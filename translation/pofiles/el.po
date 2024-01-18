@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-14 22:11+0000\n"
+"PO-Revision-Date: 2024-01-18 07:31+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -13072,9 +13072,8 @@ msgid "Choose Symbol"
 msgstr "Επιλέξτε Σύμβολο"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:67
-#, fuzzy
 msgid "Choose Power Symbol"
-msgstr "Επιλέξτε Θύρα Τροφοδοσίας"
+msgstr "Επιλέξτε Σύμβολο Θύρας Τροφοδοσίας"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:69
 #: eeschema/symbol_chooser_frame.cpp:103
@@ -13727,12 +13726,10 @@ msgid "Net names"
 msgstr "Ονόματα των nets"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:75
-#, fuzzy
 msgid "Other fields"
-msgstr "Άλλα πεδία φύλλων"
+msgstr "Άλλα πεδία"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
-#, fuzzy
 msgid "Update all other fields in the symbol from the footprint"
 msgstr "Ενημερώνει όλα τα άλλα πεδία του συμβόλου από το αποτύπωμα"
 
@@ -13891,9 +13888,8 @@ msgid "Cross-probing"
 msgstr "Cross-probing"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:145
-#, fuzzy
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Επισημανση των αποτυπωμάτων που αντιστοιχούν στα επιλεγμένα σύμβολα"
+msgstr "Επιλογή/επισήμανση αντικειμένων που αντιστοιχούν στο επιλεγμένο από PCB"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Highlight symbols corresponding to selected footprints"
@@ -14113,9 +14109,8 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Εμφάνιση αποτυπώματος στην Επιλογή Συμβόλου"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:350
-#, fuzzy
 msgid "Never show Rescue Symbols tool"
-msgstr "Διάσωση Συμβόλων"
+msgstr "Να μην εμφανίζεται ποτέ το εργαλείο Διάσωσης Συμβόλων"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:264
 #, c-format
@@ -14802,9 +14797,9 @@ msgid "Unknown netlist format.\n"
 msgstr "Άγνωστη μορφή λίστας δικτύων.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "BOM preset '%s' not found"
-msgstr "Το αρχείο '%s' δεν βρέθηκε"
+msgstr "Δεν βρέθηκε προκαθορισμένο BOM '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:533
 #: eeschema/eeschema_jobs_handler.cpp:758
@@ -14872,9 +14867,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "Αποθήκευση Αρχείου Αναφοράς ΕΗΚ σε %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
-#, fuzzy
 msgid "Net Navigator"
-msgstr "Πλοηγός Ιεράρχησης"
+msgstr "Πλοηγός Δικτύων"
 
 #: eeschema/eeschema_settings.cpp:92 pagelayout_editor/pl_editor_frame.cpp:189
 #: pcbnew/footprint_edit_frame.cpp:228 pcbnew/pcb_edit_frame.cpp:308
@@ -15075,9 +15069,8 @@ msgid "Duplicate sheet names within a given sheet"
 msgstr "Διπλά ονόματα φύλλων στο ίδιο φύλλο"
 
 #: eeschema/erc_item.cpp:51
-#, fuzzy
 msgid "Symbol pin or wire end off connection grid"
-msgstr "Ακροδέκτης συμβόλου ή άκρη καλωδίου εκτός πλέγματος"
+msgstr "Ακροδέκτης συμβόλου ή άκρη καλωδίου εκτός πλέγματος διασύνδεσης"
 
 #: eeschema/erc_item.cpp:55
 msgid "Pin not connected"
@@ -16093,9 +16086,8 @@ msgid "Bus from %s, %s to %s, %s"
 msgstr "Δίαυλος από %s, %s σε %s, %s"
 
 #: eeschema/net_navigator.cpp:72
-#, fuzzy
 msgid "Graphic line not connectable"
-msgstr "Pin μη συνδεδεμένο"
+msgstr "Γραμμή γραφικών παραμένει ασύνδετη"
 
 #: eeschema/net_navigator.cpp:85
 #, c-format
@@ -16176,9 +16168,8 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "Σφάλμα: διπλά ονόματα φύλλων. Συνέχεια;"
 
 #: eeschema/picksymbol.cpp:121
-#, fuzzy
 msgid "Change Unit"
-msgstr "Αλλαγή Μονάδας Συμβόλου"
+msgstr "Αλλαγή Μονάδας"
 
 #: eeschema/picksymbol.cpp:138
 #, c-format
@@ -16882,18 +16873,17 @@ msgstr ""
 "αποτυπώματος. Εάν δεν προσδιοριστεί κανένα, θα θεωρηθεί ως «cadstarpcblib»."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "Αδυναμία δημιουργίας βιβλιοθήκης αποτυπωμάτων '%s'."
+msgstr "Αδυναμία εύρεσης αρχείου .csa που αντιστοιχεί στη βιβλιοθήκη '%s'."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
 msgstr "Σχηματικά αρχεία CADSTAR Archive"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "Αρχεία CADSTAR Archive"
+msgstr "Αρχεία Βιβλιοθήκης Εξαρτημάτων CADSTAR"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:84
 #, c-format
@@ -17674,9 +17664,8 @@ msgid "Excluded from board"
 msgstr "Εξαίρεση από πλακέτα"
 
 #: eeschema/sch_symbol.cpp:1426
-#, fuzzy
 msgid "Excluded from simulation"
-msgstr "Εξαιρείται της προσομοίωσης"
+msgstr "Εξαιρέθηκε από την προσομοίωση"
 
 #: eeschema/sch_symbol.cpp:1432 eeschema/sch_symbol.cpp:1840
 #: eeschema/widgets/search_handlers.cpp:139 pcbnew/footprint.cpp:1315
@@ -17694,7 +17683,6 @@ msgstr "BOM"
 
 #: eeschema/sch_symbol.cpp:1846 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
-#, fuzzy
 msgid "Exclude from"
 msgstr "Εξαίρεση από"
 
@@ -17733,24 +17721,20 @@ msgid "Symbol %s [%s]"
 msgstr "Σύμβολο %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2610
-#, fuzzy
 msgid "Exclude From Board"
 msgstr "Εξαίρεση Από Πλακέτα"
 
 #: eeschema/sch_symbol.cpp:2613
-#, fuzzy
 msgid "Exclude From Simulation"
-msgstr "Εξαιρείται της προσομοίωσης"
+msgstr "Εξαίρεση Από Προσομοίωση"
 
 #: eeschema/sch_symbol.cpp:2616 pcbnew/footprint.cpp:3470
-#, fuzzy
 msgid "Exclude From Bill of Materials"
-msgstr "Εξάιρεση από BOM"
+msgstr "Εξάιρεση Aπό Λίστα Υλικών"
 
 #: eeschema/sch_symbol.cpp:2619 pcbnew/footprint.cpp:3473
-#, fuzzy
 msgid "Do not Populate"
-msgstr "Να Μην Τοποθετηθεί"
+msgstr "Να μην Τοποθετηθεί"
 
 #: eeschema/sch_text.cpp:404
 msgid "Graphic Text"
@@ -18303,12 +18287,10 @@ msgid "Invalid R_load."
 msgstr "Μη έγκυρο R_load."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
 msgstr "Μη έγκυρη πτώση dV/dt."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
 msgstr "Μη έγκυρη ανύψωση dV/dt."
 
@@ -18757,12 +18739,10 @@ msgid "expecting simulation tab type"
 msgstr "αναμένεται τύπος καρτέλας προσομοίωσης"
 
 #: eeschema/sim/legacy_workbook.cpp:210
-#, fuzzy
 msgid "expecting trace count"
 msgstr "αναμένεται πλήθος ίχνους"
 
 #: eeschema/sim/legacy_workbook.cpp:226
-#, fuzzy
 msgid "expecting trace type"
 msgstr "αναμένεται τύπος ίχνους"
 
@@ -18771,7 +18751,6 @@ msgid "expecting trace name"
 msgstr "Αναμένεται όνομα διαδρόμου"
 
 #: eeschema/sim/legacy_workbook.cpp:246
-#, fuzzy
 msgid "expecting trace color"
 msgstr "αναμένεται χρώμα ίχνους"
 
@@ -18981,9 +18960,8 @@ msgstr "Τάση (μέτρηση)"
 #: eeschema/sim/simulator_frame_ui.cpp:726
 #: eeschema/sim/simulator_frame_ui.cpp:830
 #: eeschema/sim/simulator_frame_ui.cpp:998
-#, fuzzy
 msgid " (gain)"
-msgstr " (gain)"
+msgstr " (κέρδος)"
 
 #: eeschema/sim/sim_plot_tab.h:148 eeschema/sim/simulator_frame_ui.cpp:211
 #: eeschema/sim/simulator_frame_ui.cpp:727
@@ -19049,44 +19027,40 @@ msgid "Save changes to workbook?"
 msgstr "Αποθήκευση αλλαγών στο περιβάλλον εργασίας;"
 
 #: eeschema/sim/simulator_frame_ui.cpp:145
-#, fuzzy
 msgid "Measure Min"
-msgstr "Μετρούμενος κόμβος"
+msgstr "Μέτρηση Ελαχ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:146
-#, fuzzy
 msgid "Measure Max"
-msgstr "&Μέτρηση"
+msgstr "Μέτρηση Μεγ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:147
-#, fuzzy
 msgid "Measure Average"
-msgstr "Μέτρηση απόστασης"
+msgstr "Μέτρηση Μέσης Τιμής"
 
 #: eeschema/sim/simulator_frame_ui.cpp:148
-#, fuzzy
 msgid "Measure RMS"
-msgstr "&Μέτρηση"
+msgstr "Μέτρηση Ενεργού Τιμής"
 
 #: eeschema/sim/simulator_frame_ui.cpp:149
 #, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "Μετρούμενος κόμβος"
+msgstr "Μέτρηση Peak-to-peak"
 
 #: eeschema/sim/simulator_frame_ui.cpp:153
 #, fuzzy
 msgid "Measure Frequency of Min"
-msgstr "Εργαλείο Μέτρησης"
+msgstr "Μέτρηση Συχνότητας του Ελαχ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:154
 #, fuzzy
 msgid "Measure Frequency of Max"
-msgstr "Εργαλείο Μέτρησης"
+msgstr "Μέτρηση Συχνότητας του Μεγ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:158
 #, fuzzy
 msgid "Measure Time of Min"
-msgstr "Εργαλείο Μέτρησης"
+msgstr "Μέτρηση Χρόνου του Ελαχ"
 
 #: eeschema/sim/simulator_frame_ui.cpp:159
 msgid "Measure Time of Max"
@@ -19225,7 +19199,6 @@ msgstr ""
 "Αδυναμία εύρεσης μοντέλου '%s' για αντιγραφή ως \"Σαν είδος\" μοντέλου '%s'"
 
 #: eeschema/sim/spice_simulator.cpp:57
-#, fuzzy
 msgid "DC Operating Point"
 msgstr "Σημείο Λειτουργίας DC"
 
@@ -19264,7 +19237,6 @@ msgid "Transfer Function Analysis"
 msgstr "Ανάλυση Συνάρτησης Μεταφοράς"
 
 #: eeschema/sim/spice_simulator.cpp:66
-#, fuzzy
 msgid "S-Parameter Analysis"
 msgstr "Ανάλυση S-Parameter"
 
@@ -19437,22 +19409,20 @@ msgstr ""
 "<b>Η θύρα τροφοδοσίας θα πρέπει να έχει μόνο έναν ακροδέκτη</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:213
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
 msgstr ""
-"<b>Ύποπτη Θύρα Τροφοδοσίας</b><br>Ακροδέκτης μόνο σαν Είσοδος ή Έξοδος "
-"Ισχύος έχει νόημα<br><br>"
+"<b>Ύποπτη Θύρα Τροφοδοσίας</b><br>Ο ακροδέκτης έχει νόημα μόνο σαν Είσοδος ή "
+"Έξοδος Ισχύος<br><br>"
 
 #: eeschema/symbol_checker.cpp:220
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
-"<b>Ύποπτη Θύρα Τροφοδοσίας</b><br>Μόνο κρυφοί ακροδέκτες ισχύος συνδέονται "
-"αυτόματα<br><br>"
+"<b>Ύποπτη Θύρα Τροφοδοσίας</b><br>Δεν απαιτούνται πλέον αόρατοι ακροδέκτες "
+"εισόδων ισχύος<br><br>"
 
 #: eeschema/symbol_checker.cpp:245
 #, c-format
@@ -21102,7 +21072,6 @@ msgid "Generate Legacy Bill of Materials..."
 msgstr "Δημιουργία Προγενέστερης Λίστας Υλικών..."
 
 #: eeschema/tools/ee_actions.cpp:1051
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
 msgstr ""
@@ -21462,9 +21431,8 @@ msgid "Dark Mode Plots"
 msgstr "Dark Mode Plots"
 
 #: eeschema/tools/ee_actions.cpp:1432
-#, fuzzy
 msgid "Draw plots with a black background"
-msgstr "Σχεδίαση σχεδιογραφίσεων με μαύρο φόντο"
+msgstr "Σχεδίαση σχεδιαγραφίσεων με μαύρο φόντο"
 
 #: eeschema/tools/ee_actions.cpp:1437
 #, fuzzy
@@ -21555,9 +21523,8 @@ msgstr "Αρχεία βιβλιοθήκης: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:295
 #: pcbnew/tools/board_inspection_tool.cpp:1512
-#, fuzzy
 msgid "The library is not included in the current configuration."
-msgstr "Η βιβλιοθήκη δεν συμπεριλαμβάνεται με την τρέχουσα διαμόρφωση."
+msgstr "Η βιβλιοθήκη δεν συμπεριλαμβάνεται στην τρέχουσα διαμόρφωση."
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
 #: eeschema/tools/ee_inspection_tool.cpp:303
@@ -21566,7 +21533,6 @@ msgstr "Διαχείριση Βιβλιοθηκών Συμβόλων"
 
 #: eeschema/tools/ee_inspection_tool.cpp:301
 #: pcbnew/tools/board_inspection_tool.cpp:1520
-#, fuzzy
 msgid "The library is not enabled in the current configuration."
 msgstr "Η βιβλιοθήκη δεν είναι ενεργοποιημένη στην τρέχουσα διαμόρφωση."
 
@@ -21678,7 +21644,6 @@ msgid "Pin Helpers"
 msgstr "Βοηθοί Ακροδέκτη"
 
 #: eeschema/tools/sch_edit_tool.cpp:455
-#, fuzzy
 msgid "Transform Selection"
 msgstr "Μετασχηματισμός Επιλεγμένου"
 
@@ -21769,9 +21734,8 @@ msgstr ""
 "έκδοση;"
 
 #: eeschema/tools/sch_editor_control.cpp:342
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Ενημέρωση συμβόλων σχηματικού ώστε να αναφέρουν τη νέα βιβλιοθήκη;"
+msgstr "Συμπερίληψη συμβόλων ισχύος σχηματικού στη βιβλιοθήκη;"
 
 #: eeschema/tools/sch_editor_control.cpp:407
 #, c-format
@@ -21868,9 +21832,8 @@ msgstr "Πατήστε <ESC> για ακύρωση μετακίνησης."
 
 #: eeschema/tools/sch_move_tool.cpp:1751
 #: eeschema/tools/symbol_editor_move_tool.cpp:505
-#, fuzzy
 msgid "Align"
-msgstr "Στοίχιση Οριζ"
+msgstr "Στοίχιση"
 
 #: eeschema/tools/sch_navigate_tool.cpp:81
 #, c-format
@@ -21989,9 +21952,8 @@ msgid "Recently Used"
 msgstr "Πρόσφατη Χρήση"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
-#, fuzzy
 msgid "Already Placed"
-msgstr "Μετακίνηση και Τοποθέτηση"
+msgstr "Τοποθετήθηκε Ήδη"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:561
 msgid "No footprint specified"
@@ -26341,7 +26303,6 @@ msgid "Overvoltage category:"
 msgstr "Κατηγορία υπερτάσεων:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -26357,16 +26318,16 @@ msgid ""
 msgstr ""
 "OVC I: Εξοπλισμός χωρίς άμεση σύνδεση με την παροχή ρεύματος\n"
 "\n"
-"OVC II: Εξοπλισμός που καταναλώνει ενέργεια από τη μόνιμη εγκατάσταση. (π."
-"χ.: συσκευές, φορητά εργαλεία, οικιακά φορτία). Το OVCIII ισχύει εάν "
-"υπάρχουν απαιτήσεις αξιοπιστίας και διαθεσιμότητας\n"
+"OVC II: Εξοπλισμός που καταναλώνει ενέργεια από τη μόνιμη εγκατάσταση. (π.χ.:"
+" συσκευές, φορητά εργαλεία, οικιακά φορτία). Το OVCIII ισχύει εάν υπάρχουν "
+"απαιτήσεις αξιοπιστίας και διαθεσιμότητας\n"
 "\n"
 "OVC III : Εξοπλισμός σε μόνιμη εγκατάσταση με απαιτήσεις αξιοπιστίας και "
 "διαθεσιμότητας. (π.χ.: ηλεκτρικοί διακόπτες, εξοπλισμός για βιομηχανική "
 "χρήση)\n"
 "\n"
 "OVC IV: Εξοπλισμός στην αρχή της εγκατάστασης (π.χ. μετρητές ηλεκτρικής "
-"ενέργειας, πρωτογενείς συσκευές προστασίας από υπερένταση)"
+"ενέργειας, κύριες προστασίες υπερέντασης)"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
@@ -30329,7 +30290,6 @@ msgid "Angle between Ref point and Center pos."
 msgstr "Γωνία μεταξύ σημείου αναφοράς και κεντρικού σημείου."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:418
-#, fuzzy
 msgid "Duplicate parameters"
 msgstr "Αντιγραφή παραμέτρων"
 
@@ -31022,7 +30982,6 @@ msgid "Compress output into 'zip' file"
 msgstr "Συμπιέστε την έξοδο σε αρχείο 'zip'"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
-#, fuzzy
 msgid "BOM Columns"
 msgstr "Στήλες BOM"
 
@@ -31331,12 +31290,11 @@ msgstr ""
 "κατα την κατασκευή περιγράμματος πλακέτας."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:93
-#, fuzzy
 msgid "Export STEP / GLTF"
 msgstr "Εξαγωγή STEP / GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:184
-#, fuzzy, c-format
+#, c-format
 msgid "Process failed with exit code %d"
 msgstr "Η διεργασία απέτυχε με κωδικό εξόδου %d"
 
@@ -31393,9 +31351,8 @@ msgid "Export as black elements on a white background"
 msgstr "Εξαγωγή ως μαύρα στοιχεία σε λευκό φόντο"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
-#, fuzzy
 msgid "Use current board theme"
-msgstr "Αποθήκευση τρέχουσας πλακέτας με νέο όνομα"
+msgstr "Χρήση τρέχον θεματικού πλακέτας"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:114
 msgid "Page with frame and title block"
@@ -32422,14 +32379,12 @@ msgid "Generators A (%s)"
 msgstr "Δημιουργοί A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild selected"
-msgstr "Δεν επιλέχθηκε δίαυλος"
+msgstr "Επαναδημιουργία επιλεγμένου"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
-#, fuzzy
 msgid "Rebuild this type"
-msgstr "Επαναδημιουργία Φωλιάς Συνδέσεων"
+msgstr "Επαναδημιουργία του ίδιου τύπου"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:62
 msgid "Rebuild All"
@@ -33255,7 +33210,7 @@ msgid "Report file"
 msgstr "Αρχείο αναφοράς"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2303
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
@@ -35909,7 +35864,6 @@ msgid "Arc/circle approximated by segments"
 msgstr "Τόξο/κύκλος κατά προσέγγιση με τμήματα"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:368
-#, fuzzy
 msgid "Maximum allowed deviation:"
 msgstr "Μέγιστη επιτρεπτή απόκλιση:"
 
@@ -35947,7 +35901,6 @@ msgid "Allow fillets outside zone outline"
 msgstr "Να επιτρέπονται φιλέτα έξω από το περίγραμμα της ζώνης"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
-#, fuzzy
 msgid "Minimum thermal relief spoke count:"
 msgstr "Ελάχιστο πλήθος ακτίνων θερμικής εκτόνωσης:"
 
@@ -35972,7 +35925,6 @@ msgstr ""
 "αγνοείται."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
-#, fuzzy
 msgid "When Adding Footprints to Board"
 msgstr "Κατα την Προσθήκη Αποτυπωμάτων στην Πλακέτα"
 
