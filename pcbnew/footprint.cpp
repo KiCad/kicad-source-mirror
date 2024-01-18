@@ -3441,24 +3441,24 @@ static struct FOOTPRINT_DESC
                     &FOOTPRINT::SetOrientationDegrees, &FOOTPRINT::GetOrientationDegrees,
                     PROPERTY_DISPLAY::PT_DEGREE ) );
 
-        const wxString groupFootprint = _HKI( "Fields" );
+        const wxString groupFields = _HKI( "Fields" );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Reference" ),
                     &FOOTPRINT::SetReference, &FOOTPRINT::GetReferenceAsString ),
-                    groupFootprint );
+                    groupFields );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Value" ),
                     &FOOTPRINT::SetValue, &FOOTPRINT::GetValueAsString ),
-                    groupFootprint );
+                    groupFields );
 
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library Link" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetFPIDAsString ),
-                    groupFootprint );
+                    groupFields );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Library Description" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetLibDescription ),
-                    groupFootprint );
+                    groupFields );
         propMgr.AddProperty( new PROPERTY<FOOTPRINT, wxString>( _HKI( "Keywords" ),
                     NO_SETTER( FOOTPRINT, wxString ), &FOOTPRINT::GetKeywords ),
-                    groupFootprint );
+                    groupFields );
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
