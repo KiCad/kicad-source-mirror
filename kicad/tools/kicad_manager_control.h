@@ -79,8 +79,7 @@ private:
 
     int openProject( const wxString& aDefaultDir );
 
-    wxFileName newProjectDirectory( wxString* aFileName = nullptr );
-
+    wxFileName newProjectDirectory( wxString* aFileName = nullptr, bool isRepo = false );
 };
 
 #endif

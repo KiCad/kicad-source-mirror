@@ -64,13 +64,14 @@ void KICAD_MANAGER_CONTROL::Reset( RESET_REASON aReason )
 }
 
 
-wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName )
+wxFileName KICAD_MANAGER_CONTROL::newProjectDirectory( wxString* aFileName, bool isRepo )
 {
     wxString default_filename = aFileName ? *aFileName : wxString();
 
     wxString        default_dir = m_frame->GetMruPath();
     wxFileDialog    dlg( m_frame, _( "Create New Project" ), default_dir, default_filename,
-                         FILEEXT::ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+                         ( isRepo ? wxString( "" ) : FILEEXT::ProjectFileWildcard() ),
+                         wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
     // Add a "Create a new directory" checkbox
     FILEDLG_NEW_PROJECT newProjectHook;
@@ -154,23 +155,8 @@ int KICAD_MANAGER_CONTROL::NewFromRepository( const TOOL_EVENT& aEvent )
     if( ret != wxID_OK )
         return -1;
 
-    wxFileName reponame( dlg.GetRepoName() );
-
-    // Set the default file extension for the new repository's project,
-    // preserving any part that is the original extension in the process.
-    if( reponame.GetExt().IsEmpty() )
-    {
-        reponame.SetExt( FILEEXT::ProjectFileExtension );
-    }
-    else if( reponame.GetExt().ToStdString() != FILEEXT::ProjectFileExtension )
-    {
-        reponame.SetName( reponame.GetName() + wxT( "." ) + reponame.GetExt() );
-        reponame.SetExt( FILEEXT::ProjectFileExtension );
-    }
-
-    wxString project_name = reponame.GetFullPath();
-
-    wxFileName pro = newProjectDirectory( &project_name );
+    wxString   project_name = dlg.GetRepoName();
+    wxFileName pro = newProjectDirectory( &project_name, true );
 
     if( !pro.IsOk() )
         return -1;
