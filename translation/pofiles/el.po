@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-18 07:31+0000\n"
+"PO-Revision-Date: 2024-01-19 22:00+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -20219,9 +20219,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Το αρχείο του σχηματικού δεν υπάρχει ή δεν είναι προσβάσιμο\n"
 
 #: kicad/cli/command_export_sch_plot.cpp:51
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Χρωματικό θέμα προς χρήση (προκαθορισμένο στις ρυθμίσεις pcbnew)"
+msgstr "Χρωματικό θέμα προς χρήση (προκαθορισμένο στις ρυθμίσεις σχηματικού)"
 
 #: kicad/cli/command_export_sch_plot.cpp:64
 msgid "Avoid setting a background color (regardless of theme)"
@@ -38442,7 +38441,7 @@ msgstr "Σχεδίαση διάστασης "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:434
 msgid "Min track/spacing: "
-msgstr "Ελάχιστη απόσταση διαδρόμου: "
+msgstr "Ελάχ διαδρόμου/απόσταση: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:444
 msgid "Copper Finish: "
