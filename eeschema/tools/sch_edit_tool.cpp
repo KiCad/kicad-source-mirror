@@ -1572,11 +1572,18 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
         if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
+        {
             editFieldText( symbol->GetField( REFERENCE_FIELD ) );
+        }
         else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
+        {
             editFieldText( symbol->GetField( VALUE_FIELD ) );
+        }
         else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
-            editFieldText( symbol->GetField( FOOTPRINT_FIELD ) );
+        {
+            if( !symbol->IsPower() )
+                editFieldText( symbol->GetField( FOOTPRINT_FIELD ) );
+        }
     }
     else if( item->Type() == SCH_FIELD_T )
     {
