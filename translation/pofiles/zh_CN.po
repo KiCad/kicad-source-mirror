@@ -28,13 +28,14 @@
 # JasonTan <tfx2001@outlook.com>, 2023.
 # Zhen Sun <igoal@163.com>, 2023.
 # 向阳阳 <hinata.hoshino@foxmail.com>, 2024.
+# Lao·Zhu <2208213223@qq.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-18 07:31+0000\n"
-"Last-Translator: 向阳阳 <hinata.hoshino@foxmail.com>\n"
+"PO-Revision-Date: 2024-01-19 12:00+0000\n"
+"Last-Translator: Lao·Zhu <2208213223@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -40825,7 +40826,8 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr ""
+msgstr "脚印定义'%s'在多个层上的元件铜与焊盘相关联。KiCad "
+"不支持自定义焊盘栈。该铜项已作为图形元素导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42555,7 +42557,7 @@ msgstr "仍然拖动"
 #: pcbnew/router/router_tool.cpp:1923 pcbnew/router/router_tool.cpp:2397
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(无论如何都提交 %s）"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
 #, fuzzy
