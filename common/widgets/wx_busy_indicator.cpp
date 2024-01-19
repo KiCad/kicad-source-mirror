@@ -26,6 +26,7 @@
 #include <wx/cursor.h>
 
 
-WX_BUSY_INDICATOR::WX_BUSY_INDICATOR() : m_cursor( std::make_unique<wxBusyCursor>() )
+WX_BUSY_INDICATOR::WX_BUSY_INDICATOR() :
+        m_cursor( std::make_unique<wxBusyCursor>() )
 {
 }

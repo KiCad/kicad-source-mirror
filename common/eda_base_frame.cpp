@@ -1053,198 +1053,203 @@ void EDA_BASE_FRAME::OnPreferences( wxCommandEvent& event )
 
 void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParentPage )
 {
-    WX_BUSY_INDICATOR busy_cursor;
-
     PAGED_DIALOG dlg( this, _( "Preferences" ), true, true, wxEmptyString,
                       wxWindow::FromDIP( wxSize( 980, 560 ), NULL ) );
 
     dlg.SetEvtHandlerEnabled( false );
 
-    WX_TREEBOOK*            book = dlg.GetTreebook();
-    PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
-    KIFACE*                 kiface = nullptr;
-    std::vector<int>        expand;
-
-    Kiway().GetActions( hotkeysPanel->ActionsList() );
-
-    book->AddLazyPage(
-            []( wxWindow* aParent ) -> wxWindow*
-            {
-                return new PANEL_COMMON_SETTINGS( aParent );
-            },
-            _( "Common" ) );
-
-    book->AddLazyPage(
-            []( wxWindow* aParent ) -> wxWindow*
-            {
-                return new PANEL_MOUSE_SETTINGS( aParent );
-            }, _( "Mouse and Touchpad" ) );
-
-    book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
-
-// This currently allows pre-defined repositories that we
-// don't use, so keep it disabled at the moment
-if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
-    book->AddLazyPage(
-            []( wxWindow* aParent ) -> wxWindow*
-            {
-                return new PANEL_GIT_REPOS( aParent );
-            }, _( "Version Control" ) );
-
-#ifdef KICAD_USE_SENTRY
-    book->AddLazyPage(
-            []( wxWindow* aParent ) -> wxWindow*
-            {
-                return new PANEL_DATA_COLLECTION( aParent );
-            }, _( "Data Collection" ) );
-#endif
-
-#define LAZY_CTOR( key )                                                \
-        [=]( wxWindow* aParent )                                        \
-        {                                                               \
-            return kiface->CreateKiWindow( aParent, key, &Kiway() );    \
-        }
-
-    // If a dll is not loaded, the loader will show an error message.
-
-    try
     {
-        kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
+        WX_BUSY_INDICATOR busy_cursor;
 
-        if( !kiface )
-            return;
+        WX_TREEBOOK*            book = dlg.GetTreebook();
+        PANEL_HOTKEYS_EDITOR*   hotkeysPanel = new PANEL_HOTKEYS_EDITOR( this, book, false );
+        KIFACE*                 kiface = nullptr;
+        std::vector<int>        expand;
 
-        kiface->GetActions( hotkeysPanel->ActionsList() );
-
-        if( GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
-            expand.push_back( (int) book->GetPageCount() );
-
-        book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_GRIDS ), _( "Grids" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_COLORS ), _( "Colors" ) );
-
-        if( GetFrameType() == FRAME_SCH )
-            expand.push_back( (int) book->GetPageCount() );
-
-        book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_GRIDS ), _( "Grids" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
-    }
-    catch( ... )
-    {
-    }
-
-    try
-    {
-        kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
-
-        if( !kiface )
-            return;
-
-        kiface->GetActions( hotkeysPanel->ActionsList() );
-
-        if( GetFrameType() == FRAME_FOOTPRINT_EDITOR )
-            expand.push_back( (int) book->GetPageCount() );
-
-        book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_GRIDS ), _( "Grids" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_ORIGINS_AXES ), _( "Origins & Axes" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_VALUES ), _( "Default Values" ) );
-
-        if( GetFrameType() ==  FRAME_PCB_EDITOR )
-            expand.push_back( (int) book->GetPageCount() );
-
-        book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTS ), _( "Display Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_GRIDS ), _( "Grids" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
-
-        if( GetFrameType() == FRAME_PCB_DISPLAY3D )
-            expand.push_back( (int) book->GetPageCount() );
-
-        book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
-    }
-    catch( ... )
-    {
-    }
-
-    try
-    {
-        kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
-
-        if( !kiface )
-            return;
-
-        kiface->GetActions( hotkeysPanel->ActionsList() );
-
-        if( GetFrameType() == FRAME_GERBER )
-            expand.push_back( (int) book->GetPageCount() );
-
-        book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_COLORS ), _( "Colors" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
-    }
-    catch( ... )
-    {
-    }
-
-    try
-    {
-        kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
-
-        if( !kiface )
-            return;
-
-        kiface->GetActions( hotkeysPanel->ActionsList() );
-
-        if( GetFrameType() == FRAME_PL_EDITOR )
-            expand.push_back( (int) book->GetPageCount() );
-
-        book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_DS_GRIDS ), _( "Grids" ) );
-        book->AddLazySubPage( LAZY_CTOR( PANEL_DS_COLORS ), _( "Colors" ) );
+        Kiway().GetActions( hotkeysPanel->ActionsList() );
 
         book->AddLazyPage(
                 []( wxWindow* aParent ) -> wxWindow*
                 {
-                    return new PANEL_PACKAGES_AND_UPDATES( aParent );
-                }, _( "Packages and Updates" ) );
+                    return new PANEL_COMMON_SETTINGS( aParent );
+                },
+                _( "Common" ) );
+
+        book->AddLazyPage(
+                []( wxWindow* aParent ) -> wxWindow*
+                {
+                    return new PANEL_MOUSE_SETTINGS( aParent );
+                }, _( "Mouse and Touchpad" ) );
+
+        book->AddPage( hotkeysPanel, _( "Hotkeys" ) );
+
+        // This currently allows pre-defined repositories that we
+        // don't use, so keep it disabled at the moment
+        if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
+        {
+            book->AddLazyPage(
+                    []( wxWindow* aParent ) -> wxWindow*
+                    {
+                        return new PANEL_GIT_REPOS( aParent );
+                    }, _( "Version Control" ) );
+        }
+
+    #ifdef KICAD_USE_SENTRY
+        book->AddLazyPage(
+                []( wxWindow* aParent ) -> wxWindow*
+                {
+                    return new PANEL_DATA_COLLECTION( aParent );
+                }, _( "Data Collection" ) );
+    #endif
+
+    #define LAZY_CTOR( key )                                                \
+            [=]( wxWindow* aParent )                                        \
+            {                                                               \
+                return kiface->CreateKiWindow( aParent, key, &Kiway() );    \
+            }
+
+        // If a dll is not loaded, the loader will show an error message.
+
+        try
+        {
+            kiface = Kiway().KiFACE( KIWAY::FACE_SCH );
+
+            if( !kiface )
+                return;
+
+            kiface->GetActions( hotkeysPanel->ActionsList() );
+
+            if( GetFrameType() == FRAME_SCH_SYMBOL_EDITOR )
+                expand.push_back( (int) book->GetPageCount() );
+
+            book->AddPage( new wxPanel( book ), _( "Symbol Editor" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_DISP_OPTIONS ), _( "Display Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_GRIDS ), _( "Grids" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_EDIT_OPTIONS ), _( "Editing Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SYM_COLORS ), _( "Colors" ) );
+
+            if( GetFrameType() == FRAME_SCH )
+                expand.push_back( (int) book->GetPageCount() );
+
+            book->AddPage( new wxPanel( book ), _( "Schematic Editor" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_DISP_OPTIONS ), _( "Display Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_GRIDS ), _( "Grids" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_EDIT_OPTIONS ), _( "Editing Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
+        }
+        catch( ... )
+        {
+        }
+
+        try
+        {
+            kiface = Kiway().KiFACE( KIWAY::FACE_PCB );
+
+            if( !kiface )
+                return;
+
+            kiface->GetActions( hotkeysPanel->ActionsList() );
+
+            if( GetFrameType() == FRAME_FOOTPRINT_EDITOR )
+                expand.push_back( (int) book->GetPageCount() );
+
+            book->AddPage( new wxPanel( book ), _( "Footprint Editor" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DISPLAY_OPTIONS ), _( "Display Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_GRIDS ), _( "Grids" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_ORIGINS_AXES ), _( "Origins & Axes" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_EDIT_OPTIONS ), _( "Editing Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_COLORS ), _( "Colors" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_FP_DEFAULT_VALUES ), _( "Default Values" ) );
+
+            if( GetFrameType() ==  FRAME_PCB_EDITOR )
+                expand.push_back( (int) book->GetPageCount() );
+
+            book->AddPage( new wxPanel( book ), _( "PCB Editor" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_DISPLAY_OPTS ), _( "Display Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_GRIDS ), _( "Grids" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ORIGINS_AXES ), _( "Origins & Axes" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_EDIT_OPTIONS ), _( "Editing Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_COLORS ), _( "Colors" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_PCB_ACTION_PLUGINS ), _( "Action Plugins" ) );
+
+            if( GetFrameType() == FRAME_PCB_DISPLAY3D )
+                expand.push_back( (int) book->GetPageCount() );
+
+            book->AddPage( new wxPanel( book ), _( "3D Viewer" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_DISPLAY_OPTIONS ), _( "General" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_OPENGL ), _( "Realtime Renderer" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_3DV_RAYTRACING ), _( "Raytracing Renderer" ) );
+        }
+        catch( ... )
+        {
+        }
+
+        try
+        {
+            kiface = Kiway().KiFACE( KIWAY::FACE_GERBVIEW );
+
+            if( !kiface )
+                return;
+
+            kiface->GetActions( hotkeysPanel->ActionsList() );
+
+            if( GetFrameType() == FRAME_GERBER )
+                expand.push_back( (int) book->GetPageCount() );
+
+            book->AddPage( new wxPanel( book ), _( "Gerber Viewer" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_DISPLAY_OPTIONS ), _( "Display Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_COLORS ), _( "Colors" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_GBR_EXCELLON_OPTIONS ), _( "Excellon Options" ) );
+        }
+        catch( ... )
+        {
+        }
+
+        try
+        {
+            kiface = Kiway().KiFACE( KIWAY::FACE_PL_EDITOR );
+
+            if( !kiface )
+                return;
+
+            kiface->GetActions( hotkeysPanel->ActionsList() );
+
+            if( GetFrameType() == FRAME_PL_EDITOR )
+                expand.push_back( (int) book->GetPageCount() );
+
+            book->AddPage( new wxPanel( book ), _( "Drawing Sheet Editor" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_DS_DISPLAY_OPTIONS ), _( "Display Options" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_DS_GRIDS ), _( "Grids" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_DS_COLORS ), _( "Colors" ) );
+
+            book->AddLazyPage(
+                    []( wxWindow* aParent ) -> wxWindow*
+                    {
+                        return new PANEL_PACKAGES_AND_UPDATES( aParent );
+                    }, _( "Packages and Updates" ) );
+        }
+        catch( ... )
+        {
+        }
+
+        // Update all of the action hotkeys. The process of loading the actions through
+        // the KiFACE will only get us the default hotkeys
+        ReadHotKeyConfigIntoActions( wxEmptyString, hotkeysPanel->ActionsList() );
+
+        for( size_t i = 0; i < book->GetPageCount(); ++i )
+            book->GetPage( i )->Layout();
+
+        for( int page : expand )
+            book->ExpandNode( page );
+
+        if( !aStartPage.IsEmpty() )
+            dlg.SetInitialPage( aStartPage, aStartParentPage );
+
+        dlg.SetEvtHandlerEnabled( true );
+#undef LAZY_CTOR
     }
-    catch( ... )
-    {
-    }
-
-    // Update all of the action hotkeys. The process of loading the actions through
-    // the KiFACE will only get us the default hotkeys
-    ReadHotKeyConfigIntoActions( wxEmptyString, hotkeysPanel->ActionsList() );
-
-    for( size_t i = 0; i < book->GetPageCount(); ++i )
-        book->GetPage( i )->Layout();
-
-    for( int page : expand )
-        book->ExpandNode( page );
-
-    if( !aStartPage.IsEmpty() )
-        dlg.SetInitialPage( aStartPage, aStartParentPage );
-
-    dlg.SetEvtHandlerEnabled( true );
 
     if( dlg.ShowModal() == wxID_OK )
     {
@@ -1254,7 +1259,6 @@ if( ADVANCED_CFG::GetCfg().m_EnableGit && false )
         dlg.Kiway().CommonSettingsChanged( false, false );
     }
 
-#undef LAZY_CTOR
 }
 
 
