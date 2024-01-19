@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-15 02:12+0000\n"
+"PO-Revision-Date: 2024-01-20 05:59+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -41074,6 +41074,10 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"フットプリント定義 '%s' "
+"には、複数のレイヤー上のパッドに関連付けられた導体部分が含まれています。 "
+"カスタム パッドスタックは KiCad ではサポートされていません。 "
+"導体のアイテムはグラフィック要素としてインポートされました。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42857,7 +42861,7 @@ msgstr "強制的にドラッグ"
 #: pcbnew/router/router_tool.cpp:1923 pcbnew/router/router_tool.cpp:2397
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s をとにかく確定させます。)"
 
 #: pcbnew/router/router_tool.cpp:1927 pcbnew/router/router_tool.cpp:2401
 msgid "Track violates DRC."
