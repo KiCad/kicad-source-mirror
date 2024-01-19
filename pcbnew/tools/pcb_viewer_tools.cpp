@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,13 @@ void PCB_VIEWER_TOOLS::Reset( RESET_REASON aReason )
 
 int PCB_VIEWER_TOOLS::Show3DViewer( const TOOL_EVENT& aEvent )
 {
+    bool do_reload_board = true;    // reload board flag
+
+    // At EDA_3D_VIEWER_FRAME creation, the current board is loaded, so disable loading
+    // the current board if the 3D frame is not yet created
+    if( frame()->Get3DViewerFrame() == nullptr )
+        do_reload_board = false;
+
     EDA_3D_VIEWER_FRAME* draw3DFrame = frame()->CreateAndShow3D_Frame();
 
     if( frame()->IsType( FRAME_FOOTPRINT_VIEWER )
@@ -73,8 +80,9 @@ int PCB_VIEWER_TOOLS::Show3DViewer( const TOOL_EVENT& aEvent )
         KIPLATFORM::UI::ReparentQuasiModal( draw3DFrame );
     }
 
-    // And load or update the current board
-    frame()->Update3DView( true, true );
+    // And load or update the current board (if needed)
+    if( do_reload_board )
+        frame()->Update3DView( true, true );
 
     return 0;
 }
