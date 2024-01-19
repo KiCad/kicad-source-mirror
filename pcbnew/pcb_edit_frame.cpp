@@ -734,7 +734,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::doDelete, ENABLE( cond.HasItems() ) );
     mgr->SetConditions( ACTIONS::duplicate, ENABLE( cond.HasItems() ) );
 
-    mgr->SetConditions( PCB_ACTIONS::group, ENABLE( SELECTION_CONDITIONS::MoreThan( 1 ) ) );
+    mgr->SetConditions( PCB_ACTIONS::group, ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
     mgr->SetConditions( PCB_ACTIONS::ungroup, ENABLE( SELECTION_CONDITIONS::HasTypes(
                                                       { PCB_GROUP_T, PCB_GENERATOR_T } ) ) );
     mgr->SetConditions( PCB_ACTIONS::lock, ENABLE( PCB_SELECTION_CONDITIONS::HasUnlockedItems ) );
