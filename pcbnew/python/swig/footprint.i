@@ -142,8 +142,8 @@
 %pythoncode
 %{
     def GetPluginForPath(libname):
-        plugin_type = IO_MGR.GuessPluginTypeFromLibPath( libname );
-        return IO_MGR.PluginFind(plugin_type)
+        plugin_type = PCB_IO_MGR.GuessPluginTypeFromLibPath( libname );
+        return PCB_IO_MGR.PluginFind(plugin_type)
 
     def FootprintEnumerate(libname):
         plug = GetPluginForPath(libname)
