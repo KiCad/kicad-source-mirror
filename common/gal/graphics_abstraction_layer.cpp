@@ -111,19 +111,19 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
     if( m_options.m_gridStyle != m_gridStyle )
     {
-        m_gridStyle = m_options.m_gridStyle ;
+        m_gridStyle = m_options.m_gridStyle;
         refresh = true;
     }
 
     if( m_options.m_gridLineWidth != m_gridLineWidth )
     {
-        m_gridLineWidth = std::floor( m_options.m_scaleFactor * ( m_options.m_gridLineWidth + 0.5 ) );
+        m_gridLineWidth = m_options.m_scaleFactor * m_options.m_gridLineWidth + 0.25;
         refresh = true;
     }
 
     if( m_options.m_gridMinSpacing != m_gridMinSpacing )
     {
-        m_gridMinSpacing = m_options.m_scaleFactor * m_options.m_gridMinSpacing;
+        m_gridMinSpacing = m_options.m_gridMinSpacing;
         refresh = true;
     }
 

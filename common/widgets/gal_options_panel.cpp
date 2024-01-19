@@ -30,7 +30,7 @@
 /*
  * Spin control parameters
  */
-static const double gridThicknessMin = 1.0;
+static const double gridThicknessMin = 0.5;
 static const double gridThicknessMax = 10.0;
 static const double gridThicknessStep = 0.5;
 
