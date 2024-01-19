@@ -350,15 +350,66 @@ public:
     int GetOrientation() const;
 
     /**
-     * Access for property manager.
+     * Orientation/mirroring access for property manager.
      */
     void SetOrientationProp( SYMBOL_ORIENTATION_PROP aAngle )
     {
-        SetOrientation( aAngle );
+        int mirroring = GetOrientation();
+
+        mirroring &= ( SYMBOL_ORIENTATION_T::SYM_MIRROR_X | SYMBOL_ORIENTATION_T::SYM_MIRROR_Y );
+
+        SetOrientation( aAngle | mirroring );
     }
+
     SYMBOL_ORIENTATION_PROP GetOrientationProp() const
     {
-        return (SYMBOL_ORIENTATION_PROP) GetOrientation();
+        int orientation = GetOrientation();
+
+        orientation &= ~( SYMBOL_ORIENTATION_T::SYM_MIRROR_X | SYMBOL_ORIENTATION_T::SYM_MIRROR_Y );
+
+        switch( orientation )
+        {
+        default:
+        case SYM_NORMAL:
+        case SYM_ORIENT_0:   return SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_0;
+        case SYM_ORIENT_90:  return SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_90;
+        case SYM_ORIENT_180: return SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_180;
+        case SYM_ORIENT_270: return SYMBOL_ORIENTATION_PROP::SYMBOL_ANGLE_270;
+        }
+    }
+
+    void SetMirrorX( bool aMirror )
+    {
+        int orientation = GetOrientation();
+
+        if( aMirror )
+            orientation |= SYMBOL_ORIENTATION_T::SYM_MIRROR_X;
+        else
+            orientation &= ~SYMBOL_ORIENTATION_T::SYM_MIRROR_X;
+
+        SetOrientation( orientation );
+    }
+
+    bool GetMirrorX() const
+    {
+        return GetOrientation() & SYMBOL_ORIENTATION_T::SYM_MIRROR_X;
+    }
+
+    void SetMirrorY( bool aMirror )
+    {
+        int orientation = GetOrientation();
+
+        if( aMirror )
+            orientation |= SYMBOL_ORIENTATION_T::SYM_MIRROR_Y;
+        else
+            orientation &= ~SYMBOL_ORIENTATION_T::SYM_MIRROR_Y;
+
+        SetOrientation( orientation );
+    }
+
+    bool GetMirrorY() const
+    {
+        return GetOrientation() & SYMBOL_ORIENTATION_T::SYM_MIRROR_Y;
     }
 
     /**

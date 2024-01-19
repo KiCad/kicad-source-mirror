@@ -1604,6 +1604,12 @@ void SCH_SYMBOL::SetOrientation( int aOrientation )
         SetOrientation( SYM_MIRROR_Y );
         break;
 
+    case ( SYM_ORIENT_0 + SYM_MIRROR_X + SYM_MIRROR_Y ):
+        SetOrientation( SYM_ORIENT_0 );
+        SetOrientation( SYM_MIRROR_X );
+        SetOrientation( SYM_MIRROR_Y );
+        break;
+
     case ( SYM_ORIENT_90 + SYM_MIRROR_X ):
         SetOrientation( SYM_ORIENT_90 );
         SetOrientation( SYM_MIRROR_X );
@@ -1611,6 +1617,12 @@ void SCH_SYMBOL::SetOrientation( int aOrientation )
 
     case ( SYM_ORIENT_90 + SYM_MIRROR_Y ):
         SetOrientation( SYM_ORIENT_90 );
+        SetOrientation( SYM_MIRROR_Y );
+        break;
+
+    case ( SYM_ORIENT_90 + SYM_MIRROR_X + SYM_MIRROR_Y ):
+        SetOrientation( SYM_ORIENT_90 );
+        SetOrientation( SYM_MIRROR_X );
         SetOrientation( SYM_MIRROR_Y );
         break;
 
@@ -1624,6 +1636,12 @@ void SCH_SYMBOL::SetOrientation( int aOrientation )
         SetOrientation( SYM_MIRROR_Y );
         break;
 
+    case ( SYM_ORIENT_180 + SYM_MIRROR_X + SYM_MIRROR_Y ):
+        SetOrientation( SYM_ORIENT_180 );
+        SetOrientation( SYM_MIRROR_X );
+        SetOrientation( SYM_MIRROR_Y );
+        break;
+
     case ( SYM_ORIENT_270 + SYM_MIRROR_X ):
         SetOrientation( SYM_ORIENT_270 );
         SetOrientation( SYM_MIRROR_X );
@@ -1631,6 +1649,12 @@ void SCH_SYMBOL::SetOrientation( int aOrientation )
 
     case ( SYM_ORIENT_270 + SYM_MIRROR_Y ):
         SetOrientation( SYM_ORIENT_270 );
+        SetOrientation( SYM_MIRROR_Y );
+        break;
+
+    case ( SYM_ORIENT_270 + SYM_MIRROR_X + SYM_MIRROR_Y ):
+        SetOrientation( SYM_ORIENT_270 );
+        SetOrientation( SYM_MIRROR_X );
         SetOrientation( SYM_MIRROR_Y );
         break;
 
@@ -2619,8 +2643,12 @@ static struct SCH_SYMBOL_DESC
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
 
         propMgr.AddProperty( new PROPERTY_ENUM<SCH_SYMBOL, SYMBOL_ORIENTATION_PROP>(
-                    _HKI( "Orientation" ), &SCH_SYMBOL::SetOrientationProp,
-                &SCH_SYMBOL::GetOrientationProp ) );
+                    _HKI( "Orientation" ),
+                    &SCH_SYMBOL::SetOrientationProp, &SCH_SYMBOL::GetOrientationProp ) );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Mirror X" ),
+                    &SCH_SYMBOL::SetMirrorX, &SCH_SYMBOL::GetMirrorX ) );
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Mirror Y" ),
+                    &SCH_SYMBOL::SetMirrorY, &SCH_SYMBOL::GetMirrorY ) );
 
         auto isMultiUnitSymbol =
                 []( INSPECTABLE* aItem ) -> bool
