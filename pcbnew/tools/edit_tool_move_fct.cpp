@@ -723,6 +723,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 if( isSkip )
                     orig_items[itemIdx]->SetPosition( originalPos );
 
+                view()->Update( orig_items[itemIdx] );
                 rebuildConnectivity();
 
                 if( ++itemIdx < orig_items.size() )
