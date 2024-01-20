@@ -38,6 +38,7 @@
     - DRCE_MISSING_FOOTPRINT
     - DRCE_DUPLICATE_FOOTPRINT
     - DRCE_EXTRA_FOOTPRINT
+    - DRCE_SCHEMATIC_PARITY_ISSUES
 
     TODO:
     - cross-check PCB netlist against SCH netlist
@@ -109,21 +110,47 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
 
         if( footprint == nullptr )
         {
-            if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
-                break;
+            if( !m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
+            {
+                wxString msg;
+                msg.Printf( _( "Missing footprint %s (%s)" ),
+                            component->GetReference(),
+                            component->GetValue() );
 
-            wxString msg;
-            msg.Printf( _( "Missing footprint %s (%s)" ),
-                        component->GetReference(),
-                        component->GetValue() );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
-
-            drcItem->SetErrorMessage( msg );
-            reportViolation( drcItem, VECTOR2I(), UNDEFINED_LAYER );
+                drcItem->SetErrorMessage( msg );
+                reportViolation( drcItem, VECTOR2I(), UNDEFINED_LAYER );
+            }
         }
         else
         {
+            if( ( component->GetProperties().count( "dnp" ) > 0 )
+                != ( ( footprint->GetAttributes() & FP_DNP ) > 0 )
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
+            {
+                wxString msg;
+                msg.Printf( _( "'%s' settings differ." ), _( "Do not populate" ) );
+
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY_ISSUES );
+                drcItem->SetErrorMessage( drcItem->GetErrorMessage() + wxS( ": " ) + msg );
+                drcItem->SetItems( footprint );
+                reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
+            }
+
+            if( ( component->GetProperties().count( "exclude_from_bom" ) > 0 )
+                != ( (footprint->GetAttributes() & FP_EXCLUDE_FROM_BOM ) > 0 )
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
+            {
+                wxString msg;
+                msg.Printf( _( "'%s' settings differ." ), _( "Exclude from bill of materials" ) );
+
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY_ISSUES );
+                drcItem->SetErrorMessage( drcItem->GetErrorMessage() + wxS( ": " ) + msg );
+                drcItem->SetItems( footprint );
+                reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
+            }
+
             for( PAD* pad : footprint->Pads() )
             {
                 if( m_drcEngine->IsErrorLimitExceeded( DRCE_NET_CONFLICT ) )

@@ -181,6 +181,10 @@ DRC_ITEM DRC_ITEM::netConflict( DRCE_NET_CONFLICT,
         _( "Pad net doesn't match schematic" ),
         wxT( "net_conflict" ) );
 
+DRC_ITEM DRC_ITEM::schematicParityIssues( DRCE_SCHEMATIC_PARITY_ISSUES,
+        _( "Footprint attributes don't match symbol" ),
+        wxT( "footprint_symbol_mismatch" ) );
+
 DRC_ITEM DRC_ITEM::libFootprintIssues( DRCE_LIB_FOOTPRINT_ISSUES,
         _( "Footprint not found in libraries" ),
         wxT( "lib_footprint_issues" ) );
@@ -287,6 +291,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::duplicateFootprints,
             DRC_ITEM::missingFootprint,
             DRC_ITEM::extraFootprint,
+            DRC_ITEM::schematicParityIssues,
             DRC_ITEM::netConflict,
             DRC_ITEM::unconnectedItems,
 
@@ -359,6 +364,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_DUPLICATE_FOOTPRINT:      return std::make_shared<DRC_ITEM>( duplicateFootprints );
     case DRCE_NET_CONFLICT:             return std::make_shared<DRC_ITEM>( netConflict );
     case DRCE_EXTRA_FOOTPRINT:          return std::make_shared<DRC_ITEM>( extraFootprint );
+    case DRCE_SCHEMATIC_PARITY_ISSUES:  return std::make_shared<DRC_ITEM>( schematicParityIssues );
     case DRCE_LIB_FOOTPRINT_ISSUES:     return std::make_shared<DRC_ITEM>( libFootprintIssues );
     case DRCE_LIB_FOOTPRINT_MISMATCH:   return std::make_shared<DRC_ITEM>( libFootprintMismatch );
     case DRCE_UNRESOLVED_VARIABLE:      return std::make_shared<DRC_ITEM>( unresolvedVariable );
