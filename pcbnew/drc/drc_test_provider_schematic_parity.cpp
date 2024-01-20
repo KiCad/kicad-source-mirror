@@ -109,18 +109,18 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
 
         if( footprint == nullptr )
         {
-            if( m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
-                break;
+            if( !m_drcEngine->IsErrorLimitExceeded( DRCE_MISSING_FOOTPRINT ) )
+            {
+                wxString msg;
+                msg.Printf( _( "Missing footprint %s (%s)" ),
+                            component->GetReference(),
+                            component->GetValue() );
 
-            wxString msg;
-            msg.Printf( _( "Missing footprint %s (%s)" ),
-                        component->GetReference(),
-                        component->GetValue() );
+                std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
 
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_MISSING_FOOTPRINT );
-
-            drcItem->SetErrorMessage( msg );
-            reportViolation( drcItem, wxPoint(), UNDEFINED_LAYER );
+                drcItem->SetErrorMessage( msg );
+                reportViolation( drcItem, wxPoint(), UNDEFINED_LAYER );
+            }
         }
         else
         {
