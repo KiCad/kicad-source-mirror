@@ -247,7 +247,14 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
 void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
 {
     wxTreeItemId  itemSel = m_tree->GetSelection();
+
+    if( !itemSel.IsOk() )
+        return;
+
     TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
+
+    if( !itemData )
+        return;
 
     SetCursor( wxCURSOR_ARROWWAIT );
     m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>( EE_ACTIONS::changeSheet,
@@ -258,7 +265,7 @@ void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
 
 void HIERARCHY_PANE::onRightClick( wxTreeEvent& aEvent )
 {
-    wxTreeItemId  itemSel = m_tree->GetFocusedItem();
+    wxTreeItemId  itemSel = m_tree->GetSelection();
 
     if( !itemSel.IsOk() )
         return;
