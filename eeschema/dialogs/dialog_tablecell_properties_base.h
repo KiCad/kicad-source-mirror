@@ -98,6 +98,12 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_fillColorLabel;
 		wxPanel* m_panelFillColor;
 		COLOR_SWATCH* m_fillColorSwatch;
+		wxStaticText* m_marginsLable;
+		wxTextCtrl* m_marginTopCtrl;
+		wxStaticText* m_marginTopUnits;
+		wxTextCtrl* m_marginLeftCtrl;
+		wxTextCtrl* m_marginRightCtrl;
+		wxTextCtrl* m_marginBottomCtrl;
 		wxButton* m_applyButton;
 		wxStaticText* m_hotkeyHint;
 		wxStdDialogButtonSizer* m_sdbSizer1;

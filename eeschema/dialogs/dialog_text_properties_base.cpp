@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -175,7 +175,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bSizeCtrlSizer->Add( m_separator5, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	m_textEntrySizer->Add( bSizeCtrlSizer, wxGBPosition( 3, 3 ), wxGBSpan( 1, 2 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	m_textEntrySizer->Add( bSizeCtrlSizer, wxGBPosition( 3, 3 ), wxGBSpan( 1, 3 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textSizeLabel = new wxStaticText( this, wxID_ANY, _("Text size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_textSizeLabel->Wrap( -1 );

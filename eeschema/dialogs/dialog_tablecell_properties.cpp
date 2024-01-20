@@ -67,6 +67,10 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
         m_borderWidth( aFrame, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
         m_separatorsWidth( aFrame, m_separatorsWidthLabel, m_separatorsWidthCtrl, m_separatorsWidthUnits ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
+        m_marginLeft( aFrame, nullptr, m_marginLeftCtrl, nullptr ),
+        m_marginTop( aFrame, nullptr, m_marginTopCtrl, m_marginTopUnits ),
+        m_marginRight( aFrame, nullptr, m_marginRightCtrl, nullptr ),
+        m_marginBottom( aFrame, nullptr, m_marginBottomCtrl, nullptr ),
         m_scintillaTricks( nullptr )
 {
     m_table = static_cast<SCH_TABLE*>( m_cell->GetParent() );
@@ -244,6 +248,11 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         m_fillColorSwatch->SetSwatchColor( m_cell->GetFillColor(), false );
     else
         m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+
+    m_marginLeft.SetValue( m_cell->GetMarginLeft() );
+    m_marginTop.SetValue( m_cell->GetMarginTop() );
+    m_marginRight.SetValue( m_cell->GetMarginRight() );
+    m_marginBottom.SetValue( m_cell->GetMarginBottom() );
 
     return true;
 }
@@ -457,6 +466,11 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
         m_cell->SetFillMode( FILL_T::FILLED_WITH_COLOR );
         m_cell->SetFillColor( fillColor );
     }
+
+    m_cell->SetMarginLeft( m_marginLeft.GetIntValue() );
+    m_cell->SetMarginTop( m_marginTop.GetIntValue() );
+    m_cell->SetMarginRight( m_marginRight.GetIntValue() );
+    m_cell->SetMarginBottom( m_marginBottom.GetIntValue() );
 
     if( !commit.Empty() )
         commit.Push( _( "Edit Table Cell" ), SKIP_CONNECTIVITY );

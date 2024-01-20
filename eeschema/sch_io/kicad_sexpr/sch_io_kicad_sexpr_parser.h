@@ -182,6 +182,14 @@ private:
 
     void parseFill( FILL_PARAMS& aFill );
 
+    void parseMargins( int& aLeft, int& aTop, int& aRight, int& aBottom )
+    {
+        aLeft = parseInternalUnits( "left margin" );
+        aTop = parseInternalUnits( "top margin" );
+        aRight = parseInternalUnits( "right margin" );
+        aBottom = parseInternalUnits( "bottom margin" );
+    }
+
     void parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax,
                         bool aEnforceMinTextSize = true );
     void parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol );

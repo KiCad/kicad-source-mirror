@@ -405,6 +405,15 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseXY( int* aX, int* aY )
 }
 
 
+void PCB_IO_KICAD_SEXPR_PARSER::parseMargins( int& aLeft, int& aTop, int& aRight, int& aBottom )
+{
+    aLeft = parseBoardUnits( "left margin" );
+    aTop = parseBoardUnits( "top margin" );
+    aRight = parseBoardUnits( "right margin" );
+    aBottom = parseBoardUnits( "bottom margin" );
+}
+
+
 std::pair<wxString, wxString> PCB_IO_KICAD_SEXPR_PARSER::parseBoardProperty()
 {
     wxString pName;
@@ -3361,7 +3370,13 @@ PCB_TABLECELL* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TABLECELL( BOARD_ITEM* aParen
 
 void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
 {
+    int           left;
+    int           top;
+    int           right;
+    int           bottom;
     STROKE_PARAMS stroke( -1, LINE_STYLE::SOLID );
+    bool          foundMargins = false;
+
     T token = NextTok();
 
     if( token == T_locked )
@@ -3441,6 +3456,16 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
             NeedRIGHT();
             break;
 
+        case T_margins:
+            parseMargins( left, top, right, bottom );
+            aTextBox->SetMarginLeft( left );
+            aTextBox->SetMarginTop( top );
+            aTextBox->SetMarginRight( right );
+            aTextBox->SetMarginBottom( bottom );
+            foundMargins = true;
+            NeedRIGHT();
+            break;
+
         case T_layer:
             aTextBox->SetLayer( parseBoardItemLayer() );
             NeedRIGHT();
@@ -3488,6 +3513,14 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
     if( m_requiredVersion < 20230825 ) // compat, we move to an explicit flag
         aTextBox->SetBorderEnabled( stroke.GetWidth() >= 0 );
 
+    if( !foundMargins )
+    {
+        int margin = aTextBox->GetLegacyTextMargin();
+        aTextBox->SetMarginLeft( margin );
+        aTextBox->SetMarginTop( margin );
+        aTextBox->SetMarginRight( margin );
+        aTextBox->SetMarginBottom( margin );
+    }
 
     if( FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aTextBox->GetParent() ) )
     {

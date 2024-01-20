@@ -52,7 +52,17 @@ public:
         return wxT( "SCH_TEXTBOX" );
     }
 
-    int GetTextMargin() const;
+    int GetLegacyTextMargin() const;
+
+    void SetMarginLeft( int aLeft )     { m_marginLeft = aLeft; }
+    void SetMarginTop( int aTop )       { m_marginTop = aTop; }
+    void SetMarginRight( int aRight )   { m_marginRight = aRight; }
+    void SetMarginBottom( int aBottom ) { m_marginBottom = aBottom; }
+
+    int GetMarginLeft() const           { return m_marginLeft; }
+    int GetMarginTop() const            { return m_marginTop; }
+    int GetMarginRight() const          { return m_marginRight; }
+    int GetMarginBottom() const         { return m_marginBottom; }
 
     int GetSchTextSize() const { return GetTextWidth(); }
     void SetSchTextSize( int aSize ) { SetTextSize( VECTOR2I( aSize, aSize ) ); }
@@ -141,6 +151,10 @@ protected:
 
 protected:
     bool m_excludedFromSim;
+    int  m_marginLeft;
+    int  m_marginTop;
+    int  m_marginRight;
+    int  m_marginBottom;
 };
 
 

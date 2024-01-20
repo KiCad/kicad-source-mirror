@@ -1349,13 +1349,17 @@ void SCH_IO_KICAD_SEXPR::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
     VECTOR2I pos = aTextBox->GetStart();
     VECTOR2I size = aTextBox->GetEnd() - pos;
 
-    m_out->Print( aNestLevel + 1, "(exclude_from_sim %s) (at %s %s %s) (size %s %s)",
+    m_out->Print( aNestLevel + 1, "(exclude_from_sim %s) (at %s %s %s) (size %s %s) (margins %s %s %s %s)",
                   aTextBox->GetExcludedFromSim() ? "yes" : "no",
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.x ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.y ).c_str(),
                   EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),
                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.x ).c_str(),
-                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.y ).c_str() );
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.y ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginLeft() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginTop() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginRight() ).c_str(),
+                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginBottom() ).c_str() );
 
     if( SCH_TABLECELL* cell = dynamic_cast<SCH_TABLECELL*>( aTextBox ) )
         m_out->Print( 0, " (span %d %d)", cell->GetColSpan(), cell->GetRowSpan() );

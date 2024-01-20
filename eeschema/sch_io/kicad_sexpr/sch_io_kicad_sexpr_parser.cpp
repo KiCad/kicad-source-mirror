@@ -1816,10 +1816,16 @@ LIB_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseTextBox()
     VECTOR2I      pos;
     VECTOR2I      end;
     VECTOR2I      size;
-    bool          foundEnd = false;
-    bool          foundSize = false;
+    int           left;
+    int           top;
+    int           right;
+    int           bottom;
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
     FILL_PARAMS   fill;
+    bool          foundEnd = false;
+    bool          foundSize = false;
+    bool          foundMargins = false;
+
     std::unique_ptr<LIB_TEXTBOX> textBox = std::make_unique<LIB_TEXTBOX>( nullptr );
 
     textBox->SetUnit( m_unit );
@@ -1883,6 +1889,16 @@ LIB_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseTextBox()
             textBox->SetFillColor( fill.m_Color );
             break;
 
+        case T_margins:
+            parseMargins( left, top, right, bottom );
+            textBox->SetMarginLeft( left );
+            textBox->SetMarginTop( top );
+            textBox->SetMarginRight( right );
+            textBox->SetMarginBottom( bottom );
+            foundMargins = true;
+            NeedRIGHT();
+            break;
+
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( textBox.get() ), false );
             break;
@@ -1900,6 +1916,15 @@ LIB_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseTextBox()
         textBox->SetEnd( pos + size );
     else
         Expecting( "size" );
+
+    if( !foundMargins )
+    {
+        int margin = textBox->GetLegacyTextMargin();
+        textBox->SetMarginLeft( margin );
+        textBox->SetMarginTop( margin );
+        textBox->SetMarginRight( margin );
+        textBox->SetMarginBottom( margin );
+    }
 
     return textBox.release();
 }
@@ -4174,10 +4199,15 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBoxContent( SCH_TEXTBOX* aTextBox )
     VECTOR2I      pos;
     VECTOR2I      end;
     VECTOR2I      size;
-    bool          foundEnd = false;
-    bool          foundSize = false;
+    int           left;
+    int           top;
+    int           right;
+    int           bottom;
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
     FILL_PARAMS   fill;
+    bool          foundEnd = false;
+    bool          foundSize = false;
+    bool          foundMargins = false;
 
     NeedSYMBOL();
 
@@ -4245,6 +4275,16 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBoxContent( SCH_TEXTBOX* aTextBox )
             aTextBox->SetFillColor( fill.m_Color );
             break;
 
+        case T_margins:
+            parseMargins( left, top, right, bottom );
+            aTextBox->SetMarginLeft( left );
+            aTextBox->SetMarginTop( top );
+            aTextBox->SetMarginRight( right );
+            aTextBox->SetMarginBottom( bottom );
+            foundMargins = true;
+            NeedRIGHT();
+            break;
+
         case T_effects:
             parseEDA_TEXT( static_cast<EDA_TEXT*>( aTextBox ), false );
             break;
@@ -4271,6 +4311,15 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBoxContent( SCH_TEXTBOX* aTextBox )
         aTextBox->SetEnd( pos + size );
     else
         Expecting( "size" );
+
+    if( !foundMargins )
+    {
+        int margin = aTextBox->GetLegacyTextMargin();
+        aTextBox->SetMarginLeft( margin );
+        aTextBox->SetMarginTop( margin );
+        aTextBox->SetMarginRight( margin );
+        aTextBox->SetMarginBottom( margin );
+    }
 }
 
 

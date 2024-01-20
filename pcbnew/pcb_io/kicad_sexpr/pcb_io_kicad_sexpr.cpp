@@ -1919,6 +1919,12 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TEXTBOX* aTextBox, int aNestLevel ) c
         UNIMPLEMENTED_FOR( aTextBox->SHAPE_T_asString() );
     }
 
+    m_out->Print( 0, " (margins %s %s %s %s)",
+                  formatInternalUnits( aTextBox->GetMarginLeft() ).c_str(),
+                  formatInternalUnits( aTextBox->GetMarginTop() ).c_str(),
+                  formatInternalUnits( aTextBox->GetMarginRight() ).c_str(),
+                  formatInternalUnits( aTextBox->GetMarginBottom() ).c_str() );
+
     if( const PCB_TABLECELL* cell = dynamic_cast<const PCB_TABLECELL*>( aTextBox ) )
         m_out->Print( 0, " (span %d %d)", cell->GetColSpan(), cell->GetRowSpan() );
 

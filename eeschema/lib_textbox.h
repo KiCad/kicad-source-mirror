@@ -51,7 +51,20 @@ public:
         return wxT( "LIB_TEXTBOX" );
     }
 
-    int GetTextMargin() const;
+    int GetLegacyTextMargin() const;
+
+    void SetMarginLeft( int aLeft )     { m_marginLeft = aLeft; }
+    void SetMarginTop( int aTop )       { m_marginTop = aTop; }
+    void SetMarginRight( int aRight )   { m_marginRight = aRight; }
+    void SetMarginBottom( int aBottom ) { m_marginBottom = aBottom; }
+
+    int GetMarginLeft() const           { return m_marginLeft; }
+    int GetMarginTop() const            { return m_marginTop; }
+    int GetMarginRight() const          { return m_marginRight; }
+    int GetMarginBottom() const         { return m_marginBottom; }
+
+    int GetLibTextSize() const { return GetTextWidth(); }
+    void SetLibTextSize( int aSize ) { SetTextSize( VECTOR2I( aSize, aSize ) ); }
 
     VECTOR2I GetDrawPos() const override;
 
@@ -105,6 +118,12 @@ private:
 
     void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
                 const TRANSFORM& aTransform, bool aDimmed ) override;
+
+private:
+    int  m_marginLeft;
+    int  m_marginTop;
+    int  m_marginRight;
+    int  m_marginBottom;
 };
 
 

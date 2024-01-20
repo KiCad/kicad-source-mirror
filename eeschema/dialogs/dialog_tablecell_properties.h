@@ -58,6 +58,10 @@ private:
     UNIT_BINDER       m_borderWidth;
     UNIT_BINDER       m_separatorsWidth;
     UNIT_BINDER       m_textSize;
+    UNIT_BINDER       m_marginLeft;
+    UNIT_BINDER       m_marginTop;
+    UNIT_BINDER       m_marginRight;
+    UNIT_BINDER       m_marginBottom;
 
     SCINTILLA_TRICKS* m_scintillaTricks;
 };

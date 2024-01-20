@@ -74,6 +74,10 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( PCB_BASE_EDIT_FRAME* a
         m_textHeight( aFrame, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits ),
         m_textWidth( aFrame, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits ),
         m_textThickness( aFrame, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits ),
+        m_marginLeft( aFrame, nullptr, m_marginLeftCtrl, nullptr ),
+        m_marginTop( aFrame, nullptr, m_marginTopCtrl, m_marginTopUnits ),
+        m_marginRight( aFrame, nullptr, m_marginRightCtrl, nullptr ),
+        m_marginBottom( aFrame, nullptr, m_marginBottomCtrl, nullptr ),
         m_scintillaTricks( nullptr )
 {
     m_table = static_cast<PCB_TABLE*>( m_cell->GetParent() );
@@ -253,6 +257,11 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
     case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
     case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
     }
+
+    m_marginLeft.SetValue( m_cell->GetMarginLeft() );
+    m_marginTop.SetValue( m_cell->GetMarginTop() );
+    m_marginRight.SetValue( m_cell->GetMarginRight() );
+    m_marginBottom.SetValue( m_cell->GetMarginBottom() );
 
     return true;
 }
@@ -458,6 +467,11 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
         m_cell->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
     else
         m_cell->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+
+    m_cell->SetMarginLeft( m_marginLeft.GetIntValue() );
+    m_cell->SetMarginTop( m_marginTop.GetIntValue() );
+    m_cell->SetMarginRight( m_marginRight.GetIntValue() );
+    m_cell->SetMarginBottom( m_marginBottom.GetIntValue() );
 
     if( !commit.Empty() )
         commit.Push( _( "Edit Table Cell" ), SKIP_CONNECTIVITY );

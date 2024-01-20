@@ -64,6 +64,10 @@ private:
     UNIT_BINDER          m_textHeight;
     UNIT_BINDER          m_textWidth;
     UNIT_BINDER          m_textThickness;
+    UNIT_BINDER          m_marginLeft;
+    UNIT_BINDER          m_marginTop;
+    UNIT_BINDER          m_marginRight;
+    UNIT_BINDER          m_marginBottom;
 
     SCINTILLA_TRICKS*    m_scintillaTricks;
 };

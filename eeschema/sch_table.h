@@ -96,6 +96,12 @@ public:
     VECTOR2I GetPosition() const override;
     VECTOR2I GetEnd() const;
 
+    // For property manager:
+    void SetPositionX( int x ) { SetPosition( VECTOR2I( x, GetPosition().y ) ); }
+    void SetPositionY( int y ) { SetPosition( VECTOR2I( GetPosition().x, y ) ); }
+    int GetPositionX() const   { return GetPosition().x; }
+    int GetPositionY() const   { return GetPosition().y; }
+
     void SetColCount( int aCount ) { m_colCount = aCount; }
     int GetColCount() const { return m_colCount; }
 

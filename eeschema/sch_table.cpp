@@ -602,11 +602,11 @@ static struct SCH_TABLE_DESC
         propMgr.AddTypeCast( new TYPE_CAST<SCH_TABLE, SCH_ITEM> );
         propMgr.InheritsAfter( TYPE_HASH( SCH_TABLE ), TYPE_HASH( SCH_ITEM ) );
 
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start X" ),
-                    &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start X" ),
+                    &SCH_TABLE::SetPositionX, &SCH_TABLE::GetPositionX, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_X_COORD ) );
-        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Y" ),
-                    &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
+        propMgr.AddProperty( new PROPERTY<SCH_TABLE, int>( _HKI( "Start Y" ),
+                    &SCH_TABLE::SetPositionY, &SCH_TABLE::GetPositionY, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ) );
 
         const wxString tableProps = _( "Table Properties" );

@@ -2123,7 +2123,10 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( item );
                 BOX2I        bbox = textbox->GetBoundingBox();
 
-                bbox.Inflate( -textbox->GetTextMargin() );
+                bbox.SetOrigin( bbox.GetLeft() + textbox->GetMarginLeft(),
+                                bbox.GetTop() + textbox->GetMarginTop() );
+                bbox.SetEnd( bbox.GetRight() - textbox->GetMarginRight(),
+                             bbox.GetBottom() - textbox->GetMarginBottom() );
 
                 if( convertTo == SCH_LABEL_T
                   || convertTo == SCH_HIER_LABEL_T
@@ -2277,14 +2280,16 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
                 new_textbox->SetAttributes( *sourceText, false );
 
-                int margin = new_textbox->GetTextMargin();
-                bbox.Inflate( margin );
+                bbox.SetOrigin( bbox.GetLeft() - new_textbox->GetMarginLeft(),
+                                bbox.GetTop() - new_textbox->GetMarginTop() );
+                bbox.SetEnd( bbox.GetRight() + new_textbox->GetMarginRight(),
+                             bbox.GetBottom() + new_textbox->GetMarginBottom() );
 
                 VECTOR2I topLeft = bbox.GetPosition();
                 VECTOR2I botRight = bbox.GetEnd();
 
                 // Add 1/20 of the margin at the end to reduce line-breaking changes.
-                int slop = margin / 20;
+                int slop = new_textbox->GetLegacyTextMargin() / 20;
 
                 if( sourceText->GetTextAngle() == ANGLE_VERTICAL )
                 {

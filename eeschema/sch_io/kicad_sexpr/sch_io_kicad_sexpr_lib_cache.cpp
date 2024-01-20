@@ -502,12 +502,16 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFOR
     VECTOR2I pos = aTextBox->GetStart();
     VECTOR2I size = aTextBox->GetEnd() - pos;
 
-    aFormatter.Print( aNestLevel + 1, "(at %s %s %s) (size %s %s)\n",
+    aFormatter.Print( aNestLevel + 1, "(at %s %s %s) (size %s %s) (margins %s %s %s %s)\n",
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.x ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.y ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginLeft() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginTop() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginRight() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginBottom() ).c_str() );
 
     aTextBox->GetStroke().Format( &aFormatter, schIUScale, aNestLevel + 1 );
     aFormatter.Print( 0, "\n" );

@@ -54,6 +54,12 @@ SCH_TEXTBOX::SCH_TEXTBOX( int aLineWidth, FILL_T aFillType, const wxString& text
     SetMultilineAllowed( true );
 
     m_excludedFromSim = false;
+
+    int defaultMargin = GetLegacyTextMargin();
+    m_marginLeft = defaultMargin;
+    m_marginTop = defaultMargin;
+    m_marginRight = defaultMargin;
+    m_marginBottom = defaultMargin;
 }
 
 
@@ -62,10 +68,14 @@ SCH_TEXTBOX::SCH_TEXTBOX( const SCH_TEXTBOX& aText ) :
         EDA_TEXT( aText )
 {
     m_excludedFromSim = aText.m_excludedFromSim;
+    m_marginLeft = aText.m_marginLeft;
+    m_marginTop = aText.m_marginTop;
+    m_marginRight = aText.m_marginRight;
+    m_marginBottom = aText.m_marginBottom;
 }
 
 
-int SCH_TEXTBOX::GetTextMargin() const
+int SCH_TEXTBOX::GetLegacyTextMargin() const
 {
     return KiROUND( GetStroke().GetWidth() / 2.0 ) + KiROUND( GetTextSize().y * 0.75 );
 }
@@ -116,38 +126,37 @@ void SCH_TEXTBOX::Rotate90( bool aClockwise )
 
 VECTOR2I SCH_TEXTBOX::GetDrawPos() const
 {
-    int   margin = GetTextMargin();
     BOX2I bbox( m_start, m_end - m_start );
 
     bbox.Normalize();
 
-    VECTOR2I pos( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+    VECTOR2I pos( bbox.GetLeft() + m_marginLeft, bbox.GetBottom() - m_marginBottom );
 
-    if( GetTextAngle() == ANGLE_VERTICAL )
+    if( GetTextAngle().IsVertical() )
     {
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:
-            pos.y = bbox.GetBottom() - margin;
+            pos.y = bbox.GetBottom() - m_marginBottom;
             break;
         case GR_TEXT_H_ALIGN_CENTER:
             pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;
             break;
         case GR_TEXT_H_ALIGN_RIGHT:
-            pos.y = bbox.GetTop() + margin;
+            pos.y = bbox.GetTop() + m_marginTop;
             break;
         }
 
         switch( GetVertJustify() )
         {
         case GR_TEXT_V_ALIGN_TOP:
-            pos.x = bbox.GetLeft() + margin;
+            pos.x = bbox.GetLeft() + m_marginLeft;
             break;
         case GR_TEXT_V_ALIGN_CENTER:
             pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;
             break;
         case GR_TEXT_V_ALIGN_BOTTOM:
-            pos.x = bbox.GetRight() - margin;
+            pos.x = bbox.GetRight() - m_marginRight;
             break;
         }
     }
@@ -156,26 +165,26 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:
-            pos.x = bbox.GetLeft() + margin;
+            pos.x = bbox.GetLeft() + m_marginLeft;
             break;
         case GR_TEXT_H_ALIGN_CENTER:
             pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;
             break;
         case GR_TEXT_H_ALIGN_RIGHT:
-            pos.x = bbox.GetRight() - margin;
+            pos.x = bbox.GetRight() - m_marginRight;
             break;
         }
 
         switch( GetVertJustify() )
         {
         case GR_TEXT_V_ALIGN_TOP:
-            pos.y = bbox.GetTop() + margin;
+            pos.y = bbox.GetTop() + m_marginTop;
             break;
         case GR_TEXT_V_ALIGN_CENTER:
             pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;
             break;
         case GR_TEXT_V_ALIGN_BOTTOM:
-            pos.y = bbox.GetBottom() - margin;
+            pos.y = bbox.GetBottom() - m_marginBottom;
             break;
         }
     }
@@ -191,6 +200,10 @@ void SCH_TEXTBOX::SwapData( SCH_ITEM* aItem )
     SCH_TEXTBOX* item = static_cast<SCH_TEXTBOX*>( aItem );
 
     std::swap( m_layer, item->m_layer );
+    std::swap( m_marginLeft, item->m_marginLeft );
+    std::swap( m_marginTop, item->m_marginTop );
+    std::swap( m_marginRight, item->m_marginRight );
+    std::swap( m_marginBottom, item->m_marginBottom );
 
     SwapText( *item );
     SwapAttributes( *item );
@@ -205,13 +218,25 @@ bool SCH_TEXTBOX::operator<( const SCH_ITEM& aItem ) const
     auto other = static_cast<const SCH_TEXTBOX*>( &aItem );
 
     if( GetLayer() != other->GetLayer() )
-            return GetLayer() < other->GetLayer();
+        return GetLayer() < other->GetLayer();
 
     if( GetPosition().x != other->GetPosition().x )
         return GetPosition().x < other->GetPosition().x;
 
     if( GetPosition().y != other->GetPosition().y )
         return GetPosition().y < other->GetPosition().y;
+
+    if( GetMarginLeft() != other->GetMarginLeft() )
+        return GetMarginLeft() < other->GetMarginLeft();
+
+    if( GetMarginTop() != other->GetMarginTop() )
+        return GetMarginTop() < other->GetMarginTop();
+
+    if( GetMarginRight() != other->GetMarginRight() )
+        return GetMarginRight() < other->GetMarginRight();
+
+    if( GetMarginBottom() != other->GetMarginBottom() )
+        return GetMarginBottom() < other->GetMarginBottom();
 
     if( GetExcludedFromSim() != other->GetExcludedFromSim() )
         return GetExcludedFromSim() - other->GetExcludedFromSim();
@@ -319,9 +344,13 @@ wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtr
         font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
 
     VECTOR2I size = GetEnd() - GetStart();
-    int      colWidth = GetTextAngle() == ANGLE_HORIZONTAL ? size.x : size.y;
+    int      colWidth;
 
-    colWidth = abs( colWidth ) - GetTextMargin() * 2;
+    if( GetTextAngle().IsVertical() )
+        colWidth = abs( size.y ) - ( GetMarginTop() + GetMarginBottom() );
+    else
+        colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
+
     font->LinebreakText( text, colWidth, GetTextSize(), GetTextThickness(), IsBold(), IsItalic() );
 
     return text;
@@ -475,6 +504,18 @@ bool SCH_TEXTBOX::operator==( const SCH_ITEM& aOther ) const
     if( m_excludedFromSim != other.m_excludedFromSim )
         return false;
 
+    if( GetMarginLeft() != other.GetMarginLeft() )
+        return false;
+
+    if( GetMarginTop() != other.GetMarginTop() )
+        return false;
+
+    if( GetMarginRight() != other.GetMarginRight() )
+        return false;
+
+    if( GetMarginBottom() != other.GetMarginBottom() )
+        return false;
+
     return SCH_SHAPE::operator==( aOther ) && EDA_TEXT::operator==( other );
 }
 
@@ -489,6 +530,18 @@ double SCH_TEXTBOX::Similarity( const SCH_ITEM& aOther ) const
     double similarity = 1.0;
 
     if( m_excludedFromSim != other.m_excludedFromSim )
+        similarity *= 0.9;
+
+    if( GetMarginLeft() != other.GetMarginLeft() )
+        similarity *= 0.9;
+
+    if( GetMarginTop() != other.GetMarginTop() )
+        similarity *= 0.9;
+
+    if( GetMarginRight() != other.GetMarginRight() )
+        similarity *= 0.9;
+
+    if( GetMarginBottom() != other.GetMarginBottom() )
         similarity *= 0.9;
 
     similarity *= SCH_SHAPE::Similarity( aOther );
@@ -514,12 +567,33 @@ static struct SCH_TEXTBOX_DESC
 
         propMgr.Mask( TYPE_HASH( SCH_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Shape" ) );
 
+        propMgr.Mask( TYPE_HASH( SCH_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
         propMgr.Mask( TYPE_HASH( SCH_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
         propMgr.Mask( TYPE_HASH( SCH_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
         propMgr.Mask( TYPE_HASH( SCH_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
 
+        const wxString marginProps = _( "Margins" );
+
+        propMgr.AddProperty( new PROPERTY<SCH_TEXTBOX, int>( _HKI( "Margin Left" ),
+                    &SCH_TEXTBOX::SetMarginLeft, &SCH_TEXTBOX::GetMarginLeft,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                marginProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TEXTBOX, int>( _HKI( "Margin Top" ),
+                    &SCH_TEXTBOX::SetMarginTop, &SCH_TEXTBOX::GetMarginTop,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                marginProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TEXTBOX, int>( _HKI( "Margin Right" ),
+                    &SCH_TEXTBOX::SetMarginRight, &SCH_TEXTBOX::GetMarginRight,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                marginProps );
+        propMgr.AddProperty( new PROPERTY<SCH_TEXTBOX, int>( _HKI( "Margin Bottom" ),
+                    &SCH_TEXTBOX::SetMarginBottom, &SCH_TEXTBOX::GetMarginBottom,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                 marginProps );
+
         propMgr.AddProperty( new PROPERTY<SCH_TEXTBOX, int>( _HKI( "Text Size" ),
-                &SCH_TEXTBOX::SetSchTextSize, &SCH_TEXTBOX::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
+                    &SCH_TEXTBOX::SetSchTextSize, &SCH_TEXTBOX::GetSchTextSize,
+                    PROPERTY_DISPLAY::PT_SIZE ),
                 _( "Text Properties" ) );
 
         propMgr.Mask( TYPE_HASH( SCH_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );

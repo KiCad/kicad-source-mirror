@@ -74,7 +74,17 @@ public:
 
     void StyleFromSettings( const BOARD_DESIGN_SETTINGS& settings ) override;
 
-    int GetTextMargin() const;
+    int GetLegacyTextMargin() const;
+
+    void SetMarginLeft( int aLeft )     { m_marginLeft = aLeft; }
+    void SetMarginTop( int aTop )       { m_marginTop = aTop; }
+    void SetMarginRight( int aRight )   { m_marginRight = aRight; }
+    void SetMarginBottom( int aBottom ) { m_marginBottom = aBottom; }
+
+    int GetMarginLeft() const           { return m_marginLeft; }
+    int GetMarginTop() const            { return m_marginTop; }
+    int GetMarginRight() const          { return m_marginRight; }
+    int GetMarginBottom() const         { return m_marginBottom; }
 
     VECTOR2I GetDrawPos() const override;
 
@@ -159,6 +169,12 @@ protected:
     virtual void swapData( BOARD_ITEM* aImage ) override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
+
+private:
+    int  m_marginLeft;
+    int  m_marginTop;
+    int  m_marginRight;
+    int  m_marginBottom;
 };
 
 #endif  // #define PCB_TEXTBOX_H

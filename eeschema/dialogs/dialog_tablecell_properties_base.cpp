@@ -269,7 +269,7 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	bSizeCtrlSizer->Add( m_separator4, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bMargins->Add( bSizeCtrlSizer, 0, wxBOTTOM, 10 );
+	bMargins->Add( bSizeCtrlSizer, 0, wxBOTTOM, 5 );
 
 	wxGridBagSizer* gbSizer2;
 	gbSizer2 = new wxGridBagSizer( 4, 5 );
@@ -308,6 +308,9 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	gbSizer2->AddGrowableCol( 1 );
 
 	bMargins->Add( gbSizer2, 0, wxEXPAND|wxBOTTOM, 5 );
+
+
+	bMargins->Add( 0, 5, 0, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizer1;
 	fgSizer1 = new wxFlexGridSizer( 0, 2, 6, 5 );
@@ -349,7 +352,62 @@ DIALOG_TABLECELL_PROPERTIES_BASE::DIALOG_TABLECELL_PROPERTIES_BASE( wxWindow* pa
 	fgSizer1->Add( m_panelFillColor, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	bMargins->Add( fgSizer1, 1, wxEXPAND|wxTOP, 5 );
+	bMargins->Add( fgSizer1, 0, wxEXPAND|wxTOP, 5 );
+
+
+	bMargins->Add( 0, 10, 0, wxEXPAND, 5 );
+
+	wxGridBagSizer* gbSizer3;
+	gbSizer3 = new wxGridBagSizer( 1, 0 );
+	gbSizer3->SetFlexibleDirection( wxBOTH );
+	gbSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_marginsLable = new wxStaticText( m_cellPage, wxID_ANY, _("Margins:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginsLable->Wrap( -1 );
+	gbSizer3->Add( m_marginsLable, wxGBPosition( 0, 0 ), wxGBSpan( 1, 2 ), wxRIGHT|wxALIGN_CENTER_VERTICAL, 35 );
+
+	wxBoxSizer* marginTopSizer;
+	marginTopSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_marginTopCtrl = new wxTextCtrl( m_cellPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	marginTopSizer->Add( m_marginTopCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_marginTopUnits = new wxStaticText( m_cellPage, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_marginTopUnits->Wrap( -1 );
+	marginTopSizer->Add( m_marginTopUnits, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 3 );
+
+
+	gbSizer3->Add( marginTopSizer, wxGBPosition( 0, 2 ), wxGBSpan( 1, 4 ), wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxBoxSizer* marginLeftSizer;
+	marginLeftSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_marginLeftCtrl = new wxTextCtrl( m_cellPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	marginLeftSizer->Add( m_marginLeftCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	gbSizer3->Add( marginLeftSizer, wxGBPosition( 1, 0 ), wxGBSpan( 1, 3 ), wxEXPAND|wxRIGHT|wxLEFT, 25 );
+
+	wxBoxSizer* marginRightSizer;
+	marginRightSizer = new wxBoxSizer( wxHORIZONTAL );
+
+	m_marginRightCtrl = new wxTextCtrl( m_cellPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	marginRightSizer->Add( m_marginRightCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	gbSizer3->Add( marginRightSizer, wxGBPosition( 1, 3 ), wxGBSpan( 1, 3 ), wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer19;
+	bSizer19 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_marginBottomCtrl = new wxTextCtrl( m_cellPage, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer19->Add( m_marginBottomCtrl, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	gbSizer3->Add( bSizer19, wxGBPosition( 2, 2 ), wxGBSpan( 1, 4 ), wxEXPAND, 5 );
+
+
+	bMargins->Add( gbSizer3, 1, wxEXPAND|wxTOP, 5 );
 
 
 	bSizer13->Add( bMargins, 1, wxEXPAND|wxALL, 5 );

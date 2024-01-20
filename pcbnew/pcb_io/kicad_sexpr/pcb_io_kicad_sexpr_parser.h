@@ -283,6 +283,8 @@ private:
 
     void parseXY( int* aX, int* aY );
 
+    void parseMargins( int& aLeft, int& aTop, int& aRight, int& aBottom );
+
     std::pair<wxString, wxString> parseBoardProperty();
 
     /**

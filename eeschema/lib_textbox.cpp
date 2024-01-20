@@ -52,16 +52,27 @@ LIB_TEXTBOX::LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth, FILL_T aFillType,
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );
     SetMultilineAllowed( true );
+
+    int defaultMargin = GetLegacyTextMargin();
+    m_marginLeft = defaultMargin;
+    m_marginTop = defaultMargin;
+    m_marginRight = defaultMargin;
+    m_marginBottom = defaultMargin;
 }
 
 
 LIB_TEXTBOX::LIB_TEXTBOX( const LIB_TEXTBOX& aText ) :
         LIB_SHAPE( aText ),
         EDA_TEXT( aText )
-{ }
+{
+    m_marginLeft = aText.m_marginLeft;
+    m_marginTop = aText.m_marginTop;
+    m_marginRight = aText.m_marginRight;
+    m_marginBottom = aText.m_marginBottom;
+}
 
 
-int LIB_TEXTBOX::GetTextMargin() const
+int LIB_TEXTBOX::GetLegacyTextMargin() const
 {
     return KiROUND( GetTextSize().y * 0.8 );
 }
@@ -106,37 +117,36 @@ void LIB_TEXTBOX::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 
 VECTOR2I LIB_TEXTBOX::GetDrawPos() const
 {
-    int   margin = GetTextMargin();
     BOX2I bbox( VECTOR2I( std::min( m_start.x, m_end.x ), std::min( -m_start.y, -m_end.y ) ),
                 VECTOR2I( abs( m_end.x - m_start.x ), abs( m_end.y - m_start.y ) ) );
 
-    VECTOR2I pos( bbox.GetLeft() + margin, bbox.GetBottom() - margin );
+    VECTOR2I pos( bbox.GetLeft() + m_marginLeft, bbox.GetBottom() - m_marginBottom );
 
-    if( GetTextAngle() == ANGLE_VERTICAL )
+    if( GetTextAngle().IsVertical() )
     {
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:
-            pos.y = bbox.GetBottom() - margin;
+            pos.y = bbox.GetBottom() - m_marginBottom;
             break;
         case GR_TEXT_H_ALIGN_CENTER:
             pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;
             break;
         case GR_TEXT_H_ALIGN_RIGHT:
-            pos.y = bbox.GetTop() + margin;
+            pos.y = bbox.GetTop() + m_marginTop;
             break;
         }
 
         switch( GetVertJustify() )
         {
         case GR_TEXT_V_ALIGN_TOP:
-            pos.x = bbox.GetLeft() + margin;
+            pos.x = bbox.GetLeft() + m_marginLeft;
             break;
         case GR_TEXT_V_ALIGN_CENTER:
             pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;
             break;
         case GR_TEXT_V_ALIGN_BOTTOM:
-            pos.x = bbox.GetRight() - margin;
+            pos.x = bbox.GetRight() - m_marginRight;
             break;
         }
     }
@@ -145,26 +155,26 @@ VECTOR2I LIB_TEXTBOX::GetDrawPos() const
         switch( GetHorizJustify() )
         {
         case GR_TEXT_H_ALIGN_LEFT:
-            pos.x = bbox.GetLeft() + margin;
+            pos.x = bbox.GetLeft() + m_marginLeft;
             break;
         case GR_TEXT_H_ALIGN_CENTER:
             pos.x = ( bbox.GetLeft() + bbox.GetRight() ) / 2;
             break;
         case GR_TEXT_H_ALIGN_RIGHT:
-            pos.x = bbox.GetRight() - margin;
+            pos.x = bbox.GetRight() - m_marginRight;
             break;
         }
 
         switch( GetVertJustify() )
         {
         case GR_TEXT_V_ALIGN_TOP:
-            pos.y = bbox.GetTop() + margin;
+            pos.y = bbox.GetTop() + m_marginTop;
             break;
         case GR_TEXT_V_ALIGN_CENTER:
             pos.y = ( bbox.GetTop() + bbox.GetBottom() ) / 2;
             break;
         case GR_TEXT_V_ALIGN_BOTTOM:
-            pos.y = bbox.GetBottom() - margin;
+            pos.y = bbox.GetBottom() - m_marginBottom;
             break;
         }
     }
@@ -206,6 +216,18 @@ int LIB_TEXTBOX::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 
     if( GetTextAngle().AsTenthsOfADegree() != tmp->GetTextAngle().AsTenthsOfADegree() )
         return GetTextAngle().AsTenthsOfADegree() - tmp->GetTextAngle().AsTenthsOfADegree();
+
+    if( GetMarginLeft() != tmp->GetMarginLeft() )
+        return GetMarginLeft() - tmp->GetMarginLeft();
+
+    if( GetMarginTop() != tmp->GetMarginTop() )
+        return GetMarginTop() - tmp->GetMarginTop();
+
+    if( GetMarginRight() != tmp->GetMarginRight() )
+        return GetMarginRight() - tmp->GetMarginRight();
+
+    if( GetMarginBottom() != tmp->GetMarginBottom() )
+        return GetMarginBottom() - tmp->GetMarginBottom();
 
     return EDA_SHAPE::Compare( &static_cast<const LIB_SHAPE&>( aOther ) );
 }
@@ -333,12 +355,16 @@ wxString LIB_TEXTBOX::GetShownText( bool aAllowExtraText, int aDepth ) const
 
     KIFONT::FONT* font = GetFont();
     VECTOR2D      size = GetEnd() - GetStart();
-    int           colWidth = GetTextAngle() == ANGLE_HORIZONTAL ? size.x : size.y;
+    int           colWidth;
+
+    if( GetTextAngle().IsVertical() )
+        colWidth = abs( size.y ) - ( GetMarginTop() + GetMarginBottom() );
+    else
+        colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
 
     if( !font )
         font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
 
-    colWidth = abs( colWidth ) - GetTextMargin() * 2;
     font->LinebreakText( text, colWidth, GetTextSize(), GetTextThickness(), IsBold(), IsItalic() );
 
     return text;
@@ -537,3 +563,42 @@ void LIB_TEXTBOX::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[1] = IsPrivate() ? LAYER_NOTES_BACKGROUND : LAYER_DEVICE_BACKGROUND;
     aLayers[2] = LAYER_SELECTION_SHADOWS;
 }
+
+
+static struct LIB_TEXTBOX_DESC
+{
+    LIB_TEXTBOX_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( LIB_TEXTBOX );
+
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXTBOX, LIB_SHAPE> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXTBOX, EDA_SHAPE> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXTBOX, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( LIB_SHAPE ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Shape" ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_TEXTBOX, int>( _HKI( "Margin Left" ),
+                &LIB_TEXTBOX::SetMarginLeft, &LIB_TEXTBOX::GetMarginLeft, PROPERTY_DISPLAY::PT_SIZE ) );
+        propMgr.AddProperty( new PROPERTY<LIB_TEXTBOX, int>( _HKI( "Margin Top" ),
+                &LIB_TEXTBOX::SetMarginTop, &LIB_TEXTBOX::GetMarginTop, PROPERTY_DISPLAY::PT_SIZE ) );
+        propMgr.AddProperty( new PROPERTY<LIB_TEXTBOX, int>( _HKI( "Margin Right" ),
+                &LIB_TEXTBOX::SetMarginRight, &LIB_TEXTBOX::GetMarginRight, PROPERTY_DISPLAY::PT_SIZE ) );
+        propMgr.AddProperty( new PROPERTY<LIB_TEXTBOX, int>( _HKI( "Margin Bottom" ),
+                &LIB_TEXTBOX::SetMarginBottom, &LIB_TEXTBOX::GetMarginBottom, PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_TEXTBOX, int>( _HKI( "Text Size" ),
+                &LIB_TEXTBOX::SetLibTextSize, &LIB_TEXTBOX::GetLibTextSize, PROPERTY_DISPLAY::PT_SIZE ),
+                _( "Text Properties" ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
+    }
+} _LIB_TEXTBOX_DESC;
