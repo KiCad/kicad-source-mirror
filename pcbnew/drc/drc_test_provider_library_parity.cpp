@@ -548,10 +548,31 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
 
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), (FP_THROUGH_HOLE | FP_SMD),
                _( "Footprint types differ." ) );
+
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_ALLOW_SOLDERMASK_BRIDGES,
-               _( "Allow bridged solder mask apertures between pads settings differ." ) );
+               wxString::Format( _( "'%s' settings differ." ),
+                                 _( "Allow bridged solder mask apertures between pads" ) ) );
+
+    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_BOARD_ONLY,
+               wxString::Format( _( "'%s' settings differ." ),
+                                 _( "Not in schematic" ) ) );
+
+    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_EXCLUDE_FROM_POS_FILES,
+               wxString::Format( _( "'%s' settings differ." ),
+                                 _( "Exclude from position files" ) ) );
+
+    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_EXCLUDE_FROM_BOM,
+               wxString::Format( _( "'%s' settings differ." ),
+                                 _( "Exclude from bill of materials" ) ) );
+
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_ALLOW_MISSING_COURTYARD,
-               _( "Exempt from courtyard requirement settings differ." ) );
+               wxString::Format( _( "'%s' settings differ." ),
+                                 _( "Exempt From Courtyard Requirement" ) ) );
+
+    TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_DNP,
+               wxString::Format( _( "'%s' settings differ." ),
+                                 _( "Do not populate" ) ) );
+
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
     // the library.
