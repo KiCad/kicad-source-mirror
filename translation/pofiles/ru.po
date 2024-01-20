@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-14 12:31+0000\n"
+"PO-Revision-Date: 2024-01-20 23:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -7189,7 +7189,7 @@ msgstr "IPC-D-356 тестовые файлы"
 
 #: common/wildcards_and_files_ext.cpp:576
 msgid "Workbook file"
-msgstr "Файл сессии симуляции"
+msgstr "Файл рабочей книги симуляции"
 
 #: common/wildcards_and_files_ext.cpp:583
 msgid "PNG file"
@@ -16066,7 +16066,7 @@ msgstr "Открыть сессию симуляции"
 
 #: eeschema/sim/sim_plot_frame.cpp:1274
 msgid "Save Simulation Workbook As"
-msgstr "Сохранить сессию симуляции как"
+msgstr "Сохранить рабочую книгу симуляции как"
 
 #: eeschema/sim/sim_plot_frame.cpp:1289
 msgid "Save Plot as Image"
@@ -16126,7 +16126,7 @@ msgstr "Открыть рабочую книгу..."
 
 #: eeschema/sim/sim_plot_frame_base.cpp:29
 msgid "Save Workbook"
-msgstr "Сохранить сессию"
+msgstr "Сохранить рабочую книгу"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:33
 msgid "Save Workbook As..."
@@ -17904,7 +17904,7 @@ msgstr "Режим линий для проводников и шин"
 
 #: eeschema/tools/ee_actions.cpp:717
 msgid "Draw and drag at any angle"
-msgstr "Рисовать и перетаскивать под любым углом"
+msgstr "Чертить и перетаскивать под любым углом"
 
 #: eeschema/tools/ee_actions.cpp:723
 msgid "Constrain drawing and dragging to horizontal or vertical motions"
@@ -26379,7 +26379,7 @@ msgstr "Экспорт в STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
 msgid "Command line:\n"
-msgstr "Командная строка:\n"
+msgstr "Команда:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -29141,7 +29141,7 @@ msgstr "Чертить негативно"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:144
 msgid "Check zone fills before plotting"
-msgstr "Проверить заполнение зон перед черчением"
+msgstr "Проверить заливку зон перед черчением"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:161
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
@@ -29813,7 +29813,7 @@ msgstr "Использовать свойства конт.пл."
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
 msgid "Convert to Rule Area"
-msgstr "Преобразовать в зону запрета"
+msgstr "Преобразовать в область запрета"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:222
 msgid "No layers selected."
@@ -29831,7 +29831,8 @@ msgstr "Имя области:"
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:54
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:131
 msgid "A unique name for this rule area for use in DRC rules"
-msgstr "Уникальное имя зоны запрета для её определения при проверке правил DRC"
+msgstr ""
+"Уникальное имя области запрета для её определения при проверке правил DRC"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:69
 msgid "Basic rules:"
