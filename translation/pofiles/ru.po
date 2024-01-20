@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-20 23:01+0000\n"
+"PO-Revision-Date: 2024-01-22 00:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
 "Language: ru\n"
@@ -7596,8 +7596,7 @@ msgstr "Сохранить в схеме"
 
 #: cvpcb/tools/cvpcb_actions.cpp:68
 msgid "Save footprint associations in schematic symbol footprint fields"
-msgstr ""
-"Сохранить имя назначенного посад.места в поле посад.места символа схемы"
+msgstr "Сохранить назначения посадочных мест в поля символов на схеме"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
 msgid "Save to Schematic and File"
@@ -15983,7 +15982,7 @@ msgstr "Исследовать сигналы на схеме"
 
 #: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr "Подстройка"
+msgstr "Настроить"
 
 #: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Tune component values"
@@ -34616,25 +34615,24 @@ msgstr "Обновлены свойства %s."
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr ""
-"Установка производственного атрибута 'исключён из перечня элементов' для %s."
+"Установить производственный атрибут 'исключён из перечня элементов' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:377
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
 msgstr ""
-"Удаление производственного атрибута 'исключён из перечня элементов' из %s."
+"Удалить производственный атрибут 'исключён из перечня элементов' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:388
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
 msgstr ""
-"Установка производственного атрибута 'исключён из перечня элементов' для %s."
+"Установлен производственный атрибут 'исключён из перечня элементов' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:394
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr ""
-"Удаление производственного атрибута 'исключён из перечня элементов' из %s."
+msgstr "Удален производственный атрибут 'исключён из перечня элементов' для %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:470
 #, c-format
@@ -35085,15 +35083,15 @@ msgstr "Размер '%s' на %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
 msgid "1234.0"
-msgstr "1234,0"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
 msgid "1234.0 mm"
-msgstr "1234,0 mm"
+msgstr "1234.0 мм"
 
 #: pcbnew/pcb_dimension.cpp:1321
 msgid "1234.0 (mm)"
-msgstr "1234,0 (мм)"
+msgstr "1234 (мм)"
 
 #: pcbnew/pcb_dimension.cpp:1374
 msgid "Units Format"
@@ -35101,11 +35099,11 @@ msgstr "Формат ед.изм."
 
 #: pcbnew/pcb_dimension.cpp:1382
 msgid "Suppress Trailing Zeroes"
-msgstr "Подавлять заверш. нули"
+msgstr "Подавлять завершающие нули"
 
 #: pcbnew/pcb_dimension.cpp:1411
 msgid "Crossbar Height"
-msgstr "Высота линии"
+msgstr "Высота размерной линии"
 
 #: pcbnew/pcb_dimension.cpp:1415
 msgid "Extension Line Overshoot"
@@ -35532,7 +35530,7 @@ msgstr "'%s' разобран не полностью."
 #: pcbnew/plugins/altium/altium_pcb.cpp:684
 #, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Директория посад.места '%s' не найдена."
+msgstr "Каталог посад.места не найден: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:803
 #, c-format
@@ -35830,6 +35828,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"Определение посад.места '%s' имеет медь компонента, связанную с конт.пл. на "
+"нескольких слоях. Особые стопки конт.пл. не поддерживаются в KiCad. Медные "
+"элементы импортированы как графические."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
@@ -36200,7 +36201,7 @@ msgstr ""
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
 #, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Пропускается полигон на слое '%s' (%d): кол-во контуров не равно 1."
+msgstr "Пропуск полигона на слое '%s' (%d): количество контуров не равно 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1796
 #, c-format
@@ -36586,8 +36587,8 @@ msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"Устаревший режим заливки зон отрезками более не поддерживается.\n"
-"Заливка зон будет преобразована, но может незначительно отличаться."
+"Устаревший режим заполнения отрезками более не поддерживается.\n"
+"Заливка зон будет преобразована в полигональную."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
