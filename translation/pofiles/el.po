@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-19 22:00+0000\n"
+"PO-Revision-Date: 2024-01-20 23:01+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
 "Language: el\n"
@@ -825,9 +825,8 @@ msgid "Show copper and tech layers thickness (very slow)"
 msgstr "Εμφάνιση πάχους χαλκού και τεχνικών επιπέδων (πολύ αργό)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Επισήμανση αντικειμένων σε ανατροπή"
+msgstr "Επισήμανση αντικειμένων στο rollover"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -7224,7 +7223,7 @@ msgstr "Αρχείο Συντομεύσεων"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "Αδυναμία εύρεσης αρχείου ισοδυναμίας '%s'"
+msgstr "Αδυναμία εύρεσης αρχείου ισοδυναμίας '%s'."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -10665,7 +10664,7 @@ msgstr "Βαρύτητα παραβίασης"
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:69
 msgid "Net classes"
-msgstr "Net classes"
+msgstr "Κλάσεις δικτύου"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -16136,7 +16135,7 @@ msgstr "Λήψη μετρήσεων (probe) στο σχηματικό"
 
 #: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr "Ρύθμιση"
+msgstr "Συντόνισε"
 
 #: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Tune component values"
@@ -20884,7 +20883,7 @@ msgstr "Λήψη πακέτων αποθετηρίου"
 
 #: kicad/pcm/pcm.cpp:355
 msgid "Unable to load repository packages url."
-msgstr "Δεν είναι δυνατή η φόρτωση url πακέτων αποθετηρίου."
+msgstr "Δεν είναι δυνατή η φόρτωση url πακέτων του αποθετηρίου."
 
 #: kicad/pcm/pcm.cpp:365
 msgid "Packages hash doesn't match. Repository may be corrupted."
@@ -25675,7 +25674,7 @@ msgstr "πλήθος κατακόρυφα"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:344
 msgid "stagger"
-msgstr "κύλιση"
+msgstr "κλιμάκωση"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:400
 msgid "point count"
@@ -25711,7 +25710,7 @@ msgstr "Κάθετη Μετατόπιση:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
 msgid "Stagger:"
-msgstr "Κύλιση:"
+msgstr "Κλιμάκωση:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:99
 msgid "Rows"
@@ -25723,7 +25722,7 @@ msgstr "Στήλες"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:101
 msgid "Stagger Type"
-msgstr "Τύπος Κύλισης"
+msgstr "Τύπος Κλιμάκωσης"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Horizontal, then vertical"
@@ -27257,10 +27256,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Αυτό είναι το τοπικό διάκενο των net για όλα τα pad αυτού του αποτυπώματος.\n"
-"Αν είναι 0, χρησιμοποιούνται οι τιμές του netclass.\n"
-"Αυτή η τιμή μπορεί να αντικατασταθεί για κάθε ένα pad\n"
-"στην καρτέλα Τοπικό Διάκενο και Ρυθμίσεις, στις Ιδιότητες των Pad."
+"Αυτό είναι το τοπικό διάκενο των δικτύων για όλες τις έδρες αυτού του "
+"αποτυπώματος.\n"
+"Αν είναι 0, χρησιμοποιούνται οι τιμές της κλάσης δικτύου.\n"
+"Αυτή η τιμή μπορεί να αντικατασταθεί για κάθε έδρα\n"
+"στην καρτέλα Τοπικό Διάκενο και Ρυθμίσεις, στις Ιδιότητες των Εδρών."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:259
 msgid ""
@@ -29074,7 +29074,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1766
 msgid "BGA pad"
-msgstr "BGA pad"
+msgstr "έδρα BGA"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1768
 msgid "Fiducial, local to footprint"
@@ -30336,7 +30336,7 @@ msgstr "Διαμπερές"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1277
 msgid "Micro"
-msgstr "Micro"
+msgstr "Μίκρο"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:255
 #: pcbnew/pcb_track.cpp:1276
@@ -34032,7 +34032,7 @@ msgstr "(η ομάδα εδρών net-tie περιέχει άγνωστο αρι
 #: pcbnew/footprint.cpp:2794
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
-msgstr "(η έδρα %s εμφανίζεται πάνω από μια φορές στην ομάδα net-tie εδρών)"
+msgstr "(η έδρα %s εμφανίζεται πάνω από μια φορές στην net-tie ομάδα εδρών)"
 
 #: pcbnew/footprint.cpp:3039 pcbnew/pad.cpp:1778 pcbnew/zone.cpp:1407
 msgid "Inherited"
@@ -34191,7 +34191,7 @@ msgstr "Δεν είναι αρχείο αποτυπώματος."
 #: pcbnew/footprint_libraries_utils.cpp:277
 #, c-format
 msgid "Unable to load footprint '%s' from '%s'"
-msgstr "Αδυναμία φόρτωσης αποτυπώματος '%s' από '%s'"
+msgstr "Αποτυχία φόρτωσης αποτυπώματος '%s' από '%s'"
 
 #: pcbnew/footprint_libraries_utils.cpp:334
 msgid "Export Footprint"
@@ -35185,7 +35185,7 @@ msgstr ""
 
 #: pcbnew/pad.cpp:839 pcbnew/pad.cpp:966 pcbnew/pad.cpp:975 pcbnew/pad.cpp:984
 msgid "pad"
-msgstr "pad"
+msgstr "έδρα"
 
 #: pcbnew/pad.cpp:1004 pcbnew/pad.cpp:1839
 msgid "Pin Name"
@@ -35391,43 +35391,36 @@ msgid "Dimension '%s' on %s"
 msgstr "Διάσταση '%s' στο %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1374
 msgid "Units Format"
 msgstr "Μορφή Μονάδων"
 
 #: pcbnew/pcb_dimension.cpp:1382
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "Απαλοιφή τελικών μηδενικών"
+msgstr "Απαλοιφή Τελικών Μηδενικών"
 
 #: pcbnew/pcb_dimension.cpp:1411
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Κέρσορας Δεξιά"
+msgstr "Ύψος Crossbar"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Μετατόπιση Γραμμής Επέκτασης"
+msgstr "Προέκταση Γραμμής Επέκτασης"
 
 #: pcbnew/pcb_dimension.cpp:1498
-#, fuzzy
 msgid "Leader Length"
-msgstr "Μήκος Διέλευσης"
+msgstr "Μήκος Οδηγού"
 
 #: pcbnew/pcb_dimension.cpp:1547
 msgid "Text Frame"
@@ -36159,6 +36152,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"Ο ορισμός του αποτυπώματος '%s' έχει υλικό χαλκού που σχετίζεται με ένα έδρα "
+"σε πολλαπλά στρώματα. Οι προσαρμοσμένες έδρες δεν υποστηρίζονται στο KiCad. "
+"Τα χάλκινα αντικείμενα έχουν εισαχθεί ως γραφικά στοιχεία."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
@@ -36537,11 +36533,10 @@ msgstr ""
 "«%s» (%d)"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
 msgstr ""
-"Αγνόηση ενός πολυγώνου αφού δεν ήταν χαρτογραφημένο το επίπεδο Eagle "
-"«%s» (%d)"
+"Αγνόηση πολυγώνου στο επίπεδο '%s' (%d): πλήθος περιγράμματος δεν είναι 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1796
 #, c-format
@@ -38265,7 +38260,7 @@ msgstr "Παρακάμπτεται από μεγαλύτερο διάκενο ο
 
 #: pcbnew/tools/board_inspection_tool.cpp:805
 msgid "Diff Pair"
-msgstr "Διαφορικό Ζεύγος"
+msgstr "Διαφ. Ζεύγος"
 
 #: pcbnew/tools/board_inspection_tool.cpp:806
 msgid "Diff pair gap resolution for:"
@@ -38274,7 +38269,7 @@ msgstr "Ανάλυση κενού διαφορικού ζεύγους για:"
 #: pcbnew/tools/board_inspection_tool.cpp:811
 #, c-format
 msgid "Resolved gap constraints: min %s; opt %s; max %s."
-msgstr "Επίλυση περιορισμών πλάτους: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
+msgstr "Επίλυση περιορισμών κενού: ελάχιστο %s; ιδανικό %s; μέγιστο %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:819
 msgid "Diff pair max uncoupled length resolution for:"
@@ -38827,19 +38822,19 @@ msgstr "Προσθήκη αναδιπλούμενου κειμένου"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add Aligned Dimension"
-msgstr "Προσθήκη Διάστασης"
+msgstr "Προσθήκη Ευθυγραμμισμένης Διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add an aligned linear dimension"
-msgstr "Προσθήκη μιας διάστασης"
+msgstr "Προσθήκη ευθυγραμμισμένης γραμμικής διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Center Dimension"
-msgstr "Προσθήκη Διάστασης"
+msgstr "Προσθήκη Διάστασης Κέντρου"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add a center dimension"
-msgstr "Προσθήκη μιας διάστασης"
+msgstr "Προσθήκη μιας διάστασης κέντρου"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add Radial Dimension"
@@ -38847,15 +38842,15 @@ msgstr "Προσθήκη Ακτινικής Διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add a radial dimension"
-msgstr "Προσθήκη ακτινικής διάστασης"
+msgstr "Προσθήκη μιας ακτινικής διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add Orthogonal Dimension"
-msgstr "Προσθήκη μιας διάστασης"
+msgstr "Προσθήκη Ορθογώνιας Διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add an orthogonal dimension"
-msgstr "Προσθήκη μιας διάστασης"
+msgstr "Προσθήκη μιας ορθογώνιας διάστασης"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add Leader"
@@ -38863,7 +38858,7 @@ msgstr "Προσθήκη Ετικέτας"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add a leader dimension"
-msgstr "Προσθήκη μιας διάστασης"
+msgstr "Προσθήκη διάστασης ηγέτη"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add Filled Zone"
