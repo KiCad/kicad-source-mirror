@@ -21,90 +21,467 @@ syntax = "proto3";
 
 package kiapi.board.types;
 
+import "google/protobuf/any.proto";
 import "common/types/base_types.proto";
 
-/// Represents a track segment on a board
+enum BoardLayer
+{
+  BL_UNKNOWN = 0;
+  BL_UNDEFINED = 1;
+  BL_UNSELECTED = 2;
+  BL_F_Cu = 3;
+  BL_In1_Cu = 4;
+  BL_In2_Cu = 5;
+  BL_In3_Cu = 6;
+  BL_In4_Cu = 7;
+  BL_In5_Cu = 8;
+  BL_In6_Cu = 9;
+  BL_In7_Cu = 10;
+  BL_In8_Cu = 11;
+  BL_In9_Cu = 12;
+  BL_In10_Cu = 13;
+  BL_In11_Cu = 14;
+  BL_In12_Cu = 15;
+  BL_In13_Cu = 16;
+  BL_In14_Cu = 17;
+  BL_In15_Cu = 18;
+  BL_In16_Cu = 19;
+  BL_In17_Cu = 20;
+  BL_In18_Cu = 21;
+  BL_In19_Cu = 22;
+  BL_In20_Cu = 23;
+  BL_In21_Cu = 24;
+  BL_In22_Cu = 25;
+  BL_In23_Cu = 26;
+  BL_In24_Cu = 27;
+  BL_In25_Cu = 28;
+  BL_In26_Cu = 29;
+  BL_In27_Cu = 30;
+  BL_In28_Cu = 31;
+  BL_In29_Cu = 32;
+  BL_In30_Cu = 33;
+  BL_B_Cu = 34;
+  BL_B_Adhes = 35;
+  BL_F_Adhes = 36;
+  BL_B_Paste = 37;
+  BL_F_Paste = 38;
+  BL_B_SilkS = 39;
+  BL_F_SilkS = 40;
+  BL_B_Mask = 41;
+  BL_F_Mask = 42;
+  BL_Dwgs_User = 43;
+  BL_Cmts_User = 44;
+  BL_Eco1_User = 45;
+  BL_Eco2_User = 46;
+  BL_Edge_Cuts = 47;
+  BL_Margin = 48;
+  BL_B_CrtYd = 49;
+  BL_F_CrtYd = 50;
+  BL_B_Fab = 51;
+  BL_F_Fab = 52;
+  BL_User_1 = 53;
+  BL_User_2 = 54;
+  BL_User_3 = 55;
+  BL_User_4 = 56;
+  BL_User_5 = 57;
+  BL_User_6 = 58;
+  BL_User_7 = 59;
+  BL_User_8 = 60;
+  BL_User_9 = 61;
+}
+
+message NetCode
+{
+  int32 value = 1;
+}
+
+// Describes a copper item's net
+message Net
+{
+  // A unique code representing this net
+  NetCode code = 1;
+
+  // Human-readable net name
+  string name = 2;
+}
+
+// Represents a track segment on a board
 message Track
 {
   kiapi.common.types.KIID        id     = 1;
-  kiapi.common.types.Point2D     start  = 2;
-  kiapi.common.types.Point2D     end    = 3;
+  kiapi.common.types.Vector2     start  = 2;
+  kiapi.common.types.Vector2     end    = 3;
   kiapi.common.types.Distance    width  = 4;
   kiapi.common.types.LockedState locked = 5;
-  kiapi.common.types.BoardLayer  layer  = 6;
-  kiapi.common.types.Net         net    = 7;
+  BoardLayer                     layer  = 6;
+  Net                            net    = 7;
 }
 
-/// Represents an arc track (not a PCB_SHAPE in arc shape)
-/// Arc tracks in KiCad store start, midpoint, and end.
-/// All other values (center point, angles, etc) are inferred.
+// Represents an arc track (not a PCB_SHAPE in arc shape)
+// Arc tracks in KiCad store start, midpoint, and end.
+// All other values (center point, angles, etc) are inferred.
 message Arc
 {
   kiapi.common.types.KIID        id     = 1;
-  kiapi.common.types.Point2D     start  = 2;
-  kiapi.common.types.Point2D     mid    = 3;  /// Arc midpoint
-  kiapi.common.types.Point2D     end    = 4;
+  kiapi.common.types.Vector2     start  = 2;
+  kiapi.common.types.Vector2     mid    = 3;  // Arc midpoint
+  kiapi.common.types.Vector2     end    = 4;
   kiapi.common.types.Distance    width  = 5;
   kiapi.common.types.LockedState locked = 6;
-  kiapi.common.types.BoardLayer  layer  = 7;
-  kiapi.common.types.Net         net    = 8;
+  BoardLayer                     layer  = 7;
+  Net                            net    = 8;
 }
 
 enum PadStackType
 {
   PST_UNKNOWN      = 0;
-  PST_THROUGH      = 1;  /// Through all layers; same shape on all layers
-  PST_BLIND_BURIED = 2;  /// From a start layer to end layer (inclusive); same shape on all included layers
+  PST_THROUGH      = 1;  // Through all layers; same shape on all layers
+  PST_BLIND_BURIED = 2;  // From a start layer to end layer (inclusive); same shape on all included layers
 }
 
 enum UnconnectedLayerRemoval
 {
   ULR_UNKNOWN = 0;
 
-  /// Keep annular rings on all layers
+  // Keep annular rings on all layers
   ULR_KEEP = 1;
 
-  /// Remove annular rings on unconnected layers, including start and end layers.
+  // Remove annular rings on unconnected layers, including start and end layers.
   ULR_REMOVE = 2;
 
-  /// Remove annular rings on unconnected layers, but preserve start and end layers even if unconnected.
+  // Remove annular rings on unconnected layers, but preserve start and end layers even if unconnected.
   ULR_REMOVE_EXCEPT_START_AND_END = 3;
 }
 
-/// A pad stack definition for a multilayer pad or via.
-message PadStack
+// The shape of a pad on a given layer
+enum PadStackShape
 {
-  /// What type of pad stack this represents.
-  PadStackType type = 1;
-
-  /// Lowest (closest to F_Cu) layer this stack exists on.  Ignored if type == PST_THROUGH.
-  kiapi.common.types.BoardLayer start_layer = 2;
-
-  /// Highest (closest to B_Cu) layer this stack exists on.  Ignored if type == PST_THROUGH.
-  kiapi.common.types.BoardLayer end_layer   = 3;
-
-  /// How to treat annular rings on unconnected layers.
-  UnconnectedLayerRemoval unconnected_layer_removal = 4;
+  PSS_UNKNOWN = 0;
+  PSS_CIRCLE = 1;
+  PSS_RECTANGLE = 2;
+  PSS_OVAL = 3;
+  PSS_TRAPEZOID = 4;
+  PSS_ROUNDRECT = 5;
+  PSS_CHAMFEREDRECT = 6;
+  PSS_CUSTOM = 7;
 }
 
-/// Represents a via
+// Which corners are chamfered in a PSS_CHAMFEREDRECT
+message ChamferedRectCorners
+{
+  bool top_left = 1;
+  bool top_right = 2;
+  bool bottom_left = 3;
+  bool bottom_right = 4;
+}
+
+// The defintion of a padstack on a single layer
+message PadStackLayer
+{
+  // The board layers of this padstack entry
+  repeated BoardLayer layers = 1;
+
+  // The shape of the pad on this layer
+  PadStackShape shape = 2;
+
+  // The size (x and y) of the shape on this layer
+  kiapi.common.types.Vector2 size = 3;
+
+  // How much to round the corners of the shape by, as a fraction of min(size.x, size.y)
+  // Only used for PSS_ROUNDRECT or PSS_CHAMFEREDRECT
+  float corner_rounding_ratio = 4;
+
+  // How much to round the corners of the shape by, as a fraction of min(size.x, size.y)
+  // Only used for PSS_CHAMFEREDRECT
+  float chamfer_ratio = 5;
+
+  ChamferedRectCorners chamfered_corners = 6;
+
+  repeated GraphicShape custom_shapes = 7;
+}
+
+// A pad stack definition for a multilayer pad or via.
+message PadStack
+{
+  // What type of pad stack this represents.
+  PadStackType type = 1;
+
+  // Lowest (closest to F_Cu) layer this stack exists on.  Ignored if type == PST_THROUGH.
+  BoardLayer start_layer = 2;
+
+  // Highest (closest to B_Cu) layer this stack exists on.  Ignored if type == PST_THROUGH.
+  BoardLayer end_layer   = 3;
+
+  // How to treat pad shapes on unconnected layers.
+  UnconnectedLayerRemoval unconnected_layer_removal = 4;
+
+  // The diameter, in x and y, of the pad's drilled hole, if this pad has a hole.
+  // x and y will be the same value if the hole is round.
+  kiapi.common.types.Vector2 drill_diameter = 5;
+
+  repeated PadStackLayer layers = 6;
+
+  // The overall rotation of this padstack (affects all layers)
+  kiapi.common.types.Angle angle = 7;
+}
+
+// Represents a via
 message Via
 {
-  /// The unique identifier of the via
+  // The unique identifier of the via
   kiapi.common.types.KIID id = 1;
 
-  /// The location of the via's center point
-  kiapi.common.types.Point2D position = 2;
+  // The location of the via's center point
+  kiapi.common.types.Vector2  position = 2;
 
-  /// The diameter of the via's circular copper pad
-  kiapi.common.types.Distance pad_diameter = 4;
+  // The pad stack definition for this via.  The via's VIATYPE (blind/buried/normal) is inferred from this.
+  PadStack pad_stack = 3;
 
-  /// The diameter of the via's drilled hole
-  kiapi.common.types.Distance drill_diameter = 5;
+  kiapi.common.types.LockedState locked = 4;
 
-  /// The pad stack definition for this via.  The via's VIATYPE (blind/buried/normal) is inferred from this.
+  Net net = 5;
+}
+
+message GraphicSegmentAttributes
+{
+  kiapi.common.types.Vector2  start = 1;
+  kiapi.common.types.Vector2  end   = 2;
+}
+
+message GraphicRectangleAttributes
+{
+  kiapi.common.types.Vector2  top_left     = 1;
+  kiapi.common.types.Vector2  bottom_right = 2;
+}
+
+message GraphicArcAttributes
+{
+  kiapi.common.types.Vector2  start = 1;
+  kiapi.common.types.Vector2  mid   = 2;
+  kiapi.common.types.Vector2  end   = 3;
+}
+
+message GraphicCircleAttributes
+{
+  kiapi.common.types.Vector2  center = 1;
+
+  // A point on the radius of the circle.  This is stored instead of just a radius so that the point
+  // by which the user can adjust the circle radius is persisted.
+  kiapi.common.types.Vector2  radius_point = 2;
+}
+
+message GraphicBezierAttributes
+{
+  kiapi.common.types.Vector2  start    = 1;
+  kiapi.common.types.Vector2  control1 = 2;
+  kiapi.common.types.Vector2  control2 = 3;
+  kiapi.common.types.Vector2  end      = 4;
+}
+
+message GraphicShape
+{
+  kiapi.common.types.KIID              id         = 1;
+  kiapi.common.types.LockedState       locked     = 2;
+  BoardLayer                           layer      = 3;
+  Net                                  net        = 4;
+  kiapi.common.types.GraphicAttributes attributes = 5;
+
+  oneof geometry {
+    GraphicSegmentAttributes     segment    = 6;
+    GraphicRectangleAttributes   rectangle  = 7;
+    GraphicArcAttributes         arc        = 8;
+    GraphicCircleAttributes      circle     = 9;
+    kiapi.common.types.PolySet   polygon    = 10;
+    GraphicBezierAttributes      bezier     = 11;
+  }
+}
+
+// A board-specific text object, existing on a board layer
+message Text
+{
+  kiapi.common.types.Text text = 1;
+  BoardLayer layer = 2;
+}
+
+// A board-specific textbox, existing on a board layer
+message TextBox
+{
+  kiapi.common.types.TextBox textbox = 1;
+  BoardLayer layer = 2;
+}
+
+// NOTE: There has been some discussion about what to do with pad attributes and properties.
+// This may be considered somewhat unstable until we decide what to do with the KiCad side.
+// It is not clear what the set of mutually-exclusive pad types will be at the end of the day,
+// versus what will be non-exclusive attributes/properties.
+// For now, this maps to PAD_ATTRIB in KiCad.
+enum PadType
+{
+  PT_UNKNOWN = 0;
+  PT_PTH = 1;
+  PT_SMD = 2;
+  PT_EDGE_CONNECTOR = 3;
+  PT_NPTH = 4;
+}
+
+enum CustomPadShapeZoneFillStrategy
+{
+  CPSZ_UNKNOWN = 0;
+  CPSZ_OUTLINE = 1;
+  CPSZ_CONVEXHULL = 2;
+}
+
+message ThermalSpokeSettings
+{
+  int64 width = 1;
+  kiapi.common.types.Angle angle = 2;
+  int64 gap = 3;
+}
+
+message Pad
+{
+  kiapi.common.types.KIID id = 1;
+  kiapi.common.types.LockedState locked = 2;
+  string number = 3;
+  Net net = 4;
+  PadType type = 5;
   PadStack pad_stack = 6;
 
-  kiapi.common.types.LockedState locked = 7;
-  kiapi.common.types.Net         net    = 8;
+  // A pad's position is always relative to the parent footprint's origin
+  kiapi.common.types.Vector2 position = 7;
+
+  DesignRuleOverrides overrides = 8;
+
+  ThermalSpokeSettings thermal_spokes = 9;
+}
+
+// Copper zone, non-copper zone, or rule area
+message Zone
+{
+  // TODO
+}
+
+message Dimension
+{
+  // TODO
+}
+
+message ReferenceImage
+{
+  // TODO
+}
+
+message Group
+{
+  // TODO
+}
+
+message FieldId
+{
+  int32 id = 1;
+}
+
+message Field
+{
+  FieldId id = 1;
+  string name = 2;
+  Text text = 3;
+}
+
+message Model3D
+{
+  // TODO
+}
+
+
+enum FootprintMountingStyle
+{
+  FMS_UNKNOWN = 0;
+  FMS_THROUGH_HOLE = 1;
+  FMS_SMD = 2;
+  FMS_UNSPECIFIED = 3;
+}
+
+
+message FootprintAttributes
+{
+  string description = 1;
+  string keywords = 2;
+  bool not_in_schematic = 3;
+  bool exclude_from_position_files = 4;
+  bool exclude_from_bill_of_materials = 5;
+  bool exempt_from_courtyard_requirement = 6;
+  bool do_not_populate = 7;
+  FootprintMountingStyle mounting_style = 8;
+}
+
+// enum class ZONE_CONNECTION
+enum ZoneConnectionStyle
+{
+  ZCS_UNKNOWN     = 0;
+  ZCS_INHERITED   = 1;
+  ZCS_NONE        = 2;
+  ZCS_THERMAL     = 3;
+  ZCS_FULL        = 4;
+  ZCS_PTH_THERMAL = 5;  // Thermal reliefs for plated through holes, solid for SMD pads
+}
+
+message DesignRuleOverrides
+{
+  // Copper-to-copper clearance override
+  kiapi.common.types.Distance clearance = 1;
+
+  // Solder mask expansion/contraction
+  kiapi.common.types.Distance solder_mask_margin = 2;
+
+  // Solder paste expansion/contraction
+  kiapi.common.types.Distance solder_paste_margin = 3;
+
+  // Solder paste expansion/contraction ratio
+  kiapi.common.types.Ratio solder_paste_margin_ratio = 4;
+
+  ZoneConnectionStyle zone_connection = 5;
+}
+
+message NetTieDefinition
+{
+  repeated string pad_number = 1;
+}
+
+// A footprint definition (i.e. what would be in a library)
+message Footprint
+{
+  kiapi.common.types.LibraryIdentifier id         = 1;
+  kiapi.common.types.Vector2           anchor     = 2;
+  FootprintAttributes                  attributes = 3;
+  DesignRuleOverrides                  overrides  = 4;
+  repeated NetTieDefinition            net_ties   = 5;
+  repeated BoardLayer                  private_layers = 6;
+
+  Field reference_field = 7;
+  Field value_field = 8;
+  Field datasheet_field = 9;
+  Field description_field = 10;
+
+  // All footprint items except for mandatory fields
+  repeated google.protobuf.Any items = 11;
+}
+
+// An instance of a footprint on a board
+message FootprintInstance
+{
+  kiapi.common.types.KIID id = 1;
+  kiapi.common.types.Vector2  position = 2;
+  kiapi.common.types.Angle orientation = 3;
+  BoardLayer layer = 4;
+  kiapi.common.types.LockedState locked = 5;
+  Footprint definition = 6;
+
+  Field reference_field = 7;
+  Field value_field = 8;
+  Field datasheet_field = 9;
+  Field description_field = 10;
+
+  FootprintAttributes attributes = 11;
+  DesignRuleOverrides overrides  = 12;
 }

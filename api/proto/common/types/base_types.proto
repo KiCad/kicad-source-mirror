@@ -27,6 +27,7 @@ syntax = "proto3";
 package kiapi.common.types;
 
 import "google/protobuf/field_mask.proto";
+import "common/types/enums.proto";
 
 enum CommandStatus
 {
@@ -95,10 +96,10 @@ enum DocumentType
  */
 message LibraryIdentifier
 {
-  /// The library portion of the LIB_ID
+  // The library portion of the LIB_ID
   string library_nickname = 1;
 
-  /// The symbol or footprint name
+  // The symbol or footprint name
   string entry_name = 2;
 }
 
@@ -107,11 +108,23 @@ message LibraryIdentifier
  */
 message SheetPath
 {
-  /// The canonical path to the sheet.  The first KIID will be the root sheet, etc.
+  // The canonical path to the sheet.  The first KIID will be the root sheet, etc.
   repeated KIID path = 1;
 
-  /// The path converted to a human readable form such as "/", "/child", or "/child/grandchild"
+  // The path converted to a human readable form such as "/", "/child", or "/child/grandchild"
   string path_human_readable = 2;
+}
+
+/**
+ * Describes a KiCad project
+ */
+message ProjectSpecifier
+{
+  // The name of the project (without the kicad_pro extension)
+  string name = 1;
+
+  // The path to the project directory
+  string path = 2;
 }
 
 /**
@@ -123,24 +136,17 @@ message DocumentSpecifier
 
   oneof identifier
   {
-    /// If type == DT_SYMBOL or DT_FOOTPRINT, identifies a certain library entry
+    // If type == DT_SYMBOL or DT_FOOTPRINT, identifies a certain library entry
     LibraryIdentifier lib_id = 2;
 
-    /// If type == DT_SCHEMATIC, identifies a sheet with a given path
+    // If type == DT_SCHEMATIC, identifies a sheet with a given path
     SheetPath sheet_path = 3;
 
-    /// If type == DT_PCB, identifies a PCB with a given filename, e.g. "board.kicad_pcb"
+    // If type == DT_PCB, identifies a PCB with a given filename, e.g. "board.kicad_pcb"
     string board_filename = 4;
   }
-}
 
-/**
- * Describes the type of a KiCad item (wrapper for KICAD_T)
- */
-message ItemType
-{
-  /// Must be a valid value in the KICAD_T C++ enum (see typeinfo.h)
-  int32 type = 1;
+  ProjectSpecifier project = 5;
 }
 
 /**
@@ -148,11 +154,15 @@ message ItemType
  */
 message ItemHeader
 {
-  /// Which document is this request targeting?
+  // Which document is this request targeting?
   DocumentSpecifier document = 1;
 
-  /// Which fields on the item(s) are included with this request or response
-  google.protobuf.FieldMask field_mask = 2;
+  // Which container within the document is this request targeting?
+  // If container is omitted or empty, the document is used as the container.
+  KIID container = 2;
+
+  // Which fields on the item(s) are included with this request or response
+  google.protobuf.FieldMask field_mask = 3;
 }
 
 /**
@@ -162,32 +172,93 @@ enum ItemRequestStatus
 {
   IRS_UNKNOWN            = 0;
   IRS_OK                 = 1;
-  IRS_DOCUMENT_NOT_FOUND = 2;   /// The given document is not open in KiCad
-  IRS_FIELD_MASK_INVALID = 3;   /// The given field_mask contains invalid specifiers
+  IRS_DOCUMENT_NOT_FOUND = 2;   // The given document is not open in KiCad
+  IRS_FIELD_MASK_INVALID = 3;   // The given field_mask contains invalid specifiers
 }
 
-/// Describes a point in 2D space.  All coordinates are in nanometers.
-message Point2D
+// Describes a point or distance in 2D space.  All coordinates are in nanometers.
+message Vector2
 {
   int64 x_nm = 1;
   int64 y_nm = 2;
 }
 
-/// Describes a point in 3D space.  All coordinates are in nanometers.
-message Point3D
+// Describes a point or distance in 3D space.  All coordinates are in nanometers.
+message Vector3
 {
   int64 x_nm = 1;
   int64 y_nm = 2;
   int64 z_nm = 3;
 }
 
-/// Describes a quantity of distance (size, length, etc).  All coordinates are in nanometers.
+// Describes a quantity of distance (size, length, etc).  All coordinates are in nanometers.
 message Distance
 {
   int64 value_nm = 1;
 }
 
-/// Describes whether or not an item is locked for editing or movement
+// Corresponds to EDA_ANGLE, where the underlying storage is degrees
+message Angle
+{
+  double value_degrees = 1;
+}
+
+// Represents a value from 0.0 to 1.0
+message Ratio
+{
+  double value = 1;
+}
+
+// Corresponds to COLOR4D.  Each color channel is a double from 0.0 to 1.0.
+message Color
+{
+  double r = 1;
+  double g = 2;
+  double b = 3;
+  double a = 4;
+}
+
+// The formulation of arc that is used in KiCad core geometry code.
+// Start, midpoint (on the arc) and end are stored.  Angle, center point, etc are calculated.
+message ArcStartMidEnd
+{
+  Vector2 start = 1;
+  Vector2 mid   = 2;
+  Vector2 end   = 3;
+}
+
+message PolyLineNode
+{
+  oneof geometry {
+    Vector2        point = 1;
+    ArcStartMidEnd arc   = 2;
+  }
+}
+
+// Corresponds to class SHAPE_LINE_CHAIN: A closed or open polyline that can include arcs.
+// For non-arc cases, each node is a point along the line.  An implicit line segment exists
+// between the last and first node if closed is true.  When arcs are present, the arc start and
+// end points are not duplicated by point nodes (meaning, for example, a rectangle with rounded
+// corners could be represented with four arc nodes and no point nodes).
+message PolyLine
+{
+  repeated PolyLineNode nodes  = 1;
+  bool                  closed = 2;
+}
+
+message PolygonWithHoles
+{
+  PolyLine          outline = 1;
+  repeated PolyLine holes   = 2;
+}
+
+// Corresponds to SHAPE_POLY_SET: a set of polygons or polylines
+message PolySet
+{
+  repeated PolygonWithHoles polygons = 1;
+}
+
+// Describes whether or not an item is locked for editing or movement
 enum LockedState
 {
   LS_UNKNOWN  = 0;
@@ -195,23 +266,69 @@ enum LockedState
   LS_LOCKED   = 2;
 }
 
-message BoardLayer
+message TextAttributes
 {
-  int32 layer_id = 1; /// From PCB_LAYER_T
+  string                      font_name            = 1;
+  HorizontalAlignment         horizontal_alignment = 2;
+  VerticalAlignment           vertical_alignment   = 3;
+  kiapi.common.types.Angle    angle                = 4;
+  double                      line_spacing         = 5;
+  kiapi.common.types.Distance stroke_width         = 6;
+  bool                        italic               = 7;
+  bool                        bold                 = 8;
+  bool                        underlined           = 9;
+  bool                        visible              = 10;
+  bool                        mirrored             = 11;
+  bool                        multiline            = 12;
+  bool                        keep_upright         = 13;
+  kiapi.common.types.Vector2  size                 = 14;
 }
 
-/// Describes a copper item's net
-message Net
+message Text
 {
-  /// A unique code representing this net
-  int32 code = 1;
-
-  /// Human-readable net name
-  string name = 2;
+  kiapi.common.types.KIID           id         = 1;
+  kiapi.common.types.Vector2        position   = 2;
+  kiapi.common.types.TextAttributes attributes = 3;
+  kiapi.common.types.LockedState    locked     = 4;
+  string                            text       = 5;
+  string                            hyperlink  = 6;
+  bool                              knockout   = 7;
 }
 
-/// Describes a net class (a grouping of nets)
-message NetClass
+message TextBox
 {
-  string name = 1;
+  kiapi.common.types.KIID           id           = 1;
+  kiapi.common.types.Vector2        top_left     = 2;
+  kiapi.common.types.Vector2        bottom_right = 3;
+  kiapi.common.types.TextAttributes attributes   = 4;
+  kiapi.common.types.LockedState    locked       = 5;
+  string                            text         = 6;
+}
+
+message StrokeAttributes
+{
+  Distance width = 1;
+  StrokeLineStyle style = 2;
+  Color color = 3;
+}
+
+enum GraphicFillType
+{
+  GFT_UNKNOWN  = 0;
+  GFT_UNFILLED = 1;
+  GFT_FILLED   = 2;
+}
+
+message GraphicFillAttributes
+{
+  GraphicFillType fill_type = 1;
+
+  // Color of the fill (not used in board and footprints)
+  Color color = 2;
+}
+
+message GraphicAttributes
+{
+  StrokeAttributes stroke = 1;
+  GraphicFillAttributes fill = 2;
 }

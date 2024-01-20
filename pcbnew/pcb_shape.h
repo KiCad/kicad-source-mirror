@@ -57,6 +57,9 @@ public:
         return wxT( "PCB_SHAPE" );
     }
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     bool IsConnected() const override;
 
     wxString GetFriendlyName() const override { return EDA_SHAPE::GetFriendlyName(); }

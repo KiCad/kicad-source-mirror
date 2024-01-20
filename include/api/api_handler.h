@@ -32,7 +32,7 @@
 
 #include <google/protobuf/message.h>
 
-#include <import_export.h>
+#include <kicommon.h>
 #include <api/common/envelope.pb.h>
 #include <core/typeinfo.h>
 
@@ -44,10 +44,19 @@ typedef tl::expected<ApiResponse, ApiResponseStatus> API_RESULT;
 template <typename T>
 using HANDLER_RESULT = tl::expected<T, ApiResponseStatus>;
 
-class API_HANDLER
+
+struct HANDLER_CONTEXT
+{
+    std::string ClientName;
+};
+
+
+class KICOMMON_API API_HANDLER
 {
 public:
     API_HANDLER() {}
+
+    virtual ~API_HANDLER() {}
 
     /**
      * Attempt to handle the given API request, if a handler exists in this class for the message.
@@ -55,8 +64,6 @@ public:
      * @return a response to send to the client, or an appropriate error
      */
     API_RESULT Handle( ApiRequest& aMsg );
-
-    static std::optional<KICAD_T> TypeNameFromAny( const google::protobuf::Any& aMessage );
 
 protected:
 
@@ -81,7 +88,9 @@ protected:
      * @param aHandler is the handler function for the given request and response types
      */
     template <class RequestType, class ResponseType, class HandlerType>
-    void registerHandler( HANDLER_RESULT<ResponseType>( HandlerType::* aHandler )( RequestType& ) )
+    void registerHandler(
+            HANDLER_RESULT<ResponseType>( HandlerType::* aHandler )( RequestType&,
+                                                                     const HANDLER_CONTEXT& ) )
     {
         std::string typeName = RequestType().GetTypeName();
 
@@ -91,14 +100,17 @@ protected:
         m_handlers[typeName] =
                 [=]( ApiRequest& aRequest ) -> API_RESULT
                 {
-                    RequestType command;
+                    RequestType cmd;
                     ApiResponse envelope;
 
-                    if( !tryUnpack( aRequest, envelope, command ) )
+                    if( !tryUnpack( aRequest, envelope, cmd ) )
                         return envelope;
 
+                    HANDLER_CONTEXT ctx;
+                    ctx.ClientName = aRequest.header().client_name();
+
                     HANDLER_RESULT<ResponseType> response =
-                            std::invoke( aHandler, static_cast<HandlerType*>( this ), command );
+                            std::invoke( aHandler, static_cast<HandlerType*>( this ), cmd, ctx );
 
                     if( response.has_value() )
                     {
@@ -115,6 +127,8 @@ protected:
 
     /// Maps type name (without the URL prefix) to a handler method
     std::map<std::string, REQUEST_HANDLER> m_handlers;
+
+    static const wxString m_defaultCommitMessage;
 
 private:
 

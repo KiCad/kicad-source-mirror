@@ -326,6 +326,11 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     update = toolsMenu->Add( ACTIONS::updateSchematicFromPcb );
     update->Enable( !Kiface().IsSingle() );
 
+#ifdef KICAD_IPC_API
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( ACTIONS::pluginsReload );
+#endif
+
     //-- Preferences menu -----------------------------------------------
     //
     ACTION_MENU* prefsMenu = new ACTION_MENU( false, selTool );

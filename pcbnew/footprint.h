@@ -117,6 +117,9 @@ public:
     FOOTPRINT& operator=( const FOOTPRINT& aOther );
     FOOTPRINT& operator=( FOOTPRINT&& aOther );
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && aItem->Type() == PCB_FOOTPRINT_T;

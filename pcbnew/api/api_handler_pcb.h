@@ -23,14 +23,16 @@
 
 #include <google/protobuf/empty.pb.h>
 
-#include <api/api_handler.h>
-
+#include <api/api_handler_editor.h>
+#include <api/board/board_commands.pb.h>
+#include <api/board/board_types.pb.h>
 #include <api/common/commands/editor_commands.pb.h>
-
+#include <kiid.h>
 #include <properties/property_mgr.h>
 
 using namespace kiapi;
 using namespace kiapi::common;
+using namespace kiapi::board::commands;
 
 using google::protobuf::Empty;
 
@@ -44,7 +46,7 @@ class PCB_TRACK;
 class PROPERTY_BASE;
 
 
-class API_HANDLER_PCB : public API_HANDLER
+class API_HANDLER_PCB : public API_HANDLER_EDITOR
 {
 public:
     API_HANDLER_PCB( PCB_EDIT_FRAME* aFrame );
@@ -52,35 +54,64 @@ public:
 private:
     typedef std::map<std::string, PROPERTY_BASE*> PROTO_PROPERTY_MAP;
 
-    static std::unique_ptr<BOARD_ITEM> createItemForType( KICAD_T aType,
+    static HANDLER_RESULT<std::unique_ptr<BOARD_ITEM>> createItemForType( KICAD_T aType,
                                                           BOARD_ITEM_CONTAINER* aContainer );
 
-    HANDLER_RESULT<commands::RunActionResponse> handleRunAction( commands::RunAction& aMsg );
+    HANDLER_RESULT<commands::RunActionResponse> handleRunAction( commands::RunAction& aMsg,
+                                                                 const HANDLER_CONTEXT& aCtx );
 
     HANDLER_RESULT<commands::GetOpenDocumentsResponse> handleGetOpenDocuments(
-            commands::GetOpenDocuments& aMsg );
+            commands::GetOpenDocuments& aMsg, const HANDLER_CONTEXT& aCtx );
 
-    HANDLER_RESULT<commands::BeginCommitResponse> handleBeginCommit( commands::BeginCommit& aMsg );
-    HANDLER_RESULT<commands::EndCommitResponse> handleEndCommit( commands::EndCommit& aMsg );
+    HANDLER_RESULT<commands::GetItemsResponse> handleGetItems( commands::GetItems& aMsg,
+                                                               const HANDLER_CONTEXT& aCtx );
 
-    HANDLER_RESULT<commands::CreateItemsResponse> handleCreateItems( commands::CreateItems& aMsg );
-    HANDLER_RESULT<commands::GetItemsResponse> handleGetItems( commands::GetItems& aMsg );
-    HANDLER_RESULT<commands::UpdateItemsResponse> handleUpdateItems( commands::UpdateItems& aMsg );
-    HANDLER_RESULT<commands::DeleteItemsResponse> handleDeleteItems( commands::DeleteItems& aMsg );
+    HANDLER_RESULT<BoardStackupResponse> handleGetStackup( GetBoardStackup& aMsg,
+                                                           const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<GraphicsDefaultsResponse> handleGetGraphicsDefaults( GetGraphicsDefaults& aMsg,
+            const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<commands::BoundingBoxResponse> handleGetTextExtents( GetTextExtents& aMsg,
+            const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<Empty> handleInteractiveMoveItems( InteractiveMoveItems& aMsg,
+                                                      const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<NetsResponse> handleGetNets( GetNets& aMsg,
+                                                const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<Empty> handleRefillZones( RefillZones& aMsg, const HANDLER_CONTEXT& aCtx );
+
+protected:
+    std::unique_ptr<COMMIT> createCommit() override;
+
+    kiapi::common::types::DocumentType thisDocumentType() const override
+    {
+        return kiapi::common::types::DOCTYPE_PCB;
+    }
+
+    bool validateDocumentInternal( const DocumentSpecifier& aDocument ) const override;
+
+    void deleteItemsInternal( std::map<KIID, ItemDeletionStatus>& aItemsToDelete,
+                              const HANDLER_CONTEXT& aCtx ) override;
+
+    std::optional<EDA_ITEM*> getItemFromDocument( const DocumentSpecifier& aDocument,
+                                                  const KIID& aId ) override;
 
 private:
+    PCB_EDIT_FRAME* frame() const;
 
-    bool validateItemHeaderDocument( const common::types::ItemHeader& aHeader );
+    void pushCurrentCommit( const HANDLER_CONTEXT& aCtx, const wxString& aMessage ) override;
 
-    BOARD_COMMIT* getCurrentCommit();
+    std::optional<BOARD_ITEM*> getItemById( const KIID& aId ) const;
 
-    void pushCurrentCommit( const std::string& aMessage );
-
-    PCB_EDIT_FRAME* m_frame;
-
-    std::unique_ptr<BOARD_COMMIT> m_commit;
-
-    bool m_transactionInProgress;
+    HANDLER_RESULT<types::ItemRequestStatus> handleCreateUpdateItemsInternal( bool aCreate,
+            const HANDLER_CONTEXT& aCtx,
+            const types::ItemHeader &aHeader,
+            const google::protobuf::RepeatedPtrField<google::protobuf::Any>& aItems,
+            std::function<void(commands::ItemStatus, google::protobuf::Any)> aItemHandler )
+            override;
 };
 
 #endif //KICAD_API_HANDLER_PCB_H

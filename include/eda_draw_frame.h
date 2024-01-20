@@ -26,6 +26,7 @@
 #ifndef DRAW_FRAME_H_
 #define DRAW_FRAME_H_
 
+#include <api/api_plugin.h>
 #include <eda_base_frame.h>
 #include <kiway_player.h>
 #include <gal/gal_display_options.h>
@@ -490,6 +491,13 @@ public:
      */
     bool SaveCanvasImageToFile( const wxString& aFileName, BITMAP_TYPE aBitmapType );
 
+    /**
+     * Handler for activating an API plugin (via toolbar or menu)
+     */
+    virtual void OnApiPluginInvoke( wxCommandEvent& aEvent );
+
+    virtual PLUGIN_ACTION_SCOPE PluginActionScope() const { return PLUGIN_ACTION_SCOPE::INVALID; }
+
 
     DECLARE_EVENT_TABLE()
 
@@ -524,6 +532,11 @@ protected:
      */
     virtual void handleActivateEvent( wxActivateEvent& aEvent );
     void onActivate( wxActivateEvent& aEvent );
+
+    /**
+     * Append actions from API plugins to the main toolbar
+     */
+    virtual void addApiPluginTools();
 
 
     wxSocketServer*             m_socketServer;

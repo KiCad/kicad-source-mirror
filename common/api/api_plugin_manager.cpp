@@ -303,10 +303,15 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
         return;
     }
 
+    wxLogTrace( traceApi, wxString::Format( "Manager: begin processing; %zu jobs left in queue",
+                                            m_jobs.size() ) );
+
     JOB& job = m_jobs.front();
 
     if( job.type == JOB_TYPE::CREATE_ENV )
     {
+        wxLogTrace( traceApi, "Manager: Python exe '%s'",
+                    Pgm().GetCommonSettings()->m_Api.python_interpreter );
         wxLogTrace( traceApi, wxString::Format( "Manager: creating Python env at %s",
                                                 job.env_path ) );
         PYTHON_MANAGER manager( Pgm().GetCommonSettings()->m_Api.python_interpreter );
@@ -330,6 +335,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
         wxLogTrace( traceApi, wxString::Format( "Manager: installing dependencies for %s",
                                                 job.plugin_path ) );
 
+        std::optional<wxString> pythonHome = PYTHON_MANAGER::GetPythonEnvironment( job.identifier );
         std::optional<wxString> python = PYTHON_MANAGER::GetVirtualPython( job.identifier );
         wxFileName reqs = wxFileName( job.plugin_path, "requirements.txt" );
 
@@ -337,27 +343,45 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
         {
             wxLogTrace( traceApi, wxString::Format( "Manager: error: python not found at %s",
                                                     job.env_path ) );
-            wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED,
-                                                      wxID_ANY );
-            QueueEvent( evt );
         }
         else if( !reqs.IsFileReadable() )
         {
             wxLogTrace( traceApi,
                         wxString::Format( "Manager: error: requirements.txt not found at %s",
                                           job.plugin_path ) );
-            wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED,
-                                                      wxID_ANY );
-            QueueEvent( evt );
         }
         else
         {
-            PYTHON_MANAGER manager( *python );
+            wxLogTrace( traceApi, "Manager: Python exe '%s'", *python );
 
-            wxString cmd = wxString::Format(
+            PYTHON_MANAGER manager( *python );
+            wxExecuteEnv env;
+
+            if( pythonHome )
+                env.env[wxS( "VIRTUAL_ENV" )] = *pythonHome;
+
+            wxString cmd = wxS( "-m ensurepip" );
+            wxLogTrace( traceApi, "Manager: calling python `%s`", cmd );
+
+            manager.Execute( cmd,
+                [=]( int aRetVal, const wxString& aOutput, const wxString& aError )
+                {
+                    wxLogTrace( traceApi, wxString::Format( "Manager: ensurepip (%d): %s",
+                                                            aRetVal, aOutput ) );
+
+                    if( !aError.IsEmpty() )
+                    {
+                        wxLogTrace( traceApi,
+                                    wxString::Format( "Manager: ensurepip err: %s", aError ) );
+                    }
+                }, &env );
+
+            cmd = wxString::Format(
                     wxS( "-m pip install --no-input --isolated --require-virtualenv "
                          "--exists-action i -r '%s'" ),
                     reqs.GetFullPath() );
+
+            wxLogTrace( traceApi, "Manager: calling python `%s`", cmd );
 
             manager.Execute( cmd,
                 [=]( int aRetVal, const wxString& aOutput, const wxString& aError )
@@ -382,10 +406,14 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                                                               wxID_ANY );
 
                     QueueEvent( evt );
-                } );
+                }, &env );
         }
+
+        wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
+        QueueEvent( evt );
     }
 
     m_jobs.pop_front();
-    wxLogTrace( traceApi, wxString::Format( "Manager: %zu jobs left in queue", m_jobs.size() ) );
+    wxLogTrace( traceApi, wxString::Format( "Manager: done processing; %zu jobs left in queue",
+                                            m_jobs.size() ) );
 }

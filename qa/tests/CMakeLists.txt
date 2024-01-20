@@ -20,6 +20,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 ## Unit tests
+add_subdirectory( api )
 add_subdirectory( common )
 add_subdirectory( gerbview )
 add_subdirectory( eeschema )

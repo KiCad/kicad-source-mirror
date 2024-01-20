@@ -643,7 +643,7 @@ void FOOTPRINT_WIZARD_FRAME::PythonPluginsReload()
     PCB_EDIT_FRAME* pcbframe = static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
 
     if( pcbframe )
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
+        pcbframe->GetToolManager()->RunAction( ACTIONS::pluginsReload );
     else
-        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
+        GetToolManager()->RunAction( ACTIONS::pluginsReload );
 }

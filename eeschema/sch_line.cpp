@@ -38,6 +38,9 @@
 #include <project/net_settings.h>
 #include <trigo.h>
 #include <board_item.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/schematic/schematic_types.pb.h>
 
 
 SCH_LINE::SCH_LINE( const VECTOR2I& pos, int layer ) :
@@ -87,6 +90,49 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
     m_lastResolvedColor = aLine.m_lastResolvedColor;
 
     m_operatingPoint = aLine.m_operatingPoint;
+}
+
+
+void SCH_LINE::Serialize( google::protobuf::Any &aContainer ) const
+{
+    kiapi::schematic::types::Line line;
+
+    line.mutable_id()->set_value( m_Uuid.AsStdString() );
+    kiapi::common::PackVector2( *line.mutable_start(), GetStartPoint() );
+    kiapi::common::PackVector2( *line.mutable_end(), GetEndPoint() );
+    line.set_layer(
+            ToProtoEnum<SCH_LAYER_ID, kiapi::schematic::types::SchematicLayer>( GetLayer() ) );
+
+    aContainer.PackFrom( line );
+}
+
+
+bool SCH_LINE::Deserialize( const google::protobuf::Any &aContainer )
+{
+    kiapi::schematic::types::Line line;
+
+    if( !aContainer.UnpackTo( &line ) )
+        return false;
+
+    const_cast<KIID&>( m_Uuid ) = KIID( line.id().value() );
+    SetStartPoint( kiapi::common::UnpackVector2( line.start() ) );
+    SetEndPoint( kiapi::common::UnpackVector2( line.end() ) );
+    SCH_LAYER_ID layer =
+            FromProtoEnum<SCH_LAYER_ID, kiapi::schematic::types::SchematicLayer>( line.layer() );
+
+    switch( layer )
+    {
+    case LAYER_WIRE:
+    case LAYER_BUS:
+    case LAYER_NOTES:
+        SetLayer( layer );
+        break;
+
+    default:
+        break;
+    }
+
+    return true;
 }
 
 

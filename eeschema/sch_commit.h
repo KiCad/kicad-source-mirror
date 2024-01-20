@@ -31,6 +31,7 @@
 class PICKED_ITEMS_LIST;
 class TOOL_MANAGER;
 class SCH_EDIT_FRAME;
+class SCH_BASE_FRAME;
 class EDA_DRAW_FRAME;
 class TOOL_BASE;
 

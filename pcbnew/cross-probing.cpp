@@ -719,7 +719,7 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     }
 
     case MAIL_RELOAD_PLUGINS:
-        GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
+        GetToolManager()->RunAction( ACTIONS::pluginsReload );
         break;
 
     // many many others.

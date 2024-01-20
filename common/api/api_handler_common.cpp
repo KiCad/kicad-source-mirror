@@ -22,7 +22,11 @@
 
 #include <api/api_handler_common.h>
 #include <build_version.h>
+#include <google/protobuf/empty.pb.h>
 #include <pgm_base.h>
+#include <project/net_settings.h>
+#include <project/project_file.h>
+#include <settings/settings_manager.h>
 #include <wx/string.h>
 
 using namespace kiapi::common::commands;
@@ -34,10 +38,13 @@ API_HANDLER_COMMON::API_HANDLER_COMMON() :
         API_HANDLER()
 {
     registerHandler<GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
+    registerHandler<GetNetClasses, NetClassesResponse>( &API_HANDLER_COMMON::handleGetNetClasses );
+    registerHandler<Ping, Empty>( &API_HANDLER_COMMON::handlePing );
 }
 
 
-HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion( GetVersion& aMsg )
+HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion( GetVersion&,
+                                                                         const HANDLER_CONTEXT& )
 {
     GetVersionResponse reply;
 
@@ -49,4 +56,27 @@ HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion( GetVers
     reply.mutable_version()->set_patch( std::get<2>( version ) );
 
     return reply;
+}
+
+
+HANDLER_RESULT<NetClassesResponse> API_HANDLER_COMMON::handleGetNetClasses( GetNetClasses& aMsg,
+        const HANDLER_CONTEXT& aCtx )
+{
+    NetClassesResponse reply;
+
+    std::shared_ptr<NET_SETTINGS>& netSettings =
+            Pgm().GetSettingsManager().Prj().GetProjectFile().m_NetSettings;
+
+    for( const auto& [name, netClass] : netSettings->m_NetClasses )
+    {
+        reply.add_net_classes()->set_name( name.ToStdString() );
+    }
+
+    return reply;
+}
+
+
+HANDLER_RESULT<Empty> API_HANDLER_COMMON::handlePing( Ping& aMsg, const HANDLER_CONTEXT& aCtx )
+{
+    return Empty();
 }

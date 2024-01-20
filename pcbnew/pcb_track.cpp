@@ -23,8 +23,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <magic_enum.hpp>
-
 #include <pcb_base_frame.h>
 #include <core/mirror.h>
 #include <connectivity/connectivity_data.h>
@@ -46,6 +44,9 @@
 #include <trigo.h>
 
 #include <google/protobuf/any.pb.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/api_pcb_utils.h>
 #include <api/board/board_types.pb.h>
 
 using KIGFX::PCB_PAINTER;
@@ -296,15 +297,15 @@ void PCB_TRACK::Serialize( google::protobuf::Any &aContainer ) const
     kiapi::board::types::Track track;
 
     track.mutable_id()->set_value( m_Uuid.AsStdString() );
-    track.mutable_start()->set_x_nm( GetPosition().x );
-    track.mutable_start()->set_y_nm( GetPosition().y );
+    track.mutable_start()->set_x_nm( GetStart().x );
+    track.mutable_start()->set_y_nm( GetStart().y );
     track.mutable_end()->set_x_nm( GetEnd().x );
     track.mutable_end()->set_y_nm( GetEnd().y );
     track.mutable_width()->set_value_nm( GetWidth() );
-    track.mutable_layer()->set_layer_id( GetLayer() );
+    track.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
     track.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                  : kiapi::common::types::LockedState::LS_UNLOCKED );
-    track.mutable_net()->set_code( GetNetCode() );
+    track.mutable_net()->mutable_code()->set_value( GetNetCode() );
     track.mutable_net()->set_name( GetNetname() );
 
     aContainer.PackFrom( track );
@@ -322,8 +323,8 @@ bool PCB_TRACK::Deserialize( const google::protobuf::Any &aContainer )
     SetStart( VECTOR2I( track.start().x_nm(), track.start().y_nm() ) );
     SetEnd( VECTOR2I( track.end().x_nm(), track.end().y_nm() ) );
     SetWidth( track.width().value_nm() );
-    SetLayer( magic_enum::enum_cast<PCB_LAYER_ID>( track.layer().layer_id() ).value_or( F_Cu ) );
-    SetNetCode( track.net().code() );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( track.layer() ) );
+    SetNetCode( track.net().code().value() );
     SetLocked( track.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
     return true;
@@ -335,17 +336,17 @@ void PCB_ARC::Serialize( google::protobuf::Any &aContainer ) const
     kiapi::board::types::Arc arc;
 
     arc.mutable_id()->set_value( m_Uuid.AsStdString() );
-    arc.mutable_start()->set_x_nm( GetPosition().x );
-    arc.mutable_start()->set_y_nm( GetPosition().y );
+    arc.mutable_start()->set_x_nm( GetStart().x );
+    arc.mutable_start()->set_y_nm( GetStart().y );
     arc.mutable_mid()->set_x_nm( GetMid().x );
     arc.mutable_mid()->set_y_nm( GetMid().y );
     arc.mutable_end()->set_x_nm( GetEnd().x );
     arc.mutable_end()->set_y_nm( GetEnd().y );
     arc.mutable_width()->set_value_nm( GetWidth() );
-    arc.mutable_layer()->set_layer_id( GetLayer() );
+    arc.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
     arc.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
-    arc.mutable_net()->set_code( GetNetCode() );
+    arc.mutable_net()->mutable_code()->set_value( GetNetCode() );
     arc.mutable_net()->set_name( GetNetname() );
 
     aContainer.PackFrom( arc );
@@ -364,8 +365,8 @@ bool PCB_ARC::Deserialize( const google::protobuf::Any &aContainer )
     SetMid( VECTOR2I( arc.mid().x_nm(), arc.mid().y_nm() ) );
     SetEnd( VECTOR2I( arc.end().x_nm(), arc.end().y_nm() ) );
     SetWidth( arc.width().value_nm() );
-    SetLayer( magic_enum::enum_cast<PCB_LAYER_ID>( arc.layer().layer_id() ).value_or( F_Cu ) );
-    SetNetCode( arc.net().code() );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( arc.layer() ) );
+    SetNetCode( arc.net().code().value() );
     SetLocked( arc.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
     return true;
@@ -379,15 +380,22 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
     via.mutable_id()->set_value( m_Uuid.AsStdString() );
     via.mutable_position()->set_x_nm( GetPosition().x );
     via.mutable_position()->set_y_nm( GetPosition().y );
-    via.mutable_pad_diameter()->set_value_nm( GetWidth() );
-    via.mutable_drill_diameter()->set_value_nm( GetDrillValue() );
 
     kiapi::board::types::PadStack* padstack = via.mutable_pad_stack();
     padstack->set_type( GetViaType() == VIATYPE::BLIND_BURIED
                         ? kiapi::board::types::PadStackType::PST_BLIND_BURIED
                         : kiapi::board::types::PadStackType::PST_THROUGH );
-    padstack->mutable_start_layer()->set_layer_id( m_layer );
-    padstack->mutable_end_layer()->set_layer_id( m_bottomLayer );
+    padstack->set_start_layer(
+            ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( m_layer ) );
+    padstack->set_end_layer(
+            ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( m_bottomLayer ) );
+    kiapi::common::PackVector2( *padstack->mutable_drill_diameter(),
+                                { GetDrillValue(), GetDrillValue() } );
+
+    kiapi::board::types::PadStackLayer* stackLayer = padstack->add_layers();
+    kiapi::board::PackLayerSet( *stackLayer->mutable_layers(), GetLayerSet() );
+    kiapi::common::PackVector2( *stackLayer->mutable_size(),
+                                { GetWidth(), GetWidth() } );
 
     kiapi::board::types::UnconnectedLayerRemoval ulr;
 
@@ -409,7 +417,7 @@ void PCB_VIA::Serialize( google::protobuf::Any &aContainer ) const
 
     via.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
                                : kiapi::common::types::LockedState::LS_UNLOCKED );
-    via.mutable_net()->set_code( GetNetCode() );
+    via.mutable_net()->mutable_code()->set_value( GetNetCode() );
     via.mutable_net()->set_name( GetNetname() );
 
     aContainer.PackFrom( via );
@@ -426,10 +434,16 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
     const_cast<KIID&>( m_Uuid ) = KIID( via.id().value() );
     SetStart( VECTOR2I( via.position().x_nm(), via.position().y_nm() ) );
     SetEnd( GetStart() );
-    SetWidth( via.pad_diameter().value_nm() );
-    SetDrill( via.drill_diameter().value_nm() );
+    SetDrill( via.pad_stack().drill_diameter().x_nm() );
 
     const kiapi::board::types::PadStack& padstack = via.pad_stack();
+
+    // We don't yet support complex padstacks for vias
+    if( padstack.layers_size() == 1 )
+    {
+        const kiapi::board::types::PadStackLayer& layer = padstack.layers( 0 );
+        SetWidth( layer.size().x_nm() );
+    }
 
     switch( padstack.type() )
     {
@@ -444,10 +458,11 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
 
     if( GetViaType() != VIATYPE::THROUGH )
     {
-        m_layer = magic_enum::enum_cast<PCB_LAYER_ID>( padstack.start_layer().layer_id() )
-                        .value_or( F_Cu );
-        m_bottomLayer = magic_enum::enum_cast<PCB_LAYER_ID>( padstack.end_layer().layer_id() )
-                        .value_or( B_Cu );
+        m_layer = FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>(
+                padstack.start_layer() );
+
+        m_bottomLayer = FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>(
+                padstack.end_layer() );
     }
     else
     {
@@ -474,7 +489,7 @@ bool PCB_VIA::Deserialize( const google::protobuf::Any &aContainer )
         break;
     }
 
-    SetNetCode( via.net().code() );
+    SetNetCode( via.net().code().value() );
     SetLocked( via.locked() == kiapi::common::types::LockedState::LS_LOCKED );
 
     return true;

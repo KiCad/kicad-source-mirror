@@ -27,6 +27,9 @@
 #include <board.h>
 #include <i18n_utility.h>       // For _HKI definition
 #include "stackup_predefined_prms.h"
+#include <google/protobuf/any.pb.h>
+#include <api/board/board.pb.h>
+#include <api/api_enums.h>
 
 
 bool DIELECTRIC_PRMS::operator==( const DIELECTRIC_PRMS& aOther ) const
@@ -414,6 +417,44 @@ bool BOARD_STACKUP::operator==( const BOARD_STACKUP& aOther ) const
         return false;
     }
 
+    return true;
+}
+
+
+void BOARD_STACKUP::Serialize( google::protobuf::Any& aContainer ) const
+{
+    kiapi::board::BoardStackup stackup;
+
+    for( const BOARD_STACKUP_ITEM* item : m_list )
+    {
+        kiapi::board::BoardStackupLayer* layer = stackup.mutable_layers()->Add();
+
+        // TODO dielectric sub-layers
+        layer->mutable_thickness()->set_value_nm( item->GetThickness() );
+        layer->set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>(
+                item->GetBrdLayerId() ) );
+
+        switch( item->GetType() )
+        {
+        case BOARD_STACKUP_ITEM_TYPE::BS_ITEM_TYPE_COPPER:
+        {
+            layer->mutable_copper()->New();
+            // (no copper params yet...)
+            break;
+        }
+
+        default:
+            // TODO
+            break;
+        }
+    }
+
+    aContainer.PackFrom( stackup );
+}
+
+
+bool BOARD_STACKUP::Deserialize( const google::protobuf::Any& aContainer )
+{
     return true;
 }
 

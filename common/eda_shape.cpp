@@ -94,6 +94,7 @@ wxString EDA_SHAPE::SHAPE_T_asString() const
     case SHAPE_T::CIRCLE:    return wxS( "S_CIRCLE" );
     case SHAPE_T::POLY:      return wxS( "S_POLYGON" );
     case SHAPE_T::BEZIER:    return wxS( "S_CURVE" );
+    case SHAPE_T::UNDEFINED: return wxS( "UNDEFINED" );
     }
 
     return wxEmptyString;  // Just to quiet GCC.
@@ -243,12 +244,14 @@ void EDA_SHAPE::move( const VECTOR2I& aMoveVector )
     switch ( m_shape )
     {
     case SHAPE_T::ARC:
+        m_arcCenter += aMoveVector;
+        KI_FALLTHROUGH;
+
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECTANGLE:
     case SHAPE_T::CIRCLE:
         m_start += aMoveVector;
         m_end += aMoveVector;
-        m_arcCenter += aMoveVector;
         break;
 
     case SHAPE_T::POLY:
@@ -284,11 +287,13 @@ void EDA_SHAPE::scale( double aScale )
     switch( m_shape )
     {
     case SHAPE_T::ARC:
+        scalePt( m_arcCenter );
+        KI_FALLTHROUGH;
+
     case SHAPE_T::SEGMENT:
     case SHAPE_T::RECTANGLE:
         scalePt( m_start );
         scalePt( m_end );
-        scalePt( m_arcCenter );
         break;
 
     case SHAPE_T::CIRCLE: //  ring or circle

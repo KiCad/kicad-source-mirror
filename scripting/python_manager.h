@@ -26,8 +26,10 @@
 
 #include <wx/wx.h>
 
+#include <kicommon.h>
 
-class PYTHON_MANAGER
+
+class KICOMMON_API PYTHON_MANAGER
 {
 public:
     PYTHON_MANAGER( const wxString& aInterpreterPath ) :

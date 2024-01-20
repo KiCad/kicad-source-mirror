@@ -467,6 +467,10 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
                     doMoveItem( shape, newStart - shape->GetStart() );
 
                 break;
+
+            case SHAPE_T::UNDEFINED:
+                wxASSERT_MSG( false, wxT( "Undefined shape in AlignElements" ) );
+                break;
             }
         }
         else

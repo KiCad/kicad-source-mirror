@@ -270,6 +270,14 @@ public:
         doRunAction( aAction, false, a, nullptr );
     }
 
+    bool PostAction( const TOOL_ACTION& aAction, COMMIT* aCommit )
+    {
+        // Default initialize the parameter argument to an empty std::any
+        std::any a;
+
+        return doRunAction( aAction, false, a, aCommit );
+    }
+
     /**
      * Send a cancel event to the tool currently at the top of the tool stack.
      */

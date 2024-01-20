@@ -284,8 +284,12 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
     // Add SWIG and API plugins
     bool scriptingAvailable = SCRIPTING::IsWxAvailable();
+#ifdef KICAD_IPC_API
     bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server &&
             !Pgm().GetPluginManager().GetActionsForScope( PLUGIN_ACTION_SCOPE::PCB ).empty();
+#else
+    bool haveApiPlugins = false;
+#endif
 
     if( scriptingAvailable || haveApiPlugins )
     {
@@ -298,40 +302,11 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
         }
 
         if( haveApiPlugins )
-            AddApiPluginTools();
+            addApiPluginTools();
     }
 
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->KiRealize();
-}
-
-
-void PCB_EDIT_FRAME::AddApiPluginTools()
-{
-    // TODO: Add user control over visibility and order
-    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
-
-    mgr.ButtonBindings().clear();
-
-    std::vector<const PLUGIN_ACTION*> actions = mgr.GetActionsForScope( PLUGIN_ACTION_SCOPE::PCB );
-
-    for( auto& action : actions )
-    {
-        if( !action->show_button )
-            continue;
-
-        const wxBitmapBundle& icon = KIPLATFORM::UI::IsDarkTheme() && action->icon_dark.IsOk()
-                                             ? action->icon_dark
-                                             : action->icon_light;
-
-        wxAuiToolBarItem* button = m_mainToolBar->AddTool( wxID_ANY, wxEmptyString, icon,
-                                                           action->name );
-
-        Connect( button->GetId(), wxEVT_COMMAND_MENU_SELECTED,
-                 wxCommandEventHandler( PCB_EDIT_FRAME::OnApiPluginButton ) );
-
-        mgr.ButtonBindings().insert( { button->GetId(), action->identifier } );
-    }
 }
 
 

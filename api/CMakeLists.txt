@@ -22,11 +22,19 @@ set( KIAPI_PROTO_SRCS
     common/envelope.proto
 
     common/types/base_types.proto
+    common/types/enums.proto
+    common/types/project_settings.proto
 
     common/commands/base_commands.proto
     common/commands/editor_commands.proto
+    common/commands/project_commands.proto
 
+    board/board.proto
+    board/board_commands.proto
     board/board_types.proto
+
+    schematic/schematic_types.proto
+    schematic/schematic_commands.proto
     )
 
 # Generated C++ code must be in the build dir; it is dependent on the version of protoc installed
@@ -101,18 +109,3 @@ target_include_directories( kiapi INTERFACE
 
 # Because when building internally, the generated files do not include the "api" base path
 target_include_directories( kiapi PUBLIC ${KIAPI_CPP_BASEPATH} )
-
-option( KICAD_BUILD_ENUM_EXPORTER
-    "Build the enum exporter used as part of generating the IPC APIs"
-    OFF )
-
-if( KICAD_BUILD_ENUM_EXPORTER )
-    add_subdirectory( enums )
-
-    add_custom_target( enum_definitions
-        COMMAND $<TARGET_FILE:enum_exporter> ${CMAKE_CURRENT_BINARY_DIR}/enums.json
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-        COMMENT "Generating API definitions from KiCad enums..."
-        DEPENDS enum_exporter
-        )
-endif()

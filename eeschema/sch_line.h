@@ -51,6 +51,9 @@ public:
 
     ~SCH_LINE() { }
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && SCH_LINE_T == aItem->Type();

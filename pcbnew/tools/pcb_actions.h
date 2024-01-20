@@ -399,7 +399,6 @@ public:
     static TOOL_ACTION zoneDuplicate;
 
     /// Scripting Actions
-    static TOOL_ACTION pluginsReload;
     static TOOL_ACTION pluginsShowFolder;
 
     // Global edit tool

@@ -220,6 +220,9 @@ public:
     static TOOL_ACTION getInvolved;
     static TOOL_ACTION reportBug;
 
+    // API
+    static TOOL_ACTION pluginsReload;
+
     ///< Cursor control event types
     enum CURSOR_EVENT_TYPE
     {

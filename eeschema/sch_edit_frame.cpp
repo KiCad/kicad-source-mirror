@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <api/api_handler_sch.h>
+#include <api/api_server.h>
 #include <base_units.h>
 #include <bitmaps.h>
 #include <symbol_library.h>
@@ -96,6 +98,10 @@
 #include <widgets/panel_sch_selection_filter.h>
 #include <widgets/wx_aui_utils.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
+
+#ifdef KICAD_IPC_API
+#include <api/api_plugin_manager.h>
+#endif
 
 
 #define DIFF_SYMBOLS_DIALOG_NAME wxT( "DiffSymbolsDialog" )
@@ -176,6 +182,16 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateHToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
+
+#ifdef KICAD_IPC_API
+    wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+            [&]( wxCommandEvent& aEvt )
+            {
+                wxLogTrace( traceApi, "SCH frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
+                ReCreateHToolbar();
+                aEvt.Skip();
+            } );
+#endif
 
     m_hierarchy = new HIERARCHY_PANE( this );
 
@@ -379,6 +395,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     updateTitle();
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->ResetHistory();
+
+#ifdef KICAD_IPC_API
+    m_apiHandler = std::make_unique<API_HANDLER_SCH>( this );
+    Pgm().GetApiServer().RegisterHandler( m_apiHandler.get() );
+#endif
 
     // Default shutdown reason until a file is loaded
     KIPLATFORM::APP::SetShutdownBlockReason( this, _( "New schematic file is unsaved" ) );

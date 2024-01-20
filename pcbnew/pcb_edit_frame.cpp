@@ -266,6 +266,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
+#ifdef KICAD_IPC_API
     wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
             [&]( wxCommandEvent& aEvt )
             {
@@ -273,7 +274,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                 ReCreateHToolbar();
                 aEvt.Skip();
             } );
-
+#endif
 
     m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
 
@@ -438,7 +439,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     PythonSyncProjectName();
 
     // Sync action plugins in case they changed since the last time the frame opened
-    GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
+    GetToolManager()->RunAction( ACTIONS::pluginsReload );
 
 #ifdef KICAD_IPC_API
     m_apiHandler = std::make_unique<API_HANDLER_PCB>( this );
@@ -2062,24 +2063,6 @@ void PCB_EDIT_FRAME::PythonSyncProjectName()
 }
 
 
-void PCB_EDIT_FRAME::OnApiPluginMenu( wxCommandEvent& aEvent )
-{
-    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
-
-    if( mgr.MenuBindings().count( aEvent.GetId() ) )
-        mgr.InvokeAction( mgr.MenuBindings().at( aEvent.GetId() ) );
-}
-
-
-void PCB_EDIT_FRAME::OnApiPluginButton( wxCommandEvent& aEvent )
-{
-    API_PLUGIN_MANAGER& mgr = Pgm().GetPluginManager();
-
-    if( mgr.ButtonBindings().count( aEvent.GetId() ) )
-        mgr.InvokeAction( mgr.ButtonBindings().at( aEvent.GetId() ) );
-}
-
-
 void PCB_EDIT_FRAME::ShowFootprintPropertiesDialog( FOOTPRINT* aFootprint )
 {
     if( aFootprint == nullptr )
@@ -2493,6 +2476,26 @@ void PCB_EDIT_FRAME::ThemeChanged()
 void PCB_EDIT_FRAME::ProjectChanged()
 {
     PythonSyncProjectName();
+}
+
+
+bool PCB_EDIT_FRAME::CanAcceptApiCommands()
+{
+    // For now, be conservative: Don't allow any API use while the user is changing things
+    if( GetToolManager()->GetCurrentTool() != GetToolManager()->GetTool<PCB_SELECTION_TOOL>() )
+        return false;
+
+    ZONE_FILLER_TOOL* zoneFillerTool = m_toolManager->GetTool<ZONE_FILLER_TOOL>();
+
+    if( zoneFillerTool->IsBusy() )
+        return false;
+
+    ROUTER_TOOL* routerTool = m_toolManager->GetTool<ROUTER_TOOL>();
+
+    if( routerTool->RoutingInProgress() )
+        return false;
+
+    return EDA_BASE_FRAME::CanAcceptApiCommands();
 }
 
 

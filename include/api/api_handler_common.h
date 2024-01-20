@@ -21,22 +21,29 @@
 #ifndef KICAD_API_HANDLER_COMMON_H
 #define KICAD_API_HANDLER_COMMON_H
 
+#include <google/protobuf/empty.pb.h>
+
 #include <api/api_handler.h>
 #include <api/common/commands/base_commands.pb.h>
-#include <api/common/commands/editor_commands.pb.h>
-
-#include <google/protobuf/empty.pb.h>
+#include <api/common/commands/project_commands.pb.h>
 
 using namespace kiapi;
 using namespace kiapi::common;
+using google::protobuf::Empty;
 
-class API_HANDLER_COMMON : public API_HANDLER
+class KICOMMON_API API_HANDLER_COMMON : public API_HANDLER
 {
 public:
     API_HANDLER_COMMON();
 
 private:
-    HANDLER_RESULT<commands::GetVersionResponse> handleGetVersion( commands::GetVersion& aMsg );
+    HANDLER_RESULT<commands::GetVersionResponse> handleGetVersion( commands::GetVersion& aMsg,
+                                                                   const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<commands::NetClassesResponse> handleGetNetClasses( commands::GetNetClasses& aMsg,
+                                                                      const HANDLER_CONTEXT& aCtx );
+
+    HANDLER_RESULT<Empty> handlePing( commands::Ping& aMsg, const HANDLER_CONTEXT& aCtx );
 };
 
 #endif //KICAD_API_HANDLER_COMMON_H

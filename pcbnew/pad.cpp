@@ -50,6 +50,10 @@
 #include <pcb_painter.h>
 #include <properties/property_validators.h>
 #include <wx/log.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+#include <api/api_pcb_utils.h>
+#include <api/board/board_types.pb.h>
 
 #include <memory>
 #include <macros.h>
@@ -132,6 +136,160 @@ PAD& PAD::operator=( const PAD &aOther )
     m_keepTopBottomLayer = aOther.m_keepTopBottomLayer;
 
     return *this;
+}
+
+
+void PAD::Serialize( google::protobuf::Any &aContainer ) const
+{
+    kiapi::board::types::Pad pad;
+
+    pad.mutable_id()->set_value( m_Uuid.AsStdString() );
+    kiapi::common::PackVector2( *pad.mutable_position(), GetPosition() );
+    pad.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
+                               : kiapi::common::types::LockedState::LS_UNLOCKED );
+    pad.mutable_net()->mutable_code()->set_value( GetNetCode() );
+    pad.mutable_net()->set_name( GetNetname() );
+
+    kiapi::board::types::PadStack* padstack = pad.mutable_pad_stack();
+    padstack->set_type( kiapi::board::types::PadStackType::PST_THROUGH );
+    padstack->set_start_layer(
+            ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( m_layer ) );
+    padstack->set_end_layer(
+            ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( FlipLayer( m_layer ) ) );
+    kiapi::common::PackVector2( *padstack->mutable_drill_diameter(),
+                                { GetDrillSizeX(), GetDrillSizeY() } );
+    padstack->mutable_angle()->set_value_degrees( GetOrientationDegrees() );
+
+    kiapi::board::types::PadStackLayer* stackLayer = padstack->add_layers();
+    kiapi::board::PackLayerSet( *stackLayer->mutable_layers(), GetLayerSet() );
+    kiapi::common::PackVector2( *stackLayer->mutable_size(),
+                                { GetSizeX(), GetSizeY() } );
+    stackLayer->set_shape(
+            ToProtoEnum<PAD_SHAPE, kiapi::board::types::PadStackShape>( GetShape() ) );
+
+    kiapi::board::types::UnconnectedLayerRemoval ulr;
+
+    if( m_removeUnconnectedLayer )
+    {
+        if( m_keepTopBottomLayer )
+            ulr = kiapi::board::types::UnconnectedLayerRemoval::ULR_REMOVE_EXCEPT_START_AND_END;
+        else
+            ulr = kiapi::board::types::UnconnectedLayerRemoval::ULR_REMOVE;
+    }
+    else
+    {
+        ulr = kiapi::board::types::UnconnectedLayerRemoval::ULR_KEEP;
+    }
+
+    padstack->set_unconnected_layer_removal( ulr );
+
+    kiapi::board::types::DesignRuleOverrides* overrides = pad.mutable_overrides();
+
+    if( GetLocalClearance().has_value() )
+        overrides->mutable_clearance()->set_value_nm( *GetLocalClearance() );
+
+    if( GetLocalSolderMaskMargin().has_value() )
+        overrides->mutable_solder_mask_margin()->set_value_nm( *GetLocalSolderMaskMargin() );
+
+    if( GetLocalSolderPasteMargin().has_value() )
+        overrides->mutable_solder_paste_margin()->set_value_nm( *GetLocalSolderPasteMargin() );
+
+    if( GetLocalSolderPasteMarginRatio().has_value() )
+        overrides->mutable_solder_paste_margin_ratio()->set_value( *GetLocalSolderPasteMarginRatio() );
+
+    overrides->set_zone_connection(
+            ToProtoEnum<ZONE_CONNECTION,
+                        kiapi::board::types::ZoneConnectionStyle>( GetLocalZoneConnection() ) );
+
+    kiapi::board::types::ThermalSpokeSettings* thermals = pad.mutable_thermal_spokes();
+
+    thermals->set_width( GetThermalSpokeWidth() );
+    thermals->set_gap( GetThermalGap() );
+    thermals->mutable_angle()->set_value_degrees( GetThermalSpokeAngleDegrees() );
+
+    aContainer.PackFrom( pad );
+}
+
+
+bool PAD::Deserialize( const google::protobuf::Any &aContainer )
+{
+    kiapi::board::types::Pad pad;
+
+    if( !aContainer.UnpackTo( &pad ) )
+        return false;
+
+    const_cast<KIID&>( m_Uuid ) = KIID( pad.id().value() );
+    SetPosition( kiapi::common::UnpackVector2( pad.position() ) );
+    SetNetCode( pad.net().code().value() );
+    SetLocked( pad.locked() == kiapi::common::types::LockedState::LS_LOCKED );
+
+    const kiapi::board::types::PadStack& padstack = pad.pad_stack();
+
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>(
+            padstack.start_layer() ) );
+
+    SetDrillSize( kiapi::common::UnpackVector2( padstack.drill_diameter() ) );
+    SetOrientationDegrees( padstack.angle().value_degrees() );
+
+    // We don't yet support complex padstacks
+    if( padstack.layers_size() == 1 )
+    {
+        const kiapi::board::types::PadStackLayer& layer = padstack.layers( 0 );
+        SetSize( kiapi::common::UnpackVector2( layer.size() ) );
+        SetLayerSet( kiapi::board::UnpackLayerSet( layer.layers() ) );
+        SetShape( FromProtoEnum<PAD_SHAPE>( layer.shape() ) );
+    }
+
+    switch( padstack.unconnected_layer_removal() )
+    {
+    case kiapi::board::types::UnconnectedLayerRemoval::ULR_REMOVE:
+        m_removeUnconnectedLayer = true;
+        m_keepTopBottomLayer = false;
+        break;
+
+    case kiapi::board::types::UnconnectedLayerRemoval::ULR_REMOVE_EXCEPT_START_AND_END:
+        m_removeUnconnectedLayer = true;
+        m_keepTopBottomLayer = true;
+        break;
+
+    default:
+    case kiapi::board::types::UnconnectedLayerRemoval::ULR_KEEP:
+        m_removeUnconnectedLayer = false;
+        m_keepTopBottomLayer = false;
+        break;
+    }
+
+    const kiapi::board::types::DesignRuleOverrides& overrides = pad.overrides();
+
+    if( overrides.has_clearance() )
+        SetLocalClearance( overrides.clearance().value_nm() );
+    else
+        SetLocalClearance( std::nullopt );
+
+    if( overrides.has_solder_mask_margin() )
+        SetLocalSolderMaskMargin( overrides.solder_mask_margin().value_nm() );
+    else
+        SetLocalSolderMaskMargin( std::nullopt );
+
+    if( overrides.has_solder_paste_margin() )
+        SetLocalSolderPasteMargin( overrides.solder_paste_margin().value_nm() );
+    else
+        SetLocalSolderPasteMargin( std::nullopt );
+
+    if( overrides.has_solder_paste_margin_ratio() )
+        SetLocalSolderPasteMarginRatio( overrides.solder_paste_margin_ratio().value() );
+    else
+        SetLocalSolderPasteMarginRatio( std::nullopt );
+
+    SetLocalZoneConnection( FromProtoEnum<ZONE_CONNECTION>( overrides.zone_connection() ) );
+
+    const kiapi::board::types::ThermalSpokeSettings& thermals = pad.thermal_spokes();
+
+    SetThermalGap( thermals.gap() );
+    SetThermalSpokeWidth( thermals.width() );
+    SetThermalSpokeAngleDegrees( thermals.angle().value_degrees() );
+
+    return true;
 }
 
 

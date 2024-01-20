@@ -25,11 +25,13 @@
  */
 
 #include <advanced_config.h>
+#include <api/api_plugin_manager.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <kiface_base.h>
 #include <bitmaps.h>
 #include <eeschema_id.h>
+#include <pgm_base.h>
 #include <python_scripting.h>
 #include <tool/tool_manager.h>
 #include <tool/action_toolbar.h>
@@ -119,11 +121,24 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddScaledSeparator( this );
     m_mainToolBar->Add( EE_ACTIONS::showPcbNew );
 
-    // Access to the scripting console
-    if( SCRIPTING::IsWxAvailable() )
+    // Add scripting console and API plugins
+    bool scriptingAvailable = SCRIPTING::IsWxAvailable();
+#ifdef KICAD_IPC_API
+    bool haveApiPlugins = Pgm().GetCommonSettings()->m_Api.enable_server &&
+            !Pgm().GetPluginManager().GetActionsForScope( PLUGIN_ACTION_SCOPE::SCHEMATIC ).empty();
+#else
+    bool haveApiPlugins = false;
+#endif
+
+    if( scriptingAvailable || haveApiPlugins )
     {
         m_mainToolBar->AddScaledSeparator( this );
-        m_mainToolBar->Add( EE_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
+
+        if( scriptingAvailable )
+            m_mainToolBar->Add( EE_ACTIONS::showPythonConsole, ACTION_TOOLBAR::TOGGLE );
+
+        if( haveApiPlugins )
+            addApiPluginTools();
     }
 
     // after adding the tools to the toolbar, must call Realize() to reflect the changes

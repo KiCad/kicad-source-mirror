@@ -38,6 +38,7 @@ class FONT;
 // NB: values -1,0,1 are used in computations, do not change them
 //
 
+// This is API surface mapped to common.types.HorizontalAlignment
 enum GR_TEXT_H_ALIGN_T
 {
     GR_TEXT_H_ALIGN_LEFT   = -1,
@@ -46,6 +47,7 @@ enum GR_TEXT_H_ALIGN_T
     GR_TEXT_H_ALIGN_INDETERMINATE
 };
 
+// This is API surface mapped to common.types.VertialAlignment
 enum GR_TEXT_V_ALIGN_T
 {
     GR_TEXT_V_ALIGN_TOP    = -1,

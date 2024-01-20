@@ -32,7 +32,7 @@
  *
  * Use "KICAD_API" to enable.
  *
- * @ingroup traceApi
+ * @ingroup trace_env_vars
  */
 extern const KICOMMON_API wxChar* const traceApi;
 
@@ -41,6 +41,7 @@ wxDECLARE_EVENT( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxCommandEvent );
 
 /// Notifies other parts of KiCad when plugin availability changes
 extern const KICOMMON_API wxEventTypeTag<wxCommandEvent> EDA_EVT_PLUGIN_AVAILABILITY_CHANGED;
+
 /**
  * Responsible for loading plugin definitions for API-based plugins (ones that do not run inside
  * KiCad itself, but instead are launched as external processes by KiCad)

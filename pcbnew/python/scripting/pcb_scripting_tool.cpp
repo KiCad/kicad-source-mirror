@@ -24,7 +24,6 @@
 #include "pcb_scripting_tool.h"
 
 #include <action_plugin.h>
-#include <api/api_plugin_manager.h>
 #include <kiface_ids.h>
 #include <kiway.h>
 #include <macros.h>
@@ -37,6 +36,10 @@
 #include <Python.h>
 #include <wx/string.h>
 #include <launch_ext.h>
+
+#ifdef KICAD_IPC_API
+#include <api/api_plugin_manager.h>
+#endif
 
 using initfunc = PyObject* (*)(void);
 
@@ -108,8 +111,10 @@ int SCRIPTING_TOOL::reloadPlugins( const TOOL_EVENT& aEvent )
         return -1;
     }
 
+#ifdef KICAD_IPC_API
     // TODO move this elsewhere when SWIG plugins are removed
     Pgm().GetPluginManager().ReloadPlugins();
+#endif
 
     if( !m_isFootprintEditor )
     {
@@ -161,6 +166,6 @@ int SCRIPTING_TOOL::showPluginFolder( const TOOL_EVENT& aEvent )
 
 void SCRIPTING_TOOL::setTransitions()
 {
-    Go( &SCRIPTING_TOOL::reloadPlugins,     PCB_ACTIONS::pluginsReload.MakeEvent() );
+    Go( &SCRIPTING_TOOL::reloadPlugins,     ACTIONS::pluginsReload.MakeEvent() );
     Go( &SCRIPTING_TOOL::showPluginFolder,  PCB_ACTIONS::pluginsShowFolder.MakeEvent() );
 }

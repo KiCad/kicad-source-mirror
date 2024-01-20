@@ -37,6 +37,9 @@ public:
 
     PCB_FIELD( const PCB_TEXT& aText, int aFieldId, const wxString& aName = wxEmptyString );
 
+    void Serialize( google::protobuf::Any &aContainer ) const override;
+    bool Deserialize( const google::protobuf::Any &aContainer ) override;
+
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && PCB_FIELD_T == aItem->Type();
@@ -114,6 +117,8 @@ protected:
     void swapData( BOARD_ITEM* aImage ) override;
 
 private:
+    void setId( int aId ) { m_id = aId; }
+
     int m_id; ///< Field index, @see enum MANDATORY_FIELD_T
 
     wxString m_name;

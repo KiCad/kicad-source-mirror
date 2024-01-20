@@ -27,17 +27,18 @@ package kiapi.common.commands;
 
 import "google/protobuf/any.proto";
 import "common/types/base_types.proto";
+import "common/types/enums.proto";
 
-/// Refreshes the given frame, if that frame is open
+// Refreshes the given frame, if that frame is open
 message RefreshEditor
 {
   kiapi.common.types.FrameType frame = 1;
 }
 
-/// Retrieves a list of open documents of the given type
+// Retrieves a list of open documents of the given type
 message GetOpenDocuments
 {
-  /// Which type of documents to query
+  // Which type of documents to query
   kiapi.common.types.DocumentType type = 1;
 }
 
@@ -86,140 +87,150 @@ message BeginCommit
 
 message BeginCommitResponse
 {
+  // Opaque identifier tracking a commit
+  kiapi.common.types.KIID id = 1;
 }
 
 
-enum CommitResult
+enum CommitAction
 {
-  CR_UNKNOWN   = 0;
-  CR_OK        = 1; // Commit was pushed successfully
-  CR_NO_COMMIT = 2; // There was no commit started
+  CMA_UNKNOWN = 0;
+  CMA_COMMIT  = 1; // Commit the changes to the design
+  CMA_DROP    = 2; // Cancel this commit
 }
 
 
 message EndCommit
 {
+  // The ID that was given by BeginCommit
+  kiapi.common.types.KIID id = 1;
+
+  // What to do with this commit
+  CommitAction action = 2;
+
   // Optional message describing this changeset
-  string message = 1;
+  string message = 3;
 }
 
 
 message EndCommitResponse
 {
-  CommitResult result = 1;
 }
 
-/// Creates new items on a given document
+// Creates new items on a given document
 message CreateItems
 {
-  /// Specifies which document to create on, which fields are included, etc.
+  // Specifies which document to create on, which fields are included, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  /// List of items to create
+  // List of items to create
   repeated google.protobuf.Any items = 2;
 
-  /// Items may be created on a top-level document (sheet, board, etc) or inside a container
-  /// (symbol, footprint).  If this field is not empty, it holds the ID of a symbol or footprint
-  /// that the items should be added to.  This ID must be an existing symbol (for schematic
-  /// documents) or footprint (for board documents).  If the given container does not exist or is
-  /// not the correct item type, the CreateItems call will fail.
+  // Items may be created on a top-level document (sheet, board, etc) or inside a container
+  // (symbol, footprint).  If this field is not empty, it holds the ID of a symbol or footprint
+  // that the items should be added to.  This ID must be an existing symbol (for schematic
+  // documents) or footprint (for board documents).  If the given container does not exist or is
+  // not the correct item type, the CreateItems call will fail.
   kiapi.common.types.KIID container = 3;
 }
 
-enum ItemCreationStatus
+enum ItemStatusCode
 {
-  ICS_UNKNOWN      = 0;
-  ICS_OK           = 1; /// The item was created
-  ICS_INVALID_TYPE = 2; /// The item's type is not valid for the given document
-  ICS_EXISTING     = 3; /// The item had a specified KIID and that KIID was already in use
+  ISC_UNKNOWN      = 0;
+  ISC_OK           = 1; // The item was created or updated
+  ISC_INVALID_TYPE = 2; // The item's type is not valid for the given document
+  ISC_EXISTING     = 3; // The item to be created had a specified KIID and that KIID was already in use
+  ISC_NONEXISTENT  = 4; // The item to be updated did not exist in the given document
+  ISC_IMMUTABLE    = 5; // The item to be updated is not allowed to be modified by the API
+  ISC_INVALID_DATA = 7; // The item to be created does not have valid data for the given document
+}
+
+// Per-item status feedback for creation and update calls
+message ItemStatus
+{
+  ItemStatusCode code = 1;
+
+  string error_message = 2;
 }
 
 message ItemCreationResult
 {
-  ItemCreationStatus status = 1;
+  ItemStatus status = 1;
 
-  /// The created version of the item, including an updated KIID as applicable
+  // The created version of the item, including an updated KIID as applicable
   google.protobuf.Any item = 2;
 }
 
 message CreateItemsResponse
 {
-  /// Specifies which document was modified, which fields are included in created_items, etc.
+  // Specifies which document was modified, which fields are included in created_items, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  /// Status of the overall request; may return IRS_OK even if no items were created
+  // Status of the overall request; may return IRS_OK even if no items were created
   kiapi.common.types.ItemRequestStatus status = 2;
 
-  /// Status of each item to be created
+  // Status of each item to be created
   repeated ItemCreationResult created_items = 3;
 }
 
 message GetItems
 {
-  /// Specifies which document to query, which fields to return, etc.
+  // Specifies which document to query, which fields to return, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  /// List of one or more types of items to retreive
-  repeated kiapi.common.types.ItemType types = 2;
+  // List of one or more types of items to retreive
+  repeated kiapi.common.types.KiCadObjectType types = 2;
 }
 
 message GetItemsResponse
 {
-  /// Specifies which document was modified, which fields are included in items, etc.
+  // Specifies which document was modified, which fields are included in items, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  /// Status of the overall request; may return IRS_OK even if no items were retrieved
+  // Status of the overall request; may return IRS_OK even if no items were retrieved
   kiapi.common.types.ItemRequestStatus status = 2;
 
   repeated google.protobuf.Any items = 3;
 }
 
-/// Updates items in a given document
+// Updates items in a given document
 message UpdateItems
 {
-  /// Specifies which document to modify, which fields are included, etc.
+  // Specifies which document to modify, which fields are included, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  /// List of items to modify
+  // List of items to modify
   repeated google.protobuf.Any items = 2;
 }
 
-enum ItemUpdateStatus
-{
-  IUS_UNKNOWN      = 0;
-  IUS_OK           = 1; /// The item was updated
-  IUS_INVALID_TYPE = 2; /// The item's type is not valid for the given document
-  IUS_NONEXISTENT  = 3; /// The item did not exist in the given document
-  IUS_IMMUTABLE    = 4; /// The item is not allowed to be modified by the API
-}
 
 message ItemUpdateResult
 {
-  ItemUpdateStatus status = 1;
+  ItemStatus status = 1;
 
-  /// The update version of the item
+  // The update version of the item
   google.protobuf.Any item = 2;
 }
 
 message UpdateItemsResponse
 {
-  /// Specifies which document was modified, which fields are included in updated_items, etc.
+  // Specifies which document was modified, which fields are included in updated_items, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  /// Status of the overall request; may return IRS_OK even if no items were modified
+  // Status of the overall request; may return IRS_OK even if no items were modified
   kiapi.common.types.ItemRequestStatus status = 2;
 
-  /// Status of each item to be created
+  // Status of each item to be created
   repeated ItemUpdateResult updated_items = 3;
 }
 
-/// Deletes items in a given document
+// Deletes items in a given document
 message DeleteItems
 {
-  /// Specifies which document to modify
+  // Specifies which document to modify
   kiapi.common.types.ItemHeader header = 1;
 
-  /// List of item KIIDs to delete
+  // List of item KIIDs to delete
   repeated kiapi.common.types.KIID item_ids = 2;
 }
 
@@ -227,8 +238,8 @@ enum ItemDeletionStatus
 {
   IDS_UNKNOWN      = 0;
   IDS_OK           = 1;
-  IDS_NONEXISTENT  = 2; /// The item did not exist in the given document
-  IDS_IMMUTABLE    = 3; /// The item is not allowed to be modified by the API
+  IDS_NONEXISTENT  = 2; // The item did not exist in the given document
+  IDS_IMMUTABLE    = 3; // The item is not allowed to be modified by the API
 }
 
 message ItemDeletionResult
@@ -240,12 +251,49 @@ message ItemDeletionResult
 
 message DeleteItemsResponse
 {
-  /// Specifies which document was modified, etc.
+  // Specifies which document was modified, etc.
   kiapi.common.types.ItemHeader header = 1;
 
-  /// Status of the overall request; may return IRS_OK even if no items were deleted
+  // Status of the overall request; may return IRS_OK even if no items were deleted
   kiapi.common.types.ItemRequestStatus status = 2;
 
-  /// Status of each item requested to be deleted
+  // Status of each item requested to be deleted
   repeated ItemDeletionResult deleted_items = 3;
+}
+
+message GetItemBoundingBox
+{
+  kiapi.common.types.ItemHeader header = 1;
+
+  kiapi.common.types.KIID id = 2;
+}
+
+message BoundingBoxResponse
+{
+  kiapi.common.types.Vector2 position = 1;
+  kiapi.common.types.Vector2 size = 2;
+}
+
+// Tests if a certain point falls within tolerance of an item's geometry
+message HitTest
+{
+  kiapi.common.types.ItemHeader header = 1;
+
+  kiapi.common.types.KIID id = 2;
+
+  kiapi.common.types.Vector2 position = 3;
+
+  int32 tolerance = 4;
+}
+
+enum HitTestResult
+{
+  HTR_UNKNOWN = 0;
+  HTR_NO_HIT  = 1;
+  HTR_HIT     = 2;
+}
+
+message HitTestResponse
+{
+  HitTestResult result = 1;
 }

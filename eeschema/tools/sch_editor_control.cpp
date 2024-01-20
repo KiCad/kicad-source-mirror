@@ -80,6 +80,10 @@
 #include <wx/treectrl.h>
 #include "sch_edit_table_tool.h"
 
+#ifdef KICAD_IPC_API
+#include <api/api_plugin_manager.h>
+#endif
+
 
 /**
  * Flag to enable schematic paste debugging output.
@@ -2537,6 +2541,15 @@ int SCH_EDITOR_CONTROL::TogglePythonConsole( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ReloadPlugins( const TOOL_EVENT& aEvent )
+{
+#ifdef KICAD_IPC_API
+    Pgm().GetPluginManager().ReloadPlugins();
+#endif
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::RepairSchematic( const TOOL_EVENT& aEvent )
 {
     int      errors = 0;
@@ -2731,6 +2744,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ToggleAnnotateAuto,    EE_ACTIONS::toggleAnnotateAuto.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::TogglePythonConsole,   EE_ACTIONS::showPythonConsole.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ReloadPlugins,         ACTIONS::pluginsReload.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::RepairSchematic,       EE_ACTIONS::repairSchematic.MakeEvent() );
 

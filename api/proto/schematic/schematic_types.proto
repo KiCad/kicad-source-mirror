@@ -1,0 +1,75 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+
+package kiapi.schematic.types;
+
+import "common/types/base_types.proto";
+
+enum SchematicLayer
+{
+  SL_UNKNOWN = 0;
+}
+
+/// Represents a schematic line segment, which may be a wire, bus, or graphical line
+message Line
+{
+  kiapi.common.types.KIID    id     = 1;
+  kiapi.common.types.Vector2 start  = 2;
+  kiapi.common.types.Vector2 end    = 3;
+
+  /**
+   * One of: LAYER_BUS, LAYER_WIRE, LAYER_NOTES
+   */
+  SchematicLayer layer = 4;
+}
+
+message Text
+{
+  kiapi.common.types.Text text = 1;
+}
+
+message LocalLabel
+{
+  kiapi.common.types.KIID    id       = 1;
+  kiapi.common.types.Vector2 position = 2;
+  Text                       text     = 3;
+}
+
+message GlobalLabel
+{
+  kiapi.common.types.KIID    id       = 1;
+  kiapi.common.types.Vector2 position = 2;
+  Text                       text     = 3;
+}
+
+message HierarchicalLabel
+{
+  kiapi.common.types.KIID    id       = 1;
+  kiapi.common.types.Vector2 position = 2;
+  Text                       text     = 3;
+}
+
+message DirectiveLabel
+{
+  kiapi.common.types.KIID    id       = 1;
+  kiapi.common.types.Vector2 position = 2;
+  Text                       text     = 3;
+}

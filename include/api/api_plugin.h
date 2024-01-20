@@ -58,7 +58,7 @@ enum class PLUGIN_ACTION_SCOPE
     SCHEMATIC,
     FOOTPRINT,
     SYMBOL,
-    KICAD
+    PROJECT_MANAGER
 };
 
 

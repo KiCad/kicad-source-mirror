@@ -19,8 +19,12 @@
  */
 
 #include <api/api_handler.h>
+#include <wx/wx.h>
 
 using kiapi::common::ApiRequest, kiapi::common::ApiResponse, kiapi::common::ApiResponseStatus;
+
+
+const wxString API_HANDLER::m_defaultCommitMessage = _( "Modification from API" );
 
 
 API_RESULT API_HANDLER::Handle( ApiRequest& aMsg )
@@ -54,21 +58,4 @@ API_RESULT API_HANDLER::Handle( ApiRequest& aMsg )
     status.set_status( ApiStatusCode::AS_UNHANDLED );
     // This response is used internally; no need for an error message
     return tl::unexpected( status );
-}
-
-
-std::optional<KICAD_T> API_HANDLER::TypeNameFromAny( const google::protobuf::Any& aMessage )
-{
-    static const std::map<std::string, KICAD_T> s_types = {
-        { "type.googleapis.com/kiapi.board.types.Track", PCB_TRACE_T },
-        { "type.googleapis.com/kiapi.board.types.Arc", PCB_ARC_T },
-        { "type.googleapis.com/kiapi.board.types.Via", PCB_VIA_T },
-    };
-
-    auto it = s_types.find( aMessage.type_url() );
-
-    if( it != s_types.end() )
-        return it->second;
-
-    return std::nullopt;
 }

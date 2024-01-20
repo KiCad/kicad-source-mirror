@@ -41,8 +41,7 @@ add_custom_target(
         -DSRC_PATH=${PROJECT_SOURCE_DIR}
         -DKICAD_CMAKE_MODULE_PATH=${KICAD_CMAKE_MODULE_PATH}
         -P ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    BYPRODUCTS ${CMAKE_BINARY_DIR}/kicad_build_version.h
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR} BYPRODUCTS ${CMAKE_BINARY_DIR}/kicad_build_version.h
     DEPENDS ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/WriteVersionHeader.cmake
     COMMENT "Generating version string header"
     )
@@ -632,14 +631,14 @@ set( COMMON_SRCS
     http_lib/http_lib_connection.cpp
     http_lib/http_lib_settings.cpp
 
+    api/api_enums.cpp
+    api/api_utils.cpp
     )
 
 if( KICAD_IPC_API )
     set( COMMON_SRCS
         ${COMMON_SRCS}
-        api/api_server.cpp
-        api/api_handler.cpp
-        api/api_handler_common.cpp
+        api/api_handler_editor.cpp
     )
 endif()
 
@@ -693,6 +692,7 @@ target_include_directories( common
         .
         ${CMAKE_BINARY_DIR}
         $<TARGET_PROPERTY:argparse::argparse,INTERFACE_INCLUDE_DIRECTORIES>
+        $<TARGET_PROPERTY:kiapi,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
 # text markup support
@@ -792,6 +792,12 @@ set( PCB_COMMON_SRCS
     ${CMAKE_SOURCE_DIR}/pcbnew/tools/pcb_viewer_tools.cpp
 
     widgets/net_selector.cpp
+)
+
+set( PCB_COMMON_SRCS
+    ${PCB_COMMON_SRCS}
+    ${CMAKE_SOURCE_DIR}/pcbnew/api/api_pcb_enums.cpp
+    ${CMAKE_SOURCE_DIR}/pcbnew/api/api_pcb_utils.cpp
 )
 
 # add -DPCBNEW to compilation of these PCBNEW sources

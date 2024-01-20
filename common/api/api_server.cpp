@@ -95,9 +95,11 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
     m_logFilePath.SetName( s_logFileName );
 
     if( ADVANCED_CFG::GetCfg().m_EnableAPILogging )
+    {
         PATHS::EnsurePathExists( PATHS::GetLogsPath() );
+        log( fmt::format( "--- KiCad API server started at {} ---\n", SocketPath() ) );
+    }
 
-    log( fmt::format( "--- KiCad API server started at {} ---\n", SocketPath() ) );
     wxLogTrace( traceApi, wxString::Format( "Server: listening at %s", SocketPath() ) );
 
     Bind( API_REQUEST_EVENT, &KICAD_API_SERVER::handleApiEvent, this );
@@ -168,10 +170,13 @@ void KICAD_API_SERVER::handleApiEvent( wxCommandEvent& aEvent )
         error.mutable_status()->set_status( ApiStatusCode::AS_BAD_REQUEST );
         error.mutable_status()->set_error_message( "request could not be parsed" );
         m_server->Reply( error.SerializeAsString() );
-        log( "Response (ERROR): " + error.Utf8DebugString() );
+
+        if( ADVANCED_CFG::GetCfg().m_EnableAPILogging )
+            log( "Response (ERROR): " + error.Utf8DebugString() );
     }
 
-    log( "Request: " + request.Utf8DebugString() );
+    if( ADVANCED_CFG::GetCfg().m_EnableAPILogging )
+        log( "Request: " + request.Utf8DebugString() );
 
     if( !request.header().kicad_token().empty() &&
         request.header().kicad_token().compare( m_token ) != 0 )
@@ -182,7 +187,9 @@ void KICAD_API_SERVER::handleApiEvent( wxCommandEvent& aEvent )
         error.mutable_status()->set_error_message(
                 "the provided kicad_token did not match this KiCad instance's token" );
         m_server->Reply( error.SerializeAsString() );
-        log( "Response (ERROR): " + error.Utf8DebugString() );
+
+        if( ADVANCED_CFG::GetCfg().m_EnableAPILogging )
+            log( "Response (ERROR): " + error.Utf8DebugString() );
     }
 
     API_RESULT result;
@@ -203,7 +210,9 @@ void KICAD_API_SERVER::handleApiEvent( wxCommandEvent& aEvent )
     {
         result->mutable_header()->set_kicad_token( m_token );
         m_server->Reply( result->SerializeAsString() );
-        log( "Response: " + result->Utf8DebugString() );
+
+        if( ADVANCED_CFG::GetCfg().m_EnableAPILogging )
+            log( "Response: " + result->Utf8DebugString() );
     }
     else
     {
@@ -220,16 +229,15 @@ void KICAD_API_SERVER::handleApiEvent( wxCommandEvent& aEvent )
         }
 
         m_server->Reply( error.SerializeAsString() );
-        log( "Response (ERROR): " + error.Utf8DebugString() );
+
+        if( ADVANCED_CFG::GetCfg().m_EnableAPILogging )
+            log( "Response (ERROR): " + error.Utf8DebugString() );
     }
 }
 
 
 void KICAD_API_SERVER::log( const std::string& aOutput )
 {
-    if( !ADVANCED_CFG::GetCfg().m_EnableAPILogging )
-        return;
-
     FILE* fp = wxFopen( m_logFilePath.GetFullPath(), wxT( "a" ) );
 
     if( !fp )

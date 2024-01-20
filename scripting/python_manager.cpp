@@ -46,7 +46,7 @@ public:
             {
                 char buffer[4096];
                 buffer[ processOut->Read( buffer, sizeof( buffer ) - 1 ).LastRead() ] = '\0';
-                output.append( buffer, sizeof( buffer ) );
+                output.append( buffer, processOut->LastRead() );
                 bytesRead += processOut->LastRead();
             }
 
@@ -57,7 +57,7 @@ public:
             {
                 char buffer[4096];
                 buffer[ processOut->Read( buffer, sizeof( buffer ) - 1 ).LastRead() ] = '\0';
-                error.append( buffer, sizeof( buffer ) );
+                error.append( buffer, processOut->LastRead() );
                 bytesRead += processOut->LastRead();
             }
 
@@ -94,6 +94,12 @@ wxString PYTHON_MANAGER::FindPythonInterpreter()
     // TODO(JE) where
 #else
     wxArrayString output;
+
+    if( 0 == wxExecute( wxS( "which -a python3" ), output, wxEXEC_SYNC ) )
+    {
+        if( !output.IsEmpty() )
+            return output[0];
+    }
 
     if( 0 == wxExecute( wxS( "which -a python" ), output, wxEXEC_SYNC ) )
     {

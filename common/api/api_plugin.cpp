@@ -312,7 +312,8 @@ std::optional<PLUGIN_ACTION> API_PLUGIN::createActionFromJson( const nlohmann::j
                         }
 
                         wxBitmap bmp;
-                        bmp.LoadFile( iconFile.GetFullPath() );
+                        // TODO: If necessary; support types other than PNG
+                        bmp.LoadFile( iconFile.GetFullPath(), wxBITMAP_TYPE_PNG );
 
                         if( bmp.IsOk() )
                             bitmaps.push_back( bmp );

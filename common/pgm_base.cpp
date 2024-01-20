@@ -558,7 +558,10 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     m_settings_manager = std::make_unique<SETTINGS_MANAGER>( aHeadless );
     m_background_jobs_monitor = std::make_unique<BACKGROUND_JOBS_MONITOR>();
     m_notifications_manager = std::make_unique<NOTIFICATIONS_MANAGER>();
+
+#ifdef KICAD_IPC_API
     m_plugin_manager = std::make_unique<API_PLUGIN_MANAGER>( &App() );
+#endif
 
     // Our unit test mocks break if we continue
     // A bug caused InitPgm to terminate early in unit tests and the mocks are...simplistic
@@ -613,7 +616,9 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     // Need to create a project early for now (it can have an empty path for the moment)
     GetSettingsManager().LoadProject( "" );
 
+#ifdef KICAD_IPC_API
     m_plugin_manager->ReloadPlugins();
+#endif
 
     // This sets the maximum tooltip display duration to 10s (up from 5) but only affects
     // Windows as other platforms display tooltips while the mouse is not moving

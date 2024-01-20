@@ -1151,9 +1151,9 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     PCB_EDIT_FRAME* pcbframe = static_cast<PCB_EDIT_FRAME*>( Kiway().Player( FRAME_PCB_EDITOR, false ) );
 
     if( pcbframe )
-        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::pluginsReload );
+        pcbframe->GetToolManager()->RunAction( ACTIONS::pluginsReload );
     else
-        m_toolManager->RunAction( PCB_ACTIONS::pluginsReload );
+        m_toolManager->RunAction( ACTIONS::pluginsReload );
 }
 
 

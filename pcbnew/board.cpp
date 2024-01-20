@@ -154,37 +154,26 @@ BOARD::~BOARD()
     // Clean up the owned elements
     DeleteMARKERs();
 
-    for( ZONE* zone : m_zones )
-        delete zone;
-
-    m_zones.clear();
-
     delete m_SolderMaskBridges;
 
-    for( FOOTPRINT* footprint : m_footprints )
-        delete footprint;
+    BOARD_ITEM_SET ownedItems = GetItemSet();
 
+    m_zones.clear();
     m_footprints.clear();
-
-    for( PCB_TRACK* t : m_tracks )
-        delete t;
-
     m_tracks.clear();
-
-    for( BOARD_ITEM* d : m_drawings )
-        delete d;
-
     m_drawings.clear();
-
-    for( PCB_GROUP* g : m_groups )
-        delete g;
-
     m_groups.clear();
 
+    // Generators not currently returned by GetItemSet
     for( PCB_GENERATOR* g : m_generators )
-        delete g;
+        ownedItems.insert( g );
 
     m_generators.clear();
+
+    // Delete the owned items after clearing the containers, because some item dtors
+    // cause call chains that query the containers
+    for( BOARD_ITEM* item : ownedItems )
+        delete item;
 }
 
 

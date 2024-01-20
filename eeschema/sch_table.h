@@ -32,7 +32,7 @@
 class SCH_TABLE : public SCH_ITEM
 {
 public:
-    SCH_TABLE( int aLineWidth );
+    SCH_TABLE( int aLineWidth = 0 );
 
     SCH_TABLE( const SCH_TABLE& aTable );
 

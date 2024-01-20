@@ -15,29 +15,45 @@
 # You should have received a copy of the GNU General Public License along
 # with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-include_directories( BEFORE ${INC_BEFORE} )
-include_directories(
-    ${INC_AFTER}
+set( QA_API_SRCS
+    test_api_module.cpp
+    test_api_enums.cpp
+    test_api_proto.cpp
     )
 
-add_executable( enum_exporter WIN32
-    enum_exporter.cpp
+add_executable( qa_api
+    ${QA_API_SRCS}
     )
 
-target_link_libraries( enum_exporter
+add_dependencies( qa_api pcbnew )
+
+target_link_libraries( qa_api
+    kiapi
+    qa_utils
+    qa_pcbnew_utils
+    pcbnew_kiface_objects
+    3d-viewer
+    connectivity
+    pcbcommon
+    pnsrouter
+    gal
     common
+    idf3
+    markdown_lib
+    ${PCBNEW_IO_LIBRARIES}
+    ${wxWidgets_LIBRARIES}
+    Boost::headers
+    Boost::unit_test_framework
+    ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
     )
 
-target_include_directories( enum_exporter PRIVATE
+target_include_directories( qa_api PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/common
+    ${CMAKE_SOURCE_DIR}/qa/mocks/include
+    ${CMAKE_SOURCE_DIR}/pcbnew
+    ${CMAKE_CURRENT_SOURCE_DIR}
     $<TARGET_PROPERTY:magic_enum,INTERFACE_INCLUDE_DIRECTORIES>
     )
 
-if( MSVC )
-   # The cli needs subsystem:console or else we can't link wmain/main
-   set_target_properties(enum_exporter PROPERTIES COMPILE_DEFINITIONS_DEBUG "_CONSOLE")
-   set_target_properties(enum_exporter PROPERTIES COMPILE_DEFINITIONS_RELWITHDEBINFO "_CONSOLE")
-   set_target_properties(enum_exporter PROPERTIES LINK_FLAGS_DEBUG "/SUBSYSTEM:CONSOLE")
-   set_target_properties(enum_exporter PROPERTIES LINK_FLAGS_RELWITHDEBINFO "/SUBSYSTEM:CONSOLE")
-   set_target_properties(enum_exporter PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:CONSOLE")
-   set_target_properties(enum_exporter PROPERTIES LINK_FLAGS_MINSIZEREL "/SUBSYSTEM:CONSOLE")
-endif()
+kicad_add_boost_test( qa_api qa_api )

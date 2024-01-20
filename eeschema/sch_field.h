@@ -54,7 +54,8 @@ public:
     SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                const wxString& aName = wxEmptyString );
 
-    SCH_FIELD( SCH_ITEM* aParent, int aFieldId, const wxString& aName = wxEmptyString );
+    SCH_FIELD( SCH_ITEM* aParent, int aFieldId = INVALID_FIELD,
+               const wxString& aName = wxEmptyString );
 
     SCH_FIELD( const SCH_FIELD& aText );
 

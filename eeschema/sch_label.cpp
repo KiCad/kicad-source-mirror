@@ -43,6 +43,9 @@
 #include <core/mirror.h>
 #include <trigo.h>
 #include <sch_label.h>
+#include <magic_enum.hpp>
+#include <api/api_utils.h>
+#include <api/schematic/schematic_types.pb.h>
 
 using KIGFX::SCH_RENDER_SETTINGS;
 
@@ -1470,6 +1473,31 @@ SCH_LABEL::SCH_LABEL( const VECTOR2I& pos, const wxString& text ) :
 }
 
 
+void SCH_LABEL::Serialize( google::protobuf::Any &aContainer ) const
+{
+    kiapi::schematic::types::LocalLabel label;
+
+    label.mutable_id()->set_value( m_Uuid.AsStdString() );
+    kiapi::common::PackVector2( *label.mutable_position(), GetPosition() );
+
+    aContainer.PackFrom( label );
+}
+
+
+bool SCH_LABEL::Deserialize( const google::protobuf::Any &aContainer )
+{
+    kiapi::schematic::types::LocalLabel label;
+
+    if( !aContainer.UnpackTo( &label ) )
+        return false;
+
+    const_cast<KIID&>( m_Uuid ) = KIID( label.id().value() );
+    SetPosition( kiapi::common::UnpackVector2( label.position() ) );
+
+    return true;
+}
+
+
 const BOX2I SCH_LABEL::GetBodyBoundingBox() const
 {
     BOX2I rect = GetTextBox();
@@ -1539,6 +1567,19 @@ SCH_DIRECTIVE_LABEL::SCH_DIRECTIVE_LABEL( const SCH_DIRECTIVE_LABEL& aClassLabel
 {
     m_pinLength = aClassLabel.m_pinLength;
     m_symbolSize = aClassLabel.m_symbolSize;
+}
+
+
+void SCH_DIRECTIVE_LABEL::Serialize( google::protobuf::Any &aContainer ) const
+{
+    // TODO
+}
+
+
+bool SCH_DIRECTIVE_LABEL::Deserialize( const google::protobuf::Any &aContainer )
+{
+    // TODO
+    return false;
 }
 
 
@@ -1791,6 +1832,19 @@ SCH_GLOBALLABEL::SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel ) :
 }
 
 
+void SCH_GLOBALLABEL::Serialize( google::protobuf::Any &aContainer ) const
+{
+    // TODO
+}
+
+
+bool SCH_GLOBALLABEL::Deserialize( const google::protobuf::Any &aContainer )
+{
+    // TODO
+    return false;
+}
+
+
 VECTOR2I SCH_GLOBALLABEL::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const
 {
     int horiz = GetLabelBoxExpansion( aSettings );
@@ -1988,6 +2042,19 @@ SCH_HIERLABEL::SCH_HIERLABEL( const VECTOR2I& pos, const wxString& text, KICAD_T
     m_layer      = LAYER_HIERLABEL;
     m_shape      = LABEL_FLAG_SHAPE::L_INPUT;
     m_isDangling = true;
+}
+
+
+void SCH_HIERLABEL::Serialize( google::protobuf::Any &aContainer ) const
+{
+    // TODO
+}
+
+
+bool SCH_HIERLABEL::Deserialize( const google::protobuf::Any &aContainer )
+{
+    // TODO
+    return false;
 }
 
 

@@ -985,12 +985,6 @@ TOOL_ACTION PCB_ACTIONS::defaultPadProperties( TOOL_ACTION_ARGS()
 
 // SCRIPTING TOOL
 //
-TOOL_ACTION PCB_ACTIONS::pluginsReload( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.ScriptingTool.pluginsReload" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Refresh Plugins" ) )
-        .Tooltip( _( "Reload all python plugins and refresh plugin menus" ) )
-        .Icon( BITMAPS::reload ) );
 
 TOOL_ACTION PCB_ACTIONS::pluginsShowFolder( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ScriptingTool.pluginsShowFolder" )

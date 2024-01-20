@@ -62,6 +62,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE;
 class DIALOG_SCH_FIND;
 class RESCUER;
 class HIERARCHY_PANE;
+class API_HANDLER_SCH;
 
 
 /// Schematic search type used by the socket link with Pcbnew
@@ -872,6 +873,11 @@ public:
 
     void ToggleNetNavigator();
 
+    PLUGIN_ACTION_SCOPE PluginActionScope() const override
+    {
+        return PLUGIN_ACTION_SCOPE::SCHEMATIC;
+    }
+
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -1016,6 +1022,10 @@ private:
     bool m_highlightedConnChanged;
 
     std::vector<wxEvtHandler*> m_schematicChangeListeners;
+
+#ifdef KICAD_IPC_API
+    std::unique_ptr<API_HANDLER_SCH> m_apiHandler;
+#endif
 };
 
 

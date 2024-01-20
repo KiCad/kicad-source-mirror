@@ -24,6 +24,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <google/protobuf/any.pb.h>
+#include <magic_enum.hpp>
+
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <macros.h>
@@ -35,6 +38,10 @@
 #include <geometry/shape_compound.h>
 #include <pcb_shape.h>
 #include <pcb_painter.h>
+#include <api/board/board_types.pb.h>
+#include <api/api_enums.h>
+#include <api/api_utils.h>
+
 
 PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, KICAD_T aItemType, SHAPE_T aShapeType ) :
     BOARD_CONNECTED_ITEM( aParent, aItemType ),
@@ -52,6 +59,270 @@ PCB_SHAPE::PCB_SHAPE( BOARD_ITEM* aParent, SHAPE_T shapetype ) :
 
 PCB_SHAPE::~PCB_SHAPE()
 {
+}
+
+// TODO: lift out
+kiapi::common::types::PolyLine lineChainToProto( const SHAPE_LINE_CHAIN& aSlc )
+{
+    kiapi::common::types::PolyLine msg;
+
+    for( int vertex = 0; vertex < aSlc.PointCount(); vertex = aSlc.NextShape( vertex ) )
+    {
+        kiapi::common::types::PolyLineNode* node = msg.mutable_nodes()->Add();
+
+        if( aSlc.IsPtOnArc( vertex ) )
+        {
+            const SHAPE_ARC& arc = aSlc.Arc( aSlc.ArcIndex( vertex ) );
+            node->mutable_arc()->mutable_start()->set_x_nm( arc.GetP0().x );
+            node->mutable_arc()->mutable_start()->set_y_nm( arc.GetP0().y );
+            node->mutable_arc()->mutable_mid()->set_x_nm( arc.GetArcMid().x );
+            node->mutable_arc()->mutable_mid()->set_y_nm( arc.GetArcMid().y );
+            node->mutable_arc()->mutable_end()->set_x_nm( arc.GetP1().x );
+            node->mutable_arc()->mutable_end()->set_y_nm( arc.GetP1().y );
+        }
+        else
+        {
+            node->mutable_point()->set_x_nm( aSlc.CPoint( vertex ).x );
+            node->mutable_point()->set_y_nm( aSlc.CPoint( vertex ).y );
+        }
+    }
+
+    msg.set_closed( aSlc.IsClosed() );
+
+    return msg;
+}
+
+
+void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
+{
+    kiapi::board::types::GraphicShape msg;
+
+    msg.mutable_id()->set_value( m_Uuid.AsStdString() );
+    msg.set_layer( ToProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( GetLayer() ) );
+    msg.set_locked( IsLocked() ? kiapi::common::types::LockedState::LS_LOCKED
+                               : kiapi::common::types::LockedState::LS_UNLOCKED );
+    msg.mutable_net()->mutable_code()->set_value( GetNetCode() );
+    msg.mutable_net()->set_name( GetNetname() );
+
+    kiapi::common::types::StrokeAttributes* stroke
+            = msg.mutable_attributes()->mutable_stroke();
+    kiapi::common::types::GraphicFillAttributes* fill = msg.mutable_attributes()->mutable_fill();
+
+    stroke->mutable_width()->set_value_nm( GetWidth() );
+
+    switch( GetLineStyle() )
+    {
+    case LINE_STYLE::DEFAULT:    stroke->set_style( kiapi::common::types::SLS_DEFAULT ); break;
+    case LINE_STYLE::SOLID:      stroke->set_style( kiapi::common::types::SLS_SOLID ); break;
+    case LINE_STYLE::DASH:       stroke->set_style( kiapi::common::types::SLS_DASH ); break;
+    case LINE_STYLE::DOT:        stroke->set_style( kiapi::common::types::SLS_DOT ); break;
+    case LINE_STYLE::DASHDOT:    stroke->set_style( kiapi::common::types::SLS_DASHDOT ); break;
+    case LINE_STYLE::DASHDOTDOT: stroke->set_style( kiapi::common::types::SLS_DASHDOTDOT ); break;
+    default: break;
+    }
+
+    switch( GetFillMode() )
+    {
+    case FILL_T::FILLED_SHAPE: fill->set_fill_type( kiapi::common::types::GFT_FILLED ); break;
+    default:                   fill->set_fill_type( kiapi::common::types::GFT_UNFILLED ); break;
+    }
+
+    switch( GetShape() )
+    {
+    case SHAPE_T::SEGMENT:
+    {
+        kiapi::board::types::GraphicSegmentAttributes* segment = msg.mutable_segment();
+        kiapi::common::PackVector2( *segment->mutable_start(), GetStart() );
+        kiapi::common::PackVector2( *segment->mutable_end(), GetEnd() );
+        break;
+    }
+
+    case SHAPE_T::RECTANGLE:
+    {
+        kiapi::board::types::GraphicRectangleAttributes* rectangle = msg.mutable_rectangle();
+        kiapi::common::PackVector2( *rectangle->mutable_top_left(), GetStart() );
+        kiapi::common::PackVector2( *rectangle->mutable_bottom_right(), GetEnd() );
+        break;
+    }
+
+    case SHAPE_T::ARC:
+    {
+        kiapi::board::types::GraphicArcAttributes* arc = msg.mutable_arc();
+        kiapi::common::PackVector2( *arc->mutable_start(), GetStart() );
+        kiapi::common::PackVector2( *arc->mutable_mid(), GetArcMid() );
+        kiapi::common::PackVector2( *arc->mutable_end(), GetEnd() );
+        break;
+    }
+
+    case SHAPE_T::CIRCLE:
+    {
+        kiapi::board::types::GraphicCircleAttributes* circle = msg.mutable_circle();
+        kiapi::common::PackVector2( *circle->mutable_center(), GetStart() );
+        kiapi::common::PackVector2( *circle->mutable_radius_point(), GetEnd() );
+        break;
+    }
+
+    case SHAPE_T::POLY:
+    {
+        kiapi::common::types::PolySet* polyset = msg.mutable_polygon();
+
+        for( int idx = 0; idx < GetPolyShape().OutlineCount(); ++idx )
+        {
+            const SHAPE_POLY_SET::POLYGON& poly = GetPolyShape().Polygon( idx );
+
+            if( poly.empty() )
+                continue;
+
+            kiapi::common::types::PolygonWithHoles* polyMsg = polyset->mutable_polygons()->Add();
+            polyMsg->mutable_outline()->CopyFrom( lineChainToProto( poly.front() ) );
+
+            if( poly.size() > 1 )
+            {
+                for( size_t hole = 1; hole < poly.size(); ++hole )
+                    polyMsg->mutable_holes()->Add( lineChainToProto( poly[hole] ) );
+            }
+        }
+        break;
+    }
+
+    case SHAPE_T::BEZIER:
+    {
+        kiapi::board::types::GraphicBezierAttributes* bezier = msg.mutable_bezier();
+        kiapi::common::PackVector2( *bezier->mutable_start(), GetStart() );
+        kiapi::common::PackVector2( *bezier->mutable_control1(), GetBezierC1() );
+        kiapi::common::PackVector2( *bezier->mutable_control2(), GetBezierC2() );
+        kiapi::common::PackVector2( *bezier->mutable_end(), GetEnd() );
+        break;
+    }
+
+    default:
+        wxASSERT_MSG( false, "Unhandled shape in PCB_SHAPE::Serialize" );
+    }
+
+    aContainer.PackFrom( msg );
+}
+
+
+// TODO(JE) lift out
+SHAPE_LINE_CHAIN lineChainFromProto( const kiapi::common::types::PolyLine& aProto )
+{
+    SHAPE_LINE_CHAIN slc;
+
+    for( const kiapi::common::types::PolyLineNode& node : aProto.nodes() )
+    {
+        if( node.has_point() )
+        {
+            slc.Append( VECTOR2I( node.point().x_nm(), node.point().y_nm() ) );
+        }
+        else if( node.has_arc() )
+        {
+            slc.Append( SHAPE_ARC( VECTOR2I( node.arc().start().x_nm(), node.arc().start().y_nm() ),
+                                   VECTOR2I( node.arc().mid().x_nm(), node.arc().mid().y_nm() ),
+                                   VECTOR2I( node.arc().end().x_nm(), node.arc().end().y_nm() ),
+                                   0 /* don't care about width here */ ) );
+        }
+    }
+
+    slc.SetClosed( aProto.closed() );
+
+    return slc;
+}
+
+
+bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
+{
+    kiapi::board::types::GraphicShape msg;
+
+    if( !aContainer.UnpackTo( &msg ) )
+        return false;
+
+    // Initialize everything to a known state that doesn't get touched by every
+    // codepath below, to make sure the equality operator is consistent
+    m_start = {};
+    m_end = {};
+    m_arcCenter = {};
+    m_arcMidData = {};
+    m_bezierC1 = {};
+    m_bezierC2 = {};
+    m_editState = 0;
+    m_proxyItem = false;
+    m_endsSwapped = false;
+
+    const_cast<KIID&>( m_Uuid ) = KIID( msg.id().value() );
+    SetLocked( msg.locked() == kiapi::common::types::LS_LOCKED );
+    SetLayer( FromProtoEnum<PCB_LAYER_ID, kiapi::board::types::BoardLayer>( msg.layer() ) );
+    SetNetCode( msg.net().code().value() );
+
+    SetFilled( msg.attributes().fill().fill_type() == kiapi::common::types::GFT_FILLED );
+    SetWidth( msg.attributes().stroke().width().value_nm() );
+
+    switch( msg.attributes().stroke().style() )
+    {
+    case kiapi::common::types::SLS_DEFAULT:    SetLineStyle( LINE_STYLE::DEFAULT );    break;
+    case kiapi::common::types::SLS_SOLID:      SetLineStyle( LINE_STYLE::SOLID );      break;
+    case kiapi::common::types::SLS_DASH:       SetLineStyle( LINE_STYLE::DASH );       break;
+    case kiapi::common::types::SLS_DOT:        SetLineStyle( LINE_STYLE::DOT );        break;
+    case kiapi::common::types::SLS_DASHDOT:    SetLineStyle( LINE_STYLE::DASHDOT );    break;
+    case kiapi::common::types::SLS_DASHDOTDOT: SetLineStyle( LINE_STYLE::DASHDOTDOT ); break;
+    default: break;
+    }
+
+    if( msg.has_segment() )
+    {
+        SetShape( SHAPE_T::SEGMENT );
+        SetStart( kiapi::common::UnpackVector2( msg.segment().start() ) );
+        SetEnd( kiapi::common::UnpackVector2( msg.segment().end() ) );
+    }
+    else if( msg.has_rectangle() )
+    {
+        SetShape( SHAPE_T::RECTANGLE );
+        SetStart( kiapi::common::UnpackVector2( msg.rectangle().top_left() ) );
+        SetEnd( kiapi::common::UnpackVector2( msg.rectangle().bottom_right() ) );
+    }
+    else if( msg.has_arc() )
+    {
+        SetShape( SHAPE_T::ARC );
+        SetArcGeometry( kiapi::common::UnpackVector2( msg.arc().start() ),
+                        kiapi::common::UnpackVector2( msg.arc().mid() ),
+                        kiapi::common::UnpackVector2( msg.arc().end() ) );
+    }
+    else if( msg.has_circle() )
+    {
+        SetShape( SHAPE_T::CIRCLE );
+        SetStart( kiapi::common::UnpackVector2( msg.circle().center() ) );
+        SetEnd( kiapi::common::UnpackVector2( msg.circle().radius_point() ) );
+    }
+    else if( msg.has_polygon() )
+    {
+        SetShape( SHAPE_T::POLY );
+        const auto& polyMsg = msg.polygon().polygons();
+
+        SHAPE_POLY_SET sps;
+
+        for( const kiapi::common::types::PolygonWithHoles& polygonWithHoles : polyMsg )
+        {
+            SHAPE_POLY_SET::POLYGON polygon;
+
+            polygon.emplace_back( lineChainFromProto( polygonWithHoles.outline() ) );
+
+            for( const kiapi::common::types::PolyLine& holeMsg : polygonWithHoles.holes() )
+                polygon.emplace_back( lineChainFromProto( holeMsg ) );
+
+            sps.AddPolygon( polygon );
+        }
+
+        SetPolyShape( sps );
+    }
+    else if( msg.has_bezier() )
+    {
+        SetShape( SHAPE_T::BEZIER );
+        SetStart( kiapi::common::UnpackVector2( msg.bezier().start() ) );
+        SetBezierC1( kiapi::common::UnpackVector2( msg.bezier().control1() ) );
+        SetBezierC2( kiapi::common::UnpackVector2( msg.bezier().control2() ) );
+        SetEnd( kiapi::common::UnpackVector2( msg.bezier().end() ) );
+    }
+
+    return true;
 }
 
 

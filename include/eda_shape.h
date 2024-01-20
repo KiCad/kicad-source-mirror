@@ -40,6 +40,7 @@ using KIGFX::COLOR4D;
 
 enum class SHAPE_T : int
 {
+    UNDEFINED = -1,
     SEGMENT = 0,
     RECTANGLE,      /// use RECTANGLE instead of RECT to avoid collision in a Windows header
     ARC,

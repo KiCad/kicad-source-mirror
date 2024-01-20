@@ -31,3 +31,8 @@ message GetVersionResponse
 {
   kiapi.common.types.KiCadVersion version = 1;
 }
+
+// A command to check if the connection to KiCad is OK
+message Ping
+{
+}

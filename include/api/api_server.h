@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 Jon Evans <jon@craftyjon.com>
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,6 +28,8 @@
 #include <wx/event.h>
 #include <wx/filename.h>
 
+#include <kicommon.h>
+
 class API_HANDLER;
 class API_HANDLER_COMMON;
 class KINNG_REQUEST_SERVER;
@@ -37,7 +39,7 @@ class wxEvtHandler;
 wxDECLARE_EVENT( API_REQUEST_EVENT, wxCommandEvent );
 
 
-class KICAD_API_SERVER : public wxEvtHandler
+class KICOMMON_API KICAD_API_SERVER : public wxEvtHandler
 {
 public:
     KICAD_API_SERVER();

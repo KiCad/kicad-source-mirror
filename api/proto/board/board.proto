@@ -1,0 +1,116 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 Jon Evans <jon@craftyjon.com>
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+syntax = "proto3";
+
+package kiapi.board;
+
+import "common/types/base_types.proto";
+import "board/board_types.proto";
+
+message BoardFinish
+{
+  string type_name = 1;
+}
+
+message BoardImpedanceControl
+{
+  bool is_controlled = 1;
+}
+
+message BoardEdgeConnector
+{
+}
+
+message Castellation
+{
+  bool has_castellated_pads = 1;
+}
+
+message EdgePlating
+{
+  bool has_edge_plating = 1;
+}
+
+message BoardEdgeSettings
+{
+  BoardEdgeConnector connector = 1;
+  Castellation castellation = 2;
+  EdgePlating plating = 3;
+}
+
+message BoardStackupCopperLayer
+{
+
+}
+
+message BoardStackupLayer
+{
+  kiapi.common.types.Distance thickness = 1;
+  kiapi.board.types.BoardLayer layer = 2;
+  bool enabled = 3;
+  oneof item {
+    BoardStackupCopperLayer copper = 4;
+  }
+}
+
+message BoardStackup
+{
+  BoardFinish finish = 1;
+  BoardImpedanceControl impedance = 2;
+  // NOTE: m_HasThicknessConstrains appears to be unused
+  BoardEdgeSettings edge = 3;
+  repeated BoardStackupLayer layers = 4;
+}
+
+// LAYER_CLASS_* in BOARD_DESIGN_SETTINGS -- needs to become an enum class
+enum BoardLayerClass
+{
+  BLC_UNKNOWN = 0;
+  BLC_SILKSCREEN = 1;
+  BLC_COPPER = 2;
+  BLC_EDGES = 3;
+  BLC_COURTYARD = 4;
+  BLC_FABRICATION = 5;
+  BLC_OTHER = 6;
+}
+
+message BoardLayerGraphicsDefaults
+{
+  BoardLayerClass layer = 1;
+  kiapi.common.types.TextAttributes text = 2;
+  kiapi.common.types.Distance line_thickness = 3;
+}
+
+message GraphicsDefaults
+{
+  repeated BoardLayerGraphicsDefaults layers = 1;
+}
+
+// Anything that isn't stackup or design rules
+message BoardSettings
+{
+  GraphicsDefaults graphics_defaults = 1;
+  // Dimension default settings
+}
+
+message BoardDesignRules
+{
+}

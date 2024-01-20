@@ -1,0 +1,119 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * enums.proto
+ * Includes protobuf versions of common KiCad enums
+ */
+
+syntax = "proto3";
+
+package kiapi.common.types;
+
+// The set of object types (from KICAD_T) that are exposed to the API.
+enum KiCadObjectType
+{
+  KOT_UNKNOWN = 0;
+
+  KOT_PCB_FOOTPRINT = 1;
+  KOT_PCB_PAD = 2;
+  KOT_PCB_SHAPE = 3;
+  KOT_PCB_REFERENCE_IMAGE = 4;
+  KOT_PCB_FIELD = 5;
+  KOT_PCB_GENERATOR = 6;
+  KOT_PCB_TEXT = 7;
+  KOT_PCB_TEXTBOX = 8;
+  KOT_PCB_TABLE = 9;
+  KOT_PCB_TABLECELL = 10;
+  KOT_PCB_TRACE = 11;
+  KOT_PCB_VIA = 12;
+  KOT_PCB_ARC = 13;
+  KOT_PCB_MARKER = 14;
+  KOT_PCB_DIMENSION = 15;
+  KOT_PCB_ZONE = 16;
+  KOT_PCB_GROUP = 17;
+
+  KOT_SCH_MARKER = 18;
+  KOT_SCH_JUNCTION = 19;
+  KOT_SCH_NO_CONNECT = 20;
+  KOT_SCH_BUS_WIRE_ENTRY = 21;
+  KOT_SCH_BUS_BUS_ENTRY = 22;
+  KOT_SCH_LINE = 23;
+  KOT_SCH_SHAPE = 24;
+  KOT_SCH_BITMAP = 25;
+  KOT_SCH_TEXTBOX = 26;
+  KOT_SCH_TEXT = 27;
+  KOT_SCH_TABLE = 28;
+  KOT_SCH_TABLECELL = 29;
+  KOT_SCH_LABEL = 30;
+  KOT_SCH_GLOBAL_LABEL = 31;
+  KOT_SCH_HIER_LABEL = 32;
+  KOT_SCH_DIRECTIVE_LABEL = 33;
+  KOT_SCH_FIELD = 34;
+  KOT_SCH_SYMBOL = 35;
+  KOT_SCH_SHEET_PIN = 36;
+  KOT_SCH_SHEET = 37;
+  KOT_SCH_PIN = 38;
+
+  KOT_LIB_SYMBOL = 39;
+  KOT_LIB_SHAPE = 40;
+  KOT_LIB_TEXT = 41;
+  KOT_LIB_TEXTBOX = 42;
+  KOT_LIB_PIN = 43;
+  KOT_LIB_FIELD = 44;
+
+  KOT_WSG_LINE = 45;
+  KOT_WSG_RECT = 46;
+  KOT_WSG_POLY = 47;
+  KOT_WSG_TEXT = 48;
+  KOT_WSG_BITMAP = 49;
+  KOT_WSG_PAGE = 50;
+}
+
+// Mapped to GR_TEXT_H_ALIGN_T
+enum HorizontalAlignment
+{
+  HA_UNKNOWN       = 0;
+  HA_LEFT          = 1;
+  HA_CENTER        = 2;
+  HA_RIGHT         = 3;
+  HA_INDETERMINATE = 4;
+}
+
+// Mapped to GR_TEXT_V_ALIGN_T
+enum VerticalAlignment
+{
+  VA_UNKNOWN       = 0;
+  VA_TOP           = 1;
+  VA_CENTER        = 2;
+  VA_BOTTOM        = 3;
+  VA_INDETERMINATE = 4;
+}
+
+// Mapped to LINE_STYLE
+enum StrokeLineStyle
+{
+  SLS_UNKNOWN    = 0;
+  SLS_DEFAULT    = 1;
+  SLS_SOLID      = 2;
+  SLS_DASH       = 3;
+  SLS_DOT        = 4;
+  SLS_DASHDOT    = 5;
+  SLS_DASHDOTDOT = 6;
+}

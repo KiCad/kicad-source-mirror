@@ -1143,6 +1143,15 @@ TOOL_ACTION ACTIONS::ddAddLibrary( TOOL_ACTION_ARGS()
         .Name( "common.Control.ddaddLibrary" )
         .Scope( AS_GLOBAL ) );
 
+// API
+
+TOOL_ACTION ACTIONS::pluginsReload( TOOL_ACTION_ARGS()
+        .Name( "common.API.pluginsReload" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Refresh Plugins" ) )
+        .Tooltip( _( "Reload all python plugins and refresh plugin menus" ) )
+        .Icon( BITMAPS::reload ) );
+
 // System-wide selection Events
 
 const TOOL_EVENT EVENTS::PointSelectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.pointSelected" );

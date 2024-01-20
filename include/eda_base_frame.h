@@ -600,6 +600,13 @@ public:
      */
     virtual void HandleSystemColorChange();
 
+    /**
+     * Checks if this frame is ready to accept API commands.
+     * A frame might not accept commands if a long-running process is underway, a dialog is open,
+     * the user is interacting with a tool, etc.
+     */
+    virtual bool CanAcceptApiCommands() { return IsEnabled(); }
+
 protected:
     ///< Default style flags used for wxAUI toolbars.
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;

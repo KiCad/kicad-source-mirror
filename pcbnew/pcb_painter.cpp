@@ -1944,6 +1944,9 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
             }
 
             break;
+
+        case SHAPE_T::UNDEFINED:
+            break;
         }
     }
     else

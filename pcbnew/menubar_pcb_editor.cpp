@@ -436,7 +436,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     submenuActionPlugins->SetTitle( _( "External Plugins" ) );
     submenuActionPlugins->SetIcon( BITMAPS::puzzle_piece );
 
-    submenuActionPlugins->Add( PCB_ACTIONS::pluginsReload );
+    submenuActionPlugins->Add( ACTIONS::pluginsReload );
     submenuActionPlugins->Add( PCB_ACTIONS::pluginsShowFolder );
 
     // Populate the Action Plugin sub-menu: Must be done before Add

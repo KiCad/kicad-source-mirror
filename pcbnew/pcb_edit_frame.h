@@ -699,6 +699,8 @@ public:
 
     void ProjectChanged() override;
 
+    bool CanAcceptApiCommands() override;
+
     wxString GetCurrentFileName() const override;
 
     SELECTION& GetCurrentSelection() override;
@@ -761,11 +763,6 @@ protected:
     void AddActionPluginTools();
 
     /**
-     * Append actions from API plugins to the main toolbar
-     */
-    void AddApiPluginTools();
-
-    /**
      * Execute action plugin's Run() method and updates undo buffer.
      *
      * @param aActionPlugin action plugin
@@ -786,8 +783,7 @@ protected:
      */
     void OnActionPluginButton( wxCommandEvent& aEvent );
 
-    void OnApiPluginMenu( wxCommandEvent& aEvent );
-    void OnApiPluginButton( wxCommandEvent& aEvent );
+    PLUGIN_ACTION_SCOPE PluginActionScope() const override { return PLUGIN_ACTION_SCOPE::PCB; }
 
     /**
      * Update the state of the GUI after a new board is loaded or created.

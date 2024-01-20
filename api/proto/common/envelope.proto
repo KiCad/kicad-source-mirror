@@ -29,9 +29,11 @@ enum ApiStatusCode
   AS_OK             = 1; // Request succeeded
   AS_TIMEOUT        = 2; // Request timed out
   AS_BAD_REQUEST    = 3; // The request had invalid parameters or otherwise was illegal
-  AS_NOT_READY      = 4; // KiCad was not (yet) in a state where it could handle API requests
+  AS_NOT_READY      = 4; // KiCad has recently started and cannot handle API requests yet
   AS_UNHANDLED      = 5; // The request was not handled by KiCad
   AS_TOKEN_MISMATCH = 6; // The kicad_token in the request didn't match this KiCad's token
+  AS_BUSY           = 7; // KiCad is busy performing an operation and can't accept API commands
+  AS_UNIMPLEMENTED  = 8; // The requested API call has not yet been implemented
 }
 
 /*

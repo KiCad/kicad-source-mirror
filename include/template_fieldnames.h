@@ -40,6 +40,7 @@ class TEMPLATE_FIELDNAMES_LEXER;
  * an unlimited number of user defined fields, only some of which have indices defined here.
  */
 enum  MANDATORY_FIELD_T {
+    INVALID_FIELD = -1,           ///< The field ID hasn't been set yet; field is invalid
     REFERENCE_FIELD = 0,          ///< Field Reference of part, i.e. "IC21"
     VALUE_FIELD,                  ///< Field Value of part, i.e. "3.3K"
     FOOTPRINT_FIELD,              ///< Field Name Module PCB, i.e. "16DIP300"

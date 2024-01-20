@@ -29,6 +29,7 @@
 
 #include <deque>
 
+#include <api/serializable.h>
 #include <core/typeinfo.h>
 #include <eda_item_flags.h>
 #include <eda_search_data.h>
@@ -83,7 +84,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;
 /**
  * A base class for most all the KiCad significant classes used in schematics and boards.
  */
-class EDA_ITEM : public KIGFX::VIEW_ITEM
+class EDA_ITEM : public KIGFX::VIEW_ITEM, public SERIALIZABLE
 {
 public:
     virtual ~EDA_ITEM() { };
@@ -437,10 +438,6 @@ public:
     virtual const BOX2I ViewBBox() const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
-
-    virtual void Serialize( google::protobuf::Any &aContainer ) const {}
-
-    virtual bool Deserialize( const google::protobuf::Any &aContainer ) { return false; }
 
 #if defined(DEBUG)
 

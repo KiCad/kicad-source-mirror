@@ -97,6 +97,7 @@ void PANEL_PLUGIN_SETTINGS::OnEnableApiChecked( wxCommandEvent& aEvent )
 
 void PANEL_PLUGIN_SETTINGS::updateApiStatusText()
 {
+#ifdef KICAD_IPC_API
     if( m_cbEnableApi->GetValue() && Pgm().GetApiServer().Running() )
     {
         m_stApiStatus->SetLabel( wxString::Format( _( "Listening at %s" ),
@@ -106,6 +107,9 @@ void PANEL_PLUGIN_SETTINGS::updateApiStatusText()
     {
         m_stApiStatus->SetLabel( wxEmptyString );
     }
+#else
+    m_stApiStatus->SetLabel( _( "This installation of KiCad does not have API support enabled." ) );
+#endif
 }
 
 

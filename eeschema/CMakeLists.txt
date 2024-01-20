@@ -422,6 +422,8 @@ set( EESCHEMA_SRCS
     toolbars_sch_editor.cpp
     toolbars_symbol_viewer.cpp
 
+    api/api_sch_utils.cpp
+
     netlist_exporters/netlist_exporter_allegro.cpp
     netlist_exporters/netlist_exporter_base.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp
@@ -456,6 +458,13 @@ set( EESCHEMA_SRCS
     tools/symbol_editor_move_tool.cpp
     tools/symbol_editor_pin_tool.cpp
     )
+
+if( KICAD_IPC_API )
+    set( EESCHEMA_SRCS
+        ${EESCHEMA_SRCS}
+        api/api_handler_sch.cpp
+    )
+endif()
 
 if( WIN32 )
     if( MINGW )
