@@ -528,11 +528,6 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
 }
 
 
-const LSET PCB_SELECTION::GetSelectionLayers()
-{
-  return LSET();
-}
-
 #if 0
 #include <3d_canvas/board_adapter.h>
 

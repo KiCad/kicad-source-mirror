@@ -298,34 +298,11 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             {
                 sTool->FilterCollectorForMarkers( aCollector );
                 sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForFreePads( aCollector );
             },
-            // Prompt user regarding locked items if in board editor and in free-pad-mode (if
-            // we're not in free-pad mode we delay this until the second RequestSelection()).
-            !m_isFootprintEditor && cfg->m_AllowFreePads );
+            true /* prompt user regarding locked items */ );
 
     if( m_dragging || selection.Empty() )
-        return false;
-
-    LSET     item_layers = selection.GetSelectionLayers();
-    bool     is_hover    = selection.IsHover(); // N.B. This must be saved before the second call
-                                                // to RequestSelection() below
-    VECTOR2I pickedReferencePoint;
-
-    // Now filter out pads if not in free pads mode.  We cannot do this in the first
-    // RequestSelection() as we need the item_layers when a pad is the selection front.
-    if( !m_isFootprintEditor && !cfg->m_AllowFreePads )
-    {
-        selection = m_selectionTool->RequestSelection(
-                []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-                {
-                    sTool->FilterCollectorForMarkers( aCollector );
-                    sTool->FilterCollectorForHierarchy( aCollector, true );
-                    sTool->FilterCollectorForFreePads( aCollector );
-                },
-                true /* prompt user regarding locked items */ );
-    }
-
-    if( selection.Empty() )
         return false;
 
     editFrame->PushTool( aEvent );
@@ -376,7 +353,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     {
         if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
         {
-            if( !is_hover )
+            if( !selection.IsHover() )
                 orig_items.push_back( boardItem );
 
             sel_items.push_back( boardItem );
@@ -393,10 +370,12 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
         }
     }
 
+    VECTOR2I pickedReferencePoint;
+
     if( moveWithReference && !pickReferencePoint( _( "Select reference point for move..." ), "", "",
                                                   pickedReferencePoint ) )
     {
-        if( is_hover )
+        if( selection.IsHover() )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
         editFrame->PopTool( aEvent );
@@ -431,6 +410,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     VECTOR2D        bboxMovement;
     BOX2I           originalBBox;
     bool            updateBBox = true;
+    LSET            layers( editFrame->GetActiveLayer() );
     PCB_GRID_HELPER grid( m_toolMgr, editFrame->GetMagneticItemsSettings() );
     TOOL_EVENT      copy = aEvent;
     TOOL_EVENT*     evt = &copy;
@@ -480,7 +460,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 VECTOR2I mousePos( controls->GetMousePosition() );
 
-                m_cursor = grid.BestSnapAnchor( mousePos, item_layers,
+                m_cursor = grid.BestSnapAnchor( mousePos, layers,
                                                 grid.GetSelectionGrid( selection ), sel_items );
 
                 if( controls->GetSettings().m_lastKeyboardCursorPositionValid )

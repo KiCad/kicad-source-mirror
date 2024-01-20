@@ -105,17 +105,3 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
 
     return items;
 }
-
-
-const LSET PCB_SELECTION::GetSelectionLayers()
-{
-    LSET retval;
-
-    for( EDA_ITEM* item : m_items )
-    {
-        if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item ) )
-            retval |= board_item->GetLayerSet();
-    }
-
-    return retval;
-}

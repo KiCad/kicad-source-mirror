@@ -34,8 +34,6 @@ public:
     EDA_ITEM* GetTopLeftItem( bool aFootprintsOnly = false ) const override;
     
     const std::vector<KIGFX::VIEW_ITEM*> updateDrawList() const override;
-
-    const LSET GetSelectionLayers();
 };
 
 #endif  //  PCB_SELECTION_H
