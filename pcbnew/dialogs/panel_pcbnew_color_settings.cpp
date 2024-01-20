@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -403,9 +403,12 @@ PANEL_PCBNEW_COLOR_SETTINGS::PANEL_PCBNEW_COLOR_SETTINGS( wxWindow* aParent, BOA
         m_validLayers.push_back( id );
     }
 
+    // These layers are not in GAL_LAYER_ID_START ... GAL_LAYER_ID_BITMASK_END
     m_validLayers.push_back( LAYER_LOCKED_ITEM_SHADOW );
     m_validLayers.push_back( LAYER_CONFLICTS_SHADOW );
     m_validLayers.push_back( LAYER_PAGE_LIMITS );
+    m_validLayers.push_back( LAYER_DRC_WARNING );
+    m_validLayers.push_back( LAYER_DRC_EXCLUSION );
 
     // NOTE: Main board layers are added by createSwatches()
 
