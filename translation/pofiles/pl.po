@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:05-0800\n"
-"PO-Revision-Date: 2024-01-14 12:31+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2024-01-22 00:01+0000\n"
+"Last-Translator: Marek <fotelpl@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -9786,9 +9786,8 @@ msgstr ""
 "symbolu?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Pole musi posiadać nazwę."
+msgstr "Symbol musi posiadać nazwę."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
