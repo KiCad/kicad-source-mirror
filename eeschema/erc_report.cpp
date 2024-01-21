@@ -41,13 +41,8 @@ ERC_REPORT::ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits ) :
 }
 
 
-bool ERC_REPORT::WriteTextReport( const wxString& aFullFileName )
+wxString ERC_REPORT::GetTextReport()
 {
-    wxFFile file( aFullFileName, wxT( "wt" ) );
-
-    if( !file.IsOpened() )
-        return false;
-
     UNITS_PROVIDER unitsProvider( schIUScale, m_reportUnits );
 
     wxString msg = wxString::Format( _( "ERC report (%s, Encoding UTF8)\n" ),
@@ -93,13 +88,20 @@ bool ERC_REPORT::WriteTextReport( const wxString& aFullFileName )
     msg << wxString::Format( _( "\n ** ERC messages: %d  Errors %d  Warnings %d\n" ), total_count,
                              err_count, warn_count );
 
-    // Currently: write report using UTF8 (as usual in Kicad).
-    // TODO: see if we can use the current encoding page (mainly for Windows users),
-    // Or other format (HTML?)
-    file.Write( msg );
+    return msg;
+}
+
+
+bool ERC_REPORT::WriteTextReport( const wxString& aFullFileName )
+{
+    wxFFile file( aFullFileName, wxT( "wt" ) );
+
+    if( !file.IsOpened() )
+        return false;
+
+    file.Write( GetTextReport() );
 
     // wxFFile dtor will close the file.
-
     return true;
 }
 

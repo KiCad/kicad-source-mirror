@@ -32,7 +32,25 @@ class ERC_REPORT
 public:
     ERC_REPORT( SCHEMATIC* aSchematic, EDA_UNITS aReportUnits );
 
+    /**
+     * Returns the ERC report in "text" (human readable) format
+     *
+     * @return The complete report
+     */
+    wxString GetTextReport();
+
+    /**
+     * Writes the text report also available via GetTextReport directly to a given file path
+     *
+     * @return True if the file write completed successfully, false otherwise
+     */
     bool WriteTextReport( const wxString& aFullFileName );
+
+    /**
+     * Writes a JSON formatted ERC Report to the given file path
+     *
+     * @return True if the file write completed successfully, false otherwise
+     */
     bool WriteJsonReport( const wxString& aFullFileName );
 
 private:
