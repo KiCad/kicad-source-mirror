@@ -208,7 +208,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 	gbExportOptions->SetFlexibleDirection( wxBOTH );
 	gbExportOptions->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_labelFieldDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Field delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelFieldDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("Field delimiter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelFieldDelimiter->Wrap( -1 );
 	gbExportOptions->Add( m_labelFieldDelimiter, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
@@ -217,7 +217,7 @@ DIALOG_SYMBOL_FIELDS_TABLE_BASE::DIALOG_SYMBOL_FIELDS_TABLE_BASE( wxWindow* pare
 
 	gbExportOptions->Add( m_textFieldDelimiter, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_labelStringDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("String delimeter:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelStringDelimiter = new wxStaticText( m_panelExport, wxID_ANY, _("String delimiter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelStringDelimiter->Wrap( -1 );
 	gbExportOptions->Add( m_labelStringDelimiter, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
