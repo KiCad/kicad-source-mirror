@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-16 04:06+0000\n"
+"PO-Revision-Date: 2024-01-22 00:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -5961,7 +5961,6 @@ msgid "Invalid HEAD.  Cannot merge."
 msgstr "Ogiltig HEAS.  Kan inte slå samman."
 
 #: common/git/git_pull_handler.cpp:177
-#, fuzzy
 msgid "Could not get repository head"
 msgstr "Kunde inte hämta kodförrådets head"
 
@@ -16836,7 +16835,6 @@ msgid "Failed to parse value: '%s'"
 msgstr "Kunde inte tolka värde: '%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:58
-#, fuzzy
 msgid "httplib plugin missing library table handle!"
 msgstr "httplib-insticksmodulen saknar bibliotekstabells handle!"
 
