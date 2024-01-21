@@ -126,7 +126,7 @@ public:
     SIM_MODEL_SERIALIZER( SIM_MODEL& aModel ) : m_model( aModel ) {}
 
     std::string GenerateDevice() const;
-    std::string GenerateType() const;
+    std::string GenerateDeviceSubtype() const;
     std::string GenerateValue() const;
     std::string GenerateParams() const;
     std::string GeneratePins() const;

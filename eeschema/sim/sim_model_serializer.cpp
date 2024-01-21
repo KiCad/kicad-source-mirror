@@ -59,7 +59,7 @@ std::string SIM_MODEL_SERIALIZER::GenerateDevice() const
 }
 
 
-std::string SIM_MODEL_SERIALIZER::GenerateType() const
+std::string SIM_MODEL_SERIALIZER::GenerateDeviceSubtype() const
 {
     return m_model.GetTypeInfo().fieldValue;
 }

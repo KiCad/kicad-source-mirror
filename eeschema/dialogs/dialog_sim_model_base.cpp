@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -115,17 +115,17 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_deviceChoice->SetSelection( 0 );
 	fgSizer16->Add( m_deviceChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 10 );
 
-	m_deviceTypeLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Device type:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_deviceTypeLabel->Wrap( -1 );
-	fgSizer16->Add( m_deviceTypeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	m_deviceSubtypeLabel = new wxStaticText( m_modelPanel, wxID_ANY, _("Device type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_deviceSubtypeLabel->Wrap( -1 );
+	fgSizer16->Add( m_deviceSubtypeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
-	wxArrayString m_deviceTypeChoiceChoices;
-	m_deviceTypeChoice = new wxChoice( m_modelPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_deviceTypeChoiceChoices, 0 );
-	m_deviceTypeChoice->SetSelection( 0 );
-	fgSizer16->Add( m_deviceTypeChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 10 );
+	wxArrayString m_deviceSubtypeChoiceChoices;
+	m_deviceSubtypeChoice = new wxChoice( m_modelPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_deviceSubtypeChoiceChoices, 0 );
+	m_deviceSubtypeChoice->SetSelection( 0 );
+	fgSizer16->Add( m_deviceSubtypeChoice, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 10 );
 
 
-	bSizerMargins->Add( fgSizer16, 0, wxEXPAND|wxLEFT, 24 );
+	bSizerMargins->Add( fgSizer16, 0, wxEXPAND|wxLEFT|wxRESERVE_SPACE_EVEN_IF_HIDDEN, 24 );
 
 
 	bSizerMargins->Add( 0, 15, 0, wxEXPAND, 5 );
@@ -353,8 +353,8 @@ DIALOG_SIM_MODEL_BASE::DIALOG_SIM_MODEL_BASE( wxWindow* parent, wxWindowID id, c
 	m_deviceLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeLabelUpdate ), NULL, this );
 	m_deviceChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
 	m_deviceChoice->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeChoiceUpdate ), NULL, this );
-	m_deviceTypeLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onTypeLabelUpdate ), NULL, this );
-	m_deviceTypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
+	m_deviceSubtypeLabel->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onTypeLabelUpdate ), NULL, this );
+	m_deviceSubtypeChoice->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_modelNotebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SIM_MODEL_BASE::onPageChanging ), NULL, this );
 	m_paramGridMgr->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onSizeParamGrid ), NULL, this );
 	m_pinAssignmentsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );
@@ -390,8 +390,8 @@ DIALOG_SIM_MODEL_BASE::~DIALOG_SIM_MODEL_BASE()
 	m_deviceLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeLabelUpdate ), NULL, this );
 	m_deviceChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeChoice ), NULL, this );
 	m_deviceChoice->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onDeviceTypeChoiceUpdate ), NULL, this );
-	m_deviceTypeLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onTypeLabelUpdate ), NULL, this );
-	m_deviceTypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
+	m_deviceSubtypeLabel->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_SIM_MODEL_BASE::onTypeLabelUpdate ), NULL, this );
+	m_deviceSubtypeChoice->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_SIM_MODEL_BASE::onTypeChoice ), NULL, this );
 	m_modelNotebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING, wxNotebookEventHandler( DIALOG_SIM_MODEL_BASE::onPageChanging ), NULL, this );
 	m_paramGridMgr->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_SIM_MODEL_BASE::onSizeParamGrid ), NULL, this );
 	m_pinAssignmentsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_SIM_MODEL_BASE::onPinAssignmentsGridCellChange ), NULL, this );

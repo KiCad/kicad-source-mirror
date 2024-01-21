@@ -199,7 +199,7 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
             if(aPart.m_SpiceModel.has_value())
             {
                 wxString modelVal = wxString::Format( "model=\"%s\"", aPart.m_SpiceModel.value() );
-                addNewFieldToSymbol( SIM_DEVICE_TYPE_FIELD, retSym )->SetText( "SPICE" );
+                addNewFieldToSymbol( SIM_DEVICE_FIELD, retSym )->SetText( "SPICE" );
                 addNewFieldToSymbol( SIM_PARAMS_FIELD, retSym )->SetText( modelVal );
             }
 

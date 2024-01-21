@@ -1345,6 +1345,18 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
         }
     }
 
+    // Consider missing simulation fields as empty, not un-resolved
+    if( token->IsSameAs( wxT( "SIM.DEVICE" ) )
+            || token->IsSameAs( wxT( "SIM.TYPE" ) )
+            || token->IsSameAs( wxT( "SIM.PINS" ) )
+            || token->IsSameAs( wxT( "SIM.PARAMS" ) )
+            || token->IsSameAs( wxT( "SIM.LIBRARY" ) )
+            || token->IsSameAs( wxT( "SIM.NAME" ) ) )
+    {
+        *token = wxEmptyString;
+        return true;
+    }
+
     for( const TEMPLATE_FIELDNAME& templateFieldname :
             schematic->Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {

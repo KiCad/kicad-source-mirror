@@ -91,7 +91,7 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symb
 
     m_waveformChoice->Clear();
     m_deviceChoice->Clear();
-    m_deviceTypeChoice->Clear();
+    m_deviceSubtypeChoice->Clear();
 
     m_scintillaTricksCode = new SCINTILLA_TRICKS( m_codePreview, wxT( "{}" ), false );
     m_scintillaTricksSubckt = new SCINTILLA_TRICKS( m_subckt, wxT( "()" ), false );
@@ -188,10 +188,10 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
     if( SIM_MODEL::InferSimModel( m_symbol, &m_fields, false, SIM_VALUE_GRAMMAR::NOTATION::SI,
                                   &deviceType, &modelType, &modelParams, &pinMap ) )
     {
-        setFieldValue( SIM_DEVICE_TYPE_FIELD, deviceType );
+        setFieldValue( SIM_DEVICE_FIELD, deviceType );
 
         if( !modelType.IsEmpty() )
-            setFieldValue(  SIM_TYPE_FIELD, modelType );
+            setFieldValue( SIM_DEVICE_SUBTYPE_FIELD, modelType );
 
         setFieldValue( SIM_PARAMS_FIELD, modelParams );
 
@@ -288,8 +288,8 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataToWindow()
             }
         }
     }
-    else if( !SIM_MODEL::GetFieldValue( &m_fields, SIM_DEVICE_TYPE_FIELD ).empty()
-                || !SIM_MODEL::GetFieldValue( &m_fields, SIM_TYPE_FIELD ).empty() )
+    else if( !SIM_MODEL::GetFieldValue( &m_fields, SIM_DEVICE_FIELD ).empty()
+                || !SIM_MODEL::GetFieldValue( &m_fields, SIM_DEVICE_SUBTYPE_FIELD ).empty() )
     {
         // The model is sourced from the instance.
         m_rbBuiltinModel->SetValue( true );
@@ -430,8 +430,8 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
 
     m_deviceLabel->Enable( enableBuiltinCtrls );
     m_deviceChoice->Enable( enableBuiltinCtrls );
-    m_deviceTypeLabel->Enable( enableBuiltinCtrls );
-    m_deviceTypeChoice->Enable( enableBuiltinCtrls );
+    m_deviceSubtypeLabel->Enable( enableBuiltinCtrls );
+    m_deviceSubtypeChoice->Enable( enableBuiltinCtrls );
 
     SIM_MODEL* model = &curModel();
 
@@ -505,7 +505,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateBuiltinModelWidgets( SIM_MODEL* 
     if( aModel != m_prevModel )
     {
         m_deviceChoice->Clear();
-        m_deviceTypeChoice->Clear();
+        m_deviceSubtypeChoice->Clear();
 
         if( !m_rbLibraryModel->GetValue() )
         {
@@ -536,13 +536,16 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateBuiltinModelWidgets( SIM_MODEL* 
                 if( deviceType == aModel->GetDeviceType()
                     || deviceTypeDesc == aModel->GetDeviceInfo().description )
                 {
-                    m_deviceTypeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
+                    m_deviceSubtypeChoice->Append( SIM_MODEL::TypeInfo( type ).description );
 
                     if( type == aModel->GetType() )
-                        m_deviceTypeChoice->SetSelection( m_deviceTypeChoice->GetCount() - 1 );
+                        m_deviceSubtypeChoice->SetSelection( m_deviceSubtypeChoice->GetCount() - 1 );
                 }
             }
         }
+
+        m_deviceSubtypeLabel->Show( m_deviceSubtypeChoice->GetCount() > 1 );
+        m_deviceSubtypeChoice->Show( m_deviceSubtypeChoice->GetCount() > 1 );
     }
 
     if( dynamic_cast<SIM_MODEL_RAW_SPICE*>( aModel ) )
@@ -1323,7 +1326,7 @@ template <typename T_symbol, typename T_field>
 void DIALOG_SIM_MODEL<T_symbol, T_field>::onTypeChoice( wxCommandEvent& aEvent )
 {
     SIM_MODEL::DEVICE_T deviceType = curModel().GetDeviceType();
-    wxString            typeDescription = m_deviceTypeChoice->GetStringSelection();
+    wxString            typeDescription = m_deviceSubtypeChoice->GetStringSelection();
 
     for( SIM_MODEL::TYPE type : SIM_MODEL::TYPE_ITERATOR() )
     {

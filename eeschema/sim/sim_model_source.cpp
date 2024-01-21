@@ -72,7 +72,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         item.modelName += fmt::format( "DC {} ", dc );
     }
 
-    if( m_model.GetSpiceInfo().inlineTypeString != ""
+    if( m_model.GetSpiceInfo().functionName != ""
         && m_model.GetType() != SIM_MODEL::TYPE::V   // DC-only sources are already processed
         && m_model.GetType() != SIM_MODEL::TYPE::I )
     {
@@ -187,7 +187,7 @@ std::string SPICE_GENERATOR_SOURCE::ItemLine( const SPICE_ITEM& aItem ) const
         }
 
         emptyLine = false;
-        item.modelName += fmt::format( "{}( {}) ", m_model.GetSpiceInfo().inlineTypeString, args );
+        item.modelName += fmt::format( "{}( {}) ", m_model.GetSpiceInfo().functionName, args );
     }
     else
     {

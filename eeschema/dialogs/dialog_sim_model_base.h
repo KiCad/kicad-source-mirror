@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -70,8 +70,8 @@ class DIALOG_SIM_MODEL_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbBuiltinModel;
 		wxStaticText* m_deviceLabel;
 		wxChoice* m_deviceChoice;
-		wxStaticText* m_deviceTypeLabel;
-		wxChoice* m_deviceTypeChoice;
+		wxStaticText* m_deviceSubtypeLabel;
+		wxChoice* m_deviceSubtypeChoice;
 		wxNotebook* m_modelNotebook;
 		wxPanel* m_parametersPanel;
 		wxPropertyGridManager* m_paramGridMgr;
