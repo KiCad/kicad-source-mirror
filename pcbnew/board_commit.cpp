@@ -262,7 +262,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( !( changeFlags & CHT_DONE ) )
             {
-                if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
+                if( !m_isBoardEditor )
+                {
+                    FOOTPRINT* parentFP = board->GetFirstFootprint();
+                    parentFP->Add( boardItem );
+                }
+                else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
                 {
                     parentFP->Add( boardItem );
                 }
