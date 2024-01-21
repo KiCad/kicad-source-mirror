@@ -953,13 +953,11 @@ void DIALOG_DRC::OnCancelClick( wxCommandEvent& aEvent )
 
 void DIALOG_DRC::OnChangingNotebookPage( wxNotebookEvent& aEvent )
 {
-    // Shouldn't be necessary, but is on at least OSX
-    if( aEvent.GetSelection() >= 0 )
-        m_Notebook->ChangeSelection( (unsigned) aEvent.GetSelection() );
-
     m_markerDataView->UnselectAll();
     m_unconnectedDataView->UnselectAll();
     m_footprintsDataView->UnselectAll();
+
+    aEvent.Skip();
 }
 
 
