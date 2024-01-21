@@ -80,6 +80,8 @@ public:
     DIALOG_IMPORT_GRAPHICS m_ImportGraphics;
 
     bool m_ShowPinElectricalType;
+    bool m_ShowHiddenLibPins;
+    bool m_ShowHiddenLibFields;
 
     int m_LibWidth;
 

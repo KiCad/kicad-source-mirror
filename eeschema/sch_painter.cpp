@@ -105,6 +105,8 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowUnit( 0 ),
         m_ShowBodyStyle( 0 ),
         m_ShowPinsElectricalType( true ),
+        m_ShowHiddenLibPins( true ),      // Force showing of hidden pin ( symbol editor specific)
+        m_ShowHiddenLibFields( true ),    // Force showing of hidden fields ( symbol editor specific)
         m_ShowPinNumbers( false ),
         m_ShowDisabled( false ),
         m_ShowGraphicsDisabled( false ),
@@ -1071,7 +1073,10 @@ void SCH_PAINTER::draw( const LIB_FIELD* aField, int aLayer, bool aDimmed )
 
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
-        if( m_schSettings.m_IsSymbolEditor || eeconfig()->m_Appearance.show_hidden_fields )
+        bool force_show = m_schematic ? eeconfig()->m_Appearance.show_hidden_fields
+                                      : m_schSettings.m_ShowHiddenLibFields;
+
+        if( force_show )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows, aDimmed );
         else
             return;
@@ -1398,7 +1403,9 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         if( m_schSettings.IsPrinting() )
             return;
 
-        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_pins )
+        bool force_show = m_schematic ? eeconfig()->m_Appearance.show_hidden_pins
+                                      : m_schSettings.m_ShowHiddenLibPins;
+        if( force_show )
         {
             color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
         }
@@ -2204,7 +2211,11 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
 
     if( !( aText->IsVisible() || aText->IsForceVisible() ) )
     {
-        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
+        // Currently invisible texts are always shown in symbol editor
+        bool force_show = m_schematic ? eeconfig()->m_Appearance.show_hidden_fields
+                                      : true;
+
+        if( force_show )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;

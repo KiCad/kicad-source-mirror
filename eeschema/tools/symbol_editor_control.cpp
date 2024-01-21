@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -556,6 +556,32 @@ int SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::ToggleHiddenLibPins( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    editFrame->GetRenderSettings()->m_ShowHiddenLibPins =
+                    !editFrame->GetRenderSettings()->m_ShowHiddenLibPins;
+
+    getView()->UpdateAllItems( KIGFX::REPAINT );
+    editFrame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
+int SYMBOL_EDITOR_CONTROL::ToggleHiddenLibFields( const TOOL_EVENT& aEvent )
+{
+    SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
+    editFrame->GetRenderSettings()->m_ShowHiddenLibFields =
+                    !editFrame->GetRenderSettings()->m_ShowHiddenLibFields;
+
+    getView()->UpdateAllItems( KIGFX::REPAINT );
+    editFrame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::ExportView( const TOOL_EVENT& aEvent )
 {
     if( !m_isSymbolEditor )
@@ -748,5 +774,8 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::showSymbolTree.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::hideSymbolTree.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
+
     Go( &SYMBOL_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenLibPins,   EE_ACTIONS::showHiddenLibPins.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenLibFields, EE_ACTIONS::showHiddenLibFields.MakeEvent() );
 }

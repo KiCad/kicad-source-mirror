@@ -101,6 +101,12 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
     m_params.emplace_back( new PARAM<bool>( "show_pin_electrical_type",
                                             &m_ShowPinElectricalType, true ) );
 
+    m_params.emplace_back( new PARAM<bool>( "show_hidden_lib_fields",
+                                            &m_ShowHiddenLibFields, true ) );
+
+    m_params.emplace_back( new PARAM<bool>( "show_hidden_lib_pins",
+                                            &m_ShowHiddenLibPins, true ) );
+
     m_params.emplace_back( new PARAM<int>( "lib_table_width",
                                            &m_LibWidth, 250 ) );
 

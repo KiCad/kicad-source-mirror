@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -308,6 +308,8 @@ void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::LoadSettings( GetSettings() );
 
     GetRenderSettings()->m_ShowPinsElectricalType = m_settings->m_ShowPinElectricalType;
+    GetRenderSettings()->m_ShowHiddenLibPins = m_settings->m_ShowHiddenLibPins;
+    GetRenderSettings()->m_ShowHiddenLibFields = m_settings->m_ShowHiddenLibFields;
     GetRenderSettings()->SetDefaultFont( wxEmptyString );
 }
 
@@ -321,6 +323,9 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::SaveSettings( GetSettings() );
 
     m_settings->m_ShowPinElectricalType  = GetRenderSettings()->m_ShowPinsElectricalType;
+    m_settings->m_ShowHiddenLibPins = GetRenderSettings()->m_ShowHiddenLibPins;
+    m_settings->m_ShowHiddenLibFields = GetRenderSettings()->m_ShowHiddenLibFields;
+
     m_settings->m_LibWidth               = m_treePane->GetSize().x;
 
     m_settings->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
@@ -471,6 +476,18 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
                 return GetRenderSettings() && GetRenderSettings()->m_ShowPinsElectricalType;
             };
 
+    auto hiddenPinCond =
+            [this]( const SELECTION& )
+            {
+                return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenLibPins;
+            };
+
+    auto hiddenFieldCond =
+            [this]( const SELECTION& )
+            {
+                return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenLibFields;
+            };
+
     auto showCompTreeCond =
             [this]( const SELECTION& )
             {
@@ -487,6 +504,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
     mgr->SetConditions( EE_ACTIONS::showSymbolTree,      CHECK( showCompTreeCond ) );
     mgr->SetConditions( ACTIONS::showProperties,         CHECK( propertiesCond ) );
+    mgr->SetConditions( EE_ACTIONS::showHiddenLibPins,   CHECK( hiddenPinCond ) );
+    mgr->SetConditions( EE_ACTIONS::showHiddenLibFields, CHECK( hiddenFieldCond ) );
 
     auto demorganCond =
             [this]( const SELECTION& )
@@ -1215,6 +1234,8 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextV
     SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_ShowPinElectricalType;
+    GetRenderSettings()->m_ShowHiddenLibPins = cfg->m_ShowHiddenLibPins;
+    GetRenderSettings()->m_ShowHiddenLibFields = cfg->m_ShowHiddenLibFields;
 
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
