@@ -1142,8 +1142,6 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // Active librarians
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Geries AbuAkel" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "apo" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "John Beard" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jeremy Boynes" ), LIBRARIANS,
@@ -1160,19 +1158,21 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Brandon Kirisaki" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Kliment" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Uli Köhler" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Andrew Lutsenko" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jorge Neiva" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Valentin Ochs" ), LIBRARIANS,
+                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Carlos Nieves Ónega" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Dash Peters" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Armin Schoisswohl" ), LIBRARIANS,
+                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Kliment Yanev" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
 
     // Former librarians
