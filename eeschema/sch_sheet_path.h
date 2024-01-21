@@ -674,6 +674,8 @@ public:
 
     bool HasPath( const KIID_PATH& aPath ) const;
 
+    bool ContainsSheet( const SCH_SHEET* aSheet ) const;
+
 private:
     SCH_SHEET_PATH  m_currentSheetPath;
 };

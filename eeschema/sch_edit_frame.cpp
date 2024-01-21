@@ -51,6 +51,7 @@
 #include <sch_painter.h>
 #include <sch_sheet.h>
 #include <sch_marker.h>
+#include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
@@ -1502,37 +1503,48 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
         for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
         {
-            EDA_ITEM* item = changed_list->GetPickedItem( ii );
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
 
-            if( !item || !IsEeschemaType( item->Type() ) )
+            wxCHECK2( item, continue );
+
+            // Ignore objects that are not connectable.
+            if( !item->IsConnectable() )
                 continue;
 
             SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( changed_list->GetScreenForItem( ii ) );
-            SCH_ITEM* sch_item = static_cast<SCH_ITEM*>( item );
             SCH_SHEET_PATHS& paths = screen->GetClientSheetPaths();
 
-            std::vector<VECTOR2I> tmp_pts = sch_item->GetConnectionPoints();
+            std::vector<VECTOR2I> tmp_pts = item->GetConnectionPoints();
             pts.insert( pts.end(), tmp_pts.begin(), tmp_pts.end() );
-            changed_items.insert( sch_item );
+            changed_items.insert( item );
 
             for( SCH_SHEET_PATH& path : paths )
-                item_paths.insert( std::make_pair( path, sch_item ) );
+                item_paths.insert( std::make_pair( path, item ) );
         }
 
         for( VECTOR2I& pt: pts )
         {
             for( SCH_ITEM* item : GetScreen()->Items().Overlapping(pt ) )
             {
-                if( !item->IsConnectable() )
-                    continue;
-
-                if( SCH_LINE* line = dyn_cast<SCH_LINE*>( item ) )
+                if( item->Type() == SCH_LINE_T )
                 {
-                    if( line->HitTest( pt ) )
-                    {
+                    if( item->HitTest( pt ) )
                         changed_items.insert( item );
-                        continue;
-                    }
+                }
+                else if( item->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+                    wxCHECK2( sheet, continue );
+
+                    std::vector<SCH_SHEET_PIN*> sheetPins = sheet->GetPins();
+                    changed_items.insert( sheetPins.begin(), sheetPins.end() );
+                }
+                else
+                {
+                    // Non-connectable objects have already been pruned.
+                    if( item->IsConnected( pt ) )
+                        changed_items.insert( item );
                 }
 
                 if( SCH_SYMBOL* sym = dyn_cast<SCH_SYMBOL*>( item ) )
@@ -1548,8 +1560,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
         }
 
         std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> all_items =
-                Schematic().ConnectionGraph()->ExtractAffectedItems(
-                        changed_items );
+                Schematic().ConnectionGraph()->ExtractAffectedItems( changed_items );
 
         all_items.insert( item_paths.begin(), item_paths.end() );
 
