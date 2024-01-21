@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2023 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -306,6 +306,20 @@ TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( TOOL_ACTION_ARGS()
                      "When enabled propagates all changes (except pin numbers) to other units.\n"
                      "Enabled by default for multiunit parts with interchangeable units." ) )
         .Icon( BITMAPS::pin2pin ) );
+
+TOOL_ACTION EE_ACTIONS::showHiddenLibPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showHiddenLibPins" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show Hidden Pins" ) )
+        .Tooltip( _( "Toggle display of hidden pins" ) )
+        .Icon( BITMAPS::hidden_pin ) );
+
+TOOL_ACTION EE_ACTIONS::showHiddenLibFields( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showHiddenLibFields" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show Hidden Fields" ) )
+        .Tooltip( _( "Toggle display of hidden text fields" ) )
+        .Icon( BITMAPS::spreadsheet ) );
 
 
 // SYMBOL_EDITOR_DRAWING_TOOLS

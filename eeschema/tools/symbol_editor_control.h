@@ -71,6 +71,9 @@ public:
     int ToggleProperties( const TOOL_EVENT& aEvent );
     int ToggleSyncedPinsMode( const TOOL_EVENT& aEvent );
 
+    int ToggleHiddenLibPins( const TOOL_EVENT& aEvent );
+    int ToggleHiddenLibFields( const TOOL_EVENT& aEvent );
+
     int DdAddLibrary( const TOOL_EVENT& aEvent );
 
 private:
