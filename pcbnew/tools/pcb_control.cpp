@@ -1546,26 +1546,29 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
             msgItems.emplace_back( _( "Selected Items" ),
                                    wxString::Format( wxT( "%d" ), selection.GetSize() ) );
 
-            std::set<wxString> netNames;
-            std::set<wxString> netClasses;
-
-            for( EDA_ITEM* item : selection )
+            if( m_isBoardEditor )
             {
-                if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+                std::set<wxString> netNames;
+                std::set<wxString> netClasses;
+
+                for( EDA_ITEM* item : selection )
                 {
-                    netNames.insert( UnescapeString( bci->GetNetname() ) );
-                    netClasses.insert( UnescapeString( bci->GetEffectiveNetClass()->GetName() ) );
+                    if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+                    {
+                        netNames.insert( UnescapeString( bci->GetNetname() ) );
+                        netClasses.insert( UnescapeString( bci->GetEffectiveNetClass()->GetName() ) );
 
-                    if( netNames.size() > 1 && netClasses.size() > 1 )
-                        break;
+                        if( netNames.size() > 1 && netClasses.size() > 1 )
+                            break;
+                    }
                 }
+
+                if( netNames.size() == 1 )
+                    msgItems.emplace_back( _( "Net" ), *netNames.begin() );
+
+                if( netClasses.size() == 1 )
+                    msgItems.emplace_back( _( "Resolved Netclass" ), *netClasses.begin() );
             }
-
-            if( netNames.size() == 1 )
-                msgItems.emplace_back( _( "Net" ), *netNames.begin() );
-
-            if( netClasses.size() == 1 )
-                msgItems.emplace_back( _( "Resolved Netclass" ), *netClasses.begin() );
         }
         else
         {
