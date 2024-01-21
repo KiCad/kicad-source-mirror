@@ -1487,10 +1487,10 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
     EDA_ANGLE pad_rot = aMasterPad.GetOrientation();
 
-    if( aMasterPad.GetParent() )
+    if( aMasterPad.GetParentFootprint() )
         pad_rot -= aMasterPad.GetParentFootprint()->GetOrientation();
 
-    if( GetParent() )
+    if( GetParentFootprint() )
         pad_rot += GetParentFootprint()->GetOrientation();
 
     SetOrientation( pad_rot );
