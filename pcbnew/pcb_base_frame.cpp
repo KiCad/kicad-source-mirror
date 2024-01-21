@@ -374,7 +374,7 @@ void PCB_BASE_FRAME::FocusOnItems( std::vector<BOARD_ITEM*> aItems, PCB_LAYER_ID
 
             focusPt = item->GetPosition();
 
-            if( aLayer == UNDEFINED_LAYER )
+            if( aLayer == UNDEFINED_LAYER && item->GetLayerSet().any() )
                 aLayer = item->GetLayerSet().Seq()[0];
 
             switch( item->Type() )
