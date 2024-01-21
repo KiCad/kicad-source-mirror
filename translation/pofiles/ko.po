@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2024-01-19 12:00+0000\n"
+"PO-Revision-Date: 2024-01-21 11:01+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -21452,9 +21452,8 @@ msgid "Page '%s' not found."
 msgstr "'%s' 페이지를 찾을 수 없음."
 
 #: eeschema/tools/simulator_control.cpp:94
-#, fuzzy
 msgid "Open Simulation Workbook"
-msgstr "시뮬레이션 워크북 열기"
+msgstr "시뮬레이션 통합 문서 열기"
 
 #: eeschema/tools/simulator_control.cpp:113
 msgid "noname"
@@ -21515,9 +21514,8 @@ msgstr "SVG 파일 이름"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:650
 #: eeschema/tools/symbol_editor_pin_tool.cpp:190
-#, fuzzy
 msgid "Edit Pin Properties"
-msgstr "핀 속성"
+msgstr "핀 속성 수정"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:666
 msgid "Symbol is not derived from another symbol."
@@ -21565,9 +21563,8 @@ msgid "Recently Used"
 msgstr "최근에 사용"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
-#, fuzzy
 msgid "Already Placed"
-msgstr "이동 및 배치"
+msgstr "이미 배치됨"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:561
 msgid "No footprint specified"
@@ -21604,9 +21601,9 @@ msgid "Tune %s"
 msgstr "조정 %s"
 
 #: eeschema/widgets/tuner_slider.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
-msgstr "'%s' 심볼에 튜닝할 수 없는 '%s %s' 유형의 시뮬레이션 모델이 있음"
+msgstr "%s에 '%s %s' 유형의 시뮬레이션 모델이 있음; RLC 수동부품만 조정됨"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -21618,9 +21615,8 @@ msgid "Clear layer %d?"
 msgstr "%d 레이어를 지울까요?"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:21
-#, fuzzy
 msgid "Active layer name:"
-msgstr "비활성 레이어:"
+msgstr "활성 레이어 이름:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
 #: pcbnew/dialogs/dialog_position_relative.cpp:167
@@ -21650,14 +21646,12 @@ msgid "All layers"
 msgstr "모든 레이어"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "All visible layers"
-msgstr "표시 레이어"
+msgstr "모든 레이어 표시"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.h:64
-#, fuzzy
 msgid "Layers Settings"
-msgstr "페이지 설정"
+msgstr "레이어 설정"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:144
 #, c-format
@@ -21927,7 +21921,6 @@ msgstr ""
 "이 매개변수는 주로 파일을 특정하는 데 사용되지만, 항상 그런 것은 아닙니다."
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:33
-#, fuzzy
 msgid "File Units"
 msgstr "파일 유닛"
 
@@ -21940,9 +21933,8 @@ msgid "No trailing zeros (LZ format)"
 msgstr "후행 0 없음 (LZ 형식)"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:39
-#, fuzzy
 msgid "Zero Format"
-msgstr "0 표시 형식"
+msgstr "제로 형식"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:41
 msgid ""
@@ -22597,7 +22589,6 @@ msgid "Move Layer Up"
 msgstr "레이어를 위로 이동"
 
 #: gerbview/tools/gerbview_actions.cpp:183
-#, fuzzy
 msgid "Move Current Layer up"
 msgstr "현재 레이어 위로 이동"
 
@@ -22679,9 +22670,8 @@ msgid "None of the Gerber layers contain any data"
 msgstr "데이터를 가진 거버 레이어가 없습니다"
 
 #: gerbview/tools/gerbview_control.cpp:126
-#, fuzzy
 msgid "Export as KiCad Board File"
-msgstr "비 KiCad 기판 파일 가져오기"
+msgstr "KiCad 기판 파일로 내보내기"
 
 #: gerbview/tools/gerbview_inspection_tool.cpp:147
 msgid "D Codes"
@@ -22895,51 +22885,44 @@ msgstr ""
 "'--define-var key=value' 또는 '-D key=value' 형식으로 사용하세요"
 
 #: kicad/cli/command.h:32
-#, fuzzy
 msgid "Shows help message and exits"
-msgstr "도움말 메시지를 보여주고 종료"
+msgstr "도움말 메시지 표시 및 종료"
 
 #: kicad/cli/command_fp.h:31
-#, fuzzy
 msgid "Footprint and Footprint Libraries"
-msgstr "풋프린트 라이브러리 불러오는 중"
+msgstr "풋프린트 및 풋프린트 라이브러리"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
 msgid "Export utilities (svg)"
 msgstr "유틸리티 내보내기(svg)"
 
 #: kicad/cli/command_fp_export_svg.cpp:37
-#, fuzzy
 msgid "Exports the footprint or entire footprint library to SVG"
-msgstr "전역과 프로젝트 내의 풋프린트 라이브러리 리스트 편집"
+msgstr "풋프린트 또는 전체 풋프린트 라이브러리를 SVG로 내보냄"
 
 #: kicad/cli/command_fp_export_svg.cpp:45
-#, fuzzy
 msgid "Color theme to use (will default to footprint editor settings)"
-msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
+msgstr "사용할 색상 테마(기본적으로 풋프린트 편집기 설정으로 설정됨)"
 
 #: kicad/cli/command_fp_export_svg.cpp:50
-#, fuzzy
 msgid "Specific footprint to export within the library"
-msgstr "라이브러리에서 내보낼 특정 심볼"
+msgstr "라이브러리 내에서 내보낼 특정 풋프린트"
 
 #: kicad/cli/command_fp_export_svg.cpp:75
 msgid "Footprint library does not exist or is not accessible\n"
 msgstr "풋프린트 라이브러리가 없거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_fp_upgrade.cpp:35
-#, fuzzy
 msgid "Upgrades the footprint library to the current kicad version format"
-msgstr "버전 관리에 관계없이 풋프린트 라이브러리를 강제로 다시 저장함"
+msgstr "풋프린트 라이브러리를 현재 kicad 버전 형식으로 업그레이드"
 
 #: kicad/cli/command_fp_upgrade.cpp:40
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr "버전 관리에 관계없이 풋프린트 라이브러리를 강제로 다시 저장함"
 
 #: kicad/cli/command_fp_upgrade.cpp:55
-#, fuzzy
 msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "풋프린트 라이브러리가 없거나 액세스할 수 없습니다.\n"
+msgstr "풋프린트 라이브러리 경로가 존재하지 않거나 액세스할 수 없음\n"
 
 #: kicad/cli/command_pcb_drc.cpp:46
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -22954,9 +22937,8 @@ msgid "Report all errors for each track"
 msgstr "각 배선별 모든 오류 보고"
 
 #: kicad/cli/command_pcb_drc.cpp:60 kicad/cli/command_sch_erc.cpp:55
-#, fuzzy
 msgid "Report units; valid options: in, mm, mils"
-msgstr "출력 단위, 유효한 옵션: mm, in"
+msgstr "보고서 단위; 유효한 옵션: in, mm, mils"
 
 #: kicad/cli/command_pcb_drc.cpp:64
 msgid ""
@@ -22984,9 +22966,8 @@ msgid ""
 msgstr "제외된 모든 DRC 위반을 보고하면 다른 심각도 인수와 결합할 수 있음"
 
 #: kicad/cli/command_pcb_drc.cpp:84
-#, fuzzy
 msgid "Return a nonzero exit code if DRC violations exist"
-msgstr "위반이 존재하는지 여부에 따라 종료 코드를 반환함"
+msgstr "DRC 위반이 있는 경우 0이 아닌 종료 코드 반환"
 
 #: kicad/cli/command_pcb_drc.cpp:137 kicad/cli/command_pcb_export_3d.cpp:208
 #: kicad/cli/command_pcb_export_drill.cpp:148
@@ -22996,9 +22977,8 @@ msgid "Invalid units specified\n"
 msgstr "단위가 잘못 지정됨\n"
 
 #: kicad/cli/command_pcb_drc.cpp:152 kicad/cli/command_sch_erc.cpp:145
-#, fuzzy
 msgid "Invalid report format\n"
-msgstr "잘못된 형식\n"
+msgstr "잘못된 보고서 형식\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
@@ -23021,14 +23001,12 @@ msgid "Use Drill Origin for output origin"
 msgstr "출력 원점에 드릴 원점 사용"
 
 #: kicad/cli/command_pcb_export_3d.cpp:85
-#, fuzzy
 msgid "Exclude 3D models for components with 'Unspecified' footprint type"
-msgstr "'가상' 속성이 있는 구성요소의 3D 모델 제외"
+msgstr "풋프린트 유형이 '지정되지 않음'인 컴포넌트에 대한 3D 모델 제외"
 
 #: kicad/cli/command_pcb_export_3d.cpp:91
-#, fuzzy
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "'가상' 속성이 있는 구성요소의 3D 모델 제외"
+msgstr "'부착 안 함' 속성이 있는 컴포넌트에 대한 3D 모델 제외"
 
 #: kicad/cli/command_pcb_export_3d.cpp:95
 msgid ""
@@ -23040,9 +23018,8 @@ msgid "Only generate a board with no components"
 msgstr "부품 없이 보드만 생성"
 
 #: kicad/cli/command_pcb_export_3d.cpp:104
-#, fuzzy
 msgid "Export tracks"
-msgstr "배선 없음"
+msgstr "트랙 내보내기"
 
 #: kicad/cli/command_pcb_export_3d.cpp:109
 #: pcbnew/dialogs/dialog_export_step_base.cpp:165
@@ -23064,27 +23041,23 @@ msgid ""
 msgstr "사용자 지정 출력 원점 예: 1x1in, 1x1inch, 25.4x25.4mm(기본 단위 mm)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:137
-#, fuzzy
 msgid "Output units; valid options: mm, m, in, tenths"
-msgstr "출력 단위, 유효한 옵션: mm, in"
+msgstr "출력 단위; 유효한 옵션: mm, m, in, 십분위수"
 
 #: kicad/cli/command_pcb_export_3d.cpp:142
-#, fuzzy
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
-msgstr ""
-"3D 모델을 생성하고 저장할 폴더 이름, 지정하지 않거나 비어 있는 경우 모델은 내"
-"보낸 기본 vrml 파일에 포함됨"
+msgstr "3D 모델을 생성하고 저장할 폴더의 이름, 지정하지 않거나 비어 있으면 내보낸 "
+"기본 VRML 파일에 모델이 포함됨"
 
 #: kicad/cli/command_pcb_export_3d.cpp:146
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr "결과 파일에 상대 경로를 출력하려면 --models-dir과 함께 사용함"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
-#, fuzzy
 msgid "Invalid format specified\n"
-msgstr "맵 형식이 잘못 지정됨\n"
+msgstr "잘못된 형식이 지정됨\n"
 
 #: kicad/cli/command_pcb_export_base.cpp:106
 #, c-format
@@ -23097,9 +23070,8 @@ msgid ""
 msgstr "번역되지 않은 레이어 이름의 쉼표로 구분된 목록에 F.Cu,B.Cu이 포함됨"
 
 #: kicad/cli/command_pcb_export_base.cpp:139
-#, fuzzy
 msgid "At least one layer must be specified\n"
-msgstr "하나 이상의 레이어를 지정해야 합니다.\n"
+msgstr "하나 이상의 레이어를 지정해야 함\n"
 
 #: kicad/cli/command_pcb_export_drill.cpp:47
 #: pcbnew/dialogs/dialog_gendrill_base.h:93
@@ -23149,7 +23121,6 @@ msgid "Valid options: pdf,gerberx2,ps,dxf,svg"
 msgstr "유효한 옵션: pdf,gerberx2,ps,dxf,svg"
 
 #: kicad/cli/command_pcb_export_drill.cpp:97
-#, fuzzy
 msgid "Precision of Gerber coordinates (5 or 6)"
 msgstr "거버 좌표의 정밀도(5 또는 6)"
 
@@ -23222,9 +23193,8 @@ msgid "Board file does not exist or is not accessible\n"
 msgstr "보드 파일이 존재하지 않거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:41
-#, fuzzy
 msgid "Plot given layers to a single Gerber file"
-msgstr "모든 레이어 지우기"
+msgstr "주어진 레이어를 단일 거버 파일로 플롯하기"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:56
 msgid "Do not use the extended X2 format"
@@ -23240,7 +23210,6 @@ msgid "Subtract soldermask from silkscreen"
 msgstr "실크스크린에서 솔더 마스크 빼기"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:68
-#, fuzzy
 msgid "Disable aperture macros"
 msgstr "조리개 매크로 비활성화"
 
@@ -23251,14 +23220,12 @@ msgid "Use drill/place file origin"
 msgstr "드릴/배치 파일 원점 사용"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:77
-#, fuzzy
 msgid "Precision of Gerber coordinates, valid options: 5 or 6"
 msgstr "거버 좌표의 정밀도, 유효한 옵션: 5 또는 6"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:83
-#, fuzzy
 msgid "Use KiCad Gerber file extension"
-msgstr "Protel 파일 이름 확장자 사용"
+msgstr "KiCad 거버 파일 확장자 사용"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:43
 msgid ""
@@ -23277,14 +23244,12 @@ msgstr ""
 "록(예: F.Cu,B.Cu)"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:55
-#, fuzzy
 msgid "Use the Gerber plot settings already configured in the board file"
-msgstr "보드 파일에 이미 구성된 거버 플롯 설정 사용"
+msgstr "기판 파일에 이미 구성된 거버 플롯 설정 사용"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:39
-#, fuzzy
 msgid "Generate PDF from a list of layers"
-msgstr "IPC-D-356 네트리스트 파일 생성"
+msgstr "레이어 목록에서 PDF 생성"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:46
 #: kicad/cli/command_pcb_export_svg.cpp:49
@@ -23341,14 +23306,12 @@ msgstr "스루홀 패드가 있는 모든 풋프린트 제외(ascii 또는 csv �
 
 #: kicad/cli/command_pcb_export_pos.cpp:84
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
-#, fuzzy
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "스루홀 패드가 존재하는 모든 풋프린트를 제외"
+msgstr "부착 안함 플래그가 설정된 모든 풋프린트 제외"
 
 #: kicad/cli/command_pcb_export_pos.cpp:88
-#, fuzzy
 msgid "Include board edge layer (Gerber only)"
-msgstr "보드 에지 레이어 포함(거버만 해당)"
+msgstr "기판 에지 레이어 포함(거버 전용)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:132
 #: kicad/cli/command_sch_export_netlist.cpp:87 kicad/cli/command_version.cpp:71
@@ -23356,9 +23319,8 @@ msgid "Invalid format\n"
 msgstr "잘못된 형식\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:158
-#, fuzzy
 msgid "\"both\" not supported for Gerber format\n"
-msgstr "거버 형식에 대해 \"양면\"이 지원되지 않음\n"
+msgstr "거버 형식은 '양면'이 지원되지 않음\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:174
 msgid "Invalid side specified\n"
@@ -23369,9 +23331,8 @@ msgid "Generate SVG outputs of a given layer list"
 msgstr "지정된 레이어 목록의 SVG 출력 생성"
 
 #: kicad/cli/command_pcb_export_svg.cpp:54
-#, fuzzy
 msgid "Color theme to use (will default to PCB editor settings)"
-msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
+msgstr "사용할 색상 테마(기본값은 PCB 편집기 설정)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:66
 msgid ""
@@ -23387,7 +23348,6 @@ msgid "No drawing sheet"
 msgstr "도면 시트 없음"
 
 #: kicad/cli/command_sch.h:31
-#, fuzzy
 msgid "Schematics"
 msgstr "회로도"
 
@@ -23423,9 +23383,8 @@ msgid ""
 msgstr "제외된 모든 ERC 위반을 보고, 이것은 다른 심각도 인수와 결합될 수 있음"
 
 #: kicad/cli/command_sch_erc.cpp:79
-#, fuzzy
 msgid "Return a nonzero exit code if ERC violations exist"
-msgstr "위반이 존재하는지 여부에 따라 종료 코드를 반환함"
+msgstr "ERC 위반이 있는 경우 0이 아닌 종료 코드 반환"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
@@ -23443,7 +23402,6 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "회로도 파일이 없거나 액세스할 수 없습니다.\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
-#, fuzzy
 msgid "Export a netlist"
 msgstr "네트리스트 내보내기"
 
@@ -23460,9 +23418,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "사용할 색상 테마(기본값은 회로도 설정임)"
 
 #: kicad/cli/command_sch_export_plot.cpp:80
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "기판 제조용 거버 파일 생성"
+msgstr "PDF에서 속성 팝업 생성 안 함"
 
 #: kicad/cli/command_sch_export_plot.cpp:89
 msgid "Avoid setting a background color (regardless of theme)"
@@ -23481,7 +23438,6 @@ msgid "Pen size [mm]"
 msgstr "펜 크기 [mm]"
 
 #: kicad/cli/command_sch_export_plot.cpp:108
-#, fuzzy
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
 msgstr "원점 및 배율: 0 왼쪽 하단, 1 중앙, 2 페이지 맞춤, 3 콘텐츠 맞춤"
 
@@ -23490,28 +23446,23 @@ msgid "HPGL origin option must be 0, 1, 2 or 3\n"
 msgstr "HPGL 오리진 옵션은 0, 1, 2 또는 3이어야 함\n"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
-#, fuzzy
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
-msgstr ""
-"파이썬 스크립트를 사용하여 회로도 편집기에서 사용되는 레거시 bom xml 형식을 "
+msgstr "파이썬 스크립트를 사용하여 회로도 편집기에서 사용되는 이전 BOM XML 형식 "
 "내보내기"
 
 #: kicad/cli/command_sym.h:31
-#, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "심볼 라이브러리를 불러오는 중"
+msgstr "심볼 및 심볼 라이브러리"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
-#, fuzzy
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "새 라이브러리 파일로 심볼 내보내기"
+msgstr "심볼 또는 전체 심볼 라이브러리를 SVG로 내보내기"
 
 #: kicad/cli/command_sym_export_svg.cpp:48
-#, fuzzy
 msgid "Color theme to use (will default to symbol editor settings)"
-msgstr "사용할 색상 테마(기본값은 pcbnew 설정임)"
+msgstr "사용할 색상 테마(기본값은 심볼 편집기 설정)"
 
 #: kicad/cli/command_sym_export_svg.cpp:54
 msgid "Specific symbol to export within the library"
