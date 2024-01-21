@@ -240,7 +240,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_Use3DConnexionDriver      = true;
 
-    m_IncrementalConnectivity   = false;
+    m_IncrementalConnectivity   = true;
 
     m_DisambiguationMenuDelay   = 300;
 

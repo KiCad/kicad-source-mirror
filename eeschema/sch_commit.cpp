@@ -183,6 +183,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
     bool                itemsDeselected = false;
     bool                selectedModified = false;
     bool                dirtyConnectivity = false;
+    SCH_CLEANUP_FLAGS   connectivityCleanUp = NO_CLEANUP;
 
     if( Empty() )
         return;
@@ -210,7 +211,17 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             selectedModified = true;
 
         if( !( aCommitFlags & SKIP_CONNECTIVITY ) && schItem->IsConnectable() )
+        {
             dirtyConnectivity = true;
+
+            // Do a local clean up if there are any connectable objects in the commit.
+            if( connectivityCleanUp == NO_CLEANUP )
+                connectivityCleanUp = LOCAL_CLEANUP;
+
+            // Do a full rebauild of the connectivity if there is a sheet in the commit.
+            if( schItem->Type() == SCH_SHEET_T )
+                connectivityCleanUp = GLOBAL_CLEANUP;
+        }
 
         switch( changeType )
         {
@@ -327,7 +338,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false, dirtyConnectivity );
 
             if( dirtyConnectivity )
-                frame->RecalculateConnections( this, NO_CLEANUP );
+                frame->RecalculateConnections( this, connectivityCleanUp );
         }
     }
 

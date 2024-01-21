@@ -1485,9 +1485,24 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
 
     for( SCH_ITEM* item : aSheet->GetScreen()->Items() )
     {
+        if( item->IsConnectable() )
+            item->SetConnectivityDirty();
+
         if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            wxCHECK2( symbol, continue );
+
+            // Only do this once if the symbol is shared across multiple sheets.
+            if( !m_pastedSymbols.count( symbol ) )
+            {
+                for( SCH_PIN* pin : symbol->GetPins() )
+                {
+                    const_cast<KIID&>( pin->m_Uuid ) = KIID();
+                    pin->SetConnectivityDirty();
+                }
+            }
 
             updatePastedSymbol( symbol, aSheet->GetScreen(), sheetPath, aClipPath,
                                 aForceKeepAnnotations );
@@ -1495,6 +1510,18 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
         else if( item->Type() == SCH_SHEET_T )
         {
             SCH_SHEET* subsheet = static_cast<SCH_SHEET*>( item );
+
+            wxCHECK2( subsheet, continue );
+
+            // Make sure pins get a new UUID and set the dirty connectivity flag.
+            if( !aPastedSheetsSoFar->ContainsSheet( subsheet ) )
+            {
+                for( SCH_SHEET_PIN* pin : subsheet->GetPins() )
+                {
+                    const_cast<KIID&>( pin->m_Uuid ) = KIID();
+                    pin->SetConnectivityDirty();
+                }
+            }
 
             KIID_PATH newClipPath = aClipPath;
             newClipPath.push_back( subsheet->m_Uuid );
@@ -1721,6 +1748,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     {
         KIID_PATH clipPath( wxT( "/" ) ); // clipboard is at root
 
+        SCH_ITEM* schItem = static_cast<SCH_ITEM*>( item );
+
+        wxCHECK2( schItem, continue );
+
+        if( schItem->IsConnectable() )
+            schItem->SetConnectivityDirty();
+
         if( item->Type() == SCH_SYMBOL_T )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
@@ -1759,7 +1793,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             // Make sure pins get a new UUID
             for( SCH_PIN* pin : symbol->GetPins() )
+            {
                 const_cast<KIID&>( pin->m_Uuid ) = KIID();
+                pin->SetConnectivityDirty();
+            }
 
             for( SCH_SHEET_PATH& sheetPath : sheetPathsForScreen )
             {
@@ -1845,7 +1882,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             // Make sure pins get a new UUID
             for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            {
                 const_cast<KIID&>( pin->m_Uuid ) = KIID();
+                pin->SetConnectivityDirty();
+            }
 
             // Once we have our new KIID we can update all pasted instances. This will either
             // reset the annotations or copy "kept" annotations from the supplementary clipboard.

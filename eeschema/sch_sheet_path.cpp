@@ -1345,3 +1345,18 @@ bool SCH_SHEET_LIST::HasPath( const KIID_PATH& aPath ) const
 
     return false;
 }
+
+
+bool SCH_SHEET_LIST::ContainsSheet( const SCH_SHEET* aSheet ) const
+{
+    for( const SCH_SHEET_PATH& path : *this )
+    {
+        for( size_t i = 0; i < path.size(); i++ )
+        {
+            if( path.at( i ) == aSheet )
+                return true;
+        }
+    }
+
+    return false;
+}
