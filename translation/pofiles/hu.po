@@ -1,24 +1,24 @@
 # hu/kicad.po file updated by the 'update-po-files.sh' script from kicad-source-mirror @ commit cb83f8acdfdfc1f7659e7e87d2e0696520150bc9
 # Miklós Márton <martonmiklosqdev@gmail.com>, 2022, 2023.
 # István Farkas <sakrafi1963@gmail.com>, 2023.
+# Hajdu Norbert <norbert.hajdu.biz@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-12 09:03-0800\n"
-"PO-Revision-Date: 2023-05-16 20:36+0000\n"
-"Last-Translator: Miklós Márton <martonmiklosqdev@gmail.com>\n"
-"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/hu/>\n"
+"PO-Revision-Date: 2024-01-21 11:01+0000\n"
+"Last-Translator: Hajdu Norbert <norbert.hajdu.biz@gmail.com>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/"
+"master-source/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
 msgstr "Összes fájl"
 
@@ -27,7 +27,6 @@ msgid "Build board outline"
 msgstr "Panel körvonala"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:538
-#, fuzzy
 msgid "Create layers"
 msgstr "Rétegek létrehozása"
 
@@ -35,7 +34,7 @@ msgstr "Rétegek létrehozása"
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 #, fuzzy
 msgid "No footprint loaded."
-msgstr "Nincs betöltve alkatrészrajzolat."
+msgstr "Nincs betöltve lábkiosztás."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:895
 #, fuzzy
@@ -43,37 +42,32 @@ msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Az alkatrészrajzolat körvonala hiányzik vagy hibás. Futtassa az "
-"alkatrészrajzolat ellenőrzést a teljes elemzéshez."
+"Az lábkiosztás körvonala hiányzik vagy hibás. Futtassa az lábkiosztás "
+"ellenőrzést a teljes elemzéshez."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:904
-#, fuzzy
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
 "A panel körvonala hiányzik vagy hibás. Futtassa a DRC-t a teljes elemzéshez."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
-#, fuzzy
 msgid "Create tracks and vias"
-msgstr "Vezetősávok és viák (átvezetőfuratok) létrehozzása"
+msgstr "Vezetősávok és viák (átvezetőfuratok) létrehozása"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:690
-#, fuzzy
 msgid "Create zones"
 msgstr "Zónák létrehozása"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:774
-#, fuzzy
 msgid "Build Tech layers"
 msgstr "Technológiai rétegek felépítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:806
-#, fuzzy, c-format
+#, c-format
 msgid "Build Tech layer %d"
-msgstr "%d Technológiai réteg felépítése"
+msgstr "%d technológiai réteg felépítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1022
-#, fuzzy
 msgid "Simplifying copper layer polygons"
 msgstr "Vezetőréteg poligonok egyszerűsítése"
 
@@ -87,7 +81,6 @@ msgid "Simplifying %d copper layers"
 msgstr "%d rézréteg egyszerűsítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1143
-#, fuzzy
 msgid "Simplify holes contours"
 msgstr "Furat kontúrok egyszerűsítése"
 
@@ -99,11 +92,12 @@ msgstr "Zsák/eltemetett viák és furatok felépítése"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:388
 #, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Viák kizárása"
+msgstr "OpenGL kontextus létrehozási hiba"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:419
+#, fuzzy
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
-msgstr ""
+msgstr "OpenGL verzió nem támogatott. Minimum 1.5-ös verzió szükséges"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:553
 #, fuzzy, c-format
@@ -123,43 +117,39 @@ msgstr "Forrszem %s\t"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:715
 #, fuzzy, c-format
 msgid "Rule area %s\t"
-msgstr "Kizárt terület tulajdonságok"
+msgstr "Kizárt terület tulajdonságok\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:717
-#, fuzzy, c-format
+#, c-format
 msgid "Zone %s\t"
 msgstr "Zóna %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:465
-#, fuzzy
 msgid "Load OpenGL: board"
 msgstr "OpenGL betöltés: panel"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
-#, fuzzy
 msgid "Load OpenGL: holes and vias"
 msgstr "OpenGL betöltés: furatok és viák"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:547
-#, fuzzy
 msgid "Load OpenGL: layers"
 msgstr "OpenGL betöltés: rétegek"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "OpenGL betöltés: rétegek"
+msgstr "%s OpenGL réteg betöltése"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1595
-#, fuzzy
 msgid "Loading 3D models..."
 msgstr "3D modellek betöltése..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:668
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
-#, fuzzy, c-format
+#, c-format
 msgid "Reload time %.3f s"
 msgstr "Újratöltési idő %.3f sec"
 
@@ -174,33 +164,32 @@ msgstr "Újratöltési idő %.3f sec"
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:59
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:502
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2431
-#, fuzzy, c-format
+#, c-format
 msgid "Loading %s..."
 msgstr "%s betöltése..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:464
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:174
-#, fuzzy
 msgid "Loading..."
 msgstr "Betöltés..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
 #, fuzzy
 msgid "Load Raytracing: board"
-msgstr "OpenGL betöltés: panel"
+msgstr "Sugárkövetés betöltés: panel"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
 #, fuzzy
 msgid "Load Raytracing: layers"
-msgstr "OpenGL betöltés: rétegek"
+msgstr "Sugárkövetés betöltés: rétegek"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid "Rendering time %.3f s"
 msgstr "Renderelési idő %.3f sec"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:393
-#, fuzzy, c-format
+#, c-format
 msgid "Rendering: %.0f %%"
 msgstr "Renderelés: %.0f %%"
 
@@ -210,12 +199,10 @@ msgid "Rendering: Post processing shader"
 msgstr "Renderelés: utófeldolgozó"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:51
-#, fuzzy
 msgid "Export Current View as PNG..."
 msgstr "Aktuális nézet exportálása PNG-ként..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:56
-#, fuzzy
 msgid "Export Current View as JPEG..."
 msgstr "Aktuális nézet exportálása JPEG-ként..."
 
@@ -224,27 +211,22 @@ msgstr "Aktuális nézet exportálása JPEG-ként..."
 #: common/eda_base_frame.cpp:1163 common/hotkey_store.cpp:76
 #: common/tool/actions.cpp:865 pcbnew/footprint_viewer_frame.cpp:971
 #: pcbnew/pcb_base_frame.cpp:679
-#, fuzzy
 msgid "3D Viewer"
 msgstr "3D megjelenítő"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:70
-#, fuzzy
 msgid "Copy 3D Image"
 msgstr "3D kép másolása"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:87
-#, fuzzy
 msgid "3D Grid"
 msgstr "3D rács megjelenítése"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:125
-#, fuzzy
 msgid "Raytracing"
 msgstr "Sugárkövetés"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
-#, fuzzy
 msgid "Reset to Default Settings"
 msgstr "Alapértelmezett beállítások visszaállítása"
 
@@ -257,16 +239,14 @@ msgstr "Alapértelmezett beállítások visszaállítása"
 #: pcb_calculator/pcb_calculator_frame.cpp:224
 #: pcbnew/menubar_footprint_editor.cpp:233 pcbnew/menubar_pcb_editor.cpp:457
 #: pcbnew/toolbars_footprint_viewer.cpp:193
-#, fuzzy
 msgid "&File"
-msgstr "Fájl"
+msgstr "&Fájl"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:79
 #: eeschema/menubar.cpp:340
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:170 kicad/menubar.cpp:217
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:234
 #: pcbnew/menubar_pcb_editor.cpp:458
-#, fuzzy
 msgid "&Edit"
 msgstr "Szerkesztés"
 
@@ -277,7 +257,6 @@ msgstr "Szerkesztés"
 #: kicad/menubar.cpp:218 pagelayout_editor/menubar.cpp:152
 #: pcbnew/menubar_footprint_editor.cpp:235 pcbnew/menubar_pcb_editor.cpp:459
 #: pcbnew/toolbars_footprint_viewer.cpp:194
-#, fuzzy
 msgid "&View"
 msgstr "Nézet"
 
@@ -285,28 +264,23 @@ msgstr "Nézet"
 #: bitmap2component/bitmap2cmp_frame.cpp:304 cvpcb/menubar.cpp:80
 #: eeschema/sim/toolbars_simulator_frame.cpp:163 gerbview/menubar.cpp:234
 #: kicad/menubar.cpp:220 pcb_calculator/pcb_calculator_frame.cpp:225
-#, fuzzy
 msgid "&Preferences"
 msgstr "Beállítások"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
-#, fuzzy
 msgid "Reload board"
 msgstr "Nyákterv újratöltése"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
-#, fuzzy
 msgid "Copy 3D image to clipboard"
 msgstr "3D kép másolása vágólapra"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
-#, fuzzy
 msgid "Render current view using Raytracing"
 msgstr "Sugárkövetés alkalmazása az aktuális nézetre"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
-#, fuzzy
 msgid "KiCad 3D Viewer"
 msgstr "KiCad 3D megjelenítő"
 
@@ -315,40 +289,38 @@ msgstr "KiCad 3D megjelenítő"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
 #: pcbnew/footprint_edit_frame.cpp:237 pcbnew/footprint_edit_frame.cpp:899
 #: pcbnew/pcb_edit_frame.cpp:298 pcbnew/pcb_edit_frame.cpp:1573
-#, fuzzy
 msgid "Appearance"
-msgstr "Rétegek,Objektumok"
+msgstr "Kinézet"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
 #, fuzzy
 msgid "Follow PCB Editor"
-msgstr "NYÁK Tervező"
+msgstr "Kövesd a NYÁK Tervezőt"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
 #, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Szűrési beállítások:"
+msgstr "Kövesd a Nyák nyomtatási beállításokat"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
 #, fuzzy
 msgid "legacy colors"
-msgstr "Új vezetékosztály:"
+msgstr "örökölt színek"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
-#, fuzzy
 msgid "3D Image File Name"
 msgstr "3D kép fájlnév"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
 #: common/eda_base_frame.cpp:1297 common/eda_base_frame.cpp:1301
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1664
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
+msgstr "A(z) \"%s\" fájl mentéséhez írási jogosultságokra van szükség."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:131
 #: common/confirm.cpp:321 common/dialogs/dialog_grid_settings.cpp:61
@@ -373,103 +345,86 @@ msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szüks�
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:191
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:203
 #: pcbnew/pcb_marker.cpp:205 pcbnew/widgets/appearance_controls.cpp:2662
-#, fuzzy
 msgid "Error"
 msgstr "Hiba"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:781
-#, fuzzy
 msgid "Failed to copy image to clipboard"
 msgstr "Nem sikerült a képet a vágólapra másolni"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:792
-#, fuzzy
 msgid "Can't save file"
 msgstr "A fájlt nem lehet menteni"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 #, fuzzy
 msgid "Set Pivot"
-msgstr "Lap kivezető láb hozzáadása"
+msgstr "Forgáspont beállítása"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 #, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "Forgatás egy a képernyő közepe mögötti pont körül (középső egérgomb)"
+msgstr "Panel forgatási pont elhelyezése (középső egérgomb)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
-#, fuzzy
 msgid "Rotate X Clockwise"
 msgstr "Jobbra forgatás X tengelyen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:64
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:65
-#, fuzzy
 msgid "Rotate X Counterclockwise"
 msgstr "Balra forgatás X tengelyen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:73
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:74
-#, fuzzy
 msgid "Rotate Y Clockwise"
 msgstr "Jobbra forgatás Y tengelyen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:82
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:83
-#, fuzzy
 msgid "Rotate Y Counterclockwise"
 msgstr "Balra forgatás Y tengelyen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:91
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:92
-#, fuzzy
 msgid "Rotate Z Clockwise"
 msgstr "Jobbra forgatás Z tengelyen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:100
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:101
-#, fuzzy
 msgid "Rotate Z Counterclockwise"
 msgstr "Balra forgatás Z tengelyen"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:110
-#, fuzzy
 msgid "Move Board Left"
 msgstr "Panel mozgatás balra"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:111
-#, fuzzy
 msgid "Move board Left"
 msgstr "Panel mozgatás balra"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
-#, fuzzy
 msgid "Move Board Right"
 msgstr "Panel mozgatás jobbra"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:121
-#, fuzzy
 msgid "Move board Right"
 msgstr "Panel mozgatás jobbra"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:130
-#, fuzzy
 msgid "Move Board Up"
 msgstr "Panel mozgatás felfelé"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:131
-#, fuzzy
 msgid "Move board Up"
 msgstr "Panel mozgatás felfelé"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
-#, fuzzy
 msgid "Move Board Down"
 msgstr "Panel mozgatás lefelé"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
-#, fuzzy
 msgid "Move board Down"
 msgstr "Panel mozgatás lefelé"
 
@@ -484,12 +439,10 @@ msgid "Home view"
 msgstr "Alapértelmezett nézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:159
-#, fuzzy
 msgid "Flip Board"
 msgstr "Átfordított nézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:160
-#, fuzzy
 msgid "Flip the board view"
 msgstr "Átfordított panel nézet"
 
@@ -506,99 +459,82 @@ msgstr "Merőleges kivetítés ki/bekapcsolása"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:176
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:177
-#, fuzzy
 msgid "View Front"
 msgstr "Elölnézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:186
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:187
-#, fuzzy
 msgid "View Back"
 msgstr "Hátulnézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:196
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:197
-#, fuzzy
 msgid "View Left"
 msgstr "Bal oldali nézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:206
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:207
-#, fuzzy
 msgid "View Right"
 msgstr "Jobb oldali nézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:216
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:217
-#, fuzzy
 msgid "View Top"
 msgstr "Felülnézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:226
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:227
-#, fuzzy
 msgid "View Bottom"
 msgstr "Alulnézet"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:235
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:236
-#, fuzzy
 msgid "No 3D Grid"
 msgstr "3D rács elrejtése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:243
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:244
-#, fuzzy
 msgid "3D Grid 10mm"
 msgstr "3D rács 10mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:251
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:252
-#, fuzzy
 msgid "3D Grid 5mm"
 msgstr "3D rács 5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:259
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:260
-#, fuzzy
 msgid "3D Grid 2.5mm"
 msgstr "3D rács 2,5mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:267
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:268
-#, fuzzy
 msgid "3D Grid 1mm"
 msgstr "3D rács 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:275
-#, fuzzy
 msgid "Render Realistic Materials"
 msgstr "Reális anyagok megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:276
-#, fuzzy
 msgid "Use all material properties from each 3D model file"
 msgstr "Összes anyag-tulajdonság alkalmazása az egyes 3D modell fájlokból"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:283
-#, fuzzy
 msgid "Render Solid Colors"
 msgstr "Egységes színek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
 msgstr "Csak diffúz színek alkalmazása az egyes 3D modell fájlokból"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:291
-#, fuzzy
 msgid "Render CAD Colors"
 msgstr "CAD színek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:292
-#, fuzzy
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Az anyagok diffúz színein alapuló CAD szín séma"
+msgstr "Az anyagok diffúz színein alapuló CAD szín séma használata"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:300
 #, fuzzy
@@ -611,7 +547,6 @@ msgid "Show 3D models for 'Through hole' type footprints"
 msgstr "Furatszerelt 3D modellek megjelenítése/elrejtése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show SMD 3D Models"
 msgstr "SMD 3D modellek megjelenítése"
 
@@ -621,12 +556,10 @@ msgid "Show 3D models for 'Surface mount' type footprints"
 msgstr "Felületszerelt 3D modellek megjelenítése/elrejtése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show Unspecified 3D Models"
 msgstr "Nem specifikus 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
 msgstr "Nem specifikus 3D modellek megjelenítése/elrejtése"
 
@@ -648,21 +581,20 @@ msgstr "3D modellek betöltése"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
 #, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Felületszerelt 3D modellek megjelenítése/elrejtése"
+msgstr "'Do Not Place' jelölésű 3D modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
-#, fuzzy
 msgid "Show Model Bounding Boxes"
 msgstr "A 3D modellek határoló dobozainak megjelenítése"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
 #, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "A 3D modellek határoló dobozainak megjelenítése"
+msgstr ""
+"A 3D modellek határoló dobozainak megjelenítése a valós idejű renderelésben"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
-#, fuzzy
 msgid "Show 3D Axis"
 msgstr "3D tengely megjelenítése"
 
@@ -679,32 +611,29 @@ msgid "Show/hide the appearance manager"
 msgstr "A rétegkezelő megjelenítése / elrejtése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Board Body"
-msgstr "Panel-test:"
+msgstr "Paneltest"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Show board body"
 msgstr "Paneltest megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 #, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Réz / felületkezelés színe..."
+msgstr "Felső réz / felületkezelés színe..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Réz / felületkezelés színe..."
+msgstr "Alsó réz / felületkezelés színe..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
@@ -714,7 +643,7 @@ msgstr "Alsó ragasztó"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 #, fuzzy
 msgid "Show adhesive"
-msgstr "SMD ragasztó réteg megjelenítése"
+msgstr "Ragasztó réteg megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
@@ -722,67 +651,63 @@ msgid "Solder Paste"
 msgstr "Forrasztásgátló és paszta réteg"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show solder paste"
 msgstr "Forrasztópaszta réteg megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "F.Silkscreen"
-msgstr "Szitanyomat"
+msgstr "Felső oldali szitanyomat"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show front silkscreen"
 msgstr "Felső szitanyomat"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "Szitanyomat"
-
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
-msgid "Show back silkscreen"
 msgstr "Alsó szitanyomat"
 
-#: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-msgid "F.Mask"
-msgstr ""
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
+msgid "Show back silkscreen"
+msgstr "Alsó szitanyomat megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 #, fuzzy
+msgid "F.Mask"
+msgstr "F.Mask"
+
+#: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show front solder mask"
-msgstr "Felső forrasztásgátló réteg"
+msgstr "Felső forrasztásgátló réteg megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
+#, fuzzy
 msgid "B.Mask"
-msgstr ""
+msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 #, fuzzy
 msgid "Show back solder mask"
-msgstr "Alsó forrasztásgátló"
+msgstr "Alsó forrasztásgátló réteg megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 #, fuzzy
 msgid "User.Drawings"
-msgstr "Rajzok"
+msgstr "Felhasználói rajzok"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 #, fuzzy
 msgid "Show user drawings layer"
-msgstr "Megjegyzés és rajz rétegek megjelenítése"
+msgstr "Rajz rétegek megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 #, fuzzy
 msgid "User.Comments"
-msgstr "Megjegyzés"
+msgstr "Megjegyzések"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 #, fuzzy
 msgid "Show user comments layer"
-msgstr "Forrasztásgátló réteg megjelenítése"
+msgstr "Megjegyzések réteg megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 #, fuzzy
@@ -792,7 +717,7 @@ msgstr "Felhasználói Eco1 réteg"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 #, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "ECO rétegek megjelenítése"
+msgstr "ECO1 réteg megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 #, fuzzy
@@ -802,37 +727,37 @@ msgstr "Felhasználói Eco2 réteg"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 #, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "ECO rétegek megjelenítése"
+msgstr "ECO2 réteg megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 #, fuzzy
 msgid "Through-hole Models"
-msgstr "Furatszerelt forrszemek"
+msgstr "Furatszerelt modellek"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 #, fuzzy
 msgid "SMD Models"
-msgstr "3D modellek"
+msgstr "SMD modellek"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 #, fuzzy
 msgid "Virtual Models"
-msgstr "Virtuális 3D modellek megjelenítése"
+msgstr "Virtuális modellek"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 #, fuzzy
 msgid "Models not in POS File"
-msgstr "Virtuális 3D modellek megjelenítése/elrejtése"
+msgstr "POS fájlban nem található modellek"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 #, fuzzy
 msgid "Models marked DNP"
-msgstr "3D modellek betöltése"
+msgstr "DNP jelölésű modellek"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 #, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "A 3D modellek határoló dobozainak megjelenítése"
+msgstr "Modellek határoló dobozainak megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -840,7 +765,6 @@ msgstr "A 3D modellek határoló dobozainak megjelenítése"
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:111
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:31
 #: pcbnew/widgets/appearance_controls.cpp:336
-#, fuzzy
 msgid "Values"
 msgstr "Értékek"
 
@@ -852,7 +776,6 @@ msgstr "Alkatrészrajzolat értékek megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:337
-#, fuzzy
 msgid "References"
 msgstr "Referenciák"
 
@@ -877,26 +800,26 @@ msgstr "Minden alkatrészrajzolat szöveg megjelenítése"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "Szitanyomat"
+msgstr "Panelen kívüli szitanyomat"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
+#, fuzzy
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "Ne vágja a szitanyomatot a panel körvonalához"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
 msgstr "3D tengely megjelenítése"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 #, fuzzy
 msgid "Background Start"
-msgstr "Háttér"
+msgstr "Indítás a háttérben"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 #, fuzzy
 msgid "Background gradient start color"
-msgstr "referencia %s"
+msgstr "Színátmenetes háttér kezdő színe"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 #, fuzzy
@@ -3054,9 +2977,8 @@ msgid "Paper"
 msgstr "Papír paraméterek"
 
 #: common/dialogs/dialog_page_settings.cpp:113
-#, fuzzy
 msgid "Title Block"
-msgstr "Cím Blokk"
+msgstr "Cím blokk"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, fuzzy, c-format
@@ -7668,9 +7590,8 @@ msgid "Tracks"
 msgstr "Vezetősávok"
 
 #: common/layer_id.cpp:169
-#, fuzzy
 msgid "Through vias"
-msgstr "Átmenő viák"
+msgstr "átvezető furat"
 
 #: common/layer_id.cpp:170
 #, fuzzy
@@ -15052,9 +14973,8 @@ msgstr "Kimeneti mappa:"
 #: pcbnew/dialogs/dialog_export_step.cpp:140
 #: pcbnew/dialogs/dialog_export_svg.cpp:88
 #: pcbnew/menubar_footprint_editor.cpp:73 pcbnew/menubar_pcb_editor.cpp:126
-#, fuzzy
 msgid "Export"
-msgstr "Exportolás"
+msgstr "Exportálás"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.h:139
 #, fuzzy
@@ -22006,9 +21926,8 @@ msgid "Body"
 msgstr "Rajzjel körvonal"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1288
-#, fuzzy
 msgid "Power Symbol"
-msgstr "Tápszimbólum"
+msgstr "Táp szimbólum"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1295
 #, fuzzy
@@ -26739,9 +26658,8 @@ msgstr ""
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:6
-#, fuzzy
 msgid "KiCad"
-msgstr "A Kicad-ről"
+msgstr "KiCad"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
 #, fuzzy
@@ -35291,7 +35209,6 @@ msgstr "Átmenő furat"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39 pcbnew/footprint.cpp:947
 #: pcbnew/footprint_libraries_utils.cpp:1205 pcbnew/pad.cpp:1248
 #: pcbnew/pad.cpp:1873
-#, fuzzy
 msgid "SMD"
 msgstr "SMD"
 
@@ -42071,9 +41988,8 @@ msgid "Assertion failure"
 msgstr "Vezetősáv keresztmetszet:"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Vezető rétegek:"
+msgstr "réz kitüremkedés"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -48554,7 +48470,6 @@ msgid "Loss Tangent"
 msgstr "Mágneses Veszteség Tangens"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
-#, fuzzy
 msgid "Dielectric"
 msgstr "Dielektrikum"
 
