@@ -910,6 +910,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
 
             m_cur_grid->SetCellValue( row, COL_URI, relPath );
             m_cur_grid->SetCellValue( row, COL_TYPE, kicadType );
+            m_cur_grid->SetCellValue( row, COL_OPTIONS, wxEmptyString );
         }
         else
         {
@@ -936,15 +937,6 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps, const 
 
     try
     {
-        // Write a stub file; SaveSymbol() expects something to be there already.
-        FILE_OUTPUTFORMATTER* formatter = new FILE_OUTPUTFORMATTER( aNewFilepath );
-
-        formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator kicad_converter) (generator_version \"%s\")",
-                          SEXPR_SYMBOL_LIB_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
-
-        // This will write the file
-        delete formatter;
-
         oldFilePI->EnumerateSymbolLib( symbols, aOldFilePath, aOldFileProps );
 
         // Copy non-aliases first so we can build a map from symbols to newSymbols
@@ -970,6 +962,9 @@ bool PANEL_SYM_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps, const 
             newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
             newSymbols.back()->SetParent( symbolMap[ symbol->GetParent().lock().get() ] );
         }
+
+        // Create a blank library
+        kicadPI->SaveLibrary( aNewFilepath );
 
         // Finally write out newSymbols
         for( LIB_SYMBOL* symbol : newSymbols )
