@@ -270,6 +270,7 @@ set( BMAPS_MID
     export_idf
     export_file
     export_footprint_names
+    export_gltf
     export_module
     export_part
     export_png
@@ -278,6 +279,7 @@ set( BMAPS_MID
     export_to_pcbnew
     fabrication
     file_bom
+    file_cir
     file_drl
     file_dsn
     file_gbr
