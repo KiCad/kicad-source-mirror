@@ -903,6 +903,12 @@ static void memberOfFootprintFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 {
                     if( parentFP->GetReference().Matches( arg->AsString() ) )
                         return 1.0;
+
+                    if( arg->AsString().Contains( ':' )
+                             && parentFP->GetFPIDAsString().Matches( arg->AsString() ) )
+                    {
+                        return 1.0;
+                    }
                 }
 
                 return 0.0;
