@@ -126,32 +126,33 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     std::vector<LIB_TREE_ITEM*> already_placed;
 
     // Lambda to encapsulate the common logic
-    auto processList = [&]( const std::vector<PICKED_SYMBOL>& inputList,
-                            std::vector<LIB_SYMBOL>&          storageList,
-                            std::vector<LIB_TREE_ITEM*>&      resultList )
-    {
-        storageList.reserve( inputList.size() );
-
-        for( const PICKED_SYMBOL& i : inputList )
-        {
-            LIB_SYMBOL* symbol = m_frame->GetLibSymbol( i.LibId );
-
-            if( symbol )
+    auto processList =
+            [&]( const std::vector<PICKED_SYMBOL>& inputList,
+                 std::vector<LIB_SYMBOL>&          storageList,
+                 std::vector<LIB_TREE_ITEM*>&      resultList )
             {
-                storageList.emplace_back( *symbol );
+                storageList.reserve( inputList.size() );
 
-                for( const std::pair<int, wxString>& fieldDef : i.Fields )
+                for( const PICKED_SYMBOL& i : inputList )
                 {
-                    LIB_FIELD* field = storageList.back().GetFieldById( fieldDef.first );
+                    LIB_SYMBOL* symbol = m_frame->GetLibSymbol( i.LibId );
 
-                    if( field )
-                        field->SetText( fieldDef.second );
+                    if( symbol )
+                    {
+                        storageList.emplace_back( *symbol );
+
+                        for( const std::pair<int, wxString>& fieldDef : i.Fields )
+                        {
+                            LIB_FIELD* field = storageList.back().GetFieldById( fieldDef.first );
+
+                            if( field )
+                                field->SetText( fieldDef.second );
+                        }
+
+                        resultList.push_back( &storageList.back() );
+                    }
                 }
-
-                resultList.push_back( &storageList.back() );
-            }
-        }
-    };
+            };
 
     // Sort the already placed list since it is potentially from multiple sessions,
     // but not the most recent list since we want this listed by most recent usage.
