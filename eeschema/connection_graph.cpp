@@ -3432,7 +3432,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         // We want to throw unconnected errors for power symbols even if they are connected to other
         // net items by name, because usually failing to connect them graphically is a mistake
         if( pin && !has_other_connections
-                && pin->IsGlobalPower()
+                && !pin->IsGlobalPower()
                 && !pin->GetLibPin()->GetParent()->IsPower() )
         {
             wxString name = pin->Connection( &sheet )->Name();
