@@ -1466,7 +1466,8 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
 
 
 SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPastePath,
-                                                      const KIID_PATH& aClipPath, SCH_SHEET* aSheet,
+                                                      const KIID_PATH& aClipPath,
+                                                      SCH_SHEET* aSheet,
                                                       bool aForceKeepAnnotations,
                                                       SCH_SHEET_LIST* aPastedSheetsSoFar,
                                                       SCH_REFERENCE_LIST* aPastedSymbolsSoFar )
@@ -1477,6 +1478,8 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
     sheetPath.push_back( aSheet );
 
     aPastedSheetsSoFar->push_back( sheetPath );
+    wxLogDebug( wxS( "Adding pasted sheet path: %s from clipboard path: %s." ),
+                sheetPath.Path().AsString(), aClipPath.AsString() );
 
     if( aSheet->GetScreen() == nullptr )
         return sheetPath; // We can only really set the page number but not load any items
@@ -1922,16 +1925,12 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         getView()->Hide( item, true );
     }
 
-    pasteInstances.SortByPageNumbers();
-
     if( sheetsPasted )
     {
         // Update page numbers: Find next free numeric page number
-        for( SCH_SHEET_PATH& instance : pasteInstances )
+        for( SCH_SHEET_PATH& sheetPath : pasteInstances )
         {
-            pastedSheets[instance].SortByPageNumbers();
-
-            for( SCH_SHEET_PATH& pastedSheet : pastedSheets[instance] )
+            for( SCH_SHEET_PATH& pastedSheet : pastedSheets[sheetPath] )
             {
                 int      page = 1;
                 wxString pageNum = wxString::Format( "%d", page );
@@ -1939,14 +1938,27 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 while( hierarchy.PageNumberExists( pageNum ) )
                     pageNum = wxString::Format( "%d", ++page );
 
-                pastedSheet.SetPageNumber( pageNum );
+                wxLogDebug( wxS( "Setting sheet path %s instance." ),
+                            pastedSheet.Path().AsString() );
+
+                SCH_SHEET_INSTANCE sheetInstance;
+
+                sheetInstance.m_Path = pastedSheet.Path();
+
+                // Don't include the actual sheet in the instance path.
+                sheetInstance.m_Path.pop_back();
+                sheetInstance.m_PageNumber = pageNum;
+                sheetInstance.m_ProjectName = m_frame->Prj().GetProjectName();
+
+                SCH_SHEET* sheet = pastedSheet.Last();
+
+                wxCHECK2( sheet, continue );
+
+                sheet->AddInstance( sheetInstance );
                 hierarchy.push_back( pastedSheet );
 
                 // Remove all pasted sheet instance data that is not part of the current project.
                 std::vector<KIID_PATH> instancesToRemove;
-                SCH_SHEET* sheet = pastedSheet.Last();
-
-                wxCHECK2( sheet, continue );
 
                 for( const SCH_SHEET_INSTANCE& pastedInstance : sheet->GetInstances() )
                 {
