@@ -3420,7 +3420,11 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
         // But if there is a power pin, it might be connected elsewhere
         for( SCH_PIN* test_pin : pins )
         {
-            if( test_pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
+            // Prefer the pin is part of a real component rather than some stray power symbol
+            // Or else we may fail walking connected components to a power symbol pin since we reject
+            // starting at a power symbol
+            if( test_pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
+                && !test_pin->IsGlobalPower() )
             {
                 pin = test_pin;
                 break;
