@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 09:03-0800\n"
+"POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1147,8 +1147,8 @@ msgstr "Lead Development Alumni"
 msgid "Additional Contributions By"
 msgstr "Additional Contributions By"
 
-msgid "KiCad Librarian Team"
-msgstr "KiCad Librarian Team"
+msgid "Librarian Team"
+msgstr "Librarian Team"
 
 msgid "3D models by"
 msgstr "3D models by"
@@ -1161,6 +1161,9 @@ msgstr "Footprints by"
 
 msgid "Icons by"
 msgstr "Icons by"
+
+msgid "Package Developers"
+msgstr "Package Developers"
 
 #, c-format
 msgid "About %s"
@@ -8453,14 +8456,14 @@ msgstr "Select"
 msgid "Edit"
 msgstr "Edit"
 
-msgid "Field delimeter:"
-msgstr "Field delimeter:"
+msgid "Field delimiter:"
+msgstr "Field delimiter:"
 
 msgid ","
 msgstr ","
 
-msgid "String delimeter:"
-msgstr "String delimeter:"
+msgid "String delimiter:"
+msgstr "String delimiter:"
 
 msgid "\""
 msgstr "\""
@@ -10712,6 +10715,9 @@ msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
 "Unknown or unexpected record ID %d found inside \"Additional\" section."
 
+msgid "Expected Altium Schematic file version 5.0"
+msgstr "Expected Altium Schematic file version 5.0"
+
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Record 'IEEE_SYMBOL' not handled."
 
@@ -11609,6 +11615,18 @@ msgstr "Symbol not found in %s!"
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbol %s [%s]"
+
+msgid "Mirror X"
+msgstr "Mirror X"
+
+msgid "Mirror Y"
+msgstr "Mirror Y"
+
+msgid "Library Link"
+msgstr "Library Link"
+
+msgid "Library Description"
+msgstr "Library Description"
 
 msgid "Exclude From Board"
 msgstr "Exclude From Board"
@@ -13168,9 +13186,6 @@ msgstr "The current symbol has been modified.  Save changes?"
 #, c-format
 msgid "Deriving from symbol '%s'."
 msgstr "Deriving from symbol '%s'."
-
-msgid "Symbol must have a newName."
-msgstr "Symbol must have a newName."
 
 #, c-format
 msgid "Symbol '%s' already exists in library '%s'."
@@ -26601,6 +26616,9 @@ msgstr "Extra footprint"
 msgid "Pad net doesn't match schematic"
 msgstr "Pad net doesn't match schematic"
 
+msgid "Footprint attributes don't match symbol"
+msgstr "Footprint attributes don't match symbol"
+
 msgid "Footprint not found in libraries"
 msgstr "Footprint not found in libraries"
 
@@ -27072,11 +27090,12 @@ msgstr "Footprint keywords differ."
 msgid "Footprint types differ."
 msgstr "Footprint types differ."
 
-msgid "Allow bridged solder mask apertures between pads settings differ."
-msgstr "Allow bridged solder mask apertures between pads settings differ."
+#, c-format
+msgid "'%s' settings differ."
+msgstr "'%s' settings differ."
 
-msgid "Exempt from courtyard requirement settings differ."
-msgstr "Exempt from courtyard requirement settings differ."
+msgid "Exempt From Courtyard Requirement"
+msgstr "Exempt From Courtyard Requirement"
 
 msgid "Pad clearance overridden."
 msgstr "Pad clearance overridden."
@@ -27624,12 +27643,6 @@ msgstr "Inherited"
 msgid "Thermal reliefs for PTH"
 msgstr "Thermal reliefs for PTH"
 
-msgid "Library Link"
-msgstr "Library Link"
-
-msgid "Library Description"
-msgstr "Library Description"
-
 msgid "Not in Schematic"
 msgstr "Not in Schematic"
 
@@ -27638,9 +27651,6 @@ msgstr "Exclude From Position Files"
 
 msgid "Overrides"
 msgstr "Overrides"
-
-msgid "Exempt From Courtyard Requirement"
-msgstr "Exempt From Courtyard Requirement"
 
 msgid "Clearance Override"
 msgstr "Clearance Override"
@@ -33796,6 +33806,24 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "KiCad Librarian Team"
+#~ msgstr "KiCad Librarian Team"
+
+#~ msgid "Field delimeter:"
+#~ msgstr "Field delimeter:"
+
+#~ msgid "String delimeter:"
+#~ msgstr "String delimeter:"
+
+#~ msgid "Symbol must have a newName."
+#~ msgstr "Symbol must have a newName."
+
+#~ msgid "Allow bridged solder mask apertures between pads settings differ."
+#~ msgstr "Allow bridged solder mask apertures between pads settings differ."
+
+#~ msgid "Exempt from courtyard requirement settings differ."
+#~ msgstr "Exempt from courtyard requirement settings differ."
 
 #~ msgid "Use only the diffuse color property from model 3D model file"
 #~ msgstr "Use only the diffuse color property from model 3D model file"
@@ -61086,12 +61114,6 @@ msgstr "KiCad Printed Circuit Board"
 #~ msgstr ""
 #~ "This scale gives a very large image size (%.1f mm or %.2f in). Are you "
 #~ "sure?"
-
-#~ msgid "Mirror X"
-#~ msgstr "Mirror X"
-
-#~ msgid "Mirror Y"
-#~ msgstr "Mirror Y"
 
 #~ msgid "Half Size"
 #~ msgstr "Half Size"
