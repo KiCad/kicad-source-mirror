@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 09:05-0800\n"
+"POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2023-02-06 21:07+0000\n"
 "Last-Translator: Michał Radziejewicz <radziejewiczmichal@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/master-"
@@ -4427,7 +4427,7 @@ msgid "Colors"
 msgstr "Цветове"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1437
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
 #: kicad/tools/kicad_manager_actions.cpp:80
 #, fuzzy
 msgid "Schematic Editor"
@@ -14856,7 +14856,7 @@ msgstr "Установи вход на шина /"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:997
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:970
-#: pcbnew/tools/pcb_control.cpp:1568 pcbnew/zone.cpp:569
+#: pcbnew/tools/pcb_control.cpp:1570 pcbnew/zone.cpp:569
 #, fuzzy
 msgid "Resolved Netclass"
 msgstr "(използвай клас на връзката)"
@@ -14871,23 +14871,23 @@ msgstr "Тип на връзката:"
 msgid "Bus Alias %s Members"
 msgstr "Класове на вериги:"
 
-#: eeschema/sch_edit_frame.cpp:126
+#: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 #, fuzzy
 msgid "KiCad Schematic Editor"
 msgstr "Опции на схематичния редактор"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1711
+#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1722
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Размер на схемата"
 
-#: eeschema/sch_edit_frame.cpp:270
+#: eeschema/sch_edit_frame.cpp:271
 #, fuzzy
 msgid "New schematic file is unsaved"
 msgstr "Помощен файл %s не е намерен."
 
-#: eeschema/sch_edit_frame.cpp:802 eeschema/sim/sim_plot_frame.cpp:1786
+#: eeschema/sch_edit_frame.cpp:803 eeschema/sim/sim_plot_frame.cpp:1786
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1177
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -14897,59 +14897,59 @@ msgstr "Помощен файл %s не е намерен."
 msgid "Save changes to '%s' before closing?"
 msgstr "Съхрани файлове списък на вериги и комп.отп."
 
-#: eeschema/sch_edit_frame.cpp:963
+#: eeschema/sch_edit_frame.cpp:964
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1100 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/sch_edit_frame.cpp:1117
+#: eeschema/sch_edit_frame.cpp:1118
 #, fuzzy
 msgid "New Schematic"
 msgstr "Схема"
 
-#: eeschema/sch_edit_frame.cpp:1129
+#: eeschema/sch_edit_frame.cpp:1130
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Филтър комп.отп. <%s> е вече определен."
 
-#: eeschema/sch_edit_frame.cpp:1150
+#: eeschema/sch_edit_frame.cpp:1151
 msgid "Open Schematic"
 msgstr "Отваряне на схема"
 
-#: eeschema/sch_edit_frame.cpp:1219
+#: eeschema/sch_edit_frame.cpp:1220
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1244
+#: eeschema/sch_edit_frame.cpp:1245
 #, fuzzy
 msgid "Could not open CvPcb"
 msgstr "Невъзможно отваряне на библиотечен файл за PCB отпечатък <%s>."
 
-#: eeschema/sch_edit_frame.cpp:1427 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
 #: pcbnew/pcb_edit_frame.cpp:1609
 #, fuzzy
 msgid "[Read Only]"
 msgstr "[Четене само]"
 
-#: eeschema/sch_edit_frame.cpp:1430 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
 msgid "[Unsaved]"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1434
+#: eeschema/sch_edit_frame.cpp:1435
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Размер на схемата"
 
-#: eeschema/sch_edit_frame.cpp:1734
+#: eeschema/sch_edit_frame.cpp:1745
 #, fuzzy, c-format
 msgid "Highlighted net: %s"
 msgstr "Подчертаване на връзка"
@@ -15007,7 +15007,7 @@ msgstr "Подравняване:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:972 pcbnew/pad.cpp:1011
 #: pcbnew/pad.cpp:1817 pcbnew/pcb_track.cpp:968
-#: pcbnew/tools/pcb_control.cpp:1565
+#: pcbnew/tools/pcb_control.cpp:1567
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:567
 #: pcbnew/zone.cpp:1471
 msgid "Net"
@@ -19538,7 +19538,7 @@ msgstr "Не е избрана верига."
 msgid "Net must be labeled to assign a netclass."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:1724
+#: eeschema/tools/sch_editor_control.cpp:1716
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -19546,26 +19546,26 @@ msgid ""
 "subsheets as a parent."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2148
+#: eeschema/tools/sch_editor_control.cpp:2156
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "не са избрани библиотеки"
 
-#: eeschema/tools/sch_editor_control.cpp:2440
+#: eeschema/tools/sch_editor_control.cpp:2448
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, fuzzy, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d дубликати на времеви маркери са намерени и заменени."
 
-#: eeschema/tools/sch_editor_control.cpp:2447
+#: eeschema/tools/sch_editor_control.cpp:2455
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr ""
 
-#: eeschema/tools/sch_editor_control.cpp:2454
+#: eeschema/tools/sch_editor_control.cpp:2462
 #: pcbnew/drc/drc_rule_parser.cpp:179
 #, fuzzy
 msgid "No errors found."
@@ -35301,7 +35301,7 @@ msgstr "Отстояния на подложки...\n"
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
 msgstr "Глобални настр.на конт.пл."
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, fuzzy, c-format
 msgid "Missing footprint %s (%s)"
 msgstr "Тест на комп.отп."
@@ -40301,7 +40301,7 @@ msgstr ""
 msgid "Select Via Size"
 msgstr "Избор на клавиш"
 
-#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2078
+#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2084
 #, fuzzy
 msgid "Draw a line segment"
 msgstr "Изтегли контура на сегмента"
@@ -40346,22 +40346,22 @@ msgstr "Размер"
 msgid "No graphic items found in file."
 msgstr "Покажи пътечките в контурен режим"
 
-#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1686
+#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1692
 #, fuzzy
 msgid "Place a DXF_SVG drawing"
 msgstr "Постави проводник"
 
-#: pcbnew/tools/drawing_tool.cpp:1767
+#: pcbnew/tools/drawing_tool.cpp:1773
 #, fuzzy
 msgid "Move the footprint reference anchor"
 msgstr "Постави точка на закотвяне в комп.отп."
 
-#: pcbnew/tools/drawing_tool.cpp:3099
+#: pcbnew/tools/drawing_tool.cpp:3105
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Настройки на конт.пл."
 
-#: pcbnew/tools/drawing_tool.cpp:3308
+#: pcbnew/tools/drawing_tool.cpp:3314
 #, fuzzy
 msgid "Place via"
 msgstr "Постави прох.отв."
@@ -42618,22 +42618,22 @@ msgstr "Отстояния на подложки...\n"
 msgid "Selected Items"
 msgstr "Избор на елементи"
 
-#: pcbnew/tools/pcb_point_editor.cpp:633
+#: pcbnew/tools/pcb_point_editor.cpp:647
 #, fuzzy
 msgid "Drag a corner"
 msgstr "Плъзни проводник"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2285
+#: pcbnew/tools/pcb_point_editor.cpp:2332
 #, fuzzy
 msgid "Add a zone corner"
 msgstr "Добави \"Несвързан\""
 
-#: pcbnew/tools/pcb_point_editor.cpp:2322
+#: pcbnew/tools/pcb_point_editor.cpp:2369
 #, fuzzy
 msgid "Split segment"
 msgstr "Сегмент"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2393
+#: pcbnew/tools/pcb_point_editor.cpp:2440
 #, fuzzy
 msgid "Remove a zone/polygon corner"
 msgstr "Премести ъгъл"

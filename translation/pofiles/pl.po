@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 09:05-0800\n"
+"POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2024-01-22 00:01+0000\n"
 "Last-Translator: Marek <fotelpl@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
@@ -4125,7 +4125,7 @@ msgid "Colors"
 msgstr "Kolory"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1437
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "Edytor Schematów"
@@ -13837,7 +13837,7 @@ msgstr "Typ wejścia magistrali"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:997
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:970
-#: pcbnew/tools/pcb_control.cpp:1568 pcbnew/zone.cpp:569
+#: pcbnew/tools/pcb_control.cpp:1570 pcbnew/zone.cpp:569
 msgid "Resolved Netclass"
 msgstr "Przeanalizowane klasy sieci"
 
@@ -13850,20 +13850,20 @@ msgstr "Nazwa połączenia"
 msgid "Bus Alias %s Members"
 msgstr "Zawartość aliasu magistrali %s"
 
-#: eeschema/sch_edit_frame.cpp:126
+#: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad Schematic Editor"
 msgstr "Edytor Schematów programu KiCad"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1711
+#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1722
 msgid "Schematic Hierarchy"
 msgstr "Hierarchia schematów"
 
-#: eeschema/sch_edit_frame.cpp:270
+#: eeschema/sch_edit_frame.cpp:271
 msgid "New schematic file is unsaved"
 msgstr "Nowy plik ze schematem nie jest zapisany"
 
-#: eeschema/sch_edit_frame.cpp:802 eeschema/sim/sim_plot_frame.cpp:1786
+#: eeschema/sch_edit_frame.cpp:803 eeschema/sim/sim_plot_frame.cpp:1786
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1177
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -13873,7 +13873,7 @@ msgstr "Nowy plik ze schematem nie jest zapisany"
 msgid "Save changes to '%s' before closing?"
 msgstr "Zapisać zmiany w '%s' przed zamknięciem?"
 
-#: eeschema/sch_edit_frame.cpp:963
+#: eeschema/sch_edit_frame.cpp:964
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -13883,50 +13883,50 @@ msgstr ""
 "samodzielna aplikacja. By utworzyć lub uaktualnić PCB na podstawie schematu "
 "należy uruchomić Menedżer Projektu oraz utworzyć projekt."
 
-#: eeschema/sch_edit_frame.cpp:1100 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schemat"
 
-#: eeschema/sch_edit_frame.cpp:1117
+#: eeschema/sch_edit_frame.cpp:1118
 msgid "New Schematic"
 msgstr "Nowy schemat"
 
-#: eeschema/sch_edit_frame.cpp:1129
+#: eeschema/sch_edit_frame.cpp:1130
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Plik schematu '%s' już istnieje."
 
-#: eeschema/sch_edit_frame.cpp:1150
+#: eeschema/sch_edit_frame.cpp:1151
 msgid "Open Schematic"
 msgstr "Otwórz schemat"
 
-#: eeschema/sch_edit_frame.cpp:1219
+#: eeschema/sch_edit_frame.cpp:1220
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 "Przypisywanie footprintów wymaga by elementy na schemacie zostały w pełni "
 "ponumerowane."
 
-#: eeschema/sch_edit_frame.cpp:1244
+#: eeschema/sch_edit_frame.cpp:1245
 msgid "Could not open CvPcb"
 msgstr "Nie można uruchomić CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1427 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
 #: pcbnew/pcb_edit_frame.cpp:1609
 msgid "[Read Only]"
 msgstr "[Tyko do odczytu]"
 
-#: eeschema/sch_edit_frame.cpp:1430 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
 msgid "[Unsaved]"
 msgstr "[Nie zapisany]"
 
-#: eeschema/sch_edit_frame.cpp:1434
+#: eeschema/sch_edit_frame.cpp:1435
 msgid "[no schematic loaded]"
 msgstr "[nie załadowano schematu]"
 
-#: eeschema/sch_edit_frame.cpp:1734
+#: eeschema/sch_edit_frame.cpp:1745
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Podświetlona sieć: %s"
@@ -13980,7 +13980,7 @@ msgstr "Wyrównanie"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:972 pcbnew/pad.cpp:1011
 #: pcbnew/pad.cpp:1817 pcbnew/pcb_track.cpp:968
-#: pcbnew/tools/pcb_control.cpp:1565
+#: pcbnew/tools/pcb_control.cpp:1567
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:567
 #: pcbnew/zone.cpp:1471
 msgid "Net"
@@ -18378,7 +18378,7 @@ msgstr "Nie wybrano sieci."
 msgid "Net must be labeled to assign a netclass."
 msgstr "Sieci muszą być nazwane by je dołączyć do klas sieci."
 
-#: eeschema/tools/sch_editor_control.cpp:1724
+#: eeschema/tools/sch_editor_control.cpp:1716
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18389,25 +18389,25 @@ msgstr ""
 "został odrzucony ponieważ istnieje już jako arkusz lub jeden z jego "
 "podrzędnych arkuszy stanowi arkusz nadrzędny w innym miejscu hierarchii."
 
-#: eeschema/tools/sch_editor_control.cpp:2148
+#: eeschema/tools/sch_editor_control.cpp:2156
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "Symbole z uszkodzonym powiązaniem w bibliotece nie mogą być edytowane."
 
-#: eeschema/tools/sch_editor_control.cpp:2440
+#: eeschema/tools/sch_editor_control.cpp:2448
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d powielonych ID zostało zamienionych.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2447
+#: eeschema/tools/sch_editor_control.cpp:2455
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potencjalnych problemów zostało naprawionych."
 
-#: eeschema/tools/sch_editor_control.cpp:2454
+#: eeschema/tools/sch_editor_control.cpp:2462
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Nie znaleziono błędów."
@@ -33393,7 +33393,7 @@ msgstr "Sprawdzam fizyczne prześwity..."
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
 msgstr "Naruszenie lokalnego prześwitu (%s prześwit %s; aktualnie %s)"
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
 msgid "Missing footprint %s (%s)"
 msgstr "Brakujący footprint %s (%s)"
@@ -38306,7 +38306,7 @@ msgstr "Tak, fazowane"
 msgid "Select Via Size"
 msgstr "Wybierz rozmiar przelotki"
 
-#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2078
+#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2084
 msgid "Draw a line segment"
 msgstr "Narysuj segment linii"
 
@@ -38342,19 +38342,19 @@ msgstr "Narysuj wymiar"
 msgid "No graphic items found in file."
 msgstr "Nie znaleziono obiektów graficznych w pliku."
 
-#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1686
+#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1692
 msgid "Place a DXF_SVG drawing"
 msgstr "Umieść rysunek DXF lub SVG"
 
-#: pcbnew/tools/drawing_tool.cpp:1767
+#: pcbnew/tools/drawing_tool.cpp:1773
 msgid "Move the footprint reference anchor"
 msgstr "Przesuń punkt zaczepienia footprintu"
 
-#: pcbnew/tools/drawing_tool.cpp:3099
+#: pcbnew/tools/drawing_tool.cpp:3105
 msgid "Via location violates DRC."
 msgstr "Położenie przelotki narusza DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:3308
+#: pcbnew/tools/drawing_tool.cpp:3314
 msgid "Place via"
 msgstr "Umieść przelotkę"
 
@@ -40287,19 +40287,19 @@ msgstr "Rozpoznany prześwit względem marginesu"
 msgid "Selected Items"
 msgstr "Wybrane elementy"
 
-#: pcbnew/tools/pcb_point_editor.cpp:633
+#: pcbnew/tools/pcb_point_editor.cpp:647
 msgid "Drag a corner"
 msgstr "Przeciągam narożnik"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2285
+#: pcbnew/tools/pcb_point_editor.cpp:2332
 msgid "Add a zone corner"
 msgstr "Dodaję narożnik strefy"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2322
+#: pcbnew/tools/pcb_point_editor.cpp:2369
 msgid "Split segment"
 msgstr "Dzielę segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2393
+#: pcbnew/tools/pcb_point_editor.cpp:2440
 msgid "Remove a zone/polygon corner"
 msgstr "Usuwam narożnik strefy/polygonu"
 

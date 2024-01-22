@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 09:05-0800\n"
+"POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2024-01-16 04:06+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
@@ -4119,7 +4119,7 @@ msgid "Colors"
 msgstr "Färger"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1437
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "Kretsschemaredigerare"
@@ -13780,7 +13780,7 @@ msgstr "Bussposttyp"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:997
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:970
-#: pcbnew/tools/pcb_control.cpp:1568 pcbnew/zone.cpp:569
+#: pcbnew/tools/pcb_control.cpp:1570 pcbnew/zone.cpp:569
 msgid "Resolved Netclass"
 msgstr "Fastställd nätklass"
 
@@ -13793,20 +13793,20 @@ msgstr "Anslutningens namn"
 msgid "Bus Alias %s Members"
 msgstr "Medlemmar för bussalias %s"
 
-#: eeschema/sch_edit_frame.cpp:126
+#: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad Schematic Editor"
 msgstr "KiCads kretsschemaredigerare"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1711
+#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1722
 msgid "Schematic Hierarchy"
 msgstr "Kretsschemahierarki"
 
-#: eeschema/sch_edit_frame.cpp:270
+#: eeschema/sch_edit_frame.cpp:271
 msgid "New schematic file is unsaved"
 msgstr "Nytt kretsschema har innehåll som ännu inte sparats till fil"
 
-#: eeschema/sch_edit_frame.cpp:802 eeschema/sim/sim_plot_frame.cpp:1786
+#: eeschema/sch_edit_frame.cpp:803 eeschema/sim/sim_plot_frame.cpp:1786
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1177
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -13816,7 +13816,7 @@ msgstr "Nytt kretsschema har innehåll som ännu inte sparats till fil"
 msgid "Save changes to '%s' before closing?"
 msgstr "Spara ändringar i '%s' innan stängning?"
 
-#: eeschema/sch_edit_frame.cpp:963
+#: eeschema/sch_edit_frame.cpp:964
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -13826,49 +13826,49 @@ msgstr ""
 "öppnad i fristående läge. För att skapa/uppdatera mönsterkort från "
 "kretsschema, starta Kicad-projekthanteraren och skapa ett projekt."
 
-#: eeschema/sch_edit_frame.cpp:1100 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Kretsschema"
 
-#: eeschema/sch_edit_frame.cpp:1117
+#: eeschema/sch_edit_frame.cpp:1118
 msgid "New Schematic"
 msgstr "Nytt kretsschema"
 
-#: eeschema/sch_edit_frame.cpp:1129
+#: eeschema/sch_edit_frame.cpp:1130
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Kretsschemafil '%s' finns redan."
 
-#: eeschema/sch_edit_frame.cpp:1150
+#: eeschema/sch_edit_frame.cpp:1151
 msgid "Open Schematic"
 msgstr "Öppna kretsschema"
 
-#: eeschema/sch_edit_frame.cpp:1219
+#: eeschema/sch_edit_frame.cpp:1220
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 "Tilldelning av fotavtryck kräver ett fullständigt numrerat kretsschema."
 
-#: eeschema/sch_edit_frame.cpp:1244
+#: eeschema/sch_edit_frame.cpp:1245
 msgid "Could not open CvPcb"
 msgstr "Det gick inte att öppna CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1427 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
 #: pcbnew/pcb_edit_frame.cpp:1609
 msgid "[Read Only]"
 msgstr "[Skrivskyddad]"
 
-#: eeschema/sch_edit_frame.cpp:1430 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
 msgid "[Unsaved]"
 msgstr "[Osparat]"
 
-#: eeschema/sch_edit_frame.cpp:1434
+#: eeschema/sch_edit_frame.cpp:1435
 msgid "[no schematic loaded]"
 msgstr "[inget kretsschema inläst]"
 
-#: eeschema/sch_edit_frame.cpp:1734
+#: eeschema/sch_edit_frame.cpp:1745
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Markerat nät: %s"
@@ -13922,7 +13922,7 @@ msgstr "Justering"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:972 pcbnew/pad.cpp:1011
 #: pcbnew/pad.cpp:1817 pcbnew/pcb_track.cpp:968
-#: pcbnew/tools/pcb_control.cpp:1565
+#: pcbnew/tools/pcb_control.cpp:1567
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:567
 #: pcbnew/zone.cpp:1471
 msgid "Net"
@@ -18285,7 +18285,7 @@ msgstr "Inget nät valt."
 msgid "Net must be labeled to assign a netclass."
 msgstr "Nätet måste märkas för att tilldela en nätklass."
 
-#: eeschema/tools/sch_editor_control.cpp:1724
+#: eeschema/tools/sch_editor_control.cpp:1716
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18296,26 +18296,26 @@ msgstr ""
 "släpptes eftersom destinationen redan har detta ritningsark eller ett av "
 "dess underark som förälder."
 
-#: eeschema/tools/sch_editor_control.cpp:2148
+#: eeschema/tools/sch_editor_control.cpp:2156
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr ""
 "Symboler som har trasiga länkar till symbolbibliotek kan inte redigeras."
 
-#: eeschema/tools/sch_editor_control.cpp:2440
+#: eeschema/tools/sch_editor_control.cpp:2448
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d dubblett-ID ersatt.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2447
+#: eeschema/tools/sch_editor_control.cpp:2455
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potentiella problem har åtgärdats."
 
-#: eeschema/tools/sch_editor_control.cpp:2454
+#: eeschema/tools/sch_editor_control.cpp:2462
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Inga fel hittades."
@@ -33263,7 +33263,7 @@ msgstr "Kontrollerar fysisk frigång..."
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
 msgstr "Intern frigångsöverträdelse (%s frigång %s; faktisk %s)"
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
 msgid "Missing footprint %s (%s)"
 msgstr "Fotavtryck saknas %s (%s)"
@@ -38127,7 +38127,7 @@ msgstr "Ja, avfasad"
 msgid "Select Via Size"
 msgstr "Välj Via storlek"
 
-#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2078
+#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2084
 msgid "Draw a line segment"
 msgstr "Rita ett linjesegment"
 
@@ -38163,19 +38163,19 @@ msgstr "Rita en dimension"
 msgid "No graphic items found in file."
 msgstr "Inga grafiska objekt hittades i filen."
 
-#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1686
+#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1692
 msgid "Place a DXF_SVG drawing"
 msgstr "Placera en DXF_SVG-ritning"
 
-#: pcbnew/tools/drawing_tool.cpp:1767
+#: pcbnew/tools/drawing_tool.cpp:1773
 msgid "Move the footprint reference anchor"
 msgstr "Flytta fotavtryckets referensankare"
 
-#: pcbnew/tools/drawing_tool.cpp:3099
+#: pcbnew/tools/drawing_tool.cpp:3105
 msgid "Via location violates DRC."
 msgstr "Via-placering bryter mot DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:3308
+#: pcbnew/tools/drawing_tool.cpp:3314
 msgid "Place via"
 msgstr "Placera via"
 
@@ -40091,19 +40091,19 @@ msgstr "Löst frigång till marginal"
 msgid "Selected Items"
 msgstr "Valda objekt"
 
-#: pcbnew/tools/pcb_point_editor.cpp:633
+#: pcbnew/tools/pcb_point_editor.cpp:647
 msgid "Drag a corner"
 msgstr "Dra ett hörn"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2285
+#: pcbnew/tools/pcb_point_editor.cpp:2332
 msgid "Add a zone corner"
 msgstr "Lägg till ett zonhörn"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2322
+#: pcbnew/tools/pcb_point_editor.cpp:2369
 msgid "Split segment"
 msgstr "Delat segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2393
+#: pcbnew/tools/pcb_point_editor.cpp:2440
 msgid "Remove a zone/polygon corner"
 msgstr "Ta bort ett hörn för zon / polygon"
 

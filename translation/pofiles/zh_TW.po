@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 09:05-0800\n"
+"POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2023-09-13 18:36+0000\n"
 "Last-Translator: Li Yidong <alenks@foxmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -4041,7 +4041,7 @@ msgid "Colors"
 msgstr "顏色"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1437
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "原理圖編輯器"
@@ -13534,7 +13534,7 @@ msgstr "匯流排輸入型別"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:997
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:970
-#: pcbnew/tools/pcb_control.cpp:1568 pcbnew/zone.cpp:569
+#: pcbnew/tools/pcb_control.cpp:1570 pcbnew/zone.cpp:569
 msgid "Resolved Netclass"
 msgstr "已解析的網路類"
 
@@ -13547,20 +13547,20 @@ msgstr "連線名稱"
 msgid "Bus Alias %s Members"
 msgstr "匯流排別名 %s 成員"
 
-#: eeschema/sch_edit_frame.cpp:126
+#: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad Schematic Editor"
 msgstr "KiCad 原理圖編輯器"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1711
+#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1722
 msgid "Schematic Hierarchy"
 msgstr "原理圖層次結構"
 
-#: eeschema/sch_edit_frame.cpp:270
+#: eeschema/sch_edit_frame.cpp:271
 msgid "New schematic file is unsaved"
 msgstr "新原理圖檔案未儲存"
 
-#: eeschema/sch_edit_frame.cpp:802 eeschema/sim/sim_plot_frame.cpp:1786
+#: eeschema/sch_edit_frame.cpp:803 eeschema/sim/sim_plot_frame.cpp:1786
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1177
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -13570,7 +13570,7 @@ msgstr "新原理圖檔案未儲存"
 msgid "Save changes to '%s' before closing?"
 msgstr "是否在關閉前將變更儲存到 '%s'？"
 
-#: eeschema/sch_edit_frame.cpp:963
+#: eeschema/sch_edit_frame.cpp:964
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
@@ -13579,48 +13579,48 @@ msgstr ""
 "無法更新 PCB，因為原理圖編輯器在獨立模式下開啟。為了從原理圖建立/更新 PCB，請"
 "啟動 KiCad Shell 並建立一個專案。"
 
-#: eeschema/sch_edit_frame.cpp:1100 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "原理圖"
 
-#: eeschema/sch_edit_frame.cpp:1117
+#: eeschema/sch_edit_frame.cpp:1118
 msgid "New Schematic"
 msgstr "新建原理圖"
 
-#: eeschema/sch_edit_frame.cpp:1129
+#: eeschema/sch_edit_frame.cpp:1130
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "原理圖檔案 \"%s\" 已經存在。"
 
-#: eeschema/sch_edit_frame.cpp:1150
+#: eeschema/sch_edit_frame.cpp:1151
 msgid "Open Schematic"
 msgstr "開啟原理圖"
 
-#: eeschema/sch_edit_frame.cpp:1219
+#: eeschema/sch_edit_frame.cpp:1220
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "分配封裝需要一張完整批註的原理圖。"
 
-#: eeschema/sch_edit_frame.cpp:1244
+#: eeschema/sch_edit_frame.cpp:1245
 msgid "Could not open CvPcb"
 msgstr "不能開啟 CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1427 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
 #: pcbnew/pcb_edit_frame.cpp:1609
 msgid "[Read Only]"
 msgstr "[只讀]"
 
-#: eeschema/sch_edit_frame.cpp:1430 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
 msgid "[Unsaved]"
 msgstr "[未儲存]"
 
-#: eeschema/sch_edit_frame.cpp:1434
+#: eeschema/sch_edit_frame.cpp:1435
 msgid "[no schematic loaded]"
 msgstr "[沒有載入原理圖]"
 
-#: eeschema/sch_edit_frame.cpp:1734
+#: eeschema/sch_edit_frame.cpp:1745
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "高亮網路：%s"
@@ -13674,7 +13674,7 @@ msgstr "齊行"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:972 pcbnew/pad.cpp:1011
 #: pcbnew/pad.cpp:1817 pcbnew/pcb_track.cpp:968
-#: pcbnew/tools/pcb_control.cpp:1565
+#: pcbnew/tools/pcb_control.cpp:1567
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:567
 #: pcbnew/zone.cpp:1471
 msgid "Net"
@@ -17916,7 +17916,7 @@ msgstr "沒有選擇網路。"
 msgid "Net must be labeled to assign a netclass."
 msgstr "網路必須標記才能關聯網路類。"
 
-#: eeschema/tools/sch_editor_control.cpp:1724
+#: eeschema/tools/sch_editor_control.cpp:1716
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -17926,25 +17926,25 @@ msgstr ""
 "貼上的圖框 \"%s\"\n"
 "被丟棄, 因為目標已有該圖框或其子圖框之一作為父級。"
 
-#: eeschema/tools/sch_editor_control.cpp:2148
+#: eeschema/tools/sch_editor_control.cpp:2156
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "無法編輯有損壞的庫符號連結的符號。"
 
-#: eeschema/tools/sch_editor_control.cpp:2440
+#: eeschema/tools/sch_editor_control.cpp:2448
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "已替換 %d 個重複 ID。\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2447
+#: eeschema/tools/sch_editor_control.cpp:2455
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "已修復 %d 個潛在問題。"
 
-#: eeschema/tools/sch_editor_control.cpp:2454
+#: eeschema/tools/sch_editor_control.cpp:2462
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "未發現錯誤。"
@@ -32673,7 +32673,7 @@ msgstr "檢查物理間隙..."
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
 msgstr "內部間隙違規 (%s 間隙 %s; 實際 %s)"
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
 msgid "Missing footprint %s (%s)"
 msgstr "缺失的封裝 %s (%s)"
@@ -37412,7 +37412,7 @@ msgstr "是，斜面"
 msgid "Select Via Size"
 msgstr "選擇過孔尺寸"
 
-#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2078
+#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2084
 msgid "Draw a line segment"
 msgstr "繪製線段"
 
@@ -37448,19 +37448,19 @@ msgstr "繪製標註"
 msgid "No graphic items found in file."
 msgstr "在檔案中沒找到圖形項。"
 
-#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1686
+#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1692
 msgid "Place a DXF_SVG drawing"
 msgstr "放置 DXF_SVG 圖形"
 
-#: pcbnew/tools/drawing_tool.cpp:1767
+#: pcbnew/tools/drawing_tool.cpp:1773
 msgid "Move the footprint reference anchor"
 msgstr "移動封裝位號錨點"
 
-#: pcbnew/tools/drawing_tool.cpp:3099
+#: pcbnew/tools/drawing_tool.cpp:3105
 msgid "Via location violates DRC."
 msgstr "通孔位置違反 DRC。"
 
-#: pcbnew/tools/drawing_tool.cpp:3308
+#: pcbnew/tools/drawing_tool.cpp:3314
 msgid "Place via"
 msgstr "放置過孔"
 
@@ -39346,19 +39346,19 @@ msgstr "已解析的邊界層間隙"
 msgid "Selected Items"
 msgstr "選中項"
 
-#: pcbnew/tools/pcb_point_editor.cpp:633
+#: pcbnew/tools/pcb_point_editor.cpp:647
 msgid "Drag a corner"
 msgstr "拖動拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2285
+#: pcbnew/tools/pcb_point_editor.cpp:2332
 msgid "Add a zone corner"
 msgstr "新增敷銅拐角"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2322
+#: pcbnew/tools/pcb_point_editor.cpp:2369
 msgid "Split segment"
 msgstr "分割線段"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2393
+#: pcbnew/tools/pcb_point_editor.cpp:2440
 msgid "Remove a zone/polygon corner"
 msgstr "刪除敷銅或多邊形的拐角"
 

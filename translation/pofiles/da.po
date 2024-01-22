@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 09:05-0800\n"
+"POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/kicad/master-"
@@ -4229,7 +4229,7 @@ msgid "Colors"
 msgstr "Farver"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1437
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
 #: kicad/tools/kicad_manager_actions.cpp:80
 #, fuzzy
 msgid "Schematic Editor"
@@ -14078,7 +14078,7 @@ msgstr "Busindgangstype"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:997
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:970
-#: pcbnew/tools/pcb_control.cpp:1568 pcbnew/zone.cpp:569
+#: pcbnew/tools/pcb_control.cpp:1570 pcbnew/zone.cpp:569
 #, fuzzy
 msgid "Resolved Netclass"
 msgstr "Tildelt netklasse"
@@ -14092,22 +14092,22 @@ msgstr "Forbindelsesnavn"
 msgid "Bus Alias %s Members"
 msgstr "Busalias %s medlemmer"
 
-#: eeschema/sch_edit_frame.cpp:126
+#: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 #, fuzzy
 msgid "KiCad Schematic Editor"
 msgstr "Skift til skematisk editor"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1711
+#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1722
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Skematisk paritet"
 
-#: eeschema/sch_edit_frame.cpp:270
+#: eeschema/sch_edit_frame.cpp:271
 msgid "New schematic file is unsaved"
 msgstr "Ny skematisk fil er ikke gemt"
 
-#: eeschema/sch_edit_frame.cpp:802 eeschema/sim/sim_plot_frame.cpp:1786
+#: eeschema/sch_edit_frame.cpp:803 eeschema/sim/sim_plot_frame.cpp:1786
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1177
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -14117,7 +14117,7 @@ msgstr "Ny skematisk fil er ikke gemt"
 msgid "Save changes to '%s' before closing?"
 msgstr "Gem ændringer til '%s' før lukning?"
 
-#: eeschema/sch_edit_frame.cpp:963
+#: eeschema/sch_edit_frame.cpp:964
 #, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
@@ -14128,51 +14128,51 @@ msgstr ""
 "tilstand. For at oprette / opdatere PCB'er fra skemaer skal du starte Kicad-"
 "shell og oprette et projekt."
 
-#: eeschema/sch_edit_frame.cpp:1100 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Skematisk"
 
-#: eeschema/sch_edit_frame.cpp:1117
+#: eeschema/sch_edit_frame.cpp:1118
 msgid "New Schematic"
 msgstr "Ny skematisk"
 
-#: eeschema/sch_edit_frame.cpp:1129
+#: eeschema/sch_edit_frame.cpp:1130
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Skematisk fil \"%s\" findes allerede."
 
-#: eeschema/sch_edit_frame.cpp:1150
+#: eeschema/sch_edit_frame.cpp:1151
 msgid "Open Schematic"
 msgstr "Åbn skematisk"
 
-#: eeschema/sch_edit_frame.cpp:1219
+#: eeschema/sch_edit_frame.cpp:1220
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 "Eksport af netlisten kræver en fuldstændig kommenteret skematisk skema."
 
-#: eeschema/sch_edit_frame.cpp:1244
+#: eeschema/sch_edit_frame.cpp:1245
 msgid "Could not open CvPcb"
 msgstr "Kunne ikke åbne CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1427 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
 #: pcbnew/pcb_edit_frame.cpp:1609
 msgid "[Read Only]"
 msgstr "[Læs kun]"
 
-#: eeschema/sch_edit_frame.cpp:1430 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
 msgid "[Unsaved]"
 msgstr "[Ikke gemt]"
 
-#: eeschema/sch_edit_frame.cpp:1434
+#: eeschema/sch_edit_frame.cpp:1435
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Skematisk gemt"
 
-#: eeschema/sch_edit_frame.cpp:1734
+#: eeschema/sch_edit_frame.cpp:1745
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Fremhævet net: %s"
@@ -14229,7 +14229,7 @@ msgstr "Begrundelse:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:972 pcbnew/pad.cpp:1011
 #: pcbnew/pad.cpp:1817 pcbnew/pcb_track.cpp:968
-#: pcbnew/tools/pcb_control.cpp:1565
+#: pcbnew/tools/pcb_control.cpp:1567
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:567
 #: pcbnew/zone.cpp:1471
 msgid "Net"
@@ -18823,7 +18823,7 @@ msgstr "Intet lag valgt."
 msgid "Net must be labeled to assign a netclass."
 msgstr "Net skal mærkes for at tildele en netklasse."
 
-#: eeschema/tools/sch_editor_control.cpp:1724
+#: eeschema/tools/sch_editor_control.cpp:1716
 #, fuzzy, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18834,26 +18834,26 @@ msgstr ""
 "blev droppet, fordi destinationen allerede har arket eller et af dets "
 "underark som forælder."
 
-#: eeschema/tools/sch_editor_control.cpp:2148
+#: eeschema/tools/sch_editor_control.cpp:2156
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "biblioteket \"%s\" kan ikke slettes"
 
-#: eeschema/tools/sch_editor_control.cpp:2440
+#: eeschema/tools/sch_editor_control.cpp:2448
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d duplikerede id'er udskiftet.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2447
+#: eeschema/tools/sch_editor_control.cpp:2455
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potentielle problemer repareret."
 
-#: eeschema/tools/sch_editor_control.cpp:2454
+#: eeschema/tools/sch_editor_control.cpp:2462
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Ingen fejl fundet."
@@ -33900,7 +33900,7 @@ msgstr "Kontrol af mellemrum ..."
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
 msgstr "Lokal godkendelse den %s; clearance: %s."
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
 msgid "Missing footprint %s (%s)"
 msgstr "Manglende fodaftryk %s (%s)"
@@ -38945,7 +38945,7 @@ msgstr "Ja, skrå"
 msgid "Select Via Size"
 msgstr "Vælg Via størrelse"
 
-#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2078
+#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2084
 msgid "Draw a line segment"
 msgstr "Tegn et linjesegment"
 
@@ -38984,20 +38984,20 @@ msgstr "Tegn en dimension"
 msgid "No graphic items found in file."
 msgstr "Ingen grafiske genstande fundet i filen at importere"
 
-#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1686
+#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1692
 msgid "Place a DXF_SVG drawing"
 msgstr "Placer en DXF_SVG-tegning"
 
-#: pcbnew/tools/drawing_tool.cpp:1767
+#: pcbnew/tools/drawing_tool.cpp:1773
 msgid "Move the footprint reference anchor"
 msgstr "Flyt referenceankeret til fodaftryk"
 
-#: pcbnew/tools/drawing_tool.cpp:3099
+#: pcbnew/tools/drawing_tool.cpp:3105
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Ruteplanens startpunkt overtræder DRC."
 
-#: pcbnew/tools/drawing_tool.cpp:3308
+#: pcbnew/tools/drawing_tool.cpp:3314
 msgid "Place via"
 msgstr "Placer via"
 
@@ -41006,19 +41006,19 @@ msgstr "Løst clearance: %s."
 msgid "Selected Items"
 msgstr "Valgte emner"
 
-#: pcbnew/tools/pcb_point_editor.cpp:633
+#: pcbnew/tools/pcb_point_editor.cpp:647
 msgid "Drag a corner"
 msgstr "Træk et hjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2285
+#: pcbnew/tools/pcb_point_editor.cpp:2332
 msgid "Add a zone corner"
 msgstr "Tilføj et zonehjørne"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2322
+#: pcbnew/tools/pcb_point_editor.cpp:2369
 msgid "Split segment"
 msgstr "Split segment"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2393
+#: pcbnew/tools/pcb_point_editor.cpp:2440
 msgid "Remove a zone/polygon corner"
 msgstr "Fjern et zone / polygonhjørne"
 

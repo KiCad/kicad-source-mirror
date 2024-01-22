@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-12 09:05-0800\n"
+"POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -4244,7 +4244,7 @@ msgid "Colors"
 msgstr "Spalvos"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1437
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
 #: kicad/tools/kicad_manager_actions.cpp:80
 #, fuzzy
 msgid "Schematic Editor"
@@ -14099,7 +14099,7 @@ msgstr "Autobuso įvažiavimo tipas"
 
 #: eeschema/sch_bus_entry.cpp:512 eeschema/sch_label.cpp:997
 #: eeschema/sch_line.cpp:924 pcbnew/pad.cpp:1013 pcbnew/pcb_track.cpp:970
-#: pcbnew/tools/pcb_control.cpp:1568 pcbnew/zone.cpp:569
+#: pcbnew/tools/pcb_control.cpp:1570 pcbnew/zone.cpp:569
 #, fuzzy
 msgid "Resolved Netclass"
 msgstr "Priskirtas „Netclass“"
@@ -14113,22 +14113,22 @@ msgstr "Ryšio pavadinimas"
 msgid "Bus Alias %s Members"
 msgstr "„Bus Alias“ %s nariai"
 
-#: eeschema/sch_edit_frame.cpp:126
+#: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 #, fuzzy
 msgid "KiCad Schematic Editor"
 msgstr "Schemų redaktoriaus savybės"
 
-#: eeschema/sch_edit_frame.cpp:179 eeschema/sch_edit_frame.cpp:1711
+#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1722
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Scheminis paritetas"
 
-#: eeschema/sch_edit_frame.cpp:270
+#: eeschema/sch_edit_frame.cpp:271
 msgid "New schematic file is unsaved"
 msgstr "Naujas scheminis failas neišsaugotas"
 
-#: eeschema/sch_edit_frame.cpp:802 eeschema/sim/sim_plot_frame.cpp:1786
+#: eeschema/sch_edit_frame.cpp:803 eeschema/sim/sim_plot_frame.cpp:1786
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:539
 #: eeschema/symbol_editor/symbol_editor.cpp:1177
 #: pagelayout_editor/pl_editor_frame.cpp:395
@@ -14138,7 +14138,7 @@ msgstr "Naujas scheminis failas neišsaugotas"
 msgid "Save changes to '%s' before closing?"
 msgstr "Išsaugoti „%s“ pakeitimus prieš uždarant?"
 
-#: eeschema/sch_edit_frame.cpp:963
+#: eeschema/sch_edit_frame.cpp:964
 #, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
@@ -14149,50 +14149,50 @@ msgstr ""
 "režimu. Norėdami sukurti / atnaujinti PCB iš schemų, paleiskite „Kicad“ "
 "apvalkalą ir sukurkite projektą."
 
-#: eeschema/sch_edit_frame.cpp:1100 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/sch_edit_frame.cpp:1117
+#: eeschema/sch_edit_frame.cpp:1118
 msgid "New Schematic"
 msgstr "Nauja schema"
 
-#: eeschema/sch_edit_frame.cpp:1129
+#: eeschema/sch_edit_frame.cpp:1130
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Scheminis failas „%s“ jau yra."
 
-#: eeschema/sch_edit_frame.cpp:1150
+#: eeschema/sch_edit_frame.cpp:1151
 msgid "Open Schematic"
 msgstr "Atverti schemą"
 
-#: eeschema/sch_edit_frame.cpp:1219
+#: eeschema/sch_edit_frame.cpp:1220
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Norint eksportuoti netlistą, reikalinga visiškai anotuota schema."
 
-#: eeschema/sch_edit_frame.cpp:1244
+#: eeschema/sch_edit_frame.cpp:1245
 msgid "Could not open CvPcb"
 msgstr "Nepavyko atidaryti „CvPcb“"
 
-#: eeschema/sch_edit_frame.cpp:1427 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
 #: pcbnew/pcb_edit_frame.cpp:1609
 msgid "[Read Only]"
 msgstr "[Tik skaitymui]"
 
-#: eeschema/sch_edit_frame.cpp:1430 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
 msgid "[Unsaved]"
 msgstr "[Neišsaugotas]"
 
-#: eeschema/sch_edit_frame.cpp:1434
+#: eeschema/sch_edit_frame.cpp:1435
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Schema išsaugota"
 
-#: eeschema/sch_edit_frame.cpp:1734
+#: eeschema/sch_edit_frame.cpp:1745
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Paryškintas tinklas: %s"
@@ -14249,7 +14249,7 @@ msgstr "Lygiavimas:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:39
 #: pcbnew/dialogs/dialog_net_inspector.cpp:972 pcbnew/pad.cpp:1011
 #: pcbnew/pad.cpp:1817 pcbnew/pcb_track.cpp:968
-#: pcbnew/tools/pcb_control.cpp:1565
+#: pcbnew/tools/pcb_control.cpp:1567
 #: pcbnew/widgets/pcb_properties_panel.cpp:260 pcbnew/zone.cpp:567
 #: pcbnew/zone.cpp:1471
 msgid "Net"
@@ -18860,7 +18860,7 @@ msgstr "Цепь не выбрана."
 msgid "Net must be labeled to assign a netclass."
 msgstr "Tinklas turi būti paženklintas, kad priskirtumėte tinklo klasę."
 
-#: eeschema/tools/sch_editor_control.cpp:1724
+#: eeschema/tools/sch_editor_control.cpp:1716
 #, fuzzy, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18871,26 +18871,26 @@ msgstr ""
 "buvo atsisakyta, nes paskirties vieta jau turi lapą arba vieną iš jo "
 "antrinių lapų kaip vienas iš tėvų."
 
-#: eeschema/tools/sch_editor_control.cpp:2148
+#: eeschema/tools/sch_editor_control.cpp:2156
 #, fuzzy
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "bibliotekos „%s“ negalima ištrinti"
 
-#: eeschema/tools/sch_editor_control.cpp:2440
+#: eeschema/tools/sch_editor_control.cpp:2448
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d pakeisti pasikartojantys ID.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2447
+#: eeschema/tools/sch_editor_control.cpp:2455
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d pašalintos galimos problemos."
 
-#: eeschema/tools/sch_editor_control.cpp:2454
+#: eeschema/tools/sch_editor_control.cpp:2462
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Nerasta klaidų."
@@ -33972,7 +33972,7 @@ msgstr "Tikrinamas trinkelių tarpas ..."
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
 msgstr "Vietinis klirensas %s; klirensas: %s."
 
-#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
+#: pcbnew/drc/drc_test_provider_schematic_parity.cpp:115
 #, c-format
 msgid "Missing footprint %s (%s)"
 msgstr "Trūksta pėdsako %s (%s)"
@@ -39028,7 +39028,7 @@ msgstr "Taip, nuožulniai"
 msgid "Select Via Size"
 msgstr "Pasirinkite per dydį"
 
-#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2078
+#: pcbnew/tools/drawing_tool.cpp:352 pcbnew/tools/drawing_tool.cpp:2084
 msgid "Draw a line segment"
 msgstr "Brėžti atkarpą"
 
@@ -39067,20 +39067,20 @@ msgstr "Matmuo"
 msgid "No graphic items found in file."
 msgstr "Faile nerasta grafinių elementų, kuriuos reikia importuoti"
 
-#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1686
+#: pcbnew/tools/drawing_tool.cpp:1601 pcbnew/tools/drawing_tool.cpp:1692
 msgid "Place a DXF_SVG drawing"
 msgstr "Įdėkite DXF_SVG piešinį"
 
-#: pcbnew/tools/drawing_tool.cpp:1767
+#: pcbnew/tools/drawing_tool.cpp:1773
 msgid "Move the footprint reference anchor"
 msgstr "Perkelkite pėdsako atskaitos inkarą"
 
-#: pcbnew/tools/drawing_tool.cpp:3099
+#: pcbnew/tools/drawing_tool.cpp:3105
 #, fuzzy
 msgid "Via location violates DRC."
 msgstr "Maršruto pradžios taškas pažeidžia KDR."
 
-#: pcbnew/tools/drawing_tool.cpp:3308
+#: pcbnew/tools/drawing_tool.cpp:3314
 msgid "Place via"
 msgstr "Naujas perėjimas"
 
@@ -41090,19 +41090,19 @@ msgstr "Išspręstas leidimas: %s."
 msgid "Selected Items"
 msgstr "Pasirinkti elementai"
 
-#: pcbnew/tools/pcb_point_editor.cpp:633
+#: pcbnew/tools/pcb_point_editor.cpp:647
 msgid "Drag a corner"
 msgstr "Vilkite kampą"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2285
+#: pcbnew/tools/pcb_point_editor.cpp:2332
 msgid "Add a zone corner"
 msgstr "Zonos kampas"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2322
+#: pcbnew/tools/pcb_point_editor.cpp:2369
 msgid "Split segment"
 msgstr "Sudalinti segmentą"
 
-#: pcbnew/tools/pcb_point_editor.cpp:2393
+#: pcbnew/tools/pcb_point_editor.cpp:2440
 msgid "Remove a zone/polygon corner"
 msgstr "Pašalinkite zonos / daugiakampio kampą"
 
