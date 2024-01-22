@@ -2,7 +2,7 @@
 # Ing. Angelo Aliberti <microrf@tiscali.it>, 2005.
 # Michele Petrecca <michelinux@alice.it>, 2005, 2006.
 # Doriano Blengino <web@xonelectronics.it>, 06-2006
-# Marco Ciampa <ciampix@posteo.net>, 2014-2023.
+# Marco Ciampa <ciampix@posteo.net>, 2014-2024.
 # Hildo Guillardi Júnior <hildogjr@gmail.com>, 2020.
 # ZbeeGin <zbeegin@op.pl>, 2020, 2021.
 #
@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2023-12-19 01:12+0100\n"
+"PO-Revision-Date: 2024-01-22 17:43+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -36037,7 +36037,7 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr ""
+msgstr "La definizione dell'impronta '%s' ha la componente rame associata ad una piazzola su più strati. Padstacks personalizzate non sono supportate in KiCad. Gli elementi in rame sono stati importati come elementi grafici."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
