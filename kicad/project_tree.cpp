@@ -89,22 +89,22 @@ void PROJECT_TREE::LoadIcons()
     m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );                 // TREE_TXT
     m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );                 // TREE_MD
     m_imageList->Add( KiBitmap( BITMAPS::netlist, size ) );                // TREE_NET
-    m_imageList->Add( KiBitmap( BITMAPS::netlist, size ) );                // TREE_NET_SPICE
+    m_imageList->Add( KiBitmap( BITMAPS::file_cir, size ) );               // TREE_NET_SPICE
     m_imageList->Add( KiBitmap( BITMAPS::unknown, size ) );                // TREE_UNKNOWN
-    m_imageList->Add( KiBitmap( BITMAPS::directory, size ) ); // TREE_DIRECTORY
+    m_imageList->Add( KiBitmap( BITMAPS::directory, size ) );              // TREE_DIRECTORY
     m_imageList->Add( KiBitmap( BITMAPS::icon_cvpcb_24, size ) );          // TREE_CMP_LINK
-    m_imageList->Add( KiBitmap( BITMAPS::tools, size ) );            // TREE_REPORT
+    m_imageList->Add( KiBitmap( BITMAPS::tools, size ) );                  // TREE_REPORT
     m_imageList->Add( KiBitmap( BITMAPS::file_pos, size ) );               // TREE_POS
-    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) );         // TREE_DRILL
-    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) ); // TREE_DRILL_NC (similar TREE_DRILL)
-    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) ); // TREE_DRILL_XNC (similar TREE_DRILL)
-    m_imageList->Add( KiBitmap( BITMAPS::file_svg, size ) ); // TREE_SVG
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) );               // TREE_DRILL
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) );               // TREE_DRILL_NC (similar TREE_DRILL)
+    m_imageList->Add( KiBitmap( BITMAPS::file_drl, size ) );               // TREE_DRILL_XNC (similar TREE_DRILL)
+    m_imageList->Add( KiBitmap( BITMAPS::file_svg, size ) );               // TREE_SVG
     m_imageList->Add( KiBitmap( BITMAPS::icon_pagelayout_editor_24, size ) ); // TREE_PAGE_LAYOUT_DESCR
-    m_imageList->Add( KiBitmap( BITMAPS::module, size ) );              // TREE_FOOTPRINT_FILE
-    m_imageList->Add( KiBitmap( BITMAPS::library, size ) );             // TREE_SCHEMATIC_LIBFILE
-    m_imageList->Add( KiBitmap( BITMAPS::library, size ) );          // TREE_SEXPR_SYMBOL_LIB_FILE
-    m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );           // DESIGN_RULES
-    m_imageList->Add( KiBitmap( BITMAPS::zip, size ) );              // ZIP_ARCHIVE
+    m_imageList->Add( KiBitmap( BITMAPS::module, size ) );                 // TREE_FOOTPRINT_FILE
+    m_imageList->Add( KiBitmap( BITMAPS::library, size ) );                // TREE_SCHEMATIC_LIBFILE
+    m_imageList->Add( KiBitmap( BITMAPS::library, size ) );                // TREE_SEXPR_SYMBOL_LIB_FILE
+    m_imageList->Add( KiBitmap( BITMAPS::editor, size ) );                 // DESIGN_RULES
+    m_imageList->Add( KiBitmap( BITMAPS::zip, size ) );                    // ZIP_ARCHIVE
 
     SetImageList( m_imageList );
 
