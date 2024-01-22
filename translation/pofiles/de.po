@@ -10,7 +10,7 @@
 # Flo082002 <flos6323@gmail.com>, 2021.
 # Benedikt Freisen <b.freisen@gmx.net>, 2021, 2022.
 # Mark Hämmerling <dev@markh.de>, 2021, 2022, 2023, 2024.
-# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023.
+# Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
 # Ettore Atalan <atalanttore@googlemail.com>, 2022, 2023.
 # Ivan Chuba <xtrvweb@gmail.com>, 2022.
 # magical-obama <maschwaerzler@a1.net>, 2022.
@@ -25,10 +25,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-18 07:31+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2024-01-23 02:01+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35282,9 +35282,8 @@ msgid "Keep endpoints or direction of starting point"
 msgstr "Endpunkte oder Richtung des Startpunkts beibehalten"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
-#, fuzzy
 msgid "Track mouse-drag mode:"
-msgstr "Verhalten beim an Leiterbahnziehen mit der Maus:"
+msgstr "Verhalten beim an Leiterbahn ziehen mit der Maus:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 msgid "Drag (45 degree mode)"
