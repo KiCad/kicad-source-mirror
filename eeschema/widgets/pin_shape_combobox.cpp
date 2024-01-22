@@ -53,7 +53,7 @@ PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
         if( bitmap == BITMAPS::INVALID_BITMAP )
             Append( text );
         else
-            Insert( text, KiBitmap( bitmap ), ii );
+            Insert( text, KiBitmapBundle( bitmap ), ii );
     }
 }
 

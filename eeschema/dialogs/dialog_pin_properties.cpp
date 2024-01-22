@@ -150,7 +150,8 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     const std::vector<BITMAPS>& orientationIcons = PinOrientationIcons();
 
     for ( unsigned ii = 0; ii < orientationNames.GetCount(); ii++ )
-        m_choiceOrientation->Insert( orientationNames[ii], KiBitmap( orientationIcons[ii] ), ii );
+        m_choiceOrientation->Insert( orientationNames[ii], KiBitmapBundle( orientationIcons[ii] ),
+                                     ii );
 
     // We can't set the tab order through wxWidgets due to shortcomings in their mnemonics
     // implementation on MSW
