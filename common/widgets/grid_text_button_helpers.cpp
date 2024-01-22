@@ -366,17 +366,17 @@ class TEXT_BUTTON_FILE_BROWSER : public wxComboCtrl
 {
 public:
     TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg, WX_GRID* aGrid,
-                              wxString* aCurrentDir, wxString* aExt = nullptr,
+                              wxString* aCurrentDir, const wxString& aFileFilter = wxEmptyString,
                               bool aNormalize = false,
-                              wxString aNormalizeBasePath = wxEmptyString ) :
+                              const wxString& aNormalizeBasePath = wxEmptyString ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
                          wxTE_PROCESS_ENTER ),
             m_dlg( aParentDlg ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
-            m_fileFilter( aExt ),
             m_normalize( aNormalize ),
-            m_normalizeBasePath( aNormalizeBasePath )
+            m_normalizeBasePath( aNormalizeBasePath ),
+            m_fileFilter( aFileFilter )
     {
         SetButtonBitmaps( KiBitmap( BITMAPS::small_folder ) );
 
@@ -384,10 +384,26 @@ public:
         Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
     }
 
-    void UpdateFileFilter( wxString* aFileFilter )
+    TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg, WX_GRID* aGrid,
+                              wxString* aCurrentDir,
+                              std::function<wxString( WX_GRID* grid, int row )> aFileFilterFn,
+                              bool aNormalize = false,
+                              const wxString& aNormalizeBasePath = wxEmptyString ) :
+            wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                         wxTE_PROCESS_ENTER ),
+            m_dlg( aParentDlg ),
+            m_grid( aGrid ),
+            m_currentDir( aCurrentDir ),
+            m_normalize( aNormalize ),
+            m_normalizeBasePath( aNormalizeBasePath ),
+            m_fileFilterFn( std::move( aFileFilterFn ) )
     {
-        m_fileFilter = aFileFilter;
+        SetButtonBitmaps( KiBitmap( BITMAPS::small_folder ) );
+
+        // win32 fix, avoids drawing the "native dropdown caret"
+        Customize( wxCC_IFLAG_HAS_NONSTANDARD_BUTTON );
     }
+
 
 protected:
     void DoSetPopupControl( wxComboPopup* popup ) override
@@ -397,6 +413,9 @@ protected:
 
     void OnButtonClick() override
     {
+        if( m_fileFilterFn )
+            m_fileFilter = m_fileFilterFn( m_grid, m_grid->GetGridCursorRow() );
+
         wxFileName fn = GetValue();
 
         if( fn.GetPath().IsEmpty() && m_currentDir )
@@ -404,10 +423,10 @@ protected:
         else
             fn.SetPath( ExpandEnvVarSubstitutions( fn.GetPath(), &m_dlg->Prj() ) );
 
-        if( m_fileFilter )
+        if( !m_fileFilter.IsEmpty() )
         {
             wxFileDialog dlg( m_dlg, _( "Select a File" ), fn.GetPath(), fn.GetFullName(),
-                              *m_fileFilter, wxFD_FILE_MUST_EXIST | wxFD_OPEN );
+                              m_fileFilter, wxFD_FILE_MUST_EXIST | wxFD_OPEN );
 
             if( dlg.ShowModal() == wxID_OK )
             {
@@ -469,9 +488,11 @@ protected:
     DIALOG_SHIM* m_dlg;
     WX_GRID*     m_grid;
     wxString*    m_currentDir;
-    wxString*    m_fileFilter;
     bool         m_normalize;
     wxString     m_normalizeBasePath;
+
+    wxString                                            m_fileFilter;
+    std::function<wxString( WX_GRID* aGrid, int aRow )> m_fileFilterFn;
 };
 
 
@@ -479,13 +500,10 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
     if( m_fileFilterFn )
-        m_fileFilter = m_fileFilterFn( m_grid, m_grid->GetGridCursorRow() );
-
-    if( m_fileFilter.IsEmpty() )
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, nullptr,
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, m_fileFilterFn,
                                                   m_normalize, m_normalizeBasePath );
     else
-        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, &m_fileFilter,
+        m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, m_fileFilter,
                                                   m_normalize, m_normalizeBasePath );
 
 #if wxUSE_VALIDATORS
@@ -497,28 +515,4 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 #endif
 
     wxGridCellEditor::Create( aParent, aId, aEventHandler );
-}
-
-
-void GRID_CELL_PATH_EDITOR::UpdateFilterString( const wxString& aFilterString )
-{
-    if( m_fileFilterFn )
-    {
-        int row = m_grid->GetGridCursorRow();
-
-        // When closing the window, the cursor position could be negative if no rows were selected,
-        // so don't try to update a filter for a non-existent row
-        if( row >= 0 )
-            m_fileFilter = m_fileFilterFn( m_grid, row );
-    }
-    else
-    {
-        m_fileFilter = aFilterString;
-    }
-
-    // Ensure that the control switches between files and directories properly
-    TEXT_BUTTON_FILE_BROWSER* button = dynamic_cast<TEXT_BUTTON_FILE_BROWSER*>( m_control );
-
-    if( button )
-        button->UpdateFileFilter( m_fileFilter.IsEmpty() ? nullptr : &m_fileFilter );
 }

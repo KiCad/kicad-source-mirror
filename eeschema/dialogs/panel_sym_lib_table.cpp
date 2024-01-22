@@ -131,19 +131,6 @@ public:
 
             SetValue( aRow, COL_TYPE, SCH_IO_MGR::ShowType( pluginType ) );
         }
-        // If plugin type is changed, update the filter string in the chooser dialog
-        else if( aCol == COL_TYPE )
-        {
-            wxGridCellEditor* editor = GetView()->GetCellEditor( aRow, COL_URI );
-
-            if( editor )
-            {
-                if( GRID_CELL_PATH_EDITOR* pathEditor = dynamic_cast<GRID_CELL_PATH_EDITOR*>( editor ) )
-                    pathEditor->UpdateFilterString();
-
-                editor->DecRef();
-            }
-        }
     }
 
 

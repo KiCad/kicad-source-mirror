@@ -200,15 +200,6 @@ public:
 
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
 
-    /**
-     * Update the filter string for the control's file chooser dialog. If a file filter function
-     * was provided on control creation, then that function is called to update the filter. Otherwise,
-     * the value of aFilterString is used.
-     *
-     * @param aFilterString is the new filter string to use when the control doesn't have a filter function.
-     */
-    void UpdateFilterString( const wxString& aFilterString = wxEmptyString );
-
 protected:
     DIALOG_SHIM* m_dlg;
     WX_GRID*     m_grid;
