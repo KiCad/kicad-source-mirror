@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="e_96.svg"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1429"
+     inkscape:window-height="800"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="21.189179"
+     inkscape:cx="10.595031"
+     inkscape:cy="11.420924"
+     inkscape:window-x="0"
+     inkscape:window-y="38"
+     inkscape:window-maximized="0"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="text863"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>add_glabel</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs174">
+    <style
+       id="style172">.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}.cls-1{stroke:#1a81c4;}.cls-2{stroke:#545454;}.cls-3{fill:#545454;}</style>
+  </defs>
+  <title
+     id="title176">add_glabel</title>
+  <g
+     aria-label="E96"
+     id="text863"
+     style="font-size:18.6667px;line-height:1.25;fill:#333333">
+    <g
+       id="g40935"
+       style="fill:#ded3dd;fill-opacity:1">
+      <path
+         d="M 2.213,18.648386 V 5.3576953 H 7.8876769 V 7.1496986 H 4.1170035 v 3.9013404 h 3.2853392 v 1.792003 H 4.1170035 v 3.901341 h 3.7706734 v 1.904003 z"
+         style="font-weight:bold;font-family:'DIN Condensed';-inkscape-font-specification:'DIN Condensed,  Bold';fill:#ded3dd;fill-opacity:1"
+         id="path1460" />
+      <path
+         d="m 10.248666,18.648386 2.165337,-5.581343 -0.03733,-0.03733 q -0.09333,0.07467 -0.298667,0.130667 -0.186667,0.03733 -0.504001,0.03733 -0.504001,0 -0.933335,-0.242667 Q 10.211335,12.712376 9.968668,12.339042 9.838001,12.152375 9.7633342,11.947042 9.6886672,11.723041 9.651334,11.387041 9.595334,11.05104 9.576667,10.547039 9.558,10.024371 9.558,9.24037 9.558,8.5870355 9.576667,8.1763681 9.595334,7.747034 9.651334,7.4483668 9.688667,7.1683663 9.7633342,6.9630326 9.8566682,6.7576989 9.9873347,6.5336985 10.360669,5.9176974 10.97667,5.5816967 q 0.634668,-0.3360006 1.418669,-0.3360006 0.784002,0 1.400003,0.3546673 0.616001,0.3360007 0.989335,0.9333351 0.130667,0.2240004 0.224001,0.4293341 0.09333,0.2053337 0.149333,0.4853342 0.03733,0.2986672 0.056,0.7280013 0.01867,0.4106674 0.01867,1.0640019 0,0.6160011 -0.01867,1.026669 -0.01867,0.392 -0.056,0.672001 -0.056,0.298667 -0.130667,0.541334 -0.056,0.224 -0.149333,0.485334 l -2.501339,6.682679 z m 1.213335,-8.082681 q 0,0.429334 0.280001,0.690668 0.28,0.261333 0.653334,0.261333 0.373335,0 0.653335,-0.261333 0.280001,-0.261334 0.280001,-0.690668 V 8.1017003 q 0,-0.4293341 -0.280001,-0.6906679 -0.28,-0.2613338 -0.653335,-0.2613338 -0.373334,0 -0.653334,0.2613338 -0.280001,0.2613338 -0.280001,0.6906679 z"
+         style="font-weight:bold;font-family:'DIN Condensed';-inkscape-font-specification:'DIN Condensed,  Bold';fill:#ded3dd;fill-opacity:1"
+         id="path1462" />
+      <path
+         d="m 21.186019,5.3576953 -2.165337,5.5813437 0.03733,0.03733 q 0.09333,-0.07467 0.280001,-0.112 0.205333,-0.056 0.522667,-0.056 0.504001,0 0.933335,0.242667 0.429334,0.242667 0.672001,0.616001 0.130667,0.205334 0.205334,0.410667 0.07467,0.205334 0.130667,0.541335 0.03733,0.336 0.056,0.858668 0.01867,0.504001 0.01867,1.288002 0,0.653335 -0.01867,1.082669 -0.01867,0.410667 -0.056,0.690668 -0.056,0.298667 -0.149334,0.504001 -0.07467,0.205333 -0.205333,0.429334 -0.373334,0.616001 -1.008002,0.952002 -0.616001,0.336 -1.400003,0.336 -0.784001,0 -1.400002,-0.336 -0.616001,-0.354668 -0.989335,-0.952002 -0.149334,-0.224001 -0.242667,-0.429334 -0.07467,-0.205334 -0.112001,-0.504001 -0.056,-0.280001 -0.07467,-0.690668 -0.01867,-0.429334 -0.01867,-1.082669 0,-0.616001 0.01867,-1.008001 0.01867,-0.410668 0.056,-0.709335 0.03733,-0.280001 0.112,-0.504001 0.07467,-0.242667 0.168,-0.504001 l 2.501345,-6.6826757 z m -1.213336,8.0826817 q 0,-0.429335 -0.28,-0.690668 -0.280001,-0.261334 -0.653335,-0.261334 -0.373334,0 -0.653334,0.261334 -0.280001,0.261333 -0.280001,0.690668 v 2.464004 q 0,0.429334 0.280001,0.690668 0.28,0.261334 0.653334,0.261334 0.373334,0 0.653335,-0.261334 0.28,-0.261334 0.28,-0.690668 z"
+         style="font-weight:bold;font-family:'DIN Condensed';-inkscape-font-specification:'DIN Condensed,  Bold';fill:#ded3dd;fill-opacity:1"
+         id="path1464" />
+    </g>
+  </g>
+</svg>
