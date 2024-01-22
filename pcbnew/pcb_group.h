@@ -125,7 +125,7 @@ public:
     /// @copydoc BOARD_ITEM::SetLayer
     void SetLayer( PCB_LAYER_ID aLayer ) override
     {
-        wxFAIL_MSG( wxT( "groups don't support layer SetLayer" ) );
+        // NOP
     }
 
     bool IsOnCopperLayer() const override
@@ -133,12 +133,6 @@ public:
         // A group might have members on a copper layer, but isn't itself on any layer.
         return false;
     }
-
-    /** Set layer for all items within the group.
-     *
-     * To avoid freezes with circular references, the maximum depth is 20 by default.
-     */
-    void SetLayerRecursive( PCB_LAYER_ID aLayer, int aDepth );
 
     void SetLocked( bool aLocked ) override;
 
@@ -203,7 +197,8 @@ public:
     void RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunction ) const override;
 
     ///< @copydoc BOARD_ITEM::RunOnDescendants
-    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const override;
+    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction,
+                           int aDepth = 0 ) const override;
 
     /**
      * Check if the proposed type can be added to a group

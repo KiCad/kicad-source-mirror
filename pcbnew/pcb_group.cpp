@@ -179,22 +179,6 @@ void PCB_GROUP::SetPosition( const VECTOR2I& aNewpos )
 }
 
 
-void PCB_GROUP::SetLayerRecursive( PCB_LAYER_ID aLayer, int aDepth )
-{
-    for( BOARD_ITEM* item : m_items )
-    {
-        if( ( item->Type() == PCB_GROUP_T ) && ( aDepth > 0 ) )
-        {
-            static_cast<PCB_GROUP*>( item )->SetLayerRecursive( aLayer, aDepth - 1 );
-        }
-        else
-        {
-            item->SetLayer( aLayer );
-        }
-    }
-}
-
-
 void PCB_GROUP::SetLocked( bool aLockState )
 {
     BOARD_ITEM::SetLocked( aLockState );
@@ -417,8 +401,13 @@ void PCB_GROUP::RunOnChildren( const std::function<void( BOARD_ITEM* )>& aFuncti
 }
 
 
-void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const
+void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction,
+                                  int aDepth ) const
 {
+    // Avoid freezes with infinite recursion
+    if( aDepth > 20 )
+        return;
+
     try
     {
         for( BOARD_ITEM* item : m_items )
@@ -426,7 +415,7 @@ void PCB_GROUP::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
             aFunction( item );
 
             if( item->Type() == PCB_GROUP_T )
-                item->RunOnDescendants( aFunction );
+                item->RunOnDescendants( aFunction, aDepth + 1 );
         }
     }
     catch( std::bad_function_call& )

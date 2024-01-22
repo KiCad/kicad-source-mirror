@@ -198,7 +198,8 @@ public:
      * Invoke a function on all descendants.
      * @note This function should not add or remove items.
      */
-    virtual void RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFunction ) const { }
+    virtual void RunOnDescendants( const std::function<void ( BOARD_ITEM* )>& aFunction,
+                                   int aDepth = 0 ) const { }
 
     BOARD_ITEM_CONTAINER* GetParent() const { return (BOARD_ITEM_CONTAINER*) m_parent; }
 

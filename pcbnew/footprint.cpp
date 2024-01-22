@@ -1724,8 +1724,13 @@ void FOOTPRINT::RunOnChildren( const std::function<void ( BOARD_ITEM* )>& aFunct
 }
 
 
-void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const
+void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction,
+                                  int aDepth ) const
 {
+    // Avoid freezes with infinite recursion
+    if( aDepth > 20 )
+        return;
+
     try
     {
         for( PCB_FIELD* field : m_fields )
@@ -1740,13 +1745,13 @@ void FOOTPRINT::RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFun
         for( PCB_GROUP* group : m_groups )
         {
             aFunction( group );
-            group->RunOnDescendants( aFunction );
+            group->RunOnDescendants( aFunction, aDepth + 1 );
         }
 
         for( BOARD_ITEM* drawing : m_drawings )
         {
             aFunction( drawing );
-            drawing->RunOnDescendants( aFunction );
+            drawing->RunOnDescendants( aFunction, aDepth + 1 );
         }
     }
     catch( std::bad_function_call& )

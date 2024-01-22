@@ -831,7 +831,8 @@ public:
     void RunOnChildren( const std::function<void (BOARD_ITEM*)>& aFunction ) const override;
 
     ///< @copydoc BOARD_ITEM::RunOnDescendants
-    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction ) const override;
+    void RunOnDescendants( const std::function<void( BOARD_ITEM* )>& aFunction,
+                           int aDepth = 0 ) const override;
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 

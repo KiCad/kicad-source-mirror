@@ -638,10 +638,13 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
 
                 for( BOARD_ITEM* item : aItems )
                 {
-                    if( item->Type() == PCB_GROUP_T )
-                        static_cast<PCB_GROUP*>( item )->SetLayerRecursive( destLayer, 200 );
-                    else
-                        item->SetLayer( destLayer );
+                    item->SetLayer( destLayer );
+
+                    item->RunOnDescendants(
+                            [&]( BOARD_ITEM* descendant )
+                            {
+                                descendant->SetLayer( destLayer );
+                            } );
                 }
             }
 
@@ -649,6 +652,12 @@ int DRAWING_TOOL::InteractivePlaceWithPreview( const TOOL_EVENT& aEvent,
             {
                 item->Move( cursorPosition );
                 commit.Add( item );
+
+                item->RunOnDescendants(
+                        [&]( BOARD_ITEM* descendant )
+                        {
+                            commit.Add( descendant );
+                        } );
             }
 
             commit.Push( wxT( "Placing items" ) );
