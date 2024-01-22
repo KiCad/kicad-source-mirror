@@ -110,7 +110,8 @@ void PANEL_SETUP_PINMAP::OnMouseLeave( wxMouseEvent& aEvent )
 void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
 {
     // Try to know the size of bitmap button used in drc matrix
-    wxBitmapButton* dummy = new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmap( BITMAPS::ercerr ),
+    wxBitmapButton* dummy =
+            new wxBitmapButton( m_matrixPanel, wxID_ANY, KiBitmapBundle( BITMAPS::ercerr ),
                                                 wxDefaultPosition, wxDefaultSize, wxBORDER_NONE );
     wxSize          bitmapSize = dummy->GetSize();
     delete dummy;
@@ -194,7 +195,8 @@ void PANEL_SETUP_PINMAP::reBuildMatrixPanel()
                 m_buttonList[ii][jj]->Unbind(wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
             }
 
-            wxBitmapButton* btn = new wxBitmapButton( m_matrixPanel, id, KiBitmap( bitmap_butt ),
+            wxBitmapButton* btn =
+                    new wxBitmapButton( m_matrixPanel, id, KiBitmapBundle( bitmap_butt ),
                                                       wxPoint( x, y ), wxDefaultSize, wxBORDER_NONE );
             btn->Bind( wxEVT_LEAVE_WINDOW, &PANEL_SETUP_PINMAP::OnMouseLeave, this );
             btn->Bind( wxEVT_ENTER_WINDOW, &PANEL_SETUP_PINMAP::OnMouseEnter, this );

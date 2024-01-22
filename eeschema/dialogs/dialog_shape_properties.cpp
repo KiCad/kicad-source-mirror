@@ -46,7 +46,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_borderColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
-        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
+        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
     m_borderStyleCombo->Append( DEFAULT_STYLE );
 

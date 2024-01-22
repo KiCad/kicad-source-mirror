@@ -60,7 +60,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
         m_borderColorSwatch->SetSwatchBackground( schematicBackground );
 
         for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
-            m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
+            m_borderStyleCombo->Append( lineStyleDesc.name,
+                                        KiBitmapBundle( lineStyleDesc.bitmap ) );
 
         m_borderStyleCombo->Append( DEFAULT_STYLE );
 

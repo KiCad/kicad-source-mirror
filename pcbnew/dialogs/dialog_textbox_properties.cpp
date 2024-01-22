@@ -127,7 +127,7 @@ DIALOG_TEXTBOX_PROPERTIES::DIALOG_TEXTBOX_PROPERTIES( PCB_BASE_EDIT_FRAME* aPare
         m_OrientCtrl->SetString( ii, wxString::Format( "%.1f", rot_list[ii] ) );
 
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
-        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
+        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
     m_borderStyleCombo->Append( DEFAULT_STYLE );
 

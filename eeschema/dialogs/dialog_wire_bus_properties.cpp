@@ -53,7 +53,7 @@ DIALOG_WIRE_BUS_PROPERTIES::DIALOG_WIRE_BUS_PROPERTIES( SCH_EDIT_FRAME* aParent,
     SetInitialFocus( m_lineWidth );
 
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
-        m_typeCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
+        m_typeCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
     m_typeCombo->Append( DEFAULT_STYLE );
 

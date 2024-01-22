@@ -205,7 +205,7 @@ void GRID_CELL_ICON_TEXT_POPUP::Create( wxWindow* aParent, wxWindowID aId,
         // note that the set of icons might be smaller than the set of labels if
         // the last label is <...>.
         if( i < m_icons.size() && m_icons[ i ] != BITMAPS::INVALID_BITMAP )
-            Combo()->Append( m_names[ i ], KiBitmap( m_icons[ i ] ) );
+            Combo()->Append( m_names[ i ], KiBitmapBundle( m_icons[ i ] ) );
         else
             Combo()->Append( m_names[ i ] );
     }

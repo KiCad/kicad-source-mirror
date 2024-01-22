@@ -138,7 +138,7 @@ DIALOG_SHAPE_PROPERTIES::DIALOG_SHAPE_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, 
     }
 
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
-        m_lineStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
+        m_lineStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
     m_lineStyleCombo->Append( DEFAULT_STYLE );
 

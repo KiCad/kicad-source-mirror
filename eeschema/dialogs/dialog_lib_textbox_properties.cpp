@@ -55,7 +55,7 @@ DIALOG_LIB_TEXTBOX_PROPERTIES::DIALOG_LIB_TEXTBOX_PROPERTIES( SYMBOL_EDIT_FRAME*
     m_borderColorSwatch->SetSwatchBackground( schematicBackground );
 
     for( const auto& [ lineStyle, lineStyleDesc ] : lineTypeNames )
-        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
+        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmapBundle( lineStyleDesc.bitmap ) );
 
     m_borderStyleCombo->Append( DEFAULT_STYLE );
 
