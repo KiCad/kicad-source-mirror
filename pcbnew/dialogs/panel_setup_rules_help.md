@@ -159,9 +159,11 @@ True if `A` is a member of the given group. The name can contain wildcards.
 Includes nested membership.
 <br><br>
 
-    A.memberOfFootprint('<footprint_reference>')
-True if `A` is a member of a footprint matching the given reference designator.  The
-reference can contain wildcards.
+    A.memberOfFootprint('<footprint_reference>|<footprint_id>')
+True if `A` is a member of a footprint matching the given reference designator or footprint
+ID.  The parameter can contain wildcards.
+
+NB: If matching against a footprint ID is desired, the parameter must contain a ':'.
 <br><br>
 
     A.memberOfSheet('<sheet_path>')
