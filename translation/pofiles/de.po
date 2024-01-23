@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-23 02:01+0000\n"
+"PO-Revision-Date: 2024-01-24 01:51+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -33496,7 +33496,6 @@ msgstr "Lochgröße X:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:79
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:119
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:173
-#, fuzzy
 msgid "d"
 msgstr "d"
 
@@ -33514,7 +33513,6 @@ msgstr "Pad Größe X:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:439
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:479
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:530
-#, fuzzy
 msgid "w"
 msgstr "w"
 
@@ -38734,7 +38732,7 @@ msgid "%s size differs."
 msgstr "%s Größe weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:276
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs."
 msgstr "%s trapezförmiges Delta weicht ab."
 
@@ -40922,15 +40920,15 @@ msgstr "Mindestfreiraum: %s"
 
 #: pcbnew/pad.cpp:1234
 msgid "Trap"
-msgstr "Fangen"
+msgstr "Trapez"
 
 #: pcbnew/pad.cpp:1235
 msgid "Roundrect"
-msgstr "Rundecken"
+msgstr "Abger. Rechteck"
 
 #: pcbnew/pad.cpp:1236
 msgid "Chamferedrect"
-msgstr "Fasenrichtig"
+msgstr "Abgeschr. Rechteck"
 
 #: pcbnew/pad.cpp:1237
 msgid "CustomShape"
@@ -40980,7 +40978,7 @@ msgstr "NPTH, mechanisch"
 
 #: pcbnew/pad.cpp:1883
 msgid "Trapezoid"
-msgstr "Trapez"
+msgstr "Trapezförmig"
 
 #: pcbnew/pad.cpp:1895
 msgid "Castellated pad"
@@ -44469,7 +44467,6 @@ msgid "Chamfer Lines"
 msgstr "Linien abfasen"
 
 #: pcbnew/tools/edit_tool.cpp:1210
-#, fuzzy
 msgid "Enter chamfer setback:"
 msgstr "Fasungsabsatz eingeben:"
 
