@@ -20328,9 +20328,8 @@ msgid "Exclude from Simulation"
 msgstr "从仿真中排除"
 
 #: eeschema/tools/ee_actions.cpp:888
-#, fuzzy
 msgid "Set the exclude from simulation attribute"
-msgstr "给 %s 添加了“从 BOM 中排除”制造属性。"
+msgstr "设置“排除在仿真之外”的属性"
 
 #: eeschema/tools/ee_actions.cpp:893
 msgid "Include in Simulation"
