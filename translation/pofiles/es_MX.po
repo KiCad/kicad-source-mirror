@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-16 04:06+0000\n"
+"PO-Revision-Date: 2024-01-24 02:24+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v7/es_MX/>\n"
@@ -16366,7 +16366,7 @@ msgstr "Voltaje"
 
 #: eeschema/sim/sim_plot_panel.cpp:369 eeschema/sim/sim_plot_panel.cpp:442
 msgid "Current"
-msgstr "Intensidad"
+msgstr "Corriente"
 
 #: eeschema/sim/sim_plot_panel.cpp:424
 msgid "Voltage (swept)"
