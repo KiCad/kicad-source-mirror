@@ -317,19 +317,20 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
 
 void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 {
-    int  tl = getView()->GetTopLayer();
-    GAL* gal = m_toolMgr->GetView()->GetGAL();
+    int      tl = getView()->GetTopLayer();
+    GAL*     gal = m_toolMgr->GetView()->GetGAL();
+    VECTOR2I pos = aEvent.HasPosition() ? (VECTOR2I) aEvent.Position() : m_startSnapPoint;
 
     controls()->ForceCursorPosition( false );
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
-    m_startItem = pickSingleItem( aEvent.Position(), nullptr, -1, aIgnorePads );
+    m_startItem = pickSingleItem( pos, nullptr, -1, aIgnorePads );
 
     if( !m_gridHelper->GetUseGrid() && m_startItem && !m_startItem->Layers().Overlaps( tl ) )
         m_startItem = nullptr;
 
-    m_startSnapPoint = snapToItem( m_startItem, aEvent.Position() );
+    m_startSnapPoint = snapToItem( m_startItem, pos );
     controls()->ForceCursorPosition( true, m_startSnapPoint );
 }
 
