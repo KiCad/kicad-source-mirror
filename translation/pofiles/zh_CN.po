@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-23 05:21+0000\n"
+"PO-Revision-Date: 2024-01-23 06:16+0000\n"
 "Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -20340,42 +20340,36 @@ msgid "Clear the exclude from simulation attribute"
 msgstr "清除“排除在仿真之外”的属性"
 
 #: eeschema/tools/ee_actions.cpp:899
-#, fuzzy
 msgid "Toggle Exclude from Simulation"
-msgstr "切换从仿真中排除"
+msgstr "切换“排除在仿真之外”"
 
 #: eeschema/tools/ee_actions.cpp:900
-#, fuzzy
 msgid "Toggle the exclude from simulation attribute"
-msgstr "删除 %s “从 BOM 中排除”的制造属性。"
+msgstr "切换“排除在仿真之外”的属性"
 
 #: eeschema/tools/ee_actions.cpp:905
 msgid "Exclude from Board"
 msgstr "从电路板中排除"
 
 #: eeschema/tools/ee_actions.cpp:906
-#, fuzzy
 msgid "Set the exclude from board attribute"
-msgstr "给 %s 添加了“从 BOM 中排除”制造属性。"
+msgstr "设置“排除在板子之外”属性"
 
 #: eeschema/tools/ee_actions.cpp:911
 msgid "Include on Board"
 msgstr "包括在电路板中"
 
 #: eeschema/tools/ee_actions.cpp:912
-#, fuzzy
 msgid "Clear the exclude from board attribute"
-msgstr "给 %s 添加了“从 BOM 中排除”制造属性。"
+msgstr "清楚“排除在板子之外”属性"
 
 #: eeschema/tools/ee_actions.cpp:917
-#, fuzzy
 msgid "Toggle Exclude from Board"
-msgstr "从电路板中排除"
+msgstr "切换“排除在板子之外”"
 
 #: eeschema/tools/ee_actions.cpp:918
-#, fuzzy
 msgid "Toggle the exclude from board attribute"
-msgstr "删除 %s “从 BOM 中排除”的制造属性。"
+msgstr "切换“排除在板子之外”的属性"
 
 #: eeschema/tools/ee_actions.cpp:923
 msgid "Set Do Not Populate"
@@ -20398,9 +20392,8 @@ msgid "Toggle Do Not Populate"
 msgstr "切换DNP属性"
 
 #: eeschema/tools/ee_actions.cpp:937
-#, fuzzy
 msgid "Toggle the do not populate attribute"
-msgstr "切换虚拟元件的 3D 模型"
+msgstr "切换“不要装配”的属性"
 
 #: eeschema/tools/ee_actions.cpp:944
 msgid "Open the library symbol in the Symbol Editor"
@@ -20522,27 +20515,23 @@ msgid "Generate a bill of materials for the current schematic"
 msgstr "生成当前原理图的 BOM"
 
 #: eeschema/tools/ee_actions.cpp:1050
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "生成物料清单... (&M)"
+msgstr "生成历史物料清单 (BOM)..."
 
 #: eeschema/tools/ee_actions.cpp:1051
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
-msgstr "生成当前原理图的 BOM"
+msgstr "为当前原理图生成物料清单（传统生成器）"
 
 #: eeschema/tools/ee_actions.cpp:1057
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "生成物料清单... (&M)"
+msgstr "生成物料清单 (外部)..."
 
 #: eeschema/tools/ee_actions.cpp:1058
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "生成当前原理图的 BOM"
+msgstr "使用外部生成器生成当前原理图的物料清单"
 
 #: eeschema/tools/ee_actions.cpp:1064
 msgid "Export Symbols to Library..."
@@ -20593,14 +20582,12 @@ msgid "Toggle display of hidden text fields"
 msgstr "切换是否显示隐藏的文本字段"
 
 #: eeschema/tools/ee_actions.cpp:1100
-#, fuzzy
 msgid "Show Directive Labels"
-msgstr "指令标签"
+msgstr "显示指示符标签"
 
 #: eeschema/tools/ee_actions.cpp:1101
-#, fuzzy
 msgid "Toggle display of directive labels"
-msgstr "切换胶粘层的显示"
+msgstr "切换指示符标签显示"
 
 #: eeschema/tools/ee_actions.cpp:1106
 msgid "Show ERC Warnings"
@@ -20885,14 +20872,12 @@ msgid "Draw plots with a black background"
 msgstr "用黑色背景绘图"
 
 #: eeschema/tools/ee_actions.cpp:1437
-#, fuzzy
 msgid "Edit Analysis Tab..."
-msgstr "编辑全局标签..."
+msgstr "编辑分析选项卡..."
 
 #: eeschema/tools/ee_actions.cpp:1438
-#, fuzzy
 msgid "Edit the SPICE command and plot setup for the current analysis tab"
-msgstr "为当前绘制编辑仿真命令"
+msgstr "编辑当前分析选项卡的 SPICE 命令和绘图设置"
 
 #: eeschema/tools/ee_actions.cpp:1445
 msgid "Run Simulation"
@@ -20939,9 +20924,8 @@ msgid "Symbol Warnings"
 msgstr "符号警告"
 
 #: eeschema/tools/ee_inspection_tool.cpp:263
-#, fuzzy
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "选择一个封装并与其对应的库进行检查。"
+msgstr "选择一个符号，与其库中的对应符号进行比较。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:274
 #, c-format
@@ -20954,9 +20938,8 @@ msgid "Summary"
 msgstr "总结"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
-#, fuzzy
 msgid "Schematic vs library diff for:"
-msgstr "原理图是只读的。"
+msgstr "原理图与库的差异："
 
 #: eeschema/tools/ee_inspection_tool.cpp:284
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
@@ -20971,9 +20954,8 @@ msgstr "库项目: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:295
 #: pcbnew/tools/board_inspection_tool.cpp:1512
-#, fuzzy
 msgid "The library is not included in the current configuration."
-msgstr "当前配置中未启用库。"
+msgstr "当前配置中不包括该库。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:297
 #: eeschema/tools/ee_inspection_tool.cpp:303
@@ -20993,15 +20975,13 @@ msgstr "库中不再包含项目 %s。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:342
 #: pcbnew/tools/board_inspection_tool.cpp:1546
-#, fuzzy
 msgid "No relevant differences detected."
-msgstr "没有选择层。"
+msgstr "未发现相关差异。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:344
 #: pcbnew/tools/board_inspection_tool.cpp:1548
-#, fuzzy
 msgid "Visual"
-msgstr "视觉部分"
+msgstr "可视"
 
 #: eeschema/tools/ee_inspection_tool.cpp:435
 msgid "No datasheet defined."
@@ -21040,9 +21020,8 @@ msgstr "在文件中没找到图形项。"
 #: eeschema/tools/sch_drawing_tools.cpp:893
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:712
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:801
-#, fuzzy
 msgid "Import Graphic"
-msgstr "导入图形..."
+msgstr "导入图形"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1038
 msgid "Junction location contains no joinable wires and/or pins."
@@ -21086,14 +21065,12 @@ msgid "Symbol Unit"
 msgstr "符号单元"
 
 #: eeschema/tools/sch_edit_tool.cpp:126
-#, fuzzy
 msgid "Pin Function"
-msgstr "结点"
+msgstr "引脚功能"
 
 #: eeschema/tools/sch_edit_tool.cpp:176
-#, fuzzy
 msgid "Pin Helpers"
-msgstr "引脚属性"
+msgstr "引脚助手"
 
 #: eeschema/tools/sch_edit_tool.cpp:455
 msgid "Transform Selection"
@@ -21124,7 +21101,6 @@ msgid "Label value cannot go below zero"
 msgstr "标签值不能小于零"
 
 #: eeschema/tools/sch_edit_tool.cpp:1322
-#, fuzzy
 msgid "Repeat Item"
 msgstr "重复对象"
 
@@ -21145,9 +21121,8 @@ msgid "<empty>"
 msgstr "<空>"
 
 #: eeschema/tools/sch_edit_tool.cpp:2400
-#, fuzzy
 msgid "Slice Wire"
-msgstr "删除连线"
+msgstr "切开走线"
 
 #: eeschema/tools/sch_edit_tool.cpp:2400
 msgid "Break Wire"
@@ -21168,19 +21143,16 @@ msgid "Edit Sheet Page Number"
 msgstr "编辑图纸页码"
 
 #: eeschema/tools/sch_edit_tool.cpp:2541
-#, fuzzy
 msgid "Set Attribute"
 msgstr "设置属性"
 
 #: eeschema/tools/sch_edit_tool.cpp:2578
-#, fuzzy
 msgid "Clear Attribute"
 msgstr "清除属性"
 
 #: eeschema/tools/sch_edit_tool.cpp:2615
-#, fuzzy
 msgid "Toggle Attribute"
-msgstr "属性"
+msgstr "切换属性"
 
 #: eeschema/tools/sch_editor_control.cpp:152
 #, c-format
@@ -21188,9 +21160,8 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "是否将 \"%s\" （及所有子表）恢复到上个保存的版本？"
 
 #: eeschema/tools/sch_editor_control.cpp:342
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "更新原理图中的符号以指向新库？"
+msgstr "将原理图中的电源符号包含到库中？"
 
 #: eeschema/tools/sch_editor_control.cpp:407
 #, c-format
@@ -21271,9 +21242,8 @@ msgid "Press <ESC> to cancel drawing."
 msgstr "按下 <ESC> 取消绘图。"
 
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:1220
-#, fuzzy
 msgid "Draw Wires"
-msgstr "拖动连线"
+msgstr "拖动走线"
 
 #: eeschema/tools/sch_move_tool.cpp:795
 msgid "Press <ESC> to cancel drag."
@@ -21286,9 +21256,8 @@ msgstr "按下 <ESC> 取消移动。"
 
 #: eeschema/tools/sch_move_tool.cpp:1751
 #: eeschema/tools/symbol_editor_move_tool.cpp:505
-#, fuzzy
 msgid "Align"
-msgstr "水平排列"
+msgstr "对齐"
 
 #: eeschema/tools/sch_navigate_tool.cpp:81
 #, c-format
@@ -21296,7 +21265,6 @@ msgid "Page '%s' not found."
 msgstr "未找到 '%s' 页面。"
 
 #: eeschema/tools/simulator_control.cpp:94
-#, fuzzy
 msgid "Open Simulation Workbook"
 msgstr "打开仿真工作簿"
 
@@ -21408,9 +21376,8 @@ msgid "Recently Used"
 msgstr "最近使用"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:173
-#, fuzzy
 msgid "Already Placed"
-msgstr "移动并放置"
+msgstr "已摆放"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:561
 msgid "No footprint specified"
@@ -21461,9 +21428,8 @@ msgid "Clear layer %d?"
 msgstr "清除层 %d？"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:21
-#, fuzzy
 msgid "Active layer name:"
-msgstr "非活动图层："
+msgstr "活动层名称："
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:38
 #: pcbnew/dialogs/dialog_position_relative.cpp:167
@@ -21493,14 +21459,12 @@ msgid "All layers"
 msgstr "所有层"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "All visible layers"
-msgstr "可见层"
+msgstr "所有可见层"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.h:64
-#, fuzzy
 msgid "Layers Settings"
-msgstr "页面设置"
+msgstr "层设置"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:144
 #, c-format
@@ -22726,14 +22690,12 @@ msgstr ""
 "使用格式为 '--define-var key=value' 或 '-D key=value'"
 
 #: kicad/cli/command.h:32
-#, fuzzy
 msgid "Shows help message and exits"
 msgstr "显示帮助信息并退出"
 
 #: kicad/cli/command_fp.h:31
-#, fuzzy
 msgid "Footprint and Footprint Libraries"
-msgstr "载入封装库"
+msgstr "封装和封装库"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
 #, fuzzy
