@@ -1051,13 +1051,19 @@ wxString SCH_FIELD::GetCanonicalName() const
     {
         // These should be stored in canonical format, but just in case:
         if( m_name == _( "Net Class" ) || m_name == wxT( "Net Class" ) )
+        {
             return wxT( "Netclass" );
+        }
         else if( m_name == _( "Sheet References" )
                  || m_name == wxT( "Sheet References" )
                  || m_name == wxT( "Intersheet References" ) )
+        {
             return wxT( "Intersheetrefs" );
+        }
         else
+        {
             return m_name;
+        }
     }
     else
     {

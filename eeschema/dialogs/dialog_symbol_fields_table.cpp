@@ -562,8 +562,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::AddField( const wxString& aFieldName, const wxS
     // Users can add fields with variable names that match the special names in the grid,
     // e.g. ${QUANTITY} so make sure we don't add them twice
     for( int i = 0; i < m_fieldsCtrl->GetItemCount(); i++ )
+    {
         if( m_fieldsCtrl->GetTextValue( i, FIELD_NAME_COLUMN ) == aFieldName )
             return;
+    }
 
     m_dataModel->AddColumn( aFieldName, aLabelValue, addedByUser );
 
@@ -1416,8 +1418,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::ApplyBomPreset( const BOM_PRESET& aPreset )
     else
         m_currentBomPreset = nullptr;
 
-    m_lastSelectedBomPreset =
-            ( m_currentBomPreset && !m_currentBomPreset->readOnly ) ? m_currentBomPreset : nullptr;
+    if( m_currentBomPreset && !m_currentBomPreset->readOnly )
+        m_lastSelectedBomPreset = m_currentBomPreset;
+    else
+        m_lastSelectedBomPreset = nullptr;
 
     updateBomPresetSelection( aPreset.name );
     doApplyBomPreset( aPreset );
@@ -1488,18 +1492,24 @@ void DIALOG_SYMBOL_FIELDS_TABLE::syncBomPresetSelection()
                                        && preset.filterString == current.filterString
                                        && preset.groupSymbols == current.groupSymbols
                                        && preset.excludeDNP == current.excludeDNP ) )
+                                {
                                     return false;
+                                }
 
                                 // Only compare shown or grouped fields
                                 std::vector<BOM_FIELD> A, B;
 
                                 for( const BOM_FIELD& field : preset.fieldsOrdered )
+                                {
                                     if( field.show || field.groupBy )
                                         A.emplace_back( field );
+                                }
 
                                 for( const BOM_FIELD& field : current.fieldsOrdered )
+                                {
                                     if( field.show || field.groupBy )
                                         B.emplace_back( field );
+                                }
 
                                 return A == B;
                             } );

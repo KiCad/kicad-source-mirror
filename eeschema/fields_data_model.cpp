@@ -43,8 +43,10 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::AddColumn( const wxString& aFieldName, const
     m_cols.push_back( { aFieldName, aLabel, aAddedByUser, false, false } );
 
     for( unsigned i = 0; i < m_symbolsList.GetCount(); ++i )
+    {
         if( SCH_SYMBOL* symbol = m_symbolsList[i].GetSymbol() )
             updateDataStoreSymbolField( *symbol, aFieldName );
+    }
 }
 
 
