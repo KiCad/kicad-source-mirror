@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2023 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -269,6 +269,16 @@ void SIMULATOR_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         if( m_schematicFrame && modified )
             m_schematicFrame->OnModify();
     }
+}
+
+
+void SIMULATOR_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged )
+{
+    KIWAY_PLAYER::CommonSettingsChanged( aEnvVarsChanged, aTextVarsChanged );
+
+    auto* cfg = dynamic_cast<EESCHEMA_SETTINGS*>( m_toolManager->GetSettings() );
+    wxASSERT( cfg != nullptr );
+    m_ui->ApplyPreferences( cfg->m_Simulator.preferences );
 }
 
 

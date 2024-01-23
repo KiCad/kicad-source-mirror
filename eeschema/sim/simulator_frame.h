@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2023 CERN
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -161,6 +161,8 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
 
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
+
+    void CommonSettingsChanged( bool aEnvVarsChanged, bool aTextVarsChanged ) override;
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
 

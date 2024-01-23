@@ -1137,6 +1137,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_ANNO_OPTIONS ), _( "Annotation Options" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_COLORS ), _( "Colors" ) );
             book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_FIELD_NAME_TEMPLATES ), _( "Field Name Templates" ) );
+            book->AddLazySubPage( LAZY_CTOR( PANEL_SCH_SIMULATOR ), _( "Simulator" ) );
         }
         catch( ... )
         {

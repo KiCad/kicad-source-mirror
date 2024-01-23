@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2023 CERN
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -32,6 +32,7 @@
 #include <sim/simulator_frame_ui_base.h>
 #include <sim/sim_types.h>
 #include <sim/sim_plot_tab.h>
+#include <sim/sim_preferences.h>
 
 #include <wx/event.h>
 
@@ -184,6 +185,11 @@ public:
     void LoadSettings( EESCHEMA_SETTINGS* aCfg );
 
     void SaveSettings( EESCHEMA_SETTINGS* aCfg );
+
+    /**
+     * Called when settings are changed via the common Preferences dialog.
+     */
+    void ApplyPreferences( const SIM_PREFERENCES& aPrefs );
 
     // adjust the sash dimension of splitter windows after reading
     // the config settings
@@ -342,6 +348,7 @@ private:
     bool                         m_darkMode;
     unsigned int                 m_plotNumber;
     wxTimer                      m_refreshTimer;
+    SIM_PREFERENCES              m_preferences;
 };
 
 #endif // SIMULATOR_FRAME_UI_H

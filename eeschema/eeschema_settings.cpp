@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -531,22 +531,57 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
             &m_Simulator.window.perspective, "" ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.plot_panel_width",
-            &m_Simulator.plot_panel_width, 0 ) );
+        &m_Simulator.view.plot_panel_width, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.plot_panel_height",
-            &m_Simulator.plot_panel_height, 0 ) );
+        &m_Simulator.view.plot_panel_height, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.signal_panel_height",
-            &m_Simulator.signal_panel_height, 0 ) );
+        &m_Simulator.view.signal_panel_height, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.cursors_panel_height",
-            &m_Simulator.cursors_panel_height, 0 ) );
+        &m_Simulator.view.cursors_panel_height, 0 ) );
 
     m_params.emplace_back( new PARAM<int>( "simulator.measurements_panel_height",
-            &m_Simulator.measurements_panel_height, 0 ) );
+        &m_Simulator.view.measurements_panel_height, 0 ) );
 
     m_params.emplace_back( new PARAM<bool>( "simulator.white_background",
-            &m_Simulator.white_background, false ) );
+        &m_Simulator.view.white_background, false ) );
+
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
+            "simulator.mouse_wheel_actions.vertical_unmodified",
+            &m_Simulator.preferences.mouse_wheel_actions.vertical_unmodified,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM,
+            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
+
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
+            "simulator.mouse_wheel_actions.vertical_with_ctrl",
+            &m_Simulator.preferences.mouse_wheel_actions.vertical_with_ctrl,
+            SIM_MOUSE_WHEEL_ACTION::PAN_LEFT_RIGHT,
+            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
+
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
+            "simulator.mouse_wheel_actions.vertical_with_shift",
+            &m_Simulator.preferences.mouse_wheel_actions.vertical_with_shift,
+            SIM_MOUSE_WHEEL_ACTION::PAN_UP_DOWN,
+            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY) );
+
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
+            "simulator.mouse_wheel_actions.vertical_with_alt",
+            &m_Simulator.preferences.mouse_wheel_actions.vertical_with_alt,
+            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY) );
+
+    m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
+            "simulator.mouse_wheel_actions.horizontal",
+            &m_Simulator.preferences.mouse_wheel_actions.horizontal,
+            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY) );
 
     m_params.emplace_back( new PARAM<int>( "symbol_chooser.sash_pos_h",
             &m_SymChooserPanel.sash_pos_h, -1 ) );

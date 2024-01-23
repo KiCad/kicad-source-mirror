@@ -58,6 +58,10 @@ void SIMULATOR_FRAME::ReCreateHToolbar()
     m_toolBar->AddScaledSeparator( this );
     m_toolBar->Add( ACTIONS::zoomInCenter );
     m_toolBar->Add( ACTIONS::zoomOutCenter );
+    m_toolBar->Add( ACTIONS::zoomInHorizontally );
+    m_toolBar->Add( ACTIONS::zoomOutHorizontally );
+    m_toolBar->Add( ACTIONS::zoomInVertically );
+    m_toolBar->Add( ACTIONS::zoomOutVertically );
     m_toolBar->Add( ACTIONS::zoomFitScreen );
 
     m_toolBar->AddScaledSeparator( this );
@@ -117,6 +121,10 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );
     viewMenu->Add( ACTIONS::zoomOutCenter );
+    viewMenu->Add( ACTIONS::zoomInHorizontally );
+    viewMenu->Add( ACTIONS::zoomOutHorizontally );
+    viewMenu->Add( ACTIONS::zoomInVertically );
+    viewMenu->Add( ACTIONS::zoomOutVertically );
     viewMenu->Add( ACTIONS::zoomFitScreen );
 
     viewMenu->AppendSeparator();

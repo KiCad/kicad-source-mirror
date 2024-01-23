@@ -113,6 +113,10 @@ compile_commands.json
 .kdev4/
 *.kdev4
 
+# Qt Creator
+CMakeLists.txt.user
+*.autosave
+
 # Translations
 *.mo
 i18n_status.svg

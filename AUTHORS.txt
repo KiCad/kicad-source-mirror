@@ -51,6 +51,7 @@ Thomas Pointhuber <thomas.pointhuber[at]gmx-dot-at>
 Roberto Fernandez Bautista <roberto.fer.bau[at]gmail-dot-com>
 Mikołaj Wielgus <wielgusmikolaj[at]gmail-dot-com>
 Mike Williams <mike[at]mikebwilliams-dot-com>
+Emile Cormier <emile.cormier.jr[at]gmail-dot-com>
 
 See git repo on GitLab for contributors at
 https://gitlab.com/kicad/code/kicad/-/graphs/master

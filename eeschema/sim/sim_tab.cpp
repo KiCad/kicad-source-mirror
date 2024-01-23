@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2023 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Sylwester Kocjan <s.kocjan@o2.pl>
  *
  * This program is free software; you can redistribute it and/or
@@ -65,6 +65,10 @@ bool SIM_TAB::IsPlottable( SIM_TYPE aSimType )
     default:
         return false;
     }
+}
+
+void SIM_TAB::ApplyPreferences( const SIM_PREFERENCES& /*aPrefs*/ )
+{
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2023 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -567,6 +567,34 @@ TOOL_ACTION ACTIONS::zoomOutCenter( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Zoom Out" ) )
         .Icon( BITMAPS::zoom_out ) );
+
+TOOL_ACTION ACTIONS::zoomInHorizontally( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomInHorizontally" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Zoom In Horizontally" ) )
+        .Tooltip( _( "Zoom In Horizontally" ) )
+        .Icon( BITMAPS::zoom_in_horizontally ) );
+
+TOOL_ACTION ACTIONS::zoomOutHorizontally( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomOutHorizontally" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Zoom Out Horizontally" ) )
+        .Tooltip( _( "Zoom Out Horizontally" ) )
+        .Icon( BITMAPS::zoom_out_horizontally ) );
+
+TOOL_ACTION ACTIONS::zoomInVertically( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomInVertically" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Zoom In Vertically" ) )
+        .Tooltip( _( "Zoom In Vertically" ) )
+        .Icon( BITMAPS::zoom_in_vertically ) );
+
+TOOL_ACTION ACTIONS::zoomOutVertically( TOOL_ACTION_ARGS()
+        .Name( "common.Control.zoomOutVertically" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Zoom Out Vertically" ) )
+        .Tooltip( _( "Zoom Out Vertically" ) )
+        .Icon( BITMAPS::zoom_out_vertically ) );
 
 TOOL_ACTION ACTIONS::zoomCenter( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomCenter" )

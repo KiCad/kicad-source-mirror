@@ -7,7 +7,7 @@
 // Created:         21/07/2003
 // Last edit:       05/08/2016
 // Copyright:       (c) David Schalig, Davide Rondini
-// Copyright        (c) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+// Copyright        (c) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
 // Licence:         wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -905,6 +905,38 @@ typedef std::deque<mpLayer*> wxLayerList;
 class WXDLLIMPEXP_MATHPLOT mpWindow : public wxWindow
 {
 public:
+    /**
+     * Enumerates the possible mouse wheel actions that can be performed on the plot.
+     */
+    enum class MouseWheelAction
+    {
+        NONE,
+        PAN_LEFT_RIGHT,
+        PAN_RIGHT_LEFT,
+        PAN_UP_DOWN,
+        ZOOM,
+        ZOOM_HORIZONTALLY,
+        ZOOM_VERTICALLY,
+        COUNT // Internal use only
+    };
+
+    /**
+     * Contains the set of modified mouse wheel actions that can be performed on the plot.
+     */
+    struct MouseWheelActionSet
+    {
+        /* If this bundled wxMathPlot implementation is to remain single-header and not dependent
+         * on any part of KiCad, then the SIM_MOUSE_WHEEL_ACTION_SET struct must be duplicated
+         * here. SIM_PLOT_TAB::convertMouseWheelActions is used to convert from
+         * SIM_MOUSE_WHEEL_ACTION_SET to mpWindow::MouseWheelActionSet. */
+
+        MouseWheelAction verticalUnmodified;
+        MouseWheelAction verticalWithCtrl;
+        MouseWheelAction verticalWithShift;
+        MouseWheelAction verticalWithAlt;
+        MouseWheelAction horizontal;
+    };
+
     mpWindow();
     mpWindow( wxWindow* parent, wxWindowID id );
     ~mpWindow();
@@ -1068,9 +1100,8 @@ public:
      */
     void EnableMousePanZoom( bool enabled ) { m_enableMouseNavigation = enabled; }
 
-    /** Enable/disable trackpad friendly panning (2-axis scroll wheel)
-     */
-    void EnableMouseWheelPan( bool enabled ) { m_enableMouseWheelPan = enabled; }
+    /** Set the pan/zoom actions corresponding to mousewheel/trackpad events. */
+    void SetMouseWheelActions( const MouseWheelActionSet& s ) {m_mouseWheelActions = s;}
 
     /** Set view to fit global bounding box of all plot layers and refresh display.
      *  Scale and position will be set to show all attached mpLayers.
@@ -1085,21 +1116,24 @@ public:
      *  as the "desired borders", since this use will be invoked only when printing.
      */
     void Fit( double xMin, double xMax, double yMin, double yMax,
-              const wxCoord* printSizeX = nullptr, const wxCoord* printSizeY = nullptr );
+              const wxCoord* printSizeX = nullptr, const wxCoord* printSizeY = nullptr,
+              wxOrientation directions = wxBOTH );
 
     /** Zoom into current view and refresh display
      * @param centerPoint The point (pixel coordinates) that will stay in the same
      * position on the screen after the zoom (by default, the center of the mpWindow).
      */
     void ZoomIn( const wxPoint& centerPoint = wxDefaultPosition );
-    void ZoomIn( const wxPoint& centerPoint, double zoomFactor );
+    void ZoomIn( const wxPoint& centerPoint, double zoomFactor,
+                 wxOrientation directions = wxBOTH );
 
     /** Zoom out current view and refresh display
      * @param centerPoint The point (pixel coordinates) that will stay in the same
      * position on the screen after the zoom (by default, the center of the mpWindow).
      */
     void ZoomOut( const wxPoint& centerPoint = wxDefaultPosition );
-    void ZoomOut( const wxPoint& centerPoint, double zoomFactor );
+    void ZoomOut( const wxPoint& centerPoint, double zoomFactor,
+                  wxOrientation directions = wxBOTH );
 
     /** Zoom view fitting given coordinates to the window (p0 and p1 do not need to be in any specific order)
      */
@@ -1219,7 +1253,7 @@ public:
      *  @return reference to axis colour used in theme */
     const wxColour& GetAxesColour() { return m_axColour; };
 
-    /** Limit zooming & panning to the area used by the plots */
+    /** Enable limiting of zooming & panning to the area used by the plots */
     void LimitView( bool aEnable )
     {
         m_enableLimitedView = aEnable;
@@ -1233,12 +1267,15 @@ public:
     int UndoZoomStackSize() const { return m_undoZoomStack.size(); }
     int RedoZoomStackSize() const { return m_redoZoomStack.size(); }
 
-    void AdjustLimitedView();
+    /** Limits the zoomed or panned view to the area used by the plots. */
+    void AdjustLimitedView( wxOrientation directions = wxBOTH );
 
     void OnFit( wxCommandEvent& event );
     void OnCenter( wxCommandEvent& event );
 
 protected:
+    static MouseWheelActionSet defaultMouseWheelActions();
+
     void pushZoomUndo( const std::array<double, 4>& aZoom );
 
     void OnPaint( wxPaintEvent& event );             // !< Paint handler, will plot all attached layers
@@ -1258,19 +1295,12 @@ protected:
     void onMouseLeftDown( wxMouseEvent& event );     // !< Mouse left click (for rect zoom)
     void onMouseLeftRelease( wxMouseEvent& event );  // !< Mouse left click (for rect zoom)
 
-    bool CheckXLimits( double& desiredMax, double& desiredMin ) const
-    {
-        return !( m_enableLimitedView
-                  && (desiredMax > m_maxX - m_marginRight / m_scaleX
-                      || desiredMin < m_minX - m_marginLeft / m_scaleX) );
-    }
+    void DoZoom( const wxPoint& centerPoint, double zoomFactor, wxOrientation directions );
+    void RecomputeDesiredX( double& min, double& max );
+    void RecomputeDesiredY( double& min, double& max );
+    wxOrientation ViewNeedsRefitting( wxOrientation directions ) const;
 
-    bool CheckYLimits( double& desiredMax, double& desiredMin ) const
-    {
-        return !( m_enableLimitedView
-                  && (desiredMax > m_maxY + m_marginTop / m_scaleY
-                      || desiredMin < m_minY - m_marginBottom / m_scaleY) );
-    }
+    void PerformMouseWheelAction( wxMouseEvent& event, MouseWheelAction action );
 
     /** Recalculate global layer bounding box, and save it in m_minX,...
      * \return true if there is any valid BBox information.
@@ -1309,10 +1339,18 @@ protected:
 
     bool m_yLocked;
 
-    /** These are updated in Fit() only, and may be different from the real borders
-     * (layer coordinates) only if lock aspect ratio is true.
+    /** These are updated in Fit, ZoomIn, ZoomOut, ZoomRect, SetXView, SetYView and may be different
+     *  from the real borders (layer coordinates) only if lock aspect ratio is true.
+     *
+     *  @note They use the plot area as their coordinate system, and not the layer coordinate
+     *        system used by m_posX/Y.
      */
     double m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax;
+
+    // These are gaps between the curve extrema and the edges of the plot area, expressed as
+    // a factor of global layer bounding box width/height.
+    double m_topBottomPlotGapFactor;
+    double m_leftRightPlotGapFactor;
 
     int m_marginTop, m_marginRight, m_marginBottom, m_marginLeft;
 
@@ -1321,11 +1359,11 @@ protected:
     wxBitmap*   m_buff_bmp;                 // !< For double buffering
     bool    m_enableDoubleBuffer;           // !< For double buffering
     bool    m_enableMouseNavigation;        // !< For pan/zoom with the mouse.
-    bool    m_enableMouseWheelPan;          // !< Trackpad pan/zoom
     bool    m_enableLimitedView;
+    MouseWheelActionSet m_mouseWheelActions;
     wxPoint m_mouseMClick;                  // !< For the middle button "drag" feature
     wxPoint m_mouseLClick;                  // !< Starting coords for rectangular zoom selection
-    mpInfoLayer* m_movingInfoLayer;          // !< For moving info layers over the window area
+    mpInfoLayer* m_movingInfoLayer;         // !< For moving info layers over the window area
     bool m_zooming;
     wxRect m_zoomRect;
     std::stack<std::array<double, 4>> m_undoZoomStack;
@@ -1333,6 +1371,14 @@ protected:
 
     DECLARE_DYNAMIC_CLASS( mpWindow )
     DECLARE_EVENT_TABLE()
+
+private:
+    struct DelegatingContructorTag {};
+
+    template <typename... Ts>
+    mpWindow( DelegatingContructorTag, Ts&&... windowArgs );
+
+    void initializeGraphicsContext();
 };
 
 // -----------------------------------------------------------------------------

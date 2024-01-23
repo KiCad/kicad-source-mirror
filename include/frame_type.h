@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -80,6 +80,7 @@ enum FRAME_T
     PANEL_SCH_ANNO_OPTIONS,
     PANEL_SCH_COLORS,
     PANEL_SCH_FIELD_NAME_TEMPLATES,
+    PANEL_SCH_SIMULATOR,
 
     PANEL_FP_DISPLAY_OPTIONS,
     PANEL_FP_GRIDS,

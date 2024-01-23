@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -248,18 +248,36 @@ int SIMULATOR_CONTROL::Zoom( const TOOL_EVENT& aEvent )
 {
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
     {
+        mpWindow* plot = plotTab->GetPlotWin();
+
         if( aEvent.IsAction( &ACTIONS::zoomInCenter ) )
         {
-            plotTab->GetPlotWin()->ZoomIn();
+            plot->ZoomIn();
         }
         else if( aEvent.IsAction( &ACTIONS::zoomOutCenter ) )
         {
-            plotTab->GetPlotWin()->ZoomOut();
+            plot->ZoomOut();
+        }
+        else if( aEvent.IsAction( &ACTIONS::zoomInHorizontally ) )
+        {
+            plot->ZoomIn( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxHORIZONTAL );
+        }
+        else if( aEvent.IsAction( &ACTIONS::zoomOutHorizontally ) )
+        {
+            plot->ZoomOut( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxHORIZONTAL );
+        }
+        else if( aEvent.IsAction( &ACTIONS::zoomInVertically ) )
+        {
+            plot->ZoomIn( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxVERTICAL );
+        }
+        else if( aEvent.IsAction( &ACTIONS::zoomOutVertically ) )
+        {
+            plot->ZoomOut( wxDefaultPosition, mpWindow::zoomIncrementalFactor, wxVERTICAL );
         }
         else if( aEvent.IsAction( &ACTIONS::zoomFitScreen ) )
         {
             wxCommandEvent dummy;
-            plotTab->GetPlotWin()->OnFit( dummy );
+            plot->OnFit( dummy );
         }
     }
 
@@ -519,6 +537,10 @@ void SIMULATOR_CONTROL::setTransitions()
 
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomInCenter.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomOutCenter.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomInHorizontally.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomOutHorizontally.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomInVertically.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomOutVertically.MakeEvent() );
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomFitScreen.MakeEvent() );
     Go( &SIMULATOR_CONTROL::UndoZoom,               ACTIONS::zoomUndo.MakeEvent() );
     Go( &SIMULATOR_CONTROL::RedoZoom,               ACTIONS::zoomRedo.MakeEvent() );

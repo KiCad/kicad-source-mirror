@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@
 #include <symbol_lib_table.h>
 #include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/panel_grid_settings.h>
+#include <dialogs/panel_simulator_preferences.h>
 #include <dialogs/panel_sym_lib_table.h>
 #include <kiway.h>
 #include <settings/settings_manager.h>
@@ -293,6 +294,9 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 
         case PANEL_SCH_FIELD_NAME_TEMPLATES:
             return new PANEL_TEMPLATE_FIELDNAMES( aParent, nullptr );
+
+        case PANEL_SCH_SIMULATOR:
+            return new PANEL_SIMULATOR_PREFERENCES( aParent );
 
         default:
             return nullptr;

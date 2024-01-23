@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016-2023 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Sylwester Kocjan <s.kocjan@o2.pl>
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 #ifndef __SIM_PLOT_PANEL_BASE_H
 #define __SIM_PLOT_PANEL_BASE_H
 
+#include <sim/sim_preferences.h>
 #include <sim/sim_types.h>
 #include <sim/spice_circuit_model.h>
 #include <wx/panel.h>
@@ -43,6 +44,8 @@ public:
     static bool IsPlottable( SIM_TYPE aSimType );
 
     virtual void OnLanguageChanged() = 0;
+
+    virtual void ApplyPreferences( const SIM_PREFERENCES& aPrefs );
 
     SIM_TYPE GetSimType() const;
 

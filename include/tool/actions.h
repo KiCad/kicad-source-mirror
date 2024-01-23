@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -116,6 +116,10 @@ public:
     static TOOL_ACTION zoomOut;
     static TOOL_ACTION zoomInCenter;
     static TOOL_ACTION zoomOutCenter;
+    static TOOL_ACTION zoomInHorizontally;
+    static TOOL_ACTION zoomOutHorizontally;
+    static TOOL_ACTION zoomInVertically;
+    static TOOL_ACTION zoomOutVertically;
     static TOOL_ACTION zoomCenter;
     static TOOL_ACTION zoomFitScreen;
     static TOOL_ACTION zoomFitObjects; // Zooms to bbox of items on screen (except page border)
