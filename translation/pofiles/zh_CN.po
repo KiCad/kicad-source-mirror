@@ -21,7 +21,7 @@
 # Eric <hamburger1024@duck.com>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # wh201906 <wh201906@yandex.com>, 2023.
-# Hubert Hu <qinghan.hu@gmail.com>, 2023.
+# Hubert Hu <qinghan.hu@gmail.com>, 2023, 2024.
 # Li Yidong <alenks@foxmail.com>, 2023, 2024.
 # 欠陥電気 <Misaka13514@gmail.com>, 2023.
 # Pinpang Liao <pinpang@aliyun.com>, 2023.
@@ -34,8 +34,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-19 12:00+0000\n"
-"Last-Translator: Lao·Zhu <2208213223@qq.com>\n"
+"PO-Revision-Date: 2024-01-23 05:21+0000\n"
+"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -802,19 +802,19 @@ msgid "Background gradient end color"
 msgstr "背景渐变结束颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"保存和恢复图层可见性组合。\n"
+"保存并恢复图层可见性组合。\n"
 "使用 %s+Tab 激活选择器。\n"
-"按下 %s 时， 连续的选项卡将在弹出窗口的预设中循环。"
+"按住 %s 的同时连续 Tab 键，可在弹出窗口中循环浏览预设。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
@@ -823,7 +823,7 @@ msgid ""
 msgstr ""
 "保存并恢复视图位置和缩放。\n"
 "使用 %s+Tab 激活选择器。\n"
-"按下 %s 时，连续的选项卡将在弹出窗口的视角中循环。"
+"按住 %s 的同时连续 Tab 键将在弹出窗口中循环切换视口。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:438
 msgid "Left double click or middle click to change color"
@@ -987,9 +987,8 @@ msgid "Show filled areas in zones"
 msgstr "显示填充的敷铜"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "对非电镀的铜使用裸铜色"
+msgstr "使用裸铜颜色表示未镀铜（慢）"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1694,9 +1693,8 @@ msgid "User layer drawings"
 msgstr "User.Drawings"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer comments"
-msgstr "ECO1 用户层"
+msgstr "用户注释层"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -1992,9 +1990,8 @@ msgid "Additional Contributions By"
 msgstr "附加贡献"
 
 #: common/dialog_about/AboutDialog_main.cpp:1136
-#, fuzzy
 msgid "Librarian Team"
-msgstr "KiCad 库团队"
+msgstr "库团队"
 
 #: common/dialog_about/AboutDialog_main.cpp:1208
 msgid "3D models by"
@@ -2013,9 +2010,8 @@ msgid "Icons by"
 msgstr "图标设计"
 
 #: common/dialog_about/AboutDialog_main.cpp:1255
-#, fuzzy
 msgid "Package Developers"
-msgstr "开发人员"
+msgstr "软件包开发人员"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -3195,9 +3191,8 @@ msgid "Title"
 msgstr "标题"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "封装位置"
+msgstr "将点移动到位置"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:197 common/widgets/lib_tree.cpp:265
@@ -3996,9 +3991,8 @@ msgid "Grids:"
 msgstr "网格："
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "快速切换"
+msgstr "网格快速切换"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -4014,9 +4008,8 @@ msgid "Grid 2:"
 msgstr "网格 2："
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:705
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "项特定网格"
+msgstr "网格覆盖"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
 msgid "Connected items:"
@@ -4277,9 +4270,8 @@ msgid "Pan left/right:"
 msgstr "向左/向右平移："
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
-#, fuzzy
 msgid "Reverse"
-msgstr "还原"
+msgstr "反向"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid "Pan left/right with horizontal movement"
@@ -5110,9 +5102,8 @@ msgid "Reference Image"
 msgstr "参考图片"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:196
-#, fuzzy
 msgid "Generator"
-msgstr "生成"
+msgstr "生成器"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:376 common/eda_item.cpp:397
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_textbox.cpp:445
@@ -5247,9 +5238,8 @@ msgid "Draw Item"
 msgstr "绘制项目"
 
 #: common/eda_shape.cpp:66
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "防散热导线宽度"
+msgstr "热焊盘辐条"
 
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:743
 msgid "Number Box"
@@ -5285,9 +5275,8 @@ msgid "Pad Number Box"
 msgstr "焊盘编号框"
 
 #: common/eda_shape.cpp:706 pcbnew/pcb_shape.cpp:750
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "防散热导线宽度"
+msgstr "热焊盘辐条模板"
 
 #: common/eda_shape.cpp:707 common/eda_shape.cpp:720
 msgid "Unrecognized"
@@ -5619,9 +5608,8 @@ msgid "min"
 msgstr "最小"
 
 #: common/eda_units.cpp:484
-#, fuzzy
 msgid "opt"
-msgstr "上对齐"
+msgstr "最优"
 
 #: common/eda_units.cpp:492 pcbnew/generators/pcb_tuning_pattern.cpp:208
 msgid "max"
@@ -5904,18 +5892,17 @@ msgid "Could not get repository head"
 msgstr "无法获取存储库的 HEAD"
 
 #: common/git/git_pull_handler.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr "找不到带参数 '%s' 的 Spice 项目"
+msgstr "无法获取引用 '%s' 的引用 OID"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:54
 msgid "Failed to perform checkout operation."
 msgstr "执行检出操作失败。"
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "无法从 \"%s\" 加载图片。"
+msgstr "无法查找提交 '{}'"
 
 #: common/git/git_pull_handler.cpp:249
 msgid "Could not merge commits"
@@ -5926,9 +5913,8 @@ msgid "Could not get repository index"
 msgstr "无法获取仓库索引"
 
 #: common/git/git_pull_handler.cpp:265
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "无法打开配置文件"
+msgstr "无法获取冲突迭代器"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
 msgid "Changed"
@@ -5956,12 +5942,12 @@ msgid "Received %u of %u objects"
 msgstr "接收了 %u 个对象，共 %u 个"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "* [更新]  %s .. %s  %s"
+msgstr "* [已更新] %s .. %s %s"
 
 #: common/git/kicad_git_common.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
 msgstr "* [新建] %s %s"
 
@@ -5971,7 +5957,7 @@ msgid "Writing objects: %d%% (%d/%d), %d bytes"
 msgstr "正在写入对象：%d%%（%d/%d），%d 字节"
 
 #: common/git/kicad_git_common.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
 msgstr "* [拒绝] %s (%s)"
 
@@ -6233,24 +6219,20 @@ msgid "DXF dimensions not currently supported."
 msgstr "尚不支持DXF标注（dimensions ）。"
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "尚不支持编译屏蔽。"
+msgstr "尚不支持 DXF 网格。"
 
 #: common/import_gfx/dxf_import_plugin.h:513
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "尚不支持编译屏蔽。"
+msgstr "尚不支持 DXF 曲线。"
 
 #: common/import_gfx/dxf_import_plugin.h:518
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
 msgstr "尚不支持 DXF 3dfaces。"
 
 #: common/import_gfx/dxf_import_plugin.h:523
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "尚不支持DXF solids。"
+msgstr "尚不支持DXF 实体。"
 
 #: common/import_gfx/dxf_import_plugin.h:528
 msgid "DXF images not currently supported."
@@ -6344,9 +6326,9 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "半径为 %f 且角度为 %f 的无效圆弧"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "从“%s”解析数值失败"
+msgstr "从 '%s' 解析数值失败"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
 #, c-format
@@ -6755,9 +6737,8 @@ msgid "Edit options..."
 msgstr "编辑选项..."
 
 #: common/lib_table_grid_tricks.cpp:33
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "库 \"%s\" 的选项"
+msgstr "该库条目的编辑选项"
 
 #: common/lib_table_grid_tricks.cpp:63
 msgid "Activate selected"
@@ -6768,19 +6749,17 @@ msgid "Deactivate selected"
 msgstr "停用所选"
 
 #: common/lib_table_grid_tricks.cpp:69
-#, fuzzy
 msgid "Set visible flag"
-msgstr "设置可见"
+msgstr "设置可视标记"
 
 #: common/lib_table_grid_tricks.cpp:72
-#, fuzzy
 msgid "Unset visible flag"
-msgstr "取消设置可见"
+msgstr "取消可视标记"
 
 #: common/lib_table_grid_tricks.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "库位置：%s"
+msgstr "%s 的库设置..."
 
 #: common/lib_tree_model.cpp:149
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -6858,9 +6837,8 @@ msgid "Dismiss"
 msgstr "忽略"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "齐行"
+msgstr "通知"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
@@ -7194,14 +7172,12 @@ msgid "Cancel current tool"
 msgstr "取消当前工具"
 
 #: common/tool/actions.cpp:154
-#, fuzzy
 msgid "Finish"
 msgstr "完成"
 
 #: common/tool/actions.cpp:155
-#, fuzzy
 msgid "Finish current tool"
-msgstr "当前工具"
+msgstr "结束当前工具"
 
 #: common/tool/actions.cpp:162
 msgid "Show Context Menu"
@@ -7514,9 +7490,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "切换到快速网格 2"
 
 #: common/tool/actions.cpp:658
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "切换到快速网格 1"
+msgstr "快速切换网格"
 
 #: common/tool/actions.cpp:665
 msgid "Switch to Next Grid"
@@ -8162,9 +8137,8 @@ msgid "Reset to Defaults"
 msgstr "重置为默认值"
 
 #: common/widgets/paged_dialog.cpp:90
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "在“访达”中显示主题文件"
+msgstr "在查找器中显示首选项"
 
 #: common/widgets/paged_dialog.cpp:92
 msgid "Open Preferences Directory"
@@ -8241,9 +8215,8 @@ msgid "Clear Assigned Hotkey"
 msgstr "清除关联的快捷键"
 
 #: common/widgets/widget_hotkey_list.cpp:452
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "清除关联的快捷键"
+msgstr "清除指定备选的快捷键"
 
 #: common/widgets/widget_hotkey_list.cpp:453
 msgid "Restore Defaults"
@@ -9636,7 +9609,6 @@ msgid "Password:"
 msgstr "密码："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
 msgstr "连接字符串："
 
@@ -9656,9 +9628,8 @@ msgid "Reload the database library configuration file"
 msgstr "重新加载数据库库文件的配置文件"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "正在缓存"
+msgstr "缓存"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
 msgid "Cache size:"
@@ -9666,14 +9637,12 @@ msgstr "缓存大小："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
-#, fuzzy
 msgid "How many database queries to cache"
-msgstr "要显示多少位精度"
+msgstr "要缓存多少次数据库查询"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "缓存超时时间："
+msgstr "缓存超时："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
@@ -10022,12 +9991,10 @@ msgstr "编写指令以保存所有电流 (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:319
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
-#, fuzzy
 msgid "Save all power dissipations"
 msgstr "保存所有耗散功率"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr "要保存所有元件的耗散功率，请使用以下指令：(.probe p(<item>))"
@@ -10379,9 +10346,8 @@ msgstr "按网络筛选项目："
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:91
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:121
-#, fuzzy
 msgid "Selected items only"
-msgstr "仅选择 (&S)"
+msgstr "仅选中的对象"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
@@ -10409,9 +10375,8 @@ msgid "-- leave unchanged --"
 msgstr "-- 保持不变 --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:248
-#, fuzzy
 msgid "(labels only)"
-msgstr "(仅限字段)"
+msgstr "(仅标签)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 msgid "H Align:"
@@ -10522,14 +10487,12 @@ msgid "Image Properties"
 msgstr "图片属性"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junction"
-msgstr "添加结点"
+msgstr "编辑结点"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "结点"
+msgstr "编辑结点"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -11199,14 +11162,13 @@ msgid "Has alternate body style (De Morgan)"
 msgstr "存在备用主体样式（德摩根）"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:191
-#, fuzzy
 msgid ""
 "Check this option if the symbol has an alternate body style for a De Morgan "
 "logic equivalence.\n"
 "For instance, this should be checked for a NAND gate to provide an alternate "
 "representation as an OR gate with inverted inputs."
 msgstr ""
-"如果符号具有德摩根逻辑等价的替代主体样式，请选中此选项。\n"
+"如果符号具有 De Morgan 逻辑等价的替代主体样式，请选中此选项。\n"
 "例如，对于与非门，应该选中此选项以提供作为具有反转输入的或门的替代表示。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
@@ -11351,12 +11313,10 @@ msgid "Text Box Properties"
 msgstr "文本框属性"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Line"
 msgstr "编辑线条"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Lines"
 msgstr "编辑线条"
 
@@ -11764,9 +11724,8 @@ msgid "PDF Options"
 msgstr "PDF 选项"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "生成用于制造的 Gerbers"
+msgstr "生成属性弹窗"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 msgid "Other options"
@@ -11826,7 +11785,6 @@ msgid "Instances of this symbol (%d items):"
 msgstr "此符号的实例（%d 项）："
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
-#, fuzzy
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -11834,11 +11792,11 @@ msgid ""
 "This setting can be changed from the \"Preferences\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
-"确定不再显示恢复助手工具吗?\n"
+"停止显示此工具?\n"
 "不会做任何变更。\n"
 "\n"
-"该设置可以从“符号库”对话框进行变更，\n"
-"并且可以从 “工具” 菜单手动激活该工具。"
+"可以通过 \"首选项\" 对话框更改此设置、\n"
+"也可以通过 \"工具\" 菜单手动激活该工具。"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
 msgid "Symbols to update:"
@@ -11925,14 +11883,12 @@ msgstr "网络类"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
-#, fuzzy
 msgid "BOM Presets"
-msgstr "预设"
+msgstr "BOM 预设"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
-#, fuzzy
 msgid "BOM Format Presets"
-msgstr "格式 %s"
+msgstr "BOM 格式预设"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -12229,7 +12185,6 @@ msgid "A frequency range must be specified."
 msgstr "必须指定一个或多个层。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:611
-#, fuzzy
 msgid "New Simulation Tab"
 msgstr "新的仿真选项卡"
 
@@ -12429,9 +12384,8 @@ msgid "Input signals:"
 msgstr "输入信号："
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
-#, fuzzy
 msgid "Linearize inputs before performing FFT"
-msgstr "在执行FFT前将输入进行线性化"
+msgstr "在执行 FFT 之前对输入进行线性化处理"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
 msgid "Measured node:"
@@ -12450,9 +12404,8 @@ msgid "Noise source:"
 msgstr "噪声源："
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
-#, fuzzy
 msgid "Save contributions from all noise generators"
-msgstr "保留所有噪声发生器的生成的内容"
+msgstr "保存所有噪声发生器生成的内容"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:526
 msgid "Compute noise current correlation matrix"
@@ -12571,14 +12524,12 @@ msgid "Show legend"
 msgstr "显示图例"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:809
-#, fuzzy
 msgid "Dotted current/phase"
 msgstr "点电流/相位"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:819
-#, fuzzy
 msgid "Margins:"
-msgstr "外边距"
+msgstr "余量："
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:829
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:551
@@ -12789,7 +12740,7 @@ msgstr "有差异的"
 #: eeschema/dialogs/dialog_sim_model_base.cpp:76
 #, fuzzy
 msgid "Pin model:"
-msgstr "线条模型"
+msgstr "引脚模型"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:83
 msgid "Waveform:"
@@ -12953,19 +12904,16 @@ msgid "Field name %s already exists. Cannot rename over existing field."
 msgstr "字段 \"%s\" 已经存在，无法重命名为一个现有的字段。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
-#, fuzzy
 msgid "The Quantity column cannot be grouped by."
-msgstr "无法隐藏“位号”列。"
+msgstr "数量列不能被分组"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:850
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "无法隐藏“位号”列。"
+msgstr "Item 列不能被分组"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1197
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "生成BOM (物料清单)"
+msgstr "BOM (物料清单)输出文件"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1209
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1218
@@ -12973,11 +12921,10 @@ msgid "BOM Output File"
 msgstr "BOM输出文件"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1216
-#, fuzzy
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
-msgstr "不能进行相对路径（目标卷从文件卷不同）！"
+msgstr "无法设置相对路径（目标卷与原理图文件卷不同）！"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1229
 msgid "Unsaved data"
@@ -12988,9 +12935,8 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "更改未保存。导出未保存数据吗？"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1251
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "未输入文件名"
+msgstr "导出器中未指定文件名"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1265
 #, c-format
@@ -13014,9 +12960,8 @@ msgstr "完成写入BOM文件 \"%s\"。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1587
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1988
-#, fuzzy
 msgid "BOM preset name:"
-msgstr "层预设名称："
+msgstr "BOM 预设名称："
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1587
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1988
@@ -13034,9 +12979,8 @@ msgstr ""
 "请使用一个不同的名称。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
-#, fuzzy
 msgid "View presets:"
-msgstr "预设："
+msgstr "预设视图："
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:100
 msgid "Exclude DNP"
@@ -13055,19 +12999,17 @@ msgid "Scope:"
 msgstr "范围："
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Entire project"
-msgstr "解压工程"
+msgstr "整个项目"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:169
-#, fuzzy
 msgid "Recursive"
-msgstr "递归层级"
+msgstr "递归"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:172
 #, fuzzy
 msgid "Cross-probe action:"
-msgstr "选区交叉探测"
+msgstr "交叉探测动作"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:176
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -13084,9 +13026,8 @@ msgid "Edit"
 msgstr "编辑 (&E)"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "字段界定符："
+msgstr "字段分隔符："
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
@@ -13094,9 +13035,8 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "String delimiter:"
-msgstr "字符串界定符："
+msgstr "字符串分隔符："
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "\""
@@ -13107,9 +13047,8 @@ msgid "Reference delimiter:"
 msgstr "位号界定符："
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Range delimiter:"
-msgstr "Range 界定符："
+msgstr "范围分隔符："
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -13311,7 +13250,6 @@ msgid ""
 msgstr "由于你对工程文件夹 \"%s\" 的权限不足，因此无法重新映射。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:75
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -13322,10 +13260,11 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"此原理图当前使用工程符号库表查找加载库符号的方法。 KiCad 将尝试映射现有符号以"
-"使用新的符号库表。 重新映射将变更某些工程文件, 原理图可能与旧版本的 KiCad 不"
-"兼容。 如果需要还原任何变更, 则所有变更的文件都将备份到项目文件夹中的  "
-"\"remap_backup \" 文件夹中。 如果选择跳过此步骤, 你将负责手动重新映射符号。"
+"此原理图目前使用项目符号库表查找的方法来加载符号库符号。 KiCad "
+"将尝试映射现有符号以使用新符号库表。 重新映射将更改某些项目文件，"
+"原理图可能与旧版本的 KiCad 不兼容。 如果需要恢复任何更改，"
+"所有被更改的文件都将备份到项目文件夹中的 \"scatch-backup\" 文件夹。 "
+"如果您选择跳过此步骤，您将负责手动重新映射符号。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
@@ -13542,9 +13481,8 @@ msgid "Wire/Bus"
 msgstr "导线/总线"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:232
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "迁移总线"
+msgstr "线/总线"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -13561,12 +13499,11 @@ msgstr "导线 & 总线属性"
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
 #, fuzzy
 msgid "Bill of Materials Presets:"
-msgstr "BOM (物料清单)"
+msgstr "BOM(物料清单)预设"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
-#, fuzzy
 msgid "Bill of Materials Formatting Presets:"
-msgstr "物料清单生成帮助"
+msgstr "BOM(物料清单)格式预设:"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
@@ -13693,9 +13630,8 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "当网络在 PCB 编辑器中高亮显示时，将其高亮显示"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
-msgstr "线绘图模式："
+msgstr "线绘制模式："
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:37
 msgid "Free Angle"
@@ -13873,9 +13809,8 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "在符号选择器中显示封装预览"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:350
-#, fuzzy
 msgid "Never show Rescue Symbols tool"
-msgstr "恢复符号"
+msgstr "永远不显示救援符号工具"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:264
 #, c-format
@@ -13947,9 +13882,8 @@ msgid "Default text size:"
 msgstr "默认文本大小："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "标签偏移率："
+msgstr "上划线偏移率："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -13963,9 +13897,8 @@ msgid ""
 msgstr "文本大小偏移连线、总线或引脚上方（或下方）标签的百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "全局标签边距："
+msgstr "全局标签边距比率："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -13999,9 +13932,8 @@ msgid "Largest"
 msgstr "最大"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "连接器："
+msgstr "连接网格："
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14190,11 +14122,10 @@ msgid "&Default line width:"
 msgstr "默认线宽 (&D)："
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
-msgstr "设置为 0 可使符号继承原理图的线宽"
+msgstr "设置为 0 以允许符号从原理图继承线宽属性"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -14319,12 +14250,10 @@ msgid "Add Anyway"
 msgstr "仍然添加"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:857
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
-msgstr ""
-"选择包含旧格式 (*.lib) 库的一行或多行来保存为当前的KiCad格式 (*.kicad_sym)。"
+msgstr "选择包含库的一行或多行以另存为当前 KiCad 格式 (*.kicad_sym)。"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:865
 #, c-format
@@ -14334,12 +14263,11 @@ msgid ""
 msgstr "将 '%s' 另存为当前格式（* .kicad_sym）并替换表中的旧条目？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
-msgstr ""
-"将 %d 个旧格式库另存为当前 KiCad 格式（* .kicad_sym）并替换表中的旧格式条目？"
+msgstr "将 %d 个旧格式库另存为当前 KiCad 格式（* .kicad_sym）并替换表中的旧格式条目？"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:899
 #: pcbnew/dialogs/dialog_export_step.cpp:409
@@ -14555,7 +14483,7 @@ msgid "BOM format preset '%s' not found"
 msgstr "未找到BOM格式预设 \"%s\" 。"
 
 #: eeschema/eeschema_jobs_handler.cpp:722
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
 msgstr "将符号 '%s' 单元 %d 绘制到 '%s'\n"
 
@@ -14607,9 +14535,8 @@ msgid "Saved ERC Report to %s\n"
 msgstr "保存 DRC 报告文件 \"%s\"\n"
 
 #: eeschema/eeschema_settings.cpp:70
-#, fuzzy
 msgid "Net Navigator"
-msgstr "层次化导航器"
+msgstr "网络导航器"
 
 #: eeschema/eeschema_settings.cpp:92 pagelayout_editor/pl_editor_frame.cpp:193
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:312
@@ -15121,16 +15048,15 @@ msgstr ""
 "是否在执行该操作前保存当前原理图？"
 
 #: eeschema/files-io.cpp:655
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"此操作不可恢复\n"
+"此操作将替换当前原理图的内容，该内容将永久丢失。\n"
 "\n"
-"是否在执行该操作前保存当前原理图？"
+"您想继续吗？"
 
 #: eeschema/files-io.cpp:697
 msgid "Import Schematic"
@@ -15198,9 +15124,8 @@ msgid "Failed to save %s."
 msgstr "无法保存 \"%s\"。"
 
 #: eeschema/files-io.cpp:1090
-#, fuzzy
 msgid "Locked File Warning"
-msgstr "模型缩放警告"
+msgstr "锁定文件警告"
 
 #: eeschema/files-io.cpp:1092
 msgid ""
@@ -15260,12 +15185,12 @@ msgstr ""
 "是否要恢复你所做的最后一批已保存的编辑？"
 
 #: eeschema/files-io.cpp:1583
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
 "Manual recovery of automatically saved files is required."
 msgstr ""
-"无法打开文件“%s”。\n"
+"无法打开文件 '%s'。\n"
 "需要手动恢复自动保存的文件。"
 
 #: eeschema/files-io.cpp:1633
@@ -15580,14 +15505,12 @@ msgid "Fill"
 msgstr "填充"
 
 #: eeschema/lib_symbol.cpp:275
-#, fuzzy
 msgid "Power flag differs."
-msgstr "%s 不同."
+msgstr "电源标志不同。"
 
 #: eeschema/lib_symbol.cpp:284
-#, fuzzy
 msgid "Unit count differs."
-msgstr "焊盘数量差异。"
+msgstr "单元数量不同。"
 
 #: eeschema/lib_symbol.cpp:324
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:657
@@ -15601,9 +15524,8 @@ msgid "%s differs."
 msgstr "%s 不同."
 
 #: eeschema/lib_symbol.cpp:347
-#, fuzzy
 msgid "Pin count differs."
-msgstr "焊盘数量差异。"
+msgstr "引脚数量不同。"
 
 #: eeschema/lib_symbol.cpp:363
 #, c-format
@@ -15611,63 +15533,54 @@ msgid "Pin %s not found."
 msgstr "引脚 %s 未找到。"
 
 #: eeschema/lib_symbol.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs."
-msgstr "%s 不同."
+msgstr "引脚 %s 不同."
 
 #: eeschema/lib_symbol.cpp:402
-#, fuzzy, c-format
+#, c-format
 msgid "%s field differs."
-msgstr "%s 不同."
+msgstr "字段 %s 不同."
 
 #: eeschema/lib_symbol.cpp:412
-#, fuzzy
 msgid "Field count differs."
-msgstr "焊盘数量差异。"
+msgstr "字段数不同。"
 
 #: eeschema/lib_symbol.cpp:421
-#, fuzzy
 msgid "Footprint filters differs."
-msgstr "封装类型有差异。"
+msgstr "封装过滤器不同。"
 
 #: eeschema/lib_symbol.cpp:433
-#, fuzzy
 msgid "Footprint filters differ."
-msgstr "封装类型有差异。"
+msgstr "封装过滤器不同。"
 
 #: eeschema/lib_symbol.cpp:444
-#, fuzzy
 msgid "Symbol keywords differ."
-msgstr "封装关键字有差异。"
+msgstr "符号关键字不同。"
 
 #: eeschema/lib_symbol.cpp:453
 msgid "Symbol pin name offsets differ."
 msgstr "符号引脚名称偏移有差异。"
 
 #: eeschema/lib_symbol.cpp:464
-#, fuzzy
 msgid "Show pin names settings differ."
-msgstr "显示引脚名称文本"
+msgstr "显示引脚名称设置不同。"
 
 #: eeschema/lib_symbol.cpp:473
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "显示引脚编号文本"
+msgstr "显示引脚编号设置不同。"
 
 #: eeschema/lib_symbol.cpp:482
-#, fuzzy
 msgid "Exclude from simulation settings differ."
-msgstr "不要求courtyard设置不同。"
+msgstr "从仿真中排除的设置不同。"
 
 #: eeschema/lib_symbol.cpp:491
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "从物料清单中排除"
+msgstr "从物料清单中排除设置不同"
 
 #: eeschema/lib_symbol.cpp:500
-#, fuzzy
 msgid "Exclude from board settings differ."
-msgstr "不要求courtyard设置不同。"
+msgstr "从板中排除的设置不同。"
 
 #: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:492
 #: eeschema/tools/sch_edit_tool.cpp:102
@@ -15804,39 +15717,38 @@ msgid "Bus from %s, %s to %s, %s"
 msgstr "总线从 (%s,%s) 到 (%s,%s)"
 
 #: eeschema/net_navigator.cpp:72
-#, fuzzy
 msgid "Graphic line not connectable"
-msgstr "引脚未连接"
+msgstr "图形线无法连接"
 
 #: eeschema/net_navigator.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' pin '%s'"
-msgstr "符号 %s [%s]"
+msgstr "符号 '%s' 引脚 '%s'"
 
 #: eeschema/net_navigator.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "原理图 %s 引脚 %s"
+msgstr "子图 '%s' 引脚 ' %s'"
 
 #: eeschema/net_navigator.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "文本 %s 在 (%s, %s)"
+msgstr "标签 '%s' 在 %s, %s"
 
 #: eeschema/net_navigator.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
 msgstr "全局标签 '%s' 在 %s,%s"
 
 #: eeschema/net_navigator.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "层次标签 '%s'"
+msgstr "层次标签 '%s' 在 %s, %s"
 
 #: eeschema/net_navigator.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "结点大小："
+msgstr "结点在 %s, %s"
 
 #: eeschema/net_navigator.cpp:146
 #, c-format
@@ -15895,12 +15807,10 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "在库 \"%s\" 中未找到符号 \"%s\" 的替代主体样式。"
 
 #: eeschema/picksymbol.cpp:161
-#, fuzzy
 msgid "Convert Symbol"
-msgstr "电源符号"
+msgstr "转换符号"
 
 #: eeschema/picksymbol.cpp:178
-#, fuzzy
 msgid "Set Pin Function"
 msgstr "设置引脚功能"
 
@@ -16158,9 +16068,8 @@ msgid "[no schematic loaded]"
 msgstr "[没有加载原理图]"
 
 #: eeschema/sch_edit_frame.cpp:1841
-#, fuzzy
 msgid "Schematic Cleanup"
-msgstr "原理图设置"
+msgstr "原理图清理"
 
 #: eeschema/sch_edit_frame.cpp:1954
 #, c-format
@@ -16172,9 +16081,8 @@ msgid "Save Symbol to Schematic"
 msgstr "保存符号到原理图"
 
 #: eeschema/sch_edit_frame.cpp:2237 eeschema/tools/ee_actions.cpp:63
-#, fuzzy
 msgid "Compare Symbol with Library"
-msgstr "与库中的符号比较"
+msgstr "将符号与库进行比较"
 
 #: eeschema/sch_field.cpp:955
 #, c-format
@@ -16211,9 +16119,8 @@ msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr "在“附加”部分找到了未知或意外的记录 ID %d。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:637
-#, fuzzy
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "Altium 原理图库文件应为 5.0 版本"
+msgstr "预期 Altium 原理图文件版本 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:669
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -16313,7 +16220,7 @@ msgstr "找不到文件“%s”。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3976
 #, fuzzy, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "在 “文件头” 部分找到了未知或意外的记录 id %d。"
+msgstr "在 %s 中找到未知或意外的记录 ID %d。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4102
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -16328,9 +16235,8 @@ msgid "Altium Schematic Library or Integrated Library"
 msgstr "Altium 原理图库或集成库"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:72
-#, fuzzy
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
-msgstr "文件 '%s' 似乎不是有效的原理图文件."
+msgstr "所选文件似乎不是 CADSTAR 元件库文件"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:117
 #, c-format
@@ -16543,18 +16449,17 @@ msgstr ""
 "cpa）文件创建一个单独的条目。如果未指定，则假定为 'cadstarpcblib'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "不能创建封装库\"%s\"。"
+msgstr "找不到与库 '%s' 对应的 .csa 文件。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
 msgstr "CADSTAR 原理图存档文件"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "CADSTAR 存档文件"
+msgstr "CADSTAR 元件库文件"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:84
 #, c-format
@@ -16613,9 +16518,9 @@ msgstr "Eagle ver. 6.x XML 库文件"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:414
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:458
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:492
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "无法读取数据文件 \"%s\"。"
+msgstr "无法在 '%s' 中找到有效的原理图文件"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:267
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:272
@@ -16646,24 +16551,23 @@ msgstr "EasyEDA（嘉立创 EDA）标准版文件"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "未能解析的值 \"%s\""
+msgstr "无法解析值：'%s'"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:58
-#, fuzzy
 msgid "httplib plugin missing library table handle!"
 msgstr "httplib 插件缺少库表句柄！"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Error retriving data from HTTP library %s: %s"
-msgstr "从库 '%s' 加载封装 %s 时出错。"
+msgstr "从 HTTP 库 %s 检索数据时出错：%s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid"
-msgstr "无法加载数据库库：设置文件 %s 丢失或无效"
+msgstr "HTTP 库设置文件 %s 丢失或无效"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:227
 #, c-format
@@ -17326,9 +17230,8 @@ msgstr "物料清单（BOM）"
 
 #: eeschema/sch_symbol.cpp:1870 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
-#, fuzzy
 msgid "Exclude from"
-msgstr "从 BOM 中排除"
+msgstr "排除自"
 
 #: eeschema/sch_symbol.cpp:1881
 msgid "Power symbol"
@@ -17365,24 +17268,21 @@ msgid "Symbol %s [%s]"
 msgstr "符号 %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2648
-#, fuzzy
 msgid "Mirror X"
-msgstr "Y 轴镜像"
+msgstr "X 轴镜像"
 
 #: eeschema/sch_symbol.cpp:2650
 msgid "Mirror Y"
 msgstr "Y 轴镜像"
 
 #: eeschema/sch_symbol.cpp:2674 pcbnew/footprint.cpp:3453
-#, fuzzy
 msgid "Library Link"
 msgstr "库链接"
 
 #: eeschema/sch_symbol.cpp:2677 pcbnew/footprint.cpp:3456
 #: pcbnew/plot_board_layers.cpp:114
-#, fuzzy
 msgid "Library Description"
-msgstr "描述"
+msgstr "库描述"
 
 #: eeschema/sch_symbol.cpp:2686
 msgid "Exclude From Board"
@@ -18364,49 +18264,40 @@ msgid "Error loading workbook: line %d: %s."
 msgstr "工作簿载入错误：行%d：%s。"
 
 #: eeschema/sim/legacy_workbook.cpp:133
-#, fuzzy
 msgid "expecting version"
-msgstr "预期 %s"
+msgstr "预期版本"
 
 #: eeschema/sim/legacy_workbook.cpp:150
-#, fuzzy
 msgid "expecting simulation tab count"
-msgstr "找不到外部仿真器"
+msgstr "预期仿真选项卡数量"
 
 #: eeschema/sim/legacy_workbook.cpp:164
-#, fuzzy
 msgid "expecting simulation tab type"
-msgstr "打开仿真工作簿"
+msgstr "预期仿真选项卡类型"
 
 #: eeschema/sim/legacy_workbook.cpp:210
-#, fuzzy
 msgid "expecting trace count"
-msgstr "现存线路"
+msgstr "预期走线数量"
 
 #: eeschema/sim/legacy_workbook.cpp:226
-#, fuzzy
 msgid "expecting trace type"
-msgstr "现存线路"
+msgstr "预期走线类型"
 
 #: eeschema/sim/legacy_workbook.cpp:236
-#, fuzzy
 msgid "expecting trace name"
-msgstr "期望数。"
+msgstr "预期走线名称"
 
 #: eeschema/sim/legacy_workbook.cpp:246
-#, fuzzy
 msgid "expecting trace color"
-msgstr "选择颜色："
+msgstr "预期走线颜色"
 
 #: eeschema/sim/legacy_workbook.cpp:262
-#, fuzzy
 msgid "expecting measurement count"
-msgstr "删除测量"
+msgstr "预期测量数量"
 
 #: eeschema/sim/legacy_workbook.cpp:274
-#, fuzzy
 msgid "expecting measurement definition"
-msgstr "无效的引脚名定义"
+msgstr "预期测量定义"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
@@ -18461,9 +18352,8 @@ msgid "No simulation model definition found for symbol '%s'."
 msgstr "没有找到符号“%s”的仿真模型"
 
 #: eeschema/sim/sim_model.cpp:410
-#, fuzzy
 msgid "No simulation model definition found."
-msgstr "仿真模型编辑器"
+msgstr "未找到仿真模型定义。"
 
 #: eeschema/sim/sim_model.cpp:542 eeschema/sim/sim_model.cpp:601
 #, c-format
@@ -18571,9 +18461,8 @@ msgid "Noise (A/√Hz)"
 msgstr "噪声 (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
-#, fuzzy
 msgid "Intensity"
-msgstr "当前快捷键："
+msgstr "强度"
 
 #: eeschema/sim/sim_plot_tab.cpp:666 eeschema/sim/sim_plot_tab.cpp:786
 msgid "Power"
@@ -18684,14 +18573,12 @@ msgid "Measure Peak-to-peak"
 msgstr "测量峰峰值"
 
 #: eeschema/sim/simulator_frame_ui.cpp:153
-#, fuzzy
 msgid "Measure Frequency of Min"
-msgstr "最小测量时间"
+msgstr "测量最小值的频率"
 
 #: eeschema/sim/simulator_frame_ui.cpp:154
-#, fuzzy
 msgid "Measure Frequency of Max"
-msgstr "最大测量时间"
+msgstr "测量最大频率"
 
 #: eeschema/sim/simulator_frame_ui.cpp:158
 msgid "Measure Time of Min"
@@ -18726,9 +18613,8 @@ msgid "Fourier Analyses of Multiple Signals"
 msgstr "多信号的傅立叶分析"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
-#, fuzzy
 msgid "Fundamental frequency:"
-msgstr "信号频率："
+msgstr "基准频率："
 
 #: eeschema/sim/simulator_frame_ui.cpp:323
 #, c-format
@@ -18871,9 +18757,8 @@ msgid "S-Parameter Analysis"
 msgstr "S参数分析"
 
 #: eeschema/sim/spice_simulator.cpp:67
-#, fuzzy
 msgid "Frequency Content Analysis"
-msgstr "输入信号的频率"
+msgstr "频率内容分析"
 
 #: eeschema/sim/spice_value.cpp:378
 msgid "Please, fill required fields"
@@ -19035,11 +18920,10 @@ msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>A 电源符号应该只有一个引脚</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:213
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
-msgstr "<b>可疑电源符号</b><br>仅一个输入或输出电源引脚有意义<br><br>"
+msgstr "<b>可疑的电源符号</b><br>只有输入或输出电源引脚才有意义<br><br>"
 
 #: eeschema/symbol_checker.cpp:220
 msgid ""
@@ -19118,9 +19002,8 @@ msgid "Symbol Chooser"
 msgstr "符号选择器"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "KiCad 符号库查看器"
+msgstr "KiCad 符号差异查看器"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 msgid ""
@@ -19451,9 +19334,9 @@ msgstr "导入符号"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: pcbnew/load_select_footprint.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "无法为 '%s' 找到一款 PDF 查看器。"
+msgstr "无法找到 '%s' 的阅读器。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:110
 #, c-format
@@ -19533,14 +19416,13 @@ msgstr "无法枚举库 “%s”。"
 
 #: eeschema/symbol_library_manager.cpp:843
 #: eeschema/symbol_library_manager.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "Error updating library buffer: %s"
-msgstr "保存全局库表时发生错误：%s"
+msgstr "更新库缓存时出错：%s"
 
 #: eeschema/symbol_library_manager.cpp:853
-#, fuzzy
 msgid "Error updating library buffer."
-msgstr "保存全局库表时发生错误。"
+msgstr "更新库缓存时出错。"
 
 #: eeschema/symbol_library_manager.cpp:993
 #: eeschema/tools/sch_editor_control.cpp:442
@@ -19669,14 +19551,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "将 %s 的值从“%s”更改为“%s”。"
 
 #: eeschema/tools/backannotate.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "将 %s 的封装从“%s”替换为“%s”。"
+msgstr "将 %s 的 '不装配' 从 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "将 %s 的封装从“%s”替换为“%s”。"
+msgstr "将 %s 的 '从BOM排除' 从 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:475
 #, c-format
@@ -19727,9 +19609,8 @@ msgid "Show the symbol checker window"
 msgstr "显示符号检查器窗口"
 
 #: eeschema/tools/ee_actions.cpp:64
-#, fuzzy
 msgid "Show differences between schematic symbol and its library equivalent"
-msgstr "检查电路板封装与其对应库的差异"
+msgstr "显示原理图符号与其库等效符号之间的差异"
 
 #: eeschema/tools/ee_actions.cpp:71
 msgid "Show simulation window for running SPICE or IBIS simulations."
@@ -20035,9 +19916,8 @@ msgid "Add Junction"
 msgstr "添加结点"
 
 #: eeschema/tools/ee_actions.cpp:437
-#, fuzzy
 msgid "Draw junctions"
-msgstr "拖动连接点"
+msgstr "绘制结点"
 
 #: eeschema/tools/ee_actions.cpp:447 eeschema/tools/sch_drawing_tools.cpp:963
 msgid "Add Wire to Bus Entry"
@@ -20062,9 +19942,8 @@ msgid "Add Net Class Directive"
 msgstr "添加网络类标识符"
 
 #: eeschema/tools/ee_actions.cpp:467
-#, fuzzy
 msgid "Add net class directive labels"
-msgstr "添加网络类指令标签"
+msgstr "添加网络类指示符标签"
 
 #: eeschema/tools/ee_actions.cpp:476 eeschema/tools/sch_drawing_tools.cpp:1525
 msgid "Add Hierarchical Label"
@@ -20405,14 +20284,12 @@ msgid "Highlight wires and pins of a net"
 msgstr "高亮同一网络的导线和引脚"
 
 #: eeschema/tools/ee_actions.cpp:854
-#, fuzzy
 msgid "Show Net Navigator"
-msgstr "显示飞线内网络"
+msgstr "显示网络导航器"
 
 #: eeschema/tools/ee_actions.cpp:855
-#, fuzzy
 msgid "Toggle the net navigator panel visibility"
-msgstr "切换封装树形工作区可见性"
+msgstr "切换网络导航面板的可见性"
 
 #: eeschema/tools/ee_actions.cpp:862
 msgid "Edit with Symbol Editor"
@@ -20423,34 +20300,28 @@ msgid "Open the selected symbol in the Symbol Editor"
 msgstr "在符号编辑器中打开选定的符号"
 
 #: eeschema/tools/ee_actions.cpp:869
-#, fuzzy
 msgid "Exclude from Bill of Materials"
 msgstr "从物料清单中排除"
 
 #: eeschema/tools/ee_actions.cpp:870
-#, fuzzy
 msgid "Set the exclude from bill of materials attribute"
-msgstr "从物料清单中排除"
+msgstr "设置排除在材料清单之外属性"
 
 #: eeschema/tools/ee_actions.cpp:875
-#, fuzzy
 msgid "Include in Bill of Materials"
-msgstr "从物料清单中排除"
+msgstr "包含在物料清单中"
 
 #: eeschema/tools/ee_actions.cpp:876
-#, fuzzy
 msgid "Clear the exclude from bill of materials attribute"
-msgstr "从物料清单中排除"
+msgstr "清除从物料清单中排除的属性"
 
 #: eeschema/tools/ee_actions.cpp:881
-#, fuzzy
 msgid "Toggle Exclude from Bill of Materials"
-msgstr "从物料清单中排除"
+msgstr "切换“不包含在物料清单中”"
 
 #: eeschema/tools/ee_actions.cpp:882
-#, fuzzy
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "从物料清单中排除"
+msgstr "切换 \"不包括在物料清单中 \"属性"
 
 #: eeschema/tools/ee_actions.cpp:887
 msgid "Exclude from Simulation"
