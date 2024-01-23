@@ -36,10 +36,7 @@ const char* const traceHTTPLib = "KICAD_HTTP_LIB";
 
 HTTP_LIB_CONNECTION::HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool aTestConnectionNow )
 {
-    m_rootURL = aSource.root_url;
-    m_token = aSource.token;
-    m_sourceType = aSource.type;
-    m_timeout = aSource.timeout_parts;
+    m_source = aSource;
 
     if( aTestConnectionNow )
     {
@@ -60,7 +57,7 @@ bool HTTP_LIB_CONNECTION::ValidateHTTPLibraryEndpoints()
     std::string res = "";
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    curl->SetURL( m_rootURL );
+    curl->SetURL( m_source.root_url );
 
     try
     {
@@ -126,7 +123,7 @@ bool HTTP_LIB_CONNECTION::syncCategories()
     std::string res = "";
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    curl->SetURL( m_rootURL + http_endpoint_categories + ".json" );
+    curl->SetURL( m_source.root_url + http_endpoint_categories + ".json" );
 
     try
     {
@@ -182,7 +179,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
     if( m_cachedParts.find( aPartID ) != m_cachedParts.end() )
     {
         // check if it's outdated, if so re-fetch
-        if( std::difftime( std::time( nullptr ), m_cachedParts[aPartID].lastCached ) < m_timeout )
+        if( std::difftime( std::time( nullptr ), m_cachedParts[aPartID].lastCached ) < m_source.timeout_parts )
         {
             aFetchedPart = m_cachedParts[aPartID];
             return true;
@@ -193,7 +190,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
     std::string res = "";
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    curl->SetURL( m_rootURL + fmt::format( http_endpoint_parts + "/{}.json", aPartID ) );
+    curl->SetURL( m_source.root_url + fmt::format( http_endpoint_parts + "/{}.json", aPartID ) );
 
     try
     {
@@ -312,7 +309,7 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
     std::string res = "";
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    curl->SetURL( m_rootURL
+    curl->SetURL( m_source.root_url
                     + fmt::format( http_endpoint_parts + "/category/{}.json", aCategory.id ) );
 
     try
