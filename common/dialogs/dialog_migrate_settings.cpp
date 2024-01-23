@@ -29,6 +29,7 @@
 DIALOG_MIGRATE_SETTINGS::DIALOG_MIGRATE_SETTINGS( SETTINGS_MANAGER* aManager ) :
         DIALOG_MIGRATE_SETTINGS_BASE( nullptr ), m_manager( aManager )
 {
+    SetMinSize( FromDIP( GetMinSize() ) );
     m_standardButtonsCancel->SetLabel( _( "Quit KiCad" ) );
 
     m_btnCustomPath->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
@@ -60,7 +61,7 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataToWindow()
     std::vector<wxString> paths;
 
     m_btnUseDefaults->SetValue( true );
-    
+
     if( !m_manager->GetPreviousVersionPaths( &paths ) )
     {
         m_btnPrevVer->SetLabelText( _( "Import settings from a previous version (none found)" ) );
@@ -104,7 +105,7 @@ bool DIALOG_MIGRATE_SETTINGS::TransferDataFromWindow()
         m_manager->SetMigrationSource( wxEmptyString );
     }
 
-    
+
 
     return true;
 }

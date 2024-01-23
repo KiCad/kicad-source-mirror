@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -13,7 +13,7 @@
 
 DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
+	this->SetSizeHints( wxSize( 480,-1 ), wxDefaultSize );
 
 	m_sizer = new wxBoxSizer( wxVERTICAL );
 
@@ -43,9 +43,7 @@ DIALOG_MIGRATE_SETTINGS_BASE::DIALOG_MIGRATE_SETTINGS_BASE( wxWindow* parent, wx
 	bSizer5->Add( 20, 0, 0, wxEXPAND, 5 );
 
 	m_cbPath = new wxComboBox( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	m_cbPath->SetMinSize( wxSize( 480,-1 ) );
-
-	bSizer5->Add( m_cbPath, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizer5->Add( m_cbPath, 1, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 
 	m_btnCustomPath = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
 	m_btnCustomPath->SetToolTip( _("Choose a different path") );
