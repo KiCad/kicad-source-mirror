@@ -100,8 +100,6 @@ private:
 
     SYMBOL_LIB_TABLE* m_libTable;
 
-    std::map<std::string, std::vector<HTTP_LIB_PART>> m_cachedCategoryParts;
-
      /// Generally will be null if no valid connection is established
     std::unique_ptr<HTTP_LIB_CONNECTION> m_conn;
 
@@ -120,6 +118,9 @@ private:
     wxString value_field = "value";
     wxString datasheet_field = "datasheet";
     wxString reference_field = "reference";
+
+     //     category.id       category
+    std::map<std::string, HTTP_LIB_CATEGORY> m_cachedCategories;
 
 };
 

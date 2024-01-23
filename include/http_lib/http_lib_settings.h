@@ -37,15 +37,10 @@ struct HTTP_LIB_SOURCE
     std::string          root_url;
     std::string          api_version;
     std::string          token;
-    int                  timeout;
+    int                  timeout_parts;
+    int                  timeout_categories;
 };
 
-
-struct HTTP_LIB_CATEGORY
-{
-    std::string id;   ///< id of category
-    std::string name; ///< name of category
-};
 
 struct HTTP_LIB_PART
 {
@@ -61,6 +56,18 @@ struct HTTP_LIB_PART
 
     std::map<std::string, std::tuple<std::string, bool>> fields; ///< additional generic fields
 };
+
+
+struct HTTP_LIB_CATEGORY
+{
+    std::string id;   ///< id of category
+    std::string name; ///< name of category
+
+    std::time_t lastCached = 0;
+
+    std::vector<HTTP_LIB_PART> cachedParts;
+};
+
 
 class HTTP_LIB_SETTINGS : public JSON_SETTINGS
 {

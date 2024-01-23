@@ -69,29 +69,48 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
             ( aProperties
               && aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) != aProperties->end() );
 
-    // clear buffer
-    m_cachedCategoryParts.clear();
-
     for(const HTTP_LIB_CATEGORY& category : m_conn->getCategories() )
     {
+        bool refresh_cache = true;
+
         std::vector<HTTP_LIB_PART> found_parts;
 
-        if( !m_conn->SelectAll( category, found_parts ) )
+         // Check if there is already a part in our cache, if not fetch it
+        if( m_cachedCategories.find( category.id ) != m_cachedCategories.end() )
         {
-            if( !m_conn->GetLastError().empty() )
+            // check if it's outdated, if so re-fetch
+            if( std::difftime( std::time( nullptr ), m_cachedCategories[category.id].lastCached )
+                < m_settings->m_Source.timeout_categories )
             {
-                wxString msg = wxString::Format( _( "Error retriving data from HTTP library %s: %s" ),
-                                                 category.name, m_conn->GetLastError() );
-                THROW_IO_ERROR( msg );
+                refresh_cache = false;
             }
-
-            continue;
         }
 
-        // cache information for later use in LoadSymbol()
-        m_cachedCategoryParts.emplace( category.id, found_parts );
+        if( refresh_cache )
+        {
+            if( !m_conn->SelectAll( category, found_parts ) )
+            {
+                if( !m_conn->GetLastError().empty() )
+                {
+                    wxString msg =
+                            wxString::Format( _( "Error retriving data from HTTP library %s: %s" ),
+                                              category.name, m_conn->GetLastError() );
+                    THROW_IO_ERROR( msg );
+                }
 
-        for( const HTTP_LIB_PART& part : found_parts )
+                continue;
+            }
+
+            // remove cached parts
+            m_cachedCategories[category.id].cachedParts.clear();
+
+            // Copy newly cached data across
+            m_cachedCategories[category.id].cachedParts = found_parts;
+            m_cachedCategories[category.id].lastCached = std::time( nullptr );
+
+        }
+
+        for( const HTTP_LIB_PART& part : m_cachedCategories[category.id].cachedParts )
         {
             wxString libIDString( part.name );
 
@@ -147,7 +166,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString&        aLibraryPath,
     }
 
     // get the matching query ID
-    for( const HTTP_LIB_PART& part : m_cachedCategoryParts[foundCategory->id] )
+    for( const HTTP_LIB_PART& part : m_cachedCategories[foundCategory->id].cachedParts )
     {
         if( part.id == std::get<0>( relations ) )
         {

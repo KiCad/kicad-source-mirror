@@ -39,7 +39,7 @@ HTTP_LIB_CONNECTION::HTTP_LIB_CONNECTION( const HTTP_LIB_SOURCE& aSource, bool a
     m_rootURL = aSource.root_url;
     m_token = aSource.token;
     m_sourceType = aSource.type;
-    m_timeout = aSource.timeout;
+    m_timeout = aSource.timeout_parts;
 
     if( aTestConnectionNow )
     {
