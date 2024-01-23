@@ -26,7 +26,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2024-01-24 02:24+0000\n"
-"Last-Translator: 向阳阳 <hinata.hoshino@foxmail.com>\n"
+"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -15687,7 +15687,7 @@ msgstr "在原理图上探测信号"
 
 #: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr "调整"
+msgstr "调谐"
 
 #: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Tune component values"
@@ -17904,9 +17904,8 @@ msgid "Revert '%s' (and all sub-sheets) to last version saved?"
 msgstr "是否将 \"%s\" （及所有子表）恢复到上个保存的版本？"
 
 #: eeschema/tools/sch_editor_control.cpp:336
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "更新原理图中的符号以指向新库？"
+msgstr "将原理图中的电源符号包含到库中？"
 
 #: eeschema/tools/sch_editor_control.cpp:401
 #, c-format
@@ -19217,7 +19216,7 @@ msgstr "层"
 #: gerbview/widgets/gerbview_layer_widget.cpp:80
 #: gerbview/widgets/layer_widget.cpp:557
 msgid "Items"
-msgstr "项目"
+msgstr "对象"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:131
 msgid "Show DCodes identification"
@@ -26412,7 +26411,7 @@ msgid "Solder paste relative clearance:"
 msgstr "焊膏相对间隙："
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -26427,7 +26426,7 @@ msgstr ""
 "值为 10 表示水平间距值是焊盘宽度的 10%，垂直间距值是焊盘高度的 10%。\n"
 "该值可由焊盘局部值替代。\n"
 "最终间距值是该值与绝对间距值之和。\n"
-"负值表示阻焊尺寸小于焊盘尺寸。"
+"负值表示钢网开孔尺寸小于焊盘尺寸。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:340
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:311
@@ -39008,7 +39007,7 @@ msgstr "切换圆弧编辑模式为保持端点，或保持另一点的方向"
 
 #: pcbnew/tools/pcb_actions.cpp:1282
 msgid "Position Relative To..."
-msgstr "相对...的位置"
+msgstr "相对...的位置..."
 
 #: pcbnew/tools/pcb_actions.cpp:1283
 msgid "Positions the selected item(s) by an exact amount relative to another"
