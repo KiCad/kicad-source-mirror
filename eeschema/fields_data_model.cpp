@@ -91,6 +91,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::RenameColumn( int aCol, const wxString& newN
     }
 
     m_cols[aCol].m_fieldName = newName;
+    m_cols[aCol].m_label = newName;
 }
 
 
