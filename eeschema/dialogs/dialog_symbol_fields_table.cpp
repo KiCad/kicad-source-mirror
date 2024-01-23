@@ -757,8 +757,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnRenameField( wxCommandEvent& event )
     }
 
     m_dataModel->RenameColumn( col, newFieldName );
-    m_fieldsCtrl->SetTextValue( newFieldName, col, DISPLAY_NAME_COLUMN );
-    m_fieldsCtrl->SetTextValue( newFieldName, col, FIELD_NAME_COLUMN );
+    m_fieldsCtrl->SetTextValue( newFieldName, row, DISPLAY_NAME_COLUMN );
+    m_fieldsCtrl->SetTextValue( newFieldName, row, FIELD_NAME_COLUMN );
 
     syncBomPresetSelection();
 }
