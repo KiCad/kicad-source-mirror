@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-20 23:01+0000\n"
+"PO-Revision-Date: 2024-01-24 02:24+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v7/ja/>\n"
 "Language: ja\n"
@@ -25440,9 +25440,8 @@ msgid "Vertical offset:"
 msgstr "垂直方向のオフセット:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:92
-#, fuzzy
 msgid "Stagger:"
-msgstr "スタッガー:"
+msgstr "切り返し:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:99
 msgid "Rows"
