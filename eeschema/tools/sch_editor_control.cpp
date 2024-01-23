@@ -1478,8 +1478,6 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
     sheetPath.push_back( aSheet );
 
     aPastedSheetsSoFar->push_back( sheetPath );
-    wxLogDebug( wxS( "Adding pasted sheet path: %s from clipboard path: %s." ),
-                sheetPath.Path().AsString(), aClipPath.AsString() );
 
     if( aSheet->GetScreen() == nullptr )
         return sheetPath; // We can only really set the page number but not load any items
@@ -1937,9 +1935,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 while( hierarchy.PageNumberExists( pageNum ) )
                     pageNum = wxString::Format( "%d", ++page );
-
-                wxLogDebug( wxS( "Setting sheet path %s instance." ),
-                            pastedSheet.Path().AsString() );
 
                 SCH_SHEET_INSTANCE sheetInstance;
 
