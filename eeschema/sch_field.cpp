@@ -1033,7 +1033,7 @@ wxString SCH_FIELD::GetCanonicalName() const
 {
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        if( m_id < MANDATORY_FIELDS )
+        if( m_id >= 0 && m_id < MANDATORY_FIELDS )
             return GetCanonicalFieldName( m_id );
         else
             return m_name;
