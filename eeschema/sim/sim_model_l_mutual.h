@@ -34,6 +34,11 @@ class SPICE_GENERATOR_L_MUTUAL : public SPICE_GENERATOR
 public:
     using SPICE_GENERATOR::SPICE_GENERATOR;
 
+    std::string ItemModelName( const SPICE_ITEM& aItem ) const override
+    {
+        return "";
+    }
+
     std::string ItemParams() const override;
 };
 
