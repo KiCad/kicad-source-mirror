@@ -1970,7 +1970,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 for( const SCH_SHEET_INSTANCE& instance : sheet->GetInstances() )
                 {
-                    if( instance.m_ProjectName != m_frame->Prj().GetProjectName() )
+                    if( !hierarchy.HasPath( instance.m_Path ) )
                         instancesToRemove.push_back( instance.m_Path );
                 }
 
