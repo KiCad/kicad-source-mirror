@@ -62,7 +62,9 @@ BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr ) :
     m_toolMgr( aMgr ),
     m_isBoardEditor( false )
 {
-    if( dynamic_cast<PCB_EDIT_FRAME*>( aMgr->GetToolHolder() ) )
+    EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( aMgr->GetToolHolder() );
+
+    if( frame && frame->IsType( FRAME_PCB_EDITOR ) )
         m_isBoardEditor = true;
 }
 
