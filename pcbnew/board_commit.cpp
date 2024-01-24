@@ -689,7 +689,6 @@ void BOARD_COMMIT::Revert()
 
             view->Add( boardItem );
             connectivity->Add( boardItem );
-            board->OnItemChanged( boardItem );
             itemsChanged.push_back( boardItem );
 
             delete ent.m_copy;
