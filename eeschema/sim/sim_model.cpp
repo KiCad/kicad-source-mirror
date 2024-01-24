@@ -1486,6 +1486,41 @@ template bool SIM_MODEL::InferSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymb
 template <typename T_symbol, typename T_field>
 void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 {
+    class FIELD_INFO
+    {
+    public:
+        FIELD_INFO()
+        {
+            m_Attributes.m_Visible = false;
+            m_Attributes.m_Size = VECTOR2I( DEFAULT_SIZE_TEXT * schIUScale.IU_PER_MILS,
+                                            DEFAULT_SIZE_TEXT * schIUScale.IU_PER_MILS );
+        };
+
+        FIELD_INFO( const wxString& aText, T_field* aField ) :
+                m_Text( aText ),
+                m_Attributes( aField->GetAttributes() ),
+                m_Pos( aField->GetPosition() )
+        {}
+
+        bool IsEmpty() { return m_Text.IsEmpty(); }
+
+        T_field CreateField( T_symbol* aSymbol, const wxString& aFieldName )
+        {
+            T_field field( aSymbol, -1, aFieldName );
+
+            field.SetText( m_Text );
+            field.SetAttributes( m_Attributes );
+            field.SetPosition( m_Pos );
+
+            return field;
+        }
+
+    public:
+        wxString        m_Text;
+        TEXT_ATTRIBUTES m_Attributes;
+        VECTOR2I        m_Pos;
+    };
+
     T_field* existing_deviceField = aSymbol.FindField( SIM_DEVICE_FIELD );
     T_field* existing_deviceSubtypeField = aSymbol.FindField( SIM_DEVICE_SUBTYPE_FIELD );
     T_field* existing_pinsField = aSymbol.FindField( SIM_PINS_FIELD );
@@ -1550,47 +1585,25 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         // which is confusing because it doesn't represent a device at all.
         if( existing_deviceSubtype == wxS( "MUTUAL" ) )
         {
-            aSymbol.RemoveField( existing_deviceSubtypeField );
-            existing_deviceField->SetText( "K" );
+            if( existing_deviceSubtypeField )   // Can't be null, but Coverity doesn't know that
+                aSymbol.RemoveField( existing_deviceSubtypeField );
+
+            if( existing_deviceField )
+            {
+                existing_deviceField->SetText( wxS( "K" ) );
+            }
+            else
+            {
+                FIELD_INFO deviceFieldInfo;
+                deviceFieldInfo.m_Text = wxS( "K" );
+
+                T_field deviceField = deviceFieldInfo.CreateField( &aSymbol, SIM_DEVICE_FIELD );
+                aSymbol.AddField( deviceField );
+            }
         }
 
         return;
     }
-
-    class FIELD_INFO
-    {
-    public:
-        FIELD_INFO()
-        {
-            m_Attributes.m_Visible = false;
-            m_Attributes.m_Size = VECTOR2I( DEFAULT_SIZE_TEXT * schIUScale.IU_PER_MILS,
-                                            DEFAULT_SIZE_TEXT * schIUScale.IU_PER_MILS );
-        };
-
-        FIELD_INFO( const wxString& aText, T_field* aField ) :
-                m_Text( aText ),
-                m_Attributes( aField->GetAttributes() ),
-                m_Pos( aField->GetPosition() )
-        {}
-
-        bool IsEmpty() { return m_Text.IsEmpty(); }
-
-        T_field CreateField( T_symbol* aSymbol, const wxString& aFieldName )
-        {
-            T_field field( aSymbol, -1, aFieldName );
-
-            field.SetText( m_Text );
-            field.SetAttributes( m_Attributes );
-            field.SetPosition( m_Pos );
-
-            return field;
-        }
-
-    public:
-        wxString        m_Text;
-        TEXT_ATTRIBUTES m_Attributes;
-        VECTOR2I        m_Pos;
-    };
 
     auto getSIValue =
             []( T_field* aField )
