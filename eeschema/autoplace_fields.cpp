@@ -194,23 +194,17 @@ protected:
         int max_field_width = 0;
         int total_height = 0;
 
-        std::vector<SCH_FIELD*> visibleFields;
-
         for( SCH_FIELD* field : m_fields )
         {
-            if( field->IsVisible() )
-                visibleFields.push_back( field );
-        }
-
-        for( SCH_FIELD* field : visibleFields )
-        {
-            if( field->CanAutoplace() )
+            if( !field->IsVisible() || !field->CanAutoplace() )
             {
-                if( m_symbol->GetTransform().y1 )
-                    field->SetTextAngle( ANGLE_VERTICAL );
-                else
-                    field->SetTextAngle( ANGLE_HORIZONTAL );
+                continue;
             }
+
+            if( m_symbol->GetTransform().y1 )
+                field->SetTextAngle( ANGLE_VERTICAL );
+            else
+                field->SetTextAngle( ANGLE_HORIZONTAL );
 
             BOX2I bbox = field->GetBoundingBox();
             int   field_width = bbox.GetWidth();
