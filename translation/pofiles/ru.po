@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-21 11:03+0000\n"
+"PO-Revision-Date: 2024-01-25 03:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2010,9 +2010,8 @@ msgid "Additional Contributions By"
 msgstr "Внесли свой вклад в проект"
 
 #: common/dialog_about/AboutDialog_main.cpp:1136
-#, fuzzy
 msgid "Librarian Team"
-msgstr "Библиотеки"
+msgstr "Команда библиотекарей"
 
 #: common/dialog_about/AboutDialog_main.cpp:1208
 msgid "3D models by"
@@ -2031,9 +2030,8 @@ msgid "Icons by"
 msgstr "Иконки"
 
 #: common/dialog_about/AboutDialog_main.cpp:1255
-#, fuzzy
 msgid "Package Developers"
-msgstr "Разработчики"
+msgstr "Разработчики пакетов"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -13230,7 +13228,6 @@ msgid "Edit"
 msgstr "Правка"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimiter:"
 msgstr "Разделитель полей:"
 
@@ -13240,7 +13237,6 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "String delimiter:"
 msgstr "Разделитель строк:"
 
@@ -16379,9 +16375,8 @@ msgstr ""
 "\"Additional\"."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:637
-#, fuzzy
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "Ожидался файл библиотеки Altium Schematic версии 5.0"
+msgstr "Ожидался файл Altium Schematic версии 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:669
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -17585,14 +17580,12 @@ msgid "Symbol %s [%s]"
 msgstr "Символ %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2648
-#, fuzzy
 msgid "Mirror X"
-msgstr "Отразить"
+msgstr "Отразить по X"
 
 #: eeschema/sch_symbol.cpp:2650
-#, fuzzy
 msgid "Mirror Y"
-msgstr "Отразить"
+msgstr "Отразить по Y"
 
 #: eeschema/sch_symbol.cpp:2674 pcbnew/footprint.cpp:3453
 msgid "Library Link"
@@ -37909,9 +37902,8 @@ msgid "Pad net doesn't match schematic"
 msgstr "Цепь конт.пл. не соответствует схеме"
 
 #: pcbnew/drc/drc_item.cpp:185
-#, fuzzy
 msgid "Footprint attributes don't match symbol"
-msgstr "Посад.место не совпадает с копией в библиотеке"
+msgstr "Атрибуты посад.места не совпадают с символом"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Footprint not found in libraries"
@@ -38565,9 +38557,9 @@ msgstr "Типы посад.мест отличаются."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:573
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:133
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ."
-msgstr "Позиция %s отличается."
+msgstr "Значения '%s' отличаются."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:570
 #: pcbnew/footprint.cpp:3480
