@@ -125,6 +125,36 @@ void DRC_TEST_PROVIDER_SCHEMATIC_PARITY::testNetlist( NETLIST& aNetlist )
         }
         else
         {
+            if( component->GetValue() != footprint->GetValue()
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
+            {
+                wxString msg;
+                msg.Printf( _( "Footprint %s value (%s) doesn't match symbol value (%s)." ),
+                            footprint->GetReference(), footprint->GetValue(),
+                            component->GetValue() );
+
+                std::shared_ptr<DRC_ITEM> drcItem =
+                        DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY_ISSUES );
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( footprint );
+                reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
+            }
+
+            if( component->GetFPID().GetUniStringLibId() != footprint->GetFPID().GetUniStringLibId()
+                && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
+            {
+                wxString msg;
+                msg.Printf( _( "%s footprint (%s) doesn't match that given by symbol (%s)." ),
+                            footprint->GetReference(), footprint->GetFPID().GetUniStringLibId(),
+                            component->GetFPID().GetUniStringLibId() );
+
+                std::shared_ptr<DRC_ITEM> drcItem =
+                        DRC_ITEM::Create( DRCE_SCHEMATIC_PARITY_ISSUES );
+                drcItem->SetErrorMessage( msg );
+                drcItem->SetItems( footprint );
+                reportViolation( drcItem, footprint->GetPosition(), UNDEFINED_LAYER );
+            }
+
             if( ( component->GetProperties().count( "dnp" ) > 0 )
                 != ( ( footprint->GetAttributes() & FP_DNP ) > 0 )
                 && !m_drcEngine->IsErrorLimitExceeded( DRCE_SCHEMATIC_PARITY_ISSUES ) )
