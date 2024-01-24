@@ -194,8 +194,22 @@ void WX_GRID::onGridCellSelect( wxGridEvent& aEvent )
     int row = aEvent.GetRow();
     int col = aEvent.GetCol();
 
-    if( row >= 0 && col >= 0 )
-        SelectBlock( row, col, row, col, false );
+    if( row >= 0 && row < GetNumberRows() && col >= 0 && col < GetNumberCols() )
+    {
+        if( GetSelectionMode() == wxGrid::wxGridSelectCells )
+        {
+            SelectBlock( row, col, row, col, false );
+        }
+        else if( GetSelectionMode() == wxGrid::wxGridSelectRows
+                 || GetSelectionMode() == wxGrid::wxGridSelectRowsOrColumns )
+        {
+            SelectBlock( row, 0, row, GetNumberCols() - 1, false );
+        }
+        else if( GetSelectionMode() == wxGrid::wxGridSelectColumns )
+        {
+            SelectBlock( 0, col, GetNumberRows() - 1, col, false );
+        }
+    }
 }
 
 
