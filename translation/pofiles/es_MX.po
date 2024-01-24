@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-24 01:51+0000\n"
+"PO-Revision-Date: 2024-01-25 03:02+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -12836,7 +12836,7 @@ msgstr "Guarde las contribuciones de todos los generadores de ruido"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:526
 msgid "Compute noise current correlation matrix"
-msgstr ""
+msgstr "Calcular la matriz de correlación de corriente de ruido"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
 msgid "Spice directives:"
@@ -15624,7 +15624,7 @@ msgstr "Importar esquema"
 #: eeschema/files-io.cpp:744
 #, c-format
 msgid "No loader can read the specified file: '%s'."
-msgstr ""
+msgstr "Ningún cargador puede leer el archivo especificado: '%s'."
 
 #: eeschema/files-io.cpp:812
 #, c-format
@@ -16136,7 +16136,7 @@ msgstr "Las palabras clave de las huellas difieren."
 
 #: eeschema/lib_symbol.cpp:453
 msgid "Symbol pin name offsets differ."
-msgstr ""
+msgstr "Las offsets del nombre del pin del símbolo difieren."
 
 #: eeschema/lib_symbol.cpp:464
 #, fuzzy
@@ -16841,7 +16841,7 @@ msgstr "ID de registro desconocido o inesperado %d encontrado en %s."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4102
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr ""
+msgstr "Versión esperada del archivo Altium Schematic Library 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:63
 msgid "Altium schematic files"
@@ -16862,6 +16862,8 @@ msgstr "El archivo '%s' no parece ser un archivo de esquema válido."
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
 msgstr ""
+"No se puede encontrar el símbolo %s, al que hace referencia la parte %s. La "
+"pieza no estaba cargada."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:132
 #, c-format
@@ -16869,6 +16871,8 @@ msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
 msgstr ""
+"Números de pin inconsistentes en el símbolo %s en comparación con el "
+"definido en la parte %s. La pieza no estaba cargada."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:367
 #, c-format
