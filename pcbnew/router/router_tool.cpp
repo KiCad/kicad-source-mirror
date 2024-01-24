@@ -2277,6 +2277,15 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         if( wasLocked )
             item->SetLocked( true );
 
+        if( !footprints.empty() )
+            connectivityData->ClearLocalRatsnest();
+
+        // Clear temporary COURTYARD_CONFLICT flag and ensure the conflict shadow is cleared
+        courtyardClearanceDRC.ClearConflicts( getView() );
+
+        controls()->ForceCursorPosition( false );
+        frame()->PopTool( aEvent );
+        highlightNets( false );
         return 0;
     }
 
