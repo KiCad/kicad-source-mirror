@@ -452,6 +452,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         // change offset to be symbol-relative
         field.Offset( -m_symbol->GetPosition() );
 
+        field.SetText( m_symbol->Schematic()->ConvertKIIDsToRefs( field.GetText() ) );
+
         defined.insert( field.GetName() );
         m_fields->push_back( field );
     }
@@ -730,7 +732,12 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // change all field positions from relative to absolute
     for( unsigned i = 0;  i < m_fields->size();  ++i )
-        m_fields->at( i ).Offset( m_symbol->GetPosition() );
+    {
+        SCH_FIELD& field = m_fields->at( i );
+
+        field.Offset( m_symbol->GetPosition() );
+        field.SetText( m_symbol->Schematic()->ConvertRefsToKIIDs( field.GetText() ) );
+    }
 
     SCH_FIELDS& fields = m_symbol->GetFields();
 
