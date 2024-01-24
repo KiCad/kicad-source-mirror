@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-24 02:44+0000\n"
+"PO-Revision-Date: 2024-01-25 03:01+0000\n"
 "Last-Translator: 向阳阳 <hinata.hoshino@foxmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3339,7 +3339,7 @@ msgstr "作者："
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
-msgstr "提交"
+msgstr "提交 (&o)"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
 msgid "Commit message cannot be empty"
@@ -12188,7 +12188,7 @@ msgstr "必须指定一个或多个层。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:611
 msgid "New Simulation Tab"
-msgstr "新的仿真选项卡"
+msgstr "新的仿真"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
 msgid "Analysis type:"
@@ -18770,7 +18770,7 @@ msgstr "\"%s\" 不是有效的 Spice 值。"
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:162
 msgid "&Simulation"
-msgstr "仿真"
+msgstr "仿真 (&S)"
 
 #: eeschema/sim/user_defined_signals_help_md.h:2
 msgid ""
@@ -20828,7 +20828,7 @@ msgstr "将当前图纸的副本保存到其他位置或以另一个名称进行
 
 #: eeschema/tools/ee_actions.cpp:1377
 msgid "New Analysis Tab..."
-msgstr "新的分析选项卡..."
+msgstr "新分析..."
 
 #: eeschema/tools/ee_actions.cpp:1385
 msgid "Open Workbook..."
@@ -20872,7 +20872,7 @@ msgstr "用黑色背景绘图"
 
 #: eeschema/tools/ee_actions.cpp:1437
 msgid "Edit Analysis Tab..."
-msgstr "编辑分析选项卡..."
+msgstr "编辑分析..."
 
 #: eeschema/tools/ee_actions.cpp:1438
 msgid "Edit the SPICE command and plot setup for the current analysis tab"
@@ -29464,9 +29464,7 @@ msgstr "由半径计算圆心坐标"
 msgid ""
 "This is the position of the center of the circle\n"
 "defining the circular area to create"
-msgstr ""
-"这是圆心的位置\n"
-"定义要创建的圆形区域"
+msgstr "定义圆形区域的圆心位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
 msgid "Center pos X:"
@@ -29481,8 +29479,8 @@ msgid ""
 "Array radius,\n"
 "from Ref point pos and array center:"
 msgstr ""
-"阵列半径、\n"
-"从参考点位置和阵列中心："
+"阵列半径\n"
+"参考点到圆心的距离："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
 msgid "Distance between Ref point and Center pos."
@@ -29493,8 +29491,8 @@ msgid ""
 "Array angle,\n"
 "from Ref point pos and array center:"
 msgstr ""
-"阵列角度、\n"
-"从参考点位置和阵列中心："
+"阵列角度\n"
+"参考点到圆心的连线倾角："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:400
 msgid "Angle between Ref point and Center pos."
