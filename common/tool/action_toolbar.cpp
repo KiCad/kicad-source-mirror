@@ -771,6 +771,9 @@ void ACTION_TOOLBAR::OnCustomRender(wxDC& aDc, const wxAuiToolBarItem& aItem, co
 
 bool ACTION_TOOLBAR::KiRealize()
 {
+#if wxCHECK_VERSION( 3, 3, 0 )
+    return Realize();
+#else
     wxClientDC dc( this );
 
     if( !dc.IsOk() )
@@ -819,6 +822,7 @@ bool ACTION_TOOLBAR::KiRealize()
 
     Refresh( false );
     return retval;
+#endif
 }
 
 
