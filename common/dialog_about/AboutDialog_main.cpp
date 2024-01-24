@@ -349,6 +349,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kinichiro Inoguchi" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabián Inostroza" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vlad Ivanov" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andre Iwers" ), CONTRIB_DEV, nullptr ) );
 
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "James Jackson" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jerry Jacobs" ), CONTRIB_DEV, nullptr ) );
