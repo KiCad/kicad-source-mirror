@@ -2551,7 +2551,7 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     if( !list_front.size() && !list_back.size() )
         return;
 
-    int maxError = pcbIUScale.mmToIU( 0.02 );         // max error for polygonization
+    int maxError = pcbIUScale.mmToIU( 0.005 );        // max error for polygonization
     int chainingEpsilon = pcbIUScale.mmToIU( 0.02 );  // max dist from one endPt to next startPt
 
     if( ConvertOutlineToPolygon( list_front, m_courtyard_cache_front, maxError, chainingEpsilon,
