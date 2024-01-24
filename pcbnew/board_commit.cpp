@@ -62,7 +62,8 @@ BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr ) :
     m_toolMgr( aMgr ),
     m_isBoardEditor( false )
 {
-
+    if( dynamic_cast<PCB_EDIT_FRAME*>( aMgr->GetToolHolder() ) )
+        m_isBoardEditor = true;
 }
 
 
@@ -265,6 +266,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 if( !m_isBoardEditor )
                 {
                     FOOTPRINT* parentFP = board->GetFirstFootprint();
+                    wxCHECK2_MSG( parentFP, continue, "Commit thinks this is footprint editor, but "
+                                                      "there is no first footprint!" );
                     parentFP->Add( boardItem );
                 }
                 else if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
