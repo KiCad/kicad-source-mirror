@@ -85,7 +85,8 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     importProj.m_TargetProj.MakeAbsolute();
 
     // Check if the project directory is empty
-    if( wxDir( targetDir ).HasFiles() )
+    wxDir targetDirTest( targetDir );
+    if( targetDirTest.IsOpened() && targetDirTest.HasFiles() )
     {
         msg = _( "The selected directory is not empty.  We recommend you "
                  "create projects in their own clean directory.\n\nDo you "
@@ -111,6 +112,8 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
             }
         }
     }
+
+    targetDirTest.Close();
 
     CreateNewProject( importProj.m_TargetProj.GetFullPath(), false /* Don't create stub files */ );
     LoadProject( importProj.m_TargetProj );
