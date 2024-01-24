@@ -321,7 +321,7 @@ public:
 
     const BOX2I GetBoundingBox() const override
     {
-        return getRectShape().BBox();
+        return getOutline().BBox();
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override
@@ -333,7 +333,7 @@ public:
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override
     {
-        return getRectShape().Collide( aPosition, aAccuracy );
+        return getOutline().Collide( aPosition, aAccuracy );
     }
 
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const override
@@ -451,7 +451,7 @@ protected:
     bool resetToBaseline( GENERATOR_TOOL* aTool, int aLayer, SHAPE_LINE_CHAIN& aBaseLine,
                           bool aPrimary );
 
-    SHAPE_LINE_CHAIN getRectShape() const;
+    SHAPE_LINE_CHAIN getOutline() const;
 
 protected:
     VECTOR2I              m_end;
@@ -1045,8 +1045,8 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 {
     PNS::SOLID queryItem;
 
-    SHAPE_LINE_CHAIN* chain = static_cast<SHAPE_LINE_CHAIN*>( getRectShape().Clone() );
-    queryItem.SetShape( chain );
+    SHAPE_LINE_CHAIN* chain = static_cast<SHAPE_LINE_CHAIN*>( getOutline().Clone() );
+    queryItem.SetShape( chain );        // PNS::SOLID takes ownership
     queryItem.SetLayer( m_layer );
 
     int lineWidth = 0;
@@ -1313,7 +1313,7 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
 
     KIGFX::VIEW*      view = aTool->GetManager()->GetView();
     PNS::ROUTER*      router = aTool->Router();
-    SHAPE_LINE_CHAIN  bounds = getRectShape();
+    SHAPE_LINE_CHAIN  bounds = getOutline();
     int               epsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
 
     if( router->RoutingInProgress() )
@@ -1527,7 +1527,7 @@ bool PCB_TUNING_PATTERN::UpdateEditPoints( std::shared_ptr<EDIT_POINTS> aEditPoi
 }
 
 
-SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getRectShape() const
+SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
 {
     if( m_baseLine )
     {
@@ -1651,7 +1651,7 @@ void PCB_TUNING_PATTERN::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     int size = KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) * 0.8 );
     size = std::max( size, pcbIUScale.mmToIU( 0.05 ) );
 
-    SHAPE_LINE_CHAIN chain = getRectShape();
+    SHAPE_LINE_CHAIN chain = getOutline();
 
     for( int i = 0; i < chain.SegmentCount(); i++ )
     {
