@@ -1187,8 +1187,11 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetPins( const SCH_SHEET_PATH* aSheet ) const
 
     for( const std::unique_ptr<SCH_PIN>& p : m_pins )
     {
-        if( unit && p->GetLibPin()->GetUnit() && ( p->GetLibPin()->GetUnit() != unit ) )
+        if( unit && p->GetLibPin() && p->GetLibPin()->GetUnit()
+            && ( p->GetLibPin()->GetUnit() != unit ) )
+        {
             continue;
+        }
 
         pins.push_back( p.get() );
     }
@@ -2041,7 +2044,7 @@ void SCH_SYMBOL::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
     {
         LIB_PIN* lib_pin = pin->GetLibPin();
 
-        if( lib_pin->GetUnit() && m_unit && ( m_unit != lib_pin->GetUnit() ) )
+        if( lib_pin && lib_pin->GetUnit() && m_unit && ( m_unit != lib_pin->GetUnit() ) )
             continue;
 
         DANGLING_END_ITEM item( PIN_END, lib_pin, GetPinPhysicalPosition( lib_pin ), this );
@@ -2117,8 +2120,8 @@ std::vector<VECTOR2I> SCH_SYMBOL::GetConnectionPoints() const
     {
         // Collect only pins attached to the current unit and convert.
         // others are not associated to this symbol instance
-        int pin_unit = pin->GetLibPin()->GetUnit();
-        int pin_convert = pin->GetLibPin()->GetConvert();
+        int pin_unit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : GetUnit();
+        int pin_convert = pin->GetLibPin() ? pin->GetLibPin()->GetConvert() : GetConvert();
 
         if( pin_unit > 0 && pin_unit != GetUnit() )
             continue;
@@ -2208,8 +2211,8 @@ INSPECT_RESULT SCH_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
             {
                 // Collect only pins attached to the current unit and convert.
                 // others are not associated to this symbol instance
-                int pin_unit = pin->GetLibPin()->GetUnit();
-                int pin_convert = pin->GetLibPin()->GetConvert();
+                int pin_unit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : GetUnit();
+                int pin_convert = pin->GetLibPin() ? pin->GetLibPin()->GetConvert() : GetConvert();
 
                 if( pin_unit > 0 && pin_unit != GetUnit() )
                     continue;
@@ -2346,8 +2349,8 @@ bool SCH_SYMBOL::doIsConnected( const VECTOR2I& aPosition ) const
 
         // Collect only pins attached to the current unit and convert.
         // others are not associated to this symbol instance
-        int pin_unit = pin->GetLibPin()->GetUnit();
-        int pin_convert = pin->GetLibPin()->GetConvert();
+        int pin_unit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : GetUnit();
+        int pin_convert = pin->GetLibPin() ? pin->GetLibPin()->GetConvert() : GetConvert();
 
         if( pin_unit > 0 && pin_unit != GetUnit() )
             continue;
@@ -2535,8 +2538,8 @@ bool SCH_SYMBOL::IsPointClickableAnchor( const VECTOR2I& aPos ) const
 {
     for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
-        int pin_unit = pin->GetLibPin()->GetUnit();
-        int pin_convert = pin->GetLibPin()->GetConvert();
+        int pin_unit = pin->GetLibPin() ? pin->GetLibPin()->GetUnit() : GetUnit();
+        int pin_convert = pin->GetLibPin() ? pin->GetLibPin()->GetConvert() :  GetConvert();
 
         if( pin_unit > 0 && pin_unit != GetUnit() )
             continue;
