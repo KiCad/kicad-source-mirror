@@ -90,7 +90,8 @@ void RENDER_SETTINGS::update()
         m_layerColorsHi[i]   = m_layerColors[i].Brightened( m_highlightFactor );
         m_layerColorsDark[i] = m_layerColors[i].Darkened( 1.0 - m_highlightFactor );
 
-        if( IsNetnameLayer( i ) || IsHoleLayer( i ) )
+        // Skip selection brightening for things close to black, and netname text
+        if( IsNetnameLayer( i ) || m_layerColors[i].GetBrightness() < 0.05 )
         {
             m_layerColorsSel[i] = m_layerColors[i];
             continue;
