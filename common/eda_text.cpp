@@ -1180,6 +1180,8 @@ static struct EDA_TEXT_DESC
                 &EDA_TEXT::SetText, &EDA_TEXT::GetText ),
                 textProps );
 
+        // This must be a PROPERTY_ENUM to get a choice list.
+        // SCH_ and PCB_PROPERTIES_PANEL::updateFontList() fill in the enum values.
         propMgr.AddProperty( new PROPERTY_ENUM<EDA_TEXT, int>( _HKI( "Font" ),
                 &EDA_TEXT::SetFontIndex, &EDA_TEXT::GetFontIndex ),
                 textProps )
