@@ -29,7 +29,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
     GetValue = lambda self: self.module.Value().GetText()
 
     def GenerateParameterList(self):
-        self.AddParam("Barcode", "Qr Pixel Width", self.uMM, 0.5, min_value=0.4)
+        self.AddParam("Barcode", "Qr Pixel Width", self.uMM, 0.5)
         self.AddParam("Barcode", "Border Margin (Px)", self.uInteger, 0)
         self.AddParam("Barcode", "Contents", self.uString, 'Example')
         self.AddParam("Barcode", "Negative", self.uBool, False)
