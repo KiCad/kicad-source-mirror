@@ -285,10 +285,11 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 {
     BOARD*     board = m_frame->GetBoard();
     FOOTPRINT* parentFP = m_item->GetParentFootprint();
+    wxString   msg = board->ConvertKIIDsToCrossReferences( UnescapeString( m_item->GetText() ) );
 
     if( m_SingleLineText->IsShown() )
     {
-        m_SingleLineText->SetValue( m_item->GetText() );
+        m_SingleLineText->SetValue( msg );
 
         if( m_item->Type() == PCB_FIELD_T && static_cast<PCB_FIELD*>( m_item )->IsReference() )
             KIUI::SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
@@ -297,8 +298,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     }
     else if( m_MultiLineText->IsShown() )
     {
-        wxString msg = board->ConvertKIIDsToCrossReferences( UnescapeString( m_item->GetText() ) );
-
         m_MultiLineText->SetValue( msg );
         m_MultiLineText->SetSelection( -1, -1 );
         m_MultiLineText->EmptyUndoBuffer();
@@ -435,6 +434,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( !m_textWidth.Validate( minSize, maxSize ) || !m_textHeight.Validate( minSize, maxSize ) )
         return false;
 
+    BOARD*       board = m_frame->GetBoard();
     BOARD_COMMIT commit( m_frame );
     commit.Modify( m_item );
 
@@ -451,13 +451,16 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( m_SingleLineText->IsShown() )
     {
         if( !m_SingleLineText->GetValue().IsEmpty() )
-            m_item->SetText( m_SingleLineText->GetValue() );
+        {
+            wxString txt = board->ConvertCrossReferencesToKIIDs( m_SingleLineText->GetValue() );
+
+            m_item->SetText( txt );
+        }
     }
     else if( m_MultiLineText->IsShown() )
     {
         if( !m_MultiLineText->GetValue().IsEmpty() )
         {
-            BOARD*   board = m_frame->GetBoard();
             wxString txt = board->ConvertCrossReferencesToKIIDs( m_MultiLineText->GetValue() );
 
 #ifdef __WXMAC__

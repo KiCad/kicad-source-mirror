@@ -261,8 +261,13 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataToWindow()
         return false;
 
     // Footprint Fields
-    for( PCB_FIELD* field : m_footprint->GetFields() )
-        m_fields->push_back( *field );
+    for( PCB_FIELD* srcField : m_footprint->GetFields() )
+    {
+        PCB_FIELD field( *srcField );
+        field.SetText( m_footprint->GetBoard()->ConvertKIIDsToCrossReferences( field.GetText() ) );
+
+        m_fields->push_back( field );
+    }
 
     // notify the grid
     wxGridTableMessage tmsg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED,
@@ -477,6 +482,12 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
     commit.Modify( m_footprint );
 
     // Update fields
+    for( size_t ii = 0; ii < m_fields->size(); ++ii )
+    {
+        PCB_FIELD& field = m_fields->at( ii );
+        field.SetText( m_footprint->GetBoard()->ConvertCrossReferencesToKIIDs( field.GetText() ) );
+    }
+
     size_t i = 0;
 
     for( PCB_FIELD* field : m_footprint->GetFields() )
