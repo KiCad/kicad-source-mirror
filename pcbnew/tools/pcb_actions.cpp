@@ -30,13 +30,11 @@
 #include <bitmaps.h>
 #include <layer_ids.h>
 #include <microwave/microwave_tool.h>
+#include <pcb_reference_image.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_selection_tool.h>
 #include <router/pns_router.h>
 #include <router/pns_routing_settings.h>
-
-// Forward declarations for types needed in the parameters
-class PCB_REFERENCE_IMAGE;
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be

@@ -25,13 +25,10 @@
 #include <bitmaps.h>
 #include <core/typeinfo.h>
 #include <layer_ids.h>
+#include <sch_bitmap.h>
 #include <sch_line_wire_bus_tool.h>
 #include <tools/ee_actions.h>
 #include <tool/tool_action.h>
-
-
-// Forward-define of parameter types
-class SCH_BITMAP;
 
 // Actions, being statically-defined, require specialized I18N handling.  We continue to
 // use the _() macro so that string harvesting by the I18N framework doesn't have to be
