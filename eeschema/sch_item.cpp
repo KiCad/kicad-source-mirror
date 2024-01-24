@@ -376,14 +376,18 @@ static struct SCH_ITEM_DESC
         REGISTER_TYPE( SCH_ITEM );
         propMgr.InheritsAfter( TYPE_HASH( SCH_ITEM ), TYPE_HASH( EDA_ITEM ) );
 
+#ifdef NOTYET
         // Not sure if this will ever be needed
-//        propMgr.AddProperty( new PROPERTY_ENUM<SCH_ITEM, SCH_LAYER_ID>( _HKI( "Layer" ),
-//                &SCH_ITEM::SetLayer, &SCH_ITEM::GetLayer ) )
-//                .SetIsHiddenFromPropertiesManager();
+        propMgr.AddProperty( new PROPERTY_ENUM<SCH_ITEM, SCH_LAYER_ID>( _HKI( "Layer" ),
+                &SCH_ITEM::SetLayer, &SCH_ITEM::GetLayer ) )
+                .SetIsHiddenFromPropertiesManager();
+#endif
 
+#ifdef NOTYET
         // Not yet functional in UI
-//        propMgr.AddProperty( new PROPERTY<SCH_ITEM, bool>( _HKI( "Locked" ),
-//                &SCH_ITEM::SetLocked, &SCH_ITEM::IsLocked ) );
+        propMgr.AddProperty( new PROPERTY<SCH_ITEM, bool>( _HKI( "Locked" ),
+                &SCH_ITEM::SetLocked, &SCH_ITEM::IsLocked ) );
+#endif
     }
 } _SCH_ITEM_DESC;
 
