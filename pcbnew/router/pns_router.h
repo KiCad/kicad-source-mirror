@@ -150,7 +150,7 @@ public:
     bool Finish();
     bool ContinueFromEnd( ITEM** aNewStartItem );
     bool FixRoute( const VECTOR2I& aP, ITEM* aItem, bool aForceFinish, bool aForceCommit );
-    void BreakSegment( ITEM *aItem, const VECTOR2I& aP );
+    void BreakSegmentOrArc( ITEM *aItem, const VECTOR2I& aP );
 
     std::optional<VECTOR2I> UndoLastSegment();
     void CommitRouting();

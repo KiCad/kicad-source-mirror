@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -767,7 +767,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTail
     // (now a hull or a walk/shove line cannot collide with the 'owner' of the hull under any circumstances).
     // This, however, introduced a subtle bug. For a row/column/any other 'regular' arrangement
     // of overlapping hulls (think of pads of a SOP/SOIC chip or a regular via grid), walking around may
-    // produce a new 'head' that is not considered colliding (due to the clearance epsilon), but with 
+    // produce a new 'head' that is not considered colliding (due to the clearance epsilon), but with
     // its start point inside one of the subsequent hulls to process.
     // We can't have head[0] inside any hull for the algorithm to work - therefore, we now consider the entire
     // 'tail+head' trace when walking around and in case of success, reconstruct the
@@ -932,7 +932,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead, LINE& aNewTai
     {
         newHead.AppendVia( makeVia( newHead.CPoint( -1 ) ) );
         PNS_DBG( Dbg(), AddPoint, newHead.Via().Pos(), GREEN, 1000000, "shove-new-via" );
-        
+
     }
 
     SHOVE::SHOVE_STATUS status = m_shove->ShoveLines( newHead );
@@ -1287,6 +1287,38 @@ bool LINE_PLACER::SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I
     aNode->Remove( s_old );
     aNode->Add( std::move( s_new[0] ), true );
     aNode->Add( std::move( s_new[1] ), true );
+
+    return true;
+}
+
+
+bool LINE_PLACER::SplitAdjacentArcs( NODE* aNode, ITEM* aArc, const VECTOR2I& aP )
+{
+    if( !aArc )
+        return false;
+
+    if( !aArc->OfKind( ITEM::ARC_T ) )
+        return false;
+
+    const JOINT* jt = aNode->FindJoint( aP, aArc );
+
+    if( jt && jt->LinkCount() >= 1 )
+        return false;
+
+    ARC*             a_old = static_cast<ARC*>( aArc );
+    const SHAPE_ARC& o_arc = a_old->Arc();
+
+    std::unique_ptr<ARC> a_new[2] = { Clone( *a_old ), Clone( *a_old ) };
+
+    a_new[0]->Arc().ConstructFromStartEndCenter( o_arc.GetP0(), aP, o_arc.GetCenter(),
+                                                 o_arc.IsClockwise(), o_arc.GetWidth() );
+
+    a_new[1]->Arc().ConstructFromStartEndCenter( aP, o_arc.GetP1(), o_arc.GetCenter(),
+                                                 o_arc.IsClockwise(), o_arc.GetWidth() );
+
+    aNode->Remove( a_old );
+    aNode->Add( std::move( a_new[0] ), true );
+    aNode->Add( std::move( a_new[1] ), true );
 
     return true;
 }

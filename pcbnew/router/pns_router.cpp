@@ -1039,13 +1039,20 @@ void ROUTER::SetInterface( ROUTER_IFACE *aIface )
 }
 
 
-void ROUTER::BreakSegment( ITEM *aItem, const VECTOR2I& aP )
+void ROUTER::BreakSegmentOrArc( ITEM *aItem, const VECTOR2I& aP )
 {
     NODE *node = m_world->Branch();
 
     LINE_PLACER placer( this );
 
-    if( placer.SplitAdjacentSegments( node, aItem, aP ) )
+    bool ret = false;
+
+    if( aItem->OfKind( ITEM::SEGMENT_T ) )
+        ret = placer.SplitAdjacentSegments( node, aItem, aP );
+    else if( aItem->OfKind( ITEM::ARC_T ) )
+        ret = placer.SplitAdjacentArcs( node, aItem, aP );
+
+    if( ret )
     {
         CommitRouting( node );
     }

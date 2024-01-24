@@ -1563,8 +1563,11 @@ bool ROUTER_TOOL::RoutingInProgress()
 
 void ROUTER_TOOL::breakTrack()
 {
-    if( m_startItem && m_startItem->OfKind( PNS::ITEM::SEGMENT_T ) )
-        m_router->BreakSegment( m_startItem, m_startSnapPoint );
+    if( !m_startItem )
+        return;
+
+    if( m_startItem->OfKind( PNS::ITEM::SEGMENT_T | PNS::ITEM::ARC_T ) )
+        m_router->BreakSegmentOrArc( m_startItem, m_startSnapPoint );
 }
 
 
@@ -2501,7 +2504,7 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     const BOARD_CONNECTED_ITEM* item =
             static_cast<const BOARD_CONNECTED_ITEM*>( selection.Front() );
 
-    if( item->Type() != PCB_TRACE_T )
+    if( item->Type() != PCB_TRACE_T && item->Type() != PCB_ARC_T )
         return 0;
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -2515,6 +2518,8 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
 
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
+
+    controls()->ForceCursorPosition( false );
 
     if( toolManager->IsContextMenuActive() )
     {

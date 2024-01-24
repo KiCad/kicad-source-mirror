@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2016-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -206,10 +206,16 @@ public:
     void GetModifiedNets( std::vector<NET_HANDLE>& aNets ) const override;
 
     /**
-     * Check if point \a aP lies on segment \a aSeg. If so, splits the segment in two, forming a
+     * Snaps the point \a aP to segment \a aSeg. Splits the segment in two, forming a
      * joint at \a aP and stores updated topology in node \a aNode.
      */
     bool SplitAdjacentSegments( NODE* aNode, ITEM* aSeg, const VECTOR2I& aP );
+
+    /**
+     * Snaps the point \a aP to arc \a aArc. Splits the arc in two, forming a
+     * joint at \a aP and stores updated topology in node \a aNode.
+     */
+    bool SplitAdjacentArcs( NODE* aNode, ITEM* aArc, const VECTOR2I& aP );
 
 private:
     /**
