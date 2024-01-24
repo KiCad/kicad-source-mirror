@@ -34,8 +34,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-24 01:51+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"PO-Revision-Date: 2024-01-24 02:44+0000\n"
+"Last-Translator: 向阳阳 <hinata.hoshino@foxmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -6335,7 +6335,9 @@ msgstr "从 '%s' 解析数值失败"
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
-msgstr "文件 '%s' 似乎不是有效的 KiCad 工程文件。"
+msgstr ""
+"文件 '%s' 似乎不是有效的 EasyEDA (立创 EDA) 专业版工程文件或者库文件。"
+"无法在其中找到 project.json 或者 device.json。"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #, c-format
@@ -8385,14 +8387,14 @@ msgstr "Allegro 网表文件"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr "EasyEDA（嘉立创 EDA）标准版备份压缩包"
+msgstr "EasyEDA（立创 EDA）标准版备份压缩包"
 
 #: common/wildcards_and_files_ext.cpp:304
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr "EasyEDA（嘉立创 EDA）专业版文件"
+msgstr "EasyEDA（立创 EDA）专业版文件"
 
 #: common/wildcards_and_files_ext.cpp:310
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
@@ -16544,7 +16546,7 @@ msgstr "加载原理图 \"%s\" 时出错：%s"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr "EasyEDA（嘉立创 EDA）标准版文件"
+msgstr "EasyEDA（立创 EDA）标准版文件"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:73
@@ -23461,11 +23463,11 @@ msgstr "导入 Eagle 工程文件"
 
 #: kicad/import_project.cpp:142
 msgid "Import EasyEDA Std Backup"
-msgstr "导入 EasyEDA 标准版备份"
+msgstr "导入 EasyEDA (立创 EDA) 标准版备份"
 
 #: kicad/import_project.cpp:149
 msgid "Import EasyEDA Pro Project"
-msgstr "导入 EasyEDA Pro 工程"
+msgstr "导入 EasyEDA (立创 EDA) 专业版工程"
 
 #: kicad/kicad.cpp:317
 #, c-format
@@ -23577,19 +23579,19 @@ msgstr "导入 EAGLE CAD XML 原理图和电路板"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr "EasyEDA (JLCEDA) 标准版备份..."
+msgstr "EasyEDA (立创 EDA) 标准版备份..."
 
 #: kicad/menubar.cpp:117
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "导入 EasyEDA (JLCEDA) 原理图和电路板"
+msgstr "导入 EasyEDA (立创 EDA) 原理图和电路板"
 
 #: kicad/menubar.cpp:121
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "EasyEDA (JLCEDA) 专业版工程 ..."
+msgstr "EasyEDA (立创 EDA) 专业版工程 ..."
 
 #: kicad/menubar.cpp:122
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "导入 EasyEDA (JLCEDA) 专业版原理图和电路板"
+msgstr "导入 EasyEDA (立创 EDA) 专业版原理图和电路板"
 
 #: kicad/menubar.cpp:128
 msgid "&Archive Project..."
@@ -34137,7 +34139,7 @@ msgstr "间距 (s)："
 msgid ""
 "Minimum spacing between adjacent tuning segments. The resulting spacing may "
 "be greater based on design rules."
-msgstr "相邻调谐段之间的最小间距。根据设计规则，所产生的间距可能更大。"
+msgstr "相邻等长走线之间的最小间距。根据设计规则，所产生的间距可能更大。"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:84
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
@@ -34162,7 +34164,7 @@ msgstr "单侧"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
 msgid "Tuning Pattern Properties"
-msgstr "调谐模式属性"
+msgstr "等长模式属性"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
 msgid "Remove Unused Layers"
@@ -36596,15 +36598,15 @@ msgstr "过孔间距"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
 msgid "Default properties for single-track tuning:"
-msgstr "单导线调谐的默认属性："
+msgstr "单端走线等长的默认属性："
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
 msgid "Default properties for differential-pairs:"
-msgstr "差分对的默认属性："
+msgstr "差分对走线等长的默认属性："
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:283
 msgid "Default properties for differential-pair skews:"
-msgstr "差分对偏移的默认属性："
+msgstr "差分对走线偏移的默认属性："
 
 #: pcbnew/drc/drc_cache_generator.cpp:123
 msgid "Gathering copper items..."
@@ -36655,7 +36657,7 @@ msgstr "网络类 '%s'"
 #: pcbnew/drc/drc_engine.cpp:307
 #, c-format
 msgid "netclass '%s' (diff pair)"
-msgstr "网络类 '%s' (差分队)"
+msgstr "网络类 '%s' (差分对)"
 
 #: pcbnew/drc/drc_engine.cpp:353
 #, c-format
@@ -38792,15 +38794,15 @@ msgstr "从库 '%s' 加载封装 %s 时出错。"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:259
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1988
 msgid "Tuning Pattern"
-msgstr "调谐模式"
+msgstr "等长模式"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:264
 msgid "Tuning Patterns"
-msgstr "调谐模式"
+msgstr "等长模式"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:417
 msgid "Tuning"
-msgstr "调谐"
+msgstr "等长"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1288
 msgid "too long"
@@ -38812,11 +38814,11 @@ msgstr "太短"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1290
 msgid "tuned"
-msgstr "调谐的"
+msgstr "调整就绪"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1364
 msgid "Edit Tuning Pattern"
-msgstr "编辑调谐模式"
+msgstr "编辑等长模式"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1834
 msgid "current skew"
@@ -38852,7 +38854,7 @@ msgstr "目标偏移：%s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1950
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1972
 msgid "(from tuning pattern properties)"
-msgstr "(来自调谐模式属性）"
+msgstr "(来自等长模式属性）"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1958
 #, c-format
@@ -38871,7 +38873,7 @@ msgstr "长度约束： %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2178
 msgid "Tune"
-msgstr "调谐"
+msgstr "调整"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2275
 msgid "Single track"
@@ -38891,7 +38893,7 @@ msgstr "模式属性"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2306
 msgid "Tuning Mode"
-msgstr "调谐模式"
+msgstr "等长模式"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2312
 msgid "Min Amplitude"
@@ -40850,7 +40852,7 @@ msgstr "封装 '%s' 无法在工程 '%s' 中找到"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr "EasyEDA (JLCEDA) 专业版项目"
+msgstr "EasyEDA (立创 EDA) 专业版项目"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:249
 #, c-format
@@ -43425,7 +43427,7 @@ msgstr "增大间距"
 # 此处需要考证step的真正位置以便匹配其翻译
 #: pcbnew/tools/pcb_actions.cpp:195
 msgid "Increase tuning pattern spacing by one step."
-msgstr "将调谐模式间距增大一步。"
+msgstr "将等长间距增大一步。"
 
 #: pcbnew/tools/pcb_actions.cpp:203
 msgid "Decrease Spacing"
@@ -43433,7 +43435,7 @@ msgstr "减小间距"
 
 #: pcbnew/tools/pcb_actions.cpp:204
 msgid "Decrease tuning pattern spacing by one step."
-msgstr "将调谐模式间距减小一步。"
+msgstr "将等长间距减小一步。"
 
 #: pcbnew/tools/pcb_actions.cpp:212
 msgid "Increase Amplitude"
@@ -43441,7 +43443,7 @@ msgstr "增大幅度"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Increase tuning pattern amplitude by one step."
-msgstr "将调谐模式幅度增大一布。"
+msgstr "将等长蛇形幅度增大一步。"
 
 #: pcbnew/tools/pcb_actions.cpp:221
 msgid "Decrease Amplitude"
@@ -43449,7 +43451,7 @@ msgstr "减小幅度"
 
 #: pcbnew/tools/pcb_actions.cpp:222
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "将调谐模式幅度减小一步。"
+msgstr "将等长蛇形幅度减小一步。"
 
 #: pcbnew/tools/pcb_actions.cpp:231
 msgid "Add Aligned Dimension"
