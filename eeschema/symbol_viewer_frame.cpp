@@ -1055,7 +1055,7 @@ void SYMBOL_VIEWER_FRAME::onSelectNextSymbol( wxCommandEvent& aEvent )
     int            ii = m_symbolList->GetSelection();
 
     // Select the next symbol or stop at the end of the list.
-    if( ii != wxNOT_FOUND || ii != (int) m_symbolList->GetCount() - 1 )
+    if( ii != wxNOT_FOUND && ii < (int)(m_symbolList->GetCount() - 1) )
         ii += 1;
 
     m_symbolList->SetSelection( ii );
