@@ -2328,9 +2328,6 @@ void PCB_IO_IPC2581::generateLayerFeatures( wxXmlNode* aStepNode )
 
             for( PCB_LAYER_ID layer : pad_layers )
             {
-                if( fp->IsFlipped() )
-                    layer = FlipLayer( layer );
-
                 if( pad->FlashLayer( layer ) )
                     elements[layer][pad->GetNetCode()].push_back( pad );
             }
