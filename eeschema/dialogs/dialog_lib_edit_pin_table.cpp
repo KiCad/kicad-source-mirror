@@ -999,7 +999,6 @@ void DIALOG_LIB_EDIT_PIN_TABLE::AddPin( LIB_PIN* pin )
 void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
 {
     // TODO: handle delete of multiple rows....
-
     if( !m_grid->CommitPendingChanges() )
         return;
 
@@ -1011,15 +1010,16 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
     if( curRow < 0 )
         return;
 
+    // move the selection first because wx internally will try to reselect the row we deleted in out of order events
+    int nextSelRow = std::max( curRow-1, 0 );
+    m_grid->GoToCell( nextSelRow, m_grid->GetGridCursorCol() );
+    m_grid->SetGridCursor( nextSelRow, m_grid->GetGridCursorCol() );
+    m_grid->SelectRow( nextSelRow );
+
     LIB_PINS removedRow = m_dataModel->RemoveRow( curRow );
 
     for( LIB_PIN* pin : removedRow )
         m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
-
-    curRow = std::min( curRow, m_grid->GetNumberRows() - 1 );
-    m_grid->GoToCell( curRow, m_grid->GetGridCursorCol() );
-    m_grid->SetGridCursor( curRow, m_grid->GetGridCursorCol() );
-    m_grid->SelectRow( curRow );
 
     updateSummary();
 }
