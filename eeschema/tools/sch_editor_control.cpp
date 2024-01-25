@@ -1420,27 +1420,41 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aPasteScreen,
+void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol,
                                              const SCH_SHEET_PATH& aPastePath,
                                              const KIID_PATH& aClipPath,
                                              bool aForceKeepAnnotations )
 {
-    wxCHECK( m_frame && aSymbol && aPasteScreen, /* void */ );
+    wxCHECK( m_frame && aSymbol, /* void */ );
 
-    SCH_SYMBOL_INSTANCE instance;
+    SCH_SYMBOL_INSTANCE newInstance;
+    bool instanceFound = false;
     KIID_PATH pasteLookupPath = aClipPath;
 
     m_pastedSymbols.insert( aSymbol );
 
+    for( const SCH_SYMBOL_INSTANCE& tmp : aSymbol->GetInstanceReferences() )
+    {
+        if( tmp.m_Path.EndsWith( aClipPath ) )
+        {
+            newInstance = tmp;
+            instanceFound = true;
+
+            wxLogDebug( wxS( "Pasting found symbol instance:\n\tpath: %s\n\tuuid: %s." ),
+                        aClipPath.AsString(), aSymbol->m_Uuid.AsString() );
+
+            break;
+        }
+    }
+
     // The pasted symbol look up paths include the symbol UUID.
     pasteLookupPath.push_back( aSymbol->m_Uuid );
 
-    if( m_clipboardSymbolInstances.count( pasteLookupPath ) > 0 )
+    if( !instanceFound )
     {
-        instance = m_clipboardSymbolInstances.at( pasteLookupPath );
-    }
-    else
-    {
+        wxLogDebug( wxS( "Clipboard symbol instance **not** found:\n\tpath: %s\n\tuuid: %s." ),
+                    aClipPath.AsString(), aSymbol->m_Uuid.AsString() );
+
         // Some legacy versions saved value fields escaped.  While we still do in the symbol
         // editor, we don't anymore in the schematic, so be sure to unescape them.
         SCH_FIELD* valueField = aSymbol->GetField( VALUE_FIELD );
@@ -1448,36 +1462,36 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aP
 
         // Pasted from notepad or an older instance of eeschema.  Use the values in the fields
         // instead.
-        instance.m_Reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
-        instance.m_Unit = aSymbol->GetUnit();
+        newInstance.m_Reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
+        newInstance.m_Unit = aSymbol->GetUnit();
     }
 
-    instance.m_Path = aPastePath.Path() + aClipPath;
-    instance.m_ProjectName = m_frame->Prj().GetProjectName();
+    newInstance.m_Path = aPastePath.Path();
+    newInstance.m_ProjectName = m_frame->Prj().GetProjectName();
 
-    aSymbol->AddHierarchicalReference( instance );
+    aSymbol->AddHierarchicalReference( newInstance );
 
     if( !aForceKeepAnnotations )
         aSymbol->ClearAnnotation( &aPastePath, false );
 
     // We might clear annotations but always leave the original unit number from the paste.
-    aSymbol->SetUnit( instance.m_Unit );
+    aSymbol->SetUnit( newInstance.m_Unit );
 }
 
 
-SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPastePath,
+SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( SCH_SHEET* aSheet,
+                                                      const SCH_SHEET_PATH& aPastePath,
                                                       const KIID_PATH& aClipPath,
-                                                      SCH_SHEET* aSheet,
                                                       bool aForceKeepAnnotations,
-                                                      SCH_SHEET_LIST* aPastedSheetsSoFar,
-                                                      SCH_REFERENCE_LIST* aPastedSymbolsSoFar )
+                                                      SCH_SHEET_LIST* aPastedSheets,
+                                                      std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST>& aPastedSymbols )
 {
-    wxCHECK( aSheet && aPastedSheetsSoFar && aPastedSymbolsSoFar, aPastePath );
+    wxCHECK( aSheet && aPastedSheets, aPastePath );
 
     SCH_SHEET_PATH sheetPath = aPastePath;
     sheetPath.push_back( aSheet );
 
-    aPastedSheetsSoFar->push_back( sheetPath );
+    aPastedSheets->push_back( sheetPath );
 
     if( aSheet->GetScreen() == nullptr )
         return sheetPath; // We can only really set the page number but not load any items
@@ -1503,8 +1517,7 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
                 }
             }
 
-            updatePastedSymbol( symbol, aSheet->GetScreen(), sheetPath, aClipPath,
-                                aForceKeepAnnotations );
+            updatePastedSymbol( symbol, sheetPath, aClipPath, aForceKeepAnnotations );
         }
         else if( item->Type() == SCH_SHEET_T )
         {
@@ -1513,7 +1526,7 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
             wxCHECK2( subsheet, continue );
 
             // Make sure pins get a new UUID and set the dirty connectivity flag.
-            if( !aPastedSheetsSoFar->ContainsSheet( subsheet ) )
+            if( !aPastedSheets->ContainsSheet( subsheet ) )
             {
                 for( SCH_SHEET_PIN* pin : subsheet->GetPins() )
                 {
@@ -1525,15 +1538,12 @@ SCH_SHEET_PATH SCH_EDITOR_CONTROL::updatePastedSheet( const SCH_SHEET_PATH& aPas
             KIID_PATH newClipPath = aClipPath;
             newClipPath.push_back( subsheet->m_Uuid );
 
-            updatePastedSheet( sheetPath, newClipPath, subsheet, aForceKeepAnnotations,
-                               aPastedSheetsSoFar, aPastedSymbolsSoFar );
-
-            SCH_SHEET_PATH subSheetPath = sheetPath;
-
-            subSheetPath.push_back( subsheet );
-            subSheetPath.GetSymbols( *aPastedSymbolsSoFar );
+            updatePastedSheet( subsheet, sheetPath, newClipPath, aForceKeepAnnotations,
+                               aPastedSheets, aPastedSymbols );
         }
     }
+
+    sheetPath.GetSymbols( aPastedSymbols[aPastePath] );
 
     return sheetPath;
 }
@@ -1770,7 +1780,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             }
 
             for( SCH_SHEET_PATH& instance : pasteInstances )
-                updatePastedSymbol( symbol, tempScreen, instance, clipPath, forceKeepAnnotations );
+                updatePastedSymbol( symbol, instance, clipPath, forceKeepAnnotations );
 
             // Assign a new KIID
             const_cast<KIID&>( item->m_Uuid ) = KIID();
@@ -1875,12 +1885,10 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             // reset the annotations or copy "kept" annotations from the supplementary clipboard.
             for( SCH_SHEET_PATH& instance : pasteInstances )
             {
-                SCH_SHEET_PATH sheetPath = updatePastedSheet( instance, clipPath, sheet,
-                                                              ( forceKeepAnnotations && annotate.automatic ),
-                                                              &pastedSheets[instance],
-                                                              &pastedSymbols[instance] );
-
-                sheetPath.GetSymbols( pastedSymbols[instance] );
+                SCH_SHEET_PATH subPath = updatePastedSheet( sheet, instance, clipPath,
+                                                            ( forceKeepAnnotations && annotate.automatic ),
+                                                            &pastedSheets[instance],
+                                                            pastedSymbols );
             }
         }
         else
@@ -1996,28 +2004,65 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 annotatedSymbols[sheetPath].AddItem( pastedSymbols[sheetPath][i] );
             }
         }
+
+        for( const SCH_SHEET_PATH& pastedSheetPath : pastedSheets[sheetPath] )
+        {
+            for( size_t i = 0; i < pastedSymbols[pastedSheetPath].GetCount(); i++ )
+            {
+                if(  pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS
+                  || pasteMode == PASTE_MODE::RESPECT_OPTIONS
+                  || pastedSymbols[pastedSheetPath][i].AlwaysAnnotate() )
+                {
+                    annotatedSymbols[pastedSheetPath].AddItem( pastedSymbols[pastedSheetPath][i] );
+                }
+            }
+        }
     }
 
     if( !annotatedSymbols.empty() )
     {
-        for( SCH_SHEET_PATH& instance : pasteInstances )
+        for( const SCH_SHEET_PATH& path : pasteInstances )
         {
-            annotatedSymbols[instance].SortByReferenceOnly();
+            annotatedSymbols[path].SortByReferenceOnly();
 
             if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
-                annotatedSymbols[instance].ReannotateDuplicates( existingRefs );
+                annotatedSymbols[path].ReannotateDuplicates( existingRefs );
             else
-                annotatedSymbols[instance].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
-                                                                (ANNOTATE_ALGO_T) annotate.method,
-                                                                annotateStartNum, existingRefs,
-                                                                false,
-                                                                &hierarchy );
+                annotatedSymbols[path].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
+                                                            (ANNOTATE_ALGO_T) annotate.method,
+                                                            annotateStartNum, existingRefs,
+                                                            false,
+                                                            &hierarchy );
 
-            annotatedSymbols[instance].UpdateAnnotation();
+            annotatedSymbols[path].UpdateAnnotation();
 
             // Update existing refs for next iteration
-            for( size_t i = 0; i < annotatedSymbols[instance].GetCount(); i++ )
-                existingRefs.AddItem( annotatedSymbols[instance][i] );
+            for( size_t i = 0; i < annotatedSymbols[path].GetCount(); i++ )
+                existingRefs.AddItem( annotatedSymbols[path][i] );
+
+            for( const SCH_SHEET_PATH& pastedSheetPath : pastedSheets[path] )
+            {
+                annotatedSymbols[pastedSheetPath].SortByReferenceOnly();
+
+                if( pasteMode == PASTE_MODE::UNIQUE_ANNOTATIONS )
+                {
+                    annotatedSymbols[pastedSheetPath].ReannotateDuplicates( existingRefs );
+                }
+                else
+                {
+                    annotatedSymbols[pastedSheetPath].ReannotateByOptions( (ANNOTATE_ORDER_T) annotate.sort_order,
+                                                                           (ANNOTATE_ALGO_T) annotate.method,
+                                                                           annotateStartNum, existingRefs,
+                                                                           false,
+                                                                           &hierarchy );
+                }
+
+                annotatedSymbols[pastedSheetPath].UpdateAnnotation();
+
+                // Update existing refs for next iteration
+                for( size_t i = 0; i < annotatedSymbols[pastedSheetPath].GetCount(); i++ )
+                    existingRefs.AddItem( annotatedSymbols[pastedSheetPath][i] );
+            }
         }
     }
 
