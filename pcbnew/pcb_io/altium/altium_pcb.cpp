@@ -2453,8 +2453,8 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
     {
         if( m_polygons.size() <= aElem.polygon )
         {
-            THROW_IO_ERROR( wxString::Format( "Tracks stream tries to access polygon id %d "
-                                              "of %d existing polygons.",
+            THROW_IO_ERROR( wxString::Format( "Tracks stream tries to access polygon id %u "
+                                              "of %zu existing polygons.",
                                               aElem.polygon, m_polygons.size() ) );
         }
 
