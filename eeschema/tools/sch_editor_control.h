@@ -182,14 +182,13 @@ private:
 
     void doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aForce );
 
-    void updatePastedSymbol( SCH_SYMBOL* aSymbol, SCH_SCREEN* aPasteScreen,
-                             const SCH_SHEET_PATH& aPastePath, const KIID_PATH& aClipPath,
-                             bool aForceKeepAnnotations );
+    void updatePastedSymbol( SCH_SYMBOL* aSymbol, const SCH_SHEET_PATH& aPastePath,
+                             const KIID_PATH& aClipPath, bool aForceKeepAnnotations );
 
-    SCH_SHEET_PATH updatePastedSheet( const SCH_SHEET_PATH& aPastePath, const KIID_PATH& aClipPath,
-                                      SCH_SHEET* aSheet, bool aForceKeepAnnotations,
-                                      SCH_SHEET_LIST* aPastedSheetsSoFar,
-                                      SCH_REFERENCE_LIST* aPastedSymbolsSoFar );
+    SCH_SHEET_PATH updatePastedSheet( SCH_SHEET* aSheet, const SCH_SHEET_PATH& aPastePath,
+                                      const KIID_PATH& aClipPath, bool aForceKeepAnnotations,
+                                      SCH_SHEET_LIST* aPastedSheets,
+                                      std::map<SCH_SHEET_PATH, SCH_REFERENCE_LIST>& aPastedSymbols );
 
     void setPastedSymbolInstances( const SCH_SCREEN* aScreen );
 
