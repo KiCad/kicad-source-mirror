@@ -2766,7 +2766,8 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
         {
             std::vector<double> val_list = simulator()->GetRealVector( vec, 1 );
 
-            wxCHECK2( !val_list.empty(), continue );
+            if( val_list.empty() )
+                continue;
 
             wxString            value = SPICE_VALUE( val_list[ 0 ] ).ToSpiceString();
             wxString            signal;
