@@ -69,6 +69,9 @@ public:
         m_EpsilonR( 1.0 ), m_LossTangent( 0.0 )
     {}
 
+    bool operator==( const DIELECTRIC_PRMS& aOther ) const;
+    bool operator!=( const DIELECTRIC_PRMS& aOther ) const { return !operator==( aOther ); }
+
 private:
     friend class BOARD_STACKUP_ITEM;
 
@@ -92,6 +95,9 @@ class BOARD_STACKUP_ITEM
 public:
     BOARD_STACKUP_ITEM( BOARD_STACKUP_ITEM_TYPE aType );
     BOARD_STACKUP_ITEM( const BOARD_STACKUP_ITEM& aOther );
+
+    bool operator==( const BOARD_STACKUP_ITEM& aOther ) const;
+    bool operator!=( const BOARD_STACKUP_ITEM& aOther ) const { return !operator==( aOther ); }
 
     /**
      * Add (insert) a DIELECTRIC_PRMS item to m_DielectricPrmsList
