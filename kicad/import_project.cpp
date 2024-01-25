@@ -84,36 +84,52 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     importProj.m_TargetProj.SetExt( FILEEXT::ProjectFileExtension );
     importProj.m_TargetProj.MakeAbsolute();
 
-    // Check if the project directory is empty
-    wxDir targetDirTest( targetDir );
-    if( targetDirTest.IsOpened() && targetDirTest.HasFiles() )
+    // Check if the project directory exists and is empty
+    if( !importProj.m_TargetProj.DirExists() )
     {
-        msg = _( "The selected directory is not empty.  We recommend you "
-                 "create projects in their own clean directory.\n\nDo you "
-                 "want to create a new empty directory for the project?" );
-
-        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxICON_WARNING );
-        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-        if( dlg.ShowModal() == wxID_YES )
+        if( !importProj.m_TargetProj.Mkdir() )
         {
-            // Append a new directory with the same name of the project file
-            // Keep iterating until we find an empty directory
-            importProj.FindEmptyTargetDir();
-
-            if( !wxMkdir( importProj.m_TargetProj.GetPath() ) )
-            {
-                msg = _( "Error creating new directory. Please try a different path. The "
-                         "project cannot be imported." );
-
-                wxMessageDialog dirErrorDlg( this, msg, _( "Error" ), wxOK_DEFAULT | wxICON_ERROR );
-                dirErrorDlg.ShowModal();
-                return;
-            }
+            wxString msg;
+            msg.Printf( _( "Folder '%s' could not be created.\n\n"
+                           "Make sure you have write permissions and try again." ),
+                        importProj.m_TargetProj.GetPath() );
+            DisplayErrorMessage( this, msg );
+            return;
         }
     }
+    else
+    {
+        wxDir targetDirTest( targetDir );
+        if( targetDirTest.IsOpened() && targetDirTest.HasFiles() )
+        {
+            msg = _( "The selected directory is not empty.  We recommend you "
+                     "create projects in their own clean directory.\n\nDo you "
+                     "want to create a new empty directory for the project?" );
 
-    targetDirTest.Close();
+            KIDIALOG dlg( this, msg, _( "Confirmation" ), wxYES_NO | wxICON_WARNING );
+            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+            if( dlg.ShowModal() == wxID_YES )
+            {
+                // Append a new directory with the same name of the project file
+                // Keep iterating until we find an empty directory
+                importProj.FindEmptyTargetDir();
+
+                if( !wxMkdir( importProj.m_TargetProj.GetPath() ) )
+                {
+                    msg = _( "Error creating new directory. Please try a different path. The "
+                             "project cannot be imported." );
+
+                    wxMessageDialog dirErrorDlg( this, msg, _( "Error" ),
+                                                 wxOK_DEFAULT | wxICON_ERROR );
+                    dirErrorDlg.ShowModal();
+                    return;
+                }
+            }
+        }
+
+        targetDirTest.Close();
+    }
 
     CreateNewProject( importProj.m_TargetProj.GetFullPath(), false /* Don't create stub files */ );
     LoadProject( importProj.m_TargetProj );
