@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2023 KiCad Developers, see AITHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AITHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -617,6 +617,12 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* a
     // convert any text variable cross-references to their UUIDs
     m_text = aField->Schematic()->ConvertRefsToKIIDs( m_text );
 
+    // Changing a sheetname need to update the hierarchy navigator
+    bool needUpdateHierNav = false;
+
+    if( parent && parent->Type() == SCH_SHEET_T && fieldType == SHEETNAME )
+        needUpdateHierNav = m_text != aField->GetText();
+
     aField->SetText( m_text );
     updateText( aField );
     aField->SetPosition( m_position );
@@ -676,4 +682,8 @@ void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* a
 
     if( positioningModified && parent )
         parent->ClearFieldsAutoplaced();
+
+    //Update the hierarchy navigator labels if needed
+    if( needUpdateHierNav )
+        editFrame->UpdateLabelsHierarchyNavigator();
 }

@@ -263,6 +263,45 @@ void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
 }
 
 
+void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
+{
+    // Update the labels of the hierarchical tree of the schematic.
+    // Must be called only for an up to date tree, to update displayed labels after
+    // a sheet name or a sheet number change.
+
+    std::function<void( const wxTreeItemId& )> updateLabel =
+            [&]( const wxTreeItemId& id )
+            {
+                TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+                SCH_SHEET* sheet = itemData->m_SheetPath.Last();
+                wxString sheetNameLabel = formatPageString( sheet->GetFields()[SHEETNAME].GetShownText( false ),
+                                                       itemData->m_SheetPath.GetPageNumber() );
+                if( m_tree->GetItemText( id ) != sheetNameLabel )
+                    m_tree->SetItemText( id, sheetNameLabel );
+            };
+
+    wxTreeItemId rootId  = m_tree->GetRootItem();
+    updateLabel( rootId );
+
+    std::function<void( const wxTreeItemId& )> recursiveDescent =
+            [&]( const wxTreeItemId& id )
+            {
+                wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+                wxTreeItemIdValue cookie;
+                wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+
+                while( child.IsOk() )
+                {
+                    updateLabel( child );
+                    recursiveDescent( child );
+                    child = m_tree->GetNextChild( id, cookie );
+                }
+            };
+
+    recursiveDescent( rootId );
+}
+
+
 void HIERARCHY_PANE::onRightClick( wxTreeEvent& aEvent )
 {
     wxTreeItemId  itemSel = aEvent.GetItem();
@@ -310,6 +349,8 @@ void HIERARCHY_PANE::onRightClick( wxTreeEvent& aEvent )
             }
 
             m_frame->OnModify();
+
+            UpdateLabelsHierarchyTree();
         }
     }
 }

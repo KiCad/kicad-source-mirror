@@ -1143,6 +1143,14 @@ void SCH_EDIT_FRAME::UpdateHierarchyNavigator()
 }
 
 
+void SCH_EDIT_FRAME::UpdateLabelsHierarchyNavigator()
+{
+    // Update only the hierarchy navigation tree labels.
+    // The tree list is expectyed to be up to date
+    m_hierarchy->UpdateLabelsHierarchyTree();
+}
+
+
 void SCH_EDIT_FRAME::UpdateHierarchySelection()
 {
     m_hierarchy->UpdateHierarchySelection();

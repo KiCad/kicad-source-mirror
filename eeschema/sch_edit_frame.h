@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2023 CERN (www.cern.ch)
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,6 +232,13 @@ public:
      * Update the hierarchy navigation tree and history
      */
     void UpdateHierarchyNavigator();
+
+    /**
+     * Update the hierarchy navigation tree labels.
+     * No change for the tree, only the labels are updated, after editing a sheet
+     * name or a sheet number.
+     */
+    void UpdateLabelsHierarchyNavigator();
 
     /**
      * Update the hierarchy navigation tree selection (cross-probe from schematic to hierarchy

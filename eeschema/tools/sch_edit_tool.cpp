@@ -2496,6 +2496,10 @@ int SCH_EDIT_TOOL::EditPageNumber( const TOOL_EVENT& aEvent )
 
     m_frame->OnModify();
 
+    // Update the hierarchy navigator labels if needed
+    if( pageNumber != dlg.GetValue() )
+        m_frame->UpdateLabelsHierarchyNavigator();
+
     return 0;
 }
 
