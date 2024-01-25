@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-16 04:06+0000\n"
+"PO-Revision-Date: 2024-01-26 04:27+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -13339,7 +13339,7 @@ msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:159
 msgid "Mirror:"
-msgstr "Peili:"
+msgstr "Peilaa:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Not mirrored"
@@ -16386,9 +16386,8 @@ msgstr ""
 "Tuntematon tai odottamaton tietuetunnus %d löytyi \"Lisätiedot\"-osiosta."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:637
-#, fuzzy
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "Odotettu Altium Schematic Library -tiedoston versio 5.0"
+msgstr "Odotettu Altium piirikaaviotiedoston versio 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:669
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -17588,9 +17587,8 @@ msgid "Symbol %s [%s]"
 msgstr "Symboli %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2648
-#, fuzzy
 msgid "Mirror X"
-msgstr "Peilaa Y"
+msgstr "Peilaa X"
 
 #: eeschema/sch_symbol.cpp:2650
 msgid "Mirror Y"
@@ -26149,15 +26147,14 @@ msgid "Impulse voltage:"
 msgstr "Impulssijännite:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
-#, fuzzy
 msgid ""
 "Given the rated voltage and the overvoltage category, a device should "
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
 msgstr ""
-"Kun otetaan huomioon nimellisjännite ja ylijänniteluokka, laitteen tulisi "
-"kestää tämä arvo ilman eristyksen rikkoutumista. Tämä impulssijännite on "
-"standardi 1,2/50 µs aalto"
+"Nimellisjännitetteen ja ylijänniteluokan mukaan, laitteen tulisi kestää tän "
+"jännitearvon eristyksen rikkoutumatta. Tämä impulssijännite on standardi 1,2/"
+"50 µs aalto"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -37456,9 +37453,8 @@ msgid "Pad net doesn't match schematic"
 msgstr "Anturaverkko ei vastaa kytkentäkaaviota"
 
 #: pcbnew/drc/drc_item.cpp:185
-#, fuzzy
 msgid "Footprint attributes don't match symbol"
-msgstr "Jalanjälki ei vastaa kirjastossa olevaa kopiota"
+msgstr "Jalanjäljen määritteet eivät vastaa kirjastossa olevaa kopiota"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Footprint not found in libraries"
@@ -38112,9 +38108,9 @@ msgstr "Jalanjälkityypit eriävät."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:573
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:133
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ."
-msgstr "%s sijainti eroaa."
+msgstr "'%s' asetukset eroavat."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:570
 #: pcbnew/footprint.cpp:3480
