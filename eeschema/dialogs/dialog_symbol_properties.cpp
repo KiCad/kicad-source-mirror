@@ -562,7 +562,7 @@ void DIALOG_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
     for( const SCH_FIELD& field : *m_fields )
         fields.emplace_back( field );
 
-    DIALOG_SIM_MODEL dialog( this, *m_symbol, fields );
+    DIALOG_SIM_MODEL dialog( this, m_parentFrame, *m_symbol, fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;

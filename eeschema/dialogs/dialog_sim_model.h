@@ -61,7 +61,8 @@ public:
         MODEL
     };
 
-    DIALOG_SIM_MODEL( wxWindow* aParent, T_symbol& aSymbol, std::vector<T_field>& aFields );
+    DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame, T_symbol& aSymbol,
+                      std::vector<T_field>& aFields );
 
     ~DIALOG_SIM_MODEL();
 
@@ -120,6 +121,7 @@ private:
     bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() ); }
 
 private:
+    EDA_BASE_FRAME*        m_frame;
     T_symbol&              m_symbol;
     std::vector<T_field>&  m_fields;
 

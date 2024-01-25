@@ -43,6 +43,9 @@
 #include <wx/filedlg.h>
 #include <wx/textfile.h>
 #include <fmt/format.h>
+#include <sch_edit_frame.h>
+#include <sim/sim_model_l_mutual.h>
+#include <sim/spice_circuit_model.h>
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
@@ -57,9 +60,11 @@ bool equivalent( SIM_MODEL::DEVICE_T a, SIM_MODEL::DEVICE_T b )
 
 
 template <typename T_symbol, typename T_field>
-DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, T_symbol& aSymbol,
-                                                       std::vector<T_field>& aFields ) :\
+DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame,
+                                                       T_symbol& aSymbol,
+                                                       std::vector<T_field>& aFields ) :
         DIALOG_SIM_MODEL_BASE( aParent ),
+        m_frame( aFrame ),
         m_symbol( aSymbol ),
         m_fields( aFields ),
         m_libraryModelsMgr( &Prj() ),
@@ -953,14 +958,59 @@ wxPGProperty* DIALOG_SIM_MODEL<T_symbol, T_field>::newParamProperty( SIM_MODEL* 
     //  break;
 
     case SIM_VALUE::TYPE_STRING:
-        if( param.info.enumValues.empty() )
+        // Special case: K-line mutual inductance statement parameters l1 and l2 are references
+        // to other inductors in the circuit.
+        if( dynamic_cast<SIM_MODEL_L_MUTUAL*>( aModel ) != nullptr
+                    && ( param.info.name == "l1" || param.info.name == "l2" ) )
+        {
+            wxArrayString inductors;
+
+            if( SCH_EDIT_FRAME* schEditFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
+            {
+                SPICE_CIRCUIT_MODEL circuit( &schEditFrame->Schematic() );
+                NULL_REPORTER       devNul;
+
+                circuit.ReadSchematicAndLibraries( NETLIST_EXPORTER_SPICE::OPTION_DEFAULT_FLAGS,
+                                                   devNul );
+
+                for( const SPICE_ITEM& item : circuit.GetItems() )
+                {
+                    if( item.model->GetDeviceType() == SIM_MODEL::DEVICE_T::L )
+                        inductors.push_back( item.refName );
+                }
+
+                inductors.Sort(
+                        []( const wxString& a, const wxString& b ) -> int
+                        {
+                            return StrNumCmp( a, b, true );
+                        } );
+            }
+
+            if( inductors.empty() )
+            {
+                prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel,
+                                                aParamIndex, SIM_VALUE::TYPE_STRING );
+            }
+            else
+            {
+                prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, *aModel,
+                                              aParamIndex, inductors );
+            }
+        }
+        else if( param.info.enumValues.empty() )
         {
             prop = new SIM_STRING_PROPERTY( paramDescription, param.info.name, *aModel,
                                             aParamIndex, SIM_VALUE::TYPE_STRING );
         }
         else
         {
-            prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex );
+            wxArrayString values;
+
+            for( const std::string& string : aModel->GetParam( aParamIndex ).info.enumValues )
+                values.Add( string );
+
+            prop = new SIM_ENUM_PROPERTY( paramDescription, param.info.name, *aModel, aParamIndex,
+                                          values );
         }
         break;
 
