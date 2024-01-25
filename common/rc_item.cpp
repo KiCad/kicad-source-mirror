@@ -78,7 +78,7 @@ void RC_ITEM::SetItems( const EDA_ITEM* aItem, const EDA_ITEM* bItem,
 }
 
 
-wxString getSeverityString( SEVERITY aSeverity )
+wxString RC_ITEM::getSeverityString( SEVERITY aSeverity )
 {
     wxString severity;
 
@@ -244,8 +244,6 @@ RC_TREE_MODEL::RC_TREE_MODEL( EDA_DRAW_FRAME* aParentFrame, wxDataViewCtrl* aVie
         m_severities( 0 ),
         m_rcItemsProvider( nullptr )
 {
-    m_view->GetMainWindow()->Connect( wxEVT_SIZE, wxSizeEventHandler( RC_TREE_MODEL::onSizeView ),
-                                      nullptr, this );
 }
 
 
@@ -327,8 +325,7 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
 #endif
 
     m_view->ClearColumns();
-    int width = m_view->GetMainWindow()->GetRect().GetWidth() - WX_DATAVIEW_WINDOW_PADDING;
-    m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, width );
+    m_view->AppendTextColumn( wxEmptyString, 0, wxDATAVIEW_CELL_INERT, wxCOL_WIDTH_AUTOSIZE );
 
     ExpandAll();
 
@@ -708,16 +705,4 @@ void RC_TREE_MODEL::CenterMarker( const MARKER_BASE* aMarker )
             return;
         }
     }
-}
-
-
-void RC_TREE_MODEL::onSizeView( wxSizeEvent& aEvent )
-{
-    int width = m_view->GetMainWindow()->GetRect().GetWidth() - WX_DATAVIEW_WINDOW_PADDING;
-
-    if( m_view->GetColumnCount() > 0 )
-        m_view->GetColumn( 0 )->SetWidth( width );
-
-    // Pass size event to other widgets
-    aEvent.Skip();
 }

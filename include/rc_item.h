@@ -179,6 +179,8 @@ public:
     }
 
 protected:
+    static wxString getSeverityString( SEVERITY aSeverity );
+
     int           m_errorCode;         ///< The error code's numeric value
     wxString      m_errorMessage;      ///< A message describing the details of this specific error
     wxString      m_errorTitle;        ///< The string describing the type of error
@@ -290,8 +292,6 @@ public:
 
 protected:
     void     rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, int aSeverities );
-    void     onSizeView( wxSizeEvent& aEvent );
-    wxString getSeverityString( SEVERITY aSeverity );
 
     EDA_DRAW_FRAME*                    m_editFrame;
     wxDataViewCtrl*                    m_view;
