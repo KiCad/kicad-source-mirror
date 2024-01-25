@@ -325,7 +325,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             DS_PROXY_UNDO_ITEM  alt_item( this );
             DS_PROXY_UNDO_ITEM* item = static_cast<DS_PROXY_UNDO_ITEM*>( eda_item );
             item->Restore( this );
-            *item = std::move( alt_item );
+            *item = alt_item;
         }
         else if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( eda_item ) )
         {
