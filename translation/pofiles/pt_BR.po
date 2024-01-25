@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-14 12:30+0000\n"
+"PO-Revision-Date: 2024-01-25 03:02+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -2014,9 +2014,8 @@ msgid "Additional Contributions By"
 msgstr "Contribuições adicionais por"
 
 #: common/dialog_about/AboutDialog_main.cpp:1136
-#, fuzzy
 msgid "Librarian Team"
-msgstr "Time de bibliotecários do KiCad"
+msgstr "Time de bibliotecários"
 
 #: common/dialog_about/AboutDialog_main.cpp:1208
 msgid "3D models by"
@@ -2035,9 +2034,8 @@ msgid "Icons by"
 msgstr "Ícones por"
 
 #: common/dialog_about/AboutDialog_main.cpp:1255
-#, fuzzy
 msgid "Package Developers"
-msgstr "Desenvolvedores"
+msgstr "Desenvolvedores de pacotes"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -13293,9 +13291,8 @@ msgid "Edit"
 msgstr "Editar"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "Delimitador do campo:"
+msgstr "Delimitador de campo:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
@@ -13303,9 +13300,8 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "String delimiter:"
-msgstr "Delimitador do texto:"
+msgstr "Delimitador de string:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "\""
@@ -16500,9 +16496,8 @@ msgstr ""
 "da seção \"Adicional\"."
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:637
-#, fuzzy
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "Esperado arquivo Altium Schematic Library versão 5.0"
+msgstr "Versão esperada do arquivo Altium Schematic 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:669
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -17732,9 +17727,8 @@ msgid "Symbol %s [%s]"
 msgstr "Símbolo %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2648
-#, fuzzy
 msgid "Mirror X"
-msgstr "Espelhar Y"
+msgstr "Espelhar X"
 
 #: eeschema/sch_symbol.cpp:2650
 msgid "Mirror Y"
@@ -38171,9 +38165,8 @@ msgid "Pad net doesn't match schematic"
 msgstr "A rede ilha bate com o esquema"
 
 #: pcbnew/drc/drc_item.cpp:185
-#, fuzzy
 msgid "Footprint attributes don't match symbol"
-msgstr "O footprint não bate com a cópia existente na biblioteca"
+msgstr "Os atributos do footprint não batem com o símbolo"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Footprint not found in libraries"
@@ -38828,9 +38821,9 @@ msgstr "Os tipos do footprint diferem."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:573
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:133
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ."
-msgstr "%s posição(ões) diferem."
+msgstr "%s configurações diferem."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:570
 #: pcbnew/footprint.cpp:3480
