@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-25 03:02+0000\n"
+"PO-Revision-Date: 2024-01-26 04:27+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -16942,6 +16942,9 @@ msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
 msgstr ""
+"El archivo seleccionado es una biblioteca de símbolos CADSTAR. No contiene "
+"un diseño esquemático, por lo que no se puede importar ni abrir de esta "
+"manera."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:587
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -17086,6 +17089,9 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
+"Ruta al archivo de archivos esquemáticos de CADSTAR (*.csa) relacionado con "
+"esta biblioteca de piezas de CADSTAR. Si no se especifica ninguno, se supone "
+"que está 'symbol.csa' en la misma carpeta."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:242
 msgid ""
@@ -17093,6 +17099,10 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
+"Nombre de la biblioteca de huellas relacionada con los símbolos de esta "
+"biblioteca. Debe crear una entrada separada para el archivo CADSTAR PCB "
+"Archive (*.cpa) en las tablas de la biblioteca de huellas. Si no se "
+"especifica ninguno, se supone 'cadstarpcblib'."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:286
 #, fuzzy, c-format
@@ -17137,6 +17147,8 @@ msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
 msgstr ""
+"'%s' es un archivo de formato binario Eagle; Sólo se pueden importar "
+"archivos Eagle en formato XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
@@ -17201,7 +17213,7 @@ msgstr "Error al cargar el esquema '%s': %s"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr ""
+msgstr "Archivos estándar EasyEDA (JLCEDA)"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:73
@@ -17212,6 +17224,7 @@ msgstr "No se pudo analizar el valor: '%s'"
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:58
 msgid "httplib plugin missing library table handle!"
 msgstr ""
+"¡Falta el identificador de la tabla de biblioteca del complemento httplib!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:83
 #, c-format
@@ -17229,6 +17242,8 @@ msgstr ""
 #, c-format
 msgid "HTTP library settings file %s is missing the API version number!"
 msgstr ""
+"¡Al archivo de configuración de la biblioteca HTTP %s le falta el número de "
+"versión de API!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:236
 #, c-format
@@ -17236,21 +17251,26 @@ msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s"
 msgstr ""
+"El archivo de configuración de la biblioteca HTTP %s usa la versión API %s, "
+"pero KiCad requiere la versión %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:247
 #, c-format
 msgid "HTTP library settings file %s is missing the root URL!"
 msgstr ""
+"¡Al archivo de configuración de la biblioteca HTTP %s le falta la URL raíz!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:259
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
 msgstr ""
+"El archivo de configuración de la biblioteca HTTP %s tiene un tipo de "
+"biblioteca inválido"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:306
 #, c-format
 msgid "Could not connect to %s. Errors: %s"
-msgstr ""
+msgstr "No se pudo conectar con %s. Errores: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:47
 #, fuzzy
@@ -17493,53 +17513,59 @@ msgstr "ID de biblioteca de símbolos inválido"
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr ""
+"Se ignoró el archivo en '%s'. En su lugar, se utiliza el archivo encontrado "
+"anteriormente en '%s'."
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:360
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr ""
+msgstr "Esperando un número entero en la línea %d en el archivo %s"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:383
 #, c-format
 msgid "Expected data missing on line %d in file %s"
-msgstr ""
+msgstr "Faltan datos esperados en la línea %d en el archivo %s"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:389
 #, c-format
 msgid "Extra data found on line %d in file %s"
-msgstr ""
+msgstr "Se encontraron datos adicionales en la línea %d del archivo %s"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:415
 msgid "Expecting 0, 1, 2, 3 or 4"
-msgstr ""
+msgstr "Experando 0, 1, 2, 3 ó 4"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:429
 msgid "Expecting NORMAL or WIDE"
-msgstr ""
+msgstr "Esperando NORMAL o WIDE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:447
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
-msgstr ""
+msgstr "Esperando I, O, B, IN, OUT o BIDIR"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:468
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "Esperando R0, R90, R18, R270, M0, M90, M180 o M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:490
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
 "VBOTTOM"
 msgstr ""
+"Esperando LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP o "
+"VBOTTOM"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:512
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
+"Esperando NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT o "
+"VRIGHT"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:526
 msgid "Expecting CELL or BLOCK"
-msgstr ""
+msgstr "Esperando CELL o BLOCK"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:545
 #, c-format
@@ -19016,7 +19042,7 @@ msgstr "Definición de nombre de pines inválida"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
-msgstr ""
+msgstr "esperando definición del formato de medición"
 
 #: eeschema/sim/sim_lib_mgr.cpp:83
 #, c-format
@@ -19173,11 +19199,11 @@ msgstr "Amplitud"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
-msgstr ""
+msgstr "Ruido (V/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:614
 msgid "Noise (A/√Hz)"
-msgstr ""
+msgstr "Ruido (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
 msgid "Intensity"
@@ -19259,6 +19285,8 @@ msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
 msgstr ""
+"Primero debe ejecutar una simulación TRAN; sus resultados se utilizarán para "
+"la transformada rápida de Fourier."
 
 #: eeschema/sim/simulator_frame.cpp:410
 msgid ""
@@ -19320,7 +19348,7 @@ msgstr "Medida integral"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
-msgstr ""
+msgstr "Realizar análisis de Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:214
 #: eeschema/sim/simulator_frame_ui.cpp:731
@@ -19336,7 +19364,7 @@ msgstr "Análisis de Fourier de %s"
 
 #: eeschema/sim/simulator_frame_ui.cpp:273
 msgid "Fourier Analyses of Multiple Signals"
-msgstr ""
+msgstr "Análisis de Fourier de múltiples señales"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
 #, fuzzy
@@ -19361,7 +19389,7 @@ msgstr "Eliminar medición"
 #: eeschema/sim/simulator_frame_ui.cpp:953
 #, c-format
 msgid "Analysis %u - "
-msgstr ""
+msgstr "Análisis %u - "
 
 #: eeschema/sim/simulator_frame_ui.cpp:589
 #: eeschema/sim/simulator_frame_ui.cpp:596
@@ -19468,7 +19496,7 @@ msgstr "Análisis de transitorios"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "Small-Signal Distortion Analysis"
-msgstr ""
+msgstr "Análisis de distorsión de señal pequeña"
 
 #: eeschema/sim/spice_simulator.cpp:62
 #, fuzzy
@@ -19551,6 +19579,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"Funciones SPICE:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -20277,11 +20340,11 @@ msgstr "Re-enlazado de huellas cancelado por el usuario."
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "true"
-msgstr ""
+msgstr "verdadero"
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "false"
-msgstr ""
+msgstr "falso"
 
 #: eeschema/tools/backannotate.cpp:387
 #, c-format
@@ -20321,7 +20384,7 @@ msgstr "Cambiar la referencia \"%s\" a \"%s\"."
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "Agregue el campo '%s' con valor '%s'."
 
 #: eeschema/tools/backannotate.cpp:563
 #, c-format
@@ -20367,6 +20430,7 @@ msgstr ""
 #: eeschema/tools/ee_actions.cpp:71
 msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr ""
+"Muestra la ventana de simulación para ejecutar simulaciones SPICE o IBIS."
 
 #: eeschema/tools/ee_actions.cpp:80
 msgid "Opens the datasheet in a browser"
@@ -21174,7 +21238,7 @@ msgstr "No rellenar"
 
 #: eeschema/tools/ee_actions.cpp:924
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "Establecer el atributo de no completar"
 
 #: eeschema/tools/ee_actions.cpp:929
 #, fuzzy
@@ -21183,7 +21247,7 @@ msgstr "No rellenar"
 
 #: eeschema/tools/ee_actions.cpp:930
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "Limpiar el atributo de no completar"
 
 #: eeschema/tools/ee_actions.cpp:936
 #, fuzzy
@@ -21652,7 +21716,7 @@ msgstr "Guardar una copia de la hoja activa a otra ubicación o nombre"
 
 #: eeschema/tools/ee_actions.cpp:1377
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "Nueva pestaña de análisis..."
 
 #: eeschema/tools/ee_actions.cpp:1385
 msgid "Open Workbook..."
@@ -21765,7 +21829,7 @@ msgstr "Símbolo %s"
 #: eeschema/tools/ee_inspection_tool.cpp:280
 #: pcbnew/tools/board_inspection_tool.cpp:1489
 msgid "Summary"
-msgstr ""
+msgstr "Resumen"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 msgid "Schematic vs library diff for:"
@@ -23463,7 +23527,7 @@ msgstr "Ordenar las capas por extensión de archivo"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:184
 msgid "Layers Display Parameters: Offset and Rotation"
-msgstr ""
+msgstr "Parámetros de visualización de capas: desplazamiento y rotación"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:189
 msgid "Move Current Layer Up"
@@ -23564,6 +23628,8 @@ msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
+"Ruta a la hoja de dibujo, esto anula cualquier hoja definida por el proyecto "
+"existente cuando se usa"
 
 #: kicad/cli/command.cpp:177
 msgid ""
@@ -23571,6 +23637,9 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
+"Anula o agrega variables del proyecto, se puede usar varias veces para "
+"declarar múltiples variables.\n"
+"Úselo en el formato de '--define-var clave=valor' o '-D clave=valor'"
 
 #: kicad/cli/command.h:32
 #, fuzzy
@@ -23627,10 +23696,11 @@ msgstr "La biblioteca de huellas no existe o no es accesible\n"
 #: kicad/cli/command_pcb_drc.cpp:46
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr ""
+"Ejecuta la verificación de reglas de diseño (DRC) en la PCB y crea un informe"
 
 #: kicad/cli/command_pcb_drc.cpp:51 kicad/cli/command_sch_erc.cpp:50
 msgid "Output file format, options: json, report"
-msgstr ""
+msgstr "Formato de archivo de salida, opciones: json, informe"
 
 #: kicad/cli/command_pcb_drc.cpp:55 pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -23646,28 +23716,37 @@ msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Informar todas las violaciones de DRC, esto equivale a incluir todos los "
+"demás argumentos de gravedad"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Informar todas las violaciones de nivel error de DRC; esto se puede combinar "
+"con los otros argumentos de gravedad"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Informar todas las violaciones de nivel advertencia de DRC; esto se puede "
+"combinar con los otros argumentos de gravedad"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Informar todas las infracciones de DRC excluidas; esto se puede combinar con "
+"los otros argumentos de gravedad"
 
 #: kicad/cli/command_pcb_drc.cpp:84
 msgid "Return a nonzero exit code if DRC violations exist"
 msgstr ""
+"Devolver un código de salida distinto de cero si existen violaciones de DRC"
 
 #: kicad/cli/command_pcb_drc.cpp:137 kicad/cli/command_pcb_export_3d.cpp:208
 #: kicad/cli/command_pcb_export_drill.cpp:148
@@ -23684,10 +23763,11 @@ msgstr "Formato inválido\n"
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr ""
+"Utilidades de exportación (Gerbers, taladro, archivos de posición, etc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:66
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "Formato de archivo de salida, opciones: paso, glb (glTF binario)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:70
 msgid "Overwrite output file"
@@ -23738,7 +23818,7 @@ msgstr "Distancia mínima entre puntos para tratarlos como separados"
 
 #: kicad/cli/command_pcb_export_3d.cpp:122
 msgid "Do not optimize STEP file (enables writing parametric curves)"
-msgstr ""
+msgstr "No optimizar el archivo STEP (permite escribir curvas paramétricas)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid ""
@@ -23758,10 +23838,15 @@ msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
+"Nombre de la carpeta para crear y almacenar modelos 3D; si no se especifica "
+"o está vacía, los modelos se incrustarán en el archivo VRML principal "
+"exportado"
 
 #: kicad/cli/command_pcb_export_3d.cpp:146
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
+"Se utiliza con --models-dir para generar rutas relativas en el archivo "
+"resultante"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
 #, fuzzy
@@ -23871,7 +23956,7 @@ msgstr "La precisión de las coordenadas Gerber debe ser 5 ó 6\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "Generar un DXF a partir de una lista de capas"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -23951,6 +24036,8 @@ msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
 msgstr ""
+"Trazar múltiples Gerbers para una PCB, incluida la capacidad de usar "
+"configuraciones de trazado de placa almacenadas"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:49
 msgid ""
@@ -24059,7 +24146,7 @@ msgstr "Lado inválido especificado\n"
 
 #: kicad/cli/command_pcb_export_svg.cpp:42
 msgid "Generate SVG outputs of a given layer list"
-msgstr ""
+msgstr "Generar salidas SVG de una lista de capas determinada"
 
 #: kicad/cli/command_pcb_export_svg.cpp:54
 #, fuzzy
