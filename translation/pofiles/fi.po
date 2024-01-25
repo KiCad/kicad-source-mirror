@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-16 04:06+0000\n"
+"PO-Revision-Date: 2024-01-26 14:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
@@ -11486,7 +11486,7 @@ msgstr "180"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:159
 msgid "Mirror:"
-msgstr "Peili:"
+msgstr "Peilaa:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Not mirrored"
