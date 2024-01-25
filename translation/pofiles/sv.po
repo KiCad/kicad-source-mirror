@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-23 02:01+0000\n"
+"PO-Revision-Date: 2024-01-26 04:27+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -37530,7 +37530,7 @@ msgstr "Villkoret uppfylldes."
 
 #: pcbnew/drc/drc_engine.cpp:885 pcbnew/drc/drc_engine.cpp:1516
 msgid "--> Assertion failed. <--"
-msgstr "--> Villkoret misslyckades. <--"
+msgstr "--> Villkoret fallerade. <--"
 
 #: pcbnew/drc/drc_engine.cpp:905
 #, c-format
@@ -37910,9 +37910,8 @@ msgid "Footprint doesn't match copy in library"
 msgstr "Fotavtryck stämmer inte överens med kopia i bibliotek"
 
 #: pcbnew/drc/drc_item.cpp:201
-#, fuzzy
 msgid "Assertion failure"
-msgstr "Assertion failure"
+msgstr "Assertion-fel (villkorskontroll fallerade)"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Copper sliver"
@@ -43550,12 +43549,12 @@ msgstr "Ingen 'physical_clearance'-begränsning definierad."
 #: pcbnew/tools/board_inspection_tool.cpp:583
 #: pcbnew/tools/board_inspection_tool.cpp:1397
 msgid "Assertions"
-msgstr "Försäkran"
+msgstr "Villkor"
 
 #: pcbnew/tools/board_inspection_tool.cpp:584
 #: pcbnew/tools/board_inspection_tool.cpp:1398
 msgid "Assertions for:"
-msgstr "Försäkran för:"
+msgstr "Villkor för:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:615
 msgid "Select two items for a clearance resolution report."
