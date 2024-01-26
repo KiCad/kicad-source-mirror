@@ -84,10 +84,6 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
     m_argParser.add_argument( ARG_EXIT_CODE_VIOLATIONS )
             .help( UTF8STDSTR( _( "Return a nonzero exit code if DRC violations exist" ) ) )
             .flag();
-
-    m_argParser.add_argument( ARG_PARITY )
-            .help( UTF8STDSTR( _( "Test for parity between PCB and schematic" ) ) )
-            .flag();
 }
 
 
@@ -100,7 +96,6 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
     drcJob->SetVarOverrides( m_argDefineVars );
     drcJob->m_reportAllTrackErrors = m_argParser.get<bool>( ARG_ALL_TRACK_ERRORS );
     drcJob->m_exitCodeViolations = m_argParser.get<bool>( ARG_EXIT_CODE_VIOLATIONS );
-    drcJob->m_parity = m_argParser.get<bool>( ARG_PARITY );
 
     if( m_argParser.get<bool>( ARG_SEVERITY_ALL ) )
     {
