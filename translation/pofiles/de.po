@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-24 01:51+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-01-27 05:27+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
 "Language: de\n"
@@ -26337,7 +26337,7 @@ msgstr "Isolierung für Geräte in Niederspannungssystemen"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:31
 msgid "Determine the transient impulse voltage to withstand"
-msgstr "Bestimmung der widerstehenden transienten Überspannung"
+msgstr "Bestimmung der zu widerstehenden transienten Impulsspannung"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:41
 msgid "Rated Voltage (RMS or DC):"
@@ -33547,7 +33547,7 @@ msgstr "Pad-Form:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:365
 msgid "Circular"
-msgstr "Kreis"
+msgstr "Kreisförmig"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:365 pcbnew/pad.cpp:1232
@@ -33557,11 +33557,11 @@ msgstr "Oval"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Rectangular"
-msgstr "Rechteck"
+msgstr "Rechteckig"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Trapezoidal"
-msgstr "Trapez"
+msgstr "Trapezförmig"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99 pcbnew/pad.cpp:1884
 msgid "Rounded rectangle"
@@ -33573,7 +33573,7 @@ msgstr "Abgeschrägtes Rechteck"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Chamfered with other corners rounded"
-msgstr "Abgeschrägt mit anderen gerundeten Ecken"
+msgstr "Abgeschrägt mit anderen abgerundeten Ecken"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Custom (circular base)"
@@ -33585,11 +33585,11 @@ msgstr "Benutzerdefiniert (rechteckige Basis)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:114
 msgid "Trapezoid delta:"
-msgstr "Trapezoid Delta:"
+msgstr "Trapez-Delta:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:125
 msgid "Trapezoid axis:"
-msgstr "Trapezoid Achse:"
+msgstr "Trapez-Achse:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:284
@@ -35274,7 +35274,7 @@ msgstr "Endpunkte oder Richtung des Startpunkts beibehalten"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 msgid "Track mouse-drag mode:"
-msgstr "Verhalten beim an Leiterbahn ziehen mit der Maus:"
+msgstr "Beim Maus-Ziehen an Leiterbahnen:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 msgid "Drag (45 degree mode)"
@@ -38259,7 +38259,7 @@ msgstr "Das Pad-Netz stimmt nicht mit dem Schaltplan überein"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Footprint attributes don't match symbol"
-msgstr "Footprintattribute stimmen mit denen des Symbols überein"
+msgstr "Footprintattribute stimmen nicht mit denen des Symbols überein"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Footprint not found in libraries"
@@ -38734,7 +38734,7 @@ msgstr "%s Größe weicht ab."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:276
 #, c-format
 msgid "%s trapezoid delta differs."
-msgstr "%s trapezförmiges Delta weicht ab."
+msgstr "%s Trapez-Delta weicht ab."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:284
 #, c-format
@@ -40978,7 +40978,7 @@ msgstr "NPTH, mechanisch"
 
 #: pcbnew/pad.cpp:1883
 msgid "Trapezoid"
-msgstr "Trapezförmig"
+msgstr "Trapez"
 
 #: pcbnew/pad.cpp:1895
 msgid "Castellated pad"
@@ -44468,14 +44468,14 @@ msgstr "Linien abfasen"
 
 #: pcbnew/tools/edit_tool.cpp:1210
 msgid "Enter chamfer setback:"
-msgstr "Fasungsabsatz eingeben:"
+msgstr "Fasenabsenkung eingeben:"
 
 #: pcbnew/tools/edit_tool.cpp:1224
 msgid ""
 "A setback of zero was entered.\n"
 "The chamfer operation was not performed."
 msgstr ""
-"Es wurde ein Absatz von Null eingegeben.\n"
+"Es wurde eine Absenkung von Null eingegeben.\n"
 "Die Abfasung wurde nicht durchgeführt."
 
 #: pcbnew/tools/edit_tool.cpp:1316
