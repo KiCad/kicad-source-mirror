@@ -57,6 +57,7 @@ public:
     OUTPUT_FORMAT m_format;
 
     bool m_exitCodeViolations;
+    bool m_parity;
 };
 
 #endif

@@ -1006,7 +1006,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     brd->RecordDRCExclusions();
     brd->DeleteMARKERs( true, true );
-    drcEngine->RunTests( units, drcJob->m_reportAllTrackErrors, false );
+    drcEngine->RunTests( units, drcJob->m_reportAllTrackErrors, drcJob->m_parity );
     drcEngine->ClearViolationHandler();
 
     commit.Push( _( "DRC" ), SKIP_UNDO | SKIP_SET_DIRTY );
