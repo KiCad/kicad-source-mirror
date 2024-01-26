@@ -133,7 +133,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Give an icon
     wxIcon icon;
     wxIconBundle icon_bundle;
-    
+
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_eeschema, 48 ) );
     icon_bundle.AddIcon( icon );
     icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_eeschema, 128 ) );
@@ -1507,12 +1507,10 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_CLEANUP_FLAGS aCleanupFlags )
 
         for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
         {
-            SCH_ITEM* item = static_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
+            SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
 
-            wxCHECK2( item, continue );
-
-            // Ignore objects that are not connectable.
-            if( !item->IsConnectable() )
+            // Ignore non SCH_ITEM objects and objects that are not connectable.
+            if( !item || !item->IsConnectable() )
                 continue;
 
             SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( changed_list->GetScreenForItem( ii ) );
