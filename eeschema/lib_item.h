@@ -123,6 +123,9 @@ public:
         return false;
     }
 
+    static wxString GetUnitDescription( int aUnit );
+    static wxString GetBodyStyleDescription( int aBodyStyle );
+
     /**
      * Create a copy of this #LIB_ITEM (with a new Uuid).
      */

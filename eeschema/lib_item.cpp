@@ -43,27 +43,42 @@ LIB_ITEM::LIB_ITEM( KICAD_T aType, LIB_SYMBOL* aSymbol, int aUnit, int aConvert 
 }
 
 
+wxString LIB_ITEM::GetUnitDescription( int aUnit )
+{
+    if( aUnit == 0 )
+        return _( "All" );
+    else
+        return LIB_SYMBOL::LetterSubReference( aUnit, 'A' );
+}
+
+
+wxString LIB_ITEM::GetBodyStyleDescription( int aBodyStyle )
+{
+    if( aBodyStyle == 0 )
+        return _( "All" );
+    else if( aBodyStyle == LIB_ITEM::BODY_STYLE::DEMORGAN )
+        return _( "Alternate" );
+    else if( aBodyStyle == LIB_ITEM::BODY_STYLE::BASE )
+        return _( "Standard" );
+    else
+        return wxT( "?" );
+}
+
+
 void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
 
     aList.emplace_back( _( "Type" ), GetTypeName() );
 
-    if( m_unit == 0 )
-        msg = _( "All" );
-    else
-        msg = LIB_SYMBOL::LetterSubReference( m_unit, 'A' );
+    if( LIB_SYMBOL* parent = GetParent() )
+    {
+        if( parent->GetUnitCount() )
+            aList.emplace_back( _( "Unit" ), GetUnitDescription( m_unit ) );
 
-    aList.emplace_back( _( "Unit" ), msg );
-
-    if( m_bodyStyle == LIB_ITEM::BODY_STYLE::BASE )
-        msg = _( "no" );
-    else if( m_bodyStyle == LIB_ITEM::BODY_STYLE::DEMORGAN )
-        msg = _( "yes" );
-    else
-        msg = wxT( "?" );
-
-    aList.emplace_back( _( "Converted" ), msg );
+        if( parent->HasAlternateBodyStyle() )
+            aList.emplace_back( _( "Body Style" ), GetBodyStyleDescription( m_bodyStyle ) );
+    }
 
     if( IsPrivate() )
         aList.emplace_back( _( "Private" ), wxEmptyString );

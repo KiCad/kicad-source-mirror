@@ -115,10 +115,9 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         {
             if( pin->GetUnit() == 0 || next->GetUnit() == 0 )
             {
-                // TODO: 9.0: change "of converted" to "of alternate body style"
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>"
-                               " of converted." ),
+                               " in %s body style." ),
                             next->GetNumber(),
                             nextName,
                             aUnitsProvider->MessageTextFromValue( next->GetPosition().x ),
@@ -126,14 +125,14 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                             pin->GetNumber(),
                             pin->GetName(),
                             aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
-                            aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ) );
+                            aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
+                            LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
             }
             else
             {
-                // TODO: 9.0: change "of converted" to "of alternate body style"
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>"
-                               " in units %s and %s of converted." ),
+                               " in units %s and %s of %s body style." ),
                             next->GetNumber(),
                             nextName,
                             aUnitsProvider->MessageTextFromValue( next->GetPosition().x ),
@@ -143,7 +142,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                             aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                             aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
                             aSymbol->GetUnitReference( next->GetUnit() ),
-                            aSymbol->GetUnitReference( pin->GetUnit() ) );
+                            aSymbol->GetUnitReference( pin->GetUnit() ),
+                            LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
             }
         }
         else
@@ -245,24 +245,24 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             {
                 if( aSymbol->GetUnitCount() <= 1 )
                 {
-                    // TODO: 9.0: change "of converted" to "of alternate body style"
                     msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
-                                   " of converted." ),
-                                pin->GetNumber(),
-                                pinName,
-                                aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
-                                aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ) );
-                }
-                else
-                {
-                    // TODO: 9.0: change "of converted" to "of alternate body style"
-                    msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
-                                   " in unit %c of converted." ),
+                                   " in %s body style." ),
                                 pin->GetNumber(),
                                 pinName,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                                'A' + pin->GetUnit() - 1 );
+                                LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                }
+                else
+                {
+                    msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
+                                   " in unit %c of %s body style." ),
+                                pin->GetNumber(),
+                                pinName,
+                                aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
+                                aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
+                                'A' + pin->GetUnit() - 1,
+                                LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
                 }
             }
             else
@@ -303,24 +303,24 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             {
                 if( aSymbol->GetUnitCount() <= 1 )
                 {
-                    // TODO: 9.0: change "of converted" to "of alternate body style"
                     msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>"
-                                   " of converted." ),
-                                pin->GetNumber(),
-                                pinName,
-                                aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
-                                aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ) );
-                }
-                else
-                {
-                    // TODO: 9.0: change "of converted" to "of alternate body style"
-                    msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b>"
-                                   " in unit %c of converted." ),
+                                   " of %s body style." ),
                                 pin->GetNumber(),
                                 pinName,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                                'A' + pin->GetUnit() - 1 );
+                                LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                }
+                else
+                {
+                    msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>"
+                                   " in unit %c of %s body style." ),
+                                pin->GetNumber(),
+                                pinName,
+                                aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
+                                aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
+                                'A' + pin->GetUnit() - 1,
+                                LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
                  }
             }
             else

@@ -211,18 +211,25 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 
 void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    wxString  msg;
+    wxString    msg;
+    SCH_SYMBOL* symbol = GetParentSymbol();
 
     aList.emplace_back( _( "Type" ), _( "Pin" ) );
 
-    if( m_libPin->GetBodyStyle() == LIB_ITEM::BODY_STYLE::BASE )
-        msg = _( "no" );
-    else if( m_libPin->GetBodyStyle() == LIB_ITEM::BODY_STYLE::DEMORGAN )
-        msg = _( "yes" );
-    else
-        msg = wxT( "?" );
+    if( LIB_SYMBOL* libSymbol = symbol->GetLibSymbolRef().get() )
+    {
+        if( libSymbol->GetUnitCount() )
+        {
+            aList.emplace_back( _( "Unit" ),
+                                LIB_ITEM::GetUnitDescription( m_libPin->GetUnit() ) );
+        }
 
-    aList.emplace_back( _( "Converted" ), msg );
+        if( libSymbol->HasAlternateBodyStyle() )
+        {
+            aList.emplace_back( _( "Body Style" ),
+                                LIB_ITEM::GetBodyStyleDescription( m_libPin->GetBodyStyle() ) );
+        }
+    }
 
     aList.emplace_back( _( "Name" ), GetShownName() );
     aList.emplace_back( _( "Number" ), GetShownNumber() );
@@ -237,7 +244,6 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( aFrame );
     SCH_SHEET_PATH* currentSheet = schframe ? &schframe->GetCurrentSheet() : nullptr;
-    SCH_SYMBOL*     symbol = GetParentSymbol();
 
     // Don't use GetShownText(); we want to see the variable references here
     aList.emplace_back( symbol->GetRef( currentSheet ),
