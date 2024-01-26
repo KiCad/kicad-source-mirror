@@ -1478,6 +1478,10 @@ void PAD::ImportSettingsFrom( const PAD& aMasterPad )
     SetAttribute( aMasterPad.GetAttribute() );
     SetProperty( aMasterPad.GetProperty() );
 
+    // Must be after setting attribute and layerSet
+    if( !CanHaveNumber() )
+        SetNumber( wxEmptyString );
+
     // I am not sure the m_LengthPadToDie should be imported, because this is a parameter
     // really specific to a given pad (JPC).
 #if 0
