@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-24 02:24+0000\n"
-"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"PO-Revision-Date: 2024-01-27 06:24+0000\n"
+"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -28908,7 +28908,7 @@ msgstr "Pad-Form:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:365
 msgid "Circular"
-msgstr "Kreis"
+msgstr "Kreisförmig"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:365 pcbnew/pad.cpp:1252
@@ -28918,11 +28918,11 @@ msgstr "Oval"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Rectangular"
-msgstr "Rechteck"
+msgstr "Rechteckig"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Trapezoidal"
-msgstr "Trapez"
+msgstr "Trapezförmig"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99 pcbnew/pad.cpp:1760
 msgid "Rounded rectangle"
@@ -28934,7 +28934,7 @@ msgstr "Abgeschrägtes Rechteck"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Chamfered with other corners rounded"
-msgstr "Abgeschrägt mit anderen gerundeten Ecken"
+msgstr "Abgeschrägt mit anderen abgerundeten Ecken"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:99
 msgid "Custom (circular base)"
@@ -28946,11 +28946,11 @@ msgstr "Benutzerdefiniert (rechteckige Basis)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:114
 msgid "Trapezoid delta:"
-msgstr "Trapezoid Delta:"
+msgstr "Trapez-Delta:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:125
 msgid "Trapezoid axis:"
-msgstr "Trapezoid Achse:"
+msgstr "Trapez-Achse:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:284
@@ -35364,7 +35364,7 @@ msgstr "NPTH, mechanisch"
 
 #: pcbnew/pad.cpp:1759
 msgid "Trapezoid"
-msgstr "Trapezförmig"
+msgstr "Trapez"
 
 #: pcbnew/pad.cpp:1771
 msgid "Castellated pad"
