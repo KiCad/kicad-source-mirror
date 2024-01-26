@@ -28,6 +28,7 @@ JOB_PCB_DRC::JOB_PCB_DRC( bool aIsCli ) :
     m_units( JOB_PCB_DRC::UNITS::MILLIMETERS ),
     m_severity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
     m_format( OUTPUT_FORMAT::REPORT ),
-    m_exitCodeViolations( false )
+    m_exitCodeViolations( false ),
+    m_parity( false )
 {
 }
