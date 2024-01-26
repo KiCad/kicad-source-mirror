@@ -63,6 +63,7 @@ public:
     int OnUndoRedo( const TOOL_EVENT& aEvent );
 
     bool InPadEditMode() { return m_editPad != niluuid; }
+    void ExitPadEditMode();
 
     wxString GetLastPadNumber() const { return m_lastPadNumber; }
     void SetLastPadNumber( const wxString& aPadNumber ) { m_lastPadNumber = aPadNumber; }
@@ -91,7 +92,6 @@ private:
     void explodePad( PAD* aPad, PCB_LAYER_ID* aLayer );
 
     void enterPadEditMode();
-    void exitPadEditMode();
 
 private:
     wxString           m_lastPadNumber;

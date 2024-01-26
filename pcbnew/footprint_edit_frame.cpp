@@ -808,6 +808,11 @@ bool FOOTPRINT_EDIT_FRAME::canCloseWindow( wxCloseEvent& aEvent )
         }
     }
 
+    PAD_TOOL* padTool = m_toolManager->GetTool<PAD_TOOL>();
+
+    if( padTool->InPadEditMode() )
+        padTool->ExitPadEditMode();
+
     // Save footprint tree column widths
     m_adapter->SaveSettings();
 

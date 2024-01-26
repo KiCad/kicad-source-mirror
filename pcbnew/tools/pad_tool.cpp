@@ -690,10 +690,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
     }
 
     if( m_editPad == niluuid )
-    {
-        settings->m_PadEditModePad = nullptr;
-        exitPadEditMode();
-    }
+        ExitPadEditMode();
 
     return 0;
 }
@@ -728,7 +725,7 @@ int PAD_TOOL::OnUndoRedo( const TOOL_EVENT& aEvent )
         if( flaggedPad )
             enterPadEditMode();
         else
-            exitPadEditMode();
+            ExitPadEditMode();
     }
 
     return 0;
@@ -771,9 +768,13 @@ void PAD_TOOL::enterPadEditMode()
 }
 
 
-void PAD_TOOL::exitPadEditMode()
+void PAD_TOOL::ExitPadEditMode()
 {
-    PCB_DISPLAY_OPTIONS opts = frame()->GetDisplayOptions();
+    KIGFX::PCB_PAINTER*  painter = static_cast<KIGFX::PCB_PAINTER*>( view()->GetPainter() );
+    PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+    PCB_DISPLAY_OPTIONS  opts = frame()->GetDisplayOptions();
+
+    settings->m_PadEditModePad = nullptr;
 
     if( m_previousHighContrastMode != opts.m_ContrastModeDisplay )
     {
