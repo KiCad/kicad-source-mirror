@@ -73,8 +73,12 @@ public:
 
     virtual ~LIB_ITEM() { }
 
-    // Define the enums for basic
-    enum LIB_CONVERT : int  { BASE = 1, DEMORGAN = 2 };
+    // Define the enums for basic body styles
+    enum BODY_STYLE : int
+    {
+        BASE = 1,
+        DEMORGAN = 2
+    };
 
     /**
      * The list of flags used by the #compare function.
@@ -224,7 +228,7 @@ public:
         if( m_unit != aItem.m_unit )
             similarity *= 0.9;
 
-        if( m_convert != aItem.m_convert )
+        if( m_bodyStyle != aItem.m_bodyStyle )
             similarity *= 0.9;
 
         if( m_private != aItem.m_private )
@@ -335,8 +339,8 @@ public:
     void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit() const { return m_unit; }
 
-    void SetConvert( int aConvert ) { m_convert = aConvert; }
-    int GetConvert() const { return m_convert; }
+    void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
+    int  GetBodyStyle() const { return m_bodyStyle; }
 
     void SetPrivate( bool aPrivate ) { m_private = aPrivate; }
     bool IsPrivate() const { return m_private; }
@@ -398,7 +402,7 @@ protected:
      * Shape identification for alternate body styles.  Set 0 if the item is common to all
      * body styles.  This is typially used for representing DeMorgan variants in KiCad.
      */
-    int         m_convert;
+    int         m_bodyStyle;
 
     /**
      * Private items are shown only in the Symbol Editor.

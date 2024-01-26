@@ -498,7 +498,7 @@ int ERC_TESTER::TestMissingUnits()
             {
                 if( refList.GetItem( ii ).GetUnit() == missing_unit )
                 {
-                    convert = refList.GetItem( ii ).GetSymbol()->GetConvert();
+                    convert = refList.GetItem( ii ).GetSymbol()->GetBodyStyle();
                     break;
                 }
             }

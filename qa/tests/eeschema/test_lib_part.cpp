@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
     BOOST_CHECK_EQUAL( m_part_no_data.IsMulti(), false );
 
     // no conversion
-    BOOST_CHECK_EQUAL( m_part_no_data.HasConversion(), false );
+    BOOST_CHECK_EQUAL( m_part_no_data.HasAlternateBodyStyle(), false );
 }
 
 
@@ -538,7 +538,7 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 0 ).size() == 1 );
 
     // A single unique unit with 1 pin in unit 1 and body style 1.
-    pin1->SetConvert( 1 );
+    pin1->SetBodyStyle( 1 );
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 1 ).size() == 1 );
 
     // Two unique units with pin 1 assigned to unit 1 and body style 1 and pin 2 assigned to
@@ -546,13 +546,13 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
     LIB_PIN* pin2 = new LIB_PIN( &m_part_no_data );
     m_part_no_data.SetUnitCount( 2 );
     pin2->SetUnit( 2 );
-    pin2->SetConvert( 2 );
+    pin2->SetBodyStyle( 2 );
     pin2->SetNumber( "4" );
     m_part_no_data.AddDrawItem( pin2 );
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 2, 2 ).size() == 1 );
 
     // Make pin 1 body style common to all units.
-    pin1->SetConvert( 0 );
+    pin1->SetBodyStyle( 0 );
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 1 ).size() == 0 );
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 2, 1 ).size() == 1 );
 
@@ -577,7 +577,7 @@ BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
     std::vector<struct LIB_SYMBOL_UNIT> units = m_part_no_data.GetUnitDrawItems();
     BOOST_CHECK( units.size() == 1 );
     BOOST_CHECK( units[0].m_unit == 0 );
-    BOOST_CHECK( units[0].m_convert == 0 );
+    BOOST_CHECK( units[0].m_bodyStyle == 0 );
     BOOST_CHECK( units[0].m_items[0] == pin1 );
 }
 

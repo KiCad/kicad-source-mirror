@@ -117,11 +117,11 @@ public:
      * @param aLibId is the #LIB_ID of alias to create.
      * @param aSheet is the schematic sheet the symbol is place into.
      * @param aUnit is unit for symbols that have multiple parts per package.
-     * @param aConvert is the alternate body style for the schematic symbols.
+     * @param aBodyStyle is the alternate body style for the schematic symbols.
      * @param aPosition is the position of the symbol.
      */
     SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId, const SCH_SHEET_PATH* aSheet,
-                int aUnit, int aConvert = 0, const VECTOR2I& aPosition = VECTOR2I( 0, 0 ),
+                int aUnit, int aBodyStyle = 0, const VECTOR2I& aPosition = VECTOR2I( 0, 0 ),
                 EDA_ITEM* aParent = nullptr );
 
     SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const SCH_SHEET_PATH* aSheet, const PICKED_SYMBOL& aSel,
@@ -297,9 +297,8 @@ public:
      */
     void UpdateUnit( int aUnit );
 
-    int GetConvert() const { return m_convert; }
-
-    void SetConvert( int aConvert );
+    int  GetBodyStyle() const { return m_bodyStyle; }
+    void SetBodyStyle( int aBodyStyle );
 
     wxString GetPrefix() const { return m_prefix; }
 
@@ -889,9 +888,9 @@ private:
     VECTOR2I    m_pos;
     LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
     int         m_unit;         ///< The unit for multiple part per package symbols.
-    int         m_convert;      ///< The alternate body style for symbols that have more than
-                                ///<   one body style defined.  Primarily used for symbols that
-                                ///<   have a De Morgan conversion.
+    int         m_bodyStyle;    ///< The alternate body style for symbols that have more than
+                                ///<   one body style defined.  Currently only used for symbols
+                                ///<   that have a DeMorgan conversion.
     wxString    m_prefix;       ///< C, R, U, Q etc - the first character(s) which typically
                                 ///<   indicate what the symbol is. Determined, upon placement,
                                 ///<   from the library symbol.  Created upon file load, by the

@@ -70,16 +70,16 @@ SCH_IO_KICAD_SEXPR_PARSER::SCH_IO_KICAD_SEXPR_PARSER( LINE_READER* aLineReader,
                                                       PROGRESS_REPORTER* aProgressReporter,
                                                       unsigned aLineCount, SCH_SHEET* aRootSheet,
                                                       bool aIsAppending ) :
-    SCHEMATIC_LEXER( aLineReader ),
-    m_requiredVersion( 0 ),
-    m_unit( 1 ),
-    m_convert( 1 ),
-    m_appending( aIsAppending ),
-    m_progressReporter( aProgressReporter ),
-    m_lineReader( aLineReader ),
-    m_lastProgressLine( 0 ),
-    m_lineCount( aLineCount ),
-    m_rootSheet( aRootSheet )
+        SCHEMATIC_LEXER( aLineReader ),
+        m_requiredVersion( 0 ),
+        m_unit( 1 ),
+        m_bodyStyle( 1 ),
+        m_appending( aIsAppending ),
+        m_progressReporter( aProgressReporter ),
+        m_lineReader( aLineReader ),
+        m_lastProgressLine( 0 ),
+        m_lineCount( aLineCount ),
+        m_rootSheet( aRootSheet )
 {
 }
 
@@ -236,7 +236,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
             checkVersion();
 
             m_unit = 1;
-            m_convert = 1;
+            m_bodyStyle = 1;
             LIB_SYMBOL* symbol = parseLibSymbol( aSymbolLibMap );
             aSymbolLibMap[symbol->GetName()] = symbol;
             break;
@@ -463,10 +463,10 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
                 THROW_PARSE_ERROR( error, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
             }
 
-            m_convert = static_cast<int>( tmp );
+            m_bodyStyle = static_cast<int>( tmp );
 
-            if( m_convert > 1 )
-                symbol->SetConversion( true, false );
+            if( m_bodyStyle > 1 )
+                symbol->SetHasAlternateBodyStyle( true, false );
 
             if( m_unit > symbol->GetUnitCount() )
                 symbol->SetUnitCount( m_unit, false );
@@ -513,7 +513,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
             }
 
             m_unit = 1;
-            m_convert = 1;
+            m_bodyStyle = 1;
             break;
         }
 
@@ -1099,7 +1099,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseArc()
     std::unique_ptr<LIB_SHAPE> arc = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::ARC );
 
     arc->SetUnit( m_unit );
-    arc->SetConvert( m_convert );
+    arc->SetBodyStyle( m_bodyStyle );
 
     token = NextTok();
 
@@ -1276,7 +1276,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseBezier()
     std::unique_ptr<LIB_SHAPE> bezier = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::BEZIER );
 
     bezier->SetUnit( m_unit );
-    bezier->SetConvert( m_convert );
+    bezier->SetBodyStyle( m_bodyStyle );
 
     token = NextTok();
 
@@ -1359,7 +1359,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseCircle()
     std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::CIRCLE );
 
     circle->SetUnit( m_unit );
-    circle->SetConvert( m_convert );
+    circle->SetBodyStyle( m_bodyStyle );
 
     token = NextTok();
 
@@ -1469,7 +1469,7 @@ LIB_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
     std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( nullptr );
 
     pin->SetUnit( m_unit );
-    pin->SetConvert( m_convert );
+    pin->SetBodyStyle( m_bodyStyle );
 
     // Pin electrical type.
     token = NextTok();
@@ -1632,7 +1632,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parsePolyLine()
     std::unique_ptr<LIB_SHAPE> poly = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::POLY );
 
     poly->SetUnit( m_unit );
-    poly->SetConvert( m_convert );
+    poly->SetBodyStyle( m_bodyStyle );
 
     token = NextTok();
 
@@ -1700,7 +1700,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseRectangle()
     std::unique_ptr<LIB_SHAPE> rectangle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::RECTANGLE );
 
     rectangle->SetUnit( m_unit );
-    rectangle->SetConvert( m_convert );
+    rectangle->SetBodyStyle( m_bodyStyle );
 
     token = NextTok();
 
@@ -1758,7 +1758,7 @@ LIB_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseText()
     std::unique_ptr<LIB_TEXT> text = std::make_unique<LIB_TEXT>( nullptr );
 
     text->SetUnit( m_unit );
-    text->SetConvert( m_convert );
+    text->SetBodyStyle( m_bodyStyle );
     token = NextTok();
 
     if( token == T_private )
@@ -1820,7 +1820,7 @@ LIB_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseTextBox()
     std::unique_ptr<LIB_TEXTBOX> textBox = std::make_unique<LIB_TEXTBOX>( nullptr );
 
     textBox->SetUnit( m_unit );
-    textBox->SetConvert( m_convert );
+    textBox->SetBodyStyle( m_bodyStyle );
     token = NextTok();
 
     if( token == T_private )
@@ -2890,7 +2890,7 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             break;
 
         case T_convert:
-            symbol->SetConvert( parseInt( "symbol convert" ) );
+            symbol->SetBodyStyle( parseInt( "symbol body style" ) );
             NeedRIGHT();
             break;
 

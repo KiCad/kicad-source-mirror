@@ -111,7 +111,7 @@ public:
     bool   m_IsSymbolEditor;
 
     int    m_ShowUnit;               // Show all units if 0
-    int    m_ShowConvert;            // Show all conversions if 0
+    int    m_ShowBodyStyle;          // Show all body styles if 0
 
     bool   m_ShowPinsElectricalType;
     bool   m_ShowPinNumbers;         // Force showing of pin numbers (normally symbol-specific)
@@ -148,7 +148,7 @@ private:
     void draw( const LIB_PIN* aPin, int aLayer, bool aDimmed );
     void draw( const LIB_SHAPE* aCircle, int aLayer, bool aDimmed );
     void draw( const LIB_SYMBOL* aSymbol, int, bool aDrawFields = true, int aUnit = 0,
-               int aConvert = 0, bool aDimmed = false );
+               int aBodyStyle = 0, bool aDimmed = false );
     void draw( const LIB_FIELD* aField, int aLayer, bool aDimmed );
     void draw( const LIB_TEXT* aText, int aLayer, bool aDimmed );
     void draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed );

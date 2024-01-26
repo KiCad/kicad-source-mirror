@@ -44,9 +44,9 @@ public:
     static const std::vector<KICAD_T> FieldOwners;
 
     EE_COLLECTOR( const std::vector<KICAD_T>& aScanTypes = { SCH_LOCATE_ANY_T } ) :
-        m_Unit( 0 ),
-        m_Convert( 0 ),
-        m_ShowPinElectricalTypes( false )
+            m_Unit( 0 ),
+            m_BodyStyle( 0 ),
+            m_ShowPinElectricalTypes( false )
     {
         SetScanTypes( aScanTypes );
     }
@@ -102,7 +102,7 @@ public:
 
 public:
     int      m_Unit;            // Fixed symbol unit filter (for symbol editor)
-    int      m_Convert;         // Fixed DeMorgan filter (for symbol editor)
+    int      m_BodyStyle;       // Fixed DeMorgan filter (for symbol editor)
 
     bool     m_ShowPinElectricalTypes;
 };

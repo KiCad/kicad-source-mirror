@@ -318,7 +318,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
                 got_unit[curr_pin->GetUnit()] = true;
 
-                int curr_convert = curr_pin->GetConvert();
+                int curr_bodyStyle = curr_pin->GetBodyStyle();
                 ELECTRICAL_PINTYPE etype = curr_pin->GetType();
                 wxString name = curr_pin->GetName();
                 std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
@@ -331,7 +331,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                     if( pin->GetPosition() != pos )
                         continue;
 
-                    if( pin->GetConvert() != curr_convert )
+                    if( pin->GetBodyStyle() != curr_bodyStyle )
                         continue;
 
                     if( pin->GetType() != etype )
@@ -504,7 +504,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editShapeProperties( LIB_SHAPE* aShape )
     m_frame->OnModify();
 
     SYMBOL_EDITOR_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
-    drawingTools->SetDrawSpecificConvert( !dlg.GetApplyToAllConversions() );
+    drawingTools->SetDrawSpecificBodyStyle( !dlg.GetApplyToAllConversions() );
     drawingTools->SetDrawSpecificUnit( !dlg.GetApplyToAllUnits() );
 
     std::vector<MSG_PANEL_ITEM> items;
@@ -843,7 +843,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
 
         newItem->SetUnit( newItem->GetUnit() ? m_frame->GetUnit() : 0 );
-        newItem->SetConvert( newItem->GetConvert() ? m_frame->GetConvert() : 0 );
+        newItem->SetBodyStyle( newItem->GetBodyStyle() ? m_frame->GetBodyStyle() : 0 );
 
         symbol->AddDrawItem( newItem );
         getView()->Add( newItem );

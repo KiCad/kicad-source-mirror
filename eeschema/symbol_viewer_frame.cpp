@@ -70,7 +70,7 @@
 LIB_ID SYMBOL_VIEWER_FRAME::m_currentSymbol;
 
 int SYMBOL_VIEWER_FRAME::m_unit = 1;
-int SYMBOL_VIEWER_FRAME::m_convert = 1;
+int SYMBOL_VIEWER_FRAME::m_bodyStyle = 1;
 bool SYMBOL_VIEWER_FRAME::m_show_progress = true;
 
 
@@ -371,19 +371,19 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
             [this]( const SELECTION& )
             {
                 LIB_SYMBOL* symbol = GetSelectedSymbol();
-                return symbol && symbol->HasConversion();
+                return symbol && symbol->HasAlternateBodyStyle();
             };
 
     auto demorganStandardCond =
             []( const SELECTION& )
             {
-                return m_convert == LIB_ITEM::LIB_CONVERT::BASE;
+                return m_bodyStyle == LIB_ITEM::BODY_STYLE::BASE;
             };
 
     auto demorganAlternateCond =
             []( const SELECTION& )
             {
-                return m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN;
+                return m_bodyStyle == LIB_ITEM::BODY_STYLE::DEMORGAN;
             };
 
     auto haveDatasheetCond =
@@ -407,10 +407,10 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
 }
 
 
-void SYMBOL_VIEWER_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
+void SYMBOL_VIEWER_FRAME::SetUnitAndBodyStyle( int aUnit, int aBodyStyle )
 {
     m_unit = aUnit > 0 ? aUnit : 1;
-    m_convert = aConvert > 0 ? aConvert : LIB_ITEM::LIB_CONVERT::BASE;
+    m_bodyStyle = aBodyStyle > 0 ? aBodyStyle : LIB_ITEM::BODY_STYLE::BASE;
     m_selection_changed = false;
 
     updatePreviewSymbol();
@@ -444,7 +444,7 @@ void SYMBOL_VIEWER_FRAME::updatePreviewSymbol()
     if( symbol )
     {
         GetRenderSettings()->m_ShowUnit = m_unit;
-        GetRenderSettings()->m_ShowConvert = m_convert;
+        GetRenderSettings()->m_ShowBodyStyle = m_bodyStyle;
 
         m_previewItem = symbol->Flatten();
         view->Add( m_previewItem.get() );
@@ -640,7 +640,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                                         ? m_libList->GetBaseString( 0 ) : wxString( wxT( "" ) ) );
         m_currentSymbol.SetLibItemName( wxEmptyString );
         m_unit = 1;
-        m_convert = LIB_ITEM::LIB_CONVERT::BASE;
+        m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;
     }
 
     bool cmp_changed = ReCreateSymbolList();
@@ -715,7 +715,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     if( m_symbolList->IsEmpty() )
     {
         SetSelectedSymbol( wxEmptyString );
-        m_convert = LIB_ITEM::LIB_CONVERT::BASE;
+        m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;
         m_unit    = 1;
         return true;
     }
@@ -727,7 +727,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     {
         // Select the first library entry when the previous entry name does not exist in
         // the current library.
-        m_convert   = LIB_ITEM::LIB_CONVERT::BASE;
+        m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;
         m_unit      = 1;
         index       = -1;
         changed     = true;
@@ -827,7 +827,7 @@ void SYMBOL_VIEWER_FRAME::SetSelectedSymbol( const wxString& aSymbolName )
         if( m_selection_changed )
         {
             m_unit = 1;
-            m_convert = LIB_ITEM::LIB_CONVERT::BASE;
+            m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;
             m_selection_changed = false;
         }
 
@@ -953,7 +953,7 @@ const BOX2I SYMBOL_VIEWER_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) c
 
         wxCHECK( tmp, BOX2I( VECTOR2I( -200, -200 ), VECTOR2I( 400, 400 ) ) );
 
-        return tmp->GetUnitBoundingBox( m_unit, m_convert );
+        return tmp->GetUnitBoundingBox( m_unit, m_bodyStyle );
     }
 }
 

@@ -183,7 +183,7 @@ void SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
 }
 
 
-void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aConvert )
+void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aBodyStyle )
 {
     KIGFX::VIEW* view = m_preview->GetView();
     auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
@@ -233,14 +233,14 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
         settings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
 
         // For symbols having a De Morgan body style, use the first style
-        settings->m_ShowConvert =
-                ( m_previewItem->HasConversion() && aConvert == 0 ) ? 1 : aConvert;
+        settings->m_ShowBodyStyle =
+                ( m_previewItem->HasAlternateBodyStyle() && aBodyStyle == 0 ) ? 1 : aBodyStyle;
 
         view->Add( m_previewItem );
 
         // Get the symbol size, in internal units
         m_itemBBox = m_previewItem->GetUnitBoundingBox( settings->m_ShowUnit,
-                                                        settings->m_ShowConvert );
+                                                        settings->m_ShowBodyStyle );
 
         if( !m_preview->IsShownOnScreen() )
         {
@@ -260,7 +260,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, i
 }
 
 
-void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aConvert )
+void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBodyStyle )
 {
     KIGFX::VIEW* view = m_preview->GetView();
 
@@ -283,13 +283,13 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aCo
         // draw all of them.)
         settings->m_ShowUnit = ( m_previewItem->IsMulti() && aUnit == 0 ) ? 1 : aUnit;
 
-        settings->m_ShowConvert =
-                ( m_previewItem->HasConversion() && aConvert == 0 ) ? 1 : aConvert;
+        settings->m_ShowBodyStyle =
+                ( m_previewItem->HasAlternateBodyStyle() && aBodyStyle == 0 ) ? 1 : aBodyStyle;
 
         view->Add( m_previewItem );
 
         // Get the symbol size, in internal units
-        m_itemBBox = aSymbol->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowConvert );
+        m_itemBBox = aSymbol->GetUnitBoundingBox( settings->m_ShowUnit, settings->m_ShowBodyStyle );
 
         // Calculate the draw scale to fit the drawing area
         fitOnDrawArea();

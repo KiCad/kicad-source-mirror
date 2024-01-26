@@ -1190,19 +1190,19 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
 
             symbol->SetUnit( unit );
 
-            // Same can also happen with the convert parameter
-            int convert = parseInt( aReader, line, &line );
+            // Same can also happen with the body style ("convert") parameter
+            int bodyStyle = parseInt( aReader, line, &line );
 
-            if( convert == 0 )
+            if( bodyStyle == 0 )
             {
-                convert = 1;
+                bodyStyle = 1;
 
                 // Set the file as modified so the user can be warned.
                 if( m_rootSheet->GetScreen() )
                     m_rootSheet->GetScreen()->SetContentModified();
             }
 
-            symbol->SetConvert( convert );
+            symbol->SetBodyStyle( bodyStyle );
 
             wxString text;
             parseUnquotedString( text, aReader, line, &line );
@@ -1691,7 +1691,7 @@ void SCH_IO_KICAD_LEGACY::saveSymbol( SCH_SYMBOL* aSymbol )
     // Generate unit number, conversion and timestamp
     m_out->Print( 0, "U %d %d %8.8X\n",
                   aSymbol->GetUnit(),
-                  aSymbol->GetConvert(),
+                  aSymbol->GetBodyStyle(),
                   aSymbol->m_Uuid.AsLegacyTimestamp() );
 
     // Save the position

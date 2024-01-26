@@ -59,8 +59,8 @@ public:
     void SetLastTextAngle( const EDA_ANGLE& aAngle ) { m_lastTextAngle = aAngle; }
     EDA_ANGLE GetLastTextAngle() const { return m_lastTextAngle; }
 
-    void SetDrawSpecificConvert( bool aSpecific ) { m_drawSpecificConvert = aSpecific; }
-    bool GetDrawSpecificConvert() const { return m_drawSpecificConvert; }
+    void SetDrawSpecificBodyStyle( bool aSpecific ) { m_drawSpecificBodyStyle = aSpecific; }
+    bool GetDrawSpecificBodyStyle() const { return m_drawSpecificBodyStyle; }
 
     void SetDrawSpecificUnit( bool aSpecific ) { m_drawSpecificUnit = aSpecific; }
     bool GetDrawSpecificUnit() const { return m_drawSpecificUnit; }
@@ -78,7 +78,7 @@ private:
     FILL_T            m_lastFillStyle;
     COLOR4D           m_lastFillColor;
     STROKE_PARAMS     m_lastStroke;
-    bool              m_drawSpecificConvert;
+    bool              m_drawSpecificBodyStyle;
     bool              m_drawSpecificUnit;
 
     ///< Re-entrancy guards

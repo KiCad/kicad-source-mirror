@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -196,11 +196,11 @@ DIALOG_LIB_TEXT_PROPERTIES_BASE::DIALOG_LIB_TEXT_PROPERTIES_BASE( wxWindow* pare
 	m_privateCheckbox = new wxCheckBox( this, wxID_ANY, _("Private to Symbol Editor"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_privateCheckbox, wxGBPosition( 5, 0 ), wxGBSpan( 1, 2 ), wxLEFT, 5 );
 
-	m_CommonUnit = new wxCheckBox( this, wxID_ANY, _("Common to all units"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_CommonUnit, wxGBPosition( 5, 3 ), wxGBSpan( 1, 1 ), wxLEFT, 100 );
+	m_commonToAllUnits = new wxCheckBox( this, wxID_ANY, _("Common to all units"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_commonToAllUnits, wxGBPosition( 5, 3 ), wxGBSpan( 1, 1 ), wxLEFT, 100 );
 
-	m_CommonConvert = new wxCheckBox( this, wxID_ANY, _("Common to all body styles"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_CommonConvert, wxGBPosition( 6, 3 ), wxGBSpan( 1, 1 ), wxLEFT, 100 );
+	m_commonToAllBodyStyles = new wxCheckBox( this, wxID_ANY, _("Common to all body styles"), wxDefaultPosition, wxDefaultSize, 0 );
+	gbSizer1->Add( m_commonToAllBodyStyles, wxGBPosition( 6, 3 ), wxGBSpan( 1, 1 ), wxLEFT, 100 );
 
 
 	bPropertiesSizer->Add( gbSizer1, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

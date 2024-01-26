@@ -634,7 +634,7 @@ public:
      */
     void DeleteJunction( SCH_COMMIT* aCommit, SCH_ITEM* aItem );
 
-    void ConvertPart( SCH_SYMBOL* aSymbol );
+    void FlipBodyStyle( SCH_SYMBOL* aSymbol );
 
     void SelectUnit( SCH_SYMBOL* aSymbol, int aUnit );
 

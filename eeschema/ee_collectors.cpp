@@ -87,7 +87,7 @@ const std::vector<KICAD_T> EE_COLLECTOR::FieldOwners = {
 
 INSPECT_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
-    if( m_Unit || m_Convert )
+    if( m_Unit || m_BodyStyle )
     {
         LIB_ITEM* lib_item = dynamic_cast<LIB_ITEM*>( aItem );
 
@@ -99,7 +99,7 @@ INSPECT_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
             if( m_Unit && lib_item->GetUnit() && lib_item->GetUnit() != m_Unit )
                 return INSPECT_RESULT::CONTINUE;
 
-            if( m_Convert && lib_item->GetConvert() && lib_item->GetConvert() != m_Convert )
+            if( m_BodyStyle && lib_item->GetBodyStyle() && lib_item->GetBodyStyle() != m_BodyStyle )
                 return INSPECT_RESULT::CONTINUE;
         }
     }
@@ -122,8 +122,8 @@ void EE_COLLECTOR::Collect( SCH_SCREEN* aScreen, const std::vector<KICAD_T>& aFi
     Empty(); // empty the collection just in case
 
     SetScanTypes( aFilterList );
-    m_Unit    = aUnit;
-    m_Convert = aConvert;
+    m_Unit = aUnit;
+    m_BodyStyle = aConvert;
 
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPos );
@@ -143,7 +143,7 @@ void EE_COLLECTOR::Collect( LIB_ITEMS_CONTAINER& aItems, const std::vector<KICAD
 
     SetScanTypes( aFilterList );
     m_Unit = aUnit;
-    m_Convert = aConvert;
+    m_BodyStyle = aConvert;
 
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPos );

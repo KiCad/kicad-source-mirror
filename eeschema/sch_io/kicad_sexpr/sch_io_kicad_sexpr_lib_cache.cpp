@@ -221,7 +221,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
                    []( const LIB_SYMBOL_UNIT& a, const LIB_SYMBOL_UNIT& b )
                    {
                         if( a.m_unit == b.m_unit )
-                            return a.m_convert < b.m_convert;
+                            return a.m_bodyStyle < b.m_bodyStyle;
 
                         return a.m_unit < b.m_unit;
                    } );
@@ -233,7 +233,9 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
             name.pop_back();    // Remove last char: the quote ending the string.
 
             aFormatter.Print( aNestLevel + 1, "(symbol %s_%d_%d\"\n",
-                              name.c_str(), unit.m_unit, unit.m_convert );
+                              name.c_str(),
+                              unit.m_unit,
+                              unit.m_bodyStyle );
 
             // if the unit has a display name, write that
             if( aSymbol->HasUnitDisplayName( unit.m_unit ) )

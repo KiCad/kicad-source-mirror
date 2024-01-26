@@ -66,7 +66,7 @@ class DIALOG_LIB_SYMBOL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextNbUnits;
 		wxSpinCtrl* m_SelNumberOfUnits;
 		wxCheckBox* m_OptionPartsInterchangeable;
-		wxCheckBox* m_AsConvertButt;
+		wxCheckBox* m_hasAlternateBodyStyles;
 		wxCheckBox* m_OptionPower;
 		wxCheckBox* m_ShowPinNumButt;
 		wxCheckBox* m_ShowPinNameButt;

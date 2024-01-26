@@ -200,7 +200,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                                 if( !got_unit[pin->GetUnit()]
                                         && pin->GetPosition() == cur_pin->GetPosition()
                                         && pin->GetOrientation() == cur_pin->GetOrientation()
-                                        && pin->GetConvert() == cur_pin->GetConvert()
+                                        && pin->GetBodyStyle() == cur_pin->GetBodyStyle()
                                         && pin->GetType() == cur_pin->GetType()
                                         && pin->GetName() == cur_pin->GetName()  )
                                 {

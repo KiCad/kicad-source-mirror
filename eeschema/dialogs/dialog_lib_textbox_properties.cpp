@@ -213,10 +213,10 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     m_fillColorSwatch->Enable( m_currentText->IsFilled() );
 
     m_privateCheckbox->SetValue( m_currentText->IsPrivate() );
-    m_CommonUnit->SetValue(
+    m_commonToAllUnits->SetValue(
             symbol && symbol->GetUnitCount() > 1 && m_currentText->GetUnit() == 0 );
-    m_CommonUnit->Enable( symbol && symbol->GetUnitCount() > 1 );
-    m_CommonConvert->SetValue( m_currentText->GetConvert() == 0 );
+    m_commonToAllUnits->Enable( symbol && symbol->GetUnitCount() > 1 );
+    m_commonToAllBodyStyles->SetValue( m_currentText->GetBodyStyle() == 0 );
 
     return true;
 }
@@ -340,21 +340,21 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataFromWindow()
 
     m_currentText->SetPrivate( m_privateCheckbox->GetValue() );
 
-    if( !m_CommonUnit->GetValue() )
+    if( !m_commonToAllUnits->GetValue() )
         m_currentText->SetUnit( m_frame->GetUnit() );
     else
         m_currentText->SetUnit( 0 );
 
-    if( !m_CommonConvert->GetValue() )
-        m_currentText->SetConvert( m_frame->GetConvert() );
+    if( !m_commonToAllBodyStyles->GetValue() )
+        m_currentText->SetBodyStyle( m_frame->GetBodyStyle() );
     else
-        m_currentText->SetConvert( 0 );
+        m_currentText->SetBodyStyle( 0 );
 
     // Record settings used for next time:
     auto* tools = m_frame->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
     tools->SetLastTextAngle( m_currentText->GetTextAngle() );
-    tools->SetDrawSpecificConvert( !m_CommonConvert->GetValue() );
-    tools->SetDrawSpecificUnit( !m_CommonUnit->GetValue() );
+    tools->SetDrawSpecificBodyStyle( !m_commonToAllBodyStyles->GetValue() );
+    tools->SetDrawSpecificUnit( !m_commonToAllUnits->GetValue() );
 
     m_frame->SetMsgPanel( m_currentText );
 

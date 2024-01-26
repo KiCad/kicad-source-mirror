@@ -84,7 +84,7 @@ struct LIB_SYMBOL_OPTIONS
 struct LIB_SYMBOL_UNIT
 {
     int m_unit;                       ///< The unit number.
-    int m_convert;                    ///< The alternate body style of the unit.
+    int m_bodyStyle;                  ///< The alternate body style of the unit.
     std::vector<LIB_ITEM*> m_items;   ///< The items unique to this unit and alternate body style.
 };
 
@@ -241,24 +241,25 @@ public:
      *
      * @return the symbol bounding box ( in user coordinates )
      * @param aUnit = unit selection = 0, or 1..n
-     * @param aConvert = 0, 1 or 2
+     * @param aBodyStyle = 0, 1 or 2
      *  If aUnit == 0, unit is not used
-     *  if aConvert == 0 Convert is non used
+     *  if aBodyStyle == 0 Convert is non used
      * @param aIgnoreHiddenFields default true, ignores any hidden fields
      **/
-    const BOX2I GetUnitBoundingBox( int aUnit, int aConvert, bool aIgnoreHiddenFields = true ) const;
+    const BOX2I GetUnitBoundingBox( int aUnit, int aBodyStyle,
+                                    bool aIgnoreHiddenFields = true ) const;
 
     /**
      * Get the symbol bounding box excluding fields.
      *
      * @return the symbol bounding box ( in user coordinates ) without fields
      * @param aUnit = unit selection = 0, or 1..n
-     * @param aConvert = 0, 1 or 2
+     * @param aBodyStyle = 0, 1 or 2
      *  If aUnit == 0, unit is not used
-     *  if aConvert == 0 Convert is non used
+     *  if aBodyStyle == 0 Convert is non used
      *  Fields are not taken in account
      **/
-    const BOX2I GetBodyBoundingBox( int aUnit, int aConvert, bool aIncludePins,
+    const BOX2I GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aIncludePins,
                                     bool aIncludePrivateItems ) const;
 
     const BOX2I GetBoundingBox() const override
@@ -362,24 +363,24 @@ public:
      *
      * @param aOffset - Position of symbol.
      * @param aMulti - unit if multiple units per symbol.
-     * @param aConvert - Symbol conversion (DeMorgan) if available.
+     * @param aBodyStyle - Symbol alternate body style (DeMorgan) if available.
      * @param aOpts - Drawing options
      * @param aDimmed - Reduce brightness of symbol
      */
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aMulti, int aConvert,
-                const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed );
+    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aMulti,
+                int aBodyStyle, const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed );
 
     /**
      * Print just the background fills of a symbol
      *
      * @param aOffset - Position of symbol.
      * @param aMulti - unit if multiple units per symbol.
-     * @param aConvert - Symbol conversion (DeMorgan) if available.
+     * @param aBodyStyle - Symbol alternate body style (DeMorgan) if available.
      * @param aOpts - Drawing options
      * @param aDimmed - Reduce brightness of symbol
      */
     void PrintBackground( const RENDER_SETTINGS *aSettings, const VECTOR2I &aOffset, int aMulti,
-                          int aConvert, const LIB_SYMBOL_OPTIONS &aOpts, bool aDimmed );
+                          int aBodyStyle, const LIB_SYMBOL_OPTIONS &aOpts, bool aDimmed );
 
     /**
      * Plot lib symbol to plotter.
@@ -388,13 +389,13 @@ public:
      *
      * @param aPlotter - Plotter object to plot to.
      * @param aUnit - Symbol symbol to plot.
-     * @param aConvert - Symbol alternate body style to plot.
+     * @param aBodyStyle - Symbol alternate body style to plot.
      * @param aBackground - A poor-man's Z-order.
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Symbol plot transform matrix.
      * @param aDimmed - Reduce brightness of symbol
      */
-    void Plot( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
+    void Plot( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bool aBackground,
                const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed ) const;
 
     /**
@@ -403,13 +404,13 @@ public:
      *
      * @param aPlotter - Plotter object to plot to.
      * @param aUnit - Symbol to plot.
-     * @param aConvert - Symbol alternate body style to plot.
+     * @param aBodyStyle - Symbol alternate body style to plot.
      * @param aBackground - A poor-man's Z-order.
      * @param aOffset - Distance to shift the plot coordinates.
      * @param aTransform - Symbol plot transform matrix.
      * @param aDimmed - reduce brightness of fields
      */
-    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aConvert, bool aBackground,
+    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bool aBackground,
                         const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed,
                         bool aPlotHidden = true );
 
@@ -440,10 +441,10 @@ public:
      *
      * @param aList - Pin list to place pin object pointers into.
      * @param aUnit - Unit number of pins to collect.  Set to 0 to get pins from any symbol unit.
-     * @param aConvert - Convert number of pins to collect.  Set to 0 to get pins from any
-     *                   DeMorgan variant of symbol.
+     * @param aBodyStyle - Symbol alternate body style of pins to collect.  Set to 0 to get pins
+     *                     from any DeMorgan variant of symbol.
      */
-    void GetPins( LIB_PINS& aList, int aUnit = 0, int aConvert = 0 ) const;
+    void GetPins( LIB_PINS& aList, int aUnit = 0, int aBodyStyle = 0 ) const;
 
     /**
      * Return a list of pin pointers for all units / converts.  Used primarily for SPICE where
@@ -461,11 +462,11 @@ public:
      *
      * @param aNumber - Number of the pin to find.
      * @param aUnit - Unit filter.  Set to 0 if a specific unit number is not required.
-     * @param aConvert - DeMorgan variant filter.  Set to 0 if no specific DeMorgan variant is
+     * @param aBodyStyle - DeMorgan variant filter.  Set to 0 if no specific DeMorgan variant is
      *                   required.
      * @return The pin object if found.  Otherwise NULL.
      */
-    LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aConvert = 0 ) const;
+    LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 ) const;
 
     /**
      * Return true if this symbol's pins do not match another symbol's pins. This is used to
@@ -498,7 +499,7 @@ public:
      *
      * @return True if symbol has more than one conversion.
      */
-    bool HasConversion() const;
+    bool HasAlternateBodyStyle() const;
 
     /**
      * @return the highest pin number of the symbol's pins.
@@ -516,24 +517,24 @@ public:
      * Locate a draw object.
      *
      * @param aUnit - Unit number of draw item.
-     * @param aConvert - Body style of draw item.
+     * @param aBodyStyle - Body style of draw item.
      * @param aType - Draw object type, set to 0 to search for any type.
      * @param aPoint - Coordinate for hit testing.
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const VECTOR2I& aPoint );
+    LIB_ITEM* LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType, const VECTOR2I& aPoint );
 
     /**
      * Locate a draw object (overlaid)
      *
      * @param aUnit - Unit number of draw item.
-     * @param aConvert - Body style of draw item.
+     * @param aBodyStyle - Body style of draw item.
      * @param aType - Draw object type, set to 0 to search for any type.
      * @param aPoint - Coordinate for hit testing.
      * @param aTransform = the transform matrix
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_ITEM* LocateDrawItem( int aUnit, int aConvert, KICAD_T aType, const VECTOR2I& aPoint,
+    LIB_ITEM* LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType, const VECTOR2I& aPoint,
                               const TRANSFORM& aTransform );
 
     /**
@@ -603,16 +604,15 @@ public:
     /**
      * Set or clear the alternate body style (DeMorgan) for the symbol.
      *
-     * If the symbol already has an alternate body style set and a
-     * asConvert if false, all of the existing draw items for the alternate
-     * body style are remove.  If the alternate body style is not set and
-     * asConvert is true, than the base draw items are duplicated and
-     * added to the symbol.
+     * If the symbol already has an alternate body style set and aHasAlternate is false, all
+     * of the existing draw items for the alternate body style are remove.  If the alternate
+     * body style is not set and aHasAlternate is true, than the base draw items are duplicated
+     * and added to the symbol.
      *
-     * @param aSetConvert - Set or clear the symbol alternate body style.
+     * @param aHasAlternate - Set or clear the symbol alternate body style.
      * @param aDuplicatePins - Duplicate all pins from original body style if true.
      */
-    void SetConversion( bool aSetConvert, bool aDuplicatePins = true );
+    void SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePins = true );
 
     /**
      * Set the offset in mils of the pin name text from the pin symbol.
@@ -713,16 +713,16 @@ public:
     std::vector<struct LIB_SYMBOL_UNIT> GetUniqueUnits();
 
     /**
-     * Return a list of item pointers for \a aUnit and \a aConvert for this symbol.
+     * Return a list of item pointers for \a aUnit and \a aBodyStyle for this symbol.
      *
      * @note #LIB_FIELD objects are not included.
      *
      * @param aUnit is the unit number of the item, -1 includes all units.
-     * @param aConvert is the alternate body styple of the item, -1 includes all body styles.
+     * @param aBodyStyle is the alternate body styple of the item, -1 includes all body styles.
      *
      * @return a list of unit items.
      */
-    std::vector<LIB_ITEM*> GetUnitDrawItems( int aUnit, int aConvert );
+    std::vector<LIB_ITEM*> GetUnitDrawItems( int aUnit, int aBodyStyle );
 
     /**
      * Return a measure of similarity between this symbol and \a aSymbol.

@@ -692,7 +692,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
     // iterate from unit 1, unit 0 would be "all units" which we don't want
     for( int unit = 1; unit < symbol->GetUnitCount() + 1; unit++ )
     {
-        for( int convert = 1; convert < ( symbol->HasConversion() ? 2 : 1 ) + 1; ++convert )
+        for( int bodyStyle = 1; bodyStyle < ( symbol->HasAlternateBodyStyle() ? 2 : 1 ) + 1; ++bodyStyle )
         {
             wxString   filename;
             wxFileName fn;
@@ -715,7 +715,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             {
                 filename += wxString::Format( "_%d", unit );
 
-                if( convert == 2 )
+                if( bodyStyle == 2 )
                     filename += wxS( "_demorgan" );
 
                 fn.SetName( filename );
@@ -725,7 +725,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             }
             else
             {
-                if( convert == 2 )
+                if( bodyStyle == 2 )
                     filename += wxS( "_demorgan" );
 
                 fn.SetName( filename );
@@ -735,7 +735,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             }
 
             // Get the symbol bounding box to fit the plot page to it
-            BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, convert, false );
+            BOX2I     symbolBB = symbol->Flatten()->GetUnitBoundingBox( unit, bodyStyle, false );
             PAGE_INFO pageInfo( PAGE_INFO::Custom );
             pageInfo.SetHeightMils( schIUScale.IUToMils( symbolBB.GetHeight() * 1.2 ) );
             pageInfo.SetWidthMils( schIUScale.IUToMils( symbolBB.GetWidth() * 1.2 ) );
@@ -775,12 +775,12 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
 
             // note, we want the fields from the original symbol pointer (in case of non-alias)
-            symbolToPlot->Plot( plotter, unit, convert, background, plotPos, temp, false );
-            symbol->PlotLibFields( plotter, unit, convert, background, plotPos, temp, false,
+            symbolToPlot->Plot( plotter, unit, bodyStyle, background, plotPos, temp, false );
+            symbol->PlotLibFields( plotter, unit, bodyStyle, background, plotPos, temp, false,
                                    aSvgJob->m_includeHiddenFields );
 
-            symbolToPlot->Plot( plotter, unit, convert, !background, plotPos, temp, false );
-            symbol->PlotLibFields( plotter, unit, convert, !background, plotPos, temp, false,
+            symbolToPlot->Plot( plotter, unit, bodyStyle, !background, plotPos, temp, false );
+            symbol->PlotLibFields( plotter, unit, bodyStyle, !background, plotPos, temp, false,
                                    aSvgJob->m_includeHiddenFields );
 
             plotter->EndPlot();

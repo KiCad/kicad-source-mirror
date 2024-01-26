@@ -105,11 +105,11 @@ public:
      * Set unit and convert, and set flag preventing them from automatically resetting to 1.
      *
      * @param aUnit is the unit, if invalid will be set to 1.
-     * @param aConvert is the alternate body style, if invalid will be set to 1.
+     * @param aBodyStyle is the alternate body style, if invalid will be set to 1.
      */
-    void SetUnitAndConvert( int aUnit, int aConvert );
+    void SetUnitAndBodyStyle( int aUnit, int aBodyStyle );
     int GetUnit() const { return m_unit; }
-    int GetConvert() const { return m_convert; }
+    int GetBodyStyle() const { return m_bodyStyle; }
 
     LIB_SYMBOL* GetSelectedSymbol() const;
 
@@ -168,7 +168,7 @@ private:
     static LIB_ID       m_currentSymbol;
 
     static int          m_unit;
-    static int          m_convert;
+    static int          m_bodyStyle;
     static bool         m_show_progress;
 
     /**

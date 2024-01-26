@@ -197,7 +197,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
                                                              OnAddAlternate( aEvent );
                                                          } ) );
 
-    if( aPin->GetParent()->HasConversion() )
+    if( aPin->GetParent()->HasAlternateBodyStyle() )
     {
         m_alternatesTurndown->Collapse();
         m_alternatesTurndown->Disable();
@@ -268,7 +268,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
     m_pinLength.SetValue( m_pin->GetLength() );
     m_checkApplyToAllParts->Enable( m_pin->GetParent()->IsMulti() );
     m_checkApplyToAllParts->SetValue( m_pin->GetParent()->IsMulti() && m_pin->GetUnit() == 0 );
-    m_checkApplyToAllConversions->SetValue( m_pin->GetConvert() == 0 );
+    m_checkApplyToAllBodyStyles->SetValue( m_pin->GetBodyStyle() == 0 );
     m_checkShow->SetValue( m_pin->IsVisible() );
 
     m_dummyPin->SetVisible( m_pin->IsVisible() );
@@ -360,7 +360,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
     m_pin->ChangeLength( m_pinLength.GetValue() );
     m_pin->SetType( m_choiceElectricalType->GetPinTypeSelection() );
     m_pin->SetShape( m_choiceStyle->GetPinShapeSelection() );
-    m_pin->SetConvert( m_checkApplyToAllConversions->GetValue() ? 0 : m_frame->GetConvert() );
+    m_pin->SetBodyStyle( m_checkApplyToAllBodyStyles->GetValue() ? 0 : m_frame->GetBodyStyle() );
     m_pin->SetUnit( m_checkApplyToAllParts->GetValue() ? 0 : m_frame->GetUnit() );
     m_pin->SetVisible( m_checkShow->GetValue() );
 

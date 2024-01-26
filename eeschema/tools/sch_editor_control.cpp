@@ -2235,7 +2235,8 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
         }
         else if( aEvent.IsAction( &EE_ACTIONS::editLibSymbolWithLibEdit ) )
         {
-            symbolEditor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetConvert() );
+            symbolEditor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(),
+                                      symbol->GetBodyStyle() );
 
             if( !symbolEditor->IsSymbolTreeShown() )
             {

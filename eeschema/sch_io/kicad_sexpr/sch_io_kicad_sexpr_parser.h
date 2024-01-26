@@ -217,12 +217,13 @@ private:
     SCH_TEXTBOX* parseSchTextBox();
     void parseBusAlias( SCH_SCREEN* aScreen );
 
-    int m_requiredVersion;  ///< Set to the symbol library file version required.
+private:
+    int      m_requiredVersion;   ///< Set to the symbol library file version required.
     wxString m_generatorVersion;
-    int m_unit;             ///< The current unit being parsed.
-    int m_convert;          ///< The current body style being parsed.
-    wxString m_symbolName;  ///< The current symbol name.
-    bool m_appending;       ///< Appending load status.
+    int      m_unit;              ///< The current unit being parsed.
+    int      m_bodyStyle;         ///< The current body style being parsed.
+    wxString m_symbolName;        ///< The current symbol name.
+    bool     m_appending;         ///< Appending load status.
 
     /// Field IDs that have been read so far for the current symbol.
     std::set<int>      m_fieldIDsRead;

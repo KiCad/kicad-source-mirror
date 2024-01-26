@@ -94,11 +94,11 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         if( pin->GetNumber() != next->GetNumber() )
             continue;
 
-        // Pins are not duplicated only if they are in different convert bodies
-        // (but GetConvert() == 0 means commun to all convert bodies)
-        if( pin->GetConvert() != 0 && next->GetConvert() != 0 )
+        // Pins are not duplicated only if they are in different body styles
+        // (but GetBodyStyle() == 0 means commun to all body styles)
+        if( pin->GetBodyStyle() != 0 && next->GetBodyStyle() != 0 )
         {
-            if( pin->GetConvert() != next->GetConvert() )
+            if( pin->GetBodyStyle() != next->GetBodyStyle() )
                 continue;
         }
 
@@ -111,10 +111,11 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         if( next->GetName() != "~"  && !next->GetName().IsEmpty() )
             nextName = " '" + next->GetName() + "'";
 
-        if( aSymbol->HasConversion() && next->GetConvert() )
+        if( aSymbol->HasAlternateBodyStyle() && next->GetBodyStyle() )
         {
             if( pin->GetUnit() == 0 || next->GetUnit() == 0 )
             {
+                // TODO: 9.0: change "of converted" to "of alternate body style"
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>"
                                " of converted." ),
@@ -129,6 +130,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             }
             else
             {
+                // TODO: 9.0: change "of converted" to "of alternate body style"
                 msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
                                " conflicts with pin %s%s at location <b>(%s, %s)</b>"
                                " in units %s and %s of converted." ),
@@ -182,7 +184,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
     }
 
     // Test for a valid power aSymbol.
-    // A valid power aSymbol has only one unit, no convert and one pin.
+    // A valid power aSymbol has only one unit, no alternate body styles and one pin.
     // And this pin should be PT_POWER_IN (invisible to be automatically connected)
     // or PT_POWER_OUT for a power flag
     if( aSymbol->IsPower() )
@@ -193,8 +195,9 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             aMessages.push_back( msg );
         }
 
-        if( aSymbol->HasConversion() )
+        if( aSymbol->HasAlternateBodyStyle() )
         {
+            // TODO: 9.0: change to "A Power Symbol should not have DeMorgan variants"
             msg.Printf( _( "<b>A Power Symbol should have no convert option</b><br><br>" ) );
             aMessages.push_back( msg );
         }
@@ -238,10 +241,11 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                 && !pin->IsVisible() )
         {
             // hidden power pin
-            if( aSymbol->HasConversion() && pin->GetConvert() )
+            if( aSymbol->HasAlternateBodyStyle() && pin->GetBodyStyle() )
             {
                 if( aSymbol->GetUnitCount() <= 1 )
                 {
+                    // TODO: 9.0: change "of converted" to "of alternate body style"
                     msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
                                    " of converted." ),
                                 pin->GetNumber(),
@@ -251,6 +255,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                 }
                 else
                 {
+                    // TODO: 9.0: change "of converted" to "of alternate body style"
                     msg.Printf( _( "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>"
                                    " in unit %c of converted." ),
                                 pin->GetNumber(),
@@ -294,10 +299,11 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             // pin is off grid
             msg.Empty();
 
-            if( aSymbol->HasConversion() && pin->GetConvert() )
+            if( aSymbol->HasAlternateBodyStyle() && pin->GetBodyStyle() )
             {
                 if( aSymbol->GetUnitCount() <= 1 )
                 {
+                    // TODO: 9.0: change "of converted" to "of alternate body style"
                     msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>"
                                    " of converted." ),
                                 pin->GetNumber(),
@@ -307,6 +313,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                 }
                 else
                 {
+                    // TODO: 9.0: change "of converted" to "of alternate body style"
                     msg.Printf( _( "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b>"
                                    " in unit %c of converted." ),
                                 pin->GetNumber(),
@@ -409,7 +416,7 @@ bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
 
     // Use DeMorgan variant as secondary key
     if( test == 0 )
-        test = ref->GetConvert() - tst->GetConvert();
+        test = ref->GetBodyStyle() - tst->GetBodyStyle();
 
     // Use unit as tertiary key
     if( test == 0 )

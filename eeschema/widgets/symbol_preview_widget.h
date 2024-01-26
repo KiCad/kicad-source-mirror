@@ -56,9 +56,9 @@ public:
     /**
      * Set the currently displayed symbol.
      */
-    void DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aConvert = 0 );
+    void DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aBodyStyle = 0 );
 
-    void DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aConvert = 0 );
+    void DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBodyStyle = 0 );
 
 protected:
     void onSize( wxSizeEvent& aEvent );

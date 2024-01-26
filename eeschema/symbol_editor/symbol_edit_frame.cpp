@@ -112,7 +112,7 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_treePane = nullptr;
     m_libMgr = nullptr;
     m_unit = 1;
-    m_convert = 1;
+    m_bodyStyle = 1;
     m_aboutTitle = _HKI( "KiCad Symbol Editor" );
 
     wxIcon icon;
@@ -497,13 +497,13 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto demorganStandardCond =
             [this]( const SELECTION& )
             {
-                return m_convert == LIB_ITEM::LIB_CONVERT::BASE;
+                return m_bodyStyle == LIB_ITEM::BODY_STYLE::BASE;
             };
 
     auto demorganAlternateCond =
             [this]( const SELECTION& )
             {
-                return m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN;
+                return m_bodyStyle == LIB_ITEM::BODY_STYLE::DEMORGAN;
             };
 
     auto multiUnitModeCond =
@@ -787,7 +787,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
 
     GetRenderSettings()->m_ShowUnit = m_unit;
-    GetRenderSettings()->m_ShowConvert = m_convert;
+    GetRenderSettings()->m_ShowBodyStyle = m_bodyStyle;
     GetRenderSettings()->m_ShowDisabled = IsSymbolFromLegacyLibrary() && !IsSymbolFromSchematic();
     GetRenderSettings()->m_ShowGraphicsDisabled = IsSymbolAlias() && !IsSymbolFromSchematic();
     GetCanvas()->DisplaySymbol( m_symbol );
@@ -841,7 +841,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         }
 
         int      unit = GetUnit();
-        int      convert = GetConvert();
+        int      bodyStyle = GetBodyStyle();
         wxString msg;
         wxString link;
 
@@ -854,7 +854,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
                 [=]( wxHyperlinkEvent& aEvent )
                 {
-                    LoadSymbolFromCurrentLib( rootSymbolName, unit, convert );
+                    LoadSymbolFromCurrentLib( rootSymbolName, unit, bodyStyle );
                 } ) );
 
         infobar->RemoveAllButtons();
@@ -1282,7 +1282,7 @@ void SYMBOL_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 void SYMBOL_EDIT_FRAME::RebuildView()
 {
     GetRenderSettings()->m_ShowUnit = m_unit;
-    GetRenderSettings()->m_ShowConvert = m_convert;
+    GetRenderSettings()->m_ShowBodyStyle = m_bodyStyle;
     GetRenderSettings()->m_ShowDisabled = IsSymbolFromLegacyLibrary() && !IsSymbolFromSchematic();
     GetRenderSettings()->m_ShowGraphicsDisabled = IsSymbolAlias() && !IsSymbolFromSchematic();
     GetCanvas()->DisplaySymbol( m_symbol );
@@ -1335,7 +1335,7 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
     }
     else
     {
-        return m_symbol->Flatten()->GetUnitBoundingBox( m_unit, m_convert );
+        return m_symbol->Flatten()->GetUnitBoundingBox( m_unit, m_bodyStyle );
     }
 }
 
@@ -1498,7 +1498,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             SetScreen( symbol_screen );
             SetCurSymbol( new LIB_SYMBOL( *lib_symbol ), false );
             RebuildSymbolUnitsList();
-            SetShowDeMorgan( GetCurSymbol()->HasConversion() );
+            SetShowDeMorgan( GetCurSymbol()->HasAlternateBodyStyle() );
 
             if( m_toolManager )
                 m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
@@ -1641,7 +1641,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     m_schematicSymbolUUID = aSymbol->m_Uuid;
     m_reference = symbol->GetFieldById( REFERENCE_FIELD )->GetText();
     m_unit = std::max( 1, aSymbol->GetUnit() );
-    m_convert = std::max( 1, aSymbol->GetConvert() );
+    m_bodyStyle = std::max( 1, aSymbol->GetBodyStyle() );
 
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
@@ -1667,7 +1667,7 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
 
     UpdateTitle();
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( GetCurSymbol()->HasConversion() );
+    SetShowDeMorgan( GetCurSymbol()->HasAlternateBodyStyle() );
     UpdateSymbolMsgPanelInfo();
 
     // Let tools add things to the view if necessary

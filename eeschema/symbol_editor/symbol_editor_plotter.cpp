@@ -68,15 +68,17 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName, VECTOR2I a
         plotPos.x = aOffset.x;
         plotPos.y = aOffset.y;
 
-        m_symbol->Plot( plotter, GetUnit(), GetConvert(), background, plotPos, temp, false );
+        m_symbol->Plot( plotter, GetUnit(), GetBodyStyle(), background, plotPos, temp, false );
 
         // Plot lib fields, not plotted by m_symbol->Plot():
-        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), background, plotPos, temp, false );
+        m_symbol->PlotLibFields( plotter, GetUnit(), GetBodyStyle(), background, plotPos, temp,
+                                 false );
 
-        m_symbol->Plot( plotter, GetUnit(), GetConvert(), !background, plotPos, temp, false );
+        m_symbol->Plot( plotter, GetUnit(), GetBodyStyle(), !background, plotPos, temp, false );
 
         // Plot lib fields, not plotted by m_symbol->Plot():
-        m_symbol->PlotLibFields( plotter, GetUnit(), GetConvert(), !background, plotPos, temp, false );
+        m_symbol->PlotLibFields( plotter, GetUnit(), GetBodyStyle(), !background, plotPos, temp,
+                                 false );
     }
 
     plotter->EndPlot();
@@ -99,7 +101,8 @@ void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     plot_offset.x = pagesize.x / 2;
     plot_offset.y = pagesize.y / 2;
 
-    m_symbol->PrintBackground( aSettings, plot_offset, m_unit, m_convert, LIB_SYMBOL_OPTIONS(), false );
+    m_symbol->PrintBackground( aSettings, plot_offset, m_unit, m_bodyStyle, LIB_SYMBOL_OPTIONS(),
+                               false );
 
-    m_symbol->Print( aSettings, plot_offset, m_unit, m_convert, LIB_SYMBOL_OPTIONS(), false );
+    m_symbol->Print( aSettings, plot_offset, m_unit, m_bodyStyle, LIB_SYMBOL_OPTIONS(), false );
 }

@@ -348,7 +348,7 @@ DIALOG_SYMBOL_PROPERTIES::DIALOG_SYMBOL_PROPERTIES( SCH_EDIT_FRAME* aParent,
         m_shownColumns = m_fieldsGrid->GetShownColumns();
     }
 
-    if( m_part && m_part->HasConversion() )
+    if( m_part && m_part->HasAlternateBodyStyle() )
     {
         // DeMorgan conversions are a subclass of alternate pin assignments, so don't allow
         // free-form alternate assignments as well.  (We won't know how to map the alternates
@@ -499,9 +499,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
         m_unitChoice->Enable( false );
     }
 
-    if( m_part && m_part->HasConversion() )
+    if( m_part && m_part->HasAlternateBodyStyle() )
     {
-        if( m_symbol->GetConvert() > LIB_ITEM::LIB_CONVERT::BASE )
+        if( m_symbol->GetBodyStyle() > LIB_ITEM::BODY_STYLE::BASE )
             m_cbAlternateSymbol->SetValue( true );
     }
     else
@@ -696,9 +696,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
     if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )
-        m_symbol->SetConvert( LIB_ITEM::LIB_CONVERT::DEMORGAN );
+        m_symbol->SetBodyStyle( LIB_ITEM::BODY_STYLE::DEMORGAN );
     else
-        m_symbol->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
+        m_symbol->SetBodyStyle( LIB_ITEM::BODY_STYLE::BASE );
 
     //Set the part selection in multiple part per package
     int unit_selection = m_unitChoice->IsEnabled() ? m_unitChoice->GetSelection() + 1 : 1;

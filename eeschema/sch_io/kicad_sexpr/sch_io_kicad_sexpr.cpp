@@ -696,8 +696,8 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
     m_out->Print( 0, " (unit %d)", unit );
 
-    if( aSymbol->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
-        m_out->Print( 0, " (convert %d)", aSymbol->GetConvert() );
+    if( aSymbol->GetBodyStyle() == LIB_ITEM::BODY_STYLE::DEMORGAN )
+        m_out->Print( 0, " (convert %d)", aSymbol->GetBodyStyle() );
 
     m_out->Print( 0, "\n" );
 

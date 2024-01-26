@@ -123,7 +123,7 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent ) :
 
 LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aNumber,
                   PIN_ORIENTATION aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength,
-                  int aNameTextSize, int aNumTextSize, int aConvert, const VECTOR2I& aPos,
+                  int aNameTextSize, int aNumTextSize, int aBodyStyle, const VECTOR2I& aPos,
                   int aUnit ) :
         LIB_ITEM( LIB_PIN_T, aParent ),
         m_position( aPos ),
@@ -138,7 +138,7 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aN
     SetName( aName );
     SetNumber( aNumber );
     SetUnit( aUnit );
-    SetConvert( aConvert );
+    SetBodyStyle( aBodyStyle );
 }
 
 

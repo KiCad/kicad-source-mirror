@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -154,8 +154,8 @@ DIALOG_LIB_SHAPE_PROPERTIES_BASE::DIALOG_LIB_SHAPE_PROPERTIES_BASE( wxWindow* pa
 
 	bBottom->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bBottom->Add( m_checkApplyToAllConversions, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_checkApplyToAllBodyStyles = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bBottom->Add( m_checkApplyToAllBodyStyles, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	mainSizer->Add( bBottom, 0, wxEXPAND|wxALL, 10 );

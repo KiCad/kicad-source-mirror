@@ -215,9 +215,9 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Type" ), _( "Pin" ) );
 
-    if( m_libPin->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
+    if( m_libPin->GetBodyStyle() == LIB_ITEM::BODY_STYLE::BASE )
         msg = _( "no" );
-    else if( m_libPin->GetConvert() == LIB_ITEM::LIB_CONVERT::DEMORGAN )
+    else if( m_libPin->GetBodyStyle() == LIB_ITEM::BODY_STYLE::DEMORGAN )
         msg = _( "yes" );
     else
         msg = wxT( "?" );

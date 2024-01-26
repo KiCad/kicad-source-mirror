@@ -102,7 +102,7 @@ std::vector<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
 SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_IsSymbolEditor( false ),
         m_ShowUnit( 0 ),
-        m_ShowConvert( 0 ),
+        m_ShowBodyStyle( 0 ),
         m_ShowPinsElectricalType( true ),
         m_ShowPinNumbers( false ),
         m_ShowDisabled( false ),
@@ -339,9 +339,9 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem ) const
         return false;
     }
 
-    if( m_schSettings.m_ShowConvert         // showing a specific conversion
-            && aItem->GetConvert()          // item is conversion-specific
-            && aItem->GetConvert() != m_schSettings.m_ShowConvert )
+    if( m_schSettings.m_ShowBodyStyle       // showing a specific body style
+            && aItem->GetBodyStyle()        // item is body-style-specific
+            && aItem->GetBodyStyle() != m_schSettings.m_ShowBodyStyle )
     {
         return false;
     }
@@ -737,13 +737,13 @@ void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D 
 
 
 void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields, int aUnit,
-                        int aConvert, bool aDimmed )
+                        int aBodyStyle, bool aDimmed )
 {
     if( !aUnit )
         aUnit = m_schSettings.m_ShowUnit;
 
-    if( !aConvert )
-        aConvert = m_schSettings.m_ShowConvert;
+    if( !aBodyStyle )
+        aBodyStyle = m_schSettings.m_ShowBodyStyle;
 
     std::unique_ptr< LIB_SYMBOL > tmpSymbol;
     const LIB_SYMBOL* drawnSymbol = aSymbol;
@@ -782,7 +782,7 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
         if( aUnit && item.GetUnit() && aUnit != item.GetUnit() )
             continue;
 
-        if( aConvert && item.GetConvert() && aConvert != item.GetConvert() )
+        if( aBodyStyle && item.GetBodyStyle() && aBodyStyle != item.GetBodyStyle() )
             continue;
 
         draw( &item, aLayer, aDimmed );
@@ -2489,18 +2489,18 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     }
 
     int unit = aSymbol->GetUnitSelection( &m_schematic->CurrentSheet() );
-    int convert = aSymbol->GetConvert();
+    int bodyStyle = aSymbol->GetBodyStyle();
 
     // Use dummy symbol if the actual couldn't be found (or couldn't be locked).
     LIB_SYMBOL* originalSymbol = aSymbol->GetLibSymbolRef() ?
                                  aSymbol->GetLibSymbolRef().get() : dummy();
     LIB_PINS  originalPins;
-    originalSymbol->GetPins( originalPins, unit, convert );
+    originalSymbol->GetPins( originalPins, unit, bodyStyle );
 
     // Copy the source so we can re-orient and translate it.
     LIB_SYMBOL tempSymbol( *originalSymbol );
     LIB_PINS tempPins;
-    tempSymbol.GetPins( tempPins, unit, convert );
+    tempSymbol.GetPins( tempPins, unit, bodyStyle );
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
 
@@ -2549,7 +2549,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
         tempPin->SetOperatingPoint( symbolPin->GetOperatingPoint() );
     }
 
-    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetConvert(), aSymbol->GetDNP() );
+    draw( &tempSymbol, aLayer, false, aSymbol->GetUnit(), aSymbol->GetBodyStyle(), aSymbol->GetDNP() );
 
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {

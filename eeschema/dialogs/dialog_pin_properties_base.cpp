@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -154,8 +154,8 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	checkboxesSizer->Add( m_checkApplyToAllParts, 0, wxBOTTOM, 3 );
 
-	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	checkboxesSizer->Add( m_checkApplyToAllConversions, 0, wxBOTTOM, 3 );
+	m_checkApplyToAllBodyStyles = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	checkboxesSizer->Add( m_checkApplyToAllBodyStyles, 0, wxBOTTOM, 3 );
 
 
 	checkboxesSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -283,7 +283,7 @@ DIALOG_PIN_PROPERTIES_BASE::DIALOG_PIN_PROPERTIES_BASE( wxWindow* parent, wxWind
 	m_choiceStyle->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_choiceOrientation->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkApplyToAllParts->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
-	m_checkApplyToAllConversions->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
+	m_checkApplyToAllBodyStyles->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkShow->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_panelShowPin->Connect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPaintShowPanel ), NULL, this );
 	m_alternatesTurndown->Connect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnCollapsiblePaneChange ), NULL, this );
@@ -305,7 +305,7 @@ DIALOG_PIN_PROPERTIES_BASE::~DIALOG_PIN_PROPERTIES_BASE()
 	m_choiceStyle->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_choiceOrientation->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkApplyToAllParts->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
-	m_checkApplyToAllConversions->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
+	m_checkApplyToAllBodyStyles->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_checkShow->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPropertiesChange ), NULL, this );
 	m_panelShowPin->Disconnect( wxEVT_PAINT, wxPaintEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnPaintShowPanel ), NULL, this );
 	m_alternatesTurndown->Disconnect( wxEVT_COLLAPSIBLEPANE_CHANGED, wxCollapsiblePaneEventHandler( DIALOG_PIN_PROPERTIES_BASE::OnCollapsiblePaneChange ), NULL, this );

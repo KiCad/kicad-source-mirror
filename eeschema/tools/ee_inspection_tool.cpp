@@ -345,7 +345,7 @@ int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
             SYMBOL_DIFF_WIDGET* diff = constructDiffPanel( panel );
 
             diff->DisplayDiff( flattenedSchSymbol.release(), flattenedLibSymbol.release(),
-                               symbol->GetUnit(), symbol->GetConvert() );
+                               symbol->GetUnit(), symbol->GetBodyStyle() );
         }
     }
 

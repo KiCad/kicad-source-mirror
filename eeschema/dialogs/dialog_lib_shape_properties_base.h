@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -74,7 +74,7 @@ class DIALOG_LIB_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_fillColorSwatch;
 		wxCheckBox* m_privateCheckbox;
 		wxCheckBox* m_checkApplyToAllUnits;
-		wxCheckBox* m_checkApplyToAllConversions;
+		wxCheckBox* m_checkApplyToAllBodyStyles;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

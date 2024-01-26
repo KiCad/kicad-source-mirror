@@ -174,11 +174,12 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_OptionPartsInterchangeable->SetValue( !m_libEntry->UnitsLocked() ||
                                             m_libEntry->GetUnitCount() == 1 );
 
-    // If a symbol contains no conversion-specific pins or graphic items, symbol->HasConversion()
-    // will return false.  But when editing a symbol with DeMorgan option set, we don't want to
-    // keep turning it off just because there aren't any conversion-specific items yet, so we force
-    // it to on if the parent frame has it enabled.
-    m_AsConvertButt->SetValue( m_Parent->GetShowDeMorgan() );
+    // If a symbol contains no body-style-specific pins or graphic items,
+    // symbol->HasAlternateBodyStyle() will return false.
+    // But when editing a symbol with DeMorgan option set, we don't want to keep turning it off
+    // just because there aren't any body-style-specific items yet, so we force it to on if the
+    // parent frame has it enabled.
+    m_hasAlternateBodyStyles->SetValue( m_Parent->GetShowDeMorgan() );
 
     m_OptionPower->SetValue( m_libEntry->IsPower() );
 
@@ -296,7 +297,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
             return false;
     }
 
-    if( !m_AsConvertButt->GetValue() && m_libEntry->HasConversion() )
+    if( !m_hasAlternateBodyStyles->GetValue() && m_libEntry->HasAlternateBodyStyle() )
     {
         if( !IsOK( this, _( "Delete alternate body style (De Morgan) from symbol?" ) ) )
             return false;
@@ -391,8 +392,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_libEntry->SetUnitCount( m_SelNumberOfUnits->GetValue() );
     m_libEntry->LockUnits( m_libEntry->GetUnitCount() > 1 &&
                            !m_OptionPartsInterchangeable->GetValue() );
-    m_libEntry->SetConversion( m_AsConvertButt->GetValue() );
-    m_Parent->SetShowDeMorgan( m_AsConvertButt->GetValue() );
+    m_libEntry->SetHasAlternateBodyStyle( m_hasAlternateBodyStyles->GetValue() );
+    m_Parent->SetShowDeMorgan( m_hasAlternateBodyStyles->GetValue() );
 
     if( m_OptionPower->GetValue() )
     {
@@ -429,9 +430,10 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
     m_Parent->UpdateAfterSymbolProperties( &oldName );
 
     // It's possible that the symbol being edited has no pins, in which case there may be no
-    // alternate body style objects causing #LIB_SYMBOL::HasCoversion() to always return false.
-    // This allows the user to edit the alternate body style just in case this condition occurs.
-    m_Parent->SetShowDeMorgan( m_AsConvertButt->GetValue() );
+    // alternate body style objects causing #LIB_SYMBOL::HasAlternateBodyStyle() to always return
+    // false.  This allows the user to edit the alternate body style just in case this condition
+    // occurs.
+    m_Parent->SetShowDeMorgan( m_hasAlternateBodyStyles->GetValue() );
 
     return true;
 }

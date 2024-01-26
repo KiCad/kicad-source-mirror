@@ -178,7 +178,7 @@ void RESCUE_CASE_CANDIDATE::FindRescues( RESCUER& aRescuer,
             RESCUE_CASE_CANDIDATE candidate( symbol_name, case_insensitive_matches[0]->GetName(),
                                              case_insensitive_matches[0],
                                              eachSymbol->GetUnit(),
-                                             eachSymbol->GetConvert() );
+                                             eachSymbol->GetBodyStyle() );
 
             candidate_map[symbol_name] = candidate;
         }
@@ -296,8 +296,7 @@ void RESCUE_CACHE_CANDIDATE::FindRescues( RESCUER& aRescuer,
 
             // Check if the symbol has already been rescued.
             RESCUE_CACHE_CANDIDATE candidate( symbol_name, symbol_name, cache_match, lib_match,
-                                              eachSymbol->GetUnit(),
-                                              eachSymbol->GetConvert() );
+                                              eachSymbol->GetUnit(), eachSymbol->GetBodyStyle() );
 
             candidate_map[symbol_name] = candidate;
         }
@@ -469,7 +468,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
 
             RESCUE_SYMBOL_LIB_TABLE_CANDIDATE candidate( symbol_id, new_id, cache_match, lib_match,
                                                          eachSymbol->GetUnit(),
-                                                         eachSymbol->GetConvert() );
+                                                         eachSymbol->GetBodyStyle() );
 
             candidate_map[symbol_id] = candidate;
         }

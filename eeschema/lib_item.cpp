@@ -35,10 +35,10 @@ const int fill_tab[3] = { 'N', 'F', 'f' };
 
 
 LIB_ITEM::LIB_ITEM( KICAD_T aType, LIB_SYMBOL* aSymbol, int aUnit, int aConvert ) :
-    EDA_ITEM( aSymbol, aType ),
-    m_unit( aUnit ),
-    m_convert( aConvert ),
-    m_private( false )
+        EDA_ITEM( aSymbol, aType ),
+        m_unit( aUnit ),
+        m_bodyStyle( aConvert ),
+        m_private( false )
 {
 }
 
@@ -56,9 +56,9 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Unit" ), msg );
 
-    if( m_convert == LIB_ITEM::LIB_CONVERT::BASE )
+    if( m_bodyStyle == LIB_ITEM::BODY_STYLE::BASE )
         msg = _( "no" );
-    else if( m_convert == LIB_ITEM::LIB_CONVERT::DEMORGAN )
+    else if( m_bodyStyle == LIB_ITEM::BODY_STYLE::DEMORGAN )
         msg = _( "yes" );
     else
         msg = wxT( "?" );
@@ -79,8 +79,8 @@ int LIB_ITEM::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
     if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_unit != aOther.m_unit )
         return m_unit - aOther.m_unit;
 
-    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_convert != aOther.m_convert )
-        return m_convert - aOther.m_convert;
+    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_bodyStyle != aOther.m_bodyStyle )
+        return m_bodyStyle - aOther.m_bodyStyle;
 
     if( IsPrivate() != aOther.IsPrivate() )
         return IsPrivate() < aOther.IsPrivate();

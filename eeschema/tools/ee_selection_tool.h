@@ -288,7 +288,7 @@ private:
     bool            m_isSymbolEditor;    // True when the symbol editor is the parent frame
     bool            m_isSymbolViewer;    // True when the symbol browser is the parent frame
     int             m_unit;              // Fixed unit filter (for symbol editor)
-    int             m_convert;           // Fixed DeMorgan filter (for symbol editor)
+    int             m_bodyStyle;         // Fixed DeMorgan filter (for symbol editor)
 };
 
 #endif //KICAD_SCH_SELECTION_TOOL_H

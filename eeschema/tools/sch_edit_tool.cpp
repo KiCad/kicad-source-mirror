@@ -1675,7 +1675,7 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
+int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SYMBOL_T } );
 
@@ -1685,13 +1685,13 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard )
-            && symbol->GetConvert() == LIB_ITEM::LIB_CONVERT::BASE )
+            && symbol->GetBodyStyle() == LIB_ITEM::BODY_STYLE::BASE )
     {
         return 0;
     }
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganAlternate )
-            && symbol->GetConvert() != LIB_ITEM::LIB_CONVERT::DEMORGAN )
+            && symbol->GetBodyStyle() != LIB_ITEM::BODY_STYLE::DEMORGAN )
     {
         return 0;
     }
@@ -1699,7 +1699,7 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
     if( !symbol->IsNew() )
         saveCopyInUndoList( symbol, UNDO_REDO::CHANGED );
 
-    m_frame->ConvertPart( symbol );
+    m_frame->FlipBodyStyle( symbol );
 
     if( symbol->IsNew() )
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
@@ -1801,7 +1801,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             if( wxWindow* blocking_win = editor->Kiway().GetBlockingDialog() )
                 blocking_win->Close( true );
 
-            editor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetConvert() );
+            editor->LoadSymbol( symbol->GetLibId(), symbol->GetUnit(), symbol->GetBodyStyle() );
 
             editor->Show( true );
             editor->Raise();
@@ -2643,9 +2643,9 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::updateSymbols.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::changeSymbol.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeSymbols,      EE_ACTIONS::updateSymbol.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::toggleDeMorgan.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganStandard.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    EE_ACTIONS::toggleDeMorgan.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    EE_ACTIONS::showDeMorganStandard.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeBodyStyle,    EE_ACTIONS::showDeMorganAlternate.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toHLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toGLabel.MakeEvent() );

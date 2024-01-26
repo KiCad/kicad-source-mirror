@@ -92,7 +92,7 @@ SELECTION_CONDITION EE_CONDITIONS::SingleDeMorganSymbol = []( const SELECTION& a
         SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aSel.Front() );
 
         if( symbol )
-            return symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->HasConversion();
+            return symbol->GetLibSymbolRef() && symbol->GetLibSymbolRef()->HasAlternateBodyStyle();
     }
 
     return false;
@@ -158,7 +158,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_isSymbolEditor( false ),
         m_isSymbolViewer( false ),
         m_unit( 0 ),
-        m_convert( 0 )
+        m_bodyStyle( 0 )
 {
     m_selection.Clear();
 }
@@ -201,7 +201,7 @@ bool EE_SELECTION_TOOL::Init()
     {
         m_isSymbolEditor = true;
         m_unit = symbolEditorFrame->GetUnit();
-        m_convert = symbolEditorFrame->GetConvert();
+        m_bodyStyle = symbolEditorFrame->GetBodyStyle();
     }
     else
     {
@@ -343,7 +343,7 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
         {
             m_isSymbolEditor = true;
             m_unit = symbolEditFrame->GetUnit();
-            m_convert = symbolEditFrame->GetConvert();
+            m_bodyStyle = symbolEditFrame->GetBodyStyle();
         }
         else
         {
@@ -1025,11 +1025,11 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
         if( !symbol )
             return false;
 
-        aCollector.Collect( symbol->GetDrawItems(), aScanTypes, aWhere, m_unit, m_convert );
+        aCollector.Collect( symbol->GetDrawItems(), aScanTypes, aWhere, m_unit, m_bodyStyle );
     }
     else
     {
-        aCollector.Collect( m_frame->GetScreen(), aScanTypes, aWhere, m_unit, m_convert );
+        aCollector.Collect( m_frame->GetScreen(), aScanTypes, aWhere, m_unit, m_bodyStyle );
 
         if( m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
         {
@@ -2099,7 +2099,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
             if( lib_item->GetUnit() && lib_item->GetUnit() != symEditFrame->GetUnit() )
                 return false;
 
-            if( lib_item->GetConvert() && lib_item->GetConvert() != symEditFrame->GetConvert() )
+            if( lib_item->GetBodyStyle() && lib_item->GetBodyStyle() != symEditFrame->GetBodyStyle() )
                 return false;
         }
 

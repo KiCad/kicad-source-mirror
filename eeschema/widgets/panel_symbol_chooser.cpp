@@ -609,7 +609,7 @@ void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
         wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
         // All units, but only a single De Morgan variant.
-        if( symbol->HasConversion() )
+        if( symbol->HasAlternateBodyStyle() )
             symbol->GetPins( temp_pins, 0, 1 );
         else
             symbol->GetPins( temp_pins );

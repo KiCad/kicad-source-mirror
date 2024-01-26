@@ -226,12 +226,12 @@ public:
                 break;
 
             case COL_DEMORGAN:
-                switch( pin->GetConvert() )
+                switch( pin->GetBodyStyle() )
                 {
-                case LIB_ITEM::LIB_CONVERT::BASE:
+                case LIB_ITEM::BODY_STYLE::BASE:
                     val = DEMORGAN_STD;
                     break;
-                case LIB_ITEM::LIB_CONVERT::DEMORGAN:
+                case LIB_ITEM::BODY_STYLE::DEMORGAN:
                     val = DEMORGAN_ALT;
                     break;
                 default:
@@ -437,11 +437,11 @@ public:
 
             case COL_DEMORGAN:
                 if( value == DEMORGAN_STD )
-                    pin->SetConvert( 1 );
+                    pin->SetBodyStyle( 1 );
                 else if( value == DEMORGAN_ALT )
-                    pin->SetConvert( 2 );
+                    pin->SetBodyStyle( 2 );
                 else
-                    pin->SetConvert( 0 );
+                    pin->SetBodyStyle( 0 );
                 break;
 
             default:

@@ -122,7 +122,7 @@ DIALOG_LIB_TEXT_PROPERTIES::~DIALOG_LIB_TEXT_PROPERTIES()
 
 bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 {
-    wxCHECK( m_CommonUnit, false );
+    wxCHECK( m_commonToAllUnits, false );
 
     LIB_SYMBOL* symbol = nullptr;
 
@@ -143,9 +143,9 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         m_bold->Check( m_graphicText->IsBold() );
 
         m_privateCheckbox->SetValue( m_graphicText->IsPrivate() );
-        m_CommonUnit->SetValue(
-                symbol && symbol->GetUnitCount() > 1 && m_graphicText->GetUnit() == 0 );
-        m_CommonConvert->SetValue( m_graphicText->GetConvert() == 0 );
+        m_commonToAllUnits->SetValue( symbol && symbol->GetUnitCount() > 1
+                                && m_graphicText->GetUnit() == 0 );
+        m_commonToAllBodyStyles->SetValue( m_graphicText->GetBodyStyle() == 0 );
 
         if( m_graphicText->GetTextAngle().IsHorizontal() )
             m_horizontal->Check();
@@ -176,8 +176,8 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 
         m_textSize.SetValue( schIUScale.MilsToIU( cfg->m_Defaults.text_size ) );
 
-        m_CommonUnit->SetValue( symbol->GetUnitCount() > 1 && !tools->GetDrawSpecificUnit() );
-        m_CommonConvert->SetValue( !tools->GetDrawSpecificConvert() );
+        m_commonToAllUnits->SetValue( symbol->GetUnitCount() > 1 && !tools->GetDrawSpecificUnit() );
+        m_commonToAllBodyStyles->SetValue( !tools->GetDrawSpecificBodyStyle() );
 
         if( tools->GetLastTextAngle().IsHorizontal() )
             m_horizontal->Check();
@@ -185,7 +185,7 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
             m_vertical->Check();
     }
 
-    m_CommonUnit->Enable( symbol && symbol->GetUnitCount() > 1 );
+    m_commonToAllUnits->Enable( symbol && symbol->GetUnitCount() > 1 );
 
     return true;
 }
@@ -252,15 +252,15 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
 
         m_graphicText->SetPrivate( m_privateCheckbox->GetValue() );
 
-        if( !m_CommonUnit->GetValue() )
+        if( !m_commonToAllUnits->GetValue() )
             m_graphicText->SetUnit( m_parent->GetUnit() );
         else
             m_graphicText->SetUnit( 0 );
 
-        if( !m_CommonConvert->GetValue() )
-            m_graphicText->SetConvert( m_parent->GetConvert() );
+        if( !m_commonToAllBodyStyles->GetValue() )
+            m_graphicText->SetBodyStyle( m_parent->GetBodyStyle() );
         else
-            m_graphicText->SetConvert( 0 );
+            m_graphicText->SetBodyStyle( 0 );
 
         m_graphicText->SetItalic( m_italic->IsChecked() );
         m_graphicText->SetBold( m_bold->IsChecked() );
@@ -283,8 +283,8 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
         // Record settings used for next time:
         auto* tools = m_parent->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
         tools->SetLastTextAngle( m_graphicText->GetTextAngle() );
-        tools->SetDrawSpecificConvert( !m_CommonConvert->GetValue() );
-        tools->SetDrawSpecificUnit( !m_CommonUnit->GetValue() );
+        tools->SetDrawSpecificBodyStyle( !m_commonToAllBodyStyles->GetValue() );
+        tools->SetDrawSpecificUnit( !m_commonToAllUnits->GetValue() );
     }
 
     m_parent->SetMsgPanel( m_graphicText );

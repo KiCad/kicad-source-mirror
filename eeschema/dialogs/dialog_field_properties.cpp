@@ -159,8 +159,8 @@ DIALOG_FIELD_PROPERTIES::~DIALOG_FIELD_PROPERTIES()
 void DIALOG_FIELD_PROPERTIES::init()
 {
     // Disable options for graphic text editing which are not needed for fields.
-    m_CommonConvert->Show( false );
-    m_CommonUnit->Show( false );
+    m_commonToAllBodyStyles->Show( false );
+    m_commonToAllUnits->Show( false );
 
     // Predefined fields cannot contain some chars and cannot be empty, so they need a
     // SCH_FIELD_VALIDATOR (m_StyledTextCtrl cannot use a SCH_FIELD_VALIDATOR).

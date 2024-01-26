@@ -92,13 +92,13 @@ void SYMBOL_DIFF_WIDGET::DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSy
                 static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
         settings->m_ShowUnit = ( m_previewItem->IsMulti() && !aUnit ) ? 1 : aUnit;
-        settings->m_ShowConvert = ( m_previewItem->HasConversion() && !aConvert ) ? 1 : aConvert;
+        settings->m_ShowBodyStyle = ( m_previewItem->HasAlternateBodyStyle() && !aConvert ) ? 1 : aConvert;
 
         view->Add( m_previewItem );
 
         // Get the symbol size, in internal units
         m_itemBBox = m_previewItem->GetUnitBoundingBox( settings->m_ShowUnit,
-                                                        settings->m_ShowConvert );
+                                                        settings->m_ShowBodyStyle );
 
         // Calculate the draw scale to fit the drawing area
         fitOnDrawArea();

@@ -843,7 +843,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& 
     NORMALIZE_ANGLE_POS( angle2 );
 
     arc->SetUnit( parseInt( aReader, line, &line ) );
-    arc->SetConvert( parseInt( aReader, line, &line ) );
+    arc->SetBodyStyle( parseInt( aReader, line, &line ) );
 
     STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
                           LINE_STYLE::SOLID );
@@ -920,7 +920,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL
     circle->SetStart( center );
     circle->SetEnd( VECTOR2I( center.x + radius, center.y ) );
     circle->SetUnit( parseInt( aReader, line, &line ) );
-    circle->SetConvert( parseInt( aReader, line, &line ) );
+    circle->SetBodyStyle( parseInt( aReader, line, &line ) );
 
     STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
                           LINE_STYLE::SOLID );
@@ -960,7 +960,7 @@ LIB_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& 
     text->SetTextSize( size );
     text->SetVisible( !parseInt( aReader, line, &line ) );
     text->SetUnit( parseInt( aReader, line, &line ) );
-    text->SetConvert( parseInt( aReader, line, &line ) );
+    text->SetBodyStyle( parseInt( aReader, line, &line ) );
 
     wxString str;
 
@@ -1055,7 +1055,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>&
     rectangle->SetEnd( end );
 
     rectangle->SetUnit( parseInt( aReader, line, &line ) );
-    rectangle->SetConvert( parseInt( aReader, line, &line ) );
+    rectangle->SetBodyStyle( parseInt( aReader, line, &line ) );
 
     STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
                           LINE_STYLE::SOLID );
@@ -1303,7 +1303,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMB
 
     int points = parseInt( aReader, line, &line );
     polyLine->SetUnit( parseInt( aReader, line, &line ) );
-    polyLine->SetConvert( parseInt( aReader, line, &line ) );
+    polyLine->SetBodyStyle( parseInt( aReader, line, &line ) );
 
     STROKE_PARAMS stroke( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
                           LINE_STYLE::SOLID );
@@ -1340,7 +1340,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL
     LIB_SHAPE* bezier = new LIB_SHAPE( aSymbol.get(), SHAPE_T::BEZIER );
 
     bezier->SetUnit( parseInt( aReader, line, &line ) );
-    bezier->SetConvert( parseInt( aReader, line, &line ) );
+    bezier->SetBodyStyle( parseInt( aReader, line, &line ) );
 
     STROKE_PARAMS stroke ( schIUScale.MilsToIU( parseInt( aReader, line, &line ) ),
                           LINE_STYLE::SOLID );
@@ -1609,7 +1609,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveArc( LIB_SHAPE* aArc, OUTPUTFORMATTER& a
                       startAngle.AsTenthsOfADegree(),
                       endAngle.AsTenthsOfADegree(),
                       aArc->GetUnit(),
-                      aArc->GetConvert(),
+                      aArc->GetBodyStyle(),
                       schIUScale.IUToMils( aArc->GetWidth() ),
                       fill_tab[ static_cast<int>( aArc->GetFillMode() ) - 1 ],
                       schIUScale.IUToMils( aArc->GetStart().x ),
@@ -1625,7 +1625,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMAT
 
     aFormatter.Print( 0, "B 4 %d %d %d",
                       aBezier->GetUnit(),
-                      aBezier->GetConvert(),
+                      aBezier->GetBodyStyle(),
                       schIUScale.IUToMils( aBezier->GetWidth() ) );
 
     aFormatter.Print( 0, " %d %d %d %d %d %d %d %d",
@@ -1651,7 +1651,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveCircle( LIB_SHAPE* aCircle, OUTPUTFORMAT
                       schIUScale.IUToMils( aCircle->GetPosition().y ),
                       schIUScale.IUToMils( aCircle->GetRadius() ),
                       aCircle->GetUnit(),
-                      aCircle->GetConvert(),
+                      aCircle->GetBodyStyle(),
                       schIUScale.IUToMils( aCircle->GetWidth() ),
                       fill_tab[ static_cast<int>( aCircle->GetFillMode() ) - 1 ] );
 }
@@ -1742,7 +1742,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePin( const LIB_PIN* aPin, OUTPUTFORMATTE
                       schIUScale.IUToMils( aPin->GetNumberTextSize() ),
                       schIUScale.IUToMils( aPin->GetNameTextSize() ),
                       aPin->GetUnit(),
-                      aPin->GetConvert(),
+                      aPin->GetBodyStyle(),
                       Etype );
 
     if( aPin->GetShape() != GRAPHIC_PINSHAPE::LINE || !aPin->IsVisible() )
@@ -1779,7 +1779,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePolyLine( LIB_SHAPE* aPolyLine,
     aFormatter.Print( 0, "P %d %d %d %d",
                       (int) aPolyLine->GetPolyShape().Outline( 0 ).GetPointCount(),
                       aPolyLine->GetUnit(),
-                      aPolyLine->GetConvert(),
+                      aPolyLine->GetBodyStyle(),
                       schIUScale.IUToMils( aPolyLine->GetWidth() ) );
 
     for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
@@ -1801,7 +1801,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveRectangle( LIB_SHAPE* aRectangle,
                       schIUScale.IUToMils( aRectangle->GetEnd().x ),
                       schIUScale.IUToMils( aRectangle->GetEnd().y ),
                       aRectangle->GetUnit(),
-                      aRectangle->GetConvert(),
+                      aRectangle->GetBodyStyle(),
                       schIUScale.IUToMils( aRectangle->GetWidth() ),
                       fill_tab[ static_cast<int>( aRectangle->GetFillMode() ) - 1 ] );
 }
@@ -1827,7 +1827,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveText( const LIB_TEXT* aText, OUTPUTFORMA
                       schIUScale.IUToMils( aText->GetTextWidth() ),
                       !aText->IsVisible(),
                       aText->GetUnit(),
-                      aText->GetConvert(),
+                      aText->GetBodyStyle(),
                       TO_UTF8( text ) );
 
     aFormatter.Print( 0, " %s %d", aText->IsItalic() ? "Italic" : "Normal", aText->IsBold() );

@@ -123,7 +123,7 @@ void SCH_EDIT_FRAME::SelectUnit( SCH_SYMBOL* aSymbol, int aUnit )
 }
 
 
-void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
+void SCH_EDIT_FRAME::FlipBodyStyle( SCH_SYMBOL* aSymbol )
 {
     if( !aSymbol || !aSymbol->GetLibSymbolRef() )
         return;
@@ -131,7 +131,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
     SCH_COMMIT commit( m_toolManager );
     wxString   msg;
 
-    if( !aSymbol->GetLibSymbolRef()->HasConversion() )
+    if( !aSymbol->GetLibSymbolRef()->HasAlternateBodyStyle() )
     {
         LIB_ID id = aSymbol->GetLibSymbolRef()->GetLibId();
 
@@ -144,20 +144,21 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_SYMBOL* aSymbol )
 
     commit.Modify( aSymbol, GetScreen() );
 
-    aSymbol->SetConvert( aSymbol->GetConvert() + 1 );
+    aSymbol->SetBodyStyle( aSymbol->GetBodyStyle() + 1 );
 
-    // ensure m_convert = 1 or 2
-    // 1 = shape 1 = not converted
-    // 2 = shape 2 = first converted shape
+    // ensure m_bodyStyle = 1 or 2
+    // 1 = shape 1 = first (base DeMorgan) alternate body style
+    // 2 = shape 2 = second (DeMorgan conversion) alternate body style
     // > 2 is not currently supported
-    // When m_convert = val max, return to the first shape
-    if( aSymbol->GetConvert() > LIB_ITEM::LIB_CONVERT::DEMORGAN )
-        aSymbol->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
+    // When m_bodyStyle = val max, return to the first shape
+    if( aSymbol->GetBodyStyle() > LIB_ITEM::BODY_STYLE::DEMORGAN )
+        aSymbol->SetBodyStyle( LIB_ITEM::BODY_STYLE::BASE );
 
     // If selected make sure all the now-included pins are selected
     if( aSymbol->IsSelected() )
         m_toolManager->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, aSymbol );
 
+    // TODO: 9.0 "Change Body Style"
     commit.Push( _( "Convert Symbol" ) );
 }
 

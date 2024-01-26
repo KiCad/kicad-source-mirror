@@ -35,17 +35,17 @@
 #include "symbol_editor_pin_tool.h"
 
 
-static ELECTRICAL_PINTYPE g_LastPinType          = ELECTRICAL_PINTYPE::PT_INPUT;
-static PIN_ORIENTATION    g_LastPinOrient        = PIN_ORIENTATION::PIN_RIGHT;
-static GRAPHIC_PINSHAPE   g_LastPinShape         = GRAPHIC_PINSHAPE::LINE;
-static bool               g_LastPinCommonConvert = false;
-static bool               g_LastPinCommonUnit    = false;
-static bool               g_LastPinVisible       = true;
+static ELECTRICAL_PINTYPE g_LastPinType            = ELECTRICAL_PINTYPE::PT_INPUT;
+static PIN_ORIENTATION    g_LastPinOrient          = PIN_ORIENTATION::PIN_RIGHT;
+static GRAPHIC_PINSHAPE   g_LastPinShape           = GRAPHIC_PINSHAPE::LINE;
+static bool               g_LastPinCommonBodyStyle = false;
+static bool               g_LastPinCommonUnit      = false;
+static bool               g_LastPinVisible         = true;
 
 // The -1 is a non-valid value to trigger delayed initialization
-static int                g_LastPinLength        = -1;
-static int                g_LastPinNameSize      = -1;
-static int                g_LastPinNumSize       = -1;
+static int                g_LastPinLength          = -1;
+static int                g_LastPinNameSize        = -1;
+static int                g_LastPinNumSize         = -1;
 
 static int GetLastPinLength()
 {
@@ -157,12 +157,12 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
                 && other->IsVisible() == original_pin.IsVisible()
                 && other->GetName() == original_pin.GetName() )
             {
-                if( aPin->GetConvert() == 0 )
+                if( aPin->GetBodyStyle() == 0 )
                 {
                     if( !aPin->GetUnit() || other->GetUnit() == aPin->GetUnit() )
                         aPin->GetParent()->RemoveDrawItem( other );
                 }
-                else if( other->GetConvert() == aPin->GetConvert() )
+                else if( other->GetBodyStyle() == aPin->GetBodyStyle() )
                 {
                     other->SetPosition( aPin->GetPosition() );
                     other->ChangeLength( aPin->GetLength() );
@@ -171,7 +171,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 
                 if( aPin->GetUnit() == 0 )
                 {
-                    if( !aPin->GetConvert() || other->GetConvert() == aPin->GetConvert() )
+                    if( !aPin->GetBodyStyle() || other->GetBodyStyle() == aPin->GetBodyStyle() )
                         aPin->GetParent()->RemoveDrawItem( other );
                 }
 
@@ -200,7 +200,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
     g_LastPinLength = aPin->GetLength();
     g_LastPinShape = aPin->GetShape();
     g_LastPinType = aPin->GetType();
-    g_LastPinCommonConvert = aPin->GetConvert() == 0;
+    g_LastPinCommonBodyStyle = aPin->GetBodyStyle() == 0;
     g_LastPinCommonUnit = aPin->GetUnit() == 0;
     g_LastPinVisible = aPin->IsVisible();
 
@@ -221,7 +221,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
             continue;
 
         // test for same body style
-        if( test->GetConvert() && test->GetConvert() != aPin->GetConvert() )
+        if( test->GetBodyStyle() && test->GetBodyStyle() != aPin->GetBodyStyle() )
             continue;
 
         if( ask_for_pin && m_frame->SynchronizePins() )
@@ -302,7 +302,7 @@ LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_SYMBO
     pin->SetShape( g_LastPinShape );
     pin->SetNameTextSize( GetLastPinNameSize() );
     pin->SetNumberTextSize( GetLastPinNumSize() );
-    pin->SetConvert( g_LastPinCommonConvert ? 0 : m_frame->GetConvert() );
+    pin->SetBodyStyle( g_LastPinCommonBodyStyle ? 0 : m_frame->GetBodyStyle() );
     pin->SetUnit( g_LastPinCommonUnit ? 0 : m_frame->GetUnit() );
     pin->SetVisible( g_LastPinVisible );
 
@@ -386,7 +386,7 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 
         if( aEvent.IsAction( &EE_ACTIONS::pushPinLength ) )
         {
-            if( !pin->GetConvert() || pin->GetConvert() == m_frame->GetConvert() )
+            if( !pin->GetBodyStyle() || pin->GetBodyStyle() == m_frame->GetBodyStyle() )
                 pin->ChangeLength( sourcePin->GetLength() );
         }
         else if( aEvent.IsAction( &EE_ACTIONS::pushPinNameSize ) )

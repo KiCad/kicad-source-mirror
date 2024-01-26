@@ -187,10 +187,10 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	sbSizerSymbol->Add( 0, 8, 0, wxEXPAND, 5 );
 
-	m_AsConvertButt = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Has alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_AsConvertButt->SetToolTip( _("Check this option if the symbol has an alternate body style for a De Morgan logic equivalence.\nFor instance, this should be checked for a NAND gate to provide an alternate representation as an OR gate with inverted inputs.") );
+	m_hasAlternateBodyStyles = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Has alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hasAlternateBodyStyles->SetToolTip( _("Check this option if the symbol has an alternate body style for a De Morgan logic equivalence.\nFor instance, this should be checked for a NAND gate to provide an alternate representation as an OR gate with inverted inputs.") );
 
-	sbSizerSymbol->Add( m_AsConvertButt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
+	sbSizerSymbol->Add( m_hasAlternateBodyStyles, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 
 
 	sbSizerSymbol->Add( 0, 7, 0, wxEXPAND, 5 );
@@ -391,7 +391,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 	m_SelNumberOfUnits->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrl ), NULL, this );
 	m_SelNumberOfUnits->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrlText ), NULL, this );
 	m_OptionPartsInterchangeable->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
-	m_AsConvertButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_hasAlternateBodyStyles->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_OptionPower->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
 	m_ShowPinNumButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_ShowPinNameButt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
@@ -426,7 +426,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::~DIALOG_LIB_SYMBOL_PROPERTIES_BASE()
 	m_SelNumberOfUnits->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrl ), NULL, this );
 	m_SelNumberOfUnits->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnSpinCtrlText ), NULL, this );
 	m_OptionPartsInterchangeable->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
-	m_AsConvertButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
+	m_hasAlternateBodyStyles->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_OptionPower->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::onPowerCheckBox ), NULL, this );
 	m_ShowPinNumButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );
 	m_ShowPinNameButt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_LIB_SYMBOL_PROPERTIES_BASE::OnCheckBox ), NULL, this );

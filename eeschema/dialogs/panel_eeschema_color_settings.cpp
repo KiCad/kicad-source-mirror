@@ -378,7 +378,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         LIB_SHAPE* comp_body = new LIB_SHAPE( symbol, SHAPE_T::POLY );
 
         comp_body->SetUnit( 0 );
-        comp_body->SetConvert( 0 );
+        comp_body->SetBodyStyle( 0 );
         comp_body->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         comp_body->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
         comp_body->AddPoint( MILS_POINT( p.x - 200, p.y + 200 ) );

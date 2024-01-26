@@ -105,7 +105,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromRedoList()
     }
 
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( symbol->HasConversion() );
+    SetShowDeMorgan( symbol->HasAlternateBodyStyle() );
     UpdateTitle();
 
     RebuildView();
@@ -156,7 +156,7 @@ void SYMBOL_EDIT_FRAME::GetSymbolFromUndoList()
     }
 
     RebuildSymbolUnitsList();
-    SetShowDeMorgan( symbol->HasConversion() );
+    SetShowDeMorgan( symbol->HasAlternateBodyStyle() );
     UpdateTitle();
 
     RebuildView();

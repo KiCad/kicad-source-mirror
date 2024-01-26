@@ -55,7 +55,7 @@ SYMBOL_EDITOR_DRAWING_TOOLS::SYMBOL_EDITOR_DRAWING_TOOLS() :
         m_lastFillStyle( FILL_T::NO_FILL ),
         m_lastFillColor( COLOR4D::UNSPECIFIED ),
         m_lastStroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
-        m_drawSpecificConvert( true ),
+        m_drawSpecificBodyStyle( true ),
         m_drawSpecificUnit( false ),
         m_inDrawShape( false ),
         m_inTwoClickPlace( false )
@@ -224,8 +224,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     if( m_drawSpecificUnit )
                         text->SetUnit( m_frame->GetUnit() );
 
-                    if( m_drawSpecificConvert )
-                        text->SetConvert( m_frame->GetConvert() );
+                    if( m_drawSpecificBodyStyle )
+                        text->SetBodyStyle( m_frame->GetBodyStyle() );
 
                     text->SetPosition( VECTOR2I( cursorPos.x, -cursorPos.y ) );
                     text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
@@ -488,8 +488,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
             if( m_drawSpecificUnit )
                 item->SetUnit( m_frame->GetUnit() );
 
-            if( m_drawSpecificConvert )
-                item->SetConvert( m_frame->GetConvert() );
+            if( m_drawSpecificBodyStyle )
+                item->SetBodyStyle( m_frame->GetBodyStyle() );
 
             m_selectionTool->AddItemToSel( item );
         }

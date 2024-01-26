@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -77,7 +77,7 @@ class DIALOG_PIN_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_nameSizeUnits;
 		wxStaticText* m_numberSizeUnits;
 		wxCheckBox* m_checkApplyToAllParts;
-		wxCheckBox* m_checkApplyToAllConversions;
+		wxCheckBox* m_checkApplyToAllBodyStyles;
 		wxCheckBox* m_checkShow;
 		wxStaticText* m_staticText16;
 		wxPanel* m_panelShowPin;
