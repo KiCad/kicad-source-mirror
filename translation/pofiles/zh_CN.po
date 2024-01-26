@@ -5,7 +5,7 @@
 # Rigo Ligo <rigoligo03@gmail.com>, 2020, 2021, 2022, 2023.
 # Eric <spice2wolf@gmail.com>, 2020, 2021.
 # Liu Guang <l.g110@163.com>, 2021.
-# CloverGit <w991593239@163.com>, 2021, 2022, 2023.
+# CloverGit <w991593239@163.com>, 2021, 2022, 2023, 2024.
 # Deleted User <noreply+33206@weblate.org>, 2021.
 # David Chen <d0123456789g@yahoo.com.tw>, 2021.
 # ZbeeGin <zbeegin@op.pl>, 2021.
@@ -34,8 +34,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-26 04:27+0000\n"
-"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
+"PO-Revision-Date: 2024-01-26 16:54+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -38875,7 +38875,7 @@ msgstr "调整"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2275
 msgid "Single track"
-msgstr "单导线"
+msgstr "单端走线"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2276
 msgid "Differential pair"
@@ -45037,7 +45037,7 @@ msgstr "在板外区域执行元件的自动放置"
 
 #: pcbnew/tools/pcb_actions.cpp:2227
 msgid "Route Single Track"
-msgstr "交互式布线"
+msgstr "布线(单端走线)"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
 msgid "Route tracks"
