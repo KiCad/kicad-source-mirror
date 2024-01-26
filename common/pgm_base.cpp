@@ -118,7 +118,7 @@ LANGUAGE_DESCR LanguagesList[] =
     { wxLANGUAGE_CHINESE_SIMPLIFIED, ID_LANGUAGE_CHINESE_SIMPLIFIED,
             wxT( "简体中文" ), true },
     { wxLANGUAGE_CHINESE_TRADITIONAL, ID_LANGUAGE_CHINESE_TRADITIONAL,
-            wxT( "繁體中文" ), false },
+            wxT( "繁體中文" ), true },
     { 0, 0, "", false }         // Sentinel
 };
 #undef _
