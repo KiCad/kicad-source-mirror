@@ -24,14 +24,14 @@
 # 이윤성 <yunslee@student.42seoul.kr>, 2022.
 # KwonHyeokbeom <gurqja3810@naver.com>, 2022.
 # "minsu kim (0xGabriel)" <rlaalstn9601@gmail.com>, 2023.
-# pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2023.
+# pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-23 02:01+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2024-01-27 05:27+0000\n"
+"Last-Translator: pedrolinharesmoreira <pedrolinhares@unifei.edu.br>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -31607,9 +31607,8 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
-#, fuzzy
 msgid "Gerber X3"
-msgstr "거버 X2"
+msgstr "거버 X3"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
@@ -33231,9 +33230,8 @@ msgstr "패드와 크기가 비슷한 트랙은 티어드롭이 필요하지 않
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:434
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:474
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:525
-#, fuzzy
 msgid "%("
-msgstr "%"
+msgstr "%("
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:657
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:725
@@ -33267,7 +33265,6 @@ msgstr "최적 길이:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:92
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:272
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:452
-#, fuzzy
 msgid "Maximum length (L):"
 msgstr "최대 길이:"
 
@@ -34543,25 +34540,22 @@ msgstr "('규칙 이름'에서)"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:167
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:302
-#, fuzzy
 msgid "Minimum amplitude (A):"
-msgstr "최소 진폭 (Amin):"
+msgstr "최소 진폭 (A):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:60
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:55
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:184
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:319
-#, fuzzy
 msgid "Maximum amplitude (A):"
-msgstr "최대 진폭 (Amax):"
+msgstr "최대 진폭 (A):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:71
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:66
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:195
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:330
-#, fuzzy
 msgid "Spacing (s):"
-msgstr "최소 간격 (s):"
+msgstr "간격 (s):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:76
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:74
@@ -34586,9 +34580,8 @@ msgstr "모서리 스타일:"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:248
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:383
-#, fuzzy
 msgid "Radius (r):"
-msgstr "반경:"
+msgstr "반경 (r):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:105
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:133
@@ -34603,9 +34596,8 @@ msgid "Tuning Pattern Properties"
 msgstr "선 속성"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
-#, fuzzy
 msgid "Remove Unused Layers"
-msgstr "사용하지 않은 레이어 삭제 (&R)"
+msgstr "사용하지 않은 레이어 삭제"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:52
 #, fuzzy
@@ -34855,9 +34847,8 @@ msgid "Reference and value are mandatory."
 msgstr "참조와 값은 필수입니다."
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:23
-#, fuzzy
 msgid "Default field properties for new footprints:"
-msgstr "새 풋ㅍ프린트에 대한 기본 텍스트 항목:"
+msgstr "새 풋프린트에 대한 기본 텍스트 항목:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:73
 msgid "Default text items for new footprints:"
@@ -34906,7 +34897,7 @@ msgid ""
 msgstr "'%s' 파일이 이미 있습니다. 이 파일을 덮어쓰시겠습니까?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:890
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "심볼 라이브러리 파일 '%s'을(를) 저장하지 못했습니다."
 
@@ -34965,7 +34956,6 @@ msgid "Show on tracks"
 msgstr "배선에 보이기"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
-#, fuzzy
 msgid "Show on pads & tracks"
 msgstr "패드와 배선에 표시"
 
@@ -37574,9 +37564,9 @@ msgid "(%s min %s; actual %s)"
 msgstr "(%s 최소 값 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Pad %s"
-msgstr "패드 %s\t"
+msgstr "패드 %s"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:200
 #, c-format
