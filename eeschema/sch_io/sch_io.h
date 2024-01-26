@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -81,7 +81,8 @@ public:
      */
     virtual int GetModifyHash() const = 0;
 
-    virtual void SaveLibrary( const wxString& aFileName, const STRING_UTF8_MAP* aProperties = nullptr );
+    virtual void SaveLibrary( const wxString& aFileName,
+                              const STRING_UTF8_MAP* aProperties = nullptr );
 
     /**
      * Load information from some input file format that this #SCH_IO implementation

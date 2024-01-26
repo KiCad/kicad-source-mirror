@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Roberto Fernandez Bautista <roberto.fer.bau@gmail.com>
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -62,9 +62,9 @@ int SCH_IO_CADSTAR_ARCHIVE::GetModifyHash() const
 
 
 SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFileName,
-                                                          SCHEMATIC*             aSchematic,
-                                                          SCH_SHEET*             aAppendToMe,
-                                                          const STRING_UTF8_MAP* aProperties )
+                                                      SCHEMATIC*             aSchematic,
+                                                      SCH_SHEET*             aAppendToMe,
+                                                      const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 
@@ -175,8 +175,8 @@ SCH_SHEET* SCH_IO_CADSTAR_ARCHIVE::LoadSchematicFile( const wxString&        aFi
 
 
 void SCH_IO_CADSTAR_ARCHIVE::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
-                                                     const wxString&        aLibraryPath,
-                                                     const STRING_UTF8_MAP* aProperties )
+                                                 const wxString&        aLibraryPath,
+                                                 const STRING_UTF8_MAP* aProperties )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
@@ -186,8 +186,8 @@ void SCH_IO_CADSTAR_ARCHIVE::EnumerateSymbolLib( wxArrayString&         aSymbolN
 
 
 void SCH_IO_CADSTAR_ARCHIVE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                                     const wxString&           aLibraryPath,
-                                                     const STRING_UTF8_MAP* aProperties )
+                                                 const wxString&           aLibraryPath,
+                                                 const STRING_UTF8_MAP* aProperties )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
@@ -197,8 +197,8 @@ void SCH_IO_CADSTAR_ARCHIVE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymb
 
 
 LIB_SYMBOL* SCH_IO_CADSTAR_ARCHIVE::LoadSymbol( const wxString&        aLibraryPath,
-                                                    const wxString&        aAliasName,
-                                                    const STRING_UTF8_MAP* aProperties )
+                                                const wxString&        aAliasName,
+                                                const STRING_UTF8_MAP* aProperties )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
 
@@ -246,7 +246,7 @@ void SCH_IO_CADSTAR_ARCHIVE::GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo
 
 
 void SCH_IO_CADSTAR_ARCHIVE::ensureLoadedLibrary( const wxString& aLibraryPath,
-                                                      const STRING_UTF8_MAP* aProperties )
+                                                  const STRING_UTF8_MAP* aProperties )
 {
     wxFileName csafn;
     wxString   fplibname = "cadstarpcblib";

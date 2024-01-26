@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Andre F. K. Iwers <iwers11@gmail.com>
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,8 +41,8 @@ SCH_IO_HTTP_LIB::~SCH_IO_HTTP_LIB()
 
 
 void SCH_IO_HTTP_LIB::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
-                                              const wxString&        aLibraryPath,
-                                              const STRING_UTF8_MAP* aProperties )
+                                          const wxString&        aLibraryPath,
+                                          const STRING_UTF8_MAP* aProperties )
 {
     std::vector<LIB_SYMBOL*> symbols;
     EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
@@ -52,8 +53,8 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( wxArrayString&         aSymbolNameList
 
 
 void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                             const wxString&           aLibraryPath,
-                                             const STRING_UTF8_MAP*    aProperties )
+                                          const wxString&           aLibraryPath,
+                                          const STRING_UTF8_MAP*    aProperties )
 {
     wxCHECK_RET( m_libTable, _("httplib plugin missing library table handle!") );
     ensureSettings( aLibraryPath );
@@ -125,8 +126,8 @@ void SCH_IO_HTTP_LIB::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_IO_HTTP_LIB::LoadSymbol( const wxString&        aLibraryPath,
-                                             const wxString&        aAliasName,
-                                             const STRING_UTF8_MAP* aProperties )
+                                         const wxString&        aAliasName,
+                                         const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( m_libTable, nullptr );
     ensureSettings( aLibraryPath );
@@ -348,8 +349,8 @@ void SCH_IO_HTTP_LIB::connect()
 
 
 LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbolName,
-                                                     const HTTP_LIB_CATEGORY& aCategory,
-                                                     const HTTP_LIB_PART&     aPart )
+                                                 const HTTP_LIB_CATEGORY& aCategory,
+                                                 const HTTP_LIB_PART&     aPart )
 {
     LIB_SYMBOL* symbol = nullptr;
     LIB_SYMBOL* originalSymbol = nullptr;
@@ -464,7 +465,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
 }
 
 void SCH_IO_HTTP_LIB::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                                   const STRING_UTF8_MAP* aProperties )
+                                  const STRING_UTF8_MAP* aProperties )
 {
     // TODO: Implement this sometime;
 }

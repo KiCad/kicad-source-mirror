@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -99,8 +99,8 @@ void SCH_IO_KICAD_SEXPR::init( SCHEMATIC* aSchematic, const STRING_UTF8_MAP* aPr
 
 
 SCH_SHEET* SCH_IO_KICAD_SEXPR::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                                SCH_SHEET*             aAppendToMe,
-                                                const STRING_UTF8_MAP* aProperties )
+                                                  SCH_SHEET*             aAppendToMe,
+                                                  const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic != nullptr );
 
@@ -332,8 +332,8 @@ void SCH_IO_KICAD_SEXPR::LoadContent( LINE_READER& aReader, SCH_SHEET* aSheet, i
 
 
 void SCH_IO_KICAD_SEXPR::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet,
-                                          SCHEMATIC*             aSchematic,
-                                          const STRING_UTF8_MAP* aProperties )
+                                            SCHEMATIC*             aSchematic,
+                                            const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK_RET( aSheet != nullptr, "NULL SCH_SHEET object." );
     wxCHECK_RET( !aFileName.IsEmpty(), "No schematic file name defined." );
@@ -1655,7 +1655,8 @@ std::vector<LIB_SYMBOL*> SCH_IO_KICAD_SEXPR::ParseLibSymbols( std::string& aSymb
     LIB_SYMBOL_MAP map;
 
     std::vector<LIB_SYMBOL*>            newSymbols;
-    std::unique_ptr<STRING_LINE_READER> reader = std::make_unique<STRING_LINE_READER>( aSymbolText, aSource );
+    std::unique_ptr<STRING_LINE_READER> reader = std::make_unique<STRING_LINE_READER>( aSymbolText,
+                                                                                       aSource );
 
     do
     {

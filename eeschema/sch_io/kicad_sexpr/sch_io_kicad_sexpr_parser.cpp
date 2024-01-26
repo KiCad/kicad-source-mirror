@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 CERN
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -66,9 +66,10 @@
 using namespace TSCHEMATIC_T;
 
 
-SCH_IO_KICAD_SEXPR_PARSER::SCH_IO_KICAD_SEXPR_PARSER( LINE_READER* aLineReader, PROGRESS_REPORTER* aProgressReporter,
-                                    unsigned aLineCount, SCH_SHEET* aRootSheet,
-                                    bool aIsAppending ) :
+SCH_IO_KICAD_SEXPR_PARSER::SCH_IO_KICAD_SEXPR_PARSER( LINE_READER* aLineReader,
+                                                      PROGRESS_REPORTER* aProgressReporter,
+                                                      unsigned aLineCount, SCH_SHEET* aRootSheet,
+                                                      bool aIsAppending ) :
     SCHEMATIC_LEXER( aLineReader ),
     m_requiredVersion( 0 ),
     m_unit( 1 ),
@@ -248,7 +249,8 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseLib( LIB_SYMBOL_MAP& aSymbolLibMap )
 }
 
 
-LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap, int aFileVersion )
+LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap,
+                                                    int aFileVersion )
 {
     LIB_SYMBOL* newSymbol = nullptr;
 
@@ -2449,7 +2451,8 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchSymbolInstances( SCH_SCREEN* aScreen )
 }
 
 
-void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly, int aFileVersion )
+void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopyableOnly,
+                                                int aFileVersion )
 {
     wxCHECK( aSheet != nullptr, /* void */ );
 

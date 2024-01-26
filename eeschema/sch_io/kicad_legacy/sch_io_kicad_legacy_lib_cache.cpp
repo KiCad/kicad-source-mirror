@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,7 +290,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadHeader( FILE_LINE_READER& aReader )
 
 
 LIB_SYMBOL* SCH_IO_KICAD_LEGACY_LIB_CACHE::LoadPart( LINE_READER& aReader, int aMajorVersion,
-                                               int aMinorVersion, LIB_SYMBOL_MAP* aMap )
+                                                     int aMinorVersion, LIB_SYMBOL_MAP* aMap )
 {
     const char* line = aReader.Line();
 
@@ -475,8 +475,8 @@ LIB_SYMBOL* SCH_IO_KICAD_LEGACY_LIB_CACHE::LoadPart( LINE_READER& aReader, int a
 
 
 void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadAliases( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                           LINE_READER&                 aReader,
-                                           LIB_SYMBOL_MAP*              aMap )
+                                                 LINE_READER&                 aReader,
+                                                 LIB_SYMBOL_MAP*              aMap )
 {
     wxString newAliasName;
     const char* line = aReader.Line();
@@ -525,7 +525,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadAliases( std::unique_ptr<LIB_SYMBOL>& aS
 
 
 void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                         LINE_READER&                 aReader )
+                                               LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -676,9 +676,9 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
 
 
 void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadDrawEntries( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                               LINE_READER&                 aReader,
-                                               int                          aMajorVersion,
-                                               int                          aMinorVersion )
+                                                     LINE_READER&                 aReader,
+                                                     int                          aMajorVersion,
+                                                     int                          aMinorVersion )
 {
     const char* line = aReader.Line();
 
@@ -743,7 +743,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadDrawEntries( std::unique_ptr<LIB_SYMBOL>
 
 
 FILL_T SCH_IO_KICAD_LEGACY_LIB_CACHE::parseFillMode( LINE_READER& aReader, const char* aLine,
-                                               const char** aOutput )
+                                                     const char** aOutput )
 {
     switch ( parseChar( aReader, aLine, aOutput ) )
     {
@@ -820,7 +820,7 @@ static bool MapAnglesV6( int* aAngle1, int* aAngle2 )
 
 
 LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                             LINE_READER&                 aReader )
+                                                   LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -902,7 +902,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadArc( std::unique_ptr<LIB_SYMBOL>& 
 
 
 LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                LINE_READER&                 aReader )
+                                                      LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -935,9 +935,9 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL
 
 
 LIB_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                             LINE_READER&                 aReader,
-                                             int                          aMajorVersion,
-                                             int                          aMinorVersion )
+                                                   LINE_READER&                 aReader,
+                                                   int                          aMajorVersion,
+                                                   int                          aMinorVersion )
 {
     const char* line = aReader.Line();
 
@@ -1034,7 +1034,7 @@ LIB_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& 
 
 
 LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                              LINE_READER&                 aReader )
+                                                    LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -1071,7 +1071,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadRect( std::unique_ptr<LIB_SYMBOL>&
 
 
 LIB_PIN* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                           LINE_READER&                 aReader )
+                                                 LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -1293,7 +1293,7 @@ LIB_PIN* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aS
 
 
 LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                   LINE_READER&                 aReader )
+                                                        LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -1327,7 +1327,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPolyLine( std::unique_ptr<LIB_SYMB
 
 
 LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                LINE_READER&                 aReader )
+                                                      LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -1375,7 +1375,7 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadBezier( std::unique_ptr<LIB_SYMBOL
 
 
 void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadFootprintFilters( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                    LINE_READER&                 aReader )
+                                                          LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
@@ -1440,7 +1440,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::Save( const std::optional<bool>& aOpt )
 
 
 void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                          LIB_SYMBOL_MAP* aMap )
+                                                LIB_SYMBOL_MAP* aMap )
 {
     /*
      * NB:
@@ -1657,7 +1657,8 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveCircle( LIB_SHAPE* aCircle, OUTPUTFORMAT
 }
 
 
-void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter )
+void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const LIB_FIELD* aField,
+                                               OUTPUTFORMATTER& aFormatter )
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
@@ -1770,7 +1771,8 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePin( const LIB_PIN* aPin, OUTPUTFORMATTE
 }
 
 
-void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFORMATTER& aFormatter )
+void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePolyLine( LIB_SHAPE* aPolyLine,
+                                                  OUTPUTFORMATTER& aFormatter )
 {
     wxCHECK_RET( aPolyLine && aPolyLine->GetShape() == SHAPE_T::POLY, "Invalid POLY object." );
 
@@ -1787,9 +1789,11 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFO
 }
 
 
-void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveRectangle( LIB_SHAPE* aRectangle, OUTPUTFORMATTER& aFormatter )
+void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveRectangle( LIB_SHAPE* aRectangle,
+                                                   OUTPUTFORMATTER& aFormatter )
 {
-    wxCHECK_RET( aRectangle && aRectangle->GetShape() == SHAPE_T::RECTANGLE, "Invalid RECT object." );
+    wxCHECK_RET( aRectangle && aRectangle->GetShape() == SHAPE_T::RECTANGLE,
+                 "Invalid RECT object." );
 
     aFormatter.Print( 0, "S %d %d %d %d %d %d %d %c\n",
                       schIUScale.IUToMils( aRectangle->GetPosition().x ),

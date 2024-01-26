@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -214,8 +214,8 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
 
 
 void SCH_IO_EASYEDAPRO::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
-                                                const wxString&        aLibraryPath,
-                                                const STRING_UTF8_MAP* aProperties )
+                                            const wxString&        aLibraryPath,
+                                            const STRING_UTF8_MAP* aProperties )
 {
     wxFileName fname( aLibraryPath );
 
@@ -260,8 +260,8 @@ void SCH_IO_EASYEDAPRO::EnumerateSymbolLib( wxArrayString&         aSymbolNameLi
 
 
 void SCH_IO_EASYEDAPRO::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                                const wxString&           aLibraryPath,
-                                                const STRING_UTF8_MAP*    aProperties )
+                                            const wxString&           aLibraryPath,
+                                            const STRING_UTF8_MAP*    aProperties )
 {
     wxFileName     libFname( aLibraryPath );
     wxArrayString  symbolNameList;
@@ -381,8 +381,8 @@ LIB_SYMBOL* SCH_IO_EASYEDAPRO::LoadSymbol( const wxString& aLibraryPath, const w
 
 
 SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
-                                                     SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe,
-                                                     const STRING_UTF8_MAP* aProperties )
+                                                 SCHEMATIC* aSchematic, SCH_SHEET* aAppendToMe,
+                                                 const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 

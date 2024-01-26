@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Chetan Subhash Shinde<chetanshinde2001@gmail.com>
  * Copyright (C) 2023 CERN
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -39,8 +39,8 @@
 
 
 void SCH_IO_LTSPICE_PARSER::Parse( SCH_SHEET_PATH* aSheet,
-                                std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
-                                const std::vector<wxString>& aAsyFileNames )
+                                   std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
+                                   const std::vector<wxString>& aAsyFileNames )
 {
     // Center created objects in Kicad page
     BOX2I bbox;
@@ -107,8 +107,9 @@ void SCH_IO_LTSPICE_PARSER::readIncludes( std::vector<LTSPICE_SCHEMATIC::LT_ASC>
 }
 
 
-void SCH_IO_LTSPICE_PARSER::CreateLines( LIB_SYMBOL* aSymbol, LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                      int aIndex, LIB_SHAPE* shape )
+void SCH_IO_LTSPICE_PARSER::CreateLines( LIB_SYMBOL* aSymbol,
+                                         LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
+                                         int aIndex, LIB_SHAPE* shape )
 {
     LTSPICE_SCHEMATIC::LINE& lt_line = aLTSymbol.Lines[aIndex];
 
@@ -119,7 +120,7 @@ void SCH_IO_LTSPICE_PARSER::CreateLines( LIB_SYMBOL* aSymbol, LTSPICE_SCHEMATIC:
 
 
 void SCH_IO_LTSPICE_PARSER::CreateLines( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                      SCH_SHEET_PATH* aSheet )
+                                         SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::LINE& lt_line = aLTSymbol.Lines[aIndex];
     SCH_SHAPE*               shape = new SCH_SHAPE( SHAPE_T::POLY );
@@ -136,8 +137,8 @@ void SCH_IO_LTSPICE_PARSER::CreateLines( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol
 
 
 void SCH_IO_LTSPICE_PARSER::CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
-                                             std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
-                                             const std::vector<wxString>& aAsyFiles )
+                                                std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs,
+                                                const std::vector<wxString>& aAsyFiles )
 {
     for( LTSPICE_SCHEMATIC::LT_ASC& lt_asc : outLT_ASCs )
     {
@@ -275,7 +276,7 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSYMBOLs( SCH_SHEET_PATH* aSheet,
 
 
 void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbol,
-                                       LIB_SYMBOL*                   aLibSymbol )
+                                          LIB_SYMBOL*                   aLibSymbol )
 {
     for( int j = 0; j < (int) aLtSymbol.Lines.size(); j++ )
     {
@@ -365,7 +366,7 @@ int SCH_IO_LTSPICE_PARSER::ToLtSpiceCoords( int aCoordinate )
 
 
 void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                            SCH_SHAPE* aShape )
+                                               SCH_SHAPE* aShape )
 {
     if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R90 )
     {
@@ -406,7 +407,7 @@ void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLT
 
 
 void SCH_IO_LTSPICE_PARSER::RotateMirror( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                       SCH_SYMBOL* aSchSymbol )
+                                          SCH_SYMBOL* aSchSymbol )
 {
     if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R0 )
     {
@@ -447,7 +448,7 @@ void SCH_IO_LTSPICE_PARSER::RotateMirror( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
 
 
 void SCH_IO_LTSPICE_PARSER::CreateWires( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                      SCH_SHEET_PATH* aSheet )
+                                         SCH_SHEET_PATH* aSheet )
 {
     SCH_LINE* segment = new SCH_LINE();
 
@@ -462,7 +463,7 @@ void SCH_IO_LTSPICE_PARSER::CreateWires( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol
 
 
 void SCH_IO_LTSPICE_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
-                                               std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs )
+                                                  std::vector<LTSPICE_SCHEMATIC::LT_ASC>& outLT_ASCs )
 {
     SCH_SCREEN* screen = aSheet->LastScreen();
 
@@ -547,7 +548,7 @@ void SCH_IO_LTSPICE_PARSER::CreateKicadSCH_ITEMs( SCH_SHEET_PATH* aSheet,
 
 
 void SCH_IO_LTSPICE_PARSER::CreateBusEntry( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                         SCH_SHEET_PATH* aSheet )
+                                            SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::BUSTAP& bustap = aAscfile.Bustap[aIndex];
 
@@ -582,7 +583,7 @@ LABEL_FLAG_SHAPE getLabelShape( LTSPICE_SCHEMATIC::POLARITY aPolarity )
 
 
 void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                    SCH_SHEET_PATH* aSheet )
+                                       SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::IOPIN& iopin = aAscfile.Iopins[aIndex];
     wxString                  ioPinName;
@@ -608,7 +609,7 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int 
 
 
 void SCH_IO_LTSPICE_PARSER::CreateLine( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                     SCH_SHEET_PATH* aSheet )
+                                        SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::LINE& lt_line = aAscfile.Lines[aIndex];
     SCH_LINE* line = new SCH_LINE( ToKicadCoords( lt_line.Start ), SCH_LAYER_ID::LAYER_NOTES );
@@ -622,7 +623,7 @@ void SCH_IO_LTSPICE_PARSER::CreateLine( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int
 
 
 void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                       SCH_SHEET_PATH* aSheet )
+                                          SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aAscfile.Circles[aIndex];
     SCH_SHAPE*                 circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
@@ -640,7 +641,7 @@ void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, i
 
 
 void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                    SCH_SHEET_PATH* aSheet )
+                                       SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::ARC& lt_arc = aAscfile.Arcs[aIndex];
     SCH_SHAPE*              arc = new SCH_SHAPE( SHAPE_T::ARC );
@@ -656,7 +657,7 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int 
 
 
 void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                     SCH_SHEET_PATH* aSheet )
+                                        SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aAscfile.Rectangles[aIndex];
     SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
@@ -696,14 +697,14 @@ LINE_STYLE SCH_IO_LTSPICE_PARSER::getLineStyle( const LTSPICE_SCHEMATIC::LINESTY
 
 
 STROKE_PARAMS SCH_IO_LTSPICE_PARSER::getStroke( const LTSPICE_SCHEMATIC::LINEWIDTH& aLineWidth,
-                                             const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle )
+                                                const LTSPICE_SCHEMATIC::LINESTYLE& aLineStyle )
 {
     return STROKE_PARAMS( getLineWidth( aLineWidth ), getLineStyle( aLineStyle ) );
 }
 
 
 void SCH_IO_LTSPICE_PARSER::setTextJustification( EDA_TEXT*                        aText,
-                                               LTSPICE_SCHEMATIC::JUSTIFICATION aJustification )
+                                                  LTSPICE_SCHEMATIC::JUSTIFICATION aJustification )
 {
     switch( aJustification )
     {
@@ -787,8 +788,8 @@ void SCH_IO_LTSPICE_PARSER::setTextJustification( EDA_TEXT*                     
 
 
 SCH_TEXT* SCH_IO_LTSPICE_PARSER::CreateSCH_TEXT( VECTOR2I aOffset, const wxString& aText,
-                                              int aFontSize,
-                                              LTSPICE_SCHEMATIC::JUSTIFICATION aJustification )
+                                                 int aFontSize,
+                                                 LTSPICE_SCHEMATIC::JUSTIFICATION aJustification )
 {
     VECTOR2I  pos = ToKicadCoords( aOffset ) + m_originOffset;
     SCH_TEXT* textItem = new SCH_TEXT( pos, aText, SCH_TEXT_T );
@@ -804,7 +805,7 @@ SCH_TEXT* SCH_IO_LTSPICE_PARSER::CreateSCH_TEXT( VECTOR2I aOffset, const wxStrin
 
 
 void SCH_IO_LTSPICE_PARSER::CreateWire( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int aIndex,
-                                     SCH_SHEET_PATH* aSheet, SCH_LAYER_ID aLayer )
+                                        SCH_SHEET_PATH* aSheet, SCH_LAYER_ID aLayer )
 {
     SCH_LINE* segment = new SCH_LINE();
 
@@ -819,9 +820,10 @@ void SCH_IO_LTSPICE_PARSER::CreateWire( LTSPICE_SCHEMATIC::LT_ASC& aAscfile, int
 }
 
 
-SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset, const wxString& aValue,
-                                                   int aFontSize, SCH_SHEET_PATH* aSheet,
-                                                   std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires )
+SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
+                                                      const wxString& aValue,
+                                                      int aFontSize, SCH_SHEET_PATH* aSheet,
+                                                      std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires )
 {
     LIB_SYMBOL* lib_symbol = new LIB_SYMBOL( wxS( "GND" ) );
     LIB_SHAPE*  shape = new LIB_SHAPE( lib_symbol, SHAPE_T::POLY );
@@ -903,7 +905,7 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset, c
 
 
 SCH_LABEL_BASE* SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VECTOR2I& aOffset,
-                                                     const wxString& aValue, int aFontSize )
+                                                        const wxString& aValue, int aFontSize )
 {
     SCH_LABEL_BASE* label = nullptr;
 
@@ -945,7 +947,7 @@ SCH_LABEL_BASE* SCH_IO_LTSPICE_PARSER::CreateSCH_LABEL( KICAD_T aType, const VEC
 
 
 void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                       SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheet )
+                                          SCH_SYMBOL* aSymbol, SCH_SHEET_PATH* aSheet )
 {
     wxString libPath = m_lt_schematic->GetLTspiceDataDir().GetFullPath();
     wxString symbolName = aLTSymbol.Name.Upper();
@@ -1247,7 +1249,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
 
 
 void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                     LIB_SHAPE* aRectangle )
+                                        LIB_SHAPE* aRectangle )
 {
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
 
@@ -1261,7 +1263,7 @@ void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
 
 
 void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                     SCH_SHEET_PATH* aSheet )
+                                        SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
     SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
@@ -1278,7 +1280,7 @@ void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
 
 
 void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                    LIB_PIN* aPin )
+                                       LIB_PIN* aPin )
 {
     LTSPICE_SCHEMATIC::LT_PIN& lt_pin = aLTSymbol.Pins[aIndex];
     wxString                   device = aLTSymbol.Name.Lower();
@@ -1332,7 +1334,7 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
 
 
 void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                    LIB_SHAPE* aArc )
+                                       LIB_SHAPE* aArc )
 {
     LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
 
@@ -1344,7 +1346,7 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
 
 
 void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                    SCH_SHEET_PATH* aSheet )
+                                       SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
     SCH_SHAPE*              arc = new SCH_SHAPE( SHAPE_T::ARC );
@@ -1362,7 +1364,7 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
 
 
 void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                       SCH_SHEET_PATH* aSheet )
+                                          SCH_SHEET_PATH* aSheet )
 {
     LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aLTSymbol.Circles[aIndex];
     SCH_SHAPE*                 circle = new SCH_SHAPE( SHAPE_T::CIRCLE );
@@ -1382,7 +1384,7 @@ void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
 
 
 void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                       LIB_SHAPE* aCircle )
+                                          LIB_SHAPE* aCircle )
 {
     LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aLTSymbol.Circles[aIndex];
 

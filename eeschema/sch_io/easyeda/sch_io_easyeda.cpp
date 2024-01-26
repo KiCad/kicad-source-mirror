@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -278,8 +278,8 @@ LIB_SYMBOL* loadSymbol( const wxString& aLibraryPath, nlohmann::json aFileData,
 
 
 void SCH_IO_EASYEDA::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
-                                             const wxString&        aLibraryPath,
-                                             const STRING_UTF8_MAP* aProperties )
+                                         const wxString&        aLibraryPath,
+                                         const STRING_UTF8_MAP* aProperties )
 {
     std::map<wxString, int> namesCounter;
 
@@ -401,8 +401,8 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
 
 
 void SCH_IO_EASYEDA::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                             const wxString&           aLibraryPath,
-                                             const STRING_UTF8_MAP*    aProperties )
+                                         const wxString&           aLibraryPath,
+                                         const STRING_UTF8_MAP*    aProperties )
 {
     wxFFileInputStream in( aLibraryPath );
     nlohmann::json     js;
@@ -443,8 +443,8 @@ void SCH_IO_EASYEDA::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_IO_EASYEDA::LoadSymbol( const wxString&        aLibraryPath,
-                                            const wxString&        aAliasName,
-                                            const STRING_UTF8_MAP* aProperties )
+                                        const wxString&        aAliasName,
+                                        const STRING_UTF8_MAP* aProperties )
 {
     try
     {
@@ -538,8 +538,8 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
 
 
 SCH_SHEET* SCH_IO_EASYEDA::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                                  SCH_SHEET*             aAppendToMe,
-                                                  const STRING_UTF8_MAP* aProperties )
+                                              SCH_SHEET*             aAppendToMe,
+                                              const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
 

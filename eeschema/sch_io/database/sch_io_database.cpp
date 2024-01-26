@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -47,8 +47,8 @@ SCH_IO_DATABASE::~SCH_IO_DATABASE()
 
 
 void SCH_IO_DATABASE::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
-                                              const wxString&   aLibraryPath,
-                                              const STRING_UTF8_MAP* aProperties )
+                                          const wxString&   aLibraryPath,
+                                          const STRING_UTF8_MAP* aProperties )
 {
     std::vector<LIB_SYMBOL*> symbols;
     EnumerateSymbolLib( symbols, aLibraryPath, aProperties );
@@ -59,8 +59,8 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( wxArrayString&    aSymbolNameList,
 
 
 void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                              const wxString&           aLibraryPath,
-                                              const STRING_UTF8_MAP*         aProperties )
+                                          const wxString&           aLibraryPath,
+                                          const STRING_UTF8_MAP*         aProperties )
 {
     wxCHECK_RET( m_libTable, "Database plugin missing library table handle!" );
     ensureSettings( aLibraryPath );
@@ -108,8 +108,8 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
-                                             const wxString&   aAliasName,
-                                             const STRING_UTF8_MAP* aProperties )
+                                         const wxString&   aAliasName,
+                                         const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( m_libTable, nullptr );
     ensureSettings( aLibraryPath );
@@ -389,8 +389,8 @@ std::optional<bool> SCH_IO_DATABASE::boolFromAny( const std::any& aVal )
 
 
 LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
-                                                    const DATABASE_LIB_TABLE& aTable,
-                                                    const DATABASE_CONNECTION::ROW& aRow )
+                                                const DATABASE_LIB_TABLE& aTable,
+                                                const DATABASE_CONNECTION::ROW& aRow )
 {
     LIB_SYMBOL* symbol = nullptr;
 

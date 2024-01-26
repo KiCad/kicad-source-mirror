@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -93,7 +93,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
 
     auto formatter = std::make_unique<PRETTIFIED_FILE_OUTPUTFORMATTER>( fn.GetFullPath() );
 
-    formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator \"kicad_symbol_editor\") (generator_version \"%s\")\n",
+    formatter->Print( 0, "(kicad_symbol_lib (version %d) (generator \"kicad_symbol_editor\") "
+                      "(generator_version \"%s\")\n",
                       SEXPR_SYMBOL_LIB_FILE_VERSION, GetMajorMinorVersion().c_str().AsChar() );
 
     std::vector<LIB_SYMBOL*> orderedSymbols;
@@ -130,7 +131,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Save( const std::optional<bool>& aOpt )
 
 
 void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                         int aNestLevel, const wxString& aLibName )
+                                               int aNestLevel, const wxString& aLibName )
 {
     wxCHECK_RET( aSymbol, "Invalid LIB_SYMBOL pointer." );
 
@@ -175,7 +176,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
             if( aSymbol->GetPinNameOffset() != schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) )
                 aFormatter.Print( 0, " (offset %s)",
-                                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aSymbol->GetPinNameOffset() ).c_str() );
+                                  EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                                       aSymbol->GetPinNameOffset() ).c_str() );
 
             if( !aSymbol->ShowPinNames() )
                 aFormatter.Print( 0, " hide" );
@@ -282,8 +284,9 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 }
 
 
-void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,
-                                                  int& aNextFreeFieldId, int aNestLevel )
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol,
+                                                        OUTPUTFORMATTER& aFormatter,
+                                                        int& aNextFreeFieldId, int aNestLevel )
 {
     wxCHECK_RET( aSymbol, "Invalid LIB_SYMBOL pointer." );
 
@@ -323,7 +326,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUT
 
 
 void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
-                                                 int aNestLevel )
+                                                       int aNestLevel )
 {
     wxCHECK_RET( aItem, "Invalid LIB_ITEM pointer." );
 
@@ -385,7 +388,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFO
 
 
 void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter,
-                                        int aNestLevel )
+                                              int aNestLevel )
 {
     wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
 
@@ -397,8 +400,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER
     aFormatter.Print( aNestLevel, "(property %s %s (at %s %s %g)",
                       aFormatter.Quotew( fieldName ).c_str(),
                       aFormatter.Quotew( aField->GetText() ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aField->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aField->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aField->GetPosition().y ).c_str(),
                       aField->GetTextAngle().AsDegrees() );
 
     if( aField->IsNameShown() )
@@ -413,7 +418,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER
 }
 
 
-void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter, int aNestLevel )
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter,
+                                            int aNestLevel )
 {
     wxCHECK_RET( aPin && aPin->Type() == LIB_PIN_T, "Invalid LIB_PIN object." );
 
@@ -422,10 +428,13 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFor
     aFormatter.Print( aNestLevel, "(pin %s %s (at %s %s %s) (length %s)",
                       getPinElectricalTypeToken( aPin->GetType() ),
                       getPinShapeToken( aPin->GetShape() ),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aPin->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aPin->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( getPinAngle( aPin->GetOrientation() ) ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetLength() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aPin->GetLength() ).c_str() );
 
     if( !aPin->IsVisible() )
         aFormatter.Print( 0, " hide\n" );
@@ -435,13 +444,17 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFor
     // This follows the EDA_TEXT effects formatting for future expansion.
     aFormatter.Print( aNestLevel + 1, "(name %s (effects (font (size %s %s))))\n",
                       aFormatter.Quotew( aPin->GetName() ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetNameTextSize() ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetNameTextSize() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aPin->GetNameTextSize() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aPin->GetNameTextSize() ).c_str() );
 
     aFormatter.Print( aNestLevel + 1, "(number %s (effects (font (size %s %s))))\n",
                       aFormatter.Quotew( aPin->GetNumber() ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetNumberTextSize() ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aPin->GetNumberTextSize() ).c_str() );
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aPin->GetNumberTextSize() ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aPin->GetNumberTextSize() ).c_str() );
 
 
     for( const std::pair<const wxString, LIB_PIN::ALT>& alt : aPin->GetAlternates() )
@@ -457,15 +470,17 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFor
 
 
 void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter,
-                                       int aNestLevel )
+                                             int aNestLevel )
 {
     wxCHECK_RET( aText && aText->Type() == LIB_TEXT_T, "Invalid LIB_TEXT object." );
 
     aFormatter.Print( aNestLevel, "(text%s %s (at %s %s %g)\n",
                       aText->IsPrivate() ? " private" : "",
                       aFormatter.Quotew( aText->GetText() ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aText->GetPosition().y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aText->GetPosition().x ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
+                                                           aText->GetPosition().y ).c_str(),
                       (double) aText->GetTextAngle().AsTenthsOfADegree() );
 
     aText->EDA_TEXT::Format( &aFormatter, aNestLevel, 0 );
@@ -474,7 +489,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveText( LIB_TEXT* aText, OUTPUTFORMATTER& a
 
 
 void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter,
-                                          int aNestLevel )
+                                                int aNestLevel )
 {
     wxCHECK_RET( aTextBox && aTextBox->Type() == LIB_TEXTBOX_T, "Invalid LIB_TEXTBOX object." );
 

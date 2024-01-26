@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -73,7 +73,7 @@ SCH_SHEET* SCH_IO::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSch
 
 
 void SCH_IO::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet, SCHEMATIC* aSchematic,
-                            const STRING_UTF8_MAP* aProperties )
+                                const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -81,8 +81,8 @@ void SCH_IO::SaveSchematicFile( const wxString& aFileName, SCH_SHEET* aSheet, SC
 
 
 void SCH_IO::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
-                                     const wxString&   aLibraryPath,
-                                     const STRING_UTF8_MAP* aProperties )
+                                 const wxString&   aLibraryPath,
+                                 const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -90,8 +90,8 @@ void SCH_IO::EnumerateSymbolLib( wxArrayString&    aAliasNameList,
 
 
 void SCH_IO::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                                     const wxString&   aLibraryPath,
-                                     const STRING_UTF8_MAP* aProperties )
+                                 const wxString&   aLibraryPath,
+                                 const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -99,7 +99,7 @@ void SCH_IO::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
 
 LIB_SYMBOL* SCH_IO::LoadSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                                    const STRING_UTF8_MAP* aProperties )
+                                const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -107,7 +107,7 @@ LIB_SYMBOL* SCH_IO::LoadSymbol( const wxString& aLibraryPath, const wxString& aS
 
 
 void SCH_IO::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
-                             const STRING_UTF8_MAP* aProperties )
+                         const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );
@@ -115,7 +115,7 @@ void SCH_IO::SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol
 
 
 void SCH_IO::DeleteSymbol( const wxString& aLibraryPath, const wxString& aSymbolName,
-                               const STRING_UTF8_MAP* aProperties )
+                           const STRING_UTF8_MAP* aProperties )
 {
     // not pure virtual so that plugins only have to implement subset of the SCH_IO interface.
     NOT_IMPLEMENTED( __FUNCTION__ );

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Chetan Subhash Shinde<chetanshinde2001@gmail.com>
  * Copyright (C) 2023 CERN
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -40,8 +40,8 @@ int SCH_IO_LTSPICE::GetModifyHash() const
 
 
 SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                                  SCH_SHEET*             aAppendToMe,
-                                                  const STRING_UTF8_MAP* aProperties )
+                                              SCH_SHEET*             aAppendToMe,
+                                              const STRING_UTF8_MAP* aProperties )
 {
     wxASSERT( !aFileName || aSchematic );
 
@@ -87,8 +87,10 @@ SCH_SHEET* SCH_IO_LTSPICE::LoadSchematicFile( const wxString& aFileName, SCHEMAT
 
     if( !ltspiceDataDir.DirExists() )
     {
-        // See if user has older version of LTspice installed (e.g. C:\Users\USERNAME\Documents\LTspiceXVII\lib
-        wxString foundFile = wxFindFirstFile( KIPLATFORM::ENV::GetDocumentsPath() + wxFileName::GetPathSeparator() + "LTspice*", wxDIR );
+        // See if user has older version of LTspice installed
+        // (e.g. C:\Users\USERNAME\Documents\LTspiceXVII\lib
+        wxString foundFile = wxFindFirstFile( KIPLATFORM::ENV::GetDocumentsPath() +
+                                              wxFileName::GetPathSeparator() + "LTspice*", wxDIR );
 
         while( !foundFile.empty() )
         {
