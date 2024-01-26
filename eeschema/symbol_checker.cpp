@@ -292,6 +292,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                 || ( (pin->GetPosition().y % clamped_grid_size) != 0 ) )
         {
             // pin is off grid
+            msg.Empty();
+
             if( aSymbol->HasConversion() && pin->GetConvert() )
             {
                 if( aSymbol->GetUnitCount() <= 1 )
@@ -312,7 +314,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1 );
-                }
+                 }
             }
             else
             {
@@ -335,6 +337,9 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 'A' + pin->GetUnit() - 1 );
                 }
             }
+
+            msg += wxT( "<br><br>" );
+            aMessages.push_back( msg );
         }
     }
 
