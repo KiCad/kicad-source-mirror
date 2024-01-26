@@ -115,8 +115,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         {
             if( pin->GetUnit() == 0 || next->GetUnit() == 0 )
             {
-                msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
-                               " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
+                msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
+                               " conflicts with pin %s%s at location <b>(%s, %s)</b>"
                                " of converted." ),
                             next->GetNumber(),
                             nextName,
@@ -129,8 +129,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             }
             else
             {
-                msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b>"
-                               " conflicts with pin %s%s at location <b>(%.3f, %.3f)</b>"
+                msg.Printf( _( "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b>"
+                               " conflicts with pin %s%s at location <b>(%s, %s)</b>"
                                " in units %s and %s of converted." ),
                             next->GetNumber(),
                             nextName,
