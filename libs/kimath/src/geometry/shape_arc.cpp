@@ -464,7 +464,7 @@ EDA_ANGLE SHAPE_ARC::GetCentralAngle() const
 
 double SHAPE_ARC::GetRadius() const
 {
-    return ( m_start - GetCenter() ).EuclideanNorm();
+    return std::sqrt( ( m_start - GetCenter() ).SquaredEuclideanNorm() );
 }
 
 
