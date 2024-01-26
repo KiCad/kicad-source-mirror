@@ -44,28 +44,36 @@ using namespace std::placeholders;
 
 BOARD_COMMIT::BOARD_COMMIT( TOOL_BASE* aTool ) :
         m_toolMgr( aTool->GetManager() ),
-        m_isBoardEditor( false )
+        m_isBoardEditor( false ),
+        m_isFootprintEditor( false )
 {
     if( PCB_TOOL_BASE* pcb_tool = dynamic_cast<PCB_TOOL_BASE*>( aTool ) )
+    {
         m_isBoardEditor = pcb_tool->IsBoardEditor();
+        m_isFootprintEditor = pcb_tool->IsFootprintEditor();
+    }
 }
 
 
 BOARD_COMMIT::BOARD_COMMIT( EDA_DRAW_FRAME* aFrame ) :
         m_toolMgr( aFrame->GetToolManager() ),
-        m_isBoardEditor( aFrame->IsType( FRAME_PCB_EDITOR ) )
+        m_isBoardEditor( aFrame->IsType( FRAME_PCB_EDITOR ) ),
+        m_isFootprintEditor( aFrame->IsType( FRAME_FOOTPRINT_EDITOR ) )
 {
 }
 
 
 BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr ) :
-    m_toolMgr( aMgr ),
-    m_isBoardEditor( false )
+        m_toolMgr( aMgr ),
+        m_isBoardEditor( false ),
+        m_isFootprintEditor( false )
 {
     EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( aMgr->GetToolHolder() );
 
     if( frame && frame->IsType( FRAME_PCB_EDITOR ) )
         m_isBoardEditor = true;
+    else if( frame && frame->IsType( FRAME_FOOTPRINT_EDITOR ) )
+        m_isFootprintEditor = true;
 }
 
 
@@ -265,7 +273,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( !( changeFlags & CHT_DONE ) )
             {
-                if( !m_isBoardEditor && frame ) // frame check incase we are headless drc (cli, python)
+                if( m_isFootprintEditor )
                 {
                     FOOTPRINT* parentFP = board->GetFirstFootprint();
                     wxCHECK2_MSG( parentFP, continue, "Commit thinks this is footprint editor, but "

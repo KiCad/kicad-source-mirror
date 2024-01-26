@@ -75,6 +75,7 @@ private:
 private:
     TOOL_MANAGER*  m_toolMgr;
     bool           m_isBoardEditor;
+    bool           m_isFootprintEditor;
 };
 
 #endif
