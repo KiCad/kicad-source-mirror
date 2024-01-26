@@ -1382,6 +1382,8 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
             player->Show( true );
         }
 
+        // Ensure the netlist (mainly info about symbols) is up to date
+        RecalculateConnections( nullptr, GLOBAL_CLEANUP );
         sendNetlistToCvpcb();
 
         player->Raise();
