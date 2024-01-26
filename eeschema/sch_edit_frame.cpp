@@ -1712,12 +1712,10 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
         for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
         {
-            SCH_ITEM* item = static_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
-
-            wxCHECK2( item, continue );
+            SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
 
             // Ignore objects that are not connectable.
-            if( !item->IsConnectable() )
+            if( !item || !item->IsConnectable() )
                 continue;
 
             SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( changed_list->GetScreenForItem( ii ) );
