@@ -89,7 +89,6 @@ void KICAD_MANAGER_FRAME::ImportNonKiCadProject( const wxString& aWindowTitle,
     {
         if( !importProj.m_TargetProj.Mkdir() )
         {
-            wxString msg;
             msg.Printf( _( "Folder '%s' could not be created.\n\n"
                            "Make sure you have write permissions and try again." ),
                         importProj.m_TargetProj.GetPath() );
