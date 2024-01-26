@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 16:53-0800\n"
+"POT-Creation-Date: 2024-01-26 13:06-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -10136,14 +10136,8 @@ msgstr "V Justification"
 msgid "Show Field Name"
 msgstr "Show Field Name"
 
-msgid "no"
-msgstr "no"
-
-msgid "yes"
-msgstr "yes"
-
-msgid "Converted"
-msgstr "Converted"
+msgid "Body Style"
+msgstr "Body Style"
 
 msgid "Private"
 msgstr "Private"
@@ -11349,6 +11343,12 @@ msgstr "Plugin type “%s” is not found."
 #, c-format
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Unknown SCH_FILE_T value: %d"
+
+msgid "Layer"
+msgstr "Layer"
+
+msgid "Locked"
+msgstr "Locked"
 
 msgid "Size"
 msgstr "Size"
@@ -12934,19 +12934,19 @@ msgstr ""
 
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+"%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+"%s%s at location <b>(%s, %s)</b> in %s body style."
 
 #, c-format
 msgid ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+"%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-"pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
+"<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
+"%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 
 #, c-format
 msgid ""
@@ -12989,17 +12989,19 @@ msgstr ""
 
 #, c-format
 msgid ""
-"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
+"style."
 msgstr ""
-"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+"Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
+"style."
 
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
-"of converted."
+"of %s body style."
 msgstr ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
-"of converted."
+"of %s body style."
 
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
@@ -13017,16 +13019,17 @@ msgstr ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 
 #, c-format
-msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
-msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
+msgstr ""
+"<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
 
 #, c-format
 msgid ""
-"<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
-"converted."
+"<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
+"style."
 msgstr ""
-"<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
-"converted."
+"<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
+"style."
 
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
@@ -13269,9 +13272,6 @@ msgstr "Undefined!"
 
 msgid "Parent"
 msgstr "Parent"
-
-msgid "Convert"
-msgstr "Convert"
 
 msgid "Body"
 msgstr "Body"
@@ -14967,9 +14967,6 @@ msgstr "Deselect all"
 #, c-format
 msgid "Select Layer: %s"
 msgstr "Select Layer: %s"
-
-msgid "Layer"
-msgstr "Layer"
 
 msgid "DCodes"
 msgstr "DCodes"
@@ -19403,9 +19400,6 @@ msgstr "and others"
 
 msgid "no layers"
 msgstr "no layers"
-
-msgid "Locked"
-msgstr "Locked"
 
 #, c-format
 msgid "Dielectric %d"
@@ -27207,6 +27201,14 @@ msgstr "Internal clearance violation (%s clearance %s; actual %s)"
 msgid "Missing footprint %s (%s)"
 msgstr "Missing footprint %s (%s)"
 
+#, c-format
+msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
+msgstr "Footprint %s value (%s) doesn't match symbol value (%s)."
+
+#, c-format
+msgid "%s footprint (%s) doesn't match that given by symbol (%s)."
+msgstr "%s footprint (%s) doesn't match that given by symbol (%s)."
+
 msgid "No corresponding pin found in schematic."
 msgstr "No corresponding pin found in schematic."
 
@@ -33806,6 +33808,62 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "no"
+#~ msgstr "no"
+
+#~ msgid "yes"
+#~ msgstr "yes"
+
+#~ msgid "Converted"
+#~ msgstr "Converted"
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
+#~ msgstr ""
+#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
+#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
+
+#, c-format
+#~ msgid ""
+#~ "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of "
+#~ "converted."
+#~ msgstr ""
+#~ "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of "
+#~ "converted."
+
+#, c-format
+#~ msgid ""
+#~ "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit "
+#~ "%c of converted."
+#~ msgstr ""
+#~ "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit "
+#~ "%c of converted."
+
+#, c-format
+#~ msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+#~ msgstr "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of converted."
+
+#, c-format
+#~ msgid ""
+#~ "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
+#~ "converted."
+#~ msgstr ""
+#~ "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
+#~ "converted."
+
+#~ msgid "Convert"
+#~ msgstr "Convert"
 
 #~ msgid "KiCad Librarian Team"
 #~ msgstr "KiCad Librarian Team"
