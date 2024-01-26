@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -752,15 +752,15 @@ bool PCB_SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     m_selection.ClearReferencePoint();
 
+    // Apply the stateful filter (remove items disabled by the Selection Filter)
+    FilterCollectedItems( collector, false );
+
     // Allow the client to do tool- or action-specific filtering to see if we can get down
     // to a single item
     if( aClientFilter )
         aClientFilter( aWhere, collector, this );
 
     FilterCollectorForHierarchy( collector, false );
-
-    // Apply the stateful filter
-    FilterCollectedItems( collector, false );
 
     FilterCollectorForFootprints( collector, aWhere );
 
