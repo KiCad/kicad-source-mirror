@@ -1691,18 +1691,25 @@ int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
     }
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganAlternate )
-            && symbol->GetBodyStyle() != LIB_ITEM::BODY_STYLE::DEMORGAN )
+            && symbol->GetBodyStyle() == LIB_ITEM::BODY_STYLE::DEMORGAN )
     {
         return 0;
     }
 
+    SCH_COMMIT commit( m_toolMgr );
+
     if( !symbol->IsNew() )
-        saveCopyInUndoList( symbol, UNDO_REDO::CHANGED );
+        commit.Modify( symbol, m_frame->GetScreen() );
 
     m_frame->FlipBodyStyle( symbol );
 
     if( symbol->IsNew() )
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
+
+    // TODO: 9.0 It would be better as "Change Body Style", but we're past string freeze so
+    // this (existing) string will have to do....
+    if( !commit.Empty() )
+        commit.Push( _( "Convert Symbol" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
@@ -2410,6 +2417,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION& selection = m_selectionTool->RequestSelection( { SCH_SHEET_T } );
     SCH_SHEET*    sheet = (SCH_SHEET*) selection.Front();
+    SCH_COMMIT    commit( m_toolMgr );
 
     if( !sheet || !sheet->HasUndefinedPins() )
         return 0;
@@ -2417,12 +2425,13 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
     if( !IsOK( m_frame, _( "Do you wish to delete the unreferenced pins from this sheet?" ) ) )
         return 0;
 
-    saveCopyInUndoList( sheet, UNDO_REDO::CHANGED );
+    commit.Modify( sheet, m_frame->GetScreen() );
 
     sheet->CleanupSheet();
 
     updateItem( sheet, true );
-    m_frame->OnModify();
+
+    commit.Push( _( "" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
