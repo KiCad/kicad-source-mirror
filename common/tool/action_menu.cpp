@@ -408,6 +408,13 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
     wxWindow*      focus   = wxWindow::FindFocus();
     TOOL_MANAGER*  toolMgr = getToolManager();
 
+    if( !toolMgr )
+    {
+        wxFAIL_MSG( "ACTION_MENU event fired, but there's no TOOL_MANAGER!" );
+        aEvent.Skip();
+        return;
+    }
+
     if( type == wxEVT_MENU_OPEN )
     {
         if( m_dirty && toolMgr )
