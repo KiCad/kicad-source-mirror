@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -82,8 +82,8 @@ DIALOG_LIB_NEW_SYMBOL_BASE::DIALOG_LIB_NEW_SYMBOL_BASE( wxWindow* parent, wxWind
 
 	bSizer17->Add( m_checkUnitsInterchangeable, 0, wxRIGHT|wxLEFT, 5 );
 
-	m_checkHasConversion = new wxCheckBox( this, wxID_ANY, _("Create symbol with alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer17->Add( m_checkHasConversion, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_checkHasAlternateBodyStyle = new wxCheckBox( this, wxID_ANY, _("Create symbol with alternate body style (De Morgan)"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer17->Add( m_checkHasAlternateBodyStyle, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	m_checkIsPowerSymbol = new wxCheckBox( this, wxID_ANY, _("Create symbol as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer17->Add( m_checkIsPowerSymbol, 0, wxTOP|wxRIGHT|wxLEFT, 5 );

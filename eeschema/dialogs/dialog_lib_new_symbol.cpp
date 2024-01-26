@@ -93,7 +93,7 @@ void DIALOG_LIB_NEW_SYMBOL::syncControls( bool aIsDerivedPart )
     m_staticTextUnits->Enable( !aIsDerivedPart );
     m_spinPartCount->Enable( !aIsDerivedPart );
     m_checkUnitsInterchangeable->Enable( !aIsDerivedPart );
-    m_checkHasConversion->Enable( !aIsDerivedPart );
+    m_checkHasAlternateBodyStyle->Enable( !aIsDerivedPart );
     m_checkIsPowerSymbol->Enable( !aIsDerivedPart );
     m_excludeFromBomCheckBox->Enable( !aIsDerivedPart );
     m_excludeFromBoardCheckBox->Enable( !aIsDerivedPart );

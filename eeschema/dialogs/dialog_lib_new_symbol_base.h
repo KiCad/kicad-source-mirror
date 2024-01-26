@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -54,7 +54,7 @@ class DIALOG_LIB_NEW_SYMBOL_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextUnits;
 		wxSpinCtrl* m_spinPartCount;
 		wxCheckBox* m_checkUnitsInterchangeable;
-		wxCheckBox* m_checkHasConversion;
+		wxCheckBox* m_checkHasAlternateBodyStyle;
 		wxCheckBox* m_checkIsPowerSymbol;
 		wxCheckBox* m_excludeFromBomCheckBox;
 		wxCheckBox* m_excludeFromBoardCheckBox;

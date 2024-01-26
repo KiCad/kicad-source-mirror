@@ -66,8 +66,8 @@ public:
     void SetPartCount( int count ) { m_spinPartCount->SetValue( count ); }
     int GetUnitCount() { return m_spinPartCount->GetValue(); }
 
-    void SetAlternateBodyStyle( bool enable ) { m_checkHasConversion->SetValue( enable ); }
-    bool GetAlternateBodyStyle()  { return m_checkHasConversion->GetValue(); }
+    void SetAlternateBodyStyle( bool enable ) { m_checkHasAlternateBodyStyle->SetValue( enable ); }
+    bool GetAlternateBodyStyle()  { return m_checkHasAlternateBodyStyle->GetValue(); }
 
     void SetPowerSymbol( bool enable ) { m_checkIsPowerSymbol->SetValue( enable ); }
     bool GetPowerSymbol() { return m_checkIsPowerSymbol->GetValue(); }
