@@ -167,7 +167,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
         m_nameSizeCtrl,
         m_numberSizeCtrl,
         m_checkApplyToAllParts,
-      	m_checkApplyToAllConversions,
+      	m_checkApplyToAllBodyStyles,
       	m_checkShow,
       	m_sdbSizerButtonsOK,
         m_sdbSizerButtonsCancel
