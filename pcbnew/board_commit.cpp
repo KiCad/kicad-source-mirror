@@ -265,7 +265,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
             if( !( changeFlags & CHT_DONE ) )
             {
-                if( !m_isBoardEditor )
+                if( !m_isBoardEditor && frame ) // frame check incase we are headless drc (cli, python)
                 {
                     FOOTPRINT* parentFP = board->GetFirstFootprint();
                     wxCHECK2_MSG( parentFP, continue, "Commit thinks this is footprint editor, but "
