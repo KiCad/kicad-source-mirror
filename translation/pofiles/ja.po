@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-23 06:15+0000\n"
+"PO-Revision-Date: 2024-01-27 16:27+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -38397,7 +38397,7 @@ msgstr "フットプリントの部品のタイプが異なります。"
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:146
 #, c-format
 msgid "'%s' settings differ."
-msgstr "'%s' の設定がが異なります。"
+msgstr "'%s' の設定が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:570
 #: pcbnew/footprint.cpp:3480
