@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 05:27+0000\n"
-"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
+"PO-Revision-Date: 2024-01-27 11:30+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -3496,9 +3496,8 @@ msgid "Add"
 msgstr "Añadir"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
-#, fuzzy
 msgid "Git Commit Data"
-msgstr "Datos de confirmación Git"
+msgstr "Datos de confirmación de Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
 msgid "Use default values"
@@ -4054,9 +4053,8 @@ msgid "Grids:"
 msgstr "Cuadrículas:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "Cambio rápido"
+msgstr "Cambio rápido de red"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -4072,9 +4070,8 @@ msgid "Grid 2:"
 msgstr "Cuadrícula 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:705
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "Reemplazos"
+msgstr "Anulación de cuadrícula"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
 #, fuzzy
