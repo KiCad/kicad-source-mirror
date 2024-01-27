@@ -42,6 +42,7 @@ using namespace std::placeholders;
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_control.h>
 #include <tools/board_editor_control.h>
+#include <board_commit.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <wx/msgdlg.h>
 
@@ -124,17 +125,7 @@ void PCB_BASE_EDIT_FRAME::saveCopyInUndoList( PICKED_ITEMS_LIST* commandToUndo,
         case UNDO_REDO::GRIDORIGIN:
             // If we don't yet have a copy in the link, set one up
             if( !commandToUndo->GetPickedItemLink( ii ) )
-            {
-                // Warning: DRILLORIGIN and GRIDORIGIN undo/redo command create EDA_ITEMs
-                // that cannot be casted blindly to BOARD_ITEMs (a BOARD_ITEM is derived from a EDA_ITEM)
-                // Especially SetParentGroup() does not exist in EDA_ITEM
-                EDA_ITEM* clone = static_cast<EDA_ITEM*>( item->Clone() );
-
-                if( BOARD_ITEM* brdclone = dynamic_cast<BOARD_ITEM*>( clone ) )
-                    brdclone->SetParentGroup( nullptr );
-
-                commandToUndo->SetPickedItemLink( clone, ii );
-            }
+                commandToUndo->SetPickedItemLink( BOARD_COMMIT::MakeImage( item ), ii );
 
             break;
 
@@ -379,6 +370,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             item->SwapItemData( image );
 
+            eda_item->ClearFlags( UR_TRANSIENT );
+            image->SetFlags( UR_TRANSIENT );
+
             if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item ) )
             {
                 group->RunOnChildren( [&]( BOARD_ITEM* child )
@@ -401,10 +395,15 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             if( eda_item->Type() != PCB_NETINFO_T )
                 view->Remove( eda_item );
 
+            eda_item->SetFlags( UR_TRANSIENT );
+
             break;
 
         case UNDO_REDO::DELETED:    /* deleted items are put in List, as new items */
             aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
+
+            eda_item->ClearFlags( UR_TRANSIENT );
+
             GetModel()->Add( (BOARD_ITEM*) eda_item );
 
             if( eda_item->Type() != PCB_NETINFO_T )
@@ -420,7 +419,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 if( PCB_GROUP* group = boardItem->GetParentGroup() )
                 {
                     if( !aList->GetPickedItemLink( ii ) )
-                        aList->SetPickedItemLink( group->Clone(), ii );
+                        aList->SetPickedItemLink( BOARD_COMMIT::MakeImage( group ), ii );
 
                     group->RemoveItem( boardItem );
                 }
@@ -528,6 +527,9 @@ void PCB_BASE_EDIT_FRAME::ClearListAndDeleteItems( PICKED_ITEMS_LIST* aList )
     aList->ClearListAndDeleteItems(
             []( EDA_ITEM* item )
             {
+                wxASSERT_MSG( item->HasFlag( UR_TRANSIENT ),
+                              "Item on undo/redo list not owned by undo/redo!" );
+
                 if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item ) )
                     boardItem->SetParentGroup( nullptr );
 

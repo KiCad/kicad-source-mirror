@@ -408,7 +408,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 if( !( aCommitFlags & SKIP_UNDO ) )
                 {
                     ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::UNGROUP );
-                    itemWrapper.SetLink( group->Clone() );
+                    itemWrapper.SetLink( MakeImage( group ) );
                     undoList.PushItem( itemWrapper );
                 }
 
@@ -598,10 +598,18 @@ EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 
 EDA_ITEM* BOARD_COMMIT::makeImage( EDA_ITEM* aItem ) const
 {
+    return MakeImage( aItem );
+}
+
+
+EDA_ITEM* BOARD_COMMIT::MakeImage( EDA_ITEM* aItem )
+{
     EDA_ITEM* clone = aItem->Clone();
 
     if( BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( clone ) )
         board_item->SetParentGroup( nullptr );
+
+    clone->SetFlags( UR_TRANSIENT );
 
     return clone;
 }
