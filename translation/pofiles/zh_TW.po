@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 08:43+0000\n"
+"PO-Revision-Date: 2024-01-27 09:43+0000\n"
 "Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -2429,11 +2429,11 @@ msgstr "配置全域性庫表"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
 msgid "Grid size X out of range."
-msgstr "網格尺寸 X 超出範圍"
+msgstr "網格尺寸 X 超出範圍。"
 
 #: common/dialogs/dialog_grid_settings.cpp:68
 msgid "Grid size Y out of range."
-msgstr "鑽孔超出範圍網格尺寸 Y 超出範圍"
+msgstr "鑽孔超出範圍網格尺寸 Y 超出範圍。"
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
@@ -9697,9 +9697,8 @@ msgid "Update Symbols from Library"
 msgstr "從庫中更新符號"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
-#, fuzzy
 msgid "Connected to database successfully"
-msgstr "網路列表更新完成!"
+msgstr "成功連接到資料庫"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
 #, fuzzy, c-format
@@ -12228,7 +12227,8 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"要檢視單個專案的顏色，請在偏好設定 > 原理圖編輯器 > 顏色中取消選擇 \"%s\"。"
+"要檢視單個項目的顏色\"%s\"\n"
+"請在偏好設定 > 原理圖編輯器 > 顏色中取消選擇 。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:439
 #, c-format
@@ -12336,9 +12336,8 @@ msgid "Source 1 and Source 2 must be different."
 msgstr "源 1 和源 2 必須不同"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:417
-#, fuzzy
 msgid "A frequency range must be specified."
-msgstr "必須指定一個或多個層\n"
+msgstr "必須指定一個或多個層。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:611
 #, fuzzy
@@ -14208,7 +14207,7 @@ msgstr "操作點"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:288
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "有效數字(電壓):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:296
 msgid "Range (voltages):"
@@ -14267,7 +14266,7 @@ msgstr "V"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:307
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "有效數字(電流):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:315
 msgid "Range (currents):"
@@ -14750,24 +14749,23 @@ msgid "Symbol library was not updated\n"
 msgstr "符號庫未更新\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:981
-#, fuzzy
 msgid "Running ERC...\n"
-msgstr "執行 DRC..."
+msgstr "執行 DRC...\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:989 pcbnew/pcbnew_jobs_handler.cpp:1032
 #, fuzzy, c-format
 msgid "Found %d violations\n"
-msgstr "允許違反 DRC 規則"
+msgstr "允許違反 DRC 規則\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "無法解析倉庫：%s"
+msgstr "無法在此儲存ERC報告 %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "儲存DRC報告檔案"
+msgstr "將ERC報告檔案儲存至此 %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
 #, fuzzy
@@ -15306,7 +15304,7 @@ msgstr "匯入原理圖"
 #: eeschema/files-io.cpp:744
 #, c-format
 msgid "No loader can read the specified file: '%s'."
-msgstr ""
+msgstr "沒有載入器可以讀取指定的檔案: '%s'."
 
 #: eeschema/files-io.cpp:812
 #, c-format
@@ -15370,11 +15368,12 @@ msgid "Locked File Warning"
 msgstr "模型縮放警告"
 
 #: eeschema/files-io.cpp:1092
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "你沒有 \"%s\" 資料夾的寫入許可權。"
+msgstr ""
+"你沒有寫入許可:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1108
 msgid "Saving will overwrite existing files."
@@ -15443,11 +15442,13 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "需要手動恢復才能恢復以上檔案。"
 
 #: eeschema/files-io.cpp:1648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "自動儲存檔案 '%s' 不能被刪除！"
+msgstr ""
+"自動儲存檔案 '%s' 無法被刪除。\n"
+"需要手動刪除。"
 
 #: eeschema/files-io.cpp:1682
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -15750,7 +15751,7 @@ msgstr "填充"
 
 #: eeschema/lib_symbol.cpp:275
 msgid "Power flag differs."
-msgstr ""
+msgstr "電源標誌不同。"
 
 #: eeschema/lib_symbol.cpp:284
 #, fuzzy
@@ -15767,7 +15768,7 @@ msgstr "在檔案中沒找到圖形項。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:671
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s 不同。"
 
 #: eeschema/lib_symbol.cpp:347
 #, fuzzy
@@ -15787,7 +15788,7 @@ msgstr "焊盤數量"
 #: eeschema/lib_symbol.cpp:402
 #, c-format
 msgid "%s field differs."
-msgstr ""
+msgstr "%s 欄位不同。"
 
 #: eeschema/lib_symbol.cpp:412
 #, fuzzy
@@ -15809,7 +15810,7 @@ msgstr "封裝外形順序"
 
 #: eeschema/lib_symbol.cpp:453
 msgid "Symbol pin name offsets differ."
-msgstr ""
+msgstr "符號接腳名稱偏移值不同。"
 
 #: eeschema/lib_symbol.cpp:464
 #, fuzzy
@@ -16026,9 +16027,9 @@ msgid "Failed to create directory 'devices' ."
 msgstr "未能刪除目錄 %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'.\n"
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "建立檔案 \"%s\" 失敗。\n"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:475
 #, c-format
@@ -16488,7 +16489,7 @@ msgstr "在 “檔案頭” 部分找到了未知或意外的記錄 id %d。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4102
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr ""
+msgstr "預期的Altium Schematic Library檔案版本5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:63
 msgid "Altium schematic files"
@@ -18992,9 +18993,8 @@ msgid "%s is not tunable"
 msgstr "%s 是不可調諧"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1505
-#, fuzzy
 msgid "Error: no current simulation.\n"
-msgstr "電源、電流和隔離"
+msgstr "錯誤: 沒有當前的模擬。\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1514
 #, fuzzy
@@ -23044,9 +23044,8 @@ msgid "Lock file already exists"
 msgstr "檔案 \"%s\" 已經存在。"
 
 #: include/lockfile.h:125
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "載入原理圖檔案失敗\n"
+msgstr "存取鎖定檔失敗"
 
 #: include/panel_hotkeys_editor.h:57
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -24838,9 +24837,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "本地路徑：監視資料夾變更"
 
 #: kicad/project_tree_pane.cpp:1539
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "所選檔案無效或可能已損壞！"
+msgstr "所選目錄已經是git專案。"
 
 #: kicad/project_tree_pane.cpp:1555
 msgid "Failed to initialize git project."
@@ -24878,9 +24876,9 @@ msgid "Failed to find branch head for '%s'"
 msgstr "無法為 '%s' 找到一款 PDF 檢視器。"
 
 #: kicad/project_tree_pane.cpp:1787
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s'"
-msgstr "繪製到 '%s' 時失敗。\n"
+msgstr "切換到分支 '%s' 時失敗"
 
 #: kicad/project_tree_pane.cpp:1798
 #, fuzzy, c-format
@@ -27460,7 +27458,6 @@ msgstr ""
 "是否要退出並放棄變更？"
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -27481,15 +27478,15 @@ msgstr ""
 "\n"
 "可用值在對數刻度上近似等距。\n"
 "\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
+"\tE24(5%): 1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
 "4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
 "\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
 "\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
 "\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
 "\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"- 這個計算器可以查詢標準 E 系列 (在 10 Ω 和 1 MΩ 之間) 的組合以建立任意的數"
-"值。\n"
+"- 這個計算器可以查詢標準 E 系列 (在 10 Ω 和 1 MΩ 之間) "
+"的組合以建立任意的數值。\n"
 "- 您可以輸入0.0025 到 4000 kΩ之間所需的電阻。\n"
 "- 給出了最多使用 4 個元件的解決方案。\n"
 "\n"
@@ -30394,9 +30391,8 @@ msgid "Run DRC"
 msgstr "執行 DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:276
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules."
-msgstr "DRC 不完整：無法編譯自定義設計規則。  "
+msgstr "DRC 不完整：無法編譯自定義設計規則。"
 
 #: pcbnew/dialogs/dialog_drc.cpp:278 pcbnew/tools/board_inspection_tool.cpp:213
 msgid "Show design rules."
@@ -31020,9 +31016,8 @@ msgid "Success"
 msgstr "成功。"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:246
-#, fuzzy
 msgid "Command line:\n"
-msgstr "命令列:"
+msgstr "命令列:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
 #, fuzzy
@@ -37625,9 +37620,8 @@ msgid "Checking pads..."
 msgstr "正在檢查焊盤..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "走線間距... \n"
+msgstr "走線間距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -38447,9 +38441,9 @@ msgstr ""
 "重新載入時間 %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:954
-#, fuzzy, c-format
+#, c-format
 msgid "Build holes for %s\n"
-msgstr "構造工藝層 %d"
+msgstr "為此建構孔洞 %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:959
 #, c-format
@@ -41385,9 +41379,8 @@ msgid "Generating BOM section"
 msgstr "渲染選項"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1311
-#, fuzzy
 msgid "Generating CAD data"
-msgstr "確定 PCB 資料\n"
+msgstr "生成 CAD 資料"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2352
 #, fuzzy, c-format
@@ -42061,9 +42054,8 @@ msgid "Successfully exported VRML to %s"
 msgstr "已成功建立 svg 檔案"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:159
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "解壓檔案時出錯！"
+msgstr "匯出VRML時有錯誤"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:231
 msgid "Successfully created svg file"
@@ -42079,9 +42071,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "繪製到 '%s' 時失敗。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:571
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "未能刪除目錄 %s"
+msgstr "創建輸出目錄失敗\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:761 pcbnew/pcbnew_jobs_handler.cpp:833
 msgid "Loading footprint library\n"
@@ -42109,18 +42100,17 @@ msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "將封裝從 '%s' 繪製到 '%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:997
-#, fuzzy
 msgid "Running DRC...\n"
-msgstr "執行 DRC..."
+msgstr "執行 DRC...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1012 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "未連線專案 (%s)"
+msgstr "找到%d未連接項目\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1037
 #, c-format
@@ -42128,14 +42118,14 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1051
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "無法解析倉庫：%s"
+msgstr "無法儲存DRC報告於此%s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1056
 #, fuzzy, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "儲存DRC報告檔案"
+msgstr "儲存DRC報告檔案\n"
 
 #: pcbnew/pcbnew_printout.cpp:116
 msgid "Multiple Layers"
@@ -42794,9 +42784,8 @@ msgid "[netclass %s]"
 msgstr "[網路類 %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:211
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules."
-msgstr "報告不完整：無法編譯自定義設計規則。  "
+msgstr "報告不完整：無法編譯自定義設計規則。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:316
 msgid "Uncoupled Length"
