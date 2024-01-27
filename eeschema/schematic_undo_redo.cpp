@@ -27,9 +27,11 @@
 #include <tool/tool_manager.h>
 #include <schematic.h>
 #include <sch_bus_entry.h>
+#include <sch_commit.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_bitmap.h>
+#include <sch_sheet_pin.h>
 #include <tools/ee_selection_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <tool/actions.h>
@@ -263,6 +265,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     std::vector<SCH_ITEM*> bulkAddedItems;
     std::vector<SCH_ITEM*> bulkRemovedItems;
     std::vector<SCH_ITEM*> bulkChangedItems;
+    bool                   dirtyConnectivity = false;
+    SCH_CLEANUP_FLAGS      connectivityCleanUp = NO_CLEANUP;
 
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
     // same item can be changed and deleted in the same complex command).
@@ -279,6 +283,44 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         eda_item->ClearEditFlags();
         eda_item->ClearTempFlags();
 
+        SCH_ITEM*   schItem = dynamic_cast<SCH_ITEM*>( eda_item );
+
+        // Set connectable object connectivity status.
+        if( schItem && schItem->IsConnectable() )
+        {
+            schItem->SetConnectivityDirty();
+
+            if( schItem->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
+
+                wxCHECK2( symbol, continue );
+
+                for( SCH_PIN* pin : symbol->GetPins() )
+                    pin->SetConnectivityDirty();
+            }
+            else if( schItem->Type() == SCH_SHEET_T )
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( schItem );
+
+                wxCHECK2( sheet, continue );
+
+                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                    pin->SetConnectivityDirty();
+            }
+
+            m_highlightedConnChanged = true;
+            dirtyConnectivity = true;
+
+            // Do a local clean up if there are any connectable objects in the commit.
+            if( connectivityCleanUp == NO_CLEANUP )
+                connectivityCleanUp = LOCAL_CLEANUP;
+
+            // Do a full rebauild of the connectivity if there is a sheet in the commit.
+            if( schItem->Type() == SCH_SHEET_T )
+                connectivityCleanUp = GLOBAL_CLEANUP;
+        }
+
         if( status == UNDO_REDO::NEWITEM )
         {
             // If we are removing the current sheet, get out first
@@ -288,11 +330,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                     GetToolManager()->PostAction( EE_ACTIONS::leaveSheet );
             }
 
-            SCH_ITEM* schItem = static_cast<SCH_ITEM*>( eda_item );
-
-            if( schItem && schItem->IsConnectable() )
-                m_highlightedConnChanged = true;
-
             RemoveFromScreen( eda_item, screen );
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
 
@@ -300,11 +337,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( status == UNDO_REDO::DELETED )
         {
-            SCH_ITEM* schItem = static_cast<SCH_ITEM*>( eda_item );
-
-            if( schItem && schItem->IsConnectable() )
-                m_highlightedConnChanged = true;
-
             // deleted items are re-inserted on undo
             AddToScreen( eda_item, screen );
             aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
@@ -329,9 +361,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( eda_item ) )
         {
-            if( item->IsConnectable() )
-                m_highlightedConnChanged = true;
-
             // everything else is modified in place
             SCH_ITEM* alt_item = static_cast<SCH_ITEM*>( aList->GetPickedItemLink( ii ) );
 
@@ -392,6 +421,20 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     if( bulkChangedItems.size() > 0 )
         Schematic().OnItemsChanged( bulkChangedItems );
+
+    if( dirtyConnectivity )
+    {
+        SCH_COMMIT localCommit( m_toolManager );
+
+        RecalculateConnections( &localCommit, connectivityCleanUp );
+
+        // Update the hierarchy navigator when there are sheet changes.
+        if( connectivityCleanUp == GLOBAL_CLEANUP )
+        {
+            SetSheetNumberAndCount();
+            UpdateHierarchyNavigator();
+        }
+    }
 }
 
 
@@ -414,18 +457,7 @@ void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
                                            delete aItem;
                                        } );
 
-        // Only rebuild the hierarchy navigator if there are sheet changes.
-        bool hasSheets = undo->ContainsItemType( SCH_SHEET_T );
-
         delete undo;
-
-        if( hasSheets )
-        {
-            SetSheetNumberAndCount();
-            UpdateHierarchyNavigator();
-        }
-
-        TestDanglingEnds();
 
         m_toolManager->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
     }
