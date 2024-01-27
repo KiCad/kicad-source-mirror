@@ -2431,7 +2431,7 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 
     updateItem( sheet, true );
 
-    commit.Push( _( "" ) );
+    commit.Push( wxT( "" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
