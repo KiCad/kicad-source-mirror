@@ -6,13 +6,14 @@
 # willliam <traderwilliam@gmail.com>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # 撒景賢 <james.sa.2013@gmail.com>, 2024.
+# Oliver0804 <icetzsr@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 06:24+0000\n"
-"Last-Translator: 撒景賢 <james.sa.2013@gmail.com>\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -17559,9 +17560,8 @@ msgid "Simulation"
 msgstr "模擬"
 
 #: eeschema/sch_symbol.cpp:1858
-#, fuzzy
 msgid "BOM"
-msgstr "BOM..."
+msgstr "零件清單"
 
 #: eeschema/sch_symbol.cpp:1870 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
@@ -37453,7 +37453,7 @@ msgstr "斷言失敗"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Copper sliver"
-msgstr "銅條"
+msgstr "銅箔尖刺"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Solder mask aperture bridges items with different nets"
@@ -43346,7 +43346,7 @@ msgstr "Loss Tangent（損耗角正切）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
 msgid "Dielectric"
-msgstr "電介質"
+msgstr "介電材料"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:354
 msgid "Insert board stackup table"
