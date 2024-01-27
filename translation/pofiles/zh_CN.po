@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 10:06+0000\n"
+"PO-Revision-Date: 2024-01-27 10:19+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -989,7 +989,7 @@ msgstr "显示填充区域"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "使用裸铜色表示未镀铜(慢)"
+msgstr "用裸铜色表示未电镀的铜(慢)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -5938,12 +5938,12 @@ msgstr "接收到 %u 个 %u 对象"
 #: common/git/kicad_git_common.cpp:446
 #, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "[更新] %s..%s %s"
+msgstr "* [更新] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:450
 #, c-format
 msgid "* [new] %s %s"
-msgstr "[新增] %s %s"
+msgstr "* [新增] %s %s"
 
 #: common/git/kicad_git_common.cpp:470
 #, c-format
