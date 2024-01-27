@@ -5,13 +5,14 @@
 # pondahai <dahai.pon@gmail.com>, 2022, 2024.
 # willliam <traderwilliam@gmail.com>, 2022.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
+# 撒景賢 <james.sa.2013@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 05:27+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"Last-Translator: 撒景賢 <james.sa.2013@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -13150,8 +13151,9 @@ msgid "Qty"
 msgstr "數量"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:616
+#, fuzzy
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:645
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:736
@@ -13327,8 +13329,9 @@ msgstr "mm"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
+#, fuzzy
 msgid ","
-msgstr ""
+msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
 #, fuzzy
@@ -20002,7 +20005,7 @@ msgstr "將 %s 值從 %s 更改為%s."
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "新增欄位 '%s'，其值為 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:563
 #, fuzzy, c-format
@@ -21402,7 +21405,7 @@ msgstr "自定義原點"
 
 #: eeschema/tools/ee_actions.cpp:1474
 msgid "Add, edit or delete user-defined simulation signals"
-msgstr ""
+msgstr "新增、編輯或刪除使用者定義的模擬信號"
 
 #: eeschema/tools/ee_actions.cpp:1480
 #, fuzzy
@@ -24871,7 +24874,7 @@ msgstr "移動到垃圾箱"
 
 #: kicad/project_tree_pane.cpp:933
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "把專案加入版本控管..."
 
 #: kicad/project_tree_pane.cpp:934
 #, fuzzy
@@ -26462,7 +26465,7 @@ msgstr "線寬："
 msgid ""
 "A groove which width is smaller has no effect on the path considered for "
 "creepage"
-msgstr ""
+msgstr "寬度較小的凹槽對電氣絕緣距離的考慮路徑沒有影響"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:313
 msgid ""
@@ -33574,8 +33577,9 @@ msgstr "%"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:445
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:485
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:536
+#, fuzzy
 msgid " )"
-msgstr ""
+msgstr " )"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:673
 #, fuzzy
@@ -40744,7 +40748,7 @@ msgstr "Altium Designer PCB 檔案"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:47
 msgid "Altium PCB Library or Integrated Library"
-msgstr ""
+msgstr "Altium PCB Library 或 Integrated Library"
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:31
 #, fuzzy
@@ -43926,7 +43930,7 @@ msgstr "參考節點"
 msgid ""
 "Add a bitmap image to be used as a reference (image will not be included in "
 "any output)"
-msgstr ""
+msgstr "添加一個點陣圖像以供參考（圖像將不包含在任何輸出中）"
 
 #: pcbnew/tools/pcb_actions.cpp:185
 msgid "Add a wrapped text item"
