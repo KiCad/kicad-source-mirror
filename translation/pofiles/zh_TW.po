@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 06:24+0000\n"
-"Last-Translator: William Lin <unrealin01@gmail.com>\n"
+"PO-Revision-Date: 2024-01-27 08:43+0000\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -299,16 +299,14 @@ msgstr "外觀"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "跟隨 PCB 編輯器"
+msgstr "根據 PCB 編輯器"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "篩選設定"
+msgstr "遵循PCB繪圖設置"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
 msgid "legacy colors"
@@ -400,7 +398,6 @@ msgid "Rotate Z Counterclockwise"
 msgstr "沿 Z 軸逆時針旋轉"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:110
-#, fuzzy
 msgid "Move Board Left"
 msgstr "左移電路板"
 
@@ -409,7 +406,6 @@ msgid "Move board Left"
 msgstr "左移電路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
-#, fuzzy
 msgid "Move Board Right"
 msgstr "右移電路板"
 
@@ -418,7 +414,6 @@ msgid "Move board Right"
 msgstr "右移電路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:130
-#, fuzzy
 msgid "Move Board Up"
 msgstr "上移電路板"
 
@@ -427,7 +422,6 @@ msgid "Move board Up"
 msgstr "上移電路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
-#, fuzzy
 msgid "Move Board Down"
 msgstr "下移電路板"
 
@@ -436,9 +430,8 @@ msgid "Move board Down"
 msgstr "下移電路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
-#, fuzzy
 msgid "Home View"
-msgstr "主檢視"
+msgstr "主視圖"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:151
 msgid "Home view"
@@ -453,7 +446,6 @@ msgid "Flip the board view"
 msgstr "翻轉電路板檢視"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:168
-#, fuzzy
 msgid "Toggle Orthographic Projection"
 msgstr "切換正交投影"
 
@@ -530,7 +522,6 @@ msgid "Render Solid Colors"
 msgstr "渲染單色"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
 msgstr "僅使用 3D 模型檔案中的漫反射顏色屬性"
 
@@ -543,61 +534,50 @@ msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr "根據材質的漫反射顏色使用 CAD 顏色樣式"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:300
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "切換直插通孔 3D 模型"
+msgstr "顯示直插通孔 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:301
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "切換 '通孔' 型元件的 3D 模型"
+msgstr "顯示 '通孔' 型元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "顯示 3D 貼片模型"
+msgstr "顯示 SMD 的3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "切換 '表面貼裝' 型元件的 3D 模型"
+msgstr "顯示 '表面貼裝' 型元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "切換未指定的 3D 模型"
+msgstr "顯示未指定的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "切換 '未指定' 型元件的 3D 模型"
+msgstr "顯示 '未指定' 型元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "切換不在 pos 檔案中的 3D 模型"
+msgstr "顯示不在 POS 檔案中的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "切換不在 pos 檔案中的 3D 模型"
+msgstr "顯示不在 POS 檔案中的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "切換貼片(SMD) 3D 模型"
+msgstr "顯示標記不安裝(DNP)的零件"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "排除“虛擬”屬性元件的 3D 模型"
+msgstr "顯示3D模型,即使它被標記不要安裝(DNP)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
 msgid "Show Model Bounding Boxes"
 msgstr "顯示模型邊框"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
 msgstr "顯示模型邊框"
 
@@ -629,140 +609,122 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "銅/表面處理顏色..."
+msgstr "顯示正面銅箔/表面塗層顏色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "銅/表面處理顏色..."
+msgstr "顯示背面銅箔/表面塗層顏色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Adhesive"
-msgstr "B.Adhesive"
+msgstr "膠黏層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show adhesive"
-msgstr "顯示膠粘層"
+msgstr "顯示膠黏層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Solder Paste"
 msgstr "焊膏"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show solder paste"
-msgstr "顯示錫膏層"
+msgstr ""
+"顯示錫膏層https://hosted.weblate.org/translate/kicad/master-source/zh_Hant/"
+"?q=state%3A%3Ctranslated&sort_by=-priority%2Cposition&offset=3"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr "頂層印刷層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "頂層絲印"
+msgstr "顯示頂層絲印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
 msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "底層絲印"
+msgstr "顯示底層絲印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "F.Mask"
 msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "頂層阻焊"
+msgstr "顯示頂層阻焊"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "B.Mask"
 msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "底層阻焊"
+msgstr "顯示底層阻焊"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "User.Drawings"
-msgstr "圖形"
+msgstr "用戶繪圖層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "顯示註釋和繪圖層"
+msgstr "顯示用戶繪圖層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Comments"
 msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "顯示阻焊層"
+msgstr "顯示用戶註解層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Eco1"
 msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "顯示 ECO 層"
+msgstr "顯示 工程變更1 層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
 msgid "User.Eco2"
 msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "顯示 ECO 層"
+msgstr "顯示 工程變更2 層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "通孔焊盤"
+msgstr "通孔模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "SMD Models"
-msgstr "3D 模型"
+msgstr "SMD 模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Virtual Models"
-msgstr "切換虛擬 3D 模型"
+msgstr "虛擬 3D 模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "切換不在 pos 檔案中的 3D 模型"
+msgstr "模型不在座標文件(*.pos)中"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "切換貼片(SMD) 3D 模型"
+msgstr "標記為 DNP 的模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "顯示模型邊框"
+msgstr "模型邊框"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -799,18 +761,16 @@ msgid "Show all footprint text"
 msgstr "顯示所有封裝文字"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "絲印層"
+msgstr "板外絹印層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
 msgstr "不要讓絹印層裁切到邊框"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
-msgstr "X 軸"
+msgstr "3D 軸"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Background Start"
@@ -837,12 +797,12 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"儲存和恢復圖層可見性組合。\n"
-"使用 %s+Tab 啟用選擇器。\n"
-"按下 %s 時， 連續的選項卡將在彈出視窗的預設中迴圈。"
+"儲存並恢復顏色和可見度組合。\n"
+"使用 %s+Tab 啟動選擇器。\n"
+"持續按住 %s 同時按 Tab 將會在彈出窗口中循環切換。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
@@ -850,11 +810,10 @@ msgid ""
 "popup."
 msgstr ""
 "儲存並恢復檢視位置和縮放。\n"
-"使用 %s+Tab 啟用選擇器。\n"
-"按下 %s 時，連續的選項卡將在彈出視窗的視口中迴圈。"
+"使用 %s+Tab 啟動選擇器。\n"
+"持續按住 %s 同時按 Tab 將會在彈出窗口中循環切換。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:438
-#, fuzzy
 msgid "Left double click or middle click to change color"
 msgstr "雙擊滑鼠左鍵或點選中鍵修改顏色"
 
@@ -898,9 +857,8 @@ msgstr "儲存層預設"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2022
 #: pcbnew/widgets/appearance_controls.cpp:2672
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "開啟一個現有工程"
+msgstr "覆蓋現有預設?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:689
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1646
@@ -1017,9 +975,8 @@ msgid "Show filled areas in zones"
 msgstr "顯示敷銅中的填充敷銅"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "對非電鍍的銅使用裸銅色"
+msgstr "使用裸露銅的顏色來表示未鍍銅 (速度較慢)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1064,9 +1021,8 @@ msgid "deg"
 msgstr "度"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "移動物體時平移 (&P)"
+msgstr "在移動時重新繪製"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
@@ -1262,9 +1218,8 @@ msgid "Light 8:"
 msgstr "淺色 8："
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Gerbview 選項"
+msgstr "3D 預覽選項"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
 msgid "Board thickness:"
@@ -1376,7 +1331,6 @@ msgid "KiCad Image Converter"
 msgstr "KiCad 圖片轉換器"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
-#, fuzzy
 msgid "Image files"
 msgstr "圖片檔案"
 
@@ -1405,9 +1359,8 @@ msgid "Image Files"
 msgstr "圖片檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "選擇圖紙檔案"
+msgstr "建立圖紙檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:461
 #: bitmap2component/bitmap2cmp_frame.cpp:497
@@ -1708,7 +1661,7 @@ msgstr "負片"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
 #, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "放置匯入的圖形"
+msgstr "用於圖形的 PCB 層"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -1721,9 +1674,8 @@ msgid "Front solder mask"
 msgstr "頂層阻焊"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "頂層"
+msgstr "頂表層"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #, fuzzy
@@ -1733,7 +1685,7 @@ msgstr "User.Drawings"
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #, fuzzy
 msgid "User layer comments"
-msgstr "ECO1 使用者層"
+msgstr "使用者層註解"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -2031,7 +1983,7 @@ msgstr "附加貢獻"
 #: common/dialog_about/AboutDialog_main.cpp:1136
 #, fuzzy
 msgid "Librarian Team"
-msgstr "KiCad 庫團隊"
+msgstr "庫團隊"
 
 #: common/dialog_about/AboutDialog_main.cpp:1208
 msgid "3D models by"
@@ -2050,9 +2002,8 @@ msgid "Icons by"
 msgstr "圖示設計"
 
 #: common/dialog_about/AboutDialog_main.cpp:1255
-#, fuzzy
 msgid "Package Developers"
-msgstr "開發人員"
+msgstr "封裝開發者"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2479,14 +2430,12 @@ msgid "Configure Global Library Table"
 msgstr "配置全域性庫表"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "鑽孔超出範圍"
+msgstr "網格尺寸 X 超出範圍"
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "鑽孔超出範圍"
+msgstr "鑽孔超出範圍網格尺寸 Y 超出範圍"
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
@@ -2495,9 +2444,7 @@ msgstr "快捷鍵列表"
 #: common/dialogs/dialog_import_choose_project.cpp:33
 #, fuzzy
 msgid "Project Name"
-msgstr ""
-"專案名稱:\n"
-"%s\n"
+msgstr "專案名稱:"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1069
@@ -2521,9 +2468,8 @@ msgstr ""
 "選擇一個來匯入KiCad。"
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "關閉工程"
+msgstr "選擇要匯入的專案"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -2711,7 +2657,7 @@ msgstr "圖框"
 
 #: common/dialogs/dialog_page_settings.cpp:113
 msgid "Title Block"
-msgstr "工程圖明細表"
+msgstr "電路圖標題列"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
@@ -3222,23 +3168,20 @@ msgid "MyLabel"
 msgstr "我的標籤"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
-#, fuzzy
 msgid "X label:"
-msgstr "標籤："
+msgstr "X 標籤:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
-#, fuzzy
 msgid "Y label:"
-msgstr "標籤："
+msgstr "Y 標籤:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
 msgid "Title"
 msgstr "標題"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "封裝位置"
+msgstr "將點移至位置"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:197 common/widgets/lib_tree.cpp:265
@@ -3307,9 +3250,8 @@ msgstr "檢視預設切換器"
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "連線"
+msgstr "連接"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
@@ -3333,14 +3275,12 @@ msgstr "網址"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "齊行"
+msgstr "認證"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "基名稱"
+msgstr "使用者名稱"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:440
@@ -3348,9 +3288,8 @@ msgid "Password"
 msgstr "密碼"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "送交更改..."
+msgstr "提交更改"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 msgid "Filename"
@@ -3372,19 +3311,16 @@ msgid "New"
 msgstr "新建"
 
 #: common/dialogs/git/dialog_git_commit.cpp:89
-#, fuzzy
 msgid "Modified"
-msgstr "修改分組"
+msgstr "已修改"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
-#, fuzzy
 msgid "Deleted"
-msgstr "刪除"
+msgstr "已刪除"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
-#, fuzzy
 msgid "Commit Message:"
-msgstr "錯誤訊息:"
+msgstr "提交訊息:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:115
 msgid "Author:"
@@ -3395,9 +3331,8 @@ msgid "C&ommit"
 msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "元件名稱不能為空。"
+msgstr "提交訊息不能為空白"
 
 #: common/dialogs/git/dialog_git_repository.cpp:146
 #: common/dialogs/git/dialog_git_repository.cpp:373
@@ -3405,9 +3340,8 @@ msgid "Enter the password for the SSH key"
 msgstr "輸入SSH金鑰的密碼"
 
 #: common/dialogs/git/dialog_git_repository.cpp:325
-#, fuzzy
 msgid "Test connection"
-msgstr "選擇連線"
+msgstr "測試連線"
 
 #: common/dialogs/git/dialog_git_repository.cpp:329
 #, fuzzy
@@ -6796,7 +6730,7 @@ msgstr "佈線"
 
 #: common/layer_id.cpp:169
 msgid "Through vias"
-msgstr "通孔"
+msgstr "貫孔"
 
 #: common/layer_id.cpp:170
 msgid "Blind/Buried vias"
@@ -28063,9 +27997,8 @@ msgstr "網路名稱"
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
-#, fuzzy
 msgid "Teardrops"
-msgstr "新增淚滴"
+msgstr "淚滴"
 
 #: pcbnew/board_connected_item.cpp:237
 #, fuzzy
@@ -31497,7 +31430,7 @@ msgstr "通孔"
 #: pcbnew/footprint_libraries_utils.cpp:1205 pcbnew/pad.cpp:1248
 #: pcbnew/pad.cpp:1875
 msgid "SMD"
-msgstr "貼片"
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
@@ -43342,7 +43275,7 @@ msgstr "粗細 (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Loss Tangent"
-msgstr "Loss Tangent（損耗角正切）"
+msgstr "損耗角正切"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
 msgid "Dielectric"
