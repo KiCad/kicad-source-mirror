@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 11:30+0000\n"
+"PO-Revision-Date: 2024-01-27 11:36+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -847,9 +847,8 @@ msgstr "Зберегти предстановлений шар"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1621
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2022
 #: pcbnew/widgets/appearance_controls.cpp:2672
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "Відкрити існуючий проект"
+msgstr "Перезаписати існуючі налаштування?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:689
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1646
@@ -966,9 +965,8 @@ msgid "Show filled areas in zones"
 msgstr "Показати заповнені області у зонах"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "Використати колір міді для не залуженої міді"
+msgstr "Використати колір міді для не залуженої міді (повільно)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1014,13 +1012,12 @@ msgid "deg"
 msgstr "°"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "Під час руху"
+msgstr "Перекреслити під час перетягування"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
-msgstr ""
+msgstr "Швидкість перекреслення:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
@@ -1337,7 +1334,6 @@ msgid "KiCad Image Converter"
 msgstr "Перетворення зображень KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
-#, fuzzy
 msgid "Image files"
 msgstr "Файли зображень"
 
