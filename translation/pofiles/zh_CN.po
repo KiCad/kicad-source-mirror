@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 13:47+0000\n"
+"PO-Revision-Date: 2024-01-27 16:27+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -23818,7 +23818,7 @@ msgstr "作者"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:280
 msgid "Maintainer"
-msgstr "维护人员"
+msgstr "维护者"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:284
 msgid "Resources"
