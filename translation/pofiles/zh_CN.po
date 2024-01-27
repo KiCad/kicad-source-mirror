@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 09:43+0000\n"
+"PO-Revision-Date: 2024-01-27 10:06+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -1742,7 +1742,7 @@ msgstr "后台任务"
 #, c-format, fuzzy
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "环境变量扩展失败: 在 '%s' 的 %u 位置缺少 '%c'。"
+msgstr "环境变量扩展失败: 在 '%3$s' 的 %2$u 位置缺少 '%1$c'。"
 
 #: common/common.cpp:358
 #, c-format
@@ -9690,7 +9690,7 @@ msgid ""
 msgstr ""
 "从库 %2$s 加载符号 %1$s 时出错。\n"
 "\n"
-"%s"
+"%3$s"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:114
@@ -15220,7 +15220,7 @@ msgstr "派生自"
 #: eeschema/widgets/symbol_preview_widget.cpp:201
 #, c-format, fuzzy
 msgid "Error loading symbol %s from library '%s'."
-msgstr "从库 %2$s 加载符号 '%1$s' 出错。(%s)。"
+msgstr "从库 %2$s 加载符号 '%1$s' 出错。"
 
 #: eeschema/generate_alias_info.cpp:121 eeschema/sim/spice_simulator.cpp:69
 #: kicad/pcm/pcm.cpp:779 pcbnew/zone.cpp:643
@@ -17057,9 +17057,9 @@ msgid "Done"
 msgstr "完成"
 
 #: eeschema/sch_plotter.cpp:1017
-#, c-format, fuzzy
+#, c-format
 msgid "Failed to write plot files to folder '%s'."
-msgstr "无法写入绘制文件到文件夹 's'。"
+msgstr "无法写入绘制文件到文件夹 '%s'。"
 
 #: eeschema/sch_reference_list.cpp:674
 #, c-format
