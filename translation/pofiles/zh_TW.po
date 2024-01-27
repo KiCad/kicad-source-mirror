@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 06:24+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"Last-Translator: 撒景賢 <james.sa.2013@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -13229,6 +13229,8 @@ msgid ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
 msgstr ""
+"無法修改預設值，\n"
+"請使用不同的名稱。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
 #, fuzzy
@@ -16923,7 +16925,7 @@ msgstr ""
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:306
 #, c-format
 msgid "Could not connect to %s. Errors: %s"
-msgstr ""
+msgstr "無法連接到 %s。錯誤：%s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:47
 #, fuzzy
@@ -18668,7 +18670,7 @@ msgstr "無效的引腳名定義"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
-msgstr ""
+msgstr "缺少測量格式的定義"
 
 #: eeschema/sim/sim_lib_mgr.cpp:83
 #, fuzzy, c-format
@@ -18823,11 +18825,11 @@ msgstr "幅度："
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
-msgstr ""
+msgstr "雜訊（V/√Hz）"
 
 #: eeschema/sim/sim_plot_tab.cpp:614
 msgid "Noise (A/√Hz)"
-msgstr ""
+msgstr "雜訊 (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
 #, fuzzy
@@ -18883,9 +18885,8 @@ msgstr "模擬沒有提供任何繪圖。請參考控制檯視窗的結果。"
 #: eeschema/sim/simulator_frame.cpp:111
 #: eeschema/sim/toolbars_simulator_frame.cpp:107
 #: eeschema/tools/ee_actions.cpp:70
-#, fuzzy
 msgid "Simulator"
-msgstr "模擬..."
+msgstr "模擬"
 
 #: eeschema/sim/simulator_frame.cpp:332
 msgid "Spice Simulator"
@@ -19020,7 +19021,7 @@ msgstr "刪除線段"
 #: eeschema/sim/simulator_frame_ui.cpp:953
 #, c-format
 msgid "Analysis %u - "
-msgstr ""
+msgstr "分析 %u - "
 
 #: eeschema/sim/simulator_frame_ui.cpp:589
 #: eeschema/sim/simulator_frame_ui.cpp:596
@@ -20808,7 +20809,7 @@ msgstr "不填充"
 
 #: eeschema/tools/ee_actions.cpp:930
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "清除「不填充」屬性"
 
 #: eeschema/tools/ee_actions.cpp:936
 #, fuzzy
@@ -23861,7 +23862,7 @@ msgstr ""
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
-msgstr ""
+msgstr "KiCad 有新版了！"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
 #, fuzzy
@@ -24836,7 +24837,7 @@ msgstr "專案...(&P)"
 
 #: kicad/project_tree_pane.cpp:939 kicad/project_tree_pane.cpp:953
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "Commit 到 local repo"
 
 #: kicad/project_tree_pane.cpp:942
 msgid "Push"
@@ -26393,6 +26394,9 @@ msgid ""
 "A coating that could easily delaminate in the lifespan of the product (such "
 "as a soldermask) should not be considered for a reduction."
 msgstr ""
+"計算機不支援塗層和灌封可減少間隙和橫向距離。\n"
+"\n"
+"在產品壽命內可能容易剝離的塗層（例如焊膜）不應考慮進行減少。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:254
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
@@ -28615,7 +28619,7 @@ msgstr ""
 #: pcbnew/convert_shape_list_to_polygon.cpp:669
 #, c-format
 msgid "(Circle has null or very small radius: %d nm)"
-msgstr ""
+msgstr "（圓形具有空值或非常小的半徑：%d nm納米）"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:689
 #, c-format
@@ -28625,7 +28629,7 @@ msgstr ""
 #: pcbnew/convert_shape_list_to_polygon.cpp:712
 #, c-format
 msgid "(Arc has null or very small size: %d nm)"
-msgstr ""
+msgstr "（圓弧具有空值或非常小的大小：%d nm納米）"
 
 #: pcbnew/cross-probing.cpp:105 pcbnew/dialogs/dialog_board_setup.cpp:193
 #: pcbnew/dialogs/dialog_drc.cpp:243 pcbnew/pcb_edit_frame.cpp:2399
@@ -30052,6 +30056,8 @@ msgid ""
 "Array radius,\n"
 "from Ref point pos and array center:"
 msgstr ""
+"陣列半徑，\n"
+"從貝茲點位置和陣列中心："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
 #, fuzzy
@@ -30063,6 +30069,8 @@ msgid ""
 "Array angle,\n"
 "from Ref point pos and array center:"
 msgstr ""
+"陣列角度，\n"
+"從貝茲點位置和陣列中心："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:400
 #, fuzzy
@@ -30746,7 +30754,7 @@ msgstr "強制 A4 輸出"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
-msgstr ""
+msgstr "將輸出壓成 'zip' 檔"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
 #, fuzzy
@@ -30798,7 +30806,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
-msgstr ""
+msgstr "包含經銷商零件號的列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
 #, fuzzy
@@ -30878,7 +30886,7 @@ msgstr "STEP 檔案"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
 msgid "Binary glTF files"
-msgstr ""
+msgstr "Binary glTF 檔案"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 #, fuzzy
@@ -30986,7 +30994,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Combine intersecting geometry into one shape."
-msgstr ""
+msgstr "將相交的幾何形狀合併為一個形狀。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:151
 #, fuzzy
@@ -33480,7 +33488,7 @@ msgstr "郵票孔（僅限通孔）"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 msgid "Board contains legacy teardrops."
-msgstr ""
+msgstr "板上包含舊的的水 teardrop。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
@@ -34752,7 +34760,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:418
 msgid "(as a percentage of pad/via/track size)"
-msgstr ""
+msgstr "（相對與鍍銅孔/通孔/路徑尺寸的百分比）"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:146
 msgid "Track & Via Properties"
@@ -38516,7 +38524,7 @@ msgstr "構造工藝層 %d"
 #: pcbnew/exporters/step/step_pcb_model.cpp:959
 #, c-format
 msgid "Cutting %d/%d %s\n"
-msgstr ""
+msgstr "切割 %d/%d %s 中\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:981
 #, fuzzy
@@ -44214,12 +44222,12 @@ msgstr "新增與所選直線相切的弧"
 
 #: pcbnew/tools/pcb_actions.cpp:617
 msgid "Cut away corners between selected lines"
-msgstr ""
+msgstr "切去所選線段之間的角落"
 
 #: pcbnew/tools/pcb_actions.cpp:624
 msgid ""
 "Connect shapes, possibly extending or cutting them, or adding extra geometry"
-msgstr ""
+msgstr "藉由延伸或切割把圖形接起來"
 
 #: pcbnew/tools/pcb_actions.cpp:631
 msgid "Extend lines to meet each other"
@@ -45730,7 +45738,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2411
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
-msgstr ""
+msgstr "嘗試在現有的調整模式範圍內重新調整"
 
 #: pcbnew/tools/pcb_actions.cpp:2418
 #, fuzzy
