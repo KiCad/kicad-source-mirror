@@ -34,7 +34,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 10:19+0000\n"
+"PO-Revision-Date: 2024-01-27 11:30+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -3658,7 +3658,7 @@ msgstr "此更改在重新启动编辑器时生效。"
 
 #: common/dialogs/panel_common_settings_base.cpp:152
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr "在原理图编辑器和 PCB 编辑器之间, 焦点跟随鼠标移动"
+msgstr "切换编辑器时焦点跟随鼠标移动"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid ""
@@ -15693,7 +15693,7 @@ msgstr "工具 (&T)"
 #: pagelayout_editor/menubar.cpp:155 pcbnew/menubar_footprint_editor.cpp:239
 #: pcbnew/menubar_pcb_editor.cpp:464
 msgid "P&references"
-msgstr "偏好设置 (&P)"
+msgstr "设置 (&P)"
 
 #: eeschema/net_navigator.cpp:56
 #, c-format
