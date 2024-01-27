@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 11:30+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"PO-Revision-Date: 2024-01-27 11:36+0000\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -15645,7 +15645,7 @@ msgstr "未找到引腳 %s。"
 #: eeschema/lib_symbol.cpp:371
 #, c-format
 msgid "Pin %s differs."
-msgstr "接腳%s不同。"
+msgstr "引腳%s不同。"
 
 #: eeschema/lib_symbol.cpp:402
 #, c-format
@@ -15653,9 +15653,8 @@ msgid "%s field differs."
 msgstr "%s 欄位不同。"
 
 #: eeschema/lib_symbol.cpp:412
-#, fuzzy
 msgid "Field count differs."
-msgstr "焊盤數量"
+msgstr "欄位數量不一致。"
 
 #: eeschema/lib_symbol.cpp:421
 msgid "Footprint filters differs."
@@ -15666,38 +15665,32 @@ msgid "Footprint filters differ."
 msgstr "封裝過濾差別。"
 
 #: eeschema/lib_symbol.cpp:444
-#, fuzzy
 msgid "Symbol keywords differ."
-msgstr "封裝外形順序"
+msgstr "符號的關鍵字不一致。"
 
 #: eeschema/lib_symbol.cpp:453
 msgid "Symbol pin name offsets differ."
 msgstr "符號接腳名稱偏移值不同。"
 
 #: eeschema/lib_symbol.cpp:464
-#, fuzzy
 msgid "Show pin names settings differ."
-msgstr "顯示引腳名稱文字"
+msgstr "顯示引腳名稱的設置不一致。"
 
 #: eeschema/lib_symbol.cpp:473
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "顯示引腳編號文字"
+msgstr "顯示引腳編號的設置不一致。"
 
 #: eeschema/lib_symbol.cpp:482
-#, fuzzy
 msgid "Exclude from simulation settings differ."
-msgstr "排除外框要求"
+msgstr "排除模擬的設置不一致。"
 
 #: eeschema/lib_symbol.cpp:491
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "從物料清單中排除"
+msgstr "排除材料清單的設置不一致。"
 
 #: eeschema/lib_symbol.cpp:500
-#, fuzzy
 msgid "Exclude from board settings differ."
-msgstr "排除外框要求"
+msgstr "排除板上的設置不一致。"
 
 #: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:492
 #: eeschema/tools/sch_edit_tool.cpp:102
@@ -15834,24 +15827,23 @@ msgid "Bus from %s, %s to %s, %s"
 msgstr "排線從 (%s,%s) 到 (%s,%s)"
 
 #: eeschema/net_navigator.cpp:72
-#, fuzzy
 msgid "Graphic line not connectable"
-msgstr "引腳未連線"
+msgstr "圖形線無法連接"
 
 #: eeschema/net_navigator.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' pin '%s'"
-msgstr "符號 %s [%s]"
+msgstr "符號 %s 的引腳 [%s]"
 
 #: eeschema/net_navigator.cpp:97
 #, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "圖紙'%s' 接腳 '%s'"
+msgstr "圖紙'%s' 引腳 '%s'"
 
 #: eeschema/net_navigator.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "文字 \"%s\" (%s) 於 %s"
+msgstr "文字標籤 \"%s\" (%s) 於 %s"
 
 #: eeschema/net_navigator.cpp:116
 #, c-format
