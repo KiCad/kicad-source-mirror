@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Created on: 11 Mar 2016, author John Beard
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,6 +123,11 @@ void ARRAY_CREATOR::Invoke()
             {
                 if( m_isFootprintEditor )
                 {
+                    // Fields cannot be duplicated, especially mandatory fields.
+                    // A given field is unique for the footprint
+                    if( item->Type() == PCB_FIELD_T )
+                        continue;
+
                     // Don't bother incrementing pads: the footprint won't update until commit,
                     // so we can only do this once
                     this_item = fp->DuplicateItem( item );
@@ -180,11 +185,15 @@ void ARRAY_CREATOR::Invoke()
 
                     TransformItem( *array_opts, ptN, *this_item );
 
-                    this_item->RunOnDescendants(
-                            [&]( BOARD_ITEM* aItem )
-                            {
-                                commit.Add( aItem );
-                            } );
+                    // If a group is duplicated, add also created members to the board
+                    if( this_item->Type() == PCB_GROUP_T )
+                    {
+                        this_item->RunOnDescendants(
+                                [&]( BOARD_ITEM* aItem )
+                                {
+                                    commit.Add( aItem );
+                                } );
+                    }
 
                     commit.Add( this_item );
                 }
