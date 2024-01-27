@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-27 11:05+0000\n"
+"PO-Revision-Date: 2024-01-28 12:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
@@ -1754,7 +1754,7 @@ msgstr "版本"
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Developers"
-msgstr "开发人员"
+msgstr "开发者"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Doc Writers"
@@ -3073,7 +3073,7 @@ msgstr "此更改在重新启动编辑器时生效。"
 
 #: common/dialogs/panel_common_settings_base.cpp:152
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr "在原理图编辑器和 PCB 编辑器之间, 焦点跟随鼠标移动"
+msgstr "切换编辑器时焦点跟随鼠标移动"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid ""
@@ -13307,7 +13307,7 @@ msgstr "工具 (&T)"
 #: pagelayout_editor/menubar.cpp:175 pcbnew/menubar_footprint_editor.cpp:258
 #: pcbnew/menubar_pcb_editor.cpp:477
 msgid "P&references"
-msgstr "偏好设置 (&P)"
+msgstr "设置 (&P)"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:478
 #, c-format
@@ -20114,7 +20114,7 @@ msgstr "元数据"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:227
 msgid "Package identifier: "
-msgstr "扩展内容包标识符: %s "
+msgstr "扩展内容包标识符: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:228
 msgid "License: "
@@ -20130,7 +20130,7 @@ msgstr "作者"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:277
 msgid "Maintainer"
-msgstr "维护人员"
+msgstr "维护者"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:281
 msgid "Resources"
