@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 11:36+0000\n"
+"PO-Revision-Date: 2024-01-27 13:47+0000\n"
 "Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -15851,34 +15851,33 @@ msgid "Global label '%s' at %s, %s"
 msgstr "全域性標籤 '%s'(在%s，%s)"
 
 #: eeschema/net_navigator.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "層次標籤 '%s'"
+msgstr "分層標籤 '%s' 位於 %s，%s。"
 
 #: eeschema/net_navigator.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "結點大小："
+msgstr "%s，%s 的交匯點。"
 
 #: eeschema/net_navigator.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "%s 連線從 (%s,%s) 到 (%s,%s)"
+msgstr "匯流排從 %s，%s 到 %s，%s 進入導線。"
 
 #: eeschema/net_navigator.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "%s 排線從 (%s,%s) 到 (%s,%s)"
+msgstr "匯流排從 %s，%s 到 %s，%s 進入匯流排。"
 
 #: eeschema/net_navigator.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled item type %d"
-msgstr "無法處理封裝文字型別 %s"
+msgstr "未處理的項目類型 %d。"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
-#, fuzzy
 msgid "Failed to create directory 'devices' ."
-msgstr "未能刪除目錄 %s"
+msgstr "'devices' 目錄創建失敗。"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:419
 #, c-format
@@ -15909,9 +15908,8 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "錯誤：重複的圖頁名稱。要繼續嗎？"
 
 #: eeschema/picksymbol.cpp:121
-#, fuzzy
 msgid "Change Unit"
-msgstr "修改網路"
+msgstr "更改單位"
 
 #: eeschema/picksymbol.cpp:138
 #, c-format
@@ -15919,14 +15917,12 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "在庫 \"%s\" 中未找到符號 \"%s\" 的替代主體樣式。"
 
 #: eeschema/picksymbol.cpp:161
-#, fuzzy
 msgid "Convert Symbol"
-msgstr "恢復符號"
+msgstr "轉換符號"
 
 #: eeschema/picksymbol.cpp:178
-#, fuzzy
 msgid "Set Pin Function"
-msgstr "選擇連線"
+msgstr "設定引腳功能"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:64
 msgid "none"
@@ -16063,11 +16059,12 @@ msgid "Select Symbol Library"
 msgstr "選擇符號庫"
 
 #: eeschema/sch_base_frame.cpp:723
-#, fuzzy
 msgid ""
 "The library containing the current symbol has changed.\n"
 "Do you want to reload the library?"
-msgstr "該工程配置已經更改，是否儲存？"
+msgstr ""
+"包含目前符號的庫已經變更。\n"
+"您是否要重新載入該庫？"
 
 #: eeschema/sch_bus_entry.cpp:426
 msgid "Bus to Wire Entry"
@@ -16181,9 +16178,8 @@ msgid "[no schematic loaded]"
 msgstr "[沒有載入原理圖]"
 
 #: eeschema/sch_edit_frame.cpp:1841
-#, fuzzy
 msgid "Schematic Cleanup"
-msgstr "原理圖設定"
+msgstr "清理原理圖"
 
 #: eeschema/sch_edit_frame.cpp:1954
 #, c-format
@@ -16191,14 +16187,12 @@ msgid "Highlighted net: %s"
 msgstr "高亮網路：%s"
 
 #: eeschema/sch_edit_frame.cpp:2132
-#, fuzzy
 msgid "Save Symbol to Schematic"
-msgstr "新增符號到原理圖"
+msgstr "儲存符號至原理圖"
 
 #: eeschema/sch_edit_frame.cpp:2237 eeschema/tools/ee_actions.cpp:63
-#, fuzzy
 msgid "Compare Symbol with Library"
-msgstr "符號到庫..."
+msgstr "與庫進行符號比較"
 
 #: eeschema/sch_field.cpp:955
 #, c-format
@@ -16226,9 +16220,8 @@ msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "儲存檔案沒有被完全解析 （%d 位元組剩餘）。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:593
-#, fuzzy
 msgid "Blanket not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支持遮罩。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:597
 #, c-format
@@ -16236,9 +16229,8 @@ msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr "在“附加”部分找到了未知或意外的記錄 ID %d。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:637
-#, fuzzy
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "Altium 原理圖檔案"
+msgstr "期望的 Altium 原理圖檔案版本為 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:669
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -16249,9 +16241,8 @@ msgid "Record 'PIECHART' not handled."
 msgstr "未處理記錄 'PIECHART'。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:789
-#, fuzzy
 msgid "Parameter Set not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支援參數集。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:814
 msgid "Compile mask not currently supported."
@@ -16339,7 +16330,7 @@ msgstr "找不到檔案“%s”。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3976
 #, fuzzy, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "在 “檔案頭” 部分找到了未知或意外的記錄 id %d。"
+msgstr "在 %s 中發現未知或意外的記錄ID %d。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4102
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -16350,27 +16341,25 @@ msgid "Altium schematic files"
 msgstr "Altium 原理圖檔案"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:68
-#, fuzzy
 msgid "Altium Schematic Library or Integrated Library"
-msgstr "Altium 原理圖檔案"
+msgstr "Altium 原理圖庫 或 整合庫"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:72
-#, fuzzy
 msgid "The selected file does not appear to be a CADSTAR parts Library file"
-msgstr "檔案 '%s' 似乎不是有效的原理圖檔案."
+msgstr "所選檔案似乎不是 CADSTAR 零件庫檔案。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:117
 #, c-format
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
-msgstr "無法找到符號%s(參考自零件%s)。該零件未被載入。"
+msgstr "無法找到元件 %s 引用的符號 %s。該元件未被載入。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:132
 #, c-format
 msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
-msgstr ""
+msgstr "符號 %s 與元件 %s 中定義的引腳編號不一致。該元件未被載入。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:367
 #, c-format
@@ -16431,7 +16420,7 @@ msgstr ""
 msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
-msgstr ""
+msgstr "所選檔案是 CADSTAR 符號庫。它不包含原理圖設計，因此無法以此方式匯入或開啟。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:587
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -16556,6 +16545,8 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
+"與該 CADSTAR 零件庫相關聯的 CADSTAR 原理圖存檔 (*.csa) "
+"檔案的路徑。如果未指定，則預設為同一文件夾中的 'symbol.csa'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:242
 msgid ""
@@ -16563,20 +16554,21 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
+"與此庫中符號相關的封裝庫的名稱。您應該在封裝庫表中為 CADSTAR PCB 存檔 (*.cpa)"
+" 檔案創建一個單獨的項目。如果未指定，則預設為 'cadstarpcblib'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:286
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot find the .csa file corresponding to library '%s'."
-msgstr "不能建立封裝庫\"%s\"。"
+msgstr "找不到與庫 '%s' 對應的 .csa 檔案。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:55
 msgid "CADSTAR Schematic Archive files"
 msgstr "CADSTAR 原理圖存檔檔案"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.h:61
-#, fuzzy
 msgid "CADSTAR Parts Library files"
-msgstr "CADSTAR 存檔檔案"
+msgstr "CADSTAR 零件庫檔案"
 
 #: eeschema/sch_io/database/sch_io_database.cpp:84
 #, c-format
@@ -16602,7 +16594,7 @@ msgstr "KiCad 資料庫庫檔案"
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
-msgstr ""
+msgstr "'%s' 是一個 Eagle 二進制格式檔案；只能匯入 Eagle XML 格式檔案。"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
@@ -16627,87 +16619,86 @@ msgid "Eagle XML schematic files"
 msgstr "Eagle XML 原理圖檔案"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.h:96
-#, fuzzy
 msgid "Eagle XML library files"
-msgstr "Eagle ver. 6.x XML 庫檔案"
+msgstr "Eagle XML 庫檔案"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:145
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:295
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:414
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:458
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:492
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a valid schematic file in '%s'"
-msgstr "無法讀取資料檔案 \"%s\"。"
+msgstr "無法在 '%s' 中找到有效的原理圖檔案。"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:267
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:272
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:466
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:471
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
-msgstr "從庫 %s 載入符號 '%s' 出錯。(%s)"
+msgstr "從庫 '%s' 載入符號 '%s' 時發生錯誤：%s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:392
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:397
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:434
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Error enumerating symbol library '%s': %s"
-msgstr "建立符號庫 \"%s\" 出錯。"
+msgstr "列舉符號庫 '%s' 時出現錯誤：%s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:530
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:535
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading schematic '%s': %s"
-msgstr "載入原理圖 '%s' 時出錯。"
+msgstr "讀取原理圖 '%s' 時發生錯誤：%s"
 
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) 標準版檔案"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "未能存檔檔案 \"%s\"。"
+msgstr "無法解析數值：%s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:58
 msgid "httplib plugin missing library table handle!"
-msgstr ""
+msgstr "httplib 插件缺少庫表處理程序！"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Error retriving data from HTTP library %s: %s"
-msgstr "從庫 '%s' 載入封裝 %s 時出錯。"
+msgstr "從 HTTP 庫 %s 擷取數據時發生錯誤：%s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:218
-#, fuzzy, c-format
+#, c-format
 msgid "HTTP library settings file %s missing or invalid"
-msgstr "無法載入資料庫庫：設定檔案 %s 丟失或無效"
+msgstr "HTTP 庫設定檔 %s 遺失或無效。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:227
 #, c-format
 msgid "HTTP library settings file %s is missing the API version number!"
-msgstr ""
+msgstr "HTTP 庫設定檔 %s 缺少 API 版本號碼！"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:236
 #, c-format
 msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s"
-msgstr ""
+msgstr "HTTP 庫設定檔 %s 使用 API 版本 %s，但 KiCad 需要版本 %s。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:247
 #, c-format
 msgid "HTTP library settings file %s is missing the root URL!"
-msgstr ""
+msgstr "HTTP程式庫設定檔 %s 缺少 root URL！"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:259
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
-msgstr ""
+msgstr "HTTP程式庫設定檔 %s 具有無效的程式庫類型。"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:306
 #, c-format
@@ -16715,9 +16706,8 @@ msgid "Could not connect to %s. Errors: %s"
 msgstr "無法連接到 %s。錯誤：%s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:47
-#, fuzzy
 msgid "KiCad HTTP library files"
-msgstr "KiCad 符號庫檔案"
+msgstr "KiCad的HTTP程式庫檔案"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:116
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:288
@@ -16831,9 +16821,9 @@ msgid ""
 msgstr "無法載入圖框“%s”，因為它已在原理圖層次結構中顯示為直接原型。"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse %s as a symbol"
-msgstr "已將 %s 批註為 %s。"
+msgstr "無法將 %s 解析為符號"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:306
 msgid "Invalid symbol name"
@@ -16950,64 +16940,66 @@ msgstr "無效的符號庫 ID"
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:220
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
-msgstr ""
+msgstr "忽略位於 '%s' 的檔案。改為使用先前找到的檔案位於 '%s'。"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:360
-#, c-format
+#, c-format, fuzzy
 msgid "Expecting integer at line %d in file %s"
-msgstr ""
+msgstr "在檔案 %s 的第 %d 行，應為整數"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:383
-#, c-format
+#, c-format, fuzzy
 msgid "Expected data missing on line %d in file %s"
-msgstr ""
+msgstr "在檔案 %s 的第 %d 行缺少預期的資料"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:389
-#, c-format
+#, c-format, fuzzy
 msgid "Extra data found on line %d in file %s"
-msgstr ""
+msgstr "在檔案 %s 的第 %d 行發現額外的資料。"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:415
 msgid "Expecting 0, 1, 2, 3 or 4"
-msgstr ""
+msgstr "期望值為 0、1、2、3 或 4。"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:429
 msgid "Expecting NORMAL or WIDE"
-msgstr ""
+msgstr "應為 NORMAL 或 WIDE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:447
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
-msgstr ""
+msgstr "應為 I、O、B、IN、OUT 或 BIDIR"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:468
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "應為 R0, R90, R18, R270, M0, M90, M180 或 M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:490
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
 "VBOTTOM"
 msgstr ""
+"應為 LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP 或 "
+"VBOTTOM"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:512
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
+"應為 NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT 或 VRIGHT"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:526
 msgid "Expecting CELL or BLOCK"
-msgstr ""
+msgstr "應為 CELL 或 BLOCK"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:545
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s.asy' not found"
-msgstr "沒有找到符號。"
+msgstr "找不到符號 '%s.asy'"
 
 #: eeschema/sch_io/ltspice/sch_io_ltspice.h:49
-#, fuzzy
 msgid "LTspice schematic files"
-msgstr "Altium 原理圖檔案"
+msgstr "LTspice 原理圖檔案"
 
 #: eeschema/sch_io/sch_io_mgr.cpp:43 pcbnew/pcb_io/pcb_io_mgr.cpp:49
 #, c-format
@@ -17090,9 +17082,8 @@ msgid "Hierarchical Label '%s'"
 msgstr "層次標籤 '%s'"
 
 #: eeschema/sch_label.cpp:2151
-#, fuzzy
 msgid "Pin length"
-msgstr "引腳長度："
+msgstr "引腳長度"
 
 #: eeschema/sch_line.cpp:99
 msgid "Graphic Line"
@@ -17299,19 +17290,16 @@ msgid "Hierarchical Sheet %s"
 msgstr "層次分頁 %s"
 
 #: eeschema/sch_sheet.cpp:1507 pcbnew/pcb_textbox.cpp:693
-#, fuzzy
 msgid "Border Width"
-msgstr "邊框寬度："
+msgstr "邊框寬度"
 
 #: eeschema/sch_sheet.cpp:1511
-#, fuzzy
 msgid "Border Color"
-msgstr "邊框顏色："
+msgstr "邊框顏色"
 
 #: eeschema/sch_sheet.cpp:1514
-#, fuzzy
 msgid "Background Color"
-msgstr "背景上部顏色"
+msgstr "背景顏色"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:414
 msgid "(Deleted Item)"
@@ -17331,9 +17319,8 @@ msgid "Excluded from board"
 msgstr "排除在電路板外"
 
 #: eeschema/sch_symbol.cpp:1426
-#, fuzzy
 msgid "Excluded from simulation"
-msgstr "排除於在模擬外"
+msgstr "從電路模擬中排除"
 
 #: eeschema/sch_symbol.cpp:1432 eeschema/sch_symbol.cpp:1864
 #: eeschema/widgets/search_handlers.cpp:139 pcbnew/footprint.cpp:1315
@@ -17351,9 +17338,8 @@ msgstr "零件清單"
 
 #: eeschema/sch_symbol.cpp:1870 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
-#, fuzzy
 msgid "Exclude from"
-msgstr "從 BOM 中排除"
+msgstr "排除自"
 
 #: eeschema/sch_symbol.cpp:1881
 msgid "Power symbol"
@@ -17390,42 +17376,35 @@ msgid "Symbol %s [%s]"
 msgstr "符號 %s [%s]"
 
 #: eeschema/sch_symbol.cpp:2648
-#, fuzzy
 msgid "Mirror X"
-msgstr "Y軸鏡像"
+msgstr "X 軸鏡像"
 
 #: eeschema/sch_symbol.cpp:2650
 msgid "Mirror Y"
 msgstr "Y軸鏡像"
 
 #: eeschema/sch_symbol.cpp:2674 pcbnew/footprint.cpp:3453
-#, fuzzy
 msgid "Library Link"
 msgstr "庫連結"
 
 #: eeschema/sch_symbol.cpp:2677 pcbnew/footprint.cpp:3456
 #: pcbnew/plot_board_layers.cpp:114
-#, fuzzy
 msgid "Library Description"
-msgstr "描述"
+msgstr "庫描述"
 
 #: eeschema/sch_symbol.cpp:2686
-#, fuzzy
 msgid "Exclude From Board"
 msgstr "從電路板中排除"
 
 #: eeschema/sch_symbol.cpp:2689
-#, fuzzy
 msgid "Exclude From Simulation"
-msgstr "排除於在模擬外"
+msgstr "排除於在電路模擬外"
 
 #: eeschema/sch_symbol.cpp:2692 pcbnew/footprint.cpp:3470
-#, fuzzy
 msgid "Exclude From Bill of Materials"
 msgstr "從物料清單中排除"
 
 #: eeschema/sch_symbol.cpp:2695 pcbnew/footprint.cpp:3473
-#, fuzzy
 msgid "Do not Populate"
 msgstr "不裝配"
 
@@ -17932,7 +17911,6 @@ msgid "Checking component "
 msgstr "檢查元件 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
-#, fuzzy
 msgid "Component: name cannot be empty."
 msgstr "元件名稱不能為空。"
 
@@ -17941,9 +17919,8 @@ msgid "Component: manufacturer cannot be empty."
 msgstr "元件：製造商不能為空。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:272
-#, fuzzy
 msgid "Component: invalid package."
-msgstr "元件：無效的包。"
+msgstr "元件：無效的封裝。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:281
 msgid "Component: no pin"
@@ -17954,9 +17931,8 @@ msgid "Cannot interpolate the current based on this IV table."
 msgstr "無法根據此 IV 表對電流進行插值。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:396
-#, fuzzy
 msgid "There is an invalid voltage in an IV table"
-msgstr "IV 表中有一個 Nan 電壓"
+msgstr "IV表中存在無效的電壓"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:403
 msgid "There is an invalid current in an IV table"
@@ -17967,12 +17943,10 @@ msgid "Invalid R_load."
 msgstr "R_load 無效。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:450
-#, fuzzy
 msgid "Invalid falling dV/dt."
-msgstr "無效的下降 dv/dt。"
+msgstr "無效的下降dV/dt。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:455
-#, fuzzy
 msgid "Invalid rising dV/dt."
 msgstr "無效的上升 dv/dt。"
 
@@ -17985,9 +17959,8 @@ msgid "Checking model "
 msgstr "檢查型號 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
-#, fuzzy
 msgid "Undefined model type."
-msgstr "未定義的模型型別"
+msgstr "未定義的模型類型。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:491
 msgid "Invalid Vinh value."
@@ -18006,7 +17979,6 @@ msgid "Invalid C_ref value."
 msgstr "C_ref 值無效。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:523
-#, fuzzy
 msgid "Invalid V_ref value."
 msgstr "無效的 V_ref 值。"
 
@@ -18087,44 +18059,36 @@ msgid "Negative number of pins."
 msgstr "負數的引腳。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:723
-#, fuzzy
 msgid "Empty pin number."
-msgstr "空引腳號"
+msgstr "空的引腳號"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:734
-#, fuzzy
 msgid "Resistance matrix is incorrect."
 msgstr "電阻矩陣不正確"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:745
-#, fuzzy
 msgid "Capacitance matrix is undefined."
 msgstr "電容矩陣未定義"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:754
-#, fuzzy
 msgid "Capacitance matrix is incorrect."
 msgstr "電容矩陣不正確"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:763
-#, fuzzy
 msgid "Capacitance matrix is nullptr."
 msgstr "電容矩陣為 nullptr"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:774
-#, fuzzy
 msgid "Inductance matrix is undefined."
-msgstr "電感矩陣未定義"
+msgstr "電感矩陣未定義。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:783
-#, fuzzy
 msgid "Inductance matrix is incorrect."
-msgstr "電感矩陣不正確"
+msgstr "電感矩陣不正確。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:792
-#, fuzzy
 msgid "Inductance matrix is nullptr."
-msgstr "電感矩陣為 nullptr"
+msgstr "電感矩陣為 nullptr。"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
 msgid "Cannot open file "
@@ -18403,65 +18367,54 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "位元率對於上升/下降緣可能過高"
 
 #: eeschema/sim/legacy_workbook.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr ""
-"電路板檔案載入錯誤：\n"
-"%s"
+msgstr "載入工作簿時出錯：第 %d 行：%s。"
 
 #: eeschema/sim/legacy_workbook.cpp:133
-#, fuzzy
 msgid "expecting version"
-msgstr "預期 %s"
+msgstr "期望版本 %s"
 
 #: eeschema/sim/legacy_workbook.cpp:150
-#, fuzzy
 msgid "expecting simulation tab count"
-msgstr "外部模擬器命令："
+msgstr "期望電路模擬選項卡數量"
 
 #: eeschema/sim/legacy_workbook.cpp:164
-#, fuzzy
 msgid "expecting simulation tab type"
-msgstr "開啟模擬工作簿"
+msgstr "期望電路模擬選項類型"
 
 #: eeschema/sim/legacy_workbook.cpp:210
-#, fuzzy
 msgid "expecting trace count"
-msgstr "現存線路"
+msgstr "預期走線數量"
 
 #: eeschema/sim/legacy_workbook.cpp:226
-#, fuzzy
 msgid "expecting trace type"
-msgstr "現存線路"
+msgstr "預期走線類型"
 
 #: eeschema/sim/legacy_workbook.cpp:236
-#, fuzzy
 msgid "expecting trace name"
-msgstr "期望數。"
+msgstr "預期走線名稱"
 
 #: eeschema/sim/legacy_workbook.cpp:246
-#, fuzzy
 msgid "expecting trace color"
-msgstr "選區顏色："
+msgstr "預期走線顏色"
 
 #: eeschema/sim/legacy_workbook.cpp:262
-#, fuzzy
 msgid "expecting measurement count"
-msgstr "刪除線段"
+msgstr "預期測量數量"
 
 #: eeschema/sim/legacy_workbook.cpp:274
-#, fuzzy
 msgid "expecting measurement definition"
-msgstr "無效的引腳名定義"
+msgstr "預期測量定義"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
 msgstr "缺少測量格式的定義"
 
 #: eeschema/sim/sim_lib_mgr.cpp:83
-#, fuzzy, c-format
+#, c-format
 msgid "Simulation model library not found at '%s'"
-msgstr "在 '%s' or '%s' 沒有找到模擬模型庫"
+msgstr "找不到電路模擬模型庫位於 '%s'。"
 
 #: eeschema/sim/sim_lib_mgr.cpp:88
 #, c-format
@@ -18502,14 +18455,13 @@ msgid "Invalid IBIS file '%s'"
 msgstr "無效的 IBIS 檔案 '%s'"
 
 #: eeschema/sim/sim_model.cpp:403
-#, fuzzy, c-format
+#, c-format
 msgid "No simulation model definition found for symbol '%s'."
-msgstr "在 '%s' or '%s' 沒有找到模擬模型庫"
+msgstr "找不到符號 '%s' 的電路模擬模型定義。"
 
 #: eeschema/sim/sim_model.cpp:410
-#, fuzzy
 msgid "No simulation model definition found."
-msgstr "模擬模型編輯器"
+msgstr "找不到電路模擬模型定義。"
 
 #: eeschema/sim/sim_model.cpp:542 eeschema/sim/sim_model.cpp:601
 #, c-format
@@ -18521,9 +18473,9 @@ msgstr ""
 "%s"
 
 #: eeschema/sim/sim_model.cpp:779
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown simulation model pin '%s'"
-msgstr "未知節點 '%s' (在 '%s' 中)"
+msgstr "未知的電路模擬模型引腳 '%s'。"
 
 #: eeschema/sim/sim_model_kibis.cpp:81
 #, c-format
@@ -18600,14 +18552,13 @@ msgid "Number of bits"
 msgstr "位數"
 
 #: eeschema/sim/sim_plot_tab.cpp:324
-#, fuzzy, c-format
+#, c-format
 msgid "%d"
-msgstr "%"
+msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:579
-#, fuzzy
 msgid "Amplitude"
-msgstr "幅度："
+msgstr "幅度"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
@@ -18618,14 +18569,12 @@ msgid "Noise (A/√Hz)"
 msgstr "雜訊 (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
-#, fuzzy
 msgid "Intensity"
-msgstr "當前快捷鍵："
+msgstr "強度"
 
 #: eeschema/sim/sim_plot_tab.cpp:666 eeschema/sim/sim_plot_tab.cpp:786
-#, fuzzy
 msgid "Power"
-msgstr "新增電源埠"
+msgstr "電源"
 
 #: eeschema/sim/sim_plot_tab.cpp:721
 msgid "Voltage (swept)"
@@ -18652,7 +18601,7 @@ msgstr "電壓 (測量)"
 #: eeschema/sim/simulator_frame_ui.cpp:830
 #: eeschema/sim/simulator_frame_ui.cpp:998
 msgid " (gain)"
-msgstr ""
+msgstr " (增益)"
 
 #: eeschema/sim/sim_plot_tab.h:148 eeschema/sim/simulator_frame_ui.cpp:211
 #: eeschema/sim/simulator_frame_ui.cpp:727
@@ -18684,19 +18633,18 @@ msgstr "模擬器需要一張完整批註的原理圖。"
 
 #: eeschema/sim/simulator_frame.cpp:353 eeschema/sim/simulator_frame.cpp:544
 #: eeschema/tools/simulator_control.cpp:75
-#, fuzzy
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
 msgstr ""
-"網表生成期間出錯；模擬中斷。\n"
+"網路表生成期間出錯；電路模擬中斷。\n"
 "\n"
 
 #: eeschema/sim/simulator_frame.cpp:378
 msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
-msgstr ""
+msgstr "您必須先運行一個TRAN模擬，其結果將用於快速傅立葉變換。"
 
 #: eeschema/sim/simulator_frame.cpp:410
 msgid ""
@@ -18713,80 +18661,68 @@ msgid "Save changes to workbook?"
 msgstr "儲存對工作簿的更改？"
 
 #: eeschema/sim/simulator_frame_ui.cpp:145
-#, fuzzy
 msgid "Measure Min"
-msgstr "測量節點"
+msgstr "測量最小"
 
 #: eeschema/sim/simulator_frame_ui.cpp:146
-#, fuzzy
 msgid "Measure Max"
-msgstr "測量 (&M)"
+msgstr "測量最大"
 
 #: eeschema/sim/simulator_frame_ui.cpp:147
-#, fuzzy
 msgid "Measure Average"
-msgstr "測量距離"
+msgstr "測量平均"
 
 #: eeschema/sim/simulator_frame_ui.cpp:148
-#, fuzzy
 msgid "Measure RMS"
-msgstr "測量 (&M)"
+msgstr "測量有效值"
 
 #: eeschema/sim/simulator_frame_ui.cpp:149
-#, fuzzy
 msgid "Measure Peak-to-peak"
-msgstr "測量節點"
+msgstr "測量峰對峰"
 
 #: eeschema/sim/simulator_frame_ui.cpp:153
-#, fuzzy
 msgid "Measure Frequency of Min"
-msgstr "測量工具"
+msgstr "最小測量頻率"
 
 #: eeschema/sim/simulator_frame_ui.cpp:154
-#, fuzzy
 msgid "Measure Frequency of Max"
-msgstr "測量工具"
+msgstr "最大測量頻率"
 
 #: eeschema/sim/simulator_frame_ui.cpp:158
-#, fuzzy
 msgid "Measure Time of Min"
-msgstr "測量工具"
+msgstr "最小測量時間"
 
 #: eeschema/sim/simulator_frame_ui.cpp:159
-#, fuzzy
 msgid "Measure Time of Max"
-msgstr "測量工具"
+msgstr "最大測量時間"
 
 #: eeschema/sim/simulator_frame_ui.cpp:162
-#, fuzzy
 msgid "Measure Integral"
-msgstr "測量距離"
+msgstr "測量積分"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
-msgstr ""
+msgstr "進行傅立葉分析..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:214
 #: eeschema/sim/simulator_frame_ui.cpp:731
 #: eeschema/sim/simulator_frame_ui.cpp:835
 #: eeschema/sim/simulator_frame_ui.cpp:997
-#, fuzzy
 msgid " (amplitude)"
-msgstr " 幅度："
+msgstr " (振幅)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Fourier Analysis of %s"
-msgstr "%s 屬性 (别名 %s)"
+msgstr "對 %s 進行傅立葉分析"
 
 #: eeschema/sim/simulator_frame_ui.cpp:273
 msgid "Fourier Analyses of Multiple Signals"
-msgstr ""
+msgstr "對多個信號的傅立葉分析"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
-#, fuzzy
 msgid "Fundamental frequency:"
-msgstr "訊號頻率："
+msgstr "基準頻率:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:323
 #, fuzzy, c-format
@@ -18794,14 +18730,12 @@ msgid "Format %s..."
 msgstr "格式"
 
 #: eeschema/sim/simulator_frame_ui.cpp:398
-#, fuzzy
 msgid "Format Value..."
-msgstr "編輯值..."
+msgstr "格式值..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:401
-#, fuzzy
 msgid "Delete Measurement"
-msgstr "刪除線段"
+msgstr "刪除測量"
 
 #: eeschema/sim/simulator_frame_ui.cpp:582
 #: eeschema/sim/simulator_frame_ui.cpp:953
@@ -18818,19 +18752,16 @@ msgstr "訊號"
 
 #: eeschema/sim/simulator_frame_ui.cpp:592
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
-#, fuzzy
 msgid "Cursor 1"
-msgstr "游標"
+msgstr "游標 1"
 
 #: eeschema/sim/simulator_frame_ui.cpp:593
 #: eeschema/sim/simulator_frame_ui_base.cpp:115
-#, fuzzy
 msgid "Cursor 2"
-msgstr "游標"
+msgstr "游標 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1148
 #: eeschema/sim/simulator_frame_ui.cpp:2544
-#, fuzzy
 msgid "Diff"
 msgstr "差分對"
 
@@ -18851,9 +18782,8 @@ msgid "Error: no current simulation.\n"
 msgstr "錯誤: 沒有當前的模擬。\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1514
-#, fuzzy
 msgid "Error: simulation type not defined.\n"
-msgstr "錯誤：未定義模擬型別！\n"
+msgstr "錯誤：未定義電路模擬型別！\n"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1520
 #, fuzzy
