@@ -7,13 +7,14 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # 撒景賢 <james.sa.2013@gmail.com>, 2024.
 # Oliver0804 <icetzsr@gmail.com>, 2024.
+# William Lin <unrealin01@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 06:24+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: William Lin <unrealin01@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -77,9 +78,8 @@ msgid "Build Tech layer %d"
 msgstr "構造工藝層 %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1022
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "簡化銅層多邊形"
+msgstr "簡化多邊形銅層"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1027
 msgid "Calculating plated copper"
@@ -144,9 +144,9 @@ msgid "Load OpenGL: layers"
 msgstr "載入 OpenGL：層"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "載入 OpenGL 層 %d"
+msgstr "載入 OpenGL 層 %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -301,7 +301,7 @@ msgstr "外觀"
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
 #, fuzzy
 msgid "Follow PCB Editor"
-msgstr "PCB 編輯器"
+msgstr "跟隨 PCB 編輯器"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
