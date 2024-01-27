@@ -449,11 +449,6 @@ public:
     // Create a new footprint using the Footprint Wizard
     static TOOL_ACTION createFootprint;
 
-    // We don't use ACTION::save here because we need to distinguish between saving to
-    // the library and saving to the board (which have different tooltips and icons).
-    static TOOL_ACTION saveToBoard;
-    static TOOL_ACTION saveToLibrary;
-
     static TOOL_ACTION editFootprint;
     static TOOL_ACTION duplicateFootprint;
     static TOOL_ACTION renameFootprint;
