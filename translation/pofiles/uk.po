@@ -1,5 +1,5 @@
 # Kuzemko Alexsandr <alexandrkuzemko@gmail.com>, 2022.
-# Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023.
+# Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023, 2024.
 # Artem <artem@molotov.work>, 2022.
 # Andrii Shelestov <streamx3@gmail.com>, 2022.
 # Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022.
@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2023-09-27 16:00+0000\n"
+"PO-Revision-Date: 2024-01-27 11:30+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -512,9 +512,8 @@ msgid "Render Solid Colors"
 msgstr "Візуалізувати повні кольори"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Використовувати лише властивість дифузії кольору з файлу 3D-моделі"
+msgstr "Використовувати лише властивість дифузії кольору з файлу 3D моделі"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:291
 msgid "Render CAD Colors"
@@ -778,35 +777,35 @@ msgid "Background gradient end color"
 msgstr "Кінець градієнту кольору фону"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Зберегти і відновити комбінації видимості шарів.\n"
+"Зберегти і відновити колір і комбінації видимості.\n"
 "Використовуйте %s+Tab, щоб активувати селектор.\n"
-"Послідовні вкладки, утримуючи натиснутою %s, переключатимуться між "
-"попередніми налаштуваннями у спливаючому вікні."
+"Послідовну натискання Tab утримуючи натиснутою %s, циклічно "
+"переключатимуться між попередніми налаштуваннями у спливаючому вікні."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Зберегти і відновити розташування перегляду та масштаб.\n"
+"Зберегти і відновити розташування камери та масштаб.\n"
 "Використовуйте %s+Tab, щоб активувати селектор.\n"
-"Послідовні вкладки, утримуючи натиснутою %s, перемикатимуться між вікнами "
-"перегляду у спливаючому вікні."
+"Послідовне натисканная Tab утримуючи %s, циклічно перемикатиме види у "
+"спливаючому вікні."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:438
-#, fuzzy
 msgid "Left double click or middle click to change color"
-msgstr "Натискання двічі на ліву або середню кнопку для зміни кольору"
+msgstr ""
+"Подвійне натискання на ліву або середню кнопку призведе до зміни кольору"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:485
 #: pcbnew/widgets/appearance_controls.cpp:2169
