@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 09:43+0000\n"
+"PO-Revision-Date: 2024-01-27 10:06+0000\n"
 "Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -6341,9 +6341,9 @@ msgid "Error reading '%s': %s"
 msgstr "讀取 '%s' 時發生錯誤：%s。"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "找不到 %s 引腳 '%s'。"
+msgstr "無法解析JSON檔  第 %d 行。錯誤 '%s': %s"
 
 #: common/kiway.cpp:243
 #, c-format
@@ -6522,9 +6522,8 @@ msgid "No-connect symbols"
 msgstr "不連線符號"
 
 #: common/layer_id.cpp:138
-#, fuzzy
 msgid "DNP markers"
-msgstr "標記"
+msgstr "DNP(不安裝)標記"
 
 #: common/layer_id.cpp:139
 msgid "ERC warnings"
@@ -6598,14 +6597,12 @@ msgid "Page limits"
 msgstr "圖框限制"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "操作點"
+msgstr "工作點電壓"
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Operating point currents"
-msgstr "操作點"
+msgstr "工作點電流"
 
 #: common/layer_id.cpp:159
 msgid "Footprints front"
@@ -6724,14 +6721,12 @@ msgid "Illegal character found in logical library name"
 msgstr "邏輯庫名稱中包含非法字元"
 
 #: common/lib_table_grid_tricks.cpp:32
-#, fuzzy
 msgid "Edit options..."
-msgstr "編輯選項"
+msgstr "編輯選項..."
 
 #: common/lib_table_grid_tricks.cpp:33
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "庫 \"%s\" 的選項"
+msgstr "編輯這個庫條目的設定"
 
 #: common/lib_table_grid_tricks.cpp:63
 msgid "Activate selected"
@@ -6742,19 +6737,17 @@ msgid "Deactivate selected"
 msgstr "停用所選"
 
 #: common/lib_table_grid_tricks.cpp:69
-#, fuzzy
 msgid "Set visible flag"
-msgstr "可見層"
+msgstr "設定可見標誌"
 
 #: common/lib_table_grid_tricks.cpp:72
-#, fuzzy
 msgid "Unset visible flag"
-msgstr "可見層"
+msgstr "取消可見標誌"
 
 #: common/lib_table_grid_tricks.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "編輯新焊盤設定"
+msgstr "%s 的庫設置..."
 
 #: common/lib_tree_model.cpp:149
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -6824,18 +6817,16 @@ msgstr "%lf 和 '%s'的型別不匹配"
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:63
-#, fuzzy
 msgid "View Details"
-msgstr "詳情"
+msgstr "查看詳情"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
 msgstr "駁回"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "齊行"
+msgstr "提醒"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
@@ -7004,9 +6995,8 @@ msgid "Line length exceeded"
 msgstr "超出了最大行長度"
 
 #: common/settings/bom_settings.cpp:119
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "按名稱分組"
+msgstr "基於值分組"
 
 #: common/settings/bom_settings.cpp:119 common/settings/bom_settings.cpp:137
 #: common/settings/bom_settings.cpp:156
@@ -7019,9 +7009,8 @@ msgid "Reference"
 msgstr "位號"
 
 #: common/settings/bom_settings.cpp:137
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "獲取和移動封裝"
+msgstr "基於值和封裝分組"
 
 #: common/settings/bom_settings.cpp:156
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
@@ -7042,12 +7031,11 @@ msgstr "CSV"
 #: common/settings/bom_settings.cpp:233
 #, fuzzy
 msgid "TSV"
-msgstr "V"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:239
-#, fuzzy
 msgid "Semicolons"
-msgstr "單色"
+msgstr "分號"
 
 #: common/settings/color_settings.cpp:341
 msgid "(Footprints)"
@@ -7173,14 +7161,12 @@ msgid "Cancel current tool"
 msgstr "取消當前工具"
 
 #: common/tool/actions.cpp:154
-#, fuzzy
 msgid "Finish"
-msgstr "芬蘭語"
+msgstr "完成"
 
 #: common/tool/actions.cpp:155
-#, fuzzy
 msgid "Finish current tool"
-msgstr "取消當前工具"
+msgstr "完成當前工具"
 
 #: common/tool/actions.cpp:162
 msgid "Show Context Menu"
