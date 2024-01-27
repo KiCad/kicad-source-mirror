@@ -257,7 +257,7 @@ void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
 
 void HIERARCHY_PANE::onRightClick( wxTreeEvent& aEvent )
 {
-    wxTreeItemId  itemSel = m_tree->GetFocusedItem();
+    wxTreeItemId  itemSel = aEvent.GetItem();
 
     if( !itemSel.IsOk() )
         return;
