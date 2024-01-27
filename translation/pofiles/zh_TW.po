@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 09:43+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -3342,85 +3342,73 @@ msgid "Test connection"
 msgstr "測試連線"
 
 #: common/dialogs/git/dialog_git_repository.cpp:329
-#, fuzzy
 msgid "Connection successful"
-msgstr "檔案已經成功建立。"
+msgstr "連線成功"
 
 #: common/dialogs/git/dialog_git_repository.cpp:333
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "無法開啟歸檔檔案。"
+msgstr "無法連接到 '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "無法開啟歸檔檔案。"
+msgstr "無法開啟私鑰 '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "無效的Z比例"
+msgstr "無效的SSH金鑰"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "所選檔案無效或可能已損壞！"
+msgstr "所選的文件不是有效的SSH私鑰"
 
 #: common/dialogs/git/dialog_git_repository.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "找不到庫檔案 '%s'"
+msgstr "無法開啟公鑰 '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:407
 #: common/dialogs/git/dialog_git_repository.cpp:413
-#, fuzzy
 msgid "Missing information"
-msgstr "錯誤的封裝"
+msgstr "缺少信息"
 
 #: common/dialogs/git/dialog_git_repository.cpp:407
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "請輸入合規的倉庫 URL"
+msgstr "請為該儲存庫輸入一個名稱"
 
 #: common/dialogs/git/dialog_git_repository.cpp:413
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "請輸入合規的倉庫 URL"
+msgstr "請輸入儲存庫的網址"
 
 #: common/dialogs/git/dialog_git_repository.cpp:434
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
-#, fuzzy
 msgid "SSH Key Password"
-msgstr "關鍵字"
+msgstr "SSH金鑰密碼"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "旋轉"
+msgstr "位置"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "連線名稱"
+msgstr "連接類型"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
 msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
-#, fuzzy
 msgid "Local"
-msgstr "本地檔案"
+msgstr "本地的"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "私密"
+msgstr "SSH私鑰"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "選擇檔案"
+msgstr "選擇SSH私鑰文件"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
@@ -3431,9 +3419,8 @@ msgid "Username"
 msgstr "用戶名稱"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "倉庫"
+msgstr "Git 儲存庫"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
@@ -3452,9 +3439,8 @@ msgid "Last Commit"
 msgstr "最後一次提交"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "已更新"
+msgstr "最後更新"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
@@ -3472,14 +3458,12 @@ msgid "Git Commit Data"
 msgstr "Git提交資料"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "使用預設網路名"
+msgstr "使用預設值"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "敷銅名稱："
+msgstr "作者:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
 msgid "Author e-mail:"
@@ -3499,19 +3483,16 @@ msgid "Active"
 msgstr "活動的"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "新增倉庫"
+msgstr "新增新的儲存庫"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "編輯封裝屬性"
+msgstr "編輯儲存庫屬性"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "倉庫"
+msgstr "移除 Git 儲存庫"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
@@ -3944,7 +3925,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -3960,15 +3940,15 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"KiCad 可以匿名地向開發人員報告崩潰和特殊事件資料，以幫助更有效地識別整個使用"
-"者群中的關鍵 bug，並幫助繪製功能畫像來指導改進。\n"
+"KiCad可以匿名地向開發人員報告崩潰和特殊事件數據，以更有效地幫助識別用戶群中的"
+"關鍵錯誤並幫助優化功能性能。\n"
 "\n"
-"要連結來自相同 KiCad 安裝的自動報告，將生成一個完全隨機的唯一識別符號，它僅用"
-"於崩潰報告的目的。沒有個人身份資訊(PII)，包括IP地址被儲存或連線到該識別符號。"
-"您可以在任何時候透過提供的按鈕重置此 id。\n"
+"為了連接來自相同KiCad安裝的自動報告，會生成一個完全隨機的唯一標識符，僅用於崩"
+"潰報告的目的。不會存儲任何個人身份信息（PII），包括IP地址，與此標識符無關聯。"
+"您可以隨時使用提供的按鈕重置此ID。\n"
 "\n"
-"如果您選擇自願參與，那麼發生崩潰或事件時，KiCad 將自動處理傳送上述報告。您的"
-"設計檔案，如原理圖或 PCB 在此過程中不會被共享。"
+"如果您選擇自願參加，當發生崩潰或事件時，KiCad將自動處理發送這些報告。在此過程"
+"中，您的設計文件，如原理圖或PCB，絕不會被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -3979,28 +3959,26 @@ msgid "Reset Unique Id"
 msgstr "重置唯一性ID"
 
 #: common/dialogs/panel_grid_settings.cpp:125 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "頁 %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "'%s' 已經存在。"
+msgstr "網格尺寸 '%s' 已經存在。"
 
 #: common/dialogs/panel_grid_settings.cpp:263
-#, fuzzy
 msgid "At least one grid size is required."
-msgstr "預設的網路類是必需的。"
+msgstr "至少需要一個網格尺寸。"
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
 msgid "Grids:"
 msgstr "網格:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "快速切換"
+msgstr "快速切換網格"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -4016,9 +3994,8 @@ msgid "Grid 2:"
 msgstr "網格 2："
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:705
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "覆蓋"
+msgstr "網格覆蓋"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
 msgid "Connected items:"
@@ -4105,9 +4082,8 @@ msgid "PPI:"
 msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "轉換為圓弧"
+msgstr "轉換為灰階"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -4282,7 +4258,7 @@ msgstr "觸控板向左/向右："
 #: common/dialogs/panel_mouse_settings_base.cpp:284
 #, fuzzy
 msgid "Reverse"
-msgstr "恢復"
+msgstr "反轉"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid "Pan left/right with horizontal movement"
@@ -4317,9 +4293,8 @@ msgid "General"
 msgstr "通用"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "啟動時檢查包更新"
+msgstr "在啟動時檢查 KiCad 更新"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -4337,9 +4312,8 @@ msgid "Library package handling"
 msgstr "庫包處理"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
-msgstr "自動將已安裝的庫新增到全域性庫表"
+msgstr "自動將已安裝的庫添加到全局庫表中"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:80
 msgid "Automatically remove uninstalled libraries"
@@ -4607,9 +4581,8 @@ msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "無法使用 OpenGL，回退到軟體渲染"
 
 #: common/draw_panel_gal.cpp:324
-#, fuzzy
 msgid "Graphics error"
-msgstr "繪圖層"
+msgstr "圖形錯誤"
 
 #: common/draw_panel_gal.cpp:504
 msgid "Could not use OpenGL"
@@ -4618,9 +4591,8 @@ msgstr "無法使用 OpenGL"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3213
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3095
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "單詞讀取失敗。"
+msgstr "無法讀取圖像數據。"
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:979
 #, c-format
@@ -4860,9 +4832,8 @@ msgid "Hotkeys"
 msgstr "快捷鍵"
 
 #: common/eda_base_frame.cpp:1094 kicad/project_tree_pane.cpp:985
-#, fuzzy
 msgid "Version Control"
-msgstr "僅所選部分"
+msgstr "版本控制"
 
 #: common/eda_base_frame.cpp:1102
 msgid "Data Collection"
@@ -4883,7 +4854,6 @@ msgstr "顯示選項"
 #: common/eda_base_frame.cpp:1127 common/eda_base_frame.cpp:1136
 #: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1171
 #: common/eda_base_frame.cpp:1224 common/tool/common_tools.cpp:555
-#, fuzzy
 msgid "Grids"
 msgstr "網格"
 
@@ -4967,9 +4937,8 @@ msgid "Drawing Sheet Editor"
 msgstr "圖紙編輯器"
 
 #: common/eda_base_frame.cpp:1231
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "取消表格更新"
+msgstr "套件和更新"
 
 #: common/eda_base_frame.cpp:1317
 #, c-format
@@ -5037,9 +5006,8 @@ msgid "Constrain to H, V, 45"
 msgstr "約束為水平、垂直或 45 度"
 
 #: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:712
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "編輯使用者網格..."
+msgstr "編輯網格..."
 
 #: common/eda_draw_frame.cpp:562
 msgid "Zoom Auto"
@@ -5117,14 +5085,12 @@ msgstr "圖形"
 
 #: common/eda_item.cpp:347 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "位號"
+msgstr "參考圖片"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:196
-#, fuzzy
 msgid "Generator"
-msgstr "生成"
+msgstr "生成器"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:376 common/eda_item.cpp:397
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_textbox.cpp:445
@@ -5259,9 +5225,8 @@ msgid "Draw Item"
 msgstr "繪製專案"
 
 #: common/eda_shape.cpp:66
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "防散熱導線寬度"
+msgstr "散熱導線"
 
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:743
 msgid "Number Box"
@@ -5297,9 +5262,8 @@ msgid "Pad Number Box"
 msgstr "焊盤編號框"
 
 #: common/eda_shape.cpp:706 pcbnew/pcb_shape.cpp:750
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "防散熱導線寬度"
+msgstr "散熱導線模板"
 
 #: common/eda_shape.cpp:707 common/eda_shape.cpp:720
 msgid "Unrecognized"
@@ -5627,14 +5591,12 @@ msgid "Hyperlink"
 msgstr "超連結"
 
 #: common/eda_units.cpp:476 pcbnew/generators/pcb_tuning_pattern.cpp:205
-#, fuzzy
 msgid "min"
-msgstr "在"
+msgstr "最小"
 
 #: common/eda_units.cpp:484
-#, fuzzy
 msgid "opt"
-msgstr "上對齊"
+msgstr "最佳"
 
 #: common/eda_units.cpp:492 pcbnew/generators/pcb_tuning_pattern.cpp:208
 msgid "max"
@@ -5735,7 +5697,7 @@ msgstr ""
 "請將 KiCad 升級到 %s 或更高的版本以開啟改檔案。"
 
 #: common/exceptions.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -5743,9 +5705,9 @@ msgid ""
 "To open it you will need to upgrade KiCad to version %s or later (file "
 "format dated %s or later)."
 msgstr ""
-"KiCad 無法開啟此檔案，該檔案由高於當前執行版本的軟體所建立。\n"
+"KiCad無法打開此文件，因為它是使用比您目前運行的版本更新的版本創建的。\n"
 "\n"
-"請將 KiCad 升級到 %s 或更高的版本以開啟改檔案。"
+"要打開它，您需要升級KiCad到版本%s或更高版本（文件格式日期為%s或更高版本）。"
 
 #: common/exceptions.cpp:149
 msgid "Full error text:"
@@ -5857,59 +5819,56 @@ msgid "Invalid directory name, cannot remove root"
 msgstr "無效的目錄名稱，無法移除根目錄"
 
 #: common/gestfich.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "單元 \"%s\" 未以 'mil' 結尾。"
+msgstr "目錄 '%s' 不存在"
 
 #: common/gestfich.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "“%s”未正確解析。"
+msgstr "'%s' 不是一個目錄"
 
 #: common/gestfich.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "正在刪除目錄 %s"
+msgstr "刪除目錄時發生錯誤'%s'：%s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "無法建立輸出目錄 \"%s\"。"
+msgstr "無法建立目錄'%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "無法從 \"%s\" 載入圖片。"
+msgstr "無法克隆儲存庫'%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "無法從 \"%s\" 載入圖片。"
+msgstr "無法找到遠程儲存庫'%s'"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "找不到 IBIS 模型 '%s'"
+msgstr "無法連接到遠程'%s'"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "找不到 IBIS 模型 '%s'"
+msgstr "無法從遠程'%s'獲取數據"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "無法讀取檔案 "
+msgstr "無法讀取 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "不能開啟 CvPcb"
+msgstr "無法尋找此次提交"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "無法讀取檔案 "
+msgstr "無法進行合併分析"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
@@ -5920,57 +5879,49 @@ msgid "Could not get repository head"
 msgstr "無法取得儲存庫頭"
 
 #: common/git/git_pull_handler.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr "找不到自定義焊盤 '%s'。"
+msgstr "無法獲得參考'%s'的OID。"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:54
 msgid "Failed to perform checkout operation."
 msgstr "執行checkout作業失敗。"
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "無法從 \"%s\" 載入圖片。"
+msgstr "無法查詢提交 '{}'。"
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "無法讀取檔案 "
+msgstr "無法進行提交合併"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "無法開啟庫檔案。"
+msgstr "無法獲取儲存庫的索引。"
 
 #: common/git/git_pull_handler.cpp:265
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "無法開啟配置檔案"
+msgstr "無法取得衝突迭代器"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
-msgstr "修改"
+msgstr "已變更"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
 msgstr "已添加"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "無法開啟歸檔檔案。"
+msgstr "無法查詢遠程。"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "無法開啟歸檔檔案。"
+msgstr "無法連線至遠端"
 
 #: common/git/git_push_handler.cpp:68
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "無法使用 OpenGL"
+msgstr "無法將變更推送至遠端"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
@@ -5978,14 +5929,14 @@ msgid "Received %u of %u objects"
 msgstr "收到%u個物件(共 %u個)"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "已將 %s 從 %s 更新至 %s。"
+msgstr "* [已更新] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "%s 上的敷銅%s"
+msgstr "* [新增] %s %s"
 
 #: common/git/kicad_git_common.cpp:470
 #, c-format
@@ -5993,9 +5944,9 @@ msgid "Writing objects: %d%% (%d/%d), %d bytes"
 msgstr "寫入物件共: %d%% (%d/%d), %d 位元組"
 
 #: common/git/kicad_git_common.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "網格：%s (%s)"
+msgstr "* [被拒絕] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:490
 #, fuzzy, c-format
@@ -6007,43 +5958,36 @@ msgid "Invalid repository."
 msgstr "無效的格式。"
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "提交變更失敗"
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "無法儲存恢復庫 %s。"
+msgstr "合併分支失敗。"
 
 #: common/git/kicad_git_errors.cpp:44
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "無法載入倉庫 URL"
+msgstr "複製儲存庫失敗"
 
 #: common/git/kicad_git_errors.cpp:45
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "倉庫"
+msgstr "未找到遠程儲存庫"
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
 msgstr "遠端儲存庫身分驗證失敗。"
 
 #: common/git/kicad_git_errors.cpp:49
-#, fuzzy
 msgid "Branch not found."
-msgstr "未找到 %s"
+msgstr "找不到該分支"
 
 #: common/git/kicad_git_errors.cpp:50
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "創建分支失敗"
 
 #: common/git/kicad_git_errors.cpp:51
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "無法刪除 '%s'"
+msgstr "刪除分支失敗"
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
@@ -6058,53 +6002,44 @@ msgid "Rebase conflict encountered."
 msgstr "遇到rebase衝突。"
 
 #: common/git/kicad_git_errors.cpp:62
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "無法解析本地儲存的倉庫.json."
+msgstr "未能成功從遠程儲存庫拉取更改"
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "無法解析本地儲存的倉庫.json."
+msgstr "未能成功從遠程儲存庫拉取更改"
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
 msgstr "未配置上游分支。"
 
 #: common/git/kicad_git_errors.cpp:65
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "無法解析本地儲存的倉庫.json."
+msgstr "未能與遠程儲存庫建立連接"
 
 #: common/git/kicad_git_errors.cpp:68
-#, fuzzy
 msgid "Tag not found."
-msgstr "未找到 %s"
+msgstr "找不到該標籤"
 
 #: common/git/kicad_git_errors.cpp:69
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "未能成功建立標籤"
 
 #: common/git/kicad_git_errors.cpp:70
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "無法刪除 '%s'"
+msgstr "刪除標籤失敗"
 
 #: common/git/kicad_git_errors.cpp:72
-#, fuzzy
 msgid "Unknown error."
-msgstr "未知錯誤"
+msgstr "不明錯誤"
 
 #: common/git/kicad_git_errors.cpp:73
-#, fuzzy
 msgid "No error."
 msgstr "未發現錯誤。"
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr "錯誤"
+msgstr "沒有錯誤"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:202
 #: eeschema/tools/ee_actions.cpp:217 pcbnew/dialogs/panel_setup_rules.cpp:128
@@ -6145,9 +6080,8 @@ msgid "Delete"
 msgstr "刪除"
 
 #: common/grid_tricks.cpp:361
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "刪除所選單元格"
+msgstr "清空已選儲存格的內容"
 
 #: common/grid_tricks.cpp:362 common/tool/actions.cpp:234
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
@@ -6220,9 +6154,9 @@ msgstr "KiCad收到空回應！"
 #: common/http_lib/http_lib_connection.cpp:157
 #: common/http_lib/http_lib_connection.cpp:287
 #: common/http_lib/http_lib_connection.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "錯誤： "
+msgstr "錯誤: %s"
 
 #: common/http_lib/http_lib_connection.cpp:92
 #: common/http_lib/http_lib_connection.cpp:157
@@ -6247,20 +6181,18 @@ msgid "Invalid spline definition encountered"
 msgstr "遇到了無效的花鍵定義"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "(不支援多電路板輪廓)"
+msgstr "不支援%s"
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
-#, fuzzy
 msgid "DXF construction lines not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支援DXF的構建線"
 
 #: common/import_gfx/dxf_import_plugin.h:467
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支援DXF弧線對齊文本。"
 
 #: common/import_gfx/dxf_import_plugin.h:472
 #: common/import_gfx/dxf_import_plugin.h:476
@@ -6270,34 +6202,28 @@ msgstr "尚不支援在原理圖上編譯阻劑。"
 #: common/import_gfx/dxf_import_plugin.h:492
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支援DXF的尺寸。"
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "DXF陰影填充目前不被支援。"
 
 #: common/import_gfx/dxf_import_plugin.h:513
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支援DXF中的曲線。"
 
 #: common/import_gfx/dxf_import_plugin.h:518
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支援DXF中的3D面。"
 
 #: common/import_gfx/dxf_import_plugin.h:523
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支援DXF中的實體。"
 
 #: common/import_gfx/dxf_import_plugin.h:528
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "尚不支援在原理圖上編譯阻劑。"
+msgstr "目前不支援DXF中的圖像。"
 
 #: common/io/altium/altium_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -6387,33 +6313,32 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "半徑為 %f 且角度為 %f 的無效圓弧"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "'%s' 需要一個數字"
+msgstr "無法解析 '%s' 中的數字"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
-msgstr ""
-"檔案 '%s'\n"
-"似乎不是有效的 KiCad 工程檔案。"
+msgstr "'%s' 似乎不是有效的 EasyEDA（JLCEDA）Pro 專案或庫文件。無法找到 project.json "
+"或 device.json。"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "無法開啟檔案 ‘%s’"
+msgstr "無法讀取 ZIP 檔案 '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "讀取圖片“%s”時出錯。"
+msgstr "讀取 '%s' 的 JSON 時出現錯誤：%s。"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "讀取圖片“%s”時出錯。"
+msgstr "讀取 '%s' 時發生錯誤：%s。"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:224
 #, fuzzy, c-format
