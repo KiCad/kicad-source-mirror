@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 16:27+0000\n"
+"PO-Revision-Date: 2024-01-28 13:18+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -2012,7 +2012,7 @@ msgstr "图标设计"
 
 #: common/dialog_about/AboutDialog_main.cpp:1255
 msgid "Package Developers"
-msgstr "开发人员"
+msgstr "软件包开发人员"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2032,7 +2032,7 @@ msgstr "版本"
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Developers"
-msgstr "开发人员"
+msgstr "开发者"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Doc Writers"
@@ -2052,7 +2052,7 @@ msgstr "翻译人员"
 
 #: common/dialog_about/dialog_about.cpp:147
 msgid "Packagers"
-msgstr "开发人员"
+msgstr "打包人员"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "License"
@@ -23802,7 +23802,7 @@ msgstr "元数据"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:230
 msgid "Package identifier: "
-msgstr "扩展内容包标识符: %s "
+msgstr "扩展内容包标识符: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
 msgid "License: "
