@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 11:36+0000\n"
-"Last-Translator: CloverGit <CloverGit@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-01-27 13:47+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2012,7 +2012,7 @@ msgstr "图标设计"
 
 #: common/dialog_about/AboutDialog_main.cpp:1255
 msgid "Package Developers"
-msgstr "软件包开发者"
+msgstr "开发人员"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2052,7 +2052,7 @@ msgstr "翻译人员"
 
 #: common/dialog_about/dialog_about.cpp:147
 msgid "Packagers"
-msgstr "打包人员"
+msgstr "开发人员"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "License"
@@ -4944,7 +4944,7 @@ msgstr "图纸编辑器"
 
 #: common/eda_base_frame.cpp:1231
 msgid "Packages and Updates"
-msgstr "扩展内容包和更新"
+msgstr "扩展和更新"
 
 #: common/eda_base_frame.cpp:1317
 #, c-format
