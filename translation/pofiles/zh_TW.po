@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 11:30+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -6002,11 +6002,11 @@ msgstr "遇到rebase衝突。"
 
 #: common/git/kicad_git_errors.cpp:62
 msgid "Failed to pull changes from remote repository."
-msgstr "未能成功從遠程儲存庫拉取更改"
+msgstr "未能成功從遠程儲存庫拉取更改。"
 
 #: common/git/kicad_git_errors.cpp:63
 msgid "Failed to push changes to remote repository."
-msgstr "未能成功從遠程儲存庫拉取更改"
+msgstr "未能成功從遠程儲存庫推送更改。"
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
@@ -6014,23 +6014,23 @@ msgstr "未配置上游分支。"
 
 #: common/git/kicad_git_errors.cpp:65
 msgid "Failed to establish connection with remote repository."
-msgstr "未能與遠程儲存庫建立連接"
+msgstr "未能與遠程儲存庫建立連接。"
 
 #: common/git/kicad_git_errors.cpp:68
 msgid "Tag not found."
-msgstr "找不到該標籤"
+msgstr "找不到該標籤。"
 
 #: common/git/kicad_git_errors.cpp:69
 msgid "Failed to create tag."
-msgstr "未能成功建立標籤"
+msgstr "未能成功建立標籤。"
 
 #: common/git/kicad_git_errors.cpp:70
 msgid "Failed to delete tag."
-msgstr "刪除標籤失敗"
+msgstr "刪除標籤失敗。"
 
 #: common/git/kicad_git_errors.cpp:72
 msgid "Unknown error."
-msgstr "不明錯誤"
+msgstr "不明錯誤。"
 
 #: common/git/kicad_git_errors.cpp:73
 msgid "No error."
@@ -6182,12 +6182,12 @@ msgstr "遇到了無效的花鍵定義"
 #: common/import_gfx/dxf_import_plugin.h:210
 #, c-format
 msgid "%s is not supported."
-msgstr "不支援%s"
+msgstr "不支援%s。"
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
 msgid "DXF construction lines not currently supported."
-msgstr "目前不支援DXF的構建線"
+msgstr "目前不支援DXF的構建線。"
 
 #: common/import_gfx/dxf_import_plugin.h:467
 msgid "DXF arc-aligned text not currently supported."
@@ -6332,17 +6332,17 @@ msgstr "無法讀取 ZIP 檔案 '%s'"
 #: common/io/easyedapro/easyedapro_import_utils.cpp:197
 #, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "讀取 '%s' 的 JSON 時出現錯誤：%s。"
+msgstr "讀取 '%s' 的 JSON 時出現錯誤：%s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:201
 #, c-format
 msgid "Error reading '%s': %s"
-msgstr "讀取 '%s' 時發生錯誤：%s。"
+msgstr "讀取 '%s' 時發生錯誤：%s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:224
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "無法解析JSON檔  第 %d 行。錯誤 '%s': %s"
+msgstr "無法解析JSON檔第 %d 行。錯誤 '%s': %s"
 
 #: common/kiway.cpp:243
 #, c-format
@@ -7526,9 +7526,8 @@ msgid "Edit grid definitions"
 msgstr "設定網格尺寸"
 
 #: common/tool/actions.cpp:719
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "網格原點"
+msgstr "網格原點..."
 
 #: common/tool/actions.cpp:720
 msgid "Set the grid origin point"
@@ -7569,9 +7568,8 @@ msgid "Use millimeters"
 msgstr "使用 mm 作為單位"
 
 #: common/tool/actions.cpp:760
-#, fuzzy
 msgid "Select Columns..."
-msgstr "選擇列"
+msgstr "選擇列..."
 
 #: common/tool/actions.cpp:767
 msgid "Switch units"
@@ -8661,9 +8659,9 @@ msgid "Filtered by %s"
 msgstr "篩選 %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "錯誤的封裝"
+msgstr ": %i 符合封裝"
 
 #: cvpcb/cvpcb_mainframe.cpp:844
 #, c-format
@@ -8871,9 +8869,8 @@ msgid "View the selected footprint in the footprint viewer"
 msgstr "在封裝檢視器中檢視所選的封裝"
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "管理封裝關聯檔案"
+msgstr "管理封裝關聯檔案..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
 #, fuzzy
@@ -9487,9 +9484,8 @@ msgid "Update"
 msgstr "更新"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:426
-#, fuzzy
 msgid "Update Symbols"
-msgstr "更新符號..."
+msgstr "更新符號"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
 #, fuzzy
@@ -9611,18 +9607,18 @@ msgid "Connected to database successfully"
 msgstr "成功連接到資料庫"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "%s 區域連線：%s。"
+msgstr "資料庫連接失敗: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
 msgid "No connection to database"
 msgstr "沒有連接到資料庫"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "儲存符號庫"
+msgstr "載入%zu 庫"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
@@ -9659,9 +9655,8 @@ msgid "Reload the database library configuration file"
 msgstr "重新載入資料庫設定檔"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "搜尋中..."
+msgstr "搜尋中"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
 #, fuzzy
@@ -10600,9 +10595,8 @@ msgid "untitled"
 msgstr "無標題"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:584
-#, fuzzy
 msgid "Edit Label"
-msgstr "編輯標籤..."
+msgstr "編輯標籤"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:667
 msgid "The first field is mandatory."
@@ -12068,9 +12062,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "編輯 (&E)"
+msgstr "編輯%s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:232
@@ -12241,9 +12235,8 @@ msgid "A DC source must be specified."
 msgstr "圖框必須具有指定的檔案。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:361
-#, fuzzy
 msgid "Source 1 and Source 2 must be different."
-msgstr "源 1 和源 2 必須不同"
+msgstr "來源 1 和來源 2 必須不同。"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:417
 msgid "A frequency range must be specified."
@@ -12745,9 +12738,9 @@ msgid "P"
 msgstr "Pi"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "格式"
+msgstr "格式%s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:222
 msgid "<unknown>"
@@ -12987,9 +12980,9 @@ msgid "Rename Field"
 msgstr "重新命名檔案"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:751
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "檔案 \"%s\" 已經存在，你想覆蓋它嗎？"
+msgstr "欄位名稱 \"%s\" 已經存在。無法為已存在的欄位重新命名。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
 #, fuzzy
@@ -13048,9 +13041,9 @@ msgid "Could not write BOM output '%s'."
 msgstr "無法將繪製檔案寫入資料夾 \"%s\"。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1288
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "無法建立輸出目錄 \"%s\"。"
+msgstr "將BOM輸出到 '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1587
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1988
@@ -14637,9 +14630,9 @@ msgid "Running ERC...\n"
 msgstr "執行 DRC...\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:989 pcbnew/pcbnew_jobs_handler.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "允許違反 DRC 規則\n"
+msgstr "找到%d 項違反規則\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1004
 #, c-format
@@ -14744,9 +14737,9 @@ msgid "Symbol %s has bidirectional pins in units %s that are not placed."
 msgstr "符號 %s 在未放置的單元 %s 中有雙向引腳。"
 
 #: eeschema/erc.cpp:570
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "沒有定義工具 %d"
+msgstr "網絡類別%s 未定義"
 
 #: eeschema/erc.cpp:662
 msgid "Pin with 'no connection' type is connected"
@@ -15029,9 +15022,9 @@ msgid "Allow Autoplacement"
 msgstr "允許自動放置"
 
 #: eeschema/files-io.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "原理圖 '%s' 已經開啟。"
+msgstr "電路圖 '%s' 已經被 '%s' 開啟(在 '%s')。"
 
 #: eeschema/files-io.cpp:133
 #, c-format
@@ -15051,9 +15044,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "原理圖檔案變更未儲存"
 
 #: eeschema/files-io.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "Altium 原理圖檔案"
+msgstr "未支援的電路圖檔案 '%s'。"
 
 #: eeschema/files-io.cpp:267
 msgid "Root"
@@ -15650,9 +15643,9 @@ msgid "Pin %s not found."
 msgstr "未找到引腳 %s。"
 
 #: eeschema/lib_symbol.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs."
-msgstr "焊盤數量"
+msgstr "接腳%s不同。"
 
 #: eeschema/lib_symbol.cpp:402
 #, c-format
@@ -15831,14 +15824,14 @@ msgid "P&references"
 msgstr "偏好設定 (&R)"
 
 #: eeschema/net_navigator.cpp:56
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "%s 連線從 (%s,%s) 到 (%s,%s)"
+msgstr "連線從 (%s,%s) 到 (%s,%s)"
 
 #: eeschema/net_navigator.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "%s 排線從 (%s,%s) 到 (%s,%s)"
+msgstr "排線從 (%s,%s) 到 (%s,%s)"
 
 #: eeschema/net_navigator.cpp:72
 #, fuzzy
@@ -15851,9 +15844,9 @@ msgid "Symbol '%s' pin '%s'"
 msgstr "符號 %s [%s]"
 
 #: eeschema/net_navigator.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "圖紙頁碼"
+msgstr "圖紙'%s' 接腳 '%s'"
 
 #: eeschema/net_navigator.cpp:106
 #, fuzzy, c-format
@@ -15861,9 +15854,9 @@ msgid "Label '%s' at %s, %s"
 msgstr "文字 \"%s\" (%s) 於 %s"
 
 #: eeschema/net_navigator.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "全域性標籤 '%s'"
+msgstr "全域性標籤 '%s'(在%s，%s)"
 
 #: eeschema/net_navigator.cpp:126
 #, fuzzy, c-format
@@ -16378,7 +16371,7 @@ msgstr "檔案 '%s' 似乎不是有效的原理圖檔案."
 #, c-format
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
-msgstr ""
+msgstr "無法找到符號%s(參考自零件%s)。該零件未被載入。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:132
 #, c-format
@@ -27194,7 +27187,6 @@ msgstr ""
 "量與導線電阻所耗散的能量進行比較。"
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
-#, fuzzy
 msgid ""
 "This table shows the difference in electrochemical potential between various "
 "metals and alloys. Galvanic corrosion affects different metals in contact "
@@ -27210,12 +27202,14 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"該表顯示了各種金屬和合金之間的電化學電位差異。 正數表示行為陽極，列為陰極。\n"
-" 電偶腐蝕會在特定條件下影響接觸的不同金屬。\n"
-" 電化學對的陽極被氧化並被腐蝕掉，而陰極則被溶解的金屬鍍在上面，但仍受到保"
-"護。\n"
-" EN 50310 暗示電壓差低於 300mV。 已知的做法在主要金屬或合金對之間使用第三接觸"
-"金屬（即化學金表面光潔度）。"
+"這張表格顯示了不同金屬與合金之間的電位差。電化腐蝕會影響接觸並處於特定條件下"
+"的不同金屬。<br>\n"
+"電化對中的陽極會被氧化並腐蝕掉，而陰極則會在其表面鍍上溶解的金屬，但仍保持保"
+"護。<br>\n"
+"正數表示行是陽極 (-)，列是陰極 (+)，冷暖色調也指示行的電位。<br>\n"
+"EN 50310 建議電壓差低於 300mV。已知的做法是在主對 (即 ENIG 表面處理) "
+"之間使用第三種界面金屬。<br>\n"
+"表格重新填充後，以系統預設的顏色選擇顯示選定的單元格。<br>\n"
 
 #: pcb_calculator/iec60664_help.h:2
 msgid ""
@@ -27343,17 +27337,6 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"E 系列是在 IEC (國際電工委員會) 60063 中定義的。\n"
-"\n"
-"可用值在對數刻度上近似等距。\n"
-"\n"
-"\tE24(5%): 1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0  -  1.5  -  2.2  -  3.3  -  4.7  -  6.8  -\n"
-"\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
-"\n"
 "- 這個計算器可以查詢標準 E 系列 (在 10 Ω 和 1 MΩ 之間) "
 "的組合以建立任意的數值。\n"
 "- 您可以輸入0.0025 到 4000 kΩ之間所需的電阻。\n"
