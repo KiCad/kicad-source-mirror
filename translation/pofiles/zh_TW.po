@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-27 11:05+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"PO-Revision-Date: 2024-01-28 12:01+0000\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -7074,7 +7074,7 @@ msgstr "快捷鍵檔案"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "找不到等價檔案 \"%s\"。"
+msgstr "無法找到等效檔案 '%s'。"
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -7459,7 +7459,7 @@ msgstr "儲存到原理圖和檔案"
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "將封裝關聯儲存在原理圖符號封裝欄位和原理圖檔案中"
+msgstr "將封裝關聯保存在原理圖符號的封裝字段和原理圖檔案中"
 
 #: cvpcb/tools/cvpcb_actions.cpp:98
 msgid "Select next unassigned symbol"
@@ -12455,12 +12455,12 @@ msgid "Unknown netlist format.\n"
 msgstr "未知的網表格式。\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "將符號 '%s' 單元 %d 繪製到 '%s'\n"
+msgstr "繪製符號 '%s' 單位 %d 到 '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
 msgstr "將符號 '%s' 繪製到 '%s'\n"
 
@@ -14929,10 +14929,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"選定的原理圖中，有一些庫名稱在當前專案庫表中缺失。這可能導致所載入原理圖的符"
-"號庫引用損壞。\n"
+"在所選原理圖中存在不在當前專案庫表中的庫名。  "
+"這可能導致所載入原理圖的符號庫參考失效。\n"
 "\n"
-"是否要繼續？"
+"您是否希望繼續？"
 
 #: eeschema/sheet.cpp:313
 msgid ""
@@ -14942,10 +14942,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"所選檔案是作為不同工程的一部分建立的。將檔案連結到此專案可能會導致丟失或錯誤"
-"的符號庫引用。\n"
+"所選檔案是作為不同專案的一部分創建的。  "
+"將該檔案連結到這個專案可能導致缺少或不正確的符號程式庫參考。\n"
 "\n"
-"你想繼續嗎？"
+"您是否希望繼續？"
 
 #: eeschema/sheet.cpp:362
 msgid ""
@@ -33625,7 +33625,7 @@ msgstr "匯入向量圖形檔案"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:134
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr "嘗試載入 DXF 時記憶體耗盡，DXF 可能太大。"
+msgstr "嘗試加載DXF時內存已耗盡，可能DXF過於龐大。"
 
 #: pcbnew/import_gfx/dxf_import_plugin.cpp:1465
 msgid "Invalid spline definition encountered"
