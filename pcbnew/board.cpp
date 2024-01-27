@@ -1159,11 +1159,11 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
                 return pad;
         }
 
-        if( footprint->Reference().m_Uuid == aID )
-            return &footprint->Reference();
-
-        if( footprint->Value().m_Uuid == aID )
-            return &footprint->Value();
+        for( PCB_FIELD* field : footprint->Fields() )
+        {
+            if( field->m_Uuid == aID )
+                return field;
+        }
 
         for( BOARD_ITEM* drawing : footprint->GraphicalItems() )
         {

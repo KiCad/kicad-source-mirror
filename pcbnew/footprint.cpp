@@ -1046,7 +1046,11 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
     }
 
     for( PCB_FIELD* field : m_fields )
-        texts.push_back( field );
+    {
+        // Reference and value get their own processing
+        if( !field->IsReference() && !field->IsValue() )
+            texts.push_back( field );
+    }
 
     for( PAD* pad : m_pads )
         bbox.Merge( pad->GetBoundingBox() );

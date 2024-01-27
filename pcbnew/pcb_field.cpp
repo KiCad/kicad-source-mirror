@@ -158,6 +158,14 @@ EDA_ITEM* PCB_FIELD::Clone() const
 }
 
 
+void PCB_FIELD::swapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_FIELD_T );
+
+    std::swap( *((PCB_FIELD*) this), *((PCB_FIELD*) aImage) );
+}
+
+
 bool PCB_FIELD::operator==( const BOARD_ITEM& aOther ) const
 {
     if( aOther.Type() != Type() )

@@ -103,17 +103,14 @@ public:
 
     void SetName( const wxString& aName ) { m_name = aName; }
 
-    /**
-     * Get the initial name of the field set at creation (or set by SetName()).
-     * This is the raw field name with no translation and no change.
-     */
-    const wxString& GetInternalName() { return m_name; }
-
     int GetId() const { return m_id; }
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
     bool operator==( const BOARD_ITEM& aOther ) const override;
+
+protected:
+    void swapData( BOARD_ITEM* aImage ) override;
 
 private:
     int m_id; ///< Field index, @see enum MANDATORY_FIELD_T

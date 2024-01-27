@@ -874,14 +874,14 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             // add shapes inflated by aMinThickness/2 in areas
             footprint->TransformPadsToPolySet( areas, layer, inflate, maxError, ERROR_OUTSIDE );
 
-            if( itemplotter.GetPlotReference() && footprint->Reference().IsOnLayer( layer ) )
-                plotFPTextItem( footprint->Reference() );
-
-            if( itemplotter.GetPlotValue() && footprint->Value().IsOnLayer( layer ) )
-                plotFPTextItem( footprint->Value() );
-
             for( const PCB_FIELD* field : footprint->Fields() )
             {
+                if( field->IsReference() && !itemplotter.GetPlotReference() )
+                    continue;
+
+                if( field->IsValue() && !itemplotter.GetPlotValue() )
+                    continue;
+
                 if( field->IsOnLayer( layer ) )
                     plotFPTextItem( static_cast<const PCB_TEXT&>( *field ) );
             }
