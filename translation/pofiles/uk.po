@@ -2,14 +2,14 @@
 # Ivan Chuba <xtrvweb@gmail.com>, 2022, 2023, 2024.
 # Artem <artem@molotov.work>, 2022.
 # Andrii Shelestov <streamx3@gmail.com>, 2022.
-# Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022.
+# Stanislav Kaliuk <staskalyuk.096@gmail.com>, 2022, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 11:36+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2024-01-28 13:18+0000\n"
+"Last-Translator: Stanislav Kaliuk <staskalyuk.096@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
 "Language: uk\n"
@@ -2487,6 +2487,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Цей проект містить декілька плат + схем.\n"
+"Виберіть які необхідно імпортувати у KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 #, fuzzy
@@ -3206,9 +3208,8 @@ msgid "Y label:"
 msgstr "Мітка:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
-#, fuzzy
 msgid "Title"
-msgstr "Назва:"
+msgstr "Назва"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
 #, fuzzy
@@ -3289,22 +3290,22 @@ msgstr "З'єднання"
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "Базове"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
-msgstr ""
+msgstr "Тест"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
@@ -3320,7 +3321,7 @@ msgstr "Основне імʼя"
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:440
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
 #, fuzzy
@@ -3328,9 +3329,8 @@ msgid "Commit Changes"
 msgstr "Скасувати зміни"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "Назва файлу:"
+msgstr "Назва файлу"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3359,18 +3359,16 @@ msgid "Deleted"
 msgstr "Видалити"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Повідомлення"
+msgstr "Повідомлення:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:115
-#, fuzzy
 msgid "Author:"
-msgstr "Автор"
+msgstr "Автор:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
-msgstr ""
+msgstr "Закомітити"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
 #, fuzzy
@@ -3380,7 +3378,7 @@ msgstr "Компонент: ім'я не може бути пустим."
 #: common/dialogs/git/dialog_git_repository.cpp:146
 #: common/dialogs/git/dialog_git_repository.cpp:373
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Введіть пароль для SSH ключа"
 
 #: common/dialogs/git/dialog_git_repository.cpp:325
 #, fuzzy
@@ -3395,7 +3393,7 @@ msgstr "Файл сформовано."
 #: common/dialogs/git/dialog_git_repository.cpp:333
 #, fuzzy, c-format
 msgid "Could not connect to '%s' "
-msgstr "Не вдалося відкрити файл архіву."
+msgstr "Не вдалося відкрити файл архіву. "
 
 #: common/dialogs/git/dialog_git_repository.cpp:352
 #, fuzzy, c-format
@@ -3408,9 +3406,8 @@ msgid "Invalid SSH Key"
 msgstr "Некоректна назва виводу"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Вибраний файл недійсний або пошкоджений!"
+msgstr "Вибраний приватний SSH ключ є недійсний або пошкоджений"
 
 #: common/dialogs/git/dialog_git_repository.cpp:389
 #, fuzzy, c-format
@@ -3436,7 +3433,7 @@ msgstr "Будь ласка, введіть повністю коректну UR
 #: common/dialogs/git/dialog_git_repository.cpp:434
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
 msgid "SSH Key Password"
-msgstr ""
+msgstr "Пароль до SSH ключа"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
 #, fuzzy
@@ -3450,7 +3447,7 @@ msgstr "Ім'я з'єднання"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #, fuzzy
@@ -3469,12 +3466,11 @@ msgstr "Вибрати файл"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Нове ім'я:"
+msgstr "Ім'я користувача"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 #, fuzzy
@@ -3483,19 +3479,19 @@ msgstr "Репозиторій"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Змітити гілку Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Виберіть або введіть ім'я гілки:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "Гілка"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "Останній коміт"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
 #, fuzzy
@@ -3515,7 +3511,7 @@ msgstr "Додати"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Закомітити дані в Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
 #, fuzzy
@@ -3528,9 +3524,8 @@ msgid "Author name:"
 msgstr "Ім'я області:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "Автор"
+msgstr "E-mail автора:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
 #, fuzzy
@@ -3735,13 +3730,15 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
-msgstr ""
+msgstr "Показувати індикацію при зміні налаштувань гарячими клавішами"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Коли увімкнено, деякі гарячі клавіші, що перемикають налаштування будуть "
+"показувати зміни в налаштуваннях через індикатор."
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -3793,7 +3790,7 @@ msgstr "Маленький"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Використовувати компактні іконки в панелі інструментів"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:805
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1202
@@ -3809,7 +3806,7 @@ msgstr "Нормальний"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "Використовувати стандартні розміри іконок KiCad у панелі інструментів"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3818,7 +3815,7 @@ msgstr "Великий"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Використовувати великі іконки в панелі інструментів"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 msgid "Canvas scale:"
@@ -4071,9 +4068,8 @@ msgid "At least one grid size is required."
 msgstr "Початковий клас зв'язків обов'язково."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "Сітка"
+msgstr "Сітки:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
 #, fuzzy
@@ -4178,9 +4174,8 @@ msgstr ""
 "Продовжити?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Масштаб"
+msgstr "Масштаб:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
@@ -4489,6 +4484,8 @@ msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Зв'язки ліній були змінені поза межами діалогу налаштувань.\n"
+"Бажаєте їх перезавантажити?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:465
 msgid "Netclass must have a name."
@@ -4666,12 +4663,16 @@ msgid ""
 "The violation severities have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Ступені важливості порушень були змінені поза межами діалогу налаштувань.\n"
+"Бажаєте їх перезавантажити?"
 
 #: common/dialogs/panel_text_variables.cpp:103
 msgid ""
 "The text variables have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Текстові змінні було змінено поза межами діалогу налаштувань.\n"
+"Бажаєте їх перезавантажити?"
 
 #: common/dialogs/panel_text_variables.cpp:157
 #: common/dialogs/panel_text_variables.cpp:185
@@ -4944,9 +4945,8 @@ msgid "Hotkeys"
 msgstr "Гарячі клавіші"
 
 #: common/eda_base_frame.cpp:1094 kicad/project_tree_pane.cpp:985
-#, fuzzy
 msgid "Version Control"
-msgstr "Колір виділення:"
+msgstr "Контроль версій"
 
 #: common/eda_base_frame.cpp:1102
 msgid "Data Collection"
@@ -5343,9 +5343,8 @@ msgid "Draw Item"
 msgstr "Графічний елемент"
 
 #: common/eda_shape.cpp:66
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "Ширина термічного мостика:"
+msgstr "Термовідвід"
 
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:743
 msgid "Number Box"
@@ -5493,9 +5492,8 @@ msgid "Line Width"
 msgstr "Ширина лінії"
 
 #: common/eda_shape.cpp:1988 pcbnew/pcb_shape.cpp:684
-#, fuzzy
 msgid "Line Color"
-msgstr "Колір лінії:"
+msgstr "Колір лінії"
 
 #: common/eda_shape.cpp:2025 eeschema/lib_shape.cpp:586
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
@@ -5503,9 +5501,8 @@ msgid "Filled"
 msgstr "Заповнено"
 
 #: common/eda_shape.cpp:2029 pcbnew/pcb_shape.cpp:685
-#, fuzzy
 msgid "Fill Color"
-msgstr "Колір заповнення:"
+msgstr "Колір заповнення"
 
 #: common/eda_text.cpp:806 common/eda_text.cpp:1192
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
@@ -5724,7 +5721,7 @@ msgstr "Верх"
 
 #: common/eda_units.cpp:492 pcbnew/generators/pcb_tuning_pattern.cpp:208
 msgid "max"
-msgstr ""
+msgstr "max"
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -5952,7 +5949,7 @@ msgstr "Не вдалося скопіювати файл '%s'."
 
 #: common/gestfich.cpp:307
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "Неправильне ім'я папки, неможливо видалити корінь папки"
 
 #: common/gestfich.cpp:315
 #, fuzzy, c-format
@@ -5995,9 +5992,8 @@ msgid "Could not fetch data from remote '%s'"
 msgstr "Не знайдено IBIS модель '%s'"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Не вдалося прочитати файл "
+msgstr "Не вдалося прочитати 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
 #, fuzzy
@@ -6005,17 +6001,16 @@ msgid "Could not lookup commit"
 msgstr "Не вдалося відкрити CvPcb"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Не вдалося прочитати файл "
+msgstr "Не вдалося проаналізувати злиття"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "Неправильний HEAD.  Неможливо провести злиття."
 
 #: common/git/git_pull_handler.cpp:177
 msgid "Could not get repository head"
-msgstr ""
+msgstr "Неможливо отримати останній коміт з репозиторію"
 
 #: common/git/git_pull_handler.cpp:187
 #, fuzzy, c-format
@@ -6024,7 +6019,7 @@ msgstr "Не вдалося знайти продукт Spice із посила�
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:54
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "Не вдалося виконати операцію checkout."
 
 #: common/git/git_pull_handler.cpp:212
 #, fuzzy
@@ -6032,9 +6027,8 @@ msgid "Could not lookup commit '{}'"
 msgstr "Не вдалося завантажити зображення з '%s'."
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "Не вдалося прочитати файл "
+msgstr "Не вдалося злити коміти"
 
 #: common/git/git_pull_handler.cpp:257
 #, fuzzy
@@ -6053,7 +6047,7 @@ msgstr "Змінити"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "Додано"
 
 #: common/git/git_push_handler.cpp:44
 #, fuzzy
@@ -6073,7 +6067,7 @@ msgstr "Не вдалося використати OpenGL"
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "Отримано об'єктів: %u з %u"
 
 #: common/git/kicad_git_common.cpp:446
 #, fuzzy, c-format
@@ -6088,7 +6082,7 @@ msgstr "Зона %s %s"
 #: common/git/kicad_git_common.cpp:470
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "Записування об'єктів: %d%% (%d/%d), %d байтів"
 
 #: common/git/kicad_git_common.cpp:485
 #, fuzzy, c-format
@@ -6101,9 +6095,8 @@ msgid "[updated] %s"
 msgstr "Оновлено"
 
 #: common/git/kicad_git_errors.cpp:39
-#, fuzzy
 msgid "Invalid repository."
-msgstr "Некоректний формат\n"
+msgstr "Некоректний репозиторій."
 
 #: common/git/kicad_git_errors.cpp:40
 #, fuzzy
@@ -6127,7 +6120,7 @@ msgstr "Репозиторій"
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Не вдалося авторизуватися при підключенні до віддаленого репозиторію."
 
 #: common/git/kicad_git_errors.cpp:49
 #, fuzzy
@@ -6146,15 +6139,15 @@ msgstr "Не вдалося створити файл '%s'."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "Файл не знайдено під час виконання операції checkout."
 
 #: common/git/kicad_git_errors.cpp:58
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Виявлено конфлікти під час операції merge."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Виявлено конфлікти під час виконання операції rebase."
 
 #: common/git/kicad_git_errors.cpp:62
 #, fuzzy
@@ -6168,7 +6161,7 @@ msgstr "Не вдалося обробити локальне сховище rep
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "Upstream вітка не налаштована."
 
 #: common/git/kicad_git_errors.cpp:65
 #, fuzzy
@@ -6313,15 +6306,15 @@ msgstr "Жести"
 
 #: common/http_lib/http_lib_connection.cpp:76
 msgid "KiCad received an empty response!"
-msgstr ""
+msgstr "KiCad отримав пусту відповідь!"
 
 #: common/http_lib/http_lib_connection.cpp:92
 #: common/http_lib/http_lib_connection.cpp:157
 #: common/http_lib/http_lib_connection.cpp:287
 #: common/http_lib/http_lib_connection.cpp:359
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Помилка: "
+msgstr "Помилка:%s"
 
 #: common/http_lib/http_lib_connection.cpp:92
 #: common/http_lib/http_lib_connection.cpp:157
@@ -6329,12 +6322,12 @@ msgstr "Помилка: "
 #: common/http_lib/http_lib_connection.cpp:359
 #, c-format
 msgid "API Response:  %s"
-msgstr ""
+msgstr "Відповідь API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:377
 #, c-format
 msgid "API responded with error code: %s"
-msgstr ""
+msgstr "API відповіла з кодом помилки: %s"
 
 #: common/import_gfx/dxf_import_plugin.cpp:134
 #: common/import_gfx/dxf_import_plugin.cpp:154
@@ -6495,13 +6488,13 @@ msgid "Failed to parse number from '%s'"
 msgstr "потрібно число для '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"Файл '%s'\n"
-"не є фалом проекту KiCad."
+"Файл '%s' не є EasyEDA (JLCEDA) Pro проектом або файлом бібліотеки. Не можу "
+"знайти project.json або device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
 #, fuzzy, c-format
@@ -7004,7 +6997,7 @@ msgstr "Подробиці"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
-msgstr ""
+msgstr "Сховати"
 
 #: common/notifications_manager.cpp:155
 #, fuzzy
@@ -7013,7 +7006,7 @@ msgstr "Вирівнювання"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Наразі немає жодних повідомлень"
 
 #: common/pgm_base.cpp:207
 msgid "No default editor found, you must choose one."
@@ -7572,6 +7565,8 @@ msgstr "Скасувати останній сегмент"
 #: common/tool/actions.cpp:485 common/widgets/mathplot.cpp:1447
 msgid "Return zoom to level prior to last zoom action"
 msgstr ""
+"Повернутися до масштабу, який був встановлений останньою операцією "
+"масштабування"
 
 #: common/tool/actions.cpp:491 common/widgets/mathplot.cpp:1448
 #, fuzzy
@@ -7580,7 +7575,7 @@ msgstr "Повторити останнє редагування"
 
 #: common/tool/actions.cpp:492 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
+msgstr "Повернутися до попереднього масштабу"
 
 #: common/tool/actions.cpp:509
 msgid "Cursor Up"
@@ -7707,7 +7702,7 @@ msgstr "Показувати точки сітки або лінії у вікн
 
 #: common/tool/actions.cpp:706
 msgid "Enables item-specific grids that override the current grid"
-msgstr ""
+msgstr "Активує спеціальні сітки для об'єктів, що замінять активну сітку"
 
 #: common/tool/actions.cpp:713
 #, fuzzy
@@ -7986,6 +7981,8 @@ msgstr "Повідомити про помилку"
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
 msgstr ""
+"Неможна перемкнутися на менедер проектів, якщо не було відкрито жодного "
+"проекту."
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -8277,7 +8274,7 @@ msgstr "Вибрати шлях"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Сортувати за найкращим співпадінням"
 
 #: common/widgets/lib_tree.cpp:100
 #, fuzzy
@@ -8595,14 +8592,14 @@ msgstr "KiCad файли зв'язків"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr ""
+msgstr "Резервна копія EasyEDA (JLCEDA) Std"
 
 #: common/wildcards_and_files_ext.cpp:304
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr ""
+msgstr "Файли EasyEDA (JLCEDA) Pro"
 
 #: common/wildcards_and_files_ext.cpp:310
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
@@ -8921,9 +8918,8 @@ msgid "File '%s' already exists in list."
 msgstr "Файл '%s' вже існує у списку."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
-#, fuzzy
 msgid "Footprint association files:"
-msgstr "Файл відповідності посадковому місцю"
+msgstr "Файл відповідності посадковому місцю:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
 #, fuzzy
@@ -9842,7 +9838,7 @@ msgstr "Оновити символи з бібліотеки"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:98
 msgid "Connected to database successfully"
-msgstr ""
+msgstr "Приєднання до бази даних успішне"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
 #, fuzzy, c-format
@@ -9850,9 +9846,8 @@ msgid "Database connection failed: %s"
 msgstr "%s зона з'єднання: %s."
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "З'єднання контактної площадки з зонами:"
+msgstr "Немає з'єднання з базою даних"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
 #, fuzzy, c-format
@@ -9861,7 +9856,7 @@ msgstr "Завантаження бібліотек символів"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
 #, fuzzy
@@ -9870,7 +9865,7 @@ msgstr "Нове ім'я:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Пароль:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
 #, fuzzy
@@ -9918,7 +9913,7 @@ msgstr "Кешований символ:"
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
-msgstr ""
+msgstr "Час, на який запити до бази даних будуть кешуватися (у секундах)"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
 #, fuzzy
@@ -10121,9 +10116,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "Відкрити налаштування схеми... діалог"
 
 #: eeschema/dialogs/dialog_erc.cpp:650
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Мінімальний крок сітки:"
+msgstr "Змінити крок сітки…"
 
 #: eeschema/dialogs/dialog_erc.cpp:743
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -11194,7 +11188,7 @@ msgstr "Похідна від наявного символу:"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:252
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:210
 msgid "Combo!"
-msgstr "Combo!"
+msgstr "Комбо!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:56
 msgid ""
@@ -11450,6 +11444,9 @@ msgid ""
 "For instance, this should be checked for a quad NAND gate, while it should "
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
+"Поставте галочку, якщо всі частини символа мають одну і ту саму функцію.\n"
+"Наприкад, потрібно ставити галочку для 4-х елементного І-НЕ вентиля, але в "
+"той же час не для подвійоного тріоду (де C є ниткою розжарення)."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:190
 msgid "Has alternate body style (De Morgan)"
@@ -11462,6 +11459,10 @@ msgid ""
 "For instance, this should be checked for a NAND gate to provide an alternate "
 "representation as an OR gate with inverted inputs."
 msgstr ""
+"Поставте галочку, якщо символ має альтернативний стиль тіла для логічної "
+"рівності De Morgan.\n"
+"Наприкад, потрібно ставити галочку для І-НЕ вентиля, щоб надати "
+"альтернативне подання, таке як – АБО вентиль з інвертованими входами."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:198
 msgid "Define as power symbol"
@@ -12501,9 +12502,8 @@ msgid "Source 1 and Source 2 must be different."
 msgstr "Джерело 1 та Джерело 2 повинні бути різними"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:417
-#, fuzzy
 msgid "A frequency range must be specified."
-msgstr "Потрібно вказати принаймні один або кілька шарів\n"
+msgstr "Необхідно вказати діапазон частот."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:611
 #, fuzzy
@@ -12511,9 +12511,8 @@ msgid "New Simulation Tab"
 msgstr "&Симуляція"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
-#, fuzzy
 msgid "Analysis type:"
-msgstr "Пасивний тип"
+msgstr "Тип аналізу:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "AC"
@@ -12531,15 +12530,15 @@ msgstr "OSP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
-msgstr ""
+msgstr "TRAN"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "NOISE"
-msgstr ""
+msgstr "NOISE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 #, fuzzy
@@ -12709,9 +12708,8 @@ msgid "Use initial conditions"
 msgstr "Конфігурація користувача"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
-#, fuzzy
 msgid "Input signals:"
-msgstr "Вхідний вивід"
+msgstr "Вхідний сигнали:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
 #, fuzzy
@@ -12719,31 +12717,28 @@ msgid "Linearize inputs before performing FFT"
 msgstr "Повторно залити всі зони перед виконанням DRC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
-#, fuzzy
 msgid "Measured node:"
-msgstr "Вимірюваний вузол"
+msgstr "Вимірюваний вузол:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:371
-#, fuzzy
 msgid "Reference node:"
-msgstr "Опорний вузол"
+msgstr "Опорний вузол:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:380
 msgid "(optional; default GND)"
 msgstr "(не обов'язково; типовий GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:384
-#, fuzzy
 msgid "Noise source:"
-msgstr "Джерело шуму"
+msgstr "Джерело шуму:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
-msgstr ""
+msgstr "Зберігати дані з усіх шумо-генераторів"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:526
 msgid "Compute noise current correlation matrix"
-msgstr ""
+msgstr "Обчислити матрицю колеляції шумового струму"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
 msgid "Spice directives:"
@@ -12754,37 +12749,33 @@ msgid "Load directives from schematic"
 msgstr "Завантажити директиви зі схеми"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:567
-#, fuzzy
 msgid "Transfer function:"
-msgstr "Передатна функція"
+msgstr "Передатна функція:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "(вихідна напруга)/(вхідна напруга)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(вихідна напруга)/(вхідний струм)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
-#, fuzzy
 msgid "Input:"
-msgstr "Ввід"
+msgstr "Ввід:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:586
 #: eeschema/dialogs/dialog_sim_command_base.cpp:604
 msgid "Ref:"
-msgstr ""
+msgstr "Референс:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:595
-#, fuzzy
 msgid "Output:"
-msgstr "Вивід"
+msgstr "Вивід:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:619
-#, fuzzy
 msgid "Find:"
-msgstr "Знайти"
+msgstr "Знайти:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 #, fuzzy
@@ -12798,7 +12789,7 @@ msgstr "Отвори"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Zeros"
-msgstr ""
+msgstr "Нулі"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:643
 msgid "Add full path for .include library directives"
@@ -12842,19 +12833,19 @@ msgstr "Команда симуляції"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:762
 #, c-format
 msgid "Fixed %s scale"
-msgstr ""
+msgstr "Фіксована шкала %s"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
 #: eeschema/dialogs/dialog_sim_command_base.cpp:773
 msgid "Min:"
-msgstr ""
+msgstr "Мін:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:704
 #: eeschema/dialogs/dialog_sim_command_base.cpp:743
 #: eeschema/dialogs/dialog_sim_command_base.cpp:780
 msgid "Max:"
-msgstr ""
+msgstr "Макс:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:802
 #, fuzzy
@@ -12872,9 +12863,8 @@ msgid "Dotted current/phase"
 msgstr "Пунктиром струм/фаза"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:819
-#, fuzzy
 msgid "Margins:"
-msgstr "Margin"
+msgstr "Відступи:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:829
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:551
@@ -13087,14 +13077,12 @@ msgid "Differential"
 msgstr "Диференціал"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:76
-#, fuzzy
 msgid "Pin model:"
-msgstr "Модель лінії"
+msgstr "Модель лінії:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:83
-#, fuzzy
 msgid "Waveform:"
-msgstr "Форма хвилі"
+msgstr "Форма хвилі:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:100
 msgid "Built-in SPICE model"
@@ -13166,9 +13154,9 @@ msgstr "Символ живлення"
 #: eeschema/symbol_chooser_frame.cpp:103
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:61
 #: pcbnew/footprint_chooser_frame.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr "Вибрати символ ( %d елементів завантажено)"
+msgstr " ( %d елементів завантажено)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -13221,7 +13209,7 @@ msgstr "Кількість"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:616
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:645
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:736
@@ -13253,9 +13241,9 @@ msgid "Rename Field"
 msgstr "Перейменування файлу"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:751
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "Файл '%s' вже існує. Ви хочете перезаписати цей файл?"
+msgstr "Поле '%s' вже існує. Не можна перейменувати існуюче поле."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
 #, fuzzy
@@ -13338,11 +13326,12 @@ msgid ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
 msgstr ""
+"Стандартні пресети не можуть бути змінені.\n"
+"Будь ласка використовуйте інше ім'я."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
-#, fuzzy
 msgid "View presets:"
-msgstr "Показати перемикач налаштувань"
+msgstr "Попередні налаштування вигляду:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:100
 #, fuzzy
@@ -13358,9 +13347,8 @@ msgid "Group symbols together based on common properties"
 msgstr "Групуйте символи на основі спільних властивостей"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:159
-#, fuzzy
 msgid "Scope:"
-msgstr "Область"
+msgstr "Область:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
 #, fuzzy
@@ -13373,9 +13361,8 @@ msgid "Recursive"
 msgstr "Рівень рекурсії"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:172
-#, fuzzy
 msgid "Cross-probe action:"
-msgstr "Двостороннє виділення"
+msgstr "Двостороннє виділення:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:176
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -13393,14 +13380,13 @@ msgid "Edit"
 msgstr "&Редагувати"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "Міліметри"
+msgstr "Розділювач полів:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
 msgid ","
-msgstr ""
+msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
 #, fuzzy
@@ -13409,17 +13395,15 @@ msgstr "Початкове значення:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "\""
-msgstr ""
+msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
-#, fuzzy
 msgid "Reference delimiter:"
-msgstr "Позначення"
+msgstr "Розділювач посилань:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Range delimiter:"
-msgstr "Межі сторінки"
+msgstr "Розділювач діапазону:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -13428,7 +13412,7 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:243
 msgid "Leave blank to disable ranges."
-msgstr ""
+msgstr "Лишіть пустим, щоб вимкнути діапазони."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:248
 #, fuzzy
@@ -13441,9 +13425,8 @@ msgid "Keep line breaks"
 msgstr "Утримувати доріжки"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
-#, fuzzy
 msgid "Format presets:"
-msgstr "Формат %s"
+msgstr "Формати:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:273
 #, fuzzy
@@ -13838,7 +13821,7 @@ msgstr "Інші поля листа"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
-msgstr ""
+msgstr "Оновити всі інші поля у символі з даних посадкового місця"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:584
@@ -13895,14 +13878,12 @@ msgid "Wire & Bus Properties"
 msgstr "Властивості провідника & шини"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets:"
-msgstr "Перелік компонентів (BOM)"
+msgstr "Перелік компонентів (BOM):"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
-#, fuzzy
 msgid "Bill of Materials Formatting Presets:"
-msgstr "Допомога у формуванні переліку елементів (BOM)"
+msgstr "Допомога у формуванні переліку елементів (BOM):"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
@@ -14949,24 +14930,23 @@ msgid "Symbol library was not updated\n"
 msgstr "Бібліотеку символів не оновлено\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:981
-#, fuzzy
 msgid "Running ERC...\n"
-msgstr "Запустити DRC..."
+msgstr "Перевірка ERC...\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:989 pcbnew/pcbnew_jobs_handler.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "Дозволити порушення DRC"
+msgstr "Знайдено %d порушень\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "Неможливо обробити репозиторій: %s"
+msgstr "Неможливо зберегти ERC звіт до %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "Зберегти звіт до файлу"
+msgstr "Зберегти ERC звіт до файлу %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
 #, fuzzy
@@ -15517,7 +15497,7 @@ msgstr "Імпорт схеми"
 #: eeschema/files-io.cpp:744
 #, c-format
 msgid "No loader can read the specified file: '%s'."
-msgstr ""
+msgstr "Жоден із завантажувачів не зміг прочитати файл: '%s'."
 
 #: eeschema/files-io.cpp:812
 #, c-format
@@ -15585,6 +15565,8 @@ msgid ""
 "You do not have write permissions to:\n"
 "\n"
 msgstr ""
+"У вас немає прав для запису в:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1108
 msgid "Saving will overwrite existing files."
@@ -15654,11 +15636,13 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Ручне відновлення буде необхідне для відновлення файлів, що вище."
 
 #: eeschema/files-io.cpp:1648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "Не вдалося видалити файл '%s' автоматичного збереження!"
+msgstr ""
+"Не вдалося видалити файл автозбереження '%s'\n"
+"Необхідно видалити вручну."
 
 #: eeschema/files-io.cpp:1682
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -15953,9 +15937,8 @@ msgid "Body background color"
 msgstr "Креслити колір фону"
 
 #: eeschema/lib_shape.cpp:595
-#, fuzzy
 msgid "Fill color"
-msgstr "Колір заповнення:"
+msgstr "Колір заповнення"
 
 #: eeschema/lib_shape.cpp:601 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
@@ -16025,7 +16008,7 @@ msgstr "Ключові слова посадкового місця розріз
 
 #: eeschema/lib_symbol.cpp:453
 msgid "Symbol pin name offsets differ."
-msgstr ""
+msgstr "Зміщення імен виводів символу відрізняються."
 
 #: eeschema/lib_symbol.cpp:464
 #, fuzzy
@@ -16217,19 +16200,19 @@ msgid "Hierarchical label '%s' at %s, %s"
 msgstr "Ієрархічна мітка '%s'"
 
 #: eeschema/net_navigator.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "Розмір точки з'єднання:"
+msgstr "Точка з'єднання %s, %s"
 
 #: eeschema/net_navigator.cpp:146
 #, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr ""
+msgstr "Ввід провідника в шину з %s, %s в %s, %s"
 
 #: eeschema/net_navigator.cpp:158
 #, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr ""
+msgstr "Ввід шини в шину з %s, %s в %s, %s"
 
 #: eeschema/net_navigator.cpp:166
 #, fuzzy, c-format
@@ -16242,9 +16225,9 @@ msgid "Failed to create directory 'devices' ."
 msgstr "Не вдалося видалити теку %s"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'.\n"
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося створити файл '%s'.\n"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:475
 #, c-format
@@ -16722,7 +16705,7 @@ msgstr ""
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4102
 msgid "Expected Altium Schematic Library file version 5.0"
-msgstr ""
+msgstr "Очікувався файл бібліотеки Altium Schematic версії 5.0"
 
 #: eeschema/sch_io/altium/sch_io_altium.h:63
 msgid "Altium schematic files"
@@ -16743,6 +16726,8 @@ msgstr "Файл '%s', здається, не є коректним файлом
 msgid ""
 "Unable to find symbol %s, referenced by part %s. The part was not loaded."
 msgstr ""
+"Неможливо знайти символ %s, на який посилається деталь %s. Деталь не була "
+"завантажена."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:132
 #, c-format
@@ -16750,6 +16735,8 @@ msgid ""
 "Inconsistent pin numbers in symbol %s compared to the one defined in part "
 "%s. The part was not loaded."
 msgstr ""
+"Номера виходів у символі %s не співпадають з номерами описаними у деталі %s. "
+"Деталь не була завантажена."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:367
 #, c-format
@@ -16819,6 +16806,8 @@ msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
 msgstr ""
+"Вибраний файл є символом бібліотеки CADSTAR. Він не містить схему, тому не "
+"може бути імпортований/відкритий таким чином."
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:587
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -16961,6 +16950,9 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
+"Шлях до архіву схем CADSTAR (*.csa) прив'язаний до бібліотеки деталей "
+"CADSTAR. Якщо не вказано, то припускається, що файл 'symbol.csa' знаходиться "
+"в тій самій папці."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:242
 msgid ""
@@ -16968,6 +16960,10 @@ msgid ""
 "should create a separate entry for the CADSTAR PCB Archive (*.cpa) file in "
 "the footprint library tables. If none specified, 'cadstarpcblib' is assumed."
 msgstr ""
+"Назва бібліотеки посадкових місць прив'язана до символів в цій бібліотеці. "
+"Ви маєте налаштувати окремий спосіб використання CADSTAR PCB Archive (*.cpa) "
+"файлу у таблицях бібліотеки посадкових символів. Якщо не встановлено, то "
+"припускається значення 'cadstarpcblib'."
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:286
 #, fuzzy, c-format
@@ -17012,6 +17008,8 @@ msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
 msgstr ""
+"'%s' є файлом двійкового формату програми Eagle; лише файли XML формату "
+"програми Eagle можуть бути імпортованими."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
@@ -17076,7 +17074,7 @@ msgstr "Помилка завантаження схеми '%s."
 #: eeschema/sch_io/easyeda/sch_io_easyeda.h:50
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.h:37
 msgid "EasyEDA (JLCEDA) Std files"
-msgstr ""
+msgstr "Файли EasyEDA (JLCEDA) Std"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:73
@@ -17086,7 +17084,7 @@ msgstr "Не вдалося архівувати файл '%s'."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:58
 msgid "httplib plugin missing library table handle!"
-msgstr ""
+msgstr "Плагін httplib не може знайти обробника таблиці бібліотеки!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:83
 #, fuzzy, c-format
@@ -17103,7 +17101,7 @@ msgstr ""
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:227
 #, c-format
 msgid "HTTP library settings file %s is missing the API version number!"
-msgstr ""
+msgstr "У Файлі налаштувань HTTP бібілотеки %s відстутній номер версії API!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:236
 #, c-format
@@ -17111,21 +17109,23 @@ msgid ""
 "HTTP library settings file %s uses API version %s, but KiCad requires "
 "version %s"
 msgstr ""
+"Файл налаштувань HTTP бібліотеки %s використовує версію API %s, але KiCad "
+"вимагає версію %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:247
 #, c-format
 msgid "HTTP library settings file %s is missing the root URL!"
-msgstr ""
+msgstr "У файлі налаштувань HTTP бібліотеки %s відсутній основний URL!"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:259
 #, c-format
 msgid "HTTP library settings file %s has an invalid library type"
-msgstr ""
+msgstr "Файл налаштувань HTTP бібліотеки %s має неправильний тип бібліотеки"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:306
 #, c-format
 msgid "Could not connect to %s. Errors: %s"
-msgstr ""
+msgstr "Неможливо під'єднатися до %s. Помилка: %s"
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.h:47
 #, fuzzy
@@ -17366,53 +17366,59 @@ msgstr "Неприпустимий ID бібліотеки символів"
 #, c-format
 msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr ""
+"Файл '%s' був проігнорований. Натомість використовується попередньо "
+"знайдений файл '%s'."
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:360
 #, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr ""
+msgstr "Очікується ціле число у рядку %d у файлі %s"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:383
 #, c-format
 msgid "Expected data missing on line %d in file %s"
-msgstr ""
+msgstr "Очікувались дані у рядку %d у файлі %s"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:389
 #, c-format
 msgid "Extra data found on line %d in file %s"
-msgstr ""
+msgstr "Додаткові дані знайдено у рядку %d у файлі %s"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:415
 msgid "Expecting 0, 1, 2, 3 or 4"
-msgstr ""
+msgstr "Очікується 0, 1, 2, 3 або 4"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:429
 msgid "Expecting NORMAL or WIDE"
-msgstr ""
+msgstr "Очікується NORMAL або WIDE"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:447
 msgid "Expecting I, O, B, IN, OUT or BIDIR"
-msgstr ""
+msgstr "Очікується I, O, B, IN, OUT або BIDIR"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:468
 msgid "Expecting R0, R90, R18, R270, M0, M90, M180 or M270"
-msgstr ""
+msgstr "Очікується R0, R90, R18, R270, M0, M90, M180 або M270"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:490
 msgid ""
 "Expecting LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP or "
 "VBOTTOM"
 msgstr ""
+"Очікується LEFT, CENTER, RIGHT, TOP, BOTTOM, VLEFT, VRIGHT, VCENTER, VTOP "
+"або VBOTTOM"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:512
 msgid ""
 "Expecting NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT or "
 "VRIGHT"
 msgstr ""
+"Очікується NONE, BOTTOM, TOP, LEFT, RIGHT, VBOTTOM, VTOP, VCENTER, VLEFT або "
+"VRIGHT"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:526
 msgid "Expecting CELL or BLOCK"
-msgstr ""
+msgstr "Очікується CELL або BLOCK"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:545
 #, fuzzy, c-format
@@ -17505,9 +17511,8 @@ msgid "Hierarchical Label '%s'"
 msgstr "Ієрархічна мітка '%s'"
 
 #: eeschema/sch_label.cpp:2151
-#, fuzzy
 msgid "Pin length"
-msgstr "Довжина виводу:"
+msgstr "Довжина виводу"
 
 #: eeschema/sch_line.cpp:99
 #, fuzzy
@@ -17719,14 +17724,12 @@ msgid "Hierarchical Sheet %s"
 msgstr "Ієрархічний лист %s"
 
 #: eeschema/sch_sheet.cpp:1507 pcbnew/pcb_textbox.cpp:693
-#, fuzzy
 msgid "Border Width"
-msgstr "Ширина контуру:"
+msgstr "Ширина контуру"
 
 #: eeschema/sch_sheet.cpp:1511
-#, fuzzy
 msgid "Border Color"
-msgstr "Колір контуру:"
+msgstr "Колір контуру"
 
 #: eeschema/sch_sheet.cpp:1514
 #, fuzzy
@@ -18830,11 +18833,9 @@ msgid "Bitrate could be too high for rising / falling edges"
 msgstr "Бітрейт може бути занадто високим для наростаючих/спадаючих фронтів"
 
 #: eeschema/sim/legacy_workbook.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading workbook: line %d: %s."
-msgstr ""
-"Помилка завантаження файлів плати:\n"
-"%s"
+msgstr "Помилка завантаження файлів плати: рядок%d:%s."
 
 #: eeschema/sim/legacy_workbook.cpp:133
 #, fuzzy
@@ -18867,9 +18868,8 @@ msgid "expecting trace name"
 msgstr "Очікувався номер."
 
 #: eeschema/sim/legacy_workbook.cpp:246
-#, fuzzy
 msgid "expecting trace color"
-msgstr "Колір виділення:"
+msgstr "Очікуваний trace color"
 
 #: eeschema/sim/legacy_workbook.cpp:262
 #, fuzzy
@@ -19034,9 +19034,8 @@ msgid "%d"
 msgstr "%d"
 
 #: eeschema/sim/sim_plot_tab.cpp:579
-#, fuzzy
 msgid "Amplitude"
-msgstr "Амплітуда:"
+msgstr "Амплітуда"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
@@ -19047,9 +19046,8 @@ msgid "Noise (A/√Hz)"
 msgstr ""
 
 #: eeschema/sim/sim_plot_tab.cpp:631
-#, fuzzy
 msgid "Intensity"
-msgstr "Поточна клавіша:"
+msgstr "Інтенсивність"
 
 #: eeschema/sim/sim_plot_tab.cpp:666 eeschema/sim/sim_plot_tab.cpp:786
 msgid "Power"
@@ -19080,7 +19078,7 @@ msgstr "Напруга (вимірювання)"
 #: eeschema/sim/simulator_frame_ui.cpp:830
 #: eeschema/sim/simulator_frame_ui.cpp:998
 msgid " (gain)"
-msgstr " (gain)"
+msgstr " (сила)"
 
 #: eeschema/sim/sim_plot_tab.h:148 eeschema/sim/simulator_frame_ui.cpp:211
 #: eeschema/sim/simulator_frame_ui.cpp:727
@@ -19193,9 +19191,8 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:731
 #: eeschema/sim/simulator_frame_ui.cpp:835
 #: eeschema/sim/simulator_frame_ui.cpp:997
-#, fuzzy
 msgid " (amplitude)"
-msgstr "Амплітуда:"
+msgstr " (амплітуда)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
 #, fuzzy, c-format
@@ -19303,7 +19300,7 @@ msgstr "Формат"
 #: eeschema/sim/spice_library_parser.cpp:166
 #, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Не вдалося створити модель симуляції з %s."
+msgstr "Не вдалося створити модель симуляції з %s"
 
 #: eeschema/sim/spice_model_parser.cpp:85
 #: eeschema/sim/spice_model_parser.cpp:187
@@ -19779,9 +19776,9 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Поточний символ було змінено.  Зберегти зміни?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Одержати з символу:"
+msgstr "Наслідується від символу '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:393
 #: eeschema/symbol_editor/symbol_editor.cpp:698
@@ -20013,12 +20010,9 @@ msgstr "Не вдалося полічити елементи бібліотек
 
 #: eeschema/symbol_library_manager.cpp:843
 #: eeschema/symbol_library_manager.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"Помилка збереження таблиці глобальної бібліотеки:\n"
-"\n"
-"%s"
+msgstr "Помилка збереження таблиці глобальної бібліотеки:%s"
 
 #: eeschema/symbol_library_manager.cpp:853
 #, fuzzy
@@ -21627,9 +21621,8 @@ msgid "Summary"
 msgstr ""
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
-#, fuzzy
 msgid "Schematic vs library diff for:"
-msgstr "Схема лише для читання."
+msgstr "Різниця між схемою і бібліотекою для:"
 
 #: eeschema/tools/ee_inspection_tool.cpp:284
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
@@ -22163,14 +22156,12 @@ msgid "Offset Y:"
 msgstr "Зміщення по Y:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:60
-#, fuzzy
 msgid "Rotate counterclockwise:"
-msgstr "Повернути проти годинникової стрілки"
+msgstr "Повернути проти годинникової стрілки:"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
-#, fuzzy
 msgid "Active layer"
-msgstr "Неактивні шари:"
+msgstr "Активний шар"
 
 #: gerbview/dialogs/dialog_draw_layers_settings_base.cpp:77
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
@@ -23391,23 +23382,20 @@ msgid "Failed to output data"
 msgstr "Помилка виведення даних"
 
 #: kicad/cli/command.cpp:126
-#, fuzzy
 msgid "Input directory"
-msgstr "Вихідна тека:"
+msgstr "Вхідна тека"
 
 #: kicad/cli/command.cpp:132
 msgid "Input file"
 msgstr "Вхідний файл"
 
 #: kicad/cli/command.cpp:143
-#, fuzzy
 msgid "Output directory"
-msgstr "Вихідна тека:"
+msgstr "Вихідна тека"
 
 #: kicad/cli/command.cpp:150
-#, fuzzy
 msgid "Output file"
-msgstr "Вихідна тека:"
+msgstr "Вихідний файл"
 
 #: kicad/cli/command.cpp:163
 msgid ""
@@ -23433,9 +23421,8 @@ msgid "Footprint and Footprint Libraries"
 msgstr "Завантаження бібліотек посадкових місць"
 
 #: kicad/cli/command_fp_export.h:32 kicad/cli/command_sym_export.h:33
-#, fuzzy
 msgid "Export utilities (svg)"
-msgstr "Експортувати одиниці:"
+msgstr "Експортувати утиліти (svg)"
 
 #: kicad/cli/command_fp_export_svg.cpp:37
 #, fuzzy
@@ -23577,9 +23564,8 @@ msgstr "Без доріжок"
 
 #: kicad/cli/command_pcb_export_3d.cpp:109
 #: pcbnew/dialogs/dialog_export_step_base.cpp:165
-#, fuzzy
 msgid "Export zones"
-msgstr "Експортувати одиниці:"
+msgstr "Експортувати зони"
 
 #: kicad/cli/command_pcb_export_3d.cpp:115
 msgid "Minimum distance between points to treat them as separate ones"
@@ -24007,9 +23993,8 @@ msgid ""
 msgstr ""
 
 #: kicad/cli/command_sch_export_plot.cpp:102
-#, fuzzy
 msgid "Pen size [mm]"
-msgstr "Розмір сторінки:"
+msgstr "Розмір ручки [mm]"
 
 #: kicad/cli/command_sch_export_plot.cpp:108
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
@@ -25144,9 +25129,8 @@ msgid "Commit File..."
 msgstr "Перейменувати файл..."
 
 #: kicad/project_tree_pane.cpp:967
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Перейти на внутрішній шар 1"
+msgstr "Перейти на гілку "
 
 #: kicad/project_tree_pane.cpp:972
 #, fuzzy
@@ -25190,9 +25174,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Локальне сховище: моніторинг змін теки"
 
 #: kicad/project_tree_pane.cpp:1539
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "Вибраний файл недійсний або пошкоджений!"
+msgstr "Вибрана папка вже містить існуючий git проект."
 
 #: kicad/project_tree_pane.cpp:1555
 msgid "Failed to initialize git project."
@@ -25230,9 +25213,9 @@ msgid "Failed to find branch head for '%s'"
 msgstr "Не вдалося знайти переглядач PDF для '%s'."
 
 #: kicad/project_tree_pane.cpp:1787
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to switch to branch '%s'"
-msgstr "Не вдалося накреслити '%s.\n"
+msgstr "Не вдалося змінити гілку '%s"
 
 #: kicad/project_tree_pane.cpp:1798
 #, fuzzy, c-format
@@ -25278,9 +25261,9 @@ msgid "Failed to write tree: %s"
 msgstr "Не вдалося створити файл '%s'."
 
 #: kicad/project_tree_pane.cpp:2191
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "Не вдалося накреслити '%s.\n"
+msgstr "Не вдалося знайти дерево: %s"
 
 #: kicad/project_tree_pane.cpp:2199
 #, fuzzy, c-format
@@ -26111,9 +26094,8 @@ msgid "Lines width"
 msgstr "Ширина ліній"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
-#, fuzzy
 msgid "Minimum clearance"
-msgstr "Мінімальний зазор:"
+msgstr "Мінімальний зазор"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 #, fuzzy
@@ -26339,9 +26321,8 @@ msgid "Ampacity:"
 msgstr "Непрозорість:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#, fuzzy
 msgid "Current density"
-msgstr "Поточна клавіша:"
+msgstr "Щільність струму"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
 #, fuzzy
@@ -26526,18 +26507,16 @@ msgid "Compute the clearance and creepage distances"
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
-#, fuzzy
 msgid "RMS Voltage:"
-msgstr "Напруга"
+msgstr "Напруга RMS:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
-#, fuzzy
 msgid "Transient overvoltage:"
-msgstr "Перехідні завади"
+msgstr "Короткочасна перенапруга:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:136
 msgid ""
@@ -26567,9 +26546,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:164
-#, fuzzy
 msgid "Type of insulation:"
-msgstr "Орієнтація тексту"
+msgstr "Тип ізоляції:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:166
 msgid ""
@@ -26957,9 +26935,8 @@ msgid "Threshold voltage:"
 msgstr "Порогова напруга:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "Матеріал"
+msgstr "Матеріали:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
 #, fuzzy
@@ -27822,7 +27799,6 @@ msgstr ""
 "Бажаєте вийти та скасувати зміни?"
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -27839,17 +27815,6 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Серія E визначена в IEC 60063.\n"
-"\n"
-"Доступні значення приблизно однаково розподілені в логарифмічній шкалі.\n"
-"\n"
-"E24 (5%): 1,0 1,1 1,2 1,3 1,5 1,6 1,8 2,0 2,2 2,4 2,7 3,0 3,3 3,6 3,9 4,3 "
-"4,7 5,1 5,6 6,2 6,8 7,5 8,2 9,1\n"
-"E12 (10%): 1,0 1,2 1,5 1,8 2,2 2,7 3,3 3,9 4,7 5,6 6,8 8,2\n"
-"E6 (20%): 1,0 - 1,5 - 2,2 - 3,3 - 4,7 - 6,8 -\n"
-"E3 (50%): 1,0 - - - 2,2 - - - 4,7 - - -\n"
-"E1 : 1,0 - - - - - - - - - - -\n"
-"\n"
 "- Цей калькулятор знаходить комбінації стандартних E-серії (між 10 Ом і 1 "
 "МОм) для створення довільних значень.\n"
 "- Ви можете ввести необхідний опір від 0,0025 до 4000 кОм.\n"
@@ -28371,14 +28336,12 @@ msgid "Enable Teardrops"
 msgstr "Додати краплевидність"
 
 #: pcbnew/board_connected_item.cpp:243
-#, fuzzy
 msgid "Best Length Ratio"
-msgstr "Краща довжина:"
+msgstr "Найкраще співідошення довжини"
 
 #: pcbnew/board_connected_item.cpp:250
-#, fuzzy
 msgid "Max Length"
-msgstr "Максимальна довжина:"
+msgstr "Максимальна довжина"
 
 #: pcbnew/board_connected_item.cpp:256
 #, fuzzy
@@ -28386,14 +28349,12 @@ msgid "Best Width Ratio"
 msgstr "Ширина тексту"
 
 #: pcbnew/board_connected_item.cpp:263
-#, fuzzy
 msgid "Max Width"
-msgstr "Максимальна ширина:"
+msgstr "Максимальна ширина"
 
 #: pcbnew/board_connected_item.cpp:269
-#, fuzzy
 msgid "Curve Points"
-msgstr "Точки кривої:"
+msgstr "Точки кривої"
 
 #: pcbnew/board_connected_item.cpp:275
 #, fuzzy
@@ -28406,9 +28367,8 @@ msgid "Allow Teardrops To Span Two Tracks"
 msgstr "Дозволити краплевидність сегментам двох доріжок"
 
 #: pcbnew/board_connected_item.cpp:287
-#, fuzzy
 msgid "Max Width Ratio"
-msgstr "Максимальна ширина:"
+msgstr "Максимальна співвідношення ширини"
 
 #: pcbnew/board_item.cpp:125
 msgid "all copper layers"
@@ -29720,9 +29680,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
-#, fuzzy
 msgid "Tolerance:"
-msgstr "Точність"
+msgstr "Точність:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -30370,14 +30329,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
-#, fuzzy
 msgid "Center pos X:"
-msgstr "Текстове положення X"
+msgstr "Центр X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
-#, fuzzy
 msgid "Center pos Y:"
-msgstr "Текстове положення Y"
+msgstr "Центр Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:365
 msgid ""
@@ -30785,9 +30742,8 @@ msgid "Gap between the measured points and the start of the extension lines"
 msgstr "Відступ між вимірюваними точками та початком лінії"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
-#, fuzzy
 msgid "Extension line overshoot:"
-msgstr "Перетин допоміжної лінії"
+msgstr "Перетин допоміжної лінії:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:141
 #: pcbnew/pcb_dimension.cpp:1435 pcbnew/pcb_dimension.cpp:1506
@@ -30800,9 +30756,8 @@ msgid "Run DRC"
 msgstr "Запуск DRC"
 
 #: pcbnew/dialogs/dialog_drc.cpp:276
-#, fuzzy
 msgid "DRC incomplete: could not compile custom design rules."
-msgstr "DRC не завершено: не вдалося скомпілювати правила проектування.  "
+msgstr "Конфігурація DRC неповна: не вдалося скомпілювати правила проектування."
 
 #: pcbnew/dialogs/dialog_drc.cpp:278 pcbnew/tools/board_inspection_tool.cpp:213
 msgid "Show design rules."
@@ -30833,9 +30788,8 @@ msgid "Run Inspect > Constraints Resolution"
 msgstr "Обмеження роздільної здатності..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:646
-#, fuzzy
 msgid "Run Inspect > Compare Footprint with Library"
-msgstr "Змінити посадкові місця з ідентифікатором бібліотеки:"
+msgstr "Запустити перевірку > Порівняти посадкове місце з бібліотекою"
 
 #: pcbnew/dialogs/dialog_drc.cpp:655 pcbnew/dialogs/dialog_drc.cpp:662
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -30911,9 +30865,8 @@ msgid "First pad number:"
 msgstr "Номер першої контактної площадки:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:54
-#, fuzzy
 msgid "Numbering step:"
-msgstr "Нумерація"
+msgstr "Крок нумерації:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:50
 msgid "Pad Enumeration Settings"
@@ -31079,9 +31032,8 @@ msgid "The number of values following the decimal separator"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
-#, fuzzy
 msgid "Version:"
-msgstr "Версія"
+msgstr "Версія:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
 #, fuzzy
@@ -31098,9 +31050,8 @@ msgid "BOM Columns"
 msgstr "Стовпці"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:101
-#, fuzzy
 msgid "Internal ID:"
-msgstr "Внутрішні шари"
+msgstr "Внутрішній ідентифікатор:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:103
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:111
@@ -31115,9 +31066,8 @@ msgid "Generate Unique"
 msgstr "Створити попередження"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:115
-#, fuzzy
 msgid "Manufacturer P/N:"
-msgstr "Вибрати виробника"
+msgstr "Вибрати виробника:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:117
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
@@ -31132,9 +31082,8 @@ msgid "Omit"
 msgstr "Пропустити звʼязки"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
-#, fuzzy
 msgid "Manufacturer:"
-msgstr "Вибрати виробника"
+msgstr "Виробник:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid "Distributor P/N:"
@@ -31145,9 +31094,8 @@ msgid "Column containing the distributor part number"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
-#, fuzzy
 msgid "Distributor:"
-msgstr "Вирівняти/розподілити"
+msgstr "Дистриб'ютор:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.h:81
 #, fuzzy
@@ -31354,18 +31302,12 @@ msgid "Export tracks, pads and vias"
 msgstr "Створення доріжок та перехідних отворів"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:161
-#, fuzzy
 msgid "Export tracks, pads and vias on external copper layers."
-msgstr ""
-"Експортувати доріжки і перехідні отвори на зовнішні мідні шари.\n"
-"Попередження: це займе *екстримально* багато часу."
+msgstr "Експортувати доріжки і перехідні отвори на зовнішні мідні шари."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
-#, fuzzy
 msgid "Export zones on external copper layers."
-msgstr ""
-"Експортувати доріжки і перехідні отвори на зовнішні мідні шари.\n"
-"Попередження: це займе *екстримально* багато часу."
+msgstr "Експортувати зони на зовнішні мідні шари."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
 #, fuzzy
@@ -31437,9 +31379,8 @@ msgid "Success"
 msgstr "Успішно."
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:246
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Команда:"
+msgstr "Команда:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
 #, fuzzy
@@ -31548,9 +31489,8 @@ msgid "Footprint 3D model path:"
 msgstr "Шлях до 3D-моделі посадкового місця:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
-#, fuzzy
 msgid "Coordinate Origin Options"
-msgstr "Опції початку координат:"
+msgstr "Опції початку координат"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
@@ -31695,19 +31635,16 @@ msgid "Restart Search"
 msgstr "Перезапустити пошук"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#, fuzzy
 msgid "Footprint: "
-msgstr "Посадкове місце: %s"
+msgstr "Посадкове місце: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
-#, fuzzy
 msgid "Symbol:"
-msgstr "Символ"
+msgstr "Символ:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
-#, fuzzy
 msgid "Sheet: "
-msgstr "Лист"
+msgstr "Лист: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 #, fuzzy
@@ -32663,9 +32600,8 @@ msgstr "Встановити вказані значення:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Add teardrops with default values for shape"
-msgstr "Додати краплевидну форму тільки округлим фігурам "
+msgstr "Додати краплевидну форму тільки округлим фігурам"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:114
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:129
@@ -32811,9 +32747,8 @@ msgstr "Крива"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:523
-#, fuzzy
 msgid "Points:"
-msgstr "Точки"
+msgstr "Точки:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
 #, fuzzy
@@ -32965,14 +32900,12 @@ msgid "Filter vias by size:"
 msgstr "Фільтрувати елементи за зв'язком:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "Via size:"
-msgstr "Розмір перехідних отворів"
+msgstr "Розмір перехідних отворів:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#, fuzzy
 msgid "Set to net class / custom rule values"
-msgstr "Встановити значення класу звʼязків:"
+msgstr "Встановити значення класу звʼязків/особливі правила"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:83
 msgid "Set Track and Via Properties"
@@ -34500,9 +34433,8 @@ msgstr ""
 "Виберіть 4, якщо ви не впевнені."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:410
-#, fuzzy
 msgid "Generate property popups for front footprints"
-msgstr "Типові текстові елементи для нових посадкових місць:"
+msgstr "Типові текстові елементи для нових посадкових місць"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:413
 #, fuzzy
@@ -35154,14 +35086,12 @@ msgstr ""
 "контактних площадок або зон"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:76
-#, fuzzy
 msgid "Start X:"
-msgstr "Початок X"
+msgstr "Початок X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:94
-#, fuzzy
 msgid "End X:"
-msgstr "Кінець X"
+msgstr "Кінець X:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:120
 #, fuzzy
@@ -35246,9 +35176,8 @@ msgid "Track and Via Dimensions"
 msgstr "Розміри доріжки і перехідного отвору"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
-msgstr "Цільовий перекіс:"
+msgstr "Цільовий перекіс: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:86
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1959
@@ -35317,9 +35246,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:109
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:238
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:373
-#, fuzzy
 msgid "Corner style:"
-msgstr "Форма кута"
+msgstr "Форма кута:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:94
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:119
@@ -35422,9 +35350,8 @@ msgid "Keep endpoints or direction of starting point"
 msgstr "Зберігайте кінцеві точки або напрям початкової точки"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
-#, fuzzy
 msgid "Track mouse-drag mode:"
-msgstr "Режим заокруглення доріжки"
+msgstr "Режим заокруглення доріжки:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 msgid "Drag (45 degree mode)"
@@ -35549,19 +35476,23 @@ msgstr "Внутрішні шари"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:379
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Incorrect line width.\n"
 "It must be between %s and %s"
-msgstr "Ширина лінії має бути між %s і %s."
+msgstr ""
+"%s: Неправильна ширина лінії.\n"
+"Ширина лінії має бути між %s і %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:404
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text size is incorrect.\n"
 "Size must be between %s and %s"
-msgstr "Висота тексту повинна бути між %s і %s."
+msgstr ""
+"%s: Висота тексту неправильна.\n"
+"Висота тексту повинна бути між %s і %s"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:422
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:266
@@ -35688,9 +35619,8 @@ msgid "3D Model(s)"
 msgstr "3D модель(і)"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:49
-#, fuzzy
 msgid "Net names:"
-msgstr "Імена звʼязків"
+msgstr "Імена звʼязків:"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:53
 msgid "Do not show"
@@ -36633,7 +36563,7 @@ msgstr "Контур плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Margin"
-msgstr "Margin"
+msgstr "Відступ"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:668
 msgid "Edge_Cuts setback"
@@ -37307,9 +37237,8 @@ msgstr "Типові властивості для нових графічних
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:38
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:218
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:398
-#, fuzzy
 msgid "Edges:"
-msgstr "Pcb_Edges"
+msgstr "Pcb_Edges:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:42
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:222
@@ -37346,9 +37275,8 @@ msgid "Properties for track-to-track teardrops:"
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:510
-#, fuzzy
 msgid "Maximum track width"
-msgstr "Мінімальна ширина доріжки:"
+msgstr "Мінімальна ширина доріжки"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:512
 #, fuzzy
@@ -37435,7 +37363,7 @@ msgstr "Диференційні пари:"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:170
 msgid "Gap"
-msgstr "Відступ"
+msgstr "Щілина"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:171
 msgid "Via Gap"
@@ -38548,9 +38476,9 @@ msgid "%s remove islands setting differs."
 msgstr ""
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:467
-#, fuzzy, c-format
+#, c-format
 msgid "%s minimum island size setting differs."
-msgstr "Мінімальний розмір островка:"
+msgstr "Мінімальний розмір островка %s відрізняється від налаштувань"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:470
 #, fuzzy, c-format
@@ -38999,11 +38927,9 @@ msgstr ""
 "Помилка запису STEP файлу\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"STEP файл '%s' створений.\n"
+msgstr "Файл %s '%s' створений.\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:546
 #: pcbnew/exporters/step/exporter_step.cpp:552
@@ -39030,16 +38956,18 @@ msgid "%s file has been created, but there are warnings."
 msgstr "STEP файл був створений, але є попередження."
 
 #: pcbnew/exporters/step/exporter_step.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "Час перезавантаження %.3f сек"
+msgstr ""
+"\n"
+"Час експорту %.3f сек\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:954
-#, fuzzy, c-format
+#, c-format
 msgid "Build holes for %s\n"
-msgstr "Побудова технічного шару %d"
+msgstr "Побудова дірок %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:959
 #, c-format
@@ -39690,19 +39618,16 @@ msgid "Tuning"
 msgstr "Попередження"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1288
-#, fuzzy
 msgid "too long"
-msgstr "Надто довго: "
+msgstr "надто довгий"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1289
-#, fuzzy
 msgid "too short"
-msgstr "Надто коротко: "
+msgstr "надто короткий"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1290
-#, fuzzy
 msgid "tuned"
-msgstr "Налаштовано: "
+msgstr "налаштовано"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1364
 #, fuzzy
@@ -39710,14 +39635,12 @@ msgid "Edit Tuning Pattern"
 msgstr "Редагувати в текстовому редакторі"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1834
-#, fuzzy
 msgid "current skew"
-msgstr "Поточна клавіша:"
+msgstr "Поточний перекіс"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1836
-#, fuzzy
 msgid "current length"
-msgstr "Цільова довжина:"
+msgstr "Поточна довжина"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1922
 #, fuzzy
@@ -39738,9 +39661,9 @@ msgid "Full Length"
 msgstr "Повна довжина"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1949
-#, fuzzy, c-format
+#, c-format
 msgid "Target Skew: %s"
-msgstr "Цільовий перекіс:"
+msgstr "Цільовий перекіс: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1950
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1972
@@ -39753,9 +39676,9 @@ msgid "Skew Constraints: %s"
 msgstr "Обмеження ширини: мін %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1971
-#, fuzzy, c-format
+#, c-format
 msgid "Target Length: %s"
-msgstr "Цільова довжина:"
+msgstr "Цільова довжина: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1980
 #, fuzzy, c-format
@@ -39773,9 +39696,8 @@ msgid "Single track"
 msgstr "Трасування однієї доріжки"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2276
-#, fuzzy
 msgid "Differential pair"
-msgstr "Диференційні пари:"
+msgstr "Диференційні пари"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2277
 #, fuzzy
@@ -39793,39 +39715,32 @@ msgid "Tuning Mode"
 msgstr "Модель лінії"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2312
-#, fuzzy
 msgid "Min Amplitude"
-msgstr "Мінімальна амплітуда (Amin):"
+msgstr "Мінімальна амплітуда (Amin)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2319
-#, fuzzy
 msgid "Max Amplitude"
-msgstr "Максимальна амплітуда (Amax):"
+msgstr "Максимальна амплітуда (Amax)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2326
-#, fuzzy
 msgid "Initial Side"
-msgstr "Початковий час:"
+msgstr "Початкова сторона"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2332
-#, fuzzy
 msgid "Min Spacing"
-msgstr "Мінімальний відступ (s):"
+msgstr "Мінімальний відступ (s)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2338
-#, fuzzy
 msgid "Corner Radius %"
-msgstr "Радіус округлення:"
+msgstr "Радіус округлення"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2360
-#, fuzzy
 msgid "Target Length"
-msgstr "Цільова довжина:"
+msgstr "Цільова довжина"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2369
-#, fuzzy
 msgid "Target Skew"
-msgstr "Цільовий перекіс:"
+msgstr "Цільовий перекіс"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2377
 #, fuzzy
@@ -39865,9 +39780,8 @@ msgid "Used when the DXF file has no unit set"
 msgstr ""
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:97
-#, fuzzy
 msgid "Place at:"
-msgstr "Розмістити перехідний отвір"
+msgstr "Розмістити перехідний отвір:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:98
 #, fuzzy
@@ -41263,9 +41177,8 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Файли друкованих плат Altium Circuit Studio"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy
 msgid "No footprints in library"
-msgstr "Ідентифікатор нової бібліотеки посадкових місць:"
+msgstr "Не знайдено посадкових місць у бібліотеці"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:42
 msgid "Altium Designer PCB files"
@@ -41808,9 +41721,9 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Файли бібліотек Eagle ver. 6.x XML"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_parser.cpp:780
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "Невідома Model_type "
+msgstr "Невідомий SVGNODE nodeType %d"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:166
 #, fuzzy, c-format
@@ -41819,11 +41732,9 @@ msgstr "Не вдалося знайти переглядач PDF для '%s'."
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:264
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading board '%s': %s"
-msgstr ""
-"Помилка завантаження плати.\n"
-"%s"
+msgstr "Помилка завантаження плати '%s': %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:294
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:387
@@ -42084,9 +41995,8 @@ msgid "Generating BOM section"
 msgstr "Налаштування візуалізації"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1311
-#, fuzzy
 msgid "Generating CAD data"
-msgstr "Визначення даних PCB\n"
+msgstr "Створення даних CAD"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2352
 #, fuzzy, c-format
@@ -42099,9 +42009,8 @@ msgid "Generating logistic section"
 msgstr "Генерувати файл позицій"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2906
-#, fuzzy
 msgid "Saving file"
-msgstr "Читання файлу "
+msgstr "Збереження файлу"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2938
 #, fuzzy
@@ -42158,13 +42067,12 @@ msgstr "Помилкова ZSmoothing для CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6125
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "Застарілий режим заповнення сегментів більше не підтримується.\n"
-"Перетворити зони на згладжені багатокутні заливки?"
+"Заповнення зон буде перетворено на основі найоптимальнішим методом."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2547
 #, c-format
@@ -42313,9 +42221,8 @@ msgstr ""
 "відновити на шарі User.Comments?"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1094
-#, fuzzy
 msgid "Undefined Layers Warning"
-msgstr "Невизначені шари:"
+msgstr "Попередження про невизначені шари"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1213
 #, fuzzy, c-format
@@ -42449,13 +42356,12 @@ msgstr ""
 "позиція: %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6094
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "Застаріла стратегія заповнення зони більше не підтримується.\n"
-"Перетворити зони на згладжені багатокутні заливки?"
+"Заповнення зон буде перетворено найоптимальнішим методом."
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -42543,9 +42449,8 @@ msgid "Marker (%s)"
 msgstr "Маркер (%s)"
 
 #: pcbnew/pcb_reference_image.cpp:347
-#, fuzzy
 msgid "Associated Layer"
-msgstr "Неактивні шари:"
+msgstr "Зв'язані шари"
 
 #: pcbnew/pcb_reference_image.cpp:358
 msgid "Greyscale"
@@ -42603,9 +42508,8 @@ msgid "Border Properties"
 msgstr "Властивості кривої"
 
 #: pcbnew/pcb_textbox.cpp:688
-#, fuzzy
 msgid "Border Style"
-msgstr "Стиль рамки:"
+msgstr "Стиль рамки"
 
 #: pcbnew/pcb_track.cpp:139
 #, c-format
@@ -42770,9 +42674,8 @@ msgid "Successfully exported VRML to %s"
 msgstr "Файл svg успішно створено"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:159
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "Помилка розпакування файлу!"
+msgstr "Помилка при експортуванні VRML файлу"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:231
 msgid "Successfully created svg file"
@@ -42788,9 +42691,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Не вдалося накреслити '%s.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:571
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Не вдалося видалити теку %s"
+msgstr "Не вдалося створити вихідну теку\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:761 pcbnew/pcbnew_jobs_handler.cpp:833
 msgid "Loading footprint library\n"
@@ -42818,18 +42720,17 @@ msgid "Plotting footprint '%s' to '%s'\n"
 msgstr "Креслення посадкове місце '%s' на'%s'\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:997
-#, fuzzy
 msgid "Running DRC...\n"
-msgstr "Запустити DRC..."
+msgstr "Виконання DRC...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1012 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
 msgstr "DRC"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1035
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d unconnected items\n"
-msgstr "Непідключені елементи (%s)"
+msgstr "Непідключені елементи: %d\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1037
 #, c-format
@@ -42837,14 +42738,14 @@ msgid "Found %d schematic parity issues\n"
 msgstr ""
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1051
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save DRC report to %s\n"
-msgstr "Неможливо обробити репозиторій: %s"
+msgstr "Неможливо зберегти звіт DRC до %s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1056
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "Зберегти звіт до файлу"
+msgstr "Звіт DRC збережено до файлу %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:116
 msgid "Multiple Layers"
@@ -43524,10 +43425,9 @@ msgid "[netclass %s]"
 msgstr "[клас звʼязків %s]"
 
 #: pcbnew/tools/board_inspection_tool.cpp:211
-#, fuzzy
 msgid "Report incomplete: could not compile custom design rules."
 msgstr ""
-"Звіт не завершено: не вдалося скомпілювати спеціальні правила дизайну.  "
+"Звіт не завершено: не вдалося скомпілювати спеціальні правила проектування."
 
 #: pcbnew/tools/board_inspection_tool.cpp:316
 msgid "Uncoupled Length"
@@ -44191,9 +44091,8 @@ msgstr "Закруглення ліній"
 #: pcbnew/tools/edit_tool.cpp:1210
 #: pcbnew/tools/item_modification_routine.cpp:175
 #: pcbnew/tools/pcb_actions.cpp:616
-#, fuzzy
 msgid "Chamfer Lines"
-msgstr "Розмір фаски:"
+msgstr "Розмір фаски"
 
 #: pcbnew/tools/edit_tool.cpp:1210
 #, fuzzy
@@ -44224,14 +44123,12 @@ msgid "Heal Shapes"
 msgstr "Область краплеподібного переходу"
 
 #: pcbnew/tools/edit_tool.cpp:1488
-#, fuzzy
 msgid "Tolerance value:"
-msgstr "Точність"
+msgstr "Точність:"
 
 #: pcbnew/tools/edit_tool.cpp:1525
-#, fuzzy
 msgid "Heal shapes"
-msgstr "Форма отвору:"
+msgstr "Форма отвору"
 
 #: pcbnew/tools/edit_tool.cpp:2093 pcbnew/tools/pcb_actions.cpp:552
 msgid "Change Side / Flip"
@@ -44325,9 +44222,8 @@ msgid "Click on new member..."
 msgstr "Натисніть на нового елементу..."
 
 #: pcbnew/tools/group_tool.cpp:278 pcbnew/tools/pcb_actions.cpp:1197
-#, fuzzy
 msgid "Group Items"
-msgstr "Елементи групи:"
+msgstr "Елементи групи"
 
 #: pcbnew/tools/group_tool.cpp:319 pcbnew/tools/pcb_actions.cpp:1204
 #, fuzzy
@@ -44354,9 +44250,8 @@ msgstr "Деякі з ліній не вдалося заокруглити."
 
 #: pcbnew/tools/item_modification_routine.cpp:242
 #: pcbnew/tools/pcb_actions.cpp:630
-#, fuzzy
 msgid "Extend Lines to Meet"
-msgstr "Зміщення лінії вимірювання:"
+msgstr "Зміщення лінії вимірювання"
 
 #: pcbnew/tools/item_modification_routine.cpp:250
 #, fuzzy
@@ -46484,9 +46379,8 @@ msgid "Rebuilds geometry of selected generator(s)"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2455
-#, fuzzy
 msgid "Generators Manager"
-msgstr "Генератор псевдоніму:"
+msgstr "Менеджер генераторів"
 
 #: pcbnew/tools/pcb_actions.cpp:2456
 msgid "Show a manager dialog for Generator objects"
@@ -46515,9 +46409,8 @@ msgid "Hidden"
 msgstr "Прихований текст"
 
 #: pcbnew/tools/pcb_control.cpp:353
-#, fuzzy
 msgid "Inactive Layer Display"
-msgstr "Неактивні шари:"
+msgstr "Неактивні шари"
 
 #: pcbnew/tools/pcb_control.cpp:645
 msgid "Item locked."
@@ -46552,9 +46445,8 @@ msgid "Append Board"
 msgstr "Додати плату..."
 
 #: pcbnew/tools/pcb_control.cpp:1413
-#, fuzzy
 msgid "Active Layer"
-msgstr "Неактивні шари:"
+msgstr "Активні шари"
 
 #: pcbnew/tools/pcb_control.cpp:1414 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
@@ -47563,9 +47455,10 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "Помилка завантаження [ІНФО]: надто довгий рядок введення\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "Перетворення растрових зображень у компонент"
+msgstr ""
+"Перетворення растрових зображень у компонент;Растрове "
+"зображення;Перетоврювач;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -47604,9 +47497,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Менеджер проєкту"
+msgstr "Менеджер проєкту;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -47622,9 +47514,8 @@ msgid "KiCad PCB Calculator"
 msgstr "Калькулятор для друкованих плат KiCad"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "Калькулятор друкованих плат"
+msgstr "Друкована плата;Калькулятор;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
