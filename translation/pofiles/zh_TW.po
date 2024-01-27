@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2024-01-27 11:05+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -10599,7 +10599,8 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"要檢視單個專案的顏色，請在偏好設定 > 原理圖編輯器 > 顏色中取消選擇 \"%s\"。"
+"要檢視單個項目的顏色\"%s\"\n"
+"請在偏好設定 > 原理圖編輯器 > 顏色中取消選擇 。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:434
 #, c-format
@@ -19299,9 +19300,8 @@ msgid "Lock file already exists"
 msgstr "檔案 \"%s\" 已經存在。"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "載入原理圖檔案失敗\n"
+msgstr "存取鎖定檔失敗"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -25895,9 +25895,8 @@ msgid "Export STEP"
 msgstr "匯出 STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "命令列:"
+msgstr "命令列:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -32453,9 +32452,8 @@ msgid "Checking pads..."
 msgstr "正在檢查焊盤..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "走線間距... \n"
+msgstr "走線間距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -34811,9 +34809,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "繪製到 '%s' 時失敗。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "無法建立3D建立目錄"
+msgstr "創建輸出目錄失敗\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
