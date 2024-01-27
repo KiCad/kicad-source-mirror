@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 11:05+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -2440,9 +2440,8 @@ msgid "Hotkey List"
 msgstr "快捷鍵列表"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr "專案名稱:"
+msgstr "專案名稱"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1069
@@ -5881,7 +5880,7 @@ msgstr "無法取得儲存庫頭"
 #: common/git/git_pull_handler.cpp:187
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr "無法獲得參考'%s'的OID。"
+msgstr "無法獲得參考'%s'的OID"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:54
 msgid "Failed to perform checkout operation."
@@ -5889,7 +5888,7 @@ msgstr "執行checkout作業失敗。"
 
 #: common/git/git_pull_handler.cpp:212
 msgid "Could not lookup commit '{}'"
-msgstr "無法查詢提交 '{}'。"
+msgstr "無法查詢提交 '{}'"
 
 #: common/git/git_pull_handler.cpp:249
 msgid "Could not merge commits"
@@ -5897,7 +5896,7 @@ msgstr "無法進行提交合併"
 
 #: common/git/git_pull_handler.cpp:257
 msgid "Could not get repository index"
-msgstr "無法獲取儲存庫的索引。"
+msgstr "無法獲取儲存庫的索引"
 
 #: common/git/git_pull_handler.cpp:265
 msgid "Could not get conflict iterator"
@@ -5913,7 +5912,7 @@ msgstr "已添加"
 
 #: common/git/git_push_handler.cpp:44
 msgid "Could not lookup remote"
-msgstr "無法查詢遠程。"
+msgstr "無法查詢遠程"
 
 #: common/git/git_push_handler.cpp:58
 msgid "Could not connect to remote"
@@ -5949,9 +5948,9 @@ msgid "* [rejected] %s (%s)"
 msgstr "* [被拒絕] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "已更新"
+msgstr "[已更新]%s"
 
 #: common/git/kicad_git_errors.cpp:39
 msgid "Invalid repository."
@@ -5959,7 +5958,7 @@ msgstr "無效的格式。"
 
 #: common/git/kicad_git_errors.cpp:40
 msgid "Failed to commit changes."
-msgstr "提交變更失敗"
+msgstr "提交變更失敗。"
 
 #: common/git/kicad_git_errors.cpp:41
 msgid "Failed to merge branches."
@@ -5967,11 +5966,11 @@ msgstr "合併分支失敗。"
 
 #: common/git/kicad_git_errors.cpp:44
 msgid "Failed to clone repository."
-msgstr "複製儲存庫失敗"
+msgstr "複製儲存庫失敗。"
 
 #: common/git/kicad_git_errors.cpp:45
 msgid "Remote repository not found."
-msgstr "未找到遠程儲存庫"
+msgstr "未找到遠程儲存庫。"
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
@@ -5979,15 +5978,15 @@ msgstr "遠端儲存庫身分驗證失敗。"
 
 #: common/git/kicad_git_errors.cpp:49
 msgid "Branch not found."
-msgstr "找不到該分支"
+msgstr "找不到該分支。"
 
 #: common/git/kicad_git_errors.cpp:50
 msgid "Failed to create branch."
-msgstr "創建分支失敗"
+msgstr "創建分支失敗。"
 
 #: common/git/kicad_git_errors.cpp:51
 msgid "Failed to delete branch."
-msgstr "刪除分支失敗"
+msgstr "刪除分支失敗。"
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
