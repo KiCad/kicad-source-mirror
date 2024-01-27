@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 16:28+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -779,16 +779,15 @@ msgid "Background gradient start color"
 msgstr "背景梯度起點"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "背景"
+msgstr "背景結束"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 msgid "Background gradient end color"
 msgstr "背景梯度終點"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
@@ -1657,7 +1656,6 @@ msgid "Negative"
 msgstr "負片"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
-#, fuzzy
 msgid "Pcb Layer for Graphics"
 msgstr "用於圖形的 PCB 層"
 
@@ -14235,7 +14233,7 @@ msgstr "預設線寬 (&D)："
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
-msgstr "設為 0 以允許符號繼承原理圖的線寬屬性。"
+msgstr "設為 0 以允許符號繼承原理圖的線寬屬性"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -18847,7 +18845,7 @@ msgstr "瞬態分析"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "Small-Signal Distortion Analysis"
-msgstr ""
+msgstr "小訊號失真分析"
 
 #: eeschema/sim/spice_simulator.cpp:62
 #, fuzzy
@@ -18931,6 +18929,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"SPICE 函式:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -19506,12 +19539,9 @@ msgstr "無法列舉庫 “%s”。"
 
 #: eeschema/symbol_library_manager.cpp:843
 #: eeschema/symbol_library_manager.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"儲存全域性庫表時發生錯誤：\n"
-"\n"
-"%s"
+msgstr "更新庫緩衝區時發生錯誤：%s"
 
 #: eeschema/symbol_library_manager.cpp:853
 #, fuzzy
@@ -19625,11 +19655,11 @@ msgstr "使用者取消了封裝重新連結。"
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "true"
-msgstr ""
+msgstr "真"
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "false"
-msgstr ""
+msgstr "假"
 
 #: eeschema/tools/backannotate.cpp:387
 #, c-format
@@ -19710,7 +19740,7 @@ msgstr "正在根據庫檢查電路板封裝…"
 
 #: eeschema/tools/ee_actions.cpp:71
 msgid "Show simulation window for running SPICE or IBIS simulations."
-msgstr ""
+msgstr "顯示用於運行SPICE或IBIS的模擬視窗。"
 
 #: eeschema/tools/ee_actions.cpp:80
 msgid "Opens the datasheet in a browser"
@@ -20408,7 +20438,7 @@ msgstr "顯示飛線內網路"
 
 #: eeschema/tools/ee_actions.cpp:855
 msgid "Toggle the net navigator panel visibility"
-msgstr ""
+msgstr "切換網絡導航器面板的可見性"
 
 #: eeschema/tools/ee_actions.cpp:862
 msgid "Edit with Symbol Editor"
@@ -20515,7 +20545,7 @@ msgstr "不填充"
 
 #: eeschema/tools/ee_actions.cpp:924
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "設定不填充屬性"
 
 #: eeschema/tools/ee_actions.cpp:929
 #, fuzzy
@@ -20768,7 +20798,7 @@ msgstr "顯示頁面 %s"
 
 #: eeschema/tools/ee_actions.cpp:1125
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "顯示來自模擬的工作點電壓資料"
 
 #: eeschema/tools/ee_actions.cpp:1130
 #, fuzzy
@@ -20777,7 +20807,7 @@ msgstr "顯示游標"
 
 #: eeschema/tools/ee_actions.cpp:1131
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "顯示來自模擬的工作點電流"
 
 #: eeschema/tools/ee_actions.cpp:1136 eeschema/tools/ee_actions.cpp:1145
 #: eeschema/tools/ee_actions.cpp:1154 eeschema/tools/ee_actions.cpp:1164
@@ -20981,7 +21011,7 @@ msgstr "將當前圖紙的副本儲存到其他位置或以另一個名稱進行
 
 #: eeschema/tools/ee_actions.cpp:1377
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "新的分析分頁..."
 
 #: eeschema/tools/ee_actions.cpp:1385
 msgid "Open Workbook..."
@@ -21014,7 +21044,7 @@ msgstr "點電流/相位"
 
 #: eeschema/tools/ee_actions.cpp:1426
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
-msgstr ""
+msgstr "以虛線繪製輔助信號軌跡(電流或是相位)"
 
 #: eeschema/tools/ee_actions.cpp:1431
 #, fuzzy
@@ -34660,19 +34690,23 @@ msgstr "內層"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:379
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:223
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Incorrect line width.\n"
 "It must be between %s and %s"
-msgstr "文字寬度範圍必須在 %s 和 %s。"
+msgstr ""
+"%s:不正確的線寬\n"
+"必須在 %s 和 %s之間"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:404
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s: Text size is incorrect.\n"
 "Size must be between %s and %s"
-msgstr "文字高度範圍必須在 %s 和 %s。"
+msgstr ""
+"%s: 不正確的文字大小\n"
+"文字大小範圍必須在 %s 和 %s之間"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:422
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:266
@@ -39808,11 +39842,12 @@ msgid "Thermal Relief Gap"
 msgstr "防散熱 (花焊盤) 間距"
 
 #: pcbnew/pcb_base_frame.cpp:1221
-#, fuzzy
 msgid ""
 "The library containing the current footprint has changed.\n"
 "Do you want to reload the footprint?"
-msgstr "該工程配置已經更改，是否儲存？"
+msgstr ""
+"包含目前封裝的庫已經變動。\n"
+"是否重新載入封裝？"
 
 #: pcbnew/pcb_dimension.cpp:398 pcbnew/pcb_dimension.cpp:1449
 msgid "Prefix"
@@ -40797,11 +40832,9 @@ msgstr "無法為 '%s' 找到一款 PDF 檢視器。"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:264
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading board '%s': %s"
-msgstr ""
-"電路板載入錯誤。\n"
-"%s"
+msgstr "電路板載入錯誤'%s':%s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:294
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:387
