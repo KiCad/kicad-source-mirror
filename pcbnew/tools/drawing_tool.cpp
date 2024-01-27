@@ -1898,7 +1898,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
                 COORDS_PADDING );
         m_controls->ForceCursorPosition( true, cursorPos );
 
-        if( evt->IsCancelInteractive() )
+        if( evt->IsCancelInteractive() || ( started && evt->IsAction( &ACTIONS::undo ) ) )
         {
             cleanup();
 
@@ -2087,8 +2087,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             m_view->Update( &m_preview );
             m_view->Update( &twoPointAsst );
         }
-        else if( started && (   evt->IsAction( &ACTIONS::undo )
-                             || evt->IsAction( &PCB_ACTIONS::doDelete )
+        else if( started && (   evt->IsAction( &PCB_ACTIONS::doDelete )
                              || evt->IsAction( &PCB_ACTIONS::deleteLastPoint ) ) )
         {
             if( aCommittedGraphics && !aCommittedGraphics->empty() )
@@ -2113,6 +2112,7 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
             else
             {
                 cleanup();
+                break;
             }
         }
         else if( graphic && evt->IsAction( &PCB_ACTIONS::incWidth ) )
