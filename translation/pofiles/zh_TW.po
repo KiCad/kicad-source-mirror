@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-27 06:24+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"PO-Revision-Date: 2024-01-27 11:05+0000\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -2401,7 +2401,7 @@ msgstr "圖框"
 
 #: common/dialogs/dialog_page_settings.cpp:112
 msgid "Title Block"
-msgstr "工程圖明細表"
+msgstr "電路圖標題列"
 
 #: common/dialogs/dialog_page_settings.cpp:473
 #, c-format
@@ -5321,7 +5321,7 @@ msgstr "佈線"
 
 #: common/layer_id.cpp:166
 msgid "Through vias"
-msgstr "通孔"
+msgstr "貫孔"
 
 #: common/layer_id.cpp:167
 msgid "Blind/Buried vias"
@@ -26289,7 +26289,7 @@ msgstr "通孔"
 #: pcbnew/footprint_libraries_utils.cpp:1260 pcbnew/pad.cpp:1268
 #: pcbnew/pad.cpp:1751
 msgid "SMD"
-msgstr "貼片"
+msgstr "SMD"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:198
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
@@ -37354,7 +37354,7 @@ msgstr "粗細 (mils)"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:277
 msgid "Loss Tangent"
-msgstr "Loss Tangent（損耗角正切）"
+msgstr "損耗角正切"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
