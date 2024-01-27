@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2023-08-23 18:38+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2024-01-28 12:01+0000\n"
+"Last-Translator: Stanislav Kaliuk <staskalyuk.096@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v7/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -9569,7 +9569,7 @@ msgstr "Похідна від наявного символу:"
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:176
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:210
 msgid "Combo!"
-msgstr "Combo!"
+msgstr "Комбо!"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:47
 msgid ""
@@ -16237,7 +16237,7 @@ msgstr "Напруга (вимірювання)"
 #: eeschema/sim/spice_library_parser.cpp:89
 #, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Не вдалося створити модель симуляції з %s."
+msgstr "Не вдалося створити модель симуляції з %s"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -26353,9 +26353,8 @@ msgid "Export STEP"
 msgstr "Експорт STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Команда:"
+msgstr "Команда:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -31328,7 +31327,7 @@ msgstr "Контур плати"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:665
 msgid "Margin"
-msgstr "Margin"
+msgstr "Відступ"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:668
 msgid "Edge_Cuts setback"
@@ -32278,7 +32277,7 @@ msgstr "Диференційні пари"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:167
 msgid "Gap"
-msgstr "Відступ"
+msgstr "Щілина"
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:168
 msgid "Via Gap"
@@ -35429,9 +35428,8 @@ msgid "Failed to plot to '%s'.\n"
 msgstr "Не вдалося накреслити '%s.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Не вдалося створити вихідну теку '%s'."
+msgstr "Не вдалося створити вихідну теку\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
@@ -36590,23 +36588,21 @@ msgstr ""
 "позиція: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6068
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "Застаріла стратегія заповнення зони більше не підтримується.\n"
-"Перетворити зони на згладжені багатокутні заливки?"
+"Заповнення зон буде перетворено найоптимальнішим методом."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6101
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "Застарілий режим заповнення сегментів більше не підтримується.\n"
-"Перетворити зони на згладжені багатокутні заливки?"
+"Заповнення зон буде перетворено на основі найоптимальнішим методом."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
