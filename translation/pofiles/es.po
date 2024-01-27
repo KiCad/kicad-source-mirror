@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-14 12:31+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2024-01-27 06:24+0000\n"
+"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v7/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -1425,7 +1425,7 @@ msgstr "Capa de usuario Eco1"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:160
 msgid "User layer Eco2"
-msgstr "Utilizar capa Eco2"
+msgstr "Capa de usuario Eco2"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:162
 msgid "Board Layer for Outline"
@@ -7863,7 +7863,7 @@ msgstr "Primero libre tras número de hoja X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:133
 msgid "Clear Annotation"
-msgstr "Eliminar anotación"
+msgstr "Limpiar anotación"
 
 #: eeschema/dialogs/dialog_annotate_base.h:85
 msgid "Annotate Schematic"
@@ -8550,7 +8550,7 @@ msgstr "Comprobando problemas con los símbolos de la biblioteca..."
 
 #: eeschema/dialogs/dialog_erc.cpp:559
 msgid "Checking for off grid pins and wires..."
-msgstr "Comprobando pines y cables fuera de la rejilla..."
+msgstr "Comprobando pines y cables fuera de cuadrícula..."
 
 #: eeschema/dialogs/dialog_erc.cpp:667 pcbnew/dialogs/dialog_drc.cpp:575
 msgid "errors"
@@ -18274,7 +18274,7 @@ msgstr "Activar mover símbolo"
 
 #: eeschema/tools/ee_actions.cpp:893
 msgid "Align Elements to Grid"
-msgstr "Alinear elementos a la rejilla"
+msgstr "Alinear elementos a la cuadrícula"
 
 #: eeschema/tools/ee_actions.cpp:899
 msgid "Save Current Sheet Copy As..."
