@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 16:28+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"PO-Revision-Date: 2024-01-28 13:18+0000\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -6171,7 +6171,7 @@ msgstr "API 回應錯誤代碼: %s"
 #: common/import_gfx/dxf_import_plugin.cpp:134
 #: common/import_gfx/dxf_import_plugin.cpp:154
 msgid "Memory was exhausted trying to load the DXF, it may be too large."
-msgstr "嘗試載入 DXF 時記憶體耗盡，DXF 可能太大。"
+msgstr "嘗試加載DXF時內存已耗盡，可能DXF過於龐大。"
 
 #: common/import_gfx/dxf_import_plugin.cpp:1432
 msgid "Invalid spline definition encountered"
@@ -8548,7 +8548,7 @@ msgstr "快捷鍵檔案"
 #: cvpcb/auto_associate.cpp:108
 #, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "找不到等價檔案 \"%s\"。"
+msgstr "無法找到等效檔案 '%s'。"
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -8894,7 +8894,7 @@ msgstr "儲存到原理圖和檔案"
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
-msgstr "將封裝關聯儲存在原理圖符號封裝欄位和原理圖檔案中"
+msgstr "將封裝關聯保存在原理圖符號的封裝字段和原理圖檔案中"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
 msgid "Select next unassigned symbol"
@@ -17776,10 +17776,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"選定的原理圖中，有一些庫名稱在當前專案庫表中缺失。這可能導致所載入原理圖的符"
-"號庫引用損壞。\n"
+"在所選原理圖中存在不在當前專案庫表中的庫名。  "
+"這可能導致所載入原理圖的符號庫參考失效。\n"
 "\n"
-"是否要繼續？"
+"您是否希望繼續？"
 
 #: eeschema/sheet.cpp:371
 msgid ""
@@ -17789,10 +17789,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"所選檔案是作為不同工程的一部分建立的。將檔案連結到此專案可能會導致丟失或錯誤"
-"的符號庫引用。\n"
+"所選檔案是作為不同專案的一部分創建的。  "
+"將該檔案連結到這個專案可能導致缺少或不正確的符號程式庫參考。\n"
 "\n"
-"你想繼續嗎？"
+"您是否希望繼續？"
 
 #: eeschema/sheet.cpp:420
 msgid ""
@@ -25966,6 +25966,7 @@ msgid ""
 "Events of relatively long duration."
 msgstr ""
 "相對較長持續時間的事件包括：\n"
+"\n"
 "穩態電壓值\n"
 "瞬時過壓\n"
 "週期性的峰值電壓"
@@ -31891,37 +31892,32 @@ msgstr "刪除專案"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:108
 #, fuzzy
 msgid "Set teardrops to default values for shape"
-msgstr "設定為 0 以使用預設值"
+msgstr "將淚滴設置為預設值的形狀。"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:109
-#, fuzzy
 msgid "Set teardrops to specified values:"
-msgstr "設定為指定值："
+msgstr "將淚滴設置為指定的值:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
-#, fuzzy
 msgid "Add teardrops with default values for shape"
-msgstr "只新增淚滴到圓形 "
+msgstr "添加淚滴形狀預設值"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:114
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:129
-#, fuzzy
 msgid "Add teardrops with specified values:"
-msgstr "設定為指定值："
+msgstr "添加指定值的淚滴:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:483
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:487
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:491
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:510
-#, fuzzy
 msgid "Edit Teardrops"
-msgstr "新增淚滴"
+msgstr "編輯淚滴"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
-#, fuzzy
 msgid "PTH pads"
-msgstr "%s 的非金屬化焊盤"
+msgstr "PTH 焊盤"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:31
 msgid "SMD pads"
@@ -31952,33 +31948,29 @@ msgid "Round pads only"
 msgstr "僅圓焊盤"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:99
-#, fuzzy
 msgid "Existing teardrops only"
-msgstr "正在更新網路…"
+msgstr "僅存在的淚滴"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:114
 msgid "Remove teardrops"
 msgstr "移除淚滴"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:123
-#, fuzzy
 msgid "Edit default values in Board Setup"
-msgstr "設定符號編輯器的預設值和選項"
+msgstr "編輯電路板設定中的預設值"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:141
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:613
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:150
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:330
-#, fuzzy
 msgid "Prefer zone connection"
-msgstr "%s 區域連線：%s。"
+msgstr "優先連接區域"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:144
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:617
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
-#, fuzzy
 msgid "Allow teardrops to span 2 track segments"
-msgstr "允許淚滴散佈在2 根導線段上"
+msgstr "允許淚滴跨越在2條導線段上"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:145
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -31993,9 +31985,8 @@ msgstr "允許淚滴散佈在2 根導線上，如果第一個導線段太短"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:397
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:153
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:333
-#, fuzzy
 msgid "Maximum track width:"
-msgstr "最小布線寬度："
+msgstr "最大導線寬度:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -32013,12 +32004,11 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:161
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
-msgstr ""
+msgstr "焊盤或過孔與尺寸相似的導線不需要淚滴。"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:179
-#, fuzzy
 msgid "(as a percentage of pad/via size)"
-msgstr "額外的間隙佔焊盤尺寸的百分比。"
+msgstr "(焊盤/過孔尺寸的百分比)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:222
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:458
@@ -32027,9 +32017,8 @@ msgstr "最佳長度："
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:233
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:469
-#, fuzzy
 msgid "Maximum length:"
-msgstr "最大長度："
+msgstr "最大長度:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:253
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:489
@@ -32039,21 +32028,18 @@ msgstr "最佳高度："
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:284
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:517
-#, fuzzy
 msgid "Curved edges"
-msgstr "彎曲的"
+msgstr "曲線邊緣"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:523
-#, fuzzy
 msgid "Points:"
-msgstr "點"
+msgstr "點:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:108
-#, fuzzy
 msgid "Set Teardrops"
-msgstr "新增淚滴"
+msgstr "設置淚滴"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:138
 msgid "Other text items"
@@ -32064,9 +32050,8 @@ msgid "Graphic items"
 msgstr "圖形項"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
-#, fuzzy
 msgid "Dimension items"
-msgstr "標註線"
+msgstr "標註物件"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:258
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:183
@@ -32138,9 +32123,8 @@ msgid "Upright"
 msgstr "垂直"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:341
-#, fuzzy
 msgid "Set to layer and dimension default values:"
-msgstr "設定為圖層預設值："
+msgstr "設定為圖層和尺寸預設值:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:343
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:258
@@ -32158,7 +32142,7 @@ msgstr "封裝圖形項"
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 #, fuzzy
 msgid "Footprint dimension items"
-msgstr "封裝圖形項"
+msgstr "封裝標註物件"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB graphic items"
@@ -32169,9 +32153,8 @@ msgid "PCB text items"
 msgstr "PCB 文字項"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
-#, fuzzy
 msgid "PCB dimension items"
-msgstr "標註線"
+msgstr "PCB 標註物件"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "Filter items by parent footprint library id:"
@@ -32188,29 +32171,24 @@ msgid "Keep upright"
 msgstr "禁止倒置"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:246
-#, fuzzy
 msgid "Center on footprint"
-msgstr "父級封裝"
+msgstr "封裝中心"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
-#, fuzzy
 msgid "Filter tracks by width:"
-msgstr "按網路篩選專案："
+msgstr "按寬度篩選走線:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:99
-#, fuzzy
 msgid "Filter vias by size:"
-msgstr "按網路篩選專案："
+msgstr "按尺寸篩選過孔:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "Via size:"
-msgstr "過孔外徑"
+msgstr "過孔尺寸:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
-#, fuzzy
 msgid "Set to net class / custom rule values"
-msgstr "設定為網路類值："
+msgstr "設置為 網路類別/自訂規則 的值"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:83
 msgid "Set Track and Via Properties"
@@ -32380,17 +32358,14 @@ msgid "Predefined track && via dimensions"
 msgstr "預定義的走線和過孔尺寸"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:69
-#, fuzzy
 msgid "Teardrop defaults"
-msgstr "淚滴面積"
+msgstr "淚滴預設值"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
-#, fuzzy
 msgid "Length-tuning pattern defaults"
-msgstr "長度調整"
+msgstr "長度調整模式的預設設置"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Custom rules"
 msgstr "自定義規則"
 
@@ -32602,9 +32577,9 @@ msgid "Report file"
 msgstr "報告檔案"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2303
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s)"
-msgstr "頁 %s (%s)"
+msgstr "%s (%s)"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:30
 msgid "Net name filter:"
@@ -32828,9 +32803,8 @@ msgstr "鑽孔尺寸 X："
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:79
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:119
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:173
-#, fuzzy
 msgid "d"
-msgstr "%"
+msgstr "d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1678
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
@@ -32847,7 +32821,7 @@ msgstr "焊盤尺寸 X："
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:479
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:530
 msgid "w"
-msgstr ""
+msgstr "w"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:35
 msgid "Pad type:"
@@ -33116,17 +33090,16 @@ msgstr "板上包含舊的的水 teardrop。"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
-msgstr ""
+msgstr "使用 編輯 > 編輯淚滴 來自動生成淚滴。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
-#, fuzzy
 msgid "Add teardrops on pad's track connections"
-msgstr "將淚滴置於區域內焊盤上"
+msgstr "在焊盤的導線連接處添加淚滴"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
 msgid "Tracks which are similar in size to the pad do not need teardrops."
-msgstr ""
+msgstr "與焊盤大小相似的導線不需要淚滴。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:647
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:715
@@ -33140,9 +33113,8 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:434
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:474
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:525
-#, fuzzy
 msgid "%("
-msgstr "%"
+msgstr "%("
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:657
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:725
@@ -33161,41 +33133,36 @@ msgid " )"
 msgstr " )"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:673
-#, fuzzy
 msgid "Teardrop Shape"
-msgstr "淚滴面積"
+msgstr "淚滴形狀"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:704
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:63
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:243
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:423
-#, fuzzy
 msgid "Best length (L):"
-msgstr "最佳長度："
+msgstr "最佳長度 (L):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:732
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:92
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:272
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:452
-#, fuzzy
 msgid "Maximum length (L):"
-msgstr "最大長度："
+msgstr "最大長度(L):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:752
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:103
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:283
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:463
-#, fuzzy
 msgid "Best width (W):"
-msgstr "佈線寬度 (W)："
+msgstr "最佳寬度 (W):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:780
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:132
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:312
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:492
-#, fuzzy
 msgid "Maximum width (W):"
-msgstr "最大寬度："
+msgstr "最大寬度 (W):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:833
 msgid "Pad connection:"
@@ -33323,27 +33290,22 @@ msgid "Select Fab Layers"
 msgstr "選擇製造層"
 
 #: pcbnew/dialogs/dialog_plot.cpp:477
-#, fuzzy
 msgid "Select All Copper Layers"
 msgstr "全選所有銅層"
 
 #: pcbnew/dialogs/dialog_plot.cpp:478
-#, fuzzy
 msgid "Deselect All Copper Layers"
 msgstr "取消選擇銅層"
 
 #: pcbnew/dialogs/dialog_plot.cpp:481 pcbnew/dialogs/dialog_plot.cpp:546
-#, fuzzy
 msgid "Select All Layers"
 msgstr "全選所有層"
 
 #: pcbnew/dialogs/dialog_plot.cpp:482 pcbnew/dialogs/dialog_plot.cpp:547
-#, fuzzy
 msgid "Deselect All Layers"
 msgstr "取消全選所有層"
 
 #: pcbnew/dialogs/dialog_plot.cpp:550
-#, fuzzy
 msgid "Order as Board Stackup"
 msgstr "電路板壓層"
 
@@ -33401,9 +33363,8 @@ msgid "Plot reference designators"
 msgstr "繪製位號"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:88
-#, fuzzy
 msgid "Plot footprint text"
-msgstr "繪製封裝值"
+msgstr "繪製封裝文字"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Force plotting of invisible values / refs"
@@ -38153,9 +38114,8 @@ msgid "Cutting %d/%d %s\n"
 msgstr "切割 %d/%d %s 中\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:981
-#, fuzzy
 msgid "pads"
-msgstr "無焊盤"
+msgstr "焊盤"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:982
 #, fuzzy
@@ -46444,9 +46404,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr "[資訊] 載入失敗：輸入行太長\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "將點陣圖轉換成元件"
+msgstr "將點陣圖轉換成元件;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -46485,9 +46444,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "工程管理器"
+msgstr "工程管理器;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -46502,9 +46460,8 @@ msgid "KiCad PCB Calculator"
 msgstr "KiCad PCB 計算器"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "PCB 計算器"
+msgstr "PCB;計算器;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
