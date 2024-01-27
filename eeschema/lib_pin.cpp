@@ -1666,25 +1666,16 @@ static struct LIB_PIN_DESC
         propMgr.AddProperty( new PROPERTY<LIB_PIN, wxString>( _HKI( "Pin Name" ),
                 &LIB_PIN::SetName, &LIB_PIN::GetName ) );
 
-        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Name Text Size" ),
-                &LIB_PIN::SetNameTextSize, &LIB_PIN::GetNameTextSize, PROPERTY_DISPLAY::PT_SIZE ) );
-
         propMgr.AddProperty( new PROPERTY<LIB_PIN, wxString>( _HKI( "Pin Number" ),
                 &LIB_PIN::SetNumber, &LIB_PIN::GetNumber ) );
 
-        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Number Text Size" ),
-                &LIB_PIN::SetNumberTextSize, &LIB_PIN::GetNumberTextSize,
-                PROPERTY_DISPLAY::PT_SIZE ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<LIB_PIN, ELECTRICAL_PINTYPE>(
+                _HKI( "Electrical Type" ),
+                &LIB_PIN::SetType, &LIB_PIN::GetType ) );
 
-        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Length" ),
-                &LIB_PIN::SetLength, &LIB_PIN::GetLength, PROPERTY_DISPLAY::PT_SIZE ) );
-
-        propMgr.AddProperty( new PROPERTY_ENUM<LIB_PIN,
-                                               ELECTRICAL_PINTYPE>( _HKI( "Electrical Type" ),
-                             &LIB_PIN::SetType, &LIB_PIN::GetType ) );
-
-        propMgr.AddProperty( new PROPERTY_ENUM<LIB_PIN, GRAPHIC_PINSHAPE>( _HKI( "Graphic Style" ),
-                             &LIB_PIN::SetShape, &LIB_PIN::GetShape ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<LIB_PIN, GRAPHIC_PINSHAPE>(
+                _HKI( "Graphic Style" ),
+                &LIB_PIN::SetShape, &LIB_PIN::GetShape ) );
 
         propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Position X" ),
                 &LIB_PIN::SetX, &LIB_PIN::GetX, PROPERTY_DISPLAY::PT_COORD ) );
@@ -1693,7 +1684,22 @@ static struct LIB_PIN_DESC
                 &LIB_PIN::SetY, &LIB_PIN::GetY, PROPERTY_DISPLAY::PT_COORD ) );
 
         propMgr.AddProperty( new PROPERTY_ENUM<LIB_PIN, PIN_ORIENTATION>( _HKI( "Orientation" ),
-                             &LIB_PIN::SetOrientation, &LIB_PIN::GetOrientation ) );
+                &LIB_PIN::SetOrientation, &LIB_PIN::GetOrientation ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Length" ),
+                &LIB_PIN::SetLength, &LIB_PIN::GetLength,
+                PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Name Text Size" ),
+                &LIB_PIN::SetNameTextSize, &LIB_PIN::GetNameTextSize,
+                PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, int>( _HKI( "Number Text Size" ),
+                &LIB_PIN::SetNumberTextSize, &LIB_PIN::GetNumberTextSize,
+                PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_PIN, bool>( _HKI( "Visible" ),
+                &LIB_PIN::SetVisible, &LIB_PIN::IsVisible ) );
     }
 } _LIB_PIN_DESC;
 
