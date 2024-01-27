@@ -415,8 +415,8 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 
         wxMenu* parent = dynamic_cast<wxMenu*>( GetParent() );
 
-        // Don't update the position if this menu has a parent
-        if( !parent && toolMgr )
+        // Don't update the position if this menu has a parent or is a menubar menu
+        if( !parent && !IsAttached() && toolMgr )
             g_menu_open_position = toolMgr->GetMousePosition();
 
         g_last_menu_highlighted_id = 0;
@@ -546,9 +546,11 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         {
             evt->SetMousePosition( g_menu_open_position );
         }
-        // Otherwise, if g_last_menu_highlighted_id matches then it's a menubar menu event and has
-        // no position.
-        else if( g_last_menu_highlighted_id == aEvent.GetId() )
+        // Check if it is a menubar event, and don't get any position if it is.
+        // The original hack is to see if g_last_menu_highlighted_id matches to see if it's a menubar menu event
+        // IsAttached() checks to see if a menubar was attached to the menu by wx, and if there is one, then the event
+        // is from a menubar menu.
+        else if( IsAttached() || ( g_last_menu_highlighted_id == aEvent.GetId() ) )
         {
             evt->SetHasPosition( false );
         }
