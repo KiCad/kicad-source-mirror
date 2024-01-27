@@ -29,13 +29,14 @@
 # Zhen Sun <igoal@163.com>, 2023.
 # 向阳阳 <hinata.hoshino@foxmail.com>, 2024.
 # Lao·Zhu <2208213223@qq.com>, 2024.
+# CloverGit <CloverGit@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 11:30+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2024-01-27 11:36+0000\n"
+"Last-Translator: CloverGit <CloverGit@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -3980,7 +3981,7 @@ msgstr "至少需要保留一个栅格尺寸。"
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
 msgid "Grids:"
-msgstr "栅格:"
+msgstr "栅格预设:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
 msgid "Fast Grid Switching"
@@ -4860,7 +4861,7 @@ msgstr "显示选项"
 #: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1171
 #: common/eda_base_frame.cpp:1224 common/tool/common_tools.cpp:555
 msgid "Grids"
-msgstr "栅格"
+msgstr "栅格选项"
 
 #: common/eda_base_frame.cpp:1128 common/eda_base_frame.cpp:1137
 #: common/eda_base_frame.cpp:1162 common/eda_base_frame.cpp:1173
