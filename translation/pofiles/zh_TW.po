@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-27 08:43+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -358,14 +358,12 @@ msgid "Can't save file"
 msgstr "無法儲存檔案"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
-#, fuzzy
 msgid "Set Pivot"
-msgstr "圖紙頁碼"
+msgstr "設定Pivot"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "中心軸旋轉 (點選滑鼠中鍵)"
+msgstr "放置電路板旋轉點 (點選滑鼠中鍵)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
@@ -648,7 +646,7 @@ msgstr "顯示頂層絲印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr "底層絹印"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show back silkscreen"
@@ -12604,7 +12602,7 @@ msgstr "輸入:"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:586
 #: eeschema/dialogs/dialog_sim_command_base.cpp:604
 msgid "Ref:"
-msgstr ""
+msgstr "參考:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:595
 msgid "Output:"
@@ -12993,9 +12991,9 @@ msgstr "電源符號"
 #: eeschema/symbol_chooser_frame.cpp:103
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:61
 #: pcbnew/footprint_chooser_frame.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr "選擇符號(共 %d 項)"
+msgstr " 選擇符號(共 %d 項)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -13252,7 +13250,7 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:243
 msgid "Leave blank to disable ranges."
-msgstr ""
+msgstr "留空以停用範圍。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:248
 #, fuzzy
@@ -13577,9 +13575,8 @@ msgstr ""
 ">”以建立指向此原理圖中頁面的超連結。"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:537
-#, fuzzy
 msgid "Edit Text"
-msgstr "編輯文字.."
+msgstr "編輯文字"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -13644,7 +13641,7 @@ msgstr "其他圖框欄位"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
-msgstr ""
+msgstr "更新來自封裝的符號中的其他所有欄位"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:584
@@ -18920,7 +18917,7 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:997
 #, fuzzy
 msgid " (amplitude)"
-msgstr "幅度："
+msgstr " 幅度："
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
 #, fuzzy, c-format
@@ -38414,9 +38411,7 @@ msgstr ""
 #: pcbnew/exporters/step/exporter_step.cpp:539
 #, fuzzy, c-format
 msgid "%s file '%s' created.\n"
-msgstr ""
-"\n"
-"已建立 STEP 檔案 \"%s\"。\n"
+msgstr "已建立 STEP 檔案 \"%s\"。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:546
 #: pcbnew/exporters/step/exporter_step.cpp:552
@@ -38443,11 +38438,13 @@ msgid "%s file has been created, but there are warnings."
 msgstr "STEP 檔案已建立，但有警告。"
 
 #: pcbnew/exporters/step/exporter_step.cpp:576
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "Export time %.3f s\n"
-msgstr "重新載入時間 %.3f s"
+msgstr ""
+"\n"
+"重新載入時間 %.3f s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:954
 #, fuzzy, c-format
