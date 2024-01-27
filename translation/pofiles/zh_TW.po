@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2024-01-28 12:01+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -13006,9 +13006,9 @@ msgid "Abort Project Save"
 msgstr "中止工程儲存"
 
 #: eeschema/files-io.cpp:1246
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "原理圖 '%s' 已經開啟。"
+msgstr "電路圖 '%s' 已經被 '%s' 開啟(在 '%s')。"
 
 #: eeschema/files-io.cpp:1259
 msgid "Importing Schematic"
