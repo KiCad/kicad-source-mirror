@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 13:47+0000\n"
+"PO-Revision-Date: 2024-01-27 16:28+0000\n"
 "Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -23381,44 +23381,43 @@ msgstr "原理圖"
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
-msgstr ""
+msgstr "在電路圖上運行電氣規則檢查（ERC）並生成報告。"
 
 #: kicad/cli/command_sch_erc.cpp:58
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr ""
+msgstr "報告所有ERC違規，這相當於包括所有其他嚴重性參數。"
 
 #: kicad/cli/command_sch_erc.cpp:63
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "報告所有ERC錯誤級別的違規，這可以與其他嚴重性參數結合使用"
 
 #: kicad/cli/command_sch_erc.cpp:68
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "報告所有ERC警告級別的違規，這可以與其他嚴重性參數結合使用"
 
 #: kicad/cli/command_sch_erc.cpp:74
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "報告所有排除的ERC違規，這可以與其他嚴重性參數結合使用"
 
 #: kicad/cli/command_sch_erc.cpp:79
 msgid "Return a nonzero exit code if ERC violations exist"
-msgstr ""
+msgstr "如果存在ERC違規，則返回非零退出代碼"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr ""
+msgstr "匯出工具(網路表、PDF、BOM 等等)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Materials (BOM)"
-msgstr "產生材料清單（BOM）(&M)"
+msgstr "生成物料清單(BOM)"
 
 #: kicad/cli/command_sch_export_bom.cpp:174
 #: kicad/cli/command_sch_export_netlist.cpp:56
@@ -23428,9 +23427,8 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "原理圖檔案不存在或不可訪問\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
-#, fuzzy
 msgid "Export a netlist"
-msgstr "匯出網表"
+msgstr "匯出網路表"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
 msgid ""
@@ -23445,9 +23443,8 @@ msgid "Color theme to use (will default to schematic settings)"
 msgstr "使用的顏色主題（預設為原理圖設定）"
 
 #: kicad/cli/command_sch_export_plot.cpp:80
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "生成用於製造的 Gerbers"
+msgstr "不要在PDF中生成屬性彈出窗口"
 
 #: kicad/cli/command_sch_export_plot.cpp:89
 msgid "Avoid setting a background color (regardless of theme)"
@@ -23457,41 +23454,37 @@ msgstr "避免設定背景色（無論什麼主題）"
 msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
-msgstr ""
+msgstr "以逗號分隔的頁碼清單以便打印，留白或未指定相當於所有頁"
 
 #: kicad/cli/command_sch_export_plot.cpp:102
-#, fuzzy
 msgid "Pen size [mm]"
-msgstr "圖框尺寸："
+msgstr "畫筆尺寸 [mm]"
 
 #: kicad/cli/command_sch_export_plot.cpp:108
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
-msgstr ""
+msgstr "原點和縮放：0底部左側、1居中、2頁面適應、3內容適應"
 
 #: kicad/cli/command_sch_export_plot.cpp:172
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
-msgstr ""
+msgstr "HPGL原點選項必須是0、1、2或3\n"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
-msgstr ""
+msgstr "使用Python腳本導出在原理圖編輯器中使用舊版的BOM XML格式"
 
 #: kicad/cli/command_sym.h:31
-#, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "載入符號庫"
+msgstr "符號和符號庫"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
-#, fuzzy
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "將符號匯出到新庫檔案"
+msgstr "將符號或整個符號庫導出為SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:48
-#, fuzzy
 msgid "Color theme to use (will default to symbol editor settings)"
-msgstr "要使用的顏色主題（預設使用 pcbnew 設定）"
+msgstr "使用的配色主題（將默認為符號編輯器設置）"
 
 #: kicad/cli/command_sym_export_svg.cpp:54
 msgid "Specific symbol to export within the library"
@@ -23510,23 +23503,20 @@ msgid "Symbol file does not exist or is not accessible\n"
 msgstr "符號檔案不存在或無法訪問\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:39
-#, fuzzy
 msgid "Upgrades the symbol library to the current kicad version format"
-msgstr "強制重新儲存符號庫，不考慮版本控制"
+msgstr "升級符號庫至當前的KiCad版本格式"
 
 #: kicad/cli/command_sym_upgrade.cpp:44
 msgid "Forces the symbol library to be resaved regardless of versioning"
 msgstr "強制重新儲存符號庫，不考慮版本控制"
 
 #: kicad/cli/command_sym_upgrade.cpp:59
-#, fuzzy
 msgid "Symbol library does not exist or is not accessible\n"
-msgstr "符號檔案不存在或無法訪問\n"
+msgstr "符號庫不存在或無法訪問\n"
 
 #: kicad/cli/command_version.cpp:35
-#, fuzzy
 msgid "Reports the version info in various formats"
-msgstr "列印版本資訊並退出"
+msgstr "以不同格式報告版本信息"
 
 #: kicad/cli/command_version.cpp:39
 msgid "version info format (plain, commit, about)"
@@ -23553,9 +23543,8 @@ msgid "Project Template Selector"
 msgstr "選擇工程模板"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
-#, fuzzy
 msgid "Would you like to automatically check for updates on startup?"
-msgstr "是否要在啟動時自動檢查更新？"
+msgstr "是否希望在啟動時自動檢查更新？"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
@@ -23564,7 +23553,6 @@ msgid "KiCad"
 msgstr "KiCad"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
-#, fuzzy
 msgid "Check for Updates"
 msgstr "檢查更新"
 
@@ -23572,30 +23560,27 @@ msgstr "檢查更新"
 #, c-format
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
-msgstr ""
+msgstr "KiCad %s 已經可用（目前的版本是 %s）。想要立即下載嗎？"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
 msgstr "KiCad 有新版了！"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "Skip this version"
-msgstr "預期 %s"
+msgstr "跳過此版本"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
-msgstr ""
+msgstr "稍後提醒我"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
-#, fuzzy
 msgid "Open Downloads Page"
-msgstr "下載進度"
+msgstr "打開下載頁面"
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
-#, fuzzy
 msgid "Update Available"
-msgstr "有可用的包更新"
+msgstr "有可用的更新"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project schematic"
@@ -23707,12 +23692,11 @@ msgstr "匯入 Eagle 工程檔案"
 
 #: kicad/import_project.cpp:142
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "匯入EasyEDA標準備份"
 
 #: kicad/import_project.cpp:149
-#, fuzzy
 msgid "Import EasyEDA Pro Project"
-msgstr "匯入 Eagle 工程檔案"
+msgstr "匯入EasyEDA Pro 專案"
 
 #: kicad/kicad.cpp:317
 #, c-format
@@ -23725,41 +23709,35 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:132
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "匯出GLB（二進制GLTF）"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
 msgstr "匯出 STEP"
 
 #: kicad/kicad_cli.cpp:134
-#, fuzzy
 msgid "Export VRML"
-msgstr "匯出"
+msgstr "匯出 VRML"
 
 #: kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export DXF"
-msgstr "匯出 IDFv3"
+msgstr "匯出 DXF"
 
 #: kicad/kicad_cli.cpp:148
-#, fuzzy
 msgid "Export HPGL"
-msgstr "匯出 STEP"
+msgstr "匯出 HPGL"
 
 #: kicad/kicad_cli.cpp:149
-#, fuzzy
 msgid "Export PDF"
-msgstr "匯出 IDFv3"
+msgstr "匯出 PDF"
 
 #: kicad/kicad_cli.cpp:150
-#, fuzzy
 msgid "Export PS"
-msgstr "匯出 STEP"
+msgstr "匯出 PS"
 
 #: kicad/kicad_cli.cpp:151
-#, fuzzy
 msgid "Export SVG"
-msgstr "匯出 SVG 檔案"
+msgstr "匯出 SVG"
 
 #: kicad/kicad_cli.cpp:317
 msgid "prints version information and exits"
@@ -23774,17 +23752,15 @@ msgid "Editors"
 msgstr "編輯器"
 
 #: kicad/kicad_manager_frame.cpp:303
-#, fuzzy
 msgid "PCM Updates Available"
-msgstr "有可用的包更新"
+msgstr "可用的PCM更新"
 
 #: kicad/kicad_manager_frame.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) avaliable"
-msgstr "無可用的包更新"
+msgstr "有%d個套件更新可用。"
 
 #: kicad/kicad_manager_frame.cpp:759
-#, fuzzy
 msgid "Edit File in Text Editor"
 msgstr "在文字編輯器中編輯"
 
@@ -23832,22 +23808,19 @@ msgstr "匯入 EAGLE CAD XML 原理圖和電路板"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "EasyEDA（JLCEDA）標準版 備份..."
 
 #: kicad/menubar.cpp:117
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "匯入 EAGLE CAD XML 原理圖和電路板"
+msgstr "匯入EasyEDA（JLCEDA）標準版 原理圖和電路板"
 
 #: kicad/menubar.cpp:121
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "Eagle 工程..."
+msgstr "EasyEDA（JLCEDA）Pro 專案..."
 
 #: kicad/menubar.cpp:122
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "匯入 EAGLE CAD XML 原理圖和電路板"
+msgstr "匯入EasyEDA（JLCEDA）Pro 原理圖和電路板"
 
 #: kicad/menubar.cpp:128
 msgid "&Archive Project..."
@@ -23913,9 +23886,8 @@ msgid "Add Existing"
 msgstr "新增現有"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:77
-#, fuzzy
 msgid "Remove repository"
-msgstr "倉庫"
+msgstr "移除資料庫"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
@@ -23982,9 +23954,8 @@ msgid ""
 msgstr "您確定要關閉軟體包管理器並放棄掛起的變更嗎？"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:292
-#, fuzzy
 msgid "Install Package"
-msgstr "安裝軟體包"
+msgstr "安裝套件"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:405
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:121
@@ -24121,9 +24092,8 @@ msgid "Error downloading package"
 msgstr "下載軟體包時出錯"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:528
-#, fuzzy
 msgid "Save Package"
-msgstr "儲存軟體包"
+msgstr "儲存套件"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:541
 msgid "Downloading package"
@@ -24141,11 +24111,10 @@ msgstr "保留已下載檔案"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:610
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid ""
 "This package version is incompatible with your KiCad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr "這個軟體包版本與您的 kicad 版本或平臺不相容。 您確定要安裝它嗎？"
+msgstr "此套件版本與您的KiCad版本或平台不兼容。您確定要安裝嗎？"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:612
 #: kicad/pcm/pcm_task_manager.cpp:385
@@ -24270,24 +24239,20 @@ msgid "Local file"
 msgstr "本地檔案"
 
 #: kicad/pcm/pcm.cpp:1104
-#, fuzzy
 msgid "PCM Update"
-msgstr "更新"
+msgstr "PCM 更新"
 
 #: kicad/pcm/pcm.cpp:1114
-#, fuzzy
 msgid "Preparing to fetch repositories"
-msgstr "管理倉庫"
+msgstr "準備提取資料庫"
 
 #: kicad/pcm/pcm.cpp:1132
-#, fuzzy
 msgid "Fetching repository..."
-msgstr "拉取倉庫中"
+msgstr "提取資料庫..."
 
 #: kicad/pcm/pcm.cpp:1145
-#, fuzzy
 msgid "Reviewing packages..."
-msgstr "正刪除焊盤內導線…"
+msgstr "正在檢查套件..."
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:168
 #, c-format
@@ -24328,9 +24293,9 @@ msgid "Removing previous version of package '%s'."
 msgstr "移除先前版本的軟體包 '%s'。"
 
 #: kicad/pcm/pcm_task_manager.cpp:214
-#, fuzzy, c-format
+#, c-format
 msgid "Installing package '%s'."
-msgstr "正在提取軟體包 \"%s\"。"
+msgstr "正在安裝套件 '%s'。"
 
 #: kicad/pcm/pcm_task_manager.cpp:312
 msgid "Aborting package installation."
@@ -24382,19 +24347,18 @@ msgid "Package %s uninstalled"
 msgstr "已解除安裝軟體包 %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:661
-#, fuzzy, c-format
+#, c-format
 msgid "%d out of %d operations failed."
-msgstr "檔案儲存失敗。"
+msgstr "%d 個操作中有 %d 個失敗。"
 
 #: kicad/pcm/pcm_task_manager.cpp:668
-#, fuzzy
 msgid "All operations completed successfully."
-msgstr "檔案已經成功建立。"
+msgstr "所有操作成功完成。"
 
 #: kicad/pcm/pcm_task_manager.cpp:673
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
-msgstr ""
+msgstr "%d 個操作（共 %d 個）已初始化，但未成功。"
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -24540,14 +24504,12 @@ msgid "Add Project to Version Control..."
 msgstr "把專案加入版本控管..."
 
 #: kicad/project_tree_pane.cpp:934
-#, fuzzy
 msgid "Initialize a new repository"
-msgstr "無法解析倉庫：%s"
+msgstr "初始化一個新的儲存庫"
 
 #: kicad/project_tree_pane.cpp:938
-#, fuzzy
 msgid "Commit Project..."
-msgstr "專案...(&P)"
+msgstr "提交專案..."
 
 #: kicad/project_tree_pane.cpp:939 kicad/project_tree_pane.cpp:953
 msgid "Commit changes to the local repository"
@@ -24555,53 +24517,47 @@ msgstr "Commit 到 local repo"
 
 #: kicad/project_tree_pane.cpp:942
 msgid "Push"
-msgstr ""
+msgstr "推送"
 
 #: kicad/project_tree_pane.cpp:943
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "將已提交的本地更改推送到遠程儲存庫"
 
 #: kicad/project_tree_pane.cpp:946
 msgid "Pull"
-msgstr ""
+msgstr "拉取"
 
 #: kicad/project_tree_pane.cpp:947
-#, fuzzy
 msgid "Pull changes from remote repository into local"
-msgstr "電路圖探頭"
+msgstr "從遠程儲存庫拉取改動到本地"
 
 #: kicad/project_tree_pane.cpp:952
-#, fuzzy
 msgid "Commit File..."
-msgstr "编辑欄位..."
+msgstr "提交檔案..."
 
 #: kicad/project_tree_pane.cpp:967
-#, fuzzy
 msgid "Switch to branch "
-msgstr "切換到內層 1"
+msgstr "切換分支到 "
 
 #: kicad/project_tree_pane.cpp:972
 msgid "Other..."
 msgstr "其它..."
 
 #: kicad/project_tree_pane.cpp:973
-#, fuzzy
 msgid "Switch to a different branch"
-msgstr "切換到另一種編輯圓弧的方法"
+msgstr "切換到不同的分支"
 
 #: kicad/project_tree_pane.cpp:976
-#, fuzzy
 msgid "Switch to Branch"
-msgstr "切換到 PCB 編輯器"
+msgstr "切換到分支"
 
 #: kicad/project_tree_pane.cpp:980
-#, fuzzy
 msgid "Remove Version Control"
-msgstr "移除拐角"
+msgstr "移除版本控制"
 
 #: kicad/project_tree_pane.cpp:981
 msgid "Delete all version control files from the project directory."
-msgstr ""
+msgstr "從專案目錄中刪除所有版本控制檔案。"
 
 #: kicad/project_tree_pane.cpp:1039
 #, c-format
@@ -24626,38 +24582,34 @@ msgstr "所選目錄已經是git專案。"
 
 #: kicad/project_tree_pane.cpp:1555
 msgid "Failed to initialize git project."
-msgstr ""
+msgstr "專案初始化Git失敗。"
 
 #: kicad/project_tree_pane.cpp:1570
-#, fuzzy
 msgid "Set default remote"
-msgstr "使用預設網路名"
+msgstr "設定預設遠程儲存庫"
 
 #: kicad/project_tree_pane.cpp:1623
-#, fuzzy
 msgid "Failed to set default remote."
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "設定預設遠程儲存庫失敗。"
 
 #: kicad/project_tree_pane.cpp:1639 kicad/project_tree_pane.cpp:1676
 #: kicad/project_tree_pane.cpp:1696
-#, fuzzy
 msgid "Fetching Remote"
-msgstr "拉取倉庫中"
+msgstr "提取遠程儲存庫"
 
 #: kicad/project_tree_pane.cpp:1702
-#, fuzzy
 msgid "Failed to push project"
-msgstr "未能輸出資料"
+msgstr "推送專案失敗"
 
 #: kicad/project_tree_pane.cpp:1764
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup branch '%s': %s"
-msgstr "未能載入 '%s'."
+msgstr "查找分支 '%s' 失敗：%s"
 
 #: kicad/project_tree_pane.cpp:1776
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s'"
-msgstr "無法為 '%s' 找到一款 PDF 檢視器。"
+msgstr "找不到分支 '%s' 的分支head。"
 
 #: kicad/project_tree_pane.cpp:1787
 #, c-format
@@ -24665,72 +24617,70 @@ msgid "Failed to switch to branch '%s'"
 msgstr "切換到分支 '%s' 時失敗"
 
 #: kicad/project_tree_pane.cpp:1798
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to update HEAD reference for branch '%s'"
-msgstr "'%s' 需要一個數字"
+msgstr "無法更新分支 '%s' 的HEAD引用"
 
 #: kicad/project_tree_pane.cpp:1816
-#, fuzzy
 msgid "Are you sure you want to remove git tracking from this project?"
-msgstr "你確定要刪除欄位 \"%s\"嗎？"
+msgstr "您確定要從此專案中移除Git版本控制嗎？"
 
 #: kicad/project_tree_pane.cpp:1833
-#, fuzzy
 msgid "Failed to remove git directory"
-msgstr "未能刪除目錄 %s"
+msgstr "刪除Git目錄失敗"
 
 #: kicad/project_tree_pane.cpp:2147
 msgid "Discarding commit due to empty commit message."
-msgstr ""
+msgstr "因為提交訊息為空而放棄提交。"
 
 #: kicad/project_tree_pane.cpp:2153
 msgid "Discarding commit due to empty file selection."
-msgstr ""
+msgstr "因為檔案選擇為空而放棄提交。"
 
 #: kicad/project_tree_pane.cpp:2159
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get repository index: %s"
-msgstr "無法解析倉庫：%s"
+msgstr "無法獲取儲存庫索引：%s"
 
 #: kicad/project_tree_pane.cpp:2167
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to add file to index: %s"
-msgstr "無法刪除 '%s'"
+msgstr "無法將檔案添加到索引：%s"
 
 #: kicad/project_tree_pane.cpp:2175
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write index: %s"
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "無法寫入索引：%s"
 
 #: kicad/project_tree_pane.cpp:2182
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write tree: %s"
-msgstr "無法刪除 '%s'"
+msgstr "無法寫入Tree：%s"
 
 #: kicad/project_tree_pane.cpp:2191
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to lookup tree: %s"
-msgstr "無法刪除 '%s'"
+msgstr "查找 tree 失敗：%s"
 
 #: kicad/project_tree_pane.cpp:2199
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get HEAD reference: %s"
-msgstr "未能刪除目錄 %s"
+msgstr "無法獲取HEAD引用：%s"
 
 #: kicad/project_tree_pane.cpp:2206
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
-msgstr "未能儲存原理圖 '%s'"
+msgstr "無法獲取提交：%s"
 
 #: kicad/project_tree_pane.cpp:2222
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create author signature: %s"
-msgstr "未能建立臨時檔案 '%s'。"
+msgstr "無法創建作者簽名：%s。"
 
 #: kicad/project_tree_pane.cpp:2232
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "無法創建提交：%s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -24749,14 +24699,12 @@ msgid "Create new project from template"
 msgstr "從模板新建工程"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
-#, fuzzy
 msgid "Clone Project from Repository..."
-msgstr "從模板新建工程..."
+msgstr "從儲存庫複製專案..."
 
 #: kicad/tools/kicad_manager_actions.cpp:61
-#, fuzzy
 msgid "Clone a project from an existing repository"
-msgstr "從現有封裝檔案匯入封裝"
+msgstr "從現有的儲存庫複製專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:68
 msgid "Open Demo Project..."
@@ -24850,18 +24798,16 @@ msgstr ""
 "你想繼續嗎？"
 
 #: kicad/tools/kicad_manager_control.cpp:151
-#, fuzzy
 msgid "Clone Project from Git Repository"
-msgstr "從模板新建工程"
+msgstr "從Git儲存庫複製專案"
 
 #: kicad/tools/kicad_manager_control.cpp:173
-#, fuzzy
 msgid "Cloning Repository"
-msgstr "倉庫"
+msgstr "正在複製儲存庫"
 
 #: kicad/tools/kicad_manager_control.cpp:185
 msgid "No project files were found in the repository."
-msgstr ""
+msgstr "在儲存庫中找不到任何專案檔案。"
 
 #: kicad/tools/kicad_manager_control.cpp:221
 msgid "System Templates"
@@ -24938,23 +24884,21 @@ msgid "Application failed to load:\n"
 msgstr "應用程式載入失敗：\n"
 
 #: kicad/tools/kicad_manager_control.cpp:752
-#, fuzzy
 msgid "Application cannot start."
-msgstr "應用程式載入失敗。"
+msgstr "應用程序無法啟動。"
 
 #: kicad/update_manager.cpp:164
-#, fuzzy
 msgid "Update Check"
-msgstr "更新 PCB"
+msgstr "檢查更新"
 
 #: kicad/update_manager.cpp:173
 msgid "Requesting update info"
-msgstr ""
+msgstr "請求更新資訊"
 
 #: kicad/update_manager.cpp:246
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse update response: %s"
-msgstr "無法解析倉庫：%s"
+msgstr "無法解析更新回應：%s"
 
 #: kicad/widgets/filedlg_new_project.h:32
 msgid "Create a new folder for the project"
@@ -25100,9 +25044,8 @@ msgid "Text height:"
 msgstr "文字高度："
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:183
-#, fuzzy
 msgid "Maximum width:"
-msgstr "最小寬度："
+msgstr "最大寬度:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:185
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:198
@@ -25112,9 +25055,8 @@ msgstr "設定為 0 可禁用此約束"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:196
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:264
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:500
-#, fuzzy
 msgid "Maximum height:"
-msgstr "最大高度："
+msgstr "最大高度:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:226
 msgid "Set to 0 to use default values"
@@ -25231,9 +25173,8 @@ msgid "File \"%s\" inserted"
 msgstr "插入檔案 \"%s\""
 
 #: pagelayout_editor/files.cpp:157
-#, fuzzy
 msgid "Open Drawing Sheet"
-msgstr "圖紙"
+msgstr "開啟圖紙"
 
 #: pagelayout_editor/files.cpp:173
 #, c-format
@@ -25246,9 +25187,8 @@ msgid "Unable to write '%s'."
 msgstr "無法寫入 \"%s\"。"
 
 #: pagelayout_editor/files.cpp:195
-#, fuzzy
 msgid "Save Drawing Sheet As"
-msgstr "圖紙"
+msgstr "將圖紙另存為"
 
 #: pagelayout_editor/files.cpp:244
 msgid "Error reading drawing sheet"
@@ -25380,9 +25320,8 @@ msgid "Edit preview data for page size and title block"
 msgstr "編輯圖框大小和標題塊的預覽資料"
 
 #: pagelayout_editor/tools/pl_actions.cpp:119
-#, fuzzy
 msgid "Show Title Block in Preview Mode"
-msgstr "在預覽模式下顯示標題欄"
+msgstr "在預覽模式中顯示標題欄"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 msgid ""
@@ -25393,7 +25332,6 @@ msgstr ""
 "文字佔位符將替換為預覽資料。"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Show Title Block in Edit Mode"
 msgstr "在編輯模式下顯示標題欄"
 
@@ -25538,24 +25476,20 @@ msgid "Lines width"
 msgstr "線寬"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
-#, fuzzy
 msgid "Minimum clearance"
-msgstr "最小間隙："
+msgstr "最小間隙"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
-#, fuzzy
 msgid "Via: (diameter - drill)"
-msgstr "過孔：（鑽孔直徑）"
+msgstr "貫孔: (直徑 - 鑽孔直徑)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:76
-#, fuzzy
 msgid "Plated Pad: (diameter - drill)"
-msgstr "金屬化焊盤：（鑽孔直徑）"
+msgstr "鍍金焊盤: (直徑 - 鑽孔直徑)"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:77
-#, fuzzy
 msgid "NP Pad: (diameter - drill)"
-msgstr "非金屬化焊盤：（鑽孔直徑）"
+msgstr "非鍍金焊盤:(直徑 - 鑽孔直徑)"
 
 #: pcb_calculator/calculator_panels/panel_cable_size.cpp:95
 msgid "AWG0000"
@@ -25766,14 +25700,12 @@ msgid "Ampacity:"
 msgstr "電流承載能力："
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:149
-#, fuzzy
 msgid "Current density"
-msgstr "當前快捷鍵："
+msgstr "電流密度"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:156
-#, fuzzy
 msgid "A/mm^2"
-msgstr "mm^2"
+msgstr "A/mm^2"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:167
 msgid "Application"
@@ -25871,31 +25803,31 @@ msgstr "乘數"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:19
 msgid "IPC 2221"
-msgstr ""
+msgstr "IPC 2221"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_base.cpp:21
 msgid "IEC 60664"
-msgstr ""
+msgstr "IEC 60664"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:24
 msgid "Insulation for equipment within low-voltage supply systems"
-msgstr ""
+msgstr "低壓供電系統內的設備絕緣"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:31
 msgid "Determine the transient impulse voltage to withstand"
-msgstr ""
+msgstr "確定承受的瞬態衝擊電壓"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:41
 msgid "Rated Voltage (RMS or DC):"
-msgstr ""
+msgstr "額定電壓(RMS 或 DC):"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:43
 msgid "Voltage of the mains supply"
-msgstr ""
+msgstr "市電電壓"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:54
 msgid "Overvoltage category:"
-msgstr ""
+msgstr "過壓類別:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
 msgid ""
@@ -25911,59 +25843,64 @@ msgid ""
 "OVC IV: Equipment at the origin of the installation (eg: electricity meters, "
 "primary overcurrent protection devices)"
 msgstr ""
+"OVC I：不與主電源直接連接的設備。\n"
+"\n"
+"OVC II：需要從固定安裝中供應的能源消耗設備（例如：家用電器、便攜工具、家庭負"
+"載）。如果有可靠性和可用性要求，則適用OVCIII。\n"
+"\n"
+"OVC III：在可靠性和可用性要求的固定安裝中的設備（例如：電開關、工業用設備）\n"
+"\n"
+"OVC IV：安裝起點的設備（例如：電表、主要過電流保護裝置）"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC I"
-msgstr ""
+msgstr "OVC I"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC II"
-msgstr ""
+msgstr "OVC II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC III"
-msgstr ""
+msgstr "OVC III"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:60
 msgid "OVC IV"
-msgstr ""
+msgstr "OVC IV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:83
-#, fuzzy
 msgid "Impulse voltage:"
-msgstr "脈衝值："
+msgstr "脈衝電壓:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:85
 msgid ""
 "Given the rated voltage and the overvoltage category, a device should "
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
-msgstr ""
+msgstr "根據額定電壓和過壓類別，一個設備應該能夠承受這個值，而不會破壞絕緣。這個脈衝"
+"電壓是標準的1.2/50µs波形"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:160
-#, fuzzy
 msgid "kV"
-msgstr "V"
+msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
-msgstr ""
+msgstr "計算間隙距離和爬電距離"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
-#, fuzzy
 msgid "RMS Voltage:"
-msgstr "電壓"
+msgstr "有效值電壓:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:121
 msgid "Expected RMS voltage."
-msgstr ""
+msgstr "預期有效值電壓。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:134
-#, fuzzy
 msgid "Transient overvoltage:"
-msgstr "瞬態噪聲"
+msgstr "瞬態過電壓:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:136
 msgid ""
@@ -25977,11 +25914,18 @@ msgid ""
 "\n"
 "Events that last for a few milliseconds or less."
 msgstr ""
+"短暫過電壓是由以下原因引起的：\n"
+"\n"
+"- 由主電源傳輸的大氣干擾（例如：閃電擊中）\n"
+"- 主電源中的開關負載\n"
+"- 外部電路\n"
+"- 內部發生\n"
+"\n"
+"這些事件持續時間僅為幾毫秒或更短。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:149
-#, fuzzy
 msgid "Recurring peak voltage:"
-msgstr "儲存所有電壓"
+msgstr "週期性的峰值電壓:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:151
 msgid ""
@@ -25991,11 +25935,14 @@ msgid ""
 "\n"
 "Events of relatively long duration."
 msgstr ""
+"相對較長持續時間的事件包括：\n"
+"穩態電壓值\n"
+"瞬時過壓\n"
+"週期性的峰值電壓"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:164
-#, fuzzy
 msgid "Type of insulation:"
-msgstr "文字方向"
+msgstr "絕緣的類型:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:166
 msgid ""
@@ -26008,19 +25955,24 @@ msgid ""
 "equivalent to a double insulation. ( which is two separate basic "
 "insulations, in case one of them fails  )."
 msgstr ""
+"功能性：絕緣僅對於設備的功能是必要的。\n"
+"\n"
+"基本：危險帶電部件的絕緣。\n"
+"\n"
+"加強型：單絕緣，提供相當於雙絕緣的保護程度。 "
+"（這是兩個獨立的基本絕緣，以防其中一個失效）。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
-#, fuzzy
 msgid "Functional"
-msgstr "結點"
+msgstr "功能性"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Reinforced"
-msgstr ""
+msgstr "加強型"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:179
 msgid "Pollution Degree:"
-msgstr ""
+msgstr "污染程度:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:181
 msgid ""
@@ -26033,31 +25985,33 @@ msgid ""
 "\n"
 "PD4: Continous conductivity occurs due to conductive dust, rain, ..."
 msgstr ""
+"PD1：無污染，或僅發生乾燥的非導電性污染。\n"
+"\n"
+"PD2：僅發生非導電性污染。可能會發生凝結。\n"
+"\n"
+"PD3：發生導電性污染，或者由於預期的凝結而變得導電的非導電性污染。\n"
+"\n"
+"PD4：由於導電性塵埃、雨水等引起連續導電。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD1"
-msgstr "PDF"
+msgstr "PD1"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD2"
-msgstr "PDF"
+msgstr "PD2"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD3"
-msgstr "PDF"
+msgstr "PD3"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:185
-#, fuzzy
 msgid "PD4"
-msgstr "PDF"
+msgstr "PD4"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:194
-#, fuzzy
 msgid "Material group:"
-msgstr "材料屬性："
+msgstr "材料組:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:196
 msgid ""
@@ -26069,35 +26023,38 @@ msgid ""
 "Material group IIIa: 175 <= CTI < 400\n"
 "Material group IIIb: 100 <= CTI < 175"
 msgstr ""
+"具有較高相對漏電起痕指數 (CTI) 的材料更能提供隔離。\n"
+"\n"
+"材料組 I：600 <= CTI\n"
+"材料組 II：400 <= CTI < 600\n"
+"材料組 IIIa：175 <= CTI < 400\n"
+"材料組 IIIb：100 <= CTI < 175"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
-#, fuzzy
 msgid "II"
-msgstr "I"
+msgstr "II"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIa"
-msgstr ""
+msgstr "IIIa"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:200
 msgid "IIIb"
-msgstr ""
+msgstr "IIIb"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:209
-#, fuzzy
 msgid "PCB material:"
-msgstr "普通材料："
+msgstr "PCB材料:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:211
 msgid ""
 "Printed wiring material can benefit of a creepage distance reduction for RMS "
 "voltages lower than 1000V"
-msgstr ""
+msgstr "對於低於 1000V 的 RMS 電壓，印刷線路材料可以受益於爬電距離減少"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:221
-#, fuzzy
 msgid "Max altitude:"
-msgstr "最大波幅 (Amax)："
+msgstr "最大高度:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:223
 msgid ""
@@ -26117,14 +26074,12 @@ msgid "Clearance:"
 msgstr "間隙："
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
-#, fuzzy
 msgid "Creepage:"
-msgstr "頁面中心"
+msgstr "爬電距離:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:282
-#, fuzzy
 msgid "Min groove width:"
-msgstr "線寬："
+msgstr "最小槽寬:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:284
 msgid ""
@@ -26137,6 +26092,8 @@ msgid ""
 "solid: clearance\n"
 "dashed: creepage"
 msgstr ""
+"實線:間隙\n"
+"虛線:爬電"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
 msgid "Voltage > 500 V:"
@@ -26236,11 +26193,11 @@ msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:21
 msgid "E24,E48,E96"
-msgstr ""
+msgstr "E24,E48,E96"
 
 #: pcb_calculator/calculator_panels/panel_eseries_display_base.cpp:52
 msgid "E1,E3,E6,E12"
-msgstr ""
+msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
@@ -26384,17 +26341,14 @@ msgid "Threshold voltage:"
 msgstr "閾值電壓："
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:88
-#, fuzzy
 msgid "Material names:"
-msgstr "材料"
+msgstr "材料名稱:"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
-#, fuzzy
 msgid "Chemical symbols"
-msgstr "選擇符號"
+msgstr "化學符號"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:95
-#, fuzzy
 msgid "Names"
 msgstr "名稱"
 
@@ -26404,9 +26358,9 @@ msgid "Exact"
 msgstr "精確"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Incorrect required resistance value: %s"
-msgstr "不正確的頂點值"
+msgstr "不正確的電阻值:%s"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:156
 msgid "Not worth using"
@@ -27089,6 +27043,19 @@ msgid ""
 "\n"
 "The value 0 is a special case and is not present in any series."
 msgstr ""
+"被動元件通常採用適合其精度的 E 系列值製成。\n"
+"電容器通常使用E12值。 10% 和 5% 電阻器通常使用 E24 值 1%\n"
+"電阻器使用E96值。其他系列不常用。\n"
+"\n"
+"若要選擇一個值，請從計算的目標值開始，然後將其捨入為 2\n"
+"E24 及以下為 3 位有效數字，E48 以上為 3 位有效數字。\n"
+"然後找出表中最接近有效數字的值\n"
+"剩下的並用它來代替這些數字。\n"
+"\n"
+"例如，如果計算出的目標值為 16,834.2Ω，則四捨五入為 16,800Ω。\n"
+"最接近 168 的值為 169，所選 E96 值為 16.9kΩ。\n"
+"\n"
+"值 0 是一種特殊情況，不存在於任何系列中。"
 
 #: pcb_calculator/fusing_current_help.h:2
 msgid ""
@@ -27149,11 +27116,18 @@ msgid ""
 "- Insulations trough liquids, compressed air or gases other than air are not "
 "in the scope of IEC60664"
 msgstr ""
+"IEC60664-1 的目標是為連接主電源的產品的絕緣設計提供指導。\n"
+"\n"
+"然而，該計算器不包括某些情況：\n"
+"\n"
+"- 對於高於 30kHz 的頻率，介電性能會下降。 IEC60664-4 涵蓋了這些情況\n"
+"- 當使用保形塗層或灌封以防止污染時，如果滿足 IEC60664-3 "
+"規定的所有條件，則可以減少電氣間隙和爬電距離。阻焊層通常不被視為保形塗層。\n"
+"- 透過液體、壓縮空氣或空氣以外的氣體進行的絕緣不在IEC60664的範圍內"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
-#, fuzzy
 msgid "KiCad Calculator Tools"
-msgstr "計算器工具"
+msgstr "KiCad 計算器工具"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:163
 msgid "General system design"
@@ -27164,9 +27138,8 @@ msgid "Regulators"
 msgstr "穩壓器"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:166
-#, fuzzy
 msgid "Resistor Calculator"
-msgstr "E 系列电阻计算器"
+msgstr "電阻計算器"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:168
 msgid "Power, current and isolation"
@@ -27185,7 +27158,6 @@ msgid "Cable Size"
 msgstr "導線尺寸"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:176
-#, fuzzy
 msgid "High Speed"
 msgstr "高速"
 
@@ -27769,49 +27741,40 @@ msgid "Teardrops"
 msgstr "淚滴"
 
 #: pcbnew/board_connected_item.cpp:237
-#, fuzzy
 msgid "Enable Teardrops"
-msgstr "新增淚滴"
+msgstr "啟用淚滴"
 
 #: pcbnew/board_connected_item.cpp:243
-#, fuzzy
 msgid "Best Length Ratio"
-msgstr "最佳長度："
+msgstr "最佳長度比"
 
 #: pcbnew/board_connected_item.cpp:250
-#, fuzzy
 msgid "Max Length"
-msgstr "最大長度："
+msgstr "最大長度"
 
 #: pcbnew/board_connected_item.cpp:256
-#, fuzzy
 msgid "Best Width Ratio"
-msgstr "文字寬度"
+msgstr "最佳寬度比"
 
 #: pcbnew/board_connected_item.cpp:263
-#, fuzzy
 msgid "Max Width"
-msgstr "最大寬度："
+msgstr "最大寬度"
 
 #: pcbnew/board_connected_item.cpp:269
-#, fuzzy
 msgid "Curve Points"
-msgstr "曲線點："
+msgstr "曲線點"
 
 #: pcbnew/board_connected_item.cpp:275
-#, fuzzy
 msgid "Prefer Zone Connections"
-msgstr "%s 區域連線：%s。"
+msgstr "優先區域連接"
 
 #: pcbnew/board_connected_item.cpp:281
-#, fuzzy
 msgid "Allow Teardrops To Span Two Tracks"
-msgstr "允許淚滴散佈在2 根導線段上"
+msgstr "允許淚滴跨越兩條導線"
 
 #: pcbnew/board_connected_item.cpp:287
-#, fuzzy
 msgid "Max Width Ratio"
-msgstr "最大寬度："
+msgstr "最大寬度比"
 
 #: pcbnew/board_item.cpp:125
 msgid "all copper layers"
@@ -28315,7 +28278,7 @@ msgstr "(不支援多電路板輪廓)"
 #: pcbnew/convert_shape_list_to_polygon.cpp:652
 #, c-format
 msgid "(Rectangle has null or very small size: %d nm)"
-msgstr ""
+msgstr "(矩形的尺寸為零或非常小：%d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:669
 #, c-format
@@ -28325,7 +28288,7 @@ msgstr "（圓形具有空值或非常小的半徑：%d nm納米）"
 #: pcbnew/convert_shape_list_to_polygon.cpp:689
 #, c-format
 msgid "(Segment has null or very small length: %d nm)"
-msgstr ""
+msgstr "(線段的長度為空或非常小：%d nm)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:712
 #, c-format
@@ -28862,9 +28825,8 @@ msgid "Pre-defined Sizes"
 msgstr "預定義尺寸"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:175
-#, fuzzy
 msgid "Length-tuning Patterns"
-msgstr "長度調整"
+msgstr "長度調整模式"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -29103,7 +29065,7 @@ msgstr "（不會考慮合併出現在 Net Tie 焊盤組中的焊盤。）"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr ""
+msgstr "修復電路板輪廓的不連續性"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
@@ -29112,9 +29074,8 @@ msgstr "誤差："
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
-#, fuzzy
 msgid "Changes to be applied:"
-msgstr "應用變更："
+msgstr "待應用的變更:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.h:61
 msgid "Cleanup Graphics"
@@ -29265,7 +29226,6 @@ msgstr ""
 "僅顯示與此模式匹配的網路名稱。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:55
-#, fuzzy
 msgid "Hide automatically generated net names"
 msgstr "隱藏自動生成的網路名稱"
 
@@ -29555,9 +29515,8 @@ msgid "Bad parameters"
 msgstr "引數不良或丟失"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:33
-#, fuzzy
 msgid "Grid Array Size"
-msgstr "網格陣列"
+msgstr "網格陣列大小"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:40
 msgid "Horizontal count:"
@@ -29568,31 +29527,28 @@ msgid "Vertical count:"
 msgstr "垂直(Y)方向計數："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:61
-#, fuzzy
 msgid "Items Spacing"
-msgstr "增大間距"
+msgstr "物件間距"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:68
 msgid "Horizontal spacing:"
 msgstr "水平間距："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:70
-#, fuzzy
 msgid "Distance between columns"
-msgstr "測量兩點之間的距離"
+msgstr "列之間的距離"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:81
 msgid "Vertical spacing:"
 msgstr "垂直間距："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:83
-#, fuzzy
 msgid "Distance between rows"
-msgstr "帶狀線和頂部金屬間的距離"
+msgstr "行之間的距離"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:98
 msgid "Grid Spacing Modifiers"
-msgstr ""
+msgstr "網格間距修改器"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:105
 msgid "Horizontal offset:"
@@ -29600,7 +29556,7 @@ msgstr "水平偏移："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:107
 msgid "Offset added to the next row position."
-msgstr ""
+msgstr "添加到下一行位置的偏移量"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:118
 msgid "Vertical offset:"
@@ -29608,21 +29564,19 @@ msgstr "垂直偏移："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:120
 msgid "Offset added to the next column position"
-msgstr ""
+msgstr "添加到下一列位置的偏移量"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:141
-#, fuzzy
 msgid "Stagger Settings"
-msgstr "圖框設定"
+msgstr "交錯設定"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:146
 msgid "Stagger:"
 msgstr "交錯："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:148
-#, fuzzy
 msgid "Value -1,  0 or 1 disable this option."
-msgstr "設定為 0 可禁用此約束"
+msgstr "設置數值 -1、0 或 1 用於禁用此選項。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:158
 msgid "Rows"
@@ -29701,56 +29655,50 @@ msgid "Grid Array"
 msgstr "網格陣列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:277
-#, fuzzy
 msgid "Items to duplicate"
-msgstr "刪除項"
+msgstr "要複製的物件"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:279
 msgid ""
 "This is the position of the selected item,\n"
 "or the position of the group to duplicate"
 msgstr ""
+"這是所選物件的位置\n"
+"或要複製的群組的位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
-#, fuzzy
 msgid "Ref point pos X:"
-msgstr "貝茲點 C2 X:"
+msgstr "參考點位置 X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:300
-#, fuzzy
 msgid "Ref point pos Y:"
-msgstr "貝茲點 C1 Y:"
+msgstr "參考點位置 Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:318
-#, fuzzy
 msgid "Circular array params"
-msgstr "圓形陣列"
+msgstr "圓形陣列參數"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:320
-#, fuzzy
 msgid "Set center by position"
-msgstr "設定錨點座標"
+msgstr "根據...位置設定中心"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:324
-#, fuzzy
 msgid "Set center by radius"
-msgstr "保持中心，調整半徑"
+msgstr "根據半徑設定圓心"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:327
 msgid ""
 "This is the position of the center of the circle\n"
 "defining the circular area to create"
-msgstr ""
+msgstr "這是定義要創建的圓形區域的圓心位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:337
-#, fuzzy
 msgid "Center pos X:"
-msgstr "Y 軸中心:"
+msgstr "中心位置 X:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:348
-#, fuzzy
 msgid "Center pos Y:"
-msgstr "Y 軸中心:"
+msgstr "中心位置 Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:365
 msgid ""
@@ -29761,9 +29709,8 @@ msgstr ""
 "從貝茲點位置和陣列中心："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
-#, fuzzy
 msgid "Distance between Ref point and Center pos."
-msgstr "帶狀線和頂部金屬間的距離"
+msgstr "參考點和中心位置之間的距離"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:384
 msgid ""
@@ -29774,14 +29721,12 @@ msgstr ""
 "從貝茲點位置和陣列中心："
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:400
-#, fuzzy
 msgid "Angle between Ref point and Center pos."
-msgstr "帶狀線和頂部金屬間的距離"
+msgstr "參考點和中心位置之間的角度"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:418
-#, fuzzy
 msgid "Duplicate parameters"
-msgstr "複製圖元"
+msgstr "複製參數"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:431
 msgid ""
@@ -29790,18 +29735,16 @@ msgid ""
 msgstr "正角表示一個逆時針旋轉。 0° 角將產生一個平分到“個數”個部分的整個圓。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:439
-#, fuzzy
 msgid "Item count:"
-msgstr "引腳數："
+msgstr "物件數量:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:444
 msgid "How many items in the array."
 msgstr "陣列中有多少個專案。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:451
-#, fuzzy
 msgid "Rotate items:"
-msgstr "旋轉項目"
+msgstr "旋轉物件:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:457
 msgid ""
@@ -30152,7 +30095,7 @@ msgstr "測量點與尺寸界線起點之間的間隙"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:427
 #, fuzzy
 msgid "Extension line overshoot:"
-msgstr "尺寸界線偏移："
+msgstr "延伸線超調:"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.h:141
 #: pcbnew/pcb_dimension.cpp:1435 pcbnew/pcb_dimension.cpp:1506
@@ -30187,19 +30130,16 @@ msgid "Exclude all violations of rule '%s'"
 msgstr "排除所有規則 '%s' 的違規項"
 
 #: pcbnew/dialogs/dialog_drc.cpp:629
-#, fuzzy
 msgid "Run Inspect > Clearance Resolution"
-msgstr "間隙解析..."
+msgstr "運行檢查 > 間隙解析..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:642
-#, fuzzy
 msgid "Run Inspect > Constraints Resolution"
-msgstr "約束解析..."
+msgstr "運行檢查 > 約束解析..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:646
-#, fuzzy
 msgid "Run Inspect > Compare Footprint with Library"
-msgstr "替換具有這個庫 ID 的封裝："
+msgstr "運行檢查 > 與庫比較封裝差異"
 
 #: pcbnew/dialogs/dialog_drc.cpp:655 pcbnew/dialogs/dialog_drc.cpp:662
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -30403,29 +30343,25 @@ msgid "Update Footprints from Library"
 msgstr "從庫中更新封裝"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:71
-#, fuzzy
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr "CSV文件 (*.csv)|*."
+msgstr "IPC-2581 Files (*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:72
 #, fuzzy
 msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
-msgstr "IPC-D-356 測試文件 (.d356)|*."
+msgstr "IPC-2581 Compressed Files (*.zip)|*.zip"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:74
-#, fuzzy
 msgid "Export IPC-2581 File"
-msgstr "匯出到檔案"
+msgstr "匯出IPC-2581檔案"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:132
-#, fuzzy
 msgid "manufacturer"
-msgstr "選擇製造商"
+msgstr "製造商"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:140
-#, fuzzy
 msgid "mfg"
-msgstr "meg"
+msgstr "mfg"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:28
 #: pcbnew/dialogs/dialog_export_step_base.cpp:28
@@ -30440,31 +30376,27 @@ msgstr ""
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:63
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:68
 msgid "The number of values following the decimal separator"
-msgstr ""
+msgstr "小數分隔符號後小數位數"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:72
-#, fuzzy
 msgid "Version:"
-msgstr "版本"
+msgstr "版本:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
-#, fuzzy
 msgid "Compress output"
-msgstr "強制 A4 輸出"
+msgstr "壓縮輸出"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
 msgstr "將輸出壓成 'zip' 檔"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:94
-#, fuzzy
 msgid "BOM Columns"
-msgstr "列"
+msgstr "BOM 列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:101
-#, fuzzy
 msgid "Internal ID:"
-msgstr "內層"
+msgstr "內層 ID:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:103
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:111
@@ -30472,51 +30404,46 @@ msgid ""
 "Part ID number used internally during design.\n"
 "This number must be unique to each part."
 msgstr ""
+"在設計過程中內部使用的零件ID號碼。\n"
+"此號碼必須對每個零件是唯一不重複的。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:107
-#, fuzzy
 msgid "Generate Unique"
-msgstr "生成警告"
+msgstr "生成唯一的編號"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:115
-#, fuzzy
 msgid "Manufacturer P/N:"
-msgstr "選擇製造商"
+msgstr "製造商 P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:117
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:125
-#, fuzzy
 msgid "Column containing the manufacturer part number"
-msgstr "元件：製造商不能為空。"
+msgstr "包含製造商零件號的列。"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:121
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:145
-#, fuzzy
 msgid "Omit"
-msgstr "省略網路"
+msgstr "省略"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:129
-#, fuzzy
 msgid "Manufacturer:"
-msgstr "選擇製造商"
+msgstr "製造商:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:141
 msgid "Distributor P/N:"
-msgstr ""
+msgstr "經銷商 P/N:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:149
 msgid "Column containing the distributor part number"
 msgstr "包含經銷商零件號的列"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:153
-#, fuzzy
 msgid "Distributor:"
-msgstr "對齊/分佈"
+msgstr "經銷商:"
 
 #: pcbnew/dialogs/dialog_export_2581_base.h:81
-#, fuzzy
 msgid "Export IPC-2581"
-msgstr "匯出 STEP"
+msgstr "匯出 IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_idf.cpp:173
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:120
@@ -30589,14 +30516,12 @@ msgid "Binary glTF files"
 msgstr "Binary glTF 檔案"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
-#, fuzzy
 msgid "STEP Output File"
-msgstr "輸出尺寸"
+msgstr "STEP 輸出檔案"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:368
-#, fuzzy
 msgid "No filename for output file"
-msgstr "不是一個封裝檔案。"
+msgstr "輸出的檔案沒有檔名"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:400
 #, c-format
@@ -30608,9 +30533,8 @@ msgstr ""
 "執行設計規則檢查 (DRC) 進行全面分析。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:412
-#, fuzzy
 msgid "STEP/GLTF Export"
-msgstr "匯出 STEP"
+msgstr "STEP/GLTF 匯出"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:43
 msgid "Coordinates"
@@ -30646,24 +30570,20 @@ msgid "Other Options"
 msgstr "其他選項"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:117
-#, fuzzy
 msgid "Ignore 'Do not populate' components"
-msgstr "忽略未裝載的元件"
+msgstr "忽略\"不要安裝(DNP)\"零件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:118
-#, fuzzy
 msgid "Do not show components marked 'Do not populate'"
-msgstr "不顯示不在 BOM 和放置檔案中的元件"
+msgstr "不顯示標記為\"不要安裝(DNP)\"的零件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:122
-#, fuzzy
 msgid "Ignore 'Unspecified' components"
-msgstr "忽略未裝載的元件"
+msgstr "忽略\"未指定\"的零件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
-#, fuzzy
 msgid "Do not show components with Footprint Type 'Unspecified'"
-msgstr "不顯示不在 BOM 和放置檔案中的元件"
+msgstr "不顯示具有\"未指定\"封裝類型的零件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Substitute similarly named models"
@@ -30678,78 +30598,70 @@ msgid "Overwrite old file"
 msgstr "覆蓋舊的檔案"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:140
-#, fuzzy
 msgid "Optimize STEP file"
-msgstr "STEP 檔案"
+msgstr "優化 STEP 檔案"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
 msgid ""
 "Disables writing parametric curves. Optimizes file size and write/read "
 "times, but may reduce compatibility with other software."
-msgstr ""
+msgstr "禁用寫入參數曲線。可優化檔案大小和寫入/讀取時間，但可能降低與其他軟件的兼容性"
+"。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
 msgid "Fuse shapes (time consuming)"
-msgstr ""
+msgstr "合併形狀(耗時)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Combine intersecting geometry into one shape."
 msgstr "將相交的幾何形狀合併為一個形狀。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:151
-#, fuzzy
 msgid "Export as Compound shape"
-msgstr "匯入非 KiCad 電路板檔案"
+msgstr "匯出為複合形狀"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:153
 msgid ""
 "Merges all shapes into a single Compound shape. Useful for external software "
 "that does de-duplication based on shape names."
-msgstr ""
+msgstr "將所有形狀合併為一個複合形狀。對於根據形狀名稱進行重複資料刪除的外部軟體很有"
+"用。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid "Export tracks, pads and vias"
-msgstr "建立導線和過孔"
+msgstr "匯出導線、焊盤和過孔"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:161
 msgid "Export tracks, pads and vias on external copper layers."
-msgstr ""
+msgstr "匯出外部銅層上的導線、焊盤和過孔。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
-#, fuzzy
 msgid "Export zones on external copper layers."
-msgstr "禁用銅層上的專案"
+msgstr "匯出外部銅層上的區域。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
-#, fuzzy
 msgid "Export silkscreen"
-msgstr "頂層絲印"
+msgstr "匯出 絹印層"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:172
-#, fuzzy
 msgid "Export silkscreen graphics."
-msgstr "顯示絲印層"
+msgstr "匯出 絹印層圖形"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:176
-#, fuzzy
 msgid "Export solder mask"
-msgstr "頂層阻焊"
+msgstr "匯出阻焊層"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:178
-#, fuzzy
 msgid "Export solder mask graphics."
-msgstr "頂層阻焊"
+msgstr "匯出阻焊層圖形"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:182
-#, fuzzy
 msgid "Export solder paste"
-msgstr "頂層錫膏"
+msgstr "匯出錫膏層"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:184
-#, fuzzy
 msgid "Export solder paste graphics."
-msgstr "頂層錫膏"
+msgstr "匯出錫膏層圖形"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:188
 msgid "Board outline chaining tolerance:"
@@ -30772,31 +30684,28 @@ msgstr "鬆散 (0.1 mm)"
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
-msgstr "誤差設定被視為連線的兩點之間的距離。"
+msgstr "當建構電路板邊框時, 公差設定了兩個被視為聯結的點的距離。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:93
-#, fuzzy
 msgid "Export STEP / GLTF"
-msgstr "匯出 STEP"
+msgstr "匯出 STEP / GLTF"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:183
 #, c-format
 msgid "Process failed with exit code %d"
-msgstr ""
+msgstr "處理失敗，錯誤代碼為 %d"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:191
-#, fuzzy
 msgid "Success"
-msgstr "成功。"
+msgstr "成功"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:246
 msgid "Command line:\n"
 msgstr "命令列:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
-#, fuzzy
 msgid "3D Export"
-msgstr "匯出"
+msgstr "3D 匯出"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:246
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:215
@@ -30837,9 +30746,8 @@ msgid "Export as black elements on a white background"
 msgstr "匯出為白色背景上的黑色元素"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:89
-#, fuzzy
 msgid "Use current board theme"
-msgstr "用新名稱儲存目前 PCB"
+msgstr "使用當前的電路板主題"
 
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:114
 msgid "Page with frame and title block"
@@ -30898,9 +30806,8 @@ msgid "Footprint 3D model path:"
 msgstr "封裝 3D 模型路徑:"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:46
-#, fuzzy
 msgid "Coordinate Origin Options"
-msgstr "座標原點選擇："
+msgstr "座標原點選項"
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:53
 msgid "User defined origin:"
@@ -31003,9 +30910,9 @@ msgid "'%s' found"
 msgstr "找到了' %s'"
 
 #: pcbnew/dialogs/dialog_find.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Hit(s): %d / %zu"
-msgstr "匹配記錄： %ld / %lu"
+msgstr "匹配記錄: %d / %zu"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
 msgid "Search for:"
@@ -31044,34 +30951,28 @@ msgid "Restart Search"
 msgstr "重新啟動搜尋"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#, fuzzy
 msgid "Footprint: "
-msgstr "封裝：%s"
+msgstr "封裝: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
-#, fuzzy
 msgid "Symbol:"
-msgstr "符號"
+msgstr "符號:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
-#, fuzzy
 msgid "Sheet: "
-msgstr "圖框"
+msgstr "圖紙: "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
-#, fuzzy
 msgid "Library Association"
-msgstr "別名描述："
+msgstr "庫關聯"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
-#, fuzzy
 msgid "Schematic Association"
-msgstr "原理圖編輯器"
+msgstr "電路圖關聯"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
-#, fuzzy
 msgid "Footprint Associations"
-msgstr "封裝關聯檔案"
+msgstr "封裝關聯"
 
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:61
 msgid "Run Checks"
@@ -31083,9 +30984,8 @@ msgid "Footprint Checker"
 msgstr "封裝檢查器"
 
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:35
-#, fuzzy
 msgid "Choose Footprint"
-msgstr "複製封裝"
+msgstr "選擇封裝"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:75
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:143
@@ -31093,13 +30993,11 @@ msgid "3D Models"
 msgstr "3D 模型"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:283
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
-msgstr ""
-"鎖定的封裝無法在畫布上自由移動和定位，並且只有當“已鎖定專案”複選框在選擇篩選"
+msgstr "鎖定的封裝無法在畫布上自由移動和定位，並且只有當“已鎖定專案”複選框在選擇篩選"
 "器中啟用時才能被選中。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:387
@@ -31600,9 +31498,8 @@ msgid "ASCII"
 msgstr "ASCII"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
-#, fuzzy
 msgid "Gerber X3"
-msgstr "Gerber X2"
+msgstr "Gerber X3"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
@@ -31835,29 +31732,26 @@ msgid "Buried vias:"
 msgstr "埋孔："
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
-#, fuzzy, c-format
+#, c-format
 msgid "Generators A (%s)"
-msgstr "生成器檔案"
+msgstr "生成檔案 %s"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
-#, fuzzy
 msgid "Rebuild selected"
-msgstr "未選擇匯流排"
+msgstr "重建已選定"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
-#, fuzzy
 msgid "Rebuild this type"
-msgstr "重建飛線"
+msgstr "重建此類型"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:62
-#, fuzzy
 msgid "Rebuild All"
-msgstr "全部替換"
+msgstr "全部重建"
 
 #: pcbnew/dialogs/dialog_generators_base.h:63
 #, fuzzy
 msgid "Generator Objects"
-msgstr "生成器檔案"
+msgstr "生成器對象"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:28
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:69
