@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 05:27+0000\n"
-"Last-Translator: 撒景賢 <james.sa.2013@gmail.com>\n"
+"PO-Revision-Date: 2024-01-27 06:24+0000\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -310,20 +310,19 @@ msgid "Follow PCB Plot Settings"
 msgstr "篩選設定"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
-#, fuzzy
 msgid "legacy colors"
-msgstr "使用顏色："
+msgstr "傳統配色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
-msgstr "3D 影象檔名稱"
+msgstr "3D 影像檔名"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:747
 #: common/eda_base_frame.cpp:1321 common/eda_base_frame.cpp:1325
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1664
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "無足夠許可權儲存檔案 '%s'。"
+msgstr "存檔權限不足 '%s'。"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:748 common/confirm.cpp:131
 #: common/confirm.cpp:321 common/dialogs/dialog_grid_settings.cpp:61
@@ -617,9 +616,8 @@ msgid "Show/hide the appearance manager"
 msgstr "顯示/隱藏外觀管理器"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Board Body"
-msgstr "電路板主體："
+msgstr "電路板主體"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
@@ -654,9 +652,8 @@ msgid "Show adhesive"
 msgstr "顯示膠粘層"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Solder Paste"
-msgstr "焊膏："
+msgstr "焊膏"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
@@ -815,14 +812,12 @@ msgid "3D Axis"
 msgstr "X 軸"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background Start"
-msgstr "上部背景顏色："
+msgstr "上部背景顏色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "背景梯度起點："
+msgstr "背景梯度起點"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
 #, fuzzy
@@ -830,9 +825,8 @@ msgid "Background End"
 msgstr "背景"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "背景梯度終點："
+msgstr "背景梯度終點"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 #, fuzzy, c-format
@@ -1074,9 +1068,8 @@ msgid "Redraw while moving"
 msgstr "移動物體時平移 (&P)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
-#, fuzzy
 msgid "Redraw speed:"
-msgstr "重繪螢幕"
+msgstr "重繪螢幕:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
@@ -1273,9 +1266,8 @@ msgid "3D Preview Options"
 msgstr "Gerbview 選項"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "Board thickness:"
-msgstr "電路板厚度： "
+msgstr "電路板厚度："
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:229
@@ -1781,9 +1773,8 @@ msgid "Export to Clipboard"
 msgstr "匯出到剪貼簿"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
-msgstr "上部背景顏色："
+msgstr "上部背景顏色"
 
 #: common/common.cpp:270
 #, c-format
@@ -3361,9 +3352,8 @@ msgid "Commit Changes"
 msgstr "送交更改..."
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "檔名稱："
+msgstr "檔案名稱"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3396,9 +3386,8 @@ msgid "Commit Message:"
 msgstr "錯誤訊息:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:115
-#, fuzzy
 msgid "Author:"
-msgstr "作者"
+msgstr "作者:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
@@ -3505,9 +3494,8 @@ msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "新名稱："
+msgstr "用戶名稱"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
 #, fuzzy
@@ -3561,9 +3549,8 @@ msgid "Author name:"
 msgstr "敷銅名稱："
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "作者"
+msgstr "作者 e-mail:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
 #, fuzzy
@@ -3804,9 +3791,8 @@ msgid ""
 msgstr "根據系統配色主題自動選擇淺色或深色圖示"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "微過孔尺寸過小"
+msgstr "工具列圖示大小:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -4075,9 +4061,8 @@ msgid "At least one grid size is required."
 msgstr "預設的網路類是必需的。"
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "網格"
+msgstr "網格:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
 #, fuzzy
@@ -4103,14 +4088,12 @@ msgid "Grid Overrides"
 msgstr "覆蓋"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "未連接的項目"
+msgstr "已連接的項目:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
-#, fuzzy
 msgid "Wires:"
-msgstr "連線"
+msgstr "連線:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:135
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
@@ -4131,9 +4114,8 @@ msgid "Text:"
 msgstr "文字："
 
 #: common/dialogs/panel_grid_settings_base.cpp:151
-#, fuzzy
 msgid "Graphics:"
-msgstr "圖形"
+msgstr "圖形:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
@@ -4182,9 +4164,8 @@ msgid ""
 msgstr "此比例會使影象尺寸非常大(%.1f mm 或 %.2f in)。確定嗎？"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "比例"
+msgstr "比例:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
@@ -5495,9 +5476,8 @@ msgid "Line Width"
 msgstr "線寬"
 
 #: common/eda_shape.cpp:1988 pcbnew/pcb_shape.cpp:684
-#, fuzzy
 msgid "Line Color"
-msgstr "線條顏色："
+msgstr "線條顏色"
 
 #: common/eda_shape.cpp:2025 eeschema/lib_shape.cpp:586
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
@@ -5505,9 +5485,8 @@ msgid "Filled"
 msgstr "填充"
 
 #: common/eda_shape.cpp:2029 pcbnew/pcb_shape.cpp:685
-#, fuzzy
 msgid "Fill Color"
-msgstr "填充顏色："
+msgstr "填充顏色"
 
 #: common/eda_text.cpp:806 common/eda_text.cpp:1192
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
@@ -8897,9 +8876,8 @@ msgid "File '%s' already exists in list."
 msgstr "檔案 \"%s\" 已經存在於列表中。"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
-#, fuzzy
 msgid "Footprint association files:"
-msgstr "封裝關聯檔案"
+msgstr "封裝關聯檔案:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
 #, fuzzy
@@ -9796,9 +9774,8 @@ msgid "Database connection failed: %s"
 msgstr "%s 區域連線：%s。"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "到敷銅的焊盤連線："
+msgstr "沒有連接到資料庫"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
 #, fuzzy, c-format
@@ -9836,9 +9813,8 @@ msgid "Reload Configuration"
 msgstr "使用者配置"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "讀取熱鍵設定檔:"
+msgstr "重新載入資料庫設定檔"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
 #, fuzzy
@@ -10065,9 +10041,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "開啟“原理圖設定...”對話方塊"
 
 #: eeschema/dialogs/dialog_erc.cpp:650
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "最小網格間距："
+msgstr "編輯連接的網格間距..."
 
 #: eeschema/dialogs/dialog_erc.cpp:743
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -10211,9 +10186,8 @@ msgstr "編寫指令以儲存所有電流 (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:319
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "最大允許偏差："
+msgstr "儲存所有的功耗"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
 #, fuzzy
@@ -10256,9 +10230,8 @@ msgid "Exporting netlist requires a fully annotated schematic."
 msgstr "匯出網表需要一張完整批註的原理圖。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:606
-#, fuzzy
 msgid "external simulator not found"
-msgstr "外部模擬器命令："
+msgstr "找不到外部模擬器"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:607
 msgid ""
@@ -12440,9 +12413,8 @@ msgid "New Simulation Tab"
 msgstr "模擬"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
-#, fuzzy
 msgid "Analysis type:"
-msgstr "無源型別"
+msgstr "分析類型:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "AC"
@@ -12638,9 +12610,8 @@ msgid "Use initial conditions"
 msgstr "使用英制單位"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
-#, fuzzy
 msgid "Input signals:"
-msgstr "輸入腳"
+msgstr "輸入信號:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
 #, fuzzy
@@ -12648,23 +12619,20 @@ msgid "Linearize inputs before performing FFT"
 msgstr "在執行 DRC 之前重新填充所有敷銅"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
-#, fuzzy
 msgid "Measured node:"
-msgstr "測量節點"
+msgstr "測量節點:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:371
-#, fuzzy
 msgid "Reference node:"
-msgstr "參考節點"
+msgstr "參考節點:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:380
 msgid "(optional; default GND)"
 msgstr "(可選的；預設值 GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:384
-#, fuzzy
 msgid "Noise source:"
-msgstr "噪音源"
+msgstr "雜訊源:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
@@ -12683,9 +12651,8 @@ msgid "Load directives from schematic"
 msgstr "從原理圖載入命令"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:567
-#, fuzzy
 msgid "Transfer function:"
-msgstr "轉換功能"
+msgstr "轉換函數:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
@@ -12696,9 +12663,8 @@ msgid "(output voltage) / (input current)"
 msgstr "(輸出電壓) / (輸入電流)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
-#, fuzzy
 msgid "Input:"
-msgstr "輸入"
+msgstr "輸入:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:586
 #: eeschema/dialogs/dialog_sim_command_base.cpp:604
@@ -12706,14 +12672,12 @@ msgid "Ref:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:595
-#, fuzzy
 msgid "Output:"
-msgstr "輸出"
+msgstr "輸出:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:619
-#, fuzzy
 msgid "Find:"
-msgstr "查詢"
+msgstr "查詢:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 #, fuzzy
@@ -12800,9 +12764,8 @@ msgid "Dotted current/phase"
 msgstr "點電流/相位"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:819
-#, fuzzy
 msgid "Margins:"
-msgstr "Margin"
+msgstr "邊距:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:829
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:551
@@ -12931,9 +12894,8 @@ msgid "G"
 msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T："
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #, fuzzy
@@ -13019,9 +12981,8 @@ msgid "Differential"
 msgstr "有差異的"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:76
-#, fuzzy
 msgid "Pin model:"
-msgstr "線條模型"
+msgstr "接腳模型:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:83
 msgid "Waveform:"
@@ -13151,7 +13112,6 @@ msgid "Qty"
 msgstr "數量"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:616
-#, fuzzy
 msgid "#"
 msgstr "#"
 
@@ -13303,9 +13263,8 @@ msgid "Recursive"
 msgstr "遞迴層級"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:172
-#, fuzzy
 msgid "Cross-probe action:"
-msgstr "選區交叉探測"
+msgstr "跨點檢測動作:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:176
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -13323,9 +13282,8 @@ msgid "Edit"
 msgstr "編輯 (&E)"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "mm"
+msgstr "字段分隔符:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
@@ -13343,14 +13301,12 @@ msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
-#, fuzzy
 msgid "Reference delimiter:"
-msgstr "位號"
+msgstr "參考分隔符:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Range delimiter:"
-msgstr "圖框限制"
+msgstr "範圍分隔符:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -13372,9 +13328,8 @@ msgid "Keep line breaks"
 msgstr "禁止佈線"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
-#, fuzzy
 msgid "Format presets:"
-msgstr "格式"
+msgstr "格式預設:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:273
 #, fuzzy
@@ -13809,14 +13764,12 @@ msgid "Wire & Bus Properties"
 msgstr "導線 & 匯流排屬性"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets:"
-msgstr "BOM (物料清單)"
+msgstr "零件表預設:"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
-#, fuzzy
 msgid "Bill of Materials Formatting Presets:"
-msgstr "物料清單生成幫助"
+msgstr "零件表格式預設:"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
@@ -14324,9 +14277,8 @@ msgid "Significant digits (voltages):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:296
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "儲存所有電壓"
+msgstr "範圍(電壓):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
@@ -14384,9 +14336,8 @@ msgid "Significant digits (currents):"
 msgstr ""
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:315
-#, fuzzy
 msgid "Range (currents):"
-msgstr "儲存所有電流"
+msgstr "範圍(電流):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 #, fuzzy
@@ -15855,9 +15806,8 @@ msgid "Body background color"
 msgstr "標繪背景色"
 
 #: eeschema/lib_shape.cpp:595
-#, fuzzy
 msgid "Fill color"
-msgstr "填充顏色："
+msgstr "填充顏色"
 
 #: eeschema/lib_shape.cpp:601 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
@@ -15911,14 +15861,12 @@ msgid "Field count differs."
 msgstr "焊盤數量"
 
 #: eeschema/lib_symbol.cpp:421
-#, fuzzy
 msgid "Footprint filters differs."
-msgstr "封裝型別："
+msgstr "封裝過濾差別。"
 
 #: eeschema/lib_symbol.cpp:433
-#, fuzzy
 msgid "Footprint filters differ."
-msgstr "封裝型別："
+msgstr "封裝過濾差別。"
 
 #: eeschema/lib_symbol.cpp:444
 #, fuzzy
