@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 10:06+0000\n"
+"PO-Revision-Date: 2024-01-27 11:05+0000\n"
 "Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -14013,9 +14013,8 @@ msgid ""
 msgstr "文字大小偏移導線、匯流排或引腳上方（或下方）標籤的百分比"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "全域性標籤邊距："
+msgstr "全局標籤邊界比例:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -14049,9 +14048,8 @@ msgid "Largest"
 msgstr "最大"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "聯結器："
+msgstr "連接網格:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14112,9 +14110,8 @@ msgid "Dash and dot lengths are ratios of the line width."
 msgstr "虛線和點長度是線條寬度的比率。"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:279
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "操作點"
+msgstr "工作點疊加"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:288
 msgid "Significant digits (voltages):"
@@ -14127,22 +14124,22 @@ msgstr "範圍(電壓):"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "uV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:73
@@ -14153,12 +14150,12 @@ msgstr "mV"
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "KV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #, fuzzy
