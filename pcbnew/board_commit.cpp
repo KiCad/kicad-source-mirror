@@ -586,12 +586,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
 
 EDA_ITEM* BOARD_COMMIT::parentObject( EDA_ITEM* aItem ) const
 {
-    if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( aItem ) )
-    {
-        if( FOOTPRINT* parentFP = boardItem->GetParentFootprint() )
-            return parentFP;
-    }
-
     return aItem;
 }
 
