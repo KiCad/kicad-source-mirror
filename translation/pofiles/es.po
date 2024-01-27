@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 11:30+0000\n"
+"PO-Revision-Date: 2024-01-27 13:47+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -4074,9 +4074,8 @@ msgid "Grid Overrides"
 msgstr "Anulación de cuadrícula"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "Elementos no conectados"
+msgstr "Artículos conectados:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
 #, fuzzy
