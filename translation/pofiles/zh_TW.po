@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
 "PO-Revision-Date: 2024-01-27 06:24+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -353,14 +353,14 @@ msgstr "選擇視口："
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:764
 msgid "3D Image File Name"
-msgstr "3D 影象檔名稱"
+msgstr "3D 影像檔名"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:785
 #: common/eda_base_frame.cpp:1255 common/eda_base_frame.cpp:1259
 #: pcbnew/plugins/altium/altium_pcb.cpp:1709
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "無足夠許可權儲存檔案 '%s'。"
+msgstr "存檔權限不足 '%s'。"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:786 common/confirm.cpp:134
 #: common/confirm.cpp:324 common/dialogs/panel_setup_severities.cpp:42
