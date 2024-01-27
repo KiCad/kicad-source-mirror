@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2023-09-13 18:36+0000\n"
-"Last-Translator: Li Yidong <alenks@foxmail.com>\n"
+"PO-Revision-Date: 2024-01-27 06:24+0000\n"
+"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -32211,7 +32211,7 @@ msgstr "斷言失敗"
 
 #: pcbnew/drc/drc_item.cpp:201
 msgid "Copper sliver"
-msgstr "銅條"
+msgstr "銅箔尖刺"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Solder mask aperture bridges items with different nets"
@@ -37358,7 +37358,7 @@ msgstr "Loss Tangent（損耗角正切）"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:300
 msgid "Dielectric"
-msgstr "電介質"
+msgstr "介電材料"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:353
 msgid "Insert board stackup table"
