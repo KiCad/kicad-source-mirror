@@ -374,8 +374,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
 
-            // Remove all pads/drawings/texts, as they become invalid
-            // for the VIEW after SwapItemData() called for footprints
             view->Remove( item );
             connectivity->Remove( item );
 
