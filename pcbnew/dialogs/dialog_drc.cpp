@@ -567,7 +567,9 @@ void DIALOG_DRC::OnDRCItemDClick( wxDataViewEvent& aEvent )
 
 void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 {
-    RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+    TOOL_MANAGER*          toolMgr = m_frame->GetToolManager();
+    BOARD_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
+    RC_TREE_NODE*          node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
 
     if( !node )
         return;
@@ -611,30 +613,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
     }
 
-    if( rcItem->GetErrorCode() == DRCE_CLEARANCE
-            || rcItem->GetErrorCode() == DRCE_EDGE_CLEARANCE
-            || rcItem->GetErrorCode() == DRCE_HOLE_CLEARANCE
-            || rcItem->GetErrorCode() == DRCE_DRILLED_HOLES_TOO_CLOSE )
-    {
-        menu.Append( 3, _( "Run Inspect > Clearance Resolution" ) );
-    }
-    else if( rcItem->GetErrorCode() == DRCE_TEXT_HEIGHT
-            || rcItem->GetErrorCode() == DRCE_TEXT_THICKNESS
-            || rcItem->GetErrorCode() == DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG
-            || rcItem->GetErrorCode() == DRCE_TRACK_WIDTH
-            || rcItem->GetErrorCode() == DRCE_VIA_DIAMETER
-            || rcItem->GetErrorCode() == DRCE_ANNULAR_WIDTH
-            || rcItem->GetErrorCode() == DRCE_DRILL_OUT_OF_RANGE
-            || rcItem->GetErrorCode() == DRCE_MICROVIA_DRILL_OUT_OF_RANGE
-            || rcItem->GetErrorCode() == DRCE_CONNECTION_WIDTH
-            || rcItem->GetErrorCode() == DRCE_ASSERTION_FAILURE )
-    {
-        menu.Append( 3, _( "Run Inspect > Constraints Resolution" ) );
-    }
-    else if( rcItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
-    {
-        menu.Append( 3, _( "Run Inspect > Compare Footprint with Library" ) );
-    }
+    wxString inspectDRCErrorMenuText = inspectionTool->InspectDRCErrorMenuText( rcItem );
+
+    if( !inspectDRCErrorMenuText.IsEmpty() )
+        menu.Append( 3, inspectDRCErrorMenuText );
 
     menu.AppendSeparator();
 
@@ -667,10 +649,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
     case 1:
-    {
-        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() );
-
-        if( marker )
+        if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() ) )
         {
             marker->SetExcluded( false );
 
@@ -690,13 +669,9 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         break;
-    }
 
     case 2:
-    {
-        PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() );
-
-        if( marker )
+        if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() ) )
         {
             marker->SetExcluded( true );
 
@@ -720,10 +695,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         }
 
         break;
-    }
 
     case 11:
-    {
         for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
         {
             DRC_ITEM* candidateDrcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
@@ -736,10 +709,8 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
         modified = true;
         break;
-    }
 
     case 21:
-    {
         for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
         {
             DRC_ITEM* candidateDrcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
@@ -752,16 +723,10 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->Update( m_markersProvider, m_severities );
         modified = true;
         break;
-    }
 
     case 3:
-    {
-        TOOL_MANAGER*          toolMgr = m_frame->GetToolManager();
-        BOARD_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<BOARD_INSPECTION_TOOL>();
-
         inspectionTool->InspectDRCError( node->m_RcItem );
         break;
-    }
 
     case 4:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;

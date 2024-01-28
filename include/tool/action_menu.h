@@ -64,6 +64,9 @@ public:
      */
     void SetTitle( const wxString& aTitle ) override;
 
+    // Yes, it hides a non-virtual method in the parent class.
+    wxString GetTitle() const { return m_title; }
+
     /**
      * Decide whether a title for a pop up menu should be displayed.
      */

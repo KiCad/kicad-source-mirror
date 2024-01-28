@@ -82,6 +82,7 @@ public:
     ///< Show the ratsnest for a given net.
     int ShowNetInRatsnest( const TOOL_EVENT& aEvent );
 
+    wxString InspectDRCErrorMenuText( const std::shared_ptr<RC_ITEM>& aDRCItem );
     void InspectDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem );
 
     ///< Show the clearance resolution for two selected items.
