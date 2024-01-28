@@ -98,6 +98,9 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
                     menu.Append( 4201, _( "Sort by Best Match" ), wxEmptyString, wxITEM_CHECK );
                     menu.Append( 4202, _( "Sort Alphabetically" ), wxEmptyString, wxITEM_CHECK );
+                    menu.AppendSeparator();
+                    menu.Append( 4203, ACTIONS::expandAll.GetMenuItem() );
+                    menu.Append( 4204, ACTIONS::collapseAll.GetMenuItem() );
 
                     if( m_adapter->GetSortMode() == LIB_TREE_MODEL_ADAPTER::BEST_MATCH )
                         menu.Check( 4201, true );
@@ -117,7 +120,17 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
                         m_adapter->SetSortMode( LIB_TREE_MODEL_ADAPTER::ALPHABETIC );
                         Regenerate( true );
                     }
+                    else if( menu_id == 3 || menu_id == 4203 )
+                    {
+                        ExpandAll();
+                    }
+                    else if( menu_id == 4 || menu_id == 4204 )
+                    {
+                        CollapseAll();
+                    }
                 } );
+
+        m_sort_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onTreeCharHook, this );
 
         search_sizer->Add( m_sort_ctrl, 0, wxEXPAND | wxRIGHT, 5 );
 
@@ -332,6 +345,18 @@ void LIB_TREE::Unselect()
 void LIB_TREE::ExpandLibId( const LIB_ID& aLibId )
 {
     expandIfValid( m_adapter->FindItem( aLibId ) );
+}
+
+
+void LIB_TREE::ExpandAll()
+{
+    m_tree_ctrl->ExpandAll();
+}
+
+
+void LIB_TREE::CollapseAll()
+{
+    m_tree_ctrl->CollapseAll();
 }
 
 
@@ -563,12 +588,36 @@ void LIB_TREE::onDebounceTimer( wxTimerEvent& aEvent )
 
 void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 {
+    int hotkey = aKeyStroke.GetKeyCode();
+
+    if( aKeyStroke.GetModifiers() & wxMOD_CONTROL )
+        hotkey += MD_CTRL;
+
+    if( aKeyStroke.GetModifiers() & wxMOD_ALT )
+        hotkey += MD_ALT;
+
+    if( aKeyStroke.GetModifiers() & wxMOD_SHIFT )
+        hotkey += MD_SHIFT;
+
+    if( hotkey == ACTIONS::expandAll.GetHotKey()
+        || hotkey == ACTIONS::expandAll.GetHotKeyAlt() )
+    {
+        m_tree_ctrl->ExpandAll();
+        return;
+    }
+    else if( hotkey == ACTIONS::collapseAll.GetHotKey()
+             || hotkey == ACTIONS::collapseAll.GetHotKeyAlt() )
+    {
+        m_tree_ctrl->CollapseAll();
+        return;
+    }
+
     wxDataViewItem sel = m_tree_ctrl->GetSelection();
 
     if( !sel.IsOk() )
         sel = m_adapter->GetCurrentDataViewItem();
 
-    LIB_TREE_NODE::TYPE  type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
+    LIB_TREE_NODE::TYPE type = sel.IsOk() ? m_adapter->GetTypeFor( sel ) : LIB_TREE_NODE::INVALID;
 
     switch( aKeyStroke.GetKeyCode() )
     {

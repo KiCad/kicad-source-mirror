@@ -124,6 +124,9 @@ public:
      */
     void ExpandLibId( const LIB_ID& aLibId );
 
+    void ExpandAll();
+    void CollapseAll();
+
     /**
      * Save/restore search string.
      */

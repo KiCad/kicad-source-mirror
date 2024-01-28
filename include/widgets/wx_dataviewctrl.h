@@ -66,6 +66,9 @@ public:
     wxDataViewItem GetNextSibling( wxDataViewItem const& aItem );
 
     void DoSetToolTipText( const wxString &tip ) override {}
+
+    void ExpandAll();
+    void CollapseAll();
 };
 
 #endif // WX_DATAVIEWCTRL_H_

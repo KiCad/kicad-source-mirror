@@ -128,3 +128,34 @@ wxDataViewItem WX_DATAVIEWCTRL::GetNextSibling( wxDataViewItem const& aItem )
 
     return invalid;
 }
+
+
+void recursiveDescent( WX_DATAVIEWCTRL* aCtrl, wxDataViewItem aItem, bool aExpand )
+{
+    wxDataViewItemArray children;
+
+    aCtrl->GetModel()->GetChildren( aItem, children );
+
+    for( size_t i = 0; i < children.size(); ++i )
+        recursiveDescent( aCtrl, children[i], aExpand );
+
+    if( aItem )
+    {
+        if( aExpand )
+            aCtrl->Expand( aItem );
+        else
+            aCtrl->Collapse( aItem );
+    }
+}
+
+
+void WX_DATAVIEWCTRL::ExpandAll()
+{
+    recursiveDescent( this, wxDataViewItem(), true );
+}
+
+
+void WX_DATAVIEWCTRL::CollapseAll()
+{
+    recursiveDescent( this, wxDataViewItem(), false );
+}

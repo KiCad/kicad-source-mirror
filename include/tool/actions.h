@@ -77,6 +77,8 @@ public:
     static TOOL_ACTION leftJustify;
     static TOOL_ACTION centerJustify;
     static TOOL_ACTION rightJustify;
+    static TOOL_ACTION expandAll;
+    static TOOL_ACTION collapseAll;
 
     // Tables
     static TOOL_ACTION selectRows;

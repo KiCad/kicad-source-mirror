@@ -298,6 +298,18 @@ TOOL_ACTION ACTIONS::rightJustify( TOOL_ACTION_ARGS()
         .Tooltip( _( "Right-justify fields and text items" ) )
         .Icon( BITMAPS::text_align_right ) );
 
+TOOL_ACTION ACTIONS::expandAll( TOOL_ACTION_ARGS()
+        .Name( "common.Control.expandAll" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Expand All" ) )
+        .Icon( BITMAPS::up ) );     // JEY TODO: need icon
+
+TOOL_ACTION ACTIONS::collapseAll( TOOL_ACTION_ARGS()
+        .Name( "common.Control.collapseAll" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Collapse All" ) )
+        .Icon( BITMAPS::down ) );   // JEY TODO: need icon
+
 TOOL_ACTION ACTIONS::selectColumns( TOOL_ACTION_ARGS()
         .Name( "common.InteractiveSelection.SelectColumns" )
         .Scope( AS_GLOBAL )
