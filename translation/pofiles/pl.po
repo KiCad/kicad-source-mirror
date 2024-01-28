@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-22 00:01+0000\n"
-"Last-Translator: Marek <fotelpl@gmail.com>\n"
+"PO-Revision-Date: 2024-01-28 12:01+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -2930,7 +2930,7 @@ msgstr "Przesuń w dół"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr "Pokaż Przełącznik Ustawień"
+msgstr "Pokaż panel przełączników ustawień wstępnych"
 
 #: common/dialogs/panel_color_settings.cpp:51
 msgid "Reveal Themes in Finder"
@@ -5628,7 +5628,7 @@ msgstr "%s (Strona %s)"
 #: common/plotters/PDF_plotter.cpp:1228
 #, c-format
 msgid "Show Page %s"
-msgstr "Pokaż Stronę %s"
+msgstr "Pokaż stronę %s"
 
 #: common/plotters/PDF_plotter.cpp:1239
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:812
@@ -16564,7 +16564,7 @@ msgstr "Symbol..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:71
 msgid "View as PNG..."
-msgstr "Pokaż jako plik PNG..."
+msgstr "Przeglądaj jako plik PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:72
 msgid "Symbol as SVG..."
@@ -17273,7 +17273,7 @@ msgstr "Pokaż typ elektryczny pinu"
 
 #: eeschema/tools/ee_actions.cpp:196
 msgid "Annotate pins with their electrical types"
-msgstr "Pokaż typ elektryczny pinu"
+msgstr "Numeruj piny podając ich typy elektryczne"
 
 #: eeschema/tools/ee_actions.cpp:201
 msgid "Show Pin Numbers"
@@ -19460,7 +19460,7 @@ msgstr "Pokaż menedżera warstw"
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Show or hide the layer manager"
-msgstr "Pokaż/Ukryj pasek menedżera warstw"
+msgstr "Pokazuje lub ukrywa panel menedżera warstw"
 
 #: gerbview/tools/gerbview_actions.cpp:75
 msgid "List DCodes..."
@@ -21739,7 +21739,7 @@ msgstr ""
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show Design Inspector"
-msgstr "Pokaż Inspektora projektu"
+msgstr "Pokaż inspektora projektu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:82
 msgid "Show the list of items in the drawing sheet"
@@ -39485,23 +39485,23 @@ msgstr "Przełącza widok nitek wspomagających dla zaznaczonego(-ych) elementó
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Show the net inspector"
-msgstr "Pokaż Inspektora listy sieci"
+msgstr "Pokaż inspektora listy sieci"
 
 #: pcbnew/tools/pcb_actions.cpp:860
 msgid "Show Appearance Manager"
-msgstr "Pokaż menedżera wyglądu"
+msgstr "Pokaż panel z opcjami wyglądu"
 
 #: pcbnew/tools/pcb_actions.cpp:860
 msgid "Show/hide the appearance manager"
-msgstr "Pokazuje lub ukrywa menedżera wyglądu"
+msgstr "Pokazuje lub ukrywa panel z opcjami wyglądu"
 
 #: pcbnew/tools/pcb_actions.cpp:865
 msgid "Show Properties Manager"
-msgstr "Pokaż Menedżera właściwości"
+msgstr "Pokaż panel z listą właściwości"
 
 #: pcbnew/tools/pcb_actions.cpp:865
 msgid "Show/hide the properties manager"
-msgstr "Pokazuje lub ukrywa panel Menedżera właściwości"
+msgstr "Pokazuje lub ukrywa panel z listą właściwości"
 
 #: pcbnew/tools/pcb_actions.cpp:870
 msgid "Flip Board View"
@@ -39517,7 +39517,7 @@ msgstr "Pokaż połączenia wspomagające"
 
 #: pcbnew/tools/pcb_actions.cpp:876
 msgid "Show board ratsnest"
-msgstr "Pokaż połączenia wspomagające płytki"
+msgstr "Pokazuje nitki wspomagające trasowanie płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:881
 msgid "Curved Ratsnest Lines"
@@ -41068,7 +41068,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
 msgid "Show the Net Inspector"
-msgstr "Pokaż Inspektora listy sieci"
+msgstr "Pokaż inspektora listy sieci"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
 msgid "Configure net classes"
