@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-28 13:18+0000\n"
-"Last-Translator: Oliver0804 <icetzsr@gmail.com>\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -21053,7 +21053,7 @@ msgstr "3D 模型"
 
 #: eeschema/tools/ee_actions.cpp:1432
 msgid "Draw plots with a black background"
-msgstr ""
+msgstr "繪製黑色背景的圖"
 
 #: eeschema/tools/ee_actions.cpp:1437
 #, fuzzy
@@ -21127,7 +21127,7 @@ msgstr "符號"
 #: eeschema/tools/ee_inspection_tool.cpp:280
 #: pcbnew/tools/board_inspection_tool.cpp:1489
 msgid "Summary"
-msgstr ""
+msgstr "總結"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 #, fuzzy
@@ -21180,7 +21180,7 @@ msgstr "沒有選擇層。"
 #: eeschema/tools/ee_inspection_tool.cpp:344
 #: pcbnew/tools/board_inspection_tool.cpp:1548
 msgid "Visual"
-msgstr ""
+msgstr "視覺的"
 
 #: eeschema/tools/ee_inspection_tool.cpp:435
 msgid "No datasheet defined."
@@ -22811,7 +22811,7 @@ msgstr "按副檔名對層進行排序"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:184
 msgid "Layers Display Parameters: Offset and Rotation"
-msgstr ""
+msgstr "圖層顯示參數：偏移和旋轉"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:189
 msgid "Move Current Layer Up"
@@ -22895,20 +22895,18 @@ msgid "Input file"
 msgstr "輸入檔案"
 
 #: kicad/cli/command.cpp:143
-#, fuzzy
 msgid "Output directory"
-msgstr "輸出目錄："
+msgstr "輸出目錄"
 
 #: kicad/cli/command.cpp:150
-#, fuzzy
 msgid "Output file"
-msgstr "輸出資料夾："
+msgstr "輸出資料夾"
 
 #: kicad/cli/command.cpp:163
 msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
-msgstr ""
+msgstr "電路圖路徑，使用時將覆蓋任何已存在專案所定義的電路圖"
 
 #: kicad/cli/command.cpp:177
 msgid ""
@@ -22916,6 +22914,8 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
+"覆蓋或新增專案變數，可多次使用來宣告多個變數。\n"
+"使用這些格式'--define-var key=value' 或 '-D key=value'來使用這個功能"
 
 #: kicad/cli/command.h:32
 #, fuzzy
@@ -22967,11 +22967,11 @@ msgstr "封裝庫不存在或無法訪問\n"
 
 #: kicad/cli/command_pcb_drc.cpp:46
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
-msgstr ""
+msgstr "對這塊PCB進行設計規則檢查（DRC）以及創建一份報告"
 
 #: kicad/cli/command_pcb_drc.cpp:51 kicad/cli/command_sch_erc.cpp:50
 msgid "Output file format, options: json, report"
-msgstr ""
+msgstr "輸出檔案之格式，選項有：json，report"
 
 #: kicad/cli/command_pcb_drc.cpp:55 pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -22986,7 +22986,7 @@ msgstr "輸出單位，有效選項：mm、in"
 msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr ""
+msgstr "報告所有 DRC 中違規的項目，這相當於包括所有其他嚴重性參數"
 
 #: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
