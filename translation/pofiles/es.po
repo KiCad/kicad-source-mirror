@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-27 13:47+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2024-01-28 13:18+0000\n"
+"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
 "Language: es\n"
@@ -4078,9 +4078,8 @@ msgid "Connected items:"
 msgstr "Artículos conectados:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
-#, fuzzy
 msgid "Wires:"
-msgstr "Líneas"
+msgstr "Cables:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:135
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
@@ -4101,9 +4100,8 @@ msgid "Text:"
 msgstr "Texto:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:151
-#, fuzzy
 msgid "Graphics:"
-msgstr "Gráficos"
+msgstr "Gráficos:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
@@ -4166,9 +4164,8 @@ msgid "PPI:"
 msgstr "IPP:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Convertir a un arco"
+msgstr "Convertir a escala de grises"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -13261,9 +13258,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "¿Está seguro de que desea eliminar el campo '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:736
-#, fuzzy
 msgid "Rename Field"
-msgstr "Renombrar archivo"
+msgstr "Renombrar campo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:751
 #, c-format
@@ -13272,34 +13268,29 @@ msgstr ""
 "El campo de nombre %s ya existe. No se puede sobrescribir el campo existente."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:842
-#, fuzzy
 msgid "The Quantity column cannot be grouped by."
-msgstr "No puede ocultarse la columna Referencia."
+msgstr "No se puede agrupar por la columna Cantidad."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:850
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "No puede ocultarse la columna Referencia."
+msgstr "No se puede agrupar por la columna Número de elemento."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1197
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "Lista de materiales"
+msgstr "Archivo de salida de lista de materiales"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1209
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1218
-#, fuzzy
 msgid "BOM Output File"
-msgstr "Tamaño de salida"
+msgstr "Archivo de salida de BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1216
-#, fuzzy
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
 "¡No puede crearse una ruta relativa (el volumen de destino es diferente del "
-"volumen del archivo)!"
+"volumen del archivo de esquema)!"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1229
 msgid "Unsaved data"
@@ -13310,41 +13301,38 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "Hay cambios no guardados. Exportar datos no guardados?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1251
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "No se ingresó un nombre de archivo"
+msgstr "No se ingresó un nombre de archivo en el exportador"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1265
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open/create path '%s'."
-msgstr "No puede crearse el archivo \"%s\""
+msgstr "No se pudo abrir/crear la ruta '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1274
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "No pueden guardarse los archivos de trazado en la carpeta '%s'."
+msgstr "No se pudo crear la salida de BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1283
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write BOM output '%s'."
-msgstr "No pueden guardarse los archivos de trazado en la carpeta '%s'."
+msgstr "No se pudo escribir la salida de BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1288
-#, fuzzy, c-format
+#, c-format
 msgid "Wrote BOM output to '%s'"
-msgstr "No se puede crear la carpeta de salida '%s'."
+msgstr "Salida de BOM escrita a '%s'"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1587
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1988
-#, fuzzy
 msgid "BOM preset name:"
-msgstr "Nombre de ajuste por defecto de capa:"
+msgstr "Nombre de preajuste de BOM:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1587
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1988
-#, fuzzy
 msgid "Save BOM Preset"
-msgstr "Guardar ajuste por defecto de capa"
+msgstr "Guardar preajuste de BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1613
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2014
@@ -13353,16 +13341,16 @@ msgid ""
 "Default presets cannot be modified.\n"
 "Please use a different name."
 msgstr ""
+"Los preajustes predefinidos no pueden ser modificados.\n"
+"Por favor use un nombre distinto."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
-#, fuzzy
 msgid "View presets:"
-msgstr "Ajustes por defecto:"
+msgstr "Ver preajustes:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:100
-#, fuzzy
 msgid "Exclude DNP"
-msgstr "Excluído"
+msgstr "Excluir DNP"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:106
 msgid "Group symbols"
@@ -13377,19 +13365,16 @@ msgid "Scope:"
 msgstr "Alcance:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Entire project"
-msgstr "Descomprimir proyecto"
+msgstr "Proyecto completo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:169
-#, fuzzy
 msgid "Recursive"
-msgstr "Nivel de recursión"
+msgstr "Recursivo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:172
-#, fuzzy
 msgid "Cross-probe action:"
-msgstr "Prueba cruzada en la selección"
+msgstr "Acción de sondeo cruzado:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:176
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -13406,9 +13391,8 @@ msgid "Edit"
 msgstr "Editar"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "Milímetro"
+msgstr "Delimitador de campo:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
@@ -13416,23 +13400,20 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "String delimiter:"
-msgstr "Valor inicial:"
+msgstr "Delimitador de cadena:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
-#, fuzzy
 msgid "Reference delimiter:"
-msgstr "Indicador de referencia"
+msgstr "Delimitador de referencia:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
-#, fuzzy
 msgid "Range delimiter:"
-msgstr "Límites de página"
+msgstr "Delimitador de rango:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:242
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:35
@@ -13441,27 +13422,23 @@ msgstr "-"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:243
 msgid "Leave blank to disable ranges."
-msgstr ""
+msgstr "Dejar en blanco para deshabilitar rangos."
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:248
-#, fuzzy
 msgid "Keep tabs"
-msgstr "Área restringida para vías"
+msgstr "Mantener tabuladores"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:251
-#, fuzzy
 msgid "Keep line breaks"
-msgstr "Área restringida para pistas"
+msgstr "Mantener quiebres de línea"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
-#, fuzzy
 msgid "Format presets:"
-msgstr "Formato"
+msgstr "Preajustes de formato:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:273
-#, fuzzy
 msgid "Output file:"
-msgstr "Carpeta de salida:"
+msgstr "Archivo de salida:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:318
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:328
@@ -13616,9 +13593,8 @@ msgid "Base Pin Name"
 msgstr "Nombre de pin base"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:305
-#, fuzzy
 msgid "Pin Functions"
-msgstr "Uniones"
+msgstr "Funciones de pin"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
@@ -13643,7 +13619,6 @@ msgstr ""
 "carpeta '%s' del proyecto."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:75
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -13660,7 +13635,7 @@ msgstr ""
 "símbolos. La reasignación cambiará algunos archivos del proyecto y los "
 "esquemas pueden no ser compatibles con versiones anteriores de KiCad. Se "
 "realizarán copias de seguridad de todos los archivos modificados a la "
-"carpeta \"remap_backup\" en la carpeta del proyecto en caso de que necesite "
+"carpeta \"rescue_backup\" en la carpeta del proyecto en caso de que necesite "
 "revertir los cambios. Si elige omitir este paso, será responsable de "
 "reasignar los símbolos manualmente."
 
@@ -13781,9 +13756,8 @@ msgstr ""
 "una hoja en este esquema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:537
-#, fuzzy
 msgid "Edit Text"
-msgstr "Editar texto..."
+msgstr "Editar texto"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -13851,13 +13825,12 @@ msgid "Net names"
 msgstr "Nombres de red"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:75
-#, fuzzy
 msgid "Other fields"
-msgstr "Otros campos de la hoja"
+msgstr "Otros campos"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:76
 msgid "Update all other fields in the symbol from the footprint"
-msgstr ""
+msgstr "Actualizar todos los otros campos en el símbolo desde la huella"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.h:57
 #: eeschema/tools/backannotate.cpp:584
@@ -13887,19 +13860,16 @@ msgid "Syntax Help"
 msgstr "Ayuda de sintaxis"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
-#, fuzzy
 msgid "User-defined Signals"
-msgstr "Origen definido por el usuario"
+msgstr "Señales definidas por el usuario"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
-#, fuzzy
 msgid "Wire/Bus"
-msgstr "Líneas"
+msgstr "Cable/Bus"
 
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:232
-#, fuzzy
 msgid "Wires/Buses"
-msgstr "Migrar buses"
+msgstr "Cables/Buses"
 
 #: eeschema/dialogs/dialog_wire_bus_properties_base.cpp:30
 msgid "Wire/bus width:"
@@ -13916,14 +13886,12 @@ msgid "Wire & Bus Properties"
 msgstr "Propiedades de cable y bus"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
-#, fuzzy
 msgid "Bill of Materials Presets:"
-msgstr "Lista de materiales"
+msgstr "Preajustes de lista de materiales:"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
-#, fuzzy
 msgid "Bill of Materials Formatting Presets:"
-msgstr "Ayuda para la generación de la lista de materiales"
+msgstr "Preajustes de formato de la lista de materiales:"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
@@ -13977,14 +13945,12 @@ msgid "Show ERC exclusions"
 msgstr "Mostrar exclusiones de ERC"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:68
-#, fuzzy
 msgid "Show OP voltages"
-msgstr "Mostrar página %s"
+msgstr "Mostrar voltajes de punto de operación"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:71
-#, fuzzy
 msgid "Show OP currents"
-msgstr "Guardar todas las corrientes"
+msgstr "Mostrar corrientes de punto de operación"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:74
 msgid "Show page limi&ts"
@@ -14021,9 +13987,9 @@ msgid "Cross-probing"
 msgstr "Prueba cruzada"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:145
-#, fuzzy
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Resaltar las huellas correspondientes a los símbolos seleccionados"
+msgstr ""
+"Seleccionar/Resaltar objetos correspondientes a la selección de la placa"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Highlight symbols corresponding to selected footprints"
@@ -14054,7 +14020,6 @@ msgid "Highlight nets when they are highlighted in the PCB editor"
 msgstr "Resaltar redes cuando estén resaltadas en el editor de PCB"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:33
-#, fuzzy
 msgid "Line drawing mode:"
 msgstr "Modo de dibujo de líneas:"
 
@@ -14243,9 +14208,8 @@ msgid "Show footprint previews in Symbol Chooser"
 msgstr "Mostrar vista previa de la huella en el selector de símbolos"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:350
-#, fuzzy
 msgid "Never show Rescue Symbols tool"
-msgstr "Recuperar símbolos"
+msgstr "Nunca mostrar la herramienta de recuperar símbolos"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:264
 #, c-format
@@ -14317,9 +14281,8 @@ msgid "Default text size:"
 msgstr "Tamaño de texto por defecto:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "Proporción de desfase de etiqueta:"
+msgstr "Proporción de desfase de sobrerrayado:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -14335,9 +14298,8 @@ msgstr ""
 "por debajo de un cable, bus, o pin"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "Margen global de etiquetas:"
+msgstr "Proporción global de margen de etiquetas:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -14373,9 +14335,8 @@ msgid "Largest"
 msgstr "La mayor"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "Conector:"
+msgstr "Cuadrícula de conexiones:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14437,38 +14398,32 @@ msgstr ""
 "Las longitudes de rayas y espacios son proporcionales al grosor de línea."
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:279
-#, fuzzy
 msgid "Operating-point Overlay"
-msgstr "Punto de operación"
+msgstr "Vista de punto de operación"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:288
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "Cifras significativas (voltajes):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:296
-#, fuzzy
 msgid "Range (voltages):"
-msgstr "Guardar todos los voltajes"
+msgstr "Rango (voltajes):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "fV"
-msgstr "V"
+msgstr "fV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "pV"
-msgstr "V"
+msgstr "pV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "nV"
-msgstr "V"
+msgstr "nV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "uV"
-msgstr "V"
+msgstr "μV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:73
@@ -14477,89 +14432,74 @@ msgid "mV"
 msgstr "mV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "KV"
-msgstr "V"
+msgstr "kV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "MV"
-msgstr "V"
+msgstr "MV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "GV"
-msgstr "V"
+msgstr "GV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "TV"
-msgstr "V"
+msgstr "TV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:300
-#, fuzzy
 msgid "PV"
-msgstr "V"
+msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:307
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "Cifras significativas (corrientes):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:315
-#, fuzzy
 msgid "Range (currents):"
-msgstr "Guardar todas las corrientes"
+msgstr "Rango (corrientes):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "fA"
-msgstr "A"
+msgstr "fA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "pA"
-msgstr "A"
+msgstr "pA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "nA"
-msgstr "A"
+msgstr "nA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
 msgid "uA"
-msgstr "uA"
+msgstr "μA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "mA"
-msgstr "A"
+msgstr "mA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "KA"
-msgstr "A"
+msgstr "kA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "MA"
-msgstr "A"
+msgstr "MA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "GA"
-msgstr "BGA"
+msgstr "GA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "TA"
-msgstr "A"
+msgstr "TA"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:319
-#, fuzzy
 msgid "PA"
-msgstr "A"
+msgstr "PA"
 
 #: eeschema/dialogs/panel_setup_pinmap.cpp:223
 msgid "No error or warning"
@@ -14586,13 +14526,12 @@ msgid "&Default line width:"
 msgstr "Ancho de línea por &defecto:"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:47
-#, fuzzy
 msgid ""
 "Set to 0 to allow symbols to inherit line width properties\n"
 "from schematic"
 msgstr ""
 "Establecer a 0 para permitir que los símbolos hereden\n"
-"sus grosores de línea de su esquema principal"
+"sus propiedades de grosor de línea del esquema"
 
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:62
 msgid "D&efault pin length:"
@@ -14689,9 +14628,8 @@ msgid "All supported formats"
 msgstr "Todos los formatos admitidos"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:622
-#, fuzzy
 msgid "Add Library"
-msgstr "&Añadir biblioteca"
+msgstr "Añadir biblioteca"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:636
 msgid "Warning: Duplicate Nickname"
@@ -14721,13 +14659,12 @@ msgid "Add Anyway"
 msgstr "Añadir de todas formas"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:857
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
-"Seleccione una o más filas de la tabla que contengan bibliotecas en formato "
-"heredado (*.lib) para guardarlas en el formato actual (* .kicad_sym)."
+"Seleccione una o más filas que contengan bibliotecas para guardarlas en el "
+"formato actual (* .kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:865
 #, c-format
@@ -14739,13 +14676,13 @@ msgstr ""
 "entrada heredada en la tabla?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:871
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save %d libraries as current KiCad format (*.kicad_sym) and replace legacy "
 "entries in table?"
 msgstr ""
-"¿Guardar %d bibliotecas de formato heredado en el formato actual de KiCad (*."
-"kicad_sym) y reemplazar las entradas heredadas en la tabla?"
+"¿Guardar %d bibliotecas en el formato actual de KiCad (*.kicad_sym) y "
+"reemplazar las entradas heredadas en la tabla?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:899
 #: pcbnew/dialogs/dialog_export_step.cpp:409
@@ -14954,9 +14891,9 @@ msgid "Unknown netlist format.\n"
 msgstr "Formato de lista de redes desconocido.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:438
-#, fuzzy, c-format
+#, c-format
 msgid "BOM preset '%s' not found"
-msgstr "No se ha encontrado el archivo '%s'"
+msgstr "No se ha encontrado el preajuste de BOM '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:533
 #: eeschema/eeschema_jobs_handler.cpp:758
@@ -14965,9 +14902,9 @@ msgid "Unable to open destination '%s'"
 msgstr "No se puede abrir el destino '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "BOM format preset '%s' not found"
-msgstr "No se ha encontrado la huella '%s'."
+msgstr "No se ha encontrado el preajuste de formato de BOM '%s'"
 
 #: eeschema/eeschema_jobs_handler.cpp:722
 #, c-format
@@ -15003,29 +14940,27 @@ msgid "Symbol library was not updated\n"
 msgstr "No se actualizó la biblioteca de símbolos\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:981
-#, fuzzy
 msgid "Running ERC...\n"
-msgstr "Ejecutar DRC..."
+msgstr "Ejecutando ERC...\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:989 pcbnew/pcbnew_jobs_handler.cpp:1032
-#, fuzzy, c-format
+#, c-format
 msgid "Found %d violations\n"
-msgstr "Permitir violaciones de DRC"
+msgstr "Encontradas %d infracciones\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1004
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to save ERC report to %s\n"
-msgstr "No se pudo analizar el repositorio: %s"
+msgstr "No se pudo guardar el informe de ERC a %s\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:1009
-#, fuzzy, c-format
+#, c-format
 msgid "Saved ERC Report to %s\n"
-msgstr "Guardar informe de DRC"
+msgstr "Informe de ERC guardado a %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
-#, fuzzy
 msgid "Net Navigator"
-msgstr "Navegador de jerarquía"
+msgstr "Navegador de redes"
 
 #: eeschema/eeschema_settings.cpp:92 pagelayout_editor/pl_editor_frame.cpp:193
 #: pcbnew/footprint_edit_frame.cpp:232 pcbnew/pcb_edit_frame.cpp:312
@@ -15122,14 +15057,13 @@ msgstr ""
 "colocados."
 
 #: eeschema/erc.cpp:570
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass %s is not defined"
-msgstr "No se ha definido la herramienta %d"
+msgstr "No se ha definido la clase de red %s"
 
 #: eeschema/erc.cpp:662
-#, fuzzy
 msgid "Pin with 'no connection' type is connected"
-msgstr "Pines de tipo \"no conectado\" están conectados"
+msgstr "Pin de tipo 'no conectado' está conectado"
 
 #: eeschema/erc.cpp:775
 #, c-format
@@ -15210,9 +15144,8 @@ msgid "Checking for off grid pins and wires..."
 msgstr "Comprobando pines y cables fuera de cuadrícula..."
 
 #: eeschema/erc.cpp:1263
-#, fuzzy
 msgid "Checking for undefined netclasses..."
-msgstr "Comprobando variables no resueltas..."
+msgstr "Comprobando clases de red indefinidas..."
 
 #: eeschema/erc_item.cpp:43
 msgid "Conflicts"
@@ -15316,9 +15249,8 @@ msgstr "Variable de texto sin resolver"
 
 # Pendiente
 #: eeschema/erc_item.cpp:139
-#, fuzzy
 msgid "Undefined netclass"
-msgstr "Clase de red resuelta"
+msgstr "Clase de red indefinida"
 
 #: eeschema/erc_item.cpp:143
 msgid "SPICE model issue"
@@ -15436,9 +15368,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "No se han guardado las modificaciones del esquema"
 
 #: eeschema/files-io.cpp:230
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "Archivos de esquema de Altium"
+msgstr "Archivo de esquema no soportado '%s'."
 
 #: eeschema/files-io.cpp:267
 msgid "Root"
@@ -15563,16 +15495,16 @@ msgstr ""
 "¿Desea guardar el documento activo antes de proceder?"
 
 #: eeschema/files-io.cpp:655
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"Esta operación no puede deshacerse.\n"
+"Esta operación remplaza los contenidos del esquema actual, que serán "
+"perdidos permanentemente.\n"
 "\n"
-"¿Desea guardar el documento activo antes de proceder?"
+"¿Desea proceder?"
 
 #: eeschema/files-io.cpp:697
 msgid "Import Schematic"
@@ -15581,7 +15513,7 @@ msgstr "Importar esquema"
 #: eeschema/files-io.cpp:744
 #, c-format
 msgid "No loader can read the specified file: '%s'."
-msgstr ""
+msgstr "Ningún cargador puede leer el archivo especificado '%s'."
 
 #: eeschema/files-io.cpp:812
 #, c-format
@@ -15635,21 +15567,21 @@ msgstr ""
 "Por favor, confirme que tiene permisos de escritura e inténtelo de nuevo."
 
 #: eeschema/files-io.cpp:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "No ha podido guardarse \"%s\""
+msgstr "No ha podido guardarse %s."
 
 #: eeschema/files-io.cpp:1090
-#, fuzzy
 msgid "Locked File Warning"
-msgstr "Advertencia de escalado de modelo"
+msgstr "Advertencia de archivo bloqueado"
 
 #: eeschema/files-io.cpp:1092
-#, fuzzy
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
-msgstr "No tiene permiso de escritura para la carpeta \"%s\"."
+msgstr ""
+"No tiene permiso de escritura para:\n"
+"\n"
 
 #: eeschema/files-io.cpp:1108
 msgid "Saving will overwrite existing files."
@@ -15703,7 +15635,7 @@ msgstr ""
 "guardadas que realizó?"
 
 #: eeschema/files-io.cpp:1583
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
 "Manual recovery of automatically saved files is required."
@@ -15723,11 +15655,13 @@ msgstr ""
 "Se requiere de recuperación manual para restaurar los archivos anteriores."
 
 #: eeschema/files-io.cpp:1648
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "¡No se puede eliminar el archivo de guardado automático '%s'!"
+msgstr ""
+"No se pudo eliminar el archivo de guardado automático '%s'.\n"
+"Se requiere de eliminación manual."
 
 #: eeschema/files-io.cpp:1682
 msgid "The following automatically saved file(s) could not be removed\n"
@@ -15771,9 +15705,8 @@ msgstr "Pie"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
 #: pcbnew/tools/drawing_tool.cpp:1576 pcbnew/tools/drawing_tool.cpp:1665
-#, fuzzy
 msgid "Import Graphics"
-msgstr "Importar gráficos..."
+msgstr "Importar gráficos"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 msgid "No file selected!"
@@ -15853,7 +15786,6 @@ msgid "V Justification"
 msgstr "Justificación V"
 
 #: eeschema/lib_field.cpp:654 eeschema/sch_field.cpp:1385
-#, fuzzy
 msgid "Show Field Name"
 msgstr "Mostrar nombre de campo"
 
@@ -15882,9 +15814,8 @@ msgid "Pos Y"
 msgstr "Pos Y"
 
 #: eeschema/lib_pin.cpp:1210
-#, fuzzy
 msgid "Flags"
-msgstr "banderas"
+msgstr "Banderas"
 
 #: eeschema/lib_pin.cpp:1426
 #, c-format
@@ -15988,44 +15919,41 @@ msgid "Position Y"
 msgstr "Posición Y"
 
 #: eeschema/lib_shape.cpp:461
-#, fuzzy, c-format
+#, c-format
 msgid "Arc with radius %s"
-msgstr "Arco, radio %s"
+msgstr "Arco con radio %s"
 
 #: eeschema/lib_shape.cpp:465
-#, fuzzy, c-format
+#, c-format
 msgid "Circle with radius %s"
-msgstr "Círculo, radio %s"
+msgstr "Círculo con radio %s"
 
 #: eeschema/lib_shape.cpp:469
-#, fuzzy, c-format
+#, c-format
 msgid "Rectangle with width %s height %s"
-msgstr "Rectángulo, ancho %s alto %s"
+msgstr "Rectángulo con ancho %s alto %s"
 
 #: eeschema/lib_shape.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Polyline with %d points"
-msgstr "Polilínea, %d puntos"
+msgstr "Polilínea con %d puntos"
 
 #: eeschema/lib_shape.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "Bezier Curve with %d points"
-msgstr "Curva Bézier, %d puntos"
+msgstr "Curva Bézier con %d puntos"
 
 #: eeschema/lib_shape.cpp:593
-#, fuzzy
 msgid "Body outline color"
-msgstr "Rellenar con el color del perímetro"
+msgstr "Color de perímetro de cuerpo"
 
 #: eeschema/lib_shape.cpp:594
-#, fuzzy
 msgid "Body background color"
-msgstr "Trazar el color de fondo"
+msgstr "Color de fondo de cuerpo"
 
 #: eeschema/lib_shape.cpp:595
-#, fuzzy
 msgid "Fill color"
-msgstr "Color del relleno:"
+msgstr "Color del relleno"
 
 #: eeschema/lib_shape.cpp:601 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
@@ -16034,93 +15962,81 @@ msgstr "Rellenar"
 
 #: eeschema/lib_symbol.cpp:275
 msgid "Power flag differs."
-msgstr ""
+msgstr "Bandera de alimentación difiere."
 
 #: eeschema/lib_symbol.cpp:284
-#, fuzzy
 msgid "Unit count differs."
-msgstr "Isleta Cu"
+msgstr "Cantidad de unidades difiere."
 
 #: eeschema/lib_symbol.cpp:324
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:657
-#, fuzzy
 msgid "Graphic item count differs."
-msgstr "No se han encontrado elementos gráficos en el archivo."
+msgstr "Cantidad de elementos gráficos difiere."
 
 #: eeschema/lib_symbol.cpp:336
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:671
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s difiere."
 
 #: eeschema/lib_symbol.cpp:347
-#, fuzzy
 msgid "Pin count differs."
-msgstr "Isleta Cu"
+msgstr "Cantidad de pines difiere."
 
 #: eeschema/lib_symbol.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s not found."
-msgstr "%s no encontrado"
+msgstr "Pin %s no encontrado."
 
 #: eeschema/lib_symbol.cpp:371
-#, fuzzy, c-format
+#, c-format
 msgid "Pin %s differs."
-msgstr "Isleta Cu"
+msgstr "Pin %s difiere."
 
 #: eeschema/lib_symbol.cpp:402
 #, c-format
 msgid "%s field differs."
-msgstr ""
+msgstr "Campo %s difiere."
 
 #: eeschema/lib_symbol.cpp:412
-#, fuzzy
 msgid "Field count differs."
-msgstr "Isleta Cu"
+msgstr "Cantidad de campos difiere."
 
 #: eeschema/lib_symbol.cpp:421
-#, fuzzy
 msgid "Footprint filters differs."
-msgstr "Tipo de huella:"
+msgstr "Filtros de huella difieren."
 
 #: eeschema/lib_symbol.cpp:433
-#, fuzzy
 msgid "Footprint filters differ."
-msgstr "Tipo de huella:"
+msgstr "Filtros de huella difieren."
 
 #: eeschema/lib_symbol.cpp:444
-#, fuzzy
 msgid "Symbol keywords differ."
-msgstr "Orden de huellas"
+msgstr "Palabras claves de símbolo difieren."
 
 #: eeschema/lib_symbol.cpp:453
 msgid "Symbol pin name offsets differ."
-msgstr ""
+msgstr "Desplazamientos de nombre de pin de símbolo difieren."
 
 #: eeschema/lib_symbol.cpp:464
-#, fuzzy
 msgid "Show pin names settings differ."
-msgstr "Mostrar texto del nombre de pin"
+msgstr "Ajustes de vista de nombre de pin difieren."
 
 #: eeschema/lib_symbol.cpp:473
-#, fuzzy
 msgid "Show pin numbers settings differ."
-msgstr "Mostrar texto del número de pin"
+msgstr "Ajustes de vista de número de pin difieren."
 
 #: eeschema/lib_symbol.cpp:482
-#, fuzzy
 msgid "Exclude from simulation settings differ."
-msgstr "Exento del requisito del patio"
+msgstr "Ajustes de excluir de simulación difieren."
 
 #: eeschema/lib_symbol.cpp:491
-#, fuzzy
 msgid "Exclude from bill of materials settings differ."
-msgstr "Excluir de la lista de materiales"
+msgstr "Ajustes de excluir de lista de materiales difieren."
 
 #: eeschema/lib_symbol.cpp:500
-#, fuzzy
 msgid "Exclude from board settings differ."
-msgstr "Exento del requisito del patio"
+msgstr "Ajustes de excluir de placa difieren."
 
 #: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:492
 #: eeschema/tools/sch_edit_tool.cpp:102
@@ -16249,70 +16165,68 @@ msgid "P&references"
 msgstr "P&referencias"
 
 #: eeschema/net_navigator.cpp:56
-#, fuzzy, c-format
+#, c-format
 msgid "Wire from %s, %s to %s, %s"
-msgstr "Línea %s de (%s, %s) a (%s, %s)"
+msgstr "Cable de %s, %s a %s, %s"
 
 #: eeschema/net_navigator.cpp:64
-#, fuzzy, c-format
+#, c-format
 msgid "Bus from %s, %s to %s, %s"
-msgstr "Bus %s de (%s, %s) a (%s, %s)"
+msgstr "Bus de %s, %s a %s, %s"
 
 #: eeschema/net_navigator.cpp:72
-#, fuzzy
 msgid "Graphic line not connectable"
-msgstr "Línea o polígono gráfico"
+msgstr "Línea gráfica no conectable"
 
 #: eeschema/net_navigator.cpp:85
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' pin '%s'"
-msgstr "Símbolo %s [%s]"
+msgstr "Símbolo '%s' pin '%s'"
 
 #: eeschema/net_navigator.cpp:97
-#, fuzzy, c-format
+#, c-format
 msgid "Sheet '%s' pin '%s'"
-msgstr "Pines de página"
+msgstr "Hoja '%s' pin '%s'"
 
 #: eeschema/net_navigator.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at %s, %s"
-msgstr "Etiqueta '%s'"
+msgstr "Etiqueta '%s' en %s, %s"
 
 #: eeschema/net_navigator.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
-msgstr "Etiqueta global '%s'"
+msgstr "Etiqueta global '%s' en %s, %s"
 
 #: eeschema/net_navigator.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
-msgstr "Etiqueta jerárquica '%s'"
+msgstr "Etiqueta jerárquica '%s' en %s, %s"
 
 #: eeschema/net_navigator.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid "Junction at %s, %s"
-msgstr "Tamaño del punto de unión:"
+msgstr "Unión en %s, %s"
 
 #: eeschema/net_navigator.cpp:146
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
-msgstr "Línea %s de (%s, %s) a (%s, %s)"
+msgstr "Entrada de bus a cable de %s, %s a %s, %s"
 
 #: eeschema/net_navigator.cpp:158
-#, fuzzy, c-format
+#, c-format
 msgid "Bus to bus entry from %s, %s to %s, %s"
-msgstr "Bus %s de (%s, %s) a (%s, %s)"
+msgstr "Entrada de bus a bus de %s, %s a %s, %s"
 
 # Pendiente de contexto
 #: eeschema/net_navigator.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled item type %d"
-msgstr "No puede utilizarse el texto de huella tipo %s"
+msgstr "Tipo de elemento %d no manejado"
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:56
-#, fuzzy
 msgid "Failed to create directory 'devices' ."
-msgstr "Fallo al eliminar la carpeta %s"
+msgstr "Fallo al crear la carpeta 'devices'."
 
 #: eeschema/netlist_exporters/netlist_exporter_allegro.cpp:419
 #, c-format
@@ -16343,9 +16257,8 @@ msgid "Error: duplicate sheet names. Continue?"
 msgstr "Error: nombre de hoja duplicado. ¿Continuar?"
 
 #: eeschema/picksymbol.cpp:121
-#, fuzzy
 msgid "Change Unit"
-msgstr "Cambiar Orientación"
+msgstr "Cambiar unidad"
 
 #: eeschema/picksymbol.cpp:138
 #, c-format
@@ -16355,14 +16268,12 @@ msgstr ""
 "biblioteca '%s'."
 
 #: eeschema/picksymbol.cpp:161
-#, fuzzy
 msgid "Convert Symbol"
-msgstr "Revertir símbolo"
+msgstr "Convertir símbolo"
 
 #: eeschema/picksymbol.cpp:178
-#, fuzzy
 msgid "Set Pin Function"
-msgstr "Opciones de Pin"
+msgstr "Fijar función de pin"
 
 #: eeschema/pin_numbers.cpp:124 pcbnew/zones.h:64
 msgid "none"
@@ -17843,9 +17754,8 @@ msgid "Excluded from board"
 msgstr "Excluido de la placa"
 
 #: eeschema/sch_symbol.cpp:1426
-#, fuzzy
 msgid "Excluded from simulation"
-msgstr "Excluir de la simulación"
+msgstr "Excluido de la simulación"
 
 #: eeschema/sch_symbol.cpp:1432 eeschema/sch_symbol.cpp:1864
 #: eeschema/widgets/search_handlers.cpp:139 pcbnew/footprint.cpp:1315
@@ -17939,7 +17849,6 @@ msgid "Exclude From Bill of Materials"
 msgstr "Excluir de la lista de materiales"
 
 #: eeschema/sch_symbol.cpp:2695 pcbnew/footprint.cpp:3473
-#, fuzzy
 msgid "Do not Populate"
 msgstr "No rellenar"
 
@@ -19504,9 +19413,8 @@ msgid "'%s' is not a valid Spice value."
 msgstr "'%s' no es un valor Spice válido."
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:162
-#, fuzzy
 msgid "&Simulation"
-msgstr "Simulación"
+msgstr "&Simulación"
 
 #: eeschema/sim/user_defined_signals_help_md.h:2
 msgid ""
@@ -19546,6 +19454,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"Funciones de SPICE:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -19624,7 +19567,6 @@ msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>Un símbolo de potencia debería tener solo un pin</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:213
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
@@ -19633,13 +19575,12 @@ msgstr ""
 "o salida tiene sentido<br><br>"
 
 #: eeschema/symbol_checker.cpp:220
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
-"<b>Símbolo de potencia sospechoso</b><br>Solo los pines de potencia "
-"invisibles son conectados automáticamente<br><br>"
+"<b>Símbolo de potencia sospechoso</b><br>Los pines de entrada de potencia "
+"invisibles ya no son requeridos<br><br>"
 
 #: eeschema/symbol_checker.cpp:245
 #, c-format
@@ -19707,26 +19648,23 @@ msgstr ""
 "unidad %c."
 
 #: eeschema/symbol_checker.cpp:368
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr ""
-"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
+msgstr "<b>Círculo gráfico tiene radio cero</b> en la posición <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Pin %s fuera de la cuadrícula</b> %s en la posición <b>(%s, %s)</b>."
+"<b>Rectángulo gráfico tiene tamaño cero</b> en la posición <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "Comprobador de símbolos"
+msgstr "Selector de símbolos"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "Visor de bibliotecas de símbolos de KiCad"
+msgstr "Visor de diferencias de símbolos de KiCad"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 msgid ""
@@ -19807,10 +19745,11 @@ msgstr ""
 "Administrar Bibliotecas de Símbolos para migrar al formato actual."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
 msgstr ""
-"El símbolo %s se deriva de %s. Los gráficos de símbolos no se podrán editar."
+"El símbolo %s es un símbolo derivado. Los gráficos de símbolos no se podrán "
+"editar."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:926
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:977
@@ -19919,9 +19858,9 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Se ha modificado el símbolo. ¿Desea guardar los cambios?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Derivar del símbolo:"
+msgstr "Derivando del símbolo '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:393
 #: eeschema/symbol_editor/symbol_editor.cpp:698
@@ -19956,9 +19895,8 @@ msgstr "Guardar en la biblioteca:"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:686
 #: pcbnew/footprint_libraries_utils.cpp:1086
-#, fuzzy
 msgid "A library must be specified."
-msgstr "No se ha especificado una biblioteca."
+msgstr "Se debe especificar una biblioteca."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:713
 msgid ""
@@ -20069,9 +20007,9 @@ msgstr "Importar símbolo"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:96
 #: pcbnew/load_select_footprint.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a reader for '%s'."
-msgstr "No se ha podido encontrar un visor de PDF para '%s'."
+msgstr "No se ha podido encontrar un lector para '%s'."
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:110
 #, c-format
@@ -20155,17 +20093,13 @@ msgstr "No se puede enumerar la biblioteca '%s'."
 
 #: eeschema/symbol_library_manager.cpp:843
 #: eeschema/symbol_library_manager.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid "Error updating library buffer: %s"
-msgstr ""
-"Error al guardar la tabla global de bibliotecas:\n"
-"\n"
-"%s"
+msgstr "Error al actualizar el búfer de bibliotecas: %s"
 
 #: eeschema/symbol_library_manager.cpp:853
-#, fuzzy
 msgid "Error updating library buffer."
-msgstr "Error al guardar la tabla global de bibliotecas."
+msgstr "Error al actualizar el búfer de bibliotecas."
 
 #: eeschema/symbol_library_manager.cpp:993
 #: eeschema/tools/sch_editor_control.cpp:442
@@ -20178,9 +20112,8 @@ msgid "(failed to load)"
 msgstr "(fallo al cargarse)"
 
 #: eeschema/symbol_viewer_frame.cpp:110
-#, fuzzy
 msgid "KiCad Symbol Library Browser"
-msgstr "Explorador de bibliotecas de símbolos"
+msgstr "Explorador de bibliotecas de símbolos de KiCad"
 
 #: eeschema/symbol_viewer_frame.cpp:1102 pcbnew/footprint_viewer_frame.cpp:1016
 #: pcbnew/footprint_viewer_frame.cpp:1021
@@ -20233,14 +20166,13 @@ msgid "Select at least one property to back annotate."
 msgstr "Seleccione al menos una propiedad para volver a anotar."
 
 #: eeschema/tools/backannotate.cpp:100
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"No se puede obtener la lista de redes de la PCB porque Eeschema está abierto "
-"en modo independiente.\n"
+"No se puede obtener la lista de redes de la placa porque el editor de "
+"esquemas está abierto en modo independiente.\n"
 "Debe iniciar el gestor de proyectos de KiCad y crear un proyecto."
 
 #: eeschema/tools/backannotate.cpp:168
@@ -20277,11 +20209,11 @@ msgstr "Re-enlazado de huellas cancelado por el usuario."
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "true"
-msgstr ""
+msgstr "verdadero"
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "false"
-msgstr ""
+msgstr "falso"
 
 #: eeschema/tools/backannotate.cpp:387
 #, c-format
@@ -20299,14 +20231,14 @@ msgid "Change %s value from '%s' to '%s'."
 msgstr "Cambiar el valor %s de '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:437
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "Cambiar la huella %s de '%s' a '%s'."
+msgstr "Cambiar %s 'No rellenar' de '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:452
-#, fuzzy, c-format
+#, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "Cambiar la huella %s de '%s' a '%s'."
+msgstr "Cambiar %s 'Excluir de la lista de materiales' de '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:475
 #, c-format
@@ -20314,19 +20246,19 @@ msgid "Cannot find %s pin '%s'."
 msgstr "No se puede encontrar %s pin '%s'."
 
 #: eeschema/tools/backannotate.cpp:518
-#, fuzzy, c-format
+#, c-format
 msgid "Change field '%s' value to '%s'."
-msgstr "Cambiar la referencia \"%s\" a \"%s\"."
+msgstr "Cambiar el valor del campo '%s' a '%s'."
 
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "Agregar campo '%s' con valor '%s'."
 
 #: eeschema/tools/backannotate.cpp:563
-#, fuzzy, c-format
+#, c-format
 msgid "Delete field '%s.'"
-msgstr "Eliminar campo"
+msgstr "Eliminar campo '%s'"
 
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
@@ -20358,13 +20290,15 @@ msgid "Show the symbol checker window"
 msgstr "Mostrar la ventana del comprobador de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:64
-#, fuzzy
 msgid "Show differences between schematic symbol and its library equivalent"
-msgstr "Comprobando las huellas de la placa con las de la biblioteca..."
+msgstr ""
+"Mostrar diferencias entre el símbolo de esquema y su equivalente de la "
+"biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:71
 msgid "Show simulation window for running SPICE or IBIS simulations."
 msgstr ""
+"Mostrar la ventana de simulación para ejecutar simulaciones SPICE o IBIS."
 
 #: eeschema/tools/ee_actions.cpp:80
 msgid "Opens the datasheet in a browser"
@@ -20420,14 +20354,12 @@ msgid "Create a new symbol"
 msgstr "Crear nuevo símbolo"
 
 #: eeschema/tools/ee_actions.cpp:175
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Derivado del símbolo existente:"
+msgstr "Derivar de símbolo existente"
 
 #: eeschema/tools/ee_actions.cpp:176
-#, fuzzy
 msgid "Create a new symbol, derived from an existing symbol"
-msgstr "Derivado del símbolo existente:"
+msgstr "Crear un nuevo símbolo, derivado de un símbolo existente"
 
 #: eeschema/tools/ee_actions.cpp:182
 msgid "Edit Symbol"
@@ -20458,9 +20390,8 @@ msgid "Save Copy As..."
 msgstr "Guardar copia como..."
 
 #: eeschema/tools/ee_actions.cpp:204
-#, fuzzy
 msgid "Save a copy of the current symbol to a different library."
-msgstr "Guardar el símbolo actual a una biblioteca distinta."
+msgstr "Guardar una copia del símbolo actual a una biblioteca distinta."
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Remove the selected symbol from its library"
@@ -20593,9 +20524,8 @@ msgid "Add Text Box"
 msgstr "Añadir caja de texto"
 
 #: eeschema/tools/ee_actions.cpp:342
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Añadir un elemento de texto"
+msgstr "Añadir un elemento de cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:349 eeschema/tools/ee_actions.cpp:1306
 msgid "Add Lines"
@@ -20606,14 +20536,12 @@ msgid "Add connected graphic lines"
 msgstr "Añadir líneas gráficas conectadas"
 
 #: eeschema/tools/ee_actions.cpp:358 pcbnew/tools/zone_create_helper.cpp:251
-#, fuzzy
 msgid "Add Polygon"
-msgstr "Polígono"
+msgstr "Añadir polígono"
 
 #: eeschema/tools/ee_actions.cpp:359
-#, fuzzy
 msgid "Draw polygons"
-msgstr "Dibujar polígono gráfico"
+msgstr "Dibujar polígonos"
 
 #: eeschema/tools/ee_actions.cpp:367
 msgid "Move Symbol Anchor"
@@ -20652,36 +20580,32 @@ msgid "Add Symbol"
 msgstr "Añadir símbolo"
 
 #: eeschema/tools/ee_actions.cpp:404
-#, fuzzy
 msgid "Add symbols"
-msgstr "Añadir un símbolo"
+msgstr "Añadir símbolos"
 
 #: eeschema/tools/ee_actions.cpp:414
 msgid "Add Power"
 msgstr "Añadir alimentación"
 
 #: eeschema/tools/ee_actions.cpp:415
-#, fuzzy
 msgid "Add power symbols"
-msgstr "Añadir un símbolo de alimentación"
+msgstr "Añadir símbolos de alimentación"
 
 #: eeschema/tools/ee_actions.cpp:425 eeschema/tools/sch_drawing_tools.cpp:950
 msgid "Add No Connect Flag"
 msgstr "Añadir marca de no conectado"
 
 #: eeschema/tools/ee_actions.cpp:426
-#, fuzzy
 msgid "Draw no-connection flags"
-msgstr "Añadir una marca de no conectado"
+msgstr "Dibujar banderas de no conectar"
 
 #: eeschema/tools/ee_actions.cpp:436 eeschema/tools/sch_drawing_tools.cpp:957
 msgid "Add Junction"
 msgstr "Añadir unión"
 
 #: eeschema/tools/ee_actions.cpp:437
-#, fuzzy
 msgid "Draw junctions"
-msgstr "Arrastrar unión"
+msgstr "Dibujar uniones"
 
 #: eeschema/tools/ee_actions.cpp:447 eeschema/tools/sch_drawing_tools.cpp:963
 msgid "Add Wire to Bus Entry"
@@ -20698,100 +20622,88 @@ msgid "Add Label"
 msgstr "Añadir etiqueta"
 
 #: eeschema/tools/ee_actions.cpp:459
-#, fuzzy
 msgid "Draw net labels"
-msgstr "Añadir una etiqueta de red"
+msgstr "Dibujar etiquetas de red"
 
 #: eeschema/tools/ee_actions.cpp:466
 msgid "Add Net Class Directive"
 msgstr "Añadir directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:467
-#, fuzzy
 msgid "Add net class directive labels"
-msgstr "Añadir una etiqueta de directiva de clase de red"
+msgstr "Añadir etiquetas de directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:476 eeschema/tools/sch_drawing_tools.cpp:1525
 msgid "Add Hierarchical Label"
 msgstr "Añadir etiqueta jerárquica"
 
 #: eeschema/tools/ee_actions.cpp:477
-#, fuzzy
 msgid "Add hierarchical labels"
-msgstr "Añadir una etiqueta jerárquica"
+msgstr "Añadir etiquetas jerárquicas"
 
 #: eeschema/tools/ee_actions.cpp:486
 msgid "Add Sheet"
 msgstr "Añadir página"
 
 #: eeschema/tools/ee_actions.cpp:487
-#, fuzzy
 msgid "Draw hierarchical sheets"
-msgstr "Crear hoja jerárquica"
+msgstr "Dibujar hojas jerárquicas"
 
 #: eeschema/tools/ee_actions.cpp:495
 msgid "Import Sheet Pin"
 msgstr "Importar pin de hoja"
 
 #: eeschema/tools/ee_actions.cpp:496
-#, fuzzy
 msgid "Import hierarchical sheet pins"
-msgstr "Importar un pin de hoja jerárquica"
+msgstr "Importar pines de hoja jerárquica"
 
 #: eeschema/tools/ee_actions.cpp:505
 msgid "Add Global Label"
 msgstr "Añadir etiqueta global"
 
 #: eeschema/tools/ee_actions.cpp:506
-#, fuzzy
 msgid "Add global labels"
-msgstr "Añadir una etiqueta global"
+msgstr "Añadir etiquetas globales"
 
 #: eeschema/tools/ee_actions.cpp:516
-#, fuzzy
 msgid "Draw text items"
-msgstr "Otros elementos de texto"
+msgstr "Dibujar elementos de texto"
 
 #: eeschema/tools/ee_actions.cpp:524
-#, fuzzy
 msgid "Draw text box items"
-msgstr "Añadir un elemento de caja de texto"
+msgstr "Dibujar elementos de cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:532 pagelayout_editor/tools/pl_actions.cpp:54
 msgid "Add Rectangle"
 msgstr "Añadir rectángulo"
 
 #: eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Draw rectangles"
-msgstr "Dibujar un rectángulo"
+msgstr "Dibujar rectángulos"
 
 #: eeschema/tools/ee_actions.cpp:541
 msgid "Add Circle"
 msgstr "Añadir Círculo"
 
 #: eeschema/tools/ee_actions.cpp:542
-#, fuzzy
 msgid "Draw circles"
-msgstr "Dibujar un círculo"
+msgstr "Dibujar círculos"
 
 #: eeschema/tools/ee_actions.cpp:550
 msgid "Add Arc"
 msgstr "Añadir Arco"
 
 #: eeschema/tools/ee_actions.cpp:551
-#, fuzzy
 msgid "Draw arcs"
-msgstr "Dibujar arco"
+msgstr "Dibujar arcos"
 
 #: eeschema/tools/ee_actions.cpp:559 eeschema/tools/sch_drawing_tools.cpp:705
 msgid "Add Image"
 msgstr "Añadir imagen"
 
 #: eeschema/tools/ee_actions.cpp:560
-#, fuzzy
 msgid "Add bitmap images"
-msgstr "Añadir imagen de mapa de bits"
+msgstr "Añadir imágenes de mapa de bits"
 
 #: eeschema/tools/ee_actions.cpp:577
 msgid "Repeat Last Item"
@@ -21063,15 +20975,13 @@ msgid "Highlight wires and pins of a net"
 msgstr "Resaltar cables y pines de una red"
 
 #: eeschema/tools/ee_actions.cpp:854
-#, fuzzy
 msgid "Show Net Navigator"
-msgstr "Mostrar red en las líneas aéreas"
+msgstr "Mostrar navegador de redes"
 
 # Pendiente de contexto
 #: eeschema/tools/ee_actions.cpp:855
-#, fuzzy
 msgid "Toggle the net navigator panel visibility"
-msgstr "Alterna la visibilidad del árbol de huellas"
+msgstr "Alterna la visibilidad del panel navegador de redes"
 
 #: eeschema/tools/ee_actions.cpp:862
 msgid "Edit with Symbol Editor"
@@ -21082,128 +20992,100 @@ msgid "Open the selected symbol in the Symbol Editor"
 msgstr "Abre los símbolos seleccionados en el Editor de símbolos"
 
 #: eeschema/tools/ee_actions.cpp:869
-#, fuzzy
 msgid "Exclude from Bill of Materials"
 msgstr "Excluir de la lista de materiales"
 
 #: eeschema/tools/ee_actions.cpp:870
-#, fuzzy
 msgid "Set the exclude from bill of materials attribute"
-msgstr "Excluir de la lista de materiales"
+msgstr "Fija el atributo de excluir de la lista de materiales"
 
 #: eeschema/tools/ee_actions.cpp:875
-#, fuzzy
 msgid "Include in Bill of Materials"
-msgstr "Excluir de la lista de materiales"
+msgstr "Incluir en la lista de materiales"
 
 #: eeschema/tools/ee_actions.cpp:876
-#, fuzzy
 msgid "Clear the exclude from bill of materials attribute"
-msgstr "Excluir de la lista de materiales"
+msgstr "Limpia el atributo de excluir de la lista de materiales"
 
 #: eeschema/tools/ee_actions.cpp:881
-#, fuzzy
 msgid "Toggle Exclude from Bill of Materials"
-msgstr "Excluir de la lista de materiales"
+msgstr "Alternar excluir de la lista de materiales"
 
 #: eeschema/tools/ee_actions.cpp:882
-#, fuzzy
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "Excluir de la lista de materiales"
+msgstr "Alterna el atributo de excluir de la lista de materiales"
 
 #: eeschema/tools/ee_actions.cpp:887
-#, fuzzy
 msgid "Exclude from Simulation"
 msgstr "Excluir de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:888
-#, fuzzy
 msgid "Set the exclude from simulation attribute"
-msgstr ""
-"Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
+msgstr "Fija el atributo de excluir de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:893
-#, fuzzy
 msgid "Include in Simulation"
-msgstr "Valor Spice en simulación"
+msgstr "Incluir en la simulación"
 
 #: eeschema/tools/ee_actions.cpp:894
-#, fuzzy
 msgid "Clear the exclude from simulation attribute"
-msgstr ""
-"Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
+msgstr "Limpia el atributo de excluir de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:899
-#, fuzzy
 msgid "Toggle Exclude from Simulation"
-msgstr "Excluir de la simulación"
+msgstr "Alternar excluir de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:900
-#, fuzzy
 msgid "Toggle the exclude from simulation attribute"
-msgstr ""
-"Eliminar el atributo de fabricación 'excluir de la lista de materiales' %s."
+msgstr "Alterna el atributo de excluir de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:905
-#, fuzzy
 msgid "Exclude from Board"
 msgstr "Excluir de la placa"
 
 #: eeschema/tools/ee_actions.cpp:906
-#, fuzzy
 msgid "Set the exclude from board attribute"
-msgstr ""
-"Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
+msgstr "Fija el atributo de excluir de la placa"
 
 #: eeschema/tools/ee_actions.cpp:911
-#, fuzzy
 msgid "Include on Board"
-msgstr "Excluir de la placa"
+msgstr "Incluir en la placa"
 
 #: eeschema/tools/ee_actions.cpp:912
-#, fuzzy
 msgid "Clear the exclude from board attribute"
-msgstr ""
-"Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
+msgstr "Limpia el atributo de excluir de la placa"
 
 #: eeschema/tools/ee_actions.cpp:917
-#, fuzzy
 msgid "Toggle Exclude from Board"
-msgstr "Excluir de la placa"
+msgstr "Alternar excluir de la placa"
 
 #: eeschema/tools/ee_actions.cpp:918
-#, fuzzy
 msgid "Toggle the exclude from board attribute"
-msgstr ""
-"Eliminar el atributo de fabricación 'excluir de la lista de materiales' %s."
+msgstr "Alterna el atributo de excluir de la placa"
 
 #: eeschema/tools/ee_actions.cpp:923
-#, fuzzy
 msgid "Set Do Not Populate"
-msgstr "No rellenar"
+msgstr "Fijar no rellenar"
 
 #: eeschema/tools/ee_actions.cpp:924
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "Fija el atributo de no rellenar"
 
 #: eeschema/tools/ee_actions.cpp:929
-#, fuzzy
 msgid "Unset Do Not Populate"
-msgstr "No rellenar"
+msgstr "Limpiar no rellenar"
 
 #: eeschema/tools/ee_actions.cpp:930
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "Limpia el atributo de no rellenar"
 
 #: eeschema/tools/ee_actions.cpp:936
-#, fuzzy
 msgid "Toggle Do Not Populate"
-msgstr "No rellenar"
+msgstr "Alternar no rellenar"
 
 #: eeschema/tools/ee_actions.cpp:937
-#, fuzzy
 msgid "Toggle the do not populate attribute"
-msgstr "Mostrar modelos 3D con atributo \"Virtual\""
+msgstr "Alterna el atributo de no rellenar"
 
 #: eeschema/tools/ee_actions.cpp:944
 msgid "Open the library symbol in the Symbol Editor"
@@ -21324,36 +21206,34 @@ msgstr ""
 "Exportar archivo que contiene la lista de redes en uno de varios formatos"
 
 #: eeschema/tools/ee_actions.cpp:1043
-#, fuzzy
 msgid "Generate Bill of Materials..."
-msgstr "Generar lista de &materiales..."
+msgstr "Generar lista de materiales..."
 
 #: eeschema/tools/ee_actions.cpp:1044
 msgid "Generate a bill of materials for the current schematic"
 msgstr "Generar una lista de materiales para el esquema actual"
 
 #: eeschema/tools/ee_actions.cpp:1050
-#, fuzzy
 msgid "Generate Legacy Bill of Materials..."
-msgstr "Generar lista de &materiales..."
+msgstr "Generar lista de materiales de legado..."
 
 #: eeschema/tools/ee_actions.cpp:1051
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
-msgstr "Generar una lista de materiales para el esquema actual"
+msgstr ""
+"Generar una lista de materiales para el esquema actual (Generador de legado)"
 
 #: eeschema/tools/ee_actions.cpp:1057
-#, fuzzy
 msgid "Generate Bill of Materials (External)..."
-msgstr "Generar lista de &materiales..."
+msgstr "Generar lista de materiales (Externo)..."
 
 #: eeschema/tools/ee_actions.cpp:1058
-#, fuzzy
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr "Generar una lista de materiales para el esquema actual"
+msgstr ""
+"Generar una lista de materiales para el esquema actual usando un generador "
+"externo"
 
 #: eeschema/tools/ee_actions.cpp:1064
 msgid "Export Symbols to Library..."
@@ -21404,14 +21284,12 @@ msgid "Toggle display of hidden text fields"
 msgstr "Alternar la visualización de campos de texto ocultos"
 
 #: eeschema/tools/ee_actions.cpp:1100
-#, fuzzy
 msgid "Show Directive Labels"
-msgstr "Etiqueta de directiva"
+msgstr "Mostrar etiquetas de directiva"
 
 #: eeschema/tools/ee_actions.cpp:1101
-#, fuzzy
 msgid "Toggle display of directive labels"
-msgstr "Alternar visualización de capas de adhesivo"
+msgstr "Alternar visualización de etiquetas de directiva"
 
 #: eeschema/tools/ee_actions.cpp:1106
 msgid "Show ERC Warnings"
@@ -21441,22 +21319,20 @@ msgstr ""
 "eléctricas"
 
 #: eeschema/tools/ee_actions.cpp:1124
-#, fuzzy
 msgid "Show OP Voltages"
-msgstr "Mostrar página %s"
+msgstr "Mostrar voltajes de punto de operación"
 
 #: eeschema/tools/ee_actions.cpp:1125
 msgid "Show operating point voltage data from simulation"
-msgstr ""
+msgstr "Mostrar datos de voltaje de punto de operación desde de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:1130
-#, fuzzy
 msgid "Show OP Currents"
-msgstr "Mostrar cursor"
+msgstr "Mostrar corrientes de punto de operación"
 
 #: eeschema/tools/ee_actions.cpp:1131
 msgid "Show operating point current data from simulation"
-msgstr ""
+msgstr "Mostrar datos de corriente de punto de operación desde de la simulación"
 
 #: eeschema/tools/ee_actions.cpp:1136 eeschema/tools/ee_actions.cpp:1145
 #: eeschema/tools/ee_actions.cpp:1154 eeschema/tools/ee_actions.cpp:1164
@@ -21489,9 +21365,8 @@ msgid "Annotate Automatically"
 msgstr "Anotar automáticamente"
 
 #: eeschema/tools/ee_actions.cpp:1171
-#, fuzzy
 msgid "Toggle automatic annotation of new symbols"
-msgstr "Alternar el anotado automático de nuevos símbolos de partes"
+msgstr "Alternar el anotado automático de nuevos símbolos"
 
 #: eeschema/tools/ee_actions.cpp:1177
 msgid "Repair Schematic"
@@ -21609,9 +21484,8 @@ msgid "Break a wire out of a bus"
 msgstr "Sacar un cable de un bus"
 
 #: eeschema/tools/ee_actions.cpp:1307
-#, fuzzy
 msgid "Draw graphic lines"
-msgstr "Añadir línea gráfica"
+msgstr "Dibujar líneas gráficas"
 
 #: eeschema/tools/ee_actions.cpp:1316 pcbnew/tools/pcb_actions.cpp:2333
 msgid "Undo Last Segment"
@@ -21648,7 +21522,7 @@ msgstr "Arrastrar"
 
 #: eeschema/tools/ee_actions.cpp:1347
 msgid "Drags the selected item(s)"
-msgstr "Mueve el/los elemento/s seleccionado/s"
+msgstr "Arrastra el/los elemento/s seleccionado/s"
 
 #: eeschema/tools/ee_actions.cpp:1354
 msgid "Align Elements to Grid"
@@ -21664,7 +21538,7 @@ msgstr "Guardar una copia de la hoja activa en otra ubicación o nombre"
 
 #: eeschema/tools/ee_actions.cpp:1377
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "Nueva pestaña de análisis..."
 
 #: eeschema/tools/ee_actions.cpp:1385
 msgid "Open Workbook..."
@@ -21687,9 +21561,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "Exportar trazado actual como CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1419
-#, fuzzy
 msgid "Show Legend"
-msgstr "Mostrar &leyenda"
+msgstr "Mostrar leyenda"
 
 #: eeschema/tools/ee_actions.cpp:1425
 msgid "Dotted Current/Phase"
@@ -21698,61 +21571,59 @@ msgstr "Corriente/Fase de puntos"
 #: eeschema/tools/ee_actions.cpp:1426
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
 msgstr ""
+"Dibujar el trazo de señal secundaria (corriente o fase) con una línea "
+"punteada"
 
 #: eeschema/tools/ee_actions.cpp:1431
-#, fuzzy
 msgid "Dark Mode Plots"
-msgstr "Modelos 3D"
+msgstr "Gráficas en modo oscuro"
 
 #: eeschema/tools/ee_actions.cpp:1432
 msgid "Draw plots with a black background"
-msgstr ""
+msgstr "Dibujar gráficas con un fondo negro"
 
 #: eeschema/tools/ee_actions.cpp:1437
-#, fuzzy
 msgid "Edit Analysis Tab..."
-msgstr "Editar etiqueta global..."
+msgstr "Editar pestaña de análisis..."
 
 #: eeschema/tools/ee_actions.cpp:1438
-#, fuzzy
 msgid "Edit the SPICE command and plot setup for the current analysis tab"
-msgstr "Eliminar el último punto añadido al elemento activo"
+msgstr ""
+"Editar el comando de SPICE y ajustes de gráfica para la pestaña de análisis "
+"actual"
 
 #: eeschema/tools/ee_actions.cpp:1445
 msgid "Run Simulation"
 msgstr "Ejecutar simulación"
 
 #: eeschema/tools/ee_actions.cpp:1451
-#, fuzzy
 msgid "Stop Simulation"
-msgstr "Ejecutar/Parar simulación"
+msgstr "Parar simulación"
 
 #: eeschema/tools/ee_actions.cpp:1458
-#, fuzzy
 msgid "Probe Schematic..."
-msgstr "Anotar esquema..."
+msgstr "Sondear esquema..."
 
 #: eeschema/tools/ee_actions.cpp:1459
 msgid "Add a simulator probe"
 msgstr "Añadir sonda de simulación"
 
 #: eeschema/tools/ee_actions.cpp:1466
-#, fuzzy
 msgid "Add Tuned Value..."
-msgstr "Actualizar valores de los campos..."
+msgstr "Añadir valor ajustable.."
 
 #: eeschema/tools/ee_actions.cpp:1467
 msgid "Select a value to be tuned"
 msgstr "Seleccionar un valor para ajustar"
 
 #: eeschema/tools/ee_actions.cpp:1473
-#, fuzzy
 msgid "User-defined Signals..."
-msgstr "Origen definido por el usuario"
+msgstr "Señales definidas por el usuario..."
 
 #: eeschema/tools/ee_actions.cpp:1474
 msgid "Add, edit or delete user-defined simulation signals"
 msgstr ""
+"Añadir, editar o eliminar señales de simulación definidas por el usuario"
 
 #: eeschema/tools/ee_actions.cpp:1480
 #, fuzzy
@@ -23729,9 +23600,8 @@ msgid "Exclude 3D models for components with 'Unspecified' footprint type"
 msgstr "Excluir modelos 3D para componentes con atributo 'virtual'"
 
 #: kicad/cli/command_pcb_export_3d.cpp:91
-#, fuzzy
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "Excluir modelos 3D para componentes con atributo 'virtual'"
+msgstr "Excluir modelos 3D para componentes con atributo 'No rellenar'"
 
 #: kicad/cli/command_pcb_export_3d.cpp:95
 msgid ""
@@ -24053,9 +23923,8 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:84
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
-#, fuzzy
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "Excluir todas las huellas con pads de orificios pasantes"
+msgstr "Excluir todas las huellas con la bandera de no rellenar fijada"
 
 #: kicad/cli/command_pcb_export_pos.cpp:88
 #, fuzzy
@@ -28033,7 +27902,6 @@ msgstr ""
 "¿Desea descartar los cambios y salir?"
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -28050,22 +27918,6 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Las series E están definidas en IEC 60063.\n"
-"\n"
-"Los valores disponibles están espaciados de manera aproximadamente igual en "
-"una escala logarítmica.\n"
-"\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0  -  1.2  -  1.5  -  1.8  -  2.2  -  2.7  -  3.3 -   3.9  -  "
-"4.7  -  5.6  -  6.8  -  8.2  - \n"
-"\tE6(20%):  1.0  -   -   -  1.5  -   -   -  2.2  -   -   -  3.3 -    -   -  "
-"4.7  -   -   -  6.8  -   -   - \n"
-"\tE3(50%):  1.0  -   -   -   -   -   -   -  2.2  -   -   -   -  -    -   -  "
-"4.7  -   -   -   -   -   -   - \n"
-"\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -   -  -    -   -   "
-"-   -   -   -   -   -   -   - \n"
-"\n"
 "- Esta calculadora encuentra combinaciones de las series E estándar (entre "
 "10Ω y 1MΩ) para crear valores arbitrarios.\n"
 "- Puede ingresar la resistencia requerida entre 0,0025 y 4000 kΩ.\n"
@@ -31522,15 +31374,12 @@ msgid "Other Options"
 msgstr "Otras opciones"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:117
-#, fuzzy
 msgid "Ignore 'Do not populate' components"
-msgstr "Ignorar componentes no montados"
+msgstr "Ignorar componentes con 'No rellenar'"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:118
-#, fuzzy
 msgid "Do not show components marked 'Do not populate'"
-msgstr ""
-"No mostrar componentes que no estén ni en el BOM ni el archivo de posición"
+msgstr "No mostrar componentes que estén marcados con 'No rellenar'"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:122
 #, fuzzy
@@ -33201,9 +33050,8 @@ msgid "Filter vias by size:"
 msgstr "Filtrar elementos por red:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
-#, fuzzy
 msgid "Via size:"
-msgstr "Tamaño de uVía"
+msgstr "Tamaño de vía:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:175
 #, fuzzy
