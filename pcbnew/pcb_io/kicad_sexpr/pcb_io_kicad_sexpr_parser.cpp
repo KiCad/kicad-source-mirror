@@ -2018,11 +2018,6 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
     // not the default value (0.25mm)
     bds.m_SolderMaskMinWidth = 0;
 
-    // Set up a default stackup in case the file doesn't define one
-    BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
-    stackup.RemoveAll();
-    stackup.BuildDefaultStackupList( &bds, m_board->GetCopperLayerCount() );
-
     for( T token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
@@ -2361,6 +2356,15 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseSetup()
         default:
             Unexpected( CurText() );
         }
+    }
+
+    // Set up a default stackup in case the file doesn't define one, and now we know
+    // the enabled layers
+    if( ! m_board->GetDesignSettings().m_HasStackup )
+    {
+        BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
+        stackup.RemoveAll();
+        stackup.BuildDefaultStackupList( &bds, m_board->GetCopperLayerCount() );
     }
 }
 
