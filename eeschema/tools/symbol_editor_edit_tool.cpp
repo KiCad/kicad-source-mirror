@@ -645,9 +645,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL )
         return -1;
 
-    // TODO: 9.0: this would be better as "Edit Pins", but we're past string freeze, so this
-    // (existing) string will have to do.
-    commit.Push( _( "Edit Pin Properties" ) );
+    commit.Push( _( "Edit Pins" ) );
     m_frame->RebuildView();
 
     return 0;
