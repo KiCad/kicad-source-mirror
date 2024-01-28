@@ -330,16 +330,7 @@ public:
      *        from the end (i.e. -1 means the last segment in the line chain).
      * @return a segment at the \a aIndex in the line chain.
      */
-    SEG Segment( int aIndex )
-    {
-        if( aIndex < 0 )
-            aIndex += SegmentCount();
-
-        if( aIndex == (int)( m_points.size() - 1 ) && m_closed )
-            return SEG( m_points[aIndex], m_points[0], aIndex );
-        else
-            return SEG( m_points[aIndex], m_points[aIndex + 1], aIndex );
-    }
+    SEG Segment( int aIndex ) const;
 
     /**
      * Return a constant copy of the \a aIndex segment in the line chain.
@@ -348,16 +339,7 @@ public:
      *        from the end (i.e. -1 means the last segment in the line chain).
      * @return a segment at \a aIndex in the line chain.
      */
-    const SEG CSegment( int aIndex ) const
-    {
-        if( aIndex < 0 )
-            aIndex += SegmentCount();
-
-        if( aIndex == (int)( m_points.size() - 1 ) && m_closed )
-            return SEG( m_points[aIndex], m_points[0], aIndex );
-        else
-            return SEG( m_points[aIndex], m_points[aIndex + 1], aIndex );
-    }
+    const SEG CSegment( int aIndex ) const { return Segment( aIndex ); }
 
     /**
      * Return the vertex index of the next shape in the chain, or -1 if \a aPointIndex is the
