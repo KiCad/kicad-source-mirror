@@ -1461,7 +1461,7 @@ bool FOOTPRINT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
         if( !aRect.Intersects( GetBoundingBox( false, false ) ) )
             return false;
 
-        // The empty footprint dummy rectangle intersects the selection area.
+        // If there are no pads, zones, or drawings, allow intersection with text
         if( m_pads.empty() && m_zones.empty() && m_drawings.empty() )
             return GetBoundingBox( true, false ).Intersects( arect );
 
