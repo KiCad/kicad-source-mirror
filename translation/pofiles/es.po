@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-28 12:01+0000\n"
+"PO-Revision-Date: 2024-01-29 03:52+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v7/es/>\n"
 "Language: es\n"
@@ -4787,7 +4787,7 @@ msgstr "Grosor"
 
 #: common/eda_text.cpp:1068 pcbnew/microwave/microwave_polygon.cpp:128
 msgid "Mirrored"
-msgstr "Invertido"
+msgstr "Reflejado"
 
 #: common/eda_text.cpp:1072
 #: eeschema/dialogs/dialog_field_properties_base.cpp:87
@@ -11532,7 +11532,7 @@ msgstr "Espejo:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Not mirrored"
-msgstr "Sin voltear"
+msgstr "Sin reflejar"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Around X axis"
@@ -19259,7 +19259,7 @@ msgstr "Polaridad"
 #: pcbnew/fp_textbox.cpp:333 pcbnew/pcb_text.cpp:126 pcbnew/pcb_textbox.cpp:294
 #: pcbnew/tools/edit_tool.cpp:1732
 msgid "Mirror"
-msgstr "Invertir"
+msgstr "Reflejar"
 
 #: gerbview/gerber_draw_item.cpp:687
 msgid "AB axis"
