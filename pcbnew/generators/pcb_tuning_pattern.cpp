@@ -2094,7 +2094,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
         setCursor();
         VECTOR2D cursorPos = controls->GetMousePosition();
 
-        if( evt->IsCancelInteractive() || evt->IsActivate() )
+        if( evt->IsCancelInteractive() || evt->IsActivate()
+            || ( m_tuningPattern && evt->IsAction( &ACTIONS::undo ) ) )
         {
             if( m_tuningPattern )
             {
