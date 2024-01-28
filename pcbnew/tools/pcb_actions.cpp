@@ -611,6 +611,7 @@ TOOL_ACTION PCB_ACTIONS::filletLines( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::chamferLines( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.chamferLines" )
         .Scope( AS_GLOBAL )
+// TODO: 9.0: Change to "Chamfer Lines..."
         .FriendlyName( _( "Chamfer Lines" ) )
         .Tooltip( _( "Cut away corners between selected lines" ) )
         .Icon( BITMAPS::chamfer ) );

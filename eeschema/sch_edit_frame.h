@@ -526,13 +526,13 @@ public:
     void OnAnnotate( wxCommandEvent& event );
 
     /**
-     * Verify that \a aSheet will not cause a recursion error in \a aHierarchy.
+     * Verify that \a aSheet will not cause a recursion error in \a aCurrentSheet.
      *
      * @param aSheet is the #SCH_SHEET object to test.
-     * @param aHierarchy is the #SCH_SHEET_PATH where \a aSheet is going to reside.
-     * @return true if \a aSheet will cause a recursion error in \a aHierarchy.
+     * @param aCurrentSheet is the #SCH_SHEET_PATH where \a aSheet is going to reside.
+     * @return true if \a aSheet will cause a recursion error in \a aCurrentSheet.
      */
-    bool CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
+    bool CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet );
 
     /**
      * Check \a aSchematicFileName for a potential file name case sensitivity clashes.
@@ -617,14 +617,14 @@ public:
      * - Refresh the symbol library links.
      *
      * @param aSheet is the sheet to either append or load the schematic.
-     * @param aHierarchy is the current position in the schematic hierarchy used to test for
-     *                   possible file recursion issues.
+     * @param aCurrentSheet is the current position in the schematic hierarchy used to test for
+     *                      possible file recursion issues.
      * @param aFileName is the file name to load.  The file name is expected to have an absolute
      *                  path.
      *
      * @return True if the schematic was imported properly.
      */
-    bool LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
+    bool LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet,
                             const wxString& aFileName );
 
     /**
