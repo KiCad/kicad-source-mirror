@@ -109,8 +109,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-26 13:06-0800\n"
-"PO-Revision-Date: 2023-01-31 15:39+0100\n"
+"POT-Creation-Date: 2024-01-28 01:38+0100\n"
+"PO-Revision-Date: 2024-01-28 02:39+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -189,13 +189,12 @@ msgid "Build Tech layer %d"
 msgstr "Crea strato tecnico %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1022
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "Semplifica i poligoni degli strati in rame"
+msgstr "Semplificazione poligoni degli strati in rame"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1027
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Calcolo metallizzazione rame"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1101
 #, c-format
@@ -211,9 +210,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Crea BVH (Buried Via Holes) per fori e via"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:388
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Risoluzione conteggio raggi per:"
+msgstr "Errore creazione contenuto OpenGl"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:419
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -257,9 +255,9 @@ msgid "Load OpenGL: layers"
 msgstr "Carica OpenGL: strati"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Carica strato OpenGL %d"
+msgstr "Carica strato OpenGL %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -412,21 +410,18 @@ msgstr "Aspetto"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:328
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Editor"
-msgstr "Editor C.S."
+msgstr "Segui l'editor C.S."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
-#, fuzzy
 msgid "Follow PCB Plot Settings"
-msgstr "Impostazioni filtro"
+msgstr "Segui le impostazioni tracciatura C.S."
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:587
-#, fuzzy
 msgid "legacy colors"
-msgstr "Usa colori:"
+msgstr "colori tradizionali"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:726
 msgid "3D Image File Name"
@@ -474,14 +469,12 @@ msgid "Can't save file"
 msgstr "Impossibile salvare il file"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
-#, fuzzy
 msgid "Set Pivot"
-msgstr "Pin foglio"
+msgstr "Imposta perno"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "Centra perno di rotazione (clic centrale del mouse)"
+msgstr "Piazza il centra di rotazione della scheda (clic centrale del mouse)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
@@ -514,7 +507,6 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Ruota Z in senso antiorario"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:110
-#, fuzzy
 msgid "Move Board Left"
 msgstr "Sposta scheda a sinistra"
 
@@ -523,7 +515,6 @@ msgid "Move board Left"
 msgstr "Sposta scheda a sinistra"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
-#, fuzzy
 msgid "Move Board Right"
 msgstr "Sposta scheda a destra"
 
@@ -532,7 +523,6 @@ msgid "Move board Right"
 msgstr "Sposta scheda a destra"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:130
-#, fuzzy
 msgid "Move Board Up"
 msgstr "Sposta scheda in alto"
 
@@ -541,7 +531,6 @@ msgid "Move board Up"
 msgstr "Sposta scheda in alto"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
-#, fuzzy
 msgid "Move Board Down"
 msgstr "Sposta scheda in basso"
 
@@ -550,7 +539,6 @@ msgid "Move board Down"
 msgstr "Sposta scheda in basso"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
-#, fuzzy
 msgid "Home View"
 msgstr "Vista origine"
 
@@ -567,7 +555,6 @@ msgid "Flip the board view"
 msgstr "Capovolge la vista della scheda"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:168
-#, fuzzy
 msgid "Toggle Orthographic Projection"
 msgstr "Commuta la proiezione ortogonale"
 
@@ -644,7 +631,6 @@ msgid "Render Solid Colors"
 msgstr "Render colori pieni"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
 msgstr "Usa solo la proprietà diffusione colore dal file del modello 3D"
 
@@ -658,63 +644,54 @@ msgstr ""
 "Usa uno stile colore CAD basato sulla diffusione del colore del materiale"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:300
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Commuta modelli 3D a via passanti"
+msgstr "Mostra modelli 3D a fori passanti"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:301
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Commuta modelli 3D del tipo componenti 'Foro passante'"
+msgstr "Mostra modelli 3D impronte di tipo a 'Foro passante'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
-#, fuzzy
 msgid "Show SMD 3D Models"
-msgstr "Commuta modelli 3D SMD"
+msgstr "Mostra modelli 3D SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
-#, fuzzy
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "Commuta modelli 3D del tipo 'Montaggio superficiale'"
+msgstr "Mostra modelli 3D impronte di tipo a 'Montaggio superficiale'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
-#, fuzzy
 msgid "Show Unspecified 3D Models"
-msgstr "Commuta modelli 3D imprecisati"
+msgstr "Mostra modelli 3D imprecisati"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "Commuta modelli 3D per componenti di tipo 'imprecisato'"
+msgstr "Mostra modelli 3D impronte di tipo 'imprecisato'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
-#, fuzzy
 msgid "Show 3D Models not in POS File"
-msgstr "Commuta modelli 3D non in file pos"
+msgstr "Mostra modelli 3D non in file pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
-#, fuzzy
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Commuta modelli 3D non in file pos"
+msgstr "Mostra modelli 3D anche se non presenti in file .pos"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
-#, fuzzy
 msgid "Show 3D Models marked DNP"
-msgstr "Commuta modelli 3D SMD"
+msgstr "Mostra modelli 3D marcati DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Escludi i modelli 3D  per i componenti con attributo 'virtual'"
+msgstr "Mostra modelli 3D anche se marcati 'Non piazzare'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
 msgid "Show Model Bounding Boxes"
 msgstr "Mostra perimetri modello"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Mostra i perimetri di delimitazione dei modelli"
+msgstr ""
+"Mostra perimetri di delimitazione modelli 3D nel renderizzatore in tempo "
+"reale"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
@@ -732,9 +709,8 @@ msgid "Show/hide the appearance manager"
 msgstr "Mostra/nascondi il gestore aspetto"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Board Body"
-msgstr "Corpo scheda:"
+msgstr "Corpo scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
@@ -742,149 +718,123 @@ msgstr "Mostra il corpo scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "F.Cu"
-msgstr ""
+msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Finitura rame/superficie:"
+msgstr "Mostra colore fronte finitura rame / superficie"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "B.Cu"
-msgstr ""
+msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Finitura rame/superficie:"
+msgstr "Mostra colore retro finitura rame / superficie"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Adhesive"
-msgstr "Adesivo retro"
+msgstr "Adesivo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show adhesive"
-msgstr "Mostra strato Adesivo"
+msgstr "Mostra adesivo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Pasta salda:"
+msgstr "Pasta salda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Mostra strato Pasta salda"
+msgstr "Mostra pasta salda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "F.Silkscreen"
-msgstr "Serigrafia"
+msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Show front silkscreen"
-msgstr "Serigrafia fronte"
+msgstr "Mostra serigrafia fronte"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "Serigrafia"
+msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "Show back silkscreen"
-msgstr "Serigrafia retro"
+msgstr "Mostra serigrafia retro"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "F.Mask"
-msgstr ""
+msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
-#, fuzzy
 msgid "Show front solder mask"
-msgstr "Maschera di saldatura fronte"
+msgstr "Mostra maschera di saldatura fronte"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "B.Mask"
-msgstr ""
+msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
-#, fuzzy
 msgid "Show back solder mask"
-msgstr "Maschera di saldatura retro"
+msgstr "Mostra maschera di saldatura retro"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "User.Drawings"
-msgstr "Grafiche"
+msgstr "User.Drawings"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Mostra strati commenti e grafica"
+msgstr "Mostra strato grafica utente"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "User.Comments"
-msgstr "Commenti"
+msgstr "User.Comments"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Mostra strato Maschera saldatura"
+msgstr "Mostra strato commenti utente"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "User.Eco1"
-msgstr "User1"
+msgstr "User.Eco1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
-#, fuzzy
 msgid "Show user ECO1 layer"
-msgstr "Mostra strati ECO"
+msgstr "Mostra strato utente ECO1"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "User.Eco2"
-msgstr "User2"
+msgstr "User.Eco2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:66
-#, fuzzy
 msgid "Show user ECO2 layer"
-msgstr "Mostra strati ECO"
+msgstr "Mostra strato utente ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Piazzole passanti"
+msgstr "Modelli fori passanti"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "SMD Models"
-msgstr "Modelli 3D"
+msgstr "Modelli SMD"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Modelli 3D"
+msgstr "Modelli virtuali"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "Commuta modelli 3D non in file pos"
+msgstr "Modelli non in file pos"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "Commuta modelli 3D SMD"
+msgstr "Modelli marcati come DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Mostra perimetri modello"
+msgstr "Perimetri modello"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -921,54 +871,48 @@ msgid "Show all footprint text"
 msgstr "Mostra tutto il testo impronte"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "Serigrafia"
+msgstr "Serigrafia fuori scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "Non bloccare gli strati della serigrafia ai bordi scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
-msgstr "Asse X"
+msgstr "Asse 3D"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background Start"
-msgstr "Sfondo"
+msgstr "Inizio sfondo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Inizio gradiente sfondo:"
+msgstr "Colore inizio gradiente sfondo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "Sfondo"
+msgstr "Fine sfondo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Fine gradiente sfondo:"
+msgstr "Colore fine gradiente sfondo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Salva e ripristina le combinazioni di visibilità degli strati.\n"
+"Salva e ripristina le combinazioni di visibilità e colore degli strati.\n"
 "Usare %s+Tab per attivare il selettore.\n"
 "Tab successivi tenento premuto %s cicleranno tra le preimpostazioni nella "
 "finestra a scomparsa."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
@@ -981,7 +925,6 @@ msgstr ""
 "scomparsa."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:438
-#, fuzzy
 msgid "Left double click or middle click to change color"
 msgstr "Doppio clic sinistro o clic centrale per cambiare colore"
 
@@ -1025,9 +968,8 @@ msgstr "Salva preimpostazione strato"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1632
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2033
 #: pcbnew/widgets/appearance_controls.cpp:2672
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "Apri un progetto esistente"
+msgstr "Sovrescrivere preimpostazione esistente?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:689
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1657
@@ -1144,9 +1086,8 @@ msgid "Show filled areas in zones"
 msgstr "Mostra riempimenti nelle zone"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "Usa colore rame nudo per rame non metallizzato"
+msgstr "Usa colore rame nudo per rame non metallizzato (lento)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1191,13 +1132,12 @@ msgid "deg"
 msgstr "Gradi"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "Nello spostamento"
+msgstr "Ridisegna spostando"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
-msgstr ""
+msgstr "Velocità ridisegno:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
@@ -1399,14 +1339,12 @@ msgid "Light 8:"
 msgstr "Luce 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Impostazioni anteprima"
+msgstr "Opzioni anteprima 3D"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Spessore scheda: "
+msgstr "Spessore scheda:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:229
@@ -1494,6 +1432,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"Mostra o nascondi il corpo scheda\n"
+"Se nascosto, mostra solo gli strati rame e serigrafia."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -1512,7 +1452,6 @@ msgid "KiCad Image Converter"
 msgstr "Convertitore immagini KiCad"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
-#, fuzzy
 msgid "Image files"
 msgstr "File immagine"
 
@@ -1541,9 +1480,8 @@ msgid "Image Files"
 msgstr "File immagine"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Selezionare il file foglio di disegno"
+msgstr "Crea file foglio di disegno"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:461
 #: bitmap2component/bitmap2cmp_frame.cpp:497
@@ -1843,7 +1781,7 @@ msgstr "Negativo"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
 msgid "Pcb Layer for Graphics"
-msgstr ""
+msgstr "Strato C.S. per grafiche"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
@@ -1856,19 +1794,16 @@ msgid "Front solder mask"
 msgstr "Maschera di saldatura fronte"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "Front_layer"
+msgstr "Fab_layer fronte"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer drawings"
-msgstr "Strato utente Eco1"
+msgstr "Strato utente grafiche"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer comments"
-msgstr "Strato utente Eco1"
+msgstr "Strato utente commenti"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -1909,9 +1844,8 @@ msgid "Export to Clipboard"
 msgstr "Esporta sugli appunti"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
-msgstr "Sfondo"
+msgstr "Lavori in background"
 
 #: common/common.cpp:270
 #, c-format
@@ -2170,9 +2104,8 @@ msgid "Additional Contributions By"
 msgstr "Contributi aggiuntivi di"
 
 #: common/dialog_about/AboutDialog_main.cpp:1137
-#, fuzzy
 msgid "Librarian Team"
-msgstr "Gruppo Librerie KiCad"
+msgstr "Gruppo librerie"
 
 #: common/dialog_about/AboutDialog_main.cpp:1209
 msgid "3D models by"
@@ -2191,9 +2124,8 @@ msgid "Icons by"
 msgstr "Autori icone"
 
 #: common/dialog_about/AboutDialog_main.cpp:1256
-#, fuzzy
 msgid "Package Developers"
-msgstr "Sviluppo"
+msgstr "Sviluppo pacchetti"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2634,34 +2566,29 @@ msgid "Configure Global Library Table"
 msgstr "Configura la tabella librerie globale"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Foro fuori portata"
+msgstr "Dimensione griglia X fuori portata."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Foro fuori portata"
+msgstr "Dimensione griglia Y fuori portata."
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
 msgstr "Elenco tasti comando"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr "Gestore progetto"
+msgstr "Nome progetto"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1069
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "C.S."
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1247 eeschema/sch_plotter.cpp:1009
 #: eeschema/widgets/symbol_diff_widget.cpp:38
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schema"
 
@@ -2670,11 +2597,12 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Questo file progetto contiene più combinazioni shema+C.S. .\n"
+"Scegliere quale dovrebbe venir importata in KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Chiudi progetto"
+msgstr "Scegli progetto da importare"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -3382,24 +3310,20 @@ msgid "MyLabel"
 msgstr "MiaEtichetta"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
-#, fuzzy
 msgid "X label:"
-msgstr "Etichetta:"
+msgstr "Etichetta X:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
-#, fuzzy
 msgid "Y label:"
-msgstr "Etichetta:"
+msgstr "Etichetta Y:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
-#, fuzzy
 msgid "Title"
-msgstr "Titolo:"
+msgstr "Titolo"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "posizione impronta"
+msgstr "Sposta punto alla posizione"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:197 common/widgets/lib_tree.cpp:265
@@ -3468,55 +3392,50 @@ msgstr "Visualizza commutatore preimpostazioni"
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "Connessioni"
+msgstr "Connessione"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "Base"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Giustificazione"
+msgstr "Autenticazione"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Nome base"
+msgstr "Nome utente"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:440
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Annulla cambiamenti"
+msgstr "Applica cambiamenti"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "Nome file:"
+msgstr "Nomefile"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3530,170 +3449,148 @@ msgid "Status"
 msgstr "Stato"
 
 #: common/dialogs/git/dialog_git_commit.cpp:83
-#, fuzzy
 msgid "New"
-msgstr "Collegamento"
+msgstr "Nuovo"
 
 #: common/dialogs/git/dialog_git_commit.cpp:89
-#, fuzzy
 msgid "Modified"
-msgstr "Gruppo modificato"
+msgstr "Modificato"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
-#, fuzzy
 msgid "Deleted"
-msgstr "Cancella"
+msgstr "Eliminato"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Messaggio"
+msgstr "Messaggio commit:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:115
-#, fuzzy
 msgid "Author:"
-msgstr "Autore"
+msgstr "Autore:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
-msgstr ""
+msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Il nome componente non può essere vuoto."
+msgstr "Il messaggio commit non può essere vuoto"
 
 #: common/dialogs/git/dialog_git_repository.cpp:146
 #: common/dialogs/git/dialog_git_repository.cpp:373
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Inserire la password per la chiave SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:325
-#, fuzzy
 msgid "Test connection"
-msgstr "Selezione collegamento"
+msgstr "Test connessione"
 
 #: common/dialogs/git/dialog_git_repository.cpp:329
-#, fuzzy
 msgid "Connection successful"
-msgstr "Generazione file riuscita."
+msgstr "Connessione riuscita"
 
 #: common/dialogs/git/dialog_git_repository.cpp:333
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Impossibile aprire il file archivio."
+msgstr "Impossibile connettersi a '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Impossibile aprire il file archivio."
+msgstr "Impossibile aprire la chiave privata '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Nome pin non valido"
+msgstr "Chiave SSH non valida"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Il file selezionato non è valido o potrebbe essere corrotto!"
+msgstr "Il file selezionato non è una chiave privata SSH valida"
 
 #: common/dialogs/git/dialog_git_repository.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Impossibile trovare il file di libreria '%s'"
+msgstr "Impossibile aprie la chiave pubblica '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:407
 #: common/dialogs/git/dialog_git_repository.cpp:413
-#, fuzzy
 msgid "Missing information"
-msgstr "Impronta mancante"
+msgstr "Informazioni mancanti"
 
 #: common/dialogs/git/dialog_git_repository.cpp:407
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Prego inserire url assoluto repository"
+msgstr "Inserire un nome per il repository"
 
 #: common/dialogs/git/dialog_git_repository.cpp:413
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Prego inserire url assoluto repository"
+msgstr "Inserire un url per il repository"
 
 #: common/dialogs/git/dialog_git_repository.cpp:434
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
 msgid "SSH Key Password"
-msgstr ""
+msgstr "Pasword chiave SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Rotazione"
+msgstr "Posizione"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Nome connessione"
+msgstr "Tipo connessione"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
-#, fuzzy
 msgid "Local"
-msgstr "File locale"
+msgstr "Locale"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Privato"
+msgstr "Chiave privata SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Seleziona un file"
+msgstr "Seleziona file chiave privata SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Nuovo nome:"
+msgstr "Nomeutente"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Repository"
+msgstr "Repository git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Cambio branch git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Selezionare o inserire un nome branch:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "Branch"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "Ultimo commit"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Aggiornato"
+msgstr "Ultimo aggiornamento"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
 #: common/dialogs/git/dialog_git_switch.cpp:213
-#, fuzzy
 msgid "Switch"
-msgstr "Commuta unità"
+msgstr "Commuta"
 
 #: common/dialogs/git/dialog_git_switch.cpp:218 eeschema/sch_base_frame.cpp:285
 #: pcbnew/footprint_libraries_utils.cpp:430
@@ -3702,27 +3599,23 @@ msgstr "Aggiungi"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Dati commit git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Valori predefiniti"
+msgstr "Usa valori predefiniti"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "Nome area:"
+msgstr "Nome autore:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "Autore"
+msgstr "Email autore:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Gestisci i repositori"
+msgstr "Repository git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3733,19 +3626,16 @@ msgid "Active"
 msgstr "Attiva"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Aggiungi repository"
+msgstr "Aggiungi nuovo repository"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Modifica proprietà impronta"
+msgstr "Modifica proprietà repository"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "Repository"
+msgstr "Rimuovi repository git"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
@@ -3925,12 +3815,16 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
 msgstr ""
+"Mostra indicatore a scomparsa commutando le impostazioni con i tasti comando"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 msgstr ""
+"Se abilitata, certi tasti comando che ciclano tra le impostazioni "
+"mostreranno brevemente un indicatore a scomparsa per indicare il cambio "
+"nelle impostazioni."
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -3970,9 +3864,8 @@ msgstr ""
 "del tema di sistema"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Dimensione vertice:"
+msgstr "Dimensione icone barra strumenti:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3982,7 +3875,7 @@ msgstr "Piccolo"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Usa icone compatte nelle barre degli strumenti"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:805
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1202
@@ -3998,6 +3891,7 @@ msgstr "Normale"
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
 msgstr ""
+"Usa la dimensione icone predefinita di KiCad nelle barre degli strumenti"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -4006,7 +3900,7 @@ msgstr "Grande"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Usa icone più grandi nelle barre degli strumenti"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 msgid "Canvas scale:"
@@ -4205,7 +4099,6 @@ msgid "MB"
 msgstr "MB"
 
 #: common/dialogs/panel_data_collection_base.cpp:20
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -4247,29 +4140,26 @@ msgid "Reset Unique Id"
 msgstr "Reimposta id univoco"
 
 #: common/dialogs/panel_grid_settings.cpp:125 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Pagina %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:244
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "\"%s\" esiste già."
+msgstr "La dimensione griglia '%s' esiste già."
 
 #: common/dialogs/panel_grid_settings.cpp:263
-#, fuzzy
 msgid "At least one grid size is required."
-msgstr "Le netclass predefinita è necessaria."
+msgstr "È necessaria almeno una dimensione griglia."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
-msgstr "Griglia"
+msgstr "Griglie:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "Cambio rapido"
+msgstr "Cambio rapido griglia"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -4285,25 +4175,21 @@ msgid "Grid 2:"
 msgstr "Griglia 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:705
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "Scavalcamenti"
+msgstr "Scavalcamenti griglia"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "Elementi non connessi (%s)"
+msgstr "Elementi connessi:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
-#, fuzzy
 msgid "Wires:"
-msgstr "Fili"
+msgstr "Fili:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:135
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "Via"
+msgstr "Via:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:143
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -4319,9 +4205,8 @@ msgid "Text:"
 msgstr "Testo:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:151
-#, fuzzy
 msgid "Graphics:"
-msgstr "Grafiche"
+msgstr "Grafiche:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
@@ -4375,18 +4260,16 @@ msgstr ""
 "Sicuri?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Scala"
+msgstr "Scala:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Converti linee in rettangolo"
+msgstr "Converti in scala di grigi"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -4565,9 +4448,8 @@ msgid "Pan left/right:"
 msgstr "Pan sinistra/destra:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
-#, fuzzy
 msgid "Reverse"
-msgstr "Ripristina"
+msgstr "Inverti"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
 msgid "Pan left/right with horizontal movement"
@@ -4604,9 +4486,8 @@ msgid "General"
 msgstr "Generale"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "Controlla aggiornamenti pacchetti all'avvio"
+msgstr "Controlla aggiornamenti KiCad all'avvio"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -4624,7 +4505,6 @@ msgid "Library package handling"
 msgstr "Gestione pacchetti libreria"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
 msgstr ""
 "Aggiungere automaticamente le librerie installate alla tabella librerie "
@@ -4890,9 +4770,8 @@ msgid "Could not use OpenGL, falling back to software rendering"
 msgstr "Impossibile usare OpenGL, ripiego sul rendering software"
 
 #: common/draw_panel_gal.cpp:324
-#, fuzzy
 msgid "Graphics error"
-msgstr "Strato grafico"
+msgstr "Errore grafico"
 
 #: common/draw_panel_gal.cpp:504
 msgid "Could not use OpenGL"
@@ -4901,9 +4780,8 @@ msgstr "Impossibile usare OpenGL"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3216
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3100
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "Impossibile leggere un elemento word."
+msgstr "Impossibile leggere dei dati immagine."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:979
 #, c-format
@@ -5143,9 +5021,8 @@ msgid "Hotkeys"
 msgstr "Tasti comando"
 
 #: common/eda_base_frame.cpp:1095 kicad/project_tree_pane.cpp:985
-#, fuzzy
 msgid "Version Control"
-msgstr "Colore selezione:"
+msgstr "Controllo versionamento"
 
 #: common/eda_base_frame.cpp:1103
 msgid "Data Collection"
@@ -5166,9 +5043,8 @@ msgstr "Opzioni di visualizzazione"
 #: common/eda_base_frame.cpp:1128 common/eda_base_frame.cpp:1137
 #: common/eda_base_frame.cpp:1161 common/eda_base_frame.cpp:1172
 #: common/eda_base_frame.cpp:1225 common/tool/common_tools.cpp:555
-#, fuzzy
 msgid "Grids"
-msgstr "Griglia"
+msgstr "Griglie"
 
 #: common/eda_base_frame.cpp:1129 common/eda_base_frame.cpp:1138
 #: common/eda_base_frame.cpp:1163 common/eda_base_frame.cpp:1174
@@ -5250,9 +5126,8 @@ msgid "Drawing Sheet Editor"
 msgstr "Editor fogli di disegno"
 
 #: common/eda_base_frame.cpp:1232
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "Annulla aggiornamento tabella"
+msgstr "Aggiornamento pacchetti"
 
 #: common/eda_base_frame.cpp:1318
 #, c-format
@@ -5322,9 +5197,8 @@ msgid "Constrain to H, V, 45"
 msgstr "Blocca a O, V e 45 gradi"
 
 #: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:712
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "Modifica griglia utente..."
+msgstr "Modifica griglie..."
 
 #: common/eda_draw_frame.cpp:562
 msgid "Zoom Auto"
@@ -5336,9 +5210,9 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Assi griglia"
+msgstr "griglia %s"
 
 #: common/eda_draw_frame.cpp:666 pagelayout_editor/pl_editor_frame.cpp:755
 msgid "inches"
@@ -5402,14 +5276,12 @@ msgstr "Grafica"
 
 #: common/eda_item.cpp:347 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "Riferimento"
+msgstr "Immagine di riferimento"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:196
-#, fuzzy
 msgid "Generator"
-msgstr "Genera"
+msgstr "Generatore"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:376 common/eda_item.cpp:397
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_textbox.cpp:445
@@ -5544,9 +5416,8 @@ msgid "Draw Item"
 msgstr "Elemento disegno"
 
 #: common/eda_shape.cpp:66
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "Larghezza raccordi termici:"
+msgstr "Raccordo termico"
 
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:743
 msgid "Number Box"
@@ -5582,9 +5453,8 @@ msgid "Pad Number Box"
 msgstr "Riquadro numero piazzola"
 
 #: common/eda_shape.cpp:706 pcbnew/pcb_shape.cpp:750
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "Angolo raggi raccordi termici"
+msgstr "Modello raccordo termico"
 
 #: common/eda_shape.cpp:707 common/eda_shape.cpp:720
 msgid "Unrecognized"
@@ -5624,7 +5494,7 @@ msgstr "Angolo"
 #: common/eda_shape.cpp:747 common/eda_shape.cpp:765
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:127
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:95
-#: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1679 eeschema/sch_pin.cpp:241
+#: eeschema/lib_pin.cpp:1199 eeschema/lib_pin.cpp:1689 eeschema/sch_pin.cpp:241
 #: eeschema/sch_pin.cpp:485
 msgid "Length"
 msgstr "Lunghezza"
@@ -5694,9 +5564,8 @@ msgid "Line Width"
 msgstr "Larghezza conduttore"
 
 #: common/eda_shape.cpp:1988 pcbnew/pcb_shape.cpp:684
-#, fuzzy
 msgid "Line Color"
-msgstr "Colore linea:"
+msgstr "Colore linea"
 
 #: common/eda_shape.cpp:2025 eeschema/lib_shape.cpp:586
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
@@ -5704,9 +5573,8 @@ msgid "Filled"
 msgstr "Pieno"
 
 #: common/eda_shape.cpp:2029 pcbnew/pcb_shape.cpp:685
-#, fuzzy
 msgid "Fill Color"
-msgstr "Colore riempimento:"
+msgstr "Colore riempimento"
 
 #: common/eda_text.cpp:806 common/eda_text.cpp:1194
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
@@ -5822,7 +5690,7 @@ msgstr "Basso"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:68
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:65
 #: eeschema/fields_grid_table.cpp:352 eeschema/lib_field.cpp:667
-#: eeschema/lib_pin.cpp:1201 eeschema/lib_pin.cpp:1695
+#: eeschema/lib_pin.cpp:1201 eeschema/lib_pin.cpp:1686
 #: eeschema/lib_text.cpp:536 eeschema/sch_field.cpp:1403
 #: eeschema/sch_pin.cpp:243 eeschema/sch_symbol.cpp:2669
 #: eeschema/sch_text.cpp:504 eeschema/sch_textbox.cpp:525
@@ -5881,9 +5749,9 @@ msgstr "Speculare"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:95
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:43
 #: eeschema/lib_field.cpp:548 eeschema/lib_field.cpp:663
-#: eeschema/lib_text.cpp:531 eeschema/sch_field.cpp:912
-#: eeschema/sch_pin.cpp:239 eeschema/sch_text.cpp:494
-#: include/lib_table_grid.h:198
+#: eeschema/lib_pin.cpp:1701 eeschema/lib_text.cpp:531
+#: eeschema/sch_field.cpp:912 eeschema/sch_pin.cpp:239
+#: eeschema/sch_text.cpp:494 include/lib_table_grid.h:198
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:88
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:45
@@ -5914,18 +5782,16 @@ msgid "Hyperlink"
 msgstr "Coll. Web"
 
 #: common/eda_units.cpp:476 pcbnew/generators/pcb_tuning_pattern.cpp:205
-#, fuzzy
 msgid "min"
-msgstr "Pin"
+msgstr "min"
 
 #: common/eda_units.cpp:484
-#, fuzzy
 msgid "opt"
-msgstr "Alto"
+msgstr "opt"
 
 #: common/eda_units.cpp:492 pcbnew/generators/pcb_tuning_pattern.cpp:208
 msgid "max"
-msgstr ""
+msgstr "max"
 
 #: common/env_vars.cpp:71
 msgid ""
@@ -6034,7 +5900,7 @@ msgstr ""
 "Per aprirlo, aggiornare KiCad ad una versione datata %s o più recente."
 
 #: common/exceptions.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -6046,7 +5912,8 @@ msgstr ""
 "con\n"
 "una versione più recente di quella correntemente in esecuzione.\n"
 "\n"
-"Per aprirlo, aggiornare KiCad ad una versione datata %s o più recente."
+"Per aprirlo, aggiornare KiCad alla versione %s o successiva (formato file "
+"datato %s o più recenti)."
 
 #: common/exceptions.cpp:149
 msgid "Full error text:"
@@ -6157,258 +6024,230 @@ msgstr "Impossibile copiare il file '%s'."
 
 #: common/gestfich.cpp:307
 msgid "Invalid directory name, cannot remove root"
-msgstr ""
+msgstr "Nome cartella non valido, impossibile rimuovere la radice"
 
 #: common/gestfich.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "L'unità \"%s\" non finisce con \"mil\"."
+msgstr "La cartella '%s' non esiste"
 
 #: common/gestfich.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "\"%s\" non analizzato correttamente."
+msgstr "'%s' non è una cartella"
 
 #: common/gestfich.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Rimozione cartella %s"
+msgstr "Errore rimozione cartella '%s': %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Impossibile creare la cartella risultati '%s'."
+msgstr "Impossibile creare la cartella '%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Impossibile caricare immagine da '%s'."
+msgstr "Impossibile clonare il repository '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Impossibile caricare immagine da '%s'."
+msgstr "Impossibile trovare il remote '%s'"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Modello IBIS '%s' non trovato"
+msgstr "Impossibile connettersi con il remote '%s'"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Modello IBIS '%s' non trovato"
+msgstr "Impossibile scaricare dati dal remote '%s'"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Impossibile leggere il file "
+msgstr "Impossibile leggere 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Impossibile aprire CvPcb"
+msgstr "Impossibile trovare il commit"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Impossibile leggere il file "
+msgstr "Impossibile analizzare il merge"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "HEAD non valido.  Impossibile fare merge."
 
 #: common/git/git_pull_handler.cpp:177
 msgid "Could not get repository head"
-msgstr ""
+msgstr "Impossibile ottenere la head del repository"
 
 #: common/git/git_pull_handler.cpp:187
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr ""
+msgstr "Impossibile ottenere il riferimento OID come riferimento '%s'"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:54
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "Fallita l'operazione di checkout."
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Impossibile caricare immagine da '%s'."
+msgstr "Impossibile trovare il commit '{}'"
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "Impossibile leggere il file "
+msgstr "Impossibile fare il merge dei commit"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "Impossibile aprire il file di libreria."
+msgstr "Impossibile ottenere l'indice del repository"
 
 #: common/git/git_pull_handler.cpp:265
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "Impossibile aprire il file archivio."
+msgstr "Impossibile ottenere un iteratore del conflitto"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
-msgstr "Cambia"
+msgstr "Cambiato"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
-msgstr ""
+msgstr "Aggiunto"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Impossibile aprire il file archivio."
+msgstr "Impossibile trovare il remote"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Impossibile aprire il file archivio."
+msgstr "Impossibile connettersi ad un remote"
 
 #: common/git/git_push_handler.cpp:68
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "Impossibile usare OpenGL"
+msgstr "Impossibile fare push su un remote"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
 msgid "Received %u of %u objects"
-msgstr ""
+msgstr "Ricevuti %u di %u oggetti"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Aggiornato %s da %s a %s."
+msgstr "* [aggiornato] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Zona %s su %s"
+msgstr "* [nuovo] %s %s"
 
 #: common/git/kicad_git_common.cpp:470
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "Scrittura oggetti: %d%% (%d/%d), %d bytes"
 
 #: common/git/kicad_git_common.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Griglia: %s (%s)"
+msgstr "* [respinto] %s (%s)"
 
 #: common/git/kicad_git_common.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Aggiornato"
+msgstr "[aggiornato] %s"
 
 #: common/git/kicad_git_errors.cpp:39
-#, fuzzy
 msgid "Invalid repository."
-msgstr "Formato non valido\n"
+msgstr "Repository non valido."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallito il commit dei cambiamenti."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "Fallito il salvataggio della libreria \"%s\"."
+msgstr "Fallito il merge dei branch."
 
 #: common/git/kicad_git_errors.cpp:44
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "Impossibile caricare url repository"
+msgstr "Fallita la clonazione dei repository."
 
 #: common/git/kicad_git_errors.cpp:45
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Repository"
+msgstr "Repository remoto non trovato."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
-msgstr ""
+msgstr "Fallita autenticazione sul repository remoto."
 
 #: common/git/kicad_git_errors.cpp:49
-#, fuzzy
 msgid "Branch not found."
-msgstr "File %s non trovato."
+msgstr "Branch non trovato."
 
 #: common/git/kicad_git_errors.cpp:50
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallita creazione del branch."
 
 #: common/git/kicad_git_errors.cpp:51
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallita eliminazione del branch."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
-msgstr ""
+msgstr "File non trovato durante il checkout."
 
 #: common/git/kicad_git_errors.cpp:58
 msgid "Merge conflict encountered."
-msgstr ""
+msgstr "Conflitto di merge."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Conflitto di rebase."
 
 #: common/git/kicad_git_errors.cpp:62
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "Impossibile analizzare il repository: %s"
+msgstr "Fallito il pull dei cambiamenti dal repository remoto."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "Impossibile analizzare il repository: %s"
+msgstr "Fallito il push dei cambiamenti sul repository remoto."
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
-msgstr ""
+msgstr "Nessun branch upstream configurato."
 
 #: common/git/kicad_git_errors.cpp:65
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "Impossibile analizzare il repository: %s"
+msgstr "Impossibile stabilire una connessione con il repository remoto."
 
 #: common/git/kicad_git_errors.cpp:68
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s non trovato"
+msgstr "Tag non trovato."
 
 #: common/git/kicad_git_errors.cpp:69
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallita creazione del tag."
 
 #: common/git/kicad_git_errors.cpp:70
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallita eliminazione del tag."
 
 #: common/git/kicad_git_errors.cpp:72
-#, fuzzy
 msgid "Unknown error."
-msgstr "Errore sconosciuto"
+msgstr "Errore sconosciuto."
 
 #: common/git/kicad_git_errors.cpp:73
-#, fuzzy
 msgid "No error."
 msgstr "Nessun errore."
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr "errori"
+msgstr "Nessun errore"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:202
 #: eeschema/tools/ee_actions.cpp:214 pcbnew/dialogs/panel_setup_rules.cpp:128
@@ -6450,9 +6289,8 @@ msgid "Delete"
 msgstr "Cancella"
 
 #: common/grid_tricks.cpp:361
-#, fuzzy
 msgid "Clear contents of selected cells"
-msgstr "Elimina celle selezionate"
+msgstr "Cancella i contenuti delle celle selezionate"
 
 #: common/grid_tricks.cpp:362 common/tool/actions.cpp:234
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:106
@@ -6519,15 +6357,15 @@ msgstr "Gestures"
 
 #: common/http_lib/http_lib_connection.cpp:73
 msgid "KiCad received an empty response!"
-msgstr ""
+msgstr "KiCad ha ricevuto una risposta vuota!"
 
 #: common/http_lib/http_lib_connection.cpp:89
 #: common/http_lib/http_lib_connection.cpp:154
 #: common/http_lib/http_lib_connection.cpp:284
 #: common/http_lib/http_lib_connection.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Errore: "
+msgstr "Errore: %s"
 
 #: common/http_lib/http_lib_connection.cpp:89
 #: common/http_lib/http_lib_connection.cpp:154
@@ -6535,12 +6373,12 @@ msgstr "Errore: "
 #: common/http_lib/http_lib_connection.cpp:356
 #, c-format
 msgid "API Response:  %s"
-msgstr ""
+msgstr "Risposta API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:374
 #, c-format
 msgid "API responded with error code: %s"
-msgstr ""
+msgstr "API ha resposto con un codice di errore: %s"
 
 #: common/import_gfx/dxf_import_plugin.cpp:134
 #: common/import_gfx/dxf_import_plugin.cpp:154
@@ -6554,20 +6392,18 @@ msgid "Invalid spline definition encountered"
 msgstr "Incontrata definizione di spline non valida"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "(bordi scheda multipli non supportati)"
+msgstr "%s non è supportato."
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
-#, fuzzy
 msgid "DXF construction lines not currently supported."
-msgstr "La maschera di compilazione non è attualmente supportata."
+msgstr "Linee di costruzione DXF non attualmente supportate."
 
 #: common/import_gfx/dxf_import_plugin.h:467
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "La maschera di compilazione non è attualmente supportata."
+msgstr "Testo allineato ad archi non attualmente supportato."
 
 #: common/import_gfx/dxf_import_plugin.h:472
 #: common/import_gfx/dxf_import_plugin.h:476
@@ -6577,34 +6413,28 @@ msgstr "La maschera di compilazione non è attualmente supportata."
 #: common/import_gfx/dxf_import_plugin.h:492
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "La maschera di compilazione non è attualmente supportata."
+msgstr "Dimensioni DXF non attualmente supportate."
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "La maschera di compilazione non è attualmente supportata."
+msgstr "Hatch DXF non attualmente supportate."
 
 #: common/import_gfx/dxf_import_plugin.h:513
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "La maschera di compilazione non è attualmente supportata."
+msgstr "Tracce DXF non attualmente supportate."
 
 #: common/import_gfx/dxf_import_plugin.h:518
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "La maschera di compilazione non è attualmente supportata."
+msgstr "Facce 3D DXF non attualmente supportate."
 
 #: common/import_gfx/dxf_import_plugin.h:523
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "La maschera di compilazione non è attualmente supportata."
+msgstr "Solidi DXF non attualmente supportati."
 
 #: common/import_gfx/dxf_import_plugin.h:528
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "La maschera di compilazione non è attualmente supportata."
+msgstr "Immagini DXF non attualmente supportate."
 
 #: common/io/altium/altium_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -6696,38 +6526,36 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arco non valido con raggio %f e angolo %f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "serve un numero per '%s'"
+msgstr "Fallita analisi del numero da '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
-msgstr ""
-"Il file \"%s\"\n"
-"non sembra essere un file progetto KiCad valido."
+msgstr "'%s' non sembra essere un file progetto o libreria EasyEDA (JLCEDA) Pro valido. Impossibile trovare project.json o device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "Impossibile aprire il file \"%s\""
+msgstr "Impossibile leggere l'archivio ZIP '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Errore leggendo l'immagine %s."
+msgstr "Errore JSON leggendo '%s': %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Errore leggendo l'immagine %s."
+msgstr "Errore leggendo '%s': %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Impossibile trovare pin %s \"%s\"."
+msgstr "Impossibile analizzare la riga JSON %d in '%s': %s"
 
 #: common/kiway.cpp:243
 #, c-format
@@ -6907,9 +6735,8 @@ msgid "No-connect symbols"
 msgstr "Simboli di non connesso"
 
 #: common/layer_id.cpp:138
-#, fuzzy
 msgid "DNP markers"
-msgstr "Marcatori"
+msgstr "Marcatori DNP"
 
 #: common/layer_id.cpp:139
 msgid "ERC warnings"
@@ -6933,7 +6760,7 @@ msgid "Helper items"
 msgstr "Elementi di aiuto"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:187 common/tool/grid_menu.cpp:64
-#: eeschema/tools/sch_editor_control.cpp:2629
+#: eeschema/tools/sch_editor_control.cpp:2631
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:102
 #: gerbview/widgets/gerbview_layer_widget.cpp:134
 #: pcbnew/widgets/appearance_controls.cpp:350
@@ -6983,14 +6810,12 @@ msgid "Page limits"
 msgstr "Bordi pagina"
 
 #: common/layer_id.cpp:154
-#, fuzzy
 msgid "Operating point voltages"
-msgstr "Punto operativo"
+msgstr "Tensioni punto operativo"
 
 #: common/layer_id.cpp:155
-#, fuzzy
 msgid "Operating point currents"
-msgstr "Punto operativo"
+msgstr "Correnti punto operativo"
 
 #: common/layer_id.cpp:159
 msgid "Footprints front"
@@ -7109,14 +6934,12 @@ msgid "Illegal character found in logical library name"
 msgstr "Carattere illegale trovato nel nome libreria logici"
 
 #: common/lib_table_grid_tricks.cpp:32
-#, fuzzy
 msgid "Edit options..."
-msgstr "modifica opzioni"
+msgstr "Modifica opzioni..."
 
 #: common/lib_table_grid_tricks.cpp:33
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "Opzioni per la libreria '%s'"
+msgstr "Modifica opzioni per questa voce di libreria"
 
 #: common/lib_table_grid_tricks.cpp:63
 msgid "Activate selected"
@@ -7127,19 +6950,17 @@ msgid "Deactivate selected"
 msgstr "Disattiva selezionati"
 
 #: common/lib_table_grid_tricks.cpp:69
-#, fuzzy
 msgid "Set visible flag"
-msgstr "Strati visibili"
+msgstr "Imposta flag visibile"
 
 #: common/lib_table_grid_tricks.cpp:72
-#, fuzzy
 msgid "Unset visible flag"
-msgstr "Strati visibili"
+msgstr "Togli flag visibile"
 
 #: common/lib_table_grid_tricks.cpp:80
-#, fuzzy, c-format
+#, c-format
 msgid "Library settings for %s..."
-msgstr "Posizione libreria: %s"
+msgstr "Impostazioni libreria per %s..."
 
 #: common/lib_tree_model.cpp:149
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:131
@@ -7153,9 +6974,8 @@ msgstr "Unità"
 #: common/lib_tree_model_adapter.cpp:134 common/lib_tree_model_adapter.cpp:137
 #: common/lib_tree_model_adapter.cpp:147 common/lib_tree_model_adapter.cpp:149
 #: common/lib_tree_model_adapter.cpp:150
-#, fuzzy
 msgid "Item"
-msgstr "Elementi"
+msgstr "Elemento"
 
 #: common/libeval_compiler/libeval_compiler.cpp:585
 #, c-format
@@ -7211,22 +7031,20 @@ msgstr "Mancata corrispondenza di tipo tra %lf e \"%s\""
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:63
-#, fuzzy
 msgid "View Details"
-msgstr "Dettagli"
+msgstr "Visualizza dettagli"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
-msgstr ""
+msgstr "Rimuovi"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Giustificazione"
+msgstr "Notifiche"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Non ci sono notifiche disponibili"
 
 #: common/pgm_base.cpp:207
 msgid "No default editor found, you must choose one."
@@ -7396,9 +7214,8 @@ msgid "Line length exceeded"
 msgstr "Lunghezza linea eccedente"
 
 #: common/settings/bom_settings.cpp:119
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "Raggruppa per nome"
+msgstr "Raggruppati per valore"
 
 #: common/settings/bom_settings.cpp:119 common/settings/bom_settings.cpp:137
 #: common/settings/bom_settings.cpp:156
@@ -7411,9 +7228,8 @@ msgid "Reference"
 msgstr "Riferimento"
 
 #: common/settings/bom_settings.cpp:137
-#, fuzzy
 msgid "Grouped By Value and Footprint"
-msgstr "Ottieni e sposta impronta"
+msgstr "Raggruppati per valore e impronta"
 
 #: common/settings/bom_settings.cpp:156
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:268
@@ -7432,14 +7248,12 @@ msgid "CSV"
 msgstr "CSV"
 
 #: common/settings/bom_settings.cpp:233
-#, fuzzy
 msgid "TSV"
-msgstr "V"
+msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:239
-#, fuzzy
 msgid "Semicolons"
-msgstr "Colori pieni"
+msgstr "Puntievirgole"
 
 #: common/settings/color_settings.cpp:341
 msgid "(Footprints)"
@@ -7565,14 +7379,12 @@ msgid "Cancel current tool"
 msgstr "Annulla strumento corrente"
 
 #: common/tool/actions.cpp:154
-#, fuzzy
 msgid "Finish"
-msgstr "Termina bus"
+msgstr "Finisci"
 
 #: common/tool/actions.cpp:155
-#, fuzzy
 msgid "Finish current tool"
-msgstr "Annulla strumento corrente"
+msgstr "Finisci strumento corrente"
 
 #: common/tool/actions.cpp:162
 msgid "Show Context Menu"
@@ -7607,14 +7419,12 @@ msgid "Select all items on screen"
 msgstr "Seleziona tutti gli elementi sullo schermo"
 
 #: common/tool/actions.cpp:241
-#, fuzzy
 msgid "Unselect All"
 msgstr "Deseseleziona tutto"
 
 #: common/tool/actions.cpp:242
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Seleziona tutti gli elementi sullo schermo"
+msgstr "Deseleziona tutti gli elementi sullo schermo"
 
 #: common/tool/actions.cpp:247
 msgid "Paste Special..."
@@ -7646,7 +7456,6 @@ msgid "Delete clicked items"
 msgstr "Elimina gli elementi con il clic"
 
 #: common/tool/actions.cpp:290
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
 msgstr "Modalità di modifica archi ciclica"
 
@@ -7694,9 +7503,8 @@ msgid "Find Previous"
 msgstr "Trova il precedente"
 
 #: common/tool/actions.cpp:335
-#, fuzzy
 msgid "Find previous match"
-msgstr "Trova il precedente"
+msgstr "Trova la corrispondenza precedente"
 
 #: common/tool/actions.cpp:343
 msgid "Find Next Marker"
@@ -7785,22 +7593,20 @@ msgid "Zoom to Selection"
 msgstr "Zoom alla selezione"
 
 #: common/tool/actions.cpp:484 common/widgets/mathplot.cpp:1447
-#, fuzzy
 msgid "Undo Last Zoom"
-msgstr "Annulla ultimo segmento"
+msgstr "Annulla ultimo zoom"
 
 #: common/tool/actions.cpp:485 common/widgets/mathplot.cpp:1447
 msgid "Return zoom to level prior to last zoom action"
-msgstr ""
+msgstr "Rimetti lo zoom al livello precendente all'ultima zoomata"
 
 #: common/tool/actions.cpp:491 common/widgets/mathplot.cpp:1448
-#, fuzzy
 msgid "Redo Last Zoom"
-msgstr "Rifà l'ultima modifica"
+msgstr "Rifà ultimo zoom"
 
 #: common/tool/actions.cpp:492 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
-msgstr ""
+msgstr "Rimetti lo zoom al livello precedente all'ultimo annullamento"
 
 #: common/tool/actions.cpp:509
 msgid "Cursor Up"
@@ -7892,9 +7698,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "Passa a griglia veloce 2"
 
 #: common/tool/actions.cpp:658
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "Passa a griglia veloce 1"
+msgstr "Cicla griglia veloce"
 
 #: common/tool/actions.cpp:665
 msgid "Switch to Next Grid"
@@ -7909,7 +7714,6 @@ msgid "Grid Origin"
 msgstr "Origine griglia"
 
 #: common/tool/actions.cpp:679
-#, fuzzy
 msgid "Place the grid origin point"
 msgstr "Imposta il punto origine della griglia"
 
@@ -7930,14 +7734,12 @@ msgid "Enables item-specific grids that override the current grid"
 msgstr ""
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Imposta dimensioni griglia"
+msgstr "Modifica definizioni griglia"
 
 #: common/tool/actions.cpp:719
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Origine griglia"
+msgstr "Origine griglia..."
 
 #: common/tool/actions.cpp:720
 msgid "Set the grid origin point"
@@ -7978,9 +7780,8 @@ msgid "Use millimeters"
 msgstr "Usa i millimetri"
 
 #: common/tool/actions.cpp:760
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Seleziona colonne"
+msgstr "Seleziona colonne..."
 
 #: common/tool/actions.cpp:767
 msgid "Switch units"
@@ -8051,14 +7852,12 @@ msgid "Interactively measure distance between points"
 msgstr "Misura interattivamente distanze tra punti"
 
 #: common/tool/actions.cpp:856
-#, fuzzy
 msgid "Switch to Project Manager"
-msgstr "Gestore progetto"
+msgstr "Passa al gestore progetto"
 
 #: common/tool/actions.cpp:857
-#, fuzzy
 msgid "Show project window"
-msgstr "Mostra finestra console"
+msgstr "Mostra finestra progetto"
 
 #: common/tool/actions.cpp:866
 msgid "Show 3D viewer window"
@@ -8168,14 +7967,12 @@ msgid "Open product documentation in a web browser"
 msgstr "Apri la documentazione del prodotto in un browser web"
 
 #: common/tool/actions.cpp:975
-#, fuzzy
 msgid "About KiCad"
-msgstr "Inform&azioni su KiCad"
+msgstr "Info su KiCad"
 
 #: common/tool/actions.cpp:976
-#, fuzzy
 msgid "Open about dialog"
-msgstr "Apri editor di testo"
+msgstr "Apri finestra info"
 
 #: common/tool/actions.cpp:985
 msgid "List Hotkeys..."
@@ -8411,9 +8208,8 @@ msgstr ""
 "accelerazione hardware di KiCad)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
-msgstr "Mostra"
+msgstr "Mostra griglia"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:88
@@ -8442,12 +8238,10 @@ msgid "Grid thickness:"
 msgstr "Spessore griglia:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
 msgstr "Spaziatura minima griglia:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Snap to grid:"
 msgstr "Griglia magnetica:"
 
@@ -8472,12 +8266,10 @@ msgid "Never"
 msgstr "Mai"
 
 #: common/widgets/gal_options_panel_base.cpp:132
-#, fuzzy
 msgid "Small crosshairs"
 msgstr "Crocino piccolo"
 
 #: common/widgets/gal_options_panel_base.cpp:135
-#, fuzzy
 msgid "Full window crosshairs"
 msgstr "Croce a pieno schermo"
 
@@ -8498,9 +8290,8 @@ msgid "Sort by Best Match"
 msgstr ""
 
 #: common/widgets/lib_tree.cpp:100
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Ribalta verticalmente"
+msgstr "Ordina alfabeticamente"
 
 #: common/widgets/lib_tree.cpp:373
 msgid "recent searches"
@@ -8556,14 +8347,12 @@ msgid "Reset to Defaults"
 msgstr "Reimposta ai predefiniti"
 
 #: common/widgets/paged_dialog.cpp:90
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "Rivela i temi nell'esploratore file"
+msgstr "Mostra le preferenze nell'esploratore file"
 
 #: common/widgets/paged_dialog.cpp:92
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "Apri preferenze"
+msgstr "Apri la cartella preferenze"
 
 #: common/widgets/paged_dialog.cpp:336
 #, c-format
@@ -8607,7 +8396,6 @@ msgid "Current key:"
 msgstr "Tasto corrente:"
 
 #: common/widgets/widget_hotkey_list.cpp:130
-#, fuzzy
 msgid "Clear assigned hotkey"
 msgstr "Cancella tasti assegnati"
 
@@ -8625,9 +8413,8 @@ msgid "Edit..."
 msgstr "Modifica..."
 
 #: common/widgets/widget_hotkey_list.cpp:449
-#, fuzzy
 msgid "Edit Alternate..."
-msgstr "Modifica impronta..."
+msgstr "Modifica alternativa..."
 
 #: common/widgets/widget_hotkey_list.cpp:450
 msgid "Undo Changes"
@@ -8638,14 +8425,12 @@ msgid "Clear Assigned Hotkey"
 msgstr "Cancella tasti assegnati"
 
 #: common/widgets/widget_hotkey_list.cpp:452
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "Cancella tasti assegnati"
+msgstr "Cancella alternativa assegnata"
 
 #: common/widgets/widget_hotkey_list.cpp:453
-#, fuzzy
 msgid "Restore Defaults"
-msgstr "Ripristina predefinito"
+msgstr "Ripristina predefiniti"
 
 #: common/widgets/widget_hotkey_list.cpp:493
 #, c-format
@@ -8808,20 +8593,19 @@ msgid "KiCad netlist files"
 msgstr "File di netlist KiCad"
 
 #: common/wildcards_and_files_ext.cpp:291
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "File di netlist KiCad"
+msgstr "File di netlist Allegro"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr ""
+msgstr "Archivio di backup EasyEDA (JLCEDA) Std"
 
 #: common/wildcards_and_files_ext.cpp:304
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:51
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:51
 msgid "EasyEDA (JLCEDA) Pro files"
-msgstr ""
+msgstr "File EasyEDA (JLCEDA) Pro"
 
 #: common/wildcards_and_files_ext.cpp:310
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:288
@@ -8870,9 +8654,8 @@ msgid "PostScript files"
 msgstr "File PostScript"
 
 #: common/wildcards_and_files_ext.cpp:383
-#, fuzzy
 msgid "Json files"
-msgstr "File di lavoro"
+msgstr "File Json"
 
 #: common/wildcards_and_files_ext.cpp:389
 msgid "Report files"
@@ -9082,9 +8865,9 @@ msgid "Filtered by %s"
 msgstr "Filtrato per %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Impronta mancante"
+msgstr ": %i riscontri impronte"
 
 #: cvpcb/cvpcb_mainframe.cpp:844
 #, c-format
@@ -9141,31 +8924,26 @@ msgid "File '%s' already exists in list."
 msgstr "Il file \"%s\" esiste già nell'elenco."
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:26
-#, fuzzy
 msgid "Footprint association files:"
-msgstr "File di associazione impronte"
+msgstr "File di associazione impronte:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
-#, fuzzy
 msgid "Add association file"
-msgstr "File di associazione impronte"
+msgstr "Aggiungi file di associazione"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:53
-#, fuzzy
 msgid "Edit association file"
-msgstr "File di associazione impronte"
+msgstr "Modifica file di associazione"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:61
-#, fuzzy
 msgid "Remove association file"
-msgstr "Cancella associazione"
+msgstr "Rimuovi file di associazione"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:163
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "Percorsi disponibili:"
+msgstr "Sostituzioni percorsi disponibili:"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -9299,19 +9077,16 @@ msgid "View the selected footprint in the footprint viewer"
 msgstr "Mostra l'impronta selezionata nel visualizzatore impronte"
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
-#, fuzzy
 msgid "Manage Footprint Association Files..."
-msgstr "Gestisci i file di associazione impronte"
+msgstr "Gestisci i file di associazione impronte:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Configura l'elenco file associazioni impronte (.equ). Questi file vengono "
-"usati per assegnare automaticamente i nomi impronta in base ai valori dei "
-"simboli."
+"Modifica l'elenco file associazioni impronte. Questi file vengono usati per "
+"assegnare automaticamente i nomi impronta in base ai valori dei simboli."
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save to Schematic"
@@ -9407,14 +9182,12 @@ msgid "Delete all associations?"
 msgstr "Cancellare tutte le associazioni?"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Impossibile caricare l'impronta \"%s\" da \"%s\""
+msgstr "Impossibile creare la finestra di visualizzazione impronta"
 
 #: eeschema/annotate.cpp:155
-#, fuzzy
 msgid "Delete Annotation"
-msgstr "Cancella annotazione"
+msgstr "Elimina annotazione"
 
 #: eeschema/annotate.cpp:259
 #, c-format
@@ -9634,9 +9407,8 @@ msgstr ""
 "annotato."
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "Fallita creazione file \"%s\"."
+msgstr "Fallita creazione file."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -9954,14 +9726,12 @@ msgid "Update"
 msgstr "Aggiorna"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:426
-#, fuzzy
 msgid "Update Symbols"
-msgstr "Aggiorna simbolo..."
+msgstr "Aggiorna simboli"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "*** simbolo non trovato ***"
+msgstr "*** Nessun simbolo corrispondente trovato ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:569
 msgid "*** symbol not found ***"
@@ -10078,37 +9848,34 @@ msgid "Connected to database successfully"
 msgstr ""
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Database connection failed: %s"
-msgstr "%s connessione zona: %s."
+msgstr "Connessione database fallita: %s"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:117
-#, fuzzy
 msgid "No connection to database"
-msgstr "Connessione piazzola alle zone:"
+msgstr "Nessuna connessione al database"
 
 #: eeschema/dialogs/dialog_database_lib_settings.cpp:124
-#, fuzzy, c-format
+#, c-format
 msgid "Loaded %zu libraries"
-msgstr "Caricamento librerie simboli"
+msgstr "Caricate %zu librerie"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "Nuovo nome:"
+msgstr "Nomeutente:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
-msgstr ""
+msgstr "Password:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "Connettore:"
+msgstr "Stringa di connessione:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:202
@@ -10118,45 +9885,40 @@ msgid "Libraries"
 msgstr "Librerie"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "Configurazione utente"
+msgstr "Ricarica configurazione"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
-#, fuzzy
 msgid "Reload the database library configuration file"
-msgstr "File librerie di db di KiCad"
+msgstr "Ricarica il file di configurazione librerie database"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:120
-#, fuzzy
 msgid "Caching"
-msgstr "Ricerca..."
+msgstr "Caching"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "Dimensioni pagina:"
+msgstr "Dimensioni cache:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
-#, fuzzy
 msgid "How many database queries to cache"
-msgstr "Quante cifre di precisione mostrare"
+msgstr "Quante query database mettere in cache"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "Simbolo cache:"
+msgstr "Timeout cache:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
 msgid "Time in seconds that database queries will be cached for"
 msgstr ""
+"Tempo in secondi per il quale le query del database verranno memorizzate "
+"nella cache"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "File librerie di db di KiCad"
+msgstr "Impostazioni librerie database"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:546
 #, c-format
@@ -10323,12 +10085,9 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "Cambia l'importanza a Errore per tutte le violazioni \"%s\""
 
 #: eeschema/dialogs/dialog_erc.cpp:623 eeschema/dialogs/dialog_erc.cpp:629
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr ""
-"L'importanza delle violazioni può essere modificata anche nella finestra di "
-"dialogo di impostazioni della scheda..."
+msgstr "L'importanza delle violazioni può essere modificata anche nella finestra di impostazioni schema"
 
 #: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/dialogs/dialog_drc.cpp:660
 #, c-format
@@ -10357,9 +10116,8 @@ msgid "Open the Schematic Setup... dialog"
 msgstr "Apri la finestra impostazioni schema..."
 
 #: eeschema/dialogs/dialog_erc.cpp:650
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Spaziatura minima griglia:"
+msgstr "Modifica spaziatura griglia di connessione..."
 
 #: eeschema/dialogs/dialog_erc.cpp:743
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -10503,31 +10261,27 @@ msgstr "Scrive una direttiva per salvare tutte le correnti (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:319
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Deviazione massima permessa:"
+msgstr "Salva tutte le dissipazioni di potenza"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "Scrive una direttiva per salvare tutte le correnti (.probe alli)"
+msgstr "Scrive direttive per salvare la dissipazione di potenza di tutti gli elementi (.probe p(<elemento>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:326
-#, fuzzy
 msgid "Run external simulator command:"
-msgstr "Comando simulatore esterno:"
+msgstr "Esegui comando simulatore esterno:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:328
-#, fuzzy
 msgid ""
 "Enter the command line to run SPICE\n"
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 msgstr ""
-"Inserire il comando per eseguire spice\n"
-"Solitamente <percorso per il binario spice> %I\n"
-"%I verrà rimpiazzato dal nome netlist spice corrente"
+"Inserire il comando per eseguire SPICE\n"
+"Solitamente '<percorso per il binario SPICE> \"%I\"'\n"
+"%I sarà rimpiazzato dal percorso file netlist"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:401
 msgid "Netlist command:"
@@ -10549,23 +10303,21 @@ msgstr ""
 "L'esportazione della netlist richiede uno schema completamente annotato."
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:606
-#, fuzzy
 msgid "external simulator not found"
-msgstr "Comando simulatore esterno:"
+msgstr "simulatore esterno non trovato"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:607
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
-msgstr ""
+msgstr "Nota: la riga di comando è solitamente: <tt>&lt;percorso per il binario SPICE&gt; \"%I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:613
 msgid "external simulator has the wrong format or architecture"
-msgstr ""
+msgstr "il simulatore esterno a formato o architettura sbagliati"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:618
-#, fuzzy
 msgid "permission denied"
-msgstr "Errore di permessi?"
+msgstr "permesso negato"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:765
 msgid "This plugin already exists."
@@ -10642,7 +10394,6 @@ msgid "Show the field name in addtion to its value"
 msgstr "Mostra il nome campo oltre al suo valore"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
-#, fuzzy
 msgid "Allow automatic placement"
 msgstr "Permetti autopiazzamento"
 
@@ -10799,9 +10550,8 @@ msgid "Text Item Properties"
 msgstr "Proprietà elemento testo"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:597
-#, fuzzy
 msgid "Edit Text and Graphics"
-msgstr "Modifica testo e proprietà grafiche"
+msgstr "Modifica testo e grafiche"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -10871,9 +10621,8 @@ msgstr "Filtra elementi per connessione:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:91
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:121
-#, fuzzy
 msgid "Selected items only"
-msgstr "&Solo selezione"
+msgstr "Solo elementi selezionati"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
@@ -10901,9 +10650,8 @@ msgid "-- leave unchanged --"
 msgstr "-- abbandona i cambiamenti --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:248
-#, fuzzy
 msgid "(labels only)"
-msgstr "(solo campi)"
+msgstr "(solo etichette)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 msgid "H Align:"
@@ -11011,19 +10759,16 @@ msgstr "Analizzatore Ibis"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:75
 #: pcbnew/pcb_reference_image.cpp:350
-#, fuzzy
 msgid "Image Properties"
-msgstr "Proprietà obiettivo"
+msgstr "Proprietà immagine"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junction"
-msgstr "Aggiungi giunzione"
+msgstr "Modifica giunzione"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "Giunzioni"
+msgstr "Modifica giunzioni"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -11083,9 +10828,8 @@ msgid "untitled"
 msgstr "senza-titolo"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:584
-#, fuzzy
 msgid "Edit Label"
-msgstr "Etichetta collegamento"
+msgstr "Modifica etichetta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:667
 msgid "The first field is mandatory."
@@ -11300,7 +11044,7 @@ msgstr "Numero"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:213
 #: eeschema/dialogs/dialog_symbol_properties.cpp:154
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:282
-#: eeschema/lib_pin.cpp:1683
+#: eeschema/lib_pin.cpp:1673
 msgid "Electrical Type"
 msgstr "Tipo elettrico"
 
@@ -11310,19 +11054,19 @@ msgstr "Tipo elettrico"
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:214
 #: eeschema/dialogs/dialog_symbol_properties.cpp:155
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:283
-#: eeschema/lib_pin.cpp:1686
+#: eeschema/lib_pin.cpp:1677
 msgid "Graphic Style"
 msgstr "Stile grafico"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:125
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:93
-#: eeschema/lib_pin.cpp:1675
+#: eeschema/lib_pin.cpp:1697
 msgid "Number Text Size"
 msgstr "Dimensioni testo numero"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:126
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:94
-#: eeschema/lib_pin.cpp:1669
+#: eeschema/lib_pin.cpp:1693
 msgid "Name Text Size"
 msgstr "Dimensioni testo nome"
 
@@ -11607,9 +11351,8 @@ msgstr "Eliminare stile corpo alternativo (De Morgan) dal simbolo?"
 #: eeschema/symbol_editor/symbol_editor.cpp:387
 #: eeschema/symbol_editor/symbol_editor.cpp:692
 #: eeschema/tools/symbol_editor_control.cpp:369
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Il campo deve avere un nome."
+msgstr "Il simbolo deve avere un nome."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:335
 #, c-format
@@ -11619,14 +11362,13 @@ msgstr "Nome simbolo '%s' già in uso nella libreria '%s'."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:342
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:347
 #: eeschema/dialogs/dialog_symbol_properties.cpp:860
-#, fuzzy
 msgid "Edit Symbol Properties"
-msgstr "Proprietà simbolo"
+msgstr "Modifica proprietà simbolo"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:467
 #, c-format
 msgid "The name '%s' is already in use."
-msgstr "Il nome \"%s\" è già in uso."
+msgstr "Il nome '%s' è già in uso."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
 #: eeschema/dialogs/dialog_sheet_properties.cpp:735
@@ -11677,7 +11419,6 @@ msgstr ""
 "simboli radice."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
-#, fuzzy
 msgid "Number of units:"
 msgstr "Numero di unità:"
 
@@ -11850,14 +11591,12 @@ msgid "Text Box Properties"
 msgstr "Proprietà riquadro di testo"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Line"
-msgstr "Modifica file"
+msgstr "Modifica linea"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Lines"
-msgstr "Aggiungi linee"
+msgstr "Modifica linee"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -12023,9 +11762,8 @@ msgid "Preview:"
 msgstr "Anteprima:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin function definitions"
-msgstr "Definizioni alternative di pin"
+msgstr "Definizioni funzioni pin alternative"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
@@ -12227,9 +11965,8 @@ msgid "Plot the background color if the output format supports it"
 msgstr "Traccia il colore dello sfondo se il formato d'uscita lo supporta"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:100
-#, fuzzy
 msgid "Minimum line width:"
-msgstr "Larghezza minima:"
+msgstr "Larghezza linea minima:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:105
 msgid ""
@@ -12274,9 +12011,8 @@ msgid "PDF Options"
 msgstr "Opzioni PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Genera gerber per la fabbricazione"
+msgstr "Genera finestre a scomparsa proprietà"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 msgid "Other options"
@@ -12337,7 +12073,6 @@ msgid "Instances of this symbol (%d items):"
 msgstr "Istanze di questo simbolo (%d elementi):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
-#, fuzzy
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -12348,8 +12083,7 @@ msgstr ""
 "Smettere di mostrare questo strumento?\n"
 "Nessun cambiamento verrà effettuato.\n"
 "\n"
-"Questa impostazione può essere modificata dalla finestra \"Librerie di "
-"simboli\",\n"
+"Questa impostazione può essere modificata dalla finestra \"Preferenze\", \n"
 "e lo strumento può essere attivato manualmente dal menu \"Strumenti\"."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
@@ -12439,14 +12173,12 @@ msgstr "Netclass"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
-#, fuzzy
 msgid "BOM Presets"
-msgstr "Reimpostazioni"
+msgstr "Preimpostazioni DIBA"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
-#, fuzzy
 msgid "BOM Format Presets"
-msgstr "Formato"
+msgstr "Preimpostazioni formato DIBA"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -12500,18 +12232,16 @@ msgid "Search the current &sheet only"
 msgstr "Cerca &soltanto nel foglio corrente"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:101
-#, fuzzy
 msgid "Search the current selection &only"
-msgstr "Cerca &soltanto nel foglio corrente"
+msgstr "Cerca s&olo nella selezione corrente"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:104
 msgid "Replace matches in reference designators"
 msgstr "Sostituisci corrispondenze nei designatori di riferimento"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:123
-#, fuzzy
 msgid "Replace"
-msgstr "&Rimpiazza"
+msgstr "Rimpiazza"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:41
 msgid "Schematic Setup"
@@ -12568,9 +12298,9 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
-#, fuzzy, c-format
+#, c-format
 msgid "Edit %s"
-msgstr "&Modifica"
+msgstr "Modifica %s"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:232
@@ -12587,13 +12317,12 @@ msgid "Clear colors to use Schematic Editor colors."
 msgstr "Cancella i colori per usare i colori dell'editor degli schemi."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:179
-#, fuzzy
 msgid "Edit Sheet Pin"
-msgstr "Pin foglio"
+msgstr "Modifica pin foglio"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
-msgstr "Proprietà punto di connessione tra fogli"
+msgstr "Proprietà pin foglio"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:270
 msgid "A sheet must have a valid file name."
@@ -12739,60 +12468,52 @@ msgid "Sheet Properties"
 msgstr "Proprietà foglio"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:268
-#, fuzzy
 msgid "A DC source must be specified."
-msgstr "Un foglio deve avere un file specificato."
+msgstr "Deve essere specificata una sorgente in CC."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:361
-#, fuzzy
 msgid "Source 1 and Source 2 must be different."
-msgstr "Sorgente 1 e Sorgente 2 devono essere diverse"
+msgstr "Sorgente 1 e Sorgente 2 devono essere diverse."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:417
-#, fuzzy
 msgid "A frequency range must be specified."
-msgstr "Bisogna selezionare almeno uno o più strati\n"
+msgstr "Bisogna selezionare un campo di frequenza."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:611
-#, fuzzy
 msgid "New Simulation Tab"
-msgstr "Simulazione"
+msgstr "Nuova scheda simulazione"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
-#, fuzzy
 msgid "Analysis type:"
-msgstr "Tipo piazzola:"
+msgstr "Tipo analisi:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "DC"
-msgstr "DRC"
+msgstr "DC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "OP"
-msgstr "OSP"
+msgstr "OP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
-msgstr ""
+msgstr "TRAN"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "FFT"
-msgstr ""
+msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "NOISE"
-msgstr ""
+msgstr "RUMORE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "SP"
-msgstr "OSP"
+msgstr "SP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25 pcbnew/pad.cpp:1890
 msgid "Custom"
@@ -12942,56 +12663,48 @@ msgid "(optional; default 0)"
 msgstr "(opzionale; predefinito 0)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:290
-#, fuzzy
 msgid "Max time step:"
-msgstr "Passo temporale:"
+msgstr "Passo temporale max:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:301
-#, fuzzy
 msgid "(optional; default min{tstep, (tstop-tstart)/50})"
-msgstr "(opzionale; predefinito 0)"
+msgstr "(opzionale; predefinito min(tstep, (tstop-tstart)/50})"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:305
-#, fuzzy
 msgid "Use initial conditions"
-msgstr "Configurazione utente"
+msgstr "Usa condizioni iniziali"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
-#, fuzzy
 msgid "Input signals:"
-msgstr "Pin ingresso"
+msgstr "Segnali in ingresso::"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
-#, fuzzy
 msgid "Linearize inputs before performing FFT"
-msgstr "Aggiorna tutte le zone prima di eseguire il DRC"
+msgstr "Linearizza gli ingressi prima di eseguire la FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
-#, fuzzy
 msgid "Measured node:"
-msgstr "Nodo misurato"
+msgstr "Nodo misurato:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:371
-#, fuzzy
 msgid "Reference node:"
-msgstr "Nodo di riferimento"
+msgstr "Nodo riferimento:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:380
 msgid "(optional; default GND)"
 msgstr "(opzionale; valore predefinito GND)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:384
-#, fuzzy
 msgid "Noise source:"
-msgstr "Sorgente disturbo"
+msgstr "Sorgente rumore:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:459
 msgid "Save contributions from all noise generators"
-msgstr ""
+msgstr "Salva i contributi da tutti i generatori di rumore"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:526
 msgid "Compute noise current correlation matrix"
-msgstr ""
+msgstr "Computa la matrice di correlazione corrente di rumore"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
 msgid "Spice directives:"
@@ -13002,51 +12715,45 @@ msgid "Load directives from schematic"
 msgstr "Carica direttive dallo schema"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:567
-#, fuzzy
 msgid "Transfer function:"
-msgstr "Funzione di trasferimento"
+msgstr "Funzione di trasferimento:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "(tensione uscita) / (tensione ingresso)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(tensione uscita) / (corrente ingresso)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
-#, fuzzy
 msgid "Input:"
-msgstr "Ingresso"
+msgstr "Ingresso:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:586
 #: eeschema/dialogs/dialog_sim_command_base.cpp:604
 msgid "Ref:"
-msgstr ""
+msgstr "Rif:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:595
-#, fuzzy
 msgid "Output:"
-msgstr "Uscita"
+msgstr "Uscita:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:619
-#, fuzzy
 msgid "Find:"
-msgstr "Trova"
+msgstr "Trova:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles and Zeros"
-msgstr "Polo-zero"
+msgstr "Poli e zeri"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles"
-msgstr "Fori"
+msgstr "Poli"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Zeros"
-msgstr ""
+msgstr "Zeri"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:643
 msgid "Add full path for .include library directives"
@@ -13081,48 +12788,43 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:679
-#, fuzzy
 msgid "SPICE Command"
-msgstr "Comando sim"
+msgstr "Comando SPICE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:686
 #: eeschema/dialogs/dialog_sim_command_base.cpp:725
 #: eeschema/dialogs/dialog_sim_command_base.cpp:762
 #, c-format
 msgid "Fixed %s scale"
-msgstr ""
+msgstr "Scala %s fissa"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
 #: eeschema/dialogs/dialog_sim_command_base.cpp:773
 msgid "Min:"
-msgstr ""
+msgstr "Min:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:704
 #: eeschema/dialogs/dialog_sim_command_base.cpp:743
 #: eeschema/dialogs/dialog_sim_command_base.cpp:780
 msgid "Max:"
-msgstr ""
+msgstr "Max:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:802
-#, fuzzy
 msgid "Show grid"
 msgstr "Mostra griglia"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:806
-#, fuzzy
 msgid "Show legend"
-msgstr "Mostra &legenda"
+msgstr "Mostra legenda"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:809
-#, fuzzy
 msgid "Dotted current/phase"
 msgstr "Corrente/fase tratteggiate"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:819
-#, fuzzy
 msgid "Margins:"
-msgstr "Margin"
+msgstr "Margini:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:829
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:551
@@ -13131,9 +12833,8 @@ msgstr "Sinistra:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:833
 #: eeschema/dialogs/dialog_sim_command_base.cpp:874
-#, fuzzy
 msgid "70"
-msgstr "0"
+msgstr "70"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:846
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:579
@@ -13151,9 +12852,8 @@ msgid "Bottom:"
 msgstr "Basso:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:859
-#, fuzzy
 msgid "45"
-msgstr "4"
+msgstr "45"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:870
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:565
@@ -13161,14 +12861,12 @@ msgid "Right:"
 msgstr "Destra:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:889
-#, fuzzy
 msgid "Plot Setup"
-msgstr "Impostazione scheda"
+msgstr "Impostazione tracciatura"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
-#, fuzzy
 msgid "Simulation Analysis"
-msgstr "Simulazione"
+msgstr "Analisi simulazione"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:36
 #: eeschema/sim/sim_plot_tab.cpp:652
@@ -13208,23 +12906,20 @@ msgid "Significant digits:"
 msgstr ""
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
-#, fuzzy
 msgid "Range:"
-msgstr "Cambia"
+msgstr "Campo:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "p"
-msgstr "px"
+msgstr "p"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "n"
-msgstr "No"
+msgstr "n"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
@@ -13240,38 +12935,33 @@ msgid "m"
 msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
-msgstr "OK"
+msgstr "K"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "M"
-msgstr "MB"
+msgstr "M"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "T"
-msgstr "T:"
+msgstr "T"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "P"
-msgstr "Pi"
+msgstr "P"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.h:47
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s"
-msgstr "Formato"
+msgstr "Formato %s"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:227
-#, fuzzy
 msgid "<unknown>"
-msgstr "<Sconosciuto>"
+msgstr "<sconosciuto>"
 
 #: eeschema/dialogs/dialog_sim_model.cpp:237
 #, c-format
@@ -13343,13 +13033,12 @@ msgid "Differential"
 msgstr "Differenziale"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:76
-#, fuzzy
 msgid "Pin model:"
-msgstr "Modalità posizione:"
+msgstr "Modello pin:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:83
 msgid "Waveform:"
-msgstr ""
+msgstr "Forma d'onda:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:100
 msgid "Built-in SPICE model"
@@ -13360,9 +13049,8 @@ msgid "Device:"
 msgstr "Dispositivo:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:118
-#, fuzzy
 msgid "Device type:"
-msgstr "Dispositivo:"
+msgstr "Tipo dispositivo:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:145
 #: eeschema/widgets/search_handlers.cpp:133
@@ -13408,22 +13096,20 @@ msgid "Simulation Model Editor"
 msgstr "Editor modello simulazione"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:46
-#, fuzzy
 msgid "Choose Symbol"
 msgstr "Scegli simbolo"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:67
-#, fuzzy
 msgid "Choose Power Symbol"
-msgstr "Simbolo di potenza"
+msgstr "Scegli simbolo di potenza"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:69
 #: eeschema/symbol_chooser_frame.cpp:103
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:61
 #: pcbnew/footprint_chooser_frame.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr "Scegli simbolo (%d elementi caricati)"
+msgstr "(%d elementi caricati)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -13503,35 +13189,30 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "Sicuri di voler rimuovere il campo '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:738
-#, fuzzy
 msgid "Rename Field"
-msgstr "Rinomina file"
+msgstr "Rinomina campo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "Il file \"%s\" esiste già. Vuoi sovrascrivere questo file?"
+msgstr "Il nome campo %s esiste già. Impossibile sovrascrivere su campo esistente."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:845
-#, fuzzy
 msgid "The Quantity column cannot be grouped by."
-msgstr "La colonna dei riferimenti non può essere nascosta."
+msgstr "La colonna quantità non può essere raggruppata."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "La colonna dei riferimenti non può essere nascosta."
+msgstr "La colonna numero elemento non può essere raggruppata."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1200
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "Distinta di base"
+msgstr "File uscita distinta di base"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1212
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1221
-#, fuzzy
 msgid "BOM Output File"
-msgstr "Dimensione in uscita"
+msgstr "File uscita DIBA"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1219
 #, fuzzy
@@ -13849,7 +13530,7 @@ msgid "Edit Library Symbol..."
 msgstr "Modifica simbolo di libreria..."
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
-#: eeschema/lib_pin.cpp:1672 eeschema/sch_pin.cpp:482
+#: eeschema/lib_pin.cpp:1669 eeschema/sch_pin.cpp:482
 msgid "Pin Number"
 msgstr "Numero pin"
 
@@ -16193,14 +15874,14 @@ msgstr "NonLogico"
 msgid "Pin Name"
 msgstr "Nome pin"
 
-#: eeschema/lib_pin.cpp:1689 eeschema/lib_shape.cpp:582
+#: eeschema/lib_pin.cpp:1680 eeschema/lib_shape.cpp:582
 #: eeschema/sch_shape.cpp:553 eeschema/sch_symbol.cpp:2661
 #: pcbnew/board_item.cpp:334 pcbnew/pcb_shape.cpp:680 pcbnew/pcb_track.cpp:1491
 #: pcbnew/zone.cpp:1581 pcbnew/zone.cpp:1593
 msgid "Position X"
 msgstr "Posizione X"
 
-#: eeschema/lib_pin.cpp:1692 eeschema/lib_shape.cpp:584
+#: eeschema/lib_pin.cpp:1683 eeschema/lib_shape.cpp:584
 #: eeschema/sch_shape.cpp:555 eeschema/sch_symbol.cpp:2664
 #: pcbnew/board_item.cpp:337 pcbnew/pcb_shape.cpp:682 pcbnew/pcb_track.cpp:1495
 #: pcbnew/zone.cpp:1587 pcbnew/zone.cpp:1594
@@ -16574,7 +16255,7 @@ msgstr ""
 "Nessun stile corpo alternativo trovato per il simbolo \"%s\" nella libreria "
 "\"%s\"."
 
-#: eeschema/picksymbol.cpp:163
+#: eeschema/picksymbol.cpp:163 eeschema/tools/sch_edit_tool.cpp:1712
 #, fuzzy
 msgid "Convert Symbol"
 msgstr "Simbolo di potenza"
@@ -21237,7 +20918,7 @@ msgstr "Cambia in riquadro di testo"
 msgid "Change existing item to a text box"
 msgstr "Cambia l'elemento esistente in riquadro testo"
 
-#: eeschema/tools/ee_actions.cpp:777
+#: eeschema/tools/ee_actions.cpp:777 eeschema/tools/sch_edit_tool.cpp:2434
 msgid "Cleanup Sheet Pins"
 msgstr "Ripulisci punti di connessione fogli"
 
@@ -22168,7 +21849,7 @@ msgstr "Crea dalla selezione"
 msgid "Edit Main Fields"
 msgstr "Modifica i campi principali"
 
-#: eeschema/tools/sch_edit_tool.cpp:510 eeschema/tools/sch_edit_tool.cpp:2336
+#: eeschema/tools/sch_edit_tool.cpp:510 eeschema/tools/sch_edit_tool.cpp:2343
 msgid "Change To"
 msgstr "Cambia in"
 
@@ -22205,45 +21886,45 @@ msgstr "Modifica campo %s"
 msgid "Edit '%s' Field"
 msgstr "Modifica campo '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:2060 eeschema/tools/sch_edit_tool.cpp:2148
+#: eeschema/tools/sch_edit_tool.cpp:2067 eeschema/tools/sch_edit_tool.cpp:2155
 msgid "<empty>"
 msgstr "<vuoto>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2400
+#: eeschema/tools/sch_edit_tool.cpp:2407
 #, fuzzy
 msgid "Slice Wire"
 msgstr "Stacca"
 
-#: eeschema/tools/sch_edit_tool.cpp:2400
+#: eeschema/tools/sch_edit_tool.cpp:2407
 #, fuzzy
 msgid "Break Wire"
 msgstr "Interrompi pista"
 
-#: eeschema/tools/sch_edit_tool.cpp:2417
+#: eeschema/tools/sch_edit_tool.cpp:2425
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Eliminare i pin senza riferimenti da questo foglio?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2477
+#: eeschema/tools/sch_edit_tool.cpp:2486
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Inserire numero pagina per il percorso foglio%s"
 
-#: eeschema/tools/sch_edit_tool.cpp:2480
+#: eeschema/tools/sch_edit_tool.cpp:2489
 #: eeschema/widgets/hierarchy_pane.cpp:331
 msgid "Edit Sheet Page Number"
 msgstr "Modifica numero pagina foglio"
 
-#: eeschema/tools/sch_edit_tool.cpp:2545
+#: eeschema/tools/sch_edit_tool.cpp:2554
 #, fuzzy
 msgid "Set Attribute"
 msgstr "Attributo"
 
-#: eeschema/tools/sch_edit_tool.cpp:2582
+#: eeschema/tools/sch_edit_tool.cpp:2591
 #, fuzzy
 msgid "Clear Attribute"
 msgstr "Attributo"
 
-#: eeschema/tools/sch_edit_tool.cpp:2619
+#: eeschema/tools/sch_edit_tool.cpp:2628
 #, fuzzy
 msgid "Toggle Attribute"
 msgstr "Attributo"
@@ -22290,27 +21971,27 @@ msgstr ""
 "è stato abbandonato dato che la destinazione ha già il foglio o uno dei suoi "
 "sottofogli come genitore."
 
-#: eeschema/tools/sch_editor_control.cpp:2219
+#: eeschema/tools/sch_editor_control.cpp:2221
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr ""
 "I simboli con collegamenti ai simboli di libreria interrotti non possono "
 "essere modificati."
 
-#: eeschema/tools/sch_editor_control.cpp:2589
+#: eeschema/tools/sch_editor_control.cpp:2591
 #: pcbnew/tools/board_editor_control.cpp:603
 #: pcbnew/tools/footprint_editor_control.cpp:746
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d ID duplicati rimpiazzati.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2596
+#: eeschema/tools/sch_editor_control.cpp:2598
 #: pcbnew/tools/board_editor_control.cpp:618
 #: pcbnew/tools/footprint_editor_control.cpp:761
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d potenziali problemi riparati."
 
-#: eeschema/tools/sch_editor_control.cpp:2603
+#: eeschema/tools/sch_editor_control.cpp:2605
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Nessun errore."
@@ -28655,7 +28336,7 @@ msgstr "km/h"
 msgid "mi/h"
 msgstr "mi/h"
 
-#: pcbnew/array_creator.cpp:225
+#: pcbnew/array_creator.cpp:234
 msgid "Create an array"
 msgstr "Crea un array"
 
@@ -34545,7 +34226,6 @@ msgid "Plot format:"
 msgstr "Formato tracciatura:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -35630,7 +35310,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:302
 #, fuzzy
 msgid "Minimum amplitude (A):"
-msgstr "Ampiezza max (Amax):"
+msgstr "Ampiezza min (Amin):"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:60
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:55
@@ -39143,7 +38823,7 @@ msgstr "Impronta mancante %s (%s)"
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:132
 #, fuzzy, c-format
 msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
-msgstr "I'impronta non corrisponde alla copia in libreria"
+msgstr "I'impronta '%s' non corrisponde alla copia nella libreria '%s'."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
 #, fuzzy, c-format
@@ -47184,7 +46864,7 @@ msgstr "Controllo piste colineari..."
 msgid "Merging collinear tracks..."
 msgstr "Fusione piste colineari..."
 
-#: pcbnew/undo_redo.cpp:486
+#: pcbnew/undo_redo.cpp:483
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Operazione annulla/ripeti incompleta: alcuni elementi non trovati"
 
@@ -48054,14 +47734,6 @@ msgstr "Editor di C.S. autonomo di KiCad"
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite EDA per la progettazione di schemi elettrici e circuiti stampati"
 
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
-msgid "EDA"
-msgstr "EDA"
-
-#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-msgid "Circuit board"
-msgstr "Circuito stampato"
-
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""
 "KiCad is a free and open-source electronics design automation (EDA) suite. "
@@ -48110,2311 +47782,3 @@ msgstr "Schema KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Circuito stampato KiCad"
-
-#~ msgid "no"
-#~ msgstr "No"
-
-#~ msgid "yes"
-#~ msgstr "Sì"
-
-#~ msgid "Converted"
-#~ msgstr "Convertito"
-
-#, c-format
-#~ msgid ""
-#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-#~ "pin %s%s at location <b>(%.3f, %.3f)</b> of converted."
-#~ msgstr ""
-#~ "<b>Pin duplicato %s</b> \"%s\" in posizione <b>(%.3f, %.3f)</b> in "
-#~ "conflitto con il pin %s%s in posizione <b>(%.3f, %.3f)</b> del convertito."
-
-#, c-format
-#~ msgid ""
-#~ "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
-#~ "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
-#~ msgstr ""
-#~ "<b>Pin duplicato %s</b> %s in posizione <b>(%.3f, %.3f)</b> in conflitto "
-#~ "con il pin %s%s in posizione <b>(%.3f, %.3f)</b> in unità %s e %s del "
-#~ "convertito."
-
-#, c-format
-#~ msgid ""
-#~ "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> of "
-#~ "converted."
-#~ msgstr ""
-#~ "Info: <b>Pin di potenza nascosto %s</b> %s posizione <b>(%s, %s)</b> del "
-#~ "convertito."
-
-#, c-format
-#~ msgid ""
-#~ "<b>Off grid pin %s</b> %s at location <b>(%.3s, %.3s)</b> in unit %c of "
-#~ "converted."
-#~ msgstr ""
-#~ "<b>Pin fuori griglia %s</b> %s posizione <b>(%s, %s)</b> in unità %c del "
-#~ "convertito."
-
-#~ msgid "Convert"
-#~ msgstr "Convertito"
-
-#, fuzzy
-#~ msgid "Symbol must have a newName."
-#~ msgstr "Il campo deve avere un nome."
-
-#, fuzzy
-#~ msgid "Allow bridged solder mask apertures between pads settings differ."
-#~ msgstr ""
-#~ "Consenti aperture della maschera di saldatura che fanno ponte tra piazzole"
-
-#, fuzzy
-#~ msgid "Exempt from courtyard requirement settings differ."
-#~ msgstr "Esente dai requisiti ingombri..."
-
-#~ msgid "no symbol selected"
-#~ msgstr "nessun simbolo selezionato"
-
-#~ msgid "symbol is not multi-unit"
-#~ msgstr "il simbolo non è multi unità"
-
-#, fuzzy
-#~ msgid "no pin selected"
-#~ msgstr "<nessuno selezionato>"
-
-#, fuzzy
-#~ msgid "no alternate pin functions defined"
-#~ msgstr "Definizioni alternative di pin"
-
-#, fuzzy
-#~ msgid "Toggle Exclude from BOM"
-#~ msgstr "escludi dalla DIBA"
-
-#~ msgid "Generate BOM..."
-#~ msgstr "Genera DIBA..."
-
-#, fuzzy
-#~ msgid "Generate BOM (Legacy)..."
-#~ msgstr "Genera DIBA..."
-
-#, fuzzy
-#~ msgid "Offset X"
-#~ msgstr "Scostamento X:"
-
-#, fuzzy
-#~ msgid "Offset Y"
-#~ msgstr "Scostamento Y:"
-
-#, fuzzy
-#~ msgid "Rotation CCW"
-#~ msgstr "Rotazione"
-
-#~ msgid "Zero format"
-#~ msgstr "Formato zeri"
-
-#, fuzzy
-#~ msgid ""
-#~ "Output units; ascii or csv format only; valid options: mm, m, in, tenths"
-#~ msgstr "Unità di uscita; solo formato ascii o csv; opzioni valide: in, mm"
-
-#~ msgid "Max width:"
-#~ msgstr "Larghezza massima:"
-
-#~ msgid "Min clearance"
-#~ msgstr "Tolleranza minima"
-
-#~ msgid "VRML Units for Output Files"
-#~ msgstr "Unità VRML per i file in uscita"
-
-#, fuzzy
-#~ msgid "Pos X:"
-#~ msgstr "Pos X"
-
-#, fuzzy
-#~ msgid "Amplitude (A) min:"
-#~ msgstr "Ampiezza min (Amin):"
-
-#, fuzzy
-#~ msgid "Max track width:"
-#~ msgstr "Larghezza pista minima:"
-
-#, fuzzy
-#~ msgid "Max track width"
-#~ msgstr "Larghezza pista minima"
-
-#~ msgid "BOM..."
-#~ msgstr "Diba..."
-
-#, fuzzy
-#~ msgid "Reset View"
-#~ msgstr "Reimposta vista"
-
-#~ msgid "Reset view"
-#~ msgstr "Reimposta vista"
-
-#~ msgid ">>"
-#~ msgstr ">>"
-
-#~ msgid "OUTPUTSTREAM_OUTPUTFORMATTER write error"
-#~ msgstr "OUTPUTSTREAM_OUTPUTFORMATTER errore di scrittura"
-
-#, fuzzy
-#~ msgid "current"
-#~ msgstr "Corrente"
-
-#, c-format
-#~ msgid ""
-#~ "The automatic save master file\n"
-#~ "'%s'\n"
-#~ "could not be deleted."
-#~ msgstr ""
-#~ "Il file master di autosalvataggio\n"
-#~ "'%s'\n"
-#~ "non può essere cancellato."
-
-#~ msgid ""
-#~ "This file must be manually removed or the auto save feature will be\n"
-#~ "shown every time the schematic editor is launched."
-#~ msgstr ""
-#~ "Questo file deve essere rimosso manualmente o l'autosalvataggio verrà\n"
-#~ "mostrato ad ogni avvio dell'editor degli schemi elettrici."
-
-#~ msgid "Unable to read string, input is empty."
-#~ msgstr "Impossibile leggere una stringa, l'ingresso è vuoto."
-
-#~ msgid "Finish drawing shape"
-#~ msgstr "Termina il disegno della forma grafica"
-
-#~ msgid "Finish Sheet"
-#~ msgstr "Termina foglio"
-
-#~ msgid "Finish drawing sheet"
-#~ msgstr "Termina foglio di disegno"
-
-#~ msgid "Finish Wire or Bus"
-#~ msgstr "Fine filo o bus"
-
-#~ msgid "Complete drawing at current segment"
-#~ msgstr "Completa il disegno del segmento corrente"
-
-#~ msgid "Finish Wire"
-#~ msgstr "Termina filo"
-
-#~ msgid "Complete wire with current segment"
-#~ msgstr "Completa il filo con il segmento corrente"
-
-#~ msgid "Complete bus with current segment"
-#~ msgstr "Completa il bus con il segmento corrente"
-
-#~ msgid "Finish Lines"
-#~ msgstr "Termina fili"
-
-#~ msgid "Complete connected lines with current segment"
-#~ msgstr "Completa la connessione dei fili con il segmento corrente"
-
-#, fuzzy
-#~ msgid "(as a percentage of pad size)"
-#~ msgstr "Spazio aggiuntivo come percentuale della dimensione della piazzola."
-
-#~ msgid ""
-#~ "Note: a blank reference designator or value will use the footprint name."
-#~ msgstr "Nota: un riferimento o valore vuoti useranno il nome dell'impronta."
-
-#, fuzzy
-#~ msgid "(as a percentage of larger track width)"
-#~ msgstr "Larghezza traccia coppia differenziale"
-
-#, fuzzy
-#~ msgid "Library description"
-#~ msgstr "Editor delle librerie"
-
-#, fuzzy
-#~ msgid "Tune Skew"
-#~ msgstr "Regolato: skew "
-
-#~ msgid "Target skew:"
-#~ msgstr "Skew obiettivo:"
-
-#, fuzzy
-#~ msgid "Set layer:"
-#~ msgstr "Strato iniziale:"
-
-#~ msgid "Altium PCB footprint library files"
-#~ msgstr "File di libreria di impronte Altium PCB"
-
-#~ msgid "Finish Track"
-#~ msgstr "Termina pista"
-
-#~ msgid "Stops laying the current track."
-#~ msgstr "Ferma la progettazione della pista corrente."
-
-#~ msgid "Grid Options"
-#~ msgstr "Opzioni griglia"
-
-#~ msgid "Cursor Options"
-#~ msgstr "Opzioni puntatore"
-
-#~ msgid "Create Logo File"
-#~ msgstr "Crea file del Logo"
-
-#~ msgid "Icon scale:"
-#~ msgstr "Scala icone:"
-
-#~ msgid "Grey"
-#~ msgstr "Scala di grigi"
-
-#~ msgid "Image Scale:"
-#~ msgstr "Scala immagine:"
-
-#~ msgid "Save Report to File"
-#~ msgstr "Salva il file rapporto"
-
-#~ msgid "Select with Browser"
-#~ msgstr "Seleziona tramite browser"
-
-#, fuzzy
-#~ msgid "Selected Output Filename"
-#~ msgstr "Nome file d'uscita"
-
-#, c-format
-#~ msgid "Choose Power Symbol (%d items loaded)"
-#~ msgstr "Scegli simbolo di potenza (%d elementi caricati)"
-
-#, c-format
-#~ msgid "Choose Symbol (%d items loaded)"
-#~ msgstr "Scegli simbolo (%d elementi caricati)"
-
-#~ msgid "Image File Name"
-#~ msgstr "Nome file immagine"
-
-#~ msgid "Board File Name"
-#~ msgstr "Nome file scheda"
-
-#~ msgid "Load File to Edit"
-#~ msgstr "Carica file da modificare"
-
-#~ msgid "Choose package file"
-#~ msgstr "Scegli file pacchetto"
-
-#~ msgid "Open"
-#~ msgstr "Apri"
-
-#~ msgid "Save As"
-#~ msgstr "Salva come"
-
-#~ msgid "Select a STEP export filename"
-#~ msgstr "Seleziona un nome file per l'esportazione STEP"
-
-#~ msgid "temp"
-#~ msgstr "temp"
-
-#~ msgid "uVia Diameter"
-#~ msgstr "Diametro uvia"
-
-#~ msgid "Select Netlist"
-#~ msgstr "Seleziona netlist"
-
-#~ msgid "Single Track Length Tuning"
-#~ msgstr "Regolazione lunghezza pista singola"
-
-#~ msgid "Differential Pair Length Tuning"
-#~ msgstr "Regolazione lunghezza coppia differenziale"
-
-#~ msgid "Differential Pair Skew Tuning"
-#~ msgstr "Regolazione skew coppia differenziale"
-
-#~ msgid "Length / Skew"
-#~ msgstr "Lunghezza / skew"
-
-#~ msgid "Tune from:"
-#~ msgstr "Regola da:"
-
-#~ msgid "Tune to:"
-#~ msgstr "Regola a:"
-
-#~ msgid "Constraint:"
-#~ msgstr "Vincolo:"
-
-#~ msgid "From Design Rules"
-#~ msgstr "Dalle regole di progettazione"
-
-#~ msgid "Meandering"
-#~ msgstr "Serpeggiamento"
-
-#~ msgid "Miter style:"
-#~ msgstr "Stile angolatura:"
-
-#~ msgid "45 degree"
-#~ msgstr "45 gradi"
-
-#~ msgid "arc"
-#~ msgstr "arco"
-
-#~ msgid "Miter radius (r):"
-#~ msgstr "Raggio angolatura (r):"
-
-#~ msgid "Trace Length Tuning"
-#~ msgstr "Regolazione lunghezza pista"
-
-#, fuzzy
-#~ msgid "Apply board defaults to footprint text && graphics"
-#~ msgstr "Testi e grafiche schema simbolo"
-
-#, fuzzy
-#~ msgid "Format Footprints when Added to Board"
-#~ msgstr "Esporta l'impronta all'editor"
-
-#~ msgid "Drill out of range"
-#~ msgstr "Foro fuori portata"
-
-#, fuzzy
-#~ msgid "3D model offset doesn't match: "
-#~ msgstr "La piazzola non corrisponde allo schema"
-
-#, fuzzy
-#~ msgid "3D model doesn't match: "
-#~ msgstr "La piazzola non corrisponde allo schema"
-
-#~ msgid "Footprint Image File Name"
-#~ msgstr "Nome file immagine impronta"
-
-#~ msgid "KiCad Footprint Library Viewer"
-#~ msgstr "Visualizzatore librerie impronte KiCad"
-
-#, fuzzy
-#~ msgid "Manage footprint libraries"
-#~ msgstr "Gestione librerie impronte..."
-
-#, fuzzy, c-format
-#~ msgid ""
-#~ "Footprint library not found. The current configuration does not include "
-#~ "library '%s'."
-#~ msgstr "La configurazione corrente non include la libreria \"%s\"."
-
-#, fuzzy, c-format
-#~ msgid ""
-#~ "Footprint library not enabled. Library '%s' is not enabled in the current "
-#~ "configuration."
-#~ msgstr "La libreria \"%s\" non è abilitata nella configurazione corrente."
-
-#~ msgid "doc url"
-#~ msgstr "url doc"
-
-#~ msgid "Open File"
-#~ msgstr "Apri file"
-
-#~ msgid "Graphic layer:"
-#~ msgstr "Strato grafico:"
-
-#~ msgid "Bitmap Properties"
-#~ msgstr "Proprietà bitmap"
-
-#, c-format
-#~ msgid "Width Constraints: min %s, max %s"
-#~ msgstr "Vincoli larghezza: min %s; max %s."
-
-#~ msgid "New Track"
-#~ msgstr "Nuova pista"
-
-#~ msgid "Starts laying a new track."
-#~ msgstr "Comincia la stesura di una nuova pista."
-
-#~ msgid "End Track"
-#~ msgstr "Finisci pista"
-
-#~ msgid "Stops laying the current meander."
-#~ msgstr "Ferma la stesura del serpeggiamento corrente."
-
-#~ msgid "Length Tuner"
-#~ msgstr "Regola lunghezza"
-
-#~ msgid "?"
-#~ msgstr "?"
-
-#~ msgid "Too long: skew "
-#~ msgstr "Troppo lungo: skew "
-
-#~ msgid "Too short: skew "
-#~ msgstr "Troppo corto: skew "
-
-#~ msgid "Spoke width resolution for:"
-#~ msgstr "Risoluzione larghezza raggio per:"
-
-#~ msgid "Spoke count resolution for:"
-#~ msgstr "Risoluzione conteggio raggi per:"
-
-#, c-format
-#~ msgid "Width constraints: min %s; opt %s; max %s."
-#~ msgstr "Vincoli larghezza: min %s; opz %s; max %s."
-
-#, c-format
-#~ msgid "Diameter constraints: min %s; opt %s; max %s."
-#~ msgstr "Vincoli diametro: min %s; opz %s; max %s."
-
-#, c-format
-#~ msgid "Annular width constraints: min %s; opt %s; max %s."
-#~ msgstr "Vincoli larghezza anello: min %s; opz %s; max %s."
-
-#, c-format
-#~ msgid "Text height constraints: min %s; opt %s; max %s."
-#~ msgstr "Vincoli altezza testo: min %s; opz %s; max %s."
-
-#, c-format
-#~ msgid "Text thickness constraints: min %s; opt %s; max %s."
-#~ msgstr "Vincoli larghezza testo: min %s; opz %s; max %s."
-
-#~ msgid "Recombine pad"
-#~ msgstr "Ricombina piazzola"
-
-#~ msgid "Edit pad shapes"
-#~ msgstr "Modifica forme piazzola"
-
-#~ msgid "Add bitmap image"
-#~ msgstr "Aggiungi immagine bitmap"
-
-#~ msgid "Tune length of a single track"
-#~ msgstr "Regola lunghezza pista singola"
-
-#~ msgid "Length Tuning Settings..."
-#~ msgstr "Impostazioni regolazione lunghezza..."
-
-#~ msgid "Sets the length tuning parameters for currently routed item."
-#~ msgstr ""
-#~ "Imposta i parametri di regolazione lunghezza per gli elementi "
-#~ "correntemente sbrogliati."
-
-#~ msgid "Simplifying polygons on F_Cu"
-#~ msgstr "Semplificazione poligoni su F_Cu"
-
-#~ msgid "Simplifying polygons on B_Cu"
-#~ msgstr "Semplificazione poligoni su B_Cu"
-
-#~ msgid "Center pivot rotation"
-#~ msgstr "Centra perno di rotazione"
-
-#~ msgid "Enable animation"
-#~ msgstr "Abilita animazione"
-
-#~ msgid "Animation speed:"
-#~ msgstr "Velocità animazione:"
-
-#~ msgid "Symbol Footprint Association Files (.equ)"
-#~ msgstr "File di associazione simboli-impronte (*.equ)"
-
-#~ msgid "Remove"
-#~ msgstr "Rimuovi"
-
-#~ msgid "Edit File"
-#~ msgstr "Modifica file"
-
-#~ msgid "Available environment variables for relative paths:"
-#~ msgstr "Variabili ambiente disponibili per percorsi relativi:"
-
-#~ msgid "Relative"
-#~ msgstr "Relativo"
-
-#~ msgid "Path Type"
-#~ msgstr "Tipo percorso"
-
-#~ msgid "Output file name"
-#~ msgstr "Nome file d'uscita"
-
-#~ msgid "Color theme to use (will default to pcbnew settings)"
-#~ msgstr "Tema colore da usare (predefinito per le impostazioni pcbnew)"
-
-#~ msgid "Circle Properties"
-#~ msgstr "Proprietà cerchio"
-
-#~ msgid "Arc Properties"
-#~ msgstr "Proprietà arco"
-
-#~ msgid "Polygon Properties"
-#~ msgstr "Proprietà poligono"
-
-#~ msgid "Rectangle Properties"
-#~ msgstr "Proprietà rettangolo"
-
-#~ msgid "Line Segment Properties"
-#~ msgstr "Proprietà segmento di linea"
-
-#~ msgid "Curve Properties"
-#~ msgstr "Proprietà curva"
-
-#~ msgid "Graphic Item Properties"
-#~ msgstr "Proprietà elemento grafico"
-
-#, fuzzy
-#~ msgid ""
-#~ "### Top-level Clauses\n"
-#~ "\n"
-#~ "    (version <number>)\n"
-#~ "\n"
-#~ "    (rule <rule_name> <rule_clause> ...)\n"
-#~ "\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Rule Clauses\n"
-#~ "\n"
-#~ "    (constraint <constraint_type> ...)\n"
-#~ "\n"
-#~ "    (condition \"<expression>\")\n"
-#~ "\n"
-#~ "    (layer \"<layer_name>\")\n"
-#~ "\n"
-#~ "    (severity <severity_name>)\n"
-#~ "\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Constraint Types\n"
-#~ "\n"
-#~ " * annular\\_width\n"
-#~ " * assertion\n"
-#~ " * clearance\n"
-#~ " * connection\\_width\n"
-#~ " * courtyard_clearance\n"
-#~ " * diff\\_pair\\_gap\n"
-#~ " * diff\\_pair\\_uncoupled\n"
-#~ " * disallow\n"
-#~ " * edge\\_clearance\n"
-#~ " * length\n"
-#~ " * hole\\_clearance\n"
-#~ " * hole\\_size\n"
-#~ " * min\\_resolved\\_spokes\n"
-#~ " * physical\\_clearance\n"
-#~ " * physical\\_hole\\_clearance\n"
-#~ " * silk\\_clearance\n"
-#~ " * skew\n"
-#~ " * text\\_height\n"
-#~ " * text\\_thickness\n"
-#~ " * thermal\\_relief\\_gap\n"
-#~ " * thermal\\_spoke\\_width\n"
-#~ " * track\\_width\n"
-#~ " * via\\_count\n"
-#~ " * via\\_diameter\n"
-#~ " * zone\\_connection\n"
-#~ "\n"
-#~ "Note: `clearance` and `hole_clearance` rules are not run against items of "
-#~ "the same net; `physical_clearance` and `physical_hole_clearance` rules "
-#~ "are.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "### Items\n"
-#~ "\n"
-#~ " * `A` &nbsp;&nbsp; _the first (or only) item under test_\n"
-#~ " * `B` &nbsp;&nbsp; _the second item under test (for binary tests)_\n"
-#~ " * `L` &nbsp;&nbsp; _the layer currently under test_\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Item Types\n"
-#~ "\n"
-#~ " * buried\\_via\n"
-#~ " * graphic\n"
-#~ " * hole\n"
-#~ " * micro\\_via\n"
-#~ " * pad\n"
-#~ " * text\n"
-#~ " * track\n"
-#~ " * via\n"
-#~ " * zone\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Zone Connections\n"
-#~ "\n"
-#~ " * solid\n"
-#~ " * thermal\\_reliefs\n"
-#~ " * none\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Severity Names\n"
-#~ "\n"
-#~ " * warning\n"
-#~ " * error\n"
-#~ " * exclusion\n"
-#~ " * ignore\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Examples\n"
-#~ "\n"
-#~ "    (version 1)\n"
-#~ "\n"
-#~ "    (rule HV\n"
-#~ "       (constraint clearance (min 1.5mm))\n"
-#~ "       (condition \"A.NetClass == 'HV'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule HV\n"
-#~ "       (layer outer)\n"
-#~ "       (constraint clearance (min 1.5mm))\n"
-#~ "       (condition \"A.NetClass == 'HV'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule HV_HV\n"
-#~ "       # wider clearance between HV tracks\n"
-#~ "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
-#~ "       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule HV_unshielded\n"
-#~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A."
-#~ "enclosedByArea('Shield*')\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule heavy_thermals\n"
-#~ "       (constraint thermal_spoke_width (min 0.5mm))\n"
-#~ "       (condition \"A.NetClass == 'HV'\"))\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "### Notes\n"
-#~ "\n"
-#~ "Version clause must be the first clause.  It indicates the syntax version "
-#~ "of the file so that \n"
-#~ "future rules parsers can perform automatic updates.  It should be\n"
-#~ "set to \"1\".\n"
-#~ "\n"
-#~ "Rules should be ordered by specificity.  Later rules take\n"
-#~ "precedence over earlier rules; once a matching rule is found\n"
-#~ "no further rules will be checked.\n"
-#~ "\n"
-#~ "Use Ctrl+/ to comment or uncomment line(s).\n"
-#~ "<br><br><br>\n"
-#~ "\n"
-#~ "### Expression functions\n"
-#~ "\n"
-#~ "All function parameters support simple wildcards (`*` and `?`).\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.intersectsCourtyard('<footprint_refdes>')\n"
-#~ "True if any part of `A` lies within the given footprint's principal "
-#~ "courtyard.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
-#~ "True if any part of `A` lies within the given footprint's front "
-#~ "courtyard.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.intersectsBackCourtyard('<footprint_refdes>')\n"
-#~ "True if any part of `A` lies within the given footprint's back "
-#~ "courtyard.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.intersectsArea('<zone_name>')\n"
-#~ "True if any part of `A` lies within the given zone's outline.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.enclosedByArea('<zone_name>')\n"
-#~ "True if all of `A` lies within the given zone's outline.  \n"
-#~ "\n"
-#~ "NB: this is potentially a more expensive call than `intersectsArea()`.  "
-#~ "Use `intersectsArea()` \n"
-#~ "where possible.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.isPlated()\n"
-#~ "True if `A` has a hole which is plated.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.inDiffPair('<net_name>')\n"
-#~ "True if `A` has a net that is part of the specified differential pair.\n"
-#~ "`<net_name>` is the base name of the differential pair.  For example, "
-#~ "`inDiffPair('/CLK')`\n"
-#~ "matches items in the `/CLK_P` and `/CLK_N` nets.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    AB.isCoupledDiffPair()\n"
-#~ "True if `A` and `B` are members of the same diff pair.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.memberOfGroup('<group_name>')\n"
-#~ "True if `A` is a member of the given group. The name can contain "
-#~ "wildcards.\n"
-#~ "Includes nested membership.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.memberOfFootprint('<footprint_reference>')\n"
-#~ "True if `A` is a member of a footprint matching the given reference "
-#~ "designator.  The\n"
-#~ "reference can contain wildcards.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.existsOnLayer('<layer_name>')\n"
-#~ "True if `A` exists on the given layer.  The layer name can be\n"
-#~ "either the name assigned in Board Setup > Board Editor Layers or\n"
-#~ "the canonical name (ie: `F.Cu`).\n"
-#~ "\n"
-#~ "NB: this returns true if `A` is on the given layer, independently\n"
-#~ "of whether or not the rule is being evaluated for that layer.\n"
-#~ "For the latter use a `(layer \"layer_name\")` clause in the rule.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.memberOf('<group_name>') !!!\n"
-#~ "Deprecated; use `memberOfGroup()` instead.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.insideCourtyard('<footprint_refdes>') !!!\n"
-#~ "Deprecated; use `intersectsCourtyard()` instead.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.insideFrontCourtyard('<footprint_refdes>') !!!\n"
-#~ "Deprecated; use `intersectsFrontCourtyard()` instead.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.insideBackCourtyard('<footprint_refdes>') !!!\n"
-#~ "Deprecated; use `intersectsBackCourtyard()` instead.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.insideArea('<zone_name>') !!!\n"
-#~ "Deprecated; use `intersectsArea()` instead.\n"
-#~ "<br><br><br>\n"
-#~ "\n"
-#~ "### More Examples\n"
-#~ "\n"
-#~ "    (rule \"copper keepout\"\n"
-#~ "       (constraint disallow track via zone)\n"
-#~ "       (condition \"A.intersectsArea('zone3')\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"BGA neckdown\"\n"
-#~ "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
-#~ "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-#~ "       (condition \"A.intersectsCourtyard('U3')\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # prevent silk over tented vias\n"
-#~ "    (rule silk_over_via\n"
-#~ "       (constraint silk_clearance (min 0.2mm))\n"
-#~ "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"Distance between Vias of Different Nets\"\n"
-#~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-#~ "Net\"))\n"
-#~ "\n"
-#~ "    (rule \"Clearance between Pads of Different Nets\"\n"
-#~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-#~ "Net\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"Via Hole to Track Clearance\"\n"
-#~ "        (constraint hole_clearance (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
-#~ "\n"
-#~ "    (rule \"Pad to Track Clearance\"\n"
-#~ "        (constraint clearance (min 0.2mm))\n"
-#~ "        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"clearance-to-1mm-cutout\"\n"
-#~ "        (constraint clearance (min 0.8mm))\n"
-#~ "        (condition \"A.Layer == 'Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"Max Drill Hole Size Mechanical\"\n"
-#~ "        (constraint hole_size (max 6.3mm))\n"
-#~ "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-#~ "\n"
-#~ "    (rule \"Max Drill Hole Size PTH\"\n"
-#~ "        (constraint hole_size (max 6.35mm))\n"
-#~ "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Specify an optimal gap for a particular diff-pair\n"
-#~ "    (rule \"dp clock gap\"\n"
-#~ "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-#~ "        (condition \"A.inDiffPair('/CLK')\"))\n"
-#~ "\n"
-#~ "    # Specify a larger clearance around any diff-pair\n"
-#~ "    (rule \"dp clearance\"\n"
-#~ "        (constraint clearance (min \"1.5mm\"))\n"
-#~ "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Don't use thermal reliefs on heatsink pads\n"
-#~ "    (rule heat_sink_pad\n"
-#~ "        (constraint zone_connection solid)\n"
-#~ "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
-#~ "\n"
-#~ "    # Require all four thermal relief spokes to connect to parent zone\n"
-#~ "    (rule fully_spoked_pads\n"
-#~ "        (constraint min_resolved_spokes 4))\n"
-#~ "\n"
-#~ "    # Set thermal relief gap & spoke width for all zones\n"
-#~ "    (rule defined_relief\n"
-#~ "        (constraint thermal_relief_gap (min 10mil))\n"
-#~ "        (constraint thermal_spoke_width (min 12mil)))\n"
-#~ "\n"
-#~ "    # Override thermal relief gap & spoke width for GND and PWR zones\n"
-#~ "    (rule defined_relief_pwr\n"
-#~ "        (constraint thermal_relief_gap (min 10mil))\n"
-#~ "        (constraint thermal_spoke_width (min 12mil))\n"
-#~ "        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Prevent solder wicking from SMD pads\n"
-#~ "    (rule holes_in_pads\n"
-#~ "        (constraint physical_hole_clearance (min 0.2mm))\n"
-#~ "        (condition \"B.Pad_Type == 'SMD'\"))\n"
-#~ "\n"
-#~ "    # Disallow solder mask margin overrides\n"
-#~ "    (rule \"disallow solder mask margin overrides\"\n"
-#~ "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-#~ "        (condition \"A.Type == 'Pad'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Enforce a mechanical clearance between components and board edge\n"
-#~ "    (rule front_mechanical_board_edge_clearance\n"
-#~ "        (layer \"F.Courtyard\")\n"
-#~ "        (constraint physical_clearance (min 3mm))\n"
-#~ "        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Check current-carrying capacity\n"
-#~ "    (rule high-current\n"
-#~ "        (constraint track_width (min 1.0mm))\n"
-#~ "        (constraint connection_width (min 0.8mm))\n"
-#~ "        (condition \"A.NetClass == 'Power'\"))\n"
-#~ "\n"
-#~ "### Documentation\n"
-#~ "\n"
-#~ "For the full documentation see [https://docs.kicad.org](https://docs."
-#~ "kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
-#~ msgstr ""
-#~ "### Proposizioni di primo livello\n"
-#~ "\n"
-#~ "    (version <numero>)\n"
-#~ "\n"
-#~ "    (rule <nome_regola> <proposizione_regola> ...)\n"
-#~ "\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Proposizioni regole\n"
-#~ "\n"
-#~ "    (constraint <tipo_vincolo> ...)\n"
-#~ "\n"
-#~ "    (condition \"<espressione>\")\n"
-#~ "\n"
-#~ "    (layer \"<nome_strato>\")\n"
-#~ "\n"
-#~ "    (severity <nome_importanza>)\n"
-#~ "\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Tipi vincoli\n"
-#~ "\n"
-#~ " * annular\\_width\n"
-#~ " * assertion\n"
-#~ " * clearance\n"
-#~ " * connection\\_width\n"
-#~ " * courtyard_clearance\n"
-#~ " * diff\\_pair\\_gap\n"
-#~ " * diff\\_pair\\_uncoupled\n"
-#~ " * disallow\n"
-#~ " * edge\\_clearance\n"
-#~ " * length\n"
-#~ " * hole\\_clearance\n"
-#~ " * hole\\_size\n"
-#~ " * min\\_resolved\\_spokes\n"
-#~ " * physical\\_clearance\n"
-#~ " * physical\\_hole\\_clearance\n"
-#~ " * silk\\_clearance\n"
-#~ " * skew\n"
-#~ " * text\\_height\n"
-#~ " * text\\_thickness\n"
-#~ " * thermal\\_relief\\_gap\n"
-#~ " * thermal\\_spoke\\_width\n"
-#~ " * track\\_width\n"
-#~ " * via\\_count\n"
-#~ " * via\\_diameter\n"
-#~ " * zone\\_connection\n"
-#~ "\n"
-#~ "Nota: le regole `clearance` e `hole_clearance` non vengono eseguite su "
-#~ "elementi della\n"
-#~ "stessa net; al contrario di `physical_clearance` e "
-#~ "`physical_hole_clearance`.\\n\"\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "### Elementi\n"
-#~ "\n"
-#~ " * `A` &nbsp;&nbsp; _il primo (o unico) elemento sotto test_\n"
-#~ " * `B` &nbsp;&nbsp; _il secondo elemento sotto test (per test binari)_\n"
-#~ " * `L` &nbsp;&nbsp; _lo strato attualmente sotto test_\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Tipi elementi\n"
-#~ "\n"
-#~ " * buried_via\n"
-#~ " * graphic\n"
-#~ " * hole\n"
-#~ " * micro_via\n"
-#~ " * pad\n"
-#~ " * text\n"
-#~ " * track\n"
-#~ " * via\n"
-#~ " * zone\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Connessioni zone\n"
-#~ "\n"
-#~ " * solid\n"
-#~ " * thermal\\_reliefs\n"
-#~ " * none\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Nomi importanza\n"
-#~ "\n"
-#~ " * warning\n"
-#~ " * error\n"
-#~ " * exclusion\n"
-#~ " * ignore\n"
-#~ "\n"
-#~ "<br>\n"
-#~ "\n"
-#~ "### Esempi\n"
-#~ "\n"
-#~ "    (version 1)\n"
-#~ "\n"
-#~ "    (rule HV\n"
-#~ "       (constraint clearance (min 1.5mm))\n"
-#~ "       (condition \"A.NetClass == 'HV'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule HV\n"
-#~ "       (layer outer)\n"
-#~ "       (constraint clearance (min 1.5mm))\n"
-#~ "       (condition \"A.NetClass == 'HV'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule HV_HV\n"
-#~ "       # wider clearance between HV tracks\n"
-#~ "       (constraint clearance (min \"1.5mm + 2.0mm\"))\n"
-#~ "       (condition \"A.NetClass == 'HV' && B.NetClass == 'HV'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule HV_unshielded\n"
-#~ "       (constraint clearance (min 2mm))\n"
-#~ "       (condition \"A.NetClass == 'HV' && !A.insideArea('Shield*')\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule heavy_thermals\n"
-#~ "       (constraint thermal_spoke_width (min 0.5mm))\n"
-#~ "       (condition \"A.NetClass == 'HV'\"))\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "### Note\n"
-#~ "\n"
-#~ "La proposizione della versione deve essere la prima. Indica la versione "
-#~ "della sintassi del\n"
-#~ "file in modo che\n"
-#~ "i futuri analizzatori di regole possano eseguire aggiornamenti "
-#~ "automatici. Dovrebbe essere\n"
-#~ "impostata a \"1\".\n"
-#~ "\n"
-#~ "Le regole dovrebbero essere ordinate per specificità. Le regole "
-#~ "successive prendono\n"
-#~ "precedenza sulle regole precedenti; una volta trovata una regola che "
-#~ "corrisponde\n"
-#~ "non verranno controllate ulteriori regole.\n"
-#~ "\n"
-#~ "Usare Ctrl+/ per commentare o decommentare le righe.\n"
-#~ "<br><br><br>\n"
-#~ "\n"
-#~ "### Funzioni espressione\n"
-#~ "\n"
-#~ "Tutti i parametri funzione supportano i caratteri jolly semplici (`*` e `?"
-#~ "`).\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.intersectsCourtyard('<footprint_refdes>')\n"
-#~ "Vera se ogni parte di `A` giace entro l'ingombro principale della data\n"
-#~ "impronta.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
-#~ "Vera se ogni parte di `A` giace entro l'ingombro fronte della data "
-#~ "impronta.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.intersectsBackCourtyard('<footprint_refdes>')\n"
-#~ "Vera se ogni parte di `A` giace entro l'ingombro retro della data "
-#~ "impronta.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.intersectsArea('<zone_name>')\n"
-#~ "Vera se ogni parte di `A` giace entro il bordo della data zona.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.enclosedByArea('<zone_name>')\n"
-#~ "Vera se tutto `A` giace entro il bordo della data zona.\n"
-#~ "\n"
-#~ "NB: questa è una chiamata potenzialmente più costosa di "
-#~ "`intersectsArea()`.  Usare\n"
-#~ "`intersectsArea()`\n"
-#~ "ove possibile.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.isPlated()\n"
-#~ "Vera se `A` ha un foro metallizzato.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.inDiffPair('<nome_net>')\n"
-#~ "Vera se `A` ha un collegamento che è parte della coppia differenziale "
-#~ "specificata.\n"
-#~ "`<nome_net>` è il nome base della coppia differenziale.  Per esempio,\n"
-#~ "`inDiffPair('/CLK')`\n"
-#~ "corrisponde a elementi nei collegamenti `/CLK_P` e `/CLK_N`.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    AB.isCoupledDiffPair()\n"
-#~ "Vero se `A` e `B` sono membri della stessa coppia differenziale.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.memberOf('<nome_gruppo>')\n"
-#~ "Vero se `A` è un membro del dato gruppo. Inclusi i membri annidati.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    A.existsOnLayer('<nome_strato>')\n"
-#~ "Vero se `A` esiste sul dato strato.  Il nome strato può essere\n"
-#~ "sia il nome assegnato in File > Impostazione scheda > Strati editor "
-#~ "scheda o\n"
-#~ "il nome canonico (per es.: `F.Cu`).\n"
-#~ "\n"
-#~ "NB: restituisce vero se `A` è sul dato strato, indipendentemente\n"
-#~ "dal fatto che la regola sia stata valutata per quel dato strato.\n"
-#~ "Per questo usare una proposizione `(layer \"nome_strato\")` nella "
-#~ "regola.\n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.insideCourtyard('<riferimento_impronta>') !!!\n"
-#~ "Deprecata; usare al suo posto `intersectsCourtyard()`. \n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.insideFrontCourtyard('<riferimento_impronta>') !!!\n"
-#~ "Deprecata; usare al suo posto `intersectsFrontCourtyard()`. \n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.insideBackCourtyard('<riferimento_impronta>') !!!\n"
-#~ "Deprecata; usare al suo posto `intersectsBackCourtyard()`. \n"
-#~ "<br><br>\n"
-#~ "\n"
-#~ "    !!! A.insideArea('<nome_zona>') !!!\n"
-#~ "Deprecata; usare al suo posto `intersectsArea()`. \n"
-#~ "<br><br><br>\n"
-#~ "\n"
-#~ "### Altri esempi\n"
-#~ "\n"
-#~ "    (rule \"rame proibito\"\n"
-#~ "       (constraint disallow track via zone)\n"
-#~ "       (condition \"A.insideArea('zone3')\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"restringimenti BGA\"\n"
-#~ "       (constraint track_width (min 0.2mm) (opt 0.25mm))\n"
-#~ "       (constraint clearance (min 0.05mm) (opt 0.08mm))\n"
-#~ "       (condition \"A.insideCourtyard('U3')\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # previene la serigrafia sui via tendati\n"
-#~ "    (rule silk_over_via\n"
-#~ "       (constraint silk_clearance (min 0.2mm))\n"
-#~ "       (condition \"A.Type == '*Text' && B.Type == 'Via'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"Distanza tra via di collegamenti diversi\"\n"
-#~ "        (constraint hole_to_hole (min 0.254mm))\n"
-#~ "        (condition \"A.Type =='Via' && B.Type =='Via' && A.Net != B."
-#~ "Net\"))\n"
-#~ "\n"
-#~ "    (rule \"Distanza tra piazzole di collegamenti diversi\"\n"
-#~ "        (constraint clearance (min 3.0mm))\n"
-#~ "        (condition \"A.Type =='Pad' && B.Type =='Pad' && A.Net != B."
-#~ "Net\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"Distanza tra fori via e piste\"\n"
-#~ "        (constraint hole_clearance (min 0.254mm))\n"
-#~ "        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
-#~ "\n"
-#~ "    (rule \"Distanza tra piazzole e piste\"\n"
-#~ "        (constraint clearance (min 0.2mm))\n"
-#~ "        (condition \"A.Type =='Pad' && B.Type =='Track'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"distanza-a-1mm-zona-ritaglio\"\n"
-#~ "        (constraint clearance (min 0.8mm))\n"
-#~ "        (condition \"A.Layer=='Edge.Cuts' && A.Thickness == 1.0mm\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    (rule \"Dimensione meccanica massima foro\"\n"
-#~ "        (constraint hole_size (max 6.3mm))\n"
-#~ "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
-#~ "\n"
-#~ "    (rule \"Dimensione massima foro passante\"\n"
-#~ "        (constraint hole_size (max 6.35mm))\n"
-#~ "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Specifica uno spazio ottimale per una particolare coppia "
-#~ "differenziale\n"
-#~ "    (rule \"dp clock gap\"\n"
-#~ "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
-#~ "        (condition \"A.inDiffPair('/CLK')\"))\n"
-#~ "\n"
-#~ "    # Specifica una distanza maggiore attorno ad ogni coppia "
-#~ "differenziale\n"
-#~ "    (rule \"dp clearance\"\n"
-#~ "        (constraint clearance (min \"1.5mm\"))\n"
-#~ "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Non usare supporti termici su piazzole di dissipazione\n"
-#~ "    (rule heat_sink_pad\n"
-#~ "        (constraint zone_connection solid)\n"
-#~ "        (condition \"A.Fabrication_Property == 'Heatsink pad'\"))\n"
-#~ "\n"
-#~ "    # Richiedi che tutti e quattro i raggi dei supporti termici siano "
-#~ "connessi alla zona genitore\n"
-#~ "    (rule fully_spoked_pads\n"
-#~ "        (constraint min_resolved_spokes 4))\n"
-#~ "\n"
-#~ "    # Imposta lo spazio di scarico termico e la larghezza dei raggi per "
-#~ "tutte le zone\n"
-#~ "    (rule defined_relief\n"
-#~ "        (constraint thermal_relief_gap (min 10mil))\n"
-#~ "        (constraint thermal_spoke_width (min 12mil)))\n"
-#~ "\n"
-#~ "    # Ignora la distanza di scarico termico e la larghezza dei raggi per "
-#~ "le zone GND e PWR\n"
-#~ "    (rule defined_relief_pwr\n"
-#~ "        (constraint thermal_relief_gap (min 10mil))\n"
-#~ "        (constraint thermal_spoke_width (min 12mil))\n"
-#~ "        (condition \"A.Name == 'zone_GND' || A.Name == 'zone_PWR'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Previene l'assorbimento della saldatura da parte delle piazzole "
-#~ "SMD\n"
-#~ "    (rule holes_in_pads\n"
-#~ "        (constraint physical_hole_clearance (min 0.2mm))\n"
-#~ "        (condition \"B.Pad_Type == 'SMD'\"))\n"
-#~ "\n"
-#~ "    # Non consentire il superamento del margine della maschera di "
-#~ "saldatura\n"
-#~ "    (rule \"disallow solder mask margin overrides\"\n"
-#~ "        (constraint assertion \"A.Soldermask_Margin_Override == 0mm\")\n"
-#~ "        (condition \"A.Type == 'Pad'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Applica un gioco meccanico tra i componenti e il bordo della "
-#~ "scheda\n"
-#~ "    (rule front_mechanical_board_edge_clearance\n"
-#~ "        (layer \"F.Courtyard\")\n"
-#~ "        (constraint physical_clearance (min 3mm))\n"
-#~ "        (condition \"B.Layer == 'Edge.Cuts'\"))\n"
-#~ "\n"
-#~ "\n"
-#~ "    # Controllo capacità di trasporto corrente\n"
-#~ "    (rule high-current\n"
-#~ "        (constraint track_width (min 1.0mm))\n"
-#~ "        (constraint connection_width (min 0.8mm))\n"
-#~ "        (condition \"A.NetClass == 'Power'\"))\""
-
-#, c-format
-#~ msgid "Choose Footprint (%d items loaded)"
-#~ msgstr "Scegli l'impronta (%d elementi caricati)"
-
-#, c-format
-#~ msgid ""
-#~ "Save and restore view orientation and zoom.\n"
-#~ "Use %s+Tab to activate selector.\n"
-#~ "Successive Tabs while holding %s down will cycle through viewports in the "
-#~ "popup."
-#~ msgstr ""
-#~ "Salva e ripristina orientazione vista e zoom.\n"
-#~ "Usare %s+Tab per attivare il selettore.\n"
-#~ "Tab successivi mantenendo premuto %s cicleranno tra le viste nella "
-#~ "finestra a scomparsa."
-
-#~ msgid "Toggle realistic mode"
-#~ msgstr "Commuta modalità realistica"
-
-#~ msgid "Toggle board body display"
-#~ msgstr "Commuta corpo scheda"
-
-#~ msgid "Toggle zone display"
-#~ msgstr "Commuta zone"
-
-#~ msgid "Toggle adhesive display"
-#~ msgstr "Commuta adesivi"
-
-#~ msgid "Toggle display of adhesive layers"
-#~ msgstr "Commuta la visualizzazione degli strati adesivo"
-
-#~ msgid "Toggle silkscreen display"
-#~ msgstr "Commuta serigrafia"
-
-#~ msgid "Toggle display of silkscreen layers"
-#~ msgstr "Commuta la visualizzazione degli strati di serigrafia"
-
-#~ msgid "Toggle solder mask display"
-#~ msgstr "Commuta maschera saldatura"
-
-#~ msgid "Toggle display of solder mask layers"
-#~ msgstr "Commuta la visualizzazione degli strati maschera di saldatura"
-
-#~ msgid "Toggle solder paste display"
-#~ msgstr "Commuta pasta salda"
-
-#~ msgid "Toggle display of solder paste layers"
-#~ msgstr "Commuta la visualizzazione degli strati pasta salda"
-
-#~ msgid "Toggle comments display"
-#~ msgstr "Commuta commenti"
-
-#~ msgid "Toggle display of comments and drawings layers"
-#~ msgstr "Commuta la visualizzazione degli strati commenti e grafica"
-
-#~ msgid "Toggle ECO display"
-#~ msgstr "Commuta ECO"
-
-#~ msgid "Toggle display of ECO layers"
-#~ msgstr "Commuta la visualizzazione degli strati ECO"
-
-#~ msgid "Environment Colors"
-#~ msgstr "Colori ambiente"
-
-#~ msgid "Board Colors"
-#~ msgstr "Colori scheda"
-
-#~ msgid "Use board stackup colors"
-#~ msgstr "Usa i colori dello stack-up scheda"
-
-#~ msgid "Silkscreen top:"
-#~ msgstr "Serigrafia sopra:"
-
-#~ msgid "Silkscreen bottom:"
-#~ msgstr "Serigrafia sotto:"
-
-#~ msgid "Solder mask top:"
-#~ msgstr "Maschera di saldatura sopra:"
-
-#~ msgid "Solder mask bottom:"
-#~ msgstr "Maschera di saldatura sotto:"
-
-#~ msgid "Board Layers"
-#~ msgstr "Strati scheda"
-
-#~ msgid "User Layers (not shown in realistic mode)"
-#~ msgstr "Strati utente (non mostrati in modalità realistica)"
-
-#~ msgid "Realistic mode"
-#~ msgstr "Modalità realistica"
-
-#~ msgid "Current Grid"
-#~ msgstr "Griglia corrente"
-
-#~ msgid "User Defined Grid"
-#~ msgstr "Griglia definita dall'utente"
-
-#~ msgid "Size X:"
-#~ msgstr "Dimensioni X:"
-
-#~ msgid "Size Y:"
-#~ msgstr "Dimensioni Y:"
-
-#~ msgid "Reset Grid Sizes"
-#~ msgstr "Reimposta dimensioni griglia"
-
-#~ msgid "Resets the list of grid sizes to default values"
-#~ msgstr "Imposta l'elenco delle dimensioni griglia i valori predefiniti"
-
-#~ msgid "Grid Settings"
-#~ msgstr "Impostazioni griglia"
-
-#~ msgid "Grid Properties..."
-#~ msgstr "Proprietà griglia..."
-
-#, c-format
-#~ msgid "User grid: %s (%s)"
-#~ msgstr "Griglia utente: %s (%s)"
-
-#~ msgid "Grid Style"
-#~ msgstr "Stile griglia"
-
-#~ msgid "px"
-#~ msgstr "px"
-
-#~ msgid "Cursor Shape"
-#~ msgstr "Forma puntatore"
-
-#~ msgid "Cursor shape for drawing, placement and movement tools"
-#~ msgstr ""
-#~ "Forma del puntatore per gli strumenti di disegno, piazzamento e "
-#~ "spostamento"
-
-#~ msgid "KiCad drawing symbol files"
-#~ msgstr "File di simboli grafici KiCad"
-
-#~ msgid "All KiCad symbol library files"
-#~ msgstr "Tutti i file di librerie di simboli KiCad"
-
-#~ msgid "Geda PCB footprint library files"
-#~ msgstr "File di libreria di impronte Geda PCB"
-
-#~ msgid "Drawing Properties"
-#~ msgstr "Proprietà grafiche"
-
-#, fuzzy
-#~ msgid "Off"
-#~ msgstr "Scostamento"
-
-#~ msgid "Alternate Pin Assignments"
-#~ msgstr "Assegnamenti pin alternativi"
-
-#, c-format
-#~ msgid "Unexpected file extension: '%s'."
-#~ msgstr "Estensione file non prevista: \"%s\"."
-
-#, c-format
-#~ msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
-#~ msgstr "Ellisse non supportata non importata in (X = %d; Y = %d)."
-
-#~ msgid "This new symbol has no name and cannot be created."
-#~ msgstr "Il nuovo simbolo è senza nome e non può essere creato."
-
-#~ msgid "No library specified.  Symbol could not be saved."
-#~ msgstr "Nessuna libreria specificata. Il simbolo non può essere salvato."
-
-#, c-format
-#~ msgid "Symbol '%s' already exists in library '%s'"
-#~ msgstr "Il simbolo \"%s\" esiste già nella libreria \"%s\""
-
-#~ msgid "Symbol name cannot be empty."
-#~ msgstr "Il nome del simbolo non può essere vuoto."
-
-#~ msgid ""
-#~ "Creating a project will enable features such as text variables, net "
-#~ "classes, and ERC exclusions"
-#~ msgstr ""
-#~ "Creando un progetto si abiliteranno caratteristiche come le variabili di "
-#~ "testo, le netclass e le esclusioni ERC"
-
-#~ msgid "Do not perform any additional operations after saving library."
-#~ msgstr ""
-#~ "Non eseguire nessuna operazione aggiuntiva dopo il salvataggio della "
-#~ "libreria."
-
-#~ msgid ""
-#~ "Update symbol library table entry to point to new library.\n"
-#~ "\n"
-#~ "The original library will no longer be available for use."
-#~ msgstr ""
-#~ "Aggiorna la voce libreria di simboli per puntare alla nuova libreria.\n"
-#~ "\n"
-#~ "La libreria originale non sarà più disponibile all'uso."
-
-#~ msgid ""
-#~ "Add new entry to the global symbol library table.\n"
-#~ "\n"
-#~ "The symbol library table nickname is suffixed with\n"
-#~ "an integer to prevent duplicate table entries."
-#~ msgstr ""
-#~ "Aggiunge una nuova voce alla tabella librerie di simboli globale.\n"
-#~ "\n"
-#~ "Il denominatore della libreria di simboli viene suffisso\n"
-#~ "con un intero per prevenire le voci di libreria duplicate."
-
-#~ msgid ""
-#~ "Add new entry to the project symbol library table.\n"
-#~ "\n"
-#~ "The symbol library table nickname is suffixed with\n"
-#~ "an integer to prevent duplicate table entries."
-#~ msgstr ""
-#~ "Aggiunge una nuova voce alla tabella librerie di simboli del progetto.\n"
-#~ "\n"
-#~ "Il denominatore della libreria di simboli viene suffisso con un\n"
-#~ "intero per prevenire i duplicati nelle voci della tabella."
-
-#~ msgid "Footprint path does not exist or is not accessible\n"
-#~ msgstr "Il percorso impronta non esiste o non è accessibile\n"
-
-#~ msgid "Horizontal center:"
-#~ msgstr "Centro orizzontale:"
-
-#~ msgid "Vertical center:"
-#~ msgstr "Centro verticale:"
-
-#~ msgid "Center Point:"
-#~ msgstr "Punto centrale:"
-
-#~ msgid "Ring"
-#~ msgstr "Anello"
-
-#~ msgid "Line width may not be 0 for unfilled shapes."
-#~ msgstr ""
-#~ "La larghezza della linea potrebbe non essere 0 per le forme non riempite."
-
-#, c-format
-#~ msgid "Corner %d"
-#~ msgstr "Vertice %d"
-
-#~ msgid "Polygon must have at least 3 corners"
-#~ msgstr "Un poligono deve avere almeno 3 vertici"
-
-#~ msgid "Polygon must have at least 3 corners after simplification"
-#~ msgstr "Un poligono deve avere almeno 3 vertici dopo la semplificazione"
-
-#~ msgid "Polygon can not be self-intersecting"
-#~ msgstr "Un poligono non può essere auto intersecante"
-
-#~ msgid "Note: redundant corners removed"
-#~ msgstr "Nota: vertici ridondanti rimossi"
-
-#~ msgid "Select a corner to add the new corner after."
-#~ msgstr "Selezionare un vertice per aggiungere un nuovo vertice."
-
-#~ msgid "Select a corner to delete."
-#~ msgstr "Selezionare un vertice da cancellare."
-
-#~ msgid "Start point"
-#~ msgstr "Punto iniziale"
-
-#~ msgid "Control point 1"
-#~ msgstr "Punto di controllo 1"
-
-#~ msgid "Control point 2"
-#~ msgstr "Punto di controllo 2"
-
-#~ msgid "End point"
-#~ msgstr "Punto finale"
-
-#~ msgid "Move vector"
-#~ msgstr "Sposta vettore"
-
-#~ msgid "Scaling factor:"
-#~ msgstr "Fattore di scala:"
-
-#~ msgid "Duplicate:"
-#~ msgstr "Duplica:"
-
-#~ msgid "Coordinates are relative to anchor pad, rotated 0.0 deg."
-#~ msgstr ""
-#~ "Le coordinate sono relative alla piazzola di ancoraggio, rotazione 0°"
-
-#~ msgid "Pad Custom Shape Geometry Transform"
-#~ msgstr "Trasformazione geometria piazzola di forma personalizzata"
-
-#~ msgid "Basic Shape Polygon"
-#~ msgstr "Poligono di forma base"
-
-#~ msgid "width"
-#~ msgstr "larghezza"
-
-#~ msgid "from"
-#~ msgstr "da"
-
-#~ msgid "to"
-#~ msgstr "a"
-
-#~ msgid "center"
-#~ msgstr "centro"
-
-#~ msgid "start"
-#~ msgstr "inizio"
-
-#~ msgid "angle"
-#~ msgstr "angolo"
-
-#~ msgid "at"
-#~ msgstr "a"
-
-#~ msgid "radius"
-#~ msgstr "raggio"
-
-#, c-format
-#~ msgid "corners count %d"
-#~ msgstr "conteggio vertici %d"
-
-#~ msgid "Number box"
-#~ msgstr "Riquadro n°"
-
-#~ msgid "Unknown primitive"
-#~ msgstr "Primitiva sconosciuta"
-
-#~ msgid "No shape selected"
-#~ msgstr "Nessuna forma selezionata"
-
-#~ msgid "Ring/Circle"
-#~ msgstr "Anello/cerchio"
-
-#~ msgid "Shape type:"
-#~ msgstr "Tipo di forma:"
-
-#~ msgid "Primitives list:"
-#~ msgstr "Elenco primitive:"
-
-#~ msgid "Note: coordinates are relative to anchor pad, orientation 0."
-#~ msgstr ""
-#~ "Nota: le coordinate sono relative alla piazzola di ancoraggio, "
-#~ "orientamento 0."
-
-#~ msgid "Edit Primitive"
-#~ msgstr "Modifica primitiva"
-
-#~ msgid "Transform Primitive"
-#~ msgstr "Primitiva di trasformazione"
-
-#~ msgid "Delete Primitive"
-#~ msgstr "Cancella primitiva"
-
-#~ msgid "Custom Shape Primitives"
-#~ msgstr "Primitive di forme personalizzate"
-
-#~ msgid "Net Names"
-#~ msgstr "Nomi collegamenti"
-
-#~ msgid "Show or hide net names on pads and/or tracks."
-#~ msgstr "Mostra / nasconde il nome collegamento su piazzole e/o piste."
-
-#~ msgid "Track && Via Clearances"
-#~ msgstr "Distanze piste e via"
-
-#~ msgid ""
-#~ "Show clearance outlines around tracks, and optionally the via clearance "
-#~ "around the end of the track while routing."
-#~ msgstr ""
-#~ "Mostra i bordi di distanza attorno alle piste, e opzionalmente la "
-#~ "distanza via attorno alla fine della pista durante lo sbroglio."
-
-#~ msgid "The following directories could not be opened: \n"
-#~ msgstr "Le seguenti cartelle non si possono aprire: \n"
-
-#~ msgid "Failed to open directories to look for libraries"
-#~ msgstr "Fallita l'apertura di cartelle per cercare librerie"
-
-#~ msgid "No library specified.  Footprint could not be saved."
-#~ msgstr "Nessuna libreria specificata. L'impronta non può essere salvata."
-
-#~ msgid "No footprint name specified.  Footprint could not be saved."
-#~ msgstr "Nessuna impronta specificata. L'impronta non può essere salvata."
-
-#~ msgid "No footprint name defined."
-#~ msgstr "Nessun nome impronta definito."
-
-#, c-format
-#~ msgid ""
-#~ "The current configuration does not include library '%s'.  Use Manage "
-#~ "Footprint Libraries to edit the configuration."
-#~ msgstr ""
-#~ "L'attuale configurazione non include la libreria \"%s\". Usare la "
-#~ "gestione librerie di impronte per modificare la configurazione."
-
-#~ msgid "Footprint library not found."
-#~ msgstr "Libreria impronte non trovata."
-
-#, c-format
-#~ msgid ""
-#~ "Library '%s' is not enabled in the current configuration.  Use Manage "
-#~ "Footprint Libraries to edit the configuration."
-#~ msgstr ""
-#~ "La libreria \"%s\" non è abilitata nell'attuale configurazione. Usare la "
-#~ "gestione librerie di impronte per modificare la configurazione."
-
-#~ msgid "Footprint name cannot be empty."
-#~ msgstr "Il nome impronta non può essere vuoto."
-
-#~ msgid ""
-#~ "Creating a project will enable features such as design rules, net "
-#~ "classes, and layer presets"
-#~ msgstr ""
-#~ "Creando un progetto si abiliteranno caratteristiche come il controllo "
-#~ "regole di progettazione (DRC), le netclass e le preimpostazioni strati"
-
-#, fuzzy
-#~ msgid "35"
-#~ msgstr "3"
-
-#, fuzzy
-#~ msgid "Change Item Type"
-#~ msgstr "Cambia in testo"
-
-#, fuzzy
-#~ msgid "Include soldermask over vias"
-#~ msgstr "Rimuovi maschera di saldatura sui via"
-
-#~ msgid "Cannot start routing from a graphic."
-#~ msgstr "Impossibile iniziare lo sbroglio da una grafica."
-
-#, c-format
-#~ msgid ""
-#~ "Event file: %s\n"
-#~ "Board dump: %s"
-#~ msgstr ""
-#~ "File evento: %s\n"
-#~ "Copia scheda: %s"
-
-#~ msgid "Board Thickness"
-#~ msgstr "Spessore scheda"
-
-#~ msgid "You need to select DC source"
-#~ msgstr "Bisogna selezionare la sorgente DC"
-
-#~ msgid "No valid simulation is configured."
-#~ msgstr "Non è configurata alcuna simulazione valida."
-
-#~ msgid ""
-#~ "A valid simulation can be configured by selecting a simulation tab, "
-#~ "setting the simulation parameters and clicking the OK button with the tab "
-#~ "selected."
-#~ msgstr ""
-#~ "È possibile configurare una simulazione valida selezionando una scheda di "
-#~ "simulazione, impostando i parametri di simulazione e facendo clic sul "
-#~ "pulsante OK con la scheda selezionata."
-
-#~ msgid "Exit Without Valid Simulation"
-#~ msgstr "Esci senza simulazione valida"
-
-#~ msgid "Configure Valid Simulation"
-#~ msgstr "Chiudi simulazione valida"
-
-#~ msgid "DC Transfer"
-#~ msgstr "Trasferimento DC"
-
-#~ msgid "Distortion"
-#~ msgstr "Distorsione"
-
-#, fuzzy
-#~ msgid "Number of points:"
-#~ msgstr "Numero di punti"
-
-#~ msgid "Noise"
-#~ msgstr "Disturbo"
-
-#~ msgid "This tab has no settings"
-#~ msgstr "Questa scheda non ha impostazioni"
-
-#, fuzzy
-#~ msgid "(optional; default off)"
-#~ msgstr "(opzionale; predefinito 0)"
-
-#~ msgid "Simulation Command"
-#~ msgstr "Comando simulazione"
-
-#~ msgid "100"
-#~ msgstr "100"
-
-#~ msgid "50"
-#~ msgstr "50"
-
-#~ msgid "noise [(V or A)^2/Hz]"
-#~ msgstr "rumore [(V o A)^2/Hz]"
-
-#, c-format
-#~ msgid "Plot%u - "
-#~ msgstr "Grafico%u - "
-
-#~ msgid "Pole-zero"
-#~ msgstr "Polo-zero"
-
-#~ msgid "UNKNOWN!"
-#~ msgstr "Sconosciuto!"
-
-#~ msgid "Spice value cannot be empty"
-#~ msgstr "Il valore Spice non può essere vuoto"
-
-#~ msgid "Invalid Spice value string"
-#~ msgstr "Valore stringa Spice non valido"
-
-#~ msgid "Invalid unit prefix"
-#~ msgstr "Prefisso unità non valido"
-
-#~ msgid "Move Activate"
-#~ msgstr "Sposta attiva"
-
-#~ msgid "Symbol Move Activate"
-#~ msgstr "Spostamento simbolo attiva"
-
-#~ msgid "New Plot"
-#~ msgstr "Nuovo grafico"
-
-#, fuzzy
-#~ msgid "Simulation Command..."
-#~ msgstr "Comando simulazione"
-
-#, c-format
-#~ msgid "Removing downloaded archive '%s'."
-#~ msgstr "Rimozione archivio scaricato '%s'."
-
-#~ msgid "Extracted package\n"
-#~ msgstr "Pacchetto estratto\n"
-
-#~ msgid "Do not tent vias"
-#~ msgstr "Non coprire i via (tent)"
-
-#~ msgid "DRC violation: highlight obstacles"
-#~ msgstr "Violazione DRC: evidenzia ostacoli"
-
-#~ msgid "DRC violation: shove tracks and vias"
-#~ msgstr "Violazione DRC: sposta tracce e via"
-
-#~ msgid "DRC violation: walk around obstacles"
-#~ msgstr "Violazione DRC: evita gli ostacoli"
-
-#~ msgid "Free angle mode (no shove/walkaround)"
-#~ msgstr "Modalità angolo libero (nessun compattamento/aggiramento)"
-
-#~ msgid "No modifier"
-#~ msgstr "Nessun modificatore"
-
-#~ msgid "Track Editing"
-#~ msgstr "Modifica piste"
-
-#~ msgid "Mouse drag track behavior:"
-#~ msgstr "Comportamento trascinamento pista mouse:"
-
-#~ msgid ""
-#~ "Choose the action to perform when dragging a track segment with the mouse"
-#~ msgstr ""
-#~ "Scegliere l'azione da eseguire nel trascinamento di un segmenti di pista "
-#~ "col mouse"
-
-#~ msgid "Moves the track segment without moving connected tracks"
-#~ msgstr "Sposta il segmento di pista senza spostare le piste connesse"
-
-#, fuzzy, c-format
-#~ msgid "Pad %s has overrides."
-#~ msgstr "Superamento locale"
-
-#~ msgid "Converting zone fills"
-#~ msgstr "Conversione riempimenti zone"
-
-#~ msgid "Convert Zone(s)"
-#~ msgstr "Converti zone"
-
-#~ msgid "Loading zones..."
-#~ msgstr "Caricamento zone..."
-
-#~ msgid "Legacy Zone Warning"
-#~ msgstr "Avviso zona obsoleta"
-
-#~ msgid ""
-#~ "The segment zone fill mode is no longer supported.\n"
-#~ "Convert zones to smoothed polygon fills?"
-#~ msgstr ""
-#~ "La modalità riempimento zona a segmento non è più supportata.\n"
-#~ "Convertite le zone a riempimento poligonale smussato?"
-
-#~ msgid "Convert shapes to zone"
-#~ msgstr "Converti forme in zone"
-
-#~ msgid "Convert polygons to lines"
-#~ msgstr "Converti poligoni in linee"
-
-#~ msgid "Create arc from line segment"
-#~ msgstr "Crea un arco da un segmento di linea"
-
-#~ msgid "Draw a line segment"
-#~ msgstr "Disegna un segmento"
-
-#~ msgid "Place a DXF_SVG drawing"
-#~ msgstr "Piazza un disegno DXF_SVG"
-
-#~ msgid "Move the footprint reference anchor"
-#~ msgstr "Sposta l'ancoraggio di riferimento dell'impronta"
-
-#~ msgid "Align to top"
-#~ msgstr "Allinea in alto"
-
-#~ msgid "Align to bottom"
-#~ msgstr "Allinea in basso"
-
-#~ msgid "Align to left"
-#~ msgstr "Allinea a sinistra"
-
-#~ msgid "Align to right"
-#~ msgstr "Allinea a destra"
-
-#~ msgid "Distribute horizontally"
-#~ msgstr "Distribuisci orizzontalmente"
-
-#~ msgid "Distribute vertically"
-#~ msgstr "Distribuisci verticalmente"
-
-#~ msgid "Add a zone cutout"
-#~ msgstr "Aggiungi una zona ritaglio"
-
-#~ msgid "Add a graphical polygon"
-#~ msgstr "Aggiungi un poligono grafico"
-
-#, c-format
-#~ msgid "Rule Area on %s"
-#~ msgstr "Area regole su %s"
-
-#~ msgid "Edit ignored violations..."
-#~ msgstr "Modifica violazioni ignorate..."
-
-#, fuzzy
-#~ msgid "Symbol descriptions differ."
-#~ msgstr "File di associazione impronte"
-
-#, fuzzy
-#~ msgid "Draw pins"
-#~ msgstr "Grafiche"
-
-#, fuzzy
-#~ msgid "Draw lines"
-#~ msgstr "Disegna una linea"
-
-#~ msgid "Text items must have some content."
-#~ msgstr "Gli elementi di testo devono avere del contenuto."
-
-#~ msgid "Fabrication Attributes"
-#~ msgstr "Attributi di fabbricazione"
-
-#, c-format
-#~ msgid "Update %s properties."
-#~ msgstr "Aggiorna %s proprietà."
-
-#, c-format
-#~ msgid "Updated %s properties."
-#~ msgstr "Aggiornate %s proprietà."
-
-#, c-format
-#~ msgid "Duplicate netclass name '%s'."
-#~ msgstr "Nome netclass duplicato \"%s\"."
-
-#~ msgid "bitmap2component"
-#~ msgstr "bitmap2component"
-
-#~ msgid "gerbview"
-#~ msgstr "gerbview"
-
-#~ msgid "pcbnew"
-#~ msgstr "pcbnew"
-
-#~ msgid "Load source image"
-#~ msgstr "Carica immagine sorgente"
-
-#~ msgid "Quit Image Converter"
-#~ msgstr "Esci dal convertitore immagini"
-
-#~ msgid "Entry contains trailing white space."
-#~ msgstr "La voce contiene uno spazio iniziale."
-
-#~ msgid "Entry contains leading white space."
-#~ msgstr "La voce contiene uno spazio finale."
-
-#, c-format
-#~ msgid "'%s' is not a valid library identifier format."
-#~ msgstr "\"%s\" non è un identificatore di formato libreria valido."
-
-#~ msgid "Library Identifier Validation Error"
-#~ msgstr "Errore di validazione identificatore di libreria"
-
-#~ msgid "Only include selected items"
-#~ msgstr "Includi solo gli elementi selezionati"
-
-#~ msgid ""
-#~ "Check this option if the symbol has an alternate body style (De Morgan)"
-#~ msgstr ""
-#~ "Spuntare questa opzione se il simbolo ha uno stile alternativo (De Morgan)"
-
-#~ msgid "The Reference column cannot be hidden."
-#~ msgstr "La colonna dei riferimenti non può essere nascosta."
-
-#~ msgid ""
-#~ "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
-#~ msgstr ""
-#~ "Abilita il log di <b>debug</b> per le funzioni Symbol*() in questo "
-#~ "SCH_PLUGIN."
-
-#~ msgid "Regular expression <b>symbol name</b> filter."
-#~ msgstr "Filtro <b>nome simbolo</b> espressione regolare."
-
-#~ msgid ""
-#~ "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() "
-#~ "functions."
-#~ msgstr ""
-#~ "Inserire il simbolo python che implementa le funzioni SCH_PLUGIN::"
-#~ "Symbol*()."
-
-#~ msgid "Gerber (experimental)"
-#~ msgstr "Gerber (sperimentale)"
-
-#~ msgid "Start point X:"
-#~ msgstr "Punto iniziale X:"
-
-#~ msgid "Start point Y:"
-#~ msgstr "Punto iniziale Y:"
-
-#~ msgid "Pre-defined widths:"
-#~ msgstr "Larghezze predefinite:"
-
-#~ msgid "Options Editor..."
-#~ msgstr "Editor opzioni..."
-
-#, c-format
-#~ msgid ""
-#~ "Could not load footprint '%s' from library '%s'.\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Impossibile caricare impronta \"%s\" dalla libreria \"%s\".\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "Remove Teardrops"
-#~ msgstr "Rimuovi arr. a goccia"
-
-#, fuzzy
-#~ msgid "Filling Zones"
-#~ msgstr "Riempi zone"
-
-#, c-format
-#~ msgid "%d teardrops created"
-#~ msgstr "%d arr. a goccia creati"
-
-#, c-format
-#~ msgid "%d teardrops removed."
-#~ msgstr "%d arr. a goccia rimossi."
-
-#~ msgid "Round shapes:"
-#~ msgstr "Forme tonde:"
-
-#~ msgid "Rect shapes:"
-#~ msgstr "Forme rettangolari:"
-
-#~ msgid "Vias and PTH pads"
-#~ msgstr "Via e piazzole pass."
-
-#~ msgid "Add teardrops to not driiled pads, like SMD"
-#~ msgstr "Aggiungi teardrop a piazzole non forate, come le SMD"
-
-#~ msgid "Add teardrops to two connected tracks of different widths"
-#~ msgstr "Aggiungi teardrop a due piste connesse di larghezza diversa"
-
-#~ msgid ""
-#~ "Pads inside a  copper zone outline of same net have no teardrop.\n"
-#~ "Check this option to allow teardrop for these pads."
-#~ msgstr ""
-#~ "Le piazzole dentro il contorno di una zona rame dello stesso collegamento "
-#~ "non hanno arrotondamento a goccia.\n"
-#~ "Selezionare questa opzione per permettere l'arrotondamento a goccia per "
-#~ "queste piazzole."
-
-#~ msgid "Number of segments to build a teardrop with curved shape"
-#~ msgstr "Numero di segmenti con i quali costruire un teardrop curvo"
-
-#, fuzzy
-#~ msgid "Generate raw teardrops"
-#~ msgstr "Genera errori"
-
-#~ msgid "Add teardrops"
-#~ msgstr "Aggiungi teardrop"
-
-#, fuzzy
-#~ msgid "Add teardrops and refill zones"
-#~ msgstr "Piazza arr. a goccia su piazzole nelle zone"
-
-#~ msgid "Board Layer for Outline"
-#~ msgstr "Strato scheda per bordi"
-
-#~ msgid ""
-#~ "Choose the board layer to place the outline.\n"
-#~ "The reference designator and value are always placed on the silk screen "
-#~ "layer (but will be marked invisible)."
-#~ msgstr ""
-#~ "Scegli lo strato scheda per piazzare i bordi.\n"
-#~ "I campi riferimento e valore vengono sempre piazzati sullo strato di "
-#~ "serigrafia (ma verranno marcati come invisibili)."
-
-#, fuzzy
-#~ msgid "(De Morgan) "
-#~ msgstr "De Morgan"
-
-#, fuzzy
-#~ msgid "Update teardrops before performing DRC"
-#~ msgstr "Aggiorna tutte le zone prima di eseguire il DRC"
-
-#~ msgid "&Find"
-#~ msgstr "Tro&va"
-
-#~ msgid "Replace &All"
-#~ msgstr "Rimpiazz&a tutti"
-
-#~ msgid "Sheet file must have a '.kicad_sch' extension."
-#~ msgstr "Il file foglio deve avere estensione \".kicad_sch\"."
-
-#~ msgid "Invalid Schematic File"
-#~ msgstr "File di schema non valido"
-
-#~ msgid "Volts"
-#~ msgstr "Volt"
-
-#~ msgid "Amperes"
-#~ msgstr "Ampere"
-
-#~ msgid "Hertz"
-#~ msgstr "Hertz"
-
-#~ msgid "Start frequency [Hz]"
-#~ msgstr "Frequenza iniziale [Hz]"
-
-#~ msgid "Stop frequency [Hz]"
-#~ msgstr "Frequenza finale [Hz]"
-
-#~ msgid "Save as CSV"
-#~ msgstr "Salva come CSV"
-
-#~ msgid "Add Field..."
-#~ msgstr "Aggiungi campo..."
-
-#~ msgid "Remove Field..."
-#~ msgstr "Rimuovi campo..."
-
-#~ msgid "Export as CSV..."
-#~ msgstr "Esporta come CSV..."
-
-#, c-format
-#~ msgid "Failed to generate a name for '%s': exceeded UINT64_MAX"
-#~ msgstr "Fallita la generazione del nome per '%s': exceeded UINT64_MAX"
-
-#~ msgid "The name of the field cannot be empty."
-#~ msgstr "Il nome del campo non può essere vuoto."
-
-#, c-format
-#~ msgid ""
-#~ "Simulation model type must be the same as of its base class: '%s', but is "
-#~ "'%s'"
-#~ msgstr ""
-#~ "Il tipo modello di simulazione deve essere lo stesso della sua classe "
-#~ "base: '%s', invece è '%s'"
-
-#~ msgid ""
-#~ "Errors during netlist generation; simulation aborted.\n"
-#~ "\n"
-#~ msgstr ""
-#~ "Errori durante la generazione della netlist; simulazione interrotta.\n"
-#~ "\n"
-
-#~ msgid "Simulator..."
-#~ msgstr "Simulatore..."
-
-#~ msgid "Simulate circuit in SPICE"
-#~ msgstr "Simula il circuito in SPICE"
-
-#~ msgid "Add a junction"
-#~ msgstr "Aggiungi una giunzione"
-
-#~ msgid "Add text"
-#~ msgstr "Aggiungi testo"
-
-#~ msgid "Add a text box"
-#~ msgstr "Aggiungi un riquadro di testo"
-
-#~ msgid "Add a circle"
-#~ msgstr "Aggiungi un cerchio"
-
-#~ msgid "Add an arc"
-#~ msgstr "Aggiungi un arco"
-
-#, fuzzy
-#~ msgid "PTH and NPTH in separate files"
-#~ msgstr "Fori metallizzati e non in file separati"
-
-#~ msgid "KiCad Error"
-#~ msgstr "Errore KiCad"
-
-#~ msgid "Constraints Resolution Report"
-#~ msgstr "Rapporto risoluzione vincoli"
-
-#~ msgid "Run clearance resolution tool..."
-#~ msgstr "Esegui lo strumento di risoluzione distanze..."
-
-#~ msgid "Run constraints resolution tool..."
-#~ msgstr "Esegui lo strumento di risoluzione vincoli..."
-
-#~ msgid "Are you sure you want to delete the entire board?"
-#~ msgstr "Sicuri di voler cancellare l'intera scheda?"
-
-#~ msgid "Are you sure you want to delete the selected items?"
-#~ msgstr "Cancellare gli elementi selezionati?"
-
-#~ msgid "Highlight footprints when symbols selected"
-#~ msgstr "Evidenzia impronte con simboli selezionati"
-
-#~ msgid ""
-#~ "Text will not be readable with a thickness greater than\n"
-#~ "1/4 its width or height."
-#~ msgstr ""
-#~ "Il testo sarà illeggibile con uno spessore maggiore di\n"
-#~ "1/4 della sua larghezza o altezza."
-
-#, c-format
-#~ msgid "Footprint Text Box of %s"
-#~ msgstr "Riquadro di testo impronta di %s"
-
-#, fuzzy
-#~ msgid "Check Footprint against Library"
-#~ msgstr "Controllo impronte scheda rispetto alla libreria..."
-
-#, fuzzy
-#~ msgid "The current configuration does not include the library."
-#~ msgstr "La configurazione corrente non include la libreria \"%s\"."
-
-#, fuzzy
-#~ msgid "Footprint matches library equivalent."
-#~ msgstr "Libreria impronte non abilitata."
-
-#, fuzzy
-#~ msgid "Check Footprint against Library..."
-#~ msgstr "Controllo impronte scheda rispetto alla libreria..."
-
-#~ msgid "Power symbol value field text cannot be changed."
-#~ msgstr ""
-#~ "Il testo campo valore del simbolo di potenza non può essere modificato."
-
-#, c-format
-#~ msgid "Could not find a pin named '%s' in simulation model of type '%s'"
-#~ msgstr ""
-#~ "Pin di nome '%s' non trovato nel modello di simulazione di tipo '%s'"
-
-#, c-format
-#~ msgid ""
-#~ "Could not find a parameter named '%s' in simulation model of type '%s'"
-#~ msgstr ""
-#~ "Parametro di nome '%s' non trovato nel modello di simulazione di tipo "
-#~ "'%s'."
-
-#, fuzzy, c-format
-#~ msgid "V(%s) (phase)"
-#~ msgstr " (fase)"
-
-#~ msgid "Unknown SIM_VALUE type"
-#~ msgstr "Tipo SIM_VALUE sconosciuto"
-
-#~ msgid ""
-#~ "After packages are (un)installed KiCad may need to be restarted to "
-#~ "reflect changes in the global library table."
-#~ msgstr ""
-#~ "Dopo la (dis)installazione pacchetti, potrebbe essere necessario "
-#~ "riavviare KiCad per mostrare i cambiamenti nella tabella librerie globale."
-
-#, c-format
-#~ msgid "Checking board setup constraints track width: min %s."
-#~ msgstr "Controllo vincoli impostazioni scheda larghezza piste: min %s."
-
-#, c-format
-#~ msgid "Checking board setup constraints via diameter: min %s."
-#~ msgstr "Controllo vincoli impostazioni scheda diametro via: min %s."
-
-#, c-format
-#~ msgid "Checking board setup constraints hole size: min %s."
-#~ msgstr "Controllo vincoli impostazioni scheda dimensione foro: min %s."
-
-#, c-format
-#~ msgid "Checking board setup constraints clearance: min %s."
-#~ msgstr "Controllo vincoli impostazioni scheda distanza: min %s."
-
-#, c-format
-#~ msgid "Checking board setup constraints hole to hole: min %s."
-#~ msgstr "Controllo vincoli impostazioni scheda foro a foro: min %s."
-
-#~ msgid "Create Netlist and Run Simulator Command"
-#~ msgstr "Crea netlist ed esegui comando di simulazione"
-
-#~ msgid "Add signal by name:"
-#~ msgstr "Aggiungi segnale per nome:"
-
-#~ msgid "Add Signals"
-#~ msgstr "Aggiungi segnali"
-
-#~ msgid "Path Substitutions:"
-#~ msgstr "Sostituzioni percorsi:"
-
-#~ msgid "Add signals to plot"
-#~ msgstr "Aggiungi segnali al grafico"
-
-#~ msgid "Probe"
-#~ msgstr "Campiona"
-
-#~ msgid "Probe signals on the schematic"
-#~ msgstr "Campiona i segnali nello schema"
-
-#~ msgid "Tune component values"
-#~ msgstr "Regola i valori dei componenti"
-
-#~ msgid "Simulation command and settings"
-#~ msgstr "Impostazioni e comando simulazione"
-
-#~ msgid " (mag)"
-#~ msgstr " (amp)"
-
-#~ msgid "You need to run plot-providing simulation first."
-#~ msgstr "È necessario prima eseguire la simulazione di generazione grafico."
-
-#~ msgid "Remove Signal"
-#~ msgstr "Rimuovi segnale"
-
-#~ msgid "Remove the signal from the plot"
-#~ msgstr "Rimuovi il segnale dal grafico"
-
-#~ msgid "Hide Cursor"
-#~ msgstr "Nascondi puntatore"
-
-#~ msgid "File"
-#~ msgstr "File"
-
-#~ msgid "Add Signals..."
-#~ msgstr "Aggiungi segnali..."
-
-#~ msgid "Probe from schematics"
-#~ msgstr "Campiona dallo schema"
-
-#~ msgid "Tune Component Value"
-#~ msgstr "Regola valore componente"
-
-#~ msgid ""
-#~ "Shows current simulation's netlist. Useful for debugging SPICE errors."
-#~ msgstr ""
-#~ "Mostra la netlist della simulazione corrente. Utile per fare il debug di "
-#~ "errori SPICE."
-
-#~ msgid "Settings..."
-#~ msgstr "Impostazioni..."
-
-#~ msgid "Show &Grid"
-#~ msgstr "Mostra &griglia"
-
-#~ msgid "White Background"
-#~ msgstr "Sfondo bianco"
-
-#~ msgid "View"
-#~ msgstr "Visualizza"
-
-#~ msgid "Signals"
-#~ msgstr "Segnali"
-
-#~ msgid "Cursors"
-#~ msgstr "Puntatori"
-
-#~ msgid "Reannotate:"
-#~ msgstr "Riannota:"
-
-#~ msgid "Text Width:"
-#~ msgstr "Larghezza testo:"
-
-#~ msgid "Text Height:"
-#~ msgstr "Altezza testo:"
-
-#~ msgid "Res&tore unused layers"
-#~ msgstr "Ripris&tina strati non usati"
