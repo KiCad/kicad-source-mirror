@@ -388,12 +388,13 @@ void EDA_3D_VIEWER_FRAME::handleIconizeEvent( wxIconizeEvent& aEvent )
 
 void EDA_3D_VIEWER_FRAME::ReloadRequest()
 {
-    if( m_appearancePanel )
-        m_appearancePanel->UpdateLayerCtls();
-
     // This will schedule a request to load later
+    // ReloadRequest also updates the board pointer so always call it first
     if( m_canvas )
         m_canvas->ReloadRequest( GetBoard(), PROJECT_PCB::Get3DCacheManager( &Prj() ) );
+
+    if( m_appearancePanel )
+        m_appearancePanel->UpdateLayerCtls();
 }
 
 
