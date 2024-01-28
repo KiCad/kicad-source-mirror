@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
 "PO-Revision-Date: 2024-01-28 13:18+0000\n"
-"Last-Translator: Stanislav Kaliuk <staskalyuk.096@gmail.com>\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
 "Language: uk\n"
@@ -1362,9 +1362,8 @@ msgid "Image Files"
 msgstr "Файли зображень"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Вибрати файл форматної рамки"
+msgstr "Створити файл форматної рамки"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:461
 #: bitmap2component/bitmap2cmp_frame.cpp:497
@@ -1727,9 +1726,8 @@ msgid "Export to Clipboard"
 msgstr "Експорт до буфера обміну"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
-msgstr "Фон"
+msgstr "Фонові задачі"
 
 #: common/common.cpp:270
 #, c-format
@@ -1989,9 +1987,8 @@ msgid "Additional Contributions By"
 msgstr "Додаткові внески в проект"
 
 #: common/dialog_about/AboutDialog_main.cpp:1136
-#, fuzzy
 msgid "Librarian Team"
-msgstr "Команда бібліотек KiCad"
+msgstr "Розробники бібліотек"
 
 #: common/dialog_about/AboutDialog_main.cpp:1208
 msgid "3D models by"
@@ -2010,9 +2007,8 @@ msgid "Icons by"
 msgstr "Іконки"
 
 #: common/dialog_about/AboutDialog_main.cpp:1255
-#, fuzzy
 msgid "Package Developers"
-msgstr "Розробники"
+msgstr "Розробники пакетів"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2451,23 +2447,20 @@ msgid "Configure Global Library Table"
 msgstr "Налаштувати глобальну таблицю бібліотек"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Розмір свердла перевищує межі"
+msgstr "Розмір сітки X поза діапазоном."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Розмір свердла перевищує межі"
+msgstr "Розмір сітки Y поза діапазоном."
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
 msgstr "Список гарячих клавіш"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr "Менеджер проєкту"
+msgstr "Назва проекту"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1069
@@ -2491,9 +2484,8 @@ msgstr ""
 "Виберіть які необхідно імпортувати у KiCad."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Закрити проект"
+msgstr "Вибрати проект для імпорту"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -3198,23 +3190,20 @@ msgid "MyLabel"
 msgstr "МояМітка"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
-#, fuzzy
 msgid "X label:"
-msgstr "Мітка:"
+msgstr "X етикетка:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
-#, fuzzy
 msgid "Y label:"
-msgstr "Мітка:"
+msgstr "Y етикетка:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
 msgid "Title"
 msgstr "Назва"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "позиція посадкового місця"
+msgstr "Перемістити точку в позицію"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:197 common/widgets/lib_tree.cpp:265
@@ -3283,7 +3272,6 @@ msgstr "Показати перемикач налаштувань"
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
 msgstr "З'єднання"
 
@@ -3309,14 +3297,12 @@ msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Вирівнювання"
+msgstr "Аутентифікація"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Основне імʼя"
+msgstr "Імʼя користувача"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:440
@@ -3324,9 +3310,8 @@ msgid "Password"
 msgstr "Пароль"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Скасувати зміни"
+msgstr "Запис змін до репозиторію"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 msgid "Filename"
@@ -3344,19 +3329,16 @@ msgid "Status"
 msgstr "Статус"
 
 #: common/dialogs/git/dialog_git_commit.cpp:83
-#, fuzzy
 msgid "New"
-msgstr "Зв'язок"
+msgstr "Нова"
 
 #: common/dialogs/git/dialog_git_commit.cpp:89
-#, fuzzy
 msgid "Modified"
-msgstr "Змінена група"
+msgstr "Змінено"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
-#, fuzzy
 msgid "Deleted"
-msgstr "Видалити"
+msgstr "Видалено"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
 msgid "Commit Message:"
@@ -3371,9 +3353,8 @@ msgid "C&ommit"
 msgstr "Закомітити"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Компонент: ім'я не може бути пустим."
+msgstr "Повідомлення для запису до репозиторію не можу бути пустим"
 
 #: common/dialogs/git/dialog_git_repository.cpp:146
 #: common/dialogs/git/dialog_git_repository.cpp:373
@@ -3381,14 +3362,12 @@ msgid "Enter the password for the SSH key"
 msgstr "Введіть пароль для SSH ключа"
 
 #: common/dialogs/git/dialog_git_repository.cpp:325
-#, fuzzy
 msgid "Test connection"
-msgstr "Виділити підключення"
+msgstr "Тестування з'єднання"
 
 #: common/dialogs/git/dialog_git_repository.cpp:329
-#, fuzzy
 msgid "Connection successful"
-msgstr "Файл сформовано."
+msgstr "З'єднання встановлено"
 
 #: common/dialogs/git/dialog_git_repository.cpp:333
 #, fuzzy, c-format
