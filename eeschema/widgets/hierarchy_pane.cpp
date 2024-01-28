@@ -91,7 +91,7 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
 
     m_tree->AssignImageList( imageList );
 
-    sizer->Add( m_tree, 1, wxEXPAND, wxBORDER_NONE, 0 );
+    sizer->Add( m_tree, 1, wxEXPAND, wxBORDER_NONE );
 
     m_events_bound = false;
 
@@ -100,7 +100,9 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
     // Enable selection events
     Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
     Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
-    Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
+    Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
+    Bind( wxEVT_CHAR_HOOK, &HIERARCHY_PANE::onCharHook, this );
+    m_tree->Bind( wxEVT_RIGHT_UP, &HIERARCHY_PANE::onRightClick, this );
 
     m_events_bound = true;
 }
@@ -110,7 +112,9 @@ HIERARCHY_PANE::~HIERARCHY_PANE()
 {
     Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
     Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
-    Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
+    Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
+    Unbind( wxEVT_CHAR_HOOK, &HIERARCHY_PANE::onCharHook, this );
+    m_tree->Unbind( wxEVT_RIGHT_UP, &HIERARCHY_PANE::onRightClick, this );
 }
 
 
@@ -146,7 +150,7 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
         // Disable selection events
         Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
         Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
-        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
+        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
 
         m_events_bound = false;
     }
@@ -193,7 +197,7 @@ void HIERARCHY_PANE::UpdateHierarchySelection()
         // Enable selection events
         Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
         Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
-        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
+        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
 
         m_events_bound = true;
     }
@@ -211,7 +215,7 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
         // Disable selection events
         Unbind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
         Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
-        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
+        Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
 
         m_events_bound = false;
     }
@@ -235,7 +239,7 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
         // Enable selection events
         Bind( wxEVT_TREE_ITEM_ACTIVATED, &HIERARCHY_PANE::onSelectSheetPath, this );
         Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
-        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onRightClick, this );
+        Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
 
         m_events_bound = true;
     }
@@ -302,23 +306,41 @@ void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
 }
 
 
-void HIERARCHY_PANE::onRightClick( wxTreeEvent& aEvent )
+void HIERARCHY_PANE::onTreeItemRightClick( wxTreeEvent& aEvent )
 {
-    wxTreeItemId  itemSel = aEvent.GetItem();
+    onRightClick( aEvent.GetItem() );
+}
 
-    if( !itemSel.IsOk() )
-        return;
 
-    TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( itemSel ) );
+void HIERARCHY_PANE::onRightClick( wxMouseEvent& aEvent )
+{
+    onRightClick( wxTreeItemId() );
+}
 
-    if( !itemData )
-        return;
 
-    wxMenu ctxMenu;
+void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
+{
+    wxMenu          ctxMenu;
+    TREE_ITEM_DATA* itemData = nullptr;
 
-    ctxMenu.Append( 1, _( "Edit Page Number" ) );
+    if( !aItem.IsOk() )
+        aItem = m_tree->GetSelection();
 
-    if( GetPopupMenuSelectionFromUser( ctxMenu ) == 1 )
+    if( aItem.IsOk() )
+        itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( aItem ) );
+
+    if( itemData )
+    {
+        ctxMenu.Append( 1, _( "Edit Page Number" ) );
+        ctxMenu.AppendSeparator();
+    }
+
+    ctxMenu.Append( 2, ACTIONS::expandAll.GetMenuItem() );
+    ctxMenu.Append( 3, ACTIONS::collapseAll.GetMenuItem() );
+
+    switch( GetPopupMenuSelectionFromUser( ctxMenu ) )
+    {
+    case 1:
     {
         wxString msg;
         wxString sheetPath = itemData->m_SheetPath.PathHumanReadable( false, true );
@@ -352,6 +374,44 @@ void HIERARCHY_PANE::onRightClick( wxTreeEvent& aEvent )
 
             UpdateLabelsHierarchyTree();
         }
+
+        break;
+    }
+    case 2:
+        m_tree->ExpandAll();
+        break;
+
+    case 3:
+        m_tree->CollapseAll();
+        break;
+    }
+}
+
+
+void HIERARCHY_PANE::onCharHook( wxKeyEvent& aKeyStroke )
+{
+    int hotkey = aKeyStroke.GetKeyCode();
+
+    if( aKeyStroke.GetModifiers() & wxMOD_CONTROL )
+        hotkey += MD_CTRL;
+
+    if( aKeyStroke.GetModifiers() & wxMOD_ALT )
+        hotkey += MD_ALT;
+
+    if( aKeyStroke.GetModifiers() & wxMOD_SHIFT )
+        hotkey += MD_SHIFT;
+
+    if( hotkey == ACTIONS::expandAll.GetHotKey()
+        || hotkey == ACTIONS::expandAll.GetHotKeyAlt() )
+    {
+        m_tree->ExpandAll();
+        return;
+    }
+    else if( hotkey == ACTIONS::collapseAll.GetHotKey()
+             || hotkey == ACTIONS::collapseAll.GetHotKeyAlt() )
+    {
+        m_tree->CollapseAll();
+        return;
     }
 }
 

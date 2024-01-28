@@ -105,10 +105,10 @@ private:
      */
     void onSelectSheetPath( wxTreeEvent& aEvent );
 
-    /**
-     * Handle a right-click in the tree.
-     */
-    void onRightClick( wxTreeEvent& aEvent );
+    void onTreeItemRightClick( wxTreeEvent& aEvent );
+    void onRightClick( wxMouseEvent& aEvent );
+    void onRightClick( wxTreeItemId aItem );
+    void onCharHook( wxKeyEvent& aKeyStroke );
 
     /**
      * @return String with page number in parenthesis
