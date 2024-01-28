@@ -40,7 +40,7 @@
 
 using namespace KIGFX;
 
-static const wxString productName = wxT( "KiCad E.D.A.  " );
+static const wxString productName = wxT( "KiCad E.D.A." );
 
 DS_RENDER_SETTINGS::DS_RENDER_SETTINGS()
 {
@@ -121,13 +121,9 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
                 if( token->IsSameAs( wxT( "KICAD_VERSION" ) ) && PgmOrNull() )
                 {
-                    // TODO: it'd be nice to get the Python script name/version here for when
-                    // PgmOrNull() is null...
-
-                    *token = wxString::Format( wxT( "%s%s %s" ),
+                    *token = wxString::Format( wxT( "%s %s" ),
                                                productName,
-                                               Pgm().App().GetAppName(),
-                                               GetBuildVersion() );
+                                               GetMajorMinorPatchVersion() );
                     tokenUpdated = true;
                 }
                 else if( token->IsSameAs( wxT( "#" ) ) )
