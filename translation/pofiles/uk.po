@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-28 13:18+0000\n"
+"PO-Revision-Date: 2024-01-29 03:40+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
@@ -3370,44 +3370,40 @@ msgid "Connection successful"
 msgstr "З'єднання встановлено"
 
 #: common/dialogs/git/dialog_git_repository.cpp:333
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Не вдалося відкрити файл архіву. "
+msgstr "Не вдалося приєднатися до '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Не вдалося відкрити файл архіву."
+msgstr "Не вдалося відкрити приватний ключ '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Некоректна назва виводу"
+msgstr "Некоректний SSH ключ"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
 msgid "The selected file is not a valid SSH private key"
 msgstr "Вибраний приватний SSH ключ є недійсний або пошкоджений"
 
 #: common/dialogs/git/dialog_git_repository.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Не вдалося знайти файл бібліотеки '%s'"
+msgstr "Не вдалося відкрити публічний ключ '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:407
 #: common/dialogs/git/dialog_git_repository.cpp:413
-#, fuzzy
 msgid "Missing information"
-msgstr "Відсутнє посадкове місце"
+msgstr "Відсутня інформація"
 
 #: common/dialogs/git/dialog_git_repository.cpp:407
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Будь ласка, введіть повністю коректну URL-адресу репозиторію"
+msgstr "Будь ласка введіть ім'я для репозиторію"
 
 #: common/dialogs/git/dialog_git_repository.cpp:413
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Будь ласка, введіть повністю коректну URL-адресу репозиторію"
+msgstr "Будь ласка, введіть URL-адресу репозиторію"
 
 #: common/dialogs/git/dialog_git_repository.cpp:434
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
@@ -3415,33 +3411,28 @@ msgid "SSH Key Password"
 msgstr "Пароль до SSH ключа"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Обертання"
+msgstr "Положення"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Ім'я з'єднання"
+msgstr "Тип з'єднання"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
 msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
-#, fuzzy
 msgid "Local"
-msgstr "Локальний файл"
+msgstr "Локально"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Приватний"
+msgstr "SSH приватний ключ"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Вибрати файл"
+msgstr "Виберіть приватний ключ SSH файлу"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
@@ -3452,9 +3443,8 @@ msgid "Username"
 msgstr "Ім'я користувача"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Репозиторій"
+msgstr "Git репозиторій"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
@@ -3473,9 +3463,8 @@ msgid "Last Commit"
 msgstr "Останній коміт"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Оновлено"
+msgstr "Останнє оновлення"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
@@ -3493,23 +3482,20 @@ msgid "Git Commit Data"
 msgstr "Закомітити дані в Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Типові значення"
+msgstr "Використовувати типове значення"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "Ім'я області:"
+msgstr "Ім'я автора:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
 msgid "Author e-mail:"
 msgstr "E-mail автора:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Керування репозиторіями"
+msgstr "Git репозиторії"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3520,19 +3506,16 @@ msgid "Active"
 msgstr "Активний"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Додати репозиторій"
+msgstr "Додати новий репозиторій"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Редагувати властивості посадкового місця"
+msgstr "Редагувати властивості репозиторію"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "Репозиторій"
+msgstr "Видалити Git репозиторій"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
@@ -3757,9 +3740,8 @@ msgstr ""
 "системи"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Розмір кута:"
+msgstr "Розмір іконок в панелі інструментів:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
