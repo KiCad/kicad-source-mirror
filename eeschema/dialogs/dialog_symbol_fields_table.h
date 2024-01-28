@@ -119,7 +119,7 @@ private:
     void DisableSelectionEvents();
 
 private:
-    SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol );
+    SCH_REFERENCE_LIST getSymbolReferences( SCH_SYMBOL* aSymbol, SCH_REFERENCE_LIST& aCachedRefs );
     SCH_REFERENCE_LIST getSheetSymbolReferences( SCH_SHEET& aSheet );
 
     void syncBomPresetSelection();

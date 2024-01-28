@@ -2182,6 +2182,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::savePresetsToSchematic()
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
                                                   std::vector<SCH_ITEM*>& aSchItem )
 {
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
+    SCH_REFERENCE_LIST allRefs;
+
+    allSheets.GetSymbols( allRefs );
+
     for( SCH_ITEM* item : aSchItem )
     {
         if( item->Type() == SCH_SYMBOL_T )
@@ -2192,7 +2197,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsAdded( SCHEMATIC&              aSch,
             for( SCH_FIELD& field : symbol->GetFields() )
                 AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
 
-            m_dataModel->AddReferences( getSymbolReferences( symbol ) );
+            m_dataModel->AddReferences( getSymbolReferences( symbol, allRefs ) );
         }
         else if( item->Type() == SCH_SHEET_T )
         {
@@ -2240,6 +2245,11 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsRemoved( SCHEMATIC&              aSch
 void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch,
                                                     std::vector<SCH_ITEM*>& aSchItem )
 {
+    SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
+    SCH_REFERENCE_LIST allRefs;
+
+    allSheets.GetSymbols( allRefs );
+
     for( SCH_ITEM* item : aSchItem )
     {
         if( item->Type() == SCH_SYMBOL_T )
@@ -2250,7 +2260,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnSchItemsChanged( SCHEMATIC&              aSch
             for( SCH_FIELD& field : symbol->GetFields() )
                 AddField( field.GetCanonicalName(), field.GetName(), true, false, true );
 
-            m_dataModel->UpdateReferences( getSymbolReferences( symbol ) );
+            m_dataModel->UpdateReferences( getSymbolReferences( symbol, allRefs ) );
         }
         else if( item->Type() == SCH_SHEET_T )
         {
@@ -2308,17 +2318,16 @@ void DIALOG_SYMBOL_FIELDS_TABLE::DisableSelectionEvents()
 }
 
 
-SCH_REFERENCE_LIST DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL* aSymbol )
+SCH_REFERENCE_LIST
+DIALOG_SYMBOL_FIELDS_TABLE::getSymbolReferences( SCH_SYMBOL*         aSymbol,
+                                                 SCH_REFERENCE_LIST& aCachedRefs )
 {
     SCH_SHEET_LIST     allSheets = m_parent->Schematic().GetSheets();
-    SCH_REFERENCE_LIST allRefs;
     SCH_REFERENCE_LIST symbolRefs;
 
-    allSheets.GetSymbols( allRefs );
-
-    for( size_t i = 0; i < allRefs.GetCount(); i++ )
+    for( size_t i = 0; i < aCachedRefs.GetCount(); i++ )
     {
-        SCH_REFERENCE& ref = allRefs[i];
+        SCH_REFERENCE& ref = aCachedRefs[i];
 
         if( ref.GetSymbol() == aSymbol )
         {
