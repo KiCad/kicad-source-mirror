@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-23 02:01+0000\n"
+"PO-Revision-Date: 2024-01-28 13:18+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
@@ -592,12 +592,12 @@ msgstr "Pokaż osie 3D"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
 #: pcbnew/tools/pcb_actions.cpp:1343
 msgid "Show Appearance Manager"
-msgstr "Pokaż menedżera wyglądu"
+msgstr "Pokaż panel z opcjami wyglądu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:361
 #: pcbnew/tools/pcb_actions.cpp:1344
 msgid "Show/hide the appearance manager"
-msgstr "Pokazuje lub ukrywa menedżera wyglądu"
+msgstr "Pokazuje lub ukrywa panel z opcjami wyglądu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Board Body"
@@ -3283,7 +3283,7 @@ msgstr "Przesuń w dół"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr "Pokaż Przełącznik Ustawień"
+msgstr "Pokaż panel przełączników ustawień wstępnych"
 
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
@@ -7002,7 +7002,7 @@ msgstr "%s (Strona %s)"
 #: common/plotters/PDF_plotter.cpp:1361
 #, c-format
 msgid "Show Page %s"
-msgstr "Pokaż Stronę %s"
+msgstr "Pokaż stronę %s"
 
 #: common/plotters/PDF_plotter.cpp:1372
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:851
@@ -7792,11 +7792,11 @@ msgstr "Tworzy, usuwa oraz dokonuje edycji footprintów"
 
 #: common/tool/actions.cpp:908
 msgid "Show Properties Manager"
-msgstr "Pokaż Menedżera właściwości"
+msgstr "Pokaż panel z listą właściwości"
 
 #: common/tool/actions.cpp:909
 msgid "Show/hide the properties manager"
-msgstr "Pokazuje lub ukrywa panel Menedżera właściwości"
+msgstr "Pokazuje lub ukrywa panel z listą właściwości"
 
 #: common/tool/actions.cpp:917
 msgid "Update PCB from Schematic..."
@@ -13208,7 +13208,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
 msgid "View presets:"
-msgstr "Pokaż ustawienia wstępne:"
+msgstr "Przeglądaj ustawienia wstępne:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:100
 msgid "Exclude DNP"
@@ -19481,7 +19481,7 @@ msgstr "Symbol..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:78
 msgid "View as PNG..."
-msgstr "Pokaż jako plik PNG..."
+msgstr "Przeglądaj jako plik PNG..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:79
 msgid "Symbol as SVG..."
@@ -20230,7 +20230,7 @@ msgstr "Pokaż typ elektryczny pinu"
 
 #: eeschema/tools/ee_actions.cpp:270
 msgid "Annotate pins with their electrical types"
-msgstr "Pokaż typ elektryczny pinu"
+msgstr "Numeruj piny podając ich typy elektryczne"
 
 #: eeschema/tools/ee_actions.cpp:276
 msgid "Show Pin Numbers"
@@ -21066,7 +21066,7 @@ msgstr "Przełącza widoczność ukrytych pól tekstowych"
 
 #: eeschema/tools/ee_actions.cpp:1100
 msgid "Show Directive Labels"
-msgstr "Pokaż Etykiety dyrektyw"
+msgstr "Pokaż etykiety z dyrektywami"
 
 #: eeschema/tools/ee_actions.cpp:1101
 msgid "Toggle display of directive labels"
@@ -22815,7 +22815,7 @@ msgstr "Pokaż menedżera warstw"
 
 #: gerbview/tools/gerbview_actions.cpp:77
 msgid "Show or hide the layer manager"
-msgstr "Pokaż/Ukryj pasek menedżera warstw"
+msgstr "Pokazuje lub ukrywa panel menedżera warstw"
 
 #: gerbview/tools/gerbview_actions.cpp:83
 msgid "List DCodes..."
@@ -25671,7 +25671,7 @@ msgstr ""
 
 #: pagelayout_editor/tools/pl_actions.cpp:105
 msgid "Show Design Inspector"
-msgstr "Pokaż Inspektora projektu"
+msgstr "Pokaż inspektora projektu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:106
 msgid "Show the list of items in the drawing sheet"
@@ -45522,7 +45522,7 @@ msgstr "Przełącza widok nitek wspomagających dla zaznaczonego(-ych) elementó
 
 #: pcbnew/tools/pcb_actions.cpp:1330
 msgid "Show the net inspector"
-msgstr "Pokaż Inspektora listy sieci"
+msgstr "Pokaż inspektora listy sieci"
 
 #: pcbnew/tools/pcb_actions.cpp:1350
 msgid "Flip Board View"
@@ -45538,7 +45538,7 @@ msgstr "Pokaż połączenia wspomagające"
 
 #: pcbnew/tools/pcb_actions.cpp:1359
 msgid "Show board ratsnest"
-msgstr "Pokaż połączenia wspomagające płytki"
+msgstr "Pokazuje nitki wspomagające trasowanie płytki"
 
 #: pcbnew/tools/pcb_actions.cpp:1365
 msgid "Curved Ratsnest Lines"
@@ -47252,7 +47252,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
 msgid "Show the Net Inspector"
-msgstr "Pokaż Inspektora listy sieci"
+msgstr "Pokaż inspektora listy sieci"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
 msgid "Configure net classes"
