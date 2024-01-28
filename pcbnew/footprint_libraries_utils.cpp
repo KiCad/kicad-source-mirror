@@ -926,7 +926,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         // connections and properties are kept) and the sourceFootprint (old footprint) is
         // deleted
         pcbframe->ExchangeFootprint( sourceFootprint, newFootprint, commit );
-        commit.Push( wxT( "Update footprint" ) );
+        // TODO: 9.0: make translatable
+        commit.Push( wxT( "Update Footprint" ) );
     }
     else        // This is an insert command
     {
@@ -939,7 +940,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         newFootprint->SetPosition( VECTOR2I( 0, 0 ) );
         viewControls->SetCrossHairCursorPosition( cursorPos, false );
         const_cast<KIID&>( newFootprint->m_Uuid ) = KIID();
-        commit.Push( wxT( "Insert footprint" ) );
+        // TODO: 9.0: make translatable
+        commit.Push( wxT( "Insert Footprint" ) );
 
         pcbframe->Raise();
         pcb_ToolManager->RunAction( PCB_ACTIONS::placeFootprint, newFootprint );
