@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -90,6 +90,7 @@ void Prettify( std::string& aSource, char aQuoteChar )
     bool inMultiLineList = false;
     bool inXY = false;
     int  column = 0;
+    int  backslashCount = 0;    // Count of successive backslash read since any other char
 
     auto isWhitespace = []( const char aChar )
             {
@@ -207,12 +208,16 @@ void Prettify( std::string& aSource, char aQuoteChar )
             }
             else
             {
-                // The output formatter escapes double-quotes
-                if( *cursor == aQuoteChar
-                    && ( cursor == aSource.begin() || *( cursor - 1 ) != '\\' ) )
-                {
+                // The output formatter escapes double-quotes (like \")
+                // But a corner case is a sequence like \\"
+                // therefore a '\' is attached to a '"' if a odd number of '\' is detected
+                if( *cursor == '\\' )
+                    backslashCount++;
+                else if( *cursor == aQuoteChar && ( backslashCount & 1 ) == 0 )
                     inQuote = !inQuote;
-                }
+
+                if( *cursor != '\\' )
+                    backslashCount = 0;
 
                 formatted.push_back( *cursor );
                 column++;
