@@ -399,6 +399,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 break;
             }
 
+            // The item has been removed from the board; it is now owned by undo/redo.
+            boardItem->SetFlags( UR_TRANSIENT );
+
             break;
         }
 
