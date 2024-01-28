@@ -1188,11 +1188,19 @@ void EDA_DRAW_FRAME::ShowChangedLanguage()
 
     if( m_searchPane )
     {
+        wxAuiPaneInfo& search_pane_info = m_auimgr.GetPane( m_searchPane );
+        search_pane_info.Caption( _( "Search" ) );
+
         m_searchPane->OnLanguageChange();
     }
 
     if( m_propertiesPanel )
+    {
+        wxAuiPaneInfo& properties_pane_info = m_auimgr.GetPane( m_propertiesPanel );
+        properties_pane_info.Caption( _( "Properties" ) );
+
         m_propertiesPanel->OnLanguageChanged();
+    }
 }
 
 

@@ -36,6 +36,8 @@ SEARCH_PANE::~SEARCH_PANE()
 
 void SEARCH_PANE::OnLanguageChange()
 {
+    m_searchCtrl1->SetDescriptiveText( _( "Search" ) );
+
     for( size_t i = 0; i < m_notebook->GetPageCount(); ++i )
     {
         wxWindow* page = m_notebook->GetPage( i );
