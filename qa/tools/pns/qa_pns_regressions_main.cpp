@@ -75,7 +75,7 @@ bool runSingleTest( REPORTER* aReporter, wxString name, wxString testDirPath )
 
 int main( int argc, char* argv[] )
 {
-   
+
 
     int passed = 0, failed = 0;
 
@@ -108,6 +108,26 @@ struct PNS_TEST_CASE
 };
 
 
+class FIXTURE_LOGGER
+{
+public:
+    FIXTURE_LOGGER()
+    {
+        m_Log = new KI_TEST::CONSOLE_LOG;
+        m_Reporter = new KI_TEST::CONSOLE_MSG_REPORTER( m_Log );
+    }
+
+    ~FIXTURE_LOGGER()
+    {
+        delete m_Reporter;
+        delete m_Log;
+    }
+
+    KI_TEST::CONSOLE_LOG*          m_Log;
+    KI_TEST::CONSOLE_MSG_REPORTER* m_Reporter;
+};
+
+
 class PNS_TEST_FIXTURE
 {
 public:
@@ -118,20 +138,14 @@ public:
         PNS_LOG_FILE   logFile;
         PNS_LOG_PLAYER player;
 
-        if( !m_log )
-            m_log = new KI_TEST::CONSOLE_LOG;
-
-        if( !m_reporter )
-            m_reporter = new KI_TEST::CONSOLE_MSG_REPORTER( m_log );
-
-        if( !logFile.Load( wxString( aTestData->GetDataPath() ), m_reporter ) )
+        if( !logFile.Load( wxString( aTestData->GetDataPath() ), m_logger.m_Reporter ) )
         {
-            m_reporter->Report( wxString::Format( "Failed to load test '%s' from '%s'",
+            m_logger.m_Reporter->Report( wxString::Format( "Failed to load test '%s' from '%s'",
                                                   aTestData->GetName(), aTestData->GetDataPath() ),
                                 RPT_SEVERITY_ERROR );
         }
 
-        player.SetReporter( m_reporter );
+        player.SetReporter( m_logger.m_Reporter );
         player.ReplayLog( &logFile, 0 );
         bool pass = player.CompareResults( &logFile );
 
@@ -139,12 +153,12 @@ public:
             BOOST_TEST_FAIL( "replay results inconsistent with reference reslts" );
     }
 
-    static KI_TEST::CONSOLE_LOG*          m_log;
-    static KI_TEST::CONSOLE_MSG_REPORTER* m_reporter;
+    static FIXTURE_LOGGER m_logger;
 };
 
-KI_TEST::CONSOLE_LOG*          PNS_TEST_FIXTURE::m_log = nullptr;
-KI_TEST::CONSOLE_MSG_REPORTER* PNS_TEST_FIXTURE::m_reporter = nullptr;
+
+FIXTURE_LOGGER PNS_TEST_FIXTURE::m_logger;
+
 
 std::vector<PNS_TEST_CASE*> createTestCases()
 {

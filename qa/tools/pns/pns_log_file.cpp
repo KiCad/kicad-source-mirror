@@ -69,7 +69,8 @@ PNS_LOG_FILE::PNS_LOG_FILE() :
     m_routerSettings.reset( new PNS::ROUTING_SETTINGS( nullptr, "" ) );
 }
 
-std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringTokenizer& aTokens )
+
+std::shared_ptr<SHAPE> PNS_LOG_FILE::parseShape( SHAPE_TYPE expectedType, wxStringTokenizer& aTokens )
 {
     SHAPE_TYPE type = static_cast<SHAPE_TYPE> ( wxAtoi( aTokens.GetNextToken() ) );
 
@@ -119,15 +120,15 @@ bool PNS_LOG_FILE::parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd,
     return false;
 }
 
-PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( wxStringTokenizer& aTokens )
+std::unique_ptr<PNS::SEGMENT> PNS_LOG_FILE::parsePnsSegmentFromString( wxStringTokenizer& aTokens )
 {
-    PNS::SEGMENT* seg = new PNS::SEGMENT();
+    std::unique_ptr<PNS::SEGMENT> seg( new PNS::SEGMENT() );
 
     while( aTokens.CountTokens() )
     {
         wxString cmd = aTokens.GetNextToken();
 
-        if( !parseCommonPnsProps( seg, cmd, aTokens ) )
+        if( !parseCommonPnsProps( seg.get(), cmd, aTokens ) )
         {
             if( cmd == wxS( "shape" ) )
             {
@@ -145,15 +146,15 @@ PNS::SEGMENT* PNS_LOG_FILE::parsePnsSegmentFromString( wxStringTokenizer& aToken
     return seg;
 }
 
-PNS::VIA* PNS_LOG_FILE::parsePnsViaFromString( wxStringTokenizer& aTokens )
+std::unique_ptr<PNS::VIA> PNS_LOG_FILE::parsePnsViaFromString( wxStringTokenizer& aTokens )
 {
-    PNS::VIA* via = new PNS::VIA();
+    std::unique_ptr<PNS::VIA> via( new PNS::VIA() );
 
     while( aTokens.CountTokens() )
     {
         wxString cmd = aTokens.GetNextToken();
 
-        if( !parseCommonPnsProps( via, cmd, aTokens ) )
+        if( !parseCommonPnsProps( via.get(), cmd, aTokens ) )
         {
             if( cmd == wxS( "shape" ) )
             {
@@ -178,7 +179,7 @@ PNS::VIA* PNS_LOG_FILE::parsePnsViaFromString( wxStringTokenizer& aTokens )
 }
 
 
-PNS::ITEM* PNS_LOG_FILE::parseItemFromString( wxStringTokenizer& aTokens )
+std::unique_ptr<PNS::ITEM> PNS_LOG_FILE::parseItemFromString( wxStringTokenizer& aTokens )
 {
     wxString type = aTokens.GetNextToken();
 
@@ -409,8 +410,8 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
         }
         else if ( cmd == wxT( "added" ) )
         {
-            PNS::ITEM* item = parseItemFromString( tokens );
-            m_commitState.m_addedItems.push_back( item );
+            m_parsed_items.push_back( parseItemFromString( tokens ) );
+            m_commitState.m_addedItems.push_back( m_parsed_items.back().get() );
         }
         else if ( cmd == wxT( "removed" ) )
         {

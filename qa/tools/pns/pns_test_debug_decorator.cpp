@@ -108,6 +108,7 @@ PNS_DEBUG_STAGE::PNS_DEBUG_STAGE()
 
 PNS_DEBUG_STAGE::~PNS_DEBUG_STAGE()
 {
+    delete m_entries;
 }
 
 
@@ -123,6 +124,8 @@ PNS_TEST_DEBUG_DECORATOR::PNS_TEST_DEBUG_DECORATOR( REPORTER* aReporter ) :
 
 PNS_TEST_DEBUG_DECORATOR::~PNS_TEST_DEBUG_DECORATOR()
 {
+    for( PNS_DEBUG_STAGE* stage : m_stages )
+        delete stage;
     // fixme: I know it's a hacky tool but it should clean after itself at some point...
 }
 
@@ -261,7 +264,7 @@ void PNS_TEST_DEBUG_DECORATOR::NewStage( const wxString& name, int iter,
     stage->m_name = name;
     stage->m_iter = iter;
 
-    m_stages.push_back( new PNS_DEBUG_STAGE );
+    m_stages.push_back( stage );
     m_activeEntry = m_stages.back()->m_entries;
 }
 

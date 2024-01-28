@@ -55,16 +55,14 @@ public:
 
     struct COMMIT_STATE
     {
-        COMMIT_STATE() {};
+        COMMIT_STATE(){};
         COMMIT_STATE( const COMMIT_STATE& aOther ) :
-            m_removedIds( aOther.m_removedIds ),
-            m_addedItems( aOther.m_addedItems )
+                m_removedIds( aOther.m_removedIds ), m_addedItems( aOther.m_addedItems )
         {
-
         }
 
-        std::set<KIID>                      m_removedIds;
-        std::vector<PNS::ITEM*>             m_addedItems;
+        std::set<KIID>          m_removedIds;
+        std::vector<PNS::ITEM*> m_addedItems;
 
         bool Compare( const COMMIT_STATE& aOther );
     };
@@ -91,19 +89,22 @@ public:
 private:
     bool parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd, wxStringTokenizer& aTokens );
 
-    PNS::SEGMENT* parsePnsSegmentFromString( wxStringTokenizer& aTokens );
+    std::unique_ptr<PNS::SEGMENT> parsePnsSegmentFromString( wxStringTokenizer& aTokens );
 
-    PNS::VIA* parsePnsViaFromString( wxStringTokenizer& aTokens );
+    std::unique_ptr<PNS::VIA> parsePnsViaFromString( wxStringTokenizer& aTokens );
 
-    PNS::ITEM* parseItemFromString( wxStringTokenizer& aTokens );
+    std::unique_ptr<PNS::ITEM> parseItemFromString( wxStringTokenizer& aTokens );
+
+    std::shared_ptr<SHAPE> parseShape( SHAPE_TYPE expectedType, wxStringTokenizer& aTokens );
 
 private:
-    std::shared_ptr<SETTINGS_MANAGER>      m_settingsMgr;
-    std::unique_ptr<PNS::ROUTING_SETTINGS> m_routerSettings;
-    std::vector<PNS::LOGGER::EVENT_ENTRY>  m_events;
-    std::shared_ptr<BOARD>                 m_board;
-    COMMIT_STATE                           m_commitState;
-    PNS::ROUTER_MODE                       m_mode;
+    std::shared_ptr<SETTINGS_MANAGER>       m_settingsMgr;
+    std::unique_ptr<PNS::ROUTING_SETTINGS>  m_routerSettings;
+    std::vector<PNS::LOGGER::EVENT_ENTRY>   m_events;
+    std::shared_ptr<BOARD>                  m_board;
+    COMMIT_STATE                            m_commitState;
+    std::vector<std::unique_ptr<PNS::ITEM>> m_parsed_items;
+    PNS::ROUTER_MODE                        m_mode;
 };
 
 #endif
