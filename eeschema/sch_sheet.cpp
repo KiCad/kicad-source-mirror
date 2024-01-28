@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2023 CERN
- * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,7 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
     m_pos = aPos;
     m_size = aSize;
     m_screen = nullptr;
-    
+
     m_borderWidth = 0;
     m_borderColor = COLOR4D::UNSPECIFIED;
     m_backgroundColor = COLOR4D::UNSPECIFIED;
@@ -100,7 +100,7 @@ SCH_SHEET::SCH_SHEET( EDA_ITEM* aParent, const VECTOR2I& aPos, VECTOR2I aSize,
         else
             m_fields.back().SetLayer( LAYER_SHEETFIELDS );
     }
-    
+
     AutoAutoplaceFields( nullptr );
 }
 
