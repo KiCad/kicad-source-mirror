@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-27 06:24+0000\n"
+"PO-Revision-Date: 2024-01-28 12:01+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v7/es/>\n"
 "Language: es\n"
@@ -17388,7 +17388,7 @@ msgstr "Añadir caja de texto"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "Añadir un elemento de caja de texto"
+msgstr "Añadir un elemento de cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
@@ -18262,7 +18262,7 @@ msgstr "Arrastrar"
 
 #: eeschema/tools/ee_actions.cpp:881
 msgid "Drags the selected item(s)"
-msgstr "Mueve el/los elemento/s seleccionado/s"
+msgstr "Arrastra el/los elemento/s seleccionado/s"
 
 #: eeschema/tools/ee_actions.cpp:885
 msgid "Move Activate"
@@ -22784,7 +22784,7 @@ msgstr "La corriente de ajuste, únicamente para reguladores de 3 terminales."
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:208
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:68
 msgid "uA"
-msgstr "uA"
+msgstr "μA"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
 #, c-format
