@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2023-04-02 06:28+0000\n"
+"PO-Revision-Date: 2024-01-29 03:52+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v7/pt/"
-">\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v7/pt/>"
+"\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -4299,9 +4299,9 @@ msgid "Zoom %.2f"
 msgstr "Zoom %.2f"
 
 #: common/eda_draw_frame.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Campo %s"
+msgstr "grade %s"
 
 #: common/eda_draw_frame.cpp:646 pagelayout_editor/pl_editor_frame.cpp:752
 msgid "inches"
@@ -4536,9 +4536,8 @@ msgid "Curve"
 msgstr "Curva"
 
 #: common/eda_shape.cpp:619
-#, fuzzy
 msgid "Pad Number Box"
-msgstr "Número da ilha"
+msgstr "Número da caixa da ilha"
 
 #: common/eda_shape.cpp:620 common/eda_shape.cpp:1674
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:79
@@ -6681,9 +6680,8 @@ msgid "Min grid spacing:"
 msgstr "Espaçamento mínimo da grelha:"
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Ajuste à grelha:"
+msgstr "Ajustar à grade:"
 
 #: common/widgets/gal_options_panel_base.cpp:76
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -7696,9 +7694,8 @@ msgid "Delete all associations?"
 msgstr "Apagar todas as associações?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "Não é possível criar o ficheiro de relatório \"%s\""
+msgstr "Não é possível criar o quadro de visualização do footprint"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -9805,9 +9802,8 @@ msgstr ""
 "símbolo?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "O campo deve ter um nome."
+msgstr "O símbolo deve ter um nome."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -10702,9 +10698,8 @@ msgid "Replace matches in reference designators"
 msgstr "Substitua as correspondências nos designadores de referência"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:120
-#, fuzzy
 msgid "Replace"
-msgstr "&Substituir"
+msgstr "Substituir"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:40
 msgid "Schematic Setup"
@@ -12746,14 +12741,14 @@ msgid "Unknown netlist format.\n"
 msgstr "Tipo desconhecido do formato da netlist\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:347
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' unit %d to '%s'\n"
-msgstr "Plotagem do símbolo '%s' unidade %d para '%s'\n"
+msgstr "A plotar o símbolo '%s' unidade %d para '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:358
-#, fuzzy, c-format
+#, c-format
 msgid "Plotting symbol '%s' to '%s'\n"
-msgstr "Plotagem do símbolo '%s' para '%s'\n"
+msgstr "A plotar o símbolo '%s' para '%s'\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:382
 #, c-format
@@ -13325,9 +13320,9 @@ msgid "Abort Project Save"
 msgstr "Aborte o salvamento do projeto"
 
 #: eeschema/files-io.cpp:1246
-#, fuzzy, c-format
+#, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
-msgstr "O esquema '%s' já está aberto."
+msgstr "O esquema '%s' já está aberto por '%s' em '%s'."
 
 #: eeschema/files-io.cpp:1259
 msgid "Importing Schematic"
@@ -16122,7 +16117,7 @@ msgstr "Sondar sinais no esquema"
 
 #: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr "Afinar"
+msgstr "Ajuste"
 
 #: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Tune component values"
@@ -16393,9 +16388,9 @@ msgid "Voltage (measured)"
 msgstr "Voltagem (medida)"
 
 #: eeschema/sim/spice_library_parser.cpp:89
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "Não é possível criar a pasta '%s'."
+msgstr "Não é possível criar o modelo sim de %s"
 
 #: eeschema/sim/spice_model_parser.cpp:84
 #: eeschema/sim/spice_model_parser.cpp:186
@@ -18405,9 +18400,8 @@ msgstr ""
 "Deseja reverter '%s' (e todas as páginas associadas) à última versão salva?"
 
 #: eeschema/tools/sch_editor_control.cpp:336
-#, fuzzy
 msgid "Include power symbols in schematic to the library?"
-msgstr "Atualiza os símbolos no esquema dando referência à nova biblioteca?"
+msgstr "Incluir os símbolos de energia no esquema da biblioteca?"
 
 #: eeschema/tools/sch_editor_control.cpp:401
 #, c-format
@@ -19827,14 +19821,12 @@ msgid "Malformed expression"
 msgstr "Expressão malformada"
 
 #: include/lockfile.h:105
-#, fuzzy
 msgid "Lock file already exists"
-msgstr "O ficheiro %s já existe."
+msgstr "O ficheiro de bloqueio já existe"
 
 #: include/lockfile.h:124
-#, fuzzy
 msgid "Failed to access lock file"
-msgstr "Houve uma falha ao carregar o ficheiro do esquema\n"
+msgstr "Houve uma falha ao aceder o ficheiro de bloqueio"
 
 #: include/panel_hotkeys_editor.h:55
 msgid "Reset all hotkeys to the built-in KiCad defaults"
@@ -19903,9 +19895,8 @@ msgid "Valid options are: decimal,suppressleading,suppresstrailing,keep."
 msgstr "As opções válidas são: decimal,suppressleading,suppresstrailing,keep."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "As opções válidas são: absolute,plot"
+msgstr "As opções válidas são: route,alternate."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
@@ -19956,9 +19947,8 @@ msgid "Invalid zeros format specified\n"
 msgstr "Foi definido um formato de zeros inválidos\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:182
-#, fuzzy
 msgid "Invalid oval drill format specified\n"
-msgstr "Foi definido um formato inválido do mapa\n"
+msgstr "Foi especificado um formato de perfuração inválido\n"
 
 #: kicad/cli/command_export_pcb_drill.cpp:210
 msgid "Invalid map format specified\n"
@@ -20070,6 +20060,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Definir a opção do formato da ilha/via do bloco (0 = sem formato, 1 = "
+"formato pequeno, 2 = formato real)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
@@ -20889,9 +20881,8 @@ msgstr ""
 "%s"
 
 #: kicad/pcm/pcm.cpp:465
-#, fuzzy
 msgid "Failed to parse locally stored repository.json."
-msgstr "Não foi possível analisar o repositório: %s"
+msgstr "Não foi possível analisar o repository.json armazenado localmente."
 
 #: kicad/pcm/pcm.cpp:493
 msgid ""
@@ -26574,9 +26565,8 @@ msgid "Export STEP"
 msgstr "Exportar STEP"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:210
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Linha de comando:"
+msgstr "Linha de comando:\n"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:210
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:207
@@ -33267,9 +33257,8 @@ msgid "Checking pads..."
 msgstr "A verificar as ilhas..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
-#, fuzzy
 msgid "Checking copper graphic clearances..."
-msgstr "Isolamentos de texto e gráfico...\n"
+msgstr "A verificar as folgas dos gráficos de cobre..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
@@ -33687,9 +33676,9 @@ msgid "Determining PCB data\n"
 msgstr "A determinar os dados da PCI\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:351
-#, fuzzy, c-format
+#, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Espessura do empilhamento da placa:"
+msgstr "Espessura da placa do empilhamento: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:356
 msgid "Build STEP data\n"
@@ -33802,9 +33791,9 @@ msgstr ""
 "corte."
 
 #: pcbnew/files.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "A PCI'%s' já está aberta."
+msgstr "A PCI '%s' já está aberta pelo '%s' em '%s'."
 
 #: pcbnew/files.cpp:639
 msgid "The current PCB has been modified.  Save changes?"
@@ -35346,49 +35335,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Dimensão '%s' no %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1374
-#, fuzzy
 msgid "Units Format"
-msgstr "Formato das unidades:"
+msgstr "Unidades formato"
 
 #: pcbnew/pcb_dimension.cpp:1382
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "Suprimir zeros à direita"
+msgstr "Suprimir os zeros finais"
 
 #: pcbnew/pcb_dimension.cpp:1411
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Cursor a Direita"
+msgstr "Altura da barra"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Extensão do deslocamento da linha:"
+msgstr "Extensão excedente da linha"
 
 #: pcbnew/pcb_dimension.cpp:1498
-#, fuzzy
 msgid "Leader Length"
-msgstr "Comprimento da via"
+msgstr "Comprimento da guia"
 
 #: pcbnew/pcb_dimension.cpp:1547
-#, fuzzy
 msgid "Text Frame"
-msgstr "Quadro do texto:"
+msgstr "Quadro de texto"
 
 #: pcbnew/pcb_edit_frame.cpp:204
 msgid "KiCad PCB Editor"
@@ -35689,14 +35669,13 @@ msgid "Error creating svg file"
 msgstr "Houve um erro ao criar o ficheiro svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:360 pcbnew/pcbnew_jobs_handler.cpp:439
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to plot to '%s'.\n"
-msgstr "Houve uma falha ao carregar '%s'."
+msgstr "Houve uma falha ao plotar para '%s'.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:469
-#, fuzzy
 msgid "Failed to create output directory\n"
-msgstr "Não foi possível criar a pasta de saída '%s'."
+msgstr "Houve uma falha ao criar o diretório de saída\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:658 pcbnew/pcbnew_jobs_handler.cpp:729
 msgid "Loading footprint library\n"
@@ -35802,9 +35781,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' não foi totalmente analisado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Biblioteca de footprint não encontrada."
+msgstr "O diretório do footprint não foi encontrado: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:803
 #, c-format
@@ -36102,6 +36081,10 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"A definição do footprint '%s' tem um componente de cobre associado à uma "
+"ilha em diversas camadas. As pilhas de blocos personalizadas não são "
+"compatíveis com o KiCad. Os itens de cobre foram importados como elementos "
+"gráficos."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
@@ -36482,9 +36465,10 @@ msgid "Ignoring a polygon since Eagle layer '%s' (%d) was not mapped"
 msgstr "Ignorando um polígono pois a camada '%s' do Eagle (%d) não foi mapeada"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1503
-#, fuzzy, c-format
+#, c-format
 msgid "Skipping a polygon on layer '%s' (%d): outline count is not 1"
-msgstr "Ignorando um polígono pois a camada '%s' do Eagle (%d) não foi mapeada"
+msgstr ""
+"A ignorar um polígono na camada '%s' (%d): a contagem de contornos não é 1"
 
 #: pcbnew/plugins/eagle/eagle_plugin.cpp:1796
 #, c-format
@@ -36859,23 +36843,22 @@ msgstr ""
 "posição: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6068
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "A estratégia de preenchimento legado da região não é mais suportada.\n"
-"Deseja converter as regiões em enchimentos com polígonos suavizados?"
+"O preenchimento da região será convertido com base no melhor esforço."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6101
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"A estratégia de preenchimento legado da região não é mais suportada.\n"
-"Deseja converter as regiões em enchimentos com polígonos suavizados?"
+"A estratégia de preenchimento legado do segmento da região não é mais "
+"suportada.\n"
+"O preenchimento da região será convertido com base no melhor esforço."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
@@ -38582,12 +38565,12 @@ msgid "Pack footprints"
 msgstr "Pacote de footprints"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"Clique para pôr %s (item %ld de %ld)\n"
+"Clique para  %s (item %zu de %zu)\n"
 "Pressione <esc> para cancelar tudo; clique duas vezes para concluir"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:376
