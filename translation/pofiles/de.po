@@ -25,10 +25,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 19:54-0800\n"
-"PO-Revision-Date: 2024-01-27 05:27+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"PO-Revision-Date: 2024-01-29 16:23+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -15747,9 +15747,8 @@ msgid "Show Field Name"
 msgstr "Feldname anzeigen"
 
 #: eeschema/lib_item.cpp:80 eeschema/sch_pin.cpp:229
-#, fuzzy
 msgid "Body Style"
-msgstr "Umrandungsstil"
+msgstr "Symbolform"
 
 #: eeschema/lib_item.cpp:84
 msgid "Private"
@@ -19462,22 +19461,23 @@ msgstr ""
 "verursachen, wenn in Symbolbibliothek gespeichert"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>Pin-Duplikat %s</b> %s an Position <b>(%s, %s)</b> steht in Konflikt mit "
-"Pin %s%s an Position <b>(%s, %s)</b> in Einheiten %s und %s."
+"<b>Doppelter Pin %s</b> %s an Position <b>(%s, %s)</b> steht in Konflikt mit "
+"Pin %s%s an Position <b>(%s, %s)</b> in der Symbolform %s."
 
 #: eeschema/symbol_checker.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>Pin-Duplikat %s</b> %s an Position <b>(%s, %s)</b> steht in Konflikt mit "
-"Pin %s%s an Position <b>(%s, %s)</b> in Einheiten %s und %s."
+"<b>Doppelter Pin %s</b> %s an Position <b>(%s, %s)</b> steht in Konflikt mit "
+"Pin %s%s an Position <b>(%s, %s)</b> in den Einheiten %s und %s der "
+"Symbolform %s."
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -19527,22 +19527,22 @@ msgstr ""
 "werden nicht länger benötigt<br><br>"
 
 #: eeschema/symbol_checker.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
 msgstr ""
-"Hinweis: <b>Verborgener Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
-"%s)</b> in Einheit %c."
+"Hinweis: <b>Verborgener Stromversorgungspin %s</b> %s an Position <b>(%s, "
+"%s)</b> in Symbolform %s."
 
 #: eeschema/symbol_checker.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
-"Hinweis: <b>Verborgener Stromversorgungs-Pin %s</b> %s an Position <b>(%s, "
-"%s)</b> in Einheit %c des konvertieren."
+"Hinweis: <b>Verborgener Stromversorgungspin %s</b> %s an Position <b>(%s, "
+"%s)</b> in Einheit %c der Symbolform %s."
 
 #: eeschema/symbol_checker.cpp:272
 #, c-format
@@ -19567,20 +19567,20 @@ msgstr ""
 "angeschlossenen Netze.)"
 
 #: eeschema/symbol_checker.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
 msgstr ""
-"<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%s, %s)</b> des "
-"konvertierten."
+"<b>Außerhalb des Rasters liegender Pin %s</b> %s an Position <b>(%s, %s)</b> "
+"der Symbolform %s."
 
 #: eeschema/symbol_checker.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b>Pin %s</b> %s außerhalb des Rasters an Position <b>(%s, %s)</b> in "
-"Einheit %c."
+"<b>Außerhalb des Rasters liegender Pin %s</b> %s an Position <b>(%s, %s)</b> "
+"in Einheit %c der Symbolform %s."
 
 #: eeschema/symbol_checker.cpp:330
 #, c-format
@@ -26348,7 +26348,7 @@ msgstr "Isolierung für Geräte in Niederspannungssystemen"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:31
 msgid "Determine the transient impulse voltage to withstand"
-msgstr "Bestimmung der zu widerstehenden transienten Impulsspannung"
+msgstr "Bestimmung der zu widerstehenden transienten Überspannung"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:41
 msgid "Rated Voltage (RMS or DC):"
@@ -39068,16 +39068,14 @@ msgid "Missing footprint %s (%s)"
 msgstr "Fehlender Footprint %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
-msgstr "Footprintattribute stimmen nicht mit denen des Symbols überein"
+msgstr "Footprint %s-Wert (%s) stimmt nicht mit Symbolwert (%s) überein."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint (%s) doesn't match that given by symbol (%s)."
-msgstr ""
-"Das Pad-Netz (%s) stimmt nicht mit dem im Schaltplan (%s) angegebenen Netz "
-"überein."
+msgstr "%s Footprint (%s) stimmt nicht dem des Symbols (%s) überein."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:198
 msgid "No corresponding pin found in schematic."
