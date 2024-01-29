@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 19:54-0800\n"
-"PO-Revision-Date: 2024-01-29 03:40+0000\n"
+"PO-Revision-Date: 2024-01-29 16:23+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
-"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/master-"
-"source/pt/>\n"
+"Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/"
+"master-source/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -10335,7 +10335,7 @@ msgstr "Mostra o campo nome além do valor dele"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
 msgid "Allow automatic placement"
-msgstr "Permitir a colocação automática"
+msgstr "Permitir o posicionamento automático"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:106
 msgid "Allow automatic placement of this field in the schematic"
@@ -21929,7 +21929,7 @@ msgstr "Esta posição já está ocupada por outro pino, na unidade %d."
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234
 msgid "Place Pin Anyway"
-msgstr "Colocar Pino de Qualquer Maneira"
+msgstr "Posicionar Pino de Qualquer Maneira"
 
 #: eeschema/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this schematic"
@@ -23388,7 +23388,7 @@ msgstr "Use a origem da broca para a geração da origem"
 #: kicad/cli/command_pcb_export_3d.cpp:85
 msgid "Exclude 3D models for components with 'Unspecified' footprint type"
 msgstr ""
-"Exclui os modelos 3D para os componentes com o tipo de pegada 'Não "
+"Exclui os modelos 3D para os componentes com o tipo de footprint 'Não "
 "especificado'"
 
 #: kicad/cli/command_pcb_export_3d.cpp:91
@@ -32099,7 +32099,7 @@ msgid ""
 "Creates only one file containing all footprints to place\n"
 msgstr ""
 "Cria 2 ficheiros: um para cada lado da placa ou\n"
-"Criar apenas um ficheiro contendo todos os footprints a serem colocados\n"
+"Criar apenas um ficheiro contendo todos os footprints a serem posicionados\n"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:75
 msgid "Include only SMD footprints"
@@ -33053,8 +33053,8 @@ msgid ""
 "Invalid movement values.  Movement would place selection outside of the "
 "maximum board area."
 msgstr ""
-"Valores de movimento inválidos.  O movimento colocará a seleção fora da área "
-"máxima da placa."
+"Valores de movimento inválidos.  O movimento posicionará a seleção fora da "
+"área máxima da placa."
 
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:52
 msgid "Rotate:"
@@ -33830,7 +33830,7 @@ msgid ""
 "If 0, the footprint local value or the global value is used."
 msgstr ""
 "Este é o isolamento local entre esta ilha e a máscara de solda.\n"
-"Se 0, o valor global ou local do fooprint será utilizado."
+"Se 0, o valor global ou local do footprint será utilizado."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:975
 msgid ""
@@ -34264,7 +34264,7 @@ msgstr "Gera pop-ups de propriedade para os footprints da frente"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:413
 msgid "Generate property popups for back footprints"
-msgstr "Gere pop-ups de propriedade para os foot prints de trás"
+msgstr "Gere pop-ups de propriedade para os footprints de trás"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:441
 msgid "Run DRC..."
@@ -34827,7 +34827,7 @@ msgstr "Alterar propriedades de texto"
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:60
 msgid "Enter the text placed on selected layer."
-msgstr "Digite o texto colocado na camada selecionada."
+msgstr "Digite o texto posicionado na camada selecionada."
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:101
 #: pcbnew/fp_text_grid_table.cpp:149 pcbnew/pcb_dimension.cpp:1530
@@ -38988,7 +38988,7 @@ msgstr "Verso (Invertido)"
 
 #: pcbnew/footprint.cpp:1307
 msgid "autoplaced"
-msgstr "colocado automaticamente"
+msgstr "automaticamente posicionado"
 
 #: pcbnew/footprint.cpp:1310
 msgid "not in schematic"
@@ -39134,7 +39134,7 @@ msgstr "Seleção do filtro"
 
 #: pcbnew/footprint_edit_frame.cpp:291
 msgid "Footprint changes are unsaved"
-msgstr "As alterações no foot não foram salvas"
+msgstr "As alterações no footprint não foram gravadas"
 
 #: pcbnew/footprint_edit_frame.cpp:543
 #, c-format
@@ -39380,7 +39380,7 @@ msgstr "Selecionar próxima página de parâmetros"
 
 #: pcbnew/footprint_wizard_frame.cpp:618
 msgid "Export footprint to editor"
-msgstr "Exportar pegada para o editor"
+msgstr "Exportar footprint para o editor"
 
 #: pcbnew/footprint_wizard_frame_functions.cpp:87
 msgid "no wizard selected"
@@ -42691,7 +42691,7 @@ msgstr "Não é possível iniciar um par diferencial no meio do nada."
 
 #: pcbnew/router/router_tool.cpp:113
 msgid "Place Through Via"
-msgstr "Colocar Via Passante"
+msgstr "Posicionar Via Passante"
 
 #: pcbnew/router/router_tool.cpp:114
 msgid "Adds a through-hole via at the end of currently routed track."
@@ -42699,7 +42699,7 @@ msgstr "Adiciona uma via de furo passante ao final da pista atual."
 
 #: pcbnew/router/router_tool.cpp:124
 msgid "Place Blind/Buried Via"
-msgstr "Colocar Via Cega/Encoberta"
+msgstr "Posicionar Via Cega/Encoberta"
 
 #: pcbnew/router/router_tool.cpp:125
 msgid "Adds a blind or buried via at the end of currently routed track."
@@ -42715,7 +42715,7 @@ msgstr "Adiciona uma micro via ao final da pista atual."
 
 #: pcbnew/router/router_tool.cpp:146
 msgid "Select Layer and Place Through Via..."
-msgstr "Selecionar Camada e Colocar Via Passante..."
+msgstr "Selecionar Camada e Posicionar Via Passante..."
 
 #: pcbnew/router/router_tool.cpp:147
 msgid ""
@@ -42727,7 +42727,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:157
 msgid "Select Layer and Place Blind/Buried Via..."
-msgstr "Selecionar Camada e Colocar Via Cega/Encoberta..."
+msgstr "Selecionar Camada e Poisionar Via Cega/Encoberta..."
 
 #: pcbnew/router/router_tool.cpp:158
 msgid ""
@@ -42739,7 +42739,7 @@ msgstr ""
 
 #: pcbnew/router/router_tool.cpp:166
 msgid "Select Layer and Place Micro Via..."
-msgstr "Seleciona camada e coloca micro via..."
+msgstr "Seleciona camada e posiciona micro via..."
 
 #: pcbnew/router/router_tool.cpp:167
 msgid ""
@@ -43793,7 +43793,7 @@ msgstr "A localização viola o DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:3409
 msgid "Place via"
-msgstr "Colocar via"
+msgstr "Posicionar via"
 
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
@@ -44319,7 +44319,7 @@ msgstr "Adicionar uma zona com as mesmas configurações que uma zona existente"
 
 #: pcbnew/tools/pcb_actions.cpp:339
 msgid "Place the Footprint Anchor"
-msgstr "Colocar a Âncora do Footprint"
+msgstr "Posicionar a Âncora do Footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "Set the coordinate origin point (anchor) of the footprint"
@@ -44407,8 +44407,8 @@ msgid ""
 "Selects a footprint by reference designator and places it under the cursor "
 "for moving"
 msgstr ""
-"Seleciona uma pegada pelo designador de referência e a coloca sob o cursor "
-"para que seja movido"
+"Seleciona um footprint pelo designador de referência e a posicionada sob o "
+"cursor para ser movido"
 
 #: pcbnew/tools/pcb_actions.cpp:457
 msgid "Move Individually"
@@ -44502,8 +44502,8 @@ msgid ""
 "Sorts selected footprints by reference, packs based on size and initiates "
 "movement"
 msgstr ""
-"Classifica as ilhas selecionadas por referência, embala com base no tamanho "
-"e inicia o movimento"
+"Classifica os footprints selecionadas por referência, embala à base do "
+"tamanho e inicia o movimento"
 
 #: pcbnew/tools/pcb_actions.cpp:589
 msgid "Skip item"
@@ -45641,9 +45641,7 @@ msgstr "Repara footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:1916
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr ""
-"Execute vários diagnósticos e tente reparar a representação real dos "
-"componentes"
+msgstr "Execute vários diagnósticos e tente consertar o footprint"
 
 #: pcbnew/tools/pcb_actions.cpp:1924 pcbnew/tools/placement_tool.cpp:231
 msgid "Align to Top"
