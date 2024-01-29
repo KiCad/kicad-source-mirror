@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 17:13-0800\n"
+"POT-Creation-Date: 2024-01-29 08:24-0800\n"
 "PO-Revision-Date: 2024-01-29 03:52+0000\n"
 "Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -1633,7 +1633,7 @@ msgstr "否"
 #: common/widgets/widget_hotkey_list.cpp:474
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:1846 eeschema/sch_symbol.cpp:2343
+#: eeschema/sch_symbol.cpp:1849 eeschema/sch_symbol.cpp:2346
 #: eeschema/symbol_editor/symbol_editor.cpp:540
 #: eeschema/symbol_editor/symbol_editor.cpp:1271
 #: eeschema/symbol_viewer_frame.cpp:524 include/lib_table_grid.h:192
@@ -2000,8 +2000,8 @@ msgstr "環境變數"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:339 eeschema/lib_pin.cpp:1168
-#: eeschema/sch_pin.cpp:226 eeschema/sch_symbol.cpp:1808
-#: eeschema/sch_symbol.cpp:1856 eeschema/symbol_editor/symbol_editor.cpp:1243
+#: eeschema/sch_pin.cpp:226 eeschema/sch_symbol.cpp:1811
+#: eeschema/sch_symbol.cpp:1859 eeschema/symbol_editor/symbol_editor.cpp:1243
 #: eeschema/symbol_viewer_frame.cpp:522
 #: eeschema/widgets/tuner_slider_base.cpp:26
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:39
@@ -4244,7 +4244,7 @@ msgid "Screen"
 msgstr "螢幕"
 
 #: common/eda_item.cpp:337 eeschema/dialogs/dialog_symbol_fields_table.cpp:1031
-#: eeschema/sch_symbol.cpp:1843 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1846 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:287 pcbnew/load_select_footprint.cpp:376
 #: pcbnew/pad.cpp:998 pcbnew/plot_board_layers.cpp:95
@@ -7157,7 +7157,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "\"%s\" 不是有效的封裝。"
 
 #: cvpcb/cvpcb_mainframe.cpp:793 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1847 eeschema/sch_symbol.cpp:2347
+#: eeschema/sch_symbol.cpp:1850 eeschema/sch_symbol.cpp:2350
 #: eeschema/symbol_editor/symbol_editor.cpp:1272
 #: eeschema/symbol_viewer_frame.cpp:525 pcbnew/footprint.cpp:3091
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:103
@@ -7169,8 +7169,8 @@ msgid "Pin Count"
 msgstr "引腳數量"
 
 #: cvpcb/cvpcb_mainframe.cpp:822 eeschema/sch_base_frame.cpp:560
-#: eeschema/sch_symbol.cpp:1829 eeschema/sch_symbol.cpp:1833
-#: eeschema/sch_symbol.cpp:1866 pcbnew/footprint.cpp:1093
+#: eeschema/sch_symbol.cpp:1832 eeschema/sch_symbol.cpp:1836
+#: eeschema/sch_symbol.cpp:1869 pcbnew/footprint.cpp:1093
 msgid "Library"
 msgstr "庫"
 
@@ -7279,8 +7279,8 @@ msgstr "可選的相對路徑環境變數："
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1030
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:311
-#: eeschema/fields_grid_table.cpp:340 eeschema/sch_symbol.cpp:1806
-#: eeschema/sch_symbol.cpp:1854
+#: eeschema/fields_grid_table.cpp:340 eeschema/sch_symbol.cpp:1809
+#: eeschema/sch_symbol.cpp:1857
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:44
@@ -8228,7 +8228,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:103
-#: eeschema/sch_symbol.cpp:2357
+#: eeschema/sch_symbol.cpp:2360
 msgid "Symbols"
 msgstr "符號"
 
@@ -10297,7 +10297,7 @@ msgstr "操作已完成"
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_sim_model_base.cpp:255
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1029
-#: eeschema/sch_symbol.cpp:1802 eeschema/sch_symbol.cpp:1852
+#: eeschema/sch_symbol.cpp:1805 eeschema/sch_symbol.cpp:1855
 #: pcbnew/footprint.cpp:3078 pcbnew/fp_text.cpp:279
 msgid "Reference"
 msgstr "位號"
@@ -11622,7 +11622,7 @@ msgid "(symbol editor only)"
 msgstr "（僅限符號編輯器）"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:245
-#: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:485
+#: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:488
 msgid "Color Preview"
 msgstr "顏色預覽"
 
@@ -13079,7 +13079,7 @@ msgstr ""
 "此檔案必須手動刪除，\n"
 "否則每次啟動原理圖編輯器時都會顯示自動儲存功能。"
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1825
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1828
 msgid "Derived from"
 msgstr "派生自"
 
@@ -14446,48 +14446,48 @@ msgstr "(刪除項)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "層次圖紙頁碼 %s"
 
-#: eeschema/sch_symbol.cpp:1364
+#: eeschema/sch_symbol.cpp:1367
 msgid "Excluded from BOM"
 msgstr "排除在 BOM 外"
 
-#: eeschema/sch_symbol.cpp:1369
+#: eeschema/sch_symbol.cpp:1372
 msgid "Excluded from board"
 msgstr "排除在電路板外"
 
-#: eeschema/sch_symbol.cpp:1374
+#: eeschema/sch_symbol.cpp:1377
 msgid "DNP"
 msgstr "DNP"
 
-#: eeschema/sch_symbol.cpp:1797
+#: eeschema/sch_symbol.cpp:1800
 msgid "Power symbol"
 msgstr "電源符號"
 
-#: eeschema/sch_symbol.cpp:1813
+#: eeschema/sch_symbol.cpp:1816
 msgid "flags"
 msgstr "標誌"
 
-#: eeschema/sch_symbol.cpp:1818
+#: eeschema/sch_symbol.cpp:1821
 msgid "Missing parent"
 msgstr "缺少父級"
 
-#: eeschema/sch_symbol.cpp:1833
+#: eeschema/sch_symbol.cpp:1836
 msgid "Undefined!!!"
 msgstr "未定義!!!"
 
-#: eeschema/sch_symbol.cpp:1841
+#: eeschema/sch_symbol.cpp:1844
 msgid "<Unknown>"
 msgstr "<未知>"
 
-#: eeschema/sch_symbol.cpp:1862
+#: eeschema/sch_symbol.cpp:1865
 msgid "No library defined!"
 msgstr "未定義庫!"
 
-#: eeschema/sch_symbol.cpp:1864
+#: eeschema/sch_symbol.cpp:1867
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "在 %s 中找不到符號!"
 
-#: eeschema/sch_symbol.cpp:2053
+#: eeschema/sch_symbol.cpp:2056
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "符號 %s [%s]"
@@ -14929,8 +14929,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"在所選原理圖中存在不在當前專案庫表中的庫名。  "
-"這可能導致所載入原理圖的符號庫參考失效。\n"
+"在所選原理圖中存在不在當前專案庫表中的庫名。  這可能導致所載入原理圖的符號庫"
+"參考失效。\n"
 "\n"
 "您是否希望繼續？"
 
@@ -14942,8 +14942,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"所選檔案是作為不同專案的一部分創建的。  "
-"將該檔案連結到這個專案可能導致缺少或不正確的符號程式庫參考。\n"
+"所選檔案是作為不同專案的一部分創建的。  將該檔案連結到這個專案可能導致缺少或"
+"不正確的符號程式庫參考。\n"
 "\n"
 "您是否希望繼續？"
 
@@ -17917,7 +17917,7 @@ msgstr "沒有選擇網路。"
 msgid "Net must be labeled to assign a netclass."
 msgstr "網路必須標記才能關聯網路類。"
 
-#: eeschema/tools/sch_editor_control.cpp:1716
+#: eeschema/tools/sch_editor_control.cpp:1727
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -17927,25 +17927,25 @@ msgstr ""
 "貼上的圖框 \"%s\"\n"
 "被丟棄, 因為目標已有該圖框或其子圖框之一作為父級。"
 
-#: eeschema/tools/sch_editor_control.cpp:2156
+#: eeschema/tools/sch_editor_control.cpp:2208
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "無法編輯有損壞的庫符號連結的符號。"
 
-#: eeschema/tools/sch_editor_control.cpp:2448
+#: eeschema/tools/sch_editor_control.cpp:2500
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "已替換 %d 個重複 ID。\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2455
+#: eeschema/tools/sch_editor_control.cpp:2507
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "已修復 %d 個潛在問題。"
 
-#: eeschema/tools/sch_editor_control.cpp:2462
+#: eeschema/tools/sch_editor_control.cpp:2514
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "未發現錯誤。"

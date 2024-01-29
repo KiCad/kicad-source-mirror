@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 17:13-0800\n"
+"POT-Creation-Date: 2024-01-29 08:24-0800\n"
 "PO-Revision-Date: 2023-09-16 09:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -1662,7 +1662,7 @@ msgstr "Non"
 #: common/widgets/widget_hotkey_list.cpp:474
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:1846 eeschema/sch_symbol.cpp:2343
+#: eeschema/sch_symbol.cpp:1849 eeschema/sch_symbol.cpp:2346
 #: eeschema/symbol_editor/symbol_editor.cpp:540
 #: eeschema/symbol_editor/symbol_editor.cpp:1271
 #: eeschema/symbol_viewer_frame.cpp:524 include/lib_table_grid.h:192
@@ -2040,8 +2040,8 @@ msgstr "Variables d'Environnement"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:339 eeschema/lib_pin.cpp:1168
-#: eeschema/sch_pin.cpp:226 eeschema/sch_symbol.cpp:1808
-#: eeschema/sch_symbol.cpp:1856 eeschema/symbol_editor/symbol_editor.cpp:1243
+#: eeschema/sch_pin.cpp:226 eeschema/sch_symbol.cpp:1811
+#: eeschema/sch_symbol.cpp:1859 eeschema/symbol_editor/symbol_editor.cpp:1243
 #: eeschema/symbol_viewer_frame.cpp:522
 #: eeschema/widgets/tuner_slider_base.cpp:26
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:39
@@ -4356,7 +4356,7 @@ msgid "Screen"
 msgstr "Ecran"
 
 #: common/eda_item.cpp:337 eeschema/dialogs/dialog_symbol_fields_table.cpp:1031
-#: eeschema/sch_symbol.cpp:1843 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1846 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:287 pcbnew/load_select_footprint.cpp:376
 #: pcbnew/pad.cpp:998 pcbnew/plot_board_layers.cpp:95
@@ -7324,7 +7324,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "'%s' n’est pas une empreinte valide."
 
 #: cvpcb/cvpcb_mainframe.cpp:793 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1847 eeschema/sch_symbol.cpp:2347
+#: eeschema/sch_symbol.cpp:1850 eeschema/sch_symbol.cpp:2350
 #: eeschema/symbol_editor/symbol_editor.cpp:1272
 #: eeschema/symbol_viewer_frame.cpp:525 pcbnew/footprint.cpp:3091
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:103
@@ -7336,8 +7336,8 @@ msgid "Pin Count"
 msgstr "Nombre de Pin"
 
 #: cvpcb/cvpcb_mainframe.cpp:822 eeschema/sch_base_frame.cpp:560
-#: eeschema/sch_symbol.cpp:1829 eeschema/sch_symbol.cpp:1833
-#: eeschema/sch_symbol.cpp:1866 pcbnew/footprint.cpp:1093
+#: eeschema/sch_symbol.cpp:1832 eeschema/sch_symbol.cpp:1836
+#: eeschema/sch_symbol.cpp:1869 pcbnew/footprint.cpp:1093
 msgid "Library"
 msgstr "Librairie"
 
@@ -7447,8 +7447,8 @@ msgstr "Variables d'env. pour chemins relatifs:"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1030
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:311
-#: eeschema/fields_grid_table.cpp:340 eeschema/sch_symbol.cpp:1806
-#: eeschema/sch_symbol.cpp:1854
+#: eeschema/fields_grid_table.cpp:340 eeschema/sch_symbol.cpp:1809
+#: eeschema/sch_symbol.cpp:1857
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:44
@@ -8450,7 +8450,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:103
-#: eeschema/sch_symbol.cpp:2357
+#: eeschema/sch_symbol.cpp:2360
 msgid "Symbols"
 msgstr "Symboles"
 
@@ -10564,7 +10564,7 @@ msgstr "Mesure Prise"
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_sim_model_base.cpp:255
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1029
-#: eeschema/sch_symbol.cpp:1802 eeschema/sch_symbol.cpp:1852
+#: eeschema/sch_symbol.cpp:1805 eeschema/sch_symbol.cpp:1855
 #: pcbnew/footprint.cpp:3078 pcbnew/fp_text.cpp:279
 msgid "Reference"
 msgstr "Référence"
@@ -11932,7 +11932,7 @@ msgid "(symbol editor only)"
 msgstr "(éditeur de symboles uniquement)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:245
-#: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:485
+#: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:488
 msgid "Color Preview"
 msgstr "Aperçu des Couleurs"
 
@@ -13463,7 +13463,7 @@ msgstr ""
 "automatique sera\n"
 "affiché chaque fois que l’éditeur de schémas est lancé."
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1825
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1828
 msgid "Derived from"
 msgstr "Dérivé de"
 
@@ -14904,48 +14904,48 @@ msgstr "(Élément Supprimé)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "Pins de Hiérarchie %s"
 
-#: eeschema/sch_symbol.cpp:1364
+#: eeschema/sch_symbol.cpp:1367
 msgid "Excluded from BOM"
 msgstr "Exclure de la Liste du Matériel"
 
-#: eeschema/sch_symbol.cpp:1369
+#: eeschema/sch_symbol.cpp:1372
 msgid "Excluded from board"
 msgstr "Exclure du PCB"
 
-#: eeschema/sch_symbol.cpp:1374
+#: eeschema/sch_symbol.cpp:1377
 msgid "DNP"
 msgstr "DNP"
 
-#: eeschema/sch_symbol.cpp:1797
+#: eeschema/sch_symbol.cpp:1800
 msgid "Power symbol"
 msgstr "Symbole d'alimentation"
 
-#: eeschema/sch_symbol.cpp:1813
+#: eeschema/sch_symbol.cpp:1816
 msgid "flags"
 msgstr "flags"
 
-#: eeschema/sch_symbol.cpp:1818
+#: eeschema/sch_symbol.cpp:1821
 msgid "Missing parent"
 msgstr "Parent manquant"
 
-#: eeschema/sch_symbol.cpp:1833
+#: eeschema/sch_symbol.cpp:1836
 msgid "Undefined!!!"
 msgstr "Non Défini!!!"
 
-#: eeschema/sch_symbol.cpp:1841
+#: eeschema/sch_symbol.cpp:1844
 msgid "<Unknown>"
 msgstr "<Inconnu>"
 
-#: eeschema/sch_symbol.cpp:1862
+#: eeschema/sch_symbol.cpp:1865
 msgid "No library defined!"
 msgstr "Pas de librairie définie!"
 
-#: eeschema/sch_symbol.cpp:1864
+#: eeschema/sch_symbol.cpp:1867
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "Symbole non trouvé en '%s'!"
 
-#: eeschema/sch_symbol.cpp:2053
+#: eeschema/sch_symbol.cpp:2056
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "Symbole %s [%s]"
@@ -18506,7 +18506,7 @@ msgstr "Pas de \"net\" sélectionné."
 msgid "Net must be labeled to assign a netclass."
 msgstr "Le net doit être étiqueté pour être attribué à une netclass."
 
-#: eeschema/tools/sch_editor_control.cpp:1716
+#: eeschema/tools/sch_editor_control.cpp:1727
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18517,27 +18517,27 @@ msgstr ""
 "a été abandonnée parce que la destination contient déjà la feuille ou l’une "
 "de ses sous-feuilles en tant que parent."
 
-#: eeschema/tools/sch_editor_control.cpp:2156
+#: eeschema/tools/sch_editor_control.cpp:2208
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr ""
 "Les symboles avec liens incorrects à la librairie de symboles ne peuvent pas "
 "être édités."
 
-#: eeschema/tools/sch_editor_control.cpp:2448
+#: eeschema/tools/sch_editor_control.cpp:2500
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d Unique IDs dupliqués remplacés.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2455
+#: eeschema/tools/sch_editor_control.cpp:2507
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d problèmes potentiels réparés."
 
-#: eeschema/tools/sch_editor_control.cpp:2462
+#: eeschema/tools/sch_editor_control.cpp:2514
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "Aucune erreur trouvée."

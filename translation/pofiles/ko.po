@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-21 17:13-0800\n"
+"POT-Creation-Date: 2024-01-29 08:24-0800\n"
 "PO-Revision-Date: 2024-01-19 22:00+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
@@ -1658,7 +1658,7 @@ msgstr "아니오"
 #: common/widgets/widget_hotkey_list.cpp:474
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:50
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:100
-#: eeschema/sch_symbol.cpp:1846 eeschema/sch_symbol.cpp:2343
+#: eeschema/sch_symbol.cpp:1849 eeschema/sch_symbol.cpp:2346
 #: eeschema/symbol_editor/symbol_editor.cpp:540
 #: eeschema/symbol_editor/symbol_editor.cpp:1271
 #: eeschema/symbol_viewer_frame.cpp:524 include/lib_table_grid.h:192
@@ -2028,8 +2028,8 @@ msgstr "환경 변수"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:310
 #: eeschema/dialogs/panel_template_fieldnames_base.cpp:42
 #: eeschema/fields_grid_table.cpp:339 eeschema/lib_pin.cpp:1168
-#: eeschema/sch_pin.cpp:226 eeschema/sch_symbol.cpp:1808
-#: eeschema/sch_symbol.cpp:1856 eeschema/symbol_editor/symbol_editor.cpp:1243
+#: eeschema/sch_pin.cpp:226 eeschema/sch_symbol.cpp:1811
+#: eeschema/sch_symbol.cpp:1859 eeschema/symbol_editor/symbol_editor.cpp:1243
 #: eeschema/symbol_viewer_frame.cpp:522
 #: eeschema/widgets/tuner_slider_base.cpp:26
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:39
@@ -4299,7 +4299,7 @@ msgid "Screen"
 msgstr "화면"
 
 #: common/eda_item.cpp:337 eeschema/dialogs/dialog_symbol_fields_table.cpp:1031
-#: eeschema/sch_symbol.cpp:1843 pcbnew/build_BOM_from_board.cpp:110
+#: eeschema/sch_symbol.cpp:1846 pcbnew/build_BOM_from_board.cpp:110
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:136 pcbnew/fp_shape.cpp:116
 #: pcbnew/fp_text.cpp:287 pcbnew/load_select_footprint.cpp:376
 #: pcbnew/pad.cpp:998 pcbnew/plot_board_layers.cpp:95
@@ -7232,7 +7232,7 @@ msgid "'%s' is not a valid footprint."
 msgstr "%s은(는) 유효한 풋프린트가 아닙니다."
 
 #: cvpcb/cvpcb_mainframe.cpp:793 eeschema/generate_alias_info.cpp:39
-#: eeschema/sch_symbol.cpp:1847 eeschema/sch_symbol.cpp:2347
+#: eeschema/sch_symbol.cpp:1850 eeschema/sch_symbol.cpp:2350
 #: eeschema/symbol_editor/symbol_editor.cpp:1272
 #: eeschema/symbol_viewer_frame.cpp:525 pcbnew/footprint.cpp:3091
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:103
@@ -7244,8 +7244,8 @@ msgid "Pin Count"
 msgstr "핀 개수"
 
 #: cvpcb/cvpcb_mainframe.cpp:822 eeschema/sch_base_frame.cpp:560
-#: eeschema/sch_symbol.cpp:1829 eeschema/sch_symbol.cpp:1833
-#: eeschema/sch_symbol.cpp:1866 pcbnew/footprint.cpp:1093
+#: eeschema/sch_symbol.cpp:1832 eeschema/sch_symbol.cpp:1836
+#: eeschema/sch_symbol.cpp:1869 pcbnew/footprint.cpp:1093
 msgid "Library"
 msgstr "라이브러리"
 
@@ -7356,8 +7356,8 @@ msgstr "상대 경로에 사용 가능한 환경 변수들:"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1030
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:57
 #: eeschema/dialogs/panel_sym_lib_table.cpp:311
-#: eeschema/fields_grid_table.cpp:340 eeschema/sch_symbol.cpp:1806
-#: eeschema/sch_symbol.cpp:1854
+#: eeschema/fields_grid_table.cpp:340 eeschema/sch_symbol.cpp:1809
+#: eeschema/sch_symbol.cpp:1857
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:70
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:44
@@ -8324,7 +8324,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:37
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:103
-#: eeschema/sch_symbol.cpp:2357
+#: eeschema/sch_symbol.cpp:2360
 msgid "Symbols"
 msgstr "심볼"
 
@@ -10402,7 +10402,7 @@ msgstr "취한 액션"
 #: eeschema/dialogs/dialog_rescue_each.cpp:130
 #: eeschema/dialogs/dialog_sim_model_base.cpp:255
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1029
-#: eeschema/sch_symbol.cpp:1802 eeschema/sch_symbol.cpp:1852
+#: eeschema/sch_symbol.cpp:1805 eeschema/sch_symbol.cpp:1855
 #: pcbnew/footprint.cpp:3078 pcbnew/fp_text.cpp:279
 msgid "Reference"
 msgstr "참조"
@@ -11738,7 +11738,7 @@ msgid "(symbol editor only)"
 msgstr "(심볼 편집기만 해당)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:245
-#: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:485
+#: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:488
 msgid "Color Preview"
 msgstr "색 미리보기"
 
@@ -13212,7 +13212,7 @@ msgstr ""
 "이 파일은 수동으로 제거해야 하며 자동 저장 기능은\n"
 "회로도 편집기가 시작될 때마다 표시됩니다."
 
-#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1825
+#: eeschema/generate_alias_info.cpp:37 eeschema/sch_symbol.cpp:1828
 msgid "Derived from"
 msgstr "파생 위치"
 
@@ -14624,48 +14624,48 @@ msgstr "(삭제된 항목)"
 msgid "Hierarchical Sheet Pin %s"
 msgstr "계층 시트 핀 %s"
 
-#: eeschema/sch_symbol.cpp:1364
+#: eeschema/sch_symbol.cpp:1367
 msgid "Excluded from BOM"
 msgstr "BOM에서 제외됨"
 
-#: eeschema/sch_symbol.cpp:1369
+#: eeschema/sch_symbol.cpp:1372
 msgid "Excluded from board"
 msgstr "기판에서 제외됨"
 
-#: eeschema/sch_symbol.cpp:1374
+#: eeschema/sch_symbol.cpp:1377
 msgid "DNP"
 msgstr "DNP"
 
-#: eeschema/sch_symbol.cpp:1797
+#: eeschema/sch_symbol.cpp:1800
 msgid "Power symbol"
 msgstr "전원 심볼"
 
-#: eeschema/sch_symbol.cpp:1813
+#: eeschema/sch_symbol.cpp:1816
 msgid "flags"
 msgstr "플래그"
 
-#: eeschema/sch_symbol.cpp:1818
+#: eeschema/sch_symbol.cpp:1821
 msgid "Missing parent"
 msgstr "상위 항목 존재하지 않음"
 
-#: eeschema/sch_symbol.cpp:1833
+#: eeschema/sch_symbol.cpp:1836
 msgid "Undefined!!!"
 msgstr "정의되어 있지 않습니다!!!"
 
-#: eeschema/sch_symbol.cpp:1841
+#: eeschema/sch_symbol.cpp:1844
 msgid "<Unknown>"
 msgstr "<알 수 없음>"
 
-#: eeschema/sch_symbol.cpp:1862
+#: eeschema/sch_symbol.cpp:1865
 msgid "No library defined!"
 msgstr "정의된 라이브러리가 없음!"
 
-#: eeschema/sch_symbol.cpp:1864
+#: eeschema/sch_symbol.cpp:1867
 #, c-format
 msgid "Symbol not found in %s!"
 msgstr "%s에서 심볼을 찾을 수 없음!"
 
-#: eeschema/sch_symbol.cpp:2053
+#: eeschema/sch_symbol.cpp:2056
 #, c-format
 msgid "Symbol %s [%s]"
 msgstr "심볼 %s [%s]"
@@ -18143,7 +18143,7 @@ msgstr "선택한 네트가 없음."
 msgid "Net must be labeled to assign a netclass."
 msgstr "네트클래스를 할당하려면 네트에 라벨을 지정해야 합니다."
 
-#: eeschema/tools/sch_editor_control.cpp:1716
+#: eeschema/tools/sch_editor_control.cpp:1727
 #, c-format
 msgid ""
 "The pasted sheet '%s'\n"
@@ -18154,25 +18154,25 @@ msgstr ""
 "는 제외되었습니다. 목적지 또는 목적지의 하위 시트 중 해당 시트를 상위 시트로 "
 "갖는 시트가 발견되었습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:2156
+#: eeschema/tools/sch_editor_control.cpp:2208
 msgid "Symbols with broken library symbol links cannot be edited."
 msgstr "라이브러리 기호 링크가 끊어진 기호는 편집할 수 없습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:2448
+#: eeschema/tools/sch_editor_control.cpp:2500
 #: pcbnew/tools/board_editor_control.cpp:594
 #: pcbnew/tools/footprint_editor_control.cpp:716
 #, c-format
 msgid "%d duplicate IDs replaced.\n"
 msgstr "%d 개의 중복된 ID를 교체하였습니다.\n"
 
-#: eeschema/tools/sch_editor_control.cpp:2455
+#: eeschema/tools/sch_editor_control.cpp:2507
 #: pcbnew/tools/board_editor_control.cpp:609
 #: pcbnew/tools/footprint_editor_control.cpp:731
 #, c-format
 msgid "%d potential problems repaired."
 msgstr "%d 개의 잠재적 문제점이 복구되었습니다."
 
-#: eeschema/tools/sch_editor_control.cpp:2462
+#: eeschema/tools/sch_editor_control.cpp:2514
 #: pcbnew/drc/drc_rule_parser.cpp:179
 msgid "No errors found."
 msgstr "오류가 발견되지 않았습니다."
