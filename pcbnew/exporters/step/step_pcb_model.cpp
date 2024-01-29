@@ -806,7 +806,10 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                             lastPt = firstPt;
                         }
 
-                        if( addSegment( lastPt, seg.B ) )
+                        if( lastPt != seg.A )
+                            addSegment( lastPt, seg.A );
+
+                        if( addSegment( seg.A, seg.B ) )
                             lastPt = seg.B;
                     }
 
