@@ -195,7 +195,15 @@ protected:
 class RC_TREE_NODE
 {
 public:
-    enum NODE_TYPE { MARKER, MAIN_ITEM, AUX_ITEM, AUX_ITEM2, AUX_ITEM3 };
+    enum NODE_TYPE
+    {
+        MARKER,
+        MAIN_ITEM,
+        AUX_ITEM,
+        AUX_ITEM2,
+        AUX_ITEM3,
+        COMMENT
+    };
 
     RC_TREE_NODE( RC_TREE_NODE* aParent, const std::shared_ptr<RC_ITEM>& aRcItem, NODE_TYPE aType ) :
             m_Type( aType ),
@@ -280,7 +288,7 @@ public:
     bool GetAttr( wxDataViewItem const& aItem, unsigned int aCol,
                   wxDataViewItemAttr& aAttr ) const override;
 
-    void ValueChanged( const RC_TREE_NODE* aNode );
+    void ValueChanged( RC_TREE_NODE* aNode );
 
     void DeleteCurrentItem( bool aDeep );
 

@@ -336,8 +336,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             {
                 nlohmann::json js = nlohmann::json::array();
 
-                for( const auto& entry : m_DrcExclusions )
-                    js.push_back( entry );
+                for( const wxString& entry : m_DrcExclusions )
+                    js.push_back( { entry, m_DrcExclusionComments[ entry ] } );
 
                 return js;
             },
@@ -350,10 +350,16 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
 
                 for( const nlohmann::json& entry : aObj )
                 {
-                    if( entry.empty() )
-                        continue;
-
-                    m_DrcExclusions.insert( entry.get<wxString>() );
+                    if( entry.is_array() )
+                    {
+                        wxString serialized = entry[0].get<wxString>();
+                        m_DrcExclusions.insert( serialized );
+                        m_DrcExclusionComments[ serialized ] = entry[1].get<wxString>();
+                    }
+                    else if( entry.is_string() )
+                    {
+                        m_DrcExclusions.insert( entry.get<wxString>() );
+                    }
                 }
             },
             {} ) );
@@ -938,6 +944,7 @@ void BOARD_DESIGN_SETTINGS::initFromOther( const BOARD_DESIGN_SETTINGS& aOther )
     m_MinSilkTextThickness   = aOther.m_MinSilkTextThickness;
     m_DRCSeverities          = aOther.m_DRCSeverities;
     m_DrcExclusions          = aOther.m_DrcExclusions;
+    m_DrcExclusionComments   = aOther.m_DrcExclusionComments;
     m_ZoneKeepExternalFillets     = aOther.m_ZoneKeepExternalFillets;
     m_MaxError                    = aOther.m_MaxError;
     m_SolderMaskExpansion         = aOther.m_SolderMaskExpansion;
@@ -1025,6 +1032,7 @@ bool BOARD_DESIGN_SETTINGS::operator==( const BOARD_DESIGN_SETTINGS& aOther ) co
     if( m_MinSilkTextThickness   != aOther.m_MinSilkTextThickness ) return false;
     if( m_DRCSeverities          != aOther.m_DRCSeverities ) return false;
     if( m_DrcExclusions          != aOther.m_DrcExclusions ) return false;
+    if( m_DrcExclusionComments   != aOther.m_DrcExclusionComments ) return false;
     if( m_ZoneKeepExternalFillets     != aOther.m_ZoneKeepExternalFillets ) return false;
     if( m_MaxError                    != aOther.m_MaxError ) return false;
     if( m_SolderMaskExpansion         != aOther.m_SolderMaskExpansion ) return false;

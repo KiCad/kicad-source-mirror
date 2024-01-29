@@ -149,8 +149,8 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
             {
                 nlohmann::json js = nlohmann::json::array();
 
-                for( const auto& entry : m_ErcExclusions )
-                    js.push_back( entry );
+                for( const wxString& entry : m_ErcExclusions )
+                    js.push_back( { entry, m_ErcExclusionComments[ entry ] } );
 
                 return js;
             },
@@ -163,10 +163,16 @@ ERC_SETTINGS::ERC_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath ) :
 
                 for( const nlohmann::json& entry : aObj )
                 {
-                    if( entry.empty() )
-                        continue;
-
-                    m_ErcExclusions.insert( entry.get<wxString>() );
+                    if( entry.is_array() )
+                    {
+                        wxString serialized = entry[0].get<wxString>();
+                        m_ErcExclusions.insert( serialized );
+                        m_ErcExclusionComments[ serialized ] = entry[1].get<wxString>();
+                    }
+                    else if( entry.is_string() )
+                    {
+                        m_ErcExclusions.insert( entry.get<wxString>() );
+                    }
                 }
             },
             {} ) );

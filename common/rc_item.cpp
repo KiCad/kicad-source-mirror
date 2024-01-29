@@ -84,12 +84,12 @@ wxString RC_ITEM::getSeverityString( SEVERITY aSeverity )
 
     switch( aSeverity )
     {
-    case RPT_SEVERITY_ERROR: severity = wxS( "error" ); break;
-    case RPT_SEVERITY_WARNING: severity = wxS( "warning" ); break;
-    case RPT_SEVERITY_ACTION: severity = wxS( "action" ); break;
-    case RPT_SEVERITY_INFO: severity = wxS( "info" ); break;
+    case RPT_SEVERITY_ERROR:     severity = wxS( "error" );     break;
+    case RPT_SEVERITY_WARNING:   severity = wxS( "warning" );   break;
+    case RPT_SEVERITY_ACTION:    severity = wxS( "action" );    break;
+    case RPT_SEVERITY_INFO:      severity = wxS( "info" );      break;
     case RPT_SEVERITY_EXCLUSION: severity = wxS( "exclusion" ); break;
-    case RPT_SEVERITY_DEBUG: severity = wxS( "debug" ); break;
+    case RPT_SEVERITY_DEBUG:     severity = wxS( "debug" );     break;
     default:;
     };
 
@@ -123,41 +123,48 @@ wxString RC_ITEM::ShowReport( UNITS_PROVIDER* aUnitsProvider, SEVERITY aSeverity
     // 2) try not to re-order or change syntax
     // 3) report settings key (which should be more stable) in addition to message
 
+    wxString msg;
+
     if( mainItem && auxItem )
     {
-        return wxString::Format( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n    %s: %s\n" ),
-                                 GetSettingsKey(),
-                                 GetErrorMessage(),
-                                 GetViolatingRuleDesc(),
-                                 severity,
-                                 showCoord( aUnitsProvider, mainItem->GetPosition()),
-                                 mainItem->GetItemDescription( aUnitsProvider ),
-                                 showCoord( aUnitsProvider, auxItem->GetPosition()),
-                                 auxItem->GetItemDescription( aUnitsProvider ) );
+        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n    %s: %s\n" ),
+                    GetSettingsKey(),
+                    GetErrorMessage(),
+                    GetViolatingRuleDesc(),
+                    severity,
+                    showCoord( aUnitsProvider, mainItem->GetPosition()),
+                    mainItem->GetItemDescription( aUnitsProvider ),
+                    showCoord( aUnitsProvider, auxItem->GetPosition()),
+                    auxItem->GetItemDescription( aUnitsProvider ) );
     }
     else if( mainItem )
     {
-        return wxString::Format( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n" ),
-                                 GetSettingsKey(),
-                                 GetErrorMessage(),
-                                 GetViolatingRuleDesc(),
-                                 severity,
-                                 showCoord( aUnitsProvider, mainItem->GetPosition()),
-                                 mainItem->GetItemDescription( aUnitsProvider ) );
+        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n    %s: %s\n" ),
+                    GetSettingsKey(),
+                    GetErrorMessage(),
+                    GetViolatingRuleDesc(),
+                    severity,
+                    showCoord( aUnitsProvider, mainItem->GetPosition()),
+                    mainItem->GetItemDescription( aUnitsProvider ) );
     }
     else
     {
-        return wxString::Format( wxT( "[%s]: %s\n    %s; %s\n" ),
-                                 GetSettingsKey(),
-                                 GetErrorMessage(),
-                                 GetViolatingRuleDesc(),
-                                 severity );
+        msg.Printf( wxT( "[%s]: %s\n    %s; %s\n" ),
+                    GetSettingsKey(),
+                    GetErrorMessage(),
+                    GetViolatingRuleDesc(),
+                    severity );
     }
+
+    if( m_parent && m_parent->IsExcluded() && !m_parent->GetComment().IsEmpty() )
+        msg += wxString::Format( wxS( "    %s\n" ), m_parent->GetComment() );
+
+    return msg;
 }
 
 
 void RC_ITEM::GetJsonViolation( RC_JSON::VIOLATION& aViolation, UNITS_PROVIDER* aUnitsProvider,
-                                SEVERITY                         aSeverity,
+                                SEVERITY aSeverity,
                                 const std::map<KIID, EDA_ITEM*>& aItemMap ) const
 {
     wxString severity = getSeverityString( aSeverity );
@@ -221,6 +228,7 @@ KIID RC_TREE_MODEL::ToUUID( wxDataViewItem aItem )
         switch( node->m_Type )
         {
         case RC_TREE_NODE::MARKER:
+        case RC_TREE_NODE::COMMENT:
             // rc_item->GetParent() can be null, if the parent is not existing
             // when a RC item has no corresponding ERC/DRC marker
             if( rc_item->GetParent() )
@@ -310,6 +318,12 @@ void RC_TREE_MODEL::rebuildModel( std::shared_ptr<RC_ITEMS_PROVIDER> aProvider, 
 
         if( rcItem->GetAuxItem3ID() != niluuid )
             n->m_Children.push_back( new RC_TREE_NODE( n, rcItem, RC_TREE_NODE::AUX_ITEM3 ) );
+
+        if( MARKER_BASE* marker = rcItem->GetParent() )
+        {
+            if( marker->IsExcluded() && !marker->GetComment().IsEmpty() )
+                n->m_Children.push_back( new RC_TREE_NODE( n, rcItem, RC_TREE_NODE::COMMENT ) );
+        }
     }
 
     // Must be called after a significant change of items to force the
@@ -444,6 +458,12 @@ void RC_TREE_MODEL::GetValue( wxVariant&              aVariant,
     case RC_TREE_NODE::AUX_ITEM3:
         item = m_editFrame->GetItem( rcItem->GetAuxItem3ID() );
         break;
+
+    case RC_TREE_NODE::COMMENT:
+        if( marker )
+            msg = marker->GetComment();
+
+        break;
     }
 
     if( item )
@@ -494,19 +514,51 @@ bool RC_TREE_MODEL::GetAttr( wxDataViewItem const&   aItem,
 }
 
 
-void RC_TREE_MODEL::ValueChanged( const RC_TREE_NODE* aNode )
+void RC_TREE_MODEL::ValueChanged( RC_TREE_NODE* aNode )
 {
-    if( aNode->m_Type == RC_TREE_NODE::MAIN_ITEM || aNode->m_Type == RC_TREE_NODE::AUX_ITEM )
+    if( aNode->m_Type != RC_TREE_NODE::MARKER )
     {
         ValueChanged( aNode->m_Parent );
+        return;
     }
 
-    if( aNode->m_Type == RC_TREE_NODE::MARKER )
-    {
-        wxDataViewModel::ValueChanged( ToItem( aNode ), 0 );
+    wxDataViewItem markerItem = ToItem( aNode );
 
-        for( const RC_TREE_NODE* child : aNode->m_Children )
-            wxDataViewModel::ValueChanged( ToItem( child ), 0 );
+    wxDataViewModel::ValueChanged( markerItem, 0 );
+
+    for( const RC_TREE_NODE* child : aNode->m_Children )
+        wxDataViewModel::ValueChanged( ToItem( child ), 0 );
+
+    // Comment items can come and go depening on exclusion state and comment content.
+    //
+    const std::shared_ptr<RC_ITEM> rcItem = aNode->m_RcItem;
+    MARKER_BASE*                   marker = rcItem ? rcItem->GetParent() : nullptr;
+
+    if( marker )
+    {
+        bool          needsCommentNode = marker->IsExcluded() && !marker->GetComment().IsEmpty();
+        RC_TREE_NODE* commentNode = aNode->m_Children.back();
+
+        if( commentNode && commentNode->m_Type != RC_TREE_NODE::COMMENT )
+            commentNode = nullptr;
+
+        if( needsCommentNode && !commentNode )
+        {
+            commentNode = new RC_TREE_NODE( aNode, rcItem, RC_TREE_NODE::COMMENT );
+            wxDataViewItemArray newItems;
+            newItems.push_back( ToItem( commentNode ) );
+
+            aNode->m_Children.push_back( commentNode );
+            ItemsAdded( markerItem, newItems );
+        }
+        else if( commentNode && !needsCommentNode )
+        {
+            wxDataViewItemArray deletedItems;
+            deletedItems.push_back( ToItem( commentNode ) );
+
+            aNode->m_Children.erase( aNode->m_Children.end() - 1 );
+            ItemsDeleted( markerItem, deletedItems );
+        }
     }
 }
 

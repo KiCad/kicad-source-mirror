@@ -40,7 +40,7 @@ class WX_TEXT_ENTRY_DIALOG : public WX_TEXT_ENTRY_DIALOG_BASE
 {
 public:
     WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel, const wxString& aCaption,
-                          const wxString& aDefaultValue = wxEmptyString );
+                          const wxString& aDefaultValue = wxEmptyString, bool aExtraWidth = false );
 
 
     WX_TEXT_ENTRY_DIALOG( wxWindow* aParent, const wxString& aLabel, const wxString& aCaption,

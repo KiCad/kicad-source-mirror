@@ -96,7 +96,13 @@ public:
     enum MARKER_T GetMarkerType() const { return m_markerType; }
 
     bool IsExcluded() const { return m_excluded; }
-    void SetExcluded( bool aExcluded ) { m_excluded = aExcluded; }
+    void SetExcluded( bool aExcluded, const wxString& aComment = wxEmptyString )
+    {
+        m_excluded = aExcluded;
+        m_comment = aComment;
+    }
+
+    wxString GetComment() const { return m_comment; }
 
     virtual SEVERITY GetSeverity() const { return RPT_SEVERITY_UNDEFINED; }
 
@@ -131,6 +137,7 @@ public:
 protected:
     MARKER_T            m_markerType;          // The type of marker (useful to filter markers)
     bool                m_excluded;            // User has excluded this specific error
+    wxString            m_comment;             // User-supplied comment (generally for exclusions)
     std::shared_ptr<RC_ITEM> m_rcItem;
 
     int                 m_scalingFactor;       // Scaling factor to convert corners coordinates

@@ -234,6 +234,9 @@ void PCB_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_
 
         aList.emplace_back( mainText, auxText );
     }
+
+    if( IsExcluded() )
+        aList.emplace_back( _( "Excluded" ), m_comment );
 }
 
 

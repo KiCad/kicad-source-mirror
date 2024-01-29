@@ -47,6 +47,7 @@
 #include <widgets/progress_reporter_base.h>
 #include <widgets/wx_html_report_box.h>
 #include <dialogs/panel_setup_rules_base.h>
+#include <dialogs/dialog_text_entry.h>
 #include <tools/drc_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <tools/board_inspection_tool.h>
@@ -579,7 +580,6 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     std::shared_ptr<CONNECTIVITY_DATA> conn = m_currentBoard->GetConnectivity();
     wxString                           listName;
     wxMenu                             menu;
-    wxString                           msg;
 
     switch( bds().m_DRCSeverities[ rcItem->GetErrorCode() ] )
     {
@@ -588,67 +588,107 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
     default:                   listName = _( "appropriate" ); break;
     }
 
+    enum MENU_IDS
+    {
+        ID_EDIT_EXCLUSION_COMMENT = 4467,
+        ID_REMOVE_EXCLUSION,
+        ID_REMOVE_EXCLUSION_ALL,
+        ID_ADD_EXCLUSION,
+        ID_ADD_EXCLUSION_ALL,
+        ID_INSPECT_VIOLATION,
+        ID_SET_SEVERITY_TO_ERROR,
+        ID_SET_SEVERITY_TO_WARNING,
+        ID_SET_SEVERITY_TO_IGNORE,
+        ID_EDIT_SEVERITIES
+    };
+
     if( rcItem->GetParent()->IsExcluded() )
     {
-        menu.Append( 1, _( "Remove exclusion for this violation" ),
+        menu.Append( ID_EDIT_EXCLUSION_COMMENT,
+                     _( "Edit exclusion comment..." ) );
+
+        menu.Append( ID_REMOVE_EXCLUSION,
+                     _( "Remove exclusion for this violation" ),
                      wxString::Format( _( "It will be placed back in the %s list" ), listName ) );
 
         if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->m_Implicit )
         {
-            msg.Printf( _( "Remove all exclusions for violations of rule '%s'" ),
-                        drcItem->GetViolatingRule()->m_Name );
-            menu.Append( 11, msg );
+            menu.Append( ID_REMOVE_EXCLUSION_ALL,
+                         wxString::Format( _( "Remove all exclusions for violations of rule '%s'" ),
+                                           drcItem->GetViolatingRule()->m_Name ),
+                         wxString::Format( _( "They will be placed back in the %s list" ), listName ) );
         }
     }
     else
     {
-        menu.Append( 2, _( "Exclude this violation" ),
+        menu.Append( ID_ADD_EXCLUSION,
+                     _( "Exclude this violation..." ),
                      wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
 
         if( drcItem->GetViolatingRule() && !drcItem->GetViolatingRule()->m_Implicit )
         {
-            msg.Printf( _( "Exclude all violations of rule '%s'" ),
-                        drcItem->GetViolatingRule()->m_Name );
-            menu.Append( 21, msg );
+            menu.Append( ID_ADD_EXCLUSION_ALL,
+                         wxString::Format( _( "Exclude all violations of rule '%s'..." ),
+                                           drcItem->GetViolatingRule()->m_Name ),
+                         wxString::Format( _( "They will be excluded from the %s list" ), listName ) );
         }
     }
 
     wxString inspectDRCErrorMenuText = inspectionTool->InspectDRCErrorMenuText( rcItem );
 
     if( !inspectDRCErrorMenuText.IsEmpty() )
-        menu.Append( 3, inspectDRCErrorMenuText );
+        menu.Append( ID_INSPECT_VIOLATION, inspectDRCErrorMenuText );
 
     menu.AppendSeparator();
 
     if( bds().m_DRCSeverities[ rcItem->GetErrorCode() ] == RPT_SEVERITY_WARNING )
     {
-        msg.Printf( _( "Change severity to Error for all '%s' violations" ),
-                    rcItem->GetErrorText(),
-                    _( "Violation severities can also be edited in the Board Setup... dialog" ) );
-        menu.Append( 4, msg );
+        menu.Append( ID_SET_SEVERITY_TO_ERROR,
+                     wxString::Format( _( "Change severity to Error for all '%s' violations" ),
+                                       rcItem->GetErrorText() ),
+                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
     }
     else
     {
-        msg.Printf( _( "Change severity to Warning for all '%s' violations" ),
-                    rcItem->GetErrorText(),
-                    _( "Violation severities can also be edited in the Board Setup... dialog" ) );
-        menu.Append( 5, msg );
+        menu.Append( ID_SET_SEVERITY_TO_WARNING,
+                     wxString::Format( _( "Change severity to Warning for all '%s' violations" ),
+                                       rcItem->GetErrorText() ),
+                     _( "Violation severities can also be edited in the Board Setup... dialog" ) );
     }
 
-    msg.Printf( _( "Ignore all '%s' violations" ),
-                rcItem->GetErrorText(),
-                _( "Violations will not be checked or reported" ) );
-    menu.Append( 6, msg );
+    menu.Append( ID_SET_SEVERITY_TO_IGNORE,
+                 wxString::Format( _( "Ignore all '%s' violations" ), rcItem->GetErrorText() ),
+                 _( "Violations will not be checked or reported" ) );
 
     menu.AppendSeparator();
 
-    menu.Append( 7, _( "Edit violation severities..." ), _( "Open the Board Setup... dialog" ) );
+    menu.Append( ID_EDIT_SEVERITIES,
+                 _( "Edit violation severities..." ),
+                 _( "Open the Board Setup... dialog" ) );
 
     bool modified = false;
 
     switch( GetPopupMenuSelectionFromUser( menu ) )
     {
-    case 1:
+    case ID_EDIT_EXCLUSION_COMMENT:
+        if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( node->m_RcItem->GetParent() ) )
+        {
+            WX_TEXT_ENTRY_DIALOG dlg( this, _( "Optional comment:" ), _( "Exclusion Comment" ),
+                                      marker->GetComment(), true );
+
+            if( dlg.ShowModal() == wxID_CANCEL )
+                break;
+
+            marker->SetExcluded( true, dlg.GetValue() );
+
+            // Update view
+            static_cast<RC_TREE_MODEL*>( aEvent.GetModel() )->ValueChanged( node );
+            modified = true;
+        }
+
+        break;
+
+    case ID_REMOVE_EXCLUSION:
         if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() ) )
         {
             marker->SetExcluded( false );
@@ -670,10 +710,16 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
         break;
 
-    case 2:
+    case ID_ADD_EXCLUSION:
         if( PCB_MARKER* marker = dynamic_cast<PCB_MARKER*>( rcItem->GetParent() ) )
         {
-            marker->SetExcluded( true );
+            WX_TEXT_ENTRY_DIALOG dlg( this, _( "Optional comment:" ), _( "Exclusion Comment" ),
+                                      wxEmptyString, true );
+
+            if( dlg.ShowModal() == wxID_CANCEL )
+                break;
+
+            marker->SetExcluded( true, dlg.GetValue() );
 
             if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             {
@@ -696,7 +742,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
 
         break;
 
-    case 11:
+    case ID_REMOVE_EXCLUSION_ALL:
         for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
         {
             DRC_ITEM* candidateDrcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
@@ -710,7 +756,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         modified = true;
         break;
 
-    case 21:
+    case ID_ADD_EXCLUSION_ALL:
         for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
         {
             DRC_ITEM* candidateDrcItem = static_cast<DRC_ITEM*>( marker->GetRCItem().get() );
@@ -724,11 +770,11 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         modified = true;
         break;
 
-    case 3:
+    case ID_INSPECT_VIOLATION:
         inspectionTool->InspectDRCError( node->m_RcItem );
         break;
 
-    case 4:
+    case ID_SET_SEVERITY_TO_ERROR:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_ERROR;
 
         for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
@@ -742,7 +788,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         modified = true;
         break;
 
-    case 5:
+    case ID_SET_SEVERITY_TO_WARNING:
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_WARNING;
 
         for( PCB_MARKER* marker : m_frame->GetBoard()->Markers() )
@@ -756,7 +802,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         modified = true;
         break;
 
-    case 6:
+    case ID_SET_SEVERITY_TO_IGNORE:
     {
         bds().m_DRCSeverities[ rcItem->GetErrorCode() ] = RPT_SEVERITY_IGNORE;
 
@@ -787,7 +833,7 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         break;
     }
 
-    case 7:
+    case ID_EDIT_SEVERITIES:
         m_frame->ShowBoardSetupDialog( _( "Violation Severity" ) );
         break;
     }
@@ -930,10 +976,10 @@ void DIALOG_DRC::PrevMarker()
     {
         switch( m_Notebook->GetSelection() )
         {
-        case 0: m_markersTreeModel->PrevMarker();           break;
-        case 1: m_unconnectedTreeModel->PrevMarker();       break;
-        case 2: m_fpWarningsTreeModel->PrevMarker(); break;
-        case 3:                                             break;
+        case 0: m_markersTreeModel->PrevMarker();      break;
+        case 1: m_unconnectedTreeModel->PrevMarker();  break;
+        case 2: m_fpWarningsTreeModel->PrevMarker();   break;
+        case 3:                                        break;
         }
     }
 }
@@ -945,10 +991,10 @@ void DIALOG_DRC::NextMarker()
     {
         switch( m_Notebook->GetSelection() )
         {
-        case 0: m_markersTreeModel->NextMarker();           break;
-        case 1: m_unconnectedTreeModel->NextMarker();       break;
-        case 2: m_fpWarningsTreeModel->NextMarker(); break;
-        case 3:                                             break;
+        case 0: m_markersTreeModel->NextMarker();      break;
+        case 1: m_unconnectedTreeModel->NextMarker();  break;
+        case 2: m_fpWarningsTreeModel->NextMarker();   break;
+        case 3:                                        break;
         }
     }
 }

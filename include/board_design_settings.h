@@ -695,9 +695,10 @@ public:
     int        m_MinSilkTextHeight;         // Min text height for silkscreen layers
     int        m_MinSilkTextThickness;      // Min text thickness for silkscreen layers
 
-    std::shared_ptr<DRC_ENGINE> m_DRCEngine;
-    std::map<int, SEVERITY>     m_DRCSeverities;   // Map from DRCErrorCode to SEVERITY
-    std::set<wxString>          m_DrcExclusions;
+    std::shared_ptr<DRC_ENGINE>  m_DRCEngine;
+    std::map<int, SEVERITY>      m_DRCSeverities;           // Map from DRCErrorCode to SEVERITY
+    std::set<wxString>           m_DrcExclusions;           // Serialized excluded DRC markers
+    std::map<wxString, wxString> m_DrcExclusionComments;    // Map from serialization to comment
 
     // When smoothing the zone's outline there's the question of external fillets (that is, those
     // applied to concave corners).  While it seems safer to never have copper extend outside the

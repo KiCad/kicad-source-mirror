@@ -349,7 +349,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
             if( it != settings.m_ErcExclusions.end() )
             {
-                marker->SetExcluded( true );
+                marker->SetExcluded( true, settings.m_ErcExclusionComments[serialized] );
                 settings.m_ErcExclusions.erase( it );
             }
         }
@@ -363,7 +363,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
         if( marker )
         {
-            marker->SetExcluded( true );
+            marker->SetExcluded( true, settings.m_ErcExclusionComments[serialized] );
             newMarkers.push_back( marker );
         }
     }
@@ -818,6 +818,7 @@ void SCHEMATIC::RecordERCExclusions()
     ERC_SETTINGS&  ercSettings = ErcSettings();
 
     ercSettings.m_ErcExclusions.clear();
+    ercSettings.m_ErcExclusionComments.clear();
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
@@ -826,7 +827,11 @@ void SCHEMATIC::RecordERCExclusions()
             SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
 
             if( marker->IsExcluded() )
-                ercSettings.m_ErcExclusions.insert( marker->Serialize() );
+            {
+                wxString serialized = marker->Serialize();
+                ercSettings.m_ErcExclusions.insert( serialized );
+                ercSettings.m_ErcExclusionComments[ serialized ] = marker->GetComment();
+            }
         }
     }
 }

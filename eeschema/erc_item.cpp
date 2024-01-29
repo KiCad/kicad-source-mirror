@@ -376,6 +376,12 @@ void ERC_TREE_MODEL::GetValue( wxVariant& aVariant, wxDataViewItem const& aItem,
         msg = getItemDesc( schEditFrame->GetItem( ercItem->GetAuxItem3ID() ),
                            schEditFrame->GetCurrentSheet() );
         break;
+
+    case RC_TREE_NODE::COMMENT:
+        if( marker )
+            msg = marker->GetComment();
+
+        break;
     }
 
     msg.Replace( wxS( "\n" ), wxS( " " ) );

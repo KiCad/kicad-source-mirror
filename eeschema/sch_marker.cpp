@@ -27,6 +27,7 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <base_units.h>
+#include <eda_draw_frame.h>
 #include <erc_settings.h>
 #include <sch_marker.h>
 #include <schematic.h>
@@ -272,7 +273,52 @@ const BOX2I SCH_MARKER::GetBoundingBox() const
 
 void SCH_MARKER::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    aList.emplace_back( _( "Electrical Rule Check Error" ), m_rcItem->GetErrorMessage() );
+    aList.emplace_back( _( "Type" ), _( "Marker" ) );
+    aList.emplace_back( _( "Violation" ), m_rcItem->GetErrorMessage() );
+
+    switch( GetSeverity() )
+    {
+    case RPT_SEVERITY_IGNORE:
+        aList.emplace_back( _( "Severity" ), _( "Ignore" ) );
+        break;
+    case RPT_SEVERITY_WARNING:
+        aList.emplace_back( _( "Severity" ), _( "Warning" ) );
+        break;
+    case RPT_SEVERITY_ERROR:
+        aList.emplace_back( _( "Severity" ), _( "Error" ) );
+        break;
+    default:
+        break;
+    }
+
+    if( GetMarkerType() == MARKER_DRAWING_SHEET )
+    {
+        aList.emplace_back( _( "Drawing Sheet" ), wxEmptyString );
+    }
+    else
+    {
+        wxString  mainText;
+        wxString  auxText;
+        EDA_ITEM* mainItem = nullptr;
+        EDA_ITEM* auxItem = nullptr;
+
+        if( m_rcItem->GetMainItemID() != niluuid )
+            mainItem = aFrame->GetItem( m_rcItem->GetMainItemID() );
+
+        if( m_rcItem->GetAuxItemID() != niluuid )
+            auxItem = aFrame->GetItem( m_rcItem->GetAuxItemID() );
+
+        if( mainItem )
+            mainText = mainItem->GetItemDescription( aFrame );
+
+        if( auxItem )
+            auxText = auxItem->GetItemDescription( aFrame );
+
+        aList.emplace_back( mainText, auxText );
+    }
+
+    if( IsExcluded() )
+        aList.emplace_back( _( "Excluded" ), m_comment );
 }
 
 

@@ -148,7 +148,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
             switch( severity )
             {
-            case RPT_SEVERITY_ERROR: err_count++; break;
+            case RPT_SEVERITY_ERROR:   err_count++;  break;
             case RPT_SEVERITY_WARNING: warn_count++; break;
             default: break;
             }

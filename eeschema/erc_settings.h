@@ -172,8 +172,9 @@ public:
 
 public:
 
-    std::map<int, SEVERITY> m_ERCSeverities;
-    std::set<wxString>      m_ErcExclusions;
+    std::map<int, SEVERITY>      m_ERCSeverities;
+    std::set<wxString>           m_ErcExclusions;           // Serialized excluded ERC markers
+    std::map<wxString, wxString> m_ErcExclusionComments;    // Map from serialization to comment
 
     PIN_ERROR m_PinMap[ELECTRICAL_PINTYPES_TOTAL][ELECTRICAL_PINTYPES_TOTAL];
 
