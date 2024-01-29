@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 17:13-0800\n"
-"PO-Revision-Date: 2024-01-28 12:01+0000\n"
+"PO-Revision-Date: 2024-01-29 03:52+0000\n"
 "Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
@@ -19530,7 +19530,7 @@ msgstr "要使用的顏色主題（預設使用 pcbnew 設定）"
 msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
-msgstr ""
+msgstr "設定 焊盤/導孔 鑽孔形狀選項（0=沒有形狀，1=小形狀，2=實際形狀）"
 
 #: kicad/cli/command_export_pcb_pos.cpp:44
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:64
