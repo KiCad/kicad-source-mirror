@@ -110,7 +110,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 01:38+0100\n"
-"PO-Revision-Date: 2024-01-29 12:13+0100\n"
+"PO-Revision-Date: 2024-01-29 23:58+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-source/it/>\n"
 "Language: it\n"
@@ -5068,7 +5068,7 @@ msgstr "Colori"
 #: common/tool/common_tools.cpp:561 eeschema/menubar.cpp:143
 #: eeschema/sch_edit_frame.cpp:1646 kicad/tools/kicad_manager_actions.cpp:104
 msgid "Schematic Editor"
-msgstr "Editor degli schemi"
+msgstr "Editor schemi"
 
 #: common/eda_base_frame.cpp:1139
 msgid "Annotation Options"
@@ -9572,62 +9572,36 @@ msgid ""
 msgstr ""
 "# 1. Riepilogo\n"
 "\n"
-"Lo strumento Distinta materiali crea una distinta materiali che elenca tutti "
-"i componenti del progetto.\n"
+"Lo strumento Distinta di base crea un elenco di tutti i componenti del progetto.\n"
 "\n"
-"Lo strumento utilizza uno script esterno per generare una distinta materiali "
-"nel formato desiderato. La scelta di uno script diverso modifica il modo in "
-"cui viene formattata la distinta materiali.\n"
+"Lo strumento utilizza uno script esterno per generare l'elenco materiali nel formato desiderato. La scelta di uno script diverso modifica il modo in cui viene formattata la distinta.\n"
 "\n"
-"La generazione di una distinta materiali è descritta in maggior dettaglio "
-"nel manuale dell'editor degli schemi.\n"
+"La generazione di una distinta di base è descritta in maggior dettaglio nel manuale dell'editor degli schemi.\n"
 "\n"
 "# 2. Modalità d'uso\n"
 "\n"
-"Selezionare uno script generatore nell'elenco **Script generatori DIBA**. I "
-"dettagli per il generatore selezionato sono mostrati a destra della finestra "
-"di dialogo.\n"
+"Selezionare uno script generatore nell'elenco **Script generatori DIBA**. I dettagli per il generatore selezionato sono mostrati a destra della finestra di dialogo.\n"
 "\n"
-"Facendo clic sul pulsante **Genera** viene creato un file DIBA con il "
-"generatore selezionato.\n"
+"Facendo clic sul pulsante **Genera** viene creato un file DIBA con il generatore selezionato.\n"
 "\n"
-"Le impostazioni predefinite presentano diverse opzioni per lo script "
-"generatore, sebbene alcuni script aggiuntivi siano già installati con KiCad "
-"e possano essere aggiunti all'elenco con il pulsante **+**.\n"
+"Le impostazioni predefinite presentano diverse opzioni per lo script generatore, sebbene alcuni script aggiuntivi siano già installati con KiCad e possano essere aggiunti all'elenco con il pulsante **+**.\n"
 "\n"
-"**Nota:** su Windows è disponibile un'opzione aggiuntiva **Mostra finestra "
-"console**. Quando questa opzione è deselezionata, i generatori DIBA vengono "
-"eseguiti in una finestra della console nascosta e qualsiasi output viene "
-"reindirizzato e stampato nella finestra di dialogo. Quando questa opzione è "
-"selezionata, i generatori DIBA vengono eseguiti in una finestra della "
-"console visibile.\n"
+"**Nota:** su Windows è disponibile un'opzione aggiuntiva **Mostra finestra console**. Quando questa opzione è deselezionata, i generatori DIBA vengono eseguiti in una finestra della console nascosta e qualsiasi output viene reindirizzato e stampato nella finestra di dialogo. Quando questa opzione è selezionata, i generatori DIBA vengono eseguiti in una finestra della console visibile.\n"
 "\n"
 "# 3. Generatori personalizzati e righe di comando\n"
 "\n"
-"Internamente, KiCad crea un file netlist intermedio in formato XML che "
-"contiene informazioni su tutti i componenti del progetto. Uno script "
-"generatore DIBA converte il file netlist intermedio nel formato desiderato. "
-"KiCad esegue gli script del generatore DIBA in base alla riga di comando "
-"immessa nella parte inferiore della finestra di dialogo DIBA.\n"
+"Internamente, KiCad crea un file netlist intermedio in formato XML che contiene informazioni su tutti i componenti del progetto. Uno script generatore DIBA converte il file netlist intermedio nel formato desiderato. KiCad esegue gli script del generatore DIBA in base alla riga di comando immessa nella parte inferiore della finestra di dialogo DIBA.\n"
 "\n"
-"Il formato della riga di comando accetta parametri per i nomi di file. Ogni "
-"parametro di formattazione viene sostituito con un percorso o nome file "
-"specifico del progetto. I parametri di formattazione supportati sono:\n"
+"Il formato della riga di comando accetta parametri per i nomi di file. Ogni parametro di formattazione viene sostituito con un percorso o nome file specifico del progetto. I parametri di formattazione supportati sono:\n"
 "\n"
-"  * `%I`: percorso assoluto e nome file del file netlist intermedio, che è "
-"l'ingresso per il generatore DIBA\n"
-"  * `%O`: percorso assoluto e nome file del file DIBA in uscita (senza "
-"estensione file)\n"
+"  * `%I`: percorso assoluto e nome file del file netlist intermedio, che è l'ingresso per il generatore DIBA\n"
+"  * `%O`: percorso assoluto e nome file del file DIBA in uscita (senza estensione file)\n"
 "  * `%B`: nome file base del file DIBA in uscita (senza estensione file)\n"
 "  * `%P`: percorso assoluto della cartella del progetto, senza barra finale\n"
 "\n"
-"**Nota:** il parametro del file di uscita `%O` non include un'estensione "
-"file. KiCad tenterà di aggiungere automaticamente un'estensione appropriata "
-"alla riga di comando, ma potrebbe essere necessario aggiungere manualmente "
-"un'estensione.\n"
+"**Nota:** il parametro del file di uscita `%O` non include un'estensione file. KiCad tenterà di aggiungere automaticamente un'estensione appropriata alla riga di comando, ma potrebbe essere necessario aggiungere manualmente un'estensione.\n"
 "\n"
-"Python è lo strumento consigliato per gli script del generatore DIBA, ma è "
-"possibile utilizzare anche altri strumenti.\n"
+"Python è lo strumento consigliato per gli script del generatore DIBA, ma è possibile utilizzare anche altri strumenti.\n"
 "\n"
 "## Righe di comando di esempio per script Python\n"
 "\n"
@@ -9637,24 +9611,19 @@ msgstr ""
 "python <nome file script> <nome file in ingresso> <nome file in uscita>\n"
 "```\n"
 "\n"
-"Su Windows, se lo script del generatore desiderato per una distinta "
-"materiali CSV è `C:\\Users\\username\\kicad\\my_python_script.py`, la riga "
-"di comando sarà:\n"
+"Su Windows, se lo script del generatore desiderato per una distinta di base CSV è `C:\\Users\\username\\kicad\\my_python_script.py`, la riga di comando sarà:\n"
 "\n"
 "```\n"
-"python.exe C:\\Utenti\\nomeutente\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Utenti\\nomeutente\\kicad\\my_python_script.py \"%I\" \"%O.csv\"\n"
 "```\n"
 "\n"
-"Su Linux, se lo script del generatore desiderato per una DIBA CSV è `/home/"
-"username/kicad/my_python_script.py`, la riga di comando sarà:\n"
+"Su Linux, se lo script del generatore desiderato per una DIBA CSV è `/home/username/kicad/my_python_script.py`, la riga di comando sarà:\n"
 "\n"
 "```\n"
 "python /home/nomeutente/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
 "```\n"
 "\n"
-"Le virgolette doppie (`\"`) intorno agli argomenti sono consigliate nel caso "
-"in cui i nomi dei file contengano spazi o caratteri speciali.\n"
+"Le virgolette doppie (`\"`) intorno agli argomenti sono consigliate nel caso in cui i nomi dei file contengano spazi o caratteri speciali.\n"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:66
 msgid "Change all symbols in schematic"
@@ -11234,7 +11203,7 @@ msgstr "Crea simbolo come simbolo di potenza"
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:91
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:276
 msgid "Exclude from schematic bill of materials"
-msgstr "Escludi dalla distinta materiali dello schema"
+msgstr "Escludi dalla distinta di base dello schema"
 
 #: eeschema/dialogs/dialog_lib_new_symbol_base.cpp:94
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:279
@@ -11465,12 +11434,10 @@ msgid ""
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"Impostando quest'opzione si fa in modo che il simbolo in questione appaia "
-"nella\n"
+"Impostando quest'opzione si fa in modo che il simbolo in questione appaia nella\n"
 "finestra di dialogo \"aggiungi simbolo di potenza\". Bloccherà il valore\n"
-"del testo per proteggerlo dalla modifica nello schema elettrico. Il simbolo "
-"non\n"
-"sarà incluso nella distinta materiali e non potrà aver assegnata un'impronta."
+"del testo per proteggerlo dalla modifica nello schema elettrico. Il simbolo non\n"
+"sarà incluso nella distinta di base e non potrà aver assegnata un'impronta."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:213
 msgid "Pin Text Options"
@@ -16882,7 +16849,7 @@ msgstr "File librerie di db di KiCad"
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
-msgstr ""
+msgstr "'%s' è un file in formato binario Eagle; possono essere importati solo file Eagle in formato XML."
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
 #: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
@@ -23155,7 +23122,7 @@ msgstr "Esporta l'impronta o l'intera libreria di impronte in SVG"
 
 #: kicad/cli/command_fp_export_svg.cpp:45
 msgid "Color theme to use (will default to footprint editor settings)"
-msgstr "Tema colore da usare (predefinito per le impostazioni dell'editor impronte)"
+msgstr "Tema colore da usare (predefinito come l'editor delle impronte)"
 
 #: kicad/cli/command_fp_export_svg.cpp:50
 msgid "Specific footprint to export within the library"
@@ -23298,9 +23265,8 @@ msgstr ""
 "predefinita mm)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:137
-#, fuzzy
 msgid "Output units; valid options: mm, m, in, tenths"
-msgstr "Unità di uscita, opzioni valide: mm, in"
+msgstr "Unità di uscita, opzioni valide: mm, m, in, tenths"
 
 #: kicad/cli/command_pcb_export_3d.cpp:142
 msgid ""
@@ -23515,7 +23481,7 @@ msgstr "Rendi speculare la scheda (utile a mostrare gli strati inferiori)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:71
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Tema colore da usare (predefinito sulle impostazioni dell'editor C.S.)"
+msgstr "Tema colore da usare (predefinito come l'editor del C.S.)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:75
 #: kicad/cli/command_pcb_export_svg.cpp:77
@@ -23564,14 +23530,12 @@ msgstr "Escludi tutte le impronte con piazzole passanti (solo ascii o csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:84
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
-#, fuzzy
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "Escludi tutte le impronte senza piazzole passanti"
+msgstr "Escludi tutte le impronte senza l'opzione non popolare impostata"
 
 #: kicad/cli/command_pcb_export_pos.cpp:88
-#, fuzzy
 msgid "Include board edge layer (Gerber only)"
-msgstr "Includi lo strato contorni scheda (solo gerber)"
+msgstr "Includi lo strato contorni scheda (solo Gerber)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:132
 #: kicad/cli/command_sch_export_netlist.cpp:87 kicad/cli/command_version.cpp:71
@@ -23579,9 +23543,8 @@ msgid "Invalid format\n"
 msgstr "Formato non valido\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:158
-#, fuzzy
 msgid "\"both\" not supported for Gerber format\n"
-msgstr "\"both\" non supportato per il formato gerber\n"
+msgstr "\"both\" non supportato per il formato Gerber\n"
 
 #: kicad/cli/command_pcb_export_pos.cpp:174
 msgid "Invalid side specified\n"
@@ -23593,7 +23556,7 @@ msgstr "Genera uscite SVG per un dato elenco di strati"
 
 #: kicad/cli/command_pcb_export_svg.cpp:54
 msgid "Color theme to use (will default to PCB editor settings)"
-msgstr "Tema colore da usare (predefinito sulle impostazioni dell'editor di C.S.)"
+msgstr "Tema colore da usare (predefinito come l'editor del C.S.)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:66
 msgid ""
@@ -23621,38 +23584,37 @@ msgstr "Esegue il controllo regole elettriche (ERC) sullo schema e crea un rappo
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr ""
+msgstr "Segnala tutte le violazioni ERC; equivalente a includere tutti gli altri argomenti di gravità"
 
 #: kicad/cli/command_sch_erc.cpp:63
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "Segnala tutte le violazioni del livello di errore ERC; può essere combinato con gli altri argomenti di gravità"
 
 #: kicad/cli/command_sch_erc.cpp:68
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "Segnala tutte le violazioni del livello di avviso ERC; può essere combinato con gli altri argomenti di gravità"
 
 #: kicad/cli/command_sch_erc.cpp:74
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "Segnala tutte le violazioni ERC escluse; può essere combinato con gli altri argomenti di gravità"
 
 #: kicad/cli/command_sch_erc.cpp:79
 msgid "Return a nonzero exit code if ERC violations exist"
-msgstr ""
+msgstr "Restituisce un codice non zero se esiste una violazione ERC"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr ""
+msgstr "Utilità di esportazione (netlist, pdf, diba, ecc.)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
-#, fuzzy
 msgid "Generate a Bill of Materials (BOM)"
-msgstr "Salva distinta materiali"
+msgstr "Genera distinta di base (DIBA)"
 
 #: kicad/cli/command_sch_export_bom.cpp:174
 #: kicad/cli/command_sch_export_netlist.cpp:56
@@ -23662,7 +23624,6 @@ msgid "Schematic file does not exist or is not accessible\n"
 msgstr "Il file schema non esiste o non è accessibile\n"
 
 #: kicad/cli/command_sch_export_netlist.cpp:35
-#, fuzzy
 msgid "Export a netlist"
 msgstr "Esporta netlist"
 
@@ -23675,14 +23636,12 @@ msgstr ""
 "orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_sch_export_plot.cpp:64
-#, fuzzy
 msgid "Color theme to use (will default to schematic settings)"
-msgstr "Tema colore da usare (predefinito per le impostazioni pcbnew)"
+msgstr "Tema colore da usare (predefinito come l'editor degli schemi)"
 
 #: kicad/cli/command_sch_export_plot.cpp:80
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "Genera gerber per la fabbricazione"
+msgstr "Non generare finestre per le proprietà nei PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:89
 msgid "Avoid setting a background color (regardless of theme)"
@@ -23692,41 +23651,37 @@ msgstr "Evita di impostare un colore di sfondo (indipendentemente dal tema)"
 msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
-msgstr ""
+msgstr "Elenco dei numeri di pagina separati da virgola da stampare, vuoto o non specificato equivale a tutte le pagine"
 
 #: kicad/cli/command_sch_export_plot.cpp:102
-#, fuzzy
 msgid "Pen size [mm]"
-msgstr "Dimensioni pagina:"
+msgstr "Dimensioni penna [mm]"
 
 #: kicad/cli/command_sch_export_plot.cpp:108
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
-msgstr ""
+msgstr "Origine e scala: 0 in basso a sinistra, 1 in centro, 2 giusti alla pagina, 3 giusti al contenuto"
 
 #: kicad/cli/command_sch_export_plot.cpp:172
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
-msgstr ""
+msgstr "L'opzione origine HPGL deve essere 0, 1, 2 o 3\n"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
-msgstr ""
+msgstr "Esporta il formato XML della distinta di base tradizionale usato nell'editor degli schemi con script Python"
 
 #: kicad/cli/command_sym.h:31
-#, fuzzy
 msgid "Symbol and Symbol Libraries"
-msgstr "Caricamento librerie simboli"
+msgstr "Simboli e librerie di simboli"
 
 #: kicad/cli/command_sym_export_svg.cpp:43
-#, fuzzy
 msgid "Exports the symbol or entire symbol library to SVG"
-msgstr "Esporta un simbolo in una nuova libreria"
+msgstr "Esporta un simbolo o una intera libreria di simboli in SVG"
 
 #: kicad/cli/command_sym_export_svg.cpp:48
-#, fuzzy
 msgid "Color theme to use (will default to symbol editor settings)"
-msgstr "Tema colore da usare (predefinito per le impostazioni pcbnew)"
+msgstr "Tema colore da usare (predefinito come l'editor dei simboli)"
 
 #: kicad/cli/command_sym_export_svg.cpp:54
 msgid "Specific symbol to export within the library"
@@ -23745,11 +23700,8 @@ msgid "Symbol file does not exist or is not accessible\n"
 msgstr "Il file simbolo non esiste o non è accessibile\n"
 
 #: kicad/cli/command_sym_upgrade.cpp:39
-#, fuzzy
 msgid "Upgrades the symbol library to the current kicad version format"
-msgstr ""
-"Forza l'ulteriore salvataggio della libreria di simboli indipendentemente "
-"dal controllo versioni"
+msgstr "Aggiorna la libreria di simboli al formato della versione corrente di KiCad"
 
 #: kicad/cli/command_sym_upgrade.cpp:44
 msgid "Forces the symbol library to be resaved regardless of versioning"
@@ -23758,14 +23710,12 @@ msgstr ""
 "dal controllo versioni"
 
 #: kicad/cli/command_sym_upgrade.cpp:59
-#, fuzzy
 msgid "Symbol library does not exist or is not accessible\n"
-msgstr "Il file simbolo non esiste o non è accessibile\n"
+msgstr "La libreria di simboli non esiste o non è accessibile\n"
 
 #: kicad/cli/command_version.cpp:35
-#, fuzzy
 msgid "Reports the version info in various formats"
-msgstr "stampa le informazioni di versione ed esce"
+msgstr "Stampa le informazioni di versione in vari formati"
 
 #: kicad/cli/command_version.cpp:39
 msgid "version info format (plain, commit, about)"
@@ -23792,9 +23742,8 @@ msgid "Project Template Selector"
 msgstr "Selettore modelli di progetto"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
-#, fuzzy
 msgid "Would you like to automatically check for updates on startup?"
-msgstr "Controllare automaticamente gli aggiornamenti dei plugin all'avvio?"
+msgstr "Controllare automaticamente gli aggiornamenti all'avvio?"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:31
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:12
@@ -23803,7 +23752,6 @@ msgid "KiCad"
 msgstr "KiCad"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.h:45
-#, fuzzy
 msgid "Check for Updates"
 msgstr "Controllo aggiornamenti"
 
@@ -23811,30 +23759,27 @@ msgstr "Controllo aggiornamenti"
 #, c-format
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
-msgstr ""
+msgstr "È disponibile KiCad %s (ora hai la versione %s). Scaricarlo ora?"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
-msgstr ""
+msgstr "Una nuova versione di KiCad è disponibile!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
-#, fuzzy
 msgid "Skip this version"
-msgstr "Era atteso %s"
+msgstr "Salta questa versione"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
-msgstr ""
+msgstr "Ricordamelo più avanti"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
-#, fuzzy
 msgid "Open Downloads Page"
-msgstr "Avanzamento scaricamento"
+msgstr "Apri pagina scaricamento"
 
 #: kicad/dialogs/dialog_update_notice_base.h:56
-#, fuzzy
 msgid "Update Available"
-msgstr "Aggiornamento pacchetti disponibile"
+msgstr "Aggiornamento disponibile"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project schematic"
@@ -23954,12 +23899,11 @@ msgstr "Importa file progetto Eagle"
 
 #: kicad/import_project.cpp:160
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "Importa backup EasyEDA Std"
 
 #: kicad/import_project.cpp:167
-#, fuzzy
 msgid "Import EasyEDA Pro Project"
-msgstr "Importa file progetto Eagle"
+msgstr "Importa file progetto EasyEDA"
 
 #: kicad/kicad.cpp:317
 #, c-format
@@ -23972,41 +23916,35 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:132
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "Esporta GLB (binario GLTF)"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
 msgstr "Esporta STEP"
 
 #: kicad/kicad_cli.cpp:134
-#, fuzzy
 msgid "Export VRML"
-msgstr "Esporta"
+msgstr "Esporta VRLM"
 
 #: kicad/kicad_cli.cpp:147
-#, fuzzy
 msgid "Export DXF"
-msgstr "Esporta IDFv3"
+msgstr "Esporta DXF"
 
 #: kicad/kicad_cli.cpp:148
-#, fuzzy
 msgid "Export HPGL"
-msgstr "Esporta STEP"
+msgstr "Esporta HPGL"
 
 #: kicad/kicad_cli.cpp:149
-#, fuzzy
 msgid "Export PDF"
-msgstr "Esporta IDFv3"
+msgstr "Esporta PDF"
 
 #: kicad/kicad_cli.cpp:150
-#, fuzzy
 msgid "Export PS"
-msgstr "Esporta STEP"
+msgstr "Esporta PS"
 
 #: kicad/kicad_cli.cpp:151
-#, fuzzy
 msgid "Export SVG"
-msgstr "Esporta file SVG"
+msgstr "Esporta SVG"
 
 #: kicad/kicad_cli.cpp:317
 msgid "prints version information and exits"
@@ -24021,19 +23959,17 @@ msgid "Editors"
 msgstr "Editor"
 
 #: kicad/kicad_manager_frame.cpp:303
-#, fuzzy
 msgid "PCM Updates Available"
-msgstr "Aggiornamento pacchetti disponibile"
+msgstr "Aggiornamento PCM disponibile"
 
 #: kicad/kicad_manager_frame.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "%d package update(s) avaliable"
-msgstr "Nessun aggiornamento pacchetti disponibile"
+msgstr "%d aggiornamento(i) pacchetti disponibile"
 
 #: kicad/kicad_manager_frame.cpp:759
-#, fuzzy
 msgid "Edit File in Text Editor"
-msgstr "Modifica in un editor di testo"
+msgstr "Modifica file in un editor di testo"
 
 #: kicad/kicad_manager_frame.cpp:841
 msgid "[no project loaded]"
@@ -24079,22 +24015,19 @@ msgstr "Importa schema e scheda XML EAGLE CAD"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "Backup EasyEDA (JLCEDA) Std..."
 
 #: kicad/menubar.cpp:117
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Standard schematic and board"
-msgstr "Importa schema e scheda XML EAGLE CAD"
+msgstr "Importa schema e scheda EasyEDA (JLCEDA) Standard"
 
 #: kicad/menubar.cpp:121
-#, fuzzy
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "Progetto EAGLE..."
+msgstr "Progetto EasyEDA (JLCEDA) Pro..."
 
 #: kicad/menubar.cpp:122
-#, fuzzy
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
-msgstr "Importa schema e scheda XML EAGLE CAD"
+msgstr "Importa schema e schera EasyEDA (JLCEDA) Professional"
 
 #: kicad/menubar.cpp:128
 msgid "&Archive Project..."
@@ -24160,9 +24093,8 @@ msgid "Add Existing"
 msgstr "Aggiungi esistente"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:77
-#, fuzzy
 msgid "Remove repository"
-msgstr "Repository"
+msgstr "Rimuovi repository"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
@@ -24230,7 +24162,6 @@ msgid ""
 msgstr "Chiudere la gestione pacchetti ed annullare i cambiamenti pendenti?"
 
 #: kicad/pcm/dialogs/dialog_pcm.cpp:292
-#, fuzzy
 msgid "Install Package"
 msgstr "Installa pacchetto"
 
@@ -24371,7 +24302,6 @@ msgid "Error downloading package"
 msgstr "Errore nello scaricare il pacchetto"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:528
-#, fuzzy
 msgid "Save Package"
 msgstr "Salva pacchetto"
 
@@ -28490,12 +28420,11 @@ msgstr "Non specificato"
 
 #: pcbnew/build_BOM_from_board.cpp:79
 msgid "Cannot export BOM: there are no footprints on the PCB."
-msgstr ""
-"Impossibile esportare la distinta materiali: nessuna impronta sulla scheda."
+msgstr "Impossibile esportare la distinta di base: nessuna impronta sulla scheda."
 
 #: pcbnew/build_BOM_from_board.cpp:89
 msgid "Save Bill of Materials"
-msgstr "Salva distinta materiali"
+msgstr "Salva distinta di base"
 
 #: pcbnew/build_BOM_from_board.cpp:109
 msgid "Designator"
@@ -30530,7 +30459,7 @@ msgstr "Apri la finestra impostazioni scheda..."
 #: pcbnew/dialogs/dialog_drc.cpp:913
 #, c-format
 msgid "Report file '%s' created<br>"
-msgstr "File rapporto \"%s\" creato<br>"
+msgstr "File rapporto '%s' creato<br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1106
 msgid "Do you wish to delete excluded markers as well?"
@@ -42628,7 +42557,7 @@ msgstr "Impossibile iniziare lo sbroglio da un elemento di testo."
 
 #: pcbnew/router/pns_router.cpp:315 pcbnew/router/pns_router.cpp:380
 msgid "The routing start point violates DRC."
-msgstr "Il punto di sbroglio iniziale viola il DRC."
+msgstr "Il punto di sbroglio iniziale vìola il DRC."
 
 #: pcbnew/router/pns_router.cpp:324
 msgid "Cannot start a differential pair in the middle of nowhere."
@@ -42841,12 +42770,11 @@ msgstr "Trascina comunque"
 #: pcbnew/router/router_tool.cpp:1926 pcbnew/router/router_tool.cpp:2409
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s da fare commit comunque.)"
 
 #: pcbnew/router/router_tool.cpp:1930 pcbnew/router/router_tool.cpp:2413
-#, fuzzy
 msgid "Track violates DRC."
-msgstr "La posizione via viola il DRC."
+msgstr "La pista vìola il DRC."
 
 #: pcbnew/router/router_tool.cpp:2551 pcbnew/tools/pcb_actions.cpp:2379
 msgid "Break Track"
@@ -43560,24 +43488,21 @@ msgid "Item allowed at current location."
 msgstr "Elemento permesso alla posizione corrente."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1446
-#, fuzzy
 msgid "Select a footprint to diff with its library equivalent."
-msgstr "Controllo impronte scheda rispetto alla libreria..."
+msgstr "Seleziona impronta per confrontarla con il suo equivalente di libreria."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1464
-#, fuzzy
 msgid "Select a footprint for a footprint associations report."
-msgstr "Seleziona un elemento per rapporto risoluzione vincoli."
+msgstr "Seleziona impronta per rapporto associazione impronte."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1491
 msgid "Board vs library diff for:"
-msgstr ""
+msgstr "Diff tra scheda e libreria per:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1514
 #: pcbnew/tools/board_inspection_tool.cpp:1522
-#, fuzzy
 msgid "Manage Footprint Libraries"
-msgstr "Gestione librerie impronte..."
+msgstr "Gestione librerie impronte"
 
 #: pcbnew/tools/convert_tool.cpp:77
 msgid "Copy line width of first object"
@@ -43585,51 +43510,43 @@ msgstr "Copia larghezza linea del primo oggetto"
 
 #: pcbnew/tools/convert_tool.cpp:98
 msgid "Gap:"
-msgstr ""
+msgstr "Spazio:"
 
 #: pcbnew/tools/convert_tool.cpp:263
 msgid "Create from Selection"
 msgstr "Crea dalla selezione"
 
 #: pcbnew/tools/convert_tool.cpp:422
-#, fuzzy
 msgid "Could not convert selection"
-msgstr "Impossibile aprire il file archivio."
+msgstr "Impossibile convertire la selezione."
 
 #: pcbnew/tools/convert_tool.cpp:422
-#, fuzzy
 msgid "Objects must form a closed shape"
-msgstr "(non una forma chiusa)"
+msgstr "Gli oggetti devono formare una figura chiusa"
 
 #: pcbnew/tools/convert_tool.cpp:533
-#, fuzzy
 msgid "Convert to Polygon"
-msgstr "Converti forme in poligoni"
+msgstr "Converti in poligono"
 
 #: pcbnew/tools/convert_tool.cpp:535
-#, fuzzy
 msgid "Create Polygon"
-msgstr "Crea zone"
+msgstr "Crea poligono"
 
 #: pcbnew/tools/convert_tool.cpp:540
-#, fuzzy
 msgid "Convert to Zone"
-msgstr "Converti a zona rame"
+msgstr "Converti in zona"
 
 #: pcbnew/tools/convert_tool.cpp:542
-#, fuzzy
 msgid "Create Zone"
-msgstr "Crea zone"
+msgstr "Crea zona"
 
 #: pcbnew/tools/convert_tool.cpp:1112
-#, fuzzy
 msgid "Create Lines"
-msgstr "Crea zone"
+msgstr "Crea linee"
 
 #: pcbnew/tools/convert_tool.cpp:1199
-#, fuzzy
 msgid "Create Arc"
-msgstr "Crea schiera"
+msgstr "Crea arco"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:246
 msgid "Layer Name"
@@ -43717,9 +43634,8 @@ msgid "Draw Line"
 msgstr "Disegna linea"
 
 #: pcbnew/tools/drawing_tool.cpp:426
-#, fuzzy
 msgid "Draw Text Box"
-msgstr "Disegna un riquadro di testo"
+msgstr "Disegna riquadro di testo"
 
 #: pcbnew/tools/drawing_tool.cpp:426 pcbnew/tools/pcb_actions.cpp:119
 msgid "Draw Rectangle"
@@ -43734,33 +43650,28 @@ msgid "Draw Arc"
 msgstr "Disegna arco"
 
 #: pcbnew/tools/drawing_tool.cpp:722
-#, fuzzy
 msgid "Place Image"
 msgstr "Piazza immagine"
 
 #: pcbnew/tools/drawing_tool.cpp:961
-#, fuzzy
 msgid "Place Text"
-msgstr "Piazza un testo"
+msgstr "Piazza testo"
 
 #: pcbnew/tools/drawing_tool.cpp:1288
-#, fuzzy
 msgid "Draw Dimension"
-msgstr "Disegna una quota"
+msgstr "Disegna quota"
 
 #: pcbnew/tools/drawing_tool.cpp:1747
-#, fuzzy
 msgid "Move Footprint Anchor"
-msgstr "Piazza l'ancoraggio impronta"
+msgstr "Sposta ancoraggio impronta"
 
 #: pcbnew/tools/drawing_tool.cpp:3028
-#, fuzzy
 msgid "Select Net:"
-msgstr "Connessione selezionata:"
+msgstr "Seleziona collegamento:"
 
 #: pcbnew/tools/drawing_tool.cpp:3200
 msgid "Via location violates DRC."
-msgstr "La posizione via viola il DRC."
+msgstr "La posizione via vìola il DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:3409
 msgid "Place via"
@@ -43779,9 +43690,8 @@ msgid "Positioning Tools"
 msgstr "Strumenti di posizionamento"
 
 #: pcbnew/tools/edit_tool.cpp:120
-#, fuzzy
 msgid "Shape Modification"
-msgstr "Mostra identificazione DCodes"
+msgstr "Forma modifiche"
 
 #: pcbnew/tools/edit_tool.cpp:547
 #, c-format
@@ -43833,9 +43743,8 @@ msgstr "Linee di stondamento"
 #: pcbnew/tools/edit_tool.cpp:1210
 #: pcbnew/tools/item_modification_routine.cpp:175
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines"
-msgstr "Dimensione smusso:"
+msgstr "Linee smusso"
 
 #: pcbnew/tools/edit_tool.cpp:1210
 #, fuzzy
@@ -43856,9 +43765,8 @@ msgid "A shape with least two lines must be selected."
 msgstr "Bisogna selezionare una forma di almeno due linee."
 
 #: pcbnew/tools/edit_tool.cpp:1391
-#, fuzzy
 msgid "Exactly two lines must be selected to extend them."
-msgstr "Bisogna selezionare una forma di almeno due linee."
+msgstr "Bisogna selezionare esattamente due linee per estenderle."
 
 #: pcbnew/tools/edit_tool.cpp:1488 pcbnew/tools/pcb_actions.cpp:621
 #, fuzzy
@@ -43866,9 +43774,8 @@ msgid "Heal Shapes"
 msgstr "Area arr. a goccia"
 
 #: pcbnew/tools/edit_tool.cpp:1488
-#, fuzzy
 msgid "Tolerance value:"
-msgstr "Tolleranza"
+msgstr "Valore tolleranza:"
 
 #: pcbnew/tools/edit_tool.cpp:1525
 #, fuzzy
@@ -43935,24 +43842,21 @@ msgid "No footprint problems found."
 msgstr "Nessuna problema impronte rilevato."
 
 #: pcbnew/tools/generator_tool.cpp:173
-#, fuzzy
 msgid "Regenerate All"
-msgstr "Rimpiazza tutto"
+msgstr "Rigenera tutto"
 
 #: pcbnew/tools/generator_tool.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid "Update %s"
-msgstr "Aggiorna"
+msgstr "Aggiorna %s"
 
 #: pcbnew/tools/generator_tool.cpp:235
-#, fuzzy
 msgid "Regenerate Selected"
-msgstr "De-sbroglia selezione"
+msgstr "Rigenera selezione"
 
 #: pcbnew/tools/generator_tool.cpp:254
-#, fuzzy
 msgid "Regenerate Item"
-msgstr "Elementi ripetuti"
+msgstr "Rigenera elemento"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -43967,14 +43871,12 @@ msgid "Click on new member..."
 msgstr "Fare clic su un nuovo membro..."
 
 #: pcbnew/tools/group_tool.cpp:278 pcbnew/tools/pcb_actions.cpp:1195
-#, fuzzy
 msgid "Group Items"
-msgstr "Membri gruppo:"
+msgstr "Raggruppa elementi"
 
 #: pcbnew/tools/group_tool.cpp:319 pcbnew/tools/pcb_actions.cpp:1202
-#, fuzzy
 msgid "Ungroup Items"
-msgstr "Separa"
+msgstr "Separa elementi"
 
 #: pcbnew/tools/item_modification_routine.cpp:71
 msgid "Unable to fillet the selected lines."
@@ -44965,12 +44867,11 @@ msgstr "Crea un rapporto di tutte le impronte della scheda corrente"
 
 #: pcbnew/tools/pcb_actions.cpp:1060
 msgid "IPC-2581 File (.xml)..."
-msgstr ""
+msgstr "File IPC-2581 (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1061
-#, fuzzy
 msgid "Generate an IPC-2581 file"
-msgstr "Genera file netlist IPC-D-356"
+msgstr "Genera un file IPC-2581"
 
 #: pcbnew/tools/pcb_actions.cpp:1067
 msgid "IPC-D-356 Netlist File..."
@@ -44981,13 +44882,12 @@ msgid "Generate IPC-D-356 netlist file"
 msgstr "Genera file netlist IPC-D-356"
 
 #: pcbnew/tools/pcb_actions.cpp:1074
-#, fuzzy
 msgid "Bill of Materials..."
-msgstr "Distinta di base"
+msgstr "Distinta di base..."
 
 #: pcbnew/tools/pcb_actions.cpp:1075
 msgid "Create bill of materials from board"
-msgstr "Crea una distinta materiali dalla scheda"
+msgstr "Crea una distinta di base dalla scheda"
 
 #: pcbnew/tools/pcb_actions.cpp:1084
 msgid "Switch Track Width to Next"
