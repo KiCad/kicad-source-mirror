@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-21 16:53-0800\n"
-"PO-Revision-Date: 2024-01-28 13:18+0000\n"
+"PO-Revision-Date: 2024-01-29 03:40+0000\n"
 "Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -22992,23 +22992,23 @@ msgstr "報告所有 DRC 中違規的項目，這相當於包括所有其他嚴�
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "報告所有DRC中「錯誤」等級的違規，這可以跟其他嚴重性參數相結合"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "報告所有DRC中「警告」等級的違規，這可以跟其他嚴重性參數相結合"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
-msgstr ""
+msgstr "報告所有排除DRC的違規，這可以跟其他嚴重性參數相結合"
 
 #: kicad/cli/command_pcb_drc.cpp:84
 msgid "Return a nonzero exit code if DRC violations exist"
-msgstr ""
+msgstr "如果存在DRC違規，則傳回非零退出碼"
 
 #: kicad/cli/command_pcb_drc.cpp:137 kicad/cli/command_pcb_export_3d.cpp:208
 #: kicad/cli/command_pcb_export_drill.cpp:148
@@ -23024,11 +23024,11 @@ msgstr "無效的格式\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr ""
+msgstr "匯出公用程式（Gerbers，鑽孔，位置檔等等）"
 
 #: kicad/cli/command_pcb_export_3d.cpp:66
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "輸出檔案格式，選項：step, glib(二進位 glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:70
 msgid "Overwrite output file"
@@ -23078,7 +23078,7 @@ msgstr "點之間最短相距多少才被視作分開的點"
 
 #: kicad/cli/command_pcb_export_3d.cpp:122
 msgid "Do not optimize STEP file (enables writing parametric curves)"
-msgstr ""
+msgstr "不要最佳化STEP檔案（開啟編寫參數曲線）"
 
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid ""
@@ -23095,11 +23095,12 @@ msgstr "輸出單位，有效選項：mm、in"
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
-msgstr ""
+msgstr "用於建立或儲存3D模型的資料夾名稱，如果沒有指定或為空，則模型會被嵌入被匯出的"
+"主要VRML檔案中"
 
 #: kicad/cli/command_pcb_export_3d.cpp:146
 msgid "Used with --models-dir to output relative paths in the resulting file"
-msgstr ""
+msgstr "使用 -models-dir 選項以輸出指定結果檔案的相對路徑"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
 #, fuzzy
@@ -23206,7 +23207,7 @@ msgstr "Gerber 座標精度應為 5 或 6\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "從板層清單中生成DXF"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -23286,7 +23287,7 @@ msgstr "使用 Protel 副檔名"
 msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
-msgstr ""
+msgstr "繪製PCB的多層Gerber檔，包含使用被儲存的板子繪圖設定的能力"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:49
 msgid ""
@@ -23320,7 +23321,7 @@ msgstr "要使用的顏色主題（預設使用 pcbnew 設定）"
 msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
-msgstr ""
+msgstr "設定 焊盤/導孔 鑽孔形狀選項（0=沒有形狀，1=小形狀，2=實際形狀）"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
@@ -23384,7 +23385,7 @@ msgstr "指定的側無效\n"
 
 #: kicad/cli/command_pcb_export_svg.cpp:42
 msgid "Generate SVG outputs of a given layer list"
-msgstr ""
+msgstr "生成給定板層清單的SVG輸出"
 
 #: kicad/cli/command_pcb_export_svg.cpp:54
 #, fuzzy
