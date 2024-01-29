@@ -1648,6 +1648,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         addAttribute( padStackHoleNode,  "platingStatus", aPad->GetAttribute() == PAD_ATTRIB::PTH ? "PLATED" : "NONPLATED" );
         addAttribute( padStackHoleNode,  "plusTol", "0.0" );
         addAttribute( padStackHoleNode,  "minusTol", "0.0" );
+        addXY( padStackHoleNode, aPad->GetOffset() );
     }
 
     LSEQ layer_seq = aPad->GetLayerSet().Seq();
@@ -1662,8 +1663,6 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         wxXmlNode* padStackPadDefNode = appendNode( padStackDefNode, "PadstackPadDef" );
         addAttribute( padStackPadDefNode,  "layerRef", m_layer_name_map[layer] );
         addAttribute( padStackPadDefNode,  "padUse", "REGULAR" );
-
-        addLocationNode( padStackPadDefNode, *aPad, true );
 
         if( aPad->HasHole() || !aPad->FlashLayer( layer ) )
         {
