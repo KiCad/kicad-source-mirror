@@ -218,8 +218,8 @@ private:
 class DRC_ITEMS_PROVIDER : public RC_ITEMS_PROVIDER
 {
 public:
-    DRC_ITEMS_PROVIDER( BOARD* aBoard, MARKER_BASE::TYPEMARKER aMarkerType,
-                        MARKER_BASE::TYPEMARKER otherMarkerType = MARKER_BASE::MARKER_UNSPEC ) :
+    DRC_ITEMS_PROVIDER( BOARD* aBoard, MARKER_BASE::MARKER_T aMarkerType,
+                        MARKER_BASE::MARKER_T otherMarkerType = MARKER_BASE::MARKER_UNSPEC ) :
             m_board( aBoard ),
             m_severities( 0 )
     {
@@ -238,11 +238,11 @@ public:
     void DeleteItem( int aIndex, bool aDeep ) override;
 
 private:
-    BOARD*                               m_board;
-    std::vector<MARKER_BASE::TYPEMARKER> m_markerTypes;
+    BOARD*                             m_board;
+    std::vector<MARKER_BASE::MARKER_T> m_markerTypes;
 
-    int                                  m_severities;
-    std::vector<PCB_MARKER*>             m_filteredMarkers;
+    int                                m_severities;
+    std::vector<PCB_MARKER*>           m_filteredMarkers;
 };
 
 

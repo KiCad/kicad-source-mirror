@@ -1939,7 +1939,7 @@ void SCH_SCREENS::DeleteMarker( SCH_MARKER* aMarker )
 }
 
 
-void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType, int aErrorCode,
+void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::MARKER_T aMarkerType, int aErrorCode,
                                  bool aIncludeExclusions )
 {
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
@@ -1965,7 +1965,7 @@ void SCH_SCREENS::DeleteMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType, int a
 }
 
 
-void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::TYPEMARKER aMarkerType,
+void SCH_SCREENS::DeleteAllMarkers( enum MARKER_BASE::MARKER_T aMarkerType,
                                     bool aIncludeExclusions )
 {
     DeleteMarkers( aMarkerType, ERCE_UNSPECIFIED, aIncludeExclusions );

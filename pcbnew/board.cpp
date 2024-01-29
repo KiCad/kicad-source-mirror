@@ -322,12 +322,13 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 {
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
-        auto i = m_designSettings->m_DrcExclusions.find( marker->Serialize() );
+        wxString                     serialized = marker->Serialize();
+        std::set<wxString>::iterator it = m_designSettings->m_DrcExclusions.find( serialized );
 
-        if( i != m_designSettings->m_DrcExclusions.end() )
+        if( it != m_designSettings->m_DrcExclusions.end() )
         {
             marker->SetExcluded( true );
-            m_designSettings->m_DrcExclusions.erase( i );
+            m_designSettings->m_DrcExclusions.erase( it );
         }
     }
 
@@ -335,9 +336,9 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
     if( aCreateMarkers )
     {
-        for( const wxString& exclusionData : m_designSettings->m_DrcExclusions )
+        for( const wxString& serialized : m_designSettings->m_DrcExclusions )
         {
-            PCB_MARKER* marker = PCB_MARKER::Deserialize( exclusionData );
+            PCB_MARKER* marker = PCB_MARKER::Deserialize( serialized );
 
             if( !marker )
                 continue;

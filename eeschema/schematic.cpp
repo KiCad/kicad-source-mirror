@@ -313,11 +313,13 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
     for( auto it = settings.m_ErcExclusions.begin(); it != settings.m_ErcExclusions.end(); )
     {
         SCH_MARKER* testMarker = SCH_MARKER::Deserialize( this, *it );
+
         if( testMarker->IsLegacyMarker() )
         {
             const wxString settingsKey = testMarker->GetRCItem()->GetSettingsKey();
 
-            if( settingsKey != wxT( "pin_to_pin" ) && settingsKey != wxT( "hier_label_mismatch" )
+            if(    settingsKey != wxT( "pin_to_pin" )
+                && settingsKey != wxT( "hier_label_mismatch" )
                 && settingsKey != wxT( "different_unit_net" ) )
             {
                 migratedExclusions.insert( testMarker->Serialize() );
@@ -329,6 +331,7 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
         {
             ++it;
         }
+
         delete testMarker;
     }
 
@@ -340,8 +343,9 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
     {
         for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_MARKER_T ) )
         {
-            SCH_MARKER* marker = static_cast<SCH_MARKER*>( item );
-            auto        it = settings.m_ErcExclusions.find( marker->Serialize() );
+            SCH_MARKER*                  marker = static_cast<SCH_MARKER*>( item );
+            wxString                     serialized = marker->Serialize();
+            std::set<wxString>::iterator it = settings.m_ErcExclusions.find( serialized );
 
             if( it != settings.m_ErcExclusions.end() )
             {
@@ -353,9 +357,9 @@ std::vector<SCH_MARKER*> SCHEMATIC::ResolveERCExclusions()
 
     std::vector<SCH_MARKER*> newMarkers;
 
-    for( const wxString& exclusionData : settings.m_ErcExclusions )
+    for( const wxString& serialized : settings.m_ErcExclusions )
     {
-        SCH_MARKER* marker = SCH_MARKER::Deserialize( this, exclusionData );
+        SCH_MARKER* marker = SCH_MARKER::Deserialize( this, serialized );
 
         if( marker )
         {
