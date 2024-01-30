@@ -1057,7 +1057,19 @@ int SHAPE_LINE_CHAIN::NextShape( int aPointIndex ) const
         return -1; // we don't want to wrap around
 
     if( m_shapes[aPointIndex] == SHAPES_ARE_PT )
-        return aPointIndex + 1;
+    {
+        if( aPointIndex == lastIndex - 1 )
+        {
+            if( m_closed )
+                return lastIndex;
+            else
+                return -1;
+        }
+        else
+        {
+            return aPointIndex + 1;
+        }
+    }
 
     int arcStart = aPointIndex;
 

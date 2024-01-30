@@ -47,6 +47,8 @@ struct SLC_CASES
     SHAPE_LINE_CHAIN ArcAndPoint;
     SHAPE_LINE_CHAIN EmptyChain;
     SHAPE_LINE_CHAIN OnePoint;
+    SHAPE_LINE_CHAIN TwoPoints;
+    SHAPE_LINE_CHAIN ThreePoints;
 
     SHAPE_ARC ArcCircle; ///< Full Circle arc
     SHAPE_ARC Arc0a; ///< First half of a circle
@@ -102,6 +104,12 @@ struct SLC_CASES
         ArcsAndSegMixed.Append( Arc2 );
 
         OnePoint.Append( VECTOR2I( 233450000, 228360000 ) );
+
+        TwoPoints.Append( VECTOR2I( 233450000, 228360000 ) );
+        TwoPoints.Append( VECTOR2I( 263450000, 258360000 ) );
+
+        ThreePoints = TwoPoints;
+        ThreePoints.Append( VECTOR2I( 263450000, 308360000 ) );
     }
 };
 
@@ -237,9 +245,13 @@ static const std::vector<CLOSE_TOGGLE_SHAPE_CASE> close_toggle_shape_cases =
             { "Circle2Arcs",          SLC_CASES().Circle2Arcs,          true,  2, 16, 2, 17 },
             { "ArcsCoincident",       SLC_CASES().ArcsCoincident,       false, 2, 14, 3, 14 },
             { "ArcsCoincidentClosed", SLC_CASES().ArcsCoincidentClosed, true,  3, 14, 2, 14 },
+            { "ArcsIndependent",      SLC_CASES().ArcsIndependent,      false, 3, 18, 4, 18 },
             { "DuplicateArcs",        SLC_CASES().DuplicateArcs,        false, 4, 20, 5, 20 },
             { "ArcAndPoint",          SLC_CASES().ArcAndPoint,          false, 2, 10, 3, 10 },
-            { "ArcsAndSegMixed",      SLC_CASES().ArcsAndSegMixed,      false, 4, 19, 5, 19 }
+            { "ArcsAndSegMixed",      SLC_CASES().ArcsAndSegMixed,      false, 4, 19, 5, 19 },
+            { "OnePoint",             SLC_CASES().OnePoint,             false, 0,  1, 0,  1 }, // no shapes
+            { "TwoPoints",            SLC_CASES().TwoPoints,            false, 1,  2, 2,  2 }, // there and back
+            { "ThreePoints",          SLC_CASES().ThreePoints,          false, 2,  3, 3,  3 },
         };
 
 BOOST_AUTO_TEST_CASE( ToggleClosed )
@@ -421,6 +433,8 @@ BOOST_AUTO_TEST_CASE( ShapeCount )
     BOOST_CHECK_EQUAL( ArcsAndSegMixed.ShapeCount(), 4 );
     BOOST_CHECK_EQUAL( EmptyChain.ShapeCount(), 0 );
     BOOST_CHECK_EQUAL( OnePoint.ShapeCount(), 0 );
+    BOOST_CHECK_EQUAL( TwoPoints.ShapeCount(), 1 );
+    BOOST_CHECK_EQUAL( ThreePoints.ShapeCount(), 2 );
 }
 
 
@@ -437,6 +451,10 @@ BOOST_AUTO_TEST_CASE( NextShape )
     BOOST_CHECK_EQUAL( ArcsCoincidentClosed.NextShape( 0 ), 8 ); // next shape "Arc1"
     BOOST_CHECK_EQUAL( ArcsCoincidentClosed.NextShape( 8 ), 13 ); //next shape is hidden segment joining last/first
     BOOST_CHECK_EQUAL( ArcsCoincidentClosed.NextShape( 13 ), -1 ); //no more shapes
+
+    BOOST_CHECK_EQUAL( ArcsIndependent.NextShape( 0 ), 8 ); // next shape straight seg
+    BOOST_CHECK_EQUAL( ArcsIndependent.NextShape( 8 ), 9 ); //next shape second arc
+    BOOST_CHECK_EQUAL( ArcsIndependent.NextShape( 9 ), -1 ); //no more shapes
 
     BOOST_CHECK_EQUAL( DuplicateArcs.NextShape( 0 ), 8 ); // next shape "Arc1"
     BOOST_CHECK_EQUAL( DuplicateArcs.NextShape( 8 ), 13 ); // next shape hidden segment joining the 2 duplicate arcs
@@ -463,6 +481,15 @@ BOOST_AUTO_TEST_CASE( NextShape )
     BOOST_CHECK_EQUAL( OnePoint.NextShape( 1 ), -1 );  //invalid indices should still work
     BOOST_CHECK_EQUAL( OnePoint.NextShape( 2 ), -1 ); //invalid indices should still work
     BOOST_CHECK_EQUAL( OnePoint.NextShape( -2 ), -1 ); //invalid indices should still work
+
+    BOOST_CHECK_EQUAL( TwoPoints.NextShape( 0 ), -1 );
+    BOOST_CHECK_EQUAL( TwoPoints.NextShape( 1 ), -1 );
+    BOOST_CHECK_EQUAL( TwoPoints.NextShape( -1 ), -1 );
+
+    BOOST_CHECK_EQUAL( ThreePoints.NextShape( 0 ), 1 );
+    BOOST_CHECK_EQUAL( ThreePoints.NextShape( 1 ), -1 );
+    BOOST_CHECK_EQUAL( ThreePoints.NextShape( 2 ), -1 );
+    BOOST_CHECK_EQUAL( ThreePoints.NextShape( -1 ), -1 );
 }
 
 
