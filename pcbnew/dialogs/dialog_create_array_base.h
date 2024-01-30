@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -92,14 +92,13 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_tcRefPosY;
 		wxStaticText* m_stRefPosYUnit;
 		wxRadioButton* m_radioBtnSetByPos;
-		wxRadioButton* m_radioBtnSetByRadius;
-		wxStaticText* m_stInfoItems1;
 		wxStaticText* m_labelCentreX;
 		wxTextCtrl* m_entryCentreX;
 		wxStaticText* m_unitLabelCentreX;
 		wxStaticText* m_labelCentreY;
 		wxTextCtrl* m_entryCentreY;
 		wxStaticText* m_unitLabelCentreY;
+		wxRadioButton* m_radioBtnSetByRadius;
 		wxStaticText* m_labelCircRadius;
 		wxTextCtrl* m_tcValueCircRadius;
 		wxStaticText* m_unitLabelCircRadius;
