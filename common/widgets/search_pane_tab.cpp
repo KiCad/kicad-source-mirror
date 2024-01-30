@@ -22,6 +22,7 @@
 #include <kiway.h>
 #include <vector>
 #include <string_utils.h>
+#include <wx/clipbrd.h>
 
 SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* parent,
                                             wxWindowID winid, const wxPoint& pos,
@@ -42,6 +43,7 @@ SEARCH_PANE_LISTVIEW::SEARCH_PANE_LISTVIEW( SEARCH_HANDLER* handler, wxWindow* p
     Bind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemDeselected, this );
     Bind( wxEVT_LIST_COL_CLICK, &SEARCH_PANE_LISTVIEW::OnColClicked, this );
     Bind( wxEVT_UPDATE_UI, &SEARCH_PANE_LISTVIEW::OnUpdateUI, this );
+    Bind( wxEVT_CHAR, &SEARCH_PANE_LISTVIEW::OnChar, this );
 }
 
 
@@ -51,7 +53,9 @@ SEARCH_PANE_LISTVIEW::~SEARCH_PANE_LISTVIEW()
     Unbind( wxEVT_LIST_ITEM_ACTIVATED, &SEARCH_PANE_LISTVIEW::OnItemActivated, this );
     Unbind( wxEVT_LIST_ITEM_FOCUSED, &SEARCH_PANE_LISTVIEW::OnItemSelected, this );
     Unbind( wxEVT_LIST_ITEM_DESELECTED, &SEARCH_PANE_LISTVIEW::OnItemDeselected, this );
+    Unbind( wxEVT_LIST_COL_CLICK, &SEARCH_PANE_LISTVIEW::OnColClicked, this );
     Unbind( wxEVT_UPDATE_UI, &SEARCH_PANE_LISTVIEW::OnUpdateUI, this );
+    Unbind( wxEVT_CHAR, &SEARCH_PANE_LISTVIEW::OnChar, this );
 }
 
 
@@ -130,6 +134,44 @@ void SEARCH_PANE_LISTVIEW::OnColClicked( wxListEvent& aEvent )
 
     Sort();
     Refresh();
+}
+
+
+void SEARCH_PANE_LISTVIEW::OnChar( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_CONTROL_A )
+    {
+        // Select All
+        for( int row = 0; row < GetItemCount(); row++ )
+            SetItemState( row, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+    }
+    else if( aEvent.GetKeyCode() == WXK_CONTROL_C )
+    {
+        // Copy to clipboard the selected rows
+        if( wxTheClipboard->Open() )
+        {
+            wxString txt;
+            for( int row = 0; row < GetItemCount(); row++ )
+            {
+                if( GetItemState( row, wxLIST_STATE_SELECTED ) == wxLIST_STATE_SELECTED )
+                {
+                    for( int col = 0; col < GetColumnCount(); col++ )
+                    {
+                        if( GetColumnWidth( col ) > 0 )
+                        {
+                            txt += GetItemText( row, col );
+                            if( row <= GetItemCount() - 1 )
+                                txt += wxT( "\t" );
+                        }
+                    }
+                    txt += wxT( "\n" );
+                }
+            }
+
+            wxTheClipboard->SetData( new wxTextDataObject( txt ) );
+            wxTheClipboard->Close();
+        }
+    }
 }
 
 

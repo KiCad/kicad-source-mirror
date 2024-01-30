@@ -49,6 +49,7 @@ protected:
     void     OnItemDeselected( wxListEvent& aEvent );
     void     OnColClicked( wxListEvent& aEvent );
     void     OnUpdateUI( wxUpdateUIEvent& aEvent );
+    void     OnChar( wxKeyEvent& aEvent );
 
     void GetSelectRowsList( std::vector<long>& aSelectedList );
 
