@@ -666,9 +666,9 @@ public:
      */
     TEARDROP_PARAMETERS_LIST         m_TeardropParamsList;
 
-    PNS::MEANDER_SETTINGS            m_singleTrackMeanderSettings;
-    PNS::MEANDER_SETTINGS            m_diffPairMeanderSettings;
-    PNS::MEANDER_SETTINGS            m_skewMeanderSettings;
+    PNS::MEANDER_SETTINGS            m_SingleTrackMeanderSettings;
+    PNS::MEANDER_SETTINGS            m_DiffPairMeanderSettings;
+    PNS::MEANDER_SETTINGS            m_SkewMeanderSettings;
 
     VIATYPE    m_CurrentViaType;            ///< (VIA_BLIND_BURIED, VIA_THROUGH, VIA_MICROVIA)
 

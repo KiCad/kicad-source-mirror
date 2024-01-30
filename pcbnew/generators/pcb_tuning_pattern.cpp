@@ -635,17 +635,24 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
                                                    BOARD_CONNECTED_ITEM* aStartItem,
                                                    LENGTH_TUNING_MODE aMode )
 {
-    BOARD*                       board = aStartItem->GetBoard();
-    std::shared_ptr<DRC_ENGINE>& drcEngine = board->GetDesignSettings().m_DRCEngine;
-    DRC_CONSTRAINT               constraint;
-    PCB_LAYER_ID                 layer = aStartItem->GetLayer();
+    BOARD*                 board = aStartItem->GetBoard();
+    BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+    DRC_CONSTRAINT         constraint;
+    PCB_LAYER_ID           layer = aStartItem->GetLayer();
 
     if( aMode == SINGLE && board->DpCoupledNet( aStartItem->GetNet() ) )
         aMode = DIFF_PAIR;
 
     PCB_TUNING_PATTERN* pattern = new PCB_TUNING_PATTERN( board, layer, aMode );
 
-    constraint = drcEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
+    switch( aMode )
+    {
+    case SINGLE:         pattern->m_settings = bds.m_SingleTrackMeanderSettings; break;
+    case DIFF_PAIR:      pattern->m_settings = bds.m_DiffPairMeanderSettings;    break;
+    case DIFF_PAIR_SKEW: pattern->m_settings = bds.m_SkewMeanderSettings;        break;
+    }
+
+    constraint = bds.m_DRCEngine->EvalRules( LENGTH_CONSTRAINT, aStartItem, nullptr, layer );
 
     if( !constraint.IsNull() )
     {

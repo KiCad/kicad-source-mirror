@@ -617,9 +617,9 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                             return entry;
                         };
 
-                js["single_track_defaults"] = make_settings( m_singleTrackMeanderSettings );
-                js["diff_pair_defaults"] = make_settings( m_diffPairMeanderSettings );
-                js["diff_pair_skew_defaults"] = make_settings( m_skewMeanderSettings );
+                js["single_track_defaults"] = make_settings( m_SingleTrackMeanderSettings );
+                js["diff_pair_defaults"] = make_settings( m_DiffPairMeanderSettings );
+                js["diff_pair_skew_defaults"] = make_settings( m_SkewMeanderSettings );
 
                 return js;
             },
@@ -655,13 +655,13 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
                         };
 
                 if( aObj.contains( "single_track_defaults" ) )
-                    m_singleTrackMeanderSettings = read_settings( aObj["single_track_defaults"] );
+                    m_SingleTrackMeanderSettings = read_settings( aObj["single_track_defaults"] );
 
                 if( aObj.contains( "diff_pair_defaults" ) )
-                    m_diffPairMeanderSettings = read_settings( aObj["diff_pair_defaults"] );
+                    m_DiffPairMeanderSettings = read_settings( aObj["diff_pair_defaults"] );
 
                 if( aObj.contains( "diff_pair_skew_defaults" ) )
-                    m_skewMeanderSettings = read_settings( aObj["diff_pair_skew_defaults"] );
+                    m_SkewMeanderSettings = read_settings( aObj["diff_pair_skew_defaults"] );
             },
             {} ) );
 

@@ -169,9 +169,9 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
                 BOARD_DESIGN_SETTINGS& bds = m_frame->GetBoard()->GetDesignSettings();
 
                 return new PANEL_SETUP_TUNING_PATTERNS( aParent, m_frame,
-                                                        bds.m_singleTrackMeanderSettings,
-                                                        bds.m_diffPairMeanderSettings,
-                                                        bds.m_skewMeanderSettings );
+                                                        bds.m_SingleTrackMeanderSettings,
+                                                        bds.m_DiffPairMeanderSettings,
+                                                        bds.m_SkewMeanderSettings );
             }, _( "Length-tuning Patterns" ) );
 
     m_netclassesPage = m_treebook->GetPageCount();
