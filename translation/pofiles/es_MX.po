@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-29 08:24-0800\n"
-"PO-Revision-Date: 2024-01-24 02:24+0000\n"
+"PO-Revision-Date: 2024-01-31 13:10+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v7/es_MX/>\n"
@@ -385,7 +385,7 @@ msgstr "Error"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
 msgid "Failed to copy image to clipboard"
-msgstr "Fallo al copiar la imagen al portapapeles"
+msgstr "No se pudo copiar la imagen al portapapeles"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
 msgid "Can't save file"
@@ -882,7 +882,7 @@ msgstr "Texturas de procedimiento (lento)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
-msgstr "Añadir suelo (lento)"
+msgstr "Agregar suelo (lento)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
 msgid "Anti-aliasing (slow)"
@@ -2951,7 +2951,7 @@ msgstr "Nombre del nuevo tema:"
 
 #: common/dialogs/panel_color_settings.cpp:132
 msgid "Add Color Theme"
-msgstr "Añadir tema de color"
+msgstr "Agregar tema de color"
 
 #: common/dialogs/panel_color_settings.cpp:144
 msgid "Theme already exists!"
@@ -5102,7 +5102,7 @@ msgstr "Finalizar dibujo"
 
 #: common/hotkey_store.cpp:46
 msgid "Add to Selection"
-msgstr "Añadir a la selección"
+msgstr "Agregar a la selección"
 
 #: common/hotkey_store.cpp:47 eeschema/tools/ee_actions.cpp:577
 #: gerbview/tools/gerbview_actions.cpp:119 pcbnew/tools/pcb_actions.cpp:790
@@ -5133,7 +5133,7 @@ msgstr "Gestos"
 #: common/kiway.cpp:242
 #, c-format
 msgid "Failed to verify kiface library '%s' signature."
-msgstr "Fallo al verificar la biblioteca kiface '%s' firma."
+msgstr "No se pudo verificar la firma de biblioteca kiface '%s'."
 
 #: common/kiway.cpp:279
 #, c-format
@@ -5586,7 +5586,7 @@ msgstr "Error de tipo entre %lf y '%s'"
 
 #: common/pgm_base.cpp:203
 msgid "No default editor found, you must choose one."
-msgstr "No se ha encontrado editor por defecto, debe escoger uno."
+msgstr "No se ha encontrado editor por defecto, debe elegir uno."
 
 #: common/pgm_base.cpp:223 common/pgm_base.cpp:225
 msgid "Executable file"
@@ -5891,11 +5891,11 @@ msgstr "Crear nueva carpeta de biblioteca"
 
 #: common/tool/actions.cpp:55
 msgid "Add Library..."
-msgstr "Añadir biblioteca..."
+msgstr "Agregar biblioteca..."
 
 #: common/tool/actions.cpp:55
 msgid "Add an existing library folder"
-msgstr "Añadir una carpeta de biblioteca existente"
+msgstr "Agregar una carpeta de biblioteca existente"
 
 #: common/tool/actions.cpp:61
 msgid "Open existing document"
@@ -7390,7 +7390,7 @@ msgstr "Archivos de asociación de símbolo/huella (.equ)"
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:36
 #: eeschema/sch_base_frame.cpp:277 pcbnew/footprint_libraries_utils.cpp:528
 msgid "Add"
-msgstr "Añadir"
+msgstr "Agregar"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:39
 msgid "Remove"
@@ -7689,11 +7689,11 @@ msgstr "Filtrar por biblioteca"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:255
 msgid "Delete all associations?"
-msgstr "¿Borrar todas las asociaciones?"
+msgstr "¿Eliminar todas las asociaciones?"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
 msgid "Unable to create the footprint viewer frame"
-msgstr "Incapaz de crear el marco de visualización de la huella"
+msgstr "No se pudo crear el marco de visualización de la huella"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -7912,7 +7912,7 @@ msgstr "Apodo del generador:"
 
 #: eeschema/dialogs/dialog_bom.cpp:382
 msgid "Add Generator"
-msgstr "Añadir generador"
+msgstr "Agregar generador"
 
 #: eeschema/dialogs/dialog_bom.cpp:391
 #, c-format
@@ -7938,7 +7938,7 @@ msgstr "Scripts de generador de BOM:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add a new BOM generator and its command line to the list"
-msgstr "Añadir un nuevo generador de BOM y su comando a la lista"
+msgstr "Agregar un nuevo generador de BOM y su comando a la lista"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:76
 msgid "Edit the script file in the text editor"
@@ -8082,10 +8082,10 @@ msgstr ""
 "\n"
 "La configuración por defecto presenta varias opciones de scripts "
 "generadores, aunque algunos scripts adicionales se instalan con KiCad y "
-"pueden añadirse a la lista con el botón **+**.\n"
+"pueden agregarse a la lista con el botón **+**.\n"
 "\n"
-"**Nota:** En Windows, hay una opción adicional **Mostrar ventana de "
-"consola**. Cuando esta opción está desmarcada, los generadores de listas de "
+"**Nota:** En Windows, hay una opción adicional **Mostrar ventana de consola**"
+". Cuando esta opción está desmarcada, los generadores de listas de "
 "materiales se ejecutan en una ventana de consola oculta y cualquier salida "
 "es redirigida e impresa en el diálogo. Cuando esta opción está marcada, los "
 "generadores de listas de materiales se ejecutan en una ventana de consola "
@@ -8114,8 +8114,8 @@ msgstr ""
 "final\n"
 "\n"
 "**Nota:** el parámetro `%O` del archivo de salida no incluye una extensión "
-"de archivo. KiCad intentará añadir una extensión apropiada a la línea de "
-"comandos automáticamente, pero puede ser necesario añadir una extensión a "
+"de archivo. KiCad intentará agregar una extensión apropiada a la línea de "
+"comandos automáticamente, pero puede ser necesario agregar una extensión a "
 "mano.\n"
 "\n"
 "Python es la herramienta recomendada para los scripts generadores de listas "
@@ -8135,8 +8135,8 @@ msgstr ""
 "sería:\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
-"csv\"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
+"\n"
 "```\n"
 "\n"
 "En Linux, si el script generador deseado para una lista de materiales CSV es "
@@ -8486,7 +8486,7 @@ msgstr "¿Eliminar también las exclusiones?"
 #: pcbnew/dialogs/dialog_drc.cpp:1143 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
-msgstr "Borrar todos los marcadores"
+msgstr "Eliminar todos los marcadores"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 msgid "Errors and Warnings Only"
@@ -8797,7 +8797,7 @@ msgstr "Debe proporcionar un título de generador de netlist"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:52
 msgid "Add Generator..."
-msgstr "Añadir generador..."
+msgstr "Agregar generador..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:55
 msgid "Remove Generator"
@@ -9413,7 +9413,7 @@ msgstr "Fuente"
 #: eeschema/dialogs/dialog_sheet_properties_base.cpp:93
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:90
 msgid "Add field"
-msgstr "Añadir campo"
+msgstr "Agregar campo"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:139
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:110
@@ -9831,7 +9831,7 @@ msgstr "Los primeros %d campos son obligatorios."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:772
 msgid "Add Footprint Filter"
-msgstr "Añadir filtro de huellas"
+msgstr "Agregar filtro de huellas"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:815
 msgid "Edit Footprint Filter"
@@ -9995,7 +9995,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:324
 msgid "Add footprint filter"
-msgstr "Añadir filtro de huellas"
+msgstr "Agregar filtro de huellas"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:329
 msgid "Edit footprint filter"
@@ -10152,7 +10152,7 @@ msgstr "Modo de pines sincronizados."
 #: eeschema/dialogs/dialog_pin_properties.cpp:441
 msgid "Synchronized Pins Mode.  New pin will be added to all units."
 msgstr ""
-"Modo de pines sincronizados.  Se añadirá un nuevo pin a todas las unidades."
+"Modo de pines sincronizados.  Se agregará un nuevo pin a todas las unidades."
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:443
 msgid "Synchronized Pins Mode.  Matching pins in other units will be updated."
@@ -11221,7 +11221,7 @@ msgstr "Personalizado"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:431
 msgid "Add full path for .include library directives"
-msgstr "Añadir ruta completa a directivas de biblioteca .include"
+msgstr "Agregar ruta completa a directivas de biblioteca .include"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:444
 msgid "Compatibility mode:"
@@ -11266,7 +11266,7 @@ msgstr "No hay ningún modelo llamado '%s' en la biblioteca."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:288 eeschema/sim/sim_model.cpp:403
 msgid "Failed to read simulation model from fields."
-msgstr "Fallo en la lectura del modelo de simulación de los campos."
+msgstr "No se pudo leer el modelo de simulación de los campos."
 
 #: eeschema/dialogs/dialog_sim_model.cpp:414
 msgid "Component:"
@@ -11427,7 +11427,7 @@ msgstr "Nuevo nombre de campo:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1049
 msgid "Add Field"
-msgstr "Añadir campo"
+msgstr "Agregar campo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1058
 msgid "Field must have a name."
@@ -12028,7 +12028,8 @@ msgid ""
 "the wire tool is not active"
 msgstr ""
 "Cuando está activado, puede iniciar el cableado haciendo clic en los pines "
-"desconectados incluso cuando la herramienta para añadir líneas no está activa"
+"desconectados incluso cuando la herramienta para agregar líneas no está "
+"activa"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:386
@@ -12108,7 +12109,7 @@ msgstr "Clarificar selección del menú."
 #: pcbnew/dialogs/panel_edit_options_base.cpp:137
 #: pcbnew/dialogs/panel_edit_options_base.cpp:209
 msgid "Add item(s) to selection."
-msgstr "Añadir elemento(s) a la selección."
+msgstr "Agregar elemento(s) a la selección."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:142
@@ -12503,7 +12504,7 @@ msgstr "Ya existe una biblioteca de apodo '%s'."
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:905
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
-"Uno de los apodos tendrá que ser cambiado después de añadir esta biblioteca."
+"Uno de los apodos tendrá que ser cambiado después de agregar esta biblioteca."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:535 eeschema/sch_base_frame.cpp:276
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:923
@@ -12514,7 +12515,7 @@ msgstr "Saltear"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:535
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:923
 msgid "Add Anyway"
-msgstr "Añadir de todas formas"
+msgstr "Agregar de todas formas"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:731
 msgid ""
@@ -12652,11 +12653,11 @@ msgstr "Bibliotecas específicas del proyecto"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:126
 msgid "Add empty row to table"
-msgstr "Añadir fila vacía a la tabla"
+msgstr "Agregar fila vacía a la tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:134
 msgid "Add existing library to table"
-msgstr "Añadir biblioteca existente a la tabla"
+msgstr "Agregar biblioteca existente a la tabla"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:152
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:149
@@ -13131,7 +13132,7 @@ msgstr "Memoria acabada cargando el esquema '%s'."
 #: eeschema/files-io.cpp:1325 eeschema/sheet.cpp:164
 #, c-format
 msgid "Failed to load '%s'."
-msgstr "Fallo al cargar '%s'."
+msgstr "No se pudo cargar '%s'."
 
 #: eeschema/files-io.cpp:302
 msgid ""
@@ -13521,7 +13522,7 @@ msgstr "Altura de caja"
 #: eeschema/libarch.cpp:101
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
-msgstr "Fallo al añadir el símbolo %s al archivo de biblioteca '%s'."
+msgstr "No se pudo agregar el símbolo %s al archivo de biblioteca '%s'."
 
 #: eeschema/libarch.cpp:110
 msgid "Unexpected exception occurred."
@@ -13555,7 +13556,8 @@ msgstr "Insertar el contenido de hoja de esquema..."
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
 msgstr ""
-"Añadir el contenido de una hoja de esquema de otro proyecto en la hoja activa"
+"Agregar el contenido de una hoja de esquema de otro proyecto en la hoja "
+"activa"
 
 #: eeschema/menubar.cpp:107 pcbnew/menubar_footprint_editor.cpp:65
 #: pcbnew/menubar_pcb_editor.cpp:112
@@ -13822,11 +13824,11 @@ msgstr ""
 
 #: eeschema/sch_base_frame.cpp:257 pcbnew/footprint_libraries_utils.cpp:508
 msgid "Add the library to the global library table?"
-msgstr "¿Quiere añadir la biblioteca a la tabla global de bibliotecas?"
+msgstr "¿Quiere agregar la biblioteca a la tabla global de bibliotecas?"
 
 #: eeschema/sch_base_frame.cpp:258 pcbnew/footprint_libraries_utils.cpp:509
 msgid "Add To Global Library Table"
-msgstr "Añadir a tabla global de bibliotecas"
+msgstr "Agregar a tabla global de bibliotecas"
 
 #: eeschema/sch_base_frame.cpp:268 pcbnew/footprint_libraries_utils.cpp:519
 msgid "Global"
@@ -13834,11 +13836,11 @@ msgstr "Global"
 
 #: eeschema/sch_base_frame.cpp:271 pcbnew/footprint_libraries_utils.cpp:522
 msgid "Choose the Library Table to add the library to:"
-msgstr "Seleccione la Tabla de bibliotecas a la que añadir la biblioteca:"
+msgstr "Seleccione la Tabla de bibliotecas a la que agregar la biblioteca:"
 
 #: eeschema/sch_base_frame.cpp:272 pcbnew/footprint_libraries_utils.cpp:523
 msgid "Add To Library Table"
-msgstr "Añadir a la aabla de bibliotecas"
+msgstr "Agregar a la aabla de bibliotecas"
 
 #: eeschema/sch_base_frame.cpp:554
 msgid "No symbol libraries are loaded."
@@ -15686,12 +15688,12 @@ msgstr "La línea excede la longitud máxima."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1051
 msgid "Failed to read a double."
-msgstr "Fallo al leer un doble."
+msgstr "No se pudo leer un doble."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1057
 #: eeschema/sim/kibis/ibis_parser.cpp:1101
 msgid "Failed to read a word."
-msgstr "Fallo al leer una palabra."
+msgstr "No se pudo leer una palabra."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1094
 msgid "Number is not an integer"
@@ -16602,7 +16604,7 @@ msgid ""
 msgstr ""
 "No se han podido cargar todas las bibliotecas. Utilice el diálogo "
 "Administrar bibliotecas de símbolos\n"
-"para corregir la ruta y añadir o eliminar la bibliotecas."
+"para corregir la ruta y agregar o eliminar la bibliotecas."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:70
 msgid "Symbol..."
@@ -16888,7 +16890,7 @@ msgstr "Guardar biblioteca '%s' como..."
 #, c-format
 msgid "Failed to save changes to symbol library file '%s'."
 msgstr ""
-"Fallo al guardar los cambios al archivo de biblioteca de símbolos '%s'."
+"No se pudieron guardar los cambios al archivo de biblioteca de símbolos '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1108
 msgid "Error Saving Library"
@@ -17019,7 +17021,7 @@ msgstr "Error al guardar el símbolo %s a la biblioteca '%s'."
 
 #: eeschema/symbol_tree_synchronizing_adapter.cpp:269
 msgid "(failed to load)"
-msgstr "(fallo al cargarse)"
+msgstr "(no se pudo cargar)"
 
 #: eeschema/symbol_viewer_frame.cpp:124
 msgid "KiCad Symbol Library Viewer"
@@ -17085,7 +17087,7 @@ msgstr "Cambiar visibilidad"
 #: eeschema/tools/assign_footprints.cpp:238
 #, c-format
 msgid "Failed to open symbol-footprint link file '%s'."
-msgstr "Fallo al abrir el archivo de vínculos símbolo-huella '%s'."
+msgstr "No se pudo abrir el archivo de vínculos símbolo-huella '%s'."
 
 #: eeschema/tools/backannotate.cpp:73
 msgid "Select at least one property to back annotate."
@@ -17167,7 +17169,7 @@ msgstr ""
 #: eeschema/tools/backannotate.cpp:566
 #, c-format
 msgid "Add label '%s' to %s pin %s net."
-msgstr "Añadir la etiqueta '%s' a %s pin %s red."
+msgstr "Agregar la etiqueta '%s' a %s pin %s red."
 
 #: eeschema/tools/ee_actions.cpp:45
 msgid "Perform electrical rules check"
@@ -17313,7 +17315,7 @@ msgstr "Establecer el nombre para mostrar de una unidad"
 
 #: eeschema/tools/ee_actions.cpp:191
 msgid "Add Symbol to Schematic"
-msgstr "Añadir símbolo en el esquema"
+msgstr "Agregar símbolo en el esquema"
 
 #: eeschema/tools/ee_actions.cpp:196
 msgid "Show Pin Electrical Types"
@@ -17372,38 +17374,38 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:238
 msgid "Add Pin"
-msgstr "Añadir pin"
+msgstr "Agregar pin"
 
 #: eeschema/tools/ee_actions.cpp:238
 msgid "Add a pin"
-msgstr "Añadir un pin"
+msgstr "Agregar un pin"
 
 #: eeschema/tools/ee_actions.cpp:243 eeschema/tools/ee_actions.cpp:353
 #: pagelayout_editor/tools/pl_actions.cpp:54 pcbnew/tools/pcb_actions.cpp:128
 msgid "Add Text"
-msgstr "Añadir texto"
+msgstr "Agregar texto"
 
 #: eeschema/tools/ee_actions.cpp:243 pagelayout_editor/tools/pl_actions.cpp:54
 #: pcbnew/tools/pcb_actions.cpp:128
 msgid "Add a text item"
-msgstr "Añadir un elemento de texto"
+msgstr "Agregar un elemento de texto"
 
 #: eeschema/tools/ee_actions.cpp:248 eeschema/tools/ee_actions.cpp:358
 #: pcbnew/tools/pcb_actions.cpp:133
 msgid "Add Text Box"
-msgstr "Añadir cuadro de texto"
+msgstr "Agregar cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "Añadir un elemento de cuadro de texto"
+msgstr "Agregar un elemento de caja de texto"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
-msgstr "Añadir líneas"
+msgstr "Agregar líneas"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add connected graphic lines"
-msgstr "Añadir líneas gráficas conectadas"
+msgstr "Agregar líneas gráficas conectadas"
 
 #: eeschema/tools/ee_actions.cpp:258
 msgid "Move Symbol Anchor"
@@ -17443,7 +17445,7 @@ msgstr "Copiar el tamaño del número del pin a otros pines en el símbolo"
 
 #: eeschema/tools/ee_actions.cpp:289
 msgid "Add Symbol"
-msgstr "Añadir símbolo"
+msgstr "Agregar símbolo"
 
 #: eeschema/tools/ee_actions.cpp:289
 msgid "Add a symbol"
@@ -17451,7 +17453,7 @@ msgstr "Añadir un símbolo"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Add Power"
-msgstr "Añadir alimentación"
+msgstr "Agregar alimentación"
 
 #: eeschema/tools/ee_actions.cpp:295
 msgid "Add a power symbol"
@@ -17459,7 +17461,7 @@ msgstr "Añadir un símbolo de alimentación"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add No Connect Flag"
-msgstr "Añadir marca de no conectado"
+msgstr "Agregar marca de no conectado"
 
 #: eeschema/tools/ee_actions.cpp:301
 msgid "Add a no-connection flag"
@@ -17467,7 +17469,7 @@ msgstr "Añadir una marca de no conectado"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add Junction"
-msgstr "Añadir unión"
+msgstr "Agregar unión"
 
 #: eeschema/tools/ee_actions.cpp:307
 msgid "Add a junction"
@@ -17475,15 +17477,15 @@ msgstr "Añadir una unión"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add Wire to Bus Entry"
-msgstr "Añadir entrada de línea a bus"
+msgstr "Agregar entrada de línea a bus"
 
 #: eeschema/tools/ee_actions.cpp:313
 msgid "Add a wire entry to a bus"
-msgstr "Añadir una entrada de línea a un bus"
+msgstr "Agregar una entrada de línea a un bus"
 
 #: eeschema/tools/ee_actions.cpp:319
 msgid "Add Label"
-msgstr "Añadir etiqueta"
+msgstr "Agregar etiqueta"
 
 #: eeschema/tools/ee_actions.cpp:319
 msgid "Add a net label"
@@ -17499,7 +17501,7 @@ msgstr "Añadir una etiqueta de directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:330
 msgid "Add Hierarchical Label"
-msgstr "Añadir etiqueta jerárquica"
+msgstr "Agregar etiqueta jerárquica"
 
 #: eeschema/tools/ee_actions.cpp:330
 msgid "Add a hierarchical label"
@@ -17507,7 +17509,7 @@ msgstr "Añadir una etiqueta jerárquica"
 
 #: eeschema/tools/ee_actions.cpp:336
 msgid "Add Sheet"
-msgstr "Añadir página"
+msgstr "Agregar página"
 
 #: eeschema/tools/ee_actions.cpp:336
 msgid "Add a hierarchical sheet"
@@ -17523,7 +17525,7 @@ msgstr "Importar un pin de hoja jerárquica"
 
 #: eeschema/tools/ee_actions.cpp:347
 msgid "Add Global Label"
-msgstr "Añadir etiqueta global"
+msgstr "Agregar etiqueta global"
 
 #: eeschema/tools/ee_actions.cpp:347
 msgid "Add a global label"
@@ -17539,15 +17541,15 @@ msgstr "Añadir un cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:363 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add Rectangle"
-msgstr "Añadir rectángulo"
+msgstr "Agregar rectángulo"
 
 #: eeschema/tools/ee_actions.cpp:363 pagelayout_editor/tools/pl_actions.cpp:49
 msgid "Add a rectangle"
-msgstr "Añadir un rectángulo"
+msgstr "Agregar un rectángulo"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Add Circle"
-msgstr "Añadir Círculo"
+msgstr "Agregar Círculo"
 
 #: eeschema/tools/ee_actions.cpp:368
 msgid "Add a circle"
@@ -17555,7 +17557,7 @@ msgstr "Añadir un círculo"
 
 #: eeschema/tools/ee_actions.cpp:373
 msgid "Add Arc"
-msgstr "Añadir Arco"
+msgstr "Agregar Arco"
 
 #: eeschema/tools/ee_actions.cpp:373
 msgid "Add an arc"
@@ -17563,7 +17565,7 @@ msgstr "Añadir un arco"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/pcb_actions.cpp:122
 msgid "Add Image"
-msgstr "Añadir imagen"
+msgstr "Agregar imagen"
 
 #: eeschema/tools/ee_actions.cpp:378 pcbnew/tools/pcb_actions.cpp:122
 msgid "Add bitmap image"
@@ -17780,7 +17782,7 @@ msgstr "Cambiar el elemento existente a un cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Cleanup Sheet Pins"
-msgstr "Borrar pines de hoja"
+msgstr "Eliminar pines de hoja"
 
 #: eeschema/tools/ee_actions.cpp:533
 msgid "Delete unreferenced sheet pins"
@@ -17828,7 +17830,7 @@ msgstr "Divide en segmentos no conectados"
 
 #: eeschema/tools/ee_actions.cpp:568
 msgid "Add a simulator probe"
-msgstr "Añadir sonda de simulación"
+msgstr "Agregar sonda de simulación"
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Select a value to be tuned"
@@ -17989,7 +17991,8 @@ msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Añadir símbolos usados en el esquema a una biblioteca de símbolos existente\n"
+"Agregar símbolos usados en el esquema a una biblioteca de símbolos "
+"existente\n"
 "(no elimina otros símbolos de la biblioteca)"
 
 #: eeschema/tools/ee_actions.cpp:682
@@ -18181,19 +18184,19 @@ msgstr "Mostrar u ocultar el navegador de jerarquía de hojas esquemáticas"
 
 #: eeschema/tools/ee_actions.cpp:814
 msgid "Add Wire"
-msgstr "Añadir cable"
+msgstr "Agregar cable"
 
 #: eeschema/tools/ee_actions.cpp:814
 msgid "Add a wire"
-msgstr "Añadir un cable"
+msgstr "Agregar un cable"
 
 #: eeschema/tools/ee_actions.cpp:821
 msgid "Add Bus"
-msgstr "Añadir bus"
+msgstr "Agregar bus"
 
 #: eeschema/tools/ee_actions.cpp:821
 msgid "Add a bus"
-msgstr "Añadir un bus"
+msgstr "Agregar un bus"
 
 #: eeschema/tools/ee_actions.cpp:827
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:76
@@ -18662,7 +18665,7 @@ msgstr "¿Se perderán los datos actuales?"
 #: gerbview/clear_gbr_drawlayers.cpp:78
 #, c-format
 msgid "Clear layer %d?"
-msgstr "¿Borrar la capa %d?"
+msgstr "¿Eliminar la capa %d?"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:149
 #, c-format
@@ -19563,7 +19566,7 @@ msgstr "Limpiar todas las capas"
 
 #: gerbview/tools/gerbview_actions.cpp:99
 msgid "Clear all layers. All data will be deleted"
-msgstr "Borrar todas las capas. Se eliminarán todos los datos"
+msgstr "Eliminar todas las capas. Se eliminarán todos los datos"
 
 #: gerbview/tools/gerbview_actions.cpp:104
 msgid "Reload All Layers"
@@ -20519,7 +20522,7 @@ msgstr "Abrir carpeta de proyecto en el explorador"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
-msgstr "Añadir un repositorio por defecto"
+msgstr "Agregar un repositorio por defecto"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:96
 msgid "Please enter fully qualified repository url"
@@ -20527,13 +20530,13 @@ msgstr "Por favor ingresa la URL completa del repositorio"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:97
 msgid "Add repository"
-msgstr "Añadir repositorio"
+msgstr "Agregar repositorio"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.cpp:58
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:130
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:131
 msgid "Add Existing"
-msgstr "Añadir existente"
+msgstr "Agregar existente"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories_base.h:62
 msgid "Manage Repositories"
@@ -21030,7 +21033,7 @@ msgstr "Borrando directorio %s"
 #: kicad/pcm/pcm_task_manager.cpp:513
 #, c-format
 msgid "Failed to remove directory %s"
-msgstr "Fallo al eliminar la carpeta %s"
+msgstr "No se pudo eliminar la carpeta %s"
 
 #: kicad/pcm/pcm_task_manager.cpp:577
 #, c-format
@@ -21373,7 +21376,7 @@ msgstr "Crear (o abrir) un proyecto para editar una placa."
 
 #: kicad/tools/kicad_manager_control.cpp:757
 msgid "Application failed to load:\n"
-msgstr "Fallo al cargar la aplicación:\n"
+msgstr "La aplicación no pudo cargarse:\n"
 
 #: kicad/tools/kicad_manager_control.cpp:763
 msgid "Application failed to load."
@@ -21798,19 +21801,19 @@ msgstr ""
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add Line"
-msgstr "Añadir línea"
+msgstr "Agregar línea"
 
 #: pagelayout_editor/tools/pl_actions.cpp:44
 msgid "Add a line"
-msgstr "Añadir una línea"
+msgstr "Agregar una línea"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add Bitmap"
-msgstr "Añadir mapa de bits"
+msgstr "Agregar mapa de bits"
 
 #: pagelayout_editor/tools/pl_actions.cpp:59
 msgid "Add a bitmap image"
-msgstr "Añadir una imagen de mapa de bits"
+msgstr "Agregar una imagen de mapa de bits"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
 msgid "Append Existing Drawing Sheet..."
@@ -22752,11 +22755,11 @@ msgstr "Editar el regulador activo."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:112
 msgid "Add Regulator"
-msgstr "Añadir regulador"
+msgstr "Agregar regulador"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Enter a new item to the current list of available regulators"
-msgstr "Añadir un nuevo elemento a la lista activa de reguladores disponibles"
+msgstr "Agregar un nuevo elemento a la lista activa de reguladores disponibles"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:118
 msgid "Remove an item from the current list of available regulators"
@@ -24084,12 +24087,12 @@ msgstr "Capa '%s' (subcapa %d/%d)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:321
 msgid "Add Dielectric Layer"
-msgstr "Añadir capa dieléctrica"
+msgstr "Agregar capa dieléctrica"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:324
 #: pcbnew/dialogs/panel_setup_layers.cpp:844
 msgid "Select layer to add:"
-msgstr "Seleccionar capa a añadir:"
+msgstr "Seleccionar capa a agregar:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:369
 #, c-format
@@ -24203,7 +24206,7 @@ msgid ""
 "Loss tangent and EpsilonR will be added to constraints."
 msgstr ""
 "Si se selecciona la opción de Impedancia Controlada,\n"
-"la tangente de pérdida y ÉpsilonR se añadirán a los requerimientos."
+"la tangente de pérdida y ÉpsilonR se agregarán a los requerimientos."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:47
 msgid "Add Dielectric Layer..."
@@ -26688,7 +26691,7 @@ msgstr "¿Está seguro de que desea sobreescribir el archivo existente?"
 #: pcbnew/plugins/altium/altium_pcb.cpp:1665
 #, c-format
 msgid "Failed to create folder '%s'."
-msgstr "Fallo al crear el archivo '%s'."
+msgstr "No se pudo crear la carpeta '%s'."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
@@ -27361,7 +27364,7 @@ msgid ""
 "<b>Append Selected Option</b> button."
 msgstr ""
 "Seleccione una <b>Opción</b> en el listado superior, y pulse el botón de "
-"<b>Añadir opción seleccionada</b>."
+"<b>Agregar opción seleccionada</b>."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:63
 #, c-format
@@ -27382,7 +27385,7 @@ msgstr "Opciones admitidas por el complemento actual"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr "<<    Añadir opción seleccionada"
+msgstr "<<    Agregar opción seleccionada"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:303
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:435
@@ -27806,7 +27809,7 @@ msgstr "Capa actual:"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:71
 msgid "Delete Items"
-msgstr "Borrar elementos"
+msgstr "Eliminar elementos"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
 msgid "Other text items"
@@ -28268,7 +28271,7 @@ msgstr "Eliminar las capas seleccionadas a la lista de capas coincidentes."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:70
 msgid "Remove all matched layers."
-msgstr "Borrar todas las capas coincidentes."
+msgstr "Eliminar todas las capas coincidentes."
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:78
 msgid "Matched Layers"
@@ -31130,11 +31133,11 @@ msgstr "Todas las capas definidas por el usuario ya han sido añadidas."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:842
 msgid "Add User-defined Layer"
-msgstr "Añadir capa definida por el usuario"
+msgstr "Agregar capa definida por el usuario"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:26
 msgid "Add User Defined Layer..."
-msgstr "Añadir capa definida por el usuario..."
+msgstr "Agregar capa definida por el usuario..."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:55
 msgid "CrtYd_Front"
@@ -31789,7 +31792,7 @@ msgstr "ERROR:"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:634
 msgid "Design rules cannot be added without a project"
-msgstr "No se pueden añadir reglas de diseño sin un proyecto"
+msgstr "No se pueden agregar reglas de diseño sin un proyecto"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:22
 msgid "DRC rules:"
@@ -33681,8 +33684,8 @@ msgstr "No se ha podido exportar el archivo IDF\n"
 #: pcbnew/exporters/exporter_vrml.cpp:810
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr ""
-"No se ha podido exportar el archivo VRML: no pueden añadirse orificios a los "
-"contornos."
+"No se ha podido exportar el archivo VRML: no pueden agregarse orificios a "
+"los contornos."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1242
 msgid "No project when exporting the VRML file"
@@ -33690,7 +33693,7 @@ msgstr "No hay proyecto al exportar el archivo VRML"
 
 #: pcbnew/exporters/exporter_vrml.cpp:1302
 msgid "VRML Export Failed:\n"
-msgstr "Fallo en la exportación de VRML:\n"
+msgstr "La exportación VRML falló:\n"
 
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:129
 #, c-format
@@ -33897,7 +33900,7 @@ msgid ""
 "Failed to rename temporary file '%s."
 msgstr ""
 "Error al guardar el archivo de placa '%s'.\n"
-"Fallo al renombrar el archivo temporal '%s'."
+"No se pudo renombrar el archivo temporal '%s'."
 
 #: pcbnew/files.cpp:1218
 #, c-format
@@ -34677,7 +34680,7 @@ msgid ""
 "Add footprints used on board to an existing footprint library\n"
 "(does not remove other footprints from this library)"
 msgstr ""
-"Añadir huellas usadas en la placa a una biblioteca existente\n"
+"Agregar huellas usadas en la placa a una biblioteca existente\n"
 "(no elimina otras huellas de la biblioteca)"
 
 #: pcbnew/menubar_pcb_editor.cpp:156
@@ -34699,7 +34702,7 @@ msgstr "Salidas de fabricación"
 
 #: pcbnew/menubar_pcb_editor.cpp:316
 msgid "Add Microwave Shape"
-msgstr "Añadir forma de microondas"
+msgstr "Agregar forma de microondas"
 
 #: pcbnew/menubar_pcb_editor.cpp:353
 msgid "Auto-Place Footprints"
@@ -34749,7 +34752,7 @@ msgstr "Número incorrecto, cancelar"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
 msgid "Add microwave inductor"
-msgstr "Añadir inducido de microondas"
+msgstr "Agregar inducido de microondas"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
 msgid "Length of Trace:"
@@ -34806,7 +34809,7 @@ msgstr "La forma no tiene puntos."
 
 #: pcbnew/microwave/microwave_tool.cpp:92
 msgid "Place microwave feature"
-msgstr "Añadir característica de microondas"
+msgstr "Agregar característica de microondas"
 
 #: pcbnew/netinfo_item.cpp:136
 msgid "On Board"
@@ -34819,22 +34822,22 @@ msgstr "En empaquetado"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:139
 #, c-format
 msgid "Cannot add %s (no footprint assigned)."
-msgstr "No puede añadirse %s (no se ha asignado huella)."
+msgstr "No puede agregarse %s (no se ha asignado huella)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:151
 #, c-format
 msgid "Cannot add %s (footprint '%s' not found)."
-msgstr "No puede añadirse %s (no se ha encontrado la huella '%s')."
+msgstr "No puede agregarse %s (no se ha encontrado la huella '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:161
 #, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Añadir %s (huella '%s')."
+msgstr "Agregar %s (huella '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:191
 #, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "Añadir %s (huella '%s')."
+msgstr "Agregado %s (huella '%s')."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:209
 #, c-format
@@ -34900,7 +34903,7 @@ msgstr "%s propiedades actualizadas."
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
 msgstr ""
-"Añadir el atributo de fabricación 'excluir de la lista de materiales' %s."
+"Agregar el atributo de fabricación 'excluir de la lista de materiales' %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:377
 #, c-format
@@ -34938,7 +34941,7 @@ msgstr "No se ha encontrado la red del símbolo %s pin %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:539
 #, c-format
 msgid "Add net %s."
-msgstr "Añadir red %s."
+msgstr "Agregar red %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:549
 #, c-format
@@ -35476,7 +35479,7 @@ msgstr "No se ha encontrado el archivo de esquema '%s'."
 
 #: pcbnew/pcb_edit_frame.cpp:1903
 msgid "Eeschema failed to load."
-msgstr "Fallo al cargar Eeschema."
+msgstr "Eeschema no pudo cargarse."
 
 #: pcbnew/pcb_edit_frame.cpp:2316
 msgid "Edit design rules"
@@ -37379,7 +37382,7 @@ msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
 msgstr ""
-"Seleccionar una pista, entonces añadir una vía al final de la pista trazada."
+"Seleccionar una pista, entonces agregar una vía al final de la pista trazada."
 
 #: pcbnew/router/router_tool.cpp:144
 msgid "Select Layer and Place Blind/Buried Via..."
@@ -37390,7 +37393,7 @@ msgid ""
 "Select a layer, then add a blind or buried via at the end of currently "
 "routed track."
 msgstr ""
-"Seleccionar una pista, entonces añadir una vía ciega/enterrada al final de "
+"Seleccionar una pista, entonces agregar una vía ciega/enterrada al final de "
 "la pista trazada."
 
 #: pcbnew/router/router_tool.cpp:153
@@ -37401,7 +37404,7 @@ msgstr "Seleccionar capa y colocar micro vía..."
 msgid ""
 "Select a layer, then add a micro via at the end of currently routed track."
 msgstr ""
-"Seleccionar una capa, después añadir una micro vía al final de la pista "
+"Seleccionar una capa, después agregar una micro vía al final de la pista "
 "actualmente enrutada."
 
 #: pcbnew/router/router_tool.cpp:161
@@ -38512,7 +38515,7 @@ msgstr "Ubicación de vía infringe el DRC."
 
 #: pcbnew/tools/drawing_tool.cpp:3314
 msgid "Place via"
-msgstr "Añadir vía"
+msgstr "Agregar vía"
 
 #: pcbnew/tools/drc_tool.cpp:150
 msgid "Refilling all zones..."
@@ -38796,91 +38799,91 @@ msgstr "Dibujar arco"
 
 #: pcbnew/tools/pcb_actions.cpp:110
 msgid "Add Board Characteristics"
-msgstr "Añadir características de placa"
+msgstr "Agregar características de placa"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Add a board characteristics table on a graphic layer"
-msgstr "Añadir una tabla de características de placa en una capa gráfica"
+msgstr "Agregar una tabla de características de placa en una capa gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:116
 msgid "Add Stackup Table"
-msgstr "Añadir una tabla de apilado"
+msgstr "Agregar una tabla de apilado"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Add a board stackup table on a graphic layer"
-msgstr "Añadir una tabla de apilado de placa en una capa gráfica"
+msgstr "Agregar una tabla de apilado de placa en una capa gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:133
 msgid "Add a wrapped text item"
-msgstr "Añadir un elemento de texto envuelto"
+msgstr "Agregar un elemento de texto envuelto"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add Aligned Dimension"
-msgstr "Añadir dimensión alineada"
+msgstr "Agregar dimensión alineada"
 
 #: pcbnew/tools/pcb_actions.cpp:139
 msgid "Add an aligned linear dimension"
-msgstr "Añadir una dimensión linear alineada"
+msgstr "Agregar una dimensión linear alineada"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add Center Dimension"
-msgstr "Añadir dimensión central"
+msgstr "Agregar dimensión central"
 
 #: pcbnew/tools/pcb_actions.cpp:144
 msgid "Add a center dimension"
-msgstr "Añadir una dimensión central"
+msgstr "Agregar una dimensión central"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add Radial Dimension"
-msgstr "Añadir dimensión radial"
+msgstr "Agregar dimensión radial"
 
 #: pcbnew/tools/pcb_actions.cpp:149
 msgid "Add a radial dimension"
-msgstr "Añadir una dimensión radial"
+msgstr "Agregar una dimensión radial"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add Orthogonal Dimension"
-msgstr "Añadir dimensión ortogonal"
+msgstr "Agregar dimensión ortogonal"
 
 #: pcbnew/tools/pcb_actions.cpp:154
 msgid "Add an orthogonal dimension"
-msgstr "Añadir una dimensión ortogonal"
+msgstr "Agregar una dimensión ortogonal"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add Leader"
-msgstr "Añadir directriz"
+msgstr "Agregar directriz"
 
 #: pcbnew/tools/pcb_actions.cpp:159
 msgid "Add a leader dimension"
-msgstr "Añadir una dimensión directriz"
+msgstr "Agregar una dimensión directriz"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add Filled Zone"
-msgstr "Añadir área de relleno"
+msgstr "Agregar área de relleno"
 
 #: pcbnew/tools/pcb_actions.cpp:170
 msgid "Add a filled zone"
-msgstr "Añadir una zona rellena"
+msgstr "Agregar una zona rellena"
 
 #: pcbnew/tools/pcb_actions.cpp:176
 msgid "Add Vias"
-msgstr "Añadir vías"
+msgstr "Agregar vías"
 
 #: pcbnew/tools/pcb_actions.cpp:176
 msgid "Add free-standing vias"
-msgstr "Añadir vías independientes"
+msgstr "Agregar vías independientes"
 
 #: pcbnew/tools/pcb_actions.cpp:182
 msgid "Add Rule Area"
-msgstr "Añadir área de reglas"
+msgstr "Agregar área de reglas"
 
 #: pcbnew/tools/pcb_actions.cpp:182
 msgid "Add a rule area (keepout)"
-msgstr "Añadir un área de reglas (restringida)"
+msgstr "Agregar un área de reglas (restringida)"
 
 #: pcbnew/tools/pcb_actions.cpp:188
 msgid "Add a Zone Cutout"
-msgstr "Añadir recorte de área"
+msgstr "Agregar recorte de área"
 
 #: pcbnew/tools/pcb_actions.cpp:188
 msgid "Add a cutout area of an existing zone"
@@ -38888,11 +38891,11 @@ msgstr "Recortar un área existente"
 
 #: pcbnew/tools/pcb_actions.cpp:194
 msgid "Add a Similar Zone"
-msgstr "Añadir área similar"
+msgstr "Agregar área similar"
 
 #: pcbnew/tools/pcb_actions.cpp:194
 msgid "Add a zone with the same settings as an existing zone"
-msgstr "Añadir un área con las mismas opciones que la existente"
+msgstr "Agregar un área con las mismas opciones que la existente"
 
 #: pcbnew/tools/pcb_actions.cpp:200
 msgid "Import Graphics..."
@@ -39254,7 +39257,7 @@ msgstr "Limpiar elementos redundantes, etc."
 
 #: pcbnew/tools/pcb_actions.cpp:530
 msgid "Add Microwave Gap"
-msgstr "Añadir espacio de microondas"
+msgstr "Agregar espacio de microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:530
 msgid "Create gap of specified length for microwave applications"
@@ -39263,7 +39266,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:535
 msgid "Add Microwave Stub"
-msgstr "Añadir cola de microondas"
+msgstr "Agregar cola de microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:536
 msgid "Create stub of specified length for microwave applications"
@@ -39273,7 +39276,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:541
 msgid "Add Microwave Arc Stub"
-msgstr "Añadir arco de cola de microondas"
+msgstr "Agregar arco de cola de microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:542
 msgid "Create stub (arc) of specified size for microwave applications"
@@ -39283,7 +39286,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:547
 msgid "Add Microwave Polygonal Shape"
-msgstr "Añadir forma poligonal de Microondas"
+msgstr "Agregar forma poligonal de Microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:548
 msgid "Create a microwave polygonal shape from a list of vertices"
@@ -39292,7 +39295,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:553
 msgid "Add Microwave Line"
-msgstr "Añadir línea de microondas"
+msgstr "Agregar línea de microondas"
 
 #: pcbnew/tools/pcb_actions.cpp:554
 msgid "Create line of specified length for microwave applications"
@@ -39334,11 +39337,11 @@ msgstr "Numerar pads haciendo pulsando en ellos en el orden deseado"
 
 #: pcbnew/tools/pcb_actions.cpp:585
 msgid "Add Pad"
-msgstr "Añadir pad"
+msgstr "Agregar pad"
 
 #: pcbnew/tools/pcb_actions.cpp:585
 msgid "Add a pad"
-msgstr "Añadir un pad"
+msgstr "Agregar un pad"
 
 #: pcbnew/tools/pcb_actions.cpp:591
 msgid "Edit Pad as Graphic Shapes"
@@ -39516,11 +39519,11 @@ msgstr "Duplicar perímetro de zona en otra capa"
 
 #: pcbnew/tools/pcb_actions.cpp:724
 msgid "Add Footprint"
-msgstr "Añadir huella"
+msgstr "Agregar huella"
 
 #: pcbnew/tools/pcb_actions.cpp:724
 msgid "Add a footprint"
-msgstr "Añadir una huella"
+msgstr "Agregar una huella"
 
 #: pcbnew/tools/pcb_actions.cpp:729
 msgid "Drill/Place File Origin"
@@ -39593,11 +39596,11 @@ msgstr "Abandonar el grupo actual"
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Append Board..."
-msgstr "Añadir a la placa..."
+msgstr "Agregar a la placa..."
 
 #: pcbnew/tools/pcb_actions.cpp:783
 msgid "Open another board and append its contents to this board"
-msgstr "Abrir otra placa y añadir sus contenidos a esta placa"
+msgstr "Abrir otra placa y agregar sus contenidos a esta placa"
 
 #: pcbnew/tools/pcb_actions.cpp:795
 msgid "Toggle Last Net Highlight"
@@ -40532,7 +40535,7 @@ msgstr "Añadir recorte de área"
 
 #: pcbnew/tools/zone_create_helper.cpp:237
 msgid "Add a zone"
-msgstr "Añadir área"
+msgstr "Agregar área"
 
 #: pcbnew/tools/zone_create_helper.cpp:264
 msgid "Add a graphical polygon"
@@ -41465,7 +41468,7 @@ msgstr "Alivios térmicos para PTH"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
-msgstr "[INFO] fallo al cargar: la línea de entrada es demasiado larga\n"
+msgstr "[INFO] Error al cargar: línea de entrada demasiado larga\n"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:10
 msgid "KiCad Image Converter"
