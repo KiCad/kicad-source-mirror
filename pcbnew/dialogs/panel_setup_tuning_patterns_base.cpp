@@ -247,19 +247,13 @@ PANEL_SETUP_TUNING_PATTERNS_BASE::PANEL_SETUP_TUNING_PATTERNS_BASE( wxWindow* pa
 
 	m_dp_rLabel = new wxStaticText( this, wxID_ANY, _("Radius (r):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dp_rLabel->Wrap( -1 );
-	m_dp_rLabel->Enable( false );
-
 	fgSizer32->Add( m_dp_rLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 15 );
 
 	m_dp_rCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_dp_rCtrl->Enable( false );
-
 	fgSizer32->Add( m_dp_rCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_dp_rUnits = new wxStaticText( this, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dp_rUnits->Wrap( -1 );
-	m_dp_rUnits->Enable( false );
-
 	fgSizer32->Add( m_dp_rUnits, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
