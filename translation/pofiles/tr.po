@@ -14,15 +14,16 @@
 # Mert Gülsoy <mgulsoy@gmail.com>, 2023.
 # Erkan <erkankarakas@outlook.com>, 2023.
 # Mert Kalkancı <mertkalkanci79@gmail.com>, 2024.
+# YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 19:54-0800\n"
-"PO-Revision-Date: 2024-01-18 07:32+0000\n"
-"Last-Translator: Mert Kalkancı <mertkalkanci79@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2024-01-30 19:01+0000\n"
+"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
+"master-source/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4582,9 +4583,8 @@ msgid "<b>Nets matching '%s':</b>"
 msgstr "<b>Eşleşen ağlar%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "Ağ Sınıfları"
+msgstr "Malzeme sınıfları:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:539
@@ -4667,7 +4667,7 @@ msgstr "KiCad varsayılan rengini kullanmak için rengi saydam olarak ayarlayın
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:112
 msgid "Netclass assignments:"
-msgstr "Şematik atama"
+msgstr "Malzeme atamaları:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
 msgid "Pattern"
@@ -5097,12 +5097,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Bu potansiyel olarak utanç verici!\n"
-"Görünüşe göre en son düzenlediğinizde\n"
+"Peki bu potansiyel olarak utandırıcı!\n"
+"En son düzenleme yaptığınız anlaşılıyor\n"
 "%s\n"
-"KiCad kaydetmeden önce çıktı.\n"
+"KiCad'dan kaydetmeden çıkıldı.\n"
 "\n"
-"Bunun yerine otomatik kaydedilmiş dosyayı açmak ister misiniz?"
+"Bunun yerine otomatik olarak kaydedilen dosyayı açmak ister misiniz?"
 
 #: common/eda_base_frame.cpp:1379
 msgid "The auto save file could not be renamed to the board file name."
@@ -5162,9 +5162,9 @@ msgid "Zoom %.2f"
 msgstr "%.2f Yakınlaştır"
 
 #: common/eda_draw_frame.cpp:653
-#, fuzzy, c-format
+#, c-format
 msgid "grid %s"
-msgstr "Kılavuz eksenleri"
+msgstr "ızgara %s"
 
 #: common/eda_draw_frame.cpp:666 pagelayout_editor/pl_editor_frame.cpp:755
 msgid "inches"
@@ -6273,9 +6273,8 @@ msgstr "Seçili hücreleri panoya kopyala"
 #: eeschema/tools/sch_editor_control.cpp:2188
 #: eeschema/tools/symbol_editor_edit_tool.cpp:863
 #: pcbnew/dialogs/panel_setup_rules.cpp:130 pcbnew/tools/pcb_control.cpp:1033
-#, fuzzy
 msgid "Paste"
-msgstr "pasta"
+msgstr "Yapıştır"
 
 #: common/grid_tricks.cpp:359
 msgid "Paste clipboard cells to matrix at current cell"
@@ -6775,7 +6774,7 @@ msgstr "Yardımcı öğeler"
 #: gerbview/widgets/gerbview_layer_widget.cpp:134
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Grid"
-msgstr "Arkaplan Ölçü Çizgileri"
+msgstr "Izgara"
 
 #: common/layer_id.cpp:145
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:103
@@ -6796,9 +6795,8 @@ msgid "Cursor"
 msgstr "İmleç"
 
 #: common/layer_id.cpp:148
-#, fuzzy
 msgid "Hovered items"
-msgstr "Yardımcı öğeler"
+msgstr "İşaretlenmiş parçalar"
 
 #: common/layer_id.cpp:149
 msgid "Highlighted items"
@@ -6957,14 +6955,12 @@ msgid "Edit options for this library entry"
 msgstr "'%s' Kitaplığı seçenekleri"
 
 #: common/lib_table_grid_tricks.cpp:63
-#, fuzzy
 msgid "Activate selected"
-msgstr "Seçili hücreleri sil"
+msgstr "Seçileni etkinleştir"
 
 #: common/lib_table_grid_tricks.cpp:66
-#, fuzzy
 msgid "Deactivate selected"
-msgstr "Seçili hücreleri sil"
+msgstr "Seçileni devre dışı bırak"
 
 #: common/lib_table_grid_tricks.cpp:69
 #, fuzzy
@@ -7029,9 +7025,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Tanınmayan işlev '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Beklenmeyen '%s'"
+msgstr "'%s' için beklenmeyen birimler"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1036
 #, c-format
@@ -7080,7 +7076,6 @@ msgid "Select Preferred Editor"
 msgstr "Tercih Edilen Düzenleyiciyi Seç"
 
 #: common/pgm_base.cpp:376
-#, fuzzy
 msgid ""
 "KiCad can anonymously report crashes and special event data to developers in "
 "order to aid identifying critical bugs across the user base more effectively "
@@ -7089,18 +7084,17 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
-"KiCad, kullanıcı tabanındaki kritik hataların daha etkili bir şekilde "
-"tanımlanmasına yardımcı olmak ve iyileştirmelere rehberlik etmek için "
+"KiCad, kullanıcı tabanlı kritik hataların daha etkili bir şekilde "
+"belirlenmesine yardımcı olmak ve iyileştirmelere rehberlik etmek için "
 "işlevsellik profiline yardımcı olmak amacıyla çökmeleri ve özel olay "
 "verilerini geliştiricilere anonim olarak bildirebilir. \n"
-"Gönüllü olarak katılmayı seçerseniz, KiCad çökmeler veya olaylar meydana "
+"Gönüllü olarak katılmayı seçerseniz, KiCad, çökmeler veya olaylar meydana "
 "geldiğinde söz konusu raporları göndermeyi otomatik olarak halledecektir. \n"
 "Şematik veya PCB gibi tasarım dosyalarınız bu süreçte paylaşılmaz."
 
 #: common/pgm_base.cpp:383
-#, fuzzy
 msgid "Data collection opt in request"
-msgstr "Bağlantı Yok"
+msgstr "Veri toplama isteği seçeneği"
 
 #: common/pgm_base.cpp:487
 msgid "Environment variable HOME is empty.  Unable to continue."
@@ -7115,19 +7109,19 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Bu dil için KiCad dil dosyası kurulu değil."
 
 #: common/plotters/PDF_plotter.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Lehim maskesi katmanlarını göster"
+msgstr "Sayfa %s"
 
 #: common/plotters/PDF_plotter.cpp:884
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "Izgara: %s (%s)"
+msgstr "%s (Sayfa %s)"
 
 #: common/plotters/PDF_plotter.cpp:1361
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Lehim maskesi katmanlarını göster"
+msgstr "Sayfayı göster %s"
 
 #: common/plotters/PDF_plotter.cpp:1372
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:851
@@ -7141,9 +7135,8 @@ msgid "Error loading project footprint library table."
 msgstr "Proje ayak içizimi kitaplığı tablosu yüklenirken hata oluştu."
 
 #: common/project/net_settings.cpp:61 pcbnew/board.cpp:118
-#, fuzzy
 msgid "This is the default net class."
-msgstr "Varsayılan net sınıfı gereklidir."
+msgstr "Bu varsayılan parça listesi sınıfıdır."
 
 #: common/project/project_archiver.cpp:53 kicad/pcm/pcm_task_manager.cpp:329
 msgid "Could not open archive file."
@@ -7355,9 +7348,8 @@ msgid "Save current document to another location"
 msgstr "Geçerli belgeyi başka bir konuma kaydet"
 
 #: common/tool/actions.cpp:93
-#, fuzzy
 msgid "Save a Copy..."
-msgstr "Kopyayı Farklı Kaydet..."
+msgstr "Bir Kopyasını kaydet.."
 
 #: common/tool/actions.cpp:94
 msgid "Save a copy of the current document to another location"
@@ -7462,9 +7454,8 @@ msgid "Paste Special..."
 msgstr "Özel Yapıştır..."
 
 #: common/tool/actions.cpp:248
-#, fuzzy
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "Panodan öğe(leri) seçeneklerle yapıştır"
+msgstr "Ek seçenekleriyle panodan öğe(ler)i yapıştır"
 
 #: common/tool/actions.cpp:256 eeschema/tools/symbol_editor_edit_tool.cpp:913
 #: pcbnew/tools/edit_tool.cpp:2563
@@ -7497,14 +7488,12 @@ msgid "Switch to a different method of editing arcs"
 msgstr "Yayları düzenlemek için farklı bir yönteme geçin"
 
 #: common/tool/actions.cpp:298
-#, fuzzy
 msgid "Show Search Panel"
-msgstr "Sayfa Özellikleri"
+msgstr "Arama Panelini Göster"
 
 #: common/tool/actions.cpp:299
-#, fuzzy
 msgid "Show/hide the search panel"
-msgstr "Sayfa Özellikleri"
+msgstr "Arama panelini göster / gizle"
 
 #: common/tool/actions.cpp:307 eeschema/dialogs/dialog_schematic_find.cpp:33
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:118
@@ -7621,9 +7610,8 @@ msgstr "Uzaklaştır"
 
 #: common/tool/actions.cpp:467 common/tool/actions.cpp:468
 #: common/widgets/mathplot.cpp:1452
-#, fuzzy
 msgid "Center on Cursor"
-msgstr "Yakınlaştırmada imleci merkeze taşı"
+msgstr "İmleci Ortala"
 
 #: common/tool/actions.cpp:476 common/tool/actions.cpp:477
 msgid "Zoom to Selection"
@@ -7767,10 +7755,8 @@ msgid "Show Grid"
 msgstr "Kılavuzu Göster"
 
 #: common/tool/actions.cpp:698
-#, fuzzy
 msgid "Display background grid in the edit window"
-msgstr ""
-"Düzenleme penceresinde kılavuz noktalarını veya çizgilerini görüntüleme"
+msgstr "Düzenleme penceresinde arka plan ızgarasını görüntüle"
 
 #: common/tool/actions.cpp:706
 msgid "Enables item-specific grids that override the current grid"
@@ -8103,14 +8089,12 @@ msgstr ""
 "KiCad projesine bağış yapmak için %s adresini ziyaret edin"
 
 #: common/tool/selection_tool.cpp:306
-#, fuzzy
 msgid "Select &All\tA"
-msgstr "Tümünü Seç"
+msgstr "Seç &Tümü\tA"
 
 #: common/tool/selection_tool.cpp:309
-#, fuzzy
 msgid "&Expand Selection\tE"
-msgstr "Seçim"
+msgstr "&Seçimi Genişlet\tE"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -8359,14 +8343,12 @@ msgid "Sort Alphabetically"
 msgstr "Dikey"
 
 #: common/widgets/lib_tree.cpp:373
-#, fuzzy
 msgid "recent searches"
-msgstr "İnç kullan"
+msgstr "son aramalar"
 
 #: common/widgets/lib_tree.cpp:938
-#, fuzzy
 msgid "Select Columns"
-msgstr "Seçimi kaldır"
+msgstr "Sütunları Seç"
 
 #: common/widgets/mathplot.cpp:1450
 msgid "Zoom in plot view."
@@ -8430,19 +8412,17 @@ msgstr "%s Varsayılanlara Sıfırla"
 
 #: common/widgets/properties_panel.cpp:74
 #: common/widgets/properties_panel.cpp:165
-#, fuzzy
 msgid "No objects selected"
-msgstr "Sembol seçilmedi"
+msgstr "Seçilmiş nesne yok"
 
 #: common/widgets/properties_panel.cpp:289
-#, fuzzy, c-format
+#, c-format
 msgid "%d objects selected"
-msgstr "Sembol seçilmedi"
+msgstr "%d nesne seçildi"
 
 #: common/widgets/properties_panel.cpp:296
-#, fuzzy
 msgid "Basic Properties"
-msgstr "%s Özellikler"
+msgstr "Temel Özellikler"
 
 #: common/widgets/unit_binder.cpp:315
 #, c-format
@@ -8827,9 +8807,9 @@ msgid "Hotkey file"
 msgstr "Kısayol tuşu dosyası"
 
 #: cvpcb/auto_associate.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Equivalence file '%s' could not be found."
-msgstr "'%s' eşdeğerlik dosyası varsayılan arama yollarında bulunamadı."
+msgstr "'%s' eşdeğerlik dosyası bulunamadı."
 
 #: cvpcb/auto_associate.cpp:128
 #, c-format
@@ -9066,9 +9046,8 @@ msgstr "Ayak İzi Görüntüleyici"
 
 #: cvpcb/display_footprints_frame.cpp:318
 #: pcbnew/toolbars_footprint_viewer.cpp:107
-#, fuzzy
 msgid "Automatic Zoom on footprint change"
-msgstr "Ayak izlerini otomatik olarak atayın"
+msgstr "Lehimleme yüzeyi değiştiğinde otomatik yakınlaş"
 
 #: cvpcb/display_footprints_frame.cpp:406
 #, c-format
@@ -9186,17 +9165,16 @@ msgstr ""
 "Şematik sembol ayak izi alanlarındaki ayak izi ilişkilendirlerini kaydetme"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
-#, fuzzy
 msgid "Save to Schematic and File"
-msgstr "Şemaya Kaydet"
+msgstr "Şematik ve Dosyaya Kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:83
-#, fuzzy
 msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Şematik sembol ayak izi alanlarındaki ayak izi ilişkilendirlerini kaydetme"
+"Lehimleme alanları ilişkilendirmelerini şematik sembol lehimleme  alanlarına "
+"ve şematik dosyalarına kaydet"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
 msgid "Select next unassigned symbol"
@@ -9272,9 +9250,8 @@ msgid "Delete all associations?"
 msgstr "Tüm atamaları silin?"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "'%s' kitaplığından %s ayak izi(footprint) yüklenirken hata oluştu."
+msgstr "Lehimleme alanı görüntüleyici çerçevesi oluşturulamıyor"
 
 #: eeschema/annotate.cpp:155
 #, fuzzy
@@ -9518,9 +9495,8 @@ msgid "Generator file name not found."
 msgstr "Oluşturucu dosya adı bulunamadı."
 
 #: eeschema/dialogs/dialog_bom.cpp:465
-#, fuzzy
 msgid "Bill of Materials Generation Help"
-msgstr "Ürün Reçetesi Oluşturma Yardımı"
+msgstr "Malzeme Listesi Oluşturma Yardımı"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
@@ -9563,9 +9539,8 @@ msgstr ""
 "sıfırlama"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
-#, fuzzy
 msgid "Bill of Materials"
-msgstr "Ürün Reçetesi"
+msgstr "Malzeme Listesi"
 
 #: eeschema/dialogs/dialog_bom_help_md.h:2
 msgid ""
@@ -15393,9 +15368,8 @@ msgid "Checking conflicts..."
 msgstr "Çakışmalar kontrol ediliyor..."
 
 #: eeschema/erc.cpp:1177
-#, fuzzy
 msgid "Checking units..."
-msgstr "Bacaklar kontrol ediliyor..."
+msgstr "Parçalar kontrol ediliyor..."
 
 #: eeschema/erc.cpp:1183 pcbnew/drc/drc_test_provider_footprint_checks.cpp:69
 msgid "Checking footprints..."
@@ -15414,9 +15388,8 @@ msgid "Checking for unresolved variables..."
 msgstr "Çözülmemiş değişkenler kontrol ediliyor..."
 
 #: eeschema/erc.cpp:1231
-#, fuzzy
 msgid "Checking SPICE models..."
-msgstr "Etiketler kontrol ediliyor..."
+msgstr "SPICE modelleri kontrol ediliyor..."
 
 #: eeschema/erc.cpp:1239
 msgid "Checking no connect pins for connections..."
@@ -17335,9 +17308,8 @@ msgid "Could not load database library: could not connect to database %s (%s)"
 msgstr "Veritabanı kitaplığı yüklenemedi: %s (%s) veritabanına bağlanılamadı"
 
 #: eeschema/sch_io/database/sch_io_database.h:50
-#, fuzzy
 msgid "KiCad database library files"
-msgstr "KiCad sembol kitaplığı dosyaları"
+msgstr "KiCad veritabanı kitaplığı dosyaları"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:635
 #, c-format
