@@ -1366,15 +1366,14 @@ EVT_MENU( mpID_ZOOM_UNDO, mpWindow::onZoomUndo )
 EVT_MENU( mpID_ZOOM_REDO, mpWindow::onZoomRedo )
 END_EVENT_TABLE()
 
-mpWindow::mpWindow() :
-        mpWindow( DelegatingContructorTag() )
+mpWindow::mpWindow() : mpWindow( DelegatingContructorTag() )
 {
     initializeGraphicsContext();
 }
 
 mpWindow::mpWindow( wxWindow* parent, wxWindowID id ) :
-        mpWindow( DelegatingContructorTag(),
-                  parent, id, wxDefaultPosition, wxDefaultSize, 0, wxT( "mathplot" ) )
+        mpWindow( DelegatingContructorTag(), parent, id, wxDefaultPosition, wxDefaultSize, 0,
+                  wxT( "mathplot" ) )
 {
     m_popmenu.Append( mpID_ZOOM_UNDO, _( "Undo Last Zoom" ), _( "Return zoom to level prior to last zoom action" ) );
     m_popmenu.Append( mpID_ZOOM_REDO, _( "Redo Last Zoom" ), _( "Return zoom to level prior to last zoom undo" ) );
@@ -1447,8 +1446,8 @@ void mpWindow::onMouseWheel( wxMouseEvent& event )
     }
 
     const wxMouseWheelAxis axis = event.GetWheelAxis();
-    const int modifiers = event.GetModifiers();
-    MouseWheelAction action = MouseWheelAction::NONE;
+    const int              modifiers = event.GetModifiers();
+    MouseWheelAction       action = MouseWheelAction::NONE;
 
     if( axis == wxMOUSE_WHEEL_HORIZONTAL )
     {
@@ -1618,9 +1617,8 @@ void mpWindow::Fit()
 
 
 // JL
-void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax,
-                    const wxCoord* printSizeX, const wxCoord* printSizeY,
-                    wxOrientation directions )
+void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax, const wxCoord* printSizeX,
+                    const wxCoord* printSizeY, wxOrientation directions )
 {
     const bool isPrinting = printSizeX != nullptr && printSizeY != nullptr;
 
@@ -1661,41 +1659,41 @@ void mpWindow::Fit( double xMin, double xMax, double yMin, double yMax,
     // Adjust scale so that desired X/Y span plus extra gap fits in the plot area
     double desiredSpanX = xMax - xMin;
     double desiredSpanY = yMax - yMin;
-    double newScaleX = (desiredSpanX != 0) ? double(plotScreenWidth)  / desiredSpanX : 1;
-    double newScaleY = (desiredSpanY != 0) ? double(plotScreenHeight) / desiredSpanY : 1;
+    double newScaleX = ( desiredSpanX != 0 ) ? double( plotScreenWidth )  / desiredSpanX : 1;
+    double newScaleY = ( desiredSpanY != 0 ) ? double( plotScreenHeight ) / desiredSpanY : 1;
 
     // Adjust corner coordinates:
     // Upstream's aspect lock code has been removed, so no need to account for centering.
-    double newPosX = xMin - (m_marginLeft / newScaleX);
-    double newPosY = yMax + (m_marginTop / newScaleY);
+    double newPosX = xMin - ( m_marginLeft / newScaleX );
+    double newPosY = yMax + ( m_marginTop  / newScaleY );
 
     // Commit above changes to member variables only if enabled for their respective dimension.
-    if( ((directions & wxHORIZONTAL) != 0) || isPrinting )
+    if( ( ( directions & wxHORIZONTAL ) != 0 ) || isPrinting )
     {
         // Don't commit the passed desired bounds when printing
-        if (!isPrinting)
+        if( !isPrinting )
         {
             m_desiredXmin = newDesiredXmin;
             m_desiredXmax = newDesiredXmax;
         }
 
-        m_scrX   = newScrX;
+        m_scrX = newScrX;
         m_scaleX = newScaleX;
-        m_posX   = newPosX;
+        m_posX = newPosX;
     }
 
-    if( ((directions & wxVERTICAL) != 0) || isPrinting )
+    if( ( ( directions & wxVERTICAL ) != 0 ) || isPrinting )
     {
         // Don't commit the passed desired bounds when printing
-        if (!isPrinting)
+        if( !isPrinting )
         {
             m_desiredYmin = newDesiredYmin;
             m_desiredYmax = newDesiredYmax;
         }
 
-        m_scrY   = newScrY;
+        m_scrY = newScrY;
         m_scaleY = newScaleY;
-        m_posY   = newPosY;
+        m_posY = newPosY;
     }
 
     // It is VERY IMPORTANT to NOT call Refresh if we are drawing to the printer!!
@@ -1715,41 +1713,41 @@ void mpWindow::AdjustLimitedView( wxOrientation directions )
     // The m_desired* members are expressed in plot coordinates.
     // They should be clamped against their respective m_minX, m_maxX, m_minY, m_maxY limits.
 
-    if( (directions & wxHORIZONTAL) != 0 )
+    if( ( directions & wxHORIZONTAL ) != 0 )
     {
         if( m_desiredXmin < m_minX )
         {
             double diff = m_minX - m_desiredXmin;
             m_posX += diff;
-            m_desiredXmax   += diff;
-            m_desiredXmin   = m_minX;
+            m_desiredXmax += diff;
+            m_desiredXmin = m_minX;
         }
 
         if( m_desiredXmax > m_maxX )
         {
             double diff = m_desiredXmax - m_maxX;
             m_posX -= diff;
-            m_desiredXmin   -= diff;
-            m_desiredXmax   = m_maxX;
+            m_desiredXmin -= diff;
+            m_desiredXmax = m_maxX;
         }
     }
 
-    if( (directions & wxVERTICAL) != 0 )
+    if( ( directions & wxVERTICAL ) != 0 )
     {
         if( m_desiredYmin < m_minY )
         {
             double diff = m_minY - m_desiredYmin;
             m_posY += diff;
-            m_desiredYmax   += diff;
-            m_desiredYmin   = m_minY;
+            m_desiredYmax += diff;
+            m_desiredYmin = m_minY;
         }
 
         if( m_desiredYmax > m_maxY )
         {
             double diff = m_desiredYmax - m_maxY;
             m_posY -= diff;
-            m_desiredYmin   -= diff;
-            m_desiredYmax   = m_maxY;
+            m_desiredYmin -= diff;
+            m_desiredYmax = m_maxY;
         }
     }
 }
@@ -1798,10 +1796,9 @@ void mpWindow::ZoomOut( const wxPoint& centerPoint )
 }
 
 
-void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor,
-                        wxOrientation directions )
+void mpWindow::ZoomOut( const wxPoint& centerPoint, double zoomFactor, wxOrientation directions )
 {
-    if (zoomFactor == 0)
+    if( zoomFactor == 0 )
         zoomFactor = 1.0;
     DoZoom( centerPoint, 1.0 / zoomFactor, directions );
 }
@@ -2082,8 +2079,7 @@ void mpWindow::OnPaint( wxPaintEvent& WXUNUSED( event ) )
         paintDC.Blit( 0, 0, m_scrX, m_scrY, targetDC, 0, 0 );
 }
 
-void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor,
-                       wxOrientation directions )
+void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor, wxOrientation directions )
 {
     if( m_yLocked )
     {
@@ -2092,8 +2088,8 @@ void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor,
         directions = wxHORIZONTAL;
     }
 
-    const bool horizontally = (directions & wxHORIZONTAL) != 0;
-    const bool vertically   = (directions & wxVERTICAL) != 0;
+    const bool horizontally = ( directions & wxHORIZONTAL ) != 0;
+    const bool vertically   = ( directions & wxVERTICAL )   != 0;
 
     pushZoomUndo( { m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax } );
 
@@ -2102,8 +2098,8 @@ void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor,
     if( c == wxDefaultPosition )
     {
         GetClientSize( &m_scrX, &m_scrY );
-        c.x = (m_scrX - m_marginLeft - m_marginRight)  / 2 + m_marginLeft;
-        c.y = (m_scrY - m_marginTop  - m_marginBottom) / 2 + m_marginTop;
+        c.x = ( m_scrX - m_marginLeft - m_marginRight ) / 2 + m_marginLeft;
+        c.y = ( m_scrY - m_marginTop - m_marginBottom ) / 2 + m_marginTop;
     }
     else
     {
@@ -2115,34 +2111,34 @@ void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor,
 
     // Zoom in/out:
     const double MAX_SCALE = 1e6;
-    const double newScaleX = horizontally ? (m_scaleX * zoomFactor) : m_scaleX;
-    const double newScaleY = vertically   ? (m_scaleY * zoomFactor) : m_scaleY;
+    const double newScaleX = horizontally ? ( m_scaleX * zoomFactor ) : m_scaleX;
+    const double newScaleY = vertically   ? ( m_scaleY * zoomFactor ) : m_scaleY;
 
     // Baaaaad things happen when you zoom in too much..
     if( newScaleX > MAX_SCALE || newScaleY > MAX_SCALE )
         return;
 
-    if ( horizontally )
+    if( horizontally )
     {
         // Transform the clicked X point to layer coordinates:
         const double prior_layer_x = p2x( c.x );
 
         // Adjust the new X scale and plot X origin:
         m_scaleX = newScaleX;
-        m_posX   = prior_layer_x - c.x / newScaleX;
+        m_posX = prior_layer_x - c.x / newScaleX;
 
         // Recompute the desired X view extents:
         RecomputeDesiredX( m_desiredXmin, m_desiredXmax );
     }
 
-    if ( vertically )
+    if( vertically )
     {
         // Transform the clicked Y point to layer coordinates:
         const double prior_layer_y = p2y( c.y );
 
         // Adjust the new Y scale and plot Y origin:
         m_scaleY = newScaleY;
-        m_posY   = prior_layer_y + c.y / newScaleY;
+        m_posY = prior_layer_y + c.y / newScaleY;
 
         // Recompute the desired Y view extents:
         RecomputeDesiredY( m_desiredYmin, m_desiredYmax );
@@ -2150,7 +2146,7 @@ void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor,
 
     AdjustLimitedView( directions );
 
-    if (zoomFactor < 1.0)
+    if( zoomFactor < 1.0 )
     {
         // These additional checks are needed because AdjustLimitedView only adjusts the position
         // and not the scale.
@@ -2168,10 +2164,10 @@ void mpWindow::DoZoom( const wxPoint& centerPoint, double zoomFactor,
 
 void mpWindow::RecomputeDesiredX( double& min, double& max )
 {
-    const int plotScreenWidth = m_scrX - m_marginLeft - m_marginRight;
-    const double plotSpanX    = plotScreenWidth / m_scaleX;
-    const double desiredSpanX = plotSpanX / ( 2*m_leftRightPlotGapFactor + 1 );
-    const double xGap         = desiredSpanX * m_leftRightPlotGapFactor;
+    const int    plotScreenWidth = m_scrX - m_marginLeft - m_marginRight;
+    const double plotSpanX = plotScreenWidth / m_scaleX;
+    const double desiredSpanX = plotSpanX / ( 2 * m_leftRightPlotGapFactor + 1 );
+    const double xGap = desiredSpanX * m_leftRightPlotGapFactor;
     min = m_posX + ( m_marginLeft / m_scaleX ) + xGap;
     max = m_desiredXmin + desiredSpanX;
 }
@@ -2179,11 +2175,11 @@ void mpWindow::RecomputeDesiredX( double& min, double& max )
 
 void mpWindow::RecomputeDesiredY( double& min, double& max )
 {
-    const int plotScreenHeight = m_scrY - m_marginTop  - m_marginBottom;
-    const double plotSpanY     = plotScreenHeight / m_scaleY;
-    const double desiredSpanY  = plotSpanY / ( 2*m_topBottomPlotGapFactor + 1 );
-    const double yGap          = desiredSpanY * m_topBottomPlotGapFactor;
-    max = m_posY - ( m_marginTop / m_scaleY) - yGap;
+    const int    plotScreenHeight = m_scrY - m_marginTop - m_marginBottom;
+    const double plotSpanY = plotScreenHeight / m_scaleY;
+    const double desiredSpanY = plotSpanY / ( 2 * m_topBottomPlotGapFactor + 1 );
+    const double yGap = desiredSpanY * m_topBottomPlotGapFactor;
+    max = m_posY - ( m_marginTop / m_scaleY ) - yGap;
     min = m_desiredYmax - desiredSpanY;
 }
 
@@ -2200,15 +2196,15 @@ wxOrientation mpWindow::ViewNeedsRefitting( wxOrientation directions ) const
 
     wxOrientation result = {};
 
-    if ( (directions & wxHORIZONTAL) != 0 )
+    if( ( directions & wxHORIZONTAL ) != 0 )
     {
-        if ( ( m_desiredXmax > m_maxX + xGap ) || ( m_desiredXmin < m_minX - xGap ) )
+        if( ( m_desiredXmax > m_maxX + xGap ) || ( m_desiredXmin < m_minX - xGap ) )
             result = static_cast<wxOrientation>( result | wxHORIZONTAL );
     }
 
-    if ( (directions & wxVERTICAL) != 0 )
+    if( ( directions & wxVERTICAL ) != 0 )
     {
-        if ( ( m_desiredYmax > m_maxY + yGap ) || ( m_desiredYmin < m_minY - yGap ) )
+        if( ( m_desiredYmax > m_maxY + yGap ) || ( m_desiredYmin < m_minY - yGap ) )
             result = static_cast<wxOrientation>( result | wxVERTICAL );
     }
 
@@ -2218,15 +2214,14 @@ wxOrientation mpWindow::ViewNeedsRefitting( wxOrientation directions ) const
 
 void mpWindow::PerformMouseWheelAction( wxMouseEvent& event, MouseWheelAction action )
 {
-    const int change = event.GetWheelRotation();
-    const double changeUnitsX = change / m_scaleX;
-    const double changeUnitsY = change / m_scaleY;
+    const int     change = event.GetWheelRotation();
+    const double  changeUnitsX = change / m_scaleX;
+    const double  changeUnitsY = change / m_scaleY;
     const wxPoint clickPt( event.GetX(), event.GetY() );
 
-    switch (action)
+    switch( action )
     {
-    case MouseWheelAction::NONE:
-        break;
+    case MouseWheelAction::NONE: break;
 
     case MouseWheelAction::PAN_LEFT_RIGHT:
         SetXView( m_posX + changeUnitsX, m_desiredXmax + changeUnitsX,
@@ -2270,8 +2265,7 @@ void mpWindow::PerformMouseWheelAction( wxMouseEvent& event, MouseWheelAction ac
             ZoomOut( clickPt, zoomIncrementalFactor, wxVERTICAL );
         break;
 
-    default:
-        break;
+    default: break;
     }
 }
 

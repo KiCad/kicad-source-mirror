@@ -1101,7 +1101,7 @@ public:
     void EnableMousePanZoom( bool enabled ) { m_enableMouseNavigation = enabled; }
 
     /** Set the pan/zoom actions corresponding to mousewheel/trackpad events. */
-    void SetMouseWheelActions( const MouseWheelActionSet& s ) {m_mouseWheelActions = s;}
+    void SetMouseWheelActions( const MouseWheelActionSet& s ) { m_mouseWheelActions = s; }
 
     /** Set view to fit global bounding box of all plot layers and refresh display.
      *  Scale and position will be set to show all attached mpLayers.
@@ -1124,8 +1124,7 @@ public:
      * position on the screen after the zoom (by default, the center of the mpWindow).
      */
     void ZoomIn( const wxPoint& centerPoint = wxDefaultPosition );
-    void ZoomIn( const wxPoint& centerPoint, double zoomFactor,
-                 wxOrientation directions = wxBOTH );
+    void ZoomIn( const wxPoint& centerPoint, double zoomFactor, wxOrientation directions = wxBOTH );
 
     /** Zoom out current view and refresh display
      * @param centerPoint The point (pixel coordinates) that will stay in the same

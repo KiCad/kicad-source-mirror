@@ -551,37 +551,31 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
             "simulator.mouse_wheel_actions.vertical_unmodified",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_unmodified,
-            SIM_MOUSE_WHEEL_ACTION::ZOOM,
-            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM, SIM_MOUSE_WHEEL_ACTION::NONE,
             SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
     m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
             "simulator.mouse_wheel_actions.vertical_with_ctrl",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_with_ctrl,
-            SIM_MOUSE_WHEEL_ACTION::PAN_LEFT_RIGHT,
-            SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::PAN_LEFT_RIGHT, SIM_MOUSE_WHEEL_ACTION::NONE,
             SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
     m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
             "simulator.mouse_wheel_actions.vertical_with_shift",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_with_shift,
-            SIM_MOUSE_WHEEL_ACTION::PAN_UP_DOWN,
-            SIM_MOUSE_WHEEL_ACTION::NONE,
-            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY) );
+            SIM_MOUSE_WHEEL_ACTION::PAN_UP_DOWN, SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
     m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
             "simulator.mouse_wheel_actions.vertical_with_alt",
             &m_Simulator.preferences.mouse_wheel_actions.vertical_with_alt,
-            SIM_MOUSE_WHEEL_ACTION::NONE,
-            SIM_MOUSE_WHEEL_ACTION::NONE,
-            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY) );
+            SIM_MOUSE_WHEEL_ACTION::NONE, SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
     m_params.emplace_back( new PARAM_ENUM<SIM_MOUSE_WHEEL_ACTION>(
             "simulator.mouse_wheel_actions.horizontal",
-            &m_Simulator.preferences.mouse_wheel_actions.horizontal,
-            SIM_MOUSE_WHEEL_ACTION::NONE,
-            SIM_MOUSE_WHEEL_ACTION::NONE,
-            SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY) );
+            &m_Simulator.preferences.mouse_wheel_actions.horizontal, SIM_MOUSE_WHEEL_ACTION::NONE,
+            SIM_MOUSE_WHEEL_ACTION::NONE, SIM_MOUSE_WHEEL_ACTION::ZOOM_VERTICALLY ) );
 
     m_params.emplace_back( new PARAM<int>( "symbol_chooser.sash_pos_h",
             &m_SymChooserPanel.sash_pos_h, -1 ) );

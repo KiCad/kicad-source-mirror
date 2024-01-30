@@ -197,8 +197,7 @@ public:
 
     void ApplyPreferences( const SIM_PREFERENCES& aPrefs ) override
     {
-        m_plotWin->SetMouseWheelActions(
-                convertMouseWheelActions( aPrefs.mouse_wheel_actions ) );
+        m_plotWin->SetMouseWheelActions( convertMouseWheelActions( aPrefs.mouse_wheel_actions ) );
     }
 
     wxString GetLabelX() const
@@ -366,10 +365,10 @@ public:
 
 private:
     static mpWindow::MouseWheelActionSet
-    convertMouseWheelActions(const SIM_MOUSE_WHEEL_ACTION_SET& s)
+    convertMouseWheelActions( const SIM_MOUSE_WHEEL_ACTION_SET& s )
     {
-        static_assert( static_cast<unsigned>(mpWindow::MouseWheelAction::COUNT) ==
-                               static_cast<unsigned>(SIM_MOUSE_WHEEL_ACTION::COUNT),
+        static_assert( static_cast<unsigned>( mpWindow::MouseWheelAction::COUNT )
+                               == static_cast<unsigned>( SIM_MOUSE_WHEEL_ACTION::COUNT ),
                        "mpWindow::MouseWheelAction enum must match SIM_MOUSE_WHEEL_ACTION" );
 
         using A = mpWindow::MouseWheelAction;

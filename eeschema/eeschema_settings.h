@@ -280,15 +280,15 @@ public:
     {
         struct VIEW
         {
-            int plot_panel_width;
-            int plot_panel_height;
-            int signal_panel_height;
-            int cursors_panel_height;
-            int measurements_panel_height;
+            int  plot_panel_width;
+            int  plot_panel_height;
+            int  signal_panel_height;
+            int  cursors_panel_height;
+            int  measurements_panel_height;
             bool white_background;
         };
 
-        VIEW view;
+        VIEW            view;
         WINDOW_SETTINGS window;
         SIM_PREFERENCES preferences;
     };
