@@ -661,14 +661,17 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
         else
             pattern->m_settings.SetTargetLength( constraint.GetValue() );
     }
-    else if( aMode == DIFF_PAIR_SKEW )
-    {
-        pattern->m_settings.SetTargetSkew( 0 );
-    }
     else
     {
-        pattern->m_settings.SetTargetLength( std::numeric_limits<int>::max() );
-        pattern->m_unconstrained = true;
+        if( aMode == DIFF_PAIR_SKEW )
+        {
+            pattern->m_settings.SetTargetSkew( 0 );
+        }
+        else
+        {
+            pattern->m_settings.SetTargetLength( std::numeric_limits<int>::max() );
+            pattern->m_unconstrained = true;
+        }
     }
 
     pattern->SetFlags( IS_NEW );
@@ -700,15 +703,18 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
     if( !baselineValid() )
         initBaseLines( router, layer, aBoard );
 
-    if( baselineValid() && !m_settings.m_overrideCustomRules )
+    if( !m_settings.m_overrideCustomRules )
     {
-        PCB_TRACK* track = nullptr;
+        PCB_TRACK*   track = nullptr;
+        PNS::SEGMENT pnsItem;
 
         m_origin = snapToNearestTrack( m_origin, aBoard, nullptr, &track );
         wxCHECK( track, /* void */ );
 
         NETINFO_ITEM* net = track->GetNet();
-        PNS::SEGMENT  pnsItem( m_baseLine->CSegment( 0 ), net );
+
+        pnsItem.SetParent( track );
+        pnsItem.SetNet( net );
 
         if( m_tuningMode == SINGLE )
         {
@@ -721,13 +727,20 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
         }
         else
         {
+            PCB_TRACK*    coupledTrack = nullptr;
+            PNS::SEGMENT  pnsCoupledItem;
             NETINFO_ITEM* coupledNet = aBoard->DpCoupledNet( net );
-            PNS::SEGMENT  coupledItem( m_baseLineCoupled->CSegment( 0 ), coupledNet );
+
+            if( coupledNet )
+                snapToNearestTrack( m_origin, aBoard, coupledNet, &coupledTrack );
+
+            pnsCoupledItem.SetParent( coupledTrack );
+            pnsCoupledItem.SetNet( coupledNet );
 
             if( m_tuningMode == DIFF_PAIR )
             {
                 if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_LENGTH,
-                                               &pnsItem, &coupledItem, layer, &constraint ) )
+                                               &pnsItem, &pnsCoupledItem, layer, &constraint ) )
                 {
                     m_settings.SetTargetLength( constraint.m_Value );
                     aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
@@ -736,7 +749,7 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
             else
             {
                 if( resolver->QueryConstraint( PNS::CONSTRAINT_TYPE::CT_DIFF_PAIR_SKEW,
-                                               &pnsItem, &coupledItem, layer, &constraint ) )
+                                               &pnsItem, &pnsCoupledItem, layer, &constraint ) )
                 {
                     m_settings.m_targetSkew = constraint.m_Value;
                     aTool->GetManager()->PostEvent( EVENTS::SelectedItemsModified );
