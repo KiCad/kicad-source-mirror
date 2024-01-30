@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,6 +126,7 @@ private:
     void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
 
     void ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties );
+    void ParseTemplate( int aIndex, const std::map<wxString, wxString>& aProperties );
     void ParsePin( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym);
     void ParseLabel( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
     void ParseTextFrame( const std::map<wxString, wxString>& aProperties, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
@@ -195,6 +196,7 @@ private:
     std::vector<ASCH_ADDITIONAL_FILE>  m_altiumAdditional;
 
     std::map<int, ASCH_SYMBOL>      m_altiumComponents;
+    std::map<int, ASCH_TEMPLATE>    m_altiumTemplates;
     std::map<int, int>              m_altiumImplementationList;
     std::vector<ASCH_PORT>          m_altiumPortsCurrentSheet; // we require all connections first
 

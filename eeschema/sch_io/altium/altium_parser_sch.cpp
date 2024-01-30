@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,6 +141,15 @@ ASCH_SYMBOL::ASCH_SYMBOL( const std::map<wxString, wxString>& aProps )
 }
 
 
+ASCH_TEMPLATE::ASCH_TEMPLATE( const std::map<wxString, wxString>& aProps ) :
+        ASCH_OWNER_INTERFACE( aProps )
+{
+    wxASSERT( ReadRecord( aProps ) == ALTIUM_SCH_RECORD::TEMPLATE );
+
+    filename = ALTIUM_PARSER::ReadString( aProps, "FILENAME", "" );
+}
+
+
 ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProps ) :
         ASCH_OWNER_INTERFACE( aProps )
 {
@@ -241,6 +250,7 @@ ASCH_OWNER_INTERFACE::ASCH_OWNER_INTERFACE( const std::map<wxString, wxString>& 
     ownerpartid = ReadOwnerPartId( aProps );
     ownerpartdisplaymode = ALTIUM_PARSER::ReadInt( aProps, "OWNERPARTDISPLAYMODE", 0 );
     indexinsheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", 0 );
+    IsNotAccesible = ALTIUM_PARSER::ReadBool( aProps, "ISNOTACCESIBLE", false );
 }
 
 
@@ -436,8 +446,6 @@ ASCH_ELLIPSE::ASCH_ELLIPSE( const std::map<wxString, wxString>& aProps ) :
 
     Radius = ReadKiCadUnitFrac( aProps, "RADIUS" );
     SecondaryRadius = ReadKiCadUnitFrac( aProps, "SECONDARYRADIUS" );
-
-    IsNotAccesible = ALTIUM_PARSER::ReadBool( aProps, "ISNOTACCESIBLE", false );
 }
 
 

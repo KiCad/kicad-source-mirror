@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -123,6 +123,7 @@ struct ASCH_OWNER_INTERFACE
     int ownerpartid;
     int ownerpartdisplaymode;
     int indexinsheet;
+    bool IsNotAccesible;
 
     explicit ASCH_OWNER_INTERFACE( const std::map<wxString, wxString>& aProps );
 };
@@ -162,6 +163,14 @@ struct ASCH_SYMBOL
     int displaymode;
 
     explicit ASCH_SYMBOL( const std::map<wxString, wxString>& aProps );
+};
+
+
+struct ASCH_TEMPLATE : ASCH_OWNER_INTERFACE
+{
+    wxString filename;
+
+    explicit ASCH_TEMPLATE( const std::map<wxString, wxString>& aProps );
 };
 
 
@@ -490,8 +499,6 @@ struct ASCH_ELLIPSE : ASCH_OWNER_INTERFACE, ASCH_FILL_INTERFACE, ASCH_BORDER_INT
     VECTOR2I Center;
     int      Radius;
     double   SecondaryRadius;
-
-    bool IsNotAccesible;
 
     explicit ASCH_ELLIPSE( const std::map<wxString, wxString>& aProps );
 };
