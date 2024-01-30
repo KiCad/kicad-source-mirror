@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-29 08:24-0800\n"
-"PO-Revision-Date: 2024-01-29 03:52+0000\n"
+"PO-Revision-Date: 2024-01-30 19:02+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v7/es/>\n"
 "Language: es\n"
@@ -16112,7 +16112,7 @@ msgstr "Sondear señales en el esquema"
 
 #: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr "Ajustar"
+msgstr "Afinar"
 
 #: eeschema/sim/sim_plot_frame.cpp:171
 msgid "Tune component values"
@@ -16158,7 +16158,7 @@ msgstr "Trazar%u - "
 #: eeschema/sim/sim_plot_frame.cpp:613 eeschema/sim/sim_plot_frame.cpp:625
 #: eeschema/sim/sim_plot_frame.cpp:949
 msgid "Could not apply tuned value(s):"
-msgstr "No se ha(n) podido aplicar el(los) valor(es) ajustado(s):"
+msgstr "No se ha(n) podido aplicar el(los) valor(es) afinados(s):"
 
 #: eeschema/sim/sim_plot_frame.cpp:626 eeschema/sim/sim_plot_frame.cpp:938
 #, c-format
@@ -16542,15 +16542,16 @@ msgstr ""
 #: eeschema/symbol_checker.cpp:262
 #, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr "<b>Pin de potencia %s oculto</b> %s en la posición <b>(%s, %s)</b>."
+msgstr ""
+"Info: <b>Pin de potencia %s oculto</b> %s en la posición <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:270
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b>Pin de potencia %s oculto</b> %s en la posición <b>(%s, %s)</b> en la "
-"unidad %c."
+"Info: <b>Pin de potencia %s oculto</b> %s en la posición <b>(%s, %s)</b> en "
+"la unidad %c."
 
 #: eeschema/symbol_checker.cpp:281
 msgid ""
@@ -17825,7 +17826,7 @@ msgstr "Añadir sonda de simulación"
 
 #: eeschema/tools/ee_actions.cpp:572
 msgid "Select a value to be tuned"
-msgstr "Seleccionar un valor para ajustar"
+msgstr "Seleccionar un valor para afinar"
 
 #: eeschema/tools/ee_actions.cpp:577 pcbnew/tools/pcb_actions.cpp:790
 msgid "Highlight net under cursor"
@@ -30146,7 +30147,7 @@ msgstr "Propiedades de valor de huella"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:91
 msgid "Footprint Text Properties"
-msgstr "Propiedades del texto de las huellas"
+msgstr "Propiedades de texto de huella"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:96
 msgid "Reference:"
@@ -31026,7 +31027,7 @@ msgstr "Cantidad mínima de radios de alivio térmico:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:439
 msgid "Length tuning"
-msgstr "Ajuste de longitud"
+msgstr "Afinado de longitud"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:443
 msgid "Include stackup height in track length calculations"
@@ -32773,7 +32774,7 @@ msgstr "No se cumple el requerimiento de rechazo."
 
 #: pcbnew/drc/drc_engine.cpp:1150
 msgid "Keepout layer(s) not matched."
-msgstr "La(s) capa(s) restrigida(s) no coincide(n)."
+msgstr "La(s) capa(s) de área restringida no coincide(n)."
 
 #: pcbnew/drc/drc_engine.cpp:1154 pcbnew/drc/drc_engine.cpp:1176
 #: pcbnew/drc/drc_engine.cpp:1531
@@ -40292,7 +40293,7 @@ msgstr "Afinar la longitud de un par diferencial de pistas"
 
 #: pcbnew/tools/pcb_actions.cpp:1493
 msgid "Tune skew of a differential pair"
-msgstr "Afinar desvío de un par diferencial"
+msgstr "Afinar el desvío de un par diferencial"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
