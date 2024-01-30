@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 19:54-0800\n"
-"PO-Revision-Date: 2024-01-25 03:02+0000\n"
+"PO-Revision-Date: 2024-01-30 19:01+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -15701,9 +15701,8 @@ msgid "Show Field Name"
 msgstr "Mostrar o nome do campo"
 
 #: eeschema/lib_item.cpp:80 eeschema/sch_pin.cpp:229
-#, fuzzy
 msgid "Body Style"
-msgstr "Estilo da borda"
+msgstr "Estilo de estrutura"
 
 #: eeschema/lib_item.cpp:84
 msgid "Private"
@@ -19421,22 +19420,23 @@ msgstr ""
 "criar problemas caso seja salvo numa biblioteca de símbolos"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>Duplique o pino %s</b> %s no local <b> (%s, %s)</b> está em conflito com "
-"o pino %s%s no local <b>(%s, %s)</b> nas unidades %s e %s."
+"<b>Duplique o pino %s</b> %s no local <b>(%s, %s)</b> está em conflito com o "
+"pino %s%s no local <b>(%s, %s)</b> em %s estilo de estrutura."
 
 #: eeschema/symbol_checker.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>Duplique o pino %s</b> %s no local <b> (%s, %s)</b> está em conflito com "
-"o pino %s%s no local <b>(%s, %s)</b> nas unidades %s e %s."
+"<b>Duplique o pino %s</b> %s no local <b>(%s, %s)</b> está em conflito com o "
+"pino %s%s no local <b>(%s, %s)</b> em unidades %s e %s do %s estilo da "
+"estrutura."
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -19486,22 +19486,22 @@ msgstr ""
 "alimentação da entrada não são mais necessários<br><br>"
 
 #: eeschema/symbol_checker.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
 msgstr ""
-"Info: <b>Pino de energia oculto %s</b> %s na região <b>(%s, %s)</b> na "
-"unidade %c."
+"Info: <b>Pino de energia oculto %s</b> %s no local <b>(%s, %s)</b> em %s do "
+"estilo da estrutura."
 
 #: eeschema/symbol_checker.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
-"Info: <b>Pino de energia oculto %s</b> %s na região <b>(%s, %s)</b> na "
-"unidade convertida %c."
+"Info: <b>Pino de energia oculto %s</b> %s no local <b>(%s, %s)</b> na "
+"unidade %c do %s estilo da estrutura."
 
 #: eeschema/symbol_checker.cpp:272
 #, c-format
@@ -19524,19 +19524,20 @@ msgstr ""
 "qualquer uma das redes conectadas.)"
 
 #: eeschema/symbol_checker.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
 msgstr ""
-"<b>Pino %s fora da grade</b> %s na região <b> ( %s, %s)</b> dos que foram "
-"convertidos."
+"<b>Pino %s fora da grade</b> %s no local <b>(%s, %s)</b> no %s estilo da "
+"estrutura."
 
 #: eeschema/symbol_checker.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b>Pino %s fora da grade</b> %s na região <b> (%s, %s)</b> na unidade %c."
+"<b>Pino %s fora da grade</b> %s no local <b>(%s, %s)</b> na unidade %c de %s "
+"do estilo da estrutura."
 
 #: eeschema/symbol_checker.cpp:330
 #, c-format
@@ -38971,14 +38972,15 @@ msgid "Missing footprint %s (%s)"
 msgstr "Faltando footprint %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
-msgstr "Os atributos do footprint não batem com o símbolo"
+msgstr "O valor do footprint %s (%s) não corresponde ao valor do símbolo (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint (%s) doesn't match that given by symbol (%s)."
-msgstr "A rede da ilha (%s) não bate com a rede informada pelo esquema (%s)."
+msgstr ""
+"O footprint de %s (%s) não corresponde àquela fornecida pelo símbolo (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:198
 msgid "No corresponding pin found in schematic."
