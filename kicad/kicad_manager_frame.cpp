@@ -143,7 +143,11 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
 
     if( IsNightlyVersion())
     {
-        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly ) );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly, 48 ) );
+        icon_bundle.AddIcon( icon );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly, 128 ) );
+        icon_bundle.AddIcon( icon );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly, 256 ) );
         icon_bundle.AddIcon( icon );
         icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_nightly_32 ) );
         icon_bundle.AddIcon( icon );
@@ -152,7 +156,11 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent, const wxString& titl
     }
     else
     {
-        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad ) );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad, 48 ) );
+        icon_bundle.AddIcon( icon );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad, 128 ) );
+        icon_bundle.AddIcon( icon );
+        icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad, 256 ) );
         icon_bundle.AddIcon( icon );
         icon.CopyFromBitmap( KiBitmap( BITMAPS::icon_kicad_32 ) );
         icon_bundle.AddIcon( icon );
