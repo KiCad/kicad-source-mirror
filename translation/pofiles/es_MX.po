@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 19:54-0800\n"
-"PO-Revision-Date: 2024-01-26 04:27+0000\n"
+"PO-Revision-Date: 2024-01-30 19:01+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -24188,38 +24188,49 @@ msgstr "Esquema"
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
 msgstr ""
+"Ejecuta la verificación de reglas eléctricas (ERC) en el esquema y crea un "
+"informe"
 
 #: kicad/cli/command_sch_erc.cpp:58
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Informar todas las infracciones del ERC; esto equivale a incluir todos los "
+"demás argumentos de gravedad"
 
 #: kicad/cli/command_sch_erc.cpp:63
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Informar todas las infracciones de nivel error de ERC; esto se puede "
+"combinar con los otros argumentos de gravedad"
 
 #: kicad/cli/command_sch_erc.cpp:68
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Informar todas las violaciones de nivel advertencia de ERC; esto se puede "
+"combinar con los otros argumentos de gravedad"
 
 #: kicad/cli/command_sch_erc.cpp:74
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Informar todas las infracciones de ERC excluidas; esto se puede combinar con "
+"los otros argumentos de gravedad"
 
 #: kicad/cli/command_sch_erc.cpp:79
 msgid "Return a nonzero exit code if ERC violations exist"
 msgstr ""
+"Devolver un código de salida distinto de cero si existen violaciones de ERC"
 
 #: kicad/cli/command_sch_export.h:33
 msgid "Export utilities (netlist, pdf, bom, etc)"
-msgstr ""
+msgstr "Utilidades de exportación (lista de redes, pdf, bom, etc)"
 
 #: kicad/cli/command_sch_export_bom.cpp:35
 #, fuzzy
@@ -24265,6 +24276,8 @@ msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
 msgstr ""
+"Lista de números de páginas separados por coma para imprimir, en blanco o "
+"sin especificar equivale a todas las páginas"
 
 #: kicad/cli/command_sch_export_plot.cpp:102
 #, fuzzy
@@ -24274,16 +24287,20 @@ msgstr "Tamaño de página A"
 #: kicad/cli/command_sch_export_plot.cpp:108
 msgid "Origin and scale: 0 bottom left, 1 centered, 2 page fit, 3 content fit"
 msgstr ""
+"Origen y escala: 0 abajo a la izquierda, 1 centrado, 2 ajuste de página, 3 "
+"ajuste de contenido"
 
 #: kicad/cli/command_sch_export_plot.cpp:172
 msgid "HPGL origin option must be 0, 1, 2 or 3\n"
-msgstr ""
+msgstr "La opción de origen HPGL debe ser 0, 1, 2 ó 3\n"
 
 #: kicad/cli/command_sch_export_pythonbom.cpp:36
 msgid ""
 "Export the legacy BOM XML format used in the schematic editor with Python "
 "scripts"
 msgstr ""
+"Exporte el formato XML BOM heredado utilizado en el editor de esquemas con "
+"scripts de Python"
 
 #: kicad/cli/command_sym.h:31
 #, fuzzy
@@ -24387,11 +24404,11 @@ msgstr "Buscar actualizaciones"
 #, c-format
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
-msgstr ""
+msgstr "KiCad %s ya está disponible (tiene %s). ¿Quieres descargarlo ahora?"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
-msgstr ""
+msgstr "¡Una nueva versión de KiCad está disponible!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
 #, fuzzy
@@ -24400,7 +24417,7 @@ msgstr "Esperando %s"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:60
 msgid "Remind me later"
-msgstr ""
+msgstr "Recordarme más tarde"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:66
 #, fuzzy
@@ -24531,7 +24548,7 @@ msgstr "Importar archivos de proyecto de Eagle"
 
 #: kicad/import_project.cpp:160
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "Importar EasyEDA Std Backup"
 
 #: kicad/import_project.cpp:167
 #, fuzzy
@@ -24549,7 +24566,7 @@ msgstr ""
 
 #: kicad/kicad_cli.cpp:132
 msgid "Export GLB (binary GLTF)"
-msgstr ""
+msgstr "Exportar GLB (GLTF binario)"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export STEP"
@@ -24656,7 +24673,7 @@ msgstr "Importar esquema y placa EAGLE CAD XML"
 
 #: kicad/menubar.cpp:116
 msgid "EasyEDA (JLCEDA) Std Backup..."
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Std Backup..."
 
 #: kicad/menubar.cpp:117
 #, fuzzy
@@ -25237,7 +25254,7 @@ msgstr "Archivo creado satisfactoriamente."
 #: kicad/pcm/pcm_task_manager.cpp:673
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
-msgstr ""
+msgstr "%d de %d operaciones se inicializaron pero no tuvieron éxito."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -25381,7 +25398,7 @@ msgstr "Mover a la papelera"
 
 #: kicad/project_tree_pane.cpp:933
 msgid "Add Project to Version Control..."
-msgstr ""
+msgstr "Agregar proyecto al control de versiones..."
 
 #: kicad/project_tree_pane.cpp:934
 #, fuzzy
