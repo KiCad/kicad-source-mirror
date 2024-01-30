@@ -1162,8 +1162,14 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
-    int numPoints = static_cast<int>( m_points.size() );
+    // Bad programmer checks
+    wxCHECK( aStartIndex >= 0, SHAPE_LINE_CHAIN() );
+    wxCHECK( aEndIndex >= 0, SHAPE_LINE_CHAIN() );
+    wxCHECK( aStartIndex < PointCount(), SHAPE_LINE_CHAIN() );
+    wxCHECK( aEndIndex < PointCount(), SHAPE_LINE_CHAIN() );
+    wxCHECK( aEndIndex >= aStartIndex, SHAPE_LINE_CHAIN() );
 
+    int numPoints = static_cast<int>( m_points.size() );
 
     if( IsArcSegment( aStartIndex ) && !IsArcStart( aStartIndex ) )
     {
@@ -1199,12 +1205,11 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
         if( i == -1 )
             return rv; // NextShape reached the end
 
-        int nextShape = NextShape( i );
+        int  nextShape = NextShape( i );
+        bool isLastShape = nextShape < 0;
 
         if( IsArcStart( i ) )
         {
-            bool isLastShape = nextShape < 0;
-
             if(  ( isLastShape && aEndIndex != ( numPoints - 1 ) )
                      || ( nextShape > aEndIndex ) )
             {
@@ -1260,9 +1265,11 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
                           wxT( "Still on an arc segment, we missed something..." ) );
 
             if( i == aStartIndex )
-                rv.Append( GetSegment( i ).A );
+                rv.Append( m_points[i] );
 
-            if( !IsArcStart( nextShape ) && nextShape <= aEndIndex  )
+            bool nextPointIsArc = isLastShape ? false : IsArcSegment( nextShape );
+
+            if( !nextPointIsArc && i < SegmentCount() && i < aEndIndex )
                 rv.Append( GetSegment( i ).B );
         }
 

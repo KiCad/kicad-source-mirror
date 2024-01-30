@@ -881,7 +881,29 @@ BOOST_AUTO_TEST_CASE( Slice )
         chainCopy.Append( VECTOR2I( 400000, 400000 ) );
 
         SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 11, -1 );
+        BOOST_CHECK( GEOM_TEST::IsOutlineValid( sliceResult ) );
         BOOST_CHECK_EQUAL( sliceResult.GetPoint( -1 ), VECTOR2I( 400000, 400000 ) );
+    }
+
+    BOOST_TEST_CONTEXT( "Case 6: Start to end, chain with one point" )
+    {
+        SHAPE_LINE_CHAIN chainCopy = SLC_CASES().OnePoint;
+
+        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 0, -1 );
+        BOOST_CHECK_EQUAL( sliceResult.PointCount(), 1 );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ), VECTOR2I( 233450000, 228360000 ) );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( -1 ), VECTOR2I( 233450000, 228360000 ) ); // Same as index 0
+    }
+
+    BOOST_TEST_CONTEXT( "Case 7: Start to end, chain with two points" )
+    {
+        SHAPE_LINE_CHAIN chainCopy = SLC_CASES().TwoPoints;
+
+        SHAPE_LINE_CHAIN sliceResult = chainCopy.Slice( 0, -1 );
+        BOOST_CHECK_EQUAL( sliceResult.PointCount(), 2 );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 0 ), VECTOR2I( 233450000, 228360000 ) );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( 1 ), VECTOR2I( 263450000, 258360000 ) );
+        BOOST_CHECK_EQUAL( sliceResult.GetPoint( -1 ), VECTOR2I( 263450000, 258360000 ) ); // Same as index 1
     }
 }
 
