@@ -158,16 +158,21 @@ public:
         m_endsSwapped = false;
     }
 
-    void SetEndY( int y )
+    void SetEndY( int aY )
     {
-        m_end.y = y;
+        m_end.y = aY;
         m_endsSwapped = false;
     }
 
-    void SetEndX( int x )
+    void SetEndX( int aX )
     {
-        m_end.x = x;
+        m_end.x = aX;
         m_endsSwapped = false;
+    }
+
+    void SetRadius( int aX )
+    {
+        m_end = m_start + VECTOR2I( aX, 0 );
     }
 
     virtual VECTOR2I GetTopLeft() const { return GetStart(); }

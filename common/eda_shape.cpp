@@ -1958,25 +1958,61 @@ static struct EDA_SHAPE_DESC
                     return false;
                 };
 
+        auto isNotPolygonOrCircle = []( INSPECTABLE* aItem ) -> bool
+        {
+            // Polygons, unlike other shapes, have no meaningful start or end coordinates
+            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                return shape->GetShape() != SHAPE_T::POLY && shape->GetShape() != SHAPE_T::CIRCLE;
+
+            return false;
+        };
+
+        auto isCircle = []( INSPECTABLE* aItem ) -> bool
+        {
+            // Polygons, unlike other shapes, have no meaningful start or end coordinates
+            if( EDA_SHAPE* shape = dynamic_cast<EDA_SHAPE*>( aItem ) )
+                return shape->GetShape() == SHAPE_T::CIRCLE;
+
+            return false;
+        };
+
         auto shape = new PROPERTY_ENUM<EDA_SHAPE, SHAPE_T>( _HKI( "Shape" ),
                      NO_SETTER( EDA_SHAPE, SHAPE_T ), &EDA_SHAPE::GetShape );
         propMgr.AddProperty( shape );
+
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start X" ),
                     &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_X_COORD ) )
-                .SetAvailableFunc( isNotPolygon );
+                .SetAvailableFunc( isNotPolygonOrCircle );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Y" ),
                     &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
-                .SetAvailableFunc( isNotPolygon );
+                .SetAvailableFunc( isNotPolygonOrCircle );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Center X" ),
+                    &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ) )
+                .SetAvailableFunc( isCircle );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Center Y" ),
+                    &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
+                .SetAvailableFunc( isCircle );
+
+        propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Radius" ),
+                    &EDA_SHAPE::SetRadius, &EDA_SHAPE::GetRadius, PROPERTY_DISPLAY::PT_SIZE,
+                    ORIGIN_TRANSFORMS::NOT_A_COORD ) )
+                .SetAvailableFunc( isCircle );
+
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End X" ),
                     &EDA_SHAPE::SetEndX, &EDA_SHAPE::GetEndX, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_X_COORD ) )
-                .SetAvailableFunc( isNotPolygon );
+                .SetAvailableFunc( isNotPolygonOrCircle );
+
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Y" ),
                     &EDA_SHAPE::SetEndY, &EDA_SHAPE::GetEndY, PROPERTY_DISPLAY::PT_COORD,
                     ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
-                .SetAvailableFunc( isNotPolygon );
+                .SetAvailableFunc( isNotPolygonOrCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
                     &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );

@@ -385,7 +385,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     if( m_item->GetShape() == SHAPE_T::CIRCLE )
     {
-        m_item->SetEnd( m_item->GetStart() + VECTOR2I( m_endX.GetIntValue(), 0 ) );
+        m_item->SetRadius( m_endX.GetIntValue() );
     }
     else if( m_flipStartEnd && m_item->GetShape() != SHAPE_T::ARC )
     {
