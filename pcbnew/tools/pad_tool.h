@@ -89,7 +89,7 @@ private:
     ///< Push pad settings from a pad to other pads on board or footprint.
     int pushPadSettings( const TOOL_EVENT& aEvent );
 
-    void explodePad( PAD* aPad, PCB_LAYER_ID* aLayer );
+    std::vector<PCB_SHAPE*> explodePad( PAD* aPad, PCB_LAYER_ID* aLayer );
 
     void enterPadEditMode();
 

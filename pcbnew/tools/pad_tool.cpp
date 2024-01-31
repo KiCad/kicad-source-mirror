@@ -660,11 +660,11 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         if( pad )
         {
             BOARD_COMMIT commit( frame() );
-            commit.Modify( pad->GetParentFootprint() );
+            commit.Modify( pad );
 
-            std::vector<PCB_SHAPE*> shapes = RecombinePad( pad, false );
+            std::vector<PCB_SHAPE*> mergedShapes = RecombinePad( pad, false );
 
-            for( PCB_SHAPE* shape : shapes )
+            for( PCB_SHAPE* shape : mergedShapes )
                 commit.Remove( shape );
 
             commit.Push( _( "Edit Pad" ) );
@@ -678,8 +678,13 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         PAD*         pad = static_cast<PAD*>( selection[0] );
         BOARD_COMMIT commit( frame() );
 
-        commit.Modify( pad->GetParentFootprint() );
-        explodePad( pad, &layer );
+        commit.Modify( pad );
+
+        std::vector<PCB_SHAPE*> newShapes = explodePad( pad, &layer );
+
+        for( PCB_SHAPE* shape : newShapes )
+            commit.Added( shape );
+
         commit.Push( _( "Edit Pad" ) );
 
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -798,8 +803,10 @@ void PAD_TOOL::ExitPadEditMode()
 }
 
 
-void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer )
+std::vector<PCB_SHAPE*> PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer )
 {
+    std::vector<PCB_SHAPE*> createdShapes;
+
     if( aPad->IsOnLayer( F_Cu ) )
         *aLayer = F_Cu;
     else if( aPad->IsOnLayer( B_Cu ) )
@@ -828,6 +835,7 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer )
 
             board()->GetFirstFootprint()->Add( shape );
             frame()->GetCanvas()->GetView()->Add( shape );
+            createdShapes.push_back( shape );
         }
 
         aPad->SetShape( aPad->GetAnchorPadShape() );
@@ -836,6 +844,8 @@ void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer )
 
     aPad->SetFlags( ENTERED );
     m_editPad = aPad->m_Uuid;
+
+    return createdShapes;
 }
 
 
