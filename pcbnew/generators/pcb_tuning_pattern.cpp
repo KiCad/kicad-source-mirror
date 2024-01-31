@@ -1368,7 +1368,7 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
         {
             if( PCB_TRACK* track = dynamic_cast<PCB_TRACK*>( item ) )
             {
-                if( bounds.PointInside( track->GetPosition(), epsilon )
+                if( bounds.PointInside( track->GetStart(), epsilon )
                     && bounds.PointInside( track->GetEnd(), epsilon ) )
                 {
                     AddItem( item );
