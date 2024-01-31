@@ -120,6 +120,7 @@ private:
     SCH_SCREEN* getCurrentScreen();
     SCH_SHEET* getCurrentSheet();
 
+    bool ShouldPutItemOnSheet( int aOwnerindex );
     bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
     const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );

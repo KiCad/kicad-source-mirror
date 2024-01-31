@@ -989,31 +989,8 @@ void SCH_IO_ALTIUM::ParseTemplate( int aIndex, const std::map<wxString, wxString
     if( baseName.IsEmpty() )
         baseName = wxS( "Template" );
 
-    // if( m_altiumTemplates.count( aIndex ) )
-    // Existing template will be replaced
-
-    auto                 pair = m_altiumTemplates.insert( { aIndex, altiumTemplate } );
-    const ASCH_TEMPLATE& elem = pair.first->second;
-
-    LIB_ID   libId = AltiumToKiCadLibID( getLibName(), baseName );
-
-    LIB_SYMBOL* ksymbol = new LIB_SYMBOL( wxEmptyString );
-    ksymbol->SetName( baseName );
-    ksymbol->SetDescription( elem.filename );
-    ksymbol->SetLibId( libId );
-    m_libSymbols.insert( { aIndex, ksymbol } );
-
-    // each component has its own symbol for now
-    SCH_SYMBOL* symbol = new SCH_SYMBOL();
-
-    symbol->SetLibId( libId );
-
-    SCH_SCREEN* screen = getCurrentScreen();
-    wxCHECK( screen, /* void */ );
-
-    screen->Append( symbol );
-
-    m_symbols.insert( { aIndex, symbol } );
+    m_altiumTemplates.insert( { aIndex, altiumTemplate } );
+    // No need to create a symbol - graphics is put on the sheet
 }
 
 
@@ -1280,12 +1257,26 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
 }
 
 
+bool SCH_IO_ALTIUM::ShouldPutItemOnSheet( int aOwnerindex )
+{
+    // No component assigned -> Put on sheet
+    if( aOwnerindex == ALTIUM_COMPONENT_NONE )
+        return true;
+
+    // For a template -> Put on sheet so we can resolve variables
+    if( m_altiumTemplates.find( aOwnerindex ) != m_altiumTemplates.end() )
+        return true;
+
+    return false;
+}
+
+
 void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
                                 std::vector<LIB_SYMBOL*>& aSymbol, std::vector<int>& aFontSizes )
 {
     ASCH_LABEL elem( aProperties );
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         static const std::map<wxString, wxString> variableMap = {
             { "APPLICATION_BUILDNUMBER", "KICAD_VERSION" },
@@ -1385,7 +1376,7 @@ void SCH_IO_ALTIUM::ParseTextFrame( const std::map<wxString, wxString>& aPropert
 {
     ASCH_TEXT_FRAME elem( aProperties );
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
         AddTextBox( &elem );
     else
         AddLibTextBox( &elem, aSymbol, aFontSizes );
@@ -1558,7 +1549,7 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
         return;
     }
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* currentScreen = getCurrentScreen();
         wxCHECK( currentScreen, /* void */ );
@@ -1716,7 +1707,7 @@ void SCH_IO_ALTIUM::ParsePolyline( const std::map<wxString, wxString>& aProperti
 {
     ASCH_POLYLINE elem( aProperties );
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -1789,7 +1780,7 @@ void SCH_IO_ALTIUM::ParsePolygon( const std::map<wxString, wxString>& aPropertie
 {
     ASCH_POLYGON elem( aProperties );
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -1873,7 +1864,7 @@ void SCH_IO_ALTIUM::ParseRoundRectangle( const std::map<wxString, wxString>& aPr
 {
     ASCH_ROUND_RECTANGLE elem( aProperties );
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -1977,7 +1968,7 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
 
     // Try to approximate this ellipse by a series of beziers
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* currentScreen = getCurrentScreen();
         wxCHECK( currentScreen, /* void */ );
@@ -2090,7 +2081,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
 {
     ASCH_ARC elem( aProperties );
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* currentScreen = getCurrentScreen();
         wxCHECK( currentScreen, /* void */ );
@@ -2194,7 +2185,7 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
         return;
     }
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -2319,7 +2310,7 @@ void SCH_IO_ALTIUM::ParseCircle( const std::map<wxString, wxString>& aProperties
 {
     ASCH_ELLIPSE elem( aProperties );
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -2386,7 +2377,7 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
 {
     ASCH_LINE elem( aProperties );
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
 
         SCH_SCREEN* screen = getCurrentScreen();
@@ -2457,7 +2448,7 @@ void SCH_IO_ALTIUM::ParseSignalHarness( const std::map<wxString, wxString>& aPro
 {
     ASCH_SIGNAL_HARNESS elem( aProperties );
 
-    if( elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
@@ -2487,7 +2478,7 @@ void SCH_IO_ALTIUM::ParseHarnessConnector( int aIndex, const std::map<wxString,
 {
     ASCH_HARNESS_CONNECTOR elem( aProperties );
 
-    if( elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* currentScreen = getCurrentScreen();
         wxCHECK( currentScreen, /* void */ );
@@ -2624,7 +2615,7 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
     VECTOR2I sheetTopRight = elem.TopRight + m_sheetOffset;
     VECTOR2I sheetBottomLeft = elem.BottomLeft + m_sheetOffset;
 
-    if( aSymbol.empty() && elem.ownerindex == ALTIUM_COMPONENT_NONE )
+    if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
