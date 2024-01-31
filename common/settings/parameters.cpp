@@ -311,13 +311,13 @@ void PARAM_WXSTRING_MAP::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) 
             m_ptr->clear();
 
             for( const auto& el : js->items() )
-            {
                 ( *m_ptr )[wxString( el.key().c_str(), wxConvUTF8 )] = el.value().get<wxString>();
-            }
         }
     }
     else if( aResetIfMissing )
+    {
         *m_ptr = m_default;
+    }
 }
 
 

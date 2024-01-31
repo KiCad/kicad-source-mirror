@@ -100,7 +100,7 @@ JSON_SETTINGS::JSON_SETTINGS( const wxString& aFilename, SETTINGS_LOC aLocation,
 
 JSON_SETTINGS::~JSON_SETTINGS()
 {
-    for( auto param: m_params )
+    for( PARAM_BASE* param: m_params )
         delete param;
 
     m_params.clear();
@@ -136,7 +136,7 @@ JSON_SETTINGS_INTERNALS* JSON_SETTINGS::Internals()
 
 void JSON_SETTINGS::Load()
 {
-    for( auto param : m_params )
+    for( PARAM_BASE* param : m_params )
     {
         try
         {
@@ -163,68 +163,76 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
 
     LOCALE_IO locale;
 
-    auto migrateFromLegacy = [&] ( wxFileName& aPath ) {
-        // Backup and restore during migration so that the original can be mutated if convenient
-        bool backed_up = false;
-        wxFileName temp;
-
-        if( aPath.IsDirWritable() )
-        {
-            temp.AssignTempFileName( aPath.GetFullPath() );
-
-            if( !wxCopyFile( aPath.GetFullPath(), temp.GetFullPath() ) )
+    auto migrateFromLegacy =
+            [&] ( wxFileName& aPath )
             {
-                wxLogTrace( traceSettings, wxT( "%s: could not create temp file for migration" ),
-                        GetFullFilename() );
-            }
-            else
-                backed_up = true;
-        }
+                // Backup and restore during migration so that the original can be mutated if
+                // convenient
+                bool backed_up = false;
+                wxFileName temp;
 
-        // Silence popups if legacy file is read-only
-        wxLogNull doNotLog;
+                if( aPath.IsDirWritable() )
+                {
+                    temp.AssignTempFileName( aPath.GetFullPath() );
 
-        wxConfigBase::DontCreateOnDemand();
-        auto cfg = std::make_unique<wxFileConfig>( wxT( "" ), wxT( "" ), aPath.GetFullPath() );
+                    if( !wxCopyFile( aPath.GetFullPath(), temp.GetFullPath() ) )
+                    {
+                        wxLogTrace( traceSettings,
+                                    wxT( "%s: could not create temp file for migration" ),
+                                    GetFullFilename() );
+                    }
+                    else
+                    {
+                        backed_up = true;
+                    }
+                }
 
-        // If migrate fails or is not implemented, fall back to built-in defaults that were
-        // already loaded above
-        if( !MigrateFromLegacy( cfg.get() ) )
-        {
-            success = false;
-            wxLogTrace( traceSettings,
-                        wxT( "%s: migrated; not all settings were found in legacy file" ),
-                        GetFullFilename() );
-        }
-        else
-        {
-            success = true;
-            wxLogTrace( traceSettings, wxT( "%s: migrated from legacy format" ),
-                        GetFullFilename() );
-        }
+                // Silence popups if legacy file is read-only
+                wxLogNull doNotLog;
 
-        if( backed_up )
-        {
-            cfg.reset();
+                wxConfigBase::DontCreateOnDemand();
+                auto cfg = std::make_unique<wxFileConfig>( wxT( "" ), wxT( "" ),
+                                                           aPath.GetFullPath() );
 
-            if( !wxCopyFile( temp.GetFullPath(), aPath.GetFullPath() ) )
-            {
-                wxLogTrace( traceSettings,
-                            wxT( "migrate; copy temp file %s to %s failed" ),
-                            temp.GetFullPath(), aPath.GetFullPath() );
-            }
+                // If migrate fails or is not implemented, fall back to built-in defaults that
+                // were already loaded above
+                if( !MigrateFromLegacy( cfg.get() ) )
+                {
+                    success = false;
+                    wxLogTrace( traceSettings,
+                                wxT( "%s: migrated; not all settings were found in legacy file" ),
+                                GetFullFilename() );
+                }
+                else
+                {
+                    success = true;
+                    wxLogTrace( traceSettings, wxT( "%s: migrated from legacy format" ),
+                                GetFullFilename() );
+                }
 
-            if( !wxRemoveFile( temp.GetFullPath() ) )
-            {
-                wxLogTrace( traceSettings,
-                            wxT( "migrate; failed to remove temp file %s" ),
-                            temp.GetFullPath() );
-            }
-         }
+                if( backed_up )
+                {
+                    cfg.reset();
 
-        // Either way, we want to clean up the old file afterwards
-        legacy_migrated = true;
-    };
+                    if( !wxCopyFile( temp.GetFullPath(), aPath.GetFullPath() ) )
+                    {
+                        wxLogTrace( traceSettings,
+                                    wxT( "migrate; copy temp file %s to %s failed" ),
+                                    temp.GetFullPath(),
+                                    aPath.GetFullPath() );
+                    }
+
+                    if( !wxRemoveFile( temp.GetFullPath() ) )
+                    {
+                        wxLogTrace( traceSettings,
+                                    wxT( "migrate; failed to remove temp file %s" ),
+                                    temp.GetFullPath() );
+                    }
+                 }
+
+                // Either way, we want to clean up the old file afterwards
+                legacy_migrated = true;
+            };
 
     wxFileName path;
 
@@ -298,7 +306,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
                 if( filever >= 0 && filever < m_schemaVersion )
                 {
                     wxLogTrace( traceSettings, wxT( "%s: attempting migration from version "
-                                                  "%d to %d" ),
+                                                    "%d to %d" ),
                                 GetFullFilename(), filever, m_schemaVersion );
 
                     if( Migrate() )
@@ -339,7 +347,7 @@ bool JSON_SETTINGS::LoadFromFile( const wxString& aDirectory )
     Load();
 
     // And finally load any nested settings
-    for( auto settings : m_nested_settings )
+    for( NESTED_SETTINGS* settings : m_nested_settings )
         settings->LoadFromFile();
 
     wxLogTrace( traceSettings, wxT( "Loaded <%s> with schema %d" ), GetFullFilename(),
@@ -367,7 +375,7 @@ bool JSON_SETTINGS::Store()
 {
     bool modified = false;
 
-    for( auto param : m_params )
+    for( PARAM_BASE* param : m_params )
     {
         modified |= !param->MatchesFile( this );
         param->Store( this );
@@ -379,7 +387,7 @@ bool JSON_SETTINGS::Store()
 
 void JSON_SETTINGS::ResetToDefaults()
 {
-    for( auto param : m_params )
+    for( PARAM_BASE* param : m_params )
         param->SetDefault();
 }
 
@@ -432,7 +440,7 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
     bool modified = false;
 
-    for( auto settings : m_nested_settings )
+    for( NESTED_SETTINGS* settings : m_nested_settings )
         modified |= settings->SaveToFile();
 
     modified |= Store();
@@ -832,8 +840,9 @@ void JSON_SETTINGS::ReleaseNestedSettings( NESTED_SETTINGS* aSettings )
         return;
 
     auto it = std::find_if( m_nested_settings.begin(), m_nested_settings.end(),
-                            [&aSettings]( const JSON_SETTINGS* aPtr ) {
-                              return aPtr == aSettings;
+                            [&aSettings]( const JSON_SETTINGS* aPtr )
+                            {
+                                return aPtr == aSettings;
                             } );
 
     if( it != m_nested_settings.end() )

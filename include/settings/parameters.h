@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,8 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _PARAMETERS_H
-#define _PARAMETERS_H
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
 
 #include <set>
 #include <string>
@@ -69,13 +69,8 @@ public:
     const std::string& GetJsonPath() const { return m_path; }
 
 protected:
-    /**
-     * the string used to store the param in json files
-     */
-    std::string m_path;
-
-    ///! True if the parameter pointer should never be overwritten
-    bool m_readOnly;
+    std::string m_path;               ///< Address of the param in the json files
+    bool        m_readOnly;           ///< Indicates param pointer should never be overwritten
 };
 
 
@@ -121,7 +116,9 @@ public:
             *m_ptr = val;
         }
         else if( aResetIfMissing )
+        {
             *m_ptr = m_default;
+        }
     }
 
     void Store( JSON_SETTINGS* aSettings ) const override
@@ -148,13 +145,13 @@ public:
     }
 
 private:
-    ValueType m_min;
-    ValueType m_max;
-    bool m_use_minmax;
+    ValueType  m_min;
+    ValueType  m_max;
+    bool       m_use_minmax;
 
 protected:
     ValueType* m_ptr;
-    ValueType m_default;
+    ValueType  m_default;
 };
 
 /**
@@ -240,7 +237,9 @@ public:
 
         }
         else if( aResetIfMissing )
+        {
             *m_ptr = m_default;
+        }
     }
 
     void Store( JSON_SETTINGS* aSettings ) const override
@@ -316,10 +315,8 @@ public:
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
 
 private:
-    ValueType m_default;
-
-    std::function<ValueType()> m_getter;
-
+    ValueType                        m_default;
+    std::function<ValueType()>       m_getter;
     std::function<void( ValueType )> m_setter;
 };
 
@@ -404,11 +401,11 @@ public:
 
 private:
     ValueType* m_ptr;
-    ValueType m_default;
-    ValueType m_min;
-    ValueType m_max;
-    bool m_use_minmax;
-    double m_scale;
+    ValueType  m_default;
+    ValueType  m_min;
+    ValueType  m_max;
+    bool       m_use_minmax;
+    double     m_scale;
 };
 
 template<typename Type>
@@ -442,8 +439,7 @@ public:
 
 protected:
     std::vector<Type>* m_ptr;
-
-    std::vector<Type> m_default;
+    std::vector<Type>  m_default;
 };
 
 template<typename Type>
@@ -477,8 +473,7 @@ public:
 
 protected:
     std::set<Type>* m_ptr;
-
-    std::set<Type> m_default;
+    std::set<Type>  m_default;
 };
 
 /**
@@ -568,8 +563,7 @@ public:
 
 private:
     std::map<std::string, Value>* m_ptr;
-
-    std::map<std::string, Value> m_default;
+    std::map<std::string, Value>  m_default;
 };
 
 
@@ -580,8 +574,8 @@ class PARAM_WXSTRING_MAP : public PARAM_BASE
 {
 public:
     PARAM_WXSTRING_MAP( const std::string& aJsonPath, std::map<wxString, wxString>* aPtr,
-               std::initializer_list<std::pair<const wxString, wxString>> aDefault,
-               bool aReadOnly = false ) :
+                        std::initializer_list<std::pair<const wxString, wxString>> aDefault,
+                        bool aReadOnly = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
             m_ptr( aPtr ),
             m_default( aDefault )
@@ -600,8 +594,7 @@ public:
 
 private:
     std::map<wxString, wxString>* m_ptr;
-
-    std::map<wxString, wxString> m_default;
+    std::map<wxString, wxString>  m_default;
 };
 
 #endif

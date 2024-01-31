@@ -116,7 +116,7 @@ public:
     /**
      * Calls Store() and then writes the contents of the JSON document to a file
      * @param aDirectory is the directory to save to, including trailing separator
-c     * @return true if the file was saved
+     * @return true if the file was saved
      */
     virtual bool SaveToFile( const wxString& aDirectory = "", bool aForce = false );
 
