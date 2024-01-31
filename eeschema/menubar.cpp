@@ -203,17 +203,16 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::showSearch, ACTION_MENU::CHECK );
     viewMenu->Add( EE_ACTIONS::showHierarchy, ACTION_MENU::CHECK );
     viewMenu->Add( ACTIONS::showProperties, ACTION_MENU::CHECK );
+
+    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
+        viewMenu->Add( EE_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
+
+    viewMenu->AppendSeparator();
     viewMenu->Add( EE_ACTIONS::navigateBack );
     viewMenu->Add( EE_ACTIONS::navigateUp );
     viewMenu->Add( EE_ACTIONS::navigateForward );
     viewMenu->Add( EE_ACTIONS::navigatePrevious );
     viewMenu->Add( EE_ACTIONS::navigateNext );
-
-    if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
-    {
-        viewMenu->AppendSeparator();
-        viewMenu->Add( EE_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
-    }
 
     viewMenu->AppendSeparator();
     viewMenu->Add( ACTIONS::zoomInCenter );
