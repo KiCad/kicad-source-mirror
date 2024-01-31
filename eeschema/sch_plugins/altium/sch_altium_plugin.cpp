@@ -60,6 +60,7 @@
 #include <wx/log.h>
 #include <wx/zstream.h>
 #include <wx/wfstream.h>
+#include <wx/dir.h>
 #include <trigo.h>
 
 // Harness port object itself does not contain color information about itself
@@ -366,6 +367,24 @@ void SCH_ALTIUM_PLUGIN::ParseAltiumSch( const wxString& aFileName )
         // The assumption is that all of the Altium schematic files will be in the same
         // path as the parent sheet path.
         wxFileName loadAltiumFileName( parentFileName.GetPath(), sheet->GetFileName() );
+
+        if( !loadAltiumFileName.IsFileReadable() )
+        {
+            // Try case-insensitive search
+            wxArrayString files;
+            wxDir::GetAllFiles( parentFileName.GetPath(), &files, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
+
+            for( const wxString& candidate : files )
+            {
+                wxFileName candidateFname( candidate );
+
+                if( candidateFname.GetFullName().IsSameAs( sheet->GetFileName(), false ) )
+                {
+                    loadAltiumFileName = candidateFname;
+                    break;
+                }
+            }
+        }
 
         if( loadAltiumFileName.GetFullName().IsEmpty() || !loadAltiumFileName.IsFileReadable() )
         {
@@ -1411,21 +1430,28 @@ void SCH_ALTIUM_PLUGIN::ParsePolyline( const std::map<wxString, wxString>& aProp
 {
     ASCH_POLYLINE elem( aProperties );
 
+    if( elem.Points.size() < 2 )
+        return;
+
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
 
     if( elem.OwnerPartID == ALTIUM_COMPONENT_NONE )
     {
-        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
+        for( size_t i = 1; i < elem.Points.size(); i++ )
+        {
+            SCH_LINE* line = new SCH_LINE;
 
-        for( VECTOR2I& point : elem.Points )
-            poly->AddPoint( point + m_sheetOffset );
+            line->SetStartPoint( elem.Points[i - 1] + m_sheetOffset );
+            line->SetEndPoint( elem.Points[i] + m_sheetOffset );
 
-        poly->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
-                                                        GetColorFromInt( elem.Color ) ) );
-        poly->SetFlags( IS_NEW );
+            line->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
+                                            GetColorFromInt( elem.Color ) ) );
 
-        screen->Append( poly );
+            line->SetFlags( IS_NEW );
+
+            screen->Append( line );
+        }
     }
     else
     {
