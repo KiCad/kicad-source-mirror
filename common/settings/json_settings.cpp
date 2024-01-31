@@ -466,6 +466,16 @@ bool JSON_SETTINGS::SaveToFile( const wxString& aDirectory, bool aForce )
 
     nlohmann::json toSave = m_internals->m_original;
 
+
+    for( PARAM_BASE* param : m_params )
+    {
+        if( PARAM_WXSTRING_MAP* stringMap = dynamic_cast<PARAM_WXSTRING_MAP*>( param ) )
+        {
+            if( stringMap->ClearUnknownKeys() )
+                toSave[ stringMap->GetJsonPath() ] = nlohmann::json( {} );
+        }
+    }
+
     toSave.update( m_internals->begin(), m_internals->end(), /* merge_objects = */ true );
 
     try

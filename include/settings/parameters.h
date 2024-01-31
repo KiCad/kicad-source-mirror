@@ -35,7 +35,8 @@ class PARAM_BASE
 public:
     PARAM_BASE( std::string aJsonPath, bool aReadOnly ) :
             m_path( std::move( aJsonPath ) ),
-            m_readOnly( aReadOnly )
+            m_readOnly( aReadOnly ),
+            m_clearUnknownKeys( false )
     {}
 
     virtual ~PARAM_BASE() = default;
@@ -68,9 +69,18 @@ public:
      */
     const std::string& GetJsonPath() const { return m_path; }
 
+    /**
+     * @return true if keys should be cleared from source file rather than merged.  Useful for
+     *         things such as text variables that are semantically an array but stored as a map.
+     */
+    bool ClearUnknownKeys() const { return m_clearUnknownKeys; }
+
 protected:
     std::string m_path;               ///< Address of the param in the json files
     bool        m_readOnly;           ///< Indicates param pointer should never be overwritten
+    bool        m_clearUnknownKeys;   ///< Keys should be cleared from source rather than merged.
+                                      ///<   This is useful for things that are semantically an
+                                      ///<   array but stored as a map, such as textVars.
 };
 
 
@@ -575,11 +585,13 @@ class PARAM_WXSTRING_MAP : public PARAM_BASE
 public:
     PARAM_WXSTRING_MAP( const std::string& aJsonPath, std::map<wxString, wxString>* aPtr,
                         std::initializer_list<std::pair<const wxString, wxString>> aDefault,
-                        bool aReadOnly = false ) :
+                        bool aReadOnly = false, bool aArrayBehavior = false ) :
             PARAM_BASE( aJsonPath, aReadOnly ),
             m_ptr( aPtr ),
             m_default( aDefault )
-    { }
+    {
+        m_clearUnknownKeys = aArrayBehavior;
+    }
 
     void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;
 

@@ -50,7 +50,8 @@ PROJECT_FILE::PROJECT_FILE( const wxString& aFullPath ) :
 
     m_params.emplace_back( new PARAM_LIST<FILE_INFO_PAIR>( "boards", &m_boards, {} ) );
 
-    m_params.emplace_back( new PARAM_WXSTRING_MAP( "text_variables", &m_TextVars, {} ) );
+    m_params.emplace_back( new PARAM_WXSTRING_MAP( "text_variables",
+            &m_TextVars, {}, false, true /* array behavior, even though stored as a map */ ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "libraries.pinned_symbol_libs",
             &m_PinnedSymbolLibs, {} ) );
