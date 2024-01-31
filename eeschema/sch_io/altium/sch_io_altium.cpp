@@ -2191,9 +2191,18 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
 
+        COLOR4D fillColor = GetColorFromInt( elem.AreaColor );
+
+        if( elem.IsTransparent )
+            fillColor = fillColor.WithAlpha( 0.5 );
+
+        FILL_T fillMode = elem.IsSolid ? FILL_T::FILLED_WITH_COLOR : FILL_T::NO_FILL;
+
         ELLIPSE<int> ellipse( elem.Center + m_sheetOffset, elem.Radius,
-                              KiROUND(elem.SecondaryRadius ), EDA_ANGLE::m_Angle0 );
+                              KiROUND( elem.SecondaryRadius ), EDA_ANGLE::m_Angle0 );
+
         std::vector<BEZIER<int>> beziers;
+        std::vector<VECTOR2I>    polyPoints;
 
         TransformEllipseToBeziers( ellipse, beziers );
 
@@ -2205,15 +2214,28 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
             schbezier->SetBezierC2( bezier.C2 );
             schbezier->SetEnd( bezier.End );
             schbezier->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID ) );
-            schbezier->SetFillColor( GetColorFromInt( elem.AreaColor ) );
-
-            if( elem.IsSolid )
-                schbezier->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-            else
-                schbezier->SetFilled( false );
+            schbezier->SetFillColor( fillColor );
+            schbezier->SetFillMode( fillMode );
 
             schbezier->RebuildBezierToSegmentsPointsList( schbezier->GetWidth() / 2 );
             screen->Append( schbezier );
+
+            polyPoints.push_back( bezier.Start );
+        }
+
+        if( fillMode != FILL_T::NO_FILL )
+        {
+            SCH_SHAPE* schpoly = new SCH_SHAPE( SHAPE_T::POLY );
+            schpoly->SetFillColor( fillColor );
+            schpoly->SetFillMode( fillMode );
+            schpoly->SetWidth( -1 );
+
+            for( const VECTOR2I& point : polyPoints )
+                schpoly->AddPoint( point );
+
+            schpoly->AddPoint( polyPoints[0] );
+
+            screen->Append( schpoly );
         }
     }
     else
