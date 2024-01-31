@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -28,6 +28,7 @@
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <jobs/job_fp_export_svg.h>
 #include <jobs/job_fp_upgrade.h>
+#include <jobs/job_export_pcb_ipc2581.h>
 #include <jobs/job_export_pcb_gerber.h>
 #include <jobs/job_export_pcb_gerbers.h>
 #include <jobs/job_export_pcb_drill.h>
@@ -60,8 +61,11 @@
 #include <pgm_base.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <reporter.h>
+#include <string_utf8_map.h>
 #include <wildcards_and_files_ext.h>
 #include <export_vrml.h>
+#include <wx/wfstream.h>
+#include <wx/zipstrm.h>
 
 #include "pcbnew_scripting_helpers.h"
 
@@ -84,6 +88,8 @@ PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
     Register( "fpsvg",
               std::bind( &PCBNEW_JOBS_HANDLER::JobExportFpSvg, this, std::placeholders::_1 ) );
     Register( "drc", std::bind( &PCBNEW_JOBS_HANDLER::JobExportDrc, this, std::placeholders::_1 ) );
+    Register( "ipc2581",
+              std::bind( &PCBNEW_JOBS_HANDLER::JobExportIpc2581, this, std::placeholders::_1 ) );
 }
 
 
@@ -1063,6 +1069,89 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         {
             return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
         }
+    }
+
+    return CLI::EXIT_CODES::SUCCESS;
+}
+
+
+int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
+{
+    JOB_EXPORT_PCB_IPC2581* job = dynamic_cast<JOB_EXPORT_PCB_IPC2581*>( aJob );
+
+    if( job == nullptr )
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+
+    if( job->IsCli() )
+        m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
+
+    BOARD* brd = LoadBoard( job->m_filename );
+
+    if( job->m_outputFile.IsEmpty() )
+    {
+        wxFileName fn = brd->GetFileName();
+        fn.SetName( fn.GetName() );
+        fn.SetExt( FILEEXT::Ipc2581FileExtension );
+
+        job->m_outputFile = fn.GetFullName();
+    }
+
+    STRING_UTF8_MAP props;
+    props["units"] =
+            job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? "mm" : "inch";
+    props["sigfig"] = wxString::Format( "%d", job->m_units );
+    props["version"] = job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C ? "C" : "B";
+    props["OEMRef"] = job->m_colInternalId;
+    props["mpn"] = job->m_colMfgPn;
+    props["mfg"] = job->m_colMfg;
+    props["dist"] = job->m_colDist;
+    props["distpn"] = job->m_colDistPn;
+
+    wxString tempFile = wxFileName::CreateTempFileName( wxS( "pcbnew_ipc" ) );
+    try
+    {
+        IO_RELEASER<PCB_IO> pi( PCB_IO_MGR::PluginFind( PCB_IO_MGR::IPC2581 ) );
+        pi->SetProgressReporter( m_progressReporter );
+        pi->SaveBoard( tempFile, brd, &props );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        m_reporter->Report( wxString::Format( _( "Error generating IPC2581 file '%s'.\n%s" ),
+                                              job->m_filename, ioe.What() ),
+                            RPT_SEVERITY_ERROR );
+
+        wxRemoveFile( tempFile );
+
+        return CLI::EXIT_CODES::ERR_UNKNOWN;
+    }
+
+    if( job->m_compress )
+    {
+        wxFileName tempfn = job->m_outputFile;
+        tempfn.SetExt( FILEEXT::Ipc2581FileExtension );
+        wxFileName zipfn = tempFile;
+        zipfn.SetExt( "zip" );
+
+        wxFFileOutputStream fnout( zipfn.GetFullPath() );
+        wxZipOutputStream   zip( fnout );
+        wxFFileInputStream  fnin( tempFile );
+
+        zip.PutNextEntry( tempfn.GetFullName() );
+        fnin.Read( zip );
+        zip.Close();
+        fnout.Close();
+
+        wxRemoveFile( tempFile );
+        tempFile = zipfn.GetFullPath();
+    }
+
+    // If save succeeded, replace the original with what we just wrote
+    if( !wxRenameFile( tempFile, job->m_outputFile ) )
+    {
+        m_reporter->Report( wxString::Format( _( "Error generating IPC2581 file '%s'.\n"
+                                                 "Failed to rename temporary file '%s." ),
+                                              job->m_outputFile, tempFile ),
+                            RPT_SEVERITY_ERROR );
     }
 
     return CLI::EXIT_CODES::SUCCESS;
