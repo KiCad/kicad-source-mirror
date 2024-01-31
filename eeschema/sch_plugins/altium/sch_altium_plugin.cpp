@@ -2177,10 +2177,10 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         LIB_SHAPE* bezier = new LIB_SHAPE( aKsymbol, SHAPE_T::BEZIER );
         aKsymbol->AddDrawItem( bezier );
         bezier->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), PLOT_DASH_TYPE::SOLID ) );
-        bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -50 ) } );
-        bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -87 ) } );
-        bezier->AddPoint( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -63 ) } );
-        bezier->AddPoint( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -100 ) } );
+        bezier->SetStart( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -50 ) } );
+        bezier->SetBezierC1( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -87 ) } );
+        bezier->SetBezierC2( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -63 ) } );
+        bezier->SetEnd( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -100 ) } );
 
         return { 0, schIUScale.MilsToIU( 150 ) };
     }
@@ -2343,10 +2343,17 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
 void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_POWER_PORT elem( aProperties );
-    LIB_ID          libId = AltiumToKiCadLibID( getLibName(), elem.text );
-    LIB_SYMBOL*     libSymbol = nullptr;
 
-    const auto& powerSymbolIt = m_powerSymbols.find( elem.text );
+    wxString    symName( elem.text );
+    wxString    styleName = wxString( "Style" ) << static_cast<int>( elem.style );
+
+    if( !styleName.empty() )
+        symName << '_' << styleName;
+
+    LIB_ID      libId = AltiumToKiCadLibID( getLibName(), symName );
+    LIB_SYMBOL* libSymbol = nullptr;
+
+    const auto& powerSymbolIt = m_powerSymbols.find( symName );
 
     if( powerSymbolIt != m_powerSymbols.end() )
     {
@@ -2384,7 +2391,7 @@ void SCH_ALTIUM_PLUGIN::ParsePowerPort( const std::map<wxString, wxString>& aPro
 
         // this has to be done after parsing the LIB_SYMBOL!
         m_pi->SaveSymbol( getLibFileName().GetFullPath(), libSymbol, m_properties.get() );
-        m_powerSymbols.insert( { elem.text, libSymbol } );
+        m_powerSymbols.insert( { symName, libSymbol } );
     }
 
     SCH_SCREEN* screen = getCurrentScreen();
