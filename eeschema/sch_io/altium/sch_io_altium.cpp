@@ -64,6 +64,7 @@
 #include <wx/zstream.h>
 #include <wx/wfstream.h>
 #include <trigo.h>
+#include <magic_enum.hpp>
 
 // Harness port object itself does not contain color information about itself
 // It seems altium is drawing harness ports using these colors
@@ -2838,10 +2839,10 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         LIB_SHAPE* bezier = new LIB_SHAPE( aKsymbol, SHAPE_T::BEZIER );
         aKsymbol->AddDrawItem( bezier, false );
         bezier->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), LINE_STYLE::SOLID ) );
-        bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -50 ) } );
-        bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -87 ) } );
-        bezier->AddPoint( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -63 ) } );
-        bezier->AddPoint( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -100 ) } );
+        bezier->SetStart( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -50 ) } );
+        bezier->SetBezierC1( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -87 ) } );
+        bezier->SetBezierC2( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -63 ) } );
+        bezier->SetEnd( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -100 ) } );
 
         return { 0, schIUScale.MilsToIU( 150 ) };
     }
@@ -3004,10 +3005,17 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
 void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aProperties )
 {
     ASCH_POWER_PORT elem( aProperties );
-    LIB_ID          libId = AltiumToKiCadLibID( getLibName(), elem.text );
-    LIB_SYMBOL*     libSymbol = nullptr;
 
-    const auto& powerSymbolIt = m_powerSymbols.find( elem.text );
+    wxString    symName( elem.text );
+    std::string styleName( magic_enum::enum_name<ASCH_POWER_PORT_STYLE>( elem.style ) );
+
+    if( !styleName.empty() )
+        symName << '_' << styleName;
+
+    LIB_ID      libId = AltiumToKiCadLibID( getLibName(), symName );
+    LIB_SYMBOL* libSymbol = nullptr;
+
+    const auto& powerSymbolIt = m_powerSymbols.find( symName );
 
     if( powerSymbolIt != m_powerSymbols.end() )
     {
@@ -3043,7 +3051,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
 
         // this has to be done after parsing the LIB_SYMBOL!
         m_pi->SaveSymbol( getLibFileName().GetFullPath(), libSymbol, m_properties.get() );
-        m_powerSymbols.insert( { elem.text, libSymbol } );
+        m_powerSymbols.insert( { symName, libSymbol } );
     }
 
     SCH_SCREEN* screen = getCurrentScreen();
