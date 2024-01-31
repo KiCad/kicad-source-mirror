@@ -463,6 +463,24 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
         // path as the parent sheet path.
         wxFileName loadAltiumFileName( parentFileName.GetPath(), sheet->GetFileName() );
 
+        if( !loadAltiumFileName.IsFileReadable() )
+        {
+            // Try case-insensitive search
+            wxArrayString files;
+            wxDir::GetAllFiles( parentFileName.GetPath(), &files, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
+
+            for( const wxString& candidate : files )
+            {
+                wxFileName candidateFname( candidate );
+
+                if( candidateFname.GetFullName().IsSameAs( sheet->GetFileName(), false ) )
+                {
+                    loadAltiumFileName = candidateFname;
+                    break;
+                }
+            }
+        }
+
         if( loadAltiumFileName.GetFullName().IsEmpty() || !loadAltiumFileName.IsFileReadable() )
         {
             wxString msg;
@@ -1708,21 +1726,28 @@ void SCH_IO_ALTIUM::ParsePolyline( const std::map<wxString, wxString>& aProperti
 {
     ASCH_POLYLINE elem( aProperties );
 
+    if( elem.Points.size() < 2 )
+        return;
+
     if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
         SCH_SCREEN* screen = getCurrentScreen();
         wxCHECK( screen, /* void */ );
 
-        SCH_SHAPE* poly = new SCH_SHAPE( SHAPE_T::POLY );
+        for( size_t i = 1; i < elem.Points.size(); i++ )
+        {
+            SCH_LINE* line = new SCH_LINE;
 
-        for( VECTOR2I& point : elem.Points )
-            poly->AddPoint( point + m_sheetOffset );
+            line->SetStartPoint( elem.Points[i - 1] + m_sheetOffset );
+            line->SetEndPoint( elem.Points[i] + m_sheetOffset );
 
-        poly->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
-                                                        GetColorFromInt( elem.Color ) ) );
-        poly->SetFlags( IS_NEW );
+            line->SetStroke( STROKE_PARAMS( elem.LineWidth, GetPlotDashType( elem.LineStyle ),
+                                            GetColorFromInt( elem.Color ) ) );
 
-        screen->Append( poly );
+            line->SetFlags( IS_NEW );
+
+            screen->Append( line );
+        }
     }
     else
     {
