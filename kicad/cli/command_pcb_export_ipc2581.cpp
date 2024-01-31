@@ -130,9 +130,9 @@ int CLI::PCB_EXPORT_IPC2581_COMMAND::doPerform( KIWAY& aKiway )
         ipc2581Job->m_version = JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C;
 
     wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
-    if( version == "mm" )
+    if( units == "mm" )
         ipc2581Job->m_units = JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS;
-    else if( version == "in" )
+    else if( units == "in" )
         ipc2581Job->m_units = JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::INCHES;
 
     ipc2581Job->m_colInternalId =
