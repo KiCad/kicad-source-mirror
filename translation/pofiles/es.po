@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 19:54-0800\n"
-"PO-Revision-Date: 2024-01-30 23:02+0000\n"
+"PO-Revision-Date: 2024-01-31 13:10+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
 "master-source/es/>\n"
@@ -6004,7 +6004,6 @@ msgid "Could not get reference OID for reference '%s'"
 msgstr "No se pudo obtener la referencia OID para la referencia '%s'"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:54
-#, fuzzy
 msgid "Failed to perform checkout operation."
 msgstr "Fallo al realizar la operación de checkout."
 
@@ -6111,7 +6110,6 @@ msgid "Failed to delete branch."
 msgstr "Fallo al eliminar rama."
 
 #: common/git/kicad_git_errors.cpp:55
-#, fuzzy
 msgid "File not found during checkout operation."
 msgstr "Archivo no encontrado durante la operación de checkout."
 
@@ -6120,9 +6118,8 @@ msgid "Merge conflict encountered."
 msgstr "Conflicto de fusión encontrado."
 
 #: common/git/kicad_git_errors.cpp:59
-#, fuzzy
 msgid "Rebase conflict encountered."
-msgstr "Conflicto de rebase encontrado."
+msgstr "Conflicto de «rebase» encontrado."
 
 #: common/git/kicad_git_errors.cpp:62
 msgid "Failed to pull changes from remote repository."
@@ -6133,9 +6130,8 @@ msgid "Failed to push changes to remote repository."
 msgstr "Fallo al enviar cambios al repositorio remoto."
 
 #: common/git/kicad_git_errors.cpp:64
-#, fuzzy
 msgid "No upstream branch configured."
-msgstr "No hay una rama superior configurada."
+msgstr "No hay una rama upstream configurada."
 
 #: common/git/kicad_git_errors.cpp:65
 msgid "Failed to establish connection with remote repository."
@@ -9802,7 +9798,6 @@ msgid "Loaded %zu libraries"
 msgstr "Cargadas %zu bibliotecas"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:39
-#, fuzzy
 msgid "DSN:"
 msgstr "DSN:"
 
@@ -11977,9 +11972,8 @@ msgid "PDF Options"
 msgstr "Opciones PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Generar ventana emergente de propiedades"
+msgstr "Generar cuadros emergentes de propiedades"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 msgid "Other options"
@@ -12477,12 +12471,10 @@ msgid "FFT"
 msgstr "FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "NOISE"
 msgstr "NOISE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "SP"
 msgstr "SP"
 
@@ -12906,7 +12898,6 @@ msgid "m"
 msgstr "m"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:36
-#, fuzzy
 msgid "K"
 msgstr "K"
 
@@ -23862,9 +23853,8 @@ msgstr ""
 "esquemática)"
 
 #: kicad/cli/command_sch_export_plot.cpp:80
-#, fuzzy
 msgid "Do not generate property popups in PDF"
-msgstr "No generar ventana emergente de propiedades en PDF"
+msgstr "No generar cuadros emergentes de propiedades en PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:89
 msgid "Avoid setting a background color (regardless of theme)"
@@ -25071,7 +25061,7 @@ msgid "Failed to lookup branch '%s': %s"
 msgstr "Fallo al buscar la rama '%s': %s"
 
 #: kicad/project_tree_pane.cpp:1776
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to find branch head for '%s'"
 msgstr "Fallo al buscar el HEAD de la rama para '%s'"
 
@@ -30938,7 +30928,6 @@ msgid "manufacturer"
 msgstr "fabricante"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:140
-#, fuzzy
 msgid "mfg"
 msgstr "fab"
 
@@ -31104,7 +31093,7 @@ msgstr "Archivo de salida STEP"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:368
 msgid "No filename for output file"
-msgstr "No hay un un nombre para el archivo de salida"
+msgstr "No hay un nombre para el archivo de salida"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:400
 #, c-format
@@ -33421,7 +33410,6 @@ msgstr "Tamaño X orificio:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:79
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:119
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:173
-#, fuzzy
 msgid "d"
 msgstr "d"
 
@@ -33439,7 +33427,6 @@ msgstr "Tamaño de pad X:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:439
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:479
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:530
-#, fuzzy
 msgid "w"
 msgstr "w"
 
@@ -34295,14 +34282,12 @@ msgstr ""
 "Elija 4 si no está seguro."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:410
-#, fuzzy
 msgid "Generate property popups for front footprints"
-msgstr "Generar ventanas emergentes de propiedades para huellas frontales"
+msgstr "Generar cuadros emergentes de propiedades para huellas frontales"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:413
-#, fuzzy
 msgid "Generate property popups for back footprints"
-msgstr "Generar ventanas emergentes de propiedades para huellas traseras"
+msgstr "Generar cuadros emergentes de propiedades para huellas traseras"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:441
 msgid "Run DRC..."
@@ -46688,7 +46673,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:1352
 msgid "Append Board"
-msgstr "&Importar ..."
+msgstr "Enmendar placa"
 
 #: pcbnew/tools/pcb_control.cpp:1413
 msgid "Active Layer"
