@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-29 08:24-0800\n"
-"PO-Revision-Date: 2024-01-29 03:52+0000\n"
+"PO-Revision-Date: 2024-01-31 13:10+0000\n"
 "Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
@@ -35192,7 +35192,8 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr ""
+msgstr "封裝定義「%s」具有與多個板層上的焊墊關聯的元件銅層。 KiCad "
+"不支援自訂焊墊堆疊。銅層項目已作為圖形元素導入。"
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:951
 #, c-format
@@ -35889,23 +35890,21 @@ msgstr ""
 "偏移：%d。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6068
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "不再支援舊式敷銅填充策略。\n"
-"是否將敷銅轉換為平滑的多邊形填充？"
+"區域填充將盡最大努力進行轉換。"
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6101
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "不再支援舊的線段填充模式。\n"
-"是否將敷銅轉換為光滑的多邊形填充？"
+"區域填充將盡最大努力進行轉換。"
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
