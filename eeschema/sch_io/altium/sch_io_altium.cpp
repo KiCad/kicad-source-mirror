@@ -2287,9 +2287,11 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        ELLIPSE<int> ellipse( elem.Center, elem.Radius, KiROUND(elem.SecondaryRadius ),
+        ELLIPSE<int> ellipse( elem.Center, elem.Radius, KiROUND( elem.SecondaryRadius ),
                               EDA_ANGLE::m_Angle0 );
+
         std::vector<BEZIER<int>> beziers;
+        std::vector<VECTOR2I>    polyPoints;
 
         TransformEllipseToBeziers( ellipse, beziers );
 
@@ -2317,39 +2319,27 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
             SetLibShapeLine( elem, libbezier, ALTIUM_SCH_RECORD::ELLIPSE );
             SetLibShapeFillAndColor( elem, libbezier, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
             libbezier->RebuildBezierToSegmentsPointsList( libbezier->GetWidth() / 2 );
+
+            polyPoints.push_back( libbezier->GetStart() );
         }
 
         // A series of beziers won't fill the center, so if this is meant to be fully filled,
         // Add a polygon to fill the center
-        if( elem.IsSolid)
+        if( elem.IsSolid )
         {
-
             LIB_SHAPE* libline = new LIB_SHAPE( symbol, SHAPE_T::POLY );
             symbol->AddDrawItem( libline, false );
             libline->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-            if( !schsym )
-            {
-                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( elem.Radius, 0 ) ) );
-                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( 0, elem.SecondaryRadius ) ) );
-                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( -elem.Radius, 0 ) ) );
-                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( 0, -elem.SecondaryRadius ) ) );
-                libline->AddPoint( GetLibEditPosition( elem.Center + VECTOR2I( elem.Radius, 0 ) ) );
-            }
-            else
-            {
-                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( elem.Radius, 0 ) + m_sheetOffset, schsym ) );
-                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( 0, elem.SecondaryRadius ) + m_sheetOffset, schsym ) );
-                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( -elem.Radius, 0 ) + m_sheetOffset, schsym ) );
-                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( 0, -elem.SecondaryRadius ) + m_sheetOffset, schsym ) );
-                libline->AddPoint( GetRelativePosition( elem.Center + VECTOR2I( elem.Radius, 0 ) + m_sheetOffset, schsym ) );
-            }
+            for( const VECTOR2I& point : polyPoints )
+                libline->AddPoint( point );
 
-            SetLibShapeLine( elem, libline, ALTIUM_SCH_RECORD::ELLIPSE );
+            libline->AddPoint( polyPoints[0] );
+
+            libline->SetWidth( -1 );
             SetLibShapeFillAndColor( elem, libline, ALTIUM_SCH_RECORD::ELLIPSE, elem.Color );
         }
     }
-
 }
 
 
