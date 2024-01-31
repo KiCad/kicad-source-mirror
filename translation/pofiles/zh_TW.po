@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 19:54-0800\n"
-"PO-Revision-Date: 2024-01-29 03:40+0000\n"
+"PO-Revision-Date: 2024-01-31 13:10+0000\n"
 "Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -1674,9 +1674,8 @@ msgid "Front Fab layer"
 msgstr "頂表層"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer drawings"
-msgstr "User.Drawings"
+msgstr "User.板層 圖紙"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #, fuzzy
@@ -3467,9 +3466,8 @@ msgid "Author e-mail:"
 msgstr "作者 e-mail:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "管理倉庫"
+msgstr "Git 儲存庫"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -7249,9 +7247,8 @@ msgid "Delete clicked items"
 msgstr "刪除單擊的專案"
 
 #: common/tool/actions.cpp:290
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
-msgstr "迴圈圓弧編輯模式"
+msgstr "循環圓弧編輯模式"
 
 #: common/tool/actions.cpp:291
 msgid "Switch to a different method of editing arcs"
@@ -7297,9 +7294,8 @@ msgid "Find Previous"
 msgstr "查詢預覽"
 
 #: common/tool/actions.cpp:335
-#, fuzzy
 msgid "Find previous match"
-msgstr "查詢預覽"
+msgstr "尋找上一個相符項目"
 
 #: common/tool/actions.cpp:343
 msgid "Find Next Marker"
@@ -7387,18 +7383,16 @@ msgid "Zoom to Selection"
 msgstr "縮放至選區大小"
 
 #: common/tool/actions.cpp:484 common/widgets/mathplot.cpp:1447
-#, fuzzy
 msgid "Undo Last Zoom"
-msgstr "復原上一步"
+msgstr "撤銷上次縮放"
 
 #: common/tool/actions.cpp:485 common/widgets/mathplot.cpp:1447
 msgid "Return zoom to level prior to last zoom action"
 msgstr "將｢縮放」回復到上次的縮放程度"
 
 #: common/tool/actions.cpp:491 common/widgets/mathplot.cpp:1448
-#, fuzzy
 msgid "Redo Last Zoom"
-msgstr "重做上次操作"
+msgstr "重做上次縮放"
 
 #: common/tool/actions.cpp:492 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
@@ -10092,9 +10086,8 @@ msgid "external simulator has the wrong format or architecture"
 msgstr "外部模擬器的格式或架構錯誤"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:618
-#, fuzzy
 msgid "permission denied"
-msgstr "許可權錯誤？"
+msgstr "沒有權限"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:765
 msgid "This plugin already exists."
@@ -16325,9 +16318,9 @@ msgid "File not found %s."
 msgstr "找不到檔案“%s”。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:3993
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found in %s."
-msgstr "在 %s 中發現未知或意外的記錄ID %d。"
+msgstr "發現未知或意外的記錄ID %d(在 %s 中)。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4120
 msgid "Expected Altium Schematic Library file version 5.0"
@@ -16941,19 +16934,19 @@ msgid "File at '%s' was ignored. Using previously found file at '%s' instead."
 msgstr "忽略位於 '%s' 的檔案。改為使用先前找到的檔案位於 '%s'。"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "Expecting integer at line %d in file %s"
-msgstr "在檔案 %s 的第 %d 行，應為整數"
+msgstr "第 %d 行(在檔案 %s 中)，應為整數"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:383
-#, fuzzy, c-format
+#, c-format
 msgid "Expected data missing on line %d in file %s"
-msgstr "在檔案 %s 的第 %d 行缺少預期的資料"
+msgstr "第 %d 行(在檔案 %s 中)缺少預期的資料"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Extra data found on line %d in file %s"
-msgstr "在檔案 %s 的第 %d 行發現額外的資料。"
+msgstr "第 %d 行(在檔案 %s 中)發現額外的資料。"
 
 #: eeschema/sch_io/ltspice/ltspice_schematic.cpp:415
 msgid "Expecting 0, 1, 2, 3 or 4"
@@ -18773,9 +18766,9 @@ msgid "Fundamental frequency:"
 msgstr "基準頻率:"
 
 #: eeschema/sim/simulator_frame_ui.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid "Format %s..."
-msgstr "格式"
+msgstr "格式%s..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:398
 msgid "Format Value..."
@@ -19780,9 +19773,8 @@ msgid "Show the symbol checker window"
 msgstr "顯示符號檢查器視窗"
 
 #: eeschema/tools/ee_actions.cpp:61
-#, fuzzy
 msgid "Show differences between schematic symbol and its library equivalent"
-msgstr "正在根據庫檢查電路板封裝…"
+msgstr "顯示電路圖符號與其庫等效符號之間的差異"
 
 #: eeschema/tools/ee_actions.cpp:68
 msgid "Show simulation window for running SPICE or IBIS simulations."
@@ -21161,9 +21153,8 @@ msgid "Symbol Warnings"
 msgstr "符號警告"
 
 #: eeschema/tools/ee_inspection_tool.cpp:263
-#, fuzzy
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "正在根據庫檢查電路板封裝…"
+msgstr "選擇一個符號與其庫中的等效符號進行比較。"
 
 #: eeschema/tools/ee_inspection_tool.cpp:274
 #, fuzzy, c-format
@@ -21183,15 +21174,13 @@ msgstr "原理圖是隻讀的。"
 #: eeschema/tools/ee_inspection_tool.cpp:284
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
 #: pcbnew/tools/board_inspection_tool.cpp:1493
-#, fuzzy
 msgid "Library: "
-msgstr "庫："
+msgstr "庫： "
 
 #: eeschema/tools/ee_inspection_tool.cpp:285
 #: pcbnew/tools/board_inspection_tool.cpp:1494
-#, fuzzy
 msgid "Library item: "
-msgstr "庫篩選器:"
+msgstr "庫篩選器: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:295
 #: pcbnew/tools/board_inspection_tool.cpp:1512
@@ -30246,9 +30235,8 @@ msgid "First pad number:"
 msgstr "第一個焊盤編號："
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:54
-#, fuzzy
 msgid "Numbering step:"
-msgstr "編號方式"
+msgstr "編號方式:"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.h:50
 msgid "Pad Enumeration Settings"
@@ -30376,12 +30364,11 @@ msgstr "從庫中更新封裝"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:71
 msgid "IPC-2581 Files (*.xml)|*.xml"
-msgstr "IPC-2581 Files (*.xml)|*.xml"
+msgstr "IPC-2581 檔案(*.xml)|*.xml"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:72
-#, fuzzy
 msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
-msgstr "IPC-2581 Compressed Files (*.zip)|*.zip"
+msgstr "IPC-2581 壓縮檔 (*.zip)|*.zip"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:74
 msgid "Export IPC-2581 File"
@@ -33402,6 +33389,9 @@ msgid ""
 "Not tented: vias are plotted on soldermask layer\n"
 "(Solder mask is a negative layer)"
 msgstr ""
+"封孔：未繪製在阻焊層上 \n"
+"未封孔：過孔繪製在阻焊層上\n"
+"（阻焊遮罩為負片層）"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:242
@@ -34344,7 +34334,7 @@ msgstr "新增淚滴到過孔和有孔焊盤"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:404
 msgid "Tracks which are similar in size to the via do not need teardrops."
-msgstr ""
+msgstr "尺寸與過孔相似的走線不需要做走線淚滴延伸。"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:418
 msgid "(as a percentage of pad/via/track size)"
@@ -34359,9 +34349,8 @@ msgid "Track and Via Dimensions"
 msgstr "佈線和過孔標註"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
-msgstr "目標偏移："
+msgstr "目標偏移： "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:86
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1959
@@ -34388,7 +34377,7 @@ msgstr "覆蓋鎖定"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
-msgstr ""
+msgstr "（來自“規則名稱”）"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:49
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
@@ -36415,7 +36404,7 @@ msgstr "新建圖形專案的預設屬性："
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:379
 msgid "Properties for track-to-track teardrops:"
-msgstr ""
+msgstr "走線之間的淚滴屬性："
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:510
 #, fuzzy
@@ -36433,7 +36422,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:518
 msgid "Tracks which are similar in size do not need teardrops."
-msgstr ""
+msgstr "大小相似的走線不需要淚滴狀走線延伸。"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 #, fuzzy
@@ -37536,12 +37525,12 @@ msgstr "%s 層是必須的。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:428
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr ""
+msgstr "%s 轉角平滑設定不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:430
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr ""
+msgstr "%s 轉角平滑半徑不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:432
 #, fuzzy, c-format
@@ -37556,7 +37545,7 @@ msgstr "焊盤數量"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:437
 #, c-format
 msgid "%s keep-out property differs."
-msgstr ""
+msgstr "%s keep-out 屬性不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:439
 #, fuzzy, c-format
@@ -37571,7 +37560,7 @@ msgstr "排除外框要求"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:443
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr ""
+msgstr "%s 避開的焊墊設定不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:445
 #, fuzzy, c-format
@@ -37581,7 +37570,7 @@ msgstr "刪除和跟蹤連線不同網路的資訊 (&T)"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr ""
+msgstr "%s避開的過孔設定不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
 #, fuzzy, c-format
@@ -37611,7 +37600,7 @@ msgstr "%s 最小厚度： %s。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:465
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr ""
+msgstr "%s移除孤島設定不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:467
 #, fuzzy, c-format
@@ -37626,12 +37615,12 @@ msgstr "封裝型別："
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:472
 #, c-format
 msgid "%s hatch width differs."
-msgstr ""
+msgstr "%s 交叉線寬度不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:474
 #, c-format
 msgid "%s hatch gap differs."
-msgstr ""
+msgstr "%s 交叉線間距不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:476
 #, fuzzy, c-format
@@ -37641,17 +37630,17 @@ msgstr "%s 上的規則敷銅"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:478
 #, c-format
 msgid "%s hatch smoothing level differs."
-msgstr ""
+msgstr "%s 交叉線平滑程度不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
 #, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr ""
+msgstr "%s 交叉線平滑量不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:482
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr ""
+msgstr "%s 最小交叉線孔設定不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:488
 #, fuzzy, c-format
@@ -37724,7 +37713,7 @@ msgstr "區域連線樣式"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:603
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:608
 msgid "Net tie pad groups differ."
-msgstr ""
+msgstr "網絡連接焊墊組不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:684
 #, fuzzy
@@ -38080,9 +38069,9 @@ msgstr ""
 "** 寫入 STEP 檔案出錯。 **\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:539
-#, fuzzy, c-format
+#, c-format
 msgid "%s file '%s' created.\n"
-msgstr "已建立 STEP 檔案 \"%s\"。\n"
+msgstr "%s 檔案'%s' 已建立。\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:546
 #: pcbnew/exporters/step/exporter_step.cpp:552
@@ -38279,7 +38268,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:1241
 msgid "The board must be saved before generating IPC2581 file."
-msgstr ""
+msgstr "電路板必須在生成IPC2581檔案之前存檔。"
 
 #: pcbnew/files.cpp:1257
 #, fuzzy
@@ -38760,19 +38749,17 @@ msgid "Tuning"
 msgstr "警告"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1288
-#, fuzzy
 msgid "too long"
-msgstr "太長： "
+msgstr "太長"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1289
-#, fuzzy
 msgid "too short"
-msgstr "太短： "
+msgstr "太短"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1290
 #, fuzzy
 msgid "tuned"
-msgstr "調整： "
+msgstr "調整："
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1364
 #, fuzzy
@@ -38924,7 +38911,7 @@ msgstr "預設線寬："
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:61
 msgid "Used when the DXF items in file have no line thickness set"
-msgstr ""
+msgstr "當檔案中的 DXF 項目沒有設定線條粗細時使用"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
 #, fuzzy
@@ -38933,7 +38920,7 @@ msgstr "預設計量單位："
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:74
 msgid "Used when the DXF file has no unit set"
-msgstr ""
+msgstr "當 DXF 檔案沒有設定單位時使用"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:97
 #, fuzzy
@@ -38950,6 +38937,8 @@ msgid ""
 "If checked, use the selected layer in this dialog\n"
 "If unchecked, use the Board Editor active layer"
 msgstr ""
+"如果選中，則使用此對話方塊中選定的圖層\n"
+"如果未選中，則使用板編輯器活動層"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
 #, fuzzy
@@ -38963,12 +38952,12 @@ msgstr "將所有匯入的專案新增到新分組中"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:173
 msgid "Fix discontinuities"
-msgstr ""
+msgstr "修復不連續性"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:174
 msgid ""
 "Trim/extend open shapes or add segments to make vertices of shapes coincide"
-msgstr ""
+msgstr "修剪/延伸開放形狀或添加線段以使形狀的頂點重合"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
@@ -40064,6 +40053,8 @@ msgid ""
 "This file does not appear to be in a valid PCB Binary Version 6.0 format. In "
 "Altium Designer, make sure to save as \"PCB Binary Files (*.PcbDoc)\"."
 msgstr ""
+"該檔案似乎不是有效的 PCB 二進位版本 6.0 格式。在 Altium Designer "
+"中，請確保儲存為「PCB 二進位檔案 (*.PcbDoc)」。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:503
 #, fuzzy, c-format
@@ -40105,7 +40096,7 @@ msgstr "正載入網路類..."
 msgid ""
 "More than one Altium netclass with name '%s' found. Only the first one will "
 "be imported."
-msgstr ""
+msgstr "發現多個名為「%s」的 Altium 網絡類別。僅導入第一個。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1110
 msgid "Loading components..."
@@ -40406,7 +40397,8 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr ""
+msgstr "封裝定義「%s」具有與多個板層上的焊墊關聯的元件銅層。 KiCad "
+"不支援自訂焊墊堆疊。銅層項目已作為圖形元素導入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -40795,9 +40787,9 @@ msgid "Eagle ver. 6.x XML library files"
 msgstr "Eagle ver. 6.x XML 庫檔案"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_parser.cpp:780
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown SVGNODE nodeType %d"
-msgstr "未知 Model_type "
+msgstr "未知的 SVGNODE 節點類型 %d"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:166
 #, fuzzy, c-format
@@ -40842,7 +40834,7 @@ msgstr "未找到封裝 '%s' (在庫 '%s' 中)。"
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
 msgid "EasyEDA (JLCEDA) Pro project"
-msgstr ""
+msgstr "EasyEDA (JLCEDA) Pro 專案"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:249
 #, c-format
@@ -41068,9 +41060,8 @@ msgid "Generating logistic section"
 msgstr "生成位置檔案"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2902
-#, fuzzy
 msgid "Saving file"
-msgstr "讀取檔案 "
+msgstr "正在存檔"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2934
 #, fuzzy
@@ -41079,7 +41070,7 @@ msgstr "無法刪除 '%s'"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h:88
 msgid "IPC-2581 Production File"
-msgstr ""
+msgstr "IPC-2581 生產用檔案"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
@@ -41124,13 +41115,12 @@ msgstr "CZONE_CONTAINER \"%s\"是壞的 ZSmoothing"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6134
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
 "不再支援舊的線段填充模式。\n"
-"是否將敷銅轉換為光滑的多邊形填充？"
+"區域填充將盡最大努力進行轉換。"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2547
 #, c-format
@@ -41413,13 +41403,12 @@ msgstr ""
 "偏移：%d。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6103
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "不再支援舊式敷銅填充策略。\n"
-"是否將敷銅轉換為平滑的多邊形填充？"
+"區域填充將盡最大努力進行轉換。"
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -41448,7 +41437,7 @@ msgstr "P-Cad 200x ASCII PCB 檔案"
 msgid ""
 "Selected file contains multiple footprints. Only the first one will be "
 "imported."
-msgstr ""
+msgstr "所選檔案包含多個腳位形狀。僅導入第一個。"
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
 #, fuzzy
@@ -41790,7 +41779,7 @@ msgstr "找到%d未連接項目\n"
 #: pcbnew/pcbnew_jobs_handler.cpp:1037
 #, c-format
 msgid "Found %d schematic parity issues\n"
-msgstr ""
+msgstr "發現 %d 個電路圖奇偶校驗問題\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1051
 #, c-format
@@ -41798,9 +41787,9 @@ msgid "Unable to save DRC report to %s\n"
 msgstr "無法儲存DRC報告於此%s\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1056
-#, fuzzy, c-format
+#, c-format
 msgid "Saved DRC Report to %s\n"
-msgstr "儲存DRC報告檔案\n"
+msgstr "DRC報告檔案儲存在 %s\n"
 
 #: pcbnew/pcbnew_printout.cpp:116
 msgid "Multiple Layers"
@@ -42138,7 +42127,7 @@ msgstr "仍然拖動"
 #: pcbnew/router/router_tool.cpp:1926 pcbnew/router/router_tool.cpp:2409
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "（%s 無論如何都要提交。）"
 
 #: pcbnew/router/router_tool.cpp:1930 pcbnew/router/router_tool.cpp:2413
 #, fuzzy
@@ -42847,9 +42836,8 @@ msgid "Item allowed at current location."
 msgstr "當前位置允許的專案。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1446
-#, fuzzy
 msgid "Select a footprint to diff with its library equivalent."
-msgstr "正在根據庫檢查電路板封裝…"
+msgstr "選擇一個腳位形狀來與其等效的庫進行比較。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1464
 #, fuzzy
@@ -43641,7 +43629,7 @@ msgstr "沒有檔案載入到活躍層 %d。"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Enables snapping to objects on the active layer only"
-msgstr ""
+msgstr "開啟僅允許捕捉到活動圖層上的對象"
 
 #: pcbnew/tools/pcb_actions.cpp:378
 #, fuzzy
@@ -43655,11 +43643,11 @@ msgstr "顯示可見層的專案飛線"
 
 #: pcbnew/tools/pcb_actions.cpp:385
 msgid "Toggle Snapping Between Active and All Layers"
-msgstr ""
+msgstr "在活動圖層和所有圖層之間切換吸附"
 
 #: pcbnew/tools/pcb_actions.cpp:386
 msgid "Toggles between snapping on all visible layers and only the active area"
-msgstr ""
+msgstr "在所有可見圖層和僅活動區域之間切換網格吸附"
 
 #: pcbnew/tools/pcb_actions.cpp:392
 msgid "Delete Last Point"
@@ -43825,7 +43813,7 @@ msgstr "藉由延伸或切割把圖形接起來"
 
 #: pcbnew/tools/pcb_actions.cpp:630
 msgid "Extend lines to meet each other"
-msgstr ""
+msgstr "延長線段以使彼此相遇"
 
 #: pcbnew/tools/pcb_actions.cpp:635
 #, fuzzy
@@ -43834,7 +43822,7 @@ msgstr "多邊形"
 
 #: pcbnew/tools/pcb_actions.cpp:636
 msgid "Merge selected polygons into a single polygon"
-msgstr ""
+msgstr "將選定的多邊形合併為單一多邊形"
 
 #: pcbnew/tools/pcb_actions.cpp:642
 #, fuzzy
@@ -43843,7 +43831,7 @@ msgstr "多邊形草圖"
 
 #: pcbnew/tools/pcb_actions.cpp:643
 msgid "Subtract selected polygons from the last one selected"
-msgstr ""
+msgstr "從最後一個選定的多邊形中減去選定的多邊形"
 
 #: pcbnew/tools/pcb_actions.cpp:649
 #, fuzzy
@@ -44233,7 +44221,7 @@ msgstr "建立當前電路板所有封裝報告"
 
 #: pcbnew/tools/pcb_actions.cpp:1061
 msgid "IPC-2581 File (.xml)..."
-msgstr ""
+msgstr "IPC-2581 檔案 (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1062
 #, fuzzy
@@ -44906,9 +44894,8 @@ msgid "Show constraints resolution for the selected object"
 msgstr "顯示所選物件的約束解析"
 
 #: pcbnew/tools/pcb_actions.cpp:1886
-#, fuzzy
 msgid "Show differences between board footprint and its library equivalent"
-msgstr "正在根據庫檢查電路板封裝…"
+msgstr "顯示電路板上接腳形狀與其等效庫之間的差異"
 
 #: pcbnew/tools/pcb_actions.cpp:1892
 #, fuzzy
@@ -45328,7 +45315,7 @@ msgstr "在不限制佈線角度的情況下，拖拽佈線中最近的連線點
 
 #: pcbnew/tools/pcb_actions.cpp:2409
 msgid "Update All Tuning Patterns"
-msgstr ""
+msgstr "更新所有微調模式"
 
 #: pcbnew/tools/pcb_actions.cpp:2410
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
@@ -45341,7 +45328,7 @@ msgstr "移除生成器"
 
 #: pcbnew/tools/pcb_actions.cpp:2418
 msgid "Rebuilds geometry of all generators"
-msgstr ""
+msgstr "重建所有產生器的幾何形狀"
 
 #: pcbnew/tools/pcb_actions.cpp:2425
 #, fuzzy
@@ -45350,7 +45337,7 @@ msgstr "移除生成器"
 
 #: pcbnew/tools/pcb_actions.cpp:2426
 msgid "Rebuilds geometry of selected generator(s)"
-msgstr ""
+msgstr "重建所選產生器(們)的幾何形狀"
 
 #: pcbnew/tools/pcb_actions.cpp:2454
 #, fuzzy
@@ -45359,7 +45346,7 @@ msgstr "生成別稱："
 
 #: pcbnew/tools/pcb_actions.cpp:2455
 msgid "Show a manager dialog for Generator objects"
-msgstr ""
+msgstr "顯示「產生器」物件的管理器對話框"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
@@ -45376,7 +45363,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:343
 msgid "Dimmed"
-msgstr ""
+msgstr "變淡"
 
 #: pcbnew/tools/pcb_control.cpp:344
 #, fuzzy
@@ -45431,7 +45418,7 @@ msgstr "所有圖層"
 
 #: pcbnew/tools/pcb_control.cpp:1426
 msgid "Object Snapping"
-msgstr ""
+msgstr "物件網格吸取"
 
 #: pcbnew/tools/pcb_control.cpp:1502
 #, fuzzy, c-format
