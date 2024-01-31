@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -271,6 +271,13 @@ bool SCH_PIN::IsStacked( const SCH_PIN* aPin ) const
                 || ( aPin->GetType() == ELECTRICAL_PINTYPE::PT_PASSIVE ) );
 }
 
+
+bool SCH_PIN::IsGlobalPower() const
+{
+    wxCHECK( m_libPin, false );
+
+    return m_libPin->IsGlobalPower();
+}
 
 void SCH_PIN::ClearDefaultNetName( const SCH_SHEET_PATH* aPath )
 {

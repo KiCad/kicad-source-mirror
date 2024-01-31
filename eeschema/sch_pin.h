@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHOR.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHOR.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -157,7 +157,7 @@ public:
 
     int GetLength() const;
 
-    bool IsGlobalPower() const { return m_libPin->IsGlobalPower(); }
+    bool IsGlobalPower() const;
 
     bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
 
