@@ -370,6 +370,29 @@ bool SHAPE_ARC::IsClockwise() const
 }
 
 
+VECTOR2I SHAPE_ARC::NearestPoint( const VECTOR2I& aP ) const
+{
+    const static int s_epsilon = 8;
+
+    CIRCLE   fullCircle( GetCenter(), GetRadius() );
+    VECTOR2I nearestPt = fullCircle.NearestPoint( aP );
+
+    if( ( nearestPt - m_start ).SquaredEuclideanNorm() <= s_epsilon )
+        return m_start;
+
+    if( ( nearestPt - m_end ).SquaredEuclideanNorm() <= s_epsilon )
+        return m_end;
+
+    if( sliceContainsPoint( nearestPt ) )
+        return nearestPt;
+
+    if( ( aP - m_start ).SquaredEuclideanNorm() <= ( aP - m_end ).SquaredEuclideanNorm() )
+        return m_start;
+    else
+        return m_end;
+}
+
+
 bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance, int* aActual,
                          VECTOR2I* aLocation ) const
 {

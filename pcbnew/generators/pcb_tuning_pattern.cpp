@@ -597,9 +597,22 @@ static VECTOR2I snapToNearestTrack( const VECTOR2I& aP, BOARD* aBoard, NETINFO_I
         if( aNet && track->GetNet() != aNet )
             continue;
 
-        SEG seg( track->GetStart(), track->GetEnd() );
+        VECTOR2I nearest;
 
-        VECTOR2I    nearest = seg.NearestPoint( aP );
+        if( track->Type() == PCB_ARC_T )
+        {
+            PCB_ARC*  pcbArc = static_cast<PCB_ARC*>( track );
+            SHAPE_ARC arc( pcbArc->GetStart(), pcbArc->GetMid(), pcbArc->GetEnd(),
+                           pcbArc->GetWidth() );
+
+            nearest = arc.NearestPoint( aP );
+        }
+        else
+        {
+            SEG seg( track->GetStart(), track->GetEnd() );
+            nearest = seg.NearestPoint( aP );
+        }
+
         SEG::ecoord dist_sq = ( nearest - aP ).SquaredEuclideanNorm();
 
         if( dist_sq < minDist_sq )
@@ -807,21 +820,16 @@ static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhe
 
             if( item->Kind() & PNS::ITEM::ARC_T )
             {
-                SEG::ecoord d0 = ( item->Anchor( 0 ) - aWhere ).SquaredEuclideanNorm();
-                SEG::ecoord d1 = ( item->Anchor( 1 ) - aWhere ).SquaredEuclideanNorm();
+                PNS::ARC* pnsArc = static_cast<PNS::ARC*>( item );
+
+                VECTOR2I    nearest = pnsArc->Arc().NearestPoint( aWhere );
+                SEG::ecoord d0 = ( nearest - aWhere ).SquaredEuclideanNorm();
 
                 if( d0 <= dist[1] )
                 {
                     prioritized[1] = linked;
                     dist[1] = d0;
-                    point[1] = item->Anchor( 0 );
-                }
-
-                if( d1 <= dist[1] )
-                {
-                    prioritized[1] = linked;
-                    dist[1] = d1;
-                    point[1] = item->Anchor( 1 );
+                    point[1] = nearest;
                 }
             }
             else if( item->Kind() & PNS::ITEM::SEGMENT_T )

@@ -116,6 +116,8 @@ public:
 
     const BOX2I BBox( int aClearance = 0 ) const override;
 
+    VECTOR2I NearestPoint( const VECTOR2I& aP ) const;
+
     bool Collide( const SEG& aSeg, int aClearance = 0, int* aActual = nullptr,
                   VECTOR2I* aLocation = nullptr ) const override;
     bool Collide( const VECTOR2I& aP, int aClearance = 0, int* aActual = nullptr,
