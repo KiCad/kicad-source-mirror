@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-02-01 08:44+0000\n"
+"PO-Revision-Date: 2024-02-01 13:54+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -29273,7 +29273,7 @@ msgstr "밀어내기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:19
 msgid "Walk around"
-msgstr "둘러보기"
+msgstr "돌아가기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:21
 msgid "Mode"
@@ -39562,11 +39562,11 @@ msgstr "라우터를 밀어내기 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1462
 msgid "Router Walkaround Mode"
-msgstr "라우터 순회 모드"
+msgstr "라우터 돌아가기 모드"
 
 #: pcbnew/tools/pcb_actions.cpp:1462
 msgid "Switch router to walkaround mode"
-msgstr "라우터를 순회 모드로 전환"
+msgstr "라우터를 돌아가기 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:1467
 msgid "Cycle Router Mode"
