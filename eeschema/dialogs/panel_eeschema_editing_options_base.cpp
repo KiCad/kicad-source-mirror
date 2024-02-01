@@ -134,7 +134,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	wxBoxSizer* bSizer9;
 	bSizer9 = new wxBoxSizer( wxVERTICAL );
 
-	m_hint1 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Left click (and drag) actions depend on 2 modifier keys:\nShift and Ctrl."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hint1 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Left click (and drag) actions depend on 2 modifier keys:\nShift and Ctrl"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hint1->Wrap( -1 );
 	bSizer9->Add( m_hint1, 0, wxALL, 5 );
 
@@ -147,7 +147,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText91->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText91, 0, wxALL, 5 );
 
-	m_staticText101 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText101 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Clarify selection from menu"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText101->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText101, 0, wxALL, 5 );
 
@@ -155,7 +155,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText131->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText131, 0, wxALL, 5 );
 
-	m_staticText141 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Add item(s) to selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText141 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Add item(s) to selection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText141->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText141, 0, wxALL, 5 );
 
@@ -163,7 +163,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText151->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText151, 0, wxALL, 5 );
 
-	m_staticText161 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Remove item(s) from selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText161 = new wxStaticText( m_pageWinLin, wxID_ANY, _("Remove item(s) from selection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText161->Wrap( -1 );
 	fgSizerCmdsWinLin->Add( m_staticText161, 0, wxALL, 5 );
 
@@ -192,7 +192,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	wxBoxSizer* bSizer11;
 	bSizer11 = new wxBoxSizer( wxVERTICAL );
 
-	m_hint2 = new wxStaticText( m_pageMac, wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nOption, Shift and Cmd."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_hint2 = new wxStaticText( m_pageMac, wxID_ANY, _("Left click (and drag) actions depend on 3 modifier keys:\nOption, Shift and Cmd"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_hint2->Wrap( -1 );
 	bSizer11->Add( m_hint2, 0, wxALL, 5 );
 
@@ -205,7 +205,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText11->Wrap( -1 );
 	fgSizerCmdsWinMac->Add( m_staticText11, 0, wxALL, 5 );
 
-	m_staticText12 = new wxStaticText( m_pageMac, wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText12 = new wxStaticText( m_pageMac, wxID_ANY, _("Clarify selection from menu"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
 	fgSizerCmdsWinMac->Add( m_staticText12, 0, wxALL, 5 );
 
@@ -213,7 +213,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText9->Wrap( -1 );
 	fgSizerCmdsWinMac->Add( m_staticText9, 0, wxALL, 5 );
 
-	m_staticText10 = new wxStaticText( m_pageMac, wxID_ANY, _("Add item(s) to selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( m_pageMac, wxID_ANY, _("Add item(s) to selection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	fgSizerCmdsWinMac->Add( m_staticText10, 0, wxALL, 5 );
 
@@ -221,7 +221,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText15->Wrap( -1 );
 	fgSizerCmdsWinMac->Add( m_staticText15, 0, wxALL, 5 );
 
-	m_staticText16 = new wxStaticText( m_pageMac, wxID_ANY, _("Remove item(s) from selection."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText16 = new wxStaticText( m_pageMac, wxID_ANY, _("Remove item(s) from selection"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
 	fgSizerCmdsWinMac->Add( m_staticText16, 0, wxALL, 5 );
 
@@ -229,7 +229,7 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 	m_staticText13->Wrap( -1 );
 	fgSizerCmdsWinMac->Add( m_staticText13, 0, wxALL, 5 );
 
-	m_staticText14 = new wxStaticText( m_pageMac, wxID_ANY, _("Clarify selection from menu."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText14 = new wxStaticText( m_pageMac, wxID_ANY, _("Clarify selection from menu"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
 	fgSizerCmdsWinMac->Add( m_staticText14, 0, wxALL, 5 );
 

@@ -14071,10 +14071,10 @@ msgstr "Linksklick-Mausbefehle"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Linksklick- (und Zieh-) Aktionen hängen von 2 Modifizierertasten ab:\n"
-"Umschalt und Strg."
+"Umschalt und Strg"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -14089,15 +14089,15 @@ msgstr "Langer Klick"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Auswahl im Menü klarstellen."
+msgid "Clarify selection from menu"
+msgstr "Auswahl im Menü klarstellen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Element(e) zur Auswahl hinzufügen."
+msgid "Add item(s) to selection"
+msgstr "Element(e) zur Auswahl hinzufügen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -14108,17 +14108,17 @@ msgstr "Strg+Umschalt"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Element(e) aus Auswahl entfernen."
+msgid "Remove item(s) from selection"
+msgstr "Element(e) aus Auswahl entfernen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Linksklick- (und Zieh-) Aktionen hängen von 3 Hilfstasten ab:\n"
-"⌥, Umschalt und Cmd."
+"⌥, Umschalt und Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -35296,18 +35296,18 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
-msgstr "Element(e) auswählen."
+msgid "Select item(s)"
+msgstr "Element(e) auswählen"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Toggle selection."
-msgstr "Auswahl umschalten."
+msgid "Toggle selection"
+msgstr "Auswahl umschalten"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
-msgstr "Netz hervorheben (für Pads und Leiterbahnen)."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Netz hervorheben (für Pads und Leiterbahnen)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -53638,10 +53638,10 @@ msgstr "KiCad-Leiterplatte"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Ctrl."
+#~ "Alt, Shift and Ctrl"
 #~ msgstr ""
 #~ "Linksklick- (und Zieh-) Aktionen hängen von 3 Modifizierertasten ab:\n"
-#~ "Alt, Umschalt und Strg."
+#~ "Alt, Umschalt und Strg"
 
 #~ msgid "Toggle selected state of item(s)."
 #~ msgstr "Auswahlzustand von Element(en) umschalten."
@@ -53651,10 +53651,10 @@ msgstr "KiCad-Leiterplatte"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Cmd."
+#~ "Alt, Shift and Cmd"
 #~ msgstr ""
 #~ "Linksklick- (und Zieh-) Aktionen hängen von 3 Modifizierertasten ab:\n"
-#~ "Alt, Umschalt und Cmd."
+#~ "Alt, Umschalt und Cmd"
 
 #~ msgid "Cmd+Shift"
 #~ msgstr "Cmd+Umschalt"

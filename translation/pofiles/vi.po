@@ -14669,7 +14669,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
@@ -14686,15 +14686,15 @@ msgstr "Nhấp chuột"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Làm rõ lựa chọn từ menu."
+msgid "Clarify selection from menu"
+msgstr "Làm rõ lựa chọn từ menu"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Thêm (các) mục vào lựa chọn."
+msgid "Add item(s) to selection"
+msgstr "Thêm (các) mục vào lựa chọn"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -14706,14 +14706,14 @@ msgstr "Shift"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Xóa (các) mục vào lựa chọn."
+msgid "Remove item(s) from selection"
+msgstr "Xóa (các) mục vào lựa chọn"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
@@ -36668,18 +36668,18 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
 #, fuzzy
-msgid "Select item(s)."
+msgid "Select item(s)"
 msgstr "Chọn (các) khoản mục"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Toggle selection."
+msgid "Toggle selection"
 msgstr "Chuyển đổi trạng thái lựa chọn"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
+msgid "Highlight net (for pads or tracks)"
 msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261

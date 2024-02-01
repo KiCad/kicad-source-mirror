@@ -14065,11 +14065,11 @@ msgstr "Команди по натисканню лівої кнопки миш�
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Натискання лівою кнопкою миші (і перетягування) дії залежать від 2 клавіш-"
 "модифікаторів:\n"
-"Shift і Ctrl."
+"Shift і Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -14084,15 +14084,15 @@ msgstr "Довге натискання"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Уточнення вибору з меню."
+msgid "Clarify selection from menu"
+msgstr "Уточнення вибору з меню"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Додати елемент(и) до виділення."
+msgid "Add item(s) to selection"
+msgstr "Додати елемент(и) до виділення"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -14103,18 +14103,18 @@ msgstr "Ctrl+Shift"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Видалити елемент(и) з вибраного."
+msgid "Remove item(s) from selection"
+msgstr "Видалити елемент(и) з вибраного"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Дії при натисканні лівої кнопки миші (і перетягування) залежать від 3 клавіш-"
 "модифікаторів:\n"
-"Option, Shift і Cmd."
+"Option, Shift і Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -35328,18 +35328,18 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
-msgstr "Вибрані елемент(и)."
+msgid "Select item(s)"
+msgstr "Вибрані елемент(и)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Toggle selection."
-msgstr "Перемкнути виділення."
+msgid "Toggle selection"
+msgstr "Перемкнути виділення"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
-msgstr "Підсвічувати звʼязки (для контактних площадок або доріжок)."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Підсвічувати звʼязки (для контактних площадок або доріжок)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284

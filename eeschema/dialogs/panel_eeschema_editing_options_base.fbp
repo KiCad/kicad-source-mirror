@@ -1420,7 +1420,7 @@
                               <property name="gripper">0</property>
                               <property name="hidden">0</property>
                               <property name="id">wxID_ANY</property>
-                              <property name="label">Left click (and drag) actions depend on 2 modifier keys:&#x0A;Shift and Ctrl.</property>
+                              <property name="label">Left click (and drag) actions depend on 2 modifier keys:&#x0A;Shift and Ctrl</property>
                               <property name="markup">0</property>
                               <property name="max_size"></property>
                               <property name="maximize_button">0</property>
@@ -1560,7 +1560,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="label">Clarify selection from menu.</property>
+                                  <property name="label">Clarify selection from menu</property>
                                   <property name="markup">0</property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>
@@ -1684,7 +1684,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="label">Add item(s) to selection.</property>
+                                  <property name="label">Add item(s) to selection</property>
                                   <property name="markup">0</property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>
@@ -1808,7 +1808,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="label">Remove item(s) from selection.</property>
+                                  <property name="label">Remove item(s) from selection</property>
                                   <property name="markup">0</property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>
@@ -2067,7 +2067,7 @@
                               <property name="gripper">0</property>
                               <property name="hidden">0</property>
                               <property name="id">wxID_ANY</property>
-                              <property name="label">Left click (and drag) actions depend on 3 modifier keys:&#x0A;Option, Shift and Cmd.</property>
+                              <property name="label">Left click (and drag) actions depend on 3 modifier keys:&#x0A;Option, Shift and Cmd</property>
                               <property name="markup">0</property>
                               <property name="max_size"></property>
                               <property name="maximize_button">0</property>
@@ -2207,7 +2207,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="label">Clarify selection from menu.</property>
+                                  <property name="label">Clarify selection from menu</property>
                                   <property name="markup">0</property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>
@@ -2331,7 +2331,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="label">Add item(s) to selection.</property>
+                                  <property name="label">Add item(s) to selection</property>
                                   <property name="markup">0</property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>
@@ -2455,7 +2455,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="label">Remove item(s) from selection.</property>
+                                  <property name="label">Remove item(s) from selection</property>
                                   <property name="markup">0</property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>
@@ -2579,7 +2579,7 @@
                                   <property name="gripper">0</property>
                                   <property name="hidden">0</property>
                                   <property name="id">wxID_ANY</property>
-                                  <property name="label">Clarify selection from menu.</property>
+                                  <property name="label">Clarify selection from menu</property>
                                   <property name="markup">0</property>
                                   <property name="max_size"></property>
                                   <property name="maximize_button">0</property>

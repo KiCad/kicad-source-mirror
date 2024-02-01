@@ -14795,7 +14795,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
@@ -14812,7 +14812,7 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
 #, fuzzy
-msgid "Clarify selection from menu."
+msgid "Clarify selection from menu"
 msgstr "Појасни избор"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
@@ -14820,7 +14820,7 @@ msgstr "Појасни избор"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
 #, fuzzy
-msgid "Add item(s) to selection."
+msgid "Add item(s) to selection"
 msgstr "Појасни избор"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
@@ -14834,14 +14834,14 @@ msgstr "Shift"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
 #, fuzzy
-msgid "Remove item(s) from selection."
+msgid "Remove item(s) from selection"
 msgstr "Избор филтера"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
@@ -36822,19 +36822,19 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
 #, fuzzy
-msgid "Select item(s)."
+msgid "Select item(s)"
 msgstr "Изабери"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Toggle selection."
+msgid "Toggle selection"
 msgstr "Појасни избор"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Highlight net (for pads or tracks)."
+msgid "Highlight net (for pads or tracks)"
 msgstr "Нема конекције"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261

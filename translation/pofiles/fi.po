@@ -13941,10 +13941,10 @@ msgstr "Napsauta hiiren vasemmalla painikkeella hiirikomentoja"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Vasen napsautus (ja vedä) toiminnot riippuu kahdesta muokkausnäppäimestä:\n"
-"Shift ja Ctrl."
+"Shift ja Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -13959,15 +13959,15 @@ msgstr "Pitkä Napsautus"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Tarkenna valinta valikosta."
+msgid "Clarify selection from menu"
+msgstr "Tarkenna valinta valikosta"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Lisää kohteet valintaan."
+msgid "Add item(s) to selection"
+msgstr "Lisää kohteet valintaan"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -13978,17 +13978,17 @@ msgstr "Ctrl+Shift"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Poista valinnasta."
+msgid "Remove item(s) from selection"
+msgstr "Poista valinnasta"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Vasen napsautus (ja vedä) riippuu kolmesta muokkausnäppäimestä:\n"
-"Option, Shift ja Cmd."
+"Option, Shift ja Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -34972,18 +34972,18 @@ msgstr "Jos päällä, anturoita voi siirtää suhteessa muihin jalanjälkiin."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
-msgstr "Valitse kohde/kohteet."
+msgid "Select item(s)"
+msgstr "Valitse kohde/kohteet"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Toggle selection."
-msgstr "Vaihda valinnan tila."
+msgid "Toggle selection"
+msgstr "Vaihda valinnan tila"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
-msgstr "Korosta verkko (juotospisteille tai johtimille)."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Korosta verkko (juotospisteille tai johtimille)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -52635,10 +52635,10 @@ msgstr "KiCad Painettu Piirilevy"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Ctrl."
+#~ "Alt, Shift and Ctrl"
 #~ msgstr ""
 #~ "Vasen napsautus (ja vedä) riippuu kolmesta muokkausnäppäimestä:\n"
-#~ "Alt, Vaihto ja Ctrl."
+#~ "Alt, Vaihto ja Ctrl"
 
 #~ msgid "Toggle selected state of item(s)."
 #~ msgstr "Valitse kohteet/poista kohteet valinnasta."
@@ -52648,10 +52648,10 @@ msgstr "KiCad Painettu Piirilevy"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Cmd."
+#~ "Alt, Shift and Cmd"
 #~ msgstr ""
 #~ "Vasen napsautus (ja vedä) riippuu kolmesta muokkausnäppäimestä:\n"
-#~ "Alt, Vaihto ja Cmd."
+#~ "Alt, Vaihto ja Cmd"
 
 #~ msgid "Cmd+Shift"
 #~ msgstr "Komento+Shift"

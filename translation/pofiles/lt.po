@@ -14471,11 +14471,11 @@ msgstr "Kairiuoju pelės mygtuku spustelėkite pelės komandas"
 #, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Kairiojo spustelėjimo (ir vilkimo) veiksmai priklauso nuo 3 modifikavimo "
 "klavišų:\n"
-"„Alt“, „Shift“ ir „Ctrl“."
+"„Alt“, „Shift“ ir „Ctrl“"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -14491,15 +14491,15 @@ msgstr "Spustelėkite"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Išaiškinkite pasirinkimą meniu."
+msgid "Clarify selection from menu"
+msgstr "Išaiškinkite pasirinkimą meniu"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Pridėti elementą (-us) prie pasirinkimo."
+msgid "Add item(s) to selection"
+msgstr "Pridėti elementą (-us) prie pasirinkimo"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -14510,19 +14510,19 @@ msgstr "„Ctrl“ + „Shift“"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Pašalinti elementą (-us) iš pasirinkimo."
+msgid "Remove item(s) from selection"
+msgstr "Pašalinti elementą (-us) iš pasirinkimo"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Kairiojo spustelėjimo (ir vilkimo) veiksmai priklauso nuo 3 modifikavimo "
 "klavišų:\n"
-"„Alt“, „Shift“ ir „Cmd“."
+"„Alt“, „Shift“ ir „Cmd“"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -36541,19 +36541,19 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
+msgid "Select item(s)"
 msgstr "Pasirinkite elementą (-us)."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Toggle selection."
+msgid "Toggle selection"
 msgstr "Perjungti pasirinkimo būseną"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
-msgstr "Pažymėkite tinklą (trinkelėms ar takeliams)."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Pažymėkite tinklą (trinkelėms ar takeliams)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -52873,11 +52873,11 @@ msgstr "KiCad spausdintinių plokščių failai"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Ctrl."
+#~ "Alt, Shift and Ctrl"
 #~ msgstr ""
 #~ "Kairiojo spustelėjimo (ir vilkimo) veiksmai priklauso nuo 3 modifikavimo "
 #~ "klavišų:\n"
-#~ "„Alt“, „Shift“ ir „Ctrl“."
+#~ "„Alt“, „Shift“ ir „Ctrl“"
 
 #~ msgid "Toggle selected state of item(s)."
 #~ msgstr "Perjungti pasirinktą elemento (-ų) būseną."
@@ -52888,11 +52888,11 @@ msgstr "KiCad spausdintinių plokščių failai"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Cmd."
+#~ "Alt, Shift and Cmd"
 #~ msgstr ""
 #~ "Kairiojo spustelėjimo (ir vilkimo) veiksmai priklauso nuo 3 modifikavimo "
 #~ "klavišų:\n"
-#~ "„Alt“, „Shift“ ir „Cmd“."
+#~ "„Alt“, „Shift“ ir „Cmd“"
 
 #, fuzzy
 #~ msgid "Cmd+Shift"

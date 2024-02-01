@@ -14394,10 +14394,10 @@ msgstr "Príkazy myši ľavým tlačidlom myši"
 #, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Akcie ľavého kliknutia (a ťahanie) závisia od 3 klávesov modifikátora:\n"
-"Alt, Shift a Ctrl."
+"Alt, Shift a Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -14413,15 +14413,15 @@ msgstr "Klik"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Upresnite výber z ponuky."
+msgid "Clarify selection from menu"
+msgstr "Upresnite výber z ponuky"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Pridajte položky do výberu."
+msgid "Add item(s) to selection"
+msgstr "Pridajte položky do výberu"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -14432,18 +14432,18 @@ msgstr "Ctrl + Shift"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Odstrániť položky z výberu."
+msgid "Remove item(s) from selection"
+msgstr "Odstrániť položky z výberu"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Akcie ľavého kliknutia (a ťahanie) závisia od 3 klávesov modifikátora:\n"
-"Alt, Shift a Cmd."
+"Alt, Shift a Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -36372,19 +36372,19 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
-msgstr "Vyberte položky."
+msgid "Select item(s)"
+msgstr "Vyberte položky"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Toggle selection."
+msgid "Toggle selection"
 msgstr "Prepnúť stav výberu"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
-msgstr "Zvýraznite sieť (pre podložky alebo stopy)."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Zvýraznite sieť (pre podložky alebo stopy)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -52654,10 +52654,10 @@ msgstr "&Navrhnúť dosku plošného spoja"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Ctrl."
+#~ "Alt, Shift and Ctrl"
 #~ msgstr ""
 #~ "Akcie ľavého kliknutia (a ťahanie) závisia od 3 klávesov modifikátora:\n"
-#~ "Alt, Shift a Ctrl."
+#~ "Alt, Shift a Ctrl"
 
 #~ msgid "Toggle selected state of item(s)."
 #~ msgstr "Prepnúť vybratý stav položiek."
@@ -52668,10 +52668,10 @@ msgstr "&Navrhnúť dosku plošného spoja"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Cmd."
+#~ "Alt, Shift and Cmd"
 #~ msgstr ""
 #~ "Akcie ľavého kliknutia (a ťahanie) závisia od 3 klávesov modifikátora:\n"
-#~ "Alt, Shift a Cmd."
+#~ "Alt, Shift a Cmd"
 
 #, fuzzy
 #~ msgid "Cmd+Shift"

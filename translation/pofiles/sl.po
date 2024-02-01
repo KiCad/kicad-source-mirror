@@ -15899,10 +15899,10 @@ msgstr "Levi klik Ukazi miške"
 #, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Dejanja z levim klikom (in vlečenjem) so odvisna od 3 modifikacijskih tipk:\n"
-"Alt, Shift in Ctrl."
+"Alt, Shift in Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -15919,16 +15919,16 @@ msgstr "Klik"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
 #, fuzzy
-msgid "Clarify selection from menu."
-msgstr "Pojasnite izbiro v meniju."
+msgid "Clarify selection from menu"
+msgstr "Pojasnite izbiro v meniju"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
 #, fuzzy
-msgid "Add item(s) to selection."
-msgstr "Dodajte elemente v izbor."
+msgid "Add item(s) to selection"
+msgstr "Dodajte elemente v izbor"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -15941,18 +15941,18 @@ msgstr "Ctrl + Shift"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
 #, fuzzy
-msgid "Remove item(s) from selection."
-msgstr "Odstranite elemente iz izbora."
+msgid "Remove item(s) from selection"
+msgstr "Odstranite elemente iz izbora"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 #, fuzzy
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Dejanja z levim klikom (in vlečenjem) so odvisna od 3 modifikacijskih tipk:\n"
-"Alt, Shift in Cmd."
+"Alt, Shift in Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -39832,20 +39832,20 @@ msgstr ""
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
 #, fuzzy
-msgid "Select item(s)."
-msgstr "Izberite elemente."
+msgid "Select item(s)"
+msgstr "Izberite elemente"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Toggle selection."
+msgid "Toggle selection"
 msgstr "Preklopi izbirno stanje"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Highlight net (for pads or tracks)."
-msgstr "Označite mrežo (za blazinice ali skladbe)."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Označite mrežo (za blazinice ali skladbe)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -57494,11 +57494,11 @@ msgstr "Datoteke tiskanih vezij KiCad"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Ctrl."
+#~ "Alt, Shift and Ctrl"
 #~ msgstr ""
 #~ "Dejanja z levim klikom (in vlečenjem) so odvisna od 3 modifikacijskih "
 #~ "tipk:\n"
-#~ "Alt, Shift in Ctrl."
+#~ "Alt, Shift in Ctrl"
 
 #~ msgid "Toggle selected state of item(s)."
 #~ msgstr "Preklopi izbrano stanje elementov."
@@ -57509,11 +57509,11 @@ msgstr "Datoteke tiskanih vezij KiCad"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Cmd."
+#~ "Alt, Shift and Cmd"
 #~ msgstr ""
 #~ "Dejanja z levim klikom (in vlečenjem) so odvisna od 3 modifikacijskih "
 #~ "tipk:\n"
-#~ "Alt, Shift in Cmd."
+#~ "Alt, Shift in Cmd"
 
 #, fuzzy
 #~ msgid "Cmd+Shift"

@@ -13931,10 +13931,10 @@ msgstr "Muskommandon för vänsterklick"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Åtgärder vid vänsterklick (och dra) beror på två modifieringstangenter:\n"
-"Skift och Ctrl."
+"Skift och Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -13949,15 +13949,15 @@ msgstr "Långklick"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Förtydliga urvalet från meny."
+msgid "Clarify selection from menu"
+msgstr "Förtydliga urvalet från meny"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Lägg till objekt i urvalet."
+msgid "Add item(s) to selection"
+msgstr "Lägg till objekt i urvalet"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -13968,17 +13968,17 @@ msgstr "Ctrl + Skift"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Ta bort objekt från urvalet."
+msgid "Remove item(s) from selection"
+msgstr "Ta bort objekt från urvalet"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Åtgärder vid vänsterklick (och dra) beror på tre modifieringstangenter:\n"
-"Alt, Skift och Cmd."
+"Alt, Skift och Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -34960,18 +34960,18 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
-msgstr "Välj objekt."
+msgid "Select item(s)"
+msgstr "Välj objekt"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Toggle selection."
-msgstr "Växla markeringstillstånd."
+msgid "Toggle selection"
+msgstr "Växla markeringstillstånd"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
-msgstr "Markera nät (för lödytor eller ledare)."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Markera nät (för lödytor eller ledare)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -53156,10 +53156,10 @@ msgstr "KiCad-mönsterkort"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Ctrl."
+#~ "Alt, Shift and Ctrl"
 #~ msgstr ""
 #~ "Vänsterklicka (och dra) åtgärder beror på tre modifieringsnycklar:\n"
-#~ "Alt, Skift och Ctrl."
+#~ "Alt, Skift och Ctrl"
 
 #~ msgid "Toggle selected state of item(s)."
 #~ msgstr "Växla valt tillstånd för objekt."
@@ -53170,10 +53170,10 @@ msgstr "KiCad-mönsterkort"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Cmd."
+#~ "Alt, Shift and Cmd"
 #~ msgstr ""
 #~ "Vänsterklicka (och dra) åtgärder beror på tre modifieringsnycklar:\n"
-#~ "Alt, Skift och Cmd."
+#~ "Alt, Skift och Cmd"
 
 #, fuzzy
 #~ msgid "Cmd+Shift"

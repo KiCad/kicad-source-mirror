@@ -14316,10 +14316,10 @@ msgstr "Sol Tıklama Fare Komutları"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Sol tıklama (ve sürükleme) eylemleri 2 değiştirici tuşa bağlıdır:\n"
-"Shift ve Ctrl."
+"Shift ve Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -14335,15 +14335,15 @@ msgstr "Tıklama"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Menüden seçimi netleştirin."
+msgid "Clarify selection from menu"
+msgstr "Menüden seçimi netleştirin"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Öge(ler)i seçime ekle."
+msgid "Add item(s) to selection"
+msgstr "Öge(ler)i seçime ekle"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -14354,17 +14354,17 @@ msgstr "Ctrl+Shift"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Öge(ler)i seçimden kaldır."
+msgid "Remove item(s) from selection"
+msgstr "Öge(ler)i seçimden kaldır"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Sol tıklama (ve sürükleme) eylemleri 3 değiştirici tuşa bağlıdır:\n"
-"Seçenek, Shift ve Cmd."
+"Seçenek, Shift ve Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -36912,20 +36912,20 @@ msgstr "pads can be moved with respect to the rest of the footprint."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
-msgstr "Öge(ler) seç."
+msgid "Select item(s)"
+msgstr "Öge(ler) seç"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Toggle selection."
+msgid "Toggle selection"
 msgstr "Gerçekçi modu aç/kapat"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy
-msgid "Highlight net (for pads or tracks)."
-msgstr "Pedlerde ve/veya yollarda ağ adlarını göster veya gizle."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Pedlerde ve/veya yollarda ağ adlarını göster veya gizle"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284

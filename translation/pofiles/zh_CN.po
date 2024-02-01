@@ -13735,7 +13735,7 @@ msgstr "鼠标左键命令"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "左键单击 (和拖动) 操作取决于 2 个修饰键:\n"
 "Shift 和 Ctrl。"
@@ -13753,14 +13753,14 @@ msgstr "长按"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
+msgid "Clarify selection from menu"
 msgstr "从菜单中明确选择。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
+msgid "Add item(s) to selection"
 msgstr "将项目添加到选区。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
@@ -13772,14 +13772,14 @@ msgstr "Ctrl+Shift"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
+msgid "Remove item(s) from selection"
 msgstr "从选区中移除项目。"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "左键单击 (和拖动) 操作取决于 3 个修饰键: \n"
 "Option, Shift 和 Cmd。"
@@ -34277,17 +34277,17 @@ msgstr "如果选中该选项, 焊盘可相对于封装的其他部分进行移�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
+msgid "Select item(s)"
 msgstr "选择项目。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Toggle selection."
+msgid "Toggle selection"
 msgstr "切换选区状态。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
+msgid "Highlight net (for pads or tracks)"
 msgstr "高亮显示网络 (焊盘或走线)。"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
@@ -51196,7 +51196,7 @@ msgstr "KiCad 印刷电路板"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Ctrl."
+#~ "Alt, Shift and Ctrl"
 #~ msgstr ""
 #~ "左键单击（和拖动）操作取决于 3 个修饰键：\n"
 #~ "Alt、Shift 和 Ctrl。"
@@ -51209,7 +51209,7 @@ msgstr "KiCad 印刷电路板"
 
 #~ msgid ""
 #~ "Left click (and drag) actions depend on 3 modifier keys:\n"
-#~ "Alt, Shift and Cmd."
+#~ "Alt, Shift and Cmd"
 #~ msgstr ""
 #~ "左键单击（和拖动）操作取决于 3 个修饰键：\n"
 #~ "Alt、Shift 和 Cmd。"

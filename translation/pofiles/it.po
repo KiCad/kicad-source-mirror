@@ -14069,11 +14069,11 @@ msgstr "Comandi tasto sinistro del mouse"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:99
 msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
-"Shift and Ctrl."
+"Shift and Ctrl"
 msgstr ""
 "Le azioni clic sinistro (e trascinamento) dipendono da 2 tasti "
 "modificatori:\n"
-"Maiusc e Ctrl."
+"Maiusc e Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -14088,15 +14088,15 @@ msgstr "Clic lungo"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:128
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
-msgid "Clarify selection from menu."
-msgstr "Chiarisci la selezione da menu."
+msgid "Clarify selection from menu"
+msgstr "Chiarisci la selezione da menu"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
-msgid "Add item(s) to selection."
-msgstr "Aggiungi elementi alla selezione."
+msgid "Add item(s) to selection"
+msgstr "Aggiungi elementi alla selezione"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -14107,18 +14107,18 @@ msgstr "Ctrl+Maiusc"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:224
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
-msgid "Remove item(s) from selection."
-msgstr "Rimuovi elementi dalla selezione."
+msgid "Remove item(s) from selection"
+msgstr "Rimuovi elementi dalla selezione"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
 msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
-"Option, Shift and Cmd."
+"Option, Shift and Cmd"
 msgstr ""
 "Le azioni clic sinistro (e trascinamento) dipendono da 3 tasti "
 "modificatori:\n"
-"Alt, Maiusc e Cmd."
+"Alt, Maiusc e Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -35047,18 +35047,18 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)."
-msgstr "Seleziona elementi."
+msgid "Select item(s)"
+msgstr "Seleziona elementi"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Toggle selection."
-msgstr "Commuta selezioni."
+msgid "Toggle selection"
+msgstr "Commuta selezioni"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
-msgid "Highlight net (for pads or tracks)."
-msgstr "Evidenzia net (per piazzole o piste)."
+msgid "Highlight net (for pads or tracks)"
+msgstr "Evidenzia net (per piazzole o piste)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
