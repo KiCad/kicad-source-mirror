@@ -35258,11 +35258,6 @@ msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr "หากเลือกไว้ สามารถเคลื่อนย้ายแพ็ด เมื่อเทียบกับส่วนที่เหลือของฟุ้ทพรินท์ได้"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:118
-#: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)"
-msgstr "เลือกชิ้นส่วน"
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy

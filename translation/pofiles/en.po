@@ -4784,9 +4784,6 @@ msgstr "Cycle inactive layers between normal, dimmed, and hidden"
 msgid "Draw Bounding Boxes"
 msgstr "Draw Bounding Boxes"
 
-msgid "Select item(s)"
-msgstr "Select item(s)"
-
 msgid "Measure Tool"
 msgstr "Measure Tool"
 

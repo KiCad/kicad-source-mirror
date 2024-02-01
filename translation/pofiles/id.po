@@ -8077,11 +8077,6 @@ msgstr ""
 msgid "Draw Bounding Boxes"
 msgstr "Mode Gambar"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-#, fuzzy
-msgid "Select item(s)"
-msgstr "Item yang Dipilih"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr ""

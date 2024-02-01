@@ -7875,10 +7875,6 @@ msgstr "Commuta strati inattivi tra normale, attenuato, e nascosto"
 msgid "Draw Bounding Boxes"
 msgstr "Mostra riquadri di delimitazione"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Seleziona elementi"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Strumento di misura"

@@ -8075,10 +8075,6 @@ msgstr "Skift inaktive lag mellem normal, nedtonet og skjult"
 msgid "Draw Bounding Boxes"
 msgstr "Indbindingsboks"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Vælg emne (r)"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Måleværktøj"

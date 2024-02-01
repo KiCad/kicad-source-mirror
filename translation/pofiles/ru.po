@@ -34971,11 +34971,6 @@ msgid ""
 msgstr ""
 "Если отмечено, конт.пл. могут свободно перемещаться относительно посад.места."
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:118
-#: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)"
-msgstr "Выбрать элементы"
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Toggle selection"

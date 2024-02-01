@@ -7740,10 +7740,6 @@ msgstr "Växla inaktiva lager mellan normala, nedtonade och dolda"
 msgid "Draw Bounding Boxes"
 msgstr "Rita avgränsningslådor"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Välj objekt"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Mätverktyg"

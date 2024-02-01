@@ -34677,11 +34677,6 @@ msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr "체크할 경우, 패드를 나머지 풋프린트와 관련하여 움직일 수 있습니다."
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:118
-#: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)"
-msgstr "항목을 선택합니다."
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Toggle selection"

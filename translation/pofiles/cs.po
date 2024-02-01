@@ -7764,10 +7764,6 @@ msgstr "Cyklus neaktivní vrstvy mezi normálními, stmívanými a skrytými"
 msgid "Draw Bounding Boxes"
 msgstr "Kreslit ohraničující obdélník"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Vybrat položku(y)"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Měření"

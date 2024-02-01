@@ -7547,10 +7547,6 @@ msgstr ""
 msgid "Draw Bounding Boxes"
 msgstr ""
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr ""
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr ""

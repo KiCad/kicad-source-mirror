@@ -8737,11 +8737,6 @@ msgstr ""
 msgid "Draw Bounding Boxes"
 msgstr "Befoglalókeret"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-#, fuzzy
-msgid "Select item(s)"
-msgstr "Elem(ek) kijelölése"
-
 #: common/tool/actions.cpp:839
 #, fuzzy
 msgid "Measure Tool"

@@ -7822,10 +7822,6 @@ msgstr ""
 msgid "Draw Bounding Boxes"
 msgstr "Begrenzungsrahmen anzeigen"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Element(e) auswählen"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Messwerkzeug"

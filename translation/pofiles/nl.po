@@ -35965,11 +35965,6 @@ msgstr ""
 "Indien aangevinkt: pad's kunnen verplaatst worden tov de rest van de "
 "footprint."
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:118
-#: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)"
-msgstr "Selecteer items)"
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 #, fuzzy

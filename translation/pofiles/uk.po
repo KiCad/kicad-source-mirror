@@ -35325,11 +35325,6 @@ msgstr ""
 "Якщо увімкнено, то контактні площадки можуть вільно переміщатися відносно "
 "посадкового місця."
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:118
-#: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)"
-msgstr "Вибрані елемент(и)"
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Toggle selection"

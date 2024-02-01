@@ -8410,11 +8410,6 @@ msgstr ""
 msgid "Draw Bounding Boxes"
 msgstr "Работно поле"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-#, fuzzy
-msgid "Select item(s)"
-msgstr "Избор на елементи"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr ""

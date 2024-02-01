@@ -7800,10 +7800,6 @@ msgstr ""
 msgid "Draw Bounding Boxes"
 msgstr "Dessiner Rectangle d'Encadrement"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Sélection élément(s)"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Outil de Mesure"

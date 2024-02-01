@@ -7789,10 +7789,6 @@ msgstr "Εναλλαγή ανενεργών επιπέδων μεταξύ καν
 msgid "Draw Bounding Boxes"
 msgstr "Σχεδίαση Πλαισίου Οριοθέτησης"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Επιλογή αντικειμένων"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Εργαλείο Μέτρησης"

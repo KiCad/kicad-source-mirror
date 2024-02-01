@@ -7772,10 +7772,6 @@ msgstr "Alternar capas inactivas entre normal, atenuada y oculta"
 msgid "Draw Bounding Boxes"
 msgstr "Dibujar cajas envolventes"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Seleccionar elemento(s)"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Herramienta de medida"

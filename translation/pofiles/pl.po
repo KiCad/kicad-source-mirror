@@ -7760,9 +7760,6 @@ msgstr ""
 msgid "Draw Bounding Boxes"
 msgstr "Rysuj bryły brzegowe"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Wybierz element"
 
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"

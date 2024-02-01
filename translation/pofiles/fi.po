@@ -7756,10 +7756,6 @@ msgstr ""
 msgid "Draw Bounding Boxes"
 msgstr "Piirrä Rajauslaatikot"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Valitse kohteet"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Mittaustyökalu"

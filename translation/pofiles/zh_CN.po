@@ -34281,11 +34281,6 @@ msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr "如果选中该选项, 焊盘可相对于封装的其他部分进行移动。"
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:118
-#: pcbnew/dialogs/panel_edit_options_base.cpp:190
-msgid "Select item(s)"
-msgstr "选择项目。"
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Toggle selection"

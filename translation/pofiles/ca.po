@@ -8006,10 +8006,6 @@ msgstr "Alterna les capes inactives entre normals, atenuades, i amagades"
 msgid "Draw Bounding Boxes"
 msgstr "Dibuixa capsa delimitadora"
 
-#: common/tool/actions.cpp:828 common/tool/actions.cpp:829
-msgid "Select item(s)"
-msgstr "Selecciona element(s)"
-
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
 msgstr "Eina de mesura"

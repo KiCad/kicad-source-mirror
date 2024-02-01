@@ -34939,12 +34939,6 @@ msgid ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 msgstr ""
 
-#: pcbnew/dialogs/panel_edit_options_base.cpp:118
-#: pcbnew/dialogs/panel_edit_options_base.cpp:190
-#, fuzzy
-msgid "Select item(s)"
-msgstr "Atlases krāsa:"
-
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Toggle selection"
