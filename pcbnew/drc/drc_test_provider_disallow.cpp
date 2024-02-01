@@ -90,7 +90,9 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
             {
                 ZONE* zone = dynamic_cast<ZONE*>( item );
 
-                if( zone && zone->GetIsRuleArea() && zone->GetDoNotAllowCopperPour() )
+                if( zone && zone->GetIsRuleArea()
+                    && zone->GetRuleAreaType() == RULE_AREA_TYPE::KEEPOUT
+                    && zone->GetDoNotAllowCopperPour() )
                     antiCopperKeepouts.push_back( zone );
                 else if( zone && zone->IsOnCopperLayer() )
                     copperZones.push_back( zone );
@@ -260,7 +262,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 {
                     ZONE* zone = dynamic_cast<ZONE*>( item );
 
-                    if( zone && zone->GetIsRuleArea() )
+                    if( zone && zone->GetIsRuleArea() && zone->GetRuleAreaType() == RULE_AREA_TYPE::KEEPOUT )
                         return true;
 
                     item->ClearFlags( HOLE_PROXY );     // Just in case

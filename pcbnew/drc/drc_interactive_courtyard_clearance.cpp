@@ -171,7 +171,7 @@ void DRC_INTERACTIVE_COURTYARD_CLEARANCE::testCourtyardClearances()
 
     for( ZONE* zone : m_board->Zones() )
     {
-        if( !zone->GetIsRuleArea() || !zone->GetDoNotAllowFootprints() )
+        if( !zone->GetIsRuleArea() || zone->GetRuleAreaType() != RULE_AREA_TYPE::KEEPOUT || !zone->GetDoNotAllowFootprints() )
             continue;
 
         bool disallowFront = ( zone->GetLayerSet() & LSET::FrontMask() ).any();

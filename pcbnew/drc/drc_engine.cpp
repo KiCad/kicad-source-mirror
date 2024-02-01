@@ -106,6 +106,9 @@ static bool isKeepoutZone( const BOARD_ITEM* aItem, bool aCheckFlags )
     if( !zone->GetIsRuleArea() )
         return false;
 
+    if( zone->GetRuleAreaType() != RULE_AREA_TYPE::KEEPOUT )
+        return false;
+
     if( aCheckFlags )
     {
         if(    !zone->GetDoNotAllowTracks()
