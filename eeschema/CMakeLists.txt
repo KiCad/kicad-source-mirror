@@ -532,6 +532,7 @@ target_link_libraries( eeschema
     # There's way too much crap coming in from common yet.
     gal
     common
+    pcbcommon
     argparse::argparse
     ${wxWidgets_LIBRARIES}
     )

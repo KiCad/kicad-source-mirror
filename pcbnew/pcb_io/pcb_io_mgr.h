@@ -32,6 +32,7 @@
 #include <i18n_utility.h>
 #include <io/io_base.h>
 #include <io/io_mgr.h>
+#include <pcb_io/pcb_io.h>
 
 class BOARD;
 class PCB_IO;

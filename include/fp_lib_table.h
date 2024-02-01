@@ -27,11 +27,11 @@
 #define FP_LIB_TABLE_H_
 
 #include <lib_table_base.h>
-#include <pcb_io/pcb_io.h>
 #include <pcb_io/pcb_io_mgr.h>
 
 class FOOTPRINT;
 class FP_LIB_TABLE_GRID;
+class PCB_IO;
 
 
 /**
