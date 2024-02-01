@@ -1045,7 +1045,6 @@ void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aBodyStyle ) const
 
     LIB_SYMBOL_SPTR            parent = m_parent.lock();
     const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
-    aList.reserve( drawItems.size( LIB_PIN_T ) );
 
     for( const LIB_ITEM& item : drawItems[LIB_PIN_T] )
     {
