@@ -515,10 +515,10 @@ bool MULTICHANNEL_TOOL::copyRuleAreaContents( FP_PAIRS& aMatches, BOARD_COMMIT* 
 
             aCommit->Modify( targetFP );
 
+            targetFP->SetLayerAndFlip( refFP->GetLayer() );
             targetFP->SetOrientation( refFP->GetOrientation() );
             VECTOR2I targetPos = refFP->GetPosition() + disp;
             targetFP->SetPosition( targetPos );
-            targetFP->SetLayerAndFlip( refFP->GetLayer() );
             targetFP->Reference().SetTextAngle( refFP->Reference().GetTextAngle() );
             targetFP->Reference().SetPosition( refFP->Reference().GetPosition() + disp );
             targetFP->Value().SetTextAngle( refFP->Value().GetTextAngle() );
