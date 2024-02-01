@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-29 16:23+0000\n"
+"PO-Revision-Date: 2024-02-01 13:54+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
+"master-source/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4374,7 +4374,6 @@ msgid "Library package handling"
 msgstr "Обробка пакету бібліотеки"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
 msgstr ""
 "Автоматично додавати встановлені бібліотеки до глобальної таблиці бібліотек"
@@ -4656,9 +4655,8 @@ msgstr "Не вдалося використати OpenGL"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3216
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3104
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "Не вдалося прочитати слово."
+msgstr "Не вдалося прочитати данні зображення."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:979
 #, c-format
@@ -4920,9 +4918,8 @@ msgstr "Параметри показу"
 #: common/eda_base_frame.cpp:1128 common/eda_base_frame.cpp:1137
 #: common/eda_base_frame.cpp:1161 common/eda_base_frame.cpp:1172
 #: common/eda_base_frame.cpp:1225 common/tool/common_tools.cpp:555
-#, fuzzy
 msgid "Grids"
-msgstr "Сітка"
+msgstr "Сітки"
 
 #: common/eda_base_frame.cpp:1129 common/eda_base_frame.cpp:1138
 #: common/eda_base_frame.cpp:1163 common/eda_base_frame.cpp:1174
@@ -5004,9 +5001,8 @@ msgid "Drawing Sheet Editor"
 msgstr "Редактор форматних рамок"
 
 #: common/eda_base_frame.cpp:1232
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "Відмінити оновлення таблиці"
+msgstr "Пакети і оновлення"
 
 #: common/eda_base_frame.cpp:1318
 #, c-format
@@ -5074,9 +5070,8 @@ msgid "Constrain to H, V, 45"
 msgstr "Обмежити горизонтально/вертикально на 45°"
 
 #: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:712
-#, fuzzy
 msgid "Edit Grids..."
-msgstr "Редагувати сітку користувача..."
+msgstr "Редагувати сітки..."
 
 #: common/eda_draw_frame.cpp:562
 msgid "Zoom Auto"
@@ -5166,14 +5161,12 @@ msgstr "Графіка"
 
 #: common/eda_item.cpp:347 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "Налаштування"
+msgstr "Еталонне зображення"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:196
-#, fuzzy
 msgid "Generator"
-msgstr "Генерувати"
+msgstr "Генератор"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:376 common/eda_item.cpp:397
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_textbox.cpp:445
