@@ -2449,7 +2449,7 @@ void ALTIUM_PCB::ConvertArcs6ToPcbShape( const AARC6& aElem, PCB_SHAPE* aShape )
 
 void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimitiveIndex )
 {
-    if( aElem.polygon != ALTIUM_POLYGON_NONE )
+    if( aElem.polygon != ALTIUM_POLYGON_NONE && aElem.polygon != ALTIUM_POLYGON_BOARD )
     {
         if( m_polygons.size() <= aElem.polygon )
         {
@@ -3183,7 +3183,7 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
 
 void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPrimitiveIndex )
 {
-    if( aElem.polygon != ALTIUM_POLYGON_NONE )
+    if( aElem.polygon != ALTIUM_POLYGON_NONE && aElem.polygon != ALTIUM_POLYGON_BOARD )
     {
         if( m_polygons.size() <= aElem.polygon )
         {

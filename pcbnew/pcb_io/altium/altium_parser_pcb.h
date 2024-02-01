@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Thomas Pointhuber <thomas.pointhuber@gmx.at>
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,6 +41,9 @@ const uint16_t ALTIUM_COMPONENT_NONE = std::numeric_limits<uint16_t>::max();
 
 // this constant specifies a item which does not define a polygon
 const uint16_t ALTIUM_POLYGON_NONE = std::numeric_limits<uint16_t>::max();
+
+// 65534 seems to be belonging to board outline
+const uint16_t ALTIUM_POLYGON_BOARD = std::numeric_limits<uint16_t>::max() - 1;
 
 
 enum class ALTIUM_UNIT
