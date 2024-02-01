@@ -918,7 +918,7 @@ void KIBIS_PIN::getKuKdOneWaveform( KIBIS_MODEL&                            aMod
         //simul += "plot v(KU) v(KD)\n";
 
         std::string outputFileName = m_topLevel->m_cacheDir + "temp_output.spice";
-        simul += "write " + outputFileName + " v(KU) v(KD)\n";
+        simul += "write '" + outputFileName + "' v(KU) v(KD)\n";
         simul += "quit\n";
         simul += ".endc \n";
         simul += ".end \n";
@@ -1122,7 +1122,7 @@ void KIBIS_PIN::getKuKdTwoWaveforms( KIBIS_MODEL&                            aMo
         simul += "plot v(KU) v(KD)\n";
         //simul += "plot v(x1.DIE0) \n";
         std::string outputFileName = m_topLevel->m_cacheDir + "temp_output.spice";
-        simul += "write " + outputFileName + " v(KU) v(KD)\n";
+        simul += "write '" + outputFileName + "' v(KU) v(KD)\n";
         simul += "quit\n";
         simul += ".endc \n";
         simul += ".end \n";
