@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-28 19:54-0800\n"
-"PO-Revision-Date: 2024-01-27 05:27+0000\n"
-"Last-Translator: pedrolinharesmoreira <pedrolinhares@unifei.edu.br>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"PO-Revision-Date: 2024-02-01 08:44+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -12126,7 +12126,7 @@ msgstr "편집 %s"
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:232
 msgid "Filled shape"
-msgstr "채워진 도형"
+msgstr "도형 채움"
 
 #: eeschema/dialogs/dialog_shape_properties_base.cpp:122
 msgid "Set border width to 0 to use schematic's default line width."
@@ -29458,7 +29458,7 @@ msgstr "해치 간격:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:329
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:171
 msgid "Smoothing effort:"
-msgstr "평활화 작업:"
+msgstr "다듬기 작업:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:331
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:173
@@ -29469,16 +29469,16 @@ msgid ""
 "2 = round corners\n"
 "3 = round corners (finer shape)"
 msgstr ""
-"매끄러움 효과의 설정값\n"
-"0 = 매끄러움 없음\n"
+"다듬기 작업의 설정값\n"
+"0 = 다듬기 없음\n"
 "1 = 모따기\n"
-"2 = 둥근 모서리\n"
-"3 = 둥근 모서리 (세밀한 형상)"
+"2 = 모깍기\n"
+"3 = 모깍기 (미세한 형상)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:338
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:183
 msgid "Smoothing amount:"
-msgstr "스무딩 양:"
+msgstr "다듬기 양:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:340
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:185
@@ -29487,8 +29487,8 @@ msgid ""
 "0 = no smoothing\n"
 "1.0 = max radius/chamfer size (half gap value)"
 msgstr ""
-"매끄러운 모서리 사이즈와 선 사이의 갭의 비율\n"
-"0 = 매끄러움 없음\n"
+"다듬기 모서리 크기와 선 사이의 간격의 비율\n"
+"0 = 다듬기 없음\n"
 "1.0 = 최대 반경 / 모따기 크기 (갭의 절반값)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:351
@@ -34254,11 +34254,11 @@ msgstr "오류 목록"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:28
 msgid "Start Point"
-msgstr "시작 지점"
+msgstr "시작점"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:54
 msgid "End Point"
-msgstr "끝 지점"
+msgstr "끝점"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:88
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:114
@@ -34780,9 +34780,8 @@ msgid "Show courtyard collisions when moving/dragging"
 msgstr "이동/끌기 시 부품자리 겹침 표시"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
-#, fuzzy
 msgid "Automatically refill zones"
-msgstr "자동 리필 영역"
+msgstr "영역 자동 채우기"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:384
 msgid "If checked, zones will be re-filled after each edit operation"
@@ -37689,12 +37688,12 @@ msgstr "%s 레이어는 필수입니다."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:428
 #, c-format
 msgid "%s corner smoothing setting differs."
-msgstr "%s 모서리 평활 설정이 다릅니다."
+msgstr "%s 모서리 다듬기 설정이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:430
 #, c-format
 msgid "%s corner smoothing radius differs."
-msgstr "%s 모서리 평활 반경이 다릅니다."
+msgstr "%s 모서리 다듬기 반경이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:432
 #, c-format
@@ -37792,14 +37791,14 @@ msgid "%s hatch orientation differs."
 msgstr "%s 해치 방향이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:478
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch smoothing level differs."
-msgstr "%s 해치 평활화 수준이 다릅니다."
+msgstr "%s 해치 다듬기 수준이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:480
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch smoothing amount differs."
-msgstr "%s 해치 평활화 양이 다릅니다."
+msgstr "%s 해치 다듬기 양이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:482
 #, c-format
@@ -41333,7 +41332,7 @@ msgstr "CZONE_CONTAINER \"%s\"에 대해 유효하지 않은 ZAux"
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2469
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
-msgstr "CZONE_CONTAINER \"%s\"에 대해 유효하지 않은 ZSmoothing"
+msgstr "CZONE_CONTAINER \"%s\"에 대해 유효하지 않은 Z다듬기"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6134
@@ -41431,7 +41430,7 @@ msgstr "알 수 없는 비아 유형 %d"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2328
 #, c-format
 msgid "unknown zone corner smoothing type %d"
-msgstr "알 수 없는 영역 모서리 매끄러움 유형 %d"
+msgstr "알 수 없는 영역 모서리 다듬기 유형 %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2480
 msgid "This file does not contain a PCB."
@@ -45799,7 +45798,7 @@ msgstr "설정 열기"
 msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
-msgstr "너무 느려지면 기본 설정에서 영역 자동 채우기를 끌 수 있습니다."
+msgstr "영역 자동 채우기가 너무 느리면 환경설정에서 끌 수 있습니다."
 
 #: pcbnew/tools/zone_filler_tool.cpp:347
 msgid "Fill Zone"
