@@ -840,7 +840,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_LIB_FOOTPRINT_ISSUES ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_ISSUES );
-                msg.Printf( _( "The current configuration does not include the library '%s'." ),
+                msg.Printf( _( "The current configuration does not include the footprint library '%s'." ),
                             libName );
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );
@@ -854,7 +854,7 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
             if( !m_drcEngine->IsErrorLimitExceeded( DRCE_LIB_FOOTPRINT_ISSUES ) )
             {
                 std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_LIB_FOOTPRINT_ISSUES );
-                msg.Printf( _( "The library '%s' is not enabled in the current configuration." ),
+                msg.Printf( _( "The footprint library '%s' is not enabled in the current configuration." ),
                             libName );
                 drcItem->SetErrorMessage( msg );
                 drcItem->SetItems( footprint );

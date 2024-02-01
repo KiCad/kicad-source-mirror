@@ -27,6 +27,7 @@
 #include <numeric>
 
 #include "connection_graph.h"
+#include "kiface_ids.h"
 #include <advanced_config.h>
 #include <common.h>     // for ExpandEnvVarSubstitutions
 #include <erc.h>
@@ -958,7 +959,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             {
                 std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
                 ercItem->SetItems( symbol );
-                msg.Printf( _( "The current configuration does not include the library '%s'" ),
+                msg.Printf( _( "The current configuration does not include the symbol library '%s'" ),
                             UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
 
@@ -1012,6 +1013,86 @@ int ERC_TESTER::TestLibSymbolIssues()
         for( SCH_MARKER* marker : markers )
         {
             screen->Append( marker );
+            err_count += 1;
+        }
+    }
+
+    return err_count;
+}
+
+
+int ERC_TESTER::TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject )
+{
+    wxCHECK( m_schematic, 0 );
+
+    wxString msg;
+    int      err_count = 0;
+
+    typedef int (*TESTER_FN_PTR)( const wxString&, PROJECT* );
+
+    TESTER_FN_PTR linkTester = (TESTER_FN_PTR) aCvPcb->IfaceOrAddress( KIFACE_TEST_FOOTPRINT_LINK );
+
+    for( SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    {
+        std::vector<SCH_MARKER*> markers;
+
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+            wxString    footprint = symbol->GetFootprintFieldText( true, &sheet, false );
+
+            if( footprint.IsEmpty() )
+                continue;
+
+            LIB_ID fpID;
+
+            if( fpID.Parse( footprint, true ) >= 0 )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
+                msg.Printf( _( "'%s' is not a valid footprint identifier." ), footprint );
+                ercItem->SetErrorMessage( msg );
+                ercItem->SetItems( symbol );
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                continue;
+            }
+
+            wxString libName = fpID.GetLibNickname();
+            wxString fpName = fpID.GetLibItemName();
+            int      ret = (linkTester)( footprint, aProject );
+
+            if( ret == KIFACE_TEST_FOOTPRINT_LINK_NO_LIBRARY )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
+                msg.Printf( _( "The current configuration does not include the footprint library '%s'." ),
+                            libName );
+                ercItem->SetErrorMessage( msg );
+                ercItem->SetItems( symbol );
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+            }
+            else if( ret == KIFACE_TEST_FOOTPRINT_LINK_LIBRARY_NOT_ENABLED )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
+                msg.Printf( _( "The footprint library '%s' is not enabled in the current configuration." ),
+                            libName );
+                ercItem->SetErrorMessage( msg );
+                ercItem->SetItems( symbol );
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+            }
+            else if( ret == KIFACE_TEST_FOOTPRINT_LINK_NO_FOOTPRINT )
+            {
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOOTPRINT_LINK_ISSUES );
+                msg.Printf( _( "Footprint '%s' not found in library '%s'." ),
+                            fpName,
+                            libName );
+                ercItem->SetErrorMessage( msg );
+                ercItem->SetItems( symbol );
+                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+            }
+        }
+
+        for( SCH_MARKER* marker : markers )
+        {
+            sheet.LastScreen()->Append( marker );
             err_count += 1;
         }
     }
@@ -1248,6 +1329,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking for library symbol issues..." ) );
 
         TestLibSymbolIssues();
+    }
+
+    if( settings.IsTestEnabled( ERCE_FOOTPRINT_LINK_ISSUES ) && aCvPcb )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking for footprint link issues..." ) );
+
+        TestFootprintLinkIssues( aCvPcb, aProject );
     }
 
     if( settings.IsTestEnabled( ERCE_ENDPOINT_OFF_GRID ) )

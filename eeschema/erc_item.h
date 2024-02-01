@@ -210,6 +210,7 @@ private:
     static ERC_ITEM simulationModelIssues;
     static ERC_ITEM wireDangling;
     static ERC_ITEM libSymbolIssues;
+    static ERC_ITEM footprintLinkIssues;
     static ERC_ITEM unannotated;
     static ERC_ITEM extraUnits;
     static ERC_ITEM missingUnits;

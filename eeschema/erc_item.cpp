@@ -151,6 +151,10 @@ ERC_ITEM ERC_ITEM::libSymbolIssues( ERCE_LIB_SYMBOL_ISSUES,
         _( "Library symbol issue" ),
         wxT( "lib_symbol_issues" ) );
 
+ERC_ITEM ERC_ITEM::footprintLinkIssues( ERCE_FOOTPRINT_LINK_ISSUES,
+        _( "Footprint link issue" ),
+        wxT( "footprint_link_issues" ) );
+
 ERC_ITEM ERC_ITEM::unannotated( ERCE_UNANNOTATED,
         _( "Symbol is not annotated" ),
         wxT( "unannotated" ) );
@@ -224,6 +228,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  // TODO: Add bus label syntax checking
 //                 ERC_ITEM::busLabelSyntax,
                  ERC_ITEM::libSymbolIssues,
+                 ERC_ITEM::footprintLinkIssues,
                  ERC_ITEM::extraUnits,
                  ERC_ITEM::missingUnits,
                  ERC_ITEM::missingInputPin,
@@ -264,6 +269,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_SIMULATION_MODEL:        return std::make_shared<ERC_ITEM>( simulationModelIssues );
     case ERCE_WIRE_DANGLING:           return std::make_shared<ERC_ITEM>( wireDangling );
     case ERCE_LIB_SYMBOL_ISSUES:       return std::make_shared<ERC_ITEM>( libSymbolIssues );
+    case ERCE_FOOTPRINT_LINK_ISSUES:   return std::make_shared<ERC_ITEM>( footprintLinkIssues );
     case ERCE_UNANNOTATED:             return std::make_shared<ERC_ITEM>( unannotated );
     case ERCE_EXTRA_UNITS:             return std::make_shared<ERC_ITEM>( extraUnits );
     case ERCE_DIFFERENT_UNIT_VALUE:    return std::make_shared<ERC_ITEM>( differentUnitValue );

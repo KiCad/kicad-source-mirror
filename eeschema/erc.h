@@ -114,6 +114,12 @@ public:
     int TestLibSymbolIssues();
 
     /**
+     * Test footprint links against the current footprint libraries.
+     * @return the number of issues found
+     */
+    int TestFootprintLinkIssues( KIFACE* aCvPcb, PROJECT* aProject );
+
+    /**
      * Test pins and wire ends for being off grid.
      * @return the error count
      */

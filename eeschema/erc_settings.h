@@ -74,6 +74,8 @@ enum ERCE_T
     ERCE_WIRE_DANGLING,           ///< Some wires are not connected to anything else.
     ERCE_LIB_SYMBOL_ISSUES,       ///< Library symbol changed from current symbol in schematic or
                                   ///<   the library symbol link no longer valid.
+    ERCE_FOOTPRINT_LINK_ISSUES,   ///< The footprint link is invalid, or points to a missing
+                                  ///<   (or inactive) footprint or library.
     ERCE_UNANNOTATED,             ///< Symbol has not been annotated.
     ERCE_EXTRA_UNITS,             ///< Symbol has more units than are defined.
     ERCE_DIFFERENT_UNIT_VALUE,    ///< Units of same symbol have different values.

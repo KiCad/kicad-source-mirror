@@ -323,9 +323,9 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( !libTableRow )
             {
-                msg.Printf( _( "The current configuration does not include a library named '%s'.\n"
-                               "Use Manage Footprint Libraries to edit the configuration." ),
+                msg.Printf( _( "The current configuration does not include the footprint library '%s'." ),
                             fpFileName.GetPath() );
+                msg += wxS( "\n" ) + _( "Use Manage Footprint Libraries to edit the configuration." );
                 DisplayErrorMessage( this, _( "Library not found in footprint library table." ),
                                      msg );
                 break;
@@ -335,9 +335,9 @@ void FOOTPRINT_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( !libTable->HasLibrary( libNickname, true ) )
             {
-                msg.Printf( _( "The library '%s' is not enabled in the current configuration.\n"
-                               "Use Manage Footprint Libraries to edit the configuration." ),
+                msg.Printf( _( "The footprint library '%s' is not enabled in the current configuration." ),
                             libNickname );
+                msg += wxS( "\n" ) + _( "Use Manage Footprint Libraries to edit the configuration." );
                 DisplayErrorMessage( this, _( "Footprint library not enabled." ), msg );
                 break;
             }
