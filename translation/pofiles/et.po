@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 08:24-0800\n"
+"POT-Creation-Date: 2024-02-01 10:06+0100\n"
 "PO-Revision-Date: 2023-08-25 10:50+0000\n"
 "Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/kicad/v7/et/>\n"
@@ -236,7 +236,7 @@ msgid "3D Grid"
 msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:146
-#: bitmap2component/bitmap2cmp_gui.cpp:237 cvpcb/menubar.cpp:87
+#: bitmap2component/bitmap2cmp_gui.cpp:241 cvpcb/menubar.cpp:87
 #: eeschema/menubar.cpp:319
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
 #: eeschema/toolbars_symbol_viewer.cpp:135 gerbview/menubar.cpp:237
@@ -1114,7 +1114,7 @@ msgstr ""
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:575
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:589
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:603
-#: pagelayout_editor/pl_editor_frame.cpp:754
+#: pagelayout_editor/pl_editor_frame.cpp:758
 #: pcb_calculator/widgets/unit_selector.cpp:34
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:147
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:171
@@ -1199,68 +1199,68 @@ msgstr ""
 msgid "DPI"
 msgstr "DPI"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:219 common/tool/actions.cpp:61
+#: bitmap2component/bitmap2cmp_gui.cpp:223 common/tool/actions.cpp:61
 msgid "Open..."
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:220
+#: bitmap2component/bitmap2cmp_gui.cpp:224
 msgid "Load source image"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:229 common/hotkey_store.cpp:57
+#: bitmap2component/bitmap2cmp_gui.cpp:233 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:230 common/tool/actions.cpp:114
 msgid "Quit"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:230
+#: bitmap2component/bitmap2cmp_gui.cpp:234
 msgid "Quit Image Converter"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:375
+#: bitmap2component/bitmap2cmp_gui.cpp:379
 #: eeschema/tools/sch_drawing_tools.cpp:593
-#: pagelayout_editor/pl_editor_frame.cpp:862 pcbnew/tools/drawing_tool.cpp:683
+#: pagelayout_editor/pl_editor_frame.cpp:866 pcbnew/tools/drawing_tool.cpp:683
 msgid "Choose Image"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:376
+#: bitmap2component/bitmap2cmp_gui.cpp:380
 #: eeschema/tools/sch_drawing_tools.cpp:594
-#: pagelayout_editor/pl_editor_frame.cpp:863 pcbnew/tools/drawing_tool.cpp:684
+#: pagelayout_editor/pl_editor_frame.cpp:867 pcbnew/tools/drawing_tool.cpp:684
 msgid "Image Files"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:714
+#: bitmap2component/bitmap2cmp_gui.cpp:718
 msgid "Unable to export to the Clipboard"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:739
+#: bitmap2component/bitmap2cmp_gui.cpp:743
 msgid "Create Logo File"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:756
-#: bitmap2component/bitmap2cmp_gui.cpp:792
-#: bitmap2component/bitmap2cmp_gui.cpp:827
-#: bitmap2component/bitmap2cmp_gui.cpp:862
+#: bitmap2component/bitmap2cmp_gui.cpp:760
+#: bitmap2component/bitmap2cmp_gui.cpp:796
+#: bitmap2component/bitmap2cmp_gui.cpp:831
+#: bitmap2component/bitmap2cmp_gui.cpp:866
 #, c-format
 msgid "File '%s' could not be created."
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:776
+#: bitmap2component/bitmap2cmp_gui.cpp:780
 msgid "Create PostScript File"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:812
+#: bitmap2component/bitmap2cmp_gui.cpp:816
 msgid "Create Symbol Library"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:847
+#: bitmap2component/bitmap2cmp_gui.cpp:851
 msgid "Create Footprint Library"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:885
+#: bitmap2component/bitmap2cmp_gui.cpp:889
 msgid "Error allocating memory for potrace bitmap"
 msgstr ""
 
-#: bitmap2component/bitmap2cmp_gui.cpp:912
+#: bitmap2component/bitmap2cmp_gui.cpp:916
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:127 gerbview/files.cpp:399
 #: gerbview/readgerb.cpp:76
@@ -3964,7 +3964,7 @@ msgid "Colors"
 msgstr ""
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr ""
@@ -3979,7 +3979,7 @@ msgid "Field Name Templates"
 msgstr ""
 
 #: common/eda_base_frame.cpp:1104 common/tool/actions.cpp:610
-#: kicad/tools/kicad_manager_actions.cpp:98 pcbnew/footprint_edit_frame.cpp:947
+#: kicad/tools/kicad_manager_actions.cpp:98 pcbnew/footprint_edit_frame.cpp:951
 #: pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr ""
@@ -3991,7 +3991,7 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:1113 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:92 pcbnew/menubar_pcb_editor.cpp:185
-#: pcbnew/pcb_edit_frame.cpp:184 pcbnew/pcb_edit_frame.cpp:1614
+#: pcbnew/pcb_edit_frame.cpp:184 pcbnew/pcb_edit_frame.cpp:1618
 #: pcbnew/tools/zone_filler_tool.cpp:277
 msgid "PCB Editor"
 msgstr ""
@@ -4028,7 +4028,7 @@ msgid "Raytracing Renderer"
 msgstr ""
 
 #: common/eda_base_frame.cpp:1142 common/hotkey_store.cpp:77
-#: gerbview/gerbview_frame.cpp:611 gerbview/gerbview_frame.cpp:635
+#: gerbview/gerbview_frame.cpp:615 gerbview/gerbview_frame.cpp:639
 #: gerbview/menubar.cpp:160 kicad/tools/kicad_manager_actions.cpp:104
 msgid "Gerber Viewer"
 msgstr ""
@@ -4039,7 +4039,7 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:1159 common/hotkey_store.cpp:75
 #: kicad/tools/kicad_manager_actions.cpp:121 pagelayout_editor/menubar.cpp:89
-#: pagelayout_editor/pl_editor_frame.cpp:567
+#: pagelayout_editor/pl_editor_frame.cpp:571
 msgid "Drawing Sheet Editor"
 msgstr ""
 
@@ -4084,7 +4084,7 @@ msgstr ""
 
 #: common/eda_draw_frame.cpp:149 common/tool/actions.cpp:497
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
-#: pagelayout_editor/pl_editor_frame.cpp:163
+#: pagelayout_editor/pl_editor_frame.cpp:167
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:55
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
@@ -4094,7 +4094,7 @@ msgstr ""
 msgid "Inches"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:155 pagelayout_editor/pl_editor_frame.cpp:166
+#: common/eda_draw_frame.cpp:155 pagelayout_editor/pl_editor_frame.cpp:170
 #: pcbnew/tools/drawing_tool.cpp:314 pcbnew/tools/edit_tool_move_fct.cpp:356
 #: pcbnew/tools/pcb_actions.cpp:742
 msgid "Constrain to H, V, 45"
@@ -4118,7 +4118,7 @@ msgstr ""
 msgid "grid %s"
 msgstr ""
 
-#: common/eda_draw_frame.cpp:646 pagelayout_editor/pl_editor_frame.cpp:752
+#: common/eda_draw_frame.cpp:646 pagelayout_editor/pl_editor_frame.cpp:756
 msgid "inches"
 msgstr ""
 
@@ -4136,7 +4136,7 @@ msgstr ""
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:80
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:91
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:130
-#: pagelayout_editor/pl_editor_frame.cpp:753
+#: pagelayout_editor/pl_editor_frame.cpp:757
 msgid "mils"
 msgstr ""
 
@@ -5428,7 +5428,7 @@ msgid "Show Page %s"
 msgstr ""
 
 #: common/plotters/PDF_plotter.cpp:1239
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:812
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:816
 #: eeschema/tools/sch_navigate_tool.cpp:86
 #, c-format
 msgid "Open %s"
@@ -6376,7 +6376,7 @@ msgid "Footprint not found."
 msgstr ""
 
 #: common/widgets/footprint_select_widget.cpp:70 cvpcb/cvpcb_mainframe.cpp:907
-#: pcbnew/footprint_edit_frame.cpp:972 pcbnew/load_select_footprint.cpp:225
+#: pcbnew/footprint_edit_frame.cpp:976 pcbnew/load_select_footprint.cpp:225
 msgid "Loading Footprint Libraries"
 msgstr ""
 
@@ -11335,8 +11335,8 @@ msgid "/path/to/sheet"
 msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
-#: pcbnew/footprint_edit_frame.cpp:228 pcbnew/footprint_edit_frame.cpp:865
-#: pcbnew/pcb_edit_frame.cpp:290 pcbnew/pcb_edit_frame.cpp:1520
+#: pcbnew/footprint_edit_frame.cpp:232 pcbnew/footprint_edit_frame.cpp:869
+#: pcbnew/pcb_edit_frame.cpp:294 pcbnew/pcb_edit_frame.cpp:1524
 msgid "Appearance"
 msgstr ""
 
@@ -11983,8 +11983,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1062
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1578
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1630
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1582
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1634
 #: eeschema/tools/sch_editor_control.cpp:478
 #: eeschema/tools/sch_editor_control.cpp:493
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1112
@@ -13197,73 +13197,73 @@ msgstr ""
 msgid "KiCad Schematic Editor"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1722
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1726
 msgid "Schematic Hierarchy"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:271
+#: eeschema/sch_edit_frame.cpp:275
 msgid "New schematic file is unsaved"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:803 eeschema/sim/sim_plot_frame.cpp:1786
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:539
+#: eeschema/sch_edit_frame.cpp:807 eeschema/sim/sim_plot_frame.cpp:1786
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:543
 #: eeschema/symbol_editor/symbol_editor.cpp:1177
-#: pagelayout_editor/pl_editor_frame.cpp:395
-#: pcbnew/footprint_edit_frame.cpp:720 pcbnew/footprint_edit_frame.cpp:760
-#: pcbnew/pcb_edit_frame.cpp:1076
+#: pagelayout_editor/pl_editor_frame.cpp:399
+#: pcbnew/footprint_edit_frame.cpp:724 pcbnew/footprint_edit_frame.cpp:764
+#: pcbnew/pcb_edit_frame.cpp:1080
 #, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:964
+#: eeschema/sch_edit_frame.cpp:968
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1118
+#: eeschema/sch_edit_frame.cpp:1122
 msgid "New Schematic"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1130
+#: eeschema/sch_edit_frame.cpp:1134
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1151
+#: eeschema/sch_edit_frame.cpp:1155
 msgid "Open Schematic"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1220
+#: eeschema/sch_edit_frame.cpp:1224
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1245
+#: eeschema/sch_edit_frame.cpp:1249
 msgid "Could not open CvPcb"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
-#: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
-#: pcbnew/pcb_edit_frame.cpp:1609
+#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
+#: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
-#: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
+#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1435
+#: eeschema/sch_edit_frame.cpp:1439
 msgid "[no schematic loaded]"
 msgstr ""
 
-#: eeschema/sch_edit_frame.cpp:1745
+#: eeschema/sch_edit_frame.cpp:1749
 #, c-format
 msgid "Highlighted net: %s"
 msgstr ""
@@ -15577,79 +15577,79 @@ msgstr ""
 msgid "KiCad Symbol Editor"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:137
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1031
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:141
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
 #: eeschema/symbol_library.cpp:475 eeschema/symbol_tree_model_adapter.cpp:74
 #: eeschema/symbol_viewer_frame.cpp:336
 msgid "Loading Symbol Libraries"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:191
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1212
-#: pcbnew/footprint_edit_frame.cpp:219 pcbnew/footprint_edit_frame.cpp:861
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:195
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1216
+#: pcbnew/footprint_edit_frame.cpp:223 pcbnew/footprint_edit_frame.cpp:865
 msgid "Libraries"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:247
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:251
 msgid "Library changes are unsaved"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:258
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:262
 msgid "Symbol library loading was cancelled by user."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:771
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:775
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:780
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:784
 msgid "Manage symbol libraries"
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:791
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:795
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:808
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:812
 #, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:887
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:938
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:891
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:942
 #: eeschema/tools/sch_editor_control.cpp:389
 #, c-format
 msgid "Library '%s' already exists."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:895
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:899
 #, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
 "Make sure you have write permissions and try again."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:906
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:944
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:910
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:948
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:215
 msgid "Could not open the library file."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1041
 #, c-format
 msgid "Loading library '%s'..."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1131
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1135
 #, c-format
 msgid "Failed to save backup to '%s'."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1312
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1316
 #: eeschema/symbol_viewer_frame.cpp:549
 #, c-format
 msgid ""
@@ -15657,12 +15657,12 @@ msgid ""
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1315
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1319
 #: eeschema/symbol_viewer_frame.cpp:552
 msgid "Library not found in symbol library table."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1323
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1327
 #: eeschema/symbol_viewer_frame.cpp:556
 #, c-format
 msgid ""
@@ -15670,18 +15670,18 @@ msgid ""
 "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1326
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1330
 #: eeschema/symbol_viewer_frame.cpp:559
 msgid "Symbol library not enabled."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1575
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1627
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1579
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1631
 msgid "Error saving global library table."
 msgstr ""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1576
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1628
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1580
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1632
 msgid "Error saving project library table."
 msgstr ""
 
@@ -17201,8 +17201,8 @@ msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:622
-#: pagelayout_editor/pl_editor_frame.cpp:874
-#: pagelayout_editor/pl_editor_frame.cpp:882 pcbnew/tools/drawing_tool.cpp:713
+#: pagelayout_editor/pl_editor_frame.cpp:878
+#: pagelayout_editor/pl_editor_frame.cpp:886 pcbnew/tools/drawing_tool.cpp:713
 #, c-format
 msgid "Could not load image from '%s'."
 msgstr ""
@@ -17896,7 +17896,7 @@ msgstr ""
 msgid "Usually: 3:3 in mm and 2:4 in inches"
 msgstr ""
 
-#: gerbview/events_called_functions.cpp:182 gerbview/gerbview_frame.cpp:156
+#: gerbview/events_called_functions.cpp:182 gerbview/gerbview_frame.cpp:160
 msgid "Layers Manager"
 msgstr ""
 
@@ -18206,20 +18206,20 @@ msgstr ""
 msgid "KiCad Gerber Viewer"
 msgstr ""
 
-#: gerbview/gerbview_frame.cpp:616
+#: gerbview/gerbview_frame.cpp:620
 msgid "Drawing layer not in use"
 msgstr ""
 
-#: gerbview/gerbview_frame.cpp:633
+#: gerbview/gerbview_frame.cpp:637
 msgid "(with X2 attributes)"
 msgstr ""
 
-#: gerbview/gerbview_frame.cpp:642
+#: gerbview/gerbview_frame.cpp:646
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr ""
 
-#: gerbview/gerbview_frame.cpp:658
+#: gerbview/gerbview_frame.cpp:662
 msgid "X2 attr"
 msgstr ""
 
@@ -19194,41 +19194,41 @@ msgstr ""
 msgid "prints version information and exits"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:213
+#: kicad/kicad_manager_frame.cpp:221
 msgid "Project Files"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:217
+#: kicad/kicad_manager_frame.cpp:225
 msgid "Editors"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:707
+#: kicad/kicad_manager_frame.cpp:715
 msgid "Load File to Edit"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:780
+#: kicad/kicad_manager_frame.cpp:788
 msgid "[no project loaded]"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:820
+#: kicad/kicad_manager_frame.cpp:828
 #, c-format
 msgid "Project: %s"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:864
+#: kicad/kicad_manager_frame.cpp:872
 msgid "Restoring session"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:877
+#: kicad/kicad_manager_frame.cpp:885
 #, c-format
 msgid "Restoring '%s'"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:906
+#: kicad/kicad_manager_frame.cpp:914
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:907
+#: kicad/kicad_manager_frame.cpp:915
 msgid "Check for updates"
 msgstr ""
 
@@ -20450,46 +20450,46 @@ msgstr ""
 msgid "KiCad Drawing Sheet Editor"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:160
+#: pagelayout_editor/pl_editor_frame.cpp:164
 msgid "coord origin: Right Bottom page corner"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:190 pcbnew/pcb_edit_frame.cpp:299
-#: pcbnew/pcb_edit_frame.cpp:1522
+#: pagelayout_editor/pl_editor_frame.cpp:194 pcbnew/pcb_edit_frame.cpp:303
+#: pcbnew/pcb_edit_frame.cpp:1526
 msgid "Properties"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:343
+#: pagelayout_editor/pl_editor_frame.cpp:347
 #, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:460
+#: pagelayout_editor/pl_editor_frame.cpp:464
 msgid "Error Init Printer info"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:565
+#: pagelayout_editor/pl_editor_frame.cpp:569
 msgid "[no drawing sheet loaded]"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:779
+#: pagelayout_editor/pl_editor_frame.cpp:783
 #, c-format
 msgid "coord origin: %s"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:920
+#: pagelayout_editor/pl_editor_frame.cpp:924
 msgid "New drawing sheet file is unsaved"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:924
+#: pagelayout_editor/pl_editor_frame.cpp:928
 msgid "Drawing sheet changes are unsaved"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:968
+#: pagelayout_editor/pl_editor_frame.cpp:972
 msgid "Page Width"
 msgstr ""
 
-#: pagelayout_editor/pl_editor_frame.cpp:969
+#: pagelayout_editor/pl_editor_frame.cpp:973
 msgid "Page Height"
 msgstr ""
 
@@ -22000,17 +22000,17 @@ msgstr ""
 msgid "Galvanic Corrosion"
 msgstr ""
 
-#: pcb_calculator/pcb_calculator_frame.cpp:243
+#: pcb_calculator/pcb_calculator_frame.cpp:247
 msgid "Write Data Failed"
 msgstr ""
 
-#: pcb_calculator/pcb_calculator_frame.cpp:247
+#: pcb_calculator/pcb_calculator_frame.cpp:251
 msgid ""
 "No data filename to save modifications.\n"
 "Do you want to exit and abandon your changes?"
 msgstr ""
 
-#: pcb_calculator/pcb_calculator_frame.cpp:257
+#: pcb_calculator/pcb_calculator_frame.cpp:261
 #, c-format
 msgid ""
 "Unable to write file '%s'\n"
@@ -23478,7 +23478,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:167
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:230 pcbnew/pcb_edit_frame.cpp:2322
+#: pcbnew/dialogs/dialog_drc.cpp:230 pcbnew/pcb_edit_frame.cpp:2326
 msgid "Custom Rules"
 msgstr ""
 
@@ -31703,42 +31703,42 @@ msgstr ""
 msgid "KiCad Footprint Editor"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:195 pcbnew/zone_settings.cpp:225
+#: pcbnew/footprint_edit_frame.cpp:199 pcbnew/zone_settings.cpp:225
 msgid "Inner layers"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:232 pcbnew/footprint_edit_frame.cpp:867
-#: pcbnew/pcb_edit_frame.cpp:295 pcbnew/pcb_edit_frame.cpp:1521
+#: pcbnew/footprint_edit_frame.cpp:236 pcbnew/footprint_edit_frame.cpp:871
+#: pcbnew/pcb_edit_frame.cpp:299 pcbnew/pcb_edit_frame.cpp:1525
 msgid "Selection Filter"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:300
+#: pcbnew/footprint_edit_frame.cpp:304
 msgid "Footprint changes are unsaved"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:544
+#: pcbnew/footprint_edit_frame.cpp:548
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:909
+#: pcbnew/footprint_edit_frame.cpp:913
 #, c-format
 msgid "[from %s]"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:944
+#: pcbnew/footprint_edit_frame.cpp:948
 msgid "[no footprint loaded]"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:1000
+#: pcbnew/footprint_edit_frame.cpp:1004
 msgid "Updating Footprint Libraries"
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:1310
+#: pcbnew/footprint_edit_frame.cpp:1314
 msgid "No footprint selected."
 msgstr ""
 
-#: pcbnew/footprint_edit_frame.cpp:1319
+#: pcbnew/footprint_edit_frame.cpp:1323
 msgid "Footprint Image File Name"
 msgstr ""
 
@@ -32993,61 +32993,61 @@ msgstr ""
 msgid "Export netlist used to update schematics"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:310
+#: pcbnew/pcb_edit_frame.cpp:314
 msgid "Search"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:406
+#: pcbnew/pcb_edit_frame.cpp:410
 msgid "New PCB file is unsaved"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1452
+#: pcbnew/pcb_edit_frame.cpp:1456
 msgid "Board file is read only."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1487
+#: pcbnew/pcb_edit_frame.cpp:1491
 msgid "PCB file changes are unsaved"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1786
+#: pcbnew/pcb_edit_frame.cpp:1790
 msgid "The schematic for this board cannot be found."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1810
+#: pcbnew/pcb_edit_frame.cpp:1814
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1835
+#: pcbnew/pcb_edit_frame.cpp:1839
 msgid "Eeschema netlist"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1846
+#: pcbnew/pcb_edit_frame.cpp:1850
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1873
+#: pcbnew/pcb_edit_frame.cpp:1877
 #, c-format
 msgid "Schematic file '%s' not found."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1903
+#: pcbnew/pcb_edit_frame.cpp:1907
 msgid "Eeschema failed to load."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:2316
+#: pcbnew/pcb_edit_frame.cpp:2320
 msgid "Edit design rules"
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:2328
+#: pcbnew/pcb_edit_frame.cpp:2332
 msgid "Could not compile custom design rules."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:2366
+#: pcbnew/pcb_edit_frame.cpp:2370
 msgid "Export Hyperlynx Layout"
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 08:24-0800\n"
+"POT-Creation-Date: 2024-02-01 10:06+0100\n"
 "PO-Revision-Date: 2023-06-21 11:26+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -249,7 +249,7 @@ msgid "3D Grid"
 msgstr "3D-rutenett"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:146
-#: bitmap2component/bitmap2cmp_gui.cpp:237 cvpcb/menubar.cpp:87
+#: bitmap2component/bitmap2cmp_gui.cpp:241 cvpcb/menubar.cpp:87
 #: eeschema/menubar.cpp:319
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:180
 #: eeschema/toolbars_symbol_viewer.cpp:135 gerbview/menubar.cpp:237
@@ -1200,7 +1200,7 @@ msgstr "Last inn kretskort og 3D-modeller på nytt"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:575
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:589
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:603
-#: pagelayout_editor/pl_editor_frame.cpp:754
+#: pagelayout_editor/pl_editor_frame.cpp:758
 #: pcb_calculator/widgets/unit_selector.cpp:34
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:147
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:171
@@ -1285,70 +1285,70 @@ msgstr "Tommer"
 msgid "DPI"
 msgstr "DPI (skjermoppløsning)"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:219 common/tool/actions.cpp:61
+#: bitmap2component/bitmap2cmp_gui.cpp:223 common/tool/actions.cpp:61
 msgid "Open..."
 msgstr "Åpne..."
 
-#: bitmap2component/bitmap2cmp_gui.cpp:220
+#: bitmap2component/bitmap2cmp_gui.cpp:224
 #, fuzzy
 msgid "Load source image"
 msgstr "Vis som speilbilde"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:229 common/hotkey_store.cpp:57
+#: bitmap2component/bitmap2cmp_gui.cpp:233 common/hotkey_store.cpp:57
 #: common/tool/action_menu.cpp:230 common/tool/actions.cpp:114
 msgid "Quit"
 msgstr "Avslutt"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:230
+#: bitmap2component/bitmap2cmp_gui.cpp:234
 #, fuzzy
 msgid "Quit Image Converter"
 msgstr "Konvertert"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:375
+#: bitmap2component/bitmap2cmp_gui.cpp:379
 #: eeschema/tools/sch_drawing_tools.cpp:593
-#: pagelayout_editor/pl_editor_frame.cpp:862 pcbnew/tools/drawing_tool.cpp:683
+#: pagelayout_editor/pl_editor_frame.cpp:866 pcbnew/tools/drawing_tool.cpp:683
 msgid "Choose Image"
 msgstr "Velg bilde"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:376
+#: bitmap2component/bitmap2cmp_gui.cpp:380
 #: eeschema/tools/sch_drawing_tools.cpp:594
-#: pagelayout_editor/pl_editor_frame.cpp:863 pcbnew/tools/drawing_tool.cpp:684
+#: pagelayout_editor/pl_editor_frame.cpp:867 pcbnew/tools/drawing_tool.cpp:684
 msgid "Image Files"
 msgstr "Bildefiler"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:714
+#: bitmap2component/bitmap2cmp_gui.cpp:718
 msgid "Unable to export to the Clipboard"
 msgstr "Kan ikke eksportere til utklippstavlen"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:739
+#: bitmap2component/bitmap2cmp_gui.cpp:743
 msgid "Create Logo File"
 msgstr "Opprett logofil"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:756
-#: bitmap2component/bitmap2cmp_gui.cpp:792
-#: bitmap2component/bitmap2cmp_gui.cpp:827
-#: bitmap2component/bitmap2cmp_gui.cpp:862
+#: bitmap2component/bitmap2cmp_gui.cpp:760
+#: bitmap2component/bitmap2cmp_gui.cpp:796
+#: bitmap2component/bitmap2cmp_gui.cpp:831
+#: bitmap2component/bitmap2cmp_gui.cpp:866
 #, fuzzy, c-format
 msgid "File '%s' could not be created."
 msgstr "Filen %s kunne ikke opprettes."
 
-#: bitmap2component/bitmap2cmp_gui.cpp:776
+#: bitmap2component/bitmap2cmp_gui.cpp:780
 msgid "Create PostScript File"
 msgstr "Opprett PostScript-fil"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:812
+#: bitmap2component/bitmap2cmp_gui.cpp:816
 msgid "Create Symbol Library"
 msgstr "Opprett symbolbibliotek"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:847
+#: bitmap2component/bitmap2cmp_gui.cpp:851
 msgid "Create Footprint Library"
 msgstr "Lag Footprint Library"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:885
+#: bitmap2component/bitmap2cmp_gui.cpp:889
 msgid "Error allocating memory for potrace bitmap"
 msgstr "Feil ved tildeling av minne for potrace bitmap"
 
-#: bitmap2component/bitmap2cmp_gui.cpp:912
+#: bitmap2component/bitmap2cmp_gui.cpp:916
 #: common/widgets/wx_html_report_panel_base.cpp:41
 #: eeschema/dialogs/dialog_erc_base.cpp:127 gerbview/files.cpp:399
 #: gerbview/readgerb.cpp:76
@@ -4240,7 +4240,7 @@ msgid "Colors"
 msgstr "Farger"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1438
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
 #: kicad/tools/kicad_manager_actions.cpp:80
 #, fuzzy
 msgid "Schematic Editor"
@@ -4257,7 +4257,7 @@ msgid "Field Name Templates"
 msgstr "Feltnavnemaler"
 
 #: common/eda_base_frame.cpp:1104 common/tool/actions.cpp:610
-#: kicad/tools/kicad_manager_actions.cpp:98 pcbnew/footprint_edit_frame.cpp:947
+#: kicad/tools/kicad_manager_actions.cpp:98 pcbnew/footprint_edit_frame.cpp:951
 #: pcbnew/menubar_footprint_editor.cpp:92
 msgid "Footprint Editor"
 msgstr "Footprint Editor"
@@ -4269,7 +4269,7 @@ msgstr "Forvalgte verdier"
 
 #: common/eda_base_frame.cpp:1113 common/hotkey_store.cpp:74
 #: kicad/tools/kicad_manager_actions.cpp:92 pcbnew/menubar_pcb_editor.cpp:185
-#: pcbnew/pcb_edit_frame.cpp:184 pcbnew/pcb_edit_frame.cpp:1614
+#: pcbnew/pcb_edit_frame.cpp:184 pcbnew/pcb_edit_frame.cpp:1618
 #: pcbnew/tools/zone_filler_tool.cpp:277
 #, fuzzy
 msgid "PCB Editor"
@@ -4309,7 +4309,7 @@ msgid "Raytracing Renderer"
 msgstr "Raytracing gjengivelsesalternativer"
 
 #: common/eda_base_frame.cpp:1142 common/hotkey_store.cpp:77
-#: gerbview/gerbview_frame.cpp:611 gerbview/gerbview_frame.cpp:635
+#: gerbview/gerbview_frame.cpp:615 gerbview/gerbview_frame.cpp:639
 #: gerbview/menubar.cpp:160 kicad/tools/kicad_manager_actions.cpp:104
 #, fuzzy
 msgid "Gerber Viewer"
@@ -4322,7 +4322,7 @@ msgstr "Plugin-alternativer"
 
 #: common/eda_base_frame.cpp:1159 common/hotkey_store.cpp:75
 #: kicad/tools/kicad_manager_actions.cpp:121 pagelayout_editor/menubar.cpp:89
-#: pagelayout_editor/pl_editor_frame.cpp:567
+#: pagelayout_editor/pl_editor_frame.cpp:571
 #, fuzzy
 msgid "Drawing Sheet Editor"
 msgstr "Regneark"
@@ -4376,7 +4376,7 @@ msgstr "Ukjent MIME-type for doc-fil \"%s\""
 
 #: common/eda_draw_frame.cpp:149 common/tool/actions.cpp:497
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:31
-#: pagelayout_editor/pl_editor_frame.cpp:163
+#: pagelayout_editor/pl_editor_frame.cpp:167
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:55
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:106
@@ -4386,7 +4386,7 @@ msgstr "Ukjent MIME-type for doc-fil \"%s\""
 msgid "Inches"
 msgstr "Tommer"
 
-#: common/eda_draw_frame.cpp:155 pagelayout_editor/pl_editor_frame.cpp:166
+#: common/eda_draw_frame.cpp:155 pagelayout_editor/pl_editor_frame.cpp:170
 #: pcbnew/tools/drawing_tool.cpp:314 pcbnew/tools/edit_tool_move_fct.cpp:356
 #: pcbnew/tools/pcb_actions.cpp:742
 #, fuzzy
@@ -4411,7 +4411,7 @@ msgstr "Zoom %.2f"
 msgid "grid %s"
 msgstr "Rutenettakser"
 
-#: common/eda_draw_frame.cpp:646 pagelayout_editor/pl_editor_frame.cpp:752
+#: common/eda_draw_frame.cpp:646 pagelayout_editor/pl_editor_frame.cpp:756
 msgid "inches"
 msgstr "tommer"
 
@@ -4429,7 +4429,7 @@ msgstr "tommer"
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:80
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:91
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:130
-#: pagelayout_editor/pl_editor_frame.cpp:753
+#: pagelayout_editor/pl_editor_frame.cpp:757
 msgid "mils"
 msgstr "mils"
 
@@ -5823,7 +5823,7 @@ msgid "Show Page %s"
 msgstr "Vis sidegrenser"
 
 #: common/plotters/PDF_plotter.cpp:1239
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:812
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:816
 #: eeschema/tools/sch_navigate_tool.cpp:86
 #, c-format
 msgid "Open %s"
@@ -6807,7 +6807,7 @@ msgid "Footprint not found."
 msgstr "Fotavtrykk ikke funnet"
 
 #: common/widgets/footprint_select_widget.cpp:70 cvpcb/cvpcb_mainframe.cpp:907
-#: pcbnew/footprint_edit_frame.cpp:972 pcbnew/load_select_footprint.cpp:225
+#: pcbnew/footprint_edit_frame.cpp:976 pcbnew/load_select_footprint.cpp:225
 msgid "Loading Footprint Libraries"
 msgstr "Laster inn fotavtrykksbiblioteker"
 
@@ -12113,8 +12113,8 @@ msgid "/path/to/sheet"
 msgstr "/ sti / til / ark"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:27
-#: pcbnew/footprint_edit_frame.cpp:228 pcbnew/footprint_edit_frame.cpp:865
-#: pcbnew/pcb_edit_frame.cpp:290 pcbnew/pcb_edit_frame.cpp:1520
+#: pcbnew/footprint_edit_frame.cpp:232 pcbnew/footprint_edit_frame.cpp:869
+#: pcbnew/pcb_edit_frame.cpp:294 pcbnew/pcb_edit_frame.cpp:1524
 msgid "Appearance"
 msgstr "Utseende"
 
@@ -12829,8 +12829,8 @@ msgstr ""
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1062
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1075
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1578
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1630
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1582
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1634
 #: eeschema/tools/sch_editor_control.cpp:478
 #: eeschema/tools/sch_editor_control.cpp:493
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1112
@@ -14154,26 +14154,26 @@ msgstr "Bussalias %s Medlemmer"
 msgid "KiCad Schematic Editor"
 msgstr "Bytt til skjematisk redaktør"
 
-#: eeschema/sch_edit_frame.cpp:180 eeschema/sch_edit_frame.cpp:1722
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1726
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Skjematisk paritet (%d)"
 
-#: eeschema/sch_edit_frame.cpp:271
+#: eeschema/sch_edit_frame.cpp:275
 msgid "New schematic file is unsaved"
 msgstr "Ny skjematisk fil er ikke lagret"
 
-#: eeschema/sch_edit_frame.cpp:803 eeschema/sim/sim_plot_frame.cpp:1786
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:539
+#: eeschema/sch_edit_frame.cpp:807 eeschema/sim/sim_plot_frame.cpp:1786
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:543
 #: eeschema/symbol_editor/symbol_editor.cpp:1177
-#: pagelayout_editor/pl_editor_frame.cpp:395
-#: pcbnew/footprint_edit_frame.cpp:720 pcbnew/footprint_edit_frame.cpp:760
-#: pcbnew/pcb_edit_frame.cpp:1076
+#: pagelayout_editor/pl_editor_frame.cpp:399
+#: pcbnew/footprint_edit_frame.cpp:724 pcbnew/footprint_edit_frame.cpp:764
+#: pcbnew/pcb_edit_frame.cpp:1080
 #, fuzzy, c-format
 msgid "Save changes to '%s' before closing?"
 msgstr "Lagre endringer til '%s' før lukking?"
 
-#: eeschema/sch_edit_frame.cpp:964
+#: eeschema/sch_edit_frame.cpp:968
 #, fuzzy
 msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
@@ -14184,50 +14184,50 @@ msgstr ""
 "frittstående modus. For å lage / oppdatere PCB fra skjemaer, start Kicad-"
 "skallet og opprett et prosjekt."
 
-#: eeschema/sch_edit_frame.cpp:1101 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1028
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Skjematisk"
 
-#: eeschema/sch_edit_frame.cpp:1118
+#: eeschema/sch_edit_frame.cpp:1122
 msgid "New Schematic"
 msgstr "Ny skjematisk"
 
-#: eeschema/sch_edit_frame.cpp:1130
+#: eeschema/sch_edit_frame.cpp:1134
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Skjematisk fil \"%s\" eksisterer allerede."
 
-#: eeschema/sch_edit_frame.cpp:1151
+#: eeschema/sch_edit_frame.cpp:1155
 msgid "Open Schematic"
 msgstr "Åpne skjematisk"
 
-#: eeschema/sch_edit_frame.cpp:1220
+#: eeschema/sch_edit_frame.cpp:1224
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Eksportering av nettlisten krever et fullstendig kommentert skjema."
 
-#: eeschema/sch_edit_frame.cpp:1245
+#: eeschema/sch_edit_frame.cpp:1249
 msgid "Could not open CvPcb"
 msgstr "Kunne ikke åpne CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1428 eeschema/sim/sim_plot_frame.cpp:351
-#: kicad/kicad_manager_frame.cpp:776 pcbnew/footprint_edit_frame.cpp:931
-#: pcbnew/pcb_edit_frame.cpp:1609
+#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
+#: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr "[Skrivebeskyttet]"
 
-#: eeschema/sch_edit_frame.cpp:1431 eeschema/sim/sim_plot_frame.cpp:354
-#: pcbnew/footprint_edit_frame.cpp:940 pcbnew/pcb_edit_frame.cpp:1612
+#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr "[Ikke lagret]"
 
-#: eeschema/sch_edit_frame.cpp:1435
+#: eeschema/sch_edit_frame.cpp:1439
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Skjematisk lagret"
 
-#: eeschema/sch_edit_frame.cpp:1745
+#: eeschema/sch_edit_frame.cpp:1749
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Fremhevet nett: %s"
@@ -16984,41 +16984,41 @@ msgstr "Biblioteksredaktør"
 msgid "KiCad Symbol Editor"
 msgstr "Symbolredaktør"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:137
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1031
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:141
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1035
 #: eeschema/symbol_library.cpp:475 eeschema/symbol_tree_model_adapter.cpp:74
 #: eeschema/symbol_viewer_frame.cpp:336
 msgid "Loading Symbol Libraries"
 msgstr "Laster inn symbolbiblioteker"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:191
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1212
-#: pcbnew/footprint_edit_frame.cpp:219 pcbnew/footprint_edit_frame.cpp:861
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:195
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1216
+#: pcbnew/footprint_edit_frame.cpp:223 pcbnew/footprint_edit_frame.cpp:865
 msgid "Libraries"
 msgstr "Bibliotek"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:247
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:251
 msgid "Library changes are unsaved"
 msgstr "Bibliotekendringene er ikke lagret"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:258
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:262
 #, fuzzy
 msgid "Symbol library loading was cancelled by user."
 msgstr "Bibliotek %s eksisterer allerede."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:771
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:775
 #, c-format
 msgid ""
 "Editing symbol %s from schematic.  Saving will update the schematic only."
 msgstr ""
 "Redigeringssymbol %s fra skjematisk. Lagring oppdaterer skjematisk bare."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:780
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:784
 #, fuzzy
 msgid "Manage symbol libraries"
 msgstr "Administrer symbolbiblioteker ..."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:791
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:795
 msgid ""
 "Symbols in legacy libraries are not editable.  Use Manage Symbol Libraries "
 "to migrate to current format."
@@ -17026,19 +17026,19 @@ msgstr ""
 "Symboler i foreldede bibliotek kan ikke redigeres. Bruk «Håndter "
 "symbolbibliotek» for å migrere til nåværende format."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:808
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:812
 #, fuzzy, c-format
 msgid "Symbol %s is derived from %s.  Symbol graphics will not be editable."
 msgstr "biblioteket \"%s\" kan ikke slettes"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:887
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:938
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:891
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:942
 #: eeschema/tools/sch_editor_control.cpp:389
 #, fuzzy, c-format
 msgid "Library '%s' already exists."
 msgstr "Bibliotek %s eksisterer allerede."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:895
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:899
 #, fuzzy, c-format
 msgid ""
 "Could not create the library file '%s'.\n"
@@ -17047,23 +17047,23 @@ msgstr ""
 "Kunne ikke opprette biblioteksfilen '%s'.\n"
 "Sjekk skrivetillatelse."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:906
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:944
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:910
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:948
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:215
 msgid "Could not open the library file."
 msgstr "Kunne ikke åpne bibliotekfilen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1037
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1041
 #, fuzzy, c-format
 msgid "Loading library '%s'..."
 msgstr "Laster inn biblioteket \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1131
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1135
 #, fuzzy, c-format
 msgid "Failed to save backup to '%s'."
 msgstr "Kunne ikke lagre sikkerhetskopien i \"%s\""
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1312
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1316
 #: eeschema/symbol_viewer_frame.cpp:549
 #, fuzzy, c-format
 msgid ""
@@ -17073,12 +17073,12 @@ msgstr ""
 "Den gjeldende konfigurasjonen inkluderer ikke symbolbiblioteket «%s».\n"
 "Bruk Manage Symbol Libraries til å redigere oppsettet."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1315
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1319
 #: eeschema/symbol_viewer_frame.cpp:552
 msgid "Library not found in symbol library table."
 msgstr "Biblioteket ble ikke funnet i symbolbiblioteketabellen."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1323
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1327
 #: eeschema/symbol_viewer_frame.cpp:556
 #, fuzzy, c-format
 msgid ""
@@ -17088,13 +17088,13 @@ msgstr ""
 "Biblioteket med kallenavnet «%s» er ikke aktivert\n"
 "i gjeldende oppsett. Bruk Manage Symbol Libraries tilå endre oppsettet."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1326
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1330
 #: eeschema/symbol_viewer_frame.cpp:559
 msgid "Symbol library not enabled."
 msgstr "Symbolbiblioteket ikke aktivert."
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1575
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1627
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1579
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1631
 #, fuzzy
 msgid "Error saving global library table."
 msgstr ""
@@ -17102,8 +17102,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1576
-#: eeschema/symbol_editor/symbol_edit_frame.cpp:1628
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1580
+#: eeschema/symbol_editor/symbol_edit_frame.cpp:1632
 #, fuzzy
 msgid "Error saving project library table."
 msgstr ""
@@ -18765,8 +18765,8 @@ msgid "Press <ESC> to cancel image creation."
 msgstr ""
 
 #: eeschema/tools/sch_drawing_tools.cpp:622
-#: pagelayout_editor/pl_editor_frame.cpp:874
-#: pagelayout_editor/pl_editor_frame.cpp:882 pcbnew/tools/drawing_tool.cpp:713
+#: pagelayout_editor/pl_editor_frame.cpp:878
+#: pagelayout_editor/pl_editor_frame.cpp:886 pcbnew/tools/drawing_tool.cpp:713
 #, fuzzy, c-format
 msgid "Could not load image from '%s'."
 msgstr "Kunne ikke laste inn bildet fra \"%s\""
@@ -19502,7 +19502,7 @@ msgstr "Formateringsinnstillinger"
 msgid "Usually: 3:3 in mm and 2:4 in inches"
 msgstr ""
 
-#: gerbview/events_called_functions.cpp:182 gerbview/gerbview_frame.cpp:156
+#: gerbview/events_called_functions.cpp:182 gerbview/gerbview_frame.cpp:160
 msgid "Layers Manager"
 msgstr "Lagleder"
 
@@ -19831,21 +19831,21 @@ msgstr "Fjern siste jobbfiler"
 msgid "KiCad Gerber Viewer"
 msgstr "Gerber-filer"
 
-#: gerbview/gerbview_frame.cpp:616
+#: gerbview/gerbview_frame.cpp:620
 #, fuzzy
 msgid "Drawing layer not in use"
 msgstr "Tegnesjikt %d ikke i bruk"
 
-#: gerbview/gerbview_frame.cpp:633
+#: gerbview/gerbview_frame.cpp:637
 msgid "(with X2 attributes)"
 msgstr "(med X2-attributter)"
 
-#: gerbview/gerbview_frame.cpp:642
+#: gerbview/gerbview_frame.cpp:646
 #, c-format
 msgid "Image name: \"%s\"  Layer name: \"%s\""
 msgstr "Bildenavn: \"%s\" Lagnavn: \"%s\""
 
-#: gerbview/gerbview_frame.cpp:658
+#: gerbview/gerbview_frame.cpp:662
 msgid "X2 attr"
 msgstr "X2 attr"
 
@@ -20899,44 +20899,44 @@ msgstr "Filen \"%s\" ser ikke ut til å være en gyldig skjematisk fil."
 msgid "prints version information and exits"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:213
+#: kicad/kicad_manager_frame.cpp:221
 #, fuzzy
 msgid "Project Files"
 msgstr "Bla gjennom prosjektfiler"
 
-#: kicad/kicad_manager_frame.cpp:217
+#: kicad/kicad_manager_frame.cpp:225
 #, fuzzy
 msgid "Editors"
 msgstr "Rediger"
 
-#: kicad/kicad_manager_frame.cpp:707
+#: kicad/kicad_manager_frame.cpp:715
 msgid "Load File to Edit"
 msgstr "Last inn fil for å redigere"
 
-#: kicad/kicad_manager_frame.cpp:780
+#: kicad/kicad_manager_frame.cpp:788
 #, fuzzy
 msgid "[no project loaded]"
 msgstr "Ingen fotavtrykk lastet."
 
-#: kicad/kicad_manager_frame.cpp:820
+#: kicad/kicad_manager_frame.cpp:828
 #, c-format
 msgid "Project: %s"
 msgstr "Prosjekt: %s"
 
-#: kicad/kicad_manager_frame.cpp:864
+#: kicad/kicad_manager_frame.cpp:872
 msgid "Restoring session"
 msgstr "Gjenopprettingsøkt"
 
-#: kicad/kicad_manager_frame.cpp:877
+#: kicad/kicad_manager_frame.cpp:885
 #, fuzzy, c-format
 msgid "Restoring '%s'"
 msgstr "Gjenoppretter \"%s\""
 
-#: kicad/kicad_manager_frame.cpp:906
+#: kicad/kicad_manager_frame.cpp:914
 msgid "Would you like to automatically check for plugin updates on startup?"
 msgstr ""
 
-#: kicad/kicad_manager_frame.cpp:907
+#: kicad/kicad_manager_frame.cpp:915
 #, fuzzy
 msgid "Check for updates"
 msgstr "Bekreft endring"
@@ -22263,50 +22263,50 @@ msgstr "Biblioteket \"%s\" er skrivebeskyttet."
 msgid "KiCad Drawing Sheet Editor"
 msgstr "Regneark"
 
-#: pagelayout_editor/pl_editor_frame.cpp:160
+#: pagelayout_editor/pl_editor_frame.cpp:164
 msgid "coord origin: Right Bottom page corner"
 msgstr "koord opprinnelse: Høyre nederste sidehjørne"
 
-#: pagelayout_editor/pl_editor_frame.cpp:190 pcbnew/pcb_edit_frame.cpp:299
-#: pcbnew/pcb_edit_frame.cpp:1522
+#: pagelayout_editor/pl_editor_frame.cpp:194 pcbnew/pcb_edit_frame.cpp:303
+#: pcbnew/pcb_edit_frame.cpp:1526
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: pagelayout_editor/pl_editor_frame.cpp:343
+#: pagelayout_editor/pl_editor_frame.cpp:347
 #, fuzzy, c-format
 msgid "Error loading drawing sheet '%s'."
 msgstr "Feil ved lasting av redigeringsprogram"
 
-#: pagelayout_editor/pl_editor_frame.cpp:460
+#: pagelayout_editor/pl_editor_frame.cpp:464
 msgid "Error Init Printer info"
 msgstr "Feil ved initial skriverinformasjon"
 
-#: pagelayout_editor/pl_editor_frame.cpp:565
+#: pagelayout_editor/pl_editor_frame.cpp:569
 #, fuzzy
 msgid "[no drawing sheet loaded]"
 msgstr "Fullfør tegningsarket"
 
-#: pagelayout_editor/pl_editor_frame.cpp:779
+#: pagelayout_editor/pl_editor_frame.cpp:783
 #, c-format
 msgid "coord origin: %s"
 msgstr "koord opprinnelse: %s"
 
-#: pagelayout_editor/pl_editor_frame.cpp:920
+#: pagelayout_editor/pl_editor_frame.cpp:924
 #, fuzzy
 msgid "New drawing sheet file is unsaved"
 msgstr "Ny skjematisk fil er ikke lagret"
 
-#: pagelayout_editor/pl_editor_frame.cpp:924
+#: pagelayout_editor/pl_editor_frame.cpp:928
 #, fuzzy
 msgid "Drawing sheet changes are unsaved"
 msgstr "Endringer i fotavtrykk er ikke lagret"
 
-#: pagelayout_editor/pl_editor_frame.cpp:968
+#: pagelayout_editor/pl_editor_frame.cpp:972
 #, fuzzy
 msgid "Page Width"
 msgstr "DP-bredde"
 
-#: pagelayout_editor/pl_editor_frame.cpp:969
+#: pagelayout_editor/pl_editor_frame.cpp:973
 #, fuzzy
 msgid "Page Height"
 msgstr "Teksthøyde"
@@ -24005,12 +24005,12 @@ msgstr "Styretimer"
 msgid "Galvanic Corrosion"
 msgstr ""
 
-#: pcb_calculator/pcb_calculator_frame.cpp:243
+#: pcb_calculator/pcb_calculator_frame.cpp:247
 #, fuzzy
 msgid "Write Data Failed"
 msgstr "Skriv datafilfeil"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:247
+#: pcb_calculator/pcb_calculator_frame.cpp:251
 #, fuzzy
 msgid ""
 "No data filename to save modifications.\n"
@@ -24019,7 +24019,7 @@ msgstr ""
 "Data modifisert, og ingen datafilnavn for å lagre modifikasjoner\n"
 "Vil du avslutte og forlate endringen?"
 
-#: pcb_calculator/pcb_calculator_frame.cpp:257
+#: pcb_calculator/pcb_calculator_frame.cpp:261
 #, fuzzy, c-format
 msgid ""
 "Unable to write file '%s'\n"
@@ -25647,7 +25647,7 @@ msgstr "Forhåndsdefinerte størrelser:"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:167
 #: pcbnew/dialogs/dialog_constraints_reporter.cpp:54
-#: pcbnew/dialogs/dialog_drc.cpp:230 pcbnew/pcb_edit_frame.cpp:2322
+#: pcbnew/dialogs/dialog_drc.cpp:230 pcbnew/pcb_edit_frame.cpp:2326
 #, fuzzy
 msgid "Custom Rules"
 msgstr "Egendefinert lagsett"
@@ -34528,43 +34528,43 @@ msgstr "fotavtrykk %s"
 msgid "KiCad Footprint Editor"
 msgstr "Footprint Editor"
 
-#: pcbnew/footprint_edit_frame.cpp:195 pcbnew/zone_settings.cpp:225
+#: pcbnew/footprint_edit_frame.cpp:199 pcbnew/zone_settings.cpp:225
 msgid "Inner layers"
 msgstr "Indre lag"
 
-#: pcbnew/footprint_edit_frame.cpp:232 pcbnew/footprint_edit_frame.cpp:867
-#: pcbnew/pcb_edit_frame.cpp:295 pcbnew/pcb_edit_frame.cpp:1521
+#: pcbnew/footprint_edit_frame.cpp:236 pcbnew/footprint_edit_frame.cpp:871
+#: pcbnew/pcb_edit_frame.cpp:299 pcbnew/pcb_edit_frame.cpp:1525
 msgid "Selection Filter"
 msgstr "Utvalgsfilter"
 
-#: pcbnew/footprint_edit_frame.cpp:300
+#: pcbnew/footprint_edit_frame.cpp:304
 msgid "Footprint changes are unsaved"
 msgstr "Endringer i fotavtrykk er ikke lagret"
 
-#: pcbnew/footprint_edit_frame.cpp:544
+#: pcbnew/footprint_edit_frame.cpp:548
 #, c-format
 msgid "Editing %s from board.  Saving will update the board only."
 msgstr "Redigering %s fra tavle. Lagring oppdaterer bare tavlen."
 
-#: pcbnew/footprint_edit_frame.cpp:909
+#: pcbnew/footprint_edit_frame.cpp:913
 #, fuzzy, c-format
 msgid "[from %s]"
 msgstr "(fra %s)"
 
-#: pcbnew/footprint_edit_frame.cpp:944
+#: pcbnew/footprint_edit_frame.cpp:948
 #, fuzzy
 msgid "[no footprint loaded]"
 msgstr "Ingen fotavtrykk lastet."
 
-#: pcbnew/footprint_edit_frame.cpp:1000
+#: pcbnew/footprint_edit_frame.cpp:1004
 msgid "Updating Footprint Libraries"
 msgstr "Oppdaterer Footprint Libraries"
 
-#: pcbnew/footprint_edit_frame.cpp:1310
+#: pcbnew/footprint_edit_frame.cpp:1314
 msgid "No footprint selected."
 msgstr "Ingen fotavtrykk valgt."
 
-#: pcbnew/footprint_edit_frame.cpp:1319
+#: pcbnew/footprint_edit_frame.cpp:1323
 msgid "Footprint Image File Name"
 msgstr "Footprint Image File Name"
 
@@ -35907,29 +35907,29 @@ msgstr "Bytt til PCB Editor"
 msgid "Export netlist used to update schematics"
 msgstr "Eksportering av nettlisten krever et fullstendig kommentert skjema."
 
-#: pcbnew/pcb_edit_frame.cpp:310
+#: pcbnew/pcb_edit_frame.cpp:314
 #, fuzzy
 msgid "Search"
 msgstr "Søketekst"
 
-#: pcbnew/pcb_edit_frame.cpp:406
+#: pcbnew/pcb_edit_frame.cpp:410
 msgid "New PCB file is unsaved"
 msgstr "Ny PCB-fil er ikke lagret"
 
-#: pcbnew/pcb_edit_frame.cpp:1452
+#: pcbnew/pcb_edit_frame.cpp:1456
 #, fuzzy
 msgid "Board file is read only."
 msgstr "Bare styreområdet"
 
-#: pcbnew/pcb_edit_frame.cpp:1487
+#: pcbnew/pcb_edit_frame.cpp:1491
 msgid "PCB file changes are unsaved"
 msgstr "PCB-filendringer er ikke lagret"
 
-#: pcbnew/pcb_edit_frame.cpp:1786
+#: pcbnew/pcb_edit_frame.cpp:1790
 msgid "The schematic for this board cannot be found."
 msgstr "Skjemaet for dette brettet kan ikke bli funnet."
 
-#: pcbnew/pcb_edit_frame.cpp:1810
+#: pcbnew/pcb_edit_frame.cpp:1814
 #, fuzzy
 msgid ""
 "Cannot update the PCB because PCB editor is opened in stand-alone mode. In "
@@ -35940,36 +35940,36 @@ msgstr ""
 "opprette eller oppdatere PCB fra skjemaer, må du starte KiCad-prosjektleder "
 "og opprette et prosjekt."
 
-#: pcbnew/pcb_edit_frame.cpp:1835
+#: pcbnew/pcb_edit_frame.cpp:1839
 msgid "Eeschema netlist"
 msgstr "Eeschema netlist"
 
-#: pcbnew/pcb_edit_frame.cpp:1846
+#: pcbnew/pcb_edit_frame.cpp:1850
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
 
-#: pcbnew/pcb_edit_frame.cpp:1873
+#: pcbnew/pcb_edit_frame.cpp:1877
 #, fuzzy, c-format
 msgid "Schematic file '%s' not found."
 msgstr "Skjematisk fil \"%s\" ble ikke funnet."
 
-#: pcbnew/pcb_edit_frame.cpp:1903
+#: pcbnew/pcb_edit_frame.cpp:1907
 #, fuzzy
 msgid "Eeschema failed to load."
 msgstr "Eeschema kunne ikke lastes inn:\n"
 
-#: pcbnew/pcb_edit_frame.cpp:2316
+#: pcbnew/pcb_edit_frame.cpp:2320
 #, fuzzy
 msgid "Edit design rules"
 msgstr "Designregler"
 
-#: pcbnew/pcb_edit_frame.cpp:2328
+#: pcbnew/pcb_edit_frame.cpp:2332
 msgid "Could not compile custom design rules."
 msgstr "Kunne ikke kompilere egendefinerte designregler."
 
-#: pcbnew/pcb_edit_frame.cpp:2366
+#: pcbnew/pcb_edit_frame.cpp:2370
 msgid "Export Hyperlynx Layout"
 msgstr "Eksporter Hyperlynx Layout"
 
