@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-31 13:11+0000\n"
+"PO-Revision-Date: 2024-02-02 12:24+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -20653,18 +20653,16 @@ msgid "Add Symbol"
 msgstr "Agregar símbolo"
 
 #: eeschema/tools/ee_actions.cpp:401
-#, fuzzy
 msgid "Add symbols"
-msgstr "Agregar un símbolo"
+msgstr "Agregar símbolos"
 
 #: eeschema/tools/ee_actions.cpp:411
 msgid "Add Power"
 msgstr "Agregar alimentación"
 
 #: eeschema/tools/ee_actions.cpp:412
-#, fuzzy
 msgid "Add power symbols"
-msgstr "Agregar un símbolo de alimentación"
+msgstr "Agregar símbolos de alimentación"
 
 #: eeschema/tools/ee_actions.cpp:422 eeschema/tools/sch_drawing_tools.cpp:950
 msgid "Add No Connect Flag"
@@ -40506,9 +40504,8 @@ msgid "Length Constraints: %s"
 msgstr "Restricciones de ancho: min %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2207
-#, fuzzy
 msgid "Tune"
-msgstr "Ajustar %s"
+msgstr "Ajustar"
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2304
