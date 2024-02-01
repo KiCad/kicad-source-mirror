@@ -795,6 +795,7 @@ void PANEL_SETUP_RULES::ImportSettingsFrom( BOARD* aBoard )
                 for ( wxString str = file.GetFirstLine(); !file.Eof(); str = file.GetNextLine() )
                 {
                     ConvertSmartQuotesAndDashes( &str );
+                    m_textEditor->ClearAll();
                     m_textEditor->AddText( str << '\n' );
                 }
 
