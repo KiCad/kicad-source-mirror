@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -250,6 +250,26 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
             break;
     }
 
+    if( aPad->GetAttribute() == PAD_ATTRIB::PTH && aPad->IsOnLayer( F_Cu )
+        && aPad->IsOnLayer( B_Cu ) )
+    {
+        TopoDS_Shape plating;
+
+        std::shared_ptr<SHAPE_SEGMENT> seg_hole = aPad->GetEffectiveHoleShape();
+        double width = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
+
+        if( MakeShapeAsThickSegment( plating, seg_hole->GetSeg().A, seg_hole->GetSeg().B, width,
+                                     m_boardThickness + m_copperThickness * 2, -m_copperThickness,
+                                     aOrigin ) )
+        {
+            m_board_copper_pads.push_back( plating );
+        }
+        else
+        {
+            success = false;
+        }
+    }
+
     if( !success )  // Error
         ReportMessage( wxT( "OCC error adding pad/via polygon.\n" ) );
 
@@ -324,64 +344,40 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     if( aPad == nullptr || !aPad->GetDrillSize().x )
         return false;
 
-    VECTOR2I pos = aPad->GetPosition();
-    const double margin = 0.01;     // a small margin on the Z axix to be sure the hole
-                                    // is bigget than the board with copper
-                                    // must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
+    // TODO: make configurable
+    int platingThickness = aPad->GetAttribute() == PAD_ATTRIB::PTH ? pcbIUScale.mmToIU( 0.025 ) : 0;
+
+    const double margin = 0.01; // a small margin on the Z axix to be sure the hole
+                                // is bigger than the board with copper
+                                // must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
     double holeZsize = m_boardThickness + ( m_copperThickness * 2 ) + ( margin * 2 );
 
-    if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
-    {
-        TopoDS_Shape s =
-                BRepPrimAPI_MakeCylinder( pcbIUScale.IUTomm( aPad->GetDrillSize().x ) * 0.5, holeZsize ).Shape();
-        gp_Trsf shift;
-        shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x - aOrigin.x ),
-                                      -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
-                                      -m_copperThickness - margin ) );
-        BRepBuilderAPI_Transform hole( s, shift );
-        m_cutouts.push_back( hole.Shape() );
-        return true;
-    }
-
-    // slotted hole
-    TopoDS_Shape hole;
-
-    #if 0   // set to 1 to export oblong hole as polygon
-    SHAPE_POLY_SET holeOutlines;
-
-    if( !aPad->TransformHoleToPolygon( holeOutlines, 0, m_maxError, ERROR_INSIDE ) )
-    {
-        return false;
-    }
-
-
-    if( holeOutlines.OutlineCount() > 0 )
-    {
-        if( MakeShape( hole, holeOutlines.COutline( 0 ), holeZsize, -m_copperThickness - margin, aOrigin ) )
-        {
-            m_cutouts.push_back( hole );
-        }
-    }
-    else
-    {
-        return false;
-    }
-    #else
     std::shared_ptr<SHAPE_SEGMENT> seg_hole = aPad->GetEffectiveHoleShape();
-    double width = std::min( aPad->GetDrillSize().x,  aPad->GetDrillSize().y );
 
-    if( MakeShapeAsThickSegment( hole,
-                                 seg_hole->GetSeg().A, seg_hole->GetSeg().B,
-                                 width, holeZsize, -m_copperThickness - margin,
-                                 aOrigin ) )
+    double boardDrill = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
+    double copperDrill = boardDrill - platingThickness * 2;
+
+    TopoDS_Shape copperHole, boardHole;
+
+    if( MakeShapeAsThickSegment( copperHole, seg_hole->GetSeg().A, seg_hole->GetSeg().B,
+                                 copperDrill, holeZsize, -m_copperThickness - margin, aOrigin ) )
     {
-        m_cutouts.push_back( hole );
+        m_copperCutouts.push_back( copperHole );
     }
     else
     {
         return false;
     }
-    #endif
+
+    if( MakeShapeAsThickSegment( boardHole, seg_hole->GetSeg().A, seg_hole->GetSeg().B, boardDrill,
+                                 holeZsize, -m_copperThickness - margin, aOrigin ) )
+    {
+        m_boardCutouts.push_back( boardHole );
+    }
+    else
+    {
+        return false;
+    }
 
     return true;
 }
@@ -915,76 +911,89 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
         BRepBndLib::Add( brdShape, brdBndBox );
 
     // subtract cutouts (if any)
-    if( m_cutouts.size() )
-    {
-        ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
-                                         (int) m_cutouts.size() ) );
+    ReportMessage( wxString::Format( wxT( "Build board cutouts and holes (%d hole(s)).\n" ),
+                                     (int) ( m_boardCutouts.size() + m_copperCutouts.size() ) ) );
 
+    auto buildBSB = [&brdBndBox]( std::vector<TopoDS_Shape>& input, Bnd_BoundSortBox& bsbHoles )
+    {
         // We need to encompass every location we'll need to test in the global bbox,
         // otherwise Bnd_BoundSortBox doesn't work near the boundaries.
-        Bnd_Box          brdWithHolesBndBox = brdBndBox;
-        Bnd_BoundSortBox bsbHoles;
+        Bnd_Box brdWithHolesBndBox = brdBndBox;
 
-        Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, m_cutouts.size() - 1 );
+        Handle( Bnd_HArray1OfBox ) holeBoxSet = new Bnd_HArray1OfBox( 0, input.size() - 1 );
 
-        for( size_t i = 0; i < m_cutouts.size(); i++ )
+        for( size_t i = 0; i < input.size(); i++ )
         {
             Bnd_Box bbox;
-            BRepBndLib::Add( m_cutouts[i], bbox );
+            BRepBndLib::Add( input[i], bbox );
             brdWithHolesBndBox.Add( bbox );
             ( *holeBoxSet )[i] = bbox;
         }
 
         bsbHoles.Initialize( brdWithHolesBndBox, holeBoxSet );
+    };
 
-        auto subtractShapes = [&]( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList )
+    auto subtractShapes = []( const wxString& aWhat, std::vector<TopoDS_Shape>& aShapesList,
+                              std::vector<TopoDS_Shape>& aHolesList, Bnd_BoundSortBox& aBSBHoles )
+    {
+        // Remove holes for each item (board body or bodies, one can have more than one board)
+        int cnt = 0;
+        for( TopoDS_Shape& shape : aShapesList )
         {
-            // Remove holes for each item (board body or bodies, one can have more than one board)
-            int cnt = 0;
-            for( TopoDS_Shape& shape : aShapesList )
-            {
-                Bnd_Box shapeBbox;
-                BRepBndLib::Add( shape, shapeBbox );
+            Bnd_Box shapeBbox;
+            BRepBndLib::Add( shape, shapeBbox );
 
-                const TColStd_ListOfInteger& indices = bsbHoles.Compare( shapeBbox );
+            const TColStd_ListOfInteger& indices = aBSBHoles.Compare( shapeBbox );
 
-                TopTools_ListOfShape holelist;
+            TopTools_ListOfShape holelist;
 
-                for( const Standard_Integer& index : indices )
-                    holelist.Append( m_cutouts[index] );
+            for( const Standard_Integer& index : indices )
+                holelist.Append( aHolesList[index] );
 
-                if( cnt == 0 )
-                    ReportMessage( wxString::Format( _( "Build holes for %s\n" ), aWhat ) );
+            if( cnt == 0 )
+                ReportMessage( wxString::Format( _( "Build holes for %s\n" ), aWhat ) );
 
-                cnt++;
+            cnt++;
 
-                if( cnt % 10 == 0 )
-                    ReportMessage( wxString::Format( _( "Cutting %d/%d %s\n" ), cnt,
-                                                     (int) aShapesList.size(), aWhat ) );
+            if( cnt % 10 == 0 )
+                ReportMessage( wxString::Format( _( "Cutting %d/%d %s\n" ), cnt,
+                                                 (int) aShapesList.size(), aWhat ) );
 
-                if( holelist.IsEmpty() )
-                    continue;
+            if( holelist.IsEmpty() )
+                continue;
 
-                TopTools_ListOfShape cutArgs;
-                cutArgs.Append( shape );
+            TopTools_ListOfShape cutArgs;
+            cutArgs.Append( shape );
 
-                BRepAlgoAPI_Cut cut;
+            BRepAlgoAPI_Cut cut;
 
-                // This helps cutting circular holes in zones where a hole is already cut in Clipper
-                cut.SetFuzzyValue( 0.0005 );
-                cut.SetArguments( cutArgs );
+            // This helps cutting circular holes in zones where a hole is already cut in Clipper
+            cut.SetFuzzyValue( 0.0005 );
+            cut.SetArguments( cutArgs );
 
-                cut.SetTools( holelist );
-                cut.Build();
+            cut.SetTools( holelist );
+            cut.Build();
 
-                shape = cut.Shape();
-            }
-        };
+            shape = cut.Shape();
+        }
+    };
 
-        subtractShapes( _( "pads" ), m_board_copper_pads );
-        subtractShapes( _( "shapes" ), m_board_outlines );
-        subtractShapes( _( "tracks" ), m_board_copper_tracks );
-        subtractShapes( _( "zones" ), m_board_copper_zones );
+    if( m_boardCutouts.size() )
+    {
+        Bnd_BoundSortBox bsbHoles;
+        buildBSB( m_boardCutouts, bsbHoles );
+
+        subtractShapes( _( "shapes" ), m_board_outlines, m_boardCutouts, bsbHoles );
+    }
+
+    if( m_copperCutouts.size() )
+    {
+        Bnd_BoundSortBox bsbHoles;
+        buildBSB( m_copperCutouts, bsbHoles );
+
+        subtractShapes( _( "pads" ), m_board_copper_pads, m_copperCutouts, bsbHoles );
+        subtractShapes( _( "tracks" ), m_board_copper_tracks, m_copperCutouts, bsbHoles );
+        subtractShapes( _( "zones" ), m_board_copper_zones, m_copperCutouts, bsbHoles );
     }
 
     // push the board to the data structure
