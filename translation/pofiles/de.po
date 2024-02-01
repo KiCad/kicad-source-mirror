@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-01-27 06:24+0000\n"
-"Last-Translator: Mark Hämmerling <dev@markh.de>\n"
+"PO-Revision-Date: 2024-02-01 13:54+0000\n"
+"Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -4754,7 +4754,7 @@ msgstr "Links"
 #: eeschema/sch_field.cpp:785 eeschema/sch_field.cpp:794
 #: gerbview/gerber_file_image.cpp:342 gerbview/gerber_file_image.cpp:345
 msgid "Center"
-msgstr "Mitte"
+msgstr "Zentriert"
 
 #: common/eda_text.cpp:1033
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:224
