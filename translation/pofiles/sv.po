@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-29 16:23+0000\n"
+"PO-Revision-Date: 2024-02-01 13:54+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5444,14 +5444,12 @@ msgid "Start Y"
 msgstr "Start Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "Centrera"
+msgstr "Centrum X"
 
 #: common/eda_shape.cpp:1997
-#, fuzzy
 msgid "Center Y"
-msgstr "Centrera"
+msgstr "Centrum Y"
 
 #: common/eda_shape.cpp:2007 pcbnew/generators/pcb_tuning_pattern.cpp:2323
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
@@ -12677,7 +12675,7 @@ msgstr "Användarkonfiguration"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:663
 msgid "Spice"
-msgstr "Spice"
+msgstr "SPICE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:663
 msgid "PSpice"
@@ -19264,8 +19262,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>Dubblettstift %s</b> %s på plats <b>(%s, %s)</b> är i konflikt med stift "
-"%s%s på position <b>(%s, %s)</b> i symbolform %s."
+"<b>Dubblettstift %s</b> %s på position <b>(%s, %s)</b> är i konflikt med "
+"stift %s%s på position <b>(%s, %s)</b> i symbolform %s."
 
 #: eeschema/symbol_checker.cpp:133
 #, c-format
@@ -19273,8 +19271,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>Dubblettstift %s</b> %s på plats <b>(%s, %s)</b> är i konflikt med stift "
-"%s%s på plats <b>(%s, %s)</b> i enheter %s och %s med symbolform %s."
+"<b>Dubblettstift %s</b> %s på position <b>(%s, %s)</b> är i konflikt med "
+"stift %s%s på position <b>(%s, %s)</b> i enheter %s och %s med symbolform %s."
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -19282,8 +19280,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b>Dublettstift %s</b> %s\" på plats <b>(%s, %s)</b> är i konflikt med stift "
-"%s%s på plats <b> ( %s, %s)</b>."
+"<b>Dublettstift %s</b> %s\" på position <b>(%s, %s)</b> är i konflikt med "
+"stift %s%s på position <b> ( %s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:166
 #, c-format
@@ -19291,8 +19289,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>Dubblettstift %s</b> %s\" på plats <b>(%s, %s)</b> är i konflikt med "
-"stift %s%s på plats <b> ( %s, %s)</b> i enheter %s och %s."
+"<b>Dubblettstift %s</b> %s\" på position <b>(%s, %s)</b> är i konflikt med "
+"stift %s%s på position <b> ( %s, %s)</b> i enheter %s och %s."
 
 #: eeschema/symbol_checker.cpp:194
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -23347,7 +23345,7 @@ msgstr "Spegelvänd Y-axel"
 #: kicad/cli/command_pcb_export_drill.cpp:80
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:57
 msgid "Minimal header"
-msgstr "Minimal header"
+msgstr "Minimal filheader"
 
 #: kicad/cli/command_pcb_export_drill.cpp:84
 msgid "Generate independent files for NPTH and PTH holes"
@@ -27415,12 +27413,12 @@ msgstr ""
 "kontakt med varandra under vissa förhållanden.<br>\n"
 "Anoden i ett elektrokemiskt par oxideras och fräts bort, medan katoden får "
 "upplösta metaller pläterad på sig men förblir skyddad.<br>\n"
-"Ett positivt tal visar att raden är anodisk (-) och kolumnen är katodisk "
-"(+), kalla och varma färger indikerar också raders potential.<br>\n"
+"Ett positivt tal visar att raden är anodisk (-) och kolumnen är katodisk (+)"
+", kalla och varma färger indikerar också raders potential.<br>\n"
 "EN 50310 föreslår en potentialdifferens under 300mV. Känd praxis använder "
 "sig av en tredje gränssnittsmetall mellan huvudparet (t.ex. plätering av typ "
 "ENIG).<br>\n"
-"Valda celler visas med förinställda systemets färgval efter att tabellen "
+"Valda celler visas med systemets förinställda färgval efter att tabellen "
 "fyllts på nytt.\n"
 
 #: pcb_calculator/iec60664_help.h:2
@@ -27444,8 +27442,8 @@ msgstr ""
 "\n"
 "Emellertid täcks vissa fall inte av denna kalkylator:\n"
 "\n"
-"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. "
-"IEC60664-4 behandlar dessa fall\n"
+"- För frekvenser över 30kHz är den dielektriska förmågan försämrad. IEC60664-"
+"4 behandlar dessa fall.\n"
 "- Om täckande skikt eller ingjutning används för att skydda mot "
 "nedsmutsning, och alla villkor specificerade i IEC60664-3 uppfylls, kan "
 "isolations- och krypavstånd reduceras. Lödmask anses vanligen inte som "
@@ -27503,7 +27501,7 @@ msgstr "Transmissionslinjer"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:182
 msgid "Memo"
-msgstr "Memo"
+msgstr "Tabeller"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:184
 msgid "E-Series"
@@ -30065,7 +30063,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
 msgid "Distance between Ref point and Center pos."
-msgstr "Avstånd mellan referenspunkt och mittpunkt"
+msgstr "Avstånd mellan referenspunkt och mittpunkt."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:384
 msgid ""
