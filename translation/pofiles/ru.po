@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-25 03:01+0000\n"
+"PO-Revision-Date: 2024-02-02 12:23+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5478,14 +5478,12 @@ msgid "Start Y"
 msgstr "Начало Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "Центр"
+msgstr "Центр X"
 
 #: common/eda_shape.cpp:1997
-#, fuzzy
 msgid "Center Y"
-msgstr "Центр"
+msgstr "Центр Y"
 
 #: common/eda_shape.cpp:2007 pcbnew/generators/pcb_tuning_pattern.cpp:2323
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
@@ -15599,9 +15597,8 @@ msgid "Show Field Name"
 msgstr "Отображать имя поля"
 
 #: eeschema/lib_item.cpp:80 eeschema/sch_pin.cpp:229
-#, fuzzy
 msgid "Body Style"
-msgstr "Стиль контура"
+msgstr "Стиль корпуса"
 
 #: eeschema/lib_item.cpp:84
 msgid "Private"
