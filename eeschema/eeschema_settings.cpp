@@ -241,9 +241,6 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
     m_params.emplace_back( new PARAM<wxSize>( "aui.net_nav_panel_docked_size",
             &m_AuiPanels.net_nav_panel_docked_size, wxSize( 120, -1 ) ) );
 
-    m_params.emplace_back( new PARAM<bool>( "aui.float_net_nav_panel",
-            &m_AuiPanels.float_net_nav_panel, false ) );
-
     m_params.emplace_back( new PARAM<wxPoint>( "aui.net_nav_panel_float_pos",
             &m_AuiPanels.net_nav_panel_float_pos, wxPoint( 50, 200 ), false ) );
 

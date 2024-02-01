@@ -257,6 +257,18 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.show_properties = propertiesPane.IsShown();
         cfg->m_AuiPanels.properties_splitter = m_propertiesPanel->SplitterProportion();
         cfg->m_AuiPanels.properties_panel_width = m_propertiesPanel->GetSize().x;
+
+        wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
+        cfg->m_AuiPanels.show_net_nav_panel = netNavigatorPane.IsShown();
+        cfg->m_AuiPanels.float_net_nav_panel = netNavigatorPane.IsFloating();
+
+        if( netNavigatorPane.IsDocked() )
+            cfg->m_AuiPanels.net_nav_panel_docked_size = m_netNavigator->GetSize();
+        else
+        {
+            cfg->m_AuiPanels.net_nav_panel_float_pos = netNavigatorPane.floating_pos;
+            cfg->m_AuiPanels.net_nav_panel_float_size = netNavigatorPane.floating_size;
+        }
     }
 }
 

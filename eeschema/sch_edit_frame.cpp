@@ -269,6 +269,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
       && cfg->m_AuiPanels.net_nav_panel_float_size.GetHeight() > 0 )
     {
         netNavigatorPane.FloatingSize( cfg->m_AuiPanels.net_nav_panel_float_size );
+        netNavigatorPane.FloatingPosition( cfg->m_AuiPanels.net_nav_panel_float_pos );
     }
 
     if( cfg->m_AuiPanels.properties_panel_width > 0 )
