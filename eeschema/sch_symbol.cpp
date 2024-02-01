@@ -2040,6 +2040,7 @@ bool SCH_SYMBOL::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) c
 
 void SCH_SYMBOL::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 {
+    aItemList.reserve( m_pins.size() );
     for( auto& pin : m_pins )
     {
         LIB_PIN* lib_pin = pin->GetLibPin();
@@ -2047,8 +2048,7 @@ void SCH_SYMBOL::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
         if( lib_pin && lib_pin->GetUnit() && m_unit && ( m_unit != lib_pin->GetUnit() ) )
             continue;
 
-        DANGLING_END_ITEM item( PIN_END, lib_pin, GetPinPhysicalPosition( lib_pin ), this );
-        aItemList.push_back( item );
+        aItemList.emplace_back( PIN_END, lib_pin, GetPinPhysicalPosition( lib_pin ), this );
     }
 }
 

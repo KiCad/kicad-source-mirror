@@ -182,14 +182,15 @@ public:
 
     bool IsStrokeEquivalent( const SCH_LINE* aLine )
     {
-        if( m_stroke.GetWidth() != aLine->GetStroke().GetWidth() )
+        const STROKE_PARAMS other_stroke = aLine->GetStroke();
+        if( m_stroke.GetWidth() != other_stroke.GetWidth() )
             return false;
 
-        if( m_stroke.GetColor() != aLine->GetStroke().GetColor() )
+        if( m_stroke.GetColor() != other_stroke.GetColor() )
             return false;
 
         LINE_STYLE style_a = m_stroke.GetLineStyle();
-        LINE_STYLE style_b = aLine->GetStroke().GetLineStyle();
+        LINE_STYLE style_b = other_stroke.GetLineStyle();
 
         return style_a == style_b
                || ( style_a == LINE_STYLE::DEFAULT && style_b == LINE_STYLE::SOLID )

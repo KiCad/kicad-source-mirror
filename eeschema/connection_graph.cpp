@@ -863,15 +863,8 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
                 ++it;
         }
 
-        for( auto it = m_item_to_subgraph_map.begin(); it != m_item_to_subgraph_map.end(); )
-        {
-            if( it->second == sg )
-                it = m_item_to_subgraph_map.erase( it );
-            else
-                ++it;
-        }
-
-
+        for( auto it : sg->GetItems() )
+            m_item_to_subgraph_map.erase( it );
     }
 
     for( auto it = m_net_name_to_code_map.begin(); it != m_net_name_to_code_map.end(); )
