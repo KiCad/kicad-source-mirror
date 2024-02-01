@@ -25,10 +25,10 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-29 16:23+0000\n"
+"PO-Revision-Date: 2024-02-01 13:54+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/kicad/master-"
-"source/de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/kicad/"
+"master-source/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5506,14 +5506,12 @@ msgid "Start Y"
 msgstr "Start Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "Mitte"
+msgstr "Mitte X"
 
 #: common/eda_shape.cpp:1997
-#, fuzzy
 msgid "Center Y"
-msgstr "Mitte"
+msgstr "Mitte Y"
 
 #: common/eda_shape.cpp:2007 pcbnew/generators/pcb_tuning_pattern.cpp:2323
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
@@ -5621,7 +5619,7 @@ msgstr "Links"
 #: eeschema/sch_field.cpp:923 eeschema/sch_field.cpp:932
 #: gerbview/gerber_file_image.cpp:358 gerbview/gerber_file_image.cpp:361
 msgid "Center"
-msgstr "Mitte"
+msgstr "Zentriert"
 
 #: common/eda_text.cpp:1164
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:242
@@ -14083,7 +14081,7 @@ msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl"
 msgstr ""
-"Linksklick- (und Zieh-) Aktionen hängen von 2 Modifizierertasten ab:\n"
+"Linksklick- (und Zieh-) Aktionen hängen von 2 Steuertasten ab:\n"
 "Umschalt und Strg"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
@@ -14100,7 +14098,7 @@ msgstr "Langer Klick"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
 msgid "Clarify selection from menu"
-msgstr "Auswahl im Menü klarstellen"
+msgstr "Auswahl über Menü klären"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
@@ -14127,7 +14125,7 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd"
 msgstr ""
-"Linksklick- (und Zieh-) Aktionen hängen von 3 Hilfstasten ab:\n"
+"Linksklick- (und Zieh-) Aktionen hängen von 3 Steuertasten ab:\n"
 "⌥, Umschalt und Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
