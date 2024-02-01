@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-01 08:44+0000\n"
+"PO-Revision-Date: 2024-02-01 13:54+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5416,14 +5416,12 @@ msgid "Start Y"
 msgstr "시작 Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "중"
+msgstr "중앙 X"
 
 #: common/eda_shape.cpp:1997
-#, fuzzy
 msgid "Center Y"
-msgstr "중"
+msgstr "중앙 Y"
 
 #: common/eda_shape.cpp:2007 pcbnew/generators/pcb_tuning_pattern.cpp:2323
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
@@ -15478,9 +15476,8 @@ msgid "Show Field Name"
 msgstr "필드 이름 표시"
 
 #: eeschema/lib_item.cpp:80 eeschema/sch_pin.cpp:229
-#, fuzzy
 msgid "Body Style"
-msgstr "테두리 스타일"
+msgstr "본체 유형"
 
 #: eeschema/lib_item.cpp:84
 msgid "Private"
@@ -19126,22 +19123,22 @@ msgstr ""
 "경우 문제를 일으킬 수 있음"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b> 중복되는 핀 %s</b> %s (위치 <b>(%s, %s)</b>) 가 핀 %s%s (위치 <b>(%s, "
-"%s)</b>) 와 충돌합니다 (유닛 %s와 %s)."
+"<b> 중복되는 핀 %s</b> %s 위치 <b>(%s, %s)</b> 가 핀 %s%s 위치 <b>(%s, %s)</"
+"b> 와 충돌함 %s 본체 유형."
 
 #: eeschema/symbol_checker.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b> 중복되는 핀 %s</b> %s (위치 <b>(%s, %s)</b>) 가 핀 %s%s (위치 <b>(%s, "
-"%s)</b>) 와 충돌합니다 (유닛 %s와 %s)."
+"<b> 중복되는 핀 %s</b> %s 위치 <b>(%s, %s)</b> 가 핀 %s%s 위치 <b>(%s, %s)</"
+"b> 와 충돌함 %s와 %s에서 %s의 본체 유형."
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -19189,22 +19186,19 @@ msgstr ""
 "<b>의미없는 전원 심볼</b><br>보이지 않는 입력 전원 핀은 없어도 됨<br><br>"
 
 #: eeschema/symbol_checker.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
-msgstr ""
-"<b>숨은 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습니다 (유"
-"닛 %c)."
+msgstr "<b>숨은 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> %s 본체 유형에 있음."
 
 #: eeschema/symbol_checker.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
-msgstr ""
-"<b>숨은 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 발견되었습니다 (유닛 %c"
-"에서 변환됨)."
+msgstr "<b>숨은 전원 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> %c 유닛에 %s 본체 "
+"유형이 있음."
 
 #: eeschema/symbol_checker.cpp:272
 #, c-format
@@ -19226,20 +19220,18 @@ msgid ""
 msgstr "(숨은 전원 핀은 연결된 모든 네트에 자신의 핀 이름을 표시합니다.)"
 
 #: eeschema/symbol_checker.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr ""
-"<b>그리드에서 벗어난 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습"
-"니다 (변환됨)."
+msgstr "<b>오프 그리드 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 %s 본체 유형이 "
+"있음."
 
 #: eeschema/symbol_checker.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
-msgstr ""
-"<b>그리드에서 벗어난 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에서 발견되었습"
-"니다 (유닛 %c)."
+msgstr "<b>오프 그리드 핀 %s</b> %s이(가) 위치 <b>(%s, %s)</b> 에 %c 유닛의 %s 본체 "
+"유형에 있음."
 
 #: eeschema/symbol_checker.cpp:330
 #, c-format
@@ -24158,13 +24150,11 @@ msgstr "다운로드한 파일 보존"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:610
 #: kicad/pcm/pcm_task_manager.cpp:383
-#, fuzzy
 msgid ""
 "This package version is incompatible with your KiCad version or platform. "
 "Are you sure you want to install it anyway?"
-msgstr ""
-"이 패키지는 현재 KiCad 버전 또는 플랫폼과 호환되지 않습니다. 설치하시겠습니"
-"까?"
+msgstr "이 패키지는 현재 KiCad 버전 또는 플랫폼과 호환되지 않습니다. 그래도 "
+"설치하시겠습니까?"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:612
 #: kicad/pcm/pcm_task_manager.cpp:385
@@ -30656,24 +30646,20 @@ msgid "Other Options"
 msgstr "다른 옵션"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:117
-#, fuzzy
 msgid "Ignore 'Do not populate' components"
-msgstr "마운트되지 않은 부품 무시"
+msgstr "'부착하지 않음' 컴포넌트 무시하기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:118
-#, fuzzy
 msgid "Do not show components marked 'Do not populate'"
-msgstr "BOM 및 배치 파일에 없는 구성요소를 표시하지 않음"
+msgstr "'부착하지 않음'으로 표시된 컴포넌트를 표시하지 않음"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:122
-#, fuzzy
 msgid "Ignore 'Unspecified' components"
-msgstr "마운트되지 않은 부품 무시"
+msgstr "'지정되지 않음' 컴포넌트 무시하기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:123
-#, fuzzy
 msgid "Do not show components with Footprint Type 'Unspecified'"
-msgstr "BOM 및 배치 파일에 없는 구성요소를 표시하지 않음"
+msgstr "풋프린트 유형이 '지정되지 않음'인 컴포넌트를 표시하지 않음"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:127
 msgid "Substitute similarly named models"
@@ -30688,9 +30674,8 @@ msgid "Overwrite old file"
 msgstr "오래된 파일 덮어쓰기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:140
-#, fuzzy
 msgid "Optimize STEP file"
-msgstr "STEP 파일"
+msgstr "STEP 파일 최적화"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:141
 msgid ""
@@ -30701,18 +30686,16 @@ msgstr ""
 "지만 다른 소프트웨어와의 호환성이 저하될 수 있습니다."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
-#, fuzzy
 msgid "Fuse shapes (time consuming)"
-msgstr "트랙 내보내기(시간 소요)"
+msgstr "퓨즈 모양(시간이 오래 걸림)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:147
 msgid "Combine intersecting geometry into one shape."
 msgstr "교차하는 도형을 하나의 모양으로 결합합니다."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:151
-#, fuzzy
 msgid "Export as Compound shape"
-msgstr "비 KiCad 기판 파일 가져오기"
+msgstr "복합 도형으로 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:153
 msgid ""
@@ -30723,9 +30706,8 @@ msgstr ""
 "를 수행하는 외부 소프트웨어에 유용합니다."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid "Export tracks, pads and vias"
-msgstr "배선 및 비아 생성"
+msgstr "트랙, 패드 및 비아 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:161
 msgid "Export tracks, pads and vias on external copper layers."
@@ -30736,27 +30718,24 @@ msgid "Export zones on external copper layers."
 msgstr "외부 구리 층의 영역을 내보냅니다."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
-#, fuzzy
 msgid "Export silkscreen"
-msgstr "전면 실크 스크린"
+msgstr "실크스크린 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:172
 msgid "Export silkscreen graphics."
 msgstr "실크스크린 그래픽 내보내기."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:176
-#, fuzzy
 msgid "Export solder mask"
-msgstr "전면 솔더 마스크"
+msgstr "솔더 마스크 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:178
 msgid "Export solder mask graphics."
 msgstr "솔더 마스크 그래픽 내보내기."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:182
-#, fuzzy
 msgid "Export solder paste"
-msgstr "전면 솔더 페이스트"
+msgstr "솔더 페이스트 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:184
 msgid "Export solder paste graphics."
@@ -30779,16 +30758,15 @@ msgid "Loose (0.1 mm)"
 msgstr "느슨하게 (0.1mm)"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:196
-#, fuzzy
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
-msgstr "허용 오차는 접속되었다고 간주하는 두 점 사이의 거리를 규정합니다."
+msgstr "허용 오차는 보드 윤곽선을 만들 때 결합된 것으로 간주되는 두 점 사이의 거리를 "
+"설정합니다."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:93
-#, fuzzy
 msgid "Export STEP / GLTF"
-msgstr "STEP 내보내기"
+msgstr "STEP / GLTF 내보내기"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:183
 #, c-format
@@ -30804,9 +30782,8 @@ msgid "Command line:\n"
 msgstr "명령줄:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
-#, fuzzy
 msgid "3D Export"
-msgstr "내보내기"
+msgstr "3D 내보내기"
 
 #: pcbnew/dialogs/dialog_export_svg.cpp:246
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:215
@@ -31011,7 +30988,7 @@ msgid "'%s' found"
 msgstr "'%s' 발견"
 
 #: pcbnew/dialogs/dialog_find.cpp:401
-#, fuzzy, c-format
+#, c-format
 msgid "Hit(s): %d / %zu"
 msgstr "조회수: %d / %zu"
 
@@ -31068,9 +31045,8 @@ msgid "Library Association"
 msgstr "라이브러리 연결"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:62
-#, fuzzy
 msgid "Schematic Association"
-msgstr "회로도 편집기"
+msgstr "회로도 연결"
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.h:52
 msgid "Footprint Associations"
@@ -31086,9 +31062,8 @@ msgid "Footprint Checker"
 msgstr "풋프린트 검사기"
 
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:35
-#, fuzzy
 msgid "Choose Footprint"
-msgstr "풋프린트 복사"
+msgstr "풋프린트 선택"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:75
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:143
@@ -31096,14 +31071,13 @@ msgid "3D Models"
 msgstr "3D 모델"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:288
-#, fuzzy
 msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
 msgstr ""
-"풋프린트가 잠겨있어 캔버스상에서 자유롭게 움직이거나 방향을 바꿀 수 없으며, "
-"선택 필터의 '잠긴 항목' 체크박스가 활성화된 경우에만 선택할 수 있습니다."
+"잠긴 풋프린트는 캔버스에서 자유롭게 이동하거나 방향을 바꿀 수 없으며, 선택 "
+"필터에서 '잠긴 항목' 확인란이 선택된 경우에만 선택할 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:392
 #, c-format
@@ -33887,7 +33861,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 #: pcbnew/router/router_tool.cpp:2688
 msgid "Walk around"
-msgstr "둘러보기"
+msgstr "돌아가기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:82
 msgid "Remove redundant tracks"
@@ -45435,11 +45409,11 @@ msgstr "라우터를 밀어내기 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:2279
 msgid "Router Walkaround Mode"
-msgstr "라우터 순회 모드"
+msgstr "라우터 돌아가기 모드"
 
 #: pcbnew/tools/pcb_actions.cpp:2280
 msgid "Switch router to walkaround mode"
-msgstr "라우터를 순회 모드로 전환"
+msgstr "라우터를 돌아가기 모드로 전환"
 
 #: pcbnew/tools/pcb_actions.cpp:2287
 msgid "Cycle Router Mode"
