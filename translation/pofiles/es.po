@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-01-30 19:02+0000\n"
+"PO-Revision-Date: 2024-02-01 13:54+0000\n"
 "Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/v7/es/>\n"
 "Language: es\n"
@@ -28740,7 +28740,7 @@ msgstr "Advertencia: propiedad de disipador no tiene sentido en pads NPTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1417
 msgid "Warning: Castellated property is for PTH pads."
-msgstr "Advertencia: la propiedad castellada es para pads PTH."
+msgstr "Advertencia: la propiedad de almena es para pads PTH."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1423
 msgid "Warning: BGA property is for SMD pads."
@@ -29037,7 +29037,7 @@ msgstr ""
 "Pad de punto de prueba es útil para especificar puntos de prueba en archivos "
 "Gerber\n"
 "Pad de disipador especifica un pad térmico\n"
-"Castellado especifica pads de orificio pasante castellados en el borde de la "
+"Almena especifica pads de orificio pasante almenados en el borde de la "
 "placa\n"
 "Estas propiedades son especificadas en archivos Gerber X2."
 
@@ -29063,7 +29063,7 @@ msgstr "Pad de disipador"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Castellated pad (through hole only)"
-msgstr "Pad castellado (solo orificio pasante)"
+msgstr "Pad almena (solo orificio pasante)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
 msgid "Clearance Overrides"
@@ -35183,7 +35183,7 @@ msgstr "Disipador"
 
 #: pcbnew/pad.cpp:1037
 msgid "Castellated"
-msgstr "Castellado"
+msgstr "Almenado"
 
 #: pcbnew/pad.cpp:1066
 msgid "Length in Package"
@@ -35273,7 +35273,7 @@ msgstr "Trapezoide"
 
 #: pcbnew/pad.cpp:1771
 msgid "Castellated pad"
-msgstr "Pads castellados"
+msgstr "Pad almena"
 
 #: pcbnew/pad.cpp:1823
 msgid "Pad Type"
@@ -38410,7 +38410,7 @@ msgstr "Terminación de cobre: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
-msgstr "Pads castellados: "
+msgstr "Pads almena: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 msgid "Min hole diameter: "
