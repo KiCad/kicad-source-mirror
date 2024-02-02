@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2021 CERN
- * Copyright (C) 2017-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -606,7 +606,9 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     if( m_cur_grid == m_project_grid )
         openDir = m_lastProjectLibDir;
 
-    wxFileDialog dlg( this, _( "Add Library" ), openDir, wxEmptyString, fileFiltersStr,
+    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+    wxFileDialog dlg( topLevelParent, _( "Add Library" ), openDir, wxEmptyString, fileFiltersStr,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
     if( dlg.ShowModal() == wxID_CANCEL )

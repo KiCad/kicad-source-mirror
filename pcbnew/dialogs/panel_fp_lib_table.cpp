@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013-2021 CERN
- * Copyright (C) 2012-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -957,9 +957,11 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 
     wxArrayString files;
 
+    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
     if( fileDesc.m_IsFile )
     {
-        wxFileDialog dlg( this, title, openDir, wxEmptyString, fileDesc.FileFilter(),
+        wxFileDialog dlg( topLevelParent, title, openDir, wxEmptyString, fileDesc.FileFilter(),
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
 
         int result = dlg.ShowModal();
@@ -976,7 +978,7 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
     }
     else
     {
-        wxDirDialog dlg( nullptr, title, openDir,
+        wxDirDialog dlg( topLevelParent, title, openDir,
                          wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST | wxDD_MULTIPLE );
 
         int result = dlg.ShowModal();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -525,7 +525,8 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
     KICAD_SETTINGS*   app_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
 
-    wxFileDialog dialog( this, _( "Save Package" ), app_settings->m_PcmLastDownloadDir,
+    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+    wxFileDialog dialog( topLevelParent, _( "Save Package" ), app_settings->m_PcmLastDownloadDir,
                          wxString::Format( wxT( "%s_v%s.zip" ), package.identifier, version ),
                          wxT( "ZIP files (*.zip)|*.zip" ), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -344,8 +344,10 @@ void PANEL_COMMON_SETTINGS::OnPDFViewerClick( wxCommandEvent& event )
     Pgm().ReadPdfBrowserInfos();
     wxFileName fn = Pgm().GetPdfBrowserName();
 
-    wxFileDialog dlg( this, _( "Select Preferred PDF Viewer" ), fn.GetPath(), fn.GetFullPath(),
-                      wildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+    wxFileDialog dlg( topLevelParent, _( "Select Preferred PDF Viewer" ), fn.GetPath(),
+                      fn.GetFullPath(), wildcard, wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;

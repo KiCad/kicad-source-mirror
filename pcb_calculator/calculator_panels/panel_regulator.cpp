@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,8 +154,10 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
     wildcard.Printf( _( "PCB Calculator data file" ) + wxT( " (*.%s)|*.%s" ),
                      DataFileNameExt, DataFileNameExt );
 
-    wxFileDialog dlg( this, _( "Select PCB Calculator Data File" ), wxEmptyString, fullfilename,
-                      wildcard, wxFD_OPEN );
+    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+    wxFileDialog dlg( topLevelParent, _( "Select PCB Calculator Data File" ),
+                      wxEmptyString, fullfilename, wildcard, wxFD_OPEN );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
