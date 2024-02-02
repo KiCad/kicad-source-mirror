@@ -29,6 +29,6 @@ JOB_PCB_DRC::JOB_PCB_DRC( bool aIsCli ) :
     m_severity( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
     m_format( OUTPUT_FORMAT::REPORT ),
     m_exitCodeViolations( false ),
-    m_parity( false )
+    m_parity( true )
 {
 }

@@ -82,7 +82,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             UNITS_PROVIDER( pcbIUScale, EDA_UNITS::MILLIMETRES )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
 
     void Reset() override;
 
@@ -393,7 +393,7 @@ FP_LIB_TABLE          GFootprintTable;
 FOOTPRINT_LIST_IMPL   GFootprintList;
 
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 {
     // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
@@ -416,7 +416,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     if( !loadGlobalLibTable() )
         return false;
 
-    m_jobHandler = std::make_unique<PCBNEW_JOBS_HANDLER>();
+    m_jobHandler = std::make_unique<PCBNEW_JOBS_HANDLER>( aKiway );
 
     if( m_start_flags & KFCTL_CLI )
     {

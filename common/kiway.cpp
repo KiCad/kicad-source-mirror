@@ -311,7 +311,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
             try
             {
-                startSuccess = kiface->OnKifaceStart( m_program, m_ctl );
+                startSuccess = kiface->OnKifaceStart( m_program, m_ctl, this );
             }
             catch (...)
             {

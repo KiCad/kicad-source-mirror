@@ -41,30 +41,31 @@ enum ERCE_T
     ERCE_ENDPOINT_OFF_GRID,       ///< Pin or wire-end off grid.
     ERCE_PIN_NOT_CONNECTED,       ///< Pin not connected and not no connect symbol.
     ERCE_PIN_NOT_DRIVEN,          ///< Pin connected to some others pins but no pin to drive it.
-                                  ///< pins to drive it can be output, passive, 3sttae, I/O
+                                  ///<   pins to drive it can be output, passive, 3sttae, I/O
     ERCE_POWERPIN_NOT_DRIVEN,     ///< Power input pin connected to some others pins but no
-                                  ///< power out pin to drive it.
+                                  ///<   power out pin to drive it.
     ERCE_HIERACHICAL_LABEL,       ///< Mismatch between hierarchical labels and pins sheets.
     ERCE_NOCONNECT_CONNECTED,     ///< A no connect symbol is connected to more than 1 pin.
     ERCE_NOCONNECT_NOT_CONNECTED, ///< A no connect symbol is not connected to anything.
     ERCE_LABEL_NOT_CONNECTED,     ///< Label not connected to anything.
     ERCE_SIMILAR_LABELS,          ///< 2 labels are equal for case insensitive comparisons.
     ERCE_DIFFERENT_UNIT_FP,       ///< Different units of the same symbol have different
-                                  ///< footprints assigned.
-    ERCE_MISSING_POWER_INPUT_PIN, ///< Symbol has power input pins that are not placed on the schematic
+                                  ///<   footprints assigned.
+    ERCE_MISSING_POWER_INPUT_PIN, ///< Symbol has power input pins that are not placed on the
+                                  ///<   schematic
     ERCE_MISSING_INPUT_PIN,       ///< Symbol has input pins that are not placed
     ERCE_MISSING_BIDI_PIN,        ///< Symbol has bi-directional pins that are not placed
     ERCE_MISSING_UNIT,            ///< Symbol has units that are not placed on the schematic
     ERCE_DIFFERENT_UNIT_NET,      ///< Shared pin in a multi-unit symbol is connected to
-                                  ///< more than one net.
+                                  ///<   more than one net.
     ERCE_BUS_ALIAS_CONFLICT,      ///< Conflicting bus alias definitions across sheets.
     ERCE_DRIVER_CONFLICT,         ///< Conflicting drivers (labels, etc) on a subgraph.
     ERCE_BUS_ENTRY_CONFLICT,      ///< A wire connected to a bus doesn't match the bus.
     ERCE_BUS_LABEL_ERROR,         ///< A label attached to a bus isn't in bus format.
     ERCE_BUS_TO_BUS_CONFLICT,     ///< A connection between bus objects doesn't share at least
-                                  ///< one net.
+                                  ///<   one net.
     ERCE_BUS_TO_NET_CONFLICT,     ///< A bus wire is graphically connected to a net port/pin
-                                  ///< (or vice versa).
+                                  ///<   (or vice versa).
     ERCE_NETCLASS_CONFLICT,       ///< Multiple labels assign different netclasses to same net.
     ERCE_GLOBLABEL,               ///< A global label is unique.
     ERCE_UNRESOLVED_VARIABLE,     ///< A text variable could not be resolved.
@@ -72,7 +73,7 @@ enum ERCE_T
     ERCE_SIMULATION_MODEL,        ///< An error was found in the simulation model.
     ERCE_WIRE_DANGLING,           ///< Some wires are not connected to anything else.
     ERCE_LIB_SYMBOL_ISSUES,       ///< Library symbol changed from current symbol in schematic or
-                                  ///< the library symbol link no longer valid.
+                                  ///<   the library symbol link no longer valid.
     ERCE_UNANNOTATED,             ///< Symbol has not been annotated.
     ERCE_EXTRA_UNITS,             ///< Symbol has more units than are defined.
     ERCE_DIFFERENT_UNIT_VALUE,    ///< Units of same symbol have different values.

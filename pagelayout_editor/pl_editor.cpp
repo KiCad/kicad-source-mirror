@@ -50,7 +50,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             UNITS_PROVIDER( drawSheetIUScale, EDA_UNITS::MILLIMETRES )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
 
     void OnKifaceEnd() override;
 
@@ -152,7 +152,7 @@ PGM_BASE* PgmOrNull()
     return process;
 }
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 {
     InitSettings( new PL_EDITOR_SETTINGS );
     aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );

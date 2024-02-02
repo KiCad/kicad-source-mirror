@@ -50,6 +50,7 @@
 #include <wx/ffile.h>
 #include <sim/sim_lib_mgr.h>
 #include <progress_reporter.h>
+#include <kiway.h>
 
 
 /* ERC tests :
@@ -1136,7 +1137,7 @@ int ERC_TESTER::TestSimModelIssues()
 
 
 void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
-                           PROGRESS_REPORTER* aProgressReporter )
+                           KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
 {
     ERC_SETTINGS& settings = m_schematic->ErcSettings();
 

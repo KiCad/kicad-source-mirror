@@ -27,21 +27,23 @@
 #include <jobs/job.h>
 
 
+class KIWAY;
 class REPORTER;
 class PROGRESS_REPORTER;
 
 class JOB_DISPATCHER
 {
 public:
-    JOB_DISPATCHER();
+    JOB_DISPATCHER( KIWAY* aKiway );
     void Register( const std::string& aJobTypeName, std::function<int( JOB* job )> aHandler );
     int  RunJob( JOB* job );
     void SetReporter( REPORTER* aReporter );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
 protected:
-    REPORTER* m_reporter; // non-owning
-    PROGRESS_REPORTER* m_progressReporter; // non-owning
+    KIWAY*             m_kiway;             // non-owning
+    REPORTER*          m_reporter;          // non-owning
+    PROGRESS_REPORTER* m_progressReporter;  // non-owning
 
 private:
     std::map<std::string, std::function<int( JOB* job )>> m_jobHandlers;

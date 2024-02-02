@@ -117,7 +117,7 @@ static std::unique_ptr<SCHEMATIC> readSchematicFromFile( const std::string& aFil
 }
 
 
-bool generateSchematicNetlist( const wxString& aFilename, wxString& aNetlist )
+bool generateSchematicNetlist( const wxString& aFilename, std::string& aNetlist )
 {
     std::unique_ptr<SCHEMATIC> schematic = readSchematicFromFile( aFilename.ToStdString() );
     NETLIST_EXPORTER_KICAD exporter( schematic.get() );
@@ -139,7 +139,7 @@ static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
             UNITS_PROVIDER( schIUScale, EDA_UNITS::MILLIMETRES )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
 
     void Reset() override;
 
@@ -373,7 +373,7 @@ PGM_BASE* PgmOrNull()
 }
 
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 {
     // This is process-level-initialization, not project-level-initialization of the DSO.
     // Do nothing in here pertinent to a project!
@@ -394,7 +394,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     if( !loadGlobalLibTable() )
         return false;
 
-    m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>();
+    m_jobHandler = std::make_unique<EESCHEMA_JOBS_HANDLER>( aKiway );
 
     if( m_start_flags & KFCTL_CLI )
     {

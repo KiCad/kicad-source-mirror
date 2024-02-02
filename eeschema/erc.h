@@ -23,19 +23,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _ERC_H
-#define _ERC_H
+#ifndef ERC_H
+#define ERC_H
 
 #include <erc_settings.h>
 
 
-class NETLIST_OBJECT;
-class NETLIST_OBJECT_LIST;
 class SCH_SHEET_LIST;
 class SCHEMATIC;
 class DS_PROXY_VIEW_ITEM;
 class SCH_EDIT_FRAME;
 class PROGRESS_REPORTER;
+struct KIFACE;
+class PROJECT;
 
 
 extern const wxString CommentERC_H[];
@@ -136,7 +136,7 @@ public:
     int TestMissingNetclasses();
 
     void RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
-                   PROGRESS_REPORTER* aProgressReporter );
+                   KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter );
 
 private:
 
@@ -144,4 +144,4 @@ private:
 };
 
 
-#endif  // _ERC_H
+#endif  // ERC_H

@@ -56,6 +56,9 @@
 #include <pcb_marker.h>
 #include <project/project_file.h>
 #include <exporters/export_svg.h>
+#include <kiface_ids.h>
+#include <netlist_reader/pcb_netlist.h>
+#include <netlist_reader/netlist_reader.h>
 #include <pcbnew_settings.h>
 #include <pcbplot.h>
 #include <pgm_base.h>
@@ -70,7 +73,8 @@
 #include "pcbnew_scripting_helpers.h"
 
 
-PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER()
+PCBNEW_JOBS_HANDLER::PCBNEW_JOBS_HANDLER( KIWAY* aKiway ) :
+        JOB_DISPATCHER( aKiway )
 {
     Register( "3d", std::bind( &PCBNEW_JOBS_HANDLER::JobExportStep, this, std::placeholders::_1 ) );
     Register( "svg", std::bind( &PCBNEW_JOBS_HANDLER::JobExportSvg, this, std::placeholders::_1 ) );
@@ -1002,6 +1006,46 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     m_reporter->Report( _( "Running DRC...\n" ), RPT_SEVERITY_INFO );
 
+    if( drcJob->m_parity )
+    {
+        typedef bool (*NETLIST_FN_PTR)( const wxString&, std::string& );
+
+        KIFACE*        eeschema = m_kiway->KiFACE( KIWAY::FACE_SCH );
+        wxFileName     schematicPath( drcJob->m_filename );
+        NETLIST_FN_PTR netlister = (NETLIST_FN_PTR) eeschema->IfaceOrAddress( KIFACE_NETLIST_SCHEMATIC );
+        std::string    netlist_str;
+        NETLIST        netlist;
+
+        schematicPath.SetExt( FILEEXT::KiCadSchematicFileExtension );
+
+        if( !schematicPath.Exists() )
+            schematicPath.SetExt( FILEEXT::LegacySchematicFileExtension );
+
+        if( !schematicPath.Exists() )
+        {
+            m_reporter->Report( _( "Failed to find schematic for parity tests.\n" ),
+                                RPT_SEVERITY_INFO );
+        }
+        else
+        {
+            (*netlister)( schematicPath.GetFullPath(), netlist_str );
+
+            try
+            {
+                auto lineReader = new STRING_LINE_READER( netlist_str, _( "Eeschema netlist" ) );
+                KICAD_NETLIST_READER netlistReader( lineReader, &netlist );
+                netlistReader.LoadNetlist();
+            }
+            catch( const IO_ERROR& e )
+            {
+                m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ),
+                                    RPT_SEVERITY_INFO );
+            }
+
+            drcEngine->SetSchematicNetlist( &netlist );
+        }
+    }
+
     drcEngine->SetProgressReporter( nullptr );
     drcEngine->SetViolationHandler(
             [&]( const std::shared_ptr<DRC_ITEM>& aItem, VECTOR2I aPos, int aLayer )
@@ -1017,7 +1061,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     commit.Push( _( "DRC" ), SKIP_UNDO | SKIP_SET_DIRTY );
 
-    // now "resolve" the drc exclusions again because its the only way to set exclusion status on a marker
+    // now "resolve" the drc exclusions again because its the only way to set exclusion status on
+    // a marker
     for( PCB_MARKER* marker : brd->ResolveDRCExclusions( false ) )
         brd->Add( marker );
 
@@ -1034,15 +1079,19 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     ratsnestProvider->SetSeverities( drcJob->m_severity );
     fpWarningsProvider->SetSeverities( drcJob->m_severity );
 
-    m_reporter->Report(
-            wxString::Format( _( "Found %d violations\n" ), markersProvider->GetCount() ),
-            RPT_SEVERITY_INFO );
-    m_reporter->Report(
-            wxString::Format( _( "Found %d unconnected items\n" ), ratsnestProvider->GetCount() ),
-            RPT_SEVERITY_INFO );
-    m_reporter->Report( wxString::Format( _( "Found %d schematic parity issues\n" ),
-                                          fpWarningsProvider->GetCount() ),
+    m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
+                                          markersProvider->GetCount() ),
                         RPT_SEVERITY_INFO );
+    m_reporter->Report( wxString::Format( _( "Found %d unconnected items\n" ),
+                                          ratsnestProvider->GetCount() ),
+                        RPT_SEVERITY_INFO );
+
+    if( drcJob->m_parity )
+    {
+        m_reporter->Report( wxString::Format( _( "Found %d schematic parity issues\n" ),
+                                              fpWarningsProvider->GetCount() ),
+                            RPT_SEVERITY_INFO );
+    }
 
     DRC_REPORT reportWriter( brd, units, markersProvider, ratsnestProvider, fpWarningsProvider );
 

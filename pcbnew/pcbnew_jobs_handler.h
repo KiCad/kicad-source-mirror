@@ -24,6 +24,7 @@
 #include <jobs/job_dispatcher.h>
 #include <pcb_plot_params.h>
 
+class KIWAY;
 class BOARD;
 class DS_PROXY_VIEW_ITEM;
 class FOOTPRINT;
@@ -33,7 +34,7 @@ class JOB_FP_EXPORT_SVG;
 class PCBNEW_JOBS_HANDLER : public JOB_DISPATCHER
 {
 public:
-    PCBNEW_JOBS_HANDLER();
+    PCBNEW_JOBS_HANDLER( KIWAY* aKiway );
     int JobExportStep( JOB* aJob );
     int JobExportSvg( JOB* aJob );
     int JobExportDxf( JOB* aJob );

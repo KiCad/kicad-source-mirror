@@ -34,7 +34,7 @@ namespace BMP2CMP {
 
 static struct IFACE : public KIFACE_BASE
 {
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
 
     wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
                             int aCtlBits = 0 ) override
@@ -103,7 +103,7 @@ PGM_BASE* PgmOrNull()
 #endif
 
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 {
     return start_common( aCtlBits );
 }

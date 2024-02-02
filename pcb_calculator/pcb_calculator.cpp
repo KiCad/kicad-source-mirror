@@ -39,7 +39,7 @@ static struct IFACE : public KIFACE_BASE
             KIFACE_BASE( aName, aType )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
 
     void OnKifaceEnd() override;
 
@@ -100,7 +100,7 @@ PGM_BASE* PgmOrNull()
     return process;
 }
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 {
     InitSettings( new PCB_CALCULATOR_SETTINGS );
     aProgram->GetSettingsManager().RegisterSettings( KifaceSettings() );

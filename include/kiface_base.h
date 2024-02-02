@@ -41,7 +41,7 @@ public:
     /**
      * Typically #start_common() is called from here.
      */
-    virtual bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override = 0;
+    virtual bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override = 0;
 
     virtual void OnKifaceEnd() override
     {

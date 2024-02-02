@@ -57,7 +57,7 @@ static struct IFACE : public KIFACE_BASE
             KIFACE_BASE( aName, aType )
     {}
 
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override
     {
         return true;
     }

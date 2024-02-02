@@ -174,7 +174,7 @@ struct KIFACE
      *         any UI because that is the duty of this function to say why it is returning
      *         false.  Never return false without having reported to the UI why.
      */
-    virtual bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) = 0;
+    virtual bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) = 0;
 
     /**
      * Called just once just before the DSO is to be unloaded.

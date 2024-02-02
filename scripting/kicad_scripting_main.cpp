@@ -35,7 +35,7 @@ namespace KIPYTHON {
 
 static struct IFACE : public KIFACE_BASE
 {
-    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override;
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
 
     void OnKifaceEnd() override;
 
@@ -109,7 +109,7 @@ PGM_BASE* PgmOrNull()
 }
 
 
-bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
+bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
 {
     InitSettings( new KIPYTHON_SETTINGS );
     Pgm().GetSettingsManager().RegisterSettings( KifaceSettings() );

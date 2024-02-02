@@ -29,6 +29,7 @@ namespace KIGFX
 class SCH_RENDER_SETTINGS;
 };
 
+class KIWAY;
 class SCHEMATIC;
 class JOB_SYM_EXPORT_SVG;
 class LIB_SYMBOL;
@@ -40,7 +41,7 @@ class DS_PROXY_VIEW_ITEM;
 class EESCHEMA_JOBS_HANDLER : public JOB_DISPATCHER
 {
 public:
-    EESCHEMA_JOBS_HANDLER();
+    EESCHEMA_JOBS_HANDLER( KIWAY* aKiway );
     int JobExportBom( JOB* aJob );
     int JobExportPythonBom( JOB* aJob );
     int JobExportNetlist( JOB* aJob );

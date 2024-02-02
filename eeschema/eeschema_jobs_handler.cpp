@@ -37,6 +37,7 @@
 #include <memory>
 #include <connection_graph.h>
 #include "eeschema_helpers.h"
+#include <kiway.h>
 #include <sch_painter.h>
 #include <locale_io.h>
 #include <erc.h>
@@ -64,7 +65,8 @@
 #include <fields_data_model.h>
 
 
-EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER()
+EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
+        JOB_DISPATCHER( aKiway )
 {
     Register( "bom",
               std::bind( &EESCHEMA_JOBS_HANDLER::JobExportBom, this, std::placeholders::_1 ) );
@@ -981,7 +983,8 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     m_reporter->Report( _( "Running ERC...\n" ), RPT_SEVERITY_INFO );
 
     std::unique_ptr<DS_PROXY_VIEW_ITEM> drawingSheet( getDrawingSheetProxyView( sch ) );
-    ercTester.RunTests( drawingSheet.get(), nullptr, m_progressReporter );
+    ercTester.RunTests( drawingSheet.get(), nullptr, m_kiway->KiFACE( KIWAY::FACE_CVPCB ),
+                        &sch->Prj(), m_progressReporter );
 
     markersProvider->SetSeverities( ercJob->m_severity );
 

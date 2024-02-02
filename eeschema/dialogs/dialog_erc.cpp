@@ -488,7 +488,8 @@ void DIALOG_ERC::testErc()
 
     {
         wxBusyCursor dummy;
-        tester.RunTests( m_parent->GetCanvas()->GetView()->GetDrawingSheet(), m_parent, this );
+        tester.RunTests( m_parent->GetCanvas()->GetView()->GetDrawingSheet(), m_parent,
+                         m_parent->Kiway().KiFACE( KIWAY::FACE_CVPCB ), &m_parent->Prj(), this );
     }
 
     // Update marker list:

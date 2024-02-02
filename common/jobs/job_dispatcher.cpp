@@ -24,7 +24,8 @@
 #include <wx/debug.h>
 
 
-JOB_DISPATCHER::JOB_DISPATCHER()
+JOB_DISPATCHER::JOB_DISPATCHER( KIWAY* aKiway ) :
+        m_kiway( aKiway )
 {
     m_reporter = &NULL_REPORTER::GetInstance();
     m_progressReporter = nullptr;
