@@ -380,6 +380,8 @@ private:
         std::size_t stackSize = m_stacksize;
         void* sp = nullptr;
 
+        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::doCall" ) );
+
 #ifndef LIBCONTEXT_HAS_OWN_STACK
         assert( !m_stack );
 
@@ -413,8 +415,6 @@ private:
 
         __tsan_set_fiber_name( m_callee.tsan_fiber, "Coroutine fiber" );
 #endif
-
-        wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::doCall" ) );
 
         m_callee.ctx = libcontext::make_fcontext( sp, stackSize, callerStub );
         m_running = true;
@@ -461,10 +461,12 @@ private:
     {
 #ifdef _WIN32
         void* mem = ::VirtualAlloc( 0, aAllocSize, MEM_COMMIT, PAGE_READWRITE );
+
         if( !mem )
             throw std::bad_alloc();
 #else
         void* mem = ::mmap( 0, aAllocSize, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0 );
+
         if( mem == (void*) -1 )
             throw std::bad_alloc();
 #endif
@@ -482,7 +484,7 @@ private:
         bool res = ( 0 == ::mprotect( aAddress, aGuardSize, PROT_NONE ) );
 #endif
         if( !res )
-            wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::GuardMemory has failes" ) );
+            wxLogTrace( kicadTraceCoroutineStack, wxT( "COROUTINE::GuardMemory has failed" ) );
     }
 #endif // LIBCONTEXT_HAS_OWN_STACK
 

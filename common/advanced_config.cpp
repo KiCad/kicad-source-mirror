@@ -22,7 +22,7 @@
  */
 
 #include <advanced_config.h>
-
+#include <trace_helpers.h>
 #include <config_params.h>
 #include <paths.h>
 
@@ -466,6 +466,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     for( PARAM_CFG* param : configParams )
         delete param;
+
+    wxLogTrace( kicadTraceCoroutineStack, wxT( "Using coroutine stack size %d" ), m_CoroutineStackSize );
 }
 
 
