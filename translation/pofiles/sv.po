@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-02-01 13:54+0000\n"
+"PO-Revision-Date: 2024-02-03 06:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
@@ -9756,9 +9756,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "Radera alternativ symbolform (De Morgan) från symbol?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Fältet måste ha ett namn."
+msgstr "Symbolen måste ha ett namn."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -19900,11 +19899,10 @@ msgstr ""
 "Spegelvänd mönsterkortet (användbart för att försöka visa undersidans lager)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
 msgstr ""
-"Färgtema som kommer att användas (om inget annat väljs används "
-"inställningarna i mönsterkortsredigeraren)"
+"Färgschema som ska användas (om inget annat väljs används inställningarna i "
+"mönsterkortsredigeraren)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
@@ -35538,9 +35536,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' tolkades inte fullständigt."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Footprint-biblioteket hittades inte."
+msgstr "Fotavtrycksbiblioteket hittades inte: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:803
 #, c-format
@@ -36572,23 +36570,21 @@ msgstr ""
 "position: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6068
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "Den äldre strategin för zonfyllning stöds inte längre.\n"
-"Konvertera zoner till utjämnade polygonfyllningar?"
+"Zonfyllningar kommer att konverteras efter bästa förmåga."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6101
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"Det äldre segmentfyllningsläget stöds inte längre.\n"
-"Konvertera zoner till utjämnade polygonfyllningar?"
+"Det äldre segment-zonfyllningsläget stöds inte längre.\n"
+"Zonfyllningar kommer att konverteras efter bästa förmåga."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
