@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 16:46+0000\n"
+"PO-Revision-Date: 2024-02-02 17:05+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -1987,7 +1987,7 @@ msgstr "主要开发团队"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Lead Development Alumni"
-msgstr "前主要开发人员"
+msgstr "前主要开发团队"
 
 #: common/dialog_about/AboutDialog_main.cpp:203
 msgid "Additional Contributions By"
@@ -2015,7 +2015,7 @@ msgstr "图标设计"
 
 #: common/dialog_about/AboutDialog_main.cpp:1256
 msgid "Package Developers"
-msgstr "软件包开发人员"
+msgstr "软件包开发者"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2035,27 +2035,27 @@ msgstr "版本"
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Developers"
-msgstr "开发者"
+msgstr "开发"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Doc Writers"
-msgstr "文档人员"
+msgstr "文档"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "Librarians"
-msgstr "制库人员"
+msgstr "制库"
 
 #: common/dialog_about/dialog_about.cpp:143
 msgid "Artists"
-msgstr "设计人员"
+msgstr "设计"
 
 #: common/dialog_about/dialog_about.cpp:145
 msgid "Translators"
-msgstr "翻译人员"
+msgstr "翻译"
 
 #: common/dialog_about/dialog_about.cpp:147
 msgid "Packagers"
-msgstr "打包人员"
+msgstr "打包"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "License"
@@ -12895,7 +12895,7 @@ msgstr "标签"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:191
 msgid "Group By"
-msgstr "分组依据"
+msgstr "分组"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:617
 msgid "Qty"
@@ -13057,7 +13057,7 @@ msgstr "选择"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:199
 msgid "Edit"
-msgstr "编辑 (&E)"
+msgstr "编辑"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
 msgid "Field delimiter:"
@@ -13181,7 +13181,7 @@ msgstr "镜像:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Not mirrored"
-msgstr "无镜像"
+msgstr "不作镜像"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Around X axis"
@@ -20335,7 +20335,7 @@ msgstr "高亮网络"
 
 #: eeschema/tools/ee_actions.cpp:844
 msgid "Highlight wires and pins of a net"
-msgstr "高亮同一网络的连线和引脚"
+msgstr "高亮相同网络的连线和引脚"
 
 #: eeschema/tools/ee_actions.cpp:851
 msgid "Show Net Navigator"
@@ -20796,7 +20796,7 @@ msgstr "移动到下一编号图纸"
 
 #: eeschema/tools/ee_actions.cpp:1255
 msgid "Hierarchy Navigator"
-msgstr "层次导航器"
+msgstr "层次导航"
 
 #: eeschema/tools/ee_actions.cpp:1256
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -21039,7 +21039,7 @@ msgstr "可视"
 
 #: eeschema/tools/ee_inspection_tool.cpp:435
 msgid "No datasheet defined."
-msgstr "未定义数据表。"
+msgstr "未设置数据手册链接。"
 
 #: eeschema/tools/ee_point_editor.cpp:537
 msgid "Move Point"
@@ -32342,7 +32342,7 @@ msgstr "显示 0 焊盘网络"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:41
 msgid "Group by:"
-msgstr "分组依据:"
+msgstr "分组:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:47
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
@@ -43961,7 +43961,7 @@ msgstr "在板上删除布线, 封装和图形项目"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Cleanup Tracks & Vias..."
-msgstr "清除布线和过孔..."
+msgstr "清理走线和过孔..."
 
 #: pcbnew/tools/pcb_actions.cpp:859
 msgid "Cleanup redundant items, shorting items, etc."
@@ -44942,7 +44942,7 @@ msgstr "选择网络中的所有布线"
 
 #: pcbnew/tools/pcb_actions.cpp:2111
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "选择所有属于同一网络的布线与过孔。"
+msgstr "选择所有网络相同的走线与过孔。"
 
 #: pcbnew/tools/pcb_actions.cpp:2117
 msgid "Deselect All Tracks in Net"
@@ -44950,7 +44950,7 @@ msgstr "取消选择网络中的所有布线"
 
 #: pcbnew/tools/pcb_actions.cpp:2118
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "取消选择属于同一网络的所有布线和过孔。"
+msgstr "取消选择所有网络相同的走线和过孔。"
 
 #: pcbnew/tools/pcb_actions.cpp:2125
 msgid "Select All Unconnected Footprints"
