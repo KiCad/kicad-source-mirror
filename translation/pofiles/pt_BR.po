@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-30 19:01+0000\n"
+"PO-Revision-Date: 2024-02-02 12:24+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -5485,14 +5485,12 @@ msgid "Start Y"
 msgstr "Inicia Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "Centro"
+msgstr "Centro X"
 
 #: common/eda_shape.cpp:1997
-#, fuzzy
 msgid "Center Y"
-msgstr "Centro"
+msgstr "Centro Y"
 
 #: common/eda_shape.cpp:2007 pcbnew/generators/pcb_tuning_pattern.cpp:2323
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
