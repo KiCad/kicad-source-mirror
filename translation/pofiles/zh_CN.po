@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-01-28 12:01+0000\n"
+"PO-Revision-Date: 2024-02-03 06:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
@@ -293,7 +293,7 @@ msgstr "视图 (&V)"
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:149 cvpcb/menubar.cpp:89
 #: gerbview/menubar.cpp:240 kicad/menubar.cpp:217
 msgid "&Preferences"
-msgstr "设置 (&P)"
+msgstr "设置 (&S)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:59
 #: pcbnew/widgets/appearance_controls.cpp:2779
@@ -1713,7 +1713,7 @@ msgstr "主要开发团队"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Lead Development Alumni"
-msgstr "前主要开发人员"
+msgstr "前主要开发团队"
 
 #: common/dialog_about/AboutDialog_main.cpp:203
 msgid "Additional Contributions By"
@@ -1757,27 +1757,27 @@ msgstr "版本"
 
 #: common/dialog_about/dialog_about.cpp:135
 msgid "Developers"
-msgstr "开发者"
+msgstr "开发"
 
 #: common/dialog_about/dialog_about.cpp:137
 msgid "Doc Writers"
-msgstr "文档人员"
+msgstr "文档"
 
 #: common/dialog_about/dialog_about.cpp:140
 msgid "Librarians"
-msgstr "制库人员"
+msgstr "制库"
 
 #: common/dialog_about/dialog_about.cpp:143
 msgid "Artists"
-msgstr "设计人员"
+msgstr "设计"
 
 #: common/dialog_about/dialog_about.cpp:145
 msgid "Translators"
-msgstr "翻译人员"
+msgstr "翻译"
 
 #: common/dialog_about/dialog_about.cpp:147
 msgid "Packagers"
-msgstr "打包人员"
+msgstr "打包"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "License"
@@ -4136,7 +4136,7 @@ msgstr "Excellon 选项"
 #: kicad/tools/kicad_manager_actions.cpp:121 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:571
 msgid "Drawing Sheet Editor"
-msgstr "图纸编辑器"
+msgstr "图框编辑器"
 
 #: common/eda_base_frame.cpp:1167 kicad/pcm/dialogs/dialog_pcm.cpp:210
 #: kicad/tools/kicad_manager_actions.cpp:127
@@ -8036,7 +8036,7 @@ msgstr "更新字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update symbol attributes"
-msgstr "更新符号属性"
+msgstr "更新符号特性"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:153
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:157
@@ -8159,7 +8159,7 @@ msgstr "更新/重置字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:146
 msgid "Update/reset symbol attributes"
-msgstr "更新/重置符号属性"
+msgstr "更新/重置符号特性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:101
 msgid "Update Symbols from Library"
@@ -9771,7 +9771,7 @@ msgstr "单元"
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:276
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:199
 msgid "Attributes"
-msgstr "属性"
+msgstr "特性"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:278
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:201
@@ -11194,7 +11194,7 @@ msgstr "数量"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:758
 msgid "Group By"
-msgstr "分组依据"
+msgstr "分组"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1032
 #: eeschema/symbol_editor/symbol_editor.cpp:1273
@@ -11317,7 +11317,7 @@ msgstr "镜像:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Not mirrored"
-msgstr "无镜像"
+msgstr "不作镜像"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:163
 msgid "Around X axis"
@@ -11361,7 +11361,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:218
 msgid "Do not populate"
-msgstr "添加 DNP (不作装配) 属性"
+msgstr "DNP (不作装配)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:230
 msgid "Update Symbol from Library..."
@@ -14373,7 +14373,7 @@ msgstr "需要 '斜体' 或 '~' 符号"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin.cpp:1315
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "符号字段文本属性必须是 3 个字符宽"
+msgstr "符号字段文本特性至少要包含 3 个字符"
 
 #: eeschema/sch_plugins/legacy/sch_legacy_plugin_helpers.cpp:222
 msgid "expected unquoted string"
@@ -16679,7 +16679,7 @@ msgstr "将 %s 的封装分配从 '%s' 替换为 '%s'。"
 #: eeschema/tools/backannotate.cpp:364
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "将 %s 的值从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的值由 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:389
 #, c-format
@@ -16689,12 +16689,12 @@ msgstr "找不到 %s 引脚 '%s'。"
 #: eeschema/tools/backannotate.cpp:532
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "将引脚 %s 网络 %s 的标签从 '%s' 更改为 '%s'。"
+msgstr "将引脚 %s 网络 %s 的标签由 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:557
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
-msgstr "网络 %s 无法被更改为 %s, 因为它由电源引脚驱动。"
+msgstr "无法将网络 %s 更改为 %s, 因为它受电源引脚驱动。"
 
 #: eeschema/tools/backannotate.cpp:566
 #, c-format
@@ -17378,7 +17378,7 @@ msgstr "高亮网络"
 
 #: eeschema/tools/ee_actions.cpp:589
 msgid "Highlight wires and pins of a net"
-msgstr "高亮同一网络的连线和引脚"
+msgstr "高亮相同网络的连线和引脚"
 
 #: eeschema/tools/ee_actions.cpp:595
 msgid "Edit with Symbol Editor"
@@ -17537,7 +17537,7 @@ msgstr "显示隐藏引脚"
 
 #: eeschema/tools/ee_actions.cpp:695
 msgid "Toggle display of hidden pins"
-msgstr "切换是否显示隐藏的引脚"
+msgstr "切换隐藏的引脚的显示状态"
 
 #: eeschema/tools/ee_actions.cpp:700
 msgid "Show Hidden Fields"
@@ -17545,7 +17545,7 @@ msgstr "显示隐藏字段"
 
 #: eeschema/tools/ee_actions.cpp:700
 msgid "Toggle display of hidden text fields"
-msgstr "切换是否显示隐藏的文本字段"
+msgstr "切换隐藏的文本字段的显示状态"
 
 #: eeschema/tools/ee_actions.cpp:704
 msgid "Show ERC Warnings"
@@ -17684,7 +17684,7 @@ msgstr "移动到下一编号图纸"
 
 #: eeschema/tools/ee_actions.cpp:804
 msgid "Hierarchy Navigator"
-msgstr "层次导航器"
+msgstr "层次导航"
 
 #: eeschema/tools/ee_actions.cpp:804
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -17797,7 +17797,7 @@ msgstr "将元素与栅格对齐"
 
 #: eeschema/tools/ee_actions.cpp:899
 msgid "Save Current Sheet Copy As..."
-msgstr "将当前图纸副本另存为..."
+msgstr "将当前图纸另存为..."
 
 #: eeschema/tools/ee_actions.cpp:899
 msgid "Save a copy of the current sheet to another location or name"
@@ -17813,7 +17813,7 @@ msgstr "符号警告"
 
 #: eeschema/tools/ee_inspection_tool.cpp:299
 msgid "No datasheet defined."
-msgstr "未定义数据表。"
+msgstr "未设置数据手册链接。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:270
 msgid "Press <ESC> to cancel symbol creation."
@@ -18081,7 +18081,7 @@ msgstr "输入图纸路径 %s 的页码"
 #: eeschema/widgets/hierarchy_pane.cpp:322
 #, c-format
 msgid "(page %s)"
-msgstr "(页 %s)"
+msgstr "(第 %s 页)"
 
 #: eeschema/widgets/legacyfiledlg_save_project.h:36
 msgid ""
@@ -18718,11 +18718,11 @@ msgstr "消息"
 
 #: gerbview/gerber_draw_item.cpp:625
 msgid "Attribute"
-msgstr "属性"
+msgstr "特性"
 
 #: gerbview/gerber_draw_item.cpp:628 gerbview/gerber_draw_item.cpp:638
 msgid "No attribute"
-msgstr "无属性"
+msgstr "没有特性"
 
 #: gerbview/gerber_draw_item.cpp:634
 #, c-format
@@ -18851,7 +18851,7 @@ msgstr "绘图层未在使用"
 
 #: gerbview/gerbview_frame.cpp:637
 msgid "(with X2 attributes)"
-msgstr "(X2 属性)"
+msgstr "(X2 特性)"
 
 #: gerbview/gerbview_frame.cpp:646
 #, c-format
@@ -18951,7 +18951,7 @@ msgstr "属性:"
 
 #: gerbview/toolbars_gerber.cpp:160
 msgid "Highlight items with this aperture attribute"
-msgstr "高亮显示含此光圈 (Aperture) 属性的项目"
+msgstr "高亮显示含此光圈 (Aperture) 特性的项目"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
@@ -19068,7 +19068,7 @@ msgstr "高亮元件"
 
 #: gerbview/tools/gerbview_actions.cpp:129
 msgid "Highlight Attribute"
-msgstr "高亮属性"
+msgstr "高亮特性"
 
 #: gerbview/tools/gerbview_actions.cpp:134
 msgid "Highlight DCode"
@@ -19494,7 +19494,7 @@ msgstr "不使用扩展的 X2 格式"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:60
 msgid "Do not generate netlist attributes"
-msgstr "不生成网表属性"
+msgstr "不生成网表特性"
 
 #: kicad/cli/command_export_pcb_gerber.cpp:65
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
@@ -25654,7 +25654,7 @@ msgstr "更新文本大小, 样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:81
 msgid "Update fabrication attributes"
-msgstr "更新制造属性"
+msgstr "更新制造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:82
 msgid "Update 3D models"
@@ -25678,7 +25678,7 @@ msgstr "更新封装 %s (%s)"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:363
 #, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "将封装 %s 从 '%s' 更改为 '%s'"
+msgstr "将封装 %s 由 '%s' 更改为 '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:373
 msgid "*** library footprint not found ***"
@@ -25730,7 +25730,7 @@ msgstr "更新/重置文本大小, 样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:107
 msgid "Update/reset fabrication attributes"
-msgstr "更新/重置制造属性"
+msgstr "更新/重置制造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:110
 msgid "Update/reset 3D models"
@@ -27701,7 +27701,7 @@ msgstr "显示 0 焊盘网络"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:41
 msgid "Group by:"
-msgstr "分组依据:"
+msgstr "分组:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:47
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
@@ -28289,7 +28289,7 @@ msgid ""
 "These properties are specified in Gerber X2  files."
 msgstr ""
 "在制造文件中指定特殊用途或约束的可选属性: \n"
-"BGA 属性用于 BGA 封装中的焊盘\n"
+"BGA 特性用于 BGA 封装中的焊盘\n"
 "局部基准点 属性是父级封装的基准\n"
 "全局基准点 是整个电路板的基准\n"
 "测试点焊盘 (Test Point) 可用于在 Gerber 文件中指定测试点\n"
@@ -28669,13 +28669,13 @@ msgid ""
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
 "使用 X2 Gerber 文件格式。\n"
-"主要包括 Gerber 标头中的 X2 属性。\n"
+"主要包括 Gerber 标头中的 X2 特性。\n"
 "如果未选中, 则使用 X1 格式。\n"
-"在 X1 格式中, 这些属性作为注释包含在文件中。"
+"在 X1 格式中, 这些特性作为注释包含在文件中。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
 msgid "Include netlist attributes"
-msgstr "包括网络属性"
+msgstr "包括网络特性"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:229
 msgid ""
@@ -28683,7 +28683,7 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"在 Gerber 文件中包含网表元数据和孔径属性。\n"
+"在 Gerber 文件中包含网表元数据和光圈 (Aperture) 特性。\n"
 "在 X1 格式中它们是注释。\n"
 "用于在 CAM 工具和 Gerber 查看器中检查连接性。"
 
@@ -29162,7 +29162,7 @@ msgstr "右键单击层以选择命令。"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:207
 msgid "Print according to objects tab of appearance manager"
-msgstr "根据 \"外观管理器\" 的 \"对象\" 选项卡进行打印"
+msgstr "通过 \"外观管理器\" 的 \"对象\" 选项卡进行打印"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:235
 msgid "No drill mark"
@@ -33106,7 +33106,7 @@ msgstr "状态: "
 
 #: pcbnew/footprint.cpp:1134
 msgid "Attributes:"
-msgstr "属性:"
+msgstr "特性:"
 
 #: pcbnew/footprint.cpp:1140
 #, c-format
@@ -34028,22 +34028,22 @@ msgstr "更新了 %s 项属性。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:372
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "为 %s 添加 '从 BOM 中移除' 制造属性。"
+msgstr "为 %s 添加 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:377
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "为 %s 移除 '从 BOM 中移除' 制造属性。"
+msgstr "为 %s 移除 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:388
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "已为 %s 添加 '从 BOM 中移除' 制造属性。"
+msgstr "已为 %s 添加 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:394
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "已为 %s 移除 '从 BOM 中移除' 制造属性。"
+msgstr "已为 %s 移除 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:470
 #, c-format
@@ -38043,7 +38043,7 @@ msgstr "新建封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:398
 msgid "Create a new, empty footprint"
-msgstr "创建一个新的空封装"
+msgstr "创建一个新的封装"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Create Footprint..."
@@ -38188,7 +38188,7 @@ msgstr "在板上删除布线, 封装和图形项目"
 
 #: pcbnew/tools/pcb_actions.cpp:516
 msgid "Cleanup Tracks & Vias..."
-msgstr "清除布线和过孔..."
+msgstr "清理走线和过孔..."
 
 #: pcbnew/tools/pcb_actions.cpp:517
 msgid "Cleanup redundant items, shorting items, etc."
@@ -38581,7 +38581,7 @@ msgstr "局部飞线"
 
 #: pcbnew/tools/pcb_actions.cpp:839
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "切换是否显示所选项目的飞线"
+msgstr "切换所选项目的飞线的显示状态"
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Show the net inspector"
@@ -39037,7 +39037,7 @@ msgstr "选择网络中的所有布线"
 
 #: pcbnew/tools/pcb_actions.cpp:1339
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "选择所有属于同一网络的布线与过孔。"
+msgstr "选择所有网络相同的走线与过孔。"
 
 #: pcbnew/tools/pcb_actions.cpp:1343
 msgid "Deselect All Tracks in Net"
@@ -39045,7 +39045,7 @@ msgstr "取消选择网络中的所有布线"
 
 #: pcbnew/tools/pcb_actions.cpp:1344
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "取消选择属于同一网络的所有布线和过孔。"
+msgstr "取消选择所有网络相同的走线和过孔。"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 msgid "Select All Unconnected Footprints"
