@@ -1,4 +1,4 @@
-﻿{
+{
   "environments": [
     {
       "BuildDir": "${workspaceRoot}\\build",
@@ -57,8 +57,6 @@
         }
       ],
       "cmakeToolchain": "${env.VcPkgDir}/scripts/buildsystems/vcpkg.cmake"
-    }
-      ]
     }
   ]
 }
