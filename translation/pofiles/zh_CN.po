@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 17:05+0000\n"
+"PO-Revision-Date: 2024-02-02 17:16+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -290,7 +290,7 @@ msgstr "视图 (&V)"
 #: eeschema/sim/toolbars_simulator_frame.cpp:163 gerbview/menubar.cpp:234
 #: kicad/menubar.cpp:220 pcb_calculator/pcb_calculator_frame.cpp:229
 msgid "&Preferences"
-msgstr "设置 (&P)"
+msgstr "设置 (&S)"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
