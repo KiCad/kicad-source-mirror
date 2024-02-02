@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-28 13:18+0000\n"
+"PO-Revision-Date: 2024-02-02 12:24+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5384,14 +5384,12 @@ msgid "Start Y"
 msgstr "起点 Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "居中"
+msgstr "中点 X"
 
 #: common/eda_shape.cpp:1997
-#, fuzzy
 msgid "Center Y"
-msgstr "居中"
+msgstr "中点 Y"
 
 #: common/eda_shape.cpp:2007 pcbnew/generators/pcb_tuning_pattern.cpp:2323
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
@@ -13747,8 +13745,8 @@ msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl"
 msgstr ""
-"左键单击 (和拖动) 操作取决于 2 个修饰键:\n"
-"Shift 和 Ctrl。"
+"左键单击 (拖动) 所执行的动作取决于 2 个修饰键:\n"
+"Shift 和 Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -13764,14 +13762,14 @@ msgstr "长按"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
 msgid "Clarify selection from menu"
-msgstr "从菜单中明确选择。"
+msgstr "根据菜单确定选区"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
 msgid "Add item(s) to selection"
-msgstr "将项目添加到选区。"
+msgstr "将项目添加到选区"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -13783,7 +13781,7 @@ msgstr "Ctrl+Shift"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
 msgid "Remove item(s) from selection"
-msgstr "从选区中移除项目。"
+msgstr "将项目从选区中移除"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
@@ -13791,8 +13789,8 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd"
 msgstr ""
-"左键单击 (和拖动) 操作取决于 3 个修饰键: \n"
-"Option, Shift 和 Cmd。"
+"左键单击 (拖动) 所执行的动作取决于 3 个修饰键:\n"
+"Option, Shift 和 Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
 #: pcbnew/dialogs/panel_edit_options_base.cpp:215
@@ -15361,9 +15359,8 @@ msgid "Show Field Name"
 msgstr "显示字段名称"
 
 #: eeschema/lib_item.cpp:80 eeschema/sch_pin.cpp:229
-#, fuzzy
 msgid "Body Style"
-msgstr "边框样式"
+msgstr "主体样式"
 
 #: eeschema/lib_item.cpp:84
 msgid "Private"
@@ -18935,22 +18932,22 @@ msgstr ""
 "<b>警告: 参考前缀</b><br>'%s' 结尾的前缀如果保存在符号库中, 可能会产生问题"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>重复引脚 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引脚 %s%s 冲突, 后者位于 "
-"<b>(%s, %s)</b>, 冲突覆铜在单元 %s和 %s。"
+"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 <b>("
+"%s, %s)</b>, (%s 的主体样式中)。"
 
 #: eeschema/symbol_checker.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>重复引脚 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引脚 %s%s 冲突, 后者位于 "
-"<b>(%s, %s)</b>, 冲突覆铜在单元 %s和 %s。"
+"<b>重复的引脚 %s</b> %s 位于<b>(%s, %s)</b>, 与引脚 %s%s 冲突, 后者位于 <b>("
+"%s, %s)</b>, (在单元 %s 和 %s (%s) 的主体样式中)。"
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -18995,21 +18992,18 @@ msgid ""
 msgstr "<b>可疑电源符号</b><br>不需要不可见的电源输入引脚<br><br>"
 
 #: eeschema/symbol_checker.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
-msgstr ""
-"信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, 此坐标在单元 %c 中。"
+msgstr "信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, (%s 的主体样式中)。"
 
 #: eeschema/symbol_checker.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
-msgstr ""
-"信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, 此坐标在转换后的单元 "
-"%c 中。"
+msgstr "信息: <b>隐藏的电源引脚 %s</b>%s, 位于 <b>(%s, %s)</b>, (单元 %c (属于 %s))。"
 
 #: eeschema/symbol_checker.cpp:272
 #, c-format
@@ -19029,16 +19023,17 @@ msgid ""
 msgstr "(隐藏的电源引脚会将其引脚名称驱动到任何连接的网络上。)"
 
 #: eeschema/symbol_checker.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr "<b>栅格外引脚 %s</b>%s 位于转换的位置 <b>(%s, %s)</b>。"
+msgstr "<b>未在栅格上的引脚 %s</b>, %s 位于 <b>(%s, %s)</b>, (%s 的主体样式中)。"
 
 #: eeschema/symbol_checker.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
-msgstr "<b>栅格外引脚 %s</b>%s, 位于 <b>(%s,%s )</b>, 此坐标在单元 %c 中。"
+msgstr "<b>未在栅格上引脚 %s</b>位于 <b>(%s, %s%s )</b>, (单元 %c (属于%s) "
+"的主体样式。"
 
 #: eeschema/symbol_checker.cpp:330
 #, c-format
@@ -20376,11 +20371,11 @@ msgstr "清除 '从物料清单中移除' 属性"
 
 #: eeschema/tools/ee_actions.cpp:878
 msgid "Toggle Exclude from Bill of Materials"
-msgstr "切换 '从物料清单中移除' 属性状态"
+msgstr "切换 '从物料清单中移除' 属性"
 
 #: eeschema/tools/ee_actions.cpp:879
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "切换 '从物料清单中移除' 属性状态"
+msgstr "切换 '从物料清单中移除' 属性"
 
 #: eeschema/tools/ee_actions.cpp:884
 msgid "Exclude from Simulation"
@@ -20400,11 +20395,11 @@ msgstr "清除 '不参与电路仿真' 属性"
 
 #: eeschema/tools/ee_actions.cpp:896
 msgid "Toggle Exclude from Simulation"
-msgstr "切换 '不参与电路仿真' 属性状态"
+msgstr "切换 '不参与电路仿真' 属性"
 
 #: eeschema/tools/ee_actions.cpp:897
 msgid "Toggle the exclude from simulation attribute"
-msgstr "切换 '不参与电路仿真' 属性状态"
+msgstr "切换 '不参与电路仿真' 属性"
 
 #: eeschema/tools/ee_actions.cpp:902
 msgid "Exclude from Board"
@@ -20424,11 +20419,11 @@ msgstr "清除 '不在 PCB 中进行绘制' 属性"
 
 #: eeschema/tools/ee_actions.cpp:914
 msgid "Toggle Exclude from Board"
-msgstr "切换 '不在 PCB 中进行绘制' 属性状态"
+msgstr "切换 '不在 PCB 中进行绘制' 属性"
 
 #: eeschema/tools/ee_actions.cpp:915
 msgid "Toggle the exclude from board attribute"
-msgstr "切换 '不在 PCB 中进行绘制' 属性状态"
+msgstr "切换 '不在 PCB 中进行绘制' 属性"
 
 #: eeschema/tools/ee_actions.cpp:920
 msgid "Set Do Not Populate"
@@ -20448,11 +20443,11 @@ msgstr "清除 'DNP (不作装配)' 属性"
 
 #: eeschema/tools/ee_actions.cpp:933
 msgid "Toggle Do Not Populate"
-msgstr "切换 'DNP (不作装配)' 属性状态"
+msgstr "切换 'DNP (不作装配)' 属性"
 
 #: eeschema/tools/ee_actions.cpp:934
 msgid "Toggle the do not populate attribute"
-msgstr "切换 'DNP (不作装配)' 属性状态"
+msgstr "切换 'DNP (不作装配)' 属性"
 
 #: eeschema/tools/ee_actions.cpp:941
 msgid "Open the library symbol in the Symbol Editor"
@@ -34284,12 +34279,12 @@ msgstr "如果选中该选项, 焊盘可相对于封装的其他部分进行移�
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Toggle selection"
-msgstr "切换选区状态。"
+msgstr "切换选区状态"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Highlight net (for pads or tracks)"
-msgstr "高亮显示网络 (焊盘或走线)。"
+msgstr "高亮网络 (焊盘或走线)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -37925,14 +37920,14 @@ msgid "Missing footprint %s (%s)"
 msgstr "缺失的封装 %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
-msgstr "封装属性与符号不匹配"
+msgstr "封装 %s 的值 (%s) 与对应符号的值 (%s) 不匹配。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint (%s) doesn't match that given by symbol (%s)."
-msgstr "焊盘网络 (%s) 与原理图 (%s) 提供的网络不匹配。"
+msgstr "%s 的封装 (%s) 与符号 (%s) 所指定的封装不匹配。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:198
 msgid "No corresponding pin found in schematic."
