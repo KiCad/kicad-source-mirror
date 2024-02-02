@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 12:23+0000\n"
+"PO-Revision-Date: 2024-02-02 12:58+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -19266,22 +19266,22 @@ msgstr ""
 "'%s' может создать проблемы при сохранении в библиотеке символов"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
 "<b>Вывод-дубликат %s</b> %s с координатами <b>(%s, %s)</b>, конфликтует с "
-"выводом %s%s, координаты <b>(%s, %s)</b> в частях %s и %s."
+"выводом %s%s, координаты <b>(%s, %s)</b> в стиле корпуса %s."
 
 #: eeschema/symbol_checker.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
 "<b>Вывод-дубликат %s</b> %s с координатами <b>(%s, %s)</b>, конфликтует с "
-"выводом %s%s, координаты <b>(%s, %s)</b> в частях %s и %s."
+"выводом %s%s, координаты <b>(%s, %s)</b> в частях %s и %s стиля корпуса %s."
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -19330,22 +19330,22 @@ msgstr ""
 "больше не требуются<br><br>"
 
 #: eeschema/symbol_checker.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
 msgstr ""
 "Примечание: <b>Скрытый вывод питания %s</b> %s с координатами <b>(%s, %s)</"
-"b> в части %c."
+"b> в стиле корпуса %s."
 
 #: eeschema/symbol_checker.cpp:258
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
 "Примечание: <b>Скрытый вывод питания %s</b> %s с координатами <b>(%s, %s)</"
-"b> в доп.обозначении части %c."
+"b> в части %c стиля корпуса %s."
 
 #: eeschema/symbol_checker.cpp:272
 #, c-format
@@ -19369,19 +19369,20 @@ msgstr ""
 "(Имена скрытых выводов питания будут указаны на любых подключенных цепях.)"
 
 #: eeschema/symbol_checker.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
 msgstr ""
-"<b>Вывод %s не по сетке</b> %s с координатами <b>(%s, %s)</b> в доп."
-"обозначении."
+"<b>Вывод %s не по сетке</b> %s с координатами <b>(%s, %s)</b> в стиле "
+"корпуса %s."
 
 #: eeschema/symbol_checker.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b>Вывод %s не по сетке</b> %s с координатами <b>(%s, %s)</b> в части %c."
+"<b>Вывод %s не по сетке</b> %s с координатами <b>(%s, %s)</b> в части %c "
+"стиля корпуса %s."
 
 #: eeschema/symbol_checker.cpp:330
 #, c-format
@@ -38704,14 +38705,14 @@ msgid "Missing footprint %s (%s)"
 msgstr "Отсутствует посад.место %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
-msgstr "Атрибуты посад.места не совпадают с символом"
+msgstr "Посад.место %s, значение (%s) не соответствует значению в символе (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint (%s) doesn't match that given by symbol (%s)."
-msgstr "Цепь конт.пл. (%s) не соответствует назначенной в схеме (%s)."
+msgstr "Посад.место %s (%s) не соответствует назначенному в символе (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:198
 msgid "No corresponding pin found in schematic."
