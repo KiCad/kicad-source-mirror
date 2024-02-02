@@ -123,7 +123,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::GLB: fn.SetExt( FILEEXT::GltfBinaryFileExtension );
             break;
-        default: return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
+        default:
+            return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
         aStepJob->m_outputFile = fn.GetFullName();
@@ -135,10 +136,10 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         double scale = 0.0;
         switch ( aStepJob->m_vrmlUnits )
         {
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::MILLIMETERS: scale = 1.0; break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::METERS: scale = 0.001; break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS: scale = 10.0 / 25.4; break;
-        case JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES: scale = 1.0 / 25.4; break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::MILLIMETERS: scale = 1.0;         break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::METERS:      scale = 0.001;       break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::TENTHS:      scale = 10.0 / 25.4; break;
+        case JOB_EXPORT_PCB_3D::VRML_UNITS::INCHES:      scale = 1.0 / 25.4;  break;
         }
 
         EXPORTER_VRML vrmlExporter( brd );
@@ -161,7 +162,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         if ( success )
         {
-            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ), aStepJob->m_outputFile ),
+            m_reporter->Report( wxString::Format( _( "Successfully exported VRML to %s" ),
+                                                  aStepJob->m_outputFile ),
                                 RPT_SEVERITY_INFO );
         }
         else
@@ -194,16 +196,15 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         case JOB_EXPORT_PCB_3D::FORMAT::GLB:
             params.m_format = EXPORTER_STEP_PARAMS::FORMAT::GLB;
             break;
-        default: return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
+        default:
+            return CLI::EXIT_CODES::ERR_UNKNOWN; // shouldnt have gotten here
         }
 
         EXPORTER_STEP stepExporter( brd, params );
         stepExporter.m_outputFile = aStepJob->m_outputFile;
 
         if( !stepExporter.Export() )
-        {
             return CLI::EXIT_CODES::ERR_UNKNOWN;
-        }
     }
 
     return CLI::EXIT_CODES::OK;
@@ -276,13 +277,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     plotOpts.SetDXFPlotPolygonMode( aDxfJob->m_plotGraphicItemsUsingContours );
 
     if( aDxfJob->m_dxfUnits == JOB_EXPORT_PCB_DXF::DXF_UNITS::MILLIMETERS )
-    {
         plotOpts.SetDXFPlotUnits( DXF_UNITS::MILLIMETERS );
-    }
     else
-    {
         plotOpts.SetDXFPlotUnits( DXF_UNITS::INCHES );
-    }
 
     plotOpts.SetPlotFrameRef( aDxfJob->m_plotBorderTitleBlocks );
     plotOpts.SetPlotValue( aDxfJob->m_plotFootprintValues );
@@ -345,17 +342,9 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     switch( aPdfJob->m_drillShapeOption )
     {
         default:
-        case 0:
-            plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );
-            break;
-
-        case 1:
-            plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE );
-            break;
-
-        case 2:
-            plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );
-            break;
+        case 0: plotOpts.SetDrillMarksType( DRILL_MARKS::NO_DRILL_SHAPE );    break;
+        case 1: plotOpts.SetDrillMarksType( DRILL_MARKS::SMALL_DRILL_SHAPE ); break;
+        case 2: plotOpts.SetDrillMarksType( DRILL_MARKS::FULL_DRILL_SHAPE );  break;
     }
 
     PDF_PLOTTER* plotter = (PDF_PLOTTER*) StartPlotBoard(
@@ -485,7 +474,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 }
 
 
-void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS&       aPlotOpts,
+void PCBNEW_JOBS_HANDLER::populateGerberPlotOptionsFromJob( PCB_PLOT_PARAMS& aPlotOpts,
                                                             JOB_EXPORT_PCB_GERBER* aJob )
 {
     aPlotOpts.SetFormat( PLOT_FORMAT::GERBER );
@@ -576,6 +565,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
     // ensure output dir exists
     wxFileName fn( aDrillJob->m_outputDir + wxT( "/" ) );
+
     if( !fn.Mkdir( wxS_DIR_DEFAULT, wxPATH_MKDIR_FULL ) )
     {
         m_reporter->Report( _( "Failed to create output directory\n" ), RPT_SEVERITY_ERROR );
@@ -585,13 +575,9 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     std::unique_ptr<GENDRILL_WRITER_BASE> drillWriter;
 
     if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
-    {
         drillWriter = std::make_unique<EXCELLON_WRITER>( brd );
-    }
     else
-    {
         drillWriter = std::make_unique<GERBER_WRITER>( brd );
-    }
 
     VECTOR2I offset;
 
@@ -604,12 +590,12 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
 
     switch( aDrillJob->m_mapFormat )
     {
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::POSTSCRIPT: mapFormat = PLOT_FORMAT::POST; break;
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::GERBER_X2: mapFormat = PLOT_FORMAT::GERBER; break;
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::DXF: mapFormat = PLOT_FORMAT::DXF; break;
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::SVG: mapFormat = PLOT_FORMAT::SVG; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::POSTSCRIPT: mapFormat = PLOT_FORMAT::POST;   break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::GERBER_X2:  mapFormat = PLOT_FORMAT::GERBER; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::DXF:        mapFormat = PLOT_FORMAT::DXF;    break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::SVG:        mapFormat = PLOT_FORMAT::SVG;    break;
     default:
-    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF: mapFormat = PLOT_FORMAT::PDF; break;
+    case JOB_EXPORT_PCB_DRILL::MAP_FORMAT::PDF:        mapFormat = PLOT_FORMAT::PDF;    break;
     }
 
     if( aDrillJob->m_format == JOB_EXPORT_PCB_DRILL::DRILL_FORMAT::EXCELLON )
@@ -981,17 +967,13 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     }
 
     EDA_UNITS units;
+
     switch( drcJob->m_units )
     {
-    case JOB_PCB_DRC::UNITS::INCHES:
-        units = EDA_UNITS::INCHES;
-        break;
-    case JOB_PCB_DRC::UNITS::MILS:
-        units = EDA_UNITS::MILS;
-        break;
-    case JOB_PCB_DRC::UNITS::MILLIMETERS:
-    default:
-        units = EDA_UNITS::MILLIMETRES; break;
+    case JOB_PCB_DRC::UNITS::INCHES:      units = EDA_UNITS::INCHES;      break;
+    case JOB_PCB_DRC::UNITS::MILS:        units = EDA_UNITS::MILS;        break;
+    case JOB_PCB_DRC::UNITS::MILLIMETERS: units = EDA_UNITS::MILLIMETRES; break;
+    default:                              units = EDA_UNITS::MILLIMETRES; break;
     }
 
     std::shared_ptr<DRC_ENGINE> drcEngine = brd->GetDesignSettings().m_DRCEngine;
@@ -1096,6 +1078,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     DRC_REPORT reportWriter( brd, units, markersProvider, ratsnestProvider, fpWarningsProvider );
 
     bool wroteReport = false;
+
     if( drcJob->m_format == JOB_PCB_DRC::OUTPUT_FORMAT::JSON )
         wroteReport = reportWriter.WriteJsonReport( drcJob->m_outputFile );
     else
@@ -1103,12 +1086,14 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     if( !wroteReport )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ), drcJob->m_outputFile ),
+        m_reporter->Report( wxString::Format( _( "Unable to save DRC report to %s\n" ),
+                                              drcJob->m_outputFile ),
                             RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ), drcJob->m_outputFile ),
+    m_reporter->Report( wxString::Format( _( "Saved DRC Report to %s\n" ),
+                                          drcJob->m_outputFile ),
                         RPT_SEVERITY_INFO );
 
     if( drcJob->m_exitCodeViolations )
@@ -1146,8 +1131,8 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     }
 
     STRING_UTF8_MAP props;
-    props["units"] =
-            job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? "mm" : "inch";
+    props["units"] = job->m_units == JOB_EXPORT_PCB_IPC2581::IPC2581_UNITS::MILLIMETERS ? "mm"
+                                                                                        : "inch";
     props["sigfig"] = wxString::Format( "%d", job->m_units );
     props["version"] = job->m_version == JOB_EXPORT_PCB_IPC2581::IPC2581_VERSION::C ? "C" : "B";
     props["OEMRef"] = job->m_colInternalId;
@@ -1232,20 +1217,23 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
     if( aSheetPath.IsEmpty() )
         return;
 
-    auto loadSheet = [&]( const wxString& path ) -> bool
-    {
-        BASE_SCREEN::m_DrawingSheetFileName = path;
-        wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
-                                                        aBrd->GetProject()->GetProjectPath() );
-        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
-        {
-            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." )+ wxS( "\n" ), path ),
-                                RPT_SEVERITY_ERROR );
-            return false;
-        }
+    auto loadSheet =
+            [&]( const wxString& path ) -> bool
+            {
+                BASE_SCREEN::m_DrawingSheetFileName = path;
+                wxString filename = DS_DATA_MODEL::ResolvePath( BASE_SCREEN::m_DrawingSheetFileName,
+                                                                aBrd->GetProject()->GetProjectPath() );
 
-        return true;
-    };
+                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
+                {
+                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ) + wxS( "\n" ),
+                                                          path ),
+                                        RPT_SEVERITY_ERROR );
+                    return false;
+                }
+
+                return true;
+            };
 
     if( loadSheet( aSheetPath ) )
         return;

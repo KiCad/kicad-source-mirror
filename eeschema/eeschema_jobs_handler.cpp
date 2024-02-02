@@ -104,28 +104,26 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
     // Load the drawing sheet from the filename stored in BASE_SCREEN::m_DrawingSheetFileName.
     // If empty, or not existing, the default drawing sheet is loaded.
 
-    auto loadSheet = [&]( const wxString& path ) -> bool
-    {
-        wxString resolvedSheetPath =
-                DS_DATA_MODEL::ResolvePath( path, aSch->Prj().GetProjectPath() );
+    auto loadSheet =
+            [&]( const wxString& path ) -> bool
+            {
+                wxString absolutePath = DS_DATA_MODEL::ResolvePath( path,
+                                                                    aSch->Prj().GetProjectPath() );
 
-        if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( resolvedSheetPath ) )
-        {
-            m_reporter->Report(
-                    wxString::Format( _( "Error loading drawing sheet '%s'." ) + wxS( "\n" ),
-                                      path ),
-                                RPT_SEVERITY_ERROR );
-            return false;
-        }
+                if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( absolutePath ) )
+                {
+                    m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ),
+                                                          path ),
+                                        RPT_SEVERITY_ERROR );
+                    return false;
+                }
 
-        return true;
-    };
+                return true;
+            };
 
     // try to load the override first
     if( !aDrawingSheetOverride.IsEmpty() && loadSheet( aDrawingSheetOverride ) )
-    {
         return;
-    }
 
     // no override or failed override continues here
     loadSheet( aSch->Settings().m_SchDrawingSheetFileName );
@@ -158,11 +156,11 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     PLOT_FORMAT format = PLOT_FORMAT::PDF;
     switch( aPlotJob->m_plotFormat )
     {
-    case SCH_PLOT_FORMAT::DXF: format = PLOT_FORMAT::DXF; break;
-    case SCH_PLOT_FORMAT::PDF: format = PLOT_FORMAT::PDF; break;
-    case SCH_PLOT_FORMAT::SVG: format = PLOT_FORMAT::SVG; break;
-    case SCH_PLOT_FORMAT::POST: format = PLOT_FORMAT::POST; break;
-    case SCH_PLOT_FORMAT::HPGL: format = PLOT_FORMAT::HPGL; break;
+    case SCH_PLOT_FORMAT::DXF:    format = PLOT_FORMAT::DXF;    break;
+    case SCH_PLOT_FORMAT::PDF:    format = PLOT_FORMAT::PDF;    break;
+    case SCH_PLOT_FORMAT::SVG:    format = PLOT_FORMAT::SVG;    break;
+    case SCH_PLOT_FORMAT::POST:   format = PLOT_FORMAT::POST;   break;
+    case SCH_PLOT_FORMAT::HPGL:   format = PLOT_FORMAT::HPGL;   break;
     case SCH_PLOT_FORMAT::GERBER: format = PLOT_FORMAT::GERBER; break;
     }
 
@@ -170,17 +168,17 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     switch( aPlotJob->m_HPGLPaperSizeSelect )
     {
     case JOB_HPGL_PAGE_SIZE::DEFAULT: hpglPageSize = HPGL_PAGE_SIZE::DEFAULT; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_A: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_A:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_A;  break;
     case JOB_HPGL_PAGE_SIZE::SIZE_A0: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A0; break;
     case JOB_HPGL_PAGE_SIZE::SIZE_A1: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A1; break;
     case JOB_HPGL_PAGE_SIZE::SIZE_A2: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A2; break;
     case JOB_HPGL_PAGE_SIZE::SIZE_A3: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A3; break;
     case JOB_HPGL_PAGE_SIZE::SIZE_A4: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A4; break;
     case JOB_HPGL_PAGE_SIZE::SIZE_A5: hpglPageSize = HPGL_PAGE_SIZE::SIZE_A5; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_B: hpglPageSize = HPGL_PAGE_SIZE::SIZE_B; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_C: hpglPageSize = HPGL_PAGE_SIZE::SIZE_C; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_D: hpglPageSize = HPGL_PAGE_SIZE::SIZE_D; break;
-    case JOB_HPGL_PAGE_SIZE::SIZE_E: hpglPageSize = HPGL_PAGE_SIZE::SIZE_E; break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_B:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_B;  break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_C:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_C;  break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_D:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_D;  break;
+    case JOB_HPGL_PAGE_SIZE::SIZE_E:  hpglPageSize = HPGL_PAGE_SIZE::SIZE_E;  break;
     }
 
     HPGL_PLOT_ORIGIN_AND_UNITS hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::USER_FIT_PAGE;
@@ -189,7 +187,6 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
         hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT;
         break;
-
     case JOB_HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
         hpglOrigin = HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER;
         break;
@@ -205,8 +202,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     switch( aPlotJob->m_pageSizeSelect )
     {
-    case JOB_PAGE_SIZE::PAGE_SIZE_A: pageSizeSelect = PageFormatReq::PAGE_SIZE_A; break;
-    case JOB_PAGE_SIZE::PAGE_SIZE_A4: pageSizeSelect = PageFormatReq::PAGE_SIZE_A4; break;
+    case JOB_PAGE_SIZE::PAGE_SIZE_A:    pageSizeSelect = PageFormatReq::PAGE_SIZE_A;    break;
+    case JOB_PAGE_SIZE::PAGE_SIZE_A4:   pageSizeSelect = PageFormatReq::PAGE_SIZE_A4;   break;
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
@@ -269,10 +266,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     ERC_TESTER erc( sch );
 
     if( erc.TestDuplicateSheetNames( false ) > 0 )
-    {
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
-    }
-
 
     std::unique_ptr<NETLIST_EXPORTER_BASE> helper;
     unsigned netlistOption = 0;
@@ -311,6 +305,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
         fileExt = wxS( "xml" );
         helper = std::make_unique<NETLIST_EXPORTER_XML>( sch );
         break;
+
     default:
         m_reporter->Report( _( "Unknown netlist format.\n" ), RPT_SEVERITY_ERROR );
         return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -328,9 +323,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     bool res = helper->WriteNetlist( aNetJob->m_outputFile, netlistOption, *m_reporter );
 
     if( !res )
-    {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
 
     return CLI::EXIT_CODES::OK;
 }
@@ -380,9 +373,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     ERC_TESTER erc( sch );
 
     if( erc.TestDuplicateSheetNames( false ) > 0 )
-    {
         m_reporter->Report( _( "Warning: duplicate sheet names.\n" ), RPT_SEVERITY_WARNING );
-    }
 
     // Build our data model
     FIELDS_EDITOR_GRID_DATA_MODEL dataModel( referenceList );
@@ -411,8 +402,10 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
          sch->Settings().m_TemplateFieldNames.GetTemplateFieldNames() )
     {
         if( userFieldNames.count( templateFieldname.m_Name ) == 0 )
+        {
             dataModel.AddColumn( templateFieldname.m_Name, GetTextVars( templateFieldname.m_Name ),
                                  false );
+        }
     }
 
     BOM_PRESET preset;
@@ -500,6 +493,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
             field.groupBy = std::find( aBomJob->m_fieldsGroupBy.begin(),
                                        aBomJob->m_fieldsGroupBy.end(), field.name )
                             != aBomJob->m_fieldsGroupBy.end();
+
             if( ( aBomJob->m_fieldsLabels.size() > i ) && !aBomJob->m_fieldsLabels[i].IsEmpty() )
                 field.label = aBomJob->m_fieldsLabels[i];
             else if( IsTextVar( field.name ) )
@@ -533,10 +527,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     if( !f.Open( aBomJob->m_outputFile, wxFile::write ) )
     {
-        m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ),
+        m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ),
                                               aBomJob->m_outputFile ),
-                RPT_SEVERITY_ERROR
-        );
+                            RPT_SEVERITY_ERROR );
 
         return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
     }
@@ -587,9 +580,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     bool res = f.Write( dataModel.Export( fmt ) );
 
     if( !res )
-    {
         return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
 
     return CLI::EXIT_CODES::OK;
 }
@@ -912,9 +903,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
         try
         {
             if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
-            {
                 schLibrary.SetFileName( upgradeJob->m_outputLibraryPath );
-            }
 
             schLibrary.SetModified();
             schLibrary.Save();
@@ -969,15 +958,10 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     switch( ercJob->m_units )
     {
-    case JOB_SCH_ERC::UNITS::INCHES:
-        units = EDA_UNITS::INCHES;
-        break;
-    case JOB_SCH_ERC::UNITS::MILS:
-        units = EDA_UNITS::MILS;
-        break;
-    case JOB_SCH_ERC::UNITS::MILLIMETERS:
-    default:
-        units = EDA_UNITS::MILLIMETRES; break;
+    case JOB_SCH_ERC::UNITS::INCHES:      units = EDA_UNITS::INCHES;      break;
+    case JOB_SCH_ERC::UNITS::MILS:        units = EDA_UNITS::MILS;        break;
+    case JOB_SCH_ERC::UNITS::MILLIMETERS: units = EDA_UNITS::MILLIMETRES; break;
+    default:                              units = EDA_UNITS::MILLIMETRES; break;
     }
 
     std::shared_ptr<SHEETLIST_ERC_ITEMS_PROVIDER> markersProvider =
@@ -993,9 +977,9 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     markersProvider->SetSeverities( ercJob->m_severity );
 
-    m_reporter->Report(
-            wxString::Format( _( "Found %d violations\n" ), markersProvider->GetCount() ),
-            RPT_SEVERITY_INFO );
+    m_reporter->Report( wxString::Format( _( "Found %d violations\n" ),
+                                          markersProvider->GetCount() ),
+                        RPT_SEVERITY_INFO );
 
     ERC_REPORT reportWriter( sch, units );
 
@@ -1008,9 +992,9 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
 
     if( !wroteReport )
     {
-        m_reporter->Report(
-                wxString::Format( _( "Unable to save ERC report to %s\n" ), ercJob->m_outputFile ),
-                RPT_SEVERITY_INFO );
+        m_reporter->Report( wxString::Format( _( "Unable to save ERC report to %s\n" ),
+                                              ercJob->m_outputFile ),
+                            RPT_SEVERITY_INFO );
         return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
@@ -1020,9 +1004,7 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     if( ercJob->m_exitCodeViolations )
     {
         if( markersProvider->GetCount() > 0 )
-        {
             return CLI::EXIT_CODES::ERR_RC_VIOLATIONS;
-        }
     }
 
     return CLI::EXIT_CODES::SUCCESS;
