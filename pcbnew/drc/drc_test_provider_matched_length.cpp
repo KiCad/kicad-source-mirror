@@ -150,17 +150,37 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkSkews( const DRC_CONSTRAINT& aConstr
     for( const auto& ent : aMatchedConnections )
     {
         int skew = KiROUND( ent.total - avgLength );
+        bool fail_min = false;
+        bool fail_max = false;
+
         if( aConstraint.GetValue().HasMax() && abs( skew ) > aConstraint.GetValue().Max() )
+            fail_max = true;
+        else if( aConstraint.GetValue().HasMin() && abs( skew ) < aConstraint.GetValue().Min() )
+            fail_min = true;
+
+        if( fail_min || fail_max )
         {
             std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_SKEW_OUT_OF_RANGE );
             wxString msg;
 
-            msg.Printf( _( "(%s max skew %s; actual %s; average net length %s; actual %s)" ),
-                          aConstraint.GetName(),
-                          MessageTextFromValue( aConstraint.GetValue().Max() ),
-                          MessageTextFromValue( skew ),
-                          MessageTextFromValue( avgLength ),
-                          MessageTextFromValue( ent.total ) );
+            if( fail_min )
+            {
+                msg.Printf( _( "(%s min skew %s; actual %s; average net length %s; actual %s)" ),
+                            aConstraint.GetName(),
+                            MessageTextFromValue( aConstraint.GetValue().Min() ),
+                            MessageTextFromValue( skew ),
+                            MessageTextFromValue( avgLength ),
+                            MessageTextFromValue( ent.total ) );
+            }
+            else
+            {
+                msg.Printf( _( "(%s max skew %s; actual %s; average net length %s; actual %s)" ),
+                            aConstraint.GetName(),
+                            MessageTextFromValue( aConstraint.GetValue().Max() ),
+                            MessageTextFromValue( skew ),
+                            MessageTextFromValue( avgLength ),
+                            MessageTextFromValue( ent.total ) );
+            }
 
             drcItem->SetErrorMessage( drcItem->GetErrorText() + " " + msg );
 
