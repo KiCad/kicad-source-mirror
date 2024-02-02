@@ -1,23 +1,23 @@
 # lê văn lập <levanlap2502@gmail.com>, 2020, 2021, 2022, 2023.
 # Trần Phi Hải <tranphihai-focus@outlook.com>, 2021, 2022.
 # Bế Trọng Nghĩa <benghia1st@gmail.com>, 2022.
-# Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>, 2023.
+# Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>, 2023, 2024.
 # Phạm Minh Tấn <masterminhtan@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2023-12-21 10:49+0000\n"
+"PO-Revision-Date: 2024-02-02 12:24+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/"
+"master-source/vi/>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -37,20 +37,20 @@ msgstr "Tạo các lớp"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:878
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "Không có footprint nào được nhập vào."
+msgstr "Không có footprint nào được tải."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:895
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Đường bao footprint bị thiếu hoặc không đúng định dạng. Chạy Footprint "
+"Đường viền footprint bị thiếu hoặc không đúng định dạng. Chạy Footprint "
 "Checker để phân tích đầy đủ."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:904
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Đường bao bo mạch bị thiếu hoặc không đúng định dạng. Chạy DRC để phân tích "
+"Đường viền bo mạch bị thiếu hoặc không đúng định dạng. Chạy DRC để phân tích "
 "đầy đủ."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
@@ -513,9 +513,8 @@ msgid "Render Solid Colors"
 msgstr "Kết xuất màu đồng nhất"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Chỉ sử dụng thuộc tính màu khuếch tán từ tệp mô hình 3D mô hình"
+msgstr "Chỉ sử dụng thuộc tính màu khuếch tán từ tệp mô hình 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:291
 msgid "Render CAD Colors"
@@ -524,7 +523,7 @@ msgstr "Kết xuất màu CAD"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:292
 #, fuzzy
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Sử dụng bản màu vẽ CAD dựa trên độ phân tán của vật liệu"
+msgstr "Sử dụng kiểu màu CAD dựa trên màu khuếch tán của vật liệu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:300
 msgid "Show Through Hole 3D Models"
@@ -1377,6 +1376,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"Ẩn hoặc hiện bo mạch\n"
+"Nếu bị ẩn, chỉ hiển thị các lớp đồng và màn lụa."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -3097,6 +3098,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
+"Chọn một <b>Lựa chọn tùy chọn</b> trong hộp danh sách ở trên rồi nhấp vào "
+"nút <b>Nối tùy chọn đã chọn</b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:52
 #, c-format
@@ -3156,7 +3159,7 @@ msgstr "Các tùy chọn được hỗ trợ bởi plugin hiện tại"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr ""
+msgstr "<<    Nối tùy chọn đã chọn"
 
 #: common/dialogs/dialog_print_generic.cpp:95
 #: common/dialogs/dialog_print_generic.cpp:301
@@ -3627,11 +3630,11 @@ msgstr "Chuyển đổi nhánh Git"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Chọn hoặc nhập tên nhánh:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "Nhánh"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
@@ -3873,13 +3876,15 @@ msgstr "Thay đổi này có hiệu lực khi khởi chạy lại trình chỉnh
 
 #: common/dialogs/panel_common_settings_base.cpp:152
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Tập trung theo chuột giữa trình soạn thảo sơ đồ và PCB"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Nếu con trỏ chuột được di chuyển quá khung vẽ của cửa sổ trình soạn thảo sơ "
+"đồ hoặc PCB, cửa sổ đó sẽ được nâng lên."
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
@@ -4437,7 +4442,7 @@ msgstr "Kéo nút giữa:"
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
 msgid "Pan"
-msgstr "Pan"
+msgstr "Lia"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
@@ -4580,7 +4585,7 @@ msgstr "Trình quản lý nội dung và plugin"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:53
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "Kiểm tra cập nhật gói khi khởi động"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:63
 #, fuzzy
@@ -5188,9 +5193,8 @@ msgid "Schematic Editor"
 msgstr "Đánh dấu Schematic"
 
 #: common/eda_base_frame.cpp:1139
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Gán Chú thích hoàn tất."
+msgstr "Tùy chọn đánh số"
 
 #: common/eda_base_frame.cpp:1141
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
@@ -5254,7 +5258,7 @@ msgstr "Worksheet"
 
 #: common/eda_base_frame.cpp:1232
 msgid "Packages and Updates"
-msgstr ""
+msgstr "Gói và cập nhật"
 
 #: common/eda_base_frame.cpp:1318
 #, c-format
@@ -5584,9 +5588,8 @@ msgid "Draw Item"
 msgstr "Draw Item"
 
 #: common/eda_shape.cpp:66
-#, fuzzy
 msgid "Thermal Spoke"
-msgstr "Đang kiểm tra nhãn..."
+msgstr "Nan hoa nhiệt"
 
 #: common/eda_shape.cpp:67 pcbnew/pcb_shape.cpp:743
 #, fuzzy
@@ -6088,7 +6091,7 @@ msgstr "từ %s: %s () dòng: %d"
 #: common/exceptions.cpp:76
 #, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s trong '%s', dòng %d, offset %d"
+msgstr "%s trong '%s', dòng %d, offset %d."
 
 #: common/exceptions.cpp:90
 #, fuzzy, c-format
@@ -6877,7 +6880,7 @@ msgstr "Dây"
 
 #: common/layer_id.cpp:112
 msgid "Buses"
-msgstr "Buses"
+msgstr "Bus"
 
 #: common/layer_id.cpp:113
 #, fuzzy
@@ -7895,9 +7898,8 @@ msgid "Go to next marker in Checker window"
 msgstr "Đi tới điểm đánh dấu tiếp theo trong cửa sổ Bộ kiểm tra"
 
 #: common/tool/actions.cpp:383
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Loại trừ "
+msgstr "Loại trừ đánh dấu"
 
 #: common/tool/actions.cpp:384
 #, fuzzy
@@ -8398,7 +8400,7 @@ msgstr ""
 
 #: common/tool/common_control.cpp:239 common/tool/common_control.cpp:259
 msgid "File Not Found"
-msgstr "không tìm thấy tệp."
+msgstr "không tìm thấy tệp"
 
 #: common/tool/common_control.cpp:256
 #, c-format
@@ -17126,9 +17128,9 @@ msgid "Connection Name"
 msgstr "Chiều rộng Track"
 
 #: eeschema/sch_connection.cpp:439 eeschema/sch_connection.cpp:448
-#, fuzzy, c-format
+#, c-format
 msgid "Bus Alias %s Members"
-msgstr "Thành viên bí danh"
+msgstr "%s Thành viên bí danh Bus"
 
 #: eeschema/sch_edit_frame.cpp:141
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
@@ -17866,7 +17868,7 @@ msgstr "Tên tín hiệu không hợp lệ"
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:410
 #, fuzzy, c-format
 msgid "No parent for extended symbol %s"
-msgstr "Tạo, xóa và chỉnh sửa các ký hiệu điện tử"
+msgstr "Không có cha mẹ cho biểu tượng mở rộng %s"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:425
 #, fuzzy
@@ -19230,9 +19232,8 @@ msgid "Internal Error while reading Enable"
 msgstr "Lỗi nội bộ khi đọc Enable"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2030
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Không xác định parent của thuộc tính"
+msgstr "Phân cực không xác định "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -20713,9 +20714,9 @@ msgid "false"
 msgstr ""
 
 #: eeschema/tools/backannotate.cpp:387
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "Thay đổi các Symbol khớp với bộ chỉ định tham chiếu:"
+msgstr "Thay đổi ký hiệu tham chiếu '%s' thành '%s'."
 
 #: eeschema/tools/backannotate.cpp:403
 #, fuzzy, c-format
@@ -21030,9 +21031,8 @@ msgid "Add Pin"
 msgstr "Thêm Trường"
 
 #: eeschema/tools/ee_actions.cpp:321
-#, fuzzy
 msgid "Add a pin"
-msgstr "Thêm Trường"
+msgstr "Thêm chân"
 
 #: eeschema/tools/ee_actions.cpp:329 eeschema/tools/ee_actions.cpp:512
 #: eeschema/tools/sch_drawing_tools.cpp:1520
@@ -21057,9 +21057,8 @@ msgid "Add Text Box"
 msgstr "Văn bản Ẩn"
 
 #: eeschema/tools/ee_actions.cpp:339
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Khác"
+msgstr "thêm hộp văn bản"
 
 #: eeschema/tools/ee_actions.cpp:346 eeschema/tools/ee_actions.cpp:1303
 #, fuzzy
@@ -24064,7 +24063,7 @@ msgstr "Tô sáng các mục của Mạng '%s'"
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, fuzzy, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "Phần tử được tô sáng"
+msgstr "Làm nổi bật Loại khẩu độ '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
@@ -26014,9 +26013,8 @@ msgid "Commit File..."
 msgstr "Thêm Trường..."
 
 #: kicad/project_tree_pane.cpp:967
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Chuyển sang Lưới tiếp theo"
+msgstr "Chuyển sang nhánh "
 
 #: kicad/project_tree_pane.cpp:972
 msgid "Other..."
@@ -27931,9 +27929,8 @@ msgid "Exclude value 1:"
 msgstr "Loại trừ giá trị 1:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:51
-#, fuzzy
 msgid "Exclude value 2:"
-msgstr "Loại trừ "
+msgstr "Giá trị loại trừ 2:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:71
 #, fuzzy
@@ -30028,9 +30025,8 @@ msgid "Invalid"
 msgstr "Tên tín hiệu không hợp lệ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:97
-#, fuzzy
 msgid "Excluded"
-msgstr "Loại trừ "
+msgstr "Loại trừ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:122
 #, fuzzy
@@ -30251,7 +30247,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Front Footprints"
+"Trước Footprint"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:865
 msgid ""
@@ -30261,7 +30257,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Back Footprints"
+"Sau Footprint"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:930
 #, fuzzy
@@ -31968,9 +31964,8 @@ msgid "Do you wish to delete excluded markers as well?"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:1109
-#, fuzzy
 msgid "Delete exclusions"
-msgstr "Xóa các loại trừ nữa?"
+msgstr "Xóa các loại trừ"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1250
 #, fuzzy
@@ -32855,9 +32850,8 @@ msgid "Restart Search"
 msgstr "Tìm kiếm Văn bản"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#, fuzzy
 msgid "Footprint: "
-msgstr "Footprint: %s"
+msgstr "Footprint: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
 #, fuzzy
@@ -33356,7 +33350,7 @@ msgstr "Tệp dự án: \"%s\""
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:494
 #, fuzzy, c-format
 msgid "Component count: %d."
-msgstr "Linh kiện"
+msgstr "Đếm linh kiện: %d."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:334
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:491
@@ -33655,7 +33649,7 @@ msgstr "Bl/Buried Via"
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
 #, fuzzy, c-format
 msgid "Generators A (%s)"
-msgstr "Trình tạo tệp tin:"
+msgstr "Trình tạo A (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 #, fuzzy
@@ -36253,9 +36247,8 @@ msgid "Target Properties"
 msgstr "Thuộc tính Văn bản"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:106
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Thuộc tính tham chiếu footprint"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:107
 #, fuzzy
@@ -36346,9 +36339,8 @@ msgid "Via start layer and end layer cannot be the same"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:799
-#, fuzzy
 msgid "Edit track/via properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Chỉnh sửa thuộc tính đường mạch/via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:864
 #, fuzzy
@@ -38793,9 +38785,9 @@ msgid "Board minimum hole clearance: %s."
 msgstr "Clearance lớp đồng tối thiểu"
 
 #: pcbnew/drc/drc_engine.cpp:818
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "Tên tín hiệu không được chứa khoảng trắng"
+msgstr "Ghi đè cục bộ lên %s; kết nối vùng: %s."
 
 #: pcbnew/drc/drc_engine.cpp:835
 #, c-format
@@ -38803,9 +38795,9 @@ msgid "Local override on %s; thermal relief gap: %s."
 msgstr "Ghi đè cục bộ trên %s; khoảng cách tản nhiệt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:852
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Đang kiểm tra nhãn..."
+msgstr "Ghi đè cục bộ lên %s; chiều rộng nan hoa nhiệt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:861
 #, c-format
@@ -41118,9 +41110,8 @@ msgid "Length Constraints: %s"
 msgstr "Đã cập nhật %s (đơn vị %s) từ %s thành %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2207
-#, fuzzy
 msgid "Tune"
-msgstr "Đóng %s"
+msgstr "Điều chỉnh"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2304
 #, fuzzy
@@ -45329,14 +45320,12 @@ msgid "Board overall dimensions: "
 msgstr "Kích thước tổng thể của bo: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:435
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "Khoảng cách lưới tối thiểu:"
+msgstr "Khoảng cách/đường mạch tối thiểu: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:445
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "Màu sắc lớp đồng / bề mặt hoàn thiện ..."
+msgstr "Kết thúc Đồng: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:453
 msgid "Castellated pads: "
