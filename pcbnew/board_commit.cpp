@@ -77,6 +77,12 @@ BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr ) :
         m_isFootprintEditor = true;
 }
 
+BOARD_COMMIT::BOARD_COMMIT( TOOL_MANAGER* aMgr, bool aIsBoardEditor ) :
+    m_toolMgr( aMgr ),
+    m_isBoardEditor( aIsBoardEditor )
+{
+}
+
 
 BOARD* BOARD_COMMIT::GetBoard() const
 {
