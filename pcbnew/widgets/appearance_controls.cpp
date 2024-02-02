@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -2635,7 +2635,8 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         if( m_lastSelectedUserPreset )
             name = m_lastSelectedUserPreset->name;
 
-        wxTextEntryDialog dlg( this, _( "Layer preset name:" ), _( "Save Layer Preset" ), name );
+        wxTextEntryDialog dlg( wxGetTopLevelParent( this ), _( "Layer preset name:" ),
+                               _( "Save Layer Preset" ), name );
 
         if( dlg.ShowModal() != wxID_OK )
         {
@@ -2662,14 +2663,14 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         else if( preset->readOnly )
         {
             wxMessageBox( _( "Default presets cannot be modified.\nPlease use a different name." ),
-                          _( "Error" ), wxOK | wxICON_ERROR, this );
+                          _( "Error" ), wxOK | wxICON_ERROR, wxGetTopLevelParent( this ) );
             resetSelection();
             return;
         }
         else
         {
             // Ask the user if they want to overwrite the existing preset
-            if( !IsOK( this, _( "Overwrite existing preset?" ) ) )
+            if( !IsOK( wxGetTopLevelParent( this ), _( "Overwrite existing preset?" ) ) )
             {
                 resetSelection();
                 return;
@@ -2862,7 +2863,8 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
         // Save current state to new preset
         wxString name;
 
-        wxTextEntryDialog dlg( this, _( "Viewport name:" ), _( "Save Viewport" ), name );
+        wxTextEntryDialog dlg( wxGetTopLevelParent( this ),
+                               _( "Viewport name:" ), _( "Save Viewport" ), name );
 
         if( dlg.ShowModal() != wxID_OK )
         {

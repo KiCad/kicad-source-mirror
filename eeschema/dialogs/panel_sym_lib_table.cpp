@@ -433,7 +433,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 else
                     msg = _( "A library table row path cell is empty." );
 
-                wxMessageDialog badCellDlg( this, msg, _( "Invalid Row Definition" ),
+                wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+                wxMessageDialog badCellDlg( topLevelParent, msg, _( "Invalid Row Definition" ),
                                             wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
                 badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
                                                   "invalid to be removed from the table." ) );
@@ -462,7 +464,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 m_cur_grid->MakeCellVisible( r, 0 );
                 m_cur_grid->SetGridCursor( r, 1 );
 
-                wxMessageDialog errdlg( this, msg, _( "Library Nickname Error" ) );
+                wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+                wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
                 errdlg.ShowModal();
                 return false;
             }
@@ -512,7 +516,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                     m_cur_grid->MakeCellVisible( r2, 0 );
                     m_cur_grid->SetGridCursor( r2, 1 );
 
-                    wxMessageDialog errdlg( this, msg, _( "Library Nickname Error" ) );
+                    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+                    wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
                     errdlg.ShowModal();
 
                     return false;
@@ -550,7 +556,9 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
             {
                 msg.Printf( _( "Symbol library '%s' failed to load." ), row.GetNickName() );
 
-                wxMessageDialog errdlg( this, msg + wxS( "\n" ) + ioe.What(),
+                wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+                wxMessageDialog errdlg( topLevelParent, msg + wxS( "\n" ) + ioe.What(),
                                         _( "Error Loading Library" ) );
                 errdlg.ShowModal();
 
@@ -641,7 +649,8 @@ void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             if( !applyToAll )
             {
                 // The cancel button adds the library to the table anyway
-                addDuplicates = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                addDuplicates = OKOrCancelDialog( wxGetTopLevelParent( this ), warning,
+                                                  wxString::Format( msg, nickname ),
                                                   detailedMsg, _( "Skip" ), _( "Add Anyway" ),
                                                   &applyToAll ) == wxID_CANCEL;
             }
@@ -876,7 +885,10 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         if( !legacyLib.Exists() )
         {
             msg.Printf( _( "Library '%s' not found." ), relPath );
-            DisplayErrorMessage( this, msg );
+
+            wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+            DisplayErrorMessage( topLevelParent, msg );
             continue;
         }
 
@@ -917,7 +929,10 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         else
         {
             msg.Printf( _( "Failed to save symbol library file '%s'." ), newLib.GetFullPath() );
-            DisplayErrorMessage( this, msg );
+
+            wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+            DisplayErrorMessage( topLevelParent, msg );
         }
     }
 }

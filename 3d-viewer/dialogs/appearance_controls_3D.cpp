@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 CERN
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -645,7 +645,8 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
     }
     else if( index == count - 2 )
     {
-        wxTextEntryDialog dlg( this, _( "Layer preset name:" ), _( "Save Layer Preset" ) );
+        wxTextEntryDialog dlg( wxGetTopLevelParent( this ), _( "Layer preset name:" ),
+                               _( "Save Layer Preset" ) );
 
         if( dlg.ShowModal() != wxID_OK )
         {
@@ -660,7 +661,7 @@ void APPEARANCE_CONTROLS_3D::onLayerPresetChanged( wxCommandEvent& aEvent )
 
         if( LAYER_PRESET_3D* preset = cfg->FindPreset( name ) )
         {
-            if( !IsOK( this, _( "Overwrite existing preset?" ) ) )
+            if( !IsOK( wxGetTopLevelParent( this ), _( "Overwrite existing preset?" ) ) )
             {
                 resetSelection();
                 return;
@@ -792,7 +793,8 @@ void APPEARANCE_CONTROLS_3D::onViewportChanged( wxCommandEvent& aEvent )
         // Save current state to new preset
         wxString name;
 
-        wxTextEntryDialog dlg( this, _( "Viewport name:" ), _( "Save Viewport" ), name );
+        wxTextEntryDialog dlg( wxGetTopLevelParent( this ), _( "Viewport name:" ),
+                               _( "Save Viewport" ), name );
 
         if( dlg.ShowModal() != wxID_OK )
         {

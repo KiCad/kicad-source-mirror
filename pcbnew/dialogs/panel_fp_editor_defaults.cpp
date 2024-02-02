@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -473,7 +473,8 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
     if( errorsMsg.IsEmpty() )
         return true;
 
-    KIDIALOG dlg( this, errorsMsg, KIDIALOG::KD_ERROR, _( "Parameter error" ) );
+    KIDIALOG dlg( wxGetTopLevelParent( this ), errorsMsg, KIDIALOG::KD_ERROR,
+                  _( "Parameter error" ) );
     dlg.ShowModal();
 
     return false;

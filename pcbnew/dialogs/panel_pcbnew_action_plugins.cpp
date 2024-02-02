@@ -245,7 +245,7 @@ void PANEL_PCBNEW_ACTION_PLUGINS::OnShowErrorsButtonClick( wxCommandEvent& event
 
     // Now display the filtered trace in our dialog
     // (a simple wxMessageBox is really not suitable for long messages)
-    DIALOG_FOOTPRINT_WIZARD_LOG logWindow( this );
+    DIALOG_FOOTPRINT_WIZARD_LOG logWindow( wxGetTopLevelParent( this ) );
     logWindow.m_Message->SetValue( trace );
     logWindow.ShowModal();
 }

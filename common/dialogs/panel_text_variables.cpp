@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -236,9 +236,11 @@ void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
         int width = m_TextVars->GetClientRect().GetWidth();
 
         m_TextVars->AutoSizeColumn( TV_NAME_COL );
-        m_TextVars->SetColSize( TV_NAME_COL, std::max( 72, m_TextVars->GetColSize( TV_NAME_COL ) ) );
+        m_TextVars->SetColSize( TV_NAME_COL,
+                                std::max( 72, m_TextVars->GetColSize( TV_NAME_COL ) ) );
 
-        m_TextVars->SetColSize( TV_VALUE_COL, std::max( 120, width - m_TextVars->GetColSize( TV_NAME_COL ) ) );
+        m_TextVars->SetColSize( TV_VALUE_COL,
+                                std::max( 120, width - m_TextVars->GetColSize( TV_NAME_COL ) ) );
         m_gridWidthsDirty = false;
     }
 
@@ -253,7 +255,9 @@ void PANEL_TEXT_VARIABLES::OnUpdateUI( wxUpdateUIEvent& event )
         wxString errorMsg = m_errorMsg;
         m_errorMsg = wxEmptyString;
 
-        DisplayErrorMessage( this, errorMsg );
+        wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+        DisplayErrorMessage( topLevelParent, errorMsg );
 
         m_TextVars->SetFocus();
         m_TextVars->MakeCellVisible( m_errorRow, m_errorCol );

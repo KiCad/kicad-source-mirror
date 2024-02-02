@@ -541,7 +541,9 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
                 else
                     msg = _( "A library table row path cell is empty." );
 
-                wxMessageDialog badCellDlg( this, msg, _( "Invalid Row Definition" ),
+                wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+                wxMessageDialog badCellDlg( topLevelParent, msg, _( "Invalid Row Definition" ),
                                             wxYES_NO | wxCENTER | wxICON_QUESTION | wxYES_DEFAULT );
                 badCellDlg.SetExtendedMessage( _( "Empty cells will result in all rows that are "
                                                   "invalid to be removed from the table." ) );
@@ -570,7 +572,9 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
                 m_cur_grid->MakeCellVisible( r, 0 );
                 m_cur_grid->SetGridCursor( r, 1 );
 
-                wxMessageDialog errdlg( this, msg, _( "Library Nickname Error" ) );
+                wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+                wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
                 errdlg.ShowModal();
                 return false;
             }
@@ -616,7 +620,9 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
                     m_cur_grid->MakeCellVisible( r2, 0 );
                     m_cur_grid->SetGridCursor( r2, 1 );
 
-                    wxMessageDialog errdlg( this, msg, _( "Library Nickname Error" ) );
+                    wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+                    wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
                     errdlg.ShowModal();
                     return false;
                 }
@@ -833,7 +839,7 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         if( !legacyLib.Exists() )
         {
             msg.Printf( _( "Library '%s' not found." ), relPath );
-            DisplayErrorMessage( this, msg );
+            DisplayErrorMessage( wxGetTopLevelParent( this ), msg );
             continue;
         }
 
@@ -875,7 +881,7 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         else
         {
             msg.Printf( _( "Failed to save footprint library file '%s'." ), newLib.GetFullPath() );
-            DisplayErrorMessage( this, msg );
+            DisplayErrorMessage( wxGetTopLevelParent( this ), msg );
         }
     }
 }
@@ -1026,7 +1032,8 @@ void PANEL_FP_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
             if( !applyToAll )
             {
                 // The cancel button adds the library to the table anyway
-                addDuplicates = OKOrCancelDialog( this, warning, wxString::Format( msg, nickname ),
+                addDuplicates = OKOrCancelDialog( wxGetTopLevelParent( this ), warning,
+                                                  wxString::Format( msg, nickname ),
                                                   detailedMsg, _( "Skip" ), _( "Add Anyway" ),
                                                   &applyToAll ) == wxID_CANCEL;
             }
@@ -1155,6 +1162,7 @@ void PANEL_FP_LIB_TABLE::populateEnvironReadOnlyTable()
     // the current project.
     unique.insert( PROJECT_VAR_NAME );
     unique.insert( FP_LIB_TABLE::GlobalPathEnvVariableName() );
+
     // This special environment variable is used to locate 3d shapes
     unique.insert( KICAD7_3DMODEL_DIR );
 

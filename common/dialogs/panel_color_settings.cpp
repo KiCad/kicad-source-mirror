@@ -128,7 +128,8 @@ void PANEL_COLOR_SETTINGS::OnThemeChanged( wxCommandEvent& event )
             return;
 
         FOOTPRINT_NAME_VALIDATOR themeNameValidator;
-        wxTextEntryDialog dlg( this, _( "New theme name:" ), _( "Add Color Theme" ) );
+        wxTextEntryDialog dlg( wxGetTopLevelParent( this ), _( "New theme name:" ),
+                               _( "Add Color Theme" ) );
         dlg.SetTextValidator( themeNameValidator );
 
         if( dlg.ShowModal() != wxID_OK )

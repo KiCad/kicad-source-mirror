@@ -106,7 +106,7 @@ PANEL_PACKAGES_VIEW::PANEL_PACKAGES_VIEW( wxWindow*                             
 PANEL_PACKAGES_VIEW::~PANEL_PACKAGES_VIEW()
 {
     m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_PACKAGES_VIEW::SetSashOnIdle ),
-                          NULL, this );
+                             NULL, this );
 
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     cfg->m_PackageManager.sash_pos = m_splitter1->GetSashPosition();
@@ -516,7 +516,8 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
     if( !ver_it->download_url )
     {
         wxMessageBox( _( "Package download url is not specified" ),
-                      _( "Error downloading package" ), wxICON_INFORMATION | wxOK, this );
+                      _( "Error downloading package" ), wxICON_INFORMATION | wxOK,
+                      wxGetTopLevelParent( this ) );
         return;
     }
 
@@ -559,7 +560,8 @@ void PANEL_PACKAGES_VIEW::OnDownloadVersionClicked( wxCommandEvent& event )
                 && wxMessageBox(
                            _( "Integrity of the downloaded package could not be verified, hash "
                               "does not match. Are you sure you want to keep this file?" ),
-                           _( "Keep downloaded file" ), wxICON_EXCLAMATION | wxYES_NO, this )
+                           _( "Keep downloaded file" ), wxICON_EXCLAMATION | wxYES_NO,
+                           wxGetTopLevelParent( this ) )
                            == wxNO )
             {
                 wxRemoveFile( path );
@@ -610,7 +612,8 @@ void PANEL_PACKAGES_VIEW::OnVersionActionClicked( wxCommandEvent& event )
     if( !ver_it->compatible
         && wxMessageBox( _( "This package version is incompatible with your KiCad version or "
                             "platform. Are you sure you want to install it anyway?" ),
-                         _( "Install package" ), wxICON_EXCLAMATION | wxYES_NO, this )
+                         _( "Install package" ), wxICON_EXCLAMATION | wxYES_NO,
+                         wxGetTopLevelParent( this ) )
                    == wxNO )
     {
         return;

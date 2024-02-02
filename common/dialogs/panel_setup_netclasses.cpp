@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2009-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,7 +156,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetRenderer( new GRID_CELL_COLOR_RENDERER( PAGED_DIALOG::GetDialog( this ) ) );
-    attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( PAGED_DIALOG::GetDialog( this ), m_netclassGrid ) );
+    attr->SetEditor( new GRID_CELL_COLOR_SELECTOR( PAGED_DIALOG::GetDialog( this ),
+                                                   m_netclassGrid ) );
     m_netclassGrid->SetColAttr( GRID_SCHEMATIC_COLOR, attr );
 
     attr = new wxGridCellAttr;
@@ -595,7 +596,9 @@ void PANEL_SETUP_NETCLASSES::OnRemoveNetclassClick( wxCommandEvent& event )
     }
     else if( curRow == 0 )
     {
-        DisplayErrorMessage( this, _( "The default net class is required." ) );
+        wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+        DisplayErrorMessage( topLevelParent, _( "The default net class is required." ) );
         return;
     }
 

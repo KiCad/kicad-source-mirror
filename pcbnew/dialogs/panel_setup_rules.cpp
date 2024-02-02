@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,7 +102,7 @@ void PANEL_SETUP_RULES::onCharHook( wxKeyEvent& aEvent )
     {
         if( m_originalText != m_textEditor->GetText() )
         {
-            if( IsOK( this, _( "Cancel Changes?" ) ) )
+            if( IsOK( wxGetTopLevelParent( this ), _( "Cancel Changes?" ) ) )
             {
                 m_textEditor->SetText( m_originalText );
                 m_textEditor->SelectAll();

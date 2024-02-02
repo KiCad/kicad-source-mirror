@@ -196,7 +196,7 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
 
 void PANEL_REGULATOR::OnAddRegulator( wxCommandEvent& event )
 {
-    DIALOG_REGULATOR_FORM dlg( this, wxEmptyString );
+    DIALOG_REGULATOR_FORM dlg( wxGetTopLevelParent( this ), wxEmptyString );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -230,7 +230,7 @@ void PANEL_REGULATOR::OnEditRegulator( wxCommandEvent& event )
     if( item == nullptr )
         return;
 
-    DIALOG_REGULATOR_FORM dlg( this, name );
+    DIALOG_REGULATOR_FORM dlg( wxGetTopLevelParent( this ), name );
 
     dlg.CopyRegulatorDataToDialog( item );
 

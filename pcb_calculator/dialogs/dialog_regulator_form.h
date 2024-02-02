@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2011 jean-pierre.charras
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ class REGULATOR_DATA;
 class DIALOG_REGULATOR_FORM : public DIALOG_REGULATOR_FORM_BASE
 {
 public:
-    DIALOG_REGULATOR_FORM( PANEL_REGULATOR* parent, const wxString& aRegName );
+    DIALOG_REGULATOR_FORM( wxWindow* parent, const wxString& aRegName );
 
     ~DIALOG_REGULATOR_FORM();
 

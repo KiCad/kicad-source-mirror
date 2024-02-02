@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,7 +229,8 @@ bool PANEL_GRID_SETTINGS::TransferDataToWindow()
 void PANEL_GRID_SETTINGS::OnAddGrid( wxCommandEvent& event )
 {
     GRID                 newGrid = GRID{ wxEmptyString, "", "" };
-    DIALOG_GRID_SETTINGS dlg( this->GetParent(), m_eventSource, m_unitsProvider, newGrid );
+    DIALOG_GRID_SETTINGS dlg( wxGetTopLevelParent( this ), m_eventSource, m_unitsProvider,
+                              newGrid );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -241,8 +242,11 @@ void PANEL_GRID_SETTINGS::OnAddGrid( wxCommandEvent& event )
     {
         if( newGrid == g )
         {
-            DisplayError( this, wxString::Format( _( "Grid size '%s' already exists." ),
-                                                  g.UserUnitsMessageText( m_unitsProvider ) ) );
+            wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+            DisplayError( topLevelParent,
+                          wxString::Format( _( "Grid size '%s' already exists." ),
+                                            g.UserUnitsMessageText( m_unitsProvider ) ) );
             return;
         }
     }
@@ -260,7 +264,10 @@ void PANEL_GRID_SETTINGS::OnRemoveGrid( wxCommandEvent& event )
 
     if( gridCfg.grids.size() <= 1 )
     {
-        DisplayError( this, wxString::Format( _( "At least one grid size is required." ) ) );
+        wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+        DisplayError( topLevelParent,
+                      wxString::Format( _( "At least one grid size is required." ) ) );
         return;
     }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -394,7 +394,9 @@ void PANEL_SETUP_BUSES::OnUpdateUI( wxUpdateUIEvent& event )
         wxString errorMsg = m_errorMsg;
         m_errorMsg = wxEmptyString;
 
-        DisplayErrorMessage( this, errorMsg );
+        wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+        DisplayErrorMessage( topLevelParent, errorMsg );
 
         m_errorGrid->SetFocus();
         m_errorGrid->MakeCellVisible( m_errorRow, 0 );

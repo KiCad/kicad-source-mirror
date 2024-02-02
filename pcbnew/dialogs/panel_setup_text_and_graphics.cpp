@@ -310,7 +310,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     if( errorsMsg.IsEmpty() )
         return true;
 
-    KIDIALOG dlg( this, errorsMsg, KIDIALOG::KD_ERROR, _( "Parameter error" ) );
+    KIDIALOG dlg( wxGetTopLevelParent( this ), errorsMsg, KIDIALOG::KD_ERROR,
+                  _( "Parameter error" ) );
     dlg.ShowModal();
 
     return false;

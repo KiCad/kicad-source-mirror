@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2018 jean-pierre.charras
- * Copyright (C) 2011-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,9 +81,10 @@ bool PANEL_IMAGE_EDITOR::CheckValues()
 
     if( size_min < MIN_SIZE ) // if the size is too small, the image will be hard to locate
     {
-        wxMessageBox( wxString::Format( _( "This scale results in an image which is too small "
-                                           "(%.2f mm or %.1f mil)." ),
-                                        25.4 / 300 * size_min, 1000.0 / 300.0 * size_min ) );
+        wxMessageDialog( wxGetTopLevelParent( this ),
+                         wxString::Format( _( "This scale results in an image which is too "
+                                              "small (%.2f mm or %.1f mil)." ),
+                                           25.4 / 300 * size_min, 1000.0 / 300.0 * size_min ) );
         return false;
     }
 
@@ -92,9 +93,10 @@ bool PANEL_IMAGE_EDITOR::CheckValues()
     if( size_max > MAX_SIZE )
     {
         // the actual size is 25.4/300 * size_max in mm
-        if( !IsOK( this, wxString::Format( _( "This scale results in an image which is very large "
-                                              "(%.1f mm or %.2f in). Are you sure?" ),
-                                           25.4 / 300 * size_max, size_max / 300.0 ) ) )
+        if( !IsOK( wxGetTopLevelParent( this ),
+                   wxString::Format( _( "This scale results in an image which is very large "
+                                        "(%.1f mm or %.2f in). Are you sure?" ),
+                                     25.4 / 300 * size_max, size_max / 300.0 ) ) )
         {
             return false;
         }

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -145,7 +145,8 @@ bool PANEL_EESCHEMA_COLOR_SETTINGS::validateSave( bool aQuiet )
                               "and they will not be seen on the screen.  Are you\n"
                               "sure you want to use these colors?" );
 
-            if( wxMessageBox( msg, _( "Warning" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
+            if( wxMessageBox( msg, _( "Warning" ), wxYES_NO | wxICON_QUESTION,
+                              wxGetTopLevelParent( this ) ) == wxNO )
                 return false;
 
             break;

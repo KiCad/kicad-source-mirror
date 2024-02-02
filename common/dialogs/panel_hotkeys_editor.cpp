@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2023 Kicad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -200,7 +200,8 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
 {
     wxString filename = wxFileSelector( _( "Import Hotkeys File:" ), m_frame->GetMruPath(),
                                         wxEmptyString, FILEEXT::HotkeyFileExtension,
-                                        FILEEXT::HotkeyFileWildcard(), wxFD_OPEN, this );
+                                        FILEEXT::HotkeyFileWildcard(), wxFD_OPEN,
+                                        wxGetTopLevelParent( this ) );
 
     if( filename.IsEmpty() )
         return;
@@ -229,8 +230,9 @@ void PANEL_HOTKEYS_EDITOR::ImportHotKeys()
 void PANEL_HOTKEYS_EDITOR::dumpHotkeys()
 {
     wxString filename = wxFileSelector( wxT( "Hotkeys File" ), m_frame->GetMruPath(),
-                                        wxEmptyString, FILEEXT::TextFileExtension, FILEEXT::TextFileWildcard(),
-                                        wxFD_SAVE, this );
+                                        wxEmptyString, FILEEXT::TextFileExtension,
+                                        FILEEXT::TextFileWildcard(),
+                                        wxFD_SAVE, wxGetTopLevelParent( this ) );
 
     if( filename.IsEmpty() )
         return;

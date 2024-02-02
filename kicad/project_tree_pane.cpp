@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1038,7 +1038,7 @@ void PROJECT_TREE_PANE::onRenameFile( wxCommandEvent& event )
     wxString buffer = m_TreeProject->GetItemText( curr_item );
     wxString msg = wxString::Format( _( "Change filename: '%s'" ),
                                      tree_data[0]->GetFileName() );
-    wxTextEntryDialog dlg( this, msg, _( "Change filename" ), buffer );
+    wxTextEntryDialog dlg( wxGetTopLevelParent( this ), msg, _( "Change filename" ), buffer );
 
     if( dlg.ShowModal() != wxID_OK )
         return; // canceled by user
@@ -1535,8 +1535,10 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
     if( error == 0 )
     {
         // Directory is already a git repository
+        wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
-        DisplayInfoMessage( this, _( "The selected directory is already a git project." ) );
+        DisplayInfoMessage( topLevelParent,
+                            _( "The selected directory is already a git project." ) );
         git_repository_free( repo );
         return;
     }
@@ -1552,7 +1554,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
             if( m_gitLastError != git_error_last()->klass )
             {
                 m_gitLastError = git_error_last()->klass;
-                DisplayErrorMessage( this, _( "Failed to initialize git project." ),
+                DisplayErrorMessage( m_parent, _( "Failed to initialize git project." ),
                                      git_error_last()->message );
             }
 
@@ -1565,7 +1567,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         }
     }
 
-    DIALOG_GIT_REPOSITORY dlg( this, repo );
+    DIALOG_GIT_REPOSITORY dlg( wxGetTopLevelParent( this ), repo );
 
     dlg.SetTitle( _( "Set default remote" ) );
 
@@ -1620,7 +1622,7 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
         if( m_gitLastError != git_error_last()->klass )
         {
             m_gitLastError = git_error_last()->klass;
-            DisplayErrorMessage( this, _( "Failed to set default remote." ),
+            DisplayErrorMessage( m_parent, _( "Failed to set default remote." ),
                                  git_error_last()->message );
         }
 
@@ -1636,7 +1638,9 @@ void PROJECT_TREE_PANE::onGitInitializeProject( wxCommandEvent& aEvent )
     handler.SetPassword( m_TreeProject->GitCommon()->GetPassword() );
     handler.SetSSHKey( m_TreeProject->GitCommon()->GetSSHKey() );
 
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetching Remote" ), 1 ) );
+    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
+                                                                         _( "Fetching Remote" ),
+                                                                         1 ) );
 
     handler.PerformFetch();
 
@@ -1673,7 +1677,9 @@ void PROJECT_TREE_PANE::onGitPullProject( wxCommandEvent& aEvent )
     handler.SetPassword( m_TreeProject->GitCommon()->GetPassword() );
     handler.SetSSHKey( m_TreeProject->GitCommon()->GetSSHKey() );
 
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetching Remote" ), 1 ) );
+    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
+                                                                         _( "Fetching Remote" ),
+                                                                         1 ) );
 
     handler.PerformPull();
 }
@@ -1693,13 +1699,15 @@ void PROJECT_TREE_PANE::onGitPushProject( wxCommandEvent& aEvent )
     handler.SetPassword( m_TreeProject->GitCommon()->GetPassword() );
     handler.SetSSHKey( m_TreeProject->GitCommon()->GetSSHKey() );
 
-    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fetching Remote" ), 1 ) );
+    handler.SetProgressReporter( std::make_unique<WX_PROGRESS_REPORTER>( this,
+                                                                         _( "Fetching Remote" ),
+                                                                         1 ) );
 
     if( handler.PerformPush() != PushResult::Success )
     {
         wxString errorMessage = handler.GetErrorString();
 
-        DisplayErrorMessage( this, _( "Failed to push project" ), errorMessage );
+        DisplayErrorMessage( m_parent, _( "Failed to push project" ), errorMessage );
     }
 }
 
@@ -1745,13 +1753,13 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     if( !repo )
         return;
 
-    DIALOG_GIT_SWITCH dlg( this, repo );
+    DIALOG_GIT_SWITCH dlg( wxGetTopLevelParent( this ), repo );
 
     int retval = dlg.ShowModal();
     wxString branchName = dlg.GetBranchName();
 
     if( retval == wxID_ADD )
-        git_create_branch( repo, branchName);
+        git_create_branch( repo, branchName );
     else if( retval != wxID_OK )
         return;
 
@@ -1761,8 +1769,9 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     if( git_reference_lookup( &branchRef, repo, branchName.mb_str() ) != GIT_OK &&
         git_reference_dwim( &branchRef, repo, branchName.mb_str() ) != GIT_OK )
     {
-        wxString errorMessage = wxString::Format( _( "Failed to lookup branch '%s': %s" ), branchName, giterr_last()->message );
-        DisplayError( this, errorMessage );
+        wxString errorMessage = wxString::Format( _( "Failed to lookup branch '%s': %s" ),
+                                                  branchName, giterr_last()->message );
+        DisplayError( m_parent, errorMessage );
         return;
     }
 
@@ -1774,7 +1783,7 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     {
         wxString errorMessage =
                 wxString::Format( _( "Failed to find branch head for '%s'" ), branchName );
-        DisplayError( this, errorMessage );
+        DisplayError( m_parent, errorMessage );
         git_reference_free( branchRef );
         return;
     }
@@ -1785,7 +1794,7 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     {
         wxString errorMessage =
                 wxString::Format( _( "Failed to switch to branch '%s'" ), branchName );
-        DisplayError( this, errorMessage );
+        DisplayError( m_parent, errorMessage );
         git_reference_free( branchRef );
         git_object_free( branchObj );
         return;
@@ -1796,7 +1805,7 @@ void PROJECT_TREE_PANE::onGitSwitchBranch( wxCommandEvent& aEvent )
     {
         wxString errorMessage = wxString::Format(
                 _( "Failed to update HEAD reference for branch '%s'" ), branchName );
-        DisplayError( this, errorMessage );
+        DisplayError( m_parent, errorMessage );
         git_reference_free( branchRef );
         git_object_free( branchObj );
         return;
@@ -1813,7 +1822,8 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
     git_repository* repo = m_TreeProject->GetGitRepo();
 
     if( !repo
-        || !IsOK( this, _( "Are you sure you want to remove git tracking from this project?" ) ) )
+      || !IsOK( wxGetTopLevelParent( this ),
+                _( "Are you sure you want to remove git tracking from this project?" ) ) )
     {
         return;
     }
@@ -1830,7 +1840,7 @@ void PROJECT_TREE_PANE::onGitRemoveVCS( wxCommandEvent& aEvent )
 
     if( !RmDirRecursive( fn.GetPath(), &errors ) )
     {
-        DisplayErrorMessage( this, _( "Failed to remove git directory" ), errors );
+        DisplayErrorMessage( m_parent, _( "Failed to remove git directory" ), errors );
     }
 
     // Clear all item states
@@ -2129,7 +2139,8 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
     git_status_list_free( status_list );
 
     // Create a commit dialog
-    DIALOG_GIT_COMMIT dlg( this, repo, authorName, authorEmail, modifiedFiles );
+    DIALOG_GIT_COMMIT dlg( wxGetTopLevelParent( this ), repo, authorName, authorEmail,
+                           modifiedFiles );
     auto              ret = dlg.ShowModal();
 
     if( ret == wxID_OK )

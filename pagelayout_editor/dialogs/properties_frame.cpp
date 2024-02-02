@@ -673,7 +673,7 @@ void PROPERTIES_FRAME::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 void PROPERTIES_FRAME::onHelp( wxCommandEvent& aEvent )
 {
     // Show the system variables for worksheet text:
-    HTML_MESSAGE_BOX dlg( this, _( "Predefined Keywords" ) );
+    HTML_MESSAGE_BOX dlg( wxGetTopLevelParent( this ), _( "Predefined Keywords" ) );
     wxString message;
 
     message << _( "Texts can include keywords." ) << "<br>";

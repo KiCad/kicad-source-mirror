@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Isaac Marino Bavaresco, isaacbavaresco@yahoo.com.br
  * Copyright (C) 2009 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2009-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -431,8 +431,9 @@ void PANEL_SETUP_LAYERS::DenyChangeCheckBox( wxCommandEvent& event )
 
         if( source == copper )
         {
-            DisplayError( this, _( "Use the Physical Stackup page to change the number of "
-                                   "copper layers." ) );
+            DisplayError( wxGetTopLevelParent( this ),
+                          _( "Use the Physical Stackup page to change the number of "
+                             "copper layers." ) );
 
             copper->SetValue( true );
             return;
@@ -464,19 +465,21 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
         for( unsigned int ii = 0; ii < notremovableLayers.size(); ii++ )
             msg << m_pcb->GetLayerName( notremovableLayers[ii] ) << wxT( "\n" );
 
-        if( !IsOK( this, wxString::Format( _( "Footprints have some items on removed layers:\n"
-                                              "%s\n"
-                                              "These items will be no longer accessible\n"
-                                              "Do you wish to continue?" ), msg ) ) )
+        if( !IsOK( wxGetTopLevelParent( this ),
+                   wxString::Format( _( "Footprints have some items on removed layers:\n"
+                                        "%s\n"
+                                        "These items will be no longer accessible\n"
+                                        "Do you wish to continue?" ), msg ) ) )
         {
             return false;
         }
     }
 
     if( !removedLayers.empty()
-            && !IsOK( this, _( "Items have been found on removed layers. This operation will "
-                               "delete all items from removed layers and cannot be undone.\n"
-                               "Do you wish to continue?" ) ) )
+      && !IsOK( wxGetTopLevelParent( this ),
+                _( "Items have been found on removed layers. This operation will "
+                   "delete all items from removed layers and cannot be undone.\n"
+                   "Do you wish to continue?" ) ) )
     {
         return false;
     }
@@ -799,7 +802,9 @@ bool PANEL_SETUP_LAYERS::CheckCopperLayerCount( BOARD* aWorkingBoard, BOARD* aIm
                                          newNumLayers,
                                          currNumLayers );
 
-        wxMessageDialog dlg( this, msg, _( "Inner Layers To Be Deleted" ),
+        wxWindow* topLevelParent = wxGetTopLevelParent( this );
+
+        wxMessageDialog dlg( topLevelParent, msg, _( "Inner Layers To Be Deleted" ),
                              wxICON_WARNING | wxSTAY_ON_TOP | wxYES | wxNO | wxNO_DEFAULT );
 
         if( wxID_NO == dlg.ShowModal() )
