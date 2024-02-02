@@ -42,6 +42,7 @@
 #define ID_LIST_COPY 10001
 #define ID_LIST_SHOW_ALL 10002
 #define ID_LIST_SHOW_NONE 10003
+#define ID_LIST_DISPLAY_LINE 10004
 
 class PNS_LOG_VIEWER_OVERLAY;
 
@@ -89,6 +90,7 @@ private:
     int                                     m_rewindIter;
     wxMenu*                                 m_listPopupMenu;
     std::shared_ptr<KIGFX::VIEW_GROUP>      m_previewItems;
+    std::map<wxString,wxString>             m_filenameToPathMap;
 
     bool m_showThinLines = true;
     bool m_showRPIs = true;
