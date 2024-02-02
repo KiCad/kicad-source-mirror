@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 16:18+0000\n"
+"PO-Revision-Date: 2024-02-02 16:43+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -586,11 +586,11 @@ msgstr "无论元件在 .pos 文件中是否存在, 均显示其 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
 msgid "Show 3D Models marked DNP"
-msgstr "显示被设置了 'DNP (不作装配)' 属性的元件的 3D 模型"
+msgstr "显示被设置了 'DNP (不作装配)' 特性的元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "无论元件是否设置了 'DNP (不作装配)' 属性, 均显示其 3D 模型"
+msgstr "无论元件是否设置了 'DNP (不作装配)' 特性, 均显示其 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
 msgid "Show Model Bounding Boxes"
@@ -13230,7 +13230,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:574
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:163
 msgid "Do not populate"
-msgstr "添加 DNP (不作装配) 属性"
+msgstr "DNP (不作装配)"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:229
 msgid "Update Symbol from Library..."
@@ -15581,23 +15581,23 @@ msgstr "'符号引脚与名称偏移量' 差异。"
 
 #: eeschema/lib_symbol.cpp:464
 msgid "Show pin names settings differ."
-msgstr "'针脚名称显示设置' 差异。"
+msgstr "显示 '引脚名称设置' 差异。"
 
 #: eeschema/lib_symbol.cpp:473
 msgid "Show pin numbers settings differ."
-msgstr "'针脚编号显示设置' 差异。"
+msgstr "显示 '引脚编号设置' 差异。"
 
 #: eeschema/lib_symbol.cpp:482
 msgid "Exclude from simulation settings differ."
-msgstr "'<不参与电路仿真>设置' 差异。"
+msgstr "排除 '仿真设置' 差异。"
 
 #: eeschema/lib_symbol.cpp:491
 msgid "Exclude from bill of materials settings differ."
-msgstr "'<从物料清单中移除>设置' 差异。"
+msgstr "排除 '物料清单设置' 差异。"
 
 #: eeschema/lib_symbol.cpp:500
 msgid "Exclude from board settings differ."
-msgstr "'<不在 PCB 中进行绘制>设置' 差异。"
+msgstr "排除 '电路板设置' 差异。"
 
 #: eeschema/lib_symbol.cpp:559 eeschema/sch_symbol.cpp:492
 #: eeschema/tools/sch_edit_tool.cpp:102
@@ -17361,7 +17361,7 @@ msgstr "不在物料清单中显示"
 
 #: eeschema/sch_symbol.cpp:2718 pcbnew/footprint.cpp:3482
 msgid "Do not Populate"
-msgstr "添加 DNP (不作装配) 属性"
+msgstr "不作装配"
 
 #: eeschema/sch_text.cpp:404
 msgid "Graphic Text"
@@ -19607,12 +19607,12 @@ msgstr "将 %s 的值从 '%s' 更改为 '%s'。"
 #: eeschema/tools/backannotate.cpp:437
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "将 %s 的 '不作装配' 属性从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的 '不作装配' 特性从 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:452
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "将 %s 的 '从物料清单中移除' 属性从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的 '从物料清单中移除' 特性从 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:475
 #, c-format
@@ -20355,7 +20355,7 @@ msgstr "在符号编辑器中打开选定的符号"
 
 #: eeschema/tools/ee_actions.cpp:866
 msgid "Exclude from Bill of Materials"
-msgstr "设置 '从物料清单中移除' 属性"
+msgstr "设置 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:867
 msgid "Set the exclude from bill of materials attribute"
@@ -20363,7 +20363,7 @@ msgstr "设置 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:872
 msgid "Include in Bill of Materials"
-msgstr "清除 '从物料清单中移除' 属性"
+msgstr "清除 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:873
 msgid "Clear the exclude from bill of materials attribute"
@@ -20371,7 +20371,7 @@ msgstr "清除 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:878
 msgid "Toggle Exclude from Bill of Materials"
-msgstr "切换 '从物料清单中移除' 属性"
+msgstr "切换 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:879
 msgid "Toggle the exclude from bill of materials attribute"
@@ -20379,7 +20379,7 @@ msgstr "切换 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:884
 msgid "Exclude from Simulation"
-msgstr "设置 '不参与电路仿真' 属性"
+msgstr "设置 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:885
 msgid "Set the exclude from simulation attribute"
@@ -20387,7 +20387,7 @@ msgstr "设置 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:890
 msgid "Include in Simulation"
-msgstr "清除 '不参与电路仿真' 属性"
+msgstr "清除 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:891
 msgid "Clear the exclude from simulation attribute"
@@ -20395,7 +20395,7 @@ msgstr "清除 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:896
 msgid "Toggle Exclude from Simulation"
-msgstr "切换 '不参与电路仿真' 属性"
+msgstr "切换 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:897
 msgid "Toggle the exclude from simulation attribute"
@@ -20403,7 +20403,7 @@ msgstr "切换 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:902
 msgid "Exclude from Board"
-msgstr "设置 '不在 PCB 中进行绘制' 属性"
+msgstr "设置 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:903
 msgid "Set the exclude from board attribute"
@@ -20411,7 +20411,7 @@ msgstr "设置 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:908
 msgid "Include on Board"
-msgstr "清除 '不在 PCB 中进行绘制' 属性"
+msgstr "清除 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:909
 msgid "Clear the exclude from board attribute"
@@ -20419,7 +20419,7 @@ msgstr "清除 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:914
 msgid "Toggle Exclude from Board"
-msgstr "切换 '不在 PCB 中进行绘制' 属性"
+msgstr "切换 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:915
 msgid "Toggle the exclude from board attribute"
@@ -20427,7 +20427,7 @@ msgstr "切换 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:920
 msgid "Set Do Not Populate"
-msgstr "设置 'DNP (不作装配)' 属性"
+msgstr "设置 'DNP (不作装配)' 特性"
 
 #: eeschema/tools/ee_actions.cpp:921
 msgid "Set the do not populate attribute"
@@ -20435,7 +20435,7 @@ msgstr "设置 'DNP (不作装配)' 特性"
 
 #: eeschema/tools/ee_actions.cpp:926
 msgid "Unset Do Not Populate"
-msgstr "清除 'DNP (不作装配)' 属性"
+msgstr "清除 'DNP (不作装配)' 特性"
 
 #: eeschema/tools/ee_actions.cpp:927
 msgid "Clear the do not populate attribute"
@@ -20443,7 +20443,7 @@ msgstr "清除 'DNP (不作装配)' 特性"
 
 #: eeschema/tools/ee_actions.cpp:933
 msgid "Toggle Do Not Populate"
-msgstr "切换 'DNP (不作装配)' 属性"
+msgstr "切换 'DNP (不作装配)' 特性"
 
 #: eeschema/tools/ee_actions.cpp:934
 msgid "Toggle the do not populate attribute"
@@ -23129,7 +23129,7 @@ msgstr "排除所有带通孔焊盘的封装 (仅 ascii 或 csv)"
 #: kicad/cli/command_pcb_export_pos.cpp:84
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
 msgid "Exclude all footprints with the Do Not Populate flag set"
-msgstr "排除所有设置了 DNP (不作装配) 属性的封装"
+msgstr "排除所有设置了 'DNP (不作装配)' 特性的封装"
 
 #: kicad/cli/command_pcb_export_pos.cpp:88
 msgid "Include board edge layer (Gerber only)"
@@ -30356,11 +30356,11 @@ msgstr "其他选项"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:117
 msgid "Ignore 'Do not populate' components"
-msgstr "忽略设置了 'DNP (不作装配)' 属性的元件"
+msgstr "忽略设置了 'DNP (不作装配)' 特性的元件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:118
 msgid "Do not show components marked 'Do not populate'"
-msgstr "不显示设置了 'DNP (不作装配)' 属性的元件"
+msgstr "不显示设置了 'DNP (不作装配)' 特性的元件"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:122
 msgid "Ignore 'Unspecified' components"
