@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 17:16+0000\n"
+"PO-Revision-Date: 2024-02-03 18:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5018,7 +5018,7 @@ msgstr "英寸 (Inches)"
 #: pcbnew/tools/drawing_tool.cpp:326 pcbnew/tools/edit_tool_move_fct.cpp:319
 #: pcbnew/tools/pcb_actions.cpp:1175
 msgid "Constrain to H, V, 45"
-msgstr "将绘制角度约束为水平方向, 垂直方向及斜 45 度"
+msgstr "将绘制操作约束为水平方向, 垂直方向或斜 45 度方向"
 
 #: common/eda_draw_frame.cpp:406 common/tool/actions.cpp:712
 msgid "Edit Grids..."
@@ -9793,7 +9793,7 @@ msgstr "删除所有标记"
 
 #: eeschema/dialogs/dialog_erc.cpp:304
 msgid "Errors and Warnings Only"
-msgstr "仅限错误和警告"
+msgstr "仅错误和警告"
 
 #: eeschema/dialogs/dialog_erc.cpp:305
 msgid "Errors, Warnings and Exclusions"
@@ -10420,7 +10420,7 @@ msgstr "水平对齐:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:313
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:323
 msgid "(fields only)"
-msgstr "(仅限字段)"
+msgstr "(仅字段)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:303
 msgid "V Align:"
@@ -13552,7 +13552,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:203
 msgid "(symbol editor only)"
-msgstr "(仅限符号编辑器)"
+msgstr "(仅符号编辑器)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:248
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:792
@@ -19602,17 +19602,17 @@ msgstr "将 %s 的封装分配从 '%s' 替换为 '%s'。"
 #: eeschema/tools/backannotate.cpp:420
 #, c-format
 msgid "Change %s value from '%s' to '%s'."
-msgstr "将 %s 的值从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的值由 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:437
 #, c-format
 msgid "Change %s 'Do not populate' from '%s' to '%s'."
-msgstr "将 %s 的 '不作装配' 特性从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的 '不作装配' 特性由 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:452
 #, c-format
 msgid "Change %s 'Exclude from bill of materials' from '%s' to '%s'."
-msgstr "将 %s 的 '从物料清单中移除' 特性从 '%s' 更改为 '%s'。"
+msgstr "将 %s 的 '从物料清单中移除' 特性由 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:475
 #, c-format
@@ -19638,12 +19638,12 @@ msgstr "删除字段 '%s'。"
 #: eeschema/tools/backannotate.cpp:703
 #, c-format
 msgid "Change %s pin %s net label from '%s' to '%s'."
-msgstr "将引脚 %s 网络 %s 的标签从 '%s' 更改为 '%s'。"
+msgstr "将引脚 %s 网络 %s 的标签由 '%s' 更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:725
 #, c-format
 msgid "Net %s cannot be changed to %s because it is driven by a power pin."
-msgstr "网络 %s 无法被更改为 %s, 因为它由电源引脚驱动。"
+msgstr "无法将网络 %s 更改为 %s, 因为它受电源引脚驱动。"
 
 #: eeschema/tools/backannotate.cpp:734
 #, c-format
@@ -20700,7 +20700,7 @@ msgstr "将绘图和拖动限制为水平或垂直"
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
-msgstr "将绘图和拖动限制为水平、垂直或 45 度角"
+msgstr "将绘图和拖动操作约束为水平方向, 垂直方向或斜 45 度方向"
 
 #: eeschema/tools/ee_actions.cpp:1162
 msgid "Switch to next line mode"
@@ -21422,7 +21422,7 @@ msgstr "输入图纸路径 %s 的页码"
 #: eeschema/widgets/hierarchy_pane.cpp:371
 #, c-format
 msgid "(page %s)"
-msgstr "(页 %s)"
+msgstr "(第 %s 页)"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:168
 #: pcbnew/widgets/panel_footprint_chooser.cpp:91
@@ -26700,7 +26700,7 @@ msgid ""
 msgstr ""
 "警告: \n"
 "过孔焊盘直径 >= 间距孔直径。\n"
-"对于覆铜区域内的过孔, 有些参数无法计算。"
+"对于铜箔区域内的过孔, 有些参数无法计算。"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Thermal resistance:"
@@ -30066,7 +30066,7 @@ msgstr "更新封装 %s (%s)"
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:360
 #, c-format
 msgid "Changed footprint %s from '%s' to '%s'"
-msgstr "将封装 %s 从 '%s' 更改为 '%s'"
+msgstr "将封装 %s 由 '%s' 更改为 '%s'"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:370
 msgid "*** library footprint not found ***"
@@ -33635,7 +33635,7 @@ msgstr "右键单击层以选择命令。"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:215
 msgid "Print according to objects tab of appearance manager"
-msgstr "根据 \"外观管理器\" 的 \"对象\" 选项卡进行打印"
+msgstr "通过 \"外观管理器\" 的 \"对象\" 选项卡进行打印"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:243
 msgid "No drill mark"
@@ -34229,7 +34229,7 @@ msgstr "从原理图更新 PCB"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "约束操作到水平、垂直或 45 度"
+msgstr "将操作约束为水平方向, 垂直方向或斜 45 度方向"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:35
 msgid "Step for &rotate commands:"
@@ -44262,7 +44262,7 @@ msgstr "锁定或解锁选中项目"
 #: pcbnew/tools/pcb_actions.cpp:1176
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "将操作限制在水平、垂直或 45 度"
+msgstr "将操作限制为从起点开始的水平方向, 垂直方向或斜 45 度方向"
 
 #: pcbnew/tools/pcb_actions.cpp:1183
 msgid "Prevent items from being moved and/or resized on the canvas"
