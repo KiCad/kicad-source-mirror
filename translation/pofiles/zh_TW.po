@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-01-31 13:10+0000\n"
+"PO-Revision-Date: 2024-02-03 06:01+0000\n"
 "Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
@@ -6548,9 +6548,8 @@ msgid "Min grid spacing:"
 msgstr "最小網格間距："
 
 #: common/widgets/gal_options_panel_base.cpp:72
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "對齊網格："
+msgstr "網格吸附："
 
 #: common/widgets/gal_options_panel_base.cpp:76
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -16904,7 +16903,7 @@ msgstr "新增文字框"
 
 #: eeschema/tools/ee_actions.cpp:248
 msgid "Add a text box item"
-msgstr "新增文字框專案"
+msgstr "加入文字框項目"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 msgid "Add Lines"
