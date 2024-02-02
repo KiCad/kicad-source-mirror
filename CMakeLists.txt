@@ -210,6 +210,11 @@ cmake_dependent_option( KICAD_WIN32_BUILD_PARALLEL_CL_MP
     OFF "WIN32"
     OFF )
 
+cmake_dependent_option( KICAD_WIN32_LTCG
+    "Enable Whole Program Optimization"
+    OFF "WIN32"
+    OFF )
+
 # Advanced option to make link maps (only available on linux)
 cmake_dependent_option( KICAD_MAKE_LINK_MAPS
     "Create link maps for artifacts"
@@ -540,6 +545,12 @@ if( MSVC )
         string( APPEND CMAKE_CXX_FLAGS " /fsanitize=address" )
     endif()
 
+    if( KICAD_WIN32_LTCG )
+        # we are implementing this manually because CMake's LTCG option is incomplete
+        # https://gitlab.kitware.com/cmake/cmake/-/issues/20484
+        string( APPEND CMAKE_CXX_FLAGS_RELEASE " /GL" )
+    endif()
+
     foreach( type EXE SHARED MODULE)
         # /DEBUG: create PDB
         string( APPEND CMAKE_${type}_LINKER_FLAGS " /DEBUG /MANIFEST:NO" )
@@ -549,6 +560,12 @@ if( MSVC )
         # /OPT:ICF: fold common data
         string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /OPT:ICF /MANIFEST:NO" )
         string( APPEND CMAKE_${type}_LINKER_FLAGS_RELWITHDEBINFO " /OPT:ICF /MANIFEST:NO" )
+
+        if( KICAD_WIN32_LTCG )
+            # we are implementing this manually because CMake's LTCG option is incomplete
+            # https://gitlab.kitware.com/cmake/cmake/-/issues/20484
+            string( APPEND CMAKE_${type}_LINKER_FLAGS_RELEASE " /LTCG" )
+        endif()
     endforeach()
 
     # Let cl.exe parallelize builds
