@@ -6,10 +6,10 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2023-12-25 13:09+0000\n"
+"PO-Revision-Date: 2024-02-03 06:01+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/"
-">\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v7/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,20 +35,20 @@ msgstr "Tạo các lớp"
 #: 3d-viewer/3d_canvas/board_adapter.cpp:674
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "Không có footprint nào được nhập vào."
+msgstr "Không có footprint nào được tải."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:691
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"Đường bao footprint bị thiếu hoặc không đúng định dạng. Chạy Footprint "
+"Đường viền footprint bị thiếu hoặc không đúng định dạng. Chạy Footprint "
 "Checker để phân tích đầy đủ."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:700
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Đường bao bo mạch bị thiếu hoặc không đúng định dạng. Chạy DRC để phân tích "
+"Đường viền bo mạch bị thiếu hoặc không đúng định dạng. Chạy DRC để phân tích "
 "đầy đủ."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:226
@@ -533,7 +533,7 @@ msgstr "Kết xuất màu CAD"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:202
 #, fuzzy
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Sử dụng bản màu vẽ CAD dựa trên độ phân tán của vật liệu"
+msgstr "Sử dụng kiểu màu CAD dựa trên màu khuếch tán của vật liệu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:208
 #, fuzzy
@@ -3239,13 +3239,15 @@ msgstr "Thay đổi này có hiệu lực khi khởi chạy lại trình chỉnh
 
 #: common/dialogs/panel_common_settings_base.cpp:152
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Tập trung theo chuột giữa trình soạn thảo sơ đồ và PCB"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Nếu con trỏ chuột được di chuyển quá khung vẽ của cửa sổ trình soạn thảo sơ "
+"đồ hoặc PCB, cửa sổ đó sẽ được nâng lên."
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 #, fuzzy
@@ -3671,7 +3673,7 @@ msgstr "Kéo nút giữa:"
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
 msgid "Pan"
-msgstr "Pan"
+msgstr "Lia"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
@@ -4301,9 +4303,8 @@ msgid "Schematic Editor"
 msgstr "Đánh dấu Schematic"
 
 #: common/eda_base_frame.cpp:1087
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Gán Chú thích hoàn tất."
+msgstr "Tùy chọn đánh số"
 
 #: common/eda_base_frame.cpp:1089
 #: eeschema/dialogs/dialog_schematic_setup.cpp:67
@@ -5125,7 +5126,7 @@ msgstr "từ %s: %s () dòng: %d"
 #: common/exceptions.cpp:76
 #, c-format
 msgid "%s in '%s', line %d, offset %d."
-msgstr "%s trong '%s', dòng %d, offset %d"
+msgstr "%s trong '%s', dòng %d, offset %d."
 
 #: common/exceptions.cpp:90
 #, fuzzy, c-format
@@ -5444,7 +5445,7 @@ msgstr "Dây"
 
 #: common/layer_id.cpp:112
 msgid "Buses"
-msgstr "Buses"
+msgstr "Bus"
 
 #: common/layer_id.cpp:113
 #, fuzzy
@@ -6430,9 +6431,8 @@ msgid "Go to next marker in Checker window"
 msgstr "Đi tới điểm đánh dấu tiếp theo trong cửa sổ Bộ kiểm tra"
 
 #: common/tool/actions.cpp:269
-#, fuzzy
 msgid "Exclude Marker"
-msgstr "Loại trừ "
+msgstr "Loại trừ đánh dấu"
 
 #: common/tool/actions.cpp:269
 #, fuzzy
@@ -6844,7 +6844,7 @@ msgstr ""
 
 #: common/tool/common_control.cpp:217 common/tool/common_control.cpp:237
 msgid "File Not Found"
-msgstr "không tìm thấy tệp."
+msgstr "không tìm thấy tệp"
 
 #: common/tool/common_control.cpp:234
 #, c-format
@@ -14410,9 +14410,9 @@ msgid "Connection Name"
 msgstr "Chiều rộng Track"
 
 #: eeschema/sch_connection.cpp:414 eeschema/sch_connection.cpp:423
-#, fuzzy, c-format
+#, c-format
 msgid "Bus Alias %s Members"
-msgstr "Thành viên bí danh"
+msgstr "%s Thành viên bí danh Bus"
 
 #: eeschema/sch_edit_frame.cpp:127
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
@@ -15053,7 +15053,7 @@ msgstr "Tên tín hiệu không hợp lệ"
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:286
 #, fuzzy, c-format
 msgid "No parent for extended symbol %s"
-msgstr "Tạo, xóa và chỉnh sửa các ký hiệu điện tử"
+msgstr "Không có cha mẹ cho biểu tượng mở rộng %s"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:301
 #, fuzzy
@@ -16152,9 +16152,8 @@ msgid "Internal Error while reading Enable"
 msgstr "Lỗi nội bộ khi đọc Enable"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2030
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Không xác định parent của thuộc tính"
+msgstr "Phân cực không xác định "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -16487,7 +16486,7 @@ msgstr ""
 
 #: eeschema/sim/sim_plot_frame.cpp:170 eeschema/sim/sim_plot_frame_base.cpp:242
 msgid "Tune"
-msgstr ""
+msgstr "Điều chỉnh"
 
 #: eeschema/sim/sim_plot_frame.cpp:171
 #, fuzzy
@@ -17526,9 +17525,9 @@ msgid "Footprint re-linking cancelled by user."
 msgstr "Liên kết lại footprint bị hủy bởi người dùng."
 
 #: eeschema/tools/backannotate.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "Change '%s' reference designator to '%s'."
-msgstr "Thay đổi các Symbol khớp với bộ chỉ định tham chiếu:"
+msgstr "Thay đổi ký hiệu tham chiếu '%s' thành '%s'."
 
 #: eeschema/tools/backannotate.cpp:346
 #, fuzzy, c-format
@@ -17801,7 +17800,7 @@ msgstr "Thêm Trường"
 
 #: eeschema/tools/ee_actions.cpp:238
 msgid "Add a pin"
-msgstr ""
+msgstr "Thêm chân"
 
 #: eeschema/tools/ee_actions.cpp:243 eeschema/tools/ee_actions.cpp:353
 #: pagelayout_editor/tools/pl_actions.cpp:54 pcbnew/tools/pcb_actions.cpp:128
@@ -17822,9 +17821,8 @@ msgid "Add Text Box"
 msgstr "Văn bản Ẩn"
 
 #: eeschema/tools/ee_actions.cpp:248
-#, fuzzy
 msgid "Add a text box item"
-msgstr "Văn bản Ẩn"
+msgstr "thêm hộp văn bản"
 
 #: eeschema/tools/ee_actions.cpp:253 eeschema/tools/ee_actions.cpp:834
 #, fuzzy
@@ -20385,7 +20383,7 @@ msgstr "Tô sáng các mục của Mạng '%s'"
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, fuzzy, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "Phần tử được tô sáng"
+msgstr "Làm nổi bật Loại khẩu độ '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
@@ -21514,7 +21512,7 @@ msgstr "Xuống"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:30
 msgid "Check for package updates on startup"
-msgstr ""
+msgstr "Kiểm tra cập nhật gói khi khởi động"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:40
 #, fuzzy
@@ -23222,9 +23220,8 @@ msgid "Exclude value 1:"
 msgstr "Loại trừ giá trị 1:"
 
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:51
-#, fuzzy
 msgid "Exclude value 2:"
-msgstr "Loại trừ "
+msgstr "Giá trị loại trừ 2:"
 
 #: pcb_calculator/calculator_panels/panel_eseries_base.cpp:71
 #, fuzzy
@@ -25343,9 +25340,8 @@ msgid "Invalid"
 msgstr "Tên tín hiệu không hợp lệ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:96
-#, fuzzy
 msgid "Excluded"
-msgstr "Loại trừ "
+msgstr "Loại trừ"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:111
 #, fuzzy
@@ -25566,7 +25562,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Front Footprints"
+"Trước Footprint"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:859
 msgid ""
@@ -25576,7 +25572,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Back Footprints"
+"Sau Footprint"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:924
 #, fuzzy
@@ -27175,9 +27171,8 @@ msgid "Do you wish to delete excluded markers as well?"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_drc.cpp:1145
-#, fuzzy
 msgid "Delete exclusions"
-msgstr "Xóa các loại trừ nữa?"
+msgstr "Xóa các loại trừ"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1285
 #, fuzzy
@@ -28339,6 +28334,8 @@ msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
 msgstr ""
+"Chọn một <b>Lựa chọn tùy chọn</b> trong hộp danh sách ở trên rồi nhấp vào "
+"nút <b>Nối tùy chọn đã chọn</b>."
 
 #: pcbnew/dialogs/dialog_fp_plugin_options.cpp:63
 #, c-format
@@ -28361,7 +28358,7 @@ msgstr "Các tùy chọn được hỗ trợ bởi plugin hiện tại"
 
 #: pcbnew/dialogs/dialog_fp_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr ""
+msgstr "<<    Nối tùy chọn đã chọn"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:303
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:435
@@ -28375,7 +28372,7 @@ msgstr "Tệp dự án: \"%s\""
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:484
 #, fuzzy, c-format
 msgid "Component count: %d."
-msgstr "Linh kiện"
+msgstr "Đếm linh kiện: %d."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:325
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:481
@@ -31277,9 +31274,8 @@ msgid "Target Properties"
 msgstr "Thuộc tính Văn bản"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:89
-#, fuzzy
 msgid "Footprint Reference Properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Thuộc tính tham chiếu footprint"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:90
 msgid "Footprint Value Properties"
@@ -31371,9 +31367,8 @@ msgid "Via start layer and end layer cannot be the same"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:679
-#, fuzzy
 msgid "Edit track/via properties"
-msgstr "Tệp footprint  KiCad"
+msgstr "Chỉnh sửa thuộc tính đường mạch/via"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:744
 #, fuzzy
@@ -33475,9 +33470,9 @@ msgid "Board minimum hole clearance: %s."
 msgstr "Clearance lớp đồng tối thiểu"
 
 #: pcbnew/drc/drc_engine.cpp:794
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; zone connection: %s."
-msgstr "Tên tín hiệu không được chứa khoảng trắng"
+msgstr "Ghi đè cục bộ lên %s; kết nối vùng: %s."
 
 #: pcbnew/drc/drc_engine.cpp:811
 #, c-format
@@ -33485,9 +33480,9 @@ msgid "Local override on %s; thermal relief gap: %s."
 msgstr "Ghi đè cục bộ trên %s; khoảng cách tản nhiệt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:828
-#, fuzzy, c-format
+#, c-format
 msgid "Local override on %s; thermal spoke width: %s."
-msgstr "Đang kiểm tra nhãn..."
+msgstr "Ghi đè cục bộ lên %s; chiều rộng nan hoa nhiệt: %s."
 
 #: pcbnew/drc/drc_engine.cpp:837
 #, c-format
@@ -39314,14 +39309,12 @@ msgid "Board overall dimensions: "
 msgstr "Kích thước tổng thể của bo: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:434
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "Khoảng cách lưới tối thiểu:"
+msgstr "Khoảng cách/đường mạch tối thiểu: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:444
-#, fuzzy
 msgid "Copper Finish: "
-msgstr "Màu sắc lớp đồng / bề mặt hoàn thiện ..."
+msgstr "Kết thúc Đồng: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:452
 msgid "Castellated pads: "
