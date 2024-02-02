@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 15:28+0000\n"
+"PO-Revision-Date: 2024-02-02 16:18+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -7064,7 +7064,7 @@ msgstr "按值和封装分组"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
 #: pcbnew/footprint.cpp:3472
 msgid "Attributes"
-msgstr "属性"
+msgstr "特性"
 
 #: common/settings/bom_settings.cpp:228
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:49
@@ -9474,7 +9474,7 @@ msgstr "更新字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update symbol attributes"
-msgstr "更新符号属性"
+msgstr "更新符号特性"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:154
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:154
@@ -9605,7 +9605,7 @@ msgstr "更新/重置字段位置"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:146
 msgid "Update/reset symbol attributes"
-msgstr "更新/重置符号属性"
+msgstr "更新/重置符号特性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:101
 msgid "Update Symbols from Library"
@@ -16671,7 +16671,7 @@ msgstr "需要 '斜体' 或 '~' 符号"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:1343
 msgid "symbol field text attributes must be 3 characters wide"
-msgstr "符号字段文本属性必须是 3 个字符宽"
+msgstr "符号字段文本特性至少要包含 3 个字符"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy.cpp:2217
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.cpp:1546
@@ -20359,7 +20359,7 @@ msgstr "设置 '从物料清单中移除' 属性"
 
 #: eeschema/tools/ee_actions.cpp:867
 msgid "Set the exclude from bill of materials attribute"
-msgstr "设置 '从物料清单中移除' 属性"
+msgstr "设置 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:872
 msgid "Include in Bill of Materials"
@@ -20367,7 +20367,7 @@ msgstr "清除 '从物料清单中移除' 属性"
 
 #: eeschema/tools/ee_actions.cpp:873
 msgid "Clear the exclude from bill of materials attribute"
-msgstr "清除 '从物料清单中移除' 属性"
+msgstr "清除 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:878
 msgid "Toggle Exclude from Bill of Materials"
@@ -20375,7 +20375,7 @@ msgstr "切换 '从物料清单中移除' 属性"
 
 #: eeschema/tools/ee_actions.cpp:879
 msgid "Toggle the exclude from bill of materials attribute"
-msgstr "切换 '从物料清单中移除' 属性"
+msgstr "切换 '从物料清单中移除' 特性"
 
 #: eeschema/tools/ee_actions.cpp:884
 msgid "Exclude from Simulation"
@@ -20383,7 +20383,7 @@ msgstr "设置 '不参与电路仿真' 属性"
 
 #: eeschema/tools/ee_actions.cpp:885
 msgid "Set the exclude from simulation attribute"
-msgstr "设置 '不参与电路仿真' 属性"
+msgstr "设置 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:890
 msgid "Include in Simulation"
@@ -20391,7 +20391,7 @@ msgstr "清除 '不参与电路仿真' 属性"
 
 #: eeschema/tools/ee_actions.cpp:891
 msgid "Clear the exclude from simulation attribute"
-msgstr "清除 '不参与电路仿真' 属性"
+msgstr "清除 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:896
 msgid "Toggle Exclude from Simulation"
@@ -20399,7 +20399,7 @@ msgstr "切换 '不参与电路仿真' 属性"
 
 #: eeschema/tools/ee_actions.cpp:897
 msgid "Toggle the exclude from simulation attribute"
-msgstr "切换 '不参与电路仿真' 属性"
+msgstr "切换 '不参与电路仿真' 特性"
 
 #: eeschema/tools/ee_actions.cpp:902
 msgid "Exclude from Board"
@@ -20407,7 +20407,7 @@ msgstr "设置 '不在 PCB 中进行绘制' 属性"
 
 #: eeschema/tools/ee_actions.cpp:903
 msgid "Set the exclude from board attribute"
-msgstr "设置 '不在 PCB 中进行绘制' 属性"
+msgstr "设置 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:908
 msgid "Include on Board"
@@ -20415,7 +20415,7 @@ msgstr "清除 '不在 PCB 中进行绘制' 属性"
 
 #: eeschema/tools/ee_actions.cpp:909
 msgid "Clear the exclude from board attribute"
-msgstr "清除 '不在 PCB 中进行绘制' 属性"
+msgstr "清除 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:914
 msgid "Toggle Exclude from Board"
@@ -20423,7 +20423,7 @@ msgstr "切换 '不在 PCB 中进行绘制' 属性"
 
 #: eeschema/tools/ee_actions.cpp:915
 msgid "Toggle the exclude from board attribute"
-msgstr "切换 '不在 PCB 中进行绘制' 属性"
+msgstr "切换 '不在 PCB 中进行绘制' 特性"
 
 #: eeschema/tools/ee_actions.cpp:920
 msgid "Set Do Not Populate"
@@ -20431,7 +20431,7 @@ msgstr "设置 'DNP (不作装配)' 属性"
 
 #: eeschema/tools/ee_actions.cpp:921
 msgid "Set the do not populate attribute"
-msgstr "设置 'DNP (不作装配)' 属性"
+msgstr "设置 'DNP (不作装配)' 特性"
 
 #: eeschema/tools/ee_actions.cpp:926
 msgid "Unset Do Not Populate"
@@ -20439,7 +20439,7 @@ msgstr "清除 'DNP (不作装配)' 属性"
 
 #: eeschema/tools/ee_actions.cpp:927
 msgid "Clear the do not populate attribute"
-msgstr "清除 'DNP (不作装配)' 属性"
+msgstr "清除 'DNP (不作装配)' 特性"
 
 #: eeschema/tools/ee_actions.cpp:933
 msgid "Toggle Do Not Populate"
@@ -20447,7 +20447,7 @@ msgstr "切换 'DNP (不作装配)' 属性"
 
 #: eeschema/tools/ee_actions.cpp:934
 msgid "Toggle the do not populate attribute"
-msgstr "切换 'DNP (不作装配)' 属性"
+msgstr "切换 'DNP (不作装配)' 特性"
 
 #: eeschema/tools/ee_actions.cpp:941
 msgid "Open the library symbol in the Symbol Editor"
@@ -20919,7 +20919,7 @@ msgstr "用虚线绘制辅助信号线(电流或相位)"
 
 #: eeschema/tools/ee_actions.cpp:1428
 msgid "Dark Mode Plots"
-msgstr "暗模式"
+msgstr "暗色模式"
 
 #: eeschema/tools/ee_actions.cpp:1429
 msgid "Draw plots with a black background"
@@ -21198,15 +21198,15 @@ msgstr "编辑图纸页码"
 
 #: eeschema/tools/sch_edit_tool.cpp:2554
 msgid "Set Attribute"
-msgstr "设置属性"
+msgstr "设置特性"
 
 #: eeschema/tools/sch_edit_tool.cpp:2591
 msgid "Clear Attribute"
-msgstr "清除属性"
+msgstr "清除特性"
 
 #: eeschema/tools/sch_edit_tool.cpp:2628
 msgid "Toggle Attribute"
-msgstr "切换属性"
+msgstr "切换特性"
 
 #: eeschema/tools/sch_editor_control.cpp:152
 #, c-format
@@ -22050,11 +22050,11 @@ msgstr "消息"
 
 #: gerbview/gerber_draw_item.cpp:673
 msgid "Attribute"
-msgstr "属性"
+msgstr "特性"
 
 #: gerbview/gerber_draw_item.cpp:676 gerbview/gerber_draw_item.cpp:686
 msgid "No attribute"
-msgstr "无属性"
+msgstr "没有特性"
 
 #: gerbview/gerber_draw_item.cpp:682
 #, c-format
@@ -22173,7 +22173,7 @@ msgstr "绘图层未在使用"
 
 #: gerbview/gerbview_frame.cpp:672
 msgid "(with X2 attributes)"
-msgstr "(X2 属性)"
+msgstr "(X2 特性)"
 
 #: gerbview/gerbview_frame.cpp:681
 #, c-format
@@ -22277,7 +22277,7 @@ msgstr "属性:"
 
 #: gerbview/toolbars_gerber.cpp:160
 msgid "Highlight items with this aperture attribute"
-msgstr "高亮显示含此光圈 (Aperture) 属性的项目"
+msgstr "高亮显示含此光圈 (Aperture) 特性的项目"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
@@ -22397,7 +22397,7 @@ msgstr "高亮元件"
 #: gerbview/tools/gerbview_actions.cpp:151
 #: gerbview/tools/gerbview_actions.cpp:152
 msgid "Highlight Attribute"
-msgstr "高亮属性"
+msgstr "高亮特性"
 
 #: gerbview/tools/gerbview_actions.cpp:158
 #: gerbview/tools/gerbview_actions.cpp:159
@@ -22832,7 +22832,7 @@ msgstr "排除封装类型为 '未指定' 的元件的 3D 模型"
 
 #: kicad/cli/command_pcb_export_3d.cpp:91
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
-msgstr "排除被设置了 'DNP (不作装配)' 属性的元件的 3D 模型"
+msgstr "排除被设置了 'DNP (不作装配)' 特性的元件的 3D 模型"
 
 #: kicad/cli/command_pcb_export_3d.cpp:95
 msgid ""
@@ -23030,7 +23030,7 @@ msgstr "不使用扩展的 X2 格式"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:60
 msgid "Do not generate netlist attributes"
-msgstr "不生成网表属性"
+msgstr "不生成网表特性"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:64
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
@@ -30042,7 +30042,7 @@ msgstr "更新文本大小, 样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:80
 msgid "Update fabrication attributes"
-msgstr "更新制造属性"
+msgstr "更新制造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:81
 msgid "Update 3D models"
@@ -30118,7 +30118,7 @@ msgstr "更新/重置文本大小, 样式和位置"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:108
 msgid "Update/reset fabrication attributes"
-msgstr "更新/重置制造属性"
+msgstr "更新/重置制造特性"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:111
 msgid "Update/reset 3D models"
@@ -32802,7 +32802,7 @@ msgid ""
 "These properties are specified in Gerber X2  files."
 msgstr ""
 "在制造文件中指定特殊用途或约束的可选属性: \n"
-"BGA 属性用于 BGA 封装中的焊盘\n"
+"BGA 特性用于 BGA 封装中的焊盘\n"
 "局部基准点 属性是父级封装的基准\n"
 "全局基准点 是整个电路板的基准\n"
 "测试点焊盘 (Test Point) 可用于在 Gerber 文件中指定测试点\n"
@@ -33273,13 +33273,13 @@ msgid ""
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
 "使用 X2 Gerber 文件格式。\n"
-"主要包括 Gerber 标头中的 X2 属性。\n"
+"主要包括 Gerber 标头中的 X2 特性。\n"
 "如果未选中, 则使用 X1 格式。\n"
-"在 X1 格式中, 这些属性作为注释包含在文件中。"
+"在 X1 格式中, 这些特性作为注释包含在文件中。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid "Include netlist attributes"
-msgstr "包括网络属性"
+msgstr "包括网络特性"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:233
 msgid ""
@@ -33287,7 +33287,7 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"在 Gerber 文件中包含网表元数据和孔径属性。\n"
+"在 Gerber 文件中包含网表元数据和光圈 (Aperture) 特性。\n"
 "在 X1 格式中它们是注释。\n"
 "用于在 CAM 工具和 Gerber 查看器中检查连接性。"
 
@@ -37112,7 +37112,7 @@ msgstr "焊盘网络与原理图不匹配"
 
 #: pcbnew/drc/drc_item.cpp:185
 msgid "Footprint attributes don't match symbol"
-msgstr "封装属性与符号不匹配"
+msgstr "封装特性与符号不匹配"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Footprint not found in libraries"
@@ -38418,7 +38418,7 @@ msgstr "状态: "
 
 #: pcbnew/footprint.cpp:1321
 msgid "Attributes:"
-msgstr "属性:"
+msgstr "特性:"
 
 #: pcbnew/footprint.cpp:1327
 #, c-format
@@ -39407,42 +39407,42 @@ msgstr "已将 %s 封装筛选器更新为 '%s'。"
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:547
 #, c-format
 msgid "Add %s 'exclude from BOM' fabrication attribute."
-msgstr "为 %s 添加 '从 BOM 中移除' 制造属性。"
+msgstr "为 %s 添加 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:552
 #, c-format
 msgid "Remove %s 'exclude from BOM' fabrication attribute."
-msgstr "为 %s 移除 '从 BOM 中移除' 制造属性。"
+msgstr "为 %s 移除 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:563
 #, c-format
 msgid "Added %s 'exclude from BOM' fabrication attribute."
-msgstr "已为 %s 添加 '从 BOM 中移除' 制造属性。"
+msgstr "已为 %s 添加 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:569
 #, c-format
 msgid "Removed %s 'exclude from BOM' fabrication attribute."
-msgstr "已为 %s 移除 '从 BOM 中移除' 制造属性。"
+msgstr "已为 %s 移除 '从 BOM 中移除' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:587
 #, c-format
 msgid "Add %s 'Do not place' fabrication attribute."
-msgstr "为 %s 添加 'DNP (不作装配)' 制造属性。"
+msgstr "为 %s 添加 'DNP (不作装配)' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:592
 #, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr "为 %s 移除 'DNP (不作装配)' 制造属性。"
+msgstr "为 %s 移除 'DNP (不作装配)' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:603
 #, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
-msgstr "已为 %s 添加 'DNP (不作装配)' 制造属性。"
+msgstr "已为 %s 添加 'DNP (不作装配)' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:609
 #, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
-msgstr "已为 %s 移除 'DNP (不作装配)' 制造属性。"
+msgstr "已为 %s 移除 'DNP (不作装配)' 制造特性。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:694
 #, c-format
