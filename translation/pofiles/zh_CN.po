@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 12:58+0000\n"
+"PO-Revision-Date: 2024-02-02 15:28+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -4949,7 +4949,7 @@ msgstr "Excellon 选项"
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:570
 msgid "Drawing Sheet Editor"
-msgstr "图纸编辑器"
+msgstr "图框编辑器"
 
 #: common/eda_base_frame.cpp:1232
 msgid "Packages and Updates"
@@ -20875,7 +20875,7 @@ msgstr "将元素与栅格对齐"
 
 #: eeschema/tools/ee_actions.cpp:1359
 msgid "Save Current Sheet Copy As..."
-msgstr "将当前图纸副本另存为..."
+msgstr "将当前图纸另存为..."
 
 #: eeschema/tools/ee_actions.cpp:1360
 msgid "Save a copy of the current sheet to another location or name"
@@ -43808,7 +43808,7 @@ msgstr "新建封装..."
 
 #: pcbnew/tools/pcb_actions.cpp:696
 msgid "Create a new, empty footprint"
-msgstr "创建一个新的空封装"
+msgstr "创建一个新的封装"
 
 #: pcbnew/tools/pcb_actions.cpp:702
 msgid "Create Footprint..."
