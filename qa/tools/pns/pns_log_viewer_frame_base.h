@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -23,6 +23,7 @@
 #include <wx/slider.h>
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/treelist.h>
 #include <wx/statusbr.h>
@@ -53,6 +54,8 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		wxCheckBox* m_chkThinLines;
 		wxCheckBox* m_showVertices;
 		wxStaticText* m_algoStatus;
+		wxStaticText* m_ideLabel;
+		wxChoice* m_ideChoice;
 		wxBoxSizer* m_viewSizer;
 		wxTreeListCtrl* m_itemList;
 		wxStatusBar* m_statusBar;
@@ -74,7 +77,7 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 
 	public:
 
-		PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("P&S Log Viewer"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("P&S Log Viewer"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1045,574 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
 		~PNS_LOG_VIEWER_FRAME_BASE();
 

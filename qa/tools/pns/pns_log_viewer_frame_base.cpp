@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -80,9 +80,26 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 
 	m_algoStatus = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_algoStatus->Wrap( -1 );
-	m_algoStatus->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_algoStatus->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	fgSizer3->Add( m_algoStatus, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_ideLabel = new wxStaticText( this, wxID_ANY, wxT("Select your IDE:"), wxPoint( -1,-1 ), wxDefaultSize, 0 );
+	m_ideLabel->Wrap( -1 );
+	m_ideLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	fgSizer3->Add( m_ideLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	wxString m_ideChoiceChoices[] = { wxT("VS Code"), wxT("CLion") };
+	int m_ideChoiceNChoices = sizeof( m_ideChoiceChoices ) / sizeof( wxString );
+	m_ideChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ideChoiceNChoices, m_ideChoiceChoices, 0 );
+	m_ideChoice->SetSelection( 0 );
+	m_ideChoice->SetToolTip( wxT("Select IDE for go to line functionality") );
+
+	fgSizer3->Add( m_ideChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	m_mainSizer->Add( fgSizer3, 0, wxEXPAND, 5 );

@@ -153,7 +153,7 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) :
                              wxITEM_NORMAL );
     m_listPopupMenu->Append( ID_LIST_SHOW_ALL, wxT( "Show all" ), wxT( "" ), wxITEM_NORMAL );
     m_listPopupMenu->Append( ID_LIST_SHOW_NONE, wxT( "Show none" ), wxT( "" ), wxITEM_NORMAL );
-    m_listPopupMenu->Append( ID_LIST_DISPLAY_LINE, wxT( "Go to line in vs code" ), wxT( "" ), wxITEM_NORMAL );
+    m_listPopupMenu->Append( ID_LIST_DISPLAY_LINE, wxT( "Go to line in IDE" ), wxT( "" ), wxITEM_NORMAL );
 
     m_itemList->Connect( m_itemList->GetId(), wxEVT_TREELIST_ITEM_CONTEXT_MENU,
                          wxMouseEventHandler( PNS_LOG_VIEWER_FRAME::onListRightClick ), nullptr,
@@ -611,15 +611,20 @@ void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
             wxString filename = m_itemList->GetItemText(selectedItems.back(), 2);
             wxString line = m_itemList->GetItemText(selectedItems.back(), 4);
 
-            //todo: add IDE selection somewhere in the GUI
-            // clion:
-            //wxExecute( wxString::Format( "clion --line %s %s", line, m_filenameToPathMap[filename] ) );
 
             if( !filename.empty() && !line.empty() )
-                wxExecute( wxString::Format("code --goto %s:%s", m_filenameToPathMap[filename], line) );
-        }
+            {
+                wxString filepath = m_filenameToPathMap[filename];
 
-        return;
+                switch( m_ideChoice->GetCurrentSelection() )
+                {
+                    case 0: wxExecute( wxString::Format( "code --goto %s:%s", filepath, line ) ); return;
+                    case 1: wxExecute( wxString::Format( "clion --line %s %s", line, filepath ) ); return;
+                    default: return;
+                }
+            }
+        }
+        break;
     }
     }
     return;
