@@ -89,6 +89,7 @@ bool KIPLATFORM::APP::Init()
     // It may be useful to log up to traces in a console, but in Release builds the log level changes to Info
     // Also we have to force the active target to stderr or else it goes to the void
     bool forceLog = wxGetEnv( wxS( "KICAD_FORCE_CONSOLE_TRACE" ), nullptr );
+
     if( forceLog )
     {
         wxLog::EnableLogging( true );

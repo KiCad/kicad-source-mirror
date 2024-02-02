@@ -479,6 +479,17 @@ struct APP_KICAD_CLI : public wxAppConsole
         if( !KIPLATFORM::APP::Init() )
             return false;
 
+#ifndef DEBUG
+        // Enable logging traces to the console in release build.
+        // This is usually disabled, but it can be useful for users to run to help
+        // debug issues and other problems.
+        if( wxGetEnv( wxS( "KICAD_ENABLE_WXTRACE" ), nullptr ) )
+        {
+            wxLog::EnableLogging( true );
+            wxLog::SetLogLevel( wxLOG_Trace );
+        }
+#endif
+
         if( !program.OnPgmInit() )
         {
             program.OnPgmExit();

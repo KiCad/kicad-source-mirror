@@ -176,6 +176,17 @@ struct APP_SINGLE_TOP : public wxApp
         if( !KIPLATFORM::APP::Init() )
             return false;
 
+#ifndef DEBUG
+        // Enable logging traces to the console in release build.
+        // This is usually disabled, but it can be useful for users to run to help
+        // debug issues and other problems.
+        if( wxGetEnv( wxS( "KICAD_ENABLE_WXTRACE" ), nullptr ) )
+        {
+            wxLog::EnableLogging( true );
+            wxLog::SetLogLevel( wxLOG_Trace );
+        }
+#endif
+
         // Force wxHtmlWinParser initialization when a wxHtmlWindow is used only
         // in a shared library (.so or .dll file)
         // Otherwise the Html text is displayed as plain text.
