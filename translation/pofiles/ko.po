@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-01 13:54+0000\n"
+"PO-Revision-Date: 2024-02-02 12:23+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -2511,11 +2511,11 @@ msgstr "선택 항목에 %d개의 잠긴 항목이 있음."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "잠금을 재정의하지 않는 한 이러한 항목은 건너뜁니다."
+msgstr "잠금을 무시하지 않는 한 이러한 항목은 건너뜁니다."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr "이 세션에 대한 결정을 기억하십시오."
+msgstr "이 세션에 대한 결정을 기억함."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
@@ -2527,7 +2527,7 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
-msgstr "잠금 재정의"
+msgstr "잠금 무시"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 #: kicad/dialogs/dialog_update_notice_base.cpp:53
@@ -7316,7 +7316,7 @@ msgstr "선택한 항목 삭제"
 
 #: common/tool/actions.cpp:277
 msgid "Interactive Delete Tool"
-msgstr "인터랙티브 삭제 도구"
+msgstr "대화형 삭제 도구"
 
 #: common/tool/actions.cpp:278
 msgid "Delete clicked items"
@@ -7715,7 +7715,7 @@ msgstr "측정 도구"
 
 #: common/tool/actions.cpp:840
 msgid "Interactively measure distance between points"
-msgstr "두 점 사이의 거리를 인터랙티브하게 계측"
+msgstr "두 점 사이의 거리를 대화형으로 측정"
 
 #: common/tool/actions.cpp:856
 msgid "Switch to Project Manager"
@@ -13528,7 +13528,7 @@ msgstr "회로도 업데이트"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "참조 지정자를 기반으로 풋프린트를 회로도 심볼에 연결하기"
+msgstr "참조 지정자를 기반으로 풋프린트를 회로도 심볼에 재연결"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -15423,7 +15423,7 @@ msgstr "배치"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:48
 msgid "Interactive placement"
-msgstr "인터랙티브 배치"
+msgstr "대화형 배치"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.cpp:55
 msgid "At"
@@ -32253,14 +32253,12 @@ msgid "Center on footprint"
 msgstr "상위 풋프린트"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:83
-#, fuzzy
 msgid "Filter tracks by width:"
-msgstr "네트 항목으로 필터링:"
+msgstr "너비를 기준으로 트랙을 필터링함:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:99
-#, fuzzy
 msgid "Filter vias by size:"
-msgstr "네트 항목으로 필터링:"
+msgstr "크기별로 비아를 필터링함:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
 msgid "Via size:"
@@ -32439,17 +32437,14 @@ msgid "Predefined track && via dimensions"
 msgstr "사전 정의된 트랙 및 비아 치수"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:69
-#, fuzzy
 msgid "Teardrop defaults"
-msgstr "눈물 방울 지역"
+msgstr "눈물방울 기본값"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
-#, fuzzy
 msgid "Length-tuning pattern defaults"
-msgstr "길이 조정"
+msgstr "길이 조정 패턴 기본값"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
-#, fuzzy
 msgid "Custom rules"
 msgstr "사용자 정의 규칙"
 
@@ -32663,9 +32658,9 @@ msgid "Report file"
 msgstr "보고서 파일"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:2303
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s)"
-msgstr "페이지 %s (%s)"
+msgstr "%s (%s)"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:30
 msgid "Net name filter:"
@@ -32898,9 +32893,8 @@ msgstr "홀 크기 X:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:79
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:119
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:173
-#, fuzzy
 msgid "d"
-msgstr "%d"
+msgstr "d"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1678
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
@@ -33190,9 +33184,8 @@ msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
 msgstr "자동 눈물 방울을 적용하려면 편집 > 티어드롭 편집을 사용합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
-#, fuzzy
 msgid "Add teardrops on pad's track connections"
-msgstr "패드영역에 티어드롭을 놓습니다"
+msgstr "패드의 트랙 연결부에 눈물방울 추가하기"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:643
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:341
@@ -33230,17 +33223,15 @@ msgid " )"
 msgstr " )"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:673
-#, fuzzy
 msgid "Teardrop Shape"
-msgstr "눈물 방울 지역"
+msgstr "눈물방울 모양"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:704
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:63
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:243
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:423
-#, fuzzy
 msgid "Best length (L):"
-msgstr "최적 길이:"
+msgstr "최적 길이(L):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:732
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:92
@@ -33253,17 +33244,15 @@ msgstr "최대 길이:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:103
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:283
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:463
-#, fuzzy
 msgid "Best width (W):"
-msgstr "배선 두께 (W):"
+msgstr "최적 너비(W):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:780
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:132
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:312
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:492
-#, fuzzy
 msgid "Maximum width (W):"
-msgstr "최대 너비:"
+msgstr "최대 너비(W):"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:833
 msgid "Pad connection:"
@@ -33893,7 +33882,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:92
 msgid "Smooth dragged segments"
-msgstr "드래그한 세그먼트 매끄럽게 하기"
+msgstr "세그먼트를 부드럽게 끌기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:93
 msgid ""
@@ -33909,7 +33898,7 @@ msgstr "배선 마무리 제안"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimize entire track being dragged"
-msgstr "드래그된 모든 배선 최적화"
+msgstr "모든 배선 최적화 끌기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:103
 msgid ""
@@ -33923,7 +33912,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:107
 msgid "Use mouse path to set track posture"
-msgstr "마우스 경로를 사용하여 배선 모양을 설정"
+msgstr "마우스 궤적으로 배선 모양 설정"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:108
 msgid ""
@@ -33935,7 +33924,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:112
 msgid "Fix all segments on click"
-msgstr "클릭으로 모든 세그먼트 고정"
+msgstr "클릭시 모든 세그먼트 고정"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:113
 msgid ""
@@ -33949,7 +33938,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
-msgstr "인터랙티브 라우터 설정"
+msgstr "대화형 라우터 설정"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:162
 msgid "Reset to the current distance from the reference position."
@@ -34504,9 +34493,8 @@ msgid "Target length:"
 msgstr "타겟 길이:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:42
-#, fuzzy
 msgid "Override custom rules"
-msgstr "잠금 재정의"
+msgstr "맞춤 규칙 무시"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
@@ -34611,7 +34599,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr "풋프린트를 회로도에 지정된 값으로 대체"
+msgstr "회로도에 지정된 풋프린트로 대체"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -39011,9 +38999,8 @@ msgid "Target Skew"
 msgstr "대상 기울기"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2406
-#, fuzzy
 msgid "Override Custom Rules"
-msgstr "잠금 재정의"
+msgstr "맞춤 규칙 무시"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2418
 #, fuzzy
@@ -42304,7 +42291,7 @@ msgstr "너비 %s, 간격 %s, 비아 간격 %s"
 
 #: pcbnew/router/router_tool.cpp:472
 msgid "Interactive Router"
-msgstr "인터랙티브 라우터"
+msgstr "대화형 라우터"
 
 #: pcbnew/router/router_tool.cpp:598
 msgid "Save router log"
@@ -45372,11 +45359,11 @@ msgstr "차동 쌍 라우트"
 
 #: pcbnew/tools/pcb_actions.cpp:2249
 msgid "Interactive Router Settings..."
-msgstr "인터랙티브 라우터 설정..."
+msgstr "대화형 라우터 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:2250
 msgid "Open Interactive Router settings"
-msgstr "인터랙티브 라우터 설정 열기"
+msgstr "대화형 라우터 설정 열기"
 
 #: pcbnew/tools/pcb_actions.cpp:2256
 msgid "Differential Pair Dimensions..."
