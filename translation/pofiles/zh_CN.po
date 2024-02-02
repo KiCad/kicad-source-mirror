@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 12:24+0000\n"
+"PO-Revision-Date: 2024-02-02 12:58+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -20625,7 +20625,7 @@ msgstr "显示隐藏引脚"
 
 #: eeschema/tools/ee_actions.cpp:1085
 msgid "Toggle display of hidden pins"
-msgstr "切换是否显示隐藏的引脚"
+msgstr "切换隐藏的引脚的显示状态"
 
 #: eeschema/tools/ee_actions.cpp:1091
 msgid "Show Hidden Fields"
@@ -20633,7 +20633,7 @@ msgstr "显示隐藏字段"
 
 #: eeschema/tools/ee_actions.cpp:1092
 msgid "Toggle display of hidden text fields"
-msgstr "切换是否显示隐藏的文本字段"
+msgstr "切换隐藏的文本字段的显示状态"
 
 #: eeschema/tools/ee_actions.cpp:1097
 msgid "Show Directive Labels"
@@ -44362,7 +44362,7 @@ msgstr "局部飞线"
 
 #: pcbnew/tools/pcb_actions.cpp:1312
 msgid "Toggle ratsnest display of selected item(s)"
-msgstr "切换是否显示所选项目的飞线"
+msgstr "切换所选项目的飞线的显示状态"
 
 #: pcbnew/tools/pcb_actions.cpp:1329
 msgid "Show the net inspector"
