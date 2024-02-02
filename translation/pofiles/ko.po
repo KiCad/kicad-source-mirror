@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-02-01 13:54+0000\n"
+"PO-Revision-Date: 2024-02-03 06:01+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -2273,11 +2273,11 @@ msgstr "선택 항목에 %d개의 잠긴 항목이 있음."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "잠금을 재정의하지 않는 한 이러한 항목은 건너뜁니다."
+msgstr "잠금을 무시하지 않는 한 이러한 항목은 건너뜁니다."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
-msgstr "이 세션에 대한 결정을 기억하십시오."
+msgstr "이 세션에 대한 결정을 기억함."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:45
 msgid ""
@@ -2289,7 +2289,7 @@ msgstr ""
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
-msgstr "잠금 재정의"
+msgstr "잠금 무시"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:56
 msgid ""
@@ -5970,7 +5970,7 @@ msgstr "선택한 항목 삭제"
 
 #: common/tool/actions.cpp:197
 msgid "Interactive Delete Tool"
-msgstr "인터랙티브 삭제 도구"
+msgstr "대화형 삭제 도구"
 
 #: common/tool/actions.cpp:197
 msgid "Delete clicked items"
@@ -6321,7 +6321,7 @@ msgstr "측정 도구"
 
 #: common/tool/actions.cpp:576
 msgid "Interactively measure distance between points"
-msgstr "두 점 사이의 거리를 인터랙티브하게 계측"
+msgstr "두 점 사이의 거리를 대화형으로 측정"
 
 #: common/tool/actions.cpp:590
 msgid "Show 3D viewer window"
@@ -11651,7 +11651,7 @@ msgstr "회로도 업데이트"
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:27
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
-msgstr "참조 지정자를 기반으로 풋프린트를 회로도 심볼에 연결하기"
+msgstr "참조 지정자를 기반으로 풋프린트를 회로도 심볼에 재연결"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:28
@@ -29337,7 +29337,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:51
 msgid "Smooth dragged segments"
-msgstr "드래그한 세그먼트 매끄럽게 하기"
+msgstr "세그먼트를 부드럽게 끌기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:52
 msgid ""
@@ -29364,7 +29364,7 @@ msgstr "배선 마무리 제안"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:66
 msgid "Optimize entire track being dragged"
-msgstr "드래그된 모든 배선 최적화"
+msgstr "모든 배선 최적화 끌기"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 msgid ""
@@ -29378,7 +29378,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:71
 msgid "Use mouse path to set track posture"
-msgstr "마우스 경로를 사용하여 배선 모양을 설정"
+msgstr "마우스 궤적으로 배선 모양 설정"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:72
 msgid ""
@@ -29390,7 +29390,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:76
 msgid "Fix all segments on click"
-msgstr "클릭으로 모든 세그먼트 고정"
+msgstr "클릭시 모든 세그먼트 고정"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:77
 msgid ""
@@ -29404,7 +29404,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:61
 msgid "Interactive Router Settings"
-msgstr "인터랙티브 라우터 설정"
+msgstr "대화형 라우터 설정"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:162
 msgid "Reset to the current distance from the reference position."
@@ -29884,7 +29884,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr "풋프린트를 회로도에 지정된 값으로 대체"
+msgstr "회로도에 지정된 풋프린트로 대체"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
@@ -33860,7 +33860,7 @@ msgstr "배치"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:49
 msgid "Interactive placement"
-msgstr "인터랙티브 배치"
+msgstr "대화형 배치"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:56
 msgid "At"
@@ -36614,7 +36614,7 @@ msgstr ""
 
 #: pcbnew/router/pns_kicad_iface.cpp:1984 pcbnew/router/router_tool.cpp:453
 msgid "Interactive Router"
-msgstr "인터랙티브 라우터"
+msgstr "대화형 라우터"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:54
 msgid "Please select a differential pair trace you want to tune."
@@ -39530,11 +39530,11 @@ msgstr "차동 쌍 라우트"
 
 #: pcbnew/tools/pcb_actions.cpp:1442
 msgid "Interactive Router Settings..."
-msgstr "인터랙티브 라우터 설정..."
+msgstr "대화형 라우터 설정..."
 
 #: pcbnew/tools/pcb_actions.cpp:1442
 msgid "Open Interactive Router settings"
-msgstr "인터랙티브 라우터 설정 열기"
+msgstr "대화형 라우터 설정 열기"
 
 #: pcbnew/tools/pcb_actions.cpp:1447
 msgid "Differential Pair Dimensions..."
