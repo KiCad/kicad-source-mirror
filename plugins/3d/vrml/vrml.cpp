@@ -202,8 +202,17 @@ SCENEGRAPH* LoadVRML( const wxString& aFileName, bool useInline )
             {
                 expanded = gzip::decompress( buffer, size );
             }
-            catch(...)
+            catch( std::runtime_error& e )
             {
+                wxLogDebug( wxT( " * [INFO] wrz load failed: %s" ), wxString::FromUTF8Unchecked( e.what() ) );
+
+                delete[] buffer;
+                return nullptr;
+            }
+            catch( ... )
+            {
+                wxLogDebug( wxT( " * [INFO] wrz load failed: unknown error" ) );
+
                 delete[] buffer;
                 return nullptr;
             }
