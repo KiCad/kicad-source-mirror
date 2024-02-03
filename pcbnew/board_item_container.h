@@ -79,26 +79,6 @@ public:
         Remove( aItem );
         delete aItem;
     }
-
-    /**
-     * @brief Fetch the zone settings for this container
-     */
-    virtual const ZONE_SETTINGS& GetZoneSettings() const
-    {
-        return m_zoneSettings;
-    }
-
-    /**
-     * @brief Set the zone settings for this container
-     * @param aSettings new Zone settings for this container
-     */
-    virtual void SetZoneSettings( const ZONE_SETTINGS& aSettings )
-    {
-        m_zoneSettings = aSettings;
-    }
-
-private:
-    ZONE_SETTINGS m_zoneSettings;
 };
 
 #endif /* BOARD_ITEM_CONTAINER_H */

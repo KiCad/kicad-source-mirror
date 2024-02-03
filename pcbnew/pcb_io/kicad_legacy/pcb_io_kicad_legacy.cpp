@@ -905,7 +905,7 @@ void PCB_IO_KICAD_LEGACY::loadSHEET()
 void PCB_IO_KICAD_LEGACY::loadSETUP()
 {
     BOARD_DESIGN_SETTINGS&    bds             = m_board->GetDesignSettings();
-    ZONE_SETTINGS             zoneSettings    = m_board->GetZoneSettings();
+    ZONE_SETTINGS             zoneSettings    = bds.GetDefaultZoneSettings();
     std::shared_ptr<NETCLASS> defaultNetclass = bds.m_NetSettings->m_DefaultNetClass;
     char*                     line;
     char*                     saveptr;
@@ -1146,7 +1146,7 @@ void PCB_IO_KICAD_LEGACY::loadSETUP()
         }
         else if( TESTLINE( "$EndSETUP" ) )
         {
-            m_board->SetZoneSettings( zoneSettings );
+            bds.SetDefaultZoneSettings( zoneSettings );
 
             // Very old *.brd file does not have  NETCLASSes
             // "TrackWidth", "ViaSize", "ViaDrill", "ViaMinSize", and "TrackClearence" were

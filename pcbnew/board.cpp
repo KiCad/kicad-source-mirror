@@ -771,17 +771,6 @@ BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
 }
 
 
-const ZONE_SETTINGS& BOARD::GetZoneSettings() const
-{
-    return GetDesignSettings().GetDefaultZoneSettings();
-}
-
-
-void BOARD::SetZoneSettings( const ZONE_SETTINGS& aSettings )
-{
-    GetDesignSettings().SetDefaultZoneSettings( aSettings );
-}
-
 int BOARD::GetMaxClearanceValue() const
 {
     int worstClearance = m_designSettings->GetBiggestClearanceValue();

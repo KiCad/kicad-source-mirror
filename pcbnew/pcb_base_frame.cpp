@@ -581,18 +581,6 @@ void PCB_BASE_FRAME::SetDrawBgColor( const COLOR4D& aColor )
 }
 
 
-const ZONE_SETTINGS& PCB_BASE_FRAME::GetZoneSettings() const
-{
-    return m_pcb->GetDesignSettings().GetDefaultZoneSettings();
-}
-
-
-void PCB_BASE_FRAME::SetZoneSettings( const ZONE_SETTINGS& aSettings )
-{
-    m_pcb->GetDesignSettings().SetDefaultZoneSettings( aSettings );
-}
-
-
 const PCB_PLOT_PARAMS& PCB_BASE_FRAME::GetPlotSettings() const
 {
     return m_pcb->GetPlotOptions();

@@ -642,10 +642,6 @@ public:
      */
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
 
-    const ZONE_SETTINGS& GetZoneSettings() const override;
-
-    void SetZoneSettings( const ZONE_SETTINGS& aSettings ) override;
-
     // Tented vias are vias covered by solder mask. So because the solder mask is a negative
     // layer, tented vias are NOT plotted on solder mask layers
     bool GetTentVias() const            { return !m_plotOptions.GetPlotViaOnMaskLayer(); }

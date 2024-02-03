@@ -182,9 +182,6 @@ public:
      */
     void SetDisplayOptions( const PCB_DISPLAY_OPTIONS& aOptions, bool aRefresh = true );
 
-    const ZONE_SETTINGS& GetZoneSettings() const;
-    void SetZoneSettings( const ZONE_SETTINGS& aSettings );
-
     /**
      * Return the #PCB_PLOT_PARAMS for the BOARD owned by this frame.
      */

@@ -468,7 +468,7 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
         // Creating zone or keepout
         PCB_BASE_EDIT_FRAME*  frame    = getEditFrame<PCB_BASE_EDIT_FRAME>();
         BOARD_ITEM_CONTAINER* parent   = frame->GetModel();
-        ZONE_SETTINGS         zoneInfo = frame->GetZoneSettings();
+        ZONE_SETTINGS         zoneInfo = bds.GetDefaultZoneSettings();
 
         bool nonCopper = IsNonCopperLayer( destLayer );
         zoneInfo.m_Layers.reset().set( destLayer );

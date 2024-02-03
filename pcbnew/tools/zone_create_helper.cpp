@@ -92,7 +92,7 @@ std::unique_ptr<ZONE> ZONE_CREATE_HELPER::createNewZone( bool aKeepout )
     std::set<int>         highlightedNets = board->GetHighLightNetCodes();
 
     // Get the current default settings for zones
-    ZONE_SETTINGS         zoneInfo = frame->GetZoneSettings();
+    ZONE_SETTINGS         zoneInfo = board->GetDesignSettings().GetDefaultZoneSettings();
     zoneInfo.m_Layers.reset().set( m_params.m_layer );  // TODO(JE) multilayer defaults?
     zoneInfo.m_NetcodeSelection = highlightedNets.empty() ? -1 : *highlightedNets.begin();
     zoneInfo.SetIsRuleArea( m_params.m_keepout );

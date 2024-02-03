@@ -29,6 +29,7 @@
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <board_commit.h>
+#include <board_design_settings.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
 #include <zone.h>
@@ -40,7 +41,7 @@
 void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 {
     int               dialogResult;
-    ZONE_SETTINGS     zoneInfo = GetZoneSettings();
+    ZONE_SETTINGS     zoneInfo = m_pcb->GetDesignSettings().GetDefaultZoneSettings();
     PICKED_ITEMS_LIST pickedList;    // zones for undo/redo command
     PICKED_ITEMS_LIST deletedList;   // zones that have been deleted when combined
     BOARD_COMMIT      commit( this );
@@ -74,7 +75,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
         return;
     }
 
-    SetZoneSettings( zoneInfo );
+    m_pcb->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
     OnModify();
 
     if( dialogResult == ZONE_EXPORT_VALUES )
