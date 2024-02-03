@@ -73,7 +73,8 @@ ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
     m_hatchThickness          = m_ZoneMinThickness;
     m_hatchGap                = m_ZoneMinThickness;
 
-    aParent->GetBoard()->GetDesignSettings().GetDefaultZoneSettings().ExportSetting( *this );
+    if( aParent->GetBoard() )
+        aParent->GetBoard()->GetDesignSettings().GetDefaultZoneSettings().ExportSetting( *this );
 
     m_needRefill = false;   // True only after edits.
 }
