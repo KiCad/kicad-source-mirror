@@ -551,6 +551,16 @@ void PNS_LOG_VIEWER_FRAME::syncModel()
 }
 
 
+void runCommand( const wxString& aCommand )
+{
+#ifdef __WXMSW__
+    wxShell( aCommand ); // on windows we need to launch a shell in order to run the command
+#else
+    wxExecute( aCommand );
+#endif /* __WXMSW__ */
+}
+
+
 void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
 {
     auto sel = m_itemList->GetPopupMenuSelectionFromUser( *m_listPopupMenu );
@@ -618,9 +628,10 @@ void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
 
                 switch( m_ideChoice->GetCurrentSelection() )
                 {
-                    case 0: wxExecute( wxString::Format( "code --goto %s:%s", filepath, line ) ); return;
-                    case 1: wxExecute( wxString::Format( "clion --line %s %s", line, filepath ) ); return;
-                    case 2: wxExecute( wxString::Format( "emacsclient +%s %s", line, filepath ) ); return;
+                    case 0: runCommand( wxString::Format( "code --goto %s:%s", filepath, line ) ); return;
+                    case 1: runCommand( wxString::Format( "start devenv /edit %s /command \"Gotoln %s\"", filepath, line ) ); return; // fixme
+                    case 2: runCommand( wxString::Format( "clion --line %s %s", line, filepath ) ); return;
+                    case 3: runCommand( wxString::Format( "emacsclient +%s %s", line, filepath ) ); return;
                     default: return;
                 }
             }
