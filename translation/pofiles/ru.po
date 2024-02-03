@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 12:58+0000\n"
+"PO-Revision-Date: 2024-02-03 18:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -456,7 +456,7 @@ msgstr "Перевернуть плату"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:160
 msgid "Flip the board view"
-msgstr "Перевернуть (отразить) вид платы"
+msgstr "Отразить вид платы"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:168
 msgid "Toggle Orthographic Projection"
@@ -2003,7 +2003,7 @@ msgstr "Команда ведущих разработчиков"
 
 #: common/dialog_about/AboutDialog_main.cpp:202
 msgid "Lead Development Alumni"
-msgstr "Предыдущие ведущие разработчики"
+msgstr "Бывшие ведущие разработчики"
 
 #: common/dialog_about/AboutDialog_main.cpp:203
 msgid "Additional Contributions By"
@@ -3594,7 +3594,7 @@ msgstr "Тема:"
 
 #: common/dialogs/panel_color_settings_base.cpp:35
 msgid "Override individual item colors"
-msgstr "Переопределить особые цвета элементов"
+msgstr "Игнорировать индивидуальные цвета элементов"
 
 #: common/dialogs/panel_color_settings_base.cpp:36
 msgid ""
@@ -3606,7 +3606,7 @@ msgstr ""
 
 #: common/dialogs/panel_color_settings_base.cpp:43
 msgid "Open Theme Folder"
-msgstr "Открыть каталог темы"
+msgstr "Открыть каталог тем"
 
 #: common/dialogs/panel_color_settings_base.cpp:44
 msgid "Open the folder containing color themes"
@@ -3727,8 +3727,7 @@ msgstr ""
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
 msgstr ""
-"Показывать всплывающий индикатор при переключении настроек с помощью горячих "
-"клавиш"
+"Показывать всплывающий индикатор при переключении настроек горячими клавишами"
 
 #: common/dialogs/panel_common_settings_base.cpp:158
 msgid ""
@@ -3736,8 +3735,8 @@ msgid ""
 "indicator briefly to indicate the change in settings."
 msgstr ""
 "Когда этот параметр включен, некоторые горячие клавиши переключения между "
-"настройками, будут отображать всплывающий индикатор, указывающий на "
-"изменение настроек."
+"настройками будут отображать всплывающий индикатор, указывающий на изменение "
+"настроек."
 
 #: common/dialogs/panel_common_settings_base.cpp:168
 msgid "Icon theme:"
@@ -5018,7 +5017,7 @@ msgstr "Редактор печатных плат"
 
 #: common/eda_base_frame.cpp:1176
 msgid "Action Plugins"
-msgstr "Плагины действий"
+msgstr "Action-плагины"
 
 #: common/eda_base_frame.cpp:1183
 msgid "Realtime Renderer"
@@ -5064,12 +5063,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Возможны некоторые затруднения!\n"
-"Последний раз вы редактировании файл\n"
+"Какая неудобная ситуация!\n"
+"Похоже, когда вы в последний раз редактировали\n"
 "%s\n"
-"KiCad был закрыт до сохранения.\n"
+"KiCad закрылся до сохранения файла.\n"
 "\n"
-"Желаете восстановить последние сохранённые изменения?"
+"Желаете восстановить последние авто-сохранённые изменения?"
 
 #: common/eda_base_frame.cpp:1379
 msgid "The auto save file could not be renamed to the board file name."
@@ -6723,7 +6722,7 @@ msgstr "Курсор"
 
 #: common/layer_id.cpp:148
 msgid "Hovered items"
-msgstr "Элементы с наведением"
+msgstr "Наведённые элементы"
 
 #: common/layer_id.cpp:149
 msgid "Highlighted items"
@@ -6863,7 +6862,7 @@ msgstr "Тень заблокир. элементов"
 
 #: common/layer_id.cpp:192
 msgid "Courtyard collision shadow"
-msgstr "Пересечения областей установки"
+msgstr "Пересечения обл. установки"
 
 #: common/lib_id.cpp:145
 msgid "Illegal character found in logical library name"
@@ -8402,7 +8401,7 @@ msgstr "Горячая клавиша"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47 eeschema/lib_item.cpp:60
 #: eeschema/symbol_editor/symbol_editor.cpp:1281
 msgid "Alternate"
-msgstr "Альтернативная функция"
+msgstr "Альтернатива"
 
 #: common/widgets/wx_html_report_panel.cpp:192
 #: common/widgets/wx_html_report_panel.cpp:213
@@ -10749,7 +10748,7 @@ msgstr "Имя метки не может быть пустой."
 #: eeschema/dialogs/dialog_sheet_properties.cpp:368
 #: eeschema/dialogs/dialog_symbol_properties.cpp:754 include/project.h:42
 msgid "untitled"
-msgstr "безымённый"
+msgstr "без имени"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:584
 msgid "Edit Label"
@@ -13835,7 +13834,7 @@ msgstr "Сквозное выделение"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:145
 msgid "Select/highlight objects corresponding to PCB selection"
-msgstr "Выделять/подсвечивать объекты, соответствующие выделению на плате"
+msgstr "Выделять/подсвечивать объекты, соотв. выделению на плате"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:147
 msgid "Highlight symbols corresponding to selected footprints"
@@ -13952,8 +13951,7 @@ msgid ""
 "Left click (and drag) actions depend on 2 modifier keys:\n"
 "Shift and Ctrl"
 msgstr ""
-"Действие левой кнопки мыши (и перетаскивание) зависит от нажатия двух "
-"клавиш:\n"
+"Действие левой кнопки мыши (и перетаскивание) зависит от двух клавиш:\n"
 "Shift и Ctrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
@@ -13997,8 +13995,7 @@ msgid ""
 "Left click (and drag) actions depend on 3 modifier keys:\n"
 "Option, Shift and Cmd"
 msgstr ""
-"Действие левой кнопки мыши (и перетаскивание) зависит от нажатия трёх "
-"клавиш:\n"
+"Действие левой кнопки мыши (и перетаскивание) зависит от трёх клавиш:\n"
 "Option, Shift и Cmd"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:220
@@ -20917,7 +20914,7 @@ msgstr "Импорт файл двумерного чертежа"
 
 #: eeschema/tools/ee_actions.cpp:1026
 msgid "Switch to PCB Editor"
-msgstr "Перейти к редактору платы"
+msgstr "Переключиться на редактор плат"
 
 #: eeschema/tools/ee_actions.cpp:1027
 msgid "Open PCB in board editor"
@@ -22022,7 +22019,7 @@ msgstr "Сохранить выбор"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:113
 msgid "Get Stored Choice"
-msgstr "Получить сохранённый выбор"
+msgstr "Загрузить выбор"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:116
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:35
@@ -22742,7 +22739,7 @@ msgstr "Показать содержимое файла для текущего
 
 #: gerbview/tools/gerbview_actions.cpp:97
 msgid "Export to PCB Editor..."
-msgstr "Экспорт редактору плат..."
+msgstr "Экспорт в редактор плат..."
 
 #: gerbview/tools/gerbview_actions.cpp:98
 msgid "Export data as a KiCad PCB file"
@@ -23856,7 +23853,7 @@ msgstr ""
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "Управление пакетами из репозиторев KiCad и сторонних разработчиков"
+msgstr "Управление пакетами из репозиториев KiCad и от сторонних разработчиков"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -24672,7 +24669,7 @@ msgstr "Создание нового каталога"
 
 #: kicad/project_tree_pane.cpp:834
 msgid "Switch to this Project"
-msgstr "Перейти к этому проекту"
+msgstr "Переключиться на этот проект"
 
 #: kicad/project_tree_pane.cpp:835
 msgid "Close all editors, and switch to the selected project"
@@ -28270,7 +28267,7 @@ msgstr "Толщина слоя меньше нуля. Исправьте."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1684
 msgid "Custom..."
-msgstr "Пользовательская..."
+msgstr "Особый..."
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:22
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:50
@@ -28470,7 +28467,7 @@ msgstr "Алюминий"
 #: pcbnew/exporters/exporter_vrml.cpp:276
 #: pcbnew/exporters/exporter_vrml.cpp:285
 msgid "Not specified"
-msgstr "Не установлено"
+msgstr "Не указано"
 
 #: pcbnew/build_BOM_from_board.cpp:79
 msgid "Cannot export BOM: there are no footprints on the PCB."
@@ -29664,7 +29661,7 @@ msgstr "Терморазгрузка"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Reliefs for PTH"
-msgstr "Терморазгрузка сквозных отв."
+msgstr "Терморазгрузка скв. отв."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 msgid "Thermal relief gap:"
@@ -29763,11 +29760,11 @@ msgstr "Что нужно делать с не подключёнными ост
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 msgid "Below area limit"
-msgstr "Если площадь меньше предела"
+msgstr "Площадь меньше предела"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 msgid "Minimum island size:"
-msgstr "Минимальная площадь островка:"
+msgstr "Мин. площадь островка:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 msgid "Isolated islands smaller than this will be removed"
@@ -30512,7 +30509,7 @@ msgstr "не выполняется"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
-msgstr "Перезалить все зоны перед проверкой правил проектирования (DRC)"
+msgstr "Перезалить зоны перед проверкой правил (DRC)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:31
 msgid ""
@@ -35044,8 +35041,7 @@ msgstr "Чертить контур для отображения габарит
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:378
 msgid "Show courtyard collisions when moving/dragging"
-msgstr ""
-"Показать столкновения областей установки при перемещении/перетаскивании"
+msgstr "Показать столкновения обл. установки при перемещении/перетаскивании"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:382
 msgid "Automatically refill zones"
@@ -36226,13 +36222,12 @@ msgid ""
 "Use your board manufacturer's recommendations for solder mask expansion and "
 "minimum web width."
 msgstr ""
-"Используйте расширение и мин. ширину паяльной маски и из рекомендаций "
+"Используйте расширение и мин. ширину паяльной маски из рекомендаций "
 "производителя печатных плат."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:36
 msgid "If none are provided, setting the values to zero is suggested."
-msgstr ""
-"Если требования отсутствуют, рекомендуется установить значения равные нулю."
+msgstr "Если требования отсутствуют, рекомендуется установить нулевые значения."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:56
 msgid ""
@@ -38826,7 +38821,7 @@ msgstr "(слой %s; %d мостиков подключены к изолиро
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:217
 #, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
-msgstr "(слой %s; %s минимальное количество мостиков %d; фактическое %d)"
+msgstr "(слой %s; %s мин. кол-во мостиков %d; фактическое %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:242
 msgid "Checking thermal reliefs..."
@@ -43268,7 +43263,7 @@ msgstr "Дорожка: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:672 pcbnew/toolbars_pcb_editor.cpp:740
 msgid "Edit Pre-defined Sizes..."
-msgstr "Редактировать предопределённые размеры..."
+msgstr "Править предопределённые размеры..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:709
 msgid "Via: use netclass sizes"
@@ -43960,7 +43955,7 @@ msgstr "Разместить перех.отв."
 
 #: pcbnew/tools/drc_tool.cpp:151
 msgid "Refilling all zones..."
-msgstr "Перезаливаются все зоны..."
+msgstr "Перезаливка всех зон..."
 
 #: pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
@@ -45297,7 +45292,7 @@ msgstr "Показать выбранную сеть в видимых связ�
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Switch to Schematic Editor"
-msgstr "Перейти к редактору схем"
+msgstr "Переключиться на редактор схем"
 
 #: pcbnew/tools/pcb_actions.cpp:1301
 msgid "Open schematic in schematic editor"
@@ -46530,7 +46525,7 @@ msgstr "Показать посад.места расположенные сни
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Through-hole Pads"
-msgstr "Конт.пл. со сквозными отв."
+msgstr "Конт.пл. со сквоз. отв."
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show through-hole pads"
@@ -46586,7 +46581,7 @@ msgstr "Выделять заблокированные элементы под�
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Conflict Footprint Shadow"
-msgstr "Тень конфликтов посад.мест"
+msgstr "Тень конфл. посад.мест"
 
 #: pcbnew/widgets/appearance_controls.cpp:348
 msgid "Show a shadow marker on conflicting footprints"
@@ -46657,7 +46652,7 @@ msgstr "Фильтр цепей"
 #: pcbnew/widgets/appearance_controls.cpp:609
 #: pcbnew/widgets/appearance_controls.cpp:1770
 msgid "Layer Display Options"
-msgstr "Параметры отображения слоёв"
+msgstr "Отображение слоёв"
 
 #: pcbnew/widgets/appearance_controls.cpp:621
 #: pcbnew/widgets/appearance_controls.cpp:1776
@@ -46703,7 +46698,7 @@ msgstr "Перевернуть (отразить) вид на плату"
 #: pcbnew/widgets/appearance_controls.cpp:684
 #: pcbnew/widgets/appearance_controls.cpp:2463
 msgid "Net Display Options"
-msgstr "Параметры отображения цепей"
+msgstr "Отображение цепей"
 
 #: pcbnew/widgets/appearance_controls.cpp:696
 #: pcbnew/widgets/appearance_controls.cpp:2468
