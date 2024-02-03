@@ -115,6 +115,18 @@ public:
         m_substrateList.emplace_back( aItem );
         return GetCount()-1;
     }
+
+    /**
+     * Delete the specified item in the substrate list.
+     *
+     * @param aInd is the index in the substrate list to delete
+     */
+    void DeleteSubstrate( int aIdx )
+    {
+        wxCHECK( aIdx > 0 && aIdx < (int) m_substrateList.size(), /* void */ );
+
+        m_substrateList.erase( m_substrateList.begin() + aIdx );
+    }
 };
 
 #endif      // #ifndef DIELECTRIC_MATERIAL_H

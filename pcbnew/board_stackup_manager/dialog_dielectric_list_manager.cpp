@@ -134,6 +134,26 @@ void DIALOG_DIELECTRIC_MATERIAL::onListKeyDown( wxListEvent& event )
 {
     int idx = event.GetIndex();
 
-    if( ( idx > 0 ) && ( event.GetKeyCode() == WXK_DELETE ) )
-        m_lcMaterials->DeleteItem( idx );
+    switch( event.GetKeyCode() )
+    {
+    case WXK_DELETE:
+        if( idx >= 0 )
+        {
+            m_lcMaterials->DeleteItem( idx );
+            m_materialList.DeleteSubstrate( idx );
+
+            // Get the new material information for the next item in the list
+            // (or last if the deleted item was the last item)
+            int next = ( idx < m_materialList.GetCount() ) ? idx : idx - 1;
+
+            m_lcMaterials->SetItemState( next, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
+            m_lcMaterials->SetItemState( next, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED );
+            m_lcMaterials->EnsureVisible( next );
+        }
+
+        break;
+
+    default:
+        event.Skip();
+    }
 }
