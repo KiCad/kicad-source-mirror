@@ -50,8 +50,8 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
 
     if( m_frameType == FRAME_PCB_EDITOR || m_frameType == FRAME_FOOTPRINT_EDITOR )
     {
-        m_checkGridOverrideConnected->SetLabel( wxT( "Footprints/pads:" ) );
-        m_checkGridOverrideWires->SetLabel( wxT( "Tracks:" ) );
+        m_checkGridOverrideConnected->SetLabel( _( "Footprints/pads:" ) );
+        m_checkGridOverrideWires->SetLabel( _( "Tracks:" ) );
     }
     else
     {
