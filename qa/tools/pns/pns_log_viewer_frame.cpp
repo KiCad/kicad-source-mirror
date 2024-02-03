@@ -620,6 +620,7 @@ void PNS_LOG_VIEWER_FRAME::onListRightClick( wxMouseEvent& event )
                 {
                     case 0: wxExecute( wxString::Format( "code --goto %s:%s", filepath, line ) ); return;
                     case 1: wxExecute( wxString::Format( "clion --line %s %s", line, filepath ) ); return;
+                    case 2: wxExecute( wxString::Format( "emacsclient +%s %s", line, filepath ) ); return;
                     default: return;
                 }
             }

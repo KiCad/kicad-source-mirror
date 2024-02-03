@@ -93,7 +93,7 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 
 	fgSizer3->Add( m_ideLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	wxString m_ideChoiceChoices[] = { wxT("VS Code"), wxT("CLion") };
+	wxString m_ideChoiceChoices[] = { wxT("VS Code"), wxT("CLion"), wxT("Emacs") };
 	int m_ideChoiceNChoices = sizeof( m_ideChoiceChoices ) / sizeof( wxString );
 	m_ideChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_ideChoiceNChoices, m_ideChoiceChoices, 0 );
 	m_ideChoice->SetSelection( 0 );
