@@ -54,6 +54,8 @@ public:
     int MergeCells( const TOOL_EVENT& aEvent )      { return doMergeCells( aEvent ); }
     int UnmergeCells( const TOOL_EVENT& aEvent )    { return doUnmergeCells( aEvent ); }
 
+    int EditTable( const TOOL_EVENT& aEvent );
+
 private:
     ///< Set up handlers for various events.
     void setTransitions() override;

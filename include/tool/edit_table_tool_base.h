@@ -109,6 +109,9 @@ protected:
         selToolMenu.AddItem( ACTIONS::unmergeCells,  cellSelection && mergedCellsSelection, 100 );
 
         selToolMenu.AddSeparator( 100 );
+        selToolMenu.AddItem( ACTIONS::editTable,     cellSelection && SELECTION_CONDITIONS::Idle, 100 );
+
+        selToolMenu.AddSeparator( 100 );
     }
 
     int doAddRowAbove( const TOOL_EVENT& aEvent )

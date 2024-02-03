@@ -796,7 +796,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         }
     }
 
-    commit.Push( _( "Edit track/via properties" ) );
+    commit.Push( _( "Edit Track/Via Properties" ) );
 
     // Pushing the commit will have updated the connectivity so we can now test to see if we
     // need to update any pad nets.
@@ -861,7 +861,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
             pad->SetNetCode( newNetCode );
         }
 
-        commit.Push( _( "Updating nets" ) );
+        commit.Push( _( "Update Nets" ) );
     }
 
     return true;

@@ -92,7 +92,7 @@ int AUTOPLACE_TOOL::autoplace( std::vector<FOOTPRINT*>& aFootprints, bool aPlace
     auto result = autoplacer.AutoplaceFootprints( aFootprints, &commit, aPlaceOffboard );
 
     if( result == AR_COMPLETED )
-        commit.Push( _( "Autoplace components" ) );
+        commit.Push( _( "Autoplace Components" ) );
     else
         commit.Revert();
 

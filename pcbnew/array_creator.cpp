@@ -229,5 +229,5 @@ void ARRAY_CREATOR::Invoke()
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
     m_toolMgr->RunAction<EDA_ITEMS*>( PCB_ACTIONS::selectItems, &all_added_items );
 
-    commit.Push( _( "Create an array" ) );
+    commit.Push( _( "Create Array" ) );
 }

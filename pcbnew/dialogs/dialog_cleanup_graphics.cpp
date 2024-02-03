@@ -131,7 +131,7 @@ void DIALOG_CLEANUP_GRAPHICS::doCleanup( bool aDryRun )
     else if( !commit.Empty() )
     {
         // Clear undo and redo lists to avoid inconsistencies between lists
-        commit.Push( _( "Graphics cleanup" ) );
+        commit.Push( _( "Graphics Cleanup" ) );
         m_parentFrame->GetCanvas()->Refresh( true );
     }
 }

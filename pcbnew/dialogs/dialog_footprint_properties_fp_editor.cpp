@@ -637,7 +637,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::TransferDataFromWindow()
     fpList->clear();
     fpList->insert( fpList->end(), panelList.begin(), panelList.end() );
 
-    commit.Push( _( "Modify footprint properties" ) );
+    commit.Push( _( "Edit Footprint Properties" ) );
 
     return true;
 }

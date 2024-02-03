@@ -2197,7 +2197,7 @@ void PCB_PAINTER::draw( const PCB_TEXTBOX* aTextBox, int aLayer )
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
 
-    if( aTextBox->IsBorderEnabled() )
+    if( aTextBox->Type() != PCB_TABLECELL_T && aTextBox->IsBorderEnabled() )
     {
         if( lineStyle <= LINE_STYLE::FIRST_TYPE )
         {
@@ -2367,7 +2367,7 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
             {
                 for( int col = 0; col < aTable->GetColCount(); ++col )
                 {
-                    PCB_TABLECELL* cell = aTable->GetCell( row, 0 );
+                    PCB_TABLECELL* cell = aTable->GetCell( row, col );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                     {

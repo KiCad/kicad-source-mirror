@@ -398,7 +398,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsActivate() )
         {
-            commit.Push( _( "Renumber pads" ) );
+            commit.Push( _( "Renumber Pads" ) );
 
             frame()->PopTool( aEvent );
             break;
@@ -496,7 +496,7 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsDblClick( BUT_LEFT ) )
         {
-            commit.Push( _( "Renumber pads" ) );
+            commit.Push( _( "Renumber Pads" ) );
             frame()->PopTool( aEvent );
             break;
         }

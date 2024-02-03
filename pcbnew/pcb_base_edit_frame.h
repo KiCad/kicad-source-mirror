@@ -33,7 +33,7 @@ class APPEARANCE_CONTROLS;
 class BOARD_ITEM_CONTAINER;
 class PANEL_SELECTION_FILTER;
 class PCB_TEXTBOX;
-class PCB_TABLECELL;
+class PCB_TABLE;
 class PCB_TEXT;
 class PCB_SHAPE;
 
@@ -179,7 +179,6 @@ public:
     void ShowReferenceImagePropertiesDialog( BOARD_ITEM* aBitmap );
     void ShowTextPropertiesDialog( PCB_TEXT* aText );
     int ShowTextBoxPropertiesDialog( PCB_TEXTBOX* aTextBox );
-    void ShowTableCellPropertiesDialog( PCB_TABLECELL* aTableCell );
     void ShowGraphicItemPropertiesDialog( PCB_SHAPE* aShape );
 
     ///< @copydoc EDA_DRAW_FRAME::UseGalCanvas()

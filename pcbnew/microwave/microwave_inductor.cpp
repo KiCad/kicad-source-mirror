@@ -313,7 +313,7 @@ void MICROWAVE_TOOL::createInductorBetween( const VECTOR2I& aStart, const VECTOR
 
         BOARD_COMMIT commit( this );
         commit.Add( inductorFP.release() );
-        commit.Push( _("Add microwave inductor" ) );
+        commit.Push( _("Add Microwave Inductor" ) );
     }
 }
 

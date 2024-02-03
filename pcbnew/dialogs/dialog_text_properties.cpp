@@ -340,16 +340,18 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     switch ( m_item->GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check( true );   break;
-    case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_LEFT:          m_alignLeft->Check( true );    break;
+    case GR_TEXT_H_ALIGN_CENTER:        m_alignCenter->Check( true );  break;
+    case GR_TEXT_H_ALIGN_RIGHT:         m_alignRight->Check( true );   break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:                                break;
     }
 
     switch ( m_item->GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_BOTTOM: m_valignBottom->Check( true ); break;
-    case GR_TEXT_V_ALIGN_CENTER: m_valignCenter->Check( true ); break;
-    case GR_TEXT_V_ALIGN_TOP:    m_valignTop->Check( true );    break;
+    case GR_TEXT_V_ALIGN_BOTTOM:        m_valignBottom->Check( true ); break;
+    case GR_TEXT_V_ALIGN_CENTER:        m_valignCenter->Check( true ); break;
+    case GR_TEXT_V_ALIGN_TOP:           m_valignTop->Check( true );    break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:                                break;
     }
 
     m_mirrored->Check( m_item->IsMirrored() );
@@ -528,7 +530,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     m_item->SetMirrored( m_mirrored->IsChecked() );
 
     if( pushCommit )
-        commit.Push( _( "Change text properties" ) );
+        commit.Push( _( "Edit Text Properties" ) );
 
     return true;
 }

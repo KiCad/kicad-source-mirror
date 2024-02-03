@@ -78,6 +78,7 @@
 #include <sch_sheet_path.h>
 #include <wx/filedlg.h>
 #include <wx/treectrl.h>
+#include "sch_edit_table_tool.h"
 
 
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
@@ -2213,7 +2214,17 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
-    if( !symbol || symbol->GetEditFlags() != 0 )
+    if( !symbol )
+    {
+        // Giant hack: by default we assign Edit Table to the same hotkey, so give the table
+        // tool a chance to handle it if we can't.
+        if( SCH_EDIT_TABLE_TOOL* tableTool = m_toolMgr->GetTool<SCH_EDIT_TABLE_TOOL>() )
+            tableTool->EditTable( aEvent );
+
+        return 0;
+    }
+
+    if( symbol->GetEditFlags() != 0 )
         return 0;
 
     if( symbol->IsMissingLibSymbol() )

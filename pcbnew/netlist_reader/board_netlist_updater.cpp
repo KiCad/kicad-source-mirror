@@ -1320,7 +1320,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         // * it creates crashes when calculating dynamic ratsnests if auto refill is enabled.
         // (the auto refills rebuild the connectivity with incomplete data)
         // * it is useless because zones will be refilled after placing new footprints
-        m_commit.Push( _( "Update netlist" ), m_newFootprintsCount ? ZONE_FILL_OP  : 0 );
+        m_commit.Push( _( "Update Netlist" ), m_newFootprintsCount ? ZONE_FILL_OP  : 0 );
 
         m_board->SynchronizeNetsAndNetClasses( true );
 

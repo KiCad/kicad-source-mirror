@@ -30,16 +30,24 @@
 
 class SCH_EDIT_FRAME;
 class SCH_TABLE;
+class SCH_TABLECELL;
 
 
 class DIALOG_TABLECELL_PROPERTIES : public DIALOG_TABLECELL_PROPERTIES_BASE
 {
 public:
-    DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aParentFrame, SCH_TABLECELL* aCell );
-    ~DIALOG_TABLECELL_PROPERTIES();
+    // The dialog can be closed for several reasons.
+    enum TABLECELL_PROPS_RETVALUE
+    {
+        TABLECELL_PROPS_CANCEL,
+        TABLECELL_PROPS_OK,
+        TABLECELL_PROPS_EDIT_TABLE
+    };
 
-protected:
-    void OnCharHook( wxKeyEvent& aEvt ) override;
+    DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aParentFrame, std::vector<SCH_TABLECELL*> aCells );
+
+    ///< @return the value depending on the way the dialog was closed.
+    enum TABLECELL_PROPS_RETVALUE GetReturnValue() { return m_returnValue; }
 
 private:
     bool TransferDataToWindow() override;
@@ -47,23 +55,23 @@ private:
 
     void onHAlignButton( wxCommandEvent &aEvent );
     void onVAlignButton( wxCommandEvent &aEvent );
-    void onBorderChecked( wxCommandEvent& aEvent ) override;
-    void OnApply( wxCommandEvent& aEvent ) override;
+    void onTextColorPopup( wxCommandEvent &aEvent ) override;
+    void onFillColorPopup( wxCommandEvent &aEvent ) override;
+
+    void onEditTable( wxCommandEvent& aEvent ) override;
 
 private:
-    SCH_EDIT_FRAME*   m_frame;
-    SCH_TABLE*        m_table;
-    SCH_TABLECELL*    m_cell;
+    SCH_EDIT_FRAME*               m_frame;
+    SCH_TABLE*                    m_table;
+    std::vector<SCH_TABLECELL*>   m_cells;
 
-    UNIT_BINDER       m_borderWidth;
-    UNIT_BINDER       m_separatorsWidth;
-    UNIT_BINDER       m_textSize;
-    UNIT_BINDER       m_marginLeft;
-    UNIT_BINDER       m_marginTop;
-    UNIT_BINDER       m_marginRight;
-    UNIT_BINDER       m_marginBottom;
+    UNIT_BINDER                   m_textSize;
+    UNIT_BINDER                   m_marginLeft;
+    UNIT_BINDER                   m_marginTop;
+    UNIT_BINDER                   m_marginRight;
+    UNIT_BINDER                   m_marginBottom;
 
-    SCINTILLA_TRICKS* m_scintillaTricks;
+    enum TABLECELL_PROPS_RETVALUE m_returnValue; // the option that closed the dialog
 };
 
 

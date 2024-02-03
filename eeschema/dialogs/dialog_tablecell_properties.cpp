@@ -34,94 +34,25 @@
 #include <dialog_tablecell_properties.h>
 
 
-class TABLECELL_SCINTILLA_TRICKS : public SCINTILLA_TRICKS
-{
-public:
-    TABLECELL_SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla,
-                                std::function<void( wxKeyEvent& )> onAcceptHandler,
-                                std::function<void()> onNextHandler ) :
-            SCINTILLA_TRICKS( aScintilla, wxT( "{}" ), false, std::move( onAcceptHandler ) ),
-            m_onNextHandler( std::move( onNextHandler ) )
-    { }
-
-protected:
-    void onCharHook( wxKeyEvent& aEvent ) override
-    {
-        if( aEvent.GetKeyCode() == WXK_TAB && aEvent.AltDown() && !aEvent.ControlDown() )
-            m_onNextHandler();
-        else
-            SCINTILLA_TRICKS::onCharHook( aEvent );
-    }
-
-private:
-    std::function<void()> m_onNextHandler;
-};
-
-
 DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame,
-                                                          SCH_TABLECELL* aCell ) :
+                                                          std::vector<SCH_TABLECELL*> aCells ) :
         DIALOG_TABLECELL_PROPERTIES_BASE( aFrame ),
         m_frame( aFrame ),
         m_table( nullptr ),
-        m_cell( aCell ),
-        m_borderWidth( aFrame, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
-        m_separatorsWidth( aFrame, m_separatorsWidthLabel, m_separatorsWidthCtrl, m_separatorsWidthUnits ),
+        m_cells( std::move( aCells ) ),
         m_textSize( aFrame, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits ),
         m_marginLeft( aFrame, nullptr, m_marginLeftCtrl, nullptr ),
         m_marginTop( aFrame, nullptr, m_marginTopCtrl, m_marginTopUnits ),
         m_marginRight( aFrame, nullptr, m_marginRightCtrl, nullptr ),
         m_marginBottom( aFrame, nullptr, m_marginBottomCtrl, nullptr ),
-        m_scintillaTricks( nullptr )
+        m_returnValue( TABLECELL_PROPS_CANCEL )
 {
-    m_table = static_cast<SCH_TABLE*>( m_cell->GetParent() );
+    wxASSERT( m_cells.size() > 0 && m_cells[0] );
 
-#ifdef _WIN32
-    // Without this setting, on Windows, some esoteric unicode chars create display issue
-    // in a wxStyledTextCtrl.
-    // for SetTechnology() info, see https://www.scintilla.org/ScintillaDoc.html#SCI_SETTECHNOLOGY
-    m_textCtrl->SetTechnology(wxSTC_TECHNOLOGY_DIRECTWRITE);
-#endif
-
-    m_scintillaTricks = new TABLECELL_SCINTILLA_TRICKS( m_textCtrl,
-            // onAccept handler
-            [this]( wxKeyEvent& aEvent )
-            {
-                wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
-            },
-            // onNext handler
-            [this]()
-            {
-                wxCommandEvent dummy;
-                OnApply( dummy );
-            } );
-
-    // A hack which causes Scintilla to auto-size the text editor canvas
-    // See: https://github.com/jacobslusser/ScintillaNET/issues/216
-    m_textCtrl->SetScrollWidth( 1 );
-    m_textCtrl->SetScrollWidthTracking( true );
-
-    SetInitialFocus( m_textCtrl );
-
-    for( const auto& [lineStyle, lineStyleDesc] : lineTypeNames )
-    {
-        m_borderStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
-        m_separatorsStyleCombo->Append( lineStyleDesc.name, KiBitmap( lineStyleDesc.bitmap ) );
-    }
-
-    m_borderStyleCombo->Append( DEFAULT_STYLE );
-    m_separatorsStyleCombo->Append( DEFAULT_STYLE );
+    m_table = static_cast<SCH_TABLE*>( m_cells[0]->GetParent() );
 
     if( m_frame->GetColorSettings()->GetOverrideSchItemColors() )
         m_infoBar->ShowMessage( _( "Note: individual item colors overridden in Preferences." ) );
-
-    m_separator1->SetIsSeparator();
-
-    m_bold->SetIsCheckButton();
-    m_bold->SetBitmap( KiBitmapBundle( BITMAPS::text_bold ) );
-    m_italic->SetIsCheckButton();
-    m_italic->SetBitmap( KiBitmapBundle( BITMAPS::text_italic ) );
-
-    m_separator2->SetIsSeparator();
 
     m_hAlignLeft->SetIsRadioButton();
     m_hAlignLeft->SetBitmap( KiBitmapBundle( BITMAPS::text_align_left ) );
@@ -130,21 +61,12 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
     m_hAlignRight->SetIsRadioButton();
     m_hAlignRight->SetBitmap( KiBitmapBundle( BITMAPS::text_align_right ) );
 
-    m_separator3->SetIsSeparator();
-
     m_vAlignTop->SetIsRadioButton();
     m_vAlignTop->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_top ) );
     m_vAlignCenter->SetIsRadioButton();
     m_vAlignCenter->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_center ) );
     m_vAlignBottom->SetIsRadioButton();
     m_vAlignBottom->SetBitmap( KiBitmapBundle( BITMAPS::text_valign_bottom ) );
-
-    m_separator4->SetIsSeparator();
-
-    m_hotkeyHint->SetFont( KIUI::GetInfoFont( this ) );
-    m_hotkeyHint->SetLabel( wxString::Format( wxT( "(%s+%s)" ),
-                                              KeyNameFromKeyCode( WXK_ALT ),
-                                              KeyNameFromKeyCode( WXK_TAB ) ) );
 
     SetupStandardButtons();
     Layout();
@@ -161,98 +83,115 @@ DIALOG_TABLECELL_PROPERTIES::DIALOG_TABLECELL_PROPERTIES( SCH_EDIT_FRAME* aFrame
 }
 
 
-DIALOG_TABLECELL_PROPERTIES::~DIALOG_TABLECELL_PROPERTIES()
-{
-    delete m_scintillaTricks;
-}
-
-
 bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 {
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_borderCheckbox->SetValue( m_table->StrokeExternal() );
-    m_headerBorder->SetValue( m_table->StrokeHeader() );
+    bool              firstCell = true;
+    GR_TEXT_H_ALIGN_T hAlign;
+    GR_TEXT_V_ALIGN_T vAlign;
 
-    if( m_table->GetBorderStroke().GetWidth() >= 0 )
-        m_borderWidth.SetValue( m_table->GetBorderStroke().GetWidth() );
-
-    m_borderColorSwatch->SetSwatchColor( m_table->GetBorderStroke().GetColor(), false );
-
-    int style = static_cast<int>( m_table->GetBorderStroke().GetLineStyle() );
-
-    if( style == -1 )
-        m_borderStyleCombo->SetStringSelection( DEFAULT_STYLE );
-    else if( style < (int) lineTypeNames.size() )
-        m_borderStyleCombo->SetSelection( style );
-    else
-        wxFAIL_MSG( "Line type not found in the type lookup map" );
-
-    m_borderWidth.Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
-    m_borderColorLabel->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
-    m_borderColorSwatch->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
-    m_borderStyleLabel->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
-    m_borderStyleCombo->Enable( m_table->StrokeExternal() || m_table->StrokeHeader() );
-
-    bool rows = m_table->StrokeRows() && m_table->GetSeparatorsStroke().GetWidth() >= 0;
-    bool cols = m_table->StrokeColumns() && m_table->GetSeparatorsStroke().GetWidth() >= 0;
-
-    m_rowSeparators->SetValue( rows );
-    m_colSeparators->SetValue( cols );
-
-    if( m_table->GetSeparatorsStroke().GetWidth() >= 0 )
-        m_separatorsWidth.SetValue( m_table->GetSeparatorsStroke().GetWidth() );
-
-    m_separatorsColorSwatch->SetSwatchColor( m_table->GetSeparatorsStroke().GetColor(), false );
-
-    style = static_cast<int>( m_table->GetSeparatorsStroke().GetLineStyle() );
-
-    if( style == -1 )
-        m_separatorsStyleCombo->SetStringSelection( DEFAULT_STYLE );
-    else if( style < (int) lineTypeNames.size() )
-        m_separatorsStyleCombo->SetSelection( style );
-    else
-        wxFAIL_MSG( "Line type not found in the type lookup map" );
-
-    m_separatorsWidth.Enable( rows || cols );
-    m_separatorsColorLabel->Enable( rows || cols );
-    m_separatorsColorSwatch->Enable( rows || cols );
-    m_separatorsStyleLabel->Enable( rows || cols );
-    m_separatorsStyleCombo->Enable( rows || cols );
-
-    m_textCtrl->SetValue( m_cell->GetText() );
-    m_fontCtrl->SetFontSelection( m_cell->GetFont() );
-    m_textSize.SetValue( m_cell->GetTextWidth() );
-
-    m_bold->Check( m_cell->IsBold() );
-    m_italic->Check( m_cell->IsItalic() );
-
-    switch( m_cell->GetHorizJustify() )
+    for( SCH_TABLECELL* cell : m_cells )
     {
-    case GR_TEXT_H_ALIGN_LEFT:   m_hAlignLeft->Check();   break;
-    case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check(); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  m_hAlignRight->Check();  break;
+        if( firstCell )
+        {
+            m_fontCtrl->SetFontSelection( cell->GetFont() );
+            m_textSize.SetValue( cell->GetTextWidth() );
+
+            m_bold->Set3StateValue( cell->IsBold() ? wxCHK_CHECKED : wxCHK_UNCHECKED );
+            m_italic->Set3StateValue( cell->IsItalic() ? wxCHK_CHECKED : wxCHK_UNCHECKED );
+
+            hAlign = cell->GetHorizJustify();
+            vAlign = cell->GetVertJustify();
+
+            m_textColorBook->SetSelection( 1 );
+            m_textColorSwatch->SetSwatchColor( cell->GetTextColor(), false );
+
+            m_fillColorBook->SetSelection( 1 );
+
+            if( cell->IsFilled() )
+                m_fillColorSwatch->SetSwatchColor( cell->GetFillColor(), false );
+            else
+                m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+
+            m_marginLeft.SetValue( cell->GetMarginLeft() );
+            m_marginTop.SetValue( cell->GetMarginTop() );
+            m_marginRight.SetValue( cell->GetMarginRight() );
+            m_marginBottom.SetValue( cell->GetMarginBottom() );
+
+            firstCell = false;
+        }
+        else
+        {
+            if( cell->GetFont() != m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) )
+                m_fontCtrl->SetSelection( -1 );
+
+            if( cell->GetTextWidth() != m_textSize.GetValue() )
+                m_textSize.SetValue( INDETERMINATE_STATE );
+
+            wxCheckBoxState bold = cell->IsBold() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
+
+            if( bold != m_bold->Get3StateValue() )
+                m_bold->Set3StateValue( wxCHK_UNDETERMINED );
+
+            wxCheckBoxState italic = cell->IsItalic() ? wxCHK_CHECKED : wxCHK_UNCHECKED;
+
+            if( italic != m_italic->Get3StateValue() )
+                m_italic->Set3StateValue( wxCHK_UNDETERMINED );
+
+            if( cell->GetHorizJustify() != hAlign )
+                hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
+
+            if( cell->GetVertJustify() != vAlign )
+                vAlign = GR_TEXT_V_ALIGN_INDETERMINATE;
+
+            if( cell->GetTextColor() != m_textColorSwatch->GetSwatchColor() )
+            {
+                m_textColorBook->SetSelection( 0 );
+                m_textColorPopup->SetSelection( 0 );
+            }
+
+            COLOR4D fillColor = cell->IsFilled() ? cell->GetFillColor() : COLOR4D::UNSPECIFIED;
+
+            if( fillColor != m_fillColorSwatch->GetSwatchColor() )
+            {
+                m_fillColorBook->SetSelection( 0 );
+                m_fillColorPopup->SetSelection( 0 );
+            }
+
+            if( fillColor != m_fillColorSwatch->GetSwatchColor() )
+                fillColor = COLOR4D::UNSPECIFIED;
+
+            if( cell->GetMarginLeft() != m_marginLeft.GetIntValue() )
+                m_marginLeft.SetValue( INDETERMINATE_STATE );
+
+            if( cell->GetMarginTop() != m_marginTop.GetIntValue() )
+                m_marginTop.SetValue( INDETERMINATE_STATE );
+
+            if( cell->GetMarginRight() != m_marginRight.GetIntValue() )
+                m_marginRight.SetValue( INDETERMINATE_STATE );
+
+            if( cell->GetMarginBottom() != m_marginBottom.GetIntValue() )
+                m_marginBottom.SetValue( INDETERMINATE_STATE );
+        }
+
+        switch( hAlign )
+        {
+        case GR_TEXT_H_ALIGN_LEFT:          m_hAlignLeft->Check();   break;
+        case GR_TEXT_H_ALIGN_CENTER:        m_hAlignCenter->Check(); break;
+        case GR_TEXT_H_ALIGN_RIGHT:         m_hAlignRight->Check();  break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:                          break;
+        }
+
+        switch( vAlign )
+        {
+        case GR_TEXT_V_ALIGN_TOP:           m_vAlignTop->Check();    break;
+        case GR_TEXT_V_ALIGN_CENTER:        m_vAlignCenter->Check(); break;
+        case GR_TEXT_V_ALIGN_BOTTOM:        m_vAlignBottom->Check(); break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE:                          break;
+        }
     }
-
-    switch( m_cell->GetVertJustify() )
-    {
-    case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check();    break;
-    case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
-    case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
-    }
-
-    m_textColorSwatch->SetSwatchColor( m_cell->GetTextColor(), false );
-
-    if( m_cell->IsFilled() )
-        m_fillColorSwatch->SetSwatchColor( m_cell->GetFillColor(), false );
-    else
-        m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
-
-    m_marginLeft.SetValue( m_cell->GetMarginLeft() );
-    m_marginTop.SetValue( m_cell->GetMarginTop() );
-    m_marginRight.SetValue( m_cell->GetMarginRight() );
-    m_marginBottom.SetValue( m_cell->GetMarginBottom() );
 
     return true;
 }
@@ -278,70 +217,23 @@ void DIALOG_TABLECELL_PROPERTIES::onVAlignButton( wxCommandEvent& aEvent )
 }
 
 
-void DIALOG_TABLECELL_PROPERTIES::onBorderChecked( wxCommandEvent& aEvent )
+void DIALOG_TABLECELL_PROPERTIES::onTextColorPopup( wxCommandEvent& aEvent )
 {
-    bool border = m_borderCheckbox->GetValue();
-
-    if( border && m_borderWidth.GetValue() < 0 )
-        m_borderWidth.SetValue( m_frame->eeconfig()->m_Drawing.default_line_thickness );
-
-    m_borderWidth.Enable( border );
-    m_borderColorLabel->Enable( border );
-    m_borderColorSwatch->Enable( border );
-    m_borderStyleLabel->Enable( border );
-    m_borderStyleCombo->Enable( border );
-
-    bool row = m_rowSeparators->GetValue();
-    bool col = m_colSeparators->GetValue();
-
-    if( ( row || col ) && m_separatorsWidth.GetValue() < 0 )
-        m_separatorsWidth.SetValue( m_frame->eeconfig()->m_Drawing.default_line_thickness );
-
-    m_separatorsWidth.Enable( row || col );
-    m_separatorsColorLabel->Enable( row || col );
-    m_separatorsColorSwatch->Enable( row || col );
-    m_separatorsStyleLabel->Enable( row || col );
-    m_separatorsStyleCombo->Enable( row || col );
-}
-
-
-void DIALOG_TABLECELL_PROPERTIES::OnCharHook( wxKeyEvent& aEvt )
-{
-    if( aEvt.GetKeyCode() == WXK_TAB && aEvt.AltDown() && !aEvt.ControlDown() )
+    if( aEvent.GetSelection() == 1 )
     {
-        wxCommandEvent dummy;
-        OnApply( dummy );
-    }
-    else
-    {
-        DIALOG_SHIM::OnCharHook( aEvt );
+        m_textColorBook->SetSelection( 1 );
+        m_textColorSwatch->GetNewSwatchColor();
     }
 }
 
 
-void DIALOG_TABLECELL_PROPERTIES::OnApply( wxCommandEvent& aEvent )
+void DIALOG_TABLECELL_PROPERTIES::onFillColorPopup( wxCommandEvent& aEvent )
 {
-    TransferDataFromWindow();
-
-    for( size_t ii = 0; ii < m_table->GetCells().size(); ++ii )
+    if( aEvent.GetSelection() == 1 )
     {
-        if( m_table->GetCells()[ii] == m_cell )
-        {
-            ii++;
-
-            if( ii >= m_table->GetCells().size() )
-                ii = 0;
-
-            m_cell = m_table->GetCells()[ii];
-
-            m_frame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
-            m_frame->GetToolManager()->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, m_cell );
-            break;
-        }
+        m_fillColorBook->SetSelection( 1 );
+        m_fillColorSwatch->GetNewSwatchColor();
     }
-
-    TransferDataToWindow();
-    m_textCtrl->SelectAll();
 }
 
 
@@ -356,124 +248,82 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataFromWindow()
     if( m_table->GetEditFlags() == 0 )
         commit.Modify( m_table, m_frame->GetScreen() );
 
-    m_table->SetStrokeExternal( m_borderCheckbox->GetValue() );
-    m_table->SetStrokeHeader( m_headerBorder->GetValue() );
+    for( SCH_TABLECELL* cell : m_cells )
     {
-        STROKE_PARAMS stroke = m_table->GetBorderStroke();
+        if( m_bold->Get3StateValue() == wxCHK_CHECKED )
+            cell->SetBold( true );
+        else if( m_bold->Get3StateValue() == wxCHK_UNCHECKED )
+            cell->SetBold( false );
 
-        if( m_borderCheckbox->GetValue() )
-            stroke.SetWidth( std::max( 0, m_borderWidth.GetIntValue() ) );
-        else
-            stroke.SetWidth( -1 );
+        if( m_italic->Get3StateValue() == wxCHK_CHECKED )
+            cell->SetItalic( true );
+        else if( m_italic->Get3StateValue() == wxCHK_UNCHECKED )
+            cell->SetItalic( false );
 
-        auto it = lineTypeNames.begin();
-        std::advance( it, m_borderStyleCombo->GetSelection() );
+        if( m_fontCtrl->HaveFontSelection() )
+            cell->SetFont( m_fontCtrl->GetFontSelection( cell->IsBold(), cell->IsItalic() ) );
 
-        if( it == lineTypeNames.end() )
-            stroke.SetLineStyle( LINE_STYLE::DEFAULT );
-        else
-            stroke.SetLineStyle( it->first );
+        if( !m_textSize.IsIndeterminate() )
+            cell->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
 
-        stroke.SetColor( m_borderColorSwatch->GetSwatchColor() );
+        if( m_hAlignLeft->IsChecked() )
+            cell->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        else if( m_hAlignRight->IsChecked() )
+            cell->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        else if( m_hAlignCenter->IsChecked() )
+            cell->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
 
-        m_table->SetBorderStroke( stroke );
-    }
+        if( m_vAlignTop->IsChecked() )
+            cell->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        else if( m_vAlignBottom->IsChecked() )
+            cell->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+        else if( m_vAlignCenter->IsChecked() )
+            cell->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
 
-    m_table->SetStrokeRows( m_rowSeparators->GetValue() );
-    m_table->SetStrokeColumns( m_colSeparators->GetValue() );
-    {
-        STROKE_PARAMS stroke = m_table->GetSeparatorsStroke();
+        if( m_textColorBook->GetSelection() == 1 )
+            cell->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
-        if( m_rowSeparators->GetValue() || m_colSeparators->GetValue() )
-            stroke.SetWidth( std::max( 0, m_separatorsWidth.GetIntValue() ) );
-        else
-            stroke.SetWidth( -1 );
-
-        auto it = lineTypeNames.begin();
-        std::advance( it, m_separatorsStyleCombo->GetSelection() );
-
-        if( it == lineTypeNames.end() )
-            stroke.SetLineStyle( LINE_STYLE::DEFAULT );
-        else
-            stroke.SetLineStyle( it->first );
-
-        stroke.SetColor( m_separatorsColorSwatch->GetSwatchColor() );
-
-        m_table->SetSeparatorsStroke( stroke );
-    }
-
-    wxString txt = m_textCtrl->GetValue();
-
-#ifdef __WXMAC__
-    // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.
-    // Replace it now.
-    txt.Replace( "\r", "\n" );
-#elif defined( __WINDOWS__ )
-    // On Windows, a new line is coded as \r\n.  We use only \n in kicad files and in
-    // drawing routines so strip the \r char.
-    txt.Replace( "\r", "" );
-#endif
-
-    m_cell->SetText( txt );
-
-    if( m_fontCtrl->HaveFontSelection() )
-    {
-        m_cell->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(),
-                                                       m_italic->IsChecked() ) );
-    }
-
-    if( m_cell->GetTextWidth() != m_textSize.GetValue() )
-        m_cell->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
-
-    m_cell->SetTextColor( m_textColorSwatch->GetSwatchColor() );
-
-    if( m_bold->IsChecked() != m_cell->IsBold() )
-    {
-        if( m_bold->IsChecked() )
+        if( m_fillColorBook->GetSelection() == 1 )
         {
-            m_cell->SetBold( true );
-            m_cell->SetTextThickness( GetPenSizeForBold( m_cell->GetTextWidth() ) );
+            COLOR4D fillColor = m_fillColorSwatch->GetSwatchColor();
+
+            if( fillColor == COLOR4D::UNSPECIFIED )
+            {
+                cell->SetFillMode( FILL_T::NO_FILL );
+            }
+            else
+            {
+                cell->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+                cell->SetFillColor( fillColor );
+            }
         }
-        else
-        {
-            m_cell->SetBold( false );
-            m_cell->SetTextThickness( 0 ); // Use default pen width
-        }
+
+        if( !m_marginLeft.IsIndeterminate() )
+            cell->SetMarginLeft( m_marginLeft.GetIntValue() );
+
+        if( !m_marginTop.IsIndeterminate() )
+            cell->SetMarginTop( m_marginTop.GetIntValue() );
+
+        if( !m_marginRight.IsIndeterminate() )
+            cell->SetMarginRight( m_marginRight.GetIntValue() );
+
+        if( !m_marginBottom.IsIndeterminate() )
+            cell->SetMarginBottom( m_marginBottom.GetIntValue() );
     }
-
-    if( m_hAlignRight->IsChecked() )
-        m_cell->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-    else if( m_hAlignCenter->IsChecked() )
-        m_cell->SetHorizJustify( GR_TEXT_H_ALIGN_CENTER );
-    else
-        m_cell->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
-    if( m_vAlignBottom->IsChecked() )
-        m_cell->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-    else if( m_vAlignCenter->IsChecked() )
-        m_cell->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
-    else
-        m_cell->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-
-    COLOR4D fillColor = m_fillColorSwatch->GetSwatchColor();
-
-    if( fillColor == COLOR4D::UNSPECIFIED )
-    {
-        m_cell->SetFillMode( FILL_T::NO_FILL );
-    }
-    else
-    {
-        m_cell->SetFillMode( FILL_T::FILLED_WITH_COLOR );
-        m_cell->SetFillColor( fillColor );
-    }
-
-    m_cell->SetMarginLeft( m_marginLeft.GetIntValue() );
-    m_cell->SetMarginTop( m_marginTop.GetIntValue() );
-    m_cell->SetMarginRight( m_marginRight.GetIntValue() );
-    m_cell->SetMarginBottom( m_marginBottom.GetIntValue() );
 
     if( !commit.Empty() )
-        commit.Push( _( "Edit Table Cell" ), SKIP_CONNECTIVITY );
+        commit.Push( _( "Edit Table Cell Properties" ), SKIP_CONNECTIVITY );
 
+    m_returnValue = TABLECELL_PROPS_OK;
     return true;
+}
+
+
+void DIALOG_TABLECELL_PROPERTIES::onEditTable( wxCommandEvent& aEvent )
+{
+    if( TransferDataFromWindow() )
+    {
+        m_returnValue = TABLECELL_PROPS_EDIT_TABLE;
+        Close();
+    }
 }

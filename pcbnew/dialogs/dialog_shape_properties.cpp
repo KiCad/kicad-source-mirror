@@ -512,7 +512,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
     else
         m_item->SetNetCode( -1 );
 
-    commit.Push( _( "Modify drawing properties" ) );
+    commit.Push( _( "Edit Shape Properties" ) );
 
     // Notify clients which treat locked and unlocked items differently (ie: POINT_EDITOR)
     if( wasLocked != m_item->IsLocked() )

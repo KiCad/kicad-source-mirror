@@ -228,7 +228,7 @@ void PCB_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
         item->Set( property, newValue );
     }
 
-    changes.Push( _( "Change property" ) );
+    changes.Push( _( "Edit Properties" ) );
 
     m_frame->Refresh();
 

@@ -159,6 +159,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_symbol_properties_base.cpp
     dialogs/dialog_symbol_remap.cpp
     dialogs/dialog_symbol_remap_base.cpp
+    dialogs/dialog_table_properties.cpp
+    dialogs/dialog_table_properties_base.cpp
     dialogs/dialog_tablecell_properties.cpp
     dialogs/dialog_tablecell_properties_base.cpp
     dialogs/dialog_text_properties.cpp

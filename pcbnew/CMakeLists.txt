@@ -132,6 +132,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_print_pcbnew.cpp
     dialogs/dialog_swap_layers.cpp
     dialogs/dialog_swap_layers_base.cpp
+    dialogs/dialog_table_properties.cpp
+    dialogs/dialog_table_properties_base.cpp
     dialogs/dialog_tablecell_properties.cpp
     dialogs/dialog_tablecell_properties_base.cpp
     dialogs/dialog_target_properties.cpp

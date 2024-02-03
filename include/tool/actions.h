@@ -92,6 +92,7 @@ public:
     static TOOL_ACTION deleteColumns;
     static TOOL_ACTION mergeCells;
     static TOOL_ACTION unmergeCells;
+    static TOOL_ACTION editTable;
 
     // Find and Replace
     static TOOL_ACTION showSearch;

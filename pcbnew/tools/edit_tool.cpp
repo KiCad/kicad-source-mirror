@@ -36,6 +36,7 @@
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_table.h>
 #include <pcb_tablecell.h>
 #include <pcb_generator.h>
 #include <collectors.h>
@@ -69,6 +70,8 @@ using namespace std::placeholders;
 #include <router/router_tool.h>
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
+#include <dialogs/dialog_tablecell_properties.h>
+#include <dialogs/dialog_table_properties.h>
 #include <dialogs/dialog_unit_entry.h>
 #include <board_commit.h>
 #include <zone_filler.h>
@@ -943,7 +946,7 @@ int EDIT_TOOL::ChangeTrackWidth( const TOOL_EVENT& aEvent )
         }
     }
 
-    commit.Push( _( "Edit track width/via size" ) );
+    commit.Push( _( "Edit Track Width/Via Size" ) );
 
     if( selection.IsHover() )
     {
@@ -1523,7 +1526,7 @@ int EDIT_TOOL::HealShapes( const TOOL_EVENT& aEvent )
         items_to_select.push_back( shape );
     }
 
-    commit.Push( _( "Heal shapes" ) );
+    commit.Push( _( "Heal Shapes" ) );
 
     // Select added items
     for( PCB_SHAPE* item : items_to_select )
@@ -1663,6 +1666,25 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         DIALOG_TRACK_VIA_PROPERTIES dlg( editFrame, selection );
         dlg.ShowQuasiModal();       // QuasiModal required for NET_SELECTOR
+    }
+    else if( ( SELECTION_CONDITIONS::OnlyTypes( { PCB_TABLECELL_T } ) )( selection ) )
+    {
+        std::vector<PCB_TABLECELL*> cells;
+
+        for( EDA_ITEM* item : selection.Items() )
+            cells.push_back( static_cast<PCB_TABLECELL*>( item ) );
+
+        DIALOG_TABLECELL_PROPERTIES dlg( editFrame, cells );
+
+        dlg.ShowModal();
+
+        if( dlg.GetReturnValue() == DIALOG_TABLECELL_PROPERTIES::TABLECELL_PROPS_EDIT_TABLE )
+        {
+            PCB_TABLE*              table = static_cast<PCB_TABLE*>( cells[0]->GetParent() );
+            DIALOG_TABLE_PROPERTIES tableDlg( frame(), table );
+
+            tableDlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+        }
     }
     else if( selection.Size() == 1 )
     {
@@ -2493,7 +2515,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
                 getView()->Update( boardItem );
         }
 
-        commit.Push( _( "Move exact" ) );
+        commit.Push( _( "Move Exactly" ) );
 
         if( selection.IsHover() )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );

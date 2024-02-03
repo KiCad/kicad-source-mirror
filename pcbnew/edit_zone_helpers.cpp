@@ -81,8 +81,7 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 
     m_pcb->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
 
-    // TODO: 9.0: Use title capitalization
-    commit.Push( _( "Modify zone properties" ), SKIP_CONNECTIVITY );
+    commit.Push( _( "Edit Zone Properties" ), SKIP_CONNECTIVITY );
     rebuildConnectivity();
 }
 

@@ -611,7 +611,7 @@ bool DIALOG_FOOTPRINT_PROPERTIES::TransferDataFromWindow()
 
     // This is a simple edit, we must create an undo entry
     if( m_footprint->GetEditFlags() == 0 )    // i.e. not edited, or moved
-        commit.Push( _( "Modify footprint properties" ) );
+        commit.Push( _( "Edit Footprint Properties" ) );
 
     m_returnValue = FP_PROPS_OK;
     return true;

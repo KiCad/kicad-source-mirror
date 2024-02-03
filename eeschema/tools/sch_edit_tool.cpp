@@ -63,6 +63,7 @@
 #include <dialogs/dialog_label_properties.h>
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_tablecell_properties.h>
+#include <dialogs/dialog_table_properties.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
@@ -1771,6 +1772,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_LINE_T:
     case SCH_BUS_WIRE_ENTRY_T:
     case SCH_JUNCTION_T:
+    case SCH_TABLECELL_T:
         break;
 
     default:
@@ -1899,9 +1901,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         DIALOG_SHEET_PIN_PROPERTIES dlg( m_frame, pin );
 
         // QuasiModal required for help dialog
-        if( dlg.ShowQuasiModal() == wxID_OK )
-            m_frame->OnModify();
-
+        dlg.ShowQuasiModal();
         break;
     }
 
@@ -1911,21 +1911,32 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_ITEM*>( curr_item ) );
 
         // QuasiModal required for syntax help and Scintilla auto-complete
-        if( dlg.ShowQuasiModal() == wxID_OK )
-            m_frame->OnModify();
-
+        dlg.ShowQuasiModal();
         break;
     }
 
     case SCH_TABLECELL_T:
-    {
-        DIALOG_TABLECELL_PROPERTIES dlg( m_frame, static_cast<SCH_TABLECELL*>( curr_item ) );
+        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_TABLECELL_T } )( selection ) )
+        {
+            std::vector<SCH_TABLECELL*> cells;
 
-        if( dlg.ShowModal() == wxID_OK )
-            m_frame->OnModify();
+            for( EDA_ITEM* item : selection.Items() )
+                cells.push_back( static_cast<SCH_TABLECELL*>( item ) );
+
+            DIALOG_TABLECELL_PROPERTIES dlg( m_frame, cells );
+
+            dlg.ShowModal();
+
+            if( dlg.GetReturnValue() == DIALOG_TABLECELL_PROPERTIES::TABLECELL_PROPS_EDIT_TABLE )
+            {
+                SCH_TABLE*              table = static_cast<SCH_TABLE*>( cells[0]->GetParent() );
+                DIALOG_TABLE_PROPERTIES tableDlg( m_frame, table );
+
+                tableDlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+            }
+        }
 
         break;
-    }
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
@@ -1935,9 +1946,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( curr_item ) );
 
         // Must be quasi modal for syntax help
-        if( dlg.ShowQuasiModal() == wxID_OK )
-            m_frame->OnModify();
-
+        dlg.ShowQuasiModal();
         break;
     }
 
@@ -1957,9 +1966,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( curr_item ) );
 
-        if( dlg.ShowModal() == wxID_OK )
-            m_frame->OnModify();
-
+        dlg.ShowModal();
         break;
     }
 
@@ -1972,7 +1979,6 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         {
             // The bitmap is cached in Opengl: clear the cache in case it has become invalid
             getView()->RecacheAllItems();
-            m_frame->OnModify();
         }
 
         break;
@@ -1981,12 +1987,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     case SCH_LINE_T:
     case SCH_BUS_WIRE_ENTRY_T:
     case SCH_JUNCTION_T:
-        if( std::all_of( selection.Items().begin(), selection.Items().end(),
-                [&]( const EDA_ITEM* item )
-                {
-                    return item->Type() == SCH_LINE_T
-                            && static_cast<const SCH_LINE*>( item )->IsGraphicLine();
-                } ) )
+        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_ITEM_LOCATE_GRAPHIC_LINE_T } )( selection ) )
         {
             std::deque<SCH_LINE*> lines;
 
@@ -1995,14 +1996,9 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             DIALOG_LINE_PROPERTIES dlg( m_frame, lines );
 
-            if( dlg.ShowModal() == wxID_OK )
-                m_frame->OnModify();
+            dlg.ShowModal();
         }
-        else if( std::all_of( selection.Items().begin(), selection.Items().end(),
-                [&]( const EDA_ITEM* item )
-                {
-                    return item->Type() == SCH_JUNCTION_T;
-                } ) )
+        else if( SELECTION_CONDITIONS::OnlyTypes( { SCH_JUNCTION_T } )( selection ) )
         {
             std::deque<SCH_JUNCTION*> junctions;
 
@@ -2011,19 +2007,12 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             DIALOG_JUNCTION_PROPS dlg( m_frame, junctions );
 
-            if( dlg.ShowModal() == wxID_OK )
-                m_frame->OnModify();
+            dlg.ShowModal();
         }
-        else if( std::all_of( selection.Items().begin(), selection.Items().end(),
-                [&]( const EDA_ITEM* item )
-                {
-                    const SCH_ITEM* schItem = dynamic_cast<const SCH_ITEM*>( item );
-
-                    wxCHECK( schItem, false );
-
-                    return ( schItem->HasLineStroke() && schItem->IsConnectable() )
-                            || item->Type() == SCH_JUNCTION_T;
-                } ) )
+        else if( SELECTION_CONDITIONS::OnlyTypes( { SCH_ITEM_LOCATE_WIRE_T,
+                                                    SCH_ITEM_LOCATE_BUS_T,
+                                                    SCH_BUS_WIRE_ENTRY_T,
+                                                    SCH_JUNCTION_T } )( selection ) )
         {
             std::deque<SCH_ITEM*> items;
 
@@ -2032,8 +2021,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
             DIALOG_WIRE_BUS_PROPERTIES dlg( m_frame, items );
 
-            if( dlg.ShowModal() == wxID_OK )
-                m_frame->OnModify();
+            dlg.ShowModal();
         }
         else
         {

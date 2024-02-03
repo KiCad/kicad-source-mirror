@@ -25,6 +25,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <tools/pcb_actions.h>
 #include <collectors.h>
+#include <dialogs/dialog_table_properties.h>
 #include <tools/pcb_edit_table_tool.h>
 
 
@@ -78,6 +79,44 @@ void PCB_EDIT_TABLE_TOOL::clearSelection()
 };
 
 
+int PCB_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
+{
+    const SELECTION& selection = getTableCellSelection();
+    bool             clearSelection = selection.IsHover();
+    PCB_TABLE*       parentTable = nullptr;
+
+    for( EDA_ITEM* item : selection.Items() )
+    {
+        if( item->Type() != PCB_TABLECELL_T )
+            return 0;
+
+        PCB_TABLE* table = static_cast<PCB_TABLE*>( item->GetParent() );
+
+        if( !parentTable )
+        {
+            parentTable = table;
+        }
+        else if( parentTable != table )
+        {
+            parentTable = nullptr;
+            break;
+        }
+    }
+
+    if( parentTable )
+    {
+        DIALOG_TABLE_PROPERTIES dlg( frame(), parentTable );
+
+        dlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+    }
+
+    if( clearSelection )
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+
+    return 0;
+}
+
+
 void PCB_EDIT_TABLE_TOOL::setTransitions()
 {
     Go( &PCB_EDIT_TABLE_TOOL::AddRowAbove,        ACTIONS::addRowAbove.MakeEvent() );
@@ -91,4 +130,6 @@ void PCB_EDIT_TABLE_TOOL::setTransitions()
 
     Go( &PCB_EDIT_TABLE_TOOL::MergeCells,         ACTIONS::mergeCells.MakeEvent() );
     Go( &PCB_EDIT_TABLE_TOOL::UnmergeCells,       ACTIONS::unmergeCells.MakeEvent() );
+
+    Go( &PCB_EDIT_TABLE_TOOL::EditTable,          ACTIONS::editTable.MakeEvent() );
 }

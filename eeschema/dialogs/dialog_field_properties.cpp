@@ -326,16 +326,18 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataToWindow()
 
     switch ( m_horizontalJustification )
     {
-    case GR_TEXT_H_ALIGN_LEFT:   m_hAlignLeft->Check( true );   break;
-    case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check( true ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  m_hAlignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_LEFT:          m_hAlignLeft->Check( true );   break;
+    case GR_TEXT_H_ALIGN_CENTER:        m_hAlignCenter->Check( true ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:         m_hAlignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:                                break;
     }
 
     switch ( m_verticalJustification )
     {
-    case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check( true );    break;
-    case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check( true ); break;
-    case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check( true ); break;
+    case GR_TEXT_V_ALIGN_TOP:           m_vAlignTop->Check( true );    break;
+    case GR_TEXT_V_ALIGN_CENTER:        m_vAlignCenter->Check( true ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM:        m_vAlignBottom->Check( true ); break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:                                break;
     }
 
     m_visible->SetValue( m_isVisible );

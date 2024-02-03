@@ -176,7 +176,7 @@ bool DIALOG_SHEET_PIN_PROPERTIES::TransferDataFromWindow()
     else if( m_passive->GetValue() )       m_sheetPin->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
 
     if( !commit.Empty() )
-        commit.Push( _( "Edit Sheet Pin" ) );
+        commit.Push( _( "Edit Sheet Pin Properties" ) );
 
     return true;
 }

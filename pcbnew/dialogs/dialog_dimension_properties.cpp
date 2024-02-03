@@ -252,9 +252,10 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataToWindow()
 
     switch ( m_dimension->GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check( true );   break;
-    case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_LEFT:          m_alignLeft->Check( true );   break;
+    case GR_TEXT_H_ALIGN_CENTER:        m_alignCenter->Check( true ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:         m_alignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:                               break;
     }
 
     m_mirrored->Check( m_dimension->IsMirrored() );
@@ -308,7 +309,7 @@ bool DIALOG_DIMENSION_PROPERTIES::TransferDataFromWindow()
     updateDimensionFromDialog( m_dimension );
 
     if( pushCommit )
-        commit.Push( _( "Change dimension properties" ) );
+        commit.Push( _( "Edit Dimension Properties" ) );
 
     return true;
 }

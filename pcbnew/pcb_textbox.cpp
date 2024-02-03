@@ -253,9 +253,10 @@ VECTOR2I PCB_TEXTBOX::GetDrawPos() const
     {
         switch( GetHorizJustify() )
         {
-        case GR_TEXT_H_ALIGN_LEFT:   effectiveAlignment = GR_TEXT_H_ALIGN_RIGHT;  break;
-        case GR_TEXT_H_ALIGN_CENTER: effectiveAlignment = GR_TEXT_H_ALIGN_CENTER; break;
-        case GR_TEXT_H_ALIGN_RIGHT:  effectiveAlignment = GR_TEXT_H_ALIGN_LEFT;   break;
+        case GR_TEXT_H_ALIGN_LEFT:          effectiveAlignment = GR_TEXT_H_ALIGN_RIGHT;   break;
+        case GR_TEXT_H_ALIGN_CENTER:        effectiveAlignment = GR_TEXT_H_ALIGN_CENTER;  break;
+        case GR_TEXT_H_ALIGN_RIGHT:         effectiveAlignment = GR_TEXT_H_ALIGN_LEFT;    break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) ); break;
         }
     }
 
@@ -272,6 +273,9 @@ VECTOR2I PCB_TEXTBOX::GetDrawPos() const
     case GR_TEXT_H_ALIGN_RIGHT:
         textAnchor = corners[1];
         offset = VECTOR2I( -GetMarginRight(), GetMarginTop() );
+        break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
         break;
     }
 

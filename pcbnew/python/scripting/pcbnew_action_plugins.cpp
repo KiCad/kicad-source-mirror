@@ -409,7 +409,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     // Apply changes, UndoList already handled
-    commit.Push( _( "Apply action script" ), SKIP_UNDO | SKIP_SET_DIRTY );
+    commit.Push( _( "Apply Action Script" ), SKIP_UNDO | SKIP_SET_DIRTY );
 
     RebuildAndRefresh();
 }

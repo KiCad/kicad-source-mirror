@@ -198,7 +198,7 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
     SpreadFootprints( &footprintsToPack, footprintsBbox.Normalize().GetOrigin(), false );
 
     if( doMoveSelection( aEvent, &commit, true ) )
-        commit.Push( _( "Pack footprints" ) );
+        commit.Push( _( "Pack Footprints" ) );
     else
         commit.Revert();
 

@@ -57,6 +57,7 @@
 #include <tool/tool_event.h>
 #include <tools/drawing_tool.h>
 #include <tools/pcb_actions.h>
+#include <tools/pcb_edit_table_tool.h>
 #include <tools/pcb_picker_tool.h>
 #include <tools/pcb_selection_conditions.h>
 #include <tools/pcb_selection_tool.h>
@@ -1158,7 +1159,7 @@ int BOARD_EDITOR_CONTROL::PlaceFootprint( const TOOL_EVENT& aEvent )
             else
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-                commit.Push( _( "Place a footprint" ) );
+                commit.Push( _( "Place a Footprint" ) );
                 fp = nullptr;  // to indicate that there is no footprint that we currently modify
                 m_placingFootprint = false;
             }
@@ -1566,7 +1567,14 @@ int BOARD_EDITOR_CONTROL::EditFpInFpEditor( const TOOL_EVENT& aEvent )
     const PCB_SELECTION& selection = selTool->RequestSelection( EDIT_TOOL::FootprintFilter );
 
     if( selection.Empty() )
+    {
+        // Giant hack: by default we assign Edit Table to the same hotkey, so give the table
+        // tool a chance to handle it if we can't.
+        if( PCB_EDIT_TABLE_TOOL* tableTool = m_toolMgr->GetTool<PCB_EDIT_TABLE_TOOL>() )
+            tableTool->EditTable( aEvent );
+
         return 0;
+    }
 
     FOOTPRINT* fp = selection.FirstOfKind<FOOTPRINT>();
 

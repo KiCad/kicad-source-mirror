@@ -1643,7 +1643,7 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     // redraw the area where the pad was
     m_parent->GetCanvas()->Refresh();
 
-    commit.Push( _( "Modify pad" ) );
+    commit.Push( _( "Edit Pad Properties" ) );
 
     return true;
 }

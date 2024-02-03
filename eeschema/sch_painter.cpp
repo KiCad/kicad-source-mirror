@@ -2370,7 +2370,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
     {
         drawText();
 
-        if( borderWidth > 0 )
+        if( aTextBox->Type() != SCH_TABLECELL_T && borderWidth > 0 )
         {
             COLOR4D    borderColor = aTextBox->GetStroke().GetColor();
             LINE_STYLE borderStyle = aTextBox->GetEffectiveLineStyle();
@@ -2522,7 +2522,7 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer )
             {
                 for( int col = 0; col < aTable->GetColCount(); ++col )
                 {
-                    SCH_TABLECELL* cell = aTable->GetCell( row, 0 );
+                    SCH_TABLECELL* cell = aTable->GetCell( row, col );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
                     {

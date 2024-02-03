@@ -185,9 +185,10 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataToWindow()
 
     switch ( m_textBox->GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check( true );   break;
-    case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check( true ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_LEFT:          m_alignLeft->Check( true );   break;
+    case GR_TEXT_H_ALIGN_CENTER:        m_alignCenter->Check( true ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:         m_alignRight->Check( true );  break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:                               break;
     }
 
     m_mirrored->Check( m_textBox->IsMirrored() );
@@ -377,7 +378,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     m_textBox->ClearRenderCache();
 
     if( pushCommit )
-        commit.Push( _( "Change text box properties" ) );
+        commit.Push( _( "Edit Text Box Properties" ) );
 
     return true;
 }

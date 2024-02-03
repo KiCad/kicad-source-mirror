@@ -23,6 +23,7 @@
 
 #include <ee_actions.h>
 #include <tools/sch_edit_table_tool.h>
+#include <dialogs/dialog_table_properties.h>
 
 
 SCH_EDIT_TABLE_TOOL::SCH_EDIT_TABLE_TOOL() :
@@ -38,6 +39,44 @@ bool SCH_EDIT_TABLE_TOOL::Init()
     addMenus( m_selectionTool->GetToolMenu().GetMenu() );
 
     return true;
+}
+
+
+int SCH_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
+{
+    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
+    bool          clearSelection = selection.IsHover();
+    SCH_TABLE*    parentTable = nullptr;
+
+    for( EDA_ITEM* item : selection.Items() )
+    {
+        if( item->Type() != SCH_TABLECELL_T )
+            return 0;
+
+        SCH_TABLE* table = static_cast<SCH_TABLE*>( item->GetParent() );
+
+        if( !parentTable )
+        {
+            parentTable = table;
+        }
+        else if( parentTable != table )
+        {
+            parentTable = nullptr;
+            break;
+        }
+    }
+
+    if( parentTable )
+    {
+        DIALOG_TABLE_PROPERTIES dlg( m_frame, parentTable );
+
+        dlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+    }
+
+    if( clearSelection )
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+    return 0;
 }
 
 
@@ -72,4 +111,6 @@ void SCH_EDIT_TABLE_TOOL::setTransitions()
 
     Go( &SCH_EDIT_TABLE_TOOL::MergeCells,         ACTIONS::mergeCells.MakeEvent() );
     Go( &SCH_EDIT_TABLE_TOOL::UnmergeCells,       ACTIONS::unmergeCells.MakeEvent() );
+
+    Go( &SCH_EDIT_TABLE_TOOL::EditTable,          ACTIONS::editTable.MakeEvent() );
 }

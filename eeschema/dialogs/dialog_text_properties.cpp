@@ -262,16 +262,18 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
     switch( m_currentText->GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT:   m_hAlignLeft->Check();   break;
-    case GR_TEXT_H_ALIGN_CENTER: m_hAlignCenter->Check(); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  m_hAlignRight->Check();  break;
+    case GR_TEXT_H_ALIGN_LEFT:          m_hAlignLeft->Check();   break;
+    case GR_TEXT_H_ALIGN_CENTER:        m_hAlignCenter->Check(); break;
+    case GR_TEXT_H_ALIGN_RIGHT:         m_hAlignRight->Check();  break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:                          break;
     }
 
     switch( m_currentText->GetVertJustify() )
     {
-    case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check();    break;
-    case GR_TEXT_V_ALIGN_CENTER: m_vAlignCenter->Check(); break;
-    case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
+    case GR_TEXT_V_ALIGN_TOP:           m_vAlignTop->Check();    break;
+    case GR_TEXT_V_ALIGN_CENTER:        m_vAlignCenter->Check(); break;
+    case GR_TEXT_V_ALIGN_BOTTOM:        m_vAlignBottom->Check(); break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:                          break;
     }
 
     if( m_currentText->GetTextAngle() == ANGLE_VERTICAL )
@@ -537,7 +539,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
 
     if( !commit.Empty() )
-        commit.Push( _( "Edit Text" ), SKIP_CONNECTIVITY );
+        commit.Push( _( "Edit Text Properties" ), SKIP_CONNECTIVITY );
 
     return true;
 }

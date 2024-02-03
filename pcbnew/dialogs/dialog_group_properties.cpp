@@ -111,7 +111,7 @@ bool DIALOG_GROUP_PROPERTIES::TransferDataFromWindow()
 
     m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, m_group );
 
-    commit.Push( _( "Modified group" ) );
+    commit.Push( _( "Edit Group Properties" ) );
     return true;
 }
 

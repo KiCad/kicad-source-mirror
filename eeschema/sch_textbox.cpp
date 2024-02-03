@@ -86,12 +86,10 @@ void SCH_TEXTBOX::MirrorHorizontally( int aCenter )
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_HORIZONTAL )
     {
-        switch( GetHorizJustify() )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:   SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT ); break;
-        case GR_TEXT_H_ALIGN_CENTER:                                           break;
-        case GR_TEXT_H_ALIGN_RIGHT:  SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );  break;
-        }
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+            SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     }
 }
 
@@ -101,12 +99,10 @@ void SCH_TEXTBOX::MirrorVertically( int aCenter )
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_VERTICAL )
     {
-        switch( GetHorizJustify() )
-        {
-        case GR_TEXT_H_ALIGN_LEFT:   SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT ); break;
-        case GR_TEXT_H_ALIGN_CENTER:                                           break;
-        case GR_TEXT_H_ALIGN_RIGHT:  SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );  break;
-        }
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+            SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     }
 }
 
@@ -145,6 +141,9 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
         case GR_TEXT_H_ALIGN_RIGHT:
             pos.y = bbox.GetTop() + m_marginTop;
             break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:
+            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+            break;
         }
 
         switch( GetVertJustify() )
@@ -157,6 +156,9 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
             break;
         case GR_TEXT_V_ALIGN_BOTTOM:
             pos.x = bbox.GetRight() - m_marginRight;
+            break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE:
+            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
             break;
         }
     }
@@ -173,6 +175,9 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
         case GR_TEXT_H_ALIGN_RIGHT:
             pos.x = bbox.GetRight() - m_marginRight;
             break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:
+            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+            break;
         }
 
         switch( GetVertJustify() )
@@ -185,6 +190,9 @@ VECTOR2I SCH_TEXTBOX::GetDrawPos() const
             break;
         case GR_TEXT_V_ALIGN_BOTTOM:
             pos.y = bbox.GetBottom() - m_marginBottom;
+            break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE:
+            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
             break;
         }
     }

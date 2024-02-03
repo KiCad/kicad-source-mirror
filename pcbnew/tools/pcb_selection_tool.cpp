@@ -2938,6 +2938,14 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
                 return false;
         }
 
+        if( aItem->Type() == PCB_TABLECELL_T )
+        {
+            const PCB_TABLECELL* cell = static_cast<const PCB_TABLECELL*>( aItem );
+
+            if( cell->GetRowSpan() == 0 || cell->GetColSpan() == 0 )
+                return false;
+        }
+
         break;
 
     case PCB_DIM_ALIGNED_T:

@@ -351,7 +351,7 @@ std::vector<BOARD_ITEM*> DRAWING_TOOL::DrawSpecificationStackup( const VECTOR2I&
         for( BOARD_ITEM* item : table )
             commit.Add( item );
 
-        commit.Push( _( "Insert board stackup table" ) );
+        commit.Push( _( "Insert Board Stackup Table" ) );
     }
 
     return table;

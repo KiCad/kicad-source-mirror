@@ -599,7 +599,7 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         m_currentLabel->AutoAutoplaceFields( m_Parent->GetScreen() );
 
     if( !commit.Empty() )
-        commit.Push( _( "Edit Label" ), SKIP_CONNECTIVITY );
+        commit.Push( _( "Edit Label Properties" ), SKIP_CONNECTIVITY );
 
     return true;
 }

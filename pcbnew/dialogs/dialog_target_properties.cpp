@@ -106,7 +106,7 @@ bool DIALOG_TARGET_PROPERTIES::TransferDataFromWindow()
     m_Target->SetShape( m_TargetShape->GetSelection() ? 1 : 0 );
 
     if( pushCommit )
-        commit.Push( _( "Modified alignment target" ) );
+        commit.Push( _( "Edit Alignment Target" ) );
 
     return true;
 }

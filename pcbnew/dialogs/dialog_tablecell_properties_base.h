@@ -12,7 +12,6 @@
 #include <wx/intl.h>
 class BITMAP_BUTTON;
 class FONT_CHOICE;
-class PCB_LAYER_BOX_SELECTOR;
 class WX_INFOBAR;
 
 #include "dialog_shim.h"
@@ -22,21 +21,18 @@ class WX_INFOBAR;
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/string.h>
-#include <wx/stc/stc.h>
-#include <wx/sizer.h>
 #include <wx/stattext.h>
-#include <wx/bmpcbox.h>
-#include <wx/checkbox.h>
-#include <wx/textctrl.h>
-#include <wx/gbsizer.h>
-#include <wx/panel.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
+#include <wx/sizer.h>
 #include <wx/choice.h>
-#include <wx/notebook.h>
+#include <wx/checkbox.h>
+#include <wx/gbsizer.h>
+#include <wx/textctrl.h>
+#include <wx/statline.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -50,42 +46,18 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 
 	protected:
 		WX_INFOBAR* m_infoBar;
-		wxStyledTextCtrl* m_textCtrl;
-		wxNotebook* m_notebook;
-		wxPanel* m_tablePage;
-		wxGridBagSizer* m_textEntrySizer;
-		wxStaticText* m_layerLabel;
-		PCB_LAYER_BOX_SELECTOR* m_LayerSelectionCtrl;
-		wxCheckBox* m_cbLocked;
-		wxCheckBox* m_borderCheckbox;
-		wxCheckBox* m_headerBorder;
-		wxStaticText* m_borderWidthLabel;
-		wxTextCtrl* m_borderWidthCtrl;
-		wxStaticText* m_borderWidthUnits;
-		wxStaticText* m_borderStyleLabel;
-		wxBitmapComboBox* m_borderStyleCombo;
-		wxCheckBox* m_rowSeparators;
-		wxCheckBox* m_colSeparators;
-		wxStaticText* m_separatorsWidthLabel;
-		wxTextCtrl* m_separatorsWidthCtrl;
-		wxStaticText* m_separatorsWidthUnits;
-		wxStaticText* m_separatorsStyleLabel;
-		wxBitmapComboBox* m_separatorsStyleCombo;
-		wxPanel* m_cellPage;
-		BITMAP_BUTTON* m_separator1;
-		BITMAP_BUTTON* m_bold;
-		BITMAP_BUTTON* m_italic;
-		BITMAP_BUTTON* m_separator2;
 		BITMAP_BUTTON* m_hAlignLeft;
 		BITMAP_BUTTON* m_hAlignCenter;
 		BITMAP_BUTTON* m_hAlignRight;
-		BITMAP_BUTTON* m_separator3;
+		wxStaticText* vAlignLabel;
 		BITMAP_BUTTON* m_vAlignTop;
 		BITMAP_BUTTON* m_vAlignCenter;
 		BITMAP_BUTTON* m_vAlignBottom;
-		BITMAP_BUTTON* m_separator4;
 		wxStaticText* m_fontLabel;
 		FONT_CHOICE* m_fontCtrl;
+		wxStaticText* m_styleLabel;
+		wxCheckBox* m_bold;
+		wxCheckBox* m_italic;
 		wxStaticText* m_SizeXLabel;
 		wxTextCtrl* m_SizeXCtrl;
 		wxStaticText* m_SizeXUnits;
@@ -95,24 +67,21 @@ class DIALOG_TABLECELL_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ThicknessLabel;
 		wxTextCtrl* m_ThicknessCtrl;
 		wxStaticText* m_ThicknessUnits;
-		wxStaticText* m_marginsLable;
 		wxTextCtrl* m_marginTopCtrl;
 		wxStaticText* m_marginTopUnits;
 		wxTextCtrl* m_marginLeftCtrl;
 		wxTextCtrl* m_marginRightCtrl;
 		wxTextCtrl* m_marginBottomCtrl;
-		wxButton* m_applyButton;
-		wxStaticText* m_hotkeyHint;
+		wxStaticLine* m_staticline1;
+		wxButton* m_editTable;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
 
 		// Virtual event handlers, override them in your derived class
-		virtual void onMultiLineTCLostFocus( wxFocusEvent& event ) { event.Skip(); }
-		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOkClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onThickness( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnApply( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onEditTable( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
