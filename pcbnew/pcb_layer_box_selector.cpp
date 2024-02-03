@@ -97,7 +97,6 @@ void PCB_LAYER_BOX_SELECTOR::Resync()
     SetMinSize( bestSize );
 
     SetSelection( wxNOT_FOUND );
-    Layout();
     Thaw();
 }
 
