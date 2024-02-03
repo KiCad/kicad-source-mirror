@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-03 18:01+0000\n"
+"PO-Revision-Date: 2024-02-04 19:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -71,8 +71,8 @@ msgstr ""
 #: 3d-viewer/3d_canvas/board_adapter.cpp:904
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
 msgstr ""
-"Контур платы отсутсвует или имеет неудачную форму. Выполните проверку правил "
-"DRC для получения полной информации."
+"Контур платы отсутствует или деформирован. Выполните проверку правил DRC для "
+"получения полной информации."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
 msgid "Create tracks and vias"
@@ -246,7 +246,7 @@ msgstr "Трассировка лучей"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
-msgstr "Сбросить к значениям по умолчанию"
+msgstr "Сбросить до значений по умолчанию"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:78
@@ -324,7 +324,7 @@ msgstr "Как в настройках черчения"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:588
 msgid "legacy colors"
-msgstr "унаследованные цвета"
+msgstr "Унаследованные цвета"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:727
 msgid "3D Image File Name"
@@ -9408,7 +9408,8 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
-"Сбросить скрипты формирования перечня элементов к значениям по умолчанию"
+"Сбросить список скриптов формирования перечня элементов до значений по "
+"умолчанию"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
@@ -23054,7 +23055,7 @@ msgstr "Не изменять"
 
 #: include/widgets/resettable_panel.h:66
 msgid "Reset all settings on this page to their default"
-msgstr "Сбросить все параметры на странице к значениям по умолчанию"
+msgstr "Сбросить все параметры на странице до значений по умолчанию"
 
 #: include/widgets/ui_common.h:44
 msgid "-- mixed values --"
@@ -38858,8 +38859,8 @@ msgstr "Они были экспортированы в виде овальны�
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr ""
-"Контур платы имеет неудачную форму. Выполните проверку правил DRC для "
-"получения полной информации."
+"Контур платы деформирован. Выполните проверку правил DRC для получения "
+"полной информации."
 
 #: pcbnew/exporters/export_idf.cpp:653 pcbnew/exporters/export_idf.cpp:662
 #: pcbnew/exporters/export_idf.cpp:670
