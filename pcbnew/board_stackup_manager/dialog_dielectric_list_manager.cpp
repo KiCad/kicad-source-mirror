@@ -134,6 +134,6 @@ void DIALOG_DIELECTRIC_MATERIAL::onListKeyDown( wxListEvent& event )
 {
     int idx = event.GetIndex();
 
-    if( idx > 0 )
+    if( ( idx > 0 ) && ( event.GetKeyCode() == WXK_DELETE ) )
         m_lcMaterials->DeleteItem( idx );
 }
