@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-01 13:54+0000\n"
-"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"PO-Revision-Date: 2024-02-04 19:01+0000\n"
+"Last-Translator: Stanislav Kaliuk <staskalyuk.096@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/"
 "master-source/uk/>\n"
 "Language: uk\n"
@@ -5338,9 +5338,8 @@ msgid "Pad Number Box"
 msgstr "Блок номеру контактної площадки"
 
 #: common/eda_shape.cpp:706 pcbnew/pcb_shape.cpp:750
-#, fuzzy
 msgid "Thermal Spoke Template"
-msgstr "Кут термічного мостику"
+msgstr "Шаблон термовідводу"
 
 #: common/eda_shape.cpp:707 common/eda_shape.cpp:720
 msgid "Unrecognized"
@@ -5434,14 +5433,12 @@ msgid "Start Y"
 msgstr "Початок Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "Центр"
+msgstr "Центр X"
 
 #: common/eda_shape.cpp:1997
-#, fuzzy
 msgid "Center Y"
-msgstr "Центр"
+msgstr "Центр Y"
 
 #: common/eda_shape.cpp:2007 pcbnew/generators/pcb_tuning_pattern.cpp:2323
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
@@ -5678,14 +5675,12 @@ msgid "Hyperlink"
 msgstr "Hyperlink"
 
 #: common/eda_units.cpp:476 pcbnew/generators/pcb_tuning_pattern.cpp:205
-#, fuzzy
 msgid "min"
-msgstr "Вивід"
+msgstr "min"
 
 #: common/eda_units.cpp:484
-#, fuzzy
 msgid "opt"
-msgstr "Верх"
+msgstr "opt"
 
 #: common/eda_units.cpp:492 pcbnew/generators/pcb_tuning_pattern.cpp:208
 msgid "max"
@@ -5794,7 +5789,7 @@ msgstr ""
 "новішої."
 
 #: common/exceptions.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -5805,8 +5800,8 @@ msgstr ""
 "KiCad не вдалося відкрити цей файл, оскільки його було створено за допомогою "
 "новішої версії, ніж та, яку ви використовуєте.\n"
 "\n"
-"Щоб відкрити його, вам потрібно буде оновити KiCad до версії від %s або "
-"новішої."
+"Щоб відкрити його, вам потрібно оновити KiCad до версії від %s або новішої ("
+"формат файлу датований %s або новіший)."
 
 #: common/exceptions.cpp:149
 msgid "Full error text:"
@@ -5920,53 +5915,52 @@ msgid "Invalid directory name, cannot remove root"
 msgstr "Неправильне ім'я папки, неможливо видалити корінь папки"
 
 #: common/gestfich.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "Одиниця вимірювання '%s' не закінчується на 'міл'."
+msgstr "Тека '%s' не існує"
 
 #: common/gestfich.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' не було оброблено правильно."
+msgstr "'%s' не є текою"
 
 #: common/gestfich.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "Error removing directory '%s': %s"
-msgstr "Видалення теки %s"
+msgstr "Помилка під час видалення теки '%s':%s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Не вдалося створити вихідну теку '%s'."
+msgstr "Не вдалося створити вихідну теку '%s'"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Не вдалося завантажити зображення з '%s'."
+msgstr "Не вдалося клонувати репозиторій з '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Не вдалося завантажити зображення з '%s'."
+msgstr "Не вдалося знайти віддалений репозиторій '%s'"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Не знайдено IBIS модель '%s'"
+msgstr "Не вдалося приєднатися до віддаленого репозиторію '%s'"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Не знайдено IBIS модель '%s'"
+msgstr "Не вдалося отримати дані з віддаленого репозиторію '%s'"
 
 #: common/git/git_pull_handler.cpp:90
 msgid "Could not read 'FETCH_HEAD'"
 msgstr "Не вдалося прочитати 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Не вдалося відкрити CvPcb"
+msgstr "Не вдалося знайти коміт"
 
 #: common/git/git_pull_handler.cpp:108
 msgid "Could not analyze merge"
@@ -5981,56 +5975,49 @@ msgid "Could not get repository head"
 msgstr "Неможливо отримати останній коміт з репозиторію"
 
 #: common/git/git_pull_handler.cpp:187
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr "Не вдалося знайти продукт Spice із посиланням на \"%s\""
+msgstr "Не вдалося знайти OID для посиланням на '%s'"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:54
 msgid "Failed to perform checkout operation."
 msgstr "Не вдалося виконати операцію checkout."
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Не вдалося завантажити зображення з '%s'."
+msgstr "Не вдалося знайти коміт '{}'"
 
 #: common/git/git_pull_handler.cpp:249
 msgid "Could not merge commits"
 msgstr "Не вдалося злити коміти"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "Не вдалося відкрити файл бібліотеки."
+msgstr "Не вдалося отримати індекс репозиторія"
 
 #: common/git/git_pull_handler.cpp:265
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "Не вдалося відкрити файл конфігурації"
+msgstr "Не вдалося отримати ітератор конфліктів"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
-#, fuzzy
 msgid "Changed"
-msgstr "Змінити"
+msgstr "Змінено"
 
 #: common/git/git_pull_handler.cpp:300 common/git/git_pull_handler.cpp:301
 msgid "Added"
 msgstr "Додано"
 
 #: common/git/git_push_handler.cpp:44
-#, fuzzy
 msgid "Could not lookup remote"
-msgstr "Не вдалося відкрити файл архіву."
+msgstr "Не вдалося знайти віддалений репозиторій"
 
 #: common/git/git_push_handler.cpp:58
-#, fuzzy
 msgid "Could not connect to remote"
-msgstr "Не вдалося відкрити файл архіву."
+msgstr "Не вдалося приєднатися до віддаленого репозиторію"
 
 #: common/git/git_push_handler.cpp:68
-#, fuzzy
 msgid "Could not push to remote"
-msgstr "Не вдалося використати OpenGL"
+msgstr "Не вдалося записати у віддалений репозиторій"
 
 #: common/git/kicad_git_common.cpp:419
 #, c-format
@@ -6038,14 +6025,14 @@ msgid "Received %u of %u objects"
 msgstr "Отримано об'єктів: %u з %u"
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Оновлено %s з %s до %s."
+msgstr "* [Оновлено] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:450
-#, fuzzy, c-format
+#, c-format
 msgid "* [new] %s %s"
-msgstr "Зона %s %s"
+msgstr "*[нове]%s %s"
 
 #: common/git/kicad_git_common.cpp:470
 #, c-format
@@ -6053,57 +6040,50 @@ msgid "Writing objects: %d%% (%d/%d), %d bytes"
 msgstr "Записування об'єктів: %d%% (%d/%d), %d байтів"
 
 #: common/git/kicad_git_common.cpp:485
-#, fuzzy, c-format
+#, c-format
 msgid "* [rejected] %s (%s)"
-msgstr "Сітка: %s (%s)"
+msgstr "*[відхилено]%s (%s)"
 
 #: common/git/kicad_git_common.cpp:490
-#, fuzzy, c-format
+#, c-format
 msgid "[updated] %s"
-msgstr "Оновлено"
+msgstr "[оновлено]%s"
 
 #: common/git/kicad_git_errors.cpp:39
 msgid "Invalid repository."
 msgstr "Некоректний репозиторій."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося записати зміни."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "Не вдалося зберегти бібліотеку %s."
+msgstr "Не вдалося злити гілки."
 
 #: common/git/kicad_git_errors.cpp:44
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "Неможливо завантажити url репозиторію"
+msgstr "Не вдалося клонувати репозиторій."
 
 #: common/git/kicad_git_errors.cpp:45
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Репозиторій"
+msgstr "Віддалений репозиторій не знайдено."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
 msgstr "Не вдалося авторизуватися при підключенні до віддаленого репозиторію."
 
 #: common/git/kicad_git_errors.cpp:49
-#, fuzzy
 msgid "Branch not found."
-msgstr "%s не знайдено"
+msgstr "Гілку не знайдено."
 
 #: common/git/kicad_git_errors.cpp:50
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося створити гілку."
 
 #: common/git/kicad_git_errors.cpp:51
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося видалити гілку."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
@@ -6118,53 +6098,44 @@ msgid "Rebase conflict encountered."
 msgstr "Виявлено конфлікти під час виконання операції rebase."
 
 #: common/git/kicad_git_errors.cpp:62
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "Не вдалося обробити локальне сховище repository.json."
+msgstr "Не вдалося завантажити зміни з віддаленого репозиторію."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "Не вдалося обробити локальне сховище repository.json."
+msgstr "Не вдалося записати зміни до віддаленого репозиторію."
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
 msgstr "Upstream вітка не налаштована."
 
 #: common/git/kicad_git_errors.cpp:65
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "Не вдалося обробити локальне сховище repository.json."
+msgstr "Не вдалося встановити з'єднання з віддаленим репозиторієм."
 
 #: common/git/kicad_git_errors.cpp:68
-#, fuzzy
 msgid "Tag not found."
-msgstr "%s не знайдено"
+msgstr "Тег не знайдено."
 
 #: common/git/kicad_git_errors.cpp:69
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося створити тег."
 
 #: common/git/kicad_git_errors.cpp:70
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "Не вдалося створити файл '%s'."
+msgstr "Не вдалося видалити тег."
 
 #: common/git/kicad_git_errors.cpp:72
-#, fuzzy
 msgid "Unknown error."
-msgstr "Невідома помилка"
+msgstr "Невідома помилка."
 
 #: common/git/kicad_git_errors.cpp:73
-#, fuzzy
 msgid "No error."
-msgstr "Помилок не знайдено."
+msgstr "Немає помилок."
 
 #: common/git/kicad_git_errors.h:45 common/git/kicad_git_errors.h:53
-#, fuzzy
 msgid "No error"
-msgstr "помилок"
+msgstr "Помилок не знайдено"
 
 #: common/grid_tricks.cpp:354 common/tool/actions.cpp:202
 #: eeschema/tools/ee_actions.cpp:214 pcbnew/dialogs/panel_setup_rules.cpp:128
@@ -6309,20 +6280,18 @@ msgid "Invalid spline definition encountered"
 msgstr "Некоректне визначення сплайна"
 
 #: common/import_gfx/dxf_import_plugin.h:210
-#, fuzzy, c-format
+#, c-format
 msgid "%s is not supported."
-msgstr "(декілька контурів дошки не підтримуються)"
+msgstr "%s не підтримується."
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
-#, fuzzy
 msgid "DXF construction lines not currently supported."
-msgstr "Маска під час компіляції не підтримується."
+msgstr "Конструкторські лінії DXF наразі не підтримуються."
 
 #: common/import_gfx/dxf_import_plugin.h:467
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "Набір параметрів наразі не підтримується."
+msgstr "Вирівняний по арці DXF текст наразі не підтримується."
 
 #: common/import_gfx/dxf_import_plugin.h:472
 #: common/import_gfx/dxf_import_plugin.h:476
@@ -6332,34 +6301,28 @@ msgstr "Набір параметрів наразі не підтримуєть
 #: common/import_gfx/dxf_import_plugin.h:492
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "Маска під час компіляції не підтримується."
+msgstr "Розміри DXF наразі не підтримуються."
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "Покриття наразі не підтримується."
+msgstr "Штриховка DXF наразі не підтримується."
 
 #: common/import_gfx/dxf_import_plugin.h:513
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "Покриття наразі не підтримується."
+msgstr "Фігури DXF наразі не підтримуються."
 
 #: common/import_gfx/dxf_import_plugin.h:518
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "Покриття наразі не підтримується."
+msgstr "3D фігури DXF наразі не підтримуються."
 
 #: common/import_gfx/dxf_import_plugin.h:523
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "Маска під час компіляції не підтримується."
+msgstr "Повнотілі фігури DXF наразі не підтримуються."
 
 #: common/import_gfx/dxf_import_plugin.h:528
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "Покриття наразі не підтримується."
+msgstr "Зображення DXF наразі не підтримуються."
 
 #: common/io/altium/altium_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -6451,9 +6414,9 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Неправильна дуга з радіусом %f і кутом %f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "потрібно число для '%s'"
+msgstr "Не вдалося конвертувати число з '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
 #, c-format
@@ -6465,24 +6428,24 @@ msgstr ""
 "знайти project.json або device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "Не вдалося відкрити файл '%s'"
+msgstr "Не вдалося прочитати ZIP архів '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Помилка при читанні зображення %s."
+msgstr "Помилка при читанні JSON '%s':%s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading '%s': %s"
-msgstr "Помилка при читанні зображення %s."
+msgstr "Помилка при читанні '%s':%s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:224
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Не вдалося знайти %s вивід '%s'."
+msgstr "Не вдалося розпізнати JSON рядок %d в '%s':%s"
 
 #: common/kiway.cpp:243
 #, c-format
@@ -6877,14 +6840,12 @@ msgid "Deactivate selected"
 msgstr "Деактивувати виділене"
 
 #: common/lib_table_grid_tricks.cpp:69
-#, fuzzy
 msgid "Set visible flag"
-msgstr "Видимі шари"
+msgstr "Встановити видимий шар"
 
 #: common/lib_table_grid_tricks.cpp:72
-#, fuzzy
 msgid "Unset visible flag"
-msgstr "Видимі шари"
+msgstr "Зняти видимий шар"
 
 #: common/lib_table_grid_tricks.cpp:80
 #, c-format
@@ -6960,18 +6921,16 @@ msgstr "Невідповідність типів між %lf і '%s'"
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:63
-#, fuzzy
 msgid "View Details"
-msgstr "Подробиці"
+msgstr "Переглянути подробиці"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
 msgstr "Сховати"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Вирівнювання"
+msgstr "Нагадування"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
@@ -7181,9 +7140,8 @@ msgid "TSV"
 msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:239
-#, fuzzy
 msgid "Semicolons"
-msgstr "Повні кольори"
+msgstr "Крапка з комою"
 
 #: common/settings/color_settings.cpp:341
 msgid "(Footprints)"
@@ -7309,14 +7267,12 @@ msgid "Cancel current tool"
 msgstr "Скасувати поточний інструмент"
 
 #: common/tool/actions.cpp:154
-#, fuzzy
 msgid "Finish"
-msgstr "Закінчити шину"
+msgstr "Закінчити"
 
 #: common/tool/actions.cpp:155
-#, fuzzy
 msgid "Finish current tool"
-msgstr "Скасувати поточний інструмент"
+msgstr "Закінчити поточний інструмент"
 
 #: common/tool/actions.cpp:162
 msgid "Show Context Menu"
@@ -7351,14 +7307,12 @@ msgid "Select all items on screen"
 msgstr "Виділити всі елементи на екрані"
 
 #: common/tool/actions.cpp:241
-#, fuzzy
 msgid "Unselect All"
-msgstr "Відмінити вибір"
+msgstr "Відмінити вибірку для всього"
 
 #: common/tool/actions.cpp:242
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Виділити всі елементи на екрані"
+msgstr "Відмінити вибірку всіх елементи на екрані"
 
 #: common/tool/actions.cpp:247
 msgid "Paste Special..."
@@ -7390,9 +7344,8 @@ msgid "Delete clicked items"
 msgstr "Видалення елементів за допомогою натискання мишкою"
 
 #: common/tool/actions.cpp:290
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
-msgstr "Перемикання режиму редагування дуги"
+msgstr "Перемкнути режим редагування арки"
 
 #: common/tool/actions.cpp:291
 msgid "Switch to a different method of editing arcs"
@@ -7527,9 +7480,8 @@ msgid "Zoom to Selection"
 msgstr "Масштабувати виділення"
 
 #: common/tool/actions.cpp:484 common/widgets/mathplot.cpp:1447
-#, fuzzy
 msgid "Undo Last Zoom"
-msgstr "Скасувати останній сегмент"
+msgstr "Повернути попередній масштаб"
 
 #: common/tool/actions.cpp:485 common/widgets/mathplot.cpp:1447
 msgid "Return zoom to level prior to last zoom action"
@@ -7538,9 +7490,8 @@ msgstr ""
 "масштабування"
 
 #: common/tool/actions.cpp:491 common/widgets/mathplot.cpp:1448
-#, fuzzy
 msgid "Redo Last Zoom"
-msgstr "Повторити останнє редагування"
+msgstr "Повторити останній масштаб"
 
 #: common/tool/actions.cpp:492 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
@@ -7636,9 +7587,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "Перейти на швидку сітку 2"
 
 #: common/tool/actions.cpp:658
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "Перейти на швидку сітку 1"
+msgstr "Перейти на швидку сітку"
 
 #: common/tool/actions.cpp:665
 msgid "Switch to Next Grid"
@@ -7653,9 +7603,8 @@ msgid "Grid Origin"
 msgstr "Початок координат"
 
 #: common/tool/actions.cpp:679
-#, fuzzy
 msgid "Place the grid origin point"
-msgstr "Встановити початок координат сітки"
+msgstr "Встановити початок сітки координат"
 
 #: common/tool/actions.cpp:687
 msgid "Reset Grid Origin"
@@ -7674,14 +7623,12 @@ msgid "Enables item-specific grids that override the current grid"
 msgstr "Активує спеціальні сітки для об'єктів, що замінять активну сітку"
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Встановити розміри сітки"
+msgstr "Редагувати визначення сітки"
 
 #: common/tool/actions.cpp:719
-#, fuzzy
 msgid "Grid Origin..."
-msgstr "Початок координат"
+msgstr "Початок координат..."
 
 #: common/tool/actions.cpp:720
 msgid "Set the grid origin point"
@@ -7722,9 +7669,8 @@ msgid "Use millimeters"
 msgstr "Використовувати міліметри"
 
 #: common/tool/actions.cpp:760
-#, fuzzy
 msgid "Select Columns..."
-msgstr "Вибрати колонки"
+msgstr "Вибрати колонки..."
 
 #: common/tool/actions.cpp:767
 msgid "Switch units"
@@ -7797,14 +7743,12 @@ msgid "Interactively measure distance between points"
 msgstr "Інтерактивне вимірювання відстані між точками"
 
 #: common/tool/actions.cpp:856
-#, fuzzy
 msgid "Switch to Project Manager"
-msgstr "Менеджер проєкту"
+msgstr "Перейти до менеджеру проєкту"
 
 #: common/tool/actions.cpp:857
-#, fuzzy
 msgid "Show project window"
-msgstr "Показати вікно консолі"
+msgstr "Показати вікно проєкту"
 
 #: common/tool/actions.cpp:866
 msgid "Show 3D viewer window"
@@ -7914,14 +7858,12 @@ msgid "Open product documentation in a web browser"
 msgstr "Відкрити документацію в веб браузері"
 
 #: common/tool/actions.cpp:975
-#, fuzzy
 msgid "About KiCad"
-msgstr "&Про KiCad"
+msgstr "Про KiCad"
 
 #: common/tool/actions.cpp:976
-#, fuzzy
 msgid "Open about dialog"
-msgstr "Відкрити текстовий редактор"
+msgstr "Відкрити опис програми"
 
 #: common/tool/actions.cpp:985
 msgid "List Hotkeys..."
@@ -8159,9 +8101,8 @@ msgstr ""
 "прискорення KiCad)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
-msgstr "Відображати"
+msgstr "Вигляд сітки"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:88
@@ -8190,14 +8131,12 @@ msgid "Grid thickness:"
 msgstr "Товщина сітки:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
-msgstr "Мінімальний крок сітки:"
+msgstr "Мінімальний міжсітковий інтервал:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
-#, fuzzy
 msgid "Snap to grid:"
-msgstr "Прив'язка до сітки:"
+msgstr "Прив'язати до сітки:"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -8220,14 +8159,12 @@ msgid "Never"
 msgstr "Ніколи"
 
 #: common/widgets/gal_options_panel_base.cpp:132
-#, fuzzy
 msgid "Small crosshairs"
-msgstr "Мале перехрестя"
+msgstr "Малий приціл"
 
 #: common/widgets/gal_options_panel_base.cpp:135
-#, fuzzy
 msgid "Full window crosshairs"
-msgstr "Повноекранне перехрестя"
+msgstr "Повновіконний приціл"
 
 #: common/widgets/gal_options_panel_base.cpp:141
 msgid "Always show crosshairs"
@@ -8246,9 +8183,8 @@ msgid "Sort by Best Match"
 msgstr "Сортувати за найкращим співпадінням"
 
 #: common/widgets/lib_tree.cpp:100
-#, fuzzy
 msgid "Sort Alphabetically"
-msgstr "Віддзеркалити вертикально"
+msgstr "Сортувати за алфавітом"
 
 #: common/widgets/lib_tree.cpp:373
 msgid "recent searches"
@@ -8304,14 +8240,12 @@ msgid "Reset to Defaults"
 msgstr "Відновити типові параметри"
 
 #: common/widgets/paged_dialog.cpp:90
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "Показати теми у Finder"
+msgstr "Показати налаштування у Finder"
 
 #: common/widgets/paged_dialog.cpp:92
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "Відкрити Налаштування"
+msgstr "Відкрити теку з налаштуваннями"
 
 #: common/widgets/paged_dialog.cpp:336
 #, c-format
@@ -8355,9 +8289,8 @@ msgid "Current key:"
 msgstr "Поточна клавіша:"
 
 #: common/widgets/widget_hotkey_list.cpp:130
-#, fuzzy
 msgid "Clear assigned hotkey"
-msgstr "Очистити призначену гарячу клавішу"
+msgstr "Відмінити призначену гарячу клавішу"
 
 #: common/widgets/widget_hotkey_list.cpp:154
 msgid "Set Hotkey"
@@ -8373,9 +8306,8 @@ msgid "Edit..."
 msgstr "Редагувати..."
 
 #: common/widgets/widget_hotkey_list.cpp:449
-#, fuzzy
 msgid "Edit Alternate..."
-msgstr "Редагувати посадкове місце..."
+msgstr "Редагувати альтернативне..."
 
 #: common/widgets/widget_hotkey_list.cpp:450
 msgid "Undo Changes"
@@ -8386,14 +8318,12 @@ msgid "Clear Assigned Hotkey"
 msgstr "Очистити призначену гарячу клавішу"
 
 #: common/widgets/widget_hotkey_list.cpp:452
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "Очистити призначену гарячу клавішу"
+msgstr "Очистити призначену альтетрнативу"
 
 #: common/widgets/widget_hotkey_list.cpp:453
-#, fuzzy
 msgid "Restore Defaults"
-msgstr "Відновити до типових"
+msgstr "Відновити по замовчуванню"
 
 #: common/widgets/widget_hotkey_list.cpp:493
 #, c-format
@@ -8556,9 +8486,8 @@ msgid "KiCad netlist files"
 msgstr "KiCad файли зв'язків"
 
 #: common/wildcards_and_files_ext.cpp:291
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "KiCad файли зв'язків"
+msgstr "Файли зі списком ліній Allegro"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -8618,9 +8547,8 @@ msgid "PostScript files"
 msgstr "Файли PostScript"
 
 #: common/wildcards_and_files_ext.cpp:383
-#, fuzzy
 msgid "Json files"
-msgstr "Файли завдання"
+msgstr "Файли JSON"
 
 #: common/wildcards_and_files_ext.cpp:389
 msgid "Report files"
@@ -8829,9 +8757,9 @@ msgid "Filtered by %s"
 msgstr "Фільтрувати за %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:832
-#, fuzzy, c-format
+#, c-format
 msgid ": %i matching footprints"
-msgstr "Відсутнє посадкове місце"
+msgstr ": %i підібраних посадкових місць"
 
 #: cvpcb/cvpcb_mainframe.cpp:844
 #, c-format
@@ -8892,9 +8820,8 @@ msgid "Footprint association files:"
 msgstr "Файл відповідності посадковому місцю:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
-#, fuzzy
 msgid "Add association file"
-msgstr "Файл відповідності посадковому місцю"
+msgstr "Додати файл співставлення"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:53
 #, fuzzy
@@ -14168,9 +14095,8 @@ msgstr ""
 "Показувати попередній перегляд посадкового місця в діалозі вибору символів"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:350
-#, fuzzy
 msgid "Never show Rescue Symbols tool"
-msgstr "Відновити символи"
+msgstr "Ніколи не показувати знаряддя Відновити Символи"
 
 #: eeschema/dialogs/panel_setup_buses.cpp:264
 #, c-format
@@ -14242,9 +14168,8 @@ msgid "Default text size:"
 msgstr "Розмір тексту по замовчуванню:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:66
-#, fuzzy
 msgid "Overbar offset ratio:"
-msgstr "Коефіцієнт зміщення мітки:"
+msgstr "Коефіцієнт зміщення накладної планки:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:77
 msgid "Label offset ratio:"
@@ -14260,9 +14185,8 @@ msgstr ""
 "виводом"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:92
-#, fuzzy
 msgid "Global label margin ratio:"
-msgstr "Відступ глобальної мітки:"
+msgstr "Коефіцієнт відступу глобальної мітки:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:94
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:99
@@ -14298,9 +14222,8 @@ msgid "Largest"
 msgstr "Найбільший"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:168
-#, fuzzy
 msgid "Connection grid:"
-msgstr "Роз'єм:"
+msgstr "Сітка з'єднань:"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:194
 msgid "Inter-sheet References"
@@ -14591,9 +14514,8 @@ msgid "All supported formats"
 msgstr "Всі формати, які підтримуються"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:609
-#, fuzzy
 msgid "Add Library"
-msgstr "Додати бібліотеку..."
+msgstr "Додати бібліотеку"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:623
 msgid "Warning: Duplicate Nickname"
@@ -14623,13 +14545,12 @@ msgid "Add Anyway"
 msgstr "Додати все одно"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:844
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
 msgstr ""
-"Виберіть один або кілька рядків, що містять бібліотеки в застарілому форматі "
-"(*.lib), щоб зберегти як поточний формат KiCad (*.kicad_sym)."
+"Виберіть один або кілька рядків, що містять бібліотеки, щоб зберегти як "
+"поточний формат KiCad (*.kicad_sym)."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:852
 #, c-format
@@ -18887,7 +18808,7 @@ msgstr "Неправильне визначення імені виводу"
 
 #: eeschema/sim/legacy_workbook.cpp:284
 msgid "expecting measurement format definition"
-msgstr ""
+msgstr "очікується опис формату вимірювання"
 
 #: eeschema/sim/sim_lib_mgr.cpp:83
 #, c-format
@@ -19043,11 +18964,11 @@ msgstr "Амплітуда"
 
 #: eeschema/sim/sim_plot_tab.cpp:611
 msgid "Noise (V/√Hz)"
-msgstr ""
+msgstr "Шум(V/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:614
 msgid "Noise (A/√Hz)"
-msgstr ""
+msgstr "Шум (A/√Hz)"
 
 #: eeschema/sim/sim_plot_tab.cpp:631
 msgid "Intensity"
@@ -19128,6 +19049,8 @@ msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
 msgstr ""
+"Ви повинні спочатку запустити симуляцію TRAN; її результати будуть "
+"використанні для швидкого перетвореннє Фур'є."
 
 #: eeschema/sim/simulator_frame.cpp:410
 msgid ""
@@ -19189,7 +19112,7 @@ msgstr "Вимір інтегральності"
 
 #: eeschema/sim/simulator_frame_ui.cpp:167
 msgid "Perform Fourier Analysis..."
-msgstr ""
+msgstr "Виконується аналіз Фур'є..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:214
 #: eeschema/sim/simulator_frame_ui.cpp:731
@@ -19205,7 +19128,7 @@ msgstr "Аналіз перехідних процесів"
 
 #: eeschema/sim/simulator_frame_ui.cpp:273
 msgid "Fourier Analyses of Multiple Signals"
-msgstr ""
+msgstr "Аналіз Фур'є для кількох сигналів"
 
 #: eeschema/sim/simulator_frame_ui.cpp:275
 #, fuzzy
@@ -19229,7 +19152,7 @@ msgstr "Видалити замір"
 #: eeschema/sim/simulator_frame_ui.cpp:953
 #, c-format
 msgid "Analysis %u - "
-msgstr ""
+msgstr "Аніліз %u - "
 
 #: eeschema/sim/simulator_frame_ui.cpp:589
 #: eeschema/sim/simulator_frame_ui.cpp:596
@@ -19333,7 +19256,7 @@ msgstr "Аналіз перехідних процесів"
 
 #: eeschema/sim/spice_simulator.cpp:61
 msgid "Small-Signal Distortion Analysis"
-msgstr ""
+msgstr "Аналіз викривлень у слабких сигналах"
 
 #: eeschema/sim/spice_simulator.cpp:62
 #, fuzzy
@@ -19416,6 +19339,41 @@ msgid ""
 "    aunif(nom, avar)\n"
 "    limit(nom, avar)\n"
 msgstr ""
+"SPICE функції:\n"
+"\n"
+"    sqrt(x)\n"
+"    sin(x)\n"
+"    cos(x)\n"
+"    tan(x)\n"
+"    sinh(x)\n"
+"    cosh(x)\n"
+"    tanh(x)\n"
+"    asin(x)\n"
+"    acos(x)\n"
+"    atan(x)\n"
+"    asinh(x)\n"
+"    acosh(x)\n"
+"    atanh(x)\n"
+"    arctan(x)\n"
+"    exp(x)\n"
+"    ln(x)\n"
+"    log(x)\n"
+"    abs(x)\n"
+"    nint(x)\n"
+"    int(x)\n"
+"    floor(x)\n"
+"    ceil(x)\n"
+"    pow(x, y)\n"
+"    pwr(x, y)\n"
+"    min(x, y)\n"
+"    max(x, y)\n"
+"    sgn(x)\n"
+"    ternary_fcn(x, y, z)\n"
+"    gauss(nom, rvar, sigma)\n"
+"    agauss(nom, avar, sigma)\n"
+"    unif(nom, rvar)\n"
+"    aunif(nom, avar)\n"
+"    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
@@ -20131,11 +20089,12 @@ msgstr "Повторне зв'язування посадкового сліду
 
 #: eeschema/tools/backannotate.cpp:381
 msgid "true"
-msgstr ""
+msgstr "правда"
 
 #: eeschema/tools/backannotate.cpp:381
+#, fuzzy
 msgid "false"
-msgstr ""
+msgstr "не правда"
 
 #: eeschema/tools/backannotate.cpp:387
 #, c-format
@@ -20175,7 +20134,7 @@ msgstr "Значення %s змінено з %s на %s."
 #: eeschema/tools/backannotate.cpp:534
 #, c-format
 msgid "Add field '%s' with value '%s'."
-msgstr ""
+msgstr "Додати поле '%s' зі значенням '%s'."
 
 #: eeschema/tools/backannotate.cpp:563
 #, fuzzy, c-format
@@ -20219,7 +20178,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:68
 msgid "Show simulation window for running SPICE or IBIS simulations."
-msgstr ""
+msgstr "Показати вікно симуляції для запущених симуляцій SPICE або IBIS."
 
 #: eeschema/tools/ee_actions.cpp:77
 msgid "Opens the datasheet in a browser"
@@ -20918,8 +20877,9 @@ msgid "Show Net Navigator"
 msgstr "Показати зв'язок в групі зв'язків"
 
 #: eeschema/tools/ee_actions.cpp:852
+#, fuzzy
 msgid "Toggle the net navigator panel visibility"
-msgstr ""
+msgstr "Переключити видимість панелі навігаторів"
 
 #: eeschema/tools/ee_actions.cpp:859
 msgid "Edit with Symbol Editor"
@@ -21032,7 +20992,7 @@ msgstr "Не заповнювати"
 
 #: eeschema/tools/ee_actions.cpp:921
 msgid "Set the do not populate attribute"
-msgstr ""
+msgstr "Встановити атрибут: не заселяти"
 
 #: eeschema/tools/ee_actions.cpp:926
 #, fuzzy
@@ -21041,7 +21001,7 @@ msgstr "Не заповнювати"
 
 #: eeschema/tools/ee_actions.cpp:927
 msgid "Clear the do not populate attribute"
-msgstr ""
+msgstr "Очистити атрибут: не заселяти"
 
 #: eeschema/tools/ee_actions.cpp:933
 #, fuzzy
@@ -21050,7 +21010,7 @@ msgstr "Не заповнювати"
 
 #: eeschema/tools/ee_actions.cpp:934
 msgid "Toggle the do not populate attribute"
-msgstr ""
+msgstr "Переключити атрибут: не заселяти"
 
 #: eeschema/tools/ee_actions.cpp:941
 msgid "Open the library symbol in the Symbol Editor"
@@ -21506,7 +21466,7 @@ msgstr "Зберегти копію поточної таблиці в інше 
 
 #: eeschema/tools/ee_actions.cpp:1374
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "Нове вікно аналізу..."
 
 #: eeschema/tools/ee_actions.cpp:1382
 msgid "Open Workbook..."
@@ -21616,8 +21576,9 @@ msgstr "Символи"
 
 #: eeschema/tools/ee_inspection_tool.cpp:280
 #: pcbnew/tools/board_inspection_tool.cpp:1489
+#, fuzzy
 msgid "Summary"
-msgstr ""
+msgstr "Підсумок"
 
 #: eeschema/tools/ee_inspection_tool.cpp:282
 msgid "Schematic vs library diff for:"
@@ -21666,7 +21627,7 @@ msgstr "Шари не вибрані."
 #: eeschema/tools/ee_inspection_tool.cpp:344
 #: pcbnew/tools/board_inspection_tool.cpp:1548
 msgid "Visual"
-msgstr ""
+msgstr "Візуальний"
 
 #: eeschema/tools/ee_inspection_tool.cpp:435
 msgid "No datasheet defined."
@@ -22084,7 +22045,7 @@ msgstr "Нещодавно використані"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:174
 msgid "Already Placed"
-msgstr ""
+msgstr "Вже встановлено"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:562
 msgid "No footprint specified"
@@ -23273,7 +23234,7 @@ msgstr "Сортувати шари за розширенням файлу"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:184
 msgid "Layers Display Parameters: Offset and Rotation"
-msgstr ""
+msgstr "Шари параметів відображення: відступ і обертання"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:189
 msgid "Move Current Layer Up"
@@ -23369,6 +23330,8 @@ msgid ""
 "Path to drawing sheet, this overrides any existing project defined sheet "
 "when used"
 msgstr ""
+"Шлях до малювання аркуша, при використанні переписує будь-який існуючий "
+"аркуш попередньо визначений проектом"
 
 #: kicad/cli/command.cpp:177
 msgid ""
@@ -23376,6 +23339,9 @@ msgid ""
 "multiple variables.\n"
 "Use in the format of '--define-var key=value' or '-D key=value'"
 msgstr ""
+"Перевизначає або додає змінні дл проекту. Може використовуватися стільки "
+"разів, скільки потрібно додати змінних.\n"
+"Використовує формат: '--define-var key=value' або '-D key=value'"
 
 #: kicad/cli/command.h:32
 #, fuzzy
@@ -23431,10 +23397,11 @@ msgstr "Бібліотека посадкового місця не існує �
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr ""
+"Запускає перевірку правил оформлення (DRC) на друкованій платі і створює звіт"
 
 #: kicad/cli/command_pcb_drc.cpp:52 kicad/cli/command_sch_erc.cpp:50
 msgid "Output file format, options: json, report"
-msgstr ""
+msgstr "Вихідний формат файлу, можливості: json, звіт"
 
 #: kicad/cli/command_pcb_drc.cpp:56 pcbnew/dialogs/dialog_drc_base.cpp:30
 msgid "Report all errors for each track"
@@ -23450,28 +23417,36 @@ msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
 msgstr ""
+"Повідомляти усі порушення DRC, це те саме, що додавати всі інші аргументи "
+"жорсткої перевірки"
 
 #: kicad/cli/command_pcb_drc.cpp:70
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Повідомляти усі порушення DRC на рівні помилок, це може бути зкомбіновано з "
+"іншими аргументами жорсткої перевірки"
 
 #: kicad/cli/command_pcb_drc.cpp:75
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Повідомляти усі порушення DRC на рівні попереджень, це може бути "
+"зкомбіновано з іншими аргументами жорсткої перевірки"
 
 #: kicad/cli/command_pcb_drc.cpp:80
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
 msgstr ""
+"Повідомляти усі порушення DRC, що було виключено, це може бути зкомбіновано "
+"з іншими аргументами жорсткої перевірки"
 
 #: kicad/cli/command_pcb_drc.cpp:85
 msgid "Return a nonzero exit code if DRC violations exist"
-msgstr ""
+msgstr "Повернути ненульовий код помилки, якщо існують DRC порушення"
 
 #: kicad/cli/command_pcb_drc.cpp:138 kicad/cli/command_pcb_export_3d.cpp:208
 #: kicad/cli/command_pcb_export_drill.cpp:148
@@ -23487,11 +23462,11 @@ msgstr "Некоректний формат\n"
 
 #: kicad/cli/command_pcb_export.h:33
 msgid "Export utilities (Gerbers, drill, position files, etc)"
-msgstr ""
+msgstr "Експортувати утиліти(Гербери, свердла, файли позицій тощо)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:66
 msgid "Output file format, options: step, glb (binary glTF)"
-msgstr ""
+msgstr "Формат вихідного файлу, можливаості: step, glb (бінарний glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:70
 msgid "Overwrite output file"
@@ -23540,7 +23515,7 @@ msgstr "Мінімальна дистанція між точками, що б �
 
 #: kicad/cli/command_pcb_export_3d.cpp:122
 msgid "Do not optimize STEP file (enables writing parametric curves)"
-msgstr ""
+msgstr "Не оптимізовувати STEP файл (дозволяє запис параметричних кривих)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:129
 msgid ""
@@ -23560,10 +23535,13 @@ msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
 msgstr ""
+"Назвіть теку, щоб створити і зберегти у ній 3D моделі, якщо не вказати або "
+"лишити пустою, моделі будуть вбудовані VRML файл при експорті"
 
 #: kicad/cli/command_pcb_export_3d.cpp:146
 msgid "Used with --models-dir to output relative paths in the resulting file"
 msgstr ""
+"Використовувати з --models-dir, щоб вивести відносний шлях в отриманому файлі"
 
 #: kicad/cli/command_pcb_export_3d.cpp:189
 #, fuzzy
@@ -23672,7 +23650,7 @@ msgstr "Точність Gerber координат повинно бути 5 а�
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "Згенерувати DXF файл зі списку шарів"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -23712,7 +23690,7 @@ msgstr "Файл друкованої плати не існує або недо
 
 #: kicad/cli/command_pcb_export_gerber.cpp:41
 msgid "Plot given layers to a single Gerber file"
-msgstr ""
+msgstr "Накреслить задані шари в одному Гербер файлі"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:56
 msgid "Do not use the extended X2 format"
@@ -23752,6 +23730,8 @@ msgid ""
 "Plot multiple Gerbers for a PCB, including the ability to use stored board "
 "plot settings"
 msgstr ""
+"Накреслить декілька Гербер файлів для друкованої плати, включаючи можливість "
+"використовувати збереженні налаштування креслення плати"
 
 #: kicad/cli/command_pcb_export_gerbers.cpp:49
 msgid ""
@@ -23786,6 +23766,8 @@ msgid ""
 "Set pad/via drill shape option (0 = no shape, 1 = small shape, 2 = actual "
 "shape)"
 msgstr ""
+"Встановити форму мітки дірки (0 = без форми, 1 = зменшена форма, "
+"2=оригінальна форма)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:46
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:62
@@ -23854,7 +23836,7 @@ msgstr "Вказана недійсна сторона\n"
 
 #: kicad/cli/command_pcb_export_svg.cpp:42
 msgid "Generate SVG outputs of a given layer list"
-msgstr ""
+msgstr "Згенерувати SVG файли для заданого списку шарів"
 
 #: kicad/cli/command_pcb_export_svg.cpp:54
 #, fuzzy
@@ -23882,7 +23864,7 @@ msgstr "Схема"
 #: kicad/cli/command_sch_erc.cpp:45
 msgid ""
 "Runs the Electrical Rules Check (ERC) on the schematic and creates a report"
-msgstr ""
+msgstr "Запустити перевірку електричних правил (ERC) на схемі та створити звіт"
 
 #: kicad/cli/command_sch_erc.cpp:58
 msgid ""
