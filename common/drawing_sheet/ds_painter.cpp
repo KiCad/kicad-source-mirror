@@ -121,9 +121,7 @@ wxString DS_DRAW_ITEM_LIST::BuildFullText( const wxString& aTextbase )
 
                 if( token->IsSameAs( wxT( "KICAD_VERSION" ) ) && PgmOrNull() )
                 {
-                    *token = wxString::Format( wxT( "%s %s" ),
-                                               productName,
-                                               GetMajorMinorPatchVersion() );
+                    *token = wxString::Format( wxT( "%s %s" ), productName, GetSemanticVersion() );
                     tokenUpdated = true;
                 }
                 else if( token->IsSameAs( wxT( "#" ) ) )
