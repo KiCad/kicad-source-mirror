@@ -29,9 +29,6 @@
 #include <wx/statline.h>
 #include <wx/gbsizer.h>
 #include <wx/button.h>
-#include <wx/bitmap.h>
-#include <wx/image.h>
-#include <wx/icon.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -55,8 +52,7 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 			ID_CORNER_SMOOTHING,
 			ID_M_PADINZONEOPT,
 			wxID_ANTIPAD_SIZE,
-			wxID_COPPER_BRIDGE_VALUE,
-			wxID_BUTTON_EXPORT
+			wxID_COPPER_BRIDGE_VALUE
 		};
 
 		wxBoxSizer* m_MainBoxSizer;
@@ -118,7 +114,6 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		wxStaticText* m_islandThresholdLabel;
 		wxTextCtrl* m_tcIslandThreshold;
 		wxStaticText* m_islandThresholdUnits;
-		wxButton* m_ExportSetupButton;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -132,7 +127,6 @@ class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 		virtual void OnNetSelectionUpdated( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStyleSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveIslandsSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void ExportSetupToOtherCopperZones( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnButtonCancelClick( wxCommandEvent& event ) { event.Skip(); }
 
 

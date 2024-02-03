@@ -40,9 +40,6 @@ struct CONVERT_SETTINGS;
 #define ZONE_BORDER_HATCH_MINDIST_MM 0.1        // Minimum for ZONE_SETTINGS::m_BorderHatchPitch
 #define ZONE_BORDER_HATCH_MAXDIST_MM 2.0        // Maximum for ZONE_SETTINGS::m_BorderHatchPitch
 
-#define ZONE_EXPORT_VALUES  1004        // Copper zone dialog reports wxID_OK, wxID_CANCEL or
-                                        // ZONE_EXPORT_VALUES
-
 
 /// How pads are covered by copper in zone
 enum class ZONE_CONNECTION

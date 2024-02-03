@@ -593,17 +593,6 @@ public:
     ZONE_BORDER_DISPLAY_STYLE GetHatchStyle() const { return m_borderStyle; }
     void SetHatchStyle( ZONE_BORDER_DISPLAY_STYLE aStyle ) { m_borderStyle = aStyle; }
 
-    /**
-     * Test if 2 zones are equivalent.
-     *
-     * Zones are equivalent if they have same parameters and same outline info.
-     *
-     * @note Filling is not taken into account.
-     *
-     * @param aZoneToCompare is the zone to compare with "this"
-     */
-    bool IsSame( const ZONE &aZoneToCompare );
-
     bool HasFilledPolysForLayer( PCB_LAYER_ID aLayer ) const
     {
         return m_FilledPolysList.count( aLayer ) > 0;

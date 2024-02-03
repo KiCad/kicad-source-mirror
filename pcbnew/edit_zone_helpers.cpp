@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Some code comes from FreePCB.
  *
@@ -34,21 +34,14 @@
 #include <tool/actions.h>
 #include <zone.h>
 #include <zones.h>
-#include <zones_functions_for_undo_redo.h>
 #include <connectivity/connectivity_data.h>
 
 
 void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
 {
-    int               dialogResult;
-    ZONE_SETTINGS     zoneInfo = m_pcb->GetDesignSettings().GetDefaultZoneSettings();
-    PICKED_ITEMS_LIST pickedList;    // zones for undo/redo command
-    PICKED_ITEMS_LIST deletedList;   // zones that have been deleted when combined
-    BOARD_COMMIT      commit( this );
-
-    // Save initial zones configuration, for undo/redo, before adding new zone
-    // note the net name and the layer can be changed, so we must save all zones
-    SaveCopyOfZones( pickedList, GetBoard() );
+    int           dialogResult;
+    ZONE_SETTINGS zoneInfo = m_pcb->GetDesignSettings().GetDefaultZoneSettings();
+    BOARD_COMMIT  commit( this );
 
     if( aZone->GetIsRuleArea() )
     {
@@ -69,29 +62,15 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     }
 
     if( dialogResult == wxID_CANCEL )
-    {
-        ClearListAndDeleteItems( &deletedList );
-        ClearListAndDeleteItems( &pickedList );
         return;
-    }
-
-    m_pcb->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
-    OnModify();
-
-    if( dialogResult == ZONE_EXPORT_VALUES )
-    {
-        UpdateCopyOfZonesList( pickedList, deletedList, GetBoard() );
-        commit.Stage( pickedList );
-        commit.Push( _( "Modify zone properties" ) );
-        pickedList.ClearItemsList(); // s_ItemsListPicker is no more owner of picked items
-        return;
-    }
 
     wxBusyCursor dummy;
 
     // Undraw old zone outlines
     for( ZONE* zone : GetBoard()->Zones() )
         GetCanvas()->GetView()->Update( zone );
+
+    commit.Modify( aZone );
 
     zoneInfo.ExportSetting( *aZone );
 
@@ -100,14 +79,11 @@ void PCB_EDIT_FRAME::Edit_Zone_Params( ZONE* aZone )
     if( net )   // net == NULL should not occur
         aZone->SetNetCode( net->GetNetCode() );
 
-    UpdateCopyOfZonesList( pickedList, deletedList, GetBoard() );
+    m_pcb->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
 
-    commit.Stage( pickedList );
-
+    // TODO: 9.0: Use title capitalization
     commit.Push( _( "Modify zone properties" ), SKIP_CONNECTIVITY );
     rebuildConnectivity();
-
-    pickedList.ClearItemsList();  // s_ItemsListPicker is no longer owner of picked items
 }
 
 
