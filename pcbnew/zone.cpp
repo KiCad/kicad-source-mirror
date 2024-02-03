@@ -45,36 +45,23 @@
 ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :
         BOARD_CONNECTED_ITEM( aParent, PCB_ZONE_T ),
         m_Poly( nullptr ),
+        m_teardropType( TEARDROP_TYPE::TD_NONE ),
         m_isFilled( false ),
         m_CornerSelection( nullptr ),
         m_area( 0.0 ),
         m_outlinearea( 0.0 )
 {
-    m_Poly = new SHAPE_POLY_SET();              // Outlines
-    m_cornerSmoothingType = ZONE_SETTINGS::SMOOTHING_NONE;
-    m_cornerRadius = 0;
-    m_teardropType = TEARDROP_TYPE::TD_NONE;
-    m_islandRemovalMode = ISLAND_REMOVAL_MODE::ALWAYS;
-    m_borderStyle = ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE;
-    m_borderHatchPitch = GetDefaultHatchPitch();
-    m_priority = 0;
+    m_Poly = new SHAPE_POLY_SET();    // Outlines
     SetLocalFlags( 0 );               // flags temporary used in zone calculations
     m_fillVersion = 5;                // set the "old" way to build filled polygon areas (< 6.0.x)
 
     if( GetParentFootprint() )
         SetIsRuleArea( true );        // Zones living in footprints have the rule area option
 
-    // Technically not necesssary to set this here, but just ensure a safe min value is set
-    m_ZoneMinThickness = pcbIUScale.mmToIU( ZONE_CLEARANCE_MM );
-
-    // Will be overridden by larger defaults from ZONE_SETTINGS
-    m_thermalReliefSpokeWidth = m_ZoneMinThickness;
-    m_thermalReliefGap        = m_ZoneMinThickness;
-    m_hatchThickness          = m_ZoneMinThickness;
-    m_hatchGap                = m_ZoneMinThickness;
-
     if( aParent->GetBoard() )
         aParent->GetBoard()->GetDesignSettings().GetDefaultZoneSettings().ExportSetting( *this );
+    else
+        ZONE_SETTINGS().ExportSetting( *this );
 
     m_needRefill = false;   // True only after edits.
 }
