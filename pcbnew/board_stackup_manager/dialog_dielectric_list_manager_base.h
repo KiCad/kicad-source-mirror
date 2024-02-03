@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,6 +48,7 @@ class DIALOG_DIELECTRIC_MATERIAL_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onListItemSelected( wxListEvent& event ) { event.Skip(); }
+		virtual void onListKeyDown( wxListEvent& event ) { event.Skip(); }
 
 
 	public:

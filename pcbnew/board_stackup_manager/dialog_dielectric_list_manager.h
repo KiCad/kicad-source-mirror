@@ -43,9 +43,10 @@ public:
     DIELECTRIC_SUBSTRATE GetSelectedSubstrate();
 
 private:
-	void onListItemSelected( wxListEvent& event ) override;
-	bool TransferDataFromWindow() override;
-	bool TransferDataToWindow() override;
+    void onListKeyDown( wxListEvent& event ) override;
+    void onListItemSelected( wxListEvent& event ) override;
+    bool TransferDataFromWindow() override;
+    bool TransferDataToWindow() override;
 
     void initMaterialList();    // Fills the dialog with available materials
 

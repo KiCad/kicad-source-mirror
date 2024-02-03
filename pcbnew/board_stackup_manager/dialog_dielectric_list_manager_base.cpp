@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -85,11 +85,13 @@ DIALOG_DIELECTRIC_MATERIAL_BASE::DIALOG_DIELECTRIC_MATERIAL_BASE( wxWindow* pare
 
 	// Connect Events
 	m_lcMaterials->Connect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_DIELECTRIC_MATERIAL_BASE::onListItemSelected ), NULL, this );
+	m_lcMaterials->Connect( wxEVT_COMMAND_LIST_KEY_DOWN, wxListEventHandler( DIALOG_DIELECTRIC_MATERIAL_BASE::onListKeyDown ), NULL, this );
 }
 
 DIALOG_DIELECTRIC_MATERIAL_BASE::~DIALOG_DIELECTRIC_MATERIAL_BASE()
 {
 	// Disconnect Events
 	m_lcMaterials->Disconnect( wxEVT_COMMAND_LIST_ITEM_SELECTED, wxListEventHandler( DIALOG_DIELECTRIC_MATERIAL_BASE::onListItemSelected ), NULL, this );
+	m_lcMaterials->Disconnect( wxEVT_COMMAND_LIST_KEY_DOWN, wxListEventHandler( DIALOG_DIELECTRIC_MATERIAL_BASE::onListKeyDown ), NULL, this );
 
 }

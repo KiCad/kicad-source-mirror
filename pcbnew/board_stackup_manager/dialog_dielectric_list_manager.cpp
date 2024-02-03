@@ -128,3 +128,12 @@ void DIALOG_DIELECTRIC_MATERIAL::onListItemSelected( wxListEvent& event )
     m_tcEpsilonR->SetValue( m_materialList.GetSubstrate( idx )->FormatEpsilonR() );
     m_tcLossTg->SetValue( m_materialList.GetSubstrate( idx )->FormatLossTangent() );
 }
+
+
+void DIALOG_DIELECTRIC_MATERIAL::onListKeyDown( wxListEvent& event )
+{
+    int idx = event.GetIndex();
+
+    if( idx > 0 )
+        m_lcMaterials->DeleteItem( idx );
+}
