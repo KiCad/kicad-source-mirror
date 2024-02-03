@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-01-26 14:01+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2024-02-04 08:01+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -114,9 +114,8 @@ msgid "Build BVH for holes and vias"
 msgstr "Rakenna BVH reikiä ja läpivientejä varten"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
-#, fuzzy
 msgid "OpenGL context creation error"
-msgstr "Lämpopinnan määrän tarkkuus:"
+msgstr "OpenGL-kontekstin luontivirhe"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:421
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -9768,9 +9767,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "Poista vaihtoehtoinen rungon tyyli (De Morgan) symbolista?"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Kentällä on oltava nimi."
+msgstr "Symbolilla tulee olla nimi."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -19921,9 +19919,8 @@ msgid "Mirror the board (useful for trying to show bottom layers)"
 msgstr "Peilaa piirilevy (hyödyllinen, kun yritetään näyttää pohjakerroksia)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:72
-#, fuzzy
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr "Käytettävä väriteema (oletuksena piirilevyeditorin asetukset)"
+msgstr "Käytettävä väriteema (Asettaa teeman piirilevyeditorin vakioasetuksiin)"
 
 #: kicad/cli/command_export_pcb_pdf.cpp:75
 #: kicad/cli/command_export_pcb_svg.cpp:74
@@ -30914,7 +30911,7 @@ msgstr "Ulkoinen, testaus"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "Jos haluat valmistuskerroksen levyn etupuolelle"
+msgstr "Jos haluat valmistuskerroksen piirilevyn etupuolelle"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:71
 msgid "Fab_Front"
@@ -35076,49 +35073,40 @@ msgid "Dimension '%s' on %s"
 msgstr "Mitta '%s' kohteessa %s"
 
 #: pcbnew/pcb_dimension.cpp:1319
-#, fuzzy
 msgid "1234.0"
-msgstr "1234"
+msgstr "1234.0"
 
 #: pcbnew/pcb_dimension.cpp:1320
-#, fuzzy
 msgid "1234.0 mm"
-msgstr "1234 mm"
+msgstr "1234.0 mm"
 
 #: pcbnew/pcb_dimension.cpp:1321
-#, fuzzy
 msgid "1234.0 (mm)"
-msgstr "1234 (mm)"
+msgstr "1234.0 (mm)"
 
 #: pcbnew/pcb_dimension.cpp:1374
-#, fuzzy
 msgid "Units Format"
-msgstr "Yksikkömuoto:"
+msgstr "Yksikkömuoto"
 
 #: pcbnew/pcb_dimension.cpp:1382
-#, fuzzy
 msgid "Suppress Trailing Zeroes"
-msgstr "Piilota loppunollat"
+msgstr "Tukahduta lopussa olevat nollat"
 
 #: pcbnew/pcb_dimension.cpp:1411
-#, fuzzy
 msgid "Crossbar Height"
-msgstr "Kohdistin Oikealle"
+msgstr "Poikkipalkin korkeus"
 
 #: pcbnew/pcb_dimension.cpp:1415
-#, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Jatkolinjan siirtymä:"
+msgstr "Laajennusviivan ylitys"
 
 #: pcbnew/pcb_dimension.cpp:1498
-#, fuzzy
 msgid "Leader Length"
-msgstr "Läpiviennin Pituus"
+msgstr "Johto-objektin pituus"
 
 #: pcbnew/pcb_dimension.cpp:1547
-#, fuzzy
 msgid "Text Frame"
-msgstr "Tekstikehys:"
+msgstr "Tekstikehys"
 
 #: pcbnew/pcb_edit_frame.cpp:204
 msgid "KiCad PCB Editor"
@@ -35529,9 +35517,9 @@ msgid "'%s' was not fully parsed."
 msgstr "'%s' ei kokonaan jäsennetty."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "Jalanjälkikirjastoa ei löydy."
+msgstr "Jalanjälkihakemistoa ei löydy: '%s'."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:803
 #, c-format
@@ -36568,23 +36556,21 @@ msgstr ""
 "offset: %d."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6068
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
 "Vanhaa vyöhykkeen täyttöstrategiaa ei enää tueta.\n"
-"Muunnetaanko vyöhykkeet tasoitetuiksi monikulmion täytöiksi?"
+"Vyöhykkeiden täytökset muunnetaan parhaan yrityksen mukaan."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6101
 #: pcbnew/plugins/legacy/legacy_plugin.cpp:2483
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"Vanhaa segmentin täyttötilaa ei enää tueta.\n"
-"Muunnetaanko vyöhykkeet tasoitetuiksi monikulmion täytöiksi?"
+"Vanhan segmentin vyöhyketäyttötilaa ei enää tueta.\n"
+"Vyöhykkeiden täytökset muunnetaan parhaan yrityksen mukaan."
 
 #: pcbnew/plugins/kicad/pcb_plugin.cpp:94
 #, c-format
@@ -40649,7 +40635,7 @@ msgstr "Näytä tai piilota tämä kerros"
 
 #: pcbnew/widgets/appearance_controls.cpp:1623
 msgid "Adhesive on board's front"
-msgstr "Sidosaine levyn etupuolella"
+msgstr "Sidosaine piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1624
 msgid "Adhesive on board's back"
@@ -40657,7 +40643,7 @@ msgstr "Sidosaine piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1625
 msgid "Solder paste on board's front"
-msgstr "Juotospasta levyn etupuolella"
+msgstr "Juotospasta piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1626
 msgid "Solder paste on board's back"
@@ -40665,7 +40651,7 @@ msgstr "Juotospasta piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1627
 msgid "Silkscreen on board's front"
-msgstr "Silkkipaino levyn etupuolella"
+msgstr "Silkkipaino piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1628
 msgid "Silkscreen on board's back"
@@ -40673,7 +40659,7 @@ msgstr "Silkkipaino piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1629
 msgid "Solder mask on board's front"
-msgstr "Juotosmaski levyn etupuolella"
+msgstr "Juotosmaski piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1630
 msgid "Solder mask on board's back"
@@ -40702,7 +40688,7 @@ msgstr "Piirilevyn reunan ääriviivan vähimmäisetäisyys"
 
 #: pcbnew/widgets/appearance_controls.cpp:1637
 msgid "Footprint courtyards on board's front"
-msgstr "Jalanjäljen komponettipihat piirilevyn etupuolella"
+msgstr "Jalanjälkien komponettipihat piirilevyn etupuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1638
 msgid "Footprint courtyards on board's back"
@@ -40710,7 +40696,7 @@ msgstr "Jalanjäljen komponenttipihat piirilevyn kääntöpuolella"
 
 #: pcbnew/widgets/appearance_controls.cpp:1639
 msgid "Footprint assembly on board's front"
-msgstr "Jalanjäljen asennus levyn etupuolelle"
+msgstr "Jalanjälkien asennus piirilevyn etupuolelle"
 
 #: pcbnew/widgets/appearance_controls.cpp:1640
 msgid "Footprint assembly on board's back"
