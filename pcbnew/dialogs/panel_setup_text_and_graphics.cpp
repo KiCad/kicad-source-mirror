@@ -128,7 +128,7 @@ void PANEL_SETUP_TEXT_AND_GRAPHICS::onUnitsChanged( wxCommandEvent& aEvent )
 
 bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
 {
-    wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
+    wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK );
 
 #define SET_MILS_CELL( row, col, val ) \
     m_grid->SetCellValue( row, col, m_Frame->StringFromValue( val, true ) )

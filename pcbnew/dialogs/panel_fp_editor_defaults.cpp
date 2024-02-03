@@ -240,7 +240,7 @@ PANEL_FP_EDITOR_DEFAULTS::~PANEL_FP_EDITOR_DEFAULTS()
 
 void PANEL_FP_EDITOR_DEFAULTS::loadFPSettings( FOOTPRINT_EDITOR_SETTINGS* aCfg )
 {
-    wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_BACKGROUND );
+    wxColour disabledColour = wxSystemSettings::GetColour( wxSYS_COLOUR_FRAMEBK );
 
     auto disableCell =
             [&]( int row, int col )
