@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-26 04:27+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2024-02-03 18:01+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2003,9 +2003,8 @@ msgid "Additional Contributions By"
 msgstr "Muut työpanoksia antaneet"
 
 #: common/dialog_about/AboutDialog_main.cpp:1137
-#, fuzzy
 msgid "Librarian Team"
-msgstr "KiCad-kirjastoryhmä"
+msgstr "Kirjastotiimi"
 
 #: common/dialog_about/AboutDialog_main.cpp:1209
 msgid "3D models by"
@@ -2024,9 +2023,8 @@ msgid "Icons by"
 msgstr "Kuvakkeet"
 
 #: common/dialog_about/AboutDialog_main.cpp:1256
-#, fuzzy
 msgid "Package Developers"
-msgstr "Kehittäjät"
+msgstr "Paketin kehittäjät"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -13240,9 +13238,8 @@ msgid "Edit"
 msgstr "Muokkaa"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "Kentän erotin:"
+msgstr "Kentän rajaus:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
@@ -13250,9 +13247,8 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "String delimiter:"
-msgstr "Merkkijonon erotin:"
+msgstr "Merkkijonon rajaus:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "\""
@@ -15604,9 +15600,8 @@ msgid "Show Field Name"
 msgstr "Näytä Kentän Nimi"
 
 #: eeschema/lib_item.cpp:80 eeschema/sch_pin.cpp:229
-#, fuzzy
 msgid "Body Style"
-msgstr "Reunan Tyyli"
+msgstr "Rungon tyyli"
 
 #: eeschema/lib_item.cpp:84
 msgid "Private"
@@ -19273,22 +19268,23 @@ msgstr ""
 "aiheuttaa ongelmia, jos se tallennetaan symbolikirjastoon"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> on ristiriidassa "
-"nastan %s%s kanssa sijainnissa <b>(%s, %s)</b> yksiköissä %s ja %s."
+"b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> on ristiriidassa nastan "
+"%s%s kanssa sijainnissa <b>(%s, %s)</b> b> %s runkotyylillä."
 
 #: eeschema/symbol_checker.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
 "<b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> on ristiriidassa "
-"nastan %s%s kanssa sijainnissa <b>(%s, %s)</b> yksiköissä %s ja %s."
+"nastan %s%s kanssa sijainnissa <b>(%s, %s)</b> b> %s-runkotyylin yksiköissä "
+"%s ja %s."
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -19337,12 +19333,13 @@ msgstr ""
 "tarvita<br><br>"
 
 #: eeschema/symbol_checker.cpp:248
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
 msgstr ""
-"<b>Piilotettu virtapinni %s</b> %s sijainnissa <b>(%s, %s)</b> yksikössä %c."
+"Tiedot: <b>Piilotettu virtanasta %s</b> %s sijainnissa <b>(%s, %s)</b> %s "
+"runkotyyli."
 
 #: eeschema/symbol_checker.cpp:258
 #, fuzzy, c-format
@@ -23516,8 +23513,7 @@ msgstr "Peilaa piirilevy (hyödyllinen, kun yritetään näyttää pohjakerroksi
 
 #: kicad/cli/command_pcb_export_pdf.cpp:71
 msgid "Color theme to use (will default to PCB Editor settings)"
-msgstr ""
-"Käytettävä väriteema (Asettaa teeman piirilevyeditorin vakioasetuksiin)"
+msgstr "Käytettävä väriteema (Asettaa teeman piirilevyeditorin vakioasetuksiin)"
 
 #: kicad/cli/command_pcb_export_pdf.cpp:75
 #: kicad/cli/command_pcb_export_svg.cpp:77
@@ -26116,7 +26112,6 @@ msgid "Overvoltage category:"
 msgstr "Ylijänniteluokka:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:56
-#, fuzzy
 msgid ""
 "OVC I: Equipment with no direct connection to mains supply\n"
 "\n"
@@ -38260,14 +38255,14 @@ msgid "Missing footprint %s (%s)"
 msgstr "Puuttuva jalanjälki %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
-msgstr "Jalanjäljen määritteet eivät vastaa kirjastossa olevaa kopiota"
+msgstr "Jalanjäljen %s arvo (%s) ei vastaa symboliarvoa (%s)."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint (%s) doesn't match that given by symbol (%s)."
-msgstr "Anturaverkko (%s) ei vastaa kaavion (%s) antamaa verkkoa."
+msgstr "%s jalanjälki (%s) ei vastaa symbolin (%s) antamaa."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:198
 msgid "No corresponding pin found in schematic."
@@ -40259,7 +40254,7 @@ msgstr "Laajennusviivan ylitys"
 
 #: pcbnew/pcb_dimension.cpp:1589
 msgid "Leader Length"
-msgstr "Johto-objektin Pituus"
+msgstr "Johto-objektin pituus"
 
 #: pcbnew/pcb_dimension.cpp:1635
 msgid "Text Frame"
