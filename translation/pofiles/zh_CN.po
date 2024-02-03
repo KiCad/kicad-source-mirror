@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-02-03 06:01+0000\n"
+"PO-Revision-Date: 2024-02-04 08:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hans/>\n"
@@ -4199,7 +4199,7 @@ msgstr "英寸 (Inches)"
 #: pcbnew/tools/drawing_tool.cpp:314 pcbnew/tools/edit_tool_move_fct.cpp:356
 #: pcbnew/tools/pcb_actions.cpp:742
 msgid "Constrain to H, V, 45"
-msgstr "将绘制角度约束为水平方向, 垂直方向及斜 45 度"
+msgstr "将绘制操作约束为水平方向, 垂直方向或斜 45 度方向"
 
 #: common/eda_draw_frame.cpp:393
 msgid "Edit User Grid..."
@@ -8316,7 +8316,7 @@ msgstr "删除所有标记"
 
 #: eeschema/dialogs/dialog_erc.cpp:302
 msgid "Errors and Warnings Only"
-msgstr "仅限错误和警告"
+msgstr "仅错误和警告"
 
 #: eeschema/dialogs/dialog_erc.cpp:303
 msgid "Errors, Warnings and Exclusions"
@@ -8951,7 +8951,7 @@ msgstr "水平对齐:"
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:294
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:304
 msgid "(fields only)"
-msgstr "(仅限字段)"
+msgstr "(仅字段)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:284
 msgid "V Align:"
@@ -11642,7 +11642,7 @@ msgstr ""
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:201
 msgid "(symbol editor only)"
-msgstr "(仅限符号编辑器)"
+msgstr "(仅符号编辑器)"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:245
 #: pcbnew/dialogs/panel_pcbnew_color_settings.cpp:488
@@ -17588,7 +17588,7 @@ msgstr "将绘图和拖动限制为水平或垂直"
 msgid ""
 "Constrain drawing and dragging to horizontal, vertical, or 45-degree angle "
 "motions"
-msgstr "将绘图和拖动限制为水平、垂直或 45 度角"
+msgstr "将绘图和拖动操作约束为水平方向, 垂直方向或斜 45 度方向"
 
 #: eeschema/tools/ee_actions.cpp:734
 msgid "Switch to next line mode"
@@ -22521,7 +22521,7 @@ msgid ""
 msgstr ""
 "警告: \n"
 "过孔焊盘直径 >= 间距孔直径。\n"
-"对于覆铜区域内的过孔, 有些参数无法计算。"
+"对于铜箔区域内的过孔, 有些参数无法计算。"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Thermal resistance:"
@@ -29682,7 +29682,7 @@ msgstr "如果选中该选项, 焊盘可相对于封装的其他部分进行移�
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:45
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "约束操作到水平、垂直或 45 度"
+msgstr "将操作约束为水平方向, 垂直方向或斜 45 度方向"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:51
 msgid "Step for &rotate commands:"
@@ -38477,7 +38477,7 @@ msgstr "锁定或解锁选中项目"
 #: pcbnew/tools/pcb_actions.cpp:743
 msgid ""
 "Limit actions to horizontal, vertical, or 45 degrees from the starting point"
-msgstr "将操作限制在水平、垂直或 45 度"
+msgstr "将操作限制为从起点开始的水平方向, 垂直方向或斜 45 度方向"
 
 #: pcbnew/tools/pcb_actions.cpp:748
 msgid "Prevent items from being moved and/or resized on the canvas"
