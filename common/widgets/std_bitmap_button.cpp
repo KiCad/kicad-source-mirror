@@ -29,6 +29,7 @@
 #include <wx/menu.h>
 #include <wx/renderer.h>
 #include <wx/settings.h>
+#include <wx/textctrl.h>
 #include <wx/version.h>
 #include <kiplatform/ui.h>
 
@@ -40,8 +41,21 @@ STD_BITMAP_BUTTON::STD_BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId,
 {
     if( aSize == wxDefaultSize )
     {
+#ifndef __WXMSW__
         wxSize defaultSize = wxButton::GetDefaultSize( aParent );
-        SetMinSize( wxSize( defaultSize.GetWidth() + 1, defaultSize.GetHeight() + 1 ) );
+        defaultSize.IncBy( 1 );
+#else
+        // wxButton::GetDefaultSize does not work on Windows, it's based on some archiac
+        // ascii text size logic that does not hold true in modern Windows at hi dpi scaling
+        // instead spawn a button, grab it's size and then toss it :D
+        wxButton* dummyButton = new wxButton( this, wxID_ANY );
+        dummyButton->SetLabelText( "Z" );
+
+        wxSize defaultSize = dummyButton->GetSize();
+        dummyButton->Hide();
+        delete dummyButton;
+#endif
+        SetMinSize( defaultSize );
     }
 
     Bind( wxEVT_PAINT, &STD_BITMAP_BUTTON::OnPaint, this );
@@ -74,11 +88,26 @@ void STD_BITMAP_BUTTON::SetBitmap( const wxBitmapBundle& aBmp )
 
 #ifndef __WXMSW__
     wxSize size = m_bitmap.GetDefaultSize();
-#else
-    wxSize size = m_bitmap.GetPreferredBitmapSizeFor( this );
-#endif
 
     SetMinSize( wxSize( size.GetWidth() + 8, size.GetHeight() + 8 ) );
+#else
+    wxSize size = m_bitmap.GetPreferredBitmapSizeFor( this );
+    size.IncBy( 8 );    // padding
+
+    // Now adjust the min size but don't reduce it
+    wxSize minSize = GetMinSize();
+
+    // only change the width
+    // we want to keep the height at the original determined button height
+    // or else forms will get funny
+    // additionally we prefer to make the button square
+    if( size.GetWidth() > minSize.GetHeight() )
+        minSize.SetWidth( size.GetWidth() );
+    else
+        minSize.SetWidth( minSize.GetHeight() );
+
+    SetMinSize( minSize );
+#endif
 }
 
 
