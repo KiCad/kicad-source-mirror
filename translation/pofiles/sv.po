@@ -4,15 +4,15 @@
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Richard Jonsson <richard_jonsson@hotmail.com>, 2021.
 # Henrik Kauhanen <henrik@kauhanen.se>, 2022, 2023, 2024.
-# Hanna Breisand <weblate.org@breisand.se>, 2022.
+# Hanna Breisand <weblate.org@breisand.se>, 2022, 2024.
 # Elias Sjögreen <eliassjogreen1@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 15:28+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2024-02-04 19:01+0000\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
 "Language: sv\n"
@@ -30526,7 +30526,7 @@ msgstr "Ta bort undantag"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1250
 msgid "not run"
-msgstr "inte körd"
+msgstr "inte utförd"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
