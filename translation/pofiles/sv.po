@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-02-03 06:01+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"PO-Revision-Date: 2024-02-05 08:45+0000\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -26047,7 +26047,7 @@ msgstr "Ta bort undantag"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1285
 msgid "not run"
-msgstr "inte körd"
+msgstr "inte utförd"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
