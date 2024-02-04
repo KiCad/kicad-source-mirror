@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-01-27 16:27+0000\n"
+"PO-Revision-Date: 2024-02-04 19:01+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5420,9 +5420,8 @@ msgid "Start Y"
 msgstr "始点Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "Y中央"
+msgstr "X中央"
 
 #: common/eda_shape.cpp:1997
 msgid "Center Y"
@@ -13898,7 +13897,7 @@ msgid ""
 "Shift and Ctrl"
 msgstr ""
 "左クリック(およびドラッグ)の動作は2つの修飾キーに依存します:\n"
-"ShiftとCtrl."
+"ShiftとCtrl"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:146
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:204
@@ -13914,14 +13913,14 @@ msgstr "長くクリック"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
 msgid "Clarify selection from menu"
-msgstr "明示的にメニューから選択します。"
+msgstr "明示的にメニューから選択する"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
 msgid "Add item(s) to selection"
-msgstr "アイテムを選択対象に追加します。"
+msgstr "アイテムを選択対象に追加"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -13933,7 +13932,7 @@ msgstr "Ctrl+Shift"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
 msgid "Remove item(s) from selection"
-msgstr "選択からアイテムを除外します。"
+msgstr "選択対象からアイテムを除外"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
@@ -15543,9 +15542,8 @@ msgid "Show Field Name"
 msgstr "フィールド名を表示"
 
 #: eeschema/lib_item.cpp:80 eeschema/sch_pin.cpp:229
-#, fuzzy
 msgid "Body Style"
-msgstr "境界スタイル"
+msgstr "ボディスタイル"
 
 #: eeschema/lib_item.cpp:84
 msgid "Private"
@@ -19227,13 +19225,13 @@ msgstr ""
 "ラリに保存すると問題が発生する可能性があります"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>重複ピン %s</b> \"%s\" 位置 <b>(%s, %s)</b> 衝突ピン %s%s 位置 <b>(%s, "
-"%s)</b> (ユニット %s と %s)."
+"<b>重複ピン %s</b> %s 位置 <b>(%s, %s)</b> 衝突ピン %s%s 位置 <b>(%s, %s)</"
+"b> (ボディスタイル %s)."
 
 #: eeschema/symbol_checker.cpp:133
 #, fuzzy, c-format
@@ -19323,18 +19321,17 @@ msgid ""
 msgstr "(非表示の電源ピンは、ピン名で接続されたネットを駆動します。)"
 
 #: eeschema/symbol_checker.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr ""
-"<b>グリッドから外れたピン %s</b> \"%s\" 位置 <b>(%s, %s)</b> (変換シンボル)."
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b> (ボディスタイル %s)."
 
 #: eeschema/symbol_checker.cpp:316
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
-msgstr ""
-"<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b> (ユニット %c)."
+msgstr "<b>グリッドから外れたピン %s</b> %s 位置 <b>(%s, %s)</b> (ユニット %c "
+"ボディスタイル %s)."
 
 #: eeschema/symbol_checker.cpp:330
 #, c-format
@@ -34823,12 +34820,12 @@ msgstr "チェックすろと、パッドをフットプリントから移動す
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Toggle selection"
-msgstr "選択状態を切り替える。"
+msgstr "選択状態を切り替える"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Highlight net (for pads or tracks)"
-msgstr "ネットをハイライトします(パッドまたはトラック)."
+msgstr "ネットをハイライトします(パッドまたはトラック)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -38546,9 +38543,9 @@ msgid "Missing footprint %s (%s)"
 msgstr "見つからないフットプリント %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
-msgstr "フットプリントの属性がシンボルと一致しない"
+msgstr "フットプリント %s の 値(%s) がシンボルの値(%s)と一致しません。"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
 #, fuzzy, c-format
