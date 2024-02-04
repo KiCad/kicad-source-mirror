@@ -38,6 +38,9 @@ SPLIT_BUTTON::SPLIT_BUTTON( wxWindow* aParent, wxWindowID aId, const wxString& a
         wxPanel( aParent, aId, aPos, aSize, wxBORDER_NONE | wxTAB_TRAVERSAL, wxS( "DropDownButton" ) ),
         m_label( aLabel )
 {
+    m_arrowButtonWidth = FromDIP( 20 ); // just a fixed eyeballed constant width
+    m_widthPadding = FromDIP( 10 );
+
     if( aSize == wxDefaultSize )
     {
         wxSize defaultSize = wxButton::GetDefaultSize( aParent );

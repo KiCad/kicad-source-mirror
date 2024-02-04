@@ -60,8 +60,8 @@ private:
     int       m_stateButton = 0;
     int       m_stateMenu   = 0;
     bool      m_bIsEnable   = true;
-    const int m_arrowButtonWidth = 20;
-    int       m_widthPadding     = 20;
+    int       m_arrowButtonWidth;
+    int       m_widthPadding;
     bool      m_bLButtonDown     = false;
     wxString  m_label;
     wxMenu*   m_pMenu = nullptr;
