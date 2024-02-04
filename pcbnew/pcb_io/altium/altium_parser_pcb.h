@@ -335,7 +335,7 @@ enum class ALTIUM_LAYER
     VIA_HOLES         = 82,
 };
 
-class ALTIUM_PARSER;
+class ALTIUM_BINARY_PARSER;
 
 enum class AEXTENDED_PRIMITIVE_INFORMATION_TYPE
 {
@@ -357,7 +357,7 @@ struct AEXTENDED_PRIMITIVE_INFORMATION
     ALTIUM_MODE soldermaskexpansionmode;
     int32_t     soldermaskexpansionmanual;
 
-    explicit AEXTENDED_PRIMITIVE_INFORMATION( ALTIUM_PARSER& aReader );
+    explicit AEXTENDED_PRIMITIVE_INFORMATION( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ABOARD6_LAYER_STACKUP
@@ -385,7 +385,7 @@ struct ABOARD6
 
     std::vector<ALTIUM_VERTICE> board_vertices;
 
-    explicit ABOARD6( ALTIUM_PARSER& aReader );
+    explicit ABOARD6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ACLASS6
@@ -397,7 +397,7 @@ struct ACLASS6
 
     std::vector<wxString> names;
 
-    explicit ACLASS6( ALTIUM_PARSER& aReader );
+    explicit ACLASS6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ACOMPONENT6
@@ -417,7 +417,7 @@ struct ACOMPONENT6
     ALTIUM_TEXT_POSITION nameautoposition;
     ALTIUM_TEXT_POSITION commentautoposition;
 
-    explicit ACOMPONENT6( ALTIUM_PARSER& aReader );
+    explicit ACOMPONENT6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ADIMENSION6
@@ -449,7 +449,7 @@ struct ADIMENSION6
     std::vector<VECTOR2I> referencePoint;
     std::vector<VECTOR2I> textPoint;
 
-    explicit ADIMENSION6( ALTIUM_PARSER& aReader );
+    explicit ADIMENSION6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct AMODEL
@@ -460,14 +460,14 @@ struct AMODEL
 
     VECTOR3D rotation;
 
-    explicit AMODEL( ALTIUM_PARSER& aReader );
+    explicit AMODEL( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ANET6
 {
     wxString name;
 
-    explicit ANET6( ALTIUM_PARSER& aReader );
+    explicit ANET6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct APOLYGON6
@@ -488,7 +488,7 @@ struct APOLYGON6
 
     std::vector<ALTIUM_VERTICE> vertices;
 
-    explicit APOLYGON6( ALTIUM_PARSER& aReader );
+    explicit APOLYGON6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 
@@ -539,7 +539,7 @@ struct ARULE6
 
     // TODO: implement different types of rules we need to parse
 
-    explicit ARULE6( ALTIUM_PARSER& aReader );
+    explicit ARULE6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct AREGION6
@@ -562,7 +562,7 @@ struct AREGION6
     std::vector<ALTIUM_VERTICE>              outline;
     std::vector<std::vector<ALTIUM_VERTICE>> holes;
 
-    explicit AREGION6( ALTIUM_PARSER& aReader, bool aExtendedVertices );
+    explicit AREGION6( ALTIUM_BINARY_PARSER& aReader, bool aExtendedVertices );
 };
 
 struct AARC6
@@ -584,7 +584,7 @@ struct AARC6
     double   endangle;
     uint32_t width;
 
-    explicit AARC6( ALTIUM_PARSER& aReader );
+    explicit AARC6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ACOMPONENTBODY6
@@ -600,7 +600,7 @@ struct ACOMPONENTBODY6
     double               rotation;
     double               bodyOpacity;
 
-    explicit ACOMPONENTBODY6( ALTIUM_PARSER& aReader );
+    explicit ACOMPONENTBODY6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct APAD6_SIZE_AND_SHAPE
@@ -655,7 +655,7 @@ struct APAD6
 
     std::unique_ptr<APAD6_SIZE_AND_SHAPE> sizeAndShape;
 
-    explicit APAD6( ALTIUM_PARSER& aReader );
+    explicit APAD6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct AVIA6
@@ -676,7 +676,7 @@ struct AVIA6
     ALTIUM_LAYER    layer_end;
     ALTIUM_PAD_MODE viamode;
 
-    explicit AVIA6( ALTIUM_PARSER& aReader );
+    explicit AVIA6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ATRACK6
@@ -696,7 +696,7 @@ struct ATRACK6
     VECTOR2I end;
     uint32_t width;
 
-    explicit ATRACK6( ALTIUM_PARSER& aReader );
+    explicit ATRACK6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ATEXT6
@@ -723,7 +723,7 @@ struct ATEXT6
 
     wxString text;
 
-    explicit ATEXT6( ALTIUM_PARSER& aReader, std::map<uint32_t, wxString>& aStringTable );
+    explicit ATEXT6( ALTIUM_BINARY_PARSER& aReader, std::map<uint32_t, wxString>& aStringTable );
 };
 
 struct AFILL6
@@ -740,7 +740,7 @@ struct AFILL6
     VECTOR2I pos2;
     double   rotation;
 
-    explicit AFILL6( ALTIUM_PARSER& aReader );
+    explicit AFILL6( ALTIUM_BINARY_PARSER& aReader );
 };
 
 

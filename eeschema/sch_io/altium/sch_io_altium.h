@@ -116,6 +116,11 @@ public:
     void ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
     void ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
 
+    void ParseASCIISchematic( const wxString& aFileName );
+
+    void ParseRecord( int index, std::map<wxString, wxString>& properties,
+                      const wxString& aSectionName );
+
 private:
     SCH_SCREEN* getCurrentScreen();
     SCH_SHEET* getCurrentSheet();
@@ -212,6 +217,8 @@ private:
     void ensureLoadedLibrary( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties );
     long long getLibraryTimestamp( const wxString& aLibraryPath ) const;
 
+    static bool isBinaryFile( const wxString& aFileName );
+    static bool isASCIIFile( const wxString& aFileName );
     static bool checkFileHeader( const wxString& aFileName );
 
     std::map<wxString, long long> m_timestamps;

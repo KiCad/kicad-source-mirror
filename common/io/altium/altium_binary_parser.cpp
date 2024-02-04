@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "altium_parser.h"
+#include "altium_binary_parser.h"
 #include "altium_parser_utils.h"
 
 #include <compoundfilereader.h>
@@ -350,13 +350,13 @@ void ALTIUM_COMPOUND_FILE::cacheLibFootprintNames()
 
                                             if( m_reader->IsStream( entry ) && fileName == L"Parameters" )
                                             {
-                                                ALTIUM_PARSER                parametersReader( *this, entry );
+                                                ALTIUM_BINARY_PARSER                parametersReader( *this, entry );
                                                 std::map<wxString, wxString> parameterProperties =
                                                         parametersReader.ReadProperties();
 
-                                                wxString key = ALTIUM_PARSER::ReadString(
+                                                wxString key = ALTIUM_PROPS_UTILS::ReadString(
                                                         parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
-                                                wxString fpName = ALTIUM_PARSER::ReadUnicodeString(
+                                                wxString fpName = ALTIUM_PROPS_UTILS::ReadUnicodeString(
                                                         parameterProperties, wxT( "PATTERN" ), wxT( "" ) );
 
                                                 m_libFootprintDirNameCache[key] = fpName;
@@ -370,7 +370,7 @@ void ALTIUM_COMPOUND_FILE::cacheLibFootprintNames()
 }
 
 
-ALTIUM_PARSER::ALTIUM_PARSER( const ALTIUM_COMPOUND_FILE&     aFile,
+ALTIUM_BINARY_PARSER::ALTIUM_BINARY_PARSER( const ALTIUM_COMPOUND_FILE&     aFile,
                               const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
     m_subrecord_end = nullptr;
@@ -384,7 +384,7 @@ ALTIUM_PARSER::ALTIUM_PARSER( const ALTIUM_COMPOUND_FILE&     aFile,
 }
 
 
-ALTIUM_PARSER::ALTIUM_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize )
+ALTIUM_BINARY_PARSER::ALTIUM_BINARY_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize )
 {
     m_subrecord_end = nullptr;
     m_size = aSize;
@@ -394,7 +394,7 @@ ALTIUM_PARSER::ALTIUM_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize )
 }
 
 
-std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties(
+std::map<wxString, wxString> ALTIUM_BINARY_PARSER::ReadProperties(
         std::function<std::map<wxString, wxString>( const std::string& )> handleBinaryData )
 {
 
@@ -500,125 +500,5 @@ std::map<wxString, wxString> ALTIUM_PARSER::ReadProperties(
     }
 
     return kv;
-}
-
-
-int32_t ALTIUM_PARSER::ConvertToKicadUnit( const double aValue )
-{
-    constexpr double int_limit = ( std::numeric_limits<int>::max() - 10 ) / 2.54;
-
-    int32_t iu = KiROUND( Clamp<double>( -int_limit, aValue, int_limit ) * 2.54 );
-
-    // Altium's internal precision is 0.1uinch.  KiCad's is 1nm.  Round to nearest 10nm to clean
-    // up most rounding errors.  This allows lossless conversion of increments of 0.05mils and
-    // 0.01um.
-    return KiROUND( (double) iu / 10.0 ) * 10;
-}
-
-
-int ALTIUM_PARSER::ReadInt( const std::map<wxString, wxString>& aProps, const wxString& aKey,
-                            int aDefault )
-{
-    const std::map<wxString, wxString>::const_iterator& value = aProps.find( aKey );
-    return value == aProps.end() ? aDefault : wxAtoi( value->second );
-}
-
-
-double ALTIUM_PARSER::ReadDouble( const std::map<wxString, wxString>& aProps, const wxString& aKey,
-                                  double aDefault )
-{
-    const std::map<wxString, wxString>::const_iterator& value = aProps.find( aKey );
-
-    if( value == aProps.end() )
-        return aDefault;
-
-    // Locale independent str -> double conversation
-    std::istringstream istr( (const char*) value->second.mb_str() );
-    istr.imbue( std::locale::classic() );
-
-    double doubleValue;
-    istr >> doubleValue;
-    return doubleValue;
-}
-
-
-bool ALTIUM_PARSER::ReadBool( const std::map<wxString, wxString>& aProps, const wxString& aKey,
-                              bool aDefault )
-{
-    const std::map<wxString, wxString>::const_iterator& value = aProps.find( aKey );
-
-    if( value == aProps.end() )
-        return aDefault;
-    else
-        return value->second == "T" || value->second == "TRUE";
-}
-
-
-int32_t ALTIUM_PARSER::ReadKicadUnit( const std::map<wxString, wxString>& aProps,
-                                      const wxString& aKey, const wxString& aDefault )
-{
-    const wxString& value = ReadString( aProps, aKey, aDefault );
-
-    wxString prefix;
-
-    if( !value.EndsWith( "mil", &prefix ) )
-    {
-        wxLogError( _( "Unit '%s' does not end with 'mil'." ), value );
-        return 0;
-    }
-
-    prefix.StartsWith( "+", &prefix );
-
-    double mils;
-
-    if( !prefix.ToCDouble( &mils ) )
-    {
-        wxLogError( _( "Cannot convert '%s' to double." ), prefix );
-        return 0;
-    }
-
-    return ConvertToKicadUnit( mils * 10000 );
-}
-
-
-wxString ALTIUM_PARSER::ReadString( const std::map<wxString, wxString>& aProps,
-                                    const wxString& aKey, const wxString& aDefault )
-{
-    const auto& utf8Value = aProps.find( wxString( "%UTF8%" ) + aKey );
-
-    if( utf8Value != aProps.end() )
-        return utf8Value->second;
-
-    const auto& value = aProps.find( aKey );
-
-    if( value != aProps.end() )
-        return value->second;
-
-    return aDefault;
-}
-
-
-wxString ALTIUM_PARSER::ReadUnicodeString( const std::map<wxString, wxString>& aProps,
-                                           const wxString& aKey, const wxString& aDefault )
-{
-    const auto& unicodeFlag = aProps.find( wxS( "UNICODE" ) );
-
-    if( unicodeFlag != aProps.end() && unicodeFlag->second.Contains( wxS( "EXISTS" ) ) )
-    {
-        const auto& unicodeValue = aProps.find( wxString( "UNICODE__" ) + aKey );
-
-        if( unicodeValue != aProps.end() )
-        {
-            wxArrayString arr = wxSplit( unicodeValue->second, ',', '\0' );
-            wxString      out;
-
-            for( wxString part : arr )
-                out += wxString( wchar_t( wxAtoi( part ) ) );
-
-            return out;
-        }
-    }
-
-    return ReadString( aProps, aKey, aDefault );
 }
 

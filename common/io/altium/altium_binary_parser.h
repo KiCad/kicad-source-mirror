@@ -22,8 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef ALTIUM_PARSER_H
-#define ALTIUM_PARSER_H
+#ifndef _ALTIUM_BINARY_PARSER_H
+#define _ALTIUM_BINARY_PARSER_H
+
+#include "altium_props_utils.h"
 
 #include <map>
 #include <memory>
@@ -106,12 +108,12 @@ private:
 };
 
 
-class ALTIUM_PARSER
+class ALTIUM_BINARY_PARSER
 {
 public:
-    ALTIUM_PARSER( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY* aEntry );
-    ALTIUM_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize );
-    ~ALTIUM_PARSER() = default;
+    ALTIUM_BINARY_PARSER( const ALTIUM_COMPOUND_FILE& aFile, const CFB::COMPOUND_FILE_ENTRY* aEntry );
+    ALTIUM_BINARY_PARSER( std::unique_ptr<char[]>& aContent, size_t aSize );
+    ~ALTIUM_BINARY_PARSER() = default;
 
     template <typename Type>
     Type Read()
@@ -229,7 +231,7 @@ public:
 
     int32_t ReadKicadUnit()
     {
-        return ConvertToKicadUnit( Read<int32_t>() );
+        return ALTIUM_PROPS_UTILS::ConvertToKicadUnit( Read<int32_t>() );
     }
 
     int32_t ReadKicadUnitX()
@@ -269,26 +271,6 @@ public:
             {
                 return std::map<wxString, wxString>();
             } );
-
-    static int32_t ConvertToKicadUnit( const double aValue );
-
-    static int ReadInt( const std::map<wxString, wxString>& aProps,
-                        const wxString& aKey, int aDefault );
-
-    static double ReadDouble( const std::map<wxString, wxString>& aProps,
-                              const wxString& aKey, double aDefault );
-
-    static bool ReadBool( const std::map<wxString, wxString>& aProps,
-                          const wxString& aKey, bool aDefault );
-
-    static int32_t ReadKicadUnit( const std::map<wxString, wxString>& aProps,
-                                  const wxString& aKey, const wxString& aDefault );
-
-    static wxString ReadString( const std::map<wxString, wxString>& aProps,
-                                const wxString& aKey, const wxString& aDefault );
-
-    static wxString ReadUnicodeString( const std::map<wxString, wxString>& aProps,
-                                       const wxString& aKey, const wxString& aDefault );
 
     void Skip( size_t aLength )
     {
@@ -447,4 +429,4 @@ private:
     }
 };
 
-#endif //ALTIUM_PARSER_H
+#endif //_ALTIUM_BINARY_PARSER_H

@@ -24,7 +24,7 @@
 
 #include "altium_pcb.h"
 #include "altium_parser_pcb.h"
-#include "io/altium/altium_parser.h"
+#include <io/altium/altium_binary_parser.h>
 #include <io/altium/altium_parser_utils.h>
 
 #include <board.h>
@@ -435,8 +435,8 @@ void ALTIUM_PCB::Parse( const ALTIUM_COMPOUND_FILE&                  altiumPcbFi
             if( file == nullptr )
                 continue;
 
-            ALTIUM_PARSER reader( altiumPcbFile, file );
-            uint32_t      numOfRecords = reader.Read<uint32_t>();
+            ALTIUM_BINARY_PARSER reader( altiumPcbFile, file );
+            uint32_t             numOfRecords = reader.Read<uint32_t>();
 
             if( reader.HasParsingError() )
             {
@@ -663,7 +663,7 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
                                           FormatPath( streamName ) ) );
     }
 
-    ALTIUM_PARSER parser( altiumLibFile, footprintData );
+    ALTIUM_BINARY_PARSER parser( altiumLibFile, footprintData );
 
     parser.ReadAndSetSubrecordLength();
     //wxString footprintName = parser.ReadWxString(); // Not used (single-byte char set)
@@ -679,11 +679,10 @@ FOOTPRINT* ALTIUM_PCB::ParseFootprint( ALTIUM_COMPOUND_FILE& altiumLibFile,
 
     if( parametersData != nullptr )
     {
-        ALTIUM_PARSER                parametersReader( altiumLibFile, parametersData );
+        ALTIUM_BINARY_PARSER         parametersReader( altiumLibFile, parametersData );
         std::map<wxString, wxString> parameterProperties = parametersReader.ReadProperties();
-        wxString                     description = ALTIUM_PARSER::ReadString( parameterProperties,
-                                                                              wxT( "DESCRIPTION" ),
-                                                                              wxT( "" ) );
+        wxString description = ALTIUM_PROPS_UTILS::ReadString( parameterProperties,
+                                                               wxT( "DESCRIPTION" ), wxT( "" ) );
         footprint->SetLibDescription( description );
     }
     else
@@ -845,7 +844,7 @@ const ARULE6* ALTIUM_PCB::GetRuleDefault( ALTIUM_RULE_KIND aKind ) const
 void ALTIUM_PCB::ParseFileHeader( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                                   const CFB::COMPOUND_FILE_ENTRY* aEntry )
 {
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     reader.ReadAndSetSubrecordLength();
     wxString header = reader.ReadWxString();
@@ -865,7 +864,7 @@ void ALTIUM_PCB::ParseExtendedPrimitiveInformationData( const ALTIUM_COMPOUND_FI
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading extended primitive information data..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -886,7 +885,7 @@ void ALTIUM_PCB::ParseBoard6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading board data..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     checkpoint();
     ABOARD6 elem( reader );
@@ -1066,7 +1065,7 @@ void ALTIUM_PCB::ParseClasses6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading netclasses..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1112,7 +1111,7 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPc
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading components..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     uint16_t componentId = 0;
 
@@ -1173,7 +1172,7 @@ void ALTIUM_PCB::ParseComponentsBodies6Data( const ALTIUM_COMPOUND_FILE&     aAl
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading component 3D models..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1554,7 +1553,7 @@ void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPc
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading dimension drawings..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1597,7 +1596,7 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading 3D models..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     if( reader.GetRemainingBytes() == 0 )
         return;
@@ -1690,7 +1689,7 @@ void ALTIUM_PCB::ParseNets6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading nets..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     wxASSERT( m_altiumToKicadNetcodes.empty() );
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
@@ -1714,7 +1713,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading polygons..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1860,7 +1859,7 @@ void ALTIUM_PCB::ParseRules6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading rules..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1928,7 +1927,7 @@ void ALTIUM_PCB::ParseBoardRegionsData( const ALTIUM_COMPOUND_FILE&     aAltiumP
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading board regions..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -1948,7 +1947,7 @@ void ALTIUM_PCB::ParseShapeBasedRegions6Data( const ALTIUM_COMPOUND_FILE&     aA
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading polygons..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     /* TODO: use Header section of file */
     for( int primitiveIndex = 0; reader.GetRemainingBytes() >= 4; primitiveIndex++ )
@@ -2351,7 +2350,7 @@ void ALTIUM_PCB::ParseRegions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFi
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading zone fills..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -2426,7 +2425,7 @@ void ALTIUM_PCB::ParseArcs6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading arcs..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     for( int primitiveIndex = 0; reader.GetRemainingBytes() >= 4; primitiveIndex++ )
     {
@@ -2669,7 +2668,7 @@ void ALTIUM_PCB::ParsePads6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading pads..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -3213,7 +3212,7 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading vias..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -3273,7 +3272,7 @@ void ALTIUM_PCB::ParseTracks6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFil
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading tracks..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     for( int primitiveIndex = 0; reader.GetRemainingBytes() >= 4; primitiveIndex++ )
     {
@@ -3481,7 +3480,7 @@ void ALTIUM_PCB::ParseWideStrings6Data( const ALTIUM_COMPOUND_FILE&     aAltiumP
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading unicode strings..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     m_unicodeStrings = reader.ReadWideStringTable();
 
@@ -3495,7 +3494,7 @@ void ALTIUM_PCB::ParseTexts6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading text..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
@@ -3657,7 +3656,7 @@ void ALTIUM_PCB::ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
     if( m_progressReporter )
         m_progressReporter->Report( _( "Loading rectangles..." ) );
 
-    ALTIUM_PARSER reader( aAltiumPcbFile, aEntry );
+    ALTIUM_BINARY_PARSER reader( aAltiumPcbFile, aEntry );
 
     while( reader.GetRemainingBytes() >= 4 /* TODO: use Header section of file */ )
     {
