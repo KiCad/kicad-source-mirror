@@ -2605,16 +2605,20 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
 
     if( aItem->Type() == PCB_FOOTPRINT_T )
     {
+        const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
+
         // In footprint editor, we do not want to select the footprint itself.
         if( m_isFootprintEditor )
             return false;
 
         // Allow selection of footprints if some part of the footprint is visible.
-        const FOOTPRINT* footprint = static_cast<const FOOTPRINT*>( aItem );
-        LSET             boardSide = footprint->IsFlipped() ? LSET::BackMask() : LSET::FrontMask();
+        if( footprint->GetSide() != UNDEFINED_LAYER && !m_skip_heuristics )
+        {
+            LSET boardSide = footprint->IsFlipped() ? LSET::BackMask() : LSET::FrontMask();
 
-        if( !( visibleLayers() & boardSide ).any() && !m_skip_heuristics )
-            return false;
+            if( !( visibleLayers() & boardSide ).any() )
+                return false;
+        }
 
         // If the footprint has no items except the reference and value fields, include the
         // footprint in the selections.

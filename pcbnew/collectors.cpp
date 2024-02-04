@@ -271,10 +271,10 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
 
     if( footprint )
     {
-        if( m_Guide->IgnoreFootprintsOnBack() && ( footprint->GetLayer() == B_Cu ) )
+        if( m_Guide->IgnoreFootprintsOnBack() && footprint->GetSide() == B_Cu )
             return INSPECT_RESULT::CONTINUE;
 
-        if( m_Guide->IgnoreFootprintsOnFront() && ( footprint->GetLayer() == F_Cu ) )
+        if( m_Guide->IgnoreFootprintsOnFront() && footprint->GetSide() == F_Cu )
             return INSPECT_RESULT::CONTINUE;
     }
 

@@ -989,6 +989,7 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
     std::vector<PCB_TEXT*> texts;
     const BOARD* board = GetBoard();
     bool         isFPEdit = board && board->IsFootprintHolder();
+    PCB_LAYER_ID footprintSide = GetSide();
 
     if( board )
     {
@@ -1029,8 +1030,9 @@ const BOX2I FOOTPRINT::GetBoundingBox( bool aIncludeText, bool aIncludeInvisible
             continue;
         }
 
-        // If we're not including text then drop annotations as well
-        if( !aIncludeText )
+        // If we're not including text then drop annotations as well -- unless, of course, it's
+        // an unsided footprint -- in which case it's likely to be nothing *but* annotations.
+        if( !aIncludeText && footprintSide != UNDEFINED_LAYER )
         {
             if( BaseType( item->Type() ) == PCB_DIMENSION_T )
                 continue;
@@ -1287,7 +1289,13 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     }
 
     // aFrame is the board editor:
-    aList.emplace_back( _( "Board Side" ), IsFlipped() ? _( "Back (Flipped)" ) : _( "Front" ) );
+
+    switch( GetSide() )
+    {
+    case F_Cu: aList.emplace_back( _( "Board Side" ), _( "Front" ) );          break;
+    case B_Cu: aList.emplace_back( _( "Board Side" ), _( "Back (Flipped)" ) ); break;
+    default:   /* unsided: user-layers only, etc. */                           break;
+    }
 
     auto addToken = []( wxString* aStr, const wxString& aAttr )
                     {
@@ -1331,6 +1339,37 @@ void FOOTPRINT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
     msg.Printf( _( "Doc: %s" ), m_libDescription );
     msg2.Printf( _( "Keywords: %s" ), m_keywords );
     aList.emplace_back( msg, msg2 );
+}
+
+
+PCB_LAYER_ID FOOTPRINT::GetSide() const
+{
+    if( const BOARD* board = GetBoard() )
+    {
+        if( board->IsFootprintHolder() )
+            return UNDEFINED_LAYER;
+    }
+
+    // Test pads first; they're the most likely to return a quick answer.
+    for( PAD* pad : m_pads )
+    {
+        if( ( LSET::SideSpecificMask() & pad->GetLayerSet() ).any() )
+            return GetLayer();
+    }
+
+    for( BOARD_ITEM* item : m_drawings )
+    {
+        if( LSET::SideSpecificMask().test( item->GetLayer() ) )
+            return GetLayer();
+    }
+
+    for( ZONE* zone : m_zones )
+    {
+        if( ( LSET::SideSpecificMask() & zone->GetLayerSet() ).any() )
+            return GetLayer();
+    }
+
+    return UNDEFINED_LAYER;
 }
 
 

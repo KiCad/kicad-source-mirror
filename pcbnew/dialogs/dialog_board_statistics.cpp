@@ -217,10 +217,13 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
         {
             if( ( footprint->GetAttributes() & line.attribute_mask ) == line.attribute_value )
             {
-                if( footprint->IsFlipped() )
-                    line.backSideQty++;
-                else
-                    line.frontSideQty++;
+                switch( footprint->GetSide() )
+                {
+                case F_Cu: line.frontSideQty++;                  break;
+                case B_Cu: line.backSideQty++;                   break;
+                default:   /* unsided: user-layers only, etc. */ break;
+                }
+
                 break;
             }
         }

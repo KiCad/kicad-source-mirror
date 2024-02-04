@@ -351,6 +351,12 @@ public:
     bool IsFlipped() const { return GetLayer() == B_Cu; }
 
     /**
+     * Use instead of IsFlipped() when you also need to account for unsided footprints (those
+     * purely on user-layers, etc.).
+     */
+    PCB_LAYER_ID GetSide() const;
+
+    /**
      * @copydoc BOARD_ITEM::IsOnLayer
      */
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
