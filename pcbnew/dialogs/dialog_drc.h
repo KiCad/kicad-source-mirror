@@ -98,8 +98,6 @@ private:
 
     void OnChangingNotebookPage( wxNotebookEvent& aEvent ) override;
 
-    void centerMarkerIdleHandler( wxIdleEvent& aEvent );
-
     void deleteAllMarkers( bool aIncludeExclusions );
     void refreshEditor();
 
@@ -127,8 +125,6 @@ private:
     RC_TREE_MODEL*                     m_markersTreeModel;      // wx reference-counted ptr
     RC_TREE_MODEL*                     m_unconnectedTreeModel;  // wx reference-counted ptr
     RC_TREE_MODEL*                     m_fpWarningsTreeModel;   // wx reference-counted ptr
-
-    const PCB_MARKER*                  m_centerMarkerOnIdle;
 
     int                                m_severities;            // A mask of SEVERITY flags
 };
