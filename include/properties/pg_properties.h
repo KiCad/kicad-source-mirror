@@ -41,7 +41,7 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
 class PGPROPERTY_DISTANCE
 {
 public:
-    PGPROPERTY_DISTANCE( EDA_DRAW_FRAME* aParentFrame, const wxString& aRegEx,
+    PGPROPERTY_DISTANCE( EDA_DRAW_FRAME* aParentFrame,
                          ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType );
     virtual ~PGPROPERTY_DISTANCE() = 0;
 
@@ -53,8 +53,25 @@ protected:
 
 protected:
     EDA_DRAW_FRAME*                  m_parentFrame;
-    std::unique_ptr<REGEX_VALIDATOR> m_regExValidator;
     ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
+};
+
+
+class PGPROPERTY_AREA : public wxIntProperty
+{
+public:
+    PGPROPERTY_AREA( EDA_DRAW_FRAME* aParentFrame );
+
+protected:
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+                        int aArgFlags = 0 ) const override;
+
+    wxString ValueToString( wxVariant& aVariant, int aArgFlags = 0 ) const override;
+
+    wxValidator* DoGetValidator() const override;
+
+protected:
+    EDA_DRAW_FRAME* m_parentFrame;
 };
 
 

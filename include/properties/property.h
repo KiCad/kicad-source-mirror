@@ -55,6 +55,7 @@ enum PROPERTY_DISPLAY
 {
     PT_DEFAULT,    ///< Default property for a given type
     PT_SIZE,       ///< Size expressed in distance units (mm/inch)
+    PT_AREA,       ///< Area expressed in distance units-squared (mm/inch)
     PT_COORD,      ///< Coordinate expressed in distance units (mm/inch)
     PT_DEGREE,     ///< Angle expressed in degrees
     PT_DECIDEGREE  ///< Angle expressed in decidegrees

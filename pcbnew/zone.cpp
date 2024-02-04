@@ -1545,10 +1545,10 @@ static struct ZONE_DESC
         if( zcMap.Choices().GetCount() == 0 )
         {
             zcMap.Undefined( ZONE_CONNECTION::INHERITED );
-            zcMap.Map( ZONE_CONNECTION::INHERITED, _HKI( "Inherited" ) )
-                 .Map( ZONE_CONNECTION::NONE, _HKI( "None" ) )
-                 .Map( ZONE_CONNECTION::THERMAL, _HKI( "Thermal reliefs" ) )
-                 .Map( ZONE_CONNECTION::FULL, _HKI( "Solid" ) )
+            zcMap.Map( ZONE_CONNECTION::INHERITED,   _HKI( "Inherited" ) )
+                 .Map( ZONE_CONNECTION::NONE,        _HKI( "None" ) )
+                 .Map( ZONE_CONNECTION::THERMAL,     _HKI( "Thermal reliefs" ) )
+                 .Map( ZONE_CONNECTION::FULL,        _HKI( "Solid" ) )
                  .Map( ZONE_CONNECTION::THT_THERMAL, _HKI( "Thermal reliefs for PTH" ) );
         }
 
@@ -1557,8 +1557,18 @@ static struct ZONE_DESC
         if( zfmMap.Choices().GetCount() == 0 )
         {
             zfmMap.Undefined( ZONE_FILL_MODE::POLYGONS );
-            zfmMap.Map( ZONE_FILL_MODE::POLYGONS, _HKI( "Solid fill" ) )
+            zfmMap.Map( ZONE_FILL_MODE::POLYGONS,      _HKI( "Solid fill" ) )
                   .Map( ZONE_FILL_MODE::HATCH_PATTERN, _HKI( "Hatch pattern" ) );
+        }
+
+        ENUM_MAP<ISLAND_REMOVAL_MODE>& irmMap = ENUM_MAP<ISLAND_REMOVAL_MODE>::Instance();
+
+        if( irmMap.Choices().GetCount() == 0 )
+        {
+            irmMap.Undefined( ISLAND_REMOVAL_MODE::ALWAYS );
+            irmMap.Map( ISLAND_REMOVAL_MODE::ALWAYS, _HKI( "Always" ) )
+                  .Map( ISLAND_REMOVAL_MODE::NEVER,  _HKI( "Never" ) )
+                  .Map( ISLAND_REMOVAL_MODE::AREA,   _HKI( "Below area limit" ) );
         }
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
@@ -1599,6 +1609,15 @@ static struct ZONE_DESC
                     return false;
                 };
 
+        auto isBelowAreaIslandRemoval =
+                []( INSPECTABLE* aItem ) -> bool
+                {
+                    if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
+                        return zone->GetIslandRemovalMode() == ISLAND_REMOVAL_MODE::AREA;
+
+                    return false;
+                };
+
         // Layer property is hidden because it only holds a single layer and zones actually use
         // a layer set
         propMgr.ReplaceProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Layer" ),
@@ -1613,8 +1632,7 @@ static struct ZONE_DESC
                                       _HKI( "Net Class" ), isCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, unsigned>( _HKI( "Priority" ),
-                                                           &ZONE::SetAssignedPriority,
-                                                           &ZONE::GetAssignedPriority ) )
+                    &ZONE::SetAssignedPriority, &ZONE::GetAssignedPriority ) )
                 .SetAvailableFunc( isCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, wxString>( _HKI( "Name" ),
@@ -1623,15 +1641,15 @@ static struct ZONE_DESC
         const wxString groupFill = _HKI( "Fill Style" );
 
         propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ZONE_FILL_MODE>( _HKI( "Fill Mode" ),
-                                                                      &ZONE::SetFillMode,
-                                                                      &ZONE::GetFillMode ),
-                             groupFill );
+                    &ZONE::SetFillMode, &ZONE::GetFillMode ),
+                    groupFill )
+                .SetAvailableFunc( isCopperZone );
 
         propMgr.AddProperty( new PROPERTY<ZONE, EDA_ANGLE>( _HKI( "Orientation" ),
-                                                            &ZONE::SetHatchOrientation,
-                                                            &ZONE::GetHatchOrientation,
-                                                            PROPERTY_DISPLAY::PT_DEGREE ),
-                             groupFill )
+                    &ZONE::SetHatchOrientation, &ZONE::GetHatchOrientation,
+                    PROPERTY_DISPLAY::PT_DEGREE ),
+                    groupFill )
+                .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill );
 
         // TODO: Switch to translated
@@ -1653,28 +1671,59 @@ static struct ZONE_DESC
 
         // TODO: Switch to translated
         propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Width" ),
-                                                      &ZONE::SetHatchThickness,
-                                                      &ZONE::GetHatchThickness,
-                                                      PROPERTY_DISPLAY::PT_SIZE ),
-                             groupFill )
+                    &ZONE::SetHatchThickness, &ZONE::GetHatchThickness, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupFill )
+                .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill )
                 .SetValidator( atLeastMinWidthValidator );
 
         // TODO: Switch to translated
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Gap" ), &ZONE::SetHatchGap,
-                                                      &ZONE::GetHatchGap,
-                                                      PROPERTY_DISPLAY::PT_SIZE ),
-                             groupFill )
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Gap" ),
+                    &ZONE::SetHatchGap, &ZONE::GetHatchGap, PROPERTY_DISPLAY::PT_SIZE ),
+                    groupFill )
+                .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill )
                 .SetValidator( atLeastMinWidthValidator );
 
+        // TODO: Switch to translated
+        propMgr.AddProperty( new PROPERTY<ZONE, double>( wxT( "Hatch Minimum Hole Ratio" ),
+                     &ZONE::SetHatchHoleMinArea, &ZONE::GetHatchHoleMinArea ),
+                     groupFill )
+                .SetAvailableFunc( isCopperZone )
+                .SetWriteableFunc( isHatchedFill )
+                .SetValidator( PROPERTY_VALIDATORS::PositiveRatioValidator );
+
         // TODO: Smoothing effort needs to change to enum (in dialog too)
-        // TODO: Smoothing amount (double)
-        // Unexposed properties (HatchHoleMinArea / HatchBorderAlgorithm)?
+        // TODO: Switch to translated
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Smoothing Effort" ),
+                    &ZONE::SetHatchSmoothingLevel, &ZONE::GetHatchSmoothingLevel ),
+                    groupFill )
+                .SetAvailableFunc( isCopperZone )
+                .SetWriteableFunc( isHatchedFill );
 
-        const wxString groupOverrides = _HKI( "Overrides" );
+        // TODO: Switch to translated
+        propMgr.AddProperty( new PROPERTY<ZONE, double>( wxT( "Smoothing Amount" ),
+                    &ZONE::SetHatchSmoothingValue, &ZONE::GetHatchSmoothingValue ),
+                    groupFill )
+                .SetAvailableFunc( isCopperZone )
+                .SetWriteableFunc( isHatchedFill );
 
-        auto clearanceOverride = new PROPERTY<ZONE, int>( _HKI( "Clearance Override" ),
+        // TODO: Switch to translated
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ISLAND_REMOVAL_MODE>( wxT( "Remove Islands" ),
+                    &ZONE::SetIslandRemovalMode, &ZONE::GetIslandRemovalMode ),
+                    groupFill )
+                .SetAvailableFunc( isCopperZone );
+
+        // TODO: Switch to translated
+        propMgr.AddProperty( new PROPERTY<ZONE, long long int>( wxT( "Minimum Island Area" ),
+                    &ZONE::SetMinIslandArea, &ZONE::GetMinIslandArea, PROPERTY_DISPLAY::PT_AREA ),
+                    groupFill )
+                .SetAvailableFunc( isCopperZone )
+                .SetWriteableFunc( isBelowAreaIslandRemoval );
+
+        const wxString groupElectrical = _HKI( "Electrical" );
+
+        auto clearanceOverride = new PROPERTY<ZONE, int>( _HKI( "Clearance" ),
                     &ZONE::SetLocalClearance, &ZONE::GetLocalClearance,
                     PROPERTY_DISPLAY::PT_SIZE );
         clearanceOverride->SetAvailableFunc( isCopperZone );
@@ -1705,13 +1754,14 @@ static struct ZONE_DESC
         thermalSpokeWidth->SetAvailableFunc( isCopperZone );
         thermalSpokeWidth->SetValidator( atLeastMinWidthValidator );
 
-        propMgr.AddProperty( clearanceOverride, groupOverrides );
-        propMgr.AddProperty( minWidth, groupOverrides );
-        propMgr.AddProperty( padConnections, groupOverrides );
-        propMgr.AddProperty( thermalGap, groupOverrides );
-        propMgr.AddProperty( thermalSpokeWidth, groupOverrides );
+        propMgr.AddProperty( clearanceOverride, groupElectrical );
+        propMgr.AddProperty( minWidth, groupElectrical );
+        propMgr.AddProperty( padConnections, groupElectrical );
+        propMgr.AddProperty( thermalGap, groupElectrical );
+        propMgr.AddProperty( thermalSpokeWidth, groupElectrical );
     }
 } _ZONE_DESC;
 
 IMPLEMENT_ENUM_TO_WXANY( ZONE_CONNECTION )
 IMPLEMENT_ENUM_TO_WXANY( ZONE_FILL_MODE )
+IMPLEMENT_ENUM_TO_WXANY( ISLAND_REMOVAL_MODE )

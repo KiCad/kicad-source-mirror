@@ -88,6 +88,10 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
     {
         m_unitBinder->SetCoordType( prop->CoordType() );
     }
+    else if( dynamic_cast<PGPROPERTY_AREA*>( aProperty) != nullptr )
+    {
+        m_unitBinder->SetDataType( EDA_DATA_TYPE::AREA );
+    }
     else if( dynamic_cast<PGPROPERTY_ANGLE*>( aProperty ) != nullptr )
     {
         m_unitBinder->SetCoordType( ORIGIN_TRANSFORMS::NOT_A_COORD );
@@ -107,6 +111,10 @@ void PG_UNIT_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) c
     if( var.GetType() == wxPG_VARIANT_TYPE_LONG )
     {
         m_unitBinder->ChangeValue( var.GetLong() );
+    }
+    else if( var.GetType() == wxPG_VARIANT_TYPE_LONGLONG )
+    {
+        m_unitBinder->ChangeDoubleValue( var.GetLongLong().ToDouble() );
     }
     else if( var.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
     {
@@ -184,6 +192,17 @@ bool PG_UNIT_EDITOR::GetValueFromControl( wxVariant& aVariant, wxPGProperty* aPr
                 aVariant = angle.AsDegrees();
                 m_unitBinder->SetValue( angle.AsDegrees() );
             }
+        }
+    }
+    else if( dynamic_cast<PGPROPERTY_AREA*>( aProperty ) != nullptr )
+    {
+        wxLongLongNative result = m_unitBinder->GetValue();
+        changed = ( aVariant.IsNull() || result != aVariant.GetLongLong() );
+
+        if( changed )
+        {
+            aVariant = result;
+            m_unitBinder->SetDoubleValue( result.ToDouble() );
         }
     }
     else

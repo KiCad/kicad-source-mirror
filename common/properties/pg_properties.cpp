@@ -35,10 +35,6 @@
 #include <string_utils.h>
 #include <widgets/color_swatch.h>
 
-// reg-ex describing a signed valid value with a unit
-static const wxChar REGEX_SIGNED_DISTANCE[] = wxT( "([-+]?[0-9]+[\\.?[0-9]*) *(mm|in|mils)*" );
-static const wxChar REGEX_UNSIGNED_DISTANCE[] = wxT( "([0-9]+[\\.?[0-9]*) *(mm|in|mils)*" );
-
 
 class wxAnyToEDA_ANGLE_VARIANTRegistrationImpl : public wxAnyToVariantRegistration
 {
@@ -127,6 +123,11 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
         ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
         break;
 
+    case PROPERTY_DISPLAY::PT_AREA:
+        ret = new PGPROPERTY_AREA( aFrame );
+        ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
+        break;
+
     case PROPERTY_DISPLAY::PT_COORD:
         ret = new PGPROPERTY_COORD( aFrame, aProperty->CoordType() );
         ret->SetEditor( PG_UNIT_EDITOR::BuildEditorName( aFrame ) );
@@ -208,12 +209,11 @@ wxPGProperty* PGPropertyFactory( const PROPERTY_BASE* aProperty, EDA_DRAW_FRAME*
 }
 
 
-PGPROPERTY_DISTANCE::PGPROPERTY_DISTANCE( EDA_DRAW_FRAME* aParentFrame, const wxString& aRegEx,
+PGPROPERTY_DISTANCE::PGPROPERTY_DISTANCE( EDA_DRAW_FRAME* aParentFrame,
                                           ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) :
         m_parentFrame( aParentFrame ),
         m_coordType( aCoordType )
 {
-    m_regExValidator.reset( new REGEX_VALIDATOR( aRegEx ) );
 }
 
 
@@ -265,9 +265,40 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
 }
 
 
+PGPROPERTY_AREA::PGPROPERTY_AREA( EDA_DRAW_FRAME* aParentFrame ) :
+        wxIntProperty( wxPG_LABEL, wxPG_LABEL, 0 ),
+        m_parentFrame( aParentFrame )
+{
+}
+
+
+bool PGPROPERTY_AREA::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                    int aArgFlags ) const
+{
+    // TODO(JE): Are there actual use cases for this?
+    wxCHECK_MSG( false, false, wxS( "PGPROPERTY_AREA::StringToValue should not be used." ) );
+}
+
+
+wxString PGPROPERTY_AREA::ValueToString( wxVariant& aVariant, int aArgFlags ) const
+{
+    wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_LONGLONG, wxEmptyString );
+
+    wxLongLongNative areaIU = aVariant.GetLongLong();
+
+    return m_parentFrame->StringFromValue( areaIU.ToDouble(), true, EDA_DATA_TYPE::AREA );
+}
+
+
+wxValidator* PGPROPERTY_AREA::DoGetValidator() const
+{
+    return nullptr;
+}
+
+
 PGPROPERTY_SIZE::PGPROPERTY_SIZE( EDA_DRAW_FRAME* aParentFrame ) :
         wxUIntProperty( wxPG_LABEL, wxPG_LABEL, 0 ),
-        PGPROPERTY_DISTANCE( aParentFrame, REGEX_UNSIGNED_DISTANCE, ORIGIN_TRANSFORMS::NOT_A_COORD )
+        PGPROPERTY_DISTANCE( aParentFrame, ORIGIN_TRANSFORMS::NOT_A_COORD )
 {
 }
 
@@ -281,7 +312,7 @@ wxValidator* PGPROPERTY_SIZE::DoGetValidator() const
 PGPROPERTY_COORD::PGPROPERTY_COORD( EDA_DRAW_FRAME* aParentFrame,
                                     ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType ) :
         wxIntProperty( wxPG_LABEL, wxPG_LABEL, 0 ),
-        PGPROPERTY_DISTANCE( aParentFrame, REGEX_SIGNED_DISTANCE, aCoordType )
+        PGPROPERTY_DISTANCE( aParentFrame, aCoordType )
 {
 }
 
