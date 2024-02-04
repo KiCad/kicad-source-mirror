@@ -36,14 +36,15 @@
 // this constant specifies a item which is not inside an component
 const int ALTIUM_COMPONENT_NONE = -1;
 
-class ALTIUM_PARSER;
+class ALTIUM_BINARY_PARSER;
 
 struct ASCH_STORAGE_FILE
 {
     wxString          filename;
     std::vector<char> data;
 
-    explicit ASCH_STORAGE_FILE( ALTIUM_PARSER& aReader );
+    explicit ASCH_STORAGE_FILE( const std::map<wxString, wxString>& aProps );
+    explicit ASCH_STORAGE_FILE( ALTIUM_BINARY_PARSER& aReader );
 };
 
 struct ASCH_ADDITIONAL_FILE
@@ -51,7 +52,7 @@ struct ASCH_ADDITIONAL_FILE
     wxString          FileName;
     std::vector<char> Data;
 
-    explicit ASCH_ADDITIONAL_FILE( ALTIUM_PARSER& aReader );
+    explicit ASCH_ADDITIONAL_FILE( ALTIUM_BINARY_PARSER& aReader );
 };
 
 enum class ALTIUM_SCH_RECORD

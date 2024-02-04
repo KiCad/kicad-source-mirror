@@ -23,23 +23,23 @@
 
 /**
  * @file test_altium_parser.cpp
- * Test suite for #ALTIUM_PARSER
+ * Test suite for #ALTIUM_BINARY_PARSER
  */
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
-#include <common/io/altium/altium_parser.h>
+#include <common/io/altium/altium_binary_parser.h>
 
-struct ALTIUM_PARSER_FIXTURE
+struct ALTIUM_BINARY_PARSER_FIXTURE
 {
-    ALTIUM_PARSER_FIXTURE() {}
+    ALTIUM_BINARY_PARSER_FIXTURE() {}
 };
 
 
 /**
  * Declares the struct as the Boost test fixture.
  */
-BOOST_FIXTURE_TEST_SUITE( AltiumParser, ALTIUM_PARSER_FIXTURE )
+BOOST_FIXTURE_TEST_SUITE( AltiumParser, ALTIUM_BINARY_PARSER_FIXTURE )
 
 struct ALTIUM_TO_KICAD_UNIT_CASE
 {
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE( ConvertToKicadUnit )
     {
         BOOST_TEST_CONTEXT( wxString::Format( wxT( "%i -> %i" ), c.input, c.exp_result ) )
         {
-            int result = ALTIUM_PARSER::ConvertToKicadUnit( c.input );
+            int result = ALTIUM_PROPS_UTILS::ConvertToKicadUnit( c.input );
 
             // These are all valid
             BOOST_CHECK_EQUAL( result, c.exp_result );
@@ -208,7 +208,7 @@ BOOST_AUTO_TEST_CASE( PropertiesReadKicadUnit )
         {
             std::map<wxString, wxString> properties = { { "TEST", c.input } };
 
-            int result = ALTIUM_PARSER::ReadKicadUnit( properties, "TEST", "0mil" );
+            int result = ALTIUM_PROPS_UTILS::ReadKicadUnit( properties, "TEST", "0mil" );
 
             // These are all valid
             BOOST_CHECK_EQUAL( result, c.exp_result );
@@ -286,7 +286,7 @@ BOOST_AUTO_TEST_CASE( ReadProperties )
             *content.get() = c.input.size();
             std::memcpy( content.get() + 4, c.input.c_str(), c.input.size() );
 
-            ALTIUM_PARSER parser( content, size );
+            ALTIUM_BINARY_PARSER parser( content, size );
 
             std::map<wxString, wxString> result = parser.ReadProperties();
 

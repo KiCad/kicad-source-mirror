@@ -27,7 +27,8 @@
 #include "altium_parser_sch.h"
 #include "sch_shape.h"
 #include <io/io_utils.h>
-#include <io/altium/altium_parser.h>
+#include <io/altium/altium_binary_parser.h>
+#include <io/altium/altium_ascii_parser.h>
 #include <io/altium/altium_parser_utils.h>
 #include <sch_io/altium/sch_io_altium.h>
 
@@ -65,6 +66,7 @@
 #include <wx/zstream.h>
 #include <wx/wfstream.h>
 #include <magic_enum.hpp>
+#include "sch_io_altium.h"
 
 // Harness port object itself does not contain color information about itself
 // It seems altium is drawing harness ports using these colors
@@ -242,10 +244,23 @@ int SCH_IO_ALTIUM::GetModifyHash() const
 }
 
 
-bool SCH_IO_ALTIUM::checkFileHeader( const wxString& aFileName )
+bool SCH_IO_ALTIUM::isBinaryFile( const wxString& aFileName )
 {
     // Compound File Binary Format header
     return IO_UTILS::fileStartsWithBinaryHeader( aFileName, IO_UTILS::COMPOUND_FILE_HEADER );
+}
+
+
+bool SCH_IO_ALTIUM::isASCIIFile( const wxString& aFileName )
+{
+    // ASCII file format
+    return IO_UTILS::fileStartsWithPrefix( aFileName, wxS( "|HEADER=" ), false );
+}
+
+
+bool SCH_IO_ALTIUM::checkFileHeader( const wxString& aFileName )
+{
+    return isBinaryFile( aFileName ) || isASCIIFile( aFileName );
 }
 
 
@@ -441,27 +456,34 @@ SCH_SHEET* SCH_IO_ALTIUM::getCurrentSheet()
 
 void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
 {
-    ALTIUM_COMPOUND_FILE altiumSchFile( aFileName );
-
     // Load path may be different from the project path.
     wxFileName parentFileName = aFileName;
 
-    try
+    if( isBinaryFile( aFileName ) )
     {
-        ParseStorage( altiumSchFile ); // we need this before parsing the FileHeader
-        ParseFileHeader( altiumSchFile );
+        ALTIUM_COMPOUND_FILE altiumSchFile( aFileName );
 
-        // Parse "Additional" because sheet is set up during "FileHeader" parsing.
-        ParseAdditional( altiumSchFile );
+        try
+        {
+            ParseStorage( altiumSchFile ); // we need this before parsing the FileHeader
+            ParseFileHeader( altiumSchFile );
+
+            // Parse "Additional" because sheet is set up during "FileHeader" parsing.
+            ParseAdditional( altiumSchFile );
+        }
+        catch( const CFB::CFBException& exception )
+        {
+            THROW_IO_ERROR( exception.what() );
+        }
+        catch( const std::exception& exc )
+        {
+            wxLogDebug( wxT( "Unhandled exception in Altium schematic parsers: %s." ), exc.what() );
+            throw;
+        }
     }
-    catch( const CFB::CFBException& exception )
+    else // ASCII
     {
-        THROW_IO_ERROR( exception.what() );
-    }
-    catch( const std::exception& exc )
-    {
-        wxLogDebug( wxT( "Unhandled exception in Altium schematic parsers: %s." ), exc.what() );
-        throw;
+        ParseASCIISchematic( aFileName );
     }
 
     SCH_SCREEN* currentScreen = getCurrentScreen();
@@ -550,11 +572,11 @@ void SCH_IO_ALTIUM::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
     if( file == nullptr )
         return;
 
-    ALTIUM_PARSER reader( aAltiumSchFile, file );
+    ALTIUM_BINARY_PARSER reader( aAltiumSchFile, file );
 
     std::map<wxString, wxString> properties = reader.ReadProperties();
-    wxString header = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
-    int      weight = ALTIUM_PARSER::ReadInt( properties, "WEIGHT", 0 );
+    wxString header = ALTIUM_PROPS_UTILS::ReadString( properties, "HEADER", "" );
+    int      weight = ALTIUM_PROPS_UTILS::ReadInt( properties, "WEIGHT", 0 );
 
     if( weight < 0 )
         THROW_IO_ERROR( "Storage weight is negative!" );
@@ -579,13 +601,15 @@ void SCH_IO_ALTIUM::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
 
 void SCH_IO_ALTIUM::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
 {
-    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( { "Additional" } );
+    wxString streamName = wxS( "Additional" );
+
+    const CFB::COMPOUND_FILE_ENTRY* file =
+            aAltiumSchFile.FindStream( { streamName.ToStdString() } );
 
     if( file == nullptr )
         return;
 
-    ALTIUM_PARSER reader( aAltiumSchFile, file );
-
+    ALTIUM_BINARY_PARSER reader( aAltiumSchFile, file );
 
     if( reader.GetRemainingBytes() <= 0 )
     {
@@ -595,7 +619,7 @@ void SCH_IO_ALTIUM::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
+        int               recordId = ALTIUM_PROPS_UTILS::ReadInt( properties, "RECORD", 0 );
         ALTIUM_SCH_RECORD record = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
         if( record != ALTIUM_SCH_RECORD::HEADER )
@@ -606,39 +630,7 @@ void SCH_IO_ALTIUM::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
-        ALTIUM_SCH_RECORD record = static_cast<ALTIUM_SCH_RECORD>( recordId );
-
-        // see: https://github.com/vadmium/python-altium/blob/master/format.md
-        switch( record )
-        {
-        case ALTIUM_SCH_RECORD::HARNESS_CONNECTOR:
-            ParseHarnessConnector( index, properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::HARNESS_ENTRY:
-            ParseHarnessEntry( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::HARNESS_TYPE:
-            ParseHarnessType( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::SIGNAL_HARNESS:
-            ParseSignalHarness( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::BLANKET:
-            m_reporter->Report( _( "Blanket not currently supported." ), RPT_SEVERITY_ERROR );
-            break;
-
-        default:
-            m_reporter->Report( wxString::Format( _( "Unknown or unexpected record ID %d found "
-                                                     "inside \"Additional\" section." ),
-                                                  recordId ),
-                                RPT_SEVERITY_ERROR );
-            break;
-        }
+        ParseRecord( index, properties, streamName );
     }
 
     // Handle harness Ports
@@ -657,12 +649,15 @@ void SCH_IO_ALTIUM::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
 
 void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
 {
-    const CFB::COMPOUND_FILE_ENTRY* file = aAltiumSchFile.FindStream( { "FileHeader" } );
+    wxString streamName = wxS( "FileHeader" );
+
+    const CFB::COMPOUND_FILE_ENTRY* file =
+            aAltiumSchFile.FindStream( { streamName.ToStdString() } );
 
     if( file == nullptr )
         THROW_IO_ERROR( "FileHeader not found" );
 
-    ALTIUM_PARSER reader( aAltiumSchFile, file );
+    ALTIUM_BINARY_PARSER reader( aAltiumSchFile, file );
 
     if( reader.GetRemainingBytes() <= 0 )
     {
@@ -672,7 +667,7 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        wxString libtype = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
+        wxString libtype = ALTIUM_PROPS_UTILS::ReadString( properties, "HEADER", "" );
 
         if( libtype.CmpNoCase( "Protel for Windows - Schematic Capture Binary File Version 5.0" ) )
             THROW_IO_ERROR( _( "Expected Altium Schematic file version 5.0" ) );
@@ -689,183 +684,7 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     {
         std::map<wxString, wxString> properties = reader.ReadProperties();
 
-        int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", -1 );
-        ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
-
-        // see: https://github.com/vadmium/python-altium/blob/master/format.md
-        switch( record )
-        {
-        case ALTIUM_SCH_RECORD::HEADER:
-            THROW_IO_ERROR( "Header already parsed" );
-
-        case ALTIUM_SCH_RECORD::COMPONENT:
-            ParseComponent( index, properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::PIN:
-            ParsePin( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::IEEE_SYMBOL:
-            m_reporter->Report( _( "Record 'IEEE_SYMBOL' not handled." ), RPT_SEVERITY_INFO );
-            break;
-
-        case ALTIUM_SCH_RECORD::LABEL:
-            ParseLabel( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::BEZIER:
-            ParseBezier( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::POLYLINE:
-            ParsePolyline( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::POLYGON:
-            ParsePolygon( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::ELLIPSE:
-            ParseEllipse( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::PIECHART:
-            m_reporter->Report( _( "Record 'PIECHART' not handled." ), RPT_SEVERITY_INFO );
-            break;
-
-        case ALTIUM_SCH_RECORD::ROUND_RECTANGLE:
-            ParseRoundRectangle( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
-        case ALTIUM_SCH_RECORD::ARC:
-            ParseArc( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::LINE:
-            ParseLine( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::RECTANGLE:
-            ParseRectangle( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::SHEET_SYMBOL:
-            ParseSheetSymbol( index, properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::SHEET_ENTRY:
-            ParseSheetEntry( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::POWER_PORT:
-            ParsePowerPort( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::PORT:
-            // Ports are parsed after the sheet was parsed
-            // This is required because we need all electrical connection points before placing.
-            m_altiumPortsCurrentSheet.emplace_back( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::NO_ERC:
-            ParseNoERC( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::NET_LABEL:
-            ParseNetLabel( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::BUS:
-            ParseBus( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::WIRE:
-            ParseWire( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::TEXT_FRAME:
-            ParseTextFrame( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::JUNCTION:
-            ParseJunction( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::IMAGE:
-            ParseImage( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::SHEET:
-            ParseSheet( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::SHEET_NAME:
-            ParseSheetName( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::FILE_NAME:
-            ParseFileName( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::DESIGNATOR:
-            ParseDesignator( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::BUS_ENTRY:
-            ParseBusEntry( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::TEMPLATE:
-            ParseTemplate( index, properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::PARAMETER:
-            ParseParameter( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::PARAMETER_SET:
-            m_reporter->Report( _( "Parameter Set not currently supported." ), RPT_SEVERITY_ERROR );
-            break;
-
-        case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST:
-            ParseImplementationList( index, properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::IMPLEMENTATION:
-            ParseImplementation( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::MAP_DEFINER_LIST:
-            break;
-
-        case ALTIUM_SCH_RECORD::MAP_DEFINER:
-            break;
-
-        case ALTIUM_SCH_RECORD::IMPL_PARAMS:
-            break;
-
-        case ALTIUM_SCH_RECORD::NOTE:
-            ParseNote( properties );
-            break;
-
-        case ALTIUM_SCH_RECORD::COMPILE_MASK:
-            m_reporter->Report( _( "Compile mask not currently supported." ), RPT_SEVERITY_ERROR );
-            break;
-
-        case ALTIUM_SCH_RECORD::HYPERLINK:
-            break;
-
-        default:
-            m_reporter->Report( wxString::Format( _( "Unknown or unexpected record id %d found "
-                                                     "inside \"FileHeader\" section." ),
-                                                  recordId ),
-                                RPT_SEVERITY_ERROR );
-            break;
-        }
-
-        SCH_IO_ALTIUM::m_harnessOwnerIndexOffset = index;
+        ParseRecord( index, properties, streamName );
     }
 
     if( reader.HasParsingError() )
@@ -902,6 +721,8 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     m_altiumPortsCurrentSheet.clear();
     m_altiumComponents.clear();
     m_altiumTemplates.clear();
+    m_altiumImplementationList.clear();
+
     m_symbols.clear();
     m_libSymbols.clear();
 
@@ -911,6 +732,324 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
     wxCHECK( sheet, /* void */ );
 
     sheet->SetModified();
+}
+
+
+void SCH_IO_ALTIUM::ParseASCIISchematic( const wxString& aFileName )
+{
+    // Read storage content first
+    {
+        ALTIUM_ASCII_PARSER storageReader( aFileName );
+
+        while( storageReader.CanRead() )
+        {
+            std::map<wxString, wxString> properties = storageReader.ReadProperties();
+
+            // Binary data
+            if( properties.find( wxS( "BINARY" ) ) != properties.end() )
+                m_altiumStorage.emplace_back( properties );
+        }
+    }
+
+    // Read other data
+    ALTIUM_ASCII_PARSER reader( aFileName );
+
+    if( !reader.CanRead() )
+    {
+        THROW_IO_ERROR( "FileHeader does not contain any data" );
+    }
+    else
+    {
+        std::map<wxString, wxString> properties = reader.ReadProperties();
+
+        wxString libtype = ALTIUM_PROPS_UTILS::ReadString( properties, "HEADER", "" );
+
+        if( libtype.CmpNoCase( "Protel for Windows - Schematic Capture Ascii File Version 5.0" ) )
+            THROW_IO_ERROR( _( "Expected Altium Schematic file version 5.0" ) );
+    }
+
+    // Prepare some local variables
+    wxCHECK( m_altiumPortsCurrentSheet.empty(), /* void */ );
+    wxCHECK( !m_currentTitleBlock, /* void */ );
+
+    m_currentTitleBlock = std::make_unique<TITLE_BLOCK>();
+
+    // index is required to resolve OWNERINDEX
+    int index = 0;
+
+    while( reader.CanRead() )
+    {
+        std::map<wxString, wxString> properties = reader.ReadProperties();
+
+        // Reset index at headers
+        if( properties.find( wxS( "HEADER" ) ) != properties.end() )
+        {
+            index = 0;
+            continue;
+        }
+
+        if( properties.find( wxS( "RECORD" ) ) != properties.end() )
+            ParseRecord( index, properties, aFileName );
+
+        index++;
+    }
+
+    if( reader.HasParsingError() )
+        THROW_IO_ERROR( "stream was not parsed correctly!" );
+
+    if( reader.CanRead() )
+        THROW_IO_ERROR( "stream is not fully parsed" );
+
+    // assign LIB_SYMBOL -> COMPONENT
+    for( std::pair<const int, SCH_SYMBOL*>& symbol : m_symbols )
+    {
+        auto libSymbolIt = m_libSymbols.find( symbol.first );
+
+        if( libSymbolIt == m_libSymbols.end() )
+            THROW_IO_ERROR( "every symbol should have a symbol attached" );
+
+        m_pi->SaveSymbol( getLibFileName().GetFullPath(),
+                          new LIB_SYMBOL( *( libSymbolIt->second ) ), m_properties.get() );
+
+        symbol.second->SetLibSymbol( libSymbolIt->second );
+    }
+
+    SCH_SCREEN* screen = getCurrentScreen();
+    wxCHECK( screen, /* void */ );
+
+    // Handle title blocks
+    screen->SetTitleBlock( *m_currentTitleBlock );
+    m_currentTitleBlock.reset();
+
+    // Handle harness Ports
+    for( const ASCH_PORT& port : m_altiumHarnessPortsCurrentSheet )
+        ParseHarnessPort( port );
+
+    // Handle Ports
+    for( const ASCH_PORT& port : m_altiumPortsCurrentSheet )
+        ParsePort( port );
+
+    m_altiumPortsCurrentSheet.clear();
+    m_altiumComponents.clear();
+    m_altiumTemplates.clear();
+    m_altiumImplementationList.clear();
+
+    m_symbols.clear();
+    m_libSymbols.clear();
+
+    // Otherwise we cannot save the imported sheet?
+    SCH_SHEET* sheet = getCurrentSheet();
+
+    wxCHECK( sheet, /* void */ );
+
+    sheet->SetModified();
+}
+
+
+void SCH_IO_ALTIUM::ParseRecord( int index, std::map<wxString, wxString>& properties,
+                                 const wxString& aSectionName )
+{
+    int               recordId = ALTIUM_PROPS_UTILS::ReadInt( properties, "RECORD", -1 );
+    ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
+
+    // see: https://github.com/vadmium/python-altium/blob/master/format.md
+    switch( record )
+    {
+        // FileHeader section
+
+    case ALTIUM_SCH_RECORD::HEADER:
+        THROW_IO_ERROR( "Header already parsed" );
+
+    case ALTIUM_SCH_RECORD::COMPONENT:
+        ParseComponent( index, properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::PIN:
+        ParsePin( properties );
+        break;
+
+        case ALTIUM_SCH_RECORD::IEEE_SYMBOL:
+            m_reporter->Report( _( "Record 'IEEE_SYMBOL' not handled." ), RPT_SEVERITY_INFO );
+            break;
+
+    case ALTIUM_SCH_RECORD::LABEL:
+        ParseLabel( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::BEZIER:
+        ParseBezier( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::POLYLINE:
+        ParsePolyline( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::POLYGON:
+        ParsePolygon( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::ELLIPSE:
+        ParseEllipse( properties );
+        break;
+
+        case ALTIUM_SCH_RECORD::PIECHART:
+            m_reporter->Report( _( "Record 'PIECHART' not handled." ), RPT_SEVERITY_INFO );
+            break;
+
+    case ALTIUM_SCH_RECORD::ROUND_RECTANGLE:
+        ParseRoundRectangle( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
+    case ALTIUM_SCH_RECORD::ARC:
+        ParseArc( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::LINE:
+        ParseLine( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::RECTANGLE:
+        ParseRectangle( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::SHEET_SYMBOL:
+        ParseSheetSymbol( index, properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::SHEET_ENTRY:
+        ParseSheetEntry( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::POWER_PORT:
+        ParsePowerPort( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::PORT:
+        // Ports are parsed after the sheet was parsed
+        // This is required because we need all electrical connection points before placing.
+        m_altiumPortsCurrentSheet.emplace_back( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::NO_ERC:
+        ParseNoERC( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::NET_LABEL:
+        ParseNetLabel( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::BUS:
+        ParseBus( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::WIRE:
+        ParseWire( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::TEXT_FRAME:
+        ParseTextFrame( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::JUNCTION:
+        ParseJunction( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::IMAGE:
+        ParseImage( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::SHEET:
+        ParseSheet( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::SHEET_NAME:
+        ParseSheetName( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::FILE_NAME:
+        ParseFileName( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::DESIGNATOR:
+        ParseDesignator( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::BUS_ENTRY:
+        ParseBusEntry( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::TEMPLATE:
+        ParseTemplate( index, properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::PARAMETER:
+        ParseParameter( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::PARAMETER_SET:
+        m_reporter->Report( _( "Parameter Set not currently supported." ), RPT_SEVERITY_ERROR );
+        break;
+
+    case ALTIUM_SCH_RECORD::IMPLEMENTATION_LIST:
+        ParseImplementationList( index, properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::IMPLEMENTATION:
+        ParseImplementation( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::MAP_DEFINER_LIST:
+        break;
+
+    case ALTIUM_SCH_RECORD::MAP_DEFINER:
+        break;
+
+    case ALTIUM_SCH_RECORD::IMPL_PARAMS:
+        break;
+
+    case ALTIUM_SCH_RECORD::NOTE:
+        ParseNote( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::COMPILE_MASK:
+        m_reporter->Report( _( "Compile mask not currently supported." ), RPT_SEVERITY_ERROR );
+        break;
+
+    case ALTIUM_SCH_RECORD::HYPERLINK:
+        break;
+
+    // Additional section
+
+    case ALTIUM_SCH_RECORD::HARNESS_CONNECTOR:
+        ParseHarnessConnector( index, properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::HARNESS_ENTRY:
+        ParseHarnessEntry( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::HARNESS_TYPE:
+        ParseHarnessType( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::SIGNAL_HARNESS:
+        ParseSignalHarness( properties );
+        break;
+
+    case ALTIUM_SCH_RECORD::BLANKET:
+        m_reporter->Report( _( "Blanket not currently supported." ), RPT_SEVERITY_ERROR );
+        break;
+
+    default:
+        m_reporter->Report(
+                wxString::Format( _( "Unknown or unexpected record id %d found in %s." ), recordId,
+                                  aSectionName ),
+                RPT_SEVERITY_ERROR );
+        break;
+    }
+
+    SCH_IO_ALTIUM::m_harnessOwnerIndexOffset = index;
 }
 
 
@@ -3411,7 +3550,7 @@ void SCH_IO_ALTIUM::ParseWire( const std::map<wxString, wxString>& aProperties )
         SCH_LINE* wire = new SCH_LINE( elem.points.at( i ) + m_sheetOffset,
                                        SCH_LAYER_ID::LAYER_WIRE );
         wire->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
-        wire->SetLineWidth( elem.lineWidth );
+        // wire->SetLineWidth( elem.lineWidth );
 
         wire->SetFlags( IS_NEW );
         screen->Append( wire );
@@ -3985,7 +4124,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
 
     for( auto& [name, entry] : syms )
     {
-        ALTIUM_PARSER reader( aAltiumLibFile, entry );
+        ALTIUM_BINARY_PARSER reader( aAltiumLibFile, entry );
         std::vector<LIB_SYMBOL*> symbols;
 
         if( reader.GetRemainingBytes() <= 0 )
@@ -3995,7 +4134,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
 
         {
             std::map<wxString, wxString> properties = reader.ReadProperties();
-            int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
+            int               recordId = ALTIUM_PROPS_UTILS::ReadInt( properties, "RECORD", 0 );
             ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
             if( record != ALTIUM_SCH_RECORD::COMPONENT )
@@ -4060,7 +4199,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
             if( properties.empty() )
                 continue;
 
-            int               recordId = ALTIUM_PARSER::ReadInt( properties, "RECORD", 0 );
+            int               recordId = ALTIUM_PROPS_UTILS::ReadInt( properties, "RECORD", 0 );
             ALTIUM_SCH_RECORD record   = static_cast<ALTIUM_SCH_RECORD>( recordId );
 
             switch( record )
@@ -4225,7 +4364,7 @@ void SCH_IO_ALTIUM::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile,
     if( file == nullptr )
         THROW_IO_ERROR( "FileHeader not found" );
 
-    ALTIUM_PARSER reader( aAltiumSchFile, file );
+    ALTIUM_BINARY_PARSER reader( aAltiumSchFile, file );
 
     if( reader.GetRemainingBytes() <= 0 )
     {
@@ -4234,7 +4373,7 @@ void SCH_IO_ALTIUM::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile,
 
     std::map<wxString, wxString> properties = reader.ReadProperties();
 
-    wxString libtype = ALTIUM_PARSER::ReadString( properties, "HEADER", "" );
+    wxString libtype = ALTIUM_PROPS_UTILS::ReadString( properties, "HEADER", "" );
 
     if( libtype.CmpNoCase( "Protel for Windows - Schematic Library Editor Binary File Version 5.0" ) )
         THROW_IO_ERROR( _( "Expected Altium Schematic Library file version 5.0" ) );

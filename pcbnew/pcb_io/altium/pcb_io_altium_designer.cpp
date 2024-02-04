@@ -31,7 +31,7 @@
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
 #include <io/io_utils.h>
-#include <io/altium/altium_parser.h>
+#include <io/altium/altium_binary_parser.h>
 #include <pcb_io/pcb_io.h>
 
 #include <board.h>
@@ -209,7 +209,7 @@ void PCB_IO_ALTIUM_DESIGNER::FootprintEnumerate( wxArrayString&  aFootprintNames
                                                   FormatPath( streamName ) ) );
             }
 
-            ALTIUM_PARSER parser( *altiumLibFile, libraryData );
+            ALTIUM_BINARY_PARSER parser( *altiumLibFile, libraryData );
 
             std::map<wxString, wxString> properties = parser.ReadProperties();
 

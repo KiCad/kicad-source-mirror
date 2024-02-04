@@ -31,7 +31,7 @@
 #include <pcb_io_altium_circuit_maker.h>
 #include <pcb_io_altium_designer.h>
 #include <altium_pcb.h>
-#include <io/altium/altium_parser.h>
+#include <io/altium/altium_binary_parser.h>
 #include <pcb_io/pcb_io.h>
 
 #include <board.h>
