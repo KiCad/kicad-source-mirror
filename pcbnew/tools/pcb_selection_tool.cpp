@@ -2982,12 +2982,15 @@ bool PCB_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
             bool found = false;
 
-            static_cast<BOARD_ITEM*>( item )->RunOnDescendants(
-                    [&]( BOARD_ITEM* aItem )
-                    {
-                        if( aItem->HitTest( aPoint, margin ) )
-                            found = true;
-                    } );
+            if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item ) )
+            {
+                group->RunOnDescendants(
+                        [&]( BOARD_ITEM* aItem )
+                        {
+                            if( aItem->HitTest( aPoint, margin ) )
+                                found = true;
+                        } );
+            }
 
             if( found )
                 return true;
