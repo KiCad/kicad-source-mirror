@@ -71,7 +71,8 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( wxWindow* aParentW
                                COL_TEXT_WIDTH,
                                COL_TEXT_HEIGHT,
                                COL_TEXT_THICKNESS } );
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
+    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + FromDIP( 4 ) );
+    m_grid->SetUseNativeColLabels();
 
     // Work around a bug in wxWidgets where it fails to recalculate the grid height
     // after changing the default row size

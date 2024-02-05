@@ -74,8 +74,10 @@ DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_
 {
     m_gridTable = new LAYER_GRID_TABLE( m_parent->GetBoard()->GetCopperLayerCount() );
     m_grid->SetTable( m_gridTable );
-    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
+    m_grid->SetMinSize( FromDIP( m_grid->GetMinSize() ) );
+    m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + FromDIP( 4 ) );
     m_grid->SetCellHighlightROPenWidth( 0 );
+    m_grid->SetUseNativeColLabels();
 
     SetupStandardButtons();
 
@@ -146,8 +148,8 @@ void DIALOG_SWAP_LAYERS::adjustGridColumns()
     // Account for scroll bars
     int width = KIPLATFORM::UI::GetUnobscuredSize( m_grid ).x;
 
-    m_grid->SetColSize( 0, std::max( 40, width / 2 ) );
-    m_grid->SetColSize( 1, std::max( 40, width - m_grid->GetColSize( 0 ) ) );
+    m_grid->SetColSize( 0, std::max( FromDIP( 40 ), width / 2 ) );
+    m_grid->SetColSize( 1, std::max( FromDIP( 40 ), width - m_grid->GetColSize( 0 ) ) );
 }
 
 

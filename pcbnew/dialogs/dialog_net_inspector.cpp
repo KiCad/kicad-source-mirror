@@ -1096,6 +1096,7 @@ DIALOG_NET_INSPECTOR::DIALOG_NET_INSPECTOR( PCB_EDIT_FRAME* aParent ) :
                                       wxDATAVIEW_COL_SORTABLE );
     }
 
+    m_netsList->SetMinSize( FromDIP( m_netsList->GetMinSize() ) );
     m_netsList->SetExpanderColumn( m_netsList->GetColumn( 0 ) );
 
     // avoid onFilterChange for each of the settings as it will re-build the

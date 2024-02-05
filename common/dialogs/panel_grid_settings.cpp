@@ -46,6 +46,7 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
         m_frameType( aFrameType ),
         m_eventSource( aEventSource )
 {
+    m_currentGridCtrl->SetMinSize( FromDIP( m_currentGridCtrl->GetMinSize() ) );
     RebuildGridSizes();
 
     if( m_frameType == FRAME_PCB_EDITOR || m_frameType == FRAME_FOOTPRINT_EDITOR )

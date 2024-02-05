@@ -71,9 +71,9 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindo
 
     // Membership combobox editors require a bit more room, so increase the row size of
     // all our grids for consistency
-    m_trackWidthsGrid->SetDefaultRowSize( m_trackWidthsGrid->GetDefaultRowSize() + 4 );
-    m_viaSizesGrid->SetDefaultRowSize(    m_viaSizesGrid->GetDefaultRowSize()    + 4 );
-    m_diffPairsGrid->SetDefaultRowSize(   m_diffPairsGrid->GetDefaultRowSize()   + 4 );
+    m_trackWidthsGrid->SetDefaultRowSize( m_trackWidthsGrid->GetDefaultRowSize() + FromDIP( 4 ) );
+    m_viaSizesGrid->SetDefaultRowSize( m_viaSizesGrid->GetDefaultRowSize() + FromDIP( 4 ) );
+    m_diffPairsGrid->SetDefaultRowSize( m_diffPairsGrid->GetDefaultRowSize() + FromDIP( 4 ) );
 
     m_trackWidthsGrid->PushEventHandler( new GRID_TRICKS( m_trackWidthsGrid,
                                                           [this]( wxCommandEvent& aEvent )
@@ -102,6 +102,10 @@ PANEL_SETUP_TRACKS_AND_VIAS::PANEL_SETUP_TRACKS_AND_VIAS( wxWindow* aParentWindo
     m_trackWidthsGrid->SetAutoEvalCols( { 0 } );
     m_viaSizesGrid->SetAutoEvalCols( { 0, 1 } );
     m_diffPairsGrid->SetAutoEvalCols( { 0, 1, 2 } );
+
+    m_trackWidthsGrid->SetUseNativeColLabels();
+    m_viaSizesGrid->SetUseNativeColLabels();
+    m_diffPairsGrid->SetUseNativeColLabels();
 
     // Ensure width of columns is enough to enter any reasonable value
     WX_GRID* grid_list[] = { m_trackWidthsGrid, m_viaSizesGrid, m_diffPairsGrid, nullptr };

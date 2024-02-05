@@ -108,7 +108,11 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
     // Prevent Size events from firing before we are ready
     Freeze();
     m_netclassGrid->BeginBatch();
+    m_netclassGrid->SetUseNativeColLabels();
     m_assignmentGrid->BeginBatch();
+    m_assignmentGrid->SetUseNativeColLabels();
+
+    m_splitter->SetMinimumPaneSize( FromDIP( m_splitter->GetMinimumPaneSize() ) );
 
     m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
     // Calculate a min best size to handle longest usual numeric values:
