@@ -1223,6 +1223,10 @@ static struct EDA_TEXT_DESC
                 &EDA_TEXT::SetVertJustify, &EDA_TEXT::GetVertJustify ),
                 textProps );
 
+        propMgr.AddProperty( new PROPERTY<EDA_TEXT, COLOR4D>( _HKI( "Color" ),
+                &EDA_TEXT::SetTextColor, &EDA_TEXT::GetTextColor ),
+                textProps );
+
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Hyperlink" ),
                 &EDA_TEXT::SetHyperlink, &EDA_TEXT::GetHyperlink ),
                 textProps );
