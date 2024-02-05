@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-05 08:50+0000\n"
+"PO-Revision-Date: 2024-02-05 12:59+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -1089,7 +1089,7 @@ msgstr "이 설정을 적용하려면 3D 뷰어를 닫았다가 다시 열어야
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
-msgstr "선택 색상 :"
+msgstr "색상 선택:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
@@ -12196,7 +12196,7 @@ msgid ""
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
 "개별 항목 색상을 보려면 '%s'를 선택 해제한다\n"
-"기본 설정 > 회로도 편집기 > 색상."
+"환경 설정 > 회로도 편집기 > 색상."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:439
 #, c-format
@@ -46056,7 +46056,7 @@ msgstr "네트 색상:"
 #: pcbnew/widgets/appearance_controls.cpp:703
 #: pcbnew/widgets/appearance_controls.cpp:2473
 msgid "Choose when to show net and netclass colors"
-msgstr "네트와 네트클래스 색상을 언제 표시할 지 선택"
+msgstr "네트 및 네트 클래스 색상을 표시할 시기 선택"
 
 #: pcbnew/widgets/appearance_controls.cpp:712
 #: pcbnew/widgets/appearance_controls.cpp:2476
