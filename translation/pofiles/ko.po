@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-02-05 08:48+0000\n"
+"PO-Revision-Date: 2024-02-05 08:50+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -26413,7 +26413,7 @@ msgstr "풋프린트 참조 지정자 검색"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:66
 msgid "Search footprint values"
-msgstr "풋프린트 값 찾기"
+msgstr "풋프린트 값 검색"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
 msgid "Search other text items"
@@ -26425,7 +26425,7 @@ msgstr "DRC 마커 검색"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:78
 msgid "Search net names"
-msgstr "검색 네트워크 이름"
+msgstr "네트 이름 검색"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:96
 msgid "Find Previous"
