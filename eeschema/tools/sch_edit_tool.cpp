@@ -1706,10 +1706,8 @@ int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
     if( symbol->IsNew() )
         m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
-    // TODO: 9.0 It would be better as "Change Body Style", but we're past string freeze so
-    // this (existing) string will have to do....
     if( !commit.Empty() )
-        commit.Push( _( "Convert Symbol" ) );
+        commit.Push( _( "Change Body Style" ) );
 
     if( selection.IsHover() )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );

@@ -158,9 +158,7 @@ void SCH_EDIT_FRAME::FlipBodyStyle( SCH_SYMBOL* aSymbol )
     if( aSymbol->IsSelected() )
         m_toolManager->RunAction<EDA_ITEM*>( EE_ACTIONS::addItemToSel, aSymbol );
 
-    // TODO: 9.0 It would be better as "Change Body Style", but we're past string freeze so
-    // this (existing) string will have to do....
-    commit.Push( _( "Convert Symbol" ) );
+    commit.Push( _( "Change Body Style" ) );
 }
 
 

@@ -271,7 +271,7 @@ NETS_SEARCH_HANDLER::NETS_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
         PCB_SEARCH_HANDLER( _HKI( "Nets" ), aFrame )
 {
     m_columns.emplace_back( _HKI( "Name" ),  6, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Class" ), 6, wxLIST_FORMAT_LEFT );    // 9.0 TODO: wxT -> _HKI
+    m_columns.emplace_back( _HKI( "Class" ), 6, wxLIST_FORMAT_LEFT );
 }
 
 
@@ -350,7 +350,7 @@ RATSNEST_SEARCH_HANDLER::RATSNEST_SEARCH_HANDLER( PCB_EDIT_FRAME* aFrame ) :
         PCB_SEARCH_HANDLER( _HKI( "Ratsnest" ), aFrame )
 {
     m_columns.emplace_back( _HKI( "Name" ),  6, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( wxT( "Class" ), 6, wxLIST_FORMAT_LEFT );    // 9.0 TODO: wxT -> _HKI
+    m_columns.emplace_back( _HKI( "Class" ), 6, wxLIST_FORMAT_LEFT );
 }
 
 

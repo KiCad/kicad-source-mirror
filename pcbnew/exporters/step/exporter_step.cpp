@@ -117,9 +117,9 @@ wxString EXPORTER_STEP_PARAMS::GetDefaultExportExtension()
 {
     switch( m_format )
     {
-    case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "step" ); break;
-    case EXPORTER_STEP_PARAMS::FORMAT::GLB: return wxS( "glb" ); break;
-    default: return wxEmptyString; // shouldn't happen
+    case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "step" );
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "glb" );
+    default:                                 return wxEmptyString; // shouldn't happen
     }
 }
 
@@ -128,9 +128,9 @@ wxString EXPORTER_STEP_PARAMS::GetFormatName()
     switch( m_format )
     {
     // honestly these names shouldn't be translated since they are mostly industry standard acronyms
-    case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "STEP" ); break;
-    case EXPORTER_STEP_PARAMS::FORMAT::GLB: return wxS("Binary GLTF" ); break;
-    default: return wxEmptyString; // shouldn't happen
+    case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "STEP" );
+    case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS("Binary GLTF" );
+    default:                                 return wxEmptyString; // shouldn't happen
     }
 }
 

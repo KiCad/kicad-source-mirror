@@ -1609,7 +1609,7 @@ static struct ZONE_DESC
                     return false;
                 };
 
-        auto isBelowAreaIslandRemoval =
+        auto isAreaBasedIslandRemoval =
                 []( INSPECTABLE* aItem ) -> bool
                 {
                     if( ZONE* zone = dynamic_cast<ZONE*>( aItem ) )
@@ -1652,7 +1652,6 @@ static struct ZONE_DESC
                 .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill );
 
-        // TODO: Switch to translated
         auto atLeastMinWidthValidator =
                 []( const wxAny&& aValue, EDA_ITEM* aZone ) -> VALIDATOR_RESULT
                 {
@@ -1663,30 +1662,27 @@ static struct ZONE_DESC
                     if( val < zone->GetMinThickness() )
                     {
                         return std::make_unique<VALIDATION_ERROR_MSG>(
-                                wxT( "Cannot be less than zone minimum width" ) );
+                                _( "Cannot be less than zone minimum width" ) );
                     }
 
                     return std::nullopt;
                 };
 
-        // TODO: Switch to translated
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Width" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Hatch Width" ),
                     &ZONE::SetHatchThickness, &ZONE::GetHatchThickness, PROPERTY_DISPLAY::PT_SIZE ),
                     groupFill )
                 .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill )
                 .SetValidator( atLeastMinWidthValidator );
 
-        // TODO: Switch to translated
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Hatch Gap" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Hatch Gap" ),
                     &ZONE::SetHatchGap, &ZONE::GetHatchGap, PROPERTY_DISPLAY::PT_SIZE ),
                     groupFill )
                 .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill )
                 .SetValidator( atLeastMinWidthValidator );
 
-        // TODO: Switch to translated
-        propMgr.AddProperty( new PROPERTY<ZONE, double>( wxT( "Hatch Minimum Hole Ratio" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, double>( _HKI( "Hatch Minimum Hole Ratio" ),
                      &ZONE::SetHatchHoleMinArea, &ZONE::GetHatchHoleMinArea ),
                      groupFill )
                 .SetAvailableFunc( isCopperZone )
@@ -1694,32 +1690,28 @@ static struct ZONE_DESC
                 .SetValidator( PROPERTY_VALIDATORS::PositiveRatioValidator );
 
         // TODO: Smoothing effort needs to change to enum (in dialog too)
-        // TODO: Switch to translated
-        propMgr.AddProperty( new PROPERTY<ZONE, int>( wxT( "Smoothing Effort" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, int>( _HKI( "Smoothing Effort" ),
                     &ZONE::SetHatchSmoothingLevel, &ZONE::GetHatchSmoothingLevel ),
                     groupFill )
                 .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill );
 
-        // TODO: Switch to translated
-        propMgr.AddProperty( new PROPERTY<ZONE, double>( wxT( "Smoothing Amount" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, double>( _HKI( "Smoothing Amount" ),
                     &ZONE::SetHatchSmoothingValue, &ZONE::GetHatchSmoothingValue ),
                     groupFill )
                 .SetAvailableFunc( isCopperZone )
                 .SetWriteableFunc( isHatchedFill );
 
-        // TODO: Switch to translated
-        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ISLAND_REMOVAL_MODE>( wxT( "Remove Islands" ),
+        propMgr.AddProperty( new PROPERTY_ENUM<ZONE, ISLAND_REMOVAL_MODE>( _HKI( "Remove Islands" ),
                     &ZONE::SetIslandRemovalMode, &ZONE::GetIslandRemovalMode ),
                     groupFill )
                 .SetAvailableFunc( isCopperZone );
 
-        // TODO: Switch to translated
-        propMgr.AddProperty( new PROPERTY<ZONE, long long int>( wxT( "Minimum Island Area" ),
+        propMgr.AddProperty( new PROPERTY<ZONE, long long int>( _HKI( "Minimum Island Area" ),
                     &ZONE::SetMinIslandArea, &ZONE::GetMinIslandArea, PROPERTY_DISPLAY::PT_AREA ),
                     groupFill )
                 .SetAvailableFunc( isCopperZone )
-                .SetWriteableFunc( isBelowAreaIslandRemoval );
+                .SetWriteableFunc( isAreaBasedIslandRemoval );
 
         const wxString groupElectrical = _HKI( "Electrical" );
 

@@ -197,8 +197,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
 
         if( aSymbol->HasAlternateBodyStyle() )
         {
-            // TODO: 9.0: change to "A Power Symbol should not have DeMorgan variants"
-            msg.Printf( _( "<b>A Power Symbol should have no convert option</b><br><br>" ) );
+            msg.Printf( _( "<b>A Power Symbol should not have DeMorgan variants</b><br><br>" ) );
             aMessages.push_back( msg );
         }
 

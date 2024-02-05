@@ -127,16 +127,16 @@ void SCH_SEARCH_HANDLER::SelectItems( std::vector<long>& aItemRows )
 SYMBOL_SEARCH_HANDLER::SYMBOL_SEARCH_HANDLER( SCH_EDIT_FRAME* aFrame ) :
         SCH_SEARCH_HANDLER( _HKI( "Symbols" ), aFrame )
 {
-    m_columns.emplace_back( _HKI( "Reference" ),  2,  wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _HKI( "Value" ),      6,  wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _HKI( "Footprint" ),  10, wxLIST_FORMAT_LEFT );
-    m_columns.emplace_back( _HKI( "Page" ),       1,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "X" ),           3,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Y" ),           3,  wxLIST_FORMAT_CENTER );
-    m_columns.emplace_back( wxT( "Excl. sim" ),   2,  wxLIST_FORMAT_CENTER );    // 9.0 TODO: wxT -> _HKI
-    m_columns.emplace_back( wxT( "Excl. BOM" ),   2,  wxLIST_FORMAT_CENTER );    // 9.0 TODO: wxT -> _HKI
-    m_columns.emplace_back( wxT( "Excl. board" ), 2,  wxLIST_FORMAT_CENTER );    // 9.0 TODO: wxT -> _HKI
-    m_columns.emplace_back( _HKI( "DNP" ),        2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Reference" ),   2,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Value" ),       6,  wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Footprint" ),   10, wxLIST_FORMAT_LEFT );
+    m_columns.emplace_back( _HKI( "Page" ),        1,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "X" ),            3,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( wxT( "Y" ),            3,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Excl. sim" ),   2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Excl. BOM" ),   2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "Excl. board" ), 2,  wxLIST_FORMAT_CENTER );
+    m_columns.emplace_back( _HKI( "DNP" ),         2,  wxLIST_FORMAT_CENTER );
 }
 
 
@@ -347,15 +347,14 @@ wxString LABEL_SEARCH_HANDLER::getResultCell( const SCH_SEARCH_HIT& aHit, int aC
 
     if (aCol == 0)
     {
-        // 9.0 TODO: wxS() -> _HKI():
         if(lbl->Type() == SCH_LABEL_T)
-            return wxS( "Local" );
+            return _HKI( "Local" );
         else if( lbl->Type() == SCH_GLOBAL_LABEL_T )
-            return wxS( "Global" );
+            return _HKI( "Global" );
         else if( lbl->Type() == SCH_HIER_LABEL_T )
-            return wxS( "Hierarchical" );
+            return _HKI( "Hierarchical" );
         else if( lbl->Type() == SCH_DIRECTIVE_LABEL_T )
-            return wxS( "Directive" );
+            return _HKI( "Directive" );
     }
     else if( aCol == 1 )
         return lbl->GetShownText( false );
