@@ -437,7 +437,7 @@ BVHBuildNode *BVH_PBRT::recursiveBuild ( std::vector<BVHPrimitiveInfo>& primitiv
 
     (*totalNodes)++;
 
-    // !TODO: implement an memory Arena
+    // !TODO: implement a memory arena
     BVHBuildNode *node = static_cast<BVHBuildNode *>( malloc( sizeof( BVHBuildNode ) ) );
     m_nodesToFree.push_back( node );
 

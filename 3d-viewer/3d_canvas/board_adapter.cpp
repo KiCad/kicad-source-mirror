@@ -505,7 +505,6 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
             zposTop    = zposBottom + m_nonCopperLayerThickness3DU;
             break;
 
-        // !TODO: review
         default:
             zposTop = zpos_copperTop_front + (layer_id - MAX_CU_LAYERS + 3.0f) * zpos_offset;
             zposBottom = zposTop - m_nonCopperLayerThickness3DU;

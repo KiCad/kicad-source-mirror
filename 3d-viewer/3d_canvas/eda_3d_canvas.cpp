@@ -366,13 +366,10 @@ void EDA_3D_CANVAS::DoRePaint()
     if( !GetParent()->GetParent()->IsShownOnScreen() )
         return; // The parent board editor frame is no more alive
 
-    wxString err_messages;
-
-    // !TODO: implement error reporter
+    wxString           err_messages;
     INFOBAR_REPORTER   warningReporter( m_parentInfoBar );
     STATUSBAR_REPORTER activityReporter( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
-
-    unsigned strtime = GetRunningMicroSecs();
+    unsigned           start_time = GetRunningMicroSecs();
 
     // "Makes the OpenGL state that is represented by the OpenGL rendering
     //  context context current, i.e. it will be used by all subsequent OpenGL calls.
@@ -548,7 +545,7 @@ void EDA_3D_CANVAS::DoRePaint()
     if( m_mouse_was_moved || m_camera_is_moving )
     {
         // Calculation time in milliseconds
-        const double calculation_time = (double)( GetRunningMicroSecs() - strtime) / 1e3;
+        const double calculation_time = (double)( GetRunningMicroSecs() - start_time ) / 1e3;
 
         activityReporter.Report( wxString::Format( _( "Last render time %.0f ms" ),
                                  calculation_time ) );
