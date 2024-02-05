@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-05 13:03+0000\n"
+"PO-Revision-Date: 2024-02-05 14:36+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -1856,7 +1856,7 @@ msgstr "应用于全部"
 
 #: common/confirm.cpp:233
 msgid "Your current changes will be permanently lost."
-msgstr "你当前的变更将永久丢失。"
+msgstr "当前变更将永久丢失。"
 
 #: common/confirm.cpp:234 common/tool/actions.cpp:107
 msgid "Revert"
@@ -3956,15 +3956,16 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允许 iCad 匿名地向开发人员报告崩溃和特殊事件数据, 以帮助更有效地识别用户群体"
-"中的关键 bug, 并帮助绘制功能画像来指导改进。\n"
+"允许 KiCad 匿名地向开发人员报告崩溃和特殊事件数据, "
+"以帮助更有效地识别用户群体中的关键 bug, 并帮助绘制功能画像来指导改进。\n"
 "\n"
-"要链接来自相同 KiCad 安装的自动报告, 将生成一个完全随机的唯一标识符, 它仅用于"
-"崩溃报告的目的。没有个人身份信息(PII), 包括IP地址被存储或连接到该标识符。您可"
-"以在任何时候通过提供的按钮重置此 id。\n"
+"要链接来自相同 KiCad 安装的自动报告, 将生成一个完全随机的唯一标识符, "
+"它仅用于崩溃报告的目的。没有个人身份信息(PII), "
+"包括IP地址被存储或连接到该标识符。\n"
+"您可以在任何时候通过提供的按钮重置此 id。\n"
 "\n"
-"如果您选择自愿参与, 那么发生崩溃或事件时, KiCad 将自动处理发送上述报告。您的"
-"设计文件(如原理图或PCB) 在此过程中绝对不会被共享。"
+"如果您选择自愿参与, 那么发生崩溃或事件时, KiCad 将自动处理发送上述报告。\n"
+"您的设计文件(如原理图或PCB) 在此过程中绝对不会被共享。"
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
@@ -4749,12 +4750,12 @@ msgstr "剪贴板"
 #: common/dsnlexer.cpp:328
 #, c-format
 msgid "Expecting %s"
-msgstr "预期 %s"
+msgstr "应为 %s"
 
 #: common/dsnlexer.cpp:336
 #, c-format
 msgid "Expecting '%s'"
-msgstr "预期 '%s'"
+msgstr "应为 '%s'"
 
 #: common/dsnlexer.cpp:344
 #, c-format
@@ -4975,7 +4976,7 @@ msgstr ""
 "%s\n"
 "时, 没有及时保存就退出了 KiCad。\n"
 "\n"
-"你想要打开自动保存的文件吗?"
+"是否打开自动保存的文件?"
 
 #: common/eda_base_frame.cpp:1379
 msgid "The auto save file could not be renamed to the board file name."
@@ -6314,7 +6315,7 @@ msgstr "所选文件无效或可能已损坏!"
 #: common/io/cadstar/cadstar_archive_parser.cpp:2676
 #, c-format
 msgid "Unexpected number of points in '%s'. Found %d but expected %d."
-msgstr "在 '%s' 中发现了非预期数量的点数。找到了 %d 个, 但预期是 %d 个。"
+msgstr "在 '%s' 中发现了非预期数量的点数。实际找到 %d 个, 但应为 %d 个。"
 
 #: common/io/cadstar/cadstar_archive_parser.h:43
 #, fuzzy, c-format
@@ -8012,7 +8013,7 @@ msgstr "渲染引擎"
 
 #: common/widgets/gal_options_panel_base.cpp:31
 msgid "Accelerated graphics"
-msgstr "图形加速"
+msgstr "硬件图形加速"
 
 #: common/widgets/gal_options_panel_base.cpp:32
 msgid "Hardware-accelerated graphics (recommended)"
@@ -8395,7 +8396,7 @@ msgstr "KiCad 旧版原理图文件"
 #: common/wildcards_and_files_ext.cpp:259
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr.h:74
 msgid "KiCad s-expression schematic files"
-msgstr "KiCad 'S-表达式' 原理图文件"
+msgstr "KiCad s-expression 原理图文件"
 
 #: common/wildcards_and_files_ext.cpp:266
 msgid "CADSTAR Archive files"
@@ -10087,11 +10088,11 @@ msgstr "此插件已存在。"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:798
 msgid "You must provide a netlist generator command string"
-msgstr "你必须提供网表生成器的命令内容"
+msgstr "必须提供网表生成器的命令内容"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:804
 msgid "You must provide a netlist generator title"
-msgstr "你必须提供网表生成器的标题内容"
+msgstr "必须提供网表生成器的标题内容"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:52
 msgid "Add Generator..."
@@ -14304,7 +14305,7 @@ msgstr "将 %d 个库另存为当前 KiCad 版本格式 (*.kicad_sym) 并替换�
 #: pcbnew/dialogs/dialog_export_step.cpp:409
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "文件 '%s' 已存在, 你想覆盖它吗?"
+msgstr "文件 '%s' 已存在, 要覆盖它吗?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:889
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:850
@@ -14944,7 +14945,7 @@ msgstr "原理图 '%s' 已由 '%s' 在 '%s' 中打开。"
 #: eeschema/files-io.cpp:133
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
-msgstr "原理图 '%s' 不存在。你想创建它吗?"
+msgstr "原理图 '%s' 不存在。要创建它吗?"
 
 #: eeschema/files-io.cpp:154
 msgid "Creating Schematic"
@@ -16133,7 +16134,7 @@ msgstr "在\"附加\"部分找到了未知或意外的记录 ID %d。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:658
 msgid "Expected Altium Schematic file version 5.0"
-msgstr "预期 Altium 原理图文件版本 5.0"
+msgstr "应为 5.0 版本的 Altium 原理图文件"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:690
 msgid "Record 'IEEE_SYMBOL' not handled."
@@ -16181,7 +16182,7 @@ msgstr "引脚的内边缘类型出乎意料。"
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1564
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
-msgstr "贝塞尔曲线有 %d 个控制点。预期至少 2 个。"
+msgstr "贝塞尔曲线有 %d 个控制点。至少应为 2 个。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:2640
 #, c-format
@@ -16369,9 +16370,8 @@ msgstr ""
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
-msgstr ""
-"符号 ID '%s' 是信号参考或全局信号, 但它的引脚太多。预期引脚数为 1, 但找到 "
-"%d。"
+msgstr "符号 ID '%s' 是信号参考或全局信号, 但它的引脚太多。引脚数量应为 1 个, "
+"但实际找到了 %d 个。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:977
 #, c-format
@@ -17718,7 +17718,7 @@ msgstr ""
 "导致加载的原理图中的所有符号都使用默认的实例设置或退回到库中的符号设置。加载"
 "使用该原理图文件的工程并保存为最新的文件版本将解决这个问题。\n"
 "\n"
-"你想继续吗?"
+"是否继续?"
 
 #: eeschema/sheet.cpp:312 eeschema/sheet.cpp:340 eeschema/sheet.cpp:381
 #: eeschema/sheet.cpp:430 eeschema/sheet.cpp:491
@@ -17749,7 +17749,7 @@ msgstr ""
 "所选文件是作为不同工程的一部分创建的。将文件链接到此工程可能会导致丢失或错误"
 "的符号库引用。\n"
 "\n"
-"你想继续吗?"
+"是否继续?"
 
 #: eeschema/sheet.cpp:426
 msgid ""
@@ -24119,7 +24119,7 @@ msgstr "压缩包元数据必须定义一个版本"
 msgid ""
 "Package with identifier %s is already installed. Would you like to update it "
 "to the version from selected file?"
-msgstr "已安装标识符为 %s 的扩展内容包。你想将其更新为所选文件的版本吗?"
+msgstr "已安装标识符为 %s 的扩展内容包。是否将其更新为所选文件中的版本?"
 
 #: kicad/pcm/pcm_task_manager.cpp:408
 msgid "Update package"
@@ -24558,7 +24558,7 @@ msgstr "计算器工具"
 
 #: kicad/tools/kicad_manager_actions.cpp:168
 msgid "Run component calculations, track width calculations, etc."
-msgstr "运行元件计算, 布线宽度计算等。"
+msgstr "运行元件计算, 走线宽度计算等。"
 
 #: kicad/tools/kicad_manager_actions.cpp:178
 msgid "Edit drawing sheet borders and title block"
@@ -24587,9 +24587,9 @@ msgid ""
 "\n"
 "Do you want to continue?"
 msgstr ""
-"所选的不是空目录。建议在空目录中创建工程。\n"
+"选择的目录不是一个空目录, 建议在空目录中创建工程。\n"
 "\n"
-"你想继续吗?"
+"是否继续?"
 
 #: kicad/tools/kicad_manager_control.cpp:151
 msgid "Clone Project from Git Repository"
@@ -26014,7 +26014,7 @@ msgstr "熔点:"
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:137
 #: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
-msgstr "布线宽度:"
+msgstr "走线宽度:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:77
 msgid "Track thickness:"
@@ -26022,7 +26022,7 @@ msgstr "铜层厚度:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:106
 msgid "Time to fuse:"
-msgstr "熔和时间:"
+msgstr "熔短时间:"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:113
 msgid "s"
@@ -26049,7 +26049,7 @@ msgstr "钛"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:49
 msgid "Stainless steel 18-9"
-msgstr "不锈钢 18-9"
+msgstr "18-9 不锈钢"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:50
 msgid "Silver"
@@ -26067,11 +26067,11 @@ msgstr "镍"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:850
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:30
 msgid "Copper"
-msgstr "铜层"
+msgstr "铜"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:54
 msgid "Copper-Aluminium"
-msgstr "铜铝"
+msgstr "铝铜合金"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:55
 msgid "Brass"
@@ -26091,7 +26091,7 @@ msgstr "铅"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:59
 msgid "Aluminium-Copper"
-msgstr "铝铜"
+msgstr "铝铜合金"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:60
 msgid "Cast iron"
@@ -26099,7 +26099,7 @@ msgstr "铸铁"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:61
 msgid "Carbon steel"
-msgstr "碳素钢"
+msgstr "碳钢"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:62
 msgid "Aluminium"
@@ -26132,7 +26132,7 @@ msgstr "镁"
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:33
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:38
 msgid "Copper (Cu)"
-msgstr "铜层 (Cu)"
+msgstr "铜 (Cu)"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:64
 msgid "Threshold voltage:"
@@ -26220,7 +26220,7 @@ msgstr "简单解决方案:"
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:131
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:151
 msgid "Approximation:"
-msgstr "近似值:"
+msgstr "误差:"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:122
 msgid "3R solution:"
@@ -26449,12 +26449,12 @@ msgstr "铜电阻率:"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:95
 msgid "External Layer Traces"
-msgstr "外层布线"
+msgstr "外层走线"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:103
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:199
 msgid "Trace width (W):"
-msgstr "布线宽度 (W):"
+msgstr "走线宽度 (W):"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:115
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:213
@@ -26492,7 +26492,7 @@ msgstr "W"
 
 #: pcb_calculator/calculator_panels/panel_track_width_base.cpp:191
 msgid "Internal Layer Traces"
-msgstr "内层布线"
+msgstr "内层走线"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:23
 msgid "Microstrip Line"
@@ -26813,7 +26813,7 @@ msgstr "数据文件错误。"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:44
 msgid "Volt"
-msgstr "伏特(Volt)"
+msgstr "V"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:57
 msgid "Regulator Parameters"
@@ -26940,11 +26940,11 @@ msgstr "稳压器"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:166
 msgid "Resistor Calculator"
-msgstr "E 系列电阻计算器"
+msgstr "电阻计算器"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:168
 msgid "Power, current and isolation"
-msgstr "电源、电流和隔离"
+msgstr "电源, 电流和隔离"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:170
 msgid "Electrical Spacing"
@@ -27082,10 +27082,10 @@ msgid ""
 "___H___ is thickness (height) in mils<br>\n"
 "___K___ is 0.024 for internal traces or 0.048 for external traces\n"
 msgstr ""
-"如果你指定最大电流, 则会计算相应的布线宽度。\n"
+"如果你指定最大电流, 则会计算相应的走线宽度。\n"
 "\n"
-"如果你指定其中一个布线宽度, 则将计算它可以处理的最大电流。然后将计算另外的同"
-"样处理此电流的布线宽度。\n"
+"如果你指定其中一个走线宽度, "
+"则将计算它可以处理的最大电流。然后将计算另外的同样处理此电流的走线宽度。\n"
 "\n"
 "控制值以粗体显示。\n"
 "\n"
@@ -27100,7 +27100,7 @@ msgstr ""
 "__&Delta;T__ = 环境温度温升 (单位: °C 摄氏度)\n"
 "__W__ = 宽度 (单位: mil 密耳)\n"
 "__H__ = 厚度 (高度) (单位: mil 密耳)\n"
-"__K__ = 0.024 用于内部布线, 0.048 用于外部布线\n"
+"__K__ = 0.024 用于内部走线, 0.048 用于外部走线\n"
 
 #: pcb_calculator/transline_dlg_funct.cpp:61
 msgid "Dielectric Loss Factor"
@@ -27520,7 +27520,7 @@ msgstr "过孔"
 
 #: pcbnew/board.cpp:1491 pcbnew/pcb_draw_panel_gal.cpp:557
 msgid "Track Segments"
-msgstr "布线线段"
+msgstr "走线段"
 
 #: pcbnew/board.cpp:1492 pcbnew/generators/pcb_tuning_pattern.cpp:1915
 #: pcbnew/pcb_draw_panel_gal.cpp:558
@@ -27997,7 +27997,7 @@ msgstr "供应商和参考"
 
 #: pcbnew/cleanup_item.cpp:46
 msgid "Remove track shorting two nets"
-msgstr "移除短路两个网络的布线"
+msgstr "移除两个短路网络的走线"
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove via shorting two nets"
@@ -28009,15 +28009,15 @@ msgstr "移除多余的通孔"
 
 #: pcbnew/cleanup_item.cpp:49
 msgid "Remove duplicate track"
-msgstr "移除重复的布线"
+msgstr "移除重复的走线"
 
 #: pcbnew/cleanup_item.cpp:50
 msgid "Merge co-linear tracks"
-msgstr "合并共线布线"
+msgstr "合并共线的走线"
 
 #: pcbnew/cleanup_item.cpp:51
 msgid "Remove track not connected at both ends"
-msgstr "移除未连接端的布线"
+msgstr "移除两端悬空的走线"
 
 #: pcbnew/cleanup_item.cpp:52
 msgid "Remove via connected on less than 2 layers"
@@ -28025,11 +28025,11 @@ msgstr "移除层连接数不到 2 的过孔"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
-msgstr "移除零长度布线"
+msgstr "移除长度为零的走线"
 
 #: pcbnew/cleanup_item.cpp:54
 msgid "Remove track inside pad"
-msgstr "移除焊盘内的布线"
+msgstr "移除焊盘内的走线"
 
 #: pcbnew/cleanup_item.cpp:57
 msgid "Remove zero-size graphic"
@@ -28895,13 +28895,13 @@ msgstr "清理电路板"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:25
 msgid "Delete &tracks connecting different nets"
-msgstr "删除连接不同网络走线 (&T)"
+msgstr "删除连接到不同网络的走线 (&T)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:26
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
 "circuit)"
-msgstr "移除属于不同网络的连接节点 (短路)"
+msgstr "移除连接了不同网络 (短路) 的走线"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:30
 msgid "&Delete redundant vias"
@@ -28917,31 +28917,31 @@ msgstr "删除仅在一个层上有连接的过孔"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:38
 msgid "&Merge co-linear tracks"
-msgstr "合并重叠布线 (&M)"
+msgstr "合并重叠的走线(&M)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:39
 msgid "merge aligned track segments, and remove null segments"
-msgstr "合并连成直线布线段, 移除空的线段"
+msgstr "合并已对齐的走线段, 并移除空段"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:43
 msgid "Delete tracks unconnected at one end"
-msgstr "删除某一端未连接的布线"
+msgstr "删除一端悬空的走线"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:44
 msgid "delete tracks having at least one dangling end"
-msgstr "删除一头悬空的布线段"
+msgstr "删除至少有一端悬空的走线"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:48
 msgid "Delete tracks fully inside pads"
-msgstr "删除完全在焊盘内的布线"
+msgstr "删除完全在焊盘内的走线"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:49
 msgid "Delete tracks that have both start and end positions inside of a pad"
-msgstr "删除在起始位置和结束位置都在同一焊盘内的布线"
+msgstr "删除起始和结束位置都在同一焊盘内的走线"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:60
 msgid "Cleanup Tracks and Vias"
-msgstr "清理布线和过孔"
+msgstr "清理走线和过孔"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:209
 msgid "Teardrop on Vias/Pads Properties"
@@ -28949,7 +28949,7 @@ msgstr "过孔/焊盘上的泪滴属性"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:213
 msgid "Teardrop on Tracks Properties"
-msgstr "布线上的泪滴属性"
+msgstr "走线上的泪滴属性"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:217
 msgid "Teardrop Properties"
@@ -29966,9 +29966,9 @@ msgid ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 msgstr ""
-"如果选中, 则会报告所有针对布线的 DRC 违规。对于复杂的设计来说这可能会很慢。\n"
+"如果选中, 则会报告所有针对走线的 DRC 违规。对于复杂的设计来说这可能会很慢。\n"
 "\n"
-"如果未选中, 则只会为每个布线报告第一个 DRC 违规。"
+"如果未选中, 则只会为每个走线报告第一个 DRC 违规。"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:41
 msgid "Test for parity between PCB and schematic"
@@ -30654,7 +30654,7 @@ msgstr "包含图形 (&D)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:42
 msgid "Include &tracks"
-msgstr "包含布线 (&T)"
+msgstr "包含走线 (&T)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
@@ -31208,7 +31208,7 @@ msgstr "没有可加载的 Python 脚本:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr "显示布线"
+msgstr "显示走线"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
@@ -31619,11 +31619,11 @@ msgstr "解锁封装"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:73
 msgid "Locked tracks"
-msgstr "锁定布线"
+msgstr "锁定走线"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:76
 msgid "Unlocked tracks"
-msgstr "解锁布线"
+msgstr "解锁走线"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:87
 msgid "Current layer only"
@@ -31942,7 +31942,7 @@ msgstr "设置为 网络类/自定义规则 的值"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.h:83
 msgid "Set Track and Via Properties"
-msgstr "设置布线与过孔属性"
+msgstr "设置走线与过孔属性"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
 #: pcbnew/drc/drc_engine.cpp:1428
@@ -32076,7 +32076,7 @@ msgstr "删除网表中没有元件的封装"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 msgid "Delete tracks shorting multiple nets"
-msgstr "删除短路多个网络的布线"
+msgstr "删除短路多个网络的走线"
 
 #: pcbnew/dialogs/dialog_import_settings.cpp:47
 #: pcbnew/dialogs/dialog_import_settings.cpp:100
@@ -32274,7 +32274,7 @@ msgstr "过孔长度"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:994
 msgid "Track Length"
-msgstr "布线长度"
+msgstr "走线长度"
 
 # Die 裸芯片
 #: pcbnew/dialogs/dialog_net_inspector.cpp:996
@@ -33329,7 +33329,7 @@ msgstr "将全局 Y 比例调整设置为精确缩放 PostScript 输出。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:303
 msgid "Track width correction:"
-msgstr "布线宽度修正:"
+msgstr "走线宽度修正:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:308
 msgid ""
@@ -33340,8 +33340,8 @@ msgid ""
 "(MinTrackWidth-1), +(MinClearanceValue-1)]."
 msgstr ""
 "为精确宽度 PostScript 输出设置全局宽度校正。\n"
-"这些宽度校正旨在补偿布线宽度以及焊盘和通孔尺寸误差。\n"
-"合理的宽度校正值必须在 [-(最小布线宽度 - 1),+(最小间距值 - 1)] 范围内。"
+"这些宽度校正旨在补偿走线宽度以及焊盘和通孔尺寸误差。\n"
+"合理的宽度校正值必须在 [-(最小走线宽度 - 1),+(最小间距值 - 1)] 范围内。"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:319
 msgid "Force A4 output"
@@ -33491,7 +33491,7 @@ msgstr "绕走"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:82
 msgid "Remove redundant tracks"
-msgstr "移除冗余布线"
+msgstr "移除冗余走线"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:83
 msgid ""
@@ -33500,9 +33500,9 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"在布线过程中移除闭环线路 (例如, 如果新布线与现有布线有相同的连接效果, 则旧布"
-"线将被移除)。\n"
-"环路移除在局部生效 (仅在当前布线的起点和终点之间)。"
+"在布线过程中移除闭环线路 (例如, 如果新走线与现有走线有相同的连接效果, "
+"则旧走线将被移除)。\n"
+"环路移除在局部生效 (仅在当前走线的起点和终点之间)。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
@@ -33526,11 +33526,11 @@ msgstr "启用后, 布线器会尝试将几根线段合并成一根布线 (拖�
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
 msgid "Suggest track finish"
-msgstr "建议布线完成"
+msgstr "建议走线终点"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:102
 msgid "Optimize entire track being dragged"
-msgstr "优化整个被拖动的布线"
+msgstr "优化整个被拖动的走线"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:103
 msgid ""
@@ -33543,13 +33543,13 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:107
 msgid "Use mouse path to set track posture"
-msgstr "使用鼠标设置布线形态"
+msgstr "使用鼠标设置走线形态"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:108
 msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
-msgstr "启用时, 布线的形态将由鼠标从起始位置移动的方式来引导"
+msgstr "启用时, 走线的形态将由鼠标从起始位置移动的方式来引导"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:112
 msgid "Fix all segments on click"
@@ -33560,9 +33560,8 @@ msgid ""
 "When enabled, all track segments will be fixed in place up to the cursor "
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
-msgstr ""
-"启用时, 所有的布线线段将被固定在光标所在的位置。禁用时, 最后一个线段 (离光标"
-"最近的)将不受约束并跟随光标。"
+msgstr "启用时, 所有的走线段将被固定在光标所在的位置。禁用时, 最后一个线段 "
+"(离光标最近的)将不受约束并跟随光标。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
@@ -33760,7 +33759,7 @@ msgstr "基本规则:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Keep out tracks"
-msgstr "禁止进行布线"
+msgstr "禁止放置走线"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
 msgid "Prevent tracks from routing into this area"
@@ -33989,7 +33988,7 @@ msgstr "过孔起始层和结束层不能相同"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:799
 msgid "Edit track/via properties"
-msgstr "编辑布线/过孔属性"
+msgstr "编辑走线/过孔属性"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:864
 msgid "Updating nets"
@@ -34085,11 +34084,11 @@ msgstr "(占焊盘/通孔/走线尺寸的百分比)"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.h:146
 msgid "Track & Via Properties"
-msgstr "布线与过孔属性"
+msgstr "走线与过孔属性"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
 msgid "Track and Via Dimensions"
-msgstr "布线和过孔标注"
+msgstr "走线和过孔标注"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
 msgid "Target skew: "
@@ -34253,7 +34252,7 @@ msgstr "保持端点或起点的方向"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:70
 msgid "Track mouse-drag mode:"
-msgstr "布线时的鼠标拖动行为:"
+msgstr "鼠标拖动走线行为:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:77
 msgid "Drag (45 degree mode)"
@@ -34301,12 +34300,12 @@ msgstr "吸附图形"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:291
 msgid "Snap to pads:"
-msgstr "捕捉到焊盘:"
+msgstr "捕获到焊盘:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:293
 #: pcbnew/dialogs/panel_edit_options_base.cpp:301
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr "当鼠标进入焊盘区域时捕捉光标"
+msgstr "当鼠标进入焊盘区域时捕获光标"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
@@ -34315,16 +34314,16 @@ msgstr "创建新走线时启用"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:305
 msgid "Snap to tracks:"
-msgstr "捕捉到布线:"
+msgstr "捕获到走线:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:307
 #: pcbnew/dialogs/panel_edit_options_base.cpp:315
 msgid "Capture cursor when the mouse approaches a track"
-msgstr "当鼠标靠近布线时捕捉光标"
+msgstr "当鼠标靠近走线时捕获光标"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
 msgid "Snap to graphics:"
-msgstr "捕捉到图形:"
+msgstr "捕获到图形:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:321
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
@@ -34680,7 +34679,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
-msgstr "最小布线宽度:"
+msgstr "最小走线宽度:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:67
 msgid ""
@@ -34879,16 +34878,15 @@ msgstr "长度调整"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:443
 msgid "Include stackup height in track length calculations"
-msgstr "在计算布线长度时考虑叠层高度"
+msgstr "计算走线长度时考虑叠层高度"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:444
 msgid ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
-msgstr ""
-"启用后, 计算带过孔的布线长度时将包括铜层之间的距离。禁用时, 过孔叠层高度将被"
-"忽略。"
+msgstr "启用后, 计算带过孔的走线长度时将包括铜层之间的距离。禁用时, "
+"过孔叠层高度将被忽略。"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
 msgid "When Adding Footprints to Board"
@@ -34930,7 +34928,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "在移除的层上找到了项目。该操作将移除已移除层中的所有项目, 并且不能撤消。\n"
-"你想继续吗?"
+"是否继续?"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:673
 msgid "Layer must have a name."
@@ -35021,7 +35019,7 @@ msgstr "电路板上, 非铜层"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:91
 msgid "If you want a solder paste layer for front side of the board"
-msgstr "如果你想要电路板正面的锡膏层"
+msgstr "如果您希望在电路板正面使用焊膏层"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:95
 msgid "SoldP_Front"
@@ -36087,132 +36085,167 @@ msgstr ""
 "\n"
 "### Constraints (约束) \n"
 "\n"
-"| 约束类型           | 变量类"
-"型                                                                                                          "
-"| 描"
-"述                                                                                                                                                                                                                                                                                                                                                                                                                                             "
-"|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| 检查过孔的孔环宽度"
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| 定义不同网络铜箔对象的 **电气** 间隙。  (如果您想定义不考虑网络的对象的间"
-"隙，请查看 `physical_clearance` 约束类型。<br><br>如果允许铜箔对象重叠(碰"
-"撞)，可以创建一个 `clearance` 约束，并将 `min` 值设为小于零  (例如, `-1`)。"
-"<br>                                                                                                                      "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| 检查封装 Courtyard 之间的间隙，如果任何两个封装之间的距离小于 min 的值，则"
-"会产生错误。如果封装没有 Courtyard，则该约束不会产生错误。"
-"<br>                                                                                                                                                                                                               "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| 检查差分对中耦合走线之间的间隙。 耦合走线是相互平行的线段。 差分对间隙约束"
-"不对差分对的非耦合部分 (例如，元件的扇出部分) 进行测试。"
-"<br>                                                                                                                                                                                           "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| 检查差分对正负走线非耦合部分的间距 (例如，差分对从元件扇出，或绕过某一物体 "
-"(如通孔) 的非耦合部分) 。"
-"<br>                                                                                                                                                                                                         "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| 指定一个或多个对象类型不被允许, 使用空格分割。  例如, `(constraint "
-"disallow track)` 或 `(constraint disallow track via pad)`。  如果这个类型的对"
-"象满足规则条件，就会产生一个 DRC 错误。<br><br>该约束类型与 keepout 规则区域"
-"基本相同，但可以创建更具体的 keepout 约束。"
+"| 约束类型           | 变量类型                                              "
+"                                                            | 描述           "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                 |\n"
+"|---------------------------|------------------------------------------------"
+"------------------------------------------------------------------------|----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"----------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                        | 检"
+"查过孔的孔环宽度<br>                                                         "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                             |\n"
+"| `clearance`               | min                                            "
+"                                                                        | "
+"定义不同网络铜箔对象的 **电气** 间隙。  (如果您想定义不考虑网络的对象的间隙，"
+"请查看 `physical_clearance` 约束类型。<br><br>如果允许铜箔对象重叠(碰撞)，"
+"可以创建一个 `clearance` 约束，并将 `min` 值设为小于零  (例如, `-1`)。<br>   "
+"                                                                             "
+"                                      |\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                        | "
+"检查封装 Courtyard 之间的间隙，如果任何两个封装之间的距离小于 min "
+"的值，则会产生错误。如果封装没有 Courtyard，则该约束不会产生错误。<br>       "
+"                                                                             "
+"                                                                             "
+"                                              |\n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                        | "
+"检查差分对中耦合走线之间的间隙。 耦合走线是相互平行的线段。 "
+"差分对间隙约束不对差分对的非耦合部分 (例如，元件的扇出部分) 进行测试。<br>   "
+"                                                                             "
+"                                                                             "
+"                              |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                        | "
+"检查差分对正负走线非耦合部分的间距 (例如，差分对从元件扇出，或绕过某一物体 "
+"(如通孔) 的非耦合部分) 。<br>                                                "
+"                                                                             "
+"                                                                            |"
+"\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"指定一个或多个对象类型不被允许, 使用空格分割。  例如, `(constraint disallow "
+"track)` 或 `(constraint disallow track via pad)`。  "
+"如果这个类型的对象满足规则条件，就会产生一个 DRC 错误。<br><br>该约束类型与 "
+"keepout 规则区域基本相同，但可以创建更具体的 keepout 约束。"
 "<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| 检查对象与板边的间隙。<br><br>这也可以看作是 \"铣削公差\"，因为电路板边缘将"
-"包括 `Edge.Cuts` 层上的所有图形对象以及任何 *椭圆* 焊盘孔。  (钻孔公差请查看 "
-"`physical_hole_clearance` 约束类"
-"型)<br>                                                                                                                                                    "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| 检查符合规则条件的网络的总布线长度，如果网络的长度低于限制条件的 `min` 最小"
-"值 (如果指定) 或高于 `max` 最大值 (如果指定) ，则生成错误。"
-"<br>                                                                                                                                                                                                                               "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| 检查焊盘或过孔中钻孔的大小 (直径) 。 对于椭圆形孔，较小的直径将与 `min` 最"
-"小值 (如果指定) 对比，较大的直径将与 `max` 最大值 (如果指定) 对比。"
-"<br>                                                                                                                                                                                            "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| 检查焊盘或过孔中的钻孔与不同网络的铜箔对象之间的间隙。 间隙是从孔的直径而不"
-"是孔的中心测量的。"
-"<br>                                                                                                                                                                                                                                                                        "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| 检查焊盘和过孔中机械钻孔之间的间隙。 间隙在孔边缘之间测量，而不是从孔的中心"
-"测量。<br><br>该约束类型完全是为了保护钻头。 不检查 **激光钻孔** (微孔) 与其"
-"他非机械钻孔之间的间隙，也不检查 **铣削孔** (椭圆形) 与其他非机械钻孔之间的间"
-"隙。<br> |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| 检查给定层 (包括非铜层) 上两个对象之间的间隙。<br><br>虽然这可以执行比 "
-"`clearance` 更通用的检查，但速度要慢得多。 尽可能使用 `clearance` 约束。"
-"<br>                                                                                                                                                                                                                            "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| 检查焊盘或过孔中的钻孔与另一个对象之间的间隙，无论它们是否属于同一网络。 间"
-"隙是从孔的边缘而不是中心测量的。<br><br>这也可以被认为是“钻孔公差”，因为它只"
-"包括 **圆** 孔 (有关铣削公差，请参阅 `edge_clearance`) 。"
-"<br>                                                                                                                    "
-"|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| 检查丝印层上的对象与其他对象之间的间隙。"
-"<br>                                                                                                                                                                                                                                                                                                                                                                        "
-"|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| 检查所有符合规则条件的网络的 skew，即符合规则的每个网络的长度与网络总长的平"
-"均值之间的差值。 如果该平均值与任何一个网络的长度之间的差的绝对值高于约束 "
-"`max` 最大值，则会产生错误。"
-"<br>                                                                                   "
-"|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| 指定在热焊盘连接方式下，焊盘与敷铜区域之间的最小间隙。"
-"<br>                                                                                                                                                                                                                                                                                                                                                           "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| 指定在热焊盘连接方式下，连接焊盘与敷铜的辐条的宽度。"
-"<br>                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| 检查走线和圆弧走线的宽度。 对于宽度低于 `min` 最小值 (如果指定) 或高于 "
-"`max` 最大值 (如果指定) 的走线线段，都会生成错误。"
-"<br>                                                                                                                                                                                                                                                             "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| 计算每个与规则条件匹配的网络的过孔数量。 如果该数字超过匹配网络上的约束 "
-"`max` 最大值，则将为该网络生成错误。"
-"<br>                                                                                                                                                                                                                                                               "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| 指定焊盘与敷铜区域之间的连接方式。"
-"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
-"|\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"检查对象与板边的间隙。<br><br>这也可以看作是 \"铣削公差\"，"
+"因为电路板边缘将包括 `Edge.Cuts` 层上的所有图形对象以及任何 *椭圆* 焊盘孔。  "
+"(钻孔公差请查看 `physical_hole_clearance` 约束类型)<br>                      "
+"                                                                             "
+"                                                 |\n"
+"| `length`                  | min/max                                        "
+"                                                                        | "
+"检查符合规则条件的网络的总走线长度，如果网络的长度低于限制条件的 `min` "
+"最小值 (如果指定) 或高于 `max` 最大值 (如果指定) ，则生成错误。<br>          "
+"                                                                             "
+"                                                                             "
+"                                                           |\n"
+"| `hole`                    | min/max                                        "
+"                                                                        | "
+"检查焊盘或过孔中钻孔的大小 (直径) 。 对于椭圆形孔，较小的直径将与 `min` "
+"最小值 (如果指定) 对比，较大的直径将与 `max` 最大值 (如果指定) 对比。<br>    "
+"                                                                             "
+"                                                                             "
+"                              |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                        | "
+"检查焊盘或过孔中的钻孔与不同网络的铜箔对象之间的间隙。 "
+"间隙是从孔的直径而不是孔的中心测量的。<br>                                   "
+"                                                                             "
+"                                                                             "
+"                                                                           |"
+"\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                        | "
+"检查焊盘和过孔中机械钻孔之间的间隙。 间隙在孔边缘之间测量，而不是从孔的中心测"
+"量。<br><br>该约束类型完全是为了保护钻头。 不检查 **激光钻孔** (微孔) "
+"与其他非机械钻孔之间的间隙，也不检查 **铣削孔** (椭圆形) "
+"与其他非机械钻孔之间的间隙。<br> |\n"
+"| `physical_clearance`      | min                                            "
+"                                                                        | "
+"检查给定层 (包括非铜层) 上两个对象之间的间隙。<br><br>虽然这可以执行比 "
+"`clearance` 更通用的检查，但速度要慢得多。 尽可能使用 `clearance` 约束。<br> "
+"                                                                             "
+"                                                                             "
+"                                                                 |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                        | "
+"检查焊盘或过孔中的钻孔与另一个对象之间的间隙，无论它们是否属于同一网络。 "
+"间隙是从孔的边缘而不是中心测量的。<br><br>这也可以被认为是“钻孔公差”，"
+"因为它只包括 **圆** 孔 (有关铣削公差，请参阅 `edge_clearance`) 。<br>        "
+"                                                                             "
+"                               |\n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"检查丝印层上的对象与其他对象之间的间隙。<br>                                 "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                   |\n"
+"| `skew`                    | max                                            "
+"                                                                        | "
+"检查所有符合规则条件的网络的 "
+"skew，即符合规则的每个网络的长度与网络总长的平均值之间的差值。 "
+"如果该平均值与任何一个网络的长度之间的差的绝对值高于约束 `max` "
+"最大值，则会产生错误。<br>                                                   "
+"                                |\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                        | "
+"指定在热焊盘连接方式下，焊盘与敷铜区域之间的最小间隙。<br>                   "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                    |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                        | "
+"指定在热焊盘连接方式下，连接焊盘与敷铜的辐条的宽度。<br>                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"             |\n"
+"| `track_width`             | min/opt/max                                    "
+"                                                                        | "
+"检查走线和圆弧走线的宽度。 对于宽度低于 `min` 最小值 (如果指定) 或高于 `max` "
+"最大值 (如果指定) 的走线线段，都会生成错误。<br>                             "
+"                                                                             "
+"                                                                             "
+"                                                                      |\n"
+"| `via_count`               | max                                            "
+"                                                                        | "
+"计算每个与规则条件匹配的网络的过孔数量。 如果该数字超过匹配网络上的约束 `max`"
+" 最大值，则将为该网络生成错误。<br>                                          "
+"                                                                             "
+"                                                                             "
+"                                                           |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                        | "
+"指定焊盘与敷铜区域之间的连接方式。<br>                                       "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                            |\n"
 "\n"
 "\n"
 "### Items (对象) \n"
@@ -36266,8 +36299,8 @@ msgstr ""
 "### Notes (注意事项) \n"
 "\n"
 "版本语句必须是第一个语句。 \n"
-"它表示文件的语法版本，以便未来的规则解析器可以执行自动更新。 它应该设置"
-"为“1”。\n"
+"它表示文件的语法版本，以便未来的规则解析器可以执行自动更新。 "
+"它应该设置为“1”。\n"
 "\n"
 "规则应按具体情况排序。 \n"
 "后面的规则优先于前面的规则； 一旦找到后面匹配的规则，就不会检查之前的规则。\n"
@@ -36299,8 +36332,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "若 `A` 完全落在指定区域的边框内，则为 True。\n"
 "\n"
-"注意: 调用该函数比 `intersectsArea()`更费时。尽可能使用 "
-"`intersectsArea()`。\n"
+"注意: 调用该函数比 `intersectsArea()`更费时。尽可能使用 `intersectsArea()`。"
+"\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
@@ -36312,10 +36345,11 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"若 `A` 含有指定差分对的网络，则为 True。 <网络名> 是指定差分对的基础名称。例"
-"如， inDiffPair('CLK') matches items in the CLK_P and CLK_N nets. True \n"
-"`<net_name>` 是差分对的基准名称。 例如, `inDiffPair('/CLK')` 可以匹配网络对"
-"象 `/CLK_P` 及 `/CLK_N`。\n"
+"若 `A` 含有指定差分对的网络，则为 True。 <网络名> "
+"是指定差分对的基础名称。例如， inDiffPair('CLK') matches items in the CLK_P "
+"and CLK_N nets. True \n"
+"`<net_name>` 是差分对的基准名称。 例如, `inDiffPair('/CLK')` "
+"可以匹配网络对象 `/CLK_P` 及 `/CLK_N`。\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -36365,13 +36399,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -36782,12 +36816,12 @@ msgstr "检查 %s 覆铜连接: %s。"
 #: pcbnew/drc/drc_engine.cpp:974
 #, c-format
 msgid "Checking %s track width: opt %s."
-msgstr "正检查 %s 布线宽度: 最优 %s。"
+msgstr "正检查 %s 走线宽度: 最优 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:980
 #, c-format
 msgid "Checking %s track width: min %s."
-msgstr "正检查 %s 布线宽度: 最小%s。"
+msgstr "正检查 %s 走线宽度: 最小%s。"
 
 #: pcbnew/drc/drc_engine.cpp:988
 #, c-format
@@ -36999,7 +37033,7 @@ msgstr "间距违规"
 
 #: pcbnew/drc/drc_item.cpp:73
 msgid "Tracks crossing"
-msgstr "布线有交叉"
+msgstr "走线交叉"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Board edge clearance violation"
@@ -37023,7 +37057,7 @@ msgstr "通孔未连接或仅连接了一层"
 
 #: pcbnew/drc/drc_item.cpp:97
 msgid "Track has unconnected end"
-msgstr "布线有未连接端"
+msgstr "走线末端悬空"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
@@ -37043,7 +37077,7 @@ msgstr "铜连接过窄"
 
 #: pcbnew/drc/drc_item.cpp:117
 msgid "Track width"
-msgstr "布线宽度"
+msgstr "走线宽度"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Annular width"
@@ -37156,11 +37190,11 @@ msgstr "文本线宽超出范围"
 
 #: pcbnew/drc/drc_item.cpp:233
 msgid "Trace length out of range"
-msgstr "布线长度超过范围"
+msgstr "走线长度超过范围"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Skew between traces out of range"
-msgstr "布线之间的偏移超出范围"
+msgstr "走线之间的偏移超出范围"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Too many vias on a connection"
@@ -37202,7 +37236,7 @@ msgstr "规则 '%s'"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
-msgstr "表达式中的错误。"
+msgstr "表达式错误。"
 
 #: pcbnew/drc/drc_rule_condition.cpp:100 pcbnew/drc/drc_rule_parser.cpp:61
 #: pcbnew/drc/drc_rule_parser.cpp:573
@@ -37270,7 +37304,7 @@ msgstr "缺少条件表达式。"
 #: pcbnew/drc/drc_rule_parser.cpp:226 pcbnew/drc/drc_rule_parser.cpp:460
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr "无法识别的项目 '%s'。|应为带引号的表达式。"
+msgstr "无法识别的项目 '%s'。| 应为带引号的表达式。"
 
 #: pcbnew/drc/drc_rule_parser.cpp:261 pcbnew/drc/drc_rule_parser.cpp:372
 #: pcbnew/drc/drc_rule_parser.cpp:385 pcbnew/drc/drc_rule_parser.cpp:404
@@ -37355,7 +37389,7 @@ msgstr "正在检查网络连接..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:141
 msgid "Checking track & via clearances..."
-msgstr "正在检查布线和过孔间距..."
+msgstr "正在检查走线和过孔间距..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:148
 msgid "Checking hole clearances..."
@@ -37659,7 +37693,7 @@ msgstr "%s 个 '禁止放置焊盘设置' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:445
 #, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "%s 个 '禁止进行布线设置' 差异。"
+msgstr "%s 个 '禁止放置走线设置' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, c-format
@@ -38016,7 +38050,7 @@ msgstr "(%s 最大宽度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_track_width.cpp:74
 msgid "Checking track widths..."
-msgstr "正在检查布线宽度..."
+msgstr "正在检查走线宽度..."
 
 #: pcbnew/drc/drc_test_provider_via_diameter.cpp:74
 msgid "Checking via diameters..."
@@ -38277,7 +38311,7 @@ msgstr "当前 PCB 已被修改。是否保存变更?"
 #: pcbnew/files.cpp:545
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
-msgstr "PCB '%s' 不存在, 你想创建它吗?"
+msgstr "PCB '%s' 不存在, 要创建它吗?"
 
 #: pcbnew/files.cpp:554
 msgid "Creating PCB"
@@ -38441,12 +38475,12 @@ msgstr "封装 %s"
 #: pcbnew/footprint.cpp:2710
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "(预期为 '通孔', 实际为 '%s')"
+msgstr "(应为 '通孔', 实际为 '%s')"
 
 #: pcbnew/footprint.cpp:2713
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(预期为 '贴片', 实际为 '%s')"
+msgstr "(应为 '贴片', 实际为 '%s')"
 
 #: pcbnew/footprint.cpp:2741
 msgid "(PTH pad has no copper layers)"
@@ -39226,7 +39260,7 @@ msgstr "添加微波电感"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
 msgid "Length of Trace:"
-msgstr "布线长度:"
+msgstr "走线长度:"
 
 #: pcbnew/microwave/microwave_inductor.cpp:376
 msgid "Requested length < minimum length"
@@ -40291,7 +40325,7 @@ msgstr "来自层 %d <-> %d 的过孔使用非铜层, KiCad 不支持这种情�
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3159
 msgid "Loading tracks..."
-msgstr "加载布线中..."
+msgstr "加载走线中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3367
 msgid "Loading unicode strings..."
@@ -40626,9 +40660,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含没有直接 KiCad 等效的铜元素。如果填充的是实体或图案填充, 则它"
-"们已导入为 KiCad 覆铜; 如果形状是未填充的轮廓(开放或闭合), 则它们将导入为 "
-"KiCad 布线。"
+"CADSTAR 设计包含没有直接 KiCad 等效的铜元素。如果填充的是实体或图案填充, "
+"则它们已导入为 KiCad 覆铜; 如果形状是未填充的轮廓(开放或闭合), "
+"则它们将导入为 KiCad 走线。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2301
 #, c-format
@@ -40897,7 +40931,7 @@ msgstr "无法找到列标签 %s。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1733
 #, c-format
 msgid "Invalid row size in row %zu. Expecting %zu elements but found %zu."
-msgstr "%zu 行中的行大小无效。预期有 %zu 个元素, 但发现了 %zu 个。"
+msgstr "%zu 行中的行大小无效。应有 %zu 个元素, 但实际找到了 %zu 个。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:492
 #, c-format
@@ -40942,7 +40976,7 @@ msgstr "未识别的焊盘形状基元 '%s', 位于行 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1123
 #, c-format
 msgid "Invalid token count. Expected 8 but found %zu."
-msgstr "无效的令牌数量。预期为 8, 但找到了 %zu。"
+msgstr "无效的 token 数量。应为 8, 但实际找到了 %zu。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1258
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1447
@@ -40953,7 +40987,7 @@ msgstr "这个 record_tag 字符串 '%s' 的无效格式位于行 %zu。"
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1418
 #, c-format
 msgid "Invalid row size in row %zu.  Expecting %zu elements but found %zu."
-msgstr "%zu 行中的行大小无效。预期有 %zu 个元素, 但发现 %zu 个。"
+msgstr "%zu 行中的行大小无效。应有 %zu 个元素, 但实际找到了 %zu 个。"
 
 #: pcbnew/pcb_io/fabmaster/import_fabmaster.cpp:1457
 #, c-format
@@ -41632,7 +41666,7 @@ msgstr "走线 (弧形) %s 位于 %s, 长度 %s"
 #: pcbnew/pcb_track.cpp:1298
 #, c-format
 msgid "Track %s on %s, length %s"
-msgstr "布线 %s (%s), 长度: %s"
+msgstr "走线 %s (%s), 长度: %s"
 
 #: pcbnew/pcb_track.cpp:1515
 msgid "Via Properties"
@@ -41857,7 +41891,7 @@ msgstr "找不到耦合网络 \"%s\" 的合适起点。"
 #: pcbnew/router/pns_dp_meander_placer.cpp:80
 #: pcbnew/router/pns_meander_placer.cpp:63
 msgid "Please select a track whose length you want to tune."
-msgstr "请选择要调整长度的布线。"
+msgstr "请选择要调整长度的走线。"
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:94
 msgid ""
@@ -41928,11 +41962,11 @@ msgstr "无法从非镀通孔开始布线。"
 #: pcbnew/router/pns_router.cpp:256
 #, c-format
 msgid "Rule area '%s' disallows tracks."
-msgstr "规则区域 '%s' 不允许布线。"
+msgstr "规则区域 '%s' 不允许存在走线。"
 
 #: pcbnew/router/pns_router.cpp:261
 msgid "Rule area disallows tracks."
-msgstr "规则区域不允许布线。"
+msgstr "规则区域不允许存在走线。"
 
 #: pcbnew/router/pns_router.cpp:269
 msgid "Cannot start routing from a text item."
@@ -42001,7 +42035,7 @@ msgstr "选择一个层, 然后在当前布线的走线末尾添加一个微孔�
 
 #: pcbnew/router/router_tool.cpp:177
 msgid "Custom Track/Via Size..."
-msgstr "自定义布线/过孔尺寸..."
+msgstr "自定义走线/过孔尺寸..."
 
 #: pcbnew/router/router_tool.cpp:178
 msgid "Shows a dialog for changing the track width and via size."
@@ -42009,7 +42043,7 @@ msgstr "显示修改走线宽度和过孔尺寸对话框。"
 
 #: pcbnew/router/router_tool.cpp:186
 msgid "Switch Track Posture"
-msgstr "切换布线模式"
+msgstr "切换走线模式"
 
 #: pcbnew/router/router_tool.cpp:187
 msgid "Switches posture of the currently routed track."
@@ -42025,15 +42059,15 @@ msgstr "布线时在尖/圆角及 45°/90° 角之间切换。"
 
 #: pcbnew/router/router_tool.cpp:219
 msgid "Select Track/Via Width"
-msgstr "选择 布线/过孔 宽度"
+msgstr "选择 走线/过孔 宽度"
 
 #: pcbnew/router/router_tool.cpp:237
 msgid "Use Starting Track Width"
-msgstr "使用起始布线宽度"
+msgstr "使用起始走线宽度"
 
 #: pcbnew/router/router_tool.cpp:238
 msgid "Route using the width of the starting track."
-msgstr "使用起始布线宽度。"
+msgstr "使用起始走线宽度。"
 
 #: pcbnew/router/router_tool.cpp:242 pcbnew/router/router_tool.cpp:367
 msgid "Use Net Class Values"
@@ -42146,7 +42180,7 @@ msgstr "(无论如何都提交 %s）"
 
 #: pcbnew/router/router_tool.cpp:1930 pcbnew/router/router_tool.cpp:2413
 msgid "Track violates DRC."
-msgstr "布线违反 DRC。"
+msgstr "走线违反 DRC。"
 
 #: pcbnew/router/router_tool.cpp:2551 pcbnew/tools/pcb_actions.cpp:2380
 msgid "Break Track"
@@ -42326,9 +42360,8 @@ msgid ""
 "Select the default width for new tracks. Note that this width can be "
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
-msgstr ""
-"选择新布线的默认宽度。请注意, 这个宽度可以被电路板的最小布线宽度覆盖; 如果启"
-"用了\"使用现有线路宽度\"功能, 还会被现有布线的宽度覆盖。"
+msgstr "选择新走线的默认宽度。请注意, 这个宽度可以被电路板的最小走线宽度覆盖; "
+"如果启用了\"使用现有线路宽度\"功能, 还会被现有走线的宽度覆盖。"
 
 #: pcbnew/toolbars_pcb_editor.cpp:536
 msgid ""
@@ -43579,27 +43612,27 @@ msgstr "切换弧线模式"
 
 #: pcbnew/tools/pcb_actions.cpp:372
 msgid "Snap to Objects on the Active Layer Only"
-msgstr "只捕捉活动层上的对象"
+msgstr "只捕获活动层上的对象"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Enables snapping to objects on the active layer only"
-msgstr "仅对活动层上的对象启用捕捉功能"
+msgstr "仅对活动层上的对象启用捕获功能"
 
 #: pcbnew/tools/pcb_actions.cpp:378
 msgid "Snap to Objects on All Layers"
-msgstr "捕捉所有层上的对象"
+msgstr "捕获所有层上的对象"
 
 #: pcbnew/tools/pcb_actions.cpp:379
 msgid "Enables snapping to objects on all visible layers"
-msgstr "可在所有可见层上捕捉对象"
+msgstr "可在所有可见层上捕获对象"
 
 #: pcbnew/tools/pcb_actions.cpp:385
 msgid "Toggle Snapping Between Active and All Layers"
-msgstr "在活动层和所有层之间切换捕捉"
+msgstr "在活动层和所有层之间切换捕获"
 
 #: pcbnew/tools/pcb_actions.cpp:386
 msgid "Toggles between snapping on all visible layers and only the active area"
-msgstr "切换捕获模式(对所有可见层进行捕捉/仅对活动层进行捕捉)"
+msgstr "切换捕获模式(对所有可见层进行捕获/仅对活动层进行捕获)"
 
 #: pcbnew/tools/pcb_actions.cpp:392
 msgid "Delete Last Point"
@@ -43731,15 +43764,15 @@ msgstr "跳过项目"
 
 #: pcbnew/tools/pcb_actions.cpp:595
 msgid "Change Track Width"
-msgstr "调整布线宽度"
+msgstr "调整走线宽度"
 
 #: pcbnew/tools/pcb_actions.cpp:596
 msgid "Updates selected track & via sizes"
-msgstr "更新选定的布线和过孔尺寸"
+msgstr "更新选定的走线和过孔尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:602
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr "添加与所选直线布线线段相切的弧线"
+msgstr "添加与所选直线走线段相切的弧线"
 
 #: pcbnew/tools/pcb_actions.cpp:607
 msgid "Fillet Lines..."
@@ -43929,15 +43962,15 @@ msgstr "交换层..."
 
 #: pcbnew/tools/pcb_actions.cpp:824
 msgid "Move tracks or drawings from one layer to another"
-msgstr "将布线或其它绘制对象从一层移到另一层"
+msgstr "将走线或其它绘制对象从一层移到另一层"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Edit Track & Via Properties..."
-msgstr "编辑布线与过孔属性..."
+msgstr "编辑走线与过孔属性..."
 
 #: pcbnew/tools/pcb_actions.cpp:831
 msgid "Edit track and via properties globally across board"
-msgstr "编辑电路板全局布线和过孔属性"
+msgstr "编辑电路板全局走线和过孔属性"
 
 #: pcbnew/tools/pcb_actions.cpp:838
 msgid "Edit Text and graphics properties globally across board"
@@ -43957,7 +43990,7 @@ msgstr "全局删除..."
 
 #: pcbnew/tools/pcb_actions.cpp:852
 msgid "Delete tracks, footprints and graphic items from board"
-msgstr "在板上删除布线, 封装和图形项目"
+msgstr "在板上删除走线, 封装和图形项目"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Cleanup Tracks & Vias..."
@@ -44185,19 +44218,19 @@ msgstr "从电路板创建 BOM"
 
 #: pcbnew/tools/pcb_actions.cpp:1085
 msgid "Switch Track Width to Next"
-msgstr "切换下一个布线宽度"
+msgstr "切换到下一个走线宽度"
 
 #: pcbnew/tools/pcb_actions.cpp:1086
 msgid "Change track width to next pre-defined size"
-msgstr "将布线宽度更改为下一个预设尺寸"
+msgstr "将走线宽度更改为下一个预设尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
 msgid "Switch Track Width to Previous"
-msgstr "切换上一个布线宽度"
+msgstr "切换到上一个走线宽度"
 
 #: pcbnew/tools/pcb_actions.cpp:1094
 msgid "Change track width to previous pre-defined size"
-msgstr "将布线宽度更改为上一个预设尺寸"
+msgstr "将走线宽度更改为上一个预设尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:1101
 msgid "Increase Via Size"
@@ -44409,11 +44442,11 @@ msgstr "在所有网络, 仅飞线以及不显示3种状态下切换使用网络
 
 #: pcbnew/tools/pcb_actions.cpp:1385
 msgid "Sketch Tracks"
-msgstr "草图布线"
+msgstr "草图走线"
 
 #: pcbnew/tools/pcb_actions.cpp:1386
 msgid "Show tracks in outline mode"
-msgstr "在轮廓模式下显示布线"
+msgstr "在轮廓模式下显示走线"
 
 #: pcbnew/tools/pcb_actions.cpp:1392
 msgid "Sketch Pads"
@@ -44938,7 +44971,7 @@ msgstr "取消所选对象到距离最近的焊盘的布线。"
 
 #: pcbnew/tools/pcb_actions.cpp:2110
 msgid "Select All Tracks in Net"
-msgstr "选择网络中的所有布线"
+msgstr "选择网络中的所有走线"
 
 #: pcbnew/tools/pcb_actions.cpp:2111
 msgid "Selects all tracks & vias belonging to the same net."
@@ -44946,7 +44979,7 @@ msgstr "选择所有网络相同的走线与过孔。"
 
 #: pcbnew/tools/pcb_actions.cpp:2117
 msgid "Deselect All Tracks in Net"
-msgstr "取消选择网络中的所有布线"
+msgstr "取消选择网络中的所有走线"
 
 #: pcbnew/tools/pcb_actions.cpp:2118
 msgid "Deselects all tracks & vias belonging to the same net."
@@ -44972,7 +45005,7 @@ msgstr "选择并开始移动每个所选网络上距离最近的未连接封装
 
 #: pcbnew/tools/pcb_actions.cpp:2139
 msgid "Selects all footprints and tracks in the schematic sheet"
-msgstr "选择原理图图纸中的所有封装和布线"
+msgstr "选择原理图图纸中的所有封装和走线"
 
 #: pcbnew/tools/pcb_actions.cpp:2145
 msgid "Items in Same Hierarchical Sheet"
@@ -44980,7 +45013,7 @@ msgstr "同一层次图纸中的项目"
 
 #: pcbnew/tools/pcb_actions.cpp:2146
 msgid "Selects all footprints and tracks in the same schematic sheet"
-msgstr "选择同一原理图纸中的所有封装和布线"
+msgstr "选择同一原理图纸中的所有封装和走线"
 
 #: pcbnew/tools/pcb_actions.cpp:2152
 msgid "Select on Schematic"
@@ -45138,7 +45171,7 @@ msgstr "调整差分对布线偏移"
 
 #: pcbnew/tools/pcb_actions.cpp:2333
 msgid "Walks the current track back one segment."
-msgstr "将当前布线往回走一段。"
+msgstr "将当前走线缩减一段。"
 
 #: pcbnew/tools/pcb_actions.cpp:2339
 msgid "Route From Other End"
@@ -45147,7 +45180,7 @@ msgstr "从另一端进行布线"
 #: pcbnew/tools/pcb_actions.cpp:2340
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
-msgstr "提交当前段, 并从最近的飞线端开始下一段。"
+msgstr "完成当前段, 并从最近的飞线端开始下一段。"
 
 #: pcbnew/tools/pcb_actions.cpp:2346
 msgid "Attempt Finish"
@@ -45192,7 +45225,7 @@ msgstr "拖动 (45 度模式)"
 
 #: pcbnew/tools/pcb_actions.cpp:2390
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
-msgstr "拖动布线段时以 45 度角的方式保持相连的走线连接。"
+msgstr "拖动走线段时以 45 度角的方式保持相连的走线连接。"
 
 #: pcbnew/tools/pcb_actions.cpp:2398
 msgid "Drag Free Angle"
@@ -45201,7 +45234,7 @@ msgstr "拖动 (自由角度)"
 #: pcbnew/tools/pcb_actions.cpp:2399
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
-msgstr "拖拽布线中最近的连接点, 不限制相连走线的角度。"
+msgstr "拖拽走线中最近的连接点, 不限制相连走线的角度。"
 
 #: pcbnew/tools/pcb_actions.cpp:2409
 msgid "Update All Tuning Patterns"
@@ -45301,7 +45334,7 @@ msgstr "所有层"
 
 #: pcbnew/tools/pcb_control.cpp:1426
 msgid "Object Snapping"
-msgstr "对象捕捉"
+msgstr "对象捕获"
 
 #: pcbnew/tools/pcb_control.cpp:1502
 #, c-format
@@ -45511,7 +45544,7 @@ msgstr "不完整的撤消/重做操作: 找不到某些项目"
 
 #: pcbnew/widgets/appearance_controls.cpp:327
 msgid "Show tracks"
-msgstr "显示布线"
+msgstr "显示走线"
 
 #: pcbnew/widgets/appearance_controls.cpp:328
 msgid "Show all vias"
@@ -46121,7 +46154,7 @@ msgstr "无过孔"
 
 #: pcbnew/zone.cpp:571
 msgid "No tracks"
-msgstr "无布线"
+msgstr "无走线"
 
 #: pcbnew/zone.cpp:574
 msgid "No pads"
