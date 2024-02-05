@@ -54,7 +54,7 @@ CLI::PCB_EXPORT_IPC2581_COMMAND::PCB_EXPORT_IPC2581_COMMAND() :
             .metavar( "PRECISION" );
 
     m_argParser.add_argument( ARG_COMPRESS )
-            .help( std::string( "Subtract soldermask from silkscreen" ) )
+            .help( std::string( "Compress the output" ) )
             .flag();
 
     m_argParser.add_argument( ARG_VERSION )
