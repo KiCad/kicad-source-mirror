@@ -88,13 +88,13 @@ public:
     const wxString GetUniStringLibNickname() const { return m_libraryName.wx_str(); }
 
     /**
-     * Override the logical library name portion of the LIB_ID to @a aNickname.
+     * Override the logical library name portion of the LIB_ID to @a aLibNickname.
      *
      * @return int - minus 1 (i.e. -1) means success, >= 0 indicates the  character offset
      *               into the parameter at which an error was detected, usually because it
      *               contained '/' or ':'.
      */
-    int SetLibNickname( const UTF8& aNickname );
+    int SetLibNickname( const UTF8& aLibNickname );
 
     /**
      * @return the library item name, i.e. footprintName, in UTF8.

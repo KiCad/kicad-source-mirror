@@ -32,7 +32,7 @@
 #include <lib_id.h>
 
 
-static inline int okLogical( const UTF8& aField )
+static int checkLibNickname( const UTF8& aField )
 {
     // std::string::npos is largest positive number, casting to int makes it -1.
     // Returning that means success.
@@ -96,12 +96,12 @@ LIB_ID::LIB_ID( const wxString& aLibraryName, const wxString& aItemName ) :
 }
 
 
-int LIB_ID::SetLibNickname( const UTF8& aLogical )
+int LIB_ID::SetLibNickname( const UTF8& aLibNickname )
 {
-    int offset = okLogical( aLogical );
+    int offset = checkLibNickname( aLibNickname );
 
     if( offset == -1 )
-        m_libraryName = aLogical;
+        m_libraryName = aLibNickname;
 
     return offset;
 }
@@ -138,11 +138,11 @@ UTF8 LIB_ID::Format( const UTF8& aLibraryName, const UTF8& aLibItemName )
 
     if( aLibraryName.size() )
     {
-        offset = okLogical( aLibraryName );
+        offset = checkLibNickname( aLibraryName );
 
         if( offset != -1 )
         {
-            THROW_PARSE_ERROR( _( "Illegal character found in logical library name" ),
+            THROW_PARSE_ERROR( _( "Illegal character found in library nickname" ),
                                wxString::FromUTF8( aLibraryName.c_str() ), aLibraryName.c_str(),
                                0, offset );
         }
@@ -151,7 +151,7 @@ UTF8 LIB_ID::Format( const UTF8& aLibraryName, const UTF8& aLibItemName )
         ret += ':';
     }
 
-    ret += aLibItemName;    // TODO: Add validity test.
+    ret += aLibItemName;
 
     return ret;
 }
