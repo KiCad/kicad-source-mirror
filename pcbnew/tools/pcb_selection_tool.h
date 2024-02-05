@@ -232,7 +232,12 @@ protected:
         return getViewControls();
     }
 
-    PCB_BASE_EDIT_FRAME* frame() const
+    PCB_BASE_FRAME* frame() const
+    {
+        return getEditFrame<PCB_BASE_FRAME>();
+    }
+
+    PCB_BASE_EDIT_FRAME* editFrame() const
     {
         return getEditFrame<PCB_BASE_EDIT_FRAME>();
     }

@@ -354,6 +354,13 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             m_disambiguateTimer.Stop();
 
+            // Double clicks make no sense in the footprint viewer
+            if( frame && frame->IsType( FRAME_FOOTPRINT_VIEWER ) )
+            {
+                evt->SetPassEvent();
+                continue;
+            }
+
             // Double click? Display the properties window
             m_frame->FocusOnItem( nullptr );
 
