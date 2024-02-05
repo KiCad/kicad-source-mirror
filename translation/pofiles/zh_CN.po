@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-05 12:59+0000\n"
+"PO-Revision-Date: 2024-02-05 13:03+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -19331,7 +19331,7 @@ msgstr "保留符号"
 #: pcbnew/footprint_libraries_utils.cpp:1174
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "是否放弃变更, 并将 '%s' 恢复到上一个保存的版本?"
+msgstr "是否放弃变更, 并将 '%s' 重置为上一保存版本?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1036
 #, c-format
@@ -21211,7 +21211,7 @@ msgstr "切换特性"
 #: eeschema/tools/sch_editor_control.cpp:152
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "是否放弃变更, 并将 '%s'(及所有子表)恢复到上一个保存的版本?"
+msgstr "是否放弃变更, 并将 '%s' (及所有子图纸) 重置为上一保存版本?"
 
 #: eeschema/tools/sch_editor_control.cpp:342
 msgid "Include power symbols in schematic to the library?"
