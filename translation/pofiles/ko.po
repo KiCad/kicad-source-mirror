@@ -28,7 +28,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:06+0100\n"
-"PO-Revision-Date: 2024-02-05 08:45+0000\n"
+"PO-Revision-Date: 2024-02-05 08:46+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
 "Language: ko\n"
@@ -26401,7 +26401,7 @@ msgstr "찾기:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 msgid "Match case"
-msgstr "매치 케이스"
+msgstr "대소문자 일치"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
