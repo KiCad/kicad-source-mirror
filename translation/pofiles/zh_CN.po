@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-05 14:36+0000\n"
+"PO-Revision-Date: 2024-02-06 02:47+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -26379,7 +26379,7 @@ msgstr "衰减大于 %f dB, 请重新设置"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Pi"
-msgstr "Pi"
+msgstr "Pi 型"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Tee"
@@ -26387,11 +26387,11 @@ msgstr "T 型"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Bridged tee"
-msgstr "桥 T 型"
+msgstr "威尔金森型"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Resistive splitter"
-msgstr "电阻分流器"
+msgstr "电阻型"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:26
 msgid "Attenuators"
