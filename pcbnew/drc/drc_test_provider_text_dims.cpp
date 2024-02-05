@@ -159,9 +159,8 @@ bool DRC_TEST_PROVIDER_TEXT_DIMS::Run()
 
                     for( const std::unique_ptr<KIFONT::GLYPH>& glyph : *glyphs )
                     {
-                        // Ensure the glyph is a OUTLINE_GLYPH
-                        // for texts with overbar, it can be a STROKE_GLYPH
-                        // TODO: perhaps test the overbar thickness.
+                        // Ensure the glyph is a OUTLINE_GLYPH (for instance, overbars in outline
+                        // font text are represented as STROKE_GLYPHs).
                         if( !glyph->IsOutline() )
                             continue;
 

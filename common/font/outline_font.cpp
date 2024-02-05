@@ -86,8 +86,6 @@ FT_Error OUTLINE_FONT::loadFace( const wxString& aFontFileName, int aFaceIndex )
 {
     std::lock_guard<std::mutex> guard( m_freeTypeMutex );
 
-    // TODO: check that going from wxString to char* with UTF-8
-    // conversion for filename makes sense on any/all platforms
     FT_Error e = FT_New_Face( m_freeType, aFontFileName.mb_str( wxConvUTF8 ), aFaceIndex, &m_face );
 
     if( !e )

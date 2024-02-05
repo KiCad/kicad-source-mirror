@@ -1451,8 +1451,6 @@ void SCH_IO_ALTIUM::AddTextBox( const ASCH_TEXT_FRAME *aElem )
         break;
     }
 
-    // JEY TODO: word-wrap once KiCad supports wrapped text.
-
     size_t fontId = static_cast<int>( aElem->FontID );
 
     if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )

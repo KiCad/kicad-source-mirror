@@ -1470,7 +1470,6 @@ void PCB_EDIT_FRAME::SetActiveLayer( PCB_LAYER_ID aLayer )
 
 void PCB_EDIT_FRAME::onBoardLoaded()
 {
-    // JEY TODO: move this global to the board
     ENUM_MAP<PCB_LAYER_ID>& layerEnum = ENUM_MAP<PCB_LAYER_ID>::Instance();
 
     layerEnum.Choices().Clear();

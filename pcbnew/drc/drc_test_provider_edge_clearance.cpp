@@ -38,12 +38,6 @@
     Errors generated:
     - DRCE_EDGE_CLEARANCE
     - DRCE_SILK_EDGE_CLEARANCE
-
-    TODO:
-    - separate holes to edge check
-    - tester only looks for edge crossings. it doesn't check if items are inside/outside the board
-      area.
-    - pad test missing!
 */
 
 class DRC_TEST_PROVIDER_EDGE_CLEARANCE : public DRC_TEST_PROVIDER_CLEARANCE_BASE

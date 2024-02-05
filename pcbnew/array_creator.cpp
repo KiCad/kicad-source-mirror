@@ -163,9 +163,6 @@ void ARRAY_CREATOR::Invoke()
                         // Silently drop other items (such as footprint texts) from duplication
                         break;
                     }
-
-                    // @TODO: we should merge zones. This is a bit tricky, because
-                    // the undo command needs saving old area, if it is merged.
                 }
 
                 // Add new items to selection (footprints in the selection will be reannotated)
