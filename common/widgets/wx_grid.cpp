@@ -31,7 +31,7 @@
 #include <core/kicad_algo.h>
 #include <gal/color4d.h>
 
-#define MIN_GRIDCELL_MARGIN 3
+#define MIN_GRIDCELL_MARGIN FromDIP( 3 )
 
 
 wxColour getBorderColour()
@@ -106,7 +106,7 @@ WX_GRID::WX_GRID( wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxS
     SetLabelFont( KIUI::GetControlFont( this ) );
 
     if( GetColLabelSize() > 0 )
-        SetColLabelSize( GetColLabelSize() + 4 );
+        SetColLabelSize( GetColLabelSize() + FromDIP( 4 ) );
 
     Connect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
     Connect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
