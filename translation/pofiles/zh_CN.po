@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-03 18:02+0000\n"
+"PO-Revision-Date: 2024-02-05 12:59+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -426,7 +426,7 @@ msgstr "左移电路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
 msgid "Move Board Right"
-msgstr "向右移动电路板"
+msgstr "右移电路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:121
 msgid "Move board Right"
@@ -566,7 +566,7 @@ msgstr "显示 '贴片' 类型元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
 msgid "Show 3D models for 'Surface mount' type footprints"
-msgstr "显示封装类型为 '贴片 (SMD)' 的元件的 3D 模型"
+msgstr "显示封装类型为 '贴片' 的元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
 msgid "Show Unspecified 3D Models"
@@ -603,7 +603,7 @@ msgstr "在实时渲染器中显示 3D 模型边框"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
 msgid "Show 3D Axis"
-msgstr "显示 3D 轴线"
+msgstr "显示 3D 坐标轴"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:360
 #: pcbnew/tools/pcb_actions.cpp:1342
@@ -725,7 +725,7 @@ msgstr "通孔模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "SMD Models"
-msgstr "SMD 模型"
+msgstr "贴片模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "Virtual Models"
@@ -787,7 +787,7 @@ msgstr "避免板边裁剪丝印层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
 msgid "3D Axis"
-msgstr "3D 轴"
+msgstr "3D 坐标轴"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "Background Start"
@@ -1860,7 +1860,7 @@ msgstr "你当前的变更将永久丢失。"
 
 #: common/confirm.cpp:234 common/tool/actions.cpp:107
 msgid "Revert"
-msgstr "恢复"
+msgstr "放弃变更"
 
 #: common/confirm.cpp:260 common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:126
@@ -4011,7 +4011,7 @@ msgstr "栅格 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:705
 msgid "Grid Overrides"
-msgstr "栅格覆盖"
+msgstr "栅格重写"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
 msgid "Connected items:"
@@ -5266,7 +5266,7 @@ msgstr "矩形"
 #: common/eda_shape.cpp:77 common/eda_shape.cpp:715 common/eda_shape.cpp:1931
 #: gerbview/gerber_draw_item.cpp:230
 msgid "Arc"
-msgstr "圆弧"
+msgstr "弧线"
 
 #: common/eda_shape.cpp:78 common/eda_shape.cpp:714 common/eda_shape.cpp:1932
 #: eeschema/dialogs/dialog_label_properties_base.cpp:172
@@ -6669,11 +6669,11 @@ msgstr "隐藏文本"
 
 #: common/layer_id.cpp:165
 msgid "SMD pads front"
-msgstr "SMD 焊盘正面"
+msgstr "贴片焊盘正面"
 
 #: common/layer_id.cpp:166
 msgid "SMD pads back"
-msgstr "SMD 焊盘背面"
+msgstr "贴片焊盘背面"
 
 #: common/layer_id.cpp:167
 msgid "Through-hole pads"
@@ -7228,11 +7228,11 @@ msgstr "重做上次编辑"
 
 #: common/tool/actions.cpp:203
 msgid "Cut selected item(s) to clipboard"
-msgstr "将所选项目剪切到剪贴板"
+msgstr "剪切所选项目到剪贴板"
 
 #: common/tool/actions.cpp:214
 msgid "Copy selected item(s) to clipboard"
-msgstr "将所选项目复制到剪贴板"
+msgstr "复制所选项目到剪贴板"
 
 #: common/tool/actions.cpp:225
 msgid "Paste item(s) from clipboard"
@@ -7281,11 +7281,11 @@ msgstr "单击删除项目"
 
 #: common/tool/actions.cpp:290
 msgid "Cycle Arc Editing Mode"
-msgstr "圆弧编辑模式"
+msgstr "弧线编辑模式"
 
 #: common/tool/actions.cpp:291
 msgid "Switch to a different method of editing arcs"
-msgstr "切换到另一种编辑圆弧的方法"
+msgstr "切换到另一种编辑弧线的方法"
 
 #: common/tool/actions.cpp:298
 msgid "Show Search Panel"
@@ -7312,7 +7312,7 @@ msgstr "查找和替换"
 
 #: common/tool/actions.cpp:317
 msgid "Find and replace text"
-msgstr "查找和替换文字"
+msgstr "查找和替换文本"
 
 #: common/tool/actions.cpp:325 pcbnew/dialogs/dialog_find_base.cpp:91
 msgid "Find Next"
@@ -8012,7 +8012,7 @@ msgstr "渲染引擎"
 
 #: common/widgets/gal_options_panel_base.cpp:31
 msgid "Accelerated graphics"
-msgstr "硬件加速图形"
+msgstr "图形加速"
 
 #: common/widgets/gal_options_panel_base.cpp:32
 msgid "Hardware-accelerated graphics (recommended)"
@@ -8064,7 +8064,7 @@ msgstr "最小栅格间距:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Snap to grid:"
-msgstr "对齐栅格:"
+msgstr "栅格捕获:"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -8072,11 +8072,11 @@ msgstr "对齐栅格:"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
 #: pcbnew/dialogs/panel_edit_options_base.cpp:325
 msgid "Always"
-msgstr "总是"
+msgstr "总是启用"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 msgid "When grid shown"
-msgstr "当栅格显示时"
+msgstr "当栅格显示时启用"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -8084,7 +8084,7 @@ msgstr "当栅格显示时"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
 #: pcbnew/dialogs/panel_edit_options_base.cpp:325
 msgid "Never"
-msgstr "从不"
+msgstr "从不启用"
 
 #: common/widgets/gal_options_panel_base.cpp:132
 msgid "Small crosshairs"
@@ -8092,7 +8092,7 @@ msgstr "小十字"
 
 #: common/widgets/gal_options_panel_base.cpp:135
 msgid "Full window crosshairs"
-msgstr "十字全屏光标"
+msgstr "全屏十字光标"
 
 #: common/widgets/gal_options_panel_base.cpp:141
 msgid "Always show crosshairs"
@@ -11786,11 +11786,11 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"这个原理图是使用旧的符号库完成的, 这可能会破坏原理图。一些符号可能需要重新链"
-"接到一个不同的符号名称, 一些符号可能需要被 \"恢复\" (复制或重命名) 到一个新的"
-"库。\n"
+"此原理图是使用旧的符号库绘制的, "
+"原理图内容可能会被破坏。某些符号可能需要重新链接到一个新的符号(名称不同), "
+"有的符号可能需要被 \"恢复\" (复制并重命名) 到一个新的库中。\n"
 "\n"
-"建议进行以下变更以更新工程。"
+"建议做出以下修改，以更新工程。"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:109
 msgid "Accept"
@@ -15052,7 +15052,7 @@ msgstr "终止"
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
-msgstr "这个文件由 KiCad 的旧版本所创建。它将被转换成新的格式保存。"
+msgstr "此文件由旧版 KiCad 创建。将在保存文件时将其转换为新的格式。"
 
 #: eeschema/files-io.cpp:580
 msgid "Schematic is read only."
@@ -15482,7 +15482,7 @@ msgstr "位置 Y"
 #: eeschema/lib_shape.cpp:461
 #, c-format
 msgid "Arc with radius %s"
-msgstr "弧形, 半径 %s"
+msgstr "弧线, 半径 %s"
 
 #: eeschema/lib_shape.cpp:465
 #, c-format
@@ -15885,7 +15885,7 @@ msgstr "将修改后的符号 %s 修复为 %s"
 
 #: eeschema/project_rescue.cpp:597
 msgid "This project has nothing to rescue."
-msgstr "这个工程不需要恢复。"
+msgstr "此工程无需恢复。"
 
 #: eeschema/project_rescue.cpp:612
 msgid "No symbols were rescued."
@@ -18204,7 +18204,7 @@ msgstr "差异引脚名称不正确"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2407
 msgid "Incorrect inv_pin name"
-msgstr "这个 inv_pin 名称不正确"
+msgstr "inv_pin 名称不正确"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2487
 msgid "Unknown waveform type"
@@ -19331,7 +19331,7 @@ msgstr "保留符号"
 #: pcbnew/footprint_libraries_utils.cpp:1174
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "是否将 '%s' 恢复到上个保存的版本?"
+msgstr "是否放弃变更, 并将 '%s' 恢复到上一个保存的版本?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1036
 #, c-format
@@ -20057,11 +20057,11 @@ msgstr "绘制圆形"
 
 #: eeschema/tools/ee_actions.cpp:547
 msgid "Add Arc"
-msgstr "添加圆弧"
+msgstr "添加弧线"
 
 #: eeschema/tools/ee_actions.cpp:548
 msgid "Draw arcs"
-msgstr "绘制圆弧"
+msgstr "绘制弧线"
 
 #: eeschema/tools/ee_actions.cpp:556 eeschema/tools/sch_drawing_tools.cpp:705
 msgid "Add Image"
@@ -20796,7 +20796,7 @@ msgstr "移动到下一编号图纸"
 
 #: eeschema/tools/ee_actions.cpp:1255
 msgid "Hierarchy Navigator"
-msgstr "层次导航"
+msgstr "显示层次导航"
 
 #: eeschema/tools/ee_actions.cpp:1256
 msgid "Show or hide the schematic sheet hierarchy navigator"
@@ -21211,7 +21211,7 @@ msgstr "切换特性"
 #: eeschema/tools/sch_editor_control.cpp:152
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "是否将 '%s'(及所有子表)恢复到上个保存的版本?"
+msgstr "是否放弃变更, 并将 '%s'(及所有子表)恢复到上一个保存的版本?"
 
 #: eeschema/tools/sch_editor_control.cpp:342
 msgid "Include power symbols in schematic to the library?"
@@ -21400,7 +21400,7 @@ msgstr "设置单元显示名"
 #: eeschema/tools/symbol_editor_pin_tool.cpp:230
 #, c-format
 msgid "This position is already occupied by another pin, in unit %d."
-msgstr "这个位置已经被另一个引脚占用, 在单元 %d。"
+msgstr "这个位置已经被另一个引脚占用, 在单元 %d 中。"
 
 #: eeschema/tools/symbol_editor_pin_tool.cpp:234
 msgid "Place Pin Anyway"
@@ -21713,35 +21713,35 @@ msgstr "多边形草图"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:75
 msgid "Page Size"
-msgstr "页面尺寸"
+msgstr "页面大小"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:88
 msgid "Full size"
-msgstr "实际尺寸"
+msgstr "完整"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:88
 msgid "Size A4"
-msgstr "尺寸 A4"
+msgstr "A4"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:88
 msgid "Size A3"
-msgstr "尺寸 A3"
+msgstr "A3"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:88
 msgid "Size A2"
-msgstr "尺寸 A2"
+msgstr "A2"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:88
 msgid "Size A"
-msgstr "尺寸 A"
+msgstr "A"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:88
 msgid "Size B"
-msgstr "尺寸 B"
+msgstr "B"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:88
 msgid "Size C"
-msgstr "尺寸 C"
+msgstr "C"
 
 #: gerbview/dialogs/panel_gerbview_excellon_settings_base.cpp:17
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:43
@@ -22243,7 +22243,7 @@ msgstr "无效的代码号"
 
 #: gerbview/rs274d.cpp:620
 msgid "Invalid Gerber file: missing G74 or G75 arc command"
-msgstr "无效的 Gerber 文件: 缺少 G74 或 G75 圆弧命令"
+msgstr "无效的 Gerber 文件: 缺少 G74 或 G75 弧线命令"
 
 #: gerbview/rs274x.cpp:229
 #, c-format
@@ -22530,7 +22530,7 @@ msgstr "高亮网络 \"%s\" 的项目"
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
 msgid "Highlight Aperture Type '%s'"
-msgstr "高亮光圈 (Aperture) 类型 \"%s\""
+msgstr "高亮光圈 (Aperture) 类型 '%s'"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:94
 #, c-format
@@ -28049,7 +28049,7 @@ msgstr "将重叠的形状合并到焊盘中"
 
 #: pcbnew/cleanup_item.cpp:64
 msgid "Unknown cleanup action"
-msgstr "未知的清除操作"
+msgstr "未知的清理操作"
 
 #: pcbnew/connectivity/connectivity_data.cpp:109
 msgid "Updating nets..."
@@ -28672,7 +28672,7 @@ msgstr "直插 (THT):"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:146
 #: pcbnew/dialogs/dialog_board_statistics.cpp:151
 msgid "SMD:"
-msgstr "贴片 (SMD):"
+msgstr "贴片:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:147
 msgid "Unspecified:"
@@ -28941,7 +28941,7 @@ msgstr "删除在起始位置和结束位置都在同一焊盘内的布线"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.h:60
 msgid "Cleanup Tracks and Vias"
-msgstr "清理布线与过孔"
+msgstr "清理布线和过孔"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:209
 msgid "Teardrop on Vias/Pads Properties"
@@ -29068,7 +29068,7 @@ msgstr "阴影线"
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:59
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:120
 msgid "Fully hatched"
-msgstr "完全阴影"
+msgstr "完整阴影"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:140
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:65
@@ -29131,21 +29131,21 @@ msgstr ""
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3418
 #: pcbnew/pad.cpp:1908 pcbnew/zone.cpp:1562
 msgid "Thermal reliefs"
-msgstr "缓散热焊盘 (花焊盘)"
+msgstr "缓释热焊盘 (花焊盘)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 msgid "Reliefs for PTH"
-msgstr "仅金属化孔 (PTH) 使用缓散热焊盘 (花焊盘)"
+msgstr "仅金属化孔 (PTH) 使用缓释热焊盘 (花焊盘)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:238
 msgid "Thermal relief gap:"
-msgstr "缓散热焊盘 (花焊盘) 间隙:"
+msgstr "缓释热焊盘 (花焊盘) 间隙:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:240
 msgid ""
 "The distance that will be kept clear between the filled area of the zone and "
 "a pad connected by thermal relief spokes."
-msgstr "覆铜区域与缓散热焊盘 (花焊盘) 散热引线的间距。"
+msgstr "覆铜区域与缓释热焊盘 (花焊盘) 散热引线的间距。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
@@ -29157,7 +29157,7 @@ msgstr "散热引线宽度:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:258
 msgid "Width of copper in thermal reliefs."
-msgstr "缓散热焊盘 (花焊盘) 连接线的宽度。"
+msgstr "缓释热焊盘 (花焊盘) 连接线的宽度。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:286
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:125
@@ -29224,7 +29224,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:351
 msgid "Remove islands:"
-msgstr "移除死铜:"
+msgstr "死铜移除:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:353
 msgid "Choose what to do with unconnected copper islands"
@@ -29232,7 +29232,7 @@ msgstr "选择如何处理未连接的孤铜"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
 msgid "Below area limit"
-msgstr "低于覆铜限制"
+msgstr "仅低于区域限制时"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:363
 msgid "Minimum island size:"
@@ -29240,7 +29240,7 @@ msgstr "最小孤铜尺寸:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:366
 msgid "Isolated islands smaller than this will be removed"
-msgstr "小于此的孤铜将被移除"
+msgstr "小于该值的孤铜将被移除"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:395
 msgid "Export Settings to Other Similar Zones"
@@ -30022,7 +30022,7 @@ msgstr "替换选定的封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change footprints matching reference designator:"
-msgstr "替换这个位号对应的封装:"
+msgstr "替换此位号对应的封装:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:76
 msgid "Change footprints matching value:"
@@ -30897,7 +30897,7 @@ msgstr "从 pos 文件中移除"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:210
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:211
 msgid "Exempt from courtyard requirement"
-msgstr "忽略外框要求"
+msgstr "忽略封装外框要求"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:211
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:212
@@ -31049,12 +31049,12 @@ msgstr "使用覆铜设置"
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:837
 msgid "Thermal relief"
-msgstr "缓散热焊盘 (花焊盘)"
+msgstr "缓释热焊盘 (花焊盘)"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:377
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:399
 msgid "Clearance Overrides and Settings"
-msgstr "间距覆盖和设置"
+msgstr "间距重写和设置"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:390
 msgid ""
@@ -31672,7 +31672,7 @@ msgstr "PTH 焊盘"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:31
 msgid "SMD pads"
-msgstr "SMD 焊盘"
+msgstr "贴片焊盘"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:39
 msgid "Track to track"
@@ -31780,7 +31780,7 @@ msgstr "最优高度:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:797
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:517
 msgid "Curved edges"
-msgstr "曲线边缘"
+msgstr "曲线边"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:290
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:803
@@ -31930,7 +31930,7 @@ msgstr "根据线宽筛选走线:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:99
 msgid "Filter vias by size:"
-msgstr "按大小筛选过孔:"
+msgstr "根据大小筛选过孔:"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:151
 msgid "Via size:"
@@ -32486,15 +32486,15 @@ msgstr "错误: 通孔焊盘上没有孔。"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1343
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
-msgstr "警告: 连接器焊盘通常没有锡膏。请使用 SMD 焊盘。"
+msgstr "警告: 连接器焊盘上通常不会使用锡膏。请使用贴片焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1352
 msgid "Error: SMD pad has a hole."
-msgstr "错误: SMD 焊盘上存在一个孔。"
+msgstr "错误: 贴片焊盘上存在一个孔。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1358
 msgid "Warning: SMD pad has no outer layers."
-msgstr "警告: SMD 焊盘没有外形层。"
+msgstr "警告: 贴片焊盘没有外形层。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1366
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
@@ -32514,7 +32514,7 @@ msgstr "警告: 半孔焊盘(Castellated) 属性仅适用于 PTH 焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1390
 msgid "Warning: BGA property is for SMD pads."
-msgstr "警告: BGA 属性适用于 SMD 焊盘。"
+msgstr "警告: BGA 属性适用于贴片焊盘。"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1399
 msgid "Error: Negative corner size."
@@ -32592,7 +32592,7 @@ msgstr "NPTH 非金属化孔, 机械的"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:39
 msgid "SMD Aperture"
-msgstr "SMD 开窗"
+msgstr "贴片 Aperture"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:45
 msgid "Pad number:"
@@ -32684,7 +32684,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:184
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:240
 msgid "Chamfer size:"
-msgstr "倒角尺寸:"
+msgstr "倒角大小:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:186
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:242
@@ -32693,8 +32693,8 @@ msgid ""
 "The width is the smaller value between size X and size Y.\n"
 "The max value is 50 percent."
 msgstr ""
-"倒角尺寸占焊盘宽度的百分比。\n"
-"宽度是尺寸 X 和尺寸 Y 之间的较小值。\n"
+"倒角大小占焊盘宽度的百分比。\n"
+"宽度为大小 X 和 Y 中的最小值。\n"
 "最大值是50%。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:203
@@ -32954,7 +32954,7 @@ msgstr "引线角度:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:926
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1054
 msgid "Clearance Overrides"
-msgstr "间距覆盖"
+msgstr "间距重写"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:929
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -33160,7 +33160,7 @@ msgstr "钻孔标记:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
 msgid "Actual size"
-msgstr "实际尺寸"
+msgstr "实际大小"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:120
 msgid "Scaling:"
@@ -33760,7 +33760,7 @@ msgstr "基本规则:"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:73
 msgid "Keep out tracks"
-msgstr "Keep out 走线"
+msgstr "禁止进行布线"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:74
 msgid "Prevent tracks from routing into this area"
@@ -33768,7 +33768,7 @@ msgstr "防止走线被布入该区域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:78
 msgid "Keep out vias"
-msgstr "Keep out 过孔"
+msgstr "禁止放置过孔"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:79
 msgid "Prevent vias from being placed in this area"
@@ -33776,7 +33776,7 @@ msgstr "防止过孔被放置在该区域"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:83
 msgid "Keep out pads"
-msgstr "Keep out 焊盘"
+msgstr "禁止放置焊盘"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:84
 msgid "Raise a DRC error if a pad overlaps this area"
@@ -33784,7 +33784,7 @@ msgstr "如果焊盘与该区域重叠, 会导致 DRC 错误"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:88
 msgid "Keep out zone fills"
-msgstr "Keep out 区域填充"
+msgstr "禁止区域填充"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:89
 msgid "Zones will not fill copper into this area"
@@ -33792,7 +33792,7 @@ msgstr "该区域禁止填充覆铜"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:93
 msgid "Keep out footprints"
-msgstr "Keep out 封装"
+msgstr "禁止放置封装"
 
 #: pcbnew/dialogs/dialog_rule_area_properties_base.cpp:94
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
@@ -33812,13 +33812,13 @@ msgstr "修改绘制属性"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:540
 msgid "Arc angle cannot be zero."
-msgstr "圆弧角不能为 0。"
+msgstr "弧线角不能为 0。"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:544
 #: pcbnew/dialogs/dialog_shape_properties.cpp:560
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f."
-msgstr "半径为 %f 且角度为 %f 的无效圆弧。"
+msgstr "半径为 %f 且角度为 %f 的无效弧线。"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:566
 #: pcbnew/dialogs/dialog_shape_properties.cpp:598
@@ -33868,7 +33868,7 @@ msgstr "贝塞尔控制点"
 
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:206
 msgid "Arc angle:"
-msgstr "圆弧角度:"
+msgstr "弧线角度:"
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
 msgid "Move items on:"
@@ -34057,7 +34057,7 @@ msgstr "盲孔/埋孔"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:301
 msgid "Start layer:"
-msgstr "开始层:"
+msgstr "起始层:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:308
 msgid "End layer:"
@@ -34241,7 +34241,7 @@ msgstr "设置上下文菜单和快捷键中旋转的增量 (以度为单位)。
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:52
 msgid "Arc editing mode:"
-msgstr "圆弧编辑模式:"
+msgstr "弧线编辑模式:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:59
 msgid "Keep center, adjust radius"
@@ -34311,7 +34311,7 @@ msgstr "当鼠标进入焊盘区域时捕捉光标"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:297
 #: pcbnew/dialogs/panel_edit_options_base.cpp:311
 msgid "When creating tracks"
-msgstr "当创建新布线时"
+msgstr "创建新走线时启用"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:305
 msgid "Snap to tracks:"
@@ -34338,7 +34338,7 @@ msgstr "始终显示选定的飞线"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:345
 #: pcbnew/tools/pcb_actions.cpp:1365
 msgid "Show ratsnest with curved lines"
-msgstr "用曲线显示飞线"
+msgstr "以曲线显示飞线"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:351
 msgid "Ratsnest line thickness:"
@@ -37015,7 +37015,7 @@ msgstr "孤铜"
 
 #: pcbnew/drc/drc_item.cpp:89
 msgid "Thermal relief connection to zone incomplete"
-msgstr "缓散热焊盘 (花焊盘) 与覆铜的连接不完整"
+msgstr "缓释热焊盘 (花焊盘) 与覆铜的连接不完整"
 
 #: pcbnew/drc/drc_item.cpp:93
 msgid "Via is not connected or connected on only one layer"
@@ -37132,7 +37132,7 @@ msgstr "残铜"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Solder mask aperture bridges items with different nets"
-msgstr "阻焊开窗连接了不同的网络对象"
+msgstr "阻焊开窗与不同网络的项目相连"
 
 #: pcbnew/drc/drc_item.cpp:213
 msgid "Silkscreen clipped by solder mask"
@@ -37523,12 +37523,12 @@ msgstr "%s 存在 '散热间隙' 重写。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:213
 #, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "%s 存在 '缓散热焊盘 (花焊盘) 散热引线宽度' 重写。"
+msgstr "%s 存在 '缓释热焊盘 (花焊盘) 散热引线宽度' 重写。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:215
 #, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "%s 存在 '缓散热焊盘 (花焊盘) 散热引线角度' 重写。"
+msgstr "%s 存在 '缓释热焊盘 (花焊盘) 散热引线角度' 重写。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:217
 #, c-format
@@ -37644,27 +37644,27 @@ msgstr "%s 个 'keep-out 属性' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:439
 #, c-format
 msgid "%s keep out copper fill setting differs."
-msgstr "%s 个 'keep out 覆铜设置' 差异。"
+msgstr "%s 个 '禁止区域填充设置' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:441
 #, c-format
 msgid "%s keep out footprints setting differs."
-msgstr "%s 个 'keep out 封装设置' 差异。"
+msgstr "%s 个 '禁止放置封装设置' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:443
 #, c-format
 msgid "%s keep out pads setting differs."
-msgstr "%s 个 'keep out 焊盘设置' 差异。"
+msgstr "%s 个 '禁止放置焊盘设置' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:445
 #, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "%s 个 'keep out 走线设置' 差异。"
+msgstr "%s 个 '禁止进行布线设置' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:447
 #, c-format
 msgid "%s keep out vias setting differs."
-msgstr "%s 个 'keep out 过孔设置' 差异。"
+msgstr "%s 个 '禁止放置过孔设置' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:453
 #, c-format
@@ -37684,7 +37684,7 @@ msgstr "%s 个 '散热间隙' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:459
 #, c-format
 msgid "%s thermal relief spoke width differs."
-msgstr "%s 个 '缓散热焊盘 (花焊盘) 散热引线宽度' 差异。"
+msgstr "%s 个 '缓释热焊盘 (花焊盘) 散热引线宽度' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:462
 #, c-format
@@ -37694,7 +37694,7 @@ msgstr "%s 个 '最小厚度' 差异。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:465
 #, c-format
 msgid "%s remove islands setting differs."
-msgstr "%s 个 '移除死铜设置' 差异。"
+msgstr "%s 个 '死铜移除设置' 差异。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:467
 #, c-format
@@ -37773,7 +37773,7 @@ msgstr "%s 设置不同。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:570
 #: pcbnew/footprint.cpp:3489
 msgid "Exempt From Courtyard Requirement"
-msgstr "忽略外框要求"
+msgstr "忽略封装外框要求"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:590
 msgid "Pad clearance overridden."
@@ -37967,12 +37967,12 @@ msgstr "电路板设置阻焊层最小宽度"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:542
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:636
 msgid "Front solder mask aperture bridges items with different nets"
-msgstr "顶层阻焊开窗区域与不同网络的元素相连"
+msgstr "顶层阻焊开窗区域与不同网络的项目相连"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:544
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:638
 msgid "Rear solder mask aperture bridges items with different nets"
-msgstr "底层阻焊开窗区域与不同网络的元素相连"
+msgstr "底层阻焊开窗区域与不同网络的项目相连"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:761
 msgid "Building solder mask..."
@@ -38044,7 +38044,7 @@ msgstr "(层 %s 最小引线数量 %d; 实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:242
 msgid "Checking thermal reliefs..."
-msgstr "正在检查缓散热焊盘 (花焊盘) ..."
+msgstr "正在检查缓释热焊盘 (花焊盘) ..."
 
 #: pcbnew/edit_zone_helpers.cpp:84 pcbnew/edit_zone_helpers.cpp:106
 msgid "Modify zone properties"
@@ -38446,7 +38446,7 @@ msgstr "(预期为 '通孔', 实际为 '%s')"
 #: pcbnew/footprint.cpp:2713
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
-msgstr "(预期为 'SMD', 实际为 '%s')"
+msgstr "(预期为 '贴片', 实际为 '%s')"
 
 #: pcbnew/footprint.cpp:2741
 msgid "(PTH pad has no copper layers)"
@@ -38458,15 +38458,15 @@ msgstr "(金属化焊盘的孔没留下铜)"
 
 #: pcbnew/footprint.cpp:2769
 msgid "(SMD pad appears on both front and back copper)"
-msgstr "(SMD 焊盘出现在铜层正反面)"
+msgstr "(贴片焊盘出现在铜层正反面)"
 
 #: pcbnew/footprint.cpp:2776 pcbnew/footprint.cpp:2789
 msgid "(SMD pad copper and mask layers don't match)"
-msgstr "(SMD 焊盘铜层和掩膜层不匹配)"
+msgstr "(贴片焊盘铜层和 mask 层不匹配)"
 
 #: pcbnew/footprint.cpp:2781 pcbnew/footprint.cpp:2794
 msgid "(SMD pad copper and paste layers don't match)"
-msgstr "(SMD 焊盘铜层和膏层不匹配)"
+msgstr "(贴片焊盘铜层和锡膏层不匹配)"
 
 #: pcbnew/footprint.cpp:2974
 #, c-format
@@ -38484,7 +38484,7 @@ msgstr "继承"
 
 #: pcbnew/footprint.cpp:3420 pcbnew/pad.cpp:1910 pcbnew/zone.cpp:1564
 msgid "Thermal reliefs for PTH"
-msgstr "金属化孔 (PTH) 使用缓散热焊盘 (花焊盘)"
+msgstr "对金属化孔 (PTH) 使用缓释热焊盘 (花焊盘)"
 
 #: pcbnew/footprint.cpp:3474
 msgid "Not in Schematic"
@@ -38500,15 +38500,15 @@ msgstr "覆盖"
 
 #: pcbnew/footprint.cpp:3492 pcbnew/pad.cpp:2022 pcbnew/zone.cpp:1689
 msgid "Clearance Override"
-msgstr "间距覆盖"
+msgstr "间距重写"
 
 #: pcbnew/footprint.cpp:3496 pcbnew/pad.cpp:2030
 msgid "Solderpaste Margin Override"
-msgstr "焊锡膏边缘覆盖"
+msgstr "锡膏边距重写"
 
 #: pcbnew/footprint.cpp:3501 pcbnew/pad.cpp:2034
 msgid "Solderpaste Margin Ratio Override"
-msgstr "焊锡膏边缘率覆盖"
+msgstr "锡膏边距比例重写"
 
 #: pcbnew/footprint.cpp:3506 pcbnew/pad.cpp:2039
 msgid "Zone Connection Style"
@@ -39205,7 +39205,7 @@ msgstr "短截线尺寸:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:70
 msgid "Arc Stub Radius Value:"
-msgstr "圆弧短截线半径值:"
+msgstr "弧线短截线半径值:"
 
 #: pcbnew/microwave/microwave_footprint.cpp:81
 #: pcbnew/microwave/microwave_footprint.cpp:95
@@ -39833,15 +39833,15 @@ msgstr "阻焊层边界覆盖"
 
 #: pcbnew/pad.cpp:2044 pcbnew/zone.cpp:1714
 msgid "Thermal Relief Spoke Width"
-msgstr "缓散热焊盘 (花焊盘) 引线宽度"
+msgstr "缓释热焊盘 (花焊盘) 引线宽度"
 
 #: pcbnew/pad.cpp:2049
 msgid "Thermal Relief Spoke Angle"
-msgstr "缓散热焊盘 (花焊盘) 引线角度"
+msgstr "缓释热焊盘 (花焊盘) 引线角度"
 
 #: pcbnew/pad.cpp:2053 pcbnew/zone.cpp:1708
 msgid "Thermal Relief Gap"
-msgstr "缓散热焊盘 (花焊盘) 间隙"
+msgstr "缓释热焊盘 (花焊盘) 间隙"
 
 #: pcbnew/pcb_base_frame.cpp:1221
 msgid ""
@@ -40593,8 +40593,8 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"CADSTAR 模板 '%s' 在焊盘和过孔中具有不同的缓散热焊盘 (花焊盘) 设置。KiCad 仅"
-"支持这两种设置的单一设置。已应用焊盘的设置。"
+"CADSTAR 模板 '%s' 在焊盘和过孔中具有不同的缓释热焊盘 (花焊盘) 设置。KiCad "
+"仅支持这两种设置的单一设置。已应用焊盘的设置。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2049
 #, c-format
@@ -42679,30 +42679,30 @@ msgstr "覆铜连接接线:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:737
 msgid "Thermal-relief gap resolution for:"
-msgstr "缓散热焊盘 (花焊盘) 间隙解析:"
+msgstr "缓释热焊盘 (花焊盘) 间隙解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:746
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "解析完成的缓散热焊盘 (花焊盘) 间隙: %s。"
+msgstr "解析完成的缓释热焊盘 (花焊盘) 间隙: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "缓散热焊盘 (花焊盘) 间距宽度:"
+msgstr "缓释热焊盘 (花焊盘) 间距宽度:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:760
 #, c-format
 msgid "Resolved spoke width: %s."
-msgstr "解析完成的缓散热焊盘 (花焊盘) 引线宽度: %s。"
+msgstr "解析完成的缓释热焊盘 (花焊盘) 引线宽度: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "缓散热焊盘 (花焊盘) 最小引线宽度间距:"
+msgstr "缓释热焊盘 (花焊盘) 最小引线宽度间距:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:774
 #, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "解析完成的最小缓散热焊盘 (花焊盘) 引线数量: %d。"
+msgstr "解析完成的最小缓释热焊盘 (花焊盘) 引线数量: %d。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:783
 #: pcbnew/tools/board_inspection_tool.cpp:831
@@ -42717,12 +42717,12 @@ msgstr "覆铜间距: %s。"
 #: pcbnew/tools/board_inspection_tool.cpp:797
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "被来自 %s 的较大物理间距覆盖; 间距: %s。"
+msgstr "被来自 %s 的较大物理间距重写; 间距: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:813
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "被来自 %s 的较大物理孔间距覆盖; 间距: %s。"
+msgstr "被来自 %s 的较大物理孔间距重写; 间距: %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:857
 msgid "Items belong to the same net. Min clearance is 0."
@@ -42898,7 +42898,7 @@ msgstr "创建线条"
 
 #: pcbnew/tools/convert_tool.cpp:1199
 msgid "Create Arc"
-msgstr "创建圆弧"
+msgstr "创建弧线"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:246
 msgid "Layer Name"
@@ -42995,7 +42995,7 @@ msgstr "绘制矩形"
 
 #: pcbnew/tools/drawing_tool.cpp:474 pcbnew/tools/pcb_actions.cpp:129
 msgid "Draw Circle"
-msgstr "绘制圆"
+msgstr "绘制圆形"
 
 #: pcbnew/tools/drawing_tool.cpp:521 pcbnew/tools/pcb_actions.cpp:139
 msgid "Draw Arc"
@@ -43396,7 +43396,7 @@ msgstr "绘制矩形"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Draw a circle"
-msgstr "绘制圆"
+msgstr "绘制圆形"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 msgid "Draw an arc"
@@ -43531,11 +43531,11 @@ msgstr "添加规则区域 (keepout)"
 
 #: pcbnew/tools/pcb_actions.cpp:307
 msgid "Add a Zone Cutout"
-msgstr "添加覆铜挖空"
+msgstr "添加挖空区域"
 
 #: pcbnew/tools/pcb_actions.cpp:308
 msgid "Add a cutout area of an existing zone"
-msgstr "在现有覆铜中添加一个挖空区域"
+msgstr "在现有区域中添加一个挖空区域"
 
 #: pcbnew/tools/pcb_actions.cpp:318
 msgid "Add a Similar Zone"
@@ -43571,11 +43571,11 @@ msgstr "减小线宽"
 
 #: pcbnew/tools/pcb_actions.cpp:365
 msgid "Switch Arc Posture"
-msgstr "切换圆弧模式"
+msgstr "切换弧线模式"
 
 #: pcbnew/tools/pcb_actions.cpp:366
 msgid "Switch the arc posture"
-msgstr "切换圆弧模式"
+msgstr "切换弧线模式"
 
 #: pcbnew/tools/pcb_actions.cpp:372
 msgid "Snap to Objects on the Active Layer Only"
@@ -43739,7 +43739,7 @@ msgstr "更新选定的布线和过孔尺寸"
 
 #: pcbnew/tools/pcb_actions.cpp:602
 msgid "Adds arcs tangent to the selected straight track segments"
-msgstr "添加与所选直线布线线段相切的圆弧"
+msgstr "添加与所选直线布线线段相切的弧线"
 
 #: pcbnew/tools/pcb_actions.cpp:607
 msgid "Fillet Lines..."
@@ -43965,7 +43965,7 @@ msgstr "清理走线和过孔..."
 
 #: pcbnew/tools/pcb_actions.cpp:859
 msgid "Cleanup redundant items, shorting items, etc."
-msgstr "清理冗余项, 短路项等。"
+msgstr "清理冗余项目, 合并项目, 等等。"
 
 #: pcbnew/tools/pcb_actions.cpp:865
 msgid "Cleanup Graphics..."
@@ -43973,7 +43973,7 @@ msgstr "清理图形..."
 
 #: pcbnew/tools/pcb_actions.cpp:866
 msgid "Cleanup redundant items, etc."
-msgstr "清理冗余项等。"
+msgstr "清理冗余项目等。"
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Add Microwave Gap"
@@ -44274,7 +44274,7 @@ msgstr "允许项目在画布上移动或调整大小"
 
 #: pcbnew/tools/pcb_actions.cpp:1197
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "将所选项目组合, 将它们作为单个项目处理"
+msgstr "组合所选项目, 将其作为单个项目处理"
 
 #: pcbnew/tools/pcb_actions.cpp:1204
 msgid "Ungroup any selected groups"
@@ -44806,7 +44806,7 @@ msgstr "显示封装库和原理图符号分配"
 
 #: pcbnew/tools/pcb_actions.cpp:1900
 msgid "Geographical Reannotate..."
-msgstr "位置重新批注..."
+msgstr "按位置重新批注..."
 
 #: pcbnew/tools/pcb_actions.cpp:1901
 msgid "Reannotate PCB in geographical order"
@@ -44894,21 +44894,21 @@ msgstr "所选项目沿垂直轴分布"
 
 #: pcbnew/tools/pcb_actions.cpp:2002
 msgid "Keep Arc Center, Adjust Radius"
-msgstr "保持圆弧中心, 调整半径"
+msgstr "保持弧线中心, 调整半径"
 
 #: pcbnew/tools/pcb_actions.cpp:2003
 msgid "Switch arc editing mode to keep center, adjust radius and endpoints"
-msgstr "切换圆弧编辑模式到保持中心、调整半径和端点"
+msgstr "切换弧线编辑模式到保持中心、调整半径和端点"
 
 #: pcbnew/tools/pcb_actions.cpp:2009
 msgid "Keep Arc Endpoints or Direction of Starting Point"
-msgstr "保持圆弧端点或起点方向"
+msgstr "保持弧线端点或起点方向"
 
 #: pcbnew/tools/pcb_actions.cpp:2010
 msgid ""
 "Switch arc editing mode to keep endpoints, or to keep direction of the other "
 "point"
-msgstr "切换圆弧编辑模式为保持端点, 或保持另一点的方向"
+msgstr "切换弧线编辑模式为保持端点, 或保持另一点的方向"
 
 #: pcbnew/tools/pcb_actions.cpp:2033
 msgid "Position Relative To..."
@@ -44916,7 +44916,7 @@ msgstr "相对...的位置"
 
 #: pcbnew/tools/pcb_actions.cpp:2034
 msgid "Positions the selected item(s) by an exact amount relative to another"
-msgstr "将所选项目相对于另一对象的精确位移进行定位"
+msgstr "将所选项目相对于另一项目精确定位"
 
 #: pcbnew/tools/pcb_actions.cpp:2088
 msgid "Select/Expand Connection"
@@ -45050,7 +45050,7 @@ msgstr "在板外区域执行元件的自动放置"
 
 #: pcbnew/tools/pcb_actions.cpp:2226
 msgid "Route Single Track"
-msgstr "布线(单端走线)"
+msgstr "布线(单端)"
 
 #: pcbnew/tools/pcb_actions.cpp:2227
 msgid "Route tracks"
@@ -45058,7 +45058,7 @@ msgstr "布线"
 
 #: pcbnew/tools/pcb_actions.cpp:2238
 msgid "Route Differential Pair"
-msgstr "布线(差分对)"
+msgstr "布线(差分)"
 
 #: pcbnew/tools/pcb_actions.cpp:2239
 msgid "Route differential pairs"
@@ -46260,7 +46260,7 @@ msgstr "继承"
 
 #: pcbnew/zones.h:65
 msgid "thermal reliefs"
-msgstr "缓散热焊盘 (花焊盘)"
+msgstr "缓释热焊盘 (花焊盘)"
 
 #: pcbnew/zones.h:66
 msgid "solid"
@@ -46268,7 +46268,7 @@ msgstr "实心"
 
 #: pcbnew/zones.h:67
 msgid "thermal reliefs for PTH"
-msgstr "用于金属化孔 (PTH) 的缓散热焊盘 (花焊盘)"
+msgstr "用于金属化孔 (PTH) 的缓释热焊盘 (花焊盘)"
 
 #: plugins/3d/vrml/vrml.cpp:228
 msgid "[INFO] load failed: input line too long\n"
