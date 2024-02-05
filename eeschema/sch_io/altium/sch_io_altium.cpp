@@ -896,13 +896,13 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
 }
 
 
-bool SCH_IO_ALTIUM::IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const
+bool SCH_IO_ALTIUM::IsComponentPartVisible( const ASCH_OWNER_INTERFACE& aElem ) const
 {
-    const auto& component = m_altiumComponents.find( aOwnerindex );
-    const auto& templ = m_altiumTemplates.find( aOwnerindex );
+    const auto& component = m_altiumComponents.find( aElem.ownerindex );
+    const auto& templ = m_altiumTemplates.find( aElem.ownerindex );
 
     if( component != m_altiumComponents.end() )
-        return component->second.displaymode == aOwnerpartdisplaymode;
+        return component->second.displaymode == aElem.ownerpartdisplaymode;
 
     if( templ != m_altiumTemplates.end() )
         return true;
@@ -1036,7 +1036,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
             return;
         }
 
-        if( !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
+        if( !IsComponentPartVisible( elem ) )
             return;
 
         schSymbol = m_symbols.at( libSymbolIt->first );
@@ -1636,11 +1636,8 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( aSymbol.empty()
-            && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
-        {
+        if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
-        }
 
         for( size_t i = 0; i + 1 < elem.points.size(); i += 3 )
         {
@@ -1771,11 +1768,8 @@ void SCH_IO_ALTIUM::ParsePolyline( const std::map<wxString, wxString>& aProperti
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( aSymbol.empty()
-            && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
-        {
+        if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
-        }
 
         LIB_SHAPE*  line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
         symbol->AddDrawItem( line, false );
@@ -1845,11 +1839,8 @@ void SCH_IO_ALTIUM::ParsePolygon( const std::map<wxString, wxString>& aPropertie
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( aSymbol.empty()
-            && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
-        {
+        if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
-        }
 
         LIB_SHAPE* line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
 
@@ -1929,11 +1920,8 @@ void SCH_IO_ALTIUM::ParseRoundRectangle( const std::map<wxString, wxString>& aPr
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( aSymbol.empty()
-            && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
-        {
+        if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
-        }
 
         LIB_SHAPE* rect = nullptr;
 
@@ -2048,11 +2036,8 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( aSymbol.empty()
-            && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
-        {
+        if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
-        }
 
         if( elem.m_StartAngle == 0 && ( elem.m_EndAngle == 0 || elem.m_EndAngle == 360 ) )
         {
@@ -2155,11 +2140,8 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( aSymbol.empty()
-            && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
-        {
+        if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
-        }
 
         ELLIPSE<int>             ellipse( elem.m_Center, elem.m_Radius,
                                           KiROUND( elem.m_SecondaryRadius ), ANGLE_0,
@@ -2452,11 +2434,8 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( aSymbol.empty()
-            && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
-        {
+        if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
-        }
 
         LIB_SHAPE*  line = new LIB_SHAPE( symbol, SHAPE_T::POLY );
         symbol->AddDrawItem( line, false );
@@ -2690,11 +2669,8 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        if( aSymbol.empty()
-            && !IsComponentPartVisible( elem.ownerindex, elem.ownerpartdisplaymode ) )
-        {
+        if( aSymbol.empty() && !IsComponentPartVisible( elem ) )
             return;
-        }
 
         LIB_SHAPE*  rect = new LIB_SHAPE( symbol, SHAPE_T::RECTANGLE );
         symbol->AddDrawItem( rect, false );

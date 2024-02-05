@@ -134,10 +134,18 @@ ASCH_SYMBOL::ASCH_SYMBOL( const std::map<wxString, wxString>& aProps )
     location = VECTOR2I( ReadKiCadUnitFrac( aProps, "LOCATION.X" ),
                          -ReadKiCadUnitFrac( aProps, "LOCATION.Y" ) );
 
-    partcount        = ALTIUM_PARSER::ReadInt( aProps, "PARTCOUNT", 0 );
+    partcount = ALTIUM_PARSER::ReadInt( aProps, "PARTCOUNT", 0 );
     displaymodecount = ALTIUM_PARSER::ReadInt( aProps, "DISPLAYMODECOUNT", 0 );
-    m_indexInSheet   = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", -1 );
-    displaymode      = ALTIUM_PARSER::ReadInt( aProps, "DISPLAYMODE", 0 );
+    m_indexInSheet = ALTIUM_PARSER::ReadInt( aProps, "INDEXINSHEET", -1 );
+
+    // DISPLAYMODE may be a string. Leave displaymode at 0 in this case.
+    displaymode = 0;
+    wxString displayModeStr = ALTIUM_PARSER::ReadString( aProps, "DISPLAYMODE", "" );
+
+    long v = 0;
+
+    if( displayModeStr.ToCLong( &v ) )
+        displaymode = int( v );
 }
 
 

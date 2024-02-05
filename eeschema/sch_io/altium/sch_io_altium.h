@@ -121,7 +121,7 @@ private:
     SCH_SHEET* getCurrentSheet();
 
     bool ShouldPutItemOnSheet( int aOwnerindex );
-    bool IsComponentPartVisible( int aOwnerindex, int aOwnerpartdisplaymode ) const;
+    bool IsComponentPartVisible( const ASCH_OWNER_INTERFACE& aElem ) const;
     const ASCH_STORAGE_FILE* GetFileFromStorage( const wxString& aFilename ) const;
     void AddTextBox( const ASCH_TEXT_FRAME* aElem );
     void AddLibTextBox( const ASCH_TEXT_FRAME* aElem, std::vector<LIB_SYMBOL*>& aSymbol  = nullsym, std::vector<int>& aFontSize = nullint );
