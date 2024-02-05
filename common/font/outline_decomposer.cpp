@@ -98,7 +98,7 @@ int OUTLINE_DECOMPOSER::cubicTo( const FT_Vector* aFirstControlPoint,
 {
     OUTLINE_DECOMPOSER* decomposer = static_cast<OUTLINE_DECOMPOSER*>( aCallbackData );
 
-    GLYPH_POINTS bezier;
+    std::vector<VECTOR2D> bezier;
     bezier.push_back( decomposer->m_lastEndPoint );
     bezier.push_back( toVector2D( aFirstControlPoint ) );
 
@@ -110,8 +110,9 @@ int OUTLINE_DECOMPOSER::cubicTo( const FT_Vector* aFirstControlPoint,
 
     bezier.push_back( toVector2D( aEndPoint ) );
 
-    GLYPH_POINTS result;
+    std::vector<VECTOR2D> result;
     decomposer->approximateBezierCurve( result, bezier );
+
     for( const VECTOR2D& p : result )
         decomposer->addContourPoint( p );
 
@@ -121,7 +122,7 @@ int OUTLINE_DECOMPOSER::cubicTo( const FT_Vector* aFirstControlPoint,
 }
 
 
-void OUTLINE_DECOMPOSER::OutlineToSegments( CONTOURS* aContours )
+void OUTLINE_DECOMPOSER::OutlineToSegments( std::vector<CONTOUR>* aContours )
 {
     m_contours = aContours;
 
@@ -147,8 +148,8 @@ void OUTLINE_DECOMPOSER::OutlineToSegments( CONTOURS* aContours )
 
 
 // use converter in kimath
-bool OUTLINE_DECOMPOSER::approximateQuadraticBezierCurve( GLYPH_POINTS&       aResult,
-                                                          const GLYPH_POINTS& aBezier ) const
+bool OUTLINE_DECOMPOSER::approximateQuadraticBezierCurve( std::vector<VECTOR2D>&       aResult,
+                                                          const std::vector<VECTOR2D>& aBezier ) const
 {
     wxASSERT( aBezier.size() == 3 );
 
@@ -160,7 +161,7 @@ bool OUTLINE_DECOMPOSER::approximateQuadraticBezierCurve( GLYPH_POINTS&       aR
     // qpn = Quadratic Bezier control points (n = 0..2, 3 in total)
     // cp0 = qp0, cp1 = qp0 + 2/3 * (qp1 - qp0), cp2 = qp2 + 2/3 * (qp1 - qp2), cp3 = qp2
 
-    GLYPH_POINTS cubic;
+    std::vector<VECTOR2D> cubic;
     cubic.reserve( 4 );
 
     cubic.push_back( aBezier[0] );                                           // cp0
@@ -172,11 +173,10 @@ bool OUTLINE_DECOMPOSER::approximateQuadraticBezierCurve( GLYPH_POINTS&       aR
 }
 
 
-bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( GLYPH_POINTS&       aResult,
-                                                      const GLYPH_POINTS& aCubicBezier ) const
+bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( std::vector<VECTOR2D>&       aResult,
+                                                      const std::vector<VECTOR2D>& aCubicBezier ) const
 {
     wxASSERT( aCubicBezier.size() == 4 );
-
 
     static int minimumSegmentLength = ADVANCED_CFG::GetCfg().m_MinimumSegmentLength;
     BEZIER_POLY   converter( aCubicBezier );
@@ -186,17 +186,17 @@ bool OUTLINE_DECOMPOSER::approximateCubicBezierCurve( GLYPH_POINTS&       aResul
 }
 
 
-bool OUTLINE_DECOMPOSER::approximateBezierCurve( GLYPH_POINTS&       aResult,
-                                                 const GLYPH_POINTS& aBezier ) const
+bool OUTLINE_DECOMPOSER::approximateBezierCurve( std::vector<VECTOR2D>&       aResult,
+                                                 const std::vector<VECTOR2D>& aBezier ) const
 {
     switch( aBezier.size() )
     {
     case 4: // cubic
         return approximateCubicBezierCurve( aResult, aBezier );
-        break;
+
     case 3: // quadratic
         return approximateQuadraticBezierCurve( aResult, aBezier );
-        break;
+
     default:
         // error, only 3 and 4 are acceptable values
         return false;
@@ -204,7 +204,7 @@ bool OUTLINE_DECOMPOSER::approximateBezierCurve( GLYPH_POINTS&       aResult,
 }
 
 
-int OUTLINE_DECOMPOSER::winding( const GLYPH_POINTS& aContour ) const
+int OUTLINE_DECOMPOSER::winding( const std::vector<VECTOR2D>& aContour ) const
 {
     // -1 == counterclockwise, 1 == clockwise
 

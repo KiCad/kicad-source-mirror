@@ -138,7 +138,7 @@ private:
 
     // cache for glyphs converted to straight segments
     // key is glyph index (FT_GlyphSlot field glyph_index)
-    std::map<unsigned int, GLYPH_POINTS_LIST> m_contourCache;
+    std::map<unsigned int, std::vector<std::vector<VECTOR2D>>> m_contourCache;
 
     // The height of the KiCad stroke font is the distance between stroke endpoints for a vertical
     // line of cap-height.  So the cap-height of the font is actually stroke-width taller than its

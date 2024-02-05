@@ -325,7 +325,7 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
             // contours is a collection of all outlines in the glyph; for example the 'o' glyph
             // generally contains 2 contours, one for the glyph outline and one for the hole
-            CONTOURS contours;
+            std::vector<CONTOUR> contours;
 
             OUTLINE_DECOMPOSER decomposer( face->glyph->outline );
             decomposer.OutlineToSegments( &contours );
@@ -335,8 +335,8 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
 
             for( CONTOUR& c : contours )
             {
-                GLYPH_POINTS     points = c.m_Points;
-                SHAPE_LINE_CHAIN shape;
+                std::vector<VECTOR2D> points = c.m_Points;
+                SHAPE_LINE_CHAIN      shape;
 
                 shape.ReservePoints( points.size() );
 

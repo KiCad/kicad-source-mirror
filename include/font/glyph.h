@@ -112,10 +112,6 @@ private:
 };
 
 
-typedef std::vector<VECTOR2D>     GLYPH_POINTS;
-typedef std::vector<GLYPH_POINTS> GLYPH_POINTS_LIST;
-typedef std::vector<BOX2D>        GLYPH_BOUNDING_BOX_LIST;
-
 
 } // namespace KIFONT
 

@@ -87,7 +87,7 @@ private:
 
 private:
     const std::vector<std::shared_ptr<GLYPH>>* m_glyphs;
-    const GLYPH_BOUNDING_BOX_LIST*             m_glyphBoundingBoxes;
+    const std::vector<BOX2D>*                  m_glyphBoundingBoxes;
     double                                     m_maxGlyphWidth;
 };
 
