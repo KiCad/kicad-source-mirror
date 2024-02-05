@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 12:23+0000\n"
+"PO-Revision-Date: 2024-02-05 08:45+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -9923,7 +9923,7 @@ msgstr "모든 '%s' 위반에 대한 심각도를 오류로 변경"
 #: eeschema/dialogs/dialog_erc.cpp:623 eeschema/dialogs/dialog_erc.cpp:629
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "위반 심각도는 회로도 설정... 대화상자에서도 편집할 수 있음"
+msgstr "위반 심각도는 회로도 설정... 대화 상자에서도 변경할 수 있음"
 
 #: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/dialogs/dialog_drc.cpp:660
 #, c-format
@@ -9945,7 +9945,7 @@ msgstr "핀 간 충돌 표시 편집..."
 
 #: eeschema/dialogs/dialog_erc.cpp:644 pcbnew/dialogs/dialog_drc.cpp:673
 msgid "Edit violation severities..."
-msgstr "위반 심각도 편집..."
+msgstr "위반 심각도 변경..."
 
 #: eeschema/dialogs/dialog_erc.cpp:645 eeschema/dialogs/dialog_erc.cpp:651
 msgid "Open the Schematic Setup... dialog"
@@ -30218,7 +30218,7 @@ msgstr "검사 실행 > 라이브러리와 풋프린트 비교"
 
 #: pcbnew/dialogs/dialog_drc.cpp:655 pcbnew/dialogs/dialog_drc.cpp:662
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr "위반 심각도는 보드 설정... 대화 박스에서도 편집할 수 있습니다"
+msgstr "위반 심각도는 보드 설정... 대화 상자에서도 변경할 수 있음"
 
 #: pcbnew/dialogs/dialog_drc.cpp:673
 msgid "Open the Board Setup... dialog"
@@ -31002,7 +31002,7 @@ msgstr "매치 케이스"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:52
 msgid "Wrap"
-msgstr "감싸다"
+msgstr "순환"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:62
 msgid "Search footprint reference designators"
@@ -36885,11 +36885,11 @@ msgstr "%s는 드릴 구멍이 아닙니다. 규칙이 무시되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1156
 msgid "Keepout constraint not met."
-msgstr "킵아웃 제약 조건이 충족되지 않았습니다."
+msgstr "킵아웃 제약 조건을 충족하지 못함."
 
 #: pcbnew/drc/drc_engine.cpp:1158
 msgid "Disallow constraint not met."
-msgstr "허용되지 않는 제약 조건이 충족되지 않았습니다."
+msgstr "제약 조건이 충족되지 않은 경우 허용 안 함."
 
 #: pcbnew/drc/drc_engine.cpp:1180
 msgid "Keepout layer(s) not matched."
@@ -36917,7 +36917,7 @@ msgstr "%s는 드릴 구멍이 아닙니다. 규칙이 무시되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1231
 msgid "Unconditional constraint applied."
-msgstr "조건 없는 제약이 적용되었습니다."
+msgstr "무조건 제약 조건 적용."
 
 #: pcbnew/drc/drc_engine.cpp:1235 pcbnew/drc/drc_engine.cpp:1535
 msgid "Unconditional rule applied."
@@ -36925,7 +36925,7 @@ msgstr "조건 없는 규칙이 적용되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1240
 msgid "Unconditional rule applied; overrides previous constraints."
-msgstr "조건없는 규칙이 적용되었습니다; 이전 제약을 재정의합니다."
+msgstr "무조건 규칙 적용; 이전 제약 조건을 무시합니다."
 
 #: pcbnew/drc/drc_engine.cpp:1254 pcbnew/drc/drc_engine.cpp:1540
 #, c-format
@@ -37476,7 +37476,7 @@ msgstr "(%s 최대 간격 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_disallow.cpp:72
 msgid "Checking keepouts & disallow constraints..."
-msgstr "킵아웃과 허용되지 않는 제약 조건 확인 중..."
+msgstr "킵아웃 및 불허 제약 조건 확인..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:156
 msgid "Checking copper to board edge clearances..."
@@ -42669,7 +42669,7 @@ msgstr "확인된 최대 비연결 길이: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:332
 #: pcbnew/tools/board_inspection_tool.cpp:1339
 msgid "Text height resolution for:"
-msgstr "텍스트 높이 해상도:"
+msgstr "텍스트 높이 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:340
 #, c-format
@@ -42702,7 +42702,7 @@ msgstr "연결 폭"
 
 #: pcbnew/tools/board_inspection_tool.cpp:377
 msgid "Connection width resolution for:"
-msgstr "연결 폭 해상도:"
+msgstr "연결 폭 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:385
 #, c-format
@@ -42791,12 +42791,12 @@ msgstr "확인된 최소 간격: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:460
 #: pcbnew/tools/board_inspection_tool.cpp:1194
 msgid "Physical hole clearance resolution for:"
-msgstr "물리적 홀 유격 해상도:"
+msgstr "물리적 홀 유격 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:469
 #: pcbnew/tools/board_inspection_tool.cpp:1206
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "정의된 'mechanical_hole_clearance' 제약 조건이 없습니다."
+msgstr "'물리적 구멍 간격' 제약 조건이 정의되지 않음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:480
 msgid "Hole to Hole"
@@ -42804,9 +42804,8 @@ msgstr "구멍 대 구멍"
 
 #: pcbnew/tools/board_inspection_tool.cpp:481
 #: pcbnew/tools/board_inspection_tool.cpp:1068
-#, fuzzy
 msgid "Hole-to-hole clearance resolution for:"
-msgstr "구멍 대 구멍 유격 해상도:"
+msgstr "구멍 대 구멍 유격 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:495
 msgid "Edge Clearance"
@@ -42830,7 +42829,7 @@ msgstr "기계적 유격 분해능:"
 #: pcbnew/tools/board_inspection_tool.cpp:572
 #: pcbnew/tools/board_inspection_tool.cpp:1140
 msgid "No 'physical_clearance' constraints defined."
-msgstr "정의된 '물리적 유격' 제약 조건이 없습니다."
+msgstr "정의된 '물리적 유격' 제약 조건이 없음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:583
 #: pcbnew/tools/board_inspection_tool.cpp:1397
@@ -42900,7 +42899,7 @@ msgstr "확인된 최소 스포크 수: %d."
 #: pcbnew/tools/board_inspection_tool.cpp:783
 #: pcbnew/tools/board_inspection_tool.cpp:831
 msgid "Zone clearance resolution for:"
-msgstr "구역 클리어런스 해상도:"
+msgstr "구역 클리어런스 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:787
 #, c-format
@@ -42953,7 +42952,7 @@ msgstr "최대 길이를 벗어난 차동 쌍 해결:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:919
 msgid "No 'diff_pair_uncoupled' constraints defined."
-msgstr "정의된 'diff_pair_uncoupled' 제약 조건이 없습니다."
+msgstr "정의된 '차동 쌍 연결 해제' 제약 조건이 없음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:950
 #, c-format
@@ -42974,12 +42973,12 @@ msgstr "물리적 허용 범위"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1238
 msgid "Select an item for a constraints resolution report."
-msgstr "제약 해결 보고서를 위한 항목을 선택하세요."
+msgstr "제약 조건 해결 보고서 항목을 선택하세요."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1270
 #, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "확인된 너비 제약조건: 최소 %s; 최적 %s; 최대 %s."
+msgstr "확인된 너비 제약 조건: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1290
 #, c-format
@@ -42998,12 +42997,12 @@ msgstr "확인된 환형 폭 제약 조건: 최소 %s; 최적 %s; 최대 %s."
 #: pcbnew/tools/board_inspection_tool.cpp:1328
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "확인된 구멍 크기 제약조건: 최소 %s; 최적 %s; 최대 %s."
+msgstr "확인된 구멍 크기 제약 조건: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1347
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "확인된 높이 제약조건: 최소 %s; 최적 %s; 최대 %s."
+msgstr "확인된 높이 제약 조건: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, c-format
@@ -43042,9 +43041,8 @@ msgid "Select a footprint to diff with its library equivalent."
 msgstr "라이브러리에 대한 보드 풋프린트 확인 중..."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1464
-#, fuzzy
 msgid "Select a footprint for a footprint associations report."
-msgstr "제약 해결 보고서를 위한 항목을 선택하세요."
+msgstr "풋프린트 연결 보고서에서 풋프린트를 선택하세요."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1491
 #, fuzzy
@@ -45070,7 +45068,7 @@ msgstr "클리어런스 해결"
 #: pcbnew/tools/pcb_actions.cpp:1872
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
-msgstr "선택한 두 객체에 대하여 활성화된 레이어의 클리어런스 해상도를 표시"
+msgstr "선택한 두 객체에 대하여 활성화된 레이어의 클리어런스 해법을 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1878
 msgid "Constraints Resolution"
@@ -45078,7 +45076,7 @@ msgstr "제약 조건 해결"
 
 #: pcbnew/tools/pcb_actions.cpp:1879
 msgid "Show constraints resolution for the selected object"
-msgstr "선택한 객체에 대한 제약 해결 표시"
+msgstr "선택한 객체에 대한 제약 조건 해법 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1886
 msgid "Show differences between board footprint and its library equivalent"
