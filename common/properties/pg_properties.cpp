@@ -234,34 +234,12 @@ wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFla
 {
     wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_LONG, wxEmptyString );
 
-    long distanceIU = aVariant.GetLong();
-
-    ORIGIN_TRANSFORMS&  transforms = m_parentFrame->GetOriginTransforms();
-    const EDA_IU_SCALE& iuScale    = m_parentFrame->GetIuScale();
+    long               distanceIU = aVariant.GetLong();
+    ORIGIN_TRANSFORMS& transforms = m_parentFrame->GetOriginTransforms();
 
     distanceIU = transforms.ToDisplay( static_cast<long long int>( distanceIU ), m_coordType );
 
-    switch( m_parentFrame->GetUserUnits() )
-    {
-        case EDA_UNITS::INCHES:
-            return wxString::Format( wxS( "%g in" ), iuScale.IUToMils( distanceIU ) / 1000.0 );
-
-        case EDA_UNITS::MILS:
-            return wxString::Format( wxS( "%d mils" ), iuScale.IUToMils( distanceIU ) );
-
-        case EDA_UNITS::MILLIMETRES:
-            return wxString::Format( wxS( "%g mm" ), iuScale.IUTomm( distanceIU ) );
-
-        case EDA_UNITS::UNSCALED:
-            return wxString::Format( wxS( "%li" ), distanceIU );
-
-        default:
-            // DEGREEs are handled by PGPROPERTY_ANGLE
-            break;
-    }
-
-    wxFAIL;
-    return wxEmptyString;
+    return m_parentFrame->StringFromValue( distanceIU, true, EDA_DATA_TYPE::DISTANCE );
 }
 
 
