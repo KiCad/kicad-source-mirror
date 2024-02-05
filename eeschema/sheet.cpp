@@ -600,6 +600,8 @@ bool SCH_EDIT_FRAME::EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHi
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
+    m_toolManager->ProcessEvent( EVENTS::SelectedItemsModified );
+
     return true;
 }
 
