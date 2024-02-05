@@ -560,6 +560,8 @@ static struct PCB_TEXT_DESC
         propMgr.InheritsAfter( TYPE_HASH( PCB_TEXT ), TYPE_HASH( BOARD_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ) );
 
+        propMgr.Mask( TYPE_HASH( PCB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
+
         propMgr.AddProperty( new PROPERTY<PCB_TEXT, bool, BOARD_ITEM>( _HKI( "Knockout" ),
                 &BOARD_ITEM::SetIsKnockout, &BOARD_ITEM::IsKnockout ),
                 _HKI( "Text Properties" ) );
