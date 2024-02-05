@@ -342,6 +342,10 @@ void SCH_IO_HTTP_LIB::connect()
         if( !m_conn->IsValidEndpoint() )
         {
             m_lastError = m_conn->GetLastError();
+
+            // Make sure we release pointer so we are able to query API again next time
+            m_conn.release();
+
             return;
         }
     }

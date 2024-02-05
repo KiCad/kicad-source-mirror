@@ -38,7 +38,6 @@
 class SCH_IO_HTTP_LIB : public SCH_IO
 {
 public:
-
     SCH_IO_HTTP_LIB();
     virtual ~SCH_IO_HTTP_LIB();
 
@@ -50,12 +49,10 @@ public:
 
     int GetModifyHash() const override { return 0; }
 
-    void EnumerateSymbolLib( wxArrayString& aSymbolNameList,
-                             const wxString& aLibraryPath,
+    void EnumerateSymbolLib( wxArrayString& aSymbolNameList, const wxString& aLibraryPath,
                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
-    void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
-                             const wxString& aLibraryPath,
+    void EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList, const wxString& aLibraryPath,
                              const STRING_UTF8_MAP* aProperties = nullptr ) override;
 
     LIB_SYMBOL* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
@@ -69,22 +66,16 @@ public:
 
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;
 
-    bool IsLibraryWritable( const wxString& aLibraryPath ) override
-    {
-        // TODO: HTTP libraries are well capabale of supporting this.
-        return false;
-    }
+    bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
-    void SetLibTable( SYMBOL_LIB_TABLE* aTable ) override
-    {
-        m_libTable = aTable;
-    }
-
+    void SetLibTable( SYMBOL_LIB_TABLE* aTable ) override { m_libTable = aTable; }
 
     HTTP_LIB_SETTINGS* Settings() const { return m_settings.get(); }
 
     void SaveSymbol( const wxString& aLibraryPath, const LIB_SYMBOL* aSymbol,
                      const STRING_UTF8_MAP* aProperties = nullptr ) override;
+
+    const wxString& GetError() const override { return m_lastError; }
 
 private:
 

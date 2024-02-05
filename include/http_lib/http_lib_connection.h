@@ -88,7 +88,6 @@ private:
 
     wxString httpErrorCodeDescription( uint16_t aHttpCode );
 
-    HTTP_LIB_SOURCE_TYPE m_sourceType;
     HTTP_LIB_SOURCE      m_source;
 
     //          part.id     part
