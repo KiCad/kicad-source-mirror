@@ -1,0 +1,116 @@
+(footprint "INDUCTOR_V"
+	(version 20240108)
+	(generator "pcbnew")
+	(generator_version "8.0")
+	(layer "F.Cu")
+	(descr "Inductor (vertical)")
+	(tags "INDUCTOR")
+	(property "Reference" "L***"
+		(at 0 1.99898 0)
+		(layer "F.SilkS")
+		(uuid "6a682654-5e60-428f-b950-94d018849139")
+		(effects
+			(font
+				(size 1.00076 1.00076)
+				(thickness 0.2032)
+			)
+		)
+	)
+	(property "Value" "VAL**"
+		(at 0.09906 -1.99898 0)
+		(layer "F.SilkS")
+		(uuid "30298a29-c29f-4002-aa88-58fc1f4f12ee")
+		(effects
+			(font
+				(size 1.00076 1.00076)
+				(thickness 0.2032)
+			)
+		)
+	)
+	(property "Footprint" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ae8e0d5c-2566-41ee-b71f-de0a14b8198a")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0f2870fc-1b33-4686-8318-e51f6932a0f0")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(unlocked yes)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "08bdb341-f357-41b9-b6b0-53207ef2f2e8")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_circle
+		(center 0 0)
+		(end 3.81 0)
+		(stroke
+			(width 0.20066)
+			(type solid)
+		)
+		(fill none)
+		(layer "F.SilkS")
+		(uuid "6c4d04c3-b313-4b4b-8145-a8e814f45466")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 4.1 0.1)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(fill none)
+		(layer "F.CrtYd")
+		(uuid "ca909a5c-3c5b-4a59-b2b5-63c1365294c7")
+	)
+	(pad "1" thru_hole rect
+		(at -2.54 0)
+		(size 1.905 1.905)
+		(drill 0.8128)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "e8c23d30-de7a-4f0a-88b0-85ca55e0e8e4")
+	)
+	(pad "2" thru_hole circle
+		(at 2.54 0)
+		(size 1.905 1.905)
+		(drill 0.8128)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "d23c85c9-7841-41f5-a170-2a2de74dfafa")
+	)
+	(model "${KICAD6_3DMODEL_DIR}/Inductor_THT.3dshapes/L_Radial_D10.0mm_P5.00mm_Fastron_07M.wrl"
+		(offset
+			(xyz -2.5 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

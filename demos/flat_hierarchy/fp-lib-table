@@ -1,4 +1,5 @@
 (fp_lib_table
+  (version 7)
   (lib (name "Package_DIP")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Package_DIP.pretty")(options "")(descr ""))
   (lib (name "Diode_THT")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Diode_THT.pretty")(options "")(descr ""))
   (lib (name "Capacitor_THT")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Capacitor_THT.pretty")(options "")(descr ""))
@@ -7,4 +8,5 @@
   (lib (name "LED_THT")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/LED_THT.pretty")(options "")(descr ""))
   (lib (name "pic_programmer_fp")(type "KiCad")(uri "${KIPRJMOD}/libs/pic_programmer_fp.pretty")(options "")(descr ""))
   (lib (name "TerminalBlock_Altech")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/TerminalBlock_Altech.pretty")(options "")(descr ""))
+  (lib (name "Connector_PinHeader_2.54mm")(type "KiCad")(uri "${KICAD6_FOOTPRINT_DIR}/Connector_PinHeader_2.54mm.pretty")(options "")(descr ""))
 )

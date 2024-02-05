@@ -1,53 +1,91 @@
-(kicad_sch (version 20230819) (generator eeschema)
-
-  (uuid 3bb135b1-15ed-43fe-a7bd-da79c3cfcb8b)
-
-  (paper "A4")
-
-  (title_block
-    (date "Sun 22 Mar 2015")
-    (rev "1")
-  )
-
-  (lib_symbols
-  )
-
-
-  (sheet (at 81.28 66.04) (size 41.91 43.18)
-    (stroke (width 0) (type solid))
-    (fill (color 0 0 0 0.0000))
-    (uuid 00000000-0000-0000-0000-000048553e53)
-    (property "Sheetname" "pic_programmer" (at 81.28 65.2775 0)
-      (effects (font (size 1.524 1.524)) (justify left bottom))
-    )
-    (property "Sheetfile" "pic_programmer.kicad_sch" (at 81.28 109.8301 0)
-      (effects (font (size 1.524 1.524)) (justify left top))
-    )
-    (instances
-      (project "flat_hierarchy"
-        (path "/3bb135b1-15ed-43fe-a7bd-da79c3cfcb8b" (page "2"))
-      )
-    )
-  )
-
-  (sheet (at 142.24 66.04) (size 53.34 43.18)
-    (stroke (width 0) (type solid))
-    (fill (color 0 0 0 0.0000))
-    (uuid 00000000-0000-0000-0000-000048553e7c)
-    (property "Sheetname" "sockets" (at 142.24 65.2775 0)
-      (effects (font (size 1.524 1.524)) (justify left bottom))
-    )
-    (property "Sheetfile" "pic_sockets.kicad_sch" (at 142.24 109.8301 0)
-      (effects (font (size 1.524 1.524)) (justify left top))
-    )
-    (instances
-      (project "flat_hierarchy"
-        (path "/3bb135b1-15ed-43fe-a7bd-da79c3cfcb8b" (page "3"))
-      )
-    )
-  )
-
-  (sheet_instances
-    (path "/" (page "1"))
-  )
+(kicad_sch
+	(version 20231120)
+	(generator "eeschema")
+	(generator_version "8.0")
+	(uuid "3bb135b1-15ed-43fe-a7bd-da79c3cfcb8b")
+	(paper "A4")
+	(title_block
+		(date "Sun 22 Mar 2015")
+		(rev "1")
+	)
+	(lib_symbols)
+	(sheet
+		(at 81.28 66.04)
+		(size 41.91 43.18)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "00000000-0000-0000-0000-000048553e53")
+		(property "Sheetname" "pic_programmer"
+			(at 81.28 65.2775 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "pic_programmer.kicad_sch"
+			(at 81.28 109.8301 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "flat_hierarchy"
+				(path "/3bb135b1-15ed-43fe-a7bd-da79c3cfcb8b"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 142.24 66.04)
+		(size 53.34 43.18)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "00000000-0000-0000-0000-000048553e7c")
+		(property "Sheetname" "sockets"
+			(at 142.24 65.2775 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "pic_sockets.kicad_sch"
+			(at 142.24 109.8301 0)
+			(effects
+				(font
+					(size 1.524 1.524)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "flat_hierarchy"
+				(path "/3bb135b1-15ed-43fe-a7bd-da79c3cfcb8b"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
 )
