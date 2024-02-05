@@ -2,7 +2,6 @@ install( DIRECTORY
     complex_hierarchy
     custom_pads_test
     ecc83
-    electric
     flat_hierarchy
     interf_u
     kit-dev-coldfire-xilinx_5213
