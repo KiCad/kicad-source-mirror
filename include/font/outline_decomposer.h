@@ -54,7 +54,7 @@ class OUTLINE_DECOMPOSER
 public:
     OUTLINE_DECOMPOSER( FT_Outline& aOutline );
 
-    void OutlineToSegments( std::vector<CONTOUR>* aContours );
+    bool OutlineToSegments( std::vector<CONTOUR>* aContours );
 
 private:
     void newContour();

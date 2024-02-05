@@ -328,7 +328,36 @@ VECTOR2I OUTLINE_FONT::getTextAsGlyphsUnlocked( BOX2I* aBBox,
             std::vector<CONTOUR> contours;
 
             OUTLINE_DECOMPOSER decomposer( face->glyph->outline );
-            decomposer.OutlineToSegments( &contours );
+
+            if( !decomposer.OutlineToSegments( &contours ) )
+            {
+                double  hb_advance = glyphPos[i].x_advance * GLYPH_SIZE_SCALER;
+                BOX2D   tofuBox( { scaler * 0.03, 0.0 },
+                                 { hb_advance - scaler * 0.02, scaler * 0.72 } );
+
+                contours.clear();
+
+                CONTOUR outline;
+                outline.m_Winding = 1;
+                outline.m_Orientation = FT_ORIENTATION_TRUETYPE;
+                outline.m_Points.push_back( tofuBox.GetPosition() );
+                outline.m_Points.push_back( { tofuBox.GetSize().x, tofuBox.GetPosition().y } );
+                outline.m_Points.push_back( tofuBox.GetSize() );
+                outline.m_Points.push_back( { tofuBox.GetPosition().x, tofuBox.GetSize().y } );
+                contours.push_back( outline );
+
+                CONTOUR hole;
+                tofuBox.Move( { scaler * 0.06, scaler * 0.06 } );
+                tofuBox.SetSize( { tofuBox.GetWidth() - scaler * 0.06,
+                                   tofuBox.GetHeight() - scaler * 0.06 } );
+                hole.m_Winding = 1;
+                hole.m_Orientation = FT_ORIENTATION_NONE;
+                hole.m_Points.push_back( tofuBox.GetPosition() );
+                hole.m_Points.push_back( { tofuBox.GetSize().x, tofuBox.GetPosition().y } );
+                hole.m_Points.push_back( tofuBox.GetSize() );
+                hole.m_Points.push_back( { tofuBox.GetPosition().x, tofuBox.GetSize().y } );
+                contours.push_back( hole );
+            }
 
             std::unique_ptr<OUTLINE_GLYPH> glyph = std::make_unique<OUTLINE_GLYPH>();
             std::vector<SHAPE_LINE_CHAIN>  holes;

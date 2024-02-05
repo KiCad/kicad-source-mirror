@@ -122,7 +122,7 @@ int OUTLINE_DECOMPOSER::cubicTo( const FT_Vector* aFirstControlPoint,
 }
 
 
-void OUTLINE_DECOMPOSER::OutlineToSegments( std::vector<CONTOUR>* aContours )
+bool OUTLINE_DECOMPOSER::OutlineToSegments( std::vector<CONTOUR>* aContours )
 {
     m_contours = aContours;
 
@@ -138,12 +138,12 @@ void OUTLINE_DECOMPOSER::OutlineToSegments( std::vector<CONTOUR>* aContours )
     FT_Error e = FT_Outline_Decompose( &m_outline, &callbacks, this );
 
     if( e )
-    {
-        // TODO: handle error != 0
-    }
+        return false;
 
     for( CONTOUR& c : *m_contours )
         c.m_Winding = winding( c.m_Points );
+
+    return true;
 }
 
 
