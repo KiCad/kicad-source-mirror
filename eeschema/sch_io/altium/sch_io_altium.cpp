@@ -958,12 +958,15 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex,
     const ASCH_SYMBOL& elem = pair.first->second;
 
     // TODO: this is a hack until we correctly apply all transformations to every element
-    wxString name = wxString::Format( "%s_%d%s_%s%s",
+    wxString name = wxString::Format( "%s_%d%s_%s",
                                       sheetName,
                                       elem.orientation,
                                       elem.isMirrored ? "_mirrored" : "",
-                                      elem.libreference,
-                                      elem.displaymodecount > 1 ? wxString::Format( "_%d", elem.displaymode ) : "" );
+                                      elem.libreference );
+
+    if( elem.displaymodecount > 1 )
+        name << '_' << elem.displaymode;
+
     LIB_ID libId = AltiumToKiCadLibID( getLibName(), name );
 
     LIB_SYMBOL* ksymbol = new LIB_SYMBOL( wxEmptyString );
