@@ -35,6 +35,9 @@ PANEL_BOM_PRESETS::PANEL_BOM_PRESETS( wxWindow* aWindow, SCHEMATIC_SETTINGS& aSe
 {
     m_btnDeleteBomPreset->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
     m_btnDeleteBomFmtPreset->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
+
+    m_bomPresetsGrid->SetUseNativeColLabels();
+    m_bomFmtPresetsGrid->SetUseNativeColLabels();
 }
 
 

@@ -50,6 +50,7 @@ PANEL_TEXT_VARIABLES::PANEL_TEXT_VARIABLES( wxWindow* aParent, PROJECT* aProject
     m_btnDeleteTextVar->SetBitmap( KiBitmapBundle( BITMAPS::small_trash ) );
 
     m_TextVars->ClearRows();
+    m_TextVars->SetUseNativeColLabels();
 
     // prohibit these characters in the alias names: []{}()%~<>"='`;:.,&?/\|$
     m_nameValidator.SetStyle( wxFILTER_EXCLUDE_CHAR_LIST );

@@ -59,6 +59,9 @@ PANEL_SETUP_BUSES::PANEL_SETUP_BUSES( wxWindow* aWindow, SCH_EDIT_FRAME* aFrame 
                                                           OnAddMember( aEvent );
                                                       } ) );
 
+    m_aliasesGrid->SetUseNativeColLabels();
+    m_membersGrid->SetUseNativeColLabels();
+
     // wxFormBuilder doesn't include this event...
     m_aliasesGrid->Connect( wxEVT_GRID_CELL_CHANGING,
                             wxGridEventHandler( PANEL_SETUP_BUSES::OnAliasesGridCellChanging ),
