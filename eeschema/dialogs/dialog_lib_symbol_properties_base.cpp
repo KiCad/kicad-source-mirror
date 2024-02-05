@@ -273,7 +273,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES_BASE::DIALOG_LIB_SYMBOL_PROPERTIES_BASE( wxWindow* 
 
 	sbSizerAttributes->Add( 0, 10, 0, wxEXPAND, 5 );
 
-	m_excludeFromBomCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from schematic bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_excludeFromBomCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from bill of materials"), wxDefaultPosition, wxDefaultSize, 0 );
 	sbSizerAttributes->Add( m_excludeFromBomCheckBox, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	m_excludeFromBoardCheckBox = new wxCheckBox( sbSizerAttributes->GetStaticBox(), wxID_ANY, _("Exclude from board"), wxDefaultPosition, wxDefaultSize, 0 );
