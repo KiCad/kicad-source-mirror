@@ -34,6 +34,8 @@
 std::unordered_map<uint32_t, SHAPE_POLY_SET> ConvertImageToPolygons( wxImage  img,
                                                                      VECTOR2D pixelScale )
 {
+    bool hasAlpha = img.HasAlpha();
+
     // Quantize the image
     for( int y = 0; y < img.GetHeight(); y++ )
     {
@@ -42,7 +44,7 @@ std::unordered_map<uint32_t, SHAPE_POLY_SET> ConvertImageToPolygons( wxImage  im
             int r = img.GetRed( x, y );
             int g = img.GetGreen( x, y );
             int b = img.GetBlue( x, y );
-            int a = img.GetAlpha( x, y );
+            int a = hasAlpha ? img.GetAlpha( x, y ) : 255;
 
             int roundBits = 5; // 32
             r = std::min( r >> roundBits << roundBits, 0xFF );
@@ -51,7 +53,9 @@ std::unordered_map<uint32_t, SHAPE_POLY_SET> ConvertImageToPolygons( wxImage  im
             a = std::min( a >> roundBits << roundBits, 0xFF );
 
             img.SetRGB( x, y, r, g, b );
-            img.SetAlpha( x, y, a );
+
+            if( hasAlpha )
+                img.SetAlpha( x, y, a );
         }
     }
 
@@ -65,7 +69,7 @@ std::unordered_map<uint32_t, SHAPE_POLY_SET> ConvertImageToPolygons( wxImage  im
             uint32_t r = img.GetRed( x, y );
             uint32_t g = img.GetGreen( x, y );
             uint32_t b = img.GetBlue( x, y );
-            uint32_t a = img.GetAlpha( x, y );
+            uint32_t a = hasAlpha ? img.GetAlpha( x, y ) : 255;
 
             if( a > 0 )
             {
