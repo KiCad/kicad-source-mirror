@@ -364,5 +364,9 @@ static struct SCH_JUNCTION_DESC
         propMgr.AddProperty( new PROPERTY<SCH_JUNCTION, int>( _HKI( "Diameter" ),
                 &SCH_JUNCTION::SetDiameter, &SCH_JUNCTION::GetDiameter,
                 PROPERTY_DISPLAY::PT_SIZE ) );
+
+        propMgr.AddProperty( new PROPERTY<SCH_JUNCTION, COLOR4D>( _HKI( "Color" ),
+                &SCH_JUNCTION::SetColor, &SCH_JUNCTION::GetColor ) );
+
     }
 } _SCH_JUNCTION_DESC;
