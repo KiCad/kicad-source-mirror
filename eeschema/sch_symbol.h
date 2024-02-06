@@ -863,6 +863,25 @@ public:
     bool GetDNP() const { return m_DNP; }
     void SetDNP( bool aDNP ) { m_DNP = aDNP; }
 
+    bool GetShowPinNumbers() const
+    {
+        return m_part && m_part->ShowPinNumbers();
+    }
+
+    void SetShowPinNumbers( bool aShow )
+    {
+        if( m_part )
+            m_part->SetShowPinNumbers( aShow );
+    }
+
+    bool GetShowPinNames() const { return m_part && m_part->ShowPinNames(); }
+
+    void SetShowPinNames( bool aShow )
+    {
+        if( m_part )
+            m_part->SetShowPinNames( aShow );
+    }
+
     bool IsPointClickableAnchor( const VECTOR2I& aPos ) const override;
 
     /**

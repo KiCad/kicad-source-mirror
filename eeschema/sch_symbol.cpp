@@ -2673,6 +2673,24 @@ static struct SCH_SYMBOL_DESC
         propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Mirror Y" ),
                     &SCH_SYMBOL::SetMirrorY, &SCH_SYMBOL::GetMirrorY ) );
 
+        auto hasLibPart = []( INSPECTABLE* aItem ) -> bool
+        {
+            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
+                return symbol->GetLibSymbolRef().get() != nullptr;
+
+            return false;
+        };
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Pin numbers" ),
+                                                             &SCH_SYMBOL::SetShowPinNumbers,
+                                                             &SCH_SYMBOL::GetShowPinNumbers ) )
+                .SetAvailableFunc( hasLibPart );
+
+        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Pin names" ),
+                                                             &SCH_SYMBOL::SetShowPinNames,
+                                                             &SCH_SYMBOL::GetShowPinNames ) )
+                .SetAvailableFunc( hasLibPart );
+
         auto isMultiUnitSymbol =
                 []( INSPECTABLE* aItem ) -> bool
                 {
