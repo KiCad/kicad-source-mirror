@@ -820,7 +820,7 @@ void EDA_BASE_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     int fileHistorySize = Pgm().GetCommonSettings()->m_System.file_history_size;
 
     // Load the recently used files into the history menu
-    m_fileHistory = new FILE_HISTORY( (unsigned) std::max( 0, fileHistorySize ),
+    m_fileHistory = new FILE_HISTORY( (unsigned) std::max( 1, fileHistorySize ),
                                       ID_FILE1, ID_FILE_LIST_CLEAR );
     m_fileHistory->Load( *aCfg );
 }
