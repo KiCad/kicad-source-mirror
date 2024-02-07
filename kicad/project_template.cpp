@@ -82,31 +82,49 @@ public:
     virtual wxDirTraverseResult OnFile( const wxString& filename ) override
     {
         wxFileName fn( filename );
+        wxString   path( fn.GetPathWithSep() );
 
-        bool exclude = filename.StartsWith( m_exclude ) || fn.GetName().StartsWith( wxS( "." ) );
+        bool exclude = fn.GetName().Contains( "fp-info-cache" )
+                       || fn.GetName().StartsWith( "_autosave-" ) || fn.GetExt().Contains( "lck" );
 
         if( !exclude )
             m_files.emplace_back( wxFileName( filename ) );
+
+        if( path != m_oldPath )
+        {
+            const wxString gitfiles[] = { wxT( ".gitignore" ), wxT( ".gitattributes" ) };
+
+            for( auto file : gitfiles )
+            {
+                if( wxFileExists( path + file ) )
+                    m_files.emplace_back( wxFileName( path + file ) );
+            }
+
+            m_oldPath = path;
+        }
 
         return wxDIR_CONTINUE;
     }
 
     virtual wxDirTraverseResult OnDir( const wxString& dirname ) override
     {
-        wxFileName fn( dirname, wxEmptyString );
-        wxArrayString dirs = fn.GetDirs();
-        wxString lastDir = dirs[ fn.GetDirCount() - 1 ];
-        bool exclude = dirname.StartsWith( m_exclude ) || lastDir.StartsWith( wxS( "." ) );
+        wxDirTraverseResult result = wxDIR_IGNORE;
+
+        bool exclude = dirname.StartsWith( m_exclude ) || dirname.EndsWith( "-backups" );
 
         if( !exclude )
+        {
             m_files.emplace_back( wxFileName::DirName( dirname ) );
+            result = wxDIR_CONTINUE;
+        }
 
-        return wxDIR_CONTINUE;
+        return result;
     }
 
 private:
     std::vector<wxFileName>& m_files;
     wxString                 m_exclude;
+    wxString                 m_oldPath;
 };
 
 
@@ -116,7 +134,7 @@ std::vector<wxFileName> PROJECT_TEMPLATE::GetFileList()
     FILE_TRAVERSER          sink( files, m_metaPath.GetPath() );
     wxDir                   dir( m_basePath.GetPath() );
 
-    dir.Traverse( sink );
+    dir.Traverse( sink, wxEmptyString, ( wxDIR_FILES | wxDIR_DIRS ) );
     return files;
 }
 
