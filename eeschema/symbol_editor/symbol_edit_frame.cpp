@@ -1556,18 +1556,29 @@ void SYMBOL_EDIT_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItem
     if( aItemCount == 0 )
         return;
 
-    UNDO_REDO_CONTAINER& list = whichList == UNDO_LIST ? m_undoList : m_redoList;
+    UNDO_REDO_CONTAINER& list = ( whichList == UNDO_LIST ) ? m_undoList : m_redoList;
 
-    for( PICKED_ITEMS_LIST* command : list.m_CommandsList )
+    if( aItemCount < 0 )
     {
-        command->ClearListAndDeleteItems( []( EDA_ITEM* aItem )
-                                          {
-                                              delete aItem;
-                                          } );
-        delete command;
+        list.ClearCommandList();
     }
+    else
+    {
+        for( int ii = 0; ii < aItemCount; ii++ )
+        {
+            if( list.m_CommandsList.size() == 0 )
+                break;
 
-    list.m_CommandsList.clear();
+            PICKED_ITEMS_LIST* curr_cmd = list.m_CommandsList[0];
+            list.m_CommandsList.erase( list.m_CommandsList.begin() );
+
+            curr_cmd->ClearListAndDeleteItems( []( EDA_ITEM* aItem )
+                                               {
+                                                   delete aItem;
+                                               } );
+            delete curr_cmd;    // Delete command
+        }
+    }
 }
 
 

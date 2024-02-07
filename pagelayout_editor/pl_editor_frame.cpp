@@ -934,25 +934,28 @@ void PL_EDITOR_FRAME::ClearUndoORRedoList( UNDO_REDO_LIST whichList, int aItemCo
     if( aItemCount == 0 )
         return;
 
-    UNDO_REDO_CONTAINER& list = whichList == UNDO_LIST ? m_undoList : m_redoList;
-    unsigned             icnt = list.m_CommandsList.size();
+    UNDO_REDO_CONTAINER& list = ( whichList == UNDO_LIST ) ? m_undoList : m_redoList;
 
-    if( aItemCount > 0 )
-        icnt = aItemCount;
-
-    for( unsigned ii = 0; ii < icnt; ii++ )
+    if( aItemCount < 0 )
     {
-        if( list.m_CommandsList.size() == 0 )
-            break;
+        list.ClearCommandList();
+    }
+    else
+    {
+        for( int ii = 0; ii < aItemCount; ii++ )
+        {
+            if( list.m_CommandsList.size() == 0 )
+                break;
 
-        PICKED_ITEMS_LIST* curr_cmd = list.m_CommandsList[0];
-        list.m_CommandsList.erase( list.m_CommandsList.begin() );
+            PICKED_ITEMS_LIST* curr_cmd = list.m_CommandsList[0];
+            list.m_CommandsList.erase( list.m_CommandsList.begin() );
 
-        curr_cmd->ClearListAndDeleteItems( []( EDA_ITEM* aItem )
-                                           {
-                                               delete aItem;
-                                           } );
-        delete curr_cmd;    // Delete command
+            curr_cmd->ClearListAndDeleteItems( []( EDA_ITEM* aItem )
+                                               {
+                                                   delete aItem;
+                                               } );
+            delete curr_cmd;    // Delete command
+        }
     }
 }
 
