@@ -64,6 +64,16 @@ wxString FindKicadFile( const wxString& shortname )
     if( wxFileExists( fullFileName ) )
         return fullFileName;
 
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        wxFileName buildDir( Pgm().GetExecutablePath(), shortname );
+        buildDir.RemoveLastDir();
+        buildDir.AppendDir( shortname );
+
+        if( wxFileExists( buildDir.GetFullPath() ) )
+            return buildDir.GetFullPath();
+    }
+
     // Test the presence of the file in the directory shortname
     // defined by the environment variable KiCad.
     if( Pgm().IsKicadEnvVariableDefined() )
