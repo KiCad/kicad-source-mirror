@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -550,14 +550,21 @@ void GERBVIEW_FRAME::SortLayersByX2Attributes()
 
 void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping )
 {
-    std::unordered_map<int, bool> oldVisibility;
-    LSET                          newVisibility;
+    // Save the visibility of each existing gerber layer, in order to be able
+    // to restore this visibility after layer reorder.
+    for( int currlayer = GERBER_DRAWLAYERS_COUNT-1; currlayer >= 0; --currlayer )
+    {
+        GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( currlayer );
 
-    for( const std::pair<const int, int>& entry : remapping )
-        oldVisibility[ entry.second ] = IsLayerVisible( entry.second );
+        if( gerber )
+        {
+            if( IsLayerVisible( currlayer ) )
+                gerber->SetFlags( CANDIDATE );
+            else
+                gerber->ClearFlags( CANDIDATE );
+        }
 
-    for( const std::pair<const int, int>& entry : remapping )
-        newVisibility.set( entry.first, oldVisibility[ entry.second ] );
+    }
 
     std::unordered_map<int, int> view_remapping;
 
@@ -569,7 +576,24 @@ void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping 
 
     GetCanvas()->GetView()->ReorderLayerData( view_remapping );
 
+    // Restore visibility options
+    LSET newVisibility;
+
+    for( int currlayer = GERBER_DRAWLAYERS_COUNT-1; currlayer >= 0; --currlayer )
+    {
+        GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( currlayer );
+
+        if( gerber )
+        {
+            if( gerber->HasFlag( CANDIDATE ) )
+                newVisibility.set( currlayer );
+
+            gerber->ClearFlags( CANDIDATE );
+        }
+    }
+
     SetVisibleLayers( newVisibility );
+
     ReFillLayerWidget();
     syncLayerBox( true );
     GetCanvas()->Refresh();
