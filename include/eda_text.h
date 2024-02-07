@@ -214,7 +214,7 @@ public:
     void SetLineSpacing( double aLineSpacing );
     double GetLineSpacing() const               { return m_attributes.m_LineSpacing; }
 
-    void SetTextSize( VECTOR2I aNewSize );
+    void SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize = true );
     VECTOR2I GetTextSize() const                { return m_attributes.m_Size; }
 
     void SetTextWidth( int aWidth );

@@ -355,13 +355,15 @@ void EDA_TEXT::SetLineSpacing( double aLineSpacing )
 }
 
 
-void EDA_TEXT::SetTextSize( VECTOR2I aNewSize )
+void EDA_TEXT::SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize )
 {
-    if( m_IuScale.get().IU_PER_MM != unityScale.IU_PER_MM )
-    {
-        // Plotting uses unityScale and independently scales the text.  If we clamp here we'll
-        // clamp to *really* small values.
+    // Plotting uses unityScale and independently scales the text.  If we clamp here we'll
+    // clamp to *really* small values.
+    if( m_IuScale.get().IU_PER_MM == unityScale.IU_PER_MM )
+        aEnforceMinTextSize = false;
 
+    if( aEnforceMinTextSize )
+    {
         int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
         int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
 

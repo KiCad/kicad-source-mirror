@@ -180,7 +180,8 @@ private:
 
     void parseFill( FILL_PARAMS& aFill );
 
-    void parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax );
+    void parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax,
+                        bool aEnforceMinTextSize = true );
     void parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 
     LIB_FIELD* parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol );

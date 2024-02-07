@@ -678,7 +678,8 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseFill( FILL_PARAMS& aFill )
 }
 
 
-void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax )
+void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOverbarSyntax,
+                                               bool aEnforceMinTextSize )
 {
     wxCHECK_RET( aText && ( CurTok() == T_effects || CurTok() == T_href ),
                  "Cannot parse " + GetTokenString( CurTok() ) + " as an EDA_TEXT." );
@@ -723,7 +724,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
                     VECTOR2I sz;
                     sz.y = parseInternalUnits( "text height" );
                     sz.x = parseInternalUnits( "text width" );
-                    aText->SetTextSize( sz );
+                    aText->SetTextSize( sz, aEnforceMinTextSize );
                     NeedRIGHT();
                     break;
                 }
@@ -1540,7 +1541,7 @@ LIB_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
                     // so duplicate parsing is not required.
                     EDA_TEXT text( schIUScale );
 
-                    parseEDA_TEXT( &text, true );
+                    parseEDA_TEXT( &text, true, false );
                     pin->SetNameTextSize( text.GetTextHeight() );
                     NeedRIGHT();
                 }
@@ -1574,7 +1575,7 @@ LIB_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
                     // so duplicate parsing is not required.
                     EDA_TEXT text( schIUScale );
 
-                    parseEDA_TEXT( &text, false );
+                    parseEDA_TEXT( &text, false, false );
                     pin->SetNumberTextSize( text.GetTextHeight() );
                     NeedRIGHT();
                 }
