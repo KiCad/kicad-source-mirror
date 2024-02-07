@@ -489,8 +489,12 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
         return false;
     }
 #endif
+
+    wxString instanceCheckerDir = PATHS::GetInstanceCheckerPath();
+    PATHS::EnsurePathExists( instanceCheckerDir );
+
     m_pgm_checker = std::make_unique<wxSingleInstanceChecker>();
-    m_pgm_checker->Create( pgm_name, wxStandardPaths::Get().GetTempDir() );
+    m_pgm_checker->Create( pgm_name, instanceCheckerDir );
 
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:

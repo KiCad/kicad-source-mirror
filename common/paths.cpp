@@ -385,6 +385,16 @@ wxString PATHS::GetDocumentationPath()
 }
 
 
+wxString PATHS::GetInstanceCheckerPath()
+{
+    wxFileName path;
+    path.AssignDir( wxStandardPaths::Get().GetTempDir() );
+    path.AppendDir( "kicad" );
+    path.AppendDir( "instances" );
+    return path.GetPathWithSep();
+}
+
+
 bool PATHS::EnsurePathExists( const wxString& aPath )
 {
     wxFileName path( aPath );

@@ -149,6 +149,11 @@ public:
     static wxString GetDocumentationPath();
 
     /**
+     * Gets the path used for wxSingleInstanceChecker lock files
+     */
+    static wxString GetInstanceCheckerPath();
+
+    /**
      * Attempts to create a given path if it does not exist
      */
     static bool EnsurePathExists( const wxString& aPath );
