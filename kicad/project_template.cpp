@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Brian Sidebotham <brian.sidebotham@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,8 +54,8 @@ PROJECT_TEMPLATE::PROJECT_TEMPLATE( const wxString& aPath )
     else if( !wxFileName::DirExists( m_metaPath.GetPath() ) )
     {
         // Error, the meta information directory doesn't exist!
-        m_title = _( "Couldn't open the meta information directory for this template!" ) + wxS( " " ) +
-                  m_metaPath.GetPath();
+        m_title = _( "Couldn't open the meta information directory for this template!" ) +
+                  wxS( " " ) + m_metaPath.GetPath();
     }
     else if( !wxFileName::FileExists( m_metaHtmlFile.GetFullPath() ) )
     {
@@ -94,7 +94,7 @@ public:
         {
             const wxString gitfiles[] = { wxT( ".gitignore" ), wxT( ".gitattributes" ) };
 
-            for( auto file : gitfiles )
+            for( const wxString& file : gitfiles )
             {
                 if( wxFileExists( path + file ) )
                     m_files.emplace_back( wxFileName( path + file ) );
