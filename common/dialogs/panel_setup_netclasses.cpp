@@ -114,7 +114,6 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( wxWindow* aParentWindow, EDA_DRA
 
     m_splitter->SetMinimumPaneSize( FromDIP( m_splitter->GetMinimumPaneSize() ) );
 
-    m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
     // Calculate a min best size to handle longest usual numeric values:
     int const min_best_width = m_netclassGrid->GetTextExtent( "555,555555 mils" ).x;
 
@@ -248,8 +247,6 @@ PANEL_SETUP_NETCLASSES::~PANEL_SETUP_NETCLASSES()
 {
     COMMON_SETTINGS* cfg = Pgm().GetCommonSettings();
     cfg->m_NetclassPanel.sash_pos = m_splitter->GetSashPosition();
-
-    delete [] m_originalColWidths;
 
     // Delete the GRID_TRICKS.
     m_netclassGrid->PopEventHandler( true );
