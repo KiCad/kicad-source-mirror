@@ -632,6 +632,8 @@ void SCH_IO_ALTIUM::ParseAdditional( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
 
     if( reader.GetRemainingBytes() != 0 )
         THROW_IO_ERROR( "stream is not fully parsed" );
+
+    m_altiumHarnessPortsCurrentSheet.clear();
 }
 
 
