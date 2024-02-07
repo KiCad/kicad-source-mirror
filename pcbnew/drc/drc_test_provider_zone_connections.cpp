@@ -197,6 +197,18 @@ void DRC_TEST_PROVIDER_ZONE_CONNECTIONS::testZoneLayer( ZONE* aZone, PCB_LAYER_I
             }
 
             //
+            // If we're *only* connected to isolated islands, then ignore the fact that they're
+            // isolated.  (We leave that for the connectivity tester, which checks connections on
+            // all layers.)
+            //
+
+            if( spokes == 0 )
+            {
+                spokes += ignoredSpokes;
+                ignoredSpokes = 0;
+            }
+
+            //
             // And finally report it if there aren't enough:
             //
 
