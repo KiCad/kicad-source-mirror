@@ -417,9 +417,11 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Cameron McQuinn" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ievgenii Meshcheriakov" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ashley Mills" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christoph Moench-Tegeder" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christoph Moench-Tegeder" ), CONTRIB_DEV,
+                                         nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Peter Montgomery" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alejandro García Montoro" ), CONTRIB_DEV, nullptr ) );
+    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alejandro García Montoro" ), CONTRIB_DEV,
+                                         nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Chris Morgan" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Felix Morgner" ), CONTRIB_DEV, nullptr ) );
     aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jan Mrázek" ), CONTRIB_DEV, nullptr ) );
@@ -1143,6 +1145,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     // Active librarians
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Geries AbuAkel" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Patrick Baus" ), LIBRARIANS,
+                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "John Beard" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jeremy Boynes" ), LIBRARIANS,
@@ -1173,6 +1177,8 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Armin Schoisswohl" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Martin Sotirov" ), LIBRARIANS,
+                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Kliment Yanev" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
 
@@ -1201,7 +1207,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Bob Cousins" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "nickoe" ), LIBRARIANS,
+    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Nick Østergaard" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Oliver Walters" ), LIBRARIANS,
                                          aInfo.CreateKiBitmap( BITMAPS::library ) ) );
