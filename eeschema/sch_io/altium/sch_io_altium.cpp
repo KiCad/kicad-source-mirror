@@ -504,7 +504,10 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
         {
             sheet->SetScreen( new SCH_SCREEN( m_schematic ) );
             SCH_SCREEN* screen = sheet->GetScreen();
-            sheet->SetName( loadAltiumFileName.GetName() );
+
+            if( sheet->GetName().Trim().empty() )
+                sheet->SetName( loadAltiumFileName.GetName() );
+
             wxCHECK2( screen, continue );
 
             m_sheetPath.push_back( sheet );
