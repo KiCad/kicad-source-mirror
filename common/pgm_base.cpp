@@ -45,6 +45,7 @@
 #include <advanced_config.h>
 #include <background_jobs_monitor.h>
 #include <bitmaps.h>
+#include <build_version.h>
 #include <common.h>
 #include <confirm.h>
 #include <core/arraydim.h>
@@ -493,8 +494,11 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     wxString instanceCheckerDir = PATHS::GetInstanceCheckerPath();
     PATHS::EnsurePathExists( instanceCheckerDir );
 
+    wxString instanceCheckerName = wxString::Format( wxS( "%s-%s" ), pgm_name,
+                                                     GetMajorMinorVersion() );
+
     m_pgm_checker = std::make_unique<wxSingleInstanceChecker>();
-    m_pgm_checker->Create( pgm_name, instanceCheckerDir );
+    m_pgm_checker->Create( instanceCheckerName, instanceCheckerDir );
 
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:
