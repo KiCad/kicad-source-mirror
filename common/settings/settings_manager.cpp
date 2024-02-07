@@ -70,6 +70,9 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
     // Create the built-in color settings
     // Here to allow the Python API to access the built-in colors
     registerBuiltinColorSettings();
+
+    if( !wxFileExists( GetPathForSettingsFile( m_common_settings ) ) )
+        Save( m_common_settings );
 }
 
 SETTINGS_MANAGER::~SETTINGS_MANAGER()
