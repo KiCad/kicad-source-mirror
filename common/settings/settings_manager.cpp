@@ -75,7 +75,10 @@ SETTINGS_MANAGER::SETTINGS_MANAGER( bool aHeadless ) :
                                m_common_settings->GetFullFilename() );
 
     if( !wxFileExists( commonSettings.GetFullPath() ) )
+    {
+        m_common_settings->Load();
         Save( m_common_settings );
+    }
 }
 
 SETTINGS_MANAGER::~SETTINGS_MANAGER()
