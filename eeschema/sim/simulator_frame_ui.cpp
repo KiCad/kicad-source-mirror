@@ -1976,6 +1976,7 @@ bool SIMULATOR_FRAME_UI::loadJsonWorkbook( const wxString& aPath )
 
                 if( tab_js.contains( "fixedY3scale" ) )
                 {
+                    plotTab->EnsureThirdYAxisExists();
                     const nlohmann::json& scale_js = tab_js[ "fixedY3scale" ];
                     plotTab->SetY3Scale( true, scale_js[ "min" ], scale_js[ "max" ] );
                     plotTab->GetPlotWin()->LockY( true );

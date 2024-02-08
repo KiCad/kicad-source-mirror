@@ -353,6 +353,8 @@ public:
 
     std::vector<std::pair<wxString, wxString>>& Measurements() { return m_measurements; }
 
+    void EnsureThirdYAxisExists();
+
 public:
     wxPoint m_LastLegendPosition;
 
