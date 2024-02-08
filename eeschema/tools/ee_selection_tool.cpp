@@ -1970,9 +1970,14 @@ void EE_SELECTION_TOOL::SyncSelection( const std::optional<SCH_SHEET_PATH>& targ
     // Perform individual selection of each item before processing the event.
     for( SCH_ITEM* item : items )
     {
+        SCH_ITEM* parent = dynamic_cast<SCH_ITEM*>( item->GetParent() );
+
         // Make sure we only select items on the current screen
-        if( m_frame->GetScreen()->CheckIfOnDrawList( item ) )
+        if( m_frame->GetScreen()->CheckIfOnDrawList( item )
+            || ( parent && m_frame->GetScreen()->CheckIfOnDrawList( parent ) ) )
+        {
             select( item );
+        }
     }
 
     BOX2I bbox = m_selection.GetBoundingBox();
