@@ -66,9 +66,6 @@
 #include <dialogs/dialog_tuning_pattern_properties.h>
 
 
-#define LENGTH_UNCONSTRAINED std::numeric_limits<int>::max()
-
-
 enum LENGTH_TUNING_MODE
 {
     SINGLE,
@@ -671,17 +668,6 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
             pattern->m_settings.SetTargetSkew( constraint.GetValue() );
         else
             pattern->m_settings.SetTargetLength( constraint.GetValue() );
-    }
-    else
-    {
-        if( aMode == DIFF_PAIR_SKEW )
-        {
-            pattern->m_settings.SetTargetSkew( 0 );
-        }
-        else
-        {
-            pattern->m_settings.SetTargetLength( LENGTH_UNCONSTRAINED );
-        }
     }
 
     pattern->SetFlags( IS_NEW );
@@ -1847,7 +1833,7 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
         }
         else
         {
-            if( m_settings.m_targetLength.Opt() == LENGTH_UNCONSTRAINED )
+            if( m_settings.m_targetLength.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
             {
                 statusItem->ClearMinMax();
             }

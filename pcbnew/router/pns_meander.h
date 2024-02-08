@@ -66,9 +66,9 @@ enum MEANDER_SIDE
  */
 class MEANDER_SETTINGS
 {
-#define DEFAULT_TOLERANCE 100000
-
 public:
+    static const long long int DEFAULT_TOLERANCE = 100000;
+    static const long long int LENGTH_UNCONSTRAINED = std::numeric_limits<int>::max();
 
     MEANDER_SETTINGS()
     {
@@ -77,7 +77,7 @@ public:
         m_step = 50000;
         m_lenPadToDie = 0;
         m_spacing = 600000;
-        SetTargetLength( 100000000 );
+        SetTargetLength( LENGTH_UNCONSTRAINED );
         SetTargetSkew( 0 );
         m_overrideCustomRules = false;
         m_cornerStyle = MEANDER_STYLE_ROUND;
