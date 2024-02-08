@@ -393,7 +393,7 @@ public:
 
     std::optional<int> GetTargetLength() const
     {
-        if( m_unconstrained )
+        if( m_settings.m_targetLength.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
             return std::optional<int>();
         else
             return m_settings.m_targetLength.Opt();
@@ -402,20 +402,14 @@ public:
     void SetTargetLength( std::optional<int> aValue )
     {
         if( aValue.has_value() )
-        {
-            m_unconstrained = false;
             m_settings.SetTargetLength( aValue.value() );
-        }
         else
-        {
-            m_unconstrained = true;
-            m_settings.SetTargetLength( std::numeric_limits<long long int>::max() );
-        }
+            m_settings.SetTargetLength( PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED );
     }
 
     std::optional<int> GetTargetSkew() const
     {
-        if( m_unconstrained )
+        if( m_settings.m_targetLength.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
             return std::optional<int>();
         else
             return m_settings.m_targetSkew.Opt();
@@ -424,15 +418,9 @@ public:
     void SetTargetSkew( std::optional<int> aValue )
     {
         if( aValue.has_value() )
-        {
-            m_unconstrained = false;
             m_settings.SetTargetSkew( aValue.value() );
-        }
         else
-        {
-            m_unconstrained = true;
-            m_settings.SetTargetSkew( std::numeric_limits<int>::max() );
-        }
+            m_settings.SetTargetSkew( PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED );
     }
 
     bool GetOverrideCustomRules() const { return m_settings.m_overrideCustomRules; }
