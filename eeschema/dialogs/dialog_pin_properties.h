@@ -76,7 +76,7 @@ private:
     LIB_PIN*            m_pin;
 
     LIB_SYMBOL*         m_dummyParent;
-    LIB_PIN*            m_dummyPin;       // a working copy used to show changes
+    LIB_PIN*            m_dummyPin;                   // a working copy used to show changes
 
     UNIT_BINDER         m_posX;
     UNIT_BINDER         m_posY;
@@ -91,7 +91,7 @@ private:
     int                 m_delayedFocusRow;
     int                 m_delayedFocusColumn;
 
-    int                 m_originalColWidths[ COL_COUNT ];
+    std::map<int, int>  m_originalColWidths;          // map col-number : orig-col-width
     wxSize              m_size;
     bool                m_initialized;
     inline static bool  s_alternatesTurndownOpen = false;

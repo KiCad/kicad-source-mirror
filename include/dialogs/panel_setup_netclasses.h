@@ -83,7 +83,7 @@ private:
     std::map<wxString, std::shared_ptr<NETCLASS>> m_lastLoaded;
     int                                           m_lastCheckedTicker;
 
-    std::vector<int>      m_originalColWidths;
+    std::map<int, int>    m_originalColWidths;  // Map col-number : orig-col-width
     bool                  m_netclassesDirty;    // The netclass drop-down menus need rebuilding
     int                   m_hoveredCol;         // Column being hovered over, for tooltips
     wxString              m_lastPattern;
