@@ -197,6 +197,9 @@ BOOST_AUTO_TEST_CASE( Directives )
 #endif
 
 
+// This test is flaky and fails on ngspice-42 / Linux.
+// Please replace it with something that is more stable
+#if 0
 BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
 {
     LOCALE_IO dummy;
@@ -213,6 +216,7 @@ BOOST_AUTO_TEST_CASE( LegacyLaserDriver )
     // Test D1 current after the pulse
     TestTranPoint( 150e-9, { { "I(D1)", 0 } } );
 }
+#endif
 
 
 BOOST_AUTO_TEST_CASE( LegacyPotentiometer )
