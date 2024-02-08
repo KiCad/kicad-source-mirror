@@ -146,6 +146,7 @@ void DIALOG_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
     m_TracksAndViasOpt->SetValue( m_showSelectAllOnBtn );
     m_MaskAndPasteOpt->SetValue( m_showSelectAllOnBtn );
     m_SeveritiesOpt->SetValue( m_showSelectAllOnBtn );
+    m_TeardropsOpt->SetValue( m_showSelectAllOnBtn );
     m_TuningPatternsOpt->SetValue( m_showSelectAllOnBtn );
     m_CustomRulesOpt->SetValue( m_showSelectAllOnBtn );
 
