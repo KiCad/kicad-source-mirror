@@ -66,6 +66,9 @@
 #include <dialogs/dialog_tuning_pattern_properties.h>
 
 
+#define LENGTH_UNCONSTRAINED std::numeric_limits<int>::max()
+
+
 enum LENGTH_TUNING_MODE
 {
     SINGLE,
@@ -457,7 +460,6 @@ protected:
     VECTOR2I              m_end;
 
     PNS::MEANDER_SETTINGS m_settings;
-    bool                  m_unconstrained;
 
     std::optional<SHAPE_LINE_CHAIN> m_baseLine;
     std::optional<SHAPE_LINE_CHAIN> m_baseLineCoupled;
@@ -573,7 +575,6 @@ static std::string sideToString( const PNS::MEANDER_SIDE aValue )
 PCB_TUNING_PATTERN::PCB_TUNING_PATTERN( BOARD_ITEM* aParent, PCB_LAYER_ID aLayer,
                                         LENGTH_TUNING_MODE aMode ) :
         PCB_GENERATOR( aParent, aLayer ),
-        m_unconstrained( false ),
         m_trackWidth( 0 ),
         m_diffPairGap( 0 ),
         m_tuningMode( aMode ),
@@ -679,8 +680,7 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
         }
         else
         {
-            pattern->m_settings.SetTargetLength( std::numeric_limits<int>::max() );
-            pattern->m_unconstrained = true;
+            pattern->m_settings.SetTargetLength( LENGTH_UNCONSTRAINED );
         }
     }
 
@@ -1841,18 +1841,21 @@ std::vector<EDA_ITEM*> PCB_TUNING_PATTERN::GetPreviewItems( GENERATOR_TOOL* aToo
 
         TUNING_STATUS_VIEW_ITEM* statusItem = new TUNING_STATUS_VIEW_ITEM( aFrame );
 
-        if( m_unconstrained )
-        {
-            statusItem->ClearMinMax();
-        }
-        else if( m_tuningMode == DIFF_PAIR_SKEW )
+        if( m_tuningMode == DIFF_PAIR_SKEW )
         {
             statusItem->SetMinMax( m_settings.m_targetSkew.Min(), m_settings.m_targetSkew.Max() );
         }
         else
         {
-            statusItem->SetMinMax( (double) m_settings.m_targetLength.Min(),
-                                   (double) m_settings.m_targetLength.Max() );
+            if( m_settings.m_targetLength.Opt() == LENGTH_UNCONSTRAINED )
+            {
+                statusItem->ClearMinMax();
+            }
+            else
+            {
+                statusItem->SetMinMax( (double) m_settings.m_targetLength.Min(),
+                                       (double) m_settings.m_targetLength.Max() );
+            }
         }
 
         if( m_tuningMode == DIFF_PAIR_SKEW )
