@@ -2042,7 +2042,8 @@ void PCB_PAINTER::draw( const PCB_TEXT* aText, int aLayer )
 {
     wxString resolvedText( aText->GetShownText( true ) );
 
-    if( resolvedText.Length() == 0 || !aText->GetAttributes().m_Visible )
+    if( resolvedText.Length() == 0
+        || !( aText->GetAttributes().m_Visible || aLayer == LAYER_HIDDEN_TEXT ) )
         return;
 
     if( aLayer == LAYER_LOCKED_ITEM_SHADOW )    // happens only if locked
