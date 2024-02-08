@@ -407,21 +407,8 @@ public:
             m_settings.SetTargetLength( PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED );
     }
 
-    std::optional<int> GetTargetSkew() const
-    {
-        if( m_settings.m_targetLength.Opt() == PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED )
-            return std::optional<int>();
-        else
-            return m_settings.m_targetSkew.Opt();
-    }
-
-    void SetTargetSkew( std::optional<int> aValue )
-    {
-        if( aValue.has_value() )
-            m_settings.SetTargetSkew( aValue.value() );
-        else
-            m_settings.SetTargetSkew( PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED );
-    }
+    int  GetTargetSkew() const { return m_settings.m_targetSkew.Opt(); }
+    void SetTargetSkew( int aValue ) { m_settings.SetTargetSkew( aValue ); }
 
     bool GetOverrideCustomRules() const { return m_settings.m_overrideCustomRules; }
     void SetOverrideCustomRules( bool aOverride ) { m_settings.m_overrideCustomRules = aOverride; }
@@ -694,6 +681,13 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
             pattern->m_settings.SetTargetSkew( constraint.GetValue() );
         else
             pattern->m_settings.SetTargetLength( constraint.GetValue() );
+    }
+    else
+    {
+        if( aMode == DIFF_PAIR_SKEW )
+            pattern->m_settings.SetTargetSkew( 0 );
+        else
+            pattern->m_settings.SetTargetLength( PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED );
     }
 
     pattern->SetFlags( IS_NEW );
@@ -2406,7 +2400,7 @@ static struct PCB_TUNING_PATTERN_DESC
                 .SetAvailableFunc( notIsSkew );
 
 
-        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
                                      _HKI( "Target Skew" ), &PCB_TUNING_PATTERN::SetTargetSkew,
                                      &PCB_TUNING_PATTERN::GetTargetSkew,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
