@@ -904,13 +904,21 @@ bool SETTINGS_MANAGER::LoadProject( const wxString& aFullPath, bool aSetActive )
     std::unique_ptr<PROJECT> project = std::make_unique<PROJECT>();
     project->setProjectFullName( fullPath );
 
+    if( aSetActive )
+    {
+        // until multiple projects are in play, set an environment variable for the
+        // the project pointer.
+        wxFileName projectPath( fullPath );
+        wxSetEnv( PROJECT_VAR_NAME, projectPath.GetPath() );
+    }
+
     bool success = loadProjectFile( *project );
 
     if( success )
     {
         project->SetReadOnly( readOnly || project->GetProjectFile().IsReadOnly() );
 
-        if( lockFile )
+        if( lockFile && aSetActive )
             m_project_lock.reset( new LOCKFILE( std::move( lockFile ) ) );
     }
 
@@ -947,6 +955,8 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
     wxLogTrace( traceSettings, wxT( "Unload project %s" ), projectPath );
 
     PROJECT* toRemove = m_projects.at( projectPath );
+    bool wasActiveProject = m_projects_list.begin()->get() == toRemove;
+
     auto it = std::find_if( m_projects_list.begin(), m_projects_list.end(),
                             [&]( const std::unique_ptr<PROJECT>& ptr )
                             {
@@ -958,19 +968,22 @@ bool SETTINGS_MANAGER::UnloadProject( PROJECT* aProject, bool aSave )
 
     m_projects.erase( projectPath );
 
-    // Immediately reload a null project; this is required until the rest of the application
-    // is refactored to not assume that Prj() always works
-    if( m_projects.empty() )
-        LoadProject( "" );
+    if( wasActiveProject )
+    {
+        // Immediately reload a null project; this is required until the rest of the application
+        // is refactored to not assume that Prj() always works
+        if( m_projects_list.empty() )
+            LoadProject( "" );
 
-    // Remove the reference in the environment to the previous project
-    wxSetEnv( PROJECT_VAR_NAME, wxS( "" ) );
+        // Remove the reference in the environment to the previous project
+        wxSetEnv( PROJECT_VAR_NAME, wxS( "" ) );
 
-    // Release lock on the file, in case we had one
-    m_project_lock = nullptr;
+        // Release lock on the file, in case we had one
+        m_project_lock = nullptr;
 
-    if( m_kiway )
-        m_kiway->ProjectChanged();
+        if( m_kiway )
+            m_kiway->ProjectChanged();
+    }
 
     return true;
 }
