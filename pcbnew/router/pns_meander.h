@@ -91,8 +91,17 @@ public:
     void SetTargetLength( long long int aOpt )
     {
         m_targetLength.SetOpt( aOpt );
-        m_targetLength.SetMin( aOpt - DEFAULT_TOLERANCE );
-        m_targetLength.SetMax( aOpt + DEFAULT_TOLERANCE );
+
+        if( aOpt == std::numeric_limits<long long int>::max() )
+        {
+            m_targetLength.SetMin( 0 );
+            m_targetLength.SetMax( aOpt );
+        }
+        else
+        {
+            m_targetLength.SetMin( aOpt - DEFAULT_TOLERANCE );
+            m_targetLength.SetMax( aOpt + DEFAULT_TOLERANCE );
+        }
     }
 
     void SetTargetLength( const MINOPTMAX<int>& aConstraint )
@@ -109,8 +118,17 @@ public:
     void SetTargetSkew( int aOpt )
     {
         m_targetSkew.SetOpt( aOpt );
-        m_targetSkew.SetMin( aOpt - DEFAULT_TOLERANCE );
-        m_targetSkew.SetMax( aOpt + DEFAULT_TOLERANCE );
+
+        if( aOpt == std::numeric_limits<int>::max() )
+        {
+            m_targetSkew.SetMin( 0 );
+            m_targetSkew.SetMax( aOpt );
+        }
+        else
+        {
+            m_targetSkew.SetMin( aOpt - DEFAULT_TOLERANCE );
+            m_targetSkew.SetMax( aOpt + DEFAULT_TOLERANCE );
+        }
     }
 
     void SetTargetSkew( const MINOPTMAX<int>& aConstraint )

@@ -391,11 +391,49 @@ public:
     int  GetSpacing() const { return m_settings.m_spacing; }
     void SetSpacing( int aValue ) { m_settings.m_spacing = aValue; }
 
-    long long int GetTargetLength() const { return m_settings.m_targetLength.Opt(); }
-    void          SetTargetLength( long long int aValue ) { m_settings.SetTargetLength( aValue ); }
+    std::optional<int> GetTargetLength() const
+    {
+        if( m_unconstrained )
+            return std::optional<int>();
+        else
+            return m_settings.m_targetLength.Opt();
+    }
 
-    int  GetTargetSkew() const { return m_settings.m_targetSkew.Opt(); }
-    void SetTargetSkew( int aValue ) { m_settings.SetTargetSkew( aValue ); }
+    void SetTargetLength( std::optional<int> aValue )
+    {
+        if( aValue.has_value() )
+        {
+            m_unconstrained = false;
+            m_settings.SetTargetLength( aValue.value() );
+        }
+        else
+        {
+            m_unconstrained = true;
+            m_settings.SetTargetLength( std::numeric_limits<long long int>::max() );
+        }
+    }
+
+    std::optional<int> GetTargetSkew() const
+    {
+        if( m_unconstrained )
+            return std::optional<int>();
+        else
+            return m_settings.m_targetSkew.Opt();
+    }
+
+    void SetTargetSkew( std::optional<int> aValue )
+    {
+        if( aValue.has_value() )
+        {
+            m_unconstrained = false;
+            m_settings.SetTargetSkew( aValue.value() );
+        }
+        else
+        {
+            m_unconstrained = true;
+            m_settings.SetTargetSkew( std::numeric_limits<int>::max() );
+        }
+    }
 
     bool GetOverrideCustomRules() const { return m_settings.m_overrideCustomRules; }
     void SetOverrideCustomRules( bool aOverride ) { m_settings.m_overrideCustomRules = aOverride; }
@@ -2371,7 +2409,7 @@ static struct PCB_TUNING_PATTERN_DESC
                     return !isSkew( aItem );
                 };
 
-        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, long long int>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>(
                                      _HKI( "Target Length" ),
                                      &PCB_TUNING_PATTERN::SetTargetLength,
                                      &PCB_TUNING_PATTERN::GetTargetLength,
@@ -2380,7 +2418,7 @@ static struct PCB_TUNING_PATTERN_DESC
                 .SetAvailableFunc( notIsSkew );
 
 
-        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, int>(
+        propMgr.AddProperty( new PROPERTY<PCB_TUNING_PATTERN, std::optional<int>>(
                                      _HKI( "Target Skew" ), &PCB_TUNING_PATTERN::SetTargetSkew,
                                      &PCB_TUNING_PATTERN::GetTargetSkew,
                                      PROPERTY_DISPLAY::PT_SIZE, ORIGIN_TRANSFORMS::ABS_X_COORD ),
