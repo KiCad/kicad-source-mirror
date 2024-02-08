@@ -954,7 +954,8 @@ void PCB_EDIT_FRAME::setupUIConditions()
     CURRENT_EDIT_TOOL( PCB_ACTIONS::placeFootprint );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeSingleTrack);
     CURRENT_EDIT_TOOL( PCB_ACTIONS::routeDiffPair );
-    CURRENT_EDIT_TOOL( PCB_ACTIONS::tuneLength );
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::tuneSingleTrack);
+    CURRENT_EDIT_TOOL( PCB_ACTIONS::tuneDiffPair );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::tuneSkew );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawVia );
     CURRENT_EDIT_TOOL( PCB_ACTIONS::drawZone );

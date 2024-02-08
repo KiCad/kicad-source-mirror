@@ -416,7 +416,8 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     if( !tuneGroup )
     {
         tuneGroup = new ACTION_GROUP( "group.pcbTune",
-                                      { &PCB_ACTIONS::tuneLength,
+                                      { &PCB_ACTIONS::tuneSingleTrack,
+                                        &PCB_ACTIONS::tuneDiffPair,
                                         &PCB_ACTIONS::tuneSkew } );
     }
 

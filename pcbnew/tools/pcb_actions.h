@@ -244,7 +244,8 @@ public:
     /// Activation of the Push and Shove router (differential pair mode)
     static TOOL_ACTION routeDiffPair;
 
-    static TOOL_ACTION tuneLength;
+    static TOOL_ACTION tuneSingleTrack;
+    static TOOL_ACTION tuneDiffPair;
     static TOOL_ACTION tuneSkew;
 
     static TOOL_ACTION routerUndoLastSegment;

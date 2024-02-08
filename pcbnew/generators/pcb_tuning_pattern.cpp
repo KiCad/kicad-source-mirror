@@ -653,9 +653,6 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
     DRC_CONSTRAINT         constraint;
     PCB_LAYER_ID           layer = aStartItem->GetLayer();
 
-    if( aMode == SINGLE && board->DpCoupledNet( aStartItem->GetNet() ) )
-        aMode = DIFF_PAIR;
-
     PCB_TUNING_PATTERN* pattern = new PCB_TUNING_PATTERN( board, layer, aMode );
 
     switch( aMode )

@@ -3443,6 +3443,7 @@ void DRAWING_TOOL::setTransitions()
 
     Go( &DRAWING_TOOL::ToggleHV45Mode,        PCB_ACTIONS::toggleHV45Mode.MakeEvent() );
 
-    Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneLength.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSingleTrack.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneDiffPair.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceTuningPattern,    PCB_ACTIONS::tuneSkew.MakeEvent() );
 }

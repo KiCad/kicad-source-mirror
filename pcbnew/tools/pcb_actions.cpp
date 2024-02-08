@@ -2294,18 +2294,29 @@ TOOL_ACTION PCB_ACTIONS::selectLayerPair( TOOL_ACTION_ARGS()
         .Icon( BITMAPS::select_layer_pair )
         .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION PCB_ACTIONS::tuneLength( TOOL_ACTION_ARGS()
+TOOL_ACTION PCB_ACTIONS::tuneSingleTrack( TOOL_ACTION_ARGS()
         .Name( "pcbnew.LengthTuner.TuneSingleTrack" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( '7' )
-        .DefaultHotkeyAlt( '8' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         .LegacyHotkeyName( "Tune Single Track (Modern Toolset only)" )
-        .FriendlyName( _( "Tune Length" ) )
-        .Tooltip( _( "Tune length of a single track or differential pair" ) )
+        .FriendlyName( _( "Tune length of a single track" ) )
+        .Tooltip( _( "Tune length of a single track" ) )
         .Icon( BITMAPS::ps_tune_length )
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_TUNE_SINGLE ) );
+
+TOOL_ACTION PCB_ACTIONS::tuneDiffPair( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.LengthTuner.TuneDiffPair" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( '8' )
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
+        .LegacyHotkeyName( "Tune Differential Pair Length (Modern Toolset only)" )
+        .FriendlyName( _( "Tune length of a differential pair" ) )
+        .Tooltip( _( "Tune length of a differential pair" ) )
+        .Icon( BITMAPS::ps_diff_pair_tune_length )
+        .Flags( AF_ACTIVATE )
+        .Parameter( PNS::PNS_MODE_TUNE_DIFF_PAIR ) );
 
 TOOL_ACTION PCB_ACTIONS::tuneSkew( TOOL_ACTION_ARGS()
         .Name( "pcbnew.LengthTuner.TuneDiffPairSkew" )

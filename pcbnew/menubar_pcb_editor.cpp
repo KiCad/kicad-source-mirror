@@ -356,7 +356,8 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     routeMenu->Add( PCB_ACTIONS::routeDiffPair );
 
     routeMenu->AppendSeparator();
-    routeMenu->Add( PCB_ACTIONS::tuneLength );
+    routeMenu->Add( PCB_ACTIONS::tuneSingleTrack );
+    routeMenu->Add( PCB_ACTIONS::tuneDiffPair );
     routeMenu->Add( PCB_ACTIONS::tuneSkew );
 
     routeMenu->AppendSeparator();
