@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-05 12:59+0000\n"
+"PO-Revision-Date: 2024-02-08 23:55+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -12018,7 +12018,7 @@ msgstr "찾기 (&S):"
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:36
 #: pcbnew/dialogs/dialog_find_base.cpp:33
 msgid "Text with optional wildcards"
-msgstr "와일드카드가 옵션으로 있는 텍스트"
+msgstr "와일드카드 옵션이 포함된 텍스트"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:41
 msgid "Replace &with:"
@@ -21869,7 +21869,7 @@ msgstr "레이어 선택"
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:120
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:256
 msgid "Print mirrored"
-msgstr "미러링하여 인쇄"
+msgstr "대칭 인쇄"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:179
 msgid "Included Layers"
@@ -23354,7 +23354,7 @@ msgstr "SMD 풋프린트만 포함(ascii 또는 csv만)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:79
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
-msgstr "스루홀 패드가 있는 모든 풋프린트 제외(ascii 또는 csv 전용)"
+msgstr "스루홀 패드가 있는 모든 풋프린트 제외(ascii 또는 csv 만 해당)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:84
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
@@ -26792,7 +26792,7 @@ msgstr "전송 선 유형"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:42
 msgid "Substrate Parameters"
-msgstr "서브스트레이트 매개변수"
+msgstr "기판 매개변수"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:50
 msgid "Er:"
@@ -26925,7 +26925,7 @@ msgstr "도금 저항성:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:146
 msgid "Substrate relative permittivity:"
-msgstr "서브스트레이트 상대 유전율:"
+msgstr "기판 상대 유전율:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:148
 msgid "Relative dielectric constant (epsilon r)"
@@ -27369,7 +27369,7 @@ msgstr "비저항"
 
 #: pcb_calculator/transline_ident.cpp:93
 msgid "Substrate relative permittivity (dielectric constant)"
-msgstr "서브스트레이트 상대 유전율 (유전체 상수)"
+msgstr "기판 상대 유전율(유전 상수)"
 
 #: pcb_calculator/transline_ident.cpp:97
 msgid "Dielectric loss (dissipation factor)"
@@ -27431,7 +27431,7 @@ msgstr "표피의 깊이:"
 #: pcb_calculator/transline_ident.cpp:313
 #: pcb_calculator/transline_ident.cpp:357
 msgid "Height of substrate"
-msgstr "서브스트레이트의 높이"
+msgstr "기판의 높이"
 
 #: pcb_calculator/transline_ident.cpp:127
 #: pcb_calculator/transline_ident.cpp:315
@@ -27458,11 +27458,11 @@ msgstr "도체 거칠기"
 
 #: pcb_calculator/transline_ident.cpp:136
 msgid "substrate"
-msgstr "서브스트레이트"
+msgstr "기판"
 
 #: pcb_calculator/transline_ident.cpp:137
 msgid "Relative permeability (mu) of substrate"
-msgstr "서브스트레이트의 상대 투과율 (μ)"
+msgstr "기판의 상대 투자율 (mu)"
 
 #: pcb_calculator/transline_ident.cpp:140
 #: pcb_calculator/transline_ident.cpp:172
@@ -31593,11 +31593,11 @@ msgstr "거버 X3"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Separate files for front, back"
-msgstr "전면과 후면을 별도의 파일로 분리"
+msgstr "전면, 후면용 파일 분리"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:61
 msgid "Single file for board"
-msgstr "보드에 대하여 단 하나의 파일"
+msgstr "보드용 단일 파일"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:63
 msgid "Files"
@@ -31617,7 +31617,7 @@ msgstr "SMD 풋프린트만 포함"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:78
 msgid "Exclude all footprints with through hole pads"
-msgstr "스루홀 패드가 존재하는 모든 풋프린트를 제외"
+msgstr "스루홀 패드가 있는 모든 풋프린트 제외"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:84
 msgid "Include board edge layer"
@@ -32672,7 +32672,7 @@ msgstr "패드가 0개인 네트 표시"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:41
 msgid "Group by:"
-msgstr "다음 그룹으로 묶기:"
+msgstr "그룹화 기준:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:47
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:48
@@ -32809,8 +32809,7 @@ msgstr "오류: 패드에 레이어가 없습니다."
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
-msgstr ""
-"경고: 도금된 스루홀은 보통 최소한 한 개의 레이어에 구리 패드가 있어야 합니다."
+msgstr "경고: 도금된 스루홀은 보통 적어도 한 층 이상의 구리 패드가 있어야 합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1327
 msgid "Error: Trapazoid delta is too large."
@@ -33077,7 +33076,7 @@ msgstr "홀에서의 오프셋 형상"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:458
 msgid "Specify pad to die length"
-msgstr "다이 길이에 패드를 지정"
+msgstr "다이 길이에 맞는 패드 지정"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:493
 msgid ""
@@ -33472,15 +33471,15 @@ msgstr "풋프린트 값 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:92
 msgid "Force plotting of invisible values / refs"
-msgstr "숨겨진 값 / 참조를 강제로 플롯"
+msgstr "비표시 값/참조 강제 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:93
 msgid "Force plot invisible footprint values and reference designators"
-msgstr "숨겨진 풋프린트 값과 참조 지정자를 강제로 플롯"
+msgstr "보이지 않는 풋프린트 값과 참조 지정자를 강제로 플롯"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:97
 msgid "Sketch pads on fabrication layers"
-msgstr "Fab 제작 레이어에 패드 그리기"
+msgstr "제작 층의 패드 그리기"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:98
 msgid "Include pad outlines on F.Fab and B.Fab layers when plotting"
@@ -33509,7 +33508,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_plot_base.cpp:110
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:242
 msgid "Drill marks:"
-msgstr "드릴 마크:"
+msgstr "드릴 표시:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:114
 msgid "Actual size"
@@ -38909,7 +38908,7 @@ msgstr "배선 길이"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1962 pcbnew/pad.cpp:2014
 #: pcbnew/pcb_track.cpp:1098
 msgid "Pad To Die Length"
-msgstr "패드부터 다이까지의 길이"
+msgstr "패드에서 다이까지의 길이"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1965 pcbnew/pcb_track.cpp:1101
 msgid "Full Length"
@@ -45412,9 +45411,8 @@ msgid "Change active layer pair for routing"
 msgstr "라우팅을 위한 활성화된 레이어 쌍 변경"
 
 #: pcbnew/tools/pcb_actions.cpp:2305
-#, fuzzy
 msgid "Tune Length"
-msgstr "다이 길이"
+msgstr "길이 조정"
 
 #: pcbnew/tools/pcb_actions.cpp:2306
 #, fuzzy
