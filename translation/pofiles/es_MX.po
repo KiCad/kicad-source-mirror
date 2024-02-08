@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-02 12:24+0000\n"
+"PO-Revision-Date: 2024-02-08 23:55+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -5464,9 +5464,8 @@ msgid "Start Y"
 msgstr "Inicio Y"
 
 #: common/eda_shape.cpp:1992
-#, fuzzy
 msgid "Center X"
-msgstr "Centro Y"
+msgstr "Centro X"
 
 #: common/eda_shape.cpp:1997
 msgid "Center Y"
@@ -6324,9 +6323,8 @@ msgid "DXF construction lines not currently supported."
 msgstr "Las líneas de construcción DXF no son compatibles actualmente."
 
 #: common/import_gfx/dxf_import_plugin.h:467
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "El conjunto de parámetros no se admite actualmente."
+msgstr "Actualmente no se admite texto alineado en arco DXF."
 
 #: common/import_gfx/dxf_import_plugin.h:472
 #: common/import_gfx/dxf_import_plugin.h:476
@@ -6336,14 +6334,12 @@ msgstr "El conjunto de parámetros no se admite actualmente."
 #: common/import_gfx/dxf_import_plugin.h:492
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "Actualmente no se soporta la máscara de compilación."
+msgstr "Las dimensiones DXF no son compatibles actualmente."
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "Actualmente no se admite la manta."
+msgstr "Los rayados DXF no son compatibles actualmente."
 
 #: common/import_gfx/dxf_import_plugin.h:513
 #, fuzzy
@@ -20669,9 +20665,8 @@ msgid "Add No Connect Flag"
 msgstr "Agregar marca de no conectado"
 
 #: eeschema/tools/ee_actions.cpp:423
-#, fuzzy
 msgid "Draw no-connection flags"
-msgstr "Agregar una marca de no conectado"
+msgstr "Dibujar banderas de no conexión"
 
 #: eeschema/tools/ee_actions.cpp:433 eeschema/tools/sch_drawing_tools.cpp:957
 msgid "Add Junction"
@@ -20697,27 +20692,24 @@ msgid "Add Label"
 msgstr "Agregar etiqueta"
 
 #: eeschema/tools/ee_actions.cpp:456
-#, fuzzy
 msgid "Draw net labels"
-msgstr "Agregar una etiqueta de red"
+msgstr "Dibujar etiquetas de red"
 
 #: eeschema/tools/ee_actions.cpp:463
 msgid "Add Net Class Directive"
 msgstr "Agregar directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:464
-#, fuzzy
 msgid "Add net class directive labels"
-msgstr "Agregar una etiqueta de directiva de clase de red"
+msgstr "Agregar etiquetas de directiva de clase de red"
 
 #: eeschema/tools/ee_actions.cpp:473 eeschema/tools/sch_drawing_tools.cpp:1525
 msgid "Add Hierarchical Label"
 msgstr "Agregar etiqueta jerárquica"
 
 #: eeschema/tools/ee_actions.cpp:474
-#, fuzzy
 msgid "Add hierarchical labels"
-msgstr "Agregar una etiqueta jerárquica"
+msgstr "Agregar etiquetas jerárquicas"
 
 #: eeschema/tools/ee_actions.cpp:483
 msgid "Add Sheet"
@@ -20742,9 +20734,8 @@ msgid "Add Global Label"
 msgstr "Agregar etiqueta global"
 
 #: eeschema/tools/ee_actions.cpp:503
-#, fuzzy
 msgid "Add global labels"
-msgstr "Agregar una etiqueta global"
+msgstr "Agregar etiquetas globales"
 
 #: eeschema/tools/ee_actions.cpp:513
 #, fuzzy
@@ -20752,9 +20743,8 @@ msgid "Draw text items"
 msgstr "Otros elementos de texto"
 
 #: eeschema/tools/ee_actions.cpp:521
-#, fuzzy
 msgid "Draw text box items"
-msgstr "Agregar un elemento de cuadro de texto"
+msgstr "Dibujar elementos del cuadro de texto"
 
 #: eeschema/tools/ee_actions.cpp:529 pagelayout_editor/tools/pl_actions.cpp:54
 msgid "Add Rectangle"
@@ -20788,9 +20778,8 @@ msgid "Add Image"
 msgstr "Agregar imagen"
 
 #: eeschema/tools/ee_actions.cpp:557
-#, fuzzy
 msgid "Add bitmap images"
-msgstr "Agregar imagen de mapa de bits"
+msgstr "Agregar imágenes de mapa de bits"
 
 #: eeschema/tools/ee_actions.cpp:574
 msgid "Repeat Last Item"
@@ -21597,9 +21586,8 @@ msgid "Break a wire out of a bus"
 msgstr "Sacar un cable de un bus"
 
 #: eeschema/tools/ee_actions.cpp:1304
-#, fuzzy
 msgid "Draw graphic lines"
-msgstr "Agregar línea gráfica"
+msgstr "Dibujar líneas gráficas"
 
 #: eeschema/tools/ee_actions.cpp:1313 pcbnew/tools/pcb_actions.cpp:2332
 msgid "Undo Last Segment"
@@ -28651,9 +28639,8 @@ msgstr "Nombre de red"
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:43
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
-#, fuzzy
 msgid "Teardrops"
-msgstr "Agregar lágrimas"
+msgstr "Lágrimas"
 
 #: pcbnew/board_connected_item.cpp:237
 msgid "Enable Teardrops"
@@ -35476,9 +35463,8 @@ msgid "Start, end, and connected layers"
 msgstr "Inicio, final, y capas conectadas"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:377
-#, fuzzy
 msgid "Add teardrops on via's track connections"
-msgstr "Agregar lágrimas a vías y pads con agujeros"
+msgstr "Agregar lágrimas en las conexiones de las pistas de las vías"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:404
 msgid "Tracks which are similar in size to the via do not need teardrops."
@@ -40622,7 +40608,6 @@ msgid "Group imported items"
 msgstr "Agrupar elementos"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:160
-#, fuzzy
 msgid "Add all imported items to a new group"
 msgstr "Agregar todos los elementos importados a un nuevo grupo"
 
@@ -43345,9 +43330,8 @@ msgid "%s on %s"
 msgstr "%s en %s"
 
 #: pcbnew/pcb_shape.cpp:741
-#, fuzzy
 msgid "Pad Primitives"
-msgstr "Agregar primitiva"
+msgstr "Primitivas de pad"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
@@ -45861,9 +45845,8 @@ msgid "Edit Text and graphics properties globally across board"
 msgstr "Editar propiedades globales de texto y gráficos para toda la placa"
 
 #: pcbnew/tools/pcb_actions.cpp:844
-#, fuzzy
 msgid "Edit Teardrops..."
-msgstr "Agregar lágrimas..."
+msgstr "Editar lágrimas..."
 
 #: pcbnew/tools/pcb_actions.cpp:845
 #, fuzzy
@@ -47391,7 +47374,6 @@ msgid "Move Corner"
 msgstr "Mover esquina"
 
 #: pcbnew/tools/pcb_point_editor.cpp:2404
-#, fuzzy
 msgid "Add Zone Corner"
 msgstr "Agregar esquina de zona"
 
