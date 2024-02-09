@@ -95,7 +95,7 @@ wxString SCH_PIN::GetName() const
     if( !m_alt.IsEmpty() )
         return m_alt;
 
-    return m_libPin ? m_libPin->GetName() : wxS( "??" );
+    return m_libPin ? m_libPin->GetName() : wxString( "??" );
 }
 
 
