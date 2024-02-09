@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-01 10:07+0100\n"
-"PO-Revision-Date: 2024-02-08 23:55+0000\n"
+"PO-Revision-Date: 2024-02-09 23:56+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -8120,7 +8120,7 @@ msgstr "항상"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 msgid "When grid shown"
-msgstr "그리드가 보일 때만"
+msgstr "그리드가 표시될 때"
 
 #: common/widgets/gal_options_panel_base.cpp:106
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:357
@@ -13128,7 +13128,7 @@ msgstr "반복"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:172
 msgid "Cross-probe action:"
-msgstr "교차 조사 작업:"
+msgstr "교차 탐색 작업:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:176
 #: gerbview/tools/gerbview_selection_tool.cpp:46
@@ -13735,21 +13735,21 @@ msgstr "선택한 풋프린트에 해당하는 심볼 강조 표시"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:136
 msgid "Center view on cross-probed items"
-msgstr "교차 조사 항목의 중앙 보기"
+msgstr "교차 탐색 항목의 중앙 보기"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:153
 msgid "Ensures that cross-probed symbols are visible in the current view"
-msgstr "교차 조사된 심볼은 현재 뷰에 표시되게함"
+msgstr "교차 탐색된 심볼은 현재 뷰에 표시되게 함"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:142
 msgid "Zoom to fit cross-probed items"
-msgstr "교차 탐색 항목 맞춤 확대/축소"
+msgstr "교차 탐색된 항목에 맞게 확대/축소"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:161
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:146
 msgid "Highlight cross-probed nets"
-msgstr "교차 프로브 네트 강조 표시"
+msgstr "교차 탐색된 네트 강조 표시"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:163
 msgid "Highlight nets when they are highlighted in the PCB editor"
@@ -34941,7 +34941,7 @@ msgstr "배선 시에 표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing w/ via clearance at end"
-msgstr "비아 클리어런스와 배선 시 끝에 표시하기"
+msgstr "배선 시 끝에 비아 클리어런스도 함께표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing and editing"
@@ -34971,7 +34971,7 @@ msgstr "선택된 심볼에 상응하는 연결부 강조"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:138
 msgid "Ensures that cross-probed footprints are visible in the current view"
-msgstr "교차 조사된(cross-probed) 기록들을 현재 뷰에서 볼 수 있도록 하기"
+msgstr "현재 뷰에서 교차 탐색된 풋프린트가 표시되게 함"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:148
 msgid "Highlight nets when they are highlighted in the schematic editor"
