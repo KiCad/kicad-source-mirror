@@ -428,6 +428,8 @@ void PG_RATIO_EDITOR::UpdateControl( wxPGProperty* aProperty, wxWindow* aCtrl ) 
     wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( aCtrl );
     wxVariant   var = aProperty->GetValue();
 
+    wxCHECK_MSG( textCtrl, /*void*/, wxT( "PG_RATIO_EDITOR must be used with a textCtrl!" ) );
+
     if( var.GetType() == wxT( "std::optional<double>" ) )
     {
         auto*    variantData = static_cast<STD_OPTIONAL_DOUBLE_VARIANT_DATA*>( var.GetData() );

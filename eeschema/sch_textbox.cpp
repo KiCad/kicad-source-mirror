@@ -354,7 +354,7 @@ bool SCH_TEXTBOX::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) 
 void SCH_TEXTBOX::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 {
     wxCHECK_MSG( IsHypertext(), /* void */,
-                 "Calling a hypertext menu on a SCH_TEXTBOX with no hyperlink?" );
+                 wxT( "Calling a hypertext menu on a SCH_TEXTBOX with no hyperlink?" ) );
 
     SCH_NAVIGATE_TOOL* navTool = aFrame->GetToolManager()->GetTool<SCH_NAVIGATE_TOOL>();
     navTool->HypertextCommand( m_hyperlink );

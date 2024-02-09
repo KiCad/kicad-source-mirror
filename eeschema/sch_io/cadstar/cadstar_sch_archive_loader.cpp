@@ -2657,7 +2657,7 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getSheetNumber( LAYER_ID aCadstarSheetID )
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetID, SCH_ITEM* aItem )
 {
-    wxCHECK_MSG( aItem, /*void*/, "aItem is null" );
+    wxCHECK_MSG( aItem, /*void*/, wxT( "aItem is null" ) );
 
     if( aCadstarSheetID == "ALL_SHEETS" )
     {
@@ -2676,8 +2676,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetI
     }
     else if( aCadstarSheetID == "NO_SHEET" )
     {
-        wxASSERT_MSG( false,
-                      "Trying to add an item to NO_SHEET? This might be a documentation symbol." );
+        wxFAIL_MSG( wxT( "Trying to add an item to NO_SHEET? This might be a documentation symbol." ) );
     }
     else
     {
@@ -2688,7 +2687,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetI
         else
         {
             delete aItem;
-            wxASSERT_MSG( false, "Unknown Sheet ID." );
+            wxFAIL_MSG( wxT( "Unknown Sheet ID." ) );
         }
     }
 }
