@@ -134,7 +134,7 @@ public:
      * While many of these are currently simply covers for the equivalent LIB_PIN methods,
      * the new Eeschema file format will soon allow us to override them at the schematic level.
      */
-    bool IsVisible() const { return m_libPin->IsVisible(); }
+    bool IsVisible() const;
 
     wxString GetName() const;
     wxString GetShownName() const;

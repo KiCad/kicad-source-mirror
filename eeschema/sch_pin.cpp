@@ -82,18 +82,26 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
 }
 
 
+bool SCH_PIN::IsVisible() const
+{
+    wxCHECK( m_libPin, false );
+
+    return m_libPin->IsVisible();
+}
+
+
 wxString SCH_PIN::GetName() const
 {
     if( !m_alt.IsEmpty() )
         return m_alt;
 
-    return m_libPin->GetName();
+    return m_libPin ? m_libPin->GetName() : wxS( "??" );
 }
 
 
 wxString SCH_PIN::GetShownName() const
 {
-    wxString name = m_libPin->GetName();
+    wxString name = m_libPin ? m_libPin->GetName() : wxS( "??" );
 
     if( !m_alt.IsEmpty() )
         name = m_alt;
@@ -116,6 +124,8 @@ wxString SCH_PIN::GetShownNumber() const
 
 ELECTRICAL_PINTYPE SCH_PIN::GetType() const
 {
+    wxCHECK( m_libPin, ELECTRICAL_PINTYPE::PT_NC );
+
     if( !m_alt.IsEmpty() )
         return m_libPin->GetAlt( m_alt ).m_Type;
 
@@ -125,6 +135,8 @@ ELECTRICAL_PINTYPE SCH_PIN::GetType() const
 
 GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
 {
+    wxCHECK( m_libPin, GRAPHIC_PINSHAPE::LINE );
+
     if( !m_alt.IsEmpty() )
         return m_libPin->GetAlt( m_alt ).m_Shape;
 
@@ -134,12 +146,16 @@ GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
 
 PIN_ORIENTATION SCH_PIN::GetOrientation() const
 {
+    wxCHECK( m_libPin, PIN_ORIENTATION::PIN_RIGHT );
+
     return m_libPin->GetOrientation();
 }
 
 
 int SCH_PIN::GetLength() const
 {
+    wxCHECK( m_libPin, 0 );
+
     return m_libPin->GetLength();
 }
 
@@ -197,15 +213,17 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
     LIB_PIN::ALT  localStorage;
     LIB_PIN::ALT* alt = nullptr;
 
-    if( !m_alt.IsEmpty() )
+    if( !m_alt.IsEmpty() && m_libPin )
     {
         localStorage = m_libPin->GetAlt( m_alt );
         alt = &localStorage;
     }
 
+    wxString itemDesc = m_libPin ? m_libPin->GetItemDescription( aUnitsProvider, alt ) :
+                                   wxS ( "Undefined library pin." );
     return wxString::Format( "Symbol %s %s",
                              UnescapeString( GetParentSymbol()->GetField( REFERENCE_FIELD )->GetText() ),
-                             m_libPin->GetItemDescription( aUnitsProvider, alt ) );
+                             itemDesc );
 }
 
 
@@ -220,14 +238,16 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     {
         if( libSymbol->GetUnitCount() )
         {
-            aList.emplace_back( _( "Unit" ),
-                                LIB_ITEM::GetUnitDescription( m_libPin->GetUnit() ) );
+            msg = m_libPin ? LIB_ITEM::GetUnitDescription( m_libPin->GetUnit() ) :
+                             wxS( "Undefined library pin." );
+            aList.emplace_back( _( "Unit" ), msg );
         }
 
         if( libSymbol->HasAlternateBodyStyle() )
         {
-            aList.emplace_back( _( "Body Style" ),
-                                LIB_ITEM::GetBodyStyleDescription( m_libPin->GetBodyStyle() ) );
+            msg = m_libPin ? LIB_ITEM::GetBodyStyleDescription( m_libPin->GetBodyStyle() ) :
+                             wxS( "Undefined library pin." );
+            aList.emplace_back( _( "Body Style" ), msg );
         }
     }
 
@@ -303,7 +323,9 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
         }
         else
         {
-            return EscapeString( m_libPin->GetName(), CTX_NETNAME );
+            wxString tmp = m_libPin ? m_libPin->GetName() : wxS( "??" );
+
+            return EscapeString( tmp, CTX_NETNAME );
         }
     }
 
@@ -342,23 +364,27 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
         }
     }
 
+    wxString libPinShownName = m_libPin ? m_libPin->GetShownName() : wxS( "??" );
+    wxString libPinShownNumber = m_libPin ? m_libPin->GetShownNumber() : wxS( "??" );
+
     // Use timestamp for unannotated symbols
     if( GetParentSymbol()->GetRef( &aPath, false ).Last() == '?' )
     {
         name << GetParentSymbol()->m_Uuid.AsString();
-        name << "-Pad" << m_libPin->GetNumber() << ")";
+
+        wxString libPinNumber = m_libPin ? m_libPin->GetNumber() : wxS( "??" );
+        name << "-Pad" << libPinNumber << ")";
         annotated = false;
     }
-    else if( !m_libPin->GetShownName().IsEmpty()
-            && m_libPin->GetShownName() != m_libPin->GetShownNumber() )
+    else if( !libPinShownName.IsEmpty() && ( libPinShownName != libPinShownNumber ) )
     {
         // Pin names might not be unique between different units so we must have the
         // unit token in the reference designator
         name << GetParentSymbol()->GetRef( &aPath, true );
-        name << "-" << EscapeString( m_libPin->GetShownName(), CTX_NETNAME );
+        name << "-" << EscapeString( libPinShownName, CTX_NETNAME );
 
         if( unconnected || has_multiple )
-            name << "-Pad" << EscapeString( m_libPin->GetShownNumber(), CTX_NETNAME );
+            name << "-Pad" << EscapeString( libPinShownNumber, CTX_NETNAME );
 
         name << ")";
     }
@@ -366,7 +392,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     {
         // Pin numbers are unique, so we skip the unit token
         name << GetParentSymbol()->GetRef( &aPath, false );
-        name << "-Pad" << EscapeString( m_libPin->GetShownNumber(), CTX_NETNAME ) << ")";
+        name << "-Pad" << EscapeString( libPinShownNumber, CTX_NETNAME ) << ")";
     }
 
     if( annotated )
@@ -387,8 +413,11 @@ const BOX2I SCH_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
                                      bool aIncludeElectricalType ) const
 {
     TRANSFORM t = GetParentSymbol()->GetTransform();
-    BOX2I     r = m_libPin->GetBoundingBox( aIncludeInvisiblePins, aIncludeNameAndNumber,
-                                            aIncludeElectricalType );
+    BOX2I     r;
+
+    if( m_libPin )
+        m_libPin->GetBoundingBox( aIncludeInvisiblePins, aIncludeNameAndNumber,
+                                  aIncludeElectricalType );
 
     r.RevertYAxis();
 
@@ -433,6 +462,8 @@ EDA_ITEM* SCH_PIN::Clone() const
 
 bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 {
+    wxCHECK( m_libPin, false );
+
     // Reciprocal checking is done in CONNECTION_GRAPH anyway
     return !( m_libPin->GetType() == ELECTRICAL_PINTYPE::PT_NC );
 }
@@ -471,7 +502,7 @@ double SCH_PIN::Similarity( const SCH_ITEM& aOther ) const
     if( m_position != other.m_position )
         return 0.0;
 
-    return m_libPin->Similarity( *other.m_libPin );
+    return m_libPin ? m_libPin->Similarity( *other.m_libPin ) : 0.0;
 }
 
 
