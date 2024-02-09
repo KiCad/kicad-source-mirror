@@ -1241,9 +1241,9 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 
     for( const EDA_ITEM* item : m_selection.GetItems() )
     {
-        if( item->Type() == PCB_FOOTPRINT_T ||
-            ( BOARD_CONNECTED_ITEM::ClassOf( item )
-              && static_cast<const BOARD_CONNECTED_ITEM*>( item )->IsConnected() ) )
+        if( item->Type() == PCB_FOOTPRINT_T
+            || item->Type() == PCB_GENERATOR_T
+            || ( static_cast<const BOARD_ITEM*>( item )->IsConnected() ) )
         {
             initialCount++;
         }
@@ -1286,6 +1286,14 @@ int PCB_SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 
                 for( PAD* pad : footprint->Pads() )
                     startItems.push_back( pad );
+            }
+            else if( item->Type() == PCB_GENERATOR_T )
+            {
+                for( BOARD_ITEM* generatedItem : static_cast<PCB_GENERATOR*>( item )->GetItems() )
+                {
+                    if( BOARD_CONNECTED_ITEM::ClassOf( generatedItem ) )
+                        startItems.push_back( static_cast<BOARD_CONNECTED_ITEM*>( generatedItem ) );
+                }
             }
             else if( BOARD_CONNECTED_ITEM::ClassOf( item ) )
             {
