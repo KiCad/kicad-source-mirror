@@ -62,7 +62,7 @@ void FP_LIB_TABLE_ROW::SetType( const wxString& aType )
     if( PCB_IO_MGR::PCB_FILE_T( -1 ) == type )
         type = PCB_IO_MGR::KICAD_SEXP;
 
-    plugin.release();
+    plugin.reset();
 }
 
 

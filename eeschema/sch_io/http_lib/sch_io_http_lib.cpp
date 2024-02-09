@@ -344,7 +344,7 @@ void SCH_IO_HTTP_LIB::connect()
             m_lastError = m_conn->GetLastError();
 
             // Make sure we release pointer so we are able to query API again next time
-            m_conn.release();
+            m_conn.reset();
 
             return;
         }

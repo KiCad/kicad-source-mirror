@@ -73,7 +73,7 @@ void SYMBOL_LIB_TABLE_ROW::SetType( const wxString& aType )
     if( type == SCH_IO_MGR::SCH_FILE_UNKNOWN )
         type = SCH_IO_MGR::SCH_KICAD;
 
-    plugin.release();
+    plugin.reset();
 }
 
 
