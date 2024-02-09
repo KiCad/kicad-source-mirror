@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 10:07+0100\n"
+"POT-Creation-Date: 2024-02-09 15:57-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -2395,6 +2395,12 @@ msgstr "I agree to provide anonymous reports"
 msgid "Reset Unique Id"
 msgstr "Reset Unique Id"
 
+msgid "Footprints/pads:"
+msgstr "Footprints/pads:"
+
+msgid "Tracks:"
+msgstr "Tracks:"
+
 #, c-format
 msgid "%s%s (%s)"
 msgstr "%s%s (%s)"
@@ -4156,8 +4162,8 @@ msgstr "Locked item shadow"
 msgid "Courtyard collision shadow"
 msgstr "Courtyard collision shadow"
 
-msgid "Illegal character found in logical library name"
-msgstr "Illegal character found in logical library name"
+msgid "Illegal character found in library nickname"
+msgstr "Illegal character found in library nickname"
 
 msgid "Edit options..."
 msgstr "Edit options..."
@@ -4783,6 +4789,9 @@ msgstr "Cycle inactive layers between normal, dimmed, and hidden"
 
 msgid "Draw Bounding Boxes"
 msgstr "Draw Bounding Boxes"
+
+msgid "Select item(s)"
+msgstr "Select item(s)"
 
 msgid "Measure Tool"
 msgstr "Measure Tool"
@@ -7047,8 +7056,8 @@ msgstr "Create symbol with alternate body style (De Morgan)"
 msgid "Create symbol as power symbol"
 msgstr "Create symbol as power symbol"
 
-msgid "Exclude from schematic bill of materials"
-msgstr "Exclude from schematic bill of materials"
+msgid "Exclude from bill of materials"
+msgstr "Exclude from bill of materials"
 
 msgid "Exclude from board"
 msgstr "Exclude from board"
@@ -8555,9 +8564,6 @@ msgstr "Show pin numbers"
 
 msgid "Show pin names"
 msgstr "Show pin names"
-
-msgid "Exclude from bill of materials"
-msgstr "Exclude from bill of materials"
 
 msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
@@ -10480,8 +10486,8 @@ msgstr "Change Unit"
 msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "No alternate body style found for symbol '%s' in library '%s'."
 
-msgid "Convert Symbol"
-msgstr "Convert Symbol"
+msgid "Change Body Style"
+msgstr "Change Body Style"
 
 msgid "Set Pin Function"
 msgstr "Set Pin Function"
@@ -12970,8 +12976,8 @@ msgstr ""
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>A Power Symbol should have only one unit</b><br><br>"
 
-msgid "<b>A Power Symbol should have no convert option</b><br><br>"
-msgstr "<b>A Power Symbol should have no convert option</b><br><br>"
+msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
+msgstr "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
 
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
 msgstr "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -14814,6 +14820,21 @@ msgstr "Invalid footprint specified"
 
 msgid "Change property"
 msgstr "Change property"
+
+msgid "Excl. sim"
+msgstr "Excl. sim"
+
+msgid "Excl. BOM"
+msgstr "Excl. BOM"
+
+msgid "Excl. board"
+msgstr "Excl. board"
+
+msgid "Hierarchical"
+msgstr "Hierarchical"
+
+msgid "Directive"
+msgstr "Directive"
 
 msgid "Do not update library tables"
 msgstr "Do not update library tables"
@@ -20622,16 +20643,6 @@ msgstr "Minimum island size:"
 msgid "Isolated islands smaller than this will be removed"
 msgstr "Isolated islands smaller than this will be removed"
 
-msgid "Export Settings to Other Similar Zones"
-msgstr "Export Settings to Other Similar Zones"
-
-msgid ""
-"Export this zone setup (excluding layer and net selection) to other similar "
-"copper zones (teardrops or usual copper zones)."
-msgstr ""
-"Export this zone setup (excluding layer and net selection) to other similar "
-"copper zones (teardrops or usual copper zones)."
-
 msgid "Copper Zone Properties"
 msgstr "Copper Zone Properties"
 
@@ -21117,12 +21128,6 @@ msgstr "Open the Board Setup... dialog"
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Report file '%s' created<br>"
-
-msgid "Do you wish to delete excluded markers as well?"
-msgstr "Do you wish to delete excluded markers as well?"
-
-msgid "Delete exclusions"
-msgstr "Delete exclusions"
 
 msgid "not run"
 msgstr "not run"
@@ -22434,6 +22439,13 @@ msgstr "Edit default values in Board Setup"
 
 msgid "Prefer zone connection"
 msgstr "Prefer zone connection"
+
+msgid ""
+"Do not create teardrops on tracks connected to pads that are also connected "
+"to a copper zone."
+msgstr ""
+"Do not create teardrops on tracks connected to pads that are also connected "
+"to a copper zone."
 
 msgid "Allow teardrops to span 2 track segments"
 msgstr "Allow teardrops to span 2 track segments"
@@ -24314,9 +24326,6 @@ msgid ""
 msgstr ""
 "If checked, pads can be moved with respect to the rest of the footprint."
 
-msgid "Select item(s)"
-msgstr "Select item(s)"
-
 msgid "Toggle selection"
 msgstr "Toggle selection"
 
@@ -24504,9 +24513,6 @@ msgstr "Show pad numbers"
 
 msgid "Clearance Outlines"
 msgstr "Clearance Outlines"
-
-msgid "Tracks:"
-msgstr "Tracks:"
 
 msgid "Do not show clearances"
 msgstr "Do not show clearances"
@@ -27417,11 +27423,11 @@ msgstr "Build holes for %s\n"
 msgid "Cutting %d/%d %s\n"
 msgstr "Cutting %d/%d %s\n"
 
-msgid "pads"
-msgstr "pads"
-
 msgid "shapes"
 msgstr "shapes"
+
+msgid "pads"
+msgstr "pads"
 
 msgid "tracks"
 msgstr "tracks"
@@ -27817,6 +27823,9 @@ msgstr ""
 
 msgid "Previous footprint placement still in progress."
 msgstr "Previous footprint placement still in progress."
+
+msgid "Insert Footprint"
+msgstr "Insert Footprint"
 
 msgid "Save Footprint As"
 msgstr "Save Footprint As"
@@ -30296,6 +30305,12 @@ msgstr "Plotting footprint '%s' to '%s'\n"
 msgid "Running DRC...\n"
 msgstr "Running DRC...\n"
 
+msgid "Failed to find schematic for parity tests.\n"
+msgstr "Failed to find schematic for parity tests.\n"
+
+msgid "Failed to fetch schematic netlist for parity tests.\n"
+msgstr "Failed to fetch schematic netlist for parity tests.\n"
+
 msgid "DRC"
 msgstr "DRC"
 
@@ -31787,6 +31802,9 @@ msgstr "Fillet Lines..."
 msgid "Adds arcs tangent to the selected lines"
 msgstr "Adds arcs tangent to the selected lines"
 
+msgid "Chamfer Lines..."
+msgstr "Chamfer Lines..."
+
 msgid "Cut away corners between selected lines"
 msgstr "Cut away corners between selected lines"
 
@@ -32834,11 +32852,17 @@ msgstr "Set Layer Pair..."
 msgid "Change active layer pair for routing"
 msgstr "Change active layer pair for routing"
 
-msgid "Tune Length"
-msgstr "Tune Length"
+msgid "Tune length of a single track"
+msgstr "Tune length of a single track"
 
-msgid "Tune length of a single track or differential pair"
-msgstr "Tune length of a single track or differential pair"
+msgid "Tune length of a differential pair"
+msgstr "Tune length of a differential pair"
+
+msgid "Tune Length of a Single Track"
+msgstr "Tune Length of a Single Track"
+
+msgid "Tune Length of a Differential Pair"
+msgstr "Tune Length of a Differential Pair"
 
 msgid "Tune Skew of a Differential Pair"
 msgstr "Tune Skew of a Differential Pair"
@@ -33570,6 +33594,9 @@ msgstr "Priority"
 msgid "Textbox"
 msgstr "Textbox"
 
+msgid "Class"
+msgstr "Class"
+
 msgid "No Net"
 msgstr "No Net"
 
@@ -33658,6 +33685,30 @@ msgstr "Rule Area %s"
 #, c-format
 msgid "Zone %s %s"
 msgstr "Zone %s %s"
+
+msgid "Cannot be less than zone minimum width"
+msgstr "Cannot be less than zone minimum width"
+
+msgid "Hatch Width"
+msgstr "Hatch Width"
+
+msgid "Hatch Gap"
+msgstr "Hatch Gap"
+
+msgid "Hatch Minimum Hole Ratio"
+msgstr "Hatch Minimum Hole Ratio"
+
+msgid "Smoothing Effort"
+msgstr "Smoothing Effort"
+
+msgid "Smoothing Amount"
+msgstr "Smoothing Amount"
+
+msgid "Remove Islands"
+msgstr "Remove Islands"
+
+msgid "Minimum Island Area"
+msgstr "Minimum Island Area"
 
 msgid "Minimum Width"
 msgstr "Minimum Width"
@@ -33808,6 +33859,49 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+msgid "KiCad Footprint"
+msgstr "KiCad Footprint"
+
+msgid "KiCad Schematic Symbol"
+msgstr "KiCad Schematic Symbol"
+
+msgid "KiCad Drawing Sheet"
+msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Illegal character found in logical library name"
+#~ msgstr "Illegal character found in logical library name"
+
+#~ msgid "Exclude from schematic bill of materials"
+#~ msgstr "Exclude from schematic bill of materials"
+
+#~ msgid "Convert Symbol"
+#~ msgstr "Convert Symbol"
+
+#~ msgid "<b>A Power Symbol should have no convert option</b><br><br>"
+#~ msgstr "<b>A Power Symbol should have no convert option</b><br><br>"
+
+#~ msgid "Export Settings to Other Similar Zones"
+#~ msgstr "Export Settings to Other Similar Zones"
+
+#~ msgid ""
+#~ "Export this zone setup (excluding layer and net selection) to other "
+#~ "similar copper zones (teardrops or usual copper zones)."
+#~ msgstr ""
+#~ "Export this zone setup (excluding layer and net selection) to other "
+#~ "similar copper zones (teardrops or usual copper zones)."
+
+#~ msgid "Do you wish to delete excluded markers as well?"
+#~ msgstr "Do you wish to delete excluded markers as well?"
+
+#~ msgid "Delete exclusions"
+#~ msgstr "Delete exclusions"
+
+#~ msgid "Tune Length"
+#~ msgstr "Tune Length"
+
+#~ msgid "Tune length of a single track or differential pair"
+#~ msgstr "Tune length of a single track or differential pair"
 
 #~ msgid "Enter the text placed on selected layer."
 #~ msgstr "Enter the text placed on selected layer."
@@ -36590,12 +36684,6 @@ msgstr "KiCad Printed Circuit Board"
 
 #~ msgid "Add bitmap image"
 #~ msgstr "Add bitmap image"
-
-#~ msgid "Tune length of a single track"
-#~ msgstr "Tune length of a single track"
-
-#~ msgid "Tune length of a differential pair"
-#~ msgstr "Tune length of a differential pair"
 
 #~ msgid "Length Tuning Settings..."
 #~ msgstr "Length Tuning Settings…"
