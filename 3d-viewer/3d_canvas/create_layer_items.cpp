@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2023 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -634,6 +634,17 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                 wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
                             item->Type() );
                 break;
+            }
+
+            // add also this shape to the plated copper polygon list if required
+            if( cfg.differentiate_plated_copper )
+            {
+                if( layer == F_Cu )
+                    item->TransformShapeToPolygon( *m_frontPlatedCopperPolys, F_Cu,
+                                                    0, maxError, ERROR_INSIDE );
+                else if( layer == B_Cu )
+                    item->TransformShapeToPolygon( *m_backPlatedCopperPolys, B_Cu,
+                                                    0, maxError, ERROR_INSIDE );
             }
         }
     }
