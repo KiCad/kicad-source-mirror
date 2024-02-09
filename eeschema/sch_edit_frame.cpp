@@ -1781,8 +1781,12 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
             {
             case SCH_FIELD_T:
             case SCH_PIN_T:
-                static_cast<SCH_ITEM*>( item->GetParent() )->SetConnectivityDirty();
+            {
+                SCH_ITEM* parent = static_cast<SCH_ITEM*>( item->GetParent() );
+                wxCHECK2( parent, continue );
+                parent->SetConnectivityDirty();
                 break;
+            }
 
             default:
                 item->SetConnectivityDirty();
