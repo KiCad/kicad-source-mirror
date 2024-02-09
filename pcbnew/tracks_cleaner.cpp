@@ -698,6 +698,9 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
         m_commit.Removed( aSeg2 );
     }
 
+    if( dummy_seg.GetParentGroup() )
+        dummy_seg.SetParentGroup( nullptr );
+
     return true;
 }
 
