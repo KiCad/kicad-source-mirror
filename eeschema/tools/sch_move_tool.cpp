@@ -603,12 +603,14 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        saveCopyInUndoList( (SCH_ITEM*) item, UNDO_REDO::CHANGED, appendUndo );
+                        saveCopyInUndoList( item, UNDO_REDO::CHANGED, appendUndo );
                         appendUndo = true;
                     }
 
-                    SCH_ITEM* schItem = (SCH_ITEM*) item;
-                    schItem->SetStoredPos( schItem->GetPosition() );
+                    item->SetFlags( IS_MOVING );
+
+                    if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
+                        schItem->SetStoredPos( schItem->GetPosition() );
                 }
 
                 // Set up the starting position and move/drag offset
