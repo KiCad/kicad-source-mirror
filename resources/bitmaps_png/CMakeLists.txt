@@ -193,6 +193,7 @@ set( BMAPS_MID
     add_via
     add_zone_cutout
     add_zone
+    align_elements_to_grid
     align_items
     align_items_left
     align_items_right
@@ -222,18 +223,20 @@ set( BMAPS_MID
     cancel
     chamfer
     change_entry_orient
-    contrast_mode
-    curved_ratsnest
     checked_ok
+    cleanup_graphics
+    cleanup_tracks_and_vias
     color_materials
     component_select_unit
     config
+    contrast_mode
     convert
     copy
     copy_pad_settings
     cursor_shape
     cursor
     custom_pad_to_primitives
+    curved_ratsnest
     cut
     datasheet
     delete_association
@@ -246,6 +249,7 @@ set( BMAPS_MID
     distribute_horizontal
     distribute_vertical
     down
+    drag
     drag_segment
     drag_segment_withslope
     drc

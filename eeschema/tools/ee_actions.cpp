@@ -1342,7 +1342,7 @@ TOOL_ACTION EE_ACTIONS::drag( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Drag Item" )
         .FriendlyName( _( "Drag" ) )
         .Tooltip( _( "Drags the selected item(s)" ) )
-        .Icon( BITMAPS::move )
+        .Icon( BITMAPS::drag )
         .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION EE_ACTIONS::alignToGrid( TOOL_ACTION_ARGS()

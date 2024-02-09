@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="align_elements_to_grid.svg"
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1315"
+     inkscape:window-height="704"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="11.313709"
+     inkscape:cx="8.9455919"
+     inkscape:cy="12.113393"
+     inkscape:window-x="51"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>ps_diff_pair_tune_phase</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs159429">
+    <style
+       id="style159427">.cls-1{fill:#1a81c4;}</style>
+  </defs>
+  <title
+     id="title159431">ps_diff_pair_tune_phase</title>
+  <rect
+     style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:2, 4;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+     id="rect947"
+     width="10.99999"
+     height="11"
+     x="12.00001"
+     y="12"
+     ry="0" />
+  <rect
+     style="fill:none;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+     id="rect8491"
+     width="24"
+     height="24"
+     x="0"
+     y="0"
+     ry="0" />
+  <rect
+     style="fill:#42b8eb;fill-opacity:1;stroke:none;stroke-width:1.14582;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.14582, 2.29165999999999981;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+     id="rect1414"
+     width="10.99999"
+     height="11"
+     x="8.0000105"
+     y="8"
+     ry="1" />
+  <rect
+     style="fill:none;fill-opacity:1;stroke:none;stroke-width:1.263;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+     id="rect5474"
+     width="23.999893"
+     height="23.999893"
+     x="0.00013662732"
+     y="3.6141693e-05" />
+  <path
+     style="fill:none;stroke:#ded3dd;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:2;paint-order:fill markers stroke;fill-opacity:1;stroke-opacity:1"
+     d="M 6,1 V 23"
+     id="path923"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#ded3dd;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:2;paint-order:fill markers stroke;fill-opacity:1;stroke-opacity:1"
+     d="M 1,6 H 6"
+     id="path925"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#ded3dd;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:2;paint-order:fill markers stroke;fill-opacity:1;stroke-opacity:1"
+     d="M 1,13 H 6"
+     id="path927"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#ded3dd;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:2;paint-order:fill markers stroke;fill-opacity:1;stroke-opacity:1"
+     d="M 1,20 H 6"
+     id="path929"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#ded3dd;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:2;paint-order:fill markers stroke;fill-opacity:1;stroke-opacity:1"
+     d="M 23,6 H 1"
+     id="path939"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#ded3dd;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:2;paint-order:fill markers stroke;fill-opacity:1;stroke-opacity:1"
+     d="M 20,1 V 6"
+     id="path941"
+     sodipodi:nodetypes="cc" />
+  <path
+     style="fill:none;stroke:#ded3dd;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:2;paint-order:fill markers stroke;fill-opacity:1;stroke-opacity:1"
+     d="M 13,1 V 6"
+     id="path943"
+     sodipodi:nodetypes="cc" />
+</svg>

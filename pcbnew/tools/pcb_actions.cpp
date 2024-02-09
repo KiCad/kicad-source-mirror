@@ -856,14 +856,14 @@ TOOL_ACTION PCB_ACTIONS::cleanupTracksAndVias( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Cleanup Tracks & Vias..." ) )
         .Tooltip( _( "Cleanup redundant items, shorting items, etc." ) )
-        .Icon( BITMAPS::delete_cursor ) );
+        .Icon( BITMAPS::cleanup_tracks_and_vias ) );
 
 TOOL_ACTION PCB_ACTIONS::cleanupGraphics( TOOL_ACTION_ARGS()
         .Name( "pcbnew.GlobalEdit.cleanupGraphics" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Cleanup Graphics..." ) )
         .Tooltip( _( "Cleanup redundant items, etc." ) )
-        .Icon( BITMAPS::delete_cursor ) );
+        .Icon( BITMAPS::cleanup_graphics ) );
 
 // MICROWAVE_TOOL
 //

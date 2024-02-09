@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Слой_1"
+   data-name="Слой 1"
+   viewBox="0 0 24 24"
+   version="1.1"
+   sodipodi:docname="drag.svg"
+   inkscape:version="1.0.2 (1.0.2+r75+1)">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1315"
+     inkscape:window-height="704"
+     id="namedview30"
+     showgrid="true"
+     inkscape:zoom="22.627418"
+     inkscape:cx="9.4295406"
+     inkscape:cy="8.4866927"
+     inkscape:window-x="51"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="Слой_1"
+     inkscape:snap-smooth-nodes="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid_kicad"
+       spacingx="0.5"
+       spacingy="0.5"
+       color="#9999ff"
+       opacity="0.13"
+       empspacing="2" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata43">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/4.0/" />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>ps_diff_pair_tune_phase</dc:title>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/4.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs159429">
+    <style
+       id="style159427">.cls-1{fill:#1a81c4;}</style>
+  </defs>
+  <title
+     id="title159431">ps_diff_pair_tune_phase</title>
+  <g
+     id="g845">
+    <g
+       id="g874">
+      <path
+         id="rect25847"
+         style="fill:#545454;stroke-width:1.00025"
+         d="M 5.0011973,0 0,5 5,10 5.0012,7 H 9.0020796 V 2.9989931 H 5.0011973 Z"
+         sodipodi:nodetypes="cccccccc" />
+      <path
+         id="path870"
+         style="fill:#545454;stroke-width:1.00025"
+         d="M 18.998803,0 24,5 19,10 18.9988,7 H 14.997921 V 2.9989931 h 4.000882 z"
+         sodipodi:nodetypes="cccccccc" />
+    </g>
+    <path
+       style="fill:none;fill-opacity:1;stroke:#545454;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:fill markers stroke"
+       d="m 7,13.491423 v 1.5 -4.5 c 0,-1.5 1.5,-1.5 1.5,-1.5 0,0 1.5,0 1.5,1.5 v 2 -2.5 c 0,-1.5 1.5,-1.5 1.5,-1.5 0,0 1.5,0 1.5,1.5 v 2.5 -2 c 0,-1.5 1.5,-1.5 1.5,-1.5 0,0 1.5,0 1.5,1.5 v 1.5 0.5 c 0,-1.5 1.5,-1.5 1.5,-1.5 0,0 1.5,0 1.5,1.5 v 4.5 c 0,6 -4.5,6 -4.5,6 h -5 c 0,0 -3,0.5 -5.5,-5 -1.2194793,-3.038326 0.766361,-4.967938 2.5,-5 0.1666667,0 0.5,0.5 0.5,0.5 z"
+       id="path899"
+       sodipodi:nodetypes="csccsscccscscscscscsccc" />
+  </g>
+</svg>
