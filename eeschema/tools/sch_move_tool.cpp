@@ -606,11 +606,13 @@ bool SCH_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aComm
                     }
                     else
                     {
-                        aCommit->Modify( (SCH_ITEM*) item, m_frame->GetScreen() );
+                        aCommit->Modify( item, m_frame->GetScreen() );
                     }
 
-                    SCH_ITEM* schItem = (SCH_ITEM*) item;
-                    schItem->SetStoredPos( schItem->GetPosition() );
+                    item->SetFlags( IS_MOVING );
+
+                    if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
+                        schItem->SetStoredPos( schItem->GetPosition() );
                 }
 
                 // Set up the starting position and move/drag offset
