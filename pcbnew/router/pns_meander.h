@@ -67,80 +67,16 @@ enum MEANDER_SIDE
 class MEANDER_SETTINGS
 {
 public:
-    static const long long int DEFAULT_TOLERANCE = 100000;
-    static const long long int LENGTH_UNCONSTRAINED = std::numeric_limits<int>::max();
+    static const long long int DEFAULT_TOLERANCE;
+    static const long long int LENGTH_UNCONSTRAINED;
 
-    MEANDER_SETTINGS()
-    {
-        m_minAmplitude = 100000;
-        m_maxAmplitude = 1000000;
-        m_step = 50000;
-        m_lenPadToDie = 0;
-        m_spacing = 600000;
-        SetTargetLength( LENGTH_UNCONSTRAINED );
-        SetTargetSkew( 0 );
-        m_overrideCustomRules = false;
-        m_cornerStyle = MEANDER_STYLE_ROUND;
-        m_cornerRadiusPercentage = 100;
-        m_singleSided = false;
-        m_initialSide = MEANDER_SIDE_LEFT;
-        m_lengthTolerance = 0;
-        m_keepEndpoints = false;
-    }
+    MEANDER_SETTINGS();
 
-    void SetTargetLength( long long int aOpt )
-    {
-        m_targetLength.SetOpt( aOpt );
+    void SetTargetLength( long long int aOpt );
+    void SetTargetLength( const MINOPTMAX<int>& aConstraint );
 
-        if( aOpt == std::numeric_limits<long long int>::max() )
-        {
-            m_targetLength.SetMin( 0 );
-            m_targetLength.SetMax( aOpt );
-        }
-        else
-        {
-            m_targetLength.SetMin( aOpt - DEFAULT_TOLERANCE );
-            m_targetLength.SetMax( aOpt + DEFAULT_TOLERANCE );
-        }
-    }
-
-    void SetTargetLength( const MINOPTMAX<int>& aConstraint )
-    {
-        SetTargetLength( aConstraint.Opt() );
-
-        if( aConstraint.HasMin() )
-            m_targetLength.SetMin( aConstraint.Min() );
-
-        if( aConstraint.HasMax() )
-            m_targetLength.SetMax( aConstraint.Max() );
-    }
-
-    void SetTargetSkew( int aOpt )
-    {
-        m_targetSkew.SetOpt( aOpt );
-
-        if( aOpt == std::numeric_limits<int>::max() )
-        {
-            m_targetSkew.SetMin( 0 );
-            m_targetSkew.SetMax( aOpt );
-        }
-        else
-        {
-            m_targetSkew.SetMin( aOpt - DEFAULT_TOLERANCE );
-            m_targetSkew.SetMax( aOpt + DEFAULT_TOLERANCE );
-        }
-    }
-
-    void SetTargetSkew( const MINOPTMAX<int>& aConstraint )
-    {
-        SetTargetSkew( aConstraint.Opt() );
-
-        if( aConstraint.HasMin() )
-            m_targetSkew.SetMin( aConstraint.Min() );
-
-        if( aConstraint.HasMax() )
-            m_targetSkew.SetMax( aConstraint.Max() );
-    }
+    void SetTargetSkew( int aOpt );
+    void SetTargetSkew( const MINOPTMAX<int>& aConstraint );
 
     ///< Minimum meandering amplitude.
     int m_minAmplitude;

@@ -682,13 +682,6 @@ PCB_TUNING_PATTERN* PCB_TUNING_PATTERN::CreateNew( GENERATOR_TOOL* aTool,
         else
             pattern->m_settings.SetTargetLength( constraint.GetValue() );
     }
-    else
-    {
-        if( aMode == DIFF_PAIR_SKEW )
-            pattern->m_settings.SetTargetSkew( 0 );
-        else
-            pattern->m_settings.SetTargetLength( PNS::MEANDER_SETTINGS::LENGTH_UNCONSTRAINED );
-    }
 
     pattern->SetFlags( IS_NEW );
 
