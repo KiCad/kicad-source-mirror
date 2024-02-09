@@ -101,7 +101,7 @@ wxString SCH_PIN::GetName() const
 
 wxString SCH_PIN::GetShownName() const
 {
-    wxString name = m_libPin ? m_libPin->GetName() : wxS( "??" );
+    wxString name = m_libPin ? m_libPin->GetName() : wxString( "??" );
 
     if( !m_alt.IsEmpty() )
         name = m_alt;
@@ -239,14 +239,14 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
         if( libSymbol->GetUnitCount() )
         {
             msg = m_libPin ? LIB_ITEM::GetUnitDescription( m_libPin->GetUnit() ) :
-                             wxS( "Undefined library pin." );
+                             wxString( "Undefined library pin." );
             aList.emplace_back( _( "Unit" ), msg );
         }
 
         if( libSymbol->HasAlternateBodyStyle() )
         {
             msg = m_libPin ? LIB_ITEM::GetBodyStyleDescription( m_libPin->GetBodyStyle() ) :
-                             wxS( "Undefined library pin." );
+                             wxString( "Undefined library pin." );
             aList.emplace_back( _( "Body Style" ), msg );
         }
     }
@@ -323,7 +323,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
         }
         else
         {
-            wxString tmp = m_libPin ? m_libPin->GetName() : wxS( "??" );
+            wxString tmp = m_libPin ? m_libPin->GetName() : wxString( "??" );
 
             return EscapeString( tmp, CTX_NETNAME );
         }
@@ -364,15 +364,15 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
         }
     }
 
-    wxString libPinShownName = m_libPin ? m_libPin->GetShownName() : wxS( "??" );
-    wxString libPinShownNumber = m_libPin ? m_libPin->GetShownNumber() : wxS( "??" );
+    wxString libPinShownName = m_libPin ? m_libPin->GetShownName() : wxString( "??" );
+    wxString libPinShownNumber = m_libPin ? m_libPin->GetShownNumber() : wxString( "??" );
 
     // Use timestamp for unannotated symbols
     if( GetParentSymbol()->GetRef( &aPath, false ).Last() == '?' )
     {
         name << GetParentSymbol()->m_Uuid.AsString();
 
-        wxString libPinNumber = m_libPin ? m_libPin->GetNumber() : wxS( "??" );
+        wxString libPinNumber = m_libPin ? m_libPin->GetNumber() : wxString( "??" );
         name << "-Pad" << libPinNumber << ")";
         annotated = false;
     }
