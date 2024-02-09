@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 10:06+0100\n"
+"POT-Creation-Date: 2024-02-09 15:58-0800\n"
 "PO-Revision-Date: 2024-02-01 13:54+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v7/de/>\n"
@@ -5811,7 +5811,7 @@ msgstr "Fehler beim Extrahieren!"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
 #: eeschema/sch_plotter.cpp:165 eeschema/sch_plotter.cpp:376
 #: eeschema/sch_plotter.cpp:520 eeschema/sch_plotter.cpp:731
-#: eeschema/sch_plotter.cpp:904 gerbview/export_to_pcbnew.cpp:68
+#: eeschema/sch_plotter.cpp:903 gerbview/export_to_pcbnew.cpp:68
 #: pagelayout_editor/files.cpp:214 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:884 pcbnew/dialogs/dialog_export_idf.cpp:222
@@ -8524,21 +8524,21 @@ msgstr ""
 "Schaltplan ist nicht vollständig annotiert. ERC-Ergebnisse werden "
 "unvollständig sein."
 
-#: eeschema/dialogs/dialog_erc.cpp:300
+#: eeschema/dialogs/dialog_erc.cpp:300 pcbnew/dialogs/dialog_drc.cpp:1142
 msgid "Delete exclusions too?"
 msgstr "Ausschlüsse auch löschen?"
 
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
-#: pcbnew/dialogs/dialog_drc.cpp:1143 pcbnew/dialogs/dialog_drc_base.cpp:212
+#: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Alle Marker entfernen"
 
-#: eeschema/dialogs/dialog_erc.cpp:302
+#: eeschema/dialogs/dialog_erc.cpp:302 pcbnew/dialogs/dialog_drc.cpp:1144
 msgid "Errors and Warnings Only"
 msgstr "Nur Fehler und Warnungen"
 
-#: eeschema/dialogs/dialog_erc.cpp:303
+#: eeschema/dialogs/dialog_erc.cpp:303 pcbnew/dialogs/dialog_drc.cpp:1145
 msgid "Errors, Warnings and Exclusions"
 msgstr "Fehler, Warnungen und Ausschlüsse"
 
@@ -13940,7 +13940,7 @@ msgstr "Mitglieder von Bus-Alias %s"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Schaltplan-Editor"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1726
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
 msgid "Schematic Hierarchy"
 msgstr "Schaltplan-Hierarchie"
 
@@ -13969,7 +13969,7 @@ msgstr ""
 "erstellen oder zu aktualisieren, starten Sie die KiCad-Oberfläche und "
 "erstellen ein neues KiCad-Projekt."
 
-#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schaltplan"
@@ -14012,7 +14012,7 @@ msgstr "[Ungespeichert]"
 msgid "[no schematic loaded]"
 msgstr "[Kein Schaltplan geladen]"
 
-#: eeschema/sch_edit_frame.cpp:1749
+#: eeschema/sch_edit_frame.cpp:1747
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Hervorgehobenes Netz: %s"
@@ -14183,7 +14183,7 @@ msgid "Plotted to '%s'.\n"
 msgstr "Plot in \"%s\" geschrieben.\n"
 
 #: eeschema/sch_plotter.cpp:208 eeschema/sch_plotter.cpp:393
-#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:930
+#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:929
 #: kicad/pcm/pcm_task_manager.cpp:647
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
@@ -14193,13 +14193,13 @@ msgid "Done."
 msgstr "Fertig."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
-#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:896
+#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
 #: pcbnew/dialogs/dialog_plot.cpp:1122
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Plot in \"%s\" geschrieben."
 
-#: eeschema/sch_plotter.cpp:1036
+#: eeschema/sch_plotter.cpp:1035
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Konnte die Plotdateien nicht in dem Verzeichnis \"%s\" anlegen."
@@ -14237,7 +14237,7 @@ msgstr ""
 "Geben Sie das Python-Symbol ein, welches die SCH_PLUGIN::Symbol*()-"
 "Funktionen implementiert."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -14246,72 +14246,72 @@ msgstr ""
 "Der Dateiname für Blatt %s ist undefiniert; dies ist wahrscheinlich ein "
 "Altium-Signalbündel, welches in ein Schaltplanblatt umgewandelt wurde."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Datei nicht vollständig gelesen (%d Bytes verbleiben)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
 "Unbekannte oder unerwartete Datensatz-ID %d im Abschnitt \"Additional\" "
 "gefunden."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Datensatz \"IEEE_SYMBOL\" nicht behandelt."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
 msgid "Record 'PIECHART' not handled."
 msgstr "Datensatz \"PIECHART\" nicht behandelt."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
 msgid "Compile mask not currently supported."
 msgstr "Compile mask wird derzeit nicht unterstützt."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
 "Unbekannte oder unerwartete Datensatz-ID %d im Abschnitt \"FileHeader\" "
 "gefunden."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 "Symbol \"%s\" in Blatt \"%s\" bei Index %d ersetzt durch Symbol \"%s\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
 msgid "Pin has unexpected orientation."
 msgstr "Pin hat unerwartete Ausrichtung."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
 msgid "Pin has unexpected electrical type."
 msgstr "Pin hat unerwarteten elektrischen Typ."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
 msgid "Pin has unexpected outer edge type."
 msgstr "Pin hat unerwarteten outer edge type."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
 msgid "Pin has unexpected inner edge type."
 msgstr "Pin hat unerwarteten inner edge type."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezier hat %d Stützstellen. Mindestens 2 werden erwartet."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr ""
 "Nicht unterstützte Ellipse wurde nicht importiert bei (X = %d; Y = %d)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14320,16 +14320,16 @@ msgstr ""
 "Altiums Signalbündel-Anschluss (%s) wurde als hierarchisches Schaltplanblatt "
 "importiert. Bitte überprüfen Sie den importierten Schaltplan."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "Power Port mit unbekanntem Stil als 'Bar' importiert."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Spannungssymbol erstellt einen globalen Bezeichner mit Namen \"%s\""
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14338,23 +14338,23 @@ msgstr ""
 "Altiums Signalbündel-Port (%s) wurde als Textfeld importiert. Bitte "
 "überprüfen Sie den importierten Schaltplan."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Port %s ist nicht verbunden."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Eingebettete Datei %s nicht im Speicher gefunden."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
 #, c-format
 msgid "Error reading image %s."
 msgstr "Fehler beim Lesen des Bildes %s."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
 #, c-format
 msgid "File not found %s."
 msgstr "Datei \"%s\" nicht gefunden."
@@ -18549,11 +18549,11 @@ msgstr "Bus hat keine Mitglieder"
 msgid "Press <ESC> to cancel drawing."
 msgstr "<ESC> drücken, um den Zeichenvorgang abzubrechen."
 
-#: eeschema/tools/sch_move_tool.cpp:794
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel drag."
 msgstr "<ESC> drücken, um den Ziehvorgang abzubrechen."
 
-#: eeschema/tools/sch_move_tool.cpp:796
+#: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
 msgid "Press <ESC> to cancel move."
 msgstr "<ESC> drücken, um den Verschiebevorgang abzubrechen."
@@ -26282,14 +26282,6 @@ msgstr "\"Platinenkonfiguration...\"-Dialog anzeigen"
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Protokolldatei \"%s\" erstellt<br>"
-
-#: pcbnew/dialogs/dialog_drc.cpp:1142
-msgid "Do you wish to delete excluded markers as well?"
-msgstr "Möchten Sie auch ausgeschlossene Marker löschen?"
-
-#: pcbnew/dialogs/dialog_drc.cpp:1145
-msgid "Delete exclusions"
-msgstr "Ausschlüsse löschen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1285
 msgid "not run"
@@ -35998,24 +35990,24 @@ msgstr "Lade Zonenfüllungen..."
 msgid "Loading arcs..."
 msgstr "Lade Bögen..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2611
+#: pcbnew/plugins/altium/altium_pcb.cpp:2615
 msgid "Loading pads..."
 msgstr "Lade Pads..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2696
+#: pcbnew/plugins/altium/altium_pcb.cpp:2700
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "Footprint %s Pad %s ist nicht als mehrlagig markiert, ist jedoch ein TH-Pad."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2717
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "In Footprint %s hat Pad %s ein quadratisches Loch. KiCad unterstützt dies "
 "noch nicht."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2744
+#: pcbnew/plugins/altium/altium_pcb.cpp:2748
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -36024,25 +36016,25 @@ msgstr ""
 "In Footprint %s hat Pad %s eine Lochdrehung von %f°. KiCad unterstützt nur "
 "90°-Winkel."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2756
+#: pcbnew/plugins/altium/altium_pcb.cpp:2760
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Footprint %s Pad %s verwendet ein Loch von unbekannter Art %d."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2773
+#: pcbnew/plugins/altium/altium_pcb.cpp:2777
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Footprint %s Pad %s verwendet einen komplexen Padstack (noch nicht "
 "unterstützt)"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2810
+#: pcbnew/plugins/altium/altium_pcb.cpp:2814
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "Footprint %s Pad %s verwendet eine unbekannte Pad-Form."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2868
-#: pcbnew/plugins/altium/altium_pcb.cpp:2889
+#: pcbnew/plugins/altium/altium_pcb.cpp:2872
+#: pcbnew/plugins/altium/altium_pcb.cpp:2893
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -36051,34 +36043,34 @@ msgstr ""
 "Kupferloses Pad %s auf Altium-Lage %d hat kein KiCad-Äquivalent. Es wurden "
 "auf die KiCad-Lage auf Eco1_User verschoben."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2909
+#: pcbnew/plugins/altium/altium_pcb.cpp:2913
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Kupferloses Pad %s ist mit einem Netz verbunden. Dies wird nicht unterstützt."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2915
+#: pcbnew/plugins/altium/altium_pcb.cpp:2919
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Kupferloses Pad %s hat ein Loch. Dies wird nicht unterstützt."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2920
+#: pcbnew/plugins/altium/altium_pcb.cpp:2924
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Kupferloses Pad %s verwendet einen komplexen Padstack. Dies wird noch nicht "
 "unterstützt."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3062
+#: pcbnew/plugins/altium/altium_pcb.cpp:3066
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Nicht-Kupfer-Pad %s verwendet eine unbekannte Pad-Form."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3072
+#: pcbnew/plugins/altium/altium_pcb.cpp:3076
 msgid "Loading vias..."
 msgstr "Lade Vias..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3113
+#: pcbnew/plugins/altium/altium_pcb.cpp:3117
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -36086,25 +36078,25 @@ msgstr ""
 "Via von Lage %d bis %d verwendet eine Nicht-Kupfer-Schicht, was nicht "
 "unterstützt wird."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3132
+#: pcbnew/plugins/altium/altium_pcb.cpp:3136
 msgid "Loading tracks..."
 msgstr "Lade Leiterbahnen..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3300
+#: pcbnew/plugins/altium/altium_pcb.cpp:3308
 msgid "Loading unicode strings..."
 msgstr "Lade Unicode-Strings..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3314
+#: pcbnew/plugins/altium/altium_pcb.cpp:3322
 msgid "Loading text..."
 msgstr "Lade Text..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3343
-#: pcbnew/plugins/altium/altium_pcb.cpp:3356
+#: pcbnew/plugins/altium/altium_pcb.cpp:3351
+#: pcbnew/plugins/altium/altium_pcb.cpp:3364
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Barcode auf Altium-Lage %d ignoriert (noch nicht unterstützt)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3459
+#: pcbnew/plugins/altium/altium_pcb.cpp:3467
 msgid "Loading rectangles..."
 msgstr "Lade Rechtecke..."
 
@@ -41693,6 +41685,12 @@ msgstr "KiCad-Schaltplan"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-Leiterplatte"
+
+#~ msgid "Do you wish to delete excluded markers as well?"
+#~ msgstr "Möchten Sie auch ausgeschlossene Marker löschen?"
+
+#~ msgid "Delete exclusions"
+#~ msgstr "Ausschlüsse löschen"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "Kann Zeichenkette nicht lesen; Eingabe ist leer."

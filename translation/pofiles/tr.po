@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 10:06+0100\n"
+"POT-Creation-Date: 2024-02-09 15:58-0800\n"
 "PO-Revision-Date: 2024-01-30 19:02+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v7/tr/>\n"
@@ -5730,7 +5730,7 @@ msgstr "Dosya çıkarılırken hata oluştu!"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
 #: eeschema/sch_plotter.cpp:165 eeschema/sch_plotter.cpp:376
 #: eeschema/sch_plotter.cpp:520 eeschema/sch_plotter.cpp:731
-#: eeschema/sch_plotter.cpp:904 gerbview/export_to_pcbnew.cpp:68
+#: eeschema/sch_plotter.cpp:903 gerbview/export_to_pcbnew.cpp:68
 #: pagelayout_editor/files.cpp:214 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:884 pcbnew/dialogs/dialog_export_idf.cpp:222
@@ -8398,21 +8398,21 @@ msgid "Schematic is not fully annotated. ERC results will be incomplete."
 msgstr ""
 "Şematik tam olarak numaralandırılmış değil. ERC sonuçları eksik olacaktır."
 
-#: eeschema/dialogs/dialog_erc.cpp:300
+#: eeschema/dialogs/dialog_erc.cpp:300 pcbnew/dialogs/dialog_drc.cpp:1142
 msgid "Delete exclusions too?"
 msgstr "Dışlamalar da silinsin mi?"
 
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
-#: pcbnew/dialogs/dialog_drc.cpp:1143 pcbnew/dialogs/dialog_drc_base.cpp:212
+#: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Tüm İşaretçileri Sil"
 
-#: eeschema/dialogs/dialog_erc.cpp:302
+#: eeschema/dialogs/dialog_erc.cpp:302 pcbnew/dialogs/dialog_drc.cpp:1144
 msgid "Errors and Warnings Only"
 msgstr "Yalnızca Hatalar ve Uyarılar"
 
-#: eeschema/dialogs/dialog_erc.cpp:303
+#: eeschema/dialogs/dialog_erc.cpp:303 pcbnew/dialogs/dialog_drc.cpp:1145
 msgid "Errors, Warnings and Exclusions"
 msgstr "Hatalar, Uyarılar ve Dışlamalar"
 
@@ -14000,7 +14000,7 @@ msgstr "Takma Ad Üyeleri"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad Şema Düzenleyici"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1726
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Şematik boyutu"
@@ -14030,7 +14030,7 @@ msgstr ""
 "Şemalardan PCB oluşturmak / güncellemek için KiCad kabuğunu başlatın ve bir "
 "proje oluşturun."
 
-#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Şematik"
@@ -14075,7 +14075,7 @@ msgstr "[Kaydedilmemiş]"
 msgid "[no schematic loaded]"
 msgstr "[şematikten]"
 
-#: eeschema/sch_edit_frame.cpp:1749
+#: eeschema/sch_edit_frame.cpp:1747
 #, fuzzy, c-format
 msgid "Highlighted net: %s"
 msgstr "Vurgulanan öğeler"
@@ -14250,7 +14250,7 @@ msgid "Plotted to '%s'.\n"
 msgstr "'%s' olarak çizildi.\n"
 
 #: eeschema/sch_plotter.cpp:208 eeschema/sch_plotter.cpp:393
-#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:930
+#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:929
 #: kicad/pcm/pcm_task_manager.cpp:647
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
@@ -14260,13 +14260,13 @@ msgid "Done."
 msgstr "Tamamlandı."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
-#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:896
+#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
 #: pcbnew/dialogs/dialog_plot.cpp:1122
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "'%s' olarak çizildi."
 
-#: eeschema/sch_plotter.cpp:1036
+#: eeschema/sch_plotter.cpp:1035
 #, fuzzy, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "'%s' klasörüne çizim dosyaları yazılamadı."
@@ -14302,7 +14302,7 @@ msgid ""
 "Enter the python symbol which implements the SCH_PLUGIN::Symbol*() functions."
 msgstr "SCH_PLUGİN::Symbol*() işlevlerini uygulayan python sembolünü girin."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -14311,70 +14311,70 @@ msgstr ""
 "%s sayfasının dosya adı tanımsızdır, bu muhtemelen bir sayfaya dönüştürülen "
 "bir Altium sinyal demetidir."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Depolama dosyası tam olarak ayrıştırılmadı (%d bayt kaldı)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr "\"Ek\" bölümünde bilinmeyen veya beklenmeyen kayıt kimliği %d bulundu."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "'IEEE_SYMBOL' kaydı işlenmedi."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
 msgid "Record 'PIECHART' not handled."
 msgstr "'PİECHART' kaydı işlenmedi."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
 msgid "Compile mask not currently supported."
 msgstr "Derleme maskesi şu anda desteklenmiyor."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
 "Bilinmeyen veya beklenmeyen kayıt kimliği %d \"Dosya okuyucusu\" bölümünde "
 "bulundu."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
 #, fuzzy, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 "%d dizinindeki \"%s\" sayfasındaki \"%s\" sembolü, \"%s\" sembolü ile "
 "değiştirildi."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
 msgid "Pin has unexpected orientation."
 msgstr "Pın'in beklenmedik bir yönü var."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
 msgid "Pin has unexpected electrical type."
 msgstr "Pim beklenmedik bir elektrik tipine sahiptir."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
 msgid "Pin has unexpected outer edge type."
 msgstr "Pim beklenmedik dış kenar tipine sahiptir."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
 msgid "Pin has unexpected inner edge type."
 msgstr "Pim beklenmedik iç kenar tipine sahiptir."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezier'in %d kontrol noktaları var. En az 2 bekleniyor."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Desteklenmeyen elips içe aktarılmadı (X = %d; Y = %d)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
 #, fuzzy, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14383,18 +14383,18 @@ msgstr ""
 "Altium'un kablo demeti konnektörü (% s) hiyerarşik bir sayfa olarak içe "
 "aktarıldı. Lütfen içe aktarılan şemayı gözden geçirin."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
 "'Çubuk' türü olarak içe aktarılan bilinmeyen stile sahip güç bağlantı "
 "noktası."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
 #, fuzzy, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "'%s' genel kütüphane tablo yolu oluşturulamıyor."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14403,23 +14403,23 @@ msgstr ""
 "Altium'un kablo demeti bağlantı noktası (%s) metin kutusu olarak içe "
 "aktarıldı. Lütfen içe aktarılan şemayı gözden geçirin."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
 #, fuzzy, c-format
 msgid "Port %s has no connections."
 msgstr "Bölge %s ayak bağlantısı: %s."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
 #, fuzzy, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "'%s' kurtarma dosyası bulunamadı."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
 #, c-format
 msgid "Error reading image %s."
 msgstr "%s resmi okunurken hata oluştu."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
 #, c-format
 msgid "File not found %s."
 msgstr "Dosya bulunamadı %s."
@@ -18898,11 +18898,11 @@ msgstr "Otobüsün üyesi yok"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Çizimi iptal etmek için <ESC> tuşuna basın."
 
-#: eeschema/tools/sch_move_tool.cpp:794
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel drag."
 msgstr "Sürüklemeyi iptal etmek için <ESC> tuşuna basın."
 
-#: eeschema/tools/sch_move_tool.cpp:796
+#: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
 msgid "Press <ESC> to cancel move."
 msgstr "Taşımayı iptal etmek için <ESC> tuşuna basın."
@@ -27170,15 +27170,6 @@ msgstr "Şematik Kurulum... iletişim kutusunu açın"
 #, fuzzy, c-format
 msgid "Report file '%s' created<br>"
 msgstr "'%s' rapor dosyası oluşturuldu."
-
-#: pcbnew/dialogs/dialog_drc.cpp:1142
-msgid "Do you wish to delete excluded markers as well?"
-msgstr "Hariç tutulan işaretleyicileri de silmek istiyor musunuz?"
-
-#: pcbnew/dialogs/dialog_drc.cpp:1145
-#, fuzzy
-msgid "Delete exclusions"
-msgstr "Dışlamalar da silinsin mi?"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1285
 #, fuzzy
@@ -37248,45 +37239,45 @@ msgstr "Bölge dolguları yükleniyor..."
 msgid "Loading arcs..."
 msgstr "Yaylar yükleniyor..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2611
+#: pcbnew/plugins/altium/altium_pcb.cpp:2615
 msgid "Loading pads..."
 msgstr "Pedler yükleniyor..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2696
+#: pcbnew/plugins/altium/altium_pcb.cpp:2700
 #, fuzzy, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "but is a TH pad."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2717
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Ayak izi %s ped %s kare bir deliğe sahip (henüz desteklenmiyor)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2744
+#: pcbnew/plugins/altium/altium_pcb.cpp:2748
 #, fuzzy, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr "Ayak izi %s ped %s"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2756
+#: pcbnew/plugins/altium/altium_pcb.cpp:2760
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Ayak izi %s ped %s bilinmeyen türde bir %d delik kullanıyor."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2773
+#: pcbnew/plugins/altium/altium_pcb.cpp:2777
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Ayak izi %s ped %s karmaşık bir ped yığını kullanıyor (henüz desteklenmiyor.)"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2810
+#: pcbnew/plugins/altium/altium_pcb.cpp:2814
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "Ayak izi %s ped %s bilinmeyen bir ped şekli kullanıyor."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2868
-#: pcbnew/plugins/altium/altium_pcb.cpp:2889
+#: pcbnew/plugins/altium/altium_pcb.cpp:2872
+#: pcbnew/plugins/altium/altium_pcb.cpp:2893
 #, fuzzy, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -37295,56 +37286,56 @@ msgstr ""
 "KiCad eşdeğeri olmayan bir Altium katmanında (%d) bakır olmayan ped %s "
 "bulundu. Eco1_User KiCad katmanına taşındı."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2909
+#: pcbnew/plugins/altium/altium_pcb.cpp:2913
 #, fuzzy, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "which is not supported."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2915
+#: pcbnew/plugins/altium/altium_pcb.cpp:2919
 #, fuzzy, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "which is not supported."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2920
+#: pcbnew/plugins/altium/altium_pcb.cpp:2924
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Bakır olmayan ped %s'nin karmaşık bir ped yığını var (henüz desteklenmiyor)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3062
+#: pcbnew/plugins/altium/altium_pcb.cpp:3066
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Bakır olmayan ped %s bilinmeyen bir ped şekli kullanıyor."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3072
+#: pcbnew/plugins/altium/altium_pcb.cpp:3076
 msgid "Loading vias..."
 msgstr "Vias yükleniyor..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3113
+#: pcbnew/plugins/altium/altium_pcb.cpp:3117
 #, fuzzy, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "which is not supported."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3132
+#: pcbnew/plugins/altium/altium_pcb.cpp:3136
 msgid "Loading tracks..."
 msgstr "İzler yükleniyor..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3300
+#: pcbnew/plugins/altium/altium_pcb.cpp:3308
 msgid "Loading unicode strings..."
 msgstr "Unicode dizeler yükleniyor..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3314
+#: pcbnew/plugins/altium/altium_pcb.cpp:3322
 msgid "Loading text..."
 msgstr "Metin yükleniyor..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3343
-#: pcbnew/plugins/altium/altium_pcb.cpp:3356
+#: pcbnew/plugins/altium/altium_pcb.cpp:3351
+#: pcbnew/plugins/altium/altium_pcb.cpp:3364
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Altium %d katmanında barkod yok sayıldı (henüz desteklenmiyor)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3459
+#: pcbnew/plugins/altium/altium_pcb.cpp:3467
 msgid "Loading rectangles..."
 msgstr "Dikdörtgenler yükleniyor..."
 
@@ -43245,6 +43236,13 @@ msgstr "KiCad Şeması"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Baskılı Devre Kartı"
+
+#~ msgid "Do you wish to delete excluded markers as well?"
+#~ msgstr "Hariç tutulan işaretleyicileri de silmek istiyor musunuz?"
+
+#, fuzzy
+#~ msgid "Delete exclusions"
+#~ msgstr "Dışlamalar da silinsin mi?"
 
 #, fuzzy
 #~ msgid "Unable to read string, input is empty."

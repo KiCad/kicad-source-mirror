@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 10:06+0100\n"
+"POT-Creation-Date: 2024-02-09 15:58-0800\n"
 "PO-Revision-Date: 2024-01-28 12:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v7/pl/>\n"
@@ -5758,7 +5758,7 @@ msgstr "Błąd podczas rozpakowywania pliku!"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
 #: eeschema/sch_plotter.cpp:165 eeschema/sch_plotter.cpp:376
 #: eeschema/sch_plotter.cpp:520 eeschema/sch_plotter.cpp:731
-#: eeschema/sch_plotter.cpp:904 gerbview/export_to_pcbnew.cpp:68
+#: eeschema/sch_plotter.cpp:903 gerbview/export_to_pcbnew.cpp:68
 #: pagelayout_editor/files.cpp:214 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:884 pcbnew/dialogs/dialog_export_idf.cpp:222
@@ -8458,21 +8458,21 @@ msgstr ""
 "Schemat nie został w pełni ponumerowany. Wyniki działania kontroli ERC będą "
 "niekompletne."
 
-#: eeschema/dialogs/dialog_erc.cpp:300
+#: eeschema/dialogs/dialog_erc.cpp:300 pcbnew/dialogs/dialog_drc.cpp:1142
 msgid "Delete exclusions too?"
 msgstr "Usunąć również wykluczenia?"
 
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
-#: pcbnew/dialogs/dialog_drc.cpp:1143 pcbnew/dialogs/dialog_drc_base.cpp:212
+#: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Usuń wszystkie znaczniki"
 
-#: eeschema/dialogs/dialog_erc.cpp:302
+#: eeschema/dialogs/dialog_erc.cpp:302 pcbnew/dialogs/dialog_drc.cpp:1144
 msgid "Errors and Warnings Only"
 msgstr "Tylko błędy oraz ostrzeżenia"
 
-#: eeschema/dialogs/dialog_erc.cpp:303
+#: eeschema/dialogs/dialog_erc.cpp:303 pcbnew/dialogs/dialog_drc.cpp:1145
 msgid "Errors, Warnings and Exclusions"
 msgstr "Błędy, Ostrzeżenia i Wykluczenia"
 
@@ -13855,7 +13855,7 @@ msgstr "Zawartość aliasu magistrali %s"
 msgid "KiCad Schematic Editor"
 msgstr "Edytor Schematów programu KiCad"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1726
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
 msgid "Schematic Hierarchy"
 msgstr "Hierarchia schematów"
 
@@ -13883,7 +13883,7 @@ msgstr ""
 "samodzielna aplikacja. By utworzyć lub uaktualnić PCB na podstawie schematu "
 "należy uruchomić Menedżer Projektu oraz utworzyć projekt."
 
-#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schemat"
@@ -13926,7 +13926,7 @@ msgstr "[Nie zapisany]"
 msgid "[no schematic loaded]"
 msgstr "[nie załadowano schematu]"
 
-#: eeschema/sch_edit_frame.cpp:1749
+#: eeschema/sch_edit_frame.cpp:1747
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Podświetlona sieć: %s"
@@ -14097,7 +14097,7 @@ msgid "Plotted to '%s'.\n"
 msgstr "Narysowano w '%s'.\n"
 
 #: eeschema/sch_plotter.cpp:208 eeschema/sch_plotter.cpp:393
-#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:930
+#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:929
 #: kicad/pcm/pcm_task_manager.cpp:647
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
@@ -14107,13 +14107,13 @@ msgid "Done."
 msgstr "Gotowe."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
-#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:896
+#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
 #: pcbnew/dialogs/dialog_plot.cpp:1122
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Narysowano w '%s'."
 
-#: eeschema/sch_plotter.cpp:1036
+#: eeschema/sch_plotter.cpp:1035
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Nie mogę zapisać plików z rysunkami w folderze '%s'."
@@ -14151,7 +14151,7 @@ msgstr ""
 "Wprowadź symbol języka Python, który implementuje funkcje SCH_PLUGIN::"
 "Symbol*()."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -14160,72 +14160,72 @@ msgstr ""
 "Nazwa pliku dla arkusza %s nie jest zdefiniowana, prawdopodobnie jest to "
 "wiązka sygnałów Altium, która została skonwertowana na arkusz."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Zapisany plik nie został przetworzony w pełni (pozostało %d bajtów)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
 "Odnaleziono nieznany lub niespodziewany rekord o ID %d wewnątrz sekcji "
 "\"Additional\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Rekord 'IEEE_SYMBOL' nie został obsłużony."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
 msgid "Record 'PIECHART' not handled."
 msgstr "Rekord 'PIECHART' nie został obsłużony."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
 msgid "Compile mask not currently supported."
 msgstr "Kompilowana maska nie jest obecnie obsługiwana."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
 "Odnaleziono nieznany lub niespodziewany rekord ID %d w sekcji \"FileHeader\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 "Symbol \"%s\" na arkuszu \"%s\" o indeksie %d zastąpiony przez symbol \"%s\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
 msgid "Pin has unexpected orientation."
 msgstr "Pin posiada nieoczekiwaną orientację."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
 msgid "Pin has unexpected electrical type."
 msgstr "Pin posiada niespodziewany typ elektryczny."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
 msgid "Pin has unexpected outer edge type."
 msgstr "Pin ma nieoczekiwany typ krawędzi zewnętrznej."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
 msgid "Pin has unexpected inner edge type."
 msgstr "Pin ma nieoczekiwany typ krawędzi wewnętrznej."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr ""
 "Krzywa Beziera ma %d punktów kontrolnych. Spodziewano się przynajmniej 2 "
 "punktów."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Niewspierana elipsa nie została zaimportowana na (X = %d; Y = %d)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14234,17 +14234,17 @@ msgstr ""
 "Łącze wiązki przewodów Altium (%s) zostało zaimportowane jako arkusz "
 "hierarchiczny. Proszę przejrzeć zaimportowany schemat."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr ""
 "Port zasilania z nieznanym stylem zaimportowano jako styl grubej linii."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Symbol zasilania tworzy globalną etykietę z nazwą '%s'"
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14253,23 +14253,23 @@ msgstr ""
 "Port wiązki Altium (%s) został zaimportowany jako pole tekstowe. Proszę "
 "przejrzeć zaimportowany schemat."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Port %s nie ma połączeń."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Osadzony plik %s nie został znaleziony w magazynie."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
 #, c-format
 msgid "Error reading image %s."
 msgstr "Błąd podczas odczytywania obrazu %s."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
 #, c-format
 msgid "File not found %s."
 msgstr "Nie znaleziono pliku %s."
@@ -18436,11 +18436,11 @@ msgstr "Magistrala nie posiada sygnałów"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Naciśnij <ESC> by anulować rysowanie."
 
-#: eeschema/tools/sch_move_tool.cpp:794
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel drag."
 msgstr "Naciśnij <ESC> by anulować przeciąganie."
 
-#: eeschema/tools/sch_move_tool.cpp:796
+#: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
 msgid "Press <ESC> to cancel move."
 msgstr "Naciśnij <ESC> by anulować przesuwanie."
@@ -26125,14 +26125,6 @@ msgstr "Otwiera okno dialogowe Ustawienia płytki"
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Plik raportu '%s' został utworzony<br>"
-
-#: pcbnew/dialogs/dialog_drc.cpp:1142
-msgid "Do you wish to delete excluded markers as well?"
-msgstr "Czy chcesz również usunąć wykluczone znaczniki?"
-
-#: pcbnew/dialogs/dialog_drc.cpp:1145
-msgid "Delete exclusions"
-msgstr "Usuń wykluczenia"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1285
 msgid "not run"
@@ -35773,24 +35765,24 @@ msgstr "Wczytywanie wypełnień strefy..."
 msgid "Loading arcs..."
 msgstr "Wczytywanie łuków..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2611
+#: pcbnew/plugins/altium/altium_pcb.cpp:2615
 msgid "Loading pads..."
 msgstr "Wczytywanie pól lutowniczych..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2696
+#: pcbnew/plugins/altium/altium_pcb.cpp:2700
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "W footprincie %s pole %s nie jest oznaczone jako wielowarstwowe, choć jest "
 "to pole z otworem na wylot."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2717
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Footprint %s z polem %s posiada kwadratowy otwór (obecnie nie wspierany)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2744
+#: pcbnew/plugins/altium/altium_pcb.cpp:2748
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35799,25 +35791,25 @@ msgstr ""
 "Footprint %s posiada otwór w polu %s obrócony o %f stopni. KiCad wspiera "
 "obrót tylko o 90 stopni."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2756
+#: pcbnew/plugins/altium/altium_pcb.cpp:2760
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "W footprincie %s pole %s używa otworu o nieznanym typie %d."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2773
+#: pcbnew/plugins/altium/altium_pcb.cpp:2777
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspierany) dla "
 "pola %s"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2810
+#: pcbnew/plugins/altium/altium_pcb.cpp:2814
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "W footprincie %s pole %s używa nieznanego kształtu."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2868
-#: pcbnew/plugins/altium/altium_pcb.cpp:2889
+#: pcbnew/plugins/altium/altium_pcb.cpp:2872
+#: pcbnew/plugins/altium/altium_pcb.cpp:2893
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35826,36 +35818,36 @@ msgstr ""
 "Pole %s nie będące polem miedzi na warstwie Altium %d nie ma odpowiednika w "
 "programie KiCad. Zamiast tego umieszczono go na Eco1_User."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2909
+#: pcbnew/plugins/altium/altium_pcb.cpp:2913
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Pole nie będące polem miedzi %s należy do jednej z sieci, co nie jest "
 "obsługiwane."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2915
+#: pcbnew/plugins/altium/altium_pcb.cpp:2919
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr ""
 "Pole nie będące polem miedzi %s posiada otwór, co nie jest obsługiwane."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2920
+#: pcbnew/plugins/altium/altium_pcb.cpp:2924
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Pole nie będące polem miedzi %s używa skomplikowanego stosu warstw (obecnie "
 "nie obsługiwane)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3062
+#: pcbnew/plugins/altium/altium_pcb.cpp:3066
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Pole nie będące polem miedzi %s używa nieznanego kształtu pola."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3072
+#: pcbnew/plugins/altium/altium_pcb.cpp:3076
 msgid "Loading vias..."
 msgstr "Wczytywanie przelotek..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3113
+#: pcbnew/plugins/altium/altium_pcb.cpp:3117
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -35863,25 +35855,25 @@ msgstr ""
 "Przelotka pomiędzy warstwami %d a %d używa warstwy nie będącą warstwą "
 "sygnałową, co nie jest jeszcze obsługiwane."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3132
+#: pcbnew/plugins/altium/altium_pcb.cpp:3136
 msgid "Loading tracks..."
 msgstr "Wczytywanie ścieżek..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3300
+#: pcbnew/plugins/altium/altium_pcb.cpp:3308
 msgid "Loading unicode strings..."
 msgstr "Wczytywanie treści Unicode..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3314
+#: pcbnew/plugins/altium/altium_pcb.cpp:3322
 msgid "Loading text..."
 msgstr "Wczytywanie tekstu..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3343
-#: pcbnew/plugins/altium/altium_pcb.cpp:3356
+#: pcbnew/plugins/altium/altium_pcb.cpp:3351
+#: pcbnew/plugins/altium/altium_pcb.cpp:3364
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ignoruję kod kreskowy na warstwie Altium %d (obecnie nie wspierany)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3459
+#: pcbnew/plugins/altium/altium_pcb.cpp:3467
 msgid "Loading rectangles..."
 msgstr "Wczytywanie prostokątów..."
 
@@ -41441,6 +41433,12 @@ msgstr "Schemat KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Obwód drukowany KiCad"
+
+#~ msgid "Do you wish to delete excluded markers as well?"
+#~ msgstr "Czy chcesz również usunąć wykluczone znaczniki?"
+
+#~ msgid "Delete exclusions"
+#~ msgstr "Usuń wykluczenia"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "Nie można odczytać ciągu, jest pusty."

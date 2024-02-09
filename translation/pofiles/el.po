@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 10:06+0100\n"
+"POT-Creation-Date: 2024-02-09 15:58-0800\n"
 "PO-Revision-Date: 2024-01-20 23:01+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v7/el/>\n"
@@ -5794,7 +5794,7 @@ msgstr "Σφάλμα εξαγωγής αρχείου!"
 #: eeschema/netlist_exporters/netlist_exporter_orcadpcb2.cpp:52
 #: eeschema/sch_plotter.cpp:165 eeschema/sch_plotter.cpp:376
 #: eeschema/sch_plotter.cpp:520 eeschema/sch_plotter.cpp:731
-#: eeschema/sch_plotter.cpp:904 gerbview/export_to_pcbnew.cpp:68
+#: eeschema/sch_plotter.cpp:903 gerbview/export_to_pcbnew.cpp:68
 #: pagelayout_editor/files.cpp:214 pcbnew/build_BOM_from_board.cpp:101
 #: pcbnew/dialogs/dialog_board_statistics.cpp:656
 #: pcbnew/dialogs/dialog_drc.cpp:884 pcbnew/dialogs/dialog_export_idf.cpp:222
@@ -8494,21 +8494,21 @@ msgstr ""
 "Το Σχηματικό δεν είναι πλήρως ονοματισμένο. Τα αποτελέσματα ERC θα είναι "
 "ελλιπή."
 
-#: eeschema/dialogs/dialog_erc.cpp:300
+#: eeschema/dialogs/dialog_erc.cpp:300 pcbnew/dialogs/dialog_drc.cpp:1142
 msgid "Delete exclusions too?"
 msgstr "Διαγραφή και των εξαιρέσεων;"
 
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
-#: pcbnew/dialogs/dialog_drc.cpp:1143 pcbnew/dialogs/dialog_drc_base.cpp:212
+#: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
 msgid "Delete All Markers"
 msgstr "Διαγραφή Όλων των Σημαδιών"
 
-#: eeschema/dialogs/dialog_erc.cpp:302
+#: eeschema/dialogs/dialog_erc.cpp:302 pcbnew/dialogs/dialog_drc.cpp:1144
 msgid "Errors and Warnings Only"
 msgstr "Σφάλματα και Προειδοποιήσεις Μόνο"
 
-#: eeschema/dialogs/dialog_erc.cpp:303
+#: eeschema/dialogs/dialog_erc.cpp:303 pcbnew/dialogs/dialog_drc.cpp:1145
 msgid "Errors, Warnings and Exclusions"
 msgstr "Σφάλματα, Προειδοποιήσεις και Εξαιρέσεις"
 
@@ -13912,7 +13912,7 @@ msgstr "Μέλη Συνώνυμου Διαύλου %s"
 msgid "KiCad Schematic Editor"
 msgstr "Επεξεργαστής Σχηματικού KiCad"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1726
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
 msgid "Schematic Hierarchy"
 msgstr "Ιεραρχία Σχηματικού"
 
@@ -13940,7 +13940,7 @@ msgstr ""
 "αυτόνομη λειτουργία. Για να είναι εφικτή η δημιουργία/ενημέρωση των PCB από "
 "σχηματικά , πρέπει να εκτελέσετε το Kicad και να δημιουργήσετε ένα έργο."
 
-#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1028
+#: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Σχηματικό"
@@ -13981,7 +13981,7 @@ msgstr "[Μη σωσμένο]"
 msgid "[no schematic loaded]"
 msgstr "[δεν φορτώθηκε σχηματικό]"
 
-#: eeschema/sch_edit_frame.cpp:1749
+#: eeschema/sch_edit_frame.cpp:1747
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Τονισμένο δίκτυο: %s"
@@ -14152,7 +14152,7 @@ msgid "Plotted to '%s'.\n"
 msgstr "Αποτυχία φορτώματος \"%s\"\n"
 
 #: eeschema/sch_plotter.cpp:208 eeschema/sch_plotter.cpp:393
-#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:930
+#: eeschema/sch_plotter.cpp:748 eeschema/sch_plotter.cpp:929
 #: kicad/pcm/pcm_task_manager.cpp:647
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
@@ -14162,13 +14162,13 @@ msgid "Done."
 msgstr "Έγινε."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
-#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:896
+#: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
 #: pcbnew/dialogs/dialog_plot.cpp:1122
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Σχεδιογραφήθηκε στο '%s'."
 
-#: eeschema/sch_plotter.cpp:1036
+#: eeschema/sch_plotter.cpp:1035
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Δεν ήταν δυνατή η εγγραφή αρχείων σχεδιογράφησης στον φάκελο '%s'."
@@ -14207,7 +14207,7 @@ msgstr ""
 "Εισάγετε το σύμβολο python που υλοποιεί τις συναρτήσεις SCH_PLUGIN::"
 "Symbol*() ."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -14216,72 +14216,72 @@ msgstr ""
 "Αόριστο όνομα αρχείου %s, πιθανό κάποιο signal harness του Altium που "
 "μετατράπηκε σε φύλλο."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Το αρχείο αποθήκευσης δεν έχει αναλυθεί πλήρως (απομένουν %d byte)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
 "Άγνωστη ή μη αναμενόμενη καταγραφή ID %d βρέθηκε εντός του τμήματος "
 "\"Additional\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Μη διαχειρίσιμη καταγραφή 'IEEE_SYMBOL'."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
 msgid "Record 'PIECHART' not handled."
 msgstr "Μη διαχειρίσιμη καταγραφή 'PIECHART'."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
 msgid "Compile mask not currently supported."
 msgstr "Δεν υποστηρίζεται το compile mask."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
 "Άγνωστο ή μη αναμενόμενο αναγνωριστικό καταγραφής %d βρέθηκε μέσα στην "
 "ενότητα \"FileHeader\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr ""
 "Το σύμβολο \"%s\" στο φύλλο \"%s\" στον δείκτη %d αντικαταστάθηκε με το "
 "σύμβολο \"%s\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
 msgid "Pin has unexpected orientation."
 msgstr "Ακροδέκτης με μη αναμενόμενο προσανατολισμό."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
 msgid "Pin has unexpected electrical type."
 msgstr "Ακροδέκτης με μη αναμενόμενο ηλεκτρικό τύπο."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
 msgid "Pin has unexpected outer edge type."
 msgstr "Ο ακροδέκτης έχει μη αναμενόμενο τύπο εξωτερικού άκρου."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
 msgid "Pin has unexpected inner edge type."
 msgstr "Ο ακροδέκτης έχει μη αναμενόμενο τύπο εσωτερικού άκρου."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Η καμπύλη Μπεζιέ έχει %d σημεία ελέγχου. Τουλάχιστον 2 αναμένονται."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Μη υποστηριζόμενη έλλειψη δεν εισήχθη στο (X = %d; Y = %d)."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14290,16 +14290,16 @@ msgstr ""
 "Ο harness connector (%s) του Altium εισάχθηκε ως ιεραρχικό φύλλο. Πρέπει να "
 "ελεχθεί το σχηματικό που εισάχθηκε."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "Αγνώστου στυλ θύρα τροφοδοσίας εισήχθη με τύπο 'Bar'."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Το power symbol δημιουργεί μια καθολική ετικέτα με το όνομα '%s'"
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14308,23 +14308,23 @@ msgstr ""
 "Το harness port (%s) του Altium εισάχθηκε ως Πλαίσιο Κειμένου. Πρέπει να "
 "ελεχθεί το σχηματικό που εισάχθηκε."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Η θύρα %s δεν έχει συνδέσεις."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Δεν βρέθηκε το αρχείο επαναφοράς \"%s\"."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
 #, c-format
 msgid "Error reading image %s."
 msgstr "Σφάλμα ανάγνωσης εικόνας %s."
 
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
 #, c-format
 msgid "File not found %s."
 msgstr "Το αρχείο δεν βρέθηκε %s."
@@ -18506,11 +18506,11 @@ msgstr "Ο δίαυλος δεν έχει μέλη"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Πατήστε <ESC> για ακύρωση σχεδίασης."
 
-#: eeschema/tools/sch_move_tool.cpp:794
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel drag."
 msgstr "Πατήστε <ESC> για ακύρωση συρσίματος."
 
-#: eeschema/tools/sch_move_tool.cpp:796
+#: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
 msgid "Press <ESC> to cancel move."
 msgstr "Πατήστε <ESC> για ακύρωση μετακίνησης."
@@ -26226,14 +26226,6 @@ msgstr "Άνοιγμα διαλόγου Ρύθμιση Πλακέτας"
 #, c-format
 msgid "Report file '%s' created<br>"
 msgstr "Δημιουργήθηκε αρχείο αναφοράς '%s' <br>"
-
-#: pcbnew/dialogs/dialog_drc.cpp:1142
-msgid "Do you wish to delete excluded markers as well?"
-msgstr "Διαγραφή μη αναφερθέντων σημάνσεων σε αυτό το φύλλο;"
-
-#: pcbnew/dialogs/dialog_drc.cpp:1145
-msgid "Delete exclusions"
-msgstr "Διαγραφή εξαιρέσεων"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1285
 msgid "not run"
@@ -35942,24 +35934,24 @@ msgstr "Φόρτωση γεμίσματος ζωνών..."
 msgid "Loading arcs..."
 msgstr "Φόρτωση τόξων..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2611
+#: pcbnew/plugins/altium/altium_pcb.cpp:2615
 msgid "Loading pads..."
 msgstr "Φόρτωση εδρών..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2696
+#: pcbnew/plugins/altium/altium_pcb.cpp:2700
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "Το αποτύπωμα %s έδρα %s δεν έχει επισημανθεί ως πολλαπλών επιπέδων, αλλά "
 "είναι έδρα TH/διαμπερής."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2717
+#: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "Η έδρα '%s' του αποτυπώματος %s έχει τετράγωνη οπή (δεν υποστηρίζεται ακόμη)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2744
+#: pcbnew/plugins/altium/altium_pcb.cpp:2748
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35968,25 +35960,25 @@ msgstr ""
 "Στο αποτύπωμα %s, έδρα %s, υπάρχει περιστραμμένη τρύπα κατά %f μοίρες. Το "
 "KiCad υποστηρίζει μόνο περιστροφές 90 μοιρών."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2756
+#: pcbnew/plugins/altium/altium_pcb.cpp:2760
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Το αποτύπωμα %s έδρα %s χρησιμοποιεί μια τρύπα αγνώστου είδους %d."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2773
+#: pcbnew/plugins/altium/altium_pcb.cpp:2777
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "Το αποτύπωμα %s με έδρες %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
 "οποία δεν υποστηρίζεται ακόμη.)"
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2810
+#: pcbnew/plugins/altium/altium_pcb.cpp:2814
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "Το αποτύπωμα %s έδρα %s χρησιμοποιεί ένα άγνωστο σχήμα έδρας."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2868
-#: pcbnew/plugins/altium/altium_pcb.cpp:2889
+#: pcbnew/plugins/altium/altium_pcb.cpp:2872
+#: pcbnew/plugins/altium/altium_pcb.cpp:2893
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35995,35 +35987,35 @@ msgstr ""
 "Μη χάλκινη έδρα %s στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο KiCad. "
 "Τοποθέτηση στο επίπεδο Eco1_User."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2909
+#: pcbnew/plugins/altium/altium_pcb.cpp:2913
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "Η μη χάλκινη έδρα %s είναι συνδεδεμένη σε ένα δίκτυο, κάτι το οποίο δεν "
 "υποστηρίζεται."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2915
+#: pcbnew/plugins/altium/altium_pcb.cpp:2919
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Η μη χάλκινη έδρα '%s' έχει τρύπα, αυτό δεν υποστηρίζεται."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:2920
+#: pcbnew/plugins/altium/altium_pcb.cpp:2924
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Η μη χάλκινη έδρα '%s' χρησιμοποιεί μια σύνθετη στοίβαξη έδρας (δεν "
 "υποστηρίζεται ακόμα)."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3062
+#: pcbnew/plugins/altium/altium_pcb.cpp:3066
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Η μη χάλκινη έδρα %s χρησιμοποιεί ένα άγνωστο σχήμα έδρας."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3072
+#: pcbnew/plugins/altium/altium_pcb.cpp:3076
 msgid "Loading vias..."
 msgstr "Φόρτωση διελεύσεων..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3113
+#: pcbnew/plugins/altium/altium_pcb.cpp:3117
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -36031,27 +36023,27 @@ msgstr ""
 "Η διέλευση από το επίπεδο %d στο %d χρησιμοποιεί ένα μη χάλκινο επίπεδο, το "
 "οποίο δεν υποστηρίζεται."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3132
+#: pcbnew/plugins/altium/altium_pcb.cpp:3136
 msgid "Loading tracks..."
 msgstr "Φόρτωση διαδρόμων..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3300
+#: pcbnew/plugins/altium/altium_pcb.cpp:3308
 msgid "Loading unicode strings..."
 msgstr "Φόρτωση unicode αλφαριθμητικών..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3314
+#: pcbnew/plugins/altium/altium_pcb.cpp:3322
 msgid "Loading text..."
 msgstr "Φόρτωση κειμένου..."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3343
-#: pcbnew/plugins/altium/altium_pcb.cpp:3356
+#: pcbnew/plugins/altium/altium_pcb.cpp:3351
+#: pcbnew/plugins/altium/altium_pcb.cpp:3364
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
 "Παράβλεψη γραμμωτού κώδικα στο επίπεδο του Altium %d επειδή δεν "
 "υποστηρίζεται αυτήν τη στιγμή."
 
-#: pcbnew/plugins/altium/altium_pcb.cpp:3459
+#: pcbnew/plugins/altium/altium_pcb.cpp:3467
 msgid "Loading rectangles..."
 msgstr "Φόρτωση ορθογώνιων..."
 
@@ -41618,6 +41610,12 @@ msgstr "Σχηματικό KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:27
 msgid "KiCad Printed Circuit Board"
 msgstr "Πλακέτα Τυπωμένου Κυκλώματος KiCad"
+
+#~ msgid "Do you wish to delete excluded markers as well?"
+#~ msgstr "Διαγραφή μη αναφερθέντων σημάνσεων σε αυτό το φύλλο;"
+
+#~ msgid "Delete exclusions"
+#~ msgstr "Διαγραφή εξαιρέσεων"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "Αδυναμία ανάγνωσης χαρακτήρα κειμενου, κενή είσοδος."

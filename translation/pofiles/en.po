@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-01 10:06+0100\n"
+"POT-Creation-Date: 2024-02-09 15:58-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -18057,12 +18057,6 @@ msgstr "Open the Board Setup... dialog"
 msgid "Report file '%s' created<br>"
 msgstr "Report file '%s' created<br>"
 
-msgid "Do you wish to delete excluded markers as well?"
-msgstr "Do you wish to delete excluded markers as well?"
-
-msgid "Delete exclusions"
-msgstr "Delete exclusions"
-
 msgid "not run"
 msgstr "not run"
 
@@ -29468,6 +29462,12 @@ msgstr "KiCad Schematic"
 
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Printed Circuit Board"
+
+#~ msgid "Do you wish to delete excluded markers as well?"
+#~ msgstr "Do you wish to delete excluded markers as well?"
+
+#~ msgid "Delete exclusions"
+#~ msgstr "Delete exclusions"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "Unable to read string, input is empty."
