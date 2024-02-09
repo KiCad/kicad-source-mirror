@@ -36,4 +36,46 @@
             <match type="string" offset="0" value="PCBNEW-BOARD"/>
         </magic>
     </mime-type>
+    <mime-type type="application/x-kicad-footprint">
+        <sub-class-of type="text/plain"/>
+        <comment>KiCad Footprint</comment>
+        <generic-icon name="@KICAD_MIME_ICON_PREFIX@application-x-kicad-footprint"/>
+        <glob pattern="*.kicad_mod" weight="50"/>
+        <magic priority="50">
+            <!--The new fp file (.kicad_mod) header-->
+            <match type="string" offset="0" value="(footprint"/>
+        </magic>
+        <magic priority="40">
+            <!--The old board file (.mod) header-->
+            <match type="string" offset="0" value="PCBNEW-LibModule"/>
+        </magic>
+    </mime-type>
+    <mime-type type="application/x-kicad-symbol">
+        <sub-class-of type="text/plain"/>
+        <comment>KiCad Schematic Symbol</comment>
+        <generic-icon name="@KICAD_MIME_ICON_PREFIX@application-x-kicad-symbol"/>
+        <glob pattern="*.kicad_sym" weight="50"/>
+        <magic priority="50">
+            <!--The new sym file (.kicad_sym) header-->
+            <match type="string" offset="0" value="(kicad_symbol_lib"/>
+        </magic>
+        <magic priority="40">
+            <!--The old sym lib file (.lib) header-->
+            <match type="string" offset="0" value="EESchema-LIBRARY"/>
+        </magic>
+    </mime-type>
+    <mime-type type="application/x-kicad-worksheet">
+        <sub-class-of type="text/plain"/>
+        <comment>KiCad Drawing Sheet</comment>
+        <generic-icon name="@KICAD_MIME_ICON_PREFIX@application-x-kicad-worksheet"/>
+        <glob pattern="*.kicad_wks" weight="50"/>
+        <magic priority="50">
+            <!--The new wks file (.kicad_wks) header-->
+            <match type="string" offset="0" value="(kicad_wks"/>
+        </magic>
+        <magic priority="40">
+            <!--The old style worksheet file header-->
+            <match type="string" offset="0" value="(page_layout"/>
+        </magic>
+    </mime-type>
 </mime-info>
