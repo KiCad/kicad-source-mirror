@@ -350,6 +350,8 @@ void SCH_SYMBOL::UpdatePins()
 
         if( !pin->GetAlt().IsEmpty() )
             altPinMap[ pin->GetNumber() ] = pin->GetAlt();
+
+        pin->SetLibPin( nullptr );
     }
 
     m_pinMap.clear();
