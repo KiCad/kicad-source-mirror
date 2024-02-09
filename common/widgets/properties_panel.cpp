@@ -362,6 +362,9 @@ bool PROPERTIES_PANEL::extractValueAndWritability( const SELECTION& aSelection,
         if( !propMgr.IsAvailableFor( TYPE_HASH( *item ), aProperty, item ) )
             return false;
 
+        if( aProperty->IsHiddenFromPropertiesManager() )
+            return false;
+
         // If read-only for any of the selection, read-only for the whole selection.
         if( !propMgr.IsWriteableFor( TYPE_HASH( *item ), aProperty, item ) )
             aWritable = false;
