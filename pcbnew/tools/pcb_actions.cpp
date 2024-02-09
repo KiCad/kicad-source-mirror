@@ -2413,7 +2413,7 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( TOOL_ACTION_ARGS()
         .LegacyHotkeyName( "Drag Item" )
         .FriendlyName( _( "Drag Free Angle" ) )
         .Tooltip( _( "Drags the nearest joint in the track without restricting the track angle." ) )
-        .Icon( BITMAPS::drag ) );
+        .Icon( BITMAPS::drag_segment ) );
 
 
 // GENERATOR_TOOL

@@ -246,7 +246,7 @@ set( BMAPS_MID
     distribute_horizontal
     distribute_vertical
     down
-    drag
+    drag_segment
     drag_segment_withslope
     drc
     duplicate

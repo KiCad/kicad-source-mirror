@@ -445,7 +445,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_24.png" ), 24, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_24.png" ), 24, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_24.png" ), 24, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_24.png" ), 24, wxT( "light" ) );
@@ -842,7 +842,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_dark_24.png" ), 24, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_dark_24.png" ), 24, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_dark_24.png" ), 24, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_dark_24.png" ), 24, wxT( "dark" ) );
@@ -1239,7 +1239,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_16.png" ), 16, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_16.png" ), 16, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_16.png" ), 16, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_16.png" ), 16, wxT( "light" ) );
@@ -1636,7 +1636,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_dark_16.png" ), 16, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_dark_16.png" ), 16, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_dark_16.png" ), 16, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_dark_16.png" ), 16, wxT( "dark" ) );
@@ -2033,7 +2033,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_32.png" ), 32, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_32.png" ), 32, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_32.png" ), 32, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_32.png" ), 32, wxT( "light" ) );
@@ -2430,7 +2430,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_dark_32.png" ), 32, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_dark_32.png" ), 32, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_dark_32.png" ), 32, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_dark_32.png" ), 32, wxT( "dark" ) );
@@ -2827,7 +2827,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_48.png" ), 48, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_48.png" ), 48, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_48.png" ), 48, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_48.png" ), 48, wxT( "light" ) );
@@ -3224,7 +3224,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_dark_48.png" ), 48, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_dark_48.png" ), 48, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_dark_48.png" ), 48, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_dark_48.png" ), 48, wxT( "dark" ) );
@@ -3621,7 +3621,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_64.png" ), 64, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_64.png" ), 64, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_64.png" ), 64, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_64.png" ), 64, wxT( "light" ) );
@@ -4018,7 +4018,7 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::distribute_horizontal].emplace_back( BITMAPS::distribute_horizontal, wxT( "distribute_horizontal_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::distribute_vertical].emplace_back( BITMAPS::distribute_vertical, wxT( "distribute_vertical_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::down].emplace_back( BITMAPS::down, wxT( "down_dark_64.png" ), 64, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::drag].emplace_back( BITMAPS::drag, wxT( "drag_dark_64.png" ), 64, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::drag_segment].emplace_back( BITMAPS::drag_segment, wxT( "drag_segment_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drag_segment_withslope].emplace_back( BITMAPS::drag_segment_withslope, wxT( "drag_segment_withslope_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::drc].emplace_back( BITMAPS::drc, wxT( "drc_dark_64.png" ), 64, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::duplicate].emplace_back( BITMAPS::duplicate, wxT( "duplicate_dark_64.png" ), 64, wxT( "dark" ) );
