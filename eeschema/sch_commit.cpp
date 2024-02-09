@@ -509,7 +509,6 @@ void SCH_COMMIT::Revert()
                 view->Remove( item );
 
             item->SwapData( copy );
-            item->SetConnectivityDirty();
 
             // Special cases for items which have instance data
             if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T
@@ -525,10 +524,13 @@ void SCH_COMMIT::Revert()
                 }
             }
 
+            // This must be called before any calls that require stable object pointers.
+            screen->Update( item );
+
+            item->SetConnectivityDirty();
+
             if( view )
                 view->Add( item );
-
-            screen->Update( item );
 
             delete copy;
             break;
