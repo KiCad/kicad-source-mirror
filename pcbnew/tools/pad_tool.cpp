@@ -679,12 +679,7 @@ int PAD_TOOL::EditPad( const TOOL_EVENT& aEvent )
         BOARD_COMMIT commit( frame() );
 
         commit.Modify( pad );
-
-        std::vector<PCB_SHAPE*> newShapes = explodePad( pad, &layer );
-
-        for( PCB_SHAPE* shape : newShapes )
-            commit.Added( shape );
-
+        explodePad( pad, &layer, commit );
         commit.Push( _( "Edit Pad" ) );
 
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -803,10 +798,8 @@ void PAD_TOOL::ExitPadEditMode()
 }
 
 
-std::vector<PCB_SHAPE*> PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer )
+void PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer, BOARD_COMMIT& aCommit )
 {
-    std::vector<PCB_SHAPE*> createdShapes;
-
     if( aPad->IsOnLayer( F_Cu ) )
         *aLayer = F_Cu;
     else if( aPad->IsOnLayer( B_Cu ) )
@@ -833,9 +826,7 @@ std::vector<PCB_SHAPE*> PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer )
                     shape->SetWidth( pcbIUScale.mmToIU( ZONE_THERMAL_RELIEF_COPPER_WIDTH_MM ) );
             }
 
-            board()->GetFirstFootprint()->Add( shape );
-            frame()->GetCanvas()->GetView()->Add( shape );
-            createdShapes.push_back( shape );
+            aCommit.Add( shape );
         }
 
         aPad->SetShape( aPad->GetAnchorPadShape() );
@@ -844,8 +835,6 @@ std::vector<PCB_SHAPE*> PAD_TOOL::explodePad( PAD* aPad, PCB_LAYER_ID* aLayer )
 
     aPad->SetFlags( ENTERED );
     m_editPad = aPad->m_Uuid;
-
-    return createdShapes;
 }
 
 
