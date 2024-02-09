@@ -380,10 +380,26 @@ public:
     PNS::MEANDER_SETTINGS& GetSettings() { return m_settings; }
 
     int  GetMinAmplitude() const { return m_settings.m_minAmplitude; }
-    void SetMinAmplitude( int aValue ) { m_settings.m_minAmplitude = aValue; }
+    void SetMinAmplitude( int aValue )
+    {
+        aValue = std::max( aValue, 0 );
+
+        m_settings.m_minAmplitude = aValue;
+
+        if( m_settings.m_maxAmplitude < m_settings.m_minAmplitude )
+            m_settings.m_maxAmplitude = m_settings.m_minAmplitude;
+    }
 
     int  GetMaxAmplitude() const { return m_settings.m_maxAmplitude; }
-    void SetMaxAmplitude( int aValue ) { m_settings.m_maxAmplitude = aValue; }
+    void SetMaxAmplitude( int aValue )
+    {
+        aValue = std::max( aValue, 0 );
+
+        m_settings.m_maxAmplitude = aValue;
+
+        if( m_settings.m_maxAmplitude < m_settings.m_minAmplitude )
+            m_settings.m_minAmplitude = m_settings.m_maxAmplitude;
+    }
 
     PNS::MEANDER_SIDE GetInitialSide() const { return m_settings.m_initialSide; }
     void              SetInitialSide( PNS::MEANDER_SIDE aValue ) { m_settings.m_initialSide = aValue; }

@@ -284,12 +284,15 @@ int MEANDER_SHAPE::MinAmplitude() const
 {
     int minAmplitude = Settings().m_minAmplitude;
 
-    // DP meanders don't really support smaller amplitudes
-    minAmplitude = std::max( minAmplitude, std::abs( m_baselineOffset ) * 2 );
-
-    // The path length won't be correct with very small arcs
     if( m_placer->MeanderSettings().m_cornerStyle == MEANDER_STYLE_ROUND )
-        minAmplitude = std::max( minAmplitude, m_width + std::abs( m_baselineOffset ) * 2 );
+    {
+        minAmplitude = std::max( minAmplitude, std::abs( m_baselineOffset ) + m_width );
+    }
+    else
+    {
+        int correction = m_width * tan( 1 - tan( DEG2RAD( 22.5 ) ) );
+        minAmplitude = std::max( minAmplitude, std::abs( m_baselineOffset ) + correction );
+    }
 
     return minAmplitude;
 }
@@ -297,15 +300,25 @@ int MEANDER_SHAPE::MinAmplitude() const
 
 int MEANDER_SHAPE::cornerRadius() const
 {
+    int minCr = 0;
+
+    if( m_placer->MeanderSettings().m_cornerStyle == MEANDER_STYLE_ROUND )
+        minCr = std::abs( m_baselineOffset ) + m_width / 2;
+    else
+        minCr = std::abs( m_baselineOffset ) + m_width / 2 * ( 1 - tan( DEG2RAD( 22.5 ) ) );
+
+    int maxCr1 = ( m_amplitude + std::abs( m_baselineOffset ) ) / 2;
+    int maxCr2 = spacing() / 2;
+    int maxCr = std::min( maxCr1, maxCr2 );
+
+    wxCHECK2_MSG( maxCr >= minCr, return maxCr,
+                  wxString::Format( "cornerRadius %d < %d amp %d spc %d w %d off %d", maxCr, minCr,
+                                    m_amplitude, spacing(), m_width, m_baselineOffset ) );
+
     int rPercent = Settings().m_cornerRadiusPercentage;
     int optCr = static_cast<int>( static_cast<SEG::ecoord>( spacing() ) * rPercent / 200 );
-    int minCr = std::abs( m_baselineOffset );
-    int maxCr = std::min( m_amplitude / 2, spacing() / 2 );
 
-    if( maxCr > minCr )
-        return std::clamp( optCr, minCr, maxCr );
-    else
-        return maxCr;
+    return std::clamp( optCr, minCr, maxCr );
 }
 
 
@@ -360,7 +373,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::makeMiterShape( const VECTOR2D& aP, const VECTOR
         double correction = 0;
 
         if( m_dual && radius > m_meanCornerRadius )
-            correction = (double)( -2 * abs(m_baselineOffset) ) * tan( 22.5 * M_PI / 180.0 );
+            correction = (double) ( -2 * abs( m_baselineOffset ) ) * tan( DEG2RAD( 22.5 ) );
 
         VECTOR2D dir_cu = dir_u.Resize( correction );
         VECTOR2D dir_cv = dir_v.Resize( correction );
@@ -454,8 +467,8 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( const VECTOR2D& aP, const VECTO
     VECTOR2D dir_u_b( aDir.Resize( offset ) );
     VECTOR2D dir_v_b( dir_u_b.Perpendicular() );
 
-    if( 2 * cr > amplitude )
-        cr = amplitude / 2;
+    if( 2 * cr > amplitude + std::abs( offset ) )
+        cr = ( amplitude + std::abs( offset ) ) / 2;
 
     if( 2 * cr > spc )
         cr = spc / 2;
