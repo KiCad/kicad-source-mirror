@@ -1,7 +1,7 @@
 (kicad_sch
 	(version 20231120)
 	(generator "eeschema")
-	(generator_version "7.99")
+	(generator_version "8.0")
 	(uuid "e63e39d7-6ac0-4ffd-8aa3-1841a4541b55")
 	(paper "A4")
 	(title_block
@@ -2796,7 +2796,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Valve:Valve_ECC-83-2"
+		(property "Footprint" "Footprints:Valve_ECC-83-2"
 			(at 180.34 60.96 0)
 			(effects
 				(font
@@ -2883,7 +2883,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Valve:Valve_ECC-83-2"
+		(property "Footprint" "Footprints:Valve_ECC-83-2"
 			(at 177.8 109.22 0)
 			(effects
 				(font
@@ -2970,7 +2970,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Valve:Valve_ECC-83-2"
+		(property "Footprint" "Footprints:Valve_ECC-83-2"
 			(at 111.76 80.01 0)
 			(effects
 				(font
@@ -3036,8 +3036,8 @@
 		(lib_id "ecc83_schlib:CONN_1")
 		(at 160.02 167.64 0)
 		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
+		(exclude_from_sim yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-000054a5830a")
@@ -3059,7 +3059,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "connect:1pin"
+		(property "Footprint" "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
 			(at 160.02 167.64 0)
 			(effects
 				(font
@@ -3101,8 +3101,8 @@
 		(lib_id "ecc83_schlib:CONN_1")
 		(at 160.02 170.18 0)
 		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
+		(exclude_from_sim yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-000054a58363")
@@ -3124,7 +3124,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "connect:1pin"
+		(property "Footprint" "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
 			(at 160.02 170.18 0)
 			(effects
 				(font
@@ -3166,8 +3166,8 @@
 		(lib_id "ecc83_schlib:CONN_1")
 		(at 160.02 172.72 0)
 		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
+		(exclude_from_sim yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-000054a5837a")
@@ -3189,7 +3189,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "connect:1pin"
+		(property "Footprint" "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
 			(at 160.02 172.72 0)
 			(effects
 				(font
@@ -3231,8 +3231,8 @@
 		(lib_id "ecc83_schlib:CONN_1")
 		(at 160.02 175.26 0)
 		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
+		(exclude_from_sim yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-000054a58391")
@@ -3254,7 +3254,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "connect:1pin"
+		(property "Footprint" "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
 			(at 160.02 175.26 0)
 			(effects
 				(font

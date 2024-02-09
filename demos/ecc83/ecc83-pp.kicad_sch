@@ -1,7 +1,7 @@
 (kicad_sch
 	(version 20231120)
 	(generator "eeschema")
-	(generator_version "7.99")
+	(generator_version "8.0")
 	(uuid "28f865a0-4433-4a53-bbd7-b62f276848e4")
 	(paper "A4")
 	(title_block
@@ -2087,7 +2087,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+		(property "Footprint" "Footprints:Altech_AK300_1x02_P5.00mm_45-Degree"
 			(at 127 115.57 0)
 			(effects
 				(font
@@ -2153,7 +2153,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+		(property "Footprint" "Footprints:Altech_AK300_1x02_P5.00mm_45-Degree"
 			(at 207.01 83.82 0)
 			(effects
 				(font
@@ -2220,7 +2220,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+		(property "Footprint" "Footprints:Altech_AK300_1x02_P5.00mm_45-Degree"
 			(at 41.91 58.42 0)
 			(effects
 				(font
@@ -2355,7 +2355,7 @@
 				)
 			)
 		)
-		(property "Footprint" "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree"
+		(property "Footprint" "Footprints:Altech_AK300_1x02_P5.00mm_45-Degree"
 			(at 43.18 96.52 0)
 			(effects
 				(font
@@ -2750,7 +2750,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Valve:Valve_ECC-83-1"
+		(property "Footprint" "Footprints:Valve_ECC-83-1"
 			(at 166.37 64.77 90)
 			(effects
 				(font
@@ -2837,7 +2837,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Valve:Valve_ECC-83-1"
+		(property "Footprint" "Footprints:Valve_ECC-83-1"
 			(at 162.56 118.11 0)
 			(effects
 				(font
@@ -2925,7 +2925,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Valve:Valve_ECC-83-1"
+		(property "Footprint" "Footprints:Valve_ECC-83-1"
 			(at 57.15 74.93 90)
 			(effects
 				(font
@@ -3059,8 +3059,8 @@
 		(lib_id "ecc83_schlib:CONN_1")
 		(at 158.75 177.8 0)
 		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
+		(exclude_from_sim yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-000054a5890a")
@@ -3082,7 +3082,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+		(property "Footprint" "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
 			(at 158.75 177.8 0)
 			(effects
 				(font
@@ -3124,8 +3124,8 @@
 		(lib_id "ecc83_schlib:CONN_1")
 		(at 158.75 180.34 0)
 		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
+		(exclude_from_sim yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-000054a58c65")
@@ -3147,7 +3147,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+		(property "Footprint" "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
 			(at 158.75 180.34 0)
 			(effects
 				(font
@@ -3189,8 +3189,8 @@
 		(lib_id "ecc83_schlib:CONN_1")
 		(at 158.75 182.88 0)
 		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
+		(exclude_from_sim yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-000054a58c8a")
@@ -3212,7 +3212,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+		(property "Footprint" "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
 			(at 158.75 182.88 0)
 			(effects
 				(font
@@ -3254,8 +3254,8 @@
 		(lib_id "ecc83_schlib:CONN_1")
 		(at 158.75 185.42 0)
 		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
+		(exclude_from_sim yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "00000000-0000-0000-0000-000054a58ca3")
@@ -3277,7 +3277,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "MountingHole:MountingHole_3.2mm_M3_DIN965_Pad"
+		(property "Footprint" "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
 			(at 158.75 185.42 0)
 			(effects
 				(font

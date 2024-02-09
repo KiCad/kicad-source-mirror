@@ -1,7 +1,7 @@
 (kicad_pcb
-	(version 20231231)
+	(version 20240108)
 	(generator "pcbnew")
-	(generator_version "7.99")
+	(generator_version "8.0")
 	(general
 		(thickness 1.6)
 		(legacy_teardrops no)
@@ -179,7 +179,7 @@
 				)
 			)
 		)
-		(property "Description" "Polarised capacitor"
+		(property "Description" ""
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -191,8 +191,10 @@
 				)
 			)
 		)
+		(property ki_fp_filters "CP_*")
 		(path "/00000000-0000-0000-0000-00004549f4be")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 3.83 -6.33)
@@ -2694,8 +2696,10 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_* Resistor_*")
 		(path "/00000000-0000-0000-0000-00004549f38a")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 0.54 1.37)
@@ -2964,8 +2968,10 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_* Resistor_*")
 		(path "/00000000-0000-0000-0000-00004549f39d")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 7.08 -1.37)
@@ -3234,8 +3240,10 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_* Resistor_*")
 		(path "/00000000-0000-0000-0000-00004549f3ad")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 0.54 1.37)
@@ -3504,8 +3512,10 @@
 				)
 			)
 		)
+		(property ki_fp_filters "R_* Resistor_*")
 		(path "/00000000-0000-0000-0000-00004549f3a2")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 0.54 1.37)
@@ -3719,7 +3729,7 @@
 		(property "Reference" "P5"
 			(at 4.31 -0.68 0)
 			(layer "F.SilkS")
-			(uuid "25034402-b5bb-434c-8b03-29087504283c")
+			(uuid "f622554e-e37f-4617-bc85-40506f16fc12")
 			(effects
 				(font
 					(size 1 1)
@@ -3730,7 +3740,7 @@
 		(property "Value" "CONN_1"
 			(at 6.11 -2.08 0)
 			(layer "F.Fab")
-			(uuid "d073bc25-9513-4d7a-aae7-063984362d48")
+			(uuid "31df529e-2abc-4796-b1d0-0dabad673c11")
 			(effects
 				(font
 					(size 1 1)
@@ -3743,7 +3753,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "8df73d0d-a39f-4d56-baeb-d710e0946744")
+			(uuid "f0cb0584-88de-472e-b26e-3ad14380be44")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3755,7 +3765,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "4ddb0ebf-2878-439b-912a-e0d9a6e93330")
+			(uuid "022f64ad-4e54-41d8-a365-b89b7f760c5d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3767,7 +3777,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "0f0c92d8-bbbe-43c6-8f04-5bbd7a782d74")
+			(uuid "9d8dfa8b-5e0b-40c5-b0d2-d97487b77646")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3775,8 +3785,7 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-000054a5830a")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
-		(attr through_hole exclude_from_pos_files)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.8 0)
@@ -3786,7 +3795,7 @@
 			)
 			(fill none)
 			(layer "Cmts.User")
-			(uuid "4d12d7c8-b689-415e-9b8f-e9623cd64041")
+			(uuid "188b6e7f-d1c2-41bd-b014-d028eb009683")
 		)
 		(fp_circle
 			(center 0 0)
@@ -3797,12 +3806,12 @@
 			)
 			(fill none)
 			(layer "F.CrtYd")
-			(uuid "a5ae72ad-f4b7-490d-be09-84bfb941f25e")
+			(uuid "c02c0bb4-9889-462f-9c0b-2ff9e8205eef")
 		)
 		(fp_text user "${REFERENCE}"
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "75bee1cd-9455-4b97-8606-2d0b98c67c29")
+			(uuid "86b49023-93c7-43af-bcf4-5075a8739408")
 			(effects
 				(font
 					(size 1 1)
@@ -3819,7 +3828,7 @@
 			(net 10 "unconnected-(P5-Pad1)")
 			(pinfunction "1")
 			(pintype "passive+no_connect")
-			(uuid "2d34a324-6ffc-4248-989f-a79a8114b0b5")
+			(uuid "328ee246-1187-4edd-9910-fd11bffb6614")
 		)
 	)
 	(footprint "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
@@ -3831,7 +3840,7 @@
 		(property "Reference" "P6"
 			(at -4.4 -0.18 0)
 			(layer "F.SilkS")
-			(uuid "877722d2-1cfc-4f6b-a708-1b9f48f46da3")
+			(uuid "104ef721-2162-4e8c-bc3f-bbbebc0311aa")
 			(effects
 				(font
 					(size 1 1)
@@ -3842,7 +3851,7 @@
 		(property "Value" "CONN_1"
 			(at 0 3.8 0)
 			(layer "F.Fab")
-			(uuid "2d02f2a6-cffe-4008-97a5-6d9c0f60d6e9")
+			(uuid "8b63349e-c8e4-4954-989f-e572e317c069")
 			(effects
 				(font
 					(size 1 1)
@@ -3855,7 +3864,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "8e3dcfc8-a5b9-4238-9e4d-62c48fb95dfe")
+			(uuid "5b2a683f-f9dd-457d-a4c8-089d5b02ed11")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3867,7 +3876,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "66a28ac4-dcab-49aa-b42c-5584bf672b28")
+			(uuid "d13585ac-3e12-40cb-926e-5ecb52fabe71")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3879,7 +3888,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "5b699e64-90f7-4869-b01e-d5a15d2d3fb6")
+			(uuid "40393c2a-731a-464c-b38f-71b0f4bf3e73")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3887,8 +3896,7 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-000054a58363")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
-		(attr through_hole exclude_from_pos_files)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.8 0)
@@ -3898,7 +3906,7 @@
 			)
 			(fill none)
 			(layer "Cmts.User")
-			(uuid "c6f92a3e-1c08-484c-927d-8b6df763b0ea")
+			(uuid "51ff3d02-b1ad-445e-af19-0a7bc4070ab8")
 		)
 		(fp_circle
 			(center 0 0)
@@ -3909,12 +3917,12 @@
 			)
 			(fill none)
 			(layer "F.CrtYd")
-			(uuid "3c10bc3a-3fb0-4458-bb4e-a34d80e991e1")
+			(uuid "82735012-6658-4dd3-8d60-397c27ce07eb")
 		)
 		(fp_text user "${REFERENCE}"
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "81de627e-0ff5-45bb-b27e-e483e4755dde")
+			(uuid "e883d4f3-6098-409d-b5d9-e637a401ff55")
 			(effects
 				(font
 					(size 1 1)
@@ -3931,7 +3939,7 @@
 			(net 11 "unconnected-(P6-Pad1)")
 			(pinfunction "1")
 			(pintype "passive+no_connect")
-			(uuid "a36221c9-7033-499a-add0-e24ba6286b1e")
+			(uuid "caed44f9-0751-40a4-ab47-a1d96dcacd04")
 		)
 	)
 	(footprint "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
@@ -3943,7 +3951,7 @@
 		(property "Reference" "P7"
 			(at 0 -3.8 0)
 			(layer "F.SilkS")
-			(uuid "61285679-ccf1-4b52-868f-77012ca9d275")
+			(uuid "a9dc950a-7618-45a1-9a63-b79ad1d7fbbc")
 			(effects
 				(font
 					(size 1 1)
@@ -3954,7 +3962,7 @@
 		(property "Value" "CONN_1"
 			(at -3.9 -3.74 0)
 			(layer "F.Fab")
-			(uuid "d4ce6e20-d70e-46de-b91d-2bb25de7048f")
+			(uuid "ee1f4b65-d853-4f7d-9d03-0616dd11d371")
 			(effects
 				(font
 					(size 1 1)
@@ -3967,7 +3975,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "483f5d99-a510-4d0f-a673-20b5c917a1e5")
+			(uuid "fee9a169-3c57-4938-9ff5-755b130d528e")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3979,7 +3987,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "ca39b134-d995-49bc-b1a5-c1f0e981bc53")
+			(uuid "0587bd41-6601-4b5f-9f6a-8ac52ea59d5d")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3991,7 +3999,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "ed507479-37dd-489a-8964-b604425801b1")
+			(uuid "81ff98c9-3cf9-429d-a6d3-acd3a357cc8e")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3999,8 +4007,7 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-000054a5837a")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
-		(attr through_hole exclude_from_pos_files)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.8 0)
@@ -4010,7 +4017,7 @@
 			)
 			(fill none)
 			(layer "Cmts.User")
-			(uuid "b1edf0cc-98af-43e5-85c7-c185d85e25f6")
+			(uuid "6c7692e6-3cbd-45b8-9490-24b36682fcfe")
 		)
 		(fp_circle
 			(center 0 0)
@@ -4021,12 +4028,12 @@
 			)
 			(fill none)
 			(layer "F.CrtYd")
-			(uuid "950cfeb9-ac49-4952-a8c2-a98510c8a50b")
+			(uuid "d00b958e-cc1b-4f11-b0cc-afce424a3c7b")
 		)
 		(fp_text user "${REFERENCE}"
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "e2ba20d2-8ad8-4e85-a7c3-7032a82bc386")
+			(uuid "102b8a12-1baf-4c4b-a04f-bb9f8a7480f4")
 			(effects
 				(font
 					(size 1 1)
@@ -4043,7 +4050,7 @@
 			(net 12 "unconnected-(P7-Pad1)")
 			(pinfunction "1")
 			(pintype "passive+no_connect")
-			(uuid "11c5a78e-c1c3-4fc7-bbf9-fae6d1335924")
+			(uuid "f3d63e94-5de4-4728-9147-78ee5f0e5eb7")
 		)
 	)
 	(footprint "Footprints:MountingHole_3.2mm_M3_DIN965_Pad"
@@ -4055,7 +4062,7 @@
 		(property "Reference" "P8"
 			(at 0 -3.8 0)
 			(layer "F.SilkS")
-			(uuid "559c77e3-ad39-4421-a53d-b9394f9dcfd0")
+			(uuid "a2973ef5-760d-44f9-86f0-6b8d783cb7e1")
 			(effects
 				(font
 					(size 1 1)
@@ -4066,7 +4073,7 @@
 		(property "Value" "CONN_1"
 			(at 4.81 -3.34 0)
 			(layer "F.Fab")
-			(uuid "36d6db6d-5ee5-4219-a223-4cfe6f839996")
+			(uuid "7782bf3b-40e4-4e53-9110-a4b962031571")
 			(effects
 				(font
 					(size 1 1)
@@ -4079,7 +4086,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "c805ffbe-bf27-4743-a823-306c731624cd")
+			(uuid "4a8125ba-331a-4a4e-b0e7-1a9f2c63f81e")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4091,7 +4098,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "ee6938c1-3829-4aa7-95da-63e0720191e6")
+			(uuid "5b4f28f9-0fb6-40f8-a020-8a33d92fae4a")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4103,7 +4110,7 @@
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "80332ad5-7d53-453b-9724-427a2d55bcc1")
+			(uuid "6cd8ee5f-fc34-434e-aaa0-d22277103f7c")
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4111,8 +4118,7 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-000054a58391")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
-		(attr through_hole exclude_from_pos_files)
+		(attr through_hole exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.8 0)
@@ -4122,7 +4128,7 @@
 			)
 			(fill none)
 			(layer "Cmts.User")
-			(uuid "1eb0b4e9-022d-40f5-a803-bb13c55e3bfe")
+			(uuid "98eb28a9-1e8e-4094-9517-f4ab56720883")
 		)
 		(fp_circle
 			(center 0 0)
@@ -4133,12 +4139,12 @@
 			)
 			(fill none)
 			(layer "F.CrtYd")
-			(uuid "7876e667-399b-4d1c-8d3e-24ee071f21ce")
+			(uuid "acf836f6-1982-4daf-92cd-45af195f65d0")
 		)
 		(fp_text user "${REFERENCE}"
 			(at 0 0 0)
 			(layer "F.Fab")
-			(uuid "af82a267-e87b-434d-9300-b6fa225cb02d")
+			(uuid "ff0bfdf8-4509-4032-9fd3-598db966dd35")
 			(effects
 				(font
 					(size 1 1)
@@ -4155,7 +4161,7 @@
 			(net 13 "unconnected-(P8-Pad1)")
 			(pinfunction "1")
 			(pintype "passive+no_connect")
-			(uuid "6f4c7350-4b82-4d69-afb2-0527fb2483c4")
+			(uuid "d1bbbdbc-d2bc-4da0-a727-438ad509bb8a")
 		)
 	)
 	(footprint "Footprints:Valve_ECC-83-2"
@@ -4223,7 +4229,8 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-000048b4f266")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_circle
 			(center 0 0)
@@ -4452,8 +4459,10 @@
 				)
 			)
 		)
+		(property ki_fp_filters "C? C_????_* C_???? SMD*_c Capacitor*")
 		(path "/00000000-0000-0000-0000-00004549f3be")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 3.88 3.37)
@@ -4723,7 +4732,8 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-00004549f46c")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 1.33 1.27)
@@ -4985,7 +4995,8 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-00004549f4a5")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start 1.33 1.27)
@@ -5247,7 +5258,8 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-00004549f464")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.33 -1.33)
@@ -5509,7 +5521,8 @@
 			)
 		)
 		(path "/00000000-0000-0000-0000-0000456a8acc")
-		(sheetfile "Fichier: ecc83-pp_v2.kicad_sch")
+		(sheetname "Racine")
+		(sheetfile "ecc83-pp_v2.kicad_sch")
 		(attr through_hole)
 		(fp_line
 			(start -1.33 3.87)
