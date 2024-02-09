@@ -995,6 +995,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     }
 
     std::shared_ptr<DRC_ENGINE> drcEngine = brd->GetDesignSettings().m_DRCEngine;
+    std::unique_ptr<NETLIST>    netlist = std::make_unique<NETLIST>();
 
     drcEngine->SetDrawingSheet( getDrawingSheetProxyView( brd ) );
 
@@ -1014,7 +1015,6 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
         wxFileName     schematicPath( drcJob->m_filename );
         NETLIST_FN_PTR netlister = (NETLIST_FN_PTR) eeschema->IfaceOrAddress( KIFACE_NETLIST_SCHEMATIC );
         std::string    netlist_str;
-        NETLIST        netlist;
 
         schematicPath.SetExt( FILEEXT::KiCadSchematicFileExtension );
 
@@ -1033,7 +1033,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
             try
             {
                 auto lineReader = new STRING_LINE_READER( netlist_str, _( "Eeschema netlist" ) );
-                KICAD_NETLIST_READER netlistReader( lineReader, &netlist );
+                KICAD_NETLIST_READER netlistReader( lineReader, netlist.get() );
                 netlistReader.LoadNetlist();
             }
             catch( const IO_ERROR& e )
@@ -1042,7 +1042,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
                                     RPT_SEVERITY_INFO );
             }
 
-            drcEngine->SetSchematicNetlist( &netlist );
+            drcEngine->SetSchematicNetlist( netlist.get() );
         }
     }
 
