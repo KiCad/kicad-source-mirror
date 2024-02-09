@@ -69,6 +69,20 @@ EDA_ITEM* SCH_MARKER::Clone() const
 
 void SCH_MARKER::SwapData( SCH_ITEM* aItem )
 {
+    SCH_ITEM::SwapFlags( aItem );
+
+    SCH_MARKER* item = static_cast<SCH_MARKER*>( aItem );
+
+    std::swap( m_isLegacyMarker, item->m_isLegacyMarker );
+    std::swap( m_Pos, item->m_Pos );
+
+    std::swap( m_markerType, item->m_markerType );
+    std::swap( m_excluded, item->m_excluded );
+    std::swap( m_rcItem, item->m_rcItem );
+
+    std::swap( m_scalingFactor, item->m_scalingFactor );
+    std::swap( m_shapeBoundingBox, item->m_shapeBoundingBox );
+
     std::swap( *((SCH_MARKER*) this), *((SCH_MARKER*) aItem ) );
 }
 
