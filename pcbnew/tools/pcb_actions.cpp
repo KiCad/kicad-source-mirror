@@ -2318,6 +2318,12 @@ TOOL_ACTION PCB_ACTIONS::tuneDiffPair( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( PNS::PNS_MODE_TUNE_DIFF_PAIR ) );
 
+// Reserved strings
+#if 0
+_( "Tune Length of a Single Track" );
+_( "Tune Length of a Differential Pair" );
+#endif
+
 TOOL_ACTION PCB_ACTIONS::tuneSkew( TOOL_ACTION_ARGS()
         .Name( "pcbnew.LengthTuner.TuneDiffPairSkew" )
         .Scope( AS_GLOBAL )
