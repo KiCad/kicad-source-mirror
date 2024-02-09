@@ -2574,6 +2574,47 @@ bool FABMASTER::loadEtch( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>
 
                 aBoard->Add( trk, ADD_MODE::APPEND );
             }
+            else if( seg->shape == GR_SHAPE_CIRCLE )
+            {
+                const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
+
+                PCB_SHAPE* circle = new PCB_SHAPE( aBoard, SHAPE_T::CIRCLE );
+                circle->SetLayer( layer );
+                circle->SetCenter( VECTOR2I( src->center_x, src->center_y ) );
+                circle->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
+                circle->SetWidth( src->width );
+
+                aBoard->Add( circle, ADD_MODE::APPEND );
+            }
+            else if( seg->shape == GR_SHAPE_RECTANGLE )
+            {
+                const GRAPHIC_RECTANGLE *src =
+                        static_cast<const GRAPHIC_RECTANGLE*>( seg.get() );
+
+                PCB_SHAPE* rect = new PCB_SHAPE( aBoard, SHAPE_T::RECTANGLE );
+                rect->SetLayer( layer );
+                rect->SetStart( VECTOR2I( src->start_x, src->start_y ) );
+                rect->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
+                rect->SetStroke( STROKE_PARAMS( 0 ) );
+                rect->SetFilled( true );
+                aBoard->Add( rect, ADD_MODE::APPEND );
+            }
+            else if( seg->shape == GR_SHAPE_TEXT )
+            {
+                const GRAPHIC_TEXT *src =
+                        static_cast<const GRAPHIC_TEXT*>( seg.get() );
+
+                PCB_TEXT* txt = new PCB_TEXT( aBoard );
+                txt->SetLayer( layer );
+                txt->SetTextPos( VECTOR2I( src->start_x, src->start_y - src->height / 2 ) );
+                txt->SetText( src->text );
+                txt->SetItalic( src->ital );
+                txt->SetTextThickness( src->thickness );
+                txt->SetTextHeight( src->height );
+                txt->SetTextWidth( src->width );
+                txt->SetHorizJustify( src->orient );
+                aBoard->Add( txt, ADD_MODE::APPEND );
+            }
         }
         else
         {
