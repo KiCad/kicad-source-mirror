@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-01 13:54+0000\n"
+"PO-Revision-Date: 2024-02-11 02:02+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4034,9 +4034,8 @@ msgid "Reset Unique Id"
 msgstr "Zresetuj identyfikator instalacji"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Footprinty"
+msgstr "Footprinty/pola lutownicze:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -6861,9 +6860,8 @@ msgid "Courtyard collision shadow"
 msgstr "Cień kolizji pól zajętości"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Niepoprawny znak w danych o logicznej nazwie biblioteki"
+msgstr "Znaleziono niedozwolony znak w nazwie skrótowej biblioteki"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -7777,7 +7775,7 @@ msgstr "Rysuj bryły brzegowe"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
 msgid "Select item(s)"
-msgstr "Wybierz element(y)"
+msgstr "Zaznacz element(y)"
 
 #: common/tool/actions.cpp:839
 msgid "Measure Tool"
@@ -16140,9 +16138,8 @@ msgstr ""
 "'%s'."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1710
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Styl prezentacji"
+msgstr "Zmień styl prezentacji"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
@@ -19414,9 +19411,10 @@ msgstr ""
 "<b>Symbol zasilania powinien składać się tylko z jednej jednostki</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>Symbol zasilania powinien posiadać tylko jeden pin</b><br><br>"
+msgstr ""
+"<b>Symbol zasilania nie powinien posiadać alternatywnej "
+"reprezentacji</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -21953,29 +21951,24 @@ msgid "Change property"
 msgstr "Zmień właściwości"
 
 #: eeschema/widgets/search_handlers.cpp:136
-#, fuzzy
 msgid "Excl. sim"
-msgstr "Wykluczenia"
+msgstr "Wyklucz z symulacji"
 
 #: eeschema/widgets/search_handlers.cpp:137
-#, fuzzy
 msgid "Excl. BOM"
 msgstr "Wyklucz z BOM"
 
 #: eeschema/widgets/search_handlers.cpp:138
-#, fuzzy
 msgid "Excl. board"
-msgstr "schowek"
+msgstr "Wyklucz z płytki"
 
 #: eeschema/widgets/search_handlers.cpp:355
-#, fuzzy
 msgid "Hierarchical"
-msgstr "Ścieżka hierarchiczna"
+msgstr "Hierarchiczna"
 
 #: eeschema/widgets/search_handlers.cpp:357
-#, fuzzy
 msgid "Directive"
-msgstr "Etykieta dyrektywy"
+msgstr "Dyrektywa"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -32486,6 +32479,8 @@ msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
 msgstr ""
+"Nie twórz łezek na ścieżkach połączonych z polami, które również połączone "
+"są ze strefami."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -39698,9 +39693,8 @@ msgid "Previous footprint placement still in progress."
 msgstr "Poprzedni proces układania footprintów nadal trwa."
 
 #: pcbnew/footprint_libraries_utils.cpp:942
-#, fuzzy
 msgid "Insert Footprint"
-msgstr "Importuj footprint"
+msgstr "Wstaw footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:963
 msgid "Save Footprint As"
@@ -42906,14 +42900,13 @@ msgid "Running DRC...\n"
 msgstr "Uruchamianie DRC...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1026
-#, fuzzy
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "Nie można załadować pliku schematu\n"
+msgstr "Nie można odnaleźć schematu dla testu parzystości.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1041
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Nie można załadować pliku schematu\n"
+msgstr ""
+"Nie można pobrać listy sieci schematu potrzebnej do testu parzystości.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1062 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -44935,9 +44928,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "Dodaje łuki styczne do wybranych odcinków linii"
 
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "Linie fazowania"
+msgstr "Linie fazowania..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Cut away corners between selected lines"
@@ -46358,14 +46350,12 @@ msgid "Tune length of a differential pair"
 msgstr "Dostrój długość pary różnicowej"
 
 #: pcbnew/tools/pcb_actions.cpp:2323
-#, fuzzy
 msgid "Tune Length of a Single Track"
-msgstr "Dostrój długość pojedynczej ścieżki"
+msgstr "Dostosuj długość pojedynczej ścieżki"
 
 #: pcbnew/tools/pcb_actions.cpp:2324
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
-msgstr "Dostrój długość pary różnicowej"
+msgstr "Dostosuj długość ścieżek pary różnicowej"
 
 #: pcbnew/tools/pcb_actions.cpp:2333
 msgid "Tune Skew of a Differential Pair"
@@ -47375,9 +47365,8 @@ msgstr "Ramka tekstowa"
 
 #: pcbnew/widgets/search_handlers.cpp:274
 #: pcbnew/widgets/search_handlers.cpp:353
-#, fuzzy
 msgid "Class"
-msgstr "Class 1"
+msgstr "Klasa"
 
 #: pcbnew/widgets/search_handlers.cpp:307
 #: pcbnew/widgets/search_handlers.cpp:391
@@ -47496,43 +47485,36 @@ msgid "Zone %s %s"
 msgstr "Strefa %s %s"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr "Łącza termiczne muszą być grubsze niż minimalna szerokość ścieżki."
+msgstr "Nie może być mniejsza niż minimalna szerokość strefy"
 
 #: pcbnew/zone.cpp:1671
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Szerokość kresek:"
+msgstr "Szerokość kreskowania"
 
 #: pcbnew/zone.cpp:1678
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Przerwa kresek:"
+msgstr "Przerwa kreskowania"
 
 #: pcbnew/zone.cpp:1685
 msgid "Hatch Minimum Hole Ratio"
-msgstr ""
+msgstr "Minimalny stosunek przerw w kreskowaniu"
 
 #: pcbnew/zone.cpp:1693
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Wygładzanie:"
+msgstr "Siła wygładzania"
 
 #: pcbnew/zone.cpp:1699
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Poziom wygładzania:"
+msgstr "Poziom wygładzania"
 
 #: pcbnew/zone.cpp:1705
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Usuwanie stref wolnych:"
+msgstr "Usuwanie stref wolnych"
 
 #: pcbnew/zone.cpp:1710
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Minimalny rozmiar wysepek:"
+msgstr "Minimalny rozmiar wysepek"
 
 #: pcbnew/zone.cpp:1725
 msgid "Minimum Width"
@@ -47737,19 +47719,16 @@ msgid "KiCad Printed Circuit Board"
 msgstr "Obwód drukowany KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
-#, fuzzy
 msgid "KiCad Footprint"
-msgstr "Edytor Footprintów programu KiCad"
+msgstr "Footprint programu KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
-#, fuzzy
 msgid "KiCad Schematic Symbol"
-msgstr "Symbol schematowy"
+msgstr "Symbol programu KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "Edytor obramowań stron programu KiCad"
+msgstr "Obramowanie strony programu KiCad"
 
 #~ msgid "Exclude from schematic bill of materials"
 #~ msgstr "Wyklucz z listy materiałowej"
