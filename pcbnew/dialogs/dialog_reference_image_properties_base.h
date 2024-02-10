@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 class PCB_LAYER_BOX_SELECTOR;
 
 #include "dialog_shim.h"
@@ -59,7 +60,7 @@ class DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Reference Image Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Reference Image Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~DIALOG_REFERENCE_IMAGE_PROPERTIES_BASE();
 
