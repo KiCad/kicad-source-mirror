@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-08 23:55+0000\n"
+"PO-Revision-Date: 2024-02-11 02:02+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -33017,6 +33017,8 @@ msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
 msgstr ""
+"No crear lágrimas en pistas conectadas a pads que también estén conectados a "
+"una zona de cobre."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -45678,9 +45680,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "Añade arcos tangentes a las líneas seleccionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "Líneas de biselado"
+msgstr "Líneas de biselado..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Cut away corners between selected lines"
@@ -47157,9 +47158,8 @@ msgid "Tune length of a single track"
 msgstr "Afinar la longitud de una única pista"
 
 #: pcbnew/tools/pcb_actions.cpp:2315 pcbnew/tools/pcb_actions.cpp:2316
-#, fuzzy
 msgid "Tune length of a differential pair"
-msgstr "Afinar longitud de par diferencial"
+msgstr "Afinar longitud de un par diferencial"
 
 #: pcbnew/tools/pcb_actions.cpp:2323
 #, fuzzy
@@ -48319,43 +48319,36 @@ msgid "Zone %s %s"
 msgstr "Zona %s en %s"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr "El ancho del alivio térmico no puede ser menor que el ancho mínimo."
+msgstr "No puede ser menor que el ancho mínimo de la zona"
 
 #: pcbnew/zone.cpp:1671
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Ancho del rayado:"
+msgstr "Ancho del rayado"
 
 #: pcbnew/zone.cpp:1678
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Espaciado del rayado:"
+msgstr "Espaciado del rayado"
 
 #: pcbnew/zone.cpp:1685
 msgid "Hatch Minimum Hole Ratio"
-msgstr ""
+msgstr "Proporción mínima de orificios de rayado"
 
 #: pcbnew/zone.cpp:1693
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Esfuerzo de suavizado:"
+msgstr "Esfuerzo de suavizado"
 
 #: pcbnew/zone.cpp:1699
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Cantidad de redondeado:"
+msgstr "Cantidad de redondeado"
 
 #: pcbnew/zone.cpp:1705
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Eliminar islas:"
+msgstr "Eliminar islas"
 
 #: pcbnew/zone.cpp:1710
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Tamaño mínimo de isla:"
+msgstr "Tamaño mínimo de isla"
 
 #: pcbnew/zone.cpp:1725
 msgid "Minimum Width"
