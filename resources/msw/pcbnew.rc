@@ -1,4 +1,8 @@
-icon_pcbnew ICON "../resources/bitmaps_png/icons/icon_pcbnew.ico"
+#include "resource.h"
+
+IDI_APP_PCBNEW_ICON ICON "../resources/bitmaps_png/icons/icon_pcbnew.ico"
+IDI_FILE_FOOTPRINT_ICON ICON "../resources/bitmaps_png/icons/fileicon_footprint.ico"
+IDI_FILE_PCB_ICON ICON "../resources/bitmaps_png/icons/fileicon_pcb.ico"
 
 #define RC_VER_FILE_DESCRIPTION "KiCad PCB Editor " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "pcbnew"

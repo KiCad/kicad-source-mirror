@@ -8,7 +8,7 @@
 rm -r tmp
 rm icon_*.png
 mkdir tmp
-mkdir tmp/22 tmp/26 tmp/32 tmp/48 tmp/64 tmp/128 tmp/256 tmp/ico
+mkdir tmp/16 tmp/24 tmp/32 tmp/48 tmp/64 tmp/256 tmp/ico
 echo "all directories created."
 cd ../sources/light
 
@@ -28,12 +28,11 @@ ICON_FILES="icon_3d.svg
 for fl in $ICON_FILES
 do
    NAME=${fl%.*} # strip the file extension
-	inkscape -o ../../icons/tmp/22/$NAME.png -w 22 -h 22 --export-area-snap $fl
-	inkscape -o ../../icons/tmp/26/$NAME.png -w 26 -h 26 --export-area-snap $fl
+	inkscape -o ../../icons/tmp/16/$NAME.png -w 16 -h 16 --export-area-snap $fl
+	inkscape -o ../../icons/tmp/24/$NAME.png -w 24 -h 24 --export-area-snap $fl
 	inkscape -o ../../icons/tmp/32/$NAME.png -w 32 -h 32 --export-area-snap $fl
 	inkscape -o ../../icons/tmp/48/$NAME.png -w 48 -h 48 --export-area-snap $fl
 	inkscape -o ../../icons/tmp/64/$NAME.png -w 64 -h 64 --export-area-snap $fl
-	inkscape -o ../../icons/tmp/128/$NAME.png -w 128 -h 128 --export-area-snap $fl
 	inkscape -o ../../icons/tmp/256/$NAME.png -w 256 -h 256 --export-area-snap $fl
 	echo "file $fl converted."
 done
@@ -44,8 +43,8 @@ cd ../../icons
 for fl in $ICON_FILES
 do
     NAME=${fl%.*} # strip the file extension
-    icotool -c tmp/22/$NAME.png tmp/26/$NAME.png tmp/32/$NAME.png tmp/48/$NAME.png \
-	tmp/64/$NAME.png tmp/128/$NAME.png tmp/256/$NAME.png -o tmp/ico/$NAME.ico
+    icotool -c tmp/16/$NAME.png tmp/24/$NAME.png tmp/32/$NAME.png tmp/48/$NAME.png \
+	tmp/64/$NAME.png tmp/256/$NAME.png -o tmp/ico/$NAME.ico
 	echo "file $fl converted in .ico file."
 done
 

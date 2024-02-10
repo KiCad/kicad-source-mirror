@@ -1,11 +1,19 @@
 #define INCLUDE_KICAD_VERSION
 #include <kicad_build_version.h>
 
+#include "resource.h"
+
 #if KICAD_IS_NIGHTLY
-icon_kicad ICON "../resources/bitmaps_png/icons/icon_kicad_nightly.ico"
+IDI_APP_KICAD_ICON ICON "../resources/bitmaps_png/icons/icon_kicad_nightly.ico"
 #else
-icon_kicad ICON "../resources/bitmaps_png/icons/icon_kicad.ico"
+IDI_APP_KICAD_ICON ICON "../resources/bitmaps_png/icons/icon_kicad.ico"
 #endif
+IDI_FILE_FOOTPRINT_ICON ICON "../resources/bitmaps_png/icons/fileicon_footprint.ico"
+IDI_FILE_PCB_ICON ICON "../resources/bitmaps_png/icons/fileicon_pcb.ico"
+IDI_FILE_PROJECT_ICON ICON "../resources/bitmaps_png/icons/fileicon_project.ico"
+IDI_FILE_SCHEMATIC_ICON ICON "../resources/bitmaps_png/icons/fileicon_schematic.ico"
+IDI_FILE_SYMBOL_ICON ICON "../resources/bitmaps_png/icons/fileicon_symbol.ico"
+IDI_FILE_WORKSHEET_ICON ICON "../resources/bitmaps_png/icons/fileicon_worksheet.ico"
 
 #define RC_VER_FILE_DESCRIPTION "KiCad EDA " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "kicad"

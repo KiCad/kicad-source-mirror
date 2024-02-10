@@ -1,4 +1,8 @@
-icon_eeschema ICON "../resources/bitmaps_png/icons/icon_eeschema.ico"
+#include "resource.h"
+
+IDI_APP_EESCHEMA_ICON ICON "../resources/bitmaps_png/icons/icon_eeschema.ico"
+IDI_FILE_SCHEMATIC_ICON ICON "../resources/bitmaps_png/icons/fileicon_schematic.ico"
+IDI_FILE_SYMBOL_ICON ICON "../resources/bitmaps_png/icons/fileicon_symbol.ico"
 
 #define RC_VER_FILE_DESCRIPTION "KiCad Schematic Editor " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "eeschema"

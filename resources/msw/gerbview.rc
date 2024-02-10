@@ -1,4 +1,6 @@
-icon_gerbview ICON "../resources/bitmaps_png/icons/icon_gerbview.ico"
+#include "resource.h"
+
+IDI_APP_GERBVIEW_ICON ICON "../resources/bitmaps_png/icons/icon_gerbview.ico"
 
 #define RC_VER_FILE_DESCRIPTION "KiCad Gerber Viewer " KICAD_WIN32_RC_PRODVER_STR
 #define RC_VER_INTERNALNAME "gerbview"
