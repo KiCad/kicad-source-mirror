@@ -22,39 +22,39 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 	m_fgGrid->SetFlexibleDirection( wxBOTH );
 	m_fgGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_staticTextName = new wxStaticText( this, wxID_ANY, wxT("Name:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextName = new wxStaticText( this, wxID_ANY, _("Name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextName->Wrap( -1 );
 	m_fgGrid->Add( m_staticTextName, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_textName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fgGrid->Add( m_textName, 1, wxALL|wxEXPAND, 5 );
 
-	m_staticTextOptional = new wxStaticText( this, wxID_ANY, wxT("(optional)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOptional = new wxStaticText( this, wxID_ANY, _("(optional)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOptional->Wrap( -1 );
 	m_fgGrid->Add( m_staticTextOptional, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT, 5 );
 
-	m_staticTextX = new wxStaticText( this, wxID_ANY, wxT("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextX = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextX->Wrap( -1 );
 	m_fgGrid->Add( m_staticTextX, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
 	m_textX = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_fgGrid->Add( m_textX, 1, wxALL|wxEXPAND, 5 );
 
-	m_staticTextXUnits = new wxStaticText( this, wxID_ANY, wxT("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextXUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextXUnits->Wrap( -1 );
 	m_fgGrid->Add( m_staticTextXUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL, 5 );
 
 
 	m_fgGrid->Add( 0, 0, 0, wxEXPAND, 5 );
 
-	m_checkLinked = new wxCheckBox( this, wxID_ANY, wxT("Linked"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_checkLinked = new wxCheckBox( this, wxID_ANY, _("Linked"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkLinked->SetValue(true);
 	m_fgGrid->Add( m_checkLinked, 1, wxALL|wxEXPAND, 5 );
 
 
 	m_fgGrid->Add( 0, 0, 0, wxEXPAND, 5 );
 
-	m_staticTextY = new wxStaticText( this, wxID_ANY, wxT("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextY = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextY->Wrap( -1 );
 	m_fgGrid->Add( m_staticTextY, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxALL, 5 );
 
@@ -63,7 +63,7 @@ DIALOG_GRID_SETTINGS_BASE::DIALOG_GRID_SETTINGS_BASE( wxWindow* parent, wxWindow
 
 	m_fgGrid->Add( m_textY, 1, wxALL|wxEXPAND, 5 );
 
-	m_staticTextYUnits = new wxStaticText( this, wxID_ANY, wxT("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextYUnits->Wrap( -1 );
 	m_fgGrid->Add( m_staticTextYUnits, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxALL, 5 );
 

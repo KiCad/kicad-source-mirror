@@ -16,7 +16,7 @@
         <property name="help_provider">none</property>
         <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
-        <property name="internationalize">0</property>
+        <property name="internationalize">1</property>
         <property name="name">DIALOG_GRID_SETTINGS</property>
         <property name="namespace"></property>
         <property name="path">.</property>
