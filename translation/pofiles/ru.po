@@ -5794,7 +5794,7 @@ msgstr "Ошибка извлечения файла!"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:102
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:153
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:153 eeschema/sch_plotter.cpp:904
 #, c-format
 msgid "Failed to create file '%s'."
 msgstr "Не удалось создать файл '%s'."
@@ -8458,6 +8458,7 @@ msgstr "Удалить исключения тоже?"
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
 #: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
+#: pcbnew/dialogs/dialog_drc.cpp:1143
 msgid "Delete All Markers"
 msgstr "Удалить все маркеры"
 
@@ -13790,6 +13791,7 @@ msgid "KiCad Schematic Editor"
 msgstr "Редактор схем KiCad"
 
 #: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
+#: eeschema/sch_edit_frame.cpp:1726
 msgid "Schematic Hierarchy"
 msgstr "Иерархия схемы"
 
@@ -13819,6 +13821,7 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
+#: eeschema/sch_plotter.cpp:1028
 msgid "Schematic"
 msgstr "Схема"
 
@@ -13858,7 +13861,7 @@ msgstr "[Изменено]"
 msgid "[no schematic loaded]"
 msgstr "[схема не загружена]"
 
-#: eeschema/sch_edit_frame.cpp:1747
+#: eeschema/sch_edit_frame.cpp:1747 eeschema/sch_edit_frame.cpp:1749
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Подсвечена цепь: %s"
@@ -14034,18 +14037,18 @@ msgstr "Начерчено в '%s'.\n"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:126 eeschema/sch_plotter.cpp:930
 msgid "Done."
 msgstr "Готово."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
 #: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
-#: pcbnew/dialogs/dialog_plot.cpp:1122
+#: pcbnew/dialogs/dialog_plot.cpp:1122 eeschema/sch_plotter.cpp:896
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Начерчено в '%s'."
 
-#: eeschema/sch_plotter.cpp:1035
+#: eeschema/sch_plotter.cpp:1035 eeschema/sch_plotter.cpp:1036
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Не удалось записать файлы чертежа в каталог '%s'."
@@ -14081,6 +14084,7 @@ msgstr ""
 "Укажите python-модуль, который реализует функции SCH_PLUGIN::Symbol*()."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -14090,11 +14094,13 @@ msgstr ""
 "преобразованный в лист."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Файл хранилища обработан не полностью (%d байт осталось)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
@@ -14102,18 +14108,22 @@ msgstr ""
 "\"Additional\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Запись 'IEEE_SYMBOL' не обработана."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
 msgstr "Запись 'PIECHART' не обработана."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "Маска сборки пока не поддерживается."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
@@ -14121,38 +14131,47 @@ msgstr ""
 "\"FileHeader\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr "Символ \"%s\" на листе \"%s\" с индексом %d заменен на символ \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
 msgid "Pin has unexpected orientation."
 msgstr "Вывод имеет неожиданную ориентацию."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
 msgid "Pin has unexpected electrical type."
 msgstr "Вывод имеет неожиданный электрический тип."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 msgid "Pin has unexpected outer edge type."
 msgstr "Вывод имеет неожиданный тип внешнего края."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
 msgid "Pin has unexpected inner edge type."
 msgstr "Вывод имеет неожиданный тип внутреннего края."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Кривая Безье имеет %d контрольных точек. Должно быть как минимум 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Неподдерживаемый эллипс не был импортирован в (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14162,15 +14181,18 @@ msgstr ""
 "Пожалуйста, проверьте импортированную схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "Порт питания с неизвестным стилем импортирован как тип 'Bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Символ питания создаёт глобальную метку с именем '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14180,22 +14202,27 @@ msgstr ""
 "проверьте импортированную схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Порт %s не имеет подключений."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Встроенный файл %s не найден в хранилище."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
 #, c-format
 msgid "Error reading image %s."
 msgstr "Ошибка чтения изображения %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
 #, c-format
 msgid "File not found %s."
 msgstr "Файл не найден %s."
@@ -18328,12 +18355,13 @@ msgstr "Шина не имеет сигналов"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Нажмите <ESC> для отмены черчения."
 
-#: eeschema/tools/sch_move_tool.cpp:796
+#: eeschema/tools/sch_move_tool.cpp:796 eeschema/tools/sch_move_tool.cpp:794
 msgid "Press <ESC> to cancel drag."
 msgstr "Нажмите <ESC> для отмены перетаскивания."
 
 #: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel move."
 msgstr "Нажмите <ESC> для отмены перемещения."
 
@@ -34313,7 +34341,7 @@ msgstr "Сеанс Specctra..."
 
 #: pcbnew/menubar_pcb_editor.cpp:118
 msgid "Non-KiCad Board File..."
-msgstr "Файла платы из другой САПР..."
+msgstr "Файл платы из другой САПР..."
 
 #: pcbnew/menubar_pcb_editor.cpp:119
 msgid "Import board file from other applications"
@@ -35619,10 +35647,12 @@ msgid "Loading arcs..."
 msgstr "Загрузка дуг..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2615
+#: pcbnew/plugins/altium/altium_pcb.cpp:2611
 msgid "Loading pads..."
 msgstr "Загрузка конт.пл..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2700
+#: pcbnew/plugins/altium/altium_pcb.cpp:2696
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
@@ -35630,6 +35660,7 @@ msgstr ""
 "пл. сквозного монтажа."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2721
+#: pcbnew/plugins/altium/altium_pcb.cpp:2717
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
@@ -35637,6 +35668,7 @@ msgstr ""
 "поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2748
+#: pcbnew/plugins/altium/altium_pcb.cpp:2744
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35646,11 +35678,13 @@ msgstr ""
 "поддерживает сверление только под углом 90°."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2760
+#: pcbnew/plugins/altium/altium_pcb.cpp:2756
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "У посад.места %s конт.пл. %s содержит отверстие неизвестного типа %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2777
+#: pcbnew/plugins/altium/altium_pcb.cpp:2773
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
@@ -35658,12 +35692,15 @@ msgstr ""
 "поддерживаются)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2814
+#: pcbnew/plugins/altium/altium_pcb.cpp:2810
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "У посад.места %s конт.пл. %s имеет неизвестную форму."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2872
 #: pcbnew/plugins/altium/altium_pcb.cpp:2893
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
+#: pcbnew/plugins/altium/altium_pcb.cpp:2889
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35673,31 +35710,37 @@ msgstr ""
 "будет размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2913
+#: pcbnew/plugins/altium/altium_pcb.cpp:2909
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "Не медная конт.пл. %s подключена к цепи, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2919
+#: pcbnew/plugins/altium/altium_pcb.cpp:2915
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Не медная конт.пл. %s имеет отверстие, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2924
+#: pcbnew/plugins/altium/altium_pcb.cpp:2920
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Не медная конт.пл. %s имеет сложную структуру (пока не поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3066
+#: pcbnew/plugins/altium/altium_pcb.cpp:3062
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Не медная конт.пл. %s имеет неизвестную форму."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3076
+#: pcbnew/plugins/altium/altium_pcb.cpp:3072
 msgid "Loading vias..."
 msgstr "Загрузка перех.отв..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3117
+#: pcbnew/plugins/altium/altium_pcb.cpp:3113
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -35705,24 +35748,30 @@ msgstr ""
 "Перех.отв. из слоя %d в %d использует не медный слой, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3136
+#: pcbnew/plugins/altium/altium_pcb.cpp:3132
 msgid "Loading tracks..."
 msgstr "Загрузка дорожек..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3308
+#: pcbnew/plugins/altium/altium_pcb.cpp:3300
 msgid "Loading unicode strings..."
 msgstr "Загрузка строк Unicode..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3322
+#: pcbnew/plugins/altium/altium_pcb.cpp:3314
 msgid "Loading text..."
 msgstr "Загрузка надписей..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3351
 #: pcbnew/plugins/altium/altium_pcb.cpp:3364
+#: pcbnew/plugins/altium/altium_pcb.cpp:3343
+#: pcbnew/plugins/altium/altium_pcb.cpp:3356
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Штрих-код на слое Altium (%d) игнорируется ( пока не поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3467
+#: pcbnew/plugins/altium/altium_pcb.cpp:3459
 msgid "Loading rectangles..."
 msgstr "Загрузка прямоугольников..."
 
@@ -37552,7 +37601,7 @@ msgstr "Дорожка: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:684 pcbnew/toolbars_pcb_editor.cpp:752
 msgid "Edit Pre-defined Sizes..."
-msgstr "Править предопределённые размеры..."
+msgstr "Править размеры..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:721
 msgid "Via: use netclass sizes"
@@ -38210,7 +38259,7 @@ msgstr "Редактировать размеры ширина дорожки/п
 
 #: pcbnew/tools/edit_tool.cpp:891
 msgid "At least two straight track segments must be selected."
-msgstr "Как минимум два прямых отрезка дорожки должны быть выделены."
+msgstr "Должны быть выделены как минимум два прямых сегмента дорожки."
 
 #: pcbnew/tools/edit_tool.cpp:895 pcbnew/tools/edit_tool.cpp:1176
 msgid "Enter fillet radius:"
@@ -39069,7 +39118,7 @@ msgstr "Экспорт данных трассировки Specctra DSN"
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Gerbers (.gbr)..."
-msgstr "Gerbers (.gbr)..."
+msgstr "Gerber-файлы (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:650
 msgid "Generate Gerbers for fabrication"
@@ -39122,7 +39171,7 @@ msgstr "Выбрать следующую ширину дорожки"
 
 #: pcbnew/tools/pcb_actions.cpp:684
 msgid "Change track width to next pre-defined size"
-msgstr "Изменить ширину дорожки на следующий пред.определённый размер"
+msgstr "Изменить ширину дорожки на следующий пред.установленный размер"
 
 #: pcbnew/tools/pcb_actions.cpp:689
 msgid "Switch Track Width to Previous"
@@ -39130,7 +39179,7 @@ msgstr "Выбрать предыдущую ширину дорожки"
 
 #: pcbnew/tools/pcb_actions.cpp:690
 msgid "Change track width to previous pre-defined size"
-msgstr "Изменить ширину дорожки на предыдущий пред.определённый размер"
+msgstr "Изменить ширину дорожки на предыдущий пред.установленный размер"
 
 #: pcbnew/tools/pcb_actions.cpp:695
 msgid "Increase Via Size"
@@ -39138,7 +39187,7 @@ msgstr "Увеличить размер перех.отв."
 
 #: pcbnew/tools/pcb_actions.cpp:695
 msgid "Change via size to next pre-defined size"
-msgstr "Изменить размер перех.отв. на следующий пред.определённый размер"
+msgstr "Изменить размер перех.отв. на следующий пред.установленный размер"
 
 #: pcbnew/tools/pcb_actions.cpp:700
 msgid "Decrease Via Size"
@@ -39146,7 +39195,7 @@ msgstr "Уменьшить размер перех.отв."
 
 #: pcbnew/tools/pcb_actions.cpp:700
 msgid "Change via size to previous pre-defined size"
-msgstr "Изменить размер перех.отв. на предыдущий пред.определённый размер"
+msgstr "Изменить размер перех.отв. на предыдущий пред.установленный размер"
 
 #: pcbnew/tools/pcb_actions.cpp:714
 msgid "Merge Zones"
@@ -39743,7 +39792,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Select/Expand Connection"
-msgstr "Выделить соединение"
+msgstr "Выделить/расширить соединение"
 
 #: pcbnew/tools/pcb_actions.cpp:1321
 msgid ""
@@ -41242,11 +41291,13 @@ msgstr "Схема KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Печатная плата KiCad"
 
-#~ msgid "Do you wish to delete excluded markers as well?"
-#~ msgstr "Удалить маркеры исключений тоже?"
+#: pcbnew/dialogs/dialog_drc.cpp:1142
+msgid "Do you wish to delete excluded markers as well?"
+msgstr "Удалить маркеры исключений тоже?"
 
-#~ msgid "Delete exclusions"
-#~ msgstr "Удалить исключения"
+#: pcbnew/dialogs/dialog_drc.cpp:1145
+msgid "Delete exclusions"
+msgstr "Удалить исключения"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "Невозможно прочитать строку, входные данные пусты."
