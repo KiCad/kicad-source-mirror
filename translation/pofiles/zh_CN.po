@@ -5692,7 +5692,7 @@ msgstr "提取文件时出错!"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:102
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:153
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:153 eeschema/sch_plotter.cpp:904
 #, c-format
 msgid "Failed to create file '%s'."
 msgstr "创建文件 '%s' 失败。"
@@ -8311,6 +8311,7 @@ msgstr "是否删除排除项?"
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
 #: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
+#: pcbnew/dialogs/dialog_drc.cpp:1143
 msgid "Delete All Markers"
 msgstr "删除所有标记"
 
@@ -13576,6 +13577,7 @@ msgid "KiCad Schematic Editor"
 msgstr "KiCad 原理图编辑器"
 
 #: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
+#: eeschema/sch_edit_frame.cpp:1726
 msgid "Schematic Hierarchy"
 msgstr "原理图层次结构"
 
@@ -13604,6 +13606,7 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
+#: eeschema/sch_plotter.cpp:1028
 msgid "Schematic"
 msgstr "原理图"
 
@@ -13643,7 +13646,7 @@ msgstr "[未保存]"
 msgid "[no schematic loaded]"
 msgstr "[没有加载原理图]"
 
-#: eeschema/sch_edit_frame.cpp:1747
+#: eeschema/sch_edit_frame.cpp:1747 eeschema/sch_edit_frame.cpp:1749
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "高亮网络: %s"
@@ -13820,18 +13823,18 @@ msgstr "绘制到 '%s'。\n"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:126 eeschema/sch_plotter.cpp:930
 msgid "Done."
 msgstr "完成。"
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
 #: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
-#: pcbnew/dialogs/dialog_plot.cpp:1122
+#: pcbnew/dialogs/dialog_plot.cpp:1122 eeschema/sch_plotter.cpp:896
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "已绘制到 '%s'。"
 
-#: eeschema/sch_plotter.cpp:1035
+#: eeschema/sch_plotter.cpp:1035 eeschema/sch_plotter.cpp:1036
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "无法写入绘制文件到文件夹 '%s'。"
@@ -13864,6 +13867,7 @@ msgid ""
 msgstr "输入实现 SCH_PLUGIN::Symbol*() 函数的 Python 符号。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -13871,65 +13875,80 @@ msgid ""
 msgstr "图纸 %s 的文件名未定义, 这可能是转换为图纸的 Altium 信号线束。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "存储文件没有被完全解析 (%d 字节剩余)。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr "在\"附加\"部分找到了未知或意外的记录 ID %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "未处理记录 'IEEE_SYMBOL'。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
 msgstr "未处理记录 'PIECHART'。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "尚不支持在原理图上编译阻剂。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr "在 \"文件头\" 部分找到了未知或意外的记录 id %d。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr "符号 \"%s\"(位于图纸 \"%s\", 该图纸位于索引 %d) 被符号\"%s\"替换。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
 msgid "Pin has unexpected orientation."
 msgstr "引脚方向不符预期。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
 msgid "Pin has unexpected electrical type."
 msgstr "引脚电气类型不符预期。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 msgid "Pin has unexpected outer edge type."
 msgstr "引脚的外边缘类型出乎意料。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
 msgid "Pin has unexpected inner edge type."
 msgstr "引脚的内边缘类型出乎意料。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "贝塞尔曲线有 %d 个控制点。至少应为 2 个。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "未在 (X = %d; Y = %d) 处导入不受支持的椭圆。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -13937,15 +13956,18 @@ msgid ""
 msgstr "Altium 的线束连接器 (%s) 被导入为分级表。请检查导入的原理图。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "未知样式的电源端口导入为 'Bar' 类型。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "电源符号创建名为 '%s' 的全局标签"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -13953,22 +13975,27 @@ msgid ""
 msgstr "Altium 的线束端口 (%s) 被导入为文本框。请检查导入的原理图。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
 #, c-format
 msgid "Port %s has no connections."
 msgstr "端口 %s 未连接。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "在存储中找不到嵌入文件 %s。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
 #, c-format
 msgid "Error reading image %s."
 msgstr "读取图片 %s 时出错。"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
 #, c-format
 msgid "File not found %s."
 msgstr "找不到文件 %s。"
@@ -17993,12 +18020,13 @@ msgstr "总线没有成员"
 msgid "Press <ESC> to cancel drawing."
 msgstr "按下 <ESC> 取消绘图。"
 
-#: eeschema/tools/sch_move_tool.cpp:796
+#: eeschema/tools/sch_move_tool.cpp:796 eeschema/tools/sch_move_tool.cpp:794
 msgid "Press <ESC> to cancel drag."
 msgstr "按下 <ESC> 取消拖动。"
 
 #: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel move."
 msgstr "按下 <ESC> 取消移动。"
 
@@ -35015,20 +35043,24 @@ msgid "Loading arcs..."
 msgstr "加载弧中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2615
+#: pcbnew/plugins/altium/altium_pcb.cpp:2611
 msgid "Loading pads..."
 msgstr "加载焊盘中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2700
+#: pcbnew/plugins/altium/altium_pcb.cpp:2696
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "封装 %s 焊盘 %s 未被标记为多层, 但它是 TH 焊盘。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2721
+#: pcbnew/plugins/altium/altium_pcb.cpp:2717
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "封装 %s 焊盘 %s 有一个方孔。(KiCad 目前还不支持此功能)。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2748
+#: pcbnew/plugins/altium/altium_pcb.cpp:2744
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35036,22 +35068,27 @@ msgid ""
 msgstr "封装 %s 焊盘 %s 有 %f 度的孔旋转。KiCad 仅支持 90 度角旋转。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2760
+#: pcbnew/plugins/altium/altium_pcb.cpp:2756
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "封装 %s 焊盘 %s 有一个未知类型 %d 的孔。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2777
+#: pcbnew/plugins/altium/altium_pcb.cpp:2773
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr "封装 %s 的焊盘 %s 使用了复杂的焊盘压层, 尚不支持"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2814
+#: pcbnew/plugins/altium/altium_pcb.cpp:2810
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "封装 %s 焊盘 %s 使用未知的焊盘形状。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2872
 #: pcbnew/plugins/altium/altium_pcb.cpp:2893
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
+#: pcbnew/plugins/altium/altium_pcb.cpp:2889
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35061,54 +35098,66 @@ msgstr ""
 "Eco1_User 层。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2913
+#: pcbnew/plugins/altium/altium_pcb.cpp:2909
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "非铜焊盘 %s 被连接到了某个网络, KiCad 不支持这种行为。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2919
+#: pcbnew/plugins/altium/altium_pcb.cpp:2915
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "非铜焊盘 %s有一个孔, KiCad 不支持这种情况。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2924
+#: pcbnew/plugins/altium/altium_pcb.cpp:2920
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "非铜焊盘\"%s\"使用复杂的焊盘压层, 尚不支持。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3066
+#: pcbnew/plugins/altium/altium_pcb.cpp:3062
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "非铜焊盘 '%s' 使用了未知的焊盘形状。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3076
+#: pcbnew/plugins/altium/altium_pcb.cpp:3072
 msgid "Loading vias..."
 msgstr "加载过孔中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3117
+#: pcbnew/plugins/altium/altium_pcb.cpp:3113
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
 msgstr "来自层 %d <-> %d 的过孔使用非铜层, KiCad 不支持这种情况。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3136
+#: pcbnew/plugins/altium/altium_pcb.cpp:3132
 msgid "Loading tracks..."
 msgstr "加载走线中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3308
+#: pcbnew/plugins/altium/altium_pcb.cpp:3300
 msgid "Loading unicode strings..."
 msgstr "正在加载 unicode 字符串..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3322
+#: pcbnew/plugins/altium/altium_pcb.cpp:3314
 msgid "Loading text..."
 msgstr "加载文本中..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3351
 #: pcbnew/plugins/altium/altium_pcb.cpp:3364
+#: pcbnew/plugins/altium/altium_pcb.cpp:3343
+#: pcbnew/plugins/altium/altium_pcb.cpp:3356
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "忽略了 Altium 层 %d 上的条形码 (尚不支持)。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3467
+#: pcbnew/plugins/altium/altium_pcb.cpp:3459
 msgid "Loading rectangles..."
 msgstr "加载矩形中..."
 
@@ -36310,7 +36359,7 @@ msgstr "布线起点违反 DRC。"
 
 #: pcbnew/router/pns_router.cpp:353
 msgid "Cannot start a differential pair in the middle of nowhere."
-msgstr "无法在空白覆铜开始差分对布线。"
+msgstr "无法在空白覆铜开始差分对走线。"
 
 #: pcbnew/router/router_tool.cpp:108
 msgid "Finish Track"
@@ -39213,11 +39262,11 @@ msgstr "调整单根布线长度"
 
 #: pcbnew/tools/pcb_actions.cpp:1486
 msgid "Tune length of a differential pair"
-msgstr "调整差分对布线长度"
+msgstr "调整差分对走线长度"
 
 #: pcbnew/tools/pcb_actions.cpp:1493
 msgid "Tune skew of a differential pair"
-msgstr "调整差分对布线偏移"
+msgstr "调整差分对走线偏移"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
@@ -40476,11 +40525,13 @@ msgstr "KiCad 原理图"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 印刷电路板"
 
-#~ msgid "Do you wish to delete excluded markers as well?"
-#~ msgstr "是否也要删除排除的标记?"
+#: pcbnew/dialogs/dialog_drc.cpp:1142
+msgid "Do you wish to delete excluded markers as well?"
+msgstr "是否也要删除排除的标记?"
 
-#~ msgid "Delete exclusions"
-#~ msgstr "删除排除项"
+#: pcbnew/dialogs/dialog_drc.cpp:1145
+msgid "Delete exclusions"
+msgstr "删除排除项"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "无法读取字符串，输入为空。"
