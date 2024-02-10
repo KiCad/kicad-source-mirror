@@ -6,7 +6,6 @@
 
 # create output directories
 rm -r tmp
-rm icon_*.png
 mkdir tmp
 mkdir tmp/16 tmp/24 tmp/32 tmp/48 tmp/64 tmp/256 tmp/ico
 echo "all directories created."

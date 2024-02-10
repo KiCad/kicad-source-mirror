@@ -5,7 +5,7 @@
    viewBox="0 0 256 256"
    version="1.1"
    sodipodi:docname="application-x-kicad-worksheet.svg"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   inkscape:version="1.3 (0e150ed6c4, 2023-07-21)"
    width="256"
    height="256"
    inkscape:export-filename="../../128x128/mimetypes/application-x-kicad-worksheet.png"
@@ -28,18 +28,18 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="3840"
-     inkscape:window-height="2109"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="1"
-     inkscape:cx="-37"
-     inkscape:cy="31.5"
-     inkscape:window-x="0"
-     inkscape:window-y="27"
+     inkscape:zoom="2"
+     inkscape:cx="95.75"
+     inkscape:cy="138.25"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1"
+     inkscape:current-layer="g1031"
      inkscape:snap-bbox="true"
      inkscape:object-paths="true"
      inkscape:snap-intersection-paths="true"
@@ -57,7 +57,11 @@
        spacingy="0.5"
        color="#9999ff"
        opacity="0.13"
-       empspacing="2" />
+       empspacing="2"
+       originx="0"
+       originy="0"
+       units="px"
+       visible="true" />
   </sodipodi:namedview>
   <metadata
      id="metadata43">
@@ -202,8 +206,7 @@
   <g
      id="g1031">
     <g
-       id="g1135"
-       transform="translate(2)">
+       id="g1135">
       <path
          id="path5939"
          style="fill:url(#linearGradient5941);fill-opacity:1;stroke:#bebebe;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
