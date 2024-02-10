@@ -68,7 +68,17 @@ wxString FindKicadFile( const wxString& shortname )
     {
         wxFileName buildDir( Pgm().GetExecutablePath(), shortname );
         buildDir.RemoveLastDir();
+#ifndef __WXMSW__
         buildDir.AppendDir( shortname );
+#else
+        buildDir.AppendDir( shortname.BeforeLast( '.' ) );
+#endif
+
+        if( buildDir.GetDirs().Last() == "pl_editor" )
+        {
+            buildDir.RemoveLastDir();
+            buildDir.AppendDir( "pagelayout_editor" );
+        }
 
         if( wxFileExists( buildDir.GetFullPath() ) )
             return buildDir.GetFullPath();
