@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-04 19:01+0000\n"
+"PO-Revision-Date: 2024-02-11 02:02+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4048,9 +4048,8 @@ msgid "Reset Unique Id"
 msgstr "Сбросить уникальный Id"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Посад.места"
+msgstr "Посад.места/конт.пл.:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -6877,9 +6876,8 @@ msgid "Courtyard collision shadow"
 msgstr "Пересечения обл. установки"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Найден недопустимый символ в логическом имени библиотеки"
+msgstr "Найден недопустимый символ в псевдониме библиотеки"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -16074,9 +16072,8 @@ msgstr ""
 "Не найдено альтернативное представление для символа '%s' в библиотеке '%s'."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1710
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Стиль корпуса"
+msgstr "Сменить стиль корпуса"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
@@ -19318,9 +19315,8 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Символ питания должен иметь только одну часть</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>Символ питания должен иметь только один вывод</b><br><br>"
+msgstr "<b>Символ питания не должен иметь варианты DeMorgan</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -21845,29 +21841,24 @@ msgid "Change property"
 msgstr "Изменение свойства"
 
 #: eeschema/widgets/search_handlers.cpp:136
-#, fuzzy
 msgid "Excl. sim"
-msgstr "Исключения"
+msgstr "Искл. сим"
 
 #: eeschema/widgets/search_handlers.cpp:137
-#, fuzzy
 msgid "Excl. BOM"
-msgstr "Исключен из перечня элементов"
+msgstr "Искл. BOM"
 
 #: eeschema/widgets/search_handlers.cpp:138
-#, fuzzy
 msgid "Excl. board"
-msgstr "буфер обмена"
+msgstr "Искл. платы"
 
 #: eeschema/widgets/search_handlers.cpp:355
-#, fuzzy
 msgid "Hierarchical"
-msgstr "Путь в иерархии"
+msgstr "Иерархическая"
 
 #: eeschema/widgets/search_handlers.cpp:357
-#, fuzzy
 msgid "Directive"
-msgstr "Директивная метка"
+msgstr "Директивная"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -32340,7 +32331,7 @@ msgstr "Править значения по умолчанию в \"Парам�
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:150
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:332
 msgid "Prefer zone connection"
-msgstr "Предпочитать соединения зон"
+msgstr "Приоритет соединению зоны"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:142
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:615
@@ -32350,6 +32341,8 @@ msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
 msgstr ""
+"Не создавать каплевидные переходы на дорожках, подключенных к площадкам, "
+"которые уже подключены к медной зоне."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -37305,7 +37298,7 @@ msgstr "Точек на кривой:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:370
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:547
 msgid "Allow teardrop to span two track segments"
-msgstr "Разрешить каплевидным переходам охватывать два сегмента дорожек"
+msgstr "Разрешить охватывать два сегмента дорожек"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:201
 msgid "Default properties for rectangular shapes:"
@@ -39528,9 +39521,8 @@ msgid "Previous footprint placement still in progress."
 msgstr "Всё ещё выполняется размещение предыдущего посад.места."
 
 #: pcbnew/footprint_libraries_utils.cpp:942
-#, fuzzy
 msgid "Insert Footprint"
-msgstr "Импорт посад.места"
+msgstr "Вставить посад.место"
 
 #: pcbnew/footprint_libraries_utils.cpp:963
 msgid "Save Footprint As"
@@ -39762,7 +39754,7 @@ msgstr "Целевой перекос"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2421
 msgid "Override Custom Rules"
-msgstr "Переопределить особые правила"
+msgstr "Переопр. особые правила"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2433
 msgid "Rounded"
@@ -39914,7 +39906,7 @@ msgstr "Сеанс Specctra..."
 
 #: pcbnew/menubar_pcb_editor.cpp:117
 msgid "Non-KiCad Board File..."
-msgstr "Файла платы из другой САПР..."
+msgstr "Файл платы из другой САПР..."
 
 #: pcbnew/menubar_pcb_editor.cpp:118
 msgid "Import board file from other applications"
@@ -42717,14 +42709,12 @@ msgid "Running DRC...\n"
 msgstr "Выполнение DRC...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1026
-#, fuzzy
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "Не удалось загрузить файл схемы\n"
+msgstr "Не удалось найти схему для проверок на соответствие.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1041
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Не удалось загрузить файл схемы\n"
+msgstr "Не удалось получить схему для проверок на соответствие.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1062 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -43306,7 +43296,7 @@ msgstr "Дорожка: %s (%s)"
 
 #: pcbnew/toolbars_pcb_editor.cpp:673 pcbnew/toolbars_pcb_editor.cpp:741
 msgid "Edit Pre-defined Sizes..."
-msgstr "Править предопределённые размеры..."
+msgstr "Править размеры..."
 
 #: pcbnew/toolbars_pcb_editor.cpp:710
 msgid "Via: use netclass sizes"
@@ -44028,7 +44018,7 @@ msgstr "Редактировать размеры ширина дорожки/п
 
 #: pcbnew/tools/edit_tool.cpp:980
 msgid "At least two straight track segments must be selected."
-msgstr "Как минимум два прямых отрезка дорожки должны быть выделены."
+msgstr "Должны быть выделены как минимум два прямых сегмента дорожки."
 
 #: pcbnew/tools/edit_tool.cpp:984 pcbnew/tools/edit_tool.cpp:1149
 #: pcbnew/tools/pcb_actions.cpp:601
@@ -44723,9 +44713,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "Добавляет дуги по касательной к выбранным линиям"
 
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "Фаска линий"
+msgstr "Фаска линий..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Cut away corners between selected lines"
@@ -45114,7 +45103,7 @@ msgstr "Экспорт данных трассировки Specctra DSN"
 
 #: pcbnew/tools/pcb_actions.cpp:1032
 msgid "Gerbers (.gbr)..."
-msgstr "Gerbers (.gbr)..."
+msgstr "Gerber-файлы (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1033
 msgid "Generate Gerbers for fabrication"
@@ -45175,7 +45164,7 @@ msgstr "Выбрать следующую ширину дорожки"
 
 #: pcbnew/tools/pcb_actions.cpp:1085
 msgid "Change track width to next pre-defined size"
-msgstr "Изменить ширину дорожки на следующий пред.определённый размер"
+msgstr "Изменить ширину дорожки на следующий пред.установленный размер"
 
 #: pcbnew/tools/pcb_actions.cpp:1092
 msgid "Switch Track Width to Previous"
@@ -45183,7 +45172,7 @@ msgstr "Выбрать предыдущую ширину дорожки"
 
 #: pcbnew/tools/pcb_actions.cpp:1093
 msgid "Change track width to previous pre-defined size"
-msgstr "Изменить ширину дорожки на предыдущий пред.определённый размер"
+msgstr "Изменить ширину дорожки на предыдущий пред.установленный размер"
 
 #: pcbnew/tools/pcb_actions.cpp:1100
 msgid "Increase Via Size"
@@ -45191,7 +45180,7 @@ msgstr "Увеличить размер перех.отв."
 
 #: pcbnew/tools/pcb_actions.cpp:1101
 msgid "Change via size to next pre-defined size"
-msgstr "Изменить размер перех.отв. на следующий пред.определённый размер"
+msgstr "Изменить размер перех.отв. на следующий пред.установленный размер"
 
 #: pcbnew/tools/pcb_actions.cpp:1108
 msgid "Decrease Via Size"
@@ -45199,7 +45188,7 @@ msgstr "Уменьшить размер перех.отв."
 
 #: pcbnew/tools/pcb_actions.cpp:1109
 msgid "Change via size to previous pre-defined size"
-msgstr "Изменить размер перех.отв. на предыдущий пред.определённый размер"
+msgstr "Изменить размер перех.отв. на предыдущий пред.установленный размер"
 
 #: pcbnew/tools/pcb_actions.cpp:1126
 msgid "Merge Zones"
@@ -45921,7 +45910,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2087
 msgid "Select/Expand Connection"
-msgstr "Выделить соединение"
+msgstr "Выделить/расширить соединение"
 
 #: pcbnew/tools/pcb_actions.cpp:2088
 msgid ""
@@ -46138,12 +46127,10 @@ msgid "Tune length of a differential pair"
 msgstr "Настроить длину диф.пары"
 
 #: pcbnew/tools/pcb_actions.cpp:2323
-#, fuzzy
 msgid "Tune Length of a Single Track"
 msgstr "Настроить длину одиночной дорожки"
 
 #: pcbnew/tools/pcb_actions.cpp:2324
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
 msgstr "Настроить длину диф.пары"
 
@@ -46211,7 +46198,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2405
 msgid "Drag 45 Degree Mode"
-msgstr "Перетаскивание под углом 45 градусов"
+msgstr "Перетащить под углом 45 градусов"
 
 #: pcbnew/tools/pcb_actions.cpp:2406
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
@@ -46219,7 +46206,7 @@ msgstr "Перетащить сегмент дорожки сохраняя со
 
 #: pcbnew/tools/pcb_actions.cpp:2414
 msgid "Drag Free Angle"
-msgstr "Перетаскивание под свободным углом"
+msgstr "Перетащить под свободным углом"
 
 #: pcbnew/tools/pcb_actions.cpp:2415
 msgid ""
@@ -47146,9 +47133,8 @@ msgstr "Текстовый блок"
 
 #: pcbnew/widgets/search_handlers.cpp:274
 #: pcbnew/widgets/search_handlers.cpp:353
-#, fuzzy
 msgid "Class"
-msgstr "Класс 1"
+msgstr "Класс"
 
 #: pcbnew/widgets/search_handlers.cpp:307
 #: pcbnew/widgets/search_handlers.cpp:391
@@ -47267,43 +47253,36 @@ msgid "Zone %s %s"
 msgstr "Зона %s  %s"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr "Ширина моста терморазгрузки не может быть меньше минимальной ширины."
+msgstr "Не может быть меньше минимальной ширины зоны"
 
 #: pcbnew/zone.cpp:1671
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Ширина штриха:"
+msgstr "Ширина штриха"
 
 #: pcbnew/zone.cpp:1678
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Ширина зазора:"
+msgstr "Зазор штриха"
 
 #: pcbnew/zone.cpp:1685
 msgid "Hatch Minimum Hole Ratio"
-msgstr ""
+msgstr "Отн. мин. размер отверстий в штрихе"
 
 #: pcbnew/zone.cpp:1693
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Тип скругления:"
+msgstr "Уровень скругления"
 
 #: pcbnew/zone.cpp:1699
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Уровень скругления:"
+msgstr "Величина скругления"
 
 #: pcbnew/zone.cpp:1705
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Удалять островки:"
+msgstr "Удалять островки"
 
 #: pcbnew/zone.cpp:1710
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Мин. площадь островка:"
+msgstr "Мин. площадь островка"
 
 #: pcbnew/zone.cpp:1725
 msgid "Minimum Width"
@@ -47503,19 +47482,16 @@ msgid "KiCad Printed Circuit Board"
 msgstr "Печатная плата KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
-#, fuzzy
 msgid "KiCad Footprint"
-msgstr "Редактор посад.мест KiCad"
+msgstr "Посадочное место KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
-#, fuzzy
 msgid "KiCad Schematic Symbol"
-msgstr "Символ"
+msgstr "Символ схемы KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "Редактор форматных рамок KiCad"
+msgstr "Форматная рамка KiCad"
 
 #~ msgid "Exclude from schematic bill of materials"
 #~ msgstr "Исключить из перечня элементов"
