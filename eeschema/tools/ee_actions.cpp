@@ -1349,7 +1349,7 @@ TOOL_ACTION EE_ACTIONS::alignToGrid( TOOL_ACTION_ARGS()
         .Name( "eeschema.AlignToGrid" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Align Elements to Grid" ) )
-        .Icon( BITMAPS::move )
+        .Icon( BITMAPS::align_elements_to_grid )
         .Flags( AF_ACTIVATE ) );
 
 // Schematic editor save copy curr sheet command
