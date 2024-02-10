@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-04 19:01+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2024-02-11 02:02+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3838,7 +3838,7 @@ msgstr "Redigering"
 
 #: common/dialogs/panel_common_settings_base.cpp:280
 msgid "Warp mouse to origin of moved object"
-msgstr "Flytta musmarkören till det flyttade objektets origo"
+msgstr "Flytta musmarkören till det flyttade objektets referenspunkt"
 
 #: common/dialogs/panel_common_settings_base.cpp:284
 msgid "First hotkey selects tool"
@@ -4024,9 +4024,8 @@ msgid "Reset Unique Id"
 msgstr "Återställ unikt id"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Fotavtryck"
+msgstr "Fotavtryck/lödytor:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -4406,7 +4405,7 @@ msgstr "Ta automatiskt bort avinstallerade bibliotek"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:87
 msgid "Library nickname prefix:"
-msgstr "Prefix för bibliotekets smeknamn:"
+msgstr "Prefix för bibliotekets kortnamn:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1948
 #: common/stroke_params.cpp:36
@@ -5897,7 +5896,7 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Dubblett av bibliotekets smeknamn '%s' hittades i "
+"Dubblett av bibliotekets kortnamn '%s' hittades i "
 "fotavtrycksbibliotekstabellfilen, rad %d."
 
 #: common/fp_lib_table.cpp:329
@@ -6843,9 +6842,8 @@ msgid "Courtyard collision shadow"
 msgstr "Skugga kollision mellan gårdsplaner"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Otillåtet tecken hittades i logikbibliotekets namn"
+msgstr "Otillåtet tecken hittades i bibliotekets kortnamn"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -9329,7 +9327,7 @@ msgstr "Det gick inte att skapa filen."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
-msgstr "Generatorns smeknamn:"
+msgstr "Generatorns kortnamn:"
 
 #: eeschema/dialogs/dialog_bom.cpp:387
 msgid "Add Generator"
@@ -9338,7 +9336,7 @@ msgstr "Lägg till generator"
 #: eeschema/dialogs/dialog_bom.cpp:396
 #, c-format
 msgid "Nickname '%s' already in use."
-msgstr "Smeknamn '%s' används redan."
+msgstr "Kortnamn '%s' används redan."
 
 #: eeschema/dialogs/dialog_bom.cpp:425
 #: eeschema/dialogs/dialog_export_netlist.cpp:822
@@ -14394,12 +14392,12 @@ msgstr "Förskjutning för &upprepade stift:"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:430
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:538
 msgid "A library table row nickname and path cells are empty."
-msgstr "Smeknamns- och sökvägsceller är tomma i en bibliotekstabellsrad."
+msgstr "Kortnamns- och sökvägsceller är tomma i en bibliotekstabellsrad."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:432
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:540
 msgid "A library table row nickname cell is empty."
-msgstr "Smeknamnscellen i en bibliotekstabellsrad är tom."
+msgstr "Kortnamnscellen i en bibliotekstabellsrad är tom."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:434
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:542
@@ -14433,20 +14431,20 @@ msgstr "Avbryt uppdatering av tabell"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:456
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "Otillåtet tecken '%c' i smeknamn '%s'"
+msgstr "Otillåtet tecken '%c' i kortnamn '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:469
 #: eeschema/dialogs/panel_sym_lib_table.cpp:521
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:577
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:625
 msgid "Library Nickname Error"
-msgstr "Fel i bibliotekets smeknamn"
+msgstr "Fel i bibliotekets kortnamn"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:508
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:611
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr "Flera bibliotek kan inte dela samma smeknamn ('%s')."
+msgstr "Flera bibliotek kan inte dela samma kortnamn ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:557 eeschema/symbol_library.cpp:576
 #, c-format
@@ -14471,18 +14469,18 @@ msgstr "Lägg till bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:633
 msgid "Warning: Duplicate Nickname"
-msgstr "Varning: Dubblett av smeknamn"
+msgstr "Varning: Dubblett av kortnamn"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:634
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
 #, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Ett bibliotek med smeknamnet \"%s\" finns redan."
+msgstr "Ett bibliotek med kortnamnet \"%s\" finns redan."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:635
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
 msgid "One of the nicknames will need to be changed after adding this library."
-msgstr "Ett av smeknamnen måste ändras när du har lagt till detta bibliotek."
+msgstr "Ett av kortnamnen måste ändras när du har lagt till detta bibliotek."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:654 eeschema/sch_base_frame.cpp:284
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1037
@@ -14597,7 +14595,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:973
 #: pcbnew/footprint_libraries_utils.cpp:1353
 msgid "Nickname"
-msgstr "Smeknamn"
+msgstr "Kortnamn"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:47
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
@@ -16071,9 +16069,8 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "Ingen alternativ symbolform hittades för symbol '%s' i bibliotek %s'."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1710
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Symbolform"
+msgstr "Byt symbolform"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
@@ -19312,9 +19309,9 @@ msgstr ""
 "<b>En strömförsörjningssymbol skall ha en och endast en enhet</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>En strömförsörjningssymbol skall ha endast ett stift</b><br><br>"
+msgstr ""
+"<b>En strömförsörjningssymbol skall inte ha DeMorgan-varianter</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -19801,7 +19798,8 @@ msgstr "Symbol %s sparad i biblioteket '%s'."
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"Dubblett av bibliotekssmeknamn '%s' hittades i symbolbibliotekets fil, rad %d"
+"Dubblett av biblioteks kortnamn '%s' hittades i symbolbibliotekets fil, rad "
+"%d"
 
 #: eeschema/symbol_library.cpp:598 eeschema/symbol_tree_model_adapter.cpp:216
 #, c-format
@@ -21846,29 +21844,24 @@ msgid "Change property"
 msgstr "Ändra egenskap"
 
 #: eeschema/widgets/search_handlers.cpp:136
-#, fuzzy
 msgid "Excl. sim"
-msgstr "Uteslutningar"
+msgstr "Uteslut sim"
 
 #: eeschema/widgets/search_handlers.cpp:137
-#, fuzzy
 msgid "Excl. BOM"
-msgstr "Uteslut från komponentlistan"
+msgstr "Uteslut fr. komp.lista"
 
 #: eeschema/widgets/search_handlers.cpp:138
-#, fuzzy
 msgid "Excl. board"
-msgstr "urklipp"
+msgstr "Uteslut fr. mönsterkort"
 
 #: eeschema/widgets/search_handlers.cpp:355
-#, fuzzy
 msgid "Hierarchical"
-msgstr "Hierarkisk sökväg"
+msgstr "Hierarkisk"
 
 #: eeschema/widgets/search_handlers.cpp:357
-#, fuzzy
 msgid "Directive"
-msgstr "Direktivetikett"
+msgstr "Direktiv"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -29334,7 +29327,7 @@ msgstr "Datum"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:669
 msgid "Board name"
-msgstr "Kortnamn"
+msgstr "Mönsterkortets namn"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:680
 #: pcbnew/dialogs/dialog_board_statistics.cpp:688
@@ -30549,7 +30542,7 @@ msgstr "Rapportfilen '%s' har skapats <br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1233
 msgid "not run"
-msgstr "inte utförd"
+msgstr "inte utförd(a)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
@@ -32360,6 +32353,8 @@ msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
 msgstr ""
+"Skapa inte kragförstärkningar på ledare anslutna till lödytor som också är "
+"anslutna till en kopparzon."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -35148,7 +35143,7 @@ msgstr "mapp med %s filer"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:564
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Olaglig karaktär '%c' i smeknamn '%s'."
+msgstr "Olagligt tecken '%c' i kortnamn '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:809
 msgid ""
@@ -35187,7 +35182,7 @@ msgstr "Välj %s Bibliotek"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1015
 msgid "Warning: Duplicate Nicknames"
-msgstr "Varning: Dubblett smeknamn"
+msgstr "Varning: Dubbletter av kortnamn"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
 msgid "LIbrary Format"
@@ -39147,7 +39142,7 @@ msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Fel vid sparning av mönsterkortsfil '%s'.\n"
+"Fel vid försök att spara mönsterkortsfil '%s'.\n"
 "Kunde inte byta namn på temporär fil '%s."
 
 #: pcbnew/files.cpp:1128
@@ -39525,9 +39520,8 @@ msgid "Previous footprint placement still in progress."
 msgstr "Föregående fotavtrycksplacering pågår fortfarande."
 
 #: pcbnew/footprint_libraries_utils.cpp:942
-#, fuzzy
 msgid "Insert Footprint"
-msgstr "Importera fotavtryck"
+msgstr "Infoga fotavtryck"
 
 #: pcbnew/footprint_libraries_utils.cpp:963
 msgid "Save Footprint As"
@@ -42692,14 +42686,13 @@ msgid "Running DRC...\n"
 msgstr "Utför designregelkontroll...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1026
-#, fuzzy
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "Det gick inte att läsa in kretsschemafilen\n"
+msgstr "Det gick inte att hitta kretsschema för paritetskontroller.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1041
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Det gick inte att läsa in kretsschemafilen\n"
+msgstr ""
+"Det gick inte att läsa in kretsschemats nätlista för paritetskontroller.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1062 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -44503,7 +44496,7 @@ msgstr "Placera Footprint Anchor"
 
 #: pcbnew/tools/pcb_actions.cpp:340
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr "Ställ in fotavtryckets origo (ankare)"
+msgstr "Ställ in fotavtryckets referenspunkt (ankare)"
 
 #: pcbnew/tools/pcb_actions.cpp:349
 msgid "Increase Line Width"
@@ -44707,9 +44700,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "Lägger till bågar som tangerar de valda linjerna"
 
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "Fasa av linjer"
+msgstr "Fasa av linjer..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Cut away corners between selected lines"
@@ -46121,14 +46113,12 @@ msgid "Tune length of a differential pair"
 msgstr "Anpassa längden på ett differentialpar"
 
 #: pcbnew/tools/pcb_actions.cpp:2323
-#, fuzzy
 msgid "Tune Length of a Single Track"
-msgstr "Anpassa längden för en enskild ledare"
+msgstr "Anpassa längden på en enskild ledare"
 
 #: pcbnew/tools/pcb_actions.cpp:2324
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
-msgstr "Anpassa längden på ett differentialpar"
+msgstr "Anpassa längden på ett differentiellt par"
 
 #: pcbnew/tools/pcb_actions.cpp:2333
 msgid "Tune Skew of a Differential Pair"
@@ -46607,7 +46597,7 @@ msgstr "DRC-kränkningar som har uteslutits individuellt"
 
 #: pcbnew/widgets/appearance_controls.cpp:346
 msgid "Show footprint and text origins as a cross"
-msgstr "Visa origo (ankare) för fotavtryck och text som ett kors"
+msgstr "Visa referenspunkt (origo) för fotavtryck och text som ett kors"
 
 #: pcbnew/widgets/appearance_controls.cpp:347
 msgid "Locked Item Shadow"
@@ -47125,9 +47115,8 @@ msgstr "Textruta"
 
 #: pcbnew/widgets/search_handlers.cpp:274
 #: pcbnew/widgets/search_handlers.cpp:353
-#, fuzzy
 msgid "Class"
-msgstr "Klass 1"
+msgstr "Klass"
 
 #: pcbnew/widgets/search_handlers.cpp:307
 #: pcbnew/widgets/search_handlers.cpp:391
@@ -47246,44 +47235,36 @@ msgid "Zone %s %s"
 msgstr "Zon %s %s"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr ""
-"Bredd på eker för termisk avlastning kan inte vara mindre än minsta bredd."
+msgstr "Kan inte vara mindre än zonens minsta bredd"
 
 #: pcbnew/zone.cpp:1671
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Rutnäts linjebredd:"
+msgstr "Rutnäts linjebredd"
 
 #: pcbnew/zone.cpp:1678
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Rutnäts gap:"
+msgstr "Rutnäts gap"
 
 #: pcbnew/zone.cpp:1685
 msgid "Hatch Minimum Hole Ratio"
-msgstr ""
+msgstr "Rutnäts minsta hålförhållande"
 
 #: pcbnew/zone.cpp:1693
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Utjämningsgrad:"
+msgstr "Avrundningsgrad"
 
 #: pcbnew/zone.cpp:1699
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Utjämningsradie:"
+msgstr "Avrundningsradie"
 
 #: pcbnew/zone.cpp:1705
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Ta bort öar:"
+msgstr "Ta bort öar"
 
 #: pcbnew/zone.cpp:1710
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Minsta östorlek:"
+msgstr "Minsta östorlek"
 
 #: pcbnew/zone.cpp:1725
 msgid "Minimum Width"
@@ -47482,19 +47463,16 @@ msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-mönsterkort"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
-#, fuzzy
 msgid "KiCad Footprint"
-msgstr "KiCad fotavtrycksredigerare"
+msgstr "KiCad fotavtryck"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
-#, fuzzy
 msgid "KiCad Schematic Symbol"
-msgstr "Redigera Schematisk Symbol"
+msgstr "KiCad Kretsschemasymbol"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad-ritningsarksredigerare"
+msgstr "KiCad-ritningsark"
 
 #~ msgid "Exclude from schematic bill of materials"
 #~ msgstr "Uteslut från kretsschemats komponentlista"
