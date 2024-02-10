@@ -527,6 +527,15 @@ void SCH_COMMIT::Revert()
             // This must be called before any calls that require stable object pointers.
             screen->Update( item );
 
+            // This hack is to prevent incorrectly parented symbol pins from breaking the
+            // connectivity algorithm.
+            if( item->Type() == SCH_SYMBOL_T )
+            {
+                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+                wxCHECK2( symbol, continue );
+                symbol->UpdatePins();
+            }
+
             item->SetConnectivityDirty();
 
             if( view )
