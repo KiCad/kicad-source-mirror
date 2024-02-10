@@ -21,6 +21,7 @@
  */
 
 #include "tool/tool_action.h"
+#include <wx/filedlg.h>
 #include <wx/hyperlink.h>
 #include <advanced_config.h>
 
@@ -42,6 +43,7 @@ using namespace std::placeholders;
 #include <dialogs/dialog_pns_diff_pair_dimensions.h>
 #include <dialogs/dialog_track_via_size.h>
 #include <math/vector2wx.h>
+#include <paths.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/appearance_controls.h>
 #include <connectivity/connectivity_data.h>
@@ -570,39 +572,38 @@ void ROUTER_TOOL::Reset( RESET_REASON aReason )
 
 void ROUTER_TOOL::saveRouterDebugLog()
 {
+    static wxString mruPath = PATHS::GetDefaultUserProjectsPath();
+    static size_t   lastLoggerSize = 0;
+
     auto logger = m_router->Logger();
 
-    if( !logger || logger->GetEvents().size() == 0 )
+    if( !logger || logger->GetEvents().size() == 0
+        || logger->GetEvents().size() == lastLoggerSize )
+    {
         return;
+    }
 
-    wxString cwd = wxGetCwd();
+    wxFileDialog dlg( frame(), _( "Save router log" ), mruPath, "pns.log",
+                      "PNS log files" + AddFileExtListToFilter( { "log" } ),
+                      wxFD_OVERWRITE_PROMPT | wxFD_SAVE );
 
-    wxFileName fname_log;
-    fname_log.SetPath( cwd );
-    fname_log.SetName( "pns.log" );
-
-    wxFileName fname_dump( cwd );
-    fname_dump.SetPath( cwd );
-    fname_dump.SetName( "pns.dump" );
-
-    wxFileName fname_settings( cwd );
-    fname_settings.SetPath( cwd );
-    fname_settings.SetName( "pns.settings" );
-
-    wxString msg = wxString::Format( wxT( "Path: %s\nEvent file: %s\nBoard dump: %s\nSettings dump: %s" ),
-                                     fname_log.GetPath(),
-                                     fname_log.GetFullName(),
-                                     fname_dump.GetFullName(),
-                                     fname_settings.GetFullName() );
-
-    int rv = OKOrCancelDialog( nullptr, _( "Save router log" ),
-            _( "Would you like to save the router\nevent log for debugging purposes?" ), msg,
-            _( "OK" ), _( "Cancel" ) );
-
-    if( !rv )
+    if( dlg.ShowModal() != wxID_OK )
+    {
+        lastLoggerSize = logger->GetEvents().size(); // prevent re-entry
         return;
+    }
 
-    FILE* settings_f = wxFopen( fname_settings.GetFullPath(), "wb" );
+    wxFileName fname_log( dlg.GetPath() );
+    mruPath = fname_log.GetPath();
+
+    wxFileName fname_dump( fname_log );
+    fname_dump.SetExt( "dump" );
+
+    wxFileName fname_settings( fname_log );
+    fname_settings.SetExt( "settings" );
+
+
+    FILE* settings_f = wxFopen( fname_settings.GetAbsolutePath(), "wb" );
     std::string settingsStr = m_router->Settings().FormatAsString();
     fprintf( settings_f, "%s\n", settingsStr.c_str() );
     fclose( settings_f );
@@ -612,11 +613,11 @@ void ROUTER_TOOL::saveRouterDebugLog()
 
     PCB_IO_KICAD_SEXPR  pcb_io;
 
-    pcb_io.SaveBoard( fname_dump.GetFullPath(), m_iface->GetBoard(), nullptr );
+    pcb_io.SaveBoard( fname_dump.GetAbsolutePath(), m_iface->GetBoard(), nullptr );
 
     PROJECT* prj = m_iface->GetBoard()->GetProject();
-    prj->GetProjectFile().SaveAs( cwd, "pns" );
-    prj->GetLocalSettings().SaveAs( cwd, "pns" );
+    prj->GetProjectFile().SaveAs( fname_dump.GetPath(), fname_dump.GetName() );
+    prj->GetLocalSettings().SaveAs( fname_dump.GetPath(), fname_dump.GetName() );
 
     // Build log file:
     std::vector<PNS::ITEM*> added, removed, heads;
@@ -632,14 +633,23 @@ void ROUTER_TOOL::saveRouterDebugLog()
             removedKIIDs.insert( item->Parent()->m_Uuid );
     }
 
-    FILE*    log_f = wxFopen( fname_log.GetFullPath(), "wb" );
+    FILE*    log_f = wxFopen( fname_log.GetAbsolutePath(), "wb" );
     wxString logString = PNS::LOGGER::FormatLogFileAsString( m_router->Mode(),
                                                              added, removedKIIDs, heads,
                                                              logger->GetEvents() );
+
+    if( !log_f )
+    {
+        DisplayError( frame(), wxString::Format( _( "Unable to write '%s'." ),
+                                                 fname_log.GetAbsolutePath() ) );
+        return;
+    }
+
     fprintf( log_f, "%s\n", logString.c_str().AsChar() );
     fclose( log_f );
 
     logger->Clear(); // prevent re-entry
+    lastLoggerSize = 0;
 }
 
 
