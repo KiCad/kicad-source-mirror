@@ -416,8 +416,10 @@ const BOX2I SCH_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
     BOX2I     r;
 
     if( m_libPin )
-        m_libPin->GetBoundingBox( aIncludeInvisiblePins, aIncludeNameAndNumber,
-                                  aIncludeElectricalType );
+        r = m_libPin->GetBoundingBox( aIncludeInvisiblePins, aIncludeNameAndNumber,
+                                      aIncludeElectricalType );
+    else
+        wxFAIL;
 
     r.RevertYAxis();
 
