@@ -318,7 +318,7 @@ void TRACE_MANAGER::traceV( const wxString& aWhat, const wxString& aFmt, va_list
     wxString str;
     str.PrintfV( aFmt, vargs );
 
-#ifdef __unix__
+#if defined( __UNIX__ ) || defined( _WIN32 )
     fprintf( stderr, " %-30s | %s", aWhat.c_str().AsChar(), str.c_str().AsChar() );
 #endif
 }
