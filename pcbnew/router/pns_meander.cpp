@@ -300,6 +300,9 @@ int MEANDER_SHAPE::MinAmplitude() const
 
 int MEANDER_SHAPE::cornerRadius() const
 {
+    if( m_amplitude == 0 )
+        return 0;
+
     int minCr = 0;
 
     if( m_placer->MeanderSettings().m_cornerStyle == MEANDER_STYLE_ROUND )
