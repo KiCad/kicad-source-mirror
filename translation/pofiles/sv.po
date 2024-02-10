@@ -3195,7 +3195,7 @@ msgstr "Redigering"
 
 #: common/dialogs/panel_common_settings_base.cpp:250
 msgid "Warp mouse to origin of moved object"
-msgstr "Flytta musmarkören till det flyttade objektets origo"
+msgstr "Flytta musmarkören till det flyttade objektets referenspunkt"
 
 #: common/dialogs/panel_common_settings_base.cpp:254
 msgid "First hotkey selects tool"
@@ -4977,7 +4977,7 @@ msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr ""
-"Dubblett av bibliotekets smeknamn '%s' hittades i "
+"Dubblett av bibliotekets kortnamn '%s' hittades i "
 "fotavtrycksbibliotekstabellfilen, rad %d."
 
 #: common/fp_lib_table.cpp:319
@@ -5768,7 +5768,7 @@ msgstr "Fel vid extrahering av fil!"
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:102
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:153
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:153 eeschema/sch_plotter.cpp:904
 #, c-format
 msgid "Failed to create file '%s'."
 msgstr "Det gick inte att skapa filen '%s'."
@@ -7874,7 +7874,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom.cpp:382 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
-msgstr "Generatorns smeknamn:"
+msgstr "Generatorns kortnamn:"
 
 #: eeschema/dialogs/dialog_bom.cpp:382
 msgid "Add Generator"
@@ -7883,7 +7883,7 @@ msgstr "Lägg till generator"
 #: eeschema/dialogs/dialog_bom.cpp:391
 #, c-format
 msgid "Nickname '%s' already in use."
-msgstr "Smeknamn '%s' används redan."
+msgstr "Kortnamn '%s' används redan."
 
 #: eeschema/dialogs/dialog_bom.cpp:420
 #: eeschema/dialogs/dialog_export_netlist.cpp:769
@@ -8442,6 +8442,7 @@ msgstr "Radera undantag också?"
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
 #: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
+#: pcbnew/dialogs/dialog_drc.cpp:1143
 msgid "Delete All Markers"
 msgstr "Ta bort alla markörer"
 
@@ -12353,12 +12354,12 @@ msgstr "50"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:356
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:540
 msgid "A library table row nickname and path cells are empty."
-msgstr "Smeknamns- och sökvägsceller är tomma i en bibliotekstabellsrad."
+msgstr "Kortnamns- och sökvägsceller är tomma i en bibliotekstabellsrad."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:358
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:542
 msgid "A library table row nickname cell is empty."
-msgstr "Smeknamnscellen i en bibliotekstabellsrad är tom."
+msgstr "Kortnamnscellen i en bibliotekstabellsrad är tom."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:360
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:544
@@ -12392,20 +12393,20 @@ msgstr "Avbryt uppdatering av tabell"
 #: eeschema/dialogs/panel_sym_lib_table.cpp:380
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'"
-msgstr "Otillåtet tecken '%c' i smeknamn '%s'"
+msgstr "Otillåtet tecken '%c' i kortnamn '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:391
 #: eeschema/dialogs/panel_sym_lib_table.cpp:432
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:575
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:621
 msgid "Library Nickname Error"
-msgstr "Fel i bibliotekets smeknamn"
+msgstr "Fel i bibliotekets kortnamn"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:421
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:609
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
-msgstr "Flera bibliotek kan inte dela samma smeknamn ('%s')."
+msgstr "Flera bibliotek kan inte dela samma kortnamn ('%s')."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:465 eeschema/symbol_library.cpp:534
 #, c-format
@@ -12418,18 +12419,18 @@ msgstr "Fel vid inläsning av bibliotek"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:515
 msgid "Warning: Duplicate Nickname"
-msgstr "Varning: Dubblett av smeknamn"
+msgstr "Varning: Dubblett av kortnamn"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:516
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:904
 #, c-format
 msgid "A library nicknamed '%s' already exists."
-msgstr "Ett bibliotek med smeknamnet \"%s\" finns redan."
+msgstr "Ett bibliotek med kortnamnet \"%s\" finns redan."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:517
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:905
 msgid "One of the nicknames will need to be changed after adding this library."
-msgstr "Ett av smeknamnen måste ändras när du har lagt till detta bibliotek."
+msgstr "Ett av kortnamnen måste ändras när du har lagt till detta bibliotek."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:535 eeschema/sch_base_frame.cpp:276
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:923
@@ -12550,7 +12551,7 @@ msgstr "Aktiv"
 #: pcbnew/footprint_libraries_utils.cpp:1042
 #: pcbnew/footprint_libraries_utils.cpp:1359
 msgid "Nickname"
-msgstr "Smeknamn"
+msgstr "Kortnamn"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:47
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:97
@@ -13141,15 +13142,14 @@ msgstr ""
 "Vill du spara det aktuella dokumentet innan du fortsätter?"
 
 #: eeschema/files-io.cpp:598
-#, fuzzy
 msgid ""
 "This operation replaces the contents of the current project.\n"
 "\n"
 "Do you want to proceed?"
 msgstr ""
-"Denna åtgärd kan inte ångras.\n"
+"Denna åtgärd ersätter det nuvarande innehållet i projektet.\n"
 "\n"
-"Vill du spara det aktuella dokumentet innan du fortsätter?"
+"Är du säker på att du vill fortsätta?"
 
 #: eeschema/files-io.cpp:635 pcbnew/files.cpp:178
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:191
@@ -13798,6 +13798,7 @@ msgid "KiCad Schematic Editor"
 msgstr "KiCads kretsschemaredigerare"
 
 #: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
+#: eeschema/sch_edit_frame.cpp:1726
 msgid "Schematic Hierarchy"
 msgstr "Kretsschemahierarki"
 
@@ -13827,6 +13828,7 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
+#: eeschema/sch_plotter.cpp:1028
 msgid "Schematic"
 msgstr "Kretsschema"
 
@@ -13867,7 +13869,7 @@ msgstr "[Osparat]"
 msgid "[no schematic loaded]"
 msgstr "[inget kretsschema inläst]"
 
-#: eeschema/sch_edit_frame.cpp:1747
+#: eeschema/sch_edit_frame.cpp:1747 eeschema/sch_edit_frame.cpp:1749
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Markerat nät: %s"
@@ -14043,18 +14045,18 @@ msgstr "Plottade till '%s'.\n"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:126 eeschema/sch_plotter.cpp:930
 msgid "Done."
 msgstr "Färdig."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
 #: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
-#: pcbnew/dialogs/dialog_plot.cpp:1122
+#: pcbnew/dialogs/dialog_plot.cpp:1122 eeschema/sch_plotter.cpp:896
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Plottade till '%s'."
 
-#: eeschema/sch_plotter.cpp:1035
+#: eeschema/sch_plotter.cpp:1035 eeschema/sch_plotter.cpp:1036
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Det gick inte att skriva plot-filer till mappen '%s'."
@@ -14092,6 +14094,7 @@ msgstr ""
 "Ange pythonsymbolen som implementerar SCH_PLUGIN::Symbol*() -funktionerna."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -14101,65 +14104,80 @@ msgstr ""
 "signalkabelstam som blivit konverterad till ett ark."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Lagringsfilen ofullständigt tolkad (%d bytes återstår)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr "Okänt eller oväntat post-ID %d funnet i avsnittet \"Additional\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Post 'IEEE_SYMBOL' hanterades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
 msgstr "Post 'PIECHART' hanterades inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "\"Compile mask\" stöds för närvarande inte."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr "Okänt eller oväntat post-ID %d funnet i avsnittet \"FileHeader\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr "Symbol \"%s\" i ark \"%s\" vid index %d ersatt med symbol \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
 msgid "Pin has unexpected orientation."
 msgstr "Stiftet har en oväntad riktning."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
 msgid "Pin has unexpected electrical type."
 msgstr "Stift har en oväntad elektrisk typ."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 msgid "Pin has unexpected outer edge type."
 msgstr "Stift har oväntad yttre-kant-typ."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
 msgid "Pin has unexpected inner edge type."
 msgstr "Stift har oväntad inre-kant-typ."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Bezier har %d kontrollpunkter. Åtminstone 2 förväntas."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Ellips som ej stöds importerades inte vid (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14169,15 +14187,18 @@ msgstr ""
 "Vänligen kontrollera det importerade kretsschemat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "Strömförsörjningsport med okänd stil har importerats som typ 'Bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Strömförsörjningssymbolen skapar en global etikett med namnet '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14187,22 +14208,27 @@ msgstr ""
 "det importerade kretsschemat."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Port %s har inga anslutningar."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Inbäddad fil %s hittades inte i lagring."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
 #, c-format
 msgid "Error reading image %s."
 msgstr "Fel vid inläsning av bild %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
+#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
 #, c-format
 msgid "File not found %s."
 msgstr "Fil %s hittades inte."
@@ -16834,7 +16860,8 @@ msgstr "Symbol %s sparad i biblioteket '%s'."
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
 msgstr ""
-"Dubblett av bibliotekssmeknamn '%s' hittades i symbolbibliotekets fil, rad %d"
+"Dubblett av biblioteks kortnamn '%s' hittades i symbolbibliotekets fil, rad "
+"%d"
 
 #: eeschema/symbol_library.cpp:556 eeschema/symbol_tree_model_adapter.cpp:217
 #, c-format
@@ -18342,12 +18369,13 @@ msgstr "Bus har inga medlemmar"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Tryck på <ESC> för att avbryta ritning."
 
-#: eeschema/tools/sch_move_tool.cpp:796
+#: eeschema/tools/sch_move_tool.cpp:796 eeschema/tools/sch_move_tool.cpp:794
 msgid "Press <ESC> to cancel drag."
 msgstr "Tryck på <ESC> för att avbryta drag."
 
 #: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel move."
 msgstr "Tryck på <ESC> för att avbryta flytt."
 
@@ -20659,7 +20687,7 @@ msgstr "Ta automatiskt bort avinstallerade bibliotek"
 
 #: kicad/pcm/dialogs/panel_pcm_settings_base.cpp:64
 msgid "Library nickname prefix:"
-msgstr "Prefix för bibliotekets smeknamn:"
+msgstr "Prefix för bibliotekets kortnamn:"
 
 #: kicad/pcm/pcm.cpp:123
 #, c-format
@@ -24932,7 +24960,7 @@ msgstr "Datum"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:664
 msgid "Board name"
-msgstr "Kortnamn"
+msgstr "Mönsterkortets namn"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:667
 msgid "Board"
@@ -26039,7 +26067,7 @@ msgstr "Rapportfilen '%s' har skapats <br>"
 
 #: pcbnew/dialogs/dialog_drc.cpp:1285
 msgid "not run"
-msgstr "inte utförd"
+msgstr "inte utförd(a)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:27
 msgid "Refill all zones before performing DRC"
@@ -30446,7 +30474,7 @@ msgstr "Redigera alternativ"
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:564
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
-msgstr "Olaglig karaktär '%c' i smeknamn '%s'."
+msgstr "Olagligt tecken '%c' i kortnamn '%s'."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:812
 #, c-format
@@ -30463,7 +30491,7 @@ msgstr "Det gick inte att öppna kataloger för att leta efter bibliotek"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:903
 msgid "Warning: Duplicate Nicknames"
-msgstr "Varning: Dubblett smeknamn"
+msgstr "Varning: Dubbletter av kortnamn"
 
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:97
 msgid "LIbrary Format"
@@ -33623,7 +33651,7 @@ msgid ""
 "Error saving board file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Fel vid sparning av mönsterkortsfil '%s'.\n"
+"Fel vid försök att spara mönsterkortsfil '%s'.\n"
 "Kunde inte byta namn på temporär fil '%s."
 
 #: pcbnew/files.cpp:1218
@@ -35626,10 +35654,12 @@ msgid "Loading arcs..."
 msgstr "Läser in bågar..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2615
+#: pcbnew/plugins/altium/altium_pcb.cpp:2611
 msgid "Loading pads..."
 msgstr "Läser in lödytor..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2700
+#: pcbnew/plugins/altium/altium_pcb.cpp:2696
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
@@ -35637,11 +35667,13 @@ msgstr ""
 "hålmonteringshål."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2721
+#: pcbnew/plugins/altium/altium_pcb.cpp:2717
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Fotavtryck %s lödyta %s har ett fyrkantigt hål (stöds inte ännu)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2748
+#: pcbnew/plugins/altium/altium_pcb.cpp:2744
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35651,11 +35683,13 @@ msgstr ""
 "rotationer på 90 grader."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2760
+#: pcbnew/plugins/altium/altium_pcb.cpp:2756
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Fotavtryck %s lödyta %s använder ett hål av okänd typ %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2777
+#: pcbnew/plugins/altium/altium_pcb.cpp:2773
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
@@ -35663,12 +35697,15 @@ msgstr ""
 "inte stöds ännu."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2814
+#: pcbnew/plugins/altium/altium_pcb.cpp:2810
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "Fotavtryck %s lödyta %s använder en okänd lödyte-form."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2872
 #: pcbnew/plugins/altium/altium_pcb.cpp:2893
+#: pcbnew/plugins/altium/altium_pcb.cpp:2868
+#: pcbnew/plugins/altium/altium_pcb.cpp:2889
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35678,30 +35715,36 @@ msgstr ""
 "i KiCad. Lödytan har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2913
+#: pcbnew/plugins/altium/altium_pcb.cpp:2909
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "Koppar-fria lödytan %s är kopplad till ett nät, vilket inte stöds."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2919
+#: pcbnew/plugins/altium/altium_pcb.cpp:2915
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Kopparfri lödyta '%s' har ett hål, vilket inte stöds."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2924
+#: pcbnew/plugins/altium/altium_pcb.cpp:2920
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "Kopparfri lödyta %s har en komplex kragstapel, vilket inte stöds ännu."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3066
+#: pcbnew/plugins/altium/altium_pcb.cpp:3062
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Koppar-fria lödytan %s använder en okänd lödyte-form."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3076
+#: pcbnew/plugins/altium/altium_pcb.cpp:3072
 msgid "Loading vias..."
 msgstr "Läser in vior..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3117
+#: pcbnew/plugins/altium/altium_pcb.cpp:3113
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -35709,24 +35752,30 @@ msgstr ""
 "Via från lager %d till %d använder ett koppar-fritt lager, vilket inte stöds."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3136
+#: pcbnew/plugins/altium/altium_pcb.cpp:3132
 msgid "Loading tracks..."
 msgstr "Läser in ledare..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3308
+#: pcbnew/plugins/altium/altium_pcb.cpp:3300
 msgid "Loading unicode strings..."
 msgstr "Läser in Unicode-strängar..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3322
+#: pcbnew/plugins/altium/altium_pcb.cpp:3314
 msgid "Loading text..."
 msgstr "Läser in text..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3351
 #: pcbnew/plugins/altium/altium_pcb.cpp:3364
+#: pcbnew/plugins/altium/altium_pcb.cpp:3343
+#: pcbnew/plugins/altium/altium_pcb.cpp:3356
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ignorerade streckkod på Altium-lagret %d (stöds inte ännu)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3467
+#: pcbnew/plugins/altium/altium_pcb.cpp:3459
 msgid "Loading rectangles..."
 msgstr "Läser in rektanglar..."
 
@@ -38557,7 +38606,7 @@ msgstr "Placera Footprint Anchor"
 
 #: pcbnew/tools/pcb_actions.cpp:207
 msgid "Set the coordinate origin point (anchor) of the footprint"
-msgstr "Ställ in fotavtryckets origo (ankare)"
+msgstr "Ställ in fotavtryckets referenspunkt (ankare)"
 
 #: pcbnew/tools/pcb_actions.cpp:213
 msgid "Increase Line Width"
@@ -40370,7 +40419,7 @@ msgstr "DRC-kränkningar som har uteslutits individuellt"
 
 #: pcbnew/widgets/appearance_controls.cpp:352
 msgid "Show footprint and text origins as a cross"
-msgstr "Visa origo (ankare) för fotavtryck och text som ett kors"
+msgstr "Visa referenspunkt (origo) för fotavtryck och text som ett kors"
 
 #: pcbnew/widgets/appearance_controls.cpp:353
 msgid "Locked Item Shadow"
@@ -41220,11 +41269,13 @@ msgstr "KiCad schema"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad-mönsterkort"
 
-#~ msgid "Do you wish to delete excluded markers as well?"
-#~ msgstr "Vill du också ta bort uteslutna markörer?"
+#: pcbnew/dialogs/dialog_drc.cpp:1142
+msgid "Do you wish to delete excluded markers as well?"
+msgstr "Vill du också ta bort uteslutna markörer?"
 
-#~ msgid "Delete exclusions"
-#~ msgstr "Ta bort undantag"
+#: pcbnew/dialogs/dialog_drc.cpp:1145
+msgid "Delete exclusions"
+msgstr "Ta bort undantag"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "Kunde inte läsa sträng, inmatningen är tom."
