@@ -32,6 +32,7 @@
 SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_SYMBOL* aParentSymbol ) :
     SCH_ITEM( aParentSymbol, SCH_PIN_T )
 {
+    wxASSERT( aParentSymbol );
     m_layer = LAYER_PIN;
     m_alt = wxEmptyString;
     m_number = aLibPin->GetNumber();
@@ -48,6 +49,7 @@ SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_SYMBOL* aParentSymbol ) :
 SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt ) :
     SCH_ITEM( aParentSymbol, SCH_PIN_T )
 {
+    wxASSERT( aParentSymbol );
     m_layer = LAYER_PIN;
     m_alt = aAlt;
     m_number = aNumber;

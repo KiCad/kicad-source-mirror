@@ -532,7 +532,6 @@ void SCH_COMMIT::Revert()
             if( item->Type() == SCH_SYMBOL_T )
             {
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-                wxCHECK2( symbol, continue );
                 symbol->UpdatePins();
             }
 

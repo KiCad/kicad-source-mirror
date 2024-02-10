@@ -1777,6 +1777,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
         for( auto&[ path, item ] : all_items )
         {
+            wxCHECK2( item, continue );
+
             switch( item->Type() )
             {
             case SCH_FIELD_T:
