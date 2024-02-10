@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-01-30 19:01+0000\n"
+"PO-Revision-Date: 2024-02-11 02:02+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4045,9 +4045,8 @@ msgid "Reset Unique Id"
 msgstr "Επαναφορά Μοναδικού Id"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Αποτυπώματα:"
+msgstr "Αποτυπώματα/έδρες:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -5488,9 +5487,8 @@ msgid "Start Y"
 msgstr "Έναρξη Ψ"
 
 #: common/eda_shape.cpp:1999
-#, fuzzy
 msgid "Center X"
-msgstr "Κεντράρισμα Ψ"
+msgstr "Κεντράρισμα Χ"
 
 #: common/eda_shape.cpp:2004
 msgid "Center Y"
@@ -6888,9 +6886,8 @@ msgid "Courtyard collision shadow"
 msgstr "Σκίαση σύγκρουσης περιοχής αποτυπώματος"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Απαγορευμένος χαρακτήρας βρέθηκε στο όνομα βιβλιοθήκης"
+msgstr "Απαγορευμένος χαρακτήρας βρέθηκε σε όνομα βιβλιοθήκης"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -14070,7 +14067,7 @@ msgstr "Κλικ με διάρκεια"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:200
 #: pcbnew/dialogs/panel_edit_options_base.cpp:241
 msgid "Clarify selection from menu"
-msgstr "Διευκρίνηση επιλογής από των κατάλογο επιλογών"
+msgstr "Διευκρίνιση επιλογής από τον κατάλογο επιλογών"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:158
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:216
@@ -16199,9 +16196,8 @@ msgstr ""
 "\"%s\"."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1710
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Τύπος Σώματος"
+msgstr "Αλλαγή Τύπου Σώματος"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
@@ -19472,10 +19468,10 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Ένα σύμβολο τροφοδοσίας πρέπει να έχει μόνο μια μονάδα</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
 msgstr ""
-"<b>Η θύρα τροφοδοσίας θα πρέπει να έχει μόνο έναν ακροδέκτη</b><br><br>"
+"<b>Σύμβολο Θύρας Τροφοδοσίας δεν πρέπει να έχει αντίστοιχο "
+"DeMorgan</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -22028,29 +22024,24 @@ msgid "Change property"
 msgstr "Αλλαγή ιδιότητας"
 
 #: eeschema/widgets/search_handlers.cpp:136
-#, fuzzy
 msgid "Excl. sim"
-msgstr "Αποκλεισμοί"
+msgstr "Αποκλεισμός προσ."
 
 #: eeschema/widgets/search_handlers.cpp:137
-#, fuzzy
 msgid "Excl. BOM"
 msgstr "Εξαίρεση από το BOM"
 
 #: eeschema/widgets/search_handlers.cpp:138
-#, fuzzy
 msgid "Excl. board"
-msgstr "πρόχειρο"
+msgstr "Εξαίρεση από πλακέτα"
 
 #: eeschema/widgets/search_handlers.cpp:355
-#, fuzzy
 msgid "Hierarchical"
-msgstr "Διαδρομή Ιεραρχικού"
+msgstr "Ιεραρχικό"
 
 #: eeschema/widgets/search_handlers.cpp:357
-#, fuzzy
 msgid "Directive"
-msgstr "Ετικέτα οδηγίας"
+msgstr "Οδηγία"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -32593,6 +32584,8 @@ msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
 msgstr ""
+"Να μην δημιουργηθούν δάκρυα σε διαδρόμους συνδεμένους σε έδρες που είναι "
+"συνδεμένες σε ζώνες χαλκού."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -35281,7 +35274,7 @@ msgstr "Εναλλαγή επιλογής"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Highlight net (for pads or tracks)"
-msgstr "Επιήμανση δικτύου (για έδρες ή διαδρόμους)"
+msgstr "Επισήμανση δικτύου (για έδρες ή διαδρόμους)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -39851,7 +39844,6 @@ msgid "Previous footprint placement still in progress."
 msgstr "Η προηγούμενη τοποθέτηση του αποτυπώματος βρίσκεται ακόμη σε εξέλιξη."
 
 #: pcbnew/footprint_libraries_utils.cpp:942
-#, fuzzy
 msgid "Insert Footprint"
 msgstr "Εισαγωγή Αποτυπώματος"
 
@@ -43077,14 +43069,12 @@ msgid "Running DRC...\n"
 msgstr "Εκτέλεση ΕΚΣ...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1026
-#, fuzzy
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "Αποτυχία φόρτωσης αρχείου σχηματικού\n"
+msgstr "Αποτυχία εύρεσης σχηματικού για έλεγχο\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1041
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Αποτυχία φόρτωσης αρχείου σχηματικού\n"
+msgstr "Αποτυχία φόρτωσης αρχείου λίστας δικτύων σχηματικού για έλεγχο\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1062 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -45095,9 +45085,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "Προσθέτει εφαπτόμενα τόξα στις επιλεγμένες γραμμές"
 
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "Λοξότμηση Γραμμών"
+msgstr "Λοξότμηση Γραμμών..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Cut away corners between selected lines"
@@ -46527,19 +46516,16 @@ msgid "Tune length of a single track"
 msgstr "Ρύθμιση ακριβείας για το μήκος ενός απλού διαδρόμου"
 
 #: pcbnew/tools/pcb_actions.cpp:2315 pcbnew/tools/pcb_actions.cpp:2316
-#, fuzzy
 msgid "Tune length of a differential pair"
 msgstr "Ρύθμιση ακριβείας για το μήκος ενός διαφορικού ζέυγους"
 
 #: pcbnew/tools/pcb_actions.cpp:2323
-#, fuzzy
 msgid "Tune Length of a Single Track"
-msgstr "Ρύθμιση ακριβείας για το μήκος ενός απλού διαδρόμου"
+msgstr "Ρύθμιση Ακριβείας Μήκους Μονού Διαδρόμου"
 
 #: pcbnew/tools/pcb_actions.cpp:2324
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
-msgstr "Ρύθμιση Απόκλισης Διαφορικού Ζεύγους"
+msgstr "Ρύθμιση Ακριβείας Μήκους Διαφορικού Ζεύγους"
 
 #: pcbnew/tools/pcb_actions.cpp:2333
 msgid "Tune Skew of a Differential Pair"
@@ -47671,45 +47657,36 @@ msgid "Zone %s %s"
 msgstr "Ζώνη %s %s"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr ""
-"Το πλάτος των θερμικών ακτινών δεν μπορεί να είναι μικρότερο από το ελάχιστο "
-"πλάτος."
+msgstr "Δεν μπορεί να είναι μικρότερο από το ελάχιστο πλάτος ζώνης"
 
 #: pcbnew/zone.cpp:1671
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Πλάτος σκιαγράφησης:"
+msgstr "Πλάτος Σκιαγράφησης"
 
 #: pcbnew/zone.cpp:1678
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Κενό σκιαγράφησης:"
+msgstr "Κενό Σκιαγράφησης"
 
 #: pcbnew/zone.cpp:1685
 msgid "Hatch Minimum Hole Ratio"
-msgstr ""
+msgstr "Ελάχιστη Αναλογία Οπών Σκιαγράφησης"
 
 #: pcbnew/zone.cpp:1693
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Προσπάθεια εξομάλυνσης:"
+msgstr "Προσπάθεια Εξομάλυνσης"
 
 #: pcbnew/zone.cpp:1699
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Προσπάθεια εξομάλυνσης:"
+msgstr "Ποσοστό Εξομάλυνσης"
 
 #: pcbnew/zone.cpp:1705
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Αφαίρεση νησίδων:"
+msgstr "Αφαίρεση Νησίδων"
 
 #: pcbnew/zone.cpp:1710
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Ελάχιστο μέγεθος νησίδας:"
+msgstr "Ελάχιστη Επιφάνεια Νησίδας"
 
 #: pcbnew/zone.cpp:1725
 msgid "Minimum Width"
@@ -47911,19 +47888,16 @@ msgid "KiCad Printed Circuit Board"
 msgstr "Πλακέτα Τυπωμένου Κυκλώματος KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
-#, fuzzy
 msgid "KiCad Footprint"
-msgstr "Επεξεργαστής Αποτυπώματος"
+msgstr "Αποτύπωμα KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
-#, fuzzy
 msgid "KiCad Schematic Symbol"
-msgstr "Επεξεργασία συμβόλων σχηματικού"
+msgstr "Σύμβολο Σχηματικού KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "Πρόγραμμα επεξεργασίας φύλλων σχεδίασης KiCad"
+msgstr "Φύλλα Σχεδίασης KiCad"
 
 #~ msgid "Exclude from schematic bill of materials"
 #~ msgstr "Εξαίρεση από BOM σχηματικού"
