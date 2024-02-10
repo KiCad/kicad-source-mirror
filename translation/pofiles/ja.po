@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-09 23:56+0000\n"
+"PO-Revision-Date: 2024-02-11 02:02+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4007,9 +4007,8 @@ msgid "Reset Unique Id"
 msgstr "固有IDのリセット"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "フットプリント:"
+msgstr "フットプリント/パッド:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -6825,9 +6824,8 @@ msgid "Courtyard collision shadow"
 msgstr "コートヤード衝突の領域"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "論理的なライブラリ名の中に不正な文字があります"
+msgstr "ライブラリのニックネーム中に不正な文字があります"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -16020,9 +16018,8 @@ msgstr ""
 "シンボル '%s' 用の代替ボディスタイルがライブラリ '%s' 内に見つかりません。"
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1710
-#, fuzzy
 msgid "Change Body Style"
-msgstr "アイテムのレイヤーを変更"
+msgstr "ボディスタイルを変更"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
@@ -19279,9 +19276,8 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>電源シンボルは1つだけです</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>電源シンボルにはピンが1つだけにする必要があります</b><br> <br>"
+msgstr "<b>電源シンボルはド・モルガン代替スタイルを持てません</b><br> <br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -21788,29 +21784,24 @@ msgid "Change property"
 msgstr "プロパティを変更"
 
 #: eeschema/widgets/search_handlers.cpp:136
-#, fuzzy
 msgid "Excl. sim"
-msgstr "除外"
+msgstr "シミュレーションから除外"
 
 #: eeschema/widgets/search_handlers.cpp:137
-#, fuzzy
 msgid "Excl. BOM"
 msgstr "部品表から除外"
 
 #: eeschema/widgets/search_handlers.cpp:138
-#, fuzzy
 msgid "Excl. board"
-msgstr "クリップボード"
+msgstr "基板から除外"
 
 #: eeschema/widgets/search_handlers.cpp:355
-#, fuzzy
 msgid "Hierarchical"
-msgstr "階層パス"
+msgstr "階層"
 
 #: eeschema/widgets/search_handlers.cpp:357
-#, fuzzy
 msgid "Directive"
-msgstr "指示ラベル"
+msgstr "指示"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -39368,9 +39359,8 @@ msgid "Previous footprint placement still in progress."
 msgstr "前のフットプリントの配置がまだ実行中です。"
 
 #: pcbnew/footprint_libraries_utils.cpp:942
-#, fuzzy
 msgid "Insert Footprint"
-msgstr "フットプリントをインポート"
+msgstr "フットプリントを挿入"
 
 #: pcbnew/footprint_libraries_utils.cpp:963
 msgid "Save Footprint As"
@@ -44550,9 +44540,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "選択した直線に接する円弧を追加します"
 
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "面取りライン:"
+msgstr "面取りライン..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Cut away corners between selected lines"
@@ -45944,14 +45933,12 @@ msgid "Tune length of a differential pair"
 msgstr "差動ペア配線の配線長を調整"
 
 #: pcbnew/tools/pcb_actions.cpp:2323
-#, fuzzy
 msgid "Tune Length of a Single Track"
-msgstr "単線の配線長を調整"
+msgstr "単線の長さを調整"
 
 #: pcbnew/tools/pcb_actions.cpp:2324
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
-msgstr "差動ペア配線の配線長を調整"
+msgstr "差動ペア配線の長さを調整"
 
 #: pcbnew/tools/pcb_actions.cpp:2333
 msgid "Tune Skew of a Differential Pair"
@@ -47065,19 +47052,16 @@ msgid "Zone %s %s"
 msgstr "ゾーン %s %s"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr "サーマルリリーフのスポーク幅は最小幅より狭くできません。"
+msgstr "ゾーンの最小幅より狭くできません"
 
 #: pcbnew/zone.cpp:1671
-#, fuzzy
 msgid "Hatch Width"
-msgstr "ハッチング幅:"
+msgstr "ハッチング幅"
 
 #: pcbnew/zone.cpp:1678
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "ハッチングの間隔:"
+msgstr "ハッチングの間隔"
 
 #: pcbnew/zone.cpp:1685
 #, fuzzy
@@ -47085,24 +47069,20 @@ msgid "Hatch Minimum Hole Ratio"
 msgstr "最小穴間隔:"
 
 #: pcbnew/zone.cpp:1693
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "スムージング効果:"
+msgstr "スムージング効果"
 
 #: pcbnew/zone.cpp:1699
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "スムージング量:"
+msgstr "スムージング量"
 
 #: pcbnew/zone.cpp:1705
-#, fuzzy
 msgid "Remove Islands"
-msgstr "孤立した導体部分を削除:"
+msgstr "孤立した導体部分を削除"
 
 #: pcbnew/zone.cpp:1710
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "孤立した導体部分の最小サイズ:"
+msgstr "孤立した導体部分の最小サイズ"
 
 #: pcbnew/zone.cpp:1725
 msgid "Minimum Width"
@@ -47301,19 +47281,16 @@ msgid "KiCad Printed Circuit Board"
 msgstr "KiCad プリント基板ファイル"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
-#, fuzzy
 msgid "KiCad Footprint"
-msgstr "フットプリントをロード"
+msgstr "KiCad フットプリント"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
-#, fuzzy
 msgid "KiCad Schematic Symbol"
-msgstr "回路図シンボル"
+msgstr "KiCad 回路図シンボル"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad 図面シート エディター"
+msgstr "KiCad 図面シート"
 
 #~ msgid "Exclude from schematic bill of materials"
 #~ msgstr "部品表から除外"
