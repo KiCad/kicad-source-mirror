@@ -220,7 +220,7 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
     }
 
     wxString itemDesc = m_libPin ? m_libPin->GetItemDescription( aUnitsProvider, alt ) :
-                                   wxS ( "Undefined library pin." );
+                                   wxString( wxS( "Undefined library pin." ) );
     return wxString::Format( "Symbol %s %s",
                              UnescapeString( GetParentSymbol()->GetField( REFERENCE_FIELD )->GetText() ),
                              itemDesc );
