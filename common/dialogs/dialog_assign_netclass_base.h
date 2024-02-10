@@ -9,6 +9,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 class WX_HTML_REPORT_BOX;
 
 #include "dialog_shim.h"
@@ -52,7 +53,7 @@ class DIALOG_ASSIGN_NETCLASS_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Add Netclass Assignment"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
+		DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Add Netclass Assignment"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 
 		~DIALOG_ASSIGN_NETCLASS_BASE();
 

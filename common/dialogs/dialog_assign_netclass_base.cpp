@@ -21,7 +21,7 @@ DIALOG_ASSIGN_NETCLASS_BASE::DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	stPatternLabel = new wxStaticText( this, wxID_ANY, wxT("Pattern:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stPatternLabel = new wxStaticText( this, wxID_ANY, _("Pattern:"), wxDefaultPosition, wxDefaultSize, 0 );
 	stPatternLabel->Wrap( -1 );
 	bUpperSizer->Add( stPatternLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
 
@@ -30,7 +30,7 @@ DIALOG_ASSIGN_NETCLASS_BASE::DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWi
 
 	bUpperSizer->Add( m_patternCtrl, 1, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	stNetclassLabel = new wxStaticText( this, wxID_ANY, wxT("Net class:"), wxDefaultPosition, wxDefaultSize, 0 );
+	stNetclassLabel = new wxStaticText( this, wxID_ANY, _("Net class:"), wxDefaultPosition, wxDefaultSize, 0 );
 	stNetclassLabel->Wrap( -1 );
 	bUpperSizer->Add( stNetclassLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 
@@ -48,7 +48,7 @@ DIALOG_ASSIGN_NETCLASS_BASE::DIALOG_ASSIGN_NETCLASS_BASE( wxWindow* parent, wxWi
 
 	bLowerSizer->Add( m_matchingNets, 2, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	m_info = new wxStaticText( this, wxID_ANY, wxT("Note: complete netclass assignments can be edited in Schematic Setup > Project."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_info = new wxStaticText( this, wxID_ANY, _("Note: complete netclass assignments can be edited in Schematic Setup > Project."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_info->Wrap( -1 );
 	bLowerSizer->Add( m_info, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
