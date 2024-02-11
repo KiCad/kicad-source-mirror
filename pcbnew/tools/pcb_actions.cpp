@@ -2351,7 +2351,7 @@ TOOL_ACTION PCB_ACTIONS::routerUndoLastSegment( TOOL_ACTION_ARGS()
 TOOL_ACTION PCB_ACTIONS::routerContinueFromEnd( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveRouter.ContinueFromEnd" )
         .Scope( AS_CONTEXT )
-        .DefaultHotkey( 'E' )
+        .DefaultHotkey( MD_CTRL + 'E' )
         .FriendlyName( _( "Route From Other End" ) )
         .Tooltip( _( "Commits current segments and starts next segment from nearest ratsnest end." ) ) );
 
