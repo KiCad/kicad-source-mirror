@@ -1260,6 +1260,10 @@ void SCH_EDIT_FRAME::OnClearFileHistory( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::NewProject()
 {
+    // Only standalone mode can directly load a new document
+    if( !Kiface().IsSingle() )
+        return;
+
     wxString pro_dir = m_mruPath;
 
     wxFileDialog dlg( this, _( "New Schematic" ), pro_dir, wxEmptyString,
@@ -1290,6 +1294,10 @@ void SCH_EDIT_FRAME::NewProject()
 
 void SCH_EDIT_FRAME::LoadProject()
 {
+    // Only standalone mode can directly load a new document
+    if( !Kiface().IsSingle() )
+        return;
+
     wxString pro_dir = m_mruPath;
     wxString wildcards = FILEEXT::AllSchematicFilesWildcard()
                             + wxS( "|" ) + FILEEXT::KiCadSchematicFileWildcard()
