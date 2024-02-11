@@ -315,6 +315,10 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
     {
     case ID_LOAD_FILE:
     {
+         // Only standalone mode can directly load a new document
+        if( !Kiface().IsSingle() )
+            return false;
+
         int         open_ctl = 0;
         wxString    fileName = Prj().AbsolutePath( GetBoard()->GetFileName() );
 
@@ -324,6 +328,10 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
     case ID_IMPORT_NON_KICAD_BOARD:
     {
+        // Only standalone mode can directly load a new document
+        if( !Kiface().IsSingle() )
+            return false;
+
         int         open_ctl = 1;
         wxString    fileName; // = Prj().AbsolutePath( GetBoard()->GetFileName() );
 
@@ -382,6 +390,10 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
     case ID_NEW_BOARD:
     {
+        // Only standalone mode can directly load a new document
+        if( !Kiface().IsSingle() )
+            return false;
+
         if( IsContentModified() )
         {
             wxFileName fileName = GetBoard()->GetFileName();
