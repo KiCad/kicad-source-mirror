@@ -402,6 +402,14 @@ void ACTION_MENU::OnIdle( wxIdleEvent& event )
 
 void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 {
+#ifdef __WXOSX__
+    if( aEvent.GetMenu() != this )
+    {
+        aEvent.Skip();
+        return;
+    }
+#endif
+
     OPT_TOOL_EVENT evt;
     wxString       menuText;
     wxEventType    type    = aEvent.GetEventType();
