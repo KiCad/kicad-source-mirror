@@ -535,6 +535,23 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     }
     else if( type == wxEVT_MENU_OPEN || type == wxEVT_MENU_CLOSE || type == wxEVT_MENU_HIGHLIGHT )
     {
+        wxMenuEvent* tmp = dynamic_cast<wxMenuEvent*>( &aEvent );
+
+        // Something is amiss if the event has these types and isn't a menu event, so bail out on
+        // its processing
+        if( !tmp )
+        {
+            aEvent.Skip();
+            return;
+        }
+
+        wxMenuEvent& menuEvent = *tmp;
+
+#if wxCHECK_VERSION( 3, 2, 0 )
+        // Forward the event to the menu for processing
+        if( ACTION_MENU* currentMenu = dynamic_cast<ACTION_MENU*>( menuEvent.GetMenu() ) )
+            currentMenu->OnMenuEvent( menuEvent );
+#else
         //
         // wxWidgets has several issues that we have to work around:
         //
@@ -548,12 +565,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         // 3) wxWidgets has no way to tell whether a command is from a menu selection or a
         //    hotkey.  So we keep track of menu highlighting so we can differentiate.
         //
-
-        wxMenuEvent* tmp = dynamic_cast<wxMenuEvent*>( &aEvent );
-
-        wxCHECK( tmp, /* void */ );
-
-        wxMenuEvent& menuEvent = *tmp;
 
         if( type == wxEVT_MENU_OPEN )
         {
@@ -574,6 +585,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
             m_currentMenu = nullptr;
         }
+#endif
 
         aEvent.Skip();
     }
