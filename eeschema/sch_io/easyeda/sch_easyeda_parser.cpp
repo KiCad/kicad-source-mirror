@@ -660,12 +660,9 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
             VECTOR2D delta = end - start;
 
+            double avgRad = ( rad.x + rad.y ) / 2;
             double d = delta.EuclideanNorm();
-            double h = sqrt( rad.x * rad.x - d * d / 4 );
-
-            //double aa = sqrt(1/(d*d)* ( 4*d*d*rad - d*d*d*d));
-
-            //double h = sqrt( radX - d * d / 4 );
+            double h = sqrt( std::max( 0.0, avgRad * avgRad - d * d / 4 ) );
 
             //( !far && cw ) => h
             //( far && cw ) => -h
