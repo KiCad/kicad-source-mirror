@@ -509,7 +509,15 @@ void SCH_COMMIT::Revert()
             if( view )
                 view->Remove( item );
 
+            bool unselect = !item->IsSelected();
+
             item->SwapData( copy );
+
+            if( unselect )
+            {
+                item->ClearSelected();
+                item->RunOnChildren( []( SCH_ITEM* aChild ) { aChild->ClearSelected(); } );
+            }
 
             // Special cases for items which have instance data
             if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T
