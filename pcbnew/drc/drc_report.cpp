@@ -153,7 +153,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
     for( int i = 0; i < m_fpWarningsProvider->GetCount(); ++i )
     {
-        const std::shared_ptr<RC_ITEM>& item = m_ratsnestProvider->GetItem( i );
+        const std::shared_ptr<RC_ITEM>& item = m_fpWarningsProvider->GetItem( i );
         SEVERITY                        severity = bds.GetSeverity( item->GetErrorCode() );
 
         RC_JSON::VIOLATION violation;
