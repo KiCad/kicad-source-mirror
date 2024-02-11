@@ -478,7 +478,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
             aSymbol->AddDrawItem( line.release() );
         }
-        else if( elType == wxS( "PT" ) )
+        else if( elType == wxS( "PT" ) ) // Freedraw
         {
             wxString   pointsData = arr[1];
             wxString   strokeColor = arr[2];
@@ -488,7 +488,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             //bool       locked = arr[7] != wxS( "0" );
 
              std::vector<SHAPE_LINE_CHAIN> lineChains =
-                    ParseLineChains( pointsData, schIUScale.MilsToIU( 10 ) );
+                    ParseLineChains( pointsData, schIUScale.MilsToIU( 10 ), false );
 
             for( SHAPE_LINE_CHAIN outline : lineChains )
              {

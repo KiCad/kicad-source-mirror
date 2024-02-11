@@ -58,7 +58,8 @@ public:
         return ScalePos( aVec - m_relOrigin );
     }
 
-     std::vector<SHAPE_LINE_CHAIN> ParseLineChains( const wxString& aData, int aArcMinSegLen );
+     std::vector<SHAPE_LINE_CHAIN> ParseLineChains( const wxString& aData, int aArcMinSegLen,
+                                                   bool aForceClosed );
 
 protected:
     VECTOR2D m_relOrigin;

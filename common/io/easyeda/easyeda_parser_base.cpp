@@ -66,8 +66,8 @@ double EASYEDA_PARSER_BASE::RelPosY( const wxString& aValue )
 }
 
 
-std::vector<SHAPE_LINE_CHAIN> EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data,
-                                                                    int             aArcMinSegLen )
+std::vector<SHAPE_LINE_CHAIN>
+EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data, int aArcMinSegLen, bool aForceClosed )
 {
     std::vector<SHAPE_LINE_CHAIN> result;
 
@@ -109,7 +109,12 @@ std::vector<SHAPE_LINE_CHAIN> EASYEDA_PARSER_BASE::ParseLineChains( const wxStri
             readNumber( yStr );
 
             if( chain.PointCount() > 1 )
+            {
+                if( aForceClosed )
+                    chain.SetClosed( true );
+
                 result.emplace_back( chain );
+            }
 
             chain.Clear();
 
@@ -229,7 +234,12 @@ std::vector<SHAPE_LINE_CHAIN> EASYEDA_PARSER_BASE::ParseLineChains( const wxStri
     } while( pos < data.size() );
 
     if( chain.PointCount() > 1 )
+    {
+        if( aForceClosed )
+            chain.SetClosed( true );
+
         result.emplace_back( chain );
+    }
 
     return result;
 }
