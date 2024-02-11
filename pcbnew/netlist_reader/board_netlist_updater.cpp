@@ -320,8 +320,16 @@ bool BOARD_NETLIST_UPDATER::updateFootprintParameters( FOOTPRINT* aPcbFootprint,
     if( ( m_replaceFootprints || ( aPcbFootprint->GetAttributes() & FP_JUST_ADDED ) )
         && !m_isDryRun )
     {
-        aPcbFootprint->Footprint().SetText(
+        // Update FOOTPRINT_FIELD (if exists in the netlist)
+        try
+        {
+            aPcbFootprint->Footprint().SetText(
                 aNetlistComponent->GetFields()[GetCanonicalFieldName( FOOTPRINT_FIELD )] );
+        }
+        catch( ... )
+        {
+            // If not exist (old netlist), just skip it: What else?
+        }
     }
 
     // Test for time stamp change.
