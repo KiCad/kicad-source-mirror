@@ -33,6 +33,7 @@
 
 #include <view/view.h>
 #include <sch_commit.h>
+#include <connection_graph.h>
 
 #include <functional>
 
@@ -533,6 +534,14 @@ void SCH_COMMIT::Revert()
             {
                 SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
                 symbol->UpdatePins();
+
+                CONNECTION_GRAPH* graph = schematic->ConnectionGraph();
+
+                SCH_SYMBOL* symbolCopy = static_cast<SCH_SYMBOL*>( copy );
+                graph->RemoveItem( symbolCopy );
+
+                for( SCH_PIN* pin : symbolCopy->GetPins() )
+                    graph->RemoveItem( pin );
             }
 
             item->SetConnectivityDirty();

@@ -734,11 +734,37 @@ std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> CONNECTION_GRAPH::ExtractAffected
         }
 
         alg::delete_matching( m_items, item );
+
+        if( item->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            for( SCH_PIN* pin : symbol->GetPins( &sg->m_sheet ) )
+                alg::delete_matching( m_items, pin );
+        }
     }
 
     removeSubgraphs( subgraphs );
 
     return retvals;
+}
+
+
+void CONNECTION_GRAPH::RemoveItem( SCH_ITEM* aItem )
+{
+    auto it = m_item_to_subgraph_map.find( aItem );
+
+    if( it == m_item_to_subgraph_map.end() )
+        return;
+
+    CONNECTION_SUBGRAPH* subgraph = it->second;
+
+    while(subgraph->m_absorbed_by )
+        subgraph = subgraph->m_absorbed_by;
+
+    subgraph->RemoveItem( aItem );
+    alg::delete_matching( m_items, aItem );
+    m_item_to_subgraph_map.erase( it );
 }
 
 
@@ -906,6 +932,9 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
     for( SCH_ITEM* item : aItemList )
     {
+        if( item->Type() == SCH_PIN_T )
+            std::cout << "conn updateItemConnectivity " << item << std::endl;
+
         std::vector<VECTOR2I> points = item->GetConnectionPoints();
         item->ConnectedItems( aSheet ).clear();
 

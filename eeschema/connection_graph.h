@@ -452,6 +452,8 @@ public:
      */
     void Merge( CONNECTION_GRAPH& aGraph );
 
+    void RemoveItem( SCH_ITEM* aItem );
+
 private:
     /**
      * Update the graphical connectivity between items (i.e. where they touch)
