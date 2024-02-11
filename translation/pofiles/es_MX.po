@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-11 02:02+0000\n"
+"PO-Revision-Date: 2024-02-12 03:02+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -4036,9 +4036,8 @@ msgid "Reset Unique Id"
 msgstr "Restablecer Id. único"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Huellas:"
+msgstr "Huellas/Pads:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -6354,24 +6353,20 @@ msgid "DXF hatches not currently supported."
 msgstr "Los rayados DXF no son compatibles actualmente."
 
 #: common/import_gfx/dxf_import_plugin.h:513
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "Actualmente no se admite la manta."
+msgstr "Actualmente no se admiten trazas DXF."
 
 #: common/import_gfx/dxf_import_plugin.h:518
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "Actualmente no se admite la manta."
+msgstr "Actualmente no se admiten caras 3D de DXF."
 
 #: common/import_gfx/dxf_import_plugin.h:523
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "Actualmente no se soporta la máscara de compilación."
+msgstr "Actualmente no se admiten sólidos DXF."
 
 #: common/import_gfx/dxf_import_plugin.h:528
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "Actualmente no se admite la manta."
+msgstr "Las imágenes DXF no son compatibles actualmente."
 
 #: common/io/altium/altium_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -6465,23 +6460,23 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Arco no válido con radio %f y ángulo %f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:37
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "se necesita un número para '%s'"
+msgstr "No se pudo analizar el número de '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:165
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"'%s' no parece ser un archivo de proyecto de EasyEDA (JLCEDA) Pro válido. No "
-"puedo encontrar project.json."
+"'%s' no parece ser un archivo de proyecto o biblioteca de EasyEDA (JLCEDA) "
+"Pro válido. No puedo encontrar project.json or device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:181
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "No puede abrirse al archivo '%s'"
+msgstr "No se puede leer el archivo ZIP '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:197
 #, c-format
@@ -6873,19 +6868,16 @@ msgid "Courtyard collision shadow"
 msgstr "Sombra de colisión en el patio"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr ""
-"Se ha encontrado un carácter ilegal en el nombre de la biblioteca lógica"
+msgstr "Carácter ilegal encontrado en el apodo de la biblioteca"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
 msgstr "Editar opciones..."
 
 #: common/lib_table_grid_tricks.cpp:33
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "Opciones para la biblioteca '%s'"
+msgstr "Opciones de edición para esta entrada de biblioteca"
 
 #: common/lib_table_grid_tricks.cpp:63
 msgid "Activate selected"
@@ -6896,14 +6888,12 @@ msgid "Deactivate selected"
 msgstr "Desactivar seleccionado"
 
 #: common/lib_table_grid_tricks.cpp:69
-#, fuzzy
 msgid "Set visible flag"
-msgstr "Capas visibles"
+msgstr "Establecer bandera de visibilidad"
 
 #: common/lib_table_grid_tricks.cpp:72
-#, fuzzy
 msgid "Unset visible flag"
-msgstr "Capas visibles"
+msgstr "Limpiar bandera de visibilidad"
 
 #: common/lib_table_grid_tricks.cpp:80
 #, c-format
@@ -6979,18 +6969,16 @@ msgstr "Error de tipo entre %lf y '%s'"
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:63
-#, fuzzy
 msgid "View Details"
-msgstr "Detalles"
+msgstr "Ver detalles"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
 msgstr "Rechazar"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Justificado"
+msgstr "Notificaciones"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
@@ -7328,14 +7316,12 @@ msgid "Cancel current tool"
 msgstr "Cancelar la herramienta activa"
 
 #: common/tool/actions.cpp:154
-#, fuzzy
 msgid "Finish"
-msgstr "Terminar bus"
+msgstr "Terminar"
 
 #: common/tool/actions.cpp:155
-#, fuzzy
 msgid "Finish current tool"
-msgstr "Cancelar la herramienta activa"
+msgstr "Terminar la herramienta activa"
 
 #: common/tool/actions.cpp:162
 msgid "Show Context Menu"
@@ -7374,9 +7360,8 @@ msgid "Unselect All"
 msgstr "Eliminar selección"
 
 #: common/tool/actions.cpp:242
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Seleccionar todos los elementos en la pantalla"
+msgstr "Deseleccionar todos los elementos en la pantalla"
 
 #: common/tool/actions.cpp:247
 msgid "Paste Special..."
@@ -7408,7 +7393,6 @@ msgid "Delete clicked items"
 msgstr "Eliminar elementos clicados"
 
 #: common/tool/actions.cpp:290
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
 msgstr "Ciclar modo de edición de arco"
 
@@ -7549,18 +7533,16 @@ msgid "Zoom to Selection"
 msgstr "Zoom a selección"
 
 #: common/tool/actions.cpp:484 common/widgets/mathplot.cpp:1447
-#, fuzzy
 msgid "Undo Last Zoom"
-msgstr "Deshacer último"
+msgstr "Deshacer último zoom"
 
 #: common/tool/actions.cpp:485 common/widgets/mathplot.cpp:1447
 msgid "Return zoom to level prior to last zoom action"
 msgstr "Devolver el zoom al nivel anterior a la última acción de zoom"
 
 #: common/tool/actions.cpp:491 common/widgets/mathplot.cpp:1448
-#, fuzzy
 msgid "Redo Last Zoom"
-msgstr "Rehacer última acción"
+msgstr "Rehacer último zoom"
 
 #: common/tool/actions.cpp:492 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
@@ -7656,9 +7638,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "Cambiar a cuadrícula rápida 2"
 
 #: common/tool/actions.cpp:658
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "Cambiar a cuadrícula rápida 1"
+msgstr "Ciclar cuadrícula rápida"
 
 #: common/tool/actions.cpp:665
 msgid "Switch to Next Grid"
@@ -7673,9 +7654,8 @@ msgid "Grid Origin"
 msgstr "Origen de cuadrícula"
 
 #: common/tool/actions.cpp:679
-#, fuzzy
 msgid "Place the grid origin point"
-msgstr "Situar el punto de origen de la cuadrícula"
+msgstr "Colocar el punto de origen de la cuadrícula"
 
 # ¿Reiniciar?
 # ¿Valor inicial?
@@ -7697,9 +7677,8 @@ msgstr ""
 "Habilita cuadrículas específicas de elementos que anulan la cuadrícula actual"
 
 #: common/tool/actions.cpp:713
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Ajustar dimensiones de la cuadrícula"
+msgstr "Editar definiciones de cuadrícula"
 
 #: common/tool/actions.cpp:719
 msgid "Grid Origin..."
@@ -7818,14 +7797,12 @@ msgid "Interactively measure distance between points"
 msgstr "Medición interactiva de la distancia entre dos puntos"
 
 #: common/tool/actions.cpp:856
-#, fuzzy
 msgid "Switch to Project Manager"
-msgstr "Administrador de proyectos"
+msgstr "Cambiar al administrador de proyectos"
 
 #: common/tool/actions.cpp:857
-#, fuzzy
 msgid "Show project window"
-msgstr "Mostrar consola"
+msgstr "Mostrar ventana del proyecto"
 
 #: common/tool/actions.cpp:866
 msgid "Show 3D viewer window"
@@ -7939,9 +7916,8 @@ msgid "About KiCad"
 msgstr "Acerca de KiCad"
 
 #: common/tool/actions.cpp:976
-#, fuzzy
 msgid "Open about dialog"
-msgstr "Muestra el diálogo Acerca de KiCad"
+msgstr "Abrir diálogo acerca de"
 
 #: common/tool/actions.cpp:985
 msgid "List Hotkeys..."
@@ -8208,7 +8184,6 @@ msgid "Grid thickness:"
 msgstr "Grosor de cuadrícula:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
 msgstr "Espaciado mínimo de cuadrícula:"
 
@@ -8237,12 +8212,10 @@ msgid "Never"
 msgstr "Nunca"
 
 #: common/widgets/gal_options_panel_base.cpp:132
-#, fuzzy
 msgid "Small crosshairs"
 msgstr "Cruz pequeña"
 
 #: common/widgets/gal_options_panel_base.cpp:135
-#, fuzzy
 msgid "Full window crosshairs"
 msgstr "Cruz de ventana completa"
 
@@ -8320,14 +8293,12 @@ msgid "Reset to Defaults"
 msgstr "Restablecer ajustes predeterminados"
 
 #: common/widgets/paged_dialog.cpp:90
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "Mostrar temas en Finder"
+msgstr "Mostrar preferencias en Finder"
 
 #: common/widgets/paged_dialog.cpp:92
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "Abrir preferencias"
+msgstr "Abrir directorio de preferencias"
 
 #: common/widgets/paged_dialog.cpp:336
 #, c-format
@@ -8371,7 +8342,6 @@ msgid "Current key:"
 msgstr "Tecla actual:"
 
 #: common/widgets/widget_hotkey_list.cpp:130
-#, fuzzy
 msgid "Clear assigned hotkey"
 msgstr "Eliminar atajo asignado"
 
@@ -8391,9 +8361,8 @@ msgid "Edit..."
 msgstr "Editar..."
 
 #: common/widgets/widget_hotkey_list.cpp:449
-#, fuzzy
 msgid "Edit Alternate..."
-msgstr "Editar huella..."
+msgstr "Editar alternativa..."
 
 #: common/widgets/widget_hotkey_list.cpp:450
 msgid "Undo Changes"
@@ -8404,14 +8373,12 @@ msgid "Clear Assigned Hotkey"
 msgstr "Eliminar atajo asignado"
 
 #: common/widgets/widget_hotkey_list.cpp:452
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "Eliminar atajo asignado"
+msgstr "Eliminar alternativa asignada"
 
 #: common/widgets/widget_hotkey_list.cpp:453
-#, fuzzy
 msgid "Restore Defaults"
-msgstr "Restablecer valores predeterminados"
+msgstr "Restablecer atajos predeterminados"
 
 #: common/widgets/widget_hotkey_list.cpp:493
 #, c-format
@@ -8574,9 +8541,8 @@ msgid "KiCad netlist files"
 msgstr "Archivos de redes de KiCad"
 
 #: common/wildcards_and_files_ext.cpp:291
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "Generar archivo de lista de redes"
+msgstr "Archivos de lista de red de Allegro"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -8636,9 +8602,8 @@ msgid "PostScript files"
 msgstr "Archivos PostScript"
 
 #: common/wildcards_and_files_ext.cpp:383
-#, fuzzy
 msgid "Json files"
-msgstr "Archivos de trabajo"
+msgstr "Archivos json"
 
 #: common/wildcards_and_files_ext.cpp:389
 msgid "Report files"
@@ -8913,19 +8878,16 @@ msgid "Footprint association files:"
 msgstr "Archivos de asociación de huellas:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
-#, fuzzy
 msgid "Add association file"
-msgstr "Archivo de asociación de huellas"
+msgstr "Agregar archivo de asociación"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:53
-#, fuzzy
 msgid "Edit association file"
-msgstr "Archivo de asociación de huellas"
+msgstr "Editar archivo de asociación"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:61
-#, fuzzy
 msgid "Remove association file"
-msgstr "Eliminar vículo"
+msgstr "Eliminar archivo de asociación"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
@@ -9073,14 +9035,12 @@ msgid "Manage Footprint Association Files..."
 msgstr "Gestionar archivos de asociación de huellas..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Configurar el archivo de asociación de huellas (.equ). Estos archivos se "
-"utilizan para asignar automáticamente el nombre de la huella desde el valor "
-"del componente."
+"Editar el archivo de asociación de huellas.  Estos archivos se utilizan para "
+"asignar automáticamente el nombre de la huella desde el valores de símbolos."
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save to Schematic"
@@ -9399,9 +9359,8 @@ msgid "Generating BOM requires a fully annotated schematic."
 msgstr "La generación de BOM necesita un esquema anotado completamente."
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "No puede crearse el archivo '%s'."
+msgstr "No se pudo crear el archivo."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -9726,9 +9685,8 @@ msgid "Update Symbols"
 msgstr "Actualizar símbolos"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "*** no se ha encontrado el símbolo***"
+msgstr "*** No se encontraron símbolos que coincidan con los criterios ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:569
 msgid "*** symbol not found ***"
@@ -9916,9 +9874,8 @@ msgstr ""
 "base de datos"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "Archivos de la biblioteca de la base de datos de KiCad"
+msgstr "Configuración de la biblioteca de bases de datos"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:546
 #, c-format
@@ -10401,9 +10358,8 @@ msgid "Show the field name in addtion to its value"
 msgstr "Mostrar el nombre del campo además de su valor"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
-#, fuzzy
 msgid "Allow automatic placement"
-msgstr "Permitir la autocolocación"
+msgstr "Permitir colocación automática"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:106
 msgid "Allow automatic placement of this field in the schematic"
@@ -10558,9 +10514,8 @@ msgid "Text Item Properties"
 msgstr "Propiedades del elemento de texto"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:597
-#, fuzzy
 msgid "Edit Text and Graphics"
-msgstr "Editar propiedades de texto y gráficas"
+msgstr "Editar texto y gráficos"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -10630,9 +10585,8 @@ msgstr "Filtrar elementos por red:"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:91
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:121
-#, fuzzy
 msgid "Selected items only"
-msgstr "&Sólo seleccionados"
+msgstr "Solo elementos seleccionados"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:159
 msgid "Set To"
@@ -10660,9 +10614,8 @@ msgid "-- leave unchanged --"
 msgstr "- dejar sin cambios -"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:248
-#, fuzzy
 msgid "(labels only)"
-msgstr "(solo campos)"
+msgstr "(solo etiquetas)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 msgid "H Align:"
@@ -10770,18 +10723,16 @@ msgstr "Analizador sintáctico Ibis"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:75
 #: pcbnew/pcb_reference_image.cpp:350
-#, fuzzy
 msgid "Image Properties"
-msgstr "Propiedades de mira de centrado"
+msgstr "Propiedades de imagen"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
 msgstr "Editar unión"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
-#, fuzzy
 msgid "Edit Junctions"
-msgstr "Uniones"
+msgstr "Editar uniones"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -10842,9 +10793,8 @@ msgid "untitled"
 msgstr "sin título"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:584
-#, fuzzy
 msgid "Edit Label"
-msgstr "Editar Etiqueta Local"
+msgstr "Editar etiqueta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:667
 msgid "The first field is mandatory."
@@ -11386,7 +11336,6 @@ msgstr "El nombre de símbolo '%s' ya está en uso en la biblioteca '%s'."
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:342
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:347
 #: eeschema/dialogs/dialog_symbol_properties.cpp:860
-#, fuzzy
 msgid "Edit Symbol Properties"
 msgstr "Editar propiedades del símbolo"
 
@@ -11444,9 +11393,8 @@ msgstr ""
 "como símbolos raíz."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
-#, fuzzy
 msgid "Number of units:"
-msgstr "Número de componentes:"
+msgstr "Número de unidades:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:172
 msgid "Enter the number of units for a symbol that contains more than one unit"
@@ -11626,9 +11574,8 @@ msgid "Text Box Properties"
 msgstr "Propiedades de la caja de texto"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Line"
-msgstr "Editar archivo"
+msgstr "Editar línea"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
 msgid "Edit Lines"
@@ -11803,9 +11750,8 @@ msgid "Preview:"
 msgstr "Vista previa:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin function definitions"
-msgstr "Definiciones alternativas de pin"
+msgstr "Definiciones de función de pin alternativa"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
@@ -12007,9 +11953,8 @@ msgid "Plot the background color if the output format supports it"
 msgstr "Trazar el color de fondo si el formato de salida lo admite"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:100
-#, fuzzy
 msgid "Minimum line width:"
-msgstr "Ancho mínimo:"
+msgstr "Ancho mínimo de línea:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:105
 msgid ""
@@ -12054,9 +11999,8 @@ msgid "PDF Options"
 msgstr "Opciones PDF"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:163
-#, fuzzy
 msgid "Generate property popups"
-msgstr "Generar Gerbers para fabricación"
+msgstr "Generar ventanas emergentes de propiedades"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:170
 msgid "Other options"
@@ -12119,7 +12063,6 @@ msgid "Instances of this symbol (%d items):"
 msgstr "Instancias de este símbolo (%d elementos):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
-#, fuzzy
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -12130,7 +12073,7 @@ msgstr ""
 "¿Dejar de mostrar esta herramienta?\n"
 "No se realizarán cambios.\n"
 "\n"
-"Esta opción puede cambiarse desde el diálogo \"Bibliotecas de símbolos\",\n"
+"Este ajuste puede cambiarse desde el diálogo \"Preferencias\",\n"
 "y la herramienta puede activarse manualmente desde el menú \"Herramientas\"."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
@@ -12220,14 +12163,12 @@ msgstr "Clases de red"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
-#, fuzzy
 msgid "BOM Presets"
-msgstr "Ajustes por defecto"
+msgstr "Preajustes de BOM"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
-#, fuzzy
 msgid "BOM Format Presets"
-msgstr "Formato %s"
+msgstr "Preajustes de formato de BOM"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -12366,9 +12307,8 @@ msgid "Clear colors to use Schematic Editor colors."
 msgstr "Limpiar colores para usar los colores del Editor de esquemas."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:179
-#, fuzzy
 msgid "Edit Sheet Pin"
-msgstr "Editar hoja"
+msgstr "Editar pin de hoja"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -12518,9 +12458,8 @@ msgid "Sheet Properties"
 msgstr "Propiedades de la página"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:268
-#, fuzzy
 msgid "A DC source must be specified."
-msgstr "Una hoja debe tener un archivo especificado."
+msgstr "Una fuente DC debe ser especificada."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:361
 msgid "Source 1 and Source 2 must be different."
@@ -12531,9 +12470,8 @@ msgid "A frequency range must be specified."
 msgstr "Debe especificarse un rango de frecuencia."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:611
-#, fuzzy
 msgid "New Simulation Tab"
-msgstr "Simulación"
+msgstr "Nueva pestaña de simulación"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
 msgid "Analysis type:"
@@ -12544,14 +12482,12 @@ msgid "AC"
 msgstr "AC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "DC"
-msgstr "DCR"
+msgstr "DC"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "OP"
-msgstr "OSP"
+msgstr "OP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
 msgid "TRAN"
@@ -12566,9 +12502,8 @@ msgid "NOISE"
 msgstr "RUIDO"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25
-#, fuzzy
 msgid "SP"
-msgstr "OSP"
+msgstr "SP"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:25 pcbnew/pad.cpp:1890
 msgid "Custom"
@@ -12718,28 +12653,24 @@ msgid "(optional; default 0)"
 msgstr "(opcional, 0 por defecto)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:290
-#, fuzzy
 msgid "Max time step:"
-msgstr "Paso de tiempo:"
+msgstr "Paso de tiempo máximo:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:301
-#, fuzzy
 msgid "(optional; default min{tstep, (tstop-tstart)/50})"
-msgstr "(opcional, 0 por defecto)"
+msgstr "(opcional; predeterminado min{tstep, (tstop-tstart)/50})"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:305
-#, fuzzy
 msgid "Use initial conditions"
-msgstr "Utilizar unidades imperiales"
+msgstr "Utilizar condiciones iniciales"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:323
 msgid "Input signals:"
 msgstr "Señales de entrada:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:338
-#, fuzzy
 msgid "Linearize inputs before performing FFT"
-msgstr "Rellenar todas las zonas antes de ejecutar DRC"
+msgstr "Linearizar entradas antes de ejecutar FFT"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:359
 msgid "Measured node:"
@@ -12791,9 +12722,8 @@ msgstr "Entrada:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:586
 #: eeschema/dialogs/dialog_sim_command_base.cpp:604
-#, fuzzy
 msgid "Ref:"
-msgstr "Ref. X:"
+msgstr "Ref:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:595
 msgid "Output:"
@@ -12804,14 +12734,12 @@ msgid "Find:"
 msgstr "Encontrar:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles and Zeros"
-msgstr "Polo-Cero"
+msgstr "Polos y ceros"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles"
-msgstr "Orificios"
+msgstr "Polos"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Zeros"
@@ -12850,16 +12778,15 @@ msgid "HSpice"
 msgstr "HSpice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:679
-#, fuzzy
 msgid "SPICE Command"
-msgstr "Comando de simulación"
+msgstr "Comando de SPICE"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:686
 #: eeschema/dialogs/dialog_sim_command_base.cpp:725
 #: eeschema/dialogs/dialog_sim_command_base.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed %s scale"
-msgstr "Campo %s"
+msgstr "Escala %s fija"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
@@ -12878,14 +12805,12 @@ msgid "Show grid"
 msgstr "Mostrar cuadrícula"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:806
-#, fuzzy
 msgid "Show legend"
 msgstr "Mostrar leyenda"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:809
-#, fuzzy
 msgid "Dotted current/phase"
-msgstr "Corriente/Fase de puntos"
+msgstr "Corriente/Fase punteada"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:819
 msgid "Margins:"
@@ -12898,9 +12823,8 @@ msgstr "Izquierda:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:833
 #: eeschema/dialogs/dialog_sim_command_base.cpp:874
-#, fuzzy
 msgid "70"
-msgstr "0"
+msgstr "70"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:846
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:579
@@ -12918,9 +12842,8 @@ msgid "Bottom:"
 msgstr "Inferior:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:859
-#, fuzzy
 msgid "45"
-msgstr "4"
+msgstr "45"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:870
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:565
@@ -12928,14 +12851,12 @@ msgid "Right:"
 msgstr "Derecha:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:889
-#, fuzzy
 msgid "Plot Setup"
-msgstr "Configuración de la placa"
+msgstr "Configuración de la gráfica"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
-#, fuzzy
 msgid "Simulation Analysis"
-msgstr "Ajustes de simulación"
+msgstr "Análisis de simulación"
 
 #: eeschema/dialogs/dialog_sim_format_value.cpp:36
 #: eeschema/sim/sim_plot_tab.cpp:655
@@ -13118,9 +13039,8 @@ msgid "Device:"
 msgstr "Dispositivo:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:118
-#, fuzzy
 msgid "Device type:"
-msgstr "Tipo de Spice:"
+msgstr "Tipo de dispositivo:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:145
 #: eeschema/widgets/search_handlers.cpp:133
@@ -13166,14 +13086,12 @@ msgid "Simulation Model Editor"
 msgstr "Editor de modelos de simulación"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:46
-#, fuzzy
 msgid "Choose Symbol"
 msgstr "Elegir símbolo"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:67
-#, fuzzy
 msgid "Choose Power Symbol"
-msgstr "Símbolo de alimentación"
+msgstr "Elegir símbolo de alimentación"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:69
 #: eeschema/symbol_chooser_frame.cpp:103
@@ -13261,9 +13179,8 @@ msgid "Are you sure you want to remove the field '%s'?"
 msgstr "¿Está seguro de que quiere eliminar el campo '%s'?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:738
-#, fuzzy
 msgid "Rename Field"
-msgstr "Renombrar archivo"
+msgstr "Renombrar campo"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:753
 #, c-format
@@ -13273,34 +13190,29 @@ msgstr ""
 "existente."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:845
-#, fuzzy
 msgid "The Quantity column cannot be grouped by."
-msgstr "No puede ocultarse la columna Referencia."
+msgstr "No se puede agrupar por la columna Cantidad."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "No puede ocultarse la columna Referencia."
+msgstr "No se puede agrupar por la columna Elemento."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1200
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "Lista de materiales"
+msgstr "Archivo de salida de lista de materiales"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1212
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1221
-#, fuzzy
 msgid "BOM Output File"
-msgstr "Tamaño de salida"
+msgstr "Archivo de salida BOM"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1219
-#, fuzzy
 msgid ""
 "Cannot make path relative (target volume different from schematic file "
 "volume)!"
 msgstr ""
 "¡No puede crearse una ruta relativa (el volumen de destino es diferente del "
-"volumen del archivo)!"
+"volumen del archivo esquemático)!"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1232
 msgid "Unsaved data"
@@ -13311,9 +13223,8 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "Los cambios no se han guardado. ¿Exportar datos no guardados?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1254
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "No se ingresó un nombre de archivo"
+msgstr "No se especificó un nombre de archivo en el exportador"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1268
 #, c-format
@@ -13321,9 +13232,9 @@ msgid "Could not open/create path '%s'."
 msgstr "No se pudo abrir/crear la ruta '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1277
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create BOM output '%s'."
-msgstr "No pueden guardarse los archivos de trazado en la carpeta '%s'."
+msgstr "No se pudo crear la salida de BOM '%s'."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1286
 #, fuzzy, c-format
