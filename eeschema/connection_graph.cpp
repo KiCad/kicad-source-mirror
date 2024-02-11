@@ -932,9 +932,6 @@ void CONNECTION_GRAPH::updateItemConnectivity( const SCH_SHEET_PATH& aSheet,
 
     for( SCH_ITEM* item : aItemList )
     {
-        if( item->Type() == SCH_PIN_T )
-            std::cout << "conn updateItemConnectivity " << item << std::endl;
-
         std::vector<VECTOR2I> points = item->GetConnectionPoints();
         item->ConnectedItems( aSheet ).clear();
 
