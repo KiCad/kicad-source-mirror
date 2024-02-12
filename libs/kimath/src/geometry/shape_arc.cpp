@@ -244,6 +244,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
     if( aSeg.A == aSeg.B )
         return Collide( aSeg.A, aClearance, aActual, aLocation );
 
+    int      minDist = aClearance + m_width / 2;
     VECTOR2I center = GetCenter();
     CIRCLE   circle( center, GetRadius() );
 
@@ -263,7 +264,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
 
     for( const VECTOR2I& candidate : candidatePts )
     {
-        if( Collide( candidate, aClearance, aActual, aLocation ) )
+        if( Collide( candidate, minDist, aActual, aLocation ) )
             return true;
     }
 
@@ -356,6 +357,9 @@ void SHAPE_ARC::update_bbox()
 const BOX2I SHAPE_ARC::BBox( int aClearance ) const
 {
     BOX2I bbox( m_bbox );
+
+    if( m_width != 0 )
+        bbox.Inflate( KiROUND( m_width / 2.0 ) + 1 );
 
     if( aClearance != 0 )
         bbox.Inflate( aClearance );
