@@ -561,17 +561,25 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
                wxString::Format( _( "'%s' settings differ." ),
                                  _( "Exclude from position files" ) ) );
 
+    // this test is skipped: EXCLUDE_FROM_BOM attribute is related to a given design,
+    // not to a lib footprint. EXCLUDE_FROM_BOM must be tested only in Schematic Parity
+    #if 0
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_EXCLUDE_FROM_BOM,
                wxString::Format( _( "'%s' settings differ." ),
                                  _( "Exclude from bill of materials" ) ) );
+    #endif
 
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_ALLOW_MISSING_COURTYARD,
                wxString::Format( _( "'%s' settings differ." ),
                                  _( "Exempt From Courtyard Requirement" ) ) );
 
+    // this test is skipped: Do No Place attribute is related to a given design,
+    // not to a lib footprint. DNP must be tested only in Schematic Parity
+    #if 0
     TEST_ATTR( GetAttributes(), aLibFP->GetAttributes(), FP_DNP,
                wxString::Format( _( "'%s' settings differ." ),
                                  _( "Do not populate" ) ) );
+    #endif
 
 
     // Clearance and zone connection overrides are as likely to be set at the board level as in
