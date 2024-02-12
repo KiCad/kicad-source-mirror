@@ -56,6 +56,8 @@
 #include <math/box2.h>
 #include <math/vector2d.h>
 
+#define TRIANGULATE_TRACE "triangulate"
+
 class PolygonTriangulation
 {
 public:
@@ -578,6 +580,46 @@ private:
     {
         Vertex* origPoly = start;
 
+        // Our first attempts to split the polygon will be at overlapping points.
+        // These are natural split points and we only need to switch the loop directions
+        // to generate two new loops.  Since they are overlapping, we are do not
+        // need to create a new segment to disconnect the two loops.
+        do
+        {
+            Vertex* nextZ = origPoly->nextZ;
+
+            if( nextZ && *nextZ == *origPoly )
+            {
+                std::swap( origPoly->next, nextZ->next );
+                origPoly->next->prev = origPoly;
+                nextZ->next->prev = nextZ;
+
+                origPoly->updateList();
+                nextZ->updateList();
+                return earcutList( origPoly ) && earcutList( nextZ );
+            }
+
+            Vertex* prevZ = origPoly->prevZ;
+
+            if( prevZ && *prevZ == *origPoly )
+            {
+                std::swap( origPoly->next, prevZ->next );
+                origPoly->next->prev = origPoly;
+                prevZ->next->prev = prevZ;
+
+                origPoly->updateList();
+                prevZ->updateList();
+                return earcutList( origPoly ) && earcutList( prevZ );
+            }
+
+            origPoly = origPoly->next;
+
+        } while ( origPoly != start );
+
+        // If we've made it through the split algorithm and we still haven't found a
+        // set of overlapping points, we need to create a new segment to split the polygon
+        // into two separate polygons.  We do this by finding the two vertices that form
+        // a valid line (does not cross the existing polygon)
         do
         {
             Vertex* marker = origPoly->next->next;

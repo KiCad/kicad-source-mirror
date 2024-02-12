@@ -2815,7 +2815,10 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
             // This pushes the triangulation for all polys in partitions
             // to be referenced to the ii-th polygon
-            m_triangulationValid &= triangulate( partitions, ii , m_triangulatedPolys );
+            if( !triangulate( partitions, ii , m_triangulatedPolys ) )
+            {
+                wxLogTrace( TRIANGULATE_TRACE, "Failed to triangulate partitioned polygon %d", ii );
+            }
         }
     }
     else
@@ -2826,7 +2829,10 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
         tmpSet.Fracture( PM_FAST );
 
-        m_triangulationValid = triangulate( tmpSet, -1, m_triangulatedPolys );
+        if( !triangulate( tmpSet, -1, m_triangulatedPolys ) )
+        {
+            wxLogTrace( TRIANGULATE_TRACE, "Failed to triangulate polygon" );
+        }
     }
 
     if( m_triangulationValid )
