@@ -254,8 +254,9 @@ public:
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
-    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                              const SCH_SHEET_PATH* aPath = nullptr ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                              std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                              const SCH_SHEET_PATH*           aPath = nullptr ) override;
 
     bool IsStartDangling() const { return m_startIsDangling; }
     bool IsEndDangling() const { return m_endIsDangling; }

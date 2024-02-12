@@ -1000,13 +1000,14 @@ void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                     const SCH_SHEET_PATH* aPath )
+bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                                     std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                                     const SCH_SHEET_PATH*           aPath )
 {
     bool changed = false;
 
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        changed |= sheetPin->UpdateDanglingState( aItemList );
+        changed |= sheetPin->UpdateDanglingState( aItemListByType, aItemListByPos );
 
     return changed;
 }

@@ -1361,36 +1361,46 @@ void SCH_SCREEN::TestDanglingEnds( const SCH_SHEET_PATH* aPath,
 {
     PROF_TIMER timer( __FUNCTION__ );
 
-    std::vector<DANGLING_END_ITEM> endPoints;
+    std::vector<DANGLING_END_ITEM> endPointsByPos;
+    std::vector<DANGLING_END_ITEM> endPointsByType;
 
-    auto getends =
+    auto get_ends =
             [&]( SCH_ITEM* item )
             {
                 if( item->IsConnectable() )
-                    item->GetEndPoints( endPoints );
+                    item->GetEndPoints( endPointsByType );
             };
+
     auto update_state =
             [&]( SCH_ITEM* item )
             {
-                if( item->UpdateDanglingState( endPoints, aPath ) )
+                if( item->UpdateDanglingState( endPointsByType, endPointsByPos, aPath ) )
                 {
                     if( aChangedHandler )
-                        (*aChangedHandler)( item );
+                        ( *aChangedHandler )( item );
                 }
             };
 
     for( SCH_ITEM* item : Items() )
     {
-
-        getends( item );
-        item->RunOnChildren( getends );
+        get_ends( item );
+        item->RunOnChildren( get_ends );
     }
+
+    PROF_TIMER sortTimer( "SCH_SCREEN::TestDanglingEnds pre-sort" );
+    endPointsByPos = endPointsByType;
+    DANGLING_END_ITEM_HELPER::sort_dangling_end_items( endPointsByType, endPointsByPos );
+    sortTimer.Stop();
+
+    if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
+        sortTimer.Show();
 
     for( SCH_ITEM* item : Items() )
     {
         update_state( item );
         item->RunOnChildren( update_state );
     }
+
     if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         timer.Show();
 }
