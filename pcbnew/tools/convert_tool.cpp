@@ -1103,10 +1103,7 @@ int CONVERT_TOOL::CreateLines( const TOOL_EVENT& aEvent )
         m_selectionTool->ClearSelection();
 
         for( EDA_ITEM* item : selectionCopy )
-        {
-            if( item->GetFlags() & SKIP_STRUCT )
-                commit.Remove( item );
-        }
+            commit.Remove( item );
     }
 
     commit.Push( _( "Create Lines" ) );
