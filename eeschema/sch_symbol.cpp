@@ -2055,8 +2055,9 @@ void SCH_SYMBOL::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                      const SCH_SHEET_PATH* aPath )
+bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                                      std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                                      const SCH_SHEET_PATH*           aPath )
 {
     bool changed = false;
 
@@ -2067,8 +2068,12 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
 
         VECTOR2I pos = m_transform.TransformCoordinate( pin->GetLocalPosition() ) + m_pos;
 
-        for( DANGLING_END_ITEM& each_item : aItemList )
+        auto lower = DANGLING_END_ITEM_HELPER::get_lower_pos( aItemListByPos, pos );
+        bool do_break = false;
+
+        for( auto it = lower; it < aItemListByPos.end() && it->GetPosition() == pos; it++ )
         {
+            DANGLING_END_ITEM& each_item = *it;
             // Some people like to stack pins on top of each other in a symbol to indicate
             // internal connection. While technically connected, it is not particularly useful
             // to display them that way, so skip any pins that are in the same symbol as this
@@ -2084,17 +2089,15 @@ bool SCH_SYMBOL::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
             case WIRE_END:
             case NO_CONNECT_END:
             case JUNCTION_END:
-
-                if( pos == each_item.GetPosition() )
-                    pin->SetIsDangling( false );
-
+                pin->SetIsDangling( false );
+                do_break = true;
                 break;
 
             default:
                 break;
             }
 
-            if( !pin->IsDangling() )
+            if( do_break )
                 break;
         }
 
