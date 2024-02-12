@@ -184,6 +184,9 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     }
     catch( const IO_ERROR& ioe )
     {
+        // we didnt get anywhere deregister the settings
+        aProgram->GetSettingsManager().FlushAndRelease( KifaceSettings(), false );
+
         DisplayErrorMessage( nullptr, _( "An error occurred attempting to load the global "
                                          "footprint library table." ),
                              ioe.What() );
