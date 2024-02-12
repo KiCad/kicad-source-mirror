@@ -243,7 +243,6 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
     if( aSeg.A == aSeg.B )
         return Collide( aSeg.A, aClearance, aActual, aLocation );
 
-    int      minDist = aClearance + m_width / 2;
     VECTOR2I center = GetCenter();
     CIRCLE   circle( center, GetRadius() );
 
@@ -263,7 +262,7 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
 
     for( const VECTOR2I& candidate : candidatePts )
     {
-        if( Collide( candidate, minDist, aActual, aLocation ) )
+        if( Collide( candidate, aClearance, aActual, aLocation ) )
             return true;
     }
 
