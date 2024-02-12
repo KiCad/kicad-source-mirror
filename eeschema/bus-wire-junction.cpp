@@ -185,6 +185,28 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
             } );
 
 
+    auto minX = []( const SCH_LINE* l )
+                {
+                    return std::min( l->GetStartPoint().x, l->GetEndPoint().x );
+                };
+
+    auto maxX = []( const SCH_LINE* l )
+                {
+                    return std::max( l->GetStartPoint().x, l->GetEndPoint().x );
+                };
+
+    auto minY = []( const SCH_LINE* l )
+                {
+                    return std::min( l->GetStartPoint().y, l->GetEndPoint().y );
+                };
+
+    auto maxY = []( const SCH_LINE* l )
+                {
+                    return std::max( l->GetStartPoint().y, l->GetEndPoint().y );
+                };
+
+    // Would be nice to put lines in a canonical form here by swapping
+    //  start <-> end as needed but I don't know what swapping breaks.
     while( changed )
     {
         changed = false;
@@ -195,6 +217,13 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
             if( item->GetLayer() == LAYER_WIRE || item->GetLayer() == LAYER_BUS )
                 lines.push_back( static_cast<SCH_LINE*>( item ) );
         }
+
+        // Sort by minimum X position
+        std::sort( lines.begin(), lines.end(),
+                   [&]( const SCH_LINE* a, const SCH_LINE* b )
+                   {
+                       return minX( a ) < minX( b );
+                   } );
 
         for( auto it1 = lines.begin(); it1 != lines.end(); ++it1 )
         {
@@ -209,11 +238,24 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( SCH_SCREEN* aScreen )
                 continue;
             }
 
+            int  firstRightXEdge = maxX( firstLine );
             auto it2 = it1;
 
             for( ++it2; it2 != lines.end(); ++it2 )
             {
                 SCH_LINE* secondLine = *it2;
+                int       secondLeftXEdge = minX( secondLine );
+
+                // impossible to overlap remaining lines
+                if( secondLeftXEdge > firstRightXEdge )
+                    break;
+
+                // No Y axis overlap
+                if( !( std::max( minY( firstLine ), minY( secondLine ) )
+                       <= std::min( maxY( firstLine ), maxY( secondLine ) ) ) )
+                {
+                    continue;
+                }
 
                 if( secondLine->GetFlags() & STRUCT_DELETED )
                     continue;
