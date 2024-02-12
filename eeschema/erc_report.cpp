@@ -114,7 +114,8 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     std::map<KIID, EDA_ITEM*> itemMap;
 
     RC_JSON::ERC_REPORT reportHead;
-    reportHead.source = m_sch->GetFileName();
+    wxFileName          fn( m_sch->GetFileName() );
+    reportHead.source = fn.GetFullName();
     reportHead.date = GetISO8601CurrentDateTime();
     reportHead.kicad_version = GetMajorMinorPatchVersion();
     reportHead.coordinate_units = EDA_UNIT_UTILS::GetLabel( m_reportUnits );

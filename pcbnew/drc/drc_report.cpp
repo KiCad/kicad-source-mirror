@@ -58,7 +58,8 @@ bool DRC_REPORT::WriteTextReport( const wxString& aFullFileName )
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
     int                    count;
 
-    fprintf( fp, "** Drc report for %s **\n", TO_UTF8( m_board->GetFileName() ) );
+    wxFileName fn( m_board->GetFileName() );
+    fprintf( fp, "** Drc report for %s **\n", TO_UTF8( fn.GetFullName() ) );
 
     fprintf( fp, "** Created on %s **\n", TO_UTF8( GetISO8601CurrentDateTime() ) );
 
@@ -120,7 +121,9 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     m_board->FillItemMap( itemMap );
 
     RC_JSON::DRC_REPORT reportHead;
-    reportHead.source = m_board->GetFileName();
+
+    wxFileName fn( m_board->GetFileName() );
+    reportHead.source = fn.GetFullName();
     reportHead.date = GetISO8601CurrentDateTime();
     reportHead.kicad_version = GetMajorMinorPatchVersion();
     reportHead.coordinate_units = EDA_UNIT_UTILS::GetLabel( m_reportUnits );
