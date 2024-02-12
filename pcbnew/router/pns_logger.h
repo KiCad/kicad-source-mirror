@@ -58,6 +58,13 @@ public:
         EVENT_TYPE type;
         KIID uuid;
         SIZES_SETTINGS sizes;
+
+        EVENT_ENTRY() {}
+
+        EVENT_ENTRY( const EVENT_ENTRY& aE ) :
+                p( aE.p ), type( aE.type ), uuid( aE.uuid ), sizes( aE.sizes )
+        {
+        }
     };
 
     LOGGER();

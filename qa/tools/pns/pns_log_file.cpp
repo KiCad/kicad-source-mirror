@@ -299,11 +299,10 @@ bool PNS_LOG_FILE::COMMIT_STATE::Compare( const PNS_LOG_FILE::COMMIT_STATE& aOth
 
 bool PNS_LOG_FILE::SaveLog( const wxFileName& logFileName, REPORTER* aRpt )
 {
-    std::vector<PNS::ITEM*> dummyHeads; // todo - save heads when we support it in QA
-
     FILE*    log_f = wxFopen( logFileName.GetFullPath(), "wb" );
     wxString logString = PNS::LOGGER::FormatLogFileAsString( m_mode, m_commitState.m_addedItems,
-                                                             m_commitState.m_removedIds, dummyHeads,
+                                                             m_commitState.m_removedIds,
+                                                             m_commitState.m_heads,
                                                              m_events );
     fprintf( log_f, "%s\n", logString.c_str().AsChar() );
     fclose( log_f );

@@ -86,7 +86,8 @@ public:
     PNS_LOG_PLAYER();
     ~PNS_LOG_PLAYER();
 
-    void ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex = 0, int aFrom = 0, int aTo = -1 );
+    void ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex = 0, int aFrom = 0, int aTo = -1,
+                    bool aUpdateExpectedResult = false );
 
     void SetReporter( REPORTER* aReporter ) { m_reporter = aReporter; }
 

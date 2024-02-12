@@ -342,7 +342,7 @@ void PNS_LOG_VIEWER_FRAME::SetLogFile( PNS_LOG_FILE* aLog )
 
     SetBoard( m_logFile->GetBoard() );
 
-    m_logPlayer->ReplayLog( m_logFile.get(), 0, 0, -1);
+    m_logPlayer->ReplayLog( m_logFile.get(), 0, 0, -1, true );
 
     auto dbgd = m_logPlayer->GetDebugDecorator();
     int  n_stages = dbgd->GetStageCount();

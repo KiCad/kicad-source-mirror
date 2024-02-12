@@ -57,12 +57,14 @@ public:
     {
         COMMIT_STATE(){};
         COMMIT_STATE( const COMMIT_STATE& aOther ) :
-                m_removedIds( aOther.m_removedIds ), m_addedItems( aOther.m_addedItems )
+                m_removedIds( aOther.m_removedIds ), m_addedItems( aOther.m_addedItems ),
+                m_heads( aOther.m_heads )
         {
         }
 
         std::set<KIID>          m_removedIds;
         std::vector<PNS::ITEM*> m_addedItems;
+        std::vector<PNS::ITEM*> m_heads;
 
         bool Compare( const COMMIT_STATE& aOther );
     };
@@ -84,7 +86,16 @@ public:
 
     const COMMIT_STATE& GetExpectedResult() const { return m_commitState; }
 
+    void SetExpectedResult( const COMMIT_STATE&                     aCommitState,
+                            std::vector<std::unique_ptr<PNS::ITEM>> aParsedItems )
+    {
+        m_commitState = aCommitState;
+        m_parsed_items = std::move( aParsedItems );
+    }
+
     PNS::ROUTER_MODE GetMode() const { return m_mode; }
+
+    void SetMode( PNS::ROUTER_MODE aMode ) { m_mode = aMode; }
 
 private:
     bool parseCommonPnsProps( PNS::ITEM* aItem, const wxString& cmd, wxStringTokenizer& aTokens );

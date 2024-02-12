@@ -87,7 +87,8 @@ const PNS_LOG_FILE::COMMIT_STATE PNS_LOG_PLAYER::GetRouterUpdatedItems()
     return state;
 }
 
-void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aFrom, int aTo )
+void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aFrom, int aTo,
+                                bool aUpdateExpectedResult )
 {
     m_board = aLog->GetBoard();
 
@@ -250,7 +251,36 @@ void PNS_LOG_PLAYER::ReplayLog( PNS_LOG_FILE* aLog, int aStartEventIndex, int aF
 #endif
     }
 
+    wxASSERT_MSG( m_router->Mode() == aLog->GetMode(), "didn't set the router mode correctly?" );
 
+    if( aUpdateExpectedResult )
+    {
+        std::vector<PNS::ITEM*> added, removed, heads;
+        m_router->GetUpdatedItems( removed, added, heads );
+
+        std::set<KIID> removedKIIDs;
+
+        for( auto item : removed )
+        {
+            wxASSERT_MSG( item->Parent() != nullptr, "removed an item with no parent uuid?" );
+
+            if( item->Parent() )
+                removedKIIDs.insert( item->Parent()->m_Uuid );
+        }
+
+        std::vector<std::unique_ptr<PNS::ITEM>> myOwnedItems;
+        PNS_LOG_FILE::COMMIT_STATE routerCommitState;
+        routerCommitState.m_addedItems = added;
+        routerCommitState.m_removedIds = removedKIIDs;
+        routerCommitState.m_heads = heads;
+
+        for( PNS::ITEM* head : heads )
+            myOwnedItems.emplace_back( head );
+
+        aLog->SetExpectedResult( routerCommitState, std::move( myOwnedItems ) );
+
+        int test = 0;
+    }
 }
 
 
