@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-03 18:01+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2024-02-13 12:02+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4032,9 +4032,8 @@ msgid "Reset Unique Id"
 msgstr "Nollaa Ainutlaatuinen Id-tunniste"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Liitoskuvat:"
+msgstr "Liitoskuvat/anturat:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -6856,9 +6855,8 @@ msgid "Courtyard collision shadow"
 msgstr "Piha-alueen törmäysvarjo"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Laiton merkki löytyi loogisesta kirjastonimestä"
+msgstr "Laiton merkki löytyi kirjaston lemipinimestä"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -19327,9 +19325,8 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Virtasymbolissa saa olla vain yksi yksikkö</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>Virtasymbolissa saa olla vain yksi nasta</b><br><br>"
+msgstr "<b>Virtasymbolilla ei pitäisi olla DeMorgan-munnoksia</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -21868,9 +21865,8 @@ msgid "Excl. board"
 msgstr "leikepöytä"
 
 #: eeschema/widgets/search_handlers.cpp:355
-#, fuzzy
 msgid "Hierarchical"
-msgstr "Hierarkkinen polku"
+msgstr "Hierarkkinen"
 
 #: eeschema/widgets/search_handlers.cpp:357
 #, fuzzy
@@ -32356,6 +32352,8 @@ msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
 msgstr ""
+"Kupariviisteitä ei luoda johtimien liittymiin anturoihin jotka ovat myös "
+"liittetty kuparivyöhykkeeseen."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -39075,9 +39073,8 @@ msgid "Previous footprint placement still in progress."
 msgstr "Edellisen jalanjäljen sijoittaminen on vielä kesken."
 
 #: pcbnew/footprint_libraries_utils.cpp:942
-#, fuzzy
 msgid "Insert Footprint"
-msgstr "Tuo jalanjälki"
+msgstr "Lisää jalanjälki"
 
 #: pcbnew/footprint_libraries_utils.cpp:963
 msgid "Save Footprint As"
@@ -42631,7 +42628,7 @@ msgstr "Vedä joka tapauksessa"
 #: pcbnew/router/router_tool.cpp:1926 pcbnew/router/router_tool.cpp:2409
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s tehdäksesi muutokset joka tapauksessa.)"
 
 #: pcbnew/router/router_tool.cpp:1930 pcbnew/router/router_tool.cpp:2413
 msgid "Track violates DRC."
@@ -45678,9 +45675,8 @@ msgid "Tune length of a differential pair"
 msgstr "Differentiaaliparin pituus-säätö"
 
 #: pcbnew/tools/pcb_actions.cpp:2323
-#, fuzzy
 msgid "Tune Length of a Single Track"
-msgstr "Säädä yhden johtimen pituutta"
+msgstr "Säädä yksittäisen johtimen pituutta"
 
 #: pcbnew/tools/pcb_actions.cpp:2324
 #, fuzzy
@@ -46836,14 +46832,12 @@ msgid "Smoothing Amount"
 msgstr "Tasoitusmäärä:"
 
 #: pcbnew/zone.cpp:1705
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Poista saaret:"
+msgstr "Poista saaret"
 
 #: pcbnew/zone.cpp:1710
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Saaren vähimmäiskoko:"
+msgstr "Saaren vähimmäiskoko"
 
 #: pcbnew/zone.cpp:1725
 msgid "Minimum Width"
@@ -47044,19 +47038,16 @@ msgid "KiCad Printed Circuit Board"
 msgstr "KiCad Painettu Piirilevy"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
-#, fuzzy
 msgid "KiCad Footprint"
-msgstr "Jalanjälkieditori"
+msgstr "KiCad jalanjälki"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
-#, fuzzy
 msgid "KiCad Schematic Symbol"
-msgstr "Muokkaa kytkentäkaaviosymboleita"
+msgstr "KiCad kytkentäkaaviosymboli"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad Piirustuslehtieditori"
+msgstr "KiCad Piirustuslehti"
 
 #~ msgid "Exclude from schematic bill of materials"
 #~ msgstr "Jätä pois kytkentäkaavion materiaaliluettelosta"
