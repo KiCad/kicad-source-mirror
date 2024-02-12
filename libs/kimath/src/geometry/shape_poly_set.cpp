@@ -3069,7 +3069,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
             // to be referenced to the ii-th polygon
             if( !triangulate( partitions, ii , m_triangulatedPolys ) )
             {
-                wxLogDebug( "Failed to triangulate partitioned polygon %d", ii );
+                wxLogTrace( TRIANGULATE_TRACE, "Failed to triangulate partitioned polygon %d", ii );
             }
         }
     }
@@ -3083,7 +3083,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
 
         if( !triangulate( tmpSet, -1, m_triangulatedPolys ) )
         {
-            wxLogDebug( "Failed to triangulate polygon" );
+            wxLogTrace( TRIANGULATE_TRACE, "Failed to triangulate polygon" );
         }
     }
 
