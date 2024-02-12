@@ -97,25 +97,29 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
     drcJob->m_reportAllTrackErrors = m_argParser.get<bool>( ARG_ALL_TRACK_ERRORS );
     drcJob->m_exitCodeViolations = m_argParser.get<bool>( ARG_EXIT_CODE_VIOLATIONS );
 
+    int severity = 0;
     if( m_argParser.get<bool>( ARG_SEVERITY_ALL ) )
     {
-        drcJob->m_severity = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION;
+        severity = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION;
     }
 
     if( m_argParser.get<bool>( ARG_SEVERITY_ERROR ) )
     {
-        drcJob->m_severity |= RPT_SEVERITY_ERROR;
+        severity |= RPT_SEVERITY_ERROR;
     }
 
     if( m_argParser.get<bool>( ARG_SEVERITY_WARNING ) )
     {
-        drcJob->m_severity |= RPT_SEVERITY_WARNING;
+        severity |= RPT_SEVERITY_WARNING;
     }
 
     if( m_argParser.get<bool>( ARG_SEVERITY_EXCLUSIONS ) )
     {
-        drcJob->m_severity |= RPT_SEVERITY_EXCLUSION;
+        severity |= RPT_SEVERITY_EXCLUSION;
     }
+
+    if( severity ) // override the default only if something we configured
+        drcJob->m_severity = severity;
 
     drcJob->m_reportAllTrackErrors = m_argParser.get<bool>( ARG_ALL_TRACK_ERRORS );
 

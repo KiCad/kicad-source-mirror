@@ -90,25 +90,29 @@ int CLI::SCH_ERC_COMMAND::doPerform( KIWAY& aKiway )
     ercJob->m_exitCodeViolations = m_argParser.get<bool>( ARG_EXIT_CODE_VIOLATIONS );
     ercJob->SetVarOverrides( m_argDefineVars );
 
+    int severity = 0;
     if( m_argParser.get<bool>( ARG_SEVERITY_ALL ) )
     {
-        ercJob->m_severity = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION;
+        severity = RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING | RPT_SEVERITY_EXCLUSION;
     }
 
     if( m_argParser.get<bool>( ARG_SEVERITY_ERROR ) )
     {
-        ercJob->m_severity |= RPT_SEVERITY_ERROR;
+        severity |= RPT_SEVERITY_ERROR;
     }
 
     if( m_argParser.get<bool>( ARG_SEVERITY_WARNING ) )
     {
-        ercJob->m_severity |= RPT_SEVERITY_WARNING;
+        severity |= RPT_SEVERITY_WARNING;
     }
 
     if( m_argParser.get<bool>( ARG_SEVERITY_EXCLUSIONS ) )
     {
-        ercJob->m_severity |= RPT_SEVERITY_EXCLUSION;
+        severity |= RPT_SEVERITY_EXCLUSION;
     }
+
+    if( severity ) // override the default only if something we configured
+        ercJob->m_severity = severity;
 
     wxString units = From_UTF8( m_argParser.get<std::string>( ARG_UNITS ).c_str() );
 
