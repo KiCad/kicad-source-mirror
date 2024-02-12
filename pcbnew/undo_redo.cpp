@@ -485,7 +485,11 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     if( IsType( FRAME_PCB_EDITOR ) )
     {
         if( reBuild_ratsnest || deep_reBuild_ratsnest )
+        {
+            // Connectivity may have changed; rebuild internal caches to remove stale items
+            GetBoard()->BuildConnectivity();
             Compile_Ratsnest( false );
+        }
 
         if( solder_mask_dirty )
             HideSolderMask();
