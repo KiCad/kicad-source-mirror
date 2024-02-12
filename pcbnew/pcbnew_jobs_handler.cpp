@@ -238,9 +238,9 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( aJob->IsCli() )
     {
         if( EXPORT_SVG::Plot( brd, svgPlotOptions ) )
-            m_reporter->Report( _( "Successfully created svg file" ), RPT_SEVERITY_INFO );
+            m_reporter->Report( _( "Successfully created svg file" ) + wxS( "\n" ), RPT_SEVERITY_INFO );
         else
-            m_reporter->Report( _( "Error creating svg file" ), RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
     }
 
     return CLI::EXIT_CODES::OK;
@@ -890,7 +890,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
 
     if( !svgJob->m_footprint.IsEmpty() && !singleFpPlotted )
     {
-        m_reporter->Report( _( "The given footprint could not be found to export." ),
+        m_reporter->Report( _( "The given footprint could not be found to export." ) + wxS( "\n" ),
                             RPT_SEVERITY_ERROR );
     }
 
@@ -947,7 +947,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     svgPlotOptions.m_plotFrame = false;
 
     if( !EXPORT_SVG::Plot( brd.get(), svgPlotOptions ) )
-        m_reporter->Report( _( "Error creating svg file" ), RPT_SEVERITY_ERROR );
+        m_reporter->Report( _( "Error creating svg file" ) + wxS( "\n" ), RPT_SEVERITY_ERROR );
 
 
     return CLI::EXIT_CODES::OK;
@@ -1198,7 +1198,8 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     if( !wxRenameFile( tempFile, job->m_outputFile ) )
     {
         m_reporter->Report( wxString::Format( _( "Error generating IPC2581 file '%s'.\n"
-                                                 "Failed to rename temporary file '%s." ),
+                                                 "Failed to rename temporary file '%s." )
+                                                      + wxS( "\n" ),
                                               job->m_outputFile, tempFile ),
                             RPT_SEVERITY_ERROR );
     }
@@ -1238,7 +1239,7 @@ void PCBNEW_JOBS_HANDLER::loadOverrideDrawingSheet( BOARD* aBrd, const wxString&
                                                         aBrd->GetProject()->GetProjectPath() );
         if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
         {
-            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path ),
+            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." )+ wxS( "\n" ), path ),
                                 RPT_SEVERITY_ERROR );
             return false;
         }

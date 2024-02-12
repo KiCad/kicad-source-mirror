@@ -111,7 +111,9 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
 
         if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( resolvedSheetPath ) )
         {
-            m_reporter->Report( wxString::Format( _( "Error loading drawing sheet '%s'." ), path ),
+            m_reporter->Report(
+                    wxString::Format( _( "Error loading drawing sheet '%s'." ) + wxS( "\n" ),
+                                      path ),
                                 RPT_SEVERITY_ERROR );
             return false;
         }
@@ -436,8 +438,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
         if( !schPreset )
         {
-            m_reporter->Report(
-                    wxString::Format( _( "BOM preset '%s' not found" ), aBomJob->m_bomPresetName ),
+            m_reporter->Report( wxString::Format( _( "BOM preset '%s' not found" ) + wxS( "\n" ),
+                                                  aBomJob->m_bomPresetName ),
                     RPT_SEVERITY_ERROR );
 
             return CLI::EXIT_CODES::ERR_UNKNOWN;
@@ -531,8 +533,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
     if( !f.Open( aBomJob->m_outputFile, wxFile::write ) )
     {
-        m_reporter->Report(
-                wxString::Format( _( "Unable to open destination '%s'" ), aBomJob->m_outputFile ),
+        m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ),
+                                              aBomJob->m_outputFile ),
                 RPT_SEVERITY_ERROR
         );
 
@@ -562,7 +564,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
 
         if( !schFmtPreset )
         {
-            m_reporter->Report( wxString::Format( _( "BOM format preset '%s' not found" ),
+            m_reporter->Report(
+                    wxString::Format( _( "BOM format preset '%s' not found" ) + wxS( "\n" ),
                                                   aBomJob->m_bomFmtPresetName ),
                                 RPT_SEVERITY_ERROR );
 
@@ -757,7 +760,8 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
 
             if( !plotter->OpenFile( fn.GetFullPath() ) )
             {
-                m_reporter->Report( wxString::Format( _( "Unable to open destination '%s'" ),
+                m_reporter->Report(
+                        wxString::Format( _( "Unable to open destination '%s'" ) + wxS( "\n" ),
                                                       fn.GetFullPath() ),
                                     RPT_SEVERITY_ERROR );
 
@@ -825,7 +829,8 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 
         if( !symbol )
         {
-            m_reporter->Report( _( "There is no symbol selected to save." ), RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "There is no symbol selected to save." ) + wxS( "\n" ),
+                                RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_ARGS;
         }
     }
