@@ -414,7 +414,21 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )
     start_common( aCtlBits );
 
     if( !loadGlobalLibTable() )
+    {
+        // we didnt get anywhere deregister the
+        aProgram->GetSettingsManager().FlushAndRelease(
+                aProgram->GetSettingsManager().GetAppSettings<CVPCB_SETTINGS>(), false );
+
+        aProgram->GetSettingsManager().FlushAndRelease( KifaceSettings(), false );
+
+        aProgram->GetSettingsManager().FlushAndRelease(
+                aProgram->GetSettingsManager().GetAppSettings<FOOTPRINT_EDITOR_SETTINGS>(), false );
+
+        aProgram->GetSettingsManager().FlushAndRelease(
+                aProgram->GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>(), false );
+
         return false;
+    }
 
     m_jobHandler = std::make_unique<PCBNEW_JOBS_HANDLER>( aKiway );
 
