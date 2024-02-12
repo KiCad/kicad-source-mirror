@@ -406,12 +406,14 @@ SCH_LINE* SCH_LINE_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet, const VECTO
 
     getViewControls()->SetCrossHairCursorPosition( m_busUnfold.entry->GetEnd(), false );
 
-    std::vector<DANGLING_END_ITEM> endPoints;
+    std::vector<DANGLING_END_ITEM> endPointsByType;
 
     for( SCH_ITEM* item : screen->Items().Overlapping( m_busUnfold.entry->GetBoundingBox() ) )
-        item->GetEndPoints( endPoints );
+        item->GetEndPoints( endPointsByType );
 
-    m_busUnfold.entry->UpdateDanglingState( endPoints );
+    std::vector<DANGLING_END_ITEM> endPointsByPos = endPointsByType;
+    DANGLING_END_ITEM_HELPER::sort_dangling_end_items( endPointsByType, endPointsByPos );
+    m_busUnfold.entry->UpdateDanglingState( endPointsByType, endPointsByPos );
     m_busUnfold.entry->SetEndDangling( false );
     m_busUnfold.label->SetIsDangling( false );
 

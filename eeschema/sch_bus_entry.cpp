@@ -304,8 +304,9 @@ void SCH_BUS_ENTRY_BASE::Rotate( const VECTOR2I& aCenter )
 }
 
 
-bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                              const SCH_SHEET_PATH* aPath )
+bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                                              std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                                              const SCH_SHEET_PATH*           aPath )
 {
     bool previousStateStart = m_isDanglingStart;
     bool previousStateEnd = m_isDanglingEnd;
@@ -316,9 +317,9 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
     bool has_wire[2] = { false };
     bool has_bus[2] = { false };
 
-    for( unsigned ii = 0; ii < aItemList.size(); ii++ )
+    for( unsigned ii = 0; ii < aItemListByType.size(); ii++ )
     {
-        DANGLING_END_ITEM& item = aItemList[ii];
+        DANGLING_END_ITEM& item = aItemListByType[ii];
 
         if( item.GetItem() == this )
             continue;
@@ -336,7 +337,7 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
         case BUS_END:
         {
             // The bus has created 2 DANGLING_END_ITEMs, one per end.
-            DANGLING_END_ITEM& nextItem = aItemList[++ii];
+            DANGLING_END_ITEM& nextItem = aItemListByType[++ii];
 
             if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_pos ) )
                 has_bus[0] = true;
@@ -363,17 +364,19 @@ bool SCH_BUS_WIRE_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aI
 }
 
 
-bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                             const SCH_SHEET_PATH* aPath )
+bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                                             std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                                             const SCH_SHEET_PATH*           aPath )
 {
     bool previousStateStart = m_isDanglingStart;
     bool previousStateEnd = m_isDanglingEnd;
 
     m_isDanglingStart = m_isDanglingEnd = true;
 
-    for( unsigned ii = 0; ii < aItemList.size(); ii++ )
+    // TODO: filter using get_lower as we only use one item type
+    for( unsigned ii = 0; ii < aItemListByType.size(); ii++ )
     {
-        DANGLING_END_ITEM& item = aItemList[ii];
+        DANGLING_END_ITEM& item = aItemListByType[ii];
 
         if( item.GetItem() == this )
             continue;
@@ -383,7 +386,7 @@ bool SCH_BUS_BUS_ENTRY::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aIt
         case BUS_END:
         {
             // The bus has created 2 DANGLING_END_ITEMs, one per end.
-            DANGLING_END_ITEM& nextItem = aItemList[++ii];
+            DANGLING_END_ITEM& nextItem = aItemListByType[++ii];
 
             if( IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), m_pos ) )
                 m_isDanglingStart = false;

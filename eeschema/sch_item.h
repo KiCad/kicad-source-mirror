@@ -133,6 +133,20 @@ private:
 };
 
 
+class DANGLING_END_ITEM_HELPER
+{
+public:
+    static std::vector<DANGLING_END_ITEM>::iterator
+    get_lower_pos( std::vector<DANGLING_END_ITEM>& aItemListByPos, const VECTOR2I& aPos );
+
+    static std::vector<DANGLING_END_ITEM>::iterator
+    get_lower_type( std::vector<DANGLING_END_ITEM>& aItemListByType, const DANGLING_END_T& aType );
+
+    /** Both contain the same information */
+    static void sort_dangling_end_items( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                                         std::vector<DANGLING_END_ITEM>& aItemListByPos );
+};
+
 typedef std::vector<SCH_ITEM*> SCH_ITEM_SET;
 
 
@@ -329,12 +343,15 @@ public:
      * If aSheet is passed a non-null pointer to a SCH_SHEET_PATH, the overridden method can
      * optionally use it to update sheet-local connectivity information
      *
-     * @param aItemList is the list of items to test item against.
+     * @param aItemListByType is the list of items to test item against. It's sorted
+     *   by item type, keeping WIRE_END pairs together.
+     * @param aItemListByPos is the same list but sorted first by Y then by X.
      * @param aSheet is the sheet path to update connections for.
      * @return True if the dangling state has changed from it's current setting.
      */
-    virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                      const SCH_SHEET_PATH* aPath = nullptr )
+    virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                                      std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                                      const SCH_SHEET_PATH*           aPath = nullptr )
     {
         return false;
     }

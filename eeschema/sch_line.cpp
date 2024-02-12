@@ -580,44 +580,56 @@ void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                    const SCH_SHEET_PATH* aPath )
+bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                                    std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                                    const SCH_SHEET_PATH*           aPath )
 {
-    if( IsConnectable() )
+    if( !IsConnectable() )
+        return false;
+
+    bool previousStartState = m_startIsDangling;
+    bool previousEndState = m_endIsDangling;
+
+    m_startIsDangling = m_endIsDangling = true;
+
+    for( auto it = DANGLING_END_ITEM_HELPER::get_lower_pos( aItemListByPos, m_start );
+         it < aItemListByPos.end() && it->GetPosition() == m_start; it++ )
     {
-        bool previousStartState = m_startIsDangling;
-        bool previousEndState = m_endIsDangling;
+        DANGLING_END_ITEM& item = *it;
 
-        m_startIsDangling = m_endIsDangling = true;
+        if( item.GetItem() == this )
+            continue;
 
-        for( DANGLING_END_ITEM item : aItemList )
+        if( ( IsWire() && item.GetType() != BUS_END && item.GetType() != BUS_ENTRY_END )
+            || ( IsBus() && item.GetType() != WIRE_END && item.GetType() != PIN_END ) )
         {
-            if( item.GetItem() == this )
-                continue;
-
-            if( ( IsWire() && item.GetType() != BUS_END && item.GetType() != BUS_ENTRY_END )
-                || ( IsBus() && item.GetType() != WIRE_END && item.GetType() != PIN_END ) )
-            {
-                if( m_start == item.GetPosition() )
-                    m_startIsDangling = false;
-
-                if( m_end == item.GetPosition() )
-                    m_endIsDangling = false;
-
-                if( !m_startIsDangling && !m_endIsDangling )
-                    break;
-            }
+            m_startIsDangling = false;
+            break;
         }
-
-        // We only use the bus dangling state for automatic line starting, so we don't care if it
-        // has changed or not (and returning true will result in extra work)
-        if( IsBus() )
-            return false;
-
-        return previousStartState != m_startIsDangling || previousEndState != m_endIsDangling;
     }
 
-    return false;
+    for( auto it = DANGLING_END_ITEM_HELPER::get_lower_pos( aItemListByPos, m_end );
+         it < aItemListByPos.end() && it->GetPosition() == m_end; it++ )
+    {
+        DANGLING_END_ITEM& item = *it;
+
+        if( item.GetItem() == this )
+            continue;
+
+        if( ( IsWire() && item.GetType() != BUS_END && item.GetType() != BUS_ENTRY_END )
+            || ( IsBus() && item.GetType() != WIRE_END && item.GetType() != PIN_END ) )
+        {
+            m_endIsDangling = false;
+            break;
+        }
+    }
+
+    // We only use the bus dangling state for automatic line starting, so we don't care if it
+    // has changed or not (and returning true will result in extra work)
+    if( IsBus() )
+        return false;
+
+    return previousStartState != m_startIsDangling || previousEndState != m_endIsDangling;
 }
 
 

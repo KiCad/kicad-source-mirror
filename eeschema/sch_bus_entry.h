@@ -188,8 +188,9 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                              const SCH_SHEET_PATH* aPath = nullptr ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                              std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                              const SCH_SHEET_PATH*           aPath = nullptr ) override;
 
     /**
      * Pointer to the bus item (usually a bus wire) connected to this bus-wire
@@ -233,8 +234,9 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                              const SCH_SHEET_PATH* aPath = nullptr ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                              std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                              const SCH_SHEET_PATH*           aPath = nullptr ) override;
 
     /**
      * Pointer to the bus items (usually bus wires) connected to this bus-bus

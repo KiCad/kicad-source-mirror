@@ -868,16 +868,19 @@ bool SCH_LABEL_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy
 }
 
 
-bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                                          const SCH_SHEET_PATH* aPath )
+bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                                          std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                                          const SCH_SHEET_PATH*           aPath )
 {
-    bool previousState = m_isDangling;
-    m_isDangling       = true;
+    bool     previousState = m_isDangling;
+    VECTOR2I text_pos = GetTextPos();
+    m_isDangling = true;
     m_connectionType   = CONNECTION_TYPE::NONE;
 
-    for( unsigned ii = 0; ii < aItemList.size(); ii++ )
+    for( auto it = DANGLING_END_ITEM_HELPER::get_lower_pos( aItemListByPos, text_pos );
+         it < aItemListByPos.end() && it->GetPosition() == text_pos; it++ )
     {
-        DANGLING_END_ITEM& item = aItemList[ii];
+        DANGLING_END_ITEM& item = *it;
 
         if( item.GetItem() == this )
             continue;
@@ -888,33 +891,68 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
         case LABEL_END:
         case SHEET_LABEL_END:
         case NO_CONNECT_END:
-            if( GetTextPos() == item.GetPosition() )
+            if( text_pos == item.GetPosition() )
             {
                 m_isDangling = false;
 
                 if( aPath && item.GetType() != PIN_END )
                     AddConnectionTo( *aPath, static_cast<SCH_ITEM*>( item.GetItem() ) );
             }
-
             break;
 
-        case BUS_END:
-            m_connectionType = CONNECTION_TYPE::BUS;
-            KI_FALLTHROUGH;
+        default: break;
+        }
 
-        case WIRE_END:
+        if( !m_isDangling )
+            break;
+    }
+
+    if( m_isDangling )
+    {
+        for( auto it = DANGLING_END_ITEM_HELPER::get_lower_type( aItemListByType, BUS_END );
+             it < aItemListByType.end() && it->GetType() == BUS_END; it++ )
         {
-            DANGLING_END_ITEM& nextItem = aItemList[++ii];
+            DANGLING_END_ITEM& item = *it;
+            DANGLING_END_ITEM& nextItem = *( ++it );
 
-            int accuracy = 1;   // We have rounding issues with an accuracy of 0
+            int accuracy = 1; // We have rounding issues with an accuracy of 0
 
-            m_isDangling = !TestSegmentHit( GetTextPos(), item.GetPosition(),
-                                            nextItem.GetPosition(), accuracy );
+            m_isDangling = !TestSegmentHit( text_pos, item.GetPosition(), nextItem.GetPosition(),
+                                            accuracy );
 
-            if( !m_isDangling )
+            if( m_isDangling )
+                continue;
+
+            m_connectionType = CONNECTION_TYPE::BUS;
+
+            // Add the line to the connected items, since it won't be picked
+            // up by a search of intersecting connection points
+            if( aPath )
             {
-                if( m_connectionType != CONNECTION_TYPE::BUS )
-                    m_connectionType = CONNECTION_TYPE::NET;
+                auto sch_item = static_cast<SCH_ITEM*>( item.GetItem() );
+                AddConnectionTo( *aPath, sch_item );
+                sch_item->AddConnectionTo( *aPath, this );
+            }
+            break;
+        }
+
+        if( m_isDangling )
+        {
+            for( auto it = DANGLING_END_ITEM_HELPER::get_lower_type( aItemListByType, WIRE_END );
+                 it < aItemListByType.end() && it->GetType() == WIRE_END; it++ )
+            {
+                DANGLING_END_ITEM& item = *it;
+                DANGLING_END_ITEM& nextItem = *( ++it );
+
+                int accuracy = 1; // We have rounding issues with an accuracy of 0
+
+                m_isDangling = !TestSegmentHit( text_pos, item.GetPosition(),
+                                                nextItem.GetPosition(), accuracy );
+
+                if( m_isDangling )
+                    continue;
+
+                m_connectionType = CONNECTION_TYPE::NET;
 
                 // Add the line to the connected items, since it won't be picked
                 // up by a search of intersecting connection points
@@ -924,16 +962,9 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
                     AddConnectionTo( *aPath, sch_item );
                     sch_item->AddConnectionTo( *aPath, this );
                 }
+                break;
             }
         }
-            break;
-
-        default:
-            break;
-        }
-
-        if( !m_isDangling )
-            break;
     }
 
     if( m_isDangling )

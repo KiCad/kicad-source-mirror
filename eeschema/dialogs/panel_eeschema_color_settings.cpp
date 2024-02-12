@@ -238,7 +238,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 {
     KIGFX::VIEW* view = m_preview->GetView();
 
-    std::vector<DANGLING_END_ITEM> endPoints;
+    std::vector<DANGLING_END_ITEM> endPointsByType;
 
     m_page       = new PAGE_INFO( PAGE_INFO::Custom );
     m_titleBlock = new TITLE_BLOCK;
@@ -396,7 +396,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetNumber( wxT( "1" ) );
         pin->SetName( wxT( "-" ) );
 
-        endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
+        endPointsByType.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
 
         pin = new LIB_PIN( symbol );
@@ -408,7 +408,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetNumber( wxT( "2" ) );
         pin->SetName( wxT( "+" ) );
 
-        endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
+        endPointsByType.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
 
         pin = new LIB_PIN( symbol );
@@ -420,7 +420,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetNumber( wxT( "3" ) );
         pin->SetName( wxT( "OUT" ) );
 
-        endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
+        endPointsByType.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
 
         addItem( symbol );
@@ -445,16 +445,19 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         if( sch_item && sch_item->IsConnectable() )
         {
             sch_item->AutoplaceFields( nullptr, false );
-            sch_item->GetEndPoints( endPoints );
+            sch_item->GetEndPoints( endPointsByType );
         }
     }
+
+    std::vector<DANGLING_END_ITEM> endPointsByPos = endPointsByType;
+    DANGLING_END_ITEM_HELPER::sort_dangling_end_items( endPointsByType, endPointsByPos );
 
     for( EDA_ITEM* item : m_previewItems )
     {
         SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
 
         if( sch_item && sch_item->IsConnectable() )
-            sch_item->UpdateDanglingState( endPoints, nullptr );
+            sch_item->UpdateDanglingState( endPointsByType, endPointsByPos, nullptr );
     }
 
     zoomFitPreview();

@@ -662,8 +662,9 @@ public:
      * @param aItemList is list of all #DANGLING_END_ITEM items to be tested.
      * @return true if any pin's state has changed.
      */
-    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList,
-                              const SCH_SHEET_PATH* aPath = nullptr ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
+                              std::vector<DANGLING_END_ITEM>& aItemListByPos,
+                              const SCH_SHEET_PATH*           aPath = nullptr ) override;
 
     VECTOR2I GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 

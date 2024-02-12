@@ -569,8 +569,14 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     for( EDA_ITEM* item : selection )
                         static_cast<SCH_ITEM*>( item )->GetEndPoints( internalPoints );
 
+                    std::vector<DANGLING_END_ITEM> endPointsByType = internalPoints;
+                    std::vector<DANGLING_END_ITEM> endPointsByPos = endPointsByType;
+                    DANGLING_END_ITEM_HELPER::sort_dangling_end_items( endPointsByType,
+                                                                       endPointsByPos );
+
                     for( EDA_ITEM* item : selection )
-                        static_cast<SCH_ITEM*>( item )->UpdateDanglingState( internalPoints );
+                        static_cast<SCH_ITEM*>( item )->UpdateDanglingState( endPointsByType,
+                                                                             endPointsByPos );
                 }
 
                 // Generic setup
