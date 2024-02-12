@@ -91,7 +91,7 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRen
                                                     aSch->Prj().GetProjectPath() );
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
-        wxFprintf( stderr, _( "Error loading drawing sheet." ) );
+        wxFprintf( stderr, _( "Error loading drawing sheet." ) + wxS( "\n" ) );
 }
 
 
@@ -379,7 +379,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
 
             if( !plotter->OpenFile( fn.GetFullPath() ) )
             {
-                wxFprintf( stderr, _( "Unable to open destination '%s'" ), fn.GetFullPath() );
+                wxFprintf( stderr, _( "Unable to open destination '%s'" ) + wxS( "\n" ), fn.GetFullPath() );
 
                 delete plotter;
                 return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
@@ -442,7 +442,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
 
         if( !symbol )
         {
-            wxFprintf( stderr, _( "There is no symbol selected to save." ) );
+            wxFprintf( stderr, _( "There is no symbol selected to save." ) + wxS( "\n" ) );
             return CLI::EXIT_CODES::ERR_ARGS;
         }
     }

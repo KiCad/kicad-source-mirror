@@ -143,9 +143,9 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( aJob->IsCli() )
     {
         if( PCB_PLOT_SVG::Plot( brd, svgPlotOptions ) )
-            wxPrintf( _( "Successfully created svg file" ) );
+            wxPrintf( _( "Successfully created svg file" )+ wxS( "\n" ) );
         else
-            wxPrintf( _( "Error creating svg file" ) );
+            wxPrintf( _( "Error creating svg file" )+ wxS( "\n" ) );
     }
 
     return CLI::EXIT_CODES::OK;
@@ -775,7 +775,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpSvg( JOB* aJob )
     }
 
     if( !svgJob->m_footprint.IsEmpty() && !singleFpPlotted )
-        wxFprintf( stderr, _( "The given footprint could not be found to export." ) );
+        wxFprintf( stderr, _( "The given footprint could not be found to export." ) + wxS( "\n" ) );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -827,7 +827,7 @@ int PCBNEW_JOBS_HANDLER::doFpExportSvg( JOB_FP_EXPORT_SVG* aSvgJob, const FOOTPR
     svgPlotOptions.m_plotFrame = false;
 
     if( !PCB_PLOT_SVG::Plot( brd.get(), svgPlotOptions ) )
-        wxFprintf( stderr, _( "Error creating svg file" ) );
+        wxFprintf( stderr, _( "Error creating svg file" ) + wxS( "\n" ) );
 
 
     return CLI::EXIT_CODES::OK;
