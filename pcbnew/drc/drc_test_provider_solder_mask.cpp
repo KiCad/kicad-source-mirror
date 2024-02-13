@@ -348,9 +348,9 @@ bool isMaskAperture( BOARD_ITEM* aItem )
     static const LSET saved( 2, F_Mask, B_Mask );
 
     LSET maskLayers = aItem->GetLayerSet() & saved;
-    LSET otherLayers = aItem->GetLayerSet() & ~saved;
+    LSET copperLayers = ( aItem->GetLayerSet() & ~saved ) & LSET::AllCuMask();
 
-    return maskLayers.count() > 0 && otherLayers.count() == 0;
+    return maskLayers.count() > 0 && copperLayers.count() == 0;
 }
 
 
