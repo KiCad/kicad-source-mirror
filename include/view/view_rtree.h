@@ -46,9 +46,8 @@ public:
      *
      * Item's bounding box is taken via its ViewBBox() method.
      */
-    void Insert( VIEW_ITEM* aItem )
+    void Insert( VIEW_ITEM* aItem, const BOX2I& bbox )
     {
-        const BOX2I&    bbox    = aItem->ViewBBox();
         const int       mmin[2] = { bbox.GetX(), bbox.GetY() };
         const int       mmax[2] = { bbox.GetRight(), bbox.GetBottom() };
 
@@ -60,9 +59,17 @@ public:
      *
      * Removal is done by comparing pointers, attempting to remove a copy of the item will fail.
      */
-    void Remove( VIEW_ITEM* aItem )
+    void Remove( VIEW_ITEM* aItem, const BOX2I* aBbox )
     {
         // const BOX2I&    bbox    = aItem->ViewBBox();
+
+        if( aBbox )
+        {
+            const int mmin[2] = { aBbox->GetX(), aBbox->GetY() };
+            const int mmax[2] = { aBbox->GetRight(), aBbox->GetBottom() };
+            VIEW_RTREE_BASE::Remove( mmin, mmax, aItem );
+            return;
+        }
 
         // FIXME: use cached bbox or ptr_map to speed up pointer <-> node lookups.
         const int       mmin[2] = { INT_MIN, INT_MIN };

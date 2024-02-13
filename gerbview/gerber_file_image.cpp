@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <map>
 #include <core/arraydim.h>
+#include <core/profile.h>
 
 
 /**
@@ -97,8 +98,10 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
 
 GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 {
-    for( GERBER_DRAW_ITEM* item : GetItems() )
-        delete item;
+    // Reverse iteration to avoid O(N^2) memcpy in a vector erase downstream.
+    // It results in a O(N^2) std::find, which is somewhat faster.
+    for( auto it = GetItems().rbegin(); it < GetItems().rend(); it++ )
+        delete *it;
 
     m_drawings.clear();
 
