@@ -39,6 +39,7 @@
 
 #include <wildcards_and_files_ext.h>
 #include <kiway_player.h>
+#include <string_utils.h>
 
 #define FMT_UNIMPLEMENTED   _( "Plugin \"%s\" does not implement the \"%s\" function." )
 #define FMT_NOTFOUND        _( "Plugin type \"%s\" is not found." )
@@ -184,4 +185,64 @@ SCH_IO_MGR::SCH_FILE_T SCH_IO_MGR::GuessPluginTypeFromSchPath( const wxString& a
     }
 
     return SCH_IO_MGR::SCH_FILE_UNKNOWN;
+}
+
+
+bool SCH_IO_MGR::ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+                                 const wxString& aNewFilepath )
+{
+    SCH_IO_MGR::SCH_FILE_T oldFileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
+
+    if( oldFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
+        return false;
+
+    IO_RELEASER<SCH_IO>                oldFilePI( SCH_IO_MGR::FindPlugin( oldFileType ) );
+    IO_RELEASER<SCH_IO>                kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
+    std::vector<LIB_SYMBOL*>           symbols;
+    std::vector<LIB_SYMBOL*>           newSymbols;
+    std::map<LIB_SYMBOL*, LIB_SYMBOL*> symbolMap;
+
+    try
+    {
+        oldFilePI->EnumerateSymbolLib( symbols, aOldFilePath, aOldFileProps );
+
+        // Copy non-aliases first, so we can build a map from symbols to newSymbols
+        for( LIB_SYMBOL* symbol : symbols )
+        {
+            if( symbol->IsAlias() )
+                continue;
+
+            symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
+
+            newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
+            symbolMap[symbol] = newSymbols.back();
+        }
+
+        // Now do the aliases using the map to hook them up to their newSymbol parents
+        for( LIB_SYMBOL* symbol : symbols )
+        {
+            if( !symbol->IsAlias() )
+                continue;
+
+            symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
+
+            newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
+            newSymbols.back()->SetParent( symbolMap[ symbol->GetParent().lock().get() ] );
+        }
+
+        // Create a blank library
+        kicadPI->SaveLibrary( aNewFilepath );
+
+        // Finally write out newSymbols
+        for( LIB_SYMBOL* symbol : newSymbols )
+        {
+            kicadPI->SaveSymbol( aNewFilepath, symbol );
+        }
+    }
+    catch( ... )
+    {
+        return false;
+    }
+
+    return true;
 }

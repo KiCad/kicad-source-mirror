@@ -912,7 +912,7 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
         std::unique_ptr<STRING_UTF8_MAP> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
-        if( convertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
+        if( SCH_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
         {
             relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
                                      m_project );
@@ -935,66 +935,6 @@ void PANEL_SYM_LIB_TABLE::onConvertLegacyLibraries( wxCommandEvent& event )
             DisplayErrorMessage( topLevelParent, msg );
         }
     }
-}
-
-
-bool PANEL_SYM_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
-                                          const wxString& aNewFilepath )
-{
-    SCH_IO_MGR::SCH_FILE_T oldFileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
-
-    if( oldFileType == SCH_IO_MGR::SCH_FILE_UNKNOWN )
-        return false;
-
-    IO_RELEASER<SCH_IO>                oldFilePI( SCH_IO_MGR::FindPlugin( oldFileType ) );
-    IO_RELEASER<SCH_IO>                kicadPI( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_KICAD ) );
-    std::vector<LIB_SYMBOL*>           symbols;
-    std::vector<LIB_SYMBOL*>           newSymbols;
-    std::map<LIB_SYMBOL*, LIB_SYMBOL*> symbolMap;
-
-    try
-    {
-        oldFilePI->EnumerateSymbolLib( symbols, aOldFilePath, aOldFileProps );
-
-        // Copy non-aliases first so we can build a map from symbols to newSymbols
-        for( LIB_SYMBOL* symbol : symbols )
-        {
-            if( symbol->IsAlias() )
-                continue;
-
-            symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
-
-            newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
-            symbolMap[symbol] = newSymbols.back();
-        }
-
-        // Now do the aliases using the map to hook them up to their newSymbol parents
-        for( LIB_SYMBOL* symbol : symbols )
-        {
-            if( !symbol->IsAlias() )
-                continue;
-
-            symbol->SetName( EscapeString( symbol->GetName(), CTX_LIBID ) );
-
-            newSymbols.push_back( new LIB_SYMBOL( *symbol ) );
-            newSymbols.back()->SetParent( symbolMap[ symbol->GetParent().lock().get() ] );
-        }
-
-        // Create a blank library
-        kicadPI->SaveLibrary( aNewFilepath );
-
-        // Finally write out newSymbols
-        for( LIB_SYMBOL* symbol : newSymbols )
-        {
-            kicadPI->SaveSymbol( aNewFilepath, symbol );
-        }
-    }
-    catch( ... )
-    {
-        return false;
-    }
-
-    return true;
 }
 
 
