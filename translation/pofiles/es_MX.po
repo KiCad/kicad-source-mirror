@@ -22240,9 +22240,9 @@ msgid "Linear resistance:"
 msgstr "Resistencia lineal:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "Frecuencia para una profundidad pelicular de 100%:"
+msgstr "Frecuencia para profundidad pelicular de 100%:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
@@ -24166,7 +24166,7 @@ msgstr "Capas de cobre:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
 msgid "Select the number of copper layers in the stackup"
-msgstr "Seleccione el número de capas de cobre en el apilado"
+msgstr "Seleccione el número de capas de cobre en el apilamiento"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:52
@@ -24250,7 +24250,7 @@ msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:131
 msgid "Board thickness from stackup:"
-msgstr "Grosor de la placa por el apilado:"
+msgstr "Grosor de la placa por el apilamiento:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:141
 msgid "Adjust Dielectric Thickness"
@@ -27134,7 +27134,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Margen relativo de la pasta de soldadura:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -27313,7 +27313,7 @@ msgstr ""
 "la pestaña de Márgenes prioritarios y ajustes de las Propiedades del Pad."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:288
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -31070,7 +31070,7 @@ msgstr "Ajuste de longitud"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:443
 msgid "Include stackup height in track length calculations"
-msgstr "Incluir la altura del apilado en los cálculos de largo de pista"
+msgstr "Incluir la altura del apilamiento en los cálculos de largo de pista"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:444
 msgid ""
@@ -31080,12 +31080,13 @@ msgid ""
 msgstr ""
 "Cuando está habilitado, la distancia entre capas de cobre se incluirá en los "
 "cálculos de longitud para pistas con vías. Cuando está deshabilitado, la "
-"altura del apilado para vías se ignora."
+"altura del apilamiento para vías se ignora."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:435
 msgid "Use the Physical Stackup page to change the number of copper layers."
 msgstr ""
-"Usar la página de apilado físico para cambiar el número de capas de cobre."
+"Usar la página de apilamiento físico para cambiar el número de capas de "
+"cobre."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:468
 #, c-format
@@ -33732,7 +33733,7 @@ msgstr "Archivo de trabajo Gerber '%s' creado."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:592
 msgid "Board stackup settings not up to date."
-msgstr "La configuración del apilado de la placa está desactualizada."
+msgstr "La configuración del apilamiento de la placa está desactualizada."
 
 #: pcbnew/exporters/step/exporter_step.cpp:348
 msgid "Determining PCB data\n"
@@ -33741,7 +33742,7 @@ msgstr "Determinación de los datos de placa\n"
 #: pcbnew/exporters/step/exporter_step.cpp:351
 #, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Grosor de la placa desde el apilado: %.3f mm\n"
+msgstr "Grosor de la placa desde el apilamiento: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:356
 msgid "Build STEP data\n"
@@ -35991,7 +35992,8 @@ msgstr "Huella %s pad %s utiliza un orificio de tipo desconocido %d."
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
-"Huella %s pad %s utiliza un apilado de pads complejo (todavía no soportado.)"
+"Huella %s pad %s utiliza un apilamiento de pads complejo (todavía no "
+"soportado.)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2814
 #: pcbnew/plugins/altium/altium_pcb.cpp:2810
@@ -36031,8 +36033,8 @@ msgstr ""
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
-"Un pad que no es de cobre %s tiene un apilado de pads complejo (todavía no "
-"soportado)."
+"Un pad que no es de cobre %s tiene un apilamiento de pads complejo (todavía "
+"no soportado)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3066
 #: pcbnew/plugins/altium/altium_pcb.cpp:3062
@@ -36156,7 +36158,7 @@ msgstr ""
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:543
 #, c-format
 msgid "Unexpected layer '%s' in layer stack."
-msgstr "Capa '%s' inesperada en el apilado de capas."
+msgstr "Capa '%s' inesperada en el apilamiento de capas."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:700
 #, c-format
@@ -36202,9 +36204,9 @@ msgid ""
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
 msgstr ""
-"La definición de pad de CADSTAR '%s' es un apilado complejo de pad, que no "
-"está soportado en KiCad. Por favor revise los pads importados ya que pueden "
-"requerir corrección manual."
+"La definición de pad de CADSTAR '%s' es un apilamiento complejo de pad, que "
+"no está soportado en KiCad. Por favor revise los pads importados ya que "
+"pueden requerir corrección manual."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1256
 #, c-format
@@ -38455,7 +38457,7 @@ msgstr "Dieléctrico"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:353
 msgid "Insert board stackup table"
-msgstr "Inserte la tabla de apilado de placa"
+msgstr "Inserte la tabla de apilamiento de placa"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:397
 msgid "BOARD CHARACTERISTICS"
@@ -38847,11 +38849,11 @@ msgstr "Agregar una tabla de características de placa en una capa gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:116
 msgid "Add Stackup Table"
-msgstr "Agregar una tabla de apilado"
+msgstr "Agregar una tabla de apilamiento"
 
 #: pcbnew/tools/pcb_actions.cpp:117
 msgid "Add a board stackup table on a graphic layer"
-msgstr "Agregar una tabla de apilado de placa en una capa gráfica"
+msgstr "Agregar una tabla de apilamiento de placa en una capa gráfica"
 
 #: pcbnew/tools/pcb_actions.cpp:133
 msgid "Add a wrapped text item"
