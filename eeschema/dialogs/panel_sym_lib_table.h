@@ -65,9 +65,6 @@ private:
     /// by examining all the full_uri columns.
     void populateEnvironReadOnlyTable();
 
-    bool convertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
-                         const wxString& aNewFilePath );
-
     SYMBOL_LIB_TABLE_GRID* global_model() const;
 
     SYMBOL_LIB_TABLE_GRID* project_model() const;

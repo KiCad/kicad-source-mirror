@@ -879,17 +879,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
     wxFileName fn( upgradeJob->m_libraryPath );
     fn.MakeAbsolute();
 
-    SCH_IO_KICAD_SEXPR_LIB_CACHE schLibrary( fn.GetFullPath() );
-
-    try
-    {
-        schLibrary.Load();
-    }
-    catch( ... )
-    {
-        m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
-    }
+    SCH_IO_MGR::SCH_FILE_T fileType = SCH_IO_MGR::GuessPluginTypeFromLibPath( fn.GetFullPath() );
 
     if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
     {
@@ -901,33 +891,65 @@ int EESCHEMA_JOBS_HANDLER::JobSymUpgrade( JOB* aJob )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
     }
-
-    bool shouldSave = upgradeJob->m_force
-                      || schLibrary.GetFileFormatVersionAtLoad() < SEXPR_SYMBOL_LIB_FILE_VERSION;
-
-    if( shouldSave )
+    else if( fileType != SCH_IO_MGR::SCH_KICAD )
     {
-        m_reporter->Report( _( "Saving symbol library in updated format\n" ), RPT_SEVERITY_ACTION );
+        m_reporter->Report( _( "Output path must be specified to convert legacy and non-KiCad libraries\n" ),
+                            RPT_SEVERITY_ERROR );
+
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
+    }
+
+    if( fileType == SCH_IO_MGR::SCH_KICAD )
+    {
+        SCH_IO_KICAD_SEXPR_LIB_CACHE schLibrary( fn.GetFullPath() );
 
         try
         {
-            if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
-            {
-                schLibrary.SetFileName( upgradeJob->m_outputLibraryPath );
-            }
-
-            schLibrary.SetModified();
-            schLibrary.Save();
+            schLibrary.Load();
         }
         catch( ... )
         {
-            m_reporter->Report( ( "Unable to save library\n" ), RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        bool shouldSave =
+                upgradeJob->m_force
+                || schLibrary.GetFileFormatVersionAtLoad() < SEXPR_SYMBOL_LIB_FILE_VERSION;
+
+        if( shouldSave )
+        {
+            m_reporter->Report( _( "Saving symbol library in updated format\n" ),
+                                RPT_SEVERITY_ACTION );
+
+            try
+            {
+                if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
+                {
+                    schLibrary.SetFileName( upgradeJob->m_outputLibraryPath );
+                }
+
+                schLibrary.SetModified();
+                schLibrary.Save();
+            }
+            catch( ... )
+            {
+                m_reporter->Report( ( "Unable to save library\n" ), RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+        }
+        else
+        {
+            m_reporter->Report( _( "Symbol library was not updated\n" ), RPT_SEVERITY_INFO );
         }
     }
     else
     {
-        m_reporter->Report( _( "Symbol library was not updated\n" ), RPT_SEVERITY_INFO );
+        if( !SCH_IO_MGR::ConvertLibrary( nullptr, fn.GetAbsolutePath(), upgradeJob->m_outputLibraryPath ) )
+        {
+            m_reporter->Report( ( "Unable to convert library\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
     }
 
     return CLI::EXIT_CODES::OK;

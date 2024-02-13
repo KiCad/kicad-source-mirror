@@ -106,6 +106,12 @@ public:
      * Return a plugin type given a schematic using the file extension of \a aSchematicPath.
      */
     static SCH_FILE_T GuessPluginTypeFromSchPath( const wxString& aSchematicPath, int aCtl = 0 );
+
+    /**
+     * Convert a schematic symbol library to the latest KiCad format
+     */
+    static bool ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+                                const wxString& aNewFilepath );
 };
 
 #endif // _SCH_IO_MGR_H_
