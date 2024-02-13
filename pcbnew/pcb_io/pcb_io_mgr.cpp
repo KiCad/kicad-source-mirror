@@ -183,6 +183,45 @@ void PCB_IO_MGR::Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* a
     THROW_IO_ERROR( wxString::Format( FMT_NOTFOUND, ShowType( aFileType ).GetData() ) );
 }
 
+
+bool PCB_IO_MGR::ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+                                 const wxString& aNewFilePath )
+{
+    PCB_IO_MGR::PCB_FILE_T oldFileType = PCB_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
+
+    if( oldFileType == PCB_IO_MGR::FILE_TYPE_NONE )
+        return false;
+
+
+    IO_RELEASER<PCB_IO> oldFilePI( PCB_IO_MGR::PluginFind( oldFileType ) );
+    IO_RELEASER<PCB_IO> kicadPI( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
+    wxArrayString fpNames;
+    wxFileName newFileName( aNewFilePath );
+
+    if( !newFileName.DirExists() && !wxFileName::Mkdir( aNewFilePath, wxS_DIR_DEFAULT ) )
+        return false;
+
+    try
+    {
+        bool bestEfforts = false; // throw on first error
+        oldFilePI->FootprintEnumerate( fpNames, aOldFilePath, bestEfforts, aOldFileProps );
+
+        for ( const wxString& fpName : fpNames )
+        {
+            std::unique_ptr<const FOOTPRINT> fp( oldFilePI->GetEnumeratedFootprint( aOldFilePath, fpName, aOldFileProps ) );
+            kicadPI->FootprintSave( aNewFilePath, fp.get() );
+        }
+
+    }
+    catch( ... )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+
 // These text strings are "truth" for identifying the plugins.  If you change the spellings,
 // you will obsolete library tables, so don't do it.  Additions are OK.
 

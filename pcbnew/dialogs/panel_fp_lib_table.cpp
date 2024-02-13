@@ -866,7 +866,7 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
         wxString options = m_cur_grid->GetCellValue( row, COL_OPTIONS );
         std::unique_ptr<STRING_UTF8_MAP> props( LIB_TABLE::ParseOptions( options.ToStdString() ) );
 
-        if( convertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
+        if( PCB_IO_MGR::ConvertLibrary( props.get(), legacyLib.GetFullPath(), newLib.GetFullPath() ) )
         {
             relPath = NormalizePath( newLib.GetFullPath(), &Pgm().GetLocalEnvVariables(),
                                      m_project );
@@ -885,45 +885,6 @@ void PANEL_FP_LIB_TABLE::onMigrateLibraries( wxCommandEvent& event )
             DisplayErrorMessage( wxGetTopLevelParent( this ), msg );
         }
     }
-}
-
-
-bool PANEL_FP_LIB_TABLE::convertLibrary( STRING_UTF8_MAP* aOldFileProps,
-                                         const wxString& aOldFilePath,
-                                         const wxString& aNewFilePath)
-{
-    PCB_IO_MGR::PCB_FILE_T oldFileType = PCB_IO_MGR::GuessPluginTypeFromLibPath( aOldFilePath );
-
-    if( oldFileType == PCB_IO_MGR::FILE_TYPE_NONE )
-        return false;
-
-
-    IO_RELEASER<PCB_IO> oldFilePI( PCB_IO_MGR::PluginFind( oldFileType ) );
-    IO_RELEASER<PCB_IO> kicadPI( PCB_IO_MGR::PluginFind( PCB_IO_MGR::KICAD_SEXP ) );
-    wxArrayString fpNames;
-    wxFileName newFileName( aNewFilePath );
-
-    if( !newFileName.DirExists() && !wxFileName::Mkdir( aNewFilePath, wxS_DIR_DEFAULT ) )
-        return false;
-
-    try
-    {
-        bool bestEfforts = false; // throw on first error
-        oldFilePI->FootprintEnumerate( fpNames, aOldFilePath, bestEfforts, aOldFileProps );
-
-        for ( const wxString& fpName : fpNames )
-        {
-            std::unique_ptr<const FOOTPRINT> fp( oldFilePI->GetEnumeratedFootprint( aOldFilePath, fpName, aOldFileProps ) );
-            kicadPI->FootprintSave( aNewFilePath, fp.get() );
-        }
-
-    }
-    catch( ... )
-    {
-        return false;
-    }
-
-    return true;
 }
 
 

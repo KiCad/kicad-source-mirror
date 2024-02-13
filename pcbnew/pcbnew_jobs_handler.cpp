@@ -753,8 +753,7 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
     if( upgradeJob == nullptr )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    if( aJob->IsCli() )
-        m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
+    PCB_IO_MGR::PCB_FILE_T fileType = PCB_IO_MGR::GuessPluginTypeFromLibPath( upgradeJob->m_libraryPath );
 
     if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
     {
@@ -766,52 +765,82 @@ int PCBNEW_JOBS_HANDLER::JobExportFpUpgrade( JOB* aJob )
             return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
         }
     }
-
-    PCB_IO_KICAD_SEXPR  pcb_io( CTL_FOR_LIBRARY );
-    FP_CACHE   fpLib( &pcb_io, upgradeJob->m_libraryPath );
-
-    try
+    else if( fileType != PCB_IO_MGR::KICAD_SEXP )
     {
-        fpLib.Load();
-    }
-    catch(...)
-    {
-        m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
-        return CLI::EXIT_CODES::ERR_UNKNOWN;
+        m_reporter->Report( _( "Output path must be specified to convert legacy and non-KiCad libraries\n" ),
+                            RPT_SEVERITY_ERROR );
+
+        return CLI::EXIT_CODES::ERR_INVALID_OUTPUT_CONFLICT;
     }
 
-    bool shouldSave = upgradeJob->m_force;
-
-    for( const auto& footprint : fpLib.GetFootprints() )
+    if( fileType == PCB_IO_MGR::KICAD_SEXP )
     {
-        if( footprint.second->GetFootprint()->GetFileFormatVersionAtLoad() < SEXPR_BOARD_FILE_VERSION )
+        if( !wxDir::Exists( upgradeJob->m_libraryPath ) )
         {
-            shouldSave = true;
+            m_reporter->Report( _( "Footprint library path does not exist or is not accessible\n" ),
+                                RPT_SEVERITY_INFO );
+            return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
         }
-    }
 
-    if( shouldSave )
-    {
-        m_reporter->Report( _( "Saving footprint library\n" ), RPT_SEVERITY_INFO );
+
+        if( aJob->IsCli() )
+            m_reporter->Report( _( "Loading footprint library\n" ), RPT_SEVERITY_INFO );
+
+        PCB_IO_KICAD_SEXPR pcb_io( CTL_FOR_LIBRARY );
+        FP_CACHE           fpLib( &pcb_io, upgradeJob->m_libraryPath );
 
         try
         {
-            if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
-            {
-                fpLib.SetPath( upgradeJob->m_outputLibraryPath );
-            }
-
-            fpLib.Save();
+            fpLib.Load();
         }
         catch( ... )
         {
-            m_reporter->Report( _( "Unable to save library\n" ), RPT_SEVERITY_ERROR );
+            m_reporter->Report( _( "Unable to load library\n" ), RPT_SEVERITY_ERROR );
             return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
+
+        bool shouldSave = upgradeJob->m_force;
+
+        for( const auto& footprint : fpLib.GetFootprints() )
+        {
+            if( footprint.second->GetFootprint()->GetFileFormatVersionAtLoad()
+                < SEXPR_BOARD_FILE_VERSION )
+            {
+                shouldSave = true;
+            }
+        }
+
+        if( shouldSave )
+        {
+            m_reporter->Report( _( "Saving footprint library\n" ), RPT_SEVERITY_INFO );
+
+            try
+            {
+                if( !upgradeJob->m_outputLibraryPath.IsEmpty() )
+                {
+                    fpLib.SetPath( upgradeJob->m_outputLibraryPath );
+                }
+
+                fpLib.Save();
+            }
+            catch( ... )
+            {
+                m_reporter->Report( _( "Unable to save library\n" ), RPT_SEVERITY_ERROR );
+                return CLI::EXIT_CODES::ERR_UNKNOWN;
+            }
+        }
+        else
+        {
+            m_reporter->Report( _( "Footprint library was not updated\n" ), RPT_SEVERITY_INFO );
         }
     }
     else
     {
-        m_reporter->Report( _( "Footprint library was not updated\n" ), RPT_SEVERITY_INFO );
+        if( !PCB_IO_MGR::ConvertLibrary( nullptr, upgradeJob->m_libraryPath, upgradeJob->m_outputLibraryPath ) )
+        {
+            m_reporter->Report( ( "Unable to convert library\n" ), RPT_SEVERITY_ERROR );
+            return CLI::EXIT_CODES::ERR_UNKNOWN;
+        }
     }
 
     return CLI::EXIT_CODES::OK;

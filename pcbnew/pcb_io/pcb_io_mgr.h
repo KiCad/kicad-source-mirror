@@ -228,6 +228,12 @@ public:
      */
     static void Save( PCB_FILE_T aFileType, const wxString& aFileName, BOARD* aBoard,
                       const STRING_UTF8_MAP* aProperties = nullptr );
+
+    /**
+     * Convert a schematic symbol library to the latest KiCad format
+     */
+    static bool ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
+                                const wxString& aNewFilePath );
 };
 
 #endif // PCB_IO_MGR_H_

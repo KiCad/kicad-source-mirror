@@ -68,9 +68,6 @@ private:
     void populateEnvironReadOnlyTable();
     void populatePluginList();
 
-    bool convertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString& aOldFilePath,
-                         const wxString& aNewFilePath );
-
     FP_LIB_TABLE_GRID* global_model() const
     {
         return (FP_LIB_TABLE_GRID*) m_global_grid->GetTable();

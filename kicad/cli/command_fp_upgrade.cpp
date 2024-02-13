@@ -50,12 +50,6 @@ int CLI::FP_UPGRADE_COMMAND::doPerform( KIWAY& aKiway )
     fpJob->m_outputLibraryPath = m_argOutput;
     fpJob->m_force = m_argParser.get<bool>( ARG_FORCE );
 
-    if( !wxDir::Exists( fpJob->m_libraryPath ) )
-    {
-        wxFprintf( stderr, _( "Footprint library path does not exist or is not accessible\n" ) );
-        return EXIT_CODES::ERR_INVALID_INPUT_FILE;
-    }
-
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, fpJob.get() );
 
     return exitCode;
