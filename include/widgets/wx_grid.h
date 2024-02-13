@@ -59,6 +59,14 @@ public:
     void SetLabelFont( const wxFont& aFont );   // Yes, we're hiding a non-virtual method
 
     /**
+     * Enable alternate row highlighting, where every odd row has a different background
+     * color than the even rows.s
+     *
+     * @param aEnable flag to specify to enable alternate row striping in the grid
+     */
+    void EnableAlternateRowColors( bool aEnable = true );
+
+    /**
      * Get a tokenized string containing the shown column indexes.
      * Tokens are separated by spaces.
      */

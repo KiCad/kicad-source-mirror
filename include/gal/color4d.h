@@ -189,7 +189,7 @@ public:
      * @param aOutLightness is conversion result for value component (0 ... 1.0).
      * @note saturation is set to 0.0 for black color if r = g = b,
      */
-    void ToHSL( double& aOutHue, double& aOutSaturation, double& aOutValue ) const;
+    void ToHSL( double& aOutHue, double& aOutSaturation, double& aOutLightness ) const;
 
     /**
      * Change currently used color to the one given by hue, saturation and lightness parameters.
@@ -366,6 +366,22 @@ public:
     double Distance( const COLOR4D& other ) const;
 
     int Compare( const COLOR4D& aRhs ) const;
+
+    /**
+     * Compute the relative luminance of a color using the formula from WCAG21.
+     *
+     * @return relative luminance between 0 and 1 where 0 is darkest black and 1 is lightest white.
+     */
+    double RelativeLuminance() const;
+
+    /**
+     * Compute the contrast ration between two colors using the formula from WCAG21.
+     *
+     * @param aLeft is the first color to use in the ratio
+     * @param aRight is the second color to use in the ratio
+     * @return contrast ratio between 1.0:1 and 21.0:1 between the two colors.
+     */
+    static double ContrastRatio( const COLOR4D& aLeft, const COLOR4D& aRight );
 
     /**
      * Returns a legacy color ID that is closest to the given 8-bit RGB values.

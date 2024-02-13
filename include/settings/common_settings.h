@@ -57,6 +57,7 @@ public:
         double     hicontrast_dimming_factor;
         int        text_editor_zoom;
         int        toolbar_icon_size;
+        bool       grid_striping;
     };
 
     struct AUTO_BACKUP

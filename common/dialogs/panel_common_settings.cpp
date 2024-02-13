@@ -190,6 +190,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->m_Appearance.show_scrollbars = m_showScrollbars->GetValue();
 
+    commonSettings->m_Appearance.grid_striping = m_gridStriping->GetValue();
+
     double dimmingPercent = 80;
     m_highContrastCtrl->GetValue().ToDouble( &dimmingPercent );
     commonSettings->m_Appearance.hicontrast_dimming_factor = dimmingPercent / 100.0f;
@@ -275,6 +277,8 @@ void PANEL_COMMON_SETTINGS::applySettingsToPanel( COMMON_SETTINGS& aSettings )
 
     m_checkBoxIconsInMenus->SetValue( aSettings.m_Appearance.use_icons_in_menus );
     m_scaleFonts->SetValue( aSettings.m_Appearance.apply_icon_scale_to_fonts );
+
+    m_gridStriping->SetValue( aSettings.m_Appearance.grid_striping );
 
     double dimmingPercent = aSettings.m_Appearance.hicontrast_dimming_factor * 100.0f;
     m_highContrastCtrl->SetValue( wxString::Format( "%.0f", dimmingPercent ) );

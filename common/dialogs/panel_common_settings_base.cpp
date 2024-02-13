@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -158,6 +158,11 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_hotkeyFeedback->SetToolTip( _("When enabled, certain hotkeys that cycle between settings will show a popup indicator briefly to indicate the change in settings.") );
 
 	bSizer14->Add( m_hotkeyFeedback, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+
+	m_gridStriping = new wxCheckBox( this, wxID_ANY, _("Use alternating row colors in tables"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_gridStriping->SetToolTip( _("When enabled, use a different color for every other table row") );
+
+	bSizer14->Add( m_gridStriping, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 
 
 	bUserInterfaceSizer->Add( bSizer14, 0, wxEXPAND, 5 );

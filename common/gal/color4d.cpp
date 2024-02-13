@@ -601,3 +601,27 @@ int COLOR4D::Compare( const COLOR4D& aRhs ) const
 
     return 0;
 }
+
+
+double COLOR4D::RelativeLuminance() const
+{
+    // Formula from https://www.w3.org/TR/WCAG21/#dfn-relative-luminance
+    double cr = ( r <= 0.04045 ) ? ( r / 12.92 ) : std::pow( ( r + 0.055 ) / 1.055, 2.4 );
+    double cg = ( g <= 0.04045 ) ? ( g / 12.92 ) : std::pow( ( g + 0.055 ) / 1.055, 2.4 );
+    double cb = ( b <= 0.04045 ) ? ( b / 12.92 ) : std::pow( ( b + 0.055 ) / 1.055, 2.4 );
+
+    return 0.2126 * cr + 0.7152 * cg + 0.0722 * cb;
+}
+
+
+double COLOR4D::ContrastRatio( const COLOR4D& aLeft, const COLOR4D& aRight )
+{
+    // Formula from https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio
+    double aRL = aLeft.RelativeLuminance();
+    double bRL = aRight.RelativeLuminance();
+
+    if( aRL > bRL )
+        return ( aRL + 0.05 ) / ( bRL + 0.05 );
+    else
+        return ( bRL + 0.05 ) / ( aRL + 0.05 );
+}

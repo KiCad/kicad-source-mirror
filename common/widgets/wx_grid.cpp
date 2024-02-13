@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <wx/colour.h>
 #include <wx/tokenzr.h>
 #include <wx/dc.h>
 #include <wx/settings.h>
@@ -30,6 +31,10 @@
 #include <algorithm>
 #include <core/kicad_algo.h>
 #include <gal/color4d.h>
+#include <kiplatform/ui.h>
+
+#include <pgm_base.h>
+#include <settings/common_settings.h>
 
 #define MIN_GRIDCELL_MARGIN FromDIP( 3 )
 
@@ -91,6 +96,59 @@ public:
         rect.SetRight( rect.GetRight() );
         dc.DrawRectangle( rect );
     }
+};
+
+
+/**
+ * Attribute provider that provides attributes (or modifies the existing attribute) to alternate a row color
+ * between the odd and even rows.
+ */
+class WX_GRID_ALT_ROW_COLOR_PROVIDER : public wxGridCellAttrProvider
+{
+public:
+    WX_GRID_ALT_ROW_COLOR_PROVIDER( const wxColor& aBaseColor ) : wxGridCellAttrProvider(),
+        m_attrOdd( new wxGridCellAttr() )
+    {
+        UpdateColors( aBaseColor );
+    }
+
+
+    void UpdateColors( const wxColor& aBaseColor )
+    {
+        // Choose the default color, taking into account if the dark mode theme is enabled
+        wxColor rowColor = aBaseColor.ChangeLightness( KIPLATFORM::UI::IsDarkTheme() ? 105 : 95 );
+
+        m_attrOdd->SetBackgroundColour( rowColor );
+    }
+
+
+    wxGridCellAttr* GetAttr( int row, int col,
+                             wxGridCellAttr::wxAttrKind  kind ) const override
+    {
+        wxGridCellAttrPtr cellAttr( wxGridCellAttrProvider::GetAttr( row, col, kind ) );
+
+        // Just pass through the cell attribute on even rows
+        if( row % 2 )
+            return cellAttr.release();
+
+        if( !cellAttr )
+        {
+            cellAttr = m_attrOdd;
+        }
+        else
+        {
+            if( !cellAttr->HasBackgroundColour() )
+            {
+                cellAttr = cellAttr->Clone();
+                cellAttr->SetBackgroundColour( m_attrOdd->GetBackgroundColour() );
+            }
+        }
+
+        return cellAttr.release();
+    }
+
+private:
+    wxGridCellAttrPtr m_attrOdd;
 };
 
 
@@ -179,10 +237,31 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
 
     delete[] formBuilderColWidths;
 
+    EnableAlternateRowColors( Pgm().GetCommonSettings()->m_Appearance.grid_striping );
+
     Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), nullptr, this );
     Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( WX_GRID::onGridCellSelect ), nullptr, this );
 
     m_weOwnTable = aTakeOwnership;
+}
+
+
+void WX_GRID::EnableAlternateRowColors( bool aEnable )
+{
+    wxGridTableBase* table = wxGrid::GetTable();
+
+    wxCHECK_MSG( table, /* void */,
+                 "Tried to enable alternate row colors without a table assigned to the grid" );
+
+    if( aEnable )
+    {
+        wxColor color = wxGrid::GetDefaultCellBackgroundColour();
+        table->SetAttrProvider( new WX_GRID_ALT_ROW_COLOR_PROVIDER( color ) );
+    }
+    else
+    {
+        table->SetAttrProvider( nullptr );
+    }
 }
 
 
