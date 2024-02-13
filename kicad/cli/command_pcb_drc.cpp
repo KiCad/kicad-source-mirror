@@ -56,6 +56,10 @@ CLI::PCB_DRC_COMMAND::PCB_DRC_COMMAND() : COMMAND( "drc" )
             .help( UTF8STDSTR( _( "Report all errors for each track" ) ) )
             .flag();
 
+    m_argParser.add_argument( ARG_PARITY )
+            .help( UTF8STDSTR( _( "Test for parity between PCB and schematic" ) ) )
+            .flag();
+
     m_argParser.add_argument( ARG_UNITS )
             .default_value( std::string( "mm" ) )
             .help( UTF8STDSTR( _( "Report units; valid options: in, mm, mils" ) ) )
@@ -157,6 +161,8 @@ int CLI::PCB_DRC_COMMAND::doPerform( KIWAY& aKiway )
         wxFprintf( stderr, _( "Invalid report format\n" ) );
         return EXIT_CODES::ERR_ARGS;
     }
+
+    drcJob->m_parity = m_argParser.get<bool>( ARG_PARITY );
 
     int exitCode = aKiway.ProcessJob( KIWAY::FACE_PCB, drcJob.get() );
 
