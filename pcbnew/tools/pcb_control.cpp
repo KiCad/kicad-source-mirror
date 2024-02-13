@@ -1273,6 +1273,9 @@ int PCB_CONTROL::AppendBoard( PCB_IO& pi, wxString& fileName )
     for( ZONE* zone : brd->Zones() )
         zone->SetFlags( SKIP_STRUCT );
 
+    for( PCB_GENERATOR* generator : brd->Generators() )
+        generator->SetFlags( SKIP_STRUCT );
+
     std::map<wxString, wxString> oldProperties = brd->GetProperties();
     std::map<wxString, wxString> newProperties;
 
