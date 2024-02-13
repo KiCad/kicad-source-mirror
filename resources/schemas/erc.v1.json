@@ -136,8 +136,7 @@
       "description": "Severity of the violation",
       "enum": [
         "error",
-        "warning",
-        "ignore"
+        "warning"
       ]
     },
     "Coordinate": {
