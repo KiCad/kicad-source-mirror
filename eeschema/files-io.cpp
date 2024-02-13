@@ -69,7 +69,9 @@
 #include <wx/filedlg.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
+#include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
+#include <tools/ee_selection_tool.h>
 #include <paths.h>
 #include <wx_filename.h>  // For ::ResolvePossibleSymlinks
 #include <widgets/wx_progress_reporters.h>
@@ -617,6 +619,15 @@ bool SCH_EDIT_FRAME::AppendSchematic()
 
 bool SCH_EDIT_FRAME::AddSheetAndUpdateDisplay( const wxString aFullFileName )
 {
+    SCH_COMMIT         commit( m_toolManager );
+    EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+
+    selectionTool->ClearSelection();
+
+    // Mark all existing items on the screen so we don't select them after appending
+    for( EDA_ITEM* item : GetScreen()->Items() )
+        item->SetFlags( SKIP_STRUCT );
+
     if( !LoadSheetFromFile( GetCurrentSheet().Last(), &GetCurrentSheet(), aFullFileName ) )
         return false;
 
@@ -626,6 +637,27 @@ bool SCH_EDIT_FRAME::AddSheetAndUpdateDisplay( const wxString aFullFileName )
     SyncView();
     OnModify();
     HardRedraw();   // Full reinit of the current screen and the display.
+
+    // Select all new items
+    for( EDA_ITEM* item : GetScreen()->Items() )
+    {
+        if( !item->HasFlag( SKIP_STRUCT ) )
+        {
+            commit.Added( item, GetScreen() );
+            selectionTool->AddItemToSel( item );
+
+            if( item->Type() == SCH_LINE_T )
+                item->SetFlags( STARTPOINT | ENDPOINT );
+        }
+        else
+            item->ClearFlags( SKIP_STRUCT );
+    }
+
+    // Start moving selection, cancel undoes the insertion
+    if( !m_toolManager->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
+        commit.Revert();
+    else
+        commit.Push( _( "Import Schematic Sheet Content..." ) );
 
     UpdateHierarchyNavigator();
 
