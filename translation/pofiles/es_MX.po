@@ -18312,7 +18312,7 @@ msgstr "Activar mover símbolo"
 
 #: eeschema/tools/ee_actions.cpp:893
 msgid "Align Elements to Grid"
-msgstr "Alinear elementos a la rejilla"
+msgstr "Alinear elementos a la cuadrícula"
 
 #: eeschema/tools/ee_actions.cpp:899
 msgid "Save Current Sheet Copy As..."
@@ -19943,9 +19943,8 @@ msgstr ""
 "mantener."
 
 #: kicad/cli/command_export_pcb_drill.cpp:60
-#, fuzzy
 msgid "Valid options are: route,alternate."
-msgstr "Las opciones válidas son: ruta,alternar."
+msgstr "Las opciones válidas son: ruta, alternar."
 
 #: kicad/cli/command_export_pcb_drill.cpp:64
 msgid "Output units, valid options:in,mm"
