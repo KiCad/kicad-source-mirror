@@ -16998,11 +16998,11 @@ msgstr "현재 라이브러리를 새 파일에 저장합니다."
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "New Symbol..."
-msgstr "새로운 심볼..."
+msgstr "새 심볼..."
 
 #: eeschema/tools/ee_actions.cpp:127
 msgid "Create a new symbol"
-msgstr "새로운 심볼 생성"
+msgstr "새 심볼 생성"
 
 #: eeschema/tools/ee_actions.cpp:132
 msgid "Edit Symbol"
@@ -18610,7 +18610,7 @@ msgstr "그리기 모드"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr "플래시 개체를 스케치"
+msgstr "플래시 개체 스케치"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:63
 msgid "Sketch lines"
@@ -18778,7 +18778,7 @@ msgstr "보통: mm로 3:3, 인치로 2:4"
 
 #: gerbview/events_called_functions.cpp:182 gerbview/gerbview_frame.cpp:160
 msgid "Layers Manager"
-msgstr "레이어 매니저"
+msgstr "레이어 관리자"
 
 #: gerbview/excellon_read_drill_file.cpp:270
 #, c-format
@@ -19027,7 +19027,7 @@ msgstr "컴포넌트: %s  패드: %s  Fct %s"
 #: gerbview/gerber_draw_item.cpp:727 gerbview/toolbars_gerber.cpp:129
 #: gerbview/toolbars_gerber.cpp:132
 msgid "Cmp:"
-msgstr "구성:"
+msgstr "부품:"
 
 #: gerbview/gerber_draw_item.cpp:989
 #, c-format
@@ -19246,11 +19246,11 @@ msgstr "압축된 보관 (거버와 드릴) 파일 열기"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Show Layers Manager"
-msgstr "레이어 매니저 표시"
+msgstr "레이어 관리자 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Show or hide the layer manager"
-msgstr "레이어 매니저 표시 또는 숨기기"
+msgstr "레이어 관리자 표시 또는 숨김"
 
 #: gerbview/tools/gerbview_actions.cpp:75
 msgid "List DCodes..."
@@ -19353,11 +19353,11 @@ msgstr "외곽선 모드에서 선 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Sketch Flashed Items"
-msgstr "플래시 개체를 스케치"
+msgstr "플래시 개체 스케치"
 
 #: gerbview/tools/gerbview_actions.cpp:168
 msgid "Show flashed items in outline mode"
-msgstr "플래시 개체를 외곽선 모드로 표시"
+msgstr "윤곽선 모드로 플래시 항목표시"
 
 #: gerbview/tools/gerbview_actions.cpp:174
 msgid "Sketch Polygons"
@@ -19369,11 +19369,11 @@ msgstr "외곽선 모드에서 다각형 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:180
 msgid "Ghost Negative Objects"
-msgstr "네거티브 객체 유령 표시"
+msgstr "고스트 네거티브 객체"
 
 #: gerbview/tools/gerbview_actions.cpp:180
 msgid "Show negative objects in ghost color"
-msgstr "유령 색으로 네거티브 객체 표시"
+msgstr "네거티브 객체를 고스트 컬러로 표시"
 
 #: gerbview/tools/gerbview_actions.cpp:186
 msgid "Show DCodes"
@@ -19475,7 +19475,7 @@ msgstr "DCode 식별 표시"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:133
 msgid "Show negative objects in this color"
-msgstr "네거티브 객체를 이 색상으로 표시합니다"
+msgstr "네거티브 객체를 이 색상으로 표시"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:136
 #: pcbnew/widgets/appearance_controls.cpp:355
@@ -30187,7 +30187,7 @@ msgstr "내부 레이어"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:23
 msgid "Default text items for new footprints:"
-msgstr "새 풋ㅍ프린트에 대한 기본 텍스트 항목:"
+msgstr "새 풋프린트에 대한 기본 텍스트 항목:"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:88
 msgid ""
@@ -38444,7 +38444,7 @@ msgstr "풋프린트 트리 숨기기"
 
 #: pcbnew/tools/pcb_actions.cpp:398
 msgid "New Footprint..."
-msgstr "새로운 풋프린트..."
+msgstr "새 풋프린트..."
 
 #: pcbnew/tools/pcb_actions.cpp:398
 msgid "Create a new, empty footprint"
@@ -38456,7 +38456,7 @@ msgstr "풋프린트 만들기…"
 
 #: pcbnew/tools/pcb_actions.cpp:403
 msgid "Create a new footprint using the Footprint Wizard"
-msgstr "풋프린트 마법사로 새로운 풋프린트 생성"
+msgstr "풋프린트 마법사로 새 풋프린트 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:408
 msgid "Edit Footprint"
