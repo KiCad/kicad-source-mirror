@@ -65,17 +65,35 @@ void COLOR_SWATCH::RenderToDC( wxDC* aDC, const KIGFX::COLOR4D& aColor,
     COLOR4D black;
     bool    rowCycle;
 
-    if( aCheckerboardBackground.GetBrightness() > 0.4 )
+    if( aColor == COLOR4D::UNSPECIFIED )
     {
-        white = COLOR4D::WHITE;
-        black = white.Darkened( 0.15 );
-        rowCycle = true;
+        if( aCheckerboardBackground.GetBrightness() > 0.4 )
+        {
+            white = COLOR4D::WHITE;
+            black = white.Darkened( 0.15 );
+            rowCycle = true;
+        }
+        else
+        {
+            black = COLOR4D::BLACK;
+            white = black.Brightened( 0.15 );
+            rowCycle = false;
+        }
     }
     else
     {
-        black = COLOR4D::BLACK;
-        white = black.Brightened( 0.15 );
-        rowCycle = false;
+        if( aBackground.GetBrightness() > 0.4 )
+        {
+            white = aBackground;
+            black = white.Darkened( 0.15 );
+            rowCycle = true;
+        }
+        else
+        {
+            black = COLOR4D::BLACK;
+            white = black.Brightened( 0.15 );
+            rowCycle = false;
+        }
     }
 
     for( int x = aRect.GetLeft(); x <= aRect.GetRight(); x += aCheckerboardSize.x )
