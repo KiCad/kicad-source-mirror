@@ -358,6 +358,18 @@ bool SIMULATOR_FRAME::LoadSimulator( const wxString& aSimCommand, unsigned aSimO
 }
 
 
+void SIMULATOR_FRAME::ReloadSimulator( const wxString& aSimCommand, unsigned aSimOptions )
+{
+    wxString           errors;
+    WX_STRING_REPORTER reporter( &errors );
+
+    if( !m_simulator->Attach( m_circuitModel, aSimCommand, aSimOptions, reporter ) )
+    {
+        DisplayErrorMessage( this, _( "Errors during netlist generation.\n\n" ) + errors );
+    }
+}
+
+
 void SIMULATOR_FRAME::StartSimulation()
 {
     SIM_TAB* simTab = m_ui->GetCurrentSimTab();

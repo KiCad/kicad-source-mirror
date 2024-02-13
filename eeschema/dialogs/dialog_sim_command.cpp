@@ -511,6 +511,7 @@ void DIALOG_SIM_COMMAND::ApplySettings( SIM_TAB* aTab )
         options &= ~NETLIST_EXPORTER_SPICE::OPTION_SAVE_ALL_DISSIPATIONS;
 
     aTab->SetSimOptions( options );
+    m_simulatorFrame->ReloadSimulator( m_simCommand, options );
 
 #define TO_INT( ctrl ) (int) EDA_UNIT_UTILS::UI::ValueFromString( unityScale, EDA_UNITS::UNSCALED, \
                                                                   ctrl->GetValue() )

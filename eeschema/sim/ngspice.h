@@ -163,6 +163,8 @@ private:
     ///< Execute commands from a file
     bool loadSpinit( const std::string& aFileName );
 
+    void updateNgspiceSettings();
+
     ///< Check a few different locations for codemodel files and returns one if it exists.
     std::string findCmPath() const;
 

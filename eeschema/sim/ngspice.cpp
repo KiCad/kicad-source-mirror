@@ -74,15 +74,20 @@ NGSPICE::NGSPICE() :
 NGSPICE::~NGSPICE() = default;
 
 
-void NGSPICE::Init( const SPICE_SETTINGS* aSettings )
+void NGSPICE::updateNgspiceSettings()
 {
-    Command( "reset" );
-
     for( const std::string& command : GetSettingCommands() )
     {
         wxLogTrace( traceNgspice, "Sending Ngspice configuration command '%s'.", command );
         Command( command );
     }
+}
+
+
+void NGSPICE::Init( const SPICE_SETTINGS* aSettings )
+{
+    Command( "reset" );
+    updateNgspiceSettings();
 }
 
 
@@ -277,6 +282,7 @@ bool NGSPICE::Attach( const std::shared_ptr<SIMULATION_MODEL>& aModel, const wxS
     if( model && model->GetNetlist( aSimCommand, aSimOptions, &formatter, aReporter ) )
     {
         SIMULATOR::Attach( aModel, aSimCommand, aSimOptions, aReporter );
+        updateNgspiceSettings();
         LoadNetlist( formatter.GetString() );
         return true;
     }

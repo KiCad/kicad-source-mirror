@@ -80,6 +80,11 @@ public:
      */
     bool LoadSimulator( const wxString& aSimCommand, unsigned aSimOptions );
 
+    /**
+     * Re-send the current command and settings to the simulator.  Use the existing netlist.
+     */
+    void ReloadSimulator( const wxString& aSimCommand, unsigned aSimOptions );
+
     void StartSimulation();
 
     /**
