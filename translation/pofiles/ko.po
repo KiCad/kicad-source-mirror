@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-09 23:56+0000\n"
+"PO-Revision-Date: 2024-02-13 12:02+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4968,7 +4968,7 @@ msgstr "PCB 편집기"
 
 #: common/eda_base_frame.cpp:1176
 msgid "Action Plugins"
-msgstr "플러그인 동작"
+msgstr "플러그인 작업"
 
 #: common/eda_base_frame.cpp:1183
 msgid "Realtime Renderer"
@@ -23390,7 +23390,7 @@ msgstr ""
 
 #: kicad/cli/command_pcb_export_pos.cpp:70
 msgid "Use drill/place file origin (ascii or csv only)"
-msgstr "드릴/배치 파일 원본 사용(ascii 또는 csv만 해당)"
+msgstr "드릴/배치 파일 원점 사용(ascii 또는 csv만 해당)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:74
 msgid "Include only SMD footprints (ascii or csv only)"
@@ -30646,7 +30646,7 @@ msgstr "좌표"
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:98
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Drill/place file origin"
-msgstr "드릴/배치 파일 원점 추가"
+msgstr "드릴/배치 파일 원점"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:48
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
@@ -31797,7 +31797,7 @@ msgstr "드릴 원점"
 msgid ""
 "Choose the coordinate origin: absolute or relative to the drill/place file "
 "origin"
-msgstr "좌표 원점 선택: 절대 위치 또는 드릴/배치 파일의 원점에 대한 상대 위치"
+msgstr "좌표 원점 선택: 드릴/배치 파일 원점에 대한 절대 또는 상대 좌표 원점 선택"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:108
 msgid "Drill Units"
@@ -33578,7 +33578,7 @@ msgstr "스케치"
 #: pcbnew/dialogs/dialog_plot_base.cpp:141
 msgid ""
 "Use the drill/place file origin as the coordinate origin for plotted files"
-msgstr "플로티드 파일에 대하여 드릴/배치 파일 원점을 좌표 원점으로 사용"
+msgstr "드릴/배치 파일 원점을 플롯한 파일의 좌표 원점으로 사용"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:145
 msgid "Mirrored plot"
@@ -35057,7 +35057,7 @@ msgstr "플러그인 오류 표시"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
-msgstr "페이지 출처"
+msgstr "페이지 원점"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:25
 msgid "Display Origin"
