@@ -78,6 +78,10 @@
           "items": {
             "$ref": "#/definitions/AffectedItem"
           }
+        },
+        "excluded": {
+          "type": "boolean",
+          "default": false
         }
       },
       "required": [

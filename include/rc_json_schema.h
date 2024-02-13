@@ -54,9 +54,27 @@ struct VIOLATION
     wxString                   description;
     wxString                   severity;
     std::vector<AFFECTED_ITEM> items;
+    bool                       excluded;
 };
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( VIOLATION, type, description, severity, items )
+inline void to_json( nlohmann::json& aJson, const VIOLATION& aViolation )
+{
+    aJson["type"] = aViolation.type;
+    aJson["description"] = aViolation.description;
+    aJson["severity"] = aViolation.severity;
+    aJson["items"] = aViolation.items;
+
+    if( aViolation.excluded )
+        aJson["excluded"] = aViolation.excluded;
+}
+inline void from_json( const nlohmann::json& aJson, VIOLATION& aViolation )
+{
+    aJson.at( "type" ).get_to( aViolation.type );
+    aJson.at( "description" ).get_to( aViolation.description );
+    aJson.at( "severity" ).get_to( aViolation.severity );
+    aJson.at( "items" ).get_to( aViolation.items );
+    aJson.at( "excluded" ).get_to( aViolation.excluded );
+}
 
 struct REPORT_BASE
 {
