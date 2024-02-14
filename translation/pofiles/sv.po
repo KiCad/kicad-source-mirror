@@ -24526,8 +24526,8 @@ msgid ""
 msgstr ""
 "\n"
 "Mönsterkortet har %d tomma eller ogiltiga referensbeteckningar.\n"
-"Designregelkontroll, med alternativet 'Testa paritet mellan mönsterkort och "
-"schema' ikryssat, rekommenderas.\n"
+"Designregelkontroll med alternativet 'Kontrollera att mönsterkort och "
+"kretsschema överensstämmer' ikryssat rekommenderas.\n"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:608
 #, c-format
@@ -30561,7 +30561,7 @@ msgstr "Välj vilket origo som ska användas för X-, Y-koordinatvisning."
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases right"
-msgstr "Ökar rätt"
+msgstr "Ökar till höger"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases left"
