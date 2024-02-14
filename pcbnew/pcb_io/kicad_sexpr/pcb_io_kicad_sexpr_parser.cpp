@@ -4051,43 +4051,48 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
             NeedSYMBOL();
             wxString pValue = FromUTF8();
 
-            // Skip legacy non-field properties sent from symbols that should not be kept
-            // in footprints.
-            if( pName == "ki_keywords" || pName == "ki_locked" )
+            // Prior to PCB fields, we used to use properties for special values instead of
+            // using (keyword_example "value")
+            if( m_requiredVersion < 20230620 )
             {
-                NeedRIGHT();
-                break;
-            }
+                // Skip legacy non-field properties sent from symbols that should not be kept
+                // in footprints.
+                if( pName == "ki_keywords" || pName == "ki_locked" )
+                {
+                    NeedRIGHT();
+                    break;
+                }
 
-            // Description from symbol (not the fooprint library description stored in (descr) )
-            // used to be stored as a reserved key value
-            if( pName == "ki_description" )
-            {
-                footprint->GetFieldById( DESCRIPTION_FIELD )->SetText( pValue );
-                NeedRIGHT();
-                break;
-            }
+                // Description from symbol (not the fooprint library description stored in (descr) )
+                // used to be stored as a reserved key value
+                if( pName == "ki_description" )
+                {
+                    footprint->GetFieldById( DESCRIPTION_FIELD )->SetText( pValue );
+                    NeedRIGHT();
+                    break;
+                }
 
-            if( pName == "ki_fp_filters" )
-            {
-                footprint->SetFilters( pValue );
-                NeedRIGHT();
-                break;
-            }
+                if( pName == "ki_fp_filters" )
+                {
+                    footprint->SetFilters( pValue );
+                    NeedRIGHT();
+                    break;
+                }
 
-            // Sheet file and name used to be stored as properties invisible to the user
-            if( pName == "Sheetfile" || pName == "Sheet file" )
-            {
-                footprint->SetSheetfile( pValue );
-                NeedRIGHT();
-                break;
-            }
+                // Sheet file and name used to be stored as properties invisible to the user
+                if( pName == "Sheetfile" || pName == "Sheet file" )
+                {
+                    footprint->SetSheetfile( pValue );
+                    NeedRIGHT();
+                    break;
+                }
 
-            if( pName == "Sheetname" || pName == "Sheet name" )
-            {
-                footprint->SetSheetname( pValue );
-                NeedRIGHT();
-                break;
+                if( pName == "Sheetname" || pName == "Sheet name" )
+                {
+                    footprint->SetSheetname( pValue );
+                    NeedRIGHT();
+                    break;
+                }
             }
 
             PCB_FIELD* field = nullptr;
