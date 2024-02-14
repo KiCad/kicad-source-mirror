@@ -134,7 +134,7 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
 
 #if !FLASH_OVAL_HOLE
 // A helper class to transform an oblong hole to a segment
-static void convertOblong2Segment( VECTOR2I& aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart, VECTOR2I& aEnd );
+static void convertOblong2Segment( const VECTOR2I& aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart, VECTOR2I& aEnd );
 #endif
 
 
@@ -267,7 +267,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
 
 #if !FLASH_OVAL_HOLE
-void convertOblong2Segment( VECTOR2I& aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart,
+void convertOblong2Segment( const VECTOR2I& aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart,
                             VECTOR2I& aEnd )
 {
     VECTOR2I    size( aSize );

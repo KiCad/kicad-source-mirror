@@ -1,7 +1,7 @@
 /*
 * This program source code file is part of KiCad, a free EDA CAD application.
 *
-* Copyright (C) 2021-2022 KiCad Developers, see AUTHORS.txt for contributors.
+* Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
 *
 * This program is free software; you can redistribute it and/or
 * modify it under the terms of the GNU General Public License
@@ -52,6 +52,9 @@ GERBVIEW_SETTINGS::GERBVIEW_SETTINGS() :
 
     m_params.emplace_back( new PARAM<wxString>( "appearance.page_type",
             &m_Appearance.page_type, "GERBER" ) );
+
+    m_params.emplace_back( new PARAM<bool>( "appearance.show_page_limit",
+            &m_Display.m_DisplayPageLimits, false ) );
 
     m_params.emplace_back( new PARAM_LIST<wxString>( "system.drill_file_history",
             &m_DrillFileHistory, {} ) );
