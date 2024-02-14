@@ -61,7 +61,11 @@ private:
 
     CONVERT_SETTINGS* m_convertSettings;
     wxRadioButton*    m_rbCenterline;
-    wxRadioButton*    m_rbEnvelope;
+    wxRadioButton*    m_rbBoundingHull;
+    wxStaticText*     m_gapLabel;
+    wxTextCtrl*       m_gapCtrl;
+    wxStaticText*     m_gapUnits;
+    UNIT_BINDER*      m_gap;
     wxCheckBox*       m_cbDeleteOriginals;
 };
 
@@ -83,7 +87,7 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
                              m_outlineHatchPitchCtrl, m_outlineHatchUnits ),
         m_convertSettings( aConvertSettings ),
         m_rbCenterline( nullptr ),
-        m_rbEnvelope( nullptr ),
+        m_rbBoundingHull( nullptr ),
         m_cbDeleteOriginals( nullptr )
 {
     m_parent = aParent;
@@ -101,8 +105,21 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
         bConvertSizer->Add( m_rbCenterline, 0, wxLEFT|wxRIGHT, 5 );
 
         bConvertSizer->AddSpacer( 2 );
-        m_rbEnvelope = new wxRadioButton( this, wxID_ANY, _( "Create bounding hull" ) );
-        bConvertSizer->Add( m_rbEnvelope, 0, wxLEFT|wxRIGHT, 5 );
+        m_rbBoundingHull = new wxRadioButton( this, wxID_ANY, _( "Create bounding hull" ) );
+        bConvertSizer->Add( m_rbBoundingHull, 0, wxLEFT|wxRIGHT, 5 );
+
+        m_gapLabel = new wxStaticText( this, wxID_ANY, _( "Gap:" ) );
+        m_gapCtrl = new wxTextCtrl( this, wxID_ANY );
+        m_gapUnits = new wxStaticText( this, wxID_ANY, _( "mm" ) );
+        m_gap = new UNIT_BINDER( aParent, m_gapLabel, m_gapCtrl, m_gapUnits );
+
+        wxBoxSizer* hullParamsSizer = new wxBoxSizer( wxHORIZONTAL );
+        hullParamsSizer->Add( m_gapLabel, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+        hullParamsSizer->Add( m_gapCtrl, 1, wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT, 3 );
+        hullParamsSizer->Add( m_gapUnits, 0, wxALIGN_CENTRE_VERTICAL, 5 );
+
+        bConvertSizer->AddSpacer( 2 );
+        bConvertSizer->Add( hullParamsSizer, 0, wxLEFT, 26 );
 
         bConvertSizer->AddSpacer( 6 );
         m_cbDeleteOriginals = new wxCheckBox( this, wxID_ANY,
@@ -136,7 +153,7 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataToWindow()
     if( m_convertSettings )
     {
         if( m_convertSettings->m_Strategy == BOUNDING_HULL )
-            m_rbEnvelope->SetValue( true );
+            m_rbBoundingHull->SetValue( true );
         else
             m_rbCenterline->SetValue( true );
 
@@ -201,10 +218,15 @@ bool DIALOG_RULE_AREA_PROPERTIES::TransferDataFromWindow()
 {
     if( m_convertSettings )
     {
-        if( m_rbEnvelope->GetValue() )
+        if( m_rbBoundingHull->GetValue() )
+        {
             m_convertSettings->m_Strategy = BOUNDING_HULL;
+            m_convertSettings->m_Gap = m_gap->GetIntValue();
+        }
         else
+        {
             m_convertSettings->m_Strategy = CENTERLINE;
+        }
 
         m_convertSettings->m_DeleteOriginals = m_cbDeleteOriginals->GetValue();
     }
