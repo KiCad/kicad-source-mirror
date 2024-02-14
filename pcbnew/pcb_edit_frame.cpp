@@ -451,7 +451,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 #ifdef __WXMAC__
     if( Kiface().IsSingle() )
     {
-        CallAfter( [&]()
+        CallAfter( [this]()
                    {
                        m_appearancePanel->OnBoardChanged();
                    } );
@@ -460,7 +460,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     // Register a call to update the toolbar sizes. It can't be done immediately because
     // it seems to require some sizes calculated that aren't yet (at least on GTK).
-    CallAfter( [&]()
+    CallAfter( [this]()
                {
                    // Ensure the controls on the toolbars all are correctly sized
                     UpdateToolbarControlSizes();

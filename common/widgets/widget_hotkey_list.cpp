@@ -541,7 +541,7 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     dv->GetColumn( 2 )->SetMinWidth( aParent->GetTextExtent( longKey ).x + pad );
     dv->GetColumn( 3 )->SetMinWidth( aParent->GetTextExtent( command_header ).x * 5 + pad );
 
-    CallAfter( [&]()
+    CallAfter( [this]()
                {
                    GetDataView()->Update();
                } );

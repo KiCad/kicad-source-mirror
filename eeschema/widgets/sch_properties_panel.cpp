@@ -116,7 +116,7 @@ void SCH_PROPERTIES_PANEL::AfterCommit()
 
     rebuildProperties( selection );
 
-    CallAfter( [&]()
+    CallAfter( [this]()
                {
                    m_frame->GetCanvas()->SetFocus();
                } );

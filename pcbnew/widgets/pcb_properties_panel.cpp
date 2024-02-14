@@ -122,7 +122,7 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
 
     rebuildProperties( selection );
 
-    CallAfter( [&]()
+    CallAfter( [this]()
                {
                    static_cast<PCB_EDIT_FRAME*>( m_frame )->GetCanvas()->SetFocus();
                } );
