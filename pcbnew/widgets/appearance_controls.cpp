@@ -994,7 +994,7 @@ void APPEARANCE_CONTROLS::OnNetGridMouseEvent( wxMouseEvent& aEvent )
     else if( aEvent.Dragging() )
     {
         // not allowed
-        CallAfter( [&]()
+        CallAfter( [this]()
                    {
                        m_netsGrid->ClearSelection();
                    } );

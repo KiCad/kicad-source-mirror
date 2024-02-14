@@ -483,7 +483,7 @@ void EDA_BASE_FRAME::ReCreateMenuBar()
      * ensure that they do not occur within the same event handling call stack.
      */
 
-    CallAfter( [&]()
+    CallAfter( [this]()
                {
                    if( !m_isClosing )
                        doReCreateMenuBar();

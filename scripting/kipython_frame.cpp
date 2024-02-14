@@ -90,7 +90,10 @@ KIPYTHON_FRAME::KIPYTHON_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                           wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, wxT( "KiPython" ),
                           unityScale )
 {
-    CallAfter( [&](){ SetupPythonEditor(); } );
+    CallAfter( [this]()
+               {
+                   SetupPythonEditor();
+               } );
 
     redirectStdio();
 }

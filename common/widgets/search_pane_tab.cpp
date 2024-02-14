@@ -80,10 +80,12 @@ void SEARCH_PANE_LISTVIEW::GetSelectRowsList( std::vector<long>& aSelectedList )
 
 void SEARCH_PANE_LISTVIEW::OnItemActivated( wxListEvent& aEvent )
 {
+    long item = aEvent.GetIndex();
+
     CallAfter(
-            [&]()
+            [this, item]()
             {
-                m_handler->ActivateItem( aEvent.GetIndex() );
+                m_handler->ActivateItem( item );
             } );
 
     m_selectionDirty = true;

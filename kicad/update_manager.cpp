@@ -226,11 +226,12 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
                 if( response.version != settings->m_lastReceivedUpdate )
                 {
                     aNoticeParent->CallAfter(
-                            [&]()
+                            [aNoticeParent, response]()
                             {
-                                auto notice = new DIALOG_UPDATE_NOTICE(
-                                        aNoticeParent, response.version, response.details_url,
-                                        response.downloads_url );
+                                auto notice = new DIALOG_UPDATE_NOTICE( aNoticeParent,
+                                                                        response.version,
+                                                                        response.details_url,
+                                                                        response.downloads_url );
 
                                 int retCode = notice->ShowModal();
 
@@ -238,6 +239,8 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
                                 {
                                     // basically saving the last received update prevents us from
                                     // prompting again
+                                    SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
+                                    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
                                     settings->m_lastReceivedUpdate = response.version;
                                 }
                             } );
