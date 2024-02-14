@@ -10,15 +10,15 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:31-0800\n"
-"PO-Revision-Date: 2024-02-05 08:45+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
+"PO-Revision-Date: 2024-02-15 21:02+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v7/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.4\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -14521,9 +14521,9 @@ msgstr "Tomt egenskapsnamn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate field '%s'"
-msgstr "Dubbla objekt %s%s\n"
+msgstr "Dubblettfält '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
@@ -16350,8 +16350,9 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%.3f, %.3f)</b> conflicts with "
 "pin %s%s at location <b>(%.3f, %.3f)</b> in units %s and %s of converted."
 msgstr ""
-"<b> Dubblettstift %s </b> %s på plats <b> (%s, %s) </b> är i konflikt med "
-"stift %s%s på plats <b> ( %s, %s) </b> i enheter %s och %s av konverterad."
+"<b> Dubblettstift %s </b> %s på plats <b> (%.3f, %.3f) </b> är i konflikt "
+"med stift %s%s på plats <b> ( %.3f, %.3f) </b> i enheter %s och %s av "
+"konverterad."
 
 #: eeschema/symbol_checker.cpp:146
 #, c-format
@@ -26081,7 +26082,7 @@ msgstr "Oanslutna objekt (%s)"
 #: pcbnew/dialogs/dialog_drc_base.cpp:131
 #, c-format
 msgid "Schematic Parity (%s)"
-msgstr "Kretsschemaparitet (%s)"
+msgstr "Överensstämmelse med kretsschema (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:139
 msgid "Edit ignored tests"
@@ -32639,7 +32640,7 @@ msgstr "Design för tillverkning"
 
 #: pcbnew/drc/drc_item.cpp:47
 msgid "Schematic Parity"
-msgstr "Kretsschemaparitet"
+msgstr "Överensstämmelse med kretsschema"
 
 #: pcbnew/drc/drc_item.cpp:48
 msgid "Signal Integrity"
@@ -33156,7 +33157,8 @@ msgstr "(%s min %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:466
 msgid "No project loaded, skipping library parity tests."
-msgstr "Inget projekt öppnat, hoppar över biblioteksparitetskontroller."
+msgstr ""
+"Inget projekt öppnat, hoppar över kontroll av överensstämmelse med bibliotek."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:470
 msgid "Loading footprint library table..."
@@ -33283,7 +33285,7 @@ msgstr "Ingen lödyta hittades för stift %s i kretsschemat."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:230
 msgid "Checking PCB to schematic parity..."
-msgstr "Kontrollerar paritet mellan mönsterkort och kretsschema..."
+msgstr "Kontrollerar överensstämmelse mellan mönsterkort och kretsschema..."
 
 #: pcbnew/drc/drc_test_provider_silk_clearance.cpp:97
 msgid "Checking silkscreen for overlapping items..."
@@ -38177,7 +38179,9 @@ msgstr "Gör om fyllning av alla zoner ..."
 
 #: pcbnew/tools/drc_tool.cpp:159
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "Paritetskontroll av schema kräver att det är fullständigt numrerat."
+msgstr ""
+"Kontroll av överensstämmelse med kretsschema kräver att detta är "
+"fullständigt numrerat."
 
 #: pcbnew/tools/drc_tool.cpp:193
 msgid "DRC"
