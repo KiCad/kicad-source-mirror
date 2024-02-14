@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:58-0800\n"
+"POT-Creation-Date: 2024-02-14 10:31-0800\n"
 "PO-Revision-Date: 2024-02-04 08:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
@@ -4148,7 +4148,7 @@ msgid "Colors"
 msgstr "Цвета"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1450
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "Редактор схем"
@@ -5035,9 +5035,9 @@ msgstr "Не удалось найти PDF-просмотрщик для '%s'."
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "Проблемы при запуске PDF-просмотрщика '%s'."
 
-#: common/gestfich.cpp:283 eeschema/eeschema.cpp:544 eeschema/eeschema.cpp:579
+#: common/gestfich.cpp:283 eeschema/eeschema.cpp:550 eeschema/eeschema.cpp:585
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:288
-#: pcbnew/pcbnew.cpp:505
+#: pcbnew/pcbnew.cpp:519
 #, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Не удалось скопировать файл '%s'."
@@ -5793,8 +5793,8 @@ msgstr "Ошибка извлечения файла!"
 #: pcbnew/exporters/export_gencad.cpp:258
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:102
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:153 eeschema/sch_plotter.cpp:904
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:105
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, c-format
 msgid "Failed to create file '%s'."
 msgstr "Не удалось создать файл '%s'."
@@ -7253,7 +7253,7 @@ msgstr ""
 "Подробности смотрите в разделе \"Таблица библиотек посадочных мест\" "
 "документации CvPcb."
 
-#: cvpcb/cvpcb.cpp:187
+#: cvpcb/cvpcb.cpp:190
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
@@ -8458,7 +8458,6 @@ msgstr "Удалить исключения тоже?"
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
 #: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
-#: pcbnew/dialogs/dialog_drc.cpp:1143
 msgid "Delete All Markers"
 msgstr "Удалить все маркеры"
 
@@ -12627,7 +12626,7 @@ msgstr "Шаблоны имён полей:"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:391
+#: eeschema/eeschema.cpp:397
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -12637,7 +12636,7 @@ msgstr ""
 "Пожалуйста измените глобальную таблицу библиотек символов через меню "
 "Настройки."
 
-#: eeschema/eeschema.cpp:451
+#: eeschema/eeschema.cpp:457
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -13113,7 +13112,7 @@ msgid "Abort"
 msgstr "Отмена"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:864
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13172,7 +13171,7 @@ msgstr ""
 "Ошибка сохранения файла схемы '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Не удалось создать временный файл '%s'."
@@ -13186,13 +13185,13 @@ msgstr ""
 "Ошибка сохранения файла схемы '%s'.\n"
 "Не удалось переименовать временный файл '%s'."
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Не удалось переименовать временный файл '%s'."
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1143
+#: pcbnew/files.cpp:1155
 #, c-format
 msgid "File '%s' saved."
 msgstr "Файл '%s' сохранён."
@@ -13790,8 +13789,7 @@ msgstr "Сигналы псевдонима шины %s"
 msgid "KiCad Schematic Editor"
 msgstr "Редактор схем KiCad"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
-#: eeschema/sch_edit_frame.cpp:1726
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1732
 msgid "Schematic Hierarchy"
 msgstr "Иерархия схемы"
 
@@ -13821,47 +13819,46 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-#: eeschema/sch_plotter.cpp:1028
 msgid "Schematic"
 msgstr "Схема"
 
-#: eeschema/sch_edit_frame.cpp:1122
+#: eeschema/sch_edit_frame.cpp:1126
 msgid "New Schematic"
 msgstr "Новая схема"
 
-#: eeschema/sch_edit_frame.cpp:1134
+#: eeschema/sch_edit_frame.cpp:1138
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Файл схемы '%s' уже существует."
 
-#: eeschema/sch_edit_frame.cpp:1155
+#: eeschema/sch_edit_frame.cpp:1163
 msgid "Open Schematic"
 msgstr "Открыть схему"
 
-#: eeschema/sch_edit_frame.cpp:1224
+#: eeschema/sch_edit_frame.cpp:1232
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Для назначения посад.мест требуется полностью обозначенная схема."
 
-#: eeschema/sch_edit_frame.cpp:1249
+#: eeschema/sch_edit_frame.cpp:1257
 msgid "Could not open CvPcb"
 msgstr "Не удалось открыть CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1440 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
 #: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr "[Только чтение]"
 
-#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr "[Изменено]"
 
-#: eeschema/sch_edit_frame.cpp:1439
+#: eeschema/sch_edit_frame.cpp:1447
 msgid "[no schematic loaded]"
 msgstr "[схема не загружена]"
 
-#: eeschema/sch_edit_frame.cpp:1747 eeschema/sch_edit_frame.cpp:1749
+#: eeschema/sch_edit_frame.cpp:1755
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Подсвечена цепь: %s"
@@ -14037,18 +14034,18 @@ msgstr "Начерчено в '%s'.\n"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126 eeschema/sch_plotter.cpp:930
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129
 msgid "Done."
 msgstr "Готово."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
 #: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
-#: pcbnew/dialogs/dialog_plot.cpp:1122 eeschema/sch_plotter.cpp:896
+#: pcbnew/dialogs/dialog_plot.cpp:1122
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "Начерчено в '%s'."
 
-#: eeschema/sch_plotter.cpp:1035 eeschema/sch_plotter.cpp:1036
+#: eeschema/sch_plotter.cpp:1035
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "Не удалось записать файлы чертежа в каталог '%s'."
@@ -14084,7 +14081,6 @@ msgstr ""
 "Укажите python-модуль, который реализует функции SCH_PLUGIN::Symbol*()."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -14094,13 +14090,11 @@ msgstr ""
 "преобразованный в лист."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Файл хранилища обработан не полностью (%d байт осталось)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr ""
@@ -14108,22 +14102,18 @@ msgstr ""
 "\"Additional\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "Запись 'IEEE_SYMBOL' не обработана."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
 msgstr "Запись 'PIECHART' не обработана."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "Маска сборки пока не поддерживается."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
@@ -14131,47 +14121,38 @@ msgstr ""
 "\"FileHeader\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr "Символ \"%s\" на листе \"%s\" с индексом %d заменен на символ \"%s\"."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
 msgid "Pin has unexpected orientation."
 msgstr "Вывод имеет неожиданную ориентацию."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
 msgid "Pin has unexpected electrical type."
 msgstr "Вывод имеет неожиданный электрический тип."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 msgid "Pin has unexpected outer edge type."
 msgstr "Вывод имеет неожиданный тип внешнего края."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
 msgid "Pin has unexpected inner edge type."
 msgstr "Вывод имеет неожиданный тип внутреннего края."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "Кривая Безье имеет %d контрольных точек. Должно быть как минимум 2."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "Неподдерживаемый эллипс не был импортирован в (X = %d; Y = %d)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14181,18 +14162,15 @@ msgstr ""
 "Пожалуйста, проверьте импортированную схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "Порт питания с неизвестным стилем импортирован как тип 'Bar'."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "Символ питания создаёт глобальную метку с именем '%s'"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14202,27 +14180,22 @@ msgstr ""
 "проверьте импортированную схему."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
 #, c-format
 msgid "Port %s has no connections."
 msgstr "Порт %s не имеет подключений."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "Встроенный файл %s не найден в хранилище."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
 #, c-format
 msgid "Error reading image %s."
 msgstr "Ошибка чтения изображения %s."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
 #, c-format
 msgid "File not found %s."
 msgstr "Файл не найден %s."
@@ -14468,7 +14441,7 @@ msgid "Library file '%s' not found."
 msgstr "Файл библиотеки '%s' не найден."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:516
-#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1886
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1898
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "библиотека %s не содержит символ с именем %s"
@@ -14478,7 +14451,7 @@ msgid "Invalid symbol name"
 msgstr "Неверное имя символа"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:208
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2644
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2653
 #, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "Символ %s содержит недопустимый знак '%c'"
@@ -14530,58 +14503,64 @@ msgid "Invalid pin names definition"
 msgstr "Неверное определение имён вывода"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:781
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1945
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1954
 msgid "Invalid property name"
 msgstr "Неверное имя свойства"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:789
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1962
 msgid "Empty property name"
 msgstr "Пустое имя свойства"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:810
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
+#, fuzzy, c-format
+msgid "Duplicate field '%s'"
+msgstr "Дублирование элементов %s%s\n"
+
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
 msgid "Invalid property value"
 msgstr "Неверное значение свойства"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1397
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1406
 msgid "Invalid pin name"
 msgstr "Неверное имя вывода"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1435
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1444
 msgid "Invalid pin number"
 msgstr "Неверный номер вывода"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1472
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1481
 msgid "Invalid alternate pin name"
 msgstr "Неверное альтернативное имя вывода"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1647
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1656
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1718
 msgid "Invalid text string"
 msgstr "Неверная строка текста"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1802
 msgid "Invalid page type"
 msgstr "Неверный тип страницы"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1920
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1929
 msgid "Invalid title block comment number"
 msgstr "Неверное количество комментариев основной надписи"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2051
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2060
 msgid "Invalid sheet pin name"
 msgstr "Неверное имя вывода листа"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2059
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2068
 msgid "Empty sheet pin name"
 msgstr "Пустое имя вывода листа"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2609
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2618
 msgid "Invalid symbol library name"
 msgstr "Неверное имя библиотеки символов"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2650
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2659
 msgid "Invalid symbol library ID"
 msgstr "Неверный идентификатор библиотеки символов"
 
@@ -16747,7 +16726,7 @@ msgstr "Удалить символ"
 msgid "Keep Symbol"
 msgstr "Удалить символ"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -18355,13 +18334,12 @@ msgstr "Шина не имеет сигналов"
 msgid "Press <ESC> to cancel drawing."
 msgstr "Нажмите <ESC> для отмены черчения."
 
-#: eeschema/tools/sch_move_tool.cpp:796 eeschema/tools/sch_move_tool.cpp:794
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel drag."
 msgstr "Нажмите <ESC> для отмены перетаскивания."
 
 #: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
-#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel move."
 msgstr "Нажмите <ESC> для отмены перемещения."
 
@@ -24808,7 +24786,7 @@ msgstr ""
 "Ошибка импорта настроек из платы:\n"
 "Не удалось загрузить соответствующий файл проекта %s"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:668
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "Загрузка платы"
@@ -33440,7 +33418,7 @@ msgid "Created file '%s'"
 msgstr "Создан файл '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:346
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:113
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #, c-format
 msgid "Created file '%s'."
 msgstr "Создан файл '%s'."
@@ -33537,27 +33515,27 @@ msgstr "Сохранить файл платы как"
 msgid "Printed circuit board"
 msgstr "Печатная плата"
 
-#: pcbnew/files.cpp:344
+#: pcbnew/files.cpp:352
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Файл восстановления '%s' не найден."
 
-#: pcbnew/files.cpp:349
+#: pcbnew/files.cpp:357
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Загрузить файл резервного копирования '%s'?"
 
-#: pcbnew/files.cpp:388
+#: pcbnew/files.cpp:400
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "Текущая плата будет закрыта. Сохранить изменения в '%s' перед продолжением?"
 
-#: pcbnew/files.cpp:402
+#: pcbnew/files.cpp:414
 msgid "Current Board will be closed. Continue?"
 msgstr "Текущая плата будет закрыта. Продолжить?"
 
-#: pcbnew/files.cpp:582
+#: pcbnew/files.cpp:594
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33570,57 +33548,57 @@ msgstr ""
 "предыдущих версиях KiCad, где в качестве зазора использовалась толщина "
 "контура платы."
 
-#: pcbnew/files.cpp:628
+#: pcbnew/files.cpp:640
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "Печатная плата '%s' уже открыта '%s' на '%s'."
 
-#: pcbnew/files.cpp:639
+#: pcbnew/files.cpp:651
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Текущая плата изменена. Сохранить?"
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:670
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Плата '%s' не существует. Создать?"
 
-#: pcbnew/files.cpp:667
+#: pcbnew/files.cpp:679
 msgid "Creating PCB"
 msgstr "Создание платы"
 
-#: pcbnew/files.cpp:772 pcbnew/files.cpp:782
+#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Ошибка загрузки платы '%s'."
 
-#: pcbnew/files.cpp:791
+#: pcbnew/files.cpp:803
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Закончилась память при загрузке файла платы '%s'"
 
-#: pcbnew/files.cpp:904
+#: pcbnew/files.cpp:916
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "При сохранении посад.места %s в библиотеку посад.мест проекта возникла "
 "ошибка."
 
-#: pcbnew/files.cpp:935
+#: pcbnew/files.cpp:947
 msgid "Error saving project specific footprint library table."
 msgstr "При сохранении таблицы библиотек посад.мест проекта возникла ошибка."
 
-#: pcbnew/files.cpp:1027 pcbnew/files.cpp:1169
+#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Недостаточно прав для записи файла '%s'."
 
-#: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
+#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Ошибка сохранения файла особых правил '%s'."
 
-#: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
+#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33629,7 +33607,7 @@ msgstr ""
 "Ошибка сохранения платы '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1105
+#: pcbnew/files.cpp:1117
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33638,7 +33616,7 @@ msgstr ""
 "Ошибка сохранения файла платы '%s'.\n"
 "Не удалось переименовать временный файл '%s'."
 
-#: pcbnew/files.cpp:1218
+#: pcbnew/files.cpp:1230
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -35413,7 +35391,7 @@ msgstr "Нижний слой"
 msgid "Via Type"
 msgstr "Тип перех.отв."
 
-#: pcbnew/pcbnew.cpp:409
+#: pcbnew/pcbnew.cpp:423
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -35647,12 +35625,10 @@ msgid "Loading arcs..."
 msgstr "Загрузка дуг..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2615
-#: pcbnew/plugins/altium/altium_pcb.cpp:2611
 msgid "Loading pads..."
 msgstr "Загрузка конт.пл..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2700
-#: pcbnew/plugins/altium/altium_pcb.cpp:2696
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
@@ -35660,7 +35636,6 @@ msgstr ""
 "пл. сквозного монтажа."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2721
-#: pcbnew/plugins/altium/altium_pcb.cpp:2717
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
@@ -35668,7 +35643,6 @@ msgstr ""
 "поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2748
-#: pcbnew/plugins/altium/altium_pcb.cpp:2744
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35678,13 +35652,11 @@ msgstr ""
 "поддерживает сверление только под углом 90°."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2760
-#: pcbnew/plugins/altium/altium_pcb.cpp:2756
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "У посад.места %s конт.пл. %s содержит отверстие неизвестного типа %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2777
-#: pcbnew/plugins/altium/altium_pcb.cpp:2773
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
@@ -35692,15 +35664,12 @@ msgstr ""
 "поддерживаются)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2814
-#: pcbnew/plugins/altium/altium_pcb.cpp:2810
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "У посад.места %s конт.пл. %s имеет неизвестную форму."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2872
 #: pcbnew/plugins/altium/altium_pcb.cpp:2893
-#: pcbnew/plugins/altium/altium_pcb.cpp:2868
-#: pcbnew/plugins/altium/altium_pcb.cpp:2889
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35710,37 +35679,31 @@ msgstr ""
 "будет размещена на слое Eco1_User."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2913
-#: pcbnew/plugins/altium/altium_pcb.cpp:2909
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr "Не медная конт.пл. %s подключена к цепи, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2919
-#: pcbnew/plugins/altium/altium_pcb.cpp:2915
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "Не медная конт.пл. %s имеет отверстие, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2924
-#: pcbnew/plugins/altium/altium_pcb.cpp:2920
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Не медная конт.пл. %s имеет сложную структуру (пока не поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3066
-#: pcbnew/plugins/altium/altium_pcb.cpp:3062
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "Не медная конт.пл. %s имеет неизвестную форму."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3076
-#: pcbnew/plugins/altium/altium_pcb.cpp:3072
 msgid "Loading vias..."
 msgstr "Загрузка перех.отв..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3117
-#: pcbnew/plugins/altium/altium_pcb.cpp:3113
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -35748,30 +35711,24 @@ msgstr ""
 "Перех.отв. из слоя %d в %d использует не медный слой, что не поддерживается."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3136
-#: pcbnew/plugins/altium/altium_pcb.cpp:3132
 msgid "Loading tracks..."
 msgstr "Загрузка дорожек..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3308
-#: pcbnew/plugins/altium/altium_pcb.cpp:3300
 msgid "Loading unicode strings..."
 msgstr "Загрузка строк Unicode..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3322
-#: pcbnew/plugins/altium/altium_pcb.cpp:3314
 msgid "Loading text..."
 msgstr "Загрузка надписей..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3351
 #: pcbnew/plugins/altium/altium_pcb.cpp:3364
-#: pcbnew/plugins/altium/altium_pcb.cpp:3343
-#: pcbnew/plugins/altium/altium_pcb.cpp:3356
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Штрих-код на слое Altium (%d) игнорируется ( пока не поддерживается)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3467
-#: pcbnew/plugins/altium/altium_pcb.cpp:3459
 msgid "Loading rectangles..."
 msgstr "Загрузка прямоугольников..."
 
@@ -41291,13 +41248,11 @@ msgstr "Схема KiCad"
 msgid "KiCad Printed Circuit Board"
 msgstr "Печатная плата KiCad"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1142
-msgid "Do you wish to delete excluded markers as well?"
-msgstr "Удалить маркеры исключений тоже?"
+#~ msgid "Do you wish to delete excluded markers as well?"
+#~ msgstr "Удалить маркеры исключений тоже?"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1145
-msgid "Delete exclusions"
-msgstr "Удалить исключения"
+#~ msgid "Delete exclusions"
+#~ msgstr "Удалить исключения"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "Невозможно прочитать строку, входные данные пусты."
@@ -42156,10 +42111,6 @@ msgstr "Удалить исключения"
 #, fuzzy
 #~ msgid "Alias:"
 #~ msgstr "Псевдоним: "
-
-#, c-format
-#~ msgid "Duplicate items %s%s\n"
-#~ msgstr "Дублирование элементов %s%s\n"
 
 #, fuzzy
 #~ msgid "Spice device:"

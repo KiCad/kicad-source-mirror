@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:58-0800\n"
+"POT-Creation-Date: 2024-02-14 10:31-0800\n"
 "PO-Revision-Date: 2024-02-09 13:53+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
@@ -4096,7 +4096,7 @@ msgid "Colors"
 msgstr "색상"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1450
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "회로도 편집기"
@@ -4979,9 +4979,9 @@ msgstr "'%s'에 대한 PDF 뷰어를 찾을 수 없음."
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "PDF 뷰어 '%s'를 실행하는 중에 문제가 발생했습니다."
 
-#: common/gestfich.cpp:283 eeschema/eeschema.cpp:544 eeschema/eeschema.cpp:579
+#: common/gestfich.cpp:283 eeschema/eeschema.cpp:550 eeschema/eeschema.cpp:585
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:288
-#: pcbnew/pcbnew.cpp:505
+#: pcbnew/pcbnew.cpp:519
 #, c-format
 msgid "Cannot copy file '%s'."
 msgstr "파일 '%s'을(를) 복사할 수 없습니다."
@@ -5736,8 +5736,8 @@ msgstr "파일 추출 오류!"
 #: pcbnew/exporters/export_gencad.cpp:258
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:102
-#: pcbnew/exporters/gerber_jobfile_writer.cpp:153 eeschema/sch_plotter.cpp:904
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:105
+#: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, c-format
 msgid "Failed to create file '%s'."
 msgstr "파일 '%s'의 생성에 실패하였습니다."
@@ -7192,7 +7192,7 @@ msgstr ""
 "자세한 내용은 CvPcb 공식 문서의 \"풋프린트 라이브러리 테이블\" 섹션을 참고하"
 "세요."
 
-#: cvpcb/cvpcb.cpp:187
+#: cvpcb/cvpcb.cpp:190
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr "전역 풋프린트 라이브러리 테이블을 불러오는 중에 오류가 발생했습니다."
@@ -8385,7 +8385,6 @@ msgstr "제외 항목도 삭제 하시겠습니까?"
 #: eeschema/dialogs/dialog_erc.cpp:300 eeschema/dialogs/dialog_erc_base.cpp:165
 #: pcbnew/dialogs/dialog_drc.cpp:1142 pcbnew/dialogs/dialog_drc_base.cpp:212
 #: pcbnew/dialogs/dialog_footprint_checker_base.cpp:79
-#: pcbnew/dialogs/dialog_drc.cpp:1143
 msgid "Delete All Markers"
 msgstr "모든 마커 삭제"
 
@@ -12532,7 +12531,7 @@ msgstr "필드 이름 템플릿:"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:391
+#: eeschema/eeschema.cpp:397
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -12540,7 +12539,7 @@ msgstr ""
 "전역 기호 라이브러리 테이블을 불러오는 중에 오류가 발생하였습니다.\n"
 "설정 메뉴에서 이 전역 심볼 라이브러리 테이블을 편집하세요."
 
-#: eeschema/eeschema.cpp:451
+#: eeschema/eeschema.cpp:457
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -13014,7 +13013,7 @@ msgid "Abort"
 msgstr "중단"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:864
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13072,7 +13071,7 @@ msgstr ""
 "'%s'회로도 파일 저장 중 오류 발생.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "임시 파일 '%s'을(를) 만들지 못했습니다."
@@ -13086,13 +13085,13 @@ msgstr ""
 "회로도 파일 '%s'을(를) 저장하는 중 오류 발생.\n"
 "임시 파일 '%s'의 이름을 바꾸지 못함."
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "임시 파일 '%s'의 이름을 변경하지 못했습니다."
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1143
+#: pcbnew/files.cpp:1155
 #, c-format
 msgid "File '%s' saved."
 msgstr "파일 '%s'이(가) 저장됨."
@@ -13689,8 +13688,7 @@ msgstr "버스 별칭 %s 멤버"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad 회로도 편집기"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
-#: eeschema/sch_edit_frame.cpp:1726
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1732
 msgid "Schematic Hierarchy"
 msgstr "회로도 계층"
 
@@ -13720,47 +13718,46 @@ msgstr ""
 
 #: eeschema/sch_edit_frame.cpp:1105 eeschema/sch_plotter.cpp:1027
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
-#: eeschema/sch_plotter.cpp:1028
 msgid "Schematic"
 msgstr "회로도"
 
-#: eeschema/sch_edit_frame.cpp:1122
+#: eeschema/sch_edit_frame.cpp:1126
 msgid "New Schematic"
 msgstr "새로운 회로도"
 
-#: eeschema/sch_edit_frame.cpp:1134
+#: eeschema/sch_edit_frame.cpp:1138
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "회로도 파일 '%s'은(는) 이미 존재합니다."
 
-#: eeschema/sch_edit_frame.cpp:1155
+#: eeschema/sch_edit_frame.cpp:1163
 msgid "Open Schematic"
 msgstr "회로도 열기"
 
-#: eeschema/sch_edit_frame.cpp:1224
+#: eeschema/sch_edit_frame.cpp:1232
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "풋프린트를 할당하기 위해서는 완전히 주석 처리된 회로도가 필요합니다."
 
-#: eeschema/sch_edit_frame.cpp:1249
+#: eeschema/sch_edit_frame.cpp:1257
 msgid "Could not open CvPcb"
 msgstr "CvPcb를 열 수 없습니다"
 
-#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1440 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
 #: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr "[읽기 전용]"
 
-#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr "[저장되지 않음]"
 
-#: eeschema/sch_edit_frame.cpp:1439
+#: eeschema/sch_edit_frame.cpp:1447
 msgid "[no schematic loaded]"
 msgstr "[불러온 회로도가 없습니다]"
 
-#: eeschema/sch_edit_frame.cpp:1747 eeschema/sch_edit_frame.cpp:1749
+#: eeschema/sch_edit_frame.cpp:1755
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "강조 표시된 네트: %s"
@@ -13936,18 +13933,18 @@ msgstr "'%s'에 플롯됨.\n"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126 eeschema/sch_plotter.cpp:930
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129
 msgid "Done."
 msgstr "완료."
 
 #: eeschema/sch_plotter.cpp:367 eeschema/sch_plotter.cpp:528
 #: eeschema/sch_plotter.cpp:723 eeschema/sch_plotter.cpp:895
-#: pcbnew/dialogs/dialog_plot.cpp:1122 eeschema/sch_plotter.cpp:896
+#: pcbnew/dialogs/dialog_plot.cpp:1122
 #, c-format
 msgid "Plotted to '%s'."
 msgstr "'%s'에 플롯됨."
 
-#: eeschema/sch_plotter.cpp:1035 eeschema/sch_plotter.cpp:1036
+#: eeschema/sch_plotter.cpp:1035
 #, c-format
 msgid "Failed to write plot files to folder '%s'."
 msgstr "폴더 '%s'에 플롯 파일을 쓸 수 없습니다."
@@ -13983,7 +13980,6 @@ msgid ""
 msgstr "SCH_PLUGIN::Symbol*() 함수를 실행하는 python 심볼을 입력하십시오."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:393
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:374
 #, c-format
 msgid ""
 "The file name for sheet %s is undefined, this is probably an Altium signal "
@@ -13993,81 +13989,66 @@ msgstr ""
 "수 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:459
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:440
 #, c-format
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "저장소 파일이 완전히 파싱되지 않았습니다 (%d바이트 남음)."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:519
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:500
 #, c-format
 msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
 msgstr "알 수 없거나 예기치 않은 레코드 ID %d가 \"추가\" 섹션에 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:592
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:573
 msgid "Record 'IEEE_SYMBOL' not handled."
 msgstr "'IEEE_SYMBOL' 레코드가 처리되지 않았습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:617
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:598
 msgid "Record 'PIECHART' not handled."
 msgstr "레코드 '파이차트'가 처리되지 않았습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:736
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:717
 msgid "Compile mask not currently supported."
 msgstr "컴파일 마스크는 현재 지원되지 않습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:743
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:724
 #, c-format
 msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
 msgstr ""
 "알 수 없거나 예기치 않은 레코드 ID %d가 \"파일 헤더\"섹션에서 발견되었습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:843
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:824
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
 msgstr "기호 \"%s\"가 시트\"%s\"의 인덱스 %d에서 \"%s\"기호로 대체됨."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:947
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2442
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:928
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2409
 msgid "Pin has unexpected orientation."
 msgstr "예기치 않은 핀 방향."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:994
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:975
 msgid "Pin has unexpected electrical type."
 msgstr "핀에 예기치 않은 전기 유형이 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:999
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:980
 msgid "Pin has unexpected outer edge type."
 msgstr "핀에 예기치 않은 외부 모서리 타입이 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1002
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:983
 msgid "Pin has unexpected inner edge type."
 msgstr "핀에 예기치 않은 내부 모서리 타입이 있습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1291
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1272
 #, c-format
 msgid "Bezier has %d control points. At least 2 are expected."
 msgstr "베지어 곡선에는 %d 개의 조절점이 있습니다. 최소 2개가 필요합니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1701
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1675
 #, c-format
 msgid "Unsupported ellipse was not imported at (X = %d; Y = %d)."
 msgstr "지원되지 않는 타원은 (X = %d; Y = %d)에서 가져오지 못했습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1966
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:1940
 #, c-format
 msgid ""
 "Altium's harness connector (%s) was imported as a hierarchical sheet. Please "
@@ -14077,18 +14058,15 @@ msgstr ""
 "십시오."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2322
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2296
 msgid "Power Port with unknown style imported as 'Bar' type."
 msgstr "알 수 없는 스타일의 전원 포트를 '바' 유형으로 가져왔습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2370
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2337
 #, c-format
 msgid "Power symbol creates a global label with name '%s'"
 msgstr "전원 심볼은 '%s'라는 이름의 전역 라벨을 생성합니다"
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2506
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2473
 #, c-format
 msgid ""
 "Altium's harness port (%s) was imported as a text box. Please review the "
@@ -14098,27 +14076,22 @@ msgstr ""
 "십시오."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2563
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2530
 #, c-format
 msgid "Port %s has no connections."
 msgstr "포트 %s에 연결이 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2764
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2731
 #, c-format
 msgid "Embedded file %s not found in storage."
 msgstr "내장된 파일 %s을 저장소에서 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2781
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2800
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2748
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2767
 #, c-format
 msgid "Error reading image %s."
 msgstr "이미지 %s를 읽는 동안 오류가 발생했습니다."
 
 #: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2793
-#: eeschema/sch_plugins/altium/sch_altium_plugin.cpp:2760
 #, c-format
 msgid "File not found %s."
 msgstr "%s 파일을 찾을 수 없습니다."
@@ -14361,7 +14334,7 @@ msgid "Library file '%s' not found."
 msgstr "라이브러리 파일 '%s'을(를) 찾을 수 없습니다."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:516
-#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1886
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1898
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "라이브러리 %s은(는) 심볼 이름 %s을(를) 포함하고 있지 않습니다"
@@ -14371,7 +14344,7 @@ msgid "Invalid symbol name"
 msgstr "잘못된 심볼 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:208
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2644
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2653
 #, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "심볼 %s에 잘못된 문자 '%c'가 포함되어 있습니다"
@@ -14423,58 +14396,64 @@ msgid "Invalid pin names definition"
 msgstr "잘못된 핀 이름 정의"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:781
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1945
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1954
 msgid "Invalid property name"
 msgstr "잘못된 속성 이름"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:789
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1962
 msgid "Empty property name"
 msgstr "빈 속성 이름"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:810
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
+#, fuzzy, c-format
+msgid "Duplicate field '%s'"
+msgstr "중복된 항목 %s%s\n"
+
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
 msgid "Invalid property value"
 msgstr "잘못된 속성 값"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1397
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1406
 msgid "Invalid pin name"
 msgstr "잘못된 핀 이름"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1435
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1444
 msgid "Invalid pin number"
 msgstr "잘못된 핀 번호"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1472
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1481
 msgid "Invalid alternate pin name"
 msgstr "올바르지 않은 대체 핀 이름"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1647
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1656
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1718
 msgid "Invalid text string"
 msgstr "잘못된 텍스트 문자열"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1802
 msgid "Invalid page type"
 msgstr "잘못된 페이지 유형"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1920
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1929
 msgid "Invalid title block comment number"
 msgstr "잘못된 제목 블록 주석 번호"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2051
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2060
 msgid "Invalid sheet pin name"
 msgstr "잘못된 시트 핀 이름"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2059
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2068
 msgid "Empty sheet pin name"
 msgstr "빈 시트 핀 이름"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2609
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2618
 msgid "Invalid symbol library name"
 msgstr "잘못된 심볼 라이브러리 이름"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2650
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2659
 msgid "Invalid symbol library ID"
 msgstr "잘못된 심볼 라이브러리 ID"
 
@@ -16631,7 +16610,7 @@ msgstr "심볼 삭제"
 msgid "Keep Symbol"
 msgstr "심볼 유지"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -18228,13 +18207,12 @@ msgstr "버스에 멤버가 없습니다"
 msgid "Press <ESC> to cancel drawing."
 msgstr "<ESC>를 눌러 그리기를 취소하세요."
 
-#: eeschema/tools/sch_move_tool.cpp:796 eeschema/tools/sch_move_tool.cpp:794
+#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel drag."
 msgstr "<ESC>를 눌러 드래그를 취소하세요."
 
 #: eeschema/tools/sch_move_tool.cpp:798
 #: pagelayout_editor/tools/pl_edit_tool.cpp:230
-#: eeschema/tools/sch_move_tool.cpp:796
 msgid "Press <ESC> to cancel move."
 msgstr "<ESC>를 눌러 이동을 취소하세요."
 
@@ -24633,7 +24611,7 @@ msgstr ""
 "보드에서 설정 가져오기 오류:\n"
 "연결된 프로젝트 파일 %s을(를) 불러올 수 없습니다"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:668
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "PCB를 불러오는 중입니다"
@@ -33135,7 +33113,7 @@ msgid "Created file '%s'"
 msgstr "생성된 파일 '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:346
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:113
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #, c-format
 msgid "Created file '%s'."
 msgstr "'%s' 파일 생성됨."
@@ -33233,27 +33211,27 @@ msgstr "다른 이름으로 기판 파일 저장"
 msgid "Printed circuit board"
 msgstr "인쇄 회로 기판"
 
-#: pcbnew/files.cpp:344
+#: pcbnew/files.cpp:352
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "복구 파일 '%s'을(를) 찾을 수 없습니다."
 
-#: pcbnew/files.cpp:349
+#: pcbnew/files.cpp:357
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "복구 파일 '%s'을(를) 불러오시겠습니까?"
 
-#: pcbnew/files.cpp:388
+#: pcbnew/files.cpp:400
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "현재 기판은 닫힐 것입니다. 계속하기 전에 '%s'에 변경 사항을 저장할까요?"
 
-#: pcbnew/files.cpp:402
+#: pcbnew/files.cpp:414
 msgid "Current Board will be closed. Continue?"
 msgstr "현재 기판이 닫힙니다. 계속하시겠습니까?"
 
-#: pcbnew/files.cpp:582
+#: pcbnew/files.cpp:594
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33265,58 +33243,58 @@ msgstr ""
 "이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 다"
 "른 채움 결과를 내보낼 것입니다."
 
-#: pcbnew/files.cpp:628
+#: pcbnew/files.cpp:640
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "PCB '%s'은(는) '%s'에 의해 '%s'에서 이미 열려 있습니다."
 
-#: pcbnew/files.cpp:639
+#: pcbnew/files.cpp:651
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "현재 PCB는 수정되었습니다.  변경사항을 저장할까요?"
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:670
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s'은(는) 존재하지 않습니다. 생성할까요?"
 
-#: pcbnew/files.cpp:667
+#: pcbnew/files.cpp:679
 msgid "Creating PCB"
 msgstr "PCB 생성"
 
-#: pcbnew/files.cpp:772 pcbnew/files.cpp:782
+#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "PCB '%s'을(를) 불러오는 중에 오류가 발생했습니다."
 
-#: pcbnew/files.cpp:791
+#: pcbnew/files.cpp:803
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "PCB '%s' 불러오는 중 메모리 부족이 발생하였습니다"
 
-#: pcbnew/files.cpp:904
+#: pcbnew/files.cpp:916
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "프로젝트의 특정 라이브러리에 풋프린트 %s을(를) 저장하는 동안 오류가 발생했습"
 "니다."
 
-#: pcbnew/files.cpp:935
+#: pcbnew/files.cpp:947
 msgid "Error saving project specific footprint library table."
 msgstr ""
 "프로젝트 특정 풋프린트 라이브러리 테이블을 저장하는 도중 오류가 발생했습니다."
 
-#: pcbnew/files.cpp:1027 pcbnew/files.cpp:1169
+#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "'%s' 파일 저장에 필요한 권한이 충분하지 않습니다."
 
-#: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
+#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "사용자 정의 규칙 파일 '%s'을(를) 저장하는 동안 오류가 발생했습니다."
 
-#: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
+#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33325,7 +33303,7 @@ msgstr ""
 "보드 파일 '%s'을(를) 저장하는 중 오류 발생.\n"
 "%s"
 
-#: pcbnew/files.cpp:1105
+#: pcbnew/files.cpp:1117
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33334,7 +33312,7 @@ msgstr ""
 "보드 파일 '%s'을(를) 저장하는 중 오류 발생.\n"
 "임시 파일 '%s'의 이름을 바꾸지 못함."
 
-#: pcbnew/files.cpp:1218
+#: pcbnew/files.cpp:1230
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -35092,7 +35070,7 @@ msgstr "레이어 하단"
 msgid "Via Type"
 msgstr "비아 유형"
 
-#: pcbnew/pcbnew.cpp:409
+#: pcbnew/pcbnew.cpp:423
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -35327,25 +35305,21 @@ msgid "Loading arcs..."
 msgstr "호 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2615
-#: pcbnew/plugins/altium/altium_pcb.cpp:2611
 msgid "Loading pads..."
 msgstr "패드 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2700
-#: pcbnew/plugins/altium/altium_pcb.cpp:2696
 #, c-format
 msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
 "풋프린트 %s 패드 %s은(는) 다중 레이어로 마크되지 않았으나, TH 패드입니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2721
-#: pcbnew/plugins/altium/altium_pcb.cpp:2717
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "풋프린트 %s 패드 %s에 사각형 홀이 존재합니다 (아직 지원되지 않음)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2748
-#: pcbnew/plugins/altium/altium_pcb.cpp:2744
 #, c-format
 msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
@@ -35355,28 +35329,23 @@ msgstr ""
 "을 지원합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2760
-#: pcbnew/plugins/altium/altium_pcb.cpp:2756
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "풋프린트 %s 패드 %s은(는) 알 수 없는 종류 %d 홀을 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2777
-#: pcbnew/plugins/altium/altium_pcb.cpp:2773
 #, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported.)"
 msgstr ""
 "풋프린트 %s 패드 %s은(는) 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2814
-#: pcbnew/plugins/altium/altium_pcb.cpp:2810
 #, c-format
 msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "풋프린트 %s 패드 %s은(는) 알 수 없는 패드 형태를 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2872
 #: pcbnew/plugins/altium/altium_pcb.cpp:2893
-#: pcbnew/plugins/altium/altium_pcb.cpp:2868
-#: pcbnew/plugins/altium/altium_pcb.cpp:2889
 #, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
@@ -35386,37 +35355,31 @@ msgstr ""
 "습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2913
-#: pcbnew/plugins/altium/altium_pcb.cpp:2909
 #, c-format
 msgid "Non-copper pad %s is connected to a net, which is not supported."
 msgstr ""
 "비 구리 패드 %s이(가) 네트에 연결되었습니다. 이는 아직 지원되지 않습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2919
-#: pcbnew/plugins/altium/altium_pcb.cpp:2915
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
 msgstr "비 구리 패드 %s에 홀이 존재합니다. 이는 아직 지원되지 않습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2924
-#: pcbnew/plugins/altium/altium_pcb.cpp:2920
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr "비 구리 패드 %s에 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3066
-#: pcbnew/plugins/altium/altium_pcb.cpp:3062
 #, c-format
 msgid "Non-copper pad %s uses an unknown pad-shape."
 msgstr "비 구리 패드 %s은(는) 알 수 없는 패드 형태를 사용합니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3076
-#: pcbnew/plugins/altium/altium_pcb.cpp:3072
 msgid "Loading vias..."
 msgstr "비아 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3117
-#: pcbnew/plugins/altium/altium_pcb.cpp:3113
 #, c-format
 msgid ""
 "Via from layer %d to %d uses a non-copper layer, which is not supported."
@@ -35425,30 +35388,24 @@ msgstr ""
 "원되지 않습니다."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3136
-#: pcbnew/plugins/altium/altium_pcb.cpp:3132
 msgid "Loading tracks..."
 msgstr "배선 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3308
-#: pcbnew/plugins/altium/altium_pcb.cpp:3300
 msgid "Loading unicode strings..."
 msgstr "유니코드 문자열 로드 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3322
-#: pcbnew/plugins/altium/altium_pcb.cpp:3314
 msgid "Loading text..."
 msgstr "텍스트 불러오는 중..."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3351
 #: pcbnew/plugins/altium/altium_pcb.cpp:3364
-#: pcbnew/plugins/altium/altium_pcb.cpp:3343
-#: pcbnew/plugins/altium/altium_pcb.cpp:3356
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Altium 레이어 %d의 바코드를 무시하였습니다 (아직 지원되지 않음)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:3467
-#: pcbnew/plugins/altium/altium_pcb.cpp:3459
 msgid "Loading rectangles..."
 msgstr "직사각형 불러오는 중..."
 
@@ -40903,13 +40860,11 @@ msgstr "KiCad 회로도"
 msgid "KiCad Printed Circuit Board"
 msgstr "KiCad 인쇄 회로 기판"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1142
-msgid "Do you wish to delete excluded markers as well?"
-msgstr "제외된 마커도 함께 삭제하시겠습니까?"
+#~ msgid "Do you wish to delete excluded markers as well?"
+#~ msgstr "제외된 마커도 함께 삭제하시겠습니까?"
 
-#: pcbnew/dialogs/dialog_drc.cpp:1145
-msgid "Delete exclusions"
-msgstr "제외 삭제"
+#~ msgid "Delete exclusions"
+#~ msgstr "제외 삭제"
 
 #~ msgid "Unable to read string, input is empty."
 #~ msgstr "문자열을 읽을 수 없으며 입력이 비어 있습니다."
@@ -41762,10 +41717,6 @@ msgstr "제외 삭제"
 #, fuzzy
 #~ msgid "Alias:"
 #~ msgstr "별칭: "
-
-#, c-format
-#~ msgid "Duplicate items %s%s\n"
-#~ msgstr "중복된 항목 %s%s\n"
 
 #~ msgid "Spice device:"
 #~ msgstr "Spice 장치:"

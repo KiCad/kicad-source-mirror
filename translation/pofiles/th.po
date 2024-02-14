@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:58-0800\n"
+"POT-Creation-Date: 2024-02-14 10:31-0800\n"
 "PO-Revision-Date: 2023-04-21 07:52+0000\n"
 "Last-Translator: \"boonchai k.\" <kicadthai@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/v7/th/>\n"
@@ -4029,7 +4029,7 @@ msgid "Colors"
 msgstr "สี"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1450
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "เครื่องมือแก้ไขวงจร"
@@ -4907,9 +4907,9 @@ msgstr "ไม่สามารถหาโปรแกรมดูสำหร
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "เกิดปัญหาระหว่างเรียกใช้โปรแกรมดู PDF คือ '%s'"
 
-#: common/gestfich.cpp:283 eeschema/eeschema.cpp:544 eeschema/eeschema.cpp:579
+#: common/gestfich.cpp:283 eeschema/eeschema.cpp:550 eeschema/eeschema.cpp:585
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:288
-#: pcbnew/pcbnew.cpp:505
+#: pcbnew/pcbnew.cpp:519
 #, c-format
 msgid "Cannot copy file '%s'."
 msgstr "ไม่สามารถสำเนาไฟล์ '%s'"
@@ -5658,7 +5658,7 @@ msgstr "ผิดพลาด การแตกไฟล์!"
 #: pcbnew/exporters/export_gencad.cpp:258
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:102
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:105
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, c-format
 msgid "Failed to create file '%s'."
@@ -7110,7 +7110,7 @@ msgstr ""
 "คุณต้องปรับแต่งตารางไลบรารี ให้รวมไลบรารีฟุ้ทพรินท์ทั้งหมด ที่ไม่มีใน KiCad\n"
 "กรุณาดูในส่วน \"Footprint Library Table\" ในเอกสาร CvPcb เพิ่มเติม"
 
-#: cvpcb/cvpcb.cpp:187
+#: cvpcb/cvpcb.cpp:190
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr "เกิดความผิดพลาดระหว่างอ่านตารางไลบรารีฟุ้ทพรินท์ส่วนกลาง"
@@ -12424,7 +12424,7 @@ msgstr "แม่แบบชื่อช่อง:"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:391
+#: eeschema/eeschema.cpp:397
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -12432,7 +12432,7 @@ msgstr ""
 "เกิดความผิดพลาดระหว่างพยายามอ่านตารางไลบรารีสัญลักษณ์ส่วนกลาง\n"
 "โปรดแก้ไข ตารางไลบรารีสัญลักษณ์ส่วนกลาง ในเมนู 'ปรับตั้งความชอบ'"
 
-#: eeschema/eeschema.cpp:451
+#: eeschema/eeschema.cpp:457
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -12908,7 +12908,7 @@ msgid "Abort"
 msgstr "ยกเลิก"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:864
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -12967,7 +12967,7 @@ msgstr ""
 "ผิดพลาดระหว่างบันทึกไฟล์วงจร '%s'\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "ล้มเหลวในการสร้างไฟล์ชั่วคราว '%s'"
@@ -12981,13 +12981,13 @@ msgstr ""
 "ผิดพลาดในการบันทึกไฟล์วงจร '%s'\n"
 "ล้มเหลวในการเปลี่ยนชื่อไฟล์ชั่วคราว '%s'"
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "ล้มเหลวที่จะเปลี่ยนชื่อไฟล์ชั่วคราว '%s'"
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1143
+#: pcbnew/files.cpp:1155
 #, c-format
 msgid "File '%s' saved."
 msgstr "บันทึกไฟล์ '%s' เรียบร้อย"
@@ -13587,7 +13587,7 @@ msgstr "สมาชิกนามแฝงบัส %s"
 msgid "KiCad Schematic Editor"
 msgstr "ตัวแก้ไขวงจร KiCad"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1732
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "เท่าเทียมกับวงจร"
@@ -13620,43 +13620,43 @@ msgstr ""
 msgid "Schematic"
 msgstr "วงจร"
 
-#: eeschema/sch_edit_frame.cpp:1122
+#: eeschema/sch_edit_frame.cpp:1126
 msgid "New Schematic"
 msgstr "สร้างวงจรใหม่"
 
-#: eeschema/sch_edit_frame.cpp:1134
+#: eeschema/sch_edit_frame.cpp:1138
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "ไฟล์วงจร '%s' มีอยู่แล้ว"
 
-#: eeschema/sch_edit_frame.cpp:1155
+#: eeschema/sch_edit_frame.cpp:1163
 msgid "Open Schematic"
 msgstr "เปิดวงจร"
 
-#: eeschema/sch_edit_frame.cpp:1224
+#: eeschema/sch_edit_frame.cpp:1232
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "กำหนดฟุ้ทพรินท์ ต้องการให้ทำอธิบายประกอบครบถ้วนก่อน"
 
-#: eeschema/sch_edit_frame.cpp:1249
+#: eeschema/sch_edit_frame.cpp:1257
 msgid "Could not open CvPcb"
 msgstr "ไม่สามารถเปิด CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1440 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
 #: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr "[อ่านเท่านั้น]"
 
-#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr "[ยังไม่ได้บันทึก]"
 
-#: eeschema/sch_edit_frame.cpp:1439
+#: eeschema/sch_edit_frame.cpp:1447
 msgid "[no schematic loaded]"
 msgstr "[ไม่มีการโหลดวงจร]"
 
-#: eeschema/sch_edit_frame.cpp:1747
+#: eeschema/sch_edit_frame.cpp:1755
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "เน้นสีเน็ต: %s"
@@ -13834,7 +13834,7 @@ msgstr "พล็อตไปที่ '%s'\n"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129
 msgid "Done."
 msgstr "เสร็จแล้ว"
 
@@ -14205,7 +14205,7 @@ msgid "Library file '%s' not found."
 msgstr "ไม่พบไฟล์ไลบรารี '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:516
-#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1886
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1898
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "ไลบรารี %s ไม่มีสัญลักษณ์ชื่อ %s"
@@ -14215,7 +14215,7 @@ msgid "Invalid symbol name"
 msgstr "ชื่อสัญลักษณ์ไม่ถูกต้อง"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:208
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2644
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2653
 #, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "สัญลักษณ์ %s มีอักขระไม่ถูกต้อง '%c'"
@@ -14267,58 +14267,64 @@ msgid "Invalid pin names definition"
 msgstr "คำนิยามชื่อขาไม่ถูกต้อง"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:781
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1945
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1954
 msgid "Invalid property name"
 msgstr "ชื่อคุณสมบัติไม่ถูกต้อง"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:789
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1962
 msgid "Empty property name"
 msgstr "ชื่อคุณสมบัติว่างเปล่า"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:810
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
+#, fuzzy, c-format
+msgid "Duplicate field '%s'"
+msgstr "ชิ้นส่วนซ้ำ %s%s\n"
+
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
 msgid "Invalid property value"
 msgstr "ค่าคุณสมบัติไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1397
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1406
 msgid "Invalid pin name"
 msgstr "ชื่อขาไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1435
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1444
 msgid "Invalid pin number"
 msgstr "หมายเลขขาไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1472
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1481
 msgid "Invalid alternate pin name"
 msgstr "ชื่อขาสำรองไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1647
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1656
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1718
 msgid "Invalid text string"
 msgstr "ข้อความไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1802
 msgid "Invalid page type"
 msgstr "ชนิดหน้าไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1920
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1929
 msgid "Invalid title block comment number"
 msgstr "หมายเลขความคิดเห็นบนบล็อกหัวเรื่องไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2051
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2060
 msgid "Invalid sheet pin name"
 msgstr "ชื่อชีตพินไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2059
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2068
 msgid "Empty sheet pin name"
 msgstr "ชื่อชีตพินว่างเปล่า"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2609
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2618
 msgid "Invalid symbol library name"
 msgstr "ชื่อไลบรารีสัญลักษณ์ไม่ถูกต้อง"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2650
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2659
 msgid "Invalid symbol library ID"
 msgstr "รหัสไลบรารีสัญลักษณ์ไม่ถูกต้อง"
 
@@ -16520,7 +16526,7 @@ msgstr "ลบสัญลักษณ์"
 msgid "Keep Symbol"
 msgstr "เก็บสัญลักษณ์"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -24591,7 +24597,7 @@ msgstr ""
 "เกิดความผิดพลาดนำเข้าการตั้งค่าจากบอร์ด:\n"
 "ไฟล์โปรเจ็คที่เกี่ยวข้อง %s อ่านไม่ได้"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:668
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "กำลังโหลดพีซีบี"
@@ -33129,7 +33135,7 @@ msgid "Created file '%s'"
 msgstr "สร้างไฟล์ '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:346
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:113
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #, c-format
 msgid "Created file '%s'."
 msgstr "สร้างไฟล์ '%s'"
@@ -33227,26 +33233,26 @@ msgstr "บันทึกไฟล์บอร์ดเป็น"
 msgid "Printed circuit board"
 msgstr "แผ่นวงจรพิมพ์"
 
-#: pcbnew/files.cpp:344
+#: pcbnew/files.cpp:352
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "ไม่พบไฟล์กู้คืน '%s'"
 
-#: pcbnew/files.cpp:349
+#: pcbnew/files.cpp:357
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "ตกลงที่จะโหลดไฟล์การกู้คืน '%s' หรือไม่?"
 
-#: pcbnew/files.cpp:388
+#: pcbnew/files.cpp:400
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr "บอร์ดปัจจุบันจะถูกปิด บันทึกการเปลี่ยนแปลงเป็น '%s' ก่อนดำเนินการต่อหรือไม่?"
 
-#: pcbnew/files.cpp:402
+#: pcbnew/files.cpp:414
 msgid "Current Board will be closed. Continue?"
 msgstr "บอร์ดปัจจุบันจะถูกปิด ดำเนินการต่อ?"
 
-#: pcbnew/files.cpp:582
+#: pcbnew/files.cpp:594
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33258,55 +33264,55 @@ msgstr ""
 "ซึ่งอาจส่งผลให้มีการเติมที่แตกต่างจาก KiCad "
 "รุ่นก่อนหน้าที่ใช้ความหนาของเส้นของขอบเขตของบอร์ดบนเลเยอร์ Edge Cuts"
 
-#: pcbnew/files.cpp:628
+#: pcbnew/files.cpp:640
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "พีซีบี '%s' เปิดอยู่แล้ว"
 
-#: pcbnew/files.cpp:639
+#: pcbnew/files.cpp:651
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "พีซีบีปัจจุบันได้รับการแก้ไข บันทึกการเปลี่ยนแปลง?"
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:670
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "พีซีบี '%s' ไม่มีอยู่ คุณต้องการสร้างหรือไม่?"
 
-#: pcbnew/files.cpp:667
+#: pcbnew/files.cpp:679
 msgid "Creating PCB"
 msgstr "การสร้างพีซีบอร์ด"
 
-#: pcbnew/files.cpp:772 pcbnew/files.cpp:782
+#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "เกิดข้อผิดพลาดในการโหลดพีซีบี '%s'"
 
-#: pcbnew/files.cpp:791
+#: pcbnew/files.cpp:803
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "หน่วยความจำหมด ระหว่างอ่านพีซีบี ' %s'"
 
-#: pcbnew/files.cpp:904
+#: pcbnew/files.cpp:916
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr "เกิดข้อผิดพลาดในการบันทึกฟุ้ทพรินท์ %s ไปยังไลบรารีเฉพาะของโปรเจ็กต์"
 
-#: pcbnew/files.cpp:935
+#: pcbnew/files.cpp:947
 msgid "Error saving project specific footprint library table."
 msgstr "เกิดข้อผิดพลาดในการบันทึกตารางไลบรารีฟุ้ทพรินท์เฉพาะโปรเจ็กต์"
 
-#: pcbnew/files.cpp:1027 pcbnew/files.cpp:1169
+#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "สิทธิ์ไม่เพียงพอในการเขียนไฟล์ '%s'"
 
-#: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
+#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "ข้อผิดพลาดในการบันทึกไฟล์กฎแบบกําหนดเอง '%s'"
 
-#: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
+#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33315,7 +33321,7 @@ msgstr ""
 "ข้อผิดพลาดในการบันทึกไฟล์บอร์ด '%s'\n"
 "%s"
 
-#: pcbnew/files.cpp:1105
+#: pcbnew/files.cpp:1117
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33324,7 +33330,7 @@ msgstr ""
 "เกิดข้อผิดพลาดในการบันทึกไฟล์บอร์ด '%s'\n"
 "ไม่สามารถเปลี่ยนชื่อไฟล์ชั่วคราว '%s."
 
-#: pcbnew/files.cpp:1218
+#: pcbnew/files.cpp:1230
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -35093,7 +35099,7 @@ msgstr "เลเยอร์ด้านล่าง"
 msgid "Via Type"
 msgstr "ชนิดเวีย"
 
-#: pcbnew/pcbnew.cpp:409
+#: pcbnew/pcbnew.cpp:423
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -41737,10 +41743,6 @@ msgstr "แผ่นวงจรพิมพ์ KiCad"
 #, fuzzy
 #~ msgid "Alias:"
 #~ msgstr "แฝง: "
-
-#, c-format
-#~ msgid "Duplicate items %s%s\n"
-#~ msgstr "ชิ้นส่วนซ้ำ %s%s\n"
 
 #, fuzzy
 #~ msgid "Spice type:"

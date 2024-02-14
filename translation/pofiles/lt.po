@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:58-0800\n"
+"POT-Creation-Date: 2024-02-14 10:31-0800\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -4244,7 +4244,7 @@ msgid "Colors"
 msgstr "Spalvos"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1450
 #: kicad/tools/kicad_manager_actions.cpp:80
 #, fuzzy
 msgid "Schematic Editor"
@@ -5166,9 +5166,9 @@ msgstr ""
 "Problema paleidus PDF peržiūros priemonę\n"
 "Komanda yra „%s“"
 
-#: common/gestfich.cpp:283 eeschema/eeschema.cpp:544 eeschema/eeschema.cpp:579
+#: common/gestfich.cpp:283 eeschema/eeschema.cpp:550 eeschema/eeschema.cpp:585
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:288
-#: pcbnew/pcbnew.cpp:505
+#: pcbnew/pcbnew.cpp:519
 #, fuzzy, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Negalima nukopijuoti failo „%s“."
@@ -5945,7 +5945,7 @@ msgstr "Gaunant failą įvyko klaida!\n"
 #: pcbnew/exporters/export_gencad.cpp:258
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:102
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:105
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, fuzzy, c-format
 msgid "Failed to create file '%s'."
@@ -7438,7 +7438,7 @@ msgstr ""
 "Norėdami gauti daugiau informacijos, žr. CvPcb dokumentų skyrių „Pėdsakų "
 "bibliotekos lentelė“."
 
-#: cvpcb/cvpcb.cpp:187
+#: cvpcb/cvpcb.cpp:190
 #, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
@@ -12909,7 +12909,7 @@ msgstr "Lauko pavadinimo šablonai:"
 msgid "URL"
 msgstr "Nuoroda"
 
-#: eeschema/eeschema.cpp:391
+#: eeschema/eeschema.cpp:397
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -12917,7 +12917,7 @@ msgstr ""
 "Bandant įkelti visuotinę simbolių bibliotekos lentelę įvyko klaida.\n"
 "Redaguokite šią visuotinę simbolių bibliotekos lentelę meniu „Nuostatos“."
 
-#: eeschema/eeschema.cpp:451
+#: eeschema/eeschema.cpp:457
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -13419,7 +13419,7 @@ msgid "Abort"
 msgstr "Nutraukiama\n"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:864
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
 #, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -13482,7 +13482,7 @@ msgstr ""
 "Klaida išsaugant scheminį failą „%s“.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Nepavyko sukurti laikino failo „%s“"
@@ -13496,13 +13496,13 @@ msgstr ""
 "Klaida išsaugant scheminį failą „%s“.\n"
 "Nepavyko pervadinti laikino failo %s"
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
 #, fuzzy, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Nepavyko sukurti laikino failo „%s“"
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1143
+#: pcbnew/files.cpp:1155
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "Failas „%s“ išsaugotas."
@@ -14119,7 +14119,7 @@ msgstr "„Bus Alias“ %s nariai"
 msgid "KiCad Schematic Editor"
 msgstr "Schemų redaktoriaus savybės"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1732
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Scheminis paritetas"
@@ -14154,45 +14154,45 @@ msgstr ""
 msgid "Schematic"
 msgstr "Schema"
 
-#: eeschema/sch_edit_frame.cpp:1122
+#: eeschema/sch_edit_frame.cpp:1126
 msgid "New Schematic"
 msgstr "Nauja schema"
 
-#: eeschema/sch_edit_frame.cpp:1134
+#: eeschema/sch_edit_frame.cpp:1138
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Scheminis failas „%s“ jau yra."
 
-#: eeschema/sch_edit_frame.cpp:1155
+#: eeschema/sch_edit_frame.cpp:1163
 msgid "Open Schematic"
 msgstr "Atverti schemą"
 
-#: eeschema/sch_edit_frame.cpp:1224
+#: eeschema/sch_edit_frame.cpp:1232
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Norint eksportuoti netlistą, reikalinga visiškai anotuota schema."
 
-#: eeschema/sch_edit_frame.cpp:1249
+#: eeschema/sch_edit_frame.cpp:1257
 msgid "Could not open CvPcb"
 msgstr "Nepavyko atidaryti „CvPcb“"
 
-#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1440 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
 #: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr "[Tik skaitymui]"
 
-#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr "[Neišsaugotas]"
 
-#: eeschema/sch_edit_frame.cpp:1439
+#: eeschema/sch_edit_frame.cpp:1447
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Schema išsaugota"
 
-#: eeschema/sch_edit_frame.cpp:1747
+#: eeschema/sch_edit_frame.cpp:1755
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Paryškintas tinklas: %s"
@@ -14374,7 +14374,7 @@ msgstr "Nepavyko įkelti „%s“"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129
 msgid "Done."
 msgstr ""
 
@@ -14772,7 +14772,7 @@ msgid "Library file '%s' not found."
 msgstr "Bibliotekos failas „%s“ nerastas."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:516
-#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1886
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1898
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "bibliotekoje %s nėra simbolio pavadinimu %s"
@@ -14783,7 +14783,7 @@ msgid "Invalid symbol name"
 msgstr "Neteisingas signalo pavadinimas"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:208
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2644
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2653
 #, fuzzy, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "'%s' nerastas '%s' bibliotekoje."
@@ -14851,50 +14851,56 @@ msgid "Invalid pin names definition"
 msgstr "Plokštės perimetro nustatymas"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:781
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1945
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1954
 #, fuzzy
 msgid "Invalid property name"
 msgstr "Neteisingas signalo pavadinimas"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:789
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1962
 #, fuzzy
 msgid "Empty property name"
 msgstr "Įveskite pėdsako pavadinimą:"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:810
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
+#, fuzzy, c-format
+msgid "Duplicate field '%s'"
+msgstr "Keli elementai %s %s\n"
+
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
 #, fuzzy
 msgid "Invalid property value"
 msgstr "Netinkama „Spice“ vertės eilutė"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1397
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1406
 #, fuzzy
 msgid "Invalid pin name"
 msgstr "Neteisingas signalo pavadinimas"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1435
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1444
 #, fuzzy
 msgid "Invalid pin number"
 msgstr "Neteisingas signalo pavadinimas"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1472
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1481
 #, fuzzy
 msgid "Invalid alternate pin name"
 msgstr "netinkamai keičiamas LPID"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1647
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1656
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1718
 #, fuzzy
 msgid "Invalid text string"
 msgstr "Netinkama „Spice“ vertės eilutė"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1802
 #, fuzzy
 msgid "Invalid page type"
 msgstr "Netinkamas failo pavadinimas:"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1920
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1929
 #, fuzzy
 msgid "Invalid title block comment number"
 msgstr ""
@@ -14903,22 +14909,22 @@ msgstr ""
 "eilutė: %d\n"
 "kompensuoti: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2051
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2060
 #, fuzzy
 msgid "Invalid sheet pin name"
 msgstr "netinkami lapo išvadų tipai"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2059
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2068
 #, fuzzy
 msgid "Empty sheet pin name"
 msgstr "Импорт выводов листа"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2609
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2618
 #, fuzzy
 msgid "Invalid symbol library name"
 msgstr "Neteisingas simbolių bibliotekos identifikatorius"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2650
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2659
 #, fuzzy
 msgid "Invalid symbol library ID"
 msgstr "Neteisingas simbolių bibliotekos identifikatorius"
@@ -17211,7 +17217,7 @@ msgstr "Ištrinti simbolį"
 msgid "Keep Symbol"
 msgstr "Laikyti simbolį"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, fuzzy, c-format
 msgid "Revert '%s' to last version saved?"
@@ -25660,7 +25666,7 @@ msgstr ""
 "Importuojant nustatymus iš plokštės įvyko klaida:\n"
 "Nepavyko įkelti susieto projekto failo %s"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:668
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
 #: pcbnew/tools/pcb_control.cpp:1305
 #, fuzzy
 msgid "Loading PCB"
@@ -34146,7 +34152,7 @@ msgid "Created file '%s'"
 msgstr "Sukurti failą %s\n"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:346
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:113
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #, fuzzy, c-format
 msgid "Created file '%s'."
 msgstr "Sukurti failą %s\n"
@@ -34240,26 +34246,26 @@ msgstr "Išsaugoti plokštę kitu pavadinimu"
 msgid "Printed circuit board"
 msgstr "Spausdintinė plokštė"
 
-#: pcbnew/files.cpp:344
+#: pcbnew/files.cpp:352
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Atkūrimo failas „%s“ nerastas."
 
-#: pcbnew/files.cpp:349
+#: pcbnew/files.cpp:357
 #, fuzzy, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Gerai įkelti atkūrimo failą \"%s\""
 
-#: pcbnew/files.cpp:388
+#: pcbnew/files.cpp:400
 #, fuzzy, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr "Dabartinė lenta bus uždaryta, prieš tęsdami išsaugoti „%s“ pakeitimus?"
 
-#: pcbnew/files.cpp:402
+#: pcbnew/files.cpp:414
 msgid "Current Board will be closed. Continue?"
 msgstr "Dabartinė valdyba bus uždaryta. Tęsti?"
 
-#: pcbnew/files.cpp:582
+#: pcbnew/files.cpp:594
 #, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
@@ -34273,40 +34279,40 @@ msgstr ""
 "versijomis, kuriose „Edge Cuts“ sluoksnyje buvo naudojami lentos ribos "
 "linijų storiai."
 
-#: pcbnew/files.cpp:628
+#: pcbnew/files.cpp:640
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "PCB failas „%s“ jau atidarytas."
 
-#: pcbnew/files.cpp:639
+#: pcbnew/files.cpp:651
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Dabartinė PCB buvo modifikuota. Išsaugoti pakeitimus?"
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:670
 #, fuzzy, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB „%s“ nėra. Ar norite jį sukurti?"
 
-#: pcbnew/files.cpp:667
+#: pcbnew/files.cpp:679
 #, fuzzy
 msgid "Creating PCB"
 msgstr "Kraunamas "
 
-#: pcbnew/files.cpp:772 pcbnew/files.cpp:782
+#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
 #, fuzzy, c-format
 msgid "Error loading PCB '%s'."
 msgstr ""
 "Įkeliant schemą įvyko klaida.\n"
 "%s"
 
-#: pcbnew/files.cpp:791
+#: pcbnew/files.cpp:803
 #, fuzzy, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr ""
 "Klaida įkeliant plokštės failą:\n"
 "%s"
 
-#: pcbnew/files.cpp:904
+#: pcbnew/files.cpp:916
 #, fuzzy, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
@@ -34314,7 +34320,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:935
+#: pcbnew/files.cpp:947
 #, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr ""
@@ -34322,7 +34328,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:1027 pcbnew/files.cpp:1169
+#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, fuzzy, c-format
 msgid "Insufficient permissions to write file '%s'."
@@ -34330,14 +34336,14 @@ msgstr ""
 "Neturite reikiamų teisių failo įrašymui\n"
 "%s"
 
-#: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
+#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
 #, fuzzy, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "%s"
 
-#: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
+#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34346,7 +34352,7 @@ msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "%s"
 
-#: pcbnew/files.cpp:1105
+#: pcbnew/files.cpp:1117
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34355,7 +34361,7 @@ msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "Nepavyko pervadinti laikino failo „%s“"
 
-#: pcbnew/files.cpp:1218
+#: pcbnew/files.cpp:1230
 #, fuzzy, c-format
 msgid ""
 "Board copied to:\n"
@@ -36179,7 +36185,7 @@ msgstr "Sluoksnio apačia"
 msgid "Via Type"
 msgstr "„Via Type“"
 
-#: pcbnew/pcbnew.cpp:409
+#: pcbnew/pcbnew.cpp:423
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -43123,10 +43129,6 @@ msgstr "KiCad spausdintinių plokščių failai"
 #, fuzzy
 #~ msgid "Alias:"
 #~ msgstr "Pseudonimas: "
-
-#, fuzzy, c-format
-#~ msgid "Duplicate items %s%s\n"
-#~ msgstr "Keli elementai %s %s\n"
 
 #~ msgid "Spice Model..."
 #~ msgstr "Prieskonių modelis ..."

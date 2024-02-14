@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:58-0800\n"
+"POT-Creation-Date: 2024-02-14 10:31-0800\n"
 "PO-Revision-Date: 2024-01-29 03:52+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/kicad/v7/pt/"
@@ -4141,7 +4141,7 @@ msgid "Colors"
 msgstr "Cores"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1450
 #: kicad/tools/kicad_manager_actions.cpp:80
 msgid "Schematic Editor"
 msgstr "Editor do esquemático"
@@ -5032,9 +5032,9 @@ msgstr "Não foi possível encontrar um visualizador de PDF para '%s'."
 msgid "Problem while running the PDF viewer '%s'."
 msgstr "Houve um problema ao executar o visualizador de PDF '%s'."
 
-#: common/gestfich.cpp:283 eeschema/eeschema.cpp:544 eeschema/eeschema.cpp:579
+#: common/gestfich.cpp:283 eeschema/eeschema.cpp:550 eeschema/eeschema.cpp:585
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:288
-#: pcbnew/pcbnew.cpp:505
+#: pcbnew/pcbnew.cpp:519
 #, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Não é possível copiar o arquivo '%s'."
@@ -5797,7 +5797,7 @@ msgstr "Houve um erro na extração do arquivo!"
 #: pcbnew/exporters/export_gencad.cpp:258
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:102
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:105
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, c-format
 msgid "Failed to create file '%s'."
@@ -7258,7 +7258,7 @@ msgstr ""
 "Para mais informações, consulte a seção \"Footprint Library Table\" na "
 "documentação do CvPcb."
 
-#: cvpcb/cvpcb.cpp:187
+#: cvpcb/cvpcb.cpp:190
 msgid ""
 "An error occurred attempting to load the global footprint library table."
 msgstr ""
@@ -12688,7 +12688,7 @@ msgstr "Modelos de nome do campo:"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:391
+#: eeschema/eeschema.cpp:397
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -12697,7 +12697,7 @@ msgstr ""
 "Por favor edite esta tabela global de bibliotecas de símbolo no menu "
 "Preferências."
 
-#: eeschema/eeschema.cpp:451
+#: eeschema/eeschema.cpp:457
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -13193,7 +13193,7 @@ msgid "Abort"
 msgstr "Aborte"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:864
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13253,7 +13253,7 @@ msgstr ""
 "Houve um erro ao salvar o arquivo '%s' do esquema.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Houve uma falha ao criar o arquivo temporário '%s'."
@@ -13267,13 +13267,13 @@ msgstr ""
 "Houve um erro ao salvar o arquivo '%s' do esquema.\n"
 "Houve uma falha ao renomear o arquivo temporário '%s'."
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Houve uma falha ao renomear o arquivo temporário '%s'."
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1143
+#: pcbnew/files.cpp:1155
 #, c-format
 msgid "File '%s' saved."
 msgstr "O arquivo '%s' foi salvo."
@@ -13885,7 +13885,7 @@ msgstr "Membros %s do Alias do Barramento"
 msgid "KiCad Schematic Editor"
 msgstr "Editor de esquema do KiCad"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1732
 msgid "Schematic Hierarchy"
 msgstr "Hierarquia do esquema"
 
@@ -13918,43 +13918,43 @@ msgstr ""
 msgid "Schematic"
 msgstr "Esquema"
 
-#: eeschema/sch_edit_frame.cpp:1122
+#: eeschema/sch_edit_frame.cpp:1126
 msgid "New Schematic"
 msgstr "Novo Esquema"
 
-#: eeschema/sch_edit_frame.cpp:1134
+#: eeschema/sch_edit_frame.cpp:1138
 #, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "O arquivo '%s' do esquema já existe."
 
-#: eeschema/sch_edit_frame.cpp:1155
+#: eeschema/sch_edit_frame.cpp:1163
 msgid "Open Schematic"
 msgstr "Abrir Esquema"
 
-#: eeschema/sch_edit_frame.cpp:1224
+#: eeschema/sch_edit_frame.cpp:1232
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "A atribuição dos footprints requer um esquema totalmente anotado."
 
-#: eeschema/sch_edit_frame.cpp:1249
+#: eeschema/sch_edit_frame.cpp:1257
 msgid "Could not open CvPcb"
 msgstr "Não foi possível abrir o CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1440 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
 #: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr "[Somente leitura]"
 
-#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr "[Não Salvo]"
 
-#: eeschema/sch_edit_frame.cpp:1439
+#: eeschema/sch_edit_frame.cpp:1447
 msgid "[no schematic loaded]"
 msgstr "[nenhum esquema carregado]"
 
-#: eeschema/sch_edit_frame.cpp:1747
+#: eeschema/sch_edit_frame.cpp:1755
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Rede destacada: %s"
@@ -14130,7 +14130,7 @@ msgstr "Traçado para '%s'.\n"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129
 msgid "Done."
 msgstr "Feito."
 
@@ -14552,7 +14552,7 @@ msgid "Library file '%s' not found."
 msgstr "O arquivo de biblioteca '%s' não foi encontrado."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:516
-#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1886
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1898
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "a biblioteca %s não possui um símbolo chamado %s"
@@ -14562,7 +14562,7 @@ msgid "Invalid symbol name"
 msgstr "O nome do símbolo é inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:208
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2644
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2653
 #, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "O símbolo %s contém o caractere '%c' inválido"
@@ -14614,58 +14614,64 @@ msgid "Invalid pin names definition"
 msgstr "A definição dos nomes do pin é inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:781
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1945
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1954
 msgid "Invalid property name"
 msgstr "O nome da propriedade é inválido"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:789
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1962
 msgid "Empty property name"
 msgstr "O nome da propriedade está vazio"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:810
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
+#, fuzzy, c-format
+msgid "Duplicate field '%s'"
+msgstr "Itens duplicados %s%s\n"
+
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
 msgid "Invalid property value"
 msgstr "O valor da propriedade é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1397
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1406
 msgid "Invalid pin name"
 msgstr "O nome do pino é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1435
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1444
 msgid "Invalid pin number"
 msgstr "O número do pino é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1472
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1481
 msgid "Invalid alternate pin name"
 msgstr "O nome do pino alternativo é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1647
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1656
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1718
 msgid "Invalid text string"
 msgstr "A cadeia do texto é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1802
 msgid "Invalid page type"
 msgstr "O tipo da página é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1920
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1929
 msgid "Invalid title block comment number"
 msgstr "O número do comentário do bloco do título é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2051
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2060
 msgid "Invalid sheet pin name"
 msgstr "O nome do pino da folha é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2059
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2068
 msgid "Empty sheet pin name"
 msgstr "O nome do pino da folha está vazio"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2609
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2618
 msgid "Invalid symbol library name"
 msgstr "O nome do símbolo da biblioteca é inválido"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2650
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2659
 msgid "Invalid symbol library ID"
 msgstr "A ID do símbolo da biblioteca é inválido"
 
@@ -16862,7 +16868,7 @@ msgstr "Apagar símbolo"
 msgid "Keep Symbol"
 msgstr "Mantenha o símbolo"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -24971,7 +24977,7 @@ msgstr ""
 "Houve um erro ao importar as configurações da placa:\n"
 "O ficheiro do projeto associado %s não pôde ser carregado"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:668
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "A carregar PCI"
@@ -33649,7 +33655,7 @@ msgid "Created file '%s'"
 msgstr "Arquivo '%s' criado"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:346
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:113
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #, c-format
 msgid "Created file '%s'."
 msgstr "Arquivo '%s' criado."
@@ -33747,28 +33753,28 @@ msgstr "Salvar Ficheiro de Placa Como"
 msgid "Printed circuit board"
 msgstr "Imprimir Placa"
 
-#: pcbnew/files.cpp:344
+#: pcbnew/files.cpp:352
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Arquivo de recuperação '%s' não foi encontrado."
 
-#: pcbnew/files.cpp:349
+#: pcbnew/files.cpp:357
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "OK para carregar o arquivo de recuperação '%s'?"
 
-#: pcbnew/files.cpp:388
+#: pcbnew/files.cpp:400
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "A placa atual será fechada. deseja salvar as alterações em '%s' antes de "
 "continuar?"
 
-#: pcbnew/files.cpp:402
+#: pcbnew/files.cpp:414
 msgid "Current Board will be closed. Continue?"
 msgstr "A placa atual será fechada. Prosseguir?"
 
-#: pcbnew/files.cpp:582
+#: pcbnew/files.cpp:594
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33782,58 +33788,58 @@ msgstr ""
 "do KiCad, que usavam as espessuras da linha no limite da borda na camada de "
 "corte."
 
-#: pcbnew/files.cpp:628
+#: pcbnew/files.cpp:640
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "A PCI '%s' já está aberta pelo '%s' em '%s'."
 
-#: pcbnew/files.cpp:639
+#: pcbnew/files.cpp:651
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "A PCI atual foi modificada.  Salvar as alterações?"
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:670
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "A PCI '%s' não existe. Deseja criá-lo?"
 
-#: pcbnew/files.cpp:667
+#: pcbnew/files.cpp:679
 msgid "Creating PCB"
 msgstr "Criando a PCI"
 
-#: pcbnew/files.cpp:772 pcbnew/files.cpp:782
+#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Houve um erro ao carregar a PCI '%s'."
 
-#: pcbnew/files.cpp:791
+#: pcbnew/files.cpp:803
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Memória esgotada ao carregar a PCI '%s'"
 
-#: pcbnew/files.cpp:904
+#: pcbnew/files.cpp:916
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "Houve um erro ao salvar o footprint %s na biblioteca específica do projeto."
 
-#: pcbnew/files.cpp:935
+#: pcbnew/files.cpp:947
 msgid "Error saving project specific footprint library table."
 msgstr ""
 "Houve um erro ao salvar o footprint da tabela na biblioteca de footprint do "
 "projeto."
 
-#: pcbnew/files.cpp:1027 pcbnew/files.cpp:1169
+#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Permissões insuficientes para gravar no arquivo '%s'."
 
-#: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
+#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Houve um erro ao salvar o arquivo com as regras personalizadas '%s'."
 
-#: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
+#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33842,7 +33848,7 @@ msgstr ""
 "Houve um erro ao salvar o arquivo de placa '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1105
+#: pcbnew/files.cpp:1117
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33851,7 +33857,7 @@ msgstr ""
 "Houve um erro ao salvar o arquivo de placa '%s'.\n"
 "Houve uma falha ao renomear o arquivo temporário '%s'."
 
-#: pcbnew/files.cpp:1218
+#: pcbnew/files.cpp:1230
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -35636,7 +35642,7 @@ msgstr "Camada baixo"
 msgid "Via Type"
 msgstr "Tipo via"
 
-#: pcbnew/pcbnew.cpp:409
+#: pcbnew/pcbnew.cpp:423
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -42435,10 +42441,6 @@ msgstr "Placa de circuito impresso KiCad"
 #, fuzzy
 #~ msgid "Alias:"
 #~ msgstr "Alias: "
-
-#, c-format
-#~ msgid "Duplicate items %s%s\n"
-#~ msgstr "Itens duplicados %s%s\n"
 
 #, fuzzy
 #~ msgid "Spice type:"

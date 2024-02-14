@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 5.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:58-0800\n"
+"POT-Creation-Date: 2024-02-14 10:31-0800\n"
 "PO-Revision-Date: 2023-06-21 11:26+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/kicad/"
@@ -4240,7 +4240,7 @@ msgid "Colors"
 msgstr "Farger"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1450
 #: kicad/tools/kicad_manager_actions.cpp:80
 #, fuzzy
 msgid "Schematic Editor"
@@ -5160,9 +5160,9 @@ msgstr ""
 "Problem når du kjører PDF-visningsprogrammet\n"
 "Kommandoen er \"%s\""
 
-#: common/gestfich.cpp:283 eeschema/eeschema.cpp:544 eeschema/eeschema.cpp:579
+#: common/gestfich.cpp:283 eeschema/eeschema.cpp:550 eeschema/eeschema.cpp:585
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:288
-#: pcbnew/pcbnew.cpp:505
+#: pcbnew/pcbnew.cpp:519
 #, fuzzy, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Kan ikke kopiere filen \"%s\"."
@@ -5970,7 +5970,7 @@ msgstr "Feil ved utpakking av fil!"
 #: pcbnew/exporters/export_gencad.cpp:258
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:102
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:105
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, fuzzy, c-format
 msgid "Failed to create file '%s'."
@@ -7464,7 +7464,7 @@ msgstr ""
 "Se delen \"Footprint Library Table\" i CvPcb-dokumentasjonen for mer "
 "informasjon."
 
-#: cvpcb/cvpcb.cpp:187
+#: cvpcb/cvpcb.cpp:190
 #, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
@@ -12942,7 +12942,7 @@ msgstr "Feltnavn maler:"
 msgid "URL"
 msgstr "Nettadresse"
 
-#: eeschema/eeschema.cpp:391
+#: eeschema/eeschema.cpp:397
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -12952,7 +12952,7 @@ msgstr ""
 "Vennligst rediger denne globale symbolbibliotekstabellen i Innstillinger-"
 "menyen."
 
-#: eeschema/eeschema.cpp:451
+#: eeschema/eeschema.cpp:457
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -13451,7 +13451,7 @@ msgid "Abort"
 msgstr "Avbryt"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:864
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
 #, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -13514,7 +13514,7 @@ msgstr ""
 "Feil ved lagring av skjematisk fil \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Kunne ikke opprette midlertidig fil \"%s\""
@@ -13528,13 +13528,13 @@ msgstr ""
 "Feil ved lagring av skjematisk fil \"%s\".\n"
 "Kunne ikke gi nytt navn til midlertidig fil %s"
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
 #, fuzzy, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Kunne ikke opprette midlertidig fil \"%s\""
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1143
+#: pcbnew/files.cpp:1155
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "Fil %s lagret"
@@ -14154,7 +14154,7 @@ msgstr "Bussalias %s Medlemmer"
 msgid "KiCad Schematic Editor"
 msgstr "Bytt til skjematisk redaktør"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1732
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Skjematisk paritet (%d)"
@@ -14189,45 +14189,45 @@ msgstr ""
 msgid "Schematic"
 msgstr "Skjematisk"
 
-#: eeschema/sch_edit_frame.cpp:1122
+#: eeschema/sch_edit_frame.cpp:1126
 msgid "New Schematic"
 msgstr "Ny skjematisk"
 
-#: eeschema/sch_edit_frame.cpp:1134
+#: eeschema/sch_edit_frame.cpp:1138
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Skjematisk fil \"%s\" eksisterer allerede."
 
-#: eeschema/sch_edit_frame.cpp:1155
+#: eeschema/sch_edit_frame.cpp:1163
 msgid "Open Schematic"
 msgstr "Åpne skjematisk"
 
-#: eeschema/sch_edit_frame.cpp:1224
+#: eeschema/sch_edit_frame.cpp:1232
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Eksportering av nettlisten krever et fullstendig kommentert skjema."
 
-#: eeschema/sch_edit_frame.cpp:1249
+#: eeschema/sch_edit_frame.cpp:1257
 msgid "Could not open CvPcb"
 msgstr "Kunne ikke åpne CvPcb"
 
-#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1440 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
 #: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr "[Skrivebeskyttet]"
 
-#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr "[Ikke lagret]"
 
-#: eeschema/sch_edit_frame.cpp:1439
+#: eeschema/sch_edit_frame.cpp:1447
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Skjematisk lagret"
 
-#: eeschema/sch_edit_frame.cpp:1747
+#: eeschema/sch_edit_frame.cpp:1755
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Fremhevet nett: %s"
@@ -14409,7 +14409,7 @@ msgstr "Kunne ikke laste inn \"%s\""
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129
 msgid "Done."
 msgstr "Ferdig."
 
@@ -14798,7 +14798,7 @@ msgid "Library file '%s' not found."
 msgstr "Biblioteksfil \"%s\" ble ikke funnet."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:516
-#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1886
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1898
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "bibliotek %s inneholder ikke et symbol som heter %s"
@@ -14809,7 +14809,7 @@ msgid "Invalid symbol name"
 msgstr "Ugyldig signalnavn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:208
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2644
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2653
 #, fuzzy, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "Symbolnavn \"%s\" ble ikke funnet i biblioteket \"%s\""
@@ -14877,50 +14877,56 @@ msgid "Invalid pin names definition"
 msgstr "Styrets perimeterdefinisjon"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:781
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1945
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1954
 #, fuzzy
 msgid "Invalid property name"
 msgstr "Ugyldig signalnavn"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:789
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1962
 #, fuzzy
 msgid "Empty property name"
 msgstr "Skriv inn fotavtrykk navn:"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:810
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
+#, fuzzy, c-format
+msgid "Duplicate field '%s'"
+msgstr "Flere gjenstander %s %s\n"
+
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
 #, fuzzy
 msgid "Invalid property value"
 msgstr "Ugyldig krydderverdistreng"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1397
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1406
 #, fuzzy
 msgid "Invalid pin name"
 msgstr "Ugyldig signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1435
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1444
 #, fuzzy
 msgid "Invalid pin number"
 msgstr "Ugyldig signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1472
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1481
 #, fuzzy
 msgid "Invalid alternate pin name"
 msgstr "Alternativt pinnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1647
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1656
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1718
 #, fuzzy
 msgid "Invalid text string"
 msgstr "Ugyldig krydderverdistreng"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1802
 #, fuzzy
 msgid "Invalid page type"
 msgstr "Ugyldig signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1920
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1929
 #, fuzzy
 msgid "Invalid title block comment number"
 msgstr ""
@@ -14929,22 +14935,22 @@ msgstr ""
 "linje: %d\n"
 "forskyvning: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2051
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2060
 #, fuzzy
 msgid "Invalid sheet pin name"
 msgstr "Ugyldig signalnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2059
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2068
 #, fuzzy
 msgid "Empty sheet pin name"
 msgstr "Arkets filnavn"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2609
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2618
 #, fuzzy
 msgid "Invalid symbol library name"
 msgstr "Ugyldig symbolbibliotekidentifikator"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2650
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2659
 #, fuzzy
 msgid "Invalid symbol library ID"
 msgstr "Ugyldig symbolbibliotekidentifikator"
@@ -17233,7 +17239,7 @@ msgstr "Slett symbol"
 msgid "Keep Symbol"
 msgstr "Behold symbol"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, fuzzy, c-format
 msgid "Revert '%s' to last version saved?"
@@ -25666,7 +25672,7 @@ msgstr ""
 "Feil ved import av innstillinger fra tavle:\n"
 "Tilknyttet prosjektfil %s kunne ikke lastes inn"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:668
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
 #: pcbnew/tools/pcb_control.cpp:1305
 #, fuzzy
 msgid "Loading PCB"
@@ -34146,7 +34152,7 @@ msgid "Created file '%s'"
 msgstr "Opprett fil %s\n"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:346
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:113
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #, fuzzy, c-format
 msgid "Created file '%s'."
 msgstr "Opprett fil %s\n"
@@ -34240,26 +34246,26 @@ msgstr "Lagre tavelfil som"
 msgid "Printed circuit board"
 msgstr "Trykt kretskort"
 
-#: pcbnew/files.cpp:344
+#: pcbnew/files.cpp:352
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Gjenopprettingsfil \"%s\" ble ikke funnet."
 
-#: pcbnew/files.cpp:349
+#: pcbnew/files.cpp:357
 #, fuzzy, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "OK for å laste gjenopprettingsfil \"%s\""
 
-#: pcbnew/files.cpp:388
+#: pcbnew/files.cpp:400
 #, fuzzy, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr "Nåværende styre lukkes, lagre endringene i \"%s\" før du fortsetter?"
 
-#: pcbnew/files.cpp:402
+#: pcbnew/files.cpp:414
 msgid "Current Board will be closed. Continue?"
 msgstr "Nåværende styre vil være stengt. Fortsette?"
 
-#: pcbnew/files.cpp:582
+#: pcbnew/files.cpp:594
 #, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
@@ -34272,47 +34278,47 @@ msgstr ""
 "Dette kan resultere i forskjellige fyllinger fra tidligere Kicad-versjoner "
 "som brukte linjetykkelsene til brettgrensen på Edge Cuts-laget."
 
-#: pcbnew/files.cpp:628
+#: pcbnew/files.cpp:640
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "PCB-filen \"%s\" er allerede åpen."
 
-#: pcbnew/files.cpp:639
+#: pcbnew/files.cpp:651
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Gjeldende PCB er endret. Lagre endringer?"
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:670
 #, fuzzy, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB \"%s\" eksisterer ikke. Ønsker du å lage den?"
 
-#: pcbnew/files.cpp:667
+#: pcbnew/files.cpp:679
 #, fuzzy
 msgid "Creating PCB"
 msgstr "Laster "
 
-#: pcbnew/files.cpp:772 pcbnew/files.cpp:782
+#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
 #, fuzzy, c-format
 msgid "Error loading PCB '%s'."
 msgstr ""
 "Feil ved lasting av skjema.\n"
 "%s"
 
-#: pcbnew/files.cpp:791
+#: pcbnew/files.cpp:803
 #, fuzzy, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr ""
 "Feil ved lasting av tavlefil:\n"
 "%s"
 
-#: pcbnew/files.cpp:904
+#: pcbnew/files.cpp:916
 #, fuzzy, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "Det oppsto en feil under lagring av fotavtrykket «%s» i prosjektspesifikt "
 "fotavtrykksbibliotek: %s"
 
-#: pcbnew/files.cpp:935
+#: pcbnew/files.cpp:947
 #, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr ""
@@ -34321,7 +34327,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:1027 pcbnew/files.cpp:1169
+#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, fuzzy, c-format
 msgid "Insufficient permissions to write file '%s'."
@@ -34329,12 +34335,12 @@ msgstr ""
 "Utilstrekkelige tillatelser kreves for å lagre filen\n"
 "%s"
 
-#: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
+#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Klarte ikke å lagre egendefinert regelfil «%s»."
 
-#: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
+#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34343,7 +34349,7 @@ msgstr ""
 "Feil ved lagring av tavlefilen \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:1105
+#: pcbnew/files.cpp:1117
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34352,7 +34358,7 @@ msgstr ""
 "Feil ved lagring av tavlefilen \"%s\".\n"
 "Kunne ikke gi nytt navn til den midlertidige filen \"%s\""
 
-#: pcbnew/files.cpp:1218
+#: pcbnew/files.cpp:1230
 #, fuzzy, c-format
 msgid ""
 "Board copied to:\n"
@@ -36172,7 +36178,7 @@ msgstr "Lagbunn"
 msgid "Via Type"
 msgstr "Via-type"
 
-#: pcbnew/pcbnew.cpp:409
+#: pcbnew/pcbnew.cpp:423
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -43103,10 +43109,6 @@ msgstr "KiCad kretskortfiler"
 #, fuzzy
 #~ msgid "Alias:"
 #~ msgstr "Kallenavn: "
-
-#, fuzzy, c-format
-#~ msgid "Duplicate items %s%s\n"
-#~ msgstr "Flere gjenstander %s %s\n"
 
 #~ msgid "Spice Model..."
 #~ msgstr "Spice Model ..."

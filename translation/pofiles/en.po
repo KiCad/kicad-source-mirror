@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:58-0800\n"
+"POT-Creation-Date: 2024-02-14 10:31-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -9629,6 +9629,10 @@ msgstr "Invalid property name"
 
 msgid "Empty property name"
 msgstr "Empty property name"
+
+#, c-format
+msgid "Duplicate field '%s'"
+msgstr "Duplicate field '%s'"
 
 msgid "Invalid property value"
 msgstr "Invalid property value"

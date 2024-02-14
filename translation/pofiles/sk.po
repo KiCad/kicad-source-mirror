@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:58-0800\n"
+"POT-Creation-Date: 2024-02-14 10:31-0800\n"
 "PO-Revision-Date: 2023-09-27 16:00+0000\n"
 "Last-Translator: Marcel Hecko <maco@blava.net>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v7/sk/>\n"
@@ -4193,7 +4193,7 @@ msgid "Colors"
 msgstr "Farby"
 
 #: common/eda_base_frame.cpp:1084 common/hotkey_store.cpp:73
-#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1442
+#: eeschema/menubar.cpp:143 eeschema/sch_edit_frame.cpp:1450
 #: kicad/tools/kicad_manager_actions.cpp:80
 #, fuzzy
 msgid "Schematic Editor"
@@ -5112,9 +5112,9 @@ msgstr ""
 "Problém so spustením zobrazovača PDF\n"
 "Príkaz je \"%s\""
 
-#: common/gestfich.cpp:283 eeschema/eeschema.cpp:544 eeschema/eeschema.cpp:579
+#: common/gestfich.cpp:283 eeschema/eeschema.cpp:550 eeschema/eeschema.cpp:585
 #: gerbview/gerbview.cpp:245 kicad/project_template.cpp:288
-#: pcbnew/pcbnew.cpp:505
+#: pcbnew/pcbnew.cpp:519
 #, fuzzy, c-format
 msgid "Cannot copy file '%s'."
 msgstr "Nemožno kopírovať súbor \"%s\"."
@@ -5890,7 +5890,7 @@ msgstr "Chyba rozbalovania súboru!\n"
 #: pcbnew/exporters/export_gencad.cpp:258
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:336
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:102
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:105
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, fuzzy, c-format
 msgid "Failed to create file '%s'."
@@ -7375,7 +7375,7 @@ msgstr ""
 "Ďalšie informácie nájdete v časti „Tabuľka knižnice stopy“ v dokumentácii "
 "CvPcb."
 
-#: cvpcb/cvpcb.cpp:187
+#: cvpcb/cvpcb.cpp:190
 #, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table."
@@ -12838,7 +12838,7 @@ msgstr "Šablóny názvov polí:"
 msgid "URL"
 msgstr "URL"
 
-#: eeschema/eeschema.cpp:391
+#: eeschema/eeschema.cpp:397
 msgid ""
 "An error occurred attempting to load the global symbol library table.\n"
 "Please edit this global symbol library table in Preferences menu."
@@ -12847,7 +12847,7 @@ msgstr ""
 "chyba.\n"
 "Upravte túto tabuľku globálnej knižnice symbolov v ponuke Predvoľby."
 
-#: eeschema/eeschema.cpp:451
+#: eeschema/eeschema.cpp:457
 #, c-format
 msgid ""
 "Cannot copy file '%s' as it will be overwritten by the new root sheet file."
@@ -13343,7 +13343,7 @@ msgid "Abort"
 msgstr "Ukončovanie\n"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:864
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
 #, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -13407,7 +13407,7 @@ msgstr ""
 "Chyba pri ukladaní schematického súboru „%s“.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1089
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Nepodarilo sa vytvoriť dočasný súbor „%s“"
@@ -13421,13 +13421,13 @@ msgstr ""
 "Chyba pri ukladaní schematického súboru „%s“.\n"
 "Nepodarilo sa premenovať dočasný súbor %s"
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1110
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
 #, fuzzy, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Nepodarilo sa vytvoriť dočasný súbor „%s“"
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1143
+#: pcbnew/files.cpp:1155
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "Súbor „%s“ bol uložený."
@@ -14045,7 +14045,7 @@ msgstr "Bus Alias %s členov"
 msgid "KiCad Schematic Editor"
 msgstr "Voľby editora schém"
 
-#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1724
+#: eeschema/sch_edit_frame.cpp:184 eeschema/sch_edit_frame.cpp:1732
 #, fuzzy
 msgid "Schematic Hierarchy"
 msgstr "Schematická parita"
@@ -14080,45 +14080,45 @@ msgstr ""
 msgid "Schematic"
 msgstr "Schéma"
 
-#: eeschema/sch_edit_frame.cpp:1122
+#: eeschema/sch_edit_frame.cpp:1126
 msgid "New Schematic"
 msgstr "Nová schéma"
 
-#: eeschema/sch_edit_frame.cpp:1134
+#: eeschema/sch_edit_frame.cpp:1138
 #, fuzzy, c-format
 msgid "Schematic file '%s' already exists."
 msgstr "Schematický súbor „%s“ už existuje."
 
-#: eeschema/sch_edit_frame.cpp:1155
+#: eeschema/sch_edit_frame.cpp:1163
 msgid "Open Schematic"
 msgstr "Otvoriť schému"
 
-#: eeschema/sch_edit_frame.cpp:1224
+#: eeschema/sch_edit_frame.cpp:1232
 #, fuzzy
 msgid "Assigning footprints requires a fully annotated schematic."
 msgstr "Export netlistu si vyžaduje úplne anotovanú schému."
 
-#: eeschema/sch_edit_frame.cpp:1249
+#: eeschema/sch_edit_frame.cpp:1257
 msgid "Could not open CvPcb"
 msgstr "CvPcb sa nepodarilo otvoriť"
 
-#: eeschema/sch_edit_frame.cpp:1432 eeschema/sim/sim_plot_frame.cpp:351
+#: eeschema/sch_edit_frame.cpp:1440 eeschema/sim/sim_plot_frame.cpp:351
 #: kicad/kicad_manager_frame.cpp:784 pcbnew/footprint_edit_frame.cpp:935
 #: pcbnew/pcb_edit_frame.cpp:1613
 msgid "[Read Only]"
 msgstr "[Len na čítanie]"
 
-#: eeschema/sch_edit_frame.cpp:1435 eeschema/sim/sim_plot_frame.cpp:354
+#: eeschema/sch_edit_frame.cpp:1443 eeschema/sim/sim_plot_frame.cpp:354
 #: pcbnew/footprint_edit_frame.cpp:944 pcbnew/pcb_edit_frame.cpp:1616
 msgid "[Unsaved]"
 msgstr "[Neuložené]"
 
-#: eeschema/sch_edit_frame.cpp:1439
+#: eeschema/sch_edit_frame.cpp:1447
 #, fuzzy
 msgid "[no schematic loaded]"
 msgstr "Schéma bola uložená"
 
-#: eeschema/sch_edit_frame.cpp:1747
+#: eeschema/sch_edit_frame.cpp:1755
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Zvýraznená sieť: %s"
@@ -14299,7 +14299,7 @@ msgstr "Nepodarilo sa načítať „%s“"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:162
 #: pcbnew/dialogs/dialog_plot.cpp:1144
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129
 msgid "Done."
 msgstr ""
 
@@ -14692,7 +14692,7 @@ msgid "Library file '%s' not found."
 msgstr "Súbor knižnice „%s“ sa nenašiel."
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_lib_plugin_cache.cpp:516
-#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1886
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:1898
 #, c-format
 msgid "library %s does not contain a symbol named %s"
 msgstr "knižnica %s neobsahuje symbol s názvom %s"
@@ -14703,7 +14703,7 @@ msgid "Invalid symbol name"
 msgstr "Neplatné meno signálu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:208
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2644
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2653
 #, fuzzy, c-format
 msgid "Symbol %s contains invalid character '%c'"
 msgstr "Meno súčiastky „%s” nenájdené v knižnici „%s”."
@@ -14771,47 +14771,53 @@ msgid "Invalid pin names definition"
 msgstr "Definícia obvodu dosky"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:781
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1945
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1954
 #, fuzzy
 msgid "Invalid property name"
 msgstr "Neplatné meno signálu"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:789
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1953
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1962
 msgid "Empty property name"
 msgstr "Prázdne meno vlastnosti"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:810
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1961
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
+#: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
+#, fuzzy, c-format
+msgid "Duplicate field '%s'"
+msgstr "Viacnásobná položka %s%s\n"
+
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
 msgid "Invalid property value"
 msgstr "Neplatný reťazec hodnoty spice"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1397
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1406
 #, fuzzy
 msgid "Invalid pin name"
 msgstr "Neplatné meno signálu"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1435
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1444
 #, fuzzy
 msgid "Invalid pin number"
 msgstr "Neplatné meno signálu"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1472
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1481
 #, fuzzy
 msgid "Invalid alternate pin name"
 msgstr "Alternatívny názov PIN"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1647
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1709
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1656
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1718
 msgid "Invalid text string"
 msgstr "Neplatný reťazec hodnoty spice"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1793
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1802
 #, fuzzy
 msgid "Invalid page type"
 msgstr "Min priemer prechodky"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1920
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1929
 #, fuzzy
 msgid "Invalid title block comment number"
 msgstr ""
@@ -14820,22 +14826,22 @@ msgstr ""
 "riadok: %d\n"
 "offset: %d"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2051
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2060
 #, fuzzy
 msgid "Invalid sheet pin name"
 msgstr "Neplatné meno signálu"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2059
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2068
 #, fuzzy
 msgid "Empty sheet pin name"
 msgstr "Importovať vývody listu"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2609
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2618
 #, fuzzy
 msgid "Invalid symbol library name"
 msgstr "Neplatný identifikátor knižnice symbolov"
 
-#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2650
+#: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:2659
 #, fuzzy
 msgid "Invalid symbol library ID"
 msgstr "Neplatný identifikátor knižnice symbolov"
@@ -17112,7 +17118,7 @@ msgstr "Odstrániť symbol"
 msgid "Keep Symbol"
 msgstr "Zachovať symbol"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:371
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, fuzzy, c-format
 msgid "Revert '%s' to last version saved?"
@@ -25514,7 +25520,7 @@ msgstr ""
 "Chyba pri importovaní nastavení z karty:\n"
 "Priradený súbor projektu %s sa nepodarilo načítať"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:668
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "Načítanie DPS"
@@ -33994,7 +34000,7 @@ msgid "Created file '%s'"
 msgstr "Vytvoriť súbor %s\n"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:346
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:113
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #, fuzzy, c-format
 msgid "Created file '%s'."
 msgstr "Vytvoriť súbor %s\n"
@@ -34088,27 +34094,27 @@ msgstr "Uložiť súbor dosky ako"
 msgid "Printed circuit board"
 msgstr "Doska plošných spojov"
 
-#: pcbnew/files.cpp:344
+#: pcbnew/files.cpp:352
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Obnovovací súbor „%s“ sa nenašiel."
 
-#: pcbnew/files.cpp:349
+#: pcbnew/files.cpp:357
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Načítať súbor na obnovenie „%s“?"
 
-#: pcbnew/files.cpp:388
+#: pcbnew/files.cpp:400
 #, fuzzy, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "Aktuálna tabuľa bude zatvorená. Chcete pokračovať, uložiť zmeny na „%s“?"
 
-#: pcbnew/files.cpp:402
+#: pcbnew/files.cpp:414
 msgid "Current Board will be closed. Continue?"
 msgstr "Súčasná rada bude uzavretá. Ďalej?"
 
-#: pcbnew/files.cpp:582
+#: pcbnew/files.cpp:594
 #, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
@@ -34121,40 +34127,40 @@ msgstr ""
 "To môže mať za následok odlišné výplne od predchádzajúcich verzií Kicad, "
 "ktoré využívali hrúbky čiary hranice dosky vo vrstve Edge Cuts."
 
-#: pcbnew/files.cpp:628
+#: pcbnew/files.cpp:640
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "Súbor PCB „%s“ je už otvorený."
 
-#: pcbnew/files.cpp:639
+#: pcbnew/files.cpp:651
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Aktuálna PCB bola upravená. Uložiť zmeny?"
 
-#: pcbnew/files.cpp:658
+#: pcbnew/files.cpp:670
 #, fuzzy, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB \"%s\" neexistuje. Prajete si ho vytvoriť?"
 
-#: pcbnew/files.cpp:667
+#: pcbnew/files.cpp:679
 #, fuzzy
 msgid "Creating PCB"
 msgstr "Načítanie DPS"
 
-#: pcbnew/files.cpp:772 pcbnew/files.cpp:782
+#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
 #, fuzzy, c-format
 msgid "Error loading PCB '%s'."
 msgstr ""
 "Pri načítaní schémy sa vyskytla chyba.\n"
 "%s"
 
-#: pcbnew/files.cpp:791
+#: pcbnew/files.cpp:803
 #, fuzzy, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr ""
 "Chyba pri načítaní súboru dosky:\n"
 "%s"
 
-#: pcbnew/files.cpp:904
+#: pcbnew/files.cpp:916
 #, fuzzy, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
@@ -34162,7 +34168,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:935
+#: pcbnew/files.cpp:947
 #, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr ""
@@ -34170,7 +34176,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:1027 pcbnew/files.cpp:1169
+#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, fuzzy, c-format
 msgid "Insufficient permissions to write file '%s'."
@@ -34178,14 +34184,14 @@ msgstr ""
 "Na uloženie súboru nie sú potrebné dostatočné povolenia\n"
 "%s"
 
-#: pcbnew/files.cpp:1059 pcbnew/files.cpp:1214
+#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
 #, fuzzy, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr ""
 "Chyba pri ukladaní súboru nástenky „%s“.\n"
 "%s"
 
-#: pcbnew/files.cpp:1085 pcbnew/files.cpp:1190
+#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34194,7 +34200,7 @@ msgstr ""
 "Chyba pri ukladaní súboru nástenky „%s“.\n"
 "%s"
 
-#: pcbnew/files.cpp:1105
+#: pcbnew/files.cpp:1117
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34203,7 +34209,7 @@ msgstr ""
 "Chyba pri ukladaní súboru nástenky „%s“.\n"
 "Nepodarilo sa premenovať dočasný súbor „%s“"
 
-#: pcbnew/files.cpp:1218
+#: pcbnew/files.cpp:1230
 #, fuzzy, c-format
 msgid ""
 "Board copied to:\n"
@@ -36019,7 +36025,7 @@ msgstr "Dno vrstvy"
 msgid "Via Type"
 msgstr "Cez Type"
 
-#: pcbnew/pcbnew.cpp:409
+#: pcbnew/pcbnew.cpp:423
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
@@ -42934,10 +42940,6 @@ msgstr "&Navrhnúť dosku plošného spoja"
 #, fuzzy
 #~ msgid "Alias:"
 #~ msgstr "Alias: "
-
-#, fuzzy, c-format
-#~ msgid "Duplicate items %s%s\n"
-#~ msgstr "Viacnásobná položka %s%s\n"
 
 #~ msgid "Spice Model..."
 #~ msgstr "Model korenia ..."
