@@ -111,7 +111,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-13 00:46+0100\n"
+"POT-Creation-Date: 2024-02-14 10:30-0800\n"
 "PO-Revision-Date: 2024-02-14 14:05+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -442,7 +442,7 @@ msgstr "Permessi insufficienti per salvare il file '%s'."
 #: common/dialogs/panel_setup_severities.cpp:43
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1625
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2026
-#: eeschema/files-io.cpp:942 eeschema/files-io.cpp:1010
+#: eeschema/files-io.cpp:974 eeschema/files-io.cpp:1042
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:319
 #: kicad/tools/kicad_manager_control.cpp:240
 #: kicad/tools/kicad_manager_control.cpp:297
@@ -1909,7 +1909,7 @@ msgstr "Domanda"
 #: eeschema/dialogs/dialog_plot_schematic.cpp:475
 #: eeschema/dialogs/dialog_plot_schematic.cpp:497
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:148
-#: eeschema/files-io.cpp:437 eeschema/import_gfx/dialog_import_gfx_sch.cpp:264
+#: eeschema/files-io.cpp:439 eeschema/import_gfx/dialog_import_gfx_sch.cpp:264
 #: eeschema/sheet.cpp:707 eeschema/symbol_editor/symbol_editor.cpp:131
 #: eeschema/symbol_editor/symbol_editor.cpp:525
 #: eeschema/symbol_editor/symbol_editor.cpp:820
@@ -2280,7 +2280,9 @@ msgstr "Netclass:"
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
-msgstr "Nota: le assegnazioni complete di netclass possono essere modificate in Impostazione schema > Progetto."
+msgstr ""
+"Nota: le assegnazioni complete di netclass possono essere modificate in "
+"Impostazione schema > Progetto."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
@@ -2710,12 +2712,14 @@ msgstr "Nome progetto"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1059
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:35
 msgid "PCB"
 msgstr "C.S."
 
 #: common/dialogs/dialog_import_choose_project.cpp:35
 #: eeschema/sch_edit_frame.cpp:1248 eeschema/sch_plotter.cpp:1009
 #: eeschema/widgets/symbol_diff_widget.cpp:38
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:36
 msgid "Schematic"
 msgstr "Schema"
 
@@ -3011,7 +3015,7 @@ msgstr "Larghezza foglio personalizzato."
 msgid "Export to other sheets"
 msgstr "Esporta su altri fogli"
 
-#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:429
+#: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:430
 #: eeschema/erc_item.cpp:353
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:104
 #: gerbview/widgets/gerbview_layer_widget.cpp:136 pcbnew/pcb_marker.cpp:214
@@ -4436,7 +4440,7 @@ msgstr "Zoom"
 #: common/dialogs/panel_mouse_settings_base.cpp:152
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:182
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
-#: eeschema/lib_shape.cpp:592
+#: eeschema/lib_shape.cpp:593
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:44
 #: pcbnew/board_stackup_manager/stackup_predefined_prms.cpp:49
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:158
@@ -5566,7 +5570,7 @@ msgid "Shape"
 msgstr "Forma"
 
 #: common/eda_shape.cpp:736 common/eda_shape.cpp:743 common/eda_shape.cpp:2009
-#: pcbnew/dialogs/dialog_shape_properties.cpp:195 pcbnew/pcb_track.cpp:1079
+#: pcbnew/dialogs/dialog_shape_properties.cpp:197 pcbnew/pcb_track.cpp:1079
 msgid "Radius"
 msgstr "Raggio"
 
@@ -5659,7 +5663,7 @@ msgstr "Larghezza conduttore"
 msgid "Line Color"
 msgstr "Colore linea"
 
-#: common/eda_shape.cpp:2068 eeschema/lib_shape.cpp:586
+#: common/eda_shape.cpp:2068 eeschema/lib_shape.cpp:587
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
 msgid "Filled"
 msgstr "Pieno"
@@ -7257,7 +7261,7 @@ msgstr "Errore nell'estrazione del file!"
 #: pcbnew/exporters/export_gencad.cpp:89
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:118
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:340
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:102
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:105
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, c-format
 msgid "Failed to create file '%s'."
@@ -7278,19 +7282,19 @@ msgstr "Fallita archiviazione file \"%s\"."
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
 msgstr "Archivio zip \"%s\" creato (%s non compressi, %s compressi)."
 
-#: common/rc_item.cpp:410 eeschema/erc_item.cpp:333
+#: common/rc_item.cpp:411 eeschema/erc_item.cpp:333
 msgid "Excluded warning: "
 msgstr "Avviso esclusione: "
 
-#: common/rc_item.cpp:412 eeschema/erc_item.cpp:335
+#: common/rc_item.cpp:413 eeschema/erc_item.cpp:335
 msgid "Excluded error: "
 msgstr "Errore esclusione: "
 
-#: common/rc_item.cpp:416 eeschema/erc_item.cpp:339
+#: common/rc_item.cpp:417 eeschema/erc_item.cpp:339
 msgid "Warning: "
 msgstr "Attenzione: "
 
-#: common/rc_item.cpp:420 eeschema/erc_item.cpp:343
+#: common/rc_item.cpp:421 eeschema/erc_item.cpp:343
 msgid "Error: "
 msgstr "Errore: "
 
@@ -12596,7 +12600,7 @@ msgstr "Sorgente 1 e Sorgente 2 devono essere diverse."
 msgid "A frequency range must be specified."
 msgstr "Bisogna selezionare un campo di frequenza."
 
-#: eeschema/dialogs/dialog_sim_command.cpp:611
+#: eeschema/dialogs/dialog_sim_command.cpp:612
 msgid "New Simulation Tab"
 msgstr "Nuova scheda simulazione"
 
@@ -14650,7 +14654,7 @@ msgstr "Fallito il caricamento della libreria di simboli \"%s\"."
 msgid "Error Loading Library"
 msgstr "Errore nel caricamento libreria"
 
-#: eeschema/dialogs/panel_sym_lib_table.cpp:607 eeschema/files-io.cpp:694
+#: eeschema/dialogs/panel_sym_lib_table.cpp:607 eeschema/files-io.cpp:726
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:200
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:78
 #: pcbnew/files.cpp:150 pcbnew/footprint_libraries_utils.cpp:119
@@ -15347,7 +15351,7 @@ msgstr ""
 "\n"
 " ** messaggi ERC: %d  Errori %d  Avvisi %d\n"
 
-#: eeschema/fields_grid_table.cpp:226 eeschema/files-io.cpp:918
+#: eeschema/fields_grid_table.cpp:226 eeschema/files-io.cpp:950
 #: eeschema/tools/sch_editor_control.cpp:115
 msgid "Schematic Files"
 msgstr "File di schema"
@@ -15369,38 +15373,38 @@ msgstr "Verticale"
 msgid "Allow Autoplacement"
 msgstr "Permetti autopiazzamento"
 
-#: eeschema/files-io.cpp:108
+#: eeschema/files-io.cpp:110
 #, c-format
 msgid "Schematic '%s' is already open by '%s' at '%s'."
 msgstr "Lo schema '%s' è già aperto da '%s' su '%s'."
 
-#: eeschema/files-io.cpp:133
+#: eeschema/files-io.cpp:135
 #, c-format
 msgid "Schematic '%s' does not exist.  Do you wish to create it?"
 msgstr "Lo schema elettrico \"%s\" non esiste. Vuoi crearlo?"
 
-#: eeschema/files-io.cpp:154
+#: eeschema/files-io.cpp:156
 msgid "Creating Schematic"
 msgstr "Crea schema elettrico"
 
-#: eeschema/files-io.cpp:155
+#: eeschema/files-io.cpp:157
 msgid "Loading Schematic"
 msgstr "Caricamento schema"
 
-#: eeschema/files-io.cpp:215
+#: eeschema/files-io.cpp:217
 msgid "Schematic file changes are unsaved"
 msgstr "Cambiamenti schema elettrico non salvati"
 
-#: eeschema/files-io.cpp:230
+#: eeschema/files-io.cpp:232
 #, c-format
 msgid "Unsupported schematic file '%s'."
 msgstr "File schemi elettrici '%s' non supportato."
 
-#: eeschema/files-io.cpp:267
+#: eeschema/files-io.cpp:269
 msgid "Root"
 msgstr "Principale"
 
-#: eeschema/files-io.cpp:272
+#: eeschema/files-io.cpp:274
 msgid ""
 "The entire schematic could not be loaded.  Errors occurred attempting to "
 "load hierarchical sheets."
@@ -15408,24 +15412,24 @@ msgstr ""
 "Impossibile caricare lo schema elettrico completo. Si sono verificati degli "
 "errori nel tentativo di caricare la gerarchia dei fogli."
 
-#: eeschema/files-io.cpp:279 eeschema/files-io.cpp:287
-#: eeschema/files-io.cpp:1402 eeschema/sheet.cpp:225
+#: eeschema/files-io.cpp:281 eeschema/files-io.cpp:289
+#: eeschema/files-io.cpp:1434 eeschema/sheet.cpp:225
 #, c-format
 msgid "Error loading schematic '%s'."
 msgstr "Errore nel caricamento dello schema \"%s\"."
 
-#: eeschema/files-io.cpp:295
+#: eeschema/files-io.cpp:297
 #, c-format
 msgid "Memory exhausted loading schematic '%s'."
 msgstr "Memoria esaurita nel caricare il file dello schema \"%s\"."
 
-#: eeschema/files-io.cpp:314 eeschema/files-io.cpp:1405
-#: eeschema/files-io.cpp:1417 eeschema/sheet.cpp:228
+#: eeschema/files-io.cpp:316 eeschema/files-io.cpp:1437
+#: eeschema/files-io.cpp:1449 eeschema/sheet.cpp:228
 #, c-format
 msgid "Failed to load '%s'."
 msgstr "Fallito caricamento di \"%s\"."
 
-#: eeschema/files-io.cpp:327
+#: eeschema/files-io.cpp:329
 msgid ""
 "An error was found when loading the schematic that has been automatically "
 "fixed.  Please save the schematic to repair the broken file or it may not be "
@@ -15435,15 +15439,15 @@ msgstr ""
 "automaticamente. Salvare lo schema per riparare il file rovinato o potrebbe "
 "non essere usabile con altre versioni di KiCad."
 
-#: eeschema/files-io.cpp:391
+#: eeschema/files-io.cpp:393
 msgid "Illegal entry found in project file symbol library list."
 msgstr "Voce irregolare nell'elenco librerie di simboli del progetto."
 
-#: eeschema/files-io.cpp:392
+#: eeschema/files-io.cpp:394
 msgid "Project Load Warning"
 msgstr "Avviso caricamento progetto"
 
-#: eeschema/files-io.cpp:395
+#: eeschema/files-io.cpp:397
 msgid ""
 "Symbol libraries defined in the project file symbol library list are no "
 "longer supported and will be removed.\n"
@@ -15456,16 +15460,16 @@ msgstr ""
 "Ciò può portare, in determinate condizioni, a collegamenti interrotti a "
 "librerie di simboli."
 
-#: eeschema/files-io.cpp:399
+#: eeschema/files-io.cpp:401
 msgid "Do not show this dialog again."
 msgstr "Non mostrare più questa finestra."
 
-#: eeschema/files-io.cpp:428
+#: eeschema/files-io.cpp:430
 #, c-format
 msgid "The project symbol library cache file '%s' was not found."
 msgstr "File cache della libreria di simboli del progetto \"%s\" non trovato."
 
-#: eeschema/files-io.cpp:430
+#: eeschema/files-io.cpp:432
 msgid ""
 "This can result in a broken schematic under certain conditions.  If the "
 "schematic does not have any missing symbols upon opening, save it "
@@ -15480,15 +15484,15 @@ msgstr ""
 "il ripristino del file della libreria della cache dei simboli e il "
 "ricaricamento dello schema."
 
-#: eeschema/files-io.cpp:441
+#: eeschema/files-io.cpp:443
 msgid "Load Without Cache File"
 msgstr "Carica senza file cache"
 
-#: eeschema/files-io.cpp:442
+#: eeschema/files-io.cpp:444
 msgid "Abort"
 msgstr "Interrompi"
 
-#: eeschema/files-io.cpp:457 eeschema/files-io.cpp:477
+#: eeschema/files-io.cpp:459 eeschema/files-io.cpp:479
 #: pagelayout_editor/files.cpp:259 pcbnew/files.cpp:789
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -15497,15 +15501,20 @@ msgstr ""
 "Questo file è stato creato con una precedente versione di KiCad. Verrà "
 "convertito al nuovo formato al salvataggio."
 
-#: eeschema/files-io.cpp:580
+#: eeschema/files-io.cpp:582
 msgid "Schematic is read only."
 msgstr "Il file schema è in sola lettura."
 
-#: eeschema/files-io.cpp:608
+#: eeschema/files-io.cpp:610
 msgid "Insert Schematic"
 msgstr "Inserisci schema"
 
-#: eeschema/files-io.cpp:640
+#: eeschema/files-io.cpp:660
+#, fuzzy
+msgid "Import Schematic Sheet Content..."
+msgstr "Inserisci i contenuti del foglio schema..."
+
+#: eeschema/files-io.cpp:672
 msgid ""
 "This operation cannot be undone.\n"
 "\n"
@@ -15515,7 +15524,7 @@ msgstr ""
 "\n"
 "Salvare il documento corrente prima di procedere?"
 
-#: eeschema/files-io.cpp:655
+#: eeschema/files-io.cpp:687
 msgid ""
 "This operation replaces the contents of the current schematic, which will be "
 "permanently lost.\n"
@@ -15527,16 +15536,16 @@ msgstr ""
 "\n"
 "Continuare ugualmente?"
 
-#: eeschema/files-io.cpp:697
+#: eeschema/files-io.cpp:729
 msgid "Import Schematic"
 msgstr "Importa schema"
 
-#: eeschema/files-io.cpp:744
+#: eeschema/files-io.cpp:776
 #, c-format
 msgid "No loader can read the specified file: '%s'."
 msgstr "Nessun caricatore può leggere il file specificato: '%s'."
 
-#: eeschema/files-io.cpp:812
+#: eeschema/files-io.cpp:844
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -15545,12 +15554,12 @@ msgstr ""
 "Errore nel salvataggio del file schema \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:817 pcbnew/files.cpp:1014 pcbnew/files.cpp:1295
+#: eeschema/files-io.cpp:849 pcbnew/files.cpp:1014 pcbnew/files.cpp:1295
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Fallita creazione file temporaneo \"%s\"."
 
-#: eeschema/files-io.cpp:837
+#: eeschema/files-io.cpp:869
 #, c-format
 msgid ""
 "Error saving schematic file '%s'.\n"
@@ -15559,22 +15568,22 @@ msgstr ""
 "Errore nel salvataggio del file schema \"%s\".\n"
 "Fallita rinomina del file temporaneo \"%s\""
 
-#: eeschema/files-io.cpp:843 pcbnew/files.cpp:1035 pcbnew/files.cpp:1361
+#: eeschema/files-io.cpp:875 pcbnew/files.cpp:1035 pcbnew/files.cpp:1361
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Fallita rinomina del file temporaneo \"%s\"."
 
-#: eeschema/files-io.cpp:866 pagelayout_editor/files.cpp:187
+#: eeschema/files-io.cpp:898 pagelayout_editor/files.cpp:187
 #: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1068
 #, c-format
 msgid "File '%s' saved."
 msgstr "File \"%s\" salvato."
 
-#: eeschema/files-io.cpp:871
+#: eeschema/files-io.cpp:903
 msgid "File write operation failed."
 msgstr "Operazione di scrittura file fallita."
 
-#: eeschema/files-io.cpp:938 eeschema/files-io.cpp:1006
+#: eeschema/files-io.cpp:970 eeschema/files-io.cpp:1038
 #: kicad/import_project.cpp:92 kicad/tools/kicad_manager_control.cpp:111
 #: kicad/tools/kicad_manager_control.cpp:284
 #, c-format
@@ -15587,16 +15596,16 @@ msgstr ""
 "\n"
 "Assicurarsi di avere i permessi di scrittura e riprovare."
 
-#: eeschema/files-io.cpp:1088
+#: eeschema/files-io.cpp:1120
 #, c-format
 msgid "Failed to save %s."
 msgstr "Fallito salvataggio di %s."
 
-#: eeschema/files-io.cpp:1090
+#: eeschema/files-io.cpp:1122
 msgid "Locked File Warning"
 msgstr "Avviso file lock"
 
-#: eeschema/files-io.cpp:1092
+#: eeschema/files-io.cpp:1124
 msgid ""
 "You do not have write permissions to:\n"
 "\n"
@@ -15604,15 +15613,15 @@ msgstr ""
 "Non si possiedono i permessi di scrittura su:\n"
 "\n"
 
-#: eeschema/files-io.cpp:1108
+#: eeschema/files-io.cpp:1140
 msgid "Saving will overwrite existing files."
 msgstr "Il salvataggio sovrascriverà i file esistenti."
 
-#: eeschema/files-io.cpp:1109
+#: eeschema/files-io.cpp:1141
 msgid "Save Warning"
 msgstr "Avviso di salvataggio"
 
-#: eeschema/files-io.cpp:1112
+#: eeschema/files-io.cpp:1144
 msgid ""
 "The following files will be overwritten:\n"
 "\n"
@@ -15620,28 +15629,28 @@ msgstr ""
 "I file seguenti verranno sovrascritti:\n"
 "\n"
 
-#: eeschema/files-io.cpp:1113
+#: eeschema/files-io.cpp:1145
 msgid "Overwrite Files"
 msgstr "Sovrascrivi file"
 
-#: eeschema/files-io.cpp:1114
+#: eeschema/files-io.cpp:1146
 msgid "Abort Project Save"
 msgstr "Annulla salvataggio progetto"
 
-#: eeschema/files-io.cpp:1341
+#: eeschema/files-io.cpp:1373
 msgid "Importing Schematic"
 msgstr "Importazione schema"
 
-#: eeschema/files-io.cpp:1413
+#: eeschema/files-io.cpp:1445
 #, c-format
 msgid "Unhandled exception occurred loading schematic '%s'."
 msgstr "Eccezione non gestita nel caricare il file dello schema '%s'."
 
-#: eeschema/files-io.cpp:1474
+#: eeschema/files-io.cpp:1506
 msgid "The current schematic has been modified.  Save changes?"
 msgstr "Lo schema corrente è stato modificato. Salvare le modifiche?"
 
-#: eeschema/files-io.cpp:1572
+#: eeschema/files-io.cpp:1604
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing one or more of the schematic "
@@ -15654,7 +15663,7 @@ msgstr ""
 "\"%s\"\n"
 "non è stato salvato correttamente. Recuperare le ultime modifiche effettuate?"
 
-#: eeschema/files-io.cpp:1583
+#: eeschema/files-io.cpp:1615
 #, c-format
 msgid ""
 "The file '%s' could not be opened.\n"
@@ -15663,15 +15672,15 @@ msgstr ""
 "Il file '%s' non si apre.\n"
 "È richiesto il recupero manuale dei file salvati automaticamente."
 
-#: eeschema/files-io.cpp:1633
+#: eeschema/files-io.cpp:1665
 msgid "The following automatically saved file(s) could not be restored\n"
 msgstr "I seguenti file di autosalvataggio non possono essere recuperati\n"
 
-#: eeschema/files-io.cpp:1638
+#: eeschema/files-io.cpp:1670
 msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Verrà richiesto il recupero manuale per ripristinare i file sopra."
 
-#: eeschema/files-io.cpp:1648
+#: eeschema/files-io.cpp:1680
 #, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
@@ -15680,11 +15689,11 @@ msgstr ""
 "Impossibile rimuovere il file di salvataggio automatico '%s'.\n"
 "È richiesta la rimozione manuale."
 
-#: eeschema/files-io.cpp:1682
+#: eeschema/files-io.cpp:1714
 msgid "The following automatically saved file(s) could not be removed\n"
 msgstr "I seguenti file di autosalvataggio non possono essere rimossi\n"
 
-#: eeschema/files-io.cpp:1687
+#: eeschema/files-io.cpp:1719
 msgid "Manual removal will be required for the file(s) above."
 msgstr "Verrà richiesta la rimozione manuale per i file sopra."
 
@@ -15911,15 +15920,15 @@ msgstr "NonLogico"
 msgid "Pin Name"
 msgstr "Nome pin"
 
-#: eeschema/lib_pin.cpp:1680 eeschema/lib_shape.cpp:582
-#: eeschema/sch_shape.cpp:553 eeschema/sch_symbol.cpp:2663
+#: eeschema/lib_pin.cpp:1680 eeschema/lib_shape.cpp:583
+#: eeschema/sch_shape.cpp:554 eeschema/sch_symbol.cpp:2663
 #: pcbnew/board_item.cpp:334 pcbnew/pcb_shape.cpp:680 pcbnew/pcb_track.cpp:1491
 #: pcbnew/zone.cpp:1579 pcbnew/zone.cpp:1591
 msgid "Position X"
 msgstr "Posizione X"
 
-#: eeschema/lib_pin.cpp:1683 eeschema/lib_shape.cpp:584
-#: eeschema/sch_shape.cpp:555 eeschema/sch_symbol.cpp:2666
+#: eeschema/lib_pin.cpp:1683 eeschema/lib_shape.cpp:585
+#: eeschema/sch_shape.cpp:556 eeschema/sch_symbol.cpp:2666
 #: pcbnew/board_item.cpp:337 pcbnew/pcb_shape.cpp:682 pcbnew/pcb_track.cpp:1495
 #: pcbnew/zone.cpp:1585 pcbnew/zone.cpp:1592
 msgid "Position Y"
@@ -15950,19 +15959,19 @@ msgstr "Polilinea con %d punti"
 msgid "Bezier Curve with %d points"
 msgstr "Curva di Bezier con %d punti"
 
-#: eeschema/lib_shape.cpp:593
+#: eeschema/lib_shape.cpp:594
 msgid "Body outline color"
 msgstr "Colore contorno corpo"
 
-#: eeschema/lib_shape.cpp:594
+#: eeschema/lib_shape.cpp:595
 msgid "Body background color"
 msgstr "Colore sfondo corpo"
 
-#: eeschema/lib_shape.cpp:595
+#: eeschema/lib_shape.cpp:596
 msgid "Fill color"
 msgstr "Colore riempimento"
 
-#: eeschema/lib_shape.cpp:601 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
+#: eeschema/lib_shape.cpp:602 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
 msgid "Fill"
 msgstr "Riempi"
@@ -16455,7 +16464,7 @@ msgstr "Tipo voce bus"
 #: eeschema/sch_bus_entry.cpp:521 eeschema/sch_junction.cpp:304
 #: eeschema/sch_label.cpp:1230 eeschema/sch_line.cpp:960
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1940 pcbnew/pad.cpp:995
-#: pcbnew/pcb_track.cpp:1163 pcbnew/tools/pcb_control.cpp:1675
+#: pcbnew/pcb_track.cpp:1163 pcbnew/tools/pcb_control.cpp:1678
 #: pcbnew/zone.cpp:579
 msgid "Resolved Netclass"
 msgstr "Netclass risolta"
@@ -17524,7 +17533,7 @@ msgstr "Giustificazione"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:445
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1936 pcbnew/pad.cpp:993
 #: pcbnew/pad.cpp:1945 pcbnew/pcb_shape.cpp:697 pcbnew/pcb_track.cpp:1161
-#: pcbnew/tools/pcb_control.cpp:1672
+#: pcbnew/tools/pcb_control.cpp:1675
 #: pcbnew/widgets/pcb_properties_panel.cpp:267
 #: pcbnew/widgets/search_handlers.cpp:141 pcbnew/zone.cpp:577
 #: pcbnew/zone.cpp:1630
@@ -17646,7 +17655,7 @@ msgstr "Tracciato su \"%s\".\n"
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:174
 #: pcbnew/dialogs/dialog_plot.cpp:1267
 #: pcbnew/exporters/gendrill_Excellon_writer.cpp:155
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:126
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:129
 msgid "Done."
 msgstr "Fatto."
 
@@ -19137,8 +19146,8 @@ msgstr "Simulatore Spice"
 msgid "Simulator requires a fully annotated schematic."
 msgstr "La simulazione richiede uno schema completamente annotato."
 
-#: eeschema/sim/simulator_frame.cpp:353 eeschema/sim/simulator_frame.cpp:544
-#: eeschema/tools/simulator_control.cpp:75
+#: eeschema/sim/simulator_frame.cpp:353 eeschema/sim/simulator_frame.cpp:368
+#: eeschema/sim/simulator_frame.cpp:556 eeschema/tools/simulator_control.cpp:75
 msgid ""
 "Errors during netlist generation.\n"
 "\n"
@@ -19146,7 +19155,7 @@ msgstr ""
 "Errori nella generazione della netlist.\n"
 "\n"
 
-#: eeschema/sim/simulator_frame.cpp:378
+#: eeschema/sim/simulator_frame.cpp:390
 msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
@@ -19154,7 +19163,7 @@ msgstr ""
 "È necessario prima eseguire una simulazione TRAN; i suoi risultati verranno "
 "utilizzati per la trasformata veloce di Fourier."
 
-#: eeschema/sim/simulator_frame.cpp:410
+#: eeschema/sim/simulator_frame.cpp:422
 msgid ""
 "Schematic sheet simulation command directive has changed.  Do you wish to "
 "update the Simulation Command?"
@@ -19162,11 +19171,11 @@ msgstr ""
 "La direttiva del comando di simulazione del foglio schema è stata "
 "modificata. Aggiornare il comando di simulazione?"
 
-#: eeschema/sim/simulator_frame.cpp:432 eeschema/sim/simulator_frame.cpp:776
+#: eeschema/sim/simulator_frame.cpp:444 eeschema/sim/simulator_frame.cpp:788
 msgid "Another simulation is already running."
 msgstr "Un'altra simulazione è già in esecuzione."
 
-#: eeschema/sim/simulator_frame.cpp:579
+#: eeschema/sim/simulator_frame.cpp:591
 msgid "Save changes to workbook?"
 msgstr "Salva i cambiamenti nel libretto di lavoro?"
 
@@ -23415,11 +23424,15 @@ msgstr "Formato file di uscita, opzioni: json, report"
 msgid "Report all errors for each track"
 msgstr "Riporta tutti gli errori per ogni pista"
 
-#: kicad/cli/command_pcb_drc.cpp:61 kicad/cli/command_sch_erc.cpp:55
+#: kicad/cli/command_pcb_drc.cpp:60 pcbnew/dialogs/dialog_drc_base.cpp:41
+msgid "Test for parity between PCB and schematic"
+msgstr "Controlla la parità tra C.S. e schema elettrico"
+
+#: kicad/cli/command_pcb_drc.cpp:65 kicad/cli/command_sch_erc.cpp:55
 msgid "Report units; valid options: in, mm, mils"
 msgstr "Unità rapporto; opzioni valide: in, mm, mils"
 
-#: kicad/cli/command_pcb_drc.cpp:65
+#: kicad/cli/command_pcb_drc.cpp:69
 msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
@@ -23427,7 +23440,7 @@ msgstr ""
 "Riporta tutte le violazioni DRC, equivalente ad includere tutti gli altri "
 "argomenti di gravità"
 
-#: kicad/cli/command_pcb_drc.cpp:70
+#: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
@@ -23435,7 +23448,7 @@ msgstr ""
 "Segnala tutte le violazioni DRC di livello errore; può essere combinato con "
 "gli altri argomenti di gravità"
 
-#: kicad/cli/command_pcb_drc.cpp:75
+#: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
@@ -23443,7 +23456,7 @@ msgstr ""
 "Segnala tutte le violazioni DRC di livello avviso; può essere combinato con "
 "gli altri argomenti di gravità"
 
-#: kicad/cli/command_pcb_drc.cpp:80
+#: kicad/cli/command_pcb_drc.cpp:84
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
@@ -23451,18 +23464,18 @@ msgstr ""
 "Segnala tutte le violazioni DRC escluse; può essere combinato con gli altri "
 "argomenti di gravità"
 
-#: kicad/cli/command_pcb_drc.cpp:85
+#: kicad/cli/command_pcb_drc.cpp:89
 msgid "Return a nonzero exit code if DRC violations exist"
 msgstr "Restituisci un codice d'uscita non zero se esistono violazioni DRC"
 
-#: kicad/cli/command_pcb_drc.cpp:142 kicad/cli/command_pcb_export_3d.cpp:208
+#: kicad/cli/command_pcb_drc.cpp:146 kicad/cli/command_pcb_export_3d.cpp:208
 #: kicad/cli/command_pcb_export_drill.cpp:148
 #: kicad/cli/command_pcb_export_dxf.cpp:104
 #: kicad/cli/command_pcb_export_pos.cpp:148 kicad/cli/command_sch_erc.cpp:133
 msgid "Invalid units specified\n"
 msgstr "Unità specificate non valide\n"
 
-#: kicad/cli/command_pcb_drc.cpp:157 kicad/cli/command_sch_erc.cpp:149
+#: kicad/cli/command_pcb_drc.cpp:161 kicad/cli/command_sch_erc.cpp:149
 msgid "Invalid report format\n"
 msgstr "Formato rapporto non valido\n"
 
@@ -26217,6 +26230,7 @@ msgid "Linear resistance:"
 msgstr "Resistenza lineare:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
+#, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "Freq. per 100% profondità di pelle:"
 
@@ -29424,7 +29438,7 @@ msgstr ""
 "Il file progetto associato %s è impossibile da caricare"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:292 pcbnew/files.cpp:567
-#: pcbnew/tools/pcb_control.cpp:1309
+#: pcbnew/tools/pcb_control.cpp:1312
 msgid "Loading PCB"
 msgstr "Caricamento C.S."
 
@@ -30780,10 +30794,6 @@ msgstr ""
 "Se non selezionata, verrà riportata solo la prima violazione DRC per ogni "
 "connessione di pista."
 
-#: pcbnew/dialogs/dialog_drc_base.cpp:41
-msgid "Test for parity between PCB and schematic"
-msgstr "Controlla la parità tra C.S. e schema elettrico"
-
 #: pcbnew/dialogs/dialog_drc_base.cpp:125
 #, c-format
 msgid "Unconnected Items (%s)"
@@ -31824,6 +31834,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
+#, fuzzy, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -31834,11 +31845,16 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Questo è il rapporto distanza locale applicato come percentuale tra la larghezza e l'altezza piazzola per questa impronta.\n"
-"Il valore 10 indica che la distanza orizzontale sarà pari al 10% della larghezza della piazzola, e la distanza verticale al 10% dell'altezza della piazzola.\n"
+"Questo è il rapporto distanza locale applicato come percentuale tra la "
+"larghezza e l'altezza piazzola per questa impronta.\n"
+"Il valore 10 indica che la distanza orizzontale sarà pari al 10% della "
+"larghezza della piazzola, e la distanza verticale al 10% dell'altezza della "
+"piazzola.\n"
 "Questo valore può essere superato da un valore locale della piazzola.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di distanza assoluto.\n"
-"Un valore negativo indica una dimensione di apertura dalla maschera (stencil) minore rispetto alla dimensione della piazzola."
+"La distanza finale sarà data dalla somma di questo valore e il valore di "
+"distanza assoluto.\n"
+"Un valore negativo indica una dimensione di apertura dalla maschera "
+"(stencil) minore rispetto alla dimensione della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -32002,6 +32018,7 @@ msgstr ""
 "scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
+#, fuzzy, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32013,11 +32030,17 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Questo è il locale rapporto di distanza in percentuale della larghezza e altezza per questa impronta.\n"
-"Un valore di 10 indica che la distanza orizzontale sarà pari al 10% della larghezza della piazzola, e il valore di distanza verticale al 10% dell'altezza della piazzola.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di distanza assoluto.\n"
-"Un valore negativo indica un valore di apertura dalla maschera (stencil) minore rispetto alla dimensione della piazzola.\n"
-"Questo valore può essere scavalcato, piazzola per piazzola, dal valore di Distanza locale e Impostazioni nella scheda delle proprietà della piazzola."
+"Questo è il locale rapporto di distanza in percentuale della larghezza e "
+"altezza per questa impronta.\n"
+"Un valore di 10 indica che la distanza orizzontale sarà pari al 10% della "
+"larghezza della piazzola, e il valore di distanza verticale al "
+"10% dell'altezza della piazzola.\n"
+"La distanza finale sarà data dalla somma di questo valore e il valore di "
+"distanza assoluto.\n"
+"Un valore negativo indica un valore di apertura dalla maschera (stencil) "
+"minore rispetto alla dimensione della piazzola.\n"
+"Questo valore può essere scavalcato, piazzola per piazzola, dal valore di "
+"Distanza locale e Impostazioni nella scheda delle proprietà della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
@@ -32568,7 +32591,9 @@ msgstr "Preferisci connessioni zona"
 msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
-msgstr "Non creare lacrime su piste collegate a piazzole che sono collegate anche ad una zona in rame."
+msgstr ""
+"Non creare lacrime su piste collegate a piazzole che sono collegate anche ad "
+"una zona in rame."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -33992,6 +34017,7 @@ msgid "Plot format:"
 msgstr "Formato tracciatura:"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:38
 msgid "Gerber"
 msgstr "Gerber"
 
@@ -34739,54 +34765,54 @@ msgstr "Solleva un errore DRC se l'ingombro di un'impronta tocca quest'area"
 msgid "Rule Area Properties"
 msgstr "Proprietà area regola"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:194
+#: pcbnew/dialogs/dialog_shape_properties.cpp:196
 msgid "Center Point"
 msgstr "Punto centrale"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:517
+#: pcbnew/dialogs/dialog_shape_properties.cpp:515
 msgid "Modify drawing properties"
 msgstr "Modifica proprietà grafiche"
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:540
+#: pcbnew/dialogs/dialog_shape_properties.cpp:538
 msgid "Arc angle cannot be zero."
 msgstr "L'angolo dell'arco non può essere zero."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:544
-#: pcbnew/dialogs/dialog_shape_properties.cpp:560
+#: pcbnew/dialogs/dialog_shape_properties.cpp:542
+#: pcbnew/dialogs/dialog_shape_properties.cpp:558
 #, c-format
 msgid "Invalid Arc with radius %f and angle %f."
 msgstr "Arco non valido con raggio %f e angolo %f."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:566
-#: pcbnew/dialogs/dialog_shape_properties.cpp:598
+#: pcbnew/dialogs/dialog_shape_properties.cpp:564
+#: pcbnew/dialogs/dialog_shape_properties.cpp:596
 msgid "Line width must be greater than zero."
 msgstr "La larghezza linea deve essere maggiore di zero."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:573
+#: pcbnew/dialogs/dialog_shape_properties.cpp:571
 msgid "Radius must be greater than zero."
 msgstr "Il raggio deve essere maggiore di zero."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:576
+#: pcbnew/dialogs/dialog_shape_properties.cpp:574
 msgid "Line width must be greater than zero for an unfilled circle."
 msgstr "La larghezza della linea deve essere >0 per un cerchio non pieno."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:583
+#: pcbnew/dialogs/dialog_shape_properties.cpp:581
 msgid "Rectangle cannot be empty."
 msgstr "Un rettangolo non può essere vuoto."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:586
+#: pcbnew/dialogs/dialog_shape_properties.cpp:584
 msgid "Line width must be greater than zero for an unfilled rectangle."
 msgstr "La larghezza della linea deve essere >0 per un rettangolo non pieno."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:592
+#: pcbnew/dialogs/dialog_shape_properties.cpp:590
 msgid "Line width must be greater than zero for an unfilled polygon."
 msgstr "La larghezza della linea deve essere >0 per un poligono non pieno."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:604
+#: pcbnew/dialogs/dialog_shape_properties.cpp:602
 msgid "Line width must be greater than zero for an unfilled curve."
 msgstr "La larghezza della linea deve essere >0 per una curva non piena."
 
-#: pcbnew/dialogs/dialog_shape_properties.cpp:615
+#: pcbnew/dialogs/dialog_shape_properties.cpp:613
 msgid "Error List"
 msgstr "Elenco errori"
 
@@ -35042,7 +35068,7 @@ msgstr "Skew obiettivo:"
 #: pcbnew/router/router_tool.cpp:2711 pcbnew/router/router_tool.cpp:2716
 #: pcbnew/router/router_tool.cpp:2721 pcbnew/router/router_tool.cpp:2732
 #: pcbnew/router/router_tool.cpp:2740 pcbnew/router/router_tool.cpp:2745
-#: pcbnew/tools/pcb_control.cpp:1503 pcbnew/tools/pcb_control.cpp:1513
+#: pcbnew/tools/pcb_control.cpp:1506 pcbnew/tools/pcb_control.cpp:1516
 #: pcbnew/zone.cpp:646
 #, c-format
 msgid "(from %s)"
@@ -37078,28 +37104,158 @@ msgstr ""
 "\n"
 "### Vincoli\n"
 "\n"
-"| Tipo vincolo              | Tipo argomento                                                                                                         | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                             |\n"
+"| Tipo vincolo              | Tipo "
+"argomento                                                                                                         "
+"| "
+"Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"|\n"
 "|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/max                                                                                                            | Checks the width of annular rings on vias.<br>                                                                                                                                                                                                                                                                                                                                                                                                          |\n"
-"| `clearance`               | min                                                                                                                    | Specifies the **electrical** clearance between copper objects of different nets.  (See `physical_clearance` if you wish to specify clearance between objects regardless of net.)<br><br>To allow copper objects to overlap (collide), create a `clearance` constraint with the `min` value less than zero (for example, `-1`).<br>                                                                                                                      |\n"
-"| `courtyard_clearance`     | min                                                                                                                    | Checks the clearance between footprint courtyards and generates an error if any two courtyards are closer than the `min` distance.  If a footprint does not have a courtyard shape, no errors will be generated from this constraint.<br>                                                                                                                                                                                                               |\n"
-"| `diff_pair_gap`           | min/opt/max                                                                                                            | Checks the gap between coupled tracks in a differential pair.  Coupled tracks are segments that are parallel to each other.  Differential pair gap is not tested on uncoupled portions of a differential pair (for example, the fanout from a component).<br>                                                                                                                                                                                           |\n"
-"| `diff_pair_uncoupled`     | max                                                                                                                    | Checks the distance that a differential pair track is routed uncoupled from the other polarity track in the pair (for example, where the pair fans out from a component, or becomes uncoupled to pass around another object such as a via).<br>                                                                                                                                                                                                         |\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | Specify one or more object types to disallow, separated by spaces.  For example, `(constraint disallow track)` or `(constraint disallow track via pad)`.  If an object of this type matches the rule condition, a DRC error will be created.<br><br>This constraint is essentially the same as a keepout rule area, but can be used to create more specific keepout restrictions.<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/max                                                                                                            | Checks the clearance between objects and the board edge.<br><br>This can also be thought of as the \"milling tolerance\" as the board edge will include all graphical items on the `Edge.Cuts` layer as well as any *oval* pad holes.  (See `physical_hole_clearance` for the drilling tolerance.)<br>                                                                                                                                                    |\n"
-"| `length`                  | min/max                                                                                                                | Checks the total routed length for the nets that match the rule condition and generates an error for each net that is below the `min` value (if specified) or above the `max` value (if specified) of the constraint.<br>                                                                                                                                                                                                                               |\n"
-"| `hole`                    | min/max                                                                                                                | Checks the size (diameter) of a drilled hole in a pad or via.  For oval holes, the smaller (minor) diameter will be tested against the `min` value (if specified) and the larger (major) diameter will be tested against the `max` value (if specified).<br>                                                                                                                                                                                            |\n"
-"| `hole_clearance`          | min                                                                                                                    | Checks the clearance between a drilled hole in a pad or via and copper objects on a different net.  The clearance is measured from the diameter of the hole, not its center.<br>                                                                                                                                                                                                                                                                        |\n"
-"| `hole_to_hole`            | min                                                                                                                    | Checks the clearance between mechanically-drilled holes in pads and vias.  The clearance is measured between the diameters of the holes, not between their centers.<br><br>This constraint is soley for the protection of drill bits.  The clearance between **laser-drilled** (microvias) and other non-mechanically-drilled holes is not checked, nor is the clearance between **milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
-"| `physical_clearance`      | min                                                                                                                    | Checks the clearance between two objects on a given layer (including non-copper layers).<br><br>While this can perform more general-purpose checks than `clearance`, it is much slower.  Use `clearance` where possible.<br>                                                                                                                                                                                                                            |\n"
-"| `physical_hole_clearance` | min                                                                                                                    | Checks the clearance between a drilled hole in a pad or via and another object, regardless of net. The clearance is measured from the diameter of the hole, not its center.<br><br>This can also be thought of as the \"drilling tolerance\" as it only includes **round** holes (see `edge_clearance` for the milling tolerance).<br>                                                                                                                    |\n"
-"| `silk_clearance`          | min/opt/max                                                                                                            | Checks the clearance between objects on silkscreen layers and other objects.<br>                                                                                                                                                                                                                                                                                                                                                                        |\n"
-"| `skew`                    | max                                                                                                                    | Checks the total skew for the nets that match the rule condition, that is, the difference between the length of each net and the average of all the lengths of each net that is matched by the rule.  If the absolute value of the difference between that average and the length of any one net is above the constraint `max` value, an error will be generated.<br>                                                                                   |\n"
-"| `thermal_relief_gap`      | min                                                                                                                    | Specifies the width of the gap between a pad and a zone with a thermal-relief connection.<br>                                                                                                                                                                                                                                                                                                                                                           |\n"
-"| `thermal_spoke_width`     | opt                                                                                                                    | Specifies the width of the spokes connecting a pad to a zone with a thermal-relief connection.<br>                                                                                                                                                                                                                                                                                                                                                      |\n"
-"| `track_width`             | min/opt/max                                                                                                            | Checks the width of track and arc segments.  An error will be generated for each segment that has a width below the `min` value (if specified) or above the `max` value (if specified).<br>                                                                                                                                                                                                                                                             |\n"
-"| `via_count`               | max                                                                                                                    | Counts the number of vias on every net matched by the rule condition.  If that number exceeds the constraint `max` value on any matched net, an error will be generated for that net.<br>                                                                                                                                                                                                                                                               |\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`                                                                                 | Specifies the connection to be made between a zone and a pad.<br>                                                                                                                                                                                                                                                                                                                                                                                       |\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| Checks the width of annular rings on vias."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `clearance`               | "
+"min                                                                                                                    "
+"| Specifies the **electrical** clearance between copper objects of different "
+"nets.  (See `physical_clearance` if you wish to specify clearance between "
+"objects regardless of net.)<br><br>To allow copper objects to overlap "
+"(collide), create a `clearance` constraint with the `min` value less than "
+"zero (for example, `-1`)."
+"<br>                                                                                                                      "
+"|\n"
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
+"| Checks the clearance between footprint courtyards and generates an error "
+"if any two courtyards are closer than the `min` distance.  If a footprint "
+"does not have a courtyard shape, no errors will be generated from this "
+"constraint."
+"<br>                                                                                                                                                                                                               "
+"|\n"
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
+"| Checks the gap between coupled tracks in a differential pair.  Coupled "
+"tracks are segments that are parallel to each other.  Differential pair gap "
+"is not tested on uncoupled portions of a differential pair (for example, the "
+"fanout from a component)."
+"<br>                                                                                                                                                                                           "
+"|\n"
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
+"| Checks the distance that a differential pair track is routed uncoupled "
+"from the other polarity track in the pair (for example, where the pair fans "
+"out from a component, or becomes uncoupled to pass around another object "
+"such as a via)."
+"<br>                                                                                                                                                                                                         "
+"|\n"
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Specify one or more object types to disallow, separated by spaces.  For "
+"example, `(constraint disallow track)` or `(constraint disallow track via "
+"pad)`.  If an object of this type matches the rule condition, a DRC error "
+"will be created.<br><br>This constraint is essentially the same as a keepout "
+"rule area, but can be used to create more specific keepout restrictions."
+"<br>                                                                   |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Checks the clearance between objects and the board edge.<br><br>This can "
+"also be thought of as the \"milling tolerance\" as the board edge will "
+"include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
+"pad holes.  (See `physical_hole_clearance` for the drilling "
+"tolerance.)<br>                                                                                                                                                    "
+"|\n"
+"| `length`                  | min/"
+"max                                                                                                                "
+"| Checks the total routed length for the nets that match the rule condition "
+"and generates an error for each net that is below the `min` value (if "
+"specified) or above the `max` value (if specified) of the constraint."
+"<br>                                                                                                                                                                                                                               "
+"|\n"
+"| `hole`                    | min/"
+"max                                                                                                                "
+"| Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
+"holes, the smaller (minor) diameter will be tested against the `min` value "
+"(if specified) and the larger (major) diameter will be tested against the "
+"`max` value (if specified)."
+"<br>                                                                                                                                                                                            "
+"|\n"
+"| `hole_clearance`          | "
+"min                                                                                                                    "
+"| Checks the clearance between a drilled hole in a pad or via and copper "
+"objects on a different net.  The clearance is measured from the diameter of "
+"the hole, not its center."
+"<br>                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
+"| Checks the clearance between mechanically-drilled holes in pads and vias.  "
+"The clearance is measured between the diameters of the holes, not between "
+"their centers.<br><br>This constraint is soley for the protection of drill "
+"bits.  The clearance between **laser-drilled** (microvias) and other non-"
+"mechanically-drilled holes is not checked, nor is the clearance between "
+"**milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
+"| `physical_clearance`      | "
+"min                                                                                                                    "
+"| Checks the clearance between two objects on a given layer (including non-"
+"copper layers).<br><br>While this can perform more general-purpose checks "
+"than `clearance`, it is much slower.  Use `clearance` where possible."
+"<br>                                                                                                                                                                                                                            "
+"|\n"
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
+"| Checks the clearance between a drilled hole in a pad or via and another "
+"object, regardless of net. The clearance is measured from the diameter of "
+"the hole, not its center.<br><br>This can also be thought of as the "
+"\"drilling tolerance\" as it only includes **round** holes (see "
+"`edge_clearance` for the milling tolerance)."
+"<br>                                                                                                                    "
+"|\n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Checks the clearance between objects on silkscreen layers and other "
+"objects."
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `skew`                    | "
+"max                                                                                                                    "
+"| Checks the total skew for the nets that match the rule condition, that is, "
+"the difference between the length of each net and the average of all the "
+"lengths of each net that is matched by the rule.  If the absolute value of "
+"the difference between that average and the length of any one net is above "
+"the constraint `max` value, an error will be generated."
+"<br>                                                                                   "
+"|\n"
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
+"| Specifies the width of the gap between a pad and a zone with a thermal-"
+"relief connection."
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
+"|\n"
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
+"| Specifies the width of the spokes connecting a pad to a zone with a "
+"thermal-relief connection."
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
+"|\n"
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
+"| Checks the width of track and arc segments.  An error will be generated "
+"for each segment that has a width below the `min` value (if specified) or "
+"above the `max` value (if specified)."
+"<br>                                                                                                                                                                                                                                                             "
+"|\n"
+"| `via_count`               | "
+"max                                                                                                                    "
+"| Counts the number of vias on every net matched by the rule condition.  If "
+"that number exceeds the constraint `max` value on any matched net, an error "
+"will be generated for that net."
+"<br>                                                                                                                                                                                                                                                               "
+"|\n"
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| Specifies the connection to be made between a zone and a pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
 "\n"
 "\n"
 "### Items\n"
@@ -37152,7 +37308,8 @@ msgstr ""
 "\n"
 "### Notes\n"
 "\n"
-"Version clause must be the first clause.  It indicates the syntax version of the file so that \n"
+"Version clause must be the first clause.  It indicates the syntax version of "
+"the file so that \n"
 "future rules parsers can perform automatic updates.  It should be\n"
 "set to \"1\".\n"
 "\n"
@@ -37169,7 +37326,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's principal courtyard.\n"
+"True if any part of `A` lies within the given footprint's principal "
+"courtyard.\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
@@ -37187,12 +37345,14 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "True if all of `A` lies within the given zone's outline.\n"
 "\n"
-"NB: this is potentially a more expensive call than `intersectsArea()`.  Use `intersectsArea()`\n"
+"NB: this is potentially a more expensive call than `intersectsArea()`.  Use "
+"`intersectsArea()`\n"
 "where possible.\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
-"The value of the given field. Only footprints have fields, so a field is only returned if\n"
+"The value of the given field. Only footprints have fields, so a field is "
+"only returned if\n"
 "`A` is a footprint.\n"
 "<br><br>\n"
 "\n"
@@ -37202,7 +37362,8 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<net_name>')\n"
 "True if `A` has a net that is part of the specified differential pair.\n"
-"`<net_name>` is the base name of the differential pair.  For example, `inDiffPair('/CLK')`\n"
+"`<net_name>` is the base name of the differential pair.  For example, "
+"`inDiffPair('/CLK')`\n"
 "matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
@@ -37216,12 +37377,14 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_reference>')\n"
-"True if `A` is a member of a footprint matching the given reference designator.  The\n"
+"True if `A` is a member of a footprint matching the given reference "
+"designator.  The\n"
 "reference can contain wildcards.\n"
 "<br><br>\n"
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
-"True if `A` is a member of the given schematic sheet. The sheet path can contain wildcards.\n"
+"True if `A` is a member of the given schematic sheet. The sheet path can "
+"contain wildcards.\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
@@ -37255,11 +37418,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -37354,7 +37519,8 @@ msgstr ""
 "\n"
 "### Documentation\n"
 "\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"For the full documentation see [https://docs.kicad.org](https://docs.kicad."
+"org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default properties for round shapes:"
@@ -39003,7 +39169,7 @@ msgid "Created file '%s'"
 msgstr "Creato file '%s'"
 
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:350
-#: pcbnew/exporters/gendrill_gerber_writer.cpp:113
+#: pcbnew/exporters/gendrill_gerber_writer.cpp:116
 #, c-format
 msgid "Created file '%s'."
 msgstr "Creato file '%s'."
@@ -41405,7 +41571,10 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr "La definizione dell'impronta '%s' ha un componente in rame associato ad una piazzola su più strati. I padstack personalizzati non sono supportati da KiCad. Gli elementi in rame sono stati importati come elementi grafici."
+msgstr ""
+"La definizione dell'impronta '%s' ha un componente in rame associato ad una "
+"piazzola su più strati. I padstack personalizzati non sono supportati da "
+"KiCad. Gli elementi in rame sono stati importati come elementi grafici."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42172,7 +42341,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Errato ZSmoothing per CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6134
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6139
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -42357,7 +42526,7 @@ msgstr ""
 "Nome NETCLASS '%s' duplicato nel file '%s' alla riga %d, scostamento %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2995
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5359
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5364
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42388,7 +42557,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4603
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4608
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42399,7 +42568,7 @@ msgstr ""
 "file: %s\n"
 "riga: %d scostamento: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4622
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4627
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -42410,7 +42579,7 @@ msgstr ""
 "file: %s\n"
 "riga: %d scostamento: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4923
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4928
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -42423,7 +42592,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5274
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5279
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42436,7 +42605,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5460
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5465
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42449,7 +42618,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5590
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5595
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42462,7 +42631,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6103
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6108
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
@@ -43273,7 +43442,7 @@ msgstr "Larghezza pista: %s"
 msgid "Diff Pair Gap: %s"
 msgstr "Spazio coppia diff.le: %s"
 
-#: pcbnew/router/router_tool.cpp:2730 pcbnew/tools/pcb_control.cpp:1512
+#: pcbnew/router/router_tool.cpp:2730 pcbnew/tools/pcb_control.cpp:1515
 #, c-format
 msgid "DP Max Uncoupled-length: %s"
 msgstr "Max lunghezza disaccoppiata: %s."
@@ -43966,11 +44135,11 @@ msgstr "Converti in zona"
 msgid "Create Zone"
 msgstr "Crea zona"
 
-#: pcbnew/tools/convert_tool.cpp:1112
+#: pcbnew/tools/convert_tool.cpp:1109
 msgid "Create Lines"
 msgstr "Crea linee"
 
-#: pcbnew/tools/convert_tool.cpp:1199
+#: pcbnew/tools/convert_tool.cpp:1196
 msgid "Create Arc"
 msgstr "Crea arco"
 
@@ -46437,7 +46606,7 @@ msgstr ""
 msgid "Invalid clipboard contents"
 msgstr "Contenuto appunti non valido"
 
-#: pcbnew/tools/pcb_control.cpp:1317
+#: pcbnew/tools/pcb_control.cpp:1320
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -46446,53 +46615,53 @@ msgstr ""
 "Errore nel caricamento della scheda.\n"
 "%s"
 
-#: pcbnew/tools/pcb_control.cpp:1352
+#: pcbnew/tools/pcb_control.cpp:1355
 msgid "Append Board"
 msgstr "Aggiungi scheda"
 
-#: pcbnew/tools/pcb_control.cpp:1413
+#: pcbnew/tools/pcb_control.cpp:1416
 msgid "Active Layer"
 msgstr "Strato attivo"
 
-#: pcbnew/tools/pcb_control.cpp:1414 pcbnew/widgets/appearance_controls.cpp:373
+#: pcbnew/tools/pcb_control.cpp:1417 pcbnew/widgets/appearance_controls.cpp:373
 #: pcbnew/widgets/appearance_controls_base.cpp:165
 msgid "All Layers"
 msgstr "Tutti gli strati"
 
-#: pcbnew/tools/pcb_control.cpp:1426
+#: pcbnew/tools/pcb_control.cpp:1429
 msgid "Object Snapping"
 msgstr "Magnetismo oggetti"
 
-#: pcbnew/tools/pcb_control.cpp:1502
+#: pcbnew/tools/pcb_control.cpp:1505
 #, c-format
 msgid "DP Gap Constraints: %s"
 msgstr "Vincoli spazio CD: %s"
 
-#: pcbnew/tools/pcb_control.cpp:1549
+#: pcbnew/tools/pcb_control.cpp:1552
 msgid "Resolved clearance"
 msgstr "Distanza risolta"
 
-#: pcbnew/tools/pcb_control.cpp:1554
+#: pcbnew/tools/pcb_control.cpp:1557
 msgid "Actual clearance"
 msgstr "Distanza effettiva"
 
-#: pcbnew/tools/pcb_control.cpp:1597
+#: pcbnew/tools/pcb_control.cpp:1600
 msgid "Resolved hole clearance"
 msgstr "Distanza foro risolta"
 
-#: pcbnew/tools/pcb_control.cpp:1602
+#: pcbnew/tools/pcb_control.cpp:1605
 msgid "Actual hole clearance"
 msgstr "Distanza foro effettiva"
 
-#: pcbnew/tools/pcb_control.cpp:1635
+#: pcbnew/tools/pcb_control.cpp:1638
 msgid "Resolved edge clearance"
 msgstr "Distanza bordo risolta"
 
-#: pcbnew/tools/pcb_control.cpp:1640
+#: pcbnew/tools/pcb_control.cpp:1643
 msgid "Resolved margin clearance"
 msgstr "Distanza margine risolta"
 
-#: pcbnew/tools/pcb_control.cpp:1651
+#: pcbnew/tools/pcb_control.cpp:1654
 msgid "Selected Items"
 msgstr "Elementi selezionati"
 
@@ -47568,6 +47737,15 @@ msgstr "Editor di C.S. autonomo di KiCad"
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:13
 msgid "An EDA suite for schematic and circuit board design"
 msgstr "Suite EDA per la progettazione di schemi elettrici e circuiti stampati"
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
+msgid "EDA"
+msgstr ""
+
+#: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
+#, fuzzy
+msgid "Circuit board"
+msgstr "Circuito stampato"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:51
 msgid ""

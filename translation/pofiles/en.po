@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 15:57-0800\n"
+"POT-Creation-Date: 2024-02-14 10:30-0800\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1262,6 +1262,22 @@ msgstr "Report"
 msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Currently matching nets:</b>"
 
+msgid "Pattern:"
+msgstr "Pattern:"
+
+msgid "Net class:"
+msgstr "Net class:"
+
+msgid ""
+"Note: complete netclass assignments can be edited in Schematic Setup > "
+"Project."
+msgstr ""
+"Note: complete netclass assignments can be edited in Schematic Setup > "
+"Project."
+
+msgid "Add Netclass Assignment"
+msgstr "Add Netclass Assignment"
+
 msgid "Clear Color"
 msgstr "Clear Color"
 
@@ -1439,6 +1455,21 @@ msgstr "Grid size X out of range."
 
 msgid "Grid size Y out of range."
 msgstr "Grid size Y out of range."
+
+msgid "Name:"
+msgstr "Name:"
+
+msgid "(optional)"
+msgstr "(optional)"
+
+msgid "unit"
+msgstr "unit"
+
+msgid "Linked"
+msgstr "Linked"
+
+msgid "Grid Settings"
+msgstr "Grid Settings"
 
 msgid "Hotkey List"
 msgstr "Hotkey List"
@@ -1633,9 +1664,6 @@ msgstr "Height:"
 
 msgid "Custom paper height."
 msgstr "Custom paper height."
-
-msgid "unit"
-msgstr "unit"
 
 msgid "Width:"
 msgstr "Width:"
@@ -6599,9 +6627,6 @@ msgstr "Add Generator..."
 msgid "Remove Generator"
 msgstr "Remove Generator"
 
-msgid "Name:"
-msgstr "Name:"
-
 msgid "Command line to run the generator:"
 msgstr "Command line to run the generator:"
 
@@ -6832,6 +6857,9 @@ msgstr "Ibis parser"
 
 msgid "Image Properties"
 msgstr "Image Properties"
+
+msgid "Position"
+msgstr "Position"
 
 msgid "Edit Junction"
 msgstr "Edit Junction"
@@ -9925,6 +9953,9 @@ msgstr "Schematic is read only."
 
 msgid "Insert Schematic"
 msgstr "Insert Schematic"
+
+msgid "Import Schematic Sheet Content..."
+msgstr "Import Schematic Sheet Content..."
 
 msgid ""
 "This operation cannot be undone.\n"
@@ -15257,9 +15288,6 @@ msgstr "D Code %d"
 msgid "Graphic Layer"
 msgstr "Graphic Layer"
 
-msgid "Position"
-msgstr "Position"
-
 msgid "Start"
 msgstr "Start"
 
@@ -15767,6 +15795,9 @@ msgstr "Output file format, options: json, report"
 
 msgid "Report all errors for each track"
 msgstr "Report all errors for each track"
+
+msgid "Test for parity between PCB and schematic"
+msgstr "Test for parity between PCB and schematic"
 
 msgid "Report units; valid options: in, mm, mils"
 msgstr "Report units; valid options: in, mm, mils"
@@ -21148,9 +21179,6 @@ msgstr ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 
-msgid "Test for parity between PCB and schematic"
-msgstr "Test for parity between PCB and schematic"
-
 #, c-format
 msgid "Unconnected Items (%s)"
 msgstr "Unconnected Items (%s)"
@@ -23939,6 +23967,12 @@ msgstr ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
 "filter."
+
+msgid "Associated layer:"
+msgstr "Associated layer:"
+
+msgid "Reference Image Properties"
+msgstr "Reference Image Properties"
 
 msgid "Convert to Rule Area"
 msgstr "Convert to Rule Area"
@@ -30577,13 +30611,6 @@ msgstr "Interactive Router"
 msgid "Save router log"
 msgstr "Save router log"
 
-msgid ""
-"Would you like to save the router\n"
-"event log for debugging purposes?"
-msgstr ""
-"Would you like to save the router\n"
-"event log for debugging purposes?"
-
 msgid "Blind/buried via need 2 different layers."
 msgstr "Blind/buried via need 2 different layers."
 
@@ -33868,6 +33895,13 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid ""
+#~ "Would you like to save the router\n"
+#~ "event log for debugging purposes?"
+#~ msgstr ""
+#~ "Would you like to save the router\n"
+#~ "event log for debugging purposes?"
 
 #~ msgid "Illegal character found in logical library name"
 #~ msgstr "Illegal character found in logical library name"
@@ -37694,9 +37728,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Resets the list of grid sizes to default values"
 #~ msgstr "Resets the list of grid sizes to default values"
-
-#~ msgid "Grid Settings"
-#~ msgstr "Grid Settings"
 
 #~ msgid "Edit User Grid..."
 #~ msgstr "Edit User Grid..."
