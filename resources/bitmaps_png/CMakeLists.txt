@@ -158,6 +158,7 @@ set( BMAPS_MID
     about
     add_aligned_dimension
     add_arc
+    add_bezier
     add_board
     add_bus2bus
     add_bus

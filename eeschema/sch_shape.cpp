@@ -470,6 +470,7 @@ BITMAPS SCH_SHAPE::GetMenuImage() const
     case SHAPE_T::CIRCLE:  return BITMAPS::add_circle;
     case SHAPE_T::RECTANGLE:    return BITMAPS::add_rectangle;
     case SHAPE_T::POLY:    return BITMAPS::add_graphical_segments;
+    case SHAPE_T::BEZIER:  return BITMAPS::add_bezier;
 
     default:
         UNIMPLEMENTED_FOR( SHAPE_T_asString() );
