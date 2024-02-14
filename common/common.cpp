@@ -147,6 +147,25 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
     wxString strResult;
     strResult.Alloc( strlen );  // best guess (improves performance)
 
+    auto getVersionedEnvVar = []( const wxString& aMatch, wxString& aResult ) -> bool
+            {
+                for ( const wxString& var : ENV_VAR::GetPredefinedEnvVars() )
+                {
+                    if( var.Matches( aMatch ) )
+                    {
+                        const auto value = ENV_VAR::GetEnvVar<wxString>( var );
+
+                        if( !value )
+                            continue;
+
+                        aResult += *value;
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
     for( size_t n = 0; n < strlen; n++ )
     {
         wxUniChar str_n = str[n];
@@ -222,26 +241,24 @@ wxString KIwxExpandEnvVars( const wxString& str, const PROJECT* aProject, std::s
                 strResult += tmp;
                 expanded = true;
             }
-            // Replace unmatched older variables with current 3d model locations
-            // If the user has the older model location defined, that will be matched
+            // Replace unmatched older variables with current locations
+            // If the user has the older location defined, that will be matched
             // first above.  But if they do not, this will ensure that their board still
             // displays correctly
             else if( strVarName.Contains( "KISYS3DMOD") || strVarName.Matches( "KICAD*_3DMODEL_DIR" ) )
             {
-                for( auto& var : ENV_VAR::GetPredefinedEnvVars() )
-                {
-                    if( var.Matches( "KICAD*_3DMODEL_DIR" ) )
-                    {
-                        const auto value = ENV_VAR::GetEnvVar<wxString>( var );
-
-                        if( !value )
-                            continue;
-
-                        strResult += *value;
-                        expanded = true;
-                        break;
-                    }
-                }
+                if( getVersionedEnvVar( "KICAD*_3DMODEL_DIR", strResult ) )
+                    expanded = true;
+            }
+            else if( strVarName.Matches( "KICAD*_SYMBOL_DIR" ) )
+            {
+                if( getVersionedEnvVar( "KICAD*_SYMBOL_DIR", strResult ) )
+                    expanded = true;
+            }
+            else if( strVarName.Matches( "KICAD*_FOOTPRINT_DIR" ) )
+            {
+                if( getVersionedEnvVar( "KICAD*_FOOTPRINT_DIR", strResult ) )
+                    expanded = true;
             }
             else
             {
