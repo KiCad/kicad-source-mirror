@@ -93,7 +93,7 @@ public:
             m_rbCenterline->Hide();
         }
 
-        m_rbEnvelope = new wxRadioButton( this, wxID_ANY, _( "Create bounding hull" ) );
+        m_rbBoundingHull = new wxRadioButton( this, wxID_ANY, _( "Create bounding hull" ) );
 
         m_gapLabel = new wxStaticText( this, wxID_ANY, _( "Gap:" ) );
         m_gapCtrl = new wxTextCtrl( this, wxID_ANY );
@@ -108,7 +108,7 @@ public:
         if( aShowBoundingHullOption )
         {
             topSizer->AddSpacer( 6 );
-            topSizer->Add( m_rbEnvelope, 0, wxLEFT|wxRIGHT, 5 );
+            topSizer->Add( m_rbBoundingHull, 0, wxLEFT|wxRIGHT, 5 );
 
             wxBoxSizer* hullParamsSizer = new wxBoxSizer( wxHORIZONTAL );
             hullParamsSizer->Add( m_gapLabel, 0, wxALIGN_CENTRE_VERTICAL, 5 );
@@ -126,7 +126,7 @@ public:
         }
         else
         {
-            m_rbEnvelope->Hide();
+            m_rbBoundingHull->Hide();
             m_gap->Show( false, true );
             m_width->Show( false, true );
         }
@@ -157,9 +157,9 @@ public:
         m_rbCenterline->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
                                  wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
                                  nullptr, this );
-        m_rbEnvelope->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
-                               wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
-                               nullptr, this );
+        m_rbBoundingHull->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED,
+                                   wxCommandEventHandler( CONVERT_SETTINGS_DIALOG::onRadioButton ),
+                                   nullptr, this );
 
         finishDialogSettings();
     }
@@ -177,11 +177,11 @@ protected:
         {
         case COPY_LINEWIDTH: m_rbMimicLineWidth->SetValue( true ); break;
         case CENTERLINE:     m_rbCenterline->SetValue( true );     break;
-        case BOUNDING_HULL:  m_rbEnvelope->SetValue( true );       break;
+        case BOUNDING_HULL:  m_rbBoundingHull->SetValue( true );   break;
         }
 
-        m_gap->Enable( m_rbEnvelope->GetValue() );
-        m_width->Enable( m_rbEnvelope->GetValue() );
+        m_gap->Enable( m_rbBoundingHull->GetValue() );
+        m_width->Enable( m_rbBoundingHull->GetValue() );
         m_gap->SetValue( m_settings->m_Gap );
         m_width->SetValue( m_settings->m_LineWidth );
 
@@ -191,15 +191,15 @@ protected:
 
     bool TransferDataFromWindow() override
     {
-        if( m_rbEnvelope->GetValue() )
+        if( m_rbBoundingHull->GetValue() )
             m_settings->m_Strategy = BOUNDING_HULL;
         else if( m_rbCenterline->GetValue() )
             m_settings->m_Strategy = CENTERLINE;
         else
             m_settings->m_Strategy = COPY_LINEWIDTH;
 
-        m_settings->m_Gap = m_gap->GetValue();
-        m_settings->m_LineWidth = m_width->GetValue();
+        m_settings->m_Gap = m_gap->GetIntValue();
+        m_settings->m_LineWidth = m_width->GetIntValue();
 
         m_settings->m_DeleteOriginals = m_cbDeleteOriginals->GetValue();
         return true;
@@ -207,8 +207,8 @@ protected:
 
     void onRadioButton( wxCommandEvent& aEvent )
     {
-        m_gap->Enable( m_rbEnvelope->GetValue() );
-        m_width->Enable( m_rbEnvelope->GetValue() );
+        m_gap->Enable( m_rbBoundingHull->GetValue() );
+        m_width->Enable( m_rbBoundingHull->GetValue() );
     }
 
 private:
@@ -216,7 +216,7 @@ private:
 
     wxRadioButton*    m_rbMimicLineWidth;
     wxRadioButton*    m_rbCenterline;
-    wxRadioButton*    m_rbEnvelope;
+    wxRadioButton*    m_rbBoundingHull;
     wxStaticText*     m_gapLabel;
     wxTextCtrl*       m_gapCtrl;
     wxStaticText*     m_gapUnits;
@@ -346,16 +346,18 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
                 polySet.Append( makePolysFromClosedGraphics( selection.GetItems(), cfg.m_Strategy ) );
 
-                polySet.Append( makePolysFromChainedSegs( selection.GetItems(), cfg.m_Strategy ) );
-
                 if( cfg.m_Strategy == BOUNDING_HULL )
                 {
+                    polySet.Append( makePolysFromOpenGraphics( selection.GetItems(), cfg.m_Gap ) );
+
                     polySet.ClearArcs();
                     polySet.Simplify( SHAPE_POLY_SET::PM_FAST );
                     polySet.Inflate( cfg.m_Gap, CORNER_STRATEGY::ROUND_ALL_CORNERS, bds.m_MaxError,
                                      ERROR_OUTSIDE );
-
-                    polySet.Append( makePolysFromOpenGraphics( selection.GetItems(), cfg.m_Gap ) );
+                }
+                else
+                {
+                    polySet.Append( makePolysFromChainedSegs( selection.GetItems(), cfg.m_Strategy ) );
                 }
 
                 if( polySet.IsEmpty() )
@@ -836,10 +838,15 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromClosedGraphics( const std::deque<EDA_I
             if( !shape->IsClosed() )
                 continue;
 
-            shape->SetFilled( true );
+            if( aStrategy != BOUNDING_HULL )
+                shape->SetFilled( true );
+
             shape->TransformShapeToPolygon( poly, UNDEFINED_LAYER, 0, bds.m_MaxError, ERROR_INSIDE,
                                             aStrategy == COPY_LINEWIDTH || aStrategy == CENTERLINE );
-            shape->SetFillMode( wasFilled );
+
+            if( aStrategy != BOUNDING_HULL )
+                shape->SetFillMode( wasFilled );
+
             shape->SetFlags( SKIP_STRUCT );
             break;
         }
