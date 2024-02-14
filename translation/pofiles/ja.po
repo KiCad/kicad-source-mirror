@@ -7,13 +7,14 @@
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
 # "Tokita, Hiroshi" <tokita.hiroshi@fujitsu.com>, 2023, 2024.
 # 2tama3 <2tama3@gmail.com>, 2023.
+# SubaruArai <subaruletian.arai@minebea.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 15:57-0800\n"
-"PO-Revision-Date: 2024-02-11 02:02+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"PO-Revision-Date: 2024-02-14 18:22+0000\n"
+"Last-Translator: SubaruArai <subaruletian.arai@minebea.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -32214,7 +32215,8 @@ msgstr "ゾーン接続を優先する"
 msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
-msgstr ""
+msgstr "導体ゾーン及びパッドに同時に接続されている配線にはティアドロップを作成しない"
+"。"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -42547,14 +42549,12 @@ msgid "Running DRC...\n"
 msgstr "DRC を実行...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1026
-#, fuzzy
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "回路図 \"%s\" のロードに失敗しました\n"
+msgstr "パリティテストのための回路図の検索に失敗しました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1041
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "回路図 \"%s\" のロードに失敗しました\n"
+msgstr "パリティテストのための回路図のネットリストの取得に失敗しました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1062 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -47064,9 +47064,8 @@ msgid "Hatch Gap"
 msgstr "ハッチングの間隔"
 
 #: pcbnew/zone.cpp:1685
-#, fuzzy
 msgid "Hatch Minimum Hole Ratio"
-msgstr "最小穴間隔:"
+msgstr "ハッチングの穴の最小比率"
 
 #: pcbnew/zone.cpp:1693
 msgid "Smoothing Effort"
