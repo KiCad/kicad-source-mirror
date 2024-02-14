@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,8 +39,11 @@
 #include <reporter.h>
 #include <gbr_metadata.h>
 
-// set to 1 to use flashed oblong holes, 0 to draw them by a line.
-#define FLASH_OVAL_HOLE 1
+// set to 1 to use flashed oblong holes, 0 to draw them by a line (route holes).
+// WARNING: currently ( gerber-layer-format-specification-revision-2023-08 ),
+// oblong holes **must be routed* in a drill file and not flashed,
+// so set FLASH_OVAL_HOLE to 0
+#define FLASH_OVAL_HOLE 0
 
 
 GERBER_WRITER::GERBER_WRITER( BOARD* aPcb )
@@ -131,7 +134,7 @@ bool GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory, b
 
 #if !FLASH_OVAL_HOLE
 // A helper class to transform an oblong hole to a segment
-static void convertOblong2Segment( wxSize aSize, double aOrient, VECTOR2I& aStart, VECTOR2I& aEnd );
+static void convertOblong2Segment( VECTOR2I& aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart, VECTOR2I& aEnd );
 #endif
 
 
@@ -233,7 +236,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
         if( hole_descr.m_Hole_Shape )
         {
 #if FLASH_OVAL_HOLE     // set to 1 to use flashed oblong holes,
-                                    // 0 to draw them as a line.
+                        // 0 to draw them as a line.
             plotter.FlashPadOval( hole_pos, hole_descr.m_Hole_Size, hole_descr.m_Hole_Orient,
                                   FILLED, &gbr_metadata );
 #else
@@ -264,10 +267,10 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
 
 #if !FLASH_OVAL_HOLE
-void convertOblong2Segment( wxSize aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart,
+void convertOblong2Segment( VECTOR2I& aSize, const EDA_ANGLE& aOrient, VECTOR2I& aStart,
                             VECTOR2I& aEnd )
 {
-    wxSize    size( aSize );
+    VECTOR2I    size( aSize );
     EDA_ANGLE orient( aOrient );
 
     /* The pad will be drawn as an oblong shape with size.y > size.x
