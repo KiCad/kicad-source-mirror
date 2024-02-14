@@ -123,6 +123,7 @@ bool DRC_REPORT::WriteJsonReport( const wxString& aFullFileName )
     RC_JSON::DRC_REPORT reportHead;
 
     wxFileName fn( m_board->GetFileName() );
+    reportHead.$schema = "https://schemas.kicad.org/drc.v1.json";
     reportHead.source = fn.GetFullName();
     reportHead.date = GetISO8601CurrentDateTime();
     reportHead.kicad_version = GetMajorMinorPatchVersion();

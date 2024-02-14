@@ -78,6 +78,7 @@ inline void from_json( const nlohmann::json& aJson, VIOLATION& aViolation )
 
 struct REPORT_BASE
 {
+    wxString $schema;
     wxString source;
     wxString date;
     wxString kicad_version;
@@ -94,7 +95,7 @@ struct DRC_REPORT : REPORT_BASE
     std::vector<VIOLATION>                 schematic_parity;
 };
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( DRC_REPORT, source, date, kicad_version, violations,
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( DRC_REPORT, $schema, source, date, kicad_version, violations,
                                     unconnected_items, schematic_parity, coordinate_units )
 
 struct ERC_SHEET
@@ -113,7 +114,7 @@ struct ERC_REPORT : REPORT_BASE
     std::vector<ERC_SHEET> sheets;
 };
 
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( ERC_REPORT, source, date, kicad_version, sheets,
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( ERC_REPORT, $schema, source, date, kicad_version, sheets,
                                     coordinate_units )
 
 } // namespace RC_JSON

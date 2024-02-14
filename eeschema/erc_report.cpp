@@ -115,6 +115,7 @@ bool ERC_REPORT::WriteJsonReport( const wxString& aFullFileName )
 
     RC_JSON::ERC_REPORT reportHead;
     wxFileName          fn( m_sch->GetFileName() );
+    reportHead.$schema = "https://schemas.kicad.org/erc.v1.json";
     reportHead.source = fn.GetFullName();
     reportHead.date = GetISO8601CurrentDateTime();
     reportHead.kicad_version = GetMajorMinorPatchVersion();

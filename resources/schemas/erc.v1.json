@@ -6,6 +6,10 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "JSON schema reference"
+    },
     "source": {
       "type": "string",
       "description": "Source file path"
