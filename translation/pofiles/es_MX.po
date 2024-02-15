@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:31-0800\n"
-"PO-Revision-Date: 2024-01-31 13:10+0000\n"
+"PO-Revision-Date: 2024-02-16 14:08+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v7/es_MX/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.4\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -101,7 +101,7 @@ msgstr "Construir capa técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1059
 msgid "Build BVH for holes and vias"
-msgstr "Construir BVH para orificios y vías"
+msgstr "Construir BVH para agujeros y vías"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:390
 msgid "OpenGL context creation error"
@@ -3707,7 +3707,7 @@ msgstr "Diámetro del pad de vía"
 
 #: common/dialogs/panel_setup_netclasses.cpp:501
 msgid "Via plated hole diameter"
-msgstr "Diámetro del orificio de vía plateada"
+msgstr "Diámetro del agujero de vía plateada"
 
 #: common/dialogs/panel_setup_netclasses.cpp:502
 msgid "Microvia pad diameter"
@@ -3715,7 +3715,7 @@ msgstr "Diámetro pad de microvía"
 
 #: common/dialogs/panel_setup_netclasses.cpp:503
 msgid "Microvia plated hole diameter"
-msgstr "Diámetro de orificio vía plateada"
+msgstr "Diámetro de agujero vía plateada"
 
 #: common/dialogs/panel_setup_netclasses.cpp:504
 msgid "Differential pair track width"
@@ -5450,7 +5450,7 @@ msgstr "Orificios de vía"
 
 #: common/layer_id.cpp:170
 msgid "Via hole walls"
-msgstr "Paredes de orificios de vía"
+msgstr "Paredes de agujeros de vía"
 
 #: common/layer_id.cpp:171
 msgid "Plated holes"
@@ -5458,7 +5458,7 @@ msgstr "Orificios plateados"
 
 #: common/layer_id.cpp:172
 msgid "Plated hole walls"
-msgstr "Paredes de orificios plateados"
+msgstr "Paredes de agujeros plateados"
 
 #: common/layer_id.cpp:173
 msgid "Non-plated holes"
@@ -18699,7 +18699,7 @@ msgstr "Asignación automática de capa"
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:390
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:135
 msgid "Hole data"
-msgstr "Datos de orificio"
+msgstr "Datos de agujero"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:435
 msgid ""
@@ -20126,7 +20126,7 @@ msgstr "Incluir solo huellas SMD (solo ascii o csv)"
 #: kicad/cli/command_export_pcb_pos.cpp:77
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
 msgstr ""
-"Excluir todas las huellas con pads de orificio pasante (solo ascii o csv)"
+"Excluir todas las huellas con pads de agujero pasante (solo ascii o csv)"
 
 #: kicad/cli/command_export_pcb_pos.cpp:82
 msgid "Include board edge layer (gerber only)"
@@ -23062,7 +23062,7 @@ msgstr "Longitud de vía:"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
 msgstr ""
-"La longitud de la vía es el grosor de la placa para las vías del orificio "
+"La longitud de la vía es el grosor de la placa para las vías del agujero "
 "pasante"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
@@ -23079,7 +23079,7 @@ msgstr "Diámetro de agujero de separación:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Diámetro del orificio de separación en los planos de tierra"
+msgstr "Diámetro del agujero de separación en los planos de tierra"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -23133,7 +23133,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Advertencia:\n"
-"Diámetro del pad de la vía >= Diámetro del orificio de separación.\n"
+"Diámetro del pad de la vía >= Diámetro del agujero de separación.\n"
 "Algunos parámetros no se pueden calcular para una vía dentro de una zona de "
 "cobre."
 
@@ -25272,7 +25272,7 @@ msgstr "Eliminar vías re&dundantes"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:31
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "eliminar vías de pads de orificio pasante y de vías superpuestas"
+msgstr "eliminar vías de pads de agujero pasante y de vías superpuestas"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "Delete vias connected on only one layer"
@@ -27476,7 +27476,7 @@ msgstr "Incluir solo huellas SMD"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:78
 msgid "Exclude all footprints with through hole pads"
-msgstr "Excluir todas las huellas con pads de orificios pasantes"
+msgstr "Excluir todas las huellas con pads de agujeros pasantes"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
 msgid "Include board edge layer"
@@ -28671,7 +28671,7 @@ msgstr "Error: El pad debe tener un tamaño positivo."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1277
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "Advertencia: El orificio del pad no está dentro del pad."
+msgstr "Advertencia: El agujero del pad no está dentro del pad."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1290
 msgid "Warning: Pad hole will leave no copper."
@@ -28724,7 +28724,7 @@ msgstr "Error: El delta del trapazoide es demasiado grande."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1368
 msgid "Error: Through hole pad has no hole."
-msgstr "Error: El pad de orificio pasante no tiene un agujero."
+msgstr "Error: El pad de agujero pasante no tiene un agujero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1375
 msgid ""
@@ -28790,7 +28790,7 @@ msgstr "Modificar pad"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1704
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
 msgid "Hole size X:"
-msgstr "Tamaño X orificio:"
+msgstr "Tamaño X agujero:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1716
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
@@ -28975,7 +28975,7 @@ msgstr "Inferior derecha"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:361
 msgid "Hole shape:"
-msgstr "Forma del orificio:"
+msgstr "Forma del agujero:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:402
 msgid "Offset shape from hole"
@@ -29053,7 +29053,7 @@ msgstr ""
 "Pad de punto de prueba es útil para especificar puntos de prueba en archivos "
 "Gerber\n"
 "Pad de disipador especifica un pad térmico\n"
-"Castellado especifica pads de orificio pasante castellados en el borde de la "
+"Castellado especifica pads de agujero pasante castellados en el borde de la "
 "placa\n"
 "Estas propiedades son especificadas en archivos Gerber X2."
 
@@ -29079,7 +29079,7 @@ msgstr "Pad de disipador"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Castellated pad (through hole only)"
-msgstr "Pad castellado (solo orificio pasante)"
+msgstr "Pad castellado (solo agujero pasante)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
 msgid "Clearance Overrides"
@@ -30892,7 +30892,7 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
-"El margen mínimo entre un orificio y un elemento de cobre no asociado. Si "
+"El margen mínimo entre un agujero y un elemento de cobre no asociado. Si "
 "está habilitado, este es un mínimo absoluto que no puede ser reducido por "
 "reglas personalizadas u otras configuraciones."
 
@@ -30923,13 +30923,13 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
-"El tamaño mínimo de orificio pasante. Si está habilitado, este es un mínimo "
+"El tamaño mínimo de agujero pasante. Si está habilitado, este es un mínimo "
 "absoluto que no puede ser reducido por las clases de red, reglas "
 "personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
-msgstr "Margen de orificio a orificio:"
+msgstr "Margen de agujero a agujero:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:206
 msgid ""
@@ -30937,7 +30937,7 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
-"El margen mínimo entre dos orificios taladrados. Si está habilitado, este es "
+"El margen mínimo entre dos agujeros taladrados. Si está habilitado, este es "
 "un mínimo absoluto que no puede ser reducido por reglas personalizadas, u "
 "otras configuraciones. (Nota: no aplica a agujeros fresados.)"
 
@@ -30967,7 +30967,7 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"El tamaño mínimo de orificio de micro-vía. Si está habilitado, este es un "
+"El tamaño mínimo de agujero de micro-vía. Si está habilitado, este es un "
 "mínimo absoluto que no puede ser reducido por las clases de red, reglas "
 "personalizadas, u otras configuraciones."
 
@@ -32502,7 +32502,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:369
 msgid "No via hole size defined."
-msgstr "Taladro de orificio de vía no definido."
+msgstr "Taladro de agujero de vía no definido."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:383
 msgid "No differential pair gap defined."
@@ -32569,7 +32569,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:198
 msgid "board setup constraints hole"
-msgstr "restricciones de configuración de placa para orificios"
+msgstr "restricciones de configuración de placa para agujeros"
 
 #: pcbnew/drc/drc_engine.cpp:203
 msgid "board setup constraints edge"
@@ -32632,12 +32632,12 @@ msgstr "Margen mínimo de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:772
 msgid "board minimum hole"
-msgstr "orificio mínimo de placa"
+msgstr "agujero mínimo de placa"
 
 #: pcbnew/drc/drc_engine.cpp:775
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Margen de orificio mínimo de placa: %s."
+msgstr "Margen de agujero mínimo de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:794
 #, c-format
@@ -32956,7 +32956,7 @@ msgstr "La pista tiene un lado no conectado"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
-msgstr "Infracción de margen de orificio"
+msgstr "Infracción de margen de agujero"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
@@ -33085,7 +33085,7 @@ msgstr "Longitud de pista fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:233
 msgid "Skew between traces out of range"
-msgstr "Inclinación entre pistas fuera del rango"
+msgstr "Desvío entre pistas fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Too many vias on a connection"
@@ -33285,7 +33285,7 @@ msgstr "Comprobando márgenes de pistas y vías..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:148
 msgid "Checking hole clearances..."
-msgstr "Comprobando márgenes de orificios..."
+msgstr "Comprobando márgenes de agujeros..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:156
 msgid "Checking pad clearances..."
@@ -33380,15 +33380,15 @@ msgstr "Comprobando márgenes de la serigrafía al borde de la placa..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
-msgstr "Comprobando orificios de pads..."
+msgstr "Comprobando agujeros de pads..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:93
 msgid "Checking via holes..."
-msgstr "Comprobando orificios de vías..."
+msgstr "Comprobando agujeros de vías..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:98
 msgid "Checking micro-via holes..."
-msgstr "Comprobando orificios de micro-vías..."
+msgstr "Comprobando agujeros de micro-vías..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:158
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:227
@@ -33406,7 +33406,7 @@ msgstr "(%s ancho máximo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
-msgstr "Comprobando márgenes entre orificio y orificio..."
+msgstr "Comprobando márgenes entre agujero y agujero..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:304
 #, c-format
@@ -33682,8 +33682,8 @@ msgstr "No se ha podido exportar el archivo IDF\n"
 #: pcbnew/exporters/exporter_vrml.cpp:810
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr ""
-"No se ha podido exportar el archivo VRML: no pueden agregarse orificios a "
-"los contornos."
+"No se ha podido exportar el archivo VRML: no pueden agregarse agujeros a los "
+"contornos."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1242
 msgid "No project when exporting the VRML file"
@@ -33980,7 +33980,7 @@ msgstr "Huella %s"
 #: pcbnew/footprint.cpp:2522
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "(esperado 'orificio pasante' real '%s')"
+msgstr "(esperado 'agujero pasante' real '%s')"
 
 #: pcbnew/footprint.cpp:2525
 #, c-format
@@ -33993,7 +33993,7 @@ msgstr "(el pad PTH no tiene capas de cobre)"
 
 #: pcbnew/footprint.cpp:2572
 msgid "(PTH pad's hole leaves no copper)"
-msgstr "(El orificio del pad PTH no deja cobre)"
+msgstr "(El agujero del pad PTH no deja cobre)"
 
 #: pcbnew/footprint.cpp:2581
 msgid "(SMD pad appears on both front and back copper)"
@@ -35324,11 +35324,11 @@ msgstr "Relación de radios redondos"
 
 #: pcbnew/pad.cpp:1869
 msgid "Hole Size X"
-msgstr "Tamaño X de orificio"
+msgstr "Tamaño X de agujero"
 
 #: pcbnew/pad.cpp:1875
 msgid "Hole Size Y"
-msgstr "Tamaño Y de orificio"
+msgstr "Tamaño Y de agujero"
 
 #: pcbnew/pad.cpp:1881
 msgid "Fabrication Property"
@@ -35944,7 +35944,7 @@ msgstr "Huella %s pad %s no marcado como multicapa, pero es un pad pasante."
 #: pcbnew/plugins/altium/altium_pcb.cpp:2721
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "Huella %s pad %s tiene un orificio cuadrado (todavía no soportado)."
+msgstr "Huella %s pad %s tiene un agujero cuadrado (todavía no soportado)."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2748
 #, c-format
@@ -35952,13 +35952,13 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Huella %s pad %s tiene una rotación de orificio de %f°. KiCad solo soporta "
+"Huella %s pad %s tiene una rotación de agujero de %f°. KiCad solo soporta "
 "rotaciones de 90°."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2760
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Huella %s pad %s utiliza un orificio de tipo desconocido %d."
+msgstr "Huella %s pad %s utiliza un agujero de tipo desconocido %d."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2777
 #, c-format
@@ -35992,8 +35992,7 @@ msgstr ""
 #: pcbnew/plugins/altium/altium_pcb.cpp:2919
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr ""
-"Un pad que no es de cobre %s tiene un orificio, esto no está soportado."
+msgstr "Un pad que no es de cobre %s tiene un agujero, esto no está soportado."
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:2924
 #, c-format
@@ -36171,8 +36170,8 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
-"La definición de pad de CADSTAR '%s' tiene la forma de orificio por fuera de "
-"la forma del pad. El orificio se ha movido al centro del pad."
+"La definición de pad de CADSTAR '%s' tiene la forma de agujero por fuera de "
+"la forma del pad. El agujero se ha movido al centro del pad."
 
 #: pcbnew/plugins/cadstar/cadstar_pcb_archive_loader.cpp:1287
 #, c-format
@@ -37221,8 +37220,8 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"No puede encontrarse la red complementaria del par diferencial para el "
-"afinado de la longitud. Asegurese de que los nombres de las redes que "
+"No puede encontrarse la red complementaria del par diferencial para la "
+"sintonización de la longitud. Asegurese de que los nombres de las redes que "
 "pertenecen al mismo par terminan en _N/_P o +/-."
 
 #: pcbnew/router/pns_dp_meander_placer.cpp:462
@@ -37291,9 +37290,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"No puede encontrarse la red complementaria del par diferencial para el "
-"afinado del desvío. Asegurese de que los nombres de las redes que pertenecen "
-"al mismo par terminan en _N/_P o +/-."
+"No puede encontrarse la red complementaria del par diferencial para la "
+"sintonización del desvío. Asegurese de que los nombres de las redes que "
+"pertenecen al mismo par terminan en _N/_P o +/-."
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:174
 msgid "Too long: skew "
@@ -38102,7 +38101,7 @@ msgstr "Restricciones de ancho anular resueltas: mín %s; máx. %s."
 #: pcbnew/tools/board_inspection_tool.cpp:383
 #: pcbnew/tools/board_inspection_tool.cpp:1223
 msgid "Hole Size"
-msgstr "Tamaño de orificio"
+msgstr "Tamaño de agujero"
 
 #: pcbnew/tools/board_inspection_tool.cpp:384
 #: pcbnew/tools/board_inspection_tool.cpp:1224
@@ -38111,12 +38110,12 @@ msgstr "Resolución de diámetro de orificio para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:398
 msgid "Hole Clearance"
-msgstr "Espacio libre del orificio"
+msgstr "Espacio libre del agujero"
 
 #: pcbnew/tools/board_inspection_tool.cpp:399
 #: pcbnew/tools/board_inspection_tool.cpp:945
 msgid "Hole clearance resolution for:"
-msgstr "Resolución de margen de orificios para:"
+msgstr "Resolución de margen de agujeros para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:407
 #: pcbnew/tools/board_inspection_tool.cpp:508
@@ -38442,7 +38441,7 @@ msgstr "Pads castellados: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:474
 msgid "Min hole diameter: "
-msgstr "Diámetro mínimo de orificio: "
+msgstr "Diámetro mínimo de agujero: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:483
 msgid "Impedance Control: "
@@ -40442,11 +40441,11 @@ msgstr "Margen actual"
 
 #: pcbnew/tools/pcb_control.cpp:1492
 msgid "Resolved hole clearance"
-msgstr "Margen de orificios resuelta"
+msgstr "Margen de agujeros resuelta"
 
 #: pcbnew/tools/pcb_control.cpp:1497
 msgid "Actual hole clearance"
-msgstr "Margen de orificios actual"
+msgstr "Margen de agujeros actual"
 
 #: pcbnew/tools/pcb_control.cpp:1530
 msgid "Resolved edge clearance"
@@ -40692,11 +40691,11 @@ msgstr "Mostrar huellas en la parte trasera de la placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Through-hole Pads"
-msgstr "Pads de orificio pasante"
+msgstr "Pads de agujero pasante"
 
 #: pcbnew/widgets/appearance_controls.cpp:341
 msgid "Show through-hole pads"
-msgstr "Mostrar pads de orificio pasante"
+msgstr "Mostrar pads de agujero pasante"
 
 #: pcbnew/widgets/appearance_controls.cpp:342
 msgid "Show footprint values"
