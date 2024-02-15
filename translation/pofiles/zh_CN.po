@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-11 02:02+0000\n"
+"PO-Revision-Date: 2024-02-15 20:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -44,7 +44,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.4\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2156,25 +2156,22 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>当前匹配的网络: </b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "匹配规则"
+msgstr "匹配规则:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "网络类"
+msgstr "网络类:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
-msgstr ""
+msgstr "注: 可在 '原理图设置 > 工程' 中编辑完整的网络类分配。"
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "网络类分配:"
+msgstr "添加网络类分配"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2483,9 +2480,8 @@ msgid "Name:"
 msgstr "名称:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(可选的; 默认为 0)"
+msgstr "(可选)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2571,9 +2567,8 @@ msgid "unit"
 msgstr "单位"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "链接:"
+msgstr "已链接"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -15129,9 +15124,8 @@ msgid "Insert Schematic"
 msgstr "插入原理图"
 
 #: eeschema/files-io.cpp:660
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "插入原理图图纸内容..."
+msgstr "导入原理图图纸内容..."
 
 #: eeschema/files-io.cpp:672
 msgid ""
@@ -33815,14 +33809,12 @@ msgstr ""
 "选器中启用时才能被选中。"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
-#, fuzzy
 msgid "Associated layer:"
-msgstr "相关层"
+msgstr "分配层:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
-#, fuzzy
 msgid "Reference Image Properties"
-msgstr "图像属性"
+msgstr "参考图像属性"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
 msgid "Convert to Rule Area"
