@@ -167,6 +167,27 @@ size_t SELECTION::CountType( KICAD_T aType ) const
 }
 
 
+VECTOR2I SELECTION::GetReferencePoint() const
+{
+    if( m_referencePoint )
+        return *m_referencePoint;
+    else
+        return GetBoundingBox().Centre();
+}
+
+
+void SELECTION::SetReferencePoint( const VECTOR2I& aP )
+{
+    m_referencePoint = aP;
+}
+
+
+void SELECTION::ClearReferencePoint()
+{
+    m_referencePoint = std::nullopt;
+}
+
+
 const std::vector<KIGFX::VIEW_ITEM*> SELECTION::updateDrawList() const
 {
     std::vector<VIEW_ITEM*> items;

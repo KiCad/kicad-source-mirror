@@ -249,23 +249,9 @@ public:
         return m_referencePoint != std::nullopt;
     }
 
-    VECTOR2I GetReferencePoint() const
-    {
-        if( m_referencePoint )
-            return *m_referencePoint;
-        else
-            return GetBoundingBox().Centre();
-    }
-
-    void SetReferencePoint( const VECTOR2I& aP )
-    {
-        m_referencePoint = aP;
-    }
-
-    void ClearReferencePoint()
-    {
-        m_referencePoint = std::nullopt;
-    }
+    VECTOR2I GetReferencePoint() const;
+    void SetReferencePoint( const VECTOR2I& aP );
+    void ClearReferencePoint();
 
     /**
      * Checks if all items in the selection are the same KICAD_T type
