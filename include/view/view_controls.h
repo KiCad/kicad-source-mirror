@@ -135,7 +135,8 @@ class GAL_API VIEW_CONTROLS
 {
 public:
     VIEW_CONTROLS( VIEW* aView ) :
-        m_view( aView ), m_cursorWarped( false )
+            m_view( aView ),
+            m_cursorWarped( false )
     {
     }
 
