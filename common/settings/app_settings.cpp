@@ -332,14 +332,17 @@ void APP_SETTINGS_BASE::addParamsForWindow( WINDOW_SETTINGS* aWindow, const std:
 
     int defaultGridIdx;
 
-    if( m_filename == wxS( "pl_editor" )
-        || ( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) ) )
+    if( ( m_filename == wxS( "eeschema" ) || m_filename == wxS( "symbol_editor" ) ) )
     {
         defaultGridIdx = 1;
     }
-    else
+    else if( m_filename == wxS( "pl_editor" ) )
     {
         defaultGridIdx = 4;
+    }
+    else
+    {
+        defaultGridIdx = 15;
     }
 
     m_params.emplace_back( new PARAM_LIST<GRID>( aJsonPath + ".grid.sizes", &aWindow->grid.grids,
