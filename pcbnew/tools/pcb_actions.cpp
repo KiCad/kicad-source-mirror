@@ -1921,56 +1921,56 @@ TOOL_ACTION PCB_ACTIONS::alignTop( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.alignTop" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Align to Top" ) )
-        .Tooltip( _( "Aligns selected items to the top edge" ) )
+        .Tooltip( _( "Aligns selected items to the top edge of the item under the cursor" ) )
         .Icon( BITMAPS::align_items_top ) );
 
 TOOL_ACTION PCB_ACTIONS::alignBottom( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.alignBottom" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Align to Bottom" ) )
-        .Tooltip( _( "Aligns selected items to the bottom edge" ) )
+        .Tooltip( _( "Aligns selected items to the bottom edge of the item under the cursor" ) )
         .Icon( BITMAPS::align_items_bottom ) );
 
 TOOL_ACTION PCB_ACTIONS::alignLeft( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.alignLeft" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Align to Left" ) )
-        .Tooltip( _( "Aligns selected items to the left edge" ) )
+        .Tooltip( _( "Aligns selected items to the left edge of the item under the cursor" ) )
         .Icon( BITMAPS::align_items_left ) );
 
 TOOL_ACTION PCB_ACTIONS::alignRight( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.alignRight" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Align to Right" ) )
-        .Tooltip( _( "Aligns selected items to the right edge" ) )
+        .Tooltip( _( "Aligns selected items to the right edge of the item under the cursor" ) )
         .Icon( BITMAPS::align_items_right ) );
 
 TOOL_ACTION PCB_ACTIONS::alignCenterY( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.alignCenterY" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Align to Vertical Center" ) )
-        .Tooltip( _( "Aligns selected items to the vertical center" ) )
+        .Tooltip( _( "Aligns selected items to the vertical center of the item under the cursor" ) )
         .Icon( BITMAPS::align_items_center ) );
 
 TOOL_ACTION PCB_ACTIONS::alignCenterX( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.alignCenterX" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Align to Horizontal Center" ) )
-        .Tooltip( _( "Aligns selected items to the horizontal center" ) )
+        .Tooltip( _( "Aligns selected items to the horizontal center of the item under the cursor" ) )
         .Icon( BITMAPS::align_items_middle ) );
 
 TOOL_ACTION PCB_ACTIONS::distributeHorizontally( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.distributeHorizontally" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Distribute Horizontally" ) )
-        .Tooltip( _( "Distributes selected items along the horizontal axis" ) )
+        .Tooltip( _( "Distributes selected items between the left-most item and the right-most item" ) )
         .Icon( BITMAPS::distribute_horizontal ) );
 
 TOOL_ACTION PCB_ACTIONS::distributeVertically( TOOL_ACTION_ARGS()
         .Name( "pcbnew.AlignAndDistribute.distributeVertically" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Distribute Vertically" ) )
-        .Tooltip( _( "Distributes selected items along the vertical axis" ) )
+        .Tooltip( _( "Distributes selected items between the top-most item and the bottom-most item" ) )
         .Icon( BITMAPS::distribute_vertical ) );
 
 

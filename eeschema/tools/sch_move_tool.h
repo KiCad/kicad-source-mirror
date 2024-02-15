@@ -60,7 +60,7 @@ public:
      * @param aEvent current event that activated the tool
      * @return 0
      */
-    int AlignElements( const TOOL_EVENT& aEvent );
+    int AlignToGrid( const TOOL_EVENT& aEvent );
 
 private:
     bool doMoveSelection( const TOOL_EVENT& aEvent, SCH_COMMIT* aCommit, bool aIsSlice );

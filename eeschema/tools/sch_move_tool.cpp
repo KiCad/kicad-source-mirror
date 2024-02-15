@@ -1578,7 +1578,7 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 }
 
 
-int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
+int SCH_MOVE_TOOL::AlignToGrid( const TOOL_EVENT& aEvent )
 {
     EE_GRID_HELPER    grid( m_toolMgr);
     EE_SELECTION&     selection = m_selectionTool->RequestSelection( EE_COLLECTOR::MovableItems );
@@ -1750,7 +1750,7 @@ int SCH_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
     m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
 
     m_frame->SchematicCleanUp( &commit );
-    commit.Push( _( "Align" ) );
+    commit.Push( _( "Align Items to Grid" ) );
     return 0;
 }
 
@@ -1772,7 +1772,7 @@ void SCH_MOVE_TOOL::setTransitions()
 {
     Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
     Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::drag.MakeEvent() );
-    Go( &SCH_MOVE_TOOL::AlignElements,      EE_ACTIONS::alignToGrid.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::AlignToGrid,        EE_ACTIONS::alignToGrid.MakeEvent() );
 }
 
 
