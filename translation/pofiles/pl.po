@@ -14,17 +14,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-11 02:02+0000\n"
+"PO-Revision-Date: 2024-02-15 20:02+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.4\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -2162,25 +2162,24 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Obecnie pasujące sieci:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Szablon"
+msgstr "Szablon:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Klasy sieci"
+msgstr "Klasa sieci:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Uwaga: Pełne przypisania klas sieci można zmieniać w menu Ustawienia "
+"schematu > Projekt."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Przydział klas sieci:"
+msgstr "Dodaj przypisanie klasy sieci"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2500,9 +2499,8 @@ msgid "Name:"
 msgstr "Nazwa:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(opcionalny; domyślnie 0)"
+msgstr "(opcjonalny)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2588,9 +2586,8 @@ msgid "unit"
 msgstr "jednostka"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Link:"
+msgstr "Połączone"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -15424,9 +15421,8 @@ msgid "Insert Schematic"
 msgstr "Importuj schemat"
 
 #: eeschema/files-io.cpp:660
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Dołącz zawartość innego schematu..."
+msgstr "Dołącz zawartość arkusza schematu..."
 
 #: eeschema/files-io.cpp:672
 msgid ""
@@ -34638,14 +34634,12 @@ msgstr ""
 "pole wyboru 'Zablokowane elementy'."
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
-#, fuzzy
 msgid "Associated layer:"
-msgstr "Przydzielona warstwa"
+msgstr "Przydzielona warstwa:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
-#, fuzzy
 msgid "Reference Image Properties"
-msgstr "Właściwości obrazu"
+msgstr "Właściwości obrazu referencyjnego"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
 msgid "Convert to Rule Area"
