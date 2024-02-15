@@ -675,6 +675,10 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
             restore_state = true; // Canceling the tool means that items have to be restored
             break;                // Finish
         }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selection );
+        }
         else if( evt->IsAction( &ACTIONS::undo ) || evt->IsAction( &ACTIONS::doDelete ) )
         {
             restore_state = true; // Perform undo locally
