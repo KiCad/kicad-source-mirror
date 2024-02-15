@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-14 14:05+0100\n"
+"PO-Revision-Date: 2024-02-15 11:31+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -15510,9 +15510,8 @@ msgid "Insert Schematic"
 msgstr "Inserisci schema"
 
 #: eeschema/files-io.cpp:660
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Inserisci i contenuti del foglio schema..."
+msgstr "Importa i contenuti del foglio schema..."
 
 #: eeschema/files-io.cpp:672
 msgid ""
@@ -26230,7 +26229,6 @@ msgid "Linear resistance:"
 msgstr "Resistenza lineare:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "Freq. per 100% profondità di pelle:"
 
@@ -31834,7 +31832,6 @@ msgid "Solder paste relative clearance:"
 msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
-#, fuzzy, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32018,7 +32015,6 @@ msgstr ""
 "scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
-#, fuzzy, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -41002,17 +40998,17 @@ msgstr "Sopprimi gli zeri finali"
 #: pcbnew/pcb_dimension.cpp:1508
 #, fuzzy
 msgid "Crossbar Height"
-msgstr "Altezza"
+msgstr "Altezza crossbar"
 
 #: pcbnew/pcb_dimension.cpp:1512
 #, fuzzy
 msgid "Extension Line Overshoot"
-msgstr "Scostamento linea estensione:"
+msgstr "Overshoot linea estensione"
 
 #: pcbnew/pcb_dimension.cpp:1589
 #, fuzzy
 msgid "Leader Length"
-msgstr "Lunghezza via"
+msgstr "Lunghezza leader"
 
 #: pcbnew/pcb_dimension.cpp:1635
 msgid "Text Frame"
@@ -47740,10 +47736,9 @@ msgstr "Suite EDA per la progettazione di schemi elettrici e circuiti stampati"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:34
 msgid "EDA"
-msgstr ""
+msgstr "EDA"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:37
-#, fuzzy
 msgid "Circuit board"
 msgstr "Circuito stampato"
 
