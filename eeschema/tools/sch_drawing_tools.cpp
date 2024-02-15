@@ -466,7 +466,8 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( evt->IsAction( &ACTIONS::duplicate ) )
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
         {
             if( symbol )
             {
@@ -723,6 +724,21 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+        {
+            if( image )
+            {
+                // This doesn't really make sense; we'll just end up dragging a stack of
+                // objects so we ignore the duplicate and just carry on.
+                wxBell();
+                continue;
+            }
+
+            // Exit.  The duplicate will run in its own loop.
+            m_frame->PopTool( aEvent );
+            break;
         }
         else if( image && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -1686,6 +1702,21 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 item = nullptr;
             }
         }
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+        {
+            if( item )
+            {
+                // This doesn't really make sense; we'll just end up dragging a stack of
+                // objects so we ignore the duplicate and just carry on.
+                wxBell();
+                continue;
+            }
+
+            // Exit.  The duplicate will run in its own loop.
+            m_frame->PopTool( aEvent );
+            break;
+        }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             item->SetPosition( cursorPos );
@@ -1915,6 +1946,21 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
                 m_toolMgr->PostAction( ACTIONS::activatePointEditor );
             }
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+        {
+            if( item )
+            {
+                // This doesn't really make sense; we'll just end up dragging a stack of
+                // objects so we ignore the duplicate and just carry on.
+                wxBell();
+                continue;
+            }
+
+            // Exit.  The duplicate will run in its own loop.
+            m_frame->PopTool( aEvent );
+            break;
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -2150,6 +2196,21 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             }
 
             sheet = nullptr;
+        }
+        else if( evt->IsAction( &ACTIONS::duplicate )
+                 || evt->IsAction( &EE_ACTIONS::repeatDrawItem ) )
+        {
+            if( sheet )
+            {
+                // This doesn't really make sense; we'll just end up dragging a stack of
+                // objects so we ignore the duplicate and just carry on.
+                wxBell();
+                continue;
+            }
+
+            // Exit.  The duplicate will run in its own loop.
+            m_frame->PopTool( aEvent );
+            break;
         }
         else if( sheet && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
