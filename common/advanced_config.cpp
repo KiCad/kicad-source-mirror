@@ -242,7 +242,7 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_IncrementalConnectivity   = true;
 
-    m_DisambiguationMenuDelay   = 300;
+    m_DisambiguationMenuDelay   = 500;
 
     m_PcbSelectionVisibilityRatio = 1.0;
 
