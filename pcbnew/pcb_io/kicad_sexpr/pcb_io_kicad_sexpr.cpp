@@ -2748,10 +2748,11 @@ void PCB_IO_KICAD_SEXPR::FootprintSave( const wxString& aLibraryPath, const FOOT
     wxString footprintName = aFootprint->GetFPID().GetLibItemName();
 
     FP_CACHE_FOOTPRINT_MAP& footprints = m_cache->GetFootprints();
+    wxString fpName = aFootprint->GetFPID().GetLibItemName().wx_str();
+    ReplaceIllegalFileNameChars( fpName, '_' );
 
     // Quietly overwrite footprint and delete footprint file from path for any by same name.
-    wxFileName fn( aLibraryPath, aFootprint->GetFPID().GetLibItemName(),
-                   FILEEXT::KiCadFootprintFileExtension );
+    wxFileName fn( aLibraryPath, fpName, FILEEXT::KiCadFootprintFileExtension );
 
     // Write through symlinks, don't replace them
     WX_FILENAME::ResolvePossibleSymlinks( fn );
