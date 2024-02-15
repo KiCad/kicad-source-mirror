@@ -197,7 +197,7 @@ int EDIT_TOOL::PackAndMoveFootprints( const TOOL_EVENT& aEvent )
 
     SpreadFootprints( &footprintsToPack, footprintsBbox.Normalize().GetOrigin(), false );
 
-    if( doMoveSelection( aEvent, &commit ) )
+    if( doMoveSelection( aEvent, &commit, true ) )
         commit.Push( _( "Pack footprints" ) );
     else
         commit.Revert();
@@ -219,7 +219,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
         wxCHECK( aEvent.SynchronousState(), 0 );
         aEvent.SynchronousState()->store( STS_RUNNING );
 
-        if( doMoveSelection( aEvent, commit ) )
+        if( doMoveSelection( aEvent, commit, true ) )
             aEvent.SynchronousState()->store( STS_FINISHED );
         else
             aEvent.SynchronousState()->store( STS_CANCELLED );
@@ -228,7 +228,7 @@ int EDIT_TOOL::Move( const TOOL_EVENT& aEvent )
     {
         BOARD_COMMIT localCommit( this );
 
-        if( doMoveSelection( aEvent, &localCommit ) )
+        if( doMoveSelection( aEvent, &localCommit, false ) )
             localCommit.Push( _( "Move" ) );
         else
             localCommit.Revert();
@@ -277,7 +277,7 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 }
 
 
-bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit )
+bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit, bool aAutoStart )
 {
     bool moveWithReference = aEvent.IsAction( &PCB_ACTIONS::moveWithReference );
     bool moveIndividually = aEvent.IsAction( &PCB_ACTIONS::moveIndividually );
@@ -544,7 +544,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                 m_toolMgr->PostEvent( EVENTS::SelectedItemsMoved );
             }
-            else if( !m_dragging && !evt->IsAction( &ACTIONS::refreshPreview ) )
+            else if( !m_dragging && ( aAutoStart || !evt->IsAction( &ACTIONS::refreshPreview ) ) )
             {
                 // Prepare to start dragging
                 editFrame->HideSolderMask();

@@ -2563,7 +2563,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
                                                      (int) new_items.size() ) );
 
         // If items were duplicated, pick them up
-        if( doMoveSelection( aEvent, &commit ) )
+        if( doMoveSelection( aEvent, &commit, true ) )
             commit.Push( _( "Duplicate" ) );
         else
             commit.Revert();
@@ -2629,11 +2629,11 @@ void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector,
 
 bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
 {
-    if( m_dragging && aSelection.HasReferencePoint() )
-        return false;
-
     // Can't modify an empty group
     if( aSelection.Empty() )
+        return false;
+
+    if( ( m_dragging || aSelection[0]->IsMoving() ) && aSelection.HasReferencePoint() )
         return false;
 
     // When there is only one item selected, the reference point is its position...

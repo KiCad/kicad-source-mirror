@@ -942,8 +942,13 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
         if( wxWindow* frame = dynamic_cast<wxWindow*>( m_frame ) )
             frame->PopupMenu( menu.get() );
 
-        // If a menu is canceled then notify tool
-        if( menu->GetSelected() < 0 )
+        // Warp the cursor if a menu item was selected
+        if( menu->GetSelected() >= 0 )
+        {
+            if( m_viewControls && m_warpMouseAfterContextMenu )
+                m_viewControls->WarpMouseCursor( m_menuCursor, true, false );
+        }
+        // Otherwise notify the tool of a cancelled menu
         {
             TOOL_EVENT evt( TC_COMMAND, TA_CHOICE_MENU_CHOICE, -1 );
             evt.SetHasPosition( false );
