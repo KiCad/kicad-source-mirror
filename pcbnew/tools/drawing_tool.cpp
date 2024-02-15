@@ -882,6 +882,9 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            if( !text )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
             m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) )
@@ -1179,6 +1182,9 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            if( !dimension )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
             m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
@@ -1976,6 +1982,9 @@ bool DRAWING_TOOL::drawShape( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            if( !graphic )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
             m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
@@ -2411,6 +2420,9 @@ bool DRAWING_TOOL::drawArc( const TOOL_EVENT& aTool, PCB_SHAPE** aGraphic,
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            if( !graphic )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
             m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
@@ -2663,6 +2675,9 @@ int DRAWING_TOOL::DrawZone( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
+            if( !started )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
             m_menu.ShowContextMenu( selection() );
         }
         // events that lock in nodes
