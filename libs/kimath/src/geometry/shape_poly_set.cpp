@@ -2764,7 +2764,7 @@ void SHAPE_POLY_SET::CacheTriangulation( bool aPartition, bool aSimplify )
                         dest.erase( dest.end() - 1 );
 
                     dest.push_back( std::make_unique<TRIANGULATED_POLYGON>( forOutline ) );
-                    PolygonTriangulation tess( *dest.back() );
+                    POLYGON_TRIANGULATION tess( *dest.back() );
 
                     // If the tessellation fails, we re-fracture the polygon, which will
                     // first simplify the system before fracturing and removing the holes
