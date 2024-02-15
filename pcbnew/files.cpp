@@ -328,10 +328,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
     case ID_IMPORT_NON_KICAD_BOARD:
     {
-        // Only standalone mode can directly load a new document
-        if( !Kiface().IsSingle() )
-            return false;
-
+        // Note: we explicitly allow this even if not in standalone mode for now, even though it is dangerous.
         int         open_ctl = 1;
         wxString    fileName; // = Prj().AbsolutePath( GetBoard()->GetFileName() );
 
