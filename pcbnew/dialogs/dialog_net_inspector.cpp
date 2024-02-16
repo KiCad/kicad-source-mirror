@@ -580,7 +580,7 @@ public:
         return { new_iter };
     }
 
-    void addItems( std::vector<std::unique_ptr<LIST_ITEM>>&& aItems )
+    void addItems( std::vector<std::unique_ptr<LIST_ITEM>> aItems )
     {
         if( m_items.empty() )
         {
