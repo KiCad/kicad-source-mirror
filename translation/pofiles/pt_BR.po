@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:31-0800\n"
-"PO-Revision-Date: 2024-01-14 12:31+0000\n"
+"PO-Revision-Date: 2024-02-16 14:08+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v7/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.4\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -14653,9 +14653,9 @@ msgstr "O nome da propriedade está vazio"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate field '%s'"
-msgstr "Itens duplicados %s%s\n"
+msgstr "Campos duplicados '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
