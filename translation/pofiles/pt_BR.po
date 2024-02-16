@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-02 12:24+0000\n"
+"PO-Revision-Date: 2024-02-16 14:08+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.4\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -2178,25 +2178,24 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Nets correspondentes atualmente:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Padrão"
+msgstr "Padrão:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Classes da rede"
+msgstr "Net class:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Observação: as atribuições completas da net class podem ser editadas em "
+"Configurações de esquemas > Projeto."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Atribuições da netclass:"
+msgstr "Adicionar as atribuições da netclass"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2517,9 +2516,8 @@ msgid "Name:"
 msgstr "Nome:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(opcional; padrão 0)"
+msgstr "(opcional)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2605,9 +2603,8 @@ msgid "unit"
 msgstr "unidade"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Link:"
+msgstr "Vinculado"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -4111,9 +4108,8 @@ msgid "Reset Unique Id"
 msgstr "Redefinir o ID único"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Footprints"
+msgstr "Footprints/ilhas:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -6950,9 +6946,8 @@ msgid "Courtyard collision shadow"
 msgstr "Sombra de colisão do pedaço"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Um caractere ilegal foi encontrado no nome da biblioteca lógica"
+msgstr "Um caractere ilegal foi encontrado no apelido da biblioteca"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -15472,9 +15467,8 @@ msgid "Insert Schematic"
 msgstr "Inserir um esquemático"
 
 #: eeschema/files-io.cpp:660
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Inserir o conteúdo da folha do esquema..."
+msgstr "Importar o conteúdo da folha do esquema..."
 
 #: eeschema/files-io.cpp:672
 msgid ""
@@ -16252,9 +16246,8 @@ msgstr ""
 "biblioteca '%s'."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1710
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Estilo de estrutura"
+msgstr "Alterar o estilo do corpo"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
@@ -19545,9 +19538,9 @@ msgid "<b>A Power Symbol should have only one unit</b><br><br>"
 msgstr "<b>Um símbolo de energia deve ter apenas uma unidade</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>Um símbolo de alimentação deve ter apenas um pino</b><br><br>"
+msgstr ""
+"<b>Um símbolo de alimentação não deve ter variantes DeMorgan</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
@@ -22093,29 +22086,24 @@ msgid "Change property"
 msgstr "Altera a propriedade"
 
 #: eeschema/widgets/search_handlers.cpp:136
-#, fuzzy
 msgid "Excl. sim"
-msgstr "Exclusões"
+msgstr "Excl. sim"
 
 #: eeschema/widgets/search_handlers.cpp:137
-#, fuzzy
 msgid "Excl. BOM"
-msgstr "Excluído do BOM"
+msgstr "Excl. BOM"
 
 #: eeschema/widgets/search_handlers.cpp:138
-#, fuzzy
 msgid "Excl. board"
-msgstr "área de transferência"
+msgstr "Excl. placa"
 
 #: eeschema/widgets/search_handlers.cpp:355
-#, fuzzy
 msgid "Hierarchical"
-msgstr "Caminho hierárquico"
+msgstr "Hierárquico"
 
 #: eeschema/widgets/search_handlers.cpp:357
-#, fuzzy
 msgid "Directive"
-msgstr "Etiqueta diretiva"
+msgstr "Diretiva"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -32650,6 +32638,8 @@ msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
 msgstr ""
+"Não crie reforço de junção nas trilhas conectadas às ilhas que também "
+"estejam conectados a uma região de cobre."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
@@ -34750,14 +34740,12 @@ msgstr ""
 "estiver marcada no filtro de seleção."
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
-#, fuzzy
 msgid "Associated layer:"
-msgstr "Camadas associadas"
+msgstr "Camadas associadas:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
-#, fuzzy
 msgid "Reference Image Properties"
-msgstr "Propriedades da imagem"
+msgstr "Propriedades da imagem de referência"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
 msgid "Convert to Rule Area"
@@ -39871,9 +39859,8 @@ msgid "Previous footprint placement still in progress."
 msgstr "O posicionamento do footprint anterior ainda está em andamento."
 
 #: pcbnew/footprint_libraries_utils.cpp:942
-#, fuzzy
 msgid "Insert Footprint"
-msgstr "Importa Footprint"
+msgstr "Inserir o Footprint"
 
 #: pcbnew/footprint_libraries_utils.cpp:963
 msgid "Save Footprint As"
@@ -43088,14 +43075,13 @@ msgid "Running DRC...\n"
 msgstr "Executando o DRC...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1026
-#, fuzzy
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "Houve uma falha ao carregar o arquivo do esquema\n"
+msgstr "Houve uma falha ao localizar o esquema para os testes de paridade.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1041
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Houve uma falha ao carregar o arquivo do esquema\n"
+msgstr ""
+"Houve uma falha ao buscar a netlist do esquema para os testes de paridade.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1062 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -45109,9 +45095,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "Adiciona a tangente dos arcos às linhas selecionadas"
 
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "Linhas do chanfro"
+msgstr "Linhas do chanfro..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Cut away corners between selected lines"
@@ -46548,9 +46533,8 @@ msgid "Tune length of a differential pair"
 msgstr "Ajusta o comprimento de um par diferencial"
 
 #: pcbnew/tools/pcb_actions.cpp:2323
-#, fuzzy
 msgid "Tune Length of a Single Track"
-msgstr "Ajusta o comprimento de uma única trilha"
+msgstr "Ajustar o comprimento de uma única trilha"
 
 #: pcbnew/tools/pcb_actions.cpp:2324
 #, fuzzy
