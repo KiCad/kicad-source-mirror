@@ -221,16 +221,6 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                 else if( textItem->GetText() == wxT( "${REFERENCE}" ) )
                     textItem->SetText( boardItem->GetParentFootprint()->GetReference() );
             }
-            else if( boardItem->Type() == PCB_PAD_T )
-            {
-                // Create a parent to own the copied pad
-                FOOTPRINT* footprint = new FOOTPRINT( m_board );
-                PAD*       pad = (PAD*) boardItem->Clone();
-
-                footprint->SetPosition( pad->GetPosition() );
-                footprint->Add( pad );
-                copy = footprint;
-            }
             else if( boardItem->Type() == PCB_GROUP_T )
             {
                 copy = static_cast<PCB_GROUP*>( boardItem )->DeepClone();
@@ -246,6 +236,23 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
             if( copy )
             {
+                if( copy->Type() == PCB_FIELD_T || copy->Type() == PCB_PAD_T )
+                {
+                    // Create a parent footprint to own the copied item
+                    FOOTPRINT* footprint = new FOOTPRINT( m_board );
+
+                    footprint->SetPosition( copy->GetPosition() );
+                    footprint->Add( copy );
+
+                    if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( copy ) )
+                    {
+                        if( field->IsMandatoryField() )
+                            field->SetId( footprint->GetFieldCount() );
+                    }
+
+                    copy = footprint;
+                }
+
                 copy->SetLocked( false );
 
                 // locate the reference point at (0, 0) in the copied items

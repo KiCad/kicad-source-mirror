@@ -104,6 +104,7 @@ public:
     void SetName( const wxString& aName ) { m_name = aName; }
 
     int GetId() const { return m_id; }
+    void SetId( int aId ) { m_id = aId; }
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
