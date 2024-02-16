@@ -716,7 +716,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
             }
 
             //simplify the name if its single unit
-            if( symbol->IsMulti() )
+            if( symbol->GetUnitCount() > 1 )
             {
                 filename += wxString::Format( "_%d", unit );
 
