@@ -502,11 +502,29 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
         const wxString& fieldText = field.GetText();
 
         if( fieldName.IsEmpty() && fieldText.IsEmpty() )
+        {
+            // delete empty, unnamed fields
             m_fields->erase( m_fields->begin() + ii );
+        }
         else if( fieldName == wxT( "Netclass" ) && fieldText.IsEmpty() )
-            m_fields->erase( m_fields->begin() + ii );
+        {
+            // delete empty Netclass fields if there are other Netclass fields present
+            int netclassFieldCount = 0;
+
+            for( int jj = 0; jj < m_fields->GetNumberRows(); ++jj )
+            {
+                if( m_fields->at( jj ).GetCanonicalName() == wxT( "Netclass" ) )
+                    netclassFieldCount++;
+            }
+
+            if( netclassFieldCount > 1 )
+                m_fields->erase( m_fields->begin() + ii );
+        }
         else if( fieldName.IsEmpty() )
+        {
+            // give non-empty, unnamed fields a name
             field.SetName( _( "untitled" ) );
+        }
     }
 
     m_currentLabel->SetFields( *m_fields );
