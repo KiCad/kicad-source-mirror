@@ -323,10 +323,10 @@ public:
      *                        at the same coordinates as an existing one).
      * @return true if added
      */
-    bool Add( std::unique_ptr< SEGMENT >&& aSegment, bool aAllowRedundant = false );
-    void Add( std::unique_ptr< SOLID >&&   aSolid );
-    void Add( std::unique_ptr< VIA >&&     aVia );
-    bool Add( std::unique_ptr< ARC >&&     aArc, bool aAllowRedundant = false );
+    bool Add( std::unique_ptr<SEGMENT> aSegment, bool aAllowRedundant = false );
+    void Add( std::unique_ptr<SOLID>   aSolid );
+    void Add( std::unique_ptr<VIA>     aVia );
+    bool Add( std::unique_ptr<ARC>     aArc, bool aAllowRedundant = false );
 
     void Add( LINE& aLine, bool aAllowRedundant = false );
 
@@ -355,7 +355,7 @@ public:
      * @param aOldItem item to be removed
      * @param aNewItem item add instead
      */
-    void Replace( ITEM* aOldItem, std::unique_ptr< ITEM >&& aNewItem );
+    void Replace( ITEM* aOldItem, std::unique_ptr< ITEM > aNewItem );
     void Replace( LINE& aOldLine, LINE& aNewLine );
 
     /**
