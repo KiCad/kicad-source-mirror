@@ -626,6 +626,12 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
     wxXmlDocument      xmlDocument;
     wxFFileInputStream stream( m_filename.GetFullPath() );
 
+    if( !stream.IsOk() )
+    {
+        THROW_IO_ERROR(
+                wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
+    }
+
     // read first line to check for Eagle XML format file
     wxTextInputStream text( stream );
     wxString          line = text.ReadLine();
@@ -637,7 +643,7 @@ wxXmlDocument SCH_IO_EAGLE::loadXmlDocument( const wxString& aFileName )
                                           m_filename.GetFullPath() ) );
     }
 
-    if( !stream.IsOk() || !xmlDocument.Load( stream ) )
+    if( !xmlDocument.Load( stream ) )
     {
         THROW_IO_ERROR(
                 wxString::Format( _( "Unable to read file '%s'." ), m_filename.GetFullPath() ) );
