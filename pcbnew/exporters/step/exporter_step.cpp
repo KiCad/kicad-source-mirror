@@ -249,8 +249,12 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         wxString mname = m_resolver->ResolvePath( fp_model.m_Filename, footprintBasePath );
 
 
-        if( !wxFileName::FileExists( mname ) )
+        if( mname.empty() || !wxFileName::FileExists( mname ) )
         {
+            // the error path will return an empty name sometimes, at least report back the original filename
+            if( mname.empty() )
+                mname = fp_model.m_Filename;
+
             ReportMessage( wxString::Format( wxT( "Could not add 3D model to %s.\n"
                                                   "File not found: %s\n" ),
                                              aFootprint->GetReference(), mname ) );
