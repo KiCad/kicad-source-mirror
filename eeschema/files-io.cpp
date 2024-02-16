@@ -758,6 +758,12 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
     wxFileName fn = dlg.GetPath();
 
+    if( !fn.IsFileReadable() )
+    {
+        wxLogError( _( "Insufficient permissions to read file '%s'." ), fn.GetFullPath() );
+        return;
+    }
+
     SCH_IO_MGR::SCH_FILE_T pluginType = SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN;
 
     for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
