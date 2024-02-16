@@ -1695,6 +1695,13 @@ void ALTIUM_PCB::ParseModelsData( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile
         wxZlibInputStream   zlibInputStream( stepStream );
 
         wxFFileOutputStream outputStream( storagePath.GetFullPath() );
+
+        if( !outputStream.IsOk() )
+        {
+            wxLogError( _( "Unable to write file '%s'." ), storagePath.GetFullPath() );
+            continue;
+        }
+
         outputStream.Write( zlibInputStream );
         outputStream.Close();
 
