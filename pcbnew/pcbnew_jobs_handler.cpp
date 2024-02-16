@@ -107,7 +107,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( aStepJob->m_filename );
+    BOARD* brd = LoadBoard( aStepJob->m_filename, true );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( aStepJob->m_outputFile.IsEmpty() )
@@ -231,7 +231,7 @@ int PCBNEW_JOBS_HANDLER::JobExportSvg( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( aSvgJob->m_filename );
+    BOARD* brd = LoadBoard( aSvgJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aSvgJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
@@ -257,7 +257,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDxf( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( aDxfJob->m_filename );
+    BOARD* brd = LoadBoard( aDxfJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aDxfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
@@ -314,7 +314,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPdf( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( aPdfJob->m_filename );
+    BOARD* brd = LoadBoard( aPdfJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aPdfJob->m_drawingSheet );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
@@ -385,7 +385,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( aGerberJob->m_filename );
+    BOARD* brd = LoadBoard( aGerberJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
 
     PCB_PLOT_PARAMS       boardPlotOptions = brd->GetPlotOptions();
@@ -519,7 +519,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerber( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( aGerberJob->m_filename );
+    BOARD* brd = LoadBoard( aGerberJob->m_filename, true );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( aGerberJob->m_outputFile.IsEmpty() )
@@ -572,7 +572,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrill( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( aDrillJob->m_filename );
+    BOARD* brd = LoadBoard( aDrillJob->m_filename, true );
 
     // ensure output dir exists
     wxFileName fn( aDrillJob->m_outputDir + wxT( "/" ) );
@@ -694,7 +694,7 @@ int PCBNEW_JOBS_HANDLER::JobExportPos( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( aPosJob->m_filename );
+    BOARD* brd = LoadBoard( aPosJob->m_filename, true );
 
     if( aPosJob->m_outputFile.IsEmpty() )
     {
@@ -964,7 +964,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
     if( aJob->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( drcJob->m_filename );
+    BOARD* brd = LoadBoard( drcJob->m_filename, true );
     brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     if( drcJob->m_outputFile.IsEmpty() )
@@ -1134,7 +1134,7 @@ int PCBNEW_JOBS_HANDLER::JobExportIpc2581( JOB* aJob )
     if( job->IsCli() )
         m_reporter->Report( _( "Loading board\n" ), RPT_SEVERITY_INFO );
 
-    BOARD* brd = LoadBoard( job->m_filename );
+    BOARD* brd = LoadBoard( job->m_filename, true );
 
     if( job->m_outputFile.IsEmpty() )
     {
