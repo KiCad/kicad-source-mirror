@@ -244,6 +244,8 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
                     footprint->SetPosition( copy->GetPosition() );
                     footprint->Add( copy );
 
+                    // Convert any mandatory fields to user fields.  The destination footprint
+                    // will already have its own mandatory fields.
                     if( PCB_FIELD* field = dynamic_cast<PCB_FIELD*>( copy ) )
                     {
                         if( field->IsMandatoryField() )
