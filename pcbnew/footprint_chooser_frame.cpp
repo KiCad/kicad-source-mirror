@@ -80,6 +80,8 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 {
     SetModal( true );
 
+    m_messagePanel->Hide();
+
     m_filterByFPFilters = new wxCheckBox( this, wxID_ANY, _( "Apply footprint filters" ) );
     m_filterByPinCount = new wxCheckBox( this, wxID_ANY, _( "Filter by pin count" ) );
 

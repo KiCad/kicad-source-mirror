@@ -71,6 +71,8 @@ SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 {
     SetModal( true );
 
+    m_messagePanel->Hide();
+
     wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
 
     std::vector<PICKED_SYMBOL> dummyAlreadyPlaced;
