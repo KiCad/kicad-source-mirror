@@ -740,8 +740,32 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
     aClipFootprint->Pads().clear();
 
     // Not all graphic items can be added to the current footprint:
-    // Reference and value are already existing in the current footprint, and must be unique.
-    // So they will be skipped
+    // mandatory fields are already existing in the current footprint.
+    //
+    for( PCB_FIELD* field : aClipFootprint->Fields() )
+    {
+        if( field->IsMandatoryField() )
+        {
+            if( PCB_GROUP* parentGroup = field->GetParentGroup() )
+                parentGroup->RemoveItem( field );
+        }
+        else
+        {
+            PCB_TEXT* text = static_cast<PCB_TEXT*>( field );
+
+            text->SetTextAngle( text->GetTextAngle() - aClipFootprint->GetOrientation() );
+            text->SetTextAngle( text->GetTextAngle() + editorFootprint->GetOrientation() );
+
+            VECTOR2I pos = field->GetFPRelativePosition();
+            field->SetParent( editorFootprint );
+            field->SetFPRelativePosition( pos );
+
+            aPastedItems.push_back( field );
+        }
+    }
+
+    aClipFootprint->Fields().clear();
+
     for( BOARD_ITEM* item : aClipFootprint->GraphicalItems() )
     {
         if( item->Type() == PCB_TEXT_T )
@@ -814,7 +838,6 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 
     for( BOARD_ITEM* item : aItems )
     {
-
         if( item->Type() == PCB_FOOTPRINT_T )
         {
             FOOTPRINT* fp = static_cast<FOOTPRINT*>( item );
@@ -827,6 +850,16 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
 
             // NOTE: all traversals from the back as processFPItem() might delete the item
 
+            for( int ii = static_cast<int>( fp->Fields().size() ) - 1; ii >= 0; ii-- )
+            {
+                PCB_FIELD* field = fp->Fields()[ii];
+
+                if( field->GetId() == REFERENCE_FIELD || field->GetId() == VALUE_FIELD )
+                    continue;
+
+                processFPItem( fp, field );
+            }
+
             for( int ii = static_cast<int>( fp->Pads().size() ) - 1; ii >= 0; ii-- )
                 processFPItem( fp, fp->Pads()[ii] );
 
@@ -837,7 +870,14 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
                 processFPItem( fp, fp->GraphicalItems()[ii] );
 
             if( fp->GraphicalItems().size() || fp->Pads().size() || fp->Zones().size() )
+            {
                 returnItems.push_back( fp );
+            }
+            else
+            {
+                if( PCB_GROUP* parentGroup = fp->GetParentGroup() )
+                    parentGroup->RemoveItem( item );
+            }
         }
         else if( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T )
         {
@@ -851,6 +891,11 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
             {
                 item->SetLayerSet( allowed );
                 returnItems.push_back( item );
+            }
+            else
+            {
+                if( PCB_GROUP* parentGroup = item->GetParentGroup() )
+                    parentGroup->RemoveItem( item );
             }
         }
     }
