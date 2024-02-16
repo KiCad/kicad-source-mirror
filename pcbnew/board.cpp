@@ -2269,6 +2269,14 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
     for( ZONE* zone : Zones() )
         items.push_back( zone );
 
+    for( BOARD_ITEM* item : Drawings() )
+    {
+        if( item->Type() == PCB_SHAPE_T )
+        {
+            items.push_back( dynamic_cast<PCB_SHAPE*>( item ) );
+        }
+    }
+
     return items;
 }
 
