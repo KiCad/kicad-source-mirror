@@ -1694,7 +1694,7 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     int        thickness = getLineThickness( aShape->GetWidth() );
     LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
 
-    if( IsNetnameLayer( aLayer ) )
+    if( IsNetnameLayer( aLayer ) && m_frameType == FRAME_T::FRAME_PCB_EDITOR )
     {
         if( !pcbconfig() || pcbconfig()->m_Display.m_NetNames < 2 )
             return;
