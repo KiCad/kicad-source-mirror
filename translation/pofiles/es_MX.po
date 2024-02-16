@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-15 20:02+0000\n"
+"PO-Revision-Date: 2024-02-16 14:08+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -98,7 +98,7 @@ msgstr "Simplificar contorno de agujeros"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1174
 msgid "Build BVH for holes and vias"
-msgstr "Construir BVH para orificios y vías"
+msgstr "Construir BVH para agujeros y vías"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:385
 msgid "OpenGL context creation error"
@@ -540,7 +540,7 @@ msgstr "Utilizar un estilo de color CAD basado en el color difuso del material"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:300
 msgid "Show Through Hole 3D Models"
-msgstr "Mostrar modelos 3D de orificios pasantes"
+msgstr "Mostrar modelos 3D de agujeros pasantes"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:301
 msgid "Show 3D models for 'Through hole' type footprints"
@@ -708,7 +708,7 @@ msgstr "Mostrar capa de usuario ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "Through-hole Models"
-msgstr "Modelos de orificio pasante"
+msgstr "Modelos de agujero pasante"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "SMD Models"
@@ -4551,7 +4551,7 @@ msgstr "Diámetro del pad de vía"
 
 #: common/dialogs/panel_setup_netclasses.cpp:541
 msgid "Via plated hole diameter"
-msgstr "Diámetro del orificio de vía plateada"
+msgstr "Diámetro del agujero de vía plateada"
 
 #: common/dialogs/panel_setup_netclasses.cpp:542
 msgid "Microvia pad diameter"
@@ -4559,7 +4559,7 @@ msgstr "Diámetro pad de microvía"
 
 #: common/dialogs/panel_setup_netclasses.cpp:543
 msgid "Microvia plated hole diameter"
-msgstr "Diámetro de orificio vía plateada"
+msgstr "Diámetro de agujero vía plateada"
 
 #: common/dialogs/panel_setup_netclasses.cpp:544
 msgid "Differential pair track width"
@@ -6868,7 +6868,7 @@ msgstr "Orificios de vía"
 
 #: common/layer_id.cpp:173
 msgid "Via hole walls"
-msgstr "Paredes de orificios de vía"
+msgstr "Paredes de agujeros de vía"
 
 #: common/layer_id.cpp:174
 msgid "Plated holes"
@@ -6876,7 +6876,7 @@ msgstr "Orificios plateados"
 
 #: common/layer_id.cpp:175
 msgid "Plated hole walls"
-msgstr "Paredes de orificios plateados"
+msgstr "Paredes de agujeros plateados"
 
 #: common/layer_id.cpp:176
 msgid "Non-plated holes"
@@ -22193,7 +22193,7 @@ msgstr "Asignación automática de capa"
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:385
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:135
 msgid "Hole data"
-msgstr "Datos de orificio"
+msgstr "Datos de agujero"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb.cpp:430
 msgid ""
@@ -23837,7 +23837,7 @@ msgstr "Incluir solo huellas SMD (solo ascii o csv)"
 #: kicad/cli/command_pcb_export_pos.cpp:79
 msgid "Exclude all footprints with through-hole pads (ascii or csv only)"
 msgstr ""
-"Excluir todas las huellas con pads de orificio pasante (solo ascii o csv)"
+"Excluir todas las huellas con pads de agujero pasante (solo ascii o csv)"
 
 #: kicad/cli/command_pcb_export_pos.cpp:84
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:81
@@ -27439,7 +27439,7 @@ msgstr "Longitud de vía:"
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
 msgstr ""
-"La longitud de la vía es el grosor de la placa para las vías del orificio "
+"La longitud de la vía es el grosor de la placa para las vías del agujero "
 "pasante"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
@@ -27456,7 +27456,7 @@ msgstr "Diámetro de agujero de separación:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "Diámetro del orificio de separación en los planos de tierra"
+msgstr "Diámetro del agujero de separación en los planos de tierra"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -27510,7 +27510,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "Advertencia:\n"
-"Diámetro del pad de la vía >= Diámetro del orificio de separación.\n"
+"Diámetro del pad de la vía >= Diámetro del agujero de separación.\n"
 "Algunos parámetros no se pueden calcular para una vía dentro de una zona de "
 "cobre."
 
@@ -29469,7 +29469,7 @@ msgstr "Tamaños predefinidos"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:175
 msgid "Length-tuning Patterns"
-msgstr "Patrones de afinado de longitud"
+msgstr "Patrones de sintonización de longitud"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 msgid "Project is missing or read-only. Some settings will not be editable."
@@ -29763,7 +29763,7 @@ msgstr "Eliminar vías re&dundantes"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:31
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "eliminar vías de pads de orificio pasante y de vías superpuestas"
+msgstr "eliminar vías de pads de agujero pasante y de vías superpuestas"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "Delete vias connected on only one layer"
@@ -32224,7 +32224,7 @@ msgstr "Incluir solo huellas SMD"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:78
 msgid "Exclude all footprints with through hole pads"
-msgstr "Excluir todas las huellas con pads de orificios pasantes"
+msgstr "Excluir todas las huellas con pads de agujeros pasantes"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.cpp:84
 msgid "Include board edge layer"
@@ -33385,7 +33385,7 @@ msgstr "Error: El pad debe tener un tamaño positivo."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1245
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "Advertencia: El orificio del pad no está dentro del pad."
+msgstr "Advertencia: El agujero del pad no está dentro del pad."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1258
 msgid "Warning: Pad hole will leave no copper."
@@ -33438,7 +33438,7 @@ msgstr "Error: El delta del trapazoide es demasiado grande."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1336
 msgid "Error: Through hole pad has no hole."
-msgstr "Error: El pad de orificio pasante no tiene un agujero."
+msgstr "Error: El pad de agujero pasante no tiene un agujero."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1343
 msgid ""
@@ -33504,7 +33504,7 @@ msgstr "Modificar pad"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1657
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
 msgid "Hole size X:"
-msgstr "Tamaño X orificio:"
+msgstr "Tamaño X agujero:"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1672
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1673
@@ -33694,7 +33694,7 @@ msgstr "Inferior derecha"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:361
 msgid "Hole shape:"
-msgstr "Forma del orificio:"
+msgstr "Forma del agujero:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:402
 msgid "Offset shape from hole"
@@ -33772,7 +33772,7 @@ msgstr ""
 "Pad de punto de prueba es útil para especificar puntos de prueba en archivos "
 "Gerber\n"
 "Pad de disipador especifica un pad térmico\n"
-"Castellado especifica pads de orificio pasante castellados en el borde de la "
+"Castellado especifica pads de agujero pasante castellados en el borde de la "
 "placa\n"
 "Estas propiedades son especificadas en archivos Gerber X2."
 
@@ -33798,7 +33798,7 @@ msgstr "Pad de disipador"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Castellated pad (through hole only)"
-msgstr "Pad castellado (solo orificio pasante)"
+msgstr "Pad castellado (solo agujero pasante)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
@@ -35184,7 +35184,7 @@ msgid ""
 "Minimum spacing between adjacent tuning segments. The resulting spacing may "
 "be greater based on design rules."
 msgstr ""
-"Espaciado mínimo entre segmentos de afinado adyacentes. El espaciado "
+"Espaciado mínimo entre segmentos de sintonización adyacentes. El espaciado "
 "resultante puede ser más grande que el de las reglas de diseño."
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:84
@@ -35210,7 +35210,7 @@ msgstr "De una sola cara"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
 msgid "Tuning Pattern Properties"
-msgstr "Propiedades del patrón de afinado"
+msgstr "Propiedades del patrón de sintonización"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
 msgid "Remove Unused Layers"
@@ -35790,7 +35790,7 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
-"El margen mínimo entre un orificio y un elemento de cobre no asociado. Si "
+"El margen mínimo entre un agujero y un elemento de cobre no asociado. Si "
 "está habilitado, este es un mínimo absoluto que no puede ser reducido por "
 "reglas personalizadas u otras configuraciones."
 
@@ -35821,13 +35821,13 @@ msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
 msgstr ""
-"El tamaño mínimo de orificio pasante. Si está habilitado, este es un mínimo "
+"El tamaño mínimo de agujero pasante. Si está habilitado, este es un mínimo "
 "absoluto que no puede ser reducido por las clases de red, reglas "
 "personalizadas, u otras configuraciones."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
-msgstr "Margen de orificio a orificio:"
+msgstr "Margen de agujero a agujero:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:206
 msgid ""
@@ -35835,7 +35835,7 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
-"El margen mínimo entre dos orificios taladrados. Si está habilitado, este es "
+"El margen mínimo entre dos agujeros taladrados. Si está habilitado, este es "
 "un mínimo absoluto que no puede ser reducido por reglas personalizadas, u "
 "otras configuraciones. (Nota: no aplica a agujeros fresados.)"
 
@@ -35865,7 +35865,7 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"El tamaño mínimo de orificio de micro-vía. Si está habilitado, este es un "
+"El tamaño mínimo de agujero de micro-vía. Si está habilitado, este es un "
 "mínimo absoluto que no puede ser reducido por las clases de red, reglas "
 "personalizadas, u otras configuraciones."
 
@@ -37180,169 +37180,211 @@ msgstr ""
 "\n"
 "### Restricciones\n"
 "\n"
-"| Tipo de restricción       | Tipo de "
-"argumento                                                                                                      "
-"| "
-"Descripción                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   "
-"|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| Comprueba el ancho de los anillos anulares en las vías."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                                   "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| Especifica el margen **eléctrico** entre objetos de cobre de redes "
+"| Tipo de restricción       | Tipo de argumento                              "
+"                                                                        | Des"
+"cripción                                                                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"             |\n"
+"|---------------------------|------------------------------------------------"
+"------------------------------------------------------------------------|----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                        | "
+"Comprueba el ancho de los anillos anulares en las vías.<br>                  "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                |\n"
+"| `clearance`               | min                                            "
+"                                                                        | "
+"Especifica el margen **eléctrico** entre objetos de cobre de redes "
 "distintas. (Vea `physical_clearance` si desea especificar márgenes entre "
 "objetos sin importar sus redes.)<br><br>Para permitir objetos intersecantes "
 "(colisiones), cree una restricción `clearance` con el valor `min` menor a "
-"cero (por ejemplo, `-1`)."
-"<br>                                                                                                                                                               "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| Comprueba el margen entre patios de huellas y genera un error al menos dos "
+"cero (por ejemplo, `-1`).<br>                                                "
+"                                                                             "
+"                                  |\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                        | "
+"Comprueba el margen entre patios de huellas y genera un error al menos dos "
 "patios son más cercanos que la distancia `min`. Si una huella no tiene una "
-"forma de patio, no se generarán errores por esta restricción."
-"<br>                                                                                                                                                                                                                                                                       "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| Comprueba el espacio entre pistas acopladas en un par diferencial. Las "
+"forma de patio, no se generarán errores por esta restricción.<br>            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                    |\n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                        | "
+"Comprueba el espacio entre pistas acopladas en un par diferencial. Las "
 "pistas acopladas son segmentos que son paralelos entre sí. El espacio de par "
-"diferencial no es probado en porciones no acopladas de un par diferencial "
-"(por ejemplo, el fanout de un componente)."
-"<br>                                                                                                                                                                                                                  "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| Comprueba la distancia que una pista de par diferencial es enrutada "
-"estando desacoplada de la pista con la otra polaridad en el par (por "
-"ejemplo, cuando el par se esparce hacia afuera de un componente (fanout), o "
-"se desacopla para pasar alrededor de otro objeto como una vía)."
-"<br>                                                                                                                                                                                                      "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Especifica uno o más tipos de objetos que no serán permitidos, separados "
-"por espacios. Por ejemplo, `(constraint disallow track)` o `(constraint "
-"disallow track via pad)`. Si un objeto de este tipo coincide con la "
-"condición de regla, se creará un error de DRC.<br><br>Esta restricción es "
-"esencialmente lo mismo que un área restringida, pero puede ser usada para "
-"crear áreas restringidas más especificas."
-"<br>                                                                        "
-"|\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Comprueba el margen entre objetos y el borde de la placa.<br><br>También "
-"se puede pensar de esto como la \"tolerancia de ranurado\" ya que el borde "
-"de la placa incluirá todos los elementos gráficos en la capa `Edge.Cuts` y "
-"también cualquier orificio de pad *ovalado*. (Vea `physical_hole_clearance` "
-"para la tolerancia de taladrado)."
-"<br>                                                                                                                                                "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| Comprueba la longitud total enrutada para las redes que coinciden con la "
+"diferencial no es probado en porciones no acopladas de un par diferencial ("
+"por ejemplo, el fanout de un componente).<br>                                "
+"                                                                             "
+"                                                                             "
+"                        |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                        | "
+"Comprueba la distancia que una pista de par diferencial es enrutada estando "
+"desacoplada de la pista con la otra polaridad en el par (por ejemplo, cuando "
+"el par se esparce hacia afuera de un componente (fanout), o se desacopla "
+"para pasar alrededor de otro objeto como una vía).<br>                       "
+"                                                                             "
+"                                                                             "
+"                     |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Especifica uno o más tipos de objetos que no serán permitidos, separados por "
+"espacios. Por ejemplo, `(constraint disallow track)` o `(constraint disallow "
+"track via pad)`. Si un objeto de este tipo coincide con la condición de "
+"regla, se creará un error de DRC.<br><br>Esta restricción es esencialmente "
+"lo mismo que un área restringida, pero puede ser usada para crear áreas "
+"restringidas más especificas.<br>                                            "
+"                            |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Comprueba el margen entre objetos y el borde de la placa.<br><br>También se "
+"puede pensar de esto como la \"tolerancia de ranurado\" ya que el borde de "
+"la placa incluirá todos los elementos gráficos en la capa `Edge.Cuts` y "
+"también cualquier agujero de pad *ovalado*. (Vea `physical_hole_clearance` "
+"para la tolerancia de taladrado).<br>                                        "
+"                                                                             "
+"                           |\n"
+"| `length`                  | min/max                                        "
+"                                                                        | "
+"Comprueba la longitud total enrutada para las redes que coinciden con la "
 "condición de la regla y genera un error para cada red que está por debajo "
 "del valor `min` (si fue especificado) o por encima del valor `max` (si fue "
-"especificado) de la restricción."
-"<br>                                                                                                                                                                                                                            "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| Comprueba el tamaño (diámetro) de un orificio taladrado en un pad o vía. "
-"Para orificios ovalados, el diámetro menor será comparado con el valor `min` "
-"(si fue especificado) y el diámetro mayor será comparado con el valor `max` "
-"(si fue especificado)."
-"<br>                                                                                                                                                                                                                                  "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| Comprueba el margen entre un orificio taladrado en un pad o vía y objetos "
-"de cobre en una red distinta. El margen se mide desde el diámetro del "
-"orificio, no su centro."
-"<br>                                                                                                                                                                                                                                                                                                                   "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| Comprueba el margen entre orificios taladrados mecánicamente en pads y "
-"vías. El margen se mide desde los diámetros de los orificios, no sus centros."
-"<br><br>Esta restricción es únicamente para la protección de brocas de "
-"taladro. El margen entre orificios **taladrados por láser** (microvías) y "
-"otros orificios no taladrados mecánicamente no es comprobado, y tampoco lo "
-"es el margen entre orificios **ranurados** (forma ovalada) y otros orificios "
-"no taladrados mecánicamente.<br> |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| Comprueba el margen entre dos objetos en una capa dada (incluyendo capas "
-"que no son de cobre).<br><br>Aunque esto pueda realizar comprobaciones de "
+"especificado) de la restricción.<br>                                         "
+"                                                                             "
+"                                                                             "
+"                         |\n"
+"| `hole`                    | min/max                                        "
+"                                                                        | "
+"Comprueba el tamaño (diámetro) de un agujero taladrado en un pad o vía. Para "
+"agujeros ovalados, el diámetro menor será comparado con el valor `min` (si "
+"fue especificado) y el diámetro mayor será comparado con el valor `max` (si "
+"fue especificado).<br>                                                       "
+"                                                                             "
+"                                                                             "
+"                 |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                        | "
+"Comprueba el margen entre un agujero taladrado en un pad o vía y objetos de "
+"cobre en una red distinta. El margen se mide desde el diámetro del agujero, "
+"no su centro.<br>                                                            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                        | "
+"Comprueba el margen entre agujeros taladrados mecánicamente en pads y vías. "
+"El margen se mide desde los diámetros de los agujeros, no sus "
+"centros.<br><br>Esta restricción es únicamente para la protección de brocas "
+"de taladro. El margen entre agujeros **taladrados por láser** (microvías) y "
+"otros agujeros no taladrados mecánicamente no es comprobado, y tampoco lo es "
+"el margen entre agujeros **ranurados** (forma ovalada) y otros agujeros no "
+"taladrados mecánicamente.<br> |\n"
+"| `physical_clearance`      | min                                            "
+"                                                                        | "
+"Comprueba el margen entre dos objetos en una capa dada (incluyendo capas que "
+"no son de cobre).<br><br>Aunque esto pueda realizar comprobaciones de "
 "propósito más general que `clearance`, es mucho más lento. Use `clearance` "
-"cuando sea posible."
-"<br>                                                                                                                                                                                                                                         "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| Comprueba el margen entre un orificio taladrado en un pad o vía y algún "
-"otro objeto, sin importar su red. El margen se mide desde el diámetro del "
-"orificio, no su centro.<br><br>También se puede pensar de esto como la "
-"\"tolerancia de taladrado\" ya que solo incluye orificios **redondos**. (Vea "
-"`edge_clearance` para la tolerancia de ranurado)."
-"<br>                                                                                                                                     "
-"|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Comprueba el margen entre objetos en capas de serigrafía y otros objetos."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                 "
-"|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| Comprueba la desviación (skew) total para las redes que coincidan con la "
+"cuando sea posible.<br>                                                      "
+"                                                                             "
+"                                                                             "
+"                         |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                        | "
+"Comprueba el margen entre un agujero taladrado en un pad o vía y algún otro "
+"objeto, sin importar su red. El margen se mide desde el diámetro del "
+"agujero, no su centro.<br><br>También se puede pensar de esto como la "
+"\"tolerancia de taladrado\" ya que solo incluye agujeros **redondos**. (Vea "
+"`edge_clearance` para la tolerancia de ranurado).<br>                        "
+"                                                                             "
+"                                |\n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Comprueba el margen entre objetos en capas de serigrafía y otros objetos.<br>"
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                |\n"
+"| `skew`                    | max                                            "
+"                                                                        | "
+"Comprueba la desviación (skew) total para las redes que coincidan con la "
 "condición de regla, es decir, la diferencia entre la longitud de cada red y "
 "el promedio de las longitudes de todas las redes que coinciden. Si el valor "
 "absoluto de la diferencia entre tal promedio y el largo de cualquier red "
-"está por encima del valor de restricción `max`, se generará un error."
-"<br>                                                                                                           "
-"|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| Especifica el ancho del espacio entre un pad y una zona con una conexión "
-"de alivio térmico."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                               "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| Especifica el ancho de los radios que conectan un pad a una zona con una "
-"conexión de alivio térmico."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| Comprueba el ancho de segmentos de pista y arco. Se generará un error por "
+"está por encima del valor de restricción `max`, se generará un error.<br>    "
+"                                                                             "
+"                          |\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                        | "
+"Especifica el ancho del espacio entre un pad y una zona con una conexión de "
+"alivio térmico.<br>                                                          "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                 |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                        | "
+"Especifica el ancho de los radios que conectan un pad a una zona con una "
+"conexión de alivio térmico.<br>                                              "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                    |\n"
+"| `track_width`             | min/opt/max                                    "
+"                                                                        | "
+"Comprueba el ancho de segmentos de pista y arco. Se generará un error por "
 "cada segmento que tenga un ancho menor al valor `min` (si fue especificado) "
-"o mayor al valor `max` (si fue especificado)."
-"<br>                                                                                                                                                                                                                                                                                       "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| Cuenta el número de vías en cada red que coincide con la condición de "
-"regla. Si tal número excede el valor de restricción `max` en cualquiera de "
-"las redes coincidentes, se generará un error para tal red."
-"<br>                                                                                                                                                                                                                                                                               "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Especifica la conexión a ser realizada entre una zona y un pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                           "
-"|\n"
+"o mayor al valor `max` (si fue especificado).<br>                            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                    |\n"
+"| `via_count`               | max                                            "
+"                                                                        | "
+"Cuenta el número de vías en cada red que coincide con la condición de regla. "
+"Si tal número excede el valor de restricción `max` en cualquiera de las "
+"redes coincidentes, se generará un error para tal red.<br>                   "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                     |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                        | "
+"Especifica la conexión a ser realizada entre una zona y un pad.<br>          "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                |\n"
 "\n"
 "\n"
 "### Elementos\n"
 "\n"
 " * `A` &nbsp;&nbsp; _el primer (o único) elemento bajo prueba_\n"
-" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas "
-"binarias)_\n"
+" * `B` &nbsp;&nbsp; _el segundo elemento bajo prueba (para pruebas binarias)"
+"_\n"
 " * `L` &nbsp;&nbsp; _la capa actualmente bajo prueba_\n"
 "\n"
 "<br>\n"
@@ -37402,8 +37444,8 @@ msgstr ""
 "\n"
 "### Funciones de expresiones\n"
 "\n"
-"Todos los parámetros de las funciones admiten comodines simples (`*` y `?"
-"`).\n"
+"Todos los parámetros de las funciones admiten comodines simples (`*` y `?`)."
+"\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<referencia_de_huella>')\n"
@@ -37439,12 +37481,12 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.isPlated()\n"
-"Verdadero si `A` tiene un orificio que está revestido.\n"
+"Verdadero si `A` tiene un agujero que está revestido.\n"
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<nombre_de_red>')\n"
-"Verdadero si `A` tiene una red que es parte del par diferencial "
-"especificado.\n"
+"Verdadero si `A` tiene una red que es parte del par diferencial especificado."
+"\n"
 "`<nombre_de_red>` es el nombre base del par diferencial. Por ejemplo, "
 "`inDiffPair('/CLK')`\n"
 "coincide con los elementos en las redes `/CLK_P` y `/CLK_N`.\n"
@@ -37505,16 +37547,16 @@ msgstr ""
 "\n"
 "    (rule \"Distancia entre vías de redes distintas\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Margen entre pads de redes distintas\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"Margen de orificio de vía a pista\"\n"
+"\n"
+"    (rule \"Margen de agujero de vía a pista\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
 "        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
 "\n"
@@ -37528,11 +37570,11 @@ msgstr ""
 "        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
 "\n"
 "\n"
-"    (rule \"Tamaño de taladro máximo para orificios mecánicos\"\n"
+"    (rule \"Tamaño de taladro máximo para agujeros mecánicos\"\n"
 "        (constraint hole_size (max 6.3mm))\n"
 "        (condition \"A.Pad_Type == 'NPTH, mechanical'\"))\n"
 "\n"
-"    (rule \"Tamaño de taladro máximo para orificios revestidos\"\n"
+"    (rule \"Tamaño de taladro máximo para agujeros revestidos\"\n"
 "        (constraint hole_size (max 6.35mm))\n"
 "        (condition \"A.Pad_Type == 'Through-hole'\"))\n"
 "\n"
@@ -37600,7 +37642,7 @@ msgstr ""
 "\n"
 "    # Separar los requerimientos de tamaño de puntas de taladro y cortadores "
 "de ranurado\n"
-"    (rule \"Tamaño de orificio pasante revestido\"\n"
+"    (rule \"Tamaño de agujero pasante revestido\"\n"
 "        (constraint hole_size (min 0.2mm) (max 6.35mm))\n"
 "        (condition \"A.isPlated() && A.Hole_Size_X == A.Hole_Size_Y\"))\n"
 "\n"
@@ -37720,7 +37762,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
-msgstr "Taladro de orificio de vía no definido."
+msgstr "Taladro de agujero de vía no definido."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:387
 msgid "No differential pair gap defined."
@@ -37753,7 +37795,7 @@ msgstr "Espaciado de vía"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
 msgid "Default properties for single-track tuning:"
-msgstr "Propiedades predeterminadas para el afinado de pista única:"
+msgstr "Propiedades predeterminadas para la sintonización de pista única:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
 msgid "Default properties for differential-pairs:"
@@ -37761,7 +37803,7 @@ msgstr "Propiedades predeterminadas para nuevos pares diferenciales:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
 msgid "Default properties for differential-pair skews:"
-msgstr "Propiedades predeterminadas para inclinaciones de pares diferenciales:"
+msgstr "Propiedades predeterminadas para desvíos de pares diferenciales:"
 
 #: pcbnew/drc/drc_cache_generator.cpp:123
 msgid "Gathering copper items..."
@@ -37794,7 +37836,7 @@ msgstr ""
 
 #: pcbnew/drc/drc_engine.cpp:195
 msgid "board setup constraints hole"
-msgstr "restricciones de configuración de placa para orificios"
+msgstr "restricciones de configuración de placa para agujeros"
 
 #: pcbnew/drc/drc_engine.cpp:200
 msgid "board setup constraints edge"
@@ -37861,12 +37903,12 @@ msgstr "Margen mínimo de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:796
 msgid "board minimum hole"
-msgstr "orificio mínimo de placa"
+msgstr "agujero mínimo de placa"
 
 #: pcbnew/drc/drc_engine.cpp:799
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "Margen de orificio mínimo de placa: %s."
+msgstr "Margen de agujero mínimo de placa: %s."
 
 #: pcbnew/drc/drc_engine.cpp:818
 #, c-format
@@ -38184,7 +38226,7 @@ msgstr "La pista tiene un lado no conectado"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
-msgstr "Infracción de margen de orificio"
+msgstr "Infracción de margen de agujero"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
@@ -38317,7 +38359,7 @@ msgstr "Longitud de pista fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Skew between traces out of range"
-msgstr "Inclinación entre pistas fuera del rango"
+msgstr "Desvío entre pistas fuera del rango"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Too many vias on a connection"
@@ -38517,7 +38559,7 @@ msgstr "Comprobando márgenes de pistas y vías..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:148
 msgid "Checking hole clearances..."
-msgstr "Comprobando márgenes de orificios..."
+msgstr "Comprobando márgenes de agujeros..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:156
 msgid "Checking pad clearances..."
@@ -38614,15 +38656,15 @@ msgstr "Comprobando márgenes de la serigrafía al borde de la placa..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
-msgstr "Comprobando orificios de pads..."
+msgstr "Comprobando agujeros de pads..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:93
 msgid "Checking via holes..."
-msgstr "Comprobando orificios de vías..."
+msgstr "Comprobando agujeros de vías..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:98
 msgid "Checking micro-via holes..."
-msgstr "Comprobando orificios de micro-vías..."
+msgstr "Comprobando agujeros de micro-vías..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:158
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:227
@@ -38640,7 +38682,7 @@ msgstr "(%s ancho máximo %s; real %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
-msgstr "Comprobando márgenes entre orificio y orificio..."
+msgstr "Comprobando márgenes entre agujero y agujero..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:304
 #, c-format
@@ -38715,14 +38757,14 @@ msgid "%s layers differ."
 msgstr "%s capas difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:261
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs."
-msgstr "%s difiere."
+msgstr "%s el tipo de forma del pad difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:264
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad type differs."
-msgstr "%s difiere."
+msgstr "%s el tipo de pad difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:266
 #, c-format
@@ -38735,24 +38777,24 @@ msgid "%s orientation differs."
 msgstr "La orientación de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:274
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs."
-msgstr "%s difiere."
+msgstr "%s el tamaño difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:276
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs."
-msgstr "%s difiere."
+msgstr "%s el delta de trapezoide difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:284
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ."
-msgstr "%s difiere."
+msgstr "%s las esquinas redondeadas difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:295
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ."
-msgstr "%s difiere."
+msgstr "%s las esquinas biseladas difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:301
 #, c-format
@@ -38760,19 +38802,19 @@ msgid "%s shape offset from hole differs."
 msgstr "La forma %s desplazada del agujero es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:304
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill shape differs."
-msgstr "%s difiere."
+msgstr "%s la forma del taladro difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:306
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill size differs."
-msgstr "%s difiere."
+msgstr "%s tamaño del taladro difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ."
-msgstr "%s difiere."
+msgstr "%s los primitivos de forma difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:428
 #, c-format
@@ -38785,14 +38827,14 @@ msgid "%s corner smoothing radius differs."
 msgstr "El radio de suavizado de esquinas de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:432
-#, fuzzy, c-format
+#, c-format
 msgid "%s name differs."
-msgstr "%s difiere."
+msgstr "%s el nombre difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:434
-#, fuzzy, c-format
+#, c-format
 msgid "%s priority differs."
-msgstr "%s difiere."
+msgstr "%s la prioridad difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:437
 #, c-format
@@ -38831,9 +38873,9 @@ msgid "%s pad connection property differs."
 msgstr "La propiedad de conexión del pad de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:455
-#, fuzzy, c-format
+#, c-format
 msgid "%s local clearance differs."
-msgstr "Margen resuelto: %s."
+msgstr "%s el margen local difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:457
 #, c-format
@@ -38841,9 +38883,9 @@ msgid "%s thermal relief gap differs."
 msgstr "La brecha de alivio térmico de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:459
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief spoke width differs."
-msgstr "Resuelto el ancho de los radios de alivio térmico: %s."
+msgstr "%s el ancho de radio de alivio térmico difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:462
 #, c-format
@@ -38861,19 +38903,19 @@ msgid "%s minimum island size setting differs."
 msgstr "La configuración del tamaño mínimo de isla de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:470
-#, fuzzy, c-format
+#, c-format
 msgid "%s fill type differs."
-msgstr "%s difiere."
+msgstr "%s el tipo de relleno difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:472
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch width differs."
-msgstr "%s difiere."
+msgstr "%s el ancho de rayado difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "%s hatch gap differs."
-msgstr "%s difiere."
+msgstr "%s el espacio de rayado difiere."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:476
 #, c-format
@@ -38893,7 +38935,7 @@ msgstr "La cantidad de suavizado de rayado de %s es diferente."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:482
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr "La configuración mínima de orificio rayado de %s es diferente."
+msgstr "La configuración mínima de agujero rayado de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:488
 #, c-format
@@ -38901,9 +38943,9 @@ msgid "%s outline corner count differs."
 msgstr "El recuento de esquinas del contorno de %s es diferente."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:503
-#, fuzzy, c-format
+#, c-format
 msgid "%s corners differ."
-msgstr "%s difiere."
+msgstr "%s las esquinas difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:544
 msgid "Footprint descriptions differ."
@@ -38925,13 +38967,12 @@ msgstr "Los tipos de huella difieren."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:580
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:163
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ."
-msgstr "%s difiere."
+msgstr "%s los ajustes difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:574
 #: pcbnew/footprint.cpp:3528
-#, fuzzy
 msgid "Exempt From Courtyard Requirement"
 msgstr "Exento del requisito del patio"
 
@@ -38957,9 +38998,8 @@ msgstr "Conexión de zona anulada."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:611
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:616
-#, fuzzy
 msgid "Net tie pad groups differ."
-msgstr "Los grupos de pads de unión difieren."
+msgstr "Los grupos de pads de unión de redes difieren."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:692
 msgid "Pad count differs."
@@ -39037,9 +39077,8 @@ msgid "Checking length constraints..."
 msgstr "Comprobando restricciones de longitud..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:119
-#, fuzzy
 msgid "(Suspicious items found on Edge.Cuts layer)"
-msgstr "(no se han encontrado bordes en la capa Edge.Cuts)"
+msgstr "(Se encontraron elementos sospechosos en la capa Edge.Cuts)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:145
 msgid "(no edges found on Edge.Cuts layer)"
@@ -39259,8 +39298,8 @@ msgstr "No se ha podido exportar el archivo IDF\n"
 #: pcbnew/exporters/exporter_vrml.cpp:810
 msgid "VRML Export Failed: Could not add holes to contours."
 msgstr ""
-"No se ha podido exportar el archivo VRML: no pueden agregarse orificios a "
-"los contornos."
+"No se ha podido exportar el archivo VRML: no pueden agregarse agujeros a los "
+"contornos."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1241
 msgid "No project when exporting the VRML file"
@@ -39376,24 +39415,20 @@ msgid "Cutting %d/%d %s\n"
 msgstr "Cortando %d/%d %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:986
-#, fuzzy
 msgid "shapes"
-msgstr "Forma +"
+msgstr "formas"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:994
-#, fuzzy
 msgid "pads"
-msgstr "Sin pads"
+msgstr "pads"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:995
-#, fuzzy
 msgid "tracks"
-msgstr "Pistas"
+msgstr "pistas"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:996
-#, fuzzy
 msgid "zones"
-msgstr "zona"
+msgstr "zonas"
 
 # Pendiente de contexto
 #: pcbnew/files.cpp:146
@@ -39470,9 +39505,8 @@ msgid "Creating PCB"
 msgstr "Creando placa"
 
 #: pcbnew/files.cpp:657
-#, fuzzy
 msgid "File format is not supported"
-msgstr "(no se admiten varios contornos de placa)"
+msgstr "El formato de archivo no es compatible"
 
 #: pcbnew/files.cpp:697 pcbnew/files.cpp:707
 #, c-format
@@ -39537,17 +39571,16 @@ msgid "The board must be saved before generating IPC2581 file."
 msgstr "La placa debe guardarse antes de generar el archivo IPC2581."
 
 #: pcbnew/files.cpp:1269
-#, fuzzy
 msgid "Generating IPC2581 file"
-msgstr "Generar archivo de listado de redes IPC-D-356"
+msgstr "Generar archivo IPC2581"
 
 #: pcbnew/files.cpp:1292 pcbnew/pcbnew_jobs_handler.cpp:1168
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
 "%s"
 msgstr ""
-"Error al guardar el archivo de placa '%s'.\n"
+"Error al generar archivo IPC2581 '%s'.\n"
 "%s"
 
 #: pcbnew/files.cpp:1356 pcbnew/pcbnew_jobs_handler.cpp:1200
@@ -39630,7 +39663,7 @@ msgstr "Huella %s"
 #: pcbnew/footprint.cpp:2749
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
-msgstr "(esperado 'orificio pasante' real '%s')"
+msgstr "(esperado 'agujero pasante' real '%s')"
 
 #: pcbnew/footprint.cpp:2752
 #, c-format
@@ -39643,7 +39676,7 @@ msgstr "(el pad PTH no tiene capas de cobre)"
 
 #: pcbnew/footprint.cpp:2799
 msgid "(PTH pad's hole leaves no copper)"
-msgstr "(El orificio del pad PTH no deja cobre)"
+msgstr "(El agujero del pad PTH no deja cobre)"
 
 #: pcbnew/footprint.cpp:2808
 msgid "(SMD pad appears on both front and back copper)"
@@ -39677,12 +39710,10 @@ msgid "Thermal reliefs for PTH"
 msgstr "Alivios térmicos para PTH"
 
 #: pcbnew/footprint.cpp:3513
-#, fuzzy
 msgid "Not in Schematic"
 msgstr "No está en el esquema"
 
 #: pcbnew/footprint.cpp:3515
-#, fuzzy
 msgid "Exclude From Position Files"
 msgstr "Excluir de los archivos de posición"
 
@@ -39712,9 +39743,8 @@ msgid "footprint %s"
 msgstr "huella %s"
 
 #: pcbnew/footprint_chooser_frame.cpp:73
-#, fuzzy
 msgid "Footprint Chooser"
-msgstr "Verificador de huellas"
+msgstr "Selector de huellas"
 
 #: pcbnew/footprint_chooser_frame.cpp:83
 msgid "Apply footprint filters"
@@ -39906,9 +39936,8 @@ msgid "Previous footprint placement still in progress."
 msgstr "La colocación de la huella anterior aún está progreso."
 
 #: pcbnew/footprint_libraries_utils.cpp:942
-#, fuzzy
 msgid "Insert Footprint"
-msgstr "Importar huella"
+msgstr "Insertar huella"
 
 #: pcbnew/footprint_libraries_utils.cpp:963
 msgid "Save Footprint As"
@@ -39939,14 +39968,13 @@ msgstr "Nueva huella"
 
 #: pcbnew/footprint_libraries_utils.cpp:1253
 #: pcbnew/tools/footprint_editor_control.cpp:447
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' already exists in library '%s'."
-msgstr "El nombre de huella '%s' ya está en uso en la biblioteca '%s'."
+msgstr "La huella '%s' ya existe en la biblioteca '%s'."
 
 #: pcbnew/footprint_viewer_frame.cpp:116
-#, fuzzy
 msgid "KiCad Footprint Library Browser"
-msgstr "Explorador de bibliotecas de huellas"
+msgstr "Explorador de bibliotecas de huellas de KiCad"
 
 #: pcbnew/footprint_viewer_frame.cpp:158
 msgid ""
@@ -40011,19 +40039,16 @@ msgstr "Error al cargar la huella %s desde la biblioteca '%s'."
 #: pcbnew/generators/pcb_tuning_pattern.cpp:254
 #: pcbnew/generators/pcb_tuning_pattern.cpp:259
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2031
-#, fuzzy
 msgid "Tuning Pattern"
-msgstr "Patrón"
+msgstr "Patrón de sintonización"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:264
-#, fuzzy
 msgid "Tuning Patterns"
-msgstr "Patrón"
+msgstr "Patrones de sintonización"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:446
-#, fuzzy
 msgid "Tuning"
-msgstr "Aviso"
+msgstr "Afinado"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1328
 msgid "too long"
@@ -40035,12 +40060,11 @@ msgstr "demasiado corto"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1330
 msgid "tuned"
-msgstr "afinado"
+msgstr "sintonización"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1404
-#, fuzzy
 msgid "Edit Tuning Pattern"
-msgstr "Editar en un editor de texto"
+msgstr "Editar patrón de sintonización"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1877
 msgid "current skew"
@@ -40051,9 +40075,8 @@ msgid "current length"
 msgstr "Longitud actual"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1965
-#, fuzzy
 msgid "Routed Lengths"
-msgstr "Longitud enrutada"
+msgstr "Longitudes enrutadas"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1971 pcbnew/pcb_track.cpp:1093
 msgid "Routed Length"
@@ -40076,14 +40099,13 @@ msgstr "Desvío objetivo: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1993
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2015
-#, fuzzy
 msgid "(from tuning pattern properties)"
-msgstr "Propiedades de la huella"
+msgstr "(de las propiedades del patrón de sintonización)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2001
-#, fuzzy, c-format
+#, c-format
 msgid "Skew Constraints: %s"
-msgstr "Restricciones de ancho: min %s"
+msgstr "Restricciones de desvío: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2014
 #, c-format
@@ -40091,9 +40113,9 @@ msgid "Target Length: %s"
 msgstr "Longitud objetivo: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2023
-#, fuzzy, c-format
+#, c-format
 msgid "Length Constraints: %s"
-msgstr "Restricciones de ancho: min %s"
+msgstr "Restricciones de longitud: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2222
 msgid "Tune"
@@ -40101,28 +40123,24 @@ msgstr "Ajustar"
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2319
-#, fuzzy
 msgid "Single track"
-msgstr "Pi&sta única"
+msgstr "Pista única"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2320
 msgid "Differential pair"
 msgstr "Par diferencial"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2321
-#, fuzzy
 msgid "Diff pair skew"
-msgstr "Par diferencial"
+msgstr "Desvío de par diferencial"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2335
-#, fuzzy
 msgid "Pattern Properties"
-msgstr "Propiedades de pin"
+msgstr "Propiedades de patrón"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2350
-#, fuzzy
 msgid "Tuning Mode"
-msgstr "Modelo de línea"
+msgstr "Modo de sintonización"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2356
 msgid "Min Amplitude"
@@ -40154,28 +40172,24 @@ msgid "Target Skew"
 msgstr "Desvío objetivo"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2421
-#, fuzzy
 msgid "Override Custom Rules"
-msgstr "Desactivar Bloqueos"
+msgstr "Reemplazar reglas personalizadas"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2433
-#, fuzzy
 msgid "Rounded"
-msgstr "Redondo"
+msgstr "Redondeado"
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:230
-#, fuzzy
 msgid "Please select a file to import."
-msgstr "Por favor seleccione una capa válida."
+msgstr "Por favor seleccione un archivo a importar."
 
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:236
 msgid "Please select a valid layer."
 msgstr "Por favor seleccione una capa válida."
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:59
-#, fuzzy
 msgid "DXF default line width:"
-msgstr "Ancho de línea por defecto:"
+msgstr "Ancho de línea por defecto para DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:61
 msgid "Used when the DXF items in file have no line thickness set"
@@ -40184,9 +40198,8 @@ msgstr ""
 "línea establecido"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:72
-#, fuzzy
 msgid "DXF default units:"
-msgstr "Unidades por defecto:"
+msgstr "Unidades por defecto para DXF:"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:74
 msgid "Used when the DXF file has no unit set"
@@ -40209,9 +40222,8 @@ msgstr ""
 "Si no está marcado, use la capa activa del Editor de placa"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:158
-#, fuzzy
 msgid "Group imported items"
-msgstr "Agrupar elementos"
+msgstr "Agrupar elementos importados"
 
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:160
 msgid "Add all imported items to a new group"
@@ -40248,9 +40260,9 @@ msgid "Footprints [%u items]"
 msgstr "Huellas [%u elementos]"
 
 #: pcbnew/load_select_footprint.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to find a writer for '%s'."
-msgstr "No se ha podido encontrar un visor de PDF para '%s'."
+msgstr "No se ha podido encontrar un escritor para '%s'."
 
 #: pcbnew/load_select_footprint.cpp:366
 #, c-format
@@ -40413,9 +40425,8 @@ msgid "Add Microwave Shape"
 msgstr "Agregar forma de microondas"
 
 #: pcbnew/menubar_pcb_editor.cpp:318
-#, fuzzy
 msgid "Add Dimension"
-msgstr "Dimensión"
+msgstr "Agregar dimensión"
 
 #: pcbnew/menubar_pcb_editor.cpp:339
 msgid "Auto-Place Footprints"
@@ -40669,22 +40680,19 @@ msgid "Add %s 'Do not place' fabrication attribute."
 msgstr "Agregar el atributo de fabricación %s 'No colocar'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:600
-#, fuzzy, c-format
+#, c-format
 msgid "Remove %s 'Do not place' fabrication attribute."
-msgstr ""
-"Eliminar el atributo de fabricación 'excluir de la lista de materiales' %s."
+msgstr "Eliminar el atributo de fabricación 'no colocar' %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:611
-#, fuzzy, c-format
+#, c-format
 msgid "Added %s 'Do not place' fabrication attribute."
-msgstr ""
-"Atributo de fabricación 'excluir de la lista de materiales' %s añadido."
+msgstr "Agregar el atributo de fabricación 'no colocar' %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:617
-#, fuzzy, c-format
+#, c-format
 msgid "Removed %s 'Do not place' fabrication attribute."
-msgstr ""
-"Atributo de fabricación 'excluir de la lista de materiales' %s eliminado."
+msgstr "Atributo de fabricación 'No colocar' %s eliminado."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
 #, c-format
@@ -41061,9 +41069,8 @@ msgid "Pad Type"
 msgstr "Tipo de pad"
 
 #: pcbnew/pad.cpp:1955
-#, fuzzy
 msgid "Pad Shape"
-msgstr "Forma del pad"
+msgstr "Forma de pad"
 
 #: pcbnew/pad.cpp:1959
 msgid "Pad Number"
@@ -41078,17 +41085,16 @@ msgid "Size Y"
 msgstr "Tamaño Y"
 
 #: pcbnew/pad.cpp:1987
-#, fuzzy
 msgid "Corner Radius Ratio"
-msgstr "Relación de radios redondos"
+msgstr "Proporción de radio de esquina"
 
 #: pcbnew/pad.cpp:1999
 msgid "Hole Size X"
-msgstr "Tamaño X de orificio"
+msgstr "Tamaño X de agujero"
 
 #: pcbnew/pad.cpp:2005
 msgid "Hole Size Y"
-msgstr "Tamaño Y de orificio"
+msgstr "Tamaño Y de agujero"
 
 #: pcbnew/pad.cpp:2011
 msgid "Fabrication Property"
@@ -41256,9 +41262,8 @@ msgid "Compare Footprint with Library"
 msgstr "Comparar huella con biblioteca"
 
 #: pcbnew/pcb_field.cpp:93
-#, fuzzy
 msgid "User Field"
-msgstr "Campos de usuario"
+msgstr "Campo de usuario"
 
 #: pcbnew/pcb_field.cpp:102
 #, c-format
@@ -41271,29 +41276,27 @@ msgid "Value '%s' of %s"
 msgstr "Valor '%s' de %s"
 
 #: pcbnew/pcb_field.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' of %s"
-msgstr "Texto de huella '%s' de %s"
+msgstr "Huella '%s' de %s"
 
 #: pcbnew/pcb_field.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet '%s' of %s"
-msgstr "Valor '%s' de %s"
+msgstr "Hoja de datos '%s' de %s"
 
 #: pcbnew/pcb_field.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' of %s"
-msgstr "Campo %s %s"
+msgstr "Campo '%s' de %s"
 
 #: pcbnew/pcb_generator.cpp:187 pcbnew/pcb_generator.cpp:224
-#, fuzzy
 msgid "Update Order"
-msgstr "Actualizado"
+msgstr "Actualizar orden"
 
 #: pcbnew/pcb_generator.cpp:222
-#, fuzzy
 msgid "Generator Properties"
-msgstr "Propiedades del generador de scripts"
+msgstr "Propiedades del generador"
 
 #: pcbnew/pcb_group.cpp:368
 #, c-format
@@ -41470,13 +41473,13 @@ msgstr "Cargando regiones de placa..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2027
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2138
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Se ha encontrado una zona en una capa de Altium (%d) sin un equivalente de "
-"KiCad. Se ha movido a la capa de KiCad Eco1_User."
+"Se ha encontrado un contorno discontinuo en una capa de Altium (%d) sin un "
+"equivalente de KiCad. Se ha movido a la capa de KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2068
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2171
@@ -41504,7 +41507,7 @@ msgstr "Huella %s pad %s no marcado como multicapa, pero es un pad pasante."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2745
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "Huella %s pad %s tiene un orificio cuadrado (todavía no soportado)."
+msgstr "Huella %s pad %s tiene un agujero cuadrado (todavía no soportado)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2772
 #, c-format
@@ -41512,13 +41515,13 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Huella %s pad %s tiene una rotación de orificio de %f°. KiCad solo soporta "
+"Huella %s pad %s tiene una rotación de agujero de %f°. KiCad solo soporta "
 "rotaciones de 90°."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2784
 #, c-format
 msgid "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Huella %s pad %s utiliza un orificio de tipo desconocido %d."
+msgstr "Huella %s pad %s utiliza un agujero de tipo desconocido %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2801
 #, c-format
@@ -41552,8 +41555,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2942
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr ""
-"Un pad que no es de cobre %s tiene un orificio, esto no está soportado."
+msgstr "Un pad que no es de cobre %s tiene un agujero, esto no está soportado."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2947
 #, c-format
@@ -41623,9 +41625,8 @@ msgid "Altium PCB Library or Integrated Library"
 msgstr "Biblioteca Altium PCB o biblioteca integrada"
 
 #: pcbnew/pcb_io/altium/pcb_io_solidworks.h:31
-#, fuzzy
 msgid "Solidworks PCB files"
-msgstr "Relleno sólido"
+msgstr "Archivos de PCB de Solidworks"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:91
 msgid ""
@@ -41766,8 +41767,8 @@ msgid ""
 "The CADSTAR pad definition '%s' has the hole shape outside the pad shape. "
 "The hole has been moved to the center of the pad."
 msgstr ""
-"La definición de pad de CADSTAR '%s' tiene la forma de orificio por fuera de "
-"la forma del pad. El orificio se ha movido al centro del pad."
+"La definición de pad de CADSTAR '%s' tiene la forma de agujero por fuera de "
+"la forma del pad. El agujero se ha movido al centro del pad."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1331
 #, c-format
@@ -42209,7 +42210,7 @@ msgstr "Error al leer la huella '%s' de la biblioteca '%s': %s"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:342
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load footprint '%s' from '%s'"
 msgstr "No se puede cargar la huella '%s' desde '%s'"
 
@@ -42430,25 +42431,21 @@ msgid "gEDA PCB footprint file"
 msgstr "Archivo de huella de PCB gEDA"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.h:57
-#, fuzzy
 msgid "gEDA PCB footprint library directory"
-msgstr "Archivos de la biblioteca de huellas de PCB de Altium"
+msgstr "Directorio de la biblioteca de huellas de PCB de gEDA"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:305
-#, fuzzy
 msgid "Generating content section"
-msgstr "Seleccionar conexión"
+msgstr "Generando sección de contenido"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1120
-#, fuzzy
 msgid "Generating history section"
-msgstr "Dirección de la numeración"
+msgstr "Generando sección de historial"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1147
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2734
-#, fuzzy
 msgid "Generating BOM section"
-msgstr "Opciones de representación"
+msgstr "Generando sección de BOM"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:1311
 msgid "Generating CAD data"
@@ -42460,9 +42457,8 @@ msgid "Exporting Layer %s, Net %s"
 msgstr "Exportando capa %s, red %s"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2889
-#, fuzzy
 msgid "Generating logistic section"
-msgstr "Generar archivo de posición"
+msgstr "Generando sección de logística"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2901
 msgid "Saving file"
@@ -42498,10 +42494,10 @@ msgstr ""
 "Forma de pad desconocida '%c=0x%02x' en la línea: %d de la huella: '%s'."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:1601
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown PCB_SHAPE type:'%c=0x%02x' on line %d of footprint '%s'."
 msgstr ""
-"Tipo de FP_SHAPE desconocido: '%c=0x%02x' en la línea %d de la huella '%s'."
+"Tipo de PCB_SHAPE desconocido: '%c=0x%02x' en la línea %d de la huella '%s'."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2362
 #, c-format
@@ -42655,7 +42651,6 @@ msgstr ""
 "Se encontró un archivo inesperado, «%s», en la ruta de bibliotecas «%s»."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h:293
-#, fuzzy
 msgid "KiCad footprint file"
 msgstr "Archivos de huellas de KiCad"
 
@@ -42854,11 +42849,10 @@ msgstr ""
 "primera."
 
 #: pcbnew/pcb_io/pcb_io.cpp:179
-#, fuzzy
 msgid "Enable <b>debug</b> logging for Footprint*() functions in this PCB_IO."
 msgstr ""
-"Activar el log en modo <b>debug</b> para las funciones Footprint*() en este "
-"complemento."
+"Activar registros en modo <b>debug</b> para las funciones Footprint*() en "
+"este PCB_IO."
 
 # Pendiente de contexto
 #: pcbnew/pcb_io/pcb_io.cpp:182
@@ -42884,12 +42878,11 @@ msgid "Password for <b>login</b> to some special library server."
 msgstr "Clave para el <b>login</b> en algún servidor especial de bibliotecas."
 
 #: pcbnew/pcb_io/pcb_io.cpp:200
-#, fuzzy
 msgid ""
 "Enter the python module which implements the PCB_IO::Footprint*() functions."
 msgstr ""
-"Introduzca el módulo de python que implementa las funciones de PLUGIN::"
-"Footprint*()."
+"Introduzca el módulo de Python que implementa las funciones de "
+"PCB_IO::Footprint*()."
 
 #: pcbnew/pcb_io/pcb_io_mgr.cpp:86
 #, c-format
@@ -42968,9 +42961,8 @@ msgid "PCB Text Box on %s"
 msgstr "Caja de texto de placa en %s"
 
 #: pcbnew/pcb_textbox.cpp:679
-#, fuzzy
 msgid "Border Properties"
-msgstr "Propiedades del Módulo"
+msgstr "Propiedades del borde"
 
 #: pcbnew/pcb_textbox.cpp:689
 msgid "Border Style"
@@ -43004,9 +42996,9 @@ msgid "Segment Length"
 msgstr "Longitud de segmento"
 
 #: pcbnew/pcb_track.cpp:1117
-#, fuzzy, c-format
+#, c-format
 msgid "Width Constraints: %s"
-msgstr "Restricciones de ancho: min %s"
+msgstr "Restricciones de ancho: %s"
 
 #: pcbnew/pcb_track.cpp:1129
 msgid "Micro Via"
@@ -43098,14 +43090,14 @@ msgid "Missing group name argument to %s."
 msgstr "Argumento de nombre de grupo faltante a %s."
 
 #: pcbnew/pcbexpr_functions.cpp:826
-#, fuzzy, c-format
+#, c-format
 msgid "Missing sheet name argument to %s."
-msgstr "Argumento de nombre de capa faltante a %s."
+msgstr "Argumento de nombre de hoja faltante a %s."
 
 #: pcbnew/pcbexpr_functions.cpp:873
-#, fuzzy, c-format
+#, c-format
 msgid "Missing footprint argument (reference designator) to %s."
-msgstr "Falta el argumento de huella (A, B o designador de referencia) a %s."
+msgstr "Falta el argumento de huella (designador de referencia) a %s."
 
 #: pcbnew/pcbexpr_functions.cpp:990
 #, c-format
@@ -43191,14 +43183,14 @@ msgid "Running DRC...\n"
 msgstr "Ejecutar DRC...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1026
-#, fuzzy
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "Error al cargar el archivo esquemático\n"
+msgstr "No se pudo encontrar el esquema para las pruebas de paridad.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1041
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Error al cargar el archivo esquemático\n"
+msgstr ""
+"No se pudo obtener la lista de redes del esquema para las pruebas de paridad."
+"\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1062 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -43289,8 +43281,8 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"No puede encontrarse la red complementaria del par diferencial para el "
-"afinado de la longitud. Asegurese de que los nombres de las redes que "
+"No puede encontrarse la red complementaria del par diferencial para la "
+"sintonización de la longitud. Asegurese de que los nombres de las redes que "
 "pertenecen al mismo par terminan en _N/_P o +/-."
 
 #: pcbnew/router/pns_kicad_iface.cpp:655 pcbnew/router/pns_kicad_iface.cpp:745
@@ -43326,9 +43318,8 @@ msgstr ""
 
 # ¿Podría dejarse solo como Pista? Ver contexto
 #: pcbnew/router/pns_kicad_iface.cpp:1987
-#, fuzzy
 msgid "Routing"
-msgstr "Enrutando pista"
+msgstr "Enrutado"
 
 #: pcbnew/router/pns_meander_skew_placer.cpp:52
 msgid "Please select a differential pair trace you want to tune."
@@ -43340,9 +43331,9 @@ msgid ""
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
 msgstr ""
-"No puede encontrarse la red complementaria del par diferencial para el "
-"afinado del desvío. Asegurese de que los nombres de las redes que pertenecen "
-"al mismo par terminan en _N/_P o +/-."
+"No puede encontrarse la red complementaria del par diferencial para la "
+"sintonización del desvío. Asegurese de que los nombres de las redes que "
+"pertenecen al mismo par terminan en _N/_P o +/-."
 
 #: pcbnew/router/pns_router.cpp:213
 msgid "Diff pair gap is less than board minimum clearance."
@@ -43571,9 +43562,8 @@ msgid "(%s to commit anyway.)"
 msgstr "(%s para confirmar de todos modos.)"
 
 #: pcbnew/router/router_tool.cpp:1940 pcbnew/router/router_tool.cpp:2423
-#, fuzzy
 msgid "Track violates DRC."
-msgstr "Ubicación de vía infringe el DRC."
+msgstr "La pista infringe el DRC."
 
 #: pcbnew/router/router_tool.cpp:2561 pcbnew/tools/pcb_actions.cpp:2396
 msgid "Break Track"
@@ -43879,7 +43869,6 @@ msgid "Some zones did not intersect and were not merged."
 msgstr "Algunas zonas no se intersectaban y no fueron unidas."
 
 #: pcbnew/tools/board_editor_control.cpp:1453
-#, fuzzy
 msgid "Duplicate Zone"
 msgstr "Duplicar zona"
 
@@ -43954,9 +43943,9 @@ msgid "Connection width resolution for:"
 msgstr "Resolución de ancho de conexión para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min connection width: %s."
-msgstr "Resuelta la restricción del ancho mínimo de conexión: %s."
+msgstr "Ancho mínimo de conexión resuelto: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:390
 #: pcbnew/tools/board_inspection_tool.cpp:1280
@@ -43990,27 +43979,26 @@ msgstr "Restricciones de ancho anular resueltas: mín %s; máx. %s."
 #: pcbnew/tools/board_inspection_tool.cpp:421
 #: pcbnew/tools/board_inspection_tool.cpp:1318
 msgid "Hole Size"
-msgstr "Tamaño de orificio"
+msgstr "Tamaño de agujero"
 
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #: pcbnew/tools/board_inspection_tool.cpp:1319
-#, fuzzy
 msgid "Hole size resolution for:"
-msgstr "Resolución de diámetro de orificio para:"
+msgstr "Resolución de tamaño de agujero para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:430
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
-msgstr "Restricciones de altura resueltas: mín %s; máx. %s."
+msgstr "Restricciones de tamaño de agujero resueltas: mín %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 msgid "Hole Clearance"
-msgstr "Espacio libre del orificio"
+msgstr "Espacio libre del agujero"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:1039
 msgid "Hole clearance resolution for:"
-msgstr "Resolución de margen de orificios para:"
+msgstr "Resolución de margen de agujeros para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:445
 #: pcbnew/tools/board_inspection_tool.cpp:548
@@ -44033,9 +44021,9 @@ msgstr "Los elementos pertenecen a la misma red. El margen es 0."
 #: pcbnew/tools/board_inspection_tool.cpp:1116
 #: pcbnew/tools/board_inspection_tool.cpp:1145
 #: pcbnew/tools/board_inspection_tool.cpp:1211
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min clearance: %s."
-msgstr "Margen resuelto: %s."
+msgstr "Margen mínimo resuelto: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:460
 #: pcbnew/tools/board_inspection_tool.cpp:1194
@@ -44053,9 +44041,8 @@ msgstr "De agujero a agujero"
 
 #: pcbnew/tools/board_inspection_tool.cpp:481
 #: pcbnew/tools/board_inspection_tool.cpp:1068
-#, fuzzy
 msgid "Hole-to-hole clearance resolution for:"
-msgstr "Resolución de la holgura entre agujeros para:"
+msgstr "Resolución de margen entre agujeros para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:495
 msgid "Edge Clearance"
@@ -44101,25 +44088,24 @@ msgid "Cannot generate clearance report on empty group."
 msgstr "No se puede generar un informe de margen en un grupo vacío."
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
-#, fuzzy
 msgid "Cannot generate clearance report on footprint with no pads."
-msgstr "No se puede generar un informe de margen en un grupo vacío."
+msgstr "No se puede generar un informe de margen en una huella sin pads."
 
 #: pcbnew/tools/board_inspection_tool.cpp:673
-#, fuzzy
 msgid ""
 "Cannot generate clearance report on footprint with multiple pads.  Select a "
 "single pad."
-msgstr "No se puede generar un informe de margen en un grupo vacío."
+msgstr ""
+"No se puede generar un informe de margen en una huella con múltiples pads.  "
+"Seleccione un solo pad."
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Zone connection resolution for:"
 msgstr "Resolución de conexión de zona para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:737
-#, fuzzy
 msgid "Thermal-relief gap resolution for:"
-msgstr "Resolución de la brecha de alivio térmico para:"
+msgstr "Resolución de espacio de alivio térmico para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:746
 #, c-format
@@ -44127,24 +44113,22 @@ msgid "Resolved thermal relief gap: %s."
 msgstr "Brecha de alivio térmico resuelta: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
-#, fuzzy
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "Resolución de la brecha de alivio térmico para:"
+msgstr "Resolución de ancho de radio de alivio térmico para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:760
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved spoke width: %s."
-msgstr "Resuelto el ancho de los radios de alivio térmico: %s."
+msgstr "Ancho de radio resuelto: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
-#, fuzzy
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "Resolución de la brecha de alivio térmico para:"
+msgstr "Resolución de cantidad mínima de radios de alivio térmico para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:774
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "Recuento de radios de alivio térmico mínimo resuelto: %d."
+msgstr "Cantidad de radios mínima resuelta: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:783
 #: pcbnew/tools/board_inspection_tool.cpp:831
@@ -44162,19 +44146,17 @@ msgid "Overridden by larger physical clearance from %s;clearance: %s."
 msgstr "Anulado por una mayor holgura física de %s;holgura: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:813
-#, fuzzy, c-format
+#, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "Anulado por una mayor holgura física del agujero de %s;holgura: %s."
+msgstr "Remplazado por un margen de orificio físico mayor desde %s; margen: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:857
-#, fuzzy
 msgid "Items belong to the same net. Min clearance is 0."
-msgstr "Los elementos pertenecen a la misma red. El margen es 0."
+msgstr "Los elementos pertenecen a la misma red. El margen mínimo es 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:872
-#, fuzzy
 msgid "Min clearance is 0."
-msgstr "Margen: %s."
+msgstr "El margen mínimo es 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:876
 #, c-format
@@ -44186,9 +44168,8 @@ msgid "Diff Pair"
 msgstr "Par diferencial"
 
 #: pcbnew/tools/board_inspection_tool.cpp:900
-#, fuzzy
 msgid "Diff-pair gap resolution for:"
-msgstr "Resolución de brecha de par diferencial para:"
+msgstr "Resolución de espacio de par diferencial para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:905
 #, c-format
@@ -44196,9 +44177,8 @@ msgid "Resolved gap constraints: min %s; opt %s; max %s."
 msgstr "Restricciones de espacio resueltas: mín %s; opt %s; máx. %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:913
-#, fuzzy
 msgid "Diff-pair max uncoupled length resolution for:"
-msgstr "Resolución de la longitud máxima desacoplada del par diferencial para:"
+msgstr "Resolución de longitud desacoplada máxima de par diferencial para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:919
 msgid "No 'diff_pair_uncoupled' constraints defined."
@@ -44226,9 +44206,9 @@ msgid "Select an item for a constraints resolution report."
 msgstr "Seleccione un elemento para un informe de restricciones de resolución."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1270
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved width constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de espacio resueltas: mín %s; opt %s; máx. %s."
+msgstr "Restricciones de ancho resueltas: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1290
 #, c-format
@@ -44245,14 +44225,14 @@ msgid "Resolved annular width constraints: min %s; opt %s; max %s."
 msgstr "Restricciones de ancho anular resueltas: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1328
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de espacio resueltas: mín %s; opt %s; máx. %s."
+msgstr "Restricciones de tamaño de agujero resueltas: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1347
-#, fuzzy, c-format
+#, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "Restricciones de espacio resueltas: mín %s; opt %s; máx. %s."
+msgstr "Restricciones de altura resueltas: mín %s; opc %s; máx %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, c-format
@@ -44288,20 +44268,17 @@ msgid "Item allowed at current location."
 msgstr "Elemento permitido en la ubicación actual."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1446
-#, fuzzy
 msgid "Select a footprint to diff with its library equivalent."
 msgstr ""
-"Seleccione una huella para cotejarla con su equivalente en la biblioteca."
+"Seleccione una huella para comparar con su equivalente en la biblioteca."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1464
-#, fuzzy
 msgid "Select a footprint for a footprint associations report."
-msgstr "Seleccione un elemento para un informe de restricciones de resolución."
+msgstr "Seleccione una huella para un informe de asociaciones de huella."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1491
-#, fuzzy
 msgid "Board vs library diff for:"
-msgstr "Verificación de placa/biblioteca para:"
+msgstr "Comparación entre placa y biblioteca para:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1514
 #: pcbnew/tools/board_inspection_tool.cpp:1522
@@ -44321,43 +44298,36 @@ msgid "Create from Selection"
 msgstr "Crear desde la selección"
 
 #: pcbnew/tools/convert_tool.cpp:422
-#, fuzzy
 msgid "Could not convert selection"
-msgstr "&Selección de tipos"
+msgstr "No se pudo convertir la selección"
 
 #: pcbnew/tools/convert_tool.cpp:422
-#, fuzzy
 msgid "Objects must form a closed shape"
-msgstr "(no es una forma cerrada)"
+msgstr "Los objetos deben formar una forma cerrada"
 
 #: pcbnew/tools/convert_tool.cpp:533
 msgid "Convert to Polygon"
 msgstr "Convertir a un polígono"
 
 #: pcbnew/tools/convert_tool.cpp:535
-#, fuzzy
 msgid "Create Polygon"
-msgstr "Crear zonas"
+msgstr "Crear polígono"
 
 #: pcbnew/tools/convert_tool.cpp:540
-#, fuzzy
 msgid "Convert to Zone"
-msgstr "Convertir a líneas"
+msgstr "Convertir a zona"
 
 #: pcbnew/tools/convert_tool.cpp:542
-#, fuzzy
 msgid "Create Zone"
-msgstr "Crear zonas"
+msgstr "Crear zona"
 
 #: pcbnew/tools/convert_tool.cpp:1109
-#, fuzzy
 msgid "Create Lines"
-msgstr "Crear zonas"
+msgstr "Crear líneas"
 
 #: pcbnew/tools/convert_tool.cpp:1196
-#, fuzzy
 msgid "Create Arc"
-msgstr "Crear matriz"
+msgstr "Crear arco"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:246
 msgid "Layer Name"
@@ -44417,7 +44387,7 @@ msgstr "Grosor de la placa: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:475
 msgid "Min hole diameter: "
-msgstr "Diámetro mínimo de orificio: "
+msgstr "Diámetro mínimo de agujero: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:484
 msgid "Impedance Control: "
@@ -44445,7 +44415,6 @@ msgid "Draw Line"
 msgstr "Dibujar línea"
 
 #: pcbnew/tools/drawing_tool.cpp:426
-#, fuzzy
 msgid "Draw Text Box"
 msgstr "Dibujar un cuadro de texto"
 
@@ -44462,7 +44431,6 @@ msgid "Draw Arc"
 msgstr "Dibujar arco"
 
 #: pcbnew/tools/drawing_tool.cpp:722
-#, fuzzy
 msgid "Place Image"
 msgstr "Colocar una imagen"
 
@@ -44471,19 +44439,16 @@ msgid "Place Text"
 msgstr "Colocar texto"
 
 #: pcbnew/tools/drawing_tool.cpp:1288
-#, fuzzy
 msgid "Draw Dimension"
 msgstr "Dibujar una dimensión"
 
 #: pcbnew/tools/drawing_tool.cpp:1747
-#, fuzzy
 msgid "Move Footprint Anchor"
-msgstr "Situar ancla de huella"
+msgstr "Mover ancla de huella"
 
 #: pcbnew/tools/drawing_tool.cpp:3028
-#, fuzzy
 msgid "Select Net:"
-msgstr "Red seleccionada:"
+msgstr "Seleccionar red:"
 
 #: pcbnew/tools/drawing_tool.cpp:3200
 msgid "Via location violates DRC."
@@ -44508,9 +44473,8 @@ msgid "Positioning Tools"
 msgstr "Herramientas de posicionamiento"
 
 #: pcbnew/tools/edit_tool.cpp:120
-#, fuzzy
 msgid "Shape Modification"
-msgstr "Rotación de la forma"
+msgstr "Modificación de forma"
 
 #: pcbnew/tools/edit_tool.cpp:547
 #, c-format
@@ -44565,27 +44529,24 @@ msgid "Chamfer Lines"
 msgstr "Líneas de biselado"
 
 #: pcbnew/tools/edit_tool.cpp:1210
-#, fuzzy
 msgid "Enter chamfer setback:"
-msgstr "Distacia de biselado:"
+msgstr "Introduzca el retroceso del biselado:"
 
 #: pcbnew/tools/edit_tool.cpp:1224
-#, fuzzy
 msgid ""
 "A setback of zero was entered.\n"
 "The chamfer operation was not performed."
 msgstr ""
-"Se ingresó un radio de cero.\n"
-"La operación de fileteado no fue realizada."
+"Se ingresó una distancia de cero.\n"
+"La operación de biselado no fue realizada."
 
 #: pcbnew/tools/edit_tool.cpp:1316
 msgid "A shape with least two lines must be selected."
 msgstr "Se debe seleccionar una forma con al menos dos líneas."
 
 #: pcbnew/tools/edit_tool.cpp:1391
-#, fuzzy
 msgid "Exactly two lines must be selected to extend them."
-msgstr "Se debe seleccionar una forma con al menos dos líneas."
+msgstr "Se deben seleccionar exactamente dos líneas para extenderlas."
 
 #: pcbnew/tools/edit_tool.cpp:1488 pcbnew/tools/pcb_actions.cpp:621
 msgid "Heal Shapes"
@@ -44659,9 +44620,8 @@ msgid "No footprint problems found."
 msgstr "No se han encontrado problemas en las huellas."
 
 #: pcbnew/tools/generator_tool.cpp:173
-#, fuzzy
 msgid "Regenerate All"
-msgstr "Eliminar todo"
+msgstr "Regenerar todo"
 
 #: pcbnew/tools/generator_tool.cpp:180
 #, c-format
@@ -46055,7 +46015,6 @@ msgid "Switch to Inner layer 2"
 msgstr "Cambiar a capa interior 2"
 
 #: pcbnew/tools/pcb_actions.cpp:1546
-#, fuzzy
 msgid "Switch to Inner Layer 3"
 msgstr "Cambiar a capa interior 3"
 
@@ -46951,11 +46910,11 @@ msgstr "Margen actual"
 
 #: pcbnew/tools/pcb_control.cpp:1600
 msgid "Resolved hole clearance"
-msgstr "Margen de orificios resuelta"
+msgstr "Margen de agujeros resuelta"
 
 #: pcbnew/tools/pcb_control.cpp:1605
 msgid "Actual hole clearance"
-msgstr "Margen de orificios actual"
+msgstr "Margen de agujeros actual"
 
 #: pcbnew/tools/pcb_control.cpp:1638
 msgid "Resolved edge clearance"
@@ -47197,11 +47156,11 @@ msgstr "Mostrar huellas en la parte trasera de la placa"
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Through-hole Pads"
-msgstr "Pads de orificio pasante"
+msgstr "Pads de agujero pasante"
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Show through-hole pads"
-msgstr "Mostrar pads de orificio pasante"
+msgstr "Mostrar pads de agujero pasante"
 
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Hidden Text"
@@ -47904,7 +47863,7 @@ msgstr "Espaciado del rayado"
 
 #: pcbnew/zone.cpp:1685
 msgid "Hatch Minimum Hole Ratio"
-msgstr "Proporción mínima de orificios de rayado"
+msgstr "Proporción mínima de agujeros de rayado"
 
 #: pcbnew/zone.cpp:1693
 msgid "Smoothing Effort"
