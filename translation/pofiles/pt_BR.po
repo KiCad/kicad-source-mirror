@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-16 14:08+0000\n"
+"PO-Revision-Date: 2024-02-17 15:02+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -46537,9 +46537,8 @@ msgid "Tune Length of a Single Track"
 msgstr "Ajustar o comprimento de uma única trilha"
 
 #: pcbnew/tools/pcb_actions.cpp:2324
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
-msgstr "Ajusta o comprimento de um par diferencial"
+msgstr "Ajustar o comprimento de um par diferencial"
 
 #: pcbnew/tools/pcb_actions.cpp:2333
 msgid "Tune Skew of a Differential Pair"
@@ -47545,9 +47544,8 @@ msgstr "Caixa de texto"
 
 #: pcbnew/widgets/search_handlers.cpp:274
 #: pcbnew/widgets/search_handlers.cpp:353
-#, fuzzy
 msgid "Class"
-msgstr "Classe 1"
+msgstr "Classe"
 
 #: pcbnew/widgets/search_handlers.cpp:307
 #: pcbnew/widgets/search_handlers.cpp:391
@@ -47666,43 +47664,36 @@ msgid "Zone %s %s"
 msgstr "Região %s %s"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr "A largura do raio térmico não pode ser menor do que a largura mínima."
+msgstr "Não pode ser menor que a largura mínima da região"
 
 #: pcbnew/zone.cpp:1671
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Largura da hachura:"
+msgstr "Largura da hachura"
 
 #: pcbnew/zone.cpp:1678
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Espaçamento da hachura:"
+msgstr "Espaçamento da hachura"
 
 #: pcbnew/zone.cpp:1685
 msgid "Hatch Minimum Hole Ratio"
-msgstr ""
+msgstr "Proporção mínima dos furos da hachura"
 
 #: pcbnew/zone.cpp:1693
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Esforço da suavização:"
+msgstr "Esforço da suavização"
 
 #: pcbnew/zone.cpp:1699
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Quantidade de suavização:"
+msgstr "Quantidade de suavização"
 
 #: pcbnew/zone.cpp:1705
-#, fuzzy
 msgid "Remove Islands"
-msgstr "Remove ilhas:"
+msgstr "Remover as ilhas"
 
 #: pcbnew/zone.cpp:1710
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "Tamanho mínimo da ilha:"
+msgstr "Tamanho mínimo da ilha"
 
 #: pcbnew/zone.cpp:1725
 msgid "Minimum Width"
@@ -47907,19 +47898,16 @@ msgid "KiCad Printed Circuit Board"
 msgstr "Placa de circuito impresso KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:41
-#, fuzzy
 msgid "KiCad Footprint"
-msgstr "Editor de footprint do KiCad"
+msgstr "Footprint do KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:55
-#, fuzzy
 msgid "KiCad Schematic Symbol"
-msgstr "Símbolo do esquemático"
+msgstr "Símbolo do esquemático do KiCad"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "Editor da folha do desenho do KiCad"
+msgstr "Editor da folha de desenho do KiCad"
 
 #~ msgid ""
 #~ "Would you like to save the router\n"
