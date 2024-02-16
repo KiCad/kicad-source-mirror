@@ -271,6 +271,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
+    inspectMenu->Add( EE_ACTIONS::showBusSyntaxHelp );
+
+    inspectMenu->AppendSeparator();
     inspectMenu->Add( EE_ACTIONS::runERC );
     inspectMenu->Add( ACTIONS::prevMarker );
     inspectMenu->Add( ACTIONS::nextMarker );

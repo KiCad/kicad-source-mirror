@@ -61,6 +61,7 @@ BOOST_FIXTURE_TEST_CASE( ERCHierarchicalSchematics, ERC_REGRESSION_TEST_FIXTURE 
 
         // Skip the "Modified symbol" warning
         settings.m_ERCSeverities[ERCE_LIB_SYMBOL_ISSUES] = RPT_SEVERITY_IGNORE;
+        settings.m_ERCSeverities[ERCE_LIB_SYMBOL_MISMATCH] = RPT_SEVERITY_IGNORE;
 
         m_schematic->ConnectionGraph()->RunERC();
 

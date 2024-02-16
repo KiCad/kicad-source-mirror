@@ -582,16 +582,18 @@ void DIALOG_ERC::OnERCItemDClick( wxDataViewEvent& aEvent )
 
 void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 {
-    RC_TREE_NODE* node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
+    TOOL_MANAGER*       toolMgr = m_parent->GetToolManager();
+    EE_INSPECTION_TOOL* inspectionTool = toolMgr->GetTool<EE_INSPECTION_TOOL>();
+    RC_TREE_NODE*       node = RC_TREE_MODEL::ToNode( aEvent.GetItem() );
 
     if( !node )
         return;
 
     ERC_SETTINGS& settings = m_parent->Schematic().ErcSettings();
 
-    std::shared_ptr<RC_ITEM>  rcItem = node->m_RcItem;
-    wxString  listName;
-    wxMenu    menu;
+    std::shared_ptr<RC_ITEM> rcItem = node->m_RcItem;
+    wxString                 listName;
+    wxMenu                   menu;
 
     switch( settings.GetSeverity( rcItem->GetErrorCode() ) )
     {
@@ -607,6 +609,7 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
         ID_REMOVE_EXCLUSION_ALL,
         ID_ADD_EXCLUSION,
         ID_ADD_EXCLUSION_ALL,
+        ID_INSPECT_VIOLATION,
         ID_EDIT_PIN_CONFLICT_MAP,
         ID_EDIT_CONNECTION_GRID,
         ID_SET_SEVERITY_TO_ERROR,
@@ -630,6 +633,11 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
                      _( "Exclude this violation..." ),
                      wxString::Format( _( "It will be excluded from the %s list" ), listName ) );
     }
+
+    wxString inspectERCErrorMenuText = inspectionTool->InspectERCErrorMenuText( rcItem );
+
+    if( !inspectERCErrorMenuText.IsEmpty() )
+        menu.Append( ID_INSPECT_VIOLATION, inspectERCErrorMenuText );
 
     menu.AppendSeparator();
 
@@ -737,6 +745,10 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
             modified = true;
         }
 
+        break;
+
+    case ID_INSPECT_VIOLATION:
+        inspectionTool->InspectERCError( node->m_RcItem );
         break;
 
     case ID_SET_SEVERITY_TO_ERROR:

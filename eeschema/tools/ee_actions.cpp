@@ -61,6 +61,12 @@ TOOL_ACTION EE_ACTIONS::diffSymbol( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show differences between schematic symbol and its library equivalent" ) )
         .Icon( BITMAPS::library ) );
 
+TOOL_ACTION EE_ACTIONS::showBusSyntaxHelp( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InspectionTool.showBusSyntaxHelp" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show Bus Syntax Help" ) )
+        .Icon( BITMAPS::bus_definition_tool ) );
+
 TOOL_ACTION EE_ACTIONS::showSimulator( TOOL_ACTION_ARGS()
         .Name( "eeschema.EditorControl.showSimulator" )
         .Scope( AS_GLOBAL )

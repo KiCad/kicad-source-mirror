@@ -202,7 +202,6 @@ private:
     static ERC_ITEM multipleNetNames;
     static ERC_ITEM netclassConflict;
     static ERC_ITEM netNotBusMember;
-    static ERC_ITEM busLabelSyntax;
     static ERC_ITEM busToBusConflict;
     static ERC_ITEM busToNetConflict;
     static ERC_ITEM unresolvedVariable;
@@ -210,6 +209,7 @@ private:
     static ERC_ITEM simulationModelIssues;
     static ERC_ITEM wireDangling;
     static ERC_ITEM libSymbolIssues;
+    static ERC_ITEM libSymbolMismatch;
     static ERC_ITEM footprintLinkIssues;
     static ERC_ITEM unannotated;
     static ERC_ITEM extraUnits;

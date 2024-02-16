@@ -56,10 +56,16 @@ public:
     /// Called when clicking on a item:
     int CrossProbe( const TOOL_EVENT& aEvent );
 
+    wxString InspectERCErrorMenuText( const std::shared_ptr<RC_ITEM>& aERCItem );
+    void InspectERCError( const std::shared_ptr<RC_ITEM>& aERCItem );
+
     int ExcludeMarker( const TOOL_EVENT& aEvent );
+
+    int ShowBusSyntaxHelp( const TOOL_EVENT& aEvent );
 
     int CheckSymbol( const TOOL_EVENT& aEvent );
     int DiffSymbol( const TOOL_EVENT& aEvent );
+    void DiffSymbol( SCH_SYMBOL* aSymbol );
 
     int RunSimulation( const TOOL_EVENT& aEvent );
 
@@ -75,6 +81,7 @@ private:
     void setTransitions() override;
 
 private:
+    HTML_MESSAGE_BOX* m_busSyntaxHelp;
 };
 
 #endif /* EE_INSPECTION_TOOL_H */

@@ -157,6 +157,7 @@ public:
     static TOOL_ACTION editPageNumber;
     static TOOL_ACTION checkSymbol;
     static TOOL_ACTION diffSymbol;
+    static TOOL_ACTION showBusSyntaxHelp;
 
     static TOOL_ACTION rescueSymbols;
     static TOOL_ACTION remapSymbols;

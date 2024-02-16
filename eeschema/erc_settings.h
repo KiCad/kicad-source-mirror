@@ -61,7 +61,6 @@ enum ERCE_T
     ERCE_BUS_ALIAS_CONFLICT,      ///< Conflicting bus alias definitions across sheets.
     ERCE_DRIVER_CONFLICT,         ///< Conflicting drivers (labels, etc) on a subgraph.
     ERCE_BUS_ENTRY_CONFLICT,      ///< A wire connected to a bus doesn't match the bus.
-    ERCE_BUS_LABEL_ERROR,         ///< A label attached to a bus isn't in bus format.
     ERCE_BUS_TO_BUS_CONFLICT,     ///< A connection between bus objects doesn't share at least
                                   ///<   one net.
     ERCE_BUS_TO_NET_CONFLICT,     ///< A bus wire is graphically connected to a net port/pin
@@ -69,11 +68,11 @@ enum ERCE_T
     ERCE_NETCLASS_CONFLICT,       ///< Multiple labels assign different netclasses to same net.
     ERCE_GLOBLABEL,               ///< A global label is unique.
     ERCE_UNRESOLVED_VARIABLE,     ///< A text variable could not be resolved.
-    ERCE_UNDEFINED_NETCLASS,      ///< A netclass was referenced by not defined.
+    ERCE_UNDEFINED_NETCLASS,      ///< A netclass was referenced but not defined.
     ERCE_SIMULATION_MODEL,        ///< An error was found in the simulation model.
     ERCE_WIRE_DANGLING,           ///< Some wires are not connected to anything else.
-    ERCE_LIB_SYMBOL_ISSUES,       ///< Library symbol changed from current symbol in schematic or
-                                  ///<   the library symbol link no longer valid.
+    ERCE_LIB_SYMBOL_ISSUES,       ///< Symbol not found in active libraries.
+    ERCE_LIB_SYMBOL_MISMATCH,     ///< Symbol doesn't match copy in library.
     ERCE_FOOTPRINT_LINK_ISSUES,   ///< The footprint link is invalid, or points to a missing
                                   ///<   (or inactive) footprint or library.
     ERCE_UNANNOTATED,             ///< Symbol has not been annotated.

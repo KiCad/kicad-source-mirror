@@ -334,13 +334,13 @@ wxString BOARD_INSPECTION_TOOL::InspectDRCErrorMenuText( const std::shared_ptr<R
 
 void BOARD_INSPECTION_TOOL::InspectDRCError( const std::shared_ptr<RC_ITEM>& aDRCItem )
 {
+    wxCHECK( m_frame, /* void */ );
+
     BOARD_ITEM*           a = m_frame->GetBoard()->GetItem( aDRCItem->GetMainItemID() );
     BOARD_ITEM*           b = m_frame->GetBoard()->GetItem( aDRCItem->GetAuxItemID() );
     BOARD_CONNECTED_ITEM* ac = dynamic_cast<BOARD_CONNECTED_ITEM*>( a );
     BOARD_CONNECTED_ITEM* bc = dynamic_cast<BOARD_CONNECTED_ITEM*>( b );
     PCB_LAYER_ID          layer = m_frame->GetActiveLayer();
-
-    wxCHECK( m_frame, /* void */ );
 
     if( aDRCItem->GetErrorCode() == DRCE_LIB_FOOTPRINT_MISMATCH )
     {

@@ -935,6 +935,7 @@ int ERC_TESTER::TestLibSymbolIssues()
 {
     wxCHECK( m_schematic, 0 );
 
+    ERC_SETTINGS&     settings = m_schematic->ErcSettings();
     SYMBOL_LIB_TABLE* libTable = PROJECT_SCH::SchSymbolLibTable( &m_schematic->Prj() );
     wxString          msg;
     int               err_count = 0;
@@ -957,24 +958,32 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             if( !libTableRow )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
-                ercItem->SetItems( symbol );
-                msg.Printf( _( "The current configuration does not include the symbol library '%s'" ),
-                            UnescapeString( libName ) );
-                ercItem->SetErrorMessage( msg );
+                if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                    ercItem->SetItems( symbol );
+                    msg.Printf( _( "The current configuration does not include the symbol library '%s'" ),
+                                UnescapeString( libName ) );
+                    ercItem->SetErrorMessage( msg );
 
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                }
+
                 continue;
             }
             else if( !libTable->HasLibrary( libName, true ) )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
-                ercItem->SetItems( symbol );
-                msg.Printf( _( "The library '%s' is not enabled in the current configuration" ),
-                            UnescapeString( libName ) );
-                ercItem->SetErrorMessage( msg );
+                if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                    ercItem->SetItems( symbol );
+                    msg.Printf( _( "The library '%s' is not enabled in the current configuration" ),
+                                UnescapeString( libName ) );
+                    ercItem->SetErrorMessage( msg );
 
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                }
+
                 continue;
             }
 
@@ -983,25 +992,30 @@ int ERC_TESTER::TestLibSymbolIssues()
 
             if( libSymbol == nullptr )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
-                ercItem->SetItems( symbol );
-                msg.Printf( _( "Symbol '%s' not found in symbol library '%s'" ),
-                            UnescapeString( symbolName ),
-                            UnescapeString( libName ) );
-                ercItem->SetErrorMessage( msg );
+                if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+                {
+                    std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                    ercItem->SetItems( symbol );
+                    msg.Printf( _( "Symbol '%s' not found in symbol library '%s'" ),
+                                UnescapeString( symbolName ),
+                                UnescapeString( libName ) );
+                    ercItem->SetErrorMessage( msg );
 
-                markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                    markers.emplace_back( new SCH_MARKER( ercItem, symbol->GetPosition() ) );
+                }
+
                 continue;
             }
 
             std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
             constexpr int flags = LIB_ITEM::COMPARE_FLAGS::EQUALITY | LIB_ITEM::COMPARE_FLAGS::ERC;
 
-            if( flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
+            if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH )
+                && flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )
             {
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_ISSUES );
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_LIB_SYMBOL_MISMATCH );
                 ercItem->SetItems( symbol );
-                msg.Printf( _( "Symbol '%s' has been modified in library '%s'" ),
+                msg.Printf( _( "Symbol '%s' doesn't match copy in library '%s'" ),
                             UnescapeString( symbolName ),
                             UnescapeString( libName ) );
                 ercItem->SetErrorMessage( msg );
@@ -1323,7 +1337,8 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
         TestNoConnectPins();
     }
 
-    if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES ) )
+    if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_ISSUES )
+        || settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking for library symbol issues..." ) );

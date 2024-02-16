@@ -52,7 +52,7 @@
 
 
 EE_INSPECTION_TOOL::EE_INSPECTION_TOOL() :
-    EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" )
+        EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" ), m_busSyntaxHelp( nullptr )
 {
 }
 
@@ -183,6 +183,68 @@ int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 }
 
 
+wxString EE_INSPECTION_TOOL::InspectERCErrorMenuText( const std::shared_ptr<RC_ITEM>& aERCItem )
+{
+    auto menuDescription =
+            [&]( const TOOL_ACTION& aAction )
+            {
+                wxString   menuItemLabel = aAction.GetMenuLabel();
+                wxMenuBar* menuBar = m_frame->GetMenuBar();
+
+                for( size_t ii = 0; ii < menuBar->GetMenuCount(); ++ii )
+                {
+                    for( wxMenuItem* menuItem : menuBar->GetMenu( ii )->GetMenuItems() )
+                    {
+                        if( menuItem->GetItemLabelText() == menuItemLabel )
+                        {
+                            wxString menuTitleLabel = menuBar->GetMenuLabelText( ii );
+
+                            menuTitleLabel.Replace( wxS( "&" ), wxS( "&&" ) );
+                            menuItemLabel.Replace( wxS( "&" ), wxS( "&&" ) );
+
+                            return wxString::Format( _( "Run %s > %s" ),
+                                                     menuTitleLabel,
+                                                     menuItemLabel );
+                        }
+                    }
+                }
+
+                return wxString::Format( _( "Run %s" ), aAction.GetFriendlyName() );
+            };
+
+    if( aERCItem->GetErrorCode() == ERCE_BUS_TO_NET_CONFLICT )
+    {
+        return menuDescription( EE_ACTIONS::showBusSyntaxHelp );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_MISMATCH )
+    {
+        return menuDescription( EE_ACTIONS::diffSymbol );
+    }
+
+    return wxEmptyString;
+}
+
+
+void EE_INSPECTION_TOOL::InspectERCError( const std::shared_ptr<RC_ITEM>& aERCItem )
+{
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( frame, /* void */ );
+
+    EDA_ITEM* a = frame->GetItem( aERCItem->GetMainItemID() );
+
+    if( aERCItem->GetErrorCode() == ERCE_BUS_TO_NET_CONFLICT )
+    {
+        m_toolMgr->RunAction( EE_ACTIONS::showBusSyntaxHelp );
+    }
+    else if( aERCItem->GetErrorCode() == ERCE_LIB_SYMBOL_MISMATCH )
+    {
+        if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( a ) )
+            DiffSymbol( symbol );
+    }
+}
+
+
 int EE_INSPECTION_TOOL::ExcludeMarker( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
@@ -250,6 +312,20 @@ int EE_INSPECTION_TOOL::CheckSymbol( const TOOL_EVENT& aEvent )
 }
 
 
+int EE_INSPECTION_TOOL::ShowBusSyntaxHelp( const TOOL_EVENT& aEvent )
+{
+    if( m_busSyntaxHelp )
+    {
+        m_busSyntaxHelp->Raise();
+        m_busSyntaxHelp->Show( true );
+        return 0;
+    }
+
+    m_busSyntaxHelp = SCH_TEXT::ShowSyntaxHelp( m_frame );
+    return 0;
+}
+
+
 int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
 {
     SCH_EDIT_FRAME* schEditorFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
@@ -264,18 +340,28 @@ int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
         return 0;
     }
 
+    DiffSymbol( static_cast<SCH_SYMBOL*>( selection.Front() ) );
+    return 0;
+}
+
+
+void EE_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
+{
+    SCH_EDIT_FRAME* schEditorFrame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( schEditorFrame, /* void */ );
+
     DIALOG_BOOK_REPORTER* dialog = schEditorFrame->GetSymbolDiffDialog();
 
-    wxCHECK( dialog, 0 );
+    wxCHECK( dialog, /* void */ );
 
     dialog->DeleteAllPages();
 
-    SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
-    wxString    symbolDesc = wxString::Format( _( "Symbol %s" ),
-                                               symbol->GetField( REFERENCE_FIELD )->GetText() );
-    LIB_ID      libId = symbol->GetLibId();
-    wxString    libName = libId.GetLibNickname();
-    wxString    symbolName = libId.GetLibItemName();
+    wxString symbolDesc = wxString::Format( _( "Symbol %s" ),
+                                            symbol->GetField( REFERENCE_FIELD )->GetText() );
+    LIB_ID   libId = symbol->GetLibId();
+    wxString libName = libId.GetLibNickname();
+    wxString symbolName = libId.GetLibItemName();
 
     WX_HTML_REPORT_BOX* r = dialog->AddHTMLPage( _( "Summary" ) );
 
@@ -354,7 +440,6 @@ int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
 
     dialog->Raise();
     dialog->Show( true );
-    return 0;
 }
 
 
@@ -493,6 +578,7 @@ void EE_INSPECTION_TOOL::setTransitions()
     Go( &EE_INSPECTION_TOOL::CheckSymbol,         EE_ACTIONS::checkSymbol.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::DiffSymbol,          EE_ACTIONS::diffSymbol.MakeEvent() );
     Go( &EE_INSPECTION_TOOL::RunSimulation,       EE_ACTIONS::showSimulator.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::ShowBusSyntaxHelp,   EE_ACTIONS::showBusSyntaxHelp.MakeEvent() );
 
     Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );
 
