@@ -526,6 +526,8 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                 // inflate/deflate a custom shape is a bit complex.
                 // so build a similar pad shape, and inflate/deflate the polygonal shape
                 PAD dummy( *pad );
+                dummy.SetParentGroup( nullptr );
+
                 SHAPE_POLY_SET shape;
                 pad->MergePrimitivesAsPolygon( &shape );
 

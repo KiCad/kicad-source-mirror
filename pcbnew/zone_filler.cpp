@@ -1944,6 +1944,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 spokeIter->Rotate( pad->GetOrientation() + pad->GetThermalSpokeAngle() );
                 spokeIter->Move( pad->ShapePos() );
             }
+
+            // Remove group membership from dummy item before deleting
+            dummy_pad.SetParentGroup( nullptr );
         }
         // And lastly, even when we have to resort to trig, we can use it only in a post-process
         // after the rotated-bounding-box trick from above.
@@ -1991,6 +1994,9 @@ void ZONE_FILLER::buildThermalSpokes( const ZONE* aZone, PCB_LAYER_ID aLayer,
                 spokeIter->SetPoint( 3, end );
                 spokeIter->SetPoint( 4, end_p );
             }
+
+            // Remove group membership from dummy item before deleting
+            dummy_pad.SetParentGroup( nullptr );
         }
     }
 

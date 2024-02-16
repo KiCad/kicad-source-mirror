@@ -316,6 +316,10 @@ DIALOG_PAD_PROPERTIES::~DIALOG_PAD_PROPERTIES()
 
     m_page = m_notebook->GetSelection();
 
+    // Remove the preview pad from the group of the actual pad before deletion
+    if( m_previewPad )
+        m_previewPad->SetParentGroup( nullptr );
+
     delete m_previewPad;
     delete m_axisOrigin;
 }

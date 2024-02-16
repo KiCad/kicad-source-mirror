@@ -638,6 +638,7 @@ bool FOOTPRINT::FootprintNeedsUpdate( const FOOTPRINT* aLibFP, REPORTER* aReport
     // already normalized graphic items in model footprint from library, so we need to normalize
     // graphic items in the footprint to test (*this). So normalize them using a copy of this
     FOOTPRINT dummy( *this );
+    dummy.SetParentGroup( nullptr );
     dummy.SetParent( nullptr );
 
     for( BOARD_ITEM* item : dummy.GraphicalItems() )
