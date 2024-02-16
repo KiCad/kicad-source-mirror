@@ -73,7 +73,7 @@ SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_messagePanel->Hide();
 
-    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* frameSizer = new wxBoxSizer( wxVERTICAL );
 
     std::vector<PICKED_SYMBOL> dummyAlreadyPlaced;
     m_chooserPanel =
@@ -90,17 +90,24 @@ SYMBOL_CHOOSER_FRAME::SYMBOL_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                                       } );
 
 
-    sizer->Add( m_chooserPanel, 1, wxEXPAND, 5 );
+    frameSizer->Add( m_chooserPanel, 1, wxEXPAND );
+
+    wxPanel*    bottomPanel = new wxPanel( this );
+    wxBoxSizer* bottomSizer = new wxBoxSizer( wxVERTICAL );
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
-    wxButton*               okButton = new wxButton( this, wxID_OK );
-    wxButton*               cancelButton = new wxButton( this, wxID_CANCEL );
+    wxButton*               okButton = new wxButton( bottomPanel, wxID_OK );
+    wxButton*               cancelButton = new wxButton( bottomPanel, wxID_CANCEL );
     sdbSizer->AddButton( okButton );
     sdbSizer->AddButton( cancelButton );
     sdbSizer->Realize();
 
-    sizer->Add( sdbSizer, 0, wxEXPAND | wxALL, 5 );
-    SetSizer( sizer );
+    bottomSizer->Add( sdbSizer, 1, wxEXPAND | wxALL, 5 );
+
+    bottomPanel->SetSizer( bottomSizer );
+    frameSizer->Add( bottomPanel, 0, wxEXPAND );
+
+    SetSizer( frameSizer );
 
     SetTitle( GetTitle() + wxString::Format( _( " (%d items loaded)" ),
                                              m_chooserPanel->GetItemCount() ) );

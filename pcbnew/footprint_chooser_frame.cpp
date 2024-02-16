@@ -82,8 +82,11 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     m_messagePanel->Hide();
 
-    m_filterByFPFilters = new wxCheckBox( this, wxID_ANY, _( "Apply footprint filters" ) );
-    m_filterByPinCount = new wxCheckBox( this, wxID_ANY, _( "Filter by pin count" ) );
+    wxPanel*    bottomPanel = new wxPanel( this );
+    wxBoxSizer* bottomSizer = new wxBoxSizer( wxVERTICAL );
+
+    m_filterByFPFilters = new wxCheckBox( bottomPanel, wxID_ANY, _( "Apply footprint filters" ) );
+    m_filterByPinCount = new wxCheckBox( bottomPanel, wxID_ANY, _( "Filter by pin count" ) );
 
     m_filterByFPFilters->Show( false );
     m_filterByPinCount->Show( false );
@@ -94,7 +97,8 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
         m_filterByPinCount->SetValue( cfg->m_FootprintChooser.filter_on_pin_count );
     }
 
-    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
+    wxBoxSizer* frameSizer = new wxBoxSizer( wxVERTICAL );
+
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( this, this, s_FootprintHistoryList,
             // Filter
             [this]( LIB_TREE_NODE& aNode ) -> bool
@@ -113,18 +117,18 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
                 DismissModal( false );
             } );
 
-    sizer->Add( m_chooserPanel, 1, wxEXPAND | wxBOTTOM, 2 );
+    frameSizer->Add( m_chooserPanel, 1, wxEXPAND );
 
     wxBoxSizer* fpFilterSizer = new wxBoxSizer( wxVERTICAL );
     fpFilterSizer->Add( m_filterByFPFilters, 0, wxTOP | wxEXPAND, 5 );
-    sizer->Add( fpFilterSizer, 0, wxEXPAND | wxLEFT, 10 );
+    bottomSizer->Add( fpFilterSizer, 0, wxEXPAND | wxLEFT, 10 );
 
     wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
     buttonsSizer->Add( m_filterByPinCount, 0, wxLEFT | wxTOP | wxALIGN_TOP, 5 );
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
-    wxButton*               okButton = new wxButton( this, wxID_OK );
-    wxButton*               cancelButton = new wxButton( this, wxID_CANCEL );
+    wxButton*               okButton = new wxButton( bottomPanel, wxID_OK );
+    wxButton*               cancelButton = new wxButton( bottomPanel, wxID_CANCEL );
 
     sdbSizer->AddButton( okButton );
     sdbSizer->AddButton( cancelButton );
@@ -132,8 +136,12 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     buttonsSizer->Add( sdbSizer, 1, wxALL, 5 );
 
-    sizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
-    SetSizer( sizer );
+    bottomSizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
+
+    bottomPanel->SetSizer( bottomSizer );
+    frameSizer->Add( bottomPanel, 0, wxEXPAND );
+
+    SetSizer( frameSizer );
 
     SetTitle( GetTitle() + wxString::Format( _( " (%d items loaded)" ),
                                              m_chooserPanel->GetItemCount() ) );
