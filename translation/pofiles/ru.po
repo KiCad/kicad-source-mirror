@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-15 20:02+0000\n"
+"PO-Revision-Date: 2024-02-16 14:08+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
 "master-source/ru/>\n"
@@ -7857,7 +7857,7 @@ msgstr "Интерактивно измерить расстояние межд�
 
 #: common/tool/actions.cpp:856
 msgid "Switch to Project Manager"
-msgstr "Переключиться на Менеджер проектов"
+msgstr "Переключиться на менеджер проектов"
 
 #: common/tool/actions.cpp:857
 msgid "Show project window"
@@ -13520,7 +13520,7 @@ msgstr "Функции выводов"
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
 msgid "Library link:"
-msgstr "Ссылка на библиотеку:"
+msgstr "Ссылка библиотеки:"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:328
 msgid "Simulation Model..."
@@ -17710,7 +17710,7 @@ msgstr "Отразить по Y"
 
 #: eeschema/sch_symbol.cpp:2717 pcbnew/footprint.cpp:3501
 msgid "Library Link"
-msgstr "Ссылка на библиотеку"
+msgstr "Ссылка библиотеки"
 
 #: eeschema/sch_symbol.cpp:2720 pcbnew/footprint.cpp:3504
 #: pcbnew/plot_board_layers.cpp:114
@@ -27673,7 +27673,7 @@ msgstr ""
 "дорожек до 10мм (400мил).\n"
 "\n"
 "Расчёт выполняется по формуле из IPC 2221\n"
-"<center>___I = K &sdot; &Delta;T<sup>0.44</sup> &sdot; (W &sdot; "
+"<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
 "H)<sup>0.725</sup>___</center>\n"
 "где:\n"
 "___I___ = максимальный ток в амперах\n"
@@ -30650,7 +30650,7 @@ msgstr "Заменить посад.места со значением:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:77
 msgid "Change footprints with library id:"
-msgstr "Заменить посад.места с идент. библиотеки:"
+msgstr "Заменить посад.места с идентификатором библиотеки:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:78
 msgid "Update text layers and visibilities"
@@ -34699,7 +34699,7 @@ msgstr "Изменение свойств текста"
 #: pcbnew/pcb_dimension.cpp:1652 pcbnew/pcb_dimension.cpp:1689
 #: pcbnew/pcb_text.cpp:565
 msgid "Knockout"
-msgstr "Вырезать"
+msgstr "Негативный"
 
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:103
 msgid "Keep text upright"
@@ -39292,7 +39292,7 @@ msgstr "Атрибуты:"
 #: pcbnew/footprint.cpp:1335
 #, c-format
 msgid "3D-Shape: %s"
-msgstr "3D-форма: %s"
+msgstr "3D-модель: %s"
 
 #: pcbnew/footprint.cpp:1335
 msgid "<none>"
@@ -42529,7 +42529,7 @@ msgstr "Надпись на плате"
 
 #: pcbnew/pcb_text.cpp:235
 msgid "Display"
-msgstr "Отображение"
+msgstr "Видимый"
 
 #: pcbnew/pcb_text.cpp:386
 #, c-format
