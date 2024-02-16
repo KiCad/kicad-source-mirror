@@ -78,19 +78,20 @@ PROJECT* EESCHEMA_HELPERS::GetDefaultProject()
 }
 
 
-SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName )
+SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, bool aSetActive )
 {
     if( aFileName.EndsWith( FILEEXT::KiCadSchematicFileExtension ) )
-        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD );
+        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD, aSetActive );
     else if( aFileName.EndsWith( FILEEXT::LegacySchematicFileExtension ) )
-        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY );
+        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive );
 
     // as fall back for any other kind use the legacy format
-    return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY );
+    return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive );
 }
 
 
-SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat )
+SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat,
+                                            bool aSetActive )
 {
     wxFileName pro = aFileName;
     pro.SetExt( FILEEXT::ProjectFileExtension );
@@ -107,7 +108,7 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
     {
         if( wxFileExists( projectPath ) )
         {
-            GetSettingsManager()->LoadProject( projectPath, false );
+            GetSettingsManager()->LoadProject( projectPath, aSetActive );
             project = GetSettingsManager()->GetProject( projectPath );
         }
     }
