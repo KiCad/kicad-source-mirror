@@ -141,11 +141,14 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_query_ctrl->Bind( wxEVT_SEARCH_CANCEL, &LIB_TREE::onQueryText, this );
         m_query_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onQueryCharHook, this );
         m_query_ctrl->Bind( wxEVT_MOTION, &LIB_TREE::onQueryMouseMoved, this );
+
+#if defined( __WXOSX__ ) || wxCHECK_VERSION( 3, 3, 0 ) // Doesn't work properly on other ports
         m_query_ctrl->Bind( wxEVT_LEAVE_WINDOW,
-                            [this] ( wxMouseEvent& aEvt )
+                            [this]( wxMouseEvent& aEvt )
                             {
                                 SetCursor( wxCURSOR_ARROW );
                             } );
+#endif
 
         m_query_ctrl->Bind( wxEVT_MENU,
                 [this]( wxCommandEvent& aEvent )
@@ -673,6 +676,7 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 
 void LIB_TREE::onQueryMouseMoved( wxMouseEvent& aEvent )
 {
+#if defined( __WXOSX__ ) || wxCHECK_VERSION( 3, 3, 0 ) // Doesn't work properly on other ports
     wxPoint pos = aEvent.GetPosition();
     wxRect  ctrlRect = m_query_ctrl->GetScreenRect();
     int     buttonWidth = ctrlRect.GetHeight();         // Presume buttons are square
@@ -683,6 +687,7 @@ void LIB_TREE::onQueryMouseMoved( wxMouseEvent& aEvent )
         SetCursor( wxCURSOR_ARROW );
     else
         SetCursor( wxCURSOR_IBEAM );
+#endif
 }
 
 
