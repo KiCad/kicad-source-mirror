@@ -199,6 +199,9 @@ const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
     case GR_TEXT_H_ALIGN_LEFT:                                           break;
     case GR_TEXT_H_ALIGN_CENTER: bbox.Offset( -bbox.GetWidth() / 2, 0 ); break;
     case GR_TEXT_H_ALIGN_RIGHT:  bbox.Offset( -bbox.GetWidth(),     0 ); break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     switch( GetAttributes().m_Valign )
@@ -206,6 +209,9 @@ const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
     case GR_TEXT_V_ALIGN_TOP:                                             break;
     case GR_TEXT_V_ALIGN_CENTER: bbox.Offset( 0, -bbox.GetHeight() / 2 ); break;
     case GR_TEXT_V_ALIGN_BOTTOM: bbox.Offset( 0, -bbox.GetHeight()     ); break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     bbox.Inflate( attrs.m_Size.x, attrs.m_Size.y / 2 );

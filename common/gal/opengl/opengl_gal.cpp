@@ -1598,6 +1598,10 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition,
         //if( IsTextMirrored() )
         //Translate( VECTOR2D( -textSize.x, 0 ) );
         break;
+
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     switch( GetVerticalJustify() )
@@ -1613,6 +1617,10 @@ void OPENGL_GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition,
     case GR_TEXT_V_ALIGN_BOTTOM:
         Translate( VECTOR2D( 0, -textSize.y ) );
         overbarHeight = -textSize.y / 2.0;
+        break;
+
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
         break;
     }
 

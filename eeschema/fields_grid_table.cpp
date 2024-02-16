@@ -584,9 +584,10 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_H_ALIGN:
         switch ( field.GetEffectiveHorizJustify() )
         {
-        case GR_TEXT_H_ALIGN_LEFT:   return _( "Left" );
-        case GR_TEXT_H_ALIGN_CENTER: return _( "Center" );
-        case GR_TEXT_H_ALIGN_RIGHT:  return _( "Right" );
+        case GR_TEXT_H_ALIGN_LEFT:          return _( "Left" );
+        case GR_TEXT_H_ALIGN_CENTER:        return _( "Center" );
+        case GR_TEXT_H_ALIGN_RIGHT:         return _( "Right" );
+        case GR_TEXT_H_ALIGN_INDETERMINATE: return INDETERMINATE_STATE;
         }
 
         break;
@@ -594,9 +595,10 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_V_ALIGN:
         switch ( field.GetEffectiveVertJustify() )
         {
-        case GR_TEXT_V_ALIGN_TOP:    return _( "Top" );
-        case GR_TEXT_V_ALIGN_CENTER: return _( "Center" );
-        case GR_TEXT_V_ALIGN_BOTTOM: return _( "Bottom" );
+        case GR_TEXT_V_ALIGN_TOP:           return _( "Top" );
+        case GR_TEXT_V_ALIGN_CENTER:        return _( "Center" );
+        case GR_TEXT_V_ALIGN_BOTTOM:        return _( "Bottom" );
+        case GR_TEXT_V_ALIGN_INDETERMINATE: return INDETERMINATE_STATE;
         }
 
         break;

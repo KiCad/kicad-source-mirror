@@ -709,16 +709,18 @@ void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
 
     switch( aAttrs.m_Halign )
     {
-    case GR_TEXT_H_ALIGN_LEFT:                                                break;
-    case GR_TEXT_H_ALIGN_CENTER: box.SetX( box.GetX() - box.GetWidth() / 2 ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  box.SetX( box.GetX() - box.GetWidth() );     break;
+    case GR_TEXT_H_ALIGN_LEFT:                                                         break;
+    case GR_TEXT_H_ALIGN_CENTER:        box.SetX( box.GetX() - box.GetWidth() / 2 );   break;
+    case GR_TEXT_H_ALIGN_RIGHT:         box.SetX( box.GetX() - box.GetWidth() );       break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) );  break;
     }
 
     switch(  aAttrs.m_Valign )
     {
-    case GR_TEXT_V_ALIGN_TOP:                                                  break;
-    case GR_TEXT_V_ALIGN_CENTER: box.SetY( box.GetY() - box.GetHeight() / 2 ); break;
-    case GR_TEXT_V_ALIGN_BOTTOM: box.SetY( box.GetY() - box.GetHeight() );     break;
+    case GR_TEXT_V_ALIGN_TOP:                                                          break;
+    case GR_TEXT_V_ALIGN_CENTER:        box.SetY( box.GetY() - box.GetHeight() / 2 );  break;
+    case GR_TEXT_V_ALIGN_BOTTOM:        box.SetY( box.GetY() - box.GetHeight() );      break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE: wxFAIL_MSG( wxT( "Legal only in dialogs" ) );  break;
     }
 
     // Give the highlight a bit of margin.
@@ -1178,18 +1180,36 @@ void SCH_PAINTER::draw( const LIB_TEXT* aText, int aLayer, bool aDimmed )
         {
             switch( attrs.m_Halign )
             {
-            case GR_TEXT_H_ALIGN_LEFT:   pos.y = bBox.GetBottom() + shadowOffset;          break;
-            case GR_TEXT_H_ALIGN_CENTER: pos.y = ( bBox.GetTop() + bBox.GetBottom() ) / 2; break;
-            case GR_TEXT_H_ALIGN_RIGHT:  pos.y = bBox.GetTop() - shadowOffset;             break;
+            case GR_TEXT_H_ALIGN_LEFT:
+                pos.y = bBox.GetBottom() + shadowOffset;
+                break;
+            case GR_TEXT_H_ALIGN_CENTER:
+                pos.y = ( bBox.GetTop() + bBox.GetBottom() ) / 2.0;
+                break;
+            case GR_TEXT_H_ALIGN_RIGHT:
+                pos.y = bBox.GetTop() - shadowOffset;
+                break;
+            case GR_TEXT_H_ALIGN_INDETERMINATE:
+                wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+                break;
             }
         }
         else
         {
             switch( attrs.m_Halign )
             {
-            case GR_TEXT_H_ALIGN_LEFT:   pos.x = bBox.GetLeft() - shadowOffset;            break;
-            case GR_TEXT_H_ALIGN_CENTER: pos.x = ( bBox.GetLeft() + bBox.GetRight() ) / 2; break;
-            case GR_TEXT_H_ALIGN_RIGHT:  pos.x = bBox.GetRight() + shadowOffset;           break;
+            case GR_TEXT_H_ALIGN_LEFT:
+                pos.x = bBox.GetLeft() - shadowOffset;
+                break;
+            case GR_TEXT_H_ALIGN_CENTER:
+                pos.x = ( bBox.GetLeft() + bBox.GetRight() ) / 2.0;
+                break;
+            case GR_TEXT_H_ALIGN_RIGHT:
+                pos.x = bBox.GetRight() + shadowOffset;
+                break;
+            case GR_TEXT_H_ALIGN_INDETERMINATE:
+                wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+                break;
             }
         }
 

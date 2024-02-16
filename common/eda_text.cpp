@@ -649,6 +649,10 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
         if( !IsMirrored() )
             bbox.SetX( bbox.GetX() - ( bbox.GetWidth() - italicOffset ) );
         break;
+
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     switch( GetVertJustify() )
@@ -664,6 +668,10 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     case GR_TEXT_V_ALIGN_BOTTOM:
         bbox.SetY( bbox.GetY() - bbox.GetHeight() );
         bbox.Offset( 0, fudgeFactor );
+        break;
+
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
         break;
     }
 
@@ -750,6 +758,10 @@ void EDA_TEXT::GetLinePositions( std::vector<VECTOR2I>& aPositions, int aLineCou
 
         case GR_TEXT_V_ALIGN_BOTTOM:
             pos.y -= ( aLineCount - 1 ) * offset.y;
+            break;
+
+        case GR_TEXT_V_ALIGN_INDETERMINATE:
+            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
             break;
         }
     }

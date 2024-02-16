@@ -416,9 +416,10 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     switch( GetHorizJustify() )
     {
-    case GR_TEXT_H_ALIGN_LEFT:   msg = _( "Align left" );   break;
-    case GR_TEXT_H_ALIGN_CENTER: msg = _( "Align center" ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  msg = _( "Align right" );  break;
+    case GR_TEXT_H_ALIGN_LEFT:          msg = _( "Align left" );   break;
+    case GR_TEXT_H_ALIGN_CENTER:        msg = _( "Align center" ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:         msg = _( "Align right" );  break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
     }
 
     aList.emplace_back( _( "Justification" ), msg );

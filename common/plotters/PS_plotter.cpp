@@ -381,6 +381,9 @@ void PSLIKE_PLOTTER::computeTextParameters( const VECTOR2I&          aPos,
     case GR_TEXT_H_ALIGN_CENTER: dx = -tw / 2; break;
     case GR_TEXT_H_ALIGN_RIGHT:  dx = -tw;     break;
     case GR_TEXT_H_ALIGN_LEFT:   dx = 0;       break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     switch( aV_justify )
@@ -388,6 +391,9 @@ void PSLIKE_PLOTTER::computeTextParameters( const VECTOR2I&          aPos,
     case GR_TEXT_V_ALIGN_CENTER: dy = th / 2; break;
     case GR_TEXT_V_ALIGN_TOP:    dy = th;     break;
     case GR_TEXT_V_ALIGN_BOTTOM: dy = 0;      break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     RotatePoint( &dx, &dy, aOrient );

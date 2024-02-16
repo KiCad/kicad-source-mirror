@@ -816,6 +816,9 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
     case GR_TEXT_H_ALIGN_CENTER: hjust = "middle"; break;
     case GR_TEXT_H_ALIGN_RIGHT:  hjust = "end";    break;
     case GR_TEXT_H_ALIGN_LEFT:   hjust = "start";  break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     switch( aV_justify )
@@ -823,6 +826,9 @@ void SVG_PLOTTER::Text( const VECTOR2I&        aPos,
     case GR_TEXT_V_ALIGN_CENTER: text_pos.y += aSize.y / 2; break;
     case GR_TEXT_V_ALIGN_TOP:    text_pos.y += aSize.y;     break;
     case GR_TEXT_V_ALIGN_BOTTOM:                            break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     VECTOR2I text_size;

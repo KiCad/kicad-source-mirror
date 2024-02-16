@@ -330,9 +330,10 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
 
         switch( item->m_Hjustify )
         {
-        case GR_TEXT_H_ALIGN_LEFT:   m_alignLeft->Check(); break;
-        case GR_TEXT_H_ALIGN_CENTER: m_alignCenter->Check(); break;
-        case GR_TEXT_H_ALIGN_RIGHT:  m_alignRight->Check(); break;
+        case GR_TEXT_H_ALIGN_LEFT:          m_alignLeft->Check();   break;
+        case GR_TEXT_H_ALIGN_CENTER:        m_alignCenter->Check(); break;
+        case GR_TEXT_H_ALIGN_RIGHT:         m_alignRight->Check();  break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:                         break;
         }
 
         for( BITMAP_BUTTON* btn : { m_vAlignTop, m_vAlignMiddle, m_vAlignBottom } )
@@ -340,9 +341,10 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( DS_DATA_ITEM* aItem )
 
         switch( item->m_Vjustify )
         {
-        case GR_TEXT_V_ALIGN_TOP:    m_vAlignTop->Check(); break;
-        case GR_TEXT_V_ALIGN_CENTER: m_vAlignMiddle->Check(); break;
-        case GR_TEXT_V_ALIGN_BOTTOM: m_vAlignBottom->Check(); break;
+        case GR_TEXT_V_ALIGN_TOP:           m_vAlignTop->Check();    break;
+        case GR_TEXT_V_ALIGN_CENTER:        m_vAlignMiddle->Check(); break;
+        case GR_TEXT_V_ALIGN_BOTTOM:        m_vAlignBottom->Check(); break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE:                          break;
         }
 
         // Text size

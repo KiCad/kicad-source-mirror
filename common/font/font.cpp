@@ -217,6 +217,9 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
     case GR_TEXT_V_ALIGN_TOP:                            break;
     case GR_TEXT_V_ALIGN_CENTER: offset.y -= height / 2; break;
     case GR_TEXT_V_ALIGN_BOTTOM: offset.y -= height;     break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     for( int i = 0; i < lineCount; i++ )
@@ -228,9 +231,12 @@ void FONT::getLinePositions( const wxString& aText, const VECTOR2I& aPosition,
 
         switch( aAttrs.m_Halign )
         {
-        case GR_TEXT_H_ALIGN_LEFT:                                   break;
-        case GR_TEXT_H_ALIGN_CENTER: lineOffset.x = -lineSize.x / 2; break;
-        case GR_TEXT_H_ALIGN_RIGHT:  lineOffset.x = -( lineSize.x + offset.x );     break;
+        case GR_TEXT_H_ALIGN_LEFT:                                              break;
+        case GR_TEXT_H_ALIGN_CENTER: lineOffset.x = -lineSize.x / 2;            break;
+        case GR_TEXT_H_ALIGN_RIGHT:  lineOffset.x = -( lineSize.x + offset.x ); break;
+        case GR_TEXT_H_ALIGN_INDETERMINATE:
+            wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+            break;
         }
 
         aPositions.push_back( aPosition + lineOffset );

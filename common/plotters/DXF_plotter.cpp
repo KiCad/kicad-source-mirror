@@ -975,6 +975,9 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
     case GR_TEXT_H_ALIGN_LEFT:   h_code = 0; break;
     case GR_TEXT_H_ALIGN_CENTER: h_code = 1; break;
     case GR_TEXT_H_ALIGN_RIGHT:  h_code = 2; break;
+    case GR_TEXT_H_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     switch( aAttributes.m_Valign )
@@ -982,6 +985,9 @@ void DXF_PLOTTER::plotOneLineOfText( const VECTOR2I& aPos, const COLOR4D& aColor
     case GR_TEXT_V_ALIGN_TOP:    v_code = 3; break;
     case GR_TEXT_V_ALIGN_CENTER: v_code = 2; break;
     case GR_TEXT_V_ALIGN_BOTTOM: v_code = 1; break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE:
+        wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
+        break;
     }
 
     // Position, size, rotation and alignment
