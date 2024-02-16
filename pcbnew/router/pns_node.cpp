@@ -502,7 +502,7 @@ void NODE::addSolid( SOLID* aSolid )
 }
 
 
-void NODE::Add( std::unique_ptr< SOLID >&& aSolid )
+void NODE::Add( std::unique_ptr< SOLID > aSolid )
 {
     aSolid->SetOwner( this );
     addSolid( aSolid.release() );
@@ -537,7 +537,7 @@ void NODE::addHole( HOLE* aHole )
 }
 
 
-void NODE::Add( std::unique_ptr< VIA >&& aVia )
+void NODE::Add( std::unique_ptr< VIA > aVia )
 {
     addVia( aVia.release() );
 }
@@ -630,7 +630,7 @@ void NODE::addSegment( SEGMENT* aSeg )
 }
 
 
-bool NODE::Add( std::unique_ptr< SEGMENT >&& aSegment, bool aAllowRedundant )
+bool NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
 {
     if( aSegment->Seg().A == aSegment->Seg().B )
     {
@@ -659,7 +659,7 @@ void NODE::addArc( ARC* aArc )
 }
 
 
-bool NODE::Add( std::unique_ptr< ARC >&& aArc, bool aAllowRedundant )
+bool NODE::Add( std::unique_ptr< ARC > aArc, bool aAllowRedundant )
 {
     const SHAPE_ARC& arc = aArc->CArc();
 
@@ -811,7 +811,7 @@ void NODE::removeSolidIndex( SOLID* aSolid )
 }
 
 
-void NODE::Replace( ITEM* aOldItem, std::unique_ptr< ITEM >&& aNewItem )
+void NODE::Replace( ITEM* aOldItem, std::unique_ptr< ITEM > aNewItem )
 {
     Remove( aOldItem );
     add( aNewItem.release() );
