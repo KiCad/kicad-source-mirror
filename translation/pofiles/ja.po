@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-17 15:02+0000\n"
+"PO-Revision-Date: 2024-02-18 16:02+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -1589,7 +1589,7 @@ msgstr "0000"
 #: common/widgets/gal_options_panel_base.cpp:87
 #: common/widgets/gal_options_panel_base.cpp:98
 msgid "pixels"
-msgstr "pixels"
+msgstr "ピクセル"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
 msgid "Image PPI:"
@@ -2160,7 +2160,8 @@ msgstr "ネット クラス:"
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
-msgstr ""
+msgstr "注: ネットクラス割り当てのすべての設定は、[回路図の設定...] > "
+"[プロジェクト]で編集できます。"
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
@@ -2571,9 +2572,8 @@ msgid "unit"
 msgstr "ユニット、単位"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "リンク:"
+msgstr "リンク"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -34342,9 +34342,8 @@ msgid "Associated layer:"
 msgstr "関連付けられたレイヤー:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
-#, fuzzy
 msgid "Reference Image Properties"
-msgstr "画像のプロパティ"
+msgstr "参照画像のプロパティ"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:118
 msgid "Convert to Rule Area"
@@ -38513,9 +38512,8 @@ msgstr "ルールエリアの数が異なります。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:732
 msgid "No project loaded, skipping library parity tests."
-msgstr ""
-"プロジェクトがロードされておらず、ライブラリの等価性のテストをスキップしてい"
-"ます。"
+msgstr "プロジェクトがロードされておらず、ライブラリの等価性テストをスキップしていま"
+"す。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:736
 msgid "Loading footprint library table..."
@@ -42612,11 +42610,11 @@ msgstr "DRC を実行...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1026
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "パリティテストのための回路図の検索に失敗しました。\n"
+msgstr "等価性テストのための回路図の検索に失敗しました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1041
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "パリティテストのための回路図のネットリストの取得に失敗しました。\n"
+msgstr "等価性テストのための回路図のネットリストの取得に失敗しました。\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1062 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -43880,7 +43878,7 @@ msgstr "すべてのゾーンを塗り直し..."
 
 #: pcbnew/tools/drc_tool.cpp:160
 msgid "Schematic parity tests require a fully annotated schematic."
-msgstr "回路図の等価性のテストには回路図の完全なアノテーションが必要です。"
+msgstr "回路図の等価性テストには回路図の完全なアノテーションが必要です。"
 
 #: pcbnew/tools/edit_tool.cpp:99
 msgid "Positioning Tools"
