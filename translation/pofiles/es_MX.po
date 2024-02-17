@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:31-0800\n"
-"PO-Revision-Date: 2024-02-17 15:02+0000\n"
+"PO-Revision-Date: 2024-02-18 16:02+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v7/es_MX/>\n"
@@ -14632,9 +14632,9 @@ msgstr "Nombre de propiedad vacío"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:797
 #: eeschema/sch_plugins/legacy/sch_legacy_lib_plugin_cache.cpp:680
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate field '%s'"
-msgstr "Duplicar elementos %s%s\n"
+msgstr "Duplicar campo '%s'"
 
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:819
 #: eeschema/sch_plugins/kicad/sch_sexpr_parser.cpp:1970
