@@ -84,14 +84,12 @@ TOOL_ACTION EE_ACTIONS::pointEditorAddCorner( TOOL_ACTION_ARGS()
         .Name( "eeschema.PointEditor.addCorner" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Create Corner" ) )
-        .Tooltip( _( "Create a corner" ) )
         .Icon( BITMAPS::add_corner ) );
 
 TOOL_ACTION EE_ACTIONS::pointEditorRemoveCorner( TOOL_ACTION_ARGS()
         .Name( "eeschema.PointEditor.removeCorner" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Remove Corner" ) )
-        .Tooltip( _( "Remove corner" ) )
         .Icon( BITMAPS::delete_cursor ) );
 
 
@@ -257,7 +255,7 @@ TOOL_ACTION EE_ACTIONS::addSymbolToSchematic( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.addSymbolToSchematic" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Add Symbol to Schematic" ) )
-        .Tooltip( _( "Add Symbol to Schematic" ) )
+        .Tooltip( _( "Add the current symbol to the schematic" ) )
         .Icon( BITMAPS::add_symbol_to_schematic ) );
 
 TOOL_ACTION EE_ACTIONS::showElectricalTypes( TOOL_ACTION_ARGS()
@@ -1372,6 +1370,7 @@ TOOL_ACTION EE_ACTIONS::newAnalysisTab( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'N' )
         .LegacyHotkeyName( "New" )
         .FriendlyName( _( "New Analysis Tab..." ) )
+        .Tooltip( _( "Create a new tab containing a simulation analysis" ) )
         .Icon( BITMAPS::sim_add_plot ) );
 
 TOOL_ACTION EE_ACTIONS::openWorkbook( TOOL_ACTION_ARGS()
@@ -1380,6 +1379,7 @@ TOOL_ACTION EE_ACTIONS::openWorkbook( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'O' )
         .LegacyHotkeyName( "Open" )
         .FriendlyName( _( "Open Workbook..." ) )
+        .Tooltip( _( "Open a saved set of analysis tabs and settings" ) )
         .Icon( BITMAPS::directory_open ) );
 
 TOOL_ACTION EE_ACTIONS::saveWorkbook( TOOL_ACTION_ARGS()
@@ -1388,6 +1388,7 @@ TOOL_ACTION EE_ACTIONS::saveWorkbook( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'S' )
         .LegacyHotkeyName( "Save" )
         .FriendlyName( _( "Save Workbook" ) )
+        .Tooltip( _( "Save the current set of analysis tabs and settings" ) )
         .Icon( BITMAPS::save ) );
 
 TOOL_ACTION EE_ACTIONS::saveWorkbookAs( TOOL_ACTION_ARGS()
@@ -1396,6 +1397,7 @@ TOOL_ACTION EE_ACTIONS::saveWorkbookAs( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_SHIFT + MD_CTRL + 'S' )
         .LegacyHotkeyName( "Save As" )
         .FriendlyName( _( "Save Workbook As..." ) )
+        .Tooltip( _( "Save the current set of analysis tabs and settings to another location" ) )
         .Icon( BITMAPS::sim_add_signal ) );
 
 TOOL_ACTION EE_ACTIONS::exportPlotAsPNG( TOOL_ACTION_ARGS()
@@ -1432,7 +1434,7 @@ TOOL_ACTION EE_ACTIONS::simAnalysisProperties( TOOL_ACTION_ARGS()
         .Name( "eeschema.Simulation.simAnalysisProperties" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Edit Analysis Tab..." ) )
-        .Tooltip( _( "Edit the SPICE command and plot setup for the current analysis tab" ) )
+        .Tooltip( _( "Edit the current analysis tab's SPICE command and plot setup" ) )
         .Icon( BITMAPS::sim_command ) );
 
 TOOL_ACTION EE_ACTIONS::runSimulation( TOOL_ACTION_ARGS()

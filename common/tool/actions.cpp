@@ -120,14 +120,12 @@ TOOL_ACTION ACTIONS::print( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'P' )
         .LegacyHotkeyName( "Print" )
         .FriendlyName( _( "Print..." ) )
-        .Tooltip( _( "Print" ) )
         .Icon( BITMAPS::print_button ) );
 
 TOOL_ACTION ACTIONS::plot( TOOL_ACTION_ARGS()
         .Name( "common.Control.plot" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Plot..." ) )
-        .Tooltip( _( "Plot" ) )
         .Icon( BITMAPS::plot ) );
 
 TOOL_ACTION ACTIONS::quit( TOOL_ACTION_ARGS()
@@ -408,7 +406,6 @@ TOOL_ACTION ACTIONS::zoomFitScreen( TOOL_ACTION_ARGS()
 #endif
         .LegacyHotkeyName( "Zoom Auto" )
         .FriendlyName( _( "Zoom to Fit" ) )
-        .Tooltip( _( "Zoom to Fit" ) )
         .Icon( BITMAPS::zoom_fit_in_page ) );
 
 TOOL_ACTION ACTIONS::zoomFitObjects( TOOL_ACTION_ARGS()
@@ -416,7 +413,6 @@ TOOL_ACTION ACTIONS::zoomFitObjects( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + WXK_HOME )
         .FriendlyName( _( "Zoom to Objects" ) )
-        .Tooltip( _( "Zoom to Objects" ) )
         .Icon( BITMAPS::zoom_fit_to_objects ) );
 
 TOOL_ACTION ACTIONS::zoomIn( TOOL_ACTION_ARGS()
@@ -429,7 +425,6 @@ TOOL_ACTION ACTIONS::zoomIn( TOOL_ACTION_ARGS()
 #endif
         .LegacyHotkeyName( "Zoom In" )
         .FriendlyName( _( "Zoom In at Cursor" ) )
-        .Tooltip( _( "Zoom In at Cursor" ) )
         .Icon( BITMAPS::zoom_in ) );
 
 TOOL_ACTION ACTIONS::zoomOut( TOOL_ACTION_ARGS()
@@ -442,21 +437,18 @@ TOOL_ACTION ACTIONS::zoomOut( TOOL_ACTION_ARGS()
 #endif
         .LegacyHotkeyName( "Zoom Out" )
         .FriendlyName( _( "Zoom Out at Cursor" ) )
-        .Tooltip( _( "Zoom Out at Cursor" ) )
         .Icon( BITMAPS::zoom_out ) );
 
 TOOL_ACTION ACTIONS::zoomInCenter( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomInCenter" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Zoom In" ) )
-        .Tooltip( _( "Zoom In" ) )
         .Icon( BITMAPS::zoom_in ) );
 
 TOOL_ACTION ACTIONS::zoomOutCenter( TOOL_ACTION_ARGS()
         .Name( "common.Control.zoomOutCenter" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Zoom Out" ) )
-        .Tooltip( _( "Zoom Out" ) )
         .Icon( BITMAPS::zoom_out ) );
 
 TOOL_ACTION ACTIONS::zoomCenter( TOOL_ACTION_ARGS()
@@ -465,7 +457,6 @@ TOOL_ACTION ACTIONS::zoomCenter( TOOL_ACTION_ARGS()
         .DefaultHotkey( WXK_F4 )
         .LegacyHotkeyName( "Zoom Center" )
         .FriendlyName( _( "Center on Cursor" ) )
-        .Tooltip( _( "Center on Cursor" ) )
         .Icon( BITMAPS::zoom_center_on_screen ) );
 
 TOOL_ACTION ACTIONS::zoomTool( TOOL_ACTION_ARGS()
@@ -474,7 +465,6 @@ TOOL_ACTION ACTIONS::zoomTool( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + WXK_F5 )
         .LegacyHotkeyName( "Zoom to Selection" )
         .FriendlyName( _( "Zoom to Selection" ) )
-        .Tooltip( _( "Zoom to Selection" ) )
         .Icon( BITMAPS::zoom_area )
         .Flags( AF_ACTIVATE ) );
 
@@ -819,14 +809,12 @@ TOOL_ACTION ACTIONS::toggleBoundingBoxes( TOOL_ACTION_ARGS()
         .Name( "common.Control.toggleBoundingBoxes" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Draw Bounding Boxes" ) )
-        .Tooltip( _( "Draw Bounding Boxes" ) )
         .Icon( BITMAPS::gerbview_show_negative_objects ) );
 
 TOOL_ACTION ACTIONS::selectionTool( TOOL_ACTION_ARGS()
         .Name( "common.InteractiveSelection.selectionTool" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Select item(s)" ) )
-        .Tooltip( _( "Select item(s)" ) )
         .Icon( BITMAPS::cursor )
         .Flags( AF_ACTIVATE ) );
 

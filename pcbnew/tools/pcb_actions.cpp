@@ -515,7 +515,6 @@ TOOL_ACTION PCB_ACTIONS::createArray( TOOL_ACTION_ARGS()
         .DefaultHotkey( MD_CTRL + 'T' )
         .LegacyHotkeyName( "Create Array" )
         .FriendlyName( _( "Create Array..." ) )
-        .Tooltip( _( "Create array" ) )
         .Icon( BITMAPS::array )
         .Flags( AF_ACTIVATE ) );
 
@@ -676,14 +675,12 @@ TOOL_ACTION PCB_ACTIONS::showFootprintTree( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.showFootprintTree" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Footprint Tree" ) )
-        .Tooltip( _( "Show Footprint Tree" ) )
         .Icon( BITMAPS::search_tree ) );
 
 TOOL_ACTION PCB_ACTIONS::hideFootprintTree( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.hideFootprintTree" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Hide Footprint Tree" ) )
-        .Tooltip( _( "Hide Footprint Tree" ) )
         .Icon( BITMAPS::search_tree ) );
 
 TOOL_ACTION PCB_ACTIONS::newFootprint( TOOL_ACTION_ARGS()
@@ -734,21 +731,18 @@ TOOL_ACTION PCB_ACTIONS::cutFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.cutFootprint" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Cut Footprint" ) )
-        .Tooltip( _( "Cut Footprint" ) )
         .Icon( BITMAPS::cut ) );
 
 TOOL_ACTION PCB_ACTIONS::copyFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.copyFootprint" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Copy Footprint" ) )
-        .Tooltip( _( "Copy Footprint" ) )
         .Icon( BITMAPS::copy ) );
 
 TOOL_ACTION PCB_ACTIONS::pasteFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.pasteFootprint" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Paste Footprint" ) )
-        .Tooltip( _( "Paste Footprint" ) )
         .Icon( BITMAPS::paste ) );
 
 TOOL_ACTION PCB_ACTIONS::importFootprint( TOOL_ACTION_ARGS()
@@ -769,7 +763,6 @@ TOOL_ACTION PCB_ACTIONS::footprintProperties( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.footprintProperties" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Footprint Properties..." ) )
-        .Tooltip( _( "Edit footprint properties" ) )
         .Icon( BITMAPS::module_options ) );
 
 TOOL_ACTION PCB_ACTIONS::checkFootprint( TOOL_ACTION_ARGS()
@@ -1438,14 +1431,12 @@ TOOL_ACTION PCB_ACTIONS::zoneDisplayFractured( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.zoneDisplayOutlines" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Draw Zone Fill Fracture Borders" ) )
-        .Tooltip( _( "Draw Zone Fill Fracture Borders" ) )
         .Icon( BITMAPS::show_zone_outline_only ) );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayTriangulated( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.zoneDisplayTesselation" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Draw Zone Fill Triangulation" ) )
-        .Tooltip( _( "Draw Zone Fill Triangulation" ) )
         .Icon( BITMAPS::show_zone_triangulation ) );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayToggle( TOOL_ACTION_ARGS()
@@ -1514,7 +1505,6 @@ TOOL_ACTION PCB_ACTIONS::layerTop( TOOL_ACTION_ARGS()
         .DefaultHotkey( WXK_PAGEUP )
         .LegacyHotkeyName( "Switch to Component (F.Cu) layer" )
         .FriendlyName( _( "Switch to Component (F.Cu) layer" ) )
-        .Tooltip( _( "Switch to Component (F.Cu) layer" ) )
         .Flags( AF_NOTIFY )
         .Parameter( F_Cu ) );
 
@@ -1524,7 +1514,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner1( TOOL_ACTION_ARGS()
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .LegacyHotkeyName( "Switch to Inner layer 1" )
         .FriendlyName( _( "Switch to Inner Layer 1" ) )
-        .Tooltip( _( "Switch to Inner layer 1" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In1_Cu ) );
 
@@ -1534,7 +1523,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner2( TOOL_ACTION_ARGS()
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .LegacyHotkeyName( "Switch to Inner layer 2" )
         .FriendlyName( _( "Switch to Inner Layer 2" ) )
-        .Tooltip( _( "Switch to Inner layer 2" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In2_Cu ) );
 
@@ -1544,7 +1532,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner3( TOOL_ACTION_ARGS()
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .LegacyHotkeyName( "Switch to Inner layer 3" )
         .FriendlyName( _( "Switch to Inner Layer 3" ) )
-        .Tooltip( _( "Switch to Inner layer 3" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In3_Cu ) );
 
@@ -1554,7 +1541,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner4( TOOL_ACTION_ARGS()
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .LegacyHotkeyName( "Switch to Inner layer 4" )
         .FriendlyName( _( "Switch to Inner Layer 4" ) )
-        .Tooltip( _( "Switch to Inner layer 4" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In4_Cu ) );
 
@@ -1564,7 +1550,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner5( TOOL_ACTION_ARGS()
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .LegacyHotkeyName( "Switch to Inner layer 5" )
         .FriendlyName( _( "Switch to Inner Layer 5" ) )
-        .Tooltip( _( "Switch to Inner layer 5" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In5_Cu ) );
 
@@ -1574,7 +1559,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner6( TOOL_ACTION_ARGS()
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .LegacyHotkeyName( "Switch to Inner layer 6" )
         .FriendlyName( _( "Switch to Inner Layer 6" ) )
-        .Tooltip( _( "Switch to Inner layer 6" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In6_Cu ) );
 
@@ -1583,7 +1567,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner7( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 7" ) )
-        .Tooltip( _( "Switch to Inner layer 7" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In7_Cu ) );
 
@@ -1592,7 +1575,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner8( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 8" ) )
-        .Tooltip( _( "Switch to Inner layer 8" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In8_Cu ) );
 
@@ -1601,7 +1583,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner9( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 9" ) )
-        .Tooltip( _( "Switch to Inner layer 9" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In9_Cu ) );
 
@@ -1610,7 +1591,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner10( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 10" ) )
-        .Tooltip( _( "Switch to Inner layer 10" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In10_Cu ) );
 
@@ -1619,7 +1599,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner11( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 11" ) )
-        .Tooltip( _( "Switch to Inner layer 11" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In11_Cu ) );
 
@@ -1628,7 +1607,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner12( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 12" ) )
-        .Tooltip( _( "Switch to Inner layer 12" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In12_Cu ) );
 
@@ -1637,7 +1615,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner13( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 13" ) )
-        .Tooltip( _( "Switch to Inner layer 13" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In13_Cu ) );
 
@@ -1646,7 +1623,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner14( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 14" ) )
-        .Tooltip( _( "Switch to Inner layer 14" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In14_Cu ) );
 
@@ -1655,7 +1631,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner15( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 15" ) )
-        .Tooltip( _( "Switch to Inner layer 15" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In15_Cu ) );
 
@@ -1664,7 +1639,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner16( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 16" ) )
-        .Tooltip( _( "Switch to Inner layer 16" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In16_Cu ) );
 
@@ -1673,7 +1647,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner17( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 17" ) )
-        .Tooltip( _( "Switch to Inner layer 17" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In17_Cu ) );
 
@@ -1682,7 +1655,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner18( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 18" ) )
-        .Tooltip( _( "Switch to Inner layer 18" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In18_Cu ) );
 
@@ -1691,7 +1663,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner19( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 19" ) )
-        .Tooltip( _( "Switch to Inner layer 19" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In19_Cu ) );
 
@@ -1700,7 +1671,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner20( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 20" ) )
-        .Tooltip( _( "Switch to Inner layer 20" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In20_Cu ) );
 
@@ -1709,7 +1679,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner21( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 21" ) )
-        .Tooltip( _( "Switch to Inner layer 21" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In21_Cu ) );
 
@@ -1718,7 +1687,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner22( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 22" ) )
-        .Tooltip( _( "Switch to Inner layer 22" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In22_Cu ) );
 
@@ -1727,7 +1695,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner23( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 23" ) )
-        .Tooltip( _( "Switch to Inner layer 23" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In23_Cu ) );
 
@@ -1736,7 +1703,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner24( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 24" ) )
-        .Tooltip( _( "Switch to Inner layer 24" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In24_Cu ) );
 
@@ -1745,7 +1711,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner25( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 25" ) )
-        .Tooltip( _( "Switch to Inner layer 25" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In25_Cu ) );
 
@@ -1754,7 +1719,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner26( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 26" ) )
-        .Tooltip( _( "Switch to Inner layer 26" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In26_Cu ) );
 
@@ -1763,7 +1727,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner27( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 27" ) )
-        .Tooltip( _( "Switch to Inner layer 27" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In27_Cu ) );
 
@@ -1772,7 +1735,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner28( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 28" ) )
-        .Tooltip( _( "Switch to Inner layer 28" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In28_Cu ) );
 
@@ -1781,7 +1743,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner29( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 29" ) )
-        .Tooltip( _( "Switch to Inner layer 29" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In29_Cu ) );
 
@@ -1790,7 +1751,6 @@ TOOL_ACTION PCB_ACTIONS::layerInner30( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Group( PCB_ACTIONS::layerDirectSwitchActions() )
         .FriendlyName( _( "Switch to Inner Layer 30" ) )
-        .Tooltip( _( "Switch to Inner layer 30" ) )
         .Flags( AF_NOTIFY )
         .Parameter( In30_Cu ) );
 
@@ -1801,7 +1761,6 @@ TOOL_ACTION PCB_ACTIONS::layerBottom( TOOL_ACTION_ARGS()
         .DefaultHotkey( WXK_PAGEDOWN )
         .LegacyHotkeyName( "Switch to Copper (B.Cu) layer" )
         .FriendlyName( _( "Switch to Copper (B.Cu) Layer" ) )
-        .Tooltip( _( "Switch to Copper (B.Cu) layer" ) )
         .Flags( AF_NOTIFY )
         .Parameter( B_Cu ) );
 
@@ -1811,7 +1770,6 @@ TOOL_ACTION PCB_ACTIONS::layerNext( TOOL_ACTION_ARGS()
         .DefaultHotkey( '+' )
         .LegacyHotkeyName( "Switch to Next Layer" )
         .FriendlyName( _( "Switch to Next Layer" ) )
-        .Tooltip( _( "Switch to Next Layer" ) )
         .Flags( AF_NOTIFY ) );
 
 TOOL_ACTION PCB_ACTIONS::layerPrev( TOOL_ACTION_ARGS()
@@ -1820,7 +1778,6 @@ TOOL_ACTION PCB_ACTIONS::layerPrev( TOOL_ACTION_ARGS()
         .DefaultHotkey( '-' )
         .LegacyHotkeyName( "Switch to Previous Layer" )
         .FriendlyName( _( "Switch to Previous Layer" ) )
-        .Tooltip( _( "Switch to Previous Layer" ) )
         .Flags( AF_NOTIFY ) );
 
 TOOL_ACTION PCB_ACTIONS::layerToggle( TOOL_ACTION_ARGS()
