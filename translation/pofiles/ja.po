@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-16 14:08+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2024-02-17 15:02+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -2149,14 +2149,12 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>現在一致しているネット:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "パターン"
+msgstr "パターン:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "ネット クラス"
+msgstr "ネット クラス:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
@@ -2165,9 +2163,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "ネットクラスの割り当て:"
+msgstr "ネットクラス割り当ての追加"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2487,9 +2484,8 @@ msgid "Name:"
 msgstr "名前:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(オプション; デフォルト 0)"
+msgstr "(オプション)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -15313,7 +15309,6 @@ msgid "Insert Schematic"
 msgstr "回路図を挿入"
 
 #: eeschema/files-io.cpp:660
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
 msgstr "回路図シートの内容を挿入..."
 
@@ -34343,9 +34338,8 @@ msgstr ""
 "できます。"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
-#, fuzzy
 msgid "Associated layer:"
-msgstr "関連付けたレイヤー"
+msgstr "関連付けられたレイヤー:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
 #, fuzzy
