@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2014-2023 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2014-2024 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -648,6 +648,9 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
     if( m_clearAnnotationNewItems )
         *m_clearAnnotationNewItems = clearAnnotation;
+
+    // Rebuild the entire connection graph.
+    m_frame->RecalculateConnections( nullptr, GLOBAL_CLEANUP );
 
     return true;
 }
