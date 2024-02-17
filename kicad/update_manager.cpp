@@ -196,7 +196,9 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
         requestContent.platform = "linux";
         requestContent.arch = "";
 #endif
-        requestContent.current_version = GetMajorMinorPatchVersion();
+        wxString verString = GetSemanticVersion();
+        verString.Replace( "~", "-" ); // make the string valid for semver
+        requestContent.current_version = verString;
         requestContent.lang = Pgm().GetLanguageTag();
 
         KICAD_SETTINGS* settings = Pgm().GetSettingsManager().GetAppSettings<KICAD_SETTINGS>();
