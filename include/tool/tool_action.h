@@ -355,6 +355,7 @@ public:
     wxString GetMenuLabel() const;
     wxString GetMenuItem() const;
     wxString GetTooltip( bool aIncludeHotkey = true ) const;
+    wxString GetButtonTooltip() const;
     wxString GetDescription() const;
 
     /**

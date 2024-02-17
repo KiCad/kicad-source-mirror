@@ -183,6 +183,21 @@ wxString TOOL_ACTION::GetTooltip( bool aIncludeHotkey ) const
 }
 
 
+wxString TOOL_ACTION::GetButtonTooltip() const
+{
+    // We don't show button text so use the action name as the first line of the tooltip
+    wxString tooltip = GetFriendlyName();
+
+    if( GetHotKey() )
+        tooltip += wxString::Format( wxT( "  (%s)" ), KeyNameFromKeyCode( GetHotKey() ) );
+
+    if( !GetTooltip( false ).IsEmpty() )
+        tooltip += '\n' + GetTooltip( false );
+
+    return tooltip;
+}
+
+
 void TOOL_ACTION::SetHotKey( int aKeycode, int aKeycodeAlt )
 {
     m_hotKey = aKeycode;

@@ -117,16 +117,14 @@ TOOL_ACTION PL_ACTIONS::layoutNormalMode( TOOL_ACTION_ARGS()
         .Name( "plEditor.EditorControl.LayoutNormalMode" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Title Block in Preview Mode" ) )
-        .Tooltip( _( "Show title block in preview mode:\n"
-                     "text placeholders will be replaced with preview data." ) )
+        .Tooltip( _( "Text placeholders will be replaced with preview data" ) )
         .Icon( BITMAPS::pagelayout_normal_view_mode ) );
 
 TOOL_ACTION PL_ACTIONS::layoutEditMode( TOOL_ACTION_ARGS()
         .Name( "plEditor.EditorControl.LayoutEditMode" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Title Block in Edit Mode" ) )
-        .Tooltip( _( "Show title block in edit mode:\n"
-                     "text placeholders are shown as ${keyword} tokens." ) )
+        .Tooltip( _( "Text placeholders are shown as ${keyword} tokens" ) )
         .Icon( BITMAPS::pagelayout_special_view_mode  ) );
 
 

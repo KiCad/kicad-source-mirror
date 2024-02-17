@@ -129,7 +129,7 @@ void ACTION_TOOLBAR_PALETTE::AddAction( const TOOL_ACTION& aAction )
     button->SetBitmap( normalBmp );
     button->SetDisabledBitmap( KiDisabledBitmapBundle( aAction.GetIcon() ) );
     button->SetPadding( padding );
-    button->SetToolTip( aAction.GetTooltip() );
+    button->SetToolTip( aAction.GetButtonTooltip() );
     button->AcceptDragInAsClick();
     button->SetBitmapCentered();
 
@@ -233,7 +233,7 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry, bool 
     AddTool( toolId, wxEmptyString, KiBitmapBundle( aAction.GetIcon() ),
              KiDisabledBitmapBundle( aAction.GetIcon() ),
              aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL,
-             aAction.GetTooltip(), wxEmptyString, nullptr );
+             aAction.GetButtonTooltip(), wxEmptyString, nullptr );
 
     m_toolKinds[ toolId ]       = aIsToggleEntry;
     m_toolActions[ toolId ]     = &aAction;
@@ -246,8 +246,8 @@ void ACTION_TOOLBAR::AddButton( const TOOL_ACTION& aAction )
     int toolId = aAction.GetUIId();
 
     AddTool( toolId, wxEmptyString, KiBitmapBundle( aAction.GetIcon() ),
-             KiDisabledBitmapBundle( aAction.GetIcon() ),
-             wxITEM_NORMAL, aAction.GetTooltip(), wxEmptyString, nullptr );
+             KiDisabledBitmapBundle( aAction.GetIcon() ), wxITEM_NORMAL,
+             aAction.GetButtonTooltip(), wxEmptyString, nullptr );
 
     m_toolKinds[ toolId ] = false;
     m_toolActions[ toolId ] = &aAction;

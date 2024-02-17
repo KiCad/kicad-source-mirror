@@ -128,35 +128,30 @@ TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.highlightClear" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Clear Highlight" ) )
-        .Tooltip( _( "Clear Highlight" ) )
         .Icon( BITMAPS::cancel ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.highlightNet" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Highlight Net" ) )
-        .Tooltip( _( "Highlight Net" ) )
         .Icon( BITMAPS::general_ratsnest ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.highlightComponent" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Highlight Component" ) )
-        .Tooltip( _( "Highlight Component" ) )
         .Icon( BITMAPS::module ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.highlightAttribute" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Highlight Attribute" ) )
-        .Tooltip( _( "Highlight Attribute" ) )
         .Icon( BITMAPS::flag ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightDCode( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.highlightDCode" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Highlight DCode" ) )
-        .Tooltip( _( "Highlight DCode" ) )
         .Icon( BITMAPS::show_dcodenumber ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerNext( TOOL_ACTION_ARGS()
@@ -164,23 +159,21 @@ TOOL_ACTION GERBVIEW_ACTIONS::layerNext( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( WXK_PAGEDOWN )
         .LegacyHotkeyName( "Switch to Next Layer" )
-        .FriendlyName( _( "Next Layer" ) )
-        .Tooltip( _( "Next Layer" ) ) );
+        .FriendlyName( _( "Next Layer" ) ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerPrev( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.layerPrev" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( WXK_PAGEUP )
         .LegacyHotkeyName( "Switch to Previous Layer" )
-        .FriendlyName( _( "Previous Layer" ) )
-        .Tooltip( _( "Previous Layer" ) ) );
+        .FriendlyName( _( "Previous Layer" ) ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::moveLayerUp( TOOL_ACTION_ARGS()
         .Name( "gerbview.Control.moveLayerUp" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( '+' )
         .FriendlyName( _( "Move Layer Up" ) )
-        .Tooltip( _( "Move Current Layer up" ) )
+        .Tooltip( _( "Move current layer up" ) )
         .Icon( BITMAPS::up ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::moveLayerDown( TOOL_ACTION_ARGS()
@@ -188,7 +181,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::moveLayerDown( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .DefaultHotkey( '-' )
         .FriendlyName( _( "Move Layer Down" ) )
-        .Tooltip( _( "Move Current Layer Down" ) )
+        .Tooltip( _( "Move current layer down" ) )
         .Icon( BITMAPS::down ) );
 
 TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( TOOL_ACTION_ARGS()
