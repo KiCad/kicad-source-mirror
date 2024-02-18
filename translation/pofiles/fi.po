@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-16 14:08+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2024-02-19 17:02+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -5517,14 +5517,12 @@ msgid "Start Y"
 msgstr "Alku Y"
 
 #: common/eda_shape.cpp:1999
-#, fuzzy
 msgid "Center X"
-msgstr "Keskitetty"
+msgstr "Keskipiste X"
 
 #: common/eda_shape.cpp:2004
-#, fuzzy
 msgid "Center Y"
-msgstr "Keskitetty"
+msgstr "Keskipiste Y"
 
 #: common/eda_shape.cpp:2014 pcbnew/generators/pcb_tuning_pattern.cpp:2338
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
@@ -15368,9 +15366,8 @@ msgid "Insert Schematic"
 msgstr "Aseta Kytkentäkaavio"
 
 #: eeschema/files-io.cpp:660
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Liitä Kytkentäkaaviosivun Sisältö..."
+msgstr "Tuo Kytkentäkaaviosivun Sisältö..."
 
 #: eeschema/files-io.cpp:672
 msgid ""
@@ -46858,9 +46855,8 @@ msgid "Zone %s %s"
 msgstr "Vyöhyke %s %s"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr "Lämpöpinnan leveys ei voi olla pienempi, kuin vähimmäisleveys."
+msgstr "Ei voi olla pienempi, kuin kuparivyöhykkeen vähimmäisleveys."
 
 #: pcbnew/zone.cpp:1671
 #, fuzzy
