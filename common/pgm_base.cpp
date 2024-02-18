@@ -492,8 +492,15 @@ bool PGM_BASE::InitPgm( bool aHeadless, bool aSkipPyInit, bool aIsUnitTest )
     }
 #endif
 
+    // Ensure the instance checker directory exists
+    // It should be globally writable because it is shared between all users on Linux, and so on a
+    // multi-user machine, other need to be able to access it to check for the lock files or make
+    // their own lock files.
     wxString instanceCheckerDir = PATHS::GetInstanceCheckerPath();
     PATHS::EnsurePathExists( instanceCheckerDir );
+    wxChmod( instanceCheckerDir, wxPOSIX_USER_READ | wxPOSIX_USER_WRITE | wxPOSIX_USER_EXECUTE |
+                                 wxPOSIX_GROUP_READ | wxPOSIX_GROUP_WRITE | wxPOSIX_GROUP_EXECUTE |
+                                 wxPOSIX_OTHERS_READ | wxPOSIX_OTHERS_WRITE | wxPOSIX_OTHERS_EXECUTE );
 
     wxString instanceCheckerName = wxString::Format( wxS( "%s-%s" ), pgm_name,
                                                      GetMajorMinorVersion() );
