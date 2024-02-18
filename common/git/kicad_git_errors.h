@@ -33,6 +33,7 @@ class KIGIT_ERRORS
 public:
 
     KIGIT_ERRORS() = default;
+    virtual ~KIGIT_ERRORS() = default;
 
     const std::vector<wxString>& GetErrorStrings() const
     {

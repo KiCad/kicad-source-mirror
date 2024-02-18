@@ -50,7 +50,7 @@ PROJECT_TREE::PROJECT_TREE( PROJECT_TREE_PANE* parent ) :
         m_statusImageList( nullptr )
 {
     m_projectTreePane = parent;
-    m_gitCommon = new KIGIT_COMMON( nullptr );
+    m_gitCommon = std::make_unique<KIGIT_COMMON>( nullptr );
 
     // Make sure the GUI font scales properly on GTK
     SetFont( KIUI::GetControlFont( this ) );

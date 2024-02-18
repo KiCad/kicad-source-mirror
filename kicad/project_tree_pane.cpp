@@ -1482,6 +1482,13 @@ void PROJECT_TREE_PANE::EmptyTreePrj()
     shutdownFileWatcher();
 
     m_TreeProject->DeleteAllItems();
+
+    // Remove the git repository when the project is unloaded
+    if( m_TreeProject->GetGitRepo() )
+    {
+        git_repository_free( m_TreeProject->GetGitRepo() );
+        m_TreeProject->SetGitRepo( nullptr );
+    }
 }
 
 
