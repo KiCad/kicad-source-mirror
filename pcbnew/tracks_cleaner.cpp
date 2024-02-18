@@ -664,20 +664,29 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
     for( auto& pt : pts )
     {
         if( !dummy_seg.IsPointOnEnds( pt ) )
+        {
+            dummy_seg.SetParentGroup( nullptr );
             return false;
+        }
     }
 
     // Now find the removed end(s) and stop merging if it is a node:
     if( aSeg1->GetStart() != dummy_seg.GetStart() && aSeg1->GetStart() != dummy_seg.GetEnd() )
      {
         if( testTrackEndpointIsNode( aSeg1, true ) )
+        {
+            dummy_seg.SetParentGroup( nullptr );
             return false;
+        }
     }
 
     if( aSeg1->GetEnd() != dummy_seg.GetStart() && aSeg1->GetEnd() != dummy_seg.GetEnd() )
     {
         if( testTrackEndpointIsNode( aSeg1, false ) )
+        {
+            dummy_seg.SetParentGroup( nullptr );
             return false;
+        }
     }
 
     std::shared_ptr<CLEANUP_ITEM> item = std::make_shared<CLEANUP_ITEM>( CLEANUP_MERGE_TRACKS );
@@ -698,9 +707,10 @@ bool TRACKS_CLEANER::mergeCollinearSegments( PCB_TRACK* aSeg1, PCB_TRACK* aSeg2 
         m_commit.Removed( aSeg2 );
     }
 
-    if( dummy_seg.GetParentGroup() )
-        dummy_seg.SetParentGroup( nullptr );
-
+    // Note that dummy_seg is used to replace aSeg1 after processing, so the group membership must
+    // be kept until all processing has finished, and cannot be removed right after creation of the
+    // dummy object
+    dummy_seg.SetParentGroup( nullptr );
     return true;
 }
 
