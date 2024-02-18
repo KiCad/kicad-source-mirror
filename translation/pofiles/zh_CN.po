@@ -30,13 +30,14 @@
 # 向阳阳 <hinata.hoshino@foxmail.com>, 2024.
 # Lao·Zhu <2208213223@qq.com>, 2024.
 # CloverGit <CloverGit@users.noreply.hosted.weblate.org>, 2024.
+# dsa-t <dudesuchamazing@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2024-02-15 20:02+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"PO-Revision-Date: 2024-02-19 17:02+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -44,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -8321,9 +8322,8 @@ msgstr "重置为默认值"
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr ""
-"'%1$s' 已被 '%3$s' 中的 '%2$s' 操作所使用, 确定要修改其分配 (原有分配将被移"
-"除)?"
+msgstr "'%1$s' 已被 '%3$s' 中的 '%2$s' 操作所使用, 确定要修改其分配 "
+"(原有分配将被移除)?"
 
 #: common/widgets/widget_hotkey_list.cpp:499
 msgid "Confirm change"
