@@ -1,19 +1,19 @@
-# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023.
+# Temuri Doghonadze <temuri.doghonadze@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
-"PO-Revision-Date: 2023-12-25 13:07+0000\n"
+"PO-Revision-Date: 2024-02-19 17:02+0000\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
-"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ka/>\n"
+"Language-Team: Georgian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ka/>\n"
 "Language: ka\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -2517,9 +2517,8 @@ msgid "unit"
 msgstr "unit"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "ბმული:"
+msgstr "მიბმული"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 #, fuzzy
@@ -20922,9 +20921,8 @@ msgid "Hierarchical"
 msgstr "გრაფიკული"
 
 #: eeschema/widgets/search_handlers.cpp:357
-#, fuzzy
 msgid "Directive"
-msgstr "მიმართულება:"
+msgstr "დირექტივა"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -32775,9 +32773,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
-#, fuzzy
 msgid "Associated layer:"
-msgstr "ფენის მონიშვნა"
+msgstr "ასოცირებული ფენა:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
 #, fuzzy
@@ -42164,9 +42161,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:614
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "კუთხის ნაზოლი"
+msgstr "კუთხის ნაზოლის ხაზები..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Cut away corners between selected lines"
