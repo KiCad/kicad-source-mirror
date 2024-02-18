@@ -650,10 +650,19 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                 {
                     if( i == REFERENCE_FIELD )
                     {
+                        wxString prefix = UTIL::GetRefDesPrefix( libField->GetText() );
+
                         for( const SCH_SHEET_PATH& instance : symbol_change_info.m_Instances )
                         {
-                            symbol->SetRef( &instance,
-                                            UTIL::GetRefDesUnannotated( libField->GetText() ) );
+                            wxString ref = symbol->GetRef( &instance, true );
+                            int      number = UTIL::GetRefDesNumber( ref );
+
+                            if( number >= 0 )
+                                ref.Printf( wxS( "%s%d" ), prefix, number );
+                            else
+                                ref = UTIL::GetRefDesUnannotated( prefix );
+
+                            symbol->SetRef( &instance, ref );
                         }
                     }
                     else if( i == VALUE_FIELD )
