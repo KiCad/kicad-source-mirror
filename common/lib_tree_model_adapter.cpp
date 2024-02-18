@@ -674,10 +674,10 @@ void LIB_TREE_MODEL_ADAPTER::GetValue( wxVariant&              aVariant,
         {
             const wxString& key = m_colIdxMap.at( aCol );
 
-            if( node->m_Fields.count( key ) )
-                valueStr = UnescapeString( node->m_Fields.at( key ) );
-            else if( key == wxT( "Description" ) )
+            if( key == wxT( "Description" ) )
                 valueStr = UnescapeString( node->m_Desc );
+            else if( node->m_Fields.count( key ) )
+                valueStr = UnescapeString( node->m_Fields.at( key ) );
             else
                 valueStr = wxEmptyString;
         }
