@@ -85,6 +85,8 @@ public:
     bool TestConnection( wxString* aErrorMsg = nullptr );
 
 private:
+    void cacheLib();
+
     void ensureSettings( const wxString& aSettingsPath );
 
     void ensureConnection();
@@ -107,6 +109,14 @@ private:
     std::set<wxString> m_customFields;
 
     std::set<wxString> m_defaultShownFields;
+
+    std::map<wxString, LIB_SYMBOL*> m_nameToSymbolcache;
+
+    long long m_cacheTimestamp;
+
+    int m_cacheModifyHash;
+
+
 
     wxString m_lastError;
 };
