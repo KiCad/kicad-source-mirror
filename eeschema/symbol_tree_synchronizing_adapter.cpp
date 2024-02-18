@@ -282,10 +282,10 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataVie
 
             wxString valueStr;
 
-            if( node->m_Fields.count( key ) )
-                valueStr = node->m_Fields.at( key );
-            else if( key == wxT( "Description" ) )
+            if( key == wxT( "Description" ) )
                 valueStr = node->m_Desc;
+            else if( node->m_Fields.count( key ) )
+                valueStr = node->m_Fields.at( key );
             else
                 valueStr = wxEmptyString;
 
