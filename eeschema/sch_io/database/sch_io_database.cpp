@@ -20,6 +20,7 @@
 
 #include <iostream>
 #include <unordered_set>
+#include <wx/datetime.h>
 #include <wx/log.h>
 
 #include <boost/algorithm/string.hpp>
@@ -38,6 +39,8 @@ SCH_IO_DATABASE::SCH_IO_DATABASE() : SCH_IO( wxS( "Database library" ) ),
         m_settings(),
         m_conn()
 {
+    m_cacheTimestamp = 0;
+    m_cacheModifyHash = 0;
 }
 
 
@@ -65,6 +68,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
     wxCHECK_RET( m_libTable, "Database plugin missing library table handle!" );
     ensureSettings( aLibraryPath );
     ensureConnection();
+    cacheLib();
 
     if( !m_conn )
         THROW_IO_ERROR( m_lastError );
@@ -73,36 +77,12 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                               aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly ) !=
                               aProperties->end() );
 
-    for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
+    for( auto const& pair : m_nameToSymbolcache )
     {
-        std::vector<DATABASE_CONNECTION::ROW> results;
+        LIB_SYMBOL* symbol = pair.second;
 
-        if( !m_conn->SelectAll( table.table, table.key_col, results ) )
-        {
-            if( !m_conn->GetLastError().empty() )
-            {
-                wxString msg = wxString::Format( _( "Error reading database table %s: %s" ),
-                                                 table.table, m_conn->GetLastError() );
-                THROW_IO_ERROR( msg );
-            }
-
-            continue;
-        }
-
-        for( DATABASE_CONNECTION::ROW& result : results )
-        {
-            if( !result.count( table.key_col ) )
-                continue;
-
-            std::string prefix = table.name.empty() ? "" : fmt::format( "{}/", table.name );
-            wxString name( fmt::format( "{}{}", prefix,
-                                        std::any_cast<std::string>( result[table.key_col] ) ) );
-
-            LIB_SYMBOL* symbol = loadSymbolFromRow( name, table, result );
-
-            if( symbol && ( !powerSymbolsOnly || symbol->IsPower() ) )
-                aSymbolList.emplace_back( symbol );
-        }
+        if( !powerSymbolsOnly || symbol->IsPower() )
+            aSymbolList.emplace_back( symbol );
     }
 }
 
@@ -220,6 +200,52 @@ bool SCH_IO_DATABASE::TestConnection( wxString* aErrorMsg )
     return m_conn && m_conn->IsConnected();
 }
 
+
+void SCH_IO_DATABASE::cacheLib()
+{
+    long long currentTimestampSeconds = wxDateTime::Now().GetValue().GetValue() / 1000;
+
+    if( m_libTable->GetModifyHash() == m_cacheModifyHash
+        && ( currentTimestampSeconds - m_cacheTimestamp ) < m_settings->m_Cache.max_age )
+    {
+        return;
+    }
+
+    for( const DATABASE_LIB_TABLE& table : m_settings->m_Tables )
+    {
+        std::vector<DATABASE_CONNECTION::ROW> results;
+
+        if( !m_conn->SelectAll( table.table, table.key_col, results ) )
+        {
+            if( !m_conn->GetLastError().empty() )
+            {
+                wxString msg = wxString::Format( _( "Error reading database table %s: %s" ),
+                                                 table.table, m_conn->GetLastError() );
+                THROW_IO_ERROR( msg );
+            }
+
+            continue;
+        }
+
+        for( DATABASE_CONNECTION::ROW& result : results )
+        {
+            if( !result.count( table.key_col ) )
+                continue;
+
+            std::string prefix = table.name.empty() ? "" : fmt::format( "{}/", table.name );
+            wxString    name( fmt::format( "{}{}", prefix,
+                                           std::any_cast<std::string>( result[table.key_col] ) ) );
+
+            LIB_SYMBOL* symbol = loadSymbolFromRow( name, table, result );
+
+            if( symbol )
+                m_nameToSymbolcache.insert( { symbol->GetName(), symbol } );
+        }
+    }
+
+    m_cacheTimestamp = currentTimestampSeconds;
+    m_cacheModifyHash = m_libTable->GetModifyHash();
+}
 
 void SCH_IO_DATABASE::ensureSettings( const wxString& aSettingsPath )
 {
