@@ -172,8 +172,6 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         break;
     }
 
-    m_flags &= ~PNS_COLLISION;
-
     if( aItem->Marker() & PNS::MK_VIOLATION )
         m_flags |= PNS_COLLISION;
 
