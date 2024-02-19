@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:31-0800\n"
-"PO-Revision-Date: 2024-02-03 06:01+0000\n"
+"PO-Revision-Date: 2024-02-19 17:02+0000\n"
 "Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v7/zh_Hant/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -7533,9 +7533,8 @@ msgid "Delete all associations?"
 msgstr "是否刪除所有關聯？"
 
 #: cvpcb/tools/cvpcb_control.cpp:183
-#, fuzzy
 msgid "Unable to create the footprint viewer frame"
-msgstr "無法建立報告檔案 \"%s\""
+msgstr "無法建立封裝檢視器框架"
 
 #: eeschema/annotate.cpp:265
 #, c-format
@@ -9595,9 +9594,8 @@ msgid "Delete alternate body style (De Morgan) from symbol?"
 msgstr "從符號刪除備用主體樣式（德摩根）？"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:366
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "欄位必須要有一個名稱。"
+msgstr "零件符號必須要有名字。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:378
 #: eeschema/tools/symbol_editor_control.cpp:345
@@ -31850,7 +31848,7 @@ msgstr "正在檢查 %s 最大解耦長度：%s。"
 #: pcbnew/drc/drc_engine.cpp:893
 #, c-format
 msgid "Checking %s max skew: %s."
-msgstr "正檢查 %s 最大偏斜：%s。"
+msgstr "正檢查 %s 最大偏差：%s。"
 
 #: pcbnew/drc/drc_engine.cpp:899
 #, c-format
@@ -32239,7 +32237,7 @@ msgstr "佈線長度超過範圍"
 
 #: pcbnew/drc/drc_item.cpp:233
 msgid "Skew between traces out of range"
-msgstr "佈線之間的傾斜範圍"
+msgstr "佈線之間的偏差範圍"
 
 #: pcbnew/drc/drc_item.cpp:237
 msgid "Too many vias on a connection"
@@ -32611,7 +32609,7 @@ msgstr "(%s 最大長度 %s; 實際 %s)"
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:160
 #, c-format
 msgid "(%s max skew %s; actual %s; average net length %s; actual %s)"
-msgstr "(%s 最大偏斜 %s; 實際偏斜 %s; 平均網路長度 %s; 實際長度 %s)"
+msgstr "(%s 最大偏差 %s; 實際偏差 %s; 平均網路長度 %s; 實際長度 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:189
 #, c-format
@@ -32968,9 +32966,9 @@ msgstr ""
 "結果可能與老版本的填充結果不同。"
 
 #: pcbnew/files.cpp:640
-#, fuzzy, c-format
+#, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
-msgstr "PCB \"%s\" 已經開啟。"
+msgstr "PCB“%s”已由“%s”在“%s”處開啟。"
 
 #: pcbnew/files.cpp:651
 msgid "The current PCB has been modified.  Save changes?"
@@ -34909,9 +34907,9 @@ msgid "'%s' was not fully parsed."
 msgstr "“%s”未完全解析。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:684
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint directory not found: '%s'."
-msgstr "封裝庫沒有找到。"
+msgstr "未找到足跡目錄：「%s」。"
 
 #: pcbnew/plugins/altium/altium_pcb.cpp:803
 #, c-format
@@ -37567,13 +37565,13 @@ msgid "Pack footprints"
 msgstr "打包封裝"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:363
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Click to place %s (item %zu of %zu)\n"
 "Press <esc> to cancel all; double-click to finish"
 msgstr ""
-"單擊放置 %s (%ld 的專案 %ld )\n"
-"按下 <esc> 取消全部；雙擊完成"
+"點擊以放置 %s（%zu 中的第 %zu 項）\n"
+"按<esc>取消全部；點雙擊完成"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:376
 #, c-format
@@ -39209,11 +39207,11 @@ msgstr "調整單軌佈線長度"
 
 #: pcbnew/tools/pcb_actions.cpp:1486
 msgid "Tune length of a differential pair"
-msgstr "調整差分對佈線長度"
+msgstr "調整差分對走線長度"
 
 #: pcbnew/tools/pcb_actions.cpp:1493
 msgid "Tune skew of a differential pair"
-msgstr "調整差分對佈線偏移"
+msgstr "調整差分對佈線偏差"
 
 #: pcbnew/tools/pcb_actions.cpp:1502
 msgid "Walks the current track back one segment."
