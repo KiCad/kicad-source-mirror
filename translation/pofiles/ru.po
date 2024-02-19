@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:31-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2024-02-16 14:08+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v7/ru/>\n"
@@ -393,11 +393,11 @@ msgstr "Недостаточно прав для сохранения файла
 msgid "Error"
 msgstr "Ошибка"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Failed to copy image to clipboard"
 msgstr "Не удалось скопировать изображение в буфер обмена"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:837
 msgid "Can't save file"
 msgstr "Не удалось сохранить файл"
 
@@ -9784,7 +9784,7 @@ msgid "The name '%s' is already in use."
 msgstr "Имя '%s' уже используется."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#: eeschema/dialogs/dialog_sheet_properties.cpp:753
+#: eeschema/dialogs/dialog_sheet_properties.cpp:756
 #: eeschema/dialogs/dialog_symbol_properties.cpp:987
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -10853,11 +10853,11 @@ msgstr "При сохранении файла схемы '%s' возникла 
 msgid "Failed to save schematic '%s'"
 msgstr "Не удалось сохранить схему '%s'"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:687
+#: eeschema/dialogs/dialog_sheet_properties.cpp:690
 msgid "A sheet must have a name."
 msgstr "У листа должно быть имя."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:698
 msgid "A sheet must have a file specified."
 msgstr "Листу должен быть назначен файл."
 
@@ -13112,7 +13112,7 @@ msgid "Abort"
 msgstr "Отмена"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:873
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13171,7 +13171,7 @@ msgstr ""
 "Ошибка сохранения файла схемы '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1098
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Не удалось создать временный файл '%s'."
@@ -13185,13 +13185,13 @@ msgstr ""
 "Ошибка сохранения файла схемы '%s'.\n"
 "Не удалось переименовать временный файл '%s'."
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1119
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Не удалось переименовать временный файл '%s'."
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1155
+#: pcbnew/files.cpp:1152
 #, c-format
 msgid "File '%s' saved."
 msgstr "Файл '%s' сохранён."
@@ -16726,7 +16726,7 @@ msgstr "Удалить символ"
 msgid "Keep Symbol"
 msgstr "Удалить символ"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -24786,7 +24786,7 @@ msgstr ""
 "Ошибка импорта настроек из платы:\n"
 "Не удалось загрузить соответствующий файл проекта %s"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:677
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "Загрузка платы"
@@ -33515,27 +33515,27 @@ msgstr "Сохранить файл платы как"
 msgid "Printed circuit board"
 msgstr "Печатная плата"
 
-#: pcbnew/files.cpp:352
+#: pcbnew/files.cpp:349
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Файл восстановления '%s' не найден."
 
-#: pcbnew/files.cpp:357
+#: pcbnew/files.cpp:354
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Загрузить файл резервного копирования '%s'?"
 
-#: pcbnew/files.cpp:400
+#: pcbnew/files.cpp:397
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "Текущая плата будет закрыта. Сохранить изменения в '%s' перед продолжением?"
 
-#: pcbnew/files.cpp:414
+#: pcbnew/files.cpp:411
 msgid "Current Board will be closed. Continue?"
 msgstr "Текущая плата будет закрыта. Продолжить?"
 
-#: pcbnew/files.cpp:594
+#: pcbnew/files.cpp:591
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33548,57 +33548,57 @@ msgstr ""
 "предыдущих версиях KiCad, где в качестве зазора использовалась толщина "
 "контура платы."
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:637
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "Печатная плата '%s' уже открыта '%s' на '%s'."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:648
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Текущая плата изменена. Сохранить?"
 
-#: pcbnew/files.cpp:670
+#: pcbnew/files.cpp:667
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Плата '%s' не существует. Создать?"
 
-#: pcbnew/files.cpp:679
+#: pcbnew/files.cpp:676
 msgid "Creating PCB"
 msgstr "Создание платы"
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
+#: pcbnew/files.cpp:781 pcbnew/files.cpp:791
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Ошибка загрузки платы '%s'."
 
-#: pcbnew/files.cpp:803
+#: pcbnew/files.cpp:800
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Закончилась память при загрузке файла платы '%s'"
 
-#: pcbnew/files.cpp:916
+#: pcbnew/files.cpp:913
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "При сохранении посад.места %s в библиотеку посад.мест проекта возникла "
 "ошибка."
 
-#: pcbnew/files.cpp:947
+#: pcbnew/files.cpp:944
 msgid "Error saving project specific footprint library table."
 msgstr "При сохранении таблицы библиотек посад.мест проекта возникла ошибка."
 
-#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1178
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Недостаточно прав для записи файла '%s'."
 
-#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
+#: pcbnew/files.cpp:1068 pcbnew/files.cpp:1223
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Ошибка сохранения файла особых правил '%s'."
 
-#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1199
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33607,7 +33607,7 @@ msgstr ""
 "Ошибка сохранения платы '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1117
+#: pcbnew/files.cpp:1114
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33616,7 +33616,7 @@ msgstr ""
 "Ошибка сохранения файла платы '%s'.\n"
 "Не удалось переименовать временный файл '%s'."
 
-#: pcbnew/files.cpp:1230
+#: pcbnew/files.cpp:1227
 #, c-format
 msgid ""
 "Board copied to:\n"

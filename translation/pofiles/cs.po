@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:31-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2023-12-26 21:27+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v7/cs/>\n"
@@ -377,11 +377,11 @@ msgstr "Nedostatečná oprávnění k uložení souboru '%s'."
 msgid "Error"
 msgstr "Chyba"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Failed to copy image to clipboard"
 msgstr "Nepodařilo se zkopírovat obrázek do schránky"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:837
 msgid "Can't save file"
 msgstr "Nelze uložit soubor"
 
@@ -9722,7 +9722,7 @@ msgid "The name '%s' is already in use."
 msgstr "Název '%s' se již používá."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#: eeschema/dialogs/dialog_sheet_properties.cpp:753
+#: eeschema/dialogs/dialog_sheet_properties.cpp:756
 #: eeschema/dialogs/dialog_symbol_properties.cpp:987
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -10788,11 +10788,11 @@ msgstr "Chyba při ukládání souboru schématu '%s'."
 msgid "Failed to save schematic '%s'"
 msgstr "Selhalo uložení schématu '%s'"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:687
+#: eeschema/dialogs/dialog_sheet_properties.cpp:690
 msgid "A sheet must have a name."
 msgstr "List musí mít název."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:698
 msgid "A sheet must have a file specified."
 msgstr "List musí mít specifikovaný soubor."
 
@@ -13044,7 +13044,7 @@ msgid "Abort"
 msgstr "Přerušit"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:873
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13104,7 +13104,7 @@ msgstr ""
 "Chyba uložení souboru schématu '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1098
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Nepodařilo se vytvořit dočasný soubor '%s'."
@@ -13118,13 +13118,13 @@ msgstr ""
 "Chyba uložení souboru schématu '%s'.\n"
 "Nepodařilo se přejmenovat dočasný soubor '%s'."
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1119
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Nepodařilo se přejmenovat dočasný soubor '%s'."
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1155
+#: pcbnew/files.cpp:1152
 #, c-format
 msgid "File '%s' saved."
 msgstr "Soubor '%s' uložen."
@@ -16639,7 +16639,7 @@ msgstr "Smazat symbol"
 msgid "Keep Symbol"
 msgstr "Ponechat symbol"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -24604,7 +24604,7 @@ msgstr ""
 "Chyba při importování nastavení z desky:\n"
 "Přidružený soubor projektu %s nelze načíst"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:677
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "Načítání DPS"
@@ -32888,26 +32888,26 @@ msgstr "Uložit soubor desky jako"
 msgid "Printed circuit board"
 msgstr "Deska plošných spojů"
 
-#: pcbnew/files.cpp:352
+#: pcbnew/files.cpp:349
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Soubor obnovy '%s' nenalezen."
 
-#: pcbnew/files.cpp:357
+#: pcbnew/files.cpp:354
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "OK pro načtení souboru obnovení '%s'?"
 
-#: pcbnew/files.cpp:400
+#: pcbnew/files.cpp:397
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr "Aktuální deska bude uzavřena, uložit změny do '%s' před pokračováním?"
 
-#: pcbnew/files.cpp:414
+#: pcbnew/files.cpp:411
 msgid "Current Board will be closed. Continue?"
 msgstr "Aktuální deska bude uzavřena. Pokračovat?"
 
-#: pcbnew/files.cpp:594
+#: pcbnew/files.cpp:591
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -32920,56 +32920,56 @@ msgstr ""
 "To může mít za následek odlišné výplně oproti předchozím verzím KiCadu, "
 "které používaly tloušťky čáry hranice desky na vrstvě Edge Cuts."
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:637
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "Soubor DPS '%s' je již otevřen."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:648
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Aktuální DPS byla upravena. Uložit změny?"
 
-#: pcbnew/files.cpp:670
+#: pcbnew/files.cpp:667
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "DPS '%s' neexistuje. Chcete ji vytvořit?"
 
-#: pcbnew/files.cpp:679
+#: pcbnew/files.cpp:676
 msgid "Creating PCB"
 msgstr "Vytváření DPS"
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
+#: pcbnew/files.cpp:781 pcbnew/files.cpp:791
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Chyba při načítání DPS '%s'."
 
-#: pcbnew/files.cpp:803
+#: pcbnew/files.cpp:800
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Přetečení paměti při načítání DPS '%s'"
 
-#: pcbnew/files.cpp:916
+#: pcbnew/files.cpp:913
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "Chyba při ukládání pouzdra %s do knihovny pouzder specifických pro projekt."
 
-#: pcbnew/files.cpp:947
+#: pcbnew/files.cpp:944
 msgid "Error saving project specific footprint library table."
 msgstr "Chyba ukládání tabulky pouzder projektu."
 
-#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1178
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Nedostatečná oprávnění k zápisu do souboru '%s'."
 
-#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
+#: pcbnew/files.cpp:1068 pcbnew/files.cpp:1223
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Chyba ukládání souboru vlastních pravidel '%s'."
 
-#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1199
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -32978,7 +32978,7 @@ msgstr ""
 "Chyba uložení souboru desky '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1117
+#: pcbnew/files.cpp:1114
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -32987,7 +32987,7 @@ msgstr ""
 "Chyba uložení souboru desky '%s'.\n"
 "Nepodařilo se přejmenovat dočasný soubor '%s."
 
-#: pcbnew/files.cpp:1230
+#: pcbnew/files.cpp:1227
 #, c-format
 msgid ""
 "Board copied to:\n"

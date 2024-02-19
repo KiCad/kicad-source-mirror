@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:31-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2024-02-09 13:53+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v7/ko/>\n"
@@ -400,11 +400,11 @@ msgstr "파일 '%s'을(를) 저장할 수 있는 권한이 없습니다."
 msgid "Error"
 msgstr "오류"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Failed to copy image to clipboard"
 msgstr "이미지를 클립보드에 복사하지 못함"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:837
 msgid "Can't save file"
 msgstr "파일을 저장할 수 없음"
 
@@ -9709,7 +9709,7 @@ msgid "The name '%s' is already in use."
 msgstr "'%s'라는 이름은 이미 사용 중입니다."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#: eeschema/dialogs/dialog_sheet_properties.cpp:753
+#: eeschema/dialogs/dialog_sheet_properties.cpp:756
 #: eeschema/dialogs/dialog_symbol_properties.cpp:987
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -10767,11 +10767,11 @@ msgstr "'%s'회로도 파일을 저장하는 중 오류 발생."
 msgid "Failed to save schematic '%s'"
 msgstr "회로도 '%s'를 저장하지 못함"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:687
+#: eeschema/dialogs/dialog_sheet_properties.cpp:690
 msgid "A sheet must have a name."
 msgstr "시트에는 이름이 있어야 합니다."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:698
 msgid "A sheet must have a file specified."
 msgstr "시트에는 지정된 파일이 있어야 합니다."
 
@@ -13013,7 +13013,7 @@ msgid "Abort"
 msgstr "중단"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:873
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13071,7 +13071,7 @@ msgstr ""
 "'%s'회로도 파일 저장 중 오류 발생.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1098
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "임시 파일 '%s'을(를) 만들지 못했습니다."
@@ -13085,13 +13085,13 @@ msgstr ""
 "회로도 파일 '%s'을(를) 저장하는 중 오류 발생.\n"
 "임시 파일 '%s'의 이름을 바꾸지 못함."
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1119
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "임시 파일 '%s'의 이름을 변경하지 못했습니다."
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1155
+#: pcbnew/files.cpp:1152
 #, c-format
 msgid "File '%s' saved."
 msgstr "파일 '%s'이(가) 저장됨."
@@ -16610,7 +16610,7 @@ msgstr "심볼 삭제"
 msgid "Keep Symbol"
 msgstr "심볼 유지"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -24611,7 +24611,7 @@ msgstr ""
 "보드에서 설정 가져오기 오류:\n"
 "연결된 프로젝트 파일 %s을(를) 불러올 수 없습니다"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:677
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "PCB를 불러오는 중입니다"
@@ -33211,27 +33211,27 @@ msgstr "다른 이름으로 기판 파일 저장"
 msgid "Printed circuit board"
 msgstr "인쇄 회로 기판"
 
-#: pcbnew/files.cpp:352
+#: pcbnew/files.cpp:349
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "복구 파일 '%s'을(를) 찾을 수 없습니다."
 
-#: pcbnew/files.cpp:357
+#: pcbnew/files.cpp:354
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "복구 파일 '%s'을(를) 불러오시겠습니까?"
 
-#: pcbnew/files.cpp:400
+#: pcbnew/files.cpp:397
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "현재 기판은 닫힐 것입니다. 계속하기 전에 '%s'에 변경 사항을 저장할까요?"
 
-#: pcbnew/files.cpp:414
+#: pcbnew/files.cpp:411
 msgid "Current Board will be closed. Continue?"
 msgstr "현재 기판이 닫힙니다. 계속하시겠습니까?"
 
-#: pcbnew/files.cpp:594
+#: pcbnew/files.cpp:591
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33243,58 +33243,58 @@ msgstr ""
 "이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 다"
 "른 채움 결과를 내보낼 것입니다."
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:637
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "PCB '%s'은(는) '%s'에 의해 '%s'에서 이미 열려 있습니다."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:648
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "현재 PCB는 수정되었습니다.  변경사항을 저장할까요?"
 
-#: pcbnew/files.cpp:670
+#: pcbnew/files.cpp:667
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s'은(는) 존재하지 않습니다. 생성할까요?"
 
-#: pcbnew/files.cpp:679
+#: pcbnew/files.cpp:676
 msgid "Creating PCB"
 msgstr "PCB 생성"
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
+#: pcbnew/files.cpp:781 pcbnew/files.cpp:791
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "PCB '%s'을(를) 불러오는 중에 오류가 발생했습니다."
 
-#: pcbnew/files.cpp:803
+#: pcbnew/files.cpp:800
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "PCB '%s' 불러오는 중 메모리 부족이 발생하였습니다"
 
-#: pcbnew/files.cpp:916
+#: pcbnew/files.cpp:913
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "프로젝트의 특정 라이브러리에 풋프린트 %s을(를) 저장하는 동안 오류가 발생했습"
 "니다."
 
-#: pcbnew/files.cpp:947
+#: pcbnew/files.cpp:944
 msgid "Error saving project specific footprint library table."
 msgstr ""
 "프로젝트 특정 풋프린트 라이브러리 테이블을 저장하는 도중 오류가 발생했습니다."
 
-#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1178
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "'%s' 파일 저장에 필요한 권한이 충분하지 않습니다."
 
-#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
+#: pcbnew/files.cpp:1068 pcbnew/files.cpp:1223
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "사용자 정의 규칙 파일 '%s'을(를) 저장하는 동안 오류가 발생했습니다."
 
-#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1199
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33303,7 +33303,7 @@ msgstr ""
 "보드 파일 '%s'을(를) 저장하는 중 오류 발생.\n"
 "%s"
 
-#: pcbnew/files.cpp:1117
+#: pcbnew/files.cpp:1114
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33312,7 +33312,7 @@ msgstr ""
 "보드 파일 '%s'을(를) 저장하는 중 오류 발생.\n"
 "임시 파일 '%s'의 이름을 바꾸지 못함."
 
-#: pcbnew/files.cpp:1230
+#: pcbnew/files.cpp:1227
 #, c-format
 msgid ""
 "Board copied to:\n"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:31-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2024-02-19 17:02+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v7/nl/>\n"
@@ -380,11 +380,11 @@ msgstr "Onvoldoende rechten om het bestand '%s' op te slaan."
 msgid "Error"
 msgstr "Fout"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Failed to copy image to clipboard"
 msgstr "Kan afbeelding niet naar klembord kopiëren"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:837
 msgid "Can't save file"
 msgstr "Kan bestand niet opslaan"
 
@@ -8069,16 +8069,16 @@ msgstr ""
 "\n"
 " * `%I`: absoluut pad en bestandsnaam van het tussenliggende "
 "netlijstbestand, dat de invoer is voor de BOM-generator\n"
-" * `%O`: absoluut pad en bestandsnaam van het BOM-bestand voor de uitvoer ("
-"zonder bestandsextensie)\n"
+" * `%O`: absoluut pad en bestandsnaam van het BOM-bestand voor de uitvoer "
+"(zonder bestandsextensie)\n"
 " * `%B`: basisbestandsnaam van BOM-bestand voor de uitvoer (zonder "
 "bestandsextensie)\n"
 " * `%P`: absoluut pad van de projectmap, zonder afsluitende schuine streep\n"
 "\n"
 "**Merk op:** de `%O` uitvoerbestandsparameter bevat geen bestandsextensie. "
 "KiCad zal proberen automatisch een geschikte extensie aan de commandoregel "
-"toe te voegen, maar een extensie moet mogelijk met de hand worden toegevoegd."
-"\n"
+"toe te voegen, maar een extensie moet mogelijk met de hand worden "
+"toegevoegd.\n"
 "\n"
 "Python is de aanbevolen programmeertaal voor BOM-generatorscripts, maar "
 "andere talen kunnen ook worden gebruikt.\n"
@@ -8091,9 +8091,9 @@ msgstr ""
 "python <scriptbestandsnaam> <invoerbestandsnaam> <uitvoerbestandsnaam>\n"
 "```\n"
 "\n"
-"Op Windows, als het gewenste generatorscript voor een CSV-BOM `C:\\Users"
-"\\gebruikersnaam\\kicad\\my_python_script.py` is, zou de commandoregel zijn:"
-"\n"
+"Op Windows, als het gewenste generatorscript voor een CSV-BOM `C:"
+"\\Users\\gebruikersnaam\\kicad\\my_python_script.py` is, zou de "
+"commandoregel zijn:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\gebruikersnaam\\kicad\\my_python_script.py \"%I\" \"%O."
@@ -9780,7 +9780,7 @@ msgid "The name '%s' is already in use."
 msgstr "De naam '%s' is al in gebruik."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#: eeschema/dialogs/dialog_sheet_properties.cpp:753
+#: eeschema/dialogs/dialog_sheet_properties.cpp:756
 #: eeschema/dialogs/dialog_symbol_properties.cpp:987
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -10853,11 +10853,11 @@ msgstr "Er is een fout opgetreden bij het opslaan van schema-bestand '%s'."
 msgid "Failed to save schematic '%s'"
 msgstr "Kan schema '%s' niet opslaan"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:687
+#: eeschema/dialogs/dialog_sheet_properties.cpp:690
 msgid "A sheet must have a name."
 msgstr "Een blad moet een naam hebben."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:698
 msgid "A sheet must have a file specified."
 msgstr "Een blad moet een gespecificeerd bestand hebben."
 
@@ -11991,7 +11991,8 @@ msgstr "<ESC> wist netmarkering"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr "Eerste <ESC> in selectietool wist de selectie, tweede wist netmarkering"
+msgstr ""
+"Eerste <ESC> in selectietool wist de selectie, tweede wist netmarkering"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -12017,8 +12018,8 @@ msgid ""
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
 "In schema-editor:\n"
-"Indien ingeschakeld selecteert een klik op een pin het bovenliggende symbool."
-"\n"
+"Indien ingeschakeld selecteert een klik op een pin het bovenliggende "
+"symbool.\n"
 "Indien uitgeschakeld selecteert een klik op een pin alleen de pin."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:127
@@ -12102,7 +12103,8 @@ msgstr "Automatische veldplaatsing toestaan om uit&lijning te wijzigen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:272
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "Automatisch geplaatste velden altijd uitlijnen op het raster van 50 mil"
+msgstr ""
+"Automatisch geplaatste velden altijd uitlijnen op het raster van 50 mil"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:281
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:104
@@ -13139,7 +13141,7 @@ msgid "Abort"
 msgstr "Afbreken"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:873
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13199,7 +13201,7 @@ msgstr ""
 "Fout bij het opslaan van schema-bestand '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1098
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Kan tijdelijk bestand '%s' niet aanmaken."
@@ -13213,13 +13215,13 @@ msgstr ""
 "Fout bij opslaan van schemabestand '%s'.\n"
 "Hernoemen van tijdelijk bestand '%s' mislukt."
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1119
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Hernoemen van tijdelijk bestand '%s' mislukt."
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1155
+#: pcbnew/files.cpp:1152
 #, c-format
 msgid "File '%s' saved."
 msgstr "Bestand '%s' opgeslagen."
@@ -15003,8 +15005,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
-"&nbsp;<br><samp>~{CLK}</samp></td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
+"samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -15029,8 +15031,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
-"<i>refdes</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -15045,8 +15047,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Busdefinitie</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
-";&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resulterende netten</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -15097,9 +15099,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -16793,7 +16795,7 @@ msgstr "Symbool verwijderen"
 msgid "Keep Symbol"
 msgstr "Symbool behouden"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -20003,8 +20005,8 @@ msgstr "Genereer positiebestand"
 #: kicad/cli/command_export_pcb_pos.cpp:49
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
 msgstr ""
-"Geldige opties: front,back,both. De Gerber-indeling ondersteunt alleen \"both"
-"\"."
+"Geldige opties: front,back,both. De Gerber-indeling ondersteunt alleen "
+"\"both\"."
 
 #: kicad/cli/command_export_pcb_pos.cpp:53
 msgid "Valid options: ascii,csv,gerber"
@@ -20606,8 +20608,8 @@ msgid ""
 "updated with 'Update All' button."
 msgstr ""
 "Vastgepinde pakketten hebben geen invloed op de beschikbare-"
-"updatesnotificatie en zullen niet bijgewerkt worden met de 'Alles "
-"bijwerken'-knop."
+"updatesnotificatie en zullen niet bijgewerkt worden met de 'Alles bijwerken'-"
+"knop."
 
 #: kicad/pcm/dialogs/panel_package.cpp:131
 msgid "Install Pending"
@@ -21866,8 +21868,8 @@ msgstr ""
 "___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 "___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
-"/ (L&minus;1)___<br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</"
+"sub>) / (L&minus;1)___<br>\n"
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
@@ -23033,7 +23035,8 @@ msgstr "Thermische weerstand:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:264
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr "Met behulp van thermische geleidbaarheidswaarde 401 watt/(meter-kelvin)"
+msgstr ""
+"Met behulp van thermische geleidbaarheidswaarde 401 watt/(meter-kelvin)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:272
 msgid "deg C/W"
@@ -23339,16 +23342,16 @@ msgstr ""
 "\n"
 "De controlerende waarde is vetgedrukt.\n"
 "\n"
-"De berekeningen zijn geldig voor stromen tot 35 A (extern) of 17,5 A (intern)"
-", temperatuurstijgingen tot 100 °C en breedtes tot 400 mil (10 mm).\n"
+"De berekeningen zijn geldig voor stromen tot 35 A (extern) of 17,5 A "
+"(intern), temperatuurstijgingen tot 100 °C en breedtes tot 400 mil (10 mm).\n"
 "\n"
 "De formule, uit IPC 2221, is\n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
 "H)<sup>0.725</sup>___</center>\n"
 "where:<br>\n"
 "___I___ is maximale stroom in A<br>\n"
-"___&Delta;T___ is temperatuurstijging boven omgevingstemperatuur in "
-"&deg;C<br>\n"
+"___&Delta;T___ is temperatuurstijging boven omgevingstemperatuur in &deg;"
+"C<br>\n"
 "___W___ is breedte in mils<br>\n"
 "___H___ is dikte (hoogte) in mils<br>\n"
 "___K___ is 0,024 voor interne sporen of 0,048 voor externe sporen\n"
@@ -24891,7 +24894,7 @@ msgstr ""
 "Fout bij importeren van instellingen van bord:\n"
 "Het bijbehorende projectbestand %s kan niet worden geladen"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:677
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "PCB wordt geladen"
@@ -25177,7 +25180,8 @@ msgstr "Colineaire sporen samen&voegen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:39
 msgid "merge aligned track segments, and remove null segments"
-msgstr "gelijklopende spoorsegmenten samenvoegen, en lege segmenten verwijderen"
+msgstr ""
+"gelijklopende spoorsegmenten samenvoegen, en lege segmenten verwijderen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:43
 msgid "Delete tracks unconnected at one end"
@@ -27169,8 +27173,8 @@ msgstr ""
 "deze footprint.\n"
 "De uiteindelijke vrije afstand is de som van deze waarde en de relatieve "
 "vrije afstand.\n"
-"Een negatieve waarde betekent een kleinere stencilopening dan de padgrootte."
-"\n"
+"Een negatieve waarde betekent een kleinere stencilopening dan de "
+"padgrootte.\n"
 "Deze waarde kan per pad worden aangepast in het tabblad voor\n"
 "aangepaste vrije afstand en instellingen in de padeigenschappen."
 
@@ -27193,8 +27197,8 @@ msgstr ""
 "padbreedte is en de verticale vrije afstand 10% van de padhoogte.\n"
 "De uiteindelijke vrije afstand is de som van deze waarde en de absolute "
 "vrije afstand.\n"
-"Een negatieve waarde betekent een kleinere stencilopening dan de padgrootte."
-"\n"
+"Een negatieve waarde betekent een kleinere stencilopening dan de "
+"padgrootte.\n"
 "Deze waarde kan per pad worden aangepast in het tabblad voor aangepaste "
 "vrije afstand en instellingen in de padeigenschappen."
 
@@ -27485,8 +27489,8 @@ msgstr ""
 "Ovale gaten geven vaak problemen voor bordfabrikanten.\n"
 "\"Gebruik routeopdracht\" gebruikt de gebruikelijke G00 routeopdracht "
 "(aanbevolen)\n"
-" \"Gebruik alternatieve modus\" gebruikt een andere boor-/routeopdracht (G85)"
-"\n"
+" \"Gebruik alternatieve modus\" gebruikt een andere boor-/routeopdracht "
+"(G85)\n"
 "(Gebruik dit alleen als de aanbevolen opdracht niet werkt)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:78
@@ -28971,8 +28975,8 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
-"Positieve vrije afstand betekent dat het gebied groter is dan de pad ("
-"gangbaar voor maskerafstand)."
+"Positieve vrije afstand betekent dat het gebied groter is dan de pad "
+"(gangbaar voor maskerafstand)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:591
 msgid ""
@@ -32716,7 +32720,8 @@ msgstr "Voorwaardeexpressie ontbreekt."
 #: pcbnew/drc/drc_rule_parser.cpp:226 pcbnew/drc/drc_rule_parser.cpp:460
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr "Niet-herkend item \"%s\". | Verwacht expressie tussen aanhalingstekens."
+msgstr ""
+"Niet-herkend item \"%s\". | Verwacht expressie tussen aanhalingstekens."
 
 #: pcbnew/drc/drc_rule_parser.cpp:261 pcbnew/drc/drc_rule_parser.cpp:372
 #: pcbnew/drc/drc_rule_parser.cpp:385 pcbnew/drc/drc_rule_parser.cpp:404
@@ -33305,28 +33310,28 @@ msgstr "Bewaar bordbestand als"
 msgid "Printed circuit board"
 msgstr "Printplaat"
 
-#: pcbnew/files.cpp:352
+#: pcbnew/files.cpp:349
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Herstelbestand '%s' niet gevonden."
 
-#: pcbnew/files.cpp:357
+#: pcbnew/files.cpp:354
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "OK om herstel-bestand '%s' te laden?"
 
-#: pcbnew/files.cpp:400
+#: pcbnew/files.cpp:397
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "Het huidige bord wordt gesloten, wijzigingen opslaan in '%s' voordat u "
 "verder gaat?"
 
-#: pcbnew/files.cpp:414
+#: pcbnew/files.cpp:411
 msgid "Current Board will be closed. Continue?"
 msgstr "Het huidige bestuur wordt gesloten. Doorgaan met?"
 
-#: pcbnew/files.cpp:594
+#: pcbnew/files.cpp:591
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33339,58 +33344,58 @@ msgstr ""
 "Dit kan resulteren in andere vullingen dan in eerdere Kicad-versies die de "
 "lijndiktes van de bordrand op de Edge Cuts-laag gebruikten."
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:637
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "PCB '%s' is al geopend door '%s' op '%s'."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:648
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "De huidige print is aangepast. Wijzigingen opslaan?"
 
-#: pcbnew/files.cpp:670
+#: pcbnew/files.cpp:667
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s' bestaat niet. Wilt u deze aanmaken?"
 
-#: pcbnew/files.cpp:679
+#: pcbnew/files.cpp:676
 msgid "Creating PCB"
 msgstr "Creëer PCB"
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
+#: pcbnew/files.cpp:781 pcbnew/files.cpp:791
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Fout bij het laden van PCB '%s'."
 
-#: pcbnew/files.cpp:803
+#: pcbnew/files.cpp:800
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Geheugen-fout bij het laden van PCB '%s'"
 
-#: pcbnew/files.cpp:916
+#: pcbnew/files.cpp:913
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "Fout bij het opslaan van de footprint %s naar de projectspecifieke "
 "footprintbibliotheek."
 
-#: pcbnew/files.cpp:947
+#: pcbnew/files.cpp:944
 msgid "Error saving project specific footprint library table."
 msgstr ""
 "Fout bij het opslaan van de projectspecifieke footprintbibliotheektabel."
 
-#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1178
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Onvoldoende rechten om het bestand '%s' op te slaan."
 
-#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
+#: pcbnew/files.cpp:1068 pcbnew/files.cpp:1223
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Fout bij het opslaan van aangepaste-regelsbestand '%s'."
 
-#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1199
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33399,7 +33404,7 @@ msgstr ""
 "Fout bij opslaan van bordbestand '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1117
+#: pcbnew/files.cpp:1114
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33408,7 +33413,7 @@ msgstr ""
 "Fout bij opslaan van bordbestand '%s'.\n"
 "Hernoemen van tijdelijk bestand '%s' mislukt."
 
-#: pcbnew/files.cpp:1230
+#: pcbnew/files.cpp:1227
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -34607,7 +34612,8 @@ msgstr "Kan waarde in symboolgedeelte van netlijst niet interpreteren."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:189
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "Kan pinnaam in de sectie symboolnet van de netlijst niet interpreteren."
+msgstr ""
+"Kan pinnaam in de sectie symboolnet van de netlijst niet interpreteren."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:198
 msgid "Cannot parse net name in symbol net section of netlist."
@@ -35000,7 +35006,8 @@ msgstr "Niet-herkende laag '%s'"
 #: pcbnew/pcb_expr_functions.cpp:240
 #, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Ontbrekende footprintparameter (A, B, of referentieaanduiding) voor %s."
+msgstr ""
+"Ontbrekende footprintparameter (A, B, of referentieaanduiding) voor %s."
 
 #: pcbnew/pcb_expr_functions.cpp:447
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -36375,8 +36382,8 @@ msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
-"De verouderde modus voor het vullen van zones wordt niet langer ondersteund."
-"\n"
+"De verouderde modus voor het vullen van zones wordt niet langer "
+"ondersteund.\n"
 "Zonevullingen zullen zo goed mogelijk worden omgezet."
 
 #: pcbnew/plugins/kicad/pcb_parser.cpp:6101
@@ -36892,7 +36899,8 @@ msgstr "Spoorhoekmodus"
 
 #: pcbnew/router/router_tool.cpp:176
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "Wisselt tussen scherpe/ronde en 45°/90° hoeken bij plaatsen van sporen."
+msgstr ""
+"Wisselt tussen scherpe/ronde en 45°/90° hoeken bij plaatsen van sporen."
 
 #: pcbnew/router/router_tool.cpp:200
 msgid "Select Track/Via Width"
@@ -37712,7 +37720,8 @@ msgstr "Vrije afstand voor gebieden: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:710
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Aangepast door grotere fysieke vrije afstand van %s; vrije afstand: %s."
+msgstr ""
+"Aangepast door grotere fysieke vrije afstand van %s; vrije afstand: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:726
 #, fuzzy, c-format
@@ -38734,7 +38743,8 @@ msgstr "Microgolf-opening toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:530
 msgid "Create gap of specified length for microwave applications"
-msgstr "Maak tussenruimte met specifieke lengte voor hoogfrequente toepassingen"
+msgstr ""
+"Maak tussenruimte met specifieke lengte voor hoogfrequente toepassingen"
 
 #: pcbnew/tools/pcb_actions.cpp:535
 msgid "Add Microwave Stub"
@@ -39095,8 +39105,8 @@ msgstr "Net in rattennest verbergen"
 #: pcbnew/tools/pcb_actions.cpp:819
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
-"Geselecteerde net verbergen in het rattennest van onverbonden netlijnen/"
-"-bogen"
+"Geselecteerde net verbergen in het rattennest van onverbonden netlijnen/-"
+"bogen"
 
 #: pcbnew/tools/pcb_actions.cpp:824
 msgid "Show Net in Ratsnest"
@@ -39105,8 +39115,8 @@ msgstr "Net in rattennest weergeven"
 #: pcbnew/tools/pcb_actions.cpp:825
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
-"Geselecteerde net weergeven in het rattennest van onverbonden netlijnen/"
-"-bogen"
+"Geselecteerde net weergeven in het rattennest van onverbonden netlijnen/-"
+"bogen"
 
 #: pcbnew/tools/pcb_actions.cpp:830
 msgid "Switch to Schematic Editor"
@@ -40992,7 +41002,8 @@ msgstr "PCB-rekenhulpmiddel"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "Calculator for various electronics-related computations"
-msgstr "Rekenhulpmiddel voor verscheidene elektronica-gerelateerde berekeningen"
+msgstr ""
+"Rekenhulpmiddel voor verscheidene elektronica-gerelateerde berekeningen"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:11
 msgid "KiCad PCB Editor (Standalone)"

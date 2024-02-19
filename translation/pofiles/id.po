@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:31-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2022-12-17 19:13+0000\n"
 "Last-Translator: Neko Nekowazarashi <kodra@nekoweb.my.id>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/kicad/master-"
@@ -378,11 +378,11 @@ msgstr "Izin tidak cukup untuk menyimpan file '%s'."
 msgid "Error"
 msgstr "Kesalahan"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Failed to copy image to clipboard"
 msgstr "Gagal menyalin gambar ke papan klip"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:837
 msgid "Can't save file"
 msgstr "Tidak dapat menyimpan berkas"
 
@@ -10093,7 +10093,7 @@ msgid "The name '%s' is already in use."
 msgstr "Berkas %s sudah ada."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#: eeschema/dialogs/dialog_sheet_properties.cpp:753
+#: eeschema/dialogs/dialog_sheet_properties.cpp:756
 #: eeschema/dialogs/dialog_symbol_properties.cpp:987
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -11194,12 +11194,12 @@ msgstr "Terjadi kesalahan saat menyimpan berkas skematik \"%s\"."
 msgid "Failed to save schematic '%s'"
 msgstr "Gagal menyimpan berkas pustaka simbol '%s'."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:687
+#: eeschema/dialogs/dialog_sheet_properties.cpp:690
 #, fuzzy
 msgid "A sheet must have a name."
 msgstr "Sebuah lembar kerja harus memiliki sebuah nama berkas yang valid."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:698
 msgid "A sheet must have a file specified."
 msgstr "Sebuah lembar kerja harus memiliki sebuah berkas yang ditentukan."
 
@@ -13574,7 +13574,7 @@ msgid "Abort"
 msgstr "Batalkan"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:873
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13630,7 +13630,7 @@ msgstr ""
 "Gagal menyimpan berkas skematik \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1098
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Gagal membuat berkas sementara \"%s\""
@@ -13644,13 +13644,13 @@ msgstr ""
 "Terjadi kesalahan saat menyimpan berkas skematik \"%s\".\n"
 "Gagal mengganti nama berkas sementara %s"
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1119
 #, fuzzy, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Gagal membuat berkas sementara \"%s\""
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1155
+#: pcbnew/files.cpp:1152
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "Berkas \"%s\" disimpan."
@@ -17157,7 +17157,7 @@ msgstr "Hapus Simbol"
 msgid "Keep Symbol"
 msgstr "Simbol Baru"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -25586,7 +25586,7 @@ msgstr ""
 "Terjadi kesalahan saat mengimpor pengaturan dari papan sirkuit:\n"
 "Berkas proyek terkait %s tidak dapat dimuat"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:677
 #: pcbnew/tools/pcb_control.cpp:1305
 #, fuzzy
 msgid "Loading PCB"
@@ -34288,27 +34288,27 @@ msgstr "Simpan Berkas Papan Sirkuit Sebagai"
 msgid "Printed circuit board"
 msgstr "Papan Sirkuit KiCad"
 
-#: pcbnew/files.cpp:352
+#: pcbnew/files.cpp:349
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Berkas pemulihan \"%s\" tidak ditemukan."
 
-#: pcbnew/files.cpp:357
+#: pcbnew/files.cpp:354
 #, fuzzy, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Oke untuk memuat berkas pemulihan \"%s\""
 
-#: pcbnew/files.cpp:400
+#: pcbnew/files.cpp:397
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 
-#: pcbnew/files.cpp:414
+#: pcbnew/files.cpp:411
 #, fuzzy
 msgid "Current Board will be closed. Continue?"
 msgstr "Data saat ini akan hilang?"
 
-#: pcbnew/files.cpp:594
+#: pcbnew/files.cpp:591
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -34316,43 +34316,43 @@ msgid ""
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:637
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "Berkas PCB \"%s\" sudah terbuka."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:648
 #, fuzzy
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Simbol saat ini telah dimodifikasi.  Simpan perubahan?"
 
-#: pcbnew/files.cpp:670
+#: pcbnew/files.cpp:667
 #, fuzzy, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr ""
 "Pustaka '%s' tidak ada.\n"
 "Apakah Anda ingin membuatnya?"
 
-#: pcbnew/files.cpp:679
+#: pcbnew/files.cpp:676
 #, fuzzy
 msgid "Creating PCB"
 msgstr "Memuat %s"
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
+#: pcbnew/files.cpp:781 pcbnew/files.cpp:791
 #, fuzzy, c-format
 msgid "Error loading PCB '%s'."
 msgstr ""
 "Terjadi kesalahan saat memuat berkas skematik \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:803
+#: pcbnew/files.cpp:800
 #, fuzzy, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr ""
 "Terjadi kesalahan saat memuat berkas papan sirkuit:\n"
 "%s"
 
-#: pcbnew/files.cpp:916
+#: pcbnew/files.cpp:913
 #, fuzzy, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
@@ -34360,7 +34360,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:947
+#: pcbnew/files.cpp:944
 #, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr ""
@@ -34368,7 +34368,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1178
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, fuzzy, c-format
 msgid "Insufficient permissions to write file '%s'."
@@ -34376,14 +34376,14 @@ msgstr ""
 "Izin yang diperlukan tidak cukup untuk menyimpan berkas\n"
 "%s"
 
-#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
+#: pcbnew/files.cpp:1068 pcbnew/files.cpp:1223
 #, fuzzy, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr ""
 "Terjadi kesalahan saat menyimpan berkas papan sirkuit \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1199
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34392,7 +34392,7 @@ msgstr ""
 "Terjadi kesalahan saat menyimpan berkas papan sirkuit \"%s\".\n"
 "%s"
 
-#: pcbnew/files.cpp:1117
+#: pcbnew/files.cpp:1114
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34401,7 +34401,7 @@ msgstr ""
 "Terjadi kesalahan saat menyimpan berkas papan sirkuit \"%s\".\n"
 "Gagal mengganti nama berkas sementara \"%s\""
 
-#: pcbnew/files.cpp:1230
+#: pcbnew/files.cpp:1227
 #, fuzzy, c-format
 msgid ""
 "Board copied to:\n"

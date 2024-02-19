@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:31-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2024-02-16 14:08+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v7/fi/>\n"
@@ -392,11 +392,11 @@ msgstr "Ei riittäviä käyttöoikeuksia tiedoston '%s' tallentamiseen."
 msgid "Error"
 msgstr "Virhe"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Failed to copy image to clipboard"
 msgstr "Kuvan kopioiminen leikepöydälle ei onnistunut"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:837
 msgid "Can't save file"
 msgstr "Tiedostoa ei voitu tallentaa"
 
@@ -9782,7 +9782,7 @@ msgid "The name '%s' is already in use."
 msgstr "Nimi %s on jo käytössä."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#: eeschema/dialogs/dialog_sheet_properties.cpp:753
+#: eeschema/dialogs/dialog_sheet_properties.cpp:756
 #: eeschema/dialogs/dialog_symbol_properties.cpp:987
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -10855,11 +10855,11 @@ msgstr "Kytkentäkaaviotiedoston '%s' tallennuksessa tapahtui virhe."
 msgid "Failed to save schematic '%s'"
 msgstr "Kytkentäkaavion '%s' tallentaminen epäonnistui"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:687
+#: eeschema/dialogs/dialog_sheet_properties.cpp:690
 msgid "A sheet must have a name."
 msgstr "Arkilla on oltava nimi."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:698
 msgid "A sheet must have a file specified."
 msgstr "Arkin on oltava määritetty tiedosto."
 
@@ -13128,7 +13128,7 @@ msgid "Abort"
 msgstr "Keskeytä"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:873
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -13188,7 +13188,7 @@ msgstr ""
 "Virhe tallentaessa kytkentäkaaviotiedostoa '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1098
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Väliaikaisen tiedoston '%s' luominen epäonnistui."
@@ -13202,13 +13202,13 @@ msgstr ""
 "Virhe kytkentäkaaviotiedoston '%s' tallennuksessa.\n"
 "Väliaikaisen tiedoston '%s' nimeäminen uudelleen epäonnistui."
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1119
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Väliaikaisen tiedoston '%s' uudelleennimeäminen epäonnistui."
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1155
+#: pcbnew/files.cpp:1152
 #, c-format
 msgid "File '%s' saved."
 msgstr "Tiedosto '%s' tallennettu."
@@ -16754,7 +16754,7 @@ msgstr "Poista symboli"
 msgid "Keep Symbol"
 msgstr "Säilytä symboli"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -23275,8 +23275,8 @@ msgstr ""
 "Määräävä arvo näytetään lihavoituna.\n"
 "\n"
 "Laskelmat pätevät enintään 35 A (ulkoinen johdin) tai 17,5 A (sisäinen "
-"johdin) virroille, enintään 100 °C lämpotilanousulle, ja enintään 400 mil ("
-"10 mm) leveyksille.\n"
+"johdin) virroille, enintään 100 °C lämpotilanousulle, ja enintään 400 mil "
+"(10 mm) leveyksille.\n"
 "\n"
 "IPC 2221 -kaava on\n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
@@ -24816,7 +24816,7 @@ msgstr ""
 "Virhe asetusten tuomisessa piirilevyltä:\n"
 "Liitettyä projektitiedostoa %s ei voitu ladata"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:677
 #: pcbnew/tools/pcb_control.cpp:1305
 msgid "Loading PCB"
 msgstr "Ladataan piirilevyä"
@@ -33515,28 +33515,28 @@ msgstr "Tallenna levytiedosto nimellä"
 msgid "Printed circuit board"
 msgstr "Piirilevy"
 
-#: pcbnew/files.cpp:352
+#: pcbnew/files.cpp:349
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Palautustiedostoa '%s' ei löydy."
 
-#: pcbnew/files.cpp:357
+#: pcbnew/files.cpp:354
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "OK ladata palautustiedosto '%s'?"
 
-#: pcbnew/files.cpp:400
+#: pcbnew/files.cpp:397
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "Nykyinen piirilevy suljetaan. Tallennetaanko muutokset tiedostoon \"%s\" "
 "ennen jatkamista?"
 
-#: pcbnew/files.cpp:414
+#: pcbnew/files.cpp:411
 msgid "Current Board will be closed. Continue?"
 msgstr "Nykyinen hallitus on suljettu. Jatkaa?"
 
-#: pcbnew/files.cpp:594
+#: pcbnew/files.cpp:591
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -33548,56 +33548,56 @@ msgstr ""
 "Tämä voi johtaa erilaisiin täyttöihin kuin aiemmissa Kicad-versioissa, "
 "joissa käytettiin levyn ääriviivan paksuutta Edge Cuts -kerroksessa."
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:637
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "Piirilevy '%s' on jo avattuna '%s' kohteessa '%s'."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:648
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Nykyistä piirilevyä on muokattu. Tallenna muutokset?"
 
-#: pcbnew/files.cpp:670
+#: pcbnew/files.cpp:667
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Piirilevyä '%s' ei ole olemassa. Haluatko luoda sen?"
 
-#: pcbnew/files.cpp:679
+#: pcbnew/files.cpp:676
 msgid "Creating PCB"
 msgstr "Luodaan piirilevyä"
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
+#: pcbnew/files.cpp:781 pcbnew/files.cpp:791
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Virhe ladattaessa piirilevyä '%s'."
 
-#: pcbnew/files.cpp:803
+#: pcbnew/files.cpp:800
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Muisti loppui ladattaessa piirilevyä '%s'"
 
-#: pcbnew/files.cpp:916
+#: pcbnew/files.cpp:913
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr "Virhe tallennettaessa jalanjälkeä %s projektin kirjastoon."
 
-#: pcbnew/files.cpp:947
+#: pcbnew/files.cpp:944
 msgid "Error saving project specific footprint library table."
 msgstr ""
 "Tapahtui virhe tallennettaessa tiettyä projektin jalanjälkikirjastoluetteloa."
 
-#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1178
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Ei riittäviä oikeuksia tiedostoon '%s' kirjoittamiseen."
 
-#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
+#: pcbnew/files.cpp:1068 pcbnew/files.cpp:1223
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Virhe tallettaessa mukautettujen sääntöjen tiedostoa '%s'."
 
-#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1199
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33606,7 +33606,7 @@ msgstr ""
 "Virhe tallennettaessa piirilevytiedostoa '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1117
+#: pcbnew/files.cpp:1114
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -33615,7 +33615,7 @@ msgstr ""
 "Virhe levytiedoston '%s' tallennuksessa.\n"
 "Väliaikaisen tiedoston '%s' nimeäminen uudelleen epäonnistui."
 
-#: pcbnew/files.cpp:1230
+#: pcbnew/files.cpp:1227
 #, c-format
 msgid ""
 "Board copied to:\n"

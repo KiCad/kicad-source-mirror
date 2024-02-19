@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:31-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2023-01-20 06:51+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/kicad/master-"
@@ -405,11 +405,11 @@ msgstr ""
 msgid "Error"
 msgstr "Klaida"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Failed to copy image to clipboard"
 msgstr "Nepavyko nukopijuoti vaizdo"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:837
 msgid "Can't save file"
 msgstr "Negaliu išsaugoti failo"
 
@@ -9963,7 +9963,7 @@ msgid "The name '%s' is already in use."
 msgstr "Pavadinimas „%s“ jau naudojamas."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#: eeschema/dialogs/dialog_sheet_properties.cpp:753
+#: eeschema/dialogs/dialog_sheet_properties.cpp:756
 #: eeschema/dialogs/dialog_symbol_properties.cpp:987
 #, c-format
 msgid "The first %d fields are mandatory."
@@ -11046,11 +11046,11 @@ msgstr "Įrašant scheminį failą „%s“ įvyko klaida."
 msgid "Failed to save schematic '%s'"
 msgstr "Nepavyko išsaugoti schemos „%s“"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:687
+#: eeschema/dialogs/dialog_sheet_properties.cpp:690
 msgid "A sheet must have a name."
 msgstr "Lapas turi turėti pavadinimą."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:698
 msgid "A sheet must have a file specified."
 msgstr "Lape turi būti nurodyta byla."
 
@@ -13419,7 +13419,7 @@ msgid "Abort"
 msgstr "Nutraukiama\n"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:873
 #, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -13482,7 +13482,7 @@ msgstr ""
 "Klaida išsaugant scheminį failą „%s“.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1098
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Nepavyko sukurti laikino failo „%s“"
@@ -13496,13 +13496,13 @@ msgstr ""
 "Klaida išsaugant scheminį failą „%s“.\n"
 "Nepavyko pervadinti laikino failo %s"
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1119
 #, fuzzy, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Nepavyko sukurti laikino failo „%s“"
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1155
+#: pcbnew/files.cpp:1152
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "Failas „%s“ išsaugotas."
@@ -17217,7 +17217,7 @@ msgstr "Ištrinti simbolį"
 msgid "Keep Symbol"
 msgstr "Laikyti simbolį"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, fuzzy, c-format
 msgid "Revert '%s' to last version saved?"
@@ -25666,7 +25666,7 @@ msgstr ""
 "Importuojant nustatymus iš plokštės įvyko klaida:\n"
 "Nepavyko įkelti susieto projekto failo %s"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:677
 #: pcbnew/tools/pcb_control.cpp:1305
 #, fuzzy
 msgid "Loading PCB"
@@ -34246,26 +34246,26 @@ msgstr "Išsaugoti plokštę kitu pavadinimu"
 msgid "Printed circuit board"
 msgstr "Spausdintinė plokštė"
 
-#: pcbnew/files.cpp:352
+#: pcbnew/files.cpp:349
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Atkūrimo failas „%s“ nerastas."
 
-#: pcbnew/files.cpp:357
+#: pcbnew/files.cpp:354
 #, fuzzy, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Gerai įkelti atkūrimo failą \"%s\""
 
-#: pcbnew/files.cpp:400
+#: pcbnew/files.cpp:397
 #, fuzzy, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr "Dabartinė lenta bus uždaryta, prieš tęsdami išsaugoti „%s“ pakeitimus?"
 
-#: pcbnew/files.cpp:414
+#: pcbnew/files.cpp:411
 msgid "Current Board will be closed. Continue?"
 msgstr "Dabartinė valdyba bus uždaryta. Tęsti?"
 
-#: pcbnew/files.cpp:594
+#: pcbnew/files.cpp:591
 #, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
@@ -34279,40 +34279,40 @@ msgstr ""
 "versijomis, kuriose „Edge Cuts“ sluoksnyje buvo naudojami lentos ribos "
 "linijų storiai."
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:637
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "PCB failas „%s“ jau atidarytas."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:648
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "Dabartinė PCB buvo modifikuota. Išsaugoti pakeitimus?"
 
-#: pcbnew/files.cpp:670
+#: pcbnew/files.cpp:667
 #, fuzzy, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB „%s“ nėra. Ar norite jį sukurti?"
 
-#: pcbnew/files.cpp:679
+#: pcbnew/files.cpp:676
 #, fuzzy
 msgid "Creating PCB"
 msgstr "Kraunamas "
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
+#: pcbnew/files.cpp:781 pcbnew/files.cpp:791
 #, fuzzy, c-format
 msgid "Error loading PCB '%s'."
 msgstr ""
 "Įkeliant schemą įvyko klaida.\n"
 "%s"
 
-#: pcbnew/files.cpp:803
+#: pcbnew/files.cpp:800
 #, fuzzy, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr ""
 "Klaida įkeliant plokštės failą:\n"
 "%s"
 
-#: pcbnew/files.cpp:916
+#: pcbnew/files.cpp:913
 #, fuzzy, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
@@ -34320,7 +34320,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:947
+#: pcbnew/files.cpp:944
 #, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr ""
@@ -34328,7 +34328,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1178
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, fuzzy, c-format
 msgid "Insufficient permissions to write file '%s'."
@@ -34336,14 +34336,14 @@ msgstr ""
 "Neturite reikiamų teisių failo įrašymui\n"
 "%s"
 
-#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
+#: pcbnew/files.cpp:1068 pcbnew/files.cpp:1223
 #, fuzzy, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "%s"
 
-#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1199
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34352,7 +34352,7 @@ msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "%s"
 
-#: pcbnew/files.cpp:1117
+#: pcbnew/files.cpp:1114
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -34361,7 +34361,7 @@ msgstr ""
 "Klaida išsaugant plokštės failą „%s“.\n"
 "Nepavyko pervadinti laikino failo „%s“"
 
-#: pcbnew/files.cpp:1230
+#: pcbnew/files.cpp:1227
 #, fuzzy, c-format
 msgid ""
 "Board copied to:\n"

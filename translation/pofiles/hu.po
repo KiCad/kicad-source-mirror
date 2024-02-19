@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:31-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2024-01-22 00:01+0000\n"
 "Last-Translator: Hajdu Norbert <norbert.hajdu.biz@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/kicad/v7/hu/>\n"
@@ -379,11 +379,11 @@ msgstr "A(z) \"%s\" fájl mentéséhez írási jogosultságokra van szükség."
 msgid "Error"
 msgstr "Hiba"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:819
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:826
 msgid "Failed to copy image to clipboard"
 msgstr "Nem sikerült a képet a vágólapra másolni"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:830
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:837
 msgid "Can't save file"
 msgstr "A fájlt nem lehet menteni"
 
@@ -11055,7 +11055,7 @@ msgid "The name '%s' is already in use."
 msgstr "Már létezik egy \"%s\" nevű réteg."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:594
-#: eeschema/dialogs/dialog_sheet_properties.cpp:753
+#: eeschema/dialogs/dialog_sheet_properties.cpp:756
 #: eeschema/dialogs/dialog_symbol_properties.cpp:987
 #, fuzzy, c-format
 msgid "The first %d fields are mandatory."
@@ -12259,12 +12259,12 @@ msgstr "Hiba történt a(z) \"%s\" kapcsolási rajz fájl mentése során."
 msgid "Failed to save schematic '%s'"
 msgstr "Kapcsolási rajz \"%s\" mentése sikertelen"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:687
+#: eeschema/dialogs/dialog_sheet_properties.cpp:690
 #, fuzzy
 msgid "A sheet must have a name."
 msgstr "A mezőnek nevet kell adni."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:698
 #, fuzzy
 msgid "A sheet must have a file specified."
 msgstr "A vezetékosztálynak nevet kell adni."
@@ -14846,7 +14846,7 @@ msgid "Abort"
 msgstr "Megszakítás\n"
 
 #: eeschema/files-io.cpp:432 eeschema/files-io.cpp:449
-#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:876
+#: pagelayout_editor/files.cpp:260 pcbnew/files.cpp:873
 #, fuzzy
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
@@ -14912,7 +14912,7 @@ msgstr ""
 "Hiba történt a(z) \"%s\" kapcsolási rajz fájl mentése során.\n"
 "%s"
 
-#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1101
+#: eeschema/files-io.cpp:749 pcbnew/files.cpp:1098
 #, fuzzy, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "A(z) \"%s\" könyvtár fájlt nem lehet létrehozni"
@@ -14926,13 +14926,13 @@ msgstr ""
 "Hiba történt a(z) \"%s\" kapcsolási rajz fájl mentése során.\n"
 "%s"
 
-#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1122
+#: eeschema/files-io.cpp:774 pcbnew/files.cpp:1119
 #, fuzzy, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "A(z) \"%s\" könyvtár fájlt nem lehet létrehozni"
 
 #: eeschema/files-io.cpp:797 pagelayout_editor/files.cpp:187
-#: pcbnew/files.cpp:1155
+#: pcbnew/files.cpp:1152
 #, fuzzy, c-format
 msgid "File '%s' saved."
 msgstr "A(z) %s fájl mentése megtörtént"
@@ -18757,7 +18757,7 @@ msgstr "Rajzjel Törlés"
 msgid "Keep Symbol"
 msgstr "Új rajzjel"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:379
+#: eeschema/symbol_editor/symbol_editor.cpp:932 pcbnew/files.cpp:376
 #: pcbnew/footprint_libraries_utils.cpp:1221
 #, fuzzy, c-format
 msgid "Revert '%s' to last version saved?"
@@ -27906,7 +27906,7 @@ msgid ""
 "Associated project file %s could not be loaded"
 msgstr ""
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:680
+#: pcbnew/dialogs/dialog_board_setup.cpp:266 pcbnew/files.cpp:677
 #: pcbnew/tools/pcb_control.cpp:1305
 #, fuzzy
 msgid "Loading PCB"
@@ -37524,29 +37524,29 @@ msgstr "Nyákterv fájl mentése másként"
 msgid "Printed circuit board"
 msgstr "Nyomtatott áramköri lap"
 
-#: pcbnew/files.cpp:352
+#: pcbnew/files.cpp:349
 #, fuzzy, c-format
 msgid "Recovery file '%s' not found."
 msgstr "A(z) \"%s\" biztonsági másolat fájl nem található."
 
-#: pcbnew/files.cpp:357
+#: pcbnew/files.cpp:354
 #, fuzzy, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "A visszaállítás sikerült a(z) \"%s\" biztonsági másolat fájlból."
 
-#: pcbnew/files.cpp:400
+#: pcbnew/files.cpp:397
 #, fuzzy, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "A jelenlegi nyákterv el fog veszni, a művelet nem vonható vissza!\n"
 "Folytatja?"
 
-#: pcbnew/files.cpp:414
+#: pcbnew/files.cpp:411
 #, fuzzy
 msgid "Current Board will be closed. Continue?"
 msgstr "Az aktuális adatok elveszhetnek?"
 
-#: pcbnew/files.cpp:594
+#: pcbnew/files.cpp:591
 #, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
@@ -37559,41 +37559,41 @@ msgstr ""
 "Ez a KiCad korábbi verzióiban eltérő módon működött, amelyek esetén\n"
 "a körvonal vastagság határozta meg a szigetelési távolságot."
 
-#: pcbnew/files.cpp:640
+#: pcbnew/files.cpp:637
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "A(z) \"%s\" nyákterv fájl már meg van nyitva."
 
-#: pcbnew/files.cpp:651
+#: pcbnew/files.cpp:648
 #, fuzzy
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "A nyákterv módosult. Menti a módosításokat?"
 
-#: pcbnew/files.cpp:670
+#: pcbnew/files.cpp:667
 #, fuzzy, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "A(z) \"%s\" panel nem létezik. Szeretné létrehozni?"
 
-#: pcbnew/files.cpp:679
+#: pcbnew/files.cpp:676
 #, fuzzy
 msgid "Creating PCB"
 msgstr "Betöltés "
 
-#: pcbnew/files.cpp:784 pcbnew/files.cpp:794
+#: pcbnew/files.cpp:781 pcbnew/files.cpp:791
 #, fuzzy, c-format
 msgid "Error loading PCB '%s'."
 msgstr ""
 "Hiba a kapcsolási rajz betöltésekor.\n"
 "%s"
 
-#: pcbnew/files.cpp:803
+#: pcbnew/files.cpp:800
 #, fuzzy, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr ""
 "Hiba a nyákterv betöltése közben:\n"
 "%s"
 
-#: pcbnew/files.cpp:916
+#: pcbnew/files.cpp:913
 #, fuzzy, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
@@ -37602,7 +37602,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:947
+#: pcbnew/files.cpp:944
 #, fuzzy
 msgid "Error saving project specific footprint library table."
 msgstr ""
@@ -37611,20 +37611,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: pcbnew/files.cpp:1039 pcbnew/files.cpp:1181
+#: pcbnew/files.cpp:1036 pcbnew/files.cpp:1178
 #: pcbnew/footprint_libraries_utils.cpp:363
 #, fuzzy, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "A(z) \"%s\" könyvtár mentéséhez írási jogosultságokra van szükség."
 
-#: pcbnew/files.cpp:1071 pcbnew/files.cpp:1226
+#: pcbnew/files.cpp:1068 pcbnew/files.cpp:1223
 #, fuzzy, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr ""
 "Hiba a(z) \"%s\" panel fájl mentése közben.\n"
 "%s"
 
-#: pcbnew/files.cpp:1097 pcbnew/files.cpp:1202
+#: pcbnew/files.cpp:1094 pcbnew/files.cpp:1199
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -37633,7 +37633,7 @@ msgstr ""
 "Hiba a(z) \"%s\" panel fájl mentése közben.\n"
 "%s"
 
-#: pcbnew/files.cpp:1117
+#: pcbnew/files.cpp:1114
 #, fuzzy, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -37642,7 +37642,7 @@ msgstr ""
 "Hiba a(z) \"%s\" panel fájl mentése közben.\n"
 "%s"
 
-#: pcbnew/files.cpp:1230
+#: pcbnew/files.cpp:1227
 #, fuzzy, c-format
 msgid ""
 "Board copied to:\n"
