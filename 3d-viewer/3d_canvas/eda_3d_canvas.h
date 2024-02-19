@@ -208,12 +208,6 @@ public:
         m_3dmousePivotPos = aPos;
     }
 
-private:
-    /**
-     * Called by a wxPaintEvent event
-     */
-    void OnPaint( wxPaintEvent& aEvent );
-
     /**
      * The actual function to repaint the canvas.
      *
@@ -221,6 +215,10 @@ private:
      * called outside a wxPaintEvent
      */
     void DoRePaint();
+
+private:
+    // The wxPaintEvent event. mainly calls DoRePaint()
+    void OnPaint( wxPaintEvent& aEvent );
 
     void OnEraseBackground( wxEraseEvent& event );
 

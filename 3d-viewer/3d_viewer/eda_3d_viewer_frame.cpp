@@ -757,8 +757,13 @@ void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
     }
 
     // Be sure we have the latest 3D view (remember 3D view is buffered)
-    m_canvas->Request_refresh( true );
-    wxYield();
+    // Also ensure any highlighted item is not highlighted when creating screen shot
+    EDA_3D_VIEWER_SETTINGS::RENDER_SETTINGS& cfg = m_boardAdapter.m_Cfg->m_Render;
+    bool allow_highlight = cfg.highlight_on_rollover;
+    cfg.highlight_on_rollover = false;
+
+    m_canvas->DoRePaint();      // init first buffer
+    m_canvas->DoRePaint();      // init second buffer
 
     // Build image from the 3D buffer
     wxWindowUpdateLocker noUpdates( this );
@@ -767,6 +772,8 @@ void EDA_3D_VIEWER_FRAME::takeScreenshot( wxCommandEvent& event )
 
     if( m_canvas )
         m_canvas->GetScreenshot( screenshotImage );
+
+    cfg.highlight_on_rollover = allow_highlight;
 
     if( event.GetId() == ID_TOOL_SCREENCOPY_TOCLIBBOARD )
     {
