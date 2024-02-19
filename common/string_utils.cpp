@@ -313,40 +313,40 @@ wxString UnescapeString( const wxString& aSource )
                 }
                 else
                 {
-                    token.append( ch );
+                    token << ch;
                 }
             }
 
             if( !terminated )
             {
-                newbuf.append( wxT( "{" ) + UnescapeString( token ) );
+                newbuf << wxT( "{" ) << UnescapeString( token );
             }
             else if( prev == '$' || prev == '~' || prev == '^' || prev == '_' )
             {
-                newbuf.append( wxT( "{" ) + UnescapeString( token ) + wxT( "}" ) );
+                newbuf << wxT( "{" ) << UnescapeString( token ) << wxT( "}" );
             }
-            else if( token == wxT( "dblquote" ) )  newbuf.append( wxT( "\"" ) );
-            else if( token == wxT( "quote" ) )     newbuf.append( wxT( "'" ) );
-            else if( token == wxT( "lt" ) )        newbuf.append( wxT( "<" ) );
-            else if( token == wxT( "gt" ) )        newbuf.append( wxT( ">" ) );
-            else if( token == wxT( "backslash" ) ) newbuf.append( wxT( "\\" ) );
-            else if( token == wxT( "slash" ) )     newbuf.append( wxT( "/" ) );
-            else if( token == wxT( "bar" ) )       newbuf.append( wxT( "|" ) );
-            else if( token == wxT( "comma" ) )     newbuf.append( wxT( "," ) );
-            else if( token == wxT( "colon" ) )     newbuf.append( wxT( ":" ) );
-            else if( token == wxT( "space" ) )     newbuf.append( wxT( " " ) );
-            else if( token == wxT( "dollar" ) )    newbuf.append( wxT( "$" ) );
-            else if( token == wxT( "tab" ) )       newbuf.append( wxT( "\t" ) );
-            else if( token == wxT( "return" ) )    newbuf.append( wxT( "\n" ) );
-            else if( token == wxT( "brace" ) )     newbuf.append( wxT( "{" ) );
+            else if( token == wxT( "dblquote" ) )  newbuf << wxT( "\"" );
+            else if( token == wxT( "quote" ) )     newbuf << wxT( "'" );
+            else if( token == wxT( "lt" ) )        newbuf << wxT( "<" );
+            else if( token == wxT( "gt" ) )        newbuf << wxT( ">" );
+            else if( token == wxT( "backslash" ) ) newbuf << wxT( "\\" );
+            else if( token == wxT( "slash" ) )     newbuf << wxT( "/" );
+            else if( token == wxT( "bar" ) )       newbuf << wxT( "|" );
+            else if( token == wxT( "comma" ) )     newbuf << wxT( "," );
+            else if( token == wxT( "colon" ) )     newbuf << wxT( ":" );
+            else if( token == wxT( "space" ) )     newbuf << wxT( " " );
+            else if( token == wxT( "dollar" ) )    newbuf << wxT( "$" );
+            else if( token == wxT( "tab" ) )       newbuf << wxT( "\t" );
+            else if( token == wxT( "return" ) )    newbuf << wxT( "\n" );
+            else if( token == wxT( "brace" ) )     newbuf << wxT( "{" );
             else
             {
-                newbuf.append( wxT( "{" ) + UnescapeString( token ) + wxT( "}" ) );
+                newbuf << wxT( "{" ) << UnescapeString( token ) << wxT( "}" );
             }
         }
         else
         {
-            newbuf.append( ch );
+            newbuf << ch;
         }
     }
 
@@ -785,11 +785,14 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreC
         // Any numerical comparisons to here are identical.
         if( aIgnoreCase )
         {
-            if( wxToupper( c1 ) < wxToupper( c2 ) )
-                return -1;
+            if( c1 != c2 )
+            {
+                wxUniChar uc1 = wxToupper( c1 );
+                wxUniChar uc2 = wxToupper( c2 );
 
-            if( wxToupper( c1 ) > wxToupper( c2 ) )
-                return 1;
+                if( uc1 != uc2 )
+                    return uc1 < uc2 ? -1 : 1;
+            }
         }
         else
         {

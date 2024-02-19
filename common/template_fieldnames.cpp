@@ -54,8 +54,16 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
         case FOOTPRINT_FIELD:   return s_CanonicalFootprint;   // The footprint for use with Pcbnew
         case DATASHEET_FIELD:   return s_CanonicalDatasheet;   // Link to a datasheet for symbol
         case DESCRIPTION_FIELD: return s_CanonicalDescription; // The symbol description
-        default:                return wxString::Format( wxT( "Field%d" ), aFieldNdx );
+        default: break;
         }
+
+        wxString str( wxS( "Field" ) );
+#if wxUSE_UNICODE_WCHAR
+        str << std::to_wstring( aFieldNdx );
+#else
+        str << std::to_string( aFieldNdx );
+#endif
+        return str;
     }
 
     switch( aFieldNdx )

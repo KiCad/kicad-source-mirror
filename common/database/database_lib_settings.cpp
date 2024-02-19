@@ -32,6 +32,17 @@
 const int dblibSchemaVersion = 1;
 
 
+DATABASE_FIELD_MAPPING::DATABASE_FIELD_MAPPING( std::string aColumn, std::string aName,
+                                                bool aVisibleOnAdd, bool aVisibleInChooser,
+                                                bool aShowName, bool aInheritProperties ) :
+        column( aColumn ),
+        name( aName ), name_wx( aName.c_str(), wxConvUTF8 ), visible_on_add( aVisibleOnAdd ),
+        visible_in_chooser( aVisibleInChooser ), show_name( aShowName ),
+        inherit_properties( aInheritProperties )
+{
+}
+
+
 DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
         JSON_SETTINGS( aFilename, SETTINGS_LOC::NONE, dblibSchemaVersion )
 {
@@ -113,11 +124,8 @@ DATABASE_LIB_SETTINGS::DATABASE_LIB_SETTINGS( const std::string& aFilename ) :
                         bool inherit   = fetchOrDefault<bool>( fieldJson, "inherit_properties" );
 
                         table.fields.emplace_back(
-                                DATABASE_FIELD_MAPPING(
-                                {
-                                    column, name, visible_on_add, visible_in_chooser, show_name,
-                                    inherit
-                                } ) );
+                                DATABASE_FIELD_MAPPING( column, name, visible_on_add,
+                                                        visible_in_chooser, show_name, inherit ) );
                     }
                 }
 

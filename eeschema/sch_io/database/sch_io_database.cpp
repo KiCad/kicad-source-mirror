@@ -568,6 +568,9 @@ LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
     for( LIB_FIELD* field : fields )
         fieldsMap[field->GetName()] = field;
 
+    static const wxString c_valueFieldName( wxS( "Value" ) );
+    static const wxString c_datasheetFieldName( wxS( "Datasheet" ) );
+
     for( const DATABASE_FIELD_MAPPING& mapping : aTable.fields )
     {
         if( !aRow.count( mapping.column ) )
@@ -577,7 +580,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
             continue;
         }
 
-        std:: string strValue;
+        std::string strValue;
 
         try
         {
@@ -589,7 +592,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
 
         wxString value( strValue.c_str(), wxConvUTF8 );
 
-        if( mapping.name == wxT( "Value" ) )
+        if( mapping.name_wx == c_valueFieldName )
         {
             LIB_FIELD& field = symbol->GetValueField();
             field.SetText( value );
@@ -601,7 +604,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
             }
             continue;
         }
-        else if( mapping.name == wxT( "Datasheet" ) )
+        else if( mapping.name_wx == c_datasheetFieldName )
         {
             LIB_FIELD& field = symbol->GetDatasheetField();
             field.SetText( value );
@@ -621,16 +624,16 @@ LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
         LIB_FIELD* field;
         bool isNew = false;
 
-        if( fieldsMap.count( mapping.name ) )
+        if( fieldsMap.count( mapping.name_wx ) )
         {
-            field = fieldsMap[mapping.name];
+            field = fieldsMap[mapping.name_wx];
         }
         else
         {
             field = new LIB_FIELD( symbol->GetNextAvailableFieldId() );
-            field->SetName( mapping.name );
+            field->SetName( mapping.name_wx );
             isNew = true;
-            fieldsMap[mapping.name] = field;
+            fieldsMap[mapping.name_wx] = field;
         }
 
         if( !mapping.inherit_properties || isNew )
@@ -643,13 +646,15 @@ LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
         field->SetText( value );
 
         if( isNew )
-            symbol->AddField( field );
+            symbol->AddDrawItem( field, false );
 
-        m_customFields.insert( mapping.name );
+        m_customFields.insert( mapping.name_wx );
 
         if( mapping.visible_in_chooser )
-            m_defaultShownFields.insert( mapping.name );
+            m_defaultShownFields.insert( mapping.name_wx );
     }
+
+    symbol->GetDrawItems().sort();
 
     return symbol;
 }

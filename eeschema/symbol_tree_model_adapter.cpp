@@ -163,13 +163,15 @@ bool SYMBOL_TREE_MODEL_ADAPTER::AddLibraries( const std::vector<wxString>& aNick
                     if( !parentDesc.IsEmpty() )
                         desc = wxString::Format( wxT( "%s (%s)" ), parentDesc, lib );
 
+                    UTF8 utf8Lib( lib );
+
                     std::vector<LIB_SYMBOL*> symbols;
 
                     std::copy_if( libSymbols.begin(), libSymbols.end(),
                                   std::back_inserter( symbols ),
-                                  [&lib]( LIB_SYMBOL* aSym )
+                                  [&utf8Lib]( LIB_SYMBOL* aSym )
                                   {
-                                      return lib.IsSameAs( aSym->GetLibId().GetSubLibraryName() );
+                                      return utf8Lib == aSym->GetLibId().GetSubLibraryName();
                                   } );
 
                     addFunc( name, symbols, desc );

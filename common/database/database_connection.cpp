@@ -448,7 +448,7 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
                 {
                     aResult[column] = fmt::format( "{:G}", results.get<double>( i ) );
                 }
-                catch( nanodbc::null_access_error& e )
+                catch( nanodbc::null_access_error& )
                 {
                     // Column was empty (null)
                     aResult[column] = std::string();
@@ -497,6 +497,8 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
     if( m_cache->Get( aTable, cacheEntry ) )
     {
         wxLogTrace( traceDatabase, wxT( "SelectAll: `%s` - cache hit" ), aTable );
+
+        aResults.reserve( cacheEntry.size() );
 
         for( auto &[ key, row ] : cacheEntry )
             aResults.emplace_back( row );
@@ -605,7 +607,7 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
                 {
                     result[column] = fmt::format( "{:G}", results.get<double>( j ) );
                 }
-                catch( nanodbc::null_access_error& e )
+                catch( nanodbc::null_access_error& )
                 {
                     // Column was empty (null)
                     result[column] = std::string();
