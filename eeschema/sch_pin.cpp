@@ -427,6 +427,7 @@ const BOX2I SCH_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
 
     r = t.TransformCoordinate( r );
     r.Offset( GetParentSymbol()->GetPosition() );
+    r.Normalize();
 
     return r;
 }
