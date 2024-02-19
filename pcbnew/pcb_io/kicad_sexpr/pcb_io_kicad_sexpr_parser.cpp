@@ -4072,13 +4072,6 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                     break;
                 }
 
-                if( pName == "ki_fp_filters" )
-                {
-                    footprint->SetFilters( pValue );
-                    NeedRIGHT();
-                    break;
-                }
-
                 // Sheet file and name used to be stored as properties invisible to the user
                 if( pName == "Sheetfile" || pName == "Sheet file" )
                 {
@@ -4093,6 +4086,21 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
                     NeedRIGHT();
                     break;
                 }
+            }
+
+            // 8.0.0rc3 had a bug where these properties were mistakenly added to the footprint as fields,
+            // this will remove them as fields but still correctly set the footprint filters
+            if( pName == "ki_fp_filters" )
+            {
+                footprint->SetFilters( pValue );
+
+                // Use the text effect parsing function because it will handle ki_fp_filters as a property
+                // with no text effects, but will also handle parsing the text effects. We just drop the effects
+                // if they're present.
+                PCB_FIELD ignored = PCB_FIELD( footprint.get(), footprint->GetFieldCount(), pName );
+                parsePCB_TEXT_effects( &ignored );
+
+                break;
             }
 
             PCB_FIELD* field = nullptr;
