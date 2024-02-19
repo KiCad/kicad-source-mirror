@@ -68,14 +68,18 @@ PANEL_ESERIES_DISPLAY::PANEL_ESERIES_DISPLAY( wxWindow * parent, wxWindowID id,
 
     // Make the grid lines disappear into the window background
     // making the value boxes appear to be separated from each other.
+    // Also force text to always be black so it is visible against the light
+    // colored cells in both light and dark modes.
     wxColour gridLineColour = parent->GetBackgroundColour();
 
+    m_GridEseries112->SetDefaultCellTextColour( *wxBLACK );
     m_GridEseries112->SetGridLineColour( gridLineColour );
     m_GridEseries112->EnableGridLines( true );
 
     m_GridEseries112->SetColLabelSize( wxGRID_AUTOSIZE );
     m_GridEseries112->AutoSize();
 
+    m_GridEseries2496->SetDefaultCellTextColour( *wxBLACK );
     m_GridEseries2496->SetGridLineColour( gridLineColour );
     m_GridEseries2496->EnableGridLines( true );
 
