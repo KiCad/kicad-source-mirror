@@ -844,7 +844,7 @@ void PCB_PAINTER::draw( const PCB_ARC* aArc, int aLayer )
 // Debug only: enable this code only to test the SHAPE_ARC::ConvertToPolyline function
 // and display the polyline created by it.
 #if 0
-    SHAPE_ARC arc( aArc->GetCenter(), aArc->GetStart(), aArc->GetAngle() / 10.0, aArc->GetWidth() );
+    SHAPE_ARC arc( aArc->GetCenter(), aArc->GetStart(), aArc->GetAngle(), aArc->GetWidth() );
     SHAPE_LINE_CHAIN arcSpine = arc.ConvertToPolyline( m_maxError );
     m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
     m_gal->SetIsFill( false );

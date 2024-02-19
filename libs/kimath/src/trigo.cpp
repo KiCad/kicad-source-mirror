@@ -39,6 +39,54 @@
 // Returns true if the point P is on the segment S.
 // faster than TestSegmentHit() because P should be exactly on S
 // therefore works fine only for H, V and 45 deg segm (suitable for wires in eeschema)
+/*
+CircleCenterFrom3Points calculate the center of a circle defined by 3 points
+It is similar to CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
+but it was needed to debug CalcArcCenter, so I keep it available for other issues in CalcArcCenter
+
+The perpendicular bisector of the segment between two points is the
+set of all points equidistant from both.  So if you take the
+perpendicular bisector of (x1,y1) and (x2,y2) and the perpendicular
+bisector of the segment from (x2,y2) to (x3,y3) and find the
+intersection of those lines, that point will be the center.
+
+To find the equation of the perpendicular bisector of (x1,y1) to (x2,y2),
+you know that it passes through the midpoint of the segment:
+((x1+x2)/2,(y1+y2)/2), and if the slope of the line
+connecting (x1,y1) to (x2,y2) is m, the slope of the perpendicular
+bisector is -1/m.  Work out the equations for the two lines, find
+their intersection, and bingo!  You've got the coordinates of the center.
+
+An error should occur if the three points lie on a line, and you'll
+need special code to check for the case where one of the slopes is zero.
+
+see https://web.archive.org/web/20171223103555/http://mathforum.org/library/drmath/view/54323.html
+*/
+
+//#define USE_ALTERNATE_CENTER_ALGO
+
+#ifdef USE_ALTERNATE_CENTER_ALGO
+bool CircleCenterFrom3Points( const VECTOR2D& p1, const VECTOR2D& p2,  const VECTOR2D& p3, VECTOR2D* aCenter )
+{
+    // Move coordinate origin to p2, to simplify calculations
+    VECTOR2D b = p1 - p2;
+    VECTOR2D d = p3 - p2;
+    double bc = ( b.x*b.x + b.y*b.y ) / 2.0;
+    double cd = ( -d.x*d.x - d.y*d.y ) / 2.0;
+    double det = -b.x*d.y + d.x*b.y;
+
+    if( fabs(det) < 1.0e-6 )     // arbitrary limit to avoid divide by 0
+        return false;
+
+    det = 1/det;
+    aCenter->x = ( -bc*d.y - cd*b.y ) * det;
+    aCenter->y = ( b.x*cd + d.x*bc ) * det;
+    *aCenter += p2;
+
+    return true;
+}
+#endif
+
 bool IsPointOnSegment( const VECTOR2I& aSegStart, const VECTOR2I& aSegEnd,
                        const VECTOR2I& aTestPoint )
 {
@@ -302,8 +350,8 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
                               const EDA_ANGLE& aAngle )
 {
     EDA_ANGLE angle( aAngle );
-    VECTOR2I  start = aStart;
-    VECTOR2I  end = aEnd;
+    VECTOR2D  start = aStart;
+    VECTOR2D  end = aEnd;
 
     if( angle < ANGLE_0 )
     {
@@ -337,6 +385,7 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aEnd,
 const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, const VECTOR2D& aEnd )
 {
     VECTOR2D center;
+
     double yDelta_21 = aMid.y - aStart.y;
     double xDelta_21 = aMid.x - aStart.x;
     double yDelta_32 = aEnd.y - aMid.y;
@@ -385,10 +434,19 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
             bSlope -= std::numeric_limits<double>::epsilon();
         }
     }
+#ifdef USE_ALTERNATE_CENTER_ALGO
+    // We can call ArcCenterFrom3Points from here because special cases are filtered.
+    CircleCenterFrom3Points( aStart, aMid, aEnd, &center );
+    return center;
+#endif
 
     // Prevent divide by zero error
+    // a small value is used. std::numeric_limits<double>::epsilon() is too small and
+    // generate false results
     if( aSlope == 0.0 )
-        aSlope = std::numeric_limits<double>::epsilon();
+        aSlope = 1e-10;
+    if( bSlope == 0.0 )
+        bSlope = 1e-10;
 
     // What follows is the calculation of the center using the slope of the two lines as well as
     // the propagated error that occurs when rounding to the nearest nanometer.  The error can be
@@ -423,7 +481,6 @@ const VECTOR2D CalcArcCenter( const VECTOR2D& aStart, const VECTOR2D& aMid, cons
                                        + daSlopeMidEndX * daSlopeMidEndX );
 
     double centerX = ( abSlopeStartEndY + bSlopeStartMidX - aSlopeMidEndX ) / twiceBASlopeDiff;
-
     double dCenterX = centerX * std::sqrt( ( dCenterNumeratorX / centerNumeratorX * dCenterNumeratorX / centerNumeratorX )
                                          + ( dtwiceBASlopeDiff / twiceBASlopeDiff * dtwiceBASlopeDiff / twiceBASlopeDiff ) );
 
@@ -488,5 +545,4 @@ const VECTOR2I CalcArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, cons
 
     return iCenter;
 }
-
 
