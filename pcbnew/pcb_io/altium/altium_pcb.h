@@ -106,7 +106,9 @@ typedef std::function<void( const ALTIUM_COMPOUND_FILE&, const CFB::COMPOUND_FIL
 class ALTIUM_PCB
 {
 public:
-    explicit ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter );
+    explicit ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter,
+                         const wxString& aLibrary = wxEmptyString,
+                         const wxString& aFootprintName = wxEmptyString);
     ~ALTIUM_PCB();
 
     void Parse( const ALTIUM_COMPOUND_FILE&                  aAltiumPcbFile,
@@ -250,10 +252,13 @@ private:
 
     std::map<ALTIUM_LAYER, ZONE*>        m_outer_plane;
 
-    PROGRESS_REPORTER* m_progressReporter; ///< optional; may be nullptr
+    PROGRESS_REPORTER* m_progressReporter;   ///< optional; may be nullptr
     unsigned           m_doneCount;
     unsigned           m_lastProgressCount;
-    unsigned           m_totalCount; ///< for progress reporting
+    unsigned           m_totalCount;         ///< for progress reporting
+
+    wxString           m_library;            ///< for footprint library loading error reporting
+    wxString           m_footprintName;      ///< for footprint library loading error reporting
 
     /// Altium stores pour order across all layers
     int m_highest_pour_index;
