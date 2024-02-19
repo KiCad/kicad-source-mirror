@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-14 10:30-0800\n"
 "PO-Revision-Date: 2024-02-19 17:02+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -30173,7 +30173,7 @@ msgstr "新封装的库索引值:"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Remove text items which are not in library footprint"
-msgstr "移除不在库封装中的文本项目"
+msgstr "移除在来源库封装中不存在的文本项目"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:102
 msgid "Update/reset text layers and visibilities"
