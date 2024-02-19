@@ -266,11 +266,11 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
     auto it = m_fplibFiles.find( aLibraryPath );
 
     if( it == m_fplibFiles.end() )
-        THROW_IO_ERROR( _( "No footprints in library" ) );
+        THROW_IO_ERROR( wxString::Format( _( "No footprints in library '%s'" ), aLibraryPath ) );
 
     try
     {
-        for( auto& altiumLibFile : it->second )
+        for( std::unique_ptr<ALTIUM_COMPOUND_FILE>& altiumLibFile : it->second )
         {
             auto [dirName, fpCfe] = altiumLibFile->FindLibFootprintDirName( aFootprintName );
 
@@ -278,7 +278,7 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
                 continue;
 
             // Parse File
-            ALTIUM_PCB pcb( m_board, nullptr );
+            ALTIUM_PCB pcb( m_board, nullptr, aLibraryPath, aFootprintName );
             return pcb.ParseFootprint( *altiumLibFile, aFootprintName );
         }
     }
@@ -287,8 +287,7 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
         THROW_IO_ERROR( exception.what() );
     }
 
-    THROW_IO_ERROR(
-            wxString::Format( _( "Footprint directory not found: '%s'." ), aFootprintName ) );
-
-    return nullptr;
+    THROW_IO_ERROR( wxString::Format( _( "Footprint '%s' not found in '%s'." ),
+                                      aFootprintName,
+                                      aLibraryPath ) );
 }

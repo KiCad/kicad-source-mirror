@@ -262,14 +262,17 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
 }
 
 
-ALTIUM_PCB::ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter )
+ALTIUM_PCB::ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter,
+                        const wxString& aLibrary, const wxString& aFootprintName )
 {
-    m_board              = aBoard;
+    m_board = aBoard;
     m_progressReporter = aProgressReporter;
     m_doneCount = 0;
     m_lastProgressCount = 0;
     m_totalCount = 0;
     m_highest_pour_index = 0;
+    m_library = aLibrary;
+    m_footprintName = aFootprintName;
 }
 
 ALTIUM_PCB::~ALTIUM_PCB()
@@ -2134,10 +2137,23 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
 
         if( klayer == UNDEFINED_LAYER )
         {
-            wxLogWarning(
-                    _( "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. "
-                       "It has been moved to KiCad layer Eco1_User." ),
-                    aElem.layer );
+            if( !m_footprintName.IsEmpty() )
+            {
+                wxLogWarning( _( "Loading library '%s':\n"
+                                 "Footprint %s contains a dashed outline on Altium layer (%d) with "
+                                 "no KiCad equivalent. It has been moved to KiCad layer Eco1_User." ),
+                              m_library,
+                              m_footprintName,
+                              aElem.layer );
+            }
+            else
+            {
+                wxLogWarning( _( "Footprint %s contains a dashed outline on Altium layer (%d) with "
+                                 "no KiCad equivalent. It has been moved to KiCad layer Eco1_User." ),
+                              aFootprint->GetReference(),
+                              aElem.layer );
+            }
+
             klayer = Eco1_User;
         }
 
@@ -2168,7 +2184,20 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
     }
     else
     {
-        wxLogError( _( "Ignored polygon shape of kind %d (not yet supported)." ), aElem.kind );
+        if( !m_footprintName.IsEmpty() )
+        {
+            wxLogError( _( "Error loading library '%s':\n"
+                           "Footprint %s contains polygon shape of kind %d (not yet supported)." ),
+                        m_library,
+                        m_footprintName,
+                        aElem.kind );
+        }
+        else
+        {
+            wxLogError( _( "Footprint %s contains polygon shape of kind %d (not yet supported)." ),
+                        aFootprint->GetReference(),
+                        aElem.kind );
+        }
     }
 }
 
@@ -2721,9 +2750,20 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
         if( aElem.layer != ALTIUM_LAYER::MULTI_LAYER )
         {
             // TODO: I assume other values are possible as well?
-            wxLogError( _( "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
-                        aFootprint->GetReference(),
-                        aElem.name );
+            if( !m_footprintName.IsEmpty() )
+            {
+                wxLogError( _( "Error loading library '%s':\n"
+                               "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
+                            m_library,
+                            m_footprintName,
+                            aElem.name );
+            }
+            else
+            {
+                wxLogError( _( "Footprint %s pad %s is not marked as multilayer, but is a TH pad." ),
+                            aFootprint->GetReference(),
+                            aElem.name );
+            }
         }
 
         pad->SetAttribute( aElem.plated ? PAD_ATTRIB::PTH : PAD_ATTRIB::NPTH );
@@ -2742,9 +2782,20 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                 break;
 
             case ALTIUM_PAD_HOLE_SHAPE::SQUARE:
-                wxLogWarning( _( "Footprint %s pad %s has a square hole (not yet supported)." ),
-                              aFootprint->GetReference(),
-                              aElem.name );
+                if( !m_footprintName.IsEmpty() )
+                {
+                    wxLogWarning( _( "Loading library '%s':\n"
+                                     "Footprint %s pad %s has a square hole (not yet supported)." ),
+                                  m_library,
+                                  m_footprintName,
+                                  aElem.name );
+                }
+                else
+                {
+                    wxLogWarning( _( "Footprint %s pad %s has a square hole (not yet supported)." ),
+                                  aFootprint->GetReference(),
+                                  aElem.name );
+                }
 
                 pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                 pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) ); // Workaround
@@ -2769,11 +2820,24 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                 }
                 else
                 {
-                    wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f degrees. "
-                                     "KiCad only supports 90 degree rotations." ),
-                                  aFootprint->GetReference(),
-                                  aElem.name,
-                                  slotRotation.AsDegrees() );
+                    if( !m_footprintName.IsEmpty() )
+                    {
+                        wxLogWarning( _( "Loading library '%s':\n"
+                                         "Footprint %s pad %s has a hole-rotation of %f degrees. "
+                                         "KiCad only supports 90 degree rotations." ),
+                                      m_library,
+                                      m_footprintName,
+                                      aElem.name,
+                                      slotRotation.AsDegrees() );
+                    }
+                    else
+                    {
+                        wxLogWarning( _( "Footprint %s pad %s has a hole-rotation of %f degrees. "
+                                         "KiCad only supports 90 degree rotations." ),
+                                      aFootprint->GetReference(),
+                                      aElem.name,
+                                      slotRotation.AsDegrees() );
+                    }
                 }
 
                 break;
@@ -2781,10 +2845,22 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
             default:
             case ALTIUM_PAD_HOLE_SHAPE::UNKNOWN:
-                wxLogError( _( "Footprint %s pad %s uses a hole of unknown kind %d." ),
-                            aFootprint->GetReference(),
-                            aElem.name,
-                            aElem.sizeAndShape->holeshape );
+                if( !m_footprintName.IsEmpty() )
+                {
+                    wxLogError( _( "Error loading library '%s':\n"
+                                   "Footprint %s pad %s uses a hole of unknown kind %d." ),
+                                m_library,
+                                m_footprintName,
+                                aElem.name,
+                                aElem.sizeAndShape->holeshape );
+                }
+                else
+                {
+                    wxLogError( _( "Footprint %s pad %s uses a hole of unknown kind %d." ),
+                                aFootprint->GetReference(),
+                                aElem.name,
+                                aElem.sizeAndShape->holeshape );
+                }
 
                 pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
                 pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) ); // Workaround
@@ -2798,8 +2874,20 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
     if( aElem.padmode != ALTIUM_PAD_MODE::SIMPLE )
     {
-        wxLogError( _( "Footprint %s pad %s uses a complex pad stack (not yet supported.)" ),
-                    aFootprint->GetReference(), aElem.name );
+        if( !m_footprintName.IsEmpty() )
+        {
+            wxLogError( _( "Error loading library '%s':\n"
+                           "Footprint %s pad %s uses a complex pad stack (not yet supported)." ),
+                        m_library,
+                        m_footprintName,
+                        aElem.name );
+        }
+        else
+        {
+            wxLogError( _( "Footprint %s pad %s uses a complex pad stack (not yet supported)." ),
+                        aFootprint->GetReference(),
+                        aElem.name );
+        }
     }
 
     switch( aElem.topshape )
@@ -2835,8 +2923,20 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
     case ALTIUM_PAD_SHAPE::UNKNOWN:
     default:
-        wxLogError( _( "Footprint %s pad %s uses an unknown pad-shape." ),
-                    aFootprint->GetReference(), aElem.name );
+        if( !m_footprintName.IsEmpty() )
+        {
+            wxLogError( _( "Error loading library '%s':\n"
+                           "Footprint %s pad %s uses an unknown pad-shape." ),
+                        m_library,
+                        m_footprintName,
+                        aElem.name );
+        }
+        else
+        {
+            wxLogError( _( "Footprint %s pad %s uses an unknown pad-shape." ),
+                        aFootprint->GetReference(),
+                        aElem.name );
+        }
         break;
     }
 
@@ -2913,10 +3013,25 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnNonCopper( FOOTPRINT* aFootprint, 
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning(
-                _( "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. "
-                   "It has been moved to KiCad layer Eco1_User." ),
-                aElem.name, aElem.layer );
+        if( !m_footprintName.IsEmpty() )
+        {
+            wxLogWarning( _( "Loading library '%s':\n"
+                             "Footprint %s non-copper pad %s found on an Altium layer (%d) with no "
+                             "KiCad equivalent. It has been moved to KiCad layer Eco1_User." ),
+                          m_library,
+                          m_footprintName,
+                          aElem.name,
+                          aElem.layer );
+        }
+        else
+        {
+            wxLogWarning( _( "Footprint %s non-copper pad %s found on an Altium layer (%d) with no "
+                             "KiCad equivalent. It has been moved to KiCad layer Eco1_User." ),
+                          aFootprint->GetReference(),
+                          aElem.name,
+                          aElem.layer );
+        }
+
         klayer = Eco1_User;
     }
 
@@ -3420,7 +3535,21 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItem( FOOTPRINT* aFootprint, const ATEX
 {
     if( aElem.fonttype == ALTIUM_TEXT_TYPE::BARCODE )
     {
-        wxLogError( _( "Ignored barcode on Altium layer %d (not yet supported)." ), aElem.layer );
+        if( !m_footprintName.IsEmpty() )
+        {
+            wxLogError( _( "Error loading library '%s':\n"
+                           "Footprint %s contains barcode on Altium layer %d (not yet supported)." ),
+                        m_library,
+                        m_footprintName,
+                        aElem.layer );
+        }
+        else
+        {
+            wxLogError( _( "Footprint %s contains barcode on Altium layer %d (not yet supported)." ),
+                        aFootprint->GetReference(),
+                        aElem.layer );
+        }
+
         return;
     }
 
