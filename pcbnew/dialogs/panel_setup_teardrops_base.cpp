@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -196,7 +196,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_gridSizer->Add( bSizerShapeColumns, 1, wxEXPAND, 5 );
 
 
-	m_gridSizer->Add( 0, 30, 0, wxEXPAND, 5 );
+	m_gridSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_rectShapesLabel = new wxStaticText( this, wxID_ANY, _("Default properties for rectangular shapes:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rectShapesLabel->Wrap( -1 );
@@ -378,7 +378,7 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 	m_gridSizer->Add( bSizerShapeColumns1, 1, wxEXPAND, 5 );
 
 
-	m_gridSizer->Add( 0, 30, 0, wxEXPAND, 5 );
+	m_gridSizer->Add( 0, 10, 0, wxEXPAND, 5 );
 
 	m_tracksLabel = new wxStaticText( this, wxID_ANY, _("Properties for track-to-track teardrops:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_tracksLabel->Wrap( -1 );

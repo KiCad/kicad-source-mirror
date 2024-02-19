@@ -2,12 +2,12 @@
 <svg
    id="Слой_1"
    data-name="Слой 1"
-   viewBox="0 0 22.91895 16.989038"
+   viewBox="0 0 22.924506 15.555556"
    version="1.1"
    sodipodi:docname="teardrop_rect_sizes.svg"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   width="229.1895"
-   height="169.89038"
+   width="206.32056"
+   height="140"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -28,14 +28,14 @@
      inkscape:window-height="2109"
      id="namedview30"
      showgrid="true"
-     inkscape:zoom="2.828427"
-     inkscape:cx="-2.8284272"
-     inkscape:cy="124.62758"
+     inkscape:zoom="5.656854"
+     inkscape:cx="60.104079"
+     inkscape:cy="123.6553"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
-     inkscape:current-layer="g2832"
+     inkscape:current-layer="g1279"
      inkscape:snap-bbox="true"
      inkscape:bbox-nodes="true"
      inkscape:snap-bbox-edge-midpoints="true"
@@ -51,8 +51,8 @@
        opacity="0.13"
        empspacing="2"
        visible="false"
-       originx="-0.581052"
-       originy="-3.95" />
+       originx="-0.64005777"
+       originy="-4.388889" />
   </sodipodi:namedview>
   <metadata
      id="metadata43">
@@ -223,7 +223,7 @@
   </defs>
   <g
      id="g2832"
-     transform="translate(-0.581052,-3.95)">
+     transform="translate(-0.57549644,-3.95)">
     <g
        id="g1279"
        transform="translate(-15,-13)">
@@ -237,12 +237,12 @@
          d="M 25,22 A 1.5,1.5 0 0 0 23.5,23.5 1.5,1.5 0 0 0 25,25 h 8.5 A 1.5,1.5 0 0 0 35,23.5 1.5,1.5 0 0 0 33.5,22 Z"
          id="path1389" />
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.0813342;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker1675);marker-end:url(#marker2029);paint-order:fill markers stroke"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker1675);marker-end:url(#marker2029);paint-order:fill markers stroke"
          d="M 18,17.364192 V 29.572565"
          id="path1043"
          sodipodi:nodetypes="cc" />
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.666667, 0.666667;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
          d="m 15.631052,17.05 h 4"
          id="path1878"
          sodipodi:nodetypes="cc" />
@@ -250,12 +250,12 @@
          xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.94202px;line-height:1.25;font-family:'Noto Sans Mono CJK SC';-inkscape-font-specification:'Noto Sans Mono CJK SC';letter-spacing:0px;word-spacing:0px;fill:#42b8eb;fill-opacity:1;stroke:none;stroke-width:0.121376"
          x="28.523277"
-         y="33.939037"
+         y="32.339031"
          id="text3524"><tspan
            sodipodi:role="line"
            id="tspan3522"
            x="28.523277"
-           y="33.939037"
+           y="32.339031"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:1.94202px;font-family:'Noto Sans CJK SC';-inkscape-font-specification:'Noto Sans CJK SC Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#42b8eb;fill-opacity:1;stroke-width:0.121376">L</tspan></text>
       <text
          xml:space="preserve"
@@ -269,37 +269,37 @@
            y="24.219519"
            style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:1.94202px;font-family:'Noto Sans CJK SC';-inkscape-font-specification:'Noto Sans CJK SC Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#42b8eb;fill-opacity:1;stroke-width:0.121376">W</tspan></text>
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.666667, 0.666667;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
          d="m 15.631052,29.95 h 4"
          id="path1585"
          sodipodi:nodetypes="cc" />
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.0710452;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker1859);marker-end:url(#marker1869);paint-order:fill markers stroke"
-         d="M 31.749087,32 H 26.250913"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker1859);marker-end:url(#marker1869);paint-order:fill markers stroke"
+         d="M 31.749087,30.4 H 26.250913"
          id="path1851"
          sodipodi:nodetypes="cc" />
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-         d="M 32.15,33.664208 V 25.5"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.666667, 0.666667;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         d="M 32.15,32.45 V 25.5"
          id="path1853"
          sodipodi:nodetypes="cc" />
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
-         d="M 26,33.735792 V 27.928417"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.666667, 0.666667;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         d="M 26,32.45 V 27.928417"
          id="path1855"
          sodipodi:nodetypes="cc" />
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.0818285;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker2034-3);marker-end:url(#marker2044-7);paint-order:fill markers stroke"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker2034-3);marker-end:url(#marker2044-7);paint-order:fill markers stroke"
          d="m 36,19.853065 v 7.29387"
          id="path2025"
          sodipodi:nodetypes="cc" />
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.666667, 0.666667;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
          d="M 37.495882,19.55 H 26"
          id="path2028"
          sodipodi:nodetypes="cc" />
       <path
-         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.1;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.6, 0.6;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
+         style="fill:none;fill-opacity:1;stroke:#42b8eb;stroke-width:0.111111;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:0.666667, 0.666667;stroke-dashoffset:0;stroke-opacity:1;paint-order:fill markers stroke"
          d="M 37.495882,27.45 H 26"
          id="path2136"
          sodipodi:nodetypes="cc" />
