@@ -1348,12 +1348,12 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
     SEG       poss( m_isSymbolEditor ? mapCoords( pos ) : pos,
                     m_isSymbolEditor ? mapCoords( pos ) : pos );
     EDA_ITEM* closest = nullptr;
-    int       closestDist = INT_MAX / 2;
+    int       closestDist = INT_MAX / 4;
 
     for( EDA_ITEM* item : collector )
     {
         BOX2I bbox = item->GetBoundingBox();
-        int   dist = INT_MAX / 2;
+        int   dist = INT_MAX / 4;
 
         if( exactHits.count( item ) )
         {
@@ -1366,6 +1366,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             SCH_LINE*   line = dynamic_cast<SCH_LINE*>( item );
             SCH_FIELD*  field = dynamic_cast<SCH_FIELD*>( item );
             EDA_TEXT*   text = dynamic_cast<EDA_TEXT*>( item );
+            EDA_SHAPE*  shape = dynamic_cast<EDA_SHAPE*>( item );
             SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
 
             if( line )
@@ -1389,12 +1390,27 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
                     }
                 }
 
-                field->GetEffectiveTextShape( false, box, orient )->Collide( poss, INT_MAX / 2,
-                                                                             &dist );
+                field->GetEffectiveTextShape( false, box, orient )
+                        ->Collide( poss, INT_MAX / 4, &dist );
             }
             else if( text )
             {
-                text->GetEffectiveTextShape( false )->Collide( poss, INT_MAX / 2, &dist );
+                text->GetEffectiveTextShape( false )->Collide( poss, INT_MAX / 4, &dist );
+            }
+            else if( shape )
+            {
+                std::vector<SHAPE*> shapes = shape->MakeEffectiveShapes();
+
+                for( SHAPE* s : shapes )
+                {
+                    int shapeDist = dist;
+                    s->Collide( poss, INT_MAX / 4, &shapeDist );
+
+                    if( shapeDist < dist )
+                        dist = shapeDist;
+
+                    delete s;
+                }
             }
             else if( symbol )
             {
