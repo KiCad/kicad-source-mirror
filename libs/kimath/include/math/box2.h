@@ -506,9 +506,14 @@ public:
      */
     BOX2<Vec>& Inflate( coord_type dx, coord_type dy )
     {
+        auto rangeCheck = []( ecoord_type aInput ) -> coord_type
+        {
+            return KiROUND<ecoord_type, coord_type>( aInput );
+        };
+
         if( m_Size.x >= 0 )
         {
-            if( m_Size.x < -2 * dx )
+            if( m_Size.x / 2 < -dx )
             {
                 // Don't allow deflate to eat more width than we have,
                 m_Pos.x += m_Size.x / 2;
@@ -518,12 +523,12 @@ public:
             {
                 // The inflate is valid.
                 m_Pos.x  -= dx;
-                m_Size.x += 2 * dx;
+                m_Size.x = rangeCheck( m_Size.x + ecoord_type( dx ) * 2 );
             }
         }
         else    // size.x < 0:
         {
-            if( m_Size.x > 2 * dx )
+            if( m_Size.x / 2 > dx )
             {
                 // Don't allow deflate to eat more width than we have,
                 m_Pos.x -= m_Size.x / 2;
@@ -532,14 +537,15 @@ public:
             else
             {
                 // The inflate is valid.
-                m_Pos.x  += dx;
-                m_Size.x -= 2 * dx; // m_Size.x <0: inflate when dx > 0
+                m_Pos.x += dx;
+                m_Size.x = rangeCheck( m_Size.x - ecoord_type( dx ) * 2 );
+                // m_Size.x <0: inflate when dx > 0
             }
         }
 
         if( m_Size.y >= 0 )
         {
-            if( m_Size.y < -2 * dy )
+            if( m_Size.y / 2 < -dy )
             {
                 // Don't allow deflate to eat more height than we have,
                 m_Pos.y += m_Size.y / 2;
@@ -549,12 +555,12 @@ public:
             {
                 // The inflate is valid.
                 m_Pos.y  -= dy;
-                m_Size.y += 2 * dy;
+                m_Size.y = rangeCheck( m_Size.y + ecoord_type( dy ) * 2 );
             }
         }
         else    // size.y < 0:
         {
-            if( m_Size.y > 2 * dy )
+            if( m_Size.y / 2 > dy )
             {
                 // Don't allow deflate to eat more height than we have,
                 m_Pos.y -= m_Size.y / 2;
@@ -564,7 +570,8 @@ public:
             {
                 // The inflate is valid.
                 m_Pos.y  += dy;
-                m_Size.y -= 2 * dy; // m_Size.y <0: inflate when dy > 0
+                m_Size.y = rangeCheck( m_Size.y - ecoord_type( dy ) * 2 );
+                // m_Size.y <0: inflate when dy > 0
             }
         }
 
