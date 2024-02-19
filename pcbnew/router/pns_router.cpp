@@ -440,6 +440,8 @@ bool ROUTER::StartRouting( const VECTOR2I& aP, ITEM* aStartItem, int aLayer )
     else
     {
         m_state = IDLE;
+        m_placer.reset();
+
         return false;
     }
 }
