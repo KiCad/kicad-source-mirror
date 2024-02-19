@@ -1158,10 +1158,10 @@ bool PCB_TUNING_PATTERN::recoverBaseline( PNS::ROUTER* aRouter )
 bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aLayer,
                                           SHAPE_LINE_CHAIN& aBaseLine, bool aPrimary )
 {
-    KIGFX::VIEW* view = aTool->GetManager()->GetView();
-    PNS::ROUTER* router = aTool->Router();
-    PNS::NODE*   world = router->GetWorld();
-    VECTOR2I     startSnapPoint, endSnapPoint;
+    PNS_KICAD_IFACE* iface = aTool->GetInterface();
+    PNS::ROUTER*     router = aTool->Router();
+    PNS::NODE*       world = router->GetWorld();
+    VECTOR2I         startSnapPoint, endSnapPoint;
 
     std::optional<PNS::LINE> pnsLine = getPNSLine( aBaseLine.CPoint( 0 ), aBaseLine.CPoint( -1 ),
                                                    router, aLayer, startSnapPoint, endSnapPoint );
@@ -1186,20 +1186,9 @@ bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aLayer,
         straightChain.Simplify();
     }
 
-    if( view )
-    {
-        for( PNS::LINKED_ITEM* pnsItem : pnsLine->Links() )
-        {
-            if( BOARD_ITEM* item = pnsItem->Parent() )
-                view->Hide( item, true, true );
-        }
-    }
-
     branch->Remove( *pnsLine );
 
-    PNS::LINE straightLine( *pnsLine, straightChain );
-
-    branch->Add( straightLine, false );
+    SHAPE_LINE_CHAIN newLineChain;
 
     if( aPrimary )
     {
@@ -1217,6 +1206,10 @@ bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aLayer,
             SHAPE_LINE_CHAIN pre, mid, post;
             straightChain.Split( m_origin, m_end, pre, mid, post );
 
+            newLineChain.Append( pre );
+            newLineChain.Append( mid );
+            newLineChain.Append( post );
+
             m_baseLine = mid;
         }
     }
@@ -1229,11 +1222,22 @@ bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aLayer,
             SHAPE_LINE_CHAIN pre, mid, post;
             straightChain.Split( start, end, pre, mid, post );
 
+            newLineChain.Append( pre );
+            newLineChain.Append( mid );
+            newLineChain.Append( post );
+
             m_baseLineCoupled = mid;
         }
     }
 
+    PNS::LINE newLine( *pnsLine, newLineChain );
+
+    branch->Add( newLine, false );
     router->CommitRouting( branch );
+
+    int clearance = router->GetRuleResolver()->Clearance( &newLine, nullptr );
+
+    iface->DisplayItem( &newLine, clearance, true, PNS_COLLISION );
 
     return true;
 }
@@ -1241,9 +1245,28 @@ bool PCB_TUNING_PATTERN::resetToBaseline( GENERATOR_TOOL* aTool, int aLayer,
 
 bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
+    if( !( GetFlags() & IN_EDIT ) )
+        return false;
+
+    KIGFX::VIEW*     view = aTool->GetManager()->GetView();
     PNS::ROUTER*     router = aTool->Router();
     PNS_KICAD_IFACE* iface = aTool->GetInterface();
     int              layer = GetLayer();
+
+    auto hideRemovedItems = [&]( bool aHide )
+    {
+        if( view )
+        {
+            for( const GENERATOR_PNS_CHANGES& pnsCommit : aTool->GetRouterChanges() )
+            {
+                for( BOARD_ITEM* item : pnsCommit.removedItems )
+                {
+                    if( view )
+                        view->Hide( item, aHide, aHide );
+                }
+            }
+        }
+    };
 
     iface->SetStartLayer( layer );
 
@@ -1279,6 +1302,7 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
         }
     }
 
+    hideRemovedItems( true );
     // Snap points
     VECTOR2I startSnapPoint, endSnapPoint;
 
@@ -1349,12 +1373,18 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
 void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit,
                                    const wxString& aCommitMsg, int aCommitFlags )
 {
+    if( !( GetFlags() & IN_EDIT ) )
+        return;
+
     ClearFlags( IN_EDIT );
 
     KIGFX::VIEW*      view = aTool->GetManager()->GetView();
     PNS::ROUTER*      router = aTool->Router();
+    PNS_KICAD_IFACE*  iface = aTool->GetInterface();
     SHAPE_LINE_CHAIN  bounds = getOutline();
     int               epsilon = aBoard->GetDesignSettings().GetDRCEpsilon();
+
+    iface->EraseView();
 
     if( router->RoutingInProgress() )
     {
@@ -1409,7 +1439,14 @@ void PCB_TUNING_PATTERN::EditPush( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_C
 
 void PCB_TUNING_PATTERN::EditRevert( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COMMIT* aCommit )
 {
+    if( !( GetFlags() & IN_EDIT ) )
+        return;
+
     ClearFlags( IN_EDIT );
+
+    PNS_KICAD_IFACE* iface = aTool->GetInterface();
+
+    iface->EraseView();
 
     if( KIGFX::VIEW* view = aTool->GetManager()->GetView() )
     {
