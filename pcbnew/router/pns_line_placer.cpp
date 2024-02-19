@@ -1490,7 +1490,8 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
             && aEndItem && latestNode->Depth() >= eiDepth
             && current.SegmentCount() )
     {
-        SplitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
+        if ( aEndItem->Net() == m_currentNet )
+            SplitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
 
         if( Settings().RemoveLoops() )
             removeLoops( m_lastNode, current );
