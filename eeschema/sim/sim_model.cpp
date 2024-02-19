@@ -1644,12 +1644,21 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     wxString              prefix = aSymbol.GetPrefix();
     T_field*              valueField = aSymbol.FindField( wxT( "Value" ) );
     std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
+    bool                  sourcePinsSorted = false;
 
-    std::sort( sourcePins.begin(), sourcePins.end(),
-               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
-               {
-                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
-               } );
+    auto lazySortSourcePins = [&sourcePins, &sourcePinsSorted]()
+    {
+        if( !sourcePinsSorted )
+        {
+            std::sort( sourcePins.begin(), sourcePins.end(),
+                       []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+                       {
+                           return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+                       } );
+        }
+
+        sourcePinsSorted = true;
+    };
 
     FIELD_INFO deviceInfo;
     FIELD_INFO modelInfo;
@@ -1740,6 +1749,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
             wxStringSplit( legacyPins->GetText(), pinIndexes, ' ' );
 
+            lazySortSourcePins();
+
             if( isPassive && pinIndexes.size() == 2 && sourcePins.size() == 2 )
             {
                 if( pinIndexes[0] == wxT( "2" ) )
@@ -1799,6 +1810,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         // Pull out any following parameters from model name
         model = model.BeforeFirst( ' ', &modelLineParams );
         modelInfo.m_Text = model;
+
+        lazySortSourcePins();
 
         SIM_LIBRARY::MODEL simModel = libMgr.CreateModel( lib, model.ToStdString(),
                                                           emptyFields, sourcePins, reporter );
@@ -1873,6 +1886,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 
                         if( pinMapInfo.IsEmpty() )
                         {
+                            lazySortSourcePins();
+
                             // Generate a default pin map from the SIM_MODEL's pins
                             simModel->createPins( sourcePins );
                             pinMapInfo.m_Text = wxString( simModel->Serializer().GeneratePins() );
@@ -1979,7 +1994,10 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         // the default pin map from the symbol's pins.
 
         if( pinMapInfo.IsEmpty() )
+        {
+            lazySortSourcePins();
             pinMapInfo.m_Text = generateDefaultPinMapFromSymbol( sourcePins );
+        }
     }
 
     if( !pinMapInfo.IsEmpty() )

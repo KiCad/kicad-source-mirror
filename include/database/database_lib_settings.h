@@ -22,6 +22,7 @@
 #define KICAD_DATABASE_LIB_SETTINGS_H
 
 #include <settings/json_settings.h>
+#include <wx/string.h>
 
 
 enum class DATABASE_SOURCE_TYPE
@@ -44,12 +45,17 @@ struct DATABASE_SOURCE
 
 struct DATABASE_FIELD_MAPPING
 {
-    std::string column;              ///< Database column name
-    std::string name;                ///< KiCad field name
-    bool        visible_on_add;      ///< Whether to show the field when placing the symbol
-    bool        visible_in_chooser;  ///< Whether the column is shown by default in the chooser
-    bool        show_name;           ///< Whether or not to show the field name as well as its value
-    bool        inherit_properties;  ///< Whether or not to inherit properties from symbol field
+    const std::string column;             ///< Database column name
+    const std::string name;               ///< KiCad field name
+    const wxString    name_wx;            ///< KiCad field name (converted)
+    const bool        visible_on_add;     ///< Whether to show the field when placing the symbol
+    const bool        visible_in_chooser; ///< Whether the column is shown by default in the chooser
+    const bool        show_name;   ///< Whether or not to show the field name as well as its value
+    const bool inherit_properties; ///< Whether or not to inherit properties from symbol field
+
+    explicit DATABASE_FIELD_MAPPING( std::string aColumn, std::string aName, bool aVisibleOnAdd,
+                                     bool aVisibleInChooser, bool aShowName,
+                                     bool aInheritProperties );
 };
 
 
