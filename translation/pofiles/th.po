@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:30-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2024-02-16 14:08+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/kicad/master-source/"
@@ -318,10 +318,10 @@ msgstr "ไม่มีสิทธิเพียงพอเพื่อบั
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1625
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2026
 #: eeschema/files-io.cpp:974 eeschema/files-io.cpp:1042
-#: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:319
-#: kicad/tools/kicad_manager_control.cpp:240
-#: kicad/tools/kicad_manager_control.cpp:297
-#: kicad/tools/kicad_manager_control.cpp:343
+#: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:322
+#: kicad/tools/kicad_manager_control.cpp:242
+#: kicad/tools/kicad_manager_control.cpp:299
+#: kicad/tools/kicad_manager_control.cpp:345
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -337,11 +337,11 @@ msgstr "ไม่มีสิทธิเพียงพอเพื่อบั
 msgid "Error"
 msgstr "ผิดพลาด"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:782
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:789
 msgid "Failed to copy image to clipboard"
 msgstr "สำเนาภาพไปคลิปบอร์ดล้มเหลว"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:793
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:800
 msgid "Can't save file"
 msgstr "ไม่สามารถบันทึกไฟล์"
 
@@ -1772,36 +1772,36 @@ msgstr "ส่งออกไปคลิบบอร์ด"
 msgid "Background Jobs"
 msgstr "พื้นหลัง"
 
-#: common/common.cpp:270
+#: common/common.cpp:287
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr "ขยายตัวแปรสภาพแวดล้อมผิดพลาด: ไม่พบ '%c' ที่ตำแหน่ง '%u' ใน '%s'"
 
-#: common/common.cpp:358
+#: common/common.cpp:375
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "ไม่สามารถสร้างเส้นทางสมบูรณ์ '%s' เทียบกับ '%s'"
 
-#: common/common.cpp:377
+#: common/common.cpp:394
 #, c-format
 msgid "Output directory '%s' created."
 msgstr "สร้างไดเรคตอรีทางออก '%s' สำเร็จ"
 
-#: common/common.cpp:386
+#: common/common.cpp:403
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "ไม่สามารถสร้างไดเร็คตอรีทางออก '%s'"
 
-#: common/common.cpp:677
+#: common/common.cpp:694
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr "KiCad ไม่สนับสนุนระบบปฏิบัติการนี้"
 
-#: common/common.cpp:679
+#: common/common.cpp:696
 msgid "Unsupported Operating System"
 msgstr "ไม่สนับสนุนระบบปฏิบัติการ"
 
-#: common/common.cpp:682
+#: common/common.cpp:699
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -1909,7 +1909,7 @@ msgstr "ข้อมูล"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:198
 #: eeschema/tools/symbol_editor_control.cpp:378
 #: eeschema/tools/symbol_editor_pin_tool.cpp:233 kicad/import_project.cpp:108
-#: kicad/tools/kicad_manager_control.cpp:324
+#: kicad/tools/kicad_manager_control.cpp:326
 #: pcbnew/dialogs/dialog_export_idf.cpp:174
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
@@ -2361,7 +2361,7 @@ msgstr "ตัวแปรสภาพแวดล้อม"
 #: kicad/pcm/dialogs/panel_package_base.cpp:50
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:42
 #: pcbnew/dialogs/dialog_net_inspector.cpp:986
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:411
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:412
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38
 #: pcbnew/fp_text_grid_table.cpp:137 pcbnew/widgets/search_handlers.cpp:140
 #: pcbnew/widgets/search_handlers.cpp:273
@@ -2376,12 +2376,12 @@ msgstr "ชื่อ"
 msgid "Path"
 msgstr "เส้นทาง"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:40
+#: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
 msgid "Configure Global %s Library Table"
 msgstr "การปรับแต่ง %s ตารางไลบรารีส่วนกลาง"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:43
+#: common/dialogs/dialog_global_lib_table_config.cpp:44
 #, c-format
 msgid ""
 "KiCad has been run for the first time using the new %s library table for\n"
@@ -2396,41 +2396,41 @@ msgstr ""
 "ตัวเลือกด้านล่าง หากคุณไม่แน่ใจว่าจะเลือกตัวเลือกใด โปรด\n"
 "ใช้การเลือกค่าปริยาย"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:50
+#: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid "Copy default global %s library table (recommended)"
 msgstr "สำเนาค่าปริยายส่วนกลาง %s ตารางไลบรารี(แนะนำ)"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:52
+#: common/dialogs/dialog_global_lib_table_config.cpp:53
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr "เลือกทางนี้ หากคุณไม่แน่ใจเกี่ยวกับการปรับแต่ง %s ตารางไลบรารีส่วนกลาง"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:56
+#: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid "Copy custom global %s library table"
 msgstr "สำเนาผู้ใช้กำหนด %s ตารางไลบารีส่วนกลาง"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:58
+#: common/dialogs/dialog_global_lib_table_config.cpp:59
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr "เลือกทางเลือกนี้เพื่อสำเนาไฟล์ตารางไลบรารี %s แทนชื่อปริยาย"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:62
+#: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid "Create an empty global %s library table"
 msgstr "สร้างตารางไลบรารี %s ส่วนกลางว่างเปล่า"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:64
+#: common/dialogs/dialog_global_lib_table_config.cpp:65
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr "เลือกทางเลือกนี้เพื่อกำหนดไลบรารี %s ในตารางไลบรารีเฉพาะโครงการ"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:68
+#: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
 msgid "Select global %s library table file:"
 msgstr "เลือกไฟล์ตารางไลบรารี %s ส่วนกลาง:"
@@ -3084,7 +3084,7 @@ msgstr "ทางเลือก"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:412 pcbnew/footprint.cpp:3497
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3497
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:406 pcbnew/plot_board_layers.cpp:90
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -4349,9 +4349,9 @@ msgstr "ขยาย"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties.cpp:902
-#: pcbnew/dialogs/dialog_pad_properties.cpp:911
-#: pcbnew/dialogs/dialog_pad_properties.cpp:921
+#: pcbnew/dialogs/dialog_pad_properties.cpp:906
+#: pcbnew/dialogs/dialog_pad_properties.cpp:915
+#: pcbnew/dialogs/dialog_pad_properties.cpp:925
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
 #: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3456
@@ -5796,38 +5796,38 @@ msgstr "บน"
 msgid "max"
 msgstr ""
 
-#: common/env_vars.cpp:71
+#: common/env_vars.cpp:108
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
 msgstr "เส้นทางพื้นฐานของไลบรารีฟุ้ทพรินท์ระบบ ที่ติดตั้งภายในเครื่อง (.pretty folders)"
 
-#: common/env_vars.cpp:74
+#: common/env_vars.cpp:111
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr "เส้นทางพื้นฐานของรูปร่าง 3 มิติฟุตพริ้นท์ของระบบ (.3Dshapes folders)"
 
-#: common/env_vars.cpp:76
+#: common/env_vars.cpp:113
 msgid "The base path of the locally installed symbol libraries."
 msgstr "เส้นทางพื้นฐานของไลบรารีสัญลักษณ์ ที่ติดตั้งภายในเครื่อง"
 
-#: common/env_vars.cpp:78
+#: common/env_vars.cpp:115
 msgid "A directory containing project templates installed with KiCad."
 msgstr "ไดเรกทอรีที่มีแม่แบบโครงการ ที่ติดตั้งมาพร้อมกับ KiCad"
 
-#: common/env_vars.cpp:80
+#: common/env_vars.cpp:117
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
 msgstr "ทางเลือก สามารถกําหนดได้ถ้าคุณต้องการสร้างโฟลเดอร์แม่แบบโครงการของคุณเอง"
 
-#: common/env_vars.cpp:83
+#: common/env_vars.cpp:120
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
 "ไดเร็กทอรีมีข้อมูลจากรายที่3 ประกอบด้วยปลั๊กอิน,ไลบรารีและเนื้อหาอื่นๆที่สามารถดาวน์โหลดได้"
 
-#: common/env_vars.cpp:86
+#: common/env_vars.cpp:123
 msgid ""
 "Internally defined by KiCad (cannot be edited) and is set to the absolute "
 "path of the currently loaded project file.  This environment variable can be "
@@ -5841,27 +5841,27 @@ msgstr ""
 "{KIPRJMOD}/libs/footprints.pretty "
 "สามารถกําหนดเป็นโฟลเดอร์ที่มีไลบรรารีฟุ้ทพรินท์เฉพาะโครงการชื่อ footprints.pretty"
 
-#: common/env_vars.cpp:92
+#: common/env_vars.cpp:129
 msgid "A directory containing system-wide scripts installed with KiCad"
 msgstr "ไดเรกทอรีที่มีสคริปต์ทั้งระบบที่ติดตั้งมาพร้อมกับ KiCad"
 
-#: common/env_vars.cpp:94
+#: common/env_vars.cpp:131
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr "ไดเรกทอรีที่มีสคริปต์เฉพาะผู้ใช้ติดตั้งมาพร้อมกับ KiCad"
 
-#: common/env_vars.cpp:98
+#: common/env_vars.cpp:135
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "รุ่นที่เลิกใช้แล้วของ KICAD_TEMPLATE_DIR"
 
-#: common/env_vars.cpp:100
+#: common/env_vars.cpp:137
 msgid "Deprecated version of KICAD7_3DMODEL_DIR."
 msgstr "รุ่นที่เลิกใช้แล้วของ KICAD7_3DMODEL_DIR"
 
-#: common/env_vars.cpp:102
+#: common/env_vars.cpp:139
 msgid "Deprecated version of KICAD7_FOOTPRINT_DIR."
 msgstr "รุ่นที่เลิกใช้แล้วของ KICAD7_FOOTPRINT_DIR"
 
-#: common/env_vars.cpp:104
+#: common/env_vars.cpp:141
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "รุ่นที่เลิกใช้แล้วของ KICAD_SYMBOL_DIR"
 
@@ -5913,23 +5913,23 @@ msgstr "ข้อความผิดพลาด:"
 msgid "No Files"
 msgstr "ไม่มีไฟล์"
 
-#: common/filename_resolver.cpp:448
+#: common/filename_resolver.cpp:453
 msgid "The given path does not exist"
 msgstr "เส้นทางที่ให้มาไม่มี"
 
-#: common/filename_resolver.cpp:476
+#: common/filename_resolver.cpp:481
 msgid "Alias: "
 msgstr "แฝง: "
 
-#: common/filename_resolver.cpp:479
+#: common/filename_resolver.cpp:484
 msgid "This path:"
 msgstr "เส้นทางนี้:"
 
-#: common/filename_resolver.cpp:482
+#: common/filename_resolver.cpp:487
 msgid "Existing path:"
 msgstr "เส้นทางที่มีอยู่:"
 
-#: common/filename_resolver.cpp:484
+#: common/filename_resolver.cpp:489
 msgid "Bad alias (duplicate name)"
 msgstr "ชื่อแฝงไม่ดี (ชื่อซ้ำ)"
 
@@ -5967,23 +5967,23 @@ msgstr "ผิดพลาดในการอ่าน"
 msgid "Errors were encountered loading footprints:"
 msgstr "พบความผิดพลาด การอ่านฟุ้ทพรินท์:"
 
-#: common/fp_lib_table.cpp:219
+#: common/fp_lib_table.cpp:220
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
 msgstr "พบชื่อเล่นไลบรารีซ้ำ '%s' ในไฟล์ตารางไลบรารีฟุ้ทพรินท์ ที่บรรทัด %d"
 
-#: common/fp_lib_table.cpp:329
+#: common/fp_lib_table.cpp:330
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
 msgstr "ไฟล์ fp-lib-table ไม่มีไลบรารีชื่อ '%s'"
 
-#: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:598
+#: common/fp_lib_table.cpp:559 eeschema/symbol_lib_table.cpp:602
 msgid "Added by Plugin and Content Manager"
 msgstr "เพิ่มโดยปลั๊กอินและระบบจัดการเนื้อหา"
 
-#: common/fp_lib_table.cpp:581 eeschema/symbol_lib_table.cpp:626
+#: common/fp_lib_table.cpp:585 eeschema/symbol_lib_table.cpp:630
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "ไม่สามารถสร้างเส้นทาง ตารางไลบรารีส่วนกลาง '%s'"
@@ -8862,7 +8862,7 @@ msgstr "เกิดความผิดพลาดระหว่างอ่
 msgid "Assign Footprints"
 msgstr "กำหนดฟุ้ทพรินท์"
 
-#: cvpcb/cvpcb_mainframe.cpp:113 pcbnew/dialogs/panel_fp_lib_table.cpp:1205
+#: cvpcb/cvpcb_mainframe.cpp:113 pcbnew/dialogs/panel_fp_lib_table.cpp:1206
 msgid "Footprint Libraries"
 msgstr "ไลบรารีฟุ้ทพรินท์"
 
@@ -10821,8 +10821,8 @@ msgstr "จุดเชื่อมต่อ"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1652
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1669
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1656
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1673
 msgid "Diameter:"
 msgstr "เส้นผ่าศูนย์กลาง:"
 
@@ -11426,7 +11426,7 @@ msgid "The name '%s' is already in use."
 msgstr "ชื่อ '%s' ถูกใช้แล้ว"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#: eeschema/dialogs/dialog_sheet_properties.cpp:735
+#: eeschema/dialogs/dialog_sheet_properties.cpp:738
 #: eeschema/dialogs/dialog_symbol_properties.cpp:962
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:637
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:683
@@ -12433,7 +12433,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:481
-#: kicad/tools/kicad_manager_control.cpp:649
+#: kicad/tools/kicad_manager_control.cpp:651
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' มีอยู่แล้ว"
@@ -12468,11 +12468,11 @@ msgstr "เกิดความผิดพลาดระหว่างบั
 msgid "Failed to save schematic '%s'"
 msgstr "บันทึกวงจร '%s' ไม่สำเร็จ"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:669
+#: eeschema/dialogs/dialog_sheet_properties.cpp:672
 msgid "A sheet must have a name."
 msgstr "ชีตต้องมีชื่อ"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:677
+#: eeschema/dialogs/dialog_sheet_properties.cpp:680
 msgid "A sheet must have a file specified."
 msgstr "ระต้องระบุไฟล์กับชีตวงจร"
 
@@ -13671,7 +13671,7 @@ msgstr "กำลังเพิ่มไลบรารี '%s', ไฟล์ '
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:224
 #: eeschema/dialogs/panel_sym_lib_table.cpp:887
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:841
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:842
 #, c-format
 msgid "Library '%s' not found."
 msgstr "ไลบรารี '%s' ไม่พบ"
@@ -14584,39 +14584,39 @@ msgid "&Pitch of repeated pins:"
 msgstr "ระยะห่างของขาซ้ำ(&P):"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:430
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:538
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:539
 msgid "A library table row nickname and path cells are empty."
 msgstr "ชื่อเล่นแถวของตารางไลบรารีและเซลส์เส้นทางว่างเปล่า"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:432
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:540
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:541
 msgid "A library table row nickname cell is empty."
 msgstr "ชื่อเล่นแถวตารางไลบรารีว่างเปล่า"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:434
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:542
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:543
 msgid "A library table row path cell is empty."
 msgstr "เส้นทางของเซลส์ในแถวตารางไลบรารีว่างเปล่า"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:438
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:546
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:547
 msgid "Invalid Row Definition"
 msgstr "ข้อกำหนดแถวไม่ถูกต้อง"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:548
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:549
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
 msgstr "เซลส์ว่างเปล่าจะทำให้แถวที่ไม่ถูกต้องในตาราง ถูกลบออก"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:550
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:551
 msgid "Remove Invalid Cells"
 msgstr "นำเซลส์ไม่สมบูรณ์ออก"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:443
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:551
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:552
 msgid "Cancel Table Update"
 msgstr "ยกเลิกการปรับปรุงตาราง"
 
@@ -14627,13 +14627,13 @@ msgstr "อักษรไม่ถูกต้อง '%c' ในชื่อเ
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:469
 #: eeschema/dialogs/panel_sym_lib_table.cpp:521
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:577
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:625
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:578
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:626
 msgid "Library Nickname Error"
 msgstr "ชื่อเล่นไลบรารีผิดพลาด"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:508
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:611
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:612
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "หลายๆไลบรารีจะมีชื่อเล่นซ้ำกันไม่ได้ ('%s')"
@@ -14666,24 +14666,24 @@ msgid "Warning: Duplicate Nickname"
 msgstr "ระวัง:ชื่อเล่นซ้ำ"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:634
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
 #, c-format
 msgid "A library nicknamed '%s' already exists."
 msgstr "ชื่อเล่นไลบรารี '%s' มีอยู่แล้ว"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:635
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1018
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr "ชื่อเล่นจะต้องแก้ไข หลังจากเพิ่มเข้าในไลบรารีนี้"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:654 eeschema/sch_base_frame.cpp:284
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1037
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:588
 msgid "Skip"
 msgstr "ข้าม"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:654
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1037
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
 msgid "Add Anyway"
 msgstr "เพิ่มแน่นอน"
 
@@ -14718,7 +14718,7 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "ไฟล์ '%s' มีอยู่แล้ว คุณต้องการเขียนทับ?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:903
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:856
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:857
 msgid "Migrate Library"
 msgstr "อพยพไลบรารีเก่า"
 
@@ -14743,7 +14743,7 @@ msgstr "ไลบรารีสัญลักษณ์"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1194
 #: eeschema/tools/sch_editor_control.cpp:483
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1226
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1227
 #, c-format
 msgid ""
 "Error saving global library table:\n"
@@ -14760,14 +14760,14 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1794
 #: eeschema/tools/sch_editor_control.cpp:484
 #: eeschema/tools/sch_editor_control.cpp:499
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1227
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1240
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1228
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1241
 msgid "File Save Error"
 msgstr "บันทึกไฟล์ผิดพลาด"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1207
 #: eeschema/tools/sch_editor_control.cpp:498
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1239
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1240
 #, c-format
 msgid ""
 "Error saving project-specific library table:\n"
@@ -14871,7 +14871,7 @@ msgid ""
 msgstr ""
 
 #: eeschema/eeschema_config.cpp:74 pcbnew/pcbnew_config.cpp:55
-#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:176
+#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:188
 msgid "Error loading drawing sheet."
 msgstr "เกิดความผิดพลาดระหว่างอ่านกระดาษเขียนแบบ"
 
@@ -15474,7 +15474,7 @@ msgid "Abort"
 msgstr "ยกเลิก"
 
 #: eeschema/files-io.cpp:459 eeschema/files-io.cpp:479
-#: pagelayout_editor/files.cpp:259 pcbnew/files.cpp:789
+#: pagelayout_editor/files.cpp:259 pcbnew/files.cpp:786
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -15533,7 +15533,7 @@ msgstr ""
 "ผิดพลาดระหว่างบันทึกไฟล์วงจร '%s'\n"
 "%s"
 
-#: eeschema/files-io.cpp:849 pcbnew/files.cpp:1014 pcbnew/files.cpp:1295
+#: eeschema/files-io.cpp:849 pcbnew/files.cpp:1011 pcbnew/files.cpp:1292
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "ล้มเหลวในการสร้างไฟล์ชั่วคราว '%s'"
@@ -15547,13 +15547,13 @@ msgstr ""
 "ผิดพลาดในการบันทึกไฟล์วงจร '%s'\n"
 "ล้มเหลวในการเปลี่ยนชื่อไฟล์ชั่วคราว '%s'"
 
-#: eeschema/files-io.cpp:875 pcbnew/files.cpp:1035 pcbnew/files.cpp:1361
+#: eeschema/files-io.cpp:875 pcbnew/files.cpp:1032 pcbnew/files.cpp:1358
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "ล้มเหลวที่จะเปลี่ยนชื่อไฟล์ชั่วคราว '%s'"
 
 #: eeschema/files-io.cpp:898 pagelayout_editor/files.cpp:187
-#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1068
+#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1065
 #, c-format
 msgid "File '%s' saved."
 msgstr "บันทึกไฟล์ '%s' เรียบร้อย"
@@ -15563,8 +15563,8 @@ msgid "File write operation failed."
 msgstr "การเขียนไฟล์ล้มเหลว"
 
 #: eeschema/files-io.cpp:970 eeschema/files-io.cpp:1038
-#: kicad/import_project.cpp:92 kicad/tools/kicad_manager_control.cpp:111
-#: kicad/tools/kicad_manager_control.cpp:284
+#: kicad/import_project.cpp:92 kicad/tools/kicad_manager_control.cpp:112
+#: kicad/tools/kicad_manager_control.cpp:286
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -15967,13 +15967,13 @@ msgid "Unit count differs."
 msgstr "ไม่พบชิ้นส่วนกราฟิกในไฟล์"
 
 #: eeschema/lib_symbol.cpp:324
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:665
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:666
 #, fuzzy
 msgid "Graphic item count differs."
 msgstr "ไม่พบชิ้นส่วนกราฟิกในไฟล์"
 
 #: eeschema/lib_symbol.cpp:336
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:679
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:680
 #, c-format
 msgid "%s differs."
 msgstr ""
@@ -16964,20 +16964,21 @@ msgstr ""
 msgid "KiCad database library files"
 msgstr "ไฟล์ไลบรารีสัญลักษณ์ KiCad"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:635
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:632
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:649
+#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
+#, c-format
+msgid "Unable to read file '%s'."
+msgstr "ไม่สามารถอ่านไฟล์ '%s'"
+
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:641
 #, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
 msgstr ""
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
-#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
-#, c-format
-msgid "Unable to read file '%s'."
-msgstr "ไม่สามารถอ่านไฟล์ '%s'"
-
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1726
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1732
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -16985,7 +16986,7 @@ msgid ""
 msgstr ""
 "เกิดข้อผิดพลาดในการแยกวิเคราะห์ไฟล์ Eagle ไม่พบอินสแตนซ์ '%s' แต่มีการอ้างอิงอยู่ในวงจร"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1774
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1780
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "ไม่พบ '%s' ในไลบรารีที่นำเข้า"
@@ -19854,7 +19855,7 @@ msgstr "สัญลักษณ์ '%s' มีอยู่แล้วในไ
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:132
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:199
 #: eeschema/tools/symbol_editor_control.cpp:380
-#: kicad/tools/kicad_manager_control.cpp:327
+#: kicad/tools/kicad_manager_control.cpp:329
 #: pcbnew/dialogs/dialog_export_idf.cpp:175
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
 #: pcbnew/footprint_libraries_utils.cpp:376
@@ -19920,7 +19921,7 @@ msgstr "ลบสัญลักษณ์"
 msgid "Keep Symbol"
 msgstr "เก็บสัญลักษณ์"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:958 pcbnew/files.cpp:329
+#: eeschema/symbol_editor/symbol_editor.cpp:958 pcbnew/files.cpp:326
 #: pcbnew/footprint_libraries_utils.cpp:1172
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -20025,7 +20026,7 @@ msgstr "เกิดข้อผิดพลาดในการสร้าง
 msgid "Symbol %s saved to library '%s'."
 msgstr "สัญลักษณ์ %s บันทึกไว้ในไลบรารี '%s'"
 
-#: eeschema/symbol_lib_table.cpp:277
+#: eeschema/symbol_lib_table.cpp:278
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
@@ -24321,7 +24322,7 @@ msgstr ""
 msgid "Import EasyEDA Pro Project"
 msgstr "นำเข้าไฟล์โครงการ Eagle"
 
-#: kicad/kicad.cpp:317
+#: kicad/kicad.cpp:320
 #, c-format
 msgid ""
 "File '%s'\n"
@@ -24798,17 +24799,17 @@ msgstr "แสดงเวอร์ชั่นทั้งหมด"
 msgid "Download"
 msgstr "ดาวน์โหลด"
 
-#: kicad/pcm/pcm.cpp:87
+#: kicad/pcm/pcm.cpp:88
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "ไฟล์วงจร '%s' ไม่พบ"
 
-#: kicad/pcm/pcm.cpp:92
+#: kicad/pcm/pcm.cpp:93
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "เกิดข้อผิดพลาดอ่านวงจร %s"
 
-#: kicad/pcm/pcm.cpp:119
+#: kicad/pcm/pcm.cpp:120
 #, c-format
 msgid "Error loading installed packages list: %s"
 msgstr "เกิดข้อผิดพลาดโหลดรายการแพ็คเกจ:%s"
@@ -25454,11 +25455,11 @@ msgstr "เปิดตัวแก้ไขข้อความ"
 msgid "Launch preferred text editor"
 msgstr "เปิดตัวแก้ไขข้อความที่ต้องการ"
 
-#: kicad/tools/kicad_manager_control.cpp:72
+#: kicad/tools/kicad_manager_control.cpp:73
 msgid "Create New Project"
 msgstr "สร้างโครงการใหม่"
 
-#: kicad/tools/kicad_manager_control.cpp:120
+#: kicad/tools/kicad_manager_control.cpp:121
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -25469,68 +25470,68 @@ msgstr ""
 "\n"
 "คุณต้องการดำเนินการต่อหรือไม่?"
 
-#: kicad/tools/kicad_manager_control.cpp:151
+#: kicad/tools/kicad_manager_control.cpp:152
 #, fuzzy
 msgid "Clone Project from Git Repository"
 msgstr "สร้างโครงการใหม่จากแม่แบบ"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:174
 #, fuzzy
 msgid "Cloning Repository"
 msgstr "คลังเก็บ"
 
-#: kicad/tools/kicad_manager_control.cpp:185
+#: kicad/tools/kicad_manager_control.cpp:186
 msgid "No project files were found in the repository."
 msgstr ""
 
-#: kicad/tools/kicad_manager_control.cpp:221
+#: kicad/tools/kicad_manager_control.cpp:223
 msgid "System Templates"
 msgstr "แม่แบบระบบ"
 
-#: kicad/tools/kicad_manager_control.cpp:230
+#: kicad/tools/kicad_manager_control.cpp:232
 msgid "User Templates"
 msgstr "แม่แบบผู้ใช้"
 
-#: kicad/tools/kicad_manager_control.cpp:239
+#: kicad/tools/kicad_manager_control.cpp:241
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "ไม่ได้เลือกแม่แบบโครงการ ไม่สามารถสร้างโครงการใหม่"
 
-#: kicad/tools/kicad_manager_control.cpp:247
+#: kicad/tools/kicad_manager_control.cpp:249
 msgid "New Project Folder"
 msgstr "สร้างโฟลเดอร์โครงการ"
 
-#: kicad/tools/kicad_manager_control.cpp:296
-#: kicad/tools/kicad_manager_control.cpp:665
+#: kicad/tools/kicad_manager_control.cpp:298
+#: kicad/tools/kicad_manager_control.cpp:667
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "สิทธิ์ไม่เพียงพอในการเขียนไปยังโฟลเดอร์ '%s'"
 
-#: kicad/tools/kicad_manager_control.cpp:317
+#: kicad/tools/kicad_manager_control.cpp:319
 msgid "Overwriting files:"
 msgstr "กําลังเขียนทับไฟล์:"
 
-#: kicad/tools/kicad_manager_control.cpp:323
+#: kicad/tools/kicad_manager_control.cpp:325
 msgid "Similar files already exist in the destination folder."
 msgstr "ไฟล์ที่คล้ายกันมีอยู่แล้วในโฟลเดอร์ปลายทาง"
 
-#: kicad/tools/kicad_manager_control.cpp:342
+#: kicad/tools/kicad_manager_control.cpp:344
 msgid "A problem occurred creating new project from template."
 msgstr "เกิดปัญหาในการสร้างโครงการใหม่จากแม่แบบ"
 
-#: kicad/tools/kicad_manager_control.cpp:365
+#: kicad/tools/kicad_manager_control.cpp:367
 msgid "Open Existing Project"
 msgstr "เปิดโครงการที่มีอยู่"
 
-#: kicad/tools/kicad_manager_control.cpp:590
+#: kicad/tools/kicad_manager_control.cpp:592
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "ไม่สามารถสำเนาโฟลเดอร์ '%s'"
 
-#: kicad/tools/kicad_manager_control.cpp:636
+#: kicad/tools/kicad_manager_control.cpp:638
 msgid "Save Project To"
 msgstr "บันทึกโครงการไปที่"
 
-#: kicad/tools/kicad_manager_control.cpp:656
+#: kicad/tools/kicad_manager_control.cpp:658
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -25541,23 +25542,23 @@ msgstr ""
 "\n"
 "โปรดตรวจสอบว่าคุณมีสิทธิ์ในการเขียนและลองอีกครั้ง"
 
-#: kicad/tools/kicad_manager_control.cpp:667
+#: kicad/tools/kicad_manager_control.cpp:669
 msgid "Error!"
 msgstr "ข้อผิดพลาด!"
 
-#: kicad/tools/kicad_manager_control.cpp:723
+#: kicad/tools/kicad_manager_control.cpp:725
 msgid "Create (or open) a project to edit a schematic."
 msgstr "สร้าง (หรือเปิด) โครงการเพื่อแก้ไขวงจร"
 
-#: kicad/tools/kicad_manager_control.cpp:729
+#: kicad/tools/kicad_manager_control.cpp:731
 msgid "Create (or open) a project to edit a pcb."
 msgstr "สร้าง (หรือเปิด) โครงการเพื่อแก้ไขพีซีบี"
 
-#: kicad/tools/kicad_manager_control.cpp:746
+#: kicad/tools/kicad_manager_control.cpp:748
 msgid "Application failed to load:\n"
 msgstr "ไม่สามารถโหลดแอปพลิเคชัน:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:752
+#: kicad/tools/kicad_manager_control.cpp:754
 #, fuzzy
 msgid "Application cannot start."
 msgstr "ไม่สามารถโหลดแอปพลิเคชัน"
@@ -25571,7 +25572,7 @@ msgstr "ปรับปรุงพีซีบี"
 msgid "Requesting update info"
 msgstr ""
 
-#: kicad/update_manager.cpp:246
+#: kicad/update_manager.cpp:248
 #, fuzzy, c-format
 msgid "Unable to parse update response: %s"
 msgstr "ไม่สามารถตีความคลังเก็บข้อมูล:%s"
@@ -27953,8 +27954,8 @@ msgstr ""
 "\n"
 "ค่าควบคุมจะแสดงเป็นอักษรตัวหนา\n"
 "\n"
-"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) "
-"อุณหภูมิเพิ่มขึ้นสูงสุด 100 ºC และความกว้างลายทองแดงสูงสุด 400 มิล(10 มม.)\n"
+"การคำนวณใช้ได้กับกระแสสูงสุด 35 A (ภายนอก) หรือ 17.5 A (ภายใน) อุณหภูมิเพิ่มขึ้นสูงสุด 100 "
+"ºC และความกว้างลายทองแดงสูงสุด 400 มิล(10 มม.)\n"
 "\n"
 "สูตรจาก IPC 2221 คือ \n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
@@ -29516,7 +29517,7 @@ msgstr ""
 "เกิดความผิดพลาดนำเข้าการตั้งค่าจากบอร์ด:\n"
 "ไฟล์โปรเจ็คที่เกี่ยวข้อง %s อ่านไม่ได้"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:292 pcbnew/files.cpp:567
+#: pcbnew/dialogs/dialog_board_setup.cpp:292 pcbnew/files.cpp:564
 #: pcbnew/tools/pcb_control.cpp:1312
 msgid "Loading PCB"
 msgstr "กำลังโหลดพีซีบี"
@@ -33389,165 +33390,165 @@ msgstr "คุณสมบัติแพ็ด"
 msgid "Default Pad Properties for Add Pad Tool"
 msgstr "คุณสมบัติปริยายแพ็ดสำหรับเครื่องมือเพิ่มแพ็ด"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:548
+#: pcbnew/dialogs/dialog_pad_properties.cpp:552
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "ฟุ้ทพรินท์ %s (%s), %s, หมุน %g องศา"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:551
+#: pcbnew/dialogs/dialog_pad_properties.cpp:555
 #: pcbnew/dialogs/dialog_text_properties.cpp:311
 msgid "back side (mirrored)"
 msgstr "ด้านหลัง (กลับกระจก)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:551
+#: pcbnew/dialogs/dialog_pad_properties.cpp:555
 #: pcbnew/dialogs/dialog_text_properties.cpp:312
 msgid "front side"
 msgstr "ด้านหน้า"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:897
+#: pcbnew/dialogs/dialog_pad_properties.cpp:901
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:325
 msgid "All copper layers"
 msgstr "เลเยอร์ทองแดงทั้งหมด"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:898
+#: pcbnew/dialogs/dialog_pad_properties.cpp:902
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr "%s, %s และเลเยอร์ที่เชื่อมต่อ"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:901
+#: pcbnew/dialogs/dialog_pad_properties.cpp:905
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:325
 msgid "Connected layers only"
 msgstr "เลเยอร์ที่เชื่อมต่อเท่านั้น"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:906 pcbnew/zone.cpp:603
+#: pcbnew/dialogs/dialog_pad_properties.cpp:910 pcbnew/zone.cpp:603
 #, c-format
 msgid "%s and %s"
 msgstr "%s และ %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1226
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1231
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1230
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1235
 #, fuzzy
 msgid "Error: Pad must have a positive size."
 msgstr "ข้อผิดพลาด: ขนาดมุมเป็นค่าลบ"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1245
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1249
 msgid "Warning: Pad hole not inside pad shape."
 msgstr "คําเตือน: รูเจาะไม่อยู่ภายในรูปร่างแพ็ด"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1258
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1262
 msgid "Warning: Pad hole will leave no copper."
 msgstr "คําเตือน: รูเจาะแพ็ดจะทำให้ไม่มีทองแดงเหลือ"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1263
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1267
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr "คำเตือน:ค่าระยะห่างเฉพาะที่เป็นลบ จะไม่มีผลใดๆ"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1280
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
 msgstr ""
 "คำเตือน:ค่าระยะห่างของโซลเดอร์มาส์กเป็นลบ ซึ่งใหญ่กว่ารูปร่างอื่นๆ ผลลัพธ์อาจจะประหลาดใจ"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1289
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1293
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
 msgstr "คำเตือน:ค่าระยะห่างโซลเดอร์มาส์กติดลบมากกว่าขนาดแพ็ด จะไม่มีการสร้างโซลเดอร์มาส์ก"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1308
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1312
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
 msgstr "คำเตือน:ค่าระยะเว้นโซลเดอร์มาส์กติดลบมากกว่าขนาดแพ็ด จะไม่มีการสร้างโซลเดอร์มาส์ก"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1315
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1319
 msgid "Error: pad has no layer."
 msgstr "ข้อผิดพลาด: แพ็ดไม่มีเลเยอร์"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1321
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1325
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
 msgstr "คำเตือน: รูทะลุชนิด PTH ปกติต้องมีแพ็ดทองแดงอย่างน้อยหนึ่งเลเยอร์"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1327
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1331
 #, fuzzy
 msgid "Error: Trapazoid delta is too large."
 msgstr "ข้อผิดพลาด: แพ็ดไม่มีเลเยอร์"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1336
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1340
 #, fuzzy
 msgid "Error: Through hole pad has no hole."
 msgstr "แพ็ดชนิดเจาะทะลุไม่มีรูเจาะ"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1343
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1347
 #, fuzzy
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr "คำเตือน: โดยปกติแพ็ดสำหรับเชื่อมต่อจะไม่มีโซลเดอร์เพสต์ ใช้แพ็ดชนิด SMD แทน"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1352
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1356
 #, fuzzy
 msgid "Error: SMD pad has a hole."
 msgstr "ข้อผิดพลาด: แพ็ดไม่มีเลเยอร์"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1358
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1362
 msgid "Warning: SMD pad has no outer layers."
 msgstr "คำเตือน: แพ็ด SMD ไม่มีเลเยอร์ด้านนอก"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1366
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1370
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
 msgstr "คำเตือน: คุณสมบัติฟิดูเชียลดูไม่สมเหตุผลกับแพ็ดชนิด NPTH"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1372
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1376
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
 msgstr "คำเตือน: คุณสมบัติจุดทดสอบ ไม่สมเหตุผลกับแพ็ด NPTH"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1378
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1382
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
 msgstr "คำเตือน: คุณสมบัติฮีทซิงค์ ไม่สมเหตุผลกับแพ็ด NPTH"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1384
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1388
 msgid "Warning: Castellated property is for PTH pads."
 msgstr "คำเตือน:คุณสมบัติคาสเทลเลตใช้สำหรับแพ็ด PTH"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1390
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Warning: BGA property is for SMD pads."
 msgstr "คำเตือน: คุณสมบัติ BGA ใช้สำหรับแพ็ด SMD"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1399
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1403
 msgid "Error: Negative corner size."
 msgstr "ข้อผิดพลาด: ขนาดมุมเป็นค่าลบ"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1401
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1405
 msgid "Warning: Corner size will make pad circular."
 msgstr "คำเตือน: ขนาดมุมจะทำให้แพ็ดกลายเป็นวงกลม"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1411
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1415
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr "ข้อผิดพลาด: รูปร่างแพ็ดที่กำหนดเอง ต้องมีรูปหลายเหลี่ยมเดียว"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1417
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1421
 msgid "Pad Properties Errors"
 msgstr "ข้อผิดพลาดคุณสมบัติของแพ็ด"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1418
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Pad Properties Warnings"
 msgstr "คำเตือนคุณสมบัติแพ็ด"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1624
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1628
 msgid "Modify pad"
 msgstr "แก้ไขแพ็ด"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1657
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1661
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
 msgid "Hole size X:"
 msgstr "ขนาดรูเจาะ X:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1672
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1673
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1674
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1676
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1677
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1678
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:653
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:721
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
@@ -33558,14 +33559,14 @@ msgstr "ขนาดรูเจาะ X:"
 msgid "d"
 msgstr "%d"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1678
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1682
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
 msgid "Pad size X:"
 msgstr "ขนาดแพ็ด X:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1681
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1682
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1683
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1685
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1686
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1687
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:261
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:301
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:357
@@ -35504,17 +35505,17 @@ msgstr "ค่าปริยายชิ้นส่วนข้อความ
 msgid "Default properties for new graphic items:"
 msgstr "ค่าคุณสมบัติปริยายสำหรับชิ้นส่วนกราฟิกใหม่:"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:465
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:466
 #, fuzzy, c-format
 msgid "folder with %s files"
 msgstr "เส้นหลายเหลี่ยม %d จุด"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:564
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:565
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
 msgstr "อักษรไม่ถูกต้อง '%c' ในชื่อเล่น '%s'"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:809
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:810
 #, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
@@ -35522,34 +35523,34 @@ msgstr ""
 "เลือกหนึ่งแถวหรือมากกว่าที่มีไลบรารีรูปแบบเก่า (*.lib) เพื่อเปลี่ยนเป็นรูปแบบปัจจุบัน KiCad (*."
 "kicad_sym)"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:817
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:818
 #, fuzzy, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
 msgstr "บันทึก '%s' เป็นรูปแบบ KiCad (*.kicad_sym) และแทนทางเข้าแบบเก่าในตาราง?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:823
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:824
 #, fuzzy, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
 "บันทึก '%d' แบบเก่า ให้เป็นรูปแบบ KiCad ปัจจุบัน (*.kicad_sym) และแทนแบบเก่าในตาราง?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:853
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:854
 #, fuzzy, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
 msgstr "ไฟล์ '%s' มีอยู่แล้ว คุณต้องการเขียนทับ?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:883
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:884
 #, fuzzy, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "ล้มเหลวที่จะบันทึกไฟล์ไลบรารีสัญลักษณ์ '%s'"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:958
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:959
 #, c-format
 msgid "Select %s Library"
 msgstr "เลือกไลบรารี %s"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1015
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
 msgid "Warning: Duplicate Nicknames"
 msgstr "คำเตือน: ชื่อเล่นซ้ำ"
 
@@ -35558,24 +35559,24 @@ msgstr "คำเตือน: ชื่อเล่นซ้ำ"
 msgid "LIbrary Format"
 msgstr "รูปแบบไลบรารี"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:397
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:404
 msgid "No filename entered"
 msgstr "ไม่ได้ป้อนชื่อไฟล์"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:402
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:409
 msgid "Illegal filename"
 msgstr "ชื่อไฟล์ไม่ถูกต้อง"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:407
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:414
 #: pcbnew/microwave/microwave_polygon.cpp:223
 msgid "File not found"
 msgstr "ไม่พบไฟล์"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:412
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:419
 msgid "Unable to open file"
 msgstr "ไม่สามารถเปิดไฟล์"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:417
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:424
 msgid "Unknown error"
 msgstr "ความผิดพลาดที่ไม่อาจระบุได้"
 
@@ -38543,46 +38544,46 @@ msgstr "ไม่มีการเชื่อมต่อ"
 msgid "Net tie pad groups differ."
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:692
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:693
 msgid "Pad count differs."
 msgstr ""
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:713
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:714
 #, fuzzy
 msgid "Rule area count differs."
 msgstr "พื้นที่กฎบน %s"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:732
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:733
 #, fuzzy
 msgid "No project loaded, skipping library parity tests."
 msgstr "ไม่มีรายชื่อเน็ต, ข้าม LVS"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:736
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:737
 #, fuzzy
 msgid "Loading footprint library table..."
 msgstr "ข้อผิดพลาดในการโหลดตารางฟุ้ทพรินท์ไลบรารี"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:746
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:747
 #, fuzzy
 msgid "Checking board footprints against library..."
 msgstr "ตรวจสอบฟุ้ทพรินท์…"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:778
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:779
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "การปรับแต่งของปัจจุบันไม่รวมไลบรารี '%s'"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:792
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:793
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "ไลบรารี '%s' ไม่เปิดใช้งานในการปรับแต่งปัจจุบัน"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:828
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:829
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "ไม่พบฟุ้ทพรินท์ '%s' ในไลบรารี่ '%s'"
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:841
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:842
 #, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "ฟุ้ทพรินท์ '%s' ไม่ตรงกับสำเนาในไลบรารี่ '%s'"
@@ -38831,7 +38832,7 @@ msgstr "ทั้งหมดส่งออกเป็นแพ็ดรูป
 
 #: pcbnew/exporters/export_hyperlynx.cpp:288
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:378
+#: pcbnew/exporters/step/exporter_step.cpp:382
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "เค้าโครงบอร์ดผิดรูปแบบ สั่ง DRC สำหรับการวิเคราะห์สมบูรณ์แบบ"
@@ -38874,21 +38875,21 @@ msgstr "สร้างไฟล์งานเกอร์เบอร์ '%s'"
 msgid "Board stackup settings not up to date."
 msgstr "การตั้งค่าสแต็กอัพของบอร์ดไม่ทันสมัยล่าสุด"
 
-#: pcbnew/exporters/step/exporter_step.cpp:498
+#: pcbnew/exporters/step/exporter_step.cpp:502
 msgid "Determining PCB data\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:501
+#: pcbnew/exporters/step/exporter_step.cpp:505
 #, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
 msgstr "ความหนาของบอร์ดจากสแต็กอัพ: %.3f มม\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:515
+#: pcbnew/exporters/step/exporter_step.cpp:519
 #, c-format
 msgid "Build %s data\n"
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:519
+#: pcbnew/exporters/step/exporter_step.cpp:523
 #, fuzzy
 msgid ""
 "\n"
@@ -38897,12 +38898,12 @@ msgstr ""
 "\n"
 "** ผิดพลาดเขียนไฟล์ STEP **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:523
+#: pcbnew/exporters/step/exporter_step.cpp:527
 #, fuzzy, c-format
 msgid "Writing %s file\n"
 msgstr "เขียนไฟล์ STEP\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:533
+#: pcbnew/exporters/step/exporter_step.cpp:537
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -38911,15 +38912,15 @@ msgstr ""
 "\n"
 "** ผิดพลาดเขียนไฟล์ STEP **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:539
+#: pcbnew/exporters/step/exporter_step.cpp:543
 #, fuzzy, c-format
 msgid "%s file '%s' created.\n"
 msgstr ""
 "\n"
 "สร้างไฟล์ STEP ชื่อ '%s'\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:546
-#: pcbnew/exporters/step/exporter_step.cpp:552
+#: pcbnew/exporters/step/exporter_step.cpp:550
+#: pcbnew/exporters/step/exporter_step.cpp:556
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -38928,19 +38929,19 @@ msgstr ""
 "\n"
 "** ผิดพลาดเขียนไฟล์ STEP **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:561
+#: pcbnew/exporters/step/exporter_step.cpp:565
 #, c-format
 msgid ""
 "Unable to create %s file.\n"
 "Check that the board has a valid outline and models."
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:567
+#: pcbnew/exporters/step/exporter_step.cpp:571
 #, c-format
 msgid "%s file has been created, but there are warnings."
 msgstr ""
 
-#: pcbnew/exporters/step/exporter_step.cpp:576
+#: pcbnew/exporters/step/exporter_step.cpp:580
 #, fuzzy, c-format
 msgid ""
 "\n"
@@ -38997,26 +38998,26 @@ msgstr "บันทึกไฟล์บอร์ดเป็น"
 msgid "Printed circuit board"
 msgstr "แผ่นวงจรพิมพ์"
 
-#: pcbnew/files.cpp:302
+#: pcbnew/files.cpp:299
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "ไม่พบไฟล์กู้คืน '%s'"
 
-#: pcbnew/files.cpp:307
+#: pcbnew/files.cpp:304
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "ตกลงที่จะโหลดไฟล์การกู้คืน '%s' หรือไม่?"
 
-#: pcbnew/files.cpp:350
+#: pcbnew/files.cpp:347
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr "บอร์ดปัจจุบันจะถูกปิด บันทึกการเปลี่ยนแปลงเป็น '%s' ก่อนดำเนินการต่อหรือไม่?"
 
-#: pcbnew/files.cpp:364
+#: pcbnew/files.cpp:361
 msgid "Current Board will be closed. Continue?"
 msgstr "บอร์ดปัจจุบันจะถูกปิด ดำเนินการต่อ?"
 
-#: pcbnew/files.cpp:481
+#: pcbnew/files.cpp:478
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39028,60 +39029,60 @@ msgstr ""
 "ซึ่งอาจส่งผลให้มีการเติมที่แตกต่างจาก KiCad "
 "รุ่นก่อนหน้าที่ใช้ความหนาของเส้นของขอบเขตของบอร์ดบนเลเยอร์ Edge Cuts"
 
-#: pcbnew/files.cpp:527
+#: pcbnew/files.cpp:524
 #, fuzzy, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "พีซีบี '%s' เปิดอยู่แล้ว"
 
-#: pcbnew/files.cpp:538
+#: pcbnew/files.cpp:535
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "พีซีบีปัจจุบันได้รับการแก้ไข บันทึกการเปลี่ยนแปลง?"
 
-#: pcbnew/files.cpp:557
+#: pcbnew/files.cpp:554
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "พีซีบี '%s' ไม่มีอยู่ คุณต้องการสร้างหรือไม่?"
 
-#: pcbnew/files.cpp:566
+#: pcbnew/files.cpp:563
 msgid "Creating PCB"
 msgstr "การสร้างพีซีบอร์ด"
 
-#: pcbnew/files.cpp:657
+#: pcbnew/files.cpp:654
 #, fuzzy
 msgid "File format is not supported"
 msgstr "กลับกระจกบนแกน Y ไม่สนับสนุน"
 
-#: pcbnew/files.cpp:697 pcbnew/files.cpp:707
+#: pcbnew/files.cpp:694 pcbnew/files.cpp:704
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "เกิดข้อผิดพลาดในการโหลดพีซีบี '%s'"
 
-#: pcbnew/files.cpp:716
+#: pcbnew/files.cpp:713
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "หน่วยความจำหมด ระหว่างอ่านพีซีบี ' %s'"
 
-#: pcbnew/files.cpp:829
+#: pcbnew/files.cpp:826
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr "เกิดข้อผิดพลาดในการบันทึกฟุ้ทพรินท์ %s ไปยังไลบรารีเฉพาะของโปรเจ็กต์"
 
-#: pcbnew/files.cpp:860
+#: pcbnew/files.cpp:857
 msgid "Error saving project specific footprint library table."
 msgstr "เกิดข้อผิดพลาดในการบันทึกตารางไลบรารีฟุ้ทพรินท์เฉพาะโปรเจ็กต์"
 
-#: pcbnew/files.cpp:952 pcbnew/files.cpp:1091 pcbnew/files.cpp:1259
+#: pcbnew/files.cpp:949 pcbnew/files.cpp:1088 pcbnew/files.cpp:1256
 #: pcbnew/footprint_libraries_utils.cpp:268
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "สิทธิ์ไม่เพียงพอในการเขียนไฟล์ '%s'"
 
-#: pcbnew/files.cpp:984 pcbnew/files.cpp:1136
+#: pcbnew/files.cpp:981 pcbnew/files.cpp:1133
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "ข้อผิดพลาดในการบันทึกไฟล์กฎแบบกําหนดเอง '%s'"
 
-#: pcbnew/files.cpp:1010 pcbnew/files.cpp:1112
+#: pcbnew/files.cpp:1007 pcbnew/files.cpp:1109
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -39090,7 +39091,7 @@ msgstr ""
 "ข้อผิดพลาดในการบันทึกไฟล์บอร์ด '%s'\n"
 "%s"
 
-#: pcbnew/files.cpp:1030
+#: pcbnew/files.cpp:1027
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -39099,7 +39100,7 @@ msgstr ""
 "เกิดข้อผิดพลาดในการบันทึกไฟล์บอร์ด '%s'\n"
 "ไม่สามารถเปลี่ยนชื่อไฟล์ชั่วคราว '%s."
 
-#: pcbnew/files.cpp:1140
+#: pcbnew/files.cpp:1137
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -39108,16 +39109,16 @@ msgstr ""
 "สำเนาบอร์ดไปที่:\n"
 "%s"
 
-#: pcbnew/files.cpp:1253
+#: pcbnew/files.cpp:1250
 msgid "The board must be saved before generating IPC2581 file."
 msgstr ""
 
-#: pcbnew/files.cpp:1269
+#: pcbnew/files.cpp:1266
 #, fuzzy
 msgid "Generating IPC2581 file"
 msgstr "สร้างไฟล์รายชื่อเน็ต IPC-D-356"
 
-#: pcbnew/files.cpp:1292 pcbnew/pcbnew_jobs_handler.cpp:1168
+#: pcbnew/files.cpp:1289 pcbnew/pcbnew_jobs_handler.cpp:1168
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -39126,7 +39127,7 @@ msgstr ""
 "ข้อผิดพลาดในการบันทึกไฟล์บอร์ด '%s'\n"
 "%s"
 
-#: pcbnew/files.cpp:1356 pcbnew/pcbnew_jobs_handler.cpp:1200
+#: pcbnew/files.cpp:1353 pcbnew/pcbnew_jobs_handler.cpp:1200
 #, fuzzy, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -41983,7 +41984,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "ZSmoothing ไม่ถูกต้องสำหรับ CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6139
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6147
 #, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
@@ -42168,7 +42169,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "ชื่อ NETCLASS ซ้ำ '%s' ในไฟล์ '%s' ที่บรรทัด %d ออฟเซ็ต %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2995
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5364
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5372
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42199,7 +42200,7 @@ msgstr ""
 "บรรทัด: %d\n"
 "ออฟเซต: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4608
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4616
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42210,7 +42211,7 @@ msgstr ""
 "ไฟล์: %s\n"
 "บรรทัด: %d ออฟเซ็ต: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4627
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4635
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -42221,7 +42222,7 @@ msgstr ""
 "ไฟล์: %s\n"
 "บรรทัด: %d ออฟเซ็ต: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4928
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4936
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -42234,7 +42235,7 @@ msgstr ""
 "บรรทัด: %d\n"
 "ออฟเซ็ต: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5279
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5287
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42247,7 +42248,7 @@ msgstr ""
 "บรรทัด: %d\n"
 "ออฟเซ็ต: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5465
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5473
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42260,7 +42261,7 @@ msgstr ""
 "บรรทัด: %d\n"
 "ออฟเซ็ต: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5595
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5603
 #, fuzzy, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42273,7 +42274,7 @@ msgstr ""
 "บรรทัด: %d\n"
 "ออฟเซ็ต: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6108
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6116
 #, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"

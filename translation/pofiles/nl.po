@@ -14,11 +14,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:30-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2024-02-19 17:02+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
-"master-source/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
+"source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -338,10 +338,10 @@ msgstr "Onvoldoende rechten om het bestand '%s' op te slaan."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1625
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2026
 #: eeschema/files-io.cpp:974 eeschema/files-io.cpp:1042
-#: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:319
-#: kicad/tools/kicad_manager_control.cpp:240
-#: kicad/tools/kicad_manager_control.cpp:297
-#: kicad/tools/kicad_manager_control.cpp:343
+#: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:322
+#: kicad/tools/kicad_manager_control.cpp:242
+#: kicad/tools/kicad_manager_control.cpp:299
+#: kicad/tools/kicad_manager_control.cpp:345
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -357,11 +357,11 @@ msgstr "Onvoldoende rechten om het bestand '%s' op te slaan."
 msgid "Error"
 msgstr "Fout"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:782
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:789
 msgid "Failed to copy image to clipboard"
 msgstr "Kan afbeelding niet naar klembord kopiëren"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:793
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:800
 msgid "Can't save file"
 msgstr "Kan bestand niet opslaan"
 
@@ -1751,7 +1751,7 @@ msgstr "Naar klembord exporteren"
 msgid "Background Jobs"
 msgstr "Achtergrondtaken"
 
-#: common/common.cpp:270
+#: common/common.cpp:287
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
@@ -1759,32 +1759,32 @@ msgstr ""
 "Uitbreiding omgevingsvariabelen mislukt: '%c' ontbreekt op positie %u in "
 "'%s'."
 
-#: common/common.cpp:358
+#: common/common.cpp:375
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Kan pad '%s' niet absoluut maken ten opzichte van '%s'."
 
-#: common/common.cpp:377
+#: common/common.cpp:394
 #, c-format
 msgid "Output directory '%s' created."
 msgstr "Uitvoermap \"%s\" aangemaakt."
 
-#: common/common.cpp:386
+#: common/common.cpp:403
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Kan uitvoermap '%s' niet aanmaken."
 
-#: common/common.cpp:677
+#: common/common.cpp:694
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr ""
 "Dit besturingssysteem wordt niet ondersteund door KiCad en zijn "
 "afhankelijkheden."
 
-#: common/common.cpp:679
+#: common/common.cpp:696
 msgid "Unsupported Operating System"
 msgstr "Niet Ondersteund Besturingssysteem"
 
-#: common/common.cpp:682
+#: common/common.cpp:699
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -1894,7 +1894,7 @@ msgstr "Informatie"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:198
 #: eeschema/tools/symbol_editor_control.cpp:378
 #: eeschema/tools/symbol_editor_pin_tool.cpp:233 kicad/import_project.cpp:108
-#: kicad/tools/kicad_manager_control.cpp:324
+#: kicad/tools/kicad_manager_control.cpp:326
 #: pcbnew/dialogs/dialog_export_idf.cpp:174
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
@@ -2348,7 +2348,7 @@ msgstr "Omgevingsvariabelen"
 #: kicad/pcm/dialogs/panel_package_base.cpp:50
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:42
 #: pcbnew/dialogs/dialog_net_inspector.cpp:986
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:411
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:412
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38
 #: pcbnew/fp_text_grid_table.cpp:137 pcbnew/widgets/search_handlers.cpp:140
 #: pcbnew/widgets/search_handlers.cpp:273
@@ -2363,12 +2363,12 @@ msgstr "Naam"
 msgid "Path"
 msgstr "Pad"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:40
+#: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
 msgid "Configure Global %s Library Table"
 msgstr "Globale %s bibliotheektabel configureren"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:43
+#: common/dialogs/dialog_global_lib_table_config.cpp:44
 #, c-format
 msgid ""
 "KiCad has been run for the first time using the new %s library table for\n"
@@ -2385,12 +2385,12 @@ msgstr ""
 "weet\n"
 "welke optie u moet selecteren."
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:50
+#: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid "Copy default global %s library table (recommended)"
 msgstr "Standaard globale %s bibliotheektabel kopiëren (aanbevolen)"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:52
+#: common/dialogs/dialog_global_lib_table_config.cpp:53
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
@@ -2399,12 +2399,12 @@ msgstr ""
 "Selecteer deze optie als u niet zeker bent over het configureren van de "
 "globale %s bibliotheektabel"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:56
+#: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid "Copy custom global %s library table"
 msgstr "Aangepaste globale %s bibliotheektabel kopiëren"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:58
+#: common/dialogs/dialog_global_lib_table_config.cpp:59
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
@@ -2412,12 +2412,12 @@ msgstr ""
 "Selecteer deze optie om een %s bibliotheektabelbestand anders dan het "
 "standaardbestand te kopiëren"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:62
+#: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid "Create an empty global %s library table"
 msgstr "Lege globale %s bibliotheektabel maken"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:64
+#: common/dialogs/dialog_global_lib_table_config.cpp:65
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
@@ -2425,7 +2425,7 @@ msgstr ""
 "Selecteer deze optie om %s bibliotheken te definiëren in projectspecifieke "
 "bibliotheektabellen"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:68
+#: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
 msgid "Select global %s library table file:"
 msgstr "Globale %s bibliotheektabelbestand selecteren:"
@@ -3083,7 +3083,7 @@ msgstr "Optie"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:412 pcbnew/footprint.cpp:3497
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3497
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:406 pcbnew/plot_board_layers.cpp:90
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -4346,9 +4346,9 @@ msgstr "Zoomen"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties.cpp:902
-#: pcbnew/dialogs/dialog_pad_properties.cpp:911
-#: pcbnew/dialogs/dialog_pad_properties.cpp:921
+#: pcbnew/dialogs/dialog_pad_properties.cpp:906
+#: pcbnew/dialogs/dialog_pad_properties.cpp:915
+#: pcbnew/dialogs/dialog_pad_properties.cpp:925
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
 #: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3456
@@ -5784,7 +5784,7 @@ msgstr "opt"
 msgid "max"
 msgstr "max"
 
-#: common/env_vars.cpp:71
+#: common/env_vars.cpp:108
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
@@ -5792,19 +5792,19 @@ msgstr ""
 "Het basispad van lokaal geïnstalleerde systeemfootprintbibliotheken (.pretty-"
 "mappen)."
 
-#: common/env_vars.cpp:74
+#: common/env_vars.cpp:111
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr "Het basispad van 3D-vormen voor systeemfootprints (.3Dshapes-mappen)."
 
-#: common/env_vars.cpp:76
+#: common/env_vars.cpp:113
 msgid "The base path of the locally installed symbol libraries."
 msgstr "Het basispad van de lokaal geïnstalleerde symboolbibliotheken."
 
-#: common/env_vars.cpp:78
+#: common/env_vars.cpp:115
 msgid "A directory containing project templates installed with KiCad."
 msgstr "Een map met projectsjablonen die met KiCad zijn geïnstalleerd."
 
-#: common/env_vars.cpp:80
+#: common/env_vars.cpp:117
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
@@ -5812,14 +5812,14 @@ msgstr ""
 "Optioneel. Kan worden gedefinieerd als u uw eigen map met projectsjablonen "
 "wilt maken."
 
-#: common/env_vars.cpp:83
+#: common/env_vars.cpp:120
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
 msgstr ""
 "Een map met 3rd-party plug-ins, bibliotheken en andere downloadbare inhoud."
 
-#: common/env_vars.cpp:86
+#: common/env_vars.cpp:123
 msgid ""
 "Internally defined by KiCad (cannot be edited) and is set to the absolute "
 "path of the currently loaded project file.  This environment variable can be "
@@ -5834,28 +5834,28 @@ msgstr ""
 "pretty kan bijvoorbeeld worden gedefinieerd als een map met een "
 "projectspecifieke footprintbibliotheek met de naam footprints.pretty."
 
-#: common/env_vars.cpp:92
+#: common/env_vars.cpp:129
 msgid "A directory containing system-wide scripts installed with KiCad"
 msgstr "Een map met systeembrede scripts die met KiCad zijn geïnstalleerd"
 
-#: common/env_vars.cpp:94
+#: common/env_vars.cpp:131
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr ""
 "Een map met gebruikersspecifieke scripts die met KiCad zijn geïnstalleerd"
 
-#: common/env_vars.cpp:98
+#: common/env_vars.cpp:135
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Verouderde versie van KICAD_TEMPLATE_DIR."
 
-#: common/env_vars.cpp:100
+#: common/env_vars.cpp:137
 msgid "Deprecated version of KICAD7_3DMODEL_DIR."
 msgstr "Verouderde versie van KICAD7_3DMODEL_DIR."
 
-#: common/env_vars.cpp:102
+#: common/env_vars.cpp:139
 msgid "Deprecated version of KICAD7_FOOTPRINT_DIR."
 msgstr "Verouderde versie van KICAD7_FOOTPRINT_DIR."
 
-#: common/env_vars.cpp:104
+#: common/env_vars.cpp:141
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Verouderde versie van KICAD_SYMBOL_DIR."
 
@@ -5910,23 +5910,23 @@ msgstr "Volledige foutmelding:"
 msgid "No Files"
 msgstr "Geen bestanden"
 
-#: common/filename_resolver.cpp:448
+#: common/filename_resolver.cpp:453
 msgid "The given path does not exist"
 msgstr "Het opgegeven pad bestaat niet"
 
-#: common/filename_resolver.cpp:476
+#: common/filename_resolver.cpp:481
 msgid "Alias: "
 msgstr "Alias: "
 
-#: common/filename_resolver.cpp:479
+#: common/filename_resolver.cpp:484
 msgid "This path:"
 msgstr "Dit pad:"
 
-#: common/filename_resolver.cpp:482
+#: common/filename_resolver.cpp:487
 msgid "Existing path:"
 msgstr "Bestaand pad:"
 
-#: common/filename_resolver.cpp:484
+#: common/filename_resolver.cpp:489
 msgid "Bad alias (duplicate name)"
 msgstr "Slechte alias (dubbele naam)"
 
@@ -5964,7 +5964,7 @@ msgstr "Laadfouten"
 msgid "Errors were encountered loading footprints:"
 msgstr "Er zijn fouten opgetreden bij het laden van footprints:"
 
-#: common/fp_lib_table.cpp:219
+#: common/fp_lib_table.cpp:220
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
@@ -5973,16 +5973,16 @@ msgstr ""
 "Dubbele bibliotheekbijnaam '%s' gevonden in tabelbestand "
 "footprintbibliotheek op regel %d."
 
-#: common/fp_lib_table.cpp:329
+#: common/fp_lib_table.cpp:330
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
 msgstr "fp-lib-table-bestanden bevatten geen bibliotheek met de naam '%s'."
 
-#: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:598
+#: common/fp_lib_table.cpp:559 eeschema/symbol_lib_table.cpp:602
 msgid "Added by Plugin and Content Manager"
 msgstr "Toegevoegd door plug-in en contentmanager"
 
-#: common/fp_lib_table.cpp:581 eeschema/symbol_lib_table.cpp:626
+#: common/fp_lib_table.cpp:585 eeschema/symbol_lib_table.cpp:630
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Kan pad '%s' voor globale bibliotheektabel niet aanmaken."
@@ -8799,7 +8799,7 @@ msgstr ""
 msgid "Assign Footprints"
 msgstr "Footprints toewijzen"
 
-#: cvpcb/cvpcb_mainframe.cpp:113 pcbnew/dialogs/panel_fp_lib_table.cpp:1205
+#: cvpcb/cvpcb_mainframe.cpp:113 pcbnew/dialogs/panel_fp_lib_table.cpp:1206
 msgid "Footprint Libraries"
 msgstr "Footprintbibliotheken"
 
@@ -9598,16 +9598,16 @@ msgstr ""
 "\n"
 " * `%I`: absoluut pad en bestandsnaam van het tussenliggende "
 "netlijstbestand, dat de invoer is voor de BOM-generator\n"
-" * `%O`: absoluut pad en bestandsnaam van het BOM-bestand voor de uitvoer ("
-"zonder bestandsextensie)\n"
+" * `%O`: absoluut pad en bestandsnaam van het BOM-bestand voor de uitvoer "
+"(zonder bestandsextensie)\n"
 " * `%B`: basisbestandsnaam van BOM-bestand voor de uitvoer (zonder "
 "bestandsextensie)\n"
 " * `%P`: absoluut pad van de projectmap, zonder afsluitende schuine streep\n"
 "\n"
 "**Merk op:** de `%O` uitvoerbestandsparameter bevat geen bestandsextensie. "
 "KiCad zal proberen automatisch een geschikte extensie aan de commandoregel "
-"toe te voegen, maar een extensie moet mogelijk met de hand worden toegevoegd."
-"\n"
+"toe te voegen, maar een extensie moet mogelijk met de hand worden "
+"toegevoegd.\n"
 "\n"
 "Python is de aanbevolen programmeertaal voor BOM-generatorscripts, maar "
 "andere talen kunnen ook worden gebruikt.\n"
@@ -9620,9 +9620,9 @@ msgstr ""
 "python <scriptbestandsnaam> <invoerbestandsnaam> <uitvoerbestandsnaam>\n"
 "```\n"
 "\n"
-"Op Windows, als het gewenste generatorscript voor een CSV-BOM `C:\\Users"
-"\\gebruikersnaam\\kicad\\my_python_script.py` is, zou de commandoregel zijn:"
-"\n"
+"Op Windows, als het gewenste generatorscript voor een CSV-BOM `C:"
+"\\Users\\gebruikersnaam\\kicad\\my_python_script.py` is, zou de "
+"commandoregel zijn:\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\gebruikersnaam\\kicad\\my_python_script.py \"%I\" \"%O."
@@ -10768,8 +10768,8 @@ msgstr "Knooppunten bewerken"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1652
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1669
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1656
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1673
 msgid "Diameter:"
 msgstr "Diameter:"
 
@@ -11372,7 +11372,7 @@ msgid "The name '%s' is already in use."
 msgstr "De naam '%s' is al in gebruik."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#: eeschema/dialogs/dialog_sheet_properties.cpp:735
+#: eeschema/dialogs/dialog_sheet_properties.cpp:738
 #: eeschema/dialogs/dialog_symbol_properties.cpp:962
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:637
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:683
@@ -12395,7 +12395,7 @@ msgstr ""
 "'%s'."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:481
-#: kicad/tools/kicad_manager_control.cpp:649
+#: kicad/tools/kicad_manager_control.cpp:651
 #, c-format
 msgid "'%s' already exists."
 msgstr "'%s' bestaat al."
@@ -12430,11 +12430,11 @@ msgstr "Er is een fout opgetreden bij het opslaan van schema-bestand '%s'."
 msgid "Failed to save schematic '%s'"
 msgstr "Kan schema '%s' niet opslaan"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:669
+#: eeschema/dialogs/dialog_sheet_properties.cpp:672
 msgid "A sheet must have a name."
 msgstr "Een blad moet een naam hebben."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:677
+#: eeschema/dialogs/dialog_sheet_properties.cpp:680
 msgid "A sheet must have a file specified."
 msgstr "Een blad moet een gespecificeerd bestand hebben."
 
@@ -13579,7 +13579,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:224
 #: eeschema/dialogs/panel_sym_lib_table.cpp:887
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:841
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:842
 #, c-format
 msgid "Library '%s' not found."
 msgstr "Bibliotheek '%s' niet gevonden."
@@ -13989,7 +13989,8 @@ msgstr "<ESC> wist netmarkering"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:57
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
-msgstr "Eerste <ESC> in selectietool wist de selectie, tweede wist netmarkering"
+msgstr ""
+"Eerste <ESC> in selectietool wist de selectie, tweede wist netmarkering"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -14015,8 +14016,8 @@ msgid ""
 "If disabled, clicking on a pin select only the pin."
 msgstr ""
 "In schema-editor:\n"
-"Indien ingeschakeld selecteert een klik op een pin het bovenliggende symbool."
-"\n"
+"Indien ingeschakeld selecteert een klik op een pin het bovenliggende "
+"symbool.\n"
 "Indien uitgeschakeld selecteert een klik op een pin alleen de pin."
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:127
@@ -14100,7 +14101,8 @@ msgstr "Automatische veldplaatsing toestaan om uit&lijning te wijzigen"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:272
 msgid "Al&ways align autoplaced fields to the 50 mil grid"
-msgstr "Automatisch geplaatste velden altijd uitlijnen op het raster van 50 mil"
+msgstr ""
+"Automatisch geplaatste velden altijd uitlijnen op het raster van 50 mil"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:281
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:104
@@ -14473,27 +14475,27 @@ msgid "&Pitch of repeated pins:"
 msgstr "Afstand herhaalde &pinnen:"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:430
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:538
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:539
 msgid "A library table row nickname and path cells are empty."
 msgstr "De bijnaam en padcellen van een bibliotheektabelregel zijn leeg."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:432
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:540
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:541
 msgid "A library table row nickname cell is empty."
 msgstr "Een bijnaamcel van een bibliotheektabelregel is leeg."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:434
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:542
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:543
 msgid "A library table row path cell is empty."
 msgstr "De padcel van een bibliotheektabelregel is leeg."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:438
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:546
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:547
 msgid "Invalid Row Definition"
 msgstr "Ongeldige regeldefinitie"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:548
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:549
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
@@ -14502,12 +14504,12 @@ msgstr ""
 "tabel."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:550
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:551
 msgid "Remove Invalid Cells"
 msgstr "Ongeldige cellen verwijderen"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:443
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:551
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:552
 msgid "Cancel Table Update"
 msgstr "Update van tabel afbreken"
 
@@ -14518,13 +14520,13 @@ msgstr "Ongeldig teken '%c' in bijnaam '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:469
 #: eeschema/dialogs/panel_sym_lib_table.cpp:521
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:577
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:625
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:578
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:626
 msgid "Library Nickname Error"
 msgstr "Bibliotheekbijnaam-fout"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:508
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:611
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:612
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Meerdere bibliotheken kunnen niet dezelfde bijnaam ('%s') hebben."
@@ -14555,26 +14557,26 @@ msgid "Warning: Duplicate Nickname"
 msgstr "Waarschuwing: dubbele bijnaam"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:634
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
 #, c-format
 msgid "A library nicknamed '%s' already exists."
 msgstr "Er bestaat al een bibliotheek met de bijnaam '%s'."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:635
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1018
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
 "Een van de bijnamen moet worden gewijzigd na het toevoegen van deze "
 "bibliotheek."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:654 eeschema/sch_base_frame.cpp:284
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1037
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:588
 msgid "Skip"
 msgstr "Overslaan"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:654
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1037
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
 msgid "Add Anyway"
 msgstr "Toch toevoegen"
 
@@ -14611,7 +14613,7 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Bestand '%s' bestaat al. Wilt u dit bestand overschrijven?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:903
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:856
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:857
 msgid "Migrate Library"
 msgstr "Bibliotheken migreren"
 
@@ -14637,7 +14639,7 @@ msgstr "Symboolbibliotheken"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1194
 #: eeschema/tools/sch_editor_control.cpp:483
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1226
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1227
 #, c-format
 msgid ""
 "Error saving global library table:\n"
@@ -14654,14 +14656,14 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1794
 #: eeschema/tools/sch_editor_control.cpp:484
 #: eeschema/tools/sch_editor_control.cpp:499
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1227
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1240
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1228
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1241
 msgid "File Save Error"
 msgstr "Fout bij opslaan van bestand"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1207
 #: eeschema/tools/sch_editor_control.cpp:498
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1239
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1240
 #, c-format
 msgid ""
 "Error saving project-specific library table:\n"
@@ -14768,7 +14770,7 @@ msgstr ""
 "het nieuwe hoofdbladbestand."
 
 #: eeschema/eeschema_config.cpp:74 pcbnew/pcbnew_config.cpp:55
-#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:176
+#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:188
 msgid "Error loading drawing sheet."
 msgstr "Fout bij laden van tekenblad."
 
@@ -15371,7 +15373,7 @@ msgid "Abort"
 msgstr "Afbreken"
 
 #: eeschema/files-io.cpp:459 eeschema/files-io.cpp:479
-#: pagelayout_editor/files.cpp:259 pcbnew/files.cpp:789
+#: pagelayout_editor/files.cpp:259 pcbnew/files.cpp:786
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -15431,7 +15433,7 @@ msgstr ""
 "Fout bij het opslaan van schema-bestand '%s'.\n"
 "%s"
 
-#: eeschema/files-io.cpp:849 pcbnew/files.cpp:1014 pcbnew/files.cpp:1295
+#: eeschema/files-io.cpp:849 pcbnew/files.cpp:1011 pcbnew/files.cpp:1292
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Kan tijdelijk bestand '%s' niet aanmaken."
@@ -15445,13 +15447,13 @@ msgstr ""
 "Fout bij opslaan van schemabestand '%s'.\n"
 "Hernoemen van tijdelijk bestand '%s' mislukt."
 
-#: eeschema/files-io.cpp:875 pcbnew/files.cpp:1035 pcbnew/files.cpp:1361
+#: eeschema/files-io.cpp:875 pcbnew/files.cpp:1032 pcbnew/files.cpp:1358
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Hernoemen van tijdelijk bestand '%s' mislukt."
 
 #: eeschema/files-io.cpp:898 pagelayout_editor/files.cpp:187
-#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1068
+#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1065
 #, c-format
 msgid "File '%s' saved."
 msgstr "Bestand '%s' opgeslagen."
@@ -15461,8 +15463,8 @@ msgid "File write operation failed."
 msgstr "Bestandsschrijfoperatie mislukt."
 
 #: eeschema/files-io.cpp:970 eeschema/files-io.cpp:1038
-#: kicad/import_project.cpp:92 kicad/tools/kicad_manager_control.cpp:111
-#: kicad/tools/kicad_manager_control.cpp:284
+#: kicad/import_project.cpp:92 kicad/tools/kicad_manager_control.cpp:112
+#: kicad/tools/kicad_manager_control.cpp:286
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -15863,12 +15865,12 @@ msgid "Unit count differs."
 msgstr "Aantal eenheden verschilt."
 
 #: eeschema/lib_symbol.cpp:324
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:665
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:666
 msgid "Graphic item count differs."
 msgstr "Aantal grafische items verschilt."
 
 #: eeschema/lib_symbol.cpp:336
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:679
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:680
 #, c-format
 msgid "%s differs."
 msgstr "%s verschilt."
@@ -16886,7 +16888,14 @@ msgstr ""
 msgid "KiCad database library files"
 msgstr "KiCad databasebibliotheekbestanden"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:635
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:632
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:649
+#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
+#, c-format
+msgid "Unable to read file '%s'."
+msgstr "Kan bestand '%s' niet lezen."
+
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:641
 #, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
@@ -16895,13 +16904,7 @@ msgstr ""
 "'%s' is een Eagle-bestand met binaire indeling; alleen Eagle-bestanden met "
 "XML-indeling kunnen worden geïmporteerd."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
-#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
-#, c-format
-msgid "Unable to read file '%s'."
-msgstr "Kan bestand '%s' niet lezen."
-
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1726
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1732
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -16910,7 +16913,7 @@ msgstr ""
 "Fout bij het lezen van Eagle-bestand. Kan instantie '%s' niet vinden, maar "
 "er wordt naar verwezen in het schema."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1774
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1780
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Kan '%s' niet vinden in de geïmporteerde bibliotheek."
@@ -17958,8 +17961,8 @@ msgstr ""
 "        <td></td>\n"
 "    </tr>\n"
 "    <tr>\n"
-"        <td> &nbsp;<br><samp>~{overbar}</samp><br> "
-"&nbsp;<br><samp>~{CLK}</samp></td>\n"
+"        <td> &nbsp;<br><samp>~{overbar}</samp><br> &nbsp;<br><samp>~{CLK}</"
+"samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp><u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></"
 "samp><br> <samp>overbar</samp><br> <samp><u>&nbsp;&nbsp;&nbsp;</u></"
@@ -17984,8 +17987,8 @@ msgstr ""
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>field_value</i> of symbol "
-"<i>refdes</i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>field_value</i> of symbol <i>refdes</i></"
+"samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -18000,8 +18003,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>Busdefinitie</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
-";&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>Resulterende netten</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -18052,9 +18055,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>MEM{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>MEM.D<sub>1</sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>MEM.D<sub>1</"
+"sub>, MEM.D<sub>2</sub>, MEM.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -19738,7 +19741,7 @@ msgstr "Symbool '%s' bestaat al in bibliotheek '%s'."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:132
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:199
 #: eeschema/tools/symbol_editor_control.cpp:380
-#: kicad/tools/kicad_manager_control.cpp:327
+#: kicad/tools/kicad_manager_control.cpp:329
 #: pcbnew/dialogs/dialog_export_idf.cpp:175
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
 #: pcbnew/footprint_libraries_utils.cpp:376
@@ -19806,7 +19809,7 @@ msgstr "Symbool verwijderen"
 msgid "Keep Symbol"
 msgstr "Symbool behouden"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:958 pcbnew/files.cpp:329
+#: eeschema/symbol_editor/symbol_editor.cpp:958 pcbnew/files.cpp:326
 #: pcbnew/footprint_libraries_utils.cpp:1172
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -19912,7 +19915,7 @@ msgstr "Fout bij maken van symboolbibliotheek '%s'."
 msgid "Symbol %s saved to library '%s'."
 msgstr "Symbool '%s' opgeslagen in bibliotheek '%s'."
 
-#: eeschema/symbol_lib_table.cpp:277
+#: eeschema/symbol_lib_table.cpp:278
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
@@ -21438,7 +21441,8 @@ msgstr "Analysetab bewerken..."
 
 #: eeschema/tools/ee_actions.cpp:1435
 msgid "Edit the SPICE command and plot setup for the current analysis tab"
-msgstr "Bewerk de SPICE-opdracht en plotinstellingen voor de huidige analysetab"
+msgstr ""
+"Bewerk de SPICE-opdracht en plotinstellingen voor de huidige analysetab"
 
 #: eeschema/tools/ee_actions.cpp:1442
 msgid "Run Simulation"
@@ -21487,7 +21491,8 @@ msgstr "Symbool waarschuwingen"
 
 #: eeschema/tools/ee_inspection_tool.cpp:263
 msgid "Select a symbol to diff against its library equivalent."
-msgstr "Selecteer een symbool om te vergelijken met zijn bibliotheekequivalent."
+msgstr ""
+"Selecteer een symbool om te vergelijken met zijn bibliotheekequivalent."
 
 #: eeschema/tools/ee_inspection_tool.cpp:274
 #, c-format
@@ -23674,8 +23679,8 @@ msgstr "Genereer positiebestand"
 #: kicad/cli/command_pcb_export_pos.cpp:51
 msgid "Valid options: front,back,both. Gerber format only supports \"both\"."
 msgstr ""
-"Geldige opties: front,back,both. De Gerber-indeling ondersteunt alleen \"both"
-"\"."
+"Geldige opties: front,back,both. De Gerber-indeling ondersteunt alleen "
+"\"both\"."
 
 #: kicad/cli/command_pcb_export_pos.cpp:55
 msgid "Valid options: ascii,csv,gerber"
@@ -24099,7 +24104,7 @@ msgstr "EasyEDA Std-backup importeren"
 msgid "Import EasyEDA Pro Project"
 msgstr "EasyEDA Pro-project importeren"
 
-#: kicad/kicad.cpp:317
+#: kicad/kicad.cpp:320
 #, c-format
 msgid ""
 "File '%s'\n"
@@ -24448,8 +24453,8 @@ msgid ""
 "updated with 'Update All' button."
 msgstr ""
 "Vastgepinde pakketten hebben geen invloed op de beschikbare-"
-"updatesnotificatie en zullen niet bijgewerkt worden met de 'Alles "
-"bijwerken'-knop."
+"updatesnotificatie en zullen niet bijgewerkt worden met de 'Alles bijwerken'-"
+"knop."
 
 #: kicad/pcm/dialogs/panel_package.cpp:134
 msgid "Install Pending"
@@ -24561,17 +24566,17 @@ msgstr "Alle versies weergeven"
 msgid "Download"
 msgstr "Download"
 
-#: kicad/pcm/pcm.cpp:87
+#: kicad/pcm/pcm.cpp:88
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "Schemabestand '%s' niet gevonden"
 
-#: kicad/pcm/pcm.cpp:92
+#: kicad/pcm/pcm.cpp:93
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "Fout bij laden van schema: %s"
 
-#: kicad/pcm/pcm.cpp:119
+#: kicad/pcm/pcm.cpp:120
 #, c-format
 msgid "Error loading installed packages list: %s"
 msgstr "Fout bij laden van lijst van geïnstalleerde pakketten: %s"
@@ -25204,11 +25209,11 @@ msgstr "Open Teksteditor"
 msgid "Launch preferred text editor"
 msgstr "Start de gewenste teksteditor"
 
-#: kicad/tools/kicad_manager_control.cpp:72
+#: kicad/tools/kicad_manager_control.cpp:73
 msgid "Create New Project"
 msgstr "Creëer Nieuw Project"
 
-#: kicad/tools/kicad_manager_control.cpp:120
+#: kicad/tools/kicad_manager_control.cpp:121
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -25220,68 +25225,68 @@ msgstr ""
 "\n"
 "Wilt u doorgaan?"
 
-#: kicad/tools/kicad_manager_control.cpp:151
+#: kicad/tools/kicad_manager_control.cpp:152
 msgid "Clone Project from Git Repository"
 msgstr "Project klonen uit Git-repository"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:174
 msgid "Cloning Repository"
 msgstr "Repository klonen"
 
-#: kicad/tools/kicad_manager_control.cpp:185
+#: kicad/tools/kicad_manager_control.cpp:186
 msgid "No project files were found in the repository."
 msgstr "Er zijn geen projectbestanden gevonden in de repository."
 
-#: kicad/tools/kicad_manager_control.cpp:221
+#: kicad/tools/kicad_manager_control.cpp:223
 msgid "System Templates"
 msgstr "Systeemsjablonen"
 
-#: kicad/tools/kicad_manager_control.cpp:230
+#: kicad/tools/kicad_manager_control.cpp:232
 msgid "User Templates"
 msgstr "Gebruikerssjablonen"
 
-#: kicad/tools/kicad_manager_control.cpp:239
+#: kicad/tools/kicad_manager_control.cpp:241
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Geen projectsjabloon geselecteerd. Kan nieuw project niet genereren."
 
-#: kicad/tools/kicad_manager_control.cpp:247
+#: kicad/tools/kicad_manager_control.cpp:249
 msgid "New Project Folder"
 msgstr "Nieuwe projectmap"
 
-#: kicad/tools/kicad_manager_control.cpp:296
-#: kicad/tools/kicad_manager_control.cpp:665
+#: kicad/tools/kicad_manager_control.cpp:298
+#: kicad/tools/kicad_manager_control.cpp:667
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Onvoldoende rechten om te schrijven naar map '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:317
+#: kicad/tools/kicad_manager_control.cpp:319
 msgid "Overwriting files:"
 msgstr "Bestanden overschrijven:"
 
-#: kicad/tools/kicad_manager_control.cpp:323
+#: kicad/tools/kicad_manager_control.cpp:325
 msgid "Similar files already exist in the destination folder."
 msgstr "Vergelijkbare bestanden bestaan al in de doelmap."
 
-#: kicad/tools/kicad_manager_control.cpp:342
+#: kicad/tools/kicad_manager_control.cpp:344
 msgid "A problem occurred creating new project from template."
 msgstr ""
 "Er is een probleem opgetreden bij het maken van een nieuw project op basis "
 "van een sjabloon."
 
-#: kicad/tools/kicad_manager_control.cpp:365
+#: kicad/tools/kicad_manager_control.cpp:367
 msgid "Open Existing Project"
 msgstr "Open een bestaand project"
 
-#: kicad/tools/kicad_manager_control.cpp:590
+#: kicad/tools/kicad_manager_control.cpp:592
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Kan map '%s' niet kopiëren."
 
-#: kicad/tools/kicad_manager_control.cpp:636
+#: kicad/tools/kicad_manager_control.cpp:638
 msgid "Save Project To"
 msgstr "Project opslaan in"
 
-#: kicad/tools/kicad_manager_control.cpp:656
+#: kicad/tools/kicad_manager_control.cpp:658
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -25292,24 +25297,24 @@ msgstr ""
 "\n"
 "Zorg ervoor dat u schrijfrechten heeft en probeer het opnieuw."
 
-#: kicad/tools/kicad_manager_control.cpp:667
+#: kicad/tools/kicad_manager_control.cpp:669
 msgid "Error!"
 msgstr "Fout!"
 
-#: kicad/tools/kicad_manager_control.cpp:723
+#: kicad/tools/kicad_manager_control.cpp:725
 msgid "Create (or open) a project to edit a schematic."
 msgstr ""
 "Maak een nieuw project (of open een project) om het schema te bewerken."
 
-#: kicad/tools/kicad_manager_control.cpp:729
+#: kicad/tools/kicad_manager_control.cpp:731
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Creëer (of open) een project om de PCB te bewerken."
 
-#: kicad/tools/kicad_manager_control.cpp:746
+#: kicad/tools/kicad_manager_control.cpp:748
 msgid "Application failed to load:\n"
 msgstr "Applicatie kan niet worden geladen:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:752
+#: kicad/tools/kicad_manager_control.cpp:754
 msgid "Application cannot start."
 msgstr "Applicatie kan niet starten."
 
@@ -25321,7 +25326,7 @@ msgstr "Updatecontrole"
 msgid "Requesting update info"
 msgstr "Updateinformatie opvragen"
 
-#: kicad/update_manager.cpp:246
+#: kicad/update_manager.cpp:248
 #, c-format
 msgid "Unable to parse update response: %s"
 msgstr "Kan update-antwoord niet interpreteren: %s"
@@ -25866,8 +25871,8 @@ msgstr ""
 "___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 "___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
-"/ (L&minus;1)___<br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</"
+"sub>) / (L&minus;1)___<br>\n"
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
@@ -26273,8 +26278,8 @@ msgid ""
 msgstr ""
 "OVC I: Apparatuur zonder directe verbinding met netvoeding\n"
 "\n"
-"OVC II: Energieverbruikende apparatuur gevoed door de vaste installatie. ("
-"bijv. huishoudelijke apparaten en ladingen, draagbare hulpmiddelen). OVCIII "
+"OVC II: Energieverbruikende apparatuur gevoed door de vaste installatie. "
+"(bijv. huishoudelijke apparaten en ladingen, draagbare hulpmiddelen). OVCIII "
 "is van toepassing als er eisen zijn voor betrouwbaarheid en beschikbaarheid\n"
 "\n"
 "OVC III: Apparatuur in vaste installaties met eisen aan betrouwbaarheid en "
@@ -27367,7 +27372,8 @@ msgstr "Thermische weerstand:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:264
 msgid "Using thermal conductivity value 401 Watts/(meter-Kelvin)"
-msgstr "Met behulp van thermische geleidbaarheidswaarde 401 watt/(meter-kelvin)"
+msgstr ""
+"Met behulp van thermische geleidbaarheidswaarde 401 watt/(meter-kelvin)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:272
 msgid "deg C/W"
@@ -27763,16 +27769,16 @@ msgstr ""
 "\n"
 "De controlerende waarde is vetgedrukt.\n"
 "\n"
-"De berekeningen zijn geldig voor stromen tot 35 A (extern) of 17,5 A (intern)"
-", temperatuurstijgingen tot 100 °C en breedtes tot 400 mil (10 mm).\n"
+"De berekeningen zijn geldig voor stromen tot 35 A (extern) of 17,5 A "
+"(intern), temperatuurstijgingen tot 100 °C en breedtes tot 400 mil (10 mm).\n"
 "\n"
 "De formule, uit IPC 2221, is\n"
 "<center>___I = K &middot; &Delta;T<sup>0.44</sup> &middot; (W &middot; "
 "H)<sup>0.725</sup>___</center>\n"
 "where:<br>\n"
 "___I___ is maximale stroom in A<br>\n"
-"___&Delta;T___ is temperatuurstijging boven omgevingstemperatuur in "
-"&deg;C<br>\n"
+"___&Delta;T___ is temperatuurstijging boven omgevingstemperatuur in &deg;"
+"C<br>\n"
 "___W___ is breedte in mils<br>\n"
 "___H___ is dikte (hoogte) in mils<br>\n"
 "___K___ is 0,024 voor interne sporen of 0,048 voor externe sporen\n"
@@ -29336,7 +29342,7 @@ msgstr ""
 "Fout bij importeren van instellingen van bord:\n"
 "Het bijbehorende projectbestand %s kan niet worden geladen"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:292 pcbnew/files.cpp:567
+#: pcbnew/dialogs/dialog_board_setup.cpp:292 pcbnew/files.cpp:564
 #: pcbnew/tools/pcb_control.cpp:1312
 msgid "Loading PCB"
 msgstr "PCB wordt geladen"
@@ -29626,7 +29632,8 @@ msgstr "Colineaire sporen samen&voegen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:39
 msgid "merge aligned track segments, and remove null segments"
-msgstr "gelijklopende spoorsegmenten samenvoegen, en lege segmenten verwijderen"
+msgstr ""
+"gelijklopende spoorsegmenten samenvoegen, en lege segmenten verwijderen"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:43
 msgid "Delete tracks unconnected at one end"
@@ -31906,8 +31913,8 @@ msgstr ""
 "deze footprint.\n"
 "De uiteindelijke vrije afstand is de som van deze waarde en de relatieve "
 "vrije afstand.\n"
-"Een negatieve waarde betekent een kleinere stencilopening dan de padgrootte."
-"\n"
+"Een negatieve waarde betekent een kleinere stencilopening dan de "
+"padgrootte.\n"
 "Deze waarde kan per pad worden aangepast in het tabblad voor\n"
 "aangepaste vrije afstand en instellingen in de padeigenschappen."
 
@@ -31930,8 +31937,8 @@ msgstr ""
 "padbreedte is en de verticale vrije afstand 10% van de padhoogte.\n"
 "De uiteindelijke vrije afstand is de som van deze waarde en de absolute "
 "vrije afstand.\n"
-"Een negatieve waarde betekent een kleinere stencilopening dan de padgrootte."
-"\n"
+"Een negatieve waarde betekent een kleinere stencilopening dan de "
+"padgrootte.\n"
 "Deze waarde kan per pad worden aangepast in het tabblad voor aangepaste "
 "vrije afstand en instellingen in de padeigenschappen."
 
@@ -32189,8 +32196,8 @@ msgstr ""
 "Ovale gaten geven vaak problemen voor bordfabrikanten.\n"
 "\"Gebruik routeopdracht\" gebruikt de gebruikelijke G00 routeopdracht "
 "(aanbevolen)\n"
-" \"Gebruik alternatieve modus\" gebruikt een andere boor-/routeopdracht (G85)"
-"\n"
+" \"Gebruik alternatieve modus\" gebruikt een andere boor-/routeopdracht "
+"(G85)\n"
 "(Gebruik dit alleen als de aanbevolen opdracht niet werkt)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:78
@@ -33177,60 +33184,60 @@ msgstr "Padeigenschappen"
 msgid "Default Pad Properties for Add Pad Tool"
 msgstr "Standaard padeigenschappen voor pads toevoegen-gereedschap"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:548
+#: pcbnew/dialogs/dialog_pad_properties.cpp:552
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "Footprint %s (%s), %s, gedraaid %g graden"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:551
+#: pcbnew/dialogs/dialog_pad_properties.cpp:555
 #: pcbnew/dialogs/dialog_text_properties.cpp:311
 msgid "back side (mirrored)"
 msgstr "achterkant (gespiegeld)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:551
+#: pcbnew/dialogs/dialog_pad_properties.cpp:555
 #: pcbnew/dialogs/dialog_text_properties.cpp:312
 msgid "front side"
 msgstr "voorkant"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:897
+#: pcbnew/dialogs/dialog_pad_properties.cpp:901
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:325
 msgid "All copper layers"
 msgstr "Alle koperlagen"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:898
+#: pcbnew/dialogs/dialog_pad_properties.cpp:902
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr "%s, %s en verbonden lagen"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:901
+#: pcbnew/dialogs/dialog_pad_properties.cpp:905
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:325
 msgid "Connected layers only"
 msgstr "Alleen verbonden lagen"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:906 pcbnew/zone.cpp:603
+#: pcbnew/dialogs/dialog_pad_properties.cpp:910 pcbnew/zone.cpp:603
 #, c-format
 msgid "%s and %s"
 msgstr "%s en %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1226
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1231
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1230
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1235
 msgid "Error: Pad must have a positive size."
 msgstr "Fout: Pad moet een positieve maat hebben."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1245
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1249
 msgid "Warning: Pad hole not inside pad shape."
 msgstr "Waarschuwing: Padgat niet binnen padvorm."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1258
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1262
 msgid "Warning: Pad hole will leave no copper."
 msgstr "Waarschuwing: Padgat laat geen koper over."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1263
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1267
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr ""
 "Waarschuwing: negatieve waarden voor lokale vrije afstand hebben geen effect."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1280
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
@@ -33238,7 +33245,7 @@ msgstr ""
 "Waarschuwing: Negatieve vrije afstand voor het soldeermasker is groter dan "
 "sommige vormen. Dit kan verrassingen opleveren."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1289
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1293
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
@@ -33246,7 +33253,7 @@ msgstr ""
 "Waarschuwing: Negatieve vrije afstand voor het soldeermasker is groter dan "
 "een pad. Er wordt geen soldeermasker gegenereerd."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1308
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1312
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
@@ -33254,11 +33261,11 @@ msgstr ""
 "Waarschuwing: Negatieve soldeerpastamarges groter dan pad. Er wordt geen "
 "soldeerpastamasker aangemaakt."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1315
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1319
 msgid "Error: pad has no layer."
 msgstr "Fout: pad heeft geen laag."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1321
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1325
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
@@ -33266,81 +33273,81 @@ msgstr ""
 "Waarschuwing: Geplateerde doorsteekgaten moeten normaal gesproken op "
 "minstens één laag een koperpad hebben."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1327
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1331
 msgid "Error: Trapazoid delta is too large."
 msgstr "Fout: Trapeziumdelta is te groot."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1336
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1340
 msgid "Error: Through hole pad has no hole."
 msgstr "Fout: Doorsteekpad heeft geen boorgat."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1343
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1347
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
 "Waarschuwing: Connectorpads hebben normaalgesproken geen soldeerpasta. "
 "Gebruik in plaats daarvan SMD-pads."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1352
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1356
 msgid "Error: SMD pad has a hole."
 msgstr "Fout: SMD-pad heeft een gat."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1358
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1362
 msgid "Warning: SMD pad has no outer layers."
 msgstr "Waarschuwing: SMD-pad heeft geen buitenlagen."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1366
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1370
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
 msgstr "Waarschuwing: Fiducial-eigenschap is zinloos voor NPTH-pads."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1372
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1376
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
 msgstr "Waarschuwing: Testpunt-eigenschap is zinloos voor NPTH-pads."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1378
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1382
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
 msgstr "Waarschuwing: Koellichaam-eigenschap is zinloos voor NPTH-pads."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1384
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1388
 msgid "Warning: Castellated property is for PTH pads."
 msgstr "Waarschuwing: Gekanteeld-eigenschap is bedoeld voor PTH-pads."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1390
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Warning: BGA property is for SMD pads."
 msgstr "Waarschuwing: BGA-eigenschap is alleen voor SMD-pads."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1399
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1403
 msgid "Error: Negative corner size."
 msgstr "Fout: Negatieve hoekmaat."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1401
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1405
 msgid "Warning: Corner size will make pad circular."
 msgstr "Waarschuwing: Hoekmaat maakt de pad rond."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1411
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1415
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr "Fout: Aangepaste padvorm moet resulteren in één polygoon."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1417
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1421
 msgid "Pad Properties Errors"
 msgstr "Pad-eigenschapfouten"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1418
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Pad Properties Warnings"
 msgstr "Pad-eigenschapwaarschuwingen"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1624
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1628
 msgid "Modify pad"
 msgstr "Pad wijzigen"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1657
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1661
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
 msgid "Hole size X:"
 msgstr "Gatmaat X:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1672
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1673
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1674
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1676
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1677
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1678
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:653
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:721
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
@@ -33350,14 +33357,14 @@ msgstr "Gatmaat X:"
 msgid "d"
 msgstr "d"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1678
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1682
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
 msgid "Pad size X:"
 msgstr "Padmaat X:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1681
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1682
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1683
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1685
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1686
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1687
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:261
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:301
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:357
@@ -33764,8 +33771,8 @@ msgstr ""
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
-"Positieve vrije afstand betekent dat het gebied groter is dan de pad ("
-"gangbaar voor maskerafstand)."
+"Positieve vrije afstand betekent dat het gebied groter is dan de pad "
+"(gangbaar voor maskerafstand)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:939
 msgid ""
@@ -35290,54 +35297,54 @@ msgstr "Standaardtekstitems voor nieuwe footprints:"
 msgid "Default properties for new graphic items:"
 msgstr "Standaardeigenschappen voor nieuwe grafische items:"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:465
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:466
 #, c-format
 msgid "folder with %s files"
 msgstr "map met %s bestanden"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:564
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:565
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Ongeldig teken '%c' in bijnaam '%s'."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:809
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:810
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
 "Selecteer één of meer rijen met bibliotheken om op te slaan in de huidige "
 "KiCad-indeling."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:817
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:818
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
 msgstr ""
 "'%s' opslaan in de huidige KiCad-indeling en de verouderde vermelding in de "
 "tabel vervangen?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:823
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:824
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
 "%d bibliotheken opslaan met huidige KiCad-indeling en vermeldingen in tabel "
 "vervangen?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:853
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:854
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
 msgstr "Map '%s' bestaat al. Wilt u bestaande footprints overschrijven?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:883
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:884
 #, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "Opslaan footprintbibliotheekbestand '%s' mislukt."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:958
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:959
 #, c-format
 msgid "Select %s Library"
 msgstr "Bibliotheek %s selecteren"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1015
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
 msgid "Warning: Duplicate Nicknames"
 msgstr "Waarschuwing: dubbele bijnaam"
 
@@ -35345,24 +35352,24 @@ msgstr "Waarschuwing: dubbele bijnaam"
 msgid "LIbrary Format"
 msgstr "Bibliotheekindeling"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:397
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:404
 msgid "No filename entered"
 msgstr "Geen bestand-naam ingevoerd"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:402
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:409
 msgid "Illegal filename"
 msgstr "Ongeldige bestandsnaam"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:407
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:414
 #: pcbnew/microwave/microwave_polygon.cpp:223
 msgid "File not found"
 msgstr "Bestand niet gevonden"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:412
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:419
 msgid "Unable to open file"
 msgstr "Fout bij openen van bestand"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:417
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:424
 msgid "Unknown error"
 msgstr "Onbekende fout"
 
@@ -36992,185 +36999,162 @@ msgstr ""
 "\n"
 "### Beperkingen\n"
 "\n"
-"| Beperkingstype            | Argumenttype                                   "
-"                                                                        | Des"
-"cription                                                                     "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                    |\n"
-"|---------------------------|------------------------------------------------"
-"------------------------------------------------------------------------|----"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"----------------------------------------------------|\n"
-"| `annular_width`           | min/opt/max                                    "
-"                                                                        | "
-"Controleert de breedte van annulusringen op vias.<br>                        "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                       |\n"
-"| `clearance`               | min                                            "
-"                                                                        | "
-"Specificeert de **elektrische** vrije ruimte tussen koperobjecten van "
+"| Beperkingstype            | "
+"Argumenttype                                                                                                           "
+"| "
+"Description                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"|\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| Controleert de breedte van annulusringen op vias."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                   "
+"|\n"
+"| `clearance`               | "
+"min                                                                                                                    "
+"| Specificeert de **elektrische** vrije ruimte tussen koperobjecten van "
 "verschillende netten.  (Zie `physical_clearance` als u de vrije ruimte "
 "tussen objecten ongeacht het net wilt specificeren.)<br><br>Maak om "
 "koperobjecten te laten overlappen (botsen) een `clearance`-beperking met een "
-"`min`-waarde kleiner dan nul (bijvoorbeeld `-1`).<br>                        "
-"                                                                             "
+"`min`-waarde kleiner dan nul (bijvoorbeeld `-1`)."
+"<br>                                                                                                     "
 "|\n"
-"| `courtyard_clearance`     | min                                            "
-"                                                                        | "
-"Controleert de vrije ruimte tussen footprint-afbakeningen en genereert een "
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
+"| Controleert de vrije ruimte tussen footprint-afbakeningen en genereert een "
 "fout als twee afbakeningen dichter bij elkaar zijn dan de `min`-afstand.  "
 "Als een footprint geen afbakeningsvorm heeft worden er geen foutmeldingen "
-"gegenereerd door deze beperking.<br>                                         "
-"                                                                             "
-"                                                               |\n"
-"| `diff_pair_gap`           | min/opt/max                                    "
-"                                                                        | "
-"Controleert de tussenruimte tussen gekoppelde sporen in een differentieel "
+"gegenereerd door deze beperking."
+"<br>                                                                                                                                                                                     "
+"|\n"
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
+"| Controleert de tussenruimte tussen gekoppelde sporen in een differentieel "
 "paar.  Gekoppelde sporen zijn segmenten die parallel aan elkaar lopen.  De "
 "tussenruimte van differentiele paren wordt niet getest op ongekoppelde delen "
-"van een differentieel paar (bijvoorbeeld de uitwaaiering van een component).<"
-"br>                                                                          "
-"                                                            |\n"
-"| `diff_pair_uncoupled`     | max                                            "
-"                                                                        | "
-"Controleert de afstand waar een differentieel paar ongekoppeld is gerouteerd "
-"van het andere polariteitsspoor in het paar (bijvoorbeeld waar het paar "
-"uitwaaiert van een component, of ongekoppeld wordt om een ander object zoals "
-"een via te passeren).<br>                                                    "
-"                                                                             "
-"                                                            |\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
-"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
-"Geef één of meer objecttypes om te verbieden, gescheiden door spaties.  "
+"van een differentieel paar (bijvoorbeeld de uitwaaiering van een component)."
+"<br>                                                                                                                                      "
+"|\n"
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
+"| Controleert de afstand waar een differentieel paar ongekoppeld is "
+"gerouteerd van het andere polariteitsspoor in het paar (bijvoorbeeld waar "
+"het paar uitwaaiert van een component, of ongekoppeld wordt om een ander "
+"object zoals een via te passeren)."
+"<br>                                                                                                                                                                                             "
+"|\n"
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Geef één of meer objecttypes om te verbieden, gescheiden door spaties.  "
 "Bijvoorbeeld, `(constraint disallow track)` of `(constraint disallow track "
 "via pad)`.  Als een object van dit type overeen komt met de regelvoorwaarde "
 "wordt een DRC-fout aangemaakt.<br><br>Deze beperking is in essentie "
 "hetzelfde als een weerregelgebied, maar kan gebruikt worden om meer "
-"specifieke weerbeperkingen te "
-"creëren.<br>                                       |\n"
-"| `edge_clearance`          | min/opt/max                                    "
-"                                                                        | "
-"Controleert de vrije ruimte tussen objecten en de bordrand.<br><br>Dit kan "
+"specifieke weerbeperkingen te creëren."
+"<br>                                       |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Controleert de vrije ruimte tussen objecten en de bordrand.<br><br>Dit kan "
 "ook beschouwd worden als de “freestolerantie” aangezien de bordrand alle "
 "grafische items op de `Edge.Cuts`-laag zal omvatten, evenals eventuele "
-"*ovale* padgaten.  (Zie `physical_hole_clearance` voor de boortolerantie.)<br"
-">                                                                            "
-"                                                                   |\n"
-"| `length`                  | min/max                                        "
-"                                                                        | "
-"Controleert de totale gerouteerde lengte voor de netten die overeenkomen met "
-"de regelvoorwaarde en genereert een fout voor elk net dat onder de `min`-"
+"*ovale* padgaten.  (Zie `physical_hole_clearance` voor de "
+"boortolerantie.)<br>                                                                                                                                               "
+"|\n"
+"| `length`                  | min/"
+"max                                                                                                                "
+"| Controleert de totale gerouteerde lengte voor de netten die overeenkomen "
+"met de regelvoorwaarde en genereert een fout voor elk net dat onder de `min`-"
 "waarde (als opgegeven) of boven de `max`-waarde (als opgegeven) van de "
-"beperking ligt.<br>                                                          "
-"                                                                             "
-"                                                                 |\n"
-"| `hole`                    | min/max                                        "
-"                                                                        | "
-"Controleert de grootte (diameter) van een boorgat in een pad of via.  Voor "
+"beperking ligt."
+"<br>                                                                                                                                                                                                        "
+"|\n"
+"| `hole`                    | min/"
+"max                                                                                                                "
+"| Controleert de grootte (diameter) van een boorgat in een pad of via.  Voor "
 "ovale gaten zal de kleinere (minore) diameter worden getest tegen de `min`-"
 "waarde (als opgegeven) en de grotere (majore) diameter zal worden getest "
-"tegen de `max`-waarde (als opgegeven).<br>                                   "
-"                                                                             "
-"                                                               |\n"
-"| `hole_clearance`          | min                                            "
-"                                                                        | "
-"Controleert de vrije ruimte tussen een boorgat in een pad of via en "
+"tegen de `max`-waarde (als opgegeven)."
+"<br>                                                                                                                                                                               "
+"|\n"
+"| `hole_clearance`          | "
+"min                                                                                                                    "
+"| Controleert de vrije ruimte tussen een boorgat in een pad of via en "
 "koperobjecten op een ander net.  De vrije ruimte wordt gemeten vanaf de "
-"diameter van het gat, niet vanuit het midden.<br>                            "
-"                                                                             "
-"                                                                             "
-"                                                                     |\n"
-"| `hole_to_hole`            | min                                            "
-"                                                                        | "
-"Controleert de vrije ruimte tussen mechanisch geboorde gaten in pads en via’"
-"s.  De vrije ruimte wordt gemeten tussen de diameters van de gaten, niet "
+"diameter van het gat, niet vanuit het midden."
+"<br>                                                                                                                                                                                                                                                           "
+"|\n"
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
+"| Controleert de vrije ruimte tussen mechanisch geboorde gaten in pads en "
+"via’s.  De vrije ruimte wordt gemeten tussen de diameters van de gaten, niet "
 "tussen hun middelpunten.<br><br>Deze beperking bestaat puur ter bescherming "
 "van boorbitjes.  De vrije ruimte tussen **laser-geboorde** (microvia’s) "
 "gaten wordt niet gecontroleerd, noch de vrije ruimte tussen **gefreesde** "
 "(ovaalvormige) gaten en andere niet-mechanisch geboorde gaten.<br>   |\n"
-"| `physical_clearance`      | min                                            "
-"                                                                        | "
-"Controleert de vrije ruimte tussen twee objecten op een gegeven laag ("
-"inclusief niet-koperlagen).<br><br>Hoewel dit meer algemene controles kan "
-"uitvoeren dan `clearance` is het veel langzamer.  Gebruik `clearance` waar mo"
-"gelijk.<br>                                                                  "
-"                                                                             "
-"                                                                 |\n"
-"| `physical_hole_clearance` | min                                            "
-"                                                                        | "
-"Controleert de vrije ruimte tussen een boorgat in een pad of via en een "
+"| `physical_clearance`      | "
+"min                                                                                                                    "
+"| Controleert de vrije ruimte tussen twee objecten op een gegeven laag "
+"(inclusief niet-koperlagen).<br><br>Hoewel dit meer algemene controles kan "
+"uitvoeren dan `clearance` is het veel langzamer.  Gebruik `clearance` waar "
+"mogelijk."
+"<br>                                                                                                                                                                                                                "
+"|\n"
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
+"| Controleert de vrije ruimte tussen een boorgat in een pad of via en een "
 "ander object, ongeacht het net. De vrije ruimte wordt gemeten vanaf de "
 "diameter van het gat, niet het midden.<br><br>Dit kan ook worden beschouwd "
 "als de “boortolerantie” aangezien het alleen **ronde** gaten omvat (zie "
-"`edge_clearance` voor de freestolerantie).<br>                               "
-"                                                                         |\n"
-"| `silk_clearance`          | min/opt/max                                    "
-"                                                                        | "
-"Controleert de vrije ruimte tussen objecten op silkscreenlagen en andere obje"
-"cten.<br>                                                                    "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                       |\n"
-"| `skew`                    | max                                            "
-"                                                                        | "
-"Controleert de totale scheeftrekking voor de netten die met de "
+"`edge_clearance` voor de freestolerantie)."
+"<br>                                                                                                        "
+"|\n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Controleert de vrije ruimte tussen objecten op silkscreenlagen en andere "
+"objecten."
+"<br>                                                                                                                                                                                                                                                                                                                                                                  "
+"|\n"
+"| `skew`                    | "
+"max                                                                                                                    "
+"| Controleert de totale scheeftrekking voor de netten die met de "
 "regelvoorwaarde overeenkomen. Dat wil zeggen, het verschil tussen de lengte "
 "van elk net en het gemiddelde van alle lengtes van elk net dat overeenkomt "
 "met de regel.  Als de absolute waarde van het verschil tussen dat gemiddelde "
 "en de lengte van eender net boven de `max`-waarde van de beperking ligt, "
-"wordt een fout gegenereerd.<br>                                             |"
-"\n"
-"| `thermal_relief_gap`      | min                                            "
-"                                                                        | "
-"Geeft de breedte van de tussenruimte tussen een pad en een zone met een "
-"thermische ontlastingsverbinding.<br>                                        "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                            |\n"
-"| `thermal_spoke_width`     | opt                                            "
-"                                                                        | "
-"Geeft de breedte van de spaken die een pad met een zone verbinden via een "
-"thermische ontlastingsverbinding.<br>                                        "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                          |\n"
-"| `track_width`             | min/opt/max                                    "
-"                                                                        | "
-"Cotroleert de breedte van spoor- en boogsegmenten.  Voor elk segment dat een "
-"breedte onder de `min`-waarde (als opgegeven) of boven de `max`-waarde (als "
-"opgegeven) heeft wordt een fout gegenereerd.<br>                             "
-"                                                                             "
-"                                                                             "
-"                                                        |\n"
-"| `via_count`               | max                                            "
-"                                                                        | "
-"Telt het aantal via’s op elk net wat aan de regelvoorwaarde voldoet.  Als "
+"wordt een fout gegenereerd.<br>                                             "
+"|\n"
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
+"| Geeft de breedte van de tussenruimte tussen een pad en een zone met een "
+"thermische ontlastingsverbinding."
+"<br>                                                                                                                                                                                                                                                                                                                                           "
+"|\n"
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
+"| Geeft de breedte van de spaken die een pad met een zone verbinden via een "
+"thermische ontlastingsverbinding."
+"<br>                                                                                                                                                                                                                                                                                                                                         "
+"|\n"
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
+"| Cotroleert de breedte van spoor- en boogsegmenten.  Voor elk segment dat "
+"een breedte onder de `min`-waarde (als opgegeven) of boven de `max`-waarde "
+"(als opgegeven) heeft wordt een fout gegenereerd."
+"<br>                                                                                                                                                                                                                                               "
+"|\n"
+"| `via_count`               | "
+"max                                                                                                                    "
+"| Telt het aantal via’s op elk net wat aan de regelvoorwaarde voldoet.  Als "
 "het aantal de `max`-waarde van de beperking overschrijft op eender van de "
-"overeenkomende netten, wordt er een fout gegenereerd voor dat net.<br>       "
-"                                                                             "
-"                                                                             "
-"                                                             |\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
-"                                                                        | "
-"Specificeert de verbinding die moet worden gemaakt tussen een zone en een pad"
-".<br>                                                                        "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                       |\n"
+"overeenkomende netten, wordt er een fout gegenereerd voor dat net."
+"<br>                                                                                                                                                                                                                              "
+"|\n"
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| Specificeert de verbinding die moet worden gemaakt tussen een zone en een "
+"pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                      "
+"|\n"
 "\n"
 "\n"
 "### Items\n"
@@ -37338,13 +37322,13 @@ msgstr ""
 "\n"
 "    (rule \"Afstand tussen via’s van verschillende netten\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Vrije afstand tussen pads van verschillende netten\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Vrije ruimte tussen via-gat en spoor\"\n"
@@ -38253,7 +38237,8 @@ msgstr "Voorwaardeexpressie ontbreekt."
 #: pcbnew/drc/drc_rule_parser.cpp:226 pcbnew/drc/drc_rule_parser.cpp:460
 #, c-format
 msgid "Unrecognized item '%s'.| Expected quoted expression."
-msgstr "Niet-herkend item \"%s\". | Verwacht expressie tussen aanhalingstekens."
+msgstr ""
+"Niet-herkend item \"%s\". | Verwacht expressie tussen aanhalingstekens."
 
 #: pcbnew/drc/drc_rule_parser.cpp:261 pcbnew/drc/drc_rule_parser.cpp:372
 #: pcbnew/drc/drc_rule_parser.cpp:385 pcbnew/drc/drc_rule_parser.cpp:404
@@ -38783,42 +38768,42 @@ msgstr "Zoneverbinding aangepast."
 msgid "Net tie pad groups differ."
 msgstr "Net-tie pad groepen verschillen."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:692
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:693
 msgid "Pad count differs."
 msgstr "Aantal pads verschilt."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:713
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:714
 msgid "Rule area count differs."
 msgstr "Aantal regelgebieden verschilt."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:732
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:733
 msgid "No project loaded, skipping library parity tests."
 msgstr "Geen project ingeladen, bibliotheekpariteitstests worden overgeslagen."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:736
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:737
 msgid "Loading footprint library table..."
 msgstr "Footprintbibliotheektabel openen..."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:746
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:747
 msgid "Checking board footprints against library..."
 msgstr "Controle footprints met de bibliotheek..."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:778
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:779
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "De huidige configuratie omvat niet de bibliotheek '%s'."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:792
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:793
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "De bibliotheek '%s' is niet ingeschakeld in de huidige configuratie."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:828
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:829
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "Footprint '%s' niet gevonden in bibliotheek '%s'."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:841
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:842
 #, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "Footprint '%s' komt niet overeen met kopie in bibliotheek '%s'."
@@ -39058,7 +39043,7 @@ msgstr "Ze zijn geëxporteerd als ovale pads."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:288
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:378
+#: pcbnew/exporters/step/exporter_step.cpp:382
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Bordgrenzen zijn misvormd. Voer DRC uit voor een volledige analyse."
@@ -39100,21 +39085,21 @@ msgstr "Gerber-job bestand '%s' maken."
 msgid "Board stackup settings not up to date."
 msgstr "Instellingen voor bordstapeling zijn niet actueel."
 
-#: pcbnew/exporters/step/exporter_step.cpp:498
+#: pcbnew/exporters/step/exporter_step.cpp:502
 msgid "Determining PCB data\n"
 msgstr "PCB-data bepalen\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:501
+#: pcbnew/exporters/step/exporter_step.cpp:505
 #, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
 msgstr "Borddikte van stapeling: %.3f mm\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:515
+#: pcbnew/exporters/step/exporter_step.cpp:519
 #, c-format
 msgid "Build %s data\n"
 msgstr "%s-data bouwen\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:519
+#: pcbnew/exporters/step/exporter_step.cpp:523
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -39122,12 +39107,12 @@ msgstr ""
 "\n"
 "** Fout bij het bouwen van het STEP-bordmodel. Exporteren afgebroken. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:523
+#: pcbnew/exporters/step/exporter_step.cpp:527
 #, c-format
 msgid "Writing %s file\n"
 msgstr "%s file wegschrijven\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:533
+#: pcbnew/exporters/step/exporter_step.cpp:537
 #, c-format
 msgid ""
 "\n"
@@ -39136,13 +39121,13 @@ msgstr ""
 "\n"
 "** Fout bij schrijven bestand %s. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:539
+#: pcbnew/exporters/step/exporter_step.cpp:543
 #, c-format
 msgid "%s file '%s' created.\n"
 msgstr "%s-bestand '%s' aangemaakt.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:546
-#: pcbnew/exporters/step/exporter_step.cpp:552
+#: pcbnew/exporters/step/exporter_step.cpp:550
+#: pcbnew/exporters/step/exporter_step.cpp:556
 #, c-format
 msgid ""
 "\n"
@@ -39151,7 +39136,7 @@ msgstr ""
 "\n"
 "** Fout bij exporteren bestand %s. Exporteren afgebroken. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:561
+#: pcbnew/exporters/step/exporter_step.cpp:565
 #, c-format
 msgid ""
 "Unable to create %s file.\n"
@@ -39160,12 +39145,12 @@ msgstr ""
 "Kan %s-bestand niet aanmaken.\n"
 "Controleer of het bord geldige grenzen en modellen heeft."
 
-#: pcbnew/exporters/step/exporter_step.cpp:567
+#: pcbnew/exporters/step/exporter_step.cpp:571
 #, c-format
 msgid "%s file has been created, but there are warnings."
 msgstr "%s-bestand is aangemaakt, maar er zijn waarschuwingen."
 
-#: pcbnew/exporters/step/exporter_step.cpp:576
+#: pcbnew/exporters/step/exporter_step.cpp:580
 #, c-format
 msgid ""
 "\n"
@@ -39220,28 +39205,28 @@ msgstr "Bewaar bordbestand als"
 msgid "Printed circuit board"
 msgstr "Printplaat"
 
-#: pcbnew/files.cpp:302
+#: pcbnew/files.cpp:299
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "Herstelbestand '%s' niet gevonden."
 
-#: pcbnew/files.cpp:307
+#: pcbnew/files.cpp:304
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "OK om herstel-bestand '%s' te laden?"
 
-#: pcbnew/files.cpp:350
+#: pcbnew/files.cpp:347
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "Het huidige bord wordt gesloten, wijzigingen opslaan in '%s' voordat u "
 "verder gaat?"
 
-#: pcbnew/files.cpp:364
+#: pcbnew/files.cpp:361
 msgid "Current Board will be closed. Continue?"
 msgstr "Het huidige bestuur wordt gesloten. Doorgaan met?"
 
-#: pcbnew/files.cpp:481
+#: pcbnew/files.cpp:478
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39254,62 +39239,62 @@ msgstr ""
 "Dit kan resulteren in andere vullingen dan in eerdere Kicad-versies die de "
 "lijndiktes van de bordrand op de Edge Cuts-laag gebruikten."
 
-#: pcbnew/files.cpp:527
+#: pcbnew/files.cpp:524
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "PCB '%s' is al geopend door '%s' op '%s'."
 
-#: pcbnew/files.cpp:538
+#: pcbnew/files.cpp:535
 msgid "The current PCB has been modified.  Save changes?"
 msgstr "De huidige print is aangepast. Wijzigingen opslaan?"
 
-#: pcbnew/files.cpp:557
+#: pcbnew/files.cpp:554
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "PCB '%s' bestaat niet. Wilt u deze aanmaken?"
 
-#: pcbnew/files.cpp:566
+#: pcbnew/files.cpp:563
 msgid "Creating PCB"
 msgstr "Creëer PCB"
 
-#: pcbnew/files.cpp:657
+#: pcbnew/files.cpp:654
 msgid "File format is not supported"
 msgstr "Bestandsindeling niet ondersteund"
 
-#: pcbnew/files.cpp:697 pcbnew/files.cpp:707
+#: pcbnew/files.cpp:694 pcbnew/files.cpp:704
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Fout bij het laden van PCB '%s'."
 
-#: pcbnew/files.cpp:716
+#: pcbnew/files.cpp:713
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Geheugen-fout bij het laden van PCB '%s'"
 
-#: pcbnew/files.cpp:829
+#: pcbnew/files.cpp:826
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "Fout bij het opslaan van de footprint %s naar de projectspecifieke "
 "footprintbibliotheek."
 
-#: pcbnew/files.cpp:860
+#: pcbnew/files.cpp:857
 msgid "Error saving project specific footprint library table."
 msgstr ""
 "Fout bij het opslaan van de projectspecifieke footprintbibliotheektabel."
 
-#: pcbnew/files.cpp:952 pcbnew/files.cpp:1091 pcbnew/files.cpp:1259
+#: pcbnew/files.cpp:949 pcbnew/files.cpp:1088 pcbnew/files.cpp:1256
 #: pcbnew/footprint_libraries_utils.cpp:268
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Onvoldoende rechten om het bestand '%s' op te slaan."
 
-#: pcbnew/files.cpp:984 pcbnew/files.cpp:1136
+#: pcbnew/files.cpp:981 pcbnew/files.cpp:1133
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Fout bij het opslaan van aangepaste-regelsbestand '%s'."
 
-#: pcbnew/files.cpp:1010 pcbnew/files.cpp:1112
+#: pcbnew/files.cpp:1007 pcbnew/files.cpp:1109
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -39318,7 +39303,7 @@ msgstr ""
 "Fout bij opslaan van bordbestand '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1030
+#: pcbnew/files.cpp:1027
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -39327,7 +39312,7 @@ msgstr ""
 "Fout bij opslaan van bordbestand '%s'.\n"
 "Hernoemen van tijdelijk bestand '%s' mislukt."
 
-#: pcbnew/files.cpp:1140
+#: pcbnew/files.cpp:1137
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -39336,16 +39321,16 @@ msgstr ""
 "Bord gekopiëerd naar:\n"
 "%s"
 
-#: pcbnew/files.cpp:1253
+#: pcbnew/files.cpp:1250
 msgid "The board must be saved before generating IPC2581 file."
 msgstr ""
 "Het bord moet worden opgeslagen voor het genereren van een IPC2581-bestand."
 
-#: pcbnew/files.cpp:1269
+#: pcbnew/files.cpp:1266
 msgid "Generating IPC2581 file"
 msgstr "IPC2581-bestand genereren"
 
-#: pcbnew/files.cpp:1292 pcbnew/pcbnew_jobs_handler.cpp:1168
+#: pcbnew/files.cpp:1289 pcbnew/pcbnew_jobs_handler.cpp:1168
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -39354,7 +39339,7 @@ msgstr ""
 "Fout bij genereren IPC2581-bestand '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1356 pcbnew/pcbnew_jobs_handler.cpp:1200
+#: pcbnew/files.cpp:1353 pcbnew/pcbnew_jobs_handler.cpp:1200
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -40635,7 +40620,8 @@ msgstr "Kan waarde in symboolgedeelte van netlijst niet interpreteren."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:185
 msgid "Cannot parse pin name in symbol net section of netlist."
-msgstr "Kan pinnaam in de sectie symboolnet van de netlijst niet interpreteren."
+msgstr ""
+"Kan pinnaam in de sectie symboolnet van de netlijst niet interpreteren."
 
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:194
 msgid "Cannot parse net name in symbol net section of netlist."
@@ -42235,7 +42221,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Slechte ZSmoothing voor CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6139
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6147
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -42418,7 +42404,7 @@ msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
 msgstr "Dubbele NETCLASS-naam '%s' in bestand '%s' op regel %d, offset %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2995
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5364
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5372
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42449,7 +42435,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4608
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4616
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42460,7 +42446,7 @@ msgstr ""
 "bestand: %s\n"
 "lijn: %d offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4627
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4635
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -42471,7 +42457,7 @@ msgstr ""
 "bestand: '%s'\n"
 "regel: %d offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4928
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4936
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -42484,7 +42470,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5279
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5287
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42497,7 +42483,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5465
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5473
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42510,7 +42496,7 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5595
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5603
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42523,13 +42509,13 @@ msgstr ""
 "lijn: %d\n"
 "offset: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6108
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6116
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
-"De verouderde modus voor het vullen van zones wordt niet langer ondersteund."
-"\n"
+"De verouderde modus voor het vullen van zones wordt niet langer "
+"ondersteund.\n"
 "Zonevullingen zullen zo goed mogelijk worden omgezet."
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
@@ -42774,7 +42760,8 @@ msgstr "Niet-herkende laag '%s'"
 #: pcbnew/pcbexpr_functions.cpp:240
 #, c-format
 msgid "Missing footprint argument (A, B, or reference designator) to %s."
-msgstr "Ontbrekende footprintparameter (A, B, of referentieaanduiding) voor %s."
+msgstr ""
+"Ontbrekende footprintparameter (A, B, of referentieaanduiding) voor %s."
 
 #: pcbnew/pcbexpr_functions.cpp:462
 msgid "Footprint's courtyard is not a single, closed shape."
@@ -43154,7 +43141,8 @@ msgstr "Spoorhoekmodus"
 
 #: pcbnew/router/router_tool.cpp:197
 msgid "Switches between sharp/rounded and 45°/90° corners when routing tracks."
-msgstr "Wisselt tussen scherpe/ronde en 45°/90° hoeken bij plaatsen van sporen."
+msgstr ""
+"Wisselt tussen scherpe/ronde en 45°/90° hoeken bij plaatsen van sporen."
 
 #: pcbnew/router/router_tool.cpp:221
 msgid "Select Track/Via Width"
@@ -43846,7 +43834,8 @@ msgstr "Vrije afstand voor gebieden: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:797
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "Aangepast door grotere fysieke vrije afstand van %s; vrije afstand: %s."
+msgstr ""
+"Aangepast door grotere fysieke vrije afstand van %s; vrije afstand: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:813
 #, c-format
@@ -45100,7 +45089,8 @@ msgstr "Teardrops bewerken..."
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Add, remove or edit teardrops globally across board"
-msgstr "Teardrops globaal over het hele bord toevoegen, verwijderen of bewerken"
+msgstr ""
+"Teardrops globaal over het hele bord toevoegen, verwijderen of bewerken"
 
 #: pcbnew/tools/pcb_actions.cpp:850
 msgid "Global Deletions..."
@@ -45132,7 +45122,8 @@ msgstr "Microgolf-opening toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Create gap of specified length for microwave applications"
-msgstr "Maak tussenruimte met specifieke lengte voor hoogfrequente toepassingen"
+msgstr ""
+"Maak tussenruimte met specifieke lengte voor hoogfrequente toepassingen"
 
 #: pcbnew/tools/pcb_actions.cpp:882
 msgid "Add Microwave Stub"
@@ -45501,8 +45492,8 @@ msgstr "Net in rattennest verbergen"
 #: pcbnew/tools/pcb_actions.cpp:1284
 msgid "Hide the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
-"Geselecteerde net verbergen in het rattennest van onverbonden netlijnen/"
-"-bogen"
+"Geselecteerde net verbergen in het rattennest van onverbonden netlijnen/-"
+"bogen"
 
 #: pcbnew/tools/pcb_actions.cpp:1291
 msgid "Show Net in Ratsnest"
@@ -45511,8 +45502,8 @@ msgstr "Net in rattennest weergeven"
 #: pcbnew/tools/pcb_actions.cpp:1292
 msgid "Show the selected net in the ratsnest of unconnected net lines/arcs"
 msgstr ""
-"Geselecteerde net weergeven in het rattennest van onverbonden netlijnen/"
-"-bogen"
+"Geselecteerde net weergeven in het rattennest van onverbonden netlijnen/-"
+"bogen"
 
 #: pcbnew/tools/pcb_actions.cpp:1299
 msgid "Switch to Schematic Editor"
@@ -47597,7 +47588,8 @@ msgstr "PCB-rekenhulpmiddel"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:13
 msgid "Calculator for various electronics-related computations"
-msgstr "Rekenhulpmiddel voor verscheidene elektronica-gerelateerde berekeningen"
+msgstr ""
+"Rekenhulpmiddel voor verscheidene elektronica-gerelateerde berekeningen"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"

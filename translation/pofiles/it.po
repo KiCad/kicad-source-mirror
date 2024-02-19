@@ -111,7 +111,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-14 10:30-0800\n"
+"POT-Creation-Date: 2024-02-19 11:26-0800\n"
 "PO-Revision-Date: 2024-02-15 11:31+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -443,10 +443,10 @@ msgstr "Permessi insufficienti per salvare il file '%s'."
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1625
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2026
 #: eeschema/files-io.cpp:974 eeschema/files-io.cpp:1042
-#: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:319
-#: kicad/tools/kicad_manager_control.cpp:240
-#: kicad/tools/kicad_manager_control.cpp:297
-#: kicad/tools/kicad_manager_control.cpp:343
+#: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:322
+#: kicad/tools/kicad_manager_control.cpp:242
+#: kicad/tools/kicad_manager_control.cpp:299
+#: kicad/tools/kicad_manager_control.cpp:345
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:143
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:216
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664.cpp:225
@@ -462,11 +462,11 @@ msgstr "Permessi insufficienti per salvare il file '%s'."
 msgid "Error"
 msgstr "Errore"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:782
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:789
 msgid "Failed to copy image to clipboard"
 msgstr "Impossibile salvare immagine sugli appunti"
 
-#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:793
+#: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:800
 msgid "Can't save file"
 msgstr "Impossibile salvare il file"
 
@@ -1853,37 +1853,37 @@ msgstr "Esporta sugli appunti"
 msgid "Background Jobs"
 msgstr "Lavori in background"
 
-#: common/common.cpp:270
+#: common/common.cpp:287
 #, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
 "Fallita espansione variabili ambiente: manca '%c' alla posizione %u in '%s'."
 
-#: common/common.cpp:358
+#: common/common.cpp:375
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
 msgstr "Impossibile rendere il percorso '%s' assoluto rispetto a '%s'."
 
-#: common/common.cpp:377
+#: common/common.cpp:394
 #, c-format
 msgid "Output directory '%s' created."
 msgstr "Cartella risultati '%s' creata."
 
-#: common/common.cpp:386
+#: common/common.cpp:403
 #, c-format
 msgid "Cannot create output directory '%s'."
 msgstr "Impossibile creare la cartella risultati '%s'."
 
-#: common/common.cpp:677
+#: common/common.cpp:694
 msgid "This operating system is not supported by KiCad and its dependencies."
 msgstr "Questo sistema operativo non è supportato da KiCad e connessi."
 
-#: common/common.cpp:679
+#: common/common.cpp:696
 msgid "Unsupported Operating System"
 msgstr "Sistema operativo non supportato"
 
-#: common/common.cpp:682
+#: common/common.cpp:699
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
@@ -1993,7 +1993,7 @@ msgstr "Informazioni"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:198
 #: eeschema/tools/symbol_editor_control.cpp:378
 #: eeschema/tools/symbol_editor_pin_tool.cpp:233 kicad/import_project.cpp:108
-#: kicad/tools/kicad_manager_control.cpp:324
+#: kicad/tools/kicad_manager_control.cpp:326
 #: pcbnew/dialogs/dialog_export_idf.cpp:174
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:121
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:571
@@ -2447,7 +2447,7 @@ msgstr "Variabili ambiente"
 #: kicad/pcm/dialogs/panel_package_base.cpp:50
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:42
 #: pcbnew/dialogs/dialog_net_inspector.cpp:986
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:411
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:412
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38
 #: pcbnew/fp_text_grid_table.cpp:137 pcbnew/widgets/search_handlers.cpp:140
 #: pcbnew/widgets/search_handlers.cpp:273
@@ -2462,12 +2462,12 @@ msgstr "Nome"
 msgid "Path"
 msgstr "Percorso"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:40
+#: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
 msgid "Configure Global %s Library Table"
 msgstr "Configura la tabella librerie %s globale"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:43
+#: common/dialogs/dialog_global_lib_table_config.cpp:44
 #, c-format
 msgid ""
 "KiCad has been run for the first time using the new %s library table for\n"
@@ -2485,12 +2485,12 @@ msgstr ""
 "opzioni sottostanti.  Se non si sa quale opzione scegliere, usare la\n"
 "selezione predefinita."
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:50
+#: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
 msgid "Copy default global %s library table (recommended)"
 msgstr "Copia la tabella librerie %s globale predefinita (raccomandato)"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:52
+#: common/dialogs/dialog_global_lib_table_config.cpp:53
 #, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
@@ -2499,12 +2499,12 @@ msgstr ""
 "Selezionare questa opzione se non si è sicuri sulla configurazione della "
 "tabella librerie %s globale"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:56
+#: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid "Copy custom global %s library table"
 msgstr "Copia la tabella librerie %s globale personalizzata"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:58
+#: common/dialogs/dialog_global_lib_table_config.cpp:59
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
@@ -2512,12 +2512,12 @@ msgstr ""
 "Selezionare questa opzione per copiare un file tabella librerie %s globale "
 "diverso da quello predefinito"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:62
+#: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
 msgid "Create an empty global %s library table"
 msgstr "Creare una tabella librerie %s globale vuota"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:64
+#: common/dialogs/dialog_global_lib_table_config.cpp:65
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
@@ -2525,7 +2525,7 @@ msgstr ""
 "Selezionare questa opzione per definire le librerie %s nelle tabelle "
 "librerie specifiche del progetto"
 
-#: common/dialogs/dialog_global_lib_table_config.cpp:68
+#: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
 msgid "Select global %s library table file:"
 msgstr "Seleziona il file tabella librerie %s globale:"
@@ -3183,7 +3183,7 @@ msgstr "Opzione"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:412 pcbnew/footprint.cpp:3497
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3497
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:406 pcbnew/plot_board_layers.cpp:90
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -4449,9 +4449,9 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
-#: pcbnew/dialogs/dialog_pad_properties.cpp:902
-#: pcbnew/dialogs/dialog_pad_properties.cpp:911
-#: pcbnew/dialogs/dialog_pad_properties.cpp:921
+#: pcbnew/dialogs/dialog_pad_properties.cpp:906
+#: pcbnew/dialogs/dialog_pad_properties.cpp:915
+#: pcbnew/dialogs/dialog_pad_properties.cpp:925
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
 #: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3456
@@ -5889,7 +5889,7 @@ msgstr "opt"
 msgid "max"
 msgstr "max"
 
-#: common/env_vars.cpp:71
+#: common/env_vars.cpp:108
 msgid ""
 "The base path of locally installed system footprint libraries (.pretty "
 "folders)."
@@ -5897,21 +5897,21 @@ msgstr ""
 "Il percorso base delle librerie di impronte di sistema installate localmente "
 "(cartelle .pretty)."
 
-#: common/env_vars.cpp:74
+#: common/env_vars.cpp:111
 msgid "The base path of system footprint 3D shapes (.3Dshapes folders)."
 msgstr ""
 "Il percorso base delle forme 3D delle impronte di sistema "
 "(cartelle .3Dshapes)."
 
-#: common/env_vars.cpp:76
+#: common/env_vars.cpp:113
 msgid "The base path of the locally installed symbol libraries."
 msgstr "Il percorso base delle librerie di simboli installate localmente."
 
-#: common/env_vars.cpp:78
+#: common/env_vars.cpp:115
 msgid "A directory containing project templates installed with KiCad."
 msgstr "La cartella contenente i modelli di progetto installati con KiCad."
 
-#: common/env_vars.cpp:80
+#: common/env_vars.cpp:117
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
@@ -5919,7 +5919,7 @@ msgstr ""
 "Opzionale. Può essere definito se si vuole creare una propria cartella di "
 "modelli di progetto."
 
-#: common/env_vars.cpp:83
+#: common/env_vars.cpp:120
 msgid ""
 "A directory containing 3rd party plugins, libraries and other downloadable "
 "content."
@@ -5927,7 +5927,7 @@ msgstr ""
 "Una cartella contenente plugin di terze parti, librerie e altro contenuto "
 "scaricabile."
 
-#: common/env_vars.cpp:86
+#: common/env_vars.cpp:123
 msgid ""
 "Internally defined by KiCad (cannot be edited) and is set to the absolute "
 "path of the currently loaded project file.  This environment variable can be "
@@ -5942,27 +5942,27 @@ msgstr ""
 "pretty può essere definita come una cartella contenente una libreria "
 "impronte specifica del progetto di nome footprints.pretty."
 
-#: common/env_vars.cpp:92
+#: common/env_vars.cpp:129
 msgid "A directory containing system-wide scripts installed with KiCad"
 msgstr "Una cartella contenente gli script di sistema installati con KiCad"
 
-#: common/env_vars.cpp:94
+#: common/env_vars.cpp:131
 msgid "A directory containing user-specific scripts installed with KiCad"
 msgstr "Una cartella contenente gli script utente installati con KiCad"
 
-#: common/env_vars.cpp:98
+#: common/env_vars.cpp:135
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
 msgstr "Versione deprecata di KICAD_TEMPLATE_DIR."
 
-#: common/env_vars.cpp:100
+#: common/env_vars.cpp:137
 msgid "Deprecated version of KICAD7_3DMODEL_DIR."
 msgstr "Versione deprecata di KICAD7_3DMODEL_DIR."
 
-#: common/env_vars.cpp:102
+#: common/env_vars.cpp:139
 msgid "Deprecated version of KICAD7_FOOTPRINT_DIR."
 msgstr "Versione deprecata di KICAD7_FOOTPRINT_DIR."
 
-#: common/env_vars.cpp:104
+#: common/env_vars.cpp:141
 msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Versione deprecata di KICAD_SYMBOL_DIR."
 
@@ -6019,23 +6019,23 @@ msgstr "Testo errore completo:"
 msgid "No Files"
 msgstr "Nessun file"
 
-#: common/filename_resolver.cpp:448
+#: common/filename_resolver.cpp:453
 msgid "The given path does not exist"
 msgstr "Il percorso dato non esiste"
 
-#: common/filename_resolver.cpp:476
+#: common/filename_resolver.cpp:481
 msgid "Alias: "
 msgstr "Alias: "
 
-#: common/filename_resolver.cpp:479
+#: common/filename_resolver.cpp:484
 msgid "This path:"
 msgstr "Questo percorso:"
 
-#: common/filename_resolver.cpp:482
+#: common/filename_resolver.cpp:487
 msgid "Existing path:"
 msgstr "Percorso esistente:"
 
-#: common/filename_resolver.cpp:484
+#: common/filename_resolver.cpp:489
 msgid "Bad alias (duplicate name)"
 msgstr "Alias errato (nome duplicato)"
 
@@ -6073,7 +6073,7 @@ msgstr "Errore di caricamento"
 msgid "Errors were encountered loading footprints:"
 msgstr "Errori durante il caricamento di impronte:"
 
-#: common/fp_lib_table.cpp:219
+#: common/fp_lib_table.cpp:220
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in footprint library table file line "
@@ -6082,16 +6082,16 @@ msgstr ""
 "Denominatore librerie '%s' duplicato nel file tabella librerie impronte, "
 "riga %d."
 
-#: common/fp_lib_table.cpp:329
+#: common/fp_lib_table.cpp:330
 #, c-format
 msgid "fp-lib-table files contain no library named '%s'."
 msgstr "I file fp-lib-table non contengono librerie con denominazione '%s'."
 
-#: common/fp_lib_table.cpp:555 eeschema/symbol_lib_table.cpp:598
+#: common/fp_lib_table.cpp:559 eeschema/symbol_lib_table.cpp:602
 msgid "Added by Plugin and Content Manager"
 msgstr "Aggiunto dalla gestione plugin e contenuti"
 
-#: common/fp_lib_table.cpp:581 eeschema/symbol_lib_table.cpp:626
+#: common/fp_lib_table.cpp:585 eeschema/symbol_lib_table.cpp:630
 #, c-format
 msgid "Cannot create global library table path '%s'."
 msgstr "Impossibile creare il percorso tabella librerie globale '%s'."
@@ -8908,7 +8908,7 @@ msgstr "Errore durante il caricamento della tabella librerie impronte globale."
 msgid "Assign Footprints"
 msgstr "Assegna impronte"
 
-#: cvpcb/cvpcb_mainframe.cpp:113 pcbnew/dialogs/panel_fp_lib_table.cpp:1205
+#: cvpcb/cvpcb_mainframe.cpp:113 pcbnew/dialogs/panel_fp_lib_table.cpp:1206
 msgid "Footprint Libraries"
 msgstr "Librerie di impronte"
 
@@ -10880,8 +10880,8 @@ msgstr "Modifica giunzioni"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1652
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1669
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1656
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1673
 msgid "Diameter:"
 msgstr "Diametro:"
 
@@ -11484,7 +11484,7 @@ msgid "The name '%s' is already in use."
 msgstr "Il nome '%s' è già in uso."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#: eeschema/dialogs/dialog_sheet_properties.cpp:735
+#: eeschema/dialogs/dialog_sheet_properties.cpp:738
 #: eeschema/dialogs/dialog_symbol_properties.cpp:962
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:637
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:683
@@ -12507,7 +12507,7 @@ msgstr ""
 "\"%s\"."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:481
-#: kicad/tools/kicad_manager_control.cpp:649
+#: kicad/tools/kicad_manager_control.cpp:651
 #, c-format
 msgid "'%s' already exists."
 msgstr "\"%s\" esiste già."
@@ -12542,11 +12542,11 @@ msgstr "Errore durante il salvataggio del file dello schema \"%s\"."
 msgid "Failed to save schematic '%s'"
 msgstr "Fallito il salvataggio dello schema \"%s\""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:669
+#: eeschema/dialogs/dialog_sheet_properties.cpp:672
 msgid "A sheet must have a name."
 msgstr "Un foglio deve avere un nome."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:677
+#: eeschema/dialogs/dialog_sheet_properties.cpp:680
 msgid "A sheet must have a file specified."
 msgstr "Un foglio deve avere un file specificato."
 
@@ -13691,7 +13691,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:224
 #: eeschema/dialogs/panel_sym_lib_table.cpp:887
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:841
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:842
 #, c-format
 msgid "Library '%s' not found."
 msgstr "Libreria \"%s\" non trovata."
@@ -14588,28 +14588,28 @@ msgid "&Pitch of repeated pins:"
 msgstr "&Passi dei pin ripetuti:"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:430
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:538
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:539
 msgid "A library table row nickname and path cells are empty."
 msgstr ""
 "Le celle denominatore e percorso di una riga di tabella librerie sono vuote."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:432
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:540
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:541
 msgid "A library table row nickname cell is empty."
 msgstr "La cella denominatore di una riga di tabella librerie è vuota."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:434
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:542
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:543
 msgid "A library table row path cell is empty."
 msgstr "La cella percorso di una riga di tabella librerie è vuota."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:438
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:546
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:547
 msgid "Invalid Row Definition"
 msgstr "Definizione riga non valida"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:440
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:548
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:549
 msgid ""
 "Empty cells will result in all rows that are invalid to be removed from the "
 "table."
@@ -14618,12 +14618,12 @@ msgstr ""
 "tabella."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:442
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:550
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:551
 msgid "Remove Invalid Cells"
 msgstr "Rimuovi celle non valide"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:443
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:551
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:552
 msgid "Cancel Table Update"
 msgstr "Annulla aggiornamento tabella"
 
@@ -14634,13 +14634,13 @@ msgstr "Carattere illegale '%c' in denominazione '%s'"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:469
 #: eeschema/dialogs/panel_sym_lib_table.cpp:521
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:577
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:625
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:578
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:626
 msgid "Library Nickname Error"
 msgstr "Errore denominazione libreria"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:508
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:611
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:612
 #, c-format
 msgid "Multiple libraries cannot share the same nickname ('%s')."
 msgstr "Più librerie non possono condividere la stessa denominazione (\"%s\")."
@@ -14671,26 +14671,26 @@ msgid "Warning: Duplicate Nickname"
 msgstr "Attenzione: denominatore duplicato"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:634
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
 #, c-format
 msgid "A library nicknamed '%s' already exists."
 msgstr "La libreria con denominazione \"%s\" esiste già."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:635
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1018
 msgid "One of the nicknames will need to be changed after adding this library."
 msgstr ""
 "Una delle denominazioni deve essere cambiata dopo l'aggiunta di questa "
 "libreria."
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:654 eeschema/sch_base_frame.cpp:284
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1037
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
 #: pcbnew/footprint_libraries_utils.cpp:429 pcbnew/tools/pcb_actions.cpp:588
 msgid "Skip"
 msgstr "Salta"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:654
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1037
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1038
 msgid "Add Anyway"
 msgstr "Aggiungi comunque"
 
@@ -14727,7 +14727,7 @@ msgid "File '%s' already exists. Do you want overwrite this file?"
 msgstr "Il file \"%s\" esiste già. Vuoi sovrascrivere questo file?"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:903
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:856
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:857
 msgid "Migrate Library"
 msgstr "Migra libreria"
 
@@ -14753,7 +14753,7 @@ msgstr "Librerie di simboli"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1194
 #: eeschema/tools/sch_editor_control.cpp:483
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1226
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1227
 #, c-format
 msgid ""
 "Error saving global library table:\n"
@@ -14770,14 +14770,14 @@ msgstr ""
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1794
 #: eeschema/tools/sch_editor_control.cpp:484
 #: eeschema/tools/sch_editor_control.cpp:499
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1227
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1240
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1228
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1241
 msgid "File Save Error"
 msgstr "Errore salvataggio file"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:1207
 #: eeschema/tools/sch_editor_control.cpp:498
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1239
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1240
 #, c-format
 msgid ""
 "Error saving project-specific library table:\n"
@@ -14886,7 +14886,7 @@ msgstr ""
 "foglio radice."
 
 #: eeschema/eeschema_config.cpp:74 pcbnew/pcbnew_config.cpp:55
-#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:176
+#: pcbnew/python/scripting/pcbnew_scripting_helpers.cpp:188
 msgid "Error loading drawing sheet."
 msgstr "Errore nel caricare il foglio di disegno."
 
@@ -15493,7 +15493,7 @@ msgid "Abort"
 msgstr "Interrompi"
 
 #: eeschema/files-io.cpp:459 eeschema/files-io.cpp:479
-#: pagelayout_editor/files.cpp:259 pcbnew/files.cpp:789
+#: pagelayout_editor/files.cpp:259 pcbnew/files.cpp:786
 msgid ""
 "This file was created by an older version of KiCad. It will be converted to "
 "the new format when saved."
@@ -15553,7 +15553,7 @@ msgstr ""
 "Errore nel salvataggio del file schema \"%s\".\n"
 "%s"
 
-#: eeschema/files-io.cpp:849 pcbnew/files.cpp:1014 pcbnew/files.cpp:1295
+#: eeschema/files-io.cpp:849 pcbnew/files.cpp:1011 pcbnew/files.cpp:1292
 #, c-format
 msgid "Failed to create temporary file '%s'."
 msgstr "Fallita creazione file temporaneo \"%s\"."
@@ -15567,13 +15567,13 @@ msgstr ""
 "Errore nel salvataggio del file schema \"%s\".\n"
 "Fallita rinomina del file temporaneo \"%s\""
 
-#: eeschema/files-io.cpp:875 pcbnew/files.cpp:1035 pcbnew/files.cpp:1361
+#: eeschema/files-io.cpp:875 pcbnew/files.cpp:1032 pcbnew/files.cpp:1358
 #, c-format
 msgid "Failed to rename temporary file '%s'."
 msgstr "Fallita rinomina del file temporaneo \"%s\"."
 
 #: eeschema/files-io.cpp:898 pagelayout_editor/files.cpp:187
-#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1068
+#: pagelayout_editor/files.cpp:219 pcbnew/files.cpp:1065
 #, c-format
 msgid "File '%s' saved."
 msgstr "File \"%s\" salvato."
@@ -15583,8 +15583,8 @@ msgid "File write operation failed."
 msgstr "Operazione di scrittura file fallita."
 
 #: eeschema/files-io.cpp:970 eeschema/files-io.cpp:1038
-#: kicad/import_project.cpp:92 kicad/tools/kicad_manager_control.cpp:111
-#: kicad/tools/kicad_manager_control.cpp:284
+#: kicad/import_project.cpp:92 kicad/tools/kicad_manager_control.cpp:112
+#: kicad/tools/kicad_manager_control.cpp:286
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -15984,12 +15984,12 @@ msgid "Unit count differs."
 msgstr "Conteggio unità diverso."
 
 #: eeschema/lib_symbol.cpp:324
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:665
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:666
 msgid "Graphic item count differs."
 msgstr "Conteggio elementi grafici diverso."
 
 #: eeschema/lib_symbol.cpp:336
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:679
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:680
 #, c-format
 msgid "%s differs."
 msgstr "%s diverso."
@@ -17009,7 +17009,14 @@ msgstr ""
 msgid "KiCad database library files"
 msgstr "File librerie di db di KiCad"
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:635
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:632
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:649
+#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
+#, c-format
+msgid "Unable to read file '%s'."
+msgstr "Impossibile leggere il file \"%s\"."
+
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:641
 #, c-format
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
@@ -17018,13 +17025,7 @@ msgstr ""
 "'%s' è un file in formato binario Eagle; possono essere importati solo file "
 "Eagle in formato XML."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:643
-#: pcbnew/pcb_io/eagle/pcb_io_eagle.cpp:3144
-#, c-format
-msgid "Unable to read file '%s'."
-msgstr "Impossibile leggere il file \"%s\"."
-
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1726
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1732
 #, c-format
 msgid ""
 "Error parsing Eagle file. Could not find '%s' instance but it is referenced "
@@ -17033,7 +17034,7 @@ msgstr ""
 "Errore nell'analisi del file Eagle. Impossibile trovare l'istanza \"%s\" "
 "anche se questa ha un riferimento nello schema."
 
-#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1774
+#: eeschema/sch_io/eagle/sch_io_eagle.cpp:1780
 #, c-format
 msgid "Could not find '%s' in the imported library."
 msgstr "Impossibile trovare \"%s\" nella libreria importata."
@@ -19849,7 +19850,7 @@ msgstr "Il simbolo '%s' esiste già nella libreria '%s'."
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:132
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:199
 #: eeschema/tools/symbol_editor_control.cpp:380
-#: kicad/tools/kicad_manager_control.cpp:327
+#: kicad/tools/kicad_manager_control.cpp:329
 #: pcbnew/dialogs/dialog_export_idf.cpp:175
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:122
 #: pcbnew/footprint_libraries_utils.cpp:376
@@ -19916,7 +19917,7 @@ msgstr "Elimina simbolo"
 msgid "Keep Symbol"
 msgstr "Mantieni simbolo"
 
-#: eeschema/symbol_editor/symbol_editor.cpp:958 pcbnew/files.cpp:329
+#: eeschema/symbol_editor/symbol_editor.cpp:958 pcbnew/files.cpp:326
 #: pcbnew/footprint_libraries_utils.cpp:1172
 #, c-format
 msgid "Revert '%s' to last version saved?"
@@ -20024,7 +20025,7 @@ msgstr "Errore durante la creazione della libreria simboli '%s'."
 msgid "Symbol %s saved to library '%s'."
 msgstr "Simbolo %s salvato nella libreria '%s'."
 
-#: eeschema/symbol_lib_table.cpp:277
+#: eeschema/symbol_lib_table.cpp:278
 #, c-format
 msgid ""
 "Duplicate library nickname '%s' found in symbol library table file line %d"
@@ -24212,7 +24213,7 @@ msgstr "Importa backup EasyEDA Std"
 msgid "Import EasyEDA Pro Project"
 msgstr "Importa file progetto EasyEDA"
 
-#: kicad/kicad.cpp:317
+#: kicad/kicad.cpp:320
 #, c-format
 msgid ""
 "File '%s'\n"
@@ -24670,17 +24671,17 @@ msgstr "Mostra tutte le versioni"
 msgid "Download"
 msgstr "Scarica"
 
-#: kicad/pcm/pcm.cpp:87
+#: kicad/pcm/pcm.cpp:88
 #, c-format
 msgid "schema file '%s' not found"
 msgstr "file schema '%s' non trovato"
 
-#: kicad/pcm/pcm.cpp:92
+#: kicad/pcm/pcm.cpp:93
 #, c-format
 msgid "Error loading schema: %s"
 msgstr "Errore caricando lo schema: %s"
 
-#: kicad/pcm/pcm.cpp:119
+#: kicad/pcm/pcm.cpp:120
 #, c-format
 msgid "Error loading installed packages list: %s"
 msgstr "Errore caricando l'elenco pacchetti installati: %s"
@@ -25317,11 +25318,11 @@ msgstr "Apri editor di testo"
 msgid "Launch preferred text editor"
 msgstr "Lancia l'editor di testo preferito"
 
-#: kicad/tools/kicad_manager_control.cpp:72
+#: kicad/tools/kicad_manager_control.cpp:73
 msgid "Create New Project"
 msgstr "Crea nuovo progetto"
 
-#: kicad/tools/kicad_manager_control.cpp:120
+#: kicad/tools/kicad_manager_control.cpp:121
 msgid ""
 "The selected folder is not empty.  It is recommended that you create "
 "projects in their own empty folder.\n"
@@ -25333,66 +25334,66 @@ msgstr ""
 "\n"
 "Continuare?"
 
-#: kicad/tools/kicad_manager_control.cpp:151
+#: kicad/tools/kicad_manager_control.cpp:152
 msgid "Clone Project from Git Repository"
 msgstr "Clona un progetto da un repository git"
 
-#: kicad/tools/kicad_manager_control.cpp:173
+#: kicad/tools/kicad_manager_control.cpp:174
 msgid "Cloning Repository"
 msgstr "Clonazione repository"
 
-#: kicad/tools/kicad_manager_control.cpp:185
+#: kicad/tools/kicad_manager_control.cpp:186
 msgid "No project files were found in the repository."
 msgstr "Non sono stati trovati file nel repository."
 
-#: kicad/tools/kicad_manager_control.cpp:221
+#: kicad/tools/kicad_manager_control.cpp:223
 msgid "System Templates"
 msgstr "Modelli di sistema"
 
-#: kicad/tools/kicad_manager_control.cpp:230
+#: kicad/tools/kicad_manager_control.cpp:232
 msgid "User Templates"
 msgstr "Modelli personali"
 
-#: kicad/tools/kicad_manager_control.cpp:239
+#: kicad/tools/kicad_manager_control.cpp:241
 msgid "No project template was selected.  Cannot generate new project."
 msgstr "Nessun modello selezionato. Impossibile generare un nuovo progetto."
 
-#: kicad/tools/kicad_manager_control.cpp:247
+#: kicad/tools/kicad_manager_control.cpp:249
 msgid "New Project Folder"
 msgstr "Nuova cartella progetto"
 
-#: kicad/tools/kicad_manager_control.cpp:296
-#: kicad/tools/kicad_manager_control.cpp:665
+#: kicad/tools/kicad_manager_control.cpp:298
+#: kicad/tools/kicad_manager_control.cpp:667
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
 msgstr "Permessi insufficienti per scrivere sulla cartella '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:317
+#: kicad/tools/kicad_manager_control.cpp:319
 msgid "Overwriting files:"
 msgstr "Sovrascrittura file:"
 
-#: kicad/tools/kicad_manager_control.cpp:323
+#: kicad/tools/kicad_manager_control.cpp:325
 msgid "Similar files already exist in the destination folder."
 msgstr "File simili esistono già nella cartella destinazione."
 
-#: kicad/tools/kicad_manager_control.cpp:342
+#: kicad/tools/kicad_manager_control.cpp:344
 msgid "A problem occurred creating new project from template."
 msgstr "Problema durante la creazione del nuovo progetto da modello."
 
-#: kicad/tools/kicad_manager_control.cpp:365
+#: kicad/tools/kicad_manager_control.cpp:367
 msgid "Open Existing Project"
 msgstr "Apri un progetto esistente"
 
-#: kicad/tools/kicad_manager_control.cpp:590
+#: kicad/tools/kicad_manager_control.cpp:592
 #, c-format
 msgid "Cannot copy folder '%s'."
 msgstr "Impossibile copiare la cartella '%s'."
 
-#: kicad/tools/kicad_manager_control.cpp:636
+#: kicad/tools/kicad_manager_control.cpp:638
 msgid "Save Project To"
 msgstr "Salva progetto su"
 
-#: kicad/tools/kicad_manager_control.cpp:656
+#: kicad/tools/kicad_manager_control.cpp:658
 #, c-format
 msgid ""
 "Folder '%s' could not be created.\n"
@@ -25403,23 +25404,23 @@ msgstr ""
 "\n"
 "Assicurarsi di avere i permessi di scrittura e riprovare."
 
-#: kicad/tools/kicad_manager_control.cpp:667
+#: kicad/tools/kicad_manager_control.cpp:669
 msgid "Error!"
 msgstr "Errore!"
 
-#: kicad/tools/kicad_manager_control.cpp:723
+#: kicad/tools/kicad_manager_control.cpp:725
 msgid "Create (or open) a project to edit a schematic."
 msgstr "Crea (o apre) un progetto di schema elettrico."
 
-#: kicad/tools/kicad_manager_control.cpp:729
+#: kicad/tools/kicad_manager_control.cpp:731
 msgid "Create (or open) a project to edit a pcb."
 msgstr "Crea (o apre) un progetto di circuito stampato."
 
-#: kicad/tools/kicad_manager_control.cpp:746
+#: kicad/tools/kicad_manager_control.cpp:748
 msgid "Application failed to load:\n"
 msgstr "L'app ha fallito il caricamento:\n"
 
-#: kicad/tools/kicad_manager_control.cpp:752
+#: kicad/tools/kicad_manager_control.cpp:754
 msgid "Application cannot start."
 msgstr "L'applicazione non parte."
 
@@ -25431,7 +25432,7 @@ msgstr "Controllo aggiornamento"
 msgid "Requesting update info"
 msgstr "Richiesta info aggiornamento"
 
-#: kicad/update_manager.cpp:246
+#: kicad/update_manager.cpp:248
 #, c-format
 msgid "Unable to parse update response: %s"
 msgstr "Impossibile analizzare risposta aggiornamento: %s"
@@ -26229,6 +26230,7 @@ msgid "Linear resistance:"
 msgstr "Resistenza lineare:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
+#, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "Freq. per 100% profondità di pelle:"
 
@@ -29435,7 +29437,7 @@ msgstr ""
 "Errore importando le impostazioni dalla scheda:\n"
 "Il file progetto associato %s è impossibile da caricare"
 
-#: pcbnew/dialogs/dialog_board_setup.cpp:292 pcbnew/files.cpp:567
+#: pcbnew/dialogs/dialog_board_setup.cpp:292 pcbnew/files.cpp:564
 #: pcbnew/tools/pcb_control.cpp:1312
 msgid "Loading PCB"
 msgstr "Caricamento C.S."
@@ -31832,6 +31834,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
+#, fuzzy, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32015,6 +32018,7 @@ msgstr ""
 "scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
+#, fuzzy, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -33280,59 +33284,59 @@ msgstr "Proprietà piazzola"
 msgid "Default Pad Properties for Add Pad Tool"
 msgstr "Proprietà predefinite piazzola per lo strumento aggiungi piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:548
+#: pcbnew/dialogs/dialog_pad_properties.cpp:552
 #, c-format
 msgid "Footprint %s (%s), %s, rotated %g deg"
 msgstr "Impronta %s (%s), %s, ruotata %g gradi"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:551
+#: pcbnew/dialogs/dialog_pad_properties.cpp:555
 #: pcbnew/dialogs/dialog_text_properties.cpp:311
 msgid "back side (mirrored)"
 msgstr "lato retro (speculare)"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:551
+#: pcbnew/dialogs/dialog_pad_properties.cpp:555
 #: pcbnew/dialogs/dialog_text_properties.cpp:312
 msgid "front side"
 msgstr "lato fronte"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:897
+#: pcbnew/dialogs/dialog_pad_properties.cpp:901
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:325
 msgid "All copper layers"
 msgstr "Tutti gli strati rame"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:898
+#: pcbnew/dialogs/dialog_pad_properties.cpp:902
 #, c-format
 msgid "%s, %s and connected layers"
 msgstr "%s, %s e strati connessi"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:901
+#: pcbnew/dialogs/dialog_pad_properties.cpp:905
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:325
 msgid "Connected layers only"
 msgstr "Solo lo strati connessi"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:906 pcbnew/zone.cpp:603
+#: pcbnew/dialogs/dialog_pad_properties.cpp:910 pcbnew/zone.cpp:603
 #, c-format
 msgid "%s and %s"
 msgstr "%s e %s"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1226
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1231
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1230
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1235
 msgid "Error: Pad must have a positive size."
 msgstr "Errore: la piazzola deve avere una dimensione positiva."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1245
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1249
 msgid "Warning: Pad hole not inside pad shape."
 msgstr "Attenzione: foro piazzola fuori dalla sagoma."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1258
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1262
 msgid "Warning: Pad hole will leave no copper."
 msgstr "Attenzione: il foro piazzola toglierà il rame."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1263
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1267
 msgid "Warning: Negative local clearance values will have no effect."
 msgstr "Attenzione: i valori di distanza locale negativa non avranno effetto."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1280
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
@@ -33340,7 +33344,7 @@ msgstr ""
 "Attenzione: le distanze negative della maschera di saldatura più grandi di "
 "alcune primitive di forma. I risultati potrebbero essere sorprendenti."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1289
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1293
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
@@ -33348,7 +33352,7 @@ msgstr ""
 "Attenzione: distanza maschera di saldatura negativa più grande della "
 "piazzola. Non verrà generata nessuna maschera di saldatura."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1308
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1312
 msgid ""
 "Warning: Negative solder paste margins larger than pad. No solder paste mask "
 "will be generated."
@@ -33356,11 +33360,11 @@ msgstr ""
 "Attenzione: margine pastasalda negativo più grande della piazzola. Non verrà "
 "generata nessuna maschera di pastasalda."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1315
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1319
 msgid "Error: pad has no layer."
 msgstr "Errore: la piazzola non ha strati."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1321
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1325
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
@@ -33368,82 +33372,82 @@ msgstr ""
 "Attenzione: i fori metallizzati dovrebbero avere una piazzola in rame almeno "
 "su uno strato."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1327
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1331
 msgid "Error: Trapazoid delta is too large."
 msgstr "Errore: il delta del trapeziode è troppo grande."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1336
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1340
 msgid "Error: Through hole pad has no hole."
 msgstr "Errore: piazzola foro passante senza foro"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1343
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1347
 msgid ""
 "Warning: Connector pads normally have no solder paste. Use a SMD pad instead."
 msgstr ""
 "Attenzione: le piazzole del connettore normalmente non hanno pastasalda. "
 "Usare piazzole SMD."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1352
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1356
 msgid "Error: SMD pad has a hole."
 msgstr "Errore: la piazzola SMD ha un foro."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1358
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1362
 msgid "Warning: SMD pad has no outer layers."
 msgstr "Attenzione: la piazzola SMD non ha strati esterni."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1366
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1370
 msgid "Warning: Fiducial property makes no sense on NPTH pads."
 msgstr "Attenzione: la proprietà allineatore non ha senso con piazzole NPTH."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1372
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1376
 msgid "Warning: Testpoint property makes no sense on NPTH pads."
 msgstr "Attenzione: la proprietà testpoint non ha senso con piazzole NPTH."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1378
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1382
 msgid "Warning: Heatsink property makes no sense of NPTH pads."
 msgstr "Attenzione: la proprietà dissipatore non ha senso per piazzole NPTH."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1384
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1388
 msgid "Warning: Castellated property is for PTH pads."
 msgstr "Attenzione: la proprietà dentellata è per piazzole PTH."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1390
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1394
 msgid "Warning: BGA property is for SMD pads."
 msgstr "Attenzione: la proprietà BGA è per piazzole SMD."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1399
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1403
 msgid "Error: Negative corner size."
 msgstr "Errore: dimensione angolo negativo."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1401
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1405
 msgid "Warning: Corner size will make pad circular."
 msgstr "Attenzione: la dimensione angolo renderà la piazzola circolare."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1411
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1415
 msgid "Error: Custom pad shape must resolve to a single polygon."
 msgstr ""
 "Errore: la forma piazzola personalizzata deve risolvere un singolo poligono."
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1417
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1421
 msgid "Pad Properties Errors"
 msgstr "Errori proprietà piazzole"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1418
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1422
 msgid "Pad Properties Warnings"
 msgstr "Avvertenze proprietà piazzole"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1624
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1628
 msgid "Modify pad"
 msgstr "Modifica piazzola"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1657
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1661
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
 msgid "Hole size X:"
 msgstr "Dimensione X foro:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1672
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1673
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1674
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1676
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1677
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1678
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:653
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:721
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:769
@@ -33453,14 +33457,14 @@ msgstr "Dimensione X foro:"
 msgid "d"
 msgstr "d"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1678
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1682
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:311
 msgid "Pad size X:"
 msgstr "Dimensioni X piazzola:"
 
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1681
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1682
-#: pcbnew/dialogs/dialog_pad_properties.cpp:1683
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1685
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1686
+#: pcbnew/dialogs/dialog_pad_properties.cpp:1687
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:261
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:301
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:357
@@ -35396,54 +35400,54 @@ msgstr "Elementi di testo predefiniti per le nuove impronte:"
 msgid "Default properties for new graphic items:"
 msgstr "Valori predefiniti per i nuovi elementi grafici:"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:465
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:466
 #, c-format
 msgid "folder with %s files"
 msgstr "cartella con %s file"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:564
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:565
 #, c-format
 msgid "Illegal character '%c' in nickname '%s'."
 msgstr "Carattere illegale '%c' in denominazione '%s'."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:809
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:810
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
 msgstr ""
 "Seleziona una o più righe contenenti le librerie da salvare nel formato "
 "KiCad corrente."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:817
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:818
 #, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
 msgstr ""
 "Salvare '%s' come formato KiCad corrente e sostituire la voce nella tabella?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:823
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:824
 #, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
 msgstr ""
 "Salvare %d librerie nel formato corrente di KiCad e sostituire le voci nella "
 "tabella?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:853
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:854
 #, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
 msgstr ""
 "La cartella '%s' esiste già. Sovrascrivere qualunque impronta esistente?"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:883
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:884
 #, c-format
 msgid "Failed to save footprint library file '%s'."
 msgstr "Fallito salvataggio file libreria impronte '%s'."
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:958
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:959
 #, c-format
 msgid "Select %s Library"
 msgstr "Seleziona la libreria %s"
 
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:1015
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:1016
 msgid "Warning: Duplicate Nicknames"
 msgstr "Attenzione: denominatori duplicati"
 
@@ -35451,24 +35455,24 @@ msgstr "Attenzione: denominatori duplicati"
 msgid "LIbrary Format"
 msgstr "Formato libreria"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:397
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:404
 msgid "No filename entered"
 msgstr "Nessun nomefile inserito"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:402
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:409
 msgid "Illegal filename"
 msgstr "Nomefile illegale"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:407
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:414
 #: pcbnew/microwave/microwave_polygon.cpp:223
 msgid "File not found"
 msgstr "File non trovato"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:412
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:419
 msgid "Unable to open file"
 msgstr "Impossibile aprire il file"
 
-#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:417
+#: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:424
 msgid "Unknown error"
 msgstr "Errore sconosciuto"
 
@@ -38858,42 +38862,42 @@ msgstr "Connessione zona superata."
 msgid "Net tie pad groups differ."
 msgstr "Gruppo piazzole net tie diverso."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:692
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:693
 msgid "Pad count differs."
 msgstr "Conteggio piazzole diverso."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:713
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:714
 msgid "Rule area count differs."
 msgstr "Conteggio area regole diverso."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:732
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:733
 msgid "No project loaded, skipping library parity tests."
 msgstr "Nessun progetto caricato, evitati test di parità libreria."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:736
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:737
 msgid "Loading footprint library table..."
 msgstr "Caricamento tabella librerie impronte..."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:746
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:747
 msgid "Checking board footprints against library..."
 msgstr "Controllo impronte scheda rispetto alla libreria..."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:778
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:779
 #, c-format
 msgid "The current configuration does not include the library '%s'."
 msgstr "La configurazione corrente non include la libreria \"%s\"."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:792
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:793
 #, c-format
 msgid "The library '%s' is not enabled in the current configuration."
 msgstr "La libreria \"%s\" non è abilitata nella configurazione corrente."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:828
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:829
 #, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "Impronta '%s' non trovata nella libreria '%s'."
 
-#: pcbnew/drc/drc_test_provider_library_parity.cpp:841
+#: pcbnew/drc/drc_test_provider_library_parity.cpp:842
 #, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
 msgstr "I'impronta '%s' non corrisponde alla copia nella libreria '%s'."
@@ -39137,7 +39141,7 @@ msgstr "Sono stati esportati come piazzole ovali."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:288
 #: pcbnew/exporters/exporter_vrml.cpp:781
-#: pcbnew/exporters/step/exporter_step.cpp:378
+#: pcbnew/exporters/step/exporter_step.cpp:382
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
 msgstr "Il contorno scheda non corretto. Eseguire DRC per un'analisi completa."
@@ -39179,21 +39183,21 @@ msgstr "Creato file di lavoro Gerber '%s'."
 msgid "Board stackup settings not up to date."
 msgstr "Impostazioni stackup non aggiornate."
 
-#: pcbnew/exporters/step/exporter_step.cpp:498
+#: pcbnew/exporters/step/exporter_step.cpp:502
 msgid "Determining PCB data\n"
 msgstr "Determinazione dati PCB\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:501
+#: pcbnew/exporters/step/exporter_step.cpp:505
 #, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
 msgstr "Spessore scheda dallo stackup: %.3f mm\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:515
+#: pcbnew/exporters/step/exporter_step.cpp:519
 #, c-format
 msgid "Build %s data\n"
 msgstr "Crea %s dati\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:519
+#: pcbnew/exporters/step/exporter_step.cpp:523
 msgid ""
 "\n"
 "** Error building STEP board model. Export aborted. **\n"
@@ -39201,12 +39205,12 @@ msgstr ""
 "\n"
 "** Errore creando il modello scheda STEP. Esportazione annullata. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:523
+#: pcbnew/exporters/step/exporter_step.cpp:527
 #, c-format
 msgid "Writing %s file\n"
 msgstr "Scrittura %s file\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:533
+#: pcbnew/exporters/step/exporter_step.cpp:537
 #, c-format
 msgid ""
 "\n"
@@ -39215,13 +39219,13 @@ msgstr ""
 "\n"
 "** Errore nello scrivere %s file. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:539
+#: pcbnew/exporters/step/exporter_step.cpp:543
 #, c-format
 msgid "%s file '%s' created.\n"
 msgstr "%s file '%s' creato.\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:546
-#: pcbnew/exporters/step/exporter_step.cpp:552
+#: pcbnew/exporters/step/exporter_step.cpp:550
+#: pcbnew/exporters/step/exporter_step.cpp:556
 #, c-format
 msgid ""
 "\n"
@@ -39230,7 +39234,7 @@ msgstr ""
 "\n"
 "** Errore esportando il file %s. Esportazione annullata. **\n"
 
-#: pcbnew/exporters/step/exporter_step.cpp:561
+#: pcbnew/exporters/step/exporter_step.cpp:565
 #, c-format
 msgid ""
 "Unable to create %s file.\n"
@@ -39239,12 +39243,12 @@ msgstr ""
 "Impossibile creare il file %s.\n"
 "Controllare che la scheda abbia un bordo e modelli validi."
 
-#: pcbnew/exporters/step/exporter_step.cpp:567
+#: pcbnew/exporters/step/exporter_step.cpp:571
 #, c-format
 msgid "%s file has been created, but there are warnings."
 msgstr "File %s creato, ma con messaggi di avvertimento."
 
-#: pcbnew/exporters/step/exporter_step.cpp:576
+#: pcbnew/exporters/step/exporter_step.cpp:580
 #, c-format
 msgid ""
 "\n"
@@ -39299,28 +39303,28 @@ msgstr "Salva file scheda come"
 msgid "Printed circuit board"
 msgstr "Circuito stampato"
 
-#: pcbnew/files.cpp:302
+#: pcbnew/files.cpp:299
 #, c-format
 msgid "Recovery file '%s' not found."
 msgstr "File di recupero '%s' non trovato."
 
-#: pcbnew/files.cpp:307
+#: pcbnew/files.cpp:304
 #, c-format
 msgid "OK to load recovery file '%s'?"
 msgstr "Ok per caricare il file di recupero '%s'?"
 
-#: pcbnew/files.cpp:350
+#: pcbnew/files.cpp:347
 #, c-format
 msgid "Current board will be closed, save changes to '%s' before continuing?"
 msgstr ""
 "La scheda corrente verrà chiusa, salvare i cambiamenti su \"%s\" prima di "
 "continuare?"
 
-#: pcbnew/files.cpp:364
+#: pcbnew/files.cpp:361
 msgid "Current Board will be closed. Continue?"
 msgstr "La scheda corrente verrà chiusa. Continuare?"
 
-#: pcbnew/files.cpp:481
+#: pcbnew/files.cpp:478
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39333,64 +39337,64 @@ msgstr ""
 "Ciò può portare a riempimenti diversi dalle versioni precedenti di KiCad che "
 "usavano lo spessore della linea del bordo scheda sullo strato Edge Cuts."
 
-#: pcbnew/files.cpp:527
+#: pcbnew/files.cpp:524
 #, c-format
 msgid "PCB '%s' is already open by '%s' at '%s'."
 msgstr "Il file del C.S. '%s' è già aperto da '%s' su '%s'."
 
-#: pcbnew/files.cpp:538
+#: pcbnew/files.cpp:535
 msgid "The current PCB has been modified.  Save changes?"
 msgstr ""
 "Il circuito stampato corrente è stato modificato. Salvare le modifiche?"
 
-#: pcbnew/files.cpp:557
+#: pcbnew/files.cpp:554
 #, c-format
 msgid "PCB '%s' does not exist. Do you wish to create it?"
 msgstr "Il circuito stampato '%s' non esiste. Crearlo?"
 
-#: pcbnew/files.cpp:566
+#: pcbnew/files.cpp:563
 msgid "Creating PCB"
 msgstr "Creazione C.S."
 
-#: pcbnew/files.cpp:657
+#: pcbnew/files.cpp:654
 msgid "File format is not supported"
 msgstr "Formato file non supportato"
 
-#: pcbnew/files.cpp:697 pcbnew/files.cpp:707
+#: pcbnew/files.cpp:694 pcbnew/files.cpp:704
 #, c-format
 msgid "Error loading PCB '%s'."
 msgstr "Errore caricando il C.S. '%s'."
 
-#: pcbnew/files.cpp:716
+#: pcbnew/files.cpp:713
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
 msgstr "Memoria esaurita caricando il C.S. '%s'"
 
-#: pcbnew/files.cpp:829
+#: pcbnew/files.cpp:826
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
 "Errore nel salvataggio impronta %s nella libreria impronte specifica del "
 "progetto."
 
-#: pcbnew/files.cpp:860
+#: pcbnew/files.cpp:857
 msgid "Error saving project specific footprint library table."
 msgstr ""
 "Errore nel salvataggio della tabella librerie impronte specifica del "
 "progetto."
 
-#: pcbnew/files.cpp:952 pcbnew/files.cpp:1091 pcbnew/files.cpp:1259
+#: pcbnew/files.cpp:949 pcbnew/files.cpp:1088 pcbnew/files.cpp:1256
 #: pcbnew/footprint_libraries_utils.cpp:268
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
 msgstr "Permessi insufficienti per scrivere il file '%s'."
 
-#: pcbnew/files.cpp:984 pcbnew/files.cpp:1136
+#: pcbnew/files.cpp:981 pcbnew/files.cpp:1133
 #, c-format
 msgid "Error saving custom rules file '%s'."
 msgstr "Errore nel salvataggio del file regole personalizzato '%s'."
 
-#: pcbnew/files.cpp:1010 pcbnew/files.cpp:1112
+#: pcbnew/files.cpp:1007 pcbnew/files.cpp:1109
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -39399,7 +39403,7 @@ msgstr ""
 "Errore nel salvataggio del file scheda '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1030
+#: pcbnew/files.cpp:1027
 #, c-format
 msgid ""
 "Error saving board file '%s'.\n"
@@ -39408,7 +39412,7 @@ msgstr ""
 "Errore nel salvataggio file scheda '%s'.\n"
 "Fallita rinomina del file temporaneo '%s'."
 
-#: pcbnew/files.cpp:1140
+#: pcbnew/files.cpp:1137
 #, c-format
 msgid ""
 "Board copied to:\n"
@@ -39417,15 +39421,15 @@ msgstr ""
 "Scheda copiata su:\n"
 "%s"
 
-#: pcbnew/files.cpp:1253
+#: pcbnew/files.cpp:1250
 msgid "The board must be saved before generating IPC2581 file."
 msgstr "La scheda deve essere salvata prima di generare il file IPC2581."
 
-#: pcbnew/files.cpp:1269
+#: pcbnew/files.cpp:1266
 msgid "Generating IPC2581 file"
 msgstr "Generazione file IPC2581"
 
-#: pcbnew/files.cpp:1292 pcbnew/pcbnew_jobs_handler.cpp:1168
+#: pcbnew/files.cpp:1289 pcbnew/pcbnew_jobs_handler.cpp:1168
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -39434,7 +39438,7 @@ msgstr ""
 "Errore nel generare il file IPC2581 '%s'.\n"
 "%s"
 
-#: pcbnew/files.cpp:1356 pcbnew/pcbnew_jobs_handler.cpp:1200
+#: pcbnew/files.cpp:1353 pcbnew/pcbnew_jobs_handler.cpp:1200
 #, c-format
 msgid ""
 "Error generating IPC2581 file '%s'.\n"
@@ -42337,7 +42341,7 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Errato ZSmoothing per CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6139
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6147
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
@@ -42522,7 +42526,7 @@ msgstr ""
 "Nome NETCLASS '%s' duplicato nel file '%s' alla riga %d, scostamento %d."
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2995
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5364
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5372
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42553,7 +42557,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4608
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4616
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42564,7 +42568,7 @@ msgstr ""
 "file: %s\n"
 "riga: %d scostamento: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4627
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4635
 #, c-format
 msgid ""
 "Net name doesn't match ID in\n"
@@ -42575,7 +42579,7 @@ msgstr ""
 "file: %s\n"
 "riga: %d scostamento: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4928
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:4936
 #, c-format
 msgid ""
 "Invalid zero-sized pad pinned to %s in\n"
@@ -42588,7 +42592,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d"
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5279
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5287
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42601,7 +42605,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5465
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5473
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42614,7 +42618,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5595
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5603
 #, c-format
 msgid ""
 "Invalid net ID in\n"
@@ -42627,7 +42631,7 @@ msgstr ""
 "riga: %d\n"
 "scostamento: %d."
 
-#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6108
+#: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6116
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
