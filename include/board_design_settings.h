@@ -76,6 +76,9 @@
 #define DEFAULT_CUSTOMDPAIRGAP        0.18
 #define DEFAULT_CUSTOMDPAIRVIAGAP     0.18
 
+#define DEFAULT_MEANDER_SPACING       0.6
+#define DEFAULT_DP_MEANDER_SPACING    1.0
+
 #define DEFAULT_MINCLEARANCE          0.0     // overall min clearance
 #define DEFAULT_MINCONNECTION         0.0     // overall min connection width
 #define DEFAULT_TRACKMINWIDTH         0.0     // track width min value

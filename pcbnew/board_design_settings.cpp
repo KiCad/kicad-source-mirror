@@ -212,6 +212,11 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     // Layer thickness for 3D viewer
     m_boardThickness = pcbIUScale.mmToIU( DEFAULT_BOARD_THICKNESS_MM );
 
+    // Default spacing for meanders
+    m_SingleTrackMeanderSettings.m_spacing = pcbIUScale.mmToIU( DEFAULT_MEANDER_SPACING );
+    m_SkewMeanderSettings.m_spacing = pcbIUScale.mmToIU( DEFAULT_MEANDER_SPACING );
+    m_DiffPairMeanderSettings.m_spacing = pcbIUScale.mmToIU( DEFAULT_DP_MEANDER_SPACING );
+
     m_viaSizeIndex = 0;
     m_trackWidthIndex = 0;
     m_diffPairIndex = 0;

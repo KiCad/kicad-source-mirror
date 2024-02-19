@@ -34,7 +34,7 @@ const long long int MEANDER_SETTINGS::LENGTH_UNCONSTRAINED( 1000000 * pcbIUScale
 
 MEANDER_SETTINGS::MEANDER_SETTINGS()
 {
-    m_minAmplitude = 100000;
+    m_minAmplitude = 200000;
     m_maxAmplitude = 1000000;
     m_step = 50000;
     m_lenPadToDie = 0;
@@ -43,7 +43,7 @@ MEANDER_SETTINGS::MEANDER_SETTINGS()
     SetTargetSkew( 0 );
     m_overrideCustomRules = false;
     m_cornerStyle = MEANDER_STYLE_ROUND;
-    m_cornerRadiusPercentage = 100;
+    m_cornerRadiusPercentage = 80;
     m_singleSided = false;
     m_initialSide = MEANDER_SIDE_LEFT;
     m_lengthTolerance = 0;
