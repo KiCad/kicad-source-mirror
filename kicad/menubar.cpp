@@ -24,6 +24,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <bitmaps.h>
 #include <file_history.h>
 #include <kiplatform/policy.h>
@@ -74,7 +75,11 @@ void KICAD_MANAGER_FRAME::doReCreateMenuBar()
 
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newProject );
     fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromTemplate );
-    fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromRepository );
+
+    if( ADVANCED_CFG::GetCfg().m_EnableGit )
+    {
+        fileMenu->Add( KICAD_MANAGER_ACTIONS::newFromRepository );
+    }
 
     if( wxDir::Exists( PATHS::GetStockDemosPath() ) )
     {

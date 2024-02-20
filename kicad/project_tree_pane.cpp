@@ -629,19 +629,22 @@ void PROJECT_TREE_PANE::ReCreateTreePrj()
     bool prjOpened = fn.FileExists();
 
     // Bind the git repository to the project tree (if it exists)
-    m_TreeProject->SetGitRepo( get_git_repository_for_file( fn.GetPath().c_str() ) );
-    m_TreeProject->GitCommon()->SetPassword( Prj().GetLocalSettings().m_GitRepoPassword );
-    m_TreeProject->GitCommon()->SetUsername( Prj().GetLocalSettings().m_GitRepoUsername );
-    m_TreeProject->GitCommon()->SetSSHKey( Prj().GetLocalSettings().m_GitSSHKey );
+    if( ADVANCED_CFG::GetCfg().m_EnableGit )
+    {
+        m_TreeProject->SetGitRepo( get_git_repository_for_file( fn.GetPath().c_str() ) );
+        m_TreeProject->GitCommon()->SetPassword( Prj().GetLocalSettings().m_GitRepoPassword );
+        m_TreeProject->GitCommon()->SetUsername( Prj().GetLocalSettings().m_GitRepoUsername );
+        m_TreeProject->GitCommon()->SetSSHKey( Prj().GetLocalSettings().m_GitSSHKey );
 
-    wxString conn_type = Prj().GetLocalSettings().m_GitRepoType;
+        wxString conn_type = Prj().GetLocalSettings().m_GitRepoType;
 
-    if( conn_type == "https" )
-        m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS );
-    else if( conn_type == "ssh" )
-        m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
-    else
-        m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL );
+        if( conn_type == "https" )
+            m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_HTTPS );
+        else if( conn_type == "ssh" )
+            m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_SSH );
+        else
+            m_TreeProject->GitCommon()->SetConnType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL );
+    }
 
     // We may have opened a legacy project, in which case GetProjectFileName will return the
     // name of the migrated (new format) file, which may not have been saved to disk yet.
