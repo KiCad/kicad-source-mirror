@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-19 17:02+0000\n"
+"PO-Revision-Date: 2024-02-20 20:12+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19347,8 +19347,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> on ristiriidassa nastan "
-"%s%s kanssa sijainnissa <b>(%s, %s)</b> b> %s runkotyylillä."
+"<b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> on ristiriidassa "
+"nastan %s%s kanssa sijainnissa <b>(%s, %s)</b> b> %s runkotyylillä."
 
 #: eeschema/symbol_checker.cpp:133
 #, c-format
@@ -46857,7 +46857,7 @@ msgstr "Vyöhyke %s %s"
 
 #: pcbnew/zone.cpp:1665
 msgid "Cannot be less than zone minimum width"
-msgstr "Ei voi olla pienempi, kuin kuparivyöhykkeen vähimmäisleveys."
+msgstr "Ei voi olla pienempi, kuin kuparivyöhykkeen vähimmäisleveys"
 
 #: pcbnew/zone.cpp:1671
 #, fuzzy
