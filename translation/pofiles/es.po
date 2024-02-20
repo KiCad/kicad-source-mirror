@@ -18,16 +18,16 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-01 13:54+0000\n"
-"Last-Translator: VicSanRoPe <vicsanrope@protonmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/master-"
-"source/es/>\n"
+"PO-Revision-Date: 2024-02-20 20:12+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/kicad/"
+"master-source/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-Basepath: ../Git/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -2163,25 +2163,24 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Redes actualmente coincidentes:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Patrón"
+msgstr "Patrón:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Clases de red"
+msgstr "Clase de red:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Nota: las asignaciones completas de netclass se pueden editar en "
+"Configuración del esquema > Proyecto."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Asignaciones de clases de red:"
+msgstr "Añadir asignación de Netclass"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2500,9 +2499,8 @@ msgid "Name:"
 msgstr "Nombre:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(opcional, 0 por defecto)"
+msgstr "(opcional)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2588,9 +2586,8 @@ msgid "unit"
 msgstr "unidad"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Enlace:"
+msgstr "Enlazado"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -4088,9 +4085,8 @@ msgid "Reset Unique Id"
 msgstr "Reiniciar identificador único"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Huellas:"
+msgstr "Huellas/ almohadillas:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -6923,10 +6919,8 @@ msgid "Courtyard collision shadow"
 msgstr "Sombra de colisión de patio"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr ""
-"Se ha encontrado un carácter ilegal en el nombre de la biblioteca lógica"
+msgstr "El nombre de la biblioteca contiene caracteres ilegales"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -15449,9 +15443,8 @@ msgid "Insert Schematic"
 msgstr "Insertar esquema"
 
 #: eeschema/files-io.cpp:660
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Imp&ortar contenido de hoja de esquema"
+msgstr "Importar contenido de la hoja de esquema..."
 
 #: eeschema/files-io.cpp:672
 msgid ""
@@ -16229,9 +16222,8 @@ msgstr ""
 "biblioteca '%s'."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1710
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Estilo del cuerpo"
+msgstr "Cambiar el estilo del cuerpo"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
