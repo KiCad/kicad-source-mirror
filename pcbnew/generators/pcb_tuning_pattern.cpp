@@ -1747,6 +1747,31 @@ void PCB_TUNING_PATTERN::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     int size = KiROUND( aView->ToWorld( EDIT_POINT::POINT_SIZE ) * 0.8 );
     size = std::max( size, pcbIUScale.mmToIU( 0.05 ) );
 
+    if( !HasFlag( IN_EDIT ) )
+    {
+        if( m_baseLine )
+        {
+            for( int i = 0; i < m_baseLine->SegmentCount(); i++ )
+            {
+                SEG seg = m_baseLine->CSegment( i );
+                ctx.DrawLineDashed( seg.A, seg.B, size, size / 6, true );
+            }
+        }
+        else
+        {
+            ctx.DrawLineDashed( m_origin, m_end, size, size / 6, false );
+        }
+
+        if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled )
+        {
+            for( int i = 0; i < m_baseLineCoupled->SegmentCount(); i++ )
+            {
+                SEG seg = m_baseLineCoupled->CSegment( i );
+                ctx.DrawLineDashed( seg.A, seg.B, size, size / 6, true );
+            }
+        }
+    }
+
     SHAPE_LINE_CHAIN chain = getOutline();
 
     for( int i = 0; i < chain.SegmentCount(); i++ )
