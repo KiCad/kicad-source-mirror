@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2023 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -610,7 +610,7 @@ void BOARD_ADAPTER::addShape( const PCB_SHAPE* aShape, CONTAINER_2D_BASE* aConta
             float   innerR3DU = TO_3DU( aShape->GetRadius() ) - linewidth3DU / 2.0;
             float   outerR3DU = TO_3DU( aShape->GetRadius() ) + linewidth3DU / 2.0;
 
-            if( aShape->IsFilled() )
+            if( aShape->IsFilled() || innerR3DU <= 0.0 )
                 addFILLED_CIRCLE_2D( aContainer, center3DU, outerR3DU, *aOwner );
             else
                 addRING_2D( aContainer, center3DU, innerR3DU, outerR3DU, *aOwner );
