@@ -786,32 +786,24 @@ void PCB_TUNING_PATTERN::EditStart( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_
 
 
 static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhere, int aLayer,
-                                      VECTOR2I& aPointOut )
+                                      VECTOR2I&               aPointOut,
+                                      const SHAPE_LINE_CHAIN& aBaseline = SHAPE_LINE_CHAIN() )
 {
-    int maxSlopRadius = aRouter->Sizes().Clearance() + aRouter->Sizes().TrackWidth() / 2;
+    int  maxSlopRadius = aRouter->Sizes().Clearance() + aRouter->Sizes().TrackWidth() / 2;
+    bool checkBaseline = aBaseline.SegmentCount() > 0;
 
     static const int  candidateCount = 2;
     PNS::LINKED_ITEM* prioritized[candidateCount];
     SEG::ecoord       dist[candidateCount];
+    SEG::ecoord       distBaseline[candidateCount];
     VECTOR2I          point[candidateCount];
 
     for( int i = 0; i < candidateCount; i++ )
     {
         prioritized[i] = nullptr;
         dist[i] = VECTOR2I::ECOORD_MAX;
+        distBaseline[i] = VECTOR2I::ECOORD_MAX;
     }
-
-    auto haveCandidates =
-            [&]()
-            {
-                for( PNS::ITEM* item : prioritized )
-                {
-                    if( item )
-                        return true;
-                }
-
-                return false;
-            };
 
     for( int slopRadius : { 0, maxSlopRadius } )
     {
@@ -837,12 +829,22 @@ static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhe
                 VECTOR2I    nearest = pnsArc->Arc().NearestPoint( aWhere );
                 SEG::ecoord d0 = ( nearest - aWhere ).SquaredEuclideanNorm();
 
-                if( d0 <= dist[1] )
+                if( d0 > dist[1] )
+                    continue;
+
+                if( checkBaseline )
                 {
-                    prioritized[1] = linked;
-                    dist[1] = d0;
-                    point[1] = nearest;
+                    SEG::ecoord dcBaseline = aBaseline.SquaredDistance( pnsArc->Arc().GetArcMid() );
+
+                    if( dcBaseline > distBaseline[1] )
+                        continue;
+
+                    distBaseline[1] = dcBaseline;
                 }
+
+                prioritized[1] = linked;
+                dist[1] = d0;
+                point[1] = nearest;
             }
             else if( item->Kind() & PNS::ITEM::SEGMENT_T )
             {
@@ -851,17 +853,24 @@ static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhe
                 VECTOR2I    nearest = segm->CLine().NearestPoint( aWhere, false );
                 SEG::ecoord dd = ( aWhere - nearest ).SquaredEuclideanNorm();
 
-                if( dd <= dist[1] )
+                if( dd > dist[1] )
+                    continue;
+
+                if( checkBaseline )
                 {
-                    prioritized[1] = segm;
-                    dist[1] = dd;
-                    point[1] = nearest;
+                    SEG::ecoord dcBaseline = aBaseline.SquaredDistance( segm->Shape()->Centre() );
+
+                    if( dcBaseline > distBaseline[1] )
+                        continue;
+
+                    distBaseline[1] = dcBaseline;
                 }
+
+                prioritized[1] = segm;
+                dist[1] = dd;
+                point[1] = nearest;
             }
         }
-
-        if( haveCandidates() )
-            break;
     }
 
     PNS::LINKED_ITEM* rv = nullptr;
@@ -1306,8 +1315,10 @@ bool PCB_TUNING_PATTERN::Update( GENERATOR_TOOL* aTool, BOARD* aBoard, BOARD_COM
     // Snap points
     VECTOR2I startSnapPoint, endSnapPoint;
 
-    PNS::LINKED_ITEM* startItem = pickSegment( router, m_origin, layer, startSnapPoint );
-    PNS::LINKED_ITEM* endItem = pickSegment( router, m_end, layer, endSnapPoint );
+    wxCHECK( m_baseLine, false );
+
+    PNS::LINKED_ITEM* startItem = pickSegment( router, m_origin, layer, startSnapPoint, *m_baseLine);
+    PNS::LINKED_ITEM* endItem = pickSegment( router, m_end, layer, endSnapPoint, *m_baseLine );
 
     wxASSERT( startItem );
     wxASSERT( endItem );

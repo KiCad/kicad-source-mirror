@@ -500,8 +500,10 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
     LINKED_ITEM* refItem = nullptr;
     LINKED_ITEM* coupledItem = nullptr;
     SEG::ecoord  minDist_sq = std::numeric_limits<SEG::ecoord>::max();
+    SEG::ecoord  minDistTarget_sq = std::numeric_limits<SEG::ecoord>::max();
+    VECTOR2I     targetPoint = aStart->Shape()->Centre();
 
-    for( ITEM* p_item : pItems )
+    auto findNItem = [&]( ITEM* p_item )
     {
         for( ITEM* n_item : nItems )
         {
@@ -512,8 +514,8 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
 
             if( p_item->Kind() == ITEM::SEGMENT_T )
             {
-                SEGMENT* p_seg = static_cast<SEGMENT*>( p_item );
-                SEGMENT* n_seg = static_cast<SEGMENT*>( n_item );
+                const SEGMENT* p_seg = static_cast<const SEGMENT*>( p_item );
+                const SEGMENT* n_seg = static_cast<const SEGMENT*>( n_item );
 
                 if( n_seg->Width() != p_seg->Width() )
                     continue;
@@ -530,8 +532,8 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
             }
             else if( p_item->Kind() == ITEM::ARC_T )
             {
-                ARC* p_arc = static_cast<ARC*>( p_item );
-                ARC* n_arc = static_cast<ARC*>( n_item );
+                const ARC* p_arc = static_cast<const ARC*>( p_item );
+                const ARC* n_arc = static_cast<const ARC*>( n_item );
 
                 if( n_arc->Width() != p_arc->Width() )
                     continue;
@@ -545,13 +547,44 @@ bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
                 dist_sq = SEG::Square( p_arc->CArc().GetRadius() - n_arc->CArc().GetRadius() );
             }
 
-            if( dist_sq < minDist_sq )
+            if( dist_sq <= minDist_sq )
             {
-                minDist_sq = dist_sq;
-                refItem = static_cast<LINKED_ITEM*>( p_item );
-                coupledItem = static_cast<LINKED_ITEM*>( n_item );
+                SEG::ecoord distTarget_sq = n_item->Shape()->SquaredDistance( targetPoint );
+                if( distTarget_sq < minDistTarget_sq )
+                {
+                    minDistTarget_sq = distTarget_sq;
+                    minDist_sq = dist_sq;
+
+                    refItem = static_cast<LINKED_ITEM*>( p_item );
+                    coupledItem = static_cast<LINKED_ITEM*>( n_item );
+                }
             }
         }
+    };
+
+    findNItem( startItem );
+
+    if( !coupledItem )
+    {
+        LINKED_ITEM*    linked = static_cast<LINKED_ITEM*>( startItem );
+        std::set<ITEM*> linksToTest;
+
+        for( int i = 0; i < linked->AnchorCount(); i++ )
+        {
+            const JOINT* jt = m_world->FindJoint( linked->Anchor( i ), linked );
+
+            if( !jt )
+                continue;
+
+            for( ITEM* link : jt->LinkList() )
+            {
+                if( link != linked )
+                    linksToTest.emplace( link );
+            }
+        }
+
+        for( ITEM* link : linksToTest )
+            findNItem( link );
     }
 
     if( !coupledItem )
