@@ -138,7 +138,7 @@ DIALOG_RULE_AREA_PROPERTIES::DIALOG_RULE_AREA_PROPERTIES( PCB_BASE_FRAME* aParen
     m_isFpEditor = m_parent->IsType( FRAME_FOOTPRINT_EDITOR );
 
     BOARD* board = m_parent->GetBoard();
-    LSET   layers = LSET::AllBoardTechMask() | LSET::AllCuMask( board->GetCopperLayerCount() );
+    LSET   layers = LSET::AllNonCuMask() | LSET::AllCuMask( board->GetCopperLayerCount() );
 
     m_zonesettings.SetupLayersList( m_layers, m_parent, layers, m_isFpEditor );
 
