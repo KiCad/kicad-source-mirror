@@ -2439,6 +2439,10 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
+    // Duplicating tuhing patterns alone is not supported
+    if( selection.Size() == 1 && selection.CountType( PCB_GENERATOR_T ) )
+        return 0;
+
     // we have a selection to work on now, so start the tool process
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
     BOARD_COMMIT         commit( this );
