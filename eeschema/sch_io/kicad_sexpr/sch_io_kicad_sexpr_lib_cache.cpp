@@ -72,7 +72,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::Load()
     SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
 
     parser.ParseLib( m_symbols );
-    ++m_modHash;
+    IncrementModifyHash();
 
     // Remember the file modification time of library file when the cache snapshot was made,
     // so that in a networked environment we will reload the cache as needed.
@@ -562,6 +562,6 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::DeleteSymbol( const wxString& aSymbolName )
         delete symbol;
     }
 
-    ++m_modHash;
+    IncrementModifyHash();
     m_isModified = true;
 }
