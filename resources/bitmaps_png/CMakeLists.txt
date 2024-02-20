@@ -666,6 +666,17 @@ set( BMAPS_256
     teardrop_track_sizes
     )
 
+# Tuning images (250x156 native size )
+    set( BMAPS_TUNING
+    tune_diff_pair_length_legend
+    tune_single_track_length_legend
+    )
+
+# Tuning image (250x110 native size )
+    set( BMAPS_TUNING_SKEW
+    tune_diff_pair_skew_legend
+    )
+
 # Images in this section are generated at whatever resolution is set in the source SVG file
 # Use Inkscape Document Properties > Custom Size to set (make sure units are pixels)
 # These are used for images in the UI that are not-square or very large (infographics, etc)
@@ -703,9 +714,6 @@ set( BMAPS_OTHER
     stroke_dashdotdot
     stroke_dot
     stroke_solid
-    tune_diff_pair_length_legend
-    tune_diff_pair_skew_legend
-    tune_single_track_length_legend
     twistedpair
     viacalc
     )
@@ -949,6 +957,12 @@ if( MAINTAIN_PNGS )
     bitmap_dir( 275 130 "${BMAPS_TEARDROPS}" )
 
     bitmap_dir( 550 260 "${BMAPS_TEARDROPS}" )
+
+    bitmap_dir( 250 156 "${BMAPS_TUNING}" )
+    bitmap_dir( 500 312 "${BMAPS_TUNING}" )
+
+    bitmap_dir( 250 110 "${BMAPS_TUNING_SKEW}" )
+    bitmap_dir( 500 220 "${BMAPS_TUNING_SKEW}" )
 
     bitmap_dir( -1 -1 "${BMAPS_OTHER}" )
 

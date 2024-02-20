@@ -4538,6 +4538,18 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::teardrop_sizes].emplace_back( BITMAPS::teardrop_sizes, wxT( "teardrop_sizes_dark_260.png" ), 260, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::teardrop_rect_sizes].emplace_back( BITMAPS::teardrop_rect_sizes, wxT( "teardrop_rect_sizes_dark_260.png" ), 260, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::teardrop_track_sizes].emplace_back( BITMAPS::teardrop_track_sizes, wxT( "teardrop_track_sizes_dark_260.png" ), 260, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::tune_diff_pair_length_legend].emplace_back( BITMAPS::tune_diff_pair_length_legend, wxT( "tune_diff_pair_length_legend_156.png" ), 156, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::tune_single_track_length_legend].emplace_back( BITMAPS::tune_single_track_length_legend, wxT( "tune_single_track_length_legend_156.png" ), 156, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::tune_diff_pair_length_legend].emplace_back( BITMAPS::tune_diff_pair_length_legend, wxT( "tune_diff_pair_length_legend_dark_156.png" ), 156, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::tune_single_track_length_legend].emplace_back( BITMAPS::tune_single_track_length_legend, wxT( "tune_single_track_length_legend_dark_156.png" ), 156, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::tune_diff_pair_length_legend].emplace_back( BITMAPS::tune_diff_pair_length_legend, wxT( "tune_diff_pair_length_legend_312.png" ), 312, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::tune_single_track_length_legend].emplace_back( BITMAPS::tune_single_track_length_legend, wxT( "tune_single_track_length_legend_312.png" ), 312, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::tune_diff_pair_length_legend].emplace_back( BITMAPS::tune_diff_pair_length_legend, wxT( "tune_diff_pair_length_legend_dark_312.png" ), 312, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::tune_single_track_length_legend].emplace_back( BITMAPS::tune_single_track_length_legend, wxT( "tune_single_track_length_legend_dark_312.png" ), 312, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::tune_diff_pair_skew_legend].emplace_back( BITMAPS::tune_diff_pair_skew_legend, wxT( "tune_diff_pair_skew_legend_110.png" ), 110, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::tune_diff_pair_skew_legend].emplace_back( BITMAPS::tune_diff_pair_skew_legend, wxT( "tune_diff_pair_skew_legend_dark_110.png" ), 110, wxT( "dark" ) );
+    aBitmapInfoCache[BITMAPS::tune_diff_pair_skew_legend].emplace_back( BITMAPS::tune_diff_pair_skew_legend, wxT( "tune_diff_pair_skew_legend_220.png" ), 220, wxT( "light" ) );
+    aBitmapInfoCache[BITMAPS::tune_diff_pair_skew_legend].emplace_back( BITMAPS::tune_diff_pair_skew_legend, wxT( "tune_diff_pair_skew_legend_dark_220.png" ), 220, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::att_bridge].emplace_back( BITMAPS::att_bridge, wxT( "att_bridge.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::att_pi].emplace_back( BITMAPS::att_pi, wxT( "att_pi.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::att_splitter].emplace_back( BITMAPS::att_splitter, wxT( "att_splitter.png" ), -1, wxT( "light" ) );
@@ -4570,9 +4582,6 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::stroke_dashdotdot].emplace_back( BITMAPS::stroke_dashdotdot, wxT( "stroke_dashdotdot.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::stroke_dot].emplace_back( BITMAPS::stroke_dot, wxT( "stroke_dot.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::stroke_solid].emplace_back( BITMAPS::stroke_solid, wxT( "stroke_solid.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::tune_diff_pair_length_legend].emplace_back( BITMAPS::tune_diff_pair_length_legend, wxT( "tune_diff_pair_length_legend.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::tune_diff_pair_skew_legend].emplace_back( BITMAPS::tune_diff_pair_skew_legend, wxT( "tune_diff_pair_skew_legend.png" ), -1, wxT( "light" ) );
-    aBitmapInfoCache[BITMAPS::tune_single_track_length_legend].emplace_back( BITMAPS::tune_single_track_length_legend, wxT( "tune_single_track_length_legend.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::twistedpair].emplace_back( BITMAPS::twistedpair, wxT( "twistedpair.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::viacalc].emplace_back( BITMAPS::viacalc, wxT( "viacalc.png" ), -1, wxT( "light" ) );
     aBitmapInfoCache[BITMAPS::att_bridge].emplace_back( BITMAPS::att_bridge, wxT( "att_bridge_dark.png" ), -1, wxT( "dark" ) );
@@ -4607,9 +4616,6 @@ void BuildBitmapInfo( std::unordered_map<BITMAPS, std::vector<BITMAP_INFO>>& aBi
     aBitmapInfoCache[BITMAPS::stroke_dashdotdot].emplace_back( BITMAPS::stroke_dashdotdot, wxT( "stroke_dashdotdot_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::stroke_dot].emplace_back( BITMAPS::stroke_dot, wxT( "stroke_dot_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::stroke_solid].emplace_back( BITMAPS::stroke_solid, wxT( "stroke_solid_dark.png" ), -1, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::tune_diff_pair_length_legend].emplace_back( BITMAPS::tune_diff_pair_length_legend, wxT( "tune_diff_pair_length_legend_dark.png" ), -1, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::tune_diff_pair_skew_legend].emplace_back( BITMAPS::tune_diff_pair_skew_legend, wxT( "tune_diff_pair_skew_legend_dark.png" ), -1, wxT( "dark" ) );
-    aBitmapInfoCache[BITMAPS::tune_single_track_length_legend].emplace_back( BITMAPS::tune_single_track_length_legend, wxT( "tune_single_track_length_legend_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::twistedpair].emplace_back( BITMAPS::twistedpair, wxT( "twistedpair_dark.png" ), -1, wxT( "dark" ) );
     aBitmapInfoCache[BITMAPS::viacalc].emplace_back( BITMAPS::viacalc, wxT( "viacalc_dark.png" ), -1, wxT( "dark" ) );
 
