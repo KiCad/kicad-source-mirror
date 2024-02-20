@@ -446,7 +446,7 @@ bool DP_MEANDER_PLACER::CheckFit( MEANDER_SHAPE* aShape )
         return false;
 
     int w = aShape->Width();
-    int clearance = w + m_settings.m_spacing;
+    int clearance = w + w * 3;
 
     return m_result.CheckSelfIntersections( aShape, clearance );
 }
