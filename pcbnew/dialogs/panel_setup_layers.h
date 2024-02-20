@@ -115,6 +115,7 @@ private:
 
     /**
      * Return a list of layers removed from the board that contain items.
+     * Footprints and items owned by footprints are not taken in account
      */
     LSEQ getRemovedLayersWithItems();
 

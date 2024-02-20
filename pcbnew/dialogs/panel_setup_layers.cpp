@@ -503,6 +503,15 @@ bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
             for( int i = 0; i < collector.GetCount(); i++ )
             {
                 BOARD_ITEM* item = collector[i];
+
+                // Do not remove/change an item owned by a footprint
+                if( dynamic_cast<FOOTPRINT*>( item->GetParentFootprint() ) )
+                    continue;
+
+                // Do not remove footprints
+                if( dynamic_cast<FOOTPRINT*>( item ) )
+                    continue;
+
                 LSET        layers = item->GetLayerSet();
 
                 layers.reset( layer_id );
@@ -728,7 +737,21 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
             collector.Collect( m_pcb, GENERAL_COLLECTOR::BoardLevelItems );
 
             if( collector.GetCount() != 0 )
-                removedLayers.push_back( layer_id );
+            {
+                // Skip items owned by footprints and footprints when building
+                // the actual list of removed layers: these items are not removed
+                for( int i = 0; i < collector.GetCount(); i++ )
+                {
+                    BOARD_ITEM* item = collector[i];
+
+                    if( dynamic_cast<FOOTPRINT*>( item )
+                        || dynamic_cast<FOOTPRINT*>( item->GetParentFootprint() ) )
+                        continue;
+
+                    removedLayers.push_back( layer_id );
+                    break;
+                }
+            }
         }
     }
 
