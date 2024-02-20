@@ -529,7 +529,9 @@ protected:
 
     void doSetFocus( wxWindow* aWindow )
     {
+#ifndef __WXGTK__ // Cannot focus in non-toplevel windows on GTK
         KIPLATFORM::UI::ForceFocus( aWindow );
+#endif
     }
 
 protected:
