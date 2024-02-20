@@ -1608,16 +1608,30 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
 {
     if( m_baseLine )
     {
-        bool singleSided = m_settings.m_singleSided;
+        int clampedMaxAmplitude = m_settings.m_maxAmplitude;
+        int minAllowedAmplitude = 0;
+        int baselineOffset = m_tuningMode == DIFF_PAIR ? ( m_diffPairGap + m_trackWidth ) / 2 : 0;
 
-        if( singleSided )
+        if( m_settings.m_cornerStyle == PNS::MEANDER_STYLE::MEANDER_STYLE_ROUND )
+        {
+            minAllowedAmplitude = baselineOffset + m_trackWidth;
+        }
+        else
+        {
+            int correction = m_trackWidth * tan( 1 - tan( DEG2RAD( 22.5 ) ) );
+            minAllowedAmplitude = baselineOffset + correction;
+        }
+
+        clampedMaxAmplitude = std::max( clampedMaxAmplitude, minAllowedAmplitude );
+
+        if( m_settings.m_singleSided )
         {
             SHAPE_LINE_CHAIN clBase = *m_baseLine;
             SHAPE_LINE_CHAIN left, right;
 
             if( m_tuningMode != DIFF_PAIR )
             {
-                int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+                int amplitude = clampedMaxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
                 SHAPE_LINE_CHAIN chain;
 
@@ -1633,8 +1647,7 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
             }
             else if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled )
             {
-                int amplitude =
-                        m_settings.m_maxAmplitude + m_trackWidth + KiROUND( m_diffPairGap / 2.0 );
+                int amplitude = clampedMaxAmplitude + m_trackWidth + KiROUND( m_diffPairGap / 2.0 );
 
                 SHAPE_LINE_CHAIN clCoupled = *m_baseLineCoupled;
                 SHAPE_LINE_CHAIN chain1, chain2;
@@ -1693,10 +1706,12 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
         SHAPE_POLY_SET   poly;
         SHAPE_LINE_CHAIN cl = *m_baseLine;
 
-        int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
+        int amplitude = 0;
 
         if( m_tuningMode == DIFF_PAIR )
-            amplitude = m_settings.m_maxAmplitude + m_diffPairGap / 2 + KiROUND( m_trackWidth );
+            amplitude = clampedMaxAmplitude + m_diffPairGap / 2 + KiROUND( m_trackWidth );
+        else
+            amplitude = clampedMaxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
         poly.OffsetLineChain( *m_baseLine, amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS,
                               ARC_LOW_DEF, false );
