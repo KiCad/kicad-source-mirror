@@ -8,13 +8,14 @@
 # 撒景賢 <james.sa.2013@gmail.com>, 2024.
 # Oliver0804 <icetzsr@gmail.com>, 2024.
 # William Lin <unrealin01@gmail.com>, 2024.
+# pominglee <pominglee@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-19 17:02+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"PO-Revision-Date: 2024-02-20 20:12+0000\n"
+"Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -3854,14 +3855,13 @@ msgstr "會話"
 
 #: common/dialogs/panel_common_settings_base.cpp:305
 msgid "Remember open files for next project launch"
-msgstr "啟動時開啟的上一次的工程"
+msgstr "記得在下一個專案啟動時打開這些檔案"
 
 #: common/dialogs/panel_common_settings_base.cpp:307
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
-msgstr ""
-"如果選中，啟動專案也會啟動工具，例如原理圖和電路板編輯器以及之前開啟的檔案"
+msgstr "如果勾選，啟動專案時也會啟動工具，例如原理圖和電路板編輯器以及之前開啟的檔案"
 
 #: common/dialogs/panel_common_settings_base.cpp:320
 msgid "&Auto save:"
@@ -3902,16 +3902,16 @@ msgstr "天"
 
 #: common/dialogs/panel_common_settings_base.cpp:365
 msgid "Project Backup"
-msgstr "工程備份"
+msgstr "專案備份"
 
 #: common/dialogs/panel_common_settings_base.cpp:380
 msgid "Automatically backup projects"
-msgstr "自動備份工程"
+msgstr "自動備份專案"
 
 #: common/dialogs/panel_common_settings_base.cpp:381
 msgid ""
 "Automatically create backup archives of the current project when saving files"
-msgstr "儲存檔案時自動建立當前專案的壓縮備份"
+msgstr "儲存檔案時自動建立目前專案的備份存檔"
 
 #: common/dialogs/panel_common_settings_base.cpp:385
 msgid "Create backups when auto save occurs"
@@ -5690,13 +5690,13 @@ msgstr "本地安裝的系統符號庫存放目錄的路徑。"
 
 #: common/env_vars.cpp:115
 msgid "A directory containing project templates installed with KiCad."
-msgstr "包含與 KiCad 一起安裝的專案模板的目錄。"
+msgstr "包含安裝在 KiCad 中的專案模板的目錄。"
 
 #: common/env_vars.cpp:117
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
-msgstr "可選的。如果要建立自己的工程模板資料夾，則可以定義。"
+msgstr "可選。如果您想要建立自己的專案模板文件夾，則可以定義此項。"
 
 #: common/env_vars.cpp:120
 msgid ""
@@ -5712,10 +5712,10 @@ msgid ""
 "For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a folder "
 "containing a project specific footprint library named footprints.pretty."
 msgstr ""
-"由 KiCad 內部定義（不能被編輯），並設定為當前載入的工程檔案的絕對路徑。這個環"
-"境變數可以用於定義相對於當前載入的工程檔案和路徑。例如，${KIPRJMOD}/libs/"
-"footprints.pretty 可以被定義為包含名為 footprints.pretty 工程專用封裝庫的檔案"
-"夾。"
+"由 KiCad 內部定義（不可編輯），並設置為當前載入專案檔案的絕對路徑。此環境變數"
+"可用於定義相對於目前載入專案的檔案和路徑。舉例來說，${KIPRJMOD}/libs/"
+"footprints.pretty 可以被定義為包含名為 footprints.pretty "
+"的特定專案封裝庫的文件夾。"
 
 #: common/env_vars.cpp:129
 msgid "A directory containing system-wide scripts installed with KiCad"
@@ -6212,7 +6212,7 @@ msgstr "退出"
 
 #: common/hotkey_store.cpp:72
 msgid "Project Manager"
-msgstr "工程管理器"
+msgstr "專案管理員"
 
 #: common/hotkey_store.cpp:155
 msgid "Gestures"
@@ -6972,7 +6972,7 @@ msgstr "開啟 %s"
 
 #: common/project.cpp:366 common/project.cpp:371 pcbnew/project_pcb.cpp:69
 msgid "Error loading project footprint library table."
-msgstr "載入工程封裝庫表時出錯。"
+msgstr "載入專案封裝庫表時出錯。"
 
 #: common/project/net_settings.cpp:61 pcbnew/board.cpp:118
 msgid "This is the default net class."
@@ -7792,7 +7792,7 @@ msgstr "管理符號庫..."
 
 #: common/tool/actions.cpp:948
 msgid "Edit the global and project symbol library lists"
-msgstr "編輯全域性和工程符號庫表"
+msgstr "編輯全域性和專案符號庫表"
 
 #: common/tool/actions.cpp:954
 msgid "Manage Footprint Libraries..."
@@ -7800,7 +7800,7 @@ msgstr "管理封裝庫..."
 
 #: common/tool/actions.cpp:955
 msgid "Edit the global and project footprint library lists"
-msgstr "編輯全域性和工程封裝庫列表"
+msgstr "編輯全域性和專案封裝庫列表"
 
 #: common/tool/actions.cpp:961
 msgid "Getting Started with KiCad"
@@ -7889,7 +7889,7 @@ msgid ""
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
 "無法啟動預設瀏覽器。\n"
-"有關如何幫助 KiCad 專案的資訊，請訪問 %s"
+"要獲取有關如何幫助 KiCad 專案的資訊，請訪問%s"
 
 #: common/tool/common_control.cpp:297
 msgid "Get involved with KiCad"
@@ -8404,15 +8404,15 @@ msgstr "KiCad 符號庫檔案"
 
 #: common/wildcards_and_files_ext.cpp:225
 msgid "KiCad project files"
-msgstr "KiCad 工程檔案"
+msgstr "KiCad 專案檔案"
 
 #: common/wildcards_and_files_ext.cpp:231
 msgid "KiCad legacy project files"
-msgstr "KiCad 舊工程檔案"
+msgstr "KiCad 舊專案檔案"
 
 #: common/wildcards_and_files_ext.cpp:238
 msgid "All KiCad project files"
-msgstr "所有 KiCad 工程檔案"
+msgstr "所有 KiCad 專案檔案"
 
 #: common/wildcards_and_files_ext.cpp:245
 msgid "All KiCad schematic files"
@@ -8622,7 +8622,7 @@ msgstr "找到了 %lu 個封裝/符號等價。"
 msgid ""
 "Component %s: footprint %s not found in any of the project footprint "
 "libraries."
-msgstr "元件 %s： 沒有在任何工程封裝庫中找到封裝 %s 。"
+msgstr "元件 %s： 沒有在任何專案封裝庫中找到封裝 %s 。"
 
 #: cvpcb/auto_associate.cpp:308
 msgid "CvPcb Warning"
@@ -8749,7 +8749,7 @@ msgstr ""
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:45
 #, c-format
 msgid "Project file: '%s'"
-msgstr "工程檔案：\"%s\""
+msgstr "專案檔案：\"%s\""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:93
 #: eeschema/dialogs/dialog_bom.cpp:453
@@ -11687,7 +11687,7 @@ msgstr "無法正常化路徑 '%s%s'。"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:473
 msgid "No project or path defined for the current schematic."
-msgstr "沒有為當前原理圖未定義工程或路徑。"
+msgstr "目前原理圖中沒有定義任何專案或路徑。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:25
 #: pcbnew/dialogs/dialog_export_svg_base.cpp:25
@@ -11843,7 +11843,7 @@ msgstr ""
 "接到一個不同的符號名稱，一些符號可能需要被“恢復”（複製或重新命名）到一個新的"
 "庫。\n"
 "\n"
-"建議進行以下變更以更新工程。"
+"建議進行以下變更以更新專案。"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:109
 msgid "Accept"
@@ -11909,7 +11909,7 @@ msgstr "不再顯示"
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:598 eeschema/project_rescue.cpp:613
 msgid "Project Rescue Helper"
-msgstr "工程恢復助手"
+msgstr "專案恢復助手"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:44
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:65
@@ -12050,7 +12050,7 @@ msgstr "原理圖設定"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:42
 msgid "Import Settings from Another Project..."
-msgstr "從另一個工程匯入設定..."
+msgstr "從另一個專案匯入設定..."
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:79
 msgid "Electrical Rules"
@@ -12061,7 +12061,7 @@ msgstr "電氣規則"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:668
 #: pcbnew/footprint_libraries_utils.cpp:422
 msgid "Project"
-msgstr "工程"
+msgstr "專案"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:109
 #: pcbnew/dialogs/dialog_board_setup.cpp:186
@@ -12084,7 +12084,7 @@ msgstr "文字變數"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:133
 msgid "Project is missing or read-only. Settings will not be editable."
-msgstr "工程缺失或為只讀。設定將不可編輯。"
+msgstr "專案遺失或為唯讀。設置將無法編輯。"
 
 #: eeschema/dialogs/dialog_schematic_setup.cpp:175
 #, c-format
@@ -12093,7 +12093,7 @@ msgid ""
 "Project file %s could not be loaded."
 msgstr ""
 "從專案匯入設定時出錯：\n"
-"無法載入工程檔案 %s。"
+"無法載入專案檔案 %s。"
 
 #: eeschema/dialogs/dialog_shape_properties.cpp:169
 #: eeschema/dialogs/dialog_wire_bus_properties.cpp:231
@@ -13373,7 +13373,7 @@ msgstr "符號屬性"
 msgid ""
 "Remapping is not possible because you have insufficient privileges to the "
 "project folder '%s'."
-msgstr "由於你對工程資料夾 \"%s\" 的許可權不足，因此無法重新對映。"
+msgstr "由於您對專案資料夾 \"%s\" 的許可權不足，因此無法重新對映。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:75
 #, fuzzy
@@ -13395,7 +13395,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
 msgid "Adding library '%s', file '%s' to project symbol library table."
-msgstr "新增庫 \"%s\"、檔案 \"%s\" 到工程符號庫表。"
+msgstr "新增庫 \"%s\"、檔案 \"%s\" 到專案符號庫表。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:224
 #: eeschema/dialogs/panel_sym_lib_table.cpp:887
@@ -13415,7 +13415,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:245
 msgid "Created project symbol library table.\n"
-msgstr "建立工程符號庫表。\n"
+msgstr "建立專案符號庫表。\n"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:270
 #, c-format
@@ -13434,7 +13434,7 @@ msgstr "符號庫表對映完成！"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:355
 #, c-format
 msgid "Cannot create project remap back up folder '%s'."
-msgstr "無法建立工程重新對映備份資料夾 \"%s\"。"
+msgstr "無法建立專案重新映射備份文件夾'%s'。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:358
 #: eeschema/dialogs/dialog_symbol_remap.cpp:510
@@ -14470,7 +14470,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"儲存工程特定庫表時出錯:\n"
+"儲存專案特定庫表時出錯:\n"
 "\n"
 "%s"
 
@@ -14505,7 +14505,7 @@ msgstr "全域性庫"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:121
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:118
 msgid "Project Specific Libraries"
-msgstr "工程專用庫"
+msgstr "專案特定庫"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:129
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:126
@@ -14533,7 +14533,7 @@ msgstr "這是隻讀列表,其顯示了相關的環境變數。"
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:41
 msgid "Project field name templates:"
-msgstr "工程欄位名模板："
+msgstr "專案欄位名稱模板："
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:47
 msgid "Global field name templates:"
@@ -15112,7 +15112,7 @@ msgstr "在專案檔案符號庫列表中找到非法條目。"
 
 #: eeschema/files-io.cpp:394
 msgid "Project Load Warning"
-msgstr "工程載入警告"
+msgstr "專案載入警告"
 
 #: eeschema/files-io.cpp:397
 msgid ""
@@ -15121,9 +15121,9 @@ msgid ""
 "\n"
 "This may cause broken symbol library links under certain conditions."
 msgstr ""
-"工程檔案符號庫列表中定義的符號庫不再受支援,並且將\n"
+"在專案文件的符號庫清單中定義的符號庫不再受支持，將會被移除。\n"
 "\n"
-"刪除。 在某些情況下,這可能會導致符號庫連結斷開。"
+"在某些情況下，這可能會導致符號庫連結失效。"
 
 #: eeschema/files-io.cpp:401
 msgid "Do not show this dialog again."
@@ -15294,7 +15294,7 @@ msgstr "覆蓋檔案"
 
 #: eeschema/files-io.cpp:1146
 msgid "Abort Project Save"
-msgstr "中止工程儲存"
+msgstr "中止專案儲存"
 
 #: eeschema/files-io.cpp:1373
 msgid "Importing Schematic"
@@ -15767,7 +15767,7 @@ msgstr "插入原理圖內容..."
 #: eeschema/menubar.cpp:98
 msgid ""
 "Append schematic sheet content from another project to the current sheet"
-msgstr "將其它工程中的原理圖新增到當前圖頁中"
+msgstr "將其它專案中的原理圖新增到當前圖頁中"
 
 #: eeschema/menubar.cpp:106 eeschema/symbol_editor/menubar_symbol_editor.cpp:65
 #: pcbnew/menubar_footprint_editor.cpp:64 pcbnew/menubar_pcb_editor.cpp:111
@@ -15997,7 +15997,7 @@ msgstr "將修改後的符號 %s 修復為 %s"
 
 #: eeschema/project_rescue.cpp:597
 msgid "This project has nothing to rescue."
-msgstr "這個工程不需要恢復。"
+msgstr "這個專案不需要恢復。"
 
 #: eeschema/project_rescue.cpp:612
 msgid "No symbols were rescued."
@@ -16513,7 +16513,7 @@ msgstr "文件符號 '%s' 是指庫中不存在的符號定義 ID '%s'。未載�
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1577
 msgid "Text Variables could not be set as there is no project attached."
-msgstr "由於原理圖沒有附加在工程中，因此無法設定文字變數。"
+msgstr "由於原理圖沒有附加在專案中，因此無法設定文字變數。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2114
 #, c-format
@@ -17828,11 +17828,11 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"在載入的原理圖檔案中存在來自舊檔案版本的層次圖，導致符號例項資料丟失。 這將導"
-"致載入的原理圖中的所有符號都使用預設的例項設定或退回到庫中的符號設定。 載入使"
-"用該原理圖檔案的工程並儲存為最新的檔案版本將解決這個問題。\n"
+"在載入的原理圖檔案中存在來自舊檔案版本的層次圖，導致符號例項資料丟失。 "
+"這將導致載入的原理圖中的所有符號都使用預設的例項設定或退回到庫中的符號設定。 "
+"載入使用該原理圖檔案專案程並儲存為最新的檔案版本將解決這個問題。\n"
 "\n"
-"你想繼續嗎？"
+"請問您想繼續嗎？"
 
 #: eeschema/sheet.cpp:312 eeschema/sheet.cpp:340 eeschema/sheet.cpp:381
 #: eeschema/sheet.cpp:430 eeschema/sheet.cpp:491
@@ -18885,9 +18885,9 @@ msgid "Format"
 msgstr "格式"
 
 #: eeschema/sim/spice_library_parser.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot create sim model from %s"
-msgstr "無法建立資料夾 '%s'。"
+msgstr "無法自 '%s' 建立模擬模型"
 
 #: eeschema/sim/spice_model_parser.cpp:85
 #: eeschema/sim/spice_model_parser.cpp:187
@@ -19341,7 +19341,7 @@ msgstr "儲存全域性庫表時發生錯誤。"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1740
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1792
 msgid "Error saving project library table."
-msgstr "儲存工程庫表時出錯。"
+msgstr "儲存專案庫表時出錯。"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:65
 msgid "[from schematic]"
@@ -20697,7 +20697,7 @@ msgstr "恢復符號..."
 
 #: eeschema/tools/ee_actions.cpp:996
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "在工程中找到舊的符號重新命名或恢復它們"
+msgstr "在專案中找到舊的符號重新命名或恢復它們"
 
 #: eeschema/tools/ee_actions.cpp:1002
 msgid "Remap Legacy Library Symbols..."
@@ -23615,7 +23615,7 @@ msgstr "資料夾："
 
 #: kicad/dialogs/dialog_template_selector_base.cpp:126
 msgid "Project Template Title"
-msgstr "工程模板標題"
+msgstr "專案模板標題"
 
 #: kicad/dialogs/dialog_template_selector_base.h:67
 msgid "Project Template Selector"
@@ -23663,19 +23663,19 @@ msgstr "有可用的更新"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project schematic"
-msgstr "編輯工程原理圖"
+msgstr "編輯專案原理圖"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:134
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "編輯全域性和/或工程原理符號庫"
+msgstr "編輯全域性和/或專案原理符號庫"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit the project PCB design"
-msgstr "編輯 PCB 設計工程"
+msgstr "編輯 PCB 設計專案"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:142
 msgid "Edit global and/or project PCB footprint libraries"
-msgstr "編輯全域性和/或工程 PCB 封裝庫"
+msgstr "編輯全域性和/或專案 PCB 封裝庫"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:146
 msgid "Preview Gerber files"
@@ -23701,11 +23701,11 @@ msgstr "管理來自 KiCad 和第三方倉庫的可下載外掛包"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
-msgstr "KiCad 工程檔案"
+msgstr "KiCad 專案檔案"
 
 #: kicad/files-io.cpp:66
 msgid "Unzip Project"
-msgstr "解壓工程"
+msgstr "解壓專案"
 
 #: kicad/files-io.cpp:73
 #, c-format
@@ -23727,7 +23727,7 @@ msgstr "在“%s”中解壓專案。\n"
 
 #: kicad/files-io.cpp:117
 msgid "Archive Project Files"
-msgstr "壓縮工程檔案"
+msgstr "壓縮專案檔案"
 
 #: kicad/import_proj.cpp:74
 #, c-format
@@ -23742,7 +23742,7 @@ msgstr ""
 
 #: kicad/import_project.cpp:74
 msgid "KiCad Project Destination"
-msgstr "KiCad 工程目標"
+msgstr "KiCad 專案目標"
 
 #: kicad/import_project.cpp:104
 msgid ""
@@ -23751,9 +23751,9 @@ msgid ""
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
-"您選擇的不是空目錄。 建議在空目錄中建立工程。\n"
+"所選目錄不是空目錄。 建議在空目錄中建立工程。\n"
 "\n"
-"您要建立一個與工程同名的新目錄嗎?"
+"您是否要為專案創建一個新的空目錄？"
 
 #: kicad/import_project.cpp:119
 msgid ""
@@ -23763,11 +23763,11 @@ msgstr "建立新目錄時出錯。請嘗試不同路徑。無法匯入該專案
 
 #: kicad/import_project.cpp:145
 msgid "Import CADSTAR Archive Project Files"
-msgstr "匯入 CADSTAR 存檔工程檔案"
+msgstr "匯入 CADSTAR 存檔專案檔案"
 
 #: kicad/import_project.cpp:153
 msgid "Import Eagle Project Files"
-msgstr "匯入 Eagle 工程檔案"
+msgstr "匯入 Eagle 專案檔案"
 
 #: kicad/import_project.cpp:160
 msgid "Import EasyEDA Std Backup"
@@ -23784,7 +23784,7 @@ msgid ""
 "does not appear to be a valid KiCad project file."
 msgstr ""
 "檔案 '%s'\n"
-"似乎不是有效的 KiCad 工程檔案。"
+"似乎不是有效的 KiCad 專案檔案。"
 
 #: kicad/kicad_cli.cpp:133
 msgid "Export GLB (binary GLTF)"
@@ -23824,7 +23824,7 @@ msgstr "列印版本資訊並退出"
 
 #: kicad/kicad_manager_frame.cpp:218
 msgid "Project Files"
-msgstr "工程檔案"
+msgstr "專案檔案"
 
 #: kicad/kicad_manager_frame.cpp:222
 msgid "Editors"
@@ -23850,7 +23850,7 @@ msgstr "[沒有專案被載入]"
 #: kicad/kicad_manager_frame.cpp:884
 #, c-format
 msgid "Project: %s"
-msgstr "工程：%s"
+msgstr "專案：%s"
 
 #: kicad/kicad_manager_frame.cpp:920
 msgid "Restoring session"
@@ -23863,11 +23863,11 @@ msgstr "正在恢復 \"%s\""
 
 #: kicad/menubar.cpp:57
 msgid "Clear Recent Projects"
-msgstr "清除最近的工程"
+msgstr "清除最近的專案"
 
 #: kicad/menubar.cpp:103
 msgid "Import Non-KiCad Project..."
-msgstr "匯入非 KiCad 工程..."
+msgstr "匯入非 KiCad 專案..."
 
 #: kicad/menubar.cpp:106
 msgid "CADSTAR Project..."
