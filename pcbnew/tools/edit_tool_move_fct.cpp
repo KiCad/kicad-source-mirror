@@ -415,6 +415,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
     TOOL_EVENT      copy = aEvent;
     TOOL_EVENT*     evt = &copy;
     VECTOR2I        prevPos;
+    bool            enableLocalRatsnest = true;
 
     bool hv45Mode        = false;
     bool eatFirstMouseUp = true;
@@ -559,6 +560,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                     {
                         if( item->Type() == PCB_GENERATOR_T && sel_items.size() == 1 )
                         {
+                            enableLocalRatsnest = false;
+
                             m_toolMgr->RunSynchronousAction( PCB_ACTIONS::genStartEdit, aCommit,
                                                              static_cast<PCB_GENERATOR*>( item ) );
                         }
@@ -661,7 +664,8 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
             statusPopup.Move( KIPLATFORM::UI::GetMousePosition() + wxPoint( 20, 20 ) );
 
-            m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, movement );
+            if( enableLocalRatsnest )
+                m_toolMgr->PostAction( PCB_ACTIONS::updateLocalRatsnest, movement );
         }
         else if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
