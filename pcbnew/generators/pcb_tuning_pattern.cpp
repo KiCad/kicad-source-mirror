@@ -1716,7 +1716,7 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
         poly.OffsetLineChain( *m_baseLine, amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS,
                               ARC_LOW_DEF, false );
 
-        if( m_baseLineCoupled )
+        if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled )
         {
             SHAPE_POLY_SET polyCoupled;
             polyCoupled.OffsetLineChain( *m_baseLineCoupled, amplitude,
