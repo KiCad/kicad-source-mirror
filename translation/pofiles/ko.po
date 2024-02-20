@@ -30,16 +30,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-14 18:22+0000\n"
+"PO-Revision-Date: 2024-02-20 20:12+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-Country: KOREA, REPUBLIC OF\n"
 "X-Poedit-Basepath: f:\\kicad-dev\n"
 "X-Poedit-KeywordsList: _\n"
@@ -123,7 +123,7 @@ msgstr "홀과 비아용 BVH 생성"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:385
 msgid "OpenGL context creation error"
-msgstr "OpenGL context 생성 에러"
+msgstr "OpenGL 상황 생성 오류"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:416
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -4789,7 +4789,7 @@ msgstr "도면 시트 파일 작성 중 오류 발생"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
-msgstr "첫 페이지만"
+msgstr "첫 페이지만 표시"
 
 #: common/drawing_sheet/ds_draw_item.cpp:148
 msgid "Subsequent Pages"
@@ -4813,7 +4813,7 @@ msgstr "라벨 증가 반복"
 
 #: common/drawing_sheet/ds_draw_item.cpp:166
 msgid "Repeat Position Increment"
-msgstr "위치 증분 반복"
+msgstr "위치 증가 반복"
 
 #: common/drawing_sheet/ds_draw_item.cpp:168
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
@@ -7505,7 +7505,7 @@ msgstr "커서 중심 확대"
 
 #: common/tool/actions.cpp:444 common/tool/actions.cpp:445
 msgid "Zoom Out at Cursor"
-msgstr "커서를 중심으로 축소"
+msgstr "커서 중심 축소"
 
 #: common/tool/actions.cpp:451 common/tool/actions.cpp:452
 #: common/widgets/mathplot.cpp:1450 pcbnew/dialogs/panel_setup_rules.cpp:139
@@ -18348,7 +18348,7 @@ msgstr "알 수 없는 키워드 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid " context: "
-msgstr " 문맥: "
+msgstr " 상황: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
 msgid "Invalid ramp data"
@@ -18472,7 +18472,7 @@ msgstr "내부 오류가 감지되었습니다. 파형(waveform)이 있어야 �
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2563
 msgid "Internal error: Bad parser context."
-msgstr "내부 오류: 잘못된 parser 문맥입니다."
+msgstr "내부 오류: 구문 분석기 문맥 오류."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2601
 msgid "Missing keyword."
@@ -25178,11 +25178,11 @@ msgstr "모든 페이지에 표시"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "First page only"
-msgstr "첫 페이지만"
+msgstr "첫 페이지만 표시"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Subsequent pages only"
-msgstr "후속 페이지만"
+msgstr "이후 페이지만 해당"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:161
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:474
@@ -34729,7 +34729,7 @@ msgstr "회전 명령을 위한 스텝 (&r):"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:40
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
-msgstr "컨텍스트 메뉴와 단축키 회전의 증감값을 (단위: 도) 설정합니다."
+msgstr "상황 메뉴와 단축키 회전의 증감값을 (단위: 도) 설정합니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:52
 msgid "Arc editing mode:"
@@ -46913,9 +46913,8 @@ msgid "KiCad Schematic Symbol"
 msgstr "회로도 심볼"
 
 #: resources/linux/mime/kicad-kicad.xml.in:69
-#, fuzzy
 msgid "KiCad Drawing Sheet"
-msgstr "KiCad 도면 시트 편집기"
+msgstr "KiCad 도면 시트"
 
 #~ msgid ""
 #~ "Would you like to save the router\n"
