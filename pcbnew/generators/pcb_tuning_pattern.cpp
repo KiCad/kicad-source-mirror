@@ -1696,19 +1696,23 @@ SHAPE_LINE_CHAIN PCB_TUNING_PATTERN::getOutline() const
         int amplitude = m_settings.m_maxAmplitude + KiROUND( m_trackWidth / 2.0 );
 
         if( m_tuningMode == DIFF_PAIR )
-            amplitude += m_trackWidth + m_diffPairGap;
+            amplitude = m_settings.m_maxAmplitude + m_diffPairGap / 2 + KiROUND( m_trackWidth );
 
-        if( m_tuningMode == DIFF_PAIR && m_baseLineCoupled
-            && m_baseLineCoupled->SegmentCount() > 0 )
+        poly.OffsetLineChain( *m_baseLine, amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS,
+                              ARC_LOW_DEF, false );
+
+        if( m_baseLineCoupled )
         {
-            for( int i = 0; i < cl.PointCount() - 1 && i < m_baseLineCoupled->PointCount(); ++i )
-                cl.SetPoint( i, ( cl.CPoint( i ) + m_baseLineCoupled->CPoint( i ) ) / 2 );
+            SHAPE_POLY_SET polyCoupled;
+            polyCoupled.OffsetLineChain( *m_baseLineCoupled, amplitude,
+                                         CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF, false );
 
-            cl.SetPoint( -1, ( cl.CPoint( -1 ) + m_baseLineCoupled->CPoint( -1 ) ) / 2 );
+            SHAPE_POLY_SET merged;
+            merged.BooleanAdd( poly, polyCoupled, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+            if( merged.OutlineCount() > 0 )
+                return merged.Outline( 0 );
         }
-
-        poly.OffsetLineChain( cl, amplitude, CORNER_STRATEGY::ROUND_ALL_CORNERS, ARC_LOW_DEF,
-                              false );
 
         if( poly.OutlineCount() > 0 )
             return poly.Outline( 0 );
