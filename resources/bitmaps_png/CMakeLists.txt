@@ -659,6 +659,13 @@ set( BMAPS_256
     icon_pcbcalculator
     )
 
+# Teardrop images (275x130 native size) for teardrop dialogs
+    set( BMAPS_TEARDROPS
+    teardrop_sizes
+    teardrop_rect_sizes
+    teardrop_track_sizes
+    )
+
 # Images in this section are generated at whatever resolution is set in the source SVG file
 # Use Inkscape Document Properties > Custom Size to set (make sure units are pixels)
 # These are used for images in the UI that are not-square or very large (infographics, etc)
@@ -696,9 +703,6 @@ set( BMAPS_OTHER
     stroke_dashdotdot
     stroke_dot
     stroke_solid
-    teardrop_sizes
-    teardrop_rect_sizes
-    teardrop_track_sizes
     tune_diff_pair_length_legend
     tune_diff_pair_skew_legend
     tune_single_track_length_legend
@@ -941,6 +945,10 @@ if( MAINTAIN_PNGS )
     bitmap_dir( 256 256 "${BMAPS_256}" )
 
     bitmap_dir( 48 48 "${BMAPS_BIG}" )
+
+    bitmap_dir( 275 130 "${BMAPS_TEARDROPS}" )
+
+    bitmap_dir( 550 260 "${BMAPS_TEARDROPS}" )
 
     bitmap_dir( -1 -1 "${BMAPS_OTHER}" )
 
