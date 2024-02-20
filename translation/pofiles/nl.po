@@ -10,15 +10,16 @@
 # johanneswilkens <wilkensjohannes@gmail.com>, 2023.
 # Ranforingus <ranforingus@hotmail.com>, 2023.
 # Laurens Holst <laurens@grauw.nl>, 2024.
+# Stefan De Raedemaeker <stefandr.dev@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-19 17:02+0000\n"
-"Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"PO-Revision-Date: 2024-02-21 04:12+0000\n"
+"Last-Translator: Stefan De Raedemaeker <stefandr.dev@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -99,7 +100,7 @@ msgstr "%d koperlagen vereenvoudigen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1154
 msgid "Simplify holes contours"
-msgstr "Vereenvoudig contouren van boorgaten"
+msgstr "Contouren van boorgaten vereenvoudigen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1174
 msgid "Build BVH for holes and vias"
@@ -281,7 +282,7 @@ msgstr "&Voorkeuren"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
-msgstr "Herlaad bord"
+msgstr "Bord herladen"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
 msgid "Copy 3D image to clipboard"
@@ -289,7 +290,7 @@ msgstr "3D-afbeelding naar klembord kopiëren"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Render current view using Raytracing"
-msgstr "Render de huidige weergave met behulp van raytracing"
+msgstr "Huidige weergave renderen met behulp van raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:73
