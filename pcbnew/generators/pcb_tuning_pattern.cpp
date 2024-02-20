@@ -1539,7 +1539,7 @@ bool PCB_TUNING_PATTERN::UpdateFromEditPoints( std::shared_ptr<EDIT_POINTS> aEdi
         if( m_tuningMode == DIFF_PAIR )
             value -= m_trackWidth + m_diffPairGap;
 
-        SetMaxAmplitude( KiROUND( value / pcbIUScale.mmToIU( 0.1 ) ) * pcbIUScale.mmToIU( 0.1 ) );
+        SetMaxAmplitude( KiROUND( value / pcbIUScale.mmToIU( 0.01 ) ) * pcbIUScale.mmToIU( 0.01 ) );
 
         int side = base.Side( wHandle );
 
