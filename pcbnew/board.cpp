@@ -967,31 +967,16 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     {
     case PCB_NETINFO_T:
     {
-        NETINFO_ITEM* item        = static_cast<NETINFO_ITEM*>( aBoardItem );
+        NETINFO_ITEM* netItem = static_cast<NETINFO_ITEM*>( aBoardItem );
         NETINFO_ITEM* unconnected = m_NetInfo.GetNetItem( NETINFO_LIST::UNCONNECTED );
 
-        for( FOOTPRINT* fp : m_footprints )
+        for( BOARD_CONNECTED_ITEM* boardItem : AllConnectedItems() )
         {
-            for( PAD* pad : fp->Pads() )
-            {
-                if( pad->GetNet() == item )
-                    pad->SetNet( unconnected );
-            }
+            if( boardItem->GetNet() == netItem )
+                boardItem->SetNet( unconnected );
         }
 
-        for( ZONE* zone : m_zones )
-        {
-            if( zone->GetNet() == item )
-                zone->SetNet( unconnected );
-        }
-
-        for( PCB_TRACK* track : m_tracks )
-        {
-            if( track->GetNet() == item )
-                track->SetNet( unconnected );
-        }
-
-        m_NetInfo.RemoveNet( item );
+        m_NetInfo.RemoveNet( netItem );
         break;
     }
 
@@ -2271,10 +2256,8 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
 
     for( BOARD_ITEM* item : Drawings() )
     {
-        if( item->Type() == PCB_SHAPE_T )
-        {
-            items.push_back( dynamic_cast<PCB_SHAPE*>( item ) );
-        }
+        if( BOARD_CONNECTED_ITEM* bci = dynamic_cast<BOARD_CONNECTED_ITEM*>( item ) )
+            items.push_back( bci );
     }
 
     return items;
