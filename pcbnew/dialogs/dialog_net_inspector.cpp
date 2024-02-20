@@ -2166,33 +2166,33 @@ void DIALOG_NET_INSPECTOR::onRenameNet( wxCommandEvent& aEvent )
             }
         }
 
-        // the changed name might require re-grouping.  remove and re-insert
-        // is easier.
+        for( BOARD_CONNECTED_ITEM* boardItem : m_frame->GetBoard()->AllConnectedItems() )
+        {
+            if( boardItem->GetNet() == net )
+                boardItem->SetFlags( CANDIDATE );
+            else
+                boardItem->ClearFlags( CANDIDATE );
+        }
+
+        // the changed name might require re-grouping.  remove/re-insert is easier.
         auto removed_item = m_data_model->deleteItem( m_data_model->findItem( net ) );
 
         m_brd->Remove( net );
         net->SetNetname( fullNetName );
         m_brd->Add( net );
-        m_frame->OnModify();
 
-        if( netFilterMatches( net ) )
+        for( BOARD_CONNECTED_ITEM* boardItem : m_frame->GetBoard()->AllConnectedItems() )
         {
-            std::unique_ptr<LIST_ITEM> new_item = std::make_unique<LIST_ITEM>( net );
-            new_item->SetPadCount( removed_item->GetPadCount() );
-            new_item->SetViaCount( removed_item->GetViaCount() );
-
-            for( int ii = 0; ii < MAX_CU_LAYERS; ++ii )
-                new_item->SetLayerWireLength( removed_item->GetLayerWireLength( ii ), ii );
-
-            new_item->SetChipWireLength( removed_item->GetChipWireLength() );
-
-            std::optional<LIST_ITEM_ITER> added_row = m_data_model->addItem( std::move( new_item ) );
-
-            wxDataViewItemArray new_sel;
-            new_sel.Add( wxDataViewItem( &***added_row ) );
-            m_netsList->SetSelections( new_sel );
-            onSelChanged();
+            if( boardItem->GetFlags() & CANDIDATE )
+                boardItem->SetNet( net );
         }
+
+        buildNetsList();
+
+        if( std::optional<LIST_ITEM_ITER> r = m_data_model->findItem( net ) )
+            m_netsList->Select( wxDataViewItem( r.value()->get() ) );
+
+        m_frame->OnModify();
 
         // Currently only tracks and pads have netname annotations and need to be redrawn,
         // but zones are likely to follow.  Since we don't have a way to ask what is current,
