@@ -324,6 +324,8 @@ bool DP_MEANDER_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         curIndexN = tunedN.NextShape( curIndexN );
     }
 
+    m_result.AddCorner( tunedP.CPoint( -1 ), tunedN.CPoint( -1 ) );
+
     long long int dpLen = origPathLength();
 
     m_lastStatus = TUNED;
