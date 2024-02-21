@@ -242,13 +242,16 @@ void LIB_TREE_NODE_ITEM::Update( LIB_TREE_ITEM* aItem )
 void LIB_TREE_NODE_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
-    // aMatcher test is additive
+    // aMatcher test is additive, but if we don't match the given term at all, it nulls out
     if( aMatcher )
-        m_Score += aMatcher->ScoreTerms( m_SearchTerms );
+    {
+        int currentScore = aMatcher->ScoreTerms( m_SearchTerms );
 
-    // aLib test is additive
-    if( !aLib.IsEmpty() && m_Parent->m_Name.Lower().Matches( aLib ) )
-        m_Score += 1;
+        if( m_Score >= 0 && currentScore > 0 )
+            m_Score += currentScore;
+        else
+            m_Score = -1;   // Item has failed to match this term, rule it out
+    }
 
     // aFilter test is subtractive
     if( aFilter && !(*aFilter)(*this) )
@@ -287,18 +290,27 @@ LIB_TREE_NODE_ITEM& LIB_TREE_NODE_LIBRARY::AddItem( LIB_TREE_ITEM* aItem )
 void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                                          std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
+    int newScore = 0;
+
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
     {
         child->UpdateScore( aMatcher, aLib, aFilter );
-        m_Score = std::max( m_Score, child->m_Score );
+        newScore = std::max( newScore, child->m_Score );
     }
 
-    // aLib test is additive
-    if( !aLib.IsEmpty() && m_Name.Lower().Matches( aLib ) )
+    // Each time UpdateScore is called for a library, child (item) scores may go up or down.
+    // If the all go down to zero, we need to make sure to drop the library from the list.
+    if( newScore > 0 )
+        m_Score = std::max( m_Score, newScore );
+    else
+        m_Score = 0;
+
+    // aLib test is additive, but only when we've already accumulated some score from children
+    if( !aLib.IsEmpty() && m_Name.Lower().Matches( aLib ) && m_Score > 0 )
         m_Score += 1;
 
-    // aMatcher test is additive
-    if( aMatcher )
+    // aMatcher test is additive, but only when we've already accumulated some score from children
+    if( aMatcher && m_Score > 0 )
         m_Score += aMatcher->ScoreTerms( m_SearchTerms );
 
     // show all nodes if no search/filter/etc. criteria are given
