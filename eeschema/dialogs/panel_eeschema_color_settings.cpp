@@ -258,7 +258,6 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     view->Add( m_drawingSheet );
 
     // TODO: It would be nice to parse a schematic file here.
-    // This is created from the color_settings.sch file in demos folder
 
     auto addItem = [&]( EDA_ITEM* aItem )
                    {
@@ -275,8 +274,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
                 { LAYER_WIRE,  { { 3075, 1600 }, { 3075, 2000 } } },
                 { LAYER_WIRE,  { { 3075, 1600 }, { 3250, 1600 } } },
                 { LAYER_WIRE,  { { 3075, 2000 }, { 2150, 2000 } } },
-                { LAYER_BUS,   { { 1750, 1400 }, { 1850, 1400 } } },
-                { LAYER_BUS,   { { 1850, 2500 }, { 1850, 1400 } } },
+                { LAYER_BUS,   { { 1750, 1300 }, { 1850, 1300 } } },
+                { LAYER_BUS,   { { 1850, 2500 }, { 1850, 1300 } } },
                 { LAYER_NOTES, { { 2350, 2125 }, { 2350, 2300 } } },
                 { LAYER_NOTES, { { 2350, 2125 }, { 2950, 2125 } } },
                 { LAYER_NOTES, { { 2950, 2125 }, { 2950, 2300 } } },
@@ -311,7 +310,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 #define MILS_POINT( x, y ) VECTOR2I( schIUScale.MilsToIU( x ), schIUScale.MilsToIU( y ) )
 
     SCH_NO_CONNECT* nc = new SCH_NO_CONNECT;
-    nc->SetPosition( MILS_POINT( 2525, 1300 ) );
+    nc->SetPosition( MILS_POINT( 2350, 2600 ) );
     addItem( nc );
 
     SCH_BUS_WIRE_ENTRY* e1 = new SCH_BUS_WIRE_ENTRY;
@@ -322,7 +321,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     e2->SetPosition( MILS_POINT( 1850, 2500 ) );
     addItem( e2 );
 
-    SCH_TEXT* t1 = new SCH_TEXT( MILS_POINT( 2850, 2250 ), wxT( "PLAIN TEXT" ) );
+    SCH_TEXT* t1 = new SCH_TEXT( MILS_POINT( 2650, 2240 ), wxT( "PLAIN TEXT" ) );
     addItem( t1 );
 
     SCH_LABEL* t2 = new SCH_LABEL( MILS_POINT( 1975, 1500 ), wxT( "LABEL_{0}" ) );
@@ -335,7 +334,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
     t3->SetIsDangling( false );
     addItem( t3 );
 
-    SCH_GLOBALLABEL* t4 = new SCH_GLOBALLABEL( MILS_POINT( 1750, 1400 ), wxT( "GLOBAL[0..3]" ) );
+    SCH_GLOBALLABEL* t4 = new SCH_GLOBALLABEL( MILS_POINT( 1750, 1300 ), wxT( "GLOBAL[0..3]" ) );
     t4->SetSpinStyle( SPIN_STYLE::SPIN::LEFT );
     t4->SetIsDangling( false );
     addItem( t4 );
@@ -397,6 +396,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
         pin->SetNumber( wxT( "1" ) );
         pin->SetName( wxT( "-" ) );
+        pin->SetNumberTextSize( schIUScale.MilsToIU( 50 ) );
+        pin->SetNameTextSize( schIUScale.MilsToIU( 50 ) );
 
         endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
@@ -409,6 +410,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
         pin->SetNumber( wxT( "2" ) );
         pin->SetName( wxT( "+" ) );
+        pin->SetNumberTextSize( schIUScale.MilsToIU( 50 ) );
+        pin->SetNameTextSize( schIUScale.MilsToIU( 50 ) );
 
         endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
@@ -421,6 +424,8 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         pin->SetType( ELECTRICAL_PINTYPE::PT_OUTPUT );
         pin->SetNumber( wxT( "3" ) );
         pin->SetName( wxT( "OUT" ) );
+        pin->SetNumberTextSize( schIUScale.MilsToIU( 50 ) );
+        pin->SetNameTextSize( schIUScale.MilsToIU( 50 ) );
 
         endPoints.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
