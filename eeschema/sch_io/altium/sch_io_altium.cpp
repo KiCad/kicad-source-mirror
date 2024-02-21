@@ -57,13 +57,11 @@
 #include <geometry/ellipse.h>
 #include <string_utils.h>
 #include <sch_edit_frame.h>
-#include <trigo.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/mstream.h>
 #include <wx/log.h>
 #include <wx/zstream.h>
 #include <wx/wfstream.h>
-#include <trigo.h>
 #include <magic_enum.hpp>
 
 // Harness port object itself does not contain color information about itself
@@ -134,46 +132,28 @@ static void SetSchShapeFillAndColor( const ASCH_FILL_INTERFACE& elem, SCH_SHAPE*
 }
 
 
-static void SetLibShapeLine( const ASCH_BORDER_INTERFACE& elem, LIB_SHAPE* shape, ALTIUM_SCH_RECORD aType )
+static void SetLibShapeLine( const ASCH_BORDER_INTERFACE& elem, LIB_SHAPE* shape,
+                             ALTIUM_SCH_RECORD aType )
 {
     COLOR4D color = GetColorFromInt( elem.Color );
     COLOR4D default_color;
-    COLOR4D alt_default_color = COLOR4D( PUREBLUE ); // PUREBLUE is used for many objects, so if it is used,
-                                                     // we will assume that it should blend with the others
+    COLOR4D alt_default_color = COLOR4D( PUREBLUE ); // PUREBLUE is used for many objects, so if
+                                                     // it is used, we will assume that it should
+                                                     // blend with the others
     STROKE_PARAMS stroke;
 
     switch( aType )
     {
-    case ALTIUM_SCH_RECORD::ARC:
-        default_color = COLOR4D( PUREBLUE );
-        break;
-    case ALTIUM_SCH_RECORD::BEZIER:
-        default_color = COLOR4D( PURERED );
-        break;
-    case ALTIUM_SCH_RECORD::ELLIPSE:
-        default_color = COLOR4D( PUREBLUE );
-        break;
-    case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:
-        default_color = COLOR4D( PUREBLUE );
-        break;
-    case ALTIUM_SCH_RECORD::LINE:
-        default_color = COLOR4D( PUREBLUE );
-        break;
-    case ALTIUM_SCH_RECORD::POLYGON:
-        default_color = COLOR4D( PUREBLUE );
-        break;
-    case ALTIUM_SCH_RECORD::POLYLINE:
-        default_color = COLOR4D( BLACK );
-        break;
-    case ALTIUM_SCH_RECORD::RECTANGLE:
-        default_color = COLOR4D( 0.5, 0, 0, 1.0 );
-        break;
-    case ALTIUM_SCH_RECORD::ROUND_RECTANGLE:
-        default_color = COLOR4D( PUREBLUE );
-        break;
-    default:
-        default_color = COLOR4D( PUREBLUE );
-        break;
+    case ALTIUM_SCH_RECORD::ARC:             default_color = COLOR4D( PUREBLUE );       break;
+    case ALTIUM_SCH_RECORD::BEZIER:          default_color = COLOR4D( PURERED );        break;
+    case ALTIUM_SCH_RECORD::ELLIPSE:         default_color = COLOR4D( PUREBLUE );       break;
+    case ALTIUM_SCH_RECORD::ELLIPTICAL_ARC:  default_color = COLOR4D( PUREBLUE );       break;
+    case ALTIUM_SCH_RECORD::LINE:            default_color = COLOR4D( PUREBLUE );       break;
+    case ALTIUM_SCH_RECORD::POLYGON:         default_color = COLOR4D( PUREBLUE );       break;
+    case ALTIUM_SCH_RECORD::POLYLINE:        default_color = COLOR4D( BLACK );          break;
+    case ALTIUM_SCH_RECORD::RECTANGLE:       default_color = COLOR4D( 0.5, 0, 0, 1.0 ); break;
+    case ALTIUM_SCH_RECORD::ROUND_RECTANGLE: default_color = COLOR4D( PUREBLUE );       break;
+    default:                                 default_color = COLOR4D( PUREBLUE );       break;
     }
 
     if( color == default_color || color == alt_default_color )
@@ -202,7 +182,9 @@ static void SetLibShapeFillAndColor( const ASCH_FILL_INTERFACE& elem, LIB_SHAPE*
         bgcolor = bgcolor.WithAlpha( 0.5 );
 
     if( !elem.IsSolid )
+    {
         shape->SetFillMode( FILL_T::NO_FILL );
+    }
     else if( elem.AreaColor == aStrokeColor )
     {
         bgcolor = shape->GetStroke().GetColor();
@@ -210,14 +192,18 @@ static void SetLibShapeFillAndColor( const ASCH_FILL_INTERFACE& elem, LIB_SHAPE*
         shape->SetFillMode( FILL_T::FILLED_SHAPE );
     }
     else if( bgcolor.WithAlpha( 1.0 ) == default_bgcolor )
+    {
         shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
+    }
     else
+    {
         shape->SetFillMode( FILL_T::FILLED_WITH_COLOR );
+    }
 
     shape->SetFillColor( bgcolor );
 
     if( elem.AreaColor == aStrokeColor
-      && shape->GetStroke().GetWidth() == schIUScale.MilsToIU( 1 ) )
+            && shape->GetStroke().GetWidth() == schIUScale.MilsToIU( 1 ) )
     {
         STROKE_PARAMS stroke = shape->GetStroke();
         stroke.SetWidth( -1 );
@@ -243,9 +229,7 @@ SCH_IO_ALTIUM::~SCH_IO_ALTIUM()
     for( auto& [libName, lib] : m_libCache )
     {
         for( auto& [name, symbol] : lib )
-        {
             delete symbol;
-        }
     }
 }
 
@@ -315,7 +299,7 @@ wxFileName SCH_IO_ALTIUM::getLibFileName()
 
 
 SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATIC* aSchematic,
-                                             SCH_SHEET*             aAppendToMe,
+                                             SCH_SHEET* aAppendToMe,
                                              const STRING_UTF8_MAP* aProperties )
 {
     wxCHECK( !aFileName.IsEmpty() && aSchematic, nullptr );
@@ -467,7 +451,8 @@ void SCH_IO_ALTIUM::ParseAltiumSch( const wxString& aFileName )
         {
             // Try case-insensitive search
             wxArrayString files;
-            wxDir::GetAllFiles( parentFileName.GetPath(), &files, wxEmptyString, wxDIR_FILES | wxDIR_HIDDEN );
+            wxDir::GetAllFiles( parentFileName.GetPath(), &files, wxEmptyString,
+                                wxDIR_FILES | wxDIR_HIDDEN );
 
             for( const wxString& candidate : files )
             {
@@ -543,9 +528,7 @@ void SCH_IO_ALTIUM::ParseStorage( const ALTIUM_COMPOUND_FILE& aAltiumSchFile )
         THROW_IO_ERROR( "Storage weight is negative!" );
 
     for( int i = 0; i < weight; i++ )
-    {
         m_altiumStorage.emplace_back( reader );
-    }
 
     if( reader.HasParsingError() )
         THROW_IO_ERROR( "stream was not parsed correctly!" );
@@ -692,8 +675,7 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
             break;
 
         case ALTIUM_SCH_RECORD::IEEE_SYMBOL:
-            m_reporter->Report( _( "Record 'IEEE_SYMBOL' not handled." ),
-                                RPT_SEVERITY_INFO );
+            m_reporter->Report( _( "Record 'IEEE_SYMBOL' not handled." ), RPT_SEVERITY_INFO );
             break;
 
         case ALTIUM_SCH_RECORD::LABEL:
@@ -717,8 +699,7 @@ void SCH_IO_ALTIUM::ParseFileHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile 
             break;
 
         case ALTIUM_SCH_RECORD::PIECHART:
-            m_reporter->Report( _( "Record 'PIECHART' not handled." ),
-                                RPT_SEVERITY_INFO );
+            m_reporter->Report( _( "Record 'PIECHART' not handled." ), RPT_SEVERITY_INFO );
             break;
 
         case ALTIUM_SCH_RECORD::ROUND_RECTANGLE:
@@ -933,8 +914,7 @@ const ASCH_STORAGE_FILE* SCH_IO_ALTIUM::GetFileFromStorage( const wxString& aFil
 }
 
 
-void SCH_IO_ALTIUM::ParseComponent( int aIndex,
-                                    const std::map<wxString, wxString>& aProperties )
+void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxString>& aProperties )
 {
     SCH_SHEET* currentSheet = m_sheetPath.Last();
     wxCHECK( currentSheet, /* void */ );
@@ -2141,7 +2121,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Elliptical Arc's owner (%d) not found." ),
                                                     elem.ownerindex ),
-                        RPT_SEVERITY_DEBUG );
+                                    RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -3064,8 +3044,8 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
         pin->SetVisible( false );
 
-        VECTOR2I valueFieldPos =
-                HelperGeneratePowerPortGraphics( libSymbol, elem.style, m_reporter );
+        VECTOR2I valueFieldPos = HelperGeneratePowerPortGraphics( libSymbol, elem.style,
+                                                                  m_reporter );
 
         libSymbol->GetValueField().SetPosition( valueFieldPos );
 
@@ -3249,32 +3229,21 @@ void SCH_IO_ALTIUM::ParsePort( const ASCH_PORT& aElem )
     SCH_LABEL_BASE* label;
 
     // TODO: detect correct label type depending on sheet settings, etc.
-    #if 1   // Set to 1 to use SCH_HIERLABEL label, 0 to use SCH_GLOBALLABEL
+#if 1   // Set to 1 to use SCH_HIERLABEL label, 0 to use SCH_GLOBALLABEL
     {
         label = new SCH_HIERLABEL( position, aElem.Name );
     }
-    #else
+#else
     label = new SCH_GLOBALLABEL( position, aElem.Name );
-    #endif
+#endif
 
     switch( aElem.IOtype )
     {
     default:
-    case ASCH_PORT_IOTYPE::UNSPECIFIED:
-        label->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED );
-        break;
-
-    case ASCH_PORT_IOTYPE::OUTPUT:
-        label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );
-        break;
-
-    case ASCH_PORT_IOTYPE::INPUT:
-        label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );
-        break;
-
-    case ASCH_PORT_IOTYPE::BIDI:
-        label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );
-        break;
+    case ASCH_PORT_IOTYPE::UNSPECIFIED: label->SetShape( LABEL_FLAG_SHAPE::L_UNSPECIFIED ); break;
+    case ASCH_PORT_IOTYPE::OUTPUT:      label->SetShape( LABEL_FLAG_SHAPE::L_OUTPUT );      break;
+    case ASCH_PORT_IOTYPE::INPUT:       label->SetShape( LABEL_FLAG_SHAPE::L_INPUT );       break;
+    case ASCH_PORT_IOTYPE::BIDI:        label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );        break;
     }
 
     switch( aElem.Style )
@@ -3288,6 +3257,7 @@ void SCH_IO_ALTIUM::ParsePort( const ASCH_PORT& aElem )
             label->SetSpinStyle( SPIN_STYLE::RIGHT );
         else
             label->SetSpinStyle( SPIN_STYLE::LEFT );
+
         break;
 
     case ASCH_PORT_STYLE::NONE_VERTICAL:
@@ -3298,6 +3268,7 @@ void SCH_IO_ALTIUM::ParsePort( const ASCH_PORT& aElem )
             label->SetSpinStyle( SPIN_STYLE::UP );
         else
             label->SetSpinStyle( SPIN_STYLE::BOTTOM );
+
         break;
     }
 
@@ -3393,8 +3364,8 @@ void SCH_IO_ALTIUM::ParseWire( const std::map<wxString, wxString>& aProperties )
 
     for( size_t i = 0; i + 1 < elem.points.size(); i++ )
     {
-        SCH_LINE* wire =
-                new SCH_LINE( elem.points.at( i ) + m_sheetOffset, SCH_LAYER_ID::LAYER_WIRE );
+        SCH_LINE* wire = new SCH_LINE( elem.points.at( i ) + m_sheetOffset,
+                                       SCH_LAYER_ID::LAYER_WIRE );
         wire->SetEndPoint( elem.points.at( i + 1 ) + m_sheetOffset );
         wire->SetLineWidth( elem.lineWidth );
 
