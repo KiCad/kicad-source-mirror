@@ -27,7 +27,7 @@ target_compile_definitions(clipper2 PUBLIC USINGZ)
 if (MSVC)
   target_compile_options(clipper2 PRIVATE /W4 /WX)
 else()
-  target_compile_options(clipper2 PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  target_compile_options(clipper2 PRIVATE -Wall -Wextra -Wpedantic)
   target_link_libraries(clipper2 PUBLIC -lm)
 endif()
 
