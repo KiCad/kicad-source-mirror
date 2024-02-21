@@ -2434,6 +2434,13 @@ int SCH_EDITOR_CONTROL::ToggleProperties( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ToggleLibraryTree( const TOOL_EVENT& aEvent )
+{
+    getEditFrame<SCH_EDIT_FRAME>()->ToggleLibraryTree();
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
 {
     EESCHEMA_SETTINGS* cfg = m_frame->eeconfig();
@@ -2808,6 +2815,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ShowHierarchy,         EE_ACTIONS::showHierarchy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowNetNavigator,      EE_ACTIONS::showNetNavigator.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ToggleLibraryTree,     ACTIONS::hideLibraryTree.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ToggleLibraryTree,     ACTIONS::showLibraryTree.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::toggleHiddenPins.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::toggleHiddenFields.MakeEvent() );

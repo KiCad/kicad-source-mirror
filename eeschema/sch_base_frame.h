@@ -146,6 +146,7 @@ public:
 
     void UpdateStatusBar() override;
 
+
     /**
      * Call the library viewer to select symbol to import into schematic.
      * If the library viewer is currently running, it is closed and reopened in modal mode.

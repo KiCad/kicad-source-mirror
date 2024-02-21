@@ -39,6 +39,8 @@ public:
 
     std::vector<wxString> m_OpenProjects;
 
+    wxString m_lastDesignBlockLibDir;
+
     std::vector<std::pair<wxString, wxString>> m_PcmRepositories;
     wxString                                   m_PcmLastDownloadDir;
 

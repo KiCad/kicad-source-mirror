@@ -82,7 +82,8 @@ int LIBRARY_EDITOR_CONTROL::PinLibrary( const TOOL_EVENT& aEvent )
 
     if( current && !current->m_Pinned )
     {
-        m_frame->Prj().PinLibrary( current->m_LibId.GetLibNickname(), false );
+        m_frame->Prj().PinLibrary( current->m_LibId.GetLibNickname(),
+                                   PROJECT::LIB_TYPE_T::FOOTPRINT_LIB );
         current->m_Pinned = true;
         regenerateLibraryTree();
     }
@@ -98,7 +99,8 @@ int LIBRARY_EDITOR_CONTROL::UnpinLibrary( const TOOL_EVENT& aEvent )
 
     if( current && current->m_Pinned )
     {
-        m_frame->Prj().UnpinLibrary( current->m_LibId.GetLibNickname(), false );
+        m_frame->Prj().UnpinLibrary( current->m_LibId.GetLibNickname(),
+                                     PROJECT::LIB_TYPE_T::FOOTPRINT_LIB );
         current->m_Pinned = false;
         regenerateLibraryTree();
     }

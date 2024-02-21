@@ -1104,6 +1104,13 @@ TOOL_ACTION ACTIONS::showFootprintLibTable( TOOL_ACTION_ARGS()
         .Tooltip( _( "Edit the global and project footprint library lists" ) )
         .Icon( BITMAPS::library_table ) );
 
+TOOL_ACTION ACTIONS::showDesignBlockLibTable( TOOL_ACTION_ARGS()
+        .Name( "common.SuiteControl.showDesignBLockLibTable" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Manage Design Block Libraries..." ) )
+        .Tooltip( _( "Edit the global and project design block library lists" ) )
+        .Icon( BITMAPS::library_table ) );
+
 TOOL_ACTION ACTIONS::gettingStarted( TOOL_ACTION_ARGS()
         .Name( "common.SuiteControl.gettingStarted" )
         .Scope( AS_GLOBAL )

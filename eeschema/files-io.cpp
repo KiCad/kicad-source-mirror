@@ -614,93 +614,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 }
 
 
-bool SCH_EDIT_FRAME::AppendSchematic()
-{
-    SCH_SCREEN* screen = GetScreen();
-
-    wxCHECK( screen, false );
-
-    // open file chooser dialog
-    wxString path = wxPathOnly( Prj().GetProjectFullName() );
-
-    wxFileDialog dlg( this, _( "Insert Schematic" ), path, wxEmptyString,
-                      FILEEXT::KiCadSchematicFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return false;
-
-    return AddSheetAndUpdateDisplay( dlg.GetPath() );
-}
-
-
-bool SCH_EDIT_FRAME::AddSheetAndUpdateDisplay( const wxString aFullFileName )
-{
-    SCH_COMMIT         commit( m_toolManager );
-    EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-
-    selectionTool->ClearSelection();
-
-    // Mark all existing items on the screen so we don't select them after appending
-    for( EDA_ITEM* item : GetScreen()->Items() )
-        item->SetFlags( SKIP_STRUCT );
-
-    if( !LoadSheetFromFile( GetCurrentSheet().Last(), &GetCurrentSheet(), aFullFileName ) )
-        return false;
-
-    initScreenZoom();
-    SetSheetNumberAndCount();
-
-    SyncView();
-    OnModify();
-    HardRedraw();   // Full reinit of the current screen and the display.
-    bool selected = false;
-
-    // Select all new items
-    for( EDA_ITEM* item : GetScreen()->Items() )
-    {
-        if( !item->HasFlag( SKIP_STRUCT ) )
-        {
-            commit.Added( item, GetScreen() );
-            selectionTool->AddItemToSel( item, true );
-            selected = true;
-
-            if( item->Type() == SCH_LINE_T )
-                item->SetFlags( STARTPOINT | ENDPOINT );
-        }
-        else
-            item->ClearFlags( SKIP_STRUCT );
-    }
-
-    if( selected )
-        m_toolManager->ProcessEvent( EVENTS::SelectedEvent );
-
-    // Start moving selection, cancel undoes the insertion
-    if( !m_toolManager->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
-        commit.Revert();
-    else
-        commit.Push( _( "Import Schematic Sheet Content..." ) );
-
-    UpdateHierarchyNavigator();
-
-    return true;
-}
-
-
-void SCH_EDIT_FRAME::OnAppendProject( wxCommandEvent& event )
-{
-    if( GetScreen() && GetScreen()->IsModified() )
-    {
-        wxString msg = _( "This operation cannot be undone.\n\n"
-                          "Do you want to save the current document before proceeding?" );
-
-        if( IsOK( this, msg ) )
-            SaveProject();
-    }
-
-    AppendSchematic();
-}
-
-
 void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 {
     if( Schematic().RootScreen() && !Schematic().RootScreen()->Items().empty() )
@@ -839,6 +752,19 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
 
     // Write through symlinks, don't replace them
     WX_FILENAME::ResolvePossibleSymlinks( schematicFileName );
+
+    if( !schematicFileName.DirExists() )
+    {
+        if( !wxMkdir( schematicFileName.GetPath() ) )
+        {
+            msg.Printf( _( "Error saving schematic file '%s'.\n%s" ),
+                        schematicFileName.GetFullPath(),
+                        "Could not create directory: %s" + schematicFileName.GetPath() );
+            DisplayError( this, msg );
+
+            return false;
+        }
+    }
 
     if( !IsWritable( schematicFileName ) )
         return false;

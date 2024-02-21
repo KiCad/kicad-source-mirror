@@ -64,7 +64,7 @@ protected:
      */
     SYMBOL_TREE_MODEL_ADAPTER( EDA_BASE_FRAME* aParent, LIB_TABLE* aLibs );
 
-    bool isSymbolModel() override { return true; }
+    PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::SYMBOL_LIB; }
 
 private:
     friend class SYMBOL_ASYNC_LOADER;

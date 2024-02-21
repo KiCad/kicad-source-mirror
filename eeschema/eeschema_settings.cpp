@@ -126,6 +126,28 @@ const wxAuiPaneInfo& defaultSchSelectionFilterPaneInfo( wxWindow* aWindow )
 }
 
 
+const wxAuiPaneInfo& defaultDesignBlocksPaneInfo( wxWindow* aWindow )
+{
+    static wxAuiPaneInfo paneInfo;
+
+    paneInfo.Name( EDA_DRAW_FRAME::DesignBlocksPaneName() )
+            .Caption( _( "Design Blocks" ) )
+            .CaptionVisible( true )
+            .PaneBorder( true )
+            .Right().Layer( 3 ).Position( 2 )
+            .TopDockable( false )
+            .BottomDockable( false )
+            .CloseButton( false )
+            .MinSize( aWindow->FromDIP( wxSize( 240, 60 ) ) )
+            .BestSize( aWindow->FromDIP( wxSize( 300, 200 ) ) )
+            .FloatingSize( aWindow->FromDIP( wxSize( 800, 600 ) ) )
+            .FloatingPosition( aWindow->FromDIP( wxPoint( 50, 200 ) ) )
+            .Show( true );
+
+    return paneInfo;
+}
+
+
 EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
         APP_SETTINGS_BASE( "eeschema", eeschemaSchemaVersion ),
         m_Appearance(),
@@ -239,6 +261,18 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "aui.hierarchy_panel_float_height",
             &m_AuiPanels.hierarchy_panel_float_height, -1 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.design_blocks_show",
+            &m_AuiPanels.design_blocks_show, false ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.design_blocks_panel_docked_width",
+            &m_AuiPanels.design_blocks_panel_docked_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.design_blocks_panel_float_width",
+            &m_AuiPanels.design_blocks_panel_float_width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "aui.design_blocks_panel_float_height",
+            &m_AuiPanels.design_blocks_panel_float_height, -1 ) );
 
     m_params.emplace_back( new PARAM<bool>( "aui.schematic_hierarchy_float",
             &m_AuiPanels.schematic_hierarchy_float, false ) );
@@ -612,6 +646,24 @@ EESCHEMA_SETTINGS::EESCHEMA_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "symbol_chooser.place_all_units",
             &m_SymChooserPanel.place_all_units, true ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.sash_pos_v",
+            &m_DesignBlockChooserPanel.sash_pos_v, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.width",
+            &m_DesignBlockChooserPanel.width, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.height",
+            &m_DesignBlockChooserPanel.height, -1 ) );
+
+    m_params.emplace_back( new PARAM<int>( "design_block_chooser.sort_mode",
+            &m_DesignBlockChooserPanel.sort_mode, 0 ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_block_chooser.repeated_placement",
+            &m_DesignBlockChooserPanel.repeated_placement, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "design_block_chooser.place_as_sheet",
+            &m_DesignBlockChooserPanel.place_as_sheet, false ) );
 
     m_params.emplace_back( new PARAM<bool>( "import_graphics.interactive_placement",
             &m_ImportGraphics.interactive_placement, true ) );

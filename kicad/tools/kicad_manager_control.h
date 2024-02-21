@@ -65,6 +65,7 @@ public:
     int ShowPlayer( const TOOL_EVENT& aEvent );
     int Execute( const TOOL_EVENT& aEvent );
 
+    int ShowDesignBlockLibTable( const TOOL_EVENT& aEvent );
     int ShowPluginManager( const TOOL_EVENT& aEvent );
 
     ///< Set up handlers for various events.

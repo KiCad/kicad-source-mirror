@@ -34,6 +34,7 @@
 #include <dialogs/dialog_schematic_find.h>
 #include <dialogs/dialog_book_reporter.h>
 #include <dialogs/dialog_symbol_fields_table.h>
+#include <widgets/design_block_pane.h>
 #include <eeschema_id.h>
 #include <executable_names.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -77,6 +78,7 @@
 #include <tools/ee_grid_helper.h>
 #include <tools/ee_inspection_tool.h>
 #include <tools/ee_point_editor.h>
+#include <tools/sch_design_block_control.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_edit_table_tool.h>
@@ -119,7 +121,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, SCH_BASE_FRAME )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, SCH_EDIT_FRAME::OnLoadFile )
     EVT_MENU( ID_FILE_LIST_CLEAR, SCH_EDIT_FRAME::OnClearFileHistory )
 
-    EVT_MENU( ID_APPEND_PROJECT, SCH_EDIT_FRAME::OnAppendProject )
     EVT_MENU( ID_IMPORT_NON_KICAD_SCH, SCH_EDIT_FRAME::OnImportProject )
 
     EVT_MENU( wxID_EXIT, SCH_EDIT_FRAME::OnExit )
@@ -141,7 +142,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_diffSymbolDialog( nullptr ),
     m_symbolFieldsTableDialog( nullptr ),
     m_netNavigator( nullptr ),
-    m_highlightedConnChanged( false )
+    m_highlightedConnChanged( false ),
+    m_designBlocksPane( nullptr )
 {
     m_maximizeByDefault = true;
     m_schematic = new SCHEMATIC( nullptr );
@@ -208,6 +210,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_propertiesPanel->SetSplitterProportion( eeconfig()->m_AuiPanels.properties_splitter );
 
     m_selectionFilterPanel = new PANEL_SCH_SELECTION_FILTER( this );
+    m_designBlocksPane = new DESIGN_BLOCK_PANE( this, nullptr, m_designBlockHistoryList );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -235,6 +238,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo( this ) );
     m_auimgr.AddPane( m_selectionFilterPanel, defaultSchSelectionFilterPaneInfo( this ) );
+
+    m_auimgr.AddPane( m_designBlocksPane, defaultDesignBlocksPaneInfo( this ) );
 
     m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
 
@@ -274,11 +279,13 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
     wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
     wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
+    wxAuiPaneInfo& designBlocksPane = m_auimgr.GetPane( DesignBlocksPaneName() );
     EESCHEMA_SETTINGS* cfg = eeconfig();
 
     hierarchy_pane.Show( cfg->m_AuiPanels.show_schematic_hierarchy );
     netNavigatorPane.Show( cfg->m_AuiPanels.show_net_nav_panel );
     propertiesPane.Show( cfg->m_AuiPanels.show_properties );
+    designBlocksPane.Show( cfg->m_AuiPanels.design_blocks_show );
     updateSelectionFilterVisbility();
 
     // The selection filter doesn't need to grow in the vertical direction when docked
@@ -325,6 +332,10 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     if( cfg->m_AuiPanels.float_net_nav_panel )
         netNavigatorPane.Float();
+
+    if( cfg->m_AuiPanels.design_blocks_show )
+        SetAuiPaneSize( m_auimgr, designBlocksPane,
+                        cfg->m_AuiPanels.design_blocks_panel_docked_width, -1 );
 
     if( cfg->m_AuiPanels.hierarchy_panel_docked_width > 0 )
     {
@@ -522,6 +533,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TABLE_TOOL );
     m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_DESIGN_BLOCK_CONTROL );
     m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new SCH_FIND_REPLACE_TOOL );
     m_toolManager->RegisterTool( new EE_POINT_EDITOR );
@@ -577,6 +589,12 @@ void SCH_EDIT_FRAME::setupUIConditions()
                 return m_auimgr.GetPane( NetNavigatorPaneName() ).IsShown();
             };
 
+    auto designBlockCond =
+            [ this ] (const SELECTION& aSel )
+            {
+                return m_auimgr.GetPane( DesignBlocksPaneName() ).IsShown();
+            };
+
     auto undoCond =
             [ this ] (const SELECTION& aSel )
             {
@@ -597,6 +615,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::showHierarchy,    CHECK( hierarchyNavigatorCond ) );
     mgr->SetConditions( EE_ACTIONS::showNetNavigator, CHECK( netNavigatorCond ) );
     mgr->SetConditions( ACTIONS::showProperties,      CHECK( propertiesCond ) );
+    mgr->SetConditions( ACTIONS::showLibraryTree,     CHECK( designBlockCond ) );
     mgr->SetConditions( ACTIONS::toggleGrid,          CHECK( cond.GridVisible() ) );
     mgr->SetConditions( ACTIONS::toggleGridOverrides, CHECK( cond.GridOverrides() ) );
     mgr->SetConditions( ACTIONS::toggleCursorStyle,   CHECK( cond.FullscreenCursor() ) );
@@ -745,12 +764,16 @@ void SCH_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( EE_ACTIONS::toggleAnnotateAuto,    CHECK( showAnnotateAutomaticallyCond ) );
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,      CHECK( cond.BoundingBoxes() ) );
 
+    mgr->SetConditions( EE_ACTIONS::saveSheetAsDesignBlock,     ENABLE( hasElements ) );
+    mgr->SetConditions( EE_ACTIONS::saveSelectionAsDesignBlock, ENABLE( SELECTION_CONDITIONS::NotEmpty ) );
+
 #define CURRENT_TOOL( action ) mgr->SetConditions( action, CHECK( cond.CurrentTool( action ) ) )
 
     CURRENT_TOOL( ACTIONS::deleteTool );
     CURRENT_TOOL( EE_ACTIONS::highlightNetTool );
     CURRENT_TOOL( EE_ACTIONS::placeSymbol );
     CURRENT_TOOL( EE_ACTIONS::placePower );
+    CURRENT_TOOL( EE_ACTIONS::placeDesignBlock );
     CURRENT_TOOL( EE_ACTIONS::drawWire );
     CURRENT_TOOL( EE_ACTIONS::drawBus );
     CURRENT_TOOL( EE_ACTIONS::placeBusWireEntry );
@@ -764,6 +787,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( EE_ACTIONS::drawSheet );
     CURRENT_TOOL( EE_ACTIONS::placeSheetPin );
     CURRENT_TOOL( EE_ACTIONS::syncSheetPins );
+    CURRENT_TOOL( EE_ACTIONS::drawSheetCopy );
     CURRENT_TOOL( EE_ACTIONS::drawRectangle );
     CURRENT_TOOL( EE_ACTIONS::drawCircle );
     CURRENT_TOOL( EE_ACTIONS::drawArc );

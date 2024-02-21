@@ -28,6 +28,7 @@
 #include <pgm_base.h>
 #include <confirm.h>
 #include <core/kicad_algo.h>
+#include <design_block_lib_table.h>
 #include <fp_lib_table.h>
 #include <string_utils.h>
 #include <kiface_ids.h>
@@ -167,40 +168,78 @@ const wxString PROJECT::FootprintLibTblName() const
 }
 
 
-void PROJECT::PinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
+const wxString PROJECT::DesignBlockLibTblName() const
+{
+    return libTableName( wxS( "design-block-lib-table" ) );
+}
+
+
+void PROJECT::PinLibrary( const wxString& aLibrary, enum LIB_TYPE_T aLibType )
 {
     COMMON_SETTINGS*       cfg = Pgm().GetCommonSettings();
-    std::vector<wxString>* pinnedLibs = isSymbolLibrary ? &m_projectFile->m_PinnedSymbolLibs
-                                                        : &m_projectFile->m_PinnedFootprintLibs;
+    std::vector<wxString>* pinnedLibsCfg = nullptr;
+    std::vector<wxString>* pinnedLibsFile = nullptr;
 
-    if( !alg::contains( *pinnedLibs, aLibrary ) )
-        pinnedLibs->push_back( aLibrary );
+    switch( aLibType )
+    {
+    case LIB_TYPE_T::SYMBOL_LIB:
+        pinnedLibsFile = &m_projectFile->m_PinnedSymbolLibs;
+        pinnedLibsCfg = &cfg->m_Session.pinned_symbol_libs;
+        break;
+    case LIB_TYPE_T::FOOTPRINT_LIB:
+        pinnedLibsFile = &m_projectFile->m_PinnedFootprintLibs;
+        pinnedLibsCfg = &cfg->m_Session.pinned_fp_libs;
+        break;
+    case LIB_TYPE_T::DESIGN_BLOCK_LIB:
+        pinnedLibsFile = &m_projectFile->m_PinnedDesignBlockLibs;
+        pinnedLibsCfg = &cfg->m_Session.pinned_design_block_libs;
+        break;
+    default:
+        wxFAIL_MSG( "Cannot pin library: invalid library type" );
+        return;
+    }
+
+    if( !alg::contains( *pinnedLibsFile, aLibrary ) )
+        pinnedLibsFile->push_back( aLibrary );
 
     Pgm().GetSettingsManager().SaveProject();
 
-    pinnedLibs = isSymbolLibrary ? &cfg->m_Session.pinned_symbol_libs
-                                 : &cfg->m_Session.pinned_fp_libs;
-
-    if( !alg::contains( *pinnedLibs, aLibrary ) )
-        pinnedLibs->push_back( aLibrary );
+    if( !alg::contains( *pinnedLibsCfg, aLibrary ) )
+        pinnedLibsCfg->push_back( aLibrary );
 
     cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
 }
 
 
-void PROJECT::UnpinLibrary( const wxString& aLibrary, bool isSymbolLibrary )
+void PROJECT::UnpinLibrary( const wxString& aLibrary, enum LIB_TYPE_T aLibType )
 {
     COMMON_SETTINGS*       cfg = Pgm().GetCommonSettings();
-    std::vector<wxString>* pinnedLibs = isSymbolLibrary ? &m_projectFile->m_PinnedSymbolLibs
-                                                        : &m_projectFile->m_PinnedFootprintLibs;
+    std::vector<wxString>* pinnedLibsCfg = nullptr;
+    std::vector<wxString>* pinnedLibsFile = nullptr;
 
-    alg::delete_matching( *pinnedLibs, aLibrary );
+    switch( aLibType )
+    {
+    case LIB_TYPE_T::SYMBOL_LIB:
+        pinnedLibsFile = &m_projectFile->m_PinnedSymbolLibs;
+        pinnedLibsCfg = &cfg->m_Session.pinned_symbol_libs;
+        break;
+    case LIB_TYPE_T::FOOTPRINT_LIB:
+        pinnedLibsFile = &m_projectFile->m_PinnedFootprintLibs;
+        pinnedLibsCfg = &cfg->m_Session.pinned_fp_libs;
+        break;
+    case LIB_TYPE_T::DESIGN_BLOCK_LIB:
+        pinnedLibsFile = &m_projectFile->m_PinnedDesignBlockLibs;
+        pinnedLibsCfg = &cfg->m_Session.pinned_design_block_libs;
+        break;
+    default:
+        wxFAIL_MSG( "Cannot unpin library: invalid library type" );
+        return;
+    }
+
+    alg::delete_matching( *pinnedLibsFile, aLibrary );
     Pgm().GetSettingsManager().SaveProject();
 
-    pinnedLibs = isSymbolLibrary ? &cfg->m_Session.pinned_symbol_libs
-                                 : &cfg->m_Session.pinned_fp_libs;
-
-    alg::delete_matching( *pinnedLibs, aLibrary );
+    alg::delete_matching( *pinnedLibsCfg, aLibrary );
     cfg->SaveToFile( Pgm().GetSettingsManager().GetPathForSettingsFile( cfg ) );
 }
 
@@ -369,6 +408,42 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs( KIWAY& aKiway )
         catch( ... )
         {
             DisplayErrorMessage( nullptr, _( "Error loading project footprint library table." ) );
+        }
+    }
+
+    return tbl;
+}
+
+
+DESIGN_BLOCK_LIB_TABLE* PROJECT::DesignBlockLibs()
+{
+    // This is a lazy loading function, it loads the project specific table when
+    // that table is asked for, not before.
+
+    DESIGN_BLOCK_LIB_TABLE* tbl = (DESIGN_BLOCK_LIB_TABLE*) GetElem( ELEM::DESIGN_BLOCK_LIB_TABLE );
+
+    if( tbl )
+    {
+        wxASSERT( tbl->ProjectElementType() == PROJECT::ELEM::DESIGN_BLOCK_LIB_TABLE );
+    }
+    else
+    {
+        try
+        {
+            tbl = new DESIGN_BLOCK_LIB_TABLE( &GDesignBlockTable );
+            tbl->Load( DesignBlockLibTblName() );
+
+            SetElem( ELEM::DESIGN_BLOCK_LIB_TABLE, tbl );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayErrorMessage( nullptr, _( "Error loading project design block library table." ),
+                                 ioe.What() );
+        }
+        catch( ... )
+        {
+            DisplayErrorMessage( nullptr,
+                                 _( "Error loading project design block library table." ) );
         }
     }
 

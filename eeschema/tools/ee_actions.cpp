@@ -149,6 +149,28 @@ TOOL_ACTION EE_ACTIONS::syncSelection( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveSelection.SyncSelection" )
         .Scope( AS_GLOBAL ) );
 
+// SCH_DESIGN_BLOCK_CONTROL
+TOOL_ACTION EE_ACTIONS::saveSheetAsDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.saveSheetAsDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Save Sheet as Design Block..." ) )
+        .Tooltip( _( "Create a new design block from the current sheet" ) )
+        .Icon( BITMAPS::new_component ) );
+
+TOOL_ACTION EE_ACTIONS::saveSelectionAsDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.saveSelectionAsDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Save Selection as Design Block..." ) )
+        .Tooltip( _( "Create a new design block from the current selection" ) )
+        .Icon( BITMAPS::new_component ) );
+
+TOOL_ACTION EE_ACTIONS::deleteDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SchDesignBlockControl.saveDeleteDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Delete Design Block" ) )
+        .Tooltip( _( "Remove the selected design block from its library" ) )
+        .Icon( BITMAPS::trash ) );
+
 // SYMBOL_EDITOR_CONTROL
 //
 TOOL_ACTION EE_ACTIONS::saveLibraryAs( TOOL_ACTION_ARGS()
@@ -399,6 +421,17 @@ TOOL_ACTION EE_ACTIONS::placePower( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter<SCH_SYMBOL*>( nullptr ) );
 
+TOOL_ACTION EE_ACTIONS::placeDesignBlock( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.placeDesignBlock" )
+        .Scope( AS_GLOBAL )
+        .DefaultHotkey( MD_SHIFT + 'B' )
+        .FriendlyName( _( "Place Design Block" ) )
+        .Tooltip( _( "Add selected design block to current sheet" ) )
+        .Icon( BITMAPS::add_component )
+        .Flags( AF_ACTIVATE )
+        .Parameter<DESIGN_BLOCK*>( nullptr ) );
+
+
 TOOL_ACTION EE_ACTIONS::placeNoConnect( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeNoConnect" )
         .Scope( AS_GLOBAL )
@@ -464,6 +497,15 @@ TOOL_ACTION EE_ACTIONS::drawSheet( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE )
         .Parameter( SCH_SHEET_T ) );
 
+TOOL_ACTION EE_ACTIONS::drawSheetCopy( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.drawSheetCopy" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Draw Sheet Copy" ) )
+        .Tooltip( _( "Copy sheet into project and draw on current sheet" ) )
+        .Icon( BITMAPS::add_hierarchical_subsheet )
+        .Flags( AF_ACTIVATE )
+        .Parameter<wxString*> ( nullptr ) );
+
 TOOL_ACTION EE_ACTIONS::placeSheetPin( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeSheetPin" )
         .Scope( AS_GLOBAL )
@@ -486,6 +528,15 @@ TOOL_ACTION EE_ACTIONS::syncAllSheetsPins( TOOL_ACTION_ARGS()
         .Tooltip( _( "Synchronize sheet pins and hierarchical labels" ) )
         .Icon( BITMAPS::import_hierarchical_label )
         .Flags( AF_ACTIVATE ) );
+
+TOOL_ACTION EE_ACTIONS::importSheet( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.importSheet" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Import Sheet" ) )
+        .Tooltip( _( "Import sheet into project" ) )
+        .Icon( BITMAPS::add_hierarchical_subsheet )
+        .Flags( AF_ACTIVATE )
+        .Parameter<wxString*> ( nullptr ) );
 
 TOOL_ACTION EE_ACTIONS::placeGlobalLabel( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeGlobalLabel" )

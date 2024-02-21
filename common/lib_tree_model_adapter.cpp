@@ -247,6 +247,12 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( const wxString& aNodeName, const wxSt
 }
 
 
+void LIB_TREE_MODEL_ADAPTER::DoRemoveLibrary( const wxString& aNodeName )
+{
+    m_tree.RemoveLib( aNodeName );
+}
+
+
 void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( const wxString& aSearch, bool aState )
 {
     {
@@ -383,7 +389,7 @@ void LIB_TREE_MODEL_ADAPTER::resortTree()
 
 void LIB_TREE_MODEL_ADAPTER::PinLibrary( LIB_TREE_NODE* aTreeNode )
 {
-    m_parent->Prj().PinLibrary( aTreeNode->m_LibId.GetLibNickname(), isSymbolModel() );
+    m_parent->Prj().PinLibrary( aTreeNode->m_LibId.GetLibNickname(), getLibType() );
     aTreeNode->m_Pinned = true;
 
     resortTree();
@@ -393,7 +399,7 @@ void LIB_TREE_MODEL_ADAPTER::PinLibrary( LIB_TREE_NODE* aTreeNode )
 
 void LIB_TREE_MODEL_ADAPTER::UnpinLibrary( LIB_TREE_NODE* aTreeNode )
 {
-    m_parent->Prj().UnpinLibrary( aTreeNode->m_LibId.GetLibNickname(), isSymbolModel() );
+    m_parent->Prj().UnpinLibrary( aTreeNode->m_LibId.GetLibNickname(), getLibType() );
     aTreeNode->m_Pinned = false;
 
     resortTree();

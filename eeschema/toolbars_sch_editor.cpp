@@ -37,6 +37,7 @@
 #include <tool/action_toolbar.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
+#include <widgets/design_block_pane.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/wx_aui_utils.h>
 #include <widgets/sch_properties_panel.h>
@@ -350,6 +351,48 @@ void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
         else
         {
             cfg->m_AuiPanels.hierarchy_panel_docked_width = m_hierarchy->GetSize().x;
+        }
+
+        m_auimgr.Update();
+    }
+}
+
+
+void SCH_EDIT_FRAME::ToggleLibraryTree()
+{
+    EESCHEMA_SETTINGS* cfg = eeconfig();
+
+    wxCHECK( cfg, /* void */ );
+
+    wxAuiPaneInfo& db_library_pane = m_auimgr.GetPane( DesignBlocksPaneName() );
+
+    db_library_pane.Show( !db_library_pane.IsShown() );
+
+    if( db_library_pane.IsShown() )
+    {
+        if( db_library_pane.IsFloating() )
+        {
+            db_library_pane.FloatingSize( cfg->m_AuiPanels.design_blocks_panel_float_width,
+                                          cfg->m_AuiPanels.design_blocks_panel_float_height );
+            m_auimgr.Update();
+        }
+        else if( cfg->m_AuiPanels.design_blocks_panel_docked_width > 0 )
+        {
+            // SetAuiPaneSize also updates m_auimgr
+            SetAuiPaneSize( m_auimgr, db_library_pane,
+                            cfg->m_AuiPanels.design_blocks_panel_docked_width, -1 );
+        }
+    }
+    else
+    {
+        if( db_library_pane.IsFloating() )
+        {
+            cfg->m_AuiPanels.design_blocks_panel_float_width  = db_library_pane.floating_size.x;
+            cfg->m_AuiPanels.design_blocks_panel_float_height = db_library_pane.floating_size.y;
+        }
+        else
+        {
+            cfg->m_AuiPanels.design_blocks_panel_docked_width = m_designBlocksPane->GetSize().x;
         }
 
         m_auimgr.Update();

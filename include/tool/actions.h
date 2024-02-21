@@ -217,6 +217,7 @@ public:
     static TOOL_ACTION configurePaths;
     static TOOL_ACTION showSymbolLibTable;
     static TOOL_ACTION showFootprintLibTable;
+    static TOOL_ACTION showDesignBlockLibTable;
     static TOOL_ACTION gettingStarted;
     static TOOL_ACTION help;
     static TOOL_ACTION about;

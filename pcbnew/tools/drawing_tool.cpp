@@ -708,7 +708,7 @@ int DRAWING_TOOL::PlaceReferenceImage( const TOOL_EVENT& aEvent )
 
                 if( !image || !image->ReadImageFile( fullFilename ) )
                 {
-                    wxMessageBox( _( "Could not load image from '%s'." ), fullFilename );
+                    wxMessageBox( wxString::Format(_( "Could not load image from '%s'." ), fullFilename ) );
                     delete image;
                     image = nullptr;
                     continue;

@@ -359,6 +359,23 @@ LIB_TREE_NODE_LIBRARY& LIB_TREE_NODE_ROOT::AddLib( wxString const& aName, wxStri
 }
 
 
+void LIB_TREE_NODE_ROOT::RemoveLib( wxString const& aName )
+{
+    m_Children.erase( std::remove_if( m_Children.begin(), m_Children.end(),
+                                      [&]( std::unique_ptr<LIB_TREE_NODE>& aNode )
+                                      {
+                                          return aNode->m_Name == aName;
+                                      } ),
+                      m_Children.end() );
+}
+
+
+void LIB_TREE_NODE_ROOT::Clear()
+{
+    m_Children.clear();
+}
+
+
 void LIB_TREE_NODE_ROOT::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {

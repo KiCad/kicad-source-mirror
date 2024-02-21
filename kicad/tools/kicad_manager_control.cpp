@@ -22,6 +22,7 @@
 #include <env_vars.h>
 #include <executable_names.h>
 #include <pgm_base.h>
+#include <pgm_kicad.h>
 #include <policy_keys.h>
 #include <kiway.h>
 #include <kicad_manager_frame.h>
@@ -36,6 +37,7 @@
 #include <tool/tool_event.h>
 #include <tools/kicad_manager_actions.h>
 #include <tools/kicad_manager_control.h>
+#include <dialogs/panel_design_block_lib_table.h>
 #include <dialogs/dialog_template_selector.h>
 #include <dialogs/git/dialog_git_repository.h>
 #include <git/git_clone_handler.h>
@@ -43,6 +45,7 @@
 #include <paths.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
+#include <design_block_lib_table.h>
 #include "dialog_pcm.h"
 
 #include "widgets/filedlg_new_project.h"
@@ -887,6 +890,65 @@ int KICAD_MANAGER_CONTROL::Execute( const TOOL_EVENT& aEvent )
 }
 
 
+int KICAD_MANAGER_CONTROL::ShowDesignBlockLibTable( const TOOL_EVENT& aEvent )
+{
+    // For some reason, after a click or a double click the bitmap button calling
+    // PCM keeps the focus althougt the focus was not set to this button.
+    // This hack force removing the focus from this button
+    m_frame->SetFocus();
+    wxSafeYield();
+
+    DESIGN_BLOCK_LIB_TABLE* globalTable = &GDesignBlockTable;
+    wxString                globalTablePath = DESIGN_BLOCK_LIB_TABLE::GetGlobalTableFileName();
+    DESIGN_BLOCK_LIB_TABLE* projectTable = Prj().DesignBlockLibs();
+    wxString                projectTablePath = Prj().DesignBlockLibTblName();
+    wxString                msg;
+
+    DIALOG_EDIT_LIBRARY_TABLES dlg( m_frame, _( "Design Block Libraries" ) );
+
+    if( Prj().IsNullProject() )
+        projectTable = nullptr;
+
+    dlg.InstallPanel( new PANEL_DESIGN_BLOCK_LIB_TABLE( &dlg, &Prj(), globalTable, globalTablePath,
+                                                        projectTable, projectTablePath,
+                                                        Prj().GetProjectPath() ) );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return 0;
+
+    if( dlg.m_GlobalTableChanged )
+    {
+        try
+        {
+            globalTable->Save( globalTablePath );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error saving global library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    if( projectTable && dlg.m_ProjectTableChanged )
+    {
+        try
+        {
+            projectTable->Save( projectTablePath );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            msg.Printf( _( "Error saving project-specific library table:\n\n%s" ), ioe.What() );
+            wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
+        }
+    }
+
+    std::string payload = "";
+    Kiway.ExpressMail( FRAME_SCH, MAIL_RELOAD_LIB, payload );
+    Kiway.ExpressMail( FRAME_SCH_VIEWER, MAIL_RELOAD_LIB, payload );
+
+    return 0;
+}
+
 int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
 {
     if( KIPLATFORM::POLICY::GetPolicyBool( POLICY_KEY_PCM )
@@ -924,6 +986,7 @@ int KICAD_MANAGER_CONTROL::ShowPluginManager( const TOOL_EVENT& aEvent )
         // Reset project tables
         Prj().SetElem( PROJECT::ELEM::SYMBOL_LIB_TABLE, nullptr );
         Prj().SetElem( PROJECT::ELEM::FPTBL, nullptr );
+        Prj().SetElem( PROJECT::ELEM::DESIGN_BLOCK_LIB_TABLE, nullptr );
 
         KIWAY& kiway = m_frame->Kiway();
 
@@ -979,5 +1042,7 @@ void KICAD_MANAGER_CONTROL::setTransitions()
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherSch.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::Execute,         KICAD_MANAGER_ACTIONS::editOtherPCB.MakeEvent() );
 
+    Go( &KICAD_MANAGER_CONTROL::ShowDesignBlockLibTable,
+                                                   ACTIONS::showDesignBlockLibTable.MakeEvent() );
     Go( &KICAD_MANAGER_CONTROL::ShowPluginManager, KICAD_MANAGER_ACTIONS::showPluginManager.MakeEvent() );
 }

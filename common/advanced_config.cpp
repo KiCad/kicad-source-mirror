@@ -99,6 +99,7 @@ static const wxChar UpdateUIEventInterval[] = wxT( "UpdateUIEventInterval" );
 static const wxChar V3DRT_BevelHeight_um[] = wxT( "V3DRT_BevelHeight_um" );
 static const wxChar V3DRT_BevelExtentFactor[] = wxT( "V3DRT_BevelExtentFactor" );
 static const wxChar UseClipper2[] = wxT( "UseClipper2" );
+static const wxChar EnableDesignBlocks[] = wxT( "EnableDesignBlocks" );
 static const wxChar EnableGenerators[] = wxT( "EnableGenerators" );
 static const wxChar EnableGit[] = wxT( "EnableGit" );
 static const wxChar EnableLibWithText[] = wxT( "EnableLibWithText" );
@@ -241,6 +242,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_CompactSave               = false;
     m_UpdateUIEventInterval     = 0;
     m_ShowRepairSchematic       = false;
+    m_EnableDesignBlocks        = false;
     m_EnableGenerators          = false;
     m_EnableGit                 = false;
     m_EnableLibWithText         = false;
@@ -458,6 +460,9 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
                                                &m_DisambiguationMenuDelay,
                                                m_DisambiguationMenuDelay,
                                                50, 10000 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableDesignBlocks,
+                                                &m_EnableDesignBlocks, m_EnableDesignBlocks ) );
 
     configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableGenerators,
                                                 &m_EnableGenerators, m_EnableGenerators ) );

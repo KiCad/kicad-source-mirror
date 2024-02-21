@@ -43,6 +43,9 @@ KICAD_SETTINGS::KICAD_SETTINGS() :
     m_params.emplace_back(
             new PARAM_LIST<wxString>( "system.open_projects", &m_OpenProjects, {} ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "system.last_design_block_lib_dir",
+                                                &m_lastDesignBlockLibDir, "" ) );
+
     m_params.emplace_back(
             new PARAM<wxString>( "system.last_update_check_time", &m_lastUpdateCheckTime, "" ) );
 

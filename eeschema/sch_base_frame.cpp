@@ -40,8 +40,10 @@
 #include <preview_items/selection_area.h>
 #include <project_sch.h>
 #include <symbol_library.h>
-#include <sch_base_frame.h>
 #include <symbol_lib_table.h>
+#include <sch_base_frame.h>
+#include <design_block.h>
+#include <design_block_lib_table.h>
 #include <tool/action_toolbar.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -54,6 +56,7 @@
 #include <wx/msgdlg.h>
 
 #include <navlib/nl_schematic_plugin.h>
+
 
 LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
                              SYMBOL_LIB* aCacheLib, wxWindow* aParent, bool aShowErrorMsg )

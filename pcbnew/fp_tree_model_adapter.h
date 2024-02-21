@@ -51,7 +51,7 @@ protected:
 
     std::vector<LIB_TREE_ITEM*> getFootprints( const wxString& aLibName );
 
-    bool isSymbolModel() override { return false; }
+    PROJECT::LIB_TYPE_T getLibType() override { return PROJECT::LIB_TYPE_T::FOOTPRINT_LIB; }
 
 protected:
     FP_LIB_TABLE*   m_libs;

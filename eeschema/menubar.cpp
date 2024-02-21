@@ -94,13 +94,6 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
 
     fileMenu->AppendSeparator();
 
-    fileMenu->Add( _( "Insert Schematic Sheet Content..." ),
-                   _( "Append schematic sheet content from another project to the current sheet" ),
-                   ID_APPEND_PROJECT,
-                   BITMAPS::add_document );
-
-    fileMenu->AppendSeparator();
-
     // Import submenu
     ACTION_MENU* submenuImport = new ACTION_MENU( false, selTool );
     submenuImport->SetTitle( _( "Import" ) );
@@ -207,6 +200,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     if( ADVANCED_CFG::GetCfg().m_IncrementalConnectivity )
         viewMenu->Add( EE_ACTIONS::showNetNavigator, ACTION_MENU::CHECK );
 
+    if( ADVANCED_CFG::GetCfg().m_EnableDesignBlocks )
+        viewMenu->Add( ACTIONS::showLibraryTree, ACTION_MENU::CHECK, _( "Show Design Blocks" ) );
+
     viewMenu->AppendSeparator();
     viewMenu->Add( EE_ACTIONS::navigateBack );
     viewMenu->Add( EE_ACTIONS::navigateUp );
@@ -258,6 +254,7 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( EE_ACTIONS::drawSheet );
     placeMenu->Add( EE_ACTIONS::placeSheetPin );
     placeMenu->Add( EE_ACTIONS::syncAllSheetsPins );
+    placeMenu->Add( EE_ACTIONS::importSheet );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( EE_ACTIONS::placeSchematicText );

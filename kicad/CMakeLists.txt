@@ -9,6 +9,7 @@ add_subdirectory( pcm )
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
+    ${CMAKE_SOURCE_DIR}/common/dialogs
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/eeschema
     ${CMAKE_SOURCE_DIR}/kicad/pcm
@@ -24,6 +25,8 @@ set( KICAD_SRCS
     dialogs/dialog_template_selector.cpp
     dialogs/panel_kicad_launcher_base.cpp
     dialogs/panel_kicad_launcher.cpp
+    dialogs/panel_design_block_lib_table_base.cpp
+    dialogs/panel_design_block_lib_table.cpp
     files-io.cpp
     import_proj.cpp
     import_project.cpp

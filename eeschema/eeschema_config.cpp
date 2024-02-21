@@ -34,6 +34,7 @@
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <schematic.h>
+#include <widgets/design_block_pane.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/sch_search_pane.h>
 #include <widgets/panel_sch_selection_filter.h>
@@ -303,6 +304,17 @@ void SCH_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         {
             cfg->m_AuiPanels.net_nav_panel_float_pos = netNavigatorPane.floating_pos;
             cfg->m_AuiPanels.net_nav_panel_float_size = netNavigatorPane.floating_size;
+        }
+
+        wxAuiPaneInfo& designBlocksPane = m_auimgr.GetPane( DesignBlocksPaneName() );
+        cfg->m_AuiPanels.design_blocks_show = designBlocksPane.IsShown();
+
+        if( designBlocksPane.IsDocked() )
+            cfg->m_AuiPanels.design_blocks_panel_docked_width = m_designBlocksPane->GetSize().x;
+        else
+        {
+            cfg->m_AuiPanels.design_blocks_panel_float_height = designBlocksPane.floating_size.y;
+            cfg->m_AuiPanels.design_blocks_panel_float_width = designBlocksPane.floating_size.x;
         }
     }
 }

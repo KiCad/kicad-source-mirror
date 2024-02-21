@@ -43,11 +43,9 @@ class EESCHEMA_HELPERS
 public:
     static SETTINGS_MANAGER* GetSettingsManager();
     static void              SetSchEditFrame( SCH_EDIT_FRAME* aSchEditFrame );
-    static PROJECT*          GetDefaultProject();
-    static SCHEMATIC*        LoadSchematic( wxString& aFileName, bool aSetActive );
-    static SCHEMATIC*        LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat,
-                                            bool aSetActive );
-
+    static PROJECT*          GetDefaultProject( bool aSetActive );
+    static SCHEMATIC*        LoadSchematic( const wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat,
+                                            bool aSetActive, bool aForceDefaultProject );
 
 private:
     static SCH_EDIT_FRAME*   s_SchEditFrame;

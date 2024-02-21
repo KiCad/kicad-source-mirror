@@ -1049,7 +1049,11 @@ std::vector<wxString> SETTINGS_MANAGER::GetOpenProjects() const
     std::vector<wxString> ret;
 
     for( const std::pair<const wxString, PROJECT*>& pair : m_projects )
-        ret.emplace_back( pair.first );
+    {
+        // Don't save empty projects (these are the default project settings)
+        if( !pair.first.IsEmpty() )
+            ret.emplace_back( pair.first );
+    }
 
     return ret;
 }

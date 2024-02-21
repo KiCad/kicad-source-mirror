@@ -106,6 +106,17 @@ wxString PATHS::GetDefaultUserFootprintsPath()
 }
 
 
+wxString PATHS::GetDefaultUserDesignBlocksPath()
+{
+    wxFileName tmp;
+    getUserDocumentPath( tmp );
+
+    tmp.AppendDir( wxT( "blocks" ) );
+
+    return tmp.GetPath();
+}
+
+
 wxString PATHS::GetDefaultUser3DModelsPath()
 {
     wxFileName tmp;
@@ -219,6 +230,16 @@ wxString PATHS::GetStockFootprintsPath()
     wxString path;
 
     path = GetStockEDALibraryPath() + wxT( "/footprints" );
+
+    return path;
+}
+
+
+wxString PATHS::GetStockDesignBlocksPath()
+{
+    wxString path;
+
+    path = GetStockEDALibraryPath() + wxT( "/blocks" );
 
     return path;
 }

@@ -178,26 +178,10 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataToWindow()
     m_borderSwatch->SetSwatchBackground( canvas );
     m_backgroundSwatch->SetSwatchBackground( canvas );
 
-    SCH_SHEET_LIST hierarchy = m_frame->Schematic().GetFullHierarchy();
     SCH_SHEET_PATH instance = m_frame->GetCurrentSheet();
-
     instance.push_back( m_sheet );
 
-    wxString pageNumber;
-
-    if( m_sheet->IsNew() )
-    {
-        // Don't try to be too clever when assigning the next availabe page number.  Just use
-        // the number of sheets plus one.
-        pageNumber.Printf( wxT( "%d" ), static_cast<int>( hierarchy.size() ) + 1 );
-        instance.SetPageNumber( pageNumber );
-    }
-    else
-    {
-        pageNumber = instance.GetPageNumber();
-    }
-
-    m_pageNumberTextCtrl->ChangeValue( pageNumber );
+    m_pageNumberTextCtrl->ChangeValue( instance.GetPageNumber() );
 
     m_cbExcludeFromSim->SetValue( m_sheet->GetExcludedFromSim() );
     m_cbExcludeFromBom->SetValue( m_sheet->GetExcludedFromBOM() );

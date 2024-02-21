@@ -92,6 +92,8 @@
  * - `HasDefaultCompare()` - whether sorted by default
  */
 
+#include <project.h>
+
 class APP_SETTINGS_BASE;
 class TOOL_INTERACTIVE;
 class EDA_BASE_FRAME;
@@ -181,6 +183,13 @@ public:
     void DoAddLibrary( const wxString& aNodeName, const wxString& aDesc,
                        const std::vector<LIB_TREE_ITEM*>& aItemList,
                        bool pinned, bool presorted );
+
+    /**
+     * Remove the library by name.
+     *
+     * @param aNodeName    the name of the library to remove
+     */
+    void DoRemoveLibrary( const wxString& aNodeName );
 
     std::vector<wxString> GetAvailableColumns() const { return m_availableColumns; }
 
@@ -390,7 +399,7 @@ protected:
                   unsigned int            aCol,
                   wxDataViewItemAttr&     aAttr ) const override;
 
-    virtual bool isSymbolModel() = 0;
+    virtual PROJECT::LIB_TYPE_T getLibType() = 0;
 
     void resortTree();
 

@@ -56,6 +56,8 @@ class SCH_FIELD;
 class SCH_JUNCTION;
 class SCHEMATIC;
 class SCH_COMMIT;
+class DESIGN_BLOCK;
+class DESIGN_BLOCK_PANE;
 class DIALOG_BOOK_REPORTER;
 class DIALOG_ERC;
 class DIALOG_SYMBOL_FIELDS_TABLE;
@@ -261,6 +263,11 @@ public:
      * Notification that the Find dialog has closed.
      */
     void OnFindDialogClose();
+
+    /**
+     * Design block panel options have changed and the panel needs to be refreshed.
+     */
+    void UpdateDesignBlockOptions();
 
     /**
      * Break a single segment into two at the specified point.
@@ -485,23 +492,6 @@ public:
     wxString GetCurrentFileName() const override;
 
     /**
-     * Import a KiCad schematic into the current sheet.
-     *
-     * @return True if the schematic was imported properly.
-     */
-    bool AppendSchematic();
-
-    /**
-     * Add a sheet file into the current sheet and updates display
-     *
-     * @note Used in AppendSchematic() and SCH_EDIT_TOOL::ddAppendFile() (so it is public)
-     *
-     * @param aFullFileName Path and name of sheet
-     * @return True if the sheet was properly added
-     */
-    bool AddSheetAndUpdateDisplay( const wxString aFullFileName );
-
-    /**
      * Check if any of the screens has unsaved changes and asks the user whether to save or
      * drop them.
      *
@@ -636,11 +626,16 @@ public:
      *                      possible file recursion issues.
      * @param aFileName is the file name to load.  The file name is expected to have an absolute
      *                  path.
-     *
+     * @param aSkipRecursionCheck is true to skip the recursion check. This is used when loading
+     *                  a schematic sheet that is not part of the current project. If we are placing
+     *                  sheet contents instead of a sheet, then we do not need to check for recursion.
+     * @param aSkipLibCheck is true to skip the new/duplicate lib check. This is always triggered when
+     *                  placing design blocks so it is not necessary to check for new/duplicate libs.
      * @return True if the schematic was imported properly.
      */
     bool LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet,
-                            const wxString& aFileName );
+                            const wxString& aFileName, bool aSkipRecursionCheck = false,
+                            bool aSkipLibCheck = false );
 
     /**
      * Removes a given junction and heals any wire segments under the junction
@@ -748,6 +743,51 @@ public:
     bool CreateArchiveLibrary( const wxString& aFileName );
 
     /**
+     * If a library name is given, creates a new design block library in the project folder
+     * with the given name. If no library name is given it prompts user for a library path,
+     * then creates a new design block library at that location.
+     * If library exists, user is warned about that, and is given a chance
+     * to abort the new creation, and in that case existing library is first deleted.
+     *
+     * @param aProposedName is the initial path and filename shown in the file chooser dialog.
+     * @return The newly created library path if library was successfully created, else
+     *         wxEmptyString because user aborted or error.
+     */
+    wxString CreateNewDesignBlockLibrary( const wxString& aLibName = wxEmptyString,
+                                          const wxString& aProposedName = wxEmptyString );
+
+    /**
+     * Add an existing library to either the global or project library table.
+     *
+     * @param aFileName the library to add; a file open dialog will be displayed if empty.
+     * @return true if successfully added.
+     */
+    bool AddDesignBlockLibrary( const wxString& aFilename, DESIGN_BLOCK_LIB_TABLE* aTable );
+
+    void SaveSheetAsDesignBlock( const wxString& aLibraryName );
+
+    void SaveSelectionAsDesignBlock( const wxString& aLibraryName );
+
+    bool DeleteDesignBlockLibrary( const wxString& aLibName, bool aConfirm );
+
+    bool DeleteDesignBlockFromLibrary( const LIB_ID& aLibId, bool aConfirm );
+
+
+    /**
+     * Load design block from design block library table.
+     *
+     * @param aLibId is the design block library identifier to load.
+     * @param aUseCacheLib set to true to fall back to cache library if design block is not found in
+     *                     design block library table.
+     * @param aShowErrorMessage set to true to show any error messages.
+     * @return The design block found in the library or NULL if the design block was not found.
+     */
+    DESIGN_BLOCK* GetDesignBlock( const LIB_ID& aLibId, bool aUseCacheLib = false,
+                                  bool aShowErrorMsg = false );
+
+    DESIGN_BLOCK_PANE* GetDesignBlockPane() const { return m_designBlocksPane; }
+
+    /**
      * Plot or print the current sheet to the clipboard.
      */
     virtual void PrintPage( const RENDER_SETTINGS* aSettings ) override;
@@ -839,6 +879,8 @@ public:
     void ToggleSearch();
 
     void ToggleProperties() override;
+
+    void ToggleLibraryTree() override;
 
     DIALOG_BOOK_REPORTER* GetSymbolDiffDialog();
 
@@ -934,6 +976,20 @@ protected:
     void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
 #endif
 
+    /**
+     * Prompts a user to select global or project library tables
+     *
+     * @return Pointer to library table selected or nullptr if none selected/canceled
+     */
+    DESIGN_BLOCK_LIB_TABLE* selectDesignBlockLibTable( bool aOptional = false );
+
+    /**
+     * Create a new library in the given table (presumed to be either the global or project
+     * library table).
+     */
+    wxString createNewDesignBlockLibrary( const wxString& aLibName, const wxString& aProposedName,
+                                          DESIGN_BLOCK_LIB_TABLE* aTable );
+
 private:
     // Called when resizing the Hierarchy Navigator panel
     void OnResizeHierarchyNavigator( wxSizeEvent& aEvent );
@@ -946,7 +1002,6 @@ private:
     void OnExit( wxCommandEvent& event );
 
     void OnLoadFile( wxCommandEvent& event );
-    void OnAppendProject( wxCommandEvent& event );
     void OnImportProject( wxCommandEvent& event );
 
     void OnClearFileHistory( wxCommandEvent& aEvent );
@@ -1047,6 +1102,10 @@ private:
     bool m_highlightedConnChanged;
 
     std::vector<wxEvtHandler*> m_schematicChangeListeners;
+
+    std::vector<LIB_ID> m_designBlockHistoryList;
+
+    DESIGN_BLOCK_PANE* m_designBlocksPane;
 
 #ifdef KICAD_IPC_API
     std::unique_ptr<API_HANDLER_SCH> m_apiHandler;

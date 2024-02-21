@@ -62,7 +62,7 @@ enum FRAME_T
 
     FRAME_CALC,
 
-    KIWAY_PLAYER_COUNT,         // counts subset of FRAME_T's which are KIWAY_PLAYER derivatives
+    KIWAY_PLAYER_COUNT, // counts subset of FRAME_T's which are KIWAY_PLAYER derivatives
 
     // C++ project manager is not a KIWAY_PLAYER
     KICAD_MAIN_FRAME_T = KIWAY_PLAYER_COUNT,
@@ -112,11 +112,12 @@ enum FRAME_T
 
     // Library table dialogs are transient and are never returned
     DIALOG_CONFIGUREPATHS,
+    DIALOG_DESIGN_BLOCK_LIBRARY_TABLE,
     DIALOG_SCH_LIBRARY_TABLE,
     DIALOG_PCB_LIBRARY_TABLE
 };
 
-    //TEXT_EDITOR_FRAME_T,
+//TEXT_EDITOR_FRAME_T,
 
 
 #endif  // FRAME_T_H_

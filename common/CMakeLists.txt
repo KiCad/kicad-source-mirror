@@ -14,6 +14,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/resources/bitmaps_png
     ${CMAKE_SOURCE_DIR}/3d-viewer
     ${CMAKE_SOURCE_DIR}/pcbnew
+    ${CMAKE_SOURCE_DIR}/kicad
     ${INC_AFTER}
     )
 
@@ -117,6 +118,11 @@ set( KICOMMON_SRCS
 
     database/database_lib_settings.cpp
 
+    design_block_lib_table.cpp
+    design_block_io.cpp
+    design_block_info.cpp
+    design_block_info_impl.cpp
+
     advanced_config.cpp
     asset_archive.cpp
     array_axis.cpp
@@ -173,6 +179,8 @@ set( KICOMMON_SRCS
     ../scripting/python_scripting.cpp
 
     io/kicad/kicad_io_utils.cpp    # needed by richio
+    io/io_base.cpp
+    io/io_utils.cpp
     )
 
 if( KICAD_IPC_API )

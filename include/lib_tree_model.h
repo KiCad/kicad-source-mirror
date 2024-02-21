@@ -285,6 +285,16 @@ public:
      */
     LIB_TREE_NODE_LIBRARY& AddLib( wxString const& aName, wxString const& aDesc );
 
+    /**
+     * Remove a library node from the root.
+     */
+    void RemoveLib( wxString const& aName );
+
+    /**
+     * Clear the tree
+     */
+    void Clear();
+
     void UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                       std::function<bool( LIB_TREE_NODE& aNode )>* aFilter ) override;
 };

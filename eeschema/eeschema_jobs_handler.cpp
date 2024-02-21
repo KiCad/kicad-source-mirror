@@ -149,7 +149,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     if( !aPlotJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aPlotJob->m_filename, SCH_IO_MGR::SCH_KICAD, true );
+    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aPlotJob->m_filename, SCH_IO_MGR::SCH_KICAD,
+                                                      true, false );
 
     if( sch == nullptr )
     {
@@ -247,7 +248,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     if( !aNetJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD, true );
+    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD,
+                                                      true, false );
 
     if( sch == nullptr )
     {
@@ -358,7 +360,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
     if( !aBomJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aBomJob->m_filename, SCH_IO_MGR::SCH_KICAD, true );
+    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aBomJob->m_filename, SCH_IO_MGR::SCH_KICAD,
+                                                      true, false );
 
     if( sch == nullptr )
     {
@@ -616,7 +619,8 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
     if( !aNetJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD, true );
+    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( aNetJob->m_filename, SCH_IO_MGR::SCH_KICAD,
+                                                      true, false );
 
     if( sch == nullptr )
     {
@@ -963,7 +967,8 @@ int EESCHEMA_JOBS_HANDLER::JobSchErc( JOB* aJob )
     if( !ercJob )
         return CLI::EXIT_CODES::ERR_UNKNOWN;
 
-    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( ercJob->m_filename, SCH_IO_MGR::SCH_KICAD, true );
+    SCHEMATIC* sch = EESCHEMA_HELPERS::LoadSchematic( ercJob->m_filename, SCH_IO_MGR::SCH_KICAD,
+                                                      true, false );
 
     if( sch == nullptr )
     {

@@ -123,6 +123,9 @@ public:
     /// The list of pinned footprint libraries
     std::vector<wxString> m_PinnedFootprintLibs;
 
+    /// The list of pinned design block libraries
+    std::vector<wxString> m_PinnedDesignBlockLibs;
+
     std::map<wxString, wxString> m_TextVars;
 
     /**

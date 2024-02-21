@@ -272,7 +272,10 @@ set( EESCHEMA_SIM_SRCS
     )
 
 set( EESCHEMA_WIDGETS
+    widgets/design_block_pane.cpp
+    widgets/design_block_preview_widget.cpp
     widgets/hierarchy_pane.cpp
+    widgets/panel_design_block_chooser.cpp
     widgets/panel_sch_selection_filter_base.cpp
     widgets/panel_sch_selection_filter.cpp
     widgets/panel_symbol_chooser.cpp
@@ -347,6 +350,8 @@ set( EESCHEMA_SRCS
     bus-wire-junction.cpp
     connection_graph.cpp
     cross-probing.cpp
+    design_block_tree_model_adapter.cpp
+    design_block_utils.cpp
     ee_collectors.cpp
     eeschema_config.cpp
     eeschema_helpers.cpp
@@ -441,6 +446,7 @@ set( EESCHEMA_SRCS
     tools/ee_selection_tool.cpp
     tools/rule_area_create_helper.cpp
     tools/sch_drawing_tools.cpp
+    tools/sch_design_block_control.cpp
     tools/sch_edit_table_tool.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp

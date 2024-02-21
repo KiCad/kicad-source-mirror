@@ -164,7 +164,8 @@ void SCH_EDIT_FRAME::InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename 
 
 
 bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet,
-                                        const wxString& aFileName )
+                                        const wxString& aFileName, bool aSkipRecursionCheck,
+                                        bool aSkipLibCheck )
 {
     wxASSERT( aSheet && aCurrentSheet );
 
@@ -235,26 +236,32 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
     // If the loaded schematic is in a different folder from the current project and
     // it contains hierarchical sheets, the hierarchical sheet paths need to be updated.
-    if( fileName.GetPathWithSep() != Prj().GetProjectPath() && tmpSheet->CountSheets() )
+    //
+    // Additionally, we need to make all backing screens absolute paths be in the current project
+    // path not the source path.
+    if( fileName.GetPathWithSep() != Prj().GetProjectPath() )
     {
         SCH_SHEET_LIST loadedSheets( tmpSheet.get() );
 
         for( const SCH_SHEET_PATH& sheetPath : loadedSheets )
         {
-            // Skip the loaded sheet since the user already determined if the file path should
-            // be relative or absolute.
-            if( sheetPath.size() == 1 )
-                continue;
+            wxString lastSheetPath = Prj().GetProjectPath();
 
-            wxString lastSheetPath = fileName.GetPathWithSep();
-
-            for( unsigned i = 1; i < sheetPath.size(); i++ )
+            for( unsigned i = 0; i < sheetPath.size(); i++ )
             {
                 SCH_SHEET* sheet = sheetPath.at( i );
                 wxCHECK2( sheet, continue );
 
                 SCH_SCREEN* screen = sheet->GetScreen();
                 wxCHECK2( screen, continue );
+
+                // Fix screen path to be based on the current project path.
+                // Basically, make an absolute screen path relative to the schematic file
+                // we started with, then make it absolute again using the current project path.
+                wxFileName screenFileName = screen->GetFileName();
+                screenFileName.MakeRelativeTo( fileName.GetPath() );
+                screenFileName.MakeAbsolute( Prj().GetProjectPath() );
+                screen->SetFileName( screenFileName.GetFullPath() );
 
                 // Use the screen file name which should always be absolute.
                 wxFileName loadedSheetFileName = screen->GetFileName();
@@ -268,7 +275,6 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                 else
                     sheetFileName = loadedSheetFileName.GetFullPath();
 
-                sheetFileName.Replace( wxT( "\\" ), wxT( "/" ) );
                 sheet->SetFileName( sheetFileName );
                 lastSheetPath = loadedSheetFileName.GetPath();
             }
@@ -279,11 +285,11 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     SCH_SHEET_LIST schematicSheets = Schematic().BuildUnorderedSheetList();
 
     // Make sure any new sheet changes do not cause any recursion issues.
-    if( CheckSheetForRecursion( tmpSheet.get(), aCurrentSheet )
-          || checkForNoFullyDefinedLibIds( tmpSheet.get() ) )
-    {
+    if( !aSkipRecursionCheck && CheckSheetForRecursion( tmpSheet.get(), aCurrentSheet ) )
         return false;
-    }
+
+    if( checkForNoFullyDefinedLibIds( tmpSheet.get() ) )
+        return false;
 
     // Make a valiant attempt to warn the user of all possible scenarios where there could
     // be broken symbol library links.
@@ -372,7 +378,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
 
             // If there are any new or duplicate libraries, check to see if it's possible that
             // there could be any missing libraries that would cause broken symbol library links.
-            if( !newLibNames.IsEmpty() || !duplicateLibNames.IsEmpty() )
+            if( !aSkipLibCheck && ( !newLibNames.IsEmpty() || !duplicateLibNames.IsEmpty() ) )
             {
                 if( !symLibTableFn.Exists() || !symLibTableFn.IsFileReadable() )
                 {
@@ -381,8 +387,8 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
                              "incorrect symbol library references.\n\n"
                              "Do you wish to continue?" );
                     wxMessageDialog msgDlg4( this, msg, _( "Continue Load Schematic" ),
-                                             wxOK | wxCANCEL | wxCANCEL_DEFAULT |
-                                             wxCENTER | wxICON_QUESTION );
+                                             wxOK | wxCANCEL | wxCANCEL_DEFAULT | wxCENTER
+                                                     | wxICON_QUESTION );
                     msgDlg4.SetOKCancelLabels( okButtonLabel, cancelButtonLabel );
 
                     if( msgDlg4.ShowModal() == wxID_CANCEL )

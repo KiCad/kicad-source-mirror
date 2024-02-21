@@ -55,6 +55,7 @@ public:
     int PlaceSymbol( const TOOL_EVENT& aEvent );
     int SingleClickPlace( const TOOL_EVENT& aEvent );
     int TwoClickPlace( const TOOL_EVENT& aEvent );
+    int ImportSheet( const TOOL_EVENT& aEvent );
     int DrawShape( const TOOL_EVENT& aEvent );
     int DrawRuleArea( const TOOL_EVENT& aEvent );
     int DrawTable( const TOOL_EVENT& aEvent );
@@ -83,6 +84,7 @@ private:
 
     std::vector<PICKED_SYMBOL> m_symbolHistoryList;
     std::vector<PICKED_SYMBOL> m_powerHistoryList;
+    std::vector<LIB_ID>        m_designBlockHistoryList;
 
     LABEL_FLAG_SHAPE           m_lastSheetPinType;
     LABEL_FLAG_SHAPE           m_lastGlobalLabelShape;

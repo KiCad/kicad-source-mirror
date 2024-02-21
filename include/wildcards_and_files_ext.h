@@ -176,6 +176,9 @@ public:
     static const std::string Ipc2581FileExtension;
     static const std::string WorkbookFileExtension;
 
+    static const std::string KiCadDesignBlockLibPathExtension;
+    static const std::string KiCadDesignBlockPathExtension;
+
     static const std::string PngFileExtension;
     static const std::string JpegFileExtension;
     static const std::string TextFileExtension;
@@ -246,6 +249,8 @@ public:
     static wxString DocModulesFileName();
     static wxString KiCadFootprintLibFileWildcard();
     static wxString KiCadFootprintLibPathWildcard();
+    static wxString KiCadDesignBlockLibPathWildcard();
+    static wxString KiCadDesignBlockPathWildcard();
     static wxString TextFileWildcard();
     static wxString ModLegacyExportFileWildcard();
     static wxString ErcFileWildcard();

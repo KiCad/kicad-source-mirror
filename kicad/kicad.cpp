@@ -47,6 +47,7 @@
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
 #include <wildcards_and_files_ext.h>
+#include <confirm.h>
 
 #include <git2.h>
 #include <stdexcept>
@@ -61,6 +62,7 @@
 #include <api/api_server.h>
 #endif
 
+#include <design_block_lib_table.h>
 
 // a dummy to quiet linking with EDA_BASE_FRAME::config();
 #include <kiface_base.h>
@@ -352,6 +354,27 @@ bool PGM_KICAD::OnPgmInit()
             }
         }
     }
+
+    try
+    {
+        DESIGN_BLOCK_LIB_TABLE::LoadGlobalTable( GDesignBlockTable );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        // if we are here, a incorrect global design block library table was found.
+        // Incorrect global design block library table is not a fatal error:
+        // the user just has to edit the (partially) loaded table.
+        wxString msg = _( "An error occurred attempting to load the global design block library "
+                          "table.\n"
+                          "Please edit this global design block library table in Preferences "
+                          "menu." );
+
+        DisplayErrorMessage( nullptr, msg, ioe.What() );
+    }
+
+    if( managerFrame->IsProjectActive() && GDesignBlockList.GetCount() == 0 )
+        GDesignBlockList.ReadCacheFromFile( Prj().GetProjectPath()
+                                            + wxT( "design-block-info-cache" ) );
 
     frame->Show( true );
     frame->Raise();

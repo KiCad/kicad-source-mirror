@@ -228,6 +228,7 @@ enum KICAD_T
      */
     SYMBOL_LIB_TABLE_T,
     FP_LIB_TABLE_T,
+    DESIGN_BLOCK_LIB_TABLE_T,
     SYMBOL_LIBS_T,
     SEARCH_STACK_T,
     S3D_CACHE_T,
@@ -516,6 +517,7 @@ constexpr bool IsMiscType( const KICAD_T aType )
 
     case SYMBOL_LIB_TABLE_T:
     case FP_LIB_TABLE_T:
+    case DESIGN_BLOCK_LIB_TABLE_T:
     case SYMBOL_LIBS_T:
     case SEARCH_STACK_T:
     case S3D_CACHE_T:

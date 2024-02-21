@@ -42,6 +42,7 @@
 /// default name for nameless projects
 #define NAMELESS_PROJECT _( "untitled" )
 
+class DESIGN_BLOCK_LIB_TABLE;
 class FP_LIB_TABLE;
 class SYMBOL_LIBS;
 class SEARCH_STACK;
@@ -74,6 +75,8 @@ public:
         S3DCACHE,
         SYMBOL_LIB_TABLE,
         SEARCH_STACK,
+
+        DESIGN_BLOCK_LIB_TABLE,
 
         COUNT
     };
@@ -177,8 +180,22 @@ public:
      */
     virtual const wxString SymbolLibTableName() const;
 
-    void PinLibrary( const wxString& aLibrary, bool isSymbolLibrary );
-    void UnpinLibrary( const wxString& aLibrary, bool isSymbolLibrary );
+    /**
+     * Return the path and file name of this projects design block library table.
+     */
+    virtual const wxString DesignBlockLibTblName() const;
+
+    enum LIB_TYPE_T
+    {
+        SYMBOL_LIB,
+        FOOTPRINT_LIB,
+        DESIGN_BLOCK_LIB,
+
+        LIB_TYPE_COUNT
+    };
+
+    void PinLibrary( const wxString& aLibrary, enum LIB_TYPE_T aLibType );
+    void UnpinLibrary( const wxString& aLibrary, enum LIB_TYPE_T aLibType );
 
     virtual PROJECT_FILE& GetProjectFile() const
     {
@@ -276,6 +293,11 @@ public:
      * from Pcbnew.
      */
     virtual FP_LIB_TABLE* PcbFootprintLibs( KIWAY& aKiway );
+
+    /**
+     * Return the table of design block libraries.
+     */
+    virtual DESIGN_BLOCK_LIB_TABLE* DesignBlockLibs();
 
 private:
     friend class SETTINGS_MANAGER; // so that SM can set project path

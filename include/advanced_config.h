@@ -467,6 +467,15 @@ public:
     int m_DisambiguationMenuDelay;
 
     /**
+     * Enable the new Design Blocks feature
+     *
+     * Setting name: "EnableDesignBlocks"
+     * Valid values: true or false
+     * Default value: false
+     */
+    bool m_EnableDesignBlocks;
+
+    /**
      * Enable support for generators.
      *
      * Setting name: "EnableGenerators"

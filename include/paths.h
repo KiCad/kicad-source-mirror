@@ -70,6 +70,11 @@ public:
     /**
      * Gets the default path we point users to create projects
      */
+    static wxString GetDefaultUserDesignBlocksPath();
+
+    /**
+     * Gets the default path we point users to create projects
+     */
     static wxString GetDefaultUser3DModelsPath();
 
     /**
@@ -97,6 +102,11 @@ public:
      * Gets the stock (install) footprints path
      */
     static wxString GetStockFootprintsPath();
+
+    /**
+     * Gets the stock (install) footprints path
+     */
+    static wxString GetStockDesignBlocksPath();
 
     /**
      * Gets the stock (install) 3dmodels path

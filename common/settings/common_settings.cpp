@@ -346,6 +346,9 @@ COMMON_SETTINGS::COMMON_SETTINGS() :
     m_params.emplace_back( new PARAM_LIST<wxString>( "session.pinned_fp_libs",
             &m_Session.pinned_fp_libs, {} ) );
 
+    m_params.emplace_back( new PARAM_LIST<wxString>( "session.pinned_design_block_libs",
+            &m_Session.pinned_design_block_libs, {} ) );
+
     m_params.emplace_back( new PARAM<int>( "netclass_panel.sash_pos",
             &m_NetclassPanel.sash_pos, 160 ) );
 
@@ -666,6 +669,10 @@ void COMMON_SETTINGS::InitializeEnvironment()
     path = basePath;
     path.AppendDir( wxT( "symbols" ) );
     addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "SYMBOL_DIR" ) ), path.GetFullPath() );
+
+    path = basePath;
+    path.AppendDir( wxT( "blocks" ) );
+    addVar( ENV_VAR::GetVersionedEnvVarName( wxS( "DESIGN_BLOCK_DIR" ) ), path.GetFullPath() );
 }
 
 

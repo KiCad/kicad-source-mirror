@@ -60,7 +60,7 @@ SETTINGS_MANAGER* EESCHEMA_HELPERS::GetSettingsManager()
 }
 
 
-PROJECT* EESCHEMA_HELPERS::GetDefaultProject()
+PROJECT* EESCHEMA_HELPERS::GetDefaultProject( bool aSetActive )
 {
     // For some reasons, LoadProject() needs a C locale, so ensure we have the right locale
     // This is mainly when running QA Python tests
@@ -70,7 +70,7 @@ PROJECT* EESCHEMA_HELPERS::GetDefaultProject()
 
     if( !project )
     {
-        GetSettingsManager()->LoadProject( "" );
+        GetSettingsManager()->LoadProject( "", aSetActive );
         project = GetSettingsManager()->GetProject( "" );
     }
 
@@ -78,20 +78,9 @@ PROJECT* EESCHEMA_HELPERS::GetDefaultProject()
 }
 
 
-SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, bool aSetActive )
-{
-    if( aFileName.EndsWith( FILEEXT::KiCadSchematicFileExtension ) )
-        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_KICAD, aSetActive );
-    else if( aFileName.EndsWith( FILEEXT::LegacySchematicFileExtension ) )
-        return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive );
-
-    // as fall back for any other kind use the legacy format
-    return LoadSchematic( aFileName, SCH_IO_MGR::SCH_LEGACY, aSetActive );
-}
-
-
-SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH_FILE_T aFormat,
-                                            bool aSetActive )
+SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( const wxString&        aFileName,
+                                            SCH_IO_MGR::SCH_FILE_T aFormat, bool aSetActive,
+                                            bool aForceDefaultProject )
 {
     wxFileName pro = aFileName;
     pro.SetExt( FILEEXT::ProjectFileExtension );
@@ -104,23 +93,26 @@ SCHEMATIC* EESCHEMA_HELPERS::LoadSchematic( wxString& aFileName, SCH_IO_MGR::SCH
 
     PROJECT* project = GetSettingsManager()->GetProject( projectPath );
 
-    if( !project )
+    if( !aForceDefaultProject )
     {
-        if( wxFileExists( projectPath ) )
+        if( !project )
         {
-            GetSettingsManager()->LoadProject( projectPath, aSetActive );
-            project = GetSettingsManager()->GetProject( projectPath );
+            if( wxFileExists( projectPath ) )
+            {
+                GetSettingsManager()->LoadProject( projectPath, aSetActive );
+                project = GetSettingsManager()->GetProject( projectPath );
+            }
         }
-    }
-    else if( s_SchEditFrame && project == &GetSettingsManager()->Prj() )
-    {
-        // Project is already loaded?  Then so is the board
-        return &s_SchEditFrame->Schematic();
+        else if( s_SchEditFrame && project == &GetSettingsManager()->Prj() )
+        {
+            // Project is already loaded?  Then so is the board
+            return &s_SchEditFrame->Schematic();
+        }
     }
 
     // Board cannot be loaded without a project, so create the default project
-    if( !project )
-        project = GetDefaultProject();
+    if( !project || aForceDefaultProject )
+        project = GetDefaultProject( aSetActive );
 
     IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( aFormat ) );
 

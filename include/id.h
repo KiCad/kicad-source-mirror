@@ -71,8 +71,7 @@
 
 enum main_id
 {
-    ID_APPEND_PROJECT         = wxID_HIGHEST,
-    ID_LOAD_FILE,
+    ID_LOAD_FILE = wxID_HIGHEST,
     ID_NEW_BOARD,
     ID_SAVE_BOARD,
     ID_SAVE_BOARD_AS,
