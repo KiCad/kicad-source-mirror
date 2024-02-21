@@ -1,5 +1,5 @@
 /* XPM */
-static char * cursor_line_bus64_xpm[] = {
+static char const * cursor_line_bus64_xpm[] = {
 "64 64 4 1",
 " 	c None",
 ".	c #000000",

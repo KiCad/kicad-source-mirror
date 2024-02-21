@@ -886,7 +886,7 @@ public:
      * @param aCursor is the cursor to use in the native panel
      * @return true if the cursor was updated, false if the cursor given was already set
      */
-    virtual bool SetNativeCursorStyle( KICURSOR aCursor );
+    virtual bool SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI );
 
     /**
      * Enable/disable cursor.

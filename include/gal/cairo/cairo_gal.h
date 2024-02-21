@@ -444,7 +444,7 @@ public:
     }
 
     /// @copydoc GAL::SetNativeCursorStyle()
-    bool SetNativeCursorStyle( KICURSOR aCursor ) override;
+    bool SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI ) override;
 
     /// @copydoc GAL::BeginDrawing()
     void BeginDrawing() override;

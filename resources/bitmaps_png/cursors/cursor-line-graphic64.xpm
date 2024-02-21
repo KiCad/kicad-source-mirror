@@ -1,5 +1,5 @@
 /* XPM */
-static char * cursor_line_graphic64_xpm[] = {
+static char const * cursor_line_graphic64_xpm[] = {
 "64 64 3 1",
 " 	c None",
 ".	c #000000",

@@ -81,7 +81,7 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetCursorEnabled( false );
 
     // Initialize the native widget to an arrow cursor
-    SetNativeCursorStyle( KICURSOR::ARROW );
+    SetNativeCursorStyle( KICURSOR::ARROW, false );
 
     // Initialize text properties
     ResetTextAttributes();
@@ -277,7 +277,7 @@ void GAL::BitmapText( const wxString& aText, const VECTOR2I& aPosition, const ED
 }
 
 
-bool GAL::SetNativeCursorStyle( KICURSOR aCursor )
+bool GAL::SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI )
 {
     if( m_currentNativeCursor == aCursor )
         return false;
