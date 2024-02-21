@@ -2127,13 +2127,16 @@ void OPENGL_GAL::EndDiffLayer()
 }
 
 
-bool OPENGL_GAL::SetNativeCursorStyle( KICURSOR aCursor )
+bool OPENGL_GAL::SetNativeCursorStyle( KICURSOR aCursor, bool aHiDPI )
 {
     // Store the current cursor type and get the wxCursor for it
-    if( !GAL::SetNativeCursorStyle( aCursor ) )
+    if( !GAL::SetNativeCursorStyle( aCursor, aHiDPI ) )
         return false;
 
-    m_currentwxCursor = CURSOR_STORE::GetCursor( m_currentNativeCursor );
+    if( aHiDPI )
+        m_currentwxCursor = CURSOR_STORE::GetHiDPICursor( m_currentNativeCursor );
+    else
+        m_currentwxCursor = CURSOR_STORE::GetCursor( m_currentNativeCursor );
 
     // Update the cursor in the wx control
     HIDPI_GL_CANVAS::SetCursor( m_currentwxCursor );

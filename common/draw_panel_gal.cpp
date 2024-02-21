@@ -648,8 +648,12 @@ void EDA_DRAW_PANEL_GAL::onShowTimer( wxTimerEvent& aEvent )
 
 void EDA_DRAW_PANEL_GAL::SetCurrentCursor( KICURSOR aCursor )
 {
-    if( m_gal )
-        m_gal->SetNativeCursorStyle( aCursor );
+    if( !m_gal )
+        return;
+
+    DPI_SCALING_COMMON dpi( nullptr, m_parent );
+
+    m_gal->SetNativeCursorStyle( aCursor, dpi.GetContentScaleFactor() >= 2.0 );
 }
 
 

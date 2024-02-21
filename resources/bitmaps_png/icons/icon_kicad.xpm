@@ -1,5 +1,5 @@
 /* XPM */
-static char *icon_kicad[] = {
+static char const *icon_kicad[] = {
 /* columns rows colors chars-per-pixel */
 "128 128 183 2 ",
 "   c #7C537B",

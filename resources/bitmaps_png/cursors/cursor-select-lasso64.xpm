@@ -1,5 +1,5 @@
 /* XPM */
-static char * cursor_select_lasso64_xpm[] = {
+static char const * cursor_select_lasso64_xpm[] = {
 "64 64 3 1",
 " 	c None",
 ".	c #000000",
