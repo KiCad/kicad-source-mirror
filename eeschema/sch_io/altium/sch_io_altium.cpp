@@ -33,6 +33,8 @@
 
 #include <schematic.h>
 #include <project_sch.h>
+#include <project/project_file.h>
+#include <project/net_settings.h>
 
 #include <lib_shape.h>
 #include <lib_id.h>
@@ -390,6 +392,36 @@ SCH_SHEET* SCH_IO_ALTIUM::LoadSchematicFile( const wxString& aFileName, SCHEMATI
     SCH_SCREENS allSheets( m_rootSheet );
     allSheets.UpdateSymbolLinks(); // Update all symbol library links for all sheets.
     allSheets.ClearEditFlags();
+
+    // Set up the default netclass wire & bus width based on imported wires & buses.
+    //
+
+    int minWireWidth = std::numeric_limits<int>::max();
+    int minBusWidth = std::numeric_limits<int>::max();
+
+    for( SCH_SCREEN* screen = allSheets.GetFirst(); screen != nullptr; screen = allSheets.GetNext() )
+    {
+        std::vector<SCH_MARKER*> markers;
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            if( line->IsWire() && line->GetLineWidth() > 0 )
+                minWireWidth = std::min( minWireWidth, line->GetLineWidth() );
+
+            if( line->IsBus() && line->GetLineWidth() > 0 )
+                minBusWidth = std::min( minBusWidth, line->GetLineWidth() );
+        }
+    }
+
+    std::shared_ptr<NET_SETTINGS>& netSettings = m_schematic->Prj().GetProjectFile().NetSettings();
+
+    if( minWireWidth < std::numeric_limits<int>::max() )
+        netSettings->m_DefaultNetClass->SetWireWidth( minWireWidth );
+
+    if( minBusWidth < std::numeric_limits<int>::max() )
+        netSettings->m_DefaultNetClass->SetBusWidth( minBusWidth );
 
     return m_rootSheet;
 }
