@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-20 20:12+0000\n"
+"PO-Revision-Date: 2024-02-22 08:05+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -2377,7 +2377,7 @@ msgstr "建立一個空的全域性%s庫表"
 #, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
-msgstr "選擇此選項可在工程專用庫表中定義%s庫"
+msgstr "選擇此選項可在專案專用庫表中定義%s庫"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
@@ -11909,7 +11909,7 @@ msgstr "不再顯示"
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:598 eeschema/project_rescue.cpp:613
 msgid "Project Rescue Helper"
-msgstr "專案恢復助手"
+msgstr "專案求援助手"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:44
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:65
