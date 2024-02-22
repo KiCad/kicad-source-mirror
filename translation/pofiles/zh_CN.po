@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-19 17:02+0000\n"
+"PO-Revision-Date: 2024-02-23 10:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -22094,7 +22094,7 @@ msgstr "找不到文件:"
 #: gerbview/files.cpp:285
 #, c-format
 msgid "<b>A gerber job file cannot be loaded as a plot file</b> <i>%s</i>"
-msgstr "<b>Gerber 作业文件无法作为绘制文件加载</b><i>%s</i>"
+msgstr "<b>Gerber job 文件无法作为绘制文件加载</b><i>%s</i>"
 
 #: gerbview/files.cpp:298
 msgid "Loading files..."
@@ -22113,7 +22113,7 @@ msgstr "无法打开 Zip 文件 '%s'。"
 #: gerbview/files.cpp:481
 #, c-format
 msgid "Skipped file '%s' (gerber job file)."
-msgstr "已跳过文件 '%s'(Gerber 作业文件)。"
+msgstr "已跳过文件 '%s'(Gerber job 文件)。"
 
 #: gerbview/files.cpp:526
 #, c-format
@@ -22404,7 +22404,7 @@ msgstr "打开 Gerber 工作文件..."
 
 #: gerbview/tools/gerbview_actions.cpp:63
 msgid "Open a Gerber job file and its associated gerber plot files"
-msgstr "打开 Gerber 作业文件及其关联的 Gerber 绘制文件"
+msgstr "打开 Gerber job 文件及其关联的 Gerber 绘制文件"
 
 #: gerbview/tools/gerbview_actions.cpp:69
 msgid "Open Zip Archive File..."
@@ -33313,14 +33313,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid "Generate Gerber job file"
-msgstr "生成 Gerber 工作文件"
+msgstr "生成 Gerber job 文件"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"生成一个 Gerber 工作文件, 其中包含有关于电路板的信息, \n"
+"生成一个 Gerber job 文件, 其中包含有关于电路板的信息, \n"
 "及生成的 Gerber 绘制文件列表"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:213
@@ -38189,7 +38189,7 @@ msgstr "创建文件 '%s'。"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:159
 #, c-format
 msgid "Created Gerber job file '%s'."
-msgstr "已创建 Gerber 作业文件 '%s'。"
+msgstr "已创建 Gerber job 文件 '%s'。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:592
 msgid "Board stackup settings not up to date."
