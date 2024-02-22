@@ -3816,24 +3816,25 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
         else
         {
             int      fieldIdx = libSymbol->GetFieldCount();
-            wxString fieldName = elem.name.Upper();
+            wxString fieldNameStem = elem.name;
+            wxString fieldName = fieldNameStem;
+            int disambiguate = 1;
 
             if( fieldName.IsEmpty() )
             {
-                int disambiguate = 1;
-
-                while( 1 )
-                {
-                    fieldName = wxString::Format( "ALTIUM_UNNAMED_%d", disambiguate++ );
-
-                    if( !libSymbol->FindField( fieldName ) )
-                        break;
-                }
+                fieldNameStem = "ALTIUM_UNNAMED";
+                fieldName = "ALTIUM_UNNAMED_1";
+                disambiguate = 2;
             }
-            else if( fieldName == "VALUE" )
+            else if( upperName == "VALUE" )
             {
+                fieldNameStem = "ALTIUM_VALUE";
                 fieldName = "ALTIUM_VALUE";
             }
+
+            // Avoid adding duplicate fields
+            while( libSymbol->FindField( fieldName ) )
+                fieldName = wxString::Format( "%s_%d", fieldNameStem, disambiguate++ );
 
             LIB_FIELD* new_field = new LIB_FIELD( fieldIdx, fieldName );
             libSymbol->AddField( new_field );
