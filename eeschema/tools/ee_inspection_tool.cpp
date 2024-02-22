@@ -336,10 +336,11 @@ int EE_INSPECTION_TOOL::DiffSymbol( const TOOL_EVENT& aEvent )
 
             flattenedSchSymbol->SetFields( fields );
 
-            int flags = LIB_ITEM::COMPARE_FLAGS::EQUALITY | LIB_ITEM::COMPARE_FLAGS::ERC;
-
-            if( flattenedSchSymbol->Compare( *flattenedLibSymbol, flags, r ) == 0 )
+            if( flattenedSchSymbol->Compare( *flattenedLibSymbol, LIB_ITEM::COMPARE_FLAGS::ERC,
+                                             r ) == 0 )
+            {
                 r->Report( _( "No relevant differences detected." ) );
+            }
 
             wxPanel*            panel = dialog->AddBlankPage( _( "Visual" ) );
             SYMBOL_DIFF_WIDGET* diff = constructDiffPanel( panel );

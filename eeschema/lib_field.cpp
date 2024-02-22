@@ -252,7 +252,7 @@ int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 
     bool ignoreFieldText = false;
 
-    if( m_id == REFERENCE_FIELD && ( aCompareFlags & COMPARE_FLAGS::EQUALITY ) )
+    if( m_id == REFERENCE_FIELD && !( aCompareFlags & COMPARE_FLAGS::EQUALITY ) )
         ignoreFieldText = true;
 
     if( m_id == VALUE_FIELD && ( aCompareFlags & COMPARE_FLAGS::ERC ) )
