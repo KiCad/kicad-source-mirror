@@ -37,9 +37,15 @@
 #include <wx/stdpaths.h>
 
 
-DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository* aRepository, wxString aURL ) :
-        DIALOG_GIT_REPOSITORY_BASE( aParent ), m_repository( aRepository ), m_prevFile( wxEmptyString ),
-        m_tested( 0 ), m_failedTest( false ), m_testError( wxEmptyString ), m_tempRepo( false ),
+DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository* aRepository,
+                                              wxString aURL ) :
+        DIALOG_GIT_REPOSITORY_BASE( aParent ),
+        m_repository( aRepository ),
+        m_prevFile( wxEmptyString ),
+        m_tested( 0 ),
+        m_failedTest( false ),
+        m_testError( wxEmptyString ),
+        m_tempRepo( false ),
         m_repoType( KIGIT_COMMON::GIT_CONN_TYPE::GIT_CONN_LOCAL )
 {
     m_txtURL->SetFocus();
@@ -50,7 +56,8 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
         m_tempRepo = true;
         m_tempPath = wxFileName::CreateTempFileName( "kicadtestrepo" );
 
-        git_repository_init_options options = GIT_REPOSITORY_INIT_OPTIONS_INIT;
+        git_repository_init_options options;
+        options.version = GIT_REPOSITORY_INIT_OPTIONS_VERSION;
         options.flags = GIT_REPOSITORY_INIT_MKPATH | GIT_REPOSITORY_INIT_NO_REINIT;
         git_repository_init_ext( &m_repository, m_tempPath.ToStdString().c_str(), &options );
     }
@@ -90,7 +97,9 @@ bool DIALOG_GIT_REPOSITORY::extractClipboardData()
         {
             if( std::get<0>( isValidHTTPS( clipboardText ) )
                 || std::get<0>( isValidSSH( clipboardText ) ) )
+            {
                 m_txtURL->SetValue( clipboardText );
+            }
         }
 
         wxTheClipboard->Close();
@@ -252,7 +261,8 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
 void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 {
     git_remote* remote = nullptr;
-    git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
+    git_remote_callbacks callbacks;
+    callbacks.version = GIT_REMOTE_CALLBACKS_VERSION;
 
     // We track if we have already tried to connect.
     // If we have, the server may come back to offer another connection
@@ -362,7 +372,8 @@ void DIALOG_GIT_REPOSITORY::OnFileUpdated( wxFileDirPickerEvent& aEvent )
 
     if( !isValid )
     {
-        DisplayErrorMessage( this, _( "Invalid SSH Key" ), _( "The selected file is not a valid SSH private key" ) );
+        DisplayErrorMessage( this, _( "Invalid SSH Key" ),
+                             _( "The selected file is not a valid SSH private key" ) );
         CallAfter( [this] { SetRepoSSHPath( m_prevFile ); } );
         return;
     }
@@ -386,7 +397,8 @@ void DIALOG_GIT_REPOSITORY::OnFileUpdated( wxFileDirPickerEvent& aEvent )
 
     if( !pubIfs.good() || !pubIfs.is_open() )
     {
-        DisplayErrorMessage( this, wxString::Format( _( "Could not open public key '%s'" ), file + ".pub" ),
+        DisplayErrorMessage( this, wxString::Format( _( "Could not open public key '%s'" ),
+                                                     file + ".pub" ),
                              wxString::Format( "%s: %d", std::strerror( errno ), errno ) );
         aEvent.SetPath( wxEmptyString );
         CallAfter( [this] { SetRepoSSHPath( m_prevFile ); } );
@@ -404,18 +416,21 @@ void DIALOG_GIT_REPOSITORY::OnOKClick( wxCommandEvent& event )
 
     if( m_txtName->GetValue().IsEmpty() )
     {
-        DisplayErrorMessage( this, _( "Missing information" ), _( "Please enter a name for the repository" ) );
+        DisplayErrorMessage( this, _( "Missing information" ),
+                             _( "Please enter a name for the repository" ) );
         return;
     }
 
     if( m_txtURL->GetValue().IsEmpty() )
     {
-        DisplayErrorMessage( this, _( "Missing information" ), _( "Please enter a URL for the repository" ) );
+        DisplayErrorMessage( this, _( "Missing information" ),
+                             _( "Please enter a URL for the repository" ) );
         return;
     }
 
     EndModal( wxID_OK );
 }
+
 
 void DIALOG_GIT_REPOSITORY::updateAuthControls()
 {

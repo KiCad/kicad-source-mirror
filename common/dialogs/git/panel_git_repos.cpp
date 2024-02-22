@@ -55,7 +55,7 @@ void PANEL_GIT_REPOS::ResetPanel()
     m_authorEmail->SetValue( wxEmptyString );
 }
 
-static std::pair<wxString, wxString> getDefaultAuthorEmail()
+static std::pair<wxString, wxString> getDefaultAuthorAndEmail()
 {
     wxString name;
     wxString email;
@@ -94,8 +94,8 @@ static std::pair<wxString, wxString> getDefaultAuthorEmail()
 
 bool PANEL_GIT_REPOS::TransferDataFromWindow()
 {
-    COMMON_SETTINGS* settings = Pgm().GetCommonSettings();
-    auto& repos = settings->m_Git.repositories;
+    COMMON_SETTINGS*                              settings = Pgm().GetCommonSettings();
+    std::vector<COMMON_SETTINGS::GIT_REPOSITORY>& repos = settings->m_Git.repositories;
 
     repos.clear();
 
@@ -109,7 +109,8 @@ bool PANEL_GIT_REPOS::TransferDataFromWindow()
         repo.authType = m_grid->GetCellValue( row, COL_AUTH_TYPE );
         repo.username = m_grid->GetCellValue( row, COL_USERNAME );
 
-        KIPLATFORM::SECRETS::StoreSecret( repo.path, repo.username, m_grid->GetCellValue( row, COL_PASSWORD ) );
+        KIPLATFORM::SECRETS::StoreSecret( repo.path, repo.username,
+                                          m_grid->GetCellValue( row, COL_PASSWORD ) );
         repo.ssh_path = m_grid->GetCellValue( row, COL_SSH_PATH );
         repo.checkValid = m_grid->GetCellValue( row, COL_STATUS ) == "1";
         repos.push_back( repo );
@@ -126,7 +127,8 @@ static bool testRepositoryConnection( COMMON_SETTINGS::GIT_REPOSITORY& repositor
 {
     git_libgit2_init();
 
-    git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
+    git_remote_callbacks callbacks;
+    callbacks.version = GIT_REMOTE_CALLBACKS_VERSION;
 
     typedef struct
     {
@@ -134,35 +136,39 @@ static bool testRepositoryConnection( COMMON_SETTINGS::GIT_REPOSITORY& repositor
         bool success;
     } callbacksPayload;
 
-    callbacksPayload cb_data( { &repository, true } );  // If we don't need authentication, then, we are successful
+    callbacksPayload cb_data( { &repository, true } );  // If we don't need authentication, then,
+                                                        // we are successful
     callbacks.payload = &cb_data;
-    callbacks.credentials = [](git_cred** out, const char* url, const char* username, unsigned int allowed_types, void* payload) -> int {
+    callbacks.credentials =
+            [](git_cred** out, const char* url, const char* username, unsigned int allowed_types,
+                void* payload) -> int
+            {
 
-        // If we are asking for credentials, then, we need authentication
+                // If we are asking for credentials, then, we need authentication
 
-        callbacksPayload* data = static_cast<callbacksPayload*>(payload);
+                callbacksPayload* data = static_cast<callbacksPayload*>(payload);
 
-        data->success = false;
+                data->success = false;
 
-        if( allowed_types & GIT_CREDTYPE_USERNAME )
-        {
-            data->success = true;
-        }
-        else if( data->repo->authType == "ssh" && ( allowed_types & GIT_CREDTYPE_SSH_KEY ) )
-        {
-            wxString sshKeyPath = data->repo->ssh_path;
+                if( allowed_types & GIT_CREDTYPE_USERNAME )
+                {
+                    data->success = true;
+                }
+                else if( data->repo->authType == "ssh" && ( allowed_types & GIT_CREDTYPE_SSH_KEY ) )
+                {
+                    wxString sshKeyPath = data->repo->ssh_path;
 
-            // Check if the SSH key exists and is readable
-            if( wxFileExists( sshKeyPath ) && wxFile::Access( sshKeyPath, wxFile::read ) )
-                data->success = true;
-        }
-        else if( data->repo->authType == "password" )
-        {
-            data->success = ( allowed_types & GIT_CREDTYPE_USERPASS_PLAINTEXT );
-        }
+                    // Check if the SSH key exists and is readable
+                    if( wxFileExists( sshKeyPath ) && wxFile::Access( sshKeyPath, wxFile::read ) )
+                        data->success = true;
+                }
+                else if( data->repo->authType == "password" )
+                {
+                    data->success = ( allowed_types & GIT_CREDTYPE_USERPASS_PLAINTEXT );
+                }
 
-        return 0;
-    };
+                return 0;
+            };
 
     // Create a temporary directory to initialize the Git repository
     wxString tempDirPath = wxFileName::CreateTempFileName(wxT("kigit_temp"));
@@ -177,9 +183,10 @@ static bool testRepositoryConnection( COMMON_SETTINGS::GIT_REPOSITORY& repositor
 
     // Initialize the Git repository
     git_repository* repo = nullptr;
-    int result = git_repository_init(&repo, tempDirPath.mb_str(wxConvUTF8), 0);
+    int result = git_repository_init( &repo, tempDirPath.mb_str( wxConvUTF8 ), 0 );
 
-    if (result != 0) {
+    if (result != 0)
+    {
         git_repository_free(repo);
         git_libgit2_shutdown();
         wxRmdir(tempDirPath);
@@ -187,8 +194,10 @@ static bool testRepositoryConnection( COMMON_SETTINGS::GIT_REPOSITORY& repositor
     }
 
     git_remote* remote = nullptr;
-    result = git_remote_create_anonymous(&remote, repo, tempDirPath.mb_str(wxConvUTF8));
-    if (result != 0) {
+    result = git_remote_create_anonymous( &remote, repo, tempDirPath.mb_str( wxConvUTF8 ) );
+
+    if (result != 0)
+    {
         git_remote_free(remote);
         git_repository_free(repo);
         git_libgit2_shutdown();
@@ -249,7 +258,7 @@ bool PANEL_GIT_REPOS::TransferDataToWindow()
 
     if( settings->m_Git.useDefaultAuthor )
     {
-        auto defaultAuthor = getDefaultAuthorEmail();
+        std::pair<wxString, wxString> defaultAuthor = getDefaultAuthorAndEmail();
         m_author->SetValue( defaultAuthor.first );
         m_authorEmail->SetValue( defaultAuthor.second );
         m_author->Disable();

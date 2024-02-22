@@ -32,7 +32,8 @@
 class DIALOG_GIT_REPOSITORY : public DIALOG_GIT_REPOSITORY_BASE
 {
 public:
-    DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository* aRepository, wxString aURL = wxEmptyString );
+    DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository* aRepository,
+                           wxString aURL = wxEmptyString );
     ~DIALOG_GIT_REPOSITORY() override;
 
     void SetTestResult( bool aFailed, const wxString& aError )
@@ -47,7 +48,10 @@ public:
         updateAuthControls();
     }
 
-    KIGIT_COMMON::GIT_CONN_TYPE GetRepoType() const { return static_cast<KIGIT_COMMON::GIT_CONN_TYPE>( m_ConnType->GetSelection() ); }
+    KIGIT_COMMON::GIT_CONN_TYPE GetRepoType() const
+    {
+        return static_cast<KIGIT_COMMON::GIT_CONN_TYPE>( m_ConnType->GetSelection() );
+    }
 
     void     SetRepoName( const wxString& aName ) { m_txtName->SetValue( aName ); }
     wxString GetRepoName() const { return m_txtName->GetValue(); }
@@ -106,19 +110,19 @@ private:
     std::tuple<bool,wxString,wxString,wxString> isValidHTTPS( const wxString& url );
     std::tuple<bool,wxString, wxString> isValidSSH( const wxString& url );
 
+private:
     git_repository* m_repository;
 
-    wxString m_prevFile;
+    wxString        m_prevFile;
 
-    unsigned m_tested;
-    bool m_failedTest;
-    wxString m_testError;
+    unsigned        m_tested;
+    bool            m_failedTest;
+    wxString        m_testError;
 
-    bool m_tempRepo;
-    wxString m_tempPath;
+    bool            m_tempRepo;
+    wxString        m_tempPath;
 
     KIGIT_COMMON::GIT_CONN_TYPE m_repoType;
-
 };
 
 #endif /* DIALOG_GIT_REPOSITORY_H_ */

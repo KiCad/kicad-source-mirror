@@ -89,17 +89,6 @@ const std::map<GRAPHIC_PINSHAPE, struct pinShapeStruct> pinShapes = {
 // clang-format on
 
 
-// bitmaps to show pins orientations in dialog editor
-// must have same order than pin_orientation_names
-static const BITMAPS iconsPinsOrientations[] =
-{
-    BITMAPS::pinorient_right,
-    BITMAPS::pinorient_left,
-    BITMAPS::pinorient_up,
-    BITMAPS::pinorient_down,
-};
-
-
 // clang-format off
 std::map<PIN_ORIENTATION, struct pinShapeStruct> pinOrientations = {
     { PIN_ORIENTATION::PIN_RIGHT, { _( "Right" ), BITMAPS::pinorient_right } },
