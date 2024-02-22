@@ -669,19 +669,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSymbol,
     }
     else
     {
-        wxString fieldName = wxEmptyString;
-        parseQuotedString( fieldName, aReader, line, &line, true ); // Optional.
-
-        if( fieldName.IsEmpty() )
-            return;
-
-        if( aSymbol->FindField( fieldName ) != nullptr )
-        {
-            SCH_PARSE_ERROR( wxString::Format( _( "Duplicate field '%s'" ), fieldName ),
-                             aReader, line );
-        }
-
-        field->m_name = fieldName;
+        parseQuotedString( field->m_name, aReader, line, &line, true );  // Optional.
     }
 }
 

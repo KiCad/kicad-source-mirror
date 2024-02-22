@@ -790,15 +790,6 @@ LIB_FIELD* SCH_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol
                            CurOffset() );
     }
 
-    if( LIB_FIELD* existingName = aSymbol->FindField( name ) )
-    {
-        if( existingName->GetId() > MANDATORY_FIELDS )
-        {
-            THROW_PARSE_ERROR( wxString::Format( _( "Duplicate field '%s'" ), name ),
-                               CurSource(), CurLine(), CurLineNumber(), CurOffset() );
-        }
-    }
-
     field->SetName( name );
 
     // Correctly set the ID based on canonical (untranslated) field name
