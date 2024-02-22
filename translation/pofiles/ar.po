@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-22 08:05+0000\n"
+"PO-Revision-Date: 2024-02-22 08:06+0000\n"
 "Last-Translator: HADJAISSA <hakimsi@yahoo.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/"
 "master-source/ar/>\n"
@@ -71,7 +71,7 @@ msgstr "تبسيط مضلعات طبقات النحاس"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1038
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "حساب النحاس المطلي"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1112
 #, c-format
