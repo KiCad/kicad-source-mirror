@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-20 20:12+0000\n"
+"PO-Revision-Date: 2024-02-23 10:02+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -9280,7 +9280,7 @@ msgstr "번호 매기기"
 #: eeschema/dialogs/dialog_annotate_base.cpp:101
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:73
 msgid "Use first free number after:"
-msgstr "해당 번호 이후의 첫 번째 빈 번호부터 사용:"
+msgstr "해당 번호 이후의 첫 번째 빈 번호를 사용:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:107
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:79
@@ -18859,9 +18859,8 @@ msgstr ""
 msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
-msgstr ""
-"먼저 TRAN 시뮬레이션을 실행해야 합니다. 그 결과는 고속 푸리에 변환에 사용됩니"
-"다."
+msgstr "TRAN 시뮬레이션을 먼저 실행해야 하며, 그 결과는 고속 푸리에 변환에 "
+"사용됩니다."
 
 #: eeschema/sim/simulator_frame.cpp:422
 msgid ""
@@ -25922,7 +25921,7 @@ msgstr "전압 강하:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:240
 msgid "Dissipated power:"
-msgstr "소비된 전력:"
+msgstr "소비 전력:"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:20
 msgid "10% / 5%"
@@ -26365,7 +26364,7 @@ msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr "긴 융합 시간으로 인해 현재 계산이 과소 평가되었습니다."
+msgstr "용단 시간이 길어 전류 계산이 과소 예측되었습니다."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
 msgid "Ambient temperature:"
@@ -26528,7 +26527,7 @@ msgstr "필요한 저항값이 잘못됨: %s"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator.cpp:156
 msgid "Not worth using"
-msgstr "사용 가치가 없음"
+msgstr "미사용"
 
 #: pcb_calculator/calculator_panels/panel_r_calculator_base.cpp:21
 msgid "Inputs"
@@ -26753,7 +26752,7 @@ msgstr "T형"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Bridged tee"
-msgstr "브릿지 T형"
+msgstr "브리지 T형"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Resistive splitter"
@@ -27147,7 +27146,7 @@ msgstr "주기:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
-msgstr "진공 속의 파장:"
+msgstr "진공 상태의 파장:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
@@ -27235,13 +27234,13 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"이 계산기를 사용하여 작은 트랙이 짧은 시간 동안 큰 전류를 처리할 수 있는지 확"
-"인할 수 있습니다.<br>\n"
+"이 계산기를 사용하여 작은 트랙이 짧은 시간 동안 큰 전류를 처리할 수 있는지 "
+"확인할 수 있습니다.<br>\n"
 "이 도구를 사용하면 트랙 퓨즈를 설계할 수 있지만 추정치로만 사용해야 합니다.\n"
 "\n"
-"계산기는 전선을 가열하는 데 필요한 에너지를 추정합니다<br>\n"
-"녹는점과 상 변화에 필요한 에너지.<br>\n"
-"그런 다음 이 에너지를 와이어 저항에 의해 소실된 에너지와 비교합니다."
+"이 계산기는 전선을 녹는점까지 가열하는 데 필요한 에너지와<br>\n"
+"위상 변화에 필요한 에너지를 추정합니다.<br>\n"
+"그런 다음 이 에너지를 전선 저항에 의해 소실되는 에너지와 비교합니다."
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
 msgid ""
@@ -27325,7 +27324,7 @@ msgstr "전기적 간격"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:173
 msgid "Fusing Current"
-msgstr "융합 전류"
+msgstr "용단 전류"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:174
 msgid "Cable Size"
@@ -27333,7 +27332,7 @@ msgstr "케이블 크기"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:176
 msgid "High Speed"
-msgstr "고속"
+msgstr "고주파"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:178
 msgid "Wavelength"
