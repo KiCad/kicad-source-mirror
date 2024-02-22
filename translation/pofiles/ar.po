@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-21 12:43+0000\n"
+"PO-Revision-Date: 2024-02-22 08:05+0000\n"
 "Last-Translator: HADJAISSA <hakimsi@yahoo.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/kicad/"
 "master-source/ar/>\n"
@@ -24,7 +24,7 @@ msgstr "جميع الملفات"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
-msgstr "تحديد حجم البورده"
+msgstr "تحديد حجم اللوحة"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:537
 msgid "Create layers"
@@ -2745,7 +2745,7 @@ msgstr ""
 
 #: common/dialogs/dialog_page_settings.cpp:113
 msgid "Title Block"
-msgstr ""
+msgstr "إطار العنوان"
 
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
@@ -6642,7 +6642,7 @@ msgstr ""
 
 #: common/layer_id.cpp:169
 msgid "Through vias"
-msgstr ""
+msgstr "عبر ثقوب موصلة"
 
 #: common/layer_id.cpp:170
 msgid "Blind/Buried vias"
@@ -6650,7 +6650,7 @@ msgstr ""
 
 #: common/layer_id.cpp:171
 msgid "Micro-vias"
-msgstr ""
+msgstr "ثقب وصلة الدقيق"
 
 #: common/layer_id.cpp:172
 msgid "Via holes"
@@ -18804,7 +18804,7 @@ msgstr ""
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1290
 msgid "Power Symbol"
-msgstr ""
+msgstr "رمز المولد"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1297
 msgid "Datasheet"
@@ -26756,7 +26756,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
 msgid "Teardrops"
-msgstr ""
+msgstr "أشكال دمعة"
 
 #: pcbnew/board_connected_item.cpp:237
 msgid "Enable Teardrops"
@@ -27876,7 +27876,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:504 pcbnew/pad.cpp:1247
 msgid "PTH"
-msgstr ""
+msgstr "ثقوب مطلية عمقًا"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:504 pcbnew/pad.cpp:1250
 msgid "NPTH"
@@ -29960,7 +29960,7 @@ msgstr ""
 #: pcbnew/footprint_libraries_utils.cpp:1205 pcbnew/pad.cpp:1248
 #: pcbnew/pad.cpp:1879
 msgid "SMD"
-msgstr ""
+msgstr "مكون ملصق صطحا"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:201
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:202
@@ -41234,7 +41234,7 @@ msgstr ""
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:278
 msgid "Loss Tangent"
-msgstr ""
+msgstr "معامل التبديد"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
 msgid "Dielectric"
