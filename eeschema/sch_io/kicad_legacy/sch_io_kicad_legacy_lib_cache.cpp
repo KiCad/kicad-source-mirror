@@ -670,7 +670,20 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
     }
     else
     {
-        parseQuotedString( field->m_name, aReader, line, &line, true );  // Optional.
+        wxString fieldName = wxEmptyString;
+        parseQuotedString( fieldName, aReader, line, &line, true ); // Optional.
+
+        if( fieldName.IsEmpty() )
+            return;
+
+        wxString candidateFieldName = fieldName;
+        int      suffix = 0;
+
+        //Deduplicate field name
+        while( aSymbol->FindField( candidateFieldName ) != nullptr )
+            candidateFieldName = wxString::Format( "%s_%d", fieldName, ++suffix );
+
+        field->m_name = candidateFieldName;
     }
 }
 
