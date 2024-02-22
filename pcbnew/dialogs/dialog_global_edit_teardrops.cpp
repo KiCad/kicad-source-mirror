@@ -146,9 +146,9 @@ private:
 DIALOG_GLOBAL_EDIT_TEARDROPS::DIALOG_GLOBAL_EDIT_TEARDROPS( PCB_EDIT_FRAME* aParent ) :
         DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( aParent ),
         m_teardropHDPercent( aParent, m_stHDRatio, m_tcHDRatio, m_stHDRatioUnits ),
-        m_teardropLenPercent( aParent, m_stLenPercentLabel, m_tcLenPercent, m_stLenPercentUnits ),
+        m_teardropLenPercent( aParent, m_stLenPercentLabel, m_tcLenPercent, nullptr ),
         m_teardropMaxLen( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
-        m_teardropHeightPercent( aParent, m_stHeightPercentLabel, m_tcHeightPercent, m_stHeightPercentUnits ),
+        m_teardropHeightPercent( aParent, m_stHeightPercentLabel, m_tcHeightPercent, nullptr ),
         m_teardropMaxHeight( aParent, m_stMaxHeight, m_tcMaxHeight, m_stMaxHeightUnits )
 {
     m_parent = aParent;

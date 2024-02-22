@@ -33,10 +33,10 @@ PANEL_SETUP_TEARDROPS::PANEL_SETUP_TEARDROPS( wxWindow* aParentWindow, PCB_EDIT_
         m_BrdSettings( &aFrame->GetBoard()->GetDesignSettings() ),
         m_teardropMaxLenRound( aFrame, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
         m_teardropMaxWidthRound( aFrame, m_stMaxWidthLabel, m_tcMaxWidth, m_stMaxWidthUnits ),
-        m_teardropMaxLenRect( aFrame, m_stMaxLen1, m_tcTdMaxLen1, m_stMaxLenUnits1 ),
-        m_teardropMaxWidthRect( aFrame, m_stMaxWidthLabel2, m_tcMaxWidth1, m_stMaxWidthUnits1 ),
-        m_teardropMaxLenT2T( aFrame, m_stMaxLen2, m_tcTdMaxLen2, m_stMaxLenUnits2 ),
-        m_teardropMaxWidthT2T( aFrame, m_stMaxWidthLabel2, m_tcMaxWidth2, m_stMaxWidthUnits2 )
+        m_teardropMaxLenRect( aFrame, m_stMaxLen1, m_tcTdMaxLen1, m_stMaxLen1Units ),
+        m_teardropMaxWidthRect( aFrame, m_stMaxWidth2Label, m_tcMaxWidth1, m_stMaxWidth1Units ),
+        m_teardropMaxLenT2T( aFrame, m_stMaxLen2, m_tcTdMaxLen2, m_stMaxLen2Units ),
+        m_teardropMaxWidthT2T( aFrame, m_stMaxWidth2Label, m_tcMaxWidth2, m_stMaxWidth2Units )
 {
     m_bitmapTeardrop->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_sizes ) );
     m_bitmapTeardrop1->SetBitmap( KiBitmapBundle( BITMAPS::teardrop_rect_sizes ) );
