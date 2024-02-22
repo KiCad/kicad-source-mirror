@@ -3783,11 +3783,18 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
 {
     ASCH_PARAMETER elem( aProperties );
 
-    // Part ID 1 is the current library part.  Part ID -1 means all parts
+    // Part ID 1 is the current library part.
+    // Part ID ALTIUM_COMPONENT_NONE(-1) means all parts
     // If a parameter is assigned to a specific element such as a pin,
     // we will need to handle it here.
     // TODO: Handle HIDDENNETNAME property (others?)
-    if( elem.ownerpartid != 1 && elem.ownerpartid != -1 )
+    if( elem.ownerpartid != 1 && elem.ownerpartid != ALTIUM_COMPONENT_NONE )
+        return;
+
+    // If ownerindex is populated, this is parameter belongs to a subelement (e.g. pin).
+    // Ignore for now.
+    // TODO: Update this when KiCad supports parameters for any object
+    if( elem.ownerindex != ALTIUM_COMPONENT_NONE )
         return;
 
     // TODO: fill in replacements from variant, sheet and project
