@@ -47,6 +47,12 @@ class PCB_LAYER_BOX_SELECTOR;
 class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 {
 	private:
+		wxStaticText* m_lengthUnitsPrefix;
+		wxStaticText* m_lengthUnitsHint;
+		wxStaticText* m_lengthUnitsSuffix;
+		wxStaticText* m_widthUnitsPrefix;
+		wxStaticText* m_widthUnitsHint;
+		wxStaticText* m_widthUnitsSuffix;
 
 	protected:
 		wxCheckBox* m_pthPads;
@@ -75,13 +81,11 @@ class DIALOG_GLOBAL_EDIT_TEARDROPS_BASE : public DIALOG_SHIM
 		wxStaticBitmap* m_bitmapTeardrop;
 		wxStaticText* m_stLenPercentLabel;
 		wxTextCtrl* m_tcLenPercent;
-		wxStaticText* m_stLenPercentUnits;
 		wxStaticText* m_stMaxLen;
 		wxTextCtrl* m_tcTdMaxLen;
 		wxStaticText* m_stMaxLenUnits;
 		wxStaticText* m_stHeightPercentLabel;
 		wxTextCtrl* m_tcHeightPercent;
-		wxStaticText* m_stHeightPercentUnits;
 		wxStaticText* m_stMaxHeight;
 		wxTextCtrl* m_tcMaxHeight;
 		wxStaticText* m_stMaxHeightUnits;
