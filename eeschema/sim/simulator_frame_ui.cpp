@@ -901,8 +901,12 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
 
             const SIM_MODEL::PARAM* portNum = item.model->FindParam( "portnum" );
 
-            if( portNum )
-                portnums.push_back( SIM_VALUE::ToSpice( portNum->value ) );
+            std::string portnum = "";
+            if( const SIM_MODEL::PARAM* portnum_param = item.model->FindParam( "portnum" ) )
+                portnum = SIM_VALUE::ToSpice( portnum_param->value );
+
+            if( portnum != "" )
+                portnums.push_back( portnum );
         }
 
         for( const std::string& portnum1 : portnums )
