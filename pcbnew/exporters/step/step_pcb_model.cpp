@@ -323,6 +323,9 @@ bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, 
 {
     bool success = true;
 
+    if( aPolyShapes->IsEmpty() )
+        return true;
+
     double z_pos = aOnTop ? m_boardThickness : -m_copperThickness;
 
     if( !MakeShapes( aTrack ? m_board_copper_tracks : m_board_copper_zones, *aPolyShapes,
