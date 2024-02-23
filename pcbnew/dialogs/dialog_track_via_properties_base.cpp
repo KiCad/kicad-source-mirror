@@ -377,7 +377,6 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_cbTeardrops = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Add teardrops on via's track connections"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	bSizerLeftCol11->Add( m_cbTeardrops, 0, wxBOTTOM|wxRIGHT, 3 );
 
-	wxCheckBox* m_cbTeardropsUseNextTrack;
 	m_cbTeardropsUseNextTrack = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Allow teardrops to span two track segments"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
 	m_cbTeardropsUseNextTrack->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
 
