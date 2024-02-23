@@ -349,7 +349,8 @@ public:
             m_min(),
             m_max(),
             m_use_minmax( false ),
-            m_scale( aScale )
+            m_scale( aScale ),
+            m_invScale( 1.0 / aScale )
     { }
 
     PARAM_SCALED( const std::string& aJsonPath, ValueType* aPtr, ValueType aDefault,
@@ -360,7 +361,8 @@ public:
             m_min( aMin ),
             m_max( aMax ),
             m_use_minmax( true ),
-            m_scale( aScale )
+            m_scale( aScale ),
+            m_invScale( 1.0 / aScale )
     { }
 
     void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
@@ -368,14 +370,14 @@ public:
         if( m_readOnly )
             return;
 
-        double dval = m_default * m_scale;
+        double dval = m_default / m_invScale;
 
         if( std::optional<double> optval = aSettings->Get<double>( m_path ) )
             dval = *optval;
         else if( !aResetIfMissing )
             return;
 
-        ValueType val = KiROUND<ValueType>( dval / m_scale );
+        ValueType val = KiROUND<double, ValueType>( dval * m_invScale );
 
         if( m_use_minmax )
         {
@@ -388,7 +390,7 @@ public:
 
     void Store( JSON_SETTINGS* aSettings) const override
     {
-        aSettings->Set<double>( m_path, *m_ptr * m_scale );
+        aSettings->Set<double>( m_path, *m_ptr / m_invScale );
     }
 
     ValueType GetDefault() const
@@ -404,7 +406,7 @@ public:
     bool MatchesFile( JSON_SETTINGS* aSettings ) const override
     {
         if( std::optional<double> optval = aSettings->Get<double>( m_path ) )
-            return *optval == ( *m_ptr * m_scale );
+            return *optval == ( *m_ptr / m_invScale );
 
         return false;
     }
@@ -416,6 +418,7 @@ private:
     ValueType  m_max;
     bool       m_use_minmax;
     double     m_scale;
+    double     m_invScale;
 };
 
 template<typename Type>
