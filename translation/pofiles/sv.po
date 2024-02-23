@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-16 14:08+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2024-02-23 23:09+0000\n"
+"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -24057,7 +24057,7 @@ msgstr "Exportera GLB (binär GLTF)"
 
 #: kicad/kicad_cli.cpp:134
 msgid "Export STEP"
-msgstr "Exportera STEG"
+msgstr "Exportera STEP"
 
 #: kicad/kicad_cli.cpp:135
 msgid "Export VRML"
@@ -40003,7 +40003,7 @@ msgstr "Exportera IDF 3D-kortrepresentation"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP..."
-msgstr "STEG..."
+msgstr "STEP..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "Export STEP 3D board representation"
