@@ -39,25 +39,25 @@
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
                                                           const PCB_SELECTION& aItems ) :
-    DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
-    m_frame( aParent ),
-    m_items( aItems ),
-    m_trackStartX( aParent, m_TrackStartXLabel, m_TrackStartXCtrl, nullptr ),
-    m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
-    m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, nullptr ),
-    m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
-    m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit ),
-    m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, nullptr ),
-    m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
-    m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit ),
-    m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit ),
-    m_teardropHDPercent( aParent, m_stHDRatio, m_tcHDRatio, m_stHDRatioUnits ),
-    m_teardropLenPercent( aParent, m_stLenPercentLabel, m_tcLenPercent, m_stLenPercentUnits ),
-    m_teardropMaxLen( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
-    m_teardropHeightPercent( aParent, m_stHeightPercentLabel, m_tcHeightPercent, m_stHeightPercentUnits ),
-    m_teardropMaxHeight( aParent, m_stMaxHeight, m_tcMaxHeight, m_stMaxHeightUnits ),
-    m_tracks( false ),
-    m_vias( false )
+        DIALOG_TRACK_VIA_PROPERTIES_BASE( aParent ),
+        m_frame( aParent ),
+        m_items( aItems ),
+        m_trackStartX( aParent, m_TrackStartXLabel, m_TrackStartXCtrl, nullptr ),
+        m_trackStartY( aParent, m_TrackStartYLabel, m_TrackStartYCtrl, m_TrackStartYUnit ),
+        m_trackEndX( aParent, m_TrackEndXLabel, m_TrackEndXCtrl, nullptr ),
+        m_trackEndY( aParent, m_TrackEndYLabel, m_TrackEndYCtrl, m_TrackEndYUnit ),
+        m_trackWidth( aParent, m_TrackWidthLabel, m_TrackWidthCtrl, m_TrackWidthUnit ),
+        m_viaX( aParent, m_ViaXLabel, m_ViaXCtrl, nullptr ),
+        m_viaY( aParent, m_ViaYLabel, m_ViaYCtrl, m_ViaYUnit ),
+        m_viaDiameter( aParent, m_ViaDiameterLabel, m_ViaDiameterCtrl, m_ViaDiameterUnit ),
+        m_viaDrill( aParent, m_ViaDrillLabel, m_ViaDrillCtrl, m_ViaDrillUnit ),
+        m_teardropHDPercent( aParent, m_stHDRatio, m_tcHDRatio, m_stHDRatioUnits ),
+        m_teardropLenPercent( aParent, m_stLenPercentLabel, m_tcLenPercent, nullptr ),
+        m_teardropMaxLen( aParent, m_stMaxLen, m_tcTdMaxLen, m_stMaxLenUnits ),
+        m_teardropWidthPercent( aParent, m_stWidthPercentLabel, m_tcWidthPercent, nullptr ),
+        m_teardropMaxWidth( aParent, m_stMaxWidthLabel, m_tcMaxWidth, m_stMaxWidthUnits ),
+        m_tracks( false ),
+        m_vias( false )
 {
     m_useCalculatedSize = true;
 
@@ -70,7 +70,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     m_teardropHDPercent.SetUnits( EDA_UNITS::PERCENT );
     m_teardropLenPercent.SetUnits( EDA_UNITS::PERCENT );
-    m_teardropHeightPercent.SetUnits( EDA_UNITS::PERCENT );
+    m_teardropWidthPercent.SetUnits( EDA_UNITS::PERCENT );
 
     m_minTrackWidthHint->SetFont( KIUI::GetInfoFont( this ).Italic() );
 
@@ -216,9 +216,9 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     m_cbTeardrops->SetValue( v->GetTeardropParams().m_Enabled );
                     m_cbTeardropsUseNextTrack->SetValue( v->GetTeardropParams().m_AllowUseTwoTracks );
                     m_teardropMaxLen.SetValue( v->GetTeardropParams().m_TdMaxLen );
-                    m_teardropMaxHeight.SetValue( v->GetTeardropParams().m_TdMaxWidth );
+                    m_teardropMaxWidth.SetValue( v->GetTeardropParams().m_TdMaxWidth );
                     m_teardropLenPercent.SetDoubleValue( v->GetTeardropParams().m_BestLengthRatio*100.0 );
-                    m_teardropHeightPercent.SetDoubleValue( v->GetTeardropParams().m_BestWidthRatio*100.0 );
+                    m_teardropWidthPercent.SetDoubleValue( v->GetTeardropParams().m_BestWidthRatio*100.0 );
                     m_teardropHDPercent.SetDoubleValue( v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 );
                     m_curvedEdges->SetValue( v->GetTeardropParams().IsCurved() );
                     m_curvePointsCtrl->SetValue( v->GetTeardropParams().m_CurveSegCount );
@@ -266,14 +266,14 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
                     if( m_teardropMaxLen.GetValue() != v->GetTeardropParams().m_TdMaxLen )
                         m_teardropMaxLen.SetValue( INDETERMINATE_STATE );
 
-                    if( m_teardropMaxHeight.GetValue() != v->GetTeardropParams().m_TdMaxWidth )
-                        m_teardropMaxHeight.SetValue( INDETERMINATE_STATE );
+                    if( m_teardropMaxWidth.GetValue() != v->GetTeardropParams().m_TdMaxWidth )
+                        m_teardropMaxWidth.SetValue( INDETERMINATE_STATE );
 
                     if( m_teardropLenPercent.GetDoubleValue() != v->GetTeardropParams().m_BestLengthRatio *100.0 )
                         m_teardropLenPercent.SetValue( INDETERMINATE_STATE );
 
-                    if( m_teardropHeightPercent.GetDoubleValue() != v->GetTeardropParams().m_BestWidthRatio *100.0 )
-                        m_teardropHeightPercent.SetValue( INDETERMINATE_STATE );
+                    if( m_teardropWidthPercent.GetDoubleValue() != v->GetTeardropParams().m_BestWidthRatio *100.0 )
+                        m_teardropWidthPercent.SetValue( INDETERMINATE_STATE );
 
                     if( m_teardropHDPercent.GetDoubleValue() != v->GetTeardropParams().m_WidthtoSizeFilterRatio*100.0 )
                         m_teardropHDPercent.SetValue( INDETERMINATE_STATE );
@@ -764,14 +764,15 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 if( !m_teardropMaxLen.IsIndeterminate() )
                     targetParams->m_TdMaxLen = m_teardropMaxLen.GetIntValue();
 
-                if( !m_teardropMaxHeight.IsIndeterminate() )
-                    targetParams->m_TdMaxWidth = m_teardropMaxHeight.GetIntValue();
+                if( !m_teardropMaxWidth.IsIndeterminate() )
+                    targetParams->m_TdMaxWidth = m_teardropMaxWidth.GetIntValue();
 
                 if( !m_teardropLenPercent.IsIndeterminate() )
                     targetParams->m_BestLengthRatio = m_teardropLenPercent.GetDoubleValue() / 100.0;
 
-                if( !m_teardropHeightPercent.IsIndeterminate() )
-                    targetParams->m_BestWidthRatio = m_teardropHeightPercent.GetDoubleValue() / 100.0;
+                if( !m_teardropWidthPercent.IsIndeterminate() )
+                    targetParams->m_BestWidthRatio =
+                            m_teardropWidthPercent.GetDoubleValue() / 100.0;
 
                 if( !m_teardropHDPercent.IsIndeterminate() )
                     targetParams->m_WidthtoSizeFilterRatio = m_teardropHDPercent.GetDoubleValue() / 100.0;

@@ -144,7 +144,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	bSizerLeftCol11->Add( m_cbPreferZoneConnection, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbTeardropsUseNextTrack = new wxCheckBox( sbAction->GetStaticBox(), wxID_ANY, _("Allow teardrops to span two track segments"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
-	m_cbTeardropsUseNextTrack->SetToolTip( _("Allows a teardrop to spread over 2 tracks if the first track segment is too short") );
+	m_cbTeardropsUseNextTrack->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
 
 	bSizerLeftCol11->Add( m_cbTeardropsUseNextTrack, 0, wxBOTTOM|wxRIGHT, 5 );
 

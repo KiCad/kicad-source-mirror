@@ -193,6 +193,8 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	m_cbTeardropsUseNextTrack = new wxCheckBox( this, wxID_ANY, _("Allow teardrop to span two track segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTeardropsUseNextTrack->SetValue(true);
+	m_cbTeardropsUseNextTrack->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
+
 	gbSizer->Add( m_cbTeardropsUseNextTrack, wxGBPosition( 6, 2 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
@@ -381,6 +383,8 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	m_cbTeardropsUseNextTrack1 = new wxCheckBox( this, wxID_ANY, _("Allow teardrop to span two track segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTeardropsUseNextTrack1->SetValue(true);
+	m_cbTeardropsUseNextTrack1->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
+
 	gbSizer1->Add( m_cbTeardropsUseNextTrack1, wxGBPosition( 6, 2 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
@@ -564,6 +568,8 @@ PANEL_SETUP_TEARDROPS_BASE::PANEL_SETUP_TEARDROPS_BASE( wxWindow* parent, wxWind
 
 	m_cbTeardropsUseNextTrack2 = new wxCheckBox( this, wxID_ANY, _("Allow teardrop to span two track segments"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbTeardropsUseNextTrack2->SetValue(true);
+	m_cbTeardropsUseNextTrack2->SetToolTip( _("Allows a teardrop to extend over the first 2 connected track segments if the first track segment is too short to accommodate the best length.") );
+
 	gbSizer2->Add( m_cbTeardropsUseNextTrack2, wxGBPosition( 6, 2 ), wxGBSpan( 1, 5 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
