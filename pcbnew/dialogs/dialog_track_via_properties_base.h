@@ -110,6 +110,7 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText85;
 		wxStaticText* m_staticText851;
 		wxCheckBox* m_cbTeardrops;
+		wxCheckBox* m_cbTeardropsUseNextTrack;
 		wxStaticText* m_stHDRatio;
 		wxTextCtrl* m_tcHDRatio;
 		wxStaticText* m_stHDRatioUnits;
