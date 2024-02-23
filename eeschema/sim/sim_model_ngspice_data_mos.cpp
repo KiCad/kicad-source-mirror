@@ -30,9 +30,9 @@ void NGSPICE_MODEL_INFO_MAP::addMOS()
     modelInfos[MODEL_TYPE::VDMOS] = { "VDMOS", "NCHAN", "PCHAN", { "D", "G", "S", "<TJ>", "<TCASE>" }, "DMOS model based on Level 1 MOSFET model", {}, {} };
     // Model parameters
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "type", 116, SIM_MODEL::PARAM::DIR_OUT, SIM_VALUE::TYPE_STRING, "", SIM_MODEL::PARAM::CATEGORY::DC, "vdmosn", "vdmosp", "N-channel or P-channel MOS" );
-    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "vto", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Threshold voltage" );
+    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "vto", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "3", "-3", "Threshold voltage" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "vth0", 101, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::SUPERFLUOUS, "0", "0", "n.a." );
-    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "kp", 102, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "A/V^2", SIM_MODEL::PARAM::CATEGORY::DC, "1", "1", "Transconductance parameter" );
+    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "kp", 102, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "A/V^2", SIM_MODEL::PARAM::CATEGORY::DC, "35", "15", "Transconductance parameter" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "phi", 103, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "0.6", "0.6", "Surface potential" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "lambda", 104, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "1/V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Channel length modulation" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "theta", 105, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "1/V", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Vgs dependence on mobility" );
@@ -77,13 +77,13 @@ void NGSPICE_MODEL_INFO_MAP::addMOS()
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "xti", 138, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "3", "3", "Body diode saturation current temperature exponent" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "is_", 126, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "A", SIM_MODEL::PARAM::CATEGORY::DC, "1e-14", "1e-14", "Body diode saturation current" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "vj", 127, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "V", SIM_MODEL::PARAM::CATEGORY::DC, "0.8", "0.8", "Body diode junction potential" );
-    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cjo", 128, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Zero-bias body diode junction capacitance" );
+    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cjo", 128, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "5e-10", "5e-10", "Zero-bias body diode junction capacitance" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "m_", 129, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "", SIM_MODEL::PARAM::CATEGORY::DC, "0.5", "0.5", "Body diode grading coefficient" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "fc", 130, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "0.5", "0.5", "Body diode coefficient for forward-bias depletion capacitance formula" );
-    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cgdmin", 118, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Minimum non-linear G-D capacitance" );
-    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cgdmax", 119, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Maximum non-linear G-D capacitance" );
+    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cgdmin", 118, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "2e-11", "2e-11", "Minimum non-linear G-D capacitance" );
+    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cgdmax", 119, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "2e-9", "2e-9", "Maximum non-linear G-D capacitance" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "a", 120, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "1", "1", "Non-linear Cgd capacitance parameter" );
-    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cgs_", 121, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "0", "0", "Gate-source capacitance" );
+    modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cgs_", 121, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "1.4e-9", "1.4e-9", "Gate-source capacitance" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "rthjc", 142, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "ohm", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "1", "1", "Self-heating thermal resistance, junction-to-case" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "rthca", 143, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "ohm", SIM_MODEL::PARAM::CATEGORY::TEMPERATURE, "1000", "1000", "Self-heating thermal resistance, case-to-ambient" );
     modelInfos[MODEL_TYPE::VDMOS].modelParams.emplace_back( "cthj", 144, SIM_MODEL::PARAM::DIR_INOUT, SIM_VALUE::TYPE_FLOAT, "F", SIM_MODEL::PARAM::CATEGORY::DC, "1e-05", "1e-05", "Self-heating thermal capacitance" );
