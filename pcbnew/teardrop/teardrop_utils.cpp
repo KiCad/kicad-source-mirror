@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2021 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -555,8 +555,9 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
     int actualTdLen;
     bool need_swap = false;     // true if the start and end points of the current track are swapped
 
-    // ensure that start is at the via/pad end
-    if( SEG( end, aOtherPos ).Length() < radius )
+    // aTrack is expected to have one end inside the via/pad and the other end outside
+    // so ensure the start point is inside the via/pad
+    if( !aOther->HitTest( start, 0 ) )
     {
         std::swap( start, end );
         need_swap = true;
@@ -580,7 +581,20 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
     // Search the intersection point between the pad/via shape and the current track
     // This this the starting point to define the teardrop length
     SHAPE_LINE_CHAIN::INTERSECTIONS pts;
-    int pt_count = outline.Intersect( SEG( start, end ), pts );
+    int pt_count;
+
+    if( aTrack->Type() == PCB_ARC_T )
+    {
+        // To find the starting point we convert the arc to a polyline
+        // and compute the intersection point with the pad/via shape
+        SHAPE_ARC arc( aTrack->GetStart(), static_cast<PCB_ARC*>( aTrack )->GetMid(),
+                       aTrack->GetEnd(), aTrack->GetWidth() );
+
+        SHAPE_LINE_CHAIN poly = arc.ConvertToPolyline();
+        pt_count = outline.Intersect( poly, pts );
+    }
+    else
+        pt_count = outline.Intersect( SEG( start, end ), pts );
 
     // Ensure a intersection point was found, otherwise we cannot built the teardrop
     // using this track (it is fully outside or inside the pad/via shape)
@@ -636,7 +650,7 @@ bool TEARDROP_MANAGER::findAnchorPointsOnTrack( const TEARDROP_PARAMETERS& aPara
     if( aTrack->Type() == PCB_ARC_T )
     {
         // To find the best start and end points to build the teardrop shape, we convert
-        // the arc to segments, and search for the segment havig its start point at a dist
+        // the arc to segments, and search for the segment having its start point at a dist
         // < actualTdLen, and its end point at adist > actualTdLen:
         SHAPE_ARC arc( aTrack->GetStart(), static_cast<PCB_ARC*>( aTrack )->GetMid(),
                        aTrack->GetEnd(), aTrack->GetWidth() );
