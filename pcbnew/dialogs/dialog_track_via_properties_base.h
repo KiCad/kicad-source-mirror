@@ -45,6 +45,12 @@ class PCB_LAYER_BOX_SELECTOR;
 class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 {
 	private:
+		wxStaticText* m_stLenPercentUnits;
+		wxStaticText* m_stLenPercentHint;
+		wxStaticText* m_stLenPercentSuffix;
+		wxStaticText* m_stWidthPercentUnits;
+		wxStaticText* m_stWidthPercentHint;
+		wxStaticText* m_stWidthPercentSuffix;
 
 	protected:
 		wxBoxSizer* m_MainSizer;
@@ -104,7 +110,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText85;
 		wxStaticText* m_staticText851;
 		wxCheckBox* m_cbTeardrops;
-		wxCheckBox* m_cbTeardropsUseNextTrack;
 		wxStaticText* m_stHDRatio;
 		wxTextCtrl* m_tcHDRatio;
 		wxStaticText* m_stHDRatioUnits;
@@ -112,16 +117,14 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticBitmap* m_bitmapTeardrop;
 		wxStaticText* m_stLenPercentLabel;
 		wxTextCtrl* m_tcLenPercent;
-		wxStaticText* m_stLenPercentUnits;
 		wxStaticText* m_stMaxLen;
 		wxTextCtrl* m_tcTdMaxLen;
 		wxStaticText* m_stMaxLenUnits;
-		wxStaticText* m_stHeightPercentLabel;
-		wxTextCtrl* m_tcHeightPercent;
-		wxStaticText* m_stHeightPercentUnits;
-		wxStaticText* m_stMaxHeight;
-		wxTextCtrl* m_tcMaxHeight;
-		wxStaticText* m_stMaxHeightUnits;
+		wxStaticText* m_stWidthPercentLabel;
+		wxTextCtrl* m_tcWidthPercent;
+		wxStaticText* m_stMaxWidthLabel;
+		wxTextCtrl* m_tcMaxWidth;
+		wxStaticText* m_stMaxWidthUnits;
 		wxCheckBox* m_curvedEdges;
 		wxStaticText* m_curvePointsLabel;
 		wxSpinCtrl* m_curvePointsCtrl;
