@@ -2151,8 +2151,6 @@ void SHAPE_LINE_CHAIN::Split( const VECTOR2I& aStart, const VECTOR2I& aEnd, SHAP
 {
     VECTOR2I cp( aEnd );
 
-    wxASSERT( cp != aStart );
-
     VECTOR2I n = NearestPoint( cp, false );
     VECTOR2I m = NearestPoint( aStart, false );
 

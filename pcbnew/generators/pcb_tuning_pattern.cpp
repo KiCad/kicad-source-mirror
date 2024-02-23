@@ -790,7 +790,6 @@ static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhe
                                       const SHAPE_LINE_CHAIN& aBaseline = SHAPE_LINE_CHAIN() )
 {
     int  maxSlopRadius = aRouter->Sizes().Clearance() + aRouter->Sizes().TrackWidth() / 2;
-    bool checkBaseline = aBaseline.SegmentCount() > 0;
 
     static const int  candidateCount = 2;
     PNS::LINKED_ITEM* prioritized[candidateCount];
@@ -832,9 +831,15 @@ static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhe
                 if( d0 > dist[1] )
                     continue;
 
-                if( checkBaseline )
+                if( aBaseline.PointCount() > 0 )
                 {
-                    SEG::ecoord dcBaseline = aBaseline.SquaredDistance( pnsArc->Arc().GetArcMid() );
+                    SEG::ecoord dcBaseline;
+                    VECTOR2I    target = pnsArc->Arc().GetArcMid();
+
+                    if( aBaseline.SegmentCount() > 0 )
+                        dcBaseline = aBaseline.SquaredDistance( target );
+                    else
+                        dcBaseline = ( aBaseline.CPoint( 0 ) - target ).SquaredEuclideanNorm();
 
                     if( dcBaseline > distBaseline[1] )
                         continue;
@@ -856,9 +861,15 @@ static PNS::LINKED_ITEM* pickSegment( PNS::ROUTER* aRouter, const VECTOR2I& aWhe
                 if( dd > dist[1] )
                     continue;
 
-                if( checkBaseline )
+                if( aBaseline.PointCount() > 0 )
                 {
-                    SEG::ecoord dcBaseline = aBaseline.SquaredDistance( segm->Shape()->Centre() );
+                    SEG::ecoord dcBaseline;
+                    VECTOR2I    target = segm->Shape()->Centre();
+
+                    if( aBaseline.SegmentCount() > 0 )
+                        dcBaseline = aBaseline.SquaredDistance( target );
+                    else
+                        dcBaseline = ( aBaseline.CPoint( 0 ) - target ).SquaredEuclideanNorm();
 
                     if( dcBaseline > distBaseline[1] )
                         continue;
@@ -935,7 +946,7 @@ bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* 
     wxASSERT( startItem );
     wxASSERT( endItem );
 
-    if( !startItem || !endItem || startSnapPoint == endSnapPoint )
+    if( !startItem || !endItem )
         return false;
 
     PNS::LINE               line = world->AssembleLine( startItem );
@@ -943,8 +954,8 @@ bool PCB_TUNING_PATTERN::initBaseLine( PNS::ROUTER* aRouter, int aLayer, BOARD* 
 
     wxASSERT( line.ContainsLink( endItem ) );
 
-    wxASSERT( chain.PointOnEdge( startSnapPoint, 1 ) );
-    wxASSERT( chain.PointOnEdge( endSnapPoint, 1 ) );
+    wxASSERT( chain.PointOnEdge( startSnapPoint, 40000 ) );
+    wxASSERT( chain.PointOnEdge( endSnapPoint, 40000 ) );
 
     SHAPE_LINE_CHAIN pre;
     SHAPE_LINE_CHAIN mid;
@@ -2262,10 +2273,34 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 if( collector.GetCount() > 1 )
                     selectionTool->GuessSelectionCandidates( collector, cursorPos );
 
-                if( collector.GetCount() == 1 )
-                    m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( collector[0] );
-                else
-                    m_pickerItem = nullptr;
+                m_pickerItem = nullptr;
+
+                if( collector.GetCount() > 0 )
+                {
+                    double min_dist_sq = std::numeric_limits<double>().max();
+
+                    for( EDA_ITEM* candidate : collector )
+                    {
+                        VECTOR2I candidatePos;
+
+                        if( candidate->Type() == PCB_TRACE_T )
+                        {
+                            candidatePos = static_cast<PCB_TRACK*>( candidate )->GetCenter();
+                        }
+                        else if( candidate->Type() == PCB_ARC_T )
+                        {
+                            candidatePos = static_cast<PCB_ARC*>( candidate )->GetMid();
+                        }
+
+                        double dist_sq = ( cursorPos - candidatePos ).SquaredEuclideanNorm();
+
+                        if( dist_sq < min_dist_sq )
+                        {
+                            min_dist_sq = dist_sq;
+                            m_pickerItem = static_cast<BOARD_CONNECTED_ITEM*>( candidate );
+                        }
+                    }
+                }
 
                 updateHoverStatus();
             }
@@ -2283,26 +2318,34 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
             {
                 // First click; create a tuning pattern
 
-                m_preview.FreeItems();
-
-                m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
-                m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
-                                                                 m_pickerItem, mode );
-
-                int      dummyDist;
-                int      dummyClearance = std::numeric_limits<int>::max() / 2;
-                VECTOR2I closestPt;
-
-                // With an artificially-large clearance this can't *not* collide, but the
-                // if stmt keeps Coverity happy....
-                if( m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
-                                                                &dummyDist, &closestPt ) )
+                if( dynamic_cast<PCB_TUNING_PATTERN*>( m_pickerItem->GetParentGroup() ) )
                 {
-                    m_tuningPattern->SetPosition( closestPt );
-                    m_tuningPattern->SetEnd( closestPt );
+                    m_frame->ShowInfoBarWarning(
+                            _( "Unable to tune segments inside other tuning patterns." ) );
                 }
+                else
+                {
+                    m_preview.FreeItems();
 
-                m_preview.Add( m_tuningPattern->Clone() );
+                    m_frame->SetActiveLayer( m_pickerItem->GetLayer() );
+                    m_tuningPattern = PCB_TUNING_PATTERN::CreateNew( generatorTool, m_frame,
+                                                                     m_pickerItem, mode );
+
+                    int      dummyDist;
+                    int      dummyClearance = std::numeric_limits<int>::max() / 2;
+                    VECTOR2I closestPt;
+
+                    // With an artificially-large clearance this can't *not* collide, but the
+                    // if stmt keeps Coverity happy....
+                    if( m_pickerItem->GetEffectiveShape()->Collide( cursorPos, dummyClearance,
+                                                                    &dummyDist, &closestPt ) )
+                    {
+                        m_tuningPattern->SetPosition( closestPt );
+                        m_tuningPattern->SetEnd( closestPt );
+                    }
+
+                    m_preview.Add( m_tuningPattern->Clone() );
+                }
             }
             else if( m_pickerItem && m_tuningPattern )
             {
