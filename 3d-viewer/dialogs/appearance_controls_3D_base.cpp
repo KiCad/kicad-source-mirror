@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -25,10 +25,13 @@ APPEARANCE_CONTROLS_3D_BASE::APPEARANCE_CONTROLS_3D_BASE( wxWindow* parent, wxWi
 	m_panelLayers->SetSizer( m_panelLayersSizer );
 	m_panelLayers->Layout();
 	m_panelLayersSizer->Fit( m_panelLayers );
-	m_sizerOuter->Add( m_panelLayers, 1, wxEXPAND|wxBOTTOM, 5 );
+	m_sizerOuter->Add( m_panelLayers, 1, wxEXPAND, 5 );
 
 	wxBoxSizer* bBottomMargin;
 	bBottomMargin = new wxBoxSizer( wxVERTICAL );
+
+	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bBottomMargin->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM, 3 );
 
 	wxBoxSizer* bPresets;
 	bPresets = new wxBoxSizer( wxVERTICAL );
@@ -44,7 +47,7 @@ APPEARANCE_CONTROLS_3D_BASE::APPEARANCE_CONTROLS_3D_BASE( wxWindow* parent, wxWi
 	bPresets->Add( m_cbLayerPresets, 0, wxALL|wxEXPAND, 2 );
 
 
-	bBottomMargin->Add( bPresets, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bBottomMargin->Add( bPresets, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bBottomMargin->Add( 0, 2, 0, wxEXPAND, 5 );

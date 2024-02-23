@@ -589,13 +589,18 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
 {
     std::map<int, COLOR4D> colors;
 
-    if( m_Cfg->m_CurrentPreset == FOLLOW_PCB || m_Cfg->m_CurrentPreset == FOLLOW_PLOT_SETTINGS )
+    if( LAYER_PRESET_3D* preset = m_Cfg->FindPreset( m_Cfg->m_CurrentPreset ) )
     {
-        colors = GetDefaultColors();
+        colors = preset->colors;
+    }
+    else
+    {
+        for( const auto& [ layer, color ] : GetDefaultColors() )
+            colors[ layer ] = color;
+    }
 
-        if( !m_board )
-            return colors;
-
+    if( m_Cfg->m_UseStackupColors && m_board )
+    {
         const BOARD_STACKUP& stackup = m_board->GetDesignSettings().GetStackupDescriptor();
         KIGFX::COLOR4D       bodyColor( 0, 0, 0, 0 );
 
@@ -683,26 +688,6 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
         {
             colors[ LAYER_3D_COPPER_TOP ] = findColor( wxT( "Silver" ), g_FinishColors );
         }
-
-        SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-        PCBNEW_SETTINGS*  pcbnewSettings = mgr.GetAppSettings<PCBNEW_SETTINGS>();
-        COLOR_SETTINGS*   pcbnewColors = mgr.GetColorSettings( pcbnewSettings->m_ColorTheme );
-
-        colors[ LAYER_3D_USER_DRAWINGS ] = pcbnewColors->GetColor( Dwgs_User );
-        colors[ LAYER_3D_USER_COMMENTS ] = pcbnewColors->GetColor( Cmts_User );
-        colors[ LAYER_3D_USER_ECO1 ]     = pcbnewColors->GetColor( Eco1_User );
-        colors[ LAYER_3D_USER_ECO2 ]     = pcbnewColors->GetColor( Eco2_User );
-    }
-    else if( LAYER_PRESET_3D* preset = m_Cfg->FindPreset( m_Cfg->m_CurrentPreset ) )
-    {
-        return preset->colors;
-    }
-    else
-    {
-        COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
-
-        for( const auto& [ layer, color ] : GetDefaultColors() )
-            colors[ layer ] = settings->GetColor( layer );
     }
 
     colors[ LAYER_3D_COPPER_BOTTOM ] = colors[ LAYER_3D_COPPER_TOP ];
@@ -855,6 +840,42 @@ std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetVisibleLayers() const
         ret.set( LAYER_FP_VALUES,            m_Cfg->m_Render.show_fp_values );
         ret.set( LAYER_FP_TEXT,              m_Cfg->m_Render.show_fp_text );
     }
+
+    return ret;
+}
+
+
+std::bitset<LAYER_3D_END> BOARD_ADAPTER::GetDefaultVisibleLayers() const
+{
+    std::bitset<LAYER_3D_END> ret;
+
+    ret.set( LAYER_3D_BOARD,             true );
+    ret.set( LAYER_3D_COPPER_TOP,        true );
+    ret.set( LAYER_3D_COPPER_BOTTOM,     true );
+    ret.set( LAYER_3D_SILKSCREEN_TOP,    true );
+    ret.set( LAYER_3D_SILKSCREEN_BOTTOM, true );
+    ret.set( LAYER_3D_SOLDERMASK_TOP,    true );
+    ret.set( LAYER_3D_SOLDERMASK_BOTTOM, true );
+    ret.set( LAYER_3D_SOLDERPASTE,       true );
+    ret.set( LAYER_3D_ADHESIVE,          true );
+    ret.set( LAYER_3D_USER_COMMENTS,     false );
+    ret.set( LAYER_3D_USER_DRAWINGS,     false );
+    ret.set( LAYER_3D_USER_ECO1,         false );
+    ret.set( LAYER_3D_USER_ECO2,         false );
+
+    ret.set( LAYER_FP_REFERENCES,        true );
+    ret.set( LAYER_FP_VALUES,            true );
+    ret.set( LAYER_FP_TEXT,              true );
+
+    ret.set( LAYER_3D_TH_MODELS,         true );
+    ret.set( LAYER_3D_SMD_MODELS,        true );
+    ret.set( LAYER_3D_VIRTUAL_MODELS,    true );
+    ret.set( LAYER_3D_MODELS_NOT_IN_POS, false );
+    ret.set( LAYER_3D_MODELS_MARKED_DNP, false );
+
+    ret.set( LAYER_3D_BOUNDING_BOXES,    false );
+    ret.set( LAYER_3D_OFF_BOARD_SILK,    false );
+    ret.set( LAYER_3D_AXES,              true );
 
     return ret;
 }

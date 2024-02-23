@@ -169,6 +169,7 @@ public:
     RENDER_SETTINGS m_Render;
     CAMERA_SETTINGS m_Camera;
 
+    bool                         m_UseStackupColors;
     std::vector<LAYER_PRESET_3D> m_LayerPresets;
     wxString                     m_CurrentPreset;
 
