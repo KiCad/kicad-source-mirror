@@ -112,6 +112,7 @@ public:
     void SetLayerColors( const std::map<int, COLOR4D>& aColors );
 
     std::bitset<LAYER_3D_END> GetVisibleLayers() const;
+    std::bitset<LAYER_3D_END> GetDefaultVisibleLayers() const;
     void SetVisibleLayers( const std::bitset<LAYER_3D_END>& aLayers );
 
     /**

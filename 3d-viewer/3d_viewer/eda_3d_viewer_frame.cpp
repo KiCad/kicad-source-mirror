@@ -587,17 +587,16 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
         {
             wxString legacyColorsPresetName = _( "legacy colors" );
 
+            cfg->m_UseStackupColors = false;
+
             if( !cfg->FindPreset( legacyColorsPresetName ) )
             {
                 cfg->m_LayerPresets.emplace_back( legacyColorsPresetName,
-                                                  GetAdapter().GetVisibleLayers(),
-                                                  GetAdapter().GetLayerColors() );
+                                                  GetAdapter().GetDefaultVisibleLayers(),
+                                                  GetAdapter().GetDefaultColors() );
             }
 
-            if( Pgm().GetSettingsManager().GetColorSettings()->GetUseBoardStackupColors() )
-                cfg->m_CurrentPreset = FOLLOW_PCB;
-            else
-                cfg->m_CurrentPreset = legacyColorsPresetName;
+            cfg->m_CurrentPreset = wxEmptyString;
         }
 
         m_boardAdapter.InitSettings( nullptr, nullptr );

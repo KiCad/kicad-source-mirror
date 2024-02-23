@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,6 +20,7 @@
 #include <wx/string.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/choice.h>
 
@@ -38,6 +39,7 @@ class APPEARANCE_CONTROLS_3D_BASE : public WX_PANEL
 		wxPanel* m_panelLayers;
 		wxBoxSizer* m_panelLayersSizer;
 		wxScrolledCanvas* m_windowLayers;
+		wxStaticLine* m_staticline1;
 		wxStaticText* m_presetsLabel;
 		wxChoice* m_cbLayerPresets;
 		wxStaticText* m_viewportsLabel;

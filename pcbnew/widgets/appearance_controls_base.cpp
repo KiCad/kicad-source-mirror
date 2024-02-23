@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -160,7 +160,7 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 
 	m_presetsLabel = new wxStaticText( this, wxID_ANY, _("Presets (Ctrl+Tab):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_presetsLabel->Wrap( -1 );
-	bPresets->Add( m_presetsLabel, 1, wxRIGHT|wxLEFT, 2 );
+	bPresets->Add( m_presetsLabel, 1, wxTOP|wxRIGHT|wxLEFT, 2 );
 
 	wxString m_cbLayerPresetsChoices[] = { _("All Layers"), _("(unsaved)") };
 	int m_cbLayerPresetsNChoices = sizeof( m_cbLayerPresetsChoices ) / sizeof( wxString );
@@ -188,10 +188,10 @@ APPEARANCE_CONTROLS_BASE::APPEARANCE_CONTROLS_BASE( wxWindow* parent, wxWindowID
 	bViewports->Add( m_cbViewports, 0, wxALL|wxEXPAND, 2 );
 
 
-	bBottomMargin->Add( bViewports, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bBottomMargin->Add( bViewports, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	m_sizerOuter->Add( bBottomMargin, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
+	m_sizerOuter->Add( bBottomMargin, 0, wxEXPAND|wxTOP|wxBOTTOM, 4 );
 
 
 	this->SetSizer( m_sizerOuter );

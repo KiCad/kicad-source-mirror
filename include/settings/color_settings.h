@@ -78,9 +78,6 @@ public:
     bool GetOverrideSchItemColors() const { return m_overrideSchItemColors; }
     void SetOverrideSchItemColors( bool aFlag ) { m_overrideSchItemColors = aFlag; }
 
-    bool GetUseBoardStackupColors() const { return m_useBoardStackupColors; }
-    void SetUseBoardStackupColors( bool aFlag ) { m_useBoardStackupColors = aFlag; }
-
     /**
      * Constructs and returns a list of color settings objects based on the built-in color themes.
      * These color settings are not backed by a file and cannot be modified by the user.
@@ -99,10 +96,9 @@ private:
 
     void initFromOther( const COLOR_SETTINGS& aOther );
 
+private:
     wxString m_displayName;
-
     bool     m_overrideSchItemColors;
-    bool     m_useBoardStackupColors;
 
     /**
      * Map of all layer colors.

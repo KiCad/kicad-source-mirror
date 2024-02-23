@@ -41,6 +41,7 @@
 #include <wx/bmpbuttn.h>
 #include <wx/sizer.h>
 #include <wx/textdlg.h>
+#include <wx/checkbox.h>
 
 #include <../3d_rendering/opengl/render_3d_opengl.h>
 
@@ -112,6 +113,24 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
     m_presetsLabel->SetFont( infoFont );
     m_viewportsLabel->SetFont( infoFont );
 
+    // Create display options
+    m_cbUseBoardStackupColors = new wxCheckBox( m_panelLayers, wxID_ANY,
+                                                _( "Use board stackup colors" ) );
+    m_cbUseBoardStackupColors->SetFont( infoFont );
+
+    m_cbUseBoardStackupColors->Bind( wxEVT_CHECKBOX,
+            [this]( wxCommandEvent& aEvent )
+            {
+                EDA_3D_VIEWER_SETTINGS* cfg = m_frame->GetAdapter().m_Cfg;
+                cfg->m_UseStackupColors = aEvent.IsChecked();
+
+                UpdateLayerCtls();
+                syncLayerPresetSelection();
+                m_frame->NewDisplay( true );
+            } );
+
+    m_panelLayersSizer->Add( m_cbUseBoardStackupColors, 0, wxEXPAND | wxTOP | wxLEFT | wxRIGHT, 7 );
+
     m_cbLayerPresets->SetToolTip( wxString::Format( _( "Save and restore color and visibility "
                                                        "combinations.\n"
                                                        "Use %s+Tab to activate selector.\n"
@@ -176,7 +195,9 @@ void APPEARANCE_CONTROLS_3D::OnSize( wxSizeEvent& aEvent )
 void APPEARANCE_CONTROLS_3D::OnLanguageChanged()
 {
     Freeze();
+
     rebuildLayers();
+    m_cbUseBoardStackupColors->SetLabel( _( "Use board stackup colors" ) );
     rebuildLayerPresetsWidget();
     rebuildViewportsWidget();
 
@@ -209,6 +230,9 @@ void APPEARANCE_CONTROLS_3D::OnDarkModeToggle()
 void APPEARANCE_CONTROLS_3D::CommonSettingsChanged()
 {
     OnLanguageChanged();
+
+    UpdateLayerCtls();
+    syncLayerPresetSelection();
 }
 
 
@@ -437,6 +461,19 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
                                                              SWATCH_SMALL );
                     swatch->SetToolTip( _( "Left double click or middle click to change color" ) );
 
+                    swatch->SetReadOnlyCallback(
+                            [this]()
+                            {
+                                WX_INFOBAR* infobar = m_frame->GetInfoBar();
+
+                                infobar->RemoveAllButtons();
+                                infobar->AddCloseButton();
+
+                                infobar->ShowMessageFor( _( "Uncheck 'Use board stackup colors' to "
+                                                            "allow color editing." ),
+                                                         10000, wxICON_INFORMATION );
+                            } );
+
                     sizer->Add( swatch, 0,  wxALIGN_CENTER_VERTICAL, 0 );
                     aSetting->m_Ctl_color = swatch;
 
@@ -515,6 +552,7 @@ void APPEARANCE_CONTROLS_3D::rebuildLayers()
 
 void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
 {
+    EDA_3D_VIEWER_SETTINGS*   cfg = m_frame->GetAdapter().m_Cfg;
     std::bitset<LAYER_3D_END> visibleLayers = m_frame->GetAdapter().GetVisibleLayers();
     std::map<int, COLOR4D>    colors = m_frame->GetAdapter().GetLayerColors();
 
@@ -527,8 +565,16 @@ void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
             setting->m_Ctl_visibility->SetValue( visibleLayers.test( setting->m_Id ) );
 
         if( setting->m_Ctl_color )
+        {
             setting->m_Ctl_color->SetSwatchColor( colors[ setting->m_Id ], false );
+
+            if( cfg )
+                setting->m_Ctl_color->SetReadOnly( cfg->m_UseStackupColors );
+        }
     }
+
+    if( cfg )
+        m_cbUseBoardStackupColors->SetValue( cfg->m_UseStackupColors );
 }
 
 
@@ -567,6 +613,12 @@ void APPEARANCE_CONTROLS_3D::syncLayerPresetSelection()
             presets.begin(), presets.end(),
             [&]( const LAYER_PRESET_3D& aPreset )
             {
+                if( aPreset.name.Lower() == _( "legacy colors" )
+                    && m_cbUseBoardStackupColors->GetValue() )
+                {
+                    return false;
+                }
+
                 for( int layer = LAYER_3D_BOARD; layer < LAYER_3D_END; ++layer )
                 {
                     if( aPreset.layers.test( layer ) != visibleLayers.test( layer ) )
@@ -748,6 +800,9 @@ void APPEARANCE_CONTROLS_3D::doApplyLayerPreset( const LAYER_PRESET_3D& aPreset 
     adapter.m_Cfg->m_CurrentPreset = aPreset.name;
     adapter.SetVisibleLayers( aPreset.layers );
     adapter.SetLayerColors( aPreset.colors );
+
+    if( aPreset.name.Lower() == _( "legacy colors" ) )
+        adapter.m_Cfg->m_UseStackupColors = false;
 
     UpdateLayerCtls();
     m_frame->NewDisplay( true );
