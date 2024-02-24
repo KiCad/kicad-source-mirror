@@ -362,7 +362,6 @@ bool TOOL_MANAGER::doRunAction( const TOOL_ACTION& aAction, bool aNow, const std
 
             while( synchronousControl == STS_RUNNING )
             {
-                wxMilliSleep( 50 );
                 wxYield();
             }
 
