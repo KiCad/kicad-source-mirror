@@ -1817,6 +1817,9 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         PNS::ARC*        arc = static_cast<PNS::ARC*>( aItem );
         PCB_ARC*         arc_board = static_cast<PCB_ARC*>( board_item );
         const SHAPE_ARC* arc_shape = static_cast<const SHAPE_ARC*>( arc->Shape() );
+
+        m_commit->Modify( arc_board );
+
         arc_board->SetStart( VECTOR2I( arc_shape->GetP0() ) );
         arc_board->SetEnd( VECTOR2I( arc_shape->GetP1() ) );
         arc_board->SetMid( VECTOR2I( arc_shape->GetArcMid() ) );
@@ -1829,6 +1832,9 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         PNS::SEGMENT* seg = static_cast<PNS::SEGMENT*>( aItem );
         PCB_TRACK*    track = static_cast<PCB_TRACK*>( board_item );
         const SEG&    s = seg->Seg();
+
+        m_commit->Modify( track );
+
         track->SetStart( VECTOR2I( s.A.x, s.A.y ) );
         track->SetEnd( VECTOR2I( s.B.x, s.B.y ) );
         track->SetWidth( seg->Width() );
@@ -1839,6 +1845,9 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
     {
         PCB_VIA*  via_board = static_cast<PCB_VIA*>( board_item );
         PNS::VIA* via = static_cast<PNS::VIA*>( aItem );
+
+        m_commit->Modify( via_board );
+
         via_board->SetPosition( VECTOR2I( via->Pos().x, via->Pos().y ) );
         via_board->SetWidth( via->Diameter() );
         via_board->SetDrill( via->Drill() );
@@ -1855,20 +1864,22 @@ void PNS_KICAD_IFACE::modifyBoardItem( PNS::ITEM* aItem )
         PAD*     pad = static_cast<PAD*>( aItem->Parent() );
         VECTOR2I pos = static_cast<PNS::SOLID*>( aItem )->Pos();
 
+        // Don't add to commit; we'll add the parent footprints when processing the m_fpOffsets
+
         m_fpOffsets[pad].p_old = pad->GetPosition();
         m_fpOffsets[pad].p_new = pos;
         break;
     }
 
-    default: break;
+    default:
+        m_commit->Modify( aItem->Parent() );
+        break;
     }
 }
 
 
 void PNS_KICAD_IFACE::UpdateItem( PNS::ITEM* aItem )
 {
-    BOARD_ITEM* board_item = aItem->Parent();
-    m_commit->Modify( board_item );
     modifyBoardItem( aItem );
 }
 
