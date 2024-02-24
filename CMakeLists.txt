@@ -877,7 +877,14 @@ check_find_package_result( PYTHONINTERP_FOUND "Python Interpreter" )
 # Get the correct Python site package install path from the Python interpreter found by
 # FindPythonInterp unless the user specifically defined a custom path.
 if( NOT PYTHON_SITE_PACKAGE_PATH )
-    execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig;print(\"%s\"%sysconfig.get_path('platlib', vars={'platbase': '.'}))"
+    execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "import sys, sysconfig
+if 'deb_system' in sysconfig.get_scheme_names():
+    scheme = 'deb_system'
+elif sys.version_info > (3, 10):
+    scheme = sysconfig.get_default_scheme()
+else:
+    scheme = sysconfig._get_default_scheme()
+print(\"%s\"%sysconfig.get_path('platlib', vars={'platbase': '.'}, scheme=scheme))"
         OUTPUT_VARIABLE PYTHON_SITE_PACKAGE_PATH
         OUTPUT_STRIP_TRAILING_WHITESPACE
         )
