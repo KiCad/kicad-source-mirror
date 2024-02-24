@@ -1437,9 +1437,9 @@ void APPEARANCE_CONTROLS::loadDefaultLayerPresets()
     m_presetMRU.clear();
 
     // Load the read-only defaults
-    for( const LAYER_PRESET& preset : { presetAllLayers, presetAllCopper, presetInnerCopper,
-                                        presetFront, presetFrontAssembly, presetBack,
-                                        presetBackAssembly } )
+    for( const LAYER_PRESET& preset :
+         { presetAllLayers, presetNoLayers, presetAllCopper, presetInnerCopper, presetFront,
+           presetFrontAssembly, presetBack, presetBackAssembly } )
     {
         m_layerPresets[preset.name]          = preset;
         m_layerPresets[preset.name].readOnly = true;
