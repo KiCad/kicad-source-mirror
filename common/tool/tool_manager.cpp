@@ -948,6 +948,7 @@ void TOOL_MANAGER::DispatchContextMenu( const TOOL_EVENT& aEvent )
                 m_viewControls->WarpMouseCursor( m_menuCursor, true, false );
         }
         // Otherwise notify the tool of a cancelled menu
+        else
         {
             TOOL_EVENT evt( TC_COMMAND, TA_CHOICE_MENU_CHOICE, -1 );
             evt.SetHasPosition( false );
