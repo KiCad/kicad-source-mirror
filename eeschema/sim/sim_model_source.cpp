@@ -774,6 +774,7 @@ std::vector<SIM_MODEL::PARAM::INFO> SIM_MODEL_SOURCE::makeCcParamInfos( const st
     paramInfo.name = "control";
     paramInfo.id = 2;
     paramInfo.type = SIM_VALUE::TYPE_STRING;
+    paramInfo.unit = "";
     paramInfo.description = "Controlling voltage source";
     paramInfos.push_back( paramInfo );
 
