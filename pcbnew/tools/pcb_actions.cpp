@@ -1335,6 +1335,11 @@ TOOL_ACTION PCB_ACTIONS::showLayersManager( TOOL_ACTION_ARGS()
         .Tooltip( _( "Show/hide the appearance manager" ) )
         .Icon( BITMAPS::layers_manager ) );
 
+TOOL_ACTION PCB_ACTIONS::zonesManager( "pcbnew.Control.zonesManager",
+        AS_GLOBAL, 0, "",
+        _( "Zone Manager" ), _( "Show the zone manager dialog" ),
+        BITMAPS::show_zone );
+
 TOOL_ACTION PCB_ACTIONS::flipBoard( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.flipBoard" )
         .Scope( AS_GLOBAL )

@@ -401,6 +401,10 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     toolsMenu->Add( ACTIONS::showFootprintEditor );
     toolsMenu->Add( PCB_ACTIONS::updateFootprints );
 
+    //Zones management
+    toolsMenu->AppendSeparator();
+    toolsMenu->Add( PCB_ACTIONS::zonesManager );
+
     if( ADVANCED_CFG::GetCfg().m_EnableGenerators )
     {
         toolsMenu->AppendSeparator();

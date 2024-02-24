@@ -24,6 +24,7 @@
 #include <footprint.h>
 #include <pcb_track.h>
 #include <zone.h>
+#include <zones.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/edit_tool.h>
@@ -34,6 +35,9 @@
 #include <tools/global_edit_tool.h>
 #include <board_commit.h>
 #include <dialogs/dialog_cleanup_graphics.h>
+#include <tools/pcb_actions.h>
+#include <board_design_settings.h>
+
 
 GLOBAL_EDIT_TOOL::GLOBAL_EDIT_TOOL() :
         PCB_TOOL_BASE( "pcbnew.GlobalEdit" ),
@@ -211,6 +215,55 @@ int GLOBAL_EDIT_TOOL::RemoveUnusedPads( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+int GLOBAL_EDIT_TOOL::ZonesManager( const TOOL_EVENT& aEvent )
+{
+    PCB_EDIT_FRAME* editFrame = getEditFrame<PCB_EDIT_FRAME>();
+
+    BOARD_COMMIT      commit( editFrame );
+    BOARD*            board = editFrame->GetBoard();
+
+    for( ZONE* zone : board->Zones() )
+        commit.Modify( zone );
+
+    ZONE_SETTINGS zoneInfo = board->GetDesignSettings().GetDefaultZoneSettings();
+    int           dialogResult = InvokeZonesManager( editFrame, &zoneInfo );
+
+    if( dialogResult == wxID_CANCEL )
+        return 0;
+
+    wxBusyCursor dummy;
+
+    // Undraw old zone outlines
+    for( ZONE* zone : board->Zones() )
+        editFrame->GetCanvas()->GetView()->Update( zone );
+
+
+    board->GetDesignSettings().SetDefaultZoneSettings( zoneInfo );
+    commit.Push( _( "Modify zones properties with zone manager" ), SKIP_CONNECTIVITY );
+    editFrame->OnModify();
+
+    //rebuildConnectivity
+    board->BuildConnectivity();
+
+    if( TOOL_MANAGER* manger = GetManager() )
+    {
+        manger->PostEvent( EVENTS::ConnectivityChangedEvent );
+    }
+
+    editFrame->GetCanvas()->RedrawRatsnest();
+
+    if( dialogResult == ZONE_MANAGER_REPOUR )
+    {
+        if( TOOL_MANAGER* manger = GetManager() )
+        {
+            manger->PostAction( PCB_ACTIONS::zoneFillAll );
+        }
+    }
+
+    return 0;
+}
+
+
 
 void GLOBAL_EDIT_TOOL::setTransitions()
 {
@@ -228,6 +281,7 @@ void GLOBAL_EDIT_TOOL::setTransitions()
     Go( &GLOBAL_EDIT_TOOL::CleanupTracksAndVias, PCB_ACTIONS::cleanupTracksAndVias.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );
     Go( &GLOBAL_EDIT_TOOL::RemoveUnusedPads,     PCB_ACTIONS::removeUnusedPads.MakeEvent() );
+    Go( &GLOBAL_EDIT_TOOL::ZonesManager,         PCB_ACTIONS::zonesManager.MakeEvent() );
 }
 
 

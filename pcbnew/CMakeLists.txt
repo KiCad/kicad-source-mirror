@@ -271,6 +271,20 @@ set( PCBNEW_NETLIST_SRCS
     netlist_reader/netlist.cpp
     )
 
+set( ZONE_MANAGER_SRCS
+    zone_manager/board_edges_bounding_item.cpp
+    zone_manager/dialog_zone_manager.cpp
+    zone_manager/dialog_zone_manager_base.cpp
+    zone_manager/model_zones_overview_table.cpp
+    zone_manager/pane_zone_viewer.cpp
+    zone_manager/panel_zone_gal.cpp
+    zone_manager/panel_zone_properties.cpp
+    zone_manager/panel_zone_properties_base.cpp
+    zone_manager/zone_manager_preference.cpp
+    zone_manager/zone_painter.cpp
+    zone_manager/zones_container.cpp
+    )
+
 set( PCBNEW_CLASS_SRCS
     ${PCBNEW_DIALOGS}
     ${PCBNEW_EXPORTERS}
@@ -278,6 +292,7 @@ set( PCBNEW_CLASS_SRCS
     ${PCBNEW_DRC_SRCS}
     ${PCBNEW_IMPORT_GFX}
     ${PCBNEW_NETLIST_SRCS}
+    ${ZONE_MANAGER_SRCS}
     ${PCBNEW_BRDSTACKUP_MGR}
 
     autorouter/spread_footprints.cpp
