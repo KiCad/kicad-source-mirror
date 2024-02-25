@@ -171,7 +171,9 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector<VECTOR2D>& aVertice
     }
 
     polygon->SetStroke( MapStrokeParams( aStroke ) );
-    addItem( std::move( polygon ) );
+
+    if( polygon->IsPolyShapeValid() )
+        addItem( std::move( polygon ) );
 }
 
 
