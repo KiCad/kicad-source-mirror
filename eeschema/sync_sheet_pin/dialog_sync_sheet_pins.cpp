@@ -33,6 +33,7 @@
 #include "sheet_synchronization_item.h"
 
 #include <memory>
+#include <cstddef>
 #include <sch_sheet_pin.h>
 #include <sch_sheet.h>
 #include <unordered_map>
@@ -129,8 +130,8 @@ void DIALOG_SYNC_SHEET_PINS::OnClose( wxCloseEvent& aEvent )
 
 void DIALOG_SYNC_SHEET_PINS::EndPlaceItem( EDA_ITEM* aNewItem )
 {
-    auto post_end_place_item = std::shared_ptr<nullptr_t>( nullptr,
-                                                           [&]( nullptr_t )
+    auto post_end_place_item = std::shared_ptr<std::nullptr_t>( nullptr,
+                                                           [&]( std::nullptr_t )
                                                            {
                                                                m_placeItemKind =
                                                                        PlaceItemKind::UNDEFINED;
