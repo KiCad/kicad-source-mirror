@@ -1217,7 +1217,7 @@ void PCB_IO_KICAD_SEXPR::format( const FOOTPRINT* aFootprint, int aNestLevel ) c
 
     if( aFootprint->GetLocalSolderPasteMarginRatio().has_value() )
     {
-        m_out->Print( aNestLevel+1, "(solder_paste_ratio %s)\n",
+        m_out->Print( aNestLevel+1, "(solder_paste_margin_ratio %s)\n",
                       FormatDouble2Str( aFootprint->GetLocalSolderPasteMarginRatio().value() ).c_str() );
     }
 

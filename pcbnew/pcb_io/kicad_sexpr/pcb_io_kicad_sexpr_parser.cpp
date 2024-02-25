@@ -4444,7 +4444,8 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
             break;
 
-        case T_solder_paste_ratio:
+        case T_solder_paste_ratio:          // legacy token
+        case T_solder_paste_margin_ratio:
             footprint->SetLocalSolderPasteMarginRatio( parseDouble( "local solder paste margin ratio value" ) );
             NeedRIGHT();
 
@@ -4623,7 +4624,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
         default:
             Expecting( "locked, placed, tedit, tstamp, uuid, at, descr, tags, path, "
                        "autoplace_cost90, autoplace_cost180, solder_mask_margin, "
-                       "solder_paste_margin, solder_paste_ratio, clearance, "
+                       "solder_paste_margin, solder_paste_margin_ratio, clearance, "
                        "zone_connect, thermal_gap, attr, fp_text, "
                        "fp_arc, fp_circle, fp_curve, fp_line, fp_poly, fp_rect, pad, "
                        "zone, group, generator, version or model" );
