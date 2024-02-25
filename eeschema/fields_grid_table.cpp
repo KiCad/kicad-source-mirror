@@ -84,6 +84,28 @@ static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 }
 
 
+static wxString netList( LIB_SYMBOL* aSymbol )
+{
+    /*
+     * Symbol netlist format:
+     *   pinCount
+     *   fpFilters
+     */
+    wxString netlist;
+
+    netlist << wxString::Format( wxS( "%d\r" ), aSymbol->GetPinCount() );
+
+    wxArrayString fpFilters = aSymbol->GetFPFilters();
+
+    if( !fpFilters.IsEmpty() )
+        netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+
+    netlist << wxS( "\r" );
+
+    return netlist;
+}
+
+
 template <class T>
 FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
                                          WX_GRID* aGrid, LIB_SYMBOL* aSymbol ) :
@@ -93,6 +115,7 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
         m_parentType( SCH_SYMBOL_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aSymbol ),
+        m_symbolNetlist( netList( aSymbol ) ),
         m_fieldNameValidator( FIELD_NAME ),
         m_referenceValidator( REFERENCE_FIELD ),
         m_valueValidator( VALUE_FIELD ),
