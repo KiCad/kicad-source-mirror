@@ -1,5 +1,5 @@
 (footprint "Reverb_BTDR-1V"
-	(version 20240201)
+	(version 20231007)
 	(generator pcbnew)
 	(layer "F.Cu")
 	(descr "Digital Reverberation Unit, http://www.belton.co.kr/inc/downfile.php?seq=17&file=pdf (footprint from http://www.uk-electronic.de/PDF/BTDR-1.pdf)")
