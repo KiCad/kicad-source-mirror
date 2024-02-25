@@ -726,7 +726,8 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( EE_ACTIONS::placeGlobalLabel );
     CURRENT_TOOL( EE_ACTIONS::placeHierLabel );
     CURRENT_TOOL( EE_ACTIONS::drawSheet );
-    CURRENT_TOOL( EE_ACTIONS::importSheetPin );
+    CURRENT_TOOL( EE_ACTIONS::placeSheetPin );
+    CURRENT_TOOL( EE_ACTIONS::syncSheetPins );
     CURRENT_TOOL( EE_ACTIONS::drawRectangle );
     CURRENT_TOOL( EE_ACTIONS::drawCircle );
     CURRENT_TOOL( EE_ACTIONS::drawArc );

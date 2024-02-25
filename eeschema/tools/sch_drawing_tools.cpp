@@ -22,9 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "sch_sheet_path.h"
 #include <memory>
 
 #include <kiplatform/ui.h>
+#include <optional>
 #include <project_sch.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_line_wire_bus_tool.h>
@@ -49,6 +51,7 @@
 #include <sch_tablecell.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
+#include <sch_label.h>
 #include <sch_bitmap.h>
 #include <schematic.h>
 #include <sch_commit.h>
@@ -59,6 +62,7 @@
 #include <dialogs/dialog_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
 #include <import_gfx/dialog_import_gfx_sch.h>
+#include <sync_sheet_pin/sheet_synchronization_agent.h>
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
@@ -1336,35 +1340,14 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     return textItem;
 }
 
-
-SCH_HIERLABEL* SCH_DRAWING_TOOLS::importHierLabel( SCH_SHEET* aSheet )
-{
-    if( !aSheet->GetScreen() )
-        return nullptr;
-
-    for( EDA_ITEM* item : aSheet->GetScreen()->Items().OfType( SCH_HIER_LABEL_T ) )
-    {
-        SCH_HIERLABEL* label = static_cast<SCH_HIERLABEL*>( item );
-
-        /* A global label has been found: check if there a corresponding sheet label. */
-        if( !aSheet->HasPin( label->GetText() ) )
-            return label;
-    }
-
-    return nullptr;
-}
-
-
-SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createNewSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel,
-                                                     const VECTOR2I& aPosition )
+SCH_SHEET_PIN* SCH_DRAWING_TOOLS::createNewSheetPin( SCH_SHEET* aSheet, const VECTOR2I& aPosition )
 {
     SCHEMATIC_SETTINGS& settings = aSheet->Schematic()->Settings();
     SCH_SHEET_PIN*      pin = new SCH_SHEET_PIN( aSheet );
 
     pin->SetFlags( IS_NEW | IS_MOVING );
-    pin->SetText( aLabel->GetText() );
+    pin->SetText( std::to_string( aSheet->GetPins().size() + 1 ) );
     pin->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
-    pin->SetShape( aLabel->GetShape() );
     pin->SetPosition( aPosition );
     pin->ClearSelected();
 
@@ -1394,7 +1377,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     bool isHierLabel   = aEvent.IsAction( &EE_ACTIONS::placeHierLabel );
     bool isClassLabel  = aEvent.IsAction( &EE_ACTIONS::placeClassLabel );
     bool isNetLabel    = aEvent.IsAction( &EE_ACTIONS::placeLabel );
-    bool isSheetPin    = aEvent.IsAction( &EE_ACTIONS::importSheetPin );
+    bool isSheetPin    = aEvent.IsAction( &EE_ACTIONS::placeSheetPin );
 
     GRID_HELPER_GRIDS snapGrid = isText ? GRID_TEXT : GRID_CONNECTABLE;
 
@@ -1539,7 +1522,29 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 }
                 else if( isHierLabel )
                 {
-                    item = createNewText( cursorPos, LAYER_HIERLABEL );
+                    if( m_dialogSyncSheetPin && m_dialogSyncSheetPin->GetPlacementTemplate() )
+                    {
+                        auto pin = static_cast<SCH_HIERLABEL*>(
+                                m_dialogSyncSheetPin->GetPlacementTemplate() );
+                        SCH_HIERLABEL* label = new SCH_HIERLABEL( cursorPos );
+                        SCHEMATIC*     schematic = getModel<SCHEMATIC>();
+                        label->SetText( pin->GetText() );
+                        label->SetShape( pin->GetShape() );
+                        label->SetAutoRotateOnPlacement( m_lastAutoLabelRotateOnPlacement );
+                        label->SetParent( schematic );
+                        label->SetBold( m_lastTextBold );
+                        label->SetItalic( m_lastTextItalic );
+                        label->SetSpinStyle( m_lastTextOrientation );
+                        label->SetTextSize( VECTOR2I( schematic->Settings().m_DefaultTextSize,
+                                                      schematic->Settings().m_DefaultTextSize ) );
+                        label->SetFlags( IS_NEW | IS_MOVING );
+                        item = label;
+                    }
+                    else
+                    {
+                        item = createNewText( cursorPos, LAYER_HIERLABEL );
+                    }
+
                     description = _( "Add Hierarchical Label" );
                 }
                 else if( isNetLabel )
@@ -1576,22 +1581,15 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        SCH_HIERLABEL* label = importHierLabel( sheet );
-
-                        if( !label )
+                        item = createNewSheetPin( sheet, cursorPos );
+                        if( m_dialogSyncSheetPin && m_dialogSyncSheetPin->GetPlacementTemplate() )
                         {
-                            m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
-                            m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
-                            m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
-                                                 + wxPoint( 20, 20 ) );
-                            m_statusPopup->PopupFor( 2000 );
-                            item = nullptr;
-
-                            m_frame->PopTool( aEvent );
-                            break;
+                            auto label = static_cast<SCH_HIERLABEL*>(
+                                    m_dialogSyncSheetPin->GetPlacementTemplate() );
+                            auto pin = static_cast<SCH_HIERLABEL*>( item );
+                            pin->SetText( label->GetText() );
+                            pin->SetShape( label->GetShape() );
                         }
-
-                        item = createNewSheetPin( sheet, label, cursorPos );
                     }
 
                     description = _( "Add Sheet Pin" );
@@ -1619,10 +1617,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     item->SetFlags( IS_NEW | IS_MOVING );
                     item->AutoplaceFields( nullptr, false /* aManual */ );
                     updatePreview();
-
-                    if( item->Type() != SCH_SHEET_PIN_T )
-                        m_selectionTool->AddItemToSel( item );
-
+                    m_selectionTool->AddItemToSel( item );
                     m_toolMgr->PostAction( ACTIONS::refreshPreview );
 
                     // update the cursor so it looks correct before another event
@@ -1657,27 +1652,25 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 commit.Push( description );
 
-                item = nullptr;
                 m_view->ClearPreview();
+
+                if( m_dialogSyncSheetPin && m_dialogSyncSheetPin->GetPlacementTemplate() )
+                {
+                    m_dialogSyncSheetPin->EndPlaceItem( item );
+                    m_dialogSyncSheetPin->Show( true );
+                    break;
+                }
+                else
+                {
+                    item = nullptr;
+                }
 
                 if( isSheetPin )
                 {
-                    SCH_HIERLABEL* label = importHierLabel( sheet );
-
-                    if( !label )
-                    {
-                        m_statusPopup = std::make_unique<STATUS_TEXT_POPUP>( m_frame );
-                        m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
-                        m_statusPopup->Move( KIPLATFORM::UI::GetMousePosition()
-                                             + wxPoint( 20, 20 ) );
-                        m_statusPopup->PopupFor( 2000 );
-                        item = nullptr;
-
-                        m_frame->PopTool( aEvent );
-                        break;
-                    }
-
-                    item = createNewSheetPin( sheet, label, cursorPos );
+                    item = createNewSheetPin( sheet, cursorPos );
+                    item->SetPosition( cursorPos );
+                    m_selectionTool->ClearSelection();
+                    m_selectionTool->AddItemToSel( item );
                 }
             }
         }
@@ -1747,6 +1740,13 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     controls->CaptureCursor( false );
     controls->ForceCursorPosition( false );
     m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+
+    if( m_dialogSyncSheetPin && m_dialogSyncSheetPin->GetPlacementTemplate() )
+    {
+        m_dialogSyncSheetPin->EndPlaceItem( nullptr );
+        m_dialogSyncSheetPin->Show(true);
+    }
+
     return 0;
 }
 
@@ -2471,6 +2471,142 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos )
 }
 
 
+int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
+{
+    if( !sheetPaths.size() )
+        return 0;
+
+    m_dialogSyncSheetPin = std::make_unique<DIALOG_SYNC_SHEET_PINS>(
+            m_frame, std::move( sheetPaths ),
+            std::make_shared<SHEET_SYNCHRONIZATION_AGENT>(
+                    [&]( EDA_ITEM* aItem, SCH_SHEET_PATH aPath,
+                         SHEET_SYNCHRONIZATION_AGENT::MODIFICATION aModify )
+                    {
+                        SCH_COMMIT commit( m_toolMgr );
+
+                        if( auto pin = dynamic_cast<SCH_SHEET_PIN*>( aItem ) )
+                        {
+                            commit.Modify( pin->GetParent(), aPath.LastScreen() );
+                            aModify();
+                            commit.Push( _( "Modify sch item" ) );
+                        }
+                        else
+                        {
+                            commit.Modify( aItem, aPath.LastScreen() );
+                            aModify();
+                            commit.Push( _( "Modify sch item" ), SKIP_CONNECTIVITY );
+                        }
+
+                        updateItem( aItem, true );
+                        m_frame->OnModify();
+                    },
+                    [&]( EDA_ITEM* aItem, SCH_SHEET_PATH aPath )
+                    {
+                        m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
+                                EE_ACTIONS::changeSheet, &aPath );
+                        EE_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+                        selectionTool->UnbrightenItem( aItem );
+                        selectionTool->AddItemToSel( aItem, true );
+                        m_toolMgr->RunAction( ACTIONS::doDelete );
+                    },
+                    [&]( SCH_SHEET* aItem, SCH_SHEET_PATH aPath,
+                         SHEET_SYNCHRONIZATION_AGENT::SHEET_SYNCHRONIZATION_PLACEMENT aOp,
+                         EDA_ITEM*                                                    aTemplate )
+                    {
+                        switch( aOp )
+                        {
+                        case SHEET_SYNCHRONIZATION_AGENT::PLACE_HIERLABEL:
+                        {
+                            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+                            m_dialogSyncSheetPin->Hide();
+                            m_dialogSyncSheetPin->BeginPlaceItem(
+                                    sheet, DIALOG_SYNC_SHEET_PINS::PlaceItemKind::HIERLABEL,
+                                    aTemplate );
+                            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
+                                    EE_ACTIONS::changeSheet, &aPath );
+                            m_toolMgr->RunAction( EE_ACTIONS::placeHierLabel );
+                            break;
+                        }
+                        case SHEET_SYNCHRONIZATION_AGENT::PLACE_SHEET_PIN:
+                        {
+                            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
+                            m_dialogSyncSheetPin->Hide();
+                            m_dialogSyncSheetPin->BeginPlaceItem(
+                                    sheet, DIALOG_SYNC_SHEET_PINS::PlaceItemKind::SHEET_PIN,
+                                    aTemplate );
+                            m_frame->GetToolManager()->RunAction<SCH_SHEET_PATH*>(
+                                    EE_ACTIONS::changeSheet, &aPath );
+                            m_toolMgr->GetTool<EE_SELECTION_TOOL>()->SyncSelection( {}, nullptr,
+                                                                                    { sheet } );
+                            m_toolMgr->RunAction( EE_ACTIONS::placeSheetPin );
+                            break;
+                        }
+                        }
+                    },
+                    m_toolMgr, m_frame ) );
+    m_dialogSyncSheetPin->Show( true );
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOLS::SyncSheetsPins( const TOOL_EVENT& aEvent )
+{
+    SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_selectionTool->GetSelection().Front() );
+
+    if( !sheet )
+    {
+        VECTOR2I cursorPos =  getViewControls()->GetMousePosition();
+
+        if( EDA_ITEM* i = nullptr; static_cast<void>(m_selectionTool->SelectPoint( cursorPos, { SCH_SHEET_T }, &i )) , i != nullptr )
+        {
+            sheet = dynamic_cast<SCH_SHEET*>( i );
+        }
+    }
+
+    if ( sheet )
+    {
+        SCH_SHEET_PATH current = m_frame->GetCurrentSheet();
+        current.push_back( sheet );
+        return doSyncSheetsPins( { current } );
+    }
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
+{
+    static const std::function<void( std::list<SCH_SHEET_PATH>&, SCH_SCREEN*,
+                                     std::set<SCH_SCREEN*>&, SCH_SHEET_PATH const& )>
+            getSheetChildren = []( std::list<SCH_SHEET_PATH>& aPaths, SCH_SCREEN* aScene,
+                                   std::set<SCH_SCREEN*>& aVisited, SCH_SHEET_PATH const& aCurPath )
+    {
+        if( ! aScene || aVisited.find(aScene) != aVisited.end() )
+            return ;
+
+        std::vector<SCH_ITEM*> sheetChildren;
+        aScene->GetSheets( &sheetChildren );
+        aVisited.insert(aScene);
+
+        for( SCH_ITEM* child : sheetChildren)
+        {
+            SCH_SHEET_PATH cp = aCurPath;
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( child );
+            cp.push_back(sheet);
+            aPaths.push_back( cp );
+            getSheetChildren(aPaths , sheet->GetScreen() , aVisited ,cp);
+        }
+    };
+
+    std::list<SCH_SHEET_PATH> sheetPaths;
+    std::set<SCH_SCREEN*> visited;
+    SCH_SHEET_PATH current;
+    current.push_back(&m_frame->Schematic().Root());
+    getSheetChildren(sheetPaths , m_frame->Schematic().Root().GetScreen() ,visited ,current );
+    return doSyncSheetsPins( sheetPaths );
+}
+
+
 void SCH_DRAWING_TOOLS::setTransitions()
 {
     Go( &SCH_DRAWING_TOOLS::PlaceSymbol,         EE_ACTIONS::placeSymbol.MakeEvent() );
@@ -2483,7 +2619,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeHierLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeGlobalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawSheet,           EE_ACTIONS::drawSheet.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::importSheetPin.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::TwoClickPlace,       EE_ACTIONS::placeSchematicText.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawRectangle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawCircle.MakeEvent() );
@@ -2492,4 +2628,6 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawTable,           EE_ACTIONS::drawTable.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::ImportGraphics,      EE_ACTIONS::importGraphics.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SyncSheetsPins,      EE_ACTIONS::syncSheetPins.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::SyncAllSheetsPins,   EE_ACTIONS::syncAllSheetsPins.MakeEvent() );
 }

@@ -316,6 +316,17 @@ set( EESCHEMA_PRINTING
     printing/sch_printout.cpp
     )
 
+set( SYNC_SHEET_PIN_SRCS
+    sync_sheet_pin/dialog_sync_sheet_pins.cpp
+    sync_sheet_pin/dialog_sync_sheet_pins_base.cpp
+    sync_sheet_pin/panel_sync_sheet_pins.cpp
+    sync_sheet_pin/panel_sync_sheet_pins_base.cpp
+    sync_sheet_pin/sheet_synchronization_agent.cpp
+    sync_sheet_pin/sheet_synchronization_item.cpp
+    sync_sheet_pin/sheet_synchronization_notifier.cpp
+    sync_sheet_pin/sheet_synchronization_model.cpp
+    )
+
 set( EESCHEMA_SRCS
     ${EESCHEMA_DLGS}
     ${EESCHEMA_LIBEDIT_SRCS}
@@ -323,6 +334,7 @@ set( EESCHEMA_SRCS
     ${EESCHEMA_SIM_SRCS}
     ${EESCHEMA_WIDGETS}
     ${EESCHEMA_IMPORT_GFX}
+    ${SYNC_SHEET_PIN_SRCS}
     annotate.cpp
     autoplace_fields.cpp
     bom_plugins.cpp

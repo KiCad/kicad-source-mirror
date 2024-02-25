@@ -103,6 +103,7 @@ __pycache__
 .editorconfig
 CMakeSettings.json
 .vscode/
+compile_commands.json
 /vcpkg_installed
 
 # Sublime Text

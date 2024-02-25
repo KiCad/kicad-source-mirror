@@ -89,7 +89,11 @@ public:
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierLabel;
     static TOOL_ACTION drawSheet;
-    static TOOL_ACTION importSheetPin;
+    static TOOL_ACTION placeSheetPin;
+    // Sync sheet pins for selected sheet symbol
+    static TOOL_ACTION syncSheetPins;
+    // Sync sheet pins for all sheet symbols
+    static TOOL_ACTION syncAllSheetsPins;
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawTextBox;
     static TOOL_ACTION drawTable;
