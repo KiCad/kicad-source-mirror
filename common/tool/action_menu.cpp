@@ -546,11 +546,10 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         {
             evt->SetMousePosition( g_menu_open_position );
         }
-        // Check if it is a menubar event, and don't get any position if it is.
-        // The original hack is to see if g_last_menu_highlighted_id matches to see if it's a menubar menu event
-        // IsAttached() checks to see if a menubar was attached to the menu by wx, and if there is one, then the event
-        // is from a menubar menu.
-        else if( IsAttached() || ( g_last_menu_highlighted_id == aEvent.GetId() ) )
+        // Check if it is a menubar event, and don't get any position if it is.  Note that we
+        // can't  use IsAttached() here, as it only differentiates a context menu, and we also
+        // want a hotkey to generate a position.
+        else if( g_last_menu_highlighted_id == aEvent.GetId() )
         {
             evt->SetHasPosition( false );
         }
