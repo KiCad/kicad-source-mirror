@@ -34,6 +34,8 @@
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_table.h>
+#include <pcb_tablecell.h>
 #include <pcb_reference_image.h>
 #include <zone.h>
 #include <pcb_track.h>
@@ -79,6 +81,18 @@ public:
         case PCB_SHAPE_T:             return new PCB_SHAPE( &m_board );
         case PCB_TEXT_T:              return new PCB_TEXT( &m_board );
         case PCB_TEXTBOX_T:           return new PCB_TEXTBOX( &m_board );
+        case PCB_TABLECELL_T:         return new PCB_TABLECELL( &m_board );
+        case PCB_TABLE_T:
+        {
+            PCB_TABLE* table = new PCB_TABLE( &m_board, pcbIUScale.mmToIU( 0.1 ) );
+
+            table->SetColCount( 2 );
+
+            for( int ii = 0; ii < 4; ++ii )
+                table->InsertCell( ii, new PCB_TABLECELL( &m_board ) );
+
+            return table;
+        }
         case PCB_REFERENCE_IMAGE_T:   return new PCB_REFERENCE_IMAGE( &m_board );
         case PCB_TRACE_T:             return new PCB_TRACK( &m_board );
         case PCB_VIA_T:               return new PCB_VIA( &m_board );
