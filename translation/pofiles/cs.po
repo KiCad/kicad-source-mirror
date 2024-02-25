@@ -18,16 +18,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2023-12-26 21:27+0000\n"
+"PO-Revision-Date: 2024-02-26 12:02+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
-"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/master-"
-"source/cs/>\n"
+"Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Basepath: .\n"
 
@@ -778,19 +777,16 @@ msgid "Background Start"
 msgstr "Začátek pozadí"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Začátek gradientu pozadí:"
+msgstr "Počáteční barva gradientu pozadí"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "Pozadí"
+msgstr "Konec pozadí"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Konec gradientu pozadí:"
+msgstr "Konečná barva gradientu na pozadí"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 #, c-format
@@ -1677,19 +1673,16 @@ msgid "Front solder mask"
 msgstr "Nepájivá maska nahoře"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "Horní_vrstva"
+msgstr "Horní vrstva Fab"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer drawings"
-msgstr "User.Drawings"
+msgstr "Uživatelská kresba"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer comments"
-msgstr "Vlastní vrstva Eco1"
+msgstr "Uživatelská vrstva komentáře"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -1988,9 +1981,8 @@ msgid "Additional Contributions By"
 msgstr "Další příspěvky od"
 
 #: common/dialog_about/AboutDialog_main.cpp:1139
-#, fuzzy
 msgid "Librarian Team"
-msgstr "Tým knihoven KiCadu"
+msgstr "Tým knihoven"
 
 #: common/dialog_about/AboutDialog_main.cpp:1215
 msgid "3D models by"
@@ -2009,9 +2001,8 @@ msgid "Icons by"
 msgstr "Ikony od"
 
 #: common/dialog_about/AboutDialog_main.cpp:1262
-#, fuzzy
 msgid "Package Developers"
-msgstr "Vývojáři"
+msgstr "Vývojáři balíčků"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2150,14 +2141,12 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Aktuálně odpovídající sítě:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Vzor"
+msgstr "Vzor:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Třídy spojů"
+msgstr "Třída spojů:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
@@ -2166,9 +2155,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Přiřazení třídy spojů:"
+msgstr "Přidat přiřazení třídy spojů"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2488,9 +2476,8 @@ msgid "Name:"
 msgstr "Název:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(volitelné; výchozí 0)"
+msgstr "(volitelné)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2576,9 +2563,8 @@ msgid "unit"
 msgstr "jednotka"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Odkaz:"
+msgstr "Propojeno"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -3463,14 +3449,12 @@ msgid "SSH Key Password"
 msgstr "Heslo klíče SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Otočení"
+msgstr "Umístění"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Název připojení"
+msgstr "Typ připojení"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
@@ -3478,14 +3462,12 @@ msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #: eeschema/widgets/search_handlers.cpp:351
-#, fuzzy
 msgid "Local"
-msgstr "Místní soubor"
+msgstr "Místní"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Tisknout vrstvy"
+msgstr "Privátní SSH klíč"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "Select SSH private key file"
@@ -3520,9 +3502,8 @@ msgid "Last Commit"
 msgstr "Poslední změny"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Aktualizováno"
+msgstr "Naposledy aktualizováno"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
@@ -4060,9 +4041,8 @@ msgid "Reset Unique Id"
 msgstr "Obnovení jedinečného ID"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Pouzdra:"
+msgstr "Pouzdra/plošky:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -4199,9 +4179,8 @@ msgid "PPI:"
 msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Převést na oblouk"
+msgstr "Převést na odstíny šedi"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -4415,9 +4394,8 @@ msgid "General"
 msgstr "Obecné"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "Kontrolovat aktualizace balíčků při spuštění"
+msgstr "Zkontrolovat aktualizace KiCadu při spuštění"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
@@ -4435,9 +4413,9 @@ msgid "Library package handling"
 msgstr "Správa balíčků knihoven"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
-msgstr "Automaticky přidat nainstalované knihovny do globální tabulky knihoven"
+msgstr ""
+"Automaticky přidávat nainstalované knihovny do globální tabulky knihoven"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:80
 msgid "Automatically remove uninstalled libraries"
@@ -4952,9 +4930,8 @@ msgid "Hotkeys"
 msgstr "Kl. zkratky"
 
 #: common/eda_base_frame.cpp:1095 kicad/project_tree_pane.cpp:985
-#, fuzzy
 msgid "Version Control"
-msgstr "Pouze výběr"
+msgstr "Správa verzí"
 
 #: common/eda_base_frame.cpp:1103
 msgid "Data Collection"
@@ -5058,9 +5035,8 @@ msgid "Drawing Sheet Editor"
 msgstr "Editor výkresových listů"
 
 #: common/eda_base_frame.cpp:1232
-#, fuzzy
 msgid "Packages and Updates"
-msgstr "Zrušit aktualizaci tabulky"
+msgstr "Balíčky a aktualizace"
 
 #: common/eda_base_frame.cpp:1318
 #, c-format
@@ -5219,14 +5195,12 @@ msgstr "Grafika"
 
 #: common/eda_item.cpp:347 pcbnew/pcb_reference_image.cpp:254
 #: pcbnew/pcb_reference_image.h:125
-#, fuzzy
 msgid "Reference Image"
-msgstr "Reference"
+msgstr "Referenční obrázek"
 
 #: common/eda_item.cpp:348 pcbnew/pcb_generator.cpp:196
-#, fuzzy
 msgid "Generator"
-msgstr "Generovat"
+msgstr "Generátor"
 
 #: common/eda_item.cpp:351 common/eda_item.cpp:376 common/eda_item.cpp:397
 #: eeschema/lib_textbox.cpp:484 eeschema/sch_textbox.cpp:445
@@ -5493,14 +5467,12 @@ msgid "Start Y"
 msgstr "Začátek Y"
 
 #: common/eda_shape.cpp:1999
-#, fuzzy
 msgid "Center X"
-msgstr "Na střed"
+msgstr "Střed X"
 
 #: common/eda_shape.cpp:2004
-#, fuzzy
 msgid "Center Y"
-msgstr "Na střed"
+msgstr "Střed Y"
 
 #: common/eda_shape.cpp:2014 pcbnew/generators/pcb_tuning_pattern.cpp:2338
 #: pcbnew/pcb_textbox.cpp:672 pcbnew/pcb_track.cpp:1499
@@ -5519,9 +5491,8 @@ msgid "Line Width"
 msgstr "Šířka vedení"
 
 #: common/eda_shape.cpp:2031 pcbnew/pcb_shape.cpp:684
-#, fuzzy
 msgid "Line Color"
-msgstr "Barva čáry:"
+msgstr "Barva čáry"
 
 #: common/eda_shape.cpp:2068 eeschema/lib_shape.cpp:587
 #: pcbnew/dialogs/dialog_plot_base.cpp:134
@@ -5529,9 +5500,8 @@ msgid "Filled"
 msgstr "Vyplněno"
 
 #: common/eda_shape.cpp:2072 pcbnew/pcb_shape.cpp:685
-#, fuzzy
 msgid "Fill Color"
-msgstr "Barva plnění:"
+msgstr "Barva výplně"
 
 #: common/eda_text.cpp:808 common/eda_text.cpp:1196
 #: eeschema/dialogs/dialog_field_properties_base.cpp:143
@@ -5853,7 +5823,7 @@ msgstr ""
 "nebo novější."
 
 #: common/exceptions.cpp:113
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad was unable to open this file because it was created with a more recent "
 "version than the one you are running.\n"
@@ -5861,11 +5831,11 @@ msgid ""
 "To open it you will need to upgrade KiCad to version %s or later (file "
 "format dated %s or later)."
 msgstr ""
-"KiCad nemohl otevřít tento soubor, protože byl vytvořen novější verzí, než "
-"je verze, kterou používáte.\n"
+"KiCad nemohl otevřít tento soubor, protože byl vytvořen s novější verzí, než "
+"je ta, kterou používáte.\n"
 "\n"
-"Chcete-li jej otevřít, budete muset upgradovat KiCad na verzi s datem %s "
-"nebo novější."
+"Chcete-li jej otevřít, budete muset upgradovat na verzi %s nebo novější ("
+"soubor ve formátu verze %s nebo novější)."
 
 #: common/exceptions.cpp:149
 msgid "Full error text:"
@@ -6004,24 +5974,23 @@ msgid "Could not clone repository '%s'"
 msgstr "Nelze klonovat repozitář '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Nelze načíst obrázek z '%s'."
+msgstr "Nelze vyhledat vzdálené '%s'"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Nelze najít model IBIS '%s'"
+msgstr "Nelze se připojit ke vzdálenému '%s'"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Nelze najít model IBIS '%s'"
+msgstr "Nelze obnovit data ze vzdáleného úložiště '%s'"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Nepodařilo se přečíst soubor "
+msgstr "Nelze přečíst 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
 #, fuzzy
@@ -6029,9 +5998,8 @@ msgid "Could not lookup commit"
 msgstr "Nelze otevřít CvPcb"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Nepodařilo se přečíst soubor "
+msgstr "Nelze analyzovat sloučení"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
@@ -6128,14 +6096,12 @@ msgid "Invalid repository."
 msgstr "Neplatný repozitář."
 
 #: common/git/kicad_git_errors.cpp:40
-#, fuzzy
 msgid "Failed to commit changes."
-msgstr "Selhalo vytvoření souboru '%s'."
+msgstr "Odevzdání změn se nezdařilo."
 
 #: common/git/kicad_git_errors.cpp:41
-#, fuzzy
 msgid "Failed to merge branches."
-msgstr "Nepodařilo se uložit knihovnu záchrany %s."
+msgstr "Sloučení větví se nezdařilo."
 
 #: common/git/kicad_git_errors.cpp:44
 #, fuzzy
@@ -6152,19 +6118,16 @@ msgid "Authentication failed for remote repository."
 msgstr ""
 
 #: common/git/kicad_git_errors.cpp:49
-#, fuzzy
 msgid "Branch not found."
-msgstr " nenalezeno."
+msgstr "Větev nenalezena."
 
 #: common/git/kicad_git_errors.cpp:50
-#, fuzzy
 msgid "Failed to create branch."
-msgstr "Selhalo vytvoření souboru '%s'."
+msgstr "Nepodařilo se vytvořit větev."
 
 #: common/git/kicad_git_errors.cpp:51
-#, fuzzy
 msgid "Failed to delete branch."
-msgstr "Nepodařilo se smazat '%s'"
+msgstr "Nepodařilo se smazat větev."
 
 #: common/git/kicad_git_errors.cpp:55
 msgid "File not found during checkout operation."
@@ -6921,9 +6884,8 @@ msgid "Edit options..."
 msgstr "Upravit možnosti..."
 
 #: common/lib_table_grid_tricks.cpp:33
-#, fuzzy
 msgid "Edit options for this library entry"
-msgstr "Možnosti pro knihovnu '%s'"
+msgstr "Upravit možnosti této položky knihovny"
 
 #: common/lib_table_grid_tricks.cpp:63
 msgid "Activate selected"
@@ -7365,9 +7327,8 @@ msgid "Cancel current tool"
 msgstr "Zrušit aktuální nástroj"
 
 #: common/tool/actions.cpp:154
-#, fuzzy
 msgid "Finish"
-msgstr "Dokončit sběrnici"
+msgstr "Dokončit"
 
 #: common/tool/actions.cpp:155
 msgid "Finish current tool"
@@ -8413,9 +8374,8 @@ msgid "Edit..."
 msgstr "Upravit..."
 
 #: common/widgets/widget_hotkey_list.cpp:449
-#, fuzzy
 msgid "Edit Alternate..."
-msgstr "Upravit označení..."
+msgstr "Upravit alternativu..."
 
 #: common/widgets/widget_hotkey_list.cpp:450
 msgid "Undo Changes"
@@ -8657,9 +8617,8 @@ msgid "PostScript files"
 msgstr "Soubory PostScript"
 
 #: common/wildcards_and_files_ext.cpp:383
-#, fuzzy
 msgid "Json files"
-msgstr "Soubory Job"
+msgstr "Soubory Json"
 
 #: common/wildcards_and_files_ext.cpp:389
 msgid "Report files"
@@ -13114,9 +13073,8 @@ msgid "Choose Symbol"
 msgstr "Zvolit symbol"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:67
-#, fuzzy
 msgid "Choose Power Symbol"
-msgstr "Symbol napájení"
+msgstr "Zvolit symbol napájení"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:69
 #: eeschema/symbol_chooser_frame.cpp:103
@@ -13223,9 +13181,8 @@ msgid "The Item Number column cannot be grouped by."
 msgstr "Sloupec Reference nelze skrýt."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1200
-#, fuzzy
 msgid "Bill of Materials Output File"
-msgstr "Rozpiska materiálu"
+msgstr "Výstupní soubor rozpisky materiálu"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1212
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1221
@@ -14565,9 +14522,8 @@ msgid "All supported formats"
 msgstr "Všechny podporované formáty"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:619
-#, fuzzy
 msgid "Add Library"
-msgstr "Přidat knihovnu..."
+msgstr "Přidat knihovnu"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:633
 msgid "Warning: Duplicate Nickname"
@@ -15294,9 +15250,9 @@ msgid "Schematic file changes are unsaved"
 msgstr "Změny souboru schématu nejsou uloženy"
 
 #: eeschema/files-io.cpp:232
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported schematic file '%s'."
-msgstr "Soubory schématu Ltspice"
+msgstr "Nepodporovaný soubor schématu %s."
 
 #: eeschema/files-io.cpp:269
 msgid "Root"
@@ -15405,9 +15361,8 @@ msgid "Insert Schematic"
 msgstr "Vložit schéma"
 
 #: eeschema/files-io.cpp:660
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Vlastnosti listu schéma"
+msgstr "Importovat obsah listu schématu..."
 
 #: eeschema/files-io.cpp:672
 msgid ""
@@ -15492,9 +15447,9 @@ msgstr ""
 "Ujistěte se, že máte oprávnění k zápisu a zkuste to znovu."
 
 #: eeschema/files-io.cpp:1120
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to save %s."
-msgstr "Nepodařilo se uložit \"%s\""
+msgstr "Uložení %s se nezdařilo."
 
 #: eeschema/files-io.cpp:1122
 #, fuzzy
@@ -15623,9 +15578,8 @@ msgstr "Stopy"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
 #: pcbnew/tools/drawing_tool.cpp:1576 pcbnew/tools/drawing_tool.cpp:1665
-#, fuzzy
 msgid "Import Graphics"
-msgstr "Import grafiky..."
+msgstr "Import grafiky"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 msgid "No file selected!"
