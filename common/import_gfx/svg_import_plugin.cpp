@@ -261,7 +261,7 @@ void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aCl
     if( aNumPoints > 0 )
         DrawCubicBezierPath( aPoints, aNumPoints, collectedPathPoints );
 
-    if( aClosedPath )
+    if( aClosedPath && collectedPathPoints.size() > 2 )
         DrawPolygon( collectedPathPoints, aStroke, aFilled, aFillColor );
     else
         DrawLineSegments( collectedPathPoints, aStroke );

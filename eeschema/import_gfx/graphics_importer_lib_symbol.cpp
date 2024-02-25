@@ -176,7 +176,8 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVer
 
     polygon->SetStroke( MapStrokeParams( aStroke ) );
 
-    addItem( std::move( polygon ) );
+    if( polygon->IsPolyShapeValid() )
+        addItem( std::move( polygon ) );
 }
 
 
