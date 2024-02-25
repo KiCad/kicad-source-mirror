@@ -4444,7 +4444,7 @@ FOOTPRINT* PCB_IO_KICAD_SEXPR_PARSER::parseFOOTPRINT_unchecked( wxArrayString* a
 
             break;
 
-        case T_solder_paste_margin_ratio:
+        case T_solder_paste_ratio:
             footprint->SetLocalSolderPasteMarginRatio( parseDouble( "local solder paste margin ratio value" ) );
             NeedRIGHT();
 
