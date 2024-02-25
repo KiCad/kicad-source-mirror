@@ -25,7 +25,6 @@
 
 #include <base_units.h>
 #include <widgets/text_ctrl_eval.h>
-#include <board.h>
 #include <footprint.h>
 #include <pcb_edit_frame.h>
 #include <wx/msgdlg.h>
@@ -50,7 +49,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
             m_GridOffsetX( 0 ),
             m_GridOffsetY( 0 ),
             m_GridStagger( 1 ),
-            m_GridStaggerType( 0 ),                  // rows
+            m_GridStaggerRows( true ),
             m_GridNumberingAxis( 0 ),                // h then v
             m_GridNumReverseAlt( false ),
             m_GridNumStartSet( 1 ),                  // use specified start
@@ -84,8 +83,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long      m_GridOffsetX;
     long      m_GridOffsetY;
     long      m_GridStagger;
-
-    long      m_GridStaggerType;
+    bool      m_GridStaggerRows;
     long      m_GridNumberingAxis;
     bool      m_GridNumReverseAlt;
     long      m_GridNumStartSet;
@@ -202,7 +200,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     m_cfg_persister.Add( m_vOffset, s_arrayOptions.m_GridOffsetY );
     m_cfg_persister.Add( *m_entryStagger, s_arrayOptions.m_GridStagger );
 
-    m_cfg_persister.Add( *m_radioBoxGridStaggerType, s_arrayOptions.m_GridStaggerType );
+    m_cfg_persister.Add( *m_staggerRows, s_arrayOptions.m_GridStaggerRows );
 
     m_cfg_persister.Add( *m_radioBoxGridNumberingAxis, s_arrayOptions.m_GridNumberingAxis );
     m_cfg_persister.Add( *m_checkBoxGridReverseNumbering, s_arrayOptions.m_GridNumReverseAlt );
@@ -387,15 +385,15 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         ok &= validateLongEntry(*m_entryNx, newGrid->m_nx, _("horizontal count"), errors);
         ok &= validateLongEntry(*m_entryNy, newGrid->m_ny, _("vertical count"), errors);
 
-        newGrid->m_delta.x = m_hSpacing.GetValue();
-        newGrid->m_delta.y = m_vSpacing.GetValue();
+        newGrid->m_delta.x = m_hSpacing.GetIntValue();
+        newGrid->m_delta.y = m_vSpacing.GetIntValue();
 
-        newGrid->m_offset.x = m_hOffset.GetValue();
-        newGrid->m_offset.y = m_vOffset.GetValue();
+        newGrid->m_offset.x = m_hOffset.GetIntValue();
+        newGrid->m_offset.y = m_vOffset.GetIntValue();
 
         ok &= validateLongEntry(*m_entryStagger, newGrid->m_stagger, _("stagger"), errors);
 
-        newGrid->m_stagger_rows = m_radioBoxGridStaggerType->GetSelection() == 0;
+        newGrid->m_stagger_rows = m_staggerRows->GetValue();
 
         newGrid->m_horizontalThenVertical = m_radioBoxGridNumberingAxis->GetSelection() == 0;
         newGrid->m_reverseNumberingAlternate = m_checkBoxGridReverseNumbering->GetValue();
@@ -445,8 +443,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         bool   ok = true;
         double angle = EDA_UNIT_UTILS::UI::DoubleValueFromString( m_entryCircAngle->GetValue() );
 
-        newCirc->m_centre.x = m_hCentre.GetValue();
-        newCirc->m_centre.y = m_vCentre.GetValue();
+        newCirc->m_centre.x = m_hCentre.GetIntValue();
+        newCirc->m_centre.y = m_vCentre.GetIntValue();
         newCirc->m_angle = EDA_ANGLE( angle, DEGREES_T );
 
         ok = validateLongEntry(*m_entryCircCount, newCirc->m_nPts, _("point count"), errors);
@@ -570,7 +568,7 @@ void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
 {
     if( m_radioBtnSetByPos->GetValue() )
     {
-        VECTOR2I centre( m_hCentre.GetValue(), m_vCentre.GetValue() );
+        VECTOR2I centre( m_hCentre.GetIntValue(), m_vCentre.GetIntValue() );
 
         // Find the radius, etc of the circle
         centre -= m_originalItemPosition;
@@ -587,7 +585,7 @@ void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
         m_refPosX.SetValue( m_originalItemPosition.x );
         m_refPosY.SetValue( m_originalItemPosition.y );
 
-        double radius = m_circRadius.GetValue();
+        double radius = m_circRadius.GetIntValue();
         EDA_ANGLE angle = m_circCenterAngle.GetAngleValue();
 
         m_hCentre.SetValue( m_originalItemPosition.x + radius * angle.Cos() );
