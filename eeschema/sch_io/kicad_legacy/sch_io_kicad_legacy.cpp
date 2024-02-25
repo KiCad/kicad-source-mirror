@@ -1086,7 +1086,7 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY::loadText( LINE_READER& aReader )
             penWidth = parseInt( aReader, line, &line );
     }
 
-    text->SetBold( penWidth != 0 );
+    text->SetBoldFlag( penWidth != 0 );
     text->SetTextThickness( penWidth != 0 ? GetPenSizeForBold( size ) : 0 );
 
     // Read the text string for the text.
@@ -1369,7 +1369,7 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
 
                     if( textAttrs[2] == 'B' )
                     {
-                        field.SetBold( true );
+                        field.SetBoldFlag( true );
                     }
                     else if( textAttrs[2] != 'N' )
                     {

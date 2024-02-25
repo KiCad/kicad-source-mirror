@@ -552,7 +552,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
                 case T_bold:
                 {
                     bool value = parseMaybeAbsentBool( true );
-                    aText->SetBold( value );
+                    aText->SetBoldFlag( value );
                 }
                     break;
 

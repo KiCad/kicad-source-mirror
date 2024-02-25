@@ -737,7 +737,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
                 case T_bold:
                 {
                     bool bold = parseMaybeAbsentBool( true );
-                    aText->SetBold( bold );
+                    aText->SetBoldFlag( bold );
                     break;
                 }
 

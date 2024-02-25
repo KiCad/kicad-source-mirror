@@ -140,6 +140,7 @@ public:
     bool IsItalic() const                       { return m_attributes.m_Italic; }
 
     void SetBold( bool aBold );
+    void SetBoldFlag( bool aBold );
     bool IsBold() const                         { return m_attributes.m_Bold; }
 
     virtual void SetVisible( bool aVisible );

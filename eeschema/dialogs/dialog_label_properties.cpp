@@ -553,20 +553,8 @@ bool DIALOG_LABEL_PROPERTIES::TransferDataFromWindow()
     else if( m_currentLabel->GetTextWidth() != m_textSize.GetValue() )
         m_currentLabel->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
 
-    if( m_bold->IsChecked() != m_currentLabel->IsBold() )
-    {
-        if( m_bold->IsChecked() )
-        {
-            m_currentLabel->SetBold( true );
-            m_currentLabel->SetTextThickness( GetPenSizeForBold( m_currentLabel->GetTextWidth() ) );
-        }
-        else
-        {
-            m_currentLabel->SetBold( false );
-            m_currentLabel->SetTextThickness( 0 ); // Use default pen width
-        }
-    }
-
+    // Must come after SetTextSize()
+    m_currentLabel->SetBold( m_bold->IsChecked() );
     m_currentLabel->SetItalic( m_italic->IsChecked() );
 
     m_currentLabel->SetTextColor( m_textColorSwatch->GetSwatchColor() );

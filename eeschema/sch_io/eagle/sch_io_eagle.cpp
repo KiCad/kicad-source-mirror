@@ -2773,14 +2773,9 @@ void SCH_IO_EAGLE::loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) 
 {
     aText->SetTextSize( aAttribs.ConvertSize() );
 
-    if( aAttribs.ratio )
-    {
-        if( aAttribs.ratio.CGet() > 12 )
-        {
-            aText->SetBold( true );
-            aText->SetTextThickness( GetPenSizeForBold( aText->GetTextWidth() ) );
-        }
-    }
+    // Must come after SetTextSize()
+    if( aAttribs.ratio && aAttribs.ratio.CGet() > 12 )
+        aText->SetBold( true );
 
     int  align   = aAttribs.align ? *aAttribs.align : ETEXT::BOTTOM_LEFT;
     int  degrees = aAttribs.rot ? aAttribs.rot->degrees : 0;
@@ -2796,7 +2791,11 @@ void SCH_IO_EAGLE::loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText
     aField->SetTextPos( aText->GetPosition() );
     aField->SetTextSize( aText->GetTextSize() );
     aField->SetTextAngle( aText->GetTextAngle() );
+
+    // Must come after SetTextSize()
     aField->SetBold( aText->IsBold() );
+    aField->SetItalic( false );
+
     aField->SetVertJustify( aText->GetVertJustify() );
     aField->SetHorizJustify( aText->GetHorizJustify() );
 }

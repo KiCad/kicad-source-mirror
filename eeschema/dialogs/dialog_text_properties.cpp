@@ -471,21 +471,10 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
                                                               m_italic->IsChecked() ) );
     }
 
-    if( m_bold->IsChecked() != m_currentText->IsBold() )
-    {
-        if( m_bold->IsChecked() )
-        {
-            m_currentText->SetBold( true );
-            m_currentText->SetTextThickness( GetPenSizeForBold( m_currentText->GetTextWidth() ) );
-        }
-        else
-        {
-            m_currentText->SetBold( false );
-            m_currentText->SetTextThickness( 0 ); // Use default pen width
-        }
-    }
-
+    // Must come after SetTextSize()
+    m_currentText->SetBold( m_bold->IsChecked() );
     m_currentText->SetItalic( m_italic->IsChecked() );
+
     m_currentText->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
     if( m_hAlignRight->IsChecked() )

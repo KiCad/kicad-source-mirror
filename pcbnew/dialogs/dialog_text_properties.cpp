@@ -508,7 +508,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     if( m_KeepUpright->IsShown() )
         m_item->SetKeepUpright( m_KeepUpright->GetValue() );
 
-    m_item->SetBold( m_bold->IsChecked() );
+    m_item->SetBoldFlag( m_bold->IsChecked() );
     m_item->SetItalic( m_italic->IsChecked() );
 
     if( m_alignLeft->IsChecked() )

@@ -467,10 +467,13 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
             {
                 LIB_TEXTBOX* textbox = new LIB_TEXTBOX( symbol, lineWidth, m_lastFillStyle );
 
-                textbox->SetBold( m_lastTextBold );
-                textbox->SetItalic( m_lastTextItalic );
                 textbox->SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
                                                 schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
+
+                // Must be after SetTextSize()
+                textbox->SetBold( m_lastTextBold );
+                textbox->SetItalic( m_lastTextItalic );
+
                 textbox->SetTextAngle( m_lastTextAngle );
                 textbox->SetHorizJustify( m_lastTextJust );
 

@@ -262,8 +262,9 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataFromWindow()
         else
             m_graphicText->SetBodyStyle( 0 );
 
-        m_graphicText->SetItalic( m_italic->IsChecked() );
+        // Must come after SetTextSize()
         m_graphicText->SetBold( m_bold->IsChecked() );
+        m_graphicText->SetItalic( m_italic->IsChecked() );
         m_graphicText->SetTextColor( m_textColorSwatch->GetSwatchColor() );
 
         if( m_hAlignLeft->IsChecked() )

@@ -371,6 +371,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
             if( !m_thickness.IsIndeterminate() )
                 text->SetTextThickness( m_thickness.GetValue() );
 
+            // Must be after SetTextSize()
             if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED )
                 text->SetBold( m_bold->GetValue() );
 

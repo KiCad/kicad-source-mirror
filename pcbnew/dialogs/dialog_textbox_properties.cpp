@@ -345,7 +345,7 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     }
 
     m_textBox->SetTextAngle( m_orientation.GetAngleValue().Normalize() );
-    m_textBox->SetBold( m_bold->IsChecked() );
+    m_textBox->SetBoldFlag( m_bold->IsChecked() );
     m_textBox->SetItalic( m_italic->IsChecked() );
 
     if( m_alignLeft->IsChecked() )

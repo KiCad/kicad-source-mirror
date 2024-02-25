@@ -652,7 +652,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
                 SCH_PARSE_ERROR( "invalid field text italic parameter", aReader, line );
 
             if ( attr_2 == 'B' )       // Bold
-                field->SetBold( true );
+                field->SetBoldFlag( true );
             else if( attr_2 != 'N' )   // No bold is default, check for error.
                 SCH_PARSE_ERROR( "invalid field text bold parameter", aReader, line );
         }
@@ -1020,7 +1020,7 @@ LIB_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& 
             SCH_PARSE_ERROR( "invalid text stype, expected 'Normal' or 'Italic'", aReader, line );
 
         if( parseInt( aReader, line, &line ) > 0 )
-            text->SetBold( true );
+            text->SetBoldFlag( true );
 
         // Some old libaries version > 2.0 do not have these options for text justification:
         if( !is_eol( *line ) )

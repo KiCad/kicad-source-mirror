@@ -2992,6 +2992,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextCodeIfExists( EDA_TEXT*          aKiCa
     aKiCadTextItem->SetTextThickness( getKiCadLength( textCode.LineWidth ) );
 #endif
 
+    // Must come after SetTextSize()
     aKiCadTextItem->SetBold( textCode.Font.Modifier1 == FONT_BOLD );
     aKiCadTextItem->SetItalic( textCode.Font.Italic );
 }

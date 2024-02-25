@@ -221,6 +221,22 @@ void EDA_TEXT::SetItalic( bool aItalic )
 
 void EDA_TEXT::SetBold( bool aBold )
 {
+    if( m_attributes.m_Bold != aBold )
+    {
+        int size = std::min( m_attributes.m_Size.x, m_attributes.m_Size.y );
+
+        if( aBold )
+            m_attributes.m_StrokeWidth = GetPenSizeForBold( size );
+        else
+            m_attributes.m_StrokeWidth = GetPenSizeForNormal( size );
+    }
+
+    SetBoldFlag( aBold );
+}
+
+
+void EDA_TEXT::SetBoldFlag( bool aBold )
+{
     m_attributes.m_Bold = aBold;
     ClearRenderCache();
     m_bounding_box_cache_valid = false;

@@ -2316,8 +2316,10 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
             new_eda_text->SetFont( eda_text->GetFont() );
             new_eda_text->SetTextSize( eda_text->GetTextSize() );
             new_eda_text->SetTextThickness( eda_text->GetTextThickness() );
-            new_eda_text->SetItalic( eda_text->IsItalic() );
+
+            // Must be after SetTextSize()
             new_eda_text->SetBold( eda_text->IsBold() );
+            new_eda_text->SetItalic( eda_text->IsItalic() );
 
             newtext->AutoplaceFields( m_frame->GetScreen(), false );
 

@@ -1487,9 +1487,11 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {
             const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-            textItem->SetItalic( font.Italic );
-            textItem->SetBold( font.Bold );
             textItem->SetTextSize( { font.Size / 2, font.Size / 2 } );
+
+            // Must come after SetTextSize()
+            textItem->SetBold( font.Bold );
+            textItem->SetItalic( font.Italic );
         }
 
         textItem->SetFlags(IS_NEW );
@@ -1541,9 +1543,11 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {
             const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-            textItem->SetItalic( font.Italic );
-            textItem->SetBold( font.Bold );
             textItem->SetTextSize( { font.Size / 2, font.Size / 2 } );
+
+            // Must come after SetTextSize()
+            textItem->SetBold( font.Bold );
+            textItem->SetItalic( font.Italic );
         }
         else if( fontId > 0 && fontId <= aFontSizes.size() )
         {
@@ -1621,11 +1625,12 @@ void SCH_IO_ALTIUM::AddTextBox( const ASCH_TEXT_FRAME *aElem )
     if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
     {
         const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-        textBox->SetItalic( font.Italic );
-        textBox->SetBold( font.Bold );
         textBox->SetTextSize( { font.Size / 2, font.Size / 2 } );
 
-        //textBox->SetFont(  //how to set font, we have a font mane here: ( font.fontname );
+        // Must come after SetTextSize()
+        textBox->SetBold( font.Bold );
+        textBox->SetItalic( font.Italic );
+        //textBox->SetFont(  //how to set font, we have a font name here: ( font.fontname );
     }
 
     textBox->SetFlags( IS_NEW );
@@ -3422,10 +3427,12 @@ void SCH_IO_ALTIUM::ParseHarnessPort( const ASCH_PORT& aElem )
     if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
     {
         const ASCH_SHEET_FONT& font = m_altiumSheet->fonts.at( fontId - 1 );
-        textBox->SetItalic( font.Italic );
-        textBox->SetBold( font.Bold );
         textBox->SetTextSize( { font.Size / 2, font.Size / 2 } );
-        //textBox->SetFont(  //how to set font, we have a font mane here: ( font.fontname );
+
+        // Must come after SetTextSize()
+        textBox->SetBold( font.Bold );
+        textBox->SetItalic( font.Italic );
+        //textBox->SetFont(  //how to set font, we have a font name here: ( font.fontname );
     }
 
     textBox->SetFlags( IS_NEW );

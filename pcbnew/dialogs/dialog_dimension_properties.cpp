@@ -413,6 +413,7 @@ void DIALOG_DIMENSION_PROPERTIES::updateDimensionFromDialog( PCB_DIMENSION_BASE*
     if( m_fontCtrl->HaveFontSelection() )
         aTarget->SetFont( m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() ) );
 
+    // Must come after SetTextWidth/Height()
     aTarget->SetBold( m_bold->IsChecked() );
     aTarget->SetItalic( m_italic->IsChecked() );
 
