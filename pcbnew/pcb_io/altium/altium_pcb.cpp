@@ -3639,7 +3639,7 @@ void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* 
     }
 
     aEdaText->SetTextThickness( aElem.strokewidth );
-    aEdaText->SetBold( aElem.isBold );
+    aEdaText->SetBoldFlag( aElem.isBold );
     aEdaText->SetItalic( aElem.isItalic );
     aEdaText->SetMirrored( aElem.isMirrored );
 

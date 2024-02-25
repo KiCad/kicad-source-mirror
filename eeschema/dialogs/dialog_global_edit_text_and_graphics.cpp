@@ -293,10 +293,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( SCH_COMMIT* aCommit,
         if( m_italic->Get3StateValue() != wxCHK_UNDETERMINED )
             eda_text->SetItalic( m_italic->GetValue() );
 
+        // Must come after SetTextSize()
         if( m_bold->Get3StateValue() != wxCHK_UNDETERMINED )
             eda_text->SetBold( m_bold->GetValue() );
 
-        // Must come after bold & italic
+        // Must come after SetBold() & SetItalic()
         if( m_fontCtrl->GetStringSelection() != INDETERMINATE_ACTION )
         {
             eda_text->SetFont( m_fontCtrl->GetFontSelection( eda_text->IsBold(),

@@ -1254,8 +1254,11 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
 
     textItem->SetParent( schematic );
 
+    textItem->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
+
     if( aType != LAYER_NETCLASS_REFS )
     {
+        // Must be after SetTextSize()
         textItem->SetBold( m_lastTextBold );
         textItem->SetItalic( m_lastTextItalic );
     }
@@ -1271,7 +1274,6 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         textItem->SetTextAngle( m_lastTextAngle );
     }
 
-    textItem->SetTextSize( VECTOR2I( settings.m_DefaultTextSize, settings.m_DefaultTextSize ) );
     textItem->SetFlags( IS_NEW | IS_MOVING );
 
     if( !labelItem )
@@ -1864,10 +1866,13 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             {
                 SCH_TEXTBOX* textbox = new SCH_TEXTBOX( 0, m_lastTextboxFillStyle );
 
-                textbox->SetBold( m_lastTextBold );
-                textbox->SetItalic( m_lastTextItalic );
                 textbox->SetTextSize( VECTOR2I( sch_settings.m_DefaultTextSize,
                                                 sch_settings.m_DefaultTextSize ) );
+
+                // Must come after SetTextSize()
+                textbox->SetBold( m_lastTextBold );
+                textbox->SetItalic( m_lastTextItalic );
+
                 textbox->SetTextAngle( m_lastTextboxAngle );
                 textbox->SetHorizJustify( m_lastTextboxHJustify );
                 textbox->SetVertJustify( m_lastTextboxVJustify );
