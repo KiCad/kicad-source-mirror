@@ -133,7 +133,7 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap">Load From File; </property>
                   <property name="label">Grid Array</property>
-                  <property name="select">1</property>
+                  <property name="select">0</property>
                   <object class="wxPanel" expanded="true">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>
@@ -283,7 +283,7 @@
                                       <property name="style"></property>
                                       <property name="subclass"></property>
                                       <property name="toolbar_pane">0</property>
-                                      <property name="tooltip"></property>
+                                      <property name="tooltip">Number of columns</property>
                                       <property name="window_extra_style"></property>
                                       <property name="window_name"></property>
                                       <property name="window_style"></property>
@@ -411,7 +411,7 @@
                                       <property name="style"></property>
                                       <property name="subclass"></property>
                                       <property name="toolbar_pane">0</property>
-                                      <property name="tooltip"></property>
+                                      <property name="tooltip">Number of rows</property>
                                       <property name="window_extra_style"></property>
                                       <property name="window_name"></property>
                                       <property name="window_style"></property>
@@ -472,7 +472,7 @@
                                       <property name="style"></property>
                                       <property name="subclass">TEXT_CTRL_EVAL; widgets/text_ctrl_eval.h</property>
                                       <property name="toolbar_pane">0</property>
-                                      <property name="tooltip"></property>
+                                      <property name="tooltip">Number of rows</property>
                                       <property name="validator_data_type"></property>
                                       <property name="validator_style">wxFILTER_NONE</property>
                                       <property name="validator_type">wxDefaultValidator</property>
@@ -502,7 +502,7 @@
                               <property name="permission">none</property>
                               <object class="sizeritem" expanded="true">
                                 <property name="border">5</property>
-                                <property name="flag">wxEXPAND</property>
+                                <property name="flag">wxEXPAND|wxBOTTOM</property>
                                 <property name="proportion">1</property>
                                 <object class="wxFlexGridSizer" expanded="false">
                                   <property name="cols">3</property>
@@ -912,7 +912,7 @@
                                   <property name="permission">none</property>
                                   <object class="sizeritem" expanded="true">
                                     <property name="border">5</property>
-                                    <property name="flag">wxBOTTOM|wxEXPAND</property>
+                                    <property name="flag">wxEXPAND</property>
                                     <property name="proportion">1</property>
                                     <object class="wxFlexGridSizer" expanded="true">
                                       <property name="cols">3</property>
@@ -2539,7 +2539,7 @@
                 <object class="notebookpage" expanded="true">
                   <property name="bitmap"></property>
                   <property name="label">Circular Array</property>
-                  <property name="select">0</property>
+                  <property name="select">1</property>
                   <object class="wxPanel" expanded="true">
                     <property name="BottomDockable">1</property>
                     <property name="LeftDockable">1</property>

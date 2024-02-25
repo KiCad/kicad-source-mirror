@@ -39,6 +39,8 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_labelNx = new wxStaticText( sbSizerGridSize->GetStaticBox(), wxID_ANY, _("Horizontal count:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelNx->Wrap( -1 );
+	m_labelNx->SetToolTip( _("Number of columns") );
+
 	fgSizerGridSize->Add( m_labelNx, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_entryNx = new TEXT_CTRL_EVAL( sbSizerGridSize->GetStaticBox(), wxID_ANY, _("5"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -46,9 +48,13 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_labelNy = new wxStaticText( sbSizerGridSize->GetStaticBox(), wxID_ANY, _("Vertical count:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelNy->Wrap( -1 );
+	m_labelNy->SetToolTip( _("Number of rows") );
+
 	fgSizerGridSize->Add( m_labelNy, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_entryNy = new TEXT_CTRL_EVAL( sbSizerGridSize->GetStaticBox(), wxID_ANY, _("5"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryNy->SetToolTip( _("Number of rows") );
+
 	fgSizerGridSize->Add( m_entryNy, 0, wxEXPAND, 5 );
 
 
@@ -92,7 +98,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	fgSizerItemSpacing->Add( m_unitLabelDy, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerItemsSpacing->Add( fgSizerItemSpacing, 1, wxEXPAND, 5 );
+	sbSizerItemsSpacing->Add( fgSizerItemSpacing, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	wxStaticBoxSizer* sbSizerGridShape;
 	sbSizerGridShape = new wxStaticBoxSizer( new wxStaticBox( sbSizerItemsSpacing->GetStaticBox(), wxID_ANY, _("Grid Spacing Modifiers") ), wxVERTICAL );
@@ -129,7 +135,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	fgSizerModifier->Add( m_unitLabelOffsetY, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	sbSizerGridShape->Add( fgSizerModifier, 1, wxBOTTOM|wxEXPAND, 5 );
+	sbSizerGridShape->Add( fgSizerModifier, 1, wxEXPAND, 5 );
 
 
 	sbSizerItemsSpacing->Add( sbSizerGridShape, 0, wxALL|wxEXPAND, 5 );
@@ -268,7 +274,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_gridPanel->SetSizer( bSizerGridArray );
 	m_gridPanel->Layout();
 	bSizerGridArray->Fit( m_gridPanel );
-	m_gridTypeNotebook->AddPage( m_gridPanel, _("Grid Array"), true );
+	m_gridTypeNotebook->AddPage( m_gridPanel, _("Grid Array"), false );
 	m_circularPanel = new wxPanel( m_gridTypeNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
@@ -531,7 +537,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_circularPanel->SetSizer( bSizer4 );
 	m_circularPanel->Layout();
 	bSizer4->Fit( m_circularPanel );
-	m_gridTypeNotebook->AddPage( m_circularPanel, _("Circular Array"), false );
+	m_gridTypeNotebook->AddPage( m_circularPanel, _("Circular Array"), true );
 
 	bSizer7->Add( m_gridTypeNotebook, 1, wxALL|wxEXPAND, 5 );
 
