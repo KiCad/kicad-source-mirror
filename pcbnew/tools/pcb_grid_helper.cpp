@@ -225,7 +225,7 @@ VECTOR2I PCB_GRID_HELPER::AlignToNearestPad( const VECTOR2I& aMousePos, PADS& aP
 VECTOR2I PCB_GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos,
                                           std::vector<BOARD_ITEM*>& aItems,
                                           GRID_HELPER_GRIDS aGrid,
-                                          const SELECTION_FILTER_OPTIONS* aSelectionFilter )
+                                          const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter )
 {
     clearAnchors();
 
@@ -541,7 +541,7 @@ std::set<BOARD_ITEM*> PCB_GRID_HELPER::queryVisible( const BOX2I& aArea,
 
 
 void PCB_GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom,
-                                      const SELECTION_FILTER_OPTIONS* aSelectionFilter )
+                                      const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter )
 {
     KIGFX::VIEW*         view = m_toolMgr->GetView();
     RENDER_SETTINGS*     settings = view->GetPainter()->GetSettings();

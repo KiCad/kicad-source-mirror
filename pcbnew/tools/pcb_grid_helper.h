@@ -32,7 +32,7 @@
 
 class TOOL_MANAGER;
 struct MAGNETIC_SETTINGS;
-struct SELECTION_FILTER_OPTIONS;
+struct PCB_SELECTION_FILTER_OPTIONS;
 
 class PCB_GRID_HELPER : public GRID_HELPER
 {
@@ -57,7 +57,7 @@ public:
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem,
                              GRID_HELPER_GRIDS aGrid = GRID_HELPER_GRIDS::GRID_CURRENT,
-                             const SELECTION_FILTER_OPTIONS* aSelectionFilter = nullptr );
+                             const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter = nullptr );
 
     VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
 
@@ -97,7 +97,7 @@ private:
      * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
      */
     void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bool aFrom = false,
-                         const SELECTION_FILTER_OPTIONS* aSelectionFilter = nullptr );
+                         const PCB_SELECTION_FILTER_OPTIONS* aSelectionFilter = nullptr );
 
 private:
     MAGNETIC_SETTINGS*     m_magneticSettings;

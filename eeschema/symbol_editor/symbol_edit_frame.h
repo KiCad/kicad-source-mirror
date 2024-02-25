@@ -420,6 +420,8 @@ protected:
 
     void doReCreateMenuBar() override;
 
+    void updateSelectionFilterVisbility() override;
+
 private:
     // Set up the tool framework
     void setupTools();

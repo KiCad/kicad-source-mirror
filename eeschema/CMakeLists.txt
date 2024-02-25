@@ -278,6 +278,8 @@ set( EESCHEMA_SIM_SRCS
 
 set( EESCHEMA_WIDGETS
     widgets/hierarchy_pane.cpp
+    widgets/panel_sch_selection_filter_base.cpp
+    widgets/panel_sch_selection_filter.cpp
     widgets/panel_symbol_chooser.cpp
     widgets/pin_shape_combobox.cpp
     widgets/pin_type_combobox.cpp

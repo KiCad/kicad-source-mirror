@@ -898,6 +898,8 @@ protected:
 
     void unitsChangeRefresh() override;
 
+    void updateSelectionFilterVisbility() override;
+
 private:
     // Called when resizing the Hierarchy Navigator panel
     void OnResizeHierarchyNavigator( wxSizeEvent& aEvent );

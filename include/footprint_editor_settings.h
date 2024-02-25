@@ -84,7 +84,7 @@ public:
 
     wxString m_FootprintTextShownColumns;
 
-    SELECTION_FILTER_OPTIONS m_SelectionFilter;
+    PCB_SELECTION_FILTER_OPTIONS m_SelectionFilter;
 
     std::vector<LAYER_PRESET> m_LayerPresets;
 

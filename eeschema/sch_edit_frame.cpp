@@ -93,6 +93,7 @@
 #include <wx/app.h>
 #include <wx/filedlg.h>
 #include <wx/socket.h>
+#include <widgets/panel_sch_selection_filter.h>
 #include <widgets/wx_aui_utils.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 
@@ -189,6 +190,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_propertiesPanel->SetSplitterProportion( eeconfig()->m_AuiPanels.properties_splitter );
 
+    m_selectionFilterPanel = new PANEL_SCH_SELECTION_FILTER( this );
+
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
@@ -214,6 +217,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Show( false ) );
 
     m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo( this ) );
+    m_auimgr.AddPane( m_selectionFilterPanel, defaultSchSelectionFilterPaneInfo( this ) );
 
     m_auimgr.AddPane( createHighlightedNetNavigator(), defaultNetNavigatorPaneInfo() );
 
@@ -249,14 +253,19 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
     static_cast<KIGFX::SCH_PAINTER*>( view->GetPainter() )->SetSchematic( m_schematic );
 
-    wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
-    wxAuiPaneInfo&     netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
-    wxAuiPaneInfo&     propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
+    wxAuiPaneInfo& hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+    wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
+    wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
+    wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
     EESCHEMA_SETTINGS* cfg = eeconfig();
 
     hierarchy_pane.Show( cfg->m_AuiPanels.show_schematic_hierarchy );
     netNavigatorPane.Show( cfg->m_AuiPanels.show_net_nav_panel );
     propertiesPane.Show( cfg->m_AuiPanels.show_properties );
+    updateSelectionFilterVisbility();
+
+    // The selection filter doesn't need to grow in the vertical direction when docked
+    selectionFilterPane.dock_proportion = 0;
 
     if( cfg->m_AuiPanels.hierarchy_panel_float_width > 0
             && cfg->m_AuiPanels.hierarchy_panel_float_height > 0 )
@@ -424,6 +433,7 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     }
 
     delete m_hierarchy;
+    delete m_selectionFilterPanel;
 }
 
 
@@ -1013,6 +1023,9 @@ void SCH_EDIT_FRAME::doCloseWindow()
         m_symbolFieldsTableDialog = nullptr;
     }
 
+    // Make sure local settings are persisted
+    SaveProjectLocalSettings();
+
     // Shutdown all running tools
     if( m_toolManager )
     {
@@ -1057,9 +1070,6 @@ void SCH_EDIT_FRAME::doCloseWindow()
 
     if( !Schematic().GetFileName().IsEmpty() && !Schematic().RootScreen()->IsEmpty() )
         UpdateFileHistory( fileName );
-
-    // Make sure local settings are persisted
-    SaveProjectLocalSettings();
 
     Schematic().RootScreen()->Clear();
 
@@ -1954,10 +1964,13 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
     RecreateToolbars();
 
     m_auimgr.GetPane( m_hierarchy ).Caption( _( "Schematic Hierarchy" ) );
+    m_auimgr.GetPane( m_selectionFilterPanel ).Caption( _( "Selection Filter" ) );
+    m_auimgr.GetPane( m_propertiesPanel ).Caption( _( "Properties" ) );
     m_auimgr.Update();
     m_hierarchy->UpdateHierarchyTree();
 
     m_propertiesPanel->LanguageChanged();
+    m_selectionFilterPanel->OnLanguageChanged();
 
     // status bar
     UpdateMsgPanel();
@@ -2381,4 +2394,21 @@ void SCH_EDIT_FRAME::unitsChangeRefresh()
     }
 
     UpdateProperties();
+}
+
+
+void SCH_EDIT_FRAME::updateSelectionFilterVisbility()
+{
+    wxAuiPaneInfo& hierarchyPane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
+    wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
+    wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
+    wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
+
+    // Don't give the selection filter its own visibility controls; instead show it if
+    // anything else is visible
+    bool showFilter = ( hierarchyPane.IsShown() && hierarchyPane.IsDocked() )
+                      || ( netNavigatorPane.IsShown() && netNavigatorPane.IsDocked() )
+                      || ( propertiesPane.IsShown() && propertiesPane.IsDocked() );
+
+    selectionFilterPane.Show( showFilter );
 }

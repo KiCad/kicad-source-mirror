@@ -71,6 +71,7 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/lib_tree.h>
 #include <widgets/wx_progress_reporters.h>
+#include <widgets/panel_sch_selection_filter.h>
 #include <widgets/sch_properties_panel.h>
 #include <widgets/symbol_tree_pane.h>
 #include <widgets/wx_aui_utils.h>
@@ -184,6 +185,8 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_propertiesPanel = new SCH_PROPERTIES_PANEL( this, this );
     m_propertiesPanel->SetSplitterProportion( m_settings->m_AuiPanels.properties_splitter );
 
+    m_selectionFilterPanel = new PANEL_SCH_SELECTION_FILTER( this );
+
     m_auimgr.SetManagedWindow( this );
 
     CreateInfoBar();
@@ -205,7 +208,15 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_propertiesPanel, defaultPropertiesPaneInfo( this ) );
     // Show or hide m_propertiesPanel depending on current settings:
     wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
+
+    m_auimgr.AddPane( m_selectionFilterPanel, defaultSchSelectionFilterPaneInfo( this ) );
+
+    wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
+    // The selection filter doesn't need to grow in the vertical direction when docked
+    selectionFilterPane.dock_proportion = 0;
+
     propertiesPaneInfo.Show( m_settings->m_AuiPanels.show_properties );
+    updateSelectionFilterVisbility();
 
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" )
                       .Left().Layer( 2 ) );
@@ -218,6 +229,10 @@ SYMBOL_EDIT_FRAME::SYMBOL_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .CentrePane() );
 
     FinishAUIInitialization();
+
+    // Can't put this in LoadSettings, because it has to be called before setupTools :/
+    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    selTool->GetFilter() = GetSettings()->m_SelectionFilter;
 
     if( m_settings->m_LibWidth > 0 )
         SetAuiPaneSize( m_auimgr, m_auimgr.GetPane( "SymbolTree" ), m_settings->m_LibWidth, -1 );
@@ -333,6 +348,9 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     m_settings->m_AuiPanels.properties_splitter = m_propertiesPanel->SplitterProportion();
     bool prop_shown = m_auimgr.GetPane( PropertiesPaneName() ).IsShown();
     m_settings->m_AuiPanels.show_properties = prop_shown;
+
+    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    m_settings->m_SelectionFilter = selTool->GetFilter();
 }
 
 
@@ -681,6 +699,7 @@ void SYMBOL_EDIT_FRAME::OnToggleSymbolTree( wxCommandEvent& event )
 {
     wxAuiPaneInfo& treePane = m_auimgr.GetPane( m_treePane );
     treePane.Show( !IsSymbolTreeShown() );
+    updateSelectionFilterVisbility();
     m_auimgr.Update();
 }
 
@@ -1844,4 +1863,19 @@ void SYMBOL_EDIT_FRAME::UpdateItem( EDA_ITEM* aItem, bool isAddOrDelete, bool aU
         eda_text->ClearBoundingBoxCache();
         eda_text->ClearRenderCache();
     }
+}
+
+
+void SYMBOL_EDIT_FRAME::updateSelectionFilterVisbility()
+{
+    wxAuiPaneInfo& treePane = m_auimgr.GetPane( "SymbolTree" );
+    wxAuiPaneInfo& propertiesPane = m_auimgr.GetPane( PropertiesPaneName() );
+    wxAuiPaneInfo& selectionFilterPane = m_auimgr.GetPane( wxS( "SelectionFilter" ) );
+
+    // Don't give the selection filter its own visibility controls; instead show it if
+    // anything else is visible
+    bool showFilter = ( treePane.IsShown() && treePane.IsDocked() )
+                      || ( propertiesPane.IsShown() && propertiesPane.IsDocked() );
+
+    selectionFilterPane.Show( showFilter );
 }

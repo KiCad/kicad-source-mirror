@@ -39,7 +39,7 @@
  * Selection filtering that applies all the time (not the "filter selection" dialog that modifies
  * the current selection)
  */
-struct SELECTION_FILTER_OPTIONS
+struct PCB_SELECTION_FILTER_OPTIONS
 {
     bool lockedItems;   ///< Allow selecting locked items
     bool footprints;    ///< Allow selecting entire footprints
@@ -53,7 +53,7 @@ struct SELECTION_FILTER_OPTIONS
     bool dimensions;    ///< Dimension items
     bool otherItems;    ///< Anything not fitting one of the above categories
 
-    SELECTION_FILTER_OPTIONS()
+    PCB_SELECTION_FILTER_OPTIONS()
     {
         lockedItems = true;
         footprints  = true;

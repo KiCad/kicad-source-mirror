@@ -24,6 +24,7 @@
 
 #include <layer_ids.h>
 #include <project/board_project_settings.h>
+#include <project/sch_project_settings.h>
 #include <settings/json_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <settings/app_settings.h>
@@ -132,8 +133,9 @@ public:
     std::vector<wxString> m_HiddenNets;
     std::set<wxString> m_HiddenNetclasses;
 
-    /// State of the selection filter widget
-    SELECTION_FILTER_OPTIONS m_SelectionFilter;
+    /// State of the selection filter widgets
+    PCB_SELECTION_FILTER_OPTIONS m_PcbSelectionFilter;
+    SCH_SELECTION_FILTER_OPTIONS m_SchSelectionFilter;
 
     // Upstream git repo info
     wxString m_GitRepoUsername;

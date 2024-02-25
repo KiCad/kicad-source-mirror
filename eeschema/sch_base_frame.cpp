@@ -92,7 +92,9 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                                 const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
         EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle,
                         aFrameName, schIUScale ),
-        m_base_frame_defaults( nullptr, "base_Frame_defaults" ), m_spaceMouse( nullptr )
+        m_base_frame_defaults( nullptr, "base_Frame_defaults" ),
+        m_selectionFilterPanel( nullptr ),
+        m_spaceMouse( nullptr )
 {
     if( ( aStyle & wxFRAME_NO_TASKBAR ) == 0 )
         createCanvas();

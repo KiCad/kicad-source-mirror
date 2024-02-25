@@ -161,7 +161,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     if( differentProject )
     {
         if( !Prj().IsNullProject() )
+        {
+            SaveProjectLocalSettings();
             GetSettingsManager()->SaveProject();
+        }
 
         Schematic().SetProject( nullptr );
         GetSettingsManager()->UnloadProject( &Prj(), false );
@@ -1257,6 +1260,7 @@ bool SCH_EDIT_FRAME::SaveProject( bool aSaveAs )
     else
     {
         saveProjectSettings();
+        SaveProjectLocalSettings();
     }
 
     if( !Kiface().IsSingle() )

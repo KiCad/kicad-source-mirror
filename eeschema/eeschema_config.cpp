@@ -28,12 +28,14 @@
 #include <dialogs/panel_gal_display_options.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
+#include <project/project_local_settings.h>
 #include <project/net_settings.h>
 #include <sch_edit_frame.h>
 #include <sch_painter.h>
 #include <schematic.h>
 #include <widgets/hierarchy_pane.h>
 #include <widgets/sch_search_pane.h>
+#include <widgets/panel_sch_selection_filter.h>
 #include <widgets/properties_panel.h>
 #include <settings/app_settings.h>
 #include <settings/settings_manager.h>
@@ -41,6 +43,8 @@
 #include <drawing_sheet/ds_data_model.h>
 #include <zoom_defines.h>
 #include <sim/spice_settings.h>
+#include <tool/tool_manager.h>
+#include <tools/ee_selection_tool.h>
 
 
 /// Helper for all the old plotting/printing code while it still exists
@@ -72,6 +76,12 @@ bool SCH_EDIT_FRAME::LoadProjectSettings()
 
     if( !DS_DATA_MODEL::GetTheInstance().LoadDrawingSheet( filename ) )
         ShowInfoBarError( _( "Error loading drawing sheet." ), true );
+
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+
+    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    selTool->GetFilter() = localSettings.m_SchSelectionFilter;
+    m_selectionFilterPanel->SetCheckboxesFromFilter( localSettings.m_SchSelectionFilter );
 
     return true;
 }
@@ -188,6 +198,11 @@ void SCH_EDIT_FRAME::SaveProjectLocalSettings()
 {
     if( m_schematic )
         m_schematic->RecordERCExclusions();
+
+    PROJECT_LOCAL_SETTINGS& localSettings = Prj().GetLocalSettings();
+    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+
+    localSettings.m_SchSelectionFilter = selTool->GetFilter();
 }
 
 

@@ -61,6 +61,7 @@ class SYMBOL_LIB_TABLE;
 class EESCHEMA_SETTINGS;
 class SYMBOL_EDITOR_SETTINGS;
 class NL_SCHEMATIC_PLUGIN;
+class PANEL_SCH_SELECTION_FILTER;
 
 /**
  * Load symbol from symbol library table.
@@ -273,9 +274,17 @@ protected:
      */
     void setSymWatcher( const LIB_ID* aSymbol );
 
+    /**
+     * Selection filter panel doesn't have a dedicated visibility control, so show it if any
+     * other AUI panel is shown and docked
+     */
+    virtual void updateSelectionFilterVisbility() {}
+
     /// These are only used by symbol_editor.  Eeschema should be using the one inside
     /// the SCHEMATIC.
     SCHEMATIC_SETTINGS  m_base_frame_defaults;
+
+    PANEL_SCH_SELECTION_FILTER* m_selectionFilterPanel;
 
 private:
 

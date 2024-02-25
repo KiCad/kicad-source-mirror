@@ -196,6 +196,7 @@ void SYMBOL_EDIT_FRAME::ToggleProperties()
 
     wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
     propertiesPaneInfo.Show( show );
+    updateSelectionFilterVisbility();
 
     if( show )
     {

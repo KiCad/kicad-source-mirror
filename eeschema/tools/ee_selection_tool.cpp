@@ -162,6 +162,7 @@ EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         m_unit( 0 ),
         m_bodyStyle( 0 )
 {
+    m_filter.SetDefaults();
     m_selection.Clear();
 }
 
@@ -1081,6 +1082,12 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
             continue;
         }
 
+        if( !itemPassesFilter( collector[i] ) )
+        {
+            collector.Remove( i );
+            continue;
+        }
+
         if( aSelectedOnly && !collector[i]->IsSelected() )
         {
             collector.Remove( i );
@@ -1556,6 +1563,101 @@ EE_SELECTION& EE_SELECTION_TOOL::RequestSelection( const std::vector<KICAD_T>& a
 }
 
 
+bool EE_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
+{
+    if( !aItem )
+        return false;
+
+    // Locking is not yet exposed uniformly in the schematic
+#if 0
+    if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( aItem ) )
+    {
+        if( schItem->IsLocked() && !m_filter.lockedItems )
+            return false;
+    }
+#endif
+
+    switch( aItem->Type() )
+    {
+    case SCH_SYMBOL_T:
+    case SCH_SHEET_T:
+        if( !m_filter.symbols )
+            return false;
+
+        break;
+
+    case SCH_PIN_T:
+    case SCH_SHEET_PIN_T:
+    case LIB_PIN_T:
+        if( !m_filter.pins )
+            return false;
+
+        break;
+
+    case SCH_LINE_T:
+    {
+        switch( static_cast<SCH_LINE*>( aItem )->GetLayer() )
+        {
+        case LAYER_WIRE:
+        case LAYER_BUS:
+            if( !m_filter.wires )
+                return false;
+
+            break;
+
+        default:
+            if( !m_filter.graphics )
+                return false;
+        }
+
+       break;
+    }
+
+    case SCH_SHAPE_T:
+    case LIB_SHAPE_T:
+        if( !m_filter.graphics )
+            return false;
+
+        break;
+
+    case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
+    case SCH_TABLE_T:
+    case SCH_TABLECELL_T:
+    case SCH_FIELD_T:
+    case LIB_TEXT_T:
+    case LIB_TEXTBOX_T:
+    case LIB_FIELD_T:
+        if( !m_filter.text )
+            return false;
+
+        break;
+
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+        if( !m_filter.labels )
+            return false;
+
+        break;
+
+    case SCH_BITMAP_T:
+        if( !m_filter.images )
+            return false;
+
+        break;
+
+    default:
+        if( !m_filter.otherItems )
+            return false;
+
+        break;
+    }
+
+    return true;
+}
+
+
 void EE_SELECTION_TOOL::updateReferencePoint()
 {
     VECTOR2I refP( 0, 0 );
@@ -1722,7 +1824,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                 if( m_frame->GetRenderSettings()->m_ShowPinsElectricalType )
                     item->SetFlags( SHOW_ELEC_TYPE );
 
-                if( Selectable( item ) )
+                if( Selectable( item ) && itemPassesFilter( item ) )
                 {
                     if( item->Type() == SCH_LINE_T )
                     {
@@ -1774,6 +1876,7 @@ bool EE_SELECTION_TOOL::selectMultiple()
                     item->SetFlags( SHOW_ELEC_TYPE );
 
                 if( Selectable( item )
+                        && itemPassesFilter( item )
                         && !item->GetParent()->HasFlag( CANDIDATE )
                         && item->HitTest( selectionRect, !isGreedy ) )
                 {

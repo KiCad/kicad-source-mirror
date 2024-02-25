@@ -411,6 +411,7 @@ void SCH_EDIT_FRAME::ToggleNetNavigator()
     wxAuiPaneInfo& netNavigatorPane = m_auimgr.GetPane( NetNavigatorPaneName() );
 
     netNavigatorPane.Show( !netNavigatorPane.IsShown() );
+    updateSelectionFilterVisbility();
 
     cfg->m_AuiPanels.show_net_nav_panel = netNavigatorPane.IsShown();
 

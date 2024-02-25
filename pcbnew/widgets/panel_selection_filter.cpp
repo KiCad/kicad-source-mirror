@@ -49,7 +49,7 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     m_tool = m_frame->GetToolManager()->GetTool<PCB_SELECTION_TOOL>();
     wxASSERT( m_tool );
 
-    SELECTION_FILTER_OPTIONS& opts = m_tool->GetFilter();
+    PCB_SELECTION_FILTER_OPTIONS& opts = m_tool->GetFilter();
     SetCheckboxesFromFilter( opts );
 
     m_cbFootprints->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
@@ -65,7 +65,7 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
 }
 
 
-void PANEL_SELECTION_FILTER::SetCheckboxesFromFilter( SELECTION_FILTER_OPTIONS& aOptions )
+void PANEL_SELECTION_FILTER::SetCheckboxesFromFilter( PCB_SELECTION_FILTER_OPTIONS& aOptions )
 {
     Freeze();
 
@@ -105,7 +105,7 @@ void PANEL_SELECTION_FILTER::OnFilterChanged( wxCommandEvent& aEvent )
         m_cbOtherItems->SetValue( newState );
     }
 
-    SELECTION_FILTER_OPTIONS& opts = m_tool->GetFilter();
+    PCB_SELECTION_FILTER_OPTIONS& opts = m_tool->GetFilter();
 
     // If any of the other checkboxes turned off, turn off the All Items checkbox
     bool allChecked = setFilterFromCheckboxes( opts );
@@ -113,7 +113,7 @@ void PANEL_SELECTION_FILTER::OnFilterChanged( wxCommandEvent& aEvent )
 }
 
 
-bool PANEL_SELECTION_FILTER::setFilterFromCheckboxes( SELECTION_FILTER_OPTIONS& aOptions )
+bool PANEL_SELECTION_FILTER::setFilterFromCheckboxes( PCB_SELECTION_FILTER_OPTIONS& aOptions )
 {
     aOptions.lockedItems = m_cbLockedItems->GetValue();
     aOptions.footprints  = m_cbFootprints->GetValue();

@@ -21,6 +21,8 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
+#include <nlohmann/json.hpp>
+
 #include <settings/common_settings.h>
 #include <settings/parameters.h>
 #include <settings/settings_manager.h>
@@ -121,6 +123,50 @@ SYMBOL_EDITOR_SETTINGS::SYMBOL_EDITOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<bool>( "use_eeschema_color_settings",
                                             &m_UseEeschemaColorSettings, true ) );
+
+    m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "selection_filter",
+            [&]() -> nlohmann::json
+            {
+                nlohmann::json ret;
+
+                ret["lockedItems"] = m_SelectionFilter.lockedItems;
+                ret["symbols"]     = m_SelectionFilter.symbols;
+                ret["text"]        = m_SelectionFilter.text;
+                ret["wires"]       = m_SelectionFilter.wires;
+                ret["labels"]      = m_SelectionFilter.labels;
+                ret["pins"]        = m_SelectionFilter.pins;
+                ret["graphics"]    = m_SelectionFilter.graphics;
+                ret["images"]      = m_SelectionFilter.images;
+                ret["otherItems"]  = m_SelectionFilter.otherItems;
+
+                return ret;
+            },
+            [&]( const nlohmann::json& aVal )
+            {
+                if( aVal.empty() || !aVal.is_object() )
+                    return;
+
+                SetIfPresent( aVal, "lockedItems", m_SelectionFilter.lockedItems );
+                SetIfPresent( aVal, "symbols", m_SelectionFilter.symbols );
+                SetIfPresent( aVal, "text", m_SelectionFilter.text );
+                SetIfPresent( aVal, "wires", m_SelectionFilter.wires );
+                SetIfPresent( aVal, "labels", m_SelectionFilter.labels );
+                SetIfPresent( aVal, "pins", m_SelectionFilter.pins );
+                SetIfPresent( aVal, "graphics", m_SelectionFilter.graphics );
+                SetIfPresent( aVal, "images", m_SelectionFilter.images );
+                SetIfPresent( aVal, "otherItems", m_SelectionFilter.otherItems );
+            },
+            {
+                { "lockedItems", false },
+                { "symbols", true },
+                { "text", true },
+                { "wires", true },
+                { "labels", true },
+                { "pins", true },
+                { "graphics", true },
+                { "images", true },
+                { "otherItems", true }
+            } ) );
 
     registerMigration( 0, 1,
                        [&]() -> bool

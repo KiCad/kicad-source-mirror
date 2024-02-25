@@ -280,6 +280,8 @@ void SCH_EDIT_FRAME::ToggleProperties()
     wxAuiPaneInfo& propertiesPaneInfo = m_auimgr.GetPane( PropertiesPaneName() );
     propertiesPaneInfo.Show( show );
 
+    updateSelectionFilterVisbility();
+
     EESCHEMA_SETTINGS* settings = eeconfig();
 
     if( show )
@@ -304,6 +306,8 @@ void SCH_EDIT_FRAME::ToggleSchematicHierarchy()
     wxAuiPaneInfo&     hierarchy_pane = m_auimgr.GetPane( SchematicHierarchyPaneName() );
 
     hierarchy_pane.Show( !hierarchy_pane.IsShown() );
+
+    updateSelectionFilterVisbility();
 
     if( hierarchy_pane.IsShown() )
     {

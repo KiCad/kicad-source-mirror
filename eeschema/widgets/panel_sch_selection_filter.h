@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 Jon Evans <jon@craftyjon.com>
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,24 +18,24 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef KICAD_PANEL_SELECTION_FILTER_H
-#define KICAD_PANEL_SELECTION_FILTER_H
+#ifndef KICAD_PANEL_SCH_SELECTION_FILTER_H
+#define KICAD_PANEL_SCH_SELECTION_FILTER_H
 
-#include <widgets/panel_selection_filter_base.h>
+#include <widgets/panel_sch_selection_filter_base.h>
+
+class SCH_BASE_FRAME;
+class EE_SELECTION_TOOL;
+struct SCH_SELECTION_FILTER_OPTIONS;
 
 
-class PCB_SELECTION_TOOL;
-struct PCB_SELECTION_FILTER_OPTIONS;
-
-
-class PANEL_SELECTION_FILTER : public PANEL_SELECTION_FILTER_BASE
+class PANEL_SCH_SELECTION_FILTER : public PANEL_SCH_SELECTION_FILTER_BASE
 {
 public:
-    PANEL_SELECTION_FILTER( wxWindow* aParent );
+    PANEL_SCH_SELECTION_FILTER( wxWindow* aParent );
 
-    ~PANEL_SELECTION_FILTER() = default;
+    ~PANEL_SCH_SELECTION_FILTER() = default;
 
-    void SetCheckboxesFromFilter( PCB_SELECTION_FILTER_OPTIONS& aOptions );
+    void SetCheckboxesFromFilter( SCH_SELECTION_FILTER_OPTIONS& aOptions );
 
     void OnLanguageChanged();
 
@@ -43,17 +43,16 @@ protected:
     void OnFilterChanged( wxCommandEvent& aEvent ) override;
 
 private:
-    bool setFilterFromCheckboxes( PCB_SELECTION_FILTER_OPTIONS& aOptions );
+    bool setFilterFromCheckboxes( SCH_SELECTION_FILTER_OPTIONS& aOptions );
 
     void onRightClick( wxMouseEvent& aEvent );
 
     void onPopupSelection( wxCommandEvent& aEvent );
 
 private:
-    PCB_BASE_EDIT_FRAME* m_frame;
-    PCB_SELECTION_TOOL*  m_tool;
-    wxCheckBox*          m_onlyCheckbox;
+    SCH_BASE_FRAME*    m_frame;
+    EE_SELECTION_TOOL* m_tool;
+    wxCheckBox*        m_onlyCheckbox;
 };
 
-
-#endif // KICAD_PANEL_SELECTION_FILTER_H
+#endif //KICAD_PANEL_SCH_SELECTION_FILTER_H

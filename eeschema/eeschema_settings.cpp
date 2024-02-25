@@ -70,7 +70,7 @@ const wxAuiPaneInfo& defaultNetNavigatorPaneInfo()
             .Caption( _( "Net Navigator" ) )
             .CaptionVisible( true )
             .PaneBorder( true )
-            .Left().Layer( 3 )
+            .Left().Layer( 3 ).Position( 1 )
             .TopDockable( false )
             .BottomDockable( false )
             .CloseButton( true )
@@ -92,7 +92,7 @@ const wxAuiPaneInfo& defaultPropertiesPaneInfo( wxWindow* aWindow )
             .Caption( _( "Properties" ) )
             .CaptionVisible( true )
             .PaneBorder( true )
-            .Left().Layer( 3 )
+            .Left().Layer( 3 ).Position( 2 )
             .TopDockable( false )
             .BottomDockable( false )
             .CloseButton( true )
@@ -100,6 +100,26 @@ const wxAuiPaneInfo& defaultPropertiesPaneInfo( wxWindow* aWindow )
             .BestSize( aWindow->FromDIP( wxSize( 300, 200 ) ) )
             .FloatingSize( aWindow->FromDIP( wxSize( 300, 400 ) ) )
             .FloatingPosition( aWindow->FromDIP( wxPoint( 50, 200 ) ) )
+            .Show( true );
+
+    return paneInfo;
+}
+
+
+const wxAuiPaneInfo& defaultSchSelectionFilterPaneInfo( wxWindow* aWindow )
+{
+    static wxAuiPaneInfo paneInfo;
+
+    paneInfo.Name( wxS( "SelectionFilter" ) )
+            .Caption( _( "Selection Filter" ) )
+            .CaptionVisible( true )
+            .PaneBorder( false )
+            .Left().Layer( 3 ).Position( 3 )
+            .TopDockable( false )
+            .BottomDockable( false )
+            .CloseButton( false )
+            .MinSize( aWindow->FromDIP( wxSize( 180, -1 ) ) )
+            .BestSize( aWindow->FromDIP( wxSize( 180, -1 ) ) )
             .Show( true );
 
     return paneInfo;

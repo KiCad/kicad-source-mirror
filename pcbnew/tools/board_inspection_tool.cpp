@@ -1729,7 +1729,7 @@ int BOARD_INSPECTION_TOOL::HighlightItem( const TOOL_EVENT& aEvent )
 
         // Apply the active selection filter, except we want to allow picking locked items for
         // highlighting even if the user has disabled them for selection
-        SELECTION_FILTER_OPTIONS& filter = selectionTool->GetFilter();
+        PCB_SELECTION_FILTER_OPTIONS& filter = selectionTool->GetFilter();
 
         bool saved         = filter.lockedItems;
         filter.lockedItems = true;

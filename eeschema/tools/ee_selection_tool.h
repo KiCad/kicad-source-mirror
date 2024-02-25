@@ -25,6 +25,7 @@
 #ifndef KICAD_SCH_SELECTION_TOOL_H
 #define KICAD_SCH_SELECTION_TOOL_H
 
+#include <project/sch_project_settings.h>
 #include <tool/selection_tool.h>
 #include <tool/action_menu.h>
 #include <tool/tool_menu.h>
@@ -190,6 +191,8 @@ public:
     void SyncSelection( const std::optional<SCH_SHEET_PATH>& targetSheetPath, SCH_ITEM* focusItem,
                         const std::vector<SCH_ITEM*>& items );
 
+    SCH_SELECTION_FILTER_OPTIONS& GetFilter() { return m_filter; }
+
 protected:
     SELECTION& selection() override { return m_selection; }
 
@@ -288,6 +291,11 @@ private:
      */
     bool selectionContains( const VECTOR2I& aPoint ) const;
 
+    /**
+     * Return true if the given item passes the stateful selection filter
+     */
+    bool itemPassesFilter( EDA_ITEM* aItem );
+
     ///< Set up handlers for various events.
     void setTransitions() override;
 
@@ -302,6 +310,8 @@ private:
     bool            m_isSymbolViewer;    // True when the symbol browser is the parent frame
     int             m_unit;              // Fixed unit filter (for symbol editor)
     int             m_bodyStyle;         // Fixed DeMorgan filter (for symbol editor)
+
+    SCH_SELECTION_FILTER_OPTIONS m_filter;
 };
 
 #endif //KICAD_SCH_SELECTION_TOOL_H

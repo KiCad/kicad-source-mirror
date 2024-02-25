@@ -160,7 +160,7 @@ public:
      */
     void RebuildSelection();
 
-    SELECTION_FILTER_OPTIONS& GetFilter()
+    PCB_SELECTION_FILTER_OPTIONS& GetFilter()
     {
         return m_filter;
     }
@@ -452,7 +452,7 @@ private:
 
     PCB_SELECTION            m_selection;            // Current state of selection
 
-    SELECTION_FILTER_OPTIONS m_filter;
+    PCB_SELECTION_FILTER_OPTIONS m_filter;
 
     KICURSOR                 m_nonModifiedCursor;    // Cursor in the absence of shift/ctrl/alt
 
