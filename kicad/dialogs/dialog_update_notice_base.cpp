@@ -52,7 +52,7 @@ DIALOG_UPDATE_NOTICE_BASE::DIALOG_UPDATE_NOTICE_BASE( wxWindow* parent, wxWindow
 	m_skipBtn = new wxButton( this, wxID_ANY, _("Skip this version"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_skipBtn->SetToolTip( _("Override locks and apply the operation on all the items selected.\nAny locked items will remain locked after the operation is complete.") );
 
-	bButtonSizer->Add( m_skipBtn, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 10 );
+	bButtonSizer->Add( m_skipBtn, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 
 
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -64,10 +64,10 @@ DIALOG_UPDATE_NOTICE_BASE::DIALOG_UPDATE_NOTICE_BASE( wxWindow* parent, wxWindow
 	bButtonSizer->Add( m_btnDetailsPage, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP, 5 );
 
 	m_btnDownloadPage = new wxButton( this, wxID_ANY, _("Open Downloads Page"), wxDefaultPosition, wxDefaultSize, 0 );
-	bButtonSizer->Add( m_btnDownloadPage, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP, 5 );
+	bButtonSizer->Add( m_btnDownloadPage, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 
-	bSizerMain->Add( bButtonSizer, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bButtonSizer, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
 	this->SetSizer( bSizerMain );
