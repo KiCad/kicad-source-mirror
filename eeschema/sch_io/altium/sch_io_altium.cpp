@@ -3053,6 +3053,11 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     {
         libSymbol = powerSymbolIt->second; // cache hit
     }
+    else if( LIB_SYMBOL* alreadyLoaded =
+             m_pi->LoadSymbol( getLibFileName().GetFullPath(), elem.text, m_properties.get() ) )
+    {
+        libSymbol = alreadyLoaded;
+    }
     else
     {
         libSymbol = new LIB_SYMBOL( wxEmptyString );
