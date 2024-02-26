@@ -49,6 +49,8 @@
 
 using CATEGORY = SIM_MODEL::PARAM::CATEGORY;
 
+#define FORCE_UPDATE_PINS true
+
 
 bool equivalent( SIM_MODEL::DEVICE_T a, SIM_MODEL::DEVICE_T b )
 {
@@ -128,6 +130,7 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BA
     grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );
 #endif
 
+    m_pinAssignmentsGrid->ClearRows();
     m_pinAssignmentsGrid->PushEventHandler( new GRID_TRICKS( m_pinAssignmentsGrid ) );
 
     m_subcktLabel->SetFont( KIUI::GetInfoFont( m_subcktLabel ) );
@@ -349,6 +352,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
     if( !DIALOG_SIM_MODEL_BASE::TransferDataFromWindow() )
         return false;
 
+    SIM_MODEL& model = curModel();
     std::string path;
     std::string name;
 
@@ -362,7 +366,7 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
 
         if( !m_modelNameChoice->IsEmpty() )
             name = m_modelNameChoice->GetStringSelection().ToStdString();
-        else if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &curModel() ) )
+        else if( dynamic_cast<SIM_MODEL_SPICE_FALLBACK*>( &model ) )
             name = SIM_MODEL::GetFieldValue( &m_fields, SIM_LIBRARY::NAME_FIELD, false );
     }
 
@@ -392,16 +396,27 @@ bool DIALOG_SIM_MODEL<T_symbol, T_field>::TransferDataFromWindow()
         }
     }
 
-    if( curModel().GetType() == SIM_MODEL::TYPE::RAWSPICE )
+    if( model.GetType() == SIM_MODEL::TYPE::RAWSPICE )
     {
         if( m_modelNotebook->GetSelection() == 0 )
-            updateModelCodeTab( &curModel() );
+            updateModelCodeTab( &model );
 
         wxString code = m_codePreview->GetText().Trim( true ).Trim( false );
-        curModel().SetParamValue( "model", std::string( code.ToUTF8() ) );
+        model.SetParamValue( "model", std::string( code.ToUTF8() ) );
     }
 
-    curModel().SetIsStoredInValue( m_saveInValueCheckbox->GetValue() );
+    model.SetIsStoredInValue( m_saveInValueCheckbox->GetValue() );
+
+    for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
+    {
+        wxString modelPinName = m_pinAssignmentsGrid->GetCellValue( row, PIN_COLUMN::MODEL );
+        wxString symbolPinName = m_sortedPartPins.at( row )->GetShownNumber();
+
+        model.SetPinSymbolPinNumber( getModelPinIndex( modelPinName ),
+                                     std::string( symbolPinName.ToUTF8() ) );
+    }
+
+    removeOrphanedPinAssignments( &model );
 
     curModel().WriteFields( m_fields );
 
@@ -444,7 +459,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateWidgets()
     updateBuiltinModelWidgets( model );
     updateModelParamsTab( model );
     updateModelCodeTab( model );
-    updatePinAssignments( model );
+    updatePinAssignments( model, false );
 
     std::string ref = SIM_MODEL::GetFieldValue( &m_fields, SIM_REFERENCE_FIELD );
 
@@ -696,45 +711,51 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::updateModelCodeTab( SIM_MODEL* aModel 
 
 
 template <typename T_symbol, typename T_field>
-void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments( SIM_MODEL* aModel )
+void DIALOG_SIM_MODEL<T_symbol, T_field>::updatePinAssignments( SIM_MODEL* aModel,
+                                                                bool aForceUpdatePins )
 {
-    removeOrphanedPinAssignments( aModel );
-
-    // Reset the grid.
-
-    m_pinAssignmentsGrid->ClearRows();
-    m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedPartPins.size() ) );
-
-    for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
-        m_pinAssignmentsGrid->SetCellValue( row, PIN_COLUMN::MODEL, _( "Not Connected" ) );
-
-    // Now set up the grid values in the Model column.
-    for( int modelPinIndex = 0; modelPinIndex < aModel->GetPinCount(); ++modelPinIndex )
+    if( m_pinAssignmentsGrid->GetNumberRows() == 0 )
     {
-        wxString symbolPinNumber = aModel->GetPin( modelPinIndex ).symbolPinNumber;
+        m_pinAssignmentsGrid->AppendRows( static_cast<int>( m_sortedPartPins.size() ) );
 
-        if( symbolPinNumber == "" )
-            continue;
+        for( int ii = 0; ii < m_pinAssignmentsGrid->GetNumberRows(); ++ii )
+        {
+            wxString symbolPinString = getSymbolPinString( ii );
 
-        int symbolPinRow = findSymbolPinRow( symbolPinNumber );
+            m_pinAssignmentsGrid->SetReadOnly( ii, PIN_COLUMN::SYMBOL );
+            m_pinAssignmentsGrid->SetCellValue( ii, PIN_COLUMN::SYMBOL, symbolPinString );
+        }
 
-        if( symbolPinRow == -1 )
-            continue;
-
-        wxString modelPinString = getModelPinString( aModel, modelPinIndex );
-        m_pinAssignmentsGrid->SetCellValue( symbolPinRow, PIN_COLUMN::MODEL, modelPinString );
+        aForceUpdatePins = true;
     }
 
-    // Set up the Symbol column grid values and Model column cell editors with dropdown options.
+    if( aForceUpdatePins )
+    {
+        // Reset the grid.
+        for( int row = 0; row < m_pinAssignmentsGrid->GetNumberRows(); ++row )
+            m_pinAssignmentsGrid->SetCellValue( row, PIN_COLUMN::MODEL, _( "Not Connected" ) );
+
+        // Now set up the grid values in the Model column.
+        for( int modelPinIndex = 0; modelPinIndex < aModel->GetPinCount(); ++modelPinIndex )
+        {
+            wxString symbolPinNumber = aModel->GetPin( modelPinIndex ).symbolPinNumber;
+
+            if( symbolPinNumber == "" )
+                continue;
+
+            int symbolPinRow = findSymbolPinRow( symbolPinNumber );
+
+            if( symbolPinRow == -1 )
+                continue;
+
+            wxString modelPinString = getModelPinString( aModel, modelPinIndex );
+            m_pinAssignmentsGrid->SetCellValue( symbolPinRow, PIN_COLUMN::MODEL, modelPinString );
+        }
+    }
+
     for( int ii = 0; ii < m_pinAssignmentsGrid->GetNumberRows(); ++ii )
     {
-        wxString symbolPinString = getSymbolPinString( ii );
-
-        m_pinAssignmentsGrid->SetReadOnly( ii, PIN_COLUMN::SYMBOL );
-        m_pinAssignmentsGrid->SetCellValue( ii, PIN_COLUMN::SYMBOL, symbolPinString );
-
-        wxString curModelPinString = m_pinAssignmentsGrid->GetCellValue( ii, PIN_COLUMN::MODEL );
-
+        // Set up the Model column cell editors with dropdown options.
         std::vector<BITMAPS> modelPinIcons;
         wxArrayString        modelPinChoices;
 
@@ -1419,7 +1440,7 @@ void DIALOG_SIM_MODEL<T_symbol, T_field>::onPinAssignmentsGridCellChange( wxGrid
             std::string( m_sortedPartPins.at( symbolPinIndex )->GetShownNumber().ToUTF8() ) );
     }
 
-    updatePinAssignments( &curModel() );
+    updatePinAssignments( &curModel(), FORCE_UPDATE_PINS );
 
     aEvent.Skip();
 }

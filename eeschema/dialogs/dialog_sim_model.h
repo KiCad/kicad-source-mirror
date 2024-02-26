@@ -75,7 +75,7 @@ private:
     void updateBuiltinModelWidgets( SIM_MODEL* aModel );
     void updateModelParamsTab( SIM_MODEL* aModel );
     void updateModelCodeTab( SIM_MODEL* aModel );
-    void updatePinAssignments( SIM_MODEL* aModel );
+    void updatePinAssignments( SIM_MODEL* aModel, bool aForceUpdatePins );
 
     void removeOrphanedPinAssignments( SIM_MODEL* aModel );
 
