@@ -8,17 +8,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-04 19:01+0000\n"
-"Last-Translator: Stanislav Kaliuk <staskalyuk.096@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/master-"
-"source/uk/>\n"
+"PO-Revision-Date: 2024-02-27 19:29+0000\n"
+"Last-Translator: Ivan Chuba <xtrvweb@gmail.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/kicad/v8/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -2149,14 +2148,12 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Поточні відповідні зв'язки:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Шаблон"
+msgstr "Шаблон:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Класи зв'язків"
+msgstr "Клас зв'язку:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
