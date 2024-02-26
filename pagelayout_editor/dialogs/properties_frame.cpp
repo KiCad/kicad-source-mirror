@@ -630,6 +630,12 @@ void PROPERTIES_FRAME::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 }
 
 
+void PROPERTIES_FRAME::onScintillaFocusLost( wxFocusEvent& aEvent )
+{
+    m_stcText->AutoCompCancel();
+}
+
+
 void PROPERTIES_FRAME::onHelp( wxCommandEvent& aEvent )
 {
     // Show the system variables for worksheet text:
