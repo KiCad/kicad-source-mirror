@@ -36,10 +36,10 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-19 17:02+0000\n"
+"PO-Revision-Date: 2024-02-26 12:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
-"kicad/master-source/zh_Hans/>\n"
+"kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -343,7 +343,7 @@ msgstr "3D 图像文件名称"
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1664
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "权限不足, 无法保存保存文件 '%s'。"
+msgstr "保存文件 '%s' 的权限不足。"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:749 common/confirm.cpp:131
 #: common/confirm.cpp:321 common/dialogs/dialog_grid_settings.cpp:61
@@ -5020,7 +5020,7 @@ msgstr "扩展和更新"
 #: common/eda_base_frame.cpp:1318
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
-msgstr "对文件夹 '%s' 没有足够的权限。"
+msgstr "文件夹 '%s' 的权限不足。"
 
 #: common/eda_base_frame.cpp:1359
 #, c-format
@@ -16774,7 +16774,7 @@ msgstr "文件意外结束。"
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:182
 #, c-format
 msgid "Insufficient permissions to read library '%s'."
-msgstr "无足够权限读取库 '%s'。"
+msgstr "读取库 '%s' 的权限不足。"
 
 #: eeschema/sch_io/kicad_legacy/sch_io_kicad_legacy_lib_cache.cpp:191
 msgid "symbol document library file is empty"
@@ -19493,7 +19493,7 @@ msgstr "试图加载符号库文件 '%s' 时出错。"
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:209
 #, c-format
 msgid "Insufficient permissions to save library '%s'."
-msgstr "无足够权限保存库 '%s'。"
+msgstr "保存库 '%s' 的权限不足。"
 
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:229
 #, c-format
@@ -23503,7 +23503,7 @@ msgstr "编辑用于原理图和 PCB 设计的图纸边框和工程明细表"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:164
 msgid "Manage downloadable packages from KiCad and 3rd party repositories"
-msgstr "管理来自 KiCad 和第三方仓库的可下载扩展内容包"
+msgstr "管理从 KiCad 和第三方仓库下载的扩展内容包"
 
 #: kicad/files-io.cpp:46
 msgid "KiCad project file"
@@ -24714,7 +24714,7 @@ msgstr "新建工程文件夹"
 #: kicad/tools/kicad_manager_control.cpp:667
 #, c-format
 msgid "Insufficient permissions to write to folder '%s'."
-msgstr "无足够权限写入文件夹 '%s'。"
+msgstr "写入文件夹 '%s' 的权限不足。"
 
 #: kicad/tools/kicad_manager_control.cpp:319
 msgid "Overwriting files:"
@@ -38391,7 +38391,7 @@ msgstr "保存工程专用封装库表时出错。"
 #: pcbnew/footprint_libraries_utils.cpp:268
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr "无足够权限写入文件 '%s'。"
+msgstr "写入文件 '%s' 的权限不足。"
 
 #: pcbnew/files.cpp:981 pcbnew/files.cpp:1133
 #, c-format
@@ -41114,7 +41114,7 @@ msgstr "元素标记包含 %d 个参数。"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2782
 #, c-format
 msgid "Insufficient permissions to delete folder '%s'."
-msgstr "没有足够权限删除文件夹 '%s'。"
+msgstr "删除文件夹 '%s' 的权限不足。"
 
 #: pcbnew/pcb_io/geda/pcb_io_geda.cpp:987
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2790
@@ -41343,7 +41343,7 @@ msgstr "封装文件名 '%s' 无效。"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2685
 #, c-format
 msgid "Insufficient permissions to delete '%s'."
-msgstr "没有足够的权限来删除 '%s'。"
+msgstr "删除 '%s' 的权限不足。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2757
 #, c-format
