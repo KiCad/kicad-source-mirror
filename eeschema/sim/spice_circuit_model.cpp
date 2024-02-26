@@ -131,10 +131,13 @@ bool SPICE_CIRCUIT_MODEL::ParseDCCommand( const wxString& aCmd, SPICE_DC_PARAMS*
     aSource1->m_vend = SPICE_VALUE( tokens.GetNextToken() );
     aSource1->m_vincrement = SPICE_VALUE( tokens.GetNextToken() );
 
-    aSource2->m_source = tokens.GetNextToken();
-    aSource2->m_vstart = SPICE_VALUE( tokens.GetNextToken() );
-    aSource2->m_vend = SPICE_VALUE( tokens.GetNextToken() );
-    aSource2->m_vincrement = SPICE_VALUE( tokens.GetNextToken() );
+    if( tokens.HasMoreTokens() )
+    {
+        aSource2->m_source = tokens.GetNextToken();
+        aSource2->m_vstart = SPICE_VALUE( tokens.GetNextToken() );
+        aSource2->m_vend = SPICE_VALUE( tokens.GetNextToken() );
+        aSource2->m_vincrement = SPICE_VALUE( tokens.GetNextToken() );
+    }
 
     return true;
 }

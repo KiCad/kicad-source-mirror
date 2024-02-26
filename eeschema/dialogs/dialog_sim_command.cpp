@@ -51,7 +51,10 @@ static void setStringSelection( wxChoice* aCtrl, const wxString& aStr )
 
 static wxString getStringSelection( const wxChoice* aCtrl )
 {
-    return aCtrl->GetString( aCtrl->GetSelection() );
+    if( aCtrl->GetSelection() >= 0 )
+        return aCtrl->GetString( aCtrl->GetSelection() );
+    else
+        return wxEmptyString;
 }
 
 
@@ -915,7 +918,15 @@ void DIALOG_SIM_COMMAND::onDCSource2Selected( wxCommandEvent& event )
 void DIALOG_SIM_COMMAND::onDCEnableSecondSource( wxCommandEvent& event )
 {
     bool   is2ndSrcEnabled = m_dcEnable2->IsChecked();
-    wxChar type = getStringSelection( m_dcSourceType2 ).Upper().GetChar( 0 );
+    wxChar type = '?';
+
+    if( is2ndSrcEnabled )
+    {
+        wxString fullType = getStringSelection( m_dcSourceType2 ).Upper();
+
+        if( fullType.Length() > 0 )
+            type = fullType.GetChar( 0 );
+    }
 
     m_dcSourceType2->Enable( is2ndSrcEnabled );
     m_dcSource2->Enable( is2ndSrcEnabled && type != 'T' );
