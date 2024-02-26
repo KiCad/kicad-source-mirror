@@ -45,6 +45,7 @@ class SHAPE;
 const ssize_t                     SHAPE_LINE_CHAIN::SHAPE_IS_PT = -1;
 const std::pair<ssize_t, ssize_t> SHAPE_LINE_CHAIN::SHAPES_ARE_PT = { SHAPE_IS_PT, SHAPE_IS_PT };
 
+
 SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
     : SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ), m_closed( false ), m_width( 0 )
 {
@@ -52,6 +53,27 @@ SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<int>& aV)
     {
         Append( aV[i], aV[i+1] );
     }
+}
+
+
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed ) :
+        SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+        m_closed( false ),
+        m_width( 0 )
+{
+    m_points = aV;
+    m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( aV.size(), SHAPES_ARE_PT );
+    SetClosed( aClosed );
+}
+
+
+SHAPE_LINE_CHAIN::SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed ) :
+        SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
+        m_closed( false ),
+        m_width( aArc.GetWidth() )
+{
+    Append( aArc );
+    SetClosed( aClosed );
 }
 
 
