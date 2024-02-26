@@ -260,8 +260,7 @@ void DIALOG_GIT_REPOSITORY::updateURLData()
 void DIALOG_GIT_REPOSITORY::OnTestClick( wxCommandEvent& event )
 {
     git_remote* remote = nullptr;
-    git_remote_callbacks callbacks;
-    callbacks.version = GIT_REMOTE_CALLBACKS_VERSION;
+    git_remote_callbacks callbacks = GIT_REMOTE_CALLBACKS_INIT;
 
     // We track if we have already tried to connect.
     // If we have, the server may come back to offer another connection
