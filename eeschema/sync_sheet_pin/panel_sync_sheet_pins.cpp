@@ -42,10 +42,14 @@
 PANEL_SYNC_SHEET_PINS::PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aSheet,
                                               wxNotebook* aNoteBook, int aIndex,
                                               SHEET_SYNCHRONIZATION_AGENT& aAgent,
-                                              SCH_SHEET_PATH               aPath ) :
+                                              const SCH_SHEET_PATH& aPath ) :
         PANEL_SYNC_SHEET_PINS_BASE( aParent ),
-        m_sheet( aSheet ), m_noteBook( aNoteBook ), m_index( aIndex ),
-        m_sheetFileName( aSheet->GetFileName() ), m_agent( aAgent ), m_path( std::move( aPath ) )
+        m_sheet( aSheet ),
+        m_noteBook( aNoteBook ),
+        m_index( aIndex ),
+        m_sheetFileName( aSheet->GetFileName() ),
+        m_agent( aAgent ),
+        m_path( std::move( aPath ) )
 {
     m_btnUsePinAsTemplate->SetBitmap( KiBitmapBundle( BITMAPS::add_hierar_pin ) );
     m_btnUseLabelAsTemplate->SetBitmap( KiBitmapBundle( BITMAPS::add_hierarchical_label ) );
@@ -101,6 +105,7 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
         for( size_t i = 0; i < pins_ori.size(); i++ )
         {
             SCH_SHEET_PIN* cur_pin = pins_ori[i];
+
             if( label->GetText() == cur_pin->GetText() && label->GetShape() == cur_pin->GetShape() )
             {
                 associated_list.push_back(
@@ -109,10 +114,10 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
                 return;
             }
         }
+
         labels_list.push_back(
                 std::make_shared<SCH_HIERLABEL_SYNCHRONIZATION_ITEM>( label, m_sheet ) );
     };
-
 
     for( const auto& item : labels_ori )
         check_matched( static_cast<SCH_HIERLABEL*>( item ) );
@@ -141,8 +146,7 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
 }
 
 
-SHEET_SYNCHRONIZATION_MODEL_PTR
-PANEL_SYNC_SHEET_PINS::GetModel( int aKind ) const
+SHEET_SYNCHRONIZATION_MODEL_PTR PANEL_SYNC_SHEET_PINS::GetModel( int aKind ) const
 {
     return m_models.at( aKind );
 }
@@ -172,11 +176,15 @@ void PANEL_SYNC_SHEET_PINS::OnBtnAddLabelsClicked( wxCommandEvent& aEvent )
 
     if( auto idx = m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->GetSelectedIndex();
         idx.has_value() )
+    {
         if( SHEET_SYNCHRONIZATION_ITE_PTR item =
                     m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->GetSynchronizationItem(
                             *idx ) )
+        {
             m_agent.PlaceHieraLable( m_sheet, m_path,
                                      static_cast<SCH_SHEET_PIN*>( item->GetItem() ) );
+        }
+    }
 }
 
 
@@ -186,11 +194,15 @@ void PANEL_SYNC_SHEET_PINS::OnBtnAddSheetPinsClicked( wxCommandEvent& aEvent )
 
     if( auto idx = m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->GetSelectedIndex();
         idx.has_value() )
+    {
         if( SHEET_SYNCHRONIZATION_ITE_PTR item =
                     m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->GetSynchronizationItem(
                             *idx ) )
+        {
             m_agent.PlaceSheetPin( m_sheet, m_path,
                                    static_cast<SCH_HIERLABEL*>( item->GetItem() ) );
+        }
+    }
 }
 
 
@@ -200,8 +212,10 @@ void PANEL_SYNC_SHEET_PINS::GenericSync( SYNC_DIRECTION direction )
     wxDataViewItem pinIdx = m_viewSheetPins->GetSelection();
 
     for( auto& idx : { labelIdx, pinIdx } )
+    {
         if( !idx.IsOk() )
             return;
+    }
 
     SHEET_SYNCHRONIZATION_ITE_PTR labelItem =
             m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->TakeItem( labelIdx );
@@ -209,8 +223,10 @@ void PANEL_SYNC_SHEET_PINS::GenericSync( SYNC_DIRECTION direction )
             m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->TakeItem( pinIdx );
 
     for( const auto& item : { labelItem, pinItem } )
+    {
         if( !item )
             return;
+    }
 
     auto label_ptr =
             std::static_pointer_cast<SCH_HIERLABEL_SYNCHRONIZATION_ITEM>( labelItem )->GetLabel();
@@ -247,7 +263,9 @@ void PANEL_SYNC_SHEET_PINS::GenericSync( SYNC_DIRECTION direction )
 
     for( auto idx :
          { SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL, SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN } )
+    {
         PostProcessModelSelection( idx, {} );
+    }
 
     m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->DoNotify();
 }
@@ -317,6 +335,7 @@ void PANEL_SYNC_SHEET_PINS::OnBtnUndoClicked( wxCommandEvent& aEvent )
                 std::make_shared<SCH_SHEET_PIN_SYNCHRONIZATION_ITEM>( associated->GetPin(),
                                                                       m_sheet ) );
     }
+
     PostProcessModelSelection( SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED, {} );
     UpdatePageImage();
 }
@@ -335,12 +354,14 @@ void PANEL_SYNC_SHEET_PINS::PostProcessModelSelection( int aIdex, wxDataViewItem
     {
         for( auto btn : { m_btnAddLabels, m_btnRmPins } )
             btn->Enable( m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->HasSelectedIndex() );
+
         break;
     }
     case SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL:
     {
         for( auto btn : { m_btnAddSheetPins, m_btnRmLabels } )
             btn->Enable( m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->HasSelectedIndex() );
+
         break;
     }
     case SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED:
@@ -348,7 +369,8 @@ void PANEL_SYNC_SHEET_PINS::PostProcessModelSelection( int aIdex, wxDataViewItem
         m_btnUndo->Enable( m_models[SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED]->HasSelectedIndex() );
         break;
     }
-    default: break;
+    default:
+        break;
     }
 
     if( aIdex != SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED )

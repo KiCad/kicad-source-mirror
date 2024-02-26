@@ -1584,6 +1584,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                     else
                     {
                         item = createNewSheetPin( sheet, cursorPos );
+
                         if( m_dialogSyncSheetPin && m_dialogSyncSheetPin->GetPlacementTemplate() )
                         {
                             auto label = static_cast<SCH_HIERLABEL*>(
@@ -1746,7 +1747,7 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     if( m_dialogSyncSheetPin && m_dialogSyncSheetPin->GetPlacementTemplate() )
     {
         m_dialogSyncSheetPin->EndPlaceItem( nullptr );
-        m_dialogSyncSheetPin->Show(true);
+        m_dialogSyncSheetPin->Show( true );
     }
 
     return 0;
@@ -2562,7 +2563,7 @@ int SCH_DRAWING_TOOLS::SyncSheetsPins( const TOOL_EVENT& aEvent )
     {
         VECTOR2I cursorPos =  getViewControls()->GetMousePosition();
 
-        if( EDA_ITEM* i = nullptr; static_cast<void>(m_selectionTool->SelectPoint( cursorPos, { SCH_SHEET_T }, &i )) , i != nullptr )
+        if( EDA_ITEM* i = nullptr; static_cast<void>(m_selectionTool->SelectPoint( cursorPos, { SCH_SHEET_T }, &i ) ) , i != nullptr )
         {
             sheet = dynamic_cast<SCH_SHEET*>( i );
         }
@@ -2591,23 +2592,23 @@ int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
 
         std::vector<SCH_ITEM*> sheetChildren;
         aScene->GetSheets( &sheetChildren );
-        aVisited.insert(aScene);
+        aVisited.insert( aScene );
 
-        for( SCH_ITEM* child : sheetChildren)
+        for( SCH_ITEM* child : sheetChildren )
         {
             SCH_SHEET_PATH cp = aCurPath;
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( child );
-            cp.push_back(sheet);
+            cp.push_back( sheet );
             aPaths.push_back( cp );
-            getSheetChildren(aPaths , sheet->GetScreen() , aVisited ,cp);
+            getSheetChildren( aPaths, sheet->GetScreen(), aVisited, cp );
         }
     };
 
     std::list<SCH_SHEET_PATH> sheetPaths;
     std::set<SCH_SCREEN*> visited;
     SCH_SHEET_PATH current;
-    current.push_back(&m_frame->Schematic().Root());
-    getSheetChildren(sheetPaths , m_frame->Schematic().Root().GetScreen() ,visited ,current );
+    current.push_back( &m_frame->Schematic().Root() );
+    getSheetChildren( sheetPaths, m_frame->Schematic().Root().GetScreen(), visited, current );
     return doSyncSheetsPins( sheetPaths );
 }
 

@@ -143,14 +143,16 @@ int ASSOCIATED_SCH_LABEL_PIN::GetShape() const
 wxBitmap& ASSOCIATED_SCH_LABEL_PIN::GetBitmap() const
 {
     static auto label_and_pin_icon = ( []{
-        wxBitmap left =  KiBitmap( BITMAPS::add_hierar_pin, SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT );
+        wxBitmap left =  KiBitmap( BITMAPS::add_hierar_pin,
+                                   SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT );
         wxBitmap right =
-                KiBitmap( BITMAPS::add_hierarchical_label, SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT );
+                KiBitmap( BITMAPS::add_hierarchical_label,
+                          SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT );
         wxImage img( wxSize{ SYNC_SHEET_PIN_PREFERENCE::NORMAL_WIDTH * 2,
                              SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT } );
         img.Paste( left.ConvertToImage(), 0, 0 );
         img.Paste( right.ConvertToImage(), SYNC_SHEET_PIN_PREFERENCE::NORMAL_WIDTH, 0 );
-        return wxBitmap(img);
+        return wxBitmap( img );
     } )();
 
     return label_and_pin_icon;

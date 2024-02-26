@@ -36,8 +36,10 @@ SHEET_SYNCHRONIZATION_AGENT::SHEET_SYNCHRONIZATION_AGENT( DO_MODIFY_ITEM  aDoMod
                                                           TOOL_MANAGER*   aToolManager,
                                                           SCH_EDIT_FRAME* a_frame ) :
         m_doModify( std::move( aDoModify ) ),
-        m_doDelete( std::move( aNotifyItemChange ) ), m_doPlaceItem( std::move( aPlaceItem ) ),
-        m_toolManager( aToolManager ), m_frame( a_frame )
+        m_doDelete( std::move( aNotifyItemChange ) ),
+        m_doPlaceItem( std::move( aPlaceItem ) ),
+        m_toolManager( aToolManager ),
+        m_frame( a_frame )
 {
 }
 
@@ -54,7 +56,7 @@ void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SHEET_SYNCHRONIZATION_ITEM& aItem,
 
 
 void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SCH_ITEM* sch_item, std::function<void()> aDoModify,
-                                              SCH_SHEET_PATH const&           aPath,
+                                              const SCH_SHEET_PATH& aPath,
                                               SHEET_SYNCHRONIZATION_ITEM_KIND aKind )
 {
     if( !aDoModify )
@@ -68,20 +70,20 @@ void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SCH_ITEM* sch_item, std::function<
         break;
     }
     case SHEET_SYNCHRONIZATION_ITEM_KIND::SHEET_PIN:
-
     {
         SCH_SHEET_PATH path_cp = aPath;
         path_cp.pop_back();
         m_doModify( sch_item, path_cp, aDoModify );
         break;
     }
-    case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL_AND_SHEET_PIN: break;
+    case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL_AND_SHEET_PIN:
+        break;
     }
 }
 
 
 void SHEET_SYNCHRONIZATION_AGENT::RemoveItem( SHEET_SYNCHRONIZATION_ITEM& aItem, SCH_SHEET* aSheet,
-                                              SCH_SHEET_PATH const& aPath )
+                                              const SCH_SHEET_PATH& aPath )
 {
     if( !aSheet )
         return;
@@ -101,7 +103,8 @@ void SHEET_SYNCHRONIZATION_AGENT::RemoveItem( SHEET_SYNCHRONIZATION_ITEM& aItem,
         m_doDelete( aItem.GetItem(), path_cp );
         break;
     }
-    case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL_AND_SHEET_PIN: break;
+    case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL_AND_SHEET_PIN:
+        break;
     }
 }
 

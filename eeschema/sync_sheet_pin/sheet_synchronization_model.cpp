@@ -39,9 +39,11 @@ extern wxString getElectricalTypeLabel( LABEL_FLAG_SHAPE aType );
 
 SHEET_SYNCHRONIZATION_MODEL::SHEET_SYNCHRONIZATION_MODEL( SHEET_SYNCHRONIZATION_AGENT& aAgent,
                                                           SCH_SHEET*                   aSheet,
-                                                          SCH_SHEET_PATH               aPath ) :
+                                                          SCH_SHEET_PATH&              aPath ) :
         m_selectedIndex( std::optional<unsigned>() ),
-        m_agent( aAgent ), m_sheet( aSheet ), m_path( std::move( aPath ) )
+        m_agent( aAgent ),
+        m_sheet( aSheet ),
+        m_path( std::move( aPath ) )
 {
 }
 
@@ -56,7 +58,9 @@ void SHEET_SYNCHRONIZATION_MODEL::GetValueByRow( wxVariant& aVariant, unsigned r
 
     switch( col )
     {
-    case NAME: aVariant << wxDataViewIconText( item->GetName(), item->GetBitmap() ); break;
+    case NAME:
+        aVariant << wxDataViewIconText( item->GetName(), item->GetBitmap() );
+        break;
     case SHAPE:
         aVariant = getElectricalTypeLabel( static_cast<LABEL_FLAG_SHAPE>( item->GetShape() ) );
         break;
@@ -139,7 +143,9 @@ SHEET_SYNCHRONIZATION_MODEL::TakeItems( wxDataViewItemArray const& aItems )
     for( unsigned i = 0; i < m_items.size(); i++ )
     {
         if( rowsToBeRemove.find( i ) == rowsToBeRemove.end() )
+        {
             items_remain.push_back( m_items[i] );
+        }
         else
         {
             items_token.push_back( m_items[i] );

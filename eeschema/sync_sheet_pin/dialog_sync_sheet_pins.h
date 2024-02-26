@@ -37,6 +37,7 @@ class EDA_ITEM;
 class SHEET_SYNCHRONIZATION_AGENT;
 class PANEL_SYNC_SHEET_PINS;
 class SCH_HIERLABEL;
+
 class DIALOG_SYNC_SHEET_PINS : public DIALOG_SYNC_SHEET_PINS_BASE
 {
 public:
@@ -59,17 +60,17 @@ public:
     void EndPlaceItem( EDA_ITEM* aNewItem );
 
     /**
-    * @brief Start place a new SHEET_PIN / HIERLABEL
-    *
-    * @param aSheet The sheet instance
-    * @param aKind   SHEET_PIN / HIERLABEL
-    * @param aTemplate The template used for the new SHEET_PIN / HIERLABEL
-    */
+     * Start place a new #SHEET_PIN/#HIERLABEL.
+     *
+     * @param aSheet The sheet instance
+     * @param aKind   SHEET_PIN / HIERLABEL
+     * @param aTemplate The template used for the new SHEET_PIN / HIERLABEL
+     */
     void BeginPlaceItem( SCH_SHEET* aSheet, PlaceItemKind aKind, EDA_ITEM* aTemplate );
 
     /**
-     * @brief Get the Placement Template SHEET_PIN / HIERLABEL used for place a new HIERLABEL/SHEET_PIN
-     * 
+     * Get the Placement Template SHEET_PIN / HIERLABEL used for place a new #HIERLABEL/#SHEET_PIN.
+     *
      * @return SCH_HIERLABEL*
      */
     SCH_HIERLABEL* GetPlacementTemplate() const;
@@ -79,6 +80,7 @@ private:
     //It's the agent that performs modification and placement
     std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT>           m_agent;
     SCH_SHEET*                                             m_lastEditSheet;
+
     //The same sheet may have mutiple instances
     std::unordered_map<SCH_SHEET*, PANEL_SYNC_SHEET_PINS*> m_panels;
     PlaceItemKind                                          m_placeItemKind;

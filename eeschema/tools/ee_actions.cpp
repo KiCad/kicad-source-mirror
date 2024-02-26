@@ -504,30 +504,28 @@ TOOL_ACTION EE_ACTIONS::drawSheet( TOOL_ACTION_ARGS()
         .Parameter( SCH_SHEET_T ) );
 
 TOOL_ACTION EE_ACTIONS::placeSheetPin( TOOL_ACTION_ARGS()
-                .Name( "eeschema.InteractiveDrawing.placeSheetPin" )
-                .Scope( AS_GLOBAL )
-                .FriendlyName( _( "Add Sheet Pin" ) )
-                .Tooltip( _( "Add sheet pins" ) )
-                .Icon( BITMAPS::add_hierar_pin )
-                .Flags( AF_ACTIVATE ) );
+        .Name( "eeschema.InteractiveDrawing.placeSheetPin" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Add Sheet Pin" ) )
+        .Tooltip( _( "Add sheet pins" ) )
+        .Icon( BITMAPS::add_hierar_pin )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::syncSheetPins(
-        TOOL_ACTION_ARGS()
-                .Name( "eeschema.InteractiveDrawing.syncSheetPins" )
-                .Scope( AS_GLOBAL )
-                .FriendlyName( _( "Sync Sheet Pins" ) )
-                .Tooltip( _( "Synchronize sheet pins and hierarchical labels”" ) )
-                .Icon( BITMAPS::import_hierarchical_label )
-                .Flags( AF_ACTIVATE ) );
+TOOL_ACTION EE_ACTIONS::syncSheetPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.syncSheetPins" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Sync Sheet Pins" ) )
+        .Tooltip( _( "Synchronize sheet pins and hierarchical labels”" ) )
+        .Icon( BITMAPS::import_hierarchical_label )
+        .Flags( AF_ACTIVATE ) );
 
-TOOL_ACTION EE_ACTIONS::syncAllSheetsPins(
-        TOOL_ACTION_ARGS()
-                .Name( "eeschema.InteractiveDrawing.syncAllSheetsPins" )
-                .Scope( AS_GLOBAL )
-                .FriendlyName( _( "Sync Sheet Pins" ) )
-                .Tooltip( _( "Synchronize sheet pins and hierarchical labels”" ) )
-                .Icon( BITMAPS::import_hierarchical_label )
-                .Flags( AF_ACTIVATE ) );
+TOOL_ACTION EE_ACTIONS::syncAllSheetsPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.InteractiveDrawing.syncAllSheetsPins" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Sync Sheet Pins" ) )
+        .Tooltip( _( "Synchronize sheet pins and hierarchical labels”" ) )
+        .Icon( BITMAPS::import_hierarchical_label )
+        .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION EE_ACTIONS::placeGlobalLabel( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.placeGlobalLabel" )

@@ -41,8 +41,7 @@ class SCH_ITEM;
 enum class SHEET_SYNCHRONIZATION_ITEM_KIND;
 
 /**
- * @brief Agent for all the modifications while syncing the sheet pin and hierlabel
- * 
+ * Agent for all the modifications while syncing the sheet pin and hierarchical label.
  */
 class SHEET_SYNCHRONIZATION_AGENT
 {
@@ -69,9 +68,9 @@ public:
     ~SHEET_SYNCHRONIZATION_AGENT();
 
     void ModifyItem( SHEET_SYNCHRONIZATION_ITEM& aItem, std::function<void()> aDoModify,
-                     SCH_SHEET_PATH const& aPath );
+                     const SCH_SHEET_PATH& aPath );
 
-    void ModifyItem( SCH_ITEM* aItem, std::function<void()> aDoModify, SCH_SHEET_PATH const& aPath,
+    void ModifyItem( SCH_ITEM* aItem, std::function<void()> aDoModify, const SCH_SHEET_PATH& aPath,
                      SHEET_SYNCHRONIZATION_ITEM_KIND aKind );
 
     void RemoveItem( SHEET_SYNCHRONIZATION_ITEM& aItem, SCH_SHEET* aSheet,

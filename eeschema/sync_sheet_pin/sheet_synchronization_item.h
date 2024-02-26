@@ -44,6 +44,7 @@ enum class SHEET_SYNCHRONIZATION_ITEM_KIND
 };
 
 using SCREEN_UPDATER = std::function<void( EDA_ITEM* )>;
+
 class SHEET_SYNCHRONIZATION_ITEM
 {
 public:
@@ -59,6 +60,7 @@ public:
 
     virtual SHEET_SYNCHRONIZATION_ITEM_KIND GetKind() const = 0;
 };
+
 
 class SCH_HIERLABEL_SYNCHRONIZATION_ITEM : public SHEET_SYNCHRONIZATION_ITEM
 {

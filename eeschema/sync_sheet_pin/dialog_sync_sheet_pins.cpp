@@ -39,12 +39,15 @@
 #include <unordered_map>
 #include <sch_drawing_tools.h>
 
-DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS(
-        wxWindow* aParent, std::list<SCH_SHEET_PATH> aSheetPath,
-        std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT> aAgent ) :
+
+DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS( wxWindow* aParent,
+                                                std::list<SCH_SHEET_PATH> aSheetPath,
+                                                std::shared_ptr<SHEET_SYNCHRONIZATION_AGENT> aAgent ) :
         DIALOG_SYNC_SHEET_PINS_BASE( aParent ),
-        m_agent( std::move( aAgent ) ), m_lastEditSheet( nullptr ),
-        m_placeItemKind( PlaceItemKind::UNDEFINED ), m_placementTemplate( nullptr )
+        m_agent( std::move( aAgent ) ),
+        m_lastEditSheet( nullptr ),
+        m_placeItemKind( PlaceItemKind::UNDEFINED ),
+        m_placementTemplate( nullptr )
 {
     wxImageList* imageList = new wxImageList( SYNC_SHEET_PIN_PREFERENCE::NORMAL_WIDTH,
                                               SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT );
@@ -121,6 +124,7 @@ void DIALOG_SYNC_SHEET_PINS::OnCloseBtnClick( wxCommandEvent& event )
 {
     Close();
 }
+
 
 void DIALOG_SYNC_SHEET_PINS::OnClose( wxCloseEvent& aEvent )
 {

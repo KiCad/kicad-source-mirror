@@ -53,7 +53,7 @@ public:
 
 
     PANEL_SYNC_SHEET_PINS( wxWindow* aParent, SCH_SHEET* aSheet, wxNotebook* aNoteBook, int aIndex,
-                           SHEET_SYNCHRONIZATION_AGENT& aAgent, SCH_SHEET_PATH aPath );
+                           SHEET_SYNCHRONIZATION_AGENT& aAgent, const SCH_SHEET_PATH& aPath );
 
     ~PANEL_SYNC_SHEET_PINS() override;
 

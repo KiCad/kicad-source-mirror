@@ -46,6 +46,7 @@ bool SHEET_FILE_CHANGE_NOTIFIER::ShouldIgnore() const
     return false;
 }
 
+
 void SHEET_FILE_CHANGE_NOTIFIER::Sync()
 {
     m_panel->UpdateForms();

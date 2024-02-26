@@ -28,6 +28,7 @@
 
 class SHEET_SYNCHRONIZATION_MODEL;
 class PANEL_SYNC_SHEET_PINS;
+
 class SHEET_SYNCHRONIZATION_NOTIFIER
 {
 public:
@@ -55,7 +56,7 @@ private:
 
 
 /**
- * @brief Used to sync the  modifications between the mutiple instances of a sheet file
+ * Used to sync the modifications between the mutiple instances of a sheet file.
  *
  */
 class SHEET_FILE_CHANGE_NOTIFIER : public SHEET_SYNCHRONIZATION_NOTIFIER

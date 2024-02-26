@@ -40,6 +40,7 @@ class SHEET_SYNCHRONIZATION_NOTIFIER;
 class SHEET_SYNCHRONIZATION_AGENT;
 class SCH_SHEET;
 class SCH_SHEET_PATH;
+
 class SHEET_SYNCHRONIZATION_MODEL : public wxDataViewVirtualListModel
 {
 public:
@@ -70,7 +71,7 @@ public:
 
 
     SHEET_SYNCHRONIZATION_MODEL( SHEET_SYNCHRONIZATION_AGENT& aAgent, SCH_SHEET* aSheet,
-                                 SCH_SHEET_PATH aPath );
+                                 SCH_SHEET_PATH& aPath );
     ~SHEET_SYNCHRONIZATION_MODEL() override;
 
     void GetValueByRow( wxVariant& variant, unsigned row, unsigned col ) const override;
@@ -82,12 +83,12 @@ public:
     void RemoveItems( wxDataViewItemArray const& aItems );
 
     /**
-     * @brief Add a new item, the notifiers are notified
+     * Add a new item, the notifiers are notified.
      */
     bool AppendNewItem( std::shared_ptr<SHEET_SYNCHRONIZATION_ITEM> aItem );
 
     /**
-     * @brief Just append item to the list, the notifiers are not notified
+     * Just append item to the list, the notifiers are not notified.
      */
     bool AppendItem( std::shared_ptr<SHEET_SYNCHRONIZATION_ITEM> aItem );
 
