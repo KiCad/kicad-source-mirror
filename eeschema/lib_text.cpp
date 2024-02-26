@@ -435,7 +435,7 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     case GR_TEXT_V_ALIGN_TOP:           msg = _( "Top" );          break;
     case GR_TEXT_V_ALIGN_CENTER:        msg = _( "Center" );       break;
     case GR_TEXT_V_ALIGN_BOTTOM:        msg = _( "Bottom" );       break;
-    case GR_TEXT_H_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
+    case GR_TEXT_V_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
     }
 
     aList.emplace_back( _( "V Justification" ), msg );
