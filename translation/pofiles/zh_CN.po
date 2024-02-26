@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-26 12:01+0000\n"
+"PO-Revision-Date: 2024-02-27 08:04+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -12218,7 +12218,7 @@ msgid "This action cannot be undone."
 msgstr "该操作无法撤销。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:541
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
 msgstr "创建包含 '%2$s' 内容的新文件 '%1$s'?"
 
@@ -14899,7 +14899,7 @@ msgstr "总线和网络项目之间的连接无效"
 
 #: eeschema/erc_item.cpp:135 pcbnew/drc/drc_item.cpp:197
 msgid "Unresolved text variable"
-msgstr "未解析的文字变量"
+msgstr "未解析的文本变量"
 
 #: eeschema/erc_item.cpp:139
 msgid "Undefined netclass"
@@ -37209,7 +37209,7 @@ msgstr "断言失败"
 
 #: pcbnew/drc/drc_item.cpp:205
 msgid "Copper sliver"
-msgstr "残铜"
+msgstr "铜箔毛刺"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Solder mask aperture bridges items with different nets"
@@ -38039,7 +38039,7 @@ msgstr "正在检查重叠项目的丝印..."
 
 #: pcbnew/drc/drc_test_provider_sliver_checker.cpp:84
 msgid "Running sliver detection on copper layers..."
-msgstr "在铜层上运行铜条检测..."
+msgstr "在铜层上运行毛刺检测..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:56
 msgid "board setup solder mask min width"
@@ -40657,8 +40657,8 @@ msgid ""
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
 msgstr ""
-"CADSTAR 模板 '%s' 具有为\"条子宽度 (两焊盘之间的间距) \"设置定义的非零值。对"
-"此没有 KiCad 等效项, 因此忽略此设置。"
+"CADSTAR 模板 '%s' 具有为\"毛刺宽度 (两焊盘之间的间距) \"设置定义的非零值。"
+"对此没有 KiCad 等效项, 因此忽略此设置。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1981
 #, c-format
