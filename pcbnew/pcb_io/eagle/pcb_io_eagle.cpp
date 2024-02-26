@@ -922,7 +922,11 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                 zone->AppendCorner( VECTOR2I( kicad_x( r.x1 ), kicad_y( r.y2 ) ), outlineIdx );
 
                 if( r.rot )
-                    zone->Rotate( zone->GetPosition(), EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+                {
+                    VECTOR2I center( ( kicad_x( r.x1 ) + kicad_x( r.x2 ) ) / 2,
+                                     ( kicad_y( r.y1 ) + kicad_y( r.y2 ) ) / 2 );
+                    zone->Rotate( center, EDA_ANGLE( r.rot->degrees, DEGREES_T ) );
+                }
 
                 // this is not my fault:
                 zone->SetBorderDisplayStyle( outline_hatch, ZONE::GetDefaultHatchPitch(), true );
