@@ -84,6 +84,7 @@ public:
     void OnAcceptPrms( wxCommandEvent& event ) override;
     void OnSetDefaultValues( wxCommandEvent& event ) override;
     void onScintillaCharAdded( wxStyledTextEvent &aEvent );
+    void onScintillaFocusLost( wxFocusEvent& aEvent ) override;
 	void onHelp( wxCommandEvent& aEvent ) override;
     void onHAlignButton( wxCommandEvent &aEvent );
     void onVAlignButton( wxCommandEvent &aEvent );
