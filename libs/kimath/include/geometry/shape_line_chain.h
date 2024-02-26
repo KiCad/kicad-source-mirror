@@ -173,25 +173,9 @@ public:
 
     SHAPE_LINE_CHAIN( const std::vector<int>& aV );
 
-    SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false ) :
-            SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-            m_closed( aClosed ),
-            m_width( 0 )
-    {
-        m_points = aV;
-        m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( aV.size(), SHAPES_ARE_PT );
-    }
+    SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false );
 
-    SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false ) :
-            SHAPE_LINE_CHAIN_BASE( SH_LINE_CHAIN ),
-            m_closed( aClosed ),
-            m_width( 0 )
-    {
-        m_points = aArc.ConvertToPolyline().CPoints();
-        m_arcs.emplace_back( aArc );
-        m_arcs.back().SetWidth( 0 );
-        m_shapes = std::vector<std::pair<ssize_t, ssize_t>>( m_points.size(), { 0, SHAPE_IS_PT } );
-    }
+    SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false );
 
     SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath,
                       const std::vector<CLIPPER_Z_VALUE>& aZValueBuffer,
