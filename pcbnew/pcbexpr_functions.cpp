@@ -943,7 +943,7 @@ static void isBlindBuriedViaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     aCtx->Push( result );
 
     if( item && item->Type() == PCB_VIA_T
-            && static_cast<PCB_VIA*>( item )->GetViaType() == VIATYPE::MICROVIA )
+            && static_cast<PCB_VIA*>( item )->GetViaType() == VIATYPE::BLIND_BURIED )
     {
         result->Set ( 1.0 );
     }
