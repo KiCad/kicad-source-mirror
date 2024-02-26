@@ -56,8 +56,7 @@ DIALOG_GIT_REPOSITORY::DIALOG_GIT_REPOSITORY( wxWindow* aParent, git_repository*
         m_tempRepo = true;
         m_tempPath = wxFileName::CreateTempFileName( "kicadtestrepo" );
 
-        git_repository_init_options options;
-        options.version = GIT_REPOSITORY_INIT_OPTIONS_VERSION;
+        git_repository_init_options options = GIT_REPOSITORY_INIT_OPTIONS_INIT;
         options.flags = GIT_REPOSITORY_INIT_MKPATH | GIT_REPOSITORY_INIT_NO_REINIT;
         git_repository_init_ext( &m_repository, m_tempPath.ToStdString().c_str(), &options );
     }
