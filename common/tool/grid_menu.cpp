@@ -39,15 +39,7 @@ GRID_MENU::GRID_MENU( EDA_DRAW_FRAME* aParent ) :
 {
     UpdateTitle();
     SetIcon( BITMAPS::grid_select );
-
-    APP_SETTINGS_BASE* settings = m_parent->config();
-    wxArrayString      gridsList;
-    int                i = ID_POPUP_GRID_START;
-
-    BuildChoiceList( &gridsList, settings, m_parent );
-
-    for( const wxString& grid : gridsList )
-        Append( i++, grid, wxEmptyString, wxITEM_CHECK );
+    update();
 }
 
 
@@ -76,6 +68,9 @@ void GRID_MENU::update()
 
     while( GetMenuItemCount() > 0 )
         Delete( FindItemByPosition( 0 ) );
+
+    Add( ACTIONS::gridOrigin );
+    AppendSeparator();
 
     for( const wxString& grid : gridsList )
     {

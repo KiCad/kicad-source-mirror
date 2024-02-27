@@ -211,6 +211,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     editMenu->Add( PCB_ACTIONS::editTeardrops );
     editMenu->Add( PCB_ACTIONS::changeFootprints );
     editMenu->Add( PCB_ACTIONS::swapLayers );
+    editMenu->Add( ACTIONS::gridOrigin );
 
     editMenu->AppendSeparator();
     editMenu->Add( PCB_ACTIONS::zoneFillAll );
