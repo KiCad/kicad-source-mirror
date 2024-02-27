@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-23 10:02+0000\n"
+"PO-Revision-Date: 2024-02-27 08:04+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -35240,7 +35240,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
-msgstr "구리부터 모서리 클리어런스:"
+msgstr "카퍼와 보드외곽 간 간격:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid ""
