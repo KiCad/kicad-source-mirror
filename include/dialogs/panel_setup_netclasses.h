@@ -51,6 +51,7 @@ public:
 private:
     void OnAddNetclassClick( wxCommandEvent& event ) override;
     void OnRemoveNetclassClick( wxCommandEvent& event ) override;
+    void OnImportColorsClick( wxCommandEvent& event ) override;
     void OnSizeNetclassGrid( wxSizeEvent& event ) override;
 	void OnSizeAssignmentGrid( wxSizeEvent& event ) override;
     void OnAddAssignmentClick( wxCommandEvent& event ) override;

@@ -39,7 +39,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid = new WX_GRID( m_netclassesPane, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 
 	// Grid
-	m_netclassGrid->CreateGrid( 3, 13 );
+	m_netclassGrid->CreateGrid( 3, 14 );
 	m_netclassGrid->EnableEditing( true );
 	m_netclassGrid->EnableGridLines( true );
 	m_netclassGrid->EnableDragGridSize( false );
@@ -57,10 +57,11 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetColLabelValue( 6, _("uVia Hole") );
 	m_netclassGrid->SetColLabelValue( 7, _("DP Width") );
 	m_netclassGrid->SetColLabelValue( 8, _("DP Gap") );
-	m_netclassGrid->SetColLabelValue( 9, _("Wire Thickness") );
-	m_netclassGrid->SetColLabelValue( 10, _("Bus Thickness") );
-	m_netclassGrid->SetColLabelValue( 11, _("Color") );
-	m_netclassGrid->SetColLabelValue( 12, _("Line Style") );
+	m_netclassGrid->SetColLabelValue( 9, _("PCB Color") );
+	m_netclassGrid->SetColLabelValue( 10, _("Wire Thickness") );
+	m_netclassGrid->SetColLabelValue( 11, _("Bus Thickness") );
+	m_netclassGrid->SetColLabelValue( 12, _("Color") );
+	m_netclassGrid->SetColLabelValue( 13, _("Line Style") );
 	m_netclassGrid->SetColLabelSize( wxGRID_AUTOSIZE );
 	m_netclassGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
@@ -88,14 +89,16 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_removeButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer->Add( m_removeButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-
 	buttonBoxSizer->Add( 60, 0, 1, wxEXPAND, 5 );
 
 	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use KiCad default color."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorDefaultHelpText->Wrap( -1 );
 	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
-
+	m_importColorsButton = new wxButton( m_netclassesPane, wxID_ANY, _("Import colors from schematic") );
+	buttonBoxSizer->Add( m_importColorsButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+ 
+ 
 	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
@@ -193,6 +196,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnSizeNetclassGrid ), NULL, this );
 	m_addButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnAddNetclassClick ), NULL, this );
 	m_removeButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnRemoveNetclassClick ), NULL, this );
+	m_importColorsButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnImportColorsClick ), NULL, this );
 	m_membershipPane->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::onmembershipPanelSize ), NULL, this );
 	m_assignmentGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnSizeAssignmentGrid ), NULL, this );
 	m_assignmentGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnUpdateUI ), NULL, this );
@@ -207,6 +211,7 @@ PANEL_SETUP_NETCLASSES_BASE::~PANEL_SETUP_NETCLASSES_BASE()
 	m_netclassGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnSizeNetclassGrid ), NULL, this );
 	m_addButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnAddNetclassClick ), NULL, this );
 	m_removeButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnRemoveNetclassClick ), NULL, this );
+	m_importColorsButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnImportColorsClick ), NULL, this );
 	m_membershipPane->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::onmembershipPanelSize ), NULL, this );
 	m_assignmentGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnSizeAssignmentGrid ), NULL, this );
 	m_assignmentGrid->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_SETUP_NETCLASSES_BASE::OnUpdateUI ), NULL, this );
