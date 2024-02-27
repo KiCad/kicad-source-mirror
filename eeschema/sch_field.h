@@ -152,6 +152,9 @@ public:
         return name.Trim().empty() && value.Trim().empty();
     }
 
+    int GetSchTextSize() const { return GetTextWidth(); }
+    void SetSchTextSize( int aSize ) { SetTextSize( VECTOR2I( aSize, aSize ) ); }
+
     COLOR4D GetFieldColor() const;
 
     void SetLastResolvedState( const SCH_ITEM* aItem ) override
