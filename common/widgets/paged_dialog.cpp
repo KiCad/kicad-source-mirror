@@ -360,7 +360,8 @@ void PAGED_DIALOG::onCharHook( wxKeyEvent& aEvent )
 {
     if( dynamic_cast<wxTextEntry*>( aEvent.GetEventObject() )
             || dynamic_cast<wxStyledTextCtrl*>( aEvent.GetEventObject() )
-            || dynamic_cast<wxListView*>( aEvent.GetEventObject() ) )
+            || dynamic_cast<wxListView*>( aEvent.GetEventObject() )
+            || dynamic_cast<wxGrid*>( FindFocus() ) )
     {
         aEvent.Skip();
         return;
@@ -378,7 +379,7 @@ void PAGED_DIALOG::onCharHook( wxKeyEvent& aEvent )
                 m_treebook->SetSelection( page - 1 );
         }
 
-        m_treebook->GetTreeCtrl()->SetFocus();     // Don't allow preview canvas to steal focus
+        m_treebook->GetTreeCtrl()->SetFocus();     // Don't allow preview canvas to steal gridFocus
     }
     else if( aEvent.GetKeyCode() == WXK_DOWN )
     {
@@ -386,7 +387,7 @@ void PAGED_DIALOG::onCharHook( wxKeyEvent& aEvent )
 
         m_treebook->SetSelection( std::min<int>( page + 1, m_treebook->GetPageCount() - 1 ) );
 
-        m_treebook->GetTreeCtrl()->SetFocus();     // Don't allow preview canvas to steal focus
+        m_treebook->GetTreeCtrl()->SetFocus();     // Don't allow preview canvas to steal gridFocus
     }
     else
     {
