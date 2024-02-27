@@ -377,6 +377,8 @@ public:
 
     bool m_Quitting;
 
+    bool m_PropertyGridInitialized;
+
 protected:
     /// Loads internal settings from COMMON_SETTINGS
     void loadCommonSettings();
