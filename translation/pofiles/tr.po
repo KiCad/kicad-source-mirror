@@ -20,16 +20,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-01-30 19:01+0000\n"
-"Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/master-"
-"source/tr/>\n"
+"PO-Revision-Date: 2024-02-27 19:29+0000\n"
+"Last-Translator: Mahsum Aslan <mahsumaslan@yandex.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/v8/tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -78,9 +77,8 @@ msgid "Build Tech layer %d"
 msgstr "%d Teknoloji katmanı oluştur"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1033
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "Bakır katman çokgenleri basitleştiriliyor"
+msgstr "Bakır katman çokgenleri basitleştir"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1038
 msgid "Calculating plated copper"
