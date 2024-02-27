@@ -741,16 +741,54 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
 
                     if( degrees == 90 || t.rot->spin )
                     {
-                        pcbtxt->SetTextAngle( EDA_ANGLE( sign * t.rot->degrees, DEGREES_T ) );
+                        pcbtxt->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
+
+                        if( sign < 0 )
+                        {
+                            BOX2I bbox = pcbtxt->GetBoundingBox();
+                            VECTOR2I pos = pcbtxt->GetTextPos();
+                            pos.y -= sign * bbox.GetWidth();    // yes, width: bbox is unrotated
+                            pcbtxt->SetTextPos( pos );
+                        }
                     }
                     else if( degrees == 180 )
                     {
-                        align = -align;
+                        BOX2I bbox = pcbtxt->GetBoundingBox();
+                        VECTOR2I pos = pcbtxt->GetTextPos();
+                        pos.x -= sign * bbox.GetWidth();
+                        pcbtxt->SetTextPos( pos );
+
+                        switch( align )
+                        {
+                        case ETEXT::TOP_CENTER:    align = ETEXT::BOTTOM_CENTER; break;
+                        case ETEXT::TOP_LEFT:      align = ETEXT::BOTTOM_LEFT;   break;
+                        case ETEXT::TOP_RIGHT:     align = ETEXT::BOTTOM_RIGHT;  break;
+                        case ETEXT::BOTTOM_CENTER: align = ETEXT::TOP_CENTER;    break;
+                        case ETEXT::BOTTOM_LEFT:   align = ETEXT::TOP_LEFT;      break;
+                        case ETEXT::BOTTOM_RIGHT:  align = ETEXT::TOP_RIGHT;     break;
+                        }
                     }
                     else if( degrees == 270 )
                     {
+                        if( sign < 0 )
+                        {
+                            BOX2I bbox = pcbtxt->GetBoundingBox();
+                            VECTOR2I pos = pcbtxt->GetTextPos();
+                            pos.y -=  sign * bbox.GetWidth();   // yes, width; bbox is unrotated
+                            pcbtxt->SetTextPos( pos );
+                        }
+
                         pcbtxt->SetTextAngle( EDA_ANGLE( sign * 90, DEGREES_T ) );
-                        align = -align;
+
+                        switch( align )
+                        {
+                        case ETEXT::TOP_CENTER:    align = ETEXT::BOTTOM_CENTER; break;
+                        case ETEXT::TOP_LEFT:      align = ETEXT::BOTTOM_LEFT;   break;
+                        case ETEXT::TOP_RIGHT:     align = ETEXT::BOTTOM_RIGHT;  break;
+                        case ETEXT::BOTTOM_CENTER: align = ETEXT::TOP_CENTER;    break;
+                        case ETEXT::BOTTOM_LEFT:   align = ETEXT::TOP_LEFT;      break;
+                        case ETEXT::BOTTOM_RIGHT:  align = ETEXT::TOP_RIGHT;     break;
+                        }
                     }
                     else
                     {
@@ -758,21 +796,21 @@ void PCB_IO_EAGLE::loadPlain( wxXmlNode* aGraphics )
                         // placement right.
                         if( ( degrees > 0 ) &&  ( degrees < 90 ) )
                         {
-                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * t.rot->degrees, DEGREES_T ) );
+                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
                         }
                         else if( ( degrees > 90 ) && ( degrees < 180 ) )
                         {
-                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( t.rot->degrees + 180 ), DEGREES_T ) );
+                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( degrees + 180 ), DEGREES_T ) );
                             align = ETEXT::TOP_RIGHT;
                         }
                         else if( ( degrees > 180 ) && ( degrees < 270 ) )
                         {
-                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( t.rot->degrees - 180 ), DEGREES_T ) );
+                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * ( degrees - 180 ), DEGREES_T ) );
                             align = ETEXT::TOP_RIGHT;
                         }
                         else if( ( degrees > 270 ) && ( degrees < 360 ) )
                         {
-                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * t.rot->degrees, DEGREES_T ) );
+                            pcbtxt->SetTextAngle( EDA_ANGLE( sign * degrees, DEGREES_T ) );
                             align = ETEXT::BOTTOM_LEFT;
                         }
                     }
