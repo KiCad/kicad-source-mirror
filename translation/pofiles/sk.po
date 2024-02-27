@@ -3,21 +3,22 @@
 # Jakub Janek <shaman.janek@gmail.com>, 2020, 2022, 2023.
 # Marcel Hecko <maco@blava.net>, 2022, 2023.
 # Milan Šalka <salka.milan@googlemail.com>, 2023.
+# Andrej Valek <andy@skyrain.eu>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2023-09-27 16:00+0000\n"
-"Last-Translator: Marcel Hecko <maco@blava.net>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"PO-Revision-Date: 2024-02-27 19:29+0000\n"
+"Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-Basepath: /home/slavko/projekty/svn/kicad-20100408\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -74,7 +75,7 @@ msgstr "Budujte technické vrstvy"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:817
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Vytvor technicku vrstvu %d"
+msgstr "Vytvoriť technickú vrstvu %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1033
 #, fuzzy
@@ -83,7 +84,7 @@ msgstr "Zjednodušiť polygóny medených vrstiev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1038
 msgid "Calculating plated copper"
-msgstr ""
+msgstr "Vypočítať plátovanie medi"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1112
 #, c-format
@@ -119,7 +120,7 @@ msgstr "Sieť %s\tTrieda spojov %s"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:681
 #, c-format
 msgid "Pad %s\t"
-msgstr "Ploska %s\t"
+msgstr "Plôška %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:712
 #, c-format
@@ -129,7 +130,7 @@ msgstr "Rozsah pravidla %s\t"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:714
 #, c-format
 msgid "Zone %s\t"
-msgstr "Zona %s\t"
+msgstr "Zóna %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:465
 msgid "Load OpenGL: board"
@@ -146,7 +147,7 @@ msgstr "Načítanie OpenGL: vrstvy"
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
 #, fuzzy, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Načítanie OpenGL: vrstva %d"
+msgstr "Načítanie OpenGL vrstva %d"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
@@ -182,11 +183,11 @@ msgstr "Načítavam..."
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:387
 msgid "Load Raytracing: board"
-msgstr "Načítanie Raytracing: doska"
+msgstr "Načítať Raytracing: doska"
 
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:560
 msgid "Load Raytracing: layers"
-msgstr "Načítanie Raytracing: vrstvy"
+msgstr "Načítať Raytracing: vrstvy"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:339
 #, c-format
@@ -300,17 +301,17 @@ msgstr "Vzhľad"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
 msgid "Follow PCB Editor"
-msgstr "Prepnite do editoru DPS"
+msgstr "Editor DPS"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
 msgid "Follow PCB Plot Settings"
-msgstr "Pouzi nastavenia DPS zobrazenia"
+msgstr "Nastavenie zobrazenia DPS"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:588
 msgid "legacy colors"
-msgstr "povodne farby"
+msgstr "pôvodné farby"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:727
 msgid "3D Image File Name"
@@ -358,14 +359,14 @@ msgid "Can't save file"
 msgstr "Nemožno uložiť súbor"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
-#, fuzzy
 msgid "Set Pivot"
-msgstr "Pinový hárok"
+msgstr "Nastaviť pivot"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
-#, fuzzy
 msgid "Place point around which the board will be rotated (middle mouse click)"
-msgstr "Otočenie na stred pivot (stredné kliknutie myšou)"
+msgstr ""
+"Umiestniť bod, okolo kterého bude doska otáčaná (klik stredným tlačidlom "
+"myši)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:56
@@ -398,36 +399,32 @@ msgid "Rotate Z Counterclockwise"
 msgstr "Otočiť Z proti smeru HR"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:110
-#, fuzzy
 msgid "Move Board Left"
-msgstr "Posunút dosku vĽavo"
+msgstr "Presunúť dosku vľavo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:111
 msgid "Move board Left"
-msgstr "Posunút dosku vĽavo"
+msgstr "Posunúť dosku vľavo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:120
-#, fuzzy
 msgid "Move Board Right"
-msgstr "Posunúť dosku vpravo"
+msgstr "Presunúť dosku vpravo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:121
 msgid "Move board Right"
 msgstr "Posunúť dosku vpravo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:130
-#, fuzzy
 msgid "Move Board Up"
-msgstr "Posunúť dosku nahor"
+msgstr "Presunúť dosku hore"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:131
 msgid "Move board Up"
-msgstr "Posunúť dosku nahor"
+msgstr "Posunúť dosku hore"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:140
-#, fuzzy
 msgid "Move Board Down"
-msgstr "Posunúť dosku dole"
+msgstr "Presunúť dosku dole"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Move board Down"
@@ -521,16 +518,15 @@ msgstr "Vykresliť realistické materiály"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:276
 msgid "Use all material properties from each 3D model file"
-msgstr "Využite všetky vlastnosti materiálu z každého súboru 3D modelu"
+msgstr "Použiť všetky vlastnosti materiálu z každého súboru 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:283
 msgid "Render Solid Colors"
 msgstr "Vykersliť plné farby"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
-#, fuzzy
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "Použite iba vlastnosť rozptýlenej farby zo súboru modelu 3D modelu"
+msgstr "Použiť iba vlastnosť rozptýlenej farby zo súboru modelu 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:291
 msgid "Render CAD Colors"
@@ -538,21 +534,19 @@ msgstr "Vykresliť farby CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:292
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Použite farebný štýl CAD založený na rozptýlenej farbe materiálu"
+msgstr "Použiť farebný štýl CAD založený na rozptýlenej farbe materiálu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:300
-#, fuzzy
 msgid "Show Through Hole 3D Models"
-msgstr "Prepínanie medzi 3D modelmi otvorov"
+msgstr "Zobraziť 3D modely súšiastok s vývodmi (THT)"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:301
-#, fuzzy
 msgid "Show 3D models for 'Through hole' type footprints"
-msgstr "Prepnúť 3D modely pre typ komponentov 'drôtovej technológie (THT)'"
+msgstr "Zobraziť 3D modely pre typ komponentov 'vývodovej technológie (THT)'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:309
 msgid "Show SMD 3D Models"
-msgstr "Zobraziť 3D modely suciastok SMD"
+msgstr "Zobraziť 3D modely súčiastok SMD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:310
 #, fuzzy
@@ -561,29 +555,27 @@ msgstr "Prepnúť 3D modely pre typ komponentov 'povrchovej technológie (SMT)'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
 msgid "Show Unspecified 3D Models"
-msgstr "Zobrazit Neurcite 3D Modely"
+msgstr "Zobraziť Neurčené 3D Modely"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
-#, fuzzy
 msgid "Show 3D models for 'unspecified' type footprints"
-msgstr "Prepínajte 3D modely s atribútom „Surface mount“"
+msgstr "Zobraziť 3D modely pre púzdra typu 'nešpecifikované'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:327
 msgid "Show 3D Models not in POS File"
-msgstr "Zobrazit 3D modely ktore nie su v POS subore"
+msgstr "Zobraziť 3D modely, ktoré nie sú v POS subore"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:328
 msgid "Show 3D models even if not found in .pos file"
-msgstr "Zobrazit 3D modely aj ked nie su najdene v .pos subore"
+msgstr "Zobraziť 3D modely aj keď neboli nájdené v .pos súbore"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:336
 msgid "Show 3D Models marked DNP"
-msgstr "Zobrazit 3D modely oznacene ako DNP"
+msgstr "Zobraziť 3D modely označené ako DNP"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:337
-#, fuzzy
 msgid "Show 3D models even if marked 'Do Not Place'"
-msgstr "Prepnúť 3D modely pre typ komponentov 'povrchovej technológie (SMT)'"
+msgstr "Zobraziť 3D modely, aj keď sú označené ako 'neumiestňovať'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:344
 msgid "Show Model Bounding Boxes"
@@ -658,7 +650,7 @@ msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show front silkscreen"
-msgstr "Zobrazit prednu sietotlac"
+msgstr "Zobraziť predný popis"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
@@ -666,7 +658,7 @@ msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show back silkscreen"
-msgstr "Zobrazit zadnu sietotlac"
+msgstr "Zobraziť zadný popis"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "F.Mask"
@@ -674,7 +666,7 @@ msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show front solder mask"
-msgstr "Zobraz prednu spájkovaciu masku"
+msgstr "Zobraziť prednú spájkovaciu masku"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "B.Mask"
@@ -682,7 +674,7 @@ msgstr "B.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show back solder mask"
-msgstr "Zobraz zadnu spajkovaciu pastu"
+msgstr "Zobraziť zadnú spájkovaciu masku"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 #, fuzzy
@@ -690,9 +682,8 @@ msgid "User.Drawings"
 msgstr "Kresby"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
-#, fuzzy
 msgid "Show user drawings layer"
-msgstr "Zobraziť vrstvu k&resieb"
+msgstr "Zobraziť vrstvu kresieb"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
 msgid "User.Comments"
@@ -720,29 +711,24 @@ msgid "Show user ECO2 layer"
 msgstr "Zobraziť vrstvu ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
-#, fuzzy
 msgid "Through-hole Models"
-msgstr "Podložky do priechodných otvorov"
+msgstr "Vývodové Modely"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
-#, fuzzy
 msgid "SMD Models"
-msgstr "3D modely"
+msgstr "SMD Modely"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Zobraziť 3D virtuálne modely"
+msgstr "Virtuálne Modely"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
-#, fuzzy
 msgid "Models not in POS File"
-msgstr "Prepínajte 3D modely s atribútom „Virtual“"
+msgstr "Modely sa nenachádzajú v POS súbore"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
-#, fuzzy
 msgid "Models marked DNP"
-msgstr "Načítanie 3D modelov"
+msgstr "Modely označené ako DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 #, fuzzy
@@ -784,18 +770,16 @@ msgid "Show all footprint text"
 msgstr "Zobraziť všetok text stopy"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "Sieťotlač"
+msgstr "Popis mimo dosku"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
-msgstr ""
+msgstr "Nezachytávať popisovú vrstvu na hrany dosky"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
-msgstr "Os X"
+msgstr "3D Osi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 #, fuzzy
@@ -825,6 +809,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
+"Ulož a obnov farby a nastavenie viditeľnosti.\n"
+"Použiť %s+Tab pre aktiváciu.\n"
+"Nasledujúce okná sa budú cyklicky zobrazovať kým je aktívny %s."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
 #, c-format
@@ -834,6 +821,9 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
+"Ulož a obnov pozíciu kamery a priblíženie.\n"
+"Použiť %s+Tab pre aktiváciu.\n"
+"Nasledujúce okná sa budú cyklicky zobrazovať kým je aktívny %s."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:438
 #, fuzzy
@@ -903,7 +893,7 @@ msgstr "Odstrániť predvoľbu"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2071
 #: pcbnew/widgets/appearance_controls.cpp:2712
 msgid "Select preset:"
-msgstr "Vyberte predvoľbu:"
+msgstr "Vybrať predvoľbu:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:755
 #: pcbnew/widgets/appearance_controls.cpp:2808
@@ -913,21 +903,18 @@ msgstr "Okna (Alt + Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
 #: pcbnew/widgets/appearance_controls.cpp:2817
-#, fuzzy
 msgid "Save viewport..."
-msgstr "Uložiť predvoľbu ..."
+msgstr "Uložiť oblasť zobrazenia..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:765
 #: pcbnew/widgets/appearance_controls.cpp:2818
-#, fuzzy
 msgid "Delete viewport..."
-msgstr "Odstrániť predvoľbu ..."
+msgstr "Odstrániť oblasť zobrazenia..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:796
 #: pcbnew/widgets/appearance_controls.cpp:2867
-#, fuzzy
 msgid "Viewport name:"
-msgstr "Meno siete:"
+msgstr "Názov oblasti pohľadu:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:797
 #: pcbnew/widgets/appearance_controls.cpp:2867
@@ -988,33 +975,31 @@ msgstr "Konfigurovať cesty"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
-msgstr "Výber 3D modelu"
+msgstr "Výbrať 3D Model"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
-msgstr "Nastavenie rendra"
+msgstr "Možnosti renderovania"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
-#, fuzzy
 msgid "Clip silkscreen at via annuli"
-msgstr "Clip silkscreen at via annulus"
+msgstr "Skrátiť popis na prstenec prekovu"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
-#, fuzzy
 msgid "Clip silkscreen at solder mask edges"
-msgstr "Clip silkscreen at via annulus"
+msgstr "Skrátiť popis na hrany spájkovacej masky"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
-msgstr "Zobrazovať vyplnené plochy v zónach"
+msgstr "Zobraziť vyplnené oblasti v zónach"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr ""
+msgstr "Pre nepokovenú meď použiť farbu holej medi (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
-msgstr ""
+msgstr "Pre pokovenú a nepokovenú meď použiť rôzne farby. (Pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:52
 msgid "Material properties:"
@@ -1026,9 +1011,8 @@ msgid "Realistic"
 msgstr "Realistický režim"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "Solid colors"
-msgstr "Výber farieb"
+msgstr "Nepriehľadné farby"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 #, fuzzy
@@ -1056,42 +1040,36 @@ msgstr "Prírastok rotácie:"
 #: pcbnew/dialogs/dialog_shape_properties_base.cpp:213
 #: pcbnew/dialogs/panel_edit_options_base.cpp:45
 msgid "deg"
-msgstr "stup"
+msgstr "stupňov"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "Pri pohybe"
+msgstr "Prekresliť počas presunu"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
-#, fuzzy
 msgid "Redraw speed:"
-msgstr "Prekresliť zobrazenie"
+msgstr "Rýchlosť prekreslenia:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:19
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:17
-#, fuzzy
 msgid "Rendering Options"
-msgstr "Nastavenie rendra"
+msgstr "Nastavenie vykreslovania"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "Zobraziť hranicu modelu"
+msgstr "Zobraziť ohraňujúci rámček modelu"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
-#, fuzzy
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Zobraziť hrúbku medi"
+msgstr "Zobraziť hrúbku medi a tech vrstiev (veľmi pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
-#, fuzzy
 msgid "Highlight items on rollover"
-msgstr "Zvýraznené položky"
+msgstr "Zvýrazniť položky na prevrátenie"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
-#, fuzzy
 msgid "Anti-aliasing:"
-msgstr "Anti-aliasing"
+msgstr "Antialiasing:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:48
 msgid "Disabled"
@@ -1112,12 +1090,12 @@ msgstr "8x"
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
-"Aby bolo možné použiť toto nastavenie, musí byť 3D Viewer zatvorený a znovu "
-"otvorený"
+"3D-prehliadač musí byť zatvorený a znovu otvorený pro aplikovanie týchto "
+"nastavení"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
-msgstr "Farba výberu:"
+msgstr "Výber farieb:"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:72
 msgid "While Moving"
@@ -1140,19 +1118,16 @@ msgid "Disable holes"
 msgstr "Zakážte otvory"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
-#, fuzzy
 msgid "Procedural textures (slow)"
-msgstr "Procedurálne textúry"
+msgstr "Procesné textúry (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
-#, fuzzy
 msgid "Add floor (slow)"
-msgstr "Pridať referenčnú rovinu"
+msgstr "Pridať rovinu (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:35
-#, fuzzy
 msgid "Anti-aliasing (slow)"
-msgstr "Anti-aliasing"
+msgstr "Antialiasing (pomalé)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:39
 #, fuzzy
@@ -1215,13 +1190,12 @@ msgid "Number of bounces that a ray can hit reflective objects"
 msgstr "Počet odrazov, ktoré môže lúč dopadnúť na reflexné objekty"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:121
-#, fuzzy
 msgid "Lights Configuration"
-msgstr "Konfigurácia svetla"
+msgstr "Nastavenie svetla"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:134
 msgid "Ambient camera light:"
-msgstr "Okolité svetlo pohladu:"
+msgstr "Okolité svetlo kamery:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:146
 msgid "Top light:"
@@ -1276,14 +1250,12 @@ msgid "Light 8:"
 msgstr "Svetlo 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Voľby Gerbview"
+msgstr "Možnosti 3D náhladu"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "Board thickness:"
-msgstr "Hrúbka dosky: "
+msgstr "Hrúbka dosky:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:21
 #: common/dialogs/dialog_print_generic_base.cpp:56 eeschema/sch_bitmap.cpp:229
@@ -1384,15 +1356,13 @@ msgstr "Znova načítať dosku a 3D modely"
 #: bitmap2component/bitmap2cmp_frame.cpp:293
 #: bitmap2component/bitmap2cmp_frame.cpp:356
 #: kicad/tools/kicad_manager_actions.cpp:158
-#, fuzzy
 msgid "Image Converter"
-msgstr "Obrátené"
+msgstr "Prevod obrázkov"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:156
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:11
-#, fuzzy
 msgid "KiCad Image Converter"
-msgstr "Obrátené"
+msgstr "KiCad prevod obrázkov"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
 #, fuzzy
@@ -1424,9 +1394,8 @@ msgid "Image Files"
 msgstr "Súbory obrázkov"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Uchopiť list"
+msgstr "Vytvoriť súbory výkresového listu"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:461
 #: bitmap2component/bitmap2cmp_frame.cpp:497
@@ -1438,15 +1407,15 @@ msgstr "Súbor „%s“ sa nepodarilo vytvoriť."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:481
 msgid "Create PostScript File"
-msgstr "Vytvorte súbor PostScript"
+msgstr "Vytvoriť súbor PostScript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:517
 msgid "Create Symbol Library"
-msgstr "Vytvorte Knižnicu symbolov"
+msgstr "Vytvoriť knižnicu symbolov"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:552
 msgid "Create Footprint Library"
-msgstr "Vytvorte Knižnicu stopy"
+msgstr "Vytvoriť knižnicu púzdier"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:668
 #: eeschema/dialogs/dialog_field_properties_base.cpp:220
@@ -1619,16 +1588,15 @@ msgstr "Chyby"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:22
 msgid "Original Picture"
-msgstr "Pôvodná obrázok"
+msgstr "Pôvodný obrázok"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:25
 msgid "Greyscale Picture"
-msgstr "Sivý obrázok"
+msgstr "Obrázok v odtieňoch sivej"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:28
-#, fuzzy
 msgid "Black && White Picture"
-msgstr "Č/B obrázok"
+msgstr "Čierno && Biely obrázok"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:36
 #, fuzzy
@@ -1673,9 +1641,8 @@ msgid "bits"
 msgstr "bity"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
-#, fuzzy
 msgid "Load Source Image"
-msgstr "Zvoľte obrázok"
+msgstr "Načítať zdrojový obrázok"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
 #, fuzzy
@@ -1714,7 +1681,7 @@ msgstr "300"
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:49
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:98
 msgid "Options"
-msgstr "Voľby"
+msgstr "Možnosti"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
 #, fuzzy
@@ -1725,7 +1692,7 @@ msgstr "Prah čiernej / bielej:"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "Úpravou úrovne preveďte obrázok v odtieňoch šedej na čiernobiely."
+msgstr "Úpravou úrovne preveďte obrázok v odtieňoch sivej na čiernobiely."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
 #: gerbview/gerber_file_image.cpp:354
@@ -1733,34 +1700,30 @@ msgid "Negative"
 msgstr "Negatív"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:158
-#, fuzzy
 msgid "Pcb Layer for Graphics"
-msgstr "Umiestnite importovanú grafiku"
+msgstr "Vrstva DPS pre grafiku"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:525
 msgid "Front silk screen"
-msgstr "Predná hodvábna obrazovka"
+msgstr "Popis nahor"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:531
 msgid "Front solder mask"
-msgstr "Predná spájkovacia maska"
+msgstr "Nespájkovacia maska nahor"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "Front_layer"
+msgstr "Horná vrstva Fab"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer drawings"
-msgstr "User.Drawings"
+msgstr "Užívateľská kresba"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer comments"
-msgstr "Vlastná vrstva Eco1"
+msgstr "Užívateľská kresba komentáre"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -1768,26 +1731,23 @@ msgstr "Vlastná vrstva Eco1"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco2"
-msgstr "Užívateľská vrstva Eco2"
+msgstr "Vlastná vrstva Eco2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
-#, fuzzy
 msgid "Symbol (.kicad_sym file)"
-msgstr "Výplne tela symbolu"
+msgstr "Symbol (.kicad_sym súbor)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
-#, fuzzy
 msgid "Footprint (.kicad_mod file)"
-msgstr "Pcbnew (súbor .kicad_mod)"
+msgstr "Púzdro (.kicad_mod súbor)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Postscript (.ps file)"
-msgstr "Postskript (súbor .ps)"
+msgstr "PostScript (.ps súbor)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
-#, fuzzy
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "Logo pre rohový blok (súbor .kicad_wks)"
+msgstr "List výkresu (.kicad_wks súbor)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:171
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
@@ -1804,9 +1764,8 @@ msgid "Export to Clipboard"
 msgstr "Exportovať do schránky"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
-msgstr "Pozadie"
+msgstr "Úlohy na pozadí"
 
 #: common/common.cpp:287
 #, c-format
@@ -1816,9 +1775,9 @@ msgstr ""
 "Rozšírenie premenných prostredia zlyhalo: chýba „%c“ na pozícii %u v „%s“."
 
 #: common/common.cpp:375
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Nemôžeme urobiť cestu „%s“ absolútnou vzhľadom na „%s“."
+msgstr "Nie je možné vytvoriť cestu „%s“ absolútne vzhľadom na „%s“."
 
 #: common/common.cpp:394
 #, c-format
@@ -1828,24 +1787,23 @@ msgstr "Výstupný adresár '%s' vytvorený."
 #: common/common.cpp:403
 #, c-format
 msgid "Cannot create output directory '%s'."
-msgstr "Nemožno vytvoriť výstupný adresár '%s'."
+msgstr "Nie je možné vytvoriť výstupný adresár '%s'."
 
 #: common/common.cpp:694
 msgid "This operating system is not supported by KiCad and its dependencies."
-msgstr "Tento operacny system nie je podporovany KiCad-om a jeho kniznicami."
+msgstr "Tento operačný systém nie je podporovaný KiCad-om a jeho závislosťami."
 
 #: common/common.cpp:696
-#, fuzzy
 msgid "Unsupported Operating System"
-msgstr "Nepodporované prostredníctvom tvaru: %s"
+msgstr "Nepodporovaný operačný systém"
 
 #: common/common.cpp:699
 msgid ""
 "Any issues with KiCad on this system cannot be reported to the official "
 "bugtracker."
 msgstr ""
-"Akekolvek problemy s KiCad-om na tomto systeme nie je mozne hlasit na "
-"oficialny bugtracker."
+"Akékoľvek problémy s KiCad-om na tomto systéme nie je možné hlásiť na "
+"oficiálny bugtracker."
 
 #: common/confirm.cpp:58
 msgid "Do not show again"
@@ -1876,13 +1834,12 @@ msgid "Warning"
 msgstr "Varovanie"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
-#, fuzzy
 msgid "File Open Warning"
-msgstr "Chyba uloženia súboru"
+msgstr "Varovanie uloženia súboru"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
-msgstr ""
+msgstr "Prekladané listy môžu vytvárať veľmi neočakávané výsledky."
 
 #: common/confirm.cpp:165 common/confirm.cpp:170 common/confirm.cpp:234
 #: common/confirm.cpp:261 common/dialogs/git/dialog_git_auth.cpp:54
@@ -1898,9 +1855,8 @@ msgid "Cancel"
 msgstr "Zrušiť"
 
 #: common/confirm.cpp:165 common/confirm.cpp:170
-#, fuzzy
 msgid "Open Anyway"
-msgstr "Uložiť určite"
+msgstr "Ajtak otvoriť"
 
 #: common/confirm.cpp:181 common/confirm.cpp:218
 #, fuzzy
@@ -1942,9 +1898,8 @@ msgid "OK"
 msgstr "OK"
 
 #: common/confirm.cpp:349
-#, fuzzy
 msgid "Information"
-msgstr "Potvrdenie"
+msgstr "Informácia"
 
 #: common/confirm.cpp:376 common/confirm.cpp:379
 #: eeschema/symbol_editor/symbol_editor.cpp:397
@@ -2189,7 +2144,7 @@ msgstr "Financne podporit"
 #: common/dialog_about/dialog_about_base.cpp:69
 #: common/tool/common_control.cpp:312
 msgid "Donate to KiCad"
-msgstr "Podporte KiCade finančne"
+msgstr "Podporiť KiCade"
 
 #: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:746
 msgid "&OK"
@@ -2228,19 +2183,16 @@ msgid "Report"
 msgstr "Prehľad"
 
 #: common/dialogs/dialog_assign_netclass.cpp:109
-#, fuzzy
 msgid "<b>Currently matching nets:</b>"
-msgstr "<b>Aktuálne všeobecné nastavenia:</b><br>"
+msgstr "<b>Aktuálne odpovedajúce siete:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Šrafovací vzor"
+msgstr "Vzor:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Čisté triedy"
+msgstr "Trieda spojov:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
@@ -2249,13 +2201,12 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Schematické priradenie"
+msgstr "Pridať priradenie triedy spojov"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
-msgstr "Čistá farba"
+msgstr "Vyčistiť farbu"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
@@ -2310,7 +2261,7 @@ msgstr "Náhľad (starý / nový):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:207
 msgid "Reset to Default"
-msgstr "Vynulovať"
+msgstr "Obnoviť na prednastavené"
 
 #: common/dialogs/dialog_configure_paths.cpp:192
 #: common/dialogs/dialog_configure_paths.cpp:250
@@ -2426,7 +2377,7 @@ msgstr "Meno"
 #: common/dialogs/git/panel_git_repos_base.cpp:99
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
 msgid "Path"
-msgstr "Chodníček"
+msgstr "Cesta"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
 #, c-format
@@ -2555,14 +2506,12 @@ msgid "Configure Global Library Table"
 msgstr "Konfigurácia globálnej tabulky knižníc %s"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Dĺžka stopy je mimo rozsahu"
+msgstr "Veľkosť mriežky X mimo rozsah."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Dĺžka stopy je mimo rozsahu"
+msgstr "Veľkosť mriežky Y mimo rozsah."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:96
@@ -2676,11 +2625,8 @@ msgid "Hotkey List"
 msgstr "Zoznam klávesových skratiek"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr ""
-"Názov projektu:\n"
-"%s\n"
+msgstr "Názov projektu"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1059
@@ -2702,14 +2648,12 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Zavrieť projekt"
+msgstr "Zvoliť projekt k importu"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
-#, fuzzy
 msgid "Skip Locked Items"
-msgstr "Zamknuté položky"
+msgstr "Preskočiť uzamknuté položky"
 
 #: common/dialogs/dialog_locked_items_query.cpp:36
 msgid ""
@@ -2753,7 +2697,7 @@ msgstr "Zamknuté položky"
 
 #: common/dialogs/dialog_migrate_settings.cpp:33
 msgid "Quit KiCad"
-msgstr "Skončí KiCad"
+msgstr "Ukončiť KiCad"
 
 #: common/dialogs/dialog_migrate_settings.cpp:58
 #: common/dialogs/dialog_migrate_settings_base.cpp:23
