@@ -654,7 +654,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 
                         for( const SCH_SHEET_PATH& instance : symbol_change_info.m_Instances )
                         {
-                            wxString ref = symbol->GetRef( &instance, true );
+                            wxString ref = symbol->GetRef( &instance );
                             int      number = UTIL::GetRefDesNumber( ref );
 
                             if( number >= 0 )
