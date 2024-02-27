@@ -435,6 +435,17 @@ std::shared_ptr<NETCLASS> NET_SETTINGS::GetEffectiveNetClass( const wxString& aN
 }
 
 
+std::shared_ptr<NETCLASS> NET_SETTINGS::GetNetClassByName( const wxString& aNetClassName ) const
+{
+    auto ii = m_NetClasses.find( aNetClassName );
+
+    if( ii == m_NetClasses.end() )
+        return m_DefaultNetClass;
+    else
+        return ii->second;
+}
+
+
 static bool isSuperSubOverbar( wxChar c )
 {
     return c == '_' || c == '^' || c == '~';

@@ -467,6 +467,7 @@ private:
         ID_CHANGE_COLOR = wxID_HIGHEST,
         ID_SET_NET_COLOR,
         ID_CLEAR_NET_COLOR,
+        ID_USE_SCHEMATIC_NET_COLOR,
         ID_SHOW_ALL_NETS,
         ID_HIDE_OTHER_NETS,
         ID_HIGHLIGHT_NET,

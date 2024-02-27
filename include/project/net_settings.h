@@ -63,6 +63,14 @@ public:
     std::shared_ptr<NETCLASS> GetEffectiveNetClass( const wxString& aNetName ) const;
 
     /**
+     * Get a NETCLASS object from a given Netclass name string
+     * 
+     * @param aNetClassName the Netclass name to resolve
+     * @return shared pointer to the requested NETCLASS object, or the default NETCLASS
+    */
+    std::shared_ptr<NETCLASS> GetNetClassByName( const wxString& aNetName ) const;
+
+    /**
      * Parse a bus vector (e.g. A[7..0]) into name, begin, and end.
      *
      * Ensure that begin and end are positive and that end > begin.
