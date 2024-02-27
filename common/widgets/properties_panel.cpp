@@ -24,6 +24,7 @@
 #include <eda_base_frame.h>
 #include <eda_item.h>
 #include <import_export.h>
+#include <pgm_base.h>
 #include <properties/pg_cell_renderer.h>
 
 #include <algorithm>
@@ -65,10 +66,11 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
         wxPGEditor_DatePickerCtrl = nullptr;
     }
 
-    if( !dynamic_cast<PG_CELL_RENDERER*>( wxPGGlobalVars->m_defaultRenderer ) )
+    if( !Pgm().m_PropertyGridInitialized )
     {
         delete wxPGGlobalVars->m_defaultRenderer;
         wxPGGlobalVars->m_defaultRenderer = new PG_CELL_RENDERER();
+        Pgm().m_PropertyGridInitialized = true;
     }
 
     m_caption = new wxStaticText( this, wxID_ANY, _( "No objects selected" ) );

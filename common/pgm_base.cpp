@@ -134,6 +134,7 @@ PGM_BASE::PGM_BASE()
     m_argcUtf8 = 0;
     m_argvUtf8 = nullptr;
     m_splash = nullptr;
+    m_PropertyGridInitialized = false;
 
     setLanguageId( wxLANGUAGE_DEFAULT );
 
