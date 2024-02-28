@@ -33,23 +33,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_SYNC_SHEET_PINS_BASE : public DIALOG_SHIM
 {
-private:
-protected:
-    wxBoxSizer*   m_sizerMain;
-    wxNotebook*   m_notebook;
-    wxStaticText* m_labelTip;
-    wxButton*     m_btnClose;
+	private:
 
-    // Virtual event handlers, override them in your derived class
-    virtual void OnCloseBtnClick( wxCommandEvent& event ) { event.Skip(); }
+	protected:
+		wxBoxSizer* m_sizerMain;
+		wxNotebook* m_notebook;
+		wxStaticText* m_labelTip;
+		wxButton* m_btnClose;
+
+		// Virtual event handlers, override them in your derived class
+		virtual void OnCloseBtnClick( wxCommandEvent& event ) { event.Skip(); }
 
 
-public:
-    DIALOG_SYNC_SHEET_PINS_BASE(
-            wxWindow* parent, wxWindowID id = wxID_ANY,
-            const wxString& title = _( "Synchronize sheet pins and hierarchical labels" ),
-            const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1, -1 ),
-            long style = wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
+	public:
 
-    ~DIALOG_SYNC_SHEET_PINS_BASE();
+		DIALOG_SYNC_SHEET_PINS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Synchronize sheet pins and hierarchical labels"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+
+		~DIALOG_SYNC_SHEET_PINS_BASE();
+
 };
+

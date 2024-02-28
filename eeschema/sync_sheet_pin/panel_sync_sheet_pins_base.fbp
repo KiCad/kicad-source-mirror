@@ -1157,7 +1157,7 @@
                   <property name="permission">none</property>
                   <object class="sizeritem" expanded="false">
                     <property name="border">5</property>
-                    <property name="flag">wxALL|wxEXPAND</property>
+                    <property name="flag">wxBOTTOM|wxEXPAND|wxTOP</property>
                     <property name="proportion">1</property>
                     <object class="wxDataViewCtrl" expanded="false">
                       <property name="bg"></property>

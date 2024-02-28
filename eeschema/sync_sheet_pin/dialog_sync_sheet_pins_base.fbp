@@ -143,7 +143,7 @@
             </object>
             <object class="sizeritem" expanded="true">
               <property name="border">5</property>
-              <property name="flag">wxALL</property>
+              <property name="flag">wxALIGN_CENTER_VERTICAL|wxALL</property>
               <property name="proportion">0</property>
               <object class="wxStaticText" expanded="true">
                 <property name="BottomDockable">1</property>

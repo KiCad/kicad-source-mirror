@@ -9,55 +9,46 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-DIALOG_SYNC_SHEET_PINS_BASE::DIALOG_SYNC_SHEET_PINS_BASE( wxWindow* parent, wxWindowID id,
-                                                          const wxString& title, const wxPoint& pos,
-                                                          const wxSize& size, long style ) :
-        DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_SYNC_SHEET_PINS_BASE::DIALOG_SYNC_SHEET_PINS_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
-    this->SetSizeHints( wxSize( -1, -1 ), wxDefaultSize );
+	this->SetSizeHints( wxSize( -1,-1 ), wxDefaultSize );
 
-    m_sizerMain = new wxBoxSizer( wxVERTICAL );
+	m_sizerMain = new wxBoxSizer( wxVERTICAL );
 
-    m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_notebook = new wxNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 
-    m_sizerMain->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
+	m_sizerMain->Add( m_notebook, 1, wxEXPAND | wxALL, 5 );
 
-    wxBoxSizer* bSizer8;
-    bSizer8 = new wxBoxSizer( wxHORIZONTAL );
-
-
-    bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
-
-    m_labelTip = new wxStaticText( this, wxID_ANY,
-                                   _( "Changes made in this dialog occur immediately, use Undo in "
-                                      "each affected document to undo them" ),
-                                   wxDefaultPosition, wxDefaultSize, 0 );
-    m_labelTip->Wrap( -1 );
-    bSizer8->Add( m_labelTip, 0, wxALL, 5 );
-
-    m_btnClose = new wxButton( this, wxID_ANY, _( "Close" ), wxDefaultPosition, wxDefaultSize, 0 );
-    bSizer8->Add( m_btnClose, 0, wxALL, 5 );
+	wxBoxSizer* bSizer8;
+	bSizer8 = new wxBoxSizer( wxHORIZONTAL );
 
 
-    m_sizerMain->Add( bSizer8, 0, wxEXPAND, 5 );
+	bSizer8->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_labelTip = new wxStaticText( this, wxID_ANY, _("Changes made in this dialog occur immediately, use Undo in each affected document to undo them"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelTip->Wrap( -1 );
+	bSizer8->Add( m_labelTip, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_btnClose = new wxButton( this, wxID_ANY, _("Close"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_btnClose, 0, wxALL, 5 );
 
 
-    this->SetSizer( m_sizerMain );
-    this->Layout();
-    m_sizerMain->Fit( this );
+	m_sizerMain->Add( bSizer8, 0, wxEXPAND, 5 );
 
-    this->Centre( wxBOTH );
 
-    // Connect Events
-    m_btnClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
-                         wxCommandEventHandler( DIALOG_SYNC_SHEET_PINS_BASE::OnCloseBtnClick ),
-                         NULL, this );
+	this->SetSizer( m_sizerMain );
+	this->Layout();
+	m_sizerMain->Fit( this );
+
+	this->Centre( wxBOTH );
+
+	// Connect Events
+	m_btnClose->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYNC_SHEET_PINS_BASE::OnCloseBtnClick ), NULL, this );
 }
 
 DIALOG_SYNC_SHEET_PINS_BASE::~DIALOG_SYNC_SHEET_PINS_BASE()
 {
-    // Disconnect Events
-    m_btnClose->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                            wxCommandEventHandler( DIALOG_SYNC_SHEET_PINS_BASE::OnCloseBtnClick ),
-                            NULL, this );
+	// Disconnect Events
+	m_btnClose->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_SYNC_SHEET_PINS_BASE::OnCloseBtnClick ), NULL, this );
+
 }
