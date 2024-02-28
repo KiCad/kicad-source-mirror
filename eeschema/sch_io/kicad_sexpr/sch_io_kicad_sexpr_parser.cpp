@@ -4037,7 +4037,7 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSchText()
 
         case T_at:
             text->SetPosition( parseXY() );
-            text->SetTextAngle( EDA_ANGLE( parseDouble( "text angle" ), DEGREES_T ) );
+            text->SetTextAngle( EDA_ANGLE( parseDouble( "text angle" ), DEGREES_T ).KeepUpright() );
 
             if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( text.get() ) )
             {
