@@ -899,9 +899,8 @@ void SIMULATOR_FRAME_UI::rebuildSignalsList()
             if( !name.StartsWith( "V" ) )
                 continue;
 
-            const SIM_MODEL::PARAM* portNum = item.model->FindParam( "portnum" );
-
             std::string portnum = "";
+
             if( const SIM_MODEL::PARAM* portnum_param = item.model->FindParam( "portnum" ) )
                 portnum = SIM_VALUE::ToSpice( portnum_param->value );
 
