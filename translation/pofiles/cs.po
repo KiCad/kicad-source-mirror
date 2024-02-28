@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-26 12:02+0000\n"
-"Last-Translator: Jan Straka <bach@email.cz>\n"
+"PO-Revision-Date: 2024-02-28 10:15+0000\n"
+"Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "&Soubor"
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:234
 #: pcbnew/menubar_pcb_editor.cpp:459
 msgid "&Edit"
-msgstr "U&pravit"
+msgstr "&Upravit"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:340
 #: eeschema/sim/toolbars_simulator_frame.cpp:161
@@ -449,7 +449,7 @@ msgstr "Obrátit pohled na desku"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:168
 msgid "Toggle Orthographic Projection"
-msgstr "Zapnout ortografickou projekci"
+msgstr "Prepnout ortografickou projekci"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:169
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:197
@@ -2042,7 +2042,7 @@ msgstr "Překladatelé"
 
 #: common/dialog_about/dialog_about.cpp:147
 msgid "Packagers"
-msgstr "Balíčky"
+msgstr "Balírny"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "License"
@@ -3491,7 +3491,7 @@ msgstr "Přepnout Git větev"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
 msgid "Select or enter a branch name:"
-msgstr ""
+msgstr "Vybrat alebo zadat jméno větvy:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
