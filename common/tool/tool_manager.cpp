@@ -704,7 +704,7 @@ TOOL_EVENT* TOOL_MANAGER::ScheduleWait( TOOL_BASE* aTool, const TOOL_EVENT_LIST&
 {
     TOOL_STATE* st = m_toolState[aTool];
 
-    wxASSERT( !st->pendingWait ); // everything collapses on two KiYield() in a row
+    wxCHECK( !st->pendingWait, nullptr ); // everything collapses on two KiYield() in a row
 
     // indicate to the manager that we are going to sleep and we shall be
     // woken up when an event matching aConditions arrive
