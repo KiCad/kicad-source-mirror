@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-02-28 17:50+0000\n"
+"PO-Revision-Date: 2024-02-29 09:22+0000\n"
 "Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,7 +62,7 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:261
 msgid "Create tracks and vias"
-msgstr "Pridať cesty a prechody"
+msgstr "Pridať cesty a prekovy"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:710
 msgid "Create zones"
@@ -96,7 +96,7 @@ msgstr "Zjednodušiť kontúry dier"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1191
 msgid "Build BVH for holes and vias"
-msgstr "Vytvárajte BVH pre diery a priechody"
+msgstr "Vytvoriť BVH pre diery a prekovy"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:385
 msgid "OpenGL context creation error"
@@ -133,26 +133,26 @@ msgstr "Zóna %s\t"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:465
 msgid "Load OpenGL: board"
-msgstr "Načítajte OpenGL: dosku"
+msgstr "Načítavanie OpenGL: doska"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
 msgid "Load OpenGL: holes and vias"
-msgstr "Načítajte OpenGL: otvory a priechody"
+msgstr "Načítavanie OpenGL: otvory a prekovy"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:547
 msgid "Load OpenGL: layers"
-msgstr "Načítanie OpenGL: vrstvy"
+msgstr "NačítavanieOpenGL: vrstvy"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:561
-#, fuzzy, c-format
+#, c-format
 msgid "Load OpenGL layer %s"
-msgstr "Načítanie OpenGL vrstva %d"
+msgstr "Načítavanie OpenGL vrstva %s"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:659
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:779
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1598
 msgid "Loading 3D models..."
-msgstr "Načítanie 3D modelov..."
+msgstr "Načítavanie 3D modelov..."
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:668
 #: 3d-viewer/3d_rendering/raytracing/create_scene.cpp:960
@@ -4503,72 +4503,62 @@ msgstr "Minimálna šírka spoja"
 
 #: common/dialogs/panel_setup_netclasses.cpp:540
 msgid "Via pad diameter"
-msgstr "Priemer prekovenia"
+msgstr "Vonkajší priemer prekovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:541
-#, fuzzy
 msgid "Via plated hole diameter"
-msgstr "Cez priemer podložky"
+msgstr "Priemer vŕtania prekovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:542
-#, fuzzy
 msgid "Microvia pad diameter"
-msgstr "Cez priemer podložky"
+msgstr "Vonkajší priemer mikroprekovu"
 
 #: common/dialogs/panel_setup_netclasses.cpp:543
-#, fuzzy
 msgid "Microvia plated hole diameter"
-msgstr "Cez priemer podložky"
+msgstr "Priemer plátovanej diery pre mikroprekov"
 
 #: common/dialogs/panel_setup_netclasses.cpp:544
-#, fuzzy
 msgid "Differential pair track width"
-msgstr "Ladenie skosenia diferenciálneho páru"
+msgstr "Šírka spojov diferenciálneho páru"
 
 #: common/dialogs/panel_setup_netclasses.cpp:545
-#, fuzzy
 msgid "Differential pair gap"
-msgstr "Diferenčné páry"
+msgstr "Medzera diferenciálneho páru"
 
 #: common/dialogs/panel_setup_netclasses.cpp:546
-#, fuzzy
 msgid "Schematic wire thickness"
-msgstr "Vlastnosti schémy"
+msgstr "Šírka čiary schémy"
 
 #: common/dialogs/panel_setup_netclasses.cpp:547
-#, fuzzy
 msgid "Bus wire thickness"
-msgstr "Hrúbka zbernice"
+msgstr "Šírka čiary zbernice"
 
 #: common/dialogs/panel_setup_netclasses.cpp:548
-#, fuzzy
 msgid "Schematic wire color"
-msgstr "Schematické pole"
+msgstr "Farba čiary schémy"
 
 #: common/dialogs/panel_setup_netclasses.cpp:549
-#, fuzzy
 msgid "Schematic wire line style"
-msgstr "Súbory schém"
+msgstr "Štýl čiary schémy"
 
 #: common/dialogs/panel_setup_netclasses.cpp:602
 msgid "The default net class is required."
 msgstr "Vyžaduje sa predvolená trieda siete."
 
 #: common/dialogs/panel_setup_netclasses.cpp:745
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Nets matching '%s':</b>"
-msgstr "<b>Aktuálne všeobecné nastavenia:</b><br>"
+msgstr "<b>Siete zodpovedajúce '%s':</b>"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:32
-#, fuzzy
 msgid "Netclasses:"
-msgstr "Netclasses"
+msgstr "Triedy spojov:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:52
 #: pcbnew/tools/board_inspection_tool.cpp:608
 #: pcbnew/tools/board_inspection_tool.cpp:1175 pcbnew/zone.cpp:1712
 msgid "Clearance"
-msgstr "Rozstup"
+msgstr "Izolačná medzera"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:172
@@ -4580,21 +4570,19 @@ msgstr "Šírka spoja"
 #: common/dialogs/panel_setup_netclasses_base.cpp:54
 #: pcb_calculator/pcb_calculator_frame.cpp:171
 msgid "Via Size"
-msgstr "Cez Veľkosť"
+msgstr "Veľkosť prekovu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
-#, fuzzy
 msgid "Via Hole"
-msgstr "Cez otvory"
+msgstr "Diera prekovu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "uVia Veľkosť"
+msgstr "Mikroprekov veľkosť"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
-#, fuzzy
 msgid "uVia Hole"
-msgstr "Cez otvory"
+msgstr "Mikroprekov otvor"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58
 msgid "DP Width"
@@ -4602,7 +4590,7 @@ msgstr "Šírka DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59
 msgid "DP Gap"
-msgstr "DP Gap"
+msgstr "Medzera DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "Wire Thickness"
@@ -4644,25 +4632,23 @@ msgid "Default"
 msgstr "Predvolený"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:94
-#, fuzzy
 msgid "Set color to transparent to use KiCad default color."
-msgstr "Obnovte všetky farby v tejto téme na predvolené hodnoty KiCad"
+msgstr ""
+"Nastavte farbu na priehľadnú pre použitie prednstavených farieb KiCad-u."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:112
-#, fuzzy
 msgid "Netclass assignments:"
-msgstr "Schematické priradenie"
+msgstr "Priradenie triedy spojov:"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:136
-#, fuzzy
 msgid "Pattern"
-msgstr "Šrafovací vzor"
+msgstr "Vzor"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:137
 #: eeschema/sch_field.cpp:1055 eeschema/sch_label.cpp:251
 #: pcbnew/board_connected_item.cpp:186 pcbnew/pad.cpp:1954 pcbnew/zone.cpp:1626
 msgid "Net Class"
-msgstr "Čistá trieda"
+msgstr "Triedy spojov"
 
 #: common/dialogs/panel_setup_severities.cpp:43
 #: common/dialogs/panel_setup_severities.cpp:117 eeschema/sch_marker.cpp:282
@@ -4705,9 +4691,8 @@ msgstr ""
 "Nepodarilo sa použiť OpenGL, vrátilo sa späť k softvérovému vykresľovaniu"
 
 #: common/draw_panel_gal.cpp:324
-#, fuzzy
 msgid "Graphics error"
-msgstr "Grafická vrstva"
+msgstr "Chyba grafiky"
 
 #: common/draw_panel_gal.cpp:504
 msgid "Could not use OpenGL"
@@ -4716,24 +4701,23 @@ msgstr "Nepodarilo sa použiť OpenGL"
 #: common/drawing_sheet/drawing_sheet_parser.cpp:557
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:3248
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3120
-#, fuzzy
 msgid "Failed to read image data."
-msgstr "Nepodarilo sa načítať „%s“"
+msgstr "Obrázok sa nepodarilo sa načítať."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:979
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' not found."
-msgstr "Schematický súbor „%s“ sa nenašiel."
+msgstr "List kreslenia '%s' sa nenašiel."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' could not be opened."
-msgstr "Schematický súbor „%s“ sa nenašiel."
+msgstr "List kreslenia '%s' sa neporadilo otvoriť."
 
 #: common/drawing_sheet/drawing_sheet_parser.cpp:1002
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet '%s' was not fully read."
-msgstr "Súbor „%s“ nebol úplne prečítaný"
+msgstr "List kreslenia '%s' sa neporadilo úplne načítať."
 
 #: common/drawing_sheet/ds_data_item.cpp:365
 #: common/drawing_sheet/ds_draw_item.cpp:132 common/eda_item.cpp:349
@@ -4801,9 +4785,8 @@ msgstr "Obrázok"
 
 #: common/drawing_sheet/ds_data_model_io.cpp:94
 #: common/drawing_sheet/ds_data_model_io.cpp:123
-#, fuzzy
 msgid "Error writing drawing sheet file"
-msgstr "Dokončite výkresový list"
+msgstr "Chyba pri zápise súboru výkresu"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
@@ -4902,39 +4885,34 @@ msgid "String delimiter must be a single character of ', \", or $"
 msgstr "Oddeľovač reťazcov musí mať jeden znak ', \"alebo $"
 
 #: common/dsnlexer.cpp:839
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Invalid floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"Neplatné číslo s pohyblivou rádovou čiarkou v\n"
-"súbor: \"%s\"\n"
+"Neplatné číslo s pohyblivou desatinnou čiarkou v\n"
+"súbor: '%s'\n"
 "riadok: %d\n"
 "offset: %d"
 
 #: common/dsnlexer.cpp:848
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Missing floating point number in\n"
 "file: '%s'\n"
 "line: %d\n"
 "offset: %d"
 msgstr ""
-"V systéme chýba číslo s pohyblivou rádovou čiarkou\n"
-"súbor: \"%s\"\n"
+"V systéme chýba číslo s pohyblivou desatinnou čiarkou\n"
+"súbor: '%s'\n"
 "riadok: %d\n"
 "offset: %d"
 
 #: common/dsnlexer.cpp:873
-#, fuzzy
 msgid "Invalid floating point number"
-msgstr ""
-"Neplatné číslo s pohyblivou rádovou čiarkou v\n"
-"súbor: \"%s\"\n"
-"riadok: %d\n"
-"offset: %d"
+msgstr "Neplatné číslo s pohyblivou desatinnou čiarkou"
 
 #: common/eda_base_frame.cpp:417 common/tool/actions.cpp:174
 #: pcbnew/dialogs/panel_setup_rules.cpp:123
@@ -4947,9 +4925,9 @@ msgid "Redo"
 msgstr "Vykonať znova"
 
 #: common/eda_base_frame.cpp:1008
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' was not found."
-msgstr "Súbor \"%s\" nebol nájdený."
+msgstr "Súbor '%s' sa nenašiel."
 
 #: common/eda_base_frame.cpp:1057
 msgid "Preferences"
@@ -4969,14 +4947,12 @@ msgid "Hotkeys"
 msgstr "Klávesové skratky"
 
 #: common/eda_base_frame.cpp:1095 kicad/project_tree_pane.cpp:988
-#, fuzzy
 msgid "Version Control"
-msgstr "& Iba výber"
+msgstr "Správa verzií"
 
 #: common/eda_base_frame.cpp:1103
-#, fuzzy
 msgid "Data Collection"
-msgstr "Pripojenie podložky"
+msgstr "Zhromaždené dáta"
 
 #: common/eda_base_frame.cpp:1126 common/tool/actions.cpp:986
 #: common/tool/common_tools.cpp:562 eeschema/symbol_editor/symbol_editor.cpp:82
@@ -4988,21 +4964,20 @@ msgstr "Editor symbolov"
 #: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1171
 #: common/eda_base_frame.cpp:1203 common/eda_base_frame.cpp:1224
 msgid "Display Options"
-msgstr "Zobraziť nastavenia"
+msgstr "Nastavenie zobrazenia"
 
 #: common/eda_base_frame.cpp:1128 common/eda_base_frame.cpp:1137
 #: common/eda_base_frame.cpp:1161 common/eda_base_frame.cpp:1172
 #: common/eda_base_frame.cpp:1225 common/tool/common_tools.cpp:555
-#, fuzzy
 msgid "Grids"
-msgstr "Mriežka"
+msgstr "Mriežky"
 
 #: common/eda_base_frame.cpp:1129 common/eda_base_frame.cpp:1138
 #: common/eda_base_frame.cpp:1163 common/eda_base_frame.cpp:1174
 #: pcbnew/dialogs/panel_edit_options_base.cpp:24
 #: pcbnew/tools/zone_filler_tool.cpp:280
 msgid "Editing Options"
-msgstr "Možnosti úprav"
+msgstr "Úprava možností"
 
 #: common/eda_base_frame.cpp:1130 common/eda_base_frame.cpp:1140
 #: common/eda_base_frame.cpp:1164 common/eda_base_frame.cpp:1175
@@ -5013,14 +4988,12 @@ msgstr "Farby"
 #: common/eda_base_frame.cpp:1135 common/hotkey_store.cpp:73
 #: common/tool/common_tools.cpp:561 eeschema/menubar.cpp:143
 #: eeschema/sch_edit_frame.cpp:1669 kicad/tools/kicad_manager_actions.cpp:104
-#, fuzzy
 msgid "Schematic Editor"
-msgstr "Voľby editora schém"
+msgstr "Editor schém"
 
 #: common/eda_base_frame.cpp:1139
-#, fuzzy
 msgid "Annotation Options"
-msgstr "Anotácie"
+msgstr "Možnosti označenia"
 
 #: common/eda_base_frame.cpp:1141
 #: eeschema/dialogs/dialog_schematic_setup.cpp:68
@@ -5031,11 +5004,11 @@ msgstr "Šablóny názvov polí"
 #: common/tool/common_tools.cpp:564 kicad/tools/kicad_manager_actions.cpp:137
 #: pcbnew/footprint_edit_frame.cpp:991 pcbnew/menubar_footprint_editor.cpp:91
 msgid "Footprint Editor"
-msgstr "Editor stopy"
+msgstr "Editor púzdier"
 
 #: common/eda_base_frame.cpp:1162 common/eda_base_frame.cpp:1173
 msgid "Origins & Axes"
-msgstr "Počiatky a sekery"
+msgstr "Počiatky & Osi"
 
 #: common/eda_base_frame.cpp:1165
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:466
@@ -5046,13 +5019,12 @@ msgstr "Základné hodnoty"
 #: common/tool/common_tools.cpp:563 kicad/tools/kicad_manager_actions.cpp:126
 #: pcbnew/menubar_pcb_editor.cpp:185 pcbnew/pcb_edit_frame.cpp:187
 #: pcbnew/pcb_edit_frame.cpp:1674 pcbnew/tools/zone_filler_tool.cpp:281
-#, fuzzy
 msgid "PCB Editor"
-msgstr "Prepnite na editor PCB"
+msgstr "Editor DPS"
 
 #: common/eda_base_frame.cpp:1176
 msgid "Action Plugins"
-msgstr "Akčné doplnky"
+msgstr "Akcie doplnkov"
 
 #: common/eda_base_frame.cpp:1183
 msgid "Realtime Renderer"
@@ -5065,14 +5037,12 @@ msgstr "Raytracing vykreslovanie"
 #: common/eda_base_frame.cpp:1202 common/hotkey_store.cpp:77
 #: gerbview/gerbview_frame.cpp:674 gerbview/gerbview_frame.cpp:698
 #: gerbview/menubar.cpp:159 kicad/tools/kicad_manager_actions.cpp:148
-#, fuzzy
 msgid "Gerber Viewer"
-msgstr "Súbory Gerber"
+msgstr "Gerber prehliadač"
 
 #: common/eda_base_frame.cpp:1205
-#, fuzzy
 msgid "Excellon Options"
-msgstr "Voľby vypĺňania zón"
+msgstr "Možnosti Excellon"
 
 #: common/eda_base_frame.cpp:1223 common/hotkey_store.cpp:75
 #: common/tool/common_tools.cpp:565 kicad/tools/kicad_manager_actions.cpp:177
@@ -6978,16 +6948,15 @@ msgstr "Spoje"
 
 #: common/layer_id.cpp:169
 msgid "Through vias"
-msgstr "Prostredníctvom priechodov"
+msgstr "Cez prekovy"
 
 #: common/layer_id.cpp:170
-#, fuzzy
 msgid "Blind/Buried vias"
-msgstr "Slepá/vnorená prechodka"
+msgstr "Slepý/vnorený prekov"
 
 #: common/layer_id.cpp:171
 msgid "Micro-vias"
-msgstr "Mikropriechody"
+msgstr "Mikro-prekov"
 
 #: common/layer_id.cpp:172
 msgid "Via holes"
@@ -14328,9 +14297,9 @@ msgid ""
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
 msgstr ""
-"Za normálnych okolností sú stopy spojené so svojimi symbolmi prostredníctvom "
-"svojich jedinečných identifikátorov. Túto možnosť vyberte, iba ak chcete "
-"obnoviť väzby stopy na základe ich referenčných označení."
+"Za normálnych okolností sú púzdra spojené so svojimi symbolmi "
+"prostredníctvom svojich jedinečných identifikátorov.   Túto možnosť vyberte, "
+"iba ak chcete obnoviť väzby púzdier na základe ich referenčných označení."
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -15255,7 +15224,6 @@ msgid "Add Anyway"
 msgstr "Pridať aj tak"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:855
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format "
 "(*.kicad_sym)."
@@ -28873,7 +28841,7 @@ msgstr "Cez dĺžku:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:59
 msgid "Via length is the board thickness for through hole vias"
-msgstr "Dĺžka je hrúbka dosky pre priechodky"
+msgstr "Dĺžka prekovu je hrúbka dosky pre prechádzajúce otvory prekovov"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:71
 msgid "Via pad diameter:"
@@ -28881,7 +28849,7 @@ msgstr "Cez priemer podložky:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "Priemer podložky obklopujúci (kruhový krúžok)"
+msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -29022,7 +28990,7 @@ msgstr "Indukčná reaktancia pre daný čas nábehu a vypočítaná indukčnos�
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:355
 msgid "Top view of via"
-msgstr "Pohľad zhora na cestu cez"
+msgstr "Pohľad zhora na prekov"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:39
 msgid "Period:"
@@ -30300,11 +30268,11 @@ msgstr "Odstráňte skratovanie dvoch sietí"
 
 #: pcbnew/cleanup_item.cpp:47
 msgid "Remove via shorting two nets"
-msgstr "Odstráňte skratom dvoch sietí"
+msgstr "Odstrániť prekov skratujúci dve siete"
 
 #: pcbnew/cleanup_item.cpp:48
 msgid "Remove redundant via"
-msgstr "Odstrániť nadbytočné prostredníctvom"
+msgstr "Odstrániť nadbytočné prekovy"
 
 #: pcbnew/cleanup_item.cpp:49
 msgid "Remove duplicate track"
@@ -30319,9 +30287,8 @@ msgid "Remove track not connected at both ends"
 msgstr "Odstráňte stopu, ktorá nie je pripojená na oboch koncoch"
 
 #: pcbnew/cleanup_item.cpp:52
-#, fuzzy
 msgid "Remove via connected on less than 2 layers"
-msgstr "Odstrániť pomocou pripojenia na menej ako dvoch vrstvách"
+msgstr "Odstrániť prekovy spojené na menej ako dvoch vrstvách"
 
 #: pcbnew/cleanup_item.cpp:53
 msgid "Remove zero-length track"
@@ -31006,7 +30973,7 @@ msgstr "NPTH:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:156
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:167
 msgid "Through vias:"
-msgstr "Prostredníctvom priechodov:"
+msgstr "Prechádzajúci prekov:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:157
 msgid "Blind/buried:"
@@ -31015,7 +30982,7 @@ msgstr "Slepý / pochovaný:"
 #: pcbnew/dialogs/dialog_board_statistics.cpp:158
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:175
 msgid "Micro vias:"
-msgstr "Mikropriechody:"
+msgstr "Mikro prekov:"
 
 #: pcbnew/dialogs/dialog_board_statistics.cpp:401
 #: pcbnew/dialogs/dialog_board_statistics.cpp:415
@@ -31228,16 +31195,16 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:30
 msgid "&Delete redundant vias"
-msgstr "& Odstrániť nadbytočné via"
+msgstr "&Odstrániť nadbytočné prekovy"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:31
 msgid "remove vias on through hole pads and superimposed vias"
 msgstr ""
-"odstráňte priechody na podložkách s priechodnými otvormi a prekryté priechody"
+"odstrániť prekovy na plôškach vývodových súčiastok prekrývajúcich sa prekovov"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "Delete vias connected on only one layer"
-msgstr "Odstrániť priechody pripojené iba v jednej vrstve"
+msgstr "Odstrániť prekovy pripojené iba v jednej vrstve"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:38
 msgid "&Merge co-linear tracks"
@@ -32836,13 +32803,12 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
-#, fuzzy
 msgid "Export tracks, pads and vias"
-msgstr "Pridať cesty a prechody"
+msgstr "Exportovať spoje a prekovy"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:161
 msgid "Export tracks, pads and vias on external copper layers."
-msgstr ""
+msgstr "Exportovať spoje, plôšky a prekovy na externých medených vrstvách."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
 #, fuzzy
@@ -33102,7 +33068,7 @@ msgstr "Zahrnúť a naložiť obrysovú vrstvu"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:48
 msgid "Include &vias"
-msgstr "Zahrnúť a prejsť"
+msgstr "Zahrnúť &prekovy"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:51
 msgid "Include &zones"
@@ -34004,7 +33970,7 @@ msgstr "Nepokované podložky:"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:183
 msgid "Buried vias:"
-msgstr "Zakopané priechody:"
+msgstr "Vnorené prekovy:"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:42
 #, fuzzy, c-format
@@ -34076,9 +34042,8 @@ msgid "Footprints"
 msgstr "Púzdra"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:40
-#, fuzzy
 msgid "Tracks && vias"
-msgstr "Tracks & Vias"
+msgstr "Spoje && prekovy"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:46
 msgid "Markers"
