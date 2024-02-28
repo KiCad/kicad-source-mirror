@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -646,6 +646,16 @@ void GERBER_PLOTTER::writeApertureList()
             // The aperture macro needs coordinates of the centers of the 4 corners
             std::vector<VECTOR2I> corners;
             VECTOR2I half_size( tool.m_Size.x/2-tool.m_Radius, tool.m_Size.y/2-tool.m_Radius );
+
+            // Ensure half_size.x and half_size.y > minimal value to avoid shapes
+            // with null size (especially the rectangle with coordinates corners)
+            // Because the minimal value for a non nul Gerber coord in 10nm
+            // in format 4.5, use 10 nm as minimal value.
+            // (Even in 4.6 format, use 10 nm, because gerber viewers can have
+            // a internal unit bigger than 1 nm)
+            const int min_size_value = 10;
+            half_size.x = std::max( half_size.x, min_size_value );
+            half_size.y = std::max( half_size.y, min_size_value );
 
             corners.emplace_back( -half_size.x, -half_size.y );
             corners.emplace_back( half_size.x, -half_size.y );
