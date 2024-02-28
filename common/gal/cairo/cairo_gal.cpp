@@ -1413,20 +1413,34 @@ void CAIRO_GAL::EndDrawing()
 
     // Now translate the raw context data from the format stored
     // by cairo into a format understood by wxImage.
-    pixman_image_t* dstImg = pixman_image_create_bits(
-            wxPlatformInfo::Get().GetEndianness() == wxENDIAN_LITTLE ? PIXMAN_b8g8r8
-                                                                     : PIXMAN_r8g8b8,
-            m_screenSize.x, m_screenSize.y, (uint32_t*) m_wxOutput, m_wxBufferWidth * 3 );
-    pixman_image_t* srcImg =
-            pixman_image_create_bits( PIXMAN_a8r8g8b8, m_screenSize.x, m_screenSize.y,
-                                      (uint32_t*) m_bitmapBuffer, m_wxBufferWidth * 4 );
+    int height = m_screenSize.y;
+    int stride = m_stride;
 
-    pixman_image_composite( PIXMAN_OP_SRC, srcImg, nullptr, dstImg, 0, 0, 0, 0, 0, 0,
-                            m_screenSize.x, m_screenSize.y );
+    unsigned char* srcRow = m_bitmapBuffer;
+    unsigned char* dst = m_wxOutput;
 
-    // Free allocated memory
-    pixman_image_unref( srcImg );
-    pixman_image_unref( dstImg );
+    for( int y = 0; y < height; y++ )
+    {
+        for( int x = 0; x < stride; x += 4 )
+        {
+            const unsigned char* src = srcRow + x;
+
+#if defined( __BYTE_ORDER__ ) && ( __BYTE_ORDER == __BIG_ENDIAN )
+            // XRGB
+            dst[0] = src[1];
+            dst[1] = src[2];
+            dst[2] = src[3];
+#else
+            // BGRX
+            dst[0] = src[2];
+            dst[1] = src[1];
+            dst[2] = src[0];
+#endif
+            dst += 3;
+        }
+
+        srcRow += stride;
+    }
 
     wxImage    img( m_wxBufferWidth, m_screenSize.y, m_wxOutput, true );
     wxBitmap   bmp( img );
