@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-27 19:29+0000\n"
+"PO-Revision-Date: 2024-02-28 10:16+0000\n"
 "Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v8/sk/>\n"
 "Language: sk\n"
@@ -76,9 +76,8 @@ msgid "Build Tech layer %d"
 msgstr "Vytvoriť technickú vrstvu %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1033
-#, fuzzy
 msgid "Simplifying copper layer polygons"
-msgstr "Zjednodušiť polygóny medených vrstiev"
+msgstr "Zjednodušenie polygónov medených vrstiev"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1038
 msgid "Calculating plated copper"
@@ -111,9 +110,9 @@ msgid "Last render time %.0f ms"
 msgstr "Čas renderovania %.0f ms"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:657
-#, fuzzy, c-format
+#, c-format
 msgid "Net %s\tNet class %s"
-msgstr "Sieť %s\tTrieda spojov %s"
+msgstr "Sieť %s\tTriedy spojov %s"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:681
 #, c-format
@@ -429,7 +428,6 @@ msgid "Move board Down"
 msgstr "Posunúť dosku dole"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
-#, fuzzy
 msgid "Home View"
 msgstr "Základný pohľad"
 
@@ -446,7 +444,6 @@ msgid "Flip the board view"
 msgstr "Obrátiť pohľad na dosku"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:168
-#, fuzzy
 msgid "Toggle Orthographic Projection"
 msgstr "Prepnúť ortografickú projekciu"
 
@@ -520,7 +517,7 @@ msgstr "Použiť všetky vlastnosti materiálu z každého súboru 3D modelu"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:283
 msgid "Render Solid Colors"
-msgstr "Vykersliť plné farby"
+msgstr "Vykresliť plné farby"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:284
 msgid "Use only the diffuse color property from 3D model file"
@@ -553,7 +550,7 @@ msgstr "Prepnúť 3D modely pre typ komponentov 'povrchovej technológie (SMT)'"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:318
 msgid "Show Unspecified 3D Models"
-msgstr "Zobraziť Neurčené 3D Modely"
+msgstr "Zobraziť nešpecifikované 3D modely"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:319
 msgid "Show 3D models for 'unspecified' type footprints"
@@ -580,9 +577,8 @@ msgid "Show Model Bounding Boxes"
 msgstr "Zobraziť modelové ohraničovacie boxy"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:345
-#, fuzzy
 msgid "Show 3D model bounding boxes in realtime renderer"
-msgstr "Zobraziť hranicu modelu"
+msgstr "Zobraziť ohraňujúci rámik 3D modelu v relálnom čase rendererovania"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:352
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:353
@@ -638,9 +634,8 @@ msgid "Solder Paste"
 msgstr "Spájkovacia pasta"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
-#, fuzzy
 msgid "Show solder paste"
-msgstr "Zobraziť vrstvy pájkovacej pasty"
+msgstr "Zobraziť spájkovaciu pastu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "F.Silkscreen"
@@ -688,9 +683,8 @@ msgid "User.Comments"
 msgstr "Používateľ. Poznámky"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:64
-#, fuzzy
 msgid "Show user comments layer"
-msgstr "Zobraziť vrstvy masiek"
+msgstr "Zobraziť používateľskú vrstvu komentárov"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:65
 msgid "User.Eco1"
@@ -710,15 +704,15 @@ msgstr "Zobraziť vrstvu ECO2"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "Through-hole Models"
-msgstr "Vývodové Modely"
+msgstr "Vývodové modely"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "SMD Models"
-msgstr "SMD Modely"
+msgstr "SMD modely"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
 msgid "Virtual Models"
-msgstr "Virtuálne Modely"
+msgstr "Virtuálne modely"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "Models not in POS File"
@@ -729,9 +723,8 @@ msgid "Models marked DNP"
 msgstr "Modely označené ako DNP"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
-#, fuzzy
 msgid "Model Bounding Boxes"
-msgstr "Zobraziť modelové ohraničovacie boxy"
+msgstr "Ohraničujúce rámiky modelov"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75 common/layer_id.cpp:161
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:30
@@ -745,7 +738,7 @@ msgstr "Hodnoty"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show footprint values"
-msgstr "Zobraziť hodnoty stopy"
+msgstr "Zobraziť hodnoty púzdier"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:337
@@ -755,17 +748,17 @@ msgstr "Referencia"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show footprint references"
-msgstr "Zobraziť odkazy na stopy"
+msgstr "Zobraziť referencie púzdier"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Footprint Text"
-msgstr "Text stopy"
+msgstr "Text púzdra"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show all footprint text"
-msgstr "Zobraziť všetok text stopy"
+msgstr "Zobraziť všetky texty púzdier"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Off-board Silkscreen"
@@ -780,24 +773,20 @@ msgid "3D Axis"
 msgstr "3D Osi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background Start"
-msgstr "Pozadie"
+msgstr "Zčiatok pozadia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Začiatok gradientu pozadia:"
+msgstr "Začiatočná farba gradientu pozadia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "Pozadie"
+msgstr "Koniec pozadia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Koniec gradiendu pozadia:"
+msgstr "Konečná farba gradientu pozadia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
 #, c-format
@@ -836,9 +825,9 @@ msgstr "Zobraziť alebo skryť %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:537
 #: pcbnew/widgets/appearance_controls.cpp:2512
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "(Ctrl + Tab)"
+msgstr "Prednastavuje (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:551
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1469
@@ -868,9 +857,8 @@ msgstr "Uložiť predvoľbu vrstvy"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1632
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2033
 #: pcbnew/widgets/appearance_controls.cpp:2673
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "Otvorí existujúci projekt"
+msgstr "Prepísať existujúce prednastavenie?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:690
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1657
@@ -895,9 +883,9 @@ msgstr "Vybrať predvoľbu:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:755
 #: pcbnew/widgets/appearance_controls.cpp:2808
-#, fuzzy, c-format
+#, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Okna (Alt + Tab):"
+msgstr "Okná zobrazenia (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:764
 #: pcbnew/widgets/appearance_controls.cpp:2817
@@ -916,38 +904,33 @@ msgstr "Názov oblasti pohľadu:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:797
 #: pcbnew/widgets/appearance_controls.cpp:2867
-#, fuzzy
 msgid "Save Viewport"
-msgstr "Uložiť súbor správy"
+msgstr "Uložiť oblasť zobrazenia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:836
 #: pcbnew/widgets/appearance_controls.cpp:2906
-#, fuzzy
 msgid "Viewports"
-msgstr "Prehľad"
+msgstr "Oblasť zobrazenia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:845
 #: pcbnew/widgets/appearance_controls.cpp:2915
-#, fuzzy
 msgid "Delete Viewport"
-msgstr "Odstrániť via"
+msgstr "Odstrániť oblasť zobrazenia"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:846
 #: pcbnew/widgets/appearance_controls.cpp:2916
-#, fuzzy
 msgid "Select viewport:"
-msgstr "Vyberte predvoľbu:"
+msgstr "Vybrať oblasť zobrazenia:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:36
 #: pcbnew/widgets/appearance_controls_base.cpp:161
-#, fuzzy
 msgid "Presets (Ctrl+Tab):"
-msgstr "(Ctrl + Tab)"
+msgstr "Prednastavuje (Ctrl + Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:55
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "Viewports (Alt+Tab):"
-msgstr "Okna (Alt + Tab):"
+msgstr "Zobrazenia (Alt + Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:59
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
@@ -973,7 +956,7 @@ msgstr "Konfigurovať cesty"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
-msgstr "Výbrať 3D Model"
+msgstr "Výbrať 3D model"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
@@ -1004,25 +987,22 @@ msgid "Material properties:"
 msgstr "Vlastnosti materiálu:"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "Realistic"
-msgstr "Realistický režim"
+msgstr "Realistický"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
 msgid "Solid colors"
 msgstr "Nepriehľadné farby"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:56
-#, fuzzy
 msgid "CAD colors"
-msgstr "Farby"
+msgstr "CAD farby"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:74
 msgid "Camera Options"
 msgstr "Možnosti kamery"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:84
-#, fuzzy
 msgid "Rotation increment:"
 msgstr "Prírastok rotácie:"
 
@@ -1101,7 +1081,7 @@ msgstr "Pri pohybe"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr "Zakázať anti-aliasing"
+msgstr "Zakázať antialiasing"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
@@ -1205,15 +1185,13 @@ msgstr "Svetlo zdola:"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:184
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:201
-#, fuzzy
 msgid "Elevation (deg)"
-msgstr "Elevácia (stupne)"
+msgstr "Elevácia (st)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:188
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:205
-#, fuzzy
 msgid "Azimuth (deg)"
-msgstr "Azimut (stupne)"
+msgstr "Azimut (st)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:209
 msgid "Light 1:"
@@ -1399,9 +1377,9 @@ msgstr "Vytvoriť súbory výkresového listu"
 #: bitmap2component/bitmap2cmp_frame.cpp:497
 #: bitmap2component/bitmap2cmp_frame.cpp:532
 #: bitmap2component/bitmap2cmp_frame.cpp:567
-#, fuzzy, c-format
+#, c-format
 msgid "File '%s' could not be created."
-msgstr "Súbor „%s“ sa nepodarilo vytvoriť."
+msgstr "Súbor '%s' sa nepodarilo vytvoriť."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:481
 msgid "Create PostScript File"
@@ -1597,14 +1575,12 @@ msgid "Black && White Picture"
 msgstr "Čierno && Biely obrázok"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:36
-#, fuzzy
 msgid "Image Information"
-msgstr "Informácie o bitmape"
+msgstr "Informácie o obrázku"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:45
-#, fuzzy
 msgid "Image size:"
-msgstr "Veľkosť stránky:"
+msgstr "Veľkosť obrázku:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:49
 #: bitmap2component/bitmap2cmp_panel_base.cpp:53
@@ -1621,9 +1597,8 @@ msgid "pixels"
 msgstr "pixely"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
-#, fuzzy
 msgid "Image PPI:"
-msgstr "Bitmapový PPI:"
+msgstr "PPI obrázku:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:228
 #: pcbnew/pcb_reference_image.cpp:256
@@ -1636,21 +1611,19 @@ msgstr "BPP:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:85
 msgid "bits"
-msgstr "bity"
+msgstr "bitov"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:98
 msgid "Load Source Image"
 msgstr "Načítať zdrojový obrázok"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:105
-#, fuzzy
 msgid "Output Size"
-msgstr "Výstupný vývod"
+msgstr "Výstupná veľkosť"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:107
-#, fuzzy
 msgid "Lock height / width ratio"
-msgstr "Pomer výšky a šírky zámku"
+msgstr "Zamknúť pomer výška / šírka"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:113
 #: common/dialogs/dialog_page_settings_base.cpp:37
@@ -1682,9 +1655,8 @@ msgid "Options"
 msgstr "Možnosti"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:143
-#, fuzzy
 msgid "Black / white threshold:"
-msgstr "Prah čiernej / bielej:"
+msgstr "Čierna / biela prahová hodnota:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:148
 msgid ""
@@ -1770,12 +1742,12 @@ msgstr "Úlohy na pozadí"
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
-"Rozšírenie premenných prostredia zlyhalo: chýba „%c“ na pozícii %u v „%s“."
+"Rozšírenie premenných prostredia zlyhalo: chýba '%c' na pozícii %u v '%s'."
 
 #: common/common.cpp:375
 #, c-format
 msgid "Cannot make path '%s' absolute with respect to '%s'."
-msgstr "Nie je možné vytvoriť cestu „%s“ absolútne vzhľadom na „%s“."
+msgstr "Nie je možné vytvoriť cestu '%s' absolútne vzhľadom na '%s'."
 
 #: common/common.cpp:394
 #, c-format
@@ -1857,7 +1829,6 @@ msgid "Open Anyway"
 msgstr "Ajtak otvoriť"
 
 #: common/confirm.cpp:181 common/confirm.cpp:218
-#, fuzzy
 msgid "Save Changes?"
 msgstr "Uložiť zmeny?"
 
@@ -2022,9 +1993,8 @@ msgid "Additional Contributions By"
 msgstr "Ďalšie príspevky od"
 
 #: common/dialog_about/AboutDialog_main.cpp:1139
-#, fuzzy
 msgid "Librarian Team"
-msgstr "Tím knihovníkov KiCad"
+msgstr "Tím knihovníkov"
 
 #: common/dialog_about/AboutDialog_main.cpp:1215
 msgid "3D models by"
@@ -2036,16 +2006,15 @@ msgstr "Symboly od"
 
 #: common/dialog_about/AboutDialog_main.cpp:1234
 msgid "Footprints by"
-msgstr "Stopy od"
+msgstr "Púzdra od"
 
 #: common/dialog_about/AboutDialog_main.cpp:1247
 msgid "Icons by"
 msgstr "Ikony podľa"
 
 #: common/dialog_about/AboutDialog_main.cpp:1262
-#, fuzzy
 msgid "Package Developers"
-msgstr "Vývojári"
+msgstr "Vývojári balíčkov"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2121,7 +2090,7 @@ msgstr "Informácie o verzii knižnice"
 
 #: common/dialog_about/dialog_about_base.cpp:58
 msgid "&Copy Version Info"
-msgstr "& Kopírovať informácie o verzii"
+msgstr "&Kopírovať informácie o verzii"
 
 #: common/dialog_about/dialog_about_base.cpp:59
 msgid "Copy KiCad version info to the clipboard"
@@ -2142,7 +2111,7 @@ msgstr "Financne podporit"
 #: common/dialog_about/dialog_about_base.cpp:69
 #: common/tool/common_control.cpp:312
 msgid "Donate to KiCad"
-msgstr "Podporiť KiCade"
+msgstr "Podporiť KiCad"
 
 #: common/dialog_about/dialog_about_base.cpp:94 common/dialog_shim.cpp:746
 msgid "&OK"
@@ -2295,11 +2264,10 @@ msgid ""
 "this behavior, either rename any conflicting entries or remove\n"
 "the external environment variable(s) from your system."
 msgstr ""
-"Pri ďalšom spustení KiCadu všetky cesty, ktoré už boli\n"
-"boli definované, budú dodržané a všetky nastavenia definované v ceste\n"
-"konfiguračné dialógy sú ignorované. Ak ste nemali v úmysle\n"
-"toto správanie, buď premenujte všetky konfliktné položky, alebo ich "
-"odstráňte\n"
+"Pri ďalšom spustení KiCadu všetky cesty, ktoré už bolidefinované,\n"
+"budú dodržané a všetky ostatné nastavenia definované v ceste\n"
+"konfiguračného dialógu sú ignorované. Ak ste nemali v úmysle\n"
+"toto správanie, premenujte všetky konfliktné položky, alebo odstráňte\n"
 "premenné externého prostredia z vášho systému."
 
 #: common/dialogs/dialog_configure_paths.cpp:294
@@ -2393,11 +2361,10 @@ msgid ""
 msgstr ""
 "KiCad bol spustený po prvýkrát s použitím novej knižničnej tabuľky %s pre\n"
 "prístup do knižníc. Aby mohol KiCad pristupovať do %s knižníc,\n"
-"musíte nakonfigurovať svoju globálnu %s tabuľku knižnice. Vyberte jednu z "
-"možností\n"
+"musíte nakonfigurovať svoju globálnu %s tabuľku knižníc. Vyberte jednu\n"
 "z nižšie uvedených možností. Ak si nie ste istí, ktorú možnosť zvoliť, "
 "prosím\n"
-"použiť predvolený výber."
+"použite predvolený výber."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -2522,9 +2489,8 @@ msgid "Name:"
 msgstr "Meno:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(voliteľné; predvolené 0)"
+msgstr "(voliteľné)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2610,13 +2576,12 @@ msgid "unit"
 msgstr "jednotka"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Odkazy"
+msgstr "Pripojené"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
-msgstr "Nastavenia mriežky"
+msgstr "Nastavenie mriežky"
 
 #: common/dialogs/dialog_hotkey_list.cpp:33
 msgid "Hotkey List"
@@ -2658,6 +2623,8 @@ msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
 msgstr ""
+"Odstrániť blokované prvky z výberu a použiť operáciu iba na odblokované "
+"položky (pokiaľ existujú)."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
@@ -2677,6 +2644,8 @@ msgid ""
 "Remember the option selected for the remainder of this session.\n"
 "This dialog will not be shown again until KiCad is restarted."
 msgstr ""
+"Zapamätať si vybranú možnosť pro zbytok tejto relácie.\n"
+"Tento dialóg sa znova nezobrazí, pokiaľ nebude KiCad reštartovaný."
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:55
 msgid "Override Locks"
@@ -2688,6 +2657,8 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
+"Prepísať zámky a aplikovať operáciu na všetkých vybraných položkách.\n"
+"Všetky uzamknuté položky zostanú zamknuté po dokončení operácie."
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
 msgid "Locked Items"
@@ -2709,47 +2680,43 @@ msgstr "Import nastavení z predchádzajúcej verzie (žiadna sa nenašla)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:138
 msgid "Select Settings Path"
-msgstr "Vyberte možnosť Cesta nastavenia"
+msgstr "Vyberte cestu k nastaveniu"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
-msgstr "Ako by ste chceli nastavit KiCad?"
+msgstr "Ako by ste chceli nastaviť KiCad?"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:36
 msgid "Import settings from a previous version at:"
 msgstr "Import nastavení z predchádzajúcej verzie:"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:49
-#, fuzzy
 msgid "Choose a different path"
-msgstr "Nalaďte skosenie diferenciálneho páru"
+msgstr "Vybrať inú cestu"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:56
 msgid "The selected path does not contain valid KiCad settings!"
-msgstr "Vybrata cesta neobsahuje platne nastavenia KiCad-u!"
+msgstr "Vybratá cesta neobsahuje platné nastavenia KiCad-u!"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:63
-#, fuzzy
 msgid "Import library configuration from previous version"
-msgstr "Import nastavení z predchádzajúcej verzie (žiadna sa nenašla)"
+msgstr "Import konfigurácie knižnice z predošlej verzie"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:65
 msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"Ak zaskrtnute, tak symboly a footprinty z predchadzajucej verzie budu "
-"importovane do tejto verzie"
+"Ak je zaškrtnuté, do tejto verze se importujú tabuľky knižníc symbolov a "
+"púzdier z predošlej verzie"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
-#, fuzzy
 msgid "Start with default settings"
-msgstr "Obnoviť pôvodné nastavenia"
+msgstr "Začať s pôvodným nastavením"
 
 #: common/dialogs/dialog_migrate_settings_base.h:67
-#, fuzzy
 msgid "Configure KiCad Settings Path"
-msgstr "Konfigurovať cesty"
+msgstr "Nakonfigurovať cesty nastavenia KiCad-u"
 
 #: common/dialogs/dialog_page_settings.cpp:59
 msgid "A5 148x210mm"
@@ -2781,31 +2748,31 @@ msgstr "8,5 x 11 palcov"
 
 #: common/dialogs/dialog_page_settings.cpp:66
 msgid "B 11x17in"
-msgstr "B 11x17in"
+msgstr "B 11x17 palcov"
 
 #: common/dialogs/dialog_page_settings.cpp:67
 msgid "C 17x22in"
-msgstr "C 17x22in"
+msgstr "C 17x22 palcov"
 
 #: common/dialogs/dialog_page_settings.cpp:68
 msgid "D 22x34in"
-msgstr "D 22x34in"
+msgstr "D 22x34 palcov"
 
 #: common/dialogs/dialog_page_settings.cpp:69
 msgid "E 34x44in"
-msgstr "E 34x44in"
+msgstr "E 34x44 palcov"
 
 #: common/dialogs/dialog_page_settings.cpp:70
 msgid "USLetter 8.5x11in"
-msgstr "USLetter 8,5x11in"
+msgstr "USLetter 8,5x11 palcov"
 
 #: common/dialogs/dialog_page_settings.cpp:71
 msgid "USLegal 8.5x14in"
-msgstr "USLegal 8,5x14in"
+msgstr "USLegal 8,5x14 palcov"
 
 #: common/dialogs/dialog_page_settings.cpp:72
 msgid "USLedger 11x17in"
-msgstr "USLedger 11x17in"
+msgstr "USLedger 11x17 palcov"
 
 #: common/dialogs/dialog_page_settings.cpp:73
 msgid "User (Custom)"
@@ -2840,9 +2807,9 @@ msgid "Title Block"
 msgstr "Blok pre Nazov"
 
 #: common/dialogs/dialog_page_settings.cpp:474
-#, fuzzy, c-format
+#, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "Schematický súbor „%s“ sa nenašiel."
+msgstr "Súbor listu kreslenia '%s' sa nenašiel."
 
 #: common/dialogs/dialog_page_settings.cpp:707
 #: common/dialogs/dialog_page_settings_base.cpp:54
@@ -2855,9 +2822,8 @@ msgid "Landscape"
 msgstr "Na šírku"
 
 #: common/dialogs/dialog_page_settings.cpp:795 pagelayout_editor/files.cpp:59
-#, fuzzy
 msgid "Drawing Sheet File"
-msgstr "Uchopiť list"
+msgstr "Súbor výkresového listu"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -2932,9 +2898,8 @@ msgstr "Exportovať do ostatných listov"
 #: gerbview/dialogs/panel_gerbview_color_settings.cpp:104
 #: gerbview/widgets/gerbview_layer_widget.cpp:136 pcbnew/pcb_marker.cpp:214
 #: pcbnew/widgets/appearance_controls.cpp:349
-#, fuzzy
 msgid "Drawing Sheet"
-msgstr "Uchopiť list"
+msgstr "Výkresový list"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
@@ -3027,24 +2992,23 @@ msgstr ""
 #: common/dialogs/dialog_paste_special.cpp:44
 #, c-format
 msgid "Replaces reference designators with '%s'."
-msgstr "Zmena referenčného označenia na '%s'."
+msgstr "Nahradiť referenčné označenia na '%s'."
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Assign unique reference designators to pasted symbols"
-msgstr "Priraď unikátne referenčné označenia na vložené symboly."
+msgstr "Priraď unikátne referenčné označenia na vložené symboly"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
-#, fuzzy
 msgid "Keep existing reference designators, even if they are duplicated"
-msgstr "Zachovať existujúce anotácie, aj keď sú duplikované"
+msgstr "Zachovať existujúce referenčné označenia, aj keď sú duplikované"
 
 #: common/dialogs/dialog_paste_special_base.cpp:22
 msgid "Clear reference designators on all pasted symbols"
-msgstr "Vymaz referenčné označenia pre všetky vložené symboly"
+msgstr "Vymaž referenčné označenia pre všetky vložené symboly"
 
 #: common/dialogs/dialog_paste_special_base.cpp:24
 msgid "Paste Options"
-msgstr "Možnosti prilepenia"
+msgstr "Možnosti vloženia"
 
 #: common/dialogs/dialog_paste_special_base.h:46
 msgid "Paste Special"
@@ -3059,9 +3023,9 @@ msgstr ""
 "tlačidlo <b> Pripojiť vybratú možnosť </b>."
 
 #: common/dialogs/dialog_plugin_options.cpp:52
-#, fuzzy, c-format
+#, c-format
 msgid "Options for Library '%s'"
-msgstr "Možnosti pre knižnicu „%s“"
+msgstr "Možnosti pre knižnicu '%s'"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:26
 msgid "Plugin Options"
@@ -3106,7 +3070,7 @@ msgstr "Hodnota"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:78
 msgid "Option Choices"
-msgstr "Možnosti možností"
+msgstr "Možnosti voľby"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
@@ -3114,7 +3078,7 @@ msgstr "Možnosti podporované aktuálnym doplnkom"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:85
 msgid "<<    Append Selected Option"
-msgstr "<< Pripojiť vybratú možnosť"
+msgstr "<<    Pripojiť vybratú možnosť"
 
 #: common/dialogs/dialog_print_generic.cpp:95
 #: common/dialogs/dialog_print_generic.cpp:301
@@ -3238,13 +3202,12 @@ msgstr "Čiernobiela"
 
 #: common/dialogs/dialog_print_generic_base.cpp:41
 #: eeschema/printing/dialog_print_using_printer_base.cpp:22
-#, fuzzy
 msgid "Print drawing sheet"
-msgstr "Uchopiť list"
+msgstr "Tlačiť list výkresu"
 
 #: common/dialogs/dialog_print_generic_base.cpp:43
 msgid "Print Frame references."
-msgstr "Odkazy na tlačový rám."
+msgstr "Tlačit referenčný rám."
 
 #: common/dialogs/dialog_print_generic_base.cpp:58
 #: pcbnew/dialogs/dialog_plot_base.cpp:124
@@ -3264,9 +3227,8 @@ msgid "Set X scale adjust for exact scale plotting"
 msgstr "Nastaví mierku X pre presné vykreslenie"
 
 #: common/dialogs/dialog_print_generic_base.cpp:96
-#, fuzzy
 msgid "Info text"
-msgstr "Nájsť text"
+msgstr "Text info"
 
 #: common/dialogs/dialog_print_generic_base.cpp:108
 #: eeschema/printing/dialog_print_using_printer_base.cpp:73
@@ -3277,26 +3239,23 @@ msgstr "Nastavenie strany..."
 #: common/dialogs/dialog_text_entry_base.cpp:33
 #: common/dialogs/dialog_unit_entry_base.cpp:21
 msgid "MyLabel"
-msgstr "MojNazov"
+msgstr "Moje označenie"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
-#, fuzzy
 msgid "X label:"
-msgstr "menovka"
+msgstr "Popis X:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
-#, fuzzy
 msgid "Y label:"
-msgstr "menovka"
+msgstr "Popis Y:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
 msgid "Title"
 msgstr "Názov"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "umiestnenie stopy"
+msgstr "Presunúť bod na miesto"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:197 common/widgets/lib_tree.cpp:265
@@ -3320,9 +3279,8 @@ msgid "Available:"
 msgstr "Dostupné:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:39
-#, fuzzy
 msgid "Enabled:"
-msgstr "Povoliť"
+msgstr "Povoliť:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:51
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
@@ -3366,56 +3324,50 @@ msgstr "Zobraziť prepínač predvolieb"
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "Spojenia"
+msgstr "Pripojenie"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Basic"
-msgstr ""
+msgstr "Základné"
 
 #: common/dialogs/git/dialog_git_auth.cpp:46
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "SSH"
-msgstr ""
+msgstr "SSH"
 
 #: common/dialogs/git/dialog_git_auth.cpp:52
 #: common/dialogs/git/dialog_git_repository_base.cpp:107
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:85
-#, fuzzy
 msgid "Test"
-msgstr "&Kontrola ERC"
+msgstr "Test"
 
 #: common/dialogs/git/dialog_git_auth.cpp:58
 msgid "Url"
-msgstr ""
+msgstr "Adresa"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Zarovnanie"
+msgstr "Autorizácia"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Základný názov"
+msgstr "Používateľské meno"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:440
 msgid "Password"
-msgstr ""
+msgstr "Heslo"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Žiadna zmena"
+msgstr "Odoslať zmeny"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
-#, fuzzy
 msgid "Filename"
-msgstr "&Názov súboru:"
+msgstr "Súbor"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3430,169 +3382,148 @@ msgstr "Stav"
 
 #: common/dialogs/git/dialog_git_commit.cpp:83
 msgid "New"
-msgstr "&Nový"
+msgstr "Nový"
 
 #: common/dialogs/git/dialog_git_commit.cpp:89
-#, fuzzy
 msgid "Modified"
-msgstr "Upravená skupina"
+msgstr "Upravené"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
-#, fuzzy
 msgid "Deleted"
-msgstr "Odstrániť"
+msgstr "Odstránené"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Chybové správy:"
+msgstr "Správa comitu:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:115
 msgid "Author:"
-msgstr ""
+msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Názov siete nemôže byť prázdny."
+msgstr "Správa comitu nemôže byť prázdna"
 
 #: common/dialogs/git/dialog_git_repository.cpp:146
 #: common/dialogs/git/dialog_git_repository.cpp:373
 msgid "Enter the password for the SSH key"
-msgstr ""
+msgstr "Zadať heslo pro SSH kľúč"
 
 #: common/dialogs/git/dialog_git_repository.cpp:325
-#, fuzzy
 msgid "Test connection"
-msgstr "Vyberte Pripojenie"
+msgstr "Test pripojenia"
 
 #: common/dialogs/git/dialog_git_repository.cpp:329
-#, fuzzy
 msgid "Connection successful"
-msgstr "Operácia zápisu do súboru zlyhala."
+msgstr "Pripojenie bolo úspešné"
 
 #: common/dialogs/git/dialog_git_repository.cpp:333
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Súbor archívu nejde otvoriť\n"
+msgstr "Nie je možné pripojiť sa k '%s' "
 
 #: common/dialogs/git/dialog_git_repository.cpp:352
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Súbor archívu nejde otvoriť\n"
+msgstr "Nie je možné otvoriť súkromný kľúč '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Neplatné meno signálu"
+msgstr "Neplatný SSH kľúč"
 
 #: common/dialogs/git/dialog_git_repository.cpp:365
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Vybratý súbor je neplatný alebo môže byť poškodený!"
+msgstr "Vybraný soubor nie je platným súkromným kľúčom SSH"
 
 #: common/dialogs/git/dialog_git_repository.cpp:389
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Nepodarilo sa nájsť súbor z knižnice %s"
+msgstr "Nepodarilo sa otvoriť verejný kľúč '%s'"
 
 #: common/dialogs/git/dialog_git_repository.cpp:407
 #: common/dialogs/git/dialog_git_repository.cpp:413
-#, fuzzy
 msgid "Missing information"
-msgstr "Chýba stopa"
+msgstr "Chýbajúca informácia"
 
 #: common/dialogs/git/dialog_git_repository.cpp:407
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Nie je možné načítať súbor %s"
+msgstr "Prosím, zadajte názov repozitára"
 
 #: common/dialogs/git/dialog_git_repository.cpp:413
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Nie je možné načítať súbor %s"
+msgstr "Zadajte adresu URL pre repozitár"
 
 #: common/dialogs/git/dialog_git_repository.cpp:434
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
-#, fuzzy
 msgid "SSH Key Password"
-msgstr "Kľúčové slovo"
+msgstr "Heslo kľúča SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
 msgid "Location"
 msgstr "Umiestnenie"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Názov pripojenia"
+msgstr "Typ pripojenia"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #: eeschema/widgets/search_handlers.cpp:351
-#, fuzzy
 msgid "Local"
-msgstr "Upraviť lokálny súbor ..."
+msgstr "Miestny"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Vytvoriť vrstvy"
+msgstr "Privátny SSH kľúč"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Vybrať súbor"
+msgstr "Vybrať súbor súkromného kľúča SSH"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Meno siete:"
+msgstr "Používateľské meno"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Prehľad"
+msgstr "Git repozitár"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
-msgstr ""
+msgstr "Prepnúť Git vetvu"
 
 #: common/dialogs/git/dialog_git_switch.cpp:47
-#, fuzzy
 msgid "Select or enter a branch name:"
-msgstr "Uložiť aktuálnu knižnicu &ako"
+msgstr "Vybrať alebo zadať meno vetvy:"
 
 #: common/dialogs/git/dialog_git_switch.cpp:53
 msgid "Branch"
-msgstr ""
+msgstr "Vetva"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr ""
+msgstr "Posledný comit"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Aktualizované"
+msgstr "Posledná aktualizácia"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
 #: common/dialogs/git/dialog_git_switch.cpp:213
-#, fuzzy
 msgid "Switch"
-msgstr "Prepnite jednotky"
+msgstr "Prepínač"
 
 #: common/dialogs/git/dialog_git_switch.cpp:218 eeschema/sch_base_frame.cpp:285
 #: pcbnew/footprint_libraries_utils.cpp:430
@@ -3604,23 +3535,20 @@ msgid "Git Commit Data"
 msgstr ""
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Použiť predvolené meno siete"
+msgstr "Použiť predvolené hodnoty"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "Názov oblasti:"
+msgstr "Meno autora:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
 msgid "Author e-mail:"
-msgstr ""
+msgstr "E-mail autora:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Spravujte definície autobusov"
+msgstr "Git repozitáre"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3631,23 +3559,20 @@ msgid "Active"
 msgstr "Aktívne"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Pridajte drôt na vstup zbernice"
+msgstr "Pridať nový repozitár"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "Upravte vlastnosti stopy"
+msgstr "Upraviť nastavenia repozitára"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
-#, fuzzy
 msgid "Remove Git Repository"
-msgstr "Prehľad"
+msgstr "Odstrániť Git repozitár"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
-msgstr "Odhaľte motívy vo vyhľadávači"
+msgstr "Odhaliť motívy vo vyhľadávači"
 
 #: common/dialogs/panel_color_settings.cpp:134
 msgid "New theme name:"
@@ -3700,11 +3625,11 @@ msgstr ""
 
 #: common/dialogs/panel_color_settings_base.cpp:43
 msgid "Open Theme Folder"
-msgstr "Otvorte priečinok témy"
+msgstr "Otvoriť priečinok témy"
 
 #: common/dialogs/panel_color_settings_base.cpp:44
 msgid "Open the folder containing color themes"
-msgstr "Otvorte priečinok obsahujúci farebné motívy"
+msgstr "Otvoriť priečinok obsahujúci farebné motívy"
 
 #: common/dialogs/panel_common_settings.cpp:86
 msgid ""
@@ -3747,9 +3672,8 @@ msgid "Select Preferred PDF Viewer"
 msgstr "Vyberte preferovaný zobrazovač PDF"
 
 #: common/dialogs/panel_common_settings_base.cpp:22
-#, fuzzy
 msgid "Antialiasing"
-msgstr "Anti-aliasing"
+msgstr "Antialiasing"
 
 #: common/dialogs/panel_common_settings_base.cpp:39
 msgid "Accelerated graphics:"
@@ -3796,12 +3720,11 @@ msgstr "Používateľské rozhranie"
 
 #: common/dialogs/panel_common_settings_base.cpp:143
 msgid "Show icons in menus"
-msgstr "Zobraziť ikony v ponukách"
+msgstr "Zobraziť ikony v menu"
 
 #: common/dialogs/panel_common_settings_base.cpp:146
-#, fuzzy
 msgid "Show scrollbars in editors"
-msgstr "Zobraziť ikony v ponukách"
+msgstr "Zobraziť posuvné lišty v editoroch"
 
 #: common/dialogs/panel_common_settings_base.cpp:148
 msgid "This change takes effect when relaunching the editor."
@@ -3809,13 +3732,15 @@ msgstr "Táto zmena sa prejaví po opätovnom spustení editora."
 
 #: common/dialogs/panel_common_settings_base.cpp:152
 msgid "Focus follows mouse between schematic and PCB editors"
-msgstr ""
+msgstr "Fokus sleduje myš medzi editormi schém a DPS"
 
 #: common/dialogs/panel_common_settings_base.cpp:153
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
 msgstr ""
+"Pokiaľ je kurzor myši presunúť na obrazovku okna editora schém alebo DPS, "
+"toto okno je presunuté do popredia."
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
@@ -3828,9 +3753,8 @@ msgid ""
 msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:168
-#, fuzzy
 msgid "Icon theme:"
-msgstr "Farebná téma:"
+msgstr "Motív ikon:"
 
 #: common/dialogs/panel_common_settings_base.cpp:172
 msgid "Light"
@@ -3838,7 +3762,7 @@ msgstr "Svetlo"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Use icons designed for light window backgrounds"
-msgstr "Pouzit ikony navrhnute pre svetle pozadia okien"
+msgstr "Pouziť ikony pre svetlé pozadie okien"
 
 #: common/dialogs/panel_common_settings_base.cpp:177
 #: gerbview/gerber_draw_item.cpp:725
@@ -3847,7 +3771,7 @@ msgstr "Tmavá"
 
 #: common/dialogs/panel_common_settings_base.cpp:178
 msgid "Use icons designed for dark window backgrounds"
-msgstr "Pouzi ikony pre tmave pozadia okien"
+msgstr "Pouziť ikony pre tmavé pozadie okien"
 
 #: common/dialogs/panel_common_settings_base.cpp:182
 #: common/dialogs/panel_common_settings_base.cpp:228
@@ -3862,13 +3786,12 @@ msgstr "Automaticky"
 msgid ""
 "Automatically choose light or dark icons based on the system color theme"
 msgstr ""
-"Automaticky vyber svetle alebo tmave ikony na zaklade nastavenia farebnej "
-"temy systemu"
+"Automatický vybrať svetlé alebo tmavé ikony na základe nastavenia farebnej "
+"témy systému"
 
 #: common/dialogs/panel_common_settings_base.cpp:194
-#, fuzzy
 msgid "Toolbar icon size:"
-msgstr "Príliš malá veľkosť mikro via"
+msgstr "Veľkosť ikon nástrojovej lišty:"
 
 #: common/dialogs/panel_common_settings_base.cpp:198
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
@@ -3878,7 +3801,7 @@ msgstr "Malé"
 
 #: common/dialogs/panel_common_settings_base.cpp:199
 msgid "Use compact icons in the toolbars"
-msgstr ""
+msgstr "Použiť kompaktné ikony v nástrojových lištách"
 
 #: common/dialogs/panel_common_settings_base.cpp:203 common/eda_text.cpp:807
 #: eeschema/lib_textbox.cpp:488 eeschema/sch_label.cpp:1202
@@ -3889,36 +3812,36 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:633
 #: pcbnew/widgets/appearance_controls.cpp:1782
 msgid "Normal"
-msgstr "Normálny"
+msgstr "Normálne"
 
 #: common/dialogs/panel_common_settings_base.cpp:204
 msgid "Use the default KiCad icon size in the toolbars"
-msgstr ""
+msgstr "Použiť prednastavenú veľkost ikon KiCad-u v nástrojových lištách"
 
 #: common/dialogs/panel_common_settings_base.cpp:208
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:162
 msgid "Large"
-msgstr "Veľká"
+msgstr "Veľké"
 
 #: common/dialogs/panel_common_settings_base.cpp:209
 msgid "Use larger icons in the toolbars"
-msgstr ""
+msgstr "Použiť väčšie ikony v nástrojových lištách"
 
 #: common/dialogs/panel_common_settings_base.cpp:220
 msgid "Canvas scale:"
-msgstr "Mierka plátna:"
+msgstr "Mierka kresliacej plochy:"
 
 #: common/dialogs/panel_common_settings_base.cpp:237
 msgid "Apply icon scaling to fonts"
-msgstr "Pouzit mierku ikon na pismo"
+msgstr "Použiť mierku ikon pre písma"
 
 #: common/dialogs/panel_common_settings_base.cpp:240
 msgid "(This workaround will improve some GTK HiDPI font scaling issues.)"
-msgstr ""
+msgstr "(Toto núdzové riešenie zlepší určité problémy s písmom GTK HiDPI.)"
 
 #: common/dialogs/panel_common_settings_base.cpp:247
 msgid "High-contrast mode dimming factor:"
-msgstr ""
+msgstr "Koeficient zatmenia v režime s vysokým kontrastom:"
 
 #: common/dialogs/panel_common_settings_base.cpp:254
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:73
@@ -3955,7 +3878,7 @@ msgstr "Editovanie"
 
 #: common/dialogs/panel_common_settings_base.cpp:280
 msgid "Warp mouse to origin of moved object"
-msgstr "Deformovať myš na pôvod presunutého objektu"
+msgstr "Umiestniť kurzor myši na začiatok presunutého objektu"
 
 #: common/dialogs/panel_common_settings_base.cpp:284
 msgid "First hotkey selects tool"
@@ -3971,20 +3894,19 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:295
 msgid "Session"
-msgstr "Sedenie"
+msgstr "Relácia"
 
 #: common/dialogs/panel_common_settings_base.cpp:305
 msgid "Remember open files for next project launch"
-msgstr "Pamätajte na otvorené súbory pre ďalšie spustenie projektu"
+msgstr "Zapamätať si otvorené súbory v projekte"
 
 #: common/dialogs/panel_common_settings_base.cpp:307
-#, fuzzy
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
 msgstr ""
-"Ak je začiarknuté toto políčko, spustením projektu sa tiež spustia nástroje "
-"ako eeschema a pcbnew s predtým otvorenými súbormi"
+"Ak je zaškrtnuté, spustia sa pri spustení projektu také nástroje, ako sú "
+"editory schém a plošných spojov s predtým otvorenými súbormi"
 
 #: common/dialogs/panel_common_settings_base.cpp:320
 msgid "&Auto save:"
@@ -4021,7 +3943,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:350
 msgid "days"
-msgstr ""
+msgstr "dňov"
 
 #: common/dialogs/panel_common_settings_base.cpp:365
 msgid "Project Backup"
@@ -4116,17 +4038,15 @@ msgstr ""
 
 #: common/dialogs/panel_data_collection_base.cpp:24
 msgid "I agree to provide anonymous reports"
-msgstr ""
+msgstr "Súhlasím s odosielaním anonymných reportov"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
-#, fuzzy
 msgid "Reset Unique Id"
-msgstr "Obnoviť & nepoužívané"
+msgstr "Obnoviť jedinečné ID"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "Púzdra:"
+msgstr "Púzdra/plôšky:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -4135,29 +4055,26 @@ msgid "Tracks:"
 msgstr "Spoje:"
 
 #: common/dialogs/panel_grid_settings.cpp:126 common/tool/grid_menu.cpp:105
-#, fuzzy, c-format
+#, c-format
 msgid "%s%s (%s)"
-msgstr "Prejsť na stránku %s (%s)"
+msgstr "%s%s (%s)"
 
 #: common/dialogs/panel_grid_settings.cpp:249
-#, fuzzy, c-format
+#, c-format
 msgid "Grid size '%s' already exists."
-msgstr "„%s“ už existuje."
+msgstr "Veľkosť mriežky '%s' už existuje."
 
 #: common/dialogs/panel_grid_settings.cpp:271
-#, fuzzy
 msgid "At least one grid size is required."
-msgstr "Vyžaduje sa predvolená trieda siete."
+msgstr "Je vyžadovaná najmenej jedna veľkosť mriežky."
 
 #: common/dialogs/panel_grid_settings_base.cpp:25
-#, fuzzy
 msgid "Grids:"
 msgstr "Mriežka:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:64
-#, fuzzy
 msgid "Fast Grid Switching"
-msgstr "Rýchle prepínanie"
+msgstr "Rýchle prepínanie mriežky"
 
 #: common/dialogs/panel_grid_settings_base.cpp:77
 msgid "Grid 1:"
@@ -4166,32 +4083,28 @@ msgstr "Mriežka 1:"
 #: common/dialogs/panel_grid_settings_base.cpp:86
 #: common/dialogs/panel_grid_settings_base.cpp:99
 msgid "(hotkey)"
-msgstr "(klávesová skratka)"
+msgstr "(kl. skratka)"
 
 #: common/dialogs/panel_grid_settings_base.cpp:90
 msgid "Grid 2:"
 msgstr "Mriežka 2:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:106 common/tool/actions.cpp:705
-#, fuzzy
 msgid "Grid Overrides"
-msgstr "Prepísať"
+msgstr "Prepísanie mriežky"
 
 #: common/dialogs/panel_grid_settings_base.cpp:119
-#, fuzzy
 msgid "Connected items:"
-msgstr "Nepripojené položky"
+msgstr "Pripojené položky:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:127
-#, fuzzy
 msgid "Wires:"
-msgstr "Drôty"
+msgstr "Drôty:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:135
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:88
-#, fuzzy
 msgid "Vias:"
-msgstr "Prechody"
+msgstr "Via:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:143
 #: eeschema/dialogs/dialog_field_properties_base.cpp:33
@@ -4207,9 +4120,8 @@ msgid "Text:"
 msgstr "Text:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:151
-#, fuzzy
 msgid "Graphics:"
-msgstr "Grafika"
+msgstr "Grafika:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
@@ -4240,7 +4152,7 @@ msgstr "Importovať súbor kl. skratiek:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:254
 msgid "| Action | Default Hotkey | Description"
-msgstr ""
+msgstr "| Akcia | Prednastavená klávesová akratka | Popis"
 
 #: common/dialogs/panel_image_editor.cpp:74
 msgid "Incorrect scale number"
@@ -4264,18 +4176,16 @@ msgstr ""
 "palcov). Si si istý?"
 
 #: common/dialogs/panel_image_editor_base.cpp:33
-#, fuzzy
 msgid "Scale:"
-msgstr "Mierka"
+msgstr "Mierka:"
 
 #: common/dialogs/panel_image_editor_base.cpp:40
 msgid "PPI:"
-msgstr ""
+msgstr "PPI:"
 
 #: common/dialogs/panel_image_editor_base.cpp:48
-#, fuzzy
 msgid "Convert to Greyscale"
-msgstr "Konvertovať na oblúk"
+msgstr "Konvertovať na odtiene sivej"
 
 #: common/dialogs/panel_mouse_settings.cpp:46
 #: pcbnew/dialogs/panel_edit_options_base.cpp:225
@@ -4285,6 +4195,7 @@ msgstr "Cmd"
 #: common/dialogs/panel_mouse_settings.cpp:84
 msgid "Only one action can be assigned to each vertical scroll setting"
 msgstr ""
+"Ku každému nastaveniu zvislého posúvania je možné priradiť iba jednu akciu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:20
 msgid "Pan and Zoom"
@@ -4339,32 +4250,28 @@ msgid "How fast to pan when moving an object off the edge of the screen"
 msgstr "Ako rýchlo sa dá posunúť pri posúvaní objektu od okraja obrazovky"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
-#, fuzzy
 msgid "Drag Gestures"
-msgstr "Gestá"
+msgstr "Gestá potiahnutia"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:122
-#, fuzzy
 msgid "Left button drag:"
-msgstr "Presun pravého tlačidla:"
+msgstr "Potiahnutie lavým tlačidlom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
-#, fuzzy
 msgid "Draw selection rectangle"
-msgstr "Nakreslite obdĺžnik"
+msgstr "Nakresliť obdĺžnik výberu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
 msgid "Drag selected objects; otherwise draw selection rectangle"
-msgstr ""
+msgstr "Presunúť vybrané objekty; inak nakresliť obdlížnik výberu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:126
-#, fuzzy
 msgid "Drag any object (selected or not)"
-msgstr "Presunie vybraté položky"
+msgstr "Presunúť ľubovolný objekt (vybraný aj nie)"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:135
 msgid "Middle button drag:"
-msgstr "Presunutie stredného tlačidla:"
+msgstr "Potiahnutie stredným tlačidlom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:139
 #: common/dialogs/panel_mouse_settings_base.cpp:152
@@ -4406,12 +4313,11 @@ msgstr "Žiadny"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:148
 msgid "Right button drag:"
-msgstr "Presun pravého tlačidla:"
+msgstr "Potiahnutie pravým tlačidlom:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:170
-#, fuzzy
 msgid "Scroll Gestures"
-msgstr "Gestá"
+msgstr "Gestá posunu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:186
 #, fuzzy
@@ -4432,7 +4338,7 @@ msgstr "-"
 #: common/dialogs/panel_mouse_settings_base.cpp:212
 #: pcbnew/dialogs/panel_edit_options_base.cpp:153
 msgid "Ctrl"
-msgstr "Ctrl+"
+msgstr "Ctrl"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:216
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:154
