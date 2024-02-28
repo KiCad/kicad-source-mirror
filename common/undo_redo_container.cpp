@@ -213,6 +213,27 @@ EDA_ITEM_FLAGS PICKED_ITEMS_LIST::GetPickerFlags( unsigned aIdx ) const
 }
 
 
+KIID PICKED_ITEMS_LIST::GetPickedItemGroupId( unsigned aIdx ) const
+{
+    if( aIdx < m_ItemsList.size() )
+        return m_ItemsList[aIdx].GetGroupId();
+
+    return KIID();
+}
+
+
+bool PICKED_ITEMS_LIST::SetPickedItemGroupId( KIID aGroupId, unsigned aIdx )
+{
+    if( aIdx < m_ItemsList.size() )
+    {
+        m_ItemsList[aIdx].SetGroupId( aGroupId );
+        return true;
+    }
+
+    return false;
+}
+
+
 bool PICKED_ITEMS_LIST::SetPickedItem( EDA_ITEM* aItem, unsigned aIdx )
 {
     if( aIdx < m_ItemsList.size() )

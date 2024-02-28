@@ -29,6 +29,7 @@
 #include <core/typeinfo.h>
 #include <eda_item_flags.h>
 #include <functional>
+#include <kiid.h>
 #include <vector>
 #include <wx/string.h>
 
@@ -99,6 +100,10 @@ public:
 
     EDA_ITEM* GetLink() const { return m_link; }
 
+    KIID GetGroupId() const { return m_groupId; }
+
+    void SetGroupId( KIID aId ) { m_groupId = aId; }
+
     BASE_SCREEN* GetScreen() const { return m_screen; }
 
 private:
@@ -116,6 +121,7 @@ private:
                                         * duplicate) m_Item points the duplicate (i.e the old
                                         * copy of an active item) and m_Link points the active
                                         * item in schematic */
+    KIID           m_groupId;           /* Id of the group of items in case this is a group/ungroup command */
 
     BASE_SCREEN*   m_screen;           /* For new and deleted items the screen the item should
                                         * be added to/removed from. */
@@ -226,6 +232,12 @@ public:
     UNDO_REDO GetPickedItemStatus( unsigned int aIdx ) const;
 
     /**
+     * @return The group id of the picked item, or null KIID if does not exist.
+     * @param aIdx Index of the picked item in the picked list.
+     */
+    KIID GetPickedItemGroupId( unsigned int aIdx ) const;
+
+    /**
      * Return the value of the picker flag.
      *
      * @param aIdx Index of the picker in the picked list.
@@ -256,6 +268,15 @@ public:
      * @return true if the picker exists, or false if does not exist.
      */
     bool SetPickedItemLink( EDA_ITEM* aLink, unsigned aIdx );
+
+    /**
+     * Set the group id associated to a given picked item.
+     *
+     * @param aId is the group id to associate to the picked item.
+     * @param aIdx is index of the picker in the picked list.
+     * @return true if the picker exists, or false if does not exist.
+     */
+    bool SetPickedItemGroupId( KIID aId, unsigned aIdx );
 
     /**
      * Set the type of undo/redo operation for a given picked item.
