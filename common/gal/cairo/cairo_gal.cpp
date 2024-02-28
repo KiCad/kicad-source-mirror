@@ -1425,7 +1425,7 @@ void CAIRO_GAL::EndDrawing()
         {
             const unsigned char* src = srcRow + x;
 
-#if defined( __BYTE_ORDER__ ) && ( __BYTE_ORDER == __BIG_ENDIAN )
+#if defined( __BYTE_ORDER__ ) && ( __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__ )
             // XRGB
             dst[0] = src[1];
             dst[1] = src[2];
