@@ -316,11 +316,15 @@ void DRC_TEST_PROVIDER_MISC::testTextVars()
                     return false;
 
                 BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
-                EDA_TEXT*   text = dynamic_cast<EDA_TEXT*>( boardItem );
+                EDA_TEXT*   textItem = dynamic_cast<EDA_TEXT*>( boardItem );
 
-                wxCHECK( boardItem, false );
+                if( !textItem )
+                    return true;
 
-                if( text && text->GetShownText( true ).Matches( wxT( "*${*}*" ) ) )
+                wxString resolved = ExpandEnvVarSubstitutions( textItem->GetShownText( true ),
+                                                               nullptr /*project already done*/ );
+
+                if( resolved.Matches( wxT( "*${*}*" ) ) )
                 {
                     std::shared_ptr<DRC_ITEM>drcItem = DRC_ITEM::Create( DRCE_UNRESOLVED_VARIABLE );
                     drcItem->SetItems( item );
