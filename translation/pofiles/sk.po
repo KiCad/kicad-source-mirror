@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-19 11:26-0800\n"
-"PO-Revision-Date: 2024-02-28 10:16+0000\n"
+"PO-Revision-Date: 2024-02-28 17:50+0000\n"
 "Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v8/sk/>\n"
 "Language: sk\n"
@@ -4223,7 +4223,7 @@ msgstr ""
 
 #: common/dialogs/panel_mouse_settings_base.cpp:48
 msgid "Use zoom acceleration"
-msgstr "Použite zrýchlenie priblíženia"
+msgstr "Použiť zrýchlenie priblíženia"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:49
 msgid "Zoom faster when scrolling quickly"
@@ -4251,7 +4251,7 @@ msgstr "Ako rýchlo sa dá posunúť pri posúvaní objektu od okraja obrazovky"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:103
 msgid "Drag Gestures"
-msgstr "Gestá potiahnutia"
+msgstr "Gestá ťahaním"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:122
 msgid "Left button drag:"
@@ -4320,20 +4320,16 @@ msgid "Scroll Gestures"
 msgstr "Gestá posunu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:186
-#, fuzzy
 msgid "Vertical touchpad or scroll wheel movement:"
-msgstr ""
-"Posúvanie doľava / doprava pomocou vodorovného touchpadu alebo rolovacieho "
-"kolieska:"
+msgstr "Vertikálny pohyb pomocou touchpadu alebo rolovacieho kolieska:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:191
 msgid "Only one action can be assigned to each column"
-msgstr ""
+msgstr "Každému stĺpcu je možné priradiť iba jednu akciu"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:208
-#, fuzzy
 msgid "--"
-msgstr "-"
+msgstr "--"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:212
 #: pcbnew/dialogs/panel_edit_options_base.cpp:153
@@ -4357,26 +4353,20 @@ msgid "Zoom:"
 msgstr "Zväčšenie:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:248
-#, fuzzy
 msgid "Pan up/down:"
-msgstr "Posun nahor / nadol:"
+msgstr "Posun nahor/nadol:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:268
-#, fuzzy
 msgid "Pan left/right:"
-msgstr "Posun vľavo / vpravo:"
+msgstr "Posun vľavo/vpravo:"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:284
-#, fuzzy
 msgid "Reverse"
-msgstr "Vrátiť"
+msgstr "Obrátiť"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:305
-#, fuzzy
 msgid "Pan left/right with horizontal movement"
-msgstr ""
-"Posúvanie doľava / doprava pomocou vodorovného touchpadu alebo rolovacieho "
-"kolieska"
+msgstr "Posúvať doľava/doprava s vodorovným pohybom"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:306
 msgid ""
@@ -4385,14 +4375,12 @@ msgstr ""
 "Pri posúvaní zľava doprava po touchpade posúvajte plátno doľava a doprava"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:316
-#, fuzzy
 msgid "Reset to Mouse Defaults"
-msgstr "Obnoviť na predvolené"
+msgstr "Obnoviť na predvolené nasatavenie myši"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:319
-#, fuzzy
 msgid "Reset to Trackpad Defaults"
-msgstr "Obnoviť na predvolené"
+msgstr "Obnoviť na predvolené pre touchpad"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:17
 #: common/eda_base_frame.cpp:1182
@@ -4412,41 +4400,36 @@ msgid "General"
 msgstr "Všeobecné"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:30
-#, fuzzy
 msgid "Check for KiCad updates on startup"
-msgstr "Skontrolovať púzdro"
+msgstr "Skontrolovať aktualizácie KiCad-u pri spustení"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:40
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:34
 #: kicad/pcm/dialogs/dialog_pcm.cpp:213
 #: kicad/tools/kicad_manager_actions.cpp:186
 msgid "Plugin and Content Manager"
-msgstr ""
+msgstr "Správca pluginov a obsahu"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:53
-#, fuzzy
 msgid "Check for package updates on startup"
-msgstr "Skontrolovať púzdro"
+msgstr "Skontrolovať aktualizácie balíčkov pri spustení"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:63
-#, fuzzy
 msgid "Library package handling"
-msgstr "Zmeny knižnice sú neuložené"
+msgstr "Správa balíčkov knižníc"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:76
-#, fuzzy
 msgid "Automatically add installed libraries to global library table"
-msgstr "Pridať knižnicu do globálnej tabuľky knižníc?"
+msgstr ""
+"Automaticky pridávať nainštalované knižnice do globálnej tabuľky knižníc"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:80
-#, fuzzy
 msgid "Automatically remove uninstalled libraries"
-msgstr "Automaticky trasované spoje"
+msgstr "Automaticky odstrániť odinštalované knižnice"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:87
-#, fuzzy
 msgid "Library nickname prefix:"
-msgstr "Chyba prezývky knižnice"
+msgstr "Predpona prezívky knižnice:"
 
 #: common/dialogs/panel_setup_netclasses.cpp:90 common/eda_shape.cpp:1948
 #: common/stroke_params.cpp:36
@@ -4459,7 +4442,7 @@ msgstr "Chyba prezývky knižnice"
 #: pcbnew/pad.cpp:1909 pcbnew/pcb_textbox.cpp:655 pcbnew/zone.cpp:629
 #: pcbnew/zone.cpp:1551
 msgid "Solid"
-msgstr "Plné"
+msgstr "Pevné"
 
 #: common/dialogs/panel_setup_netclasses.cpp:92 common/eda_shape.cpp:1949
 #: common/stroke_params.cpp:37
@@ -4483,30 +4466,31 @@ msgstr "Bodkovaný"
 #: eeschema/sch_bus_entry.cpp:641 eeschema/sch_line.cpp:1060
 #: pcbnew/pcb_textbox.cpp:658
 msgid "Dash-Dot"
-msgstr "Čiarka-Bodka"
+msgstr "Čiarka-bodka"
 
 #: common/dialogs/panel_setup_netclasses.cpp:98 common/eda_shape.cpp:1952
 #: common/stroke_params.cpp:40
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:372
 #: eeschema/sch_bus_entry.cpp:642 eeschema/sch_line.cpp:1061
 #: pcbnew/pcb_textbox.cpp:659
-#, fuzzy
 msgid "Dash-Dot-Dot"
-msgstr "Dash-Dot"
+msgstr "Čiarka-bodka-bodka"
 
 #: common/dialogs/panel_setup_netclasses.cpp:331
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
+"Triedy spojov byli zmenené mimo dialógu Nastavenia.\n"
+"Chcete ich znovu načítať?"
 
 #: common/dialogs/panel_setup_netclasses.cpp:467
 msgid "Netclass must have a name."
-msgstr "Netclass musí mať meno."
+msgstr "Trieda spojov musí mať meno."
 
 #: common/dialogs/panel_setup_netclasses.cpp:476
 msgid "Netclass name already in use."
-msgstr "Názov netclass sa už používa."
+msgstr "Názov triedy spojov sa už používa."
 
 #: common/dialogs/panel_setup_netclasses.cpp:538
 msgid "Minimum copper clearance"
@@ -4514,7 +4498,7 @@ msgstr "Minimálna izolačná medzera medi"
 
 #: common/dialogs/panel_setup_netclasses.cpp:539
 msgid "Minimum track width"
-msgstr "Minimálna šírka cesty"
+msgstr "Minimálna šírka spoja"
 
 #: common/dialogs/panel_setup_netclasses.cpp:540
 msgid "Via pad diameter"
