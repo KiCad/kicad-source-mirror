@@ -12,10 +12,10 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-02-23 23:09+0000\n"
-"Last-Translator: Hanna Breisand <weblate.org@breisand.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"PO-Revision-Date: 2024-02-29 09:22+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -416,7 +416,7 @@ msgstr "Hemvy"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Rita om vid hemvyns position och zoomnivå"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -5260,16 +5260,14 @@ msgstr "Textruta"
 
 #: common/eda_item.cpp:352 common/eda_item.cpp:379 eeschema/sch_table.cpp:546
 #: pcbnew/pcb_table.cpp:285
-#, fuzzy
 msgid "Table"
-msgstr "Stifttabell"
+msgstr "Tabell"
 
 #: common/eda_item.cpp:353 common/eda_item.cpp:380
 #: eeschema/sch_tablecell.cpp:118 pcbnew/pcb_tablecell.cpp:98
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "Tabellnamn"
+msgstr "Cell i tabell"
 
 #: common/eda_item.cpp:354 common/eda_item.cpp:355 pcbnew/pcb_track.cpp:1051
 msgid "Track"
@@ -7469,38 +7467,35 @@ msgstr "Radera objekt med klickning"
 
 #: common/tool/actions.cpp:283 eeschema/tools/sch_edit_tool.cpp:2469
 #: pcbnew/tools/edit_tool.cpp:2122
-#, fuzzy
 msgid "Left Justify"
 msgstr "Vänsterjustera"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "Vänsterjustera fält och textobjekt"
 
 #: common/tool/actions.cpp:290 eeschema/tools/sch_edit_tool.cpp:2471
 #: pcbnew/tools/edit_tool.cpp:2124
-#, fuzzy
 msgid "Center Justify"
-msgstr "X Justering"
+msgstr "Centrera"
 
 #: common/tool/actions.cpp:291
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "Centrera fält och textobjekt"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2473
 #: pcbnew/tools/edit_tool.cpp:2126
-#, fuzzy
 msgid "Right Justify"
 msgstr "Högerjustera"
 
 #: common/tool/actions.cpp:298
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "Högerjustera fält och textobjekt"
 
 #: common/tool/actions.cpp:304
 #, fuzzy
 msgid "Expand All"
-msgstr "Uppdatera alla"
+msgstr "Expandera alla"
 
 #: common/tool/actions.cpp:310
 #, fuzzy
@@ -7508,114 +7503,102 @@ msgid "Collapse All"
 msgstr "Ersätt alla"
 
 #: common/tool/actions.cpp:316
-#, fuzzy
 msgid "Select Column(s)"
-msgstr "Välj kolumner"
+msgstr "Välj kolumn(er)"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
 msgstr ""
+"Välj hel(a) kolumn(er) som innehåller de(n) för närvarande valda cellen "
+"(cellerna)"
 
 #: common/tool/actions.cpp:323
-#, fuzzy
 msgid "Select Row(s)"
-msgstr "Välj objekt"
+msgstr "Välj rad(er)"
 
 #: common/tool/actions.cpp:324
 msgid "Select complete row(s) containing the current selected cell(s)"
 msgstr ""
+"Välj hel(a) rad(er) som innehåller de(n) för närvarande valda cellen "
+"(cellerna)"
 
 #: common/tool/actions.cpp:330
-#, fuzzy
 msgid "Select Table"
-msgstr "Markera alla"
+msgstr "Välj tabell"
 
 #: common/tool/actions.cpp:331
-#, fuzzy
 msgid "Select parent table of selected cell(s)"
-msgstr "Radera innehåll i markerade celler"
+msgstr "Välj tabellen som innehåller för närvarande vald(a) cell(er)"
 
 #: common/tool/actions.cpp:337 include/tool/edit_table_tool_base.h:157
-#, fuzzy
 msgid "Add Row Above"
-msgstr "Lägg till strömkälla"
+msgstr "Lägg till rad ovanför"
 
 #: common/tool/actions.cpp:338
-#, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "Det går inte att fasa av de valda linjerna."
+msgstr "Lägg till en ny tabellrad ovanför de(n) valda cellen (cellerna)"
 
 #: common/tool/actions.cpp:344 include/tool/edit_table_tool_base.h:205
-#, fuzzy
 msgid "Add Row Below"
-msgstr "Lägg till strömkälla"
+msgstr "Lägg till rad nedanför"
 
 #: common/tool/actions.cpp:345
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "Lägg till en ny tabellrad under de(n) valda cellen (cellerna)"
 
 #: common/tool/actions.cpp:351 include/tool/edit_table_tool_base.h:252
-#, fuzzy
 msgid "Add Column Before"
-msgstr "Lägg till hörn"
+msgstr "Lägg till kolumn före"
 
 #: common/tool/actions.cpp:352
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "Lägg till en ny tabellkolumn före de(n) valda cellen (cellerna)"
 
 #: common/tool/actions.cpp:358 include/tool/edit_table_tool_base.h:299
-#, fuzzy
 msgid "Add Column After"
-msgstr "Lägg till hörn"
+msgstr "Lägg till kolumn efter"
 
 #: common/tool/actions.cpp:359
-#, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Det går inte att fasa av de valda linjerna."
+msgstr "Lägg till en ny tabellkolumn efter de(n) valda cellen (cellerna)"
 
 #: common/tool/actions.cpp:365
-#, fuzzy
 msgid "Delete Row(s)"
-msgstr "Radera zoner ?"
+msgstr "Radera rad(er)"
 
 #: common/tool/actions.cpp:366
-#, fuzzy
 msgid "Delete rows containing the currently selected cell(s)"
-msgstr "Radera innehåll i markerade celler"
+msgstr "Radera rader som innehåller för närvarande markerad(e) cell(er)"
 
 #: common/tool/actions.cpp:372
-#, fuzzy
 msgid "Delete Column(s)"
-msgstr "Välj kolumner"
+msgstr "Radera kolumn(er)"
 
 #: common/tool/actions.cpp:373
-#, fuzzy
 msgid "Delete columns containing the currently selected cell(s)"
-msgstr "Ta bort nät som bara innehåller en enda pad"
+msgstr ""
+"Radera kolumner som innehåller de(n) för närvarande valda cellen (cellerna)"
 
 #: common/tool/actions.cpp:379 include/tool/edit_table_tool_base.h:505
-#, fuzzy
 msgid "Merge Cells"
-msgstr "Slå samman zoner"
+msgstr "Slå samman celler"
 
 #: common/tool/actions.cpp:380
-#, fuzzy
 msgid "Turn selected table cells into a single cell"
-msgstr "Sammanfoga valda polygoner till en enda polygon"
+msgstr "Omvandla valda celler i tabellen till en enda cell"
 
 #: common/tool/actions.cpp:386 include/tool/edit_table_tool_base.h:544
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Separera sammanslagna celler"
 
 #: common/tool/actions.cpp:387
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Omvandla sammanslagna celler i tabellen tillbaka till separata celler."
 
 #: common/tool/actions.cpp:394 eeschema/dialogs/dialog_table_properties.cpp:382
 #: pcbnew/dialogs/dialog_table_properties.cpp:358
-#, fuzzy
 msgid "Edit Table"
-msgstr "Redigera etikett"
+msgstr "Redigera tabell"
 
 #: common/tool/actions.cpp:405
 msgid "Cycle Arc Editing Mode"
@@ -10231,9 +10214,8 @@ msgid "appropriate"
 msgstr "lämplig"
 
 #: eeschema/dialogs/dialog_erc.cpp:624 pcbnew/dialogs/dialog_drc.cpp:608
-#, fuzzy
 msgid "Edit exclusion comment..."
-msgstr "Redigera simulationsmodell..."
+msgstr "Redigera kommentar till undantag..."
 
 #: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/dialogs/dialog_drc.cpp:611
 msgid "Remove exclusion for this violation"
@@ -10245,9 +10227,8 @@ msgid "It will be placed back in the %s list"
 msgstr "Den kommer att placeras tillbaka i %s -listan"
 
 #: eeschema/dialogs/dialog_erc.cpp:633 pcbnew/dialogs/dialog_drc.cpp:625
-#, fuzzy
 msgid "Exclude this violation..."
-msgstr "Undanta denna överträdelse"
+msgstr "Undanta denna överträdelse..."
 
 #: eeschema/dialogs/dialog_erc.cpp:634 pcbnew/dialogs/dialog_drc.cpp:626
 #, c-format
@@ -10299,15 +10280,13 @@ msgstr "Redigera rutnätsavstånd för anslutningar..."
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:716
-#, fuzzy
 msgid "Optional comment:"
-msgstr "Antal kolumner:"
+msgstr "Valfri kommentar:"
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:716
-#, fuzzy
 msgid "Exclusion Comment"
-msgstr "Uteslutningar"
+msgstr "Kommentar till undantag"
 
 #: eeschema/dialogs/dialog_erc.cpp:803
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -11042,9 +11021,8 @@ msgid "untitled"
 msgstr "namnlös"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:590
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Egenskaper för etiketter"
+msgstr "Redigera egenskaper för etiketter"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -12547,9 +12525,8 @@ msgid "Clear colors to use Schematic Editor colors."
 msgstr "Välj transparent för att använda kretsschemaredigerarens färger."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
-#, fuzzy
 msgid "Edit Sheet Pin Properties"
-msgstr "Egenskaper för arkstift"
+msgstr "Redigera egenskaper för arkstift"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -13895,15 +13872,13 @@ msgstr "Mappa om symboler"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr "&Innehåll"
+msgstr "Cellinnehåll:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
-#, fuzzy
 msgid "External border"
-msgstr "Externa data"
+msgstr "Yttre kontur"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:67
@@ -13913,52 +13888,44 @@ msgstr "Arkkontur"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
-#, fuzzy
 msgid "Row lines"
-msgstr "Rita linjer"
+msgstr "Radlinjer"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:102
-#, fuzzy
 msgid "Column lines"
-msgstr "Kolumner"
+msgstr "Kolumnlinjer"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:612 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:406
-#, fuzzy
 msgid "Table Properties"
-msgstr "Egenskaper för etiketter"
+msgstr "Tabellegenskaper"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:315
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:274
-#, fuzzy
 msgid "Edit Table Cell Properties"
-msgstr "Redigera symbolegenskaper"
+msgstr "Redigera egenskaper för tabellceller"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
-#, fuzzy
 msgid "Horizontal alignment:"
-msgstr "Horisontellt centrum:"
+msgstr "Horisontell justering:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:41
-#, fuzzy
 msgid "Horizontal alignment"
-msgstr "Horisontell höger"
+msgstr "Horisontell justering"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:66
-#, fuzzy
 msgid "Vertical alignment:"
-msgstr "Vertikalt"
+msgstr "Vertikal justering:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:72
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:68
-#, fuzzy
 msgid "Vertical alignment"
-msgstr "Vertikalt"
+msgstr "Vertikal justering"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
@@ -13968,33 +13935,28 @@ msgstr "- blandade värden -"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
-#, fuzzy
 msgid "Set Color..."
-msgstr "Lödpasta Färg ..."
+msgstr "Ställ in färg..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:264
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:191
-#, fuzzy
 msgid "Cell margins:"
-msgstr "Marginaler:"
+msgstr "Cellmarginaler:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:305
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:229
-#, fuzzy
 msgid "Edit Table..."
-msgstr "Redigera värde ..."
+msgstr "Redigera tabell..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:230
-#, fuzzy
 msgid "Edit table properties and cell contents"
-msgstr "Ta bort filerna och deras innehåll"
+msgstr "Redigera tabellens egenskaper och cellinnehåll"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.h:98
 #: pcbnew/dialogs/dialog_tablecell_properties_base.h:89
-#, fuzzy
 msgid "Table Cell Properties"
-msgstr "Egenskaper för etiketter"
+msgstr "Egenskaper för tabellceller"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:160 eeschema/schematic.cpp:453
 msgid "<root sheet>"
@@ -14017,9 +13979,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:531
 #: pcbnew/dialogs/dialog_text_properties.cpp:533
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Textegenskaper"
+msgstr "Redigera textegenskaper"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -15315,9 +15276,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Stift %s är anslutet till både %s och %s"
 
 #: eeschema/erc.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "Den aktuella konfigurationen inkluderar inte biblioteket '%s'"
+msgstr "Den aktuella konfigurationen inkluderar inte symbolbiblioteket '%s'"
 
 #: eeschema/erc.cpp:980
 #, c-format
@@ -15330,26 +15291,28 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbol '%s' hittades inte i bibliotek '%s'"
 
 #: eeschema/erc.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "Fotavtryck '%s' stämmer inte överens med kopia i bibliotek '%s'."
+msgstr "Symbol '%s' stämmer inte överens med kopian i bibliotek '%s'"
 
 #: eeschema/erc.cpp:1066
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier."
-msgstr "'%s' är inte ett giltigt fotavtryck."
+msgstr "'%s' är inte en giltigt fotavtrycksidentifierare."
 
 #: eeschema/erc.cpp:1080 pcbnew/drc/drc_test_provider_library_parity.cpp:843
 #: pcbnew/footprint_editor_utils.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'."
-msgstr "Den aktuella konfigurationen inkluderar inte biblioteket '%s'."
+msgstr ""
+"Den aktuella konfigurationen inkluderar inte fotavtrycksbiblioteket '%s'."
 
 #: eeschema/erc.cpp:1089 pcbnew/drc/drc_test_provider_library_parity.cpp:857
 #: pcbnew/footprint_editor_utils.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
-msgstr "Biblioteket '%s' är inte aktiverat i den aktuella konfigurationen."
+msgstr ""
+"Fotavtrycksbiblioteket '%s' är inte aktiverat i den aktuella konfigurationen."
 
 #: eeschema/erc.cpp:1098 pcbnew/drc/drc_test_provider_library_parity.cpp:893
 #, c-format
@@ -15401,9 +15364,8 @@ msgid "Checking for library symbol issues..."
 msgstr "Kontrollerar problem med bibliotekssymboler..."
 
 #: eeschema/erc.cpp:1352
-#, fuzzy
 msgid "Checking for footprint link issues..."
-msgstr "Kontrollerar fotavtryck..."
+msgstr "Kontrollerar för problem med fotavtryckslänkar..."
 
 #: eeschema/erc.cpp:1360
 msgid "Checking for off grid pins and wires..."
@@ -15527,14 +15489,12 @@ msgid "Library symbol issue"
 msgstr "Problem med bibliotekssymbol"
 
 #: eeschema/erc_item.cpp:151
-#, fuzzy
 msgid "Symbol doesn't match copy in library"
-msgstr "Fotavtryck stämmer inte överens med kopia i bibliotek"
+msgstr "Symbol överensstämmer inte med kopian i biblioteket"
 
 #: eeschema/erc_item.cpp:155
-#, fuzzy
 msgid "Footprint link issue"
-msgstr "Fotavtryck: %s"
+msgstr "Problem med fotavtryckslänk"
 
 #: eeschema/erc_item.cpp:159
 msgid "Symbol is not annotated"
@@ -16330,27 +16290,23 @@ msgstr "Textrutans höjd"
 
 #: eeschema/lib_textbox.cpp:597 eeschema/sch_textbox.cpp:585
 #: pcbnew/pcb_textbox.cpp:727
-#, fuzzy
 msgid "Margin Left"
-msgstr "Panorera till Vänster"
+msgstr "Vänstermarginal"
 
 #: eeschema/lib_textbox.cpp:599 eeschema/sch_textbox.cpp:589
 #: pcbnew/pcb_textbox.cpp:731
-#, fuzzy
 msgid "Margin Top"
-msgstr "Marginal"
+msgstr "Övre marginal"
 
 #: eeschema/lib_textbox.cpp:601 eeschema/sch_textbox.cpp:593
 #: pcbnew/pcb_textbox.cpp:735
-#, fuzzy
 msgid "Margin Right"
-msgstr "Panorera till Höger"
+msgstr "Högermarginal"
 
 #: eeschema/lib_textbox.cpp:603 eeschema/sch_textbox.cpp:597
 #: pcbnew/pcb_textbox.cpp:739
-#, fuzzy
 msgid "Margin Bottom"
-msgstr "Undre lager"
+msgstr "Nedre marginal"
 
 #: eeschema/libarch.cpp:77
 #, c-format
@@ -18174,7 +18130,7 @@ msgstr "Monteras ej"
 #: eeschema/sch_table.cpp:401 pcbnew/pcb_table.cpp:249
 #, c-format
 msgid "%d Column Table"
-msgstr ""
+msgstr "Tabell med %d kolumner"
 
 #: eeschema/sch_table.cpp:546 pcbnew/pcb_table.cpp:285
 #, fuzzy, c-format
@@ -20807,9 +20763,8 @@ msgid "Add Symbol to Schematic"
 msgstr "Lägg till symbol i kretsschemat"
 
 #: eeschema/tools/ee_actions.cpp:263
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "Spara den aktuella symbolen i schemat"
+msgstr "Lägg till den aktuella symbolen i kretsschemat"
 
 #: eeschema/tools/ee_actions.cpp:269
 msgid "Show Pin Electrical Types"
@@ -21912,9 +21867,8 @@ msgid "Drags the selected item(s)"
 msgstr "Drar markerade objekt"
 
 #: eeschema/tools/ee_actions.cpp:1392 eeschema/tools/sch_move_tool.cpp:1760
-#, fuzzy
 msgid "Align Items to Grid"
-msgstr "Justera element till rutnät"
+msgstr "Justera objekt till rutnät"
 
 #: eeschema/tools/ee_actions.cpp:1400
 msgid "Save Current Sheet Copy As..."
@@ -21932,7 +21886,7 @@ msgstr "Ny analysflik..."
 
 #: eeschema/tools/ee_actions.cpp:1416
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Skapa en ny flik som innehåller en simuleringsanalys"
 
 #: eeschema/tools/ee_actions.cpp:1424
 msgid "Open Workbook..."
@@ -21940,25 +21894,24 @@ msgstr "Öppna arbetsbok..."
 
 #: eeschema/tools/ee_actions.cpp:1425
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Öppna en sparad uppsättning analysflikar och inställningar"
 
 #: eeschema/tools/ee_actions.cpp:1433
 msgid "Save Workbook"
 msgstr "Spara arbetsbok"
 
 #: eeschema/tools/ee_actions.cpp:1434
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr "Spara den aktuella symbolen i schemat"
+msgstr "Spara den aktuella uppsättningen analysflikar med inställningar"
 
 #: eeschema/tools/ee_actions.cpp:1442
 msgid "Save Workbook As..."
 msgstr "Spara arbetsbok som..."
 
 #: eeschema/tools/ee_actions.cpp:1443
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
-msgstr "Spara aktuellt dokument till en annan plats"
+msgstr ""
+"Spara aktuell uppsättning analysflikar med inställningar till en annan plats"
 
 #: eeschema/tools/ee_actions.cpp:1449
 msgid "Export Current Plot as PNG..."
@@ -21995,6 +21948,7 @@ msgstr "Redigera analysflik..."
 #: eeschema/tools/ee_actions.cpp:1480
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
+"Redigera den nuvarande analysflikens SPICE-kommando och plottinställningar"
 
 #: eeschema/tools/ee_actions.cpp:1487
 msgid "Run Simulation"
@@ -22458,9 +22412,8 @@ msgid "SVG File Name"
 msgstr "SVG filnamn"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Redigera linjer"
+msgstr "Redigera stift"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -23570,7 +23523,6 @@ msgid "Move Layer Up"
 msgstr "Flytta lager uppåt"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
 msgstr "Flytta aktuellt lager uppåt"
 
@@ -23579,7 +23531,6 @@ msgid "Move Layer Down"
 msgstr "Flytta lager neråt"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
 msgstr "Flytta aktuellt lager nedåt"
 
@@ -26390,22 +26341,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "Visa namnruta i förhandsgranskningsläge"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"Visa namnruta i förhandsgranskningsläge:\n"
-"textplatshållare kommer att ersättas med förhandsgranskningsdata."
+msgstr "Textplatshållare kommer att ersättas med förhandsgranskningsdata"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "Visa namnruta i redigeringsläge"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"Visa namnruta i redigeringsläge:\n"
-"textplatshållare visas som $ {keyword} tokens."
+msgstr "Textplatshållare visas som ${keyword} tokens."
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -33127,22 +33072,21 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
-msgstr "Tillåt kragförstärkningen att sträcka sig över två ledarsegment"
+msgstr "Tillåt kragförstärkningar att sträcka sig över två ledarsegment"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:147
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
-"Låt kragförstärkningen spridas ut över två ledarsegment om det första "
-"ledarsegmentet är för kort"
+"Låter kragförstärkningen sträcka sig över de två första anslutna "
+"ledarsegmenten om det första ledarsegmentet är för kort för att rymma den "
+"optimala längden."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -33174,9 +33118,8 @@ msgstr ""
 "kragförstärkningar."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
-#, fuzzy
 msgid "(as a percentage of pad/via minor dimension)"
-msgstr "(som en procentsats av lödytans/vians storlek)"
+msgstr "(som en procentsats av lödytans/vians mindre dimension)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:706
@@ -40500,7 +40443,7 @@ msgstr "Längdbegränsningar: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "Kan inte justera segment inuti andra längdjusteringsmönster."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
@@ -41856,35 +41799,38 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Ignorerade polygon-form av typ %d (inte stödd ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Polygon hittad på ett Altium-lager (%d) som saknar motsvarighet i KiCad. Den "
-"har flyttats till KiCad-lagret Eco1_User."
+"Läser in bibliotek '%s':\n"
+"Fotavtryck %s innehåller en streckad kontur på Altium-lager (%d) som saknar "
+"motsvarighet i KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Streckad kontur hittad på ett Altium-lager (%d) som saknar motsvarighet i "
-"KiCad. Den har flyttats till KiCad-lagret Eco1_User."
+"Fotavtryck %s innehåller en streckad kontur på Altium-lager (%d) som saknar "
+"motsvarighet i KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Ignorerade polygon-form av typ %d (inte stödd ännu)."
+msgstr ""
+"Fel vid inläsning av bibliotek '%s':\n"
+"Fotavtryck %s innehåller polygon-form av typ %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Ignorerade polygon-form av typ %d (inte stödd ännu)."
+msgstr "Fotavtryck %s innehåller polygon-form av typ %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2352
 msgid "Loading zone fills..."
@@ -41899,13 +41845,14 @@ msgid "Loading pads..."
 msgstr "Läser in lödytor..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"Fotavtryck %s lödyta %s är inte angiven som flerlager-element, men är ett "
-"hålmonteringshål."
+"Fel vid inläsning av bibliotek '%s':\n"
+"Fotavtryck %s lödyta %s är inte angiven som flerlager-element, men är en "
+"hålmonteringslödyta."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2763
 #, c-format
@@ -41915,11 +41862,13 @@ msgstr ""
 "hålmonteringshål."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "Fotavtryck %s lödyta %s har ett fyrkantigt hål (stöds inte ännu)."
+msgstr ""
+"Läser in bibliotek '%s':\n"
+"Fotavtryck %s lödyta %s har ett fyrkantigt hål (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2795
 #, c-format
@@ -41927,14 +41876,15 @@ msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Fotavtryck %s lödyta %s har ett fyrkantigt hål (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"Läser in bibliotek '%s':\n"
 "Fotavtryck %s lödyta %s har en hålrotation på %f grader. KiCad stöder bara "
-"rotationer på 90 grader."
+"90-graders rotationer."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2835
 #, c-format
@@ -41946,11 +41896,13 @@ msgstr ""
 "rotationer på 90 grader."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Fotavtryck %s lödyta %s använder ett hål av okänd typ %d."
+msgstr ""
+"Fel vid inläsning av bibliotek '%s':\n"
+"Fotavtryck %s lödyta %s använder ett hål av okänd typ %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2859
 #, c-format
@@ -41958,27 +41910,30 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Fotavtryck %s lödyta %s använder ett hål av okänd typ %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
+"Fel vid inläsning av bibliotek '%s':\n"
 "Fotavtryck %s har en lödyta %s som använder en komplex kragstapel, vilket "
 "inte stöds ännu."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 "Fotavtryck %s har en lödyta %s som använder en komplex kragstapel, vilket "
 "inte stöds ännu."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "Fotavtryck %s lödyta %s använder en okänd lödyte-form."
+msgstr ""
+"Fel vid inläsning av bibliotek '%s':\n"
+"Fotavtryck %s lödyta %s använder en okänd lödyteform."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2936
 #, c-format
@@ -41995,23 +41950,24 @@ msgstr ""
 "i KiCad. Lödytan har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Koppar-fri lödyta %s hittad på ett Altium-lager (%d) utan någon motsvarighet "
-"i KiCad. Lödytan har flyttats till KiCad-lagret Eco1_User."
+"Läser in bibliotek '%s':\n"
+"Fotavtryck %s har en koppar-fri yta %s på ett Altium-lager (%d) som saknar "
+"motsvarighet i KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Koppar-fri lödyta %s hittad på ett Altium-lager (%d) utan någon motsvarighet "
-"i KiCad. Lödytan har flyttats till KiCad-lagret Eco1_User."
+"Fotavtryck %s har en koppar-fri yta %s på ett Altium-lager (%d) som saknar "
+"motsvarighet i KiCad. Den har flyttats till KiCad-lagret Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
@@ -42062,16 +42018,19 @@ msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ignorerade streckkod på Altium-lagret %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ignorerade streckkod på Altium-lagret %d (stöds inte ännu)."
+msgstr ""
+"Fel vid inläsning av bibliotek '%s':\n"
+"Fotavtryck %s innehåller streckkod på Altium-lagret %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ignorerade streckkod på Altium-lagret %d (stöds inte ännu)."
+msgstr ""
+"Fotavtryck %s innehåller streckkod på Altium-lagret %d (stöds inte ännu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3658
 msgid "Loading rectangles..."
@@ -42086,14 +42045,14 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Altium Circuit Studio PCB-filer"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Inga fotavtryck i biblioteket"
+msgstr "Inga fotavtryck i bibliotek '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "Fotavtryck '%s' hittades inte i bibliotek '%s'."
+msgstr "Fotavtryck '%s' hittades inte i '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:42
 msgid "Altium Designer PCB files"
@@ -46604,76 +46563,71 @@ msgid "Align to Top"
 msgstr "Justera till toppen"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
-#, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
-msgstr "Justerar valda objekt till överkanten"
+msgstr "Justerar valda objekt till ovankanten av objektet under pekaren"
 
 #: pcbnew/tools/pcb_actions.cpp:1900 pcbnew/tools/placement_tool.cpp:275
 msgid "Align to Bottom"
 msgstr "Rikta in mot botten"
 
 #: pcbnew/tools/pcb_actions.cpp:1901
-#, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
-msgstr "Justerar valda objekt till den nedre kanten"
+msgstr "Justerar valda objekt till den nederkanten av objektet under pekaren"
 
 #: pcbnew/tools/pcb_actions.cpp:1907 pcbnew/tools/placement_tool.cpp:330
 msgid "Align to Left"
 msgstr "Rikta in till vänster"
 
 #: pcbnew/tools/pcb_actions.cpp:1908
-#, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
-msgstr "Justerar valda objekt till vänster kant"
+msgstr "Justerar valda objekt till vänsterkanten av objektet under pekaren"
 
 #: pcbnew/tools/pcb_actions.cpp:1914 pcbnew/tools/placement_tool.cpp:385
 msgid "Align to Right"
 msgstr "Justera till höger"
 
 #: pcbnew/tools/pcb_actions.cpp:1915
-#, fuzzy
 msgid "Aligns selected items to the right edge of the item under the cursor"
-msgstr "Justerar valda objekt till höger kant"
+msgstr "Justerar valda objekt till högerkanten på objektet under pekaren"
 
 #: pcbnew/tools/pcb_actions.cpp:1921
 msgid "Align to Vertical Center"
 msgstr "Justera mot vertikalt centrum"
 
 #: pcbnew/tools/pcb_actions.cpp:1922
-#, fuzzy
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
-msgstr "Justerar markerade objekt vertikalt centrerat"
+msgstr ""
+"Justerar markerade objekt till vertikalt centrum av objektet under pekaren"
 
 #: pcbnew/tools/pcb_actions.cpp:1928
 msgid "Align to Horizontal Center"
 msgstr "Placera objekt horisontellt centrerat"
 
 #: pcbnew/tools/pcb_actions.cpp:1929
-#, fuzzy
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
-msgstr "Justerar valda objekt horisontellt centrerat"
+msgstr "Justerar valda objekt horisontellt centrum av objektet under pekaren"
 
 #: pcbnew/tools/pcb_actions.cpp:1935 pcbnew/tools/placement_tool.cpp:535
 msgid "Distribute Horizontally"
 msgstr "Distribuera horisontellt"
 
 #: pcbnew/tools/pcb_actions.cpp:1936
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most item"
-msgstr "Distribuerar valda objekt längs den horisontella axeln"
+msgstr ""
+"Fördelar valda objekt mellan objektet längst till vänster och objektet "
+"längst till höger"
 
 #: pcbnew/tools/pcb_actions.cpp:1942 pcbnew/tools/placement_tool.cpp:660
 msgid "Distribute Vertically"
 msgstr "Distribuera vertikalt"
 
 #: pcbnew/tools/pcb_actions.cpp:1943
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most item"
-msgstr "Distribuerar valda objekt längs den horisontella axeln"
+msgstr "Fördelar valda objekt mellan det översta och nedersta objektet"
 
 #: pcbnew/tools/pcb_actions.cpp:1958
 msgid "Create a corner"
