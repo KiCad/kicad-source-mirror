@@ -166,6 +166,12 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     m_tree_ctrl = new WX_DATAVIEWCTRL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, dvFlags );
     m_adapter->AttachTo( m_tree_ctrl );
 
+#ifdef __WXGTK__
+    // The GTK renderer seems to calculate row height incorrectly sometimes; but can be overridden
+    int rowHeight = FromDIP( 8 ) + GetTextExtent( wxS( "pdI" ) ).y;
+    m_tree_ctrl->SetRowHeight( rowHeight );
+#endif
+
     sizer->Add( m_tree_ctrl, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 5 );
 
     // Description panel
