@@ -418,8 +418,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             {
                 if( PCB_GROUP* group = boardItem->GetParentGroup() )
                 {
-                    if( !aList->GetPickedItemLink( ii ) )
-                        aList->SetPickedItemLink( BOARD_COMMIT::MakeImage( group ), ii );
+                    aList->SetPickedItemGroupId( group->m_Uuid, ii );
 
                     group->RemoveItem( boardItem );
                 }
@@ -432,12 +431,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             if( BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( eda_item ) )
             {
-                PCB_GROUP* group = nullptr;
-
-                // The link is just a clone of the original parent group; we need to look up
-                // the UUID in the document to find the real parent.
-                if( EDA_ITEM* link = aList->GetPickedItemLink( ii ) )
-                    group = dynamic_cast<PCB_GROUP*>( GetBoard()->GetItem( link->m_Uuid ) );
+                PCB_GROUP* group = dynamic_cast<PCB_GROUP*>(
+                        GetBoard()->GetItem( aList->GetPickedItemGroupId( ii ) ) );
 
                 if( group )
                     group->AddItem( boardItem );

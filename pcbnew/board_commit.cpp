@@ -412,7 +412,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 if( !( aCommitFlags & SKIP_UNDO ) )
                 {
                     ITEM_PICKER itemWrapper( nullptr, boardItem, UNDO_REDO::UNGROUP );
-                    itemWrapper.SetLink( MakeImage( group ) );
+                    itemWrapper.SetGroupId( group->m_Uuid );
                     undoList.PushItem( itemWrapper );
                 }
 
