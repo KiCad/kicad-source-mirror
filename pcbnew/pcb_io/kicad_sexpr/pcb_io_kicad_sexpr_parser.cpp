@@ -1257,14 +1257,14 @@ void PCB_IO_KICAD_SEXPR_PARSER::resolveGroups( BOARD_ITEM* aParent )
         {
             for( const KIID& aUuid : groupInfo->memberUuids )
             {
-                BOARD_ITEM* item;
+                BOARD_ITEM* item = nullptr;
 
                 if( m_appendToExisting )
                     item = getItem( m_resetKIIDMap[ aUuid.AsString() ] );
                 else
                     item = getItem( aUuid );
 
-                if( item->Type() == NOT_USED )
+                if( !item || item->Type() == NOT_USED )
                 {
                     // This is the deleted item singleton, which means we didn't find the uuid.
                     continue;
