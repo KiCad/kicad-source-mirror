@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1689,7 +1689,7 @@ int SCH_MOVE_TOOL::AlignToGrid( const TOOL_EVENT& aEvent )
                 else
                     newPos = pin->GetPosition() + br_delta;
 
-                VECTOR2I delta = grid.AlignGrid( newPos, selectionGrid ) - pin->GetPosition();
+                VECTOR2I delta = grid.AlignGrid( newPos - pin->GetPosition(), selectionGrid );
 
                 if( delta != VECTOR2I( 0, 0 ) )
                 {
