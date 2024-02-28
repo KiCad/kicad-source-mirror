@@ -315,7 +315,6 @@ int SYMBOL_LIB_TABLE::GetModifyHash()
 
         if( !row || !row->plugin )
         {
-            wxFAIL;
             continue;
         }
 
