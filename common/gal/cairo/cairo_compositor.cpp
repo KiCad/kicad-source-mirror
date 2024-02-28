@@ -88,7 +88,7 @@ void CAIRO_COMPOSITOR::Resize( unsigned int aWidth, unsigned int aHeight )
 unsigned int CAIRO_COMPOSITOR::CreateBuffer()
 {
     // Pixel storage
-    BitmapPtr bitmap = new uint32_t[m_bufferSize]();
+    BitmapPtr bitmap = new uint8_t[m_bufferSize]();
 
     // Create the Cairo surface
     cairo_surface_t* surface = cairo_image_surface_create_for_data(
@@ -138,7 +138,7 @@ void CAIRO_COMPOSITOR::Begin()
 void CAIRO_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 {
     // Clear the pixel storage
-    memset( m_buffers[m_current].bitmap, 0x00, m_bufferSize * sizeof( int ) );
+    memset( m_buffers[m_current].bitmap, 0x00, m_bufferSize );
 }
 
 
