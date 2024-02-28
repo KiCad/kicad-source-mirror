@@ -1402,7 +1402,7 @@ static struct SCH_FIELD_DESC
 
         propMgr.AddProperty( new PROPERTY<SCH_FIELD, int>( _HKI( "Text Size" ),
                 &SCH_FIELD::SetSchTextSize, &SCH_FIELD::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
-                _( "Text Properties" ) );
+                _HKI( "Text Properties" ) );
 
         propMgr.Mask( TYPE_HASH( SCH_FIELD ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
 

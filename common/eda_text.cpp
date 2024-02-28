@@ -1176,7 +1176,7 @@ static struct EDA_TEXT_DESC
                 &EDA_TEXT::SetTextAngleDegrees, &EDA_TEXT::GetTextAngleDegrees,
                 PROPERTY_DISPLAY::PT_DEGREE ) );
 
-        const wxString textProps = _( "Text Properties" );
+        const wxString textProps = _HKI( "Text Properties" );
 
         propMgr.AddProperty( new PROPERTY<EDA_TEXT, wxString>( _HKI( "Text" ),
                 &EDA_TEXT::SetText, &EDA_TEXT::GetText ),

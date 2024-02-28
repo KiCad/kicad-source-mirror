@@ -53,6 +53,9 @@ public:
 
     int GetTextMargin() const;
 
+    int GetLibTextSize() const { return GetTextWidth(); }
+    void SetLibTextSize( int aSize ) { SetTextSize( VECTOR2I( aSize, aSize ) ); }
+
     VECTOR2I GetDrawPos() const override;
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;

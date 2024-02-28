@@ -519,8 +519,9 @@ static struct SCH_TEXTBOX_DESC
         propMgr.Mask( TYPE_HASH( SCH_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
 
         propMgr.AddProperty( new PROPERTY<SCH_TEXTBOX, int>( _HKI( "Text Size" ),
-                &SCH_TEXTBOX::SetSchTextSize, &SCH_TEXTBOX::GetSchTextSize, PROPERTY_DISPLAY::PT_SIZE ),
-                _( "Text Properties" ) );
+                    &SCH_TEXTBOX::SetSchTextSize, &SCH_TEXTBOX::GetSchTextSize,
+                    PROPERTY_DISPLAY::PT_SIZE ),
+                _HKI( "Text Properties" ) );
 
         propMgr.Mask( TYPE_HASH( SCH_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
     }

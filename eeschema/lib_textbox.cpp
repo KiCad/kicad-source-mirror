@@ -537,3 +537,33 @@ void LIB_TEXTBOX::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[1] = IsPrivate() ? LAYER_NOTES_BACKGROUND : LAYER_DEVICE_BACKGROUND;
     aLayers[2] = LAYER_SELECTION_SHADOWS;
 }
+
+
+static struct LIB_TEXTBOX_DESC
+{
+    LIB_TEXTBOX_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( LIB_TEXTBOX );
+
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXTBOX, LIB_SHAPE> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXTBOX, EDA_SHAPE> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXTBOX, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( LIB_SHAPE ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_SHAPE ), _HKI( "Shape" ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Height" ) );
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
+
+        propMgr.AddProperty( new PROPERTY<LIB_TEXTBOX, int>( _HKI( "Text Size" ),
+                &LIB_TEXTBOX::SetLibTextSize, &LIB_TEXTBOX::GetLibTextSize, PROPERTY_DISPLAY::PT_SIZE ),
+                _HKI( "Text Properties" ) );
+
+        propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
+    }
+} _LIB_TEXTBOX_DESC;
