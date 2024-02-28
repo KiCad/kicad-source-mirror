@@ -2566,8 +2566,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
 
     if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )
         getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
-    else
-        getView()->Update( aItem, KIGFX::REPAINT );
+    getView()->Update( aItem, KIGFX::REPAINT );
 }
 
 
@@ -2615,8 +2614,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
 
     if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )
         getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
-    else
-        getView()->Update( aItem, KIGFX::REPAINT );
+    getView()->Update( aItem, KIGFX::REPAINT );
 }
 
 
