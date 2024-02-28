@@ -18,10 +18,9 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-02-19 17:02+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2024-02-29 19:01+0000\n"
+"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2133,9 +2132,8 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Tällä hetkellä vastaavat verkot:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Kuvio"
+msgstr "Kuvio:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
 msgid "Net class:"
@@ -2146,6 +2144,8 @@ msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Huomautus: täydellisiä verkkoluokkatehtäviä voidaan muokata kohdassa "
+"kytkentäkaavioasetukset > Projekti."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
@@ -2557,9 +2557,8 @@ msgid "unit"
 msgstr "yksikkö"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Linkki:"
+msgstr "Linkitetty"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -16088,9 +16087,8 @@ msgid "No alternate body style found for symbol '%s' in library '%s'."
 msgstr "Vaihtoehtoista rungon tyyliä ei löydy symbolille '%s' kirjastossa'%s'."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1710
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Rungon tyyli"
+msgstr "Vaihda rungon tyyliä"
 
 #: eeschema/picksymbol.cpp:178
 msgid "Set Pin Function"
@@ -19374,13 +19372,13 @@ msgstr ""
 "runkotyyli."
 
 #: eeschema/symbol_checker.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
-"<b>Piilotettu virtapinni %s</b> %s sijainnissa <b>(%s, %s)</b> muunnetun "
-"yksikössä %c."
+"Tietoja: <b>Piilotettu virtanasta %s</b> %s sijainnissa <b>(%s, %s)</b> "
+"yksikössä %c %s-runkotyylissä."
 
 #: eeschema/symbol_checker.cpp:271
 #, c-format
@@ -20199,9 +20197,8 @@ msgid "Add Symbol to Schematic"
 msgstr "Lisää Symboli Kytkentäkaavioon"
 
 #: eeschema/tools/ee_actions.cpp:258
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "Tallenna nykyinen symboli kaavioon"
+msgstr "Lisää nykyinen symboli kytkentäkaavioon"
 
 #: eeschema/tools/ee_actions.cpp:264
 msgid "Show Pin Electrical Types"
@@ -21301,7 +21298,7 @@ msgstr "Uusi analyysivälilehti..."
 
 #: eeschema/tools/ee_actions.cpp:1387
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Luo uusi välilehti, joka sisältää simulaatioanalyysin"
 
 #: eeschema/tools/ee_actions.cpp:1395
 msgid "Open Workbook..."
@@ -21309,7 +21306,7 @@ msgstr "Avaa Työkirja..."
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Avaa tallennettu joukko analyysivälilehtiä ja asetuksia"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
@@ -21365,7 +21362,7 @@ msgstr "Muokkaa Analyysivälilehteä..."
 
 #: eeschema/tools/ee_actions.cpp:1451
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
+msgstr "Muokkaa nykyisen analyysivälilehden SPICE-komentoa ja piirtoasetuksia"
 
 #: eeschema/tools/ee_actions.cpp:1458
 msgid "Run Simulation"
@@ -21812,9 +21809,8 @@ msgid "SVG File Name"
 msgstr "SVG Tiedostonimi"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Muokkaa Viivoja"
+msgstr "Muokkaa nastoja"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -25678,22 +25674,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "Näytä otsikkolohko esikatselutilassa"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"Näytä otsikkolohko esikatselutilassa:\n"
-"tekstin paikkamerkit korvataan esikatselutiedoilla."
+msgstr "Tekstin paikkamerkit korvataan esikatselutiedoilla"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "Näytä otsikkolohko muokkaustilassa"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"Näytä otsikkolohko muokkaustilassa:\n"
-"tekstin paikkamerkit näytetään $ {keyword} -merkeinä."
+msgstr "Tekstin paikkamerkit näytetään ${keyword} tunnuksina"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
