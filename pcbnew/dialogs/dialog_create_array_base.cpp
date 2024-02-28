@@ -41,7 +41,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_labelNx->Wrap( -1 );
 	m_labelNx->SetToolTip( _("Number of columns") );
 
-	fgSizerGridSize->Add( m_labelNx, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerGridSize->Add( m_labelNx, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_entryNx = new TEXT_CTRL_EVAL( sbSizerGridSize->GetStaticBox(), wxID_ANY, _("5"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryNx->SetMinSize( wxSize( 60,-1 ) );
@@ -52,7 +52,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_labelNy->Wrap( -1 );
 	m_labelNy->SetToolTip( _("Number of rows") );
 
-	fgSizerGridSize->Add( m_labelNy, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	fgSizerGridSize->Add( m_labelNy, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_entryNy = new TEXT_CTRL_EVAL( sbSizerGridSize->GetStaticBox(), wxID_ANY, _("5"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryNy->SetToolTip( _("Number of rows") );
@@ -372,7 +372,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_labelCircRadius = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Radius from center to reference position:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircRadius->Wrap( -1 );
-	bSizerRadius->Add( m_labelCircRadius, 0, wxTOP, 5 );
+	bSizerRadius->Add( m_labelCircRadius, 0, wxTOP|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerRadiusValue;
 	bSizerRadiusValue = new wxBoxSizer( wxHORIZONTAL );
@@ -391,7 +391,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_labelCircCenterAngle = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Angle from center to reference position:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircCenterAngle->Wrap( -1 );
-	bSizerRadius->Add( m_labelCircCenterAngle, 0, wxTOP, 5 );
+	bSizerRadius->Add( m_labelCircCenterAngle, 0, wxTOP|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizerRadiusValue1;
 	bSizerRadiusValue1 = new wxBoxSizer( wxHORIZONTAL );
