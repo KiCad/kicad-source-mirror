@@ -126,7 +126,7 @@ protected:
         return m_buffers.size();
     }
 
-    typedef uint32_t* BitmapPtr;
+    typedef uint8_t* BitmapPtr;
     struct CAIRO_BUFFER
     {
         cairo_t*            context;        ///< Main texture handle

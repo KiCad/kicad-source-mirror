@@ -1596,15 +1596,12 @@ void CAIRO_GAL::allocateBitmaps()
 {
     m_wxBufferWidth = m_screenSize.x;
 
-    while( ( ( m_wxBufferWidth * 3 ) % 4 ) != 0 )
-        m_wxBufferWidth++;
-
     // Create buffer, use the system independent Cairo context backend
     m_stride = cairo_format_stride_for_width( GAL_FORMAT, m_wxBufferWidth );
     m_bufferSize = m_stride * m_screenSize.y;
 
     wxASSERT( m_bitmapBuffer == nullptr );
-    m_bitmapBuffer = new unsigned char[m_bufferSize * 4];
+    m_bitmapBuffer = new unsigned char[m_bufferSize];
 
     wxASSERT( m_wxOutput == nullptr );
     m_wxOutput = new unsigned char[m_wxBufferWidth * 3 * m_screenSize.y];
