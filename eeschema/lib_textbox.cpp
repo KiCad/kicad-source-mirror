@@ -605,7 +605,7 @@ static struct LIB_TEXTBOX_DESC
 
         propMgr.AddProperty( new PROPERTY<LIB_TEXTBOX, int>( _HKI( "Text Size" ),
                 &LIB_TEXTBOX::SetLibTextSize, &LIB_TEXTBOX::GetLibTextSize, PROPERTY_DISPLAY::PT_SIZE ),
-                _( "Text Properties" ) );
+                _HKI( "Text Properties" ) );
 
         propMgr.Mask( TYPE_HASH( LIB_TEXTBOX ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
     }
