@@ -540,7 +540,8 @@ int DIALOG_CHANGE_SYMBOLS::processMatchingSymbols( SCH_COMMIT* aCommit )
 
 
 int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
-                                           const std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>& aSymbols )
+                                           const std::map<SCH_SYMBOL*,
+                                           SYMBOL_CHANGE_INFO>& aSymbols )
 {
     wxCHECK( !aSymbols.empty(), 0 );
 
@@ -603,6 +604,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 
     for( const auto& [ symbol, symbol_change_info ] : symbols )
     {
+        // Remember initial link before changing for diags purpose
+        wxString initialLibLinkName = UnescapeString( symbol->GetLibId().Format() );
+
         if( symbol_change_info.m_LibId != symbol->GetLibId() )
             symbol->SetLibId( symbol_change_info.m_LibId );
 
@@ -741,7 +745,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 
         frame->GetCanvas()->GetView()->Update( symbol );
 
-        msg = getSymbolReferences( *symbol, symbol_change_info.m_LibId );
+        msg = getSymbolReferences( *symbol, symbol_change_info.m_LibId, &initialLibLinkName );
         msg += wxS( ": OK" );
         m_messagePanel->Report( msg, RPT_SEVERITY_ACTION );
         matchesProcessed +=1;
@@ -751,11 +755,20 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
 }
 
 
-wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId )
+wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol,
+                                                     const LIB_ID& aNewId,
+                                                     const wxString* aOldLibLinkName )
 {
     wxString msg;
     wxString references;
     LIB_ID oldId = aSymbol.GetLibId();
+
+    wxString oldLibLinkName;    // For report
+
+    if( aOldLibLinkName )
+        oldLibLinkName = *aOldLibLinkName;
+    else
+        oldLibLinkName = UnescapeString( oldId.Format() );
 
     SCH_EDIT_FRAME* parent = dynamic_cast< SCH_EDIT_FRAME* >( GetParent() );
 
@@ -781,31 +794,31 @@ wxString DIALOG_CHANGE_SYMBOLS::getSymbolReferences( SCH_SYMBOL& aSymbol, const 
         {
             msg.Printf( _( "Update symbol %s from '%s' to '%s'" ),
                         references,
-                        UnescapeString( oldId.Format() ),
+                        oldLibLinkName,
                         UnescapeString( aNewId.Format() ) );
         }
         else
         {
             msg.Printf( _( "Update symbols %s from '%s' to '%s'" ),
                         references,
-                        UnescapeString( oldId.Format() ),
+                        oldLibLinkName,
                         UnescapeString( aNewId.Format() ) );
         }
     }
-    else
+    else    // mode is MODE::CHANGE
     {
         if( aSymbol.GetInstances().size() == 1 )
         {
             msg.Printf( _( "Change symbol %s from '%s' to '%s'" ),
                         references,
-                        UnescapeString( oldId.Format() ),
+                        oldLibLinkName,
                         UnescapeString( aNewId.Format() ) );
         }
         else
         {
             msg.Printf( _( "Change symbols %s from '%s' to '%s'" ),
                         references,
-                        UnescapeString( oldId.Format() ),
+                        oldLibLinkName,
                         UnescapeString( aNewId.Format() ) );
         }
     }

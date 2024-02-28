@@ -87,7 +87,8 @@ private:
     int processMatchingSymbols( SCH_COMMIT* aCommit );
     int processSymbols( SCH_COMMIT* aCommit,
                         const std::map<SCH_SYMBOL*, SYMBOL_CHANGE_INFO>& aSymbols );
-    wxString getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId );
+    wxString getSymbolReferences( SCH_SYMBOL& aSymbol, const LIB_ID& aNewId,
+                                  const wxString* aOldLibLinkName = nullptr );
 
     SCH_SYMBOL* m_symbol;
     MODE        m_mode;
