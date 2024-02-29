@@ -241,11 +241,9 @@ void SHAPE_LINE_CHAIN::fixIndicesRotation()
         return;
 
     size_t rotations = 0;
-    size_t numPoints = m_points.size();
 
     while( ArcIndex( 0 ) != SHAPE_IS_PT
-        && ArcIndex( 0 ) == ArcIndex( numPoints - 1 )
-        && !IsSharedPt( 0 ) )
+        && !IsArcStart( 0 ) )
     {
         // Rotate right
         std::rotate( m_points.rbegin(), m_points.rbegin() + 1, m_points.rend() );
@@ -264,10 +262,10 @@ void SHAPE_LINE_CHAIN::mergeFirstLastPointIfNeeded()
     {
         if( m_points.size() > 1 && m_points.front() == m_points.back() )
         {
-            if( m_shapes.back() != SHAPES_ARE_PT )
+            if( ArcIndex( m_shapes.size() - 1 ) != SHAPE_IS_PT )
             {
                 m_shapes.front().second = m_shapes.front().first;
-                m_shapes.front().first = m_shapes.back().first;
+                m_shapes.front().first = ArcIndex( m_shapes.size() - 1 ) ;
             }
 
             m_points.pop_back();
@@ -2459,14 +2457,34 @@ bool SHAPE_LINE_CHAIN::IsArcSegment( size_t aSegment ) const
 
 bool SHAPE_LINE_CHAIN::IsArcStart( size_t aIndex ) const
 {
-    if( aIndex == 0 )
-        return IsPtOnArc( aIndex );
+    if( !IsArcSegment( aIndex ) ) // also does bound checking
+        return false;
 
-    return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) &&  !IsArcSegment( aIndex - 1 ) ) );
+    if( IsSharedPt( aIndex ) )
+        return true;
+
+    const SHAPE_ARC& arc = Arc( ArcIndex( aIndex ) );
+
+    return arc.GetP0() == m_points[aIndex];
 }
 
 
 bool SHAPE_LINE_CHAIN::IsArcEnd( size_t aIndex ) const
 {
-    return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) && !IsArcSegment( aIndex ) ) );
+    size_t prevIndex = aIndex - 1;
+
+    if( aIndex == 0 )
+        prevIndex = m_points.size() - 1;
+    else if( aIndex > m_points.size() -1 )
+        return false; // invalid index requested
+
+    if( !IsArcSegment( prevIndex ) )
+        return false;
+
+    if( IsSharedPt( aIndex ) )
+        return true;
+
+    const SHAPE_ARC& arc = Arc( ArcIndex( aIndex ) );
+
+    return arc.GetP1() == m_points[aIndex];
 }
