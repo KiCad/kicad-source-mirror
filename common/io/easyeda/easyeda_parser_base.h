@@ -29,6 +29,8 @@
 #include <math/vector2d.h>
 #include <wx/string.h>
 
+class EDA_TEXT;
+
 class EASYEDA_PARSER_BASE
 {
 public:
@@ -58,7 +60,9 @@ public:
         return ScalePos( aVec - m_relOrigin );
     }
 
-     std::vector<SHAPE_LINE_CHAIN> ParseLineChains( const wxString& aData, int aArcMinSegLen,
+    void TransformTextToBaseline( EDA_TEXT* textItem, const wxString& baselineAlign, bool invertY );
+
+    std::vector<SHAPE_LINE_CHAIN> ParseLineChains( const wxString& aData, int aArcMinSegLen,
                                                    bool aForceClosed );
 
 protected:

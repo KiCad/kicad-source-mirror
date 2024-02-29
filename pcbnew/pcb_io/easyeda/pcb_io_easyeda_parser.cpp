@@ -816,7 +816,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             text->SetTextAngleDegrees( rot );
 
             text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-            text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
 
             PCB_LAYER_ID layer = LayerToKi( arr[7] );
             text->SetLayer( layer );
@@ -827,7 +827,9 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             double height = ConvertSize( arr[9] ) * 0.8;
             text->SetTextSize( VECTOR2I( height, height ) );
 
-            text->SetText( UnescapeHTML( arr[10] ) );
+            wxString textStr = arr[10];
+            textStr.Replace( wxS( "\\n" ), wxS( "\n" ) );
+            text->SetText( UnescapeHTML( textStr ) );
 
             //arr[11] // Geometry data
 
@@ -836,6 +838,8 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             wxString font = arr[14];
             if( !font.IsEmpty() )
                 text->SetFont( KIFONT::FONT::GetFont( font ) );
+
+            TransformTextToBaseline( text, wxEmptyString, false );
 
             if( add )
                 aContainer->Add( text, ADD_MODE::APPEND );
