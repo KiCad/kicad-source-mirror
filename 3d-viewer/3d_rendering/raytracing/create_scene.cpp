@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015-2022 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2023 CERN
- * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -170,7 +170,7 @@ void RENDER_3D_RAYTRACE::setupMaterials()
 
     m_materials.m_Floor = BLINN_PHONG_MATERIAL( bgTop * 0.125f, SFVEC3F( 0.0f, 0.0f, 0.0f ),
                                                 ( SFVEC3F( 1.0f ) - bgTop ) / 3.0f,
-                                                0.10f * 128.0f, 0.0f, 0.50f );
+                                                0.10f * 128.0f, 1.0f, 0.50f );
     m_materials.m_Floor.SetCastShadows( false );
     m_materials.m_Floor.SetReflectionRecursionCount( 1 );
 }
@@ -817,7 +817,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     const SFVEC3F v2 = SFVEC3F( v1.x, v3.y, v1.z );
                     const SFVEC3F v4 = SFVEC3F( v3.x, v1.y, v1.z );
 
-                    SFVEC3F backgroundColor = ConvertSRGBToLinear( m_boardAdapter.m_BgColorTop );
+                    SFVEC3F floorColor = ConvertSRGBToLinear( m_boardAdapter.m_BgColorTop );
 
                     TRIANGLE* newTriangle1 = new TRIANGLE( v1, v2, v3 );
                     TRIANGLE* newTriangle2 = new TRIANGLE( v3, v4, v1 );
@@ -828,8 +828,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     newTriangle1->SetMaterial( &m_materials.m_Floor );
                     newTriangle2->SetMaterial( &m_materials.m_Floor );
 
-                    newTriangle1->SetColor( backgroundColor );
-                    newTriangle2->SetColor( backgroundColor );
+                    newTriangle1->SetColor( floorColor );
+                    newTriangle2->SetColor( floorColor );
 
                     // Ceiling triangles
                     const float maxZ = glm::max( containerBBox.Max().z, boardBBox.Max().z );
@@ -848,8 +848,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
                     newTriangle3->SetMaterial( &m_materials.m_Floor );
                     newTriangle4->SetMaterial( &m_materials.m_Floor );
 
-                    newTriangle3->SetColor( backgroundColor );
-                    newTriangle4->SetColor( backgroundColor );
+                    newTriangle3->SetColor( floorColor );
+                    newTriangle4->SetColor( floorColor );
                 }
             }
         }

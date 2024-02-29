@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,20 +87,20 @@ private:
     void postProcessShading( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void renderBlockTracing( GLubyte* ptrPBO , signed int iBlock );
-    void renderFinalColor( GLubyte* ptrPBO, const SFVEC3F& rgbColor,
+    void renderFinalColor( GLubyte* ptrPBO, const SFVEC4F& rgbColor,
                            bool applyColorSpaceConversion );
 
-    void renderRayPackets( const SFVEC3F* bgColorY, const RAY* aRayPkt, HITINFO_PACKET* aHitPacket,
-                           bool is_testShadow, SFVEC3F* aOutHitColor );
+    void renderRayPackets( const SFVEC4F* bgColorY, const RAY* aRayPkt, HITINFO_PACKET* aHitPacket,
+                           bool is_testShadow, SFVEC4F* aOutHitColor );
 
-    void renderAntiAliasPackets( const SFVEC3F* aBgColorY, const HITINFO_PACKET* aHitPck_X0Y0,
+    void renderAntiAliasPackets( const SFVEC4F* aBgColorY, const HITINFO_PACKET* aHitPck_X0Y0,
                                  const HITINFO_PACKET* aHitPck_AA_X1Y1, const RAY* aRayPck,
-                                 SFVEC3F* aOutHitColor );
+                                 SFVEC4F* aOutHitColor );
 
     // Materials
     void setupMaterials();
 
-    SFVEC3F shadeHit( const SFVEC3F& aBgColor, const RAY& aRay, HITINFO& aHitInfo,
+    SFVEC4F shadeHit( const SFVEC4F& aBgColor, const RAY& aRay, HITINFO& aHitInfo,
                       bool aIsInsideObject, unsigned int aRecursiveLevel,
                       bool is_testShadow ) const;
 
@@ -180,8 +180,8 @@ private:
 
     ACCELERATOR_3D* m_accelerator;
 
-    SFVEC3F m_backgroundColorTop;
-    SFVEC3F m_backgroundColorBottom;
+    SFVEC4F m_backgroundColorTop;
+    SFVEC4F m_backgroundColorBottom;
 
     ///< Used to see if the windows size changed.
     wxSize m_oldWindowsSize;
@@ -218,8 +218,10 @@ private:
 
 #ifdef USE_SRGB_SPACE
 extern SFVEC3F ConvertSRGBToLinear( const SFVEC3F& aSRGBcolor );
+extern SFVEC4F ConvertSRGBAToLinear( const SFVEC4F& aSRGBAcolor );
 #else
 #define ConvertSRGBToLinear( v ) ( v )
+#define ConvertSRGBAToLinear( v ) ( v )
 #endif
 
 #endif // RENDER_3D_RAYTRACE_H

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,21 +187,21 @@ SFVEC3F POST_SHADER_SSAO::Shade( const SFVEC2I& aShaderPos ) const
             ao += aoFF( aShaderPos, ddiff8, n, shadowAt8, shadowAt0, -npw,   ph );
 
             gi += giFF( aShaderPos, ddiff , n, shadowAt1, npw,  nph) *
-                    giColorCurve( GetColorAt( aShaderPos + SFVEC2I(  npw, nph ) ) );
+                    giColorCurveShade( GetColorAt( aShaderPos + SFVEC2I(  npw, nph ) ) );
             gi += giFF( aShaderPos, ddiff2, n, shadowAt2, npw, -nph) *
-                    giColorCurve( GetColorAt( aShaderPos + SFVEC2I(  npw,-nph ) ) );
+                    giColorCurveShade( GetColorAt( aShaderPos + SFVEC2I(  npw,-nph ) ) );
             gi += giFF( aShaderPos, ddiff3, n, shadowAt3, -npw,  nph) *
-                    giColorCurve( GetColorAt( aShaderPos + SFVEC2I( -npw, nph ) ) );
+                    giColorCurveShade( GetColorAt( aShaderPos + SFVEC2I( -npw, nph ) ) );
             gi += giFF( aShaderPos, ddiff4, n, shadowAt4, -npw, -nph) *
-                    giColorCurve( GetColorAt( aShaderPos + SFVEC2I( -npw,-nph ) ) );
+                    giColorCurveShade( GetColorAt( aShaderPos + SFVEC2I( -npw,-nph ) ) );
             gi += giFF( aShaderPos, ddiff5, n, shadowAt5 , pw, nph) *
-                    giColorCurve( GetColorAt( aShaderPos + SFVEC2I(   pw, nph ) ) );
+                    giColorCurveShade( GetColorAt( aShaderPos + SFVEC2I(   pw, nph ) ) );
             gi += giFF( aShaderPos, ddiff6, n, shadowAt6,  pw,-nph) *
-                    giColorCurve( GetColorAt( aShaderPos + SFVEC2I(   pw,-nph ) ) );
+                    giColorCurveShade( GetColorAt( aShaderPos + SFVEC2I(   pw,-nph ) ) );
             gi += giFF( aShaderPos, ddiff7, n, shadowAt7,  npw, ph) *
-                    giColorCurve( GetColorAt( aShaderPos + SFVEC2I(  npw,  ph ) ) );
+                    giColorCurveShade( GetColorAt( aShaderPos + SFVEC2I(  npw,  ph ) ) );
             gi += giFF( aShaderPos, ddiff8, n, shadowAt8, -npw, ph) *
-                    giColorCurve( GetColorAt( aShaderPos + SFVEC2I( -npw,  ph ) ) );
+                    giColorCurveShade( GetColorAt( aShaderPos + SFVEC2I( -npw,  ph ) ) );
         }
 
         // If it received direct light, it shouldn't consider much AO
@@ -227,18 +227,20 @@ SFVEC3F POST_SHADER_SSAO::Shade( const SFVEC2I& aShaderPos ) const
 }
 
 
-SFVEC3F POST_SHADER_SSAO::ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC3F& aInputColor,
+SFVEC4F POST_SHADER_SSAO::ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC4F& aInputColor,
                                            const SFVEC3F& aShadeColor ) const
 {
-    SFVEC3F outColor;
+    SFVEC4F outColor;
+    SFVEC3F inColor( aInputColor );
 
-    const SFVEC3F subtracted = aInputColor - aShadeColor;
-    const SFVEC3F mixed = glm::mix( aInputColor, aInputColor * 0.50f - aShadeColor * 0.05f,
+    const SFVEC3F subtracted = inColor - aShadeColor;
+    const SFVEC3F mixed = glm::mix( inColor, inColor * 0.50f - aShadeColor * 0.05f,
                                     glm::min( aShadeColor, 1.0f ) );
 
     outColor.r = ( aShadeColor.r < 0.0f ) ? subtracted.r : mixed.r;
     outColor.g = ( aShadeColor.g < 0.0f ) ? subtracted.g : mixed.g;
     outColor.b = ( aShadeColor.b < 0.0f ) ? subtracted.b : mixed.b;
+    outColor.a = std::max( aInputColor.a, ( aShadeColor.r + aShadeColor.g + aShadeColor.b ) / 3 );
 
     return outColor;
 }
@@ -253,6 +255,18 @@ SFVEC3F POST_SHADER_SSAO::giColorCurve( const SFVEC3F& aColor ) const
 
     // http://fooplot.com/#W3sidHlwZSI6MCwiZXEiOiIxLjAtKDEuMC8oeCo5LjArMS4wKSkreCowLjEiLCJjb2xvciI6IiMwMDAwMDAifSx7InR5cGUiOjEwMDAsIndpbmRvdyI6WyItMC4wNjIxODQ2MTUzODQ2MTU1MDUiLCIxLjE0Mjk4NDYxNTM4NDYxNDYiLCItMC4xMjcwOTk5OTk5OTk5OTk3NyIsIjEuMTMyNiJdfV0-
     return vec1 - ( vec1 / (aColor * SFVEC3F(9.0f) + vec1) ) + aColor * SFVEC3F(0.10f);
+}
+
+
+SFVEC4F POST_SHADER_SSAO::giColorCurve( const SFVEC4F& aColor ) const
+{
+    return SFVEC4F( giColorCurve( SFVEC3F( aColor ) ), aColor.a );
+}
+
+
+SFVEC3F POST_SHADER_SSAO::giColorCurveShade( const SFVEC4F& aColor ) const
+{
+    return giColorCurve( SFVEC3F( aColor ) );
 }
 
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,39 +23,49 @@
  */
 
 /**
- * @file color_rgb.h
+ * @file color_rgba.h
  */
 
-#ifndef COLOR_RGB_H
-#define COLOR_RGB_H
+#ifndef COLOR_RGBA_H
+#define COLOR_RGBA_H
 
 #include <plugins/3dapi/xv3d_types.h>
 
-union COLOR_RGB
+union COLOR_RGBA
 {
-    unsigned char c[3];
+    unsigned char c[4];
 
     struct
     {
         unsigned char r;
         unsigned char g;
         unsigned char b;
+        unsigned char a;
     };
 
-    COLOR_RGB( const SFVEC3F& aColor );
-    COLOR_RGB() { r = 0; g = 0; b = 0; }
-    COLOR_RGB( unsigned char aR, unsigned char aG, unsigned char aB )
+    COLOR_RGBA( const SFVEC3F& aColor );
+    COLOR_RGBA( const SFVEC4F& aColor );
+    COLOR_RGBA() { r = 0; g = 0; b = 0; a = 0; }
+    COLOR_RGBA( unsigned char aR, unsigned char aG, unsigned char aB )
     {
         r = aR;
         g = aG;
         b = aB;
     }
+
+    COLOR_RGBA( unsigned char aR, unsigned char aG, unsigned char aB, unsigned char aA )
+    {
+        r = aR;
+        g = aG;
+        b = aB;
+        a = aA;
+    }
 };
 
 
-COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2 );
-COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2, const COLOR_RGB& aC3 );
-COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2, const COLOR_RGB& aC3,
-                      const COLOR_RGB& aC4 );
+COLOR_RGBA BlendColor( const COLOR_RGBA& aC1, const COLOR_RGBA& aC2 );
+COLOR_RGBA BlendColor( const COLOR_RGBA& aC1, const COLOR_RGBA& aC2, const COLOR_RGBA& aC3 );
+COLOR_RGBA BlendColor( const COLOR_RGBA& aC1, const COLOR_RGBA& aC2, const COLOR_RGBA& aC3,
+                       const COLOR_RGBA& aC4 );
 
-#endif   // COLOR_RGB_H
+#endif   // COLOR_RGBA_H

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public:
     explicit POST_SHADER_SSAO( const CAMERA& aCamera );
 
     SFVEC3F Shade(const SFVEC2I& aShaderPos ) const override;
-    SFVEC3F ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC3F& aInputColor,
+    SFVEC4F ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC4F& aInputColor,
                              const SFVEC3F& aShadeColor ) const override;
 
     SFVEC3F Blur( const SFVEC2I& aShaderPos ) const;
@@ -77,6 +77,8 @@ private:
      * @return transformed color.
      */
     SFVEC3F giColorCurve( const SFVEC3F& aColor ) const;
+    SFVEC4F giColorCurve( const SFVEC4F& aColor ) const;
+    SFVEC3F giColorCurveShade( const SFVEC4F& aColor ) const;
 
     SFVEC3F* m_shadedBuffer;
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,9 @@ void DBG_SaveBuffer( const wxString& aFileName, const float *aInBuffer,
                      unsigned int aXSize, unsigned int aYSize );
 
 void DBG_SaveBuffer( const wxString& aFileName, const SFVEC3F *aInBuffer,
+                     unsigned int aXSize, unsigned int aYSize );
+
+void DBG_SaveBuffer( const wxString& aFileName, const SFVEC4F *aInBuffer,
                      unsigned int aXSize, unsigned int aYSize );
 
 void DBG_SaveNormalsBuffer( const wxString& aFileName, const SFVEC3F *aInNormalsBuffer,

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,19 @@ static void dbg_save_rgb_buffer( const wxString& aFileName, unsigned char *aRGBp
 {
     wxImage image( aXSize, aYSize );
     image.SetData( aRGBpixelBuffer );
+    image = image.Mirror( false );
+    image.SaveFile( aFileName + wxT( ".png" ), wxBITMAP_TYPE_PNG );
+    image.Destroy();
+}
+
+
+static void dbg_save_rgb_a_buffer( const wxString& aFileName, unsigned char* aRGBpixelBuffer,
+                                   unsigned char* aAlphaBuffer, unsigned int aXSize,
+                                   unsigned int aYSize )
+{
+    wxImage image( aXSize, aYSize );
+    image.SetData( aRGBpixelBuffer );
+    image.SetAlpha( aAlphaBuffer );
     image = image.Mirror( false );
     image.SaveFile( aFileName + wxT( ".png" ), wxBITMAP_TYPE_PNG );
     image.Destroy();
@@ -107,6 +120,31 @@ void DBG_SaveBuffer( const wxString& aFileName, const SFVEC3F *aInBuffer,
     }
 
     dbg_save_rgb_buffer( aFileName, pixelbuffer, aXSize, aYSize );
+}
+
+
+void DBG_SaveBuffer( const wxString& aFileName, const SFVEC4F *aInBuffer,
+                     unsigned int aXSize, unsigned int aYSize )
+{
+    const unsigned int wxh = aXSize * aYSize;
+
+    unsigned char *pixelbuffer = (unsigned char*) malloc( wxh * 4 );
+    unsigned char *alphabuffer = (unsigned char*) malloc( wxh );
+
+    for( unsigned int i = 0; i < wxh; ++i )
+    {
+        const SFVEC4F &v = aInBuffer[i];
+        const unsigned int ix3 = i * 3;
+
+        // Set RGB value with all same values intensities
+        pixelbuffer[ix3 + 0] = (unsigned char) glm::min( (int) ( v.r * 255.0f ), 255 );
+        pixelbuffer[ix3 + 1] = (unsigned char) glm::min( (int) ( v.g * 255.0f ), 255 );
+        pixelbuffer[ix3 + 2] = (unsigned char) glm::min( (int) ( v.b * 255.0f ), 255 );
+
+        alphabuffer[i] = (unsigned char) glm::min( (int) ( v.a * 255.0f ), 255 );
+    }
+
+    dbg_save_rgb_a_buffer( aFileName, pixelbuffer, alphabuffer, aXSize, aYSize );
 }
 
 

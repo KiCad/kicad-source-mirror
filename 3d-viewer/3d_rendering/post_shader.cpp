@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,7 +63,7 @@ void POST_SHADER::UpdateSize( unsigned int xSize, unsigned int ySize )
     const unsigned int n_elements = xSize * ySize;
 
     m_normals = new SFVEC3F[n_elements];
-    m_color   = new SFVEC3F[n_elements];
+    m_color   = new SFVEC4F[n_elements];
     m_depth   = new float[n_elements];
     m_wc_hitposition = new SFVEC3F[n_elements];
     m_shadow_att_factor = new float[n_elements];
@@ -77,7 +77,7 @@ void POST_SHADER::UpdateSize( const SFVEC2UI& aSize )
 
 
 void POST_SHADER::SetPixelData( unsigned int x, unsigned int y, const SFVEC3F& aNormal,
-                                const SFVEC3F& aColor, const SFVEC3F& aHitPosition,
+                                const SFVEC4F& aColor, const SFVEC3F& aHitPosition,
                                 float aDepth, float aShadowAttFactor )
 {
     wxASSERT( x < m_size.x );
@@ -125,7 +125,7 @@ const SFVEC3F& POST_SHADER::GetNormalAt( const SFVEC2F& aPos ) const
 }
 
 
-const SFVEC3F& POST_SHADER::GetColorAt( const SFVEC2F& aPos ) const
+const SFVEC4F& POST_SHADER::GetColorAt( const SFVEC2F& aPos ) const
 {
     return m_color[GetIndex( aPos )];
 }
@@ -149,13 +149,13 @@ const SFVEC3F& POST_SHADER::GetNormalAt( const SFVEC2I& aPos ) const
 }
 
 
-const SFVEC3F& POST_SHADER::GetColorAt( const SFVEC2I& aPos ) const
+const SFVEC4F& POST_SHADER::GetColorAt( const SFVEC2I& aPos ) const
 {
     return m_color[GetIndex( aPos )];
 }
 
 
-const SFVEC3F& POST_SHADER::GetColorAtNotProtected( const SFVEC2I& aPos ) const
+const SFVEC4F& POST_SHADER::GetColorAtNotProtected( const SFVEC2I& aPos ) const
 {
     return m_color[ aPos.x + m_size.x * aPos.y ];
 }

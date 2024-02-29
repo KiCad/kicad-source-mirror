@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public:
      * @param aShadeColor The result of the shader.
      * @return the result of the shade process
      */
-    virtual SFVEC3F ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC3F& aInputColor,
+    virtual SFVEC4F ApplyShadeColor( const SFVEC2I& aShaderPos, const SFVEC4F& aInputColor,
                                      const SFVEC3F& aShadeColor ) const = 0;
 
     void UpdateSize( const SFVEC2UI& aSize );
@@ -56,10 +56,10 @@ public:
     void InitFrame() { m_tmin = FLT_MAX; m_tmax = 0.0f; }
 
     void SetPixelData( unsigned int x, unsigned int y, const SFVEC3F& aNormal,
-                       const SFVEC3F& aColor, const SFVEC3F& aHitPosition,
+                       const SFVEC4F& aColor, const SFVEC3F& aHitPosition,
                        float aDepth, float aShadowAttFactor );
 
-    const SFVEC3F& GetColorAtNotProtected( const SFVEC2I& aPos ) const;
+    const SFVEC4F& GetColorAtNotProtected( const SFVEC2I& aPos ) const;
 
     void DebugBuffersOutputAsImages() const;
 
@@ -88,12 +88,12 @@ public:
 
 protected:
     const SFVEC3F& GetNormalAt( const SFVEC2F& aPos ) const;
-    const SFVEC3F& GetColorAt( const SFVEC2F& aPos ) const;
+    const SFVEC4F& GetColorAt( const SFVEC2F& aPos ) const;
     const SFVEC3F& GetPositionAt( const SFVEC2F& aPos ) const;
     float GetDepthAt( const SFVEC2F& aPos ) const;
 
     const SFVEC3F& GetNormalAt( const SFVEC2I& aPos ) const;
-    const SFVEC3F& GetColorAt( const SFVEC2I& aPos ) const;
+    const SFVEC4F& GetColorAt( const SFVEC2I& aPos ) const;
     const SFVEC3F& GetPositionAt( const SFVEC2I& aPos ) const;
     const float& GetShadowFactorAt( const SFVEC2I& aPos ) const;
 
@@ -109,7 +109,7 @@ protected:
 
     SFVEC2UI m_size;
     SFVEC3F* m_normals;
-    SFVEC3F* m_color;
+    SFVEC4F* m_color;
     SFVEC3F* m_wc_hitposition;
     float*   m_depth;
     float*   m_shadow_att_factor;

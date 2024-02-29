@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2023 CERN
- * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -444,6 +444,12 @@ void RENDER_3D_OPENGL::renderBoardBody( bool aSkipRenderHoles )
 }
 
 
+static inline SFVEC4F premultiplyAlpha( const SFVEC4F& aInput )
+{
+    return SFVEC4F( aInput.r * aInput.a, aInput.g * aInput.a, aInput.b * aInput.a, aInput.a );
+}
+
+
 bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                REPORTER* aWarningReporter )
 {
@@ -503,7 +509,8 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     OglResetTextureState();
 
     // Draw the background ( rectangle with color gradient)
-    OglDrawBackground( m_boardAdapter.m_BgColorTop, m_boardAdapter.m_BgColorBot );
+    OglDrawBackground( premultiplyAlpha( m_boardAdapter.m_BgColorTop ),
+                       premultiplyAlpha( m_boardAdapter.m_BgColorBot ) );
 
     glEnable( GL_DEPTH_TEST );
 

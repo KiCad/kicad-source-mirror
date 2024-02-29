@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,47 +23,60 @@
  */
 
  /**
- * @file color_rgb.cpp
+ * @file color_rgba.cpp
  */
 
 
-#include "color_rgb.h"
+#include "color_rgba.h"
 
 
-COLOR_RGB::COLOR_RGB( const SFVEC3F& aColor )
+COLOR_RGBA::COLOR_RGBA( const SFVEC3F& aColor )
 {
     r = (unsigned int) glm::clamp( (int) ( aColor.r * 255 ), 0, 255 );
     g = (unsigned int) glm::clamp( (int) ( aColor.g * 255 ), 0, 255 );
     b = (unsigned int) glm::clamp( (int) ( aColor.b * 255 ), 0, 255 );
+    a = 255;
 }
 
 
-COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2 )
+COLOR_RGBA::COLOR_RGBA( const SFVEC4F& aColor )
+{
+    r = (unsigned int) glm::clamp( (int) ( aColor.r * 255 ), 0, 255 );
+    g = (unsigned int) glm::clamp( (int) ( aColor.g * 255 ), 0, 255 );
+    b = (unsigned int) glm::clamp( (int) ( aColor.b * 255 ), 0, 255 );
+    a = (unsigned int) glm::clamp( (int) ( aColor.a * 255 ), 0, 255 );
+}
+
+
+COLOR_RGBA BlendColor( const COLOR_RGBA& aC1, const COLOR_RGBA& aC2 )
 {
     const unsigned int r = aC1.r + aC2.r;
     const unsigned int g = aC1.g + aC2.g;
     const unsigned int b = aC1.b + aC2.b;
+    const unsigned int a = aC1.a + aC2.a;
 
-    return COLOR_RGB( ( r >> 1 ), ( g >> 1 ), ( b >> 1 ) );
+    return COLOR_RGBA( ( r >> 1 ), ( g >> 1 ), ( b >> 1 ), ( a >> 1 ) );
 }
 
 
-COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2, const COLOR_RGB& aC3 )
+COLOR_RGBA BlendColor( const COLOR_RGBA& aC1, const COLOR_RGBA& aC2, const COLOR_RGBA& aC3 )
 {
     const unsigned int r = aC1.r + aC2.r + aC3.r;
     const unsigned int g = aC1.g + aC2.g + aC3.g;
     const unsigned int b = aC1.b + aC2.b + aC3.b;
+    const unsigned int a = aC1.a + aC2.a + aC3.a;
 
-    return COLOR_RGB( ( r / 3 ), ( g / 3 ), ( b / 3 ) );
+    return COLOR_RGBA( ( r / 3 ), ( g / 3 ), ( b / 3 ), ( a / 3 ) );
 }
 
 
-COLOR_RGB BlendColor( const COLOR_RGB& aC1, const COLOR_RGB& aC2, const COLOR_RGB& aC3,
-                      const COLOR_RGB& aC4 )
+COLOR_RGBA BlendColor( const COLOR_RGBA& aC1, const COLOR_RGBA& aC2, const COLOR_RGBA& aC3,
+                      const COLOR_RGBA& aC4 )
 {
     const unsigned int r = aC1.r + aC2.r + aC3.r + aC4.r;
     const unsigned int g = aC1.g + aC2.g + aC3.g + aC4.g;
     const unsigned int b = aC1.b + aC2.b + aC3.b + aC4.b;
+    const unsigned int a = aC1.a + aC2.a + aC3.a + aC4.a;
 
-    return COLOR_RGB( ( r >> 2 ), ( g >> 2 ), ( b >> 2 ) );
+    return COLOR_RGBA( ( r >> 2 ), ( g >> 2 ), ( b >> 2 ), ( a >> 2 ) );
 }
