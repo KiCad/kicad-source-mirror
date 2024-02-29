@@ -78,7 +78,7 @@ struct UPDATE_RESPONSE
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE( UPDATE_RESPONSE, version, release_date, details_url,
                                     downloads_url )
 
-#define UPDATE_QUERY_ENDPOINT wxS( "http://localhost:8000/api/v1/update" )
+#define UPDATE_QUERY_ENDPOINT wxS( "https://downloads.kicad.org/api/v1/update" )
 
 
 UPDATE_MANAGER::UPDATE_MANAGER() : m_working( false )
