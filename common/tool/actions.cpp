@@ -569,7 +569,7 @@ TOOL_ACTION ACTIONS::selectionTool( "common.InteractiveSelection.selectionTool",
         _( "Select item(s)" ), _( "Select item(s)" ),
         BITMAPS::cursor, AF_ACTIVATE );
 
-TOOL_ACTION ACTIONS::measureTool( "common.InteractiveEdit.measureTool",
+TOOL_ACTION ACTIONS::measureTool( "common.Interactive.measureTool",
         AS_GLOBAL,
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
         MD_CTRL + MD_SHIFT + 'M', LEGACY_HK_NAME( "Measure Distance (Modern Toolset only)" ),
