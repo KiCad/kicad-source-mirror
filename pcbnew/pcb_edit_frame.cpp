@@ -322,7 +322,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Search" ) ).PaneBorder( false )
                       .MinSize( FromDIP( wxSize ( 180, 60 ) ) ).BestSize( FromDIP( wxSize ( 180, 100 ) ) )
                       .FloatingSize( FromDIP( wxSize( 480, 200 ) ) )
-                      .CloseButton( true )
                       .DestroyOnClose( false ) );
 
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
