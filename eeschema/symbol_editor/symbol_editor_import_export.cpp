@@ -53,9 +53,6 @@ void SYMBOL_EDIT_FRAME::ImportSymbol()
 
     for( const SCH_IO_MGR::SCH_FILE_T& fileType : SCH_IO_MGR::SCH_FILE_T_vector )
     {
-        if( fileType == SCH_IO_MGR::SCH_KICAD || fileType == SCH_IO_MGR::SCH_LEGACY )
-            continue; // this is "Import non-KiCad schematic"
-
         IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( fileType ) );
 
         if( !pi )
