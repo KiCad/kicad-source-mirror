@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-02-29 09:22+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
+"PO-Revision-Date: 2024-02-29 18:34+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
 "master-source/fi/>\n"
 "Language: fi\n"
@@ -18131,12 +18131,12 @@ msgstr "Ei asenneta"
 #: eeschema/sch_table.cpp:401 pcbnew/pcb_table.cpp:249
 #, c-format
 msgid "%d Column Table"
-msgstr "%d Saraketaulukko"
+msgstr "%d Sarakkeen taulukko"
 
 #: eeschema/sch_table.cpp:546 pcbnew/pcb_table.cpp:285
 #, c-format
 msgid "%d Columns"
-msgstr "%d Sarakkeet"
+msgstr "%d Sarakkeita"
 
 #: eeschema/sch_table.cpp:614 pcbnew/pcb_table.cpp:408
 msgid "External Border"
