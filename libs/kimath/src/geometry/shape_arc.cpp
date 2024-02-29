@@ -328,25 +328,34 @@ void SHAPE_ARC::update_bbox()
     int quad_angle_start = std::ceil( start_angle.AsDegrees() / 90.0 );
     int quad_angle_end = std::floor( end_angle.AsDegrees() / 90.0 );
 
-    VECTOR2I center = GetCenter();
-    const int radius = KiROUND( GetRadius() );
+    // very large radius means the arc is similar to a segment
+    // so do not try to add more points, center cannot be handled
+    // Very large is here > INT_MAX/2
+    double d_radius = GetRadius();
 
-    // count through quadrants included in arc
-    for( int quad_angle = quad_angle_start; quad_angle <= quad_angle_end; ++quad_angle )
+    if( d_radius < INT_MAX/2 )
     {
-        VECTOR2I  quad_pt = center;
+        VECTOR2I center = GetCenter();
 
-        switch( quad_angle % 4 )
+        const int radius = KiROUND( d_radius );
+
+        // count through quadrants included in arc
+        for( int quad_angle = quad_angle_start; quad_angle <= quad_angle_end; ++quad_angle )
         {
-        case 0:          quad_pt += { radius, 0 };  break;
-        case 1: case -3: quad_pt += { 0, radius };  break;
-        case 2: case -2: quad_pt += { -radius, 0 }; break;
-        case 3: case -1: quad_pt += { 0, -radius }; break;
-        default:
-            assert( false );
-        }
+            VECTOR2I  quad_pt = center;
 
-        points.push_back( quad_pt );
+            switch( quad_angle % 4 )
+            {
+            case 0:          quad_pt += { radius, 0 };  break;
+            case 1: case -3: quad_pt += { 0, radius };  break;
+            case 2: case -2: quad_pt += { -radius, 0 }; break;
+            case 3: case -1: quad_pt += { 0, -radius }; break;
+            default:
+                assert( false );
+            }
+
+            points.push_back( quad_pt );
+        }
     }
 
     m_bbox.Compute( points );
