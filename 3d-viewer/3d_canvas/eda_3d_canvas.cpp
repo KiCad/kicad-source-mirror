@@ -81,11 +81,11 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, HIDPI_GL_3D_CANVAS )
 END_EVENT_TABLE()
 
 
-EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
+EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttribs,
                               BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera,
                               S3D_CACHE* a3DCachePointer ) :
-        HIDPI_GL_3D_CANVAS( EDA_DRAW_PANEL_GAL::GetVcSettings(), aCamera, aParent, wxID_ANY,
-                            aAttribList, wxDefaultPosition,
+        HIDPI_GL_3D_CANVAS( EDA_DRAW_PANEL_GAL::GetVcSettings(), aCamera, aParent, aGLAttribs,
+                            wxID_ANY, wxDefaultPosition,
                             wxDefaultSize, wxFULL_REPAINT_ON_RESIZE ),
         m_eventDispatcher( nullptr ),
         m_parentStatusBar( nullptr ),

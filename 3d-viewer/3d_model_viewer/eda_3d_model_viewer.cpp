@@ -85,9 +85,9 @@ END_EVENT_TABLE()
 #define RANGE_SCALE_3D 8.0f
 
 
-EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const int* aAttribList,
+EDA_3D_MODEL_VIEWER::EDA_3D_MODEL_VIEWER( wxWindow* aParent, const wxGLAttributes& aGLAttribs,
                                           S3D_CACHE* aCacheManager ) :
-        HIDPI_GL_CANVAS( EDA_DRAW_PANEL_GAL::GetVcSettings(), aParent, wxID_ANY, aAttribList,
+        HIDPI_GL_CANVAS( EDA_DRAW_PANEL_GAL::GetVcSettings(), aParent, aGLAttribs, wxID_ANY,
                          wxDefaultPosition, wxDefaultSize,
                          wxFULL_REPAINT_ON_RESIZE ),
         m_trackBallCamera( RANGE_SCALE_3D * 4.0f ),
@@ -302,7 +302,7 @@ void EDA_3D_MODEL_VIEWER::OnPaint( wxPaintEvent& event )
 
     // clear color and depth buffers
     glEnable( GL_DEPTH_TEST );
-    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     glClearDepth( 1.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 

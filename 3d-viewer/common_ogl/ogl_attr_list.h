@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,8 @@
 #ifndef _OGL_ATT_LIST_H
 #define _OGL_ATT_LIST_H
 
+#include <wx/glcanvas.h>
+
 /// Anti-aliasing options
 enum class ANTIALIASING_MODE
 {
@@ -51,29 +53,12 @@ public:
      *  Get a list of attributes to pass to wxGLCanvas.
      *
      *  @param aAntiAliasingMode = 0 - disabled; try to initialize (if is supported) the
-     *  list with anti aliasing capabilities
-     *  @return a list of options to be passed in the creation of a EDA_3D_CANVAS class
+     *  list with anti aliasing capabilities.
+     *  @param aAlpha set to enable alpha channel.
+     *  @return wxGLAttributes to be passed in the creation of a EDA_3D_CANVAS class
      */
-    static const int* GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode );
-
-private:
-    /**
-     *  Attributes list to be passed to a wxGLCanvas creation.
-     *
-     *  This array should be 2*n+1
-     *  Sadly wxwidgets / glx < 13 allowed
-     *  a thing named "boolean attributes" that don't take a value.
-     *  (See src/unix/glx11.cpp -> wxGLCanvasX11::ConvertWXAttrsToGL() ).
-     *  To avoid problems due to this, just specify those attributes twice.
-     *  Only WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_STEREO are such boolean
-     *  attributes.
-     */
-    static const int m_openGL_attributes_list[];
-
-    /**
-     * Attributes list that was (eventually) changed and are passed to creation.
-     */
-    static int m_openGL_attributes_list_to_use[];
+    static const wxGLAttributes GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode,
+                                                   bool              aAlpha = false );
 };
 
 #endif // _OGL_ATT_LIST_H

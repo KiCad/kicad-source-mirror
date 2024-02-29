@@ -191,7 +191,7 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
 
 
     // Clear buffers
-    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     glClearDepth( 1.0f );
     glClearStencil( 0x00 );
     glClear( GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
@@ -220,8 +220,7 @@ bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         if( m_cameraLight )
             m_cameraLight->SetDirection( -m_camera.GetDir() );
 
-        OglDrawBackground( SFVEC3F( m_boardAdapter.m_BgColorTop),
-                           SFVEC3F( m_boardAdapter.m_BgColorBot) );
+        OglDrawBackground( m_boardAdapter.m_BgColorTop, m_boardAdapter.m_BgColorBot );
 
         // Bind PBO
         glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );

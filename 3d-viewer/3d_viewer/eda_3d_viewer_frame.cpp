@@ -116,8 +116,8 @@ EDA_3D_VIEWER_FRAME::EDA_3D_VIEWER_FRAME( KIWAY* aKiway, PCB_BASE_FRAME* aParent
     EDA_3D_VIEWER_SETTINGS* cfg = mgr.GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
     ANTIALIASING_MODE       aaMode = static_cast<ANTIALIASING_MODE>( cfg->m_Render.opengl_AA_mode );
 
-    m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode ), m_boardAdapter,
-                                  m_currentCamera,
+    m_canvas = new EDA_3D_CANVAS( this, OGL_ATT_LIST::GetAttributesList( aaMode, true ),
+                                  m_boardAdapter, m_currentCamera,
                                   PROJECT_PCB::Get3DCacheManager( &Prj() ) );
 
     m_appearancePanel = new APPEARANCE_CONTROLS_3D( this, GetCanvas() );

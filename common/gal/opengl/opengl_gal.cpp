@@ -71,8 +71,15 @@ using namespace KIGFX;
 #include <glsl_kicad_vert.h>
 using namespace KIGFX::BUILTIN_FONT;
 
-static void      InitTesselatorCallbacks( GLUtesselator* aTesselator );
-static const int glAttributes[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 8, 0 };
+static void InitTesselatorCallbacks( GLUtesselator* aTesselator );
+
+static wxGLAttributes getGLAttribs()
+{
+    wxGLAttributes attribs;
+    attribs.RGBA().DoubleBuffer().Depth( 8 ).EndList();
+
+    return attribs;
+}
 
 wxGLContext* OPENGL_GAL::m_glMainContext = nullptr;
 int          OPENGL_GAL::m_instanceCounter = 0;
@@ -299,12 +306,13 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
     return textureID;
 }
 
+
 OPENGL_GAL::OPENGL_GAL( const KIGFX::VC_SETTINGS& aVcSettings, GAL_DISPLAY_OPTIONS& aDisplayOptions,
                         wxWindow* aParent,
                         wxEvtHandler* aMouseListener, wxEvtHandler* aPaintListener,
                         const wxString& aName ) :
         GAL( aDisplayOptions ),
-        HIDPI_GL_CANVAS( aVcSettings, aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition,
+        HIDPI_GL_CANVAS( aVcSettings, aParent, getGLAttribs(), wxID_ANY, wxDefaultPosition,
                          wxDefaultSize,
                          wxEXPAND, aName ),
         m_mouseListener( aMouseListener ),

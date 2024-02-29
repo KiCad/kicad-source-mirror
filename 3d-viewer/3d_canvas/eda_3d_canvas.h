@@ -52,12 +52,12 @@ public:
      *  Create a new 3D Canvas with an attribute list.
      *
      *  @param aParent the parent creator of this canvas.
-     *  @param aAttribList a list of openGL options created by GetOpenGL_AttributesList.
+     *  @param aGLAttribs openGL attributes created by #OGL_ATT_LIST::GetAttributesList.
      *  @param aBoard The board.
      *  @param aSettings the settings options to be used by this canvas.
      */
-    EDA_3D_CANVAS( wxWindow* aParent, const int* aAttribList,
-                   BOARD_ADAPTER& aSettings, CAMERA& aCamera, S3D_CACHE* a3DCachePointer );
+    EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttribs, BOARD_ADAPTER& aSettings,
+                   CAMERA& aCamera, S3D_CACHE* a3DCachePointer );
 
     ~EDA_3D_CANVAS();
 

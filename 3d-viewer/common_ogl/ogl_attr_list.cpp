@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,94 +33,45 @@
 #include <core/arraydim.h>
 
 
-const int OGL_ATT_LIST::m_openGL_attributes_list[] = {
-
-    // Boolean attributes (using itself at padding):
-
-    // 0                    1
-    WX_GL_RGBA,             WX_GL_RGBA,
-    // 2                    3
-    WX_GL_DOUBLEBUFFER,     WX_GL_DOUBLEBUFFER,
-
-
-    // Normal attributes with values:
-
-    // 4                    5
-    WX_GL_DEPTH_SIZE,       16,
-    // 6                    7
-    WX_GL_STENCIL_SIZE,     8,
-
-
-    // This ones need to be the last in the list (as the tags will set to 0 if AA fails)
-
-    // 8                    9
-    WX_GL_SAMPLES,          0,  // Disable AA for the start.
-    //10                    11
-    WX_GL_SAMPLE_BUFFERS,   1,  // Enable multisampling support (antialiasing).
-
-    0,                      0   // NULL termination
-};
-
-#define ATT_WX_GL_SAMPLES_OFFSET 8
-#define ATT_WX_GL_SAMPLES_OFFSET_DATA 9
-#define ATT_WX_GL_SAMPLE_BUFFERS_OFFSET 10
-#define ATT_WX_GL_SAMPLE_BUFFERS_DATA 11
-
-int OGL_ATT_LIST::m_openGL_attributes_list_to_use[
-                                        arrayDim( OGL_ATT_LIST::m_openGL_attributes_list ) ] = { 0 };
-
-
-const int* OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode )
+const wxGLAttributes OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE aAntiAliasingMode,
+                                                      bool              aAlpha )
 {
     wxASSERT( aAntiAliasingMode <= ANTIALIASING_MODE::AA_8X );
 
-    memcpy( m_openGL_attributes_list_to_use, m_openGL_attributes_list,
-            sizeof( m_openGL_attributes_list_to_use ) );
+    auto makeAttribs = [aAlpha]( int aSamplers )
+    {
+        wxGLAttributes dispAttrs;
+
+        dispAttrs.RGBA()
+                .DoubleBuffer()
+                .Depth( 16 )
+                .Stencil( 8 )
+                .Samplers( aSamplers )
+                .SampleBuffers( aSamplers >= 0 ? 1 : -1 )
+                .MinRGBA( 8, 8, 8, aAlpha ? 8 : -1 )
+                .EndList();
+
+        return dispAttrs;
+    };
+
+    int maxSamples = -1;
 
     if( aAntiAliasingMode > ANTIALIASING_MODE::AA_NONE )
     {
-        // There is a bug on wxGLCanvas that makes IsDisplaySupported fail
-        // while testing for antialiasing.
-        // http://trac.wxwidgets.org/ticket/16909
-        // this next code will only work after this bug is fixed
-        //
-        // On my experience (Mario) it was only working on Linux but failing on
-        // Windows, so there was no AA.
-
-
         // Check if the canvas supports multisampling.
-        if( wxGLCanvas::IsDisplaySupported( m_openGL_attributes_list_to_use ) )
+        if( wxGLCanvas::IsDisplaySupported( makeAttribs( 0 ) ) )
         {
-            static const int aaSamples[4] = {0, 2, 4, 8};
+            static const int aaSamples[4] = { 0, 2, 4, 8 };
 
             // Check for possible sample sizes, start form the requested.
-            int maxSamples = aaSamples[static_cast<int>( aAntiAliasingMode )];
+            maxSamples = aaSamples[static_cast<int>( aAntiAliasingMode )];
 
-            m_openGL_attributes_list_to_use[ATT_WX_GL_SAMPLES_OFFSET_DATA] = maxSamples;
-
-            for( ; (maxSamples > 0) &&
-                   ( !wxGLCanvas::IsDisplaySupported( m_openGL_attributes_list_to_use ) );
-                maxSamples = maxSamples >> 1 )
+            while( maxSamples > 0 && !wxGLCanvas::IsDisplaySupported( makeAttribs( maxSamples ) ) )
             {
-                m_openGL_attributes_list_to_use[ATT_WX_GL_SAMPLES_OFFSET_DATA] = maxSamples;
+                maxSamples = maxSamples >> 1;
             }
         }
-        else
-        {
-            aAntiAliasingMode = ANTIALIASING_MODE::AA_NONE;
-        }
     }
 
-    // Disable antialiasing if it failed or was not requested
-    if( aAntiAliasingMode == ANTIALIASING_MODE::AA_NONE )
-    {
-        // Remove multisampling information
-        // (hoping that the GPU driver will decide what is best)
-        m_openGL_attributes_list_to_use[ATT_WX_GL_SAMPLES_OFFSET]        = 0;
-        m_openGL_attributes_list_to_use[ATT_WX_GL_SAMPLES_OFFSET_DATA]   = 0;
-        m_openGL_attributes_list_to_use[ATT_WX_GL_SAMPLE_BUFFERS_OFFSET] = 0;
-        m_openGL_attributes_list_to_use[ATT_WX_GL_SAMPLE_BUFFERS_DATA]   = 0;
-    }
-
-    return m_openGL_attributes_list_to_use;
+    return makeAttribs( maxSamples );
 }

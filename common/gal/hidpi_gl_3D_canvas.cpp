@@ -28,11 +28,11 @@
 const float HIDPI_GL_3D_CANVAS::m_delta_move_step_factor = 0.7f;
 
 HIDPI_GL_3D_CANVAS::HIDPI_GL_3D_CANVAS( const KIGFX::VC_SETTINGS& aVcSettings, CAMERA& aCamera,
-                                        wxWindow* aParent, wxWindowID,
-                                        const int* aAttribList, const wxPoint& aPos,
+                                        wxWindow* aParent, const wxGLAttributes& aGLAttribs,
+                                        wxWindowID, const wxPoint& aPos,
                                         const wxSize& aSize, long aStyle, const wxString& aName,
                                         const wxPalette& aPalette ) :
-        HIDPI_GL_CANVAS( aVcSettings, aParent, wxID_ANY, aAttribList, aPos, aSize, aStyle, aName, aPalette ),
+        HIDPI_GL_CANVAS( aVcSettings, aParent, aGLAttribs, wxID_ANY, aPos, aSize, aStyle, aName, aPalette ),
         m_mouse_is_moving( false ),
         m_mouse_was_moved( false ),
         m_camera_is_moving( false ),

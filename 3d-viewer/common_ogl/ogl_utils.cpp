@@ -46,7 +46,7 @@ void OglGetScreenshot( wxImage& aDstImage )
 
     glGetIntegerv( GL_VIEWPORT, (GLint*) &viewport );
 
-    unsigned char* pixelbuffer = (unsigned char*) malloc( viewport.x * viewport.y * 3 );
+    unsigned char* pixelbuffer = (unsigned char*) malloc( viewport.x * viewport.y * 4 );
 
     // Call glFinish before screenshot to ensure everything is fully drawn.
     glFinish();
@@ -54,15 +54,40 @@ void OglGetScreenshot( wxImage& aDstImage )
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadBuffer( GL_BACK_LEFT );
 
-    glReadPixels( viewport.originX, viewport.originY, viewport.x, viewport.y, GL_RGB,
+    glReadPixels( viewport.originX, viewport.originY, viewport.x, viewport.y, GL_RGBA,
                   GL_UNSIGNED_BYTE, pixelbuffer );
+
+    unsigned char* rgbBuffer = (unsigned char*) malloc( viewport.x * viewport.y * 3 );
+    unsigned char* alphaBuffer = (unsigned char*) malloc( viewport.x * viewport.y );
+
+    unsigned char* rgbaPtr = pixelbuffer;
+    unsigned char* rgbPtr = rgbBuffer;
+    unsigned char* alphaPtr = alphaBuffer;
+
+    for( int y = 0; y < viewport.y; y++ )
+    {
+        for( int x = 0; x < viewport.x; x++ )
+        {
+            rgbPtr[0] = rgbaPtr[0];
+            rgbPtr[1] = rgbaPtr[1];
+            rgbPtr[2] = rgbaPtr[2];
+            alphaPtr[0] = rgbaPtr[3];
+
+            rgbaPtr += 4;
+            rgbPtr += 3;
+            alphaPtr += 1;
+        }
+    }
 
     // "Sets the image data without performing checks.
     //  The data given must have the size (width*height*3)
     //  The data must have been allocated with malloc()
     //  If static_data is false, after this call the pointer to the data is owned
     //  by the wxImage object, that will be responsible for deleting it."
-    aDstImage.SetData( pixelbuffer, viewport.x, viewport.y, false );
+    aDstImage.SetData( rgbBuffer, viewport.x, viewport.y, false );
+    aDstImage.SetAlpha( alphaBuffer, false );
+
+    free( pixelbuffer );
 
     aDstImage = aDstImage.Mirror( false );
 }
@@ -157,7 +182,7 @@ void OglSetDiffuseMaterial( const SFVEC3F &aMaterialDiffuse, float aOpacity,
 }
 
 
-void OglDrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor )
+void OglDrawBackground( const SFVEC4F& aTopColor, const SFVEC4F& aBotColor )
 {
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
@@ -173,14 +198,14 @@ void OglDrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor )
     glDisable( GL_ALPHA_TEST );
 
     glBegin( GL_QUADS );
-    glColor4f( aTopColor.x, aTopColor.y, aTopColor.z, 1.0f );
+    glColor4f( aTopColor.r, aTopColor.g, aTopColor.b, aTopColor.a );
     glVertex2f( -1.0, 1.0 );    // Top left corner
 
-    glColor4f( aBotColor.x, aBotColor.y, aBotColor.z, 1.0f );
+    glColor4f( aBotColor.r, aBotColor.g, aBotColor.b, aBotColor.a );
     glVertex2f( -1.0,-1.0 );    // bottom left corner
     glVertex2f( 1.0,-1.0 );     // bottom right corner
 
-    glColor4f( aTopColor.x, aTopColor.y, aTopColor.z, 1.0f );
+    glColor4f( aTopColor.r, aTopColor.g, aTopColor.b, aTopColor.a);
     glVertex2f( 1.0, 1.0 );     // top right corner
     glEnd();
 }

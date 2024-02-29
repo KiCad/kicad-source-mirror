@@ -495,7 +495,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
         glEnable( GL_MULTISAMPLE );
 
     // clear color and depth buffers
-    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     glClearDepth( 1.0f );
     glClearStencil( 0x00 );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
@@ -503,8 +503,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
     OglResetTextureState();
 
     // Draw the background ( rectangle with color gradient)
-    OglDrawBackground( SFVEC3F( m_boardAdapter.m_BgColorTop ),
-                       SFVEC3F( m_boardAdapter.m_BgColorBot ) );
+    OglDrawBackground( m_boardAdapter.m_BgColorTop, m_boardAdapter.m_BgColorBot );
 
     glEnable( GL_DEPTH_TEST );
 

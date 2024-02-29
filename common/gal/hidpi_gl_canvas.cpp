@@ -29,11 +29,11 @@
 #include <gal/dpi_scaling.h>
 
 
-HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( const KIGFX::VC_SETTINGS& aSettings, wxWindow* aParent, wxWindowID aId,
-                                  const int* aAttribList,
+HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( const KIGFX::VC_SETTINGS& aSettings, wxWindow* aParent,
+                                  const wxGLAttributes& aGLAttribs, wxWindowID aId,
                                   const wxPoint& aPos, const wxSize& aSize, long aStyle,
                                   const wxString& aName, const wxPalette& aPalette ) :
-        wxGLCanvas( aParent, aId, aAttribList, aPos, aSize, aStyle, aName, aPalette ),
+        wxGLCanvas( aParent, aGLAttribs, aId, aPos, aSize, aStyle, aName, aPalette ),
         m_settings( aSettings ),
         m_scale_factor( DPI_SCALING::GetDefaultScaleFactor() )
 {

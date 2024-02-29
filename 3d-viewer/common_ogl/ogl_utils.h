@@ -71,7 +71,7 @@ GLuint OglLoadTexture( const IMAGE& aImage );
  */
 void OglGetScreenshot( wxImage& aDstImage );
 
-void OglDrawBackground( const SFVEC3F& aTopColor, const SFVEC3F& aBotColor );
+void OglDrawBackground( const SFVEC4F& aTopColor, const SFVEC4F& aBotColor );
 
 /**
  * Reset to default state the texture settings.
