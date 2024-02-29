@@ -2419,3 +2419,54 @@ bool SHAPE_LINE_CHAIN::POINT_INSIDE_TRACKER::IsInside()
     processVertex( m_lastPoint, m_firstPoint );
     return m_state > 0;
 }
+
+
+bool SHAPE_LINE_CHAIN::IsSharedPt( size_t aIndex ) const
+{
+    return aIndex < m_shapes.size()
+           && m_shapes[aIndex].first != SHAPE_IS_PT
+           && m_shapes[aIndex].second != SHAPE_IS_PT;
+}
+
+
+bool SHAPE_LINE_CHAIN::IsPtOnArc( size_t aPtIndex ) const
+{
+    return aPtIndex < m_shapes.size() && m_shapes[aPtIndex] != SHAPES_ARE_PT;
+}
+
+
+bool SHAPE_LINE_CHAIN::IsArcSegment( size_t aSegment ) const
+{
+    /*
+     * A segment is part of an arc except in the special case of two arcs next to each other
+     * but without a shared vertex.  Here there is a segment between the end of the first arc
+     * and the start of the second arc.
+     */
+    size_t nextIdx = aSegment + 1;
+
+    if( nextIdx > m_shapes.size() - 1 )
+    {
+        if( nextIdx == m_shapes.size() && m_closed && IsSharedPt( 0 ) )
+            nextIdx = 0; // segment between end point and first point
+        else
+            return false;
+    }
+
+    return ( IsPtOnArc( aSegment )
+                 && ( ArcIndex( aSegment ) == m_shapes[nextIdx].first ) );
+}
+
+
+bool SHAPE_LINE_CHAIN::IsArcStart( size_t aIndex ) const
+{
+    if( aIndex == 0 )
+        return IsPtOnArc( aIndex );
+
+    return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) &&  !IsArcSegment( aIndex - 1 ) ) );
+}
+
+
+bool SHAPE_LINE_CHAIN::IsArcEnd( size_t aIndex ) const
+{
+    return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) && !IsArcSegment( aIndex ) ) );
+}

@@ -799,55 +799,15 @@ public:
      * @param aIndex
      * @return
     */
-    bool IsSharedPt( size_t aIndex ) const
-    {
-        return aIndex < m_shapes.size()
-               && m_shapes[aIndex].first != SHAPE_IS_PT
-               && m_shapes[aIndex].second != SHAPE_IS_PT;
-    }
+    bool IsSharedPt( size_t aIndex ) const;
 
+    bool IsPtOnArc( size_t aPtIndex ) const;
 
-    bool IsPtOnArc( size_t aPtIndex ) const
-    {
-        return aPtIndex < m_shapes.size() && m_shapes[aPtIndex] != SHAPES_ARE_PT;
-    }
+    bool IsArcSegment( size_t aSegment ) const;
 
+    bool IsArcStart( size_t aIndex ) const;
 
-    bool IsArcSegment( size_t aSegment ) const
-    {
-        /*
-         * A segment is part of an arc except in the special case of two arcs next to each other
-         * but without a shared vertex.  Here there is a segment between the end of the first arc
-         * and the start of the second arc.
-         */
-        size_t nextIdx = aSegment + 1;
-
-        if( nextIdx > m_shapes.size() - 1 )
-        {
-            if( nextIdx == m_shapes.size() && m_closed && IsSharedPt( 0 ) )
-                nextIdx = 0; // segment between end point and first point
-            else
-                return false;
-        }
-
-        return ( IsPtOnArc( aSegment )
-                 && ( ArcIndex( aSegment ) == m_shapes[nextIdx].first ) );
-    }
-
-
-    bool IsArcStart( size_t aIndex ) const
-    {
-        if( aIndex == 0 )
-            return IsPtOnArc( aIndex );
-
-        return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) && !IsArcSegment( aIndex - 1 ) ) );
-    }
-
-
-    bool IsArcEnd( size_t aIndex ) const
-    {
-        return ( IsSharedPt( aIndex ) || ( IsPtOnArc( aIndex ) && !IsArcSegment( aIndex ) ) );
-    }
+    bool IsArcEnd( size_t aIndex ) const;
 
     using SHAPE::Distance;
 
