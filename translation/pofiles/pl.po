@@ -15,17 +15,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-02-16 14:08+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2024-02-29 19:02+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -416,7 +415,7 @@ msgstr "Widok domyślny"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Przerysuj w pozycji wyjściowej i powiększ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -21401,7 +21400,7 @@ msgstr "Nowa zakładka z analizą..."
 
 #: eeschema/tools/ee_actions.cpp:1387
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Tworzy nową kartę zawierającą dane z symulacji"
 
 #: eeschema/tools/ee_actions.cpp:1395
 msgid "Open Workbook..."
@@ -21409,7 +21408,7 @@ msgstr "Otwórz skoroszyt..."
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Otwiera zapisane wcześniej zestawy ustawień z kartami wyników"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
@@ -21465,7 +21464,7 @@ msgstr "Edytuj zakładkę analizy..."
 
 #: eeschema/tools/ee_actions.cpp:1451
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
+msgstr "Edytuje polecenia SPICE i ustawienia wykresu dla bieżącej karty analizy"
 
 #: eeschema/tools/ee_actions.cpp:1458
 msgid "Run Simulation"
@@ -25774,22 +25773,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "Pokaż bloczek tytułowy w trybie podglądu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"Pokazuje blok tytułowy w trybie podglądu:\n"
-"Odpowiedniki tekstu będą pokazywane jako właściwe teksty."
+msgstr "Symbole zastępcze tekstu będą pokazywane jako właściwe teksty"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "Pokaż bloczek tytułowy w trybie edycji"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"Pokaż blok tytułowy w trybie edycji:\n"
-"Teksty będą pokazywane jako tokeny ${keyword}."
+msgstr "Symbole zastępcze tekstów będą pokazywane jako tokeny ${keyword}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -32520,13 +32513,12 @@ msgstr "Zezwól na rozlanie się łezki na dwa segmenty ścieżki"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
 "Zezwól na rozlanie się łezki na 2 ścieżki, jeśli pierwszy segment ścieżki "
-"jest za krótki"
+"jest za krótki by zmieścić właściwą długość łezki."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -39943,7 +39935,7 @@ msgstr "Ograniczenia długości: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "Nie można dostroić segmentów w ramach innych wzorców strojenia."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
@@ -41285,35 +41277,40 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Zignorowano kształt strefy typu %d (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Wielokąt na warstwie Altium (%d) nie ma odpowiednika w programie KiCad. "
-"Zamiast tego umieszczono go na Eco1_User."
+"Wczytywanie biblioteki '%s':\n"
+"Footprint %s zawiera przerywany kontur na warstwie Altium (%d), który nie "
+"posiada odpowiednika w programie KiCad. Został on przeniesiony na warstwę "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Przerywany kontur istniejący na warstwie Altium (%d) nie ma odpowiednika w "
-"programie KiCad. Został przeniesiony na warstwę KiCad Eco1_User."
+"Footprint %s posiada przerywany kontur istniejący na warstwie Altium (%d), "
+"który nie ma odpowiednika w programie KiCad. Został przeniesiony na warstwę "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Zignorowano kształt strefy typu %d (obecnie nie wspierany)."
+msgstr ""
+"Błąd podczas wczytywania biblioteki '%s':\n"
+"Footprint %s zawiera kształt strefy typu %d (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Zignorowano kształt strefy typu %d (obecnie nie wspierany)."
+msgstr "Footprint %s zawiera kształt strefy typu %d (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2352
 msgid "Loading zone fills..."
@@ -41328,11 +41325,12 @@ msgid "Loading pads..."
 msgstr "Wczytywanie pól lutowniczych..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
+"Błąd podczas ładowania biblioteki '%s':\n"
 "W footprincie %s pole %s nie jest oznaczone jako wielowarstwowe, choć jest "
 "to pole z otworem na wylot."
 
@@ -41344,11 +41342,12 @@ msgstr ""
 "to pole z otworem na wylot."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
+"Wczytywanie biblioteki '%s':\n"
 "Footprint %s z polem %s posiada kwadratowy otwór (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2795
@@ -41358,12 +41357,13 @@ msgstr ""
 "Footprint %s z polem %s posiada kwadratowy otwór (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"Wczytywanie biblioteki '%s':\n"
 "Footprint %s posiada otwór w polu %s obrócony o %f stopni. KiCad wspiera "
 "obrót tylko o 90 stopni."
 
@@ -41377,11 +41377,13 @@ msgstr ""
 "obrót tylko o 90 stopni."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "W footprincie %s pole %s używa otworu o nieznanym typie %d."
+msgstr ""
+"Błąd podczas ładowania biblioteki '%s':\n"
+"W footprincie %s pole %s używa otworu o nieznanym typie %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2859
 #, c-format
@@ -41389,27 +41391,30 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "W footprincie %s pole %s używa otworu o nieznanym typie %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspierany) dla "
-"pola %s"
+"Błąd podczas wczytywania biblioteki '%s':\n"
+"Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspieranego) "
+"dla pola %s."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspierany) dla "
-"pola %s"
+"Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspieranego) "
+"dla pola %s."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "W footprincie %s pole %s używa nieznanego kształtu."
+msgstr ""
+"Błąd podczas ładowania biblioteki '%s':\n"
+"W footprincie %s pole %s używa nieznanego kształtu."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2936
 #, c-format
@@ -41426,23 +41431,26 @@ msgstr ""
 "programie KiCad. Zamiast tego umieszczono go na Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Pole %s nie będące polem miedzi na warstwie Altium %d nie ma odpowiednika w "
-"programie KiCad. Zamiast tego umieszczono go na Eco1_User."
+"Wczytywanie biblioteki '%s':\n"
+"Footprint %s z polem %s nie będącym polem miedzi na warstwie Altium (%d) nie "
+"ma odpowiednika w programie KiCad. Został on przesunięty na warstwę "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Pole %s nie będące polem miedzi na warstwie Altium %d nie ma odpowiednika w "
-"programie KiCad. Zamiast tego umieszczono go na Eco1_User."
+"Footprint %s z polem %s nie będącym polem miedzi na warstwie Altium (%d) nie "
+"ma odpowiednika w programie KiCad. Zostanie on przeniesiony na warstwę "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
@@ -41499,16 +41507,21 @@ msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ignoruję kod kreskowy na warstwie Altium %d (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ignoruję kod kreskowy na warstwie Altium %d (obecnie nie wspierany)."
+msgstr ""
+"Błąd podczas wczytywania biblioteki '%s':\n"
+"Footprint %s posiada kod kreskowy na warstwie Altium %d (obecnie nie "
+"wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ignoruję kod kreskowy na warstwie Altium %d (obecnie nie wspierany)."
+msgstr ""
+"Footprint %s zawiera kod kreskowy na warstwie Altium %d (obecnie nie "
+"wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3658
 msgid "Loading rectangles..."
@@ -41523,9 +41536,9 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Pliki PCB Altium Circuit Studio"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Nie znaleziono footprintów w bibliotece"
+msgstr "Nie znaleziono footprintów w bibliotece '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
 #, fuzzy, c-format
