@@ -129,35 +129,35 @@ enum class RATSNEST_MODE
  */
 struct LAYER_PRESET
 {
-    LAYER_PRESET( const wxString& aName = wxEmptyString ) :
+    LAYER_PRESET( const wxString& aName = wxS( "" ) ) :
             name( aName ),
+            layers( LSET::AllLayersMask() ),
+            renderLayers( GAL_SET::DefaultVisible() ),
+            flipBoard( false ),
             activeLayer( UNSELECTED_LAYER )
     {
-        layers       = LSET::AllLayersMask();
-        renderLayers = GAL_SET::DefaultVisible();
         readOnly     = false;
-        flipBoard    = false;
     }
 
-    LAYER_PRESET( const wxString& aName, const LSET& aVisibleLayers ) :
+    LAYER_PRESET( const wxString& aName, const LSET& aVisibleLayers, bool aFlipBoard ) :
             name( aName ),
             layers( aVisibleLayers ),
+            renderLayers( GAL_SET::DefaultVisible() ),
+            flipBoard( aFlipBoard ),
             activeLayer( UNSELECTED_LAYER )
     {
-        renderLayers = GAL_SET::DefaultVisible();
         readOnly     = false;
-        flipBoard    = false;
     }
 
     LAYER_PRESET( const wxString& aName, const LSET& aVisibleLayers, const GAL_SET& aVisibleObjects,
-                  PCB_LAYER_ID aActiveLayer ) :
+                  PCB_LAYER_ID aActiveLayer, bool aFlipBoard ) :
             name( aName ),
             layers( aVisibleLayers ),
             renderLayers( aVisibleObjects ),
+            flipBoard( aFlipBoard ),
             activeLayer( aActiveLayer )
     {
         readOnly  = false;
-        flipBoard = false;
     }
 
     bool LayersMatch( const LAYER_PRESET& aOther )
