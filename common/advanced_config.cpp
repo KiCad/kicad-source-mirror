@@ -105,6 +105,8 @@ static const wxChar EnableEeschemaPrintCairo[] = wxT( "EnableEeschemaPrintCairo"
 static const wxChar DisambiguationTime[] = wxT( "DisambiguationTime" );
 static const wxChar PcbSelectionVisibilityRatio[] = wxT( "PcbSelectionVisibilityRatio" );
 static const wxChar MinimumSegmentLength[] = wxT( "MinimumSegmentLength" );
+static const wxChar OcePluginLinearDeflection[] = wxT( "OcePluginLinearDeflection" );
+static const wxChar OcePluginAngularDeflection[] = wxT( "OcePluginAngularDeflection" );
 } // namespace KEYS
 
 
@@ -249,6 +251,9 @@ ADVANCED_CFG::ADVANCED_CFG()
     m_PcbSelectionVisibilityRatio = 1.0;
 
     m_MinimumSegmentLength      = 50;
+
+    m_OcePluginLinearDeflection = 0.14;
+    m_OcePluginAngularDeflection = 30;
 
     loadFromConfigFile();
 }
@@ -448,6 +453,14 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::MinimumSegmentLength,
                                                   &m_MinimumSegmentLength,
                                                   m_MinimumSegmentLength, 10, 1000 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::OcePluginLinearDeflection,
+                                                    &m_OcePluginLinearDeflection,
+                                                    m_OcePluginLinearDeflection, 0.01, 1.0 ) );
+
+    configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::OcePluginAngularDeflection,
+                                                    &m_OcePluginAngularDeflection,
+                                                    m_OcePluginAngularDeflection, 0.01, 360.0 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config

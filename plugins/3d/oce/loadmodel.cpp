@@ -40,6 +40,7 @@
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 
+#include <advanced_config.h>
 #include <decompress.hpp>
 
 #include <TDocStd_Document.hxx>
@@ -87,15 +88,6 @@
 // log mask for wxLogTrace
 #define MASK_OCE wxT( "PLUGIN_OCE" )
 #define MASK_OCE_EXTRA wxT( "PLUGIN_OCE_EXTRA" )
-
-// precision for mesh creation; 0.07 should be good enough for ECAD viewing
-#define USER_PREC (0.14)
-
-// angular deflection for meshing
-// 10 deg (36 faces per circle) = 0.17453293
-// 20 deg (18 faces per circle) = 0.34906585
-// 30 deg (12 faces per circle) = 0.52359878
-#define USER_ANGLE (0.52359878)
 
 typedef std::map<std::size_t, SGNODE*>               COLORMAP;
 typedef std::map<std::string, SGNODE*>               FACEMAP;
@@ -588,8 +580,8 @@ bool readSTEP( Handle(TDocStd_Document)& m_doc, const char* fname )
     if( !Interface_Static::SetIVal( "read.precision.mode", 1 ) )
         return false;
 
-    // Set the shape conversion precision to USER_PREC (default 0.0001 has too many triangles)
-    if( !Interface_Static::SetRVal( "read.precision.val", USER_PREC ) )
+    // Set the shape conversion precision (default 0.0001 has too many triangles)
+    if( !Interface_Static::SetRVal( "read.precision.val", ADVANCED_CFG::GetCfg().m_OcePluginLinearDeflection ) )
         return false;
 
     // set other translation options
@@ -1139,13 +1131,15 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     TopLoc_Location loc;
     Standard_Boolean isTessellate (Standard_False);
     Handle( Poly_Triangulation ) triangulation = BRep_Tool::Triangulation( face, loc );
+    const double linDeflection = ADVANCED_CFG::GetCfg().m_OcePluginLinearDeflection;
 
-    if( triangulation.IsNull() || triangulation->Deflection() > USER_PREC + Precision::Confusion() )
+    if( triangulation.IsNull() || triangulation->Deflection() > linDeflection + Precision::Confusion() )
         isTessellate = Standard_True;
 
     if( isTessellate )
     {
-        BRepMesh_IncrementalMesh IM(face, USER_PREC, Standard_False, USER_ANGLE );
+        BRepMesh_IncrementalMesh IM(face, linDeflection, Standard_False,
+                                     glm::radians(ADVANCED_CFG::GetCfg().m_OcePluginAngularDeflection) );
         triangulation = BRep_Tool::Triangulation( face, loc );
     }
 

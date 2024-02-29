@@ -518,6 +518,33 @@ public:
      */
     int m_MinimumSegmentLength;
 
+    /**
+     * OCE (STEP/IGES) 3D Plugin Tesselation Linear Deflection
+     *
+     * Linear deflection determines the maximum distance between the original geometry
+     * and the tessellated representation, measured in millimeters (mm), influencing
+     * the precision of flat surfaces.
+     *
+     * Setting name: "OcePluginLinearDeflection"
+     * Valid values: 0.01 to 1.0
+     * Default value: 0.14
+     */
+    double m_OcePluginLinearDeflection;
+
+    /**
+     * OCE (STEP/IGES) 3D Plugin Tesselation Angular Deflection
+     *
+     * Angular deflection specifies the maximum deviation angle (in degrees) between
+     * the normals of adjacent facets in the tessellated model. Lower values result
+     * in smoother curved surfaces by creating more facets to closely approximate
+     * the curve.
+     *
+     * Setting name: "OcePluginAngularDeflection"
+     * Valid values: 0.1 to 180
+     * Default value: 30
+     */
+    double m_OcePluginAngularDeflection;
+
 ///@}
 
 
