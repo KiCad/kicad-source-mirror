@@ -27,6 +27,7 @@
 #include <bezier_curves.h>
 #include <ki_exception.h>
 #include <wx/translation.h>
+#include <eda_text.h>
 
 
 double EASYEDA_PARSER_BASE::Convert( const wxString& aValue )
@@ -63,6 +64,49 @@ double EASYEDA_PARSER_BASE::RelPosX( const wxString& aValue )
 double EASYEDA_PARSER_BASE::RelPosY( const wxString& aValue )
 {
     return RelPosY( Convert( aValue ) );
+}
+
+
+void EASYEDA_PARSER_BASE::TransformTextToBaseline( EDA_TEXT*       textItem,
+                                                   const wxString& baselineAlign, bool invertY )
+{
+    int upOffset = 0;
+
+    if( baselineAlign == wxS( "" ) || baselineAlign == wxS( "auto" )
+        || baselineAlign == wxS( "use-script" ) || baselineAlign == wxS( "no-change" )
+        || baselineAlign == wxS( "reset-size" ) || baselineAlign == wxS( "alphabetic" )
+        || baselineAlign == wxS( "inherit" ) )
+    {
+        upOffset = textItem->GetTextSize().y;
+    }
+    else if( baselineAlign == wxS( "ideographic" ) || baselineAlign == wxS( "text-after-edge" ) )
+    {
+        upOffset = textItem->GetTextSize().y * 1.2;
+    }
+    else if( baselineAlign == wxS( "central" ) )
+    {
+        upOffset = textItem->GetTextSize().y * 0.5;
+    }
+    else if( baselineAlign == wxS( "middle" ) )
+    {
+        upOffset = textItem->GetTextSize().y * 0.6;
+    }
+    else if( baselineAlign == wxS( "mathematical" ) )
+    {
+        upOffset = textItem->GetTextSize().y * 0.1;
+    }
+    else if( baselineAlign == wxS( "hanging" ) || baselineAlign == wxS( "text-before-edge" ) )
+    {
+        upOffset = 0;
+    }
+
+    VECTOR2I offset( 0, -upOffset );
+    RotatePoint( offset, textItem->GetTextAngle() );
+
+    if( invertY )
+        offset.y = -offset.y;
+
+    textItem->SetTextPos( textItem->GetTextPos() + offset );
 }
 
 

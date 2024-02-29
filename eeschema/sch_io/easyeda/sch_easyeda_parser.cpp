@@ -175,48 +175,6 @@ static ELECTRICAL_PINTYPE ConvertElecType( const wxString& aType )
 }
 
 
-static void TransformToBaseline( EDA_TEXT* textItem, const wxString& baselineAlign, bool invertY )
-{
-    int upOffset = 0;
-
-    if( baselineAlign == wxS( "" ) || baselineAlign == wxS( "auto" )
-        || baselineAlign == wxS( "use-script" ) || baselineAlign == wxS( "no-change" )
-        || baselineAlign == wxS( "reset-size" ) || baselineAlign == wxS( "alphabetic" )
-        || baselineAlign == wxS( "inherit" ) )
-    {
-        upOffset = textItem->GetTextSize().y;
-    }
-    else if( baselineAlign == wxS( "ideographic" ) || baselineAlign == wxS( "text-after-edge" ) )
-    {
-        upOffset = textItem->GetTextSize().y * 1.2;
-    }
-    else if( baselineAlign == wxS( "central" ) )
-    {
-        upOffset = textItem->GetTextSize().y * 0.5;
-    }
-    else if( baselineAlign == wxS( "middle" ) )
-    {
-        upOffset = textItem->GetTextSize().y * 0.6;
-    }
-    else if( baselineAlign == wxS( "mathematical" ) )
-    {
-        upOffset = textItem->GetTextSize().y * 0.1;
-    }
-    else if( baselineAlign == wxS( "hanging" ) || baselineAlign == wxS( "text-before-edge" ) )
-    {
-        upOffset = 0;
-    }
-
-    VECTOR2I offset( 0, -upOffset );
-    RotatePoint( offset, textItem->GetTextAngle() );
-
-    if( invertY )
-        offset.y = -offset.y;
-
-    textItem->SetTextPos( textItem->GetTextPos() + offset );
-}
-
-
 VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_FLAG_STYLE aStyle,
                                           REPORTER* aReporter )
 {
@@ -936,7 +894,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
             textItem->SetTextSize( VECTOR2I( ktextSize, ktextSize ) );
 
-            TransformToBaseline( textItem, baselineAlign, true );
+            TransformTextToBaseline( textItem, baselineAlign, true );
 
             if( added )
                 aSymbol->AddDrawItem( dynamic_cast<LIB_ITEM*>( textItem ) );
@@ -1299,7 +1257,7 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
 
                 valField->SetTextSize( VECTOR2I( ktextSize, ktextSize ) );
 
-                //TransformToBaseline( valField, wxS( "" ), true );
+                //TransformTextToBaseline( valField, wxS( "" ), true );
 
                 createdItems.push_back( std::move( schSym ) );
             }
@@ -1418,7 +1376,7 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
 
             textItem->SetTextSize( VECTOR2I( ktextSize, ktextSize ) );
 
-            TransformToBaseline( textItem.get(), baselineAlign, false );
+            TransformTextToBaseline( textItem.get(), baselineAlign, false );
 
             createdItems.push_back( std::move( textItem ) );
         }
