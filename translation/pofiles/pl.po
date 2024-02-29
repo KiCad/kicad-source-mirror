@@ -15,17 +15,17 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-02-16 14:08+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2024-02-29 09:22+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-Basepath: ../../../kicad-source-mirror\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -417,7 +417,7 @@ msgstr "Widok domyślny"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Przerysuj w pozycji wyjściowej i powiększ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -5272,9 +5272,8 @@ msgstr "Blok tekstu"
 
 #: common/eda_item.cpp:352 common/eda_item.cpp:379 eeschema/sch_table.cpp:546
 #: pcbnew/pcb_table.cpp:285
-#, fuzzy
 msgid "Table"
-msgstr "Tabela pinów"
+msgstr "Tabela"
 
 #: common/eda_item.cpp:353 common/eda_item.cpp:380
 #: eeschema/sch_tablecell.cpp:118 pcbnew/pcb_tablecell.cpp:98
@@ -7491,7 +7490,7 @@ msgstr "Wyrównanie w poziomie"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "Wyrównuje do lewej pola i elementy tekstowe"
 
 #: common/tool/actions.cpp:290 eeschema/tools/sch_edit_tool.cpp:2471
 #: pcbnew/tools/edit_tool.cpp:2124
@@ -7501,7 +7500,7 @@ msgstr "Wyrównanie w poziomie"
 
 #: common/tool/actions.cpp:291
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "Centruje i wyrównuje pola, i elementy tekstowe"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2473
 #: pcbnew/tools/edit_tool.cpp:2126
@@ -7511,7 +7510,7 @@ msgstr "Wyrównanie w poziomie"
 
 #: common/tool/actions.cpp:298
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "Wyrównuje do prawej pola i elementy tekstowe"
 
 #: common/tool/actions.cpp:304
 #, fuzzy
@@ -7530,7 +7529,7 @@ msgstr "Wybierz kolumny"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Wybiera pełne kolumny zawierające aktualnie wybrane komórki"
 
 #: common/tool/actions.cpp:323
 #, fuzzy
@@ -7539,7 +7538,7 @@ msgstr "Zaznacz element(y)"
 
 #: common/tool/actions.cpp:324
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "Wybiera pełne rzędy zawierające aktualnie wybrane komórki"
 
 #: common/tool/actions.cpp:330
 #, fuzzy
@@ -7557,9 +7556,8 @@ msgid "Add Row Above"
 msgstr "Dodaj port zasilania"
 
 #: common/tool/actions.cpp:338
-#, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "Nie można ściąć wybranych linii."
+msgstr "Wstaw nowy wiersz tabeli przed zaznaczoną komórką(-ami)"
 
 #: common/tool/actions.cpp:344 include/tool/edit_table_tool_base.h:205
 #, fuzzy
@@ -7568,7 +7566,7 @@ msgstr "Dodaj port zasilania"
 
 #: common/tool/actions.cpp:345
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "Wstawia nowy rząd tabeli poniżej zaznaczonych komórek"
 
 #: common/tool/actions.cpp:351 include/tool/edit_table_tool_base.h:252
 #, fuzzy
@@ -7577,7 +7575,7 @@ msgstr "Dodaj narożnik"
 
 #: common/tool/actions.cpp:352
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "Wstawia nową kolumnę tabeli poniżej zaznaczonych komórek"
 
 #: common/tool/actions.cpp:358 include/tool/edit_table_tool_base.h:299
 #, fuzzy
@@ -7585,9 +7583,8 @@ msgid "Add Column After"
 msgstr "Dodaj narożnik"
 
 #: common/tool/actions.cpp:359
-#, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Nie można ściąć wybranych linii."
+msgstr "Wstaw nowy wiersz tabeli po zaznaczonej komórce(-ami)"
 
 #: common/tool/actions.cpp:365
 #, fuzzy
@@ -7621,11 +7618,11 @@ msgstr "Łączy wybrane wielokąty w jeden wielokąt"
 
 #: common/tool/actions.cpp:386 include/tool/edit_table_tool_base.h:544
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Rozłączanie komórek"
 
 #: common/tool/actions.cpp:387
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Zmienia połączone komórki tabeli ponownie w pojedyncze komórki."
 
 #: common/tool/actions.cpp:394 eeschema/dialogs/dialog_table_properties.cpp:382
 #: pcbnew/dialogs/dialog_table_properties.cpp:358
@@ -10276,9 +10273,8 @@ msgid "It will be placed back in the %s list"
 msgstr "Zostanie umieszczone ponownie na liście %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:633 pcbnew/dialogs/dialog_drc.cpp:625
-#, fuzzy
 msgid "Exclude this violation..."
-msgstr "Wyklucz to naruszenie zasad"
+msgstr "Wyklucz to naruszenie zasad..."
 
 #: eeschema/dialogs/dialog_erc.cpp:634 pcbnew/dialogs/dialog_drc.cpp:626
 #, c-format
@@ -13939,9 +13935,8 @@ msgstr "Remapowanie symboli"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr " kontekst: "
+msgstr "Zawartość komórki:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
@@ -15389,9 +15384,9 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "Symbol '%s' nie został odnaleziony w bibliotece '%s'"
 
 #: eeschema/erc.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "Footprint '%s' nie odpowiada jego kopii w bibliotece '%s'."
+msgstr "Symbol '%s' nie odpowiada jego kopii w bibliotece '%s'"
 
 #: eeschema/erc.cpp:1066
 #, fuzzy, c-format
@@ -18263,12 +18258,12 @@ msgstr "Nie obsadzony"
 #: eeschema/sch_table.cpp:401 pcbnew/pcb_table.cpp:249
 #, c-format
 msgid "%d Column Table"
-msgstr ""
+msgstr "%d kolumn tabeli"
 
 #: eeschema/sch_table.cpp:546 pcbnew/pcb_table.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "%d Columns"
-msgstr "Kolumnami"
+msgstr "%d kolumn"
 
 #: eeschema/sch_table.cpp:614 pcbnew/pcb_table.cpp:408
 #, fuzzy
@@ -18292,7 +18287,7 @@ msgstr "Usuń generator"
 
 #: eeschema/sch_table.cpp:639 pcbnew/pcb_table.cpp:433
 msgid "Cell Separators"
-msgstr ""
+msgstr "Separatory komórek"
 
 #: eeschema/sch_table.cpp:643 pcbnew/pcb_table.cpp:437
 #, fuzzy
@@ -18310,9 +18305,9 @@ msgid "Separators Color"
 msgstr "Wyczyść kolor"
 
 #: eeschema/sch_tablecell.cpp:55 pcbnew/pcb_tablecell.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid "Table Cell %s"
-msgstr "Nazwa tabeli"
+msgstr "Komórka tabeli %s"
 
 #: eeschema/sch_tablecell.cpp:123 pcbnew/pcb_tablecell.cpp:109
 #, fuzzy
@@ -18616,9 +18611,8 @@ msgstr ""
 "\n"
 
 #: eeschema/sch_textbox.cpp:583 pcbnew/pcb_textbox.cpp:725
-#, fuzzy
 msgid "Margins"
-msgstr "Marginesy:"
+msgstr "Marginesy"
 
 #: eeschema/sch_validators.cpp:59
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
@@ -20221,10 +20215,8 @@ msgstr "Obecna konfiguracja nie zawiera biblioteki '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1451
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1462
-#, fuzzy
 msgid "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Bieżąca konfiguracja nie zawiera biblioteki symboli '%s'.\n"
 "Użyj narzędzia Zarządzaj bibliotekami symboli by zmienić obecną konfigurację."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1452
@@ -20550,6 +20542,8 @@ msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
 msgstr ""
+"Zmiany wykonane w tym oknie dialogowym są natychmiastowe, użyj polecenia "
+"Cofnij w każdym zmienionym dokumencie by je cofnąć"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
 #, fuzzy
@@ -20557,9 +20551,8 @@ msgid "Synchronize sheet pins and hierarchical labels"
 msgstr "Zmienia istniejący element na etykietę hierarchiczną"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
-#, fuzzy
 msgid "Symbol name"
-msgstr "Nazwa symbolu:"
+msgstr "Nazwa symbolu"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:34
 #, fuzzy
@@ -20591,13 +20584,12 @@ msgid "Change sheet pin to hierarchical label"
 msgstr "Zmienia istniejący element na etykietę hierarchiczną"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Change hierarchical label to sheet pin"
-msgstr "Zmieniam '%s' etykiet hierarchicznych na '%s'."
+msgstr "Zmienia etykietę hierarchiczną na pin arkusza"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr ""
+msgstr "Łamie przypisania pomiędzy pinami a etykietami hierarchicznymi"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Display previous symbol"
@@ -22040,7 +22032,7 @@ msgstr "Nowa zakładka z analizą..."
 
 #: eeschema/tools/ee_actions.cpp:1416
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Tworzy nową kartę zawierającą dane z symulacji"
 
 #: eeschema/tools/ee_actions.cpp:1424
 msgid "Open Workbook..."
@@ -22048,7 +22040,7 @@ msgstr "Otwórz skoroszyt..."
 
 #: eeschema/tools/ee_actions.cpp:1425
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Otwiera zapisane wcześniej zestawy ustawień z kartami wyników"
 
 #: eeschema/tools/ee_actions.cpp:1433
 msgid "Save Workbook"
@@ -22104,7 +22096,7 @@ msgstr "Edytuj zakładkę analizy..."
 
 #: eeschema/tools/ee_actions.cpp:1480
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
+msgstr "Edytuje polecenia SPICE i ustawienia wykresu dla bieżącej karty analizy"
 
 #: eeschema/tools/ee_actions.cpp:1487
 msgid "Run Simulation"
@@ -26501,22 +26493,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "Pokaż bloczek tytułowy w trybie podglądu"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"Pokazuje blok tytułowy w trybie podglądu:\n"
-"Odpowiedniki tekstu będą pokazywane jako właściwe teksty."
+msgstr "Symbole zastępcze tekstu będą pokazywane jako właściwe teksty"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "Pokaż bloczek tytułowy w trybie edycji"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"Pokaż blok tytułowy w trybie edycji:\n"
-"Teksty będą pokazywane jako tokeny ${keyword}."
+msgstr "Symbole zastępcze tekstów będą pokazywane jako tokeny ${keyword}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -30974,27 +30960,24 @@ msgid "Set center by radius"
 msgstr "Ustaw środek według promienia"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
-#, fuzzy
 msgid "Radius from center to reference position:"
-msgstr "Przywróć aktualny kąt z pozycji odniesienia."
+msgstr "Promień z punktu centralnego do pozycji odniesienia:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:381
 msgid "Distance between Ref point and Center pos."
 msgstr "Odległość pomiędzy punktem referencyjnym a centralnym."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:392
-#, fuzzy
 msgid "Angle from center to reference position:"
-msgstr "Przywróć aktualny kąt z pozycji odniesienia."
+msgstr "Kąt z punktu centralnego do pozycji odniesienia:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:408
 msgid "Angle between Ref point and Center pos."
 msgstr "Kąt pomiędzy punktem referencyjnym a centralnym."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:429
-#, fuzzy
 msgid "Duplication Settings"
-msgstr "Zdublowane wyprowadzenia:"
+msgstr "Ustawienia powielania"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:442
 msgid ""
@@ -31411,9 +31394,9 @@ msgid "They will be placed back in the %s list"
 msgstr "Zostanie umieszczone ponownie na liście %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'..."
-msgstr "Wyklucz wszystkie naruszenia reguły '%s'"
+msgstr "Wyklucz wszystkie naruszenia reguły '%s'..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:633
 #, fuzzy, c-format
@@ -33264,13 +33247,12 @@ msgstr "Zezwól na rozlanie się łezki na dwa segmenty ścieżki"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
 "Zezwól na rozlanie się łezki na 2 ścieżki, jeśli pierwszy segment ścieżki "
-"jest za krótki"
+"jest za krótki by zmieścić właściwą długość łezki."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -40365,11 +40347,10 @@ msgid "Edit Zone"
 msgstr "Edycja strefy"
 
 #: pcbnew/footprint_editor_utils.cpp:328 pcbnew/footprint_editor_utils.cpp:340
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Bieżąca konfiguracja nie zawiera biblioteki '%s'.  Użyj narzędzia Zarządzaj "
-"bibliotekami footprintów by zmienić obecną konfigurację."
+"Użyj narzędzia Zarządzaj bibliotekami footprintów by zmienić obecną "
+"konfigurację."
 
 #: pcbnew/footprint_editor_utils.cpp:329
 msgid "Library not found in footprint library table."
@@ -40674,7 +40655,7 @@ msgstr "Ograniczenia długości: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "Nie można dostroić segmentów w ramach innych wzorców strojenia."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
@@ -42028,35 +42009,40 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Zignorowano kształt strefy typu %d (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Wielokąt na warstwie Altium (%d) nie ma odpowiednika w programie KiCad. "
-"Zamiast tego umieszczono go na Eco1_User."
+"Wczytywanie biblioteki '%s':\n"
+"Footprint %s zawiera przerywany kontur na warstwie Altium (%d), który nie "
+"posiada odpowiednika w programie KiCad. Został on przeniesiony na warstwę "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Przerywany kontur istniejący na warstwie Altium (%d) nie ma odpowiednika w "
-"programie KiCad. Został przeniesiony na warstwę KiCad Eco1_User."
+"Footprint %s posiada przerywany kontur istniejący na warstwie Altium (%d), "
+"który nie ma odpowiednika w programie KiCad. Został przeniesiony na warstwę "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Zignorowano kształt strefy typu %d (obecnie nie wspierany)."
+msgstr ""
+"Błąd podczas wczytywania biblioteki '%s':\n"
+"Footprint %s zawiera kształt strefy typu %d (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Zignorowano kształt strefy typu %d (obecnie nie wspierany)."
+msgstr "Footprint %s zawiera kształt strefy typu %d (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2352
 msgid "Loading zone fills..."
@@ -42071,11 +42057,12 @@ msgid "Loading pads..."
 msgstr "Wczytywanie pól lutowniczych..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
+"Błąd podczas ładowania biblioteki '%s':\n"
 "W footprincie %s pole %s nie jest oznaczone jako wielowarstwowe, choć jest "
 "to pole z otworem na wylot."
 
@@ -42087,11 +42074,12 @@ msgstr ""
 "to pole z otworem na wylot."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
+"Wczytywanie biblioteki '%s':\n"
 "Footprint %s z polem %s posiada kwadratowy otwór (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2795
@@ -42101,12 +42089,13 @@ msgstr ""
 "Footprint %s z polem %s posiada kwadratowy otwór (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"Wczytywanie biblioteki '%s':\n"
 "Footprint %s posiada otwór w polu %s obrócony o %f stopni. KiCad wspiera "
 "obrót tylko o 90 stopni."
 
@@ -42120,11 +42109,13 @@ msgstr ""
 "obrót tylko o 90 stopni."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "W footprincie %s pole %s używa otworu o nieznanym typie %d."
+msgstr ""
+"Błąd podczas ładowania biblioteki '%s':\n"
+"W footprincie %s pole %s używa otworu o nieznanym typie %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2859
 #, c-format
@@ -42132,27 +42123,30 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "W footprincie %s pole %s używa otworu o nieznanym typie %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspierany) dla "
-"pola %s"
+"Błąd podczas wczytywania biblioteki '%s':\n"
+"Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspieranego) "
+"dla pola %s."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspierany) dla "
-"pola %s"
+"Footprint %s używa skomplikowanego stosu warstw (obecnie nie wspieranego) "
+"dla pola %s."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "W footprincie %s pole %s używa nieznanego kształtu."
+msgstr ""
+"Błąd podczas ładowania biblioteki '%s':\n"
+"W footprincie %s pole %s używa nieznanego kształtu."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2936
 #, c-format
@@ -42169,23 +42163,26 @@ msgstr ""
 "programie KiCad. Zamiast tego umieszczono go na Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Pole %s nie będące polem miedzi na warstwie Altium %d nie ma odpowiednika w "
-"programie KiCad. Zamiast tego umieszczono go na Eco1_User."
+"Wczytywanie biblioteki '%s':\n"
+"Footprint %s z polem %s nie będącym polem miedzi na warstwie Altium (%d) nie "
+"ma odpowiednika w programie KiCad. Został on przesunięty na warstwę "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Pole %s nie będące polem miedzi na warstwie Altium %d nie ma odpowiednika w "
-"programie KiCad. Zamiast tego umieszczono go na Eco1_User."
+"Footprint %s z polem %s nie będącym polem miedzi na warstwie Altium (%d) nie "
+"ma odpowiednika w programie KiCad. Zostanie on przeniesiony na warstwę "
+"Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
@@ -42242,16 +42239,21 @@ msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ignoruję kod kreskowy na warstwie Altium %d (obecnie nie wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ignoruję kod kreskowy na warstwie Altium %d (obecnie nie wspierany)."
+msgstr ""
+"Błąd podczas wczytywania biblioteki '%s':\n"
+"Footprint %s posiada kod kreskowy na warstwie Altium %d (obecnie nie "
+"wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ignoruję kod kreskowy na warstwie Altium %d (obecnie nie wspierany)."
+msgstr ""
+"Footprint %s zawiera kod kreskowy na warstwie Altium %d (obecnie nie "
+"wspierany)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3658
 msgid "Loading rectangles..."
@@ -42266,9 +42268,9 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Pliki PCB Altium Circuit Studio"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Nie znaleziono footprintów w bibliotece"
+msgstr "Nie znaleziono footprintów w bibliotece '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
 #, fuzzy, c-format
@@ -45211,9 +45213,8 @@ msgid "Change Side / Flip"
 msgstr "Zmień stronę / obróć"
 
 #: pcbnew/tools/edit_tool.cpp:2518
-#, fuzzy
 msgid "Move Exactly"
-msgstr "Przesuń dokładnie..."
+msgstr "Przesuń dokładnie"
 
 #: pcbnew/tools/edit_tool.cpp:2680
 #, c-format
@@ -48342,17 +48343,13 @@ msgstr "Kontynuuj bez wypełnienia"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:41
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:49
-#, fuzzy
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
-"Strefy są wypełniane według poziomu priorytetów, poziom 3 ma wyższy "
-"priorytet niż poziom 2.\n"
-"Gdy strefa znajduje się wewnątrz innej strefy:\n"
-"* Jeśli jej priorytet jest wyższy, jej obrys jest usuwany z pozostałej "
-"strefy.\n"
-"* Jeśli jej priorytet jest taki sam, zgłaszany jest błąd DRC."
+"Strefa na najwyższym poziomie posiada najwyższy priorytet. Gdy strefa "
+"znajduje się wewnątrz innej strefy, jeśli jej priorytet jest wyższy, jej "
+"obrys jest usuwany z pozostałej strefy."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:99
 #, fuzzy
