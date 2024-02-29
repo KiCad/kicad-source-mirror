@@ -30,10 +30,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-02-27 08:04+0000\n"
+"PO-Revision-Date: 2024-02-29 09:22+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/master-"
-"source/ko/>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
+"master-source/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -123,7 +123,7 @@ msgstr "홀과 비아용 BVH 생성"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:385
 msgid "OpenGL context creation error"
-msgstr "OpenGL 상황 생성 오류"
+msgstr "OpenGL 문맥 생성 오류"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:416
 msgid "Your OpenGL version is not supported. Minimum required is 1.5."
@@ -435,7 +435,7 @@ msgstr "홈 화면"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "홈 위치에서 다시 그리기 및 확대/축소"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -2148,25 +2148,22 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>현재 일치하는 네트:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "패턴"
+msgstr "패턴:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "네트 클래스"
+msgstr "네트클래스:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
-msgstr ""
+msgstr "참고: 전체 네트클래스 과제는 회로도 설정 > 프로젝트에서 편집할 수 있습니다."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "네트클래스 할당:"
+msgstr "네트클래스 할당 추가"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2482,9 +2479,8 @@ msgid "Name:"
 msgstr "이름:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(선택사항; 기본값 0)"
+msgstr "(선택사항)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2573,9 +2569,8 @@ msgid "unit"
 msgstr "단위"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "링크:"
+msgstr "연결됨"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -4051,9 +4046,8 @@ msgid "Reset Unique Id"
 msgstr "고유 ID 재설정"
 
 #: common/dialogs/panel_grid_settings.cpp:54
-#, fuzzy
 msgid "Footprints/pads:"
-msgstr "풋프린트"
+msgstr "풋프린트/패드:"
 
 #: common/dialogs/panel_grid_settings.cpp:55
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:81
@@ -4796,7 +4790,7 @@ msgstr "도면 시트 파일 작성 중 오류 발생"
 
 #: common/drawing_sheet/ds_draw_item.cpp:147
 msgid "First Page Only"
-msgstr "첫 페이지만 표시"
+msgstr "첫 페이지만"
 
 #: common/drawing_sheet/ds_draw_item.cpp:148
 msgid "Subsequent Pages"
@@ -5235,16 +5229,14 @@ msgstr "텍스트 상자"
 
 #: common/eda_item.cpp:352 common/eda_item.cpp:379 eeschema/sch_table.cpp:546
 #: pcbnew/pcb_table.cpp:285
-#, fuzzy
 msgid "Table"
-msgstr "핀 테이블"
+msgstr "테이블"
 
 #: common/eda_item.cpp:353 common/eda_item.cpp:380
 #: eeschema/sch_tablecell.cpp:118 pcbnew/pcb_tablecell.cpp:98
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "네트 이름"
+msgstr "테이블 셀"
 
 #: common/eda_item.cpp:354 common/eda_item.cpp:355 pcbnew/pcb_track.cpp:1051
 msgid "Track"
@@ -6919,9 +6911,8 @@ msgid "Courtyard collision shadow"
 msgstr "부품자리 겹침 그림자"
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "논리 라이브러리 이름에 잘못된 문자가 있음"
+msgstr "라이브러리 닉네임에서 잘못된 문자 발견"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -7439,153 +7430,131 @@ msgstr "클릭한 항목 삭제"
 
 #: common/tool/actions.cpp:283 eeschema/tools/sch_edit_tool.cpp:2469
 #: pcbnew/tools/edit_tool.cpp:2122
-#, fuzzy
 msgid "Left Justify"
-msgstr "왼쪽 맞춤"
+msgstr "왼쪽 정렬"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "필드 및 텍스트 항목 왼쪽 맞춤"
 
 #: common/tool/actions.cpp:290 eeschema/tools/sch_edit_tool.cpp:2471
 #: pcbnew/tools/edit_tool.cpp:2124
-#, fuzzy
 msgid "Center Justify"
-msgstr "세로 맞춤"
+msgstr "중앙 정렬"
 
 #: common/tool/actions.cpp:291
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "필드 및 텍스트 항목 가운데 맞춤"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2473
 #: pcbnew/tools/edit_tool.cpp:2126
-#, fuzzy
 msgid "Right Justify"
-msgstr "오른쪽 맞춤"
+msgstr "오른쪽 정렬"
 
 #: common/tool/actions.cpp:298
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "필드 및 텍스트 항목 오른쪽 맞춤"
 
 #: common/tool/actions.cpp:304
-#, fuzzy
 msgid "Expand All"
-msgstr "모두 업데이트"
+msgstr "모두 확장"
 
 #: common/tool/actions.cpp:310
-#, fuzzy
 msgid "Collapse All"
-msgstr "모든 항목 교체"
+msgstr "모두 접기"
 
 #: common/tool/actions.cpp:316
-#, fuzzy
 msgid "Select Column(s)"
 msgstr "열 선택"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "현재 선택된 셀이 포함된 전체 열을 선택함"
 
 #: common/tool/actions.cpp:323
-#, fuzzy
 msgid "Select Row(s)"
-msgstr "항목 선택"
+msgstr "행 선택"
 
 #: common/tool/actions.cpp:324
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "현재 선택된 셀이 포함된 전체 행을 선택함"
 
 #: common/tool/actions.cpp:330
-#, fuzzy
 msgid "Select Table"
-msgstr "전체 선택"
+msgstr "테이블 선택"
 
 #: common/tool/actions.cpp:331
-#, fuzzy
 msgid "Select parent table of selected cell(s)"
-msgstr "선택한 셀의 내용 지우기"
+msgstr "선택한 셀의 상위 테이블 선택"
 
 #: common/tool/actions.cpp:337 include/tool/edit_table_tool_base.h:157
-#, fuzzy
 msgid "Add Row Above"
-msgstr "위로 추가"
+msgstr "위에 행 추가"
 
 #: common/tool/actions.cpp:338
-#, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "선택한 선을 모깎기할 수 없습니다."
+msgstr "선택한 셀 위에 새 테이블 행을 삽입하기"
 
 #: common/tool/actions.cpp:344 include/tool/edit_table_tool_base.h:205
-#, fuzzy
 msgid "Add Row Below"
-msgstr "전원 추가"
+msgstr "아래 행 추가"
 
 #: common/tool/actions.cpp:345
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "선택한 셀 아래에 새 테이블 행 삽입하기"
 
 #: common/tool/actions.cpp:351 include/tool/edit_table_tool_base.h:252
-#, fuzzy
 msgid "Add Column Before"
-msgstr "모서리 추가"
+msgstr "앞에 열 추가"
 
 #: common/tool/actions.cpp:352
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "선택한 셀 앞에 새 테이블 열 삽입하기"
 
 #: common/tool/actions.cpp:358 include/tool/edit_table_tool_base.h:299
-#, fuzzy
 msgid "Add Column After"
-msgstr "모서리 추가"
+msgstr "뒤에 열 추가"
 
 #: common/tool/actions.cpp:359
-#, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "선택한 선을 모깎기할 수 없습니다."
+msgstr "선택한 셀 아래에 새 테이블 열을 삽입하기"
 
 #: common/tool/actions.cpp:365
-#, fuzzy
 msgid "Delete Row(s)"
-msgstr "버스 삭제"
+msgstr "행 삭제"
 
 #: common/tool/actions.cpp:366
-#, fuzzy
 msgid "Delete rows containing the currently selected cell(s)"
-msgstr "선택한 셀의 내용 지우기"
+msgstr "현재 선택된 셀이 포함된 행 삭제하기"
 
 #: common/tool/actions.cpp:372
-#, fuzzy
 msgid "Delete Column(s)"
-msgstr "열 선택"
+msgstr "열 삭제"
 
 #: common/tool/actions.cpp:373
-#, fuzzy
 msgid "Delete columns containing the currently selected cell(s)"
-msgstr "한 개의 패드만을 포함한 네트 삭제"
+msgstr "현재 선택된 셀이 포함된 열 삭제하기"
 
 #: common/tool/actions.cpp:379 include/tool/edit_table_tool_base.h:505
-#, fuzzy
 msgid "Merge Cells"
-msgstr "병합 영역"
+msgstr "셀 병합"
 
 #: common/tool/actions.cpp:380
-#, fuzzy
 msgid "Turn selected table cells into a single cell"
-msgstr "선택한 다각형을 단일 다각형으로 병합"
+msgstr "선택한 테이블 셀을 단일 셀로 전환"
 
 #: common/tool/actions.cpp:386 include/tool/edit_table_tool_base.h:544
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "셀 병합 취소"
 
 #: common/tool/actions.cpp:387
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "병합된 테이블 셀을 다시 개별 셀로 전환합니다."
 
 #: common/tool/actions.cpp:394 eeschema/dialogs/dialog_table_properties.cpp:382
 #: pcbnew/dialogs/dialog_table_properties.cpp:358
-#, fuzzy
 msgid "Edit Table"
-msgstr "라벨 편집"
+msgstr "테이블 편집"
 
 #: common/tool/actions.cpp:405
 msgid "Cycle Arc Editing Mode"
@@ -10174,9 +10143,8 @@ msgid "appropriate"
 msgstr "적절함"
 
 #: eeschema/dialogs/dialog_erc.cpp:624 pcbnew/dialogs/dialog_drc.cpp:608
-#, fuzzy
 msgid "Edit exclusion comment..."
-msgstr "시뮬레이션 모델 편집..."
+msgstr "제외 설명 수정..."
 
 #: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/dialogs/dialog_drc.cpp:611
 msgid "Remove exclusion for this violation"
@@ -10188,9 +10156,8 @@ msgid "It will be placed back in the %s list"
 msgstr "%s 리스트에 다시 배치됩니다"
 
 #: eeschema/dialogs/dialog_erc.cpp:633 pcbnew/dialogs/dialog_drc.cpp:625
-#, fuzzy
 msgid "Exclude this violation..."
-msgstr "이 위반 제외"
+msgstr "이 위반 제외..."
 
 #: eeschema/dialogs/dialog_erc.cpp:634 pcbnew/dialogs/dialog_drc.cpp:626
 #, c-format
@@ -10240,15 +10207,13 @@ msgstr "연결 그리드 간격 편집..."
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:716
-#, fuzzy
 msgid "Optional comment:"
-msgstr "수평 개수:"
+msgstr "옵션 설명:"
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:716
-#, fuzzy
 msgid "Exclusion Comment"
-msgstr "제외"
+msgstr "제외 설명"
 
 #: eeschema/dialogs/dialog_erc.cpp:803
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -10978,9 +10943,8 @@ msgid "untitled"
 msgstr "제목 없음"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:590
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "라벨 속성"
+msgstr "라벨 속성 편집"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -12472,9 +12436,8 @@ msgid "Clear colors to use Schematic Editor colors."
 msgstr "회로도의 편집기 색상을 사용하려면 색상을 지웁니다."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
-#, fuzzy
 msgid "Edit Sheet Pin Properties"
-msgstr "시트 핀 속성"
+msgstr "시트 핀 속성 편집"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -13807,70 +13770,59 @@ msgstr "심볼 다시 매핑"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr "목차 (&C)"
+msgstr "셀 내용:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
-#, fuzzy
 msgid "External border"
-msgstr "외부 데이터"
+msgstr "바깥 테두리"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:67
-#, fuzzy
 msgid "Header border"
-msgstr "시트 테두리"
+msgstr "머리글 테두리"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
-#, fuzzy
 msgid "Row lines"
-msgstr "선 그리기"
+msgstr "가로 선"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:102
-#, fuzzy
 msgid "Column lines"
-msgstr "열"
+msgstr "세로 선"
 
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:612 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:406
-#, fuzzy
 msgid "Table Properties"
-msgstr "라벨 속성"
+msgstr "테이블 속성"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:315
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:274
-#, fuzzy
 msgid "Edit Table Cell Properties"
-msgstr "심볼 속성 편집"
+msgstr "테이블 셀 속성 편집"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
-#, fuzzy
 msgid "Horizontal alignment:"
-msgstr "수평 중심:"
+msgstr "수평 정렬:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:41
-#, fuzzy
 msgid "Horizontal alignment"
-msgstr "가로/세로"
+msgstr "수평 정렬"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:66
-#, fuzzy
 msgid "Vertical alignment:"
-msgstr "세로쓰기"
+msgstr "수직 정렬:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:72
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:68
-#, fuzzy
 msgid "Vertical alignment"
-msgstr "세로쓰기"
+msgstr "수직 정렬"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
@@ -13880,21 +13832,18 @@ msgstr "-- 섞인 값 --"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
-#, fuzzy
 msgid "Set Color..."
-msgstr "솔더 페이스트 색상 ..."
+msgstr "색상 설정..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:264
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:191
-#, fuzzy
 msgid "Cell margins:"
-msgstr "마진:"
+msgstr "셀 마진:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:305
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:229
-#, fuzzy
 msgid "Edit Table..."
-msgstr "값 편집..."
+msgstr "테이블 편집..."
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:306
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:230
@@ -15227,9 +15176,9 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "심볼 %s를 라이브러리 '%s'에서 찾을 수 없음"
 
 #: eeschema/erc.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "풋프린트 '%s'이(가) 라이브러리 '%s'의 복사본과 일치하지 않습니다."
+msgstr "심볼 '%s'가 라이브러리 '%s'의 복사본과 일치하지 않음"
 
 #: eeschema/erc.cpp:1066
 #, fuzzy, c-format
@@ -18053,7 +18002,7 @@ msgstr "부착하지 않음"
 #: eeschema/sch_table.cpp:401 pcbnew/pcb_table.cpp:249
 #, c-format
 msgid "%d Column Table"
-msgstr ""
+msgstr "%d 열 테이블"
 
 #: eeschema/sch_table.cpp:546 pcbnew/pcb_table.cpp:285
 #, fuzzy, c-format
@@ -18082,7 +18031,7 @@ msgstr "생성기 제거"
 
 #: eeschema/sch_table.cpp:639 pcbnew/pcb_table.cpp:433
 msgid "Cell Separators"
-msgstr ""
+msgstr "셀 구분자"
 
 #: eeschema/sch_table.cpp:643 pcbnew/pcb_table.cpp:437
 #, fuzzy
@@ -18403,9 +18352,8 @@ msgstr ""
 "\n"
 
 #: eeschema/sch_textbox.cpp:583 pcbnew/pcb_textbox.cpp:725
-#, fuzzy
 msgid "Margins"
-msgstr "마진:"
+msgstr "마진"
 
 #: eeschema/sch_validators.cpp:59
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
@@ -20307,7 +20255,8 @@ msgstr "[선택된 라이브러리 없음]"
 msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
-msgstr ""
+msgstr "이 대화 상자에서 변경한 내용은 즉시 적용되며, 영향을 받는 각 문서에서 실행 "
+"취소를 사용하여 실행 취소할 수 있음"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
 #, fuzzy
@@ -20315,9 +20264,8 @@ msgid "Synchronize sheet pins and hierarchical labels"
 msgstr "기존 항목을 계층 라벨로 변경"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
-#, fuzzy
 msgid "Symbol name"
-msgstr "심볼 이름:"
+msgstr "심볼 이름"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:34
 #, fuzzy
@@ -20355,7 +20303,7 @@ msgstr "라벨로 바꾸기"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr ""
+msgstr "시트 핀과 계층적 라벨 연결 끊기"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Display previous symbol"
@@ -21776,7 +21724,7 @@ msgstr "새 분석 탭..."
 
 #: eeschema/tools/ee_actions.cpp:1416
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "시뮬레이션 분석이 포함된 새 탭 만들기"
 
 #: eeschema/tools/ee_actions.cpp:1424
 msgid "Open Workbook..."
@@ -21784,7 +21732,7 @@ msgstr "통합 문서 열기..."
 
 #: eeschema/tools/ee_actions.cpp:1425
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "저장된 분석 탭 및 설정 세트 열기"
 
 #: eeschema/tools/ee_actions.cpp:1433
 msgid "Save Workbook"
@@ -21838,7 +21786,7 @@ msgstr "분석 탭 편집..."
 
 #: eeschema/tools/ee_actions.cpp:1480
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
+msgstr "현재 분석 탭의 SPICE 명령 및 플롯 설정 편집"
 
 #: eeschema/tools/ee_actions.cpp:1487
 msgid "Run Simulation"
@@ -25879,7 +25827,7 @@ msgstr "모든 페이지에 표시"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "First page only"
-msgstr "첫 페이지만 표시"
+msgstr "첫 페이지만"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Subsequent pages only"
@@ -26181,22 +26129,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "미리보기 모드에서 제목 블록 표시"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"미리보기 모드에서 제목 블록 표시하기:\n"
-"텍스트 자리 표시자는 미리보기 데이터로 대체됩니다."
+msgstr "텍스트 자리 표시자가 미리 보기 데이터로 대체됨"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "편집 모드에서 제목 블록 표시"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"편집 모드에서 제목 블록 표시하기:\n"
-"텍스트 자리 표시자는 ${keyword} 토큰으로 표시됩니다."
+msgstr "텍스트 자리 표시자는 ${keyword} 토큰으로 표시됨"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -30596,27 +30538,24 @@ msgid "Set center by radius"
 msgstr "반경으로 중심 설정"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:373
-#, fuzzy
 msgid "Radius from center to reference position:"
-msgstr "참조 위치에서 현재 각도를 초기화합니다."
+msgstr "중앙에서 기준 위치까지의 반경:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:381
 msgid "Distance between Ref point and Center pos."
 msgstr "기준점과 중심 위치 사이의 거리."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:392
-#, fuzzy
 msgid "Angle from center to reference position:"
-msgstr "참조 위치에서 현재 각도를 초기화합니다."
+msgstr "중심에서 기준 위치까지의 각도:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:408
 msgid "Angle between Ref point and Center pos."
 msgstr "기준점과 중심 위치 사이의 각도."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:429
-#, fuzzy
 msgid "Duplication Settings"
-msgstr "중복 핀:"
+msgstr "복제 설정"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:442
 msgid ""
@@ -31027,9 +30966,9 @@ msgid "They will be placed back in the %s list"
 msgstr "%s 리스트에 다시 배치됩니다"
 
 #: pcbnew/dialogs/dialog_drc.cpp:631
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'..."
-msgstr "모든 규칙 '%s' 위반 제외"
+msgstr "규칙 '%s'의 모든 위반 제외..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:633
 #, fuzzy, c-format
@@ -32841,7 +32780,7 @@ msgstr "선호 영역 연결"
 msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
-msgstr ""
+msgstr "구리 영역에도 연결되고 패드에 연결된 트랙에는 티어드롭을 만들지 않습니다."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
@@ -32854,13 +32793,12 @@ msgstr "티어 드롭이 두 트랙 세그먼트에 걸쳐 있도록 허용"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
-"첫 번째 트랙 세그먼트가 너무 짧은 경우 눈물방울이 2개의 트랙에 퍼지도록 허용"
-"함"
+"첫 번째 트랙 세그먼트가 너무 짧아 최적의 길이를 수용하지 못하는 경우 "
+"티어드롭이 연결된 처음 2개의 트랙 세그먼트에 걸쳐 확장되도록 허용합니다."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -34945,9 +34883,8 @@ msgstr ""
 "서 '잠긴 항목' 확인란이 선택되어 있는 경우에만 선택할 수 있습니다."
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
-#, fuzzy
 msgid "Associated layer:"
-msgstr "연관 레이어"
+msgstr "연관 레이어:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
 #, fuzzy
@@ -35524,12 +35461,12 @@ msgstr "체크할 경우, 패드를 나머지 풋프린트와 관련하여 움�
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Toggle selection"
-msgstr "선택 항목을 전환합니다."
+msgstr "선택 토글"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:157
 #: pcbnew/dialogs/panel_edit_options_base.cpp:229
 msgid "Highlight net (for pads or tracks)"
-msgstr "네트 강조 (패드 또는 배선용)."
+msgstr "네트 강조 (패드 또는 배선용)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:261
 #: pcbnew/dialogs/panel_edit_options_base.cpp:284
@@ -38804,9 +38741,9 @@ msgid "Missing footprint %s (%s)"
 msgstr "풋프린트 누락 %s (%s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:132
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
-msgstr "풋프린트 라이브러리의 사본과 일치하지 않음"
+msgstr "풋프린트 %s 값(%s)이 심볼 값(%s)과 일치하지 않음."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
 #, fuzzy, c-format
@@ -39466,11 +39403,8 @@ msgid "Edit Zone"
 msgstr "영역 편집"
 
 #: pcbnew/footprint_editor_utils.cpp:328 pcbnew/footprint_editor_utils.cpp:340
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr ""
-"현재 설정은 '%s' 라이브러리를 포함하지 않습니다.  풋프린트 라이브러리 관리를 "
-"사용하여 설정을 편집하세요."
+msgstr "풋프린트 라이브러리 관리를 사용하여 설정을 편집합니다."
 
 #: pcbnew/footprint_editor_utils.cpp:329
 msgid "Library not found in footprint library table."
@@ -39783,7 +39717,7 @@ msgstr "너비 제한: 최소 %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "다른 튜닝 패턴 내의 세그먼트는 튜닝할 수 없습니다."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 #, fuzzy
@@ -41247,18 +41181,18 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "풋프린트 %s 패드 %s은(는) 알 수 없는 종류 %d 홀을 사용합니다."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"풋프린트 %s 패드 %s은(는) 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)"
+"라이브러리 '%s'를 로드하는 동안 오류 발생:\n"
+"풋프린트 %s 패드 %s가 복잡한 패드 스택을 사용함(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
-msgstr ""
-"풋프린트 %s 패드 %s은(는) 복잡한 패드 스택을 사용합니다 (아직 지원되지 않음)"
+msgstr "풋프린트 %s 패드 %s가 복잡한 패드 스택을 사용함(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
 #, fuzzy, c-format
@@ -44301,9 +44235,8 @@ msgid "Change Side / Flip"
 msgstr "배치면 변경 / 반전"
 
 #: pcbnew/tools/edit_tool.cpp:2518
-#, fuzzy
 msgid "Move Exactly"
-msgstr "정확하게 이동..."
+msgstr "정확하게 이동"
 
 #: pcbnew/tools/edit_tool.cpp:2680
 #, c-format
@@ -44945,9 +44878,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "선택한 선에 접하는 호 탄젠트 추가"
 
 #: pcbnew/tools/pcb_actions.cpp:621
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "모따기 선"
+msgstr "모따기 선..."
 
 #: pcbnew/tools/pcb_actions.cpp:622
 msgid "Cut away corners between selected lines"
@@ -47398,43 +47330,36 @@ msgid "Zone %s %s"
 msgstr "영역 %s (%s 상의)"
 
 #: pcbnew/zone.cpp:1659
-#, fuzzy
 msgid "Cannot be less than zone minimum width"
-msgstr "단열 살 너비는 최소 너비보다 작을 수 없습니다."
+msgstr "영역 최소 너비보다 작을 수 없음"
 
 #: pcbnew/zone.cpp:1665
-#, fuzzy
 msgid "Hatch Width"
-msgstr "해치 너비:"
+msgstr "해치 너비"
 
 #: pcbnew/zone.cpp:1672
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "해치 간격:"
+msgstr "해치 간격"
 
 #: pcbnew/zone.cpp:1679
 msgid "Hatch Minimum Hole Ratio"
-msgstr ""
+msgstr "해치의 최소 구멍 비율"
 
 #: pcbnew/zone.cpp:1687
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "다듬기 작업:"
+msgstr "다듬기 작업"
 
 #: pcbnew/zone.cpp:1693
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "다듬기 양:"
+msgstr "다듬기 양"
 
 #: pcbnew/zone.cpp:1699
-#, fuzzy
 msgid "Remove Islands"
-msgstr "고립된 영역 제거:"
+msgstr "고립 영역 제거"
 
 #: pcbnew/zone.cpp:1704
-#, fuzzy
 msgid "Minimum Island Area"
-msgstr "고립된 영역 최소 크기:"
+msgstr "고립 영역 최소화"
 
 #: pcbnew/zone.cpp:1719
 msgid "Minimum Width"
