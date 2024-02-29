@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-02-29 18:34+0000\n"
+"PO-Revision-Date: 2024-03-01 00:04+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -15244,9 +15244,8 @@ msgid "Checking for library symbol issues..."
 msgstr "라이브러리 심볼 문제 확인 중..."
 
 #: eeschema/erc.cpp:1352
-#, fuzzy
 msgid "Checking for footprint link issues..."
-msgstr "풋프린트 확인..."
+msgstr "풋프린트 연결 문제 확인..."
 
 #: eeschema/erc.cpp:1360
 msgid "Checking for off grid pins and wires..."
@@ -26434,7 +26433,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "침투깊이 100%를 위한 주파수:"
+msgstr "침투 깊이 100% 를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
@@ -35468,9 +35467,8 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:477
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:315
-#, fuzzy
 msgid "Parameter error"
-msgstr "매개변수"
+msgstr "매개변수 오류"
 
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:518
 msgid "Reference and value are mandatory."
@@ -35499,32 +35497,25 @@ msgid "Illegal character '%c' in nickname '%s'."
 msgstr "허용되지 않는 문자 '%c'이(가) 별칭 '%s' 에서 발견되었습니다."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:810
-#, fuzzy
 msgid ""
 "Select one or more rows containing libraries to save as current KiCad format."
-msgstr ""
-"오래된 형식 (*.lib) 의 라이브러리가 포함된 행을 하나 이상 선택하여 현재 "
-"KiCad 형식 (*.kicad_sym) 으로 저장합니다."
+msgstr "라이브러리가 포함된 행을 하나 이상 선택하여 현재 KiCad 형식으로 저장합니다."
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:818
-#, fuzzy, c-format
+#, c-format
 msgid "Save '%s' as current KiCad format and replace entry in table?"
-msgstr ""
-"'%s'을(를) 현재 KiCad 형식 (*.kicad_sym) 으로 저장하고 테이블에서 레거시 항목"
-"을 바꾸시겠습니까?"
+msgstr "'%s'를 현재 KiCad 형식으로 저장하고 테이블의 항목을 바꿀까요?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:824
-#, fuzzy, c-format
+#, c-format
 msgid "Save %d libraries as current KiCad format and replace entries in table?"
-msgstr ""
-"%d개의 오래된 형식 라이브러리를 현재 KiCad 형식 (*.kicad_sym) 으로 저장하고 "
-"테이블에서 오래된 항목을 교체하시겠습니까?"
+msgstr "%d 라이브러리를 현재 KiCad 형식으로 저장하고 테이블의 항목을 바꿀까요?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:854
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Folder '%s' already exists. Do you want overwrite any existing footprints?"
-msgstr "'%s' 파일이 이미 있습니다. 이 파일을 덮어쓰시겠습니까?"
+msgstr "폴더 '%s'가 이미 있습니다. 기존 풋프린트를 덮어쓸까요?"
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:884
 #, c-format
@@ -35599,9 +35590,8 @@ msgid "Clearance Outlines"
 msgstr "클리어런스 외곽선"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
-#, fuzzy
 msgid "Do not show clearances"
-msgstr "다시 표시 안 함"
+msgstr "간격을 표시하지 않음"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing"
@@ -35624,14 +35614,12 @@ msgid "Show pad clearance"
 msgstr "패드 클리어런스 표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
-#, fuzzy
 msgid "Show all fields when parent footprint is selected"
-msgstr "풋프린트 선택 시 심볼 강조 표시"
+msgstr "상위 풋프린트를 선택하면 모든 필드 표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:130
-#, fuzzy
 msgid "Select/highlight objects corresponding to schematic selection"
-msgstr "Schematic 편집기에서 해당 항목 선택"
+msgstr "회로도 선택에 해당하는 개체 선택/강조하기"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:132
 msgid "Highlight footprints corresponding to selected symbols"
@@ -35662,7 +35650,6 @@ msgid "Icon"
 msgstr "아이콘"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
-#, fuzzy
 msgid "Show Button"
 msgstr "버튼 표시"
 
@@ -35910,7 +35897,6 @@ msgid "Arc/circle approximated by segments"
 msgstr "호/원을 세그먼트로 근사하기"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:368
-#, fuzzy
 msgid "Maximum allowed deviation:"
 msgstr "최대 허용 편차:"
 
@@ -35946,9 +35932,8 @@ msgid "Allow fillets outside zone outline"
 msgstr "바깥 영역 외곽선에 대해 모깍기 허용"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:420
-#, fuzzy
 msgid "Minimum thermal relief spoke count:"
-msgstr "최소 단열판 스포크 수:"
+msgstr "최소 열 분산 스포크 수:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:439
 msgid "Length tuning"
@@ -35968,14 +35953,12 @@ msgstr ""
 "다.  비활성화되면, 비아 스택업 높이는 무시됩니다."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
-#, fuzzy
 msgid "When Adding Footprints to Board"
-msgstr "풋프린트 편집기에서 열기"
+msgstr "보드에 풋프린트 추가 시"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:58
-#, fuzzy
 msgid "Apply board defaults to footprint fields"
-msgstr "모든 풋프린트 필드 표시"
+msgstr "보드 기본값을 풋프린트 필드에 적용"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:61
 msgid "Apply board defaults to footprint text"
@@ -37163,9 +37146,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
-#, fuzzy
 msgid "Default properties for round shapes:"
-msgstr "새 그래픽 항목에 대한 기본 속성:"
+msgstr "원형 도형의 기본 속성:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:38
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:228
@@ -37194,14 +37176,12 @@ msgstr "곡선 점:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:194
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:384
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:569
-#, fuzzy
 msgid "Allow teardrop to span two track segments"
-msgstr "티어 드롭이 두 트랙 세그먼트에 걸쳐 있도록 허용"
+msgstr "티어드롭이 두 개의 트랙 세그먼트에 걸쳐 있도록 허용"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:209
-#, fuzzy
 msgid "Default properties for rectangular shapes:"
-msgstr "새 그래픽 항목에 대한 기본 속성:"
+msgstr "직사각형 도형의 기본 속성:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:399
 msgid "Properties for track-to-track teardrops:"
@@ -37212,22 +37192,20 @@ msgid "Maximum track width"
 msgstr "최대 배선폭"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:536
-#, fuzzy
 msgid ""
 "Max track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
-"최대 패드/비아 크기 대 트랙 너비 비율로 눈물 방울을 생성합니다.\n"
-"100은 항상 눈물방울을 만듭니다."
+"티어드롭을 생성할 최대 트랙 너비 비율입니다.\n"
+"100은 항상 티어드롭을 생성합니다."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:542
 msgid "Tracks which are similar in size do not need teardrops."
 msgstr "크기가 비슷한 트랙은 티어드롭이 필요하지 않습니다."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
-#, fuzzy
 msgid "Default properties for new graphics and text:"
-msgstr "새 그래픽 항목에 대한 기본 속성:"
+msgstr "새 그래픽과 텍스트의 기본 속성:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
@@ -37300,19 +37278,16 @@ msgid "Via Gap"
 msgstr "비아 간격"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
-#, fuzzy
 msgid "Default properties for single-track tuning:"
-msgstr "새 그래픽 항목에 대한 기본 속성:"
+msgstr "단일 트랙 튜닝의 기본 속성:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
-#, fuzzy
 msgid "Default properties for differential-pairs:"
-msgstr "새 그래픽 항목에 대한 기본 속성:"
+msgstr "차동 쌍의 기본 속성:"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:277
-#, fuzzy
 msgid "Default properties for differential-pair skews:"
-msgstr "새 그래픽 항목에 대한 기본 속성:"
+msgstr "차동 쌍 스큐의 기본 속성:"
 
 #: pcbnew/drc/drc_cache_generator.cpp:123
 msgid "Gathering copper items..."
@@ -37366,9 +37341,9 @@ msgid "netclass '%s' (diff pair)"
 msgstr "네트클래스 '%s' (차동 쌍)"
 
 #: pcbnew/drc/drc_engine.cpp:353
-#, fuzzy, c-format
+#, c-format
 msgid "netclass '%s' (uvia)"
-msgstr "네트클래스 '%s' (차동 쌍)"
+msgstr "네트클래스 '%s' (uvia)"
 
 #: pcbnew/drc/drc_engine.cpp:428
 msgid "keepout area"
@@ -37488,9 +37463,9 @@ msgid "Checking %s track width: opt %s."
 msgstr "확인 중 %s 배선 폭: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:980
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s track width: min %s."
-msgstr "확인 중 %s 배선 폭: 선택 %s."
+msgstr "트랙 너비 %s 점검: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:988
 #, c-format
@@ -37503,9 +37478,9 @@ msgid "Checking %s via diameter: opt %s."
 msgstr "%s 비아 직경 확인: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1002
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s via diameter: min %s."
-msgstr "%s 비아 직경 확인: 선택 %s."
+msgstr "비아 지름 %s 점검: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1011
 #, c-format
@@ -37513,9 +37488,9 @@ msgid "Checking %s hole size: opt %s."
 msgstr "확인 중 %s 홀 크기: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1017
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "확인 중 %s 홀 크기: 선택 %s."
+msgstr "구멍 크기 %s 점검: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1027
 #, c-format
@@ -37528,14 +37503,14 @@ msgid "Checking %s diff pair gap: opt %s."
 msgstr "%s의 차동 쌍 유격 확인 중: 선택 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1041
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "%s 클리어런스 확인 중: %s."
+msgstr "클리어런스 %s 점검: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1049
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "확인 중 %s 홀 크기: 선택 %s."
+msgstr "홀에서 홀까지 %s 점검: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1055 pcbnew/drc/drc_engine.cpp:1081
 #: pcbnew/drc/drc_engine.cpp:1528
@@ -37549,14 +37524,13 @@ msgid "Checking %s: min %s; opt %s; max %s."
 msgstr "%s 확인 중: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1091
-#, fuzzy
 msgid "Netclass clearances apply only between copper items."
-msgstr "기판과 네트클래스 클리어런스는 구리 개체 사이에만 적용됩니다."
+msgstr "네트클래스 간격은 구리 항목 간에만 적용됩니다."
 
 #: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
-#, fuzzy, c-format
+#, c-format
 msgid "%s contains no copper.  Rule ignored."
-msgstr "%s는 드릴 구멍이 아닙니다. 규칙이 무시되었습니다."
+msgstr "%s에 구리가 없음.  규칙이 무시됨."
 
 #: pcbnew/drc/drc_engine.cpp:1157
 msgid "Keepout constraint not met."
@@ -37581,9 +37555,8 @@ msgid "Rule layer not matched; rule ignored."
 msgstr "규칙 레이어가 일치하지 않음; 규칙이 무시되었습니다."
 
 #: pcbnew/drc/drc_engine.cpp:1202
-#, fuzzy
 msgid "Constraint layer not matched."
-msgstr "킵아웃 레이어가 일치하지 않습니다."
+msgstr "제약 조건 계층이 일치하지 않음."
 
 #: pcbnew/drc/drc_engine.cpp:1222
 #, c-format
@@ -37628,9 +37601,9 @@ msgid "Condition not satisfied; rule ignored."
 msgstr "조건을 만족하지 못하였습니다; 규칙은 무시됩니다."
 
 #: pcbnew/drc/drc_engine.cpp:1343 pcbnew/drc/drc_engine.cpp:1367
-#, fuzzy, c-format
+#, c-format
 msgid "Local clearance on %s: %s."
-msgstr "%s의 지역 클리어런스 값; 클리어런스: %s."
+msgstr "%s의 지역 클리어런스: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1426
 #, c-format
@@ -37755,9 +37728,8 @@ msgid "Annular width"
 msgstr "환형 폭"
 
 #: pcbnew/drc/drc_item.cpp:125
-#, fuzzy
 msgid "Hole size out of range"
-msgstr "드릴 허용 범위 벗어남"
+msgstr "범위를 벗어난 구멍 크기"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Via diameter"
@@ -37768,9 +37740,8 @@ msgid "Padstack is not valid"
 msgstr "패드스택이 유효하지 않음"
 
 #: pcbnew/drc/drc_item.cpp:137
-#, fuzzy
 msgid "Micro via hole size out of range"
-msgstr "마이크로 비아 드릴 허용 범위 초과"
+msgstr "범위를 벗어난 마이크로 비아 홀 크기"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
@@ -37817,9 +37788,8 @@ msgid "Pad net doesn't match schematic"
 msgstr "패드 네트와 회로도가 불일치"
 
 #: pcbnew/drc/drc_item.cpp:185
-#, fuzzy
 msgid "Footprint attributes don't match symbol"
-msgstr "풋프린트 라이브러리의 사본과 일치하지 않음"
+msgstr "풋프린트 속성이 심볼과 일치하지 않음"
 
 #: pcbnew/drc/drc_item.cpp:189
 msgid "Footprint not found in libraries"
@@ -37903,9 +37873,9 @@ msgid "Local override"
 msgstr "지역 재정의"
 
 #: pcbnew/drc/drc_rule.h:156
-#, fuzzy, c-format
+#, c-format
 msgid "rule '%s'"
-msgstr "규칙 %s"
+msgstr "규칙 '%s'"
 
 #: pcbnew/drc/drc_rule_condition.cpp:52
 msgid "ERROR in expression."
@@ -38223,19 +38193,19 @@ msgid "%s has zone connection override."
 msgstr "%s에 영역 연결 재정의가 있음."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:239
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief gap override."
-msgstr "%s 방열 간격이 다릅니다."
+msgstr "%s에 열 분산 간격 재정의가 적용됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:245
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief spoke width override."
-msgstr "해결된 단열판 스포크 너비: %s."
+msgstr "%s에 열 분산 스포크 너비 재정의가 적용됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:251
-#, fuzzy, c-format
+#, c-format
 msgid "%s has thermal relief spoke angle override."
-msgstr "해결된 단열판 스포크 너비: %s."
+msgstr "%s에 열 분산 스포크 각도 재정의가 적용됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:257
 #, c-format
@@ -38243,14 +38213,14 @@ msgid "%s has zone knockout setting override."
 msgstr "%s에 영역 녹아웃 설정 재정의가 있음."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad to die length differs."
-msgstr "%s 해치 너비가 다릅니다."
+msgstr "%s 패드에서 다이의 길이가 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "%s position differs."
-msgstr "%s 우선 순위가 다릅니다."
+msgstr "%s 위치가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:274
 #, c-format
@@ -38259,24 +38229,24 @@ msgstr "%s의 숫자가 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:296
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s layers differ."
-msgstr "%s 레이어는 필수입니다."
+msgstr "%s 레이어가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:302
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad shape type differs."
-msgstr "%s 채움 유형이 다릅니다."
+msgstr "%s 패드 모양 유형이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "%s pad type differs."
-msgstr "%s 채움 유형이 다릅니다."
+msgstr "%s 패드 유형이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:307
-#, fuzzy, c-format
+#, c-format
 msgid "%s fabrication property differs."
-msgstr "%s 패드 연결 속성이 다릅니다."
+msgstr "%s 제작 속성이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:312
 #, c-format
@@ -38284,44 +38254,44 @@ msgid "%s orientation differs."
 msgstr "%s 방향이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid "%s size differs."
-msgstr "%s 필드가 다릅니다."
+msgstr "%s 크기가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:317
-#, fuzzy, c-format
+#, c-format
 msgid "%s trapezoid delta differs."
-msgstr "%s 필드가 다릅니다."
+msgstr "%s 사다리꼴 델타가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:325
-#, fuzzy, c-format
+#, c-format
 msgid "%s rounded corners differ."
-msgstr "%s 모서리가 다릅니다."
+msgstr "%s 둥근 모서리가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:336
-#, fuzzy, c-format
+#, c-format
 msgid "%s chamfered corners differ."
-msgstr "%s 모서리가 다릅니다."
+msgstr "%s 모따기된 모서리가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape offset from hole differs."
-msgstr "%s 패드 연결 속성이 다릅니다."
+msgstr "구멍의 %s 모양 오프셋이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill shape differs."
-msgstr "%s 채움 유형이 다릅니다."
+msgstr "%s 드릴 모양이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:347
-#, fuzzy, c-format
+#, c-format
 msgid "%s drill size differs."
-msgstr "%s 채움 유형이 다릅니다."
+msgstr "%s 드릴 크기가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:385
-#, fuzzy, c-format
+#, c-format
 msgid "%s shape primitives differ."
-msgstr "%s 레이어는 필수입니다."
+msgstr "%s 모양 기본값이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:469
 #, c-format
@@ -38364,9 +38334,9 @@ msgid "%s keep out pads setting differs."
 msgstr "%s 패드 차단 설정이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s keep out tracks setting differs."
-msgstr "%s 트랙 유지 설정이 다릅니다."
+msgstr "%s 트랙 금지 설정이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:488
 #, c-format
@@ -38379,9 +38349,9 @@ msgid "%s pad connection property differs."
 msgstr "%s 패드 연결 속성이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:496
-#, fuzzy, c-format
+#, c-format
 msgid "%s local clearance differs."
-msgstr "해결된 클리어런스: %s."
+msgstr "%s 지역 클리어런스가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:498
 #, c-format
@@ -38389,9 +38359,9 @@ msgid "%s thermal relief gap differs."
 msgstr "%s 방열 간격이 다릅니다."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:500
-#, fuzzy, c-format
+#, c-format
 msgid "%s thermal relief spoke width differs."
-msgstr "해결된 단열판 스포크 너비: %s."
+msgstr "%s 열 분산 스포크 너비가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:503
 #, c-format
@@ -38473,13 +38443,12 @@ msgstr "풋프린트 유형이 다름."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:621
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:163
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:176
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' settings differ."
-msgstr "%s 우선 순위가 다릅니다."
+msgstr "'%s' 설정이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:615
 #: pcbnew/footprint.cpp:3524
-#, fuzzy
 msgid "Exempt From Courtyard Requirement"
 msgstr "부품자리 요구 사항 면제"
 
@@ -38496,7 +38465,6 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "솔더 페이스트 절대 간격이 재정의됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:663
-#, fuzzy
 msgid "\"Solder paste relative clearance overridden."
 msgstr "솔더 페이스트 상대 간격이 재정의됨."
 
@@ -38545,9 +38513,9 @@ msgid "(%s max length %s; actual %s)"
 msgstr "(%s 최대 길이 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min skew %s; actual %s; average net length %s; actual %s)"
-msgstr "(%s 최대 스큐: %s, 실제 값: %s, 평균 네트 길이: %s, 실제 값: %s)"
+msgstr "(%s 최소 스큐: %s, 실제 값: %s, 평균 네트 길이: %s, 실제 값: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:177
 #, c-format
@@ -38572,9 +38540,8 @@ msgid "Checking length constraints..."
 msgstr "길이 제한 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:119
-#, fuzzy
 msgid "(Suspicious items found on Edge.Cuts layer)"
-msgstr "(Edge.Cuts 레이어에서 모서리를 찾지 못했습니다)"
+msgstr "(Edge.Cuts 레이어에서 의심스러운 항목 발견)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:145
 msgid "(no edges found on Edge.Cuts layer)"
@@ -38625,9 +38592,9 @@ msgid "Footprint %s value (%s) doesn't match symbol value (%s)."
 msgstr "풋프린트 %s 값(%s)이 심볼 값(%s)과 일치하지 않음."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "%s footprint (%s) doesn't match that given by symbol (%s)."
-msgstr "%s 풋프린트(%s)가 심볼(%s)이 지정한 풋프린트(%s)와 일치하지 않음."
+msgstr "%s 풋프린트(%s)가 심볼(%s)이 지정한 것과 일치하지 않음."
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:198
 msgid "No corresponding pin found in schematic."
@@ -38747,9 +38714,8 @@ msgid "Checking thermal reliefs..."
 msgstr "단열판 확인..."
 
 #: pcbnew/edit_zone_helpers.cpp:84
-#, fuzzy
 msgid "Edit Zone Properties"
-msgstr "핀 속성 수정"
+msgstr "영역 속성 편집"
 
 #: pcbnew/exporters/export_d356.cpp:380
 msgid "Export D-356 Test File"
@@ -38901,22 +38867,18 @@ msgid "Cutting %d/%d %s\n"
 msgstr "절단 %d/%d %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:989
-#, fuzzy
 msgid "shapes"
-msgstr "+ 모양"
+msgstr "형상"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:997
-#, fuzzy
 msgid "pads"
-msgstr "패드 없음"
+msgstr "패드"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:998
-#, fuzzy
 msgid "tracks"
 msgstr "배선"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:999
-#, fuzzy
 msgid "zones"
 msgstr "구역"
 
@@ -41106,15 +41068,15 @@ msgstr ""
 "습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "라이브러리 '%s'를 로딩:\n"
-"Altium 레이어(%d)에 있는 %s 비구리 패드 %s가 KiCad에 해당하는 것이 없습니다. "
-"KiCad 레이어 Eco1_User로 이동되었습니다."
+"풋프린트 %s 비구리 패드 %s가 알티움 레이어(%d)에서 발견되었으며 KiCad에 "
+"해당하는 것은 없습니다. KiCad 레이어 Eco1_User로 이동되었습니다."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
 #, c-format
@@ -47288,16 +47250,12 @@ msgstr "채우지 않고 계속"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:41
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:49
-#, fuzzy
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
-"영역들은 우선 순위에 따라 채워집니다, 레벨 3은 레벨 2보다 우선 순위가 높습니"
-"다.\n"
-"한 영역이 다른 영역 안에 있을 경우:\n"
-"* 우선 순위가 높은 경우: 외곽선이 다른 영역에서 제거됩니다.\n"
-"* 우선 순위가 동일한 경우: DRC 오류가 설정됩니다."
+"최상위 영역의 우선순위가 가장 높습니다. 영역이 다른 영역 안에 있을 때 "
+"우선순위가 더 높으면 해당 영역의 윤곽선이 다른 영역에서 제거됩니다."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:99
 #, fuzzy
