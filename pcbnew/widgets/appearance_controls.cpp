@@ -368,27 +368,28 @@ static std::set<int> s_allowedInFpEditor =
 
 // These are the built-in layer presets that cannot be deleted
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetNoLayers( _HKI( "No Layers" ), LSET() );
+LAYER_PRESET APPEARANCE_CONTROLS::presetNoLayers( _HKI( "No Layers" ), LSET(), false );
 
-LAYER_PRESET APPEARANCE_CONTROLS::presetAllLayers( _HKI( "All Layers" ), LSET::AllLayersMask() );
+LAYER_PRESET APPEARANCE_CONTROLS::presetAllLayers( _HKI( "All Layers" ),
+        LSET::AllLayersMask(), false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetAllCopper( _HKI( "All Copper Layers" ),
-        LSET::AllCuMask().set( Edge_Cuts ) );
+        LSET::AllCuMask().set( Edge_Cuts ), false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetInnerCopper( _HKI( "Inner Copper Layers" ),
-        LSET::InternalCuMask().set( Edge_Cuts ) );
+        LSET::InternalCuMask().set( Edge_Cuts ), false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetFront( _HKI( "Front Layers" ),
-        LSET::FrontMask().set( Edge_Cuts ) );
+        LSET::FrontMask().set( Edge_Cuts ), false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetFrontAssembly( _HKI( "Front Assembly View" ),
-        LSET::FrontAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), F_SilkS );
+        LSET::FrontAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), F_SilkS, false );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetBack( _HKI( "Back Layers" ),
-        LSET::BackMask().set( Edge_Cuts ) );
+        LSET::BackMask().set( Edge_Cuts ), true );
 
 LAYER_PRESET APPEARANCE_CONTROLS::presetBackAssembly( _HKI( "Back Assembly View" ),
-        LSET::BackAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), B_SilkS );
+        LSET::BackAssembly().set( Edge_Cuts ), GAL_SET::DefaultVisible(), B_SilkS, true );
 
 // this one is only used to store the object visibility settings  of the last used
 // built-in layer preset
@@ -524,6 +525,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
             [&]( wxCommandEvent& aEvent )
             {
                 m_frame->GetToolManager()->RunAction( PCB_ACTIONS::flipBoard );
+                syncLayerPresetSelection();
             } );
 
     m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER(
@@ -2564,12 +2566,14 @@ void APPEARANCE_CONTROLS::syncLayerPresetSelection()
 {
     LSET    visibleLayers  = getVisibleLayers();
     GAL_SET visibleObjects = getVisibleObjects();
+    bool    flipBoard = m_cbFlipBoard->GetValue();
 
     auto it = std::find_if( m_layerPresets.begin(), m_layerPresets.end(),
                             [&]( const std::pair<const wxString, LAYER_PRESET>& aPair )
                             {
                                 return ( aPair.second.layers == visibleLayers
-                                         && aPair.second.renderLayers == visibleObjects );
+                                         && aPair.second.renderLayers == visibleObjects
+                                         && aPair.second.flipBoard == flipBoard );
                             } );
 
     if( it != m_layerPresets.end() )
@@ -2667,7 +2671,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         if( !exists )
         {
             m_layerPresets[name] = LAYER_PRESET( name, getVisibleLayers(), getVisibleObjects(),
-                                                 UNSELECTED_LAYER );
+                                                 UNSELECTED_LAYER, m_cbFlipBoard->GetValue() );
         }
 
         LAYER_PRESET* preset = &m_layerPresets[name];
@@ -2675,7 +2679,6 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
         if( !exists )
         {
             index = m_cbLayerPresets->Insert( name, index - 1, static_cast<void*>( preset ) );
-            preset->flipBoard = m_cbFlipBoard->GetValue();
         }
         else if( preset->readOnly )
         {
@@ -2757,7 +2760,7 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
     }
 
     LAYER_PRESET* preset = static_cast<LAYER_PRESET*>( m_cbLayerPresets->GetClientData( index ) );
-    m_currentPreset      = preset;
+    m_currentPreset = preset;
 
     m_lastSelectedUserPreset = ( !preset || preset->readOnly ) ? nullptr : preset;
 
@@ -2786,7 +2789,8 @@ void APPEARANCE_CONTROLS::onLayerPresetChanged( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
 {
-    BOARD* board = m_frame->GetBoard();
+    BOARD*           board = m_frame->GetBoard();
+    KIGFX::PCB_VIEW* view = m_frame->GetCanvas()->GetView();
 
     setVisibleLayers( aPreset.layers );
     setVisibleObjects( aPreset.renderLayers );
@@ -2808,15 +2812,16 @@ void APPEARANCE_CONTROLS::doApplyLayerPreset( const LAYER_PRESET& aPreset )
     if( !m_isFpEditor )
         m_frame->GetCanvas()->SyncLayersVisibility( board );
 
-    if( aPreset.flipBoard )
+    if( aPreset.flipBoard != view->IsMirroredX() )
     {
-        m_frame->GetCanvas()->GetView()->SetMirror( true, false );
-        m_frame->GetCanvas()->GetView()->RecacheAllItems();
+        view->SetMirror( !view->IsMirroredX(), view->IsMirroredY() );
+        view->RecacheAllItems();
     }
 
     m_frame->GetCanvas()->Refresh();
 
     syncColorsAndVisibility();
+    UpdateDisplayOptions();
 }
 
 
@@ -2960,11 +2965,6 @@ void APPEARANCE_CONTROLS::onViewportChanged( wxCommandEvent& aEvent )
 void APPEARANCE_CONTROLS::doApplyViewport( const VIEWPORT& aViewport )
 {
     m_frame->GetCanvas()->GetView()->SetViewport( aViewport.rect );
-    if( m_cbFlipBoard->GetValue() )
-    {
-        m_frame->GetCanvas()->GetView()->SetMirror( true, false );
-        m_frame->GetCanvas()->GetView()->RecacheAllItems();
-    }
     m_frame->GetCanvas()->Refresh();
 }
 
