@@ -563,7 +563,8 @@ void APPEARANCE_CONTROLS_3D::syncLayerPresetSelection()
     std::bitset<LAYER_3D_END>     visibleLayers = m_frame->GetAdapter().GetVisibleLayers();
     std::map<int, COLOR4D>        colors = m_frame->GetAdapter().GetLayerColors();
 
-    auto it = std::find_if( presets.begin(), presets.end(),
+    auto it = std::find_if(
+            presets.begin(), presets.end(),
             [&]( const LAYER_PRESET_3D& aPreset )
             {
                 for( int layer = LAYER_3D_BOARD; layer < LAYER_3D_END; ++layer )
@@ -578,9 +579,12 @@ void APPEARANCE_CONTROLS_3D::syncLayerPresetSelection()
                         return false;
                 }
 
-                for( int layer = LAYER_3D_BOARD; layer < LAYER_3D_ADHESIVE; ++layer )
+                for( int layer = LAYER_3D_START + 1; layer < LAYER_3D_END; ++layer )
                 {
-                    if( aPreset.colors.at( layer ) != colors.at( layer ) )
+                    auto it1 = aPreset.colors.find( layer );
+                    auto it2 = colors.find( layer );
+
+                    if( it1 != aPreset.colors.end() && it2 != colors.end() && *it1 != *it2 )
                         return false;
                 }
 
