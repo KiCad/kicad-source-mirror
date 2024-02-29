@@ -936,7 +936,7 @@ TOOL_ACTION ACTIONS::selectionTool( TOOL_ACTION_ARGS()
         .Flags( AF_ACTIVATE ) );
 
 TOOL_ACTION ACTIONS::measureTool( TOOL_ACTION_ARGS()
-        .Name( "common.InteractiveEdit.measureTool" )
+        .Name( "common.Interactive.measureTool" )
         .Scope( AS_GLOBAL )
         .DefaultHotkey( MD_CTRL + MD_SHIFT + 'M' )
         // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
