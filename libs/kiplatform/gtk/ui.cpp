@@ -301,6 +301,12 @@ bool KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
             aWindow->WarpPointer( aX, aY );
             gdk_window_set_cursor( win, cur_cursor );
 
+            if( cur_cursor )
+                g_object_unref( cur_cursor );
+
+            if( blank_cursor )
+                g_object_unref( blank_cursor );
+
             return true;
         }
 #endif
