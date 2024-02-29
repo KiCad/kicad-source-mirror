@@ -1004,19 +1004,16 @@ void PROJECT_TREE_PANE::onOpenSelectedFileWithTextEditor( wxCommandEvent& event 
     }
 
     std::vector<PROJECT_TREE_ITEM*> tree_data = GetSelectedData();
-    wxString files;
 
     for( PROJECT_TREE_ITEM* item_data : tree_data )
     {
         wxString fullFileName = item_data->GetFileName();
 
-        if( !files.IsEmpty() )
-            files += " ";
-
-        files += fullFileName;
+        if( !fullFileName.IsEmpty() )
+        {
+            ExecuteFile( editorname, fullFileName.wc_str(), nullptr, false );
+        }
     }
-
-    ExecuteFile( editorname, files );
 }
 
 

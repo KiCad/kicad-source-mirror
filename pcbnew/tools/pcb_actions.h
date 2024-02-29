@@ -461,6 +461,7 @@ public:
     static TOOL_ACTION pasteFootprint;
     static TOOL_ACTION importFootprint;
     static TOOL_ACTION exportFootprint;
+    static TOOL_ACTION openWithTextEditor;
 
     static TOOL_ACTION footprintProperties;
     static TOOL_ACTION defaultPadProperties;

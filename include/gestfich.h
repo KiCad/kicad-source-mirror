@@ -57,9 +57,15 @@ void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& 
 
 /**
  * Call the executable file \a aEditorName with the parameter \a aFileName.
+ * @param aEditorName is the full filename for the binary.
+ * @param aFileName is the full filename of the file to open.
+ * @param aCallback a wxProcess* for the call.
+ * @param aFileForKicad a boolean to flag if aFileName runs with a KiCad binary.
+ * In this case aFileName is a shortname and FindKicadFile() is called to return the path.
+ * In the other case, aFileName is a full file name (passed prefixed with the path).
  */
 int ExecuteFile( const wxString& aEditorName, const wxString& aFileName = wxEmptyString,
-                 wxProcess* aCallback = nullptr );
+                 wxProcess* aCallback = nullptr, bool aFileForKicad = true );
 
 /**
  * Add un " to the start and the end of string (if not already done).

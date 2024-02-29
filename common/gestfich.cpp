@@ -29,7 +29,6 @@
  */
 
 #include <wx/mimetype.h>
-#include <wx/filename.h>
 #include <wx/dir.h>
 
 #include <pgm_base.h>
@@ -137,7 +136,8 @@ wxString FindKicadFile( const wxString& shortname )
 }
 
 
-int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProcess *aCallback )
+int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProcess* aCallback,
+                 bool aFileForKicad )
 {
     wxString              fullEditorName;
     std::vector<wxString> params;
@@ -206,10 +206,18 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName, wxProce
 
     pushParam();
 
-    fullEditorName = FindKicadFile( params[0] );
+    if( aFileForKicad )
+        fullEditorName = FindKicadFile( params[0] );
+    else
+        fullEditorName = params[0];
+
     params.erase( params.begin() );
 #else
-    fullEditorName = FindKicadFile( aEditorName );
+
+    if( aFileForKicad )
+        fullEditorName = FindKicadFile( aEditorName );
+    else
+        fullEditorName = aEditorName;
 #endif
 
     if( wxFileExists( fullEditorName ) )

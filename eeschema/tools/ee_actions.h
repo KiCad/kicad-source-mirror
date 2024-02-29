@@ -209,6 +209,7 @@ public:
     static TOOL_ACTION exportSymbol;
     static TOOL_ACTION updateSymbolFields;
     static TOOL_ACTION setUnitDisplayName;
+    static TOOL_ACTION openWithTextEditor;
 
     // Hierarchy navigation
     static TOOL_ACTION changeSheet;

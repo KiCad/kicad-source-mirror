@@ -767,6 +767,13 @@ TOOL_ACTION PCB_ACTIONS::exportFootprint( TOOL_ACTION_ARGS()
         .Tooltip( _( "Export edited footprint to file" ) )
         .Icon( BITMAPS::export_module ) );
 
+TOOL_ACTION PCB_ACTIONS::openWithTextEditor( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.openWithTextEditor" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Edit in a Text Editor..." ) )
+        .Tooltip( _( "Open a library file with a text editor" ) )
+        .Icon( BITMAPS::editor ) );
+
 TOOL_ACTION PCB_ACTIONS::footprintProperties( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.footprintProperties" )
         .Scope( AS_GLOBAL )

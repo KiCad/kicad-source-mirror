@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include "footprint_editor_control.h"
 #include <wx/generic/textdlgg.h>
 #include <string_utils.h>
@@ -32,6 +33,7 @@
 #include <footprint_edit_frame.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
+#include <gestfich.h> // To open with a text editor
 #include <widgets/wx_infobar.h>
 #include <footprint.h>
 #include <pad.h>
@@ -118,6 +120,15 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
                 return fp != nullptr;
             };
 
+    auto canOpenWithTextEditor =
+            [ this ]( const SELECTION& aSel )
+            {
+                // The option is shown if the editor has no current edits,
+                // dumb/simple guard against opening a new file that does not exist on disk
+                bool ret = !m_frame->IsContentModified();
+                return ret;
+            };
+
     ctxMenu.AddItem( ACTIONS::pinLibrary,             unpinnedLibSelectedCondition );
     ctxMenu.AddItem( ACTIONS::unpinLibrary,           pinnedLibSelectedCondition );
 
@@ -144,6 +155,13 @@ bool FOOTPRINT_EDITOR_CONTROL::Init()
 
     // If we've got nothing else to show, at least show a hide tree option
     ctxMenu.AddItem( PCB_ACTIONS::hideFootprintTree,  !libInferredCondition );
+
+    if( ADVANCED_CFG::GetCfg().m_EnableLibWithText )
+    {
+        ctxMenu.AddSeparator();
+        ctxMenu.AddItem( PCB_ACTIONS::openWithTextEditor,
+                         canOpenWithTextEditor && fpSelectedCondition );
+    }
 
     return true;
 }
@@ -567,6 +585,43 @@ int FOOTPRINT_EDITOR_CONTROL::ExportFootprint( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
+{
+    wxString fullEditorName = Pgm().GetTextEditor();
+
+    if( fullEditorName.IsEmpty() )
+    {
+        wxMessageBox( _( "No text editor selected in KiCad. Please choose one." ) );
+        return 0;
+    }
+
+    FP_LIB_TABLE* globalTable = dynamic_cast<FP_LIB_TABLE*>( &GFootprintTable );
+    FP_LIB_TABLE* projectTable = PROJECT_PCB::PcbFootprintLibs( &m_frame->Prj() );
+    LIB_ID        libId = m_frame->GetTreeFPID();
+
+    const char* libName = libId.GetLibNickname().c_str();
+    wxString    libItemName = wxEmptyString;
+
+    for( FP_LIB_TABLE* table : { globalTable, projectTable } )
+    {
+        if( !table )
+            break;
+
+        libItemName = table->FindRow( libName, true )->GetFullURI( true ).c_str();
+
+        libItemName = libItemName + "/" + libId.GetLibItemName() + ".kicad_mod";
+
+    }
+
+    if( !libItemName.IsEmpty() )
+    {
+        ExecuteFile( fullEditorName, libItemName.wc_str(), nullptr, false );
+    }
+
+    return 0;
+}
+
+
 int FOOTPRINT_EDITOR_CONTROL::EditFootprint( const TOOL_EVENT& aEvent )
 {
     m_frame->LoadFootprintFromLibrary( m_frame->GetTreeFPID() );
@@ -788,6 +843,7 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
 
     Go( &FOOTPRINT_EDITOR_CONTROL::ImportFootprint,      PCB_ACTIONS::importFootprint.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ExportFootprint,      PCB_ACTIONS::exportFootprint.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::OpenWithTextEditor,   PCB_ACTIONS::openWithTextEditor.MakeEvent() );
 
     Go( &FOOTPRINT_EDITOR_CONTROL::EditTextAndGraphics,  PCB_ACTIONS::editTextAndGraphics.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::CleanupGraphics,      PCB_ACTIONS::cleanupGraphics.MakeEvent() );

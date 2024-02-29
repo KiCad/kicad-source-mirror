@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <advanced_config.h>
 #include <kiway.h>
 #include <pgm_base.h>
 #include <sch_painter.h>
@@ -35,6 +36,7 @@
 #include <wildcards_and_files_ext.h>
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>
+#include <gestfich.h> // To open with a text editor
 #include <wx/filedlg.h>
 #include "wx/generic/textdlgg.h"
 #include "string_utils.h"
@@ -96,6 +98,15 @@ bool SYMBOL_EDITOR_CONTROL::Init()
                 {
                     return editFrame->GetTreeSelectionCount() > 1;
                 };
+        auto canOpenWithTextEditor =
+                [ editFrame ]( const SELECTION& aSel )
+                {
+                    // The option is shown if the lib has no current edits
+                    LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+                    wxString libName = editFrame->GetTargetLibId().GetLibNickname();
+                    bool     ret = !libMgr.IsLibraryModified( libName );
+                    return ret;
+                };
 
         ctxMenu.AddItem( ACTIONS::pinLibrary,            unpinnedLibSelectedCondition );
         ctxMenu.AddItem( ACTIONS::unpinLibrary,          pinnedLibSelectedCondition );
@@ -123,7 +134,16 @@ bool SYMBOL_EDITOR_CONTROL::Init()
         ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
 
         // If we've got nothing else to show, at least show a hide tree option
+        ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::hideSymbolTree,    !libInferredCondition );
+
+        if( ADVANCED_CFG::GetCfg().m_EnableLibWithText )
+        {
+            ctxMenu.AddSeparator();
+            ctxMenu.AddItem( EE_ACTIONS::openWithTextEditor,
+                             canOpenWithTextEditor
+                                     && ( symbolSelectedCondition || libSelectedCondition ) );
+        }
     }
 
     return true;
@@ -242,6 +262,36 @@ int SYMBOL_EDITOR_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
         static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->ExportSymbol();
 
+    return 0;
+}
+
+
+int SYMBOL_EDITOR_CONTROL::OpenWithTextEditor( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+    {
+        wxString fullEditorName = Pgm().GetTextEditor();
+
+        if( fullEditorName.IsEmpty() )
+        {
+            wxMessageBox( _( "No text editor selected in KiCad. Please choose one." ) );
+            return 0;
+        }
+
+        SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
+        LIB_SYMBOL_LIBRARY_MANAGER& libMgr = editFrame->GetLibManager();
+
+        LIB_ID libId = editFrame->GetTreeLIBID();
+
+        wxString libName = libId.GetLibNickname();
+        wxString tempFName = libMgr.GetLibrary( libName )->GetFullURI( true ).wc_str();
+
+        if( !tempFName.IsEmpty() )
+        {
+            ExecuteFile( fullEditorName, tempFName, nullptr, false );
+        }
+    }
     return 0;
 }
 
@@ -760,6 +810,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::pasteSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::OpenWithTextEditor,    EE_ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ExportView,            EE_ACTIONS::exportSymbolView.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG,     EE_ACTIONS::exportSymbolAsSVG.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::AddSymbolToSchematic,  EE_ACTIONS::addSymbolToSchematic.MakeEvent() );

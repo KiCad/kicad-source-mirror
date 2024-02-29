@@ -476,6 +476,15 @@ public:
     bool m_EnableGit;
 
     /**
+     * Enable option to load lib files with text editor.
+     *
+     * Setting name: "EnableLibWithText"
+     * Valid values: 0 or 1
+     * Default value: 0
+     */
+    bool m_EnableLibWithText;
+
+    /**
      * Enable Eeschema printing using Cairo.
      *
      * Setting name: "EnableEeschemaPrintCairo"
