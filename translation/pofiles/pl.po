@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-02-29 19:02+0000\n"
+"PO-Revision-Date: 2024-03-02 05:01+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
@@ -20296,9 +20296,8 @@ msgid "Add Symbol to Schematic"
 msgstr "Umieszcza symbol na schemacie"
 
 #: eeschema/tools/ee_actions.cpp:258
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "Zapisuje bieżący symbol na schemacie"
+msgstr "Dodaje bieżący symbol na schemat"
 
 #: eeschema/tools/ee_actions.cpp:264
 msgid "Show Pin Electrical Types"
@@ -21381,7 +21380,6 @@ msgid "Drags the selected item(s)"
 msgstr "Przesuwa wybrany(e) element(y)"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1759
-#, fuzzy
 msgid "Align Items to Grid"
 msgstr "Wyrównaj elementy do siatki"
 
@@ -21415,19 +21413,16 @@ msgid "Save Workbook"
 msgstr "Zapisz skoroszyt"
 
 #: eeschema/tools/ee_actions.cpp:1405
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr ""
-"Wczytuje bieżącą listę sieci i wypisuje brakujące lub dodatkowe footprinty"
+msgstr "Zapisuje bieżący zestaw kart analiz i ich ustawienia"
 
 #: eeschema/tools/ee_actions.cpp:1413
 msgid "Save Workbook As..."
 msgstr "Zapisz skoroszyt jako..."
 
 #: eeschema/tools/ee_actions.cpp:1414
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
-msgstr "Zapisuje bieżący dokument w innej lokalizacji"
+msgstr "Zapisuje bieżący zestaw kart analiz i ich ustawienia w osobnej lokacji"
 
 #: eeschema/tools/ee_actions.cpp:1420
 msgid "Export Current Plot as PNG..."
@@ -21913,9 +21908,8 @@ msgid "SVG File Name"
 msgstr "Nazwa pliku SVG"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Zmienia właściwości linii graficznych"
+msgstr "Edycja pinów"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -22977,7 +22971,6 @@ msgid "Move Layer Up"
 msgstr "Przesuń warstwę w górę"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
 msgstr "Przesuń bieżącą warstwę w górę"
 
@@ -22986,7 +22979,6 @@ msgid "Move Layer Down"
 msgstr "Przesuń warstwę w dół"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
 msgstr "Przesuń bieżącą warstwę w dół"
 
@@ -32504,7 +32496,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
 msgstr "Zezwól na rozlanie się łezki na dwa segmenty ścieżki"
 
@@ -32549,7 +32540,6 @@ msgstr ""
 "Ścieżki o wielkości zbliżonej do pola lub przelotki nie wymagają łezek."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
-#, fuzzy
 msgid "(as a percentage of pad/via minor dimension)"
 msgstr "(jako procent rozmiaru pola/przelotki)"
 
@@ -41541,9 +41531,9 @@ msgid "No footprints in library '%s'"
 msgstr "Nie znaleziono footprintów w bibliotece '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "Footprint '%s' nie został znaleziony w bibliotece '%s'."
+msgstr "Footprint '%s' nie został znaleziony w '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:42
 msgid "Altium Designer PCB files"
