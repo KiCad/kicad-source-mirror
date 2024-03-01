@@ -1288,20 +1288,33 @@ SCH_SYMBOL* SCH_IO_KICAD_LEGACY::loadSymbol( LINE_READER& aReader )
             int size = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
             int attributes = parseHex( aReader, line, &line );
 
-            if( index >= symbol->GetFieldCount() )
+            // Description was not mandatory until v8.0, so any fields with an index
+            // past this point should be user fields
+            if( index > DATASHEET_FIELD )
             {
                 // The first MANDATOR_FIELDS _must_ be constructed within the SCH_SYMBOL
                 // constructor.  This assert is simply here to guard against a change in that
                 // constructor.
                 wxASSERT( symbol->GetFieldCount() >= MANDATORY_FIELDS );
 
-                // Ignore the _supplied_ fieldNdx.  It is not important anymore if within the
-                // user defined fields region (i.e. >= MANDATORY_FIELDS).
-                // We freely renumber the index to fit the next available field slot.
-                index = symbol->GetFieldCount();  // new has this index after insertion
+                // We need to check for an existing field by name that happens to have the same
+                // name and index as any field that was made mandatory after this point, e.g. Description
+                // is now mandatory but a user could have easily added their own user field named Description
+                // after Datasheet before it was mandatory, and we don't want to add a second Description field.
+                SCH_FIELD* existingField = symbol->GetFieldByName( name );
 
-                SCH_FIELD field( VECTOR2I( 0, 0 ), index, symbol.get(), name );
-                symbol->AddField( field );
+                if( !existingField )
+                {
+                    // Ignore the _supplied_ fieldNdx.  It is not important anymore if within the
+                    // user defined fields region (i.e. >= MANDATORY_FIELDS).
+                    // We freely renumber the index to fit the next available field slot.
+                    index = symbol->GetFieldCount(); // new has this index after insertion
+
+                    SCH_FIELD field( VECTOR2I( 0, 0 ), index, symbol.get(), name );
+                    symbol->AddField( field );
+                }
+                else
+                    index = existingField->GetId();
             }
 
             SCH_FIELD& field = symbol->GetFields()[index];
