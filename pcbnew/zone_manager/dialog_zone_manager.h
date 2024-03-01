@@ -119,12 +119,12 @@ protected:
 
     void OnTableCharHook( wxKeyEvent& event ) override;
 
-    PANEL_ZONE_GAL& Canvas();
-
 private:
     void GenericProcessChar( wxKeyEvent& event );
 
     void OnIDle( wxIdleEvent& aEvent );
+
+    void FitCanvasToScreen();
 
 
 private:
@@ -136,8 +136,9 @@ private:
     PANE_ZONE_VIEWER*                           m_zoneViewer;
     std::optional<unsigned>                     m_priorityDragIndex;
     std::unique_ptr<ZONE_FILLER>                m_filler;
-    std::unique_ptr<COMMIT>                     m_commit;
     bool                                        m_needZoomGAL;
+    bool                                        m_isFillingZones;
+    bool                                        m_zoneFillComplete;
 };
 
 #endif

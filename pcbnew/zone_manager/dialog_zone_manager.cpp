@@ -60,6 +60,13 @@
 #include "pane_zone_viewer.h"
 #include "zone_manager_preference.h"
 
+
+inline void DIALOG_ZONE_MANAGER::FitCanvasToScreen()
+{
+    if( PANEL_ZONE_GAL* canvas = m_zoneViewer->GetZoneGAL() )
+        canvas->ZoomFitScreen();
+}
+
 inline void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelectionChange( wxDataViewItem const& aItem )
 {
     bool textCtrlHasFocus = m_filterCtrl->HasFocus();
@@ -119,12 +126,11 @@ void DIALOG_ZONE_MANAGER::OnIDle( wxIdleEvent& aEvent )
     m_viewZonesOverview->SetFocus();
     Unbind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIDle, this );
 
-    //NOTE - Required on Linux
-    if( m_needZoomGAL )
-    {
-        Canvas().ZoomFitScreen();
-        m_needZoomGAL = false;
-    }
+    if( !m_needZoomGAL )
+        return;
+
+    m_needZoomGAL = false;
+    FitCanvasToScreen();
 }
 
 
@@ -136,7 +142,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
                 new MODEL_ZONES_OVERVIEW_TABLE( m_zonesContainer->GetZonesPriorityContainers(),
                                                 aParent->GetBoard(), aParent, this ) ),
         m_zoneViewer( new PANE_ZONE_VIEWER( this, aParent ) ), m_priorityDragIndex( {} ),
-        m_needZoomGAL( true )
+        m_needZoomGAL( true ), m_isFillingZones( false ), m_zoneFillComplete( false )
 {
 #ifdef __APPLE__
     m_sizerZoneOP->InsertSpacer( m_sizerZoneOP->GetItemCount(), 5 );
@@ -196,7 +202,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_MainBoxSizer->Fit( this );
 
     //NOTE - Works on Windows and MacOS , need further handling in IDLE on Ubuntu
-    Canvas().ZoomFitScreen();
+    FitCanvasToScreen();
 }
 
 DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
@@ -362,30 +368,38 @@ void DIALOG_ZONE_MANAGER::OnFilterCtrlEnter( wxCommandEvent& aEvent )
 
 void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
 {
+    if( m_isFillingZones )
+        return;
+
+    m_isFillingZones = true;
     m_zonesContainer->FlushZoneSettingsChange();
     m_zonesContainer->FlushPriorityChange();
 
     BOARD* board = m_pcbFrame->GetBoard();
     board->IncrementTimeStamp();
 
-    m_commit = std::make_unique<BOARD_COMMIT>( m_pcbFrame );
-    m_filler = std::make_unique<ZONE_FILLER>( board, m_commit.get() );
+    auto commit = std::make_unique<BOARD_COMMIT>( m_pcbFrame );
+    m_filler = std::make_unique<ZONE_FILLER>( board, commit.get() );
     auto reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fill All Zones" ), 5 );
-
     m_filler->SetProgressReporter( reporter.get() );
     board->Zones() = m_zonesContainer->GetClonedZoneList();
-    m_filler->Fill( board->Zones() );
+    //NOTE - Nether revert nor commit is needed here , cause the cloned zones are not owned by the pcb frame
+    m_zoneFillComplete = m_filler->Fill( board->Zones() );
     board->BuildConnectivity();
     board->Zones() = m_zonesContainer->GetOriginalZoneList();
 
-    PANEL_ZONE_GAL* gal = m_zoneViewer->GetZoneGAL();
-    gal->RedrawRatsnest();
-    gal->GetView()->UpdateItems();
-    gal->Refresh();
-    int layer = gal->GetLayer();
-    gal->ActivateSelectedZone(
-            m_modelZoneOverviewTable->GetZone( m_viewZonesOverview->GetSelection() ) );
-    gal->OnLayerSelected( layer );
+    if( auto gal = m_zoneViewer->GetZoneGAL() )
+    {
+        gal->RedrawRatsnest();
+        gal->GetView()->UpdateItems();
+        gal->Refresh();
+        int layer = gal->GetLayer();
+        gal->ActivateSelectedZone(
+                m_modelZoneOverviewTable->GetZone( m_viewZonesOverview->GetSelection() ) );
+        gal->OnLayerSelected( layer );
+    }
+
+    m_isFillingZones = false;
 }
 
 
@@ -446,9 +460,4 @@ void DIALOG_ZONE_MANAGER::MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT aMove )
         wxDataViewItem new_item = m_modelZoneOverviewTable->GetItem( *new_index );
         PostProcessZoneViewSelectionChange( new_item );
     }
-}
-
-PANEL_ZONE_GAL& DIALOG_ZONE_MANAGER::Canvas()
-{
-    return *m_zoneViewer->GetZoneGAL();
 }
