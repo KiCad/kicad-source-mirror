@@ -199,6 +199,9 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     Connect( FP_SELECTION_EVENT,  // custom event fired by a PANEL_FOOTPRINT_CHOOSER
              wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), NULL, this );
+
+    // Needed on Linux to fix the position of widgets in bottomPanel
+    PostSizeEvent();
 }
 
 
