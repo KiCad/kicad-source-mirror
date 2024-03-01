@@ -430,7 +430,12 @@ int PAD_TOOL::EnumeratePads( const TOOL_EVENT& aEvent )
                 collector.Collect( board(), { PCB_PAD_T }, testpoint, guide );
 
                 for( int i = 0; i < collector.GetCount(); ++i )
-                    selectedPads.push_back( static_cast<PAD*>( collector[i] ) );
+                {
+                    PAD* pad = static_cast<PAD*>( collector[i] );
+
+                    if( !pad->IsAperturePad() )
+                        selectedPads.push_back( pad );
+                }
             }
 
             selectedPads.unique();
