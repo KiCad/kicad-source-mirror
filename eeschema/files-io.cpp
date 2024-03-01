@@ -777,6 +777,8 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     if( pluginType == SCH_IO_MGR::SCH_FILE_T::SCH_FILE_UNKNOWN )
     {
         wxLogError( _( "No loader can read the specified file: '%s'." ), fn.GetFullPath() );
+        CreateScreens();
+        SetScreen( Schematic().RootScreen() );
         return;
     }
 
