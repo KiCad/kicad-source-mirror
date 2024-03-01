@@ -40,6 +40,7 @@
 #include <tools/pcb_actions.h>
 #include <wildcards_and_files_ext.h>
 #include <pcb_marker.h>
+#include <pgm_base.h>
 #include <wx/filedlg.h>
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
@@ -209,7 +210,7 @@ bool DIALOG_DRC::updateUI()
     double cur = alg::clamp( 0.0, (double) m_progress.load() / m_maxProgress, 1.0 );
 
     m_gauge->SetValue( KiROUND( cur * 1000.0 ) );
-    wxSafeYield( this );
+    Pgm().App().SafeYieldFor( this, wxEVT_CATEGORY_NATIVE_EVENTS );
 
     return !m_cancelled;
 }
