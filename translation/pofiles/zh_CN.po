@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-02-27 19:29+0000\n"
+"PO-Revision-Date: 2024-03-02 05:03+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -146,7 +146,7 @@ msgstr "焊盘 %s\t"
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:712
 #, c-format
 msgid "Rule area %s\t"
-msgstr "规则区域 %s\t"
+msgstr "规则区 %s\t"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:714
 #, c-format
@@ -433,7 +433,7 @@ msgstr "主视图"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "在原点重新绘制并缩放"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -6876,7 +6876,7 @@ msgstr "'%s' 和 %lf 之间类型不匹配"
 #: common/libeval_compiler/libeval_compiler.cpp:1162
 #, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr "%lf 和 '%s'之间的类型不匹配"
+msgstr "%lf 和 '%s'之间类型不匹配"
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:63
@@ -7893,7 +7893,7 @@ msgstr "全选 (&A)\tA"
 
 #: common/tool/selection_tool.cpp:309
 msgid "&Expand Selection\tE"
-msgstr "展开选定内容 (&E)\tE"
+msgstr "展开选区 (&E)\tE"
 
 #: common/tool/zoom_menu.cpp:67
 #, c-format
@@ -7990,7 +7990,7 @@ msgstr "字段验证错误"
 
 #: common/view/view.cpp:536
 msgid "Mirroring for Y axis is not supported yet"
-msgstr "尚不支持 Y 轴的镜像"
+msgstr "尚未支持 Y 轴的镜像"
 
 #: common/widgets/font_choice.cpp:64
 msgid "<not found>"
@@ -9750,11 +9750,11 @@ msgstr "符号"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:38
 msgid "Current Library Reference"
-msgstr "当前库位号"
+msgstr "当前库参考"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:39
 msgid "New Library Reference"
-msgstr "新的库位号"
+msgstr "新的库参考"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.cpp:58
 msgid "Map Orphans"
@@ -9783,7 +9783,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_edit_symbols_libid_base.h:57
 msgid "Symbol Library References"
-msgstr "符号库位号"
+msgstr "符号库参考"
 
 #: eeschema/dialogs/dialog_erc.cpp:106
 msgid "Run ERC"
@@ -16143,7 +16143,7 @@ msgstr "存储文件没有被完全解析 (%d 字节剩余)。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:632
 msgid "Blanket not currently supported."
-msgstr "尚不支持编译屏蔽。"
+msgstr "尚未支持空白。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:636
 #, c-format
@@ -16164,11 +16164,11 @@ msgstr "未处理记录 'PIECHART'。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:829
 msgid "Parameter Set not currently supported."
-msgstr "尚不支持在原理图上使用变量集合。"
+msgstr "尚未支持参数设置。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:854
 msgid "Compile mask not currently supported."
-msgstr "尚不支持在原理图上编译阻剂。"
+msgstr "尚未支持 Compile mask。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:861
 #, c-format
@@ -16460,7 +16460,7 @@ msgstr ""
 msgid ""
 "The CADSTAR schematic might be corrupt: Block %s references a child sheet "
 "but has no Figure defined."
-msgstr "CADSTAR 原理图可能已损坏: 块 %s 引用子图框, 但没有定义图。"
+msgstr "CADSTAR 原理图可能已损坏: 块 %s 引用子图纸, 但没有定义图。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:237
 msgid ""
@@ -18263,7 +18263,7 @@ msgstr "创建临时输出文件时出错"
 msgid ""
 "Kibis does not support DUT values yet. https://ibis.org/summits/nov16a/chen."
 "pdf"
-msgstr "Kibis 尚不支持 DUT 值。https://ibis.org/summits/nov16a/chen.pdf"
+msgstr "Kibis 尚未支持 DUT 值。https://ibis.org/summits/nov16a/chen.pdf"
 
 #: eeschema/sim/kibis/kibis.cpp:874
 msgid "Model has only one waveform pair, reduced accuracy"
@@ -19831,9 +19831,8 @@ msgid "Add Symbol to Schematic"
 msgstr "添加符号到原理图"
 
 #: eeschema/tools/ee_actions.cpp:258
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "将当前符号保存在原理图中"
+msgstr "将当前符号添加到原理图中"
 
 #: eeschema/tools/ee_actions.cpp:264
 msgid "Show Pin Electrical Types"
@@ -20898,9 +20897,8 @@ msgid "Drags the selected item(s)"
 msgstr "拖动所选项目"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1759
-#, fuzzy
 msgid "Align Items to Grid"
-msgstr "将元素与栅格对齐"
+msgstr "将项目与栅格对齐"
 
 #: eeschema/tools/ee_actions.cpp:1371
 msgid "Save Current Sheet Copy As..."
@@ -20916,7 +20914,7 @@ msgstr "新建分析选项卡..."
 
 #: eeschema/tools/ee_actions.cpp:1387
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "创建包含模拟分析的新选项卡"
 
 #: eeschema/tools/ee_actions.cpp:1395
 msgid "Open Workbook..."
@@ -20924,25 +20922,23 @@ msgstr "打开工作簿..."
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "打开已保存的分析选项卡和设置"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
 msgstr "保存工作簿"
 
 #: eeschema/tools/ee_actions.cpp:1405
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr "读取当前的网表文件并列出丢失和额外的封装"
+msgstr "保存当前分析选项卡和设置"
 
 #: eeschema/tools/ee_actions.cpp:1413
 msgid "Save Workbook As..."
 msgstr "另存工作簿为..."
 
 #: eeschema/tools/ee_actions.cpp:1414
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
-msgstr "将当前文件保存到其他位置"
+msgstr "将当前分析选项卡和设置保存到其他位置"
 
 #: eeschema/tools/ee_actions.cpp:1420
 msgid "Export Current Plot as PNG..."
@@ -20978,7 +20974,7 @@ msgstr "编辑分析选项卡..."
 
 #: eeschema/tools/ee_actions.cpp:1451
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
+msgstr "编辑当前分析选项卡的 SPICE 命令和绘制设置"
 
 #: eeschema/tools/ee_actions.cpp:1458
 msgid "Run Simulation"
@@ -21422,9 +21418,8 @@ msgid "SVG File Name"
 msgstr "SVG 文件名称"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "编辑多行"
+msgstr "编辑引脚"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -22477,7 +22472,6 @@ msgid "Move Layer Up"
 msgstr "上移层"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
 msgstr "上移当前层"
 
@@ -22486,7 +22480,6 @@ msgid "Move Layer Down"
 msgstr "下移层"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
 msgstr "下移当前层"
 
@@ -25183,22 +25176,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "在预览模式下显示标题栏"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"在预览模式下显示标题块:\n"
-"文本占位符将替换为预览数据。"
+msgstr "文本占位符将被替换为预览数据"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "在编辑模式下显示标题栏"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"在编辑模式下显示标题块: \n"
-"文本占位符显示为 ${keyword} 标记。"
+msgstr "文本占位符显示为 ${keyword} 标记"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -30059,7 +30046,7 @@ msgstr "替换 PCB 上的所有封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:74
 msgid "Change selected footprint(s)"
-msgstr "替换选定的封装"
+msgstr "替换已选封装"
 
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:75
 msgid "Change footprints matching reference designator:"
@@ -31101,7 +31088,7 @@ msgstr "间距重写和设置"
 msgid ""
 "The library ID and footprint ID currently assigned.  Use \"Change "
 "Footprint...\" to assign a different footprint."
-msgstr "当前已经分配了库 ID 和封装 ID。使用“替换封装…”来分配不同的封装。"
+msgstr "当前已经分配了库 ID 和封装 ID。使用 \"替换封装…\" 来分配不同的封装。"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:122
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:114
@@ -31563,7 +31550,7 @@ msgstr "生成一个 (%s)"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:51
 msgid "Rebuild selected"
-msgstr "重建已选定"
+msgstr "重建已选"
 
 #: pcbnew/dialogs/dialog_generators_base.cpp:54
 msgid "Rebuild this type"
@@ -31765,11 +31752,10 @@ msgstr "优先区域连接"
 msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
-msgstr "请勿在连接到铜区的焊盘上创建滴泪。"
+msgstr "请勿在连接到铜区的焊盘上创建泪滴。"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
 msgstr "允许泪滴跨越两个走线段"
 
@@ -31778,11 +31764,10 @@ msgstr "允许泪滴跨越两个走线段"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
-msgstr "如果第一根走线段太短, 允许泪滴延伸到第二根走线上"
+msgstr "如果首个走线段过短, 无法满足最佳长度, 则允许泪滴延伸到前两段走线段上。"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -33304,14 +33289,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid "Generate Gerber job file"
-msgstr "生成 Gerber 工作文件"
+msgstr "生成 Gerber job 文件"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:208
 msgid ""
 "Generate a Gerber job file that contains info about the board,\n"
 "and the list of generated Gerber plot files"
 msgstr ""
-"生成一个 Gerber 工作文件, 其中包含有关于电路板的信息, \n"
+"生成一个 Gerber job 文件, 其中包含有关于电路板的信息, \n"
 "及生成的 Gerber 绘制文件列表"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:213
@@ -37206,7 +37191,7 @@ msgstr "在库中找不到封装"
 
 #: pcbnew/drc/drc_item.cpp:193
 msgid "Footprint doesn't match copy in library"
-msgstr "封装与库中副本不匹配"
+msgstr "封装与来源库封装存在差异"
 
 #: pcbnew/drc/drc_item.cpp:201
 msgid "Assertion failure"
@@ -37924,7 +37909,7 @@ msgstr "在库 %2$s 中未找到封装 '%1$s'。"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:842
 #, c-format
 msgid "Footprint '%s' does not match copy in library '%s'."
-msgstr "封装 '%s' 与库 '%s' 中的副本不匹配。"
+msgstr "封装 '%s' 与来源库封装 '%s' 存在差异。"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:114
 #, c-format
@@ -38957,7 +38942,7 @@ msgstr "目标偏移: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2096
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2118
 msgid "(from tuning pattern properties)"
-msgstr "(来自调整模式属性)"
+msgstr "(来自调整线对属性)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2104
 #, c-format
@@ -38976,7 +38961,7 @@ msgstr "长度约束: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "无法在其他调整线对内调整走线段。"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
@@ -40254,7 +40239,7 @@ msgstr "正加载尺寸图形..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1583
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr "忽略了类型为 %d 的标注 (尚不支持)。"
+msgstr "忽略了类型为 %d 的标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1624
 msgid "No 3D-models will be imported."
@@ -40316,11 +40301,13 @@ msgstr ""
 "Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "忽略类型为 %d 的多边形, 因为尚未实现。"
+msgstr ""
+"加载库 '%s' 时出错:\n"
+"封装 %s 上包含 %d 类型的多边形 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2197
 #, fuzzy, c-format
@@ -40340,11 +40327,13 @@ msgid "Loading pads..."
 msgstr "加载焊盘中..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
-msgstr "封装 %s 焊盘 %s 未被标记为多层, 但它是 TH 焊盘。"
+msgstr ""
+"加载库 '%s' 库出错:\n"
+"封装 %s 的焊盘 %s 未被标记为多层焊盘, 但它却是一个通孔。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2763
 #, c-format
@@ -40379,11 +40368,13 @@ msgid ""
 msgstr "封装 %s 焊盘 %s 有 %f 度的孔旋转。KiCad 仅支持 90 度角旋转。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "封装 %s 焊盘 %s 有一个未知类型 %d 的孔。"
+msgstr ""
+"加载库 '%s' 时出错:\n"
+"封装 %s 的焊盘 %s 使用了未知类型 (%d) 的孔。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2859
 #, c-format
@@ -40391,23 +40382,27 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "封装 %s 焊盘 %s 有一个未知类型 %d 的孔。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
-msgstr "封装 %s 的焊盘 %s 使用了复杂的焊盘压层, 尚不支持"
+msgstr ""
+"加载库 '%s' 时出错：\n"
+"封装 %s 的焊盘 %s 使用了复杂的焊盘叠层 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
-msgstr "封装 %s 的焊盘 %s 使用了复杂的焊盘压层, 尚不支持"
+msgstr "封装 %s 的焊盘 %s 使用了复杂的焊盘叠层 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "封装 %s 焊盘 %s 使用未知的焊盘形状。"
+msgstr ""
+"加载库 '%s' 时出错:\n"
+"封装 %s 的焊盘 %s 使用了未知的焊盘形状。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2936
 #, c-format
@@ -40424,23 +40419,24 @@ msgstr ""
 "Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"非铜焊盘 %s , 发现于Altium 层 (%d), 没有 KiCad 等效项。它已被移动至 Kicad "
-"Eco1_User 层。"
+"正在加载库 '%1$s':\n"
+"在 Altium 图层 (%4$d) 上发现封装 %2$s 的非铜焊盘 %3$s, 但是在 KiCad "
+"中没有与该图层对应的等效图层。 已将其移至 KiCad 图层 Eco1_User。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"非铜焊盘 %s , 发现于Altium 层 (%d), 没有 KiCad 等效项。它已被移动至 Kicad "
-"Eco1_User 层。"
+"在 Altium 图层 (%3$d) 上发现封装 %1$s 的非铜焊盘 %2$s, 但是在 KiCad "
+"中没有与该图层对应的等效图层。 已将其移至 KiCad 图层 Eco1_User。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
@@ -40455,7 +40451,7 @@ msgstr "非铜焊盘 %s有一个孔, KiCad 不支持这种情况。"
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3062
 #, c-format
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
-msgstr "非铜焊盘\"%s\"使用复杂的焊盘压层, 尚不支持。"
+msgstr "非铜焊盘\"%s\"使用复杂的焊盘压层, 尚未支持。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3204
 #, c-format
@@ -40487,19 +40483,21 @@ msgstr "加载文本中..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3525
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
-msgstr "忽略了 Altium 层 %d 上的条形码 (尚不支持)。"
+msgstr "忽略了 Altium 层 %d 上的条形码 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "忽略了 Altium 层 %d 上的条形码 (尚不支持)。"
+msgstr ""
+"加载库 '%s' 时出错:\n"
+"封装 %s 在 Altium 层 %d 中包含条形码 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "忽略了 Altium 层 %d 上的条形码 (尚不支持)。"
+msgstr "封装 %s 包含 Altium 层 %d 上的条形码 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3658
 msgid "Loading rectangles..."
@@ -40514,9 +40512,9 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Altium Circuit Studio PCB 文件"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "库中没有封装"
+msgstr "库 '%s' 中没有封装"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
 #, fuzzy, c-format
@@ -40695,9 +40693,8 @@ msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
-msgstr ""
-"尺寸 ID%s在 CADSTAR 中有\"外部\"样式。KiCad 尚不支持外部尺寸样式。软件使用内"
-"部尺寸样式导入了尺寸对象。"
+msgstr "标注 ID %s 在 CADSTAR 中具有 '外部' 样式。KiCad "
+"尚未支持外部标注样式。软件使用内部标注样式导入了该标注对象。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1540
 #, c-format
@@ -44900,76 +44897,68 @@ msgid "Align to Top"
 msgstr "顶端对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1881
-#, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
-msgstr "将所选项目与上边缘对齐"
+msgstr "将所选项目与光标下项目的顶边缘对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1887 pcbnew/tools/placement_tool.cpp:275
 msgid "Align to Bottom"
 msgstr "底端对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1888
-#, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
-msgstr "将所选项目与底部边缘对齐"
+msgstr "将所选项目与光标下项目的底边缘对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1894 pcbnew/tools/placement_tool.cpp:330
 msgid "Align to Left"
 msgstr "左对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1895
-#, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
-msgstr "将所选项目与左边缘对齐"
+msgstr "将所选项目与光标下项目的左边缘对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1901 pcbnew/tools/placement_tool.cpp:385
 msgid "Align to Right"
 msgstr "右对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1902
-#, fuzzy
 msgid "Aligns selected items to the right edge of the item under the cursor"
-msgstr "将所选项目与右边缘对齐"
+msgstr "将所选项目与光标下项目的右边缘对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1908
 msgid "Align to Vertical Center"
 msgstr "垂直居中"
 
 #: pcbnew/tools/pcb_actions.cpp:1909
-#, fuzzy
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
-msgstr "将所选项目垂直居中对齐"
+msgstr "将所选项目与光标下项目垂直居中对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1915
 msgid "Align to Horizontal Center"
 msgstr "水平居中"
 
 #: pcbnew/tools/pcb_actions.cpp:1916
-#, fuzzy
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
-msgstr "将所选项目与水平中心对齐"
+msgstr "将所选项目与光标下项目水平居中对齐"
 
 #: pcbnew/tools/pcb_actions.cpp:1922 pcbnew/tools/placement_tool.cpp:535
 msgid "Distribute Horizontally"
 msgstr "水平分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1923
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most item"
-msgstr "所选项目沿水平轴分布"
+msgstr "将所选项目在最左侧项目和最右侧项目之间水平分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1929 pcbnew/tools/placement_tool.cpp:660
 msgid "Distribute Vertically"
 msgstr "垂直分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1930
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most item"
-msgstr "所选项目沿水平轴分布"
+msgstr "将所选项目在最上侧项目和最下侧项目之间垂直分布"
 
 #: pcbnew/tools/pcb_actions.cpp:1945
 msgid "Create a corner"
@@ -45300,11 +45289,11 @@ msgstr "拖拽走线中最近的连接点, 不限制相连走线的角度。"
 
 #: pcbnew/tools/pcb_actions.cpp:2376
 msgid "Update All Tuning Patterns"
-msgstr "更新所有调整模式"
+msgstr "更新所有调整线对"
 
 #: pcbnew/tools/pcb_actions.cpp:2377
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
-msgstr "尝试在其范围内重新调整现有的调整模式"
+msgstr "尝试在其范围内重新调整现有的调整线对"
 
 #: pcbnew/tools/pcb_actions.cpp:2384
 msgid "Rebuild All Generators"
