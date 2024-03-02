@@ -1302,7 +1302,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         }
     }
 
-    if( m_previewPad->GetLocalClearance() < 0 )
+    if( m_previewPad->GetLocalClearance().value_or( 0 ) < 0 )
         warning_msgs.Add( _( "Warning: Negative local clearance values will have no effect." ) );
 
     // Some pads need a negative solder mask clearance (mainly for BGA with small pads)
