@@ -282,6 +282,9 @@ public:
     bool IsLayerOptionsExpanded();
     bool IsNetOptionsExpanded();
 
+    bool IsTogglingNetclassRatsnestVisibility();
+    bool IsTogglingNetRatsnestVisibility();
+
 protected:
     void OnNotebookPageChanged( wxNotebookEvent& event ) override;
     void OnSetFocus( wxFocusEvent& aEvent ) override;
@@ -486,6 +489,8 @@ private:
         ID_SHOW_ALL_NON_COPPER,
         ID_LAST_VALUE
     };
+
+    bool m_togglingNetclassRatsnestVisibility;
 };
 
 #endif
