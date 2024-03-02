@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -455,8 +455,9 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         else if( m_parentType == SCH_SYMBOL_T && aRow == FOOTPRINT_FIELD )
         {
             // Power symbols have do not appear in the board, so don't allow
-            // a footprint
-            if( m_part->IsPower() )
+            // a footprint (m_part can be nullptr when loading a old schematic
+            // (for instance Kicad 4) with libraries missing)
+            if( m_part && m_part->IsPower() )
             {
                 m_readOnlyAttr->IncRef();
                 return m_readOnlyAttr;
