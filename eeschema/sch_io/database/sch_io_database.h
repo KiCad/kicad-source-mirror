@@ -93,9 +93,9 @@ private:
 
     void connect();
 
-    LIB_SYMBOL* loadSymbolFromRow( const wxString& aSymbolName,
-                                   const DATABASE_LIB_TABLE& aTable,
-                                   const DATABASE_CONNECTION::ROW& aRow );
+    std::unique_ptr<LIB_SYMBOL> loadSymbolFromRow( const wxString& aSymbolName,
+                                                   const DATABASE_LIB_TABLE& aTable,
+                                                   const DATABASE_CONNECTION::ROW& aRow );
 
     static std::optional<bool> boolFromAny( const std::any& aVal );
 
@@ -110,7 +110,7 @@ private:
 
     std::set<wxString> m_defaultShownFields;
 
-    std::map<wxString, LIB_SYMBOL*> m_nameToSymbolcache;
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>> m_nameToSymbolcache;
 
     long long m_cacheTimestamp;
 

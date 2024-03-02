@@ -79,7 +79,7 @@ void SCH_IO_DATABASE::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
 
     for( auto const& pair : m_nameToSymbolcache )
     {
-        LIB_SYMBOL* symbol = pair.second;
+        LIB_SYMBOL* symbol = pair.second.get();
 
         if( !powerSymbolsOnly || symbol->IsPower() )
             aSymbolList.emplace_back( symbol );
@@ -151,7 +151,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::LoadSymbol( const wxString&   aLibraryPath,
 
     wxCHECK( foundTable, nullptr );
 
-    return loadSymbolFromRow( aAliasName, *foundTable, result );
+    return loadSymbolFromRow( aAliasName, *foundTable, result ).release();
 }
 
 
@@ -236,10 +236,10 @@ void SCH_IO_DATABASE::cacheLib()
             wxString    name( fmt::format( "{}{}", prefix,
                                            std::any_cast<std::string>( result[table.key_col] ) ) );
 
-            LIB_SYMBOL* symbol = loadSymbolFromRow( name, table, result );
+            std::unique_ptr<LIB_SYMBOL> symbol = loadSymbolFromRow( name, table, result );
 
             if( symbol )
-                m_nameToSymbolcache.insert( { symbol->GetName(), symbol } );
+                m_nameToSymbolcache[symbol->GetName()] = std::move( symbol );
         }
     }
 
@@ -414,11 +414,11 @@ std::optional<bool> SCH_IO_DATABASE::boolFromAny( const std::any& aVal )
 }
 
 
-LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
+std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
                                                 const DATABASE_LIB_TABLE& aTable,
                                                 const DATABASE_CONNECTION::ROW& aRow )
 {
-    LIB_SYMBOL* symbol = nullptr;
+    std::unique_ptr<LIB_SYMBOL> symbol = nullptr;
 
     if( aRow.count( aTable.symbols_col ) )
     {
@@ -436,7 +436,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
         {
             wxLogTrace( traceDatabase, wxT( "loadSymbolFromRow: found original symbol '%s'" ),
                         symbolIdStr );
-            symbol = originalSymbol->Duplicate();
+            symbol.reset( originalSymbol->Duplicate() );
             symbol->SetSourceLibId( symbolId );
         }
         else if( !symbolId.IsValid() )
@@ -455,7 +455,7 @@ LIB_SYMBOL* SCH_IO_DATABASE::loadSymbolFromRow( const wxString& aSymbolName,
     {
         // Actual symbol not found: return metadata only; error will be indicated in the
         // symbol chooser
-        symbol = new LIB_SYMBOL( aSymbolName );
+        symbol.reset( new LIB_SYMBOL( aSymbolName ) );
     }
     else
     {
