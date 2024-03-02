@@ -26,6 +26,9 @@
 #include <wx/choice.h>
 #include <wx/sizer.h>
 #include <wx/treelist.h>
+#include <wx/panel.h>
+#include <wx/notebook.h>
+#include <wx/splitter.h>
 #include <wx/statusbr.h>
 #include <wx/frame.h>
 
@@ -43,6 +46,7 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu1;
 		wxBoxSizer* m_mainSizer;
+		wxFlexGridSizer* m_topBarSizer;
 		wxStaticText* m_rewindText;
 		wxButton* m_rewindLeft;
 		wxSlider* m_rewindSlider;
@@ -56,8 +60,13 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		wxStaticText* m_algoStatus;
 		wxStaticText* m_ideLabel;
 		wxChoice* m_ideChoice;
-		wxBoxSizer* m_viewSizer;
+		wxSplitterWindow* m_mainSplitter;
+		wxPanel* m_panelProps;
+		wxNotebook* m_propsNotebook;
+		wxPanel* m_panelListView;
 		wxTreeListCtrl* m_itemList;
+		wxPanel* m_panelConsole;
+		wxTextCtrl* m_consoleText;
 		wxStatusBar* m_statusBar;
 
 		// Virtual event handlers, override them in your derived class
@@ -80,6 +89,12 @@ class PNS_LOG_VIEWER_FRAME_BASE : public wxFrame
 		PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("P&S Log Viewer"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 1045,574 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
 		~PNS_LOG_VIEWER_FRAME_BASE();
+
+		void m_mainSplitterOnIdle( wxIdleEvent& )
+		{
+			m_mainSplitter->SetSashPosition( 0 );
+			m_mainSplitter->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PNS_LOG_VIEWER_FRAME_BASE::m_mainSplitterOnIdle ), NULL, this );
+		}
 
 };
 

@@ -33,65 +33,64 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 
 	m_mainSizer = new wxBoxSizer( wxVERTICAL );
 
-	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 3, 10, 0, 0 );
-	fgSizer3->SetFlexibleDirection( wxBOTH );
-	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_topBarSizer = new wxFlexGridSizer( 3, 10, 0, 0 );
+	m_topBarSizer->SetFlexibleDirection( wxBOTH );
+	m_topBarSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_rewindText = new wxStaticText( this, wxID_ANY, wxT("Rewind: "), wxDefaultPosition, wxDefaultSize, 0 );
 	m_rewindText->Wrap( -1 );
-	fgSizer3->Add( m_rewindText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_topBarSizer->Add( m_rewindText, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rewindLeft = new wxButton( this, wxID_ANY, wxT("<"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	m_rewindLeft->SetMaxSize( wxSize( 50,-1 ) );
 
-	fgSizer3->Add( m_rewindLeft, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_topBarSizer->Add( m_rewindLeft, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rewindSlider = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxSize( 200,-1 ), wxSL_HORIZONTAL );
 	m_rewindSlider->SetMinSize( wxSize( 200,-1 ) );
 
-	fgSizer3->Add( m_rewindSlider, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_topBarSizer->Add( m_rewindSlider, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rewindRight = new wxButton( this, wxID_ANY, wxT(">"), wxDefaultPosition, wxSize( 50,-1 ), 0 );
 	m_rewindRight->SetMaxSize( wxSize( 50,-1 ) );
 
-	fgSizer3->Add( m_rewindRight, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_topBarSizer->Add( m_rewindRight, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rewindPos = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 50,-1 ), wxTE_PROCESS_ENTER );
 	m_rewindPos->SetMaxSize( wxSize( 50,-1 ) );
 
-	fgSizer3->Add( m_rewindPos, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
+	m_topBarSizer->Add( m_rewindPos, 0, wxALL|wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT, 5 );
 
 	m_staticText2 = new wxStaticText( this, wxID_ANY, wxT("Filter:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	fgSizer3->Add( m_staticText2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_topBarSizer->Add( m_staticText2, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_filterString = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_filterString, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_topBarSizer->Add( m_filterString, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_chkShowRPItems = new wxCheckBox( this, wxID_ANY, wxT("Show RPIs"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_chkShowRPItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_topBarSizer->Add( m_chkShowRPItems, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_chkThinLines = new wxCheckBox( this, wxID_ANY, wxT("Thin lines"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_chkThinLines, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_topBarSizer->Add( m_chkThinLines, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_showVertices = new wxCheckBox( this, wxID_ANY, wxT("Show Vertices"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_showVertices, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_topBarSizer->Add( m_showVertices, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_algoStatus = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_algoStatus->Wrap( -1 );
 	m_algoStatus->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	fgSizer3->Add( m_algoStatus, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+	m_topBarSizer->Add( m_algoStatus, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	m_topBarSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_ideLabel = new wxStaticText( this, wxID_ANY, wxT("Select your IDE:"), wxPoint( -1,-1 ), wxDefaultSize, 0 );
 	m_ideLabel->Wrap( -1 );
 	m_ideLabel->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
-	fgSizer3->Add( m_ideLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_topBarSizer->Add( m_ideLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_ideChoiceChoices[] = { wxT("VS Code"), wxT("Visual Studio (full)"), wxT("CLion"), wxT("Emacs") };
 	int m_ideChoiceNChoices = sizeof( m_ideChoiceChoices ) / sizeof( wxString );
@@ -99,25 +98,53 @@ PNS_LOG_VIEWER_FRAME_BASE::PNS_LOG_VIEWER_FRAME_BASE( wxWindow* parent, wxWindow
 	m_ideChoice->SetSelection( 0 );
 	m_ideChoice->SetToolTip( wxT("Select IDE for go to line functionality") );
 
-	fgSizer3->Add( m_ideChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_topBarSizer->Add( m_ideChoice, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
-	m_mainSizer->Add( fgSizer3, 0, wxEXPAND, 5 );
+	m_mainSizer->Add( m_topBarSizer, 0, wxEXPAND, 5 );
 
-	m_viewSizer = new wxBoxSizer( wxVERTICAL );
+	m_mainSplitter = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3D );
+	m_mainSplitter->Connect( wxEVT_IDLE, wxIdleEventHandler( PNS_LOG_VIEWER_FRAME_BASE::m_mainSplitterOnIdle ), NULL, this );
 
+	m_panelProps = new wxPanel( m_mainSplitter, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer5;
+	bSizer5 = new wxBoxSizer( wxVERTICAL );
 
-	m_mainSizer->Add( m_viewSizer, 1, wxEXPAND, 5 );
-
+	m_propsNotebook = new wxNotebook( m_panelProps, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
+	m_panelListView = new wxPanel( m_propsNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	wxBoxSizer* bSizer6;
 	bSizer6 = new wxBoxSizer( wxVERTICAL );
 
-	m_itemList = new wxTreeListCtrl( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_CHECKBOX|wxTL_DEFAULT_STYLE|wxTL_MULTIPLE );
+	m_itemList = new wxTreeListCtrl( m_panelListView, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_CHECKBOX|wxTL_DEFAULT_STYLE|wxTL_MULTIPLE );
 
 	bSizer6->Add( m_itemList, 1, wxALL|wxEXPAND, 5 );
 
 
-	m_mainSizer->Add( bSizer6, 1, wxEXPAND, 5 );
+	m_panelListView->SetSizer( bSizer6 );
+	m_panelListView->Layout();
+	bSizer6->Fit( m_panelListView );
+	m_propsNotebook->AddPage( m_panelListView, wxT("Geometry"), false );
+	m_panelConsole = new wxPanel( m_propsNotebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer7;
+	bSizer7 = new wxBoxSizer( wxVERTICAL );
+
+	m_consoleText = new wxTextCtrl( m_panelConsole, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH );
+	bSizer7->Add( m_consoleText, 1, wxALL|wxEXPAND, 5 );
+
+
+	m_panelConsole->SetSizer( bSizer7 );
+	m_panelConsole->Layout();
+	bSizer7->Fit( m_panelConsole );
+	m_propsNotebook->AddPage( m_panelConsole, wxT("Console"), false );
+
+	bSizer5->Add( m_propsNotebook, 1, wxEXPAND | wxALL, 5 );
+
+
+	m_panelProps->SetSizer( bSizer5 );
+	m_panelProps->Layout();
+	bSizer5->Fit( m_panelProps );
+	m_mainSplitter->Initialize( m_panelProps );
+	m_mainSizer->Add( m_mainSplitter, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( m_mainSizer );

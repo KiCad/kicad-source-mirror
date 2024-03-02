@@ -33,6 +33,8 @@
 #include <pcb_draw_panel_gal.h>
 #include <gal/graphics_abstraction_layer.h>
 
+#include <tool/tools_holder.h>
+
 using std::unique_ptr;
 
 class PCB_DRAW_PANEL_GAL;
@@ -41,13 +43,14 @@ class BOARD;
 class TOOL_MANAGER;
 class TOOL_DISPATCHER;
 class ACTIONS;
-
+class PCB_SELECTION;
+class PCB_TEST_SELECTION_TOOL;
 
 namespace KIGFX {
     class VIEW;
 };
 
-class PCB_TEST_FRAME_BASE
+class PCB_TEST_FRAME_BASE : public TOOLS_HOLDER
 {
 public:
     PCB_TEST_FRAME_BASE();
@@ -61,6 +64,15 @@ public:
 
     void LoadSettings();
 
+    virtual wxWindow* GetToolCanvas() const override
+    {
+        return m_galPanel.get();
+    }
+
+    void SetSelectionHook( std::function<void(PCB_TEST_FRAME_BASE*, PCB_SELECTION*)> aHook );
+    void SetSelectableItemTypes( const std::vector<KICAD_T> aTypes );
+    std::shared_ptr< PCB_TEST_SELECTION_TOOL> GetSelectionTool() const { return m_selectionTool; }
+
 protected:
 
     void createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType = PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
@@ -68,14 +80,9 @@ protected:
 
     std::shared_ptr < PCB_DRAW_PANEL_GAL > m_galPanel;
     std::shared_ptr < BOARD > m_board;
+    std::shared_ptr < PCB_TEST_SELECTION_TOOL> m_selectionTool;
     KIGFX::GAL_DISPLAY_OPTIONS m_displayOptions;
     wxString m_mruPath;
-
-#ifdef USE_TOOL_MANAGER
-    unique_ptr < TOOL_MANAGER > m_toolManager;
-    unique_ptr < TOOL_DISPATCHER > m_toolDispatcher;
-    unique_ptr < ACTIONS > m_pcbActions;
-#endif
 };
 
 void SetTopFrame ( wxFrame* aFrame );

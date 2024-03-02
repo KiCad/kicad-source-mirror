@@ -40,6 +40,8 @@
 #include <pcb_draw_panel_gal.h>
 #include <view/wx_view_controls.h>
 #include <pcb_painter.h>
+#include <pcb_actions.h>
+#include <functional>
 
 #include <pad.h>
 #include <footprint.h>
@@ -48,36 +50,39 @@
 #include <pcb_edit_frame.h>
 
 #include <connectivity/connectivity_data.h>
+#include <connectivity/from_to_cache.h>
 
 #include <pcb_io/pcb_io_mgr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 
 #include <memory>
 
-#include <tool/actions.h>
+#include <trace_helpers.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/pcb_tool_base.h>
-#include <tools/pcb_selection_tool.h>
 
 #include "pcb_test_frame.h"
-
-#include <trace_helpers.h>
+#include "pcb_test_selection_tool.h"
 
 using namespace KIGFX;
-
 
 void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
 {
     m_board = b;
+    printf("TestFrameBase::SetBoard %p\n", b.get() );
 
     PROF_TIMER cntConnectivity( "connectivity-build" );
+    m_board->BuildListOfNets();
     m_board->BuildConnectivity();
-    cntConnectivity.Stop();
+    cntConnectivity.Show();
 
     PROF_TIMER cntView("view-build");
     m_galPanel->DisplayBoard( m_board.get() );
-    cntView.Stop();
+    cntView.Show();
+
+    PROF_TIMER cntFromTo("fromto-cache-update");
+    m_board->GetConnectivity()->GetFromToCache()->Rebuild( m_board.get() );
+    cntFromTo.Show();
 
     m_galPanel->UpdateColors();
 
@@ -91,10 +96,33 @@ void PCB_TEST_FRAME_BASE::SetBoard( std::shared_ptr<BOARD> b )
 
     PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
+    
+    m_toolManager = new TOOL_MANAGER;
+
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
-                                   m_galPanel->GetViewControls(), cfg, nullptr );
+                                   m_galPanel->GetViewControls(), cfg, this );
+
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager );
+
+    m_selectionTool.reset( new PCB_TEST_SELECTION_TOOL );
+
+    m_toolManager->RegisterTool( m_selectionTool.get() );
+
+    createUserTools();
+
+
+    for( TOOL_BASE* tool : m_toolManager->Tools() )
+    {
+        if( PCB_TOOL_BASE* pcbTool = dynamic_cast<PCB_TOOL_BASE*>( tool ) )
+            pcbTool->SetIsBoardEditor( true );
+    }
+
+    m_toolManager->InitTools();
+
+    m_galPanel->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 #endif
 }
 
@@ -119,10 +147,11 @@ BOARD* PCB_TEST_FRAME_BASE::LoadAndDisplayBoard( const std::string& filename )
     return brd;
 }
 
-
-class TEST_ACTIONS : public ACTIONS
+void PCB_TEST_FRAME_BASE::SetSelectableItemTypes( const std::vector<KICAD_T> aTypes )
 {
-};
+    m_selectionTool->SetSelectableItemTypes( aTypes );
+}
+
 
 
 void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType )
@@ -154,23 +183,7 @@ void PCB_TEST_FRAME_BASE::createView( wxWindow *aParent, PCB_DRAW_PANEL_GAL::GAL
 
     m_galPanel->GetViewControls()->ShowCursor( true );
 
-#ifdef USE_TOOL_MANAGER
-    SETTINGS_MANAGER&       mgr = Pgm().GetSettingsManager();
-    PCBNEW_SETTINGS* cfg = mgr.GetAppSettings<PCBNEW_SETTINGS>();
 
-    m_toolManager = std::make_unique<TOOL_MANAGER>( );
-    m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
-                                   m_galPanel->GetViewControls(), cfg, nullptr );
-
-    m_pcbActions = std::make_unique<TEST_ACTIONS>( );
-    m_toolDispatcher = std::make_unique<TOOL_DISPATCHER>( m_toolManager.get() );
-
-    m_toolManager->RegisterTool( new PCB_SELECTION_TOOL );
-    createUserTools();
-
-    m_toolManager->InitTools();
-    m_toolManager->InvokeTool( "test.DefaultTool" );
-#endif
 
     //SetBoard( std::make_shared<BOARD>( new BOARD ));
 }
@@ -195,4 +208,15 @@ void PCB_TEST_FRAME_BASE::LoadSettings()
     mgr.RegisterSettings( new PCBNEW_SETTINGS );
     mgr.RegisterSettings( new CVPCB_SETTINGS );
     mgr.GetColorSettings()->Load();
+}
+
+void PCB_TEST_FRAME_BASE::SetSelectionHook( std::function<void(PCB_TEST_FRAME_BASE*, PCB_SELECTION*)> aHook )
+{
+    auto tool = m_toolManager->FindTool("pcbnew.InteractiveSelection");
+    if (!tool)
+        return;
+
+    auto casted = static_cast<PCB_TEST_SELECTION_TOOL*>( tool );
+
+    casted->SetSelectionHook( aHook );
 }

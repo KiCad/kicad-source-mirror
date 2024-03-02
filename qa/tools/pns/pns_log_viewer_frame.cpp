@@ -117,12 +117,18 @@ void PNS_LOG_VIEWER_OVERLAY::DrawAnnotations()
 
 
 PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) :
-        PNS_LOG_VIEWER_FRAME_BASE( frame ), m_rewindIter( 0 ), m_reporter( &m_consoleLog )
+        PNS_LOG_VIEWER_FRAME_BASE( frame ), m_rewindIter( 0 )
 {
     LoadSettings();
     createView( this, PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
 
-    m_viewSizer->Add( m_galPanel.get(), 1, wxEXPAND, 5 );
+    m_reporter.reset( new WX_TEXT_CTRL_REPORTER( m_consoleText ) );
+    m_galPanel->SetParent( m_mainSplitter );
+    m_mainSplitter->Initialize( m_galPanel.get() );
+    m_mainSplitter->SplitHorizontally( m_galPanel.get(), m_panelProps );
+    m_galPanel->Layout();
+    m_topBarSizer->Layout();
+    m_mainSizer->Layout();
 
     Layout();
 
@@ -329,7 +335,7 @@ void PNS_LOG_VIEWER_FRAME::LoadLogFile( const wxString& aFile )
 {
     std::unique_ptr<PNS_LOG_FILE> logFile( new PNS_LOG_FILE );
 
-    if( logFile->Load( wxFileName( aFile ), &m_reporter ) )
+    if( logFile->Load( wxFileName( aFile ), m_reporter.get() ) )
         SetLogFile( logFile.release() );
 }
 
@@ -417,7 +423,7 @@ void PNS_LOG_VIEWER_FRAME::onSaveAs( wxCommandEvent& event )
 
         wxASSERT_MSG( create_me.IsAbsolute(), wxS( "wxFileDialog returned non-absolute path" ) );
 
-        m_logFile->SaveLog( create_me, &m_reporter );
+        m_logFile->SaveLog( create_me, m_reporter.get() );
         m_mruPath = create_me.GetPath();
     }
 
@@ -932,6 +938,12 @@ void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
 
     //view->UpdateAllItems( KIGFX::ALL );
 }
+
+REPORTER* PNS_LOG_VIEWER_FRAME::GetConsoleReporter()
+{
+    return m_reporter.get();
+}
+
 
 #if 0
 
