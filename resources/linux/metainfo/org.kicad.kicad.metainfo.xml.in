@@ -54,7 +54,7 @@
     </description>
 
     <screenshots>
-        <screenshot>
+        <screenshot type="default">
             <caption>KiCad Schematic Editor</caption>
             <image width="1600" height="900">https://www.kicad.org/img/screenshots/appstream/eeschema_7.png</image>
         </screenshot>
