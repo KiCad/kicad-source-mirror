@@ -1181,7 +1181,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         {
             for( PAD* pad : footprint->Pads() )
             {
-                if( pad->GetNetCode() == aZone->GetNetCode() )
+                if( pad->GetNetCode() == aZone->GetNetCode() && aZone->GetNetCode() != 0 )
                 {
                     if( pad->IsOnLayer( aLayer ) )
                         allowedNetTiePads.insert( pad );
