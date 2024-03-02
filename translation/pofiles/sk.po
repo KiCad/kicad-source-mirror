@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-02 05:04+0000\n"
+"PO-Revision-Date: 2024-03-03 06:01+0000\n"
 "Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
 "master-source/sk/>\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr "Všetky súbory"
+msgstr "Všetky Súbory"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
@@ -300,7 +300,7 @@ msgstr "Vzhľad"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:544
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:40
 msgid "Follow PCB Editor"
-msgstr "Editor DPS"
+msgstr "Nasledovať editor DPS"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:330
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:545
@@ -605,7 +605,7 @@ msgstr "Zobraziť spájkovaciu pastu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "F.Silkscreen"
-msgstr "F.Silkscreen"
+msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 msgid "Show front silkscreen"
@@ -613,7 +613,7 @@ msgstr "Zobraziť predný popis"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "B.Silkscreen"
-msgstr "B.Silkscreen"
+msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show back silkscreen"
@@ -1709,7 +1709,7 @@ msgstr "Výstupný formát"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 msgid "Export to File"
-msgstr "Exportovať do súboru"
+msgstr "Exportovať do Súboru"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:178
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -1814,7 +1814,7 @@ msgstr "Ajtak otvoriť"
 
 #: common/confirm.cpp:181 common/confirm.cpp:218
 msgid "Save Changes?"
-msgstr "Uložiť zmeny?"
+msgstr "Uložiť Zmeny?"
 
 #: common/confirm.cpp:183 common/confirm.cpp:220
 msgid "If you don't save, all your changes will be permanently lost."
@@ -2110,9 +2110,8 @@ msgid "&Yes"
 msgstr "&Ano"
 
 #: common/dialog_shim.cpp:749
-#, fuzzy
 msgid "&No"
-msgstr "Nie"
+msgstr "&Nie"
 
 #: common/dialog_shim.cpp:750
 msgid "&Apply"
@@ -4128,7 +4127,7 @@ msgstr "Text:"
 
 #: common/dialogs/panel_grid_settings_base.cpp:151
 msgid "Graphics:"
-msgstr "Grafika:"
+msgstr "Grafiky:"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:78
 msgid "Type filter text"
@@ -5236,7 +5235,7 @@ msgstr "Generátor"
 #: eeschema/widgets/search_handlers.cpp:281 pcbnew/pcb_textbox.cpp:372
 #: pcbnew/pcb_textbox.h:65
 msgid "Text Box"
-msgstr "Text"
+msgstr "Textové pole"
 
 #: common/eda_item.cpp:352 common/eda_item.cpp:379 eeschema/sch_table.cpp:546
 #: pcbnew/pcb_table.cpp:285
@@ -8194,12 +8193,15 @@ msgid "Can not switch to project manager in stand-alone mode."
 msgstr ""
 
 #: common/tool/common_control.cpp:236
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Help file '%s' or\n"
 "'%s' could not be found.\n"
 "Do you want to access the KiCad online help?"
-msgstr "Súbor pomocníka '%s' sa nenašiel."
+msgstr ""
+"Pomocný súbor '%s' alebo\n"
+"'%s' nebol nájdený.\n"
+"Chcete otvoriť online pomoc KiCad-u?"
 
 #: common/tool/common_control.cpp:239 common/tool/common_control.cpp:259
 msgid "File Not Found"
@@ -8382,9 +8384,8 @@ msgid "Accelerated graphics"
 msgstr "Akcelerovaná grafika"
 
 #: common/widgets/gal_options_panel_base.cpp:32
-#, fuzzy
 msgid "Hardware-accelerated graphics (recommended)"
-msgstr "Použite hardvérovo akcelerovanú grafiku (odporúčané)"
+msgstr "Hardwareovo-akcelerovaná grafika (doporučené)"
 
 #: common/widgets/gal_options_panel_base.cpp:36
 msgid "Fallback graphics"
@@ -8395,8 +8396,8 @@ msgid ""
 "Software graphics (for computers which do not support KiCad's hardware "
 "acceleration requirements)"
 msgstr ""
-"Emulovaná grafika (pro počítače, které nesplňují požadavky na grafickou "
-"akceleraci KiCadu)"
+"Software-ová grafika (pre počítače, ktoré nespĺňajú požiadavky na grafickú "
+"akceleráciu KiCad-u)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
 #, fuzzy
@@ -10592,9 +10593,8 @@ msgid "external simulator has the wrong format or architecture"
 msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:618
-#, fuzzy
 msgid "permission denied"
-msgstr "Chyba povolenia?"
+msgstr "prístup odmietnutý"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:765
 msgid "This plugin already exists."
@@ -13641,9 +13641,9 @@ msgid "Rename Field"
 msgstr "Premenovať súbor"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:753
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "Súbor '%s' už existuje. Chcete prepísať tento súbor?"
+msgstr "Súbor %s už existuje. Nie je možné prepísať existujúce polia."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:845
 #, fuzzy
@@ -13684,9 +13684,8 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1254
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "Súbor nie je zvolený!"
+msgstr "Názov súboru nie je špecifikovaný pre exportovanie"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1268
 #, fuzzy, c-format
@@ -16277,11 +16276,13 @@ msgid "Manual recovery will be required to restore the file(s) above."
 msgstr "Ruční obnovení bude vyžadováno pro obnovení výše uvedených souboru(ů)."
 
 #: eeschema/files-io.cpp:1684
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The autosave file '%s' could not be removed.\n"
 "Manual removal will be required."
-msgstr "Automaticky uložený súbor \"%s\" nejde odstrániť!"
+msgstr ""
+"Automaticky uložený súbor '%s' nejde odstrániť.\n"
+"Je potrebné vykonať manuálne odstránenie."
 
 #: eeschema/files-io.cpp:1718
 #, fuzzy
@@ -16326,9 +16327,8 @@ msgstr "Nohy"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:202
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:215
 #: pcbnew/tools/drawing_tool.cpp:1797 pcbnew/tools/drawing_tool.cpp:1886
-#, fuzzy
 msgid "Import Graphics"
-msgstr "& Importovať grafiku..."
+msgstr "Importovať grafiku"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:217
 msgid "No file selected!"
@@ -16393,7 +16393,7 @@ msgstr "Predvolené jednotky:"
 #: eeschema/import_gfx/dialog_import_gfx_sch_base.h:77
 #: pcbnew/import_gfx/dialog_import_graphics_base.h:85
 msgid "Import Vector Graphics File"
-msgstr "Importujte súbor vektorovej grafiky"
+msgstr "Importovať súbor vektorovej grafiky"
 
 #: eeschema/lib_field.cpp:564 eeschema/lib_text.cpp:431
 #: eeschema/sch_field.cpp:928
@@ -16781,7 +16781,7 @@ msgstr "Priradenia stôp"
 #: eeschema/menubar.cpp:116 eeschema/symbol_editor/menubar_symbol_editor.cpp:69
 #: pcbnew/menubar_footprint_editor.cpp:68 pcbnew/menubar_pcb_editor.cpp:116
 msgid "Graphics..."
-msgstr "&Grafický..."
+msgstr "Grafický..."
 
 #: eeschema/menubar.cpp:126
 #, fuzzy
@@ -19180,19 +19180,16 @@ msgid "Model name cannot be empty."
 msgstr "Názov siete nemôže byť prázdny."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:217
-#, fuzzy
 msgid "Rpin is not valid."
-msgstr "Meno súboru nie je platné!"
+msgstr "Rpin je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:225
-#, fuzzy
 msgid "Lpin is not valid."
-msgstr "Meno súboru nie je platné!"
+msgstr "Lpin je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:233
-#, fuzzy
 msgid "Cpin is not valid."
-msgstr "Meno súboru nie je platné!"
+msgstr "Cpin je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:247
 msgid "Checking component "
@@ -19290,9 +19287,8 @@ msgid "Invalid V_meas value."
 msgstr "Neplatný reťazec hodnoty korenia"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:539
-#, fuzzy
 msgid "C_comp is invalid."
-msgstr "Niektoré súbory neplatné!"
+msgstr "C_comp je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:547
 #, fuzzy
@@ -19300,9 +19296,8 @@ msgid "Temperature Range is invalid."
 msgstr "Nárast teploty:"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:572
-#, fuzzy
 msgid "Voltage Range is invalid."
-msgstr "Meno súboru nie je platné!"
+msgstr "Rozsah napätia je neplatný."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:578
 #, fuzzy
@@ -19542,9 +19537,8 @@ msgid "Unknown Model_type "
 msgstr "Neznámy Model_type "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1993
-#, fuzzy
 msgid "Internal Error while reading model_type"
-msgstr "Chyba rozbalovania súboru!"
+msgstr "Interná chyba počas čítania model_type"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2008
 msgid "Unknown Enable: "
@@ -19552,9 +19546,8 @@ msgstr "Neznámy Enable: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2015
 #: eeschema/sim/kibis/ibis_parser.cpp:2037
-#, fuzzy
 msgid "Internal Error while reading Enable"
-msgstr "Chyba rozbalovania súboru!"
+msgstr "Interná chyba počas čítania Povolení"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2030
 msgid "Unknown polarity "
@@ -19619,9 +19612,8 @@ msgid "Missing keyword."
 msgstr "Kľúčové slová:"
 
 #: eeschema/sim/kibis/kibis.cpp:455
-#, fuzzy
 msgid "waveform has less than two points"
-msgstr "Tvar nemá žiadne body!"
+msgstr "tvar vlny má menej ako dva body"
 
 #: eeschema/sim/kibis/kibis.cpp:674 eeschema/sim/kibis/kibis.cpp:739
 #, fuzzy
@@ -19629,9 +19621,8 @@ msgid "Cannot remove temporary output file"
 msgstr "Dočasný súbor '%s' nemožno premenovať na súbor knižnice stopy '%s'"
 
 #: eeschema/sim/kibis/kibis.cpp:725
-#, fuzzy
 msgid "Error while reading temporary file"
-msgstr "Chyba rozbalovania súboru!"
+msgstr "Chyba počas čítania dočasného súboru"
 
 #: eeschema/sim/kibis/kibis.cpp:734
 #, fuzzy
@@ -20070,9 +20061,8 @@ msgid "Another simulation is already running."
 msgstr "Simulacia uz bezi."
 
 #: eeschema/sim/simulator_frame.cpp:591
-#, fuzzy
 msgid "Save changes to workbook?"
-msgstr "Uložiť zmeny do dosky"
+msgstr "Uložiť zmeny do zošita?"
 
 #: eeschema/sim/simulator_frame_ui.cpp:145
 #, fuzzy
@@ -20328,9 +20318,8 @@ msgid "'%s' is not a valid Spice value."
 msgstr "\"%s\" nie je platná hodnota Spice"
 
 #: eeschema/sim/toolbars_simulator_frame.cpp:162
-#, fuzzy
 msgid "&Simulation"
-msgstr "Simulácia"
+msgstr "&Simulácia"
 
 #: eeschema/sim/user_defined_signals_help_md.h:2
 msgid ""
@@ -20407,12 +20396,12 @@ msgstr ""
 "    limit(nom, avar)\n"
 
 #: eeschema/symbol_async_loader.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Loading library %s..."
-msgstr "Načítava sa knižnica '%s'"
+msgstr "Načítava sa knižnica %s..."
 
 #: eeschema/symbol_async_loader.cpp:122 eeschema/symbol_async_loader.cpp:130
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol library %s.\n"
 "\n"
@@ -20432,163 +20421,149 @@ msgstr ""
 "problémy, pokud je uložena v knihovně symbolů"
 
 #: eeschema/symbol_checker.cpp:118
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b> Duplikát špendlíka %s </b> '%s' v mieste <b> (%.3f, %.3f) </b> je v "
-"rozpore s kolíkom %s '%s' v mieste <b> ( %.3f, %.3f) </b> v jednotkách %c a "
-"%c"
+"<b>Duplikovaný vývod %s</b> %s na pozícii <b>(%s, %s)</b> je v konflikte s "
+"vývodom %s%s na pozícii <b>(%s, %s)</b> v %s tele."
 
 #: eeschema/symbol_checker.cpp:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b> Duplikát špendlíka %s </b> '%s' v mieste <b> (%.3f, %.3f) </b> je v "
-"rozpore s kolíkom %s '%s' v mieste <b> ( %.3f, %.3f) </b> v jednotkách %c a "
-"%c"
+"<b>Duplikovaný vývod %s</b> %s na pozícii <b>(%s, %s)</b> je v konflikte s "
+"vývodom %s%s na pozícii <b>(%s, %s)</b> v jednotkách %s a %s z %s tela."
 
 #: eeschema/symbol_checker.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b>."
 msgstr ""
-"<b> Duplikát špendlíka %s </b> '%s' v mieste <b> (%.3f, %.3f) </b> je v "
-"konflikte s pinom %s '%s' v mieste <b> ( %.3f, %.3f) </b>"
+"<b>Duplikovaný vývod %s</b> %s na pozícii <b>(%s, %s)</b> je v konflikte s "
+"vývodom %s%s na pozícii <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:166
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b> Duplikát špendlíka %s </b> '%s' v mieste <b> (%.3f, %.3f) </b> je v "
-"rozpore s kolíkom %s '%s' v mieste <b> ( %.3f, %.3f) </b> v jednotkách %c a "
-"%c"
+"<b>Duplikovaný vývod %s</b> %s na pozícii <b>(%s, %s)</b> je v konflikte s "
+"vývodom %s%s na pozícii <b>(%s, %s)</b> v jednotkách %s a %s."
 
 #: eeschema/symbol_checker.cpp:194
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
-msgstr "<b>Symbol napájení by měl mít pouze jednu jednotku</b><br><br>"
+msgstr "<b>Symbol napájania by mal mať iba jednu jednotku</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:200
-#, fuzzy
 msgid "<b>A Power Symbol should not have DeMorgan variants</b><br><br>"
-msgstr "<b>Symbol napájení by měl mít jen jeden vývod</b><br><br>"
+msgstr ""
+"<b>Symbol napájania by mal mať iba jeden DeMorgran-ov variant</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:206
 msgid "<b>A Power Symbol should have only one pin</b><br><br>"
-msgstr "<b>Symbol napájení by měl mít jen jeden vývod</b><br><br>"
+msgstr "<b>Symbol napájania by mal mať iba jeden vývod</b><br><br>"
 
 #: eeschema/symbol_checker.cpp:215
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Only an input or output power pin has "
 "meaning<br><br>"
 msgstr ""
-"Podezřelý symbol napájení</b><br>Pouze vstupní nebo výstupní vývod má "
-"význam<br><br>"
+"<b>Podozrivý symbol napájania</b><br>Iba vstup alebo výstup má význam<br><br>"
 
 #: eeschema/symbol_checker.cpp:222
-#, fuzzy
 msgid ""
 "<b>Suspicious Power Symbol</b><br>Invisible input power pins are no longer "
 "required<br><br>"
 msgstr ""
-"<b>Podezřelý symbol napájení</b><br>Automaticky připojeny pouze neviditelné "
-"vstupní napájecí vývody<br><br>"
+"<b>Podozrivý symbol napájania</b><br>Neviditeľné vstupné napájacie vývody už "
+"nie sú potrebné<br><br>"
 
 #: eeschema/symbol_checker.cpp:247
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
 msgstr ""
-"<b> Špendlík mimo mriežku %s </b> '%s' na mieste <b> (%.3f, %.3f) </b> v "
-"symbole %c. <br>"
+"Info: <b>Skrytý vývod napájania %s</b> %s na pozícii <b>(%s, %s)</b> v %s "
+"tele."
 
 #: eeschema/symbol_checker.cpp:257
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
 msgstr ""
-"<b> Konverzný kolík %s </b> '%s' na mieste <b> (%.3f, %.3f) </b> v symbole "
-"%c prevedeného. <br>"
+"Info: <b>Skrytý napájací vývod %s</b> %s na pozícii <b>(%s, %s)</b> v "
+"jednotke %c z %s tela."
 
 #: eeschema/symbol_checker.cpp:271
-#, fuzzy, c-format
+#, c-format
 msgid "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b> Špendlík mimo mriežku %s </b> '%s' na mieste <b> (%.3f, %.3f) </b>. <br>"
+msgstr "Info: <b>Skrytý napájací vývod %s</b> %s na pozícii <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:279
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b> Špendlík mimo mriežku %s </b> '%s' na mieste <b> (%.3f, %.3f) </b> v "
-"symbole %c. <br>"
+"Info: <b>Skrytý napájací vývod %s</b> %s na pozícii <b>(%s, %s)</b> v "
+"jednotke %c."
 
 #: eeschema/symbol_checker.cpp:290
 msgid ""
 "(Hidden power pins will drive their pin names on to any connected nets.)"
 msgstr ""
-"(Skryté napájecí vývody přenášejí své názvy vývodů do všech připojených "
-"sítí.)"
+"(Skryté napájacie vývody prenášajú svoje názvy vývodov do všetkých "
+"pripojených sietí.)"
 
 #: eeschema/symbol_checker.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr ""
-"<b> Konverzný kolík %s </b> '%s' v mieste <b> (%.3f, %.3f) </b> prevedený. "
-"<br>"
+msgstr "<b>Vývod mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b> z %s tela."
 
 #: eeschema/symbol_checker.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b> Špendlík mimo mriežku %s </b> '%s' na mieste <b> (%.3f, %.3f) </b> v "
-"symbole %c. <br>"
+"<b>Vývod mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b> v jednotke %c z "
+"%s tela."
 
 #: eeschema/symbol_checker.cpp:329
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b>."
-msgstr ""
-"<b> Špendlík mimo mriežku %s </b> '%s' na mieste <b> (%.3f, %.3f) </b>. <br>"
+msgstr "<b>Vývod mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:337
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
 msgstr ""
-"<b> Špendlík mimo mriežku %s </b> '%s' na mieste <b> (%.3f, %.3f) </b> v "
-"symbole %c. <br>"
+"<b>Vývod mimo mriežky %s</b> %s na pozícii <b>(%s, %s)</b> v jednotke %c."
 
 #: eeschema/symbol_checker.cpp:379
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic circle has radius = 0</b> at location <b>(%s, %s)</b>."
-msgstr ""
-"<b> Špendlík mimo mriežku %s </b> '%s' na mieste <b> (%.3f, %.3f) </b>. <br>"
+msgstr "<b>Grafický kruh s polomerom = 0</b> na pozícii <b>(%s, %s)</b>."
 
 #: eeschema/symbol_checker.cpp:390
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Graphic rectangle has size 0</b> at location <b>(%s, %s)</b>."
-msgstr ""
-"<b> Špendlík mimo mriežku %s </b> '%s' na mieste <b> (%.3f, %.3f) </b>. <br>"
+msgstr "<b>Grafický kruh má veľkosť 0</b> na pozícii <b>(%s, %s)</b>."
 
 #: eeschema/symbol_chooser_frame.cpp:69
-#, fuzzy
 msgid "Symbol Chooser"
-msgstr "Kontrola symbolov"
+msgstr "Vyberač Symbolov"
 
 #: eeschema/symbol_diff_frame.cpp:62
-#, fuzzy
 msgid "KiCad Symbol Difference Viewer"
-msgstr "Súbory knižnice symbolov KiCad"
+msgstr "KiCad Prehliadač Rozdielov Symbolov"
 
 #: eeschema/symbol_diff_frame.cpp:103 eeschema/symbol_viewer_frame.cpp:170
 #, fuzzy
@@ -20612,9 +20587,8 @@ msgstr ""
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:68
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:77
-#, fuzzy
 msgid "Symbol..."
-msgstr "Nový symbol..."
+msgstr "Symbol..."
 
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:78
 #, fuzzy
@@ -20672,9 +20646,9 @@ msgstr ""
 "aktuálneho formátu použite Manage Symbol Libraries."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:886
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol %s is a derived symbol.  Symbol graphics will not be editable."
-msgstr "Symbol %s je odvodený od %s. Grafiku symbolov nebude možné upraviť."
+msgstr "Symbol %s je odvodeným symbolom.  Grafiku symbolu nebude možné upraviť."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:964
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1015
@@ -20848,11 +20822,13 @@ msgid "Symbol name '%s' already in use."
 msgstr "Názov '%s' sa už používa."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:800
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The symbol '%s' has been modified.\n"
 "Do you want to remove it from the library?"
-msgstr "Meno súčiastky '%s' nenájdené v knižnici '%s'."
+msgstr ""
+"Symbol '%s' bol upravený.\n"
+"Prajete si ho odstrániť z knižnice?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:812
 #, fuzzy, c-format
@@ -21994,7 +21970,7 @@ msgstr "Odstráňte neodkazy na špendlíky hárka"
 
 #: eeschema/tools/ee_actions.cpp:824 pcbnew/tools/pcb_actions.cpp:837
 msgid "Edit Text & Graphics Properties..."
-msgstr "Upraviť vlastnosti textu a grafiky..."
+msgstr "Upraviť text & Vlastnosti grafiky..."
 
 #: eeschema/tools/ee_actions.cpp:825
 msgid "Edit text and graphics properties globally across schematic"
@@ -22277,9 +22253,8 @@ msgid "Export drawing of current sheet to clipboard"
 msgstr "Exportovať výkres aktuálneho hárku do schránky"
 
 #: eeschema/tools/ee_actions.cpp:1059 pcbnew/tools/pcb_actions.cpp:337
-#, fuzzy
 msgid "Import Graphics..."
-msgstr "& Importovať grafiku..."
+msgstr "Importovať Grafiku..."
 
 #: eeschema/tools/ee_actions.cpp:1060 pcbnew/tools/pcb_actions.cpp:338
 msgid "Import 2D drawing file"
@@ -22903,11 +22878,8 @@ msgid "Import Graphic"
 msgstr "& Importovať grafiku..."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1060
-#, fuzzy
 msgid "Junction location contains no joinable wires and/or pins."
-msgstr ""
-"Zmena prípony súboru zmení typ súboru.\n"
-" Chcete pokračovať?"
+msgstr "V mieste umiestnenia pripojení nie sú žiadne spoje a/alebo vývody."
 
 #: eeschema/tools/sch_drawing_tools.cpp:1493
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:181
@@ -23312,7 +23284,7 @@ msgstr "Povoliť výber uzamknutých položiek"
 #: pcbnew/widgets/panel_selection_filter.cpp:191
 #: pcbnew/widgets/panel_selection_filter_base.cpp:49
 msgid "Graphics"
-msgstr "Grafika"
+msgstr "Grafiky"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:200
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:51
@@ -25661,9 +25633,8 @@ msgid "Edit File in Text Editor"
 msgstr "Úpravy v textovom editore"
 
 #: kicad/kicad_manager_frame.cpp:841
-#, fuzzy
 msgid "[no project loaded]"
-msgstr "Nenačítané puzdro."
+msgstr "[žiadny projekt nie je načítaný]"
 
 #: kicad/kicad_manager_frame.cpp:884
 #, c-format
@@ -26215,14 +26186,13 @@ msgid "Reviewing packages..."
 msgstr "Odstráňte stopu vo vnútri podložky"
 
 #: kicad/pcm/pcm_task_manager.cpp:74 kicad/pcm/pcm_task_manager.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "Version %s of package %s not found!"
-msgstr "Súbor Netlistu %s nenájdený"
+msgstr "Verzia %s balčíku %s nebola nájdená!"
 
 #: kicad/pcm/pcm_task_manager.cpp:83
-#, fuzzy
 msgid "Unable to create download directory!"
-msgstr "Nie je možné vytvoriť adresár '%s'"
+msgstr "Nebolo možné vytvoriť adresár pre sťahovanie!"
 
 #: kicad/pcm/pcm_task_manager.cpp:132
 #, fuzzy, c-format
@@ -26549,9 +26519,8 @@ msgid "Local path: monitoring folder changes"
 msgstr "Lokálna cesta: sledovanie zmien priečinka"
 
 #: kicad/project_tree_pane.cpp:1544
-#, fuzzy
 msgid "The selected directory is already a git project."
-msgstr "Vybratý súbor je neplatný alebo môže byť poškodený!"
+msgstr "Vybraný adresár už je používaný ako git projekt."
 
 #: kicad/project_tree_pane.cpp:1560
 msgid "Failed to initialize git project."
@@ -26831,9 +26800,8 @@ msgid "Similar files already exist in the destination folder."
 msgstr "Podobné súbory už v cieľovom priečinku existujú."
 
 #: kicad/tools/kicad_manager_control.cpp:344
-#, fuzzy
 msgid "A problem occurred creating new project from template."
-msgstr "Pri vytváraní nového projektu zo šablóny sa vyskytol problém!"
+msgstr "Problém počas vytvárania nového projektu zo šablóny."
 
 #: kicad/tools/kicad_manager_control.cpp:367
 msgid "Open Existing Project"
@@ -27365,7 +27333,6 @@ msgid "Error writing objects to clipboard"
 msgstr "Chyba pri zápise objektov do schránky"
 
 #: pcb_calculator/attenuators/bridget_tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Bridged Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -27377,16 +27344,8 @@ msgid ""
 "___R1 = Z<sub>0</sub> &middot; (L&minus;1)___<br>\n"
 "___R2 = Z<sub>0</sub> / (L&minus;1)___\n"
 msgstr ""
-"## Rozdelený zoslabovač\n"
-"### Útlm je 6 dB\n"
-"___Z <sub> v </sub> ___ požadovaná vstupná impedancia v & # x2126; <br>\n"
-"___Z <sub> out </sub> ___ požadovaná výstupná impedancia v & # x2126; <br>\n"
-"___Z <sub> vstup </sub> = Z <sub> výstup </sub> ___\n"
-"\n"
-"___R1 = R2 = R3 = Z <sub> out </sub> / 3 ___\n"
 
 #: pcb_calculator/attenuators/pi_formula.h:2
-#, fuzzy
 msgid ""
 "### Pi Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -27401,21 +27360,8 @@ msgid ""
 "___R1 = 1 / (A/Z<sub>in</sub> &minus; 1/R2)___<br>\n"
 "___R3 = 1 / (A/Z<sub>out</sub> &minus; 1/R2)___\n"
 msgstr ""
-"## Tee atenuátor\n"
-"__Zin__ požadovaná vstupná impedancia v & # x2126; <br>\n"
-"__Zout__ požadovaná výstupná impedancia <br>\n"
-"__Zin = Zout__ <br> <br>\n"
-"\n"
-"* __a__ útlm v dB\n"
-"* __L = 10 <sup> a / 20 </sup> __ (strata)\n"
-"* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> in </sub> \\ * Z <sub> out </sub>) / (L "
-"- 1) ___\n"
-"* ___R1 = Z <sub> in </sub> \\ * A - R2___\n"
-"* ___R3 = Z <sub> out </sub> \\ * A - R2___\n"
 
 #: pcb_calculator/attenuators/splitter_formula.h:2
-#, fuzzy
 msgid ""
 "### Split Attenuator\n"
 "Attenuation is 6 dB<br>\n"
@@ -27425,16 +27371,8 @@ msgid ""
 "\n"
 "___R1 = R2 = R3 = Z<sub>0</sub>/3___\n"
 msgstr ""
-"## Rozdelený zoslabovač\n"
-"### Útlm je 6 dB\n"
-"___Z <sub> v </sub> ___ požadovaná vstupná impedancia v & # x2126; <br>\n"
-"___Z <sub> out </sub> ___ požadovaná výstupná impedancia v & # x2126; <br>\n"
-"___Z <sub> vstup </sub> = Z <sub> výstup </sub> ___\n"
-"\n"
-"___R1 = R2 = R3 = Z <sub> out </sub> / 3 ___\n"
 
 #: pcb_calculator/attenuators/tee_formula.h:2
-#, fuzzy
 msgid ""
 "### Tee Attenuator\n"
 "___a___ is attenuation in dB<br>\n"
@@ -27449,18 +27387,6 @@ msgid ""
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 msgstr ""
-"## Tee atenuátor\n"
-"__Zin__ požadovaná vstupná impedancia v & # x2126; <br>\n"
-"__Zout__ požadovaná výstupná impedancia <br>\n"
-"__Zin = Zout__ <br> <br>\n"
-"\n"
-"* __a__ útlm v dB\n"
-"* __L = 10 <sup> a / 20 </sup> __ (strata)\n"
-"* ___A = (L + 1) / (L - 1) ___ <br> <br>\n"
-"* ___R2 = 2 & radic; (L \\ * Z <sub> in </sub> \\ * Z <sub> out </sub>) / (L "
-"- 1) ___\n"
-"* ___R1 = Z <sub> in </sub> \\ * A - R2___\n"
-"* ___R3 = Z <sub> out </sub> \\ * A - R2___\n"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:33
 msgid "Note: Values are minimal values"
@@ -31172,7 +31098,6 @@ msgid "Update PCB"
 msgstr "Aktualizujte PCB"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:134
-#, fuzzy
 msgid "Graphics Cleanup"
 msgstr "Vyčistenie grafiky"
 
@@ -31185,9 +31110,8 @@ msgid "Delete redundant graphics"
 msgstr "Odstrániť nadbytočnú grafiku"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
-#, fuzzy
 msgid "Merge overlapping graphics into pads"
-msgstr "Zlúčiť prekrývajúce sa segenty"
+msgstr "Zlúčiť prekrývajúcu sa grafiku do plôšok"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
 msgid ""
@@ -31700,7 +31624,7 @@ msgstr "počet bodov"
 
 #: pcbnew/dialogs/dialog_create_array.cpp:495
 msgid "Bad parameters"
-msgstr "Chybné parametre!"
+msgstr "Chybné parametre"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:33
 #, fuzzy
@@ -32561,9 +32485,8 @@ msgid "IPC-2581 Compressed Files (*.zip)|*.zip"
 msgstr "Soubory pro testování IPC-D-356 (.d356)|*."
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:74
-#, fuzzy
 msgid "Export IPC-2581 File"
-msgstr "Exportovať do súboru"
+msgstr "Exportovať Súbor IPC-2581"
 
 #: pcbnew/dialogs/dialog_export_2581.cpp:132
 #, fuzzy
@@ -32749,13 +32672,13 @@ msgid "No filename for output file"
 msgstr "Nie súbor stopy"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:400
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"Obrys dosky chýba alebo má nesprávny tvar. Spustením DRC získate úplnú "
-"analýzu."
+"Obrys dosky chýba alebo nie je uzavretý s použitím %.3f tolerancie.\n"
+"Spustením DRC získate úplnú analýzu."
 
 #: pcbnew/dialogs/dialog_export_step.cpp:412
 #, fuzzy
@@ -32875,9 +32798,8 @@ msgid "Export silkscreen"
 msgstr "Predná hodvábna obrazovka"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:172
-#, fuzzy
 msgid "Export silkscreen graphics."
-msgstr "Zobraziť vrstvy potlače"
+msgstr "Exportovať grafický popis."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:176
 #, fuzzy
@@ -32885,9 +32807,8 @@ msgid "Export solder mask"
 msgstr "Predná spájkovacia maska"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:178
-#, fuzzy
 msgid "Export solder mask graphics."
-msgstr "Predná spájkovacia maska"
+msgstr "Exportovať grafiku prednej nespájkovacej masky."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:182
 #, fuzzy
@@ -32895,9 +32816,8 @@ msgid "Export solder paste"
 msgstr "Predná spájkovacia pasta"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:184
-#, fuzzy
 msgid "Export solder paste graphics."
-msgstr "Predná spájkovacia pasta"
+msgstr "Exportovať grafiku prednej spájkovacej pasty."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:188
 #, fuzzy
@@ -34111,14 +34031,12 @@ msgid "Filter Settings"
 msgstr "Nastavenia filtra"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
-#, fuzzy
 msgid "Locked graphics"
-msgstr "Zamknuté spoje"
+msgstr "Zamknutá grafika"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:63
-#, fuzzy
 msgid "Unlocked graphics"
-msgstr "Odomknuté stopy"
+msgstr "Odomknutá grafika"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:66
 msgid "Locked footprints"
@@ -34747,14 +34665,12 @@ msgid "Solder mask/paste defaults"
 msgstr "Predvolené hodnoty spájkovacej masky / pasty"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:57
-#, fuzzy
 msgid "Text && graphics default properties"
 msgstr "Predvolené vlastnosti textu a grafiky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:60
-#, fuzzy
 msgid "Text && graphics formatting"
-msgstr "Text a grafika"
+msgstr "Text a formátovanie grafiky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:63
 #, fuzzy
@@ -34772,9 +34688,8 @@ msgid "Teardrop defaults"
 msgstr "Nastavenia mriežky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
-#, fuzzy
 msgid "Length-tuning pattern defaults"
-msgstr "Ladenie stopovej dĺžky"
+msgstr "Predvolené nastavenie ladenia dĺžky"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:78
 #, fuzzy
@@ -36936,9 +36851,8 @@ msgid "Single-sided"
 msgstr "Jedna strana"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.h:74
-#, fuzzy
 msgid "Tuning Pattern Properties"
-msgstr "Vlastnosti vývodu"
+msgstr "Vlastnosti vzoru ladenia"
 
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:51
 #, fuzzy
@@ -37106,7 +37020,7 @@ msgstr "Zachyťte kurzor, keď sa myš priblíži k stope"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:319
 msgid "Snap to graphics:"
-msgstr "Snap to graphics:"
+msgstr "Prichytávanie na grafiku:"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:321
 #: pcbnew/dialogs/panel_edit_options_base.cpp:329
@@ -37266,9 +37180,8 @@ msgid "LIbrary Format"
 msgstr "Cesta knmižnice"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:404
-#, fuzzy
 msgid "No filename entered"
-msgstr "Súbor nie je zvolený!"
+msgstr "Názov súboru nebol zadaný"
 
 #: pcbnew/dialogs/panel_fp_properties_3d_model.cpp:409
 #, fuzzy
@@ -37326,9 +37239,8 @@ msgid "Clearance Outlines"
 msgstr "Obrysy klírensu"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
-#, fuzzy
 msgid "Do not show clearances"
-msgstr "Ďalej už nezobrazovať"
+msgstr "Nezobrazovať izolačné medzery"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 #, fuzzy
@@ -37690,9 +37602,8 @@ msgid "Minimum thermal relief spoke count:"
 msgstr "Šírka lúča tepelného reliéfu:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:439
-#, fuzzy
 msgid "Length tuning"
-msgstr "Ladenie stopovej dĺžky"
+msgstr "Ladenie dĺžky"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:443
 msgid "Include stackup height in track length calculations"
@@ -38437,9 +38348,8 @@ msgstr ""
 "(absolútne a relatívne)."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:105
-#, fuzzy
 msgid "Cancel Changes?"
-msgstr "Uložiť zmeny?"
+msgstr "Zrušiť zmeny?"
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:644
 msgid "DRC rules"
@@ -38984,9 +38894,8 @@ msgid "Tracks which are similar in size do not need teardrops."
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
-#, fuzzy
 msgid "Default properties for new graphics and text:"
-msgstr "Predvolené vlastnosti pre nové grafické prvky:"
+msgstr "Predvolené vlastnosti pre novú grafiku a text:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
@@ -39066,7 +38975,7 @@ msgstr "Medzera prekovu"
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:19
 #, fuzzy
 msgid "Default properties for single-track tuning:"
-msgstr "Predvolené vlastnosti pre nové grafické prvky:"
+msgstr "Prednastavené vlastnosti pre ladenie jedného spoja"
 
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:148
 #, fuzzy
@@ -41349,39 +41258,32 @@ msgstr ""
 #: pcbnew/generators/pcb_tuning_pattern.cpp:254
 #: pcbnew/generators/pcb_tuning_pattern.cpp:259
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2134
-#, fuzzy
 msgid "Tuning Pattern"
-msgstr "Šrafovací vzor"
+msgstr "Ladiaci Vzor"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:264
-#, fuzzy
 msgid "Tuning Patterns"
-msgstr "Šrafovací vzor"
+msgstr "Ladiace Vzory"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:446
-#, fuzzy
 msgid "Tuning"
-msgstr "Varovanie"
+msgstr "Ladenie"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1374
-#, fuzzy
 msgid "too long"
-msgstr "Príliš dlhé:"
+msgstr "príliš dlhé"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1375
-#, fuzzy
 msgid "too short"
-msgstr "Príliš krátke:"
+msgstr "príliš krátke"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1376
-#, fuzzy
 msgid "tuned"
-msgstr "Vyladené:"
+msgstr "vyladené"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1456
-#, fuzzy
 msgid "Edit Tuning Pattern"
-msgstr "Úpravy v textovom editore"
+msgstr "Upraviť ladiaci vzor"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1980
 #, fuzzy
@@ -41419,9 +41321,8 @@ msgstr "Cieľová odchýlka:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2096
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2118
-#, fuzzy
 msgid "(from tuning pattern properties)"
-msgstr "Vlastnosti puzdra"
+msgstr "(z vlastností ladiaceho vzoru)"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2104
 #, fuzzy, c-format
@@ -41857,14 +41758,12 @@ msgid "Shape Description File"
 msgstr "Čítať súbor popisu tvaru..."
 
 #: pcbnew/microwave/microwave_polygon.cpp:313
-#, fuzzy
 msgid "Shape has a null size."
-msgstr "Tvar má nulovú veľkosť!"
+msgstr "Tvar má nulovú veľkosť."
 
 #: pcbnew/microwave/microwave_polygon.cpp:319
-#, fuzzy
 msgid "Shape has no points."
-msgstr "Tvar nemá žiadne body!"
+msgstr "Tvar nemá žiadne body."
 
 #: pcbnew/microwave/microwave_tool.cpp:92
 msgid "Place microwave feature"
@@ -43998,13 +43897,12 @@ msgstr "Zlé vyrovnanie pre CZONE_CONTAINER \"%s\""
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2521
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6427
-#, fuzzy
 msgid ""
 "The legacy segment zone fill mode is no longer supported.\n"
 "Zone fills will be converted on a best-effort basis."
 msgstr ""
-"Režim vyplnenia starého segmentu už nie je podporovaný.\n"
-"Premeniť zóny na polygónové výplne?"
+"Starší režim vypĺňania zón segmentu už nie je podporovaný.\n"
+"Zóny budú zkonvertované podľa najlepšej varianty."
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2547
 #, c-format
@@ -44293,13 +44191,12 @@ msgstr ""
 "offset: %d"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:6396
-#, fuzzy
 msgid ""
 "Legacy zone fill strategy is not supported anymore.\n"
 "Zone fills will be converted on best-effort basis."
 msgstr ""
-"Režim vyplnenia starého segmentu už nie je podporovaný.\n"
-"Premeniť zóny na polygónové výplne?"
+"Starší stratégia vypĺňania zón už nie je podporovaná.\n"
+"Zóny budú zkonvertované podľa najlepšej varianty."
 
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:48 pcbnew/pcb_io/pcad/pcad_pcb.cpp:59
 #: pcbnew/pcb_io/pcad/pcad_pcb.cpp:70
@@ -44609,9 +44506,8 @@ msgid "Successfully exported VRML to %s"
 msgstr "DPS a schéma boli úspešne opätovne anotované"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:171
-#, fuzzy
 msgid "Error exporting VRML"
-msgstr "Chyba rozbalovania súboru!"
+msgstr "Chyba počas exportu VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:242
 #, fuzzy
@@ -44619,9 +44515,8 @@ msgid "Successfully created svg file"
 msgstr "DPS a schéma boli úspešne opätovne anotované"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:244 pcbnew/pcbnew_jobs_handler.cpp:936
-#, fuzzy
 msgid "Error creating svg file"
-msgstr "Chyba rozbalovania súboru!"
+msgstr "Chyba počas vytvárania súboru svg"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:457 pcbnew/pcbnew_jobs_handler.cpp:539
 #, fuzzy, c-format
@@ -45393,11 +45288,8 @@ msgid "Duplicate Zone"
 msgstr "Duplicitná zóna"
 
 #: pcbnew/tools/board_editor_control.cpp:1527
-#, fuzzy
 msgid "Selection contains no items with labeled nets."
-msgstr ""
-"Zmena prípony súboru zmení typ súboru.\n"
-" Chcete pokračovať?"
+msgstr "Výber neobsahuje položky s označenými sieťami."
 
 #: pcbnew/tools/board_inspection_tool.cpp:65
 #, fuzzy
@@ -45864,9 +45756,8 @@ msgid "Convert to Polygon"
 msgstr "Konvertovať na mnohouholník"
 
 #: pcbnew/tools/convert_tool.cpp:537
-#, fuzzy
 msgid "Create Polygon"
-msgstr "Vytvoriť zóny"
+msgstr "Vytvoriť Polygón"
 
 #: pcbnew/tools/convert_tool.cpp:542
 #, fuzzy
@@ -45874,14 +45765,12 @@ msgid "Convert to Zone"
 msgstr "Konvertovať na riadky"
 
 #: pcbnew/tools/convert_tool.cpp:544
-#, fuzzy
 msgid "Create Zone"
-msgstr "Vytvoriť zóny"
+msgstr "Vytvoriť Zónu"
 
 #: pcbnew/tools/convert_tool.cpp:1116
-#, fuzzy
 msgid "Create Lines"
-msgstr "Vytvoriť zóny"
+msgstr "Vytvoriť Čiary"
 
 #: pcbnew/tools/convert_tool.cpp:1203
 #, fuzzy
@@ -46372,18 +46261,16 @@ msgid "Pad Edit Mode.  Press %s to exit."
 msgstr "Režim úpravy podložky. Stlačením %s ponuku opustíte."
 
 #: pcbnew/tools/pcb_actions.cpp:53
-#, fuzzy
 msgid "Create Polygon from Selection..."
-msgstr "Vytvorí z výberu grafický polygón"
+msgstr "Vytvoriť Polygón z výberu..."
 
 #: pcbnew/tools/pcb_actions.cpp:54
 msgid "Creates a graphic polygon from the selection"
 msgstr "Vytvorí z výberu grafický polygón"
 
 #: pcbnew/tools/pcb_actions.cpp:60
-#, fuzzy
 msgid "Create Zone from Selection..."
-msgstr "Odstrániť z výberu"
+msgstr "Vytvoriť Zónu z výberu..."
 
 #: pcbnew/tools/pcb_actions.cpp:61
 msgid "Creates a copper zone from the selection"
@@ -46399,9 +46286,8 @@ msgid "Creates a rule area from the selection"
 msgstr "Z výberu vytvorí oblasť pravidiel"
 
 #: pcbnew/tools/pcb_actions.cpp:74
-#, fuzzy
 msgid "Create Lines from Selection..."
-msgstr "Z výberu vytvorí grafické čiary"
+msgstr "Vytvoriť Čiary z výberu..."
 
 #: pcbnew/tools/pcb_actions.cpp:75
 msgid "Creates graphic lines from the selection"
@@ -48341,7 +48227,6 @@ msgid "Show a manager dialog for Generator objects"
 msgstr ""
 
 #: pcbnew/tools/pcb_control.cpp:234
-#, fuzzy
 msgid "Don't show again"
 msgstr "Ďalej už nezobrazovať"
 
