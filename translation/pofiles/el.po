@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-02-16 14:08+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"PO-Revision-Date: 2024-03-03 06:01+0000\n"
+"Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: /home/m/ll/mount_point/home/mmisirlis/KiCad-GR-LL-notes/"
 "sources_git_official/kicad\n"
@@ -418,7 +418,7 @@ msgstr "Αρχική Προβολή"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Εκ νέου σχεδίαση στην αρχική θέση και μεγέθυνση"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -2155,25 +2155,24 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Τρέχων αντιστοιχισμένα δίκτυα:</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Μοτίβο"
+msgstr "Μοτίβο:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Κλάσεις δικτύου"
+msgstr "Κλάση δικτύου:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
 msgstr ""
+"Σημείωση: οι πλήρεις αναθέσεις κλάσεων δικτύου μπορούν να επεξεργαστούν στο "
+"Ρυθμίσεις Σχηματικού > Έργο."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Αναθέσεις κλάσης δικτύου:"
+msgstr "Προσθήκη Ανάθεσης Κλάσης Δικτύου"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2499,9 +2498,8 @@ msgid "Name:"
 msgstr "Όνομα:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(προαιρετικό, προκαθορισμένη τιμή 0)"
+msgstr "(προαιρετικό)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2590,9 +2588,8 @@ msgid "unit"
 msgstr "μονάδα"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Σύνδεσμος:"
+msgstr "Συνδεδεμένο"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -5295,16 +5292,14 @@ msgstr "Πλαίσιο Κειμένου"
 
 #: common/eda_item.cpp:352 common/eda_item.cpp:379 eeschema/sch_table.cpp:546
 #: pcbnew/pcb_table.cpp:285
-#, fuzzy
 msgid "Table"
-msgstr "Κατάλογος:"
+msgstr "Πίνακας"
 
 #: common/eda_item.cpp:353 common/eda_item.cpp:380
 #: eeschema/sch_tablecell.cpp:118 pcbnew/pcb_tablecell.cpp:98
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "Όνομα Καταλόγου"
+msgstr "Κελί Πίνακα"
 
 #: common/eda_item.cpp:354 common/eda_item.cpp:355 pcbnew/pcb_track.cpp:1051
 msgid "Track"
@@ -7517,9 +7512,8 @@ msgstr "Διαγραφή επιλεγμένων αντικειμένων"
 
 #: common/tool/actions.cpp:283 eeschema/tools/sch_edit_tool.cpp:2469
 #: pcbnew/tools/edit_tool.cpp:2122
-#, fuzzy
 msgid "Left Justify"
-msgstr "Κάθ. στοίχιση"
+msgstr "Αρ. Στοίχιση"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
@@ -7546,19 +7540,16 @@ msgid "Right-justify fields and text items"
 msgstr ""
 
 #: common/tool/actions.cpp:304
-#, fuzzy
 msgid "Expand All"
-msgstr "Ενημέρωση Όλων"
+msgstr "Ανάπτυξη Όλων"
 
 #: common/tool/actions.cpp:310
-#, fuzzy
 msgid "Collapse All"
-msgstr "Αντικατάσταση Όλων"
+msgstr "Σύμπτυξη Όλων"
 
 #: common/tool/actions.cpp:316
-#, fuzzy
 msgid "Select Column(s)"
-msgstr "Επιλέξτε Στήλες"
+msgstr "Επιλέξτε Στήλη(ες)"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
@@ -7574,96 +7565,81 @@ msgid "Select complete row(s) containing the current selected cell(s)"
 msgstr ""
 
 #: common/tool/actions.cpp:330
-#, fuzzy
 msgid "Select Table"
-msgstr "Επιλογή όλων"
+msgstr "Επιλογή Πίνακα"
 
 #: common/tool/actions.cpp:331
-#, fuzzy
 msgid "Select parent table of selected cell(s)"
-msgstr "Διαγραφή περιεχομένου επιλεγμένων κελιών"
+msgstr "Επιλογή γονικού πίνακα επιλεγμένων κελιών"
 
 #: common/tool/actions.cpp:337 include/tool/edit_table_tool_base.h:157
-#, fuzzy
 msgid "Add Row Above"
-msgstr "Προσθήκη Ισχύος"
+msgstr "Προσθήκη Σειράς Επάνω"
 
 #: common/tool/actions.cpp:338
-#, fuzzy
 msgid "Insert a new table row above the selected cell(s)"
-msgstr "Αδυναμία λοξοτόμησης επιλεγμένων γραμμών."
+msgstr "Εισαγωγή νέας σειράς πίνακα επάνω από τα επιλεγμένα κελιά"
 
 #: common/tool/actions.cpp:344 include/tool/edit_table_tool_base.h:205
-#, fuzzy
 msgid "Add Row Below"
-msgstr "Προσθήκη Ισχύος"
+msgstr "Προσθήκη Σειράς Κάτω"
 
 #: common/tool/actions.cpp:345
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "Εισαγωγή νέας σειράς πίνακα κάτω από τα επιλεγμένα κελιά"
 
 #: common/tool/actions.cpp:351 include/tool/edit_table_tool_base.h:252
-#, fuzzy
 msgid "Add Column Before"
-msgstr "Προσθήκη Γωνίας"
+msgstr "Προσθήκη Στήλης Πριν"
 
 #: common/tool/actions.cpp:352
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "Εισαγωγή νέας στήλης πίνακα πριν από τα επιλεγμένα κελιά"
 
 #: common/tool/actions.cpp:358 include/tool/edit_table_tool_base.h:299
-#, fuzzy
 msgid "Add Column After"
-msgstr "Προσθήκη Γωνίας"
+msgstr "Προσθήκη Στήλης Μετά"
 
 #: common/tool/actions.cpp:359
-#, fuzzy
 msgid "Insert a new table column after the selected cell(s)"
-msgstr "Αδυναμία λοξοτόμησης επιλεγμένων γραμμών."
+msgstr "Εισαγωγή νέας στήλης πίνακα μετά από τα επιλεγμένα κελιά"
 
 #: common/tool/actions.cpp:365
-#, fuzzy
 msgid "Delete Row(s)"
-msgstr "Διαγραφή Δίαυλου"
+msgstr "Διαγραφή Σειράς(ών)"
 
 #: common/tool/actions.cpp:366
-#, fuzzy
 msgid "Delete rows containing the currently selected cell(s)"
-msgstr "Διαγραφή περιεχομένου επιλεγμένων κελιών"
+msgstr "Διαγραφή σειρών που περιέχουν τα επιλεγμένα κελιά"
 
 #: common/tool/actions.cpp:372
-#, fuzzy
 msgid "Delete Column(s)"
-msgstr "Επιλέξτε Στήλες"
+msgstr "Διαγραφή Στήλης"
 
 #: common/tool/actions.cpp:373
-#, fuzzy
 msgid "Delete columns containing the currently selected cell(s)"
-msgstr "Διαγραφή δικτύων που περιέχουν μόνο μία έδρα"
+msgstr "Διαγραφή στηλών που περιέχουν τα επιλεγμένα κελιά"
 
 #: common/tool/actions.cpp:379 include/tool/edit_table_tool_base.h:505
-#, fuzzy
 msgid "Merge Cells"
-msgstr "Συγχώνευση Ζωνών"
+msgstr "Συγχώνευση Κελιών"
 
 #: common/tool/actions.cpp:380
-#, fuzzy
 msgid "Turn selected table cells into a single cell"
-msgstr "Συγχώνευση επιλεγμένων πολυγώνων σε ένα"
+msgstr "Συγχώνευση επιλεγμένων κελιών σε ένα"
 
 #: common/tool/actions.cpp:386 include/tool/edit_table_tool_base.h:544
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Διάσπαση Κελιών"
 
 #: common/tool/actions.cpp:387
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Μετατροπή συγχωνευμένων κελιών σε μεμονωμένα."
 
 #: common/tool/actions.cpp:394 eeschema/dialogs/dialog_table_properties.cpp:382
 #: pcbnew/dialogs/dialog_table_properties.cpp:358
-#, fuzzy
 msgid "Edit Table"
-msgstr "Επεξεργασία Ετικέτας"
+msgstr "Επεξεργασία Πίνακα"
 
 #: common/tool/actions.cpp:405
 msgid "Cycle Arc Editing Mode"
@@ -10302,9 +10278,8 @@ msgid "appropriate"
 msgstr "κατάλληλο"
 
 #: eeschema/dialogs/dialog_erc.cpp:624 pcbnew/dialogs/dialog_drc.cpp:608
-#, fuzzy
 msgid "Edit exclusion comment..."
-msgstr "Επεξεργασία Μοντέλου Προσομοίωσης..."
+msgstr "Επεξεργασία σχολίου αποκλεισμού..."
 
 #: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/dialogs/dialog_drc.cpp:611
 msgid "Remove exclusion for this violation"
@@ -10316,9 +10291,8 @@ msgid "It will be placed back in the %s list"
 msgstr "Θα τοποθετηθεί ξανά στη λίστα %s"
 
 #: eeschema/dialogs/dialog_erc.cpp:633 pcbnew/dialogs/dialog_drc.cpp:625
-#, fuzzy
 msgid "Exclude this violation..."
-msgstr "Εξαίρεση αυτής της παραβίασης"
+msgstr "Εξαίρεση αυτής της παραβίασης..."
 
 #: eeschema/dialogs/dialog_erc.cpp:634 pcbnew/dialogs/dialog_drc.cpp:626
 #, c-format
@@ -10370,15 +10344,13 @@ msgstr "Επεξεργασία ελάχιστης απόσταση πλέγμα�
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:716
-#, fuzzy
 msgid "Optional comment:"
-msgstr "Πλήθος οριζόντια:"
+msgstr "Προαιρετικό σχόλιο:"
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:676 pcbnew/dialogs/dialog_drc.cpp:716
-#, fuzzy
 msgid "Exclusion Comment"
-msgstr "Αποκλεισμοί"
+msgstr "Σχόλιο Αποκλεισμού"
 
 #: eeschema/dialogs/dialog_erc.cpp:803
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
@@ -10636,7 +10608,7 @@ msgid ""
 "> General > Formatting"
 msgstr ""
 "Η ορατότητα των ενδοσχηματικών αναφορών ελέγχεται καθολικά στο Ρυθμίσεις "
-"Σχηματικού> Γενικά> Μορφοποίηση"
+"Σχηματικού > Γενικά > Μορφοποίηση"
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:78
 #, c-format
@@ -11119,9 +11091,8 @@ msgid "untitled"
 msgstr "χωρίς όνομα"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:590
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Ιδιότητες Ετικέτας"
+msgstr "Επεξεργασία Ιδιοτήτων Ετικέτας"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -12635,9 +12606,8 @@ msgid "Clear colors to use Schematic Editor colors."
 msgstr "Καθαρισμός χρωμάτων για χρήση χρωμάτων του Επεξεργαστή Σχηματικού."
 
 #: eeschema/dialogs/dialog_sheet_pin_properties.cpp:167
-#, fuzzy
 msgid "Edit Sheet Pin Properties"
-msgstr "Ιδιότητες Ακροδέκτη Φύλλου"
+msgstr "Επεξεργασία Ιδιοτήτων Ακροδέκτη Φύλλου"
 
 #: eeschema/dialogs/dialog_sheet_pin_properties_base.h:84
 msgid "Sheet Pin Properties"
@@ -13988,21 +13958,18 @@ msgstr "Μετατροπή Συμβόλων"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:36
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:36
-#, fuzzy
 msgid "Cell contents:"
-msgstr "Π&εριεχόμενα"
+msgstr "Περιεχόμενα κελιού:"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:55
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:64
-#, fuzzy
 msgid "External border"
-msgstr "Εξωτερικά δεδομένα"
+msgstr "Εξωτερικό περίγραμμα"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:58
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:67
-#, fuzzy
 msgid "Header border"
-msgstr "Περίγραμμα φύλλου"
+msgstr "Περίγραμμα κεφαλίδας"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
@@ -14019,39 +13986,33 @@ msgstr "Στήλες"
 #: eeschema/dialogs/dialog_table_properties_base.h:76
 #: eeschema/sch_table.cpp:612 pcbnew/dialogs/dialog_table_properties_base.h:72
 #: pcbnew/pcb_table.cpp:406
-#, fuzzy
 msgid "Table Properties"
-msgstr "Ιδιότητες Ετικέτας"
+msgstr "Ιδιότητες Πίνακα"
 
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:315
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:274
-#, fuzzy
 msgid "Edit Table Cell Properties"
-msgstr "Επεξεργασία Ιδιοτήτων Συμβόλου"
+msgstr "Επεξεργασία Ιδιοτήτων Κελιού Πίνακα"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
-#, fuzzy
 msgid "Horizontal alignment:"
-msgstr "Οριζόντια απόσταση:"
+msgstr "Οριζόντια στοίχιση:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:41
-#, fuzzy
 msgid "Horizontal alignment"
-msgstr "Οριζόντια απόσταση:"
+msgstr "Οριζόντια στοίχιση"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:66
-#, fuzzy
 msgid "Vertical alignment:"
-msgstr "Κάθετη απόσταση:"
+msgstr "Κάθετη στοίχιση:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:72
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:68
-#, fuzzy
 msgid "Vertical alignment"
-msgstr "Κάθετη απόσταση:"
+msgstr "Κάθετη στοίχιση"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
@@ -15875,9 +15836,8 @@ msgid "Insert Schematic"
 msgstr "Εισαγωγή Σχηματικού"
 
 #: eeschema/files-io.cpp:663
-#, fuzzy
 msgid "Import Schematic Sheet Content..."
-msgstr "Εισα&γωγή Περιεχομένου Σχηματικού Φύλλου"
+msgstr "Εισαγωγή Περιεχομένου Φύλλου Σχηματικού..."
 
 #: eeschema/files-io.cpp:675
 msgid ""
@@ -20983,9 +20943,8 @@ msgid "Add Symbol to Schematic"
 msgstr "Προσθήκη Συμβόλου στο Σχηματικό"
 
 #: eeschema/tools/ee_actions.cpp:263
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "Αποθήκευση όλων των φύλλων στο σχηματικό έργο"
+msgstr "Προσθήκη τρέχον συμβόλου στο σχηματικό"
 
 #: eeschema/tools/ee_actions.cpp:269
 msgid "Show Pin Electrical Types"
@@ -22095,7 +22054,6 @@ msgid "Drags the selected item(s)"
 msgstr "Σύρσιμο επιλεγμένων αντικειμένων"
 
 #: eeschema/tools/ee_actions.cpp:1392 eeschema/tools/sch_move_tool.cpp:1760
-#, fuzzy
 msgid "Align Items to Grid"
 msgstr "Στοίχιση Αντικειμένων στο Πλέγμα"
 
@@ -22113,7 +22071,7 @@ msgstr "Νέα Καρτέλα Ανάλυσης..."
 
 #: eeschema/tools/ee_actions.cpp:1416
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Δημιουργία νέας καρτέλας που περιέχει μια ανάλυση προσομοίωσης"
 
 #: eeschema/tools/ee_actions.cpp:1424
 msgid "Open Workbook..."
@@ -22121,27 +22079,25 @@ msgstr "Άνοιγμα Βιβλίου Εργασίας..."
 
 #: eeschema/tools/ee_actions.cpp:1425
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Άνοιγμα αποθηκευμένου σετ καρτελών και ρυθμίσεων"
 
 #: eeschema/tools/ee_actions.cpp:1433
 msgid "Save Workbook"
 msgstr "Αποθήκευση Βιβλίου Εργασίας"
 
 #: eeschema/tools/ee_actions.cpp:1434
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr ""
-"Ανάγνωση της τρέχουσας λίστας δικτύων και προβολή των επιπλέον αποτυπωμάτων "
-"και αυτών που λείπουν"
+msgstr "Αποθήκευση τρέχον σετ καρτελών αναλύσεων και ρυθμίσεων"
 
 #: eeschema/tools/ee_actions.cpp:1442
 msgid "Save Workbook As..."
 msgstr "Αποθήκευση Βιβλίου Εργασίας Σαν..."
 
 #: eeschema/tools/ee_actions.cpp:1443
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
-msgstr "Αποθήκευση του τρέχοντος εγγράφου σε άλλη τοποθεσία"
+msgstr ""
+"Αποθήκευση τρέχον σετ καρτελών αναλύσεων και ρυθμίσεων σε διαφορετική "
+"τοποθεσία"
 
 #: eeschema/tools/ee_actions.cpp:1449
 msgid "Export Current Plot as PNG..."
@@ -22179,6 +22135,7 @@ msgstr "Επεξεργασία Καρτέλας Ανάλυσης..."
 #: eeschema/tools/ee_actions.cpp:1480
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
+"Επεξεργασία εντολής SPICE τρέχον καρτέλας ανάλυσης και ρυθμίσεων διαγράμματος"
 
 #: eeschema/tools/ee_actions.cpp:1487
 msgid "Run Simulation"
@@ -22643,9 +22600,8 @@ msgid "SVG File Name"
 msgstr "Όνομα Αρχείου SVG"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Επεξεργασία Γραμμών"
+msgstr "Επεξεργασία Ακροδεκτών"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -23766,18 +23722,16 @@ msgid "Move Layer Up"
 msgstr "Μετακίνηση Επιπέδου Επάνω"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
-msgstr "Μετακίνηση Τρέχοντος Επιπέδου Επάνω"
+msgstr "Μετακίνηση τρέχον επιπέδου επάνω"
 
 #: gerbview/tools/gerbview_actions.cpp:183
 msgid "Move Layer Down"
 msgstr "Μετακίνηση Επιπέδου Κάτω"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
-msgstr "Μετακίνηση Τρέχοντος Επιπέδου Κάτω"
+msgstr "Μετακίνηση τρέχον επιπέδου κάτω"
 
 #: gerbview/tools/gerbview_actions.cpp:192
 msgid "Sketch Lines"
@@ -26595,22 +26549,17 @@ msgid "Show Title Block in Preview Mode"
 msgstr "Εμφάνιση Πεδίου Τίτλου σε Λειτουργία Προεπισκόπησης"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
 msgstr ""
-"Εμφάνιση πλαισίου τίτλου σε λειτουργία προεπισκόπησης:\n"
-"τα σύμβολα κράτησης θέσης θα αντικατασταθούν με τα δεδομένα προεπισκόπησης."
+"Σύμβολα κράτησης θέσης κειμένου θα αντικατασταθούν με δεδομένα προεπισκόπησης"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "Εμφάνιση Πεδίου Τίτλου σε Λειτουργία Επεξεργασίας"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"Εμφάνιση πλαισίου τίτλου σε λειτουργία επεξεργασίας:\n"
-"τα σύμβολα κράτησης θέσης κειμένου εμφανίζονται ως διακριτικά ${keyword}."
+msgstr "Σύμβολα κράτησης θέσης κειμένου εμφανίζονται ως διακριτικά ${keyword}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -33363,22 +33312,20 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
-msgstr "Να επιτρέπεται σε δάκρυ να εκτείνεται σε δύο τμήματα διαδρόμων"
+msgstr "Να επιτρέπεται δάκρυα να εκτείνονται σε δύο τμήματα διαδρόμων"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:147
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
-"Να επιτραπέι στα teardrops η επέκταση για πάνω από 2 διαδοχικά τμήματα "
-"διαδρόμου σε περίπτωση που το πρώτο είναι μικρό"
+"Να επιτρέπεται στα δάκρυα η επέκταση στα 2 πρώτα συνδεμένα τμήματα διαδρόμου "
+"σε περίπτωση που το πρώτο είναι μικρό για να χωρέσει το καλύτερο μήκος."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -35500,9 +35447,8 @@ msgstr ""
 "ενεργοποιηθεί στο φίλτρο επιλογής."
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
-#, fuzzy
 msgid "Associated layer:"
-msgstr "Συσχετισμένο Επίπεδο"
+msgstr "Συσχετισμένο επίπεδο:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
 #, fuzzy
@@ -37485,7 +37431,6 @@ msgid "Check rule syntax"
 msgstr "Ελέγξτε τη σύνταξη κανόνων"
 
 #: pcbnew/dialogs/panel_setup_rules_help_md.h:2
-#, fuzzy
 msgid ""
 "### Top-level Clauses\n"
 "\n"
@@ -37961,164 +37906,200 @@ msgstr ""
 "\n"
 "### Περιορισμοί\n"
 "\n"
-"| Τύπος Περιορισμού           | Τύπος "
-"Παραμέτρου                                                                                                          "
-"| "
-"Περιγραφή                                                                                                                                                                                                                                                                                                                                                                                                                                             "
-"|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| Ελέγχει το μέγεθος του δακτυλίου στις διελεύσεις."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| Καθορίζει το **ηλεκτρικό** διάκενο μεταξύ χάλκινων αντικειμένων "
-"διαφορετικών δικτύων.  (Δείτε `physical_clearance` εάν θέλετε να "
-"προσδιορίσετε την απόσταση μεταξύ αντικειμένων ανεξάρτητα από κάποιο "
-"δίκτυο.)<br><br>Για να επιτρέψτε σε χάλκινα αντικείμενα να επικαλύπτονται "
-"(σύγκρουση), δημιουργήστε έναν περιορισμό `clearance` με την τιμή `min` "
-"μικρότερη από το μηδέν (για παράδειγμα, `-1`)."
-"<br>                                                                                                                      "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| Ελέγχει το διάκενο μεταξύ της περιοχής του αποτυπώματος και δημιουργεί "
+"| Τύπος Περιορισμού           | Τύπος Παραμέτρου                             "
+"                                                                             "
+"| Περιγραφή                                                                  "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"|---------------------------|------------------------------------------------"
+"------------------------------------------------------------------------|----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"----------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                        | "
+"Ελέγχει το μέγεθος του δακτυλίου στις διελεύσεις.<br>                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                              |\n"
+"| `assertion`               | \"&lt;expression>\"                            "
+"                                                                         | "
+"Ελέγχει τη δεδομένη έκφραση.<br>                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                 |\n"
+"| `clearance`               | min                                            "
+"                                                                        | "
+"Καθορίζει το **ηλεκτρικό** διάκενο μεταξύ χάλκινων αντικειμένων διαφορετικών "
+"δικτύων.  (Δείτε `physical_clearance` εάν θέλετε να προσδιορίσετε την "
+"απόσταση μεταξύ αντικειμένων ανεξάρτητα από κάποιο δίκτυο.)<br><br>Για να "
+"επιτρέψτε σε χάλκινα αντικείμενα να επικαλύπτονται (σύγκρουση), δημιουργήστε "
+"έναν περιορισμό `clearance` με την τιμή `min` μικρότερη από το μηδέν (για "
+"παράδειγμα, `-1`).<br>                                                       "
+"                                                               |\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                        | "
+"Ελέγχει το διάκενο μεταξύ της περιοχής του αποτυπώματος και δημιουργεί "
 "σφάλμα εάν δύο από αυτά είναι πιο κοντά από την απόσταση `min`.  Εάν ένα "
 "αποτύπωμα δεν έχει σχήμα περιοχής, δεν θα δημιουργηθούν σφάλματα από αυτόν "
-"τον περιορισμό."
-"<br>                                                                                                                                                                                                               "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| Ελέγχει το κενό μεταξύ των συζευγμένων διαδρόμων σε ένα διαφορικό ζεύγος.  "
+"τον περιορισμό.<br>                                                          "
+"                                                                             "
+"                                                                        |\n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                        | "
+"Ελέγχει το κενό μεταξύ των συζευγμένων διαδρόμων σε ένα διαφορικό ζεύγος.  "
 "Τα συζευγμένα κομμάτια είναι τμήματα που είναι παράλληλα μεταξύ τους.  Το "
 "διάκενο διαφορικού ζεύγους δεν ελέγχεται σε μη συζευγμένα τμήματα ενός "
-"διαφορικού ζεύγους (για παράδειγμα, το fanout από ένα στοιχείο)."
-"<br>                                                                                                                                                                                           "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| Ελέγχει την απόσταση που ένας διάδρομος διαφορικού ζεύγους δρομολογείται "
-"μη συζευγμένος από το άλλο κομμάτι πολικότητας του ζεύγους(για παράδειγμα, "
-"όταν το ζεύγος βγαίνει από ένα στοιχείο ή αποσυνδέεται για να περάσει γύρω "
-"από ένα άλλο αντικείμενο, όπως μια διέλευση)."
-"<br>                                                                                                                                                                                                         "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Καθορίστε έναν ή περισσότερους τύπους αντικειμένων προς απαγόρευση, "
-"διαχωρισμένους με κενά.  Για παράδειγμα, `(constraint disallow track)` ή "
-"`(constraint disallow track via pad)`.  Εάν ένα αντικείμενο αυτού του τύπου "
+"διαφορικού ζεύγους (για παράδειγμα, το fanout από ένα στοιχείο).<br>         "
+"                                                                             "
+"                                                                             "
+"                        |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                        | "
+"Ελέγχει την απόσταση που ένας διάδρομος διαφορικού ζεύγους δρομολογείται μη "
+"συζευγμένος από το άλλο κομμάτι πολικότητας του ζεύγους(για παράδειγμα, όταν "
+"το ζεύγος βγαίνει από ένα στοιχείο ή αποσυνδέεται για να περάσει γύρω από "
+"ένα άλλο αντικείμενο, όπως μια διέλευση).<br>                                "
+"                                                                             "
+"                                                                             "
+"               |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Καθορίστε έναν ή περισσότερους τύπους αντικειμένων προς απαγόρευση, "
+"διαχωρισμένους με κενά.  Για παράδειγμα, `(constraint disallow track)` ή `("
+"constraint disallow track via pad)`.  Εάν ένα αντικείμενο αυτού του τύπου "
 "ταιριάζει με τη συνθήκη κανόνα, θα δημιουργηθεί ένα σφάλμα ΕΚΣ.<br><br>Αυτός "
 "ο περιορισμός είναι ουσιαστικά ο ίδιος με μια περιοχή κανόνων, αλλά μπορεί "
-"να χρησιμοποιηθεί για τη δημιουργία πιο συγκεκριμένων περιορισμών "
-"αποκλεισμού."
-"<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Έλεγχος διακένου μεταξύ αντικειμένων και ορίου πλακέτας.<br><br>Αυτό "
-"μπορεί να ερμηνευτεί σαν την \"ανοχή φρέζας\" καθώς η άκρη της πλακέτας θα "
+"να χρησιμοποιηθεί για τη δημιουργία πιο συγκεκριμένων περιορισμών αποκλεισμού"
+".<br>                                                                   |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Έλεγχος διακένου μεταξύ αντικειμένων και ορίου πλακέτας.<br><br>Αυτό μπορεί "
+"να ερμηνευτεί σαν την \"ανοχή φρέζας\" καθώς η άκρη της πλακέτας θα "
 "περιλαμβάνει όλα τα γραφικά στοιχεία από το `Edge.Cuts` επίπεδο καθώς και "
 "κάθε *οβάλ* οπές έδρας.  (Δείτε `physical_hole_clearance` για την ανοχή "
-"διάτρησης.)<br>                                                                                                                                                    "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| Ελέγχει το συνολικό μήκος δρομολόγησης για δίκτυα που ταιριάζουν με την "
+"διάτρησης.)<br>                                                              "
+"                                                                             "
+"         |\n"
+"| `length`                  | min/max                                        "
+"                                                                        | "
+"Ελέγχει το συνολικό μήκος δρομολόγησης για δίκτυα που ταιριάζουν με την "
 "συνθήκη του κανόνα του περιορισμού και δημιουργεί σφάλμα για κάθε δίκτυο που "
-"είναι κάτω του `min` (αν καθοριστεί) ή άνω του `max` (αν "
-"καθοριστεί)<br>                                                                                                                                                                                                                               "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| Ελέγχει το μέγεθος (διάμετρο) οπής διάτρησης σε έδρα ή διέλευση.  Για οβάλ "
+"είναι κάτω του `min` (αν καθοριστεί) ή άνω του `max` (αν καθοριστεί)<br>     "
+"                                                                             "
+"                                                                             "
+"                                                                |\n"
+"| `hole`                    | min/max                                        "
+"                                                                        | "
+"Ελέγχει το μέγεθος (διάμετρο) οπής διάτρησης σε έδρα ή διέλευση.  Για οβάλ "
 "οπές, η μικρότερη (μικρή) διάμετρος θα ελεγθεί έναντι του`min` (αν "
-"καθοριστεί) και η μεγαλύτερη (μεγάλη)  διάμετρος θα ελεγθεί έναντι του`max` "
-"(αν καθοριστεί)."
-"<br>                                                                                                                                                                                            "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| Ελέγχει το διάκενο μεταξύ διαμπερούς οπής σε έδρα ή διέλευση και χάλκινων "
+"καθοριστεί) και η μεγαλύτερη (μεγάλη)  διάμετρος θα ελεγθεί έναντι του`max` ("
+"αν καθοριστεί).<br>                                                          "
+"                                                                             "
+"                                                     |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                        | "
+"Ελέγχει το διάκενο μεταξύ διαμπερούς οπής σε έδρα ή διέλευση και χάλκινων "
 "αντικειμένων σε διαφορετικό δίκτυο.  Το διάκενο προσμετράται από τη διάμετρο "
-"της οπής, όχι το κέντρο."
-"<br>                                                                                                                                                                                                                                                                        "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| Ελέγχει το διάκενο μεταξύ μηχανολογικών διαμπερών οπών σε έδρες ή "
+"της οπής, όχι το κέντρο.<br>                                                 "
+"                                                                             "
+"                                                                             "
+"                                                             |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                        | "
+"Ελέγχει το διάκενο μεταξύ μηχανολογικών διαμπερών οπών σε έδρες ή "
 "διελεύσεις.  Το διάκενο προσμετράται από τις διαμέτρους των οπών, όχι τα "
 "κέντρα τους.<br><br>Αυτός ο περιορισμός είναι αποκλειστικά για την προστασία "
 "των τρυπανιών.  Το διάκενο μεταξύ **διατρήσεων-λέιζερ** (μικρο-διελεύσεις) "
 "και άλλων μη μηχανολογικών τρυπημένων οπών δεν ελέγχεται, ούτε το διάκενο "
-"μεταξύ **φρέζας** (οβάλ-σχήμα) και άλλων μη μηχανολογικών τρυπημένων οπών."
-"<br> |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| Ελέγχει το διάκενο μεταξύ αντικειμένων σε δεδομένο επίπεδο "
-"(συμπεριλαμβανομένων μη χάλκινων επιπέδων).<br><br>Ενώ μπορεί να εκτελέσει "
+"μεταξύ **φρέζας** (οβάλ-σχήμα) και άλλων μη μηχανολογικών τρυπημένων "
+"οπών.<br> |\n"
+"| `physical_clearance`      | min                                            "
+"                                                                        | "
+"Ελέγχει το διάκενο μεταξύ αντικειμένων σε δεδομένο επίπεδο ("
+"συμπεριλαμβανομένων μη χάλκινων επιπέδων).<br><br>Ενώ μπορεί να εκτελέσει "
 "περισσότερους ελέγχους γενικής χρήσης από το `clearance`, είναι πιο αργό.  "
-"Προτιμάται η χρήση `clearance` όπου ταιριάζει."
-"<br>                                                                                                                                                                                                                            "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| Ελέγχει το διάκενο μεταξύ διαμπερούς οπής σε έδρα ή διέλευση και σε άλλο "
+"Προτιμάται η χρήση `clearance` όπου ταιριάζει.<br>                           "
+"                                                                             "
+"                                                                             "
+"                                       |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                        | "
+"Ελέγχει το διάκενο μεταξύ διαμπερούς οπής σε έδρα ή διέλευση και σε άλλο "
 "αντικείμενο, ανεξαρτήτως δικτύου. Το διάκενο προσμετράται από τη διάμετρο "
 "της οπής, όχι το κέντρο.<br><br>Όπως η \"ανοχή διάτρησης\" μιας και "
 "περιλαμβάνει μόνο **στρογγυλές** οπές (Δείτε `edge_clearance` για την ανοχή "
-"φρέζας)."
-"<br>                                                                                                                    "
-"|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Ελέγχει το διάκενο μεταξύ αντικειμένων σε επίπεδα μεταξοτυπίας και άλλων "
-"αντικειμένων."
-"<br>                                                                                                                                                                                                                                                                                                                                                                        "
-"|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| Ελέγχει τη συνολική απόκλιση δικτύων που ταιριάζουν με τη συνθήκη του "
+"φρέζας).<br>                                                                 "
+"                                                   |\n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Ελέγχει το διάκενο μεταξύ αντικειμένων σε επίπεδα μεταξοτυπίας και άλλων αντι"
+"κειμένων.<br>                                                                "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                 |\n"
+"| `skew`                    | max                                            "
+"                                                                        | "
+"Ελέγχει τη συνολική απόκλιση δικτύων που ταιριάζουν με τη συνθήκη του "
 "κανόνα, δηλαδή τη διαφορά μεταξύ του μήκους κάθε δικτύου και του μέσου όρου "
 "όλου του μήκους κάθε δικτύου που αντιστοιχεί στον κανόνα.  Εάν η απόλυτη "
 "τιμή της διαφοράς μεταξύ αυτού του μέσου όρου και του μήκους οποιουδήποτε "
-"δικτύου είναι πάνω από την τιμή 'max' του περιορισμού, θα δημιουργηθεί "
-"σφάλμα."
-"<br>                                                                                   "
-"|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| Καθορίζει το πλάτος κένου μεταξύ έδρας και ζώνης με σύνδεση θερμικής "
-"ανακούφισης."
-"<br>                                                                                                                                                                                                                                                                                                                                                           "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| Καθορίζει το πλάτος των ακτίνων που συνδέουν έδρα με ζώνη με σύνδεση "
-"θερμικής ανακούφισης."
-"<br>                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| Ελέγχει το πλάτος των τμημάτων διαδρόμου και τόξου.  Θα δημιουργηθεί ένα "
+"δικτύου είναι πάνω από την τιμή 'max' του περιορισμού, θα δημιουργηθεί σφάλμα"
+".<br>                                                                        "
+"           |\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                        | "
+"Καθορίζει το πλάτος κένου μεταξύ έδρας και ζώνης με σύνδεση θερμικής ανακούφι"
+"σης.<br>                                                                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                               |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                        | "
+"Καθορίζει το πλάτος των ακτίνων που συνδέουν έδρα με ζώνη με σύνδεση "
+"θερμικής ανακούφισης.<br>                                                    "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                           |\n"
+"| `track_width`             | min/opt/max                                    "
+"                                                                        | "
+"Ελέγχει το πλάτος των τμημάτων διαδρόμου και τόξου.  Θα δημιουργηθεί ένα "
 "σφάλμα για κάθε τμήμα που έχει πλάτος κάτω από την τιμή \"min\" (αν έχει "
-"καθοριστεί) ή πάνω από την τιμή \"max\" (αν έχει καθοριστεί)."
-"<br>                                                                                                                                                                                                                                                             "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| Μετρά τον πλήθος των διελεύσεων κάθε δικτύου που αντιστοιχεί στην συνθήκη "
+"καθοριστεί) ή πάνω από την τιμή \"max\" (αν έχει καθοριστεί).<br>            "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"          |\n"
+"| `via_count`               | max                                            "
+"                                                                        | "
+"Μετρά τον πλήθος των διελεύσεων κάθε δικτύου που αντιστοιχεί στην συνθήκη "
 "του κανόνα.  Εάν ο αριθμός υπερβαίνει τον περιορισμό \"max\" σε οποιοδήποτε "
-"αντιστοιχισμένο δίκτυο, θα δημιουργηθεί ένα σφάλμα για το δίκτυο αυτό."
-"<br>                                                                                                                                                                                                                                                               "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Καθορίζει τη σύνδεση μεταξύ ζώνης και έδρας."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
-"|\n"
+"αντιστοιχισμένο δίκτυο, θα δημιουργηθεί ένα σφάλμα για το δίκτυο αυτό.<br>   "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                     |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                        | "
+"Καθορίζει τη σύνδεση μεταξύ ζώνης και έδρας.<br>                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                      |\n"
 "\n"
 "\n"
 "### Αντικείμενα\n"
@@ -38293,13 +38274,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -40832,6 +40813,7 @@ msgstr "Περιορισμός Μήκους: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
+"Δεν είναι δυνατός ο συντονισμός τμημάτων μέσα σε άλλα μοτίβα συντονισμού."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
@@ -42208,8 +42190,9 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Το πολύγωνο στο επίπεδο του Altium %d δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο Eco1_User."
+"Φόρτωση βιβλιοθήκης '%s':\n"
+"Το αποτύπωμα %s περιέχει διακεκομμένο περίγραμμα στο επίπεδο του Altium (%d) "
+"χωρίς ισοδύναμο στο KiCad. Τοποθέτηση στο Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2151
 #, fuzzy, c-format
@@ -42217,20 +42200,22 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Βρέθηκε διακεκομμένο περίγραμμα στο επίπεδο του Altium (%d) που δεν έχει "
-"ισοδύναμο στο KiCad. Μεταφέρθηκε στο επίπεδο του KiCad Eco1_User."
+"Το αποτύπωμα %s περιέχει διακεκομμένο περίγραμμα στο επίπεδο του Altium (%d) "
+"χωρίς ισοδύναμο στο KiCad. Τοποθέτηση στο Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Παράβλεψη σχήματος πολυγώνου %d (δεν υποστηρίζεται ακόμη)."
+msgstr ""
+"Σφάλμα φόρτωσης βιβλιοθήκης '%s':\n"
+"Το αποτύπωμα %s περιέχει σχήμα πολυγώνου %d (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Παράβλεψη σχήματος πολυγώνου %d (δεν υποστηρίζεται ακόμη)."
+msgstr "Το αποτύπωμα %s περιέχει σχήμα πολυγώνου %d (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2352
 msgid "Loading zone fills..."
@@ -42245,13 +42230,14 @@ msgid "Loading pads..."
 msgstr "Φόρτωση εδρών..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"Το αποτύπωμα %s έδρα %s δεν έχει επισημανθεί ως πολλαπλών επιπέδων, αλλά "
-"είναι έδρα TH/διαμπερής."
+"Σφάλμα φόρτωσης βιβλιοθήκης '%s':\n"
+"Το αποτύπωμα %s περιέχει έδρα %s που δεν έχει επισημανθεί ως πολλαπλών "
+"επιπέδων, αλλά είναι διαμπερής έδρα."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2763
 #, c-format
@@ -42445,14 +42431,14 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Αρχεία PCB Altium Circuit Studio"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Κανένα αποτύπωμα στη βιβλιοθήκη"
+msgstr "Κανένα αποτύπωμα στη βιβλιοθήκη '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "Το αποτύπωμα '%s'δεν βρέθηκε στη βιβλιοθήκη '%s'."
+msgstr "Το αποτύπωμα '%s' δεν βρέθηκε στη βιβλιοθήκη '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:42
 msgid "Altium Designer PCB files"
@@ -47011,56 +46997,62 @@ msgid "Align to Top"
 msgstr "Στοίχιση Επάνω"
 
 #: pcbnew/tools/pcb_actions.cpp:1894
-#, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο επάνω άκρο"
+msgstr ""
+"Στοίχιση επιλεγμένων στοιχείων στο επάνω άκρο του αντικειμένου κάτω από τον "
+"κέρσορα"
 
 #: pcbnew/tools/pcb_actions.cpp:1900 pcbnew/tools/placement_tool.cpp:275
 msgid "Align to Bottom"
 msgstr "Στοίχιση Κάτω"
 
 #: pcbnew/tools/pcb_actions.cpp:1901
-#, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο κάτω άκρο"
+msgstr ""
+"Στοίχιση επιλεγμένων στοιχείων στο κάτω άκρο του αντικειμένου κάτω από τον "
+"κέρσορα"
 
 #: pcbnew/tools/pcb_actions.cpp:1907 pcbnew/tools/placement_tool.cpp:330
 msgid "Align to Left"
 msgstr "Στοίχιση Αριστερά"
 
 #: pcbnew/tools/pcb_actions.cpp:1908
-#, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο αριστερό άκρο"
+msgstr ""
+"Στοίχιση επιλεγμένων στοιχείων στο αριστερό άκρο του αντικειμένου κάτω από "
+"τον κέρσορα"
 
 #: pcbnew/tools/pcb_actions.cpp:1914 pcbnew/tools/placement_tool.cpp:385
 msgid "Align to Right"
 msgstr "Στοίχιση Δεξιά"
 
 #: pcbnew/tools/pcb_actions.cpp:1915
-#, fuzzy
 msgid "Aligns selected items to the right edge of the item under the cursor"
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο δεξί άκρο"
+msgstr ""
+"Στοίχιση επιλεγμένων στοιχείων στο δεξί άκρο του αντικειμένου κάτω από τον "
+"κέρσορα"
 
 #: pcbnew/tools/pcb_actions.cpp:1921
 msgid "Align to Vertical Center"
 msgstr "Στοίχιση στο Κέντρο Κάθετα"
 
 #: pcbnew/tools/pcb_actions.cpp:1922
-#, fuzzy
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο κατακόρυφο κέντρο"
+msgstr ""
+"Στοίχιση επιλεγμένων στοιχείων στο κατακόρυφο κέντρο του αντικειμένου κάτω "
+"από τον κέρσορα"
 
 #: pcbnew/tools/pcb_actions.cpp:1928
 msgid "Align to Horizontal Center"
 msgstr "Στοίχιση στο Κέντρο Οριζόντια"
 
 #: pcbnew/tools/pcb_actions.cpp:1929
-#, fuzzy
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
-msgstr "Στοίχιση επιλεγμένων στοιχείων στο οριζόντιο κέντρο"
+msgstr ""
+"Στοίχιση επιλεγμένων στοιχείων στο οριζόντιο κέντρο του αντικειμένου κάτω "
+"από τον κέρσορα"
 
 #: pcbnew/tools/pcb_actions.cpp:1935 pcbnew/tools/placement_tool.cpp:535
 msgid "Distribute Horizontally"
@@ -47080,7 +47072,7 @@ msgstr "Διανομή Κάθετα"
 #, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most item"
-msgstr "Διανομή επιλεγμένων αντικειμένων κατά μήκος του οριζόντιου άξονα"
+msgstr "Διανομή επιλεγμένων αντικειμένων κατά μήκος του κάθετου άξονα"
 
 #: pcbnew/tools/pcb_actions.cpp:1958
 msgid "Create a corner"
