@@ -237,8 +237,9 @@ DRC_ITEM DRC_ITEM::skewOutOfRange( DRCE_SKEW_OUT_OF_RANGE,
         _( "Skew between traces out of range" ),
         wxT( "skew_out_of_range" ) );
 
-DRC_ITEM DRC_ITEM::tooManyVias( DRCE_TOO_MANY_VIAS,
-        _( "Too many vias on a connection" ),
+// Note: this used to only check against a max value, hence the settings key too_many_vias
+DRC_ITEM DRC_ITEM::viaCountOutOfRange( DRCE_VIA_COUNT_OUT_OF_RANGE,
+        _( "Too many or too few vias on a connection" ),
         wxT( "too_many_vias" ) );
 
 DRC_ITEM DRC_ITEM::diffPairGapOutOfRange( DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE,
@@ -298,7 +299,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> DRC_ITEM::allItemTypes( {
             DRC_ITEM::heading_signal_integrity,
             DRC_ITEM::lengthOutOfRange,
             DRC_ITEM::skewOutOfRange,
-            DRC_ITEM::tooManyVias,
+            DRC_ITEM::viaCountOutOfRange,
             DRC_ITEM::diffPairGapOutOfRange,
             DRC_ITEM::diffPairUncoupledLengthTooLong,
 
@@ -378,7 +379,7 @@ std::shared_ptr<DRC_ITEM> DRC_ITEM::Create( int aErrorCode )
     case DRCE_TEXT_THICKNESS:           return std::make_shared<DRC_ITEM>( textThicknessOutOfRange );
     case DRCE_LENGTH_OUT_OF_RANGE:      return std::make_shared<DRC_ITEM>( lengthOutOfRange );
     case DRCE_SKEW_OUT_OF_RANGE:        return std::make_shared<DRC_ITEM>( skewOutOfRange );
-    case DRCE_TOO_MANY_VIAS:            return std::make_shared<DRC_ITEM>( tooManyVias );
+    case DRCE_VIA_COUNT_OUT_OF_RANGE:   return std::make_shared<DRC_ITEM>( viaCountOutOfRange );
     case DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE:          return std::make_shared<DRC_ITEM>( diffPairGapOutOfRange );
     case DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG: return std::make_shared<DRC_ITEM>( diffPairUncoupledLengthTooLong );
     case DRCE_FOOTPRINT:                return std::make_shared<DRC_ITEM>( footprint );

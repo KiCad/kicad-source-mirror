@@ -95,7 +95,7 @@ enum PCB_DRC_CODE {
 
     DRCE_LENGTH_OUT_OF_RANGE,
     DRCE_SKEW_OUT_OF_RANGE,
-    DRCE_TOO_MANY_VIAS,
+    DRCE_VIA_COUNT_OUT_OF_RANGE,
     DRCE_DIFF_PAIR_GAP_OUT_OF_RANGE,
     DRCE_DIFF_PAIR_UNCOUPLED_LENGTH_TOO_LONG,
 
@@ -202,7 +202,7 @@ private:
     static DRC_ITEM textThicknessOutOfRange;
     static DRC_ITEM lengthOutOfRange;
     static DRC_ITEM skewOutOfRange;
-    static DRC_ITEM tooManyVias;
+    static DRC_ITEM viaCountOutOfRange;
     static DRC_ITEM diffPairGapOutOfRange;
     static DRC_ITEM diffPairUncoupledLengthTooLong;
     static DRC_ITEM footprint;
