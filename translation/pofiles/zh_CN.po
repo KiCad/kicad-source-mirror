@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-02 05:04+0000\n"
+"PO-Revision-Date: 2024-03-03 06:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -5225,7 +5225,7 @@ msgstr "标记"
 #: common/eda_item.cpp:361 pcbnew/pcb_dimension.cpp:396
 #: pcbnew/widgets/search_handlers.cpp:248
 msgid "Dimension"
-msgstr "标注"
+msgstr "测量标注"
 
 #: common/eda_item.cpp:362 pcbnew/pcb_dimension.cpp:1059
 #: pcbnew/pcb_dimension.cpp:1186
@@ -12078,11 +12078,11 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"此原理图是使用旧的符号库绘制的, 原理图内容可能会被破坏。某些符号可能需要重新"
-"链接到一个新的符号(名称不同), 有的符号可能需要被 \"恢复\" (复制并重命名) 到一"
-"个新的库中。\n"
+"此原理图是使用旧的符号库绘制的, "
+"原理图内容可能会被破坏。某些符号可能需要重新链接到一个新的符号(名称不同), "
+"有的符号可能需要被 \"恢复\" (复制并重命名) 到一个新的库中。\n"
 "\n"
-"建议做出以下修改，以更新工程。"
+"建议做出以下修改, 以更新工程。"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:109
 msgid "Accept"
@@ -12440,7 +12440,7 @@ msgid "This action cannot be undone."
 msgstr "该操作无法撤销。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:541
-#, c-format
+#, c-format, fuzzy
 msgid "Create new file '%s' with contents of '%s'?"
 msgstr "创建包含 '%2$s' 内容的新文件 '%1$s'?"
 
@@ -16706,21 +16706,22 @@ msgstr "符号 %s 中的引脚编号与元件 %s 中定义的引脚编号不一�
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
-msgstr "CADSTAR 设计包含没有 KiCad 等效项的变体。仅主变体 ('%s') 被加载。"
+msgstr "CADSTAR 设计包含变体, 但在 KiCad 中没有对应的等效项。仅加载主变体 ('%s')。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:376
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
-msgstr ""
-"CADSTAR 设计包含没有 KiCad 等效项的分组项目。所有分组的项目都已取消分组。"
+msgstr "CADSTAR 设计包含组合项目, 但在 KiCad "
+"中没有对应的等效项。所有组合项目已解组合。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:383
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:160
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
-msgstr "CADSTAR 设计包含没有 KiCad 等效项的重用块。导入期间已丢弃重用块信息。"
+msgstr "CADSTAR 设计包含重用块, 但在 KiCad "
+"中没有对应的等效项。导入时已丢弃重用块信息。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:497
 msgid ""
@@ -19433,7 +19434,7 @@ msgstr ""
 #: eeschema/symbol_async_loader.cpp:108
 #, c-format
 msgid "Loading library %s..."
-msgstr "正在加载库 %s..."
+msgstr "正在加载 %s 库..."
 
 #: eeschema/symbol_async_loader.cpp:122 eeschema/symbol_async_loader.cpp:130
 #, c-format
@@ -19691,7 +19692,7 @@ msgstr "无法打开库文件。"
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1114
 #, c-format
 msgid "Loading library '%s'..."
-msgstr "正在加载库 '%s'..."
+msgstr "正在加载 '%s' 库..."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1208
 #, c-format
@@ -20234,7 +20235,7 @@ msgstr "显示符号检查器窗口"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Show differences between schematic symbol and its library equivalent"
-msgstr "显示原理图符号与库中与其对应符号之间的差异"
+msgstr "显示原理图符号与库中的对应符号之间的差异"
 
 #: eeschema/tools/ee_actions.cpp:67
 msgid "Show Bus Syntax Help"
@@ -23878,7 +23879,7 @@ msgstr "在原理图上运行电气规则检查 (ERC) 并创建报告"
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr "报告所有 ERC 违规, 等效于使用所有级别的错误参数"
+msgstr "报告所有 ERC 违规, 相当于使用所有级别的错误参数"
 
 #: kicad/cli/command_sch_erc.cpp:63
 msgid ""
@@ -23945,7 +23946,7 @@ msgstr "避免设置背景色 (无论什么主题)"
 msgid ""
 "List of page numbers separated by comma to print, blank or unspecified is "
 "equivalent to all pages"
-msgstr "用逗号分隔的要打印的页码列表, 空白或未指定等同于所有页码"
+msgstr "用逗号分隔的要打印的页码列表, 留空或未指定则默认打印所有页码"
 
 #: kicad/cli/command_sch_export_plot.cpp:102
 msgid "Pen size [mm]"
@@ -30287,7 +30288,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:312
 msgid "Edit Dimension Properties"
-msgstr "编辑标注属性"
+msgstr "编辑测量标注属性"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -30320,12 +30321,12 @@ msgstr "层:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:89
 msgid "Dimension Format"
-msgstr "标注格式"
+msgstr "测量标注格式"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:98
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:104
 msgid "Measured value of this dimension"
-msgstr "该标注的测量值"
+msgstr "该测量标注的测量值"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:108
 msgid "Override value"
@@ -30350,12 +30351,12 @@ msgstr "单位:"
 msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
-msgstr "此标注的单位(\"自动\"以遵循编辑器中选择的单位)"
+msgstr "此测量标注的单位(\"自动\"以遵循编辑器中选择的单位)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
 msgid "Text to print before the dimension value"
-msgstr "要在标注值之前打印的文本"
+msgstr "要在测量标注值之前打印的文本"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:117
@@ -30385,7 +30386,7 @@ msgstr "1234 (mm)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:157
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:162
 msgid "Text to print after the dimension value"
-msgstr "要在标注值之后打印的文本"
+msgstr "要在测量标注值之后打印的文本"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:61
@@ -30466,7 +30467,7 @@ msgstr "选中后, 即使精度设置更高, \"0.100\" 也会显示为 \"0.1\""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:209
 msgid "Dimension Text"
-msgstr "标注文本"
+msgstr "测量标注文本"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:144
@@ -30551,23 +30552,23 @@ msgstr "手动"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:359
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "选择文本相对于标注线的定位方式"
+msgstr "选择文本相对于测量标注线的定位方式"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:363
 msgid "Keep aligned with dimension"
-msgstr "与标注保持对齐"
+msgstr "与测量标注保持对齐"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:364
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr "自动设置文本方向以匹配标注线"
+msgstr "自动设置文本方向以匹配测量标注线"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 msgid "Dimension Line"
-msgstr "标注线"
+msgstr "测量标注线"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 msgid "Thickness of the dimension lines"
-msgstr "标注线的宽度"
+msgstr "测量标注线的宽度"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:401
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:144
@@ -30592,7 +30593,7 @@ msgstr "延长线过冲:"
 #: pcbnew/pcb_dimension.cpp:1435 pcbnew/pcb_dimension.cpp:1506
 #: pcbnew/pcb_dimension.cpp:1587 pcbnew/pcb_dimension.cpp:1633
 msgid "Dimension Properties"
-msgstr "标注属性"
+msgstr "测量标注属性"
 
 #: pcbnew/dialogs/dialog_drc.cpp:126
 msgid "Run DRC"
@@ -32445,9 +32446,8 @@ msgid ""
 msgstr "与焊盘或过孔大小接近的走线不需要泪滴。"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
-#, fuzzy
 msgid "(as a percentage of pad/via minor dimension)"
-msgstr "(焊盘/过孔 大小的百分比)"
+msgstr "(焊盘/过孔 最小大小的百分比)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:706
@@ -32943,7 +32943,7 @@ msgstr "自动匹配的层"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:95
 msgid "Automatically match any unmatched layers to their KiCad equivalent."
-msgstr "自动将任何不匹配的层与 KiCad 等效项匹配。"
+msgstr "自动将未匹配的层与 KiCad 中的对应层进行匹配。"
 
 #: pcbnew/dialogs/dialog_imported_layers_base.h:65
 msgid "Edit Mapping of Imported Layers"
@@ -33910,7 +33910,7 @@ msgstr "负片绘制"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:165
 msgid "Global solder mask minimum width and/or margin are not set to 0. "
-msgstr "全局阻焊层最小宽度和/或边距未设置为 0。 "
+msgstr "全局阻焊最小宽度 (或) 边距未设置为 0。 "
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:169
 msgid ""
@@ -34140,7 +34140,7 @@ msgstr "过孔间隙与线路间隙相同"
 
 #: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:57
 msgid "Differential Pair Dimensions"
-msgstr "差分对标注"
+msgstr "差分对尺寸"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:23
 #: pcbnew/router/router_tool.cpp:2703
@@ -34807,7 +34807,7 @@ msgstr "走线与过孔属性"
 
 #: pcbnew/dialogs/dialog_track_via_size_base.h:53
 msgid "Track and Via Dimensions"
-msgstr "走线和过孔标注"
+msgstr "走线和过孔尺寸"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
 msgid "Target skew: "
@@ -37255,12 +37255,12 @@ msgstr "新建图形或文本对象的默认属性:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
-msgstr "新的尺寸标注对象的默认属性:"
+msgstr "新的测量标注对象的默认属性:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:98
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
-msgstr "标注的默认单位(\"自动\"跟随选定的 UI 单位)"
+msgstr "测量标注的默认单位(\"自动\"跟随选定的 UI 单位)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:105
 msgid "Text position:"
@@ -37268,7 +37268,7 @@ msgstr "文字位置 :"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:113
 msgid "Where to position the dimension text relative to the dimension line"
-msgstr "标注文字相对于标注线的位置"
+msgstr "测量标注文字相对于测量标注线的位置"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:127
 msgid "Keep text aligned"
@@ -37276,7 +37276,7 @@ msgstr "保持文本对齐"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:128
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr "选中后, 标注文本将与标注线保持对齐"
+msgstr "选中后, 测量标注文本将与测量标注线保持对齐"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:140
 msgid "How many digits of precision to show"
@@ -38510,7 +38510,6 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "'锡膏绝对间距' 重写。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:663
-#, fuzzy
 msgid "\"Solder paste relative clearance overridden."
 msgstr "'锡膏相对间距' 重写。"
 
@@ -38559,9 +38558,9 @@ msgid "(%s max length %s; actual %s)"
 msgstr "(%s 最大长度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min skew %s; actual %s; average net length %s; actual %s)"
-msgstr "(%s 最大偏移 %s; 实际偏移 %s; 平均网络长度 %s; 实际长度 %s)"
+msgstr "(%s 最小偏移 %s; 实际 %s; 平均网络长度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:177
 #, c-format
@@ -39279,9 +39278,8 @@ msgid "Edit Zone"
 msgstr "编辑覆铜"
 
 #: pcbnew/footprint_editor_utils.cpp:328 pcbnew/footprint_editor_utils.cpp:340
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr "当前配置不包含库 '%s'。使用管理封装库来编辑配置来编辑配置。"
+msgstr "使用 管理封装库 编辑配置。"
 
 #: pcbnew/footprint_editor_utils.cpp:329
 msgid "Library not found in footprint library table."
@@ -39884,7 +39882,7 @@ msgstr "添加微波形状"
 
 #: pcbnew/menubar_pcb_editor.cpp:320
 msgid "Add Dimension"
-msgstr "添加标注"
+msgstr "添加测量标注"
 
 #: pcbnew/menubar_pcb_editor.cpp:341
 msgid "Auto-Place Footprints"
@@ -40018,9 +40016,9 @@ msgid "Cannot update %s (footprint '%s' not found)."
 msgstr "无法更新 %s (封装 '%s' 找不到)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "将 %s 的封装从 '%s' 替换为 '%s'。"
+msgstr "无法将封装 %s 从'%s' 更改为 '%s' (封装已锁定)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:246
 #, c-format
@@ -40028,9 +40026,9 @@ msgid "Change %s footprint from '%s' to '%s'."
 msgstr "将 %s 的封装从 '%s' 替换为 '%s'。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "Could not change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "将 %s 的封装从 '%s' 替换为 '%s'。"
+msgstr "不能将封装 %s 从'%s' 更改为 '%s' (封装已锁定)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:273
 #, c-format
@@ -40265,14 +40263,14 @@ msgid "Multiple footprints found for '%s'."
 msgstr "找到了 '%s' 的多个封装。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
-msgstr "无法移除未使用的封装 %s (已锁定)。"
+msgstr "无法移除未使用的封装 %s (封装已锁定)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1264
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
-msgstr "无法移除未使用的封装 %s (已锁定)。"
+msgstr "不能移除未使用的封装 %s (封装已锁定)。"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1277
 #, c-format
@@ -40579,7 +40577,7 @@ msgstr "后缀"
 #: pcbnew/pcb_dimension.cpp:550
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "标注 '%s' 在 %s"
+msgstr "测量标注 '%s' 在 %s"
 
 #: pcbnew/pcb_dimension.cpp:1416
 msgid "1234.0"
@@ -40783,7 +40781,8 @@ msgstr "Pads6 stream 中的 subrecord 6 数据的长度非法: %d。"
 msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
-msgstr "Altium 层 (%d) 没有 KiCad 等效项。它已被移动至 KiCad 层 Eco1_User。"
+msgstr "Altium 层 ( %d ) 在 KiCad 中没有对应的等效项。已将其移至 KiCad 的 Eco1_User "
+"层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:443
 #, c-format
@@ -40861,19 +40860,18 @@ msgstr "正加载元件 3D 模型..."
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 层( %d )上找到的标注没有任何 KiCad 等效项。它已被移动到 KiCad 层 "
-"Eco1_User。"
+msgstr "Altium 层 ( %d ) 上存在测量标注, 但在 KiCad 中没有对应的等效项。已将其移至 "
+"KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1555
 msgid "Loading dimension drawings..."
-msgstr "正加载尺寸图形..."
+msgstr "正加载测量标注图形..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1576
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1583
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr "忽略了类型为 %d 的标注 (尚未支持)。"
+msgstr "忽略了类型为 %d 的测量标注 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1624
 msgid "No 3D-models will be imported."
@@ -40906,9 +40904,8 @@ msgstr "正加载板覆铜..."
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
-msgstr ""
-"Altium 层 (%d) 上发现的虚线轮廓无法与 KiCad 层对应。已将其移至 KiCad 的 "
-"Eco1_User 层。"
+msgstr "Altium 层 (%d) 上存在虚线轮廓, 但在 KiCad 中没有对应的等效项。已将其移至 "
+"KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2071
 #, c-format
@@ -40916,23 +40913,24 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "忽略类型为 %d 的多边形, 因为尚未实现。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium 层 (%d) 上找到的多边形没有任何 KiCad 等效项。它已被移动至 KiCad "
-"Eco1_User 层。"
+"正在加载 '%s' 库:\n"
+"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线轮廓, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium 层 (%d) 上发现的虚线轮廓无法与 KiCad 层对应。已将其移至 KiCad 的 "
-"Eco1_User 层。"
+"在封装 %s 中发现在其 Altium 层 (%d) 上存在虚线轮廓, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
 #, c-format
@@ -40944,9 +40942,9 @@ msgstr ""
 "封装 %s 上包含 %d 类型的多边形 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "忽略类型为 %d 的多边形, 因为尚未实现。"
+msgstr "封装 %s 包含类型为 %d 的多边形形状 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2352
 msgid "Loading zone fills..."
@@ -40975,11 +40973,13 @@ msgid "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr "封装 %s 焊盘 %s 未被标记为多层, 但它是 TH 焊盘。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "封装 %s 焊盘 %s 有一个方孔。(KiCad 目前还不支持此功能)。"
+msgstr ""
+"正在加载 '%s' 库:\n"
+"在封装 %s 的焊盘 %s 上有一个方孔 (尚未支持)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2795
 #, c-format
@@ -40993,7 +40993,7 @@ msgid ""
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"正在加载库 '%s'：\n"
+"正在加载 '%s' 库:\n"
 "在封装 %s 的焊盘 %s 上有旋转角度为 %f 度的孔。KiCad 只支持旋转角度为 90 "
 "度的孔。"
 
@@ -41047,13 +41047,13 @@ msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "封装 %s 焊盘 %s 使用未知的焊盘形状。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2996
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"非铜焊盘 %s , 发现于Altium 层 (%d), 没有 KiCad 等效项。它已被移动至 Kicad "
-"Eco1_User 层。"
+"在 Altium 层 (%2$d) 上存在非铜焊盘 %1$s, 但在 KiCad 中没有对应的等效项。"
+"已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
 #, fuzzy, c-format
@@ -41062,9 +41062,9 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"正在加载库 '%1$s':\n"
-"在 Altium 图层 (%4$d) 上发现封装 %2$s 的非铜焊盘 %3$s, 但是在 KiCad "
-"中没有与该图层对应的等效图层。 已将其移至 KiCad 图层 Eco1_User。"
+"正在加载 '%1$s' 库:\n"
+"在封装 %2$s 中发现在其 Altium 层 (%4$d) 上存在非铜焊盘 %3$s, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
 #, fuzzy, c-format
@@ -41072,8 +41072,8 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在 Altium 图层 (%3$d) 上发现封装 %1$s 的非铜焊盘 %2$s, 但是在 KiCad "
-"中没有与该图层对应的等效图层。 已将其移至 KiCad 图层 Eco1_User。"
+"在封装 %1$s 中发现在其 Altium 层 (%3$d) 上存在非铜焊盘 %2$s, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
@@ -41194,14 +41194,15 @@ msgstr ""
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
-msgstr "CADSTAR 设计包含没有 KiCad 等效项的布线元素。未加载这些元素。"
+msgstr "CADSTAR 设计包含 Trunk 布线元素, 但在 KiCad "
+"中没有对应的等效项。未加载这些元素。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "variant '%s' was loaded."
-msgstr "这个 CADSTAR 设计包含没有 KiCad 等效项的变量。仅变量 '%s'被加载。"
+msgstr "CADSTAR 设计包含变体, 但在 KiCad 中没有对应的等效项。仅加载变体 '%s'。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:164
 msgid ""
@@ -41217,7 +41218,8 @@ msgstr ""
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
-msgstr "CADSTAR 层 '%s' 没有等效项。此层上的所有元素都映射到 KiCad 层 \"%s\"。"
+msgstr "CADSTAR 设计包含层 '%s' , 但在 KiCad 中没有对应的等效项。"
+"此层上的所有元素都被映射到了 KiCad 的 '%s' 层。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:253
 #, c-format
@@ -41272,8 +41274,8 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"库元件 '%s' 中的 CADSTAR 覆铜 '%s' 没有一个 KiCad 等效。该覆铜既不是过孔也不"
-"是布线 keepout 区域。该覆铜没有被导入。"
+"CADSTAR 设计包含 '%s' 区 (存在于库元件 '%s' 中), 但在 KiCad "
+"中没有对应的等效项。该区既不是过孔也不是布线 keepout 区, 因此未被导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1091
 #, c-format
@@ -41320,9 +41322,8 @@ msgstr "无法在组地图中找到子组 %s (父组 ID = %s, 名称 = %s)。"
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr ""
-"尺度 ID %s 是一个角度尺寸, KiCad 中没有与之等效的东西。取而代之的是一个对齐的"
-"尺度。"
+msgstr "测量标注 ID %s 是一个角度测量标注, 但在 KiCad "
+"中没有对应的等效项。已使用对齐测量标注取代。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1491
 #, c-format
@@ -41330,20 +41331,21 @@ msgid ""
 "Dimension ID %s has 'External' style in CADSTAR. External dimension styles "
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
-msgstr "标注 ID %s 在 CADSTAR 中具有 '外部' 样式。KiCad "
-"尚未支持外部标注样式。软件使用内部标注样式导入了该标注对象。"
+msgstr ""
+"测量标注 ID %s 在 CADSTAR 中具有 '外部' 样式。KiCad "
+"尚未支持外部测量标注样式。软件使用内部测量标注样式导入了该标注对象。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1548
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "意料之外的标注类型 (ID%s)。这未被导入。"
+msgstr "错误的测量标注类型 (ID%s)。未被导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1683
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "标注 %s是一个没有 KiCad 等效的角度标注。对象未被导入。"
+msgstr "测量标注 %s 是一个角度测量标注, 但在 KiCad 中没有对应的等效项。对象未被导入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1723
 #, c-format
@@ -41360,7 +41362,7 @@ msgstr ""
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
-msgstr "CADSTAR 覆铜 '%s' 没有 KiCad 等效项。不支持纯放置覆铜。"
+msgstr "CADSTAR 设计包含 '%s' 区, 但在 KiCad 中没有对应的等效项。不支持纯放置区。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1759
 #, c-format
@@ -41378,26 +41380,24 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR 模板 '%s' 启用了设置\"允许再无布线区\"。此设置没有 KiCad 等效项, 因此"
-"已被忽略。"
+"CADSTAR 模板 '%s' 启用了 'Allow in No Routing Areas' 设置, 但在 KiCad "
+"中没有对应的等效项, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1960
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
-"这个 CADSTAR 模板 '%s' 启用了设置\"盒式隔离引脚\"。此设置没有 KiCad 等效项, "
-"因此已被忽略。"
+msgstr "CADSTAR 模板 '%s' 启用了 'Box Isolated Pins' 设置, 但在 KiCad "
+"中没有对应的等效项, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1968
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr ""
-"这个 CADSTAR 模板 '%s' 启用了\"自动重灌\"设置。此设置没有 KiCad 等效项, 因此"
-"已被忽略。"
+msgstr "CADSTAR 模板 '%s' 启用了 'Automatic Repour' 设置, 但在 KiCad "
+"中没有对应的等效项, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1979
 #, c-format
@@ -41405,9 +41405,8 @@ msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
-msgstr ""
-"CADSTAR 模板 '%s' 具有为\"毛刺宽度 (两焊盘之间的间距) \"设置定义的非零值。对"
-"此没有 KiCad 等效项, 因此忽略此设置。"
+msgstr "CADSTAR 模板 '%s' 为 'Sliver Width' 设置了非零值, 但在 KiCad "
+"中没有对应的等效项, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1989
 #, c-format
@@ -41460,9 +41459,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 设计包含没有直接 KiCad 等效的铜元素。如果填充的是实体或图案填充, 则它"
-"们已导入为 KiCad 覆铜; 如果形状是未填充的轮廓(开放或闭合), 则它们将导入为 "
-"KiCad 走线。"
+"CADSTAR 设计包含 COPPER 元素, 但在 KiCad 中没有对应的等效项。"
+"如果填充的是实体或图案填充, 则它们已导入为 KiCad 覆铜; "
+"如果形状是未填充的轮廓(开放或闭合), 则它们将导入为 KiCad 走线。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2309
 #, c-format
@@ -41504,9 +41503,8 @@ msgstr ""
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
-msgstr ""
-"'%s' 的形状是在 CADSTAR 中填充的图案填充, 该 CADSTAR 没有 KiCad 等效项。改用"
-"实体填充。"
+msgstr "形状 '%s' 在 CADSTAR 作为填充图案, 但在 KiCad "
+"中没有对应的等效项。改用实体填充。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3621
 #, c-format
@@ -41555,7 +41553,7 @@ msgstr ""
 msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
-msgstr "尺寸 ID %s 使用了 KiCad 不支持的一种单位类型。改为使用毫米。"
+msgstr "测量标注 ID %s 使用了 KiCad 不支持的单位。已将其单位改为毫米。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4012
 msgid ""
@@ -41564,9 +41562,9 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"CADSTAR 设计包含关联了\"网络类\"的网络。KiCad 没有与 CADSTAR 的网络类等效的元"
-"素, 因此没有导入这些元素。注: KiCad 的\"网络类\"版本更接近 CADSTAR 的\"网络路"
-"线编码\"(已为所有网络导入)。"
+"CADSTAR 设计包含关联了\"网络类\"的网络。但在 KiCad 中没有对应的等效项, "
+"因此没有导入这些元素。注: KiCad 的\"网络类\"版本更接近 CADSTAR "
+"的\"网络路线编码\"(已为所有网络导入)。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4022
 msgid ""
@@ -41575,8 +41573,8 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
-"CADSTAR 设计包含关联了\"间隔类\"的网络。KiCad 没有与 CADSTAR 的间隔类等效的元"
-"素, 因此未导入这些元素。请检查设计规则, 因为覆铜将受此影响。"
+"CADSTAR 设计包含关联了\"间隔类\"的网络。但在 KiCad 中没有对应的等效项, "
+"因此未导入这些元素。请检查设计规则, 因为覆铜将受此影响。"
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
@@ -42906,7 +42904,7 @@ msgstr "过孔 %s"
 
 #: pcbnew/router/router_tool.cpp:354
 msgid "Select Differential Pair Dimensions"
-msgstr "选择差分对标注"
+msgstr "选择差分对尺寸"
 
 #: pcbnew/router/router_tool.cpp:370
 msgid "Use differential pair dimensions from the net class"
@@ -43828,7 +43826,7 @@ msgstr "放置文本"
 
 #: pcbnew/tools/drawing_tool.cpp:1509
 msgid "Draw Dimension"
-msgstr "绘制标注"
+msgstr "绘制测量标注"
 
 #: pcbnew/tools/drawing_tool.cpp:1968
 msgid "Move Footprint Anchor"
@@ -44021,7 +44019,7 @@ msgstr "重新生成项目"
 
 #: pcbnew/tools/global_edit_tool.cpp:242
 msgid "Modify zones properties with zone manager"
-msgstr "通过域规则管理器修改域规则属性"
+msgstr "通过规则域管理器修改规则域属性"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -44284,35 +44282,35 @@ msgstr "将幅度降低一级。"
 
 #: pcbnew/tools/pcb_actions.cpp:237
 msgid "Add Aligned Dimension"
-msgstr "添加对齐标注"
+msgstr "添加对齐测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:238
 msgid "Add an aligned linear dimension"
-msgstr "添加对齐的线性标注"
+msgstr "添加对齐的线性测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:245
 msgid "Add Center Dimension"
-msgstr "添加中心标注"
+msgstr "添加中心测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:246
 msgid "Add a center dimension"
-msgstr "添加中心标注"
+msgstr "添加中心测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:253
 msgid "Add Radial Dimension"
-msgstr "添加径向标注"
+msgstr "添加径向测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:254
 msgid "Add a radial dimension"
-msgstr "添加径向标注"
+msgstr "添加径向测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:261
 msgid "Add Orthogonal Dimension"
-msgstr "添加正交标注"
+msgstr "添加正交测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:262
 msgid "Add an orthogonal dimension"
-msgstr "添加正交标注"
+msgstr "添加正交测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:269
 msgid "Add Leader"
@@ -44320,7 +44318,7 @@ msgstr "添加引线标注"
 
 #: pcbnew/tools/pcb_actions.cpp:270
 msgid "Add a leader dimension"
-msgstr "添加引线标注"
+msgstr "添加引线测量标注"
 
 #: pcbnew/tools/pcb_actions.cpp:283
 msgid "Add Filled Zone"
@@ -45188,7 +45186,7 @@ msgstr "区管理器"
 
 #: pcbnew/tools/pcb_actions.cpp:1348
 msgid "Show the zone manager dialog"
-msgstr "显示 域规则管理器 窗口"
+msgstr "显示 规则域管理器 窗口"
 
 #: pcbnew/tools/pcb_actions.cpp:1354
 msgid "Flip Board View"
@@ -45785,11 +45783,11 @@ msgstr "打开交互布线设置"
 
 #: pcbnew/tools/pcb_actions.cpp:2225
 msgid "Differential Pair Dimensions..."
-msgstr "差分对标注..."
+msgstr "差分对尺寸..."
 
 #: pcbnew/tools/pcb_actions.cpp:2226
 msgid "Open Differential Pair Dimension settings"
-msgstr "打开差分对标注设置"
+msgstr "打开差分对尺寸设置"
 
 #: pcbnew/tools/pcb_actions.cpp:2232
 msgid "Router Highlight Mode"
@@ -46790,7 +46788,7 @@ msgstr "规则区域"
 #: pcbnew/widgets/panel_selection_filter.cpp:194
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr "标注"
+msgstr "测量标注"
 
 #: pcbnew/widgets/search_handlers.cpp:143 pcbnew/zone.cpp:578
 #: pcbnew/zone.cpp:1628
@@ -46991,8 +46989,8 @@ msgstr "取消覆铜"
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
-msgstr "顶部域规则的优先级最高。当某一域规则位于另一域规则内时, 如果其优先级更高, "
-"则其轮廓会被从另一域规则中移除。"
+msgstr "顶部规则域的优先级最高。当某一规则域位于另一规则域内时, 如果其优先级更高, "
+"则其轮廓会被从另一规则域中移除。"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:99
 msgid "Repour"
