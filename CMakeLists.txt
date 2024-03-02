@@ -106,10 +106,9 @@ option( KICAD_SCRIPTING_WXPYTHON
     ON )
 mark_as_advanced( KICAD_SCRIPTING_WXPYTHON )
 
-cmake_dependent_option( KICAD_UPDATE_CHECK
+option( KICAD_UPDATE_CHECK
     "Build in update check"
-    ON "APPLE_OR_WIN32"
-    OFF )
+    ON )
 
 # EGL is only needed on Linux with Wayland
 cmake_dependent_option( KICAD_USE_EGL
