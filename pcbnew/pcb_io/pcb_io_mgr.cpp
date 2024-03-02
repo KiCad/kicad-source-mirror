@@ -198,6 +198,14 @@ bool PCB_IO_MGR::ConvertLibrary( STRING_UTF8_MAP* aOldFileProps, const wxString&
     wxArrayString fpNames;
     wxFileName newFileName( aNewFilePath );
 
+    if( newFileName.HasExt() )
+    {
+        wxString extraDir = newFileName.GetFullName();
+        newFileName.ClearExt();
+        newFileName.SetName( "" );
+        newFileName.AppendDir( extraDir );
+    }
+
     if( !newFileName.DirExists() && !wxFileName::Mkdir( aNewFilePath, wxS_DIR_DEFAULT ) )
         return false;
 
