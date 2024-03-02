@@ -201,16 +201,31 @@ void DRC_TEST_PROVIDER_MATCHED_LENGTH::checkViaCounts( const DRC_CONSTRAINT& aCo
 {
     for( const auto& ent : aMatchedConnections )
     {
+        std::shared_ptr<DRC_ITEM> drcItem = nullptr;
+
         if( aConstraint.GetValue().HasMax() && ent.viaCount > aConstraint.GetValue().Max() )
         {
-            std::shared_ptr<DRC_ITEM> drcItem = DRC_ITEM::Create( DRCE_TOO_MANY_VIAS );
+            drcItem = DRC_ITEM::Create( DRCE_VIA_COUNT_OUT_OF_RANGE );
             wxString msg = wxString::Format( _( "(%s max count %d; actual %d)" ),
                                              aConstraint.GetName(),
                                              aConstraint.GetValue().Max(),
                                              ent.viaCount );
 
-            drcItem->SetErrorMessage( drcItem->GetErrorText() + wxS( " " ) + msg );
+            drcItem->SetErrorMessage( _( "Too many vias on a connection" ) + wxS( " " ) + msg );
+        }
+        else if( aConstraint.GetValue().HasMin() && ent.viaCount < aConstraint.GetValue().Min() )
+        {
+            drcItem = DRC_ITEM::Create( DRCE_VIA_COUNT_OUT_OF_RANGE );
+            wxString msg = wxString::Format( _( "(%s min count %d; actual %d)" ),
+                                             aConstraint.GetName(),
+                                             aConstraint.GetValue().Min(),
+                                             ent.viaCount );
 
+            drcItem->SetErrorMessage( _( "Too few vias on a connection" ) + wxS( " " ) + msg );
+        }
+
+        if( drcItem )
+        {
             for( auto offendingTrack : ent.items )
                 drcItem->SetItems( offendingTrack );
 
