@@ -144,10 +144,10 @@ int BOARD_INSPECTION_TOOL::ShowBoardStatistics( const TOOL_EVENT& aEvent )
 }
 
 
-std::unique_ptr<DRC_ENGINE> BOARD_INSPECTION_TOOL::makeDRCEngine( bool* aCompileError, 
+std::unique_ptr<DRC_ENGINE> BOARD_INSPECTION_TOOL::makeDRCEngine( bool* aCompileError,
                                                                   bool* aCourtyardError )
 {
-    auto engine = std::make_unique<DRC_ENGINE>( m_frame->GetBoard(), 
+    auto engine = std::make_unique<DRC_ENGINE>( m_frame->GetBoard(),
                                                 &m_frame->GetBoard()->GetDesignSettings() );
 
     try
@@ -2115,10 +2115,13 @@ void BOARD_INSPECTION_TOOL::doHideRatsnestNet( int aNetCode, bool aHide )
     else
         rs->GetHiddenNets().erase( aNetCode );
 
-    m_frame->GetCanvas()->RedrawRatsnest();
-    m_frame->GetCanvas()->Refresh();
+    if( !m_frame->GetAppearancePanel()->IsTogglingNetclassRatsnestVisibility() )
+    {
+        m_frame->GetCanvas()->RedrawRatsnest();
+        m_frame->GetCanvas()->Refresh();
 
-    m_frame->GetAppearancePanel()->OnNetVisibilityChanged( aNetCode, !aHide );
+        m_frame->GetAppearancePanel()->OnNetVisibilityChanged( aNetCode, !aHide );
+    }
 }
 
 

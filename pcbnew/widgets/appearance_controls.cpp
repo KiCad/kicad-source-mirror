@@ -58,6 +58,7 @@
 #include <wx/statline.h>
 #include <wx/textdlg.h>
 #include <wx/bmpbuttn.h>        // needed on wxMSW for OnSetFocus()
+#include <core/profile.h>
 
 
 NET_GRID_TABLE::NET_GRID_TABLE( PCB_BASE_FRAME* aFrame, wxColor aBackgroundColor ) :
@@ -405,7 +406,8 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
         m_isFpEditor( aFpEditorMode ),
         m_currentPreset( nullptr ),
         m_lastSelectedUserPreset( nullptr ),
-        m_layerContextMenu( nullptr )
+        m_layerContextMenu( nullptr ),
+        m_togglingNetclassRatsnestVisibility( false )
 {
     // Correct the min size from wxformbuilder not using fromdip
     SetMinSize( FromDIP( GetMinSize() ) );
@@ -1083,6 +1085,9 @@ void APPEARANCE_CONTROLS::OnBoardNetSettingsChanged( BOARD& aBoard )
 
 void APPEARANCE_CONTROLS::OnNetVisibilityChanged( int aNetCode, bool aVisibility )
 {
+    if( m_togglingNetclassRatsnestVisibility )
+        return;
+
     int row = m_netsTable->GetRowByNetcode( aNetCode );
 
     if( row >= 0 )
@@ -3096,6 +3101,8 @@ void APPEARANCE_CONTROLS::onNetclassVisibilityChanged( wxCommandEvent& aEvent )
 
 void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
 {
+    m_togglingNetclassRatsnestVisibility = true;
+
     for( NETINFO_ITEM* net : m_frame->GetBoard()->GetNetInfo() )
     {
         if( net->GetNetClass()->GetName() == aClassName )
@@ -3119,6 +3126,9 @@ void APPEARANCE_CONTROLS::showNetclass( const wxString& aClassName, bool aShow )
         localSettings.m_HiddenNetclasses.erase( aClassName );
 
     m_netsGrid->ForceRefresh();
+    m_frame->GetCanvas()->RedrawRatsnest();
+    m_frame->GetCanvas()->Refresh();
+    m_togglingNetclassRatsnestVisibility = false;
 }
 
 
@@ -3410,4 +3420,10 @@ void APPEARANCE_CONTROLS::onReadOnlySwatch()
 void APPEARANCE_CONTROLS::RefreshCollapsiblePanes()
 {
     m_paneLayerDisplayOptions->Refresh();
+}
+
+
+bool APPEARANCE_CONTROLS::IsTogglingNetclassRatsnestVisibility()
+{
+    return m_togglingNetclassRatsnestVisibility;
 }
