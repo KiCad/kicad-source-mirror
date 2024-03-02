@@ -54,11 +54,6 @@
     </description>
 
     <screenshots>
-        <screenshot type="default">
-            <caption>KiCad Main Window</caption>
-            <image width="1200" height="846">https://www.kicad.org/img/screenshots/appstream/kicad_7.png</image>
-        </screenshot>
-
         <screenshot>
             <caption>KiCad Schematic Editor</caption>
             <image width="1600" height="900">https://www.kicad.org/img/screenshots/appstream/eeschema_7.png</image>
