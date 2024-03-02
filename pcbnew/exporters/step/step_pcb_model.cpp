@@ -769,7 +769,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                             int nextShape = aChain.NextShape( i );
 
                             // If nextShape points to the end, then we have a circle.
-                            if( nextShape != aChain.PointCount() - 1 )
+                            if( nextShape != -1 )
                                 i = nextShape;
                         }
                     }
