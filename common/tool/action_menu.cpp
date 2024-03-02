@@ -39,6 +39,7 @@
 #include <wx/stc/stc.h>
 #include <textentry_tricks.h>
 #include <wx/listctrl.h>
+#include <wx/grid.h>
 #include <widgets/ui_common.h>
 
 using namespace std::placeholders;
@@ -436,7 +437,8 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
         // events first.
         if( dynamic_cast<wxTextEntry*>( focus )
                 || dynamic_cast<wxStyledTextCtrl*>( focus )
-                || dynamic_cast<wxListView*>( focus ) )
+                || dynamic_cast<wxListView*>( focus )
+                || dynamic_cast<wxGrid*>( focus ) )
         {
             // Original key event has been lost, so we have to re-create it from the menu's
             // wxAcceleratorEntry.
@@ -451,7 +453,7 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                 keyEvent.m_shiftDown = ( acceleratorKey->GetFlags() & wxMOD_SHIFT ) > 0;
                 keyEvent.m_altDown = ( acceleratorKey->GetFlags() & wxMOD_ALT ) > 0;
 
-                if( auto ctrl = dynamic_cast<wxTextEntry*>( focus ) )
+                if( wxTextEntry* ctrl = dynamic_cast<wxTextEntry*>( focus ) )
                     TEXTENTRY_TRICKS::OnCharHook( ctrl, keyEvent );
                 else
                     focus->HandleWindowEvent( keyEvent );
@@ -462,10 +464,14 @@ void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
                     focus->HandleWindowEvent( keyEvent );
                 }
 
-                // If the event was used as KEY event (not skipped) by the focused window,
-                // just finish.
-                // Otherwise this is actually a wxEVT_COMMAND_MENU_SELECTED, or the
-                // focused window is read only
+                // Don't bubble-up dangerous actions; the target may be behind a modeless dialog.
+                // Cf. https://gitlab.com/kicad/code/kicad/-/issues/17229
+                if( keyEvent.GetKeyCode() == WXK_BACK || keyEvent.GetKeyCode() == WXK_DELETE )
+                    return;
+
+                // If the event was used as a KEY event (not skipped) by the focused window,
+                // just finish.  Otherwise this is actually a wxEVT_COMMAND_MENU_SELECTED (or the
+                // focused window is read only).
                 if( !keyEvent.GetSkipped() )
                     return;
             }
