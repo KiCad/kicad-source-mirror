@@ -558,19 +558,34 @@ void DIALOG_PAD_PROPERTIES::initValues()
             m_FlippedWarningSizer->Show( footprint->IsFlipped() );
             m_parentInfo->SetLabel( msg );
         }
-    }
 
-    m_primitives = m_previewPad->GetPrimitives();
-
-    if( m_currentPad )
-    {
         m_padNumCtrl->SetValue( m_previewPad->GetNumber() );
     }
     else
     {
         PAD_TOOL* padTool = m_parent->GetToolManager()->GetTool<PAD_TOOL>();
         m_padNumCtrl->SetValue( padTool->GetLastPadNumber() );
+
+        if( m_isFpEditor )
+        {
+            switch( m_board->Footprints()[0]->GetAttributes() )
+            {
+            case FOOTPRINT_ATTR_T::FP_THROUGH_HOLE:
+                m_previewPad->SetAttribute( PAD_ATTRIB::PTH );
+
+                if( m_previewPad->GetDrillSizeX() == 0 )
+                    m_board->GetDesignSettings().SetDefaultMasterPad();
+
+                break;
+
+            case FOOTPRINT_ATTR_T::FP_SMD:
+                m_previewPad->SetAttribute( PAD_ATTRIB::SMD );
+                break;
+            }
+        }
     }
+
+    m_primitives = m_previewPad->GetPrimitives();
 
     m_padNetSelector->SetSelectedNetcode( m_previewPad->GetNetCode() );
 
@@ -965,15 +980,23 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 
     m_gbSizerHole->Show( hasHole );
     m_staticline6->Show( hasHole );
+
     if( !hasHole )
     {
         m_holeX.ChangeValue( 0 );
         m_holeY.ChangeValue( 0 );
     }
-    else if ( m_holeX.GetValue() == 0 && m_currentPad )
+    else if( m_holeX.GetValue() == 0 )
     {
-        m_holeX.ChangeValue( m_currentPad->GetDrillSize().x );
-        m_holeY.ChangeValue( m_currentPad->GetDrillSize().y );
+        if( m_currentPad )
+        {
+            m_holeX.ChangeValue( m_currentPad->GetDrillSize().x );
+            m_holeY.ChangeValue( m_currentPad->GetDrillSize().y );
+        }
+        else
+        {
+            m_holeX.ChangeValue( pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ) );
+        }
     }
 
     if( !hasConnection )

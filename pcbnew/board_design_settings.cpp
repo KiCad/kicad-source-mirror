@@ -53,6 +53,7 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
     m_HasStackup = false;                   // no stackup defined by default
 
     m_Pad_Master = std::make_unique<PAD>( nullptr );
+    SetDefaultMasterPad();
 
     LSET all_set = LSET().set();
     m_enabledLayers = all_set;              // All layers enabled at first.
@@ -1480,4 +1481,16 @@ bool BOARD_DESIGN_SETTINGS::GetTextItalic( PCB_LAYER_ID aLayer ) const
 bool BOARD_DESIGN_SETTINGS::GetTextUpright( PCB_LAYER_ID aLayer ) const
 {
     return m_TextUpright[ GetLayerClass( aLayer ) ];
+}
+
+void BOARD_DESIGN_SETTINGS::SetDefaultMasterPad()
+{
+    m_Pad_Master.get()->SetSizeX( pcbIUScale.mmToIU( DEFAULT_PAD_WIDTH_MM ) );
+    m_Pad_Master.get()->SetSizeY( pcbIUScale.mmToIU( DEFAULT_PAD_HEIGTH_MM ) );
+    m_Pad_Master.get()->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+    m_Pad_Master.get()->SetDrillSize(
+            VECTOR2I( pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ), 0 ) );
+    m_Pad_Master.get()->SetShape( PAD_SHAPE::ROUNDRECT );
+    m_Pad_Master.get()->SetRoundRectCornerRadius(
+            pcbIUScale.mmToIU( DEFAULT_PAD_HEIGTH_MM / 100.0 * DEFAULT_PAD_REACT_RADIUS ) );
 }

@@ -103,6 +103,11 @@
 #define MINIMUM_LINE_WIDTH_MM         0.005   // minimal line width entered in a dialog
 #define MAXIMUM_LINE_WIDTH_MM         100.0   // max line width entered in a dialog
 
+// Default pad properies
+#define DEFAULT_PAD_WIDTH_MM 2.54         // master pad width
+#define DEFAULT_PAD_HEIGTH_MM 1.27        // master pad heigth
+#define DEFAULT_PAD_DRILL_DIAMETER_MM 0.8 // master pad drill diameter for PTH
+#define DEFAULT_PAD_REACT_RADIUS 15       // master pad corner radius in percent
 
 /**
  * Container to handle a stock of specific vias each with unique diameter and drill sizes
@@ -652,6 +657,8 @@ public:
 
     void            SetGridOrigin( const VECTOR2I& aOrigin ) { m_gridOrigin = aOrigin; }
     const VECTOR2I& GetGridOrigin() { return m_gridOrigin; }
+
+    void SetDefaultMasterPad();
 
 private:
     void initFromOther( const BOARD_DESIGN_SETTINGS& aOther );
