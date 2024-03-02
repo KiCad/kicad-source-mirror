@@ -47,6 +47,7 @@
 #include <undo_redo_container.h>
 #include <units_provider.h>
 #include <origin_transforms.h>
+#include <ui_events.h>
 
 // Option for main frames
 #define KICAD_DEFAULT_DRAWFRAME_STYLE wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS
@@ -91,8 +92,6 @@ class TOOL_INTERACTIVE;
 
 /// This is the handler functor for the update UI events
 typedef std::function< void( wxUpdateUIEvent& ) > UIUpdateHandler;
-
-wxDECLARE_EVENT( EDA_EVT_UNITS_CHANGED, wxCommandEvent );
 
 
 /**

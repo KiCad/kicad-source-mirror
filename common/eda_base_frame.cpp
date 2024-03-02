@@ -72,8 +72,6 @@
 #include <functional>
 #include <kiface_ids.h>
 
-wxDEFINE_EVENT( EDA_EVT_UNITS_CHANGED, wxCommandEvent );
-
 
 // Minimum window size
 static const wxSize minSizeLookup( FRAME_T aFrameType, wxWindow* aWindow )

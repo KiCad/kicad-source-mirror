@@ -122,6 +122,7 @@ set( KICOMMON_SRCS
     paths.cpp
     richio.cpp
     string_utils.cpp
+    ui_events.cpp
     trace_helpers.cpp
     wildcards_and_files_ext.cpp
     wx_filename.cpp
