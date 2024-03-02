@@ -138,12 +138,13 @@ private:
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
         EE_SELECTION&      selection = selTool->GetSelection();
         SCH_PIN*           pin = dynamic_cast<SCH_PIN*>( selection.Front() );
+        LIB_PIN*           libPin = pin ? pin->GetLibPin() : nullptr;
 
         Clear();
 
-        wxCHECK( pin, /* void */ );
+        wxCHECK( libPin, /* void */ );
 
-        wxMenuItem* item = Append( ID_POPUP_SCH_ALT_PIN_FUNCTION, pin->GetName(), wxEmptyString,
+        wxMenuItem* item = Append( ID_POPUP_SCH_ALT_PIN_FUNCTION, libPin->GetName(), wxEmptyString,
                                    wxITEM_CHECK );
 
         if( pin->GetAlt().IsEmpty() )
@@ -151,7 +152,7 @@ private:
 
         int ii = 1;
 
-        for( const auto& [ name, definition ] : pin->GetLibPin()->GetAlternates() )
+        for( const auto& [ name, definition ] : libPin->GetAlternates() )
         {
             item = Append( ID_POPUP_SCH_ALT_PIN_FUNCTION + ii, name, wxEmptyString, wxITEM_CHECK );
 
