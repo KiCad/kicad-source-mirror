@@ -6184,7 +6184,8 @@ ZONE* PCB_IO_KICAD_SEXPR_PARSER::parseZONE( BOARD_ITEM_CONTAINER* aParent )
         zone->SetNetCode( NETINFO_LIST::UNCONNECTED );
 
     // Ensure the zone net name is valid, and matches the net code, for copper zones
-    if( zone_has_net && ( zone->GetNet()->GetNetname() != netnameFromfile ) )
+    if( zone_has_net
+        && ( !zone->GetNet() || zone->GetNet()->GetNetname() != netnameFromfile ) )
     {
         // Can happens which old boards, with nonexistent nets ...
         // or after being edited by hand
