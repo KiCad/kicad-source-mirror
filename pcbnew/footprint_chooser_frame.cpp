@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 CERN
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -129,29 +129,34 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     build3DCanvas();    // must be called after creating m_chooserPanel
     m_preview3DCanvas->Show( !m_showFpMode );
 
-    wxBoxSizer* fpFilterSizer = new wxBoxSizer( wxVERTICAL );
-    fpFilterSizer->Add( m_filterByFPFilters, 0, wxLEFT | wxTOP | wxEXPAND, 5 );
+    // The m_filterByFPFilters can have a long string, if the symbol has a FP filter
+    // with many items, so give it its own sizer
+    wxBoxSizer* fpFilterSizerByFP = new wxBoxSizer( wxVERTICAL );
+    fpFilterSizerByFP->Add( m_filterByFPFilters, 0, wxLEFT | wxTOP | wxEXPAND, 5 );
+    bottomSizer->Add( fpFilterSizerByFP, 0, wxLEFT | wxTOP, 5 );
 
+    // buttonsSizer contains the m_filterByPinCount and BITMAP buttons
     wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
-    fpFilterSizer->Add( m_filterByPinCount, 0, wxLEFT | wxTOP | wxBOTTOM, 5 );
-    buttonsSizer->Add( fpFilterSizer, 0, wxEXPAND | wxLEFT, 10 );
+    buttonsSizer->Add( m_filterByPinCount, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
 
-    wxBoxSizer* grbuttSizer = new wxBoxSizer( wxHORIZONTAL );
+    // Add a spacer between the wxCheckBox and bitmap buttons
+    buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+
     m_grButton3DView = new BITMAP_BUTTON( bottomPanel, wxID_ANY,
                                 wxNullBitmap, wxDefaultPosition,
                                 wxDefaultSize/*, wxBU_AUTODRAW|wxBORDER_NONE*/ );
     m_grButton3DView->SetIsRadioButton();
     m_grButton3DView->SetBitmap( KiBitmapBundle( BITMAPS::shape_3d ) );
     m_grButton3DView->Check( !m_showFpMode );
-	grbuttSizer->Add( m_grButton3DView, 0, wxALIGN_CENTER_VERTICAL, 5 );
+    buttonsSizer->Add( m_grButton3DView, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_grButtonFpView = new BITMAP_BUTTON( bottomPanel, wxID_ANY,
+    m_grButtonFpView = new BITMAP_BUTTON( bottomPanel, wxID_ANY,
                                           wxNullBitmap, wxDefaultPosition,
                                           wxDefaultSize/*, wxBU_AUTODRAW|wxBORDER_NONE*/ );
     m_grButtonFpView->SetIsRadioButton();
     m_grButtonFpView->SetBitmap( KiBitmapBundle( BITMAPS::module ) );
     m_grButtonFpView->Check( m_showFpMode );
-	grbuttSizer->Add( m_grButtonFpView, 0, wxALIGN_CENTER_VERTICAL, 5 );
+    buttonsSizer->Add( m_grButtonFpView, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
     wxButton*               okButton = new wxButton( bottomPanel, wxID_OK );
@@ -161,7 +166,8 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     sdbSizer->AddButton( cancelButton );
     sdbSizer->Realize();
 
-    buttonsSizer->Add( grbuttSizer, 1, wxALL, 5 );
+    // Add a spacer between the bitmap buttons and thesdbSizer
+    buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
     buttonsSizer->Add( sdbSizer, 1, wxALL, 5 );
 
     bottomSizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
