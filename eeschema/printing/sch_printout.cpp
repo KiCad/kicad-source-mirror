@@ -19,6 +19,8 @@
  */
 
 #include "sch_printout.h"
+#include <tool/tool_manager.h>
+#include <tools/ee_selection_tool.h>
 #include <sch_edit_frame.h>
 #include <math/vector2wx.h>
 #include <pgm_base.h>
@@ -257,6 +259,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
         SETTINGS_MANAGER&  mgr   = Pgm().GetSettingsManager();
         EESCHEMA_SETTINGS* cfg   = m_parent->eeconfig();
         COLOR_SETTINGS*    theme = mgr.GetColorSettings( cfg->m_Printing.color_theme );
+        EE_SELECTION_TOOL* selTool = m_parent->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
 
         // Target paper size
         wxRect         pageSizePx = GetLogicalPageRect();
@@ -344,6 +347,18 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
         }
 
         view->SetLayerVisible( LAYER_DRAWINGSHEET, printDrawingSheet );
+
+        // Don't draw the selection if it's not from the current screen
+        for( EDA_ITEM* item : selTool->GetSelection() )
+        {
+            if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
+            {
+                if( !m_parent->GetScreen()->CheckIfOnDrawList( schItem ) )
+                    view->SetLayerVisible( LAYER_SELECT_OVERLAY, false );
+
+                break;
+            }
+        }
 
         // When is the actual paper size does not match the schematic page size,
         // we need to adjust the print scale to fit the selected paper size (pageSizeIU)
