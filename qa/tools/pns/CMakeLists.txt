@@ -63,6 +63,7 @@ add_executable( pns_debug_tool
     pns_log_viewer_frame_base.cpp
     label_manager.cpp
     ../../qa_utils/pcb_test_frame.cpp
+    ../../qa_utils/pcb_test_selection_tool.cpp
     ../../qa_utils/test_app_main.cpp
     ../../qa_utils/utility_program.cpp
     ../../qa_utils/mocks.cpp
@@ -74,6 +75,7 @@ add_executable( pns_debug_tool
 add_executable( qa_pns_regressions
   ${COMMON_SRCS}
   ../../qa_utils/pcb_test_frame.cpp
+  ../../qa_utils/pcb_test_selection_tool.cpp
   ../../qa_utils/test_app_main.cpp
   ../../qa_utils/utility_program.cpp
   ../../qa_utils/mocks.cpp
