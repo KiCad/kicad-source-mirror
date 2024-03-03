@@ -1294,8 +1294,6 @@ void SYMBOL_EDIT_FRAME::ShowChangedLanguage()
 
     m_treePane->GetLibTree()->ShowChangedLanguage();
 
-    m_propertiesPanel->LanguageChanged();
-
     // status bar
     UpdateMsgPanel();
 

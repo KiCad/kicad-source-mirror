@@ -62,6 +62,14 @@ PANEL_SELECTION_FILTER::PANEL_SELECTION_FILTER( wxWindow* aParent ) :
     m_cbKeepouts->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
     m_cbDimensions->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
     m_cbOtherItems->Bind( wxEVT_RIGHT_DOWN, &PANEL_SELECTION_FILTER::onRightClick, this );
+
+    m_frame->Bind( EDA_LANG_CHANGED, &PANEL_SELECTION_FILTER::OnLanguageChanged, this );
+}
+
+
+PANEL_SELECTION_FILTER::~PANEL_SELECTION_FILTER()
+{
+    m_frame->Unbind( EDA_LANG_CHANGED, &PANEL_SELECTION_FILTER::OnLanguageChanged, this );
 }
 
 
@@ -178,7 +186,7 @@ void PANEL_SELECTION_FILTER::onPopupSelection( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_SELECTION_FILTER::OnLanguageChanged()
+void PANEL_SELECTION_FILTER::OnLanguageChanged( wxCommandEvent& aEvent )
 {
     m_cbAllItems->SetLabel( _( "All items" ) );
     m_cbLockedItems->SetLabel( _( "Locked items" ) );
@@ -195,4 +203,6 @@ void PANEL_SELECTION_FILTER::OnLanguageChanged()
     m_cbOtherItems->SetLabel( _( "Other items" ) );
 
     m_cbAllItems->GetParent()->Layout();
+
+    aEvent.Skip();
 }

@@ -64,17 +64,18 @@ public:
     void OnNotebookPageChanged( wxBookCtrlEvent& aEvent ) override;
 
     void RefreshSearch();
-    void OnLanguageChange();
     void FocusSearch();
     void ClearAllResults();
 
 protected:
+    void             OnLanguageChange( wxCommandEvent& aEvent );
     SEARCH_PANE_TAB* GetCurrentTab() const;
 
 private:
     std::vector<SEARCH_HANDLER*>  m_handlers;
     std::vector<SEARCH_PANE_TAB*> m_tabs;
     wxString                      m_lastQuery;
+    EDA_DRAW_FRAME*               m_frame;
 };
 
 #endif

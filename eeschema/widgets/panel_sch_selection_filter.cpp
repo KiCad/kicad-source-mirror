@@ -78,6 +78,14 @@ PANEL_SCH_SELECTION_FILTER::PANEL_SCH_SELECTION_FILTER( wxWindow* aParent ) :
         m_gridSizer->SetItemPosition( m_cbOtherItems, wxGBPosition( 2, 1 ) );
         Thaw();
     }
+
+    m_frame->Bind( EDA_LANG_CHANGED, &PANEL_SCH_SELECTION_FILTER::OnLanguageChanged, this );
+}
+
+
+PANEL_SCH_SELECTION_FILTER::~PANEL_SCH_SELECTION_FILTER()
+{
+    m_frame->Unbind( EDA_LANG_CHANGED, &PANEL_SCH_SELECTION_FILTER::OnLanguageChanged, this );
 }
 
 
@@ -186,7 +194,7 @@ void PANEL_SCH_SELECTION_FILTER::onPopupSelection( wxCommandEvent& aEvent )
 }
 
 
-void PANEL_SCH_SELECTION_FILTER::OnLanguageChanged()
+void PANEL_SCH_SELECTION_FILTER::OnLanguageChanged( wxCommandEvent& aEvent )
 {
     m_cbAllItems->SetLabel( _( "All items" ) );
     m_cbLockedItems->SetLabel( _( "Locked items" ) );
@@ -201,4 +209,6 @@ void PANEL_SCH_SELECTION_FILTER::OnLanguageChanged()
     m_cbOtherItems->SetLabel( _( "Other items" ) );
 
     m_cbAllItems->GetParent()->Layout();
+
+    aEvent.Skip();
 }

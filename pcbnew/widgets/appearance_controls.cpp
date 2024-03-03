@@ -591,11 +591,15 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
 
     Bind( wxEVT_COMMAND_MENU_SELECTED, &APPEARANCE_CONTROLS::OnLayerContextMenu, this,
           ID_CHANGE_COLOR, ID_LAST_VALUE );
+
+    m_frame->Bind( EDA_LANG_CHANGED, &APPEARANCE_CONTROLS::OnLanguageChanged, this );
 }
 
 
 APPEARANCE_CONTROLS::~APPEARANCE_CONTROLS()
 {
+    m_frame->Unbind( EDA_LANG_CHANGED, &APPEARANCE_CONTROLS::OnLanguageChanged, this );
+
     delete m_iconProvider;
 }
 
@@ -1018,7 +1022,7 @@ void APPEARANCE_CONTROLS::OnNetGridMouseEvent( wxMouseEvent& aEvent )
 }
 
 
-void APPEARANCE_CONTROLS::OnLanguageChanged()
+void APPEARANCE_CONTROLS::OnLanguageChanged( wxCommandEvent& aEvent )
 {
     m_notebook->SetPageText( 0, _( "Layers" ) );
     m_notebook->SetPageText( 1, _( "Objects" ) );
@@ -1042,6 +1046,8 @@ void APPEARANCE_CONTROLS::OnLanguageChanged()
 
     Thaw();
     Refresh();
+
+    aEvent.Skip();
 }
 
 

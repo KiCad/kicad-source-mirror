@@ -43,8 +43,6 @@ public:
 
     void AfterCommit() override;
 
-    void LanguageChanged() override;
-
 protected:
     wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const override;
 
@@ -52,6 +50,8 @@ protected:
 
     void valueChanging( wxPropertyGridEvent& aEvent ) override;
     void valueChanged( wxPropertyGridEvent& aEvent ) override;
+
+    void OnLanguageChanged( wxCommandEvent& aEvent ) override;
 
     ///< Regenerates caches of font list property
     void updateFontList();

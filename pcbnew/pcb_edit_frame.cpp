@@ -1582,10 +1582,6 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     m_auimgr.GetPane( m_propertiesPanel ).Caption( _( "Properties" ) );
     m_auimgr.Update();
 
-    m_appearancePanel->OnLanguageChanged();
-    m_selectionFilterPanel->OnLanguageChanged();
-    m_propertiesPanel->OnLanguageChanged();
-
     UpdateTitle();
 }
 

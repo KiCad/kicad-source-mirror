@@ -33,14 +33,13 @@ class PANEL_SELECTION_FILTER : public PANEL_SELECTION_FILTER_BASE
 public:
     PANEL_SELECTION_FILTER( wxWindow* aParent );
 
-    ~PANEL_SELECTION_FILTER() = default;
+    ~PANEL_SELECTION_FILTER();
 
     void SetCheckboxesFromFilter( PCB_SELECTION_FILTER_OPTIONS& aOptions );
 
-    void OnLanguageChanged();
-
 protected:
     void OnFilterChanged( wxCommandEvent& aEvent ) override;
+    void OnLanguageChanged( wxCommandEvent& aEvent );
 
 private:
     bool setFilterFromCheckboxes( PCB_SELECTION_FILTER_OPTIONS& aOptions );

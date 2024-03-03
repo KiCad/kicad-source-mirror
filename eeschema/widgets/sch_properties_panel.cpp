@@ -207,8 +207,9 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 }
 
 
-void SCH_PROPERTIES_PANEL::LanguageChanged()
+void SCH_PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
 {
+    PROPERTIES_PANEL::OnLanguageChanged( aEvent );
     updateFontList();
 }
 

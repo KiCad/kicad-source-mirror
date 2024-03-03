@@ -24,17 +24,20 @@
 
 
 SEARCH_PANE::SEARCH_PANE( EDA_DRAW_FRAME* aFrame ) :
-	SEARCH_PANE_BASE( aFrame )
+	SEARCH_PANE_BASE( aFrame ),
+    m_frame( aFrame )
 {
+    m_frame->Bind( EDA_LANG_CHANGED, &SEARCH_PANE::OnLanguageChange, this );
 }
 
 
 SEARCH_PANE::~SEARCH_PANE()
 {
+    m_frame->Unbind( EDA_LANG_CHANGED, &SEARCH_PANE::OnLanguageChange, this );
 }
 
 
-void SEARCH_PANE::OnLanguageChange()
+void SEARCH_PANE::OnLanguageChange( wxCommandEvent& aEvent )
 {
     m_searchCtrl1->SetDescriptiveText( _( "Search" ) );
 
@@ -48,6 +51,8 @@ void SEARCH_PANE::OnLanguageChange()
         tab->RefreshColumnNames();
         m_notebook->SetPageText( i, wxGetTranslation( tab->GetSearchHandler()->GetName() ) );
     }
+
+    aEvent.Skip();
 }
 
 

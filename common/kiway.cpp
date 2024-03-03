@@ -617,8 +617,12 @@ void KIWAY::SetLanguage( int aLanguage )
         // so a static_cast is used.
         EDA_BASE_FRAME* top = static_cast<EDA_BASE_FRAME*>( m_top );
 
-        if( top )
+        if ( top )
+        {
             top->ShowChangedLanguage();
+            wxCommandEvent e( EDA_LANG_CHANGED );
+            top->GetEventHandler()->ProcessEvent( e );
+        }
     }
 #endif
 
@@ -629,6 +633,8 @@ void KIWAY::SetLanguage( int aLanguage )
         if( frame )
         {
             frame->ShowChangedLanguage();
+            wxCommandEvent e( EDA_LANG_CHANGED );
+            frame->GetEventHandler()->ProcessEvent( e );
         }
     }
 }

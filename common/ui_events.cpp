@@ -24,3 +24,4 @@
 #include <ui_events.h>
 
 wxDEFINE_EVENT( EDA_EVT_UNITS_CHANGED, wxCommandEvent );
+wxDEFINE_EVENT( EDA_LANG_CHANGED, wxCommandEvent );

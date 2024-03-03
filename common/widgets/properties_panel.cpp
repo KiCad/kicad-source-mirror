@@ -141,10 +141,18 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
                          } );
               aEvent.Skip();
           } );
+
+    m_frame->Bind( EDA_LANG_CHANGED, &PROPERTIES_PANEL::OnLanguageChanged, this );
 }
 
 
-void PROPERTIES_PANEL::OnLanguageChanged()
+PROPERTIES_PANEL::~PROPERTIES_PANEL()
+{
+    m_frame->Unbind( EDA_LANG_CHANGED, &PROPERTIES_PANEL::OnLanguageChanged, this );
+}
+
+
+void PROPERTIES_PANEL::OnLanguageChanged( wxCommandEvent& aEvent )
 {
     if( m_grid->IsEditorFocused() )
         m_grid->CommitChangesFromEditor();
@@ -153,6 +161,8 @@ void PROPERTIES_PANEL::OnLanguageChanged()
     m_displayed.clear();
 
     UpdateData();
+
+    aEvent.Skip();
 }
 
 

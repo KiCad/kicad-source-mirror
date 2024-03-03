@@ -911,8 +911,6 @@ void FOOTPRINT_EDIT_FRAME::ShowChangedLanguage()
     sf_pane_info.Caption( _( "Selection Filter" ) );
 
     // update the layer manager
-    m_appearancePanel->OnLanguageChanged();
-    m_selectionFilterPanel->OnLanguageChanged();
     UpdateUserInterface();
 
     // Now restore the visibility:

@@ -200,8 +200,6 @@ public:
 
     wxSize GetBestSize() const;
 
-    void OnLanguageChanged();
-
     ///< Update the panel contents from the application and board models.
     void OnBoardChanged();
 
@@ -290,6 +288,7 @@ protected:
     void OnNetGridDoubleClick( wxGridEvent& event ) override;
     void OnNetGridRightClick( wxGridEvent& event ) override;
     void OnNetGridMouseEvent( wxMouseEvent& aEvent );
+    void OnLanguageChanged( wxCommandEvent& aEvent );
 
 private:
     void createControls();

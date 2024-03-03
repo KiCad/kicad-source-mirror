@@ -1969,9 +1969,6 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
     m_auimgr.Update();
     m_hierarchy->UpdateHierarchyTree();
 
-    m_propertiesPanel->LanguageChanged();
-    m_selectionFilterPanel->OnLanguageChanged();
-
     // status bar
     UpdateMsgPanel();
 
