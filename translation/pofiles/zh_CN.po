@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-03-03 06:01+0000\n"
+"PO-Revision-Date: 2024-03-04 07:01+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -1949,7 +1949,7 @@ msgstr "整个 KiCad EDA 套件遵循以下许可协议发行"
 
 #: common/dialog_about/AboutDialog_main.cpp:182
 msgid "GNU General Public License (GPL) version 3 or any later version"
-msgstr "GNU 通用公共许可证 (GPL) 版本 3 或任何更高版本"
+msgstr "GNU 通用公共许可 (GPL) 版本 3 或任何更高版本 (GPLv3+)"
 
 #: common/dialog_about/AboutDialog_main.cpp:201
 msgid "Lead Development Team"
@@ -2029,7 +2029,7 @@ msgstr "打包"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "License"
-msgstr "许可证"
+msgstr "许可"
 
 #: common/dialog_about/dialog_about.cpp:464
 msgid "Could not open clipboard to write version information."
@@ -23920,7 +23920,7 @@ msgstr "扩展内容包标识符: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
 msgid "License: "
-msgstr "许可证: "
+msgstr "许可: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:245
 msgid "Tags: "
