@@ -783,6 +783,12 @@ public:
     return *this;
   }
 
+  template <typename T> Argument &add_choices(std::vector<T> &&choices) {
+    for (T &choice : choices)
+      add_choice(std::forward<T>(choice));
+    return *this;
+  }
+
   template <typename T, typename... U>
   Argument &choices(T &&first, U &&... rest) {
     add_choice(std::forward<T>(first));
