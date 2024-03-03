@@ -658,8 +658,6 @@ void EDA_3D_VIEWER_FRAME::ShowChangedLanguage()
     {
         wxAuiPaneInfo& lm_pane_info = m_auimgr.GetPane( m_appearancePanel );
         lm_pane_info.Caption( _( "Appearance" ) );
-
-        m_appearancePanel->OnLanguageChanged();
     }
 
     SetStatusText( wxEmptyString, ACTIVITY );

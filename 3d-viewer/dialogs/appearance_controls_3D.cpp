@@ -153,11 +153,14 @@ APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
 
     m_toggleGridRenderer = new GRID_BITMAP_TOGGLE_RENDERER( KiBitmap( BITMAPS::visibility ),
                                                             KiBitmap( BITMAPS::visibility_off ) );
+
+    m_frame->Bind( EDA_LANG_CHANGED, &APPEARANCE_CONTROLS_3D::OnLanguageChanged, this );
 }
 
 
 APPEARANCE_CONTROLS_3D::~APPEARANCE_CONTROLS_3D()
 {
+    m_frame->Unbind( EDA_LANG_CHANGED, &APPEARANCE_CONTROLS_3D::OnLanguageChanged, this );
 }
 
 
@@ -192,7 +195,7 @@ void APPEARANCE_CONTROLS_3D::OnSize( wxSizeEvent& aEvent )
 }
 
 
-void APPEARANCE_CONTROLS_3D::OnLanguageChanged()
+void APPEARANCE_CONTROLS_3D::rebuildControls()
 {
     Freeze();
 
@@ -203,6 +206,14 @@ void APPEARANCE_CONTROLS_3D::OnLanguageChanged()
 
     Thaw();
     Refresh();
+}
+
+
+void APPEARANCE_CONTROLS_3D::OnLanguageChanged( wxCommandEvent& aEvent )
+{
+    rebuildControls();
+
+    aEvent.Skip();
 }
 
 
@@ -229,7 +240,7 @@ void APPEARANCE_CONTROLS_3D::OnDarkModeToggle()
 
 void APPEARANCE_CONTROLS_3D::CommonSettingsChanged()
 {
-    OnLanguageChanged();
+    rebuildControls();
 
     UpdateLayerCtls();
     syncLayerPresetSelection();

@@ -114,8 +114,6 @@ public:
     ~APPEARANCE_CONTROLS_3D();
 
     wxSize GetBestSize() const;
-
-    void OnLanguageChanged();
     void OnDarkModeToggle();
     void OnLayerVisibilityChanged( int aLayer, bool isVisible );
 
@@ -140,8 +138,11 @@ public:
 protected:
     void OnSetFocus( wxFocusEvent& aEvent ) override;
     void OnSize( wxSizeEvent& aEvent ) override;
+    void OnLanguageChanged( wxCommandEvent& aEvent );
 
 private:
+    void rebuildControls();
+
     void rebuildLayers();
 
     void rebuildLayerPresetsWidget();
