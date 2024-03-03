@@ -493,7 +493,7 @@ void EXPORTER_STEP::calculatePcbThickness()
 bool EXPORTER_STEP::Export()
 {
     // Display the export time, for statistics
-    unsigned stats_startExportTime = GetRunningMicroSecs();
+    int64_t stats_startExportTime = GetRunningMicroSecs();
 
     // setup opencascade message log
     Message::DefaultMessenger()->RemovePrinters( STANDARD_TYPE( Message_PrinterOStream ) );

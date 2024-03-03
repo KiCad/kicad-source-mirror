@@ -678,14 +678,14 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
 #if USE_INSTRUMENTATION
             // measure the time to load a BOARD.
-            unsigned startTime = GetRunningMicroSecs();
+            int64_t startTime = GetRunningMicroSecs();
 #endif
 
             pi->SetProgressReporter( &progressReporter );
             loadedBoard = pi->LoadBoard( fullFileName, nullptr, &props, &Prj() );
 
 #if USE_INSTRUMENTATION
-            unsigned stopTime = GetRunningMicroSecs();
+            int64_t stopTime = GetRunningMicroSecs();
             printf( "PCB_IO::Load(): %u usecs\n", stopTime - startTime );
 #endif
         }

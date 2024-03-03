@@ -154,7 +154,7 @@ private:
     RT_RENDER_STATE m_renderState;
 
     /// Time that the render starts
-    unsigned long int m_renderStartTime;
+    int64_t m_renderStartTime;
 
     /// Save the number of blocks progress of the render
     size_t m_blockRenderProgressCount;

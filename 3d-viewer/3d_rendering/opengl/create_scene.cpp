@@ -454,7 +454,7 @@ void RENDER_3D_OPENGL::reload( REPORTER* aStatusReporter, REPORTER* aWarningRepo
 
     OBJECT_2D_STATS::Instance().ResetStats();
 
-    unsigned stats_startReloadTime = GetRunningMicroSecs();
+    int64_t stats_startReloadTime = GetRunningMicroSecs();
 
     m_boardAdapter.InitSettings( aStatusReporter, aWarningReporter );
 

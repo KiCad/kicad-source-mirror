@@ -154,9 +154,9 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
     //    https://github.com/KiCad/kicad-source-mirror/blob/master/3d-viewer/3d_draw.cpp#L692
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_startCopperLayersTime = GetRunningMicroSecs();
+    int64_t stats_startCopperLayersTime = GetRunningMicroSecs();
 
-    unsigned start_Time = stats_startCopperLayersTime;
+    int64_t start_Time = stats_startCopperLayersTime;
 #endif
 
     PCB_LAYER_ID cu_seq[MAX_CU_LAYERS];

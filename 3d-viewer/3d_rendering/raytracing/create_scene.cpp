@@ -368,7 +368,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     OBJECT_2D_STATS::Instance().ResetStats();
     OBJECT_3D_STATS::Instance().ResetStats();
 
-    unsigned stats_startReloadTime = GetRunningMicroSecs();
+    int64_t stats_startReloadTime = GetRunningMicroSecs();
 
     if( !aOnlyLoadCopperAndShapes )
     {
@@ -771,8 +771,8 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     }
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_endConvertTime        = GetRunningMicroSecs();
-    unsigned stats_startLoad3DmodelsTime = stats_endConvertTime;
+    int64_t stats_endConvertTime = GetRunningMicroSecs();
+    int64_t stats_startLoad3DmodelsTime = stats_endConvertTime;
 #endif
 
     if( aStatusReporter )
@@ -781,7 +781,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     load3DModels( m_objectContainer, aOnlyLoadCopperAndShapes );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_endLoad3DmodelsTime = GetRunningMicroSecs();
+    int64_t stats_endLoad3DmodelsTime = GetRunningMicroSecs();
 #endif
 
     if( !aOnlyLoadCopperAndShapes )
@@ -955,7 +955,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
     if( aStatusReporter )
     {
         // Calculation time in seconds
-        double calculation_time = (double) GetRunningMicroSecs() - stats_startReloadTime / 1e6;
+        double calculation_time = (double) ( GetRunningMicroSecs() - stats_startReloadTime ) / 1e6;
 
         aStatusReporter->Report( wxString::Format( _( "Reload time %.3f s" ), calculation_time ) );
     }

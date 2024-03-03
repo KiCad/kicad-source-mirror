@@ -305,7 +305,7 @@ private:
 
     bool                   m_render_pivot;            // Render the pivot while camera moving
     float                  m_camera_moving_speed;     // 1.0f will be 1:1
-    unsigned               m_strtime_camera_movement; // Ticktime of camera movement start
+    int64_t                m_strtime_camera_movement; // Ticktime of camera movement start
     bool                   m_animation_enabled;       // Camera animation enabled
     int                    m_moving_speed_multiplier; // Camera animation speed multiplier option
 
