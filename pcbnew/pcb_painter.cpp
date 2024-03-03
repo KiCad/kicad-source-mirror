@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2019 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -1700,8 +1700,12 @@ void PCB_PAINTER::draw( const PCB_SHAPE* aShape, int aLayer )
     int        thickness = getLineThickness( aShape->GetWidth() );
     LINE_STYLE lineStyle = aShape->GetStroke().GetLineStyle();
 
-    if( IsNetnameLayer( aLayer ) && m_frameType == FRAME_T::FRAME_PCB_EDITOR )
+    if( IsNetnameLayer( aLayer ) )
     {
+        // Net names are shown only in board editor:
+        if( m_frameType != FRAME_T::FRAME_PCB_EDITOR )
+            return;
+
         if( !pcbconfig() || pcbconfig()->m_Display.m_NetNames < 2 )
             return;
 
