@@ -206,7 +206,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     // Columns; layers 1 - 3
     m_auimgr.AddPane( m_hierarchy, EDA_PANE().Palette().Name( SchematicHierarchyPaneName() )
                       .Caption( _( "Schematic Hierarchy" ) )
-                      .Left().Layer( 3 )
+                      .Left().Layer( 3 ).Position( 1 )
                       .TopDockable( false )
                       .BottomDockable( false )
                       .CloseButton( true )
