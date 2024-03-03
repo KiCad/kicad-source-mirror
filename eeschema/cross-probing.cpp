@@ -226,6 +226,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             m_highlightedConn = wxEmptyString;
 
         GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting );
+        RefreshNetNavigator();
 
         SetStatusText( _( "Selected net:" ) + wxS( " " ) + UnescapeString( netName ) );
         return;
