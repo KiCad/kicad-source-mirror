@@ -21,6 +21,7 @@
 
 #include <wx/crt.h>
 #include <wx/string.h>
+#include <wx/filename.h>
 
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -57,4 +58,11 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
         // Handle error
         return false;
     }
+}
+
+bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
+{
+    wxFileName fn( aFileName );
+
+    return fn.GetName().StartsWith( wxT( "." ) );
 }

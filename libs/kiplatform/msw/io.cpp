@@ -114,3 +114,13 @@ bool KIPLATFORM::IO::DuplicatePermissions( const wxString &aSrc, const wxString 
 
     return retval;
 }
+
+bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
+{
+    bool result = false;
+
+    if( ( GetFileAttributesW( aFileName.fn_str() ) & FILE_ATTRIBUTE_HIDDEN ) )
+        result = true;
+
+    return result;
+}

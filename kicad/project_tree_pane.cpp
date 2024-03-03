@@ -78,6 +78,8 @@
 #include "project_tree_pane.h"
 #include <widgets/kistatusbar.h>
 
+#include <kiplatform/io.h>
+
 
 /* Note about the project tree build process:
  * Building the project tree can be *very* long if there are a lot of subdirectories in the
@@ -392,12 +394,8 @@ wxTreeItemId PROJECT_TREE_PANE::addItemToProjectTree( const wxString& aName,
     TREE_FILE_TYPE type = TREE_FILE_TYPE::UNKNOWN;
     wxFileName     fn( aName );
 
-#ifndef __WXMSW__
-    // Files/dirs names starting by "." are not visible files under unices (including MacOS),
-    // but are under MSW.
-    if( fn.GetName().StartsWith( wxT( "." ) ) )
+    if( KIPLATFORM::IO::IsFileHidden( aName ) )
         return wxTreeItemId();
-#endif
 
     if( wxDirExists( aName ) )
     {
