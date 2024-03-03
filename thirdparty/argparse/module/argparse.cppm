@@ -33,12 +33,13 @@ module;
 
 #ifndef ARGPARSE_MODULE_USE_STD_MODULE
 #include <argparse/argparse.hpp>
-#endif 
+#endif
 
 export module argparse;
 
 #ifdef ARGPARSE_MODULE_USE_STD_MODULE
 import std;
+import std.compat;
 
 extern "C++" {
 #include <argparse/argparse.hpp>
