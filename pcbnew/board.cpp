@@ -80,6 +80,8 @@ BOARD::BOARD() :
         m_project( nullptr ),
         m_userUnits( EDA_UNITS::MILLIMETRES ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
+        m_deleting( false ),
+        m_maxClearanceValue( 0 ),
         m_NetInfo( this )
 {
     // A too small value do not allow connecting 2 shapes (i.e. segments) not exactly connected
@@ -131,6 +133,8 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
+    m_deleting = true;
+
     // Untangle group parents before doing any deleting
     for( PCB_GROUP* group : m_groups )
     {
@@ -253,6 +257,8 @@ void BOARD::ClearProject()
 void BOARD::IncrementTimeStamp()
 {
     m_timeStamp++;
+
+    UpdateMaxClearanceCache();
 
     if( !m_IntersectsAreaCache.empty()
         || !m_EnclosedByAreaCache.empty()
@@ -772,8 +778,12 @@ BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
 }
 
 
-int BOARD::GetMaxClearanceValue() const
+void BOARD::UpdateMaxClearanceCache()
 {
+    // in destructor, useless work
+    if( m_deleting )
+        return;
+
     int worstClearance = m_designSettings->GetBiggestClearanceValue();
 
     for( ZONE* zone : m_zones )
@@ -793,7 +803,7 @@ int BOARD::GetMaxClearanceValue() const
             worstClearance = std::max( worstClearance, zone->GetLocalClearance().value() );
     }
 
-    return worstClearance;
+    m_maxClearanceValue = worstClearance;
 }
 
 

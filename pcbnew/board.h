@@ -1133,7 +1133,10 @@ public:
      * the clearances from board design settings as well as embedded clearances in footprints,
      * pads and zones.  Includes electrical, physical, hole and edge clearances.
     */
-    int GetMaxClearanceValue() const;
+    int GetMaxClearanceValue() const
+    {
+        return m_maxClearanceValue;
+    };
 
     /**
      * Map all nets in the given board to nets with the same name (if any) in the destination
@@ -1260,6 +1263,9 @@ private:
             ( l->*aFunc )( std::forward<Args>( args )... );
     }
 
+
+    void UpdateMaxClearanceCache();
+
     friend class PCB_EDIT_FRAME;
 
 
@@ -1313,6 +1319,9 @@ private:
      * properties).  If this flag is set, then auto-teardrop-generation will be disabled.
      */
     bool                         m_legacyTeardrops = false;
+
+    bool                         m_deleting;        // inside destructor
+    int                          m_maxClearanceValue;  // cached value
 
     NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...
 
