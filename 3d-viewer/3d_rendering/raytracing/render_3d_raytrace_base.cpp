@@ -22,32 +22,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <gal/opengl/kiglew.h>    // Must be included first
-
 #include <algorithm>
 #include <atomic>
 #include <chrono>
 #include <thread>
 
-#include "render_3d_raytrace.h"
+#include "render_3d_raytrace_base.h"
 #include "mortoncodes.h"
 #include "../color_rgba.h"
 #include "3d_fastmath.h"
 #include "3d_math.h"
-#include "../common_ogl/ogl_utils.h"
 #include <core/profile.h>        // To use GetRunningMicroSecs or another profiling utility
 #include <wx/log.h>
 
 
-RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
-    RENDER_3D_BASE( aCanvas, aAdapter, aCamera ),
-    m_postShaderSsao( aCamera )
+RENDER_3D_RAYTRACE_BASE::RENDER_3D_RAYTRACE_BASE( BOARD_ADAPTER& aAdapter, CAMERA& aCamera ) :
+        RENDER_3D_BASE( aAdapter, aCamera ),
+        m_postShaderSsao( aCamera )
 {
-    wxLogTrace( m_logTrace, wxT( "RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE" ) );
+    wxLogTrace( m_logTrace, wxT( "RENDER_3D_RAYTRACE_BASE::RENDER_3D_RAYTRACE_BASE" ) );
 
-    m_openglSupportsVertexBufferObjects = false;
-    m_pboId       = GL_NONE;
-    m_pboDataSize = 0;
+    //m_pboId       = GL_NONE;
+    //m_pboDataSize = 0;
     m_accelerator = nullptr;
     m_convertedDummyBlockCount = 0;
     m_converted2dRoundSegmentCount = 0;
@@ -62,6 +58,7 @@ RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& a
     m_xoffset = 0;
     m_yoffset = 0;
 
+    m_is_canvas_initialized = false;
     m_isPreview = false;
     m_renderState = RT_RENDER_STATE_MAX; // Set to an initial invalid state
     m_renderStartTime = 0;
@@ -69,9 +66,9 @@ RENDER_3D_RAYTRACE::RENDER_3D_RAYTRACE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& a
 }
 
 
-RENDER_3D_RAYTRACE::~RENDER_3D_RAYTRACE()
+RENDER_3D_RAYTRACE_BASE::~RENDER_3D_RAYTRACE_BASE()
 {
-    wxLogTrace( m_logTrace, wxT( "RENDER_3D_RAYTRACE::~RENDER_3D_RAYTRACE" ) );
+    wxLogTrace( m_logTrace, wxT( "RENDER_3D_RAYTRACE_BASE::~RENDER_3D_RAYTRACE_BASE" ) );
 
     delete m_accelerator;
     m_accelerator = nullptr;
@@ -84,43 +81,16 @@ RENDER_3D_RAYTRACE::~RENDER_3D_RAYTRACE()
 
     delete[] m_shaderBuffer;
     m_shaderBuffer = nullptr;
-
-    deletePbo();
 }
 
 
-int RENDER_3D_RAYTRACE::GetWaitForEditingTimeOut()
+int RENDER_3D_RAYTRACE_BASE::GetWaitForEditingTimeOut()
 {
     return 200; // ms
 }
 
 
-void RENDER_3D_RAYTRACE::deletePbo()
-{
-    // Delete PBO if it was created
-    if( m_openglSupportsVertexBufferObjects )
-    {
-        if( glIsBufferARB( m_pboId ) )
-            glDeleteBuffers( 1, &m_pboId );
-
-        m_pboId = GL_NONE;
-    }
-}
-
-
-void RENDER_3D_RAYTRACE::SetCurWindowSize( const wxSize& aSize )
-{
-    if( m_windowSize != aSize )
-    {
-        m_windowSize = aSize;
-        glViewport( 0, 0, m_windowSize.x, m_windowSize.y );
-
-        initializeNewWindowSize();
-    }
-}
-
-
-void RENDER_3D_RAYTRACE::restartRenderState()
+void RENDER_3D_RAYTRACE_BASE::restartRenderState()
 {
     m_renderStartTime = GetRunningMicroSecs();
 
@@ -145,151 +115,13 @@ static inline void SetPixel( GLubyte* p, const COLOR_RGBA& v )
 }
 
 
-static inline SFVEC4F premultiplyAlpha( const SFVEC4F& aInput )
+SFVEC4F RENDER_3D_RAYTRACE_BASE::premultiplyAlpha( const SFVEC4F& aInput )
 {
     return SFVEC4F( aInput.r * aInput.a, aInput.g * aInput.a, aInput.b * aInput.a, aInput.a );
 }
 
 
-bool RENDER_3D_RAYTRACE::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
-                                 REPORTER* aWarningReporter )
-{
-    bool requestRedraw = false;
-
-    // Initialize openGL if need
-    if( !m_is_opengl_initialized )
-    {
-        if( !initializeOpenGL() )
-            return false;
-
-        //aIsMoving = true;
-        requestRedraw = true;
-
-        // It will assign the first time the windows size, so it will now
-        // revert to preview mode the first time the Redraw is called
-        m_oldWindowsSize = m_windowSize;
-        initializeBlockPositions();
-    }
-
-    std::unique_ptr<BUSY_INDICATOR> busy = CreateBusyIndicator();
-
-    // Reload board if it was requested
-    if( m_reloadRequested )
-    {
-        if( aStatusReporter )
-            aStatusReporter->Report( _( "Loading..." ) );
-
-        //aIsMoving = true;
-        requestRedraw = true;
-        Reload( aStatusReporter, aWarningReporter, false );
-    }
-
-
-    // Recalculate constants if windows size was changed
-    if( m_windowSize != m_oldWindowsSize )
-    {
-        m_oldWindowsSize = m_windowSize;
-        aIsMoving = true;
-        requestRedraw = true;
-
-        initializeBlockPositions();
-    }
-
-
-    // Clear buffers
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-    glClearDepth( 1.0f );
-    glClearStencil( 0x00 );
-    glClear( GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
-
-    // 4-byte pixel alignment
-    glPixelStorei( GL_UNPACK_ALIGNMENT, 4 );
-
-    glDisable( GL_STENCIL_TEST );
-    glDisable( GL_LIGHTING );
-    glDisable( GL_COLOR_MATERIAL );
-    glDisable( GL_DEPTH_TEST );
-    glDisable( GL_TEXTURE_2D );
-    glDisable( GL_BLEND );
-    glDisable( GL_MULTISAMPLE );
-
-    const bool was_camera_changed = m_camera.ParametersChanged();
-
-    if( requestRedraw || aIsMoving || was_camera_changed )
-        m_renderState = RT_RENDER_STATE_MAX; // Set to an invalid state,
-                                             // so it will restart again latter
-
-    // This will only render if need, otherwise it will redraw the PBO on the screen again
-    if( aIsMoving || was_camera_changed )
-    {
-        // Set head light (camera view light) with the opposite direction of the camera
-        if( m_cameraLight )
-            m_cameraLight->SetDirection( -m_camera.GetDir() );
-
-        OglDrawBackground( premultiplyAlpha( m_boardAdapter.m_BgColorTop ),
-                           premultiplyAlpha( m_boardAdapter.m_BgColorBot ) );
-
-        // Bind PBO
-        glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
-
-        // Get the PBO pixel pointer to write the data
-        GLubyte* ptrPBO = (GLubyte *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
-                                                     GL_WRITE_ONLY_ARB );
-
-        if( ptrPBO )
-        {
-            renderPreview( ptrPBO );
-
-            // release pointer to mapping buffer, this initialize the coping to PBO
-            glUnmapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB );
-        }
-
-        glWindowPos2i( m_xoffset, m_yoffset );
-    }
-    else
-    {
-        // Bind PBO
-        glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
-
-        if( m_renderState != RT_RENDER_STATE_FINISH )
-        {
-            // Get the PBO pixel pointer to write the data
-            GLubyte* ptrPBO = (GLubyte *)glMapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB,
-                                                         GL_WRITE_ONLY_ARB );
-
-            if( ptrPBO )
-            {
-                render( ptrPBO, aStatusReporter );
-
-                if( m_renderState != RT_RENDER_STATE_FINISH )
-                    requestRedraw = true;
-
-                // release pointer to mapping buffer, this initialize the coping to PBO
-                glUnmapBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB );
-            }
-        }
-
-        if( m_renderState == RT_RENDER_STATE_FINISH )
-        {
-            glClear( GL_COLOR_BUFFER_BIT );
-        }
-
-        glWindowPos2i( m_xoffset, m_yoffset );
-    }
-
-    // This way it will blend the progress rendering with the last buffer. eg:
-    // if it was called after a openGL.
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    glEnable( GL_ALPHA_TEST );
-    glDrawPixels( m_realBufferSize.x, m_realBufferSize.y, GL_RGBA, GL_UNSIGNED_BYTE, 0 );
-    glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, 0 );
-
-    return requestRedraw;
-}
-
-
-void RENDER_3D_RAYTRACE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE_BASE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
     if( ( m_renderState == RT_RENDER_STATE_FINISH ) || ( m_renderState >= RT_RENDER_STATE_MAX ) )
     {
@@ -342,14 +174,14 @@ void RENDER_3D_RAYTRACE::render( GLubyte* ptrPBO, REPORTER* aStatusReporter )
     if( aStatusReporter && ( m_renderState == RT_RENDER_STATE_FINISH ) )
     {
         // Calculation time in seconds
-        const double elapsed_time = (double)( GetRunningMicroSecs() - m_renderStartTime ) / 1e6;
+        const double elapsed_time = (double) ( GetRunningMicroSecs() - m_renderStartTime ) / 1e6;
 
         aStatusReporter->Report( wxString::Format( _( "Rendering time %.3f s" ), elapsed_time ) );
     }
 }
 
 
-void RENDER_3D_RAYTRACE::renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE_BASE::renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReporter )
 {
     m_isPreview = false;
 
@@ -363,6 +195,8 @@ void RENDER_3D_RAYTRACE::renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReport
     size_t parallelThreadCount = std::min<size_t>(
             std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
             m_blockPositions.size() );
+
+    const int timeLimit = m_blockPositions.size() > 40000 ? 500 : 200;
 
     for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
@@ -380,8 +214,10 @@ void RENDER_3D_RAYTRACE::renderTracing( GLubyte* ptrPBO, REPORTER* aStatusReport
 
                     // Check if it spend already some time render and request to exit
                     // to display the progress
-                    if( std::chrono::duration_cast<std::chrono::milliseconds>(
-                            std::chrono::steady_clock::now() - startTime ).count() > 150 )
+                    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(
+                            std::chrono::steady_clock::now() - startTime );
+
+                    if( diff.count() > timeLimit )
                         breakLoop = true;
                 }
             }
@@ -459,7 +295,7 @@ SFVEC4F ConvertSRGBAToLinear( const SFVEC4F& aSRGBAcolor )
 #endif
 
 
-void RENDER_3D_RAYTRACE::renderFinalColor( GLubyte* ptrPBO, const SFVEC4F& rgbColor,
+void RENDER_3D_RAYTRACE_BASE::renderFinalColor( GLubyte* ptrPBO, const SFVEC4F& rgbColor,
                                          bool applyColorSpaceConversion )
 {
     SFVEC4F color = rgbColor;
@@ -494,7 +330,7 @@ static void HITINFO_PACKET_init( HITINFO_PACKET* aHitPacket )
 }
 
 
-void RENDER_3D_RAYTRACE::renderRayPackets( const SFVEC4F* bgColorY, const RAY* aRayPkt,
+void RENDER_3D_RAYTRACE_BASE::renderRayPackets( const SFVEC4F* bgColorY, const RAY* aRayPkt,
                                            HITINFO_PACKET* aHitPacket, bool is_testShadow,
                                            SFVEC4F* aOutHitColor )
 {
@@ -516,7 +352,7 @@ void RENDER_3D_RAYTRACE::renderRayPackets( const SFVEC4F* bgColorY, const RAY* a
 }
 
 
-void RENDER_3D_RAYTRACE::renderAntiAliasPackets( const SFVEC4F* aBgColorY,
+void RENDER_3D_RAYTRACE_BASE::renderAntiAliasPackets( const SFVEC4F* aBgColorY,
                                                  const HITINFO_PACKET* aHitPck_X0Y0,
                                                  const HITINFO_PACKET* aHitPck_AA_X1Y1,
                                                  const RAY* aRayPck, SFVEC4F* aOutHitColor )
@@ -640,7 +476,7 @@ void RENDER_3D_RAYTRACE::renderAntiAliasPackets( const SFVEC4F* aBgColorY,
 #define DISP_FACTOR 0.075f
 
 
-void RENDER_3D_RAYTRACE::renderBlockTracing( GLubyte* ptrPBO, signed int iBlock )
+void RENDER_3D_RAYTRACE_BASE::renderBlockTracing( GLubyte* ptrPBO, signed int iBlock )
 {
     // Initialize ray packets
     const SFVEC2UI& blockPos = m_blockPositions[iBlock];
@@ -851,7 +687,7 @@ void RENDER_3D_RAYTRACE::renderBlockTracing( GLubyte* ptrPBO, signed int iBlock 
 }
 
 
-void RENDER_3D_RAYTRACE::postProcessShading( GLubyte* /* ptrPBO */, REPORTER* aStatusReporter )
+void RENDER_3D_RAYTRACE_BASE::postProcessShading( GLubyte* /* ptrPBO */, REPORTER* aStatusReporter )
 {
     if( m_boardAdapter.m_Cfg->m_Render.raytrace_post_processing )
     {
@@ -903,7 +739,7 @@ void RENDER_3D_RAYTRACE::postProcessShading( GLubyte* /* ptrPBO */, REPORTER* aS
 }
 
 
-void RENDER_3D_RAYTRACE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* /* aStatusReporter */ )
+void RENDER_3D_RAYTRACE_BASE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* /* aStatusReporter */ )
 {
     if( m_boardAdapter.m_Cfg->m_Render.raytrace_post_processing )
     {
@@ -960,7 +796,7 @@ void RENDER_3D_RAYTRACE::postProcessBlurFinish( GLubyte* ptrPBO, REPORTER* /* aS
 }
 
 
-void RENDER_3D_RAYTRACE::renderPreview( GLubyte* ptrPBO )
+void RENDER_3D_RAYTRACE_BASE::renderPreview( GLubyte* ptrPBO )
 {
     m_isPreview = true;
 
@@ -1558,7 +1394,7 @@ void RENDER_3D_RAYTRACE::renderPreview( GLubyte* ptrPBO )
 
 #define USE_EXPERIMENTAL_SOFT_SHADOWS 1
 
-SFVEC4F RENDER_3D_RAYTRACE::shadeHit( const SFVEC4F& aBgColor, const RAY& aRay, HITINFO& aHitInfo,
+SFVEC4F RENDER_3D_RAYTRACE_BASE::shadeHit( const SFVEC4F& aBgColor, const RAY& aRay, HITINFO& aHitInfo,
                                       bool aIsInsideObject, unsigned int aRecursiveLevel,
                                       bool is_testShadow ) const
 {
@@ -1734,6 +1570,10 @@ SFVEC4F RENDER_3D_RAYTRACE::shadeHit( const SFVEC4F& aBgColor, const RAY& aRay, 
 
                     sum_color += add;
                 }
+                else
+                {
+                    sum_color += aBgColor;
+                }
             }
 
             outColor += (sum_color / SFVEC4F( (float)reflection_number_of_samples) );
@@ -1825,49 +1665,6 @@ SFVEC4F RENDER_3D_RAYTRACE::shadeHit( const SFVEC4F& aBgColor, const RAY& aRay, 
 }
 
 
-void RENDER_3D_RAYTRACE::initializeNewWindowSize()
-{
-    initPbo();
-}
-
-
-void RENDER_3D_RAYTRACE::initPbo()
-{
-    if( GLEW_ARB_pixel_buffer_object )
-    {
-        m_openglSupportsVertexBufferObjects = true;
-
-        // Try to delete vbo if it was already initialized
-        deletePbo();
-
-        // Learn about Pixel buffer objects at:
-        // http://www.songho.ca/opengl/gl_pbo.html
-        // http://web.eecs.umich.edu/~sugih/courses/eecs487/lectures/25-PBO+Mipmapping.pdf
-        // "create 2 pixel buffer objects, you need to delete them when program exits.
-        // glBufferDataARB with NULL pointer reserves only memory space."
-
-        // This sets the number of RGBA pixels
-        m_pboDataSize =  m_realBufferSize.x * m_realBufferSize.y * 4;
-
-        glGenBuffersARB( 1, &m_pboId );
-        glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboId );
-        glBufferDataARB( GL_PIXEL_UNPACK_BUFFER_ARB, m_pboDataSize, 0, GL_STREAM_DRAW_ARB );
-        glBindBufferARB( GL_PIXEL_UNPACK_BUFFER_ARB, 0 );
-
-        wxLogTrace( m_logTrace,
-                    wxT( "RENDER_3D_RAYTRACE:: GLEW_ARB_pixel_buffer_object is supported" ) );
-    }
-}
-
-
-bool RENDER_3D_RAYTRACE::initializeOpenGL()
-{
-    m_is_opengl_initialized = true;
-
-    return true;
-}
-
-
 static float distance( const SFVEC2UI& a, const SFVEC2UI& b )
 {
     const float dx = (float) a.x - (float) b.x;
@@ -1876,7 +1673,7 @@ static float distance( const SFVEC2UI& a, const SFVEC2UI& b )
 }
 
 
-void RENDER_3D_RAYTRACE::initializeBlockPositions()
+void RENDER_3D_RAYTRACE_BASE::initializeBlockPositions()
 {
     m_realBufferSize = SFVEC2UI( 0 );
 
@@ -1959,7 +1756,7 @@ void RENDER_3D_RAYTRACE::initializeBlockPositions()
 }
 
 
-BOARD_ITEM* RENDER_3D_RAYTRACE::IntersectBoardItem( const RAY& aRay )
+BOARD_ITEM* RENDER_3D_RAYTRACE_BASE::IntersectBoardItem( const RAY& aRay )
 {
     HITINFO hitInfo;
     hitInfo.m_tHit = std::numeric_limits<float>::infinity();

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 class WX_INFOBAR;
 class wxStatusBar;
 class BOARD;
-class RENDER_3D_RAYTRACE;
+class RENDER_3D_RAYTRACE_GL;
 class RENDER_3D_OPENGL;
 
 
@@ -97,7 +97,7 @@ public:
     }
 
     /**
-     * @return the current render ( a RENDER_3D_RAYTRACE* or a RENDER_3D_OPENGL* render )
+     * @return the current render ( a RENDER_3D_RAYTRACE_GL* or a RENDER_3D_OPENGL* render )
      */
     RENDER_3D_BASE* GetCurrentRender() const { return m_3d_render; }
 
@@ -311,7 +311,7 @@ private:
 
     BOARD_ADAPTER&         m_boardAdapter;            // Pre-computed 3D info and settings
     RENDER_3D_BASE*        m_3d_render;
-    RENDER_3D_RAYTRACE*    m_3d_render_raytracing;
+    RENDER_3D_RAYTRACE_GL* m_3d_render_raytracing;
     RENDER_3D_OPENGL*      m_3d_render_opengl;
 
     bool                   m_opengl_supports_raytracing;

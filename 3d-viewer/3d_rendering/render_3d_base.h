@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
 class RENDER_3D_BASE
 {
 public:
-    explicit RENDER_3D_BASE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera );
+    explicit RENDER_3D_BASE( BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera );
 
     virtual ~RENDER_3D_BASE() = 0;
 
@@ -98,16 +98,13 @@ protected:
      */
     std::unique_ptr<BUSY_INDICATOR> CreateBusyIndicator() const;
 
-    ///< the canvas to display the scene
-    EDA_3D_CANVAS* m_canvas;
-
     ///< Settings reference in use for this render.
     BOARD_ADAPTER& m_boardAdapter;
 
     CAMERA&        m_camera;
 
-    ///< Flag if the opengl specific for this render was already initialized.
-    bool m_is_opengl_initialized;
+    ///< Flag if the canvas specific for this render was already initialized.
+    bool m_canvasInitialized;
 
     ///< @todo This must be reviewed in order to flag change types.
     bool m_reloadRequested;

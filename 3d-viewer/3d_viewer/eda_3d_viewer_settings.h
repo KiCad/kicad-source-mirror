@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Jon Evans <jon@craftyjon.com>
  * Copyright (C) 2023 CERN
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -23,7 +23,6 @@
 #define EDA_3D_VIEWER_SETTINGS_H_
 
 #include <3d_enums.h>
-#include <common_ogl/ogl_attr_list.h>
 #include <plugins/3dapi/xv3d_types.h>
 #include <settings/app_settings.h>
 #include <settings/parameters.h>
@@ -33,6 +32,8 @@
 #define FOLLOW_PCB           wxT( "follow_pcb_editor" )
 #define FOLLOW_PLOT_SETTINGS wxT( "follow_plot_settings" )
 #define LEGACY_PRESET_FLAG   wxT( "legacy_preset_flag" )
+
+enum class ANTIALIASING_MODE;
 
 
 struct LAYER_PRESET_3D

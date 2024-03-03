@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,13 +44,12 @@
 const wxChar* RENDER_3D_BASE::m_logTrace = wxT( "KI_TRACE_3D_RENDER" );
 
 
-RENDER_3D_BASE::RENDER_3D_BASE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera ) :
+RENDER_3D_BASE::RENDER_3D_BASE( BOARD_ADAPTER& aBoardAdapter, CAMERA& aCamera ) :
         m_boardAdapter( aBoardAdapter ),
         m_camera( aCamera )
 {
     wxLogTrace( m_logTrace, wxT( "RENDER_3D_BASE::RENDER_3D_BASE" ) );
-    m_canvas                = aCanvas;
-    m_is_opengl_initialized = false;
+    m_canvasInitialized     = false;
     m_windowSize            = wxSize( -1, -1 );
     m_reloadRequested       = true;
 }

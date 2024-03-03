@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,6 +207,8 @@ private:
         SMATERIAL m_Plastic;
         SMATERIAL m_GrayMaterial;
     } m_materials;
+
+    EDA_3D_CANVAS* m_canvas;
 
     MAP_OGL_DISP_LISTS  m_layers;
     OPENGL_RENDER_LIST* m_platedPadsFront;

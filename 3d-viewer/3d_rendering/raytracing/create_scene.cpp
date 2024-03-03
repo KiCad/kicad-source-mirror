@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "render_3d_raytrace.h"
+#include "render_3d_raytrace_base.h"
 #include "shapes3D/plane_3d.h"
 #include "shapes3D/round_segment_3d.h"
 #include "shapes3D/layer_item_3d.h"
@@ -72,7 +72,7 @@ static float TransparencyControl( float aGrayColorValue, float aTransparency )
 #define UNITS3D_TO_UNITSPCB ( pcbIUScale.IU_PER_MM )
 
 
-void RENDER_3D_RAYTRACE::setupMaterials()
+void RENDER_3D_RAYTRACE_BASE::setupMaterials()
 {
     MATERIAL::SetDefaultRefractionRayCount( m_boardAdapter.m_Cfg->m_Render.raytrace_nrsamples_refractions );
     MATERIAL::SetDefaultReflectionRayCount( m_boardAdapter.m_Cfg->m_Render.raytrace_nrsamples_reflections );
@@ -176,7 +176,7 @@ void RENDER_3D_RAYTRACE::setupMaterials()
 }
 
 
-void RENDER_3D_RAYTRACE::createObject( CONTAINER_3D& aDstContainer, const OBJECT_2D* aObject2D,
+void RENDER_3D_RAYTRACE_BASE::createObject( CONTAINER_3D& aDstContainer, const OBJECT_2D* aObject2D,
                                        float aZMin, float aZMax, const MATERIAL* aMaterial,
                                        const SFVEC3F& aObjColor )
 {
@@ -227,7 +227,7 @@ void RENDER_3D_RAYTRACE::createObject( CONTAINER_3D& aDstContainer, const OBJECT
 }
 
 
-void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aContainer2d,
+void RENDER_3D_RAYTRACE_BASE::createItemsFromContainer( const BVH_CONTAINER_2D* aContainer2d,
                                                    PCB_LAYER_ID aLayer_id,
                                                    const MATERIAL* aMaterialLayer,
                                                    const SFVEC3F& aLayerColor,
@@ -358,7 +358,7 @@ void RENDER_3D_RAYTRACE::createItemsFromContainer( const BVH_CONTAINER_2D* aCont
 extern void buildBoardBoundingBoxPoly( const BOARD* aBoard, SHAPE_POLY_SET& aOutline );
 
 
-void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter,
+void RENDER_3D_RAYTRACE_BASE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningReporter,
                                  bool aOnlyLoadCopperAndShapes )
 {
     m_reloadRequested = false;
@@ -962,7 +962,7 @@ void RENDER_3D_RAYTRACE::Reload( REPORTER* aStatusReporter, REPORTER* aWarningRe
 }
 
 
-void RENDER_3D_RAYTRACE::insertHole( const PCB_VIA* aVia )
+void RENDER_3D_RAYTRACE_BASE::insertHole( const PCB_VIA* aVia )
 {
     PCB_LAYER_ID top_layer, bottom_layer;
     int          radiusBUI = ( aVia->GetDrillValue() / 2 );
@@ -993,7 +993,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PCB_VIA* aVia )
 }
 
 
-void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
+void RENDER_3D_RAYTRACE_BASE::insertHole( const PAD* aPad )
 {
     const OBJECT_2D* object2d_A = nullptr;
 
@@ -1164,7 +1164,7 @@ void RENDER_3D_RAYTRACE::insertHole( const PAD* aPad )
 }
 
 
-void RENDER_3D_RAYTRACE::addPadsAndVias()
+void RENDER_3D_RAYTRACE_BASE::addPadsAndVias()
 {
     if( !m_boardAdapter.GetBoard() )
         return;
@@ -1193,7 +1193,7 @@ void RENDER_3D_RAYTRACE::addPadsAndVias()
 }
 
 
-void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation )
+void RENDER_3D_RAYTRACE_BASE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMaterialInformation )
 {
     if( !m_boardAdapter.GetBoard() )
         return;
@@ -1315,7 +1315,7 @@ void RENDER_3D_RAYTRACE::load3DModels( CONTAINER_3D& aDstContainer, bool aSkipMa
 }
 
 
-MODEL_MATERIALS* RENDER_3D_RAYTRACE::getModelMaterial( const S3DMODEL* a3DModel )
+MODEL_MATERIALS* RENDER_3D_RAYTRACE_BASE::getModelMaterial( const S3DMODEL* a3DModel )
 {
     MODEL_MATERIALS* materialVector;
 
@@ -1418,7 +1418,7 @@ MODEL_MATERIALS* RENDER_3D_RAYTRACE::getModelMaterial( const S3DMODEL* a3DModel 
 }
 
 
-void RENDER_3D_RAYTRACE::addModels( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
+void RENDER_3D_RAYTRACE_BASE::addModels( CONTAINER_3D& aDstContainer, const S3DMODEL* a3DModel,
                                     const glm::mat4& aModelMatrix, float aFPOpacity,
                                     bool aSkipMaterialInformation, BOARD_ITEM* aBoardItem )
 {

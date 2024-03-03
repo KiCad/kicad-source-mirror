@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,17 +38,31 @@
 // stdlib
 #include <algorithm>
 
-TRACK_BALL::TRACK_BALL( float aInitialDistance ) :
-    CAMERA( aInitialDistance )
+
+TRACK_BALL::TRACK_BALL( float aInitialDistance ) : CAMERA( aInitialDistance )
 {
     wxLogTrace( m_logTrace, wxT( "TRACK_BALL::TRACK_BALL" ) );
+    initQuat();
+}
 
+
+TRACK_BALL::TRACK_BALL( SFVEC3F aInitPos, SFVEC3F aLookat, PROJECTION_TYPE aProjectionType ) :
+        CAMERA( aInitPos, aLookat, aProjectionType )
+{
+    wxLogTrace( m_logTrace, wxT( "TRACK_BALL::TRACK_BALL" ) );
+    initQuat();
+}
+
+
+void TRACK_BALL::initQuat()
+{
     memset( m_quat_t0, 0, sizeof( m_quat_t0 ) );
     memset( m_quat_t1, 0, sizeof( m_quat_t1 ) );
 
     trackball( m_quat_t0, 0.0, 0.0, 0.0, 0.0 );
     trackball( m_quat_t1, 0.0, 0.0, 0.0, 0.0 );
 }
+
 
 void TRACK_BALL::Drag( const wxPoint& aNewMousePosition )
 {

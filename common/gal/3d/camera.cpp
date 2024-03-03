@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,6 +29,7 @@
 #include <gal/3d/camera.h>
 #include <wx/log.h>
 #include <algorithm>
+#include <3d_enums.h>
 
 // A helper function to normalize aAngle between -2PI and +2PI
 inline void normalise2PI( float& aAngle )
@@ -50,15 +51,22 @@ const float CAMERA::DEFAULT_MIN_ZOOM = 0.020f;
 const float CAMERA::DEFAULT_MAX_ZOOM = 2.0f;
 
 
-CAMERA::CAMERA( float aInitialDistance )
+CAMERA::CAMERA( float aInitialDistance ) :
+        CAMERA( SFVEC3F( 0.0f, 0.0f, -aInitialDistance ), SFVEC3F( 0.0f ),
+                PROJECTION_TYPE::PERSPECTIVE )
+{
+}
+
+
+CAMERA::CAMERA( SFVEC3F aInitPos, SFVEC3F aLookat, PROJECTION_TYPE aProjectionType )
 {
     wxLogTrace( m_logTrace, wxT( "CAMERA::CAMERA" ) );
 
-    m_camera_pos_init       = SFVEC3F( 0.0f, 0.0f, -aInitialDistance );
-    m_board_lookat_pos_init = SFVEC3F( 0.0f );
-    m_windowSize            = SFVEC2I( 0, 0 );
-    m_projectionType        = PROJECTION_TYPE::PERSPECTIVE;
-    m_interpolation_mode    = CAMERA_INTERPOLATION::BEZIER;
+    m_camera_pos_init = aInitPos;
+    m_board_lookat_pos_init = aLookat;
+    m_windowSize = SFVEC2I( 0, 0 );
+    m_projectionType = aProjectionType;
+    m_interpolation_mode = CAMERA_INTERPOLATION::BEZIER;
 
     m_minZoom = DEFAULT_MIN_ZOOM;
     m_maxZoom = DEFAULT_MAX_ZOOM;
@@ -96,6 +104,57 @@ void CAMERA::Reset()
     m_scr_nX.clear();
     m_scr_nY.clear();
     rebuildProjection();
+}
+
+
+bool CAMERA::ViewCommand_T1( VIEW3D_TYPE aRequestedView )
+{
+    switch( aRequestedView )
+    {
+    case VIEW3D_TYPE::VIEW3D_RIGHT:
+        SetT0_and_T1_current_T();
+        Reset_T1();
+        RotateZ_T1( glm::radians( -90.0f ) );
+        RotateX_T1( glm::radians( -90.0f ) );
+        return true;
+
+    case VIEW3D_TYPE::VIEW3D_LEFT:
+        Reset_T1();
+        RotateZ_T1( glm::radians(  90.0f ) );
+        RotateX_T1( glm::radians( -90.0f ) );
+        return true;
+
+    case VIEW3D_TYPE::VIEW3D_FRONT:
+        Reset_T1();
+        RotateX_T1( glm::radians( -90.0f ) );
+        return true;
+
+    case VIEW3D_TYPE::VIEW3D_BACK:
+        Reset_T1();
+        RotateX_T1( glm::radians( -90.0f ) );
+
+        // The rotation angle should be 180.
+        // We use 179.999 (180 - epsilon) to avoid a full 360 deg rotation when
+        // using 180 deg if the previous rotated position was already 180 deg
+        RotateZ_T1( glm::radians( 179.999f ) );
+        return true;
+
+    case VIEW3D_TYPE::VIEW3D_TOP:
+        Reset_T1();
+        return true;
+
+    case VIEW3D_TYPE::VIEW3D_BOTTOM:
+        Reset_T1();
+        RotateY_T1( glm::radians( 179.999f ) );    // Rotation = 180 - epsilon
+        return true;
+
+    case VIEW3D_TYPE::VIEW3D_FLIP:
+        RotateY_T1( glm::radians( 179.999f ) );
+        return true;
+
+    default:
+        return false;
+    }
 }
 
 

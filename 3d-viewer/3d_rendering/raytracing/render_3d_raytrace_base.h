@@ -22,10 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef RENDER_3D_RAYTRACE_H
-#define RENDER_3D_RAYTRACE_H
+#ifndef RENDER_3D_RAYTRACE_BASE_H
+#define RENDER_3D_RAYTRACE_BASE_H
 
-#include "../../common_ogl/openGL_includes.h"
 #include "accelerators/container_3d.h"
 #include "accelerators/accelerator_3d.h"
 #include "../render_3d_base.h"
@@ -52,19 +51,16 @@ typedef enum
 } RT_RENDER_STATE;
 
 
-class RENDER_3D_RAYTRACE : public RENDER_3D_BASE
+class RENDER_3D_RAYTRACE_BASE : public RENDER_3D_BASE
 {
 public:
     // TODO: Take into account board thickness so that the camera won't move inside of the board
     // when facing it perpendicularly.
     static constexpr float MIN_DISTANCE_IU = 4 * PCB_IU_PER_MM;
 
-    explicit RENDER_3D_RAYTRACE( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
+    explicit RENDER_3D_RAYTRACE_BASE( BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
 
-    ~RENDER_3D_RAYTRACE();
-
-    void SetCurWindowSize( const wxSize& aSize ) override;
-    bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
+    ~RENDER_3D_RAYTRACE_BASE();
 
     int GetWaitForEditingTimeOut() override;
 
@@ -73,11 +69,9 @@ public:
 
     BOARD_ITEM *IntersectBoardItem( const RAY& aRay );
 
-private:
-    bool initializeOpenGL();
-    void initializeNewWindowSize();
-    void initPbo();
-    void deletePbo();
+protected:
+    virtual void initPbo() = 0;
+    virtual void deletePbo() = 0;
     void createItemsFromContainer( const BVH_CONTAINER_2D* aContainer2d, PCB_LAYER_ID aLayer_id,
                                    const MATERIAL* aMaterialLayer, const SFVEC3F& aLayerColor,
                                    float aLayerZOffset );
@@ -128,6 +122,8 @@ private:
     void render( GLubyte* ptrPBO, REPORTER* aStatusReporter );
     void renderPreview( GLubyte* ptrPBO );
 
+    static SFVEC4F premultiplyAlpha( const SFVEC4F& aInput );
+
     struct
     {
         BLINN_PHONG_MATERIAL m_Paste;
@@ -148,6 +144,7 @@ private:
     BRUSHED_METAL_NORMAL m_brushedMetalMaterial;
     SILK_SCREEN_NORMAL   m_silkScreenMaterial;
 
+    bool m_is_canvas_initialized;
     bool m_isPreview;
 
     /// State used on quality render
@@ -165,10 +162,8 @@ private:
 
     DIRECTIONAL_LIGHT* m_cameraLight;
 
-    bool m_openglSupportsVertexBufferObjects;
-
-    GLuint m_pboId;
-    GLuint m_pboDataSize;
+    /*GLuint m_pboId;
+    GLuint m_pboDataSize;*/
 
     CONTAINER_3D m_objectContainer;
 
@@ -224,4 +219,4 @@ extern SFVEC4F ConvertSRGBAToLinear( const SFVEC4F& aSRGBAcolor );
 #define ConvertSRGBAToLinear( v ) ( v )
 #endif
 
-#endif // RENDER_3D_RAYTRACE_H
+#endif // RENDER_3D_RAYTRACE_BASE_H

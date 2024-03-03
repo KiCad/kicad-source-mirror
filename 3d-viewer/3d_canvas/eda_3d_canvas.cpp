@@ -29,7 +29,7 @@
 #include "../common_ogl/ogl_utils.h"
 #include "eda_3d_canvas.h"
 #include <eda_3d_viewer_frame.h>
-#include <3d_rendering/raytracing/render_3d_raytrace.h>
+#include <3d_rendering/raytracing/render_3d_raytrace_gl.h>
 #include <3d_rendering/opengl/render_3d_opengl.h>
 #include <3d_viewer_id.h>
 #include <advanced_config.h>
@@ -119,7 +119,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow* aParent, const wxGLAttributes& aGLAttrib
 
     m_is_currently_painting.clear();
 
-    m_3d_render_raytracing = new RENDER_3D_RAYTRACE( this, m_boardAdapter, m_camera );
+    m_3d_render_raytracing = new RENDER_3D_RAYTRACE_GL( this, m_boardAdapter, m_camera );
     m_3d_render_opengl = new RENDER_3D_OPENGL( this, m_boardAdapter, m_camera );
 
     wxASSERT( m_3d_render_raytracing != nullptr );
@@ -979,64 +979,22 @@ bool EDA_3D_CANVAS::SetView3D( VIEW3D_TYPE aRequestedView )
         return true;
 
     case VIEW3D_TYPE::VIEW3D_RIGHT:
-        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_camera.SetT0_and_T1_current_T();
-        m_camera.Reset_T1();
-        m_camera.RotateZ_T1( glm::radians( -90.0f ) );
-        m_camera.RotateX_T1( glm::radians( -90.0f ) );
-        request_start_moving_camera();
-        return true;
-
     case VIEW3D_TYPE::VIEW3D_LEFT:
-        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_camera.SetT0_and_T1_current_T();
-        m_camera.Reset_T1();
-        m_camera.RotateZ_T1( glm::radians(  90.0f ) );
-        m_camera.RotateX_T1( glm::radians( -90.0f ) );
-        request_start_moving_camera();
-        return true;
-
     case VIEW3D_TYPE::VIEW3D_FRONT:
-        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_camera.SetT0_and_T1_current_T();
-        m_camera.Reset_T1();
-        m_camera.RotateX_T1( glm::radians( -90.0f ) );
-        request_start_moving_camera();
-        return true;
-
     case VIEW3D_TYPE::VIEW3D_BACK:
+    case VIEW3D_TYPE::VIEW3D_FLIP:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
-        m_camera.Reset_T1();
-        m_camera.RotateX_T1( glm::radians( -90.0f ) );
-
-        // The rotation angle should be 180.
-        // We use 179.999 (180 - epsilon) to avoid a full 360 deg rotation when
-        // using 180 deg if the previous rotated position was already 180 deg
-        m_camera.RotateZ_T1( glm::radians( 179.999f ) );
+        m_camera.ViewCommand_T1( aRequestedView );
         request_start_moving_camera();
         return true;
 
     case VIEW3D_TYPE::VIEW3D_TOP:
-        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_camera.SetT0_and_T1_current_T();
-        m_camera.Reset_T1();
-        request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
-        return true;
-
     case VIEW3D_TYPE::VIEW3D_BOTTOM:
         m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
         m_camera.SetT0_and_T1_current_T();
-        m_camera.Reset_T1();
-        m_camera.RotateY_T1( glm::radians( 179.999f ) );    // Rotation = 180 - epsilon
+        m_camera.ViewCommand_T1( aRequestedView );
         request_start_moving_camera( glm::min( glm::max( m_camera.GetZoom(), 0.5f ), 1.125f ) );
-        return true;
-
-    case VIEW3D_TYPE::VIEW3D_FLIP:
-        m_camera.SetInterpolateMode( CAMERA_INTERPOLATION::BEZIER );
-        m_camera.SetT0_and_T1_current_T();
-        m_camera.RotateY_T1( glm::radians( 179.999f ) );
-        request_start_moving_camera();
         return true;
 
     default:

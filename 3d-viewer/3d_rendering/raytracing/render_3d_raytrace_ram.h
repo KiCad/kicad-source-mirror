@@ -1,7 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2015-2020 Mario Luzeiro <mrluzeiro@ua.pt>
+ * Copyright (C) 2024 Alex Shvartzkop <dudesuchamazing@gmail.com>
  * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -22,49 +23,36 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file track_ball.h
- * @brief Declaration for a track ball camera
- */
+#ifndef RENDER_3D_RAYTRACE_RAM_H
+#define RENDER_3D_RAYTRACE_RAM_H
 
-#ifndef TRACK_BALL_H
-#define TRACK_BALL_H
-
-#include <gal/3d/camera.h>
+#include "render_3d_raytrace_base.h"
 
 
-class TRACK_BALL : public CAMERA
+class RENDER_3D_RAYTRACE_RAM : public RENDER_3D_RAYTRACE_BASE
 {
 public:
-    explicit TRACK_BALL( float aInitialDistance );
-    explicit TRACK_BALL( SFVEC3F aInitPos, SFVEC3F aLookat, PROJECTION_TYPE aProjectionType );
+    // TODO: Take into account board thickness so that the camera won't move inside of the board
+    // when facing it perpendicularly.
+    static constexpr float MIN_DISTANCE_IU = 4 * PCB_IU_PER_MM;
 
-    virtual ~TRACK_BALL()
-    {
-    }
+    explicit RENDER_3D_RAYTRACE_RAM( BOARD_ADAPTER& aAdapter, CAMERA& aCamera );
 
-    void Drag( const wxPoint& aNewMousePosition ) override;
+    ~RENDER_3D_RAYTRACE_RAM();
 
-    void Pan( const wxPoint& aNewMousePosition ) override;
+    GLubyte* GetBuffer();
+    wxSize   GetRealBufferSize();
 
-    void Pan( const SFVEC3F& aDeltaOffsetInc ) override;
-
-    void Pan_T1( const SFVEC3F& aDeltaOffsetInc ) override;
-
-    void Reset_T1() override;
-
-    void SetT0_and_T1_current_T() override;
-
-    void Interpolate( float t ) override;
+    void SetCurWindowSize( const wxSize& aSize ) override;
+    bool Redraw( bool aIsMoving, REPORTER* aStatusReporter, REPORTER* aWarningReporter ) override;
 
 private:
-    void initQuat();
+    void initPbo() override;
+    void deletePbo() override;
 
-    /**
-     *  interpolate quaternions of the trackball
-     */
-    double m_quat_t0[4];
-    double m_quat_t1[4];
+    GLubyte* m_outputBuffer;
+    GLuint   m_pboDataSize;
 };
 
-#endif // TRACK_BALL_H
+
+#endif // RENDER_3D_RAYTRACE_RAM_H

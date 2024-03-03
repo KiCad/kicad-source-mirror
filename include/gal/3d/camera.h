@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,6 +34,7 @@
 #include <plugins/3dapi/xv3d_types.h>
 #include <wx/gdicmn.h>  // for wxSize
 #include <vector>
+#include <3d_enums.h>
 
 enum class PROJECTION_TYPE
 {
@@ -110,6 +111,7 @@ public:
      * @param aInitialDistance Initial Z-distance to the board
      */
     explicit CAMERA( float aInitialDistance );
+    explicit CAMERA( SFVEC3F aInitPos, SFVEC3F aLookat, PROJECTION_TYPE aProjectionType );
 
     virtual ~CAMERA()
     {
@@ -231,6 +233,8 @@ public:
         m_maxZoom = maxZoom;
         zoomChanged();
     }
+
+    bool ViewCommand_T1( VIEW3D_TYPE aRequestedView );
 
     void RotateX( float aAngleInRadians );
     void RotateY( float aAngleInRadians );

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2020 Oleg Endo <olegendo@gcc.gnu.org>
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 2015-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 #include <plugins/3dapi/c3dmodel.h>
 #include "../../common_ogl/openGL_includes.h"
 #include "../raytracing/shapes3D/bbox_3d.h"
-#include "../../3d_enums.h"
+#include <3d_enums.h>
 
 #include <wx/chartype.h>
 

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2023 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
 #include "../3d_rendering/raytracing/accelerators/container_3d.h"
 #include "../3d_rendering/raytracing/shapes3D/bbox_3d.h"
 #include <gal/3d/camera.h>
-#include "../3d_enums.h"
+#include <3d_enums.h>
 #include "../3d_cache/3d_cache.h"
 #include "../common_ogl/ogl_attr_list.h"
 #include "../3d_viewer/eda_3d_viewer_settings.h"

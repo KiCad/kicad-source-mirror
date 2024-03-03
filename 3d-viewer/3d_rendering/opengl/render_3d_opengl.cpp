@@ -47,7 +47,8 @@
 
 RENDER_3D_OPENGL::RENDER_3D_OPENGL( EDA_3D_CANVAS* aCanvas, BOARD_ADAPTER& aAdapter,
                                     CAMERA& aCamera ) :
-        RENDER_3D_BASE( aCanvas, aAdapter, aCamera )
+        RENDER_3D_BASE( aAdapter, aCamera ),
+        m_canvas( aCanvas )
 {
     wxLogTrace( m_logTrace, wxT( "RENDER_3D_OPENGL::RENDER_3D_OPENGL" ) );
 
@@ -454,7 +455,7 @@ bool RENDER_3D_OPENGL::Redraw( bool aIsMoving, REPORTER* aStatusReporter,
                                REPORTER* aWarningReporter )
 {
     // Initialize OpenGL
-    if( !m_is_opengl_initialized )
+    if( !m_canvasInitialized )
     {
         if( !initializeOpenGL() )
             return false;
@@ -823,7 +824,7 @@ bool RENDER_3D_OPENGL::initializeOpenGL()
 
     // Use this mode if you want see the triangle lines (debug proposes)
     //glPolygonMode( GL_FRONT_AND_BACK,  GL_LINE );
-    m_is_opengl_initialized = true;
+    m_canvasInitialized = true;
 
     return true;
 }
@@ -1021,7 +1022,7 @@ void RENDER_3D_OPENGL::get3dModelsFromFootprint( std::list<MODELTORENDER> &aDstR
                     const SFVEC3F offset = SFVEC3F( sM.m_Offset.x, sM.m_Offset.y, sM.m_Offset.z );
                     const SFVEC3F rotation = SFVEC3F( sM.m_Rotation.x, sM.m_Rotation.y, sM.m_Rotation.z );
                     const SFVEC3F scale = SFVEC3F( sM.m_Scale.x, sM.m_Scale.y, sM.m_Scale.z );
-                    
+
                     std::vector<float> key = { offset.x, offset.y, offset.z,
                                                rotation.x, rotation.y, rotation.z,
                                                scale.x, scale.y, scale.z };
@@ -1134,7 +1135,7 @@ void RENDER_3D_OPENGL::renderTransparentModels( const glm::mat4 &aCameraViewMatr
         const SFVEC3F bBoxWorld = mtr.m_modelWorldMat * glm::vec4( bBoxCenter, 1.0f );
 
         const float distanceToCamera = glm::length( cameraPos - bBoxWorld );
-        
+
         transparentModelList.emplace_back( &mtr, distanceToCamera );
     }
 
@@ -1224,7 +1225,7 @@ void RENDER_3D_OPENGL::renderModel( const glm::mat4 &aCameraViewMatrix,
         aModelToRender.m_model->DrawBbox();
 
         glEnable( GL_LIGHTING );
-        
+
         if( !wasBlendEnabled )
             glDisable( GL_BLEND );
     }

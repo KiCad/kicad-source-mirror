@@ -88,6 +88,7 @@ set( KICOMMON_SRCS
     jobs/job_export_sch_pythonbom.cpp
     jobs/job_fp_export_svg.cpp
     jobs/job_fp_upgrade.cpp
+    jobs/job_pcb_render.cpp
     jobs/job_pcb_drc.cpp
     jobs/job_sch_erc.cpp
     jobs/job_sym_export_svg.cpp
