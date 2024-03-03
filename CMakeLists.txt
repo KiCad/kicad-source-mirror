@@ -514,6 +514,8 @@ if( MSVC )
     string( APPEND CMAKE_CXX_FLAGS " /wd4800" )
     # /Zi: create PDB
     string( APPEND CMAKE_CXX_FLAGS " /Zi" )
+    # /Zc:__cplusplus: define this macro according to C++ standard version
+    string( APPEND CMAKE_CXX_FLAGS " /Zc:__cplusplus" )
     # /GF: enable string pooling
     string( APPEND CMAKE_CXX_FLAGS_RELEASE " /GF" )
     string( APPEND CMAKE_CXX_FLAGS_RELWITHDEBINFO " /GF" )
