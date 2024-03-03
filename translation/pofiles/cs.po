@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-02-28 10:15+0000\n"
-"Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
+"PO-Revision-Date: 2024-03-04 07:01+0000\n"
+"Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -2009,7 +2009,7 @@ msgstr "Překladatelé"
 
 #: common/dialog_about/dialog_about.cpp:147
 msgid "Packagers"
-msgstr "Balírny"
+msgstr "Tvůrci balíčků"
 
 #: common/dialog_about/dialog_about.cpp:150
 msgid "License"
@@ -3355,7 +3355,7 @@ msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
-msgstr ""
+msgstr "C&ommit"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
 msgid "Commit message cannot be empty"
@@ -3485,7 +3485,7 @@ msgstr "Přidat"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Data vložené na Git"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
 msgid "Use default values"
@@ -5964,20 +5964,20 @@ msgstr "Nelze analyzovat sloučení"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
-msgstr ""
+msgstr "Neplatný HEAD. Nelze sloučit."
 
 #: common/git/git_pull_handler.cpp:177
 msgid "Could not get repository head"
-msgstr ""
+msgstr "Nelze získat hlavičku repozitáře"
 
 #: common/git/git_pull_handler.cpp:187
 #, c-format
 msgid "Could not get reference OID for reference '%s'"
-msgstr ""
+msgstr "Nelze získat referenční OID pro referenci '%s'"
 
 #: common/git/git_pull_handler.cpp:195 common/git/kicad_git_errors.cpp:54
 msgid "Failed to perform checkout operation."
-msgstr ""
+msgstr "Provedení kontrolní operace se nezdařilo."
 
 #: common/git/git_pull_handler.cpp:212
 #, fuzzy
@@ -5985,9 +5985,8 @@ msgid "Could not lookup commit '{}'"
 msgstr "Nelze načíst obrázek z '%s'."
 
 #: common/git/git_pull_handler.cpp:249
-#, fuzzy
 msgid "Could not merge commits"
-msgstr "Nepodařilo se přečíst soubor "
+msgstr "Nelze sloučit comity"
 
 #: common/git/git_pull_handler.cpp:257
 #, fuzzy
@@ -6040,7 +6039,7 @@ msgstr "* [nový] %s %s"
 #: common/git/kicad_git_common.cpp:470
 #, c-format
 msgid "Writing objects: %d%% (%d/%d), %d bytes"
-msgstr ""
+msgstr "Zapisují se objekty: %d%% (%d/%d), %d bajtů"
 
 #: common/git/kicad_git_common.cpp:485
 #, c-format
@@ -6070,9 +6069,8 @@ msgid "Failed to clone repository."
 msgstr "Nelze načíst adresu URL repozitáře"
 
 #: common/git/kicad_git_errors.cpp:45
-#, fuzzy
 msgid "Remote repository not found."
-msgstr "Repositář"
+msgstr "Vzdálený repozitář nenalezen."
 
 #: common/git/kicad_git_errors.cpp:46
 msgid "Authentication failed for remote repository."
@@ -6254,7 +6252,7 @@ msgstr "Gesta"
 
 #: common/http_lib/http_lib_connection.cpp:73
 msgid "KiCad received an empty response!"
-msgstr ""
+msgstr "KiCad dostal prázdnou odpověď!"
 
 #: common/http_lib/http_lib_connection.cpp:89
 #: common/http_lib/http_lib_connection.cpp:154
@@ -6270,12 +6268,12 @@ msgstr "Chyba: %s"
 #: common/http_lib/http_lib_connection.cpp:356
 #, c-format
 msgid "API Response:  %s"
-msgstr ""
+msgstr "Odpověď API:  %s"
 
 #: common/http_lib/http_lib_connection.cpp:374
 #, c-format
 msgid "API responded with error code: %s"
-msgstr ""
+msgstr "API odpovědělo kódem chyby: %s"
 
 #: common/import_gfx/dxf_import_plugin.cpp:134
 #: common/import_gfx/dxf_import_plugin.cpp:154
@@ -6944,7 +6942,7 @@ msgstr "Zobrazit podrobnosti"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
-msgstr ""
+msgstr "Zamítnuto"
 
 #: common/notifications_manager.cpp:155
 #, fuzzy
@@ -8513,7 +8511,7 @@ msgstr "Generovat netlist"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "EasyEDA (JLCEDA) Std backup archive"
-msgstr ""
+msgstr "Zálohovací archiv EasyEDA (JLCEDA) Std"
 
 #: common/wildcards_and_files_ext.cpp:304
 #: eeschema/sch_io/easyedapro/sch_io_easyedapro.h:46
@@ -10148,7 +10146,7 @@ msgstr "Uložit všechna napětí"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:308
 msgid "Write a directive to save all voltages (.save all)"
-msgstr ""
+msgstr "Napsat směrnici pro uložení všech napětí (.save all)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:313
 #: eeschema/dialogs/dialog_sim_command_base.cpp:650
@@ -10157,7 +10155,7 @@ msgstr "Uložit všechny proudy"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:314
 msgid "Write a directive to save all currents (.probe alli)"
-msgstr ""
+msgstr "Napsat směrnici pro uložení všech proudů (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:319
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
@@ -10169,6 +10167,7 @@ msgstr "Max povolená odchylka:"
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
 msgstr ""
+"Napsat směrnice o uložení rozptylu napájení všech položek (.probe p(<item>))"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:326
 msgid "Run external simulator command:"
@@ -10543,9 +10542,8 @@ msgid "-- leave unchanged --"
 msgstr "-- nechat beze změny --"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:248
-#, fuzzy
 msgid "(labels only)"
-msgstr "(pouze pole)"
+msgstr "(pouze popisky)"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:279
 msgid "H Align:"
@@ -12620,7 +12618,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:526
 msgid "Compute noise current correlation matrix"
-msgstr ""
+msgstr "Výpočet korelační matice šumu"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:538
 msgid "Spice directives:"
@@ -12636,11 +12634,11 @@ msgstr "Funkce přenosu:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input voltage)"
-msgstr ""
+msgstr "(výstupní napětí) / (vstupní napětí)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:571
 msgid "(output voltage) / (input current)"
-msgstr ""
+msgstr "(výstupní napětí) / (vstupní proud)"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:577
 msgid "Input:"
@@ -12825,7 +12823,7 @@ msgstr "Fáze"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:25
 msgid "Significant digits:"
-msgstr ""
+msgstr "Významné číslice:"
 
 #: eeschema/dialogs/dialog_sim_format_value_base.cpp:32
 msgid "Range:"
@@ -14248,7 +14246,7 @@ msgstr "Provozní bod"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:288
 msgid "Significant digits (voltages):"
-msgstr ""
+msgstr "Významné číslice (napětí):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:296
 msgid "Range (voltages):"
@@ -14298,7 +14296,7 @@ msgstr "PV"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:307
 msgid "Significant digits (currents):"
-msgstr ""
+msgstr "Významné číslice (proudy):"
 
 #: eeschema/dialogs/panel_setup_formatting_base.cpp:315
 msgid "Range (currents):"
@@ -24116,7 +24114,7 @@ msgstr "Import souborů projektu Eagle"
 
 #: kicad/import_project.cpp:160
 msgid "Import EasyEDA Std Backup"
-msgstr ""
+msgstr "Import zálohy EasyEDA Std"
 
 #: kicad/import_project.cpp:167
 #, fuzzy
@@ -31170,9 +31168,8 @@ msgid "Success"
 msgstr "Úspěch."
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:246
-#, fuzzy
 msgid "Command line:\n"
-msgstr "Příkazová řádka:"
+msgstr "Příkazová řádka:\n"
 
 #: pcbnew/dialogs/dialog_export_step_process_base.h:46
 #, fuzzy
@@ -41864,7 +41861,7 @@ msgstr "Nepodařilo se smazat '%s'"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.h:88
 msgid "IPC-2581 Production File"
-msgstr ""
+msgstr "Výrobní soubor IPC-2581"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:653
 #, c-format
