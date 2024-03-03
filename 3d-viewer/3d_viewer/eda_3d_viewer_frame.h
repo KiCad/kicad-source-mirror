@@ -5,7 +5,7 @@
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2023 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,6 +166,8 @@ private:
      * Load configuration from common settings.
      */
     void loadCommonSettings();
+
+    void applySettings( EDA_3D_VIEWER_SETTINGS* aSettings );
 
 private:
     wxFileName                     m_defaultSaveScreenshotFileName;

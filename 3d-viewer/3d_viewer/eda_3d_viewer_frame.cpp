@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2023 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -568,20 +568,14 @@ void EDA_3D_VIEWER_FRAME::LoadSettings( APP_SETTINGS_BASE *aCfg )
 
     if( cfg )
     {
-        m_boardAdapter.m_Cfg = cfg;
+        applySettings( cfg );
+
         m_boardAdapter.SetBoard( GetBoard() );
 
         // When opening the 3D viewer, we use the OpenGL mode, never the ray tracing engine
         // because the ray tracing is very time consuming, and can be seen as not working
         // (freeze window) with large boards.
         m_boardAdapter.m_Cfg->m_Render.engine = RENDER_ENGINE::OPENGL;
-
-        m_canvas->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
-        m_canvas->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
-        m_canvas->SetProjectionMode( cfg->m_Camera.projection_mode );
-
-
-        m_canvas->SetVcSettings( EDA_DRAW_PANEL_GAL::GetVcSettings() );
 
         if( cfg->m_CurrentPreset == LEGACY_PRESET_FLAG )
         {
@@ -645,7 +639,7 @@ void EDA_3D_VIEWER_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTex
     ReCreateMainToolbar();
 
     loadCommonSettings();
-    LoadSettings( Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>() );
+    applySettings( Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>() );
 
     m_appearancePanel->CommonSettingsChanged();
 
@@ -823,4 +817,16 @@ void EDA_3D_VIEWER_FRAME::loadCommonSettings()
 
     // TODO(JE) use all control options
     m_boardAdapter.m_MousewheelPanning = settings->m_Input.scroll_modifier_zoom != 0;
+}
+
+
+void EDA_3D_VIEWER_FRAME::applySettings( EDA_3D_VIEWER_SETTINGS* cfg )
+{
+    m_boardAdapter.m_Cfg = cfg;
+
+    m_canvas->SetAnimationEnabled( cfg->m_Camera.animation_enabled );
+    m_canvas->SetMovingSpeedMultiplier( cfg->m_Camera.moving_speed_multiplier );
+    m_canvas->SetProjectionMode( cfg->m_Camera.projection_mode );
+
+    m_canvas->SetVcSettings( EDA_DRAW_PANEL_GAL::GetVcSettings() );
 }
