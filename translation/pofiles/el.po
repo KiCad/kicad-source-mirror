@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-03-03 06:01+0000\n"
+"PO-Revision-Date: 2024-03-04 07:01+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v8/el/>\n"
 "Language: el\n"
@@ -32648,9 +32648,8 @@ msgstr ""
 "δάκρυα."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
-#, fuzzy
 msgid "(as a percentage of pad/via minor dimension)"
-msgstr "(ως ποσοστό μεγέθους έδρας/διέλευσης)"
+msgstr "(ως ποσοστό της δευτερεύουσας διάστασης έδρας/διέλευσης)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:706
@@ -34732,9 +34731,8 @@ msgid "Associated layer:"
 msgstr "Συσχετισμένο επίπεδο:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
-#, fuzzy
 msgid "Reference Image Properties"
-msgstr "Ιδιότητες Εικόνας"
+msgstr "Ιδιότητες Εικόνας Αναφοράς"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
 #: pcbnew/tools/convert_tool.cpp:98
@@ -41476,7 +41474,7 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Παράβλεψη σχήματος πολυγώνου %d (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
@@ -41484,16 +41482,16 @@ msgid ""
 msgstr ""
 "Φόρτωση βιβλιοθήκης '%s':\n"
 "Το αποτύπωμα %s περιέχει διακεκομμένο περίγραμμα στο επίπεδο του Altium (%d) "
-"χωρίς ισοδύναμο στο KiCad. Τοποθέτηση στο Eco1_User."
+"χωρίς ισοδύναμο στο KiCad. Έχει μετακινηθεί στο Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "Το αποτύπωμα %s περιέχει διακεκομμένο περίγραμμα στο επίπεδο του Altium (%d) "
-"χωρίς ισοδύναμο στο KiCad. Τοποθέτηση στο Eco1_User."
+"χωρίς ισοδύναμο στο KiCad. Έχει μετακινηθεί στο Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
 #, c-format
@@ -41539,12 +41537,13 @@ msgstr ""
 "είναι έδρα TH/διαμπερής."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"Η έδρα '%s' του αποτυπώματος %s έχει τετράγωνη οπή (δεν υποστηρίζεται ακόμη)."
+"Φόρτωση βιβλιοθήκης '%s':\n"
+"Το αποτύπωμα %s έχει έδρα %s με τετράγωνη οπή (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2795
 #, c-format
@@ -41553,12 +41552,13 @@ msgstr ""
 "Η έδρα '%s' του αποτυπώματος %s έχει τετράγωνη οπή (δεν υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"Φόρτωση βιβλιοθήκης '%s':\n"
 "Στο αποτύπωμα %s, έδρα %s, υπάρχει περιστραμμένη τρύπα κατά %f μοίρες. Το "
 "KiCad υποστηρίζει μόνο περιστροφές 90 μοιρών."
 
@@ -41572,11 +41572,13 @@ msgstr ""
 "KiCad υποστηρίζει μόνο περιστροφές 90 μοιρών."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Το αποτύπωμα %s έδρα %s χρησιμοποιεί μια τρύπα αγνώστου είδους %d."
+msgstr ""
+"Σφάλμα φόρτωσης βιβλιοθήκης '%s':\n"
+"Το αποτύπωμα %s έδρα %s χρησιμοποιεί μια τρύπα αγνώστου είδους %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2859
 #, c-format
@@ -41584,27 +41586,30 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Το αποτύπωμα %s έδρα %s χρησιμοποιεί μια τρύπα αγνώστου είδους %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"Το αποτύπωμα %s με έδρες %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
+"Σφάλμα φόρτωσης βιβλιοθήκης '%s':\n"
+"Το αποτύπωμα %s με έδρα %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
 "οποία δεν υποστηρίζεται ακόμη.)"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"Το αποτύπωμα %s με έδρες %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
+"Το αποτύπωμα %s με έδρα %s χρησιμοποιεί μια σύνθετη στοίβαξη στις έδρες (η "
 "οποία δεν υποστηρίζεται ακόμη.)"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "Το αποτύπωμα %s έδρα %s χρησιμοποιεί ένα άγνωστο σχήμα έδρας."
+msgstr ""
+"Σφάλμα φόρτωσης βιβλιοθήκης '%s':\n"
+"Το αποτύπωμα %s έδρα %s χρησιμοποιεί ένα άγνωστο σχήμα έδρας."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2936
 #, c-format
@@ -41621,23 +41626,24 @@ msgstr ""
 "Τοποθέτηση στο επίπεδο Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Μη χάλκινη έδρα %s στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο επίπεδο Eco1_User."
+"Φόρτωση βιβλιοθήκης '%s':\n"
+"Στο αποτύπωμα %s η χάλκινη έδρα %s στο επίπεδο του Altium (%d) δεν έχει "
+"ισοδύναμο στο KiCad. Έχει μετακινηθεί στο επίπεδο Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Μη χάλκινη έδρα %s στο επίπεδο του Altium (%d) δεν έχει ισοδύναμο στο KiCad. "
-"Τοποθέτηση στο επίπεδο Eco1_User."
+"Στο αποτύπωμα %s μη χάλκινη έδρα %s στο επίπεδο του Altium (%d) δεν έχει "
+"ισοδύναμο στο KiCad. Έχει μετακινηθεί στο επίπεδο Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
@@ -41656,7 +41662,7 @@ msgstr "Η μη χάλκινη έδρα '%s' έχει τρύπα, αυτό δε�
 msgid "Non-copper pad %s has a complex pad stack (not yet supported)."
 msgstr ""
 "Η μη χάλκινη έδρα '%s' χρησιμοποιεί μια σύνθετη στοίβαξη έδρας (δεν "
-"υποστηρίζεται ακόμα)."
+"υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3204
 #, c-format
@@ -41691,24 +41697,25 @@ msgstr "Φόρτωση κειμένου..."
 #, c-format
 msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"Παράβλεψη γραμμωτού κώδικα στο επίπεδο του Altium %d επειδή δεν "
-"υποστηρίζεται αυτήν τη στιγμή."
+"Παράβλεψη γραμμωτού κώδικα στο επίπεδο του Altium %d (δεν υποστηρίζεται "
+"ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"Παράβλεψη γραμμωτού κώδικα στο επίπεδο του Altium %d επειδή δεν "
-"υποστηρίζεται αυτήν τη στιγμή."
+"Σφάλμα φόρτωσης βιβλιοθήκης '%s':\n"
+"Το αποτύπωμα %s περιέχει γραμμωτό κώδικα στο επίπεδο του Altium %d (δεν "
+"υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"Παράβλεψη γραμμωτού κώδικα στο επίπεδο του Altium %d επειδή δεν "
-"υποστηρίζεται αυτήν τη στιγμή."
+"Το αποτύπωμα %s περιέχει γραμμωτό κώδικα στο επίπεδο του Altium %d (δεν "
+"υποστηρίζεται ακόμη)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3658
 msgid "Loading rectangles..."
@@ -46343,20 +46350,22 @@ msgid "Distribute Horizontally"
 msgstr "Διανομή Οριζόντια"
 
 #: pcbnew/tools/pcb_actions.cpp:1923
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most item"
-msgstr "Διανομή επιλεγμένων αντικειμένων κατά μήκος του οριζόντιου άξονα"
+msgstr ""
+"Κατανομή επιλεγμένων αντικειμένων μεταξύ του αριστερότερου και του "
+"δεξιότερου αντικειμένου"
 
 #: pcbnew/tools/pcb_actions.cpp:1929 pcbnew/tools/placement_tool.cpp:660
 msgid "Distribute Vertically"
 msgstr "Διανομή Κάθετα"
 
 #: pcbnew/tools/pcb_actions.cpp:1930
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most item"
-msgstr "Διανομή επιλεγμένων αντικειμένων κατά μήκος του κάθετου άξονα"
+msgstr ""
+"Κατανομή επιλεγμένων αντικειμένων μεταξύ του υψηλότερου και του χαμηλότερου "
+"αντικειμένου"
 
 #: pcbnew/tools/pcb_actions.cpp:1945
 msgid "Create a corner"
