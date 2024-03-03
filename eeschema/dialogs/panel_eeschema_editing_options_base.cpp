@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -94,27 +94,6 @@ PANEL_EESCHEMA_EDITING_OPTIONS_BASE::PANEL_EESCHEMA_EDITING_OPTIONS_BASE( wxWind
 
 
 	bLeftColumn->Add( bSizer6, 0, wxEXPAND|wxTOP|wxLEFT, 10 );
-
-
-	bLeftColumn->Add( 0, 15, 0, wxEXPAND, 5 );
-
-	m_selectionLabel = new wxStaticText( this, wxID_ANY, _("Selection"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_selectionLabel->Wrap( -1 );
-	bLeftColumn->Add( m_selectionLabel, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 13 );
-
-	m_staticline5 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bLeftColumn->Add( m_staticline5, 0, wxEXPAND|wxBOTTOM, 5 );
-
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxVERTICAL );
-
-	m_cbPinSelectionOpt = new wxCheckBox( this, wxID_ANY, _("Clicking on a pin selects the symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbPinSelectionOpt->SetToolTip( _("In schematic editor:\nIf enabled, clicking on a pin select the parent symbol.\nIf disabled, clicking on a pin select only the pin.") );
-
-	bSizer7->Add( m_cbPinSelectionOpt, 0, wxALL, 5 );
-
-
-	bLeftColumn->Add( bSizer7, 0, wxEXPAND|wxTOP|wxLEFT, 5 );
 
 
 	bLeftColumn->Add( 0, 15, 0, wxEXPAND, 5 );

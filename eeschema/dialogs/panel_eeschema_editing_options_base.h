@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,9 +50,6 @@ class PANEL_EESCHEMA_EDITING_OPTIONS_BASE : public RESETTABLE_PANEL
 		COLOR_SWATCH* m_borderColorSwatch;
 		wxStaticText* m_backgroundColorLabel;
 		COLOR_SWATCH* m_backgroundColorSwatch;
-		wxStaticText* m_selectionLabel;
-		wxStaticLine* m_staticline5;
-		wxCheckBox* m_cbPinSelectionOpt;
 		wxSimplebook* m_leftClickCmdsBook;
 		wxPanel* m_pageWinLin;
 		wxStaticText* m_leftClickLabel;

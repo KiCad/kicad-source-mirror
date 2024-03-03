@@ -82,7 +82,6 @@ void PANEL_EESCHEMA_EDITING_OPTIONS::loadEEschemaSettings( EESCHEMA_SETTINGS* aC
     m_checkAutoplaceAlign->SetValue( aCfg->m_AutoplaceFields.align_to_grid );
 
     m_mouseDragIsDrag->SetValue( !aCfg->m_Input.drag_is_move );
-    m_cbPinSelectionOpt->SetValue( aCfg->m_Selection.select_pin_selects_symbol );
 
     m_cbAutoStartWires->SetValue( aCfg->m_Drawing.auto_start_wires );
     m_escClearsNetHighlight->SetValue( aCfg->m_Input.esc_clears_net_highlight );
@@ -121,7 +120,6 @@ bool PANEL_EESCHEMA_EDITING_OPTIONS::TransferDataFromWindow()
     cfg->m_AutoplaceFields.align_to_grid = m_checkAutoplaceAlign->GetValue();
 
     cfg->m_Input.drag_is_move = !m_mouseDragIsDrag->GetValue();
-    cfg->m_Selection.select_pin_selects_symbol = m_cbPinSelectionOpt->GetValue();
 
     cfg->m_Drawing.auto_start_wires = m_cbAutoStartWires->GetValue();
     cfg->m_Input.esc_clears_net_highlight = m_escClearsNetHighlight->GetValue();

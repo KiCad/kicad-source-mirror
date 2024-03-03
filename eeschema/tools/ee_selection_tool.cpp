@@ -1044,7 +1044,9 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
     {
         aCollector.Collect( m_frame->GetScreen(), aScanTypes, aWhere, m_unit, m_bodyStyle );
 
-        if( m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
+        // If pins are disabled in the filter, they will be removed later.  Let's add the parent
+        // so that people can use pins to select symbols in this case.
+        if( !m_filter.pins )
         {
             int originalCount = aCollector.GetCount();
 
@@ -1338,11 +1340,6 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             int pixelThreshold = KiROUND( getView()->ToWorld( 6 ) );
 
             if( item->HitTest( aPos, pixelThreshold ) )
-                exactHits.insert( item );
-        }
-        else if( symbol && m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
-        {
-            if( symbol->GetBodyAndPinsBoundingBox().Contains( aPos ) )
                 exactHits.insert( item );
         }
         else if( table )
@@ -2437,7 +2434,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
         if( !pin->IsVisible() && !m_frame->GetShowAllPins() )
             return false;
 
-        if( m_frame->eeconfig()->m_Selection.select_pin_selects_symbol )
+        if( !m_filter.pins )
         {
             // Pin anchors have to be allowed for auto-starting wires.
             if( aPos )
