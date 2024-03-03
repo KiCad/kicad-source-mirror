@@ -150,14 +150,28 @@ nlohmann::json EASYEDAPRO::ReadProjectOrDeviceFile( const wxString& aZipFileName
     {
         wxString name = entry->GetName();
 
-        if( name == wxS( "project.json" ) || name == wxS( "device.json" ) )
+        try
         {
-            wxMemoryOutputStream memos;
-            memos << zip;
-            wxStreamBuffer* buf = memos.GetOutputStreamBuffer();
-            wxString        str( (char*) buf->GetBufferStart(), buf->GetBufferSize() );
+            if( name == wxS( "project.json" ) || name == wxS( "device.json" ) )
+            {
+                wxMemoryOutputStream memos;
+                memos << zip;
+                wxStreamBuffer* buf = memos.GetOutputStreamBuffer();
 
-            return nlohmann::json::parse( str );
+                wxString str =
+                        wxString::FromUTF8( (char*) buf->GetBufferStart(), buf->GetBufferSize() );
+
+                return nlohmann::json::parse( str );
+            }
+        }
+        catch( nlohmann::json::exception& e )
+        {
+            THROW_IO_ERROR(
+                    wxString::Format( _( "JSON error reading '%s': %s" ), name, e.what() ) );
+        }
+        catch( std::exception& e )
+        {
+            THROW_IO_ERROR( wxString::Format( _( "Error reading '%s': %s" ), name, e.what() ) );
         }
     }
 
