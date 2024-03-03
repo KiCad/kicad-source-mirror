@@ -369,7 +369,7 @@ void EDA_3D_CANVAS::DoRePaint()
     wxString           err_messages;
     INFOBAR_REPORTER   warningReporter( m_parentInfoBar );
     STATUSBAR_REPORTER activityReporter( m_parentStatusBar, EDA_3D_VIEWER_STATUSBAR::ACTIVITY );
-    unsigned           start_time = GetRunningMicroSecs();
+    int64_t            start_time = GetRunningMicroSecs();
 
     // "Makes the OpenGL state that is represented by the OpenGL rendering
     //  context context current, i.e. it will be used by all subsequent OpenGL calls.
@@ -461,7 +461,7 @@ void EDA_3D_CANVAS::DoRePaint()
 
     if( m_camera_is_moving )
     {
-        const unsigned curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
+        const int64_t curtime_delta = GetRunningMicroSecs() - m_strtime_camera_movement;
         curtime_delta_s = (curtime_delta / 1e6) * m_camera_moving_speed;
         m_camera.Interpolate( curtime_delta_s );
 

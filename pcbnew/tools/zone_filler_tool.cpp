@@ -211,7 +211,7 @@ int ZONE_FILLER_TOOL::ZoneFillDirty( const TOOL_EVENT& aEvent )
     if( m_fillInProgress )
         return 0;
 
-    unsigned startTime = GetRunningMicroSecs();
+    int64_t startTime = GetRunningMicroSecs();
     m_fillInProgress = true;
 
     m_dirtyZoneIDs.clear();

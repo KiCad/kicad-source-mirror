@@ -530,7 +530,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     m_boardBoundingBox = BBOX_3D( boardMin, boardMax );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
-    unsigned stats_startCreateBoardPolyTime = GetRunningMicroSecs();
+    int64_t stats_startCreateBoardPolyTime = GetRunningMicroSecs();
 #endif
 
     if( aStatusReporter )

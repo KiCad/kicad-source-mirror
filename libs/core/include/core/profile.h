@@ -36,6 +36,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <cstdint>
 
 /**
  * A small class to help profiling.
@@ -216,7 +217,7 @@ private:
  *         differences between two calls.
  * @author Dick Hollenbeck
  */
-unsigned GetRunningMicroSecs();
+int64_t GetRunningMicroSecs();
 
 
 /**

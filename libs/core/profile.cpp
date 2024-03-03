@@ -24,34 +24,35 @@
 
 
 #include <config.h>
+#include <cstdint>
 
 #if defined( _WIN32 )
 
 #define WIN32_LEAN_AND_MEAN 1
 #include <windows.h>
 
-unsigned GetRunningMicroSecs()
+int64_t GetRunningMicroSecs()
 {
     FILETIME now;
 
     GetSystemTimeAsFileTime( &now );
-    unsigned long long t = ( UINT64( now.dwHighDateTime ) << 32 ) + now.dwLowDateTime;
+    uint64_t t = ( UINT64( now.dwHighDateTime ) << 32 ) + now.dwLowDateTime;
     t /= 10;
 
-    return unsigned( t );
+    return int64_t( t );
 }
 
 #elif defined( HAVE_CLOCK_GETTIME )
 
 #include <ctime>
 
-unsigned GetRunningMicroSecs()
+int64_t GetRunningMicroSecs()
 {
     struct timespec now;
 
     clock_gettime( CLOCK_MONOTONIC, &now );
 
-    unsigned usecs = ( (unsigned) now.tv_nsec ) / 1000 + ( (unsigned) now.tv_sec ) * 1000000;
+    int64_t usecs = (int64_t) now.tv_sec * 1000000 + now.tv_nsec / 1000;
     //    unsigned msecs = (now.tv_nsec / (1000*1000)) + now.tv_sec * 1000;
 
     return usecs;
@@ -61,13 +62,13 @@ unsigned GetRunningMicroSecs()
 #elif defined( HAVE_GETTIMEOFDAY_FUNC )
 
 #include <sys/time.h>
-unsigned GetRunningMicroSecs()
+int64_t GetRunningMicroSecs()
 {
     timeval tv;
 
     gettimeofday( &tv, 0 );
 
-    return ( tv.tv_sec * 1000000 ) + tv.tv_usec;
+    return (int64_t) tv.tv_sec * 1000000 + tv.tv_usec;
 }
 
 #endif
