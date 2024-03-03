@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,7 +381,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             PAD_SHAPE padShape = pad->GetShape();
             VECTOR2I  padSize = pad->GetSize();
             VECTOR2I  padDelta = pad->GetDelta(); // has meaning only for trapezoidal pads
-            double    padCornerRadius = pad->GetRoundRectCornerRadius();
+            // CornerRadius and CornerRadiusRatio can be modified
+            // the radius is built from the ratio, so saving/restoring the ratio is enough
+            double    padCornerRadiusRatio = pad->GetRoundRectRadiusRatio();
 
             // Don't draw a 0 sized pad.
             // Note: a custom pad can have its pad anchor with size = 0
@@ -554,7 +556,7 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
             pad->SetSize( padSize );
             pad->SetDelta( padDelta );
             pad->SetShape( padShape );
-            pad->SetRoundRectCornerRadius( padCornerRadius );
+            pad->SetRoundRectRadiusRatio( padCornerRadiusRatio );
         }
 
         aPlotter->EndBlock( nullptr );
