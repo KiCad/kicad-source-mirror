@@ -11,16 +11,16 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-02-17 15:02+0000\n"
-"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
+"PO-Revision-Date: 2024-03-03 06:01+0000\n"
+"Last-Translator: pedrolinharesmoreira <pedrolinhares@unifei.edu.br>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
-"kicad/master-source/pt_BR/>\n"
+"kicad/v8/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -21987,9 +21987,8 @@ msgid "SVG File Name"
 msgstr "Nome do arquivo SVG"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Editar as linhas"
+msgstr "Editar os pinos"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -23053,7 +23052,6 @@ msgid "Move Layer Up"
 msgstr "Move a camada para cima"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
 msgstr "Mover a camada atual para cima"
 
@@ -23062,7 +23060,6 @@ msgid "Move Layer Down"
 msgstr "Move a camada para baixo"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
 msgstr "Move a camada atual para baixo"
 
@@ -41525,7 +41522,9 @@ msgstr ""
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "footprint %s ilha %s usa uma ilha com forma desconhecida."
+msgstr ""
+"Erro ao carregar biblioteca '%s':\n"
+"Footprint %s ilha %s usa uma ilha com forma desconhecida."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2936
 #, c-format
@@ -41638,9 +41637,9 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Arquivos do Altium Circuit Studio"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Nenhum footprint na biblioteca"
+msgstr "Nenhum footprint na biblioteca '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
 #, fuzzy, c-format
