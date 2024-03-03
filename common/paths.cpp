@@ -295,12 +295,16 @@ wxString PATHS::GetStockPlugins3DPath()
 {
     wxFileName fn;
 
-#ifdef __WXGTK__
-    // KICAD_PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
-    // corresponding to the install path used for constructing KICAD_USER_PLUGIN
-    wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
-    fn.Assign( tfname, "" );
-    fn.AppendDir( wxT( "kicad" ) );
+#if defined( __WXMSW__ )
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        fn.AssignDir( getWindowsKiCadRoot() );
+    }
+    else
+    {
+        fn.AssignDir( GetExecutablePath() );
+    }
+
     fn.AppendDir( wxT( "plugins" ) );
 #elif defined( __WXMAC__ )
     fn.Assign( wxStandardPaths::Get().GetPluginsDir(), wxEmptyString );
@@ -323,15 +327,11 @@ wxString PATHS::GetStockPlugins3DPath()
         fn.AppendDir( wxT( "PlugIns" ) );
     }
 #else
-    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
-    {
-        fn.AssignDir( getWindowsKiCadRoot() );
-    }
-    else
-    {
-        fn.AssignDir( GetExecutablePath() );
-    }
-
+    // KICAD_PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
+    // corresponding to the install path used for constructing KICAD_USER_PLUGIN
+    wxString tfname = wxString::FromUTF8Unchecked( KICAD_PLUGINDIR );
+    fn.Assign( tfname, "" );
+    fn.AppendDir( wxT( "kicad" ) );
     fn.AppendDir( wxT( "plugins" ) );
 #endif
 
