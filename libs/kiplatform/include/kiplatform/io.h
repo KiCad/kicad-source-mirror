@@ -44,6 +44,12 @@ namespace IO
      * @return true if the process was successful
      */
     bool DuplicatePermissions( const wxString& aSrc, const wxString& aDest );
+
+    /**
+    * Helper function to determine the status of the 'Hidden' file attribute.
+    * @return true if the file attribut is set.
+    */
+    bool IsFileHidden( const wxString& aFileName );
 } // namespace IO
 } // namespace KIPLATFORM
 

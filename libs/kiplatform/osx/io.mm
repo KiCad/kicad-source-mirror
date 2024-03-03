@@ -23,6 +23,7 @@
 
 #include <wx/crt.h>
 #include <wx/string.h>
+#include <wx/filename.h>
 
 FILE* KIPLATFORM::IO::SeqFOpen( const wxString& aPath, const wxString& aMode )
 {
@@ -62,4 +63,11 @@ bool KIPLATFORM::IO::DuplicatePermissions(const wxString& sourceFilePath, const 
         NSLog(@"Error assigning permissions: %@", error);
         return false;
     }
+}
+
+bool KIPLATFORM::IO::IsFileHidden( const wxString& aFileName )
+{
+    wxFileName fn( aFileName );
+
+    return fn.GetName().StartsWith( wxT( "." ) );
 }
