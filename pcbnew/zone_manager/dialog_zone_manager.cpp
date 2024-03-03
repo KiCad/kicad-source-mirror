@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Ethan Chien <liangtie.qian@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,6 +67,7 @@ inline void DIALOG_ZONE_MANAGER::FitCanvasToScreen()
         canvas->ZoomFitScreen();
 }
 
+
 inline void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelectionChange( wxDataViewItem const& aItem )
 {
     bool textCtrlHasFocus = m_filterCtrl->HasFocus();
@@ -103,16 +104,19 @@ inline void DIALOG_ZONE_MANAGER::PostProcessZoneViewSelectionChange( wxDataViewI
 inline void DIALOG_ZONE_MANAGER::GenericProcessChar( wxKeyEvent& aEvent )
 {
     aEvent.Skip();
+
     if( aEvent.GetKeyCode() == WXK_DOWN || aEvent.GetKeyCode() == WXK_UP )
     {
         Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIDle, this );
     }
 }
 
+
 void DIALOG_ZONE_MANAGER::OnTableChar( wxKeyEvent& aEvent )
 {
     GenericProcessChar( aEvent );
 }
+
 
 void DIALOG_ZONE_MANAGER::OnTableCharHook( wxKeyEvent& aEvent )
 {
@@ -151,7 +155,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     m_btnMoveUp->SetBitmap( KiBitmapBundle( BITMAPS::small_up ) );
     m_btnMoveDown->SetBitmap( KiBitmapBundle( BITMAPS::small_down ) );
     m_sizerProperties->Add( m_panelZoneProperties, 1, wxALL | wxEXPAND );
-    m_sizerTop->Add( m_zoneViewer, 1, wxALL | wxEXPAND, 0 );
+    m_sizerTop->Add( m_zoneViewer, 1, wxBOTTOM | wxTOP | wxRIGHT | wxEXPAND, 5 );
     m_checkRepour->SetValue( ZONE_MANAGER_PREFERENCE::GetRepourOnClose() );
     m_zoneViewer->SetId( ZONE_VIEWER );
 
@@ -205,6 +209,7 @@ DIALOG_ZONE_MANAGER::DIALOG_ZONE_MANAGER( PCB_BASE_FRAME* aParent, ZONE_SETTINGS
     FitCanvasToScreen();
 }
 
+
 DIALOG_ZONE_MANAGER::~DIALOG_ZONE_MANAGER() = default;
 
 
@@ -220,6 +225,7 @@ int InvokeZonesManager( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aZoneInfo )
     return res;
 }
 
+
 void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
 {
     for( ZONE_SELECTION_CHANGE_NOTIFIER* i :
@@ -227,13 +233,16 @@ void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
     {
         i->OnZoneSelectionChanged( zone );
     }
+
     Layout();
 }
+
 
 void DIALOG_ZONE_MANAGER::OnViewZonesOverviewOnLeftUp( wxMouseEvent& aEvent )
 {
     Bind( wxEVT_IDLE, &DIALOG_ZONE_MANAGER::OnIDle, this );
 }
+
 
 void DIALOG_ZONE_MANAGER::OnDataViewCtrlSelectionChanged( wxDataViewEvent& aEvent )
 {
@@ -269,6 +278,7 @@ void DIALOG_ZONE_MANAGER::OnOk( wxCommandEvent& aEvt )
     aEvt.Skip();
 }
 
+
 #if wxUSE_DRAG_AND_DROP
 
 void DIALOG_ZONE_MANAGER::OnBeginDrag( wxDataViewEvent& aEvent )
@@ -283,10 +293,12 @@ void DIALOG_ZONE_MANAGER::OnBeginDrag( wxDataViewEvent& aEvent )
         m_priorityDragIndex = m_modelZoneOverviewTable->GetRow( it );
 }
 
+
 void DIALOG_ZONE_MANAGER::OnDropPossible( wxDataViewEvent& aEvent )
 {
     aEvent.SetDropEffect( wxDragMove ); // check 'move' drop effect
 }
+
 
 void DIALOG_ZONE_MANAGER::OnRepourCheck( wxCommandEvent& aEvent )
 {
@@ -324,7 +336,9 @@ void DIALOG_ZONE_MANAGER::OnDrop( wxDataViewEvent& aEvent )
             m_viewZonesOverview->Select( item );
     }
 }
+
 #endif // wxUSE_DRAG_AND_DROP
+
 
 void DIALOG_ZONE_MANAGER::OnMoveUpClick( wxCommandEvent& aEvent )
 {
@@ -332,11 +346,13 @@ void DIALOG_ZONE_MANAGER::OnMoveUpClick( wxCommandEvent& aEvent )
     MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_UP );
 }
 
+
 void DIALOG_ZONE_MANAGER::OnMoveDownClick( wxCommandEvent& aEvent )
 {
     WXUNUSED( aEvent );
     MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT::MOVE_DOWN );
 }
+
 
 void DIALOG_ZONE_MANAGER::OnFilterCtrlCancel( wxCommandEvent& aEvent )
 {
@@ -345,12 +361,14 @@ void DIALOG_ZONE_MANAGER::OnFilterCtrlCancel( wxCommandEvent& aEvent )
     aEvent.Skip();
 }
 
+
 void DIALOG_ZONE_MANAGER::OnFilterCtrlSearch( wxCommandEvent& aEvent )
 {
     PostProcessZoneViewSelectionChange( m_modelZoneOverviewTable->ApplyFilter(
             aEvent.GetString(), m_viewZonesOverview->GetSelection() ) );
     aEvent.Skip();
 }
+
 
 void DIALOG_ZONE_MANAGER::OnFilterCtrlTextChange( wxCommandEvent& aEvent )
 {
@@ -359,12 +377,14 @@ void DIALOG_ZONE_MANAGER::OnFilterCtrlTextChange( wxCommandEvent& aEvent )
     aEvent.Skip();
 }
 
+
 void DIALOG_ZONE_MANAGER::OnFilterCtrlEnter( wxCommandEvent& aEvent )
 {
     PostProcessZoneViewSelectionChange( m_modelZoneOverviewTable->ApplyFilter(
             aEvent.GetString(), m_viewZonesOverview->GetSelection() ) );
     aEvent.Skip();
 }
+
 
 void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
 {
@@ -383,7 +403,8 @@ void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
     auto reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fill All Zones" ), 5 );
     m_filler->SetProgressReporter( reporter.get() );
     board->Zones() = m_zonesContainer->GetClonedZoneList();
-    //NOTE - Nether revert nor commit is needed here , cause the cloned zones are not owned by the pcb frame
+    //NOTE - Nether revert nor commit is needed here , cause the cloned zones are not owned by
+    //       the pcb frame.
     m_zoneFillComplete = m_filler->Fill( board->Zones() );
     board->BuildConnectivity();
     board->Zones() = m_zonesContainer->GetOriginalZoneList();
@@ -413,6 +434,7 @@ void DIALOG_ZONE_MANAGER::OnZoneNameUpdate( wxCommandEvent& aEvent )
     }
 }
 
+
 void DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange( wxCommandEvent& aEvent )
 {
     unsigned count = aEvent.GetInt();
@@ -420,6 +442,7 @@ void DIALOG_ZONE_MANAGER::OnZonesTableRowCountChange( wxCommandEvent& aEvent )
     for( STD_BITMAP_BUTTON* btn : { m_btnMoveDown, m_btnMoveUp } )
         btn->Enable( count == m_modelZoneOverviewTable->GetAllZonesCount() );
 }
+
 
 void DIALOG_ZONE_MANAGER::OnCheckBoxClicked( wxCommandEvent& aEvent )
 {
@@ -440,6 +463,7 @@ void DIALOG_ZONE_MANAGER::OnCheckBoxClicked( wxCommandEvent& aEvent )
                                                m_viewZonesOverview->GetSelection() );
     }
 }
+
 
 void DIALOG_ZONE_MANAGER::MoveSelectedZonePriority( ZONE_INDEX_MOVEMENT aMove )
 {
