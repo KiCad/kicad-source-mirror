@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-04 19:56+0000\n"
+"PO-Revision-Date: 2024-03-05 20:01+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -241,7 +241,7 @@ msgstr "Raytracen"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
-msgstr "Herstel standaardinstellingen"
+msgstr "Standaardinstellingen herstellen"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:78
@@ -509,7 +509,7 @@ msgstr "CAD-kleuren renderen"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Use a CAD color style based on the diffuse color of the material"
 msgstr ""
-"Een CAD-kleurstijl op basis van de diffuse kleur van het materiaal gebruiken"
+"CAD-kleurstijl op basis van de diffuse kleur van het materiaal gebruiken"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:279
 msgid "Show Through Hole 3D Models"
@@ -567,12 +567,12 @@ msgstr "3D-as weergeven"
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:338
 #: pcbnew/tools/pcb_actions.cpp:1342
 msgid "Show Appearance Manager"
-msgstr "Weergavemanager weergeven"
+msgstr "Vormgevingbeheer weergeven"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 #: pcbnew/tools/pcb_actions.cpp:1343
 msgid "Show/hide the appearance manager"
-msgstr "De weergavemanager weergeven/verbergen"
+msgstr "Vormgevingbeheer weergeven/verbergen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Board Body"
@@ -714,7 +714,7 @@ msgstr "Waarden"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:75
 #: pcbnew/widgets/appearance_controls.cpp:336
 msgid "Show footprint values"
-msgstr "Toon footprintwaarden"
+msgstr "Footprintwaarden weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:337
@@ -724,7 +724,7 @@ msgstr "Referenties"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:76
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "Show footprint references"
-msgstr "Toon footprintreferenties"
+msgstr "Footprintreferenties weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
@@ -734,7 +734,7 @@ msgstr "Footprinttekst"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:338
 msgid "Show all footprint text"
-msgstr "Toon alle footprintteksten"
+msgstr "Alle footprintteksten weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Off-board Silkscreen"
@@ -1021,7 +1021,7 @@ msgstr "Modelbegrenzingen weergeven"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Toon koper- en technische laagdikte (erg langzaam)"
+msgstr "Koper- en technische laagdikte weergeven (erg langzaam)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
@@ -1781,7 +1781,7 @@ msgstr ""
 
 #: common/confirm.cpp:58
 msgid "Do not show again"
-msgstr "Toon niet meer"
+msgstr "Niet meer laten zien"
 
 #: common/confirm.cpp:128
 msgid "Message"
@@ -2106,7 +2106,7 @@ msgstr "Fout &rapporteren"
 
 #: common/dialog_about/dialog_about_base.cpp:64 common/tool/actions.cpp:1111
 msgid "Report a problem with KiCad"
-msgstr "Meld een probleem met KiCad"
+msgstr "Probleem met KiCad melden"
 
 #: common/dialog_about/dialog_about_base.cpp:68 common/tool/actions.cpp:1104
 msgid "Donate"
@@ -2217,7 +2217,7 @@ msgstr "Waarde:"
 #: common/dialogs/dialog_color_picker_base.cpp:134
 #: common/dialogs/dialog_color_picker_base.h:94
 msgid "Color Picker"
-msgstr "Kleur Kiezer"
+msgstr "Kleurkiezer"
 
 #: common/dialogs/dialog_color_picker_base.cpp:154
 msgid "Defined Colors"
@@ -4457,7 +4457,7 @@ msgstr "Controleren op KiCad-updates bij opstarten"
 #: kicad/pcm/dialogs/dialog_pcm.cpp:213
 #: kicad/tools/kicad_manager_actions.cpp:186
 msgid "Plugin and Content Manager"
-msgstr "Plug-in en contentmanager"
+msgstr "Plug-in en contentbeheer"
 
 #: common/dialogs/panel_packages_and_updates_base.cpp:53
 msgid "Check for package updates on startup"
@@ -5010,7 +5010,7 @@ msgstr "Gegevensverzameling"
 #: common/tool/common_tools.cpp:562 eeschema/symbol_editor/symbol_editor.cpp:82
 #: kicad/tools/kicad_manager_actions.cpp:115
 msgid "Symbol Editor"
-msgstr "Symbool-editor"
+msgstr "Symbooleditor"
 
 #: common/eda_base_frame.cpp:1127 common/eda_base_frame.cpp:1136
 #: common/eda_base_frame.cpp:1160 common/eda_base_frame.cpp:1171
@@ -5056,7 +5056,7 @@ msgstr "Veldnaamsjablonen"
 #: common/tool/common_tools.cpp:564 kicad/tools/kicad_manager_actions.cpp:137
 #: pcbnew/footprint_edit_frame.cpp:991 pcbnew/menubar_footprint_editor.cpp:91
 msgid "Footprint Editor"
-msgstr "Footprint-editor"
+msgstr "Footprinteditor"
 
 #: common/eda_base_frame.cpp:1162 common/eda_base_frame.cpp:1173
 msgid "Origins & Axes"
@@ -5101,7 +5101,7 @@ msgstr "Excellon-opties"
 #: pagelayout_editor/menubar.cpp:88 pagelayout_editor/menubar.cpp:89
 #: pagelayout_editor/pl_editor_frame.cpp:570
 msgid "Drawing Sheet Editor"
-msgstr "Tekenblad-editor"
+msgstr "Tekenbladeditor"
 
 #: common/eda_base_frame.cpp:1232
 msgid "Packages and Updates"
@@ -5311,12 +5311,12 @@ msgstr "Markering"
 #: common/eda_item.cpp:361 pcbnew/pcb_dimension.cpp:396
 #: pcbnew/widgets/search_handlers.cpp:248
 msgid "Dimension"
-msgstr "Afmeting"
+msgstr "Maatlijn"
 
 #: common/eda_item.cpp:362 pcbnew/pcb_dimension.cpp:1059
 #: pcbnew/pcb_dimension.cpp:1186
 msgid "Leader"
-msgstr "Leider"
+msgstr "Verwijslijn"
 
 #: common/eda_item.cpp:363 pcbnew/pcb_target.cpp:125
 msgid "Target"
@@ -6029,7 +6029,7 @@ msgstr "fp-lib-table-bestanden bevatten geen bibliotheek met de naam '%s'."
 
 #: common/fp_lib_table.cpp:559 eeschema/symbol_lib_table.cpp:601
 msgid "Added by Plugin and Content Manager"
-msgstr "Toegevoegd door plug-in en contentmanager"
+msgstr "Toegevoegd door plug-in en contentbeheer"
 
 #: common/fp_lib_table.cpp:585 eeschema/symbol_lib_table.cpp:629
 #, c-format
@@ -6448,7 +6448,7 @@ msgstr "DXF boog-uitgelijnde tekst wordt momenteel niet ondersteund."
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
 msgid "DXF dimensions not currently supported."
-msgstr "DXF-dimensies worden momenteel niet ondersteund."
+msgstr "DXF-maatlijnen worden momenteel niet ondersteund."
 
 #: common/import_gfx/dxf_import_plugin.h:506
 msgid "DXF hatches not currently supported."
@@ -7145,7 +7145,7 @@ msgstr "%s (Pagina %s)"
 #: common/plotters/PDF_plotter.cpp:1361
 #, c-format
 msgid "Show Page %s"
-msgstr "Toon pagina %s"
+msgstr "Pagina %s weergeven"
 
 #: common/plotters/PDF_plotter.cpp:1372
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:889
@@ -7328,7 +7328,7 @@ msgstr "Nieuw..."
 
 #: common/tool/actions.cpp:46
 msgid "Create a new document in the editor"
-msgstr "Maak een nieuw document in de editor"
+msgstr "Nieuw document maken in de editor"
 
 #: common/tool/actions.cpp:52 eeschema/symbol_editor/symbol_editor.cpp:618
 #: pcbnew/footprint_libraries_utils.cpp:1018
@@ -7337,7 +7337,7 @@ msgstr "Nieuwe bibliotheek..."
 
 #: common/tool/actions.cpp:53
 msgid "Create a new library folder"
-msgstr "Maak een nieuwe bibliotheekmap"
+msgstr "Nieuwe bibliotheekmap maken"
 
 #: common/tool/actions.cpp:59
 msgid "Add Library..."
@@ -7345,7 +7345,7 @@ msgstr "Bibliotheek toevoegen..."
 
 #: common/tool/actions.cpp:60
 msgid "Add an existing library folder"
-msgstr "Voeg een bestaande bibliotheekmap toe"
+msgstr "Bestaande bibliotheekmap toevoegen"
 
 #: common/tool/actions.cpp:68
 msgid "Open..."
@@ -7365,7 +7365,7 @@ msgstr "Opslaan als..."
 
 #: common/tool/actions.cpp:87
 msgid "Save current document to another location"
-msgstr "Sla het huidige document op een andere locatie op"
+msgstr "Huidige document opslaan op een andere locatie"
 
 #: common/tool/actions.cpp:93
 msgid "Save a Copy..."
@@ -7373,7 +7373,7 @@ msgstr "Kopie opslaan..."
 
 #: common/tool/actions.cpp:94
 msgid "Save a copy of the current document to another location"
-msgstr "Bewaar een kopie van het huidige document op een andere locatie"
+msgstr "Kopie van het huidige document opslaan op een andere locatie"
 
 #: common/tool/actions.cpp:100
 msgid "Save All"
@@ -7385,7 +7385,7 @@ msgstr "Alle wijzigingen opslaan"
 
 #: common/tool/actions.cpp:108
 msgid "Throw away changes"
-msgstr "Wijzigingen weggooien"
+msgstr "Wijzigingen verwerpen"
 
 #: common/tool/actions.cpp:113
 msgid "Page Settings..."
@@ -7409,7 +7409,7 @@ msgstr "Huidige editor sluiten"
 
 #: common/tool/actions.cpp:144
 msgid "Cancel current tool"
-msgstr "Annuleer de huidige tool"
+msgstr "Huidige tool annuleren"
 
 #: common/tool/actions.cpp:152
 msgid "Finish"
@@ -7417,7 +7417,7 @@ msgstr "Voltooien"
 
 #: common/tool/actions.cpp:153
 msgid "Finish current tool"
-msgstr "Voltooi huidige tool"
+msgstr "Huidige tool voltooien"
 
 #: common/tool/actions.cpp:160
 msgid "Show Context Menu"
@@ -7623,7 +7623,7 @@ msgstr "Boogbewerkingsmodus wisselen"
 
 #: common/tool/actions.cpp:406
 msgid "Switch to a different method of editing arcs"
-msgstr "Schakel naar een andere boogbewerkingsmodus"
+msgstr "Schakelen naar een andere boogbewerkingsmodus"
 
 #: common/tool/actions.cpp:413
 msgid "Show Search Panel"
@@ -7695,7 +7695,7 @@ msgstr "Vorige markering"
 
 #: common/tool/actions.cpp:485
 msgid "Go to previous marker in Checker window"
-msgstr "Ga naar de vorige markering in het Checker-venster"
+msgstr "Ga naar vorige markering in het controlescherm"
 
 #: common/tool/actions.cpp:491
 msgid "Next Marker"
@@ -7703,7 +7703,7 @@ msgstr "Volgende markering"
 
 #: common/tool/actions.cpp:492
 msgid "Go to next marker in Checker window"
-msgstr "Ga naar de volgende markering in het Checker-venster"
+msgstr "Ga naar volgende markering in het controlescherm"
 
 #: common/tool/actions.cpp:498
 msgid "Exclude Marker"
@@ -7711,8 +7711,7 @@ msgstr "Markering uitzonderen"
 
 #: common/tool/actions.cpp:499
 msgid "Mark current violation in Checker window as an exclusion"
-msgstr ""
-"Markeer de huidige overtreding in het Checker-venster als een uitsluiting"
+msgstr "Huidige overtreding in het controlescherm markeren als een uitzondering"
 
 #: common/tool/actions.cpp:512 common/tool/actions.cpp:513
 #: kicad/pcm/dialogs/dialog_pcm_base.cpp:131
@@ -7824,7 +7823,7 @@ msgstr "Bibliotheek vastpinnen"
 
 #: common/tool/actions.cpp:705
 msgid "Keep the library at the top of the list"
-msgstr "Houd de bibliotheek bovenaan de lijst"
+msgstr "Bibliotheek bovenaan de lijst houden"
 
 #: common/tool/actions.cpp:710
 msgid "Unpin Library"
@@ -7832,7 +7831,7 @@ msgstr "Bibliotheek losmaken"
 
 #: common/tool/actions.cpp:711
 msgid "No longer keep the library at the top of the list"
-msgstr "Houd de bibliotheek niet meer bovenaan de lijst"
+msgstr "Bibliotheek niet meer bovenaan de lijst houden"
 
 #: common/tool/actions.cpp:717
 msgid "Pan Up"
@@ -7908,7 +7907,7 @@ msgstr "Nulpunt raster instellen"
 
 #: common/tool/actions.cpp:833
 msgid "Use inches"
-msgstr "Gebruik inches"
+msgstr "Inches gebruiken"
 
 #: common/tool/actions.cpp:841 eeschema/import_gfx/dialog_import_gfx_sch.cpp:60
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -7921,7 +7920,7 @@ msgstr "Mils"
 
 #: common/tool/actions.cpp:842
 msgid "Use mils"
-msgstr "Gebruik mils"
+msgstr "Mils gebruiken"
 
 #: common/tool/actions.cpp:850 eeschema/import_gfx/dialog_import_gfx_sch.cpp:59
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:122
@@ -7938,7 +7937,7 @@ msgstr "Millimeters"
 
 #: common/tool/actions.cpp:851
 msgid "Use millimeters"
-msgstr "Gebruik millimeters"
+msgstr "Millimeters gebruiken"
 
 #: common/tool/actions.cpp:867
 msgid "Select Columns..."
@@ -7946,11 +7945,11 @@ msgstr "Kolommen selecteren..."
 
 #: common/tool/actions.cpp:874
 msgid "Switch units"
-msgstr "Eenheid schakelen"
+msgstr "Eenheden schakelen"
 
 #: common/tool/actions.cpp:875
 msgid "Switch between imperial and metric units"
-msgstr "Schakel tussen Engelse en metrische eenheden"
+msgstr "Schakelen tussen Engelse en metrische eenheden"
 
 #: common/tool/actions.cpp:881
 msgid "Polar Coordinates"
@@ -7958,11 +7957,11 @@ msgstr "Poolcoördinaten"
 
 #: common/tool/actions.cpp:882
 msgid "Switch between polar and cartesian coordinate systems"
-msgstr "Schakel tussen polaire en cartesische coördinatensystemen"
+msgstr "Schakelen tussen polaire en cartesische coördinatensystemen"
 
 #: common/tool/actions.cpp:890
 msgid "Reset Local Coordinates"
-msgstr "Reset lokale coördinaten"
+msgstr "Lokale coördinaten opnieuw instellen"
 
 #: common/tool/actions.cpp:898
 msgid "Always Show Cursor"
@@ -8011,11 +8010,11 @@ msgstr "Meetinstrument"
 
 #: common/tool/actions.cpp:945
 msgid "Interactively measure distance between points"
-msgstr "Meet interactief de afstand tussen punten"
+msgstr "Interactief de afstand tussen punten meten"
 
 #: common/tool/actions.cpp:961
 msgid "Switch to Project Manager"
-msgstr "Naar projectmanager schakelen"
+msgstr "Schakelen naar projectbeheerder"
 
 #: common/tool/actions.cpp:962
 msgid "Show project window"
@@ -8045,7 +8044,7 @@ msgstr "Footprintbibliotheekverkenner"
 
 #: common/tool/actions.cpp:996
 msgid "Browse footprint libraries"
-msgstr "Blader door footprintbibliotheken"
+msgstr "Bladeren door footprintbibliotheken"
 
 #: common/tool/actions.cpp:1005
 msgid "Create, delete and edit footprints"
@@ -8053,11 +8052,11 @@ msgstr "Footprints maken, verwijderen en bewerken"
 
 #: common/tool/actions.cpp:1013
 msgid "Show Properties Manager"
-msgstr "Eigenschappenbeheerder weergeven"
+msgstr "Eigenschappenbeheer weergeven"
 
 #: common/tool/actions.cpp:1014
 msgid "Show/hide the properties manager"
-msgstr "Eigenschappenmanager weergeven/verbergen"
+msgstr "Eigenschappenbeheer weergeven/verbergen"
 
 #: common/tool/actions.cpp:1022
 msgid "Update PCB from Schematic..."
@@ -8090,7 +8089,7 @@ msgstr "Paden instellen..."
 
 #: common/tool/actions.cpp:1046
 msgid "Edit path configuration environment variables"
-msgstr "Bewerk omgevingsvariabelen voor padconfiguratie"
+msgstr "Omgevingsvariabelen voor padconfiguratie bewerken"
 
 #: common/tool/actions.cpp:1052
 msgid "Manage Symbol Libraries..."
@@ -8114,7 +8113,7 @@ msgstr "Aan de slag met KiCad"
 
 #: common/tool/actions.cpp:1067
 msgid "Open \"Getting Started in KiCad\" guide for beginners"
-msgstr "Open de gids \"Aan de slag in KiCad\" voor beginners"
+msgstr "\"Aan de slag in KiCad\"-gids voor beginners openen"
 
 #: common/tool/actions.cpp:1073
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:35
@@ -8142,7 +8141,7 @@ msgstr "Sneltoetsen weergeven..."
 
 #: common/tool/actions.cpp:1091
 msgid "Displays current hotkeys table and corresponding commands"
-msgstr "Geeft de huidige sneltoetsentabel en bijbehorende opdrachten weer"
+msgstr "Huidige sneltoetsentabel en bijbehorende opdrachten weergeven"
 
 #: common/tool/actions.cpp:1097
 msgid "Get Involved"
@@ -8162,7 +8161,7 @@ msgstr "Bug rapporteren"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr "Kan niet overschakelen naar projectmanager in zelfstandige modus."
+msgstr "Kan niet overschakelen naar projectbeheer in zelfstandige modus."
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -9148,7 +9147,7 @@ msgstr "Footprinttoewijzingsconflicten"
 #: cvpcb/display_footprints_frame.cpp:70
 #: pcbnew/toolbars_footprint_viewer.cpp:176
 msgid "Footprint Viewer"
-msgstr "Footprint-viewer"
+msgstr "Footprintviewer"
 
 #: cvpcb/display_footprints_frame.cpp:318
 #: pcbnew/toolbars_footprint_viewer.cpp:107
@@ -9248,7 +9247,7 @@ msgstr "Geselecteerde footprint weergeven"
 
 #: cvpcb/tools/cvpcb_actions.cpp:56
 msgid "View the selected footprint in the footprint viewer"
-msgstr "Bekijk de geselecteerde footprint in de footprint viewer"
+msgstr "Geselecteerde footprint weergeven in de footprint-viewer"
 
 #: cvpcb/tools/cvpcb_actions.cpp:64
 msgid "Manage Footprint Association Files..."
@@ -9259,7 +9258,7 @@ msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Bewerk de lijst met footprintassociatiebestanden. Deze bestanden worden "
+"Lijst met footprintassociatiebestanden bewerken. Deze bestanden worden "
 "gebruikt om automatisch footprintnamen toe te wijzen op basis van "
 "symboolwaarden."
 
@@ -9269,7 +9268,7 @@ msgstr "Opslaan in schema"
 
 #: cvpcb/tools/cvpcb_actions.cpp:74
 msgid "Save footprint associations in schematic symbol footprint fields"
-msgstr "Sla footprint-associaties op in schematische symbool-footprint-velden"
+msgstr "Footprintassociaties opslaan in footprintvelden van schemasymbolen"
 
 #: cvpcb/tools/cvpcb_actions.cpp:82
 msgid "Save to Schematic and File"
@@ -9280,7 +9279,7 @@ msgid ""
 "Save footprint associations in schematic symbol footprint fields and "
 "schematic files"
 msgstr ""
-"Footprintassociaties opslaan in symboolfootprintvelden van schema's en "
+"Footprintassociaties opslaan in footprintvelden van schemasymbolen en "
 "schemabestanden"
 
 #: cvpcb/tools/cvpcb_actions.cpp:105
@@ -9334,7 +9333,7 @@ msgstr "Footprintfilters van symbool gebruiken"
 #: cvpcb/tools/cvpcb_actions.cpp:158
 msgid "Filter footprint list by footprint filters defined in the symbol"
 msgstr ""
-"Filter footprintlijst op footprintfilters die in het symbool zijn "
+"Footprintlijst filteren op footprintfilters die in het symbool zijn "
 "gedefinieerd"
 
 #: cvpcb/tools/cvpcb_actions.cpp:166 pcbnew/footprint_chooser_frame.cpp:96
@@ -14025,7 +14024,7 @@ msgstr "Schema bijwerken"
 msgid ""
 "Re-link footprints to schematic symbols based on their reference designators"
 msgstr ""
-"Koppel footprints opnieuw aan schema-symbolen op basis van hun referentie-"
+"Koppel footprints opnieuw aan schemasymbolen op basis van hun referentie-"
 "aanduidingen"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:33
@@ -14096,7 +14095,7 @@ msgstr "Velden opnieuw instellen indien leeg in bovenliggend symbool"
 #: eeschema/dialogs/dialog_user_defined_signals.cpp:253
 #: eeschema/sch_label.cpp:2078 pcbnew/dialogs/panel_setup_rules.cpp:767
 msgid "Syntax Help"
-msgstr "Syntaxis Help"
+msgstr "Syntaxishulp"
 
 #: eeschema/dialogs/dialog_user_defined_signals_base.h:63
 msgid "User-defined Signals"
@@ -14867,7 +14866,7 @@ msgstr "Bibliotheek toevoegen"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:633
 msgid "Warning: Duplicate Nickname"
-msgstr "Waarschuwing: dubbele bijnaam"
+msgstr "Waarschuwing: gedupliceerde bijnaam"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:634
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:1017
@@ -15042,7 +15041,8 @@ msgstr "Bibliotheken migreren"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:203
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:197
 msgid "This is a read-only table which shows pertinent environment variables."
-msgstr "Dit is een alleen-lezen tabel die relevante omgevingsvariabelen toont."
+msgstr ""
+"Dit is een alleen-lezentabel die relevante omgevingsvariabelen weergeeft."
 
 #: eeschema/dialogs/panel_template_fieldnames.cpp:41
 msgid "Project field name templates:"
@@ -15304,7 +15304,7 @@ msgstr "Pin %s is verbonden met zowel %s als %s"
 #: eeschema/erc.cpp:965
 #, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "De huidige configuratie bevat niet symboolbibliotheek '%s'"
+msgstr "De huidige configuratie bevat geen symboolbibliotheek '%s'"
 
 #: eeschema/erc.cpp:980
 #, c-format
@@ -15330,7 +15330,7 @@ msgstr "'%s' is geen geldige footprint-ID."
 #: pcbnew/footprint_editor_utils.cpp:326
 #, c-format
 msgid "The current configuration does not include the footprint library '%s'."
-msgstr "De huidige configuratie omvat niet de footprintbibliotheek '%s'."
+msgstr "De huidige configuratie bevat geen footprintbibliotheek '%s'."
 
 #: eeschema/erc.cpp:1089 pcbnew/drc/drc_test_provider_library_parity.cpp:857
 #: pcbnew/footprint_editor_utils.cpp:338
@@ -15389,9 +15389,8 @@ msgid "Checking for library symbol issues..."
 msgstr "Controle op problemen met bibliotheeksymbolen..."
 
 #: eeschema/erc.cpp:1352
-#, fuzzy
 msgid "Checking for footprint link issues..."
-msgstr "Controle footprints..."
+msgstr "Controle op problemen met footprintkoppelingen..."
 
 #: eeschema/erc.cpp:1360
 msgid "Checking for off grid pins and wires..."
@@ -16320,22 +16319,22 @@ msgstr "Vakhoogte"
 #: eeschema/lib_textbox.cpp:597 eeschema/sch_textbox.cpp:585
 #: pcbnew/pcb_textbox.cpp:727
 msgid "Margin Left"
-msgstr "Marge Links"
+msgstr "Marge links"
 
 #: eeschema/lib_textbox.cpp:599 eeschema/sch_textbox.cpp:589
 #: pcbnew/pcb_textbox.cpp:731
 msgid "Margin Top"
-msgstr "Marge Boven"
+msgstr "Marge boven"
 
 #: eeschema/lib_textbox.cpp:601 eeschema/sch_textbox.cpp:593
 #: pcbnew/pcb_textbox.cpp:735
 msgid "Margin Right"
-msgstr "Marge Rechts"
+msgstr "Marge rechts"
 
 #: eeschema/lib_textbox.cpp:603 eeschema/sch_textbox.cpp:597
 #: pcbnew/pcb_textbox.cpp:739
 msgid "Margin Bottom"
-msgstr "Marge Onder"
+msgstr "Marge onder"
 
 #: eeschema/libarch.cpp:77
 #, c-format
@@ -16378,8 +16377,7 @@ msgstr "Niet-KiCad schema..."
 msgid ""
 "Replace current schematic sheet with one imported from another application"
 msgstr ""
-"Vervang het huidige schemablad door een geïmporteerd uit een andere "
-"applicatie"
+"Huidige schemablad vervangen door een geïmporteerd uit een andere applicatie"
 
 #: eeschema/menubar.cpp:115
 msgid "Footprint Assignments..."
@@ -16522,7 +16520,7 @@ msgstr "Succes."
 
 #: eeschema/netlist_exporters/netlist_generator.cpp:207
 msgid "Error: duplicate sheet names. Continue?"
-msgstr "Fout: dubbele bladnamen. Doorgaan met?"
+msgstr "Fout: gedupliceerde bladnamen. Doorgaan?"
 
 #: eeschema/picksymbol.cpp:121
 msgid "Change Unit"
@@ -16762,7 +16760,7 @@ msgid ""
 msgstr ""
 "Kan de PCB niet bijwerken omdat de schema-editor in stand-alonemodus is "
 "geopend. Om PCB’s van schema’s te maken of bij te werken moet u de KiCad-"
-"projectmanager starten en een project aanmaken."
+"projectbeheerder starten en een project aanmaken."
 
 #: eeschema/sch_edit_frame.cpp:1283
 msgid "New Schematic"
@@ -20108,9 +20106,9 @@ msgid "Failed to save backup to '%s'."
 msgstr "Kan back-up niet opslaan in '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1449
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'."
-msgstr "De huidige configuratie omvat niet de bibliotheek '%s'."
+msgstr "De huidige configuratie bevat geen symboolbibliotheek '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1451
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1462
@@ -20447,23 +20445,20 @@ msgstr ""
 "ongedaan te maken"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
-#, fuzzy
 msgid "Synchronize sheet pins and hierarchical labels"
-msgstr "Bestaand item naar een hiërarchisch label veranderen"
+msgstr "Bladpinnen en hiërarchische labels synchroniseren"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
 msgid "Symbol name"
 msgstr "Symboolnaam"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:34
-#, fuzzy
 msgid "Add Hierarchical Labels"
-msgstr "Hiërarchisch label toevoegen"
+msgstr "Hiërarchische labels toevoegen"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:37
-#, fuzzy
 msgid "Delete Sheet Pins"
-msgstr "Verwijder Segment"
+msgstr "Bladpinnen verwijderen"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:59
 msgid "Sheet name"
@@ -20474,23 +20469,20 @@ msgid "Add Sheet Pins"
 msgstr "Bladpinnen toevoegen"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:72
-#, fuzzy
 msgid "Delete Hierarchical Labels"
-msgstr "Verwijder Hiërarchisch Label"
+msgstr "Hiërarchische labels verwijderen"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid "Change sheet pin to hierarchical label"
-msgstr "Bestaand item naar een hiërarchisch label veranderen"
+msgstr "Bladpin omzetten naar hiërarchisch label"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Change hierarchical label to sheet pin"
-msgstr "Verander naar Hierarchisch label"
+msgstr "Hiërarchisch label omzetten naar bladpin"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr ""
+msgstr "Verbreek koppeling(en) tussen bladpin(nen) en hiërarchische label(s)"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Display previous symbol"
@@ -20514,7 +20506,7 @@ msgstr "Behoud de zichtbaarheid van het bestaande footprintveld"
 
 #: eeschema/tools/assign_footprints.cpp:224
 msgid "Show all footprint fields"
-msgstr "Toon alle footprint-velden"
+msgstr "Alle footprint-velden weergeven"
 
 #: eeschema/tools/assign_footprints.cpp:225
 msgid "Hide all footprint fields"
@@ -20545,7 +20537,7 @@ msgid ""
 msgstr ""
 "Kan PCB-netlijst niet ophalen omdat de schema-editor in zelfstandige modus "
 "is geopend.\n"
-"U moet de KiCad-projectmanager starten en een project aanmaken."
+"U moet de KiCad-projectbeheerder starten en een project aanmaken."
 
 #: eeschema/tools/backannotate.cpp:168
 #, c-format
@@ -20653,7 +20645,7 @@ msgstr "Voeg label '%s' toe aan %s pin %s net."
 
 #: eeschema/tools/ee_actions.cpp:47
 msgid "Perform electrical rules check"
-msgstr "Controleer de elektrische regels"
+msgstr "Elektrische regels controleren"
 
 #: eeschema/tools/ee_actions.cpp:53
 msgid "Symbol Checker"
@@ -20661,7 +20653,7 @@ msgstr "Symboolcontrole"
 
 #: eeschema/tools/ee_actions.cpp:54
 msgid "Show the symbol checker window"
-msgstr "Symboolcontrole-venster weergeven"
+msgstr "Symboolcontrolescherm weergeven"
 
 #: eeschema/tools/ee_actions.cpp:61
 msgid "Show differences between schematic symbol and its library equivalent"
@@ -20669,9 +20661,8 @@ msgstr ""
 "Verschillen weergeven tussen schemasymbool en zijn bibliotheekequivalent"
 
 #: eeschema/tools/ee_actions.cpp:67
-#, fuzzy
 msgid "Show Bus Syntax Help"
-msgstr "Syntaxis Help"
+msgstr "Bussyntaxishulp weergeven"
 
 #: eeschema/tools/ee_actions.cpp:74
 msgid "Show simulation window for running SPICE or IBIS simulations."
@@ -20696,7 +20687,7 @@ msgstr "Knooppunt selecteren"
 
 #: eeschema/tools/ee_actions.cpp:115
 msgid "Select a connection item under the cursor"
-msgstr "Selecteer een verbindingsitem onder de cursor"
+msgstr "Verbindingsitem onder de cursor selecteren"
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "Select Connection"
@@ -20704,7 +20695,7 @@ msgstr "Verbinding selecteren"
 
 #: eeschema/tools/ee_actions.cpp:123
 msgid "Select a complete connection"
-msgstr "Een volledige verbinding selecteren"
+msgstr "Volledige verbinding selecteren"
 
 #: eeschema/tools/ee_actions.cpp:161
 msgid "Save Library As..."
@@ -20720,7 +20711,7 @@ msgstr "Nieuw symbool..."
 
 #: eeschema/tools/ee_actions.cpp:169
 msgid "Create a new symbol"
-msgstr "Maak een nieuw symbool"
+msgstr "Nieuw symbool maken"
 
 #: eeschema/tools/ee_actions.cpp:175
 msgid "Derive from Existing Symbol"
@@ -20740,11 +20731,11 @@ msgstr "Geselecteerd symbool weergeven op het editorcanvas"
 
 #: eeschema/tools/ee_actions.cpp:189
 msgid "Duplicate Symbol"
-msgstr "Duplicaat symbool"
+msgstr "Symbool dupliceren"
 
 #: eeschema/tools/ee_actions.cpp:190
 msgid "Make a copy of the selected symbol"
-msgstr "Maak een kopie van het geselecteerde symbool"
+msgstr "Kopie maken van het geselecteerde symbool"
 
 #: eeschema/tools/ee_actions.cpp:196
 msgid "Rename Symbol..."
@@ -20764,7 +20755,7 @@ msgstr "Kopie van het huidige symbool opslaan in een andere bibliotheek."
 
 #: eeschema/tools/ee_actions.cpp:211
 msgid "Remove the selected symbol from its library"
-msgstr "Het geselecteerde symbool verwijderen uit zijn bibliotheek"
+msgstr "Geselecteerde symbool verwijderen uit zijn bibliotheek"
 
 #: eeschema/tools/ee_actions.cpp:229
 msgid "Paste Symbol"
@@ -20776,7 +20767,7 @@ msgstr "Symbool importeren..."
 
 #: eeschema/tools/ee_actions.cpp:236
 msgid "Import a symbol to the current library"
-msgstr "Importeer een symbool naar de huidige bibliotheek"
+msgstr "Symbool importeren naar de huidige bibliotheek"
 
 #: eeschema/tools/ee_actions.cpp:242
 msgid "Export..."
@@ -20793,7 +20784,7 @@ msgstr "Symboolvelden bijwerken..."
 #: eeschema/tools/ee_actions.cpp:250
 msgid "Update symbol to match changes made in parent symbol"
 msgstr ""
-"Symbool bijwerken om wijzigingen in een bovenliggend symbool over te nemen"
+"Symbool bijwerken om wijzigingen van een bovenliggend symbool over te nemen"
 
 #: eeschema/tools/ee_actions.cpp:256
 msgid "Set Unit Display Name..."
@@ -20809,7 +20800,7 @@ msgstr "Symbool toevoegen aan schema"
 
 #: eeschema/tools/ee_actions.cpp:263
 msgid "Add the current symbol to the schematic"
-msgstr "Het huidige symbool aan het schema toevoegen"
+msgstr "Huidige symbool aan het schema toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:269
 msgid "Show Pin Electrical Types"
@@ -20849,7 +20840,7 @@ msgstr "Symbool exporteren als SVG..."
 
 #: eeschema/tools/ee_actions.cpp:303
 msgid "Create SVG file from the current symbol"
-msgstr "Maak een SVG-bestand van het huidige symbool"
+msgstr "SVG-bestand maken van het huidige symbool"
 
 #: eeschema/tools/ee_actions.cpp:309
 msgid "Synchronized Pins Mode"
@@ -20889,7 +20880,7 @@ msgstr "Pin toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:338
 msgid "Add a pin"
-msgstr "Voeg een speld toe"
+msgstr "Pin toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:346 eeschema/tools/ee_actions.cpp:545
 #: eeschema/tools/sch_drawing_tools.cpp:1523
@@ -20901,7 +20892,7 @@ msgstr "Tekst toevoegen"
 #: eeschema/tools/ee_actions.cpp:347 pagelayout_editor/tools/pl_actions.cpp:64
 #: pcbnew/tools/pcb_actions.cpp:175
 msgid "Add a text item"
-msgstr "Voeg een tekstitem toe"
+msgstr "Tekstitem toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:355 eeschema/tools/ee_actions.cpp:553
 #: eeschema/tools/sch_drawing_tools.cpp:1885
@@ -20936,7 +20927,7 @@ msgstr "Symboolanker verplaatsen"
 
 #: eeschema/tools/ee_actions.cpp:382
 msgid "Specify a new location for the symbol anchor"
-msgstr "Geef een nieuwe locatie op voor het symboolanker"
+msgstr "Nieuwe locatie opgeven voor het symboolanker"
 
 #: eeschema/tools/ee_actions.cpp:391
 msgid "Push Pin Length"
@@ -20944,7 +20935,7 @@ msgstr "Pinlengte doorvoeren"
 
 #: eeschema/tools/ee_actions.cpp:392
 msgid "Copy pin length to other pins in symbol"
-msgstr "Kopieer de lengte van de pen naar andere pennen in het symbool"
+msgstr "Lengte van de pin kopiëren naar andere pinnen in het symbool"
 
 #: eeschema/tools/ee_actions.cpp:398
 msgid "Push Pin Name Size"
@@ -20952,7 +20943,7 @@ msgstr "Pinnaamgrootte doorvoeren"
 
 #: eeschema/tools/ee_actions.cpp:399
 msgid "Copy pin name size to other pins in symbol"
-msgstr "Kopieer de grootte van de pinnaam naar andere pinnen in het symbool"
+msgstr "Grootte van de pinnaam kopiëren naar andere pinnen in het symbool"
 
 #: eeschema/tools/ee_actions.cpp:405
 msgid "Push Pin Number Size"
@@ -20960,7 +20951,7 @@ msgstr "Pinnummergrootte doorvoeren"
 
 #: eeschema/tools/ee_actions.cpp:406
 msgid "Copy pin number size to other pins in symbol"
-msgstr "Kopieer de grootte van het pinnummer naar andere pinnen in het symbool"
+msgstr "Grootte van het pinnummer kopiëren naar andere pinnen in het symbool"
 
 #: eeschema/tools/ee_actions.cpp:417 eeschema/tools/sch_drawing_tools.cpp:407
 msgid "Add Symbol"
@@ -21000,7 +20991,7 @@ msgstr "Draad aan busverbinding toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:462
 msgid "Add a wire entry to a bus"
-msgstr "Een draadverbinding aan een bus toevoegen"
+msgstr "Draadverbinding aan een bus toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:472 eeschema/tools/sch_drawing_tools.cpp:1555
 #: eeschema/tools/sch_drawing_tools.cpp:1560
@@ -21014,11 +21005,11 @@ msgstr "Netlabels tekenen"
 
 #: eeschema/tools/ee_actions.cpp:480
 msgid "Add Net Class Directive"
-msgstr "Voeg netklasserichtlijn toe"
+msgstr "Netklasserichtlijn toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:481
 msgid "Add net class directive labels"
-msgstr "Voeg richtlijnlabels voor netklassen toe"
+msgstr "Richtlijnlabels voor netklassen toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:490 eeschema/tools/sch_drawing_tools.cpp:1550
 msgid "Add Hierarchical Label"
@@ -21041,19 +21032,16 @@ msgid "Add Sheet Pin"
 msgstr "Bladpin toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:510
-#, fuzzy
 msgid "Add sheet pins"
-msgstr "Voeg een bladspeld toe"
+msgstr "Bladpinnen toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:517 eeschema/tools/ee_actions.cpp:525
-#, fuzzy
 msgid "Sync Sheet Pins"
-msgstr "Bladspeld"
+msgstr "Bladpinnen synchroniseren"
 
 #: eeschema/tools/ee_actions.cpp:518 eeschema/tools/ee_actions.cpp:526
-#, fuzzy
 msgid "Synchronize sheet pins and hierarchical labels”"
-msgstr "Bestaand item naar een hiërarchisch label veranderen"
+msgstr "Bladpinnen en hiërarchische labels synchroniseren”"
 
 #: eeschema/tools/ee_actions.cpp:535
 msgid "Add Global Label"
@@ -21072,14 +21060,12 @@ msgid "Draw text box items"
 msgstr "Tekstvakitems tekenen"
 
 #: eeschema/tools/ee_actions.cpp:562 pcbnew/tools/pcb_actions.cpp:190
-#, fuzzy
 msgid "Add Table"
-msgstr "Label toevoegen"
+msgstr "Tabel toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:563 pcbnew/tools/pcb_actions.cpp:191
-#, fuzzy
 msgid "Draw table"
-msgstr "Teken een lijn"
+msgstr "Tabel tekenen"
 
 #: eeschema/tools/ee_actions.cpp:570 pagelayout_editor/tools/pl_actions.cpp:54
 msgid "Add Rectangle"
@@ -21168,7 +21154,7 @@ msgstr "Instelllingen..."
 
 #: eeschema/tools/ee_actions.cpp:666 pcbnew/tools/pcb_actions.cpp:676
 msgid "Displays item properties dialog"
-msgstr "Geeft het scherm voor itemeigenschappen weer"
+msgstr "Scherm voor itemeigenschappen weergeven"
 
 #: eeschema/tools/ee_actions.cpp:674
 msgid "Edit Reference Designator..."
@@ -21176,7 +21162,7 @@ msgstr "Referentie-aanduiding bewerken..."
 
 #: eeschema/tools/ee_actions.cpp:675
 msgid "Displays reference designator dialog"
-msgstr "Geeft het scherm voor referentie-aanduiding weer"
+msgstr "Scherm voor de referentie-aanduiding weergeven"
 
 #: eeschema/tools/ee_actions.cpp:683
 msgid "Edit Value..."
@@ -21184,7 +21170,7 @@ msgstr "Waarde bewerken..."
 
 #: eeschema/tools/ee_actions.cpp:684
 msgid "Displays value field dialog"
-msgstr "Geeft het scherm voor het waardeveld weer"
+msgstr "Scherm voor het waardeveld weergeven"
 
 #: eeschema/tools/ee_actions.cpp:692
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:236
@@ -21193,7 +21179,7 @@ msgstr "Footprint bewerken..."
 
 #: eeschema/tools/ee_actions.cpp:693
 msgid "Displays footprint field dialog"
-msgstr "Geeft het scherm voor het footprintveld weer"
+msgstr "Scherm voor het footprintveld weergeven"
 
 #: eeschema/tools/ee_actions.cpp:701 eeschema/tools/sch_edit_tool.cpp:1674
 msgid "Autoplace Fields"
@@ -21211,7 +21197,7 @@ msgstr "Symbolen wijzigen..."
 
 #: eeschema/tools/ee_actions.cpp:709
 msgid "Assign different symbols from the library"
-msgstr "Wijs verschillende symbolen uit de bibliotheek toe"
+msgstr "Verschillende symbolen uit de bibliotheek toewijzen"
 
 #: eeschema/tools/ee_actions.cpp:715
 msgid "Update Symbols from Library..."
@@ -21232,7 +21218,8 @@ msgstr "Symbool bijwerken..."
 
 #: eeschema/tools/ee_actions.cpp:730
 msgid "Update symbol to include any changes from the library"
-msgstr "Symbool bijwerken met eventuele wijzigingen uit de bibliotheek"
+msgstr ""
+"Symbool bijwerken om eventuele wijzigingen uit de bibliotheek op te nemen"
 
 #: eeschema/tools/ee_actions.cpp:736 pcbnew/tools/pcb_actions.cpp:1120
 msgid "Assign Netclass..."
@@ -21240,7 +21227,7 @@ msgstr "Netklasse toewijzen..."
 
 #: eeschema/tools/ee_actions.cpp:737 pcbnew/tools/pcb_actions.cpp:1121
 msgid "Assign a netclass to nets matching a pattern"
-msgstr "Wijs een netklasse toe aan nets die met een patroon overeenkomen"
+msgstr "Netklasse toewijzen aan nets die met een patroon overeenkomen"
 
 #: eeschema/tools/ee_actions.cpp:743
 msgid "De Morgan Conversion"
@@ -21248,7 +21235,7 @@ msgstr "De Morgan-conversie"
 
 #: eeschema/tools/ee_actions.cpp:744
 msgid "Switch between De Morgan representations"
-msgstr "Schakel tussen De Morgan-representaties"
+msgstr "Schakelen tussen De Morgan-representaties"
 
 #: eeschema/tools/ee_actions.cpp:750
 msgid "De Morgan Standard"
@@ -21256,7 +21243,7 @@ msgstr "De Morgan-standaard"
 
 #: eeschema/tools/ee_actions.cpp:751
 msgid "Switch to standard De Morgan representation"
-msgstr "Schakel over naar de standaard De Morgan-representatie"
+msgstr "Schakelen naar de standaard De Morgan-representatie"
 
 #: eeschema/tools/ee_actions.cpp:757
 msgid "De Morgan Alternate"
@@ -21264,7 +21251,7 @@ msgstr "De Morgan-alternatief"
 
 #: eeschema/tools/ee_actions.cpp:758
 msgid "Switch to alternate De Morgan representation"
-msgstr "Schakel over naar een alternatieve De Morgan-representatie"
+msgstr "Schakelen naar de alternatieve De Morgan-representatie"
 
 #: eeschema/tools/ee_actions.cpp:764
 msgid "Change to Label"
@@ -21328,7 +21315,7 @@ msgstr "Tekst- & tekeningeigenschappen bewerken..."
 
 #: eeschema/tools/ee_actions.cpp:825
 msgid "Edit text and graphics properties globally across schematic"
-msgstr "Bewerk tekst en grafische eigenschappen globaal in schema's"
+msgstr "Tekst en grafische eigenschappen globaal bewerken in het schema"
 
 #: eeschema/tools/ee_actions.cpp:831
 msgid "Symbol Properties..."
@@ -21352,7 +21339,7 @@ msgstr "Breek"
 
 #: eeschema/tools/ee_actions.cpp:846
 msgid "Divide into connected segments"
-msgstr "Verdeel in verbonden segmenten"
+msgstr "Verdelen in verbonden segmenten"
 
 #: eeschema/tools/ee_actions.cpp:852
 msgid "Slice"
@@ -21360,7 +21347,7 @@ msgstr "Snijden"
 
 #: eeschema/tools/ee_actions.cpp:853
 msgid "Divide into unconnected segments"
-msgstr "Verdeel in onverbonden segmenten"
+msgstr "Verdelen in onverbonden segmenten"
 
 #: eeschema/tools/ee_actions.cpp:867 pcbnew/tools/pcb_actions.cpp:1242
 msgid "Highlight net under cursor"
@@ -21372,7 +21359,7 @@ msgstr "Netmarkering wissen"
 
 #: eeschema/tools/ee_actions.cpp:875 pcbnew/tools/pcb_actions.cpp:1258
 msgid "Clear any existing net highlighting"
-msgstr "Een bestaande netmarkering wissen"
+msgstr "Bestaande netmarkering wissen"
 
 #: eeschema/tools/ee_actions.cpp:884
 msgid "Highlight Nets"
@@ -21380,7 +21367,7 @@ msgstr "Netten markeren"
 
 #: eeschema/tools/ee_actions.cpp:885
 msgid "Highlight wires and pins of a net"
-msgstr "Markeer draden en pinnen van een net"
+msgstr "Draden en pinnen van een net markeren"
 
 #: eeschema/tools/ee_actions.cpp:892
 msgid "Show Net Navigator"
@@ -21396,7 +21383,7 @@ msgstr "Bewerken met symbooleditor"
 
 #: eeschema/tools/ee_actions.cpp:901
 msgid "Open the selected symbol in the Symbol Editor"
-msgstr "Open het geselecteerde symbool in de symbool-editor"
+msgstr "Geselecteerde symbool openen in de symbooleditor"
 
 #: eeschema/tools/ee_actions.cpp:907
 msgid "Exclude from Bill of Materials"
@@ -21504,7 +21491,7 @@ msgstr "Symboolvelden bewerken..."
 
 #: eeschema/tools/ee_actions.cpp:989
 msgid "Bulk-edit fields of all symbols in schematic"
-msgstr "Bewerk velden van alle symbolen in een schema"
+msgstr "Velden van alle symbolen in een schema bewerken"
 
 #: eeschema/tools/ee_actions.cpp:995
 msgid "Edit Symbol Library Links..."
@@ -21512,7 +21499,7 @@ msgstr "Symboolbibliotheekkoppelingen bewerken..."
 
 #: eeschema/tools/ee_actions.cpp:996
 msgid "Edit links between schematic and library symbols"
-msgstr "Bewerk koppelingen tussen schemasymbolen en bibliotheeksymbolen"
+msgstr "Koppelingen tussen schemasymbolen en bibliotheeksymbolen bewerken"
 
 #: eeschema/tools/ee_actions.cpp:1002
 msgid "Assign Footprints..."
@@ -21520,7 +21507,7 @@ msgstr "Footprints toewijzen..."
 
 #: eeschema/tools/ee_actions.cpp:1003
 msgid "Run footprint assignment tool"
-msgstr "Footprint-toewijzingstool uitvoeren"
+msgstr "Footprinttoewijzingshulpmiddel uitvoeren"
 
 #: eeschema/tools/ee_actions.cpp:1009
 msgid "Import Footprint Assignments..."
@@ -21530,7 +21517,7 @@ msgstr "Footprinttoewijzingen importeren..."
 msgid ""
 "Import symbol footprint assignments from .cmp file created by board editor"
 msgstr ""
-"Importeer symboolfootprinttoewijzingen uit .cmp-bestand gemaakt door de "
+"Symboolfootprinttoewijzingen importeren uit .cmp-bestand gemaakt door de "
 "bordeditor"
 
 #: eeschema/tools/ee_actions.cpp:1016
@@ -21539,7 +21526,7 @@ msgstr "Schema annoteren..."
 
 #: eeschema/tools/ee_actions.cpp:1017
 msgid "Fill in schematic symbol reference designators"
-msgstr "Vul referentie-aanduidingen van schemasymbolen in"
+msgstr "Referentie-aanduidingen van schemasymbolen invullen"
 
 #: eeschema/tools/ee_actions.cpp:1023
 msgid "Schematic Setup..."
@@ -21548,7 +21535,7 @@ msgstr "Schema-instellingen..."
 #: eeschema/tools/ee_actions.cpp:1024
 msgid "Edit schematic setup including annotation styles and electrical rules"
 msgstr ""
-"Bewerk schema-instellingen inclusief annotatiestijlen en elektrische regels"
+"Schema-instellingen bewerken inclusief annotatiestijlen en elektrische regels"
 
 #: eeschema/tools/ee_actions.cpp:1030
 msgid "Edit Sheet Page Number..."
@@ -21556,7 +21543,7 @@ msgstr "Paginanummer bewerken..."
 
 #: eeschema/tools/ee_actions.cpp:1031
 msgid "Edit the page number of the current or selected sheet"
-msgstr "Bewerk het paginanummer van het huidige of geselecteerde blad"
+msgstr "Paginanummer bewerken van het huidige of geselecteerde blad"
 
 #: eeschema/tools/ee_actions.cpp:1036
 msgid "Rescue Symbols..."
@@ -21596,11 +21583,11 @@ msgstr "Importeer 2D-tekeningbestand"
 
 #: eeschema/tools/ee_actions.cpp:1067
 msgid "Switch to PCB Editor"
-msgstr "Naar PCB-editor schakelen"
+msgstr "Schakelen naar PCB-editor"
 
 #: eeschema/tools/ee_actions.cpp:1068
 msgid "Open PCB in board editor"
-msgstr "Open de printplaat in de bordeditor"
+msgstr "PCB in bordeditor openen"
 
 #: eeschema/tools/ee_actions.cpp:1074
 msgid "Export Netlist..."
@@ -21616,7 +21603,7 @@ msgstr "Stuklijst (BOM) genereren..."
 
 #: eeschema/tools/ee_actions.cpp:1082
 msgid "Generate a bill of materials for the current schematic"
-msgstr "Genereer een stuklijst voor het huidige schema"
+msgstr "Stuklijst voor het huidige schema genereren"
 
 #: eeschema/tools/ee_actions.cpp:1088
 msgid "Generate Legacy Bill of Materials..."
@@ -21625,7 +21612,7 @@ msgstr "Stuklijst genereren (verouderd)..."
 #: eeschema/tools/ee_actions.cpp:1089
 msgid ""
 "Generate a bill of materials for the current schematic (Legacy Generator)"
-msgstr "Genereer een stuklijst voor het huidige schema (verouderde generator)"
+msgstr "Stuklijst voor het huidige schema genereren (verouderde generator)"
 
 #: eeschema/tools/ee_actions.cpp:1095
 msgid "Generate Bill of Materials (External)..."
@@ -21635,8 +21622,7 @@ msgstr "Stuklijst genereren (extern)..."
 msgid ""
 "Generate a bill of materials for the current schematic using external "
 "generator"
-msgstr ""
-"Genereer een stuklijst voor het huidige schema met een externe generator"
+msgstr "Stuklijst voor het huidige schema genereren met een externe generator"
 
 #: eeschema/tools/ee_actions.cpp:1102
 msgid "Export Symbols to Library..."
@@ -21647,7 +21633,7 @@ msgid ""
 "Add symbols used in schematic to an existing symbol library\n"
 "(does not remove other symbols from this library)"
 msgstr ""
-"Voeg symbolen die in het schema worden gebruikt toe aan een bestaande "
+"Symbolen die in het schema worden gebruikt toevoegen aan een bestaande "
 "symboolbibliotheek\n"
 "(verwijdert geen andere symbolen uit deze bibliotheek)"
 
@@ -21660,7 +21646,7 @@ msgid ""
 "Create a new symbol library using the symbols used in the schematic\n"
 "(if the library already exists it will be replaced)"
 msgstr ""
-"Maak een nieuwe symboolbibliotheek met de symbolen die in het schema worden "
+"Nieuwe symboolbibliotheek maken met de symbolen die in het schema worden "
 "gebruikt\n"
 "(als de bibliotheek al bestaat wordt deze vervangen)"
 
@@ -21674,7 +21660,7 @@ msgstr "Overeenkomstige items in de PCB-editor selecteren"
 
 #: eeschema/tools/ee_actions.cpp:1138
 msgid "Show Directive Labels"
-msgstr "Toon richtlijnlabels"
+msgstr "Richtlijnlabels weergeven"
 
 #: eeschema/tools/ee_actions.cpp:1139
 msgid "Toggle display of directive labels"
@@ -21745,7 +21731,7 @@ msgstr ""
 
 #: eeschema/tools/ee_actions.cpp:1203
 msgid "Switch to next line mode"
-msgstr "Overschakelen naar volgende lijnmodus"
+msgstr "Schakelen naar volgende lijnmodus"
 
 #: eeschema/tools/ee_actions.cpp:1208
 msgid "Annotate Automatically"
@@ -21761,7 +21747,7 @@ msgstr "Schema repareren"
 
 #: eeschema/tools/ee_actions.cpp:1216
 msgid "Run various diagnostics and attempt to repair schematic"
-msgstr "Voer verschillende diagnoses uit en probeer het schema te repareren"
+msgstr "Verschillende diagnoses uitvoeren en probeer het schema te repareren"
 
 #: eeschema/tools/ee_actions.cpp:1223 pcbnew/tools/pcb_actions.cpp:1335
 msgid "Scripting Console"
@@ -21785,7 +21771,7 @@ msgstr "Blad binnengaan"
 
 #: eeschema/tools/ee_actions.cpp:1240
 msgid "Display the selected sheet's contents in the schematic editor"
-msgstr "De inhoud van het geselecteerde blad weergeven in de schema-editor"
+msgstr "Inhoud van het geselecteerde blad weergeven in de schema-editor"
 
 #: eeschema/tools/ee_actions.cpp:1248
 msgid "Leave Sheet"
@@ -21793,7 +21779,7 @@ msgstr "Blad verlaten"
 
 #: eeschema/tools/ee_actions.cpp:1249
 msgid "Display the parent sheet in the schematic editor"
-msgstr "Het bovenliggende blad weergeven in de schema-editor"
+msgstr "Bovenliggende blad weergeven in de schema-editor"
 
 #: eeschema/tools/ee_actions.cpp:1256
 msgid "Navigate Up"
@@ -21849,7 +21835,7 @@ msgstr "Draad toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:1310
 msgid "Add a wire"
-msgstr "Voeg een draad toe"
+msgstr "Draad toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:1321
 msgid "Add Bus"
@@ -21857,7 +21843,7 @@ msgstr "Bus toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:1322
 msgid "Add a bus"
-msgstr "Voeg een bus toe"
+msgstr "Bus toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:1332
 #: eeschema/tools/sch_line_wire_bus_tool.cpp:71
@@ -21867,7 +21853,7 @@ msgstr "Uitvouwen vanuit bus"
 
 #: eeschema/tools/ee_actions.cpp:1333
 msgid "Break a wire out of a bus"
-msgstr "Een draad afsplitsen van een bus"
+msgstr "Draad van bus uitbreken"
 
 #: eeschema/tools/ee_actions.cpp:1345
 msgid "Draw graphic lines"
@@ -21920,7 +21906,9 @@ msgstr "Kopie van deze tekening opslaan als..."
 
 #: eeschema/tools/ee_actions.cpp:1401
 msgid "Save a copy of the current sheet to another location or name"
-msgstr "Bewaar een kopie van het huidige document op een andere locatie"
+msgstr ""
+"Kopie van het huidige blad opslaan op een andere locatie of onder een andere "
+"naam"
 
 #: eeschema/tools/ee_actions.cpp:1415
 msgid "New Analysis Tab..."
@@ -21928,7 +21916,7 @@ msgstr "Nieuw analysetab..."
 
 #: eeschema/tools/ee_actions.cpp:1416
 msgid "Create a new tab containing a simulation analysis"
-msgstr "Nieuwe tab openen met simulatieanalyse"
+msgstr "Nieuw tabblad openen met simulatieanalyse"
 
 #: eeschema/tools/ee_actions.cpp:1424
 msgid "Open Workbook..."
@@ -21972,7 +21960,7 @@ msgstr "Gestippelde stroom/fase"
 
 #: eeschema/tools/ee_actions.cpp:1468
 msgid "Draw secondary signal trace (current or phase) with a dotted line"
-msgstr "Teken secondaire signaalsporen (stroom of fase) met een stippellijn"
+msgstr "Secondaire signaalsporen (stroom of fase) met een stippellijn tekenen"
 
 #: eeschema/tools/ee_actions.cpp:1473
 msgid "Dark Mode Plots"
@@ -21980,7 +21968,7 @@ msgstr "Plotten in donkere modus"
 
 #: eeschema/tools/ee_actions.cpp:1474
 msgid "Draw plots with a black background"
-msgstr "Teken plots met een zwarte achtergrond"
+msgstr "Plots tekenen met een zwarte achtergrond"
 
 #: eeschema/tools/ee_actions.cpp:1479
 msgid "Edit Analysis Tab..."
@@ -21992,7 +21980,7 @@ msgstr "SPICE-commando en plotinstellingen van de huidige analysetab bewerken"
 
 #: eeschema/tools/ee_actions.cpp:1487
 msgid "Run Simulation"
-msgstr "Simulatie uitvoeren"
+msgstr "Simulatie starten"
 
 #: eeschema/tools/ee_actions.cpp:1493
 msgid "Stop Simulation"
@@ -22004,7 +21992,7 @@ msgstr "Schema sonderen..."
 
 #: eeschema/tools/ee_actions.cpp:1501
 msgid "Add a simulator probe"
-msgstr "Voeg een simulatorsonde toe"
+msgstr "Simulatorsonde toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:1508
 msgid "Add Tuned Value..."
@@ -22012,7 +22000,7 @@ msgstr "Afgestemde waarde toevoegen..."
 
 #: eeschema/tools/ee_actions.cpp:1509
 msgid "Select a value to be tuned"
-msgstr "Selecteer een waarde om af te stemmen"
+msgstr "Waarde selecteren om af te stemmen"
 
 #: eeschema/tools/ee_actions.cpp:1515
 msgid "User-defined Signals..."
@@ -22029,15 +22017,15 @@ msgstr "SPICE-netlijst weergeven"
 
 #: eeschema/tools/ee_inspection_tool.cpp:205
 #: pcbnew/tools/board_inspection_tool.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid "Run %s > %s"
-msgstr "op %s en %s"
+msgstr "Uitvoeren %s > %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:212
 #: pcbnew/tools/board_inspection_tool.cpp:298
-#, fuzzy, c-format
+#, c-format
 msgid "Run %s"
-msgstr "op %s"
+msgstr "Uitvoeren %s"
 
 #: eeschema/tools/ee_inspection_tool.cpp:299
 msgid "No symbol issues found."
@@ -22173,9 +22161,8 @@ msgid "Draw %s"
 msgstr "%s tekenen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2163 pcbnew/tools/drawing_tool.cpp:1169
-#, fuzzy
 msgid "Draw Table"
-msgstr "Teken een lijn"
+msgstr "Tabel tekenen"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2325
 msgid "Press <ESC> to cancel sheet creation."
@@ -22183,9 +22170,8 @@ msgstr "Druk op <ESC> om nieuwe pagina te annuleren."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2497
 #: eeschema/tools/sch_drawing_tools.cpp:2503
-#, fuzzy
 msgid "Modify sch item"
-msgstr "Gewijzigd"
+msgstr "Schema-item wijzigen"
 
 #: eeschema/tools/sch_edit_tool.cpp:81
 msgid "Symbol Unit"
@@ -22552,9 +22538,8 @@ msgid "Other items"
 msgstr "Andere items"
 
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:47
-#, fuzzy
 msgid "Graphical shapes"
-msgstr "Grafische vorm"
+msgstr "Grafische vormen"
 
 #: eeschema/widgets/panel_symbol_chooser.cpp:168
 #: pcbnew/widgets/panel_footprint_chooser.cpp:95
@@ -22575,9 +22560,8 @@ msgstr "Ongeldige footprint opgegeven"
 
 #: eeschema/widgets/sch_properties_panel.cpp:202
 #: pcbnew/widgets/pcb_properties_panel.cpp:231
-#, fuzzy
 msgid "Edit Properties"
-msgstr "Pad Voorkeuren"
+msgstr "Eigenschappen bewerken"
 
 #: eeschema/widgets/search_handlers.cpp:136
 msgid "Excl. sim"
@@ -23304,17 +23288,17 @@ msgstr "Grafische laag %d"
 #: gerbview/gerbview_frame.cpp:67 gerbview/menubar.cpp:134
 #: gerbview/menubar.cpp:140
 msgid "Clear Recent Zip Files"
-msgstr "Wis recente zip-bestanden"
+msgstr "Recente zip-bestanden leegmaken"
 
 #: gerbview/gerbview_frame.cpp:69 gerbview/menubar.cpp:92
 #: gerbview/menubar.cpp:98
 msgid "Clear Recent Drill Files"
-msgstr "Wis recente analysebestanden"
+msgstr "Recente analysebestanden leegmaken"
 
 #: gerbview/gerbview_frame.cpp:71 gerbview/menubar.cpp:112
 #: gerbview/menubar.cpp:119
 msgid "Clear Recent Job Files"
-msgstr "Wis recente taakbestanden"
+msgstr "Recente taakbestanden leegmaken"
 
 #: gerbview/gerbview_frame.cpp:88
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:11
@@ -23348,23 +23332,23 @@ msgstr "Open het Gerber-taakbestand"
 
 #: gerbview/menubar.cpp:68 gerbview/menubar.cpp:75
 msgid "Clear Recent Gerber Files"
-msgstr "Wis recente Gerber-bestanden"
+msgstr "Recente Gerber-bestanden leegmaken"
 
 #: gerbview/menubar.cpp:74 gerbview/menubar.cpp:97
 msgid "Open Recent Gerber File"
-msgstr "Open recent Gerber-bestand"
+msgstr "Recent Gerber-bestand openen"
 
 #: gerbview/menubar.cpp:88
 msgid "Open Recent Drill File"
-msgstr "Open recent analysebestand"
+msgstr "Recent analysebestand openen"
 
 #: gerbview/menubar.cpp:118
 msgid "Open Recent Job File"
-msgstr "Open recent taakbestand"
+msgstr "Recent taakbestand openen"
 
 #: gerbview/menubar.cpp:139
 msgid "Open Recent Zip File"
-msgstr "Open recent zip-bestand"
+msgstr "Recent zip-bestand openen"
 
 #: gerbview/menubar.cpp:184
 msgid "&Units"
@@ -23479,15 +23463,15 @@ msgstr "Zip-archiefbestand openen..."
 
 #: gerbview/tools/gerbview_actions.cpp:70
 msgid "Open a zipped archive (Gerber and Drill) file"
-msgstr "Open een gecomprimeerd archiefbestand (Gerber en Drill)"
+msgstr "Gecomprimeerd archiefbestand (Gerber en Drill) openen"
 
 #: gerbview/tools/gerbview_actions.cpp:76
 msgid "Show Layers Manager"
-msgstr "Laagbeheerder weergeven"
+msgstr "Laagbeheer weergeven"
 
 #: gerbview/tools/gerbview_actions.cpp:77
 msgid "Show or hide the layer manager"
-msgstr "Toon of verberg de laagbeheerder"
+msgstr "Laagbeheer weergeven of verbergen"
 
 #: gerbview/tools/gerbview_actions.cpp:83
 msgid "List DCodes..."
@@ -23495,7 +23479,7 @@ msgstr "DCodes weergeven..."
 
 #: gerbview/tools/gerbview_actions.cpp:84
 msgid "List D-codes defined in Gerber files"
-msgstr "Lijst D-codes gedefinieerd in Gerber-bestanden"
+msgstr "D-codes gedefinieerd in Gerber-bestanden weergeven"
 
 #: gerbview/tools/gerbview_actions.cpp:90
 msgid "Show Source..."
@@ -23503,7 +23487,7 @@ msgstr "Bron weergeven..."
 
 #: gerbview/tools/gerbview_actions.cpp:91
 msgid "Show source file for the current layer"
-msgstr "Weergeven bron bestand van huidige laag"
+msgstr "Bronbestand van huidige laag weergeven"
 
 #: gerbview/tools/gerbview_actions.cpp:97
 msgid "Export to PCB Editor..."
@@ -23520,7 +23504,7 @@ msgstr "Huidige laag wissen..."
 
 #: gerbview/tools/gerbview_actions.cpp:105
 msgid "Clear the selected graphic layer"
-msgstr "De geselecteerde grafische laag wissen"
+msgstr "Geselecteerde grafische laag wissen"
 
 #: gerbview/tools/gerbview_actions.cpp:111
 msgid "Clear All Layers"
@@ -23536,7 +23520,7 @@ msgstr "Alle lagen herladen"
 
 #: gerbview/tools/gerbview_actions.cpp:119
 msgid "Reload all layers. All data will be reloaded"
-msgstr "Herlaad alle lagen. Alle gegevens worden opnieuw geladen"
+msgstr "Alle lagen herladen. Alle gegevens worden opnieuw geladen"
 
 #: gerbview/tools/gerbview_actions.cpp:130
 msgid "Clear Highlight"
@@ -23552,7 +23536,7 @@ msgstr "Attribuut markeren"
 
 #: gerbview/tools/gerbview_actions.cpp:154
 msgid "Highlight DCode"
-msgstr "Markeer DCode"
+msgstr "DCode markeren"
 
 #: gerbview/tools/gerbview_actions.cpp:162
 msgid "Next Layer"
@@ -23584,7 +23568,7 @@ msgstr "Lijnen schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:193
 msgid "Show lines in outline mode"
-msgstr "Toon lijnen in overzichtsmodus"
+msgstr "Lijnen weergeven in overzichtsmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Sketch Flashed Items"
@@ -23592,7 +23576,7 @@ msgstr "Geflitste items schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:202
 msgid "Show flashed items in outline mode"
-msgstr "Toon geflitste items in overzichtsmodus"
+msgstr "Geflitste items weergeven in overzichtsmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:210
 msgid "Sketch Polygons"
@@ -23600,15 +23584,15 @@ msgstr "Polygonen schetsen"
 
 #: gerbview/tools/gerbview_actions.cpp:211
 msgid "Show polygons in outline mode"
-msgstr "Toon polygonen in overzichtsmodus"
+msgstr "Polygonen weergeven in overzichtsmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:218
 msgid "Ghost Negative Objects"
-msgstr "Negatieve objecten in spookkleur"
+msgstr "Negatieve objecten vervagen"
 
 #: gerbview/tools/gerbview_actions.cpp:219
 msgid "Show negative objects in ghost color"
-msgstr "Toon negatieve objecten in spookkleur"
+msgstr "Negatieve objecten weergeven in vervaagde kleur"
 
 #: gerbview/tools/gerbview_actions.cpp:227
 msgid "Show DCodes"
@@ -23636,7 +23620,7 @@ msgstr "Lagen weergeven in exclusieve disjunctie-vergelijkingsmodus"
 
 #: gerbview/tools/gerbview_actions.cpp:248
 msgid "Flip Gerber View"
-msgstr "Gerber-weergave omkeren"
+msgstr "Gerber-view omkeren"
 
 #: gerbview/tools/gerbview_actions.cpp:249
 msgid "Show as mirror image"
@@ -23703,7 +23687,7 @@ msgstr "Items"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:130
 msgid "Show DCodes identification"
-msgstr "Toon DCodes identificatie"
+msgstr "DCodes-identificatie weergeven"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:132
 msgid "Show negative objects in this color"
@@ -24550,7 +24534,7 @@ msgstr "versieinformatieindeling (plain, commit, about)"
 
 #: kicad/dialogs/dialog_template_selector.cpp:149
 msgid "<h1>Template Selector</h1>"
-msgstr "<h1> Sjabloonkiezer </h1>"
+msgstr "<h1> Sjabloonselectie </h1>"
 
 #: kicad/dialogs/dialog_template_selector.cpp:254
 msgid "Select Templates Directory"
@@ -24566,7 +24550,7 @@ msgstr "Titel van projectsjabloon"
 
 #: kicad/dialogs/dialog_template_selector_base.h:67
 msgid "Project Template Selector"
-msgstr "Selectie van projectsjablonen"
+msgstr "Projectsjabloonselectie"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
 msgid "Would you like to automatically check for updates on startup?"
@@ -24610,11 +24594,11 @@ msgstr "Update beschikbaar"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:130
 msgid "Edit the project schematic"
-msgstr "Schema van het project bewerken"
+msgstr "Schema’s van het project aanpassen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:134
 msgid "Edit global and/or project schematic symbol libraries"
-msgstr "Globale en/of projectspecifieke symboolbibliotheken bewerken"
+msgstr "Globale en projectsymboolbibliotheken bewerken"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:138
 msgid "Edit the project PCB design"
@@ -24630,7 +24614,7 @@ msgstr "Gerber-bestanden voorvertonen"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:150
 msgid "Convert bitmap images to schematic symbols or PCB footprints"
-msgstr "Bitmapafbeeldingen omzetten naar schemasymbolen of PCB-footprints"
+msgstr "Bitmapafbeeldingen converteren naar schemasymbolen of PCB-footprints"
 
 #: kicad/dialogs/panel_kicad_launcher.cpp:154
 msgid "Show tools for calculating resistance, current capacity, etc."
@@ -24817,7 +24801,7 @@ msgstr "'%s' herstellen"
 
 #: kicad/menubar.cpp:58
 msgid "Clear Recent Projects"
-msgstr "Recente projecten wissen"
+msgstr "Recente projecten leegmaken"
 
 #: kicad/menubar.cpp:108
 msgid "Import Non-KiCad Project..."
@@ -24869,7 +24853,7 @@ msgstr "Project &dearchiveren..."
 
 #: kicad/menubar.cpp:139 kicad/menubar.cpp:265
 msgid "Unarchive project files from zip archive"
-msgstr "Projectbestanden dearchiveren uit een zip-archief"
+msgstr "Projectbestanden dearchiveren uit zip-archief"
 
 #: kicad/menubar.cpp:167
 msgid "Browse Project Files"
@@ -25039,7 +25023,7 @@ msgstr "Pakketmap openen"
 
 #: kicad/pcm/dialogs/dialog_pcm_base.h:76
 msgid "Plugin And Content Manager"
-msgstr "Plug-in en contentmanager"
+msgstr "Plug-in en contentbeheer"
 
 #: kicad/pcm/dialogs/dialog_pcm_progress.cpp:53
 msgid "Aborting remaining tasks."
@@ -25750,7 +25734,7 @@ msgstr "Nieuw project van sjabloon..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Create new project from template"
-msgstr "Nieuw project aanmaken op basis van sjabloon"
+msgstr "Nieuw project maken op basis van sjabloon"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
 msgid "Clone Project from Repository..."
@@ -25758,7 +25742,7 @@ msgstr "Project klonen van repository..."
 
 #: kicad/tools/kicad_manager_actions.cpp:61
 msgid "Clone a project from an existing repository"
-msgstr "Project uit een bestaande repository klonen"
+msgstr "Project klonen van een bestaande repository"
 
 #: kicad/tools/kicad_manager_actions.cpp:68
 msgid "Open Demo Project..."
@@ -25826,7 +25810,7 @@ msgstr "Tekenbladranden en titelblok bewerken"
 
 #: kicad/tools/kicad_manager_actions.cpp:187
 msgid "Run Plugin and Content Manager"
-msgstr "Plug-in en contentmanager starten"
+msgstr "Plug-in en contentbeheerder starten"
 
 #: kicad/tools/kicad_manager_actions.cpp:193
 msgid "Open Text Editor"
@@ -26340,11 +26324,11 @@ msgstr "Lijn toevoegen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:46
 msgid "Add a line"
-msgstr "Voeg een lijn toe"
+msgstr "Lijn toevoegen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:55
 msgid "Add a rectangle"
-msgstr "Voeg een rechthoek toe"
+msgstr "Rechthoek toevoegen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:72
 msgid "Add Bitmap"
@@ -26352,7 +26336,7 @@ msgstr "Bitmap toevoegen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:73
 msgid "Add a bitmap image"
-msgstr "Voeg een bitmapafbeelding toe"
+msgstr "Bitmapafbeelding toevoegen"
 
 #: pagelayout_editor/tools/pl_actions.cpp:94
 msgid "Append Existing Drawing Sheet..."
@@ -26368,7 +26352,7 @@ msgstr "Ontwerpinspecteur weergeven"
 
 #: pagelayout_editor/tools/pl_actions.cpp:106
 msgid "Show the list of items in the drawing sheet"
-msgstr "Lijst van items in het tekenblad weergeven"
+msgstr "Lijst van items op het tekenblad weergeven"
 
 #: pagelayout_editor/tools/pl_actions.cpp:112
 msgid "Page Preview Settings..."
@@ -26376,7 +26360,7 @@ msgstr "Paginavoorbeeldinstellingen..."
 
 #: pagelayout_editor/tools/pl_actions.cpp:113
 msgid "Edit preview data for page size and title block"
-msgstr "Bewerk voorbeeldgegevens voor paginaformaat en titelblok"
+msgstr "Voorbeeldgegevens voor paginaformaat en titelblok bewerken"
 
 #: pagelayout_editor/tools/pl_actions.cpp:119
 msgid "Show Title Block in Preview Mode"
@@ -26384,7 +26368,7 @@ msgstr "Titelblok in voorbeeldmodus weergeven"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
 msgid "Text placeholders will be replaced with preview data"
-msgstr "Tekstvariabelen worden vervangen door voorbeelddata"
+msgstr "Tekstvariabelen worden vervangen door voorbeeldgegevens"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
@@ -30156,9 +30140,8 @@ msgid "Update PCB"
 msgstr "PCB bijwerken"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics.cpp:134
-#, fuzzy
 msgid "Graphics Cleanup"
-msgstr "Tekening-opschoning"
+msgstr "Tekeningen opschonen"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
 msgid "Merge lines into rectangles"
@@ -30212,7 +30195,6 @@ msgid "Rebuilding connectivity..."
 msgstr "Bordconnectiviteit herbouwen..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:170
-#, fuzzy
 msgid "Board Cleanup"
 msgstr "Bord opschonen"
 
@@ -30681,9 +30663,8 @@ msgid "Horizontal count:"
 msgstr "Aantal horizontaal:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:42
-#, fuzzy
 msgid "Number of columns"
-msgstr "Aantal cycli"
+msgstr "Aantal kolommen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:51
 msgid "Vertical count:"
@@ -30691,9 +30672,8 @@ msgstr "Aantal verticaal:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:53
 #: pcbnew/dialogs/dialog_create_array_base.cpp:58
-#, fuzzy
 msgid "Number of rows"
-msgstr "Aantal punten"
+msgstr "Aantal rijen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:70
 msgid "Items Spacing"
@@ -30816,7 +30796,6 @@ msgid "Grid Array"
 msgstr "Rasterreeks"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:286
-#, fuzzy
 msgid "Items to Duplicate"
 msgstr "Items om te dupliceren"
 
@@ -30837,9 +30816,8 @@ msgid "Ref point pos Y:"
 msgstr "Referentiepunt Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:327
-#, fuzzy
 msgid "Array Settings"
-msgstr "Laaginstellingen"
+msgstr "Reeksinstellingen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:329
 msgid "Set center by position"
@@ -30874,9 +30852,8 @@ msgid "Angle between Ref point and Center pos."
 msgstr "Hoek tussen referentiepunt en middelpunt."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:429
-#, fuzzy
 msgid "Duplication Settings"
-msgstr "Dubbele pinnen:"
+msgstr "Duplicatieinstellingen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:442
 msgid ""
@@ -30951,13 +30928,12 @@ msgstr ""
 "Het is verplaatst naar de eerste gedefinieerde laag."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:312
-#, fuzzy
 msgid "Edit Dimension Properties"
-msgstr "Dimensie-eigenschappen"
+msgstr "Dimensie-eigenschappen bewerken"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
-msgstr "Leader-indeling"
+msgstr "Verwijslijnindeling"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:39
 msgid "Text frame:"
@@ -30966,7 +30942,7 @@ msgstr "Tekstkader:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:41
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:49
 msgid "Draw a shape around the leader text"
-msgstr "Teken een vorm rond de leider-tekst"
+msgstr "Vorm tekenen rond de verwijslijntekst"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:76
@@ -30986,12 +30962,12 @@ msgstr "Laag:"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:69
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:89
 msgid "Dimension Format"
-msgstr "Afmetingnotatie"
+msgstr "Maatlijnnotatie"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:98
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:104
 msgid "Measured value of this dimension"
-msgstr "Gemeten waarde van deze dimensie"
+msgstr "Gemeten waarde van deze maatlijn"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:108
 msgid "Override value"
@@ -31019,13 +30995,13 @@ msgid ""
 "Units of this dimension (\"automatic\" to follow the units selected in the "
 "editor)"
 msgstr ""
-"Eenheden van deze dimensie ('automatisch' om de eenheden te volgen die in de "
-"editor zijn geselecteerd)"
+"Eenheid van deze maatlijn (“automatisch” om de eenheid te volgen die in de "
+"editor is geselecteerd)"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:132
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:137
 msgid "Text to print before the dimension value"
-msgstr "Tekst die moet worden afgedrukt vóór de dimensiewaarde"
+msgstr "Tekst om af te drukken vóór de maatlijnwaarde"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:141
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:117
@@ -31055,7 +31031,7 @@ msgstr "1234 (mm)"
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:157
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:162
 msgid "Text to print after the dimension value"
-msgstr "Tekst om af te drukken na de dimensiewaarde"
+msgstr "Tekst om af te drukken na de maatlijnwaarde"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:166
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:61
@@ -31138,7 +31114,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:209
 msgid "Dimension Text"
-msgstr "Afmetingstekst"
+msgstr "Maatlijntekst"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:272
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:144
@@ -31227,7 +31203,7 @@ msgstr "Kies hoe u de tekst wilt plaatsen ten opzichte van de maatlijn"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:363
 msgid "Keep aligned with dimension"
-msgstr "Blijf in lijn met de dimensie"
+msgstr "Blijf in lijn met de maatlijn"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:364
 msgid "Automatically set the text orientation to match the dimension lines"
@@ -31237,7 +31213,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 msgid "Dimension Line"
-msgstr "Maatlijn"
+msgstr "Maatlijn-lijn"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:387
 msgid "Thickness of the dimension lines"
@@ -31266,7 +31242,7 @@ msgstr "Uitloop verlengingslijn:"
 #: pcbnew/pcb_dimension.cpp:1435 pcbnew/pcb_dimension.cpp:1506
 #: pcbnew/pcb_dimension.cpp:1587 pcbnew/pcb_dimension.cpp:1633
 msgid "Dimension Properties"
-msgstr "Dimensie-eigenschappen"
+msgstr "Maatlijneigenschappen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:126
 msgid "Run DRC"
@@ -31290,9 +31266,9 @@ msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Alle uitzonderingen voor overtredingen van regel '%s' verwijderen"
 
 #: pcbnew/dialogs/dialog_drc.cpp:619
-#, fuzzy, c-format
+#, c-format
 msgid "They will be placed back in the %s list"
-msgstr "Het wordt teruggeplaatst in de %s-lijst"
+msgstr "Zij worden teruggeplaatst in de %s-lijst"
 
 #: pcbnew/dialogs/dialog_drc.cpp:631
 #, c-format
@@ -31300,9 +31276,9 @@ msgid "Exclude all violations of rule '%s'..."
 msgstr "Alle overtredingen van regel '%s' uitzonderen..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:633
-#, fuzzy, c-format
+#, c-format
 msgid "They will be excluded from the %s list"
-msgstr "Het wordt weggelaten van de %s -lijst"
+msgstr "Zij worden weggelaten van de %s -lijst"
 
 #: pcbnew/dialogs/dialog_drc.cpp:649 pcbnew/dialogs/dialog_drc.cpp:656
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -32191,9 +32167,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:614
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:640
-#, fuzzy
 msgid "Edit Footprint Properties"
-msgstr "Footprint-eigenschappen aanpassen"
+msgstr "Footprinteigenschappen bewerken"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:53
@@ -32299,9 +32274,8 @@ msgid "Clearances"
 msgstr "Vrije afstanden"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:269
-#, fuzzy
 msgid "Leave values blank to use Board Setup values."
-msgstr "Stel waarden in op 0 om bordinstellingwaarden te gebruiken."
+msgstr "Laat waarden leeg om bordinstellingwaarden te gebruiken."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:279
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
@@ -32453,7 +32427,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_footprint_properties_base.h:122
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.h:114
 msgid "Footprint Properties"
-msgstr "Footprint-eigenschappen"
+msgstr "Footprinteigenschappen"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:392
 #: pcbnew/footprint_libraries_utils.cpp:1092
@@ -32508,9 +32482,8 @@ msgid "Component type:"
 msgstr "Component type:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:237
-#, fuzzy
 msgid "Leave values blank to use netclass values."
-msgstr "Stel waarden in op 0 om waarden van netklasse te gebruiken."
+msgstr "Laat waarden leeg om waarden van netklasse te gebruiken."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:249
 msgid ""
@@ -32536,7 +32509,7 @@ msgstr ""
 "deze footprint.\n"
 "Bij 0 wordt de globale waarde gebruikt.\n"
 "Deze waarde kan per pad worden aangepast in het tabblad voor\n"
-"aangepaste vrije afstand en instellingen in de pad-eigenschappen."
+"aangepaste vrije afstand en instellingen in de padeigenschappen."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
 msgid ""
@@ -32607,7 +32580,7 @@ msgstr "Niet laadbare python-scripts:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:84
 msgid "Show Trace"
-msgstr "Toon bewerkingen"
+msgstr "Bewerkingen weergeven"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:98
 msgid "Update Python Modules"
@@ -33296,7 +33269,7 @@ msgstr "Grafische items"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
 msgid "Dimension items"
-msgstr "Dimensieitems"
+msgstr "Maatlijnitems"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:258
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:183
@@ -33370,7 +33343,7 @@ msgstr "Rechtop"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:341
 msgid "Set to layer and dimension default values:"
-msgstr "Instellen op standaardwaarden van lagen en dimensies:"
+msgstr "Instellen op standaardwaarden van lagen en maatlijnen:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:343
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:258
@@ -33387,7 +33360,7 @@ msgstr "Tekenitems footprint"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
 msgid "Footprint dimension items"
-msgstr "Dimensie-items footprint"
+msgstr "Maatlijnitems footprint"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB graphic items"
@@ -33399,7 +33372,7 @@ msgstr "Tekstitems PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "PCB dimension items"
-msgstr "Dimensieitems PCB"
+msgstr "Maatlijnitems PCB"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "Filter items by parent footprint library id:"
@@ -33481,9 +33454,8 @@ msgid "Error loading footprint library table."
 msgstr "Fout bij het laden van de footprintbibliotheektabel."
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:114
-#, fuzzy
 msgid "Edit Group Properties"
-msgstr "Groepseigenschappen"
+msgstr "Groepeigenschappen bewerken"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -33499,7 +33471,7 @@ msgstr "Groepsleden:"
 
 #: pcbnew/dialogs/dialog_group_properties_base.h:64
 msgid "Group Properties"
-msgstr "Groepseigenschappen"
+msgstr "Groepeigenschappen"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:81
 msgid "Load and Test Netlist"
@@ -33574,9 +33546,8 @@ msgstr "Vervang footprints door die gespecificeerd in netlist"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
-#, fuzzy
 msgid "Delete/replace footprints even if locked"
-msgstr "Footprintfilter verwijderen"
+msgstr "Footprints verwijderen/vervangen zelfs als ze vergrendeld zijn"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 msgid "Delete tracks shorting multiple nets"
@@ -33844,7 +33815,7 @@ msgstr "Netnaamfilter:"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:37
 msgid "Show zero pad nets"
-msgstr "Toon zero pad-netten"
+msgstr "Zero pad-netten weergeven"
 
 #: pcbnew/dialogs/dialog_net_inspector_base.cpp:41
 msgid "Group by:"
@@ -34054,9 +34025,8 @@ msgid "Pad Properties Warnings"
 msgstr "Pad-eigenschapwaarschuwingen"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1646
-#, fuzzy
 msgid "Edit Pad Properties"
-msgstr "Pineigenschappen bewerken"
+msgstr "Paneigenschappen bewerken"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1679
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
@@ -34422,11 +34392,10 @@ msgid "Clearance Overrides"
 msgstr "Aangepaste vrije afstanden"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:931
-#, fuzzy
 msgid "Leave values blank to use parent footprint or netclass values."
 msgstr ""
-"Stel waarden in op 0 om de waarden van de bovenliggende footprint of "
-"netklasse te gebruiken."
+"Laat waarden leeg om waarden van de bovenliggende footprint of netklasse te "
+"gebruiken."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:935
 msgid ""
@@ -35145,7 +35114,7 @@ msgstr "Klik rechts voor laagselectieopdrachten."
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:215
 msgid "Print according to objects tab of appearance manager"
-msgstr "Afdrukken volgens het tabblad Objecten van de uiterlijkmanager"
+msgstr "Afdrukken volgens het objecten-tabblad van de vormgevingbeheerder"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:243
 msgid "No drill mark"
@@ -35331,9 +35300,8 @@ msgid "Center Point"
 msgstr "Middelpunt"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:515
-#, fuzzy
 msgid "Edit Shape Properties"
-msgstr "Pineigenschappen bewerken"
+msgstr "Vormeigenschappen bewerken"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:538
 msgid "Arc angle cannot be zero."
@@ -35408,9 +35376,8 @@ msgid "Swap Layers"
 msgstr "Wissel lagen"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
-#, fuzzy
 msgid "Edit Alignment Target"
-msgstr "Laag Uitlijning Doel Plaatsen"
+msgstr "Uitlijningsdoel bewerken"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
@@ -35426,7 +35393,7 @@ msgstr "X"
 
 #: pcbnew/dialogs/dialog_target_properties_base.h:51
 msgid "Target Properties"
-msgstr "Doel Instellingen"
+msgstr "Doeleigenschappen"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:106
 msgid "Footprint Reference Properties"
@@ -35470,9 +35437,8 @@ msgid "Parent footprint description"
 msgstr "Beschrijving van bovenliggende footprint"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:381
-#, fuzzy
 msgid "Edit Text Box Properties"
-msgstr "Tekstvakeigenschappen"
+msgstr "Tekstvakeigenschappen bewerken"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:205
 msgid "Border style:"
@@ -35511,14 +35477,12 @@ msgid "Via start layer and end layer cannot be the same"
 msgstr "Via startlaag en eindlaag kunnen niet hetzelfde zijn"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:800
-#, fuzzy
 msgid "Edit Track/Via Properties"
 msgstr "Spoor-/viaeigenschappen bewerken"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:865
-#, fuzzy
 msgid "Update Nets"
-msgstr "Update netlijst"
+msgstr "Netten bijwerken"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -35639,7 +35603,7 @@ msgstr "(van %s)"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:31
 msgid "Target length:"
-msgstr "Target lengte:"
+msgstr "Doellengte:"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:42
 msgid "Override custom rules"
@@ -36122,14 +36086,14 @@ msgstr "Markeert netten wanneer ze zijn gemarkeerd in de schema-editor"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:152
 msgid "Refresh 3D view automatically"
-msgstr "3D-view automatisch verversen"
+msgstr "3D-view automatisch vernieuwen"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:153
 msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
 msgstr ""
-"Indien ingeschakeld verversen bewerkingen aan het bord de 3D-view (mogelijk "
+"Indien ingeschakeld vernieuwen bewerkingen aan het bord de 3D-view (mogelijk "
 "traag op grotere borden)"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
@@ -36155,7 +36119,7 @@ msgstr "Verplaats Omlaag"
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:76
 #: pcbnew/tools/pcb_actions.cpp:995
 msgid "Open Plugin Directory"
-msgstr "Open plug-inmap"
+msgstr "Plug-inmap openen"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:81
 msgid "Reload Plugins"
@@ -36163,7 +36127,7 @@ msgstr "Herlaad plug-ins"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:86
 msgid "Show Plugin Errors"
-msgstr "Toon plug-in-fouten"
+msgstr "Plug-infouten weergeven"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:23
 msgid "Page origin"
@@ -38203,14 +38167,14 @@ msgstr "Standaardeigenschappen voor nieuwe tekeningen en tekst:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:78
 msgid "Default properties for new dimension objects:"
-msgstr "Standaardeigenschappen voor nieuwe dimensieobjecten:"
+msgstr "Standaardeigenschappen voor nieuwe maatlijnobjecten:"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:98
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
 msgstr ""
-"Standaardeenheden voor afmetingen ('automatisch' om de gekozen UI-eenheden "
-"te volgen)"
+"Standaardeenheid voor maatlijnen (“automatisch” om de gekozen UI-eenheid te "
+"volgen)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:105
 msgid "Text position:"
@@ -38228,7 +38192,7 @@ msgstr "Tekst uitgelijnd houden"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:128
 msgid "When checked, dimension text will be kept aligned with dimension lines"
 msgstr ""
-"Indien aangevinkt, wordt de afmetingstekst uitgelijnd met de afmetingslijnen"
+"Indien aangevinkt wordt de maatlijntekst uitgelijnd met de maatlijnlijnen"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:140
 msgid "How many digits of precision to show"
@@ -38668,7 +38632,7 @@ msgstr "Items niet toegestaan"
 
 #: pcbnew/drc/drc_item.cpp:65
 msgid "Text (or dimension) on Edge.Cuts layer"
-msgstr "Text (of dimensie) op Edge.Cuts-laag"
+msgstr "Text (of maatlijn) op Edge.Cuts-laag"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Clearance violation"
@@ -39465,9 +39429,8 @@ msgid "Solder paste absolute clearance overridden."
 msgstr "Absolute vrije afstand van soldeerpasta aangepast."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:663
-#, fuzzy
 msgid "\"Solder paste relative clearance overridden."
-msgstr "Relatieve vrije afstand van soldeerpasta aangepast."
+msgstr "\"Relatieve vrije afstand van soldeerpasta aangepast."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:670
 msgid "Zone connection overridden."
@@ -39514,10 +39477,10 @@ msgid "(%s max length %s; actual %s)"
 msgstr "(%s max lengte %s; werkelijk %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min skew %s; actual %s; average net length %s; actual %s)"
 msgstr ""
-"(%s max scheeftrekking %s; werkelijk %s; gemiddelde netlengte %s; werkelijk "
+"(%s min scheeftrekking %s; werkelijk %s; gemiddelde netlengte %s; werkelijk "
 "%s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:177
@@ -39719,9 +39682,8 @@ msgid "Checking thermal reliefs..."
 msgstr "Controle thermische ontlastingen..."
 
 #: pcbnew/edit_zone_helpers.cpp:84
-#, fuzzy
 msgid "Edit Zone Properties"
-msgstr "Pineigenschappen bewerken"
+msgstr "Zoneeigenschappen bewerken"
 
 #: pcbnew/exporters/export_d356.cpp:380
 msgid "Export D-356 Test File"
@@ -40248,11 +40210,8 @@ msgid "Edit Zone"
 msgstr "Bewerk Zone"
 
 #: pcbnew/footprint_editor_utils.cpp:328 pcbnew/footprint_editor_utils.cpp:340
-#, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
-msgstr ""
-"De huidige configuratie bevat geen bibliotheek '%s'. Gebruik Manage "
-"Footprint Libraries om de configuratie te bewerken."
+msgstr "Gebruik footprintbibliotheken beheren om de configuratie te bewerken."
 
 #: pcbnew/footprint_editor_utils.cpp:329
 msgid "Library not found in footprint library table."
@@ -40868,7 +40827,7 @@ msgstr "Microgolfvorm toevoegen"
 
 #: pcbnew/menubar_pcb_editor.cpp:320
 msgid "Add Dimension"
-msgstr "Dimensie toevoegen"
+msgstr "Maatlijn toevoegen"
 
 #: pcbnew/menubar_pcb_editor.cpp:341
 msgid "Auto-Place Footprints"
@@ -40897,7 +40856,7 @@ msgstr "Booguitsteekselradius:"
 #: pcbnew/microwave/microwave_footprint.cpp:81
 #: pcbnew/microwave/microwave_footprint.cpp:95
 msgid "Create Microwave Footprint"
-msgstr "Microgolf-footprint maken"
+msgstr "Microgolffootprint maken"
 
 #: pcbnew/microwave/microwave_footprint.cpp:94
 msgid "Angle in degrees:"
@@ -40908,7 +40867,6 @@ msgid "Incorrect number, abort"
 msgstr "Incorrect nummer, afbreken"
 
 #: pcbnew/microwave/microwave_inductor.cpp:316
-#, fuzzy
 msgid "Add Microwave Inductor"
 msgstr "Microgolfspoel toevoegen"
 
@@ -40962,7 +40920,7 @@ msgstr "Vorm heeft geen punten."
 
 #: pcbnew/microwave/microwave_tool.cpp:92
 msgid "Place microwave feature"
-msgstr "Microgolf-footprint plaatsen"
+msgstr "Microgolfobject plaatsen"
 
 #: pcbnew/netinfo_item.cpp:137
 msgid "On Board"
@@ -41003,9 +40961,11 @@ msgid "Cannot update %s (footprint '%s' not found)."
 msgstr "Kan %s niet bijwerken (footprint '%s' niet gevonden)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:235
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "Footprint %s wijzigen van '%s' naar '%s'."
+msgstr ""
+"Kan ongebruikte footprint %s niet wijzigen van '%s' naar '%s' (footprint is "
+"vergrendeld)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:246
 #, c-format
@@ -41013,9 +40973,11 @@ msgid "Change %s footprint from '%s' to '%s'."
 msgstr "Footprint %s wijzigen van '%s' naar '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:260
-#, fuzzy, c-format
+#, c-format
 msgid "Could not change %s footprint from '%s' to '%s' (footprint is locked)."
-msgstr "Footprint %s wijzigen van '%s' naar '%s'."
+msgstr ""
+"Kon ongebruikte footprint %s niet wijzigen van '%s' naar '%s' (footprint is "
+"vergrendeld)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:273
 #, c-format
@@ -41252,14 +41214,16 @@ msgid "Multiple footprints found for '%s'."
 msgstr "Meerdere footprints gevonden voor '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove unused footprint %s (footprint is locked)."
-msgstr "Kan ongebruikte footprint %s niet verwijderen (vergrendeld)."
+msgstr ""
+"Kan ongebruikte footprint %s niet verwijderen (footprint is vergrendeld)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1264
-#, fuzzy, c-format
+#, c-format
 msgid "Could not remove unused footprint %s (footprint is locked)."
-msgstr "Kon ongebruikte footprint %s niet verwijderen (vergrendeld)."
+msgstr ""
+"Kon ongebruikte footprint %s niet verwijderen (footprint is vergrendeld)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1277
 #, c-format
@@ -41277,9 +41241,8 @@ msgid "Removed unused net %s."
 msgstr "Ongebruikt net %s verwijderd."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1323
-#, fuzzy
 msgid "Update Netlist"
-msgstr "Update netlijst"
+msgstr "Netlijst bijwerken"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1344
 #, c-format
@@ -41572,7 +41535,7 @@ msgstr "Achtervoegsel"
 #: pcbnew/pcb_dimension.cpp:550
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "Dimensie '%s' op %s"
+msgstr "Maatlijn '%s' op %s"
 
 #: pcbnew/pcb_dimension.cpp:1416
 msgid "1234.0"
@@ -41604,7 +41567,7 @@ msgstr "Uitloop verlengingslijn"
 
 #: pcbnew/pcb_dimension.cpp:1589
 msgid "Leader Length"
-msgstr "Aanlooplengte"
+msgstr "Verwijslijnlengte"
 
 #: pcbnew/pcb_dimension.cpp:1635
 msgid "Text Frame"
@@ -41643,7 +41606,7 @@ msgid ""
 msgstr ""
 "Kan de PCB niet bijwerken omdat de PCB-editor in stand-alonemodus is "
 "geopend. Om PCB’s van schema’s te maken of bij te werken moet u de KiCad-"
-"projectmanager starten en een project aanmaken."
+"projectbeheerder starten en een project aanmaken."
 
 #: pcbnew/pcb_edit_frame.cpp:1894 pcbnew/pcbnew_jobs_handler.cpp:1017
 msgid "Eeschema netlist"
@@ -41862,18 +41825,18 @@ msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
 msgstr ""
-"Dimensie gevonden op een Altium-laag %d zonder KiCad-equivalent. Het is "
+"Maatlijn gevonden op een Altium-laag %d zonder KiCad-equivalent. Het is "
 "verplaatst naar Kicad-laag Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1555
 msgid "Loading dimension drawings..."
-msgstr "Dimensietekeningen laden..."
+msgstr "Maatlijntekeningen laden..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1576
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1583
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr "Negeer dimensie van soort %d (nog niet ondesteund)."
+msgstr "Maatlijn van soort %d genegeerd (nog niet ondersteund)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1624
 msgid "No 3D-models will be imported."
@@ -42350,8 +42313,8 @@ msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
 msgstr ""
-"Dimension Id %s staat onder een hoek. KiCad ondersteunt dat niet. De "
-"dimension is uitgelijnd."
+"Maatlijn met ID %s staat onder een hoek. KiCad ondersteunt dat niet. In "
+"plaats is een uitgelijnde maatlijn gebruikt."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1491
 #, c-format
@@ -42360,14 +42323,14 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"Dimensie-ID %s heeft een ‘Externe’ stijl in CADSTAR. Externe dimensiestijlen "
-"worden in KiCad nog niet ondersteund. Het dimensieobject is geïmporteerd met "
-"een interne dimensiestijl."
+"Maatlijn met ID %s heeft een ‘Externe’ stijl in CADSTAR. Externe "
+"maatlijnstijlen worden in KiCad nog niet ondersteund. Het maatlijnobject is "
+"geïmporteerd met een interne maatlijnstijl."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1548
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "Onverwacht Dimensie type (ID %s). Dit is niet geïmporteerd."
+msgstr "Onverwacht Dimension-type (ID %s). Dit is niet geïmporteerd."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1683
 #, c-format
@@ -42375,8 +42338,8 @@ msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
 msgstr ""
-"Dimensie %s is een angular dimensie zonder KiCad-equivalent. Dit object is "
-"niet geïmporteerd."
+"Maatlijn %s is een hoekmaatlijn zonder KiCad-equivalent. Dit object is niet "
+"geïmporteerd."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1723
 #, c-format
@@ -42615,8 +42578,8 @@ msgid ""
 "Dimension ID %s uses a type of unit that is not supported in KiCad. "
 "Millimeters were applied instead."
 msgstr ""
-"Dimensie-ID %s gebruikt een eenheid die niet wordt ondersteund door KiCad. "
-"Millimeters zijn toegepast."
+"Maatlijn met ID %s gebruikt een eenheid die niet wordt ondersteund door "
+"KiCad. Millimeters zijn toegepast."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4012
 msgid ""
@@ -43449,7 +43412,7 @@ msgstr "Padprimitieven"
 
 #: pcbnew/pcb_target.cpp:151
 msgid "PCB Target"
-msgstr "PCB Tekst"
+msgstr "Tekst"
 
 #: pcbnew/pcb_text.cpp:226
 msgid "PCB Text"
@@ -43470,9 +43433,9 @@ msgid "PCB Text '%s' on %s"
 msgstr "PCB-tekst '%s' op %s"
 
 #: pcbnew/pcb_textbox.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text Box '%s' on %s"
-msgstr "PCB-tekst '%s' op %s"
+msgstr "PCB-tekstvak '%s' op %s"
 
 #: pcbnew/pcb_textbox.cpp:707
 msgid "Border Properties"
@@ -43747,9 +43710,8 @@ msgid "Unknown Method"
 msgstr "Onbekende methode"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:412
-#, fuzzy
 msgid "Apply Action Script"
-msgstr "Aktie script toepassen"
+msgstr "Actiescript toepassen"
 
 #: pcbnew/python/scripting/pcbnew_footprint_wizards.cpp:70
 msgid "Exception on python footprint wizard code"
@@ -44237,11 +44199,11 @@ msgstr "+/- voor omwisselen"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:62
 msgid "Display previous footprint"
-msgstr "Toon vorige footprint"
+msgstr "Vorige footprint weergeven"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:65
 msgid "Display next footprint"
-msgstr "Toon volgende footprint"
+msgstr "Volgende footprint weergeven"
 
 #: pcbnew/toolbars_footprint_viewer.cpp:78
 msgid "Insert footprint in board"
@@ -44336,13 +44298,12 @@ msgid ""
 "project manager and create a project."
 msgstr ""
 "Kan schema niet bijwerken omdat Pcbnew in stand-alonemodus is geopend. Om "
-"PCB’s van schema’s te maken of bij te werken moet u de KiCad-projectmanager "
-"starten en een project aanmaken."
+"PCB’s van schema’s te maken of bij te werken moet u de KiCad-"
+"projectbeheerder starten en een project aanmaken."
 
 #: pcbnew/tools/board_editor_control.cpp:1162
-#, fuzzy
 msgid "Place a Footprint"
-msgstr "Plaats een footprint"
+msgstr "Footprint plaatsen"
 
 #: pcbnew/tools/board_editor_control.cpp:1277 pcbnew/tools/pcb_actions.cpp:1182
 msgid "Lock"
@@ -44945,7 +44906,7 @@ msgstr "Tekst plaatsen"
 
 #: pcbnew/tools/drawing_tool.cpp:1509
 msgid "Draw Dimension"
-msgstr "Dimensie tekenen"
+msgstr "Maatlijn tekenen"
 
 #: pcbnew/tools/drawing_tool.cpp:1968
 msgid "Move Footprint Anchor"
@@ -44989,7 +44950,6 @@ msgid "Drag Arc Track"
 msgstr "Sleep boogspoor"
 
 #: pcbnew/tools/edit_tool.cpp:949
-#, fuzzy
 msgid "Edit Track Width/Via Size"
 msgstr "Spoorbreedte/viamaat bewerken"
 
@@ -45087,7 +45047,6 @@ msgid "Copy canceled"
 msgstr "Kopiëren geannuleerd"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:201
-#, fuzzy
 msgid "Pack Footprints"
 msgstr "Footprints samenpakken"
 
@@ -45139,9 +45098,8 @@ msgid "Regenerate Item"
 msgstr "Item hergenereren"
 
 #: pcbnew/tools/global_edit_tool.cpp:242
-#, fuzzy
 msgid "Modify zones properties with zone manager"
-msgstr "Wijzig zone-eigenschappen"
+msgstr "Zoneeigenschappen wijzigen met zonebeheer"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -45246,7 +45204,6 @@ msgstr ""
 "Druk op <esc> om alle te annuleren; dubbelklik om vast te leggen"
 
 #: pcbnew/tools/pad_tool.cpp:401 pcbnew/tools/pad_tool.cpp:499
-#, fuzzy
 msgid "Renumber Pads"
 msgstr "Pads hernummerren"
 
@@ -45274,7 +45231,7 @@ msgstr "Polygoon maken van selectie..."
 
 #: pcbnew/tools/pcb_actions.cpp:54
 msgid "Creates a graphic polygon from the selection"
-msgstr "Creëert een grafische polygoon van de selectie"
+msgstr "Maakt een grafische polygoon van de selectie"
 
 #: pcbnew/tools/pcb_actions.cpp:60
 msgid "Create Zone from Selection..."
@@ -45282,7 +45239,7 @@ msgstr "Zone maken van selectie..."
 
 #: pcbnew/tools/pcb_actions.cpp:61
 msgid "Creates a copper zone from the selection"
-msgstr "Creëert een koper-zone uit de selectie"
+msgstr "Maakt een koper-zone uit de selectie"
 
 #: pcbnew/tools/pcb_actions.cpp:67
 msgid "Create Rule Area from Selection..."
@@ -45318,7 +45275,7 @@ msgstr "Maakt sporen van de geselecteerde grafische lijnen"
 
 #: pcbnew/tools/pcb_actions.cpp:101
 msgid "Draw a line"
-msgstr "Teken een lijn"
+msgstr "Lijn tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:110
 msgid "Draw Graphic Polygon"
@@ -45326,19 +45283,19 @@ msgstr "Grafische polygoon tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:111
 msgid "Draw a graphic polygon"
-msgstr "Teken een grafische polygon"
+msgstr "Grafische polygoon tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:120
 msgid "Draw a rectangle"
-msgstr "Teken een rechthoek"
+msgstr "Rechthoek tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:130
 msgid "Draw a circle"
-msgstr "Teken een cirkel"
+msgstr "Cirkel tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:140
 msgid "Draw an arc"
-msgstr "Teken een boog"
+msgstr "Boog tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:148
 msgid "Add Board Characteristics"
@@ -45365,13 +45322,12 @@ msgid ""
 "Add a bitmap image to be used as a reference (image will not be included in "
 "any output)"
 msgstr ""
-"Voeg een bitmap-afbeelding toe ter referentie (afbeelding wordt in geen "
-"enkele uitvoer opgenomen)"
+"Bitmapafbeelding toevoegen ter referentie (afbeelding wordt in geen enkele "
+"uitvoer opgenomen)"
 
 #: pcbnew/tools/pcb_actions.cpp:183
-#, fuzzy
 msgid "Add a line-wrapped text item"
-msgstr "Een tekstitem met kader toevoegen"
+msgstr "Een tekstitem met tekstomloop toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:200
 msgid "Increase Spacing"
@@ -45379,7 +45335,7 @@ msgstr "Tussenruimte vergroten"
 
 #: pcbnew/tools/pcb_actions.cpp:201
 msgid "Increase tuning pattern spacing by one step."
-msgstr "Vergroot afstempatroonafstand met één stap."
+msgstr "Afstempatroonafstand met één stap vergroten."
 
 #: pcbnew/tools/pcb_actions.cpp:209
 msgid "Decrease Spacing"
@@ -45387,7 +45343,7 @@ msgstr "Tussenruimte verkleinen"
 
 #: pcbnew/tools/pcb_actions.cpp:210
 msgid "Decrease tuning pattern spacing by one step."
-msgstr "Verklein afstempatroonafstand met één stap."
+msgstr "Afstempatroonafstand met één stap verkleinen."
 
 #: pcbnew/tools/pcb_actions.cpp:218
 msgid "Increase Amplitude"
@@ -45395,7 +45351,7 @@ msgstr "Amplitude verhogen"
 
 #: pcbnew/tools/pcb_actions.cpp:219
 msgid "Increase tuning pattern amplitude by one step."
-msgstr "Verhoog afstempatroonamplitude met één stap."
+msgstr "Afstempatroonamplitude met één stap verhogen."
 
 #: pcbnew/tools/pcb_actions.cpp:227
 msgid "Decrease Amplitude"
@@ -45403,47 +45359,47 @@ msgstr "Amplitude verlagen"
 
 #: pcbnew/tools/pcb_actions.cpp:228
 msgid "Decrease tuning pattern amplitude by one step."
-msgstr "Verlaag afstempatroonamplitude met één stap."
+msgstr "Afstempatroonamplitude met één stap verlagen."
 
 #: pcbnew/tools/pcb_actions.cpp:237
 msgid "Add Aligned Dimension"
-msgstr "Uitgelijnde dimensie toevoegen"
+msgstr "Uitgelijnde maatlijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:238
 msgid "Add an aligned linear dimension"
-msgstr "Uitgelijnde lineaire dimensie toevoegen"
+msgstr "Uitgelijnde lineaire maatlijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:245
 msgid "Add Center Dimension"
-msgstr "Middenmaat toevoegen"
+msgstr "Hartlijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:246
 msgid "Add a center dimension"
-msgstr "Voeg een middenmaat toe"
+msgstr "Hartlijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:253
 msgid "Add Radial Dimension"
-msgstr "Radiale dimensie toevoegen"
+msgstr "Radiale maatlijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:254
 msgid "Add a radial dimension"
-msgstr "Radiale dimensie toevoegen"
+msgstr "Radiale maatlijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:261
 msgid "Add Orthogonal Dimension"
-msgstr "Orthogonale dimensie toevoegen"
+msgstr "Orthogonale maatlijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:262
 msgid "Add an orthogonal dimension"
-msgstr "Voeg een orthogonale dimensie toe"
+msgstr "Orthogonale maatlijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:269
 msgid "Add Leader"
-msgstr "Leider toevoegen"
+msgstr "Verwijslijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:270
 msgid "Add a leader dimension"
-msgstr "Voeg een leider-dimensie toe"
+msgstr "Verwijslijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:283
 msgid "Add Filled Zone"
@@ -45467,7 +45423,7 @@ msgstr "Regelgebied toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:305
 msgid "Add a rule area (keepout)"
-msgstr "Voeg een regelgebied toe (weergebied)"
+msgstr "Regelgebied (weergebied) toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:315
 msgid "Add a Zone Cutout"
@@ -45483,7 +45439,7 @@ msgstr "Vergelijkbare zone toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:327
 msgid "Add a zone with the same settings as an existing zone"
-msgstr "Voeg een zone toe met dezelfde instellingen als een bestaande zone"
+msgstr "Zone toevoegen met dezelfde instellingen als een bestaande zone"
 
 #: pcbnew/tools/pcb_actions.cpp:347
 msgid "Place the Footprint Anchor"
@@ -45499,7 +45455,7 @@ msgstr "Lijnbreedte vergroten"
 
 #: pcbnew/tools/pcb_actions.cpp:358
 msgid "Increase the line width"
-msgstr "Vergroot de lijnbreedte"
+msgstr "Lijnbreedte vergroten"
 
 #: pcbnew/tools/pcb_actions.cpp:365
 msgid "Decrease Line Width"
@@ -45507,7 +45463,7 @@ msgstr "Lijnbreedte verkleinen"
 
 #: pcbnew/tools/pcb_actions.cpp:366
 msgid "Decrease the line width"
-msgstr "Verklein de lijnbreedte"
+msgstr "Lijnbreedte verkleinen"
 
 #: pcbnew/tools/pcb_actions.cpp:373
 msgid "Switch Arc Posture"
@@ -45515,7 +45471,7 @@ msgstr "Boogstand veranderen"
 
 #: pcbnew/tools/pcb_actions.cpp:374
 msgid "Switch the arc posture"
-msgstr "Verander de boogstand"
+msgstr "Boogstand veranderen"
 
 #: pcbnew/tools/pcb_actions.cpp:380
 msgid "Snap to Objects on the Active Layer Only"
@@ -45527,7 +45483,7 @@ msgstr "Activeert uitlijnen naar objecten op alleen de actieve laag"
 
 #: pcbnew/tools/pcb_actions.cpp:386
 msgid "Snap to Objects on All Layers"
-msgstr "Naar objecten op alle lagen uitlijnen"
+msgstr "Uitlijnen naar objecten op alle lagen"
 
 #: pcbnew/tools/pcb_actions.cpp:387
 msgid "Enables snapping to objects on all visible layers"
@@ -45549,7 +45505,7 @@ msgstr "Laatste punt verwijderen"
 
 #: pcbnew/tools/pcb_actions.cpp:401
 msgid "Delete the last point added to the current item"
-msgstr "Het laatste punt dat aan het huidige item is toegevoegd verwijderen"
+msgstr "Laatste punt dat aan het huidige item is toegevoegd verwijderen"
 
 #: pcbnew/tools/pcb_actions.cpp:407
 msgid "Close Outline"
@@ -45561,7 +45517,7 @@ msgstr "De lopende omtrek sluiten"
 
 #: pcbnew/tools/pcb_actions.cpp:417
 msgid "Show the design rules checker window"
-msgstr "Toon het controlevenster van de ontwerpregels"
+msgstr "Ontwerpregelscontrolescherm weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:428
 msgid "Open in Footprint Editor"
@@ -45585,7 +45541,7 @@ msgstr "Individueel verplaatsen"
 
 #: pcbnew/tools/pcb_actions.cpp:466
 msgid "Moves the selected items one-by-one"
-msgstr "Verplaatst de geselecteerde items een-voor-een"
+msgstr "Verplaatst de geselecteerde items één-voor-één"
 
 #: pcbnew/tools/pcb_actions.cpp:474
 msgid "Move with Reference"
@@ -45602,7 +45558,7 @@ msgstr "Kopiëren met referentie"
 #: pcbnew/tools/pcb_actions.cpp:484
 msgid "Copy selected item(s) to clipboard with a specified starting point"
 msgstr ""
-"Kopieer geselecteerde item(s) naar klembord met een gespecificeerd startpunt"
+"Kopieert geselecteerde item(s) naar klembord met een gespecificeerd startpunt"
 
 #: pcbnew/tools/pcb_actions.cpp:493
 msgid "Duplicate and Increment"
@@ -45626,7 +45582,7 @@ msgstr "Hoek verplaatsen naar..."
 
 #: pcbnew/tools/pcb_actions.cpp:510
 msgid "Move the active corner to an exact location"
-msgstr "De actieve hoek verplaatsen naar een exacte locatie"
+msgstr "Actieve hoek verplaatsen naar een exacte locatie"
 
 #: pcbnew/tools/pcb_actions.cpp:516
 msgid "Move Midpoint To..."
@@ -45634,7 +45590,7 @@ msgstr "Middelpunt verplaatsen naar..."
 
 #: pcbnew/tools/pcb_actions.cpp:517
 msgid "Move the active midpoint to an exact location"
-msgstr "Het actieve middelpunt verplaatsen naar een exacte locatie"
+msgstr "Actieve middelpunt verplaatsen naar een exacte locatie"
 
 #: pcbnew/tools/pcb_actions.cpp:525
 msgid "Create Array..."
@@ -45690,7 +45646,7 @@ msgstr "Lijnen afronden..."
 
 #: pcbnew/tools/pcb_actions.cpp:615
 msgid "Adds arcs tangent to the selected lines"
-msgstr "Voegt bogen toe die de geselecteerde lijnen raken"
+msgstr "Voegt bogen toe tangent aan de geselecteerde lijnen"
 
 #: pcbnew/tools/pcb_actions.cpp:621
 msgid "Chamfer Lines..."
@@ -45757,7 +45713,7 @@ msgstr "Nieuwe footprint..."
 
 #: pcbnew/tools/pcb_actions.cpp:700
 msgid "Create a new, empty footprint"
-msgstr "Maak een nieuwe, lege footprint"
+msgstr "Nieuwe, lege footprint maken"
 
 #: pcbnew/tools/pcb_actions.cpp:706
 msgid "Create Footprint..."
@@ -45765,7 +45721,7 @@ msgstr "Footprint maken..."
 
 #: pcbnew/tools/pcb_actions.cpp:707
 msgid "Create a new footprint using the Footprint Wizard"
-msgstr "Maak een nieuwe footprint met de Footprint Wizard"
+msgstr "Nieuwe footprint maken met de Footprint Wizard"
 
 #: pcbnew/tools/pcb_actions.cpp:713
 msgid "Edit Footprint"
@@ -45781,7 +45737,7 @@ msgstr "Footprint dupliceren"
 
 #: pcbnew/tools/pcb_actions.cpp:721
 msgid "Make a copy of the selected footprint"
-msgstr "Een kopie van de geselecteerde footprint maken"
+msgstr "Kopie van de geselecteerde footprint maken"
 
 #: pcbnew/tools/pcb_actions.cpp:727
 msgid "Rename Footprint..."
@@ -45789,7 +45745,7 @@ msgstr "Footprint hernoemen..."
 
 #: pcbnew/tools/pcb_actions.cpp:728
 msgid "Rename the selected footprint"
-msgstr "De geselecteerde footprint hernoemen"
+msgstr "Geselecteerde footprint hernoemen"
 
 #: pcbnew/tools/pcb_actions.cpp:734 pcbnew/tools/pcb_actions.cpp:735
 msgid "Delete Footprint from Library"
@@ -45821,7 +45777,7 @@ msgstr "Huidige footprint exporteren..."
 
 #: pcbnew/tools/pcb_actions.cpp:767
 msgid "Export edited footprint to file"
-msgstr "Export bewerkte footprint naar bestand"
+msgstr "Bewerkte footprint exporteren naar bestand"
 
 #: pcbnew/tools/pcb_actions.cpp:773
 msgid "Footprint Properties..."
@@ -45829,7 +45785,7 @@ msgstr "Footprinteigenschappen..."
 
 #: pcbnew/tools/pcb_actions.cpp:780
 msgid "Show the footprint checker window"
-msgstr "Het footprintcontrolescherm weergeven"
+msgstr "Footprintcontrolescherm weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:788
 msgid "Update Footprint..."
@@ -45871,7 +45827,7 @@ msgstr "Footprints wijzigen..."
 
 #: pcbnew/tools/pcb_actions.cpp:817
 msgid "Assign different footprints from the library"
-msgstr "Wijs verschillende footprints uit de bibliotheek toe"
+msgstr "Andere footprints uit de bibliotheek toewijzen"
 
 #: pcbnew/tools/pcb_actions.cpp:823
 msgid "Swap Layers..."
@@ -45891,7 +45847,7 @@ msgstr "Spoor- en viaeigenschappen globaal bewerken over het hele bord"
 
 #: pcbnew/tools/pcb_actions.cpp:838
 msgid "Edit Text and graphics properties globally across board"
-msgstr "Bewerk tekst en grafische eigenschappen globaal over de hele linie"
+msgstr "Tekst en grafische eigenschappen globaal over het hele bord bewerken"
 
 #: pcbnew/tools/pcb_actions.cpp:844
 msgid "Edit Teardrops..."
@@ -45928,12 +45884,11 @@ msgstr "Overtollige items, etc. opschonen."
 
 #: pcbnew/tools/pcb_actions.cpp:874
 msgid "Add Microwave Gap"
-msgstr "Microgolf-opening toevoegen"
+msgstr "Microgolfopening toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:875
 msgid "Create gap of specified length for microwave applications"
-msgstr ""
-"Maak tussenruimte met specifieke lengte voor hoogfrequente toepassingen"
+msgstr "Tussenruimte maken met specifieke lengte voor microgolftoepassingen"
 
 #: pcbnew/tools/pcb_actions.cpp:883
 msgid "Add Microwave Stub"
@@ -45941,25 +45896,25 @@ msgstr "Microgolfuitsteeksel toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:884
 msgid "Create stub of specified length for microwave applications"
-msgstr "Maak uitsteeksel met specifieke lengte voor hoogfrequente toepassingen"
+msgstr "Uitsteeksel maken met specifieke lengte voor microgolftoepassingen"
 
 #: pcbnew/tools/pcb_actions.cpp:892
 msgid "Add Microwave Arc Stub"
-msgstr "Microgolf-booguitsteeksel toevoegen"
+msgstr "Microgolfbooguitsteeksel toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:893
 msgid "Create stub (arc) of specified size for microwave applications"
 msgstr ""
-"Maak een uitsteeksel (boog) met een specifieke grootte voor hoogfrequente "
-"toepassingen"
+"Uitsteeksel (boog) maken met een specifieke grootte voor "
+"microgolftoepassingen"
 
 #: pcbnew/tools/pcb_actions.cpp:901
 msgid "Add Microwave Polygonal Shape"
-msgstr "Microgolf-polygoonvorm toevoegen"
+msgstr "Microgolfpolygoonvorm toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:902
 msgid "Create a microwave polygonal shape from a list of vertices"
-msgstr "Maak een microgolf-polygoonvorm uit een lijst van hoekpunten"
+msgstr "Microgolf-polygoonvorm maken uit een lijst van hoekpunten"
 
 #: pcbnew/tools/pcb_actions.cpp:910
 msgid "Add Microwave Line"
@@ -45967,24 +45922,24 @@ msgstr "Microgolflijn toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:911
 msgid "Create line of specified length for microwave applications"
-msgstr "Maak een lijn met specifieke lengte voor hoogfrequente toepassingen"
+msgstr "Lijn maken met specifieke lengte voor microgolftoepassingen"
 
 #: pcbnew/tools/pcb_actions.cpp:921
 msgid "Copy Pad Properties to Default"
-msgstr "Pad-eigenschappen kopiëren naar standaard"
+msgstr "Padeigenschappen kopiëren naar standaard"
 
 #: pcbnew/tools/pcb_actions.cpp:922
 msgid "Copy current pad's properties"
-msgstr "Kopieer de eigenschappen van het huidige pad"
+msgstr "Eigenschappen van huidige pad kopiëren"
 
 #: pcbnew/tools/pcb_actions.cpp:928
 msgid "Paste Default Pad Properties to Selected"
-msgstr "Standaard padeigenschappen plakken naar de selectie"
+msgstr "Standaard padeigenschappen plakken naar selectie"
 
 #: pcbnew/tools/pcb_actions.cpp:929
 msgid "Replace the current pad's properties with those copied earlier"
 msgstr ""
-"Vervang de eigenschappen van de huidige pad door de eerder gekopieerde "
+"Eigenschappen van de huidige pad vervangen door de eerder gekopieerde "
 "eigenschappen"
 
 #: pcbnew/tools/pcb_actions.cpp:935
@@ -45993,7 +45948,7 @@ msgstr "Padeigenschappen doorvoeren naar andere pads..."
 
 #: pcbnew/tools/pcb_actions.cpp:936
 msgid "Copy the current pad's properties to other pads"
-msgstr "Kopieer de eigenschappen van de huidige pad naar andere pads"
+msgstr "Eigenschappen van de huidige pad kopiëren naar andere pads"
 
 #: pcbnew/tools/pcb_actions.cpp:942
 msgid "Renumber Pads..."
@@ -46001,7 +45956,7 @@ msgstr "Pads hernummeren..."
 
 #: pcbnew/tools/pcb_actions.cpp:943
 msgid "Renumber pads by clicking on them in the desired order"
-msgstr "Hernummer pads door erop te klikken in de gewenste volgorde"
+msgstr "Pads hernummeren door erop te klikken in de gewenste volgorde"
 
 #: pcbnew/tools/pcb_actions.cpp:950
 msgid "Add Pad"
@@ -46009,7 +45964,7 @@ msgstr "Pad toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:951
 msgid "Add a pad"
-msgstr "Voeg een pad toe"
+msgstr "Pad toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:959
 msgid "Edit Pad as Graphic Shapes"
@@ -46036,15 +45991,15 @@ msgstr "Standaard padeigenschappen..."
 #: pcbnew/tools/pcb_actions.cpp:975
 msgid "Edit the pad properties used when creating new pads"
 msgstr ""
-"Bewerk de pad-eigenschappen die worden gebruikt bij het maken van nieuwe pads"
+"Padeigenschappen bewerken die worden gebruikt bij het maken van nieuwe pads"
 
 #: pcbnew/tools/pcb_actions.cpp:984
 msgid "Refresh Plugins"
-msgstr "Plug-ins verversen"
+msgstr "Plug-ins vernieuwen"
 
 #: pcbnew/tools/pcb_actions.cpp:985
 msgid "Reload all python plugins and refresh plugin menus"
-msgstr "Herlaad alle pythonplug-ins en vernieuw plug-inmenu's"
+msgstr "Alle pythonplug-ins herladen en plug-inmenu's vernieuwen"
 
 #: pcbnew/tools/pcb_actions.cpp:992
 msgid "Reveal Plugin Folder in Finder"
@@ -46052,7 +46007,7 @@ msgstr "Plug-inmap weergeven in Finder"
 
 #: pcbnew/tools/pcb_actions.cpp:993
 msgid "Reveals the plugins folder in a Finder window"
-msgstr "Geeft de map met plug-ins weer in een Finder-venster"
+msgstr "Map met plug-ins weergeven in een Finder-venster"
 
 #: pcbnew/tools/pcb_actions.cpp:1005
 msgid "Board Setup..."
@@ -46061,7 +46016,7 @@ msgstr "Bordinstellingen..."
 #: pcbnew/tools/pcb_actions.cpp:1006
 msgid "Edit board setup including layers, design rules and various defaults"
 msgstr ""
-"Bewerk de bordopstelling inclusief lagen, ontwerpregels en verschillende "
+"Bordopstelling bewerken inclusief lagen, ontwerpregels en verscheidene "
 "standaardinstellingen"
 
 #: pcbnew/tools/pcb_actions.cpp:1012
@@ -46094,7 +46049,7 @@ msgstr "Gerbers (.gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1034
 msgid "Generate Gerbers for fabrication"
-msgstr "Genereer Gerbers voor fabricage"
+msgstr "Gerbers genereren voor fabricage"
 
 #: pcbnew/tools/pcb_actions.cpp:1040
 msgid "Drill Files (.drl)..."
@@ -46110,7 +46065,7 @@ msgstr "Componentplaatsing (.pos, .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1048
 msgid "Generate component placement file(s) for pick and place"
-msgstr "Genereer component-positie-bestand voor pick and place machines"
+msgstr "Componentplaatsingsbestand genereren voor pick-and-placemachines"
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Footprint Report (.rpt)..."
@@ -46118,7 +46073,7 @@ msgstr "Footprintrapport (.rpt)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1055
 msgid "Create report of all footprints from current board"
-msgstr "Maak een rapport van alle footprints van het huidige bord"
+msgstr "Rapport maken van alle footprints van het huidige bord"
 
 #: pcbnew/tools/pcb_actions.cpp:1061
 msgid "IPC-2581 File (.xml)..."
@@ -46126,7 +46081,7 @@ msgstr "IPC-2581-bestand (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1062
 msgid "Generate an IPC-2581 file"
-msgstr "Genereer een IPC-2581-bestand"
+msgstr "IPC-2581-bestand genereren"
 
 #: pcbnew/tools/pcb_actions.cpp:1068
 msgid "IPC-D-356 Netlist File..."
@@ -46134,7 +46089,7 @@ msgstr "IPC-D-356 netlijst-bestand..."
 
 #: pcbnew/tools/pcb_actions.cpp:1069
 msgid "Generate IPC-D-356 netlist file"
-msgstr "Genereer IPC-D-356 netlist-bestand"
+msgstr "IPC-D-356 netlist-bestand genereren"
 
 #: pcbnew/tools/pcb_actions.cpp:1075
 msgid "Bill of Materials..."
@@ -46182,7 +46137,7 @@ msgstr "Zones samenvoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:1128
 msgid "Merge zones"
-msgstr "Voeg zones samen"
+msgstr "Zones samenvoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:1133
 msgid "Duplicate Zone onto Layer..."
@@ -46190,7 +46145,7 @@ msgstr "Zone dupliceren op laag..."
 
 #: pcbnew/tools/pcb_actions.cpp:1134
 msgid "Duplicate zone outline onto a different layer"
-msgstr "Dupliceer zonegrenzen naar een andere laag"
+msgstr "Zonegrenzen dupliceren naar een andere laag"
 
 #: pcbnew/tools/pcb_actions.cpp:1142
 msgid "Add Footprint"
@@ -46206,7 +46161,7 @@ msgstr "Nulpunt boor-/plaatsbestand"
 
 #: pcbnew/tools/pcb_actions.cpp:1152
 msgid "Place origin point for drill files and component placement files"
-msgstr "Plaats het nulpunt voor boorbestanden en componentplaatsingsbestanden"
+msgstr "Nulpunt plaatsen voor boorbestanden en componentplaatsingsbestanden"
 
 #: pcbnew/tools/pcb_actions.cpp:1160
 msgid "Reset Drill Origin"
@@ -46237,7 +46192,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1197
 msgid "Group the selected items so that they are treated as a single item"
-msgstr "Groepeer geselecteerde items zodat ze als één geheel worden behandeld"
+msgstr "Geselecteerde items groeperen zodat ze als één geheel worden behandeld"
 
 #: pcbnew/tools/pcb_actions.cpp:1204
 msgid "Ungroup any selected groups"
@@ -46257,7 +46212,7 @@ msgstr "Groep binnengaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1218
 msgid "Enter the group to edit items"
-msgstr "Ga de groep in om items te bewerken"
+msgstr "Groep binnengaan om items te bewerken"
 
 #: pcbnew/tools/pcb_actions.cpp:1224
 msgid "Leave Group"
@@ -46265,7 +46220,7 @@ msgstr "Groep verlaten"
 
 #: pcbnew/tools/pcb_actions.cpp:1225
 msgid "Leave the current group"
-msgstr "Verlaat de huidige groep"
+msgstr "Huidige groep verlaten"
 
 #: pcbnew/tools/pcb_actions.cpp:1231
 msgid "Append Board..."
@@ -46273,7 +46228,7 @@ msgstr "Bord toevoegen..."
 
 #: pcbnew/tools/pcb_actions.cpp:1232
 msgid "Open another board and append its contents to this board"
-msgstr "Open een ander bord en voeg de inhoud toe aan dit bord"
+msgstr "Ander bord openen en de inhoud aan dit bord toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:1249
 msgid "Toggle Last Net Highlight"
@@ -46293,7 +46248,7 @@ msgstr "Netmarkering omschakelen"
 
 #: pcbnew/tools/pcb_actions.cpp:1273
 msgid "Highlight all copper items on the selected net(s)"
-msgstr "Markeer alle koperitems van het geselecteerde net"
+msgstr "Alle koperitems van het geselecteerde net markeren"
 
 #: pcbnew/tools/pcb_actions.cpp:1284
 msgid "Hide Net in Ratsnest"
@@ -46317,11 +46272,11 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:1300
 msgid "Switch to Schematic Editor"
-msgstr "Naar schema-editor schakelen"
+msgstr "Schakelen naar schema-editor"
 
 #: pcbnew/tools/pcb_actions.cpp:1301
 msgid "Open schematic in schematic editor"
-msgstr "Open schema in schema-editor"
+msgstr "Schema openen in schema-editor"
 
 #: pcbnew/tools/pcb_actions.cpp:1311
 msgid "Local Ratsnest"
@@ -46333,18 +46288,16 @@ msgstr "Weergave van geselecteerde item(s) in rattennest omschakelen"
 
 #: pcbnew/tools/pcb_actions.cpp:1329
 msgid "Show the net inspector"
-msgstr "Laat de netinspecteur zien"
+msgstr "Netinspecteur weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:1348
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:78
-#, fuzzy
 msgid "Zone Manager"
-msgstr "Projectbeheer"
+msgstr "Zonebeheer"
 
 #: pcbnew/tools/pcb_actions.cpp:1348
-#, fuzzy
 msgid "Show the zone manager dialog"
-msgstr "De weergavemanager weergeven/verbergen"
+msgstr "Zonebeheerscherm weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:1354
 msgid "Flip Board View"
@@ -46374,7 +46327,7 @@ msgstr "Rattennestmodus (3 standen)"
 msgid ""
 "Cycle between showing ratsnests for all layers, just visible layers, and none"
 msgstr ""
-"Schakel tussen het weergeven van rattennesten voor alle lagen, alleen voor "
+"Schakelen tussen het weergeven van rattennesten voor alle lagen, alleen voor "
 "zichtbare lagen, of niet"
 
 #: pcbnew/tools/pcb_actions.cpp:1382
@@ -46386,7 +46339,7 @@ msgid ""
 "Cycle between using net and netclass colors for all nets, just ratsnests, "
 "and none"
 msgstr ""
-"Schakel tussen net- en netklassekleuren voor alle nets, alleen voor "
+"Schakelen tussen net- en netklassekleuren voor alle nets, alleen voor "
 "rattennesten, of niet"
 
 #: pcbnew/tools/pcb_actions.cpp:1390
@@ -46427,7 +46380,7 @@ msgstr "Tekstitems schetsen"
 
 #: pcbnew/tools/pcb_actions.cpp:1419
 msgid "Show footprint texts in line mode"
-msgstr "Toon footprint-teksten in lijn-modus"
+msgstr "Footprintteksten in lijnmodus weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:1425
 msgid "Show Pad Numbers"
@@ -46447,7 +46400,7 @@ msgstr "Zonegrenzen tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:1440
 msgid "Show only zone boundaries"
-msgstr "Alleen zone-grenzen weergeven"
+msgstr "Alleen zonegrenzen weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:1446
 msgid "Draw Zone Fill Fracture Borders"
@@ -46463,7 +46416,7 @@ msgstr "Zoneweergave omschakelen"
 
 #: pcbnew/tools/pcb_actions.cpp:1459
 msgid "Cycle between showing zone fills and just their outlines"
-msgstr "Schakel tussen tonen van gevulde zones of alleen de zonegrenzen"
+msgstr "Schakelen tussen tonen van gevulde zones of alleen de zonegrenzen"
 
 #: pcbnew/tools/pcb_actions.cpp:1520
 msgid "Switch to Component (F.Cu) layer"
@@ -46607,7 +46560,7 @@ msgstr "Laag wisselen"
 
 #: pcbnew/tools/pcb_actions.cpp:1802
 msgid "Switch between layers in active layer pair"
-msgstr "Schakel tussen lagen in een actief lagenpaar"
+msgstr "Schakelen tussen lagen in een actief lagenpaar"
 
 #: pcbnew/tools/pcb_actions.cpp:1811
 msgid "Increase Layer Opacity"
@@ -46615,7 +46568,7 @@ msgstr "Ondoorzichtigheid van de laag vergroten"
 
 #: pcbnew/tools/pcb_actions.cpp:1812
 msgid "Make the current layer less transparent"
-msgstr "Maak de laag minder transparant"
+msgstr "Huidige laag minder transparant maken"
 
 #: pcbnew/tools/pcb_actions.cpp:1821
 msgid "Decrease Layer Opacity"
@@ -46623,7 +46576,7 @@ msgstr "Ondoorzichtigheid verminderen"
 
 #: pcbnew/tools/pcb_actions.cpp:1822
 msgid "Make the current layer more transparent"
-msgstr "Maak de huidige laag transparanter"
+msgstr "Huidige laag transparanter maken"
 
 #: pcbnew/tools/pcb_actions.cpp:1834
 msgid "Show Board Statistics"
@@ -46641,8 +46594,8 @@ msgstr "Vrije afstandresolutie"
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Toon vrije afstandresolutie voor de actieve laag tussen twee geselecteerde "
-"objecten"
+"Vrije afstandresolutie weergeven voor de actieve laag tussen twee "
+"geselecteerde objecten"
 
 #: pcbnew/tools/pcb_actions.cpp:1847
 msgid "Constraints Resolution"
@@ -46679,7 +46632,7 @@ msgstr "Bord repareren"
 
 #: pcbnew/tools/pcb_actions.cpp:1877
 msgid "Run various diagnostics and attempt to repair board"
-msgstr "Voer verschillende diagnoses uit en probeer de footprint te repareren"
+msgstr "Verschillende diagnoses uitvoeren en probeer het bord te repareren"
 
 #: pcbnew/tools/pcb_actions.cpp:1884
 msgid "Repair Footprint"
@@ -46687,7 +46640,7 @@ msgstr "Footprint repareren"
 
 #: pcbnew/tools/pcb_actions.cpp:1885
 msgid "Run various diagnostics and attempt to repair footprint"
-msgstr "Voer verschillende diagnoses uit en probeer de footprint te repareren"
+msgstr "Verschillende diagnoses uitvoeren en probeer de footprint te repareren"
 
 #: pcbnew/tools/pcb_actions.cpp:1893 pcbnew/tools/placement_tool.cpp:231
 msgid "Align to Top"
@@ -46832,7 +46785,7 @@ msgstr "Alle sporen in net selecteren"
 
 #: pcbnew/tools/pcb_actions.cpp:2080
 msgid "Selects all tracks & vias belonging to the same net."
-msgstr "Alle sporen en via’s selecteren die tot hetzelfde net behoren."
+msgstr "Selecteert alle sporen en via’s die tot hetzelfde net behoren."
 
 #: pcbnew/tools/pcb_actions.cpp:2086
 msgid "Deselect All Tracks in Net"
@@ -46840,7 +46793,7 @@ msgstr "Alle sporen in net deselecteren"
 
 #: pcbnew/tools/pcb_actions.cpp:2087
 msgid "Deselects all tracks & vias belonging to the same net."
-msgstr "Alle sporen en via’s deselecteren die tot hetzelfde net behoren."
+msgstr "Deselecteert alle sporen en via’s die tot hetzelfde net behoren."
 
 #: pcbnew/tools/pcb_actions.cpp:2094
 msgid "Select All Unconnected Footprints"
@@ -46848,11 +46801,12 @@ msgstr "Alle niet-verbonden footprints selecteren"
 
 #: pcbnew/tools/pcb_actions.cpp:2095
 msgid "Selects all unconnected footprints belonging to each selected net."
-msgstr "Selecteert alle sporen en via’s die tot hetzelfde net behoren."
+msgstr ""
+"Selecteert alle niet-verbonden footprints die tot hetzelfde net behoren."
 
 #: pcbnew/tools/pcb_actions.cpp:2101
 msgid "Grab Nearest Unconnected Footprints"
-msgstr "Dichtstbijzijnde onverbonden footprints pakken"
+msgstr "Dichtstbijzijnde niet-verbonden footprints pakken"
 
 #: pcbnew/tools/pcb_actions.cpp:2102
 msgid ""
@@ -46876,7 +46830,7 @@ msgstr "Selecteert alle footprints en sporen in hetzelfde schemablad"
 
 #: pcbnew/tools/pcb_actions.cpp:2121
 msgid "Select on Schematic"
-msgstr "Op schema selecteren"
+msgstr "Selecteren op schema"
 
 #: pcbnew/tools/pcb_actions.cpp:2122
 msgid "Selects corresponding items in Schematic editor"
@@ -46953,7 +46907,7 @@ msgstr "Sporen leggen"
 
 #: pcbnew/tools/pcb_actions.cpp:2207
 msgid "Route Differential Pair"
-msgstr "Leg differentieel paar"
+msgstr "Differentieel paar leggen"
 
 #: pcbnew/tools/pcb_actions.cpp:2208
 msgid "Route differential pairs"
@@ -46965,15 +46919,15 @@ msgstr "Instellingen interactieve router..."
 
 #: pcbnew/tools/pcb_actions.cpp:2219
 msgid "Open Interactive Router settings"
-msgstr "Open interactieve router-instellingen"
+msgstr "Interactive router-instellingen openen"
 
 #: pcbnew/tools/pcb_actions.cpp:2225
 msgid "Differential Pair Dimensions..."
-msgstr "Afmetingen differentieel paar..."
+msgstr "Differentieel-paarafmetingen..."
 
 #: pcbnew/tools/pcb_actions.cpp:2226
 msgid "Open Differential Pair Dimension settings"
-msgstr "Open instellingen voor differentieel paar-afmetingen"
+msgstr "Instellingen openen voor differentieel-paarafmetingen"
 
 #: pcbnew/tools/pcb_actions.cpp:2232
 msgid "Router Highlight Mode"
@@ -46993,11 +46947,11 @@ msgstr "Router in verschuifmodus zetten"
 
 #: pcbnew/tools/pcb_actions.cpp:2248
 msgid "Router Walkaround Mode"
-msgstr "Omheenloopmodus router"
+msgstr "Router omloopmodus"
 
 #: pcbnew/tools/pcb_actions.cpp:2249
 msgid "Switch router to walkaround mode"
-msgstr "Router in omheenloopmodus zetten"
+msgstr "Router in omloopmodus zetten"
 
 #: pcbnew/tools/pcb_actions.cpp:2256
 msgid "Cycle Router Mode"
@@ -47051,7 +47005,7 @@ msgstr "Spoor leggen vanaf andere eind"
 msgid ""
 "Commits current segments and starts next segment from nearest ratsnest end."
 msgstr ""
-"Verbind huidige segmenten en begin volgende segment vanaf het "
+"Verbindt huidige segmenten en begint volgende segment vanaf het "
 "dichtstbijzijnde rattennesteinde."
 
 #: pcbnew/tools/pcb_actions.cpp:2326
@@ -47061,7 +47015,8 @@ msgstr "Probeer te voltooien"
 #: pcbnew/tools/pcb_actions.cpp:2327
 msgid "Attempts to complete current route to nearest ratsnest end."
 msgstr ""
-"Poog de huidige route te voltooien naar het dichtstbijzijnde rattennesteinde."
+"Probeert de huidige route te voltooien naar het dichtstbijzijnde "
+"rattennesteinde."
 
 #: pcbnew/tools/pcb_actions.cpp:2334
 msgid "Route Selected"
@@ -47069,7 +47024,7 @@ msgstr "Selectie routeren"
 
 #: pcbnew/tools/pcb_actions.cpp:2335
 msgid "Sequentially route selected items from ratsnest anchor."
-msgstr "Sequentieel geselecteerde items routen vanaf het rattennestanker."
+msgstr "Sequentieel geselecteerde items routeren vanaf het rattennestanker."
 
 #: pcbnew/tools/pcb_actions.cpp:2343
 msgid "Route Selected From Other End"
@@ -47088,7 +47043,7 @@ msgstr "Probeer geselecteerde te voltooien (Autoroute)"
 #: pcbnew/tools/pcb_actions.cpp:2353
 msgid "Sequentially attempt to automatically route all selected pads."
 msgstr ""
-"Probeer achtereenvolgens automatisch de sporen van alle geselecteerde pads "
+"Probeert achtereenvolgens automatisch de sporen van alle geselecteerde pads "
 "te leggen."
 
 #: pcbnew/tools/pcb_actions.cpp:2361
@@ -47126,7 +47081,7 @@ msgstr "Alle afstempatronen bijwerken"
 #: pcbnew/tools/pcb_actions.cpp:2390
 msgid "Attempt to re-tune existing tuning patterns within their bounds"
 msgstr ""
-"Probeer bestaande afstempatronen opnieuw af te stemmen binnen hun "
+"Probeert bestaande afstempatronen opnieuw af te stemmen binnen hun "
 "begrenzingen"
 
 #: pcbnew/tools/pcb_actions.cpp:2397
@@ -47139,7 +47094,7 @@ msgstr "Geometrie van alle generatoren herbouwen"
 
 #: pcbnew/tools/pcb_actions.cpp:2405
 msgid "Rebuild Selected Generators"
-msgstr "Geselecteerde generatoren opnieuw opbouwen"
+msgstr "Geselecteerde generatoren herbouwen"
 
 #: pcbnew/tools/pcb_actions.cpp:2406
 msgid "Rebuilds geometry of selected generator(s)"
@@ -47147,11 +47102,11 @@ msgstr "Geometrie van geselecteerde generatoren herbouwen"
 
 #: pcbnew/tools/pcb_actions.cpp:2434
 msgid "Generators Manager"
-msgstr "Generatormanager"
+msgstr "Generatorbeheer"
 
 #: pcbnew/tools/pcb_actions.cpp:2435
 msgid "Show a manager dialog for Generator objects"
-msgstr "Managerscherm voor generatorobjecten weergeven"
+msgstr "Beheerscherm voor generatorobjecten weergeven"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
@@ -47256,9 +47211,8 @@ msgid "Selected Items"
 msgstr "Geselecteerde items"
 
 #: pcbnew/tools/pcb_point_editor.cpp:700
-#, fuzzy
 msgid "Resize Table Cells"
-msgstr "Ongeldige cellen verwijderen"
+msgstr "Formaat tabelcellen aanpassen"
 
 #: pcbnew/tools/pcb_point_editor.cpp:772
 msgid "Move Midpoint to Location"
@@ -47443,7 +47397,7 @@ msgstr "Alle via’s weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:329
 msgid "Show all pads"
-msgstr "Toon alle pad's"
+msgstr "Alle pads weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:330
 msgid "Show copper zones"
@@ -47670,7 +47624,7 @@ msgstr "Net- en netklassekleuren worden weergegeven op alle koperitems"
 #: pcbnew/widgets/appearance_controls.cpp:720
 #: pcbnew/widgets/appearance_controls.cpp:2479
 msgid "Net and netclass colors are shown on the ratsnest only"
-msgstr "Net- en netklassekleuren worden alleen op het rattennest getoond"
+msgstr "Net- en netklassekleuren worden alleen op het rattennest weergegeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:727
 #: pcbnew/widgets/appearance_controls.cpp:2482
@@ -47740,7 +47694,7 @@ msgstr "Sporen en via’s deselecteren in %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:939
 msgid "Show All Nets"
-msgstr "Toon alle netten"
+msgstr "Alle netten weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:941
 msgid "Hide All Other Nets"
@@ -47766,7 +47720,7 @@ msgstr ""
 #: pcbnew/widgets/appearance_controls.cpp:1022
 #: pcbnew/widgets/appearance_controls_base.cpp:45
 msgid "Objects"
-msgstr "Voorwerpen"
+msgstr "Objecten"
 
 #: pcbnew/widgets/appearance_controls.cpp:1557
 msgid "Double click or middle click for color change, right click for menu"
@@ -47776,7 +47730,7 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls.cpp:1563
 msgid "Show or hide this layer"
-msgstr "Toon of verberg deze laag"
+msgstr "Deze laag weergeven of verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1636
 msgid "Adhesive on board's front"
@@ -47947,7 +47901,7 @@ msgstr "Markeer netten in %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:2338
 msgid "Show All Netclasses"
-msgstr "Toon alle netklassen"
+msgstr "Alle netklassen weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:2340
 msgid "Hide All Other Netclasses"
@@ -47956,7 +47910,7 @@ msgstr "Verberg alle andere netklassen"
 #: pcbnew/widgets/appearance_controls.cpp:2401
 #, c-format
 msgid "Show or hide ratsnest for nets in %s"
-msgstr "Toon of verberg rattennest voor netten in %s"
+msgstr "Rattennest weergeven of verbergen voor netten in %s"
 
 #: pcbnew/widgets/appearance_controls.cpp:3337
 msgid ""
@@ -48002,7 +47956,7 @@ msgstr "Regelgebieden"
 #: pcbnew/widgets/panel_selection_filter.cpp:194
 #: pcbnew/widgets/panel_selection_filter_base.cpp:61
 msgid "Dimensions"
-msgstr "Afmetingen"
+msgstr "Maatlijnen"
 
 #: pcbnew/widgets/search_handlers.cpp:143 pcbnew/zone.cpp:578
 #: pcbnew/zone.cpp:1628
@@ -48200,22 +48154,17 @@ msgstr "Doorgaan zonder hervullen"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:41
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:49
-#, fuzzy
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
-"Zones worden gevuld op basis van prioriteitsniveau, niveau 3 heeft een "
-"hogere prioriteit dan niveau 2.\n"
-"Als een zone zich binnen een andere zone bevindt:\n"
-"* Als de prioriteit hoger is, wordt zijn omtrek verwijderd van de andere "
-"zone.\n"
-"* Als de prioriteit gelijk is, wordt er een DRC-fout ingesteld."
+"Bovenste zone heeft de hoogste prioriteit. Als een zone zich binnen een "
+"andere zone bevindt en de prioriteit hoger is, wordt zijn omtrek verwijderd "
+"van de andere zone."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:99
-#, fuzzy
 msgid "Repour"
-msgstr "Meld"
+msgstr "Hervullen"
 
 #: pcbnew/zones.h:61
 msgid "inherited"
