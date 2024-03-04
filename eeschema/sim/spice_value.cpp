@@ -115,20 +115,20 @@ void SPICE_VALUE::Normalize()
 {
     while( std::fabs( m_base ) >= 1000.0 )
     {
-        m_base *= 0.001;
-        m_prefix = (UNIT_PREFIX)( m_prefix + 3 );
-
         if( m_prefix == PFX_TERA )     // this is the biggest unit available
             break;
+
+        m_base *= 0.001;
+        m_prefix = (UNIT_PREFIX)( m_prefix + 3 );
     }
 
     while( m_base != 0.0 && std::fabs( m_base ) < 1.000 )
     {
-        m_base *= 1000.0;
-        m_prefix = (UNIT_PREFIX)( m_prefix - 3 );
-
         if( m_prefix == PFX_FEMTO )     // this is the smallest unit available
             break;
+
+        m_base *= 1000.0;
+        m_prefix = (UNIT_PREFIX)( m_prefix - 3 );
     }
 }
 

@@ -33,6 +33,9 @@
 #include <sch_symbol.h>
 #include <sch_sheet_path.h>
 #include <schematic.h>
+#include <sim/sim_model.h>
+#include <sim/spice_generator.h>
+#include <sim/sim_lib_mgr.h>
 #include <trace_helpers.h>
 #include <trigo.h>
 #include <refdes_utils.h>
@@ -1285,7 +1288,7 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 {
     static wxRegEx operatingPoint( wxT( "^"
                                         "OP"
-                                        "(:[a-zA-Z]*)?"            // port
+                                        "(:[^.]*)?"                // pin
                                         "(.([0-9])?([a-zA-Z]*))?"  // format
                                         "$" ) );
 
@@ -1298,26 +1301,66 @@ bool SCH_SYMBOL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* token, i
 
     if( operatingPoint.Matches( *token ) )
     {
-        wxString port( operatingPoint.GetMatch( *token, 1 ) );
+        wxString pin( operatingPoint.GetMatch( *token, 1 ).Lower() );
         wxString precisionStr( operatingPoint.GetMatch( *token, 3 ) );
         wxString range( operatingPoint.GetMatch( *token, 4 ) );
-
-        wxString signal = GetRef( aPath ) + port;
         int      precision = 3;
 
         if( !precisionStr.IsEmpty() )
             precision = precisionStr[0] - '0';
 
         if( range.IsEmpty() )
+            range = wxS( "~A" );
+
+        SIM_LIB_MGR   simLibMgr( &schematic->Prj() );
+        NULL_REPORTER devnull;
+        SIM_MODEL&    model = simLibMgr.CreateModel( aPath, const_cast<SCH_SYMBOL&>( *this ),
+                                                     devnull ).model;
+        SPICE_ITEM spiceItem;
+        spiceItem.refName = GetRef( aPath );
+
+        wxString spiceRef = model.SpiceGenerator().ItemName( spiceItem );
+        spiceRef = spiceRef.Lower();
+
+        if( pin.IsEmpty() )
         {
-            if( port == wxS( ":power" ) )
+            *token = schematic->GetOperatingPoint( spiceRef, precision, range );
+            return true;
+        }
+        else if( pin == wxS( ":power" ) )
+        {
+            if( range.IsEmpty() )
                 range = wxS( "~W" );
-            else
-                range = wxS( "~A" );
+
+            *token = schematic->GetOperatingPoint( spiceRef + wxS( ":power" ), precision, range );
+            return true;
+        }
+        else
+        {
+            pin = pin.SubString( 1, -1 );   // Strip ':' from front
+
+            for( const std::reference_wrapper<const SIM_MODEL::PIN>& modelPin : model.GetPins() )
+            {
+                SCH_PIN* symbolPin = GetPin( modelPin.get().symbolPinNumber );
+
+                if( pin == symbolPin->GetName().Lower() || pin == symbolPin->GetNumber().Lower() )
+                {
+                    if( model.GetPins().size() == 2 )
+                    {
+                        *token = schematic->GetOperatingPoint( spiceRef, precision, range );
+                    }
+                    else
+                    {
+                        wxString signalName = spiceRef + wxS( ":" ) + modelPin.get().name;
+                        *token = schematic->GetOperatingPoint( signalName, precision, range );
+                    }
+
+                    return true;
+                }
+            }
         }
 
-        *token = schematic->GetOperatingPoint( signal.Lower(), precision, range );
-
+        *token = wxS( "?" );
         return true;
     }
 
