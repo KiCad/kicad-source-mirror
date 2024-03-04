@@ -347,9 +347,16 @@ void PCB_IO_EASYEDA::FootprintEnumerate( wxArrayString&  aFootprintNames,
             wxString packageName = wxString::Format( wxS( "Unknown_%s" ),
                                                      pcbDoc.uuid.value_or( wxS( "Unknown" ) ) );
 
+            std::optional<std::map<wxString, wxString>> c_para;
+
             if( pcbDoc.c_para )
+                c_para = pcbDoc.c_para;
+            else if( doc.head.c_para )
+                c_para = doc.head.c_para;
+
+            if( c_para )
             {
-                packageName = get_def( *pcbDoc.c_para, wxS( "package" ), packageName );
+                packageName = get_def( *c_para, wxS( "package" ), packageName );
             }
 
             aFootprintNames.Add( packageName );
@@ -477,18 +484,24 @@ FOOTPRINT* PCB_IO_EASYEDA::FootprintLoad( const wxString& aLibraryPath,
             wxString packageName = wxString::Format( wxS( "Unknown_%s" ),
                                                      pcbDoc.uuid.value_or( wxS( "Unknown" ) ) );
 
+            std::optional<std::map<wxString, wxString>> c_para;
+
             if( pcbDoc.c_para )
+                c_para = pcbDoc.c_para;
+            else if( doc.head.c_para )
+                c_para = doc.head.c_para;
+
+            if( c_para )
             {
-                packageName = get_def( *pcbDoc.c_para, wxS( "package" ), packageName );
+                packageName = get_def( *c_para, wxS( "package" ), packageName );
 
                 if( packageName != aFootprintName )
                     return nullptr;
 
                 VECTOR2D origin( doc.head.x, doc.head.y );
 
-                FOOTPRINT* footprint =
-                        parser.ParseFootprint( origin, ANGLE_0, F_Cu, nullptr, *pcbDoc.c_para,
-                                               m_loadedFootprints, doc.shape );
+                FOOTPRINT* footprint = parser.ParseFootprint(
+                        origin, ANGLE_0, F_Cu, nullptr, *c_para, m_loadedFootprints, doc.shape );
 
                 if( !footprint )
                     return nullptr;
