@@ -789,11 +789,11 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             wxString  textType = arr[1];
             bool      add = false;
 
-            if( textType == wxS( "P" ) )
+            if( footprint && textType == wxS( "P" ) )
             {
                 text = footprint->GetField( REFERENCE_FIELD );
             }
-            else if( textType == wxS( "N" ) )
+            else if( footprint && textType == wxS( "N" ) )
             {
                 text = footprint->GetField( VALUE_FIELD );
             }
