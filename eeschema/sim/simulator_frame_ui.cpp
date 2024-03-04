@@ -2795,8 +2795,11 @@ void SIMULATOR_FRAME_UI::OnSimRefresh( bool aFinal )
             m_simConsole->AppendText( msg );
             m_simConsole->SetInsertionPointEnd();
 
-            if( signal.StartsWith( wxS( "V(" ) ) || signal.StartsWith( wxS( "I(" ) ) )
+            if( type == SPT_VOLTAGE || type == SPT_CURRENT || type == SPT_POWER )
                 signal = signal.SubString( 2, signal.Length() - 2 );
+
+            if( type == SPT_POWER )
+                signal += wxS( ":power" );
 
             m_schematicFrame->Schematic().SetOperatingPoint( signal, val_list.at( 0 ) );
         }
