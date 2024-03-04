@@ -1134,6 +1134,7 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                 if( layerPoly != m_layers_poly.end() )
                                 {
                                     // This will make a union of all added contours
+                                    layerPoly->second->ClearArcs();
                                     layerPoly->second->Simplify( SHAPE_POLY_SET::PM_FAST );
                                 }
                             }
