@@ -2107,9 +2107,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
 
                         line->SetStroke( STROKE_PARAMS( lsrc->width, LINE_STYLE::SOLID ) );
 
-                        line->Rotate( { 0, 0 }, fp->GetOrientation() );
-                        line->Move( fp->GetPosition() );
-
                         if( lsrc->width == 0 )
                             line->SetStroke( defaultStroke );
 
@@ -2126,9 +2123,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         circle->SetCenter( VECTOR2I( lsrc->center_x, lsrc->center_y ) );
                         circle->SetEnd( VECTOR2I( lsrc->end_x, lsrc->end_y ) );
                         circle->SetWidth( lsrc->width );
-
-                        circle->Rotate( { 0, 0 }, fp->GetOrientation() );
-                        circle->Move( fp->GetPosition() );
 
                         if( lsrc->width == 0 )
                             circle->SetWidth( ds.GetLineThickness( circle->GetLayer() ) );
@@ -2150,9 +2144,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                                              lsrc->result.GetArcMid(),
                                              lsrc->result.GetP1() );
                         arc->SetStroke( STROKE_PARAMS( lsrc->width, LINE_STYLE::SOLID ) );
-
-                        arc->Rotate( { 0, 0 }, fp->GetOrientation() );
-                        arc->Move( fp->GetPosition() );
 
                         if( lsrc->width == 0 )
                             arc->SetStroke( defaultStroke );
@@ -2184,9 +2175,6 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                         }
 
                         rect->SetStroke( defaultStroke );
-
-                        rect->Rotate( { 0, 0 }, fp->GetOrientation() );
-                        rect->Move( fp->GetPosition() );
 
                         fp->Add( rect, ADD_MODE::APPEND );
                         break;
