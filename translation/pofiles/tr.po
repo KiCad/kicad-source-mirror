@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-04 19:56+0000\n"
+"PO-Revision-Date: 2024-03-05 20:01+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -560,14 +560,12 @@ msgstr "Görünüm Yöneticisini Göster"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 #: pcbnew/tools/pcb_actions.cpp:1343
-#, fuzzy
 msgid "Show/hide the appearance manager"
-msgstr "Sayfa Özellikleri"
+msgstr "Görünüm yöneticisini göster/gizle"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
-#, fuzzy
 msgid "Board Body"
-msgstr "Kart gövdesi:"
+msgstr "Kart Gövdesi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
@@ -594,9 +592,8 @@ msgid "Adhesive"
 msgstr "Yapışkan"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show adhesive"
-msgstr "Yapışkan katmanları göster"
+msgstr "Yapışkanı göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 msgid "Solder Paste"
@@ -679,9 +676,8 @@ msgid "SMD Models"
 msgstr "SMD Modelleri"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:70
-#, fuzzy
 msgid "Virtual Models"
-msgstr "Sanal 3B modelleri aç/kapat"
+msgstr "Sanal Modeller"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:71
 msgid "Models not in POS File"
@@ -730,54 +726,48 @@ msgid "Show all footprint text"
 msgstr "Tüm iz düşümü metnini göster"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
-#, fuzzy
 msgid "Off-board Silkscreen"
-msgstr "ipek baskı"
+msgstr "Kart Dışı Serigrafi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 msgid "Do not clip silk layers to board outline"
 msgstr "Kart sınırında ipek katmalarını kırpma"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:80
-#, fuzzy
 msgid "3D Axis"
-msgstr "X Ekseni"
+msgstr "3B Eksen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background Start"
-msgstr "Arka plan"
+msgstr "Arka Planda Başlat"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
-#, fuzzy
 msgid "Background gradient start color"
-msgstr "Arkaplan gradyanı başlangıcı:"
+msgstr "Arkaplan gradyan başlangıç rengi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background End"
-msgstr "Arka plan"
+msgstr "Arka Plan Sonu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:82
-#, fuzzy
 msgid "Background gradient end color"
-msgstr "Arkaplan gradyanı bitişi:"
+msgstr "Arka plan gradyan bitiş rengi"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
 "Use %s+Tab to activate selector.\n"
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Katman görünürlük kombinasyonlarını kaydet ve geri yükle.\n"
-"Seçiciyi etkinleştirmek için %s+Tab tuşlarını kullan.\n"
-"s tuşunu basılı tutarken art arda Sekmeler açılır pencerede ön ayarlar "
+"Renk ve görünürlük kombinasyonlarını kaydedin ve geri yükleyin.\n"
+"Seçiciyi etkinleştirmek için %s+Tab tuşlarını kullanın.\n"
+"%s tuşunu basılı tutarken art arda Sekmeler açılır pencerede ön ayarlar "
 "arasında geçiş yapacaktır."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Save and restore camera position and zoom.\n"
 "Use %s+Tab to activate selector.\n"
@@ -786,61 +776,55 @@ msgid ""
 msgstr ""
 "Görünüm konumunu ve yakınlaştırmayı kaydet ve geri yükle.\n"
 "Seçiciyi etkinleştirmek için %s+Tab tuşlarını kullan.\n"
-"s tuşunu basılı tutarken art arda Sekmeler açılır pencerede görünüm alanları "
-"arasında geçiş yapacaktır."
+"%s tuşunu basılı tutarken art arda Sekmeler açılır pencerede görünüm "
+"alanları arasında geçiş yapacaktır."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:438
-#, fuzzy
 msgid "Left double click or middle click to change color"
-msgstr "Renk değişimi için sol çift tıklama veya orta tıklama"
+msgstr "Renk değiştirmek için sol çift tıklama veya orta tıklama"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:485
 #: pcbnew/widgets/appearance_controls.cpp:2169
-#, fuzzy, c-format
+#, c-format
 msgid "Show or hide %s"
-msgstr "Bacak adlarını göster veya gizle"
+msgstr "Göster veya gizle %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:537
 #: pcbnew/widgets/appearance_controls.cpp:2512
-#, fuzzy, c-format
+#, c-format
 msgid "Presets (%s+Tab):"
-msgstr "Hazır Ayarlar (Ctrl+Tab):"
+msgstr "Ön Ayarlar (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:551
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1469
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1890
 #: pcbnew/widgets/appearance_controls.cpp:2534
-#, fuzzy
 msgid "Save preset..."
-msgstr "Farklı Kaydet..."
+msgstr "Ön ayarı kaydet..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:552
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1470
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1891
 #: pcbnew/widgets/appearance_controls.cpp:2535
-#, fuzzy
 msgid "Delete preset..."
-msgstr "İşaretçileri Sil"
+msgstr "Ön ayarı sil..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:648
 #: pcbnew/widgets/appearance_controls.cpp:2638
-#, fuzzy
 msgid "Layer preset name:"
-msgstr "Katman Adı"
+msgstr "Katman ön ayar adı:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:649
 #: pcbnew/widgets/appearance_controls.cpp:2639
-#, fuzzy
 msgid "Save Layer Preset"
-msgstr "Kartı yukarı hareket ettir"
+msgstr "Katman Ön Ayarını Kaydet"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:664
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1632
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2033
 #: pcbnew/widgets/appearance_controls.cpp:2673
-#, fuzzy
 msgid "Overwrite existing preset?"
-msgstr "Varolan belgeyi aç"
+msgstr "Mevcut ön ayarın üzerine yazılsın mı?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:690
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1657
@@ -853,17 +837,15 @@ msgstr "ön ayarlar"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1669
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2070
 #: pcbnew/widgets/appearance_controls.cpp:2711
-#, fuzzy
 msgid "Delete Preset"
-msgstr "İşaretçileri Sil"
+msgstr "Ön Ayarı Sil"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:700
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1670
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2071
 #: pcbnew/widgets/appearance_controls.cpp:2712
-#, fuzzy
 msgid "Select preset:"
-msgstr "Seçilen ağ:"
+msgstr "Ön ayarı seçin:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:755
 #: pcbnew/widgets/appearance_controls.cpp:2808
@@ -959,9 +941,8 @@ msgid "Show filled areas in zones"
 msgstr "Bölgelerde dolu alanları göster"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
-#, fuzzy
 msgid "Use bare copper color for unplated copper (slow)"
-msgstr "Kaplanmamış bakır için çıplak bakır rengini kullan"
+msgstr "Kaplamasız bakır için çıplak bakır rengi kullanın (yavaş)"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:45
 msgid "Use different colors for plated and unplated copper. (Slow)"
@@ -1007,9 +988,8 @@ msgid "deg"
 msgstr "derece"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:102
-#, fuzzy
 msgid "Redraw while moving"
-msgstr "Hareket Ederken"
+msgstr "Hareket ederken yeniden çiz"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:106
 msgid "Redraw speed:"
@@ -1210,9 +1190,8 @@ msgid "Light 8:"
 msgstr "Işık 8:"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
-#, fuzzy
 msgid "3D Preview Options"
-msgstr "Önizleme Ayarları"
+msgstr "3B Önizleme Seçenekleri"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model.cpp:417
 msgid "Board thickness:"
@@ -1328,9 +1307,8 @@ msgid "KiCad Image Converter"
 msgstr "KiCad Görüntü Dönüştürücüsü"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
-#, fuzzy
 msgid "Image files"
-msgstr "Görüntü Dosyaları"
+msgstr "görüntü dosyaları"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:282 eeschema/menubar.cpp:71
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
@@ -1357,9 +1335,8 @@ msgid "Image Files"
 msgstr "Görüntü Dosyaları"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
-#, fuzzy
 msgid "Create Drawing Sheet File"
-msgstr "Çizim Sayfası Seçin"
+msgstr "Çizim Sayfası Dosyası Oluştur"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:461
 #: bitmap2component/bitmap2cmp_frame.cpp:497
@@ -1691,19 +1668,16 @@ msgid "Front solder mask"
 msgstr "Ön lehim maskesi"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "Front Fab layer"
-msgstr "ön katman"
+msgstr "Ön İmalat katmanı"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer drawings"
-msgstr "Kullanıcı.Çizimleri"
+msgstr "Kullanıcı katmanı çizimleri"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
-#, fuzzy
 msgid "User layer comments"
-msgstr "Kullanıcı katmanı Eco1"
+msgstr "Kullanıcı katmanı açıklamaları"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -1744,9 +1718,8 @@ msgid "Export to Clipboard"
 msgstr "Panoya Aktar"
 
 #: common/background_jobs_monitor.cpp:97
-#, fuzzy
 msgid "Background Jobs"
-msgstr "Arka plan"
+msgstr "Arka Plan İşleri"
 
 #: common/common.cpp:287
 #, c-format
@@ -2006,9 +1979,8 @@ msgid "Additional Contributions By"
 msgstr "Ek Katkıda Bulunanlar"
 
 #: common/dialog_about/AboutDialog_main.cpp:1139
-#, fuzzy
 msgid "Librarian Team"
-msgstr "KiCad Kütüphaneci Takımı"
+msgstr "Kütüphaneci Takımı"
 
 #: common/dialog_about/AboutDialog_main.cpp:1215
 msgid "3D models by"
@@ -2027,9 +1999,8 @@ msgid "Icons by"
 msgstr "Simgeler"
 
 #: common/dialog_about/AboutDialog_main.cpp:1262
-#, fuzzy
 msgid "Package Developers"
-msgstr "Geliştiriciler"
+msgstr "Paket Geliştiriciler"
 
 #: common/dialog_about/dialog_about.cpp:99
 #, c-format
@@ -2168,14 +2139,12 @@ msgid "<b>Currently matching nets:</b>"
 msgstr "<b>Şu anda eşleşen ağlar</b>"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:24
-#, fuzzy
 msgid "Pattern:"
-msgstr "Desen"
+msgstr "Desen:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:33
-#, fuzzy
 msgid "Net class:"
-msgstr "Ağ Sınıfları"
+msgstr "Ağ Sınıfı:"
 
 #: common/dialogs/dialog_assign_netclass_base.cpp:51
 msgid ""
@@ -2185,9 +2154,8 @@ msgstr ""
 "Not: Tam ağsınıfı atamaları Şematik Kurulum > Proje bölümünde düzenlenebilir."
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
-#, fuzzy
 msgid "Add Netclass Assignment"
-msgstr "Malzeme atamaları:"
+msgstr "Malzeme Ataması Ekle"
 
 #: common/dialogs/dialog_color_picker.cpp:94
 msgid "Clear Color"
@@ -2491,14 +2459,12 @@ msgid "Configure Global Library Table"
 msgstr "Genel Kitaplık Tablosunu Yapılandır"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Metin yüksekliği aralık dışında"
+msgstr "Izgara boyutu X aralık dışında."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Metin yüksekliği aralık dışında"
+msgstr "Izgara boyutu Y aralık dışında."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:96
@@ -2511,9 +2477,8 @@ msgid "Name:"
 msgstr "İsim:"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:32
-#, fuzzy
 msgid "(optional)"
-msgstr "(optional; default 0)"
+msgstr "(isteğe bağlı)"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:43
 #: common/dialogs/dialog_grid_settings_base.cpp:66
@@ -2602,9 +2567,8 @@ msgid "unit"
 msgstr "birim"
 
 #: common/dialogs/dialog_grid_settings_base.cpp:50
-#, fuzzy
 msgid "Linked"
-msgstr "Link:"
+msgstr "Bağlı"
 
 #: common/dialogs/dialog_grid_settings_base.h:57
 msgid "Grid Settings"
@@ -2615,9 +2579,8 @@ msgid "Hotkey List"
 msgstr "Kısayol Listesi"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
-#, fuzzy
 msgid "Project Name"
-msgstr "Proje Yöneticisi"
+msgstr "Proje Adı"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1050
@@ -2641,9 +2604,8 @@ msgstr ""
 "Hangisinin KiCad'a aktarılması gerektiğini seçin."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
-#, fuzzy
 msgid "Choose Project to Import"
-msgstr "Proje"
+msgstr "İçe Aktarılacak Projeyi Seç"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
@@ -3062,9 +3024,8 @@ msgid "Options for Library '%s'"
 msgstr "'%s' Kitaplığı seçenekleri"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:26
-#, fuzzy
 msgid "Plugin Options"
-msgstr "Bacak Metin Seçenekleri"
+msgstr "Eklenti Seçenekleri"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:43
 #: common/dialogs/panel_mouse_settings.cpp:47
@@ -3104,9 +3065,8 @@ msgid "Value"
 msgstr "Değer"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:78
-#, fuzzy
 msgid "Option Choices"
-msgstr "Seçenekler"
+msgstr "Seçenek Tercihleri"
 
 #: common/dialogs/dialog_plugin_options_base.cpp:81
 msgid "Options supported by current plugin"
@@ -3279,24 +3239,20 @@ msgid "MyLabel"
 msgstr "Etiketim"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:77
-#, fuzzy
 msgid "X label:"
-msgstr "Etiket:"
+msgstr "X etiketi:"
 
 #: common/dialogs/dialog_unit_entry_base.cpp:88
-#, fuzzy
 msgid "Y label:"
-msgstr "Etiket:"
+msgstr "Y etiketi:"
 
 #: common/dialogs/dialog_unit_entry_base.h:46
-#, fuzzy
 msgid "Title"
-msgstr "Başlık:"
+msgstr "Başlık"
 
 #: common/dialogs/dialog_unit_entry_base.h:73
-#, fuzzy
 msgid "Move Point to Location"
-msgstr "Ayak İzi Numaralandırılması"
+msgstr "Noktayı Konuma Taşı"
 
 #: common/dialogs/eda_list_dialog.cpp:46 common/dialogs/eda_list_dialog.cpp:68
 #: common/widgets/lib_tree.cpp:216 common/widgets/lib_tree.cpp:284
@@ -3365,9 +3321,8 @@ msgstr "Ön Ayar Değiştiriciyi Görüntüle"
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:32
-#, fuzzy
 msgid "Connection"
-msgstr "Bağlantılar"
+msgstr "Bağlantı"
 
 #: common/dialogs/git/dialog_git_auth.cpp:45
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
@@ -3391,14 +3346,12 @@ msgstr "Url"
 
 #: common/dialogs/git/dialog_git_auth.cpp:60
 #: common/dialogs/git/dialog_git_repository_base.cpp:78
-#, fuzzy
 msgid "Authentication"
-msgstr "Gerekçe"
+msgstr "Kimlik Doğrulama"
 
 #: common/dialogs/git/dialog_git_auth.cpp:62
-#, fuzzy
 msgid "User Name"
-msgstr "Temel Adı"
+msgstr "Kullanıcı Adı"
 
 #: common/dialogs/git/dialog_git_auth.cpp:64
 #: common/dialogs/git/dialog_git_repository.cpp:453
@@ -3406,9 +3359,8 @@ msgid "Password"
 msgstr "Şifre"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
-#, fuzzy
 msgid "Commit Changes"
-msgstr "Değişiklikleri Geri Al"
+msgstr "Değişiklikleri Kabul Et"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 #, fuzzy
@@ -3428,38 +3380,32 @@ msgid "Status"
 msgstr "Durum"
 
 #: common/dialogs/git/dialog_git_commit.cpp:83
-#, fuzzy
 msgid "New"
-msgstr "Ağ"
+msgstr "Yeni"
 
 #: common/dialogs/git/dialog_git_commit.cpp:89
-#, fuzzy
 msgid "Modified"
-msgstr "Değiştirilmiş grup"
+msgstr "Değiştirilmiş"
 
 #: common/dialogs/git/dialog_git_commit.cpp:95
-#, fuzzy
 msgid "Deleted"
-msgstr "Sil"
+msgstr "Silindi"
 
 #: common/dialogs/git/dialog_git_commit.cpp:108
-#, fuzzy
 msgid "Commit Message:"
-msgstr "Mesaj"
+msgstr "Mesajı ilet:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:115
-#, fuzzy
 msgid "Author:"
-msgstr "Yazar"
+msgstr "Yazar:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:136
 msgid "C&ommit"
 msgstr "Yorum"
 
 #: common/dialogs/git/dialog_git_commit.cpp:153
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Değişken adı boş olamaz."
+msgstr "Kabul mesajı boş olamaz"
 
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:382
@@ -3467,14 +3413,12 @@ msgid "Enter the password for the SSH key"
 msgstr "SSH anahtar için şifre girin"
 
 #: common/dialogs/git/dialog_git_repository.cpp:333
-#, fuzzy
 msgid "Test connection"
-msgstr "Ayak İzi Seç..."
+msgstr "Test bağlantısı"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
-#, fuzzy
 msgid "Connection successful"
-msgstr "Dosya oluşturma başarılı."
+msgstr "Bağlantı başarılı"
 
 #: common/dialogs/git/dialog_git_repository.cpp:341
 #, c-format
@@ -3482,40 +3426,35 @@ msgid "Could not connect to '%s' "
 msgstr "'%s'ye bağlanılamadı "
 
 #: common/dialogs/git/dialog_git_repository.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Arşiv dosyası açılamadı."
+msgstr "Özel anahtar '%s' açılamadı"
 
 #: common/dialogs/git/dialog_git_repository.cpp:373
-#, fuzzy
 msgid "Invalid SSH Key"
-msgstr "Geçersiz sinyal adı"
+msgstr "Geçersiz SSH Anahtarı"
 
 #: common/dialogs/git/dialog_git_repository.cpp:374
-#, fuzzy
 msgid "The selected file is not a valid SSH private key"
-msgstr "Seçili dosya geçerli değil veya bozuk olabilir!"
+msgstr "Seçilen dosya geçerli bir SSH özel anahtarı değil"
 
 #: common/dialogs/git/dialog_git_repository.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "%s kütüphane dosyası bulunamadı."
+msgstr "Genel anahtar '%s' açılamadı"
 
 #: common/dialogs/git/dialog_git_repository.cpp:417
 #: common/dialogs/git/dialog_git_repository.cpp:424
-#, fuzzy
 msgid "Missing information"
-msgstr "Ayak izi ata"
+msgstr "Eksik bilgi"
 
 #: common/dialogs/git/dialog_git_repository.cpp:418
-#, fuzzy
 msgid "Please enter a name for the repository"
-msgstr "Lütfen tam nitelikli depo url'sini girin"
+msgstr "Lütfen depo için bir ad girin"
 
 #: common/dialogs/git/dialog_git_repository.cpp:425
-#, fuzzy
 msgid "Please enter a URL for the repository"
-msgstr "Lütfen tam nitelikli depo url'sini girin"
+msgstr "Lütfen depo için bir URL girin"
 
 #: common/dialogs/git/dialog_git_repository.cpp:447
 #: common/dialogs/git/dialog_git_repository_base.cpp:120
@@ -3523,14 +3462,12 @@ msgid "SSH Key Password"
 msgstr "SSH Anahtar Şifresi"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:39
-#, fuzzy
 msgid "Location"
-msgstr "Döndürme"
+msgstr "Konum"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:46
-#, fuzzy
 msgid "Connection Type"
-msgstr "Bağlantı Adı"
+msgstr "Bağlantı Tipi"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 msgid "HTTPS"
@@ -3538,33 +3475,28 @@ msgstr "HTTPS"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:53
 #: eeschema/widgets/search_handlers.cpp:351
-#, fuzzy
 msgid "Local"
-msgstr "Yerel dosya"
+msgstr "Yerel"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:97
-#, fuzzy
 msgid "SSH Private Key"
-msgstr "Özel Katmanlar"
+msgstr "SSH Özel Anahtarı"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
-#, fuzzy
 msgid "Select SSH private key file"
-msgstr "Bir dosya seç"
+msgstr "SSH özel anahtar dosyasını seçin"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
 msgstr "*"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:113
-#, fuzzy
 msgid "Username"
-msgstr "Ağ adları"
+msgstr "Kullanıcı Adı"
 
 #: common/dialogs/git/dialog_git_repository_base.h:77
-#, fuzzy
 msgid "Git Repository"
-msgstr "Depo"
+msgstr "Git Depo"
 
 #: common/dialogs/git/dialog_git_switch.cpp:39
 msgid "Git Branch Switch"
@@ -3579,14 +3511,12 @@ msgid "Branch"
 msgstr "Dal"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
-#, fuzzy
 msgid "Last Commit"
-msgstr "Son taahhüt"
+msgstr "Son Kabul"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
-#, fuzzy
 msgid "Last Updated"
-msgstr "Güncellendi"
+msgstr "Son Güncelleme"
 
 #: common/dialogs/git/dialog_git_switch.cpp:65
 #: common/dialogs/git/dialog_git_switch.cpp:146
@@ -3604,24 +3534,20 @@ msgid "Git Commit Data"
 msgstr "Git Bağlılık Verileri"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
-#, fuzzy
 msgid "Use default values"
-msgstr "Varsayılan Değerler"
+msgstr "Varsayılan değerleri kullan"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:40
-#, fuzzy
 msgid "Author name:"
-msgstr "Ağ adları"
+msgstr "Yazar adı:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:51
-#, fuzzy
 msgid "Author e-mail:"
-msgstr "Yazar"
+msgstr "Yazar e-posta:"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:68
-#, fuzzy
 msgid "Git Repositories"
-msgstr "Depoları Yönet"
+msgstr "Git Depoları"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:97
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:44
@@ -3632,14 +3558,12 @@ msgid "Active"
 msgstr "Etkin"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:122
-#, fuzzy
 msgid "Add new repository"
-msgstr "Depo ekle"
+msgstr "Yeni depo ekle"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:127
-#, fuzzy
 msgid "Edit repository properties"
-msgstr "İz düşümü özelliklerini düzenle"
+msgstr "Depo özelliklerini düzenle"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:135
 #, fuzzy
@@ -8408,9 +8332,8 @@ msgid " or "
 msgstr " veya "
 
 #: common/validators.cpp:426
-#, fuzzy
 msgid ", or "
-msgstr " veya "
+msgstr ", veya "
 
 #: common/validators.cpp:438
 #, fuzzy, c-format
@@ -13658,9 +13581,9 @@ msgstr "Güç Sembolü"
 #: eeschema/symbol_chooser_frame.cpp:112
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:104
 #: pcbnew/footprint_chooser_frame.cpp:174
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr "Sembol Seç (%d öğeler yüklendi)"
+msgstr " (%d öğeler yüklendi)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -19532,9 +19455,8 @@ msgid "Package model name cannot be empty."
 msgstr "Değişken adı boş olamaz."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:678
-#, fuzzy
 msgid "Checking package model "
-msgstr "Paket dosyasını seçin"
+msgstr "Paket modeli kontrol ediliyor "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:685
 #, fuzzy
@@ -19585,18 +19507,16 @@ msgid "Inductance matrix is nullptr."
 msgstr "Endüktans matrisi boşluk 'tur."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:808
-#, fuzzy
 msgid "Cannot open file "
-msgstr "'%s' dosyası açılamıyor"
+msgstr "Dosya açılamıyor "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:832
 msgid "Unexpected end of file. Missing [END] ?"
 msgstr "Beklenmeyen dosya sonu. Eksik [SON] ?"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:844
-#, fuzzy
 msgid "Error on line "
-msgstr "Paket indirilirken hata oluştu"
+msgstr "Hat üzerinde hata "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:872
 msgid "A line did not end properly."
@@ -19637,9 +19557,8 @@ msgid "No extra argument was expected"
 msgstr "Fazladan bir tartışma beklenmiyordu"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
-#, fuzzy
 msgid "Unknown keyword in "
-msgstr "'%s' içinde bilinmeyen düğüm '%s'"
+msgstr "Bilinmeyen anahtar kelime "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid " context: "
@@ -19703,9 +19622,8 @@ msgid "Typ-Min-Max Values requires at least Typ."
 msgstr "Typ-Min-Max Değerleri en az Tür gerektirir."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1986
-#, fuzzy
 msgid "Unknown Model_type "
-msgstr "'%s' içinde bilinmeyen düğüm '%s'"
+msgstr "Bilinmeyen Model_type "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1993
 #, fuzzy
@@ -19713,9 +19631,8 @@ msgid "Internal Error while reading model_type"
 msgstr "Dosya okunurken hata oluştu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2008
-#, fuzzy
 msgid "Unknown Enable: "
-msgstr "Bilinmiyor"
+msgstr "Bilinmeyen Etkinlik: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2015
 #: eeschema/sim/kibis/ibis_parser.cpp:2037
@@ -19724,9 +19641,8 @@ msgid "Internal Error while reading Enable"
 msgstr "Dosya okunurken hata oluştu."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2030
-#, fuzzy
 msgid "Unknown polarity "
-msgstr "Özelliğin bilinmeyen üst öğesi"
+msgstr "Bilinmeyen kutup "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2067
 msgid "Continued reading a model that did not begin. ( internal error )"
@@ -20169,9 +20085,8 @@ msgstr " (kazanç)"
 #: eeschema/sim/simulator_frame_ui.cpp:831
 #: eeschema/sim/simulator_frame_ui.cpp:836
 #: eeschema/sim/simulator_frame_ui.cpp:1003
-#, fuzzy
 msgid " (phase)"
-msgstr "AC fazı:"
+msgstr " (faz)"
 
 #: eeschema/sim/sim_tab.cpp:87 eeschema/sim/sim_tab.cpp:104
 msgid ""
@@ -20288,9 +20203,8 @@ msgstr "Fourier Analizi Gerçekleştirin..."
 #: eeschema/sim/simulator_frame_ui.cpp:731
 #: eeschema/sim/simulator_frame_ui.cpp:835
 #: eeschema/sim/simulator_frame_ui.cpp:1001
-#, fuzzy
 msgid " (amplitude)"
-msgstr "Minimum genlik (Amin):"
+msgstr " (genlik)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
 #, c-format
@@ -23040,15 +22954,13 @@ msgstr "Şematik salt okunur."
 #: eeschema/tools/ee_inspection_tool.cpp:370
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:47
 #: pcbnew/tools/board_inspection_tool.cpp:1562
-#, fuzzy
 msgid "Library: "
-msgstr "Kütüphane:"
+msgstr "Kütüphane: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:371
 #: pcbnew/tools/board_inspection_tool.cpp:1563
-#, fuzzy
 msgid "Library item: "
-msgstr "Kitaplık bağlantısı:"
+msgstr "Kütüphane parçası: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:381
 #: pcbnew/tools/board_inspection_tool.cpp:1581
@@ -23759,9 +23671,8 @@ msgid "Layer selection:"
 msgstr "Gerçekçi modu aç/kapat"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:78
-#, fuzzy
 msgid "Copper layers count:"
-msgstr "Bakır Katman Sayısı: "
+msgstr "Bakır Katman Sayısı:"
 
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:82
 #: gerbview/dialogs/dialog_layers_select_to_pcb_base.cpp:83
@@ -26374,9 +26285,8 @@ msgid "Metadata"
 msgstr "Meta Veriler"
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:230
-#, fuzzy
 msgid "Package identifier: "
-msgstr "Yeni kütüphane tanımlayıcısı:"
+msgstr "Paket kimliği: "
 
 #: kicad/pcm/dialogs/panel_packages_view.cpp:231
 msgid "License: "
@@ -26729,9 +26639,8 @@ msgid "Rename File"
 msgstr "Yeniden Adlandır"
 
 #: kicad/project_tree_item.cpp:142
-#, fuzzy
 msgid "Unable to rename file ... "
-msgstr "'%s' dosyası okunamıyor."
+msgstr "Dosya yeniden adlandırılamıyor ... "
 
 #: kicad/project_tree_item.cpp:142
 msgid "Permission error?"
@@ -26894,9 +26803,8 @@ msgid "Commit File..."
 msgstr "Alan Ekle..."
 
 #: kicad/project_tree_pane.cpp:970
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Sonraki Kılavuza Geç"
+msgstr "Şubeye geç "
 
 #: kicad/project_tree_pane.cpp:975
 #, fuzzy
@@ -27303,9 +27211,9 @@ msgid "Create a new folder for the project"
 msgstr "Düzenleyicide yeni belge oluştur"
 
 #: libs/kiplatform/msw/environment.cpp:63
-#, fuzzy, c-format
+#, c-format
 msgid "Error code: %d"
-msgstr "Hata: "
+msgstr "Hata kodu: %d"
 
 #: pagelayout_editor/dialogs/design_inspector.cpp:226
 msgid "Layout"
@@ -29294,9 +29202,8 @@ msgid "Twisted Pair"
 msgstr "Bükümlü Çift"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:25
-#, fuzzy
 msgid "Transmission Line Type"
-msgstr "TransLine "
+msgstr "İletim Hattı Tipi"
 
 #: pcb_calculator/calculator_panels/panel_transline_base.cpp:42
 #, fuzzy
@@ -29390,9 +29297,8 @@ msgid "Electrical Resistivity in Ohm*m"
 msgstr "Ohm * m cinsinden Elektriksel Direnç"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:31
-#, fuzzy
 msgid "Finished hole diameter (D):"
-msgstr "Asgari delik çapı: "
+msgstr "Tamamlanmış delik çapı (D):"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:45
 #, fuzzy
@@ -29418,9 +29324,8 @@ msgid "Diameter of pad surrounding via (annular ring)"
 msgstr "Aracılığıyla çevreleyen pedin çapı (halka şeklindeki halka)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
-#, fuzzy
 msgid "Clearance hole diameter:"
-msgstr "Asgari delik çapı: "
+msgstr "Açıklık delik çapı:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
@@ -29788,9 +29693,8 @@ msgid "RF Attenuators"
 msgstr "Zayıflatıcılar"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:180
-#, fuzzy
 msgid "Transmission Lines"
-msgstr "TransLine "
+msgstr "İletim Hatları"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:182
 msgid "Memo"
@@ -30547,9 +30451,8 @@ msgid "Plated board edge"
 msgstr "Kartı yeniden yükle"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:31
-#, fuzzy
 msgid "Copper finish:"
-msgstr "Bakır Kaplama: "
+msgstr "Bakır Kaplama:"
 
 #: pcbnew/board_stackup_manager/panel_board_finish_base.cpp:40
 #, fuzzy
@@ -30738,9 +30641,8 @@ msgid "Id"
 msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:131
-#, fuzzy
 msgid "Board thickness from stackup:"
-msgstr "Kart Kalınlığı: "
+msgstr "İstiflemeden gelen levha kalınlığı:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:141
 msgid "Adjust Dielectric Thickness"
@@ -31514,9 +31416,8 @@ msgid "Physical Stackup"
 msgstr "Açıklık"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:111
-#, fuzzy
 msgid "Board Finish"
-msgstr "Bakır Kaplama: "
+msgstr "Kart Kaplama"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:118
 #: pcbnew/dialogs/dialog_plot.cpp:1298
@@ -32071,9 +31972,8 @@ msgstr "Anahat kapak aralığı:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:154
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:87
 #: pcbnew/zone_manager/panel_zone_properties_base.cpp:104
-#, fuzzy
 msgid "Corner smoothing:"
-msgstr "Bakır Katman Sayısı: "
+msgstr "Köşe yumuşatma:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:158
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:91
@@ -33942,9 +33842,8 @@ msgid "Restart Search"
 msgstr "Metin Ara"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:48
-#, fuzzy
 msgid "Footprint: "
-msgstr "Ayak İzi: %s"
+msgstr "Ayak İzi: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
 #, fuzzy
@@ -33952,9 +33851,8 @@ msgid "Symbol:"
 msgstr "Sembol"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
-#, fuzzy
 msgid "Sheet: "
-msgstr "Sayfa"
+msgstr "Sayfa "
 
 #: pcbnew/dialogs/dialog_footprint_associations_base.cpp:21
 #, fuzzy
@@ -34786,9 +34684,8 @@ msgid "Precision"
 msgstr "Kesinlik"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:144
-#, fuzzy
 msgid "Hole Counts"
-msgstr "Bakır Katman Sayısı: "
+msgstr "Delik Sayısı"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:151
 #, fuzzy
@@ -37761,9 +37658,8 @@ msgid "Track and Via Dimensions"
 msgstr "Yol Genişliği ve Geçiş Boyutu"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
-msgstr "Hedef"
+msgstr "Hedef sapması: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:86
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2105
@@ -42331,19 +42227,16 @@ msgid "Tuning"
 msgstr "Uyarı"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1374
-#, fuzzy
 msgid "too long"
-msgstr "Çok uzun: "
+msgstr "çok uzun:"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1375
-#, fuzzy
 msgid "too short"
-msgstr "Çok kısa: "
+msgstr "çok kısa"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1376
-#, fuzzy
 msgid "tuned"
-msgstr "Ayarlanmış: "
+msgstr "ayarlanmış"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1456
 #, fuzzy
@@ -44732,9 +44625,8 @@ msgstr ""
 "katmanında bulundu"
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.cpp:69
-#, fuzzy
 msgid "Could not read file "
-msgstr "Arşiv dosyası açılamadı."
+msgstr "Dosya okunamadı "
 
 #: pcbnew/pcb_io/fabmaster/pcb_io_fabmaster.h:38
 msgid "Fabmaster PCB files"
@@ -46826,18 +46718,16 @@ msgid "Board overall dimensions: "
 msgstr "Pano genel boyutları: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:435
-#, fuzzy
 msgid "Min track/spacing: "
-msgstr "En az ızgara aralığı:"
+msgstr "Minimum iz/boşluk: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:445
 msgid "Copper Finish: "
 msgstr "Bakır Kaplama: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:453
-#, fuzzy
 msgid "Castellated pads: "
-msgstr "Sıralanmış"
+msgstr "Kafesli pedler: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:461
 msgid "Board Thickness: "
@@ -46848,18 +46738,16 @@ msgid "Min hole diameter: "
 msgstr "Asgari delik çapı: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:484
-#, fuzzy
 msgid "Impedance Control: "
-msgstr "Empedans kontrollü"
+msgstr "Empedans Kontrolü: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:492
 msgid "Plated Board Edge: "
 msgstr "Kaplama Levha Kenarı: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:500
-#, fuzzy
 msgid "Edge card connectors: "
-msgstr "Ped bağlantısı:"
+msgstr "Kart kenarı konektörleri: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:508
 msgid "Yes, Bevelled"
@@ -50404,9 +50292,8 @@ msgid "Filled Area"
 msgstr "Dolu"
 
 #: pcbnew/zone.cpp:651
-#, fuzzy
 msgid "Corner Count"
-msgstr "Bakır Katman Sayısı: "
+msgstr "Köşe Sayısı"
 
 #: pcbnew/zone.cpp:686
 #, fuzzy
