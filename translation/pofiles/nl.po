@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
 "PO-Revision-Date: 2024-03-04 19:53+0000\n"
-"Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
+"Last-Translator: Ranforingus <ranforingus@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -13925,7 +13925,7 @@ msgstr "Tabeleigenschappen"
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:315
 #: pcbnew/dialogs/dialog_tablecell_properties.cpp:274
 msgid "Edit Table Cell Properties"
-msgstr "Tabeleigenschappen bewerken"
+msgstr "Tabelceleigenschappen bewerken"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
@@ -18184,9 +18184,8 @@ msgid "External Border"
 msgstr "Buitenrand"
 
 #: eeschema/sch_table.cpp:618 pcbnew/pcb_table.cpp:412
-#, fuzzy
 msgid "Header Border"
-msgstr "Bord repareren"
+msgstr "Koptekstrand"
 
 #: eeschema/sch_table.cpp:627 pcbnew/pcb_table.cpp:421
 #: pcbnew/pcb_tablecell.cpp:173 pcbnew/pcb_textbox.cpp:716
