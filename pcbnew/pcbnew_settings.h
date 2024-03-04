@@ -213,6 +213,8 @@ public:
     struct DIALOG_EXPORT_VRML
     {
         int    units;
+        bool   no_unspecified;
+        bool   no_dnp;
         bool   copy_3d_models;
         bool   use_relative_paths;
         int    ref_units;

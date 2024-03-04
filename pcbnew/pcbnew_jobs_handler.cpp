@@ -157,6 +157,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
 
         bool success = vrmlExporter.ExportVRML_File(
                 brd->GetProject(), &messages, aStepJob->m_outputFile, scale,
+                aStepJob->m_includeUnspecified, aStepJob->m_includeDNP,
                 !aStepJob->m_vrmlModelDir.IsEmpty(), aStepJob->m_vrmlRelativePaths,
                 aStepJob->m_vrmlModelDir, originX, originY );
 

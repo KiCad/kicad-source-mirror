@@ -50,6 +50,8 @@ class DIALOG_EXPORT_3DFILE_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText5;
 		wxTextCtrl* m_VRML_Yref;
 		wxRadioBox* m_rbSelectUnits;
+		wxCheckBox* m_cbRemoveDNP;
+		wxCheckBox* m_cbRemoveUnspecified;
 		wxCheckBox* m_cbCopyFiles;
 		wxCheckBox* m_cbUseRelativePaths;
 		wxStdDialogButtonSizer* m_sdbSizer;

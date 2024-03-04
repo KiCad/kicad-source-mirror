@@ -54,6 +54,8 @@ public:
         PCBNEW_SETTINGS* cfg = m_parent->GetPcbNewSettings();
 
         m_unitsOpt            = cfg->m_ExportVrml.units;
+        m_noUnspecified       = cfg->m_ExportVrml.no_unspecified;
+        m_noDNP               = cfg->m_ExportVrml.no_dnp;
         m_copy3DFilesOpt      = cfg->m_ExportVrml.copy_3d_models;
         m_useRelativePathsOpt = cfg->m_ExportVrml.use_relative_paths;
         m_RefUnits            = cfg->m_ExportVrml.ref_units;
@@ -64,6 +66,8 @@ public:
 
         m_rbCoordOrigin->SetSelection( m_originMode );
         m_rbSelectUnits->SetSelection( m_unitsOpt );
+        m_cbRemoveUnspecified->SetValue( m_noUnspecified );
+        m_cbRemoveDNP->SetValue( m_noDNP );
         m_cbCopyFiles->SetValue( m_copy3DFilesOpt );
         m_cbUseRelativePaths->SetValue( m_useRelativePathsOpt );
         m_VRML_RefUnitChoice->SetSelection( m_RefUnits );
@@ -83,6 +87,8 @@ public:
     ~DIALOG_EXPORT_3DFILE()
     {
         m_unitsOpt = GetUnits();
+        m_noUnspecified = GetNoUnspecifiedOption();
+        m_noDNP = GetNoDNPOption();
         m_copy3DFilesOpt = GetCopyFilesOption();
 
         PCBNEW_SETTINGS* cfg = nullptr;
@@ -99,6 +105,8 @@ public:
         if( cfg )
         {
             cfg->m_ExportVrml.units              = m_unitsOpt;
+            cfg->m_ExportVrml.no_unspecified     = m_noUnspecified;
+            cfg->m_ExportVrml.no_dnp             = m_noDNP;
             cfg->m_ExportVrml.copy_3d_models     = m_copy3DFilesOpt;
             cfg->m_ExportVrml.use_relative_paths = m_useRelativePathsOpt;
             cfg->m_ExportVrml.ref_units          = m_VRML_RefUnitChoice->GetSelection();
@@ -153,6 +161,16 @@ public:
         return m_unitsOpt = m_rbSelectUnits->GetSelection();
     }
 
+    bool GetNoUnspecifiedOption()
+    {
+        return m_cbRemoveUnspecified->GetValue();
+    }
+
+    bool GetNoDNPOption()
+    {
+        return m_cbRemoveDNP->GetValue();
+    }
+
     bool GetCopyFilesOption()
     {
         return m_copy3DFilesOpt = m_cbCopyFiles->GetValue();
@@ -174,6 +192,8 @@ public:
 private:
     PCB_EDIT_FRAME* m_parent;
     int             m_unitsOpt;             // Remember last units option
+    bool            m_noUnspecified;        // Remember last No Unspecified Component option
+    bool            m_noDNP;                // Remember last No DNP Component option
     bool            m_copy3DFilesOpt;       // Remember last copy model files option
     bool            m_useRelativePathsOpt;  // Remember last use absolute paths option
     int             m_RefUnits;             // Remember last units for Reference Point
@@ -249,6 +269,8 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
     }
 
     double scale = scaleList[dlg.GetUnits()];     // final scale export
+    bool includeUnspecified = !dlg.GetNoUnspecifiedOption();
+    bool includeDNP = !dlg.GetNoDNPOption();
     bool export3DFiles = dlg.GetCopyFilesOption();
     bool useRelativePaths = dlg.GetUseRelativePathsOption();
 
@@ -272,8 +294,8 @@ void PCB_EDIT_FRAME::OnExportVRML( wxCommandEvent& event )
         }
     }
 
-    if( !ExportVRML_File( path, scale, export3DFiles, useRelativePaths,
-                          modelPath.GetPath(), aXRef, aYRef ) )
+    if( !ExportVRML_File( path, scale, includeUnspecified, includeDNP, export3DFiles,
+                          useRelativePaths, modelPath.GetPath(), aXRef, aYRef ) )
     {
         wxString msg = wxString::Format( _( "Failed to create file '%s'." ), path );
         DisplayErrorMessage( this, msg );

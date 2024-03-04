@@ -51,6 +51,7 @@ public:
      */
     bool ExportVRML_File( PROJECT* aProject, wxString *aMessages,
                                   const wxString& aFullFileName, double aMMtoWRMLunit,
+                                  bool aIncludeUnspecified, bool aIncludeDNP,
                                   bool aExport3DFiles, bool aUseRelativePaths,
                                   const wxString& a3D_Subdir,
                                   double aXRef, double aYRef );

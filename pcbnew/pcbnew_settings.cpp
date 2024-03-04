@@ -413,6 +413,12 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "export_vrml.units",
             &m_ExportVrml.units, 1 ) );
 
+    m_params.emplace_back( new PARAM<bool>( "export_vrml.no_unspecified",
+            &m_ExportVrml.no_unspecified, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "export_vrml.no_dnp",
+            &m_ExportVrml.no_dnp, false ) );
+
     m_params.emplace_back( new PARAM<bool>( "export_vrml.copy_3d_models",
             &m_ExportVrml.copy_3d_models, false ) );
 

@@ -60,12 +60,14 @@ EXPORTER_VRML::EXPORTER_VRML( BOARD* aBoard )
 
 bool EXPORTER_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
                               const wxString& aFullFileName, double aMMtoWRMLunit,
+                              bool aIncludeUnspecified, bool aIncludeDNP,
                               bool aExport3DFiles, bool aUseRelativePaths,
                               const wxString& a3D_Subdir,
                               double aXRef, double aYRef )
 {
     return pcb_exporter->ExportVRML_File( aProject, aMessages,
                                           aFullFileName, aMMtoWRMLunit,
+                                          aIncludeUnspecified, aIncludeDNP,
                                           aExport3DFiles, aUseRelativePaths,
                                           a3D_Subdir, aXRef, aYRef );
 }
@@ -1020,6 +1022,15 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
     for( PAD* pad : aFootprint->Pads() )
         ExportVrmlPadHole( pad );
 
+    if( !m_includeUnspecified
+        && ( !( aFootprint->GetAttributes() & ( FP_THROUGH_HOLE | FP_SMD ) ) ) )
+    {
+        return;
+    }
+
+    if( !m_includeDNP && aFootprint->IsDNP() )
+        return;
+
     bool isFlipped = aFootprint->GetLayer() == B_Cu;
 
     // Export the object VRML model(s)
@@ -1231,6 +1242,7 @@ void EXPORTER_PCB_VRML::ExportVrmlFootprint( FOOTPRINT* aFootprint, std::ostream
 
 bool EXPORTER_PCB_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
                                          const wxString& aFullFileName, double aMMtoWRMLunit,
+                                         bool aIncludeUnspecified, bool aIncludeDNP,
                                          bool aExport3DFiles, bool aUseRelativePaths,
                                          const wxString& a3D_Subdir,
                                          double aXRef, double aYRef )
@@ -1251,6 +1263,8 @@ bool EXPORTER_PCB_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
     m_Subdir3DFpModels = subdir.GetAbsolutePath( wxFileName( aFullFileName ).GetPath() );
 
     m_UseRelPathIn3DModelFilename = aUseRelativePaths;
+    m_includeUnspecified = aIncludeUnspecified;
+    m_includeDNP = aIncludeDNP;
     m_Cache3Dmodels = PROJECT_PCB::Get3DCacheManager( aProject );
 
     // When 3D models are separate files, for historical reasons the VRML unit
@@ -1311,6 +1325,7 @@ bool EXPORTER_PCB_VRML::ExportVRML_File( PROJECT* aProject, wxString *aMessages,
 }
 
 bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMtoWRMLunit,
+                                      bool aIncludeUnspecified, bool aIncludeDNP,
                                       bool aExport3DFiles, bool aUseRelativePaths,
                                       const wxString& a3D_Subdir,
                                       double aXRef, double aYRef )
@@ -1320,6 +1335,7 @@ bool PCB_EDIT_FRAME::ExportVRML_File( const wxString& aFullFileName, double aMMt
     EXPORTER_VRML model3d( GetBoard() );
 
     success = model3d.ExportVRML_File( &Prj(), &msgs, aFullFileName, aMMtoWRMLunit,
+                                       aIncludeUnspecified, aIncludeDNP,
                                        aExport3DFiles, aUseRelativePaths,
                                        a3D_Subdir, aXRef, aYRef );
 

@@ -494,6 +494,7 @@ public:
      * @return true if Ok.
      */
     bool ExportVRML_File( const wxString& aFullFileName, double aMMtoWRMLunit,
+                          bool aIncludeUnspecified, bool aIncludeDNP,
                           bool aExport3DFiles, bool aUseRelativePaths,
                           const wxString& a3D_Subdir, double aXRef, double aYRef );
 

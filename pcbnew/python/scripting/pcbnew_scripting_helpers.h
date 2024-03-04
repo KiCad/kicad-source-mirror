@@ -157,7 +157,8 @@ bool ExportSpecctraDSN( BOARD* aBoard, wxString& aFullFilename );
  * See ExportVRML_File in pcb_edit_frame.h for detailed documentation.
  * @return true if OK.
  */
-bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit, bool aExport3DFiles,
+bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit, bool aIncludeUnspecified,
+                 bool aIncludeDNP, bool aExport3DFiles,
                  bool aUseRelativePaths, const wxString& a3D_Subdir, double aXRef, double aYRef );
 
 /**

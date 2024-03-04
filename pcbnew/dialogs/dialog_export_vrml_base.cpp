@@ -121,6 +121,12 @@ DIALOG_EXPORT_3DFILE_BASE::DIALOG_EXPORT_3DFILE_BASE( wxWindow* parent, wxWindow
 	wxBoxSizer* bSizer4;
 	bSizer4 = new wxBoxSizer( wxVERTICAL );
 
+	m_cbRemoveDNP = new wxCheckBox( this, wxID_ANY, _("Ignore 'Do not populate' components"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_cbRemoveDNP, 0, wxALL, 5 );
+
+	m_cbRemoveUnspecified = new wxCheckBox( this, wxID_ANY, _("Ignore 'Unspecified' components"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer4->Add( m_cbRemoveUnspecified, 0, wxALL, 5 );
+
 	m_cbCopyFiles = new wxCheckBox( this, wxID_ANY, _("Copy 3D model files to 3D model path"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbCopyFiles->SetToolTip( _("If checked: copy 3D models to the destination folder\nIf not checked: Embed 3D models in the VRML board file") );
 

@@ -397,12 +397,14 @@ bool ExportSpecctraDSN( BOARD* aBoard, wxString& aFullFilename )
 }
 
 
-bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit, bool aExport3DFiles,
+bool ExportVRML( const wxString& aFullFileName, double aMMtoWRMLunit, bool aIncludeUnspecified,
+                 bool aIncludeDNP, bool aExport3DFiles,
                  bool aUseRelativePaths, const wxString& a3D_Subdir, double aXRef, double aYRef )
 {
     if( s_PcbEditFrame )
     {
         bool ok = s_PcbEditFrame->ExportVRML_File( aFullFileName, aMMtoWRMLunit,
+                                                   aIncludeUnspecified, aIncludeDNP,
                                                    aExport3DFiles, aUseRelativePaths,
                                                    a3D_Subdir, aXRef, aYRef );
         return ok;

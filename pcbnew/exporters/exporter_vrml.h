@@ -124,6 +124,7 @@ public:
      */
     bool ExportVRML_File( PROJECT* aProject, wxString *aMessages,
                           const wxString& aFullFileName, double  aMMtoWRMLunit,
+                          bool aIncludeUnspecified, bool aIncludeDNP,
                           bool aExport3DFiles, bool aUseRelativePaths,
                           const wxString& a3D_Subdir,
                           double aXRef, double aYRef );
@@ -243,6 +244,12 @@ private:
 
     // true to reuse component definitions
     bool     m_ReuseDef;
+
+    // true if unspecified components should be included
+    bool     m_includeUnspecified;
+
+    // true if DNP components should be included
+    bool     m_includeDNP;
 
     // scaling from 0.1 inch to desired VRML unit
     double   m_WorldScale = 1.0;

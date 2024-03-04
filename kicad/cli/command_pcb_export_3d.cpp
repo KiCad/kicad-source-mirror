@@ -70,6 +70,17 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
             .help( UTF8STDSTR( _( "Overwrite output file" ) ) )
             .flag();
 
+    m_argParser.add_argument( ARG_NO_UNSPECIFIED )
+            .help( UTF8STDSTR(
+                    _( "Exclude 3D models for components with 'Unspecified' footprint type" ) ) )
+            .implicit_value( true )
+            .default_value( false );
+
+    m_argParser.add_argument( ARG_NO_DNP )
+            .help( UTF8STDSTR(
+                    _( "Exclude 3D models for components with 'Do not populate' attribute" ) ) )
+            .flag();
+
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         m_argParser.add_argument( ARG_GRID_ORIGIN )
@@ -78,17 +89,6 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
 
         m_argParser.add_argument( ARG_DRILL_ORIGIN )
                 .help( UTF8STDSTR( _( "Use Drill Origin for output origin" ) ) )
-                .flag();
-
-        m_argParser.add_argument( ARG_NO_UNSPECIFIED )
-                .help( UTF8STDSTR( _(
-                        "Exclude 3D models for components with 'Unspecified' footprint type" ) ) )
-                .implicit_value( true )
-                .default_value( false );
-
-        m_argParser.add_argument( ARG_NO_DNP )
-                .help( UTF8STDSTR(
-                        _( "Exclude 3D models for components with 'Do not populate' attribute" ) ) )
                 .flag();
 
         m_argParser.add_argument( "--subst-models" )
@@ -157,8 +157,6 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
     {
         step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
         step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
-        step->m_includeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
-        step->m_includeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
         step->m_substModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
         step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
         step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
@@ -170,6 +168,8 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         step->m_optimizeStep = !m_argParser.get<bool>( ARG_NO_OPTIMIZE_STEP );
     }
 
+    step->m_includeUnspecified = !m_argParser.get<bool>( ARG_NO_UNSPECIFIED );
+    step->m_includeDNP = !m_argParser.get<bool>( ARG_NO_DNP );
     step->m_overwrite = m_argParser.get<bool>( ARG_FORCE );
     step->m_filename = m_argInput;
     step->m_outputFile = m_argOutput;
