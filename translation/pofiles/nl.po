@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
 "PO-Revision-Date: 2024-03-04 19:56+0000\n"
-"Last-Translator: Ranforingus <ranforingus@hotmail.com>\n"
+"Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
 "Language: nl\n"
@@ -15322,9 +15322,9 @@ msgid "Symbol '%s' doesn't match copy in library '%s'"
 msgstr "Symbool '%s' komt niet overeen met kopie in bibliotheek '%s'"
 
 #: eeschema/erc.cpp:1066
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a valid footprint identifier."
-msgstr "'%s' is geen geldige footprint."
+msgstr "'%s' is geen geldige footprint-ID."
 
 #: eeschema/erc.cpp:1080 pcbnew/drc/drc_test_provider_library_parity.cpp:843
 #: pcbnew/footprint_editor_utils.cpp:326
