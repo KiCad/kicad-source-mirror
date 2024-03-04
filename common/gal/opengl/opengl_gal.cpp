@@ -1013,11 +1013,20 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
 
         VECTOR2D p( cos( startAngle ) * aRadius, sin( startAngle ) * aRadius );
         double   alpha;
+        unsigned int lineCount = 0;
+
+        for( alpha = startAngle + alphaIncrement; alpha <= endAngle; alpha += alphaIncrement )
+            lineCount++;
+
+        if( alpha != endAngle )
+            lineCount++;
+
+        reserveLineQuads( lineCount );
 
         for( alpha = startAngle + alphaIncrement; alpha <= endAngle; alpha += alphaIncrement )
         {
             VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
-            DrawLine( p, p_next );
+            drawLineQuad( p, p_next, false );
 
             p = p_next;
         }
@@ -1026,7 +1035,7 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
         if( alpha != endAngle )
         {
             VECTOR2D p_last( cos( endAngle ) * aRadius, sin( endAngle ) * aRadius );
-            DrawLine( p, p_last );
+            drawLineQuad( p, p_last, false );
         }
     }
 
