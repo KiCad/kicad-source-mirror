@@ -87,6 +87,7 @@ void EASYEDA::from_json( const nlohmann::json& j, EASYEDA::DOCUMENT& d )
     PARSE_VALUE( head );
 
     PARSE_VALUE( canvas );
+    PARSE_VALUE( title );
     PARSE_VALUE( shape );
     PARSE_VALUE( dataStr );
 }
