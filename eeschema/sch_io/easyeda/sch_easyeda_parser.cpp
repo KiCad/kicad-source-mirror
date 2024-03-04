@@ -445,11 +445,11 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxString   fillColor = arr[5].Lower();
             //bool       locked = arr[7] != wxS( "0" );
 
-             std::vector<SHAPE_LINE_CHAIN> lineChains =
+            std::vector<SHAPE_LINE_CHAIN> lineChains =
                     ParseLineChains( pointsData, schIUScale.MilsToIU( 10 ), false );
 
             for( SHAPE_LINE_CHAIN outline : lineChains )
-             {
+            {
                 std::unique_ptr<LIB_SHAPE> shape =
                         std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
 
@@ -805,6 +805,55 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
             int pinUnit = 0;
             int kPinLen = ScaleSize( std::abs( pinLen ) );
+
+            if( segments.size() > 5 )
+            {
+                wxArrayString dotParts = wxSplit( segments[5], '~', '\0' );
+                wxArrayString clockParts = wxSplit( segments[6], '~', '\0' );
+
+                if( dotParts.size() == 3 && clockParts.size() == 2 )
+                {
+                    if( dotParts[0] == wxS( "1" ) )
+                    {
+                        VECTOR2D dotPos( Convert( dotParts[1] ), Convert( dotParts[2] ) );
+
+                        std::unique_ptr<LIB_SHAPE> circle =
+                                std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::CIRCLE );
+
+                        circle->SetCenter( RelPosSym( dotPos ) );
+                        circle->SetEnd( RelPosSym(
+                                pinPos + ( dotPos - pinPos ).Resize( std::abs( pinLen ) ) ) );
+
+                        circle->SetUnit( 0 );
+
+                        aSymbol->AddDrawItem( circle.release() );
+                    }
+
+                    if( clockParts[0] == wxS( "1" ) )
+                    {
+                        std::vector<SHAPE_LINE_CHAIN> lineChains =
+                                ParseLineChains( clockParts[1], schIUScale.MilsToIU( 10 ), false );
+
+                        for( SHAPE_LINE_CHAIN outline : lineChains )
+                        {
+                            std::unique_ptr<LIB_SHAPE> shape =
+                                    std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
+
+                            outline.Mirror( false, true );
+
+                            if( outline.IsClosed() )
+                                outline.Append( outline.CPoint( 0 ), true );
+
+                            for( const VECTOR2I& pt : outline.CPoints() )
+                                shape->AddPoint( pt );
+
+                            shape->SetUnit( 0 );
+
+                            aSymbol->AddDrawItem( shape.release() );
+                        }
+                    }
+                }
+            }
 
             std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( aSymbol );
 
