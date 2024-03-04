@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-04 19:53+0000\n"
+"PO-Revision-Date: 2024-03-04 19:56+0000\n"
 "Last-Translator: Ranforingus <ranforingus@hotmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -13909,7 +13909,7 @@ msgstr "Koptekstrand"
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
 msgid "Row lines"
-msgstr "Rijlijnen"
+msgstr "Rij lijnen"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:102
@@ -15302,9 +15302,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Pin %s is verbonden met zowel %s als %s"
 
 #: eeschema/erc.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr "De huidige configuratie bevat niet de bibliotheek '%s'"
+msgstr "De huidige configuratie bevat niet symboolbibliotheek '%s'"
 
 #: eeschema/erc.cpp:980
 #, c-format
@@ -15328,15 +15328,16 @@ msgstr "'%s' is geen geldige footprint."
 
 #: eeschema/erc.cpp:1080 pcbnew/drc/drc_test_provider_library_parity.cpp:843
 #: pcbnew/footprint_editor_utils.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'."
-msgstr "De huidige configuratie omvat niet de bibliotheek '%s'."
+msgstr "De huidige configuratie omvat niet de footprintbibliotheek '%s'."
 
 #: eeschema/erc.cpp:1089 pcbnew/drc/drc_test_provider_library_parity.cpp:857
 #: pcbnew/footprint_editor_utils.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
-msgstr "De bibliotheek '%s' is niet ingeschakeld in de huidige configuratie."
+msgstr ""
+"De footprintbibliotheek '%s' is niet ingeschakeld in de huidige configuratie."
 
 #: eeschema/erc.cpp:1098 pcbnew/drc/drc_test_provider_library_parity.cpp:893
 #, c-format
@@ -15512,9 +15513,8 @@ msgid "Library symbol issue"
 msgstr "Probleem met bibliotheeksymbool"
 
 #: eeschema/erc_item.cpp:151
-#, fuzzy
 msgid "Symbol doesn't match copy in library"
-msgstr "Footprint komt niet overeen met versie in bibliotheek"
+msgstr "Symbool komt niet overeen met versie in bibliotheek"
 
 #: eeschema/erc_item.cpp:155
 msgid "Footprint link issue"
