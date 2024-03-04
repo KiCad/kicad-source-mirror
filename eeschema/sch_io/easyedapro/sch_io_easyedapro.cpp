@@ -469,7 +469,9 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
     if( !m_projectData )
         return nullptr;
 
-    auto cbs = [&]( const wxString& name, const wxString& symUuid, wxInputStream& zip ) -> bool
+    const int schSheetsCount = prjSchematicSheets.size();
+
+    auto cbs = [&]( const wxString& name, const wxString& baseName, wxInputStream& zip ) -> bool
     {
         if( !name.EndsWith( wxS( ".esch" ) ) )
             EASY_IT_CONTINUE;
@@ -500,41 +502,52 @@ SCH_SHEET* SCH_IO_EASYEDAPRO::LoadSchematicFile( const wxString& aFileName,
         if( prjSheetIt == prjSchematicSheets.end() )
             EASY_IT_CONTINUE;
 
-        wxString sheetBaseName =
-                sheetId + wxS( "_" ) + EscapeString( prjSheetIt->name, CTX_FILENAME );
-
-        wxFileName sheetFname( aFileName );
-        sheetFname.SetFullName( sheetBaseName + wxS( "." )
-                                + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
-
-        std::unique_ptr<SCH_SHEET> subSheet = std::make_unique<SCH_SHEET>( aSchematic );
-        subSheet->SetFileName( sheetFname.GetFullPath() );
-        subSheet->SetName( prjSheetIt->name );
-
-        SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
-        screen->SetFileName( sheetFname.GetFullPath() );
-        screen->SetPageNumber( sheetId );
-        subSheet->SetScreen( screen );
-
-        VECTOR2I pos;
-        pos.x = schIUScale.MilsToIU( 200 );
-        pos.y = schIUScale.MilsToIU( 200 )
-                + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) ) * ( sheetId_i - 1 );
-
-        subSheet->SetPosition( pos );
-
         std::vector<nlohmann::json> lines = EASYEDAPRO::ParseJsonLines( zip, name );
 
-        SCH_SHEET_PATH sheetPath;
-        sheetPath.push_back( rootSheet );
-        sheetPath.push_back( subSheet.get() );
-        sheetPath.SetPageNumber( sheetId );
-        aSchematic->SetCurrentSheet( sheetPath );
+        if( schSheetsCount > 1 )
+        {
+            wxString sheetBaseName =
+                    sheetId + wxS( "_" ) + EscapeString( prjSheetIt->name, CTX_FILENAME );
 
-        parser.ParseSchematic( aSchematic, subSheet.get(), project, m_projectData->m_Symbols,
-                               m_projectData->m_Blobs, lines, libName );
+            wxFileName sheetFname( aFileName );
+            sheetFname.SetFullName( sheetBaseName + wxS( "." )
+                                    + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
 
-        rootSheet->GetScreen()->Append( subSheet.release() );
+            wxFileName relSheetPath( sheetFname );
+            relSheetPath.MakeRelativeTo( rootFname.GetPath() );
+
+            std::unique_ptr<SCH_SHEET> subSheet = std::make_unique<SCH_SHEET>( aSchematic );
+            subSheet->SetFileName( relSheetPath.GetFullPath() );
+            subSheet->SetName( prjSheetIt->name );
+
+            SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
+            screen->SetFileName( sheetFname.GetFullPath() );
+            screen->SetPageNumber( sheetId );
+            subSheet->SetScreen( screen );
+
+            VECTOR2I pos;
+            pos.x = schIUScale.MilsToIU( 200 );
+            pos.y = schIUScale.MilsToIU( 200 )
+                    + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) ) * ( sheetId_i - 1 );
+
+            subSheet->SetPosition( pos );
+
+            SCH_SHEET_PATH sheetPath;
+            sheetPath.push_back( rootSheet );
+            sheetPath.push_back( subSheet.get() );
+            sheetPath.SetPageNumber( sheetId );
+            aSchematic->SetCurrentSheet( sheetPath );
+
+            parser.ParseSchematic( aSchematic, subSheet.get(), project, m_projectData->m_Symbols,
+                                   m_projectData->m_Blobs, lines, libName );
+
+            rootSheet->GetScreen()->Append( subSheet.release() );
+        }
+        else
+        {
+            parser.ParseSchematic( aSchematic, rootSheet, project, m_projectData->m_Symbols,
+                                   m_projectData->m_Blobs, lines, libName );
+        }
 
         EASY_IT_CONTINUE;
     };
