@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-04 19:53+0000\n"
+"PO-Revision-Date: 2024-03-04 19:56+0000\n"
 "Last-Translator: YÜKSEL AÇIKGÖZ <yukselacikgoz@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/kicad/"
 "master-source/tr/>\n"
@@ -3477,9 +3477,9 @@ msgid "Connection successful"
 msgstr "Dosya oluşturma başarılı."
 
 #: common/dialogs/git/dialog_git_repository.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Arşiv dosyası açılamadı."
+msgstr "'%s'ye bağlanılamadı "
 
 #: common/dialogs/git/dialog_git_repository.cpp:360
 #, fuzzy, c-format
@@ -6504,9 +6504,9 @@ msgstr "KiCad boş bir yanıt aldı!"
 #: common/http_lib/http_lib_connection.cpp:154
 #: common/http_lib/http_lib_connection.cpp:284
 #: common/http_lib/http_lib_connection.cpp:356
-#, fuzzy, c-format
+#, c-format
 msgid "Error: %s"
-msgstr "Hata: "
+msgstr "Hata: %s"
 
 #: common/http_lib/http_lib_connection.cpp:89
 #: common/http_lib/http_lib_connection.cpp:154
@@ -10684,9 +10684,8 @@ msgid "external simulator has the wrong format or architecture"
 msgstr "harici simülatör yanlış format veya mimariye sahiptir"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:618
-#, fuzzy
 msgid "permission denied"
-msgstr "TransLine "
+msgstr "i̇zi̇n reddedi̇ldi̇"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:765
 msgid "This plugin already exists."
@@ -19335,9 +19334,8 @@ msgid "Invalid C_pkg value."
 msgstr "Geçersiz sinyal adı"
 
 #: eeschema/sim/kibis/ibis_parser.cpp:186
-#, fuzzy
 msgid "Checking pin "
-msgstr "Bacaklar kontrol ediliyor..."
+msgstr "Pin kontrol ediliyor "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:193
 #, fuzzy
@@ -19370,9 +19368,8 @@ msgid "Cpin is not valid."
 msgstr "'%s' ayak izi kimliği geçerli değil."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:247
-#, fuzzy
 msgid "Checking component "
-msgstr "Ağlar yükleniyor..."
+msgstr "Bileşen kontrol ediliyor "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:254
 #, fuzzy
@@ -19427,9 +19424,8 @@ msgid "Model name cannot be empty"
 msgstr "Değişken adı boş olamaz."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:475
-#, fuzzy
 msgid "Checking model "
-msgstr "Etiketler kontrol ediliyor..."
+msgstr "Model kontrol ediliyor "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:482
 #, fuzzy
