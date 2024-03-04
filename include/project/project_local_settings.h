@@ -114,6 +114,9 @@ public:
     /// The current net color mode
     NET_COLOR_MODE m_NetColorMode;
 
+    /// The state of the net inspector panel
+    PANEL_NET_INSPECTOR_SETTINGS m_NetInspectorPanel;
+
     /// The current setting for whether to automatically adjust track widths to match
     bool m_AutoTrackWidth;
 

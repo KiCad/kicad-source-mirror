@@ -46,6 +46,7 @@ class wxFindReplaceData;
 class SEARCH_PANE;
 class HOTKEY_CYCLE_POPUP;
 class PROPERTIES_PANEL;
+class NET_INSPECTOR_PANEL;
 enum class BITMAP_TYPE;
 
 namespace KIGFX
@@ -401,6 +402,8 @@ public:
 
     static const wxString PropertiesPaneName() { return wxS( "PropertiesManager" ); }
 
+    static const wxString NetInspectorPanelName() { return wxS( "NetInspector" ); }
+
     /**
      * Fetch an item by KIID.  Frame-type-specific implementation.
      */
@@ -528,33 +531,34 @@ protected:
     ///< Prevents opening same file multiple times.
     std::unique_ptr<LOCKFILE> m_file_checker;
 
-    COLOR4D            m_gridColor;         // Grid color
-    COLOR4D            m_drawBgColor;       // The background color of the draw canvas; BLACK for
-                                            // Pcbnew, BLACK or WHITE for Eeschema
-    int                m_undoRedoCountMax;  // Default Undo/Redo command Max depth, to be handed
-                                            // to screens
-    bool               m_polarCoords;       // For those frames that support polar coordinates
+    COLOR4D              m_gridColor;         // Grid color
+    COLOR4D              m_drawBgColor;       // The background color of the draw canvas; BLACK for
+                                              // Pcbnew, BLACK or WHITE for Eeschema
+    int                  m_undoRedoCountMax;  // Default Undo/Redo command Max depth, to be handed
+                                              // to screens
+    bool                 m_polarCoords;       // For those frames that support polar coordinates
 
-    bool               m_showBorderAndTitleBlock;  // Show the drawing sheet (border & title block).
+    bool                 m_showBorderAndTitleBlock;  // Show the drawing sheet (border & title block).
 
-    wxChoice*          m_gridSelectBox;
-    wxChoice*          m_zoomSelectBox;
+    wxChoice*            m_gridSelectBox;
+    wxChoice*            m_zoomSelectBox;
 
-    ACTION_TOOLBAR*    m_mainToolBar;
-    ACTION_TOOLBAR*    m_auxiliaryToolBar;  // Additional tools under main toolbar
-    ACTION_TOOLBAR*    m_drawToolBar;       // Drawing tools (typically on right edge of window)
-    ACTION_TOOLBAR*    m_optionsToolBar;    // Options (typically on left edge of window)
+    ACTION_TOOLBAR*      m_mainToolBar;
+    ACTION_TOOLBAR*      m_auxiliaryToolBar;  // Additional tools under main toolbar
+    ACTION_TOOLBAR*      m_drawToolBar;       // Drawing tools (typically on right edge of window)
+    ACTION_TOOLBAR*      m_optionsToolBar;    // Options (typically on left edge of window)
 
     std::unique_ptr<EDA_SEARCH_DATA> m_findReplaceData;
-    wxArrayString      m_findStringHistoryList;
-    wxArrayString      m_replaceStringHistoryList;
+    wxArrayString        m_findStringHistoryList;
+    wxArrayString        m_replaceStringHistoryList;
 
-    EDA_MSG_PANEL*     m_messagePanel;
-    int                m_msgFrameHeight;
+    EDA_MSG_PANEL*       m_messagePanel;
+    int                  m_msgFrameHeight;
 
-    COLOR_SETTINGS*    m_colorSettings;
-    SEARCH_PANE*       m_searchPane;
-    PROPERTIES_PANEL*  m_propertiesPanel;
+    COLOR_SETTINGS*      m_colorSettings;
+    SEARCH_PANE*         m_searchPane;
+    PROPERTIES_PANEL*    m_propertiesPanel;
+    NET_INSPECTOR_PANEL* m_netInspectorPanel;
 
     HOTKEY_CYCLE_POPUP* m_hotkeyPopup;
 

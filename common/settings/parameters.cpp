@@ -140,6 +140,7 @@ bool PARAM_LIST<ValueType>::MatchesFile( JSON_SETTINGS* aSettings ) const
 }
 
 
+template class PARAM_LIST<bool>;
 template class PARAM_LIST<int>;
 template class PARAM_LIST<double>;
 template class PARAM_LIST<wxString>;

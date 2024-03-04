@@ -38,7 +38,6 @@
 #include <dialog_find.h>
 #include <dialog_footprint_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
-#include <dialogs/dialog_net_inspector.h>
 #include <dialog_board_setup.h>
 #include <invoke_pcb_dialog.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -102,6 +101,7 @@
 #include <widgets/wx_infobar.h>
 #include <widgets/panel_selection_filter.h>
 #include <widgets/pcb_properties_panel.h>
+#include <widgets/pcb_net_inspector_panel.h>
 #include <widgets/wx_aui_utils.h>
 #include <kiplatform/app.h>
 #include <core/profile.h>
@@ -193,7 +193,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_inspectClearanceDlg( nullptr ),
     m_inspectConstraintsDlg( nullptr ),
     m_footprintDiffDlg( nullptr ),
-    m_netInspectorDlg( nullptr ),
     m_importProperties( nullptr )
 {
     m_maximizeByDefault = true;
@@ -205,6 +204,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_supportsAutoSave = true;
     m_probingSchToPcb = false;
     m_show_search = false;
+    m_show_net_inspector = false;
 
     // We don't know what state board was in when it was last saved, so we have to
     // assume dirty
@@ -270,6 +270,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_appearancePanel = new APPEARANCE_CONTROLS( this, GetCanvas() );
     m_searchPane = new PCB_SEARCH_PANE( this );
+    m_netInspectorPanel = new PCB_NET_INSPECTOR_PANEL( this, this );
 
     m_auimgr.SetManagedWindow( this );
 
@@ -317,6 +318,14 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( GetCanvas(), EDA_PANE().Canvas().Name( wxS( "DrawFrame" ) )
                       .Center() );
 
+    m_auimgr.AddPane( m_netInspectorPanel, EDA_PANE()
+                                                   .Name( NetInspectorPanelName() )
+                                                   .Bottom()
+                                                   .Caption( _( "Net Inspector" ) )
+                                                   .PaneBorder( false )
+                                                   .MinSize( FromDIP( wxSize( 240, 60 ) ) )
+                                                   .BestSize( FromDIP( wxSize( 300, 200 ) ) ) );
+
     m_auimgr.AddPane( m_searchPane, EDA_PANE().Name( SearchPaneName() )
                       .Bottom()
                       .Caption( _( "Search" ) ).PaneBorder( false )
@@ -324,10 +333,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .FloatingSize( FromDIP( wxSize( 480, 200 ) ) )
                       .DestroyOnClose( false ) );
 
+
     m_auimgr.GetPane( "LayersManager" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( "SelectionFilter" ).Show( m_show_layer_manager_tools );
     m_auimgr.GetPane( PropertiesPaneName() ).Show( GetPcbNewSettings()->m_AuiPanels.show_properties );
-
+    m_auimgr.GetPane( NetInspectorPanelName() ).Show( m_show_net_inspector );
     m_auimgr.GetPane( SearchPaneName() ).Show( m_show_search );
 
     // The selection filter doesn't need to grow in the vertical direction when docked
@@ -489,8 +499,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     Bind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs,
           this );
-    Bind( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, &PCB_EDIT_FRAME::onCloseNetInspectorDialog, this );
-    Bind( EDA_EVT_UNITS_CHANGED, &PCB_EDIT_FRAME::onUnitsChanged, this );
     m_acceptedExts.emplace( FILEEXT::KiCadPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
     m_acceptedExts.emplace( FILEEXT::LegacyPcbFileExtension, &PCB_ACTIONS::ddAppendBoard );
     DragAcceptFiles( true );
@@ -520,6 +528,7 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
     delete m_appearancePanel;
     delete m_exportNetlistAction;
     delete m_propertiesPanel;
+    delete m_netInspectorPanel;
 }
 
 
@@ -796,6 +805,12 @@ void PCB_EDIT_FRAME::setupUIConditions()
                 return PropertiesShown();
             };
 
+    auto netInspectorCond =
+            [this] ( const SELECTION& )
+            {
+                return NetInspectorShown();
+            };
+
     auto searchPaneCond =
             [this] ( const SELECTION& )
             {
@@ -843,6 +858,7 @@ void PCB_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( PCB_ACTIONS::toggleNetHighlight,   CHECK( netHighlightCond )
                                                            .Enable( enableNetHighlightCond ) );
     mgr->SetConditions( PCB_ACTIONS::showProperties,       CHECK( propertiesCond ) );
+    mgr->SetConditions( PCB_ACTIONS::showNetInspector,     CHECK( netInspectorCond ) );
     mgr->SetConditions( PCB_ACTIONS::showSearch,           CHECK( searchPaneCond ) );
 
     auto isArcKeepCenterMode =
@@ -1108,10 +1124,8 @@ void PCB_EDIT_FRAME::doCloseWindow()
     GetCanvas()->StopDrawing();
 
     // Clean up mode-less dialogs.
-    Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER,
-            &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs, this );
-    Unbind( EDA_EVT_CLOSE_NET_INSPECTOR_DIALOG, &PCB_EDIT_FRAME::onCloseNetInspectorDialog, this );
-    Unbind( EDA_EVT_UNITS_CHANGED, &PCB_EDIT_FRAME::onUnitsChanged, this );
+    Unbind( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, &PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs,
+            this );
 
     wxWindow* open_dlg = wxWindow::FindWindowByName( DIALOG_DRC_WINDOW_NAME );
 
@@ -1146,13 +1160,6 @@ void PCB_EDIT_FRAME::doCloseWindow()
     {
         m_footprintDiffDlg->Destroy();
         m_footprintDiffDlg = nullptr;
-    }
-
-    if( m_netInspectorDlg )
-    {
-        RemoveBoardChangeListener( m_netInspectorDlg );
-        m_netInspectorDlg->Destroy();
-        m_netInspectorDlg = nullptr;
     }
 
     // Delete the auto save file if it exists.
@@ -1309,6 +1316,7 @@ void PCB_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     {
         m_show_layer_manager_tools = cfg->m_AuiPanels.show_layer_manager;
         m_show_search              = cfg->m_AuiPanels.show_search;
+        m_show_net_inspector       = cfg->m_AuiPanels.show_net_inspector;
     }
 }
 
@@ -1338,6 +1346,13 @@ void PCB_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
         cfg->m_AuiPanels.search_panel_height = m_searchPane->GetSize().y;
         cfg->m_AuiPanels.search_panel_width = m_searchPane->GetSize().x;
         cfg->m_AuiPanels.search_panel_dock_direction = searchPaneInfo.dock_direction;
+
+        if( m_netInspectorPanel )
+        {
+            wxAuiPaneInfo& netInspectorhPaneInfo = m_auimgr.GetPane( NetInspectorPanelName() );
+            m_show_net_inspector = netInspectorhPaneInfo.IsShown();
+            cfg->m_AuiPanels.show_net_inspector = m_show_net_inspector;
+        }
 
         if( m_appearancePanel )
         {
@@ -1580,6 +1595,7 @@ void PCB_EDIT_FRAME::ShowChangedLanguage()
     m_auimgr.GetPane( m_appearancePanel ).Caption( _( "Appearance" ) );
     m_auimgr.GetPane( m_selectionFilterPanel ).Caption( _( "Selection Filter" ) );
     m_auimgr.GetPane( m_propertiesPanel ).Caption( _( "Properties" ) );
+    m_auimgr.GetPane( m_netInspectorPanel ).Caption( _( "Net Inspector" ) );
     m_auimgr.Update();
 
     UpdateTitle();
@@ -1711,6 +1727,7 @@ void PCB_EDIT_FRAME::UpdateUserInterface()
 
     // Stackup and/or color theme may have changed
     m_appearancePanel->OnBoardChanged();
+    m_netInspectorPanel->OnParentSetupChanged();
 }
 
 
@@ -2472,6 +2489,12 @@ bool PCB_EDIT_FRAME::PropertiesShown()
 }
 
 
+bool PCB_EDIT_FRAME::NetInspectorShown()
+{
+    return m_auimgr.GetPane( NetInspectorPanelName() ).IsShown();
+}
+
+
 void PCB_EDIT_FRAME::onSize( wxSizeEvent& aEvent )
 {
     if( IsShownOnScreen() )
@@ -2549,36 +2572,4 @@ void PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent 
         m_footprintDiffDlg->Destroy();
         m_footprintDiffDlg = nullptr;
     }
-}
-
-
-DIALOG_NET_INSPECTOR* PCB_EDIT_FRAME::GetNetInspectorDialog()
-{
-    if( !m_netInspectorDlg )
-    {
-        m_netInspectorDlg = new DIALOG_NET_INSPECTOR( this );
-        AddBoardChangeListener( m_netInspectorDlg );
-    }
-
-    return m_netInspectorDlg;
-}
-
-
-void PCB_EDIT_FRAME::onCloseNetInspectorDialog( wxCommandEvent& aEvent )
-{
-    if( m_netInspectorDlg )
-    {
-        RemoveBoardChangeListener( m_netInspectorDlg );
-        m_netInspectorDlg->Destroy();
-        m_netInspectorDlg = nullptr;
-    }
-}
-
-
-void PCB_EDIT_FRAME::onUnitsChanged( wxCommandEvent& aEvent )
-{
-    wxCommandEvent evt( EDA_EVT_UNITS_CHANGED );
-
-    if( m_netInspectorDlg )
-        m_netInspectorDlg->HandleWindowEvent( evt );
 }

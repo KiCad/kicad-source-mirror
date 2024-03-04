@@ -280,6 +280,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::showProperties,                 ACTION_MENU::CHECK );
     viewMenu->Add( PCB_ACTIONS::showSearch,                 ACTION_MENU::CHECK );
     viewMenu->Add( PCB_ACTIONS::showLayersManager,          ACTION_MENU::CHECK );
+    viewMenu->Add( PCB_ACTIONS::showNetInspector,           ACTION_MENU::CHECK );
 
 #ifdef __APPLE__
     viewMenu->AppendSeparator();
@@ -370,7 +371,6 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
     //
     ACTION_MENU* inspectMenu = new ACTION_MENU( false, selTool );
 
-    inspectMenu->Add( PCB_ACTIONS::listNets );
     inspectMenu->Add( PCB_ACTIONS::boardStatistics );
     inspectMenu->Add( ACTIONS::measureTool );
 

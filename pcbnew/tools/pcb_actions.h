@@ -430,13 +430,13 @@ public:
     static TOOL_ACTION generateD356File;
     static TOOL_ACTION generateBOM;
 
-    static TOOL_ACTION listNets;
     static TOOL_ACTION runDRC;
 
     static TOOL_ACTION editFpInFpEditor;
     static TOOL_ACTION editLibFpInFpEditor;
 
     static TOOL_ACTION showLayersManager;
+    static TOOL_ACTION showNetInspector;
     static TOOL_ACTION showPythonConsole;
     static TOOL_ACTION zonesManager;
 

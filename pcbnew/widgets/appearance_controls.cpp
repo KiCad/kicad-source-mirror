@@ -508,8 +508,7 @@ APPEARANCE_CONTROLS::APPEARANCE_CONTROLS( PCB_BASE_FRAME* aParent, wxWindow* aFo
     m_btnNetInspector->Bind( wxEVT_BUTTON,
             [&]( wxCommandEvent& aEvent )
             {
-                m_frame->GetToolManager()->RunAction( PCB_ACTIONS::listNets );
-                passOnFocus();
+                m_frame->GetToolManager()->RunAction( PCB_ACTIONS::showNetInspector );
             } );
 
     m_btnConfigureNetClasses->Bind( wxEVT_BUTTON,

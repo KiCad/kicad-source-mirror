@@ -31,7 +31,6 @@ class BOARD;
 class BOARD_COMMIT;
 class BOARD_ITEM_CONTAINER;
 class DIALOG_BOOK_REPORTER;
-class DIALOG_NET_INSPECTOR;
 class FOOTPRINT;
 class PCB_TRACK;
 class PCB_VIA;
@@ -162,6 +161,7 @@ public:
 
     bool LayerManagerShown();
     bool PropertiesShown();
+    bool NetInspectorShown();
 
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
@@ -301,6 +301,9 @@ public:
     void PrepareLayerIndicator( bool aForceRebuild = false );
 
     void ToggleLayersManager();
+
+    void ToggleNetInspector();
+
     void ToggleSearch();
 
     /**
@@ -705,8 +708,6 @@ public:
 
     DIALOG_BOOK_REPORTER* GetFootprintDiffDialog();
 
-    DIALOG_NET_INSPECTOR* GetNetInspectorDialog();
-
     DECLARE_EVENT_TABLE()
 
 protected:
@@ -813,10 +814,6 @@ protected:
 
     void onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent );
 
-    void onCloseNetInspectorDialog( wxCommandEvent& aEvent );
-
-    void onUnitsChanged( wxCommandEvent& aEvent );
-
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox; // a combo box to display and select active layer
 
@@ -825,6 +822,7 @@ public:
 
     bool m_show_layer_manager_tools;
     bool m_show_search;
+    bool m_show_net_inspector;
 
     bool m_ZoneFillsDirty;          // Board has been modified since last zone fill.
 
@@ -848,7 +846,6 @@ private:
     DIALOG_BOOK_REPORTER* m_inspectClearanceDlg;
     DIALOG_BOOK_REPORTER* m_inspectConstraintsDlg;
     DIALOG_BOOK_REPORTER* m_footprintDiffDlg;
-    DIALOG_NET_INSPECTOR* m_netInspectorDlg;
 
     const STRING_UTF8_MAP* m_importProperties; // Properties used for non-KiCad import.
 

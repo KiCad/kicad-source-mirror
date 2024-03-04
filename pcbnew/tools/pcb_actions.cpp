@@ -1329,13 +1329,6 @@ TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .Parameter( VECTOR2I() ) );
 
-TOOL_ACTION PCB_ACTIONS::listNets( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.Control.listNets" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Net Inspector" ) )
-        .Tooltip( _( "Show the net inspector" ) )
-        .Icon( BITMAPS::list_nets ) );
-
 TOOL_ACTION PCB_ACTIONS::showPythonConsole( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.showPythonConsole" )
         .Scope( AS_GLOBAL )
@@ -1349,6 +1342,13 @@ TOOL_ACTION PCB_ACTIONS::showLayersManager( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Show Appearance Manager" ) )
         .Tooltip( _( "Show/hide the appearance manager" ) )
         .Icon( BITMAPS::layers_manager ) );
+
+TOOL_ACTION PCB_ACTIONS::showNetInspector( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.Control.showNetInspector" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Show Net Inspector" ) )
+        .Tooltip( _( "Show/hide the net inspector" ) )
+        .Icon( BITMAPS::tools ) );
 
 TOOL_ACTION PCB_ACTIONS::zonesManager( "pcbnew.Control.zonesManager",
         AS_GLOBAL, 0, "",

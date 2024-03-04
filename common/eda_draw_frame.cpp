@@ -61,6 +61,7 @@
 #include <drawing_sheet/ds_draw_item.h>
 #include <widgets/msgpanel.h>
 #include <widgets/properties_panel.h>
+#include <widgets/net_inspector_panel.h>
 #include <wx/event.h>
 #include <wx/snglinst.h>
 #include <widgets/ui_common.h>
@@ -119,6 +120,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_findReplaceData     = std::make_unique<EDA_SEARCH_DATA>();
     m_hotkeyPopup         = nullptr;
     m_propertiesPanel     = nullptr;
+    m_netInspectorPanel   = nullptr;
 
     SetUserUnits( EDA_UNITS::MILLIMETRES );
 
@@ -1196,6 +1198,12 @@ void EDA_DRAW_FRAME::ShowChangedLanguage()
     {
         wxAuiPaneInfo& properties_pane_info = m_auimgr.GetPane( m_propertiesPanel );
         properties_pane_info.Caption( _( "Properties" ) );
+    }
+
+    if( m_netInspectorPanel )
+    {
+        wxAuiPaneInfo& net_inspector_panel_info = m_auimgr.GetPane( m_netInspectorPanel );
+        net_inspector_panel_info.Caption( _( "Net Inspector" ) );
     }
 }
 

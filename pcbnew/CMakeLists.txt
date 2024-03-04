@@ -113,8 +113,6 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_layer_selection_base.cpp
     dialogs/dialog_move_exact.cpp
     dialogs/dialog_move_exact_base.cpp
-    dialogs/dialog_net_inspector.cpp
-    dialogs/dialog_net_inspector_base.cpp
     dialogs/dialog_import_netlist.cpp
     dialogs/dialog_import_netlist_base.cpp
     dialogs/dialog_non_copper_zones_properties.cpp
@@ -397,6 +395,8 @@ set( PCBNEW_CLASS_SRCS
     widgets/pcb_properties_panel.cpp
     widgets/pcb_search_pane.cpp
     widgets/search_handlers.cpp
+    widgets/net_inspector_panel.cpp
+    widgets/pcb_net_inspector_panel.cpp
 
     )
 

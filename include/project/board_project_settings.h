@@ -257,5 +257,40 @@ private:
     std::vector<VIEWPORT3D>* m_viewports;
 };
 
+/**
+ * Persisted state for the net inspector panel
+ */
+struct PANEL_NET_INSPECTOR_SETTINGS
+{
+    wxString              filter_text;
+    bool                  filter_by_net_name;
+    bool                  filter_by_netclass;
+    bool                  group_by_netclass;
+    bool                  group_by_constraint;
+    std::vector<wxString> custom_group_rules;
+    bool                  show_zero_pad_nets;
+    bool                  show_unconnected_nets;
+    int                   sorting_column;
+    bool                  sort_order_asc;
+    std::vector<int>      col_order;
+    std::vector<int>      col_widths;
+    std::vector<bool>     col_hidden;
+
+    std::vector<wxString> expanded_rows;
+
+    PANEL_NET_INSPECTOR_SETTINGS()
+    {
+        filter_text = "";
+        filter_by_net_name = true;
+        filter_by_netclass = true;
+        group_by_netclass = false;
+        group_by_constraint = false;
+        show_zero_pad_nets = false;
+        show_unconnected_nets = false;
+        sorting_column = -1;
+        sort_order_asc = true;
+    }
+};
+
 
 #endif // KICAD_BOARD_PROJECT_SETTINGS_H

@@ -95,7 +95,6 @@ PCB_PROPERTIES_PANEL::PCB_PROPERTIES_PANEL( wxWindow* aParent, PCB_BASE_EDIT_FRA
 }
 
 
-
 PCB_PROPERTIES_PANEL::~PCB_PROPERTIES_PANEL()
 {
     m_unitEditorInstance->UpdateFrame( nullptr );

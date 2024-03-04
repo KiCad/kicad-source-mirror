@@ -189,6 +189,36 @@ PROJECT_LOCAL_SETTINGS::PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxStrin
     m_params.emplace_back( new PARAM<wxString>( "git.ssh_key",
             &m_GitSSHKey, "" ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "net_inspector_panel.filter_text",
+                                                &m_NetInspectorPanel.filter_text, "" ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.filter_by_net_name",
+                                            &m_NetInspectorPanel.filter_by_net_name, true ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.filter_by_netclass",
+                                            &m_NetInspectorPanel.filter_by_netclass, true ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.group_by_netclass",
+                                            &m_NetInspectorPanel.group_by_netclass, false ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.group_by_constraint",
+                                            &m_NetInspectorPanel.group_by_constraint, false ) );
+    m_params.emplace_back( new PARAM_LIST<wxString>( "net_inspector_panel.custom_group_rules",
+                                                     &m_NetInspectorPanel.custom_group_rules,
+                                                     {} ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.show_zero_pad_nets",
+                                            &m_NetInspectorPanel.show_zero_pad_nets, false ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.show_unconnected_nets",
+                                            &m_NetInspectorPanel.show_unconnected_nets, false ) );
+    m_params.emplace_back( new PARAM<int>( "net_inspector_panel.sorting_column",
+                                           &m_NetInspectorPanel.sorting_column, -1 ) );
+    m_params.emplace_back( new PARAM<bool>( "net_inspector_panel.sort_ascending",
+                                            &m_NetInspectorPanel.sort_order_asc, true ) );
+    m_params.emplace_back( new PARAM_LIST<int>( "net_inspector_panel.col_order",
+                                                &m_NetInspectorPanel.col_order, {} ) );
+    m_params.emplace_back( new PARAM_LIST<int>( "net_inspector_panel.col_widths",
+                                                &m_NetInspectorPanel.col_widths, {} ) );
+    m_params.emplace_back( new PARAM_LIST<bool>( "net_inspector_panel.col_hidden",
+                                                 &m_NetInspectorPanel.col_hidden, {} ) );
+    m_params.emplace_back( new PARAM_LIST<wxString>( "net_inspector_panel.expanded_rows",
+                                                     &m_NetInspectorPanel.expanded_rows, {} ) );
+
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "project.files",
             [&]() -> nlohmann::json
             {

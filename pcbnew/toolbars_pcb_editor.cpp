@@ -48,6 +48,7 @@
 #include <tools/pcb_selection_tool.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/pcb_properties_panel.h>
+#include <widgets/net_inspector_panel.h>
 #include <widgets/pcb_search_pane.h>
 #include <widgets/wx_aui_utils.h>
 #include <wx/wupdlock.h>
@@ -356,7 +357,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     // Tools to show/hide toolbars:
     m_optionsToolBar->AddScaledSeparator( this );
     m_optionsToolBar->Add( PCB_ACTIONS::showLayersManager,    ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( PCB_ACTIONS::showProperties,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::showProperties, ACTION_TOOLBAR::TOGGLE );
 
     PCB_SELECTION_TOOL*          selTool = m_toolManager->GetTool<PCB_SELECTION_TOOL>();
     std::unique_ptr<ACTION_MENU> gridMenu = std::make_unique<ACTION_MENU>( false, selTool );
@@ -785,6 +786,29 @@ void PCB_EDIT_FRAME::ToggleLayersManager()
     else
     {
         settings->m_AuiPanels.right_panel_width = m_appearancePanel->GetSize().x;
+        m_auimgr.Update();
+    }
+}
+
+
+void PCB_EDIT_FRAME::ToggleNetInspector()
+{
+    PCBNEW_SETTINGS* settings          = GetPcbNewSettings();
+    wxAuiPaneInfo&   netInspectorPanel = m_auimgr.GetPane( NetInspectorPanelName() );
+
+    m_show_net_inspector = !m_show_net_inspector;
+
+    netInspectorPanel.Show( m_show_net_inspector );
+
+    if( m_show_net_inspector )
+    {
+        SetAuiPaneSize( m_auimgr, netInspectorPanel, settings->m_AuiPanels.net_inspector_width,
+                        -1 );
+    }
+    else
+    {
+        m_netInspectorPanel->SaveSettings();
+        settings->m_AuiPanels.net_inspector_width = m_netInspectorPanel->GetSize().x;
         m_auimgr.Update();
     }
 }

@@ -24,7 +24,6 @@
 #ifndef BOARD_INSPECTION_TOOL_H
 #define BOARD_INSPECTION_TOOL_H
 
-#include <dialogs/dialog_net_inspector.h>
 #include <dialogs/dialog_book_reporter.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_engine.h>
@@ -73,8 +72,6 @@ public:
 
     ///< Show local ratsnest of a component.
     int LocalRatsnestTool( const TOOL_EVENT& aEvent );
-
-    int ListNets( const TOOL_EVENT& aEvent );
 
     ///< Hide the ratsnest for a given net.
     int HideNetInRatsnest( const TOOL_EVENT& aEvent );

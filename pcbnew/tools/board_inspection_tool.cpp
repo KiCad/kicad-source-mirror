@@ -32,7 +32,6 @@
 #include <drc/drc_engine.h>
 #include <dialogs/dialog_board_statistics.h>
 #include <dialogs/dialog_book_reporter.h>
-#include <dialogs/dialog_net_inspector.h>
 #include <dialogs/panel_setup_rules_base.h>
 #include <dialogs/dialog_footprint_associations.h>
 #include <string_utils.h>
@@ -2060,20 +2059,6 @@ void BOARD_INSPECTION_TOOL::calculateSelectionRatsnest( const VECTOR2I& aDelta )
 }
 
 
-int BOARD_INSPECTION_TOOL::ListNets( const TOOL_EVENT& aEvent )
-{
-    wxCHECK( m_frame, 0 );
-
-    DIALOG_NET_INSPECTOR* dialog = m_frame->GetNetInspectorDialog();
-
-    wxCHECK( dialog, 0 );
-
-    dialog->Raise();
-    dialog->Show( true );
-    return 0;
-}
-
-
 int BOARD_INSPECTION_TOOL::HideNetInRatsnest( const TOOL_EVENT& aEvent )
 {
     doHideRatsnestNet( aEvent.Parameter<int>(), true );
@@ -2131,7 +2116,6 @@ void BOARD_INSPECTION_TOOL::setTransitions()
     Go( &BOARD_INSPECTION_TOOL::HideLocalRatsnest,   PCB_ACTIONS::hideLocalRatsnest.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::UpdateLocalRatsnest, PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
 
-    Go( &BOARD_INSPECTION_TOOL::ListNets,            PCB_ACTIONS::listNets.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::ShowBoardStatistics, PCB_ACTIONS::boardStatistics.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::InspectClearance,    PCB_ACTIONS::inspectClearance.MakeEvent() );
     Go( &BOARD_INSPECTION_TOOL::InspectConstraints,  PCB_ACTIONS::inspectConstraints.MakeEvent() );

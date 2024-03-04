@@ -95,6 +95,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
     m_params.emplace_back( new PARAM<int>( "aui.right_panel_width",
             &m_AuiPanels.right_panel_width, -1 ) );
 
+    m_params.emplace_back( new PARAM<int>( "aui.net_inspector_width",
+            &m_AuiPanels.net_inspector_width, -1 ) );
+
     m_params.emplace_back( new PARAM<int>( "aui.properties_panel_width",
             &m_AuiPanels.properties_panel_width, -1 ) );
 
@@ -124,6 +127,9 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
 
     m_params.emplace_back( new PARAM<bool>( "aui.show_search",
             &m_AuiPanels.show_search, false ) );
+
+    m_params.emplace_back( new PARAM<bool>( "aui.show_net_inspector",
+            &m_AuiPanels.show_net_inspector, false ) );        
 
     m_params.emplace_back( new PARAM<int>( "footprint_chooser.width",
             &m_FootprintChooser.width, -1 ) );
@@ -584,31 +590,6 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Reannotate.exclude_list, "" ) );
     m_params.emplace_back( new PARAM<wxString>( "reannotate_dialog.annotate_report_file_name",
             &m_Reannotate.report_file_name, "" ) );
-
-    m_params.emplace_back( new PARAM<wxString>( "net_inspector_dialog.group_by_text",
-            &m_NetInspector.group_by_text, "" ) );
-    m_params.emplace_back( new PARAM<bool>( "net_inspector_dialog.group_by",
-            &m_NetInspector.group_by, false ) );
-    m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.group_by_kind",
-            &m_NetInspector.group_by_kind, 0 ) );
-    m_params.emplace_back( new PARAM<bool>( "net_inspector_dialog.show_zero_pad_nets",
-            &m_NetInspector.show_zero_pad_nets, true ) );
-    m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.sorting_column",
-            &m_NetInspector.sorting_column, -1 ) );
-    m_params.emplace_back( new PARAM<bool>( "net_inspector_dialog.sort_ascending",
-            &m_NetInspector.sort_order_asc, true ) );
-    m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.dlg_width",
-            &m_NetInspector.dlg_width, 960 ) );
-    m_params.emplace_back( new PARAM<int>( "net_inspector_dialog.dlg_height",
-            &m_NetInspector.dlg_height, 520 ) );
-
-    const std::vector<int> default_col_order = { };
-    const std::vector<int> default_widths = { };
-
-    m_params.emplace_back( new PARAM_LIST<int>( "net_inspector_dialog.col_order",
-            &m_NetInspector.col_order, default_col_order ) );
-    m_params.emplace_back( new PARAM_LIST<int>( "net_inspector_dialog.col_widths",
-            &m_NetInspector.col_widths, default_widths ) );
 
     m_params.emplace_back( new PARAM_LAMBDA<nlohmann::json>( "action_plugins",
             [&]() -> nlohmann::json
