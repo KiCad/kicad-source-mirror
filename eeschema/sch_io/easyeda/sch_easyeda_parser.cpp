@@ -837,6 +837,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxString fontSize = arr[7];
             wxString baselineAlign = arr[10];
             wxString textStr = arr[12];
+            bool     visible = arr[13] != wxS( "0" );
 
             textStr.Replace( wxS( "\\n" ), wxS( "\n" ) );
             textStr = UnescapeHTML( textStr );
@@ -874,6 +875,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
                 textItem->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
             textItem->SetFont( KIFONT::FONT::GetFont( fontname ) );
+            textItem->SetVisible( visible );
 
             double ptSize = 7;
 
