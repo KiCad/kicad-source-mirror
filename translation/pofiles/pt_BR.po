@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-04 19:53+0000\n"
+"PO-Revision-Date: 2024-03-04 19:56+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -42248,14 +42248,15 @@ msgid "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr "Footprint %s ilha %s tem um furo quadrado (ainda não é compatível)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"footprint %s ilha %s tem uma rotação no furo com %f graus. O KiCad suporta "
-"apenas rotações com 90 graus."
+"Carregando a biblioteca '%s':\n"
+"O bloco %s do footprint %s tem um furo com uma rotação de %f graus. O KiCad "
+"suporta apenas rotações de 90 graus."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2835
 #, c-format
@@ -42267,11 +42268,13 @@ msgstr ""
 "apenas rotações com 90 graus."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "footprint %s ilha %s usa um buraco com tipo desconhecido %d."
+msgstr ""
+"Houve um erro ao carregar a biblioteca '%s':\n"
+"O footprint %s ilha %s usa um tipo desconhecido furo  %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2859
 #, c-format
@@ -42279,20 +42282,20 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "footprint %s ilha %s usa um buraco com tipo desconhecido %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"O footprint %s da ilha %s usa uma pilha complexa de ilhas (ainda não é "
-"compatível.)"
+"Houve um erro ao carregar a biblioteca '%s':\n"
+"O footprint %s ilha %s usa uma pilha de ilhas complexas (ainda não "
+"suportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"O footprint %s da ilha %s usa uma pilha complexa de ilhas (ainda não é "
-"compatível.)"
+"O footprint %s ilha %s usa uma pilha complexa de ilhas (ainda não suportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
 #, fuzzy, c-format
