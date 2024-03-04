@@ -744,6 +744,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     case PAD_PROP::TESTPOINT:        m_choiceFabProperty->SetSelection( 4 ); break;
     case PAD_PROP::HEATSINK:         m_choiceFabProperty->SetSelection( 5 ); break;
     case PAD_PROP::CASTELLATED:      m_choiceFabProperty->SetSelection( 6 ); break;
+    case PAD_PROP::MECHANICAL:       m_choiceFabProperty->SetSelection( 7 ); break;
     }
 
     // Ensure the pad property is compatible with the pad type
@@ -1440,6 +1441,12 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
         warning_msgs.Add(  _( "Warning: BGA property is for SMD pads." ) );
     }
 
+    if( m_previewPad->GetProperty() == PAD_PROP::MECHANICAL
+            && m_previewPad->GetAttribute() != PAD_ATTRIB::PTH )
+    {
+        warning_msgs.Add(  _( "Warning: Mechanical property is for PTH pads." ) );
+    }
+
     if( m_previewPad->GetShape() == PAD_SHAPE::ROUNDRECT
             || m_previewPad->GetShape() == PAD_SHAPE::CHAMFERED_RECT )
     {
@@ -1686,6 +1693,7 @@ PAD_PROP DIALOG_PAD_PROPERTIES::getSelectedProperty()
     case 4:  prop = PAD_PROP::TESTPOINT;      break;
     case 5:  prop = PAD_PROP::HEATSINK;       break;
     case 6:  prop = PAD_PROP::CASTELLATED;    break;
+    case 7:  prop = PAD_PROP::MECHANICAL;     break;
     }
 
     return prop;

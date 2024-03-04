@@ -243,6 +243,7 @@ pad_prop_fiducial_glob
 pad_prop_castellated
 pad_prop_testpoint
 pad_prop_heatsink
+pad_prop_mechanical
 padvia
 prefer_zone_connections
 private_layers

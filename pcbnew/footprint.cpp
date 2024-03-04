@@ -1145,6 +1145,7 @@ int FOOTPRINT::GetLikelyAttribute() const
 
         case PAD_PROP::HEATSINK:
         case PAD_PROP::CASTELLATED:
+        case PAD_PROP::MECHANICAL:
             continue;
 
         case PAD_PROP::NONE:

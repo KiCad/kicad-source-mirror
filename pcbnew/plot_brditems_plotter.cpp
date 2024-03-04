@@ -184,6 +184,7 @@ void BRDITEMS_PLOTTER::PlotPad( const PAD* aPad, const COLOR4D& aColor, OUTLINE_
             break;
 
         case PAD_PROP::NONE:
+        case PAD_PROP::MECHANICAL:
             break;
         }
 

@@ -1490,6 +1490,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
     case PAD_PROP::TESTPOINT:        property = "pad_prop_testpoint";     break;
     case PAD_PROP::HEATSINK:         property = "pad_prop_heatsink";      break;
     case PAD_PROP::CASTELLATED:      property = "pad_prop_castellated";   break;
+    case PAD_PROP::MECHANICAL:       property = "pad_prop_mechanical";    break;
 
     default:
         THROW_IO_ERROR( wxString::Format( wxT( "unknown pad property: %d" ),

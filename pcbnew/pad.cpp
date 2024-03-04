@@ -1229,6 +1229,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     case PAD_PROP::TESTPOINT:      props += _( "Test point" );      break;
     case PAD_PROP::HEATSINK:       props += _( "Heat sink" );       break;
     case PAD_PROP::CASTELLATED:    props += _( "Castellated" );     break;
+    case PAD_PROP::MECHANICAL:     props += _( "Mechanical" );      break;
     }
 
     aList.emplace_back( ShowPadShape(), props );
@@ -2112,7 +2113,8 @@ static struct PAD_DESC
                 .Map( PAD_PROP::FIDUCIAL_LOCAL,    _HKI( "Fiducial, local to footprint" ) )
                 .Map( PAD_PROP::TESTPOINT,         _HKI( "Test point pad" ) )
                 .Map( PAD_PROP::HEATSINK,          _HKI( "Heatsink pad" ) )
-                .Map( PAD_PROP::CASTELLATED,       _HKI( "Castellated pad" ) );
+                .Map( PAD_PROP::CASTELLATED,       _HKI( "Castellated pad" ) )
+                .Map( PAD_PROP::MECHANICAL,        _HKI( "Mechanical pad" ) );
 
         ENUM_MAP<ZONE_CONNECTION>& zcMap = ENUM_MAP<ZONE_CONNECTION>::Instance();
 

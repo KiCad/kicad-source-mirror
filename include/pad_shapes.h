@@ -75,7 +75,8 @@ enum class PAD_ATTRIB
 
 /**
  * The set of pad properties used in Gerber files (Draw files, and P&P files)
- * to define some properties in fabrication or test files.
+ * to define some properties in fabrication or test files.  Also used by
+ * DRC to check some properties.
  */
 enum class PAD_PROP
 {
@@ -85,7 +86,8 @@ enum class PAD_PROP
     FIDUCIAL_LOCAL,        ///< a fiducial (usually a smd) local to the parent footprint
     TESTPOINT,             ///< a test point pad
     HEATSINK,              ///< a pad used as heat sink, usually in SMD footprints
-    CASTELLATED            ///< a pad with a castellated through hole
+    CASTELLATED,           ///< a pad with a castellated through hole
+    MECHANICAL,            ///< a pad used for mechanical support
 };
 
 

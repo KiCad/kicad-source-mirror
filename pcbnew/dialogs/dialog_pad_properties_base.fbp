@@ -6886,7 +6886,7 @@
                               <property name="style"></property>
                               <property name="subclass">; ; forward_declare</property>
                               <property name="toolbar_pane">0</property>
-                              <property name="tooltip">Optional property to specify a special purpose or constraint in fabrication files:&#x0A;BGA attribute is for pads in BGA footprints&#x0A;Fiducial local is a fiducial for the parent footprint&#x0A;Fiducial global is a fiducial for the whole board&#x0A;Test Point pad  is useful to specify test points in Gerber files&#x0A;Heatsink pad  specify a thermal pad&#x0A;Castellated specify castellated through hole pads on a board edge&#x0A;These properties are specified in Gerber X2  files.</property>
+                              <property name="tooltip">Optional property to specify a special purpose or constraint in fabrication files:&#x0A;BGA attribute is for pads in BGA footprints&#x0A;Fiducial local is a fiducial for the parent footprint&#x0A;Fiducial global is a fiducial for the whole board&#x0A;Test Point specifies an electrical test point&#x0A;Heatsink specifies a thermal pad&#x0A;Castellated specifies a through hole pad on a board edge&#x0A;Mechanical specifies a through-hole pad that is used for mechanical support</property>
                               <property name="window_extra_style"></property>
                               <property name="window_name"></property>
                               <property name="window_style"></property>
@@ -6921,7 +6921,7 @@
                               <property name="caption"></property>
                               <property name="caption_visible">1</property>
                               <property name="center_pane">0</property>
-                              <property name="choices">&quot;None&quot; &quot;BGA pad&quot; &quot;Fiducial, local to footprint&quot; &quot;Fiducial, global to board&quot; &quot;Test point pad&quot; &quot;Heatsink pad&quot; &quot;Castellated pad (through hole only)&quot;</property>
+                              <property name="choices">&quot;None&quot; &quot;BGA pad&quot; &quot;Fiducial, local to footprint&quot; &quot;Fiducial, global to board&quot; &quot;Test point pad&quot; &quot;Heatsink pad&quot; &quot;Castellated pad (through hole only)&quot; &quot;Mechanical&quot;</property>
                               <property name="close_button">1</property>
                               <property name="context_help"></property>
                               <property name="context_menu">1</property>

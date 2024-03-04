@@ -5074,6 +5074,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
                 case T_pad_prop_testpoint:     pad->SetProperty( PAD_PROP::TESTPOINT );      break;
                 case T_pad_prop_castellated:   pad->SetProperty( PAD_PROP::CASTELLATED );    break;
                 case T_pad_prop_heatsink:      pad->SetProperty( PAD_PROP::HEATSINK );       break;
+                case T_pad_prop_mechanical:    pad->SetProperty( PAD_PROP::MECHANICAL );     break;
                 case T_none:                   pad->SetProperty( PAD_PROP::NONE );           break;
                 case T_RIGHT:                                                                break;
 
