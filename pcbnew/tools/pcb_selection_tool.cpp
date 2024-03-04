@@ -2917,6 +2917,10 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         if( options.m_ImageOpacity == 0.00 )
             return false;
 
+        // Bitmap images on board are hidden if LAYER_DRAW_BITMAPS is not visible
+        if( !view()->IsLayerVisible( LAYER_DRAW_BITMAPS ) )
+            return false;
+
         KI_FALLTHROUGH;
 
     case PCB_SHAPE_T:
