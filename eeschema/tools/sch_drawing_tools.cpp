@@ -2486,7 +2486,7 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
             m_frame, std::move( sheetPaths ),
             std::make_shared<SHEET_SYNCHRONIZATION_AGENT>(
                     [&]( EDA_ITEM* aItem, SCH_SHEET_PATH aPath,
-                         SHEET_SYNCHRONIZATION_AGENT::MODIFICATION aModify )
+                         SHEET_SYNCHRONIZATION_AGENT::MODIFICATION const& aModify )
                     {
                         SCH_COMMIT commit( m_toolMgr );
 
@@ -2609,7 +2609,7 @@ int SCH_DRAWING_TOOLS::SyncAllSheetsPins( const TOOL_EVENT& aEvent )
     SCH_SHEET_PATH current;
     current.push_back( &m_frame->Schematic().Root() );
     getSheetChildren( sheetPaths, m_frame->Schematic().Root().GetScreen(), visited, current );
-    return doSyncSheetsPins( sheetPaths );
+    return doSyncSheetsPins( std::move( sheetPaths ) );
 }
 
 

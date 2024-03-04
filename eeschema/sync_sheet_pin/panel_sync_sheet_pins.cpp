@@ -126,21 +126,9 @@ void PANEL_SYNC_SHEET_PINS::UpdateForms()
         pins_list.push_back( std::make_shared<SCH_SHEET_PIN_SYNCHRONIZATION_ITEM>(
                 static_cast<SCH_SHEET_PIN*>( pin ), m_sheet ) );
 
-    for( const auto& [idx, model] : m_models )
-    {
-        switch( idx )
-        {
-        case SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL:
-            model->UpdateItems( std::move( labels_list ) );
-            break;
-        case SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN:
-            model->UpdateItems( std::move( pins_list ) );
-            break;
-        case SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED:
-            model->UpdateItems( std::move( associated_list ) );
-            break;
-        }
-    }
+    m_models[SHEET_SYNCHRONIZATION_MODEL::HIRE_LABEL]->UpdateItems( std::move( labels_list ) );
+    m_models[SHEET_SYNCHRONIZATION_MODEL::SHEET_PIN]->UpdateItems( std::move( pins_list ) );
+    m_models[SHEET_SYNCHRONIZATION_MODEL::ASSOCIATED]->UpdateItems( std::move( associated_list ) );
 
     UpdatePageImage();
 }

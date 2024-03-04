@@ -56,7 +56,7 @@ public:
 
     using MODIFICATION = std::function<void()>;
 
-    using DO_MODIFY_ITEM = std::function<void( EDA_ITEM*, SCH_SHEET_PATH, MODIFICATION )>;
+    using DO_MODIFY_ITEM = std::function<void( EDA_ITEM*, SCH_SHEET_PATH, MODIFICATION const& )>;
 
     using DO_PLACE_ITEM = std::function<void( SCH_SHEET*, SCH_SHEET_PATH,
                                               SHEET_SYNCHRONIZATION_PLACEMENT, EDA_ITEM* )>;
@@ -67,11 +67,11 @@ public:
                                  SCH_EDIT_FRAME* a_frame );
     ~SHEET_SYNCHRONIZATION_AGENT();
 
-    void ModifyItem( SHEET_SYNCHRONIZATION_ITEM& aItem, std::function<void()> aDoModify,
+    void ModifyItem( SHEET_SYNCHRONIZATION_ITEM& aItem, std::function<void()> const& aDoModify,
                      const SCH_SHEET_PATH& aPath );
 
-    void ModifyItem( SCH_ITEM* aItem, std::function<void()> aDoModify, const SCH_SHEET_PATH& aPath,
-                     SHEET_SYNCHRONIZATION_ITEM_KIND aKind );
+    void ModifyItem( SCH_ITEM* aItem, std::function<void()> const& aDoModify,
+                     const SCH_SHEET_PATH& aPath, SHEET_SYNCHRONIZATION_ITEM_KIND aKind );
 
     void RemoveItem( SHEET_SYNCHRONIZATION_ITEM& aItem, SCH_SHEET* aSheet,
                      SCH_SHEET_PATH const& aPath );

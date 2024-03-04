@@ -47,16 +47,17 @@ SHEET_SYNCHRONIZATION_AGENT::SHEET_SYNCHRONIZATION_AGENT( DO_MODIFY_ITEM  aDoMod
 SHEET_SYNCHRONIZATION_AGENT::~SHEET_SYNCHRONIZATION_AGENT() = default;
 
 
-void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SHEET_SYNCHRONIZATION_ITEM& aItem,
-                                              std::function<void()>       aDoModify,
-                                              SCH_SHEET_PATH const&       aPath )
+void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SHEET_SYNCHRONIZATION_ITEM&  aItem,
+                                              std::function<void()> const& aDoModify,
+                                              SCH_SHEET_PATH const&        aPath )
 {
     return ModifyItem( aItem.GetItem(), aDoModify, aPath, aItem.GetKind() );
 }
 
 
-void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SCH_ITEM* sch_item, std::function<void()> aDoModify,
-                                              const SCH_SHEET_PATH& aPath,
+void SHEET_SYNCHRONIZATION_AGENT::ModifyItem( SCH_ITEM*                       sch_item,
+                                              std::function<void()> const&    aDoModify,
+                                              const SCH_SHEET_PATH&           aPath,
                                               SHEET_SYNCHRONIZATION_ITEM_KIND aKind )
 {
     if( !aDoModify )
@@ -100,7 +101,7 @@ void SHEET_SYNCHRONIZATION_AGENT::RemoveItem( SHEET_SYNCHRONIZATION_ITEM& aItem,
     {
         SCH_SHEET_PATH path_cp = aPath;
         path_cp.pop_back();
-        m_doDelete( aItem.GetItem(), path_cp );
+        m_doDelete( aItem.GetItem(), std::move( path_cp ) );
         break;
     }
     case SHEET_SYNCHRONIZATION_ITEM_KIND::HIERLABEL_AND_SHEET_PIN:
