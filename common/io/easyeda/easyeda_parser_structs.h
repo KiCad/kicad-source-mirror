@@ -73,9 +73,10 @@ struct DOCUMENT
 
     // BBox
     // colors
-    wxString                                    canvas;
-    wxArrayString                               shape;
-    std::optional<nlohmann::json>               dataStr;
+    wxString                      canvas;
+    wxString                      title;
+    wxArrayString                 shape;
+    std::optional<nlohmann::json> dataStr;
 };
 
 struct C_PARA

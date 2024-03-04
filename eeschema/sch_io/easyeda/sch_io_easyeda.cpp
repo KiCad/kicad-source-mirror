@@ -30,6 +30,8 @@
 #include <sch_screen.h>
 #include <kiplatform/environment.h>
 #include <project_sch.h>
+#include <wildcards_and_files_ext.h>
+#include <string_utils.h>
 
 #include <wx/log.h>
 #include <wx/stdstream.h>
@@ -496,17 +498,11 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
         if( topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_SHEET
             || topDocType == EASYEDA::DOC_TYPE::SCHEMATIC_LIST )
         {
+            int                          pageNum = 1;
             EASYEDA::DOCUMENT_SCHEMATICS schDoc = js.get<EASYEDA::DOCUMENT_SCHEMATICS>();
-
-            bool first = true;
 
             for( const EASYEDA::DOCUMENT& subDoc : *schDoc.schematics )
             {
-                if( first )
-                    first = false; // TODO
-                else
-                    break;
-
                 if( subDoc.docType )
                 {
                     if( *subDoc.docType != EASYEDA::DOC_TYPE::SCHEMATIC_SHEET )
@@ -520,7 +516,56 @@ static void LoadSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRootSheet, const w
 
                 EASYEDA::DOCUMENT dataStrDoc = subDoc.dataStr->get<EASYEDA::DOCUMENT>();
 
-                parser.ParseSchematic( aSchematic, aRootSheet, aFileName, dataStrDoc.shape );
+                if( schDoc.schematics->size() > 1 )
+                {
+                    wxString sheetTitle =
+                            !subDoc.title.empty() ? subDoc.title : ( wxString() << pageNum );
+
+                    wxString sheetBaseName = EscapeString( sheetTitle, CTX_FILENAME );
+
+                    wxFileName sheetFname( aFileName );
+                    sheetFname.SetFullName(
+                            sheetBaseName + wxS( "." )
+                            + wxString::FromUTF8( FILEEXT::KiCadSchematicFileExtension ) );
+
+                    wxFileName relSheetPath( sheetFname );
+                    relSheetPath.MakeRelativeTo(
+                            wxFileName( aRootSheet->GetFileName() ).GetPath() );
+
+                    std::unique_ptr<SCH_SHEET> subSheet = std::make_unique<SCH_SHEET>( aSchematic );
+                    subSheet->SetFileName( relSheetPath.GetFullPath() );
+                    subSheet->SetName( sheetTitle );
+
+                    SCH_SCREEN* screen = new SCH_SCREEN( aSchematic );
+                    screen->SetFileName( sheetFname.GetFullPath() );
+                    screen->SetPageNumber( wxString() << pageNum );
+                    subSheet->SetScreen( screen );
+
+                    VECTOR2I pos;
+                    pos.x = schIUScale.MilsToIU( 200 );
+                    pos.y = schIUScale.MilsToIU( 200 )
+                            + ( subSheet->GetSize().y + schIUScale.MilsToIU( 200 ) )
+                                      * ( pageNum - 1 );
+
+                    subSheet->SetPosition( pos );
+
+                    SCH_SHEET_PATH sheetPath;
+                    sheetPath.push_back( aRootSheet );
+                    sheetPath.push_back( subSheet.get() );
+                    sheetPath.SetPageNumber( wxString() << pageNum );
+                    aSchematic->SetCurrentSheet( sheetPath );
+
+                    parser.ParseSchematic( aSchematic, subSheet.get(), aFileName,
+                                           dataStrDoc.shape );
+
+                    aRootSheet->GetScreen()->Append( subSheet.release() );
+                }
+                else
+                {
+                    parser.ParseSchematic( aSchematic, aRootSheet, aFileName, dataStrDoc.shape );
+                }
+
+                pageNum++;
             }
         }
     }
