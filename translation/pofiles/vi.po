@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: Kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-02-02 12:24+0000\n"
+"PO-Revision-Date: 2024-03-05 10:02+0000\n"
 "Last-Translator: Nguyễn Ngọc Khánh <ngockhanhnguyen985@gmail.com>\n"
-"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/master-"
-"source/vi/>\n"
+"Language-Team: Vietnamese <https://hosted.weblate.org/projects/kicad/v8/vi/>"
+"\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-Basepath: E:/OPEN_SOURSE/kicad\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -32821,19 +32821,17 @@ msgid "Filter Selected Items"
 msgstr "Xóa bỏ (các) khoản mục đã chọn"
 
 #: pcbnew/dialogs/dialog_find.cpp:250
-#, fuzzy
 msgid "Searching..."
-msgstr "Tìm kiếm Văn bản"
+msgstr "Đang tìm kiếm..."
 
 #: pcbnew/dialogs/dialog_find.cpp:382
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' not found"
-msgstr "%s không tìm thấy"
+msgstr "'%s' không tìm thấy"
 
 #: pcbnew/dialogs/dialog_find.cpp:390
-#, fuzzy
 msgid "No more items to show"
-msgstr "Xóa các mục đã nhấp"
+msgstr "Không còn mục nào để hiển thị"
 
 #: pcbnew/dialogs/dialog_find.cpp:392
 msgid "No hits"
@@ -32850,9 +32848,8 @@ msgid "Hit(s): %d / %zu"
 msgstr ""
 
 #: pcbnew/dialogs/dialog_find_base.cpp:28
-#, fuzzy
 msgid "Search for:"
-msgstr "Tên Sheet"
+msgstr "Tìm kiếm:"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:43
 msgid "Match case"
@@ -32897,9 +32894,8 @@ msgid "Footprint: "
 msgstr "Footprint: "
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:97
-#, fuzzy
 msgid "Symbol:"
-msgstr "Biểu tượng"
+msgstr "Ký hiệu:"
 
 #: pcbnew/dialogs/dialog_footprint_associations.cpp:98
 msgid "Sheet: "
@@ -32937,9 +32933,8 @@ msgstr "Footprint"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:75
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:143
-#, fuzzy
 msgid "3D Models"
-msgstr "Mô hình 3D bởi"
+msgstr "Mô hình 3D"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:288
 msgid ""
@@ -33020,9 +33015,8 @@ msgstr "Bộ chỉ định tham chiếu"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:143
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:339
-#, fuzzy
 msgid "90"
-msgstr "0"
+msgstr "90"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:151
 msgid "Side:"
@@ -33092,9 +33086,8 @@ msgstr "Footprint"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:267
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:235
-#, fuzzy
 msgid "Clearances"
-msgstr "Clearance"
+msgstr "Khoảng cách an toàn"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:269
 msgid "Set values to 0 to use Board Setup values."
@@ -38974,9 +38967,9 @@ msgid "Checking %s hole size: min %s."
 msgstr "Đang kiểm tra các pin..."
 
 #: pcbnew/drc/drc_engine.cpp:1027
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s: min %s."
-msgstr "Đang kiểm tra các pin..."
+msgstr "Đang kiểm tra %s: tối thiểu %s."
 
 #: pcbnew/drc/drc_engine.cpp:1035
 #, fuzzy, c-format
@@ -38995,9 +38988,9 @@ msgstr "Đang kiểm tra các pin..."
 
 #: pcbnew/drc/drc_engine.cpp:1055 pcbnew/drc/drc_engine.cpp:1081
 #: pcbnew/drc/drc_engine.cpp:1525
-#, fuzzy, c-format
+#, c-format
 msgid "Checking %s."
-msgstr "Đang kiểm tra các pin..."
+msgstr "Đang kiểm tra %s."
 
 #: pcbnew/drc/drc_engine.cpp:1070
 #, fuzzy, c-format
@@ -39011,7 +39004,7 @@ msgstr ""
 #: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
 #, c-format
 msgid "%s contains no copper.  Rule ignored."
-msgstr ""
+msgstr "%s không chứa đồng. Quy tắc bị bỏ qua."
 
 #: pcbnew/drc/drc_engine.cpp:1156
 msgid "Keepout constraint not met."
@@ -39063,17 +39056,16 @@ msgid "Checking rule condition \"%s\"."
 msgstr "Đang kiểm tra xung đột bus ..."
 
 #: pcbnew/drc/drc_engine.cpp:1264
-#, fuzzy
 msgid "Constraint applied."
-msgstr "Dọc"
+msgstr "Đã áp dụng ràng buộc."
 
 #: pcbnew/drc/drc_engine.cpp:1268 pcbnew/drc/drc_engine.cpp:1546
 msgid "Rule applied."
-msgstr ""
+msgstr "Đã áp dụng quy tắc."
 
 #: pcbnew/drc/drc_engine.cpp:1273
 msgid "Rule applied; overrides previous constraints."
-msgstr ""
+msgstr "Đã áp dụng luật; ghi đè các ràng buộc trước đó."
 
 #: pcbnew/drc/drc_engine.cpp:1281
 msgid "Membership not satisfied; constraint ignored."
@@ -39134,7 +39126,7 @@ msgstr "Đánh dấu Schematic"
 
 #: pcbnew/drc/drc_item.cpp:48
 msgid "Signal Integrity"
-msgstr ""
+msgstr "Tính toàn vẹn tín hiệu"
 
 #: pcbnew/drc/drc_item.cpp:49
 #, fuzzy
@@ -40070,9 +40062,9 @@ msgid "The library '%s' is not enabled in the current configuration."
 msgstr "Thư viện \"%s\" không có trong bảng thư viện footprint."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:829
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
-msgstr "Không tìm thấy Footprint"
+msgstr "Không tìm thấy dấu chân '%s' trong thư viện '%s'."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:842
 #, fuzzy, c-format
