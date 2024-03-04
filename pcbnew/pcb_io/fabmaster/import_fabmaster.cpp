@@ -2646,14 +2646,13 @@ SHAPE_POLY_SET FABMASTER::loadShapePolySet( const graphic_element& aElement )
         }
     }
 
-    poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
     return poly_outline;
 }
 
 
 bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRACE>& aLine)
 {
-    if( aLine->segment.size() < 3 )
+    if( aLine->segment.empty() )
         return false;
 
     PCB_LAYER_ID layer = Cmts_User;
@@ -2663,13 +2662,51 @@ bool FABMASTER::loadPolygon( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
     if( IsPcbLayer( new_layer ) )
         layer = new_layer;
 
+    STROKE_PARAMS defaultStroke( aBoard->GetDesignSettings().GetLineThickness( layer ) );
+
+    if( aLine->segment.size() < 3 )
+    {
+        for( const auto& seg : aLine->segment )
+        {
+            PCB_SHAPE* new_shape = new PCB_SHAPE( aBoard );
+
+            new_shape->SetLayer( layer );
+
+            new_shape->SetStroke(
+                    STROKE_PARAMS( ( *( aLine->segment.begin() ) )->width, LINE_STYLE::SOLID ) );
+
+            if( new_shape->GetWidth() == 0 )
+                new_shape->SetStroke( defaultStroke );
+
+            if( seg->shape == GR_SHAPE_LINE )
+            {
+                const GRAPHIC_LINE* src = static_cast<const GRAPHIC_LINE*>( seg.get() );
+
+                new_shape->SetShape( SHAPE_T::SEGMENT );
+                new_shape->SetStart( VECTOR2I( src->start_x, src->start_y ) );
+                new_shape->SetEnd( VECTOR2I( src->end_x, src->end_y ) );
+            }
+            else if( seg->shape == GR_SHAPE_ARC )
+            {
+                const GRAPHIC_ARC* src = static_cast<const GRAPHIC_ARC*>( seg.get() );
+
+                new_shape->SetShape( SHAPE_T::ARC );
+                new_shape->SetArcGeometry( src->result.GetP0(), src->result.GetArcMid(),
+                                          src->result.GetP1() );
+            }
+
+            aBoard->Add( new_shape, ADD_MODE::APPEND );
+        }
+    }
+
     SHAPE_POLY_SET poly_outline = loadShapePolySet( aLine->segment );
+
+    poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
     if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
         return false;
 
-    STROKE_PARAMS defaultStroke( aBoard->GetDesignSettings().GetLineThickness( layer ) );
-    PCB_SHAPE*    new_poly = new PCB_SHAPE( aBoard );
+    PCB_SHAPE* new_poly = new PCB_SHAPE( aBoard );
 
     new_poly->SetShape( SHAPE_T::POLY );
     new_poly->SetLayer( layer );
@@ -2802,7 +2839,7 @@ bool FABMASTER::loadOutline( BOARD* aBoard, const std::unique_ptr<FABMASTER::TRA
 {
     PCB_LAYER_ID layer;
 
-    if( aLine->lclass == "BOARD GEOMETRY" )
+    if( aLine->lclass == "BOARD GEOMETRY" && aLine->layer != "DIMENSION" )
         layer = Edge_Cuts;
     else if( aLine->lclass == "DRAWING FORMAT" )
         layer = Dwgs_User;
@@ -2930,6 +2967,8 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
             if( ( *( geom.elements->begin() ) )->width == 0 )
             {
                 SHAPE_POLY_SET poly_outline = loadShapePolySet( *( geom.elements ) );
+
+                poly_outline.Fracture( SHAPE_POLY_SET::POLYGON_MODE::PM_FAST );
 
                 if( poly_outline.OutlineCount() < 1 || poly_outline.COutline( 0 ).PointCount() < 3 )
                     continue;
@@ -3095,7 +3134,7 @@ bool FABMASTER::LoadBoard( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter )
 
         if( track->lclass == "ETCH" )
             loadEtch( aBoard, track);
-        else if( track->layer == "OUTLINE" )
+        else if( track->layer == "OUTLINE" || track->layer == "DIMENSION" )
             loadOutline( aBoard, track );
     }
 
