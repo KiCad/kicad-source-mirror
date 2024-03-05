@@ -14,16 +14,15 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-02-18 16:02+0000\n"
-"Last-Translator: SubaruArai <subaruletian.arai@minebea.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2024-03-07 00:01+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -20145,9 +20144,8 @@ msgid "Add Symbol to Schematic"
 msgstr "回路図にシンボルを追加"
 
 #: eeschema/tools/ee_actions.cpp:258
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "回路図に現在のシンボルを保存"
+msgstr "回路図に現在のシンボルを追加"
 
 #: eeschema/tools/ee_actions.cpp:264
 msgid "Show Pin Electrical Types"
@@ -25592,22 +25590,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "タイトル ブロックをプレビューモードで表示"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"プレビュー モードでタイトル ブロックを表示:\n"
-"テキスト領域はプレビュー データで置き換えられます。"
+msgstr "テキスト領域はプレビュー データで置き換えられます"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "タイトル ブロックを編集モードで表示"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"編集モードでタイトル ブロックを表示:\n"
-"テキスト領域は ${keyword} トークンとして表示されます。"
+msgstr "テキスト領域は ${keyword} トークンとして表示されます"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -25957,7 +25949,7 @@ msgid "Linear resistance:"
 msgstr "線形抵抗:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, c-format
+#, c-format, fuzzy
 msgid "Frequency for 100% skin depth:"
 msgstr "100% の表皮深さの場合の周波数:"
 
@@ -28233,8 +28225,7 @@ msgstr "削除するレイヤーを選択:"
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
-msgstr ""
-"不正な値の εR (εR は正の値もしくは未使用なら null でなければなりません)"
+msgstr "不正なεRの値 (εR は正の値もしくは未使用なら null でなければなりません)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1186
 msgid ""
@@ -32258,13 +32249,11 @@ msgstr "ティアドロップが2つの配線セグメントを跨ぐことを�
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
-msgstr ""
-"最初の配線セグメントが短すぎる場合、ティアドロップが2つの配線に広がることを許"
-"容する"
+msgstr "最初の配線セグメントが短すぎて最適な長さにすると収まらない場合、ティアドロッ"
+"プが初めの2つの配線接続されたセグメントに広がることを許容する。"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -41063,20 +41052,20 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "フットプリント %s のパッド %s は未知の穴の種別 %dを使用しています。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"フットプリント %s の パッド '%s' は複合したパッドスタックを使用しています(サ"
-"ポートされていません。)"
+"ライブラリ '%s' ロード中のエラー:\n"
+"フットプリント %s の パッド %s "
+"は複合したパッドスタックを使用しています(サポートされていません)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
-msgstr ""
-"フットプリント %s の パッド '%s' は複合したパッドスタックを使用しています(サ"
-"ポートされていません。)"
+msgstr "フットプリント %s の パッド %s "
+"は複合したパッドスタックを使用しています(サポートされていません)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
 #, fuzzy, c-format
@@ -41170,16 +41159,20 @@ msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Altium レイヤー %d 上のバーコードは無視されます。(未サポートです)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Altium レイヤー %d 上のバーコードは無視されます。(未サポートです)."
+msgstr ""
+"ライブラリ '%s' ロード中のエラー:\n"
+"フットプリント '%s' はAltium レイヤー %d "
+"にバーコードを含んでいます。(未サポートです)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Altium レイヤー %d 上のバーコードは無視されます。(未サポートです)."
+msgstr "フットプリント '%s' はAltium レイヤー %d "
+"にバーコードを含んでいます。(未サポートです)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3658
 msgid "Loading rectangles..."
@@ -41194,9 +41187,9 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Altium Circuit Studio 基板ファイル"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "ライブラリにフットプリントがありません"
+msgstr "ライブラリ '%s' にフットプリントがありません"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
 #, fuzzy, c-format
