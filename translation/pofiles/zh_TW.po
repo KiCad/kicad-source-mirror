@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-02-22 08:05+0000\n"
+"PO-Revision-Date: 2024-03-05 20:01+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -2575,7 +2575,7 @@ msgid ""
 "Choose which one should be imported to KiCad."
 msgstr ""
 "這個專案包含多個電路板與電路圖組合。\n"
-"選擇一個來匯入KiCad。"
+"選擇應匯入到 KiCad 的項目。"
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 msgid "Choose Project to Import"
@@ -5745,7 +5745,7 @@ msgstr "包含安裝在 KiCad 中的專案模板的目錄。"
 msgid ""
 "Optional. Can be defined if you want to create your own project templates "
 "folder."
-msgstr "可選。如果您想要建立自己的專案模板文件夾，則可以定義此項。"
+msgstr "可選項目。如果您想要建立自己的專案模板文件夾，則可以定義此項。"
 
 #: common/env_vars.cpp:120
 msgid ""
@@ -7905,7 +7905,7 @@ msgstr "互動測量點之間的距離"
 
 #: common/tool/actions.cpp:961
 msgid "Switch to Project Manager"
-msgstr "切換到專案管理器"
+msgstr "切換到專案管理員"
 
 #: common/tool/actions.cpp:962
 msgid "Show project window"
@@ -8052,7 +8052,7 @@ msgstr "報告 Bug"
 
 #: common/tool/common_control.cpp:194
 msgid "Can not switch to project manager in stand-alone mode."
-msgstr "單機模式下無法切換到專案管理員。"
+msgstr "在獨立模式下無法切換到專案管理員。"
 
 #: common/tool/common_control.cpp:236
 #, c-format
@@ -12161,7 +12161,7 @@ msgstr "不再顯示"
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:598 eeschema/project_rescue.cpp:613
 msgid "Project Rescue Helper"
-msgstr "專案求援助手"
+msgstr "專案救援助手"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:44
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:65
@@ -13379,9 +13379,8 @@ msgid "Scope:"
 msgstr "範圍:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Entire project"
-msgstr "解壓工程"
+msgstr "整個專案"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:169
 #, fuzzy
@@ -13630,7 +13629,6 @@ msgid ""
 msgstr "由於您對專案資料夾 \"%s\" 的許可權不足，因此無法重新對映。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:75
-#, fuzzy
 msgid ""
 "This schematic currently uses the project symbol library list look up method "
 "for loading library symbols.  KiCad will attempt to map the existing symbols "
@@ -13641,10 +13639,11 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"此原理圖當前使用工程符號庫表查詢載入庫符號的方法。 KiCad 將嘗試對映現有符號以"
-"使用新的符號庫表。 重新對映將變更某些工程檔案, 原理圖可能與舊版本的 KiCad 不"
-"相容。 如果需要還原任何變更, 則所有變更的檔案都將備份到專案資料夾中的  "
-"\"remap_backup \" 資料夾中。 如果選擇跳過此步驟, 你將負責手動重新對映符號。"
+"此原理圖當前使用專案符號庫表查詢載入庫符號的方法。 KiCad "
+"將嘗試對映現有符號以使用新的符號庫表。 重新對映將變更某些專案檔案, "
+"原理圖可能與舊版本的 KiCad 不相容。 如果需要還原任何變更, "
+"則所有變更的檔案都將備份到專案資料夾中的  \"remap_backup \" 資料夾中。 "
+"如果選擇跳過此步驟, 你將負責手動重新對映符號。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
@@ -16421,7 +16420,7 @@ msgstr "將修改後的符號 %s 修復為 %s"
 
 #: eeschema/project_rescue.cpp:597
 msgid "This project has nothing to rescue."
-msgstr "這個專案不需要恢復。"
+msgstr "這個專案沒有需要救援的內容。"
 
 #: eeschema/project_rescue.cpp:612
 msgid "No symbols were rescued."
@@ -18339,9 +18338,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"在載入的原理圖檔案中存在來自舊檔案版本的層次圖，導致符號例項資料丟失。 這將導"
-"致載入的原理圖中的所有符號都使用預設的例項設定或退回到庫中的符號設定。 載入使"
-"用該原理圖檔案專案程並儲存為最新的檔案版本將解決這個問題。\n"
+"在載入的原理圖檔案中存在來自舊檔案版本的層次圖，導致符號例項資料丟失。 "
+"這將導致載入的原理圖中的所有符號都使用預設的例項設定或退回到庫中的符號設定。 "
+"載入使用此原理圖檔案的專案並保存到最新的檔案版本將解決此問題。\n"
 "\n"
 "請問您想繼續嗎？"
 
@@ -18384,10 +18383,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"所選原理圖中的某些符號庫名稱在所選原理圖專案庫表中缺失。這可能破壞符號庫引"
-"用。\n"
+"所選原理圖中的某些符號庫名稱在所選原理圖專案庫表中缺失。這可能破壞符號庫引用"
+"。\n"
 "\n"
-"是否要繼續？"
+"請問您是否要繼續？"
 
 #: eeschema/sheet.cpp:487
 msgid ""
@@ -18418,7 +18417,7 @@ msgstr ""
 "到一個支援不區分檔名大小寫的系統，\n"
 "這會造成問題。\n"
 "\n"
-"你想繼續嗎？"
+"請問您是否要繼續？"
 
 #: eeschema/sheet.cpp:709
 msgid "Do not show this message again."
@@ -20253,14 +20252,13 @@ msgid "Select at least one property to back annotate."
 msgstr "選擇至少一個要反向批註的屬性。"
 
 #: eeschema/tools/backannotate.cpp:100
-#, fuzzy
 msgid ""
 "Cannot fetch PCB netlist because Schematic Editor is opened in stand-alone "
 "mode.\n"
 "You must launch the KiCad project manager and create a project."
 msgstr ""
-"無法獲取 PCB 網表，因為 eesschema 是在獨立模式下開啟的。\n"
-"您必須啟動 KiCad 專案管理器並建立一個專案。"
+"無法獲取 PCB 網表，因為原理圖編輯器是在獨立模式下開啟的。\n"
+"您必須啟動 KiCad 專案管理員並建立一個專案。"
 
 #: eeschema/tools/backannotate.cpp:168
 #, c-format
@@ -21306,7 +21304,7 @@ msgstr "恢復符號..."
 
 #: eeschema/tools/ee_actions.cpp:1037
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "在專案中找到舊的符號重新命名或恢復它們"
+msgstr "在專案中尋找舊符號並將它們重新命名或進行救援"
 
 #: eeschema/tools/ee_actions.cpp:1043
 msgid "Remap Legacy Library Symbols..."
@@ -24317,7 +24315,7 @@ msgstr "專案模板標題"
 
 #: kicad/dialogs/dialog_template_selector_base.h:67
 msgid "Project Template Selector"
-msgstr "選擇工程模板"
+msgstr "專案模板選擇器"
 
 #: kicad/dialogs/dialog_update_check_prompt_base.cpp:27
 msgid "Would you like to automatically check for updates on startup?"
@@ -24449,7 +24447,7 @@ msgid ""
 "\n"
 "Do you want to create a new empty directory for the project?"
 msgstr ""
-"所選目錄不是空目錄。 建議在空目錄中建立工程。\n"
+"所選目錄不是空的。我們建議您在自己的乾淨目錄中創建專案。\n"
 "\n"
 "您是否要為專案創建一個新的空目錄？"
 
@@ -24569,7 +24567,7 @@ msgstr "匯入非 KiCad 專案..."
 
 #: kicad/menubar.cpp:111
 msgid "CADSTAR Project..."
-msgstr "CADSTAR 工程..."
+msgstr "CADSTAR 專案..."
 
 #: kicad/menubar.cpp:112
 msgid "Import CADSTAR Archive Schematic and PCB (*.csa, *.cpa)"
@@ -24577,7 +24575,7 @@ msgstr "匯入 CADSTAR 存檔架構和 PCB (*.csa， *.cpa)"
 
 #: kicad/menubar.cpp:116
 msgid "EAGLE Project..."
-msgstr "Eagle 工程..."
+msgstr "Eagle 專案..."
 
 #: kicad/menubar.cpp:117
 msgid "Import EAGLE CAD XML schematic and board"
@@ -24593,7 +24591,7 @@ msgstr "匯入EasyEDA（JLCEDA）標準版 原理圖和電路板"
 
 #: kicad/menubar.cpp:126
 msgid "EasyEDA (JLCEDA) Pro Project..."
-msgstr "EasyEDA（JLCEDA）Pro 專案..."
+msgstr "EasyEDA(JLCEDA)Pro 專案..."
 
 #: kicad/menubar.cpp:127
 msgid "Import EasyEDA (JLCEDA) Professional schematic and board"
@@ -24601,27 +24599,27 @@ msgstr "匯入EasyEDA（JLCEDA）Pro 原理圖和電路板"
 
 #: kicad/menubar.cpp:133
 msgid "&Archive Project..."
-msgstr "壓縮工程(&A)..."
+msgstr "壓縮專案(&A)..."
 
 #: kicad/menubar.cpp:134
 msgid "Archive all needed project files into zip archive"
-msgstr "把當前工程壓縮成 Zip 檔案"
+msgstr "將所有必要的專案檔案封裝成 zip 存檔"
 
 #: kicad/menubar.cpp:138
 msgid "&Unarchive Project..."
-msgstr "解壓工程(&U)..."
+msgstr "解封專案(&U)..."
 
 #: kicad/menubar.cpp:139 kicad/menubar.cpp:265
 msgid "Unarchive project files from zip archive"
-msgstr "選擇一個 Zip 工程檔案，並解壓縮"
+msgstr "從 zip 存檔解封專案檔案"
 
 #: kicad/menubar.cpp:167
 msgid "Browse Project Files"
-msgstr "瀏覽工程檔案"
+msgstr "瀏覽專案檔案"
 
 #: kicad/menubar.cpp:168
 msgid "Open project directory in file browser"
-msgstr "在檔案瀏覽器中開啟工程目錄"
+msgstr "在檔案瀏覽器中開啟專案目錄"
 
 #: kicad/menubar.cpp:201
 msgid "Edit Local File..."
@@ -24633,15 +24631,15 @@ msgstr "在文字編輯器中編輯本地檔案"
 
 #: kicad/menubar.cpp:258
 msgid "Archive all project files"
-msgstr "壓縮全部工程檔案"
+msgstr "封存全部專案檔案"
 
 #: kicad/menubar.cpp:275
 msgid "Reveal project folder in Finder"
-msgstr "在“訪達”中顯示工程資料夾"
+msgstr "在 Finder 中顯示專案資料夾"
 
 #: kicad/menubar.cpp:277
 msgid "Open project directory in file explorer"
-msgstr "在檔案資源管理器中開啟工程目錄"
+msgstr "在檔案管理器中打開專案目錄"
 
 #: kicad/pcm/dialogs/dialog_manage_repositories.cpp:53
 msgid "Add Default Repository"
@@ -25194,11 +25192,11 @@ msgstr "建立新目錄"
 
 #: kicad/project_tree_pane.cpp:837
 msgid "Switch to this Project"
-msgstr "切換到此工程"
+msgstr "切換到此專案"
 
 #: kicad/project_tree_pane.cpp:838
 msgid "Close all editors, and switch to the selected project"
-msgstr "關閉所有編輯器，然後切換到所選工程"
+msgstr "關閉所有編輯器，然後切換到所選專案"
 
 #: kicad/project_tree_pane.cpp:845
 msgid "New Directory..."
@@ -40651,7 +40649,7 @@ msgid ""
 "project manager and create a project."
 msgstr ""
 "無法更新 PCB, 因為 PCB 編輯器是在獨立模式下開啟的。為了從原理圖建立或更新 "
-"PCB, 你必須啟動 KiCad 工程管理器並建立一個工程。"
+"PCB, 你必須啟動 KiCad 專案管理員並建立一個專案。"
 
 #: pcbnew/pcb_edit_frame.cpp:1894 pcbnew/pcbnew_jobs_handler.cpp:1017
 msgid "Eeschema netlist"
@@ -43235,9 +43233,8 @@ msgid ""
 "Cannot update schematic because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
-msgstr ""
-"無法更新原理圖，因為 Pcbnew 在獨立模式下開啟。為了從原理圖建立或更新 PCB，您"
-"必須啟動 KiCad 專案管理器並建立專案。"
+msgstr "無法更新原理圖，因為 Pcbnew 在獨立模式下開啟。為了從原理圖建立或更新 PCB，"
+"您必須啟動 KiCad 專案管理員並建立專案。"
 
 #: pcbnew/tools/board_editor_control.cpp:1162
 #, fuzzy
@@ -47231,7 +47228,7 @@ msgstr "gerbview;PCB;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
-msgstr "工程管理器;"
+msgstr "專案管理員;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
