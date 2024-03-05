@@ -247,7 +247,12 @@ void LIB_TREE_NODE_ITEM::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxSt
     {
         int currentScore = aMatcher->ScoreTerms( m_SearchTerms );
 
-        if( m_Score >= 0 && currentScore > 0 )
+        // This is a hack: the second phase of search in the adapter will look for a tokenized
+        // LIB_ID and send the lib part down here.  While we generally want to prune ourselves
+        // out here (by setting score to -1) the first time we fail to match a search term,
+        // we want to give the same search term a second chance if it has been split from a library
+        // name.
+        if( ( m_Score >= 0 || !aLib.IsEmpty() ) && currentScore > 0 )
             m_Score += currentScore;
         else
             m_Score = -1;   // Item has failed to match this term, rule it out
@@ -306,11 +311,15 @@ void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const w
         m_Score = 0;
 
     // aLib test is additive, but only when we've already accumulated some score from children
-    if( !aLib.IsEmpty() && m_Name.Lower().Matches( aLib ) && m_Score > 0 )
+    if( !aLib.IsEmpty()
+        && m_Name.Lower().Matches( aLib )
+        && ( m_Score > 0 || m_Children.empty() ) )
+    {
         m_Score += 1;
+    }
 
-    // aMatcher test is additive, but only when we've already accumulated some score from children
-    if( aMatcher && m_Score > 0 )
+    // aMatcher test is additive
+    if( aMatcher )
         m_Score += aMatcher->ScoreTerms( m_SearchTerms );
 
     // show all nodes if no search/filter/etc. criteria are given
