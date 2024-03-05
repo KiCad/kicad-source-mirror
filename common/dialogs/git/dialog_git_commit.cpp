@@ -57,6 +57,21 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
     m_listCtrl->SetColumnWidth( 1, 200 );
 
     // Set up image list for icons
+#ifdef __WXMAC__
+    // HiDPI-aware API; will be generally available in wxWidgets 3.4
+    wxVector<wxBitmapBundle> stateImages;
+    stateImages.push_back( wxBitmapBundle() );                          // GIT_STATUS_UNTRACKED
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_good_check ) ); // GIT_STATUS_CURRENT
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_modified ) ); // GIT_STATUS_MODIFIED
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_add ) );    // GIT_STATUS_ADDED
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_delete ) ); // GIT_STATUS_DELETED
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_out_of_date ) );   // GIT_STATUS_BEHIND
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_changed_ahead ) ); // GIT_STATUS_AHEAD
+    stateImages.push_back( KiBitmapBundle( BITMAPS::git_conflict ) ); // GIT_STATUS_CONFLICTED
+
+    m_listCtrl->SetNormalImages( stateImages );
+    m_listCtrl->SetSmallImages( stateImages );
+#else
     wxImageList* imageList = new wxImageList(
             16, 16, true, static_cast<int>( KIGIT_COMMON::GIT_STATUS::GIT_STATUS_LAST ) );
 
@@ -71,6 +86,7 @@ DIALOG_GIT_COMMIT::DIALOG_GIT_COMMIT( wxWindow* parent, git_repository* repo,
 
     // Assign the image list to the list control
     m_listCtrl->SetImageList( imageList, wxIMAGE_LIST_SMALL );
+#endif
 
     // Populate list control with items
     for( auto& [filename, status] : filesToCommit )

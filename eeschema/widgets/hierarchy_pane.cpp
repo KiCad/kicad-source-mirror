@@ -80,6 +80,13 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
     SetSizer( sizer );
     m_tree = new HIERARCHY_TREE( this );
 
+#ifdef __WXMAC__
+    // HiDPI-aware API; will be generally available in wxWidgets 3.4
+    wxVector<wxBitmapBundle> images;
+    images.push_back( KiBitmapBundle( BITMAPS::tree_nosel ) );
+    images.push_back( KiBitmapBundle( BITMAPS::tree_sel ) );
+    m_tree->SetImages( images );
+#else
     // Make an image list containing small icons
     // All icons are expected having the same size.
     wxBitmap tree_nosel_bm( KiBitmap( BITMAPS::tree_nosel ) );
@@ -90,6 +97,7 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
     imageList->Add( KiBitmap( BITMAPS::tree_sel ) );
 
     m_tree->AssignImageList( imageList );
+#endif
 
     sizer->Add( m_tree, 1, wxEXPAND, wxBORDER_NONE );
 
