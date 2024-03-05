@@ -195,7 +195,12 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
 
         m_itemMap[zone] = ITEM_MAP_ENTRY();
 
-        for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+        // Don't check for connections on layers that only exist in the zone but
+        // were disabled in the board
+        BOARD* board = zone->GetBoard();
+        LSET layerset = board->GetEnabledLayers() & zone->GetLayerSet();
+
+        for( PCB_LAYER_ID layer : layerset.Seq() )
         {
             for( CN_ITEM* zitem : m_itemList.Add( zone, layer ) )
                 m_itemMap[zone].Link( zitem );
@@ -446,13 +451,15 @@ void CN_CONNECTIVITY_ALGO::Build( BOARD* aBoard, PROGRESS_REPORTER* aReporter )
             m_itemMap[zone] = ITEM_MAP_ENTRY();
             markItemNetAsDirty( zone );
 
-            for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq() )
+            // Don't check for connections on layers that only exist in the zone but
+            // were disabled in the board
+            BOARD* board = zone->GetBoard();
+            LSET layerset = board->GetEnabledLayers() & zone->GetLayerSet() & LSET::AllCuMask();
+
+            for( PCB_LAYER_ID layer : layerset.Seq() )
             {
-                if( IsCopperLayer( layer ) )
-                {
-                    for( int j = 0; j < zone->GetFilledPolysList( layer )->OutlineCount(); j++ )
-                        zitems.push_back( new CN_ZONE_LAYER( zone, layer, j ) );
-                }
+                for( int j = 0; j < zone->GetFilledPolysList( layer )->OutlineCount(); j++ )
+                    zitems.push_back( new CN_ZONE_LAYER( zone, layer, j ) );
             }
         }
     }
