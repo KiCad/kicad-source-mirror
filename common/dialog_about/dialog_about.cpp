@@ -51,11 +51,30 @@
 
 
 DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
-    : DIALOG_ABOUT_BASE( aParent ), m_info( aAppInfo )
+    : DIALOG_ABOUT_BASE( aParent ),
+        m_images( nullptr ),
+        m_info( aAppInfo )
 {
     wxASSERT( aParent != nullptr );
 
     SetEvtHandlerEnabled( false );
+
+#ifdef __WXMAC__
+    // HiDPI-aware API; will be generally available in wxWidgets 3.4
+    wxVector<wxBitmapBundle> images;
+
+    images.push_back( KiBitmapBundle( BITMAPS::info ) );              // INFORMATION
+    images.push_back( KiBitmapBundle( BITMAPS::recent ) );            // VERSION
+    images.push_back( KiBitmapBundle( BITMAPS::preference ) );        // DEVELOPERS
+    images.push_back( KiBitmapBundle( BITMAPS::editor ) );            // DOCWRITERS
+    images.push_back( KiBitmapBundle( BITMAPS::library ) );           // LIBRARIANS
+    images.push_back( KiBitmapBundle( BITMAPS::color_materials ) );   // ARTISTS
+    images.push_back( KiBitmapBundle( BITMAPS::language ) );          // TRANSLATORS
+    images.push_back( KiBitmapBundle( BITMAPS::zip ) );               // PACKAGERS
+    images.push_back( KiBitmapBundle( BITMAPS::tools ) );             // LICENSE
+
+    m_notebook->SetImages( images );
+#else
     // TODO: Change these to 16x16 versions when available
     m_images = new wxImageList( 24, 24, false, 9 );
 
@@ -70,6 +89,7 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     m_images->Add( KiBitmap( BITMAPS::tools ) );             // LICENSE
 
     m_notebook->SetImageList( m_images );
+#endif
 
     if( m_info.GetAppIcon().IsOk() )
     {
@@ -108,7 +128,9 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
 
 DIALOG_ABOUT::~DIALOG_ABOUT()
 {
+#ifndef __WXMAC__
     delete m_images;
+#endif
 }
 
 
