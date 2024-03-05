@@ -1172,6 +1172,18 @@ BOARD* PCB_IO_KICAD_SEXPR_PARSER::parseBOARD_unchecked()
         }
     }
 
+    // Clear unused zone data
+    {
+        LSET layers = m_board->GetEnabledLayers();
+
+        for( BOARD_ITEM* zone : m_board->Zones() )
+        {
+            ZONE* z = static_cast<ZONE*>( zone );
+
+            z->SetLayerSet( z->GetLayerSet() & layers );
+        }
+    }
+
     return m_board;
 }
 

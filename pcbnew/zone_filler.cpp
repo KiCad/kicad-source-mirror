@@ -610,7 +610,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aPare
 
     for( ZONE* zone : aZones )
     {
-        LSET   zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask( MAX_CU_LAYERS );
+        // Don't check for connections on layers that only exist in the zone but
+        // were disabled in the board
+        BOARD* board = zone->GetBoard();
+        LSET zoneCopperLayers = zone->GetLayerSet() & LSET::AllCuMask() & board->GetEnabledLayers();
 
         // Min-thickness is the web thickness.  On the other hand, a blob min-thickness by
         // min-thickness is not useful.  Since there's no obvious definition of web vs. blob, we

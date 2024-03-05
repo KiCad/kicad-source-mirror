@@ -2283,9 +2283,14 @@ void PCB_IO_KICAD_SEXPR::format( const ZONE* aZone, int aNestLevel ) const
         KICAD_FORMAT::FormatBool( m_out, 0, "locked", aZone->IsLocked() );
 
     // If a zone exists on multiple layers, format accordingly
-    if( aZone->GetLayerSet().count() > 1 )
+    LSET layers = aZone->GetLayerSet();
+
+    if( aZone->GetBoard() )
+        layers &= aZone->GetBoard()->GetEnabledLayers();
+
+    if( layers.count() > 1 )
     {
-        formatLayers( aZone->GetLayerSet() );
+        formatLayers( layers );
     }
     else
     {
