@@ -1259,7 +1259,7 @@ int EE_SELECTION_TOOL::SelectAll( const TOOL_EVENT& aEvent )
     {
         if( EDA_ITEM* item = dynamic_cast<EDA_ITEM*>( item_pair.first ) )
         {
-            if( Selectable( item ) )
+            if( Selectable( item ) && itemPassesFilter( item ) )
             {
                 if( item->Type() == SCH_LINE_T )
                     item->SetFlags( STARTPOINT | ENDPOINT );
