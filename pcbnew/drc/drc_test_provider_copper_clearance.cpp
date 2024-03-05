@@ -376,6 +376,43 @@ void DRC_TEST_PROVIDER_COPPER_CLEARANCE::testItemAgainstZone( BOARD_ITEM* aItem,
     if( !worstCaseBBox.Intersects( aZone->GetBoundingBox() ) )
         return;
 
+    FOOTPRINT* parentFP = aItem->GetParentFootprint();
+
+    // Ignore graphic items which implement a net-tie to the zone's net on the layer being tested.
+    if( parentFP && parentFP->IsNetTie() && dynamic_cast<PCB_SHAPE*>( aItem ) )
+    {
+        std::set<PAD*> allowedNetTiePads;
+
+        for( PAD* pad : parentFP->Pads() )
+        {
+            if( pad->GetNetCode() == aZone->GetNetCode() && aZone->GetNetCode() != 0 )
+            {
+                if( pad->IsOnLayer( aLayer ) )
+                    allowedNetTiePads.insert( pad );
+
+                for( PAD* other : parentFP->GetNetTiePads( pad ) )
+                {
+                    if( other->IsOnLayer( aLayer ) )
+                        allowedNetTiePads.insert( other );
+                }
+            }
+        }
+
+        if( !allowedNetTiePads.empty() )
+        {
+            std::shared_ptr<SHAPE> itemShape = aItem->GetEffectiveShape();
+
+            for( PAD* pad : allowedNetTiePads )
+            {
+                if( pad->GetBoundingBox().Intersects( itemBBox )
+                        && pad->GetEffectiveShape()->Collide( itemShape.get() ) )
+                {
+                    return;
+                }
+            }
+        }
+    }
+
     bool testClearance = !m_drcEngine->IsErrorLimitExceeded( DRCE_CLEARANCE );
     bool testHoles = !m_drcEngine->IsErrorLimitExceeded( DRCE_HOLE_CLEARANCE );
 
