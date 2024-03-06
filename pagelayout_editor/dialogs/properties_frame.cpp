@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -633,6 +633,7 @@ void PROPERTIES_FRAME::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 void PROPERTIES_FRAME::onScintillaFocusLost( wxFocusEvent& aEvent )
 {
     m_stcText->AutoCompCancel();
+    aEvent.Skip();
 }
 
 
