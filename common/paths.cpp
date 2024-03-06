@@ -169,6 +169,10 @@ wxString PATHS::GetStockDataPath( bool aRespectRunFromBuildDir )
         path = GetExecutablePath() + wxT( ".." );
 #endif
     }
+    else if( wxGetEnv( wxT( "KICAD_STOCK_DATA_HOME" ), &path ) && !path.IsEmpty() )
+    {
+        return path;
+    }
     else
     {
 #if defined( __WXMAC__ )
