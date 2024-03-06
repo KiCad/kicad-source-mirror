@@ -147,9 +147,10 @@ public:
     wxScopedCharBuffer ReadCharBuffer()
     {
         uint8_t len = Read<uint8_t>();
+
         if( GetRemainingBytes() >= len )
         {
-            char* buf = new char[len];
+            char* buf = static_cast<char*>( malloc( len ) );
             memcpy( buf, m_pos, len );
             m_pos += len;
 
