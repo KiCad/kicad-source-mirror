@@ -1140,6 +1140,7 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
     // component->SetOrientation( elem.orientation );
     symbol->SetLibId( libId );
     symbol->SetUnit( std::max( 0, elem.currentpartid ) );
+    symbol->GetField( DESCRIPTION_FIELD )->SetText( elem.componentdescription );
 
     SCH_SCREEN* screen = getCurrentScreen();
     wxCHECK( screen, /* void */ );
