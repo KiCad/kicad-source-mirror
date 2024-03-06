@@ -1330,7 +1330,6 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         EDA_ITEM*   item = collector[ i ];
         SCH_LINE*   line = dynamic_cast<SCH_LINE*>( item );
         LIB_SHAPE*  shape = dynamic_cast<LIB_SHAPE*>( item );
-        SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item );
         SCH_TABLE*  table = dynamic_cast<SCH_TABLE*>( item );
 
         // Lines are hard to hit.  Give them a bit more slop to still be considered "exact".

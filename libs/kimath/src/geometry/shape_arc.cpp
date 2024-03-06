@@ -333,7 +333,7 @@ void SHAPE_ARC::update_bbox()
     // Very large is here > INT_MAX/2
     double d_radius = GetRadius();
 
-    if( d_radius < INT_MAX/2 )
+    if( d_radius < (double)INT_MAX/2.0 )
     {
         VECTOR2I center = GetCenter();
 

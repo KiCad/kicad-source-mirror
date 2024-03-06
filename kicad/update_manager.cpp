@@ -240,8 +240,8 @@ void UPDATE_MANAGER::CheckForUpdate( wxWindow* aNoticeParent )
                                     // basically saving the last received update prevents us from
                                     // prompting again
                                     SETTINGS_MANAGER& mgr = Pgm().GetSettingsManager();
-                                    KICAD_SETTINGS*   settings = mgr.GetAppSettings<KICAD_SETTINGS>();
-                                    settings->m_lastReceivedUpdate = response.version;
+                                    KICAD_SETTINGS*   curr_settings = mgr.GetAppSettings<KICAD_SETTINGS>();
+                                    curr_settings->m_lastReceivedUpdate = response.version;
                                 }
                             } );
                 }
