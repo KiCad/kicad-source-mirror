@@ -24,6 +24,7 @@
 
 #include <cstdio>
 #include <memory>
+#include <mutex>
 #include <wx/log.h>
 #include <board.h>
 #include <board_design_settings.h>

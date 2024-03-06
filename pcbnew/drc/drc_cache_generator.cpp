@@ -30,6 +30,7 @@
 #include <drc/drc_engine.h>
 #include <drc/drc_rtree.h>
 #include <drc/drc_cache_generator.h>
+#include <mutex>
 
 bool DRC_CACHE_GENERATOR::Run()
 {

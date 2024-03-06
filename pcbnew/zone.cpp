@@ -40,6 +40,7 @@
 #include <settings/settings_manager.h>
 #include <trigo.h>
 #include <i18n_utility.h>
+#include <mutex>
 
 
 ZONE::ZONE( BOARD_ITEM_CONTAINER* aParent ) :

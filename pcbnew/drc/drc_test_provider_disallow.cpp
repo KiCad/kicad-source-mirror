@@ -33,6 +33,7 @@
 #include <progress_reporter.h>
 #include <core/thread_pool.h>
 #include <zone.h>
+#include <mutex>
 
 
 /*
