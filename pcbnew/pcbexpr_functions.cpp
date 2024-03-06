@@ -648,7 +648,6 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             if( !aArea->GetBoundingBox().Intersects( itemBBox ) )
                                 return false;
 
-                            std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
                             LSET                         testLayers;
                             PTR_PTR_LAYER_CACHE_KEY      key;
 
@@ -661,6 +660,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             {
                                 if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                                 {
+                                    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
                                     key = { aArea, item, layer };
 
                                     auto i = board->m_IntersectsAreaCache.find( key );
@@ -672,7 +672,10 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                                 bool collides = collidesWithArea( item, context, aArea );
 
                                 if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
+                                {
+                                    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
                                     board->m_IntersectsAreaCache[ key ] = collides;
+                                }
 
                                 if( collides )
                                     return true;

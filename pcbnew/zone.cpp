@@ -368,9 +368,7 @@ void ZONE::CacheBoundingBox()
     auto                                    cacheIter = cache.find( this );
 
     if( cacheIter == cache.end() )
-    {
         cache[ this ] = m_Poly->BBox();
-    }
 }
 
 
