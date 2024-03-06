@@ -22,6 +22,10 @@ import FootprintWizardBase
 # see https://github.com/kazuhikoarase/qrcode-generator/blob/master/python/qrcode.py
 import kicad_qrcode as qrcode  # TODO: local qrcode package is preferred, so we renamed it
 
+# Max type number for the QRCode is 10, this is restricted by the upstream library
+# https://github.com/kazuhikoarase/qrcode-generator
+_PYTHON_QR_LIB_MAX_TYPE_NO = len(qrcode.QRUtil.MAX_LENGTH)
+
 class QRCodeWizard(FootprintWizardBase.FootprintWizard):
     GetName = lambda self: '2D Barcode QRCode'
     GetDescription = lambda self: 'QR Code barcode generator'
@@ -29,8 +33,24 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
     GetValue = lambda self: self.module.Value().GetText()
 
     def GenerateParameterList(self):
+        # TODO: add params for ECLevel and qrcode mode (num/alnum/bytes)
         self.AddParam("Barcode", "Qr Pixel Width", self.uMM, 0.5)
-        self.AddParam("Barcode", "Border Margin (Px)", self.uInteger, 0)
+        self.AddParam(
+            "Barcode",
+            "Border Margin (Px)",
+            self.uInteger,
+            0,
+            min_value=0,
+        )
+        self.AddParam(
+            "Barcode",
+            "Type Number",
+            self.uInteger,
+            0,
+            min_value=0,
+            max_value=_PYTHON_QR_LIB_MAX_TYPE_NO,
+            hint="Set to 0 for autodetect (will use the smallest possible)",
+        )
         self.AddParam("Barcode", "Contents", self.uString, 'Example')
         self.AddParam("Barcode", "Negative", self.uBool, False)
         self.AddParam("Barcode", "Use SilkS layer", self.uBool, False)
@@ -42,8 +62,8 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
 
 
     def CheckParameters(self):
-        # 512 bits maximum in this type of QR code with 2 bytes reserved
-        self.Barcode = str(self.parameters['Barcode']['Contents'])[:61]
+        self.Barcode = self.parameters['Barcode']['Contents']
+        self.TypeNumber = self.parameters['Barcode']['Type Number']
         self.X = self.parameters['Barcode']['Qr Pixel Width']
         self.negative = self.parameters['Barcode']['Negative']
         self.UseSilkS = self.parameters['Barcode']['Use SilkS layer']
@@ -54,16 +74,30 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.textWidth = int(self.parameters['Caption']['Width'])
         self.module.Value().SetText(str(self.Barcode))
 
-        if self.border < 0:
-            self.border = 0
 
-        # Build Qrcode
-        self.qr = qrcode.QRCode()
-        self.qr.setTypeNumber(4)
         # ErrorCorrectLevel: L = 7%, M = 15% Q = 25% H = 30%
-        self.qr.setErrorCorrectLevel(qrcode.ErrorCorrectLevel.M)
-        self.qr.addData(str(self.Barcode))
-        self.qr.make()
+        self.ECLevel = qrcode.ErrorCorrectLevel.M
+
+        # Check if the content is too long
+        # technically we don't need this conversion (TypeNumber=0 will be
+        # regarded as max) but this isn't part of the documented API, so we'll
+        # convert to be safe
+        max_type_num = (
+            _PYTHON_QR_LIB_MAX_TYPE_NO
+            if self.TypeNumber == 0
+            else self.TypeNumber
+        )
+        max_length = qrcode.QRUtil.getMaxLength(
+            max_type_num,
+            qrcode.Mode.MODE_8BIT_BYTE,
+            self.ECLevel
+        )
+        if len(self.Barcode) > max_length:
+            self.GetParam("Barcode", "Contents").AddError(
+                f"Content too long ({len(self.Barcode)} > {max_length}) for"
+                " the provided parameters."
+            )
+
 
     def drawPixelSquareArea( self, layer, size, xposition, yposition):
         # creates a PCB_SHAPE of rectangle type. The rectangle is square
@@ -101,6 +135,19 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
 
 
     def BuildThisFootprint(self):
+        # Build QRCode
+        # Auto detect type number
+        if self.TypeNumber == 0:
+            self.qr = qrcode.QRCode.getMinimumQRCode(self.Barcode, self.ECLevel)
+        # Manually specified type number
+        else:
+            self.qr = qrcode.QRCode()
+            self.qr.setTypeNumber(self.TypeNumber)
+            self.qr.setErrorCorrectLevel(self.ECLevel)
+            self.qr.addData(self.Barcode)
+            self.qr.make()
+
+        # render QRCode
         if self.border >= 0:
             # Adding border: Create a new array larger than the self.qr.modules
             sz = self.qr.modules.__len__() + (self.border * 2)
