@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-03-05 10:02+0000\n"
+"PO-Revision-Date: 2024-03-07 00:02+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hant/>\n"
@@ -277,7 +277,7 @@ msgstr "重新載入電路板"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
 msgid "Copy 3D image to clipboard"
-msgstr "複製 3D 影象到剪貼簿"
+msgstr "複製 3D 影像到剪貼簿"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Render current view using Raytracing"
@@ -351,7 +351,7 @@ msgstr "錯誤"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:789
 msgid "Failed to copy image to clipboard"
-msgstr "無法將影象複製到剪貼簿"
+msgstr "無法將影像複製到剪貼簿"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:800
 msgid "Can't save file"
@@ -419,7 +419,7 @@ msgstr "翻轉電路板"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "Flip the board view"
-msgstr "翻轉電路板檢視"
+msgstr "翻轉電路板視圖"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:158
 msgid "Toggle Orthographic Projection"
@@ -566,7 +566,7 @@ msgstr "電路板主體"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:54
 msgid "Show board body"
-msgstr "顯示電路板"
+msgstr "顯示電路板主體"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "F.Cu"
@@ -1278,7 +1278,7 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
-"顯示或隱藏板體。\n"
+"顯示或隱藏電路板主體。\n"
 "如果隱藏，則只會顯示銅層與絹印層。"
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
@@ -10750,7 +10750,7 @@ msgstr "三態"
 #: eeschema/lib_pin.cpp:1627 eeschema/pin_type.cpp:56 eeschema/pin_type.cpp:204
 #: eeschema/sch_label.cpp:150 eeschema/sch_label.cpp:2114
 msgid "Passive"
-msgstr "無源"
+msgstr "被動"
 
 #: eeschema/dialogs/dialog_label_properties_base.cpp:169
 #: eeschema/sch_label.cpp:2165
@@ -14645,7 +14645,7 @@ msgstr "三態引腳"
 
 #: eeschema/erc.cpp:77 eeschema/erc.cpp:94
 msgid "Passive Pin"
-msgstr "無源引腳"
+msgstr "被動接腳"
 
 #: eeschema/erc.cpp:78 eeschema/erc.cpp:95
 msgid "Free Pin"
@@ -21690,9 +21690,9 @@ msgid "Tune %s"
 msgstr "調整%s"
 
 #: eeschema/widgets/tuner_slider.cpp:75
-#, fuzzy, c-format
+#, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
-msgstr "符號 '%s' 有 '%s %s' 型別的模擬模型，無法調整"
+msgstr "%s 具有模擬模型類型 '%s %s'；僅 RLC 被動元件可進行調整"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -24633,7 +24633,7 @@ msgstr "所選目錄已經是git專案。"
 
 #: kicad/project_tree_pane.cpp:1560
 msgid "Failed to initialize git project."
-msgstr "專案初始化Git失敗。"
+msgstr "Git 專案初始化失敗。"
 
 #: kicad/project_tree_pane.cpp:1575
 msgid "Set default remote"
@@ -24674,7 +24674,7 @@ msgstr "無法更新分支 '%s' 的HEAD引用"
 
 #: kicad/project_tree_pane.cpp:1829
 msgid "Are you sure you want to remove git tracking from this project?"
-msgstr "您確定要從此專案中移除Git版本控制嗎？"
+msgstr "您確定要從此專案中移除 Git 追蹤嗎？"
 
 #: kicad/project_tree_pane.cpp:1846
 msgid "Failed to remove git directory"
@@ -24735,19 +24735,19 @@ msgstr "無法創建提交：%s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
-msgstr "新建工程..."
+msgstr "建立新專案..."
 
 #: kicad/tools/kicad_manager_actions.cpp:44
 msgid "Create new blank project"
-msgstr "新建空工程"
+msgstr "建立新的空白專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:52
 msgid "New Project from Template..."
-msgstr "從模板新建工程..."
+msgstr "從模板新建專案..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Create new project from template"
-msgstr "從模板新建工程"
+msgstr "從模板新建專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
 msgid "Clone Project from Repository..."
@@ -24759,27 +24759,27 @@ msgstr "從現有的儲存庫複製專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:68
 msgid "Open Demo Project..."
-msgstr "開啟演示工程..."
+msgstr "開啟展示專案..."
 
 #: kicad/tools/kicad_manager_actions.cpp:69
 msgid "Open a demo project"
-msgstr "開啟一個演示工程"
+msgstr "開啟一個展示專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:77
 msgid "Open Project..."
-msgstr "開啟工程..."
+msgstr "開啟專案..."
 
 #: kicad/tools/kicad_manager_actions.cpp:78
 msgid "Open an existing project"
-msgstr "開啟一個現有工程"
+msgstr "開啟一個現有專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:85
 msgid "Close Project"
-msgstr "關閉工程"
+msgstr "關閉專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:86
 msgid "Close the current project"
-msgstr "關閉當前工程"
+msgstr "關閉目前專案"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit schematic"
@@ -24835,7 +24835,7 @@ msgstr "啟動首選文字編輯器"
 
 #: kicad/tools/kicad_manager_control.cpp:73
 msgid "Create New Project"
-msgstr "新建工程"
+msgstr "建立新專案"
 
 #: kicad/tools/kicad_manager_control.cpp:121
 msgid ""
@@ -24846,7 +24846,7 @@ msgid ""
 msgstr ""
 "所選的不是空目錄。 建議在空目錄中建立專案。\n"
 "\n"
-"你想繼續嗎？"
+"請問您是否要繼續？"
 
 #: kicad/tools/kicad_manager_control.cpp:152
 msgid "Clone Project from Git Repository"
@@ -24870,11 +24870,11 @@ msgstr "自定義模板"
 
 #: kicad/tools/kicad_manager_control.cpp:241
 msgid "No project template was selected.  Cannot generate new project."
-msgstr "未選中工程模板。無法生成新的工程。"
+msgstr "未選擇任何專案模板。無法生成新的專案。"
 
 #: kicad/tools/kicad_manager_control.cpp:249
 msgid "New Project Folder"
-msgstr "新建工程資料夾"
+msgstr "新建專案資料夾"
 
 #: kicad/tools/kicad_manager_control.cpp:298
 #: kicad/tools/kicad_manager_control.cpp:667
@@ -24892,11 +24892,11 @@ msgstr "目標資料夾中已存在類似檔案。"
 
 #: kicad/tools/kicad_manager_control.cpp:344
 msgid "A problem occurred creating new project from template."
-msgstr "從模板建立工程發生一個問題。"
+msgstr "從模板建立專案發生一個問題。"
 
 #: kicad/tools/kicad_manager_control.cpp:367
 msgid "Open Existing Project"
-msgstr "開啟已有工程"
+msgstr "開啟已有專案"
 
 #: kicad/tools/kicad_manager_control.cpp:592
 #, c-format
@@ -24905,7 +24905,7 @@ msgstr "無法複製 \"%s\" 資料夾。"
 
 #: kicad/tools/kicad_manager_control.cpp:638
 msgid "Save Project To"
-msgstr "將工程儲存到"
+msgstr "將專案儲存到"
 
 #: kicad/tools/kicad_manager_control.cpp:658
 #, c-format
@@ -24953,7 +24953,7 @@ msgstr "無法解析更新回應：%s"
 
 #: kicad/widgets/filedlg_new_project.h:32
 msgid "Create a new folder for the project"
-msgstr "為工程建立一個新目錄"
+msgstr "為專案建立一個新目錄"
 
 #: libs/kiplatform/msw/environment.cpp:63
 #, c-format
@@ -28863,7 +28863,7 @@ msgstr "長度調整模式"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 msgid "Project is missing or read-only. Some settings will not be editable."
-msgstr "工程缺失或為只讀。一些設定將不可編輯。"
+msgstr "專案遺失或為唯讀。某些設置將無法編輯。"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:270
 #, c-format
@@ -33941,7 +33941,7 @@ msgstr "詳情：%s"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:33
 msgid "Send project directly"
-msgstr "直接傳送工程"
+msgstr "直接傳送專案"
 
 #: pcbnew/dialogs/dialog_produce_pcb_base.cpp:37
 msgid "Sends production files to manufacturer from KiCad"
@@ -35918,7 +35918,7 @@ msgstr "錯誤："
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:714
 msgid "Design rules cannot be added without a project"
-msgstr "如果沒有工程，無法新增設計規則"
+msgstr "如果沒有專案的話，無法新增設計規則"
 
 #: pcbnew/dialogs/panel_setup_rules_base.cpp:23
 msgid "DRC rules:"
@@ -37740,7 +37740,7 @@ msgstr "%s 上的規則敷銅"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:733
 msgid "No project loaded, skipping library parity tests."
-msgstr "沒有載入工程，跳過庫的奇偶性測試。"
+msgstr "沒有載入專案，跳過庫的奇偶性測試。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:737
 msgid "Loading footprint library table..."
@@ -38235,11 +38235,11 @@ msgstr "載入電路板 '%s' 時記憶體耗盡"
 #: pcbnew/files.cpp:826
 #, c-format
 msgid "Error saving footprint %s to project specific library."
-msgstr "將封裝“%s”儲存到工程專用封裝庫時出錯。"
+msgstr "將封裝“%s”儲存到專案專用封裝庫時出錯。"
 
 #: pcbnew/files.cpp:857
 msgid "Error saving project specific footprint library table."
-msgstr "儲存工程專用封裝庫表時出錯。"
+msgstr "儲存專案專用封裝庫表時出錯。"
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1088 pcbnew/files.cpp:1256
 #: pcbnew/footprint_libraries_utils.cpp:268
@@ -40942,9 +40942,9 @@ msgid "Cannot load footprint '%s' from '%s'"
 msgstr "無法載入封裝 '%s' 來自 '%s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in project '%s'"
-msgstr "未找到封裝 '%s' (在庫 '%s' 中)。"
+msgstr "未找到封裝 '%s' (在專案 '%s' 中)。"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
@@ -41919,7 +41919,7 @@ msgstr "多層"
 
 #: pcbnew/project_pcb.cpp:64
 msgid "Error loading project footprint libraries."
-msgstr "載入工程封裝庫時出錯。"
+msgstr "載入專案封裝庫時出錯。"
 
 #: pcbnew/python/scripting/pcbnew_action_plugins.cpp:82
 msgid "Exception on python action plugin code"
@@ -46179,7 +46179,7 @@ msgstr "配置網路類"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this board"
-msgstr "為此板建立新工程"
+msgstr "為此板建立新專案"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:35
 msgid "Omit extra information"
