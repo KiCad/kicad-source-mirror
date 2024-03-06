@@ -1507,6 +1507,7 @@ void SYMBOL_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         {
             wxLogTrace( "KICAD_LIB_WATCH", "Refreshing symbol %s", symbol->GetName() );
 
+            SetScreen( m_dummyScreen );  // UpdateLibraryBuffer will destroy the old screen
             m_libMgr->UpdateLibraryBuffer( libName );
 
             LIB_SYMBOL* lib_symbol = m_libMgr->GetBufferedSymbol( symbol->GetName(), libName );
