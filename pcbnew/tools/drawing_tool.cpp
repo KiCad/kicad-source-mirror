@@ -3458,8 +3458,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             aCommit.Add( via );
 
-            // If the user explicitly disables snap (using shift), then don't break the tracks into
-            // a chevron.  This will prevent PNS from being able to connect the via and track but
+            // If the user explicitly disables snap (using shift), then don't break the tracks.
+            // This will prevent PNS from being able to connect the via and track but
             // it is explicitly requested by the user
             if( track && m_gridHelper.GetSnap() )
             {
@@ -3467,107 +3467,11 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 VECTOR2I trackEnd = track->GetEnd();
                 SEG      trackSeg( trackStart, trackEnd );
 
-                OPT_VECTOR2I joint1;
-                OPT_VECTOR2I joint2;
-
-                auto insertChevron =
-                        [&]()
-                        {
-                            if( ( trackStart - *joint1 ).SquaredEuclideanNorm()
-                                    > ( trackStart - *joint2 ).SquaredEuclideanNorm() )
-                            {
-                                std::swap( joint1, joint2 );
-                            }
-
-                            aCommit.Modify( track );
-                            track->SetStart( trackStart );
-                            track->SetEnd( *joint1 );
-
-                            if( *joint1 != viaPos )
-                            {
-                                PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
-                                wxCHECK( newTrack, /* void */ );
-                                const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
-
-                                newTrack->SetStart( *joint1 );
-                                newTrack->SetEnd( viaPos );
-                                aCommit.Add( newTrack );
-                            }
-
-                            if( *joint2 != viaPos )
-                            {
-                                PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
-                                wxCHECK( newTrack, /* void */ );
-                                const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
-
-                                newTrack->SetStart( viaPos );
-                                newTrack->SetEnd( *joint2 );
-                                aCommit.Add( newTrack );
-                            }
-
-                            PCB_TRACK* newTrack = dynamic_cast<PCB_TRACK*>( track->Clone() );
-                            wxCHECK( newTrack, /* void */ );
-                            const_cast<KIID&>( newTrack->m_Uuid ) = KIID();
-
-                            newTrack->SetStart( *joint2 );
-                            newTrack->SetEnd( trackEnd );
-                            aCommit.Add( newTrack );
-                        };
-
                 if( viaPos == trackStart || viaPos == trackEnd )
                     return true;
 
-                if( trackStart.x == trackEnd.x )
-                {
-                    VECTOR2I splitPt = trackSeg.NearestPoint( viaPos );
-
-                    if( splitPt.x != viaPos.x
-                            && abs( splitPt.x - viaPos.x ) < abs( splitPt.y - trackStart.y  )
-                            && abs( splitPt.x - viaPos.x ) < abs( splitPt.y - trackEnd.y ) )
-                    {
-                        int offset = abs( splitPt.x - viaPos.x );
-
-                        joint1 = VECTOR2I( splitPt.x, splitPt.y - offset );
-                        joint2 = VECTOR2I( splitPt.x, splitPt.y + offset );
-
-                        insertChevron();
-                        return true;
-                    }
-                }
-                else if( trackStart.y == trackEnd.y )
-                {
-                    VECTOR2I splitPt = trackSeg.NearestPoint( viaPos );
-
-                    if( splitPt.y != viaPos.y
-                            && abs( trackStart.y - viaPos.y ) < abs( trackStart.x - viaPos.x )
-                            && abs( trackEnd.y - viaPos.y ) < abs( trackEnd.x - viaPos.x ) )
-                    {
-                        int offset = abs( splitPt.y - viaPos.y );
-
-                        joint1 = VECTOR2I( splitPt.x - offset, splitPt.y );
-                        joint2 = VECTOR2I( splitPt.x + offset, splitPt.y );
-
-                        insertChevron();
-                        return true;
-                    }
-                }
-                else if( abs( trackStart.y - trackEnd.y ) == abs( trackStart.x - trackEnd.x ) )
-                {
-                    SEG horiz( VECTOR2I( -INT_MAX, viaPos.y ), VECTOR2I( INT_MAX, viaPos.y ) );
-                    SEG vert( VECTOR2I( viaPos.x, -INT_MAX ), VECTOR2I( viaPos.x, INT_MAX ) );
-
-                    if( track->GetBoundingBox().Contains( viaPos ) )
-                    {
-                        joint1 = trackSeg.Intersect( horiz, true, true );
-                        joint2 = trackSeg.Intersect( vert, true, true );
-
-                        if( !joint1 || !joint2 )
-                            return false;
-
-                        insertChevron();
-                        return true;
-                    }
-                }
+                if( !trackSeg.Contains( viaPos ) )
+                    return true;
 
                 aCommit.Modify( track );
                 track->SetStart( trackStart );
