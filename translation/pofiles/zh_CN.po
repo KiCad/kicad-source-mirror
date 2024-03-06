@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-03-04 07:01+0000\n"
+"PO-Revision-Date: 2024-03-07 00:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -4592,7 +4592,7 @@ msgid ""
 "The violation severities have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
 msgstr ""
-"违规严重程度已在设置对话框外更改。\n"
+"违规严重级别已在设置对话框外更改。\n"
 "是否重新加载?"
 
 #: common/dialogs/panel_text_variables.cpp:104
@@ -8298,7 +8298,7 @@ msgstr "快捷键"
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:47 eeschema/lib_item.cpp:60
 #: eeschema/symbol_editor/symbol_editor.cpp:1281
 msgid "Alternate"
-msgstr "备选引脚"
+msgstr "备选"
 
 #: common/widgets/wx_html_report_panel.cpp:192
 #: common/widgets/wx_html_report_panel.cpp:213
@@ -9861,17 +9861,17 @@ msgstr "它将从 %s 列表中排除"
 #: eeschema/dialogs/dialog_erc.cpp:622 pcbnew/dialogs/dialog_drc.cpp:643
 #, c-format
 msgid "Change severity to Error for all '%s' violations"
-msgstr "将所有 '%s' 违规的严重性等级修改为 '错误'"
+msgstr "将所有 '%s' 违规的违规严重级别修改为 '错误'"
 
 #: eeschema/dialogs/dialog_erc.cpp:624 eeschema/dialogs/dialog_erc.cpp:630
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "违规严重程度也可以在 '电路板设置' 选项中进行编辑"
+msgstr "违规严重级别也可以在 '电路板设置' 选项中进行编辑"
 
 #: eeschema/dialogs/dialog_erc.cpp:628 pcbnew/dialogs/dialog_drc.cpp:650
 #, c-format
 msgid "Change severity to Warning for all '%s' violations"
-msgstr "将所有 '%s' 违规的严重性等级修改为 '警告'"
+msgstr "将所有 '%s' 违规的违规严重级别修改为 '警告'"
 
 #: eeschema/dialogs/dialog_erc.cpp:633 pcbnew/dialogs/dialog_drc.cpp:656
 #, c-format
@@ -9888,7 +9888,7 @@ msgstr "编辑引脚到引脚冲突图..."
 
 #: eeschema/dialogs/dialog_erc.cpp:645 pcbnew/dialogs/dialog_drc.cpp:663
 msgid "Edit violation severities..."
-msgstr "编辑违规严重程度......"
+msgstr "编辑违规严重级别......"
 
 #: eeschema/dialogs/dialog_erc.cpp:646 eeschema/dialogs/dialog_erc.cpp:652
 msgid "Open the Schematic Setup... dialog"
@@ -9908,7 +9908,7 @@ msgstr "引脚冲突图"
 #: pcbnew/dialogs/dialog_board_setup.cpp:202 pcbnew/dialogs/dialog_drc.cpp:826
 #: pcbnew/dialogs/dialog_drc.cpp:841
 msgid "Violation Severity"
-msgstr "违规严重程度"
+msgstr "违规严重级别"
 
 #: eeschema/dialogs/dialog_erc.cpp:752
 #: eeschema/dialogs/dialog_label_properties_base.cpp:185
@@ -11426,12 +11426,12 @@ msgstr "迁移总线"
 #: eeschema/dialogs/dialog_pin_properties.cpp:53
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:212
 msgid "Alternate Pin Name"
-msgstr "备选引脚名称"
+msgstr "引脚复用名称"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:204
 #: eeschema/dialogs/dialog_symbol_properties.cpp:357
 msgid "Alternate pin assignments are not available for De Morgan symbols."
-msgstr "备选引脚分配功能对 De Morgan 等效样式符号不可用。"
+msgstr "引脚复用分配功能对 De Morgan 等效样式符号不可用。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:281
 msgid "Exit sync pins mode"
@@ -11455,7 +11455,7 @@ msgstr "符号只有一个单元, 该操作无效。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:326
 msgid "Alternate pin definitions must have a name."
-msgstr "备选引脚定义必须要有一个名称。"
+msgstr "引脚复用定义必须要有一个名称。"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:346
 #, c-format
@@ -11536,7 +11536,7 @@ msgstr "预览:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
 msgid "Alternate pin function definitions"
-msgstr "备选引脚功能定义"
+msgstr "引脚复用功能定义"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
@@ -11932,7 +11932,7 @@ msgstr "引脚冲突图"
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:57
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:81
 msgid "Violation severities"
-msgstr "违规严重程度"
+msgstr "违规严重级别"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:75
@@ -16832,7 +16832,7 @@ msgstr "无效的引脚编号"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1598
 msgid "Invalid alternate pin name"
-msgstr "无效的备选引脚名称"
+msgstr "无效的引脚复用名称"
 
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1773
 #: eeschema/sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.cpp:1835
@@ -22832,25 +22832,25 @@ msgstr "报告单位, 有效选项: in, mm, mils"
 msgid ""
 "Report all DRC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr "报告所有 DRC 违规行为, 相当于包括所有严重性级别参数"
+msgstr "报告所有 DRC 违规, 相当于使用所有违规严重级别参数"
 
 #: kicad/cli/command_pcb_drc.cpp:74
 msgid ""
 "Report all DRC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr "报告所有违反 DRC 错误级别的情况, 可结合其他严重性级别参数使用"
+msgstr "报告所有错误级别的 DRC 违规, 可以与其他违规严重级别参数结合使用"
 
 #: kicad/cli/command_pcb_drc.cpp:79
 msgid ""
 "Report all DRC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr "报告所有违反 DRC 警告级别的情况, 可结合其他严重性级别参数使用"
+msgstr "报告所有警告级别的 DRC 违规, 可以与其他违规严重级别参数结合使用"
 
 #: kicad/cli/command_pcb_drc.cpp:84
 msgid ""
 "Report all excluded DRC violations, this can be combined with the other "
 "severity arguments"
-msgstr "报告所有排除在外的 DRC 违规行为, 可结合其他严重性级别参数使用"
+msgstr "报告所有已被排除的 DRC 违规行为, 可以与其他违规严重级别参数结合使用"
 
 #: kicad/cli/command_pcb_drc.cpp:89
 msgid "Return a nonzero exit code if DRC violations exist"
@@ -23242,25 +23242,25 @@ msgstr "在原理图上运行电气规则检查 (ERC) 并创建报告"
 msgid ""
 "Report all ERC violations, this is equivalent to including all the other "
 "severity arguments"
-msgstr "报告所有 ERC 违规, 相当于使用所有级别的错误参数"
+msgstr "报告所有 ERC 违规, 相当于使用所有违规严重级别参数"
 
 #: kicad/cli/command_sch_erc.cpp:63
 msgid ""
 "Report all ERC error level violations, this can be combined with the other "
 "severity arguments"
-msgstr "报告所有错误级别的 ERC 违规, 可以结合错误级别的参数结合使用"
+msgstr "报告所有错误级别的 ERC 违规, 可以与其他违规严重级别参数结合使用"
 
 #: kicad/cli/command_sch_erc.cpp:68
 msgid ""
 "Report all ERC warning level violations, this can be combined with the other "
 "severity arguments"
-msgstr "报告所有警告级别的 ERC 违规, 可以结合错误级别的参数结合使用"
+msgstr "报告所有警告级别的 ERC 违规, 可以与其他违规严重级别参数结合使用"
 
 #: kicad/cli/command_sch_erc.cpp:74
 msgid ""
 "Report all excluded ERC violations, this can be combined with the other "
 "severity arguments"
-msgstr "报告所有排除的 ERC 违规, 可以结合错误级别的参数结合使用"
+msgstr "报告所有已被排除的 ERC 违规, 可以与其他违规严重级别参数结合使用"
 
 #: kicad/cli/command_sch_erc.cpp:79
 msgid "Return a nonzero exit code if ERC violations exist"
@@ -29972,7 +29972,7 @@ msgstr "运行检查 > 比较封装与库差异"
 
 #: pcbnew/dialogs/dialog_drc.cpp:645 pcbnew/dialogs/dialog_drc.cpp:652
 msgid "Violation severities can also be edited in the Board Setup... dialog"
-msgstr "也可在 <电路板设置...> 选项中编辑违规严重程度"
+msgstr "也可在 <电路板设置...> 选项中编辑违规严重级别"
 
 #: pcbnew/dialogs/dialog_drc.cpp:663
 msgid "Open the Board Setup... dialog"
@@ -45662,7 +45662,7 @@ msgstr "DRC 警告"
 
 #: pcbnew/widgets/appearance_controls.cpp:343
 msgid "DRC violations with a Warning severity"
-msgstr "具有警告严重性的 DRC 违规"
+msgstr "严重级别为警告的 DRC 违规"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "DRC Errors"
@@ -45670,7 +45670,7 @@ msgstr "DRC 错误"
 
 #: pcbnew/widgets/appearance_controls.cpp:344
 msgid "DRC violations with an Error severity"
-msgstr "具有错误严重性的 DRC 违规"
+msgstr "严重级别为错误的 DRC 违规"
 
 #: pcbnew/widgets/appearance_controls.cpp:345
 msgid "DRC Exclusions"
