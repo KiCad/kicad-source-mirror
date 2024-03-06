@@ -1320,7 +1320,7 @@ private:
      */
     bool                         m_legacyTeardrops = false;
 
-    bool                         m_deleting;        // inside destructor
+    bool                         m_skipMaxClearanceCacheUpdate;
     int                          m_maxClearanceValue;  // cached value
 
     NETINFO_LIST                 m_NetInfo;         // net info list (name, design constraints...

@@ -80,7 +80,7 @@ BOARD::BOARD() :
         m_project( nullptr ),
         m_userUnits( EDA_UNITS::MILLIMETRES ),
         m_designSettings( new BOARD_DESIGN_SETTINGS( nullptr, "board.design_settings" ) ),
-        m_deleting( false ),
+        m_skipMaxClearanceCacheUpdate( false ),
         m_maxClearanceValue( 0 ),
         m_NetInfo( this )
 {
@@ -133,7 +133,7 @@ BOARD::BOARD() :
 
 BOARD::~BOARD()
 {
-    m_deleting = true;
+    m_skipMaxClearanceCacheUpdate = true;
 
     // Untangle group parents before doing any deleting
     for( PCB_GROUP* group : m_groups )
@@ -780,8 +780,8 @@ BOARD_DESIGN_SETTINGS& BOARD::GetDesignSettings() const
 
 void BOARD::UpdateMaxClearanceCache()
 {
-    // in destructor, useless work
-    if( m_deleting )
+    // in destructor or otherwise reasonable to skip
+    if( m_skipMaxClearanceCacheUpdate )
         return;
 
     int worstClearance = m_designSettings->GetBiggestClearanceValue();
@@ -1121,10 +1121,14 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
 
 void BOARD::DeleteAllFootprints()
 {
+    m_skipMaxClearanceCacheUpdate = true;
+
     for( FOOTPRINT* footprint : m_footprints )
         delete footprint;
 
     m_footprints.clear();
+    m_skipMaxClearanceCacheUpdate = false;
+    UpdateMaxClearanceCache();
 }
 
 
