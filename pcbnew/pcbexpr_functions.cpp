@@ -135,7 +135,7 @@ static void existsOnLayerFunc( LIBEVAL::CONTEXT* aCtx, void *self )
                      */
 
                     BOARD* board = item->GetBoard();
-                    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                    std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
                     auto i = board->m_LayerExpressionCache.find( layerName );
                     LSET mask;
 
@@ -271,8 +271,8 @@ static void intersectsCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( searchFootprints( board, arg->AsString(), context,
                         [&]( FOOTPRINT* fp )
                         {
-                            PTR_PTR_CACHE_KEY            key = { fp, item };
-                            std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                            PTR_PTR_CACHE_KEY                   key = { fp, item };
+                            std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
 
                             if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                             {
@@ -331,8 +331,8 @@ static void intersectsFrontCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( searchFootprints( board, arg->AsString(), context,
                         [&]( FOOTPRINT* fp )
                         {
-                            PTR_PTR_CACHE_KEY            key = { fp, item };
-                            std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                            PTR_PTR_CACHE_KEY                   key = { fp, item };
+                            std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
 
                             if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                             {
@@ -390,8 +390,8 @@ static void intersectsBackCourtyardFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                 if( searchFootprints( board, arg->AsString(), context,
                         [&]( FOOTPRINT* fp )
                         {
-                            PTR_PTR_CACHE_KEY            key = { fp, item };
-                            std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                            PTR_PTR_CACHE_KEY                   key = { fp, item };
+                            std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
 
                             if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                             {
@@ -660,7 +660,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             {
                                 if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                                 {
-                                    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                                    std::shared_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
                                     key = { aArea, item, layer };
 
                                     auto i = board->m_IntersectsAreaCache.find( key );
@@ -673,7 +673,7 @@ static void intersectsAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
 
                                 if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                                 {
-                                    std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
+                                    std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
                                     board->m_IntersectsAreaCache[ key ] = collides;
                                 }
 
@@ -735,8 +735,8 @@ static void enclosedByAreaFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                             if( !aArea->GetBoundingBox().Intersects( itemBBox ) )
                                 return false;
 
-                            std::unique_lock<std::mutex> cacheLock( board->m_CachesMutex );
-                            PTR_PTR_LAYER_CACHE_KEY      key = { aArea, item, layer };
+                            std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
+                            PTR_PTR_LAYER_CACHE_KEY             key = { aArea, item, layer };
 
                             if( ( item->GetFlags() & ROUTER_TRANSIENT ) == 0 )
                             {
