@@ -24,6 +24,7 @@
 
 #include <cstdio>
 #include <memory>
+#include <mutex>
 #include <board.h>
 #include <board_connected_item.h>
 #include <pcbexpr_evaluator.h>

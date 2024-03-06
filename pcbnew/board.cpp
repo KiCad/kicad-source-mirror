@@ -62,6 +62,7 @@
 #include <string_utils.h>
 #include <core/thread_pool.h>
 #include <zone.h>
+#include <mutex>
 
 // This is an odd place for this, but CvPcb won't link if it's in board_item.cpp like I first
 // tried it.
