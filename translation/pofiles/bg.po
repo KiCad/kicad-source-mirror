@@ -4,16 +4,15 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2023-02-06 21:07+0000\n"
-"Last-Translator: Michał Radziejewicz <radziejewiczmichal@gmail.com>\n"
-"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/master-"
-"source/bg/>\n"
+"PO-Revision-Date: 2024-03-07 00:01+0000\n"
+"Last-Translator: 109247019824 <stoyan@gmx.com>\n"
+"Language-Team: Bulgarian <https://hosted.weblate.org/projects/kicad/v8/bg/>\n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: C:\\kicad\\trunk\n"
 "X-Poedit-Language: Bulgarian\n"
@@ -30,14 +29,12 @@ msgstr ""
 "X-Poedit-SearchPath-9: polygon\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
-#, fuzzy
 msgid "All Files"
-msgstr "Drill файлове (за разпробиване)"
+msgstr "Всички файлове"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
-#, fuzzy
 msgid "Build board outline"
-msgstr "Изтриване на контури на платката"
+msgstr "Създаване на контур на платката"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:537
 #, fuzzy
@@ -230,7 +227,7 @@ msgstr "Експорт на конфиг. горещи клавиши"
 #: common/tool/actions.cpp:853 pcbnew/footprint_viewer_frame.cpp:971
 #: pcbnew/pcb_base_frame.cpp:667
 msgid "3D Viewer"
-msgstr "3D Изглед"
+msgstr "Преглед в 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:70
 #, fuzzy
@@ -262,7 +259,7 @@ msgstr "Нулирай установяването"
 #: pcbnew/menubar_footprint_editor.cpp:234 pcbnew/menubar_pcb_editor.cpp:459
 #: pcbnew/toolbars_footprint_viewer.cpp:193
 msgid "&File"
-msgstr "Файл"
+msgstr "&Файл"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:79
 #: eeschema/menubar.cpp:339
@@ -270,7 +267,7 @@ msgstr "Файл"
 #: pagelayout_editor/menubar.cpp:151 pcbnew/menubar_footprint_editor.cpp:235
 #: pcbnew/menubar_pcb_editor.cpp:460
 msgid "&Edit"
-msgstr "Редактиране"
+msgstr "&Редактиране"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:141 eeschema/menubar.cpp:340
 #: eeschema/sim/toolbars_simulator_frame.cpp:161
@@ -280,18 +277,18 @@ msgstr "Редактиране"
 #: pcbnew/menubar_footprint_editor.cpp:236 pcbnew/menubar_pcb_editor.cpp:461
 #: pcbnew/toolbars_footprint_viewer.cpp:194
 msgid "&View"
-msgstr "Изглед"
+msgstr "&Изглед"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:142
 #: bitmap2component/bitmap2cmp_frame.cpp:308 cvpcb/menubar.cpp:80
 #: eeschema/sim/toolbars_simulator_frame.cpp:163 gerbview/menubar.cpp:234
 #: kicad/menubar.cpp:225 pcb_calculator/pcb_calculator_frame.cpp:229
 msgid "&Preferences"
-msgstr "Предпочитания"
+msgstr "&Настройки"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:57
 msgid "Reload board"
-msgstr "Презареди платката"
+msgstr "Презареждане на платката"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
 #, fuzzy
@@ -690,9 +687,8 @@ msgid "Show front silkscreen"
 msgstr "Фронтална страна"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
-#, fuzzy
 msgid "B.Silkscreen"
-msgstr "Silkscreen Cmp"
+msgstr "Г.Ситопечат"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 #, fuzzy
@@ -18949,7 +18945,7 @@ msgstr "Старт на симулатор"
 
 #: eeschema/sch_symbol.cpp:1875
 msgid "BOM"
-msgstr ""
+msgstr "BOM"
 
 #: eeschema/sch_symbol.cpp:1887 eeschema/sch_text.cpp:407
 #: eeschema/sch_textbox.cpp:448
@@ -38136,9 +38132,8 @@ msgid ""
 msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
-#, fuzzy
 msgid "Silkscreen"
-msgstr "Silkscreen Cmp"
+msgstr "Ситопечат"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:299
 #, fuzzy
@@ -40178,9 +40173,8 @@ msgid "Assertion failure"
 msgstr "Площ на напречно сечение"
 
 #: pcbnew/drc/drc_item.cpp:205
-#, fuzzy
 msgid "Copper sliver"
-msgstr "Медни слоеве:"
+msgstr "Меден слой"
 
 #: pcbnew/drc/drc_item.cpp:209
 msgid "Solder mask aperture bridges items with different nets"
@@ -46421,9 +46415,8 @@ msgid "Loss Tangent"
 msgstr "Загуби"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:301
-#, fuzzy
 msgid "Dielectric"
-msgstr "Диелектрични загуби"
+msgstr "Диелектрик"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:354
 #, fuzzy
