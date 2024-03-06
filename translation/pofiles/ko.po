@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:53-0800\n"
-"PO-Revision-Date: 2024-03-04 07:01+0000\n"
+"PO-Revision-Date: 2024-03-07 00:01+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -4769,7 +4769,7 @@ msgstr "라벨 증가 반복"
 
 #: common/drawing_sheet/ds_draw_item.cpp:166
 msgid "Repeat Position Increment"
-msgstr "위치 증분 반복"
+msgstr "위치 증가 반복"
 
 #: common/drawing_sheet/ds_draw_item.cpp:168
 #: pagelayout_editor/dialogs/dialog_design_inspector_base.cpp:38
@@ -27178,13 +27178,13 @@ msgid ""
 "<br>\n"
 "This energy is then compared to the one dissipated by the wire resistance."
 msgstr ""
-"이 계산기를 사용하여 작은 트랙이 짧은 시간 동안 큰 전류를 처리할 수 있는지 확"
-"인할 수 있습니다.<br>\n"
+"이 계산기를 사용하여 작은 트랙이 짧은 시간 동안 큰 전류를 처리할 수 있는지 "
+"확인할 수 있습니다.<br>\n"
 "이 도구를 사용하면 트랙 퓨즈를 설계할 수 있지만 추정치로만 사용해야 합니다.\n"
 "\n"
-"계산기는 전선을 가열하는 데 필요한 에너지를 추정합니다<br>\n"
-"녹는점과 상 변화에 필요한 에너지.<br>\n"
-"그런 다음 이 에너지를 와이어 저항에 의해 소실된 에너지와 비교합니다."
+"이 계산기는 전선을 녹는점까지 가열하는 데 필요한 에너지와<br>\n"
+"위상 변화에 필요한 에너지를 추정합니다.<br>\n"
+"그런 다음 이 에너지를 전선 저항에 의해 소실되는 에너지와 비교합니다."
 
 #: pcb_calculator/galvanic_corrosion_help.h:2
 msgid ""
