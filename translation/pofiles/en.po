@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-28 09:53-0800\n"
+"POT-Creation-Date: 2024-03-07 23:59+0100\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -492,6 +492,9 @@ msgstr "Background End"
 msgid "Background gradient end color"
 msgstr "Background gradient end color"
 
+msgid "Use board stackup colors"
+msgstr "Use board stackup colors"
+
 #, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
@@ -518,6 +521,9 @@ msgstr ""
 
 msgid "Left double click or middle click to change color"
 msgstr "Left double click or middle click to change color"
+
+msgid "Uncheck 'Use board stackup colors' to allow color editing."
+msgstr "Uncheck 'Use board stackup colors' to allow color editing."
 
 #, c-format
 msgid "Show or hide %s"
@@ -3897,6 +3903,14 @@ msgid "Failed to parse number from '%s'"
 msgstr "Failed to parse number from '%s'"
 
 #, c-format
+msgid "JSON error reading '%s': %s"
+msgstr "JSON error reading '%s': %s"
+
+#, c-format
+msgid "Error reading '%s': %s"
+msgstr "Error reading '%s': %s"
+
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
@@ -3907,14 +3921,6 @@ msgstr ""
 #, c-format
 msgid "Cannot read ZIP archive '%s'"
 msgstr "Cannot read ZIP archive '%s'"
-
-#, c-format
-msgid "JSON error reading '%s': %s"
-msgstr "JSON error reading '%s': %s"
-
-#, c-format
-msgid "Error reading '%s': %s"
-msgstr "Error reading '%s': %s"
 
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
@@ -9530,6 +9536,11 @@ msgstr "There is no symbol selected to save."
 
 msgid "Output path must not conflict with existing path\n"
 msgstr "Output path must not conflict with existing path\n"
+
+msgid ""
+"Output path must be specified to convert legacy and non-KiCad libraries\n"
+msgstr ""
+"Output path must be specified to convert legacy and non-KiCad libraries\n"
 
 msgid "Saving symbol library in updated format\n"
 msgstr "Saving symbol library in updated format\n"
@@ -15786,9 +15797,6 @@ msgstr "Upgrades the footprint library to the current kicad version format"
 
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr "Forces the footprint library to be resaved regardless of versioning"
-
-msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Footprint library path does not exist or is not accessible\n"
 
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -30450,6 +30458,9 @@ msgstr "Failed to plot to '%s'.\n"
 msgid "Failed to create output directory\n"
 msgstr "Failed to create output directory\n"
 
+msgid "Footprint library path does not exist or is not accessible\n"
+msgstr "Footprint library path does not exist or is not accessible\n"
+
 msgid "Loading footprint library\n"
 msgstr "Loading footprint library\n"
 
@@ -33908,9 +33919,6 @@ msgstr ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 
-msgid "KiCad Main Window"
-msgstr "KiCad Main Window"
-
 msgid "KiCad PCB Layout Editor"
 msgstr "KiCad PCB Layout Editor"
 
@@ -33940,6 +33948,9 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "KiCad Main Window"
+#~ msgstr "KiCad Main Window"
 
 #~ msgid "Move board Left"
 #~ msgstr "Move board Left"
@@ -38779,9 +38790,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Board Colors"
 #~ msgstr "Board Colors"
-
-#~ msgid "Use board stackup colors"
-#~ msgstr "Use board stackup colors"
 
 #~ msgid "Use colors:"
 #~ msgstr "Use colors:"
