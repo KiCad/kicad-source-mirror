@@ -25,13 +25,14 @@
 # KwonHyeokbeom <gurqja3810@naver.com>, 2022.
 # "minsu kim (0xGabriel)" <rlaalstn9601@gmail.com>, 2023.
 # pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2023, 2024.
+# Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
 "PO-Revision-Date: 2024-03-07 22:55+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -26433,7 +26434,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "100% 표면 깊이를 위한 주파수:"
+msgstr "100% 표피 깊이를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
