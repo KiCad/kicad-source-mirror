@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-07 00:02+0000\n"
+"PO-Revision-Date: 2024-03-07 22:55+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -1009,7 +1009,7 @@ msgstr "顯示銅層和技術層厚度 (非常慢)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
-msgstr "翻轉時高亮顯示條目"
+msgstr "翻轉時高亮顯示項目"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -2583,22 +2583,22 @@ msgstr "選擇要匯入的專案"
 
 #: common/dialogs/dialog_locked_items_query.cpp:35
 msgid "Skip Locked Items"
-msgstr "跳過鎖定項"
+msgstr "跳過鎖定項目"
 
 #: common/dialogs/dialog_locked_items_query.cpp:36
 msgid ""
 "Remove locked items from the selection and only apply the operation to the "
 "unlocked items (if any)."
-msgstr "從選擇中移除鎖定的專案，並只對未鎖定專案(如果有的話)進行操作。"
+msgstr "從選擇中移除鎖定的項目，並只對未鎖定項目(如果有的話)進行操作。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:30
 #, c-format
 msgid "The selection contains %d locked items."
-msgstr "選中部分含 %d 個鎖定專案。"
+msgstr "選中部分含 %d 個鎖定項目。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:34
 msgid "These items will be skipped unless you override the locks."
-msgstr "除非您覆蓋鎖定，否則跳過這些專案。"
+msgstr "這些項目將被跳過，除非您覆蓋鎖定。"
 
 #: common/dialogs/dialog_locked_items_query_base.cpp:44
 msgid "Remember decision for this session."
@@ -2622,12 +2622,12 @@ msgid ""
 "Override locks and apply the operation on all the items selected.\n"
 "Any locked items will remain locked after the operation is complete."
 msgstr ""
-"無視鎖定並對選定的所有項應用操作。\n"
-"任何鎖定的專案將在操作完成後保持鎖定。"
+"覆蓋鎖定並將操作應用於所有選定的項目。\n"
+"操作完成後，任何已鎖定的項目將保持鎖定狀態。"
 
 #: common/dialogs/dialog_locked_items_query_base.h:56
 msgid "Locked Items"
-msgstr "鎖定項"
+msgstr "被鎖定項目"
 
 #: common/dialogs/dialog_migrate_settings.cpp:33
 msgid "Quit KiCad"
@@ -3579,13 +3579,13 @@ msgstr "主題："
 
 #: common/dialogs/panel_color_settings_base.cpp:35
 msgid "Override individual item colors"
-msgstr "覆蓋單個專案的顏色"
+msgstr "覆蓋單個項目的顏色"
 
 #: common/dialogs/panel_color_settings_base.cpp:36
 msgid ""
 "Show all items in their default color even if they have specific colors set "
 "in their properties."
-msgstr "即使屬性中設定了特定的顏色，也以其預設顏色顯示所有專案。"
+msgstr "即使屬性中設定了特定的顏色，也以其預設顏色顯示所有項目。"
 
 #: common/dialogs/panel_color_settings_base.cpp:43
 msgid "Open Theme Folder"
@@ -3868,8 +3868,8 @@ msgid ""
 "Delay after the first change to create a backup file of the board on disk.\n"
 "If set to 0, auto backup is disabled"
 msgstr ""
-"在第一次更改後延遲建立磁碟上的備份檔案。\n"
-"如果設定為 0，則禁用自動備份"
+"在第一次更改後延遲建立磁碟上的電路板備份檔案。\n"
+"如果設定為 0，則停用自動備份"
 
 #: common/dialogs/panel_common_settings_base.cpp:330
 #: common/dialogs/panel_common_settings_base.cpp:417
@@ -4161,7 +4161,7 @@ msgstr "移動物件時自動平移"
 msgid ""
 "When drawing a track or moving an item, pan when approaching the edge of the "
 "display."
-msgstr "當繪製佈線或移動專案時， 在接近顯示器邊緣時平移畫布。"
+msgstr "當繪製佈線或移動項目時， 在接近顯示器邊緣時進行平移。"
 
 #: common/dialogs/panel_mouse_settings_base.cpp:48
 msgid "Use zoom acceleration"
@@ -5024,7 +5024,7 @@ msgstr ""
 
 #: common/eda_base_frame.cpp:1379
 msgid "The auto save file could not be renamed to the board file name."
-msgstr "自動儲存檔案不能重新命名為電路板檔名稱。"
+msgstr "自動儲存檔案不能重新命名為電路板檔名。"
 
 #: common/eda_base_frame.cpp:1619
 msgid "Set Language"
@@ -5220,7 +5220,7 @@ msgstr "敷銅"
 
 #: common/eda_item.cpp:365
 msgid "ItemList"
-msgstr "專案列表"
+msgstr "項目列表"
 
 #: common/eda_item.cpp:366
 msgid "NetInfo"
@@ -5309,7 +5309,7 @@ msgstr "Gerber 佈局"
 
 #: common/eda_item.cpp:406
 msgid "Draw Item"
-msgstr "繪製專案"
+msgstr "繪製項目"
 
 #: common/eda_shape.cpp:66
 msgid "Thermal Spoke"
@@ -6172,7 +6172,7 @@ msgstr "剪下"
 
 #: common/grid_tricks.cpp:355
 msgid "Clear selected cells placing original contents on clipboard"
-msgstr "將原始內容儲存到剪貼簿並清除所選單元格"
+msgstr "清除所選儲存格，將原始內容放置在剪貼板上"
 
 #: common/grid_tricks.cpp:356 common/tool/actions.cpp:211
 #: eeschema/tools/ee_actions.cpp:223 pcbnew/dialogs/panel_setup_rules.cpp:129
@@ -6181,7 +6181,7 @@ msgstr "複製"
 
 #: common/grid_tricks.cpp:357
 msgid "Copy selected cells to clipboard"
-msgstr "複製選中的單元格到剪貼簿"
+msgstr "複製選中的儲存格到剪貼簿"
 
 #: common/grid_tricks.cpp:358 common/tool/actions.cpp:222
 #: eeschema/tools/sch_editor_control.cpp:2189
@@ -6192,7 +6192,7 @@ msgstr "貼上"
 
 #: common/grid_tricks.cpp:359
 msgid "Paste clipboard cells to matrix at current cell"
-msgstr "將剪貼簿內容貼上到當前單元格位置"
+msgstr "將剪貼簿內容貼上到當前儲存格位置"
 
 #: common/grid_tricks.cpp:360 common/tool/actions.cpp:267
 #: eeschema/tools/sch_edit_tool.cpp:1460
@@ -6671,7 +6671,7 @@ msgstr "錨點"
 
 #: common/layer_id.cpp:143 common/layer_id.cpp:186
 msgid "Helper items"
-msgstr "輔助項"
+msgstr "輔助項目"
 
 #: common/layer_id.cpp:144 common/layer_id.cpp:187 common/tool/grid_menu.cpp:56
 #: eeschema/tools/sch_editor_control.cpp:2642
@@ -6701,15 +6701,15 @@ msgstr "游標"
 
 #: common/layer_id.cpp:148
 msgid "Hovered items"
-msgstr "懸停專案"
+msgstr "懸停項目"
 
 #: common/layer_id.cpp:149
 msgid "Highlighted items"
-msgstr "高亮專案"
+msgstr "強調顯示的項目"
 
 #: common/layer_id.cpp:150
 msgid "Hidden items"
-msgstr "隱藏專案"
+msgstr "隱藏項目"
 
 #: common/layer_id.cpp:151 common/layer_id.cpp:190
 msgid "Selection highlight"
@@ -6837,7 +6837,7 @@ msgstr "網格軸"
 
 #: common/layer_id.cpp:191
 msgid "Locked item shadow"
-msgstr "鎖定的專案陰影"
+msgstr "鎖定項目陰影"
 
 #: common/layer_id.cpp:192
 msgid "Courtyard collision shadow"
@@ -6889,7 +6889,7 @@ msgstr "單位"
 #: common/lib_tree_model_adapter.cpp:152 common/lib_tree_model_adapter.cpp:154
 #: common/lib_tree_model_adapter.cpp:155
 msgid "Item"
-msgstr "專案"
+msgstr "項目"
 
 #: common/libeval_compiler/libeval_compiler.cpp:585
 #, c-format
@@ -6910,7 +6910,7 @@ msgstr "屬性的未知父級"
 #: common/libeval_compiler/libeval_compiler.cpp:1065
 #, c-format
 msgid "Unrecognized item '%s'"
-msgstr "無法識別的專案 '%s'"
+msgstr "無法識別的項目 '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:894
 #: common/libeval_compiler/libeval_compiler.cpp:997
@@ -7307,19 +7307,19 @@ msgstr "重做上一次編輯"
 
 #: common/tool/actions.cpp:201
 msgid "Cut selected item(s) to clipboard"
-msgstr "將所選專案剪下到剪貼簿"
+msgstr "將所選項目剪下到剪貼簿"
 
 #: common/tool/actions.cpp:212
 msgid "Copy selected item(s) to clipboard"
-msgstr "將所選專案複製到剪貼簿"
+msgstr "將所選項目複製到剪貼簿"
 
 #: common/tool/actions.cpp:223
 msgid "Paste item(s) from clipboard"
-msgstr "從剪貼簿貼上專案"
+msgstr "從剪貼簿貼上項目"
 
 #: common/tool/actions.cpp:233
 msgid "Select all items on screen"
-msgstr "選擇螢幕上的所有專案"
+msgstr "選擇螢幕上的所有項目"
 
 #: common/tool/actions.cpp:239
 msgid "Unselect All"
@@ -7335,7 +7335,7 @@ msgstr "特殊貼上..."
 
 #: common/tool/actions.cpp:246
 msgid "Paste item(s) from clipboard with annotation options"
-msgstr "使用註釋選項從剪貼簿貼上專案"
+msgstr "使用註釋選項從剪貼簿貼上項目"
 
 #: common/tool/actions.cpp:254 eeschema/tools/symbol_editor_edit_tool.cpp:911
 #: pcbnew/tools/edit_tool.cpp:2685
@@ -7344,11 +7344,11 @@ msgstr "建立副本"
 
 #: common/tool/actions.cpp:255
 msgid "Duplicates the selected item(s)"
-msgstr "建立所選項的副本"
+msgstr "建立所選項目的副本"
 
 #: common/tool/actions.cpp:268
 msgid "Deletes selected item(s)"
-msgstr "刪除選擇項"
+msgstr "刪除選擇項目"
 
 #: common/tool/actions.cpp:275
 msgid "Interactive Delete Tool"
@@ -7356,7 +7356,7 @@ msgstr "互動式刪除工具"
 
 #: common/tool/actions.cpp:276
 msgid "Delete clicked items"
-msgstr "刪除單擊的專案"
+msgstr "刪除單擊的項目"
 
 #: common/tool/actions.cpp:283 eeschema/tools/sch_edit_tool.cpp:2469
 #: pcbnew/tools/edit_tool.cpp:2122
@@ -7366,7 +7366,7 @@ msgstr "X 對齊"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "將字段和文本項目靠左對齊"
 
 #: common/tool/actions.cpp:290 eeschema/tools/sch_edit_tool.cpp:2471
 #: pcbnew/tools/edit_tool.cpp:2124
@@ -7376,7 +7376,7 @@ msgstr "X 對齊"
 
 #: common/tool/actions.cpp:291
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "將字段和文本項目靠中對齊"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2473
 #: pcbnew/tools/edit_tool.cpp:2126
@@ -7386,7 +7386,7 @@ msgstr "X 對齊"
 
 #: common/tool/actions.cpp:298
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "將字段和文本項目靠右對齊"
 
 #: common/tool/actions.cpp:304
 #, fuzzy
@@ -7893,7 +7893,7 @@ msgstr "繪製邊界框"
 #: common/tool/actions.cpp:934 pcbnew/dialogs/panel_edit_options_base.cpp:118
 #: pcbnew/dialogs/panel_edit_options_base.cpp:190
 msgid "Select item(s)"
-msgstr "選擇專案"
+msgstr "選擇項目"
 
 #: common/tool/actions.cpp:944
 msgid "Measure Tool"
@@ -8377,7 +8377,7 @@ msgstr "適應螢幕"
 
 #: common/widgets/mathplot.cpp:1453
 msgid "Set plot view to show all items"
-msgstr "設定繪製檢視以顯示所有專案"
+msgstr "設定繪製檢視以顯示所有的項目"
 
 #: common/widgets/net_selector.cpp:58 gerbview/gerber_draw_item.cpp:751
 #: pcbnew/dialogs/dialog_copper_zones.cpp:372
@@ -9271,7 +9271,7 @@ msgstr ""
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
-msgstr "%s 和 %s 都連線到同一根導線上；選擇 %s 作為用於網路列表的標籤"
+msgstr "%s 和 %s 都附加在相同的項目上；將使用 %s 在網表中"
 
 #: eeschema/connection_graph.cpp:3257
 #, c-format
@@ -10226,7 +10226,7 @@ msgstr "圖框"
 #: pcbnew/dialogs/dialog_drc_base.cpp:99
 #: pcbnew/dialogs/dialog_generators_base.cpp:31
 msgid "Click on items to highlight them on the board."
-msgstr "單擊專案以在板上高亮它們。"
+msgstr "單擊項目以在電路板上突出顯示它們。"
 
 #: eeschema/dialogs/dialog_erc_base.cpp:90
 #: pcbnew/dialogs/dialog_drc_base.cpp:110
@@ -10300,10 +10300,9 @@ msgid "Save all power dissipations"
 msgstr "儲存所有的功耗"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
-#, fuzzy
 msgid ""
 "Write directives to save power dissipation of all items (.probe p(<item>))"
-msgstr "編寫指令以儲存所有電流 (.probe alli)"
+msgstr "撰寫指令以儲存所有項目的功率消耗（.probe p(<item>)）"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:326
 #, fuzzy
@@ -10592,7 +10591,7 @@ msgstr "適用於所有主體樣式"
 #: eeschema/dialogs/dialog_field_properties_base.h:101
 #: eeschema/dialogs/dialog_lib_text_properties_base.h:88
 msgid "Text Item Properties"
-msgstr "文字項屬性"
+msgstr "文字項目屬性"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:598
 msgid "Edit Text and Graphics"
@@ -10638,15 +10637,15 @@ msgstr "按名稱篩選專案："
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:99
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:79
 msgid "Filter items by parent reference designator:"
-msgstr "按父級位號過濾專案："
+msgstr "按照父參考設計符號篩選項目："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:107
 msgid "Filter items by parent symbol library id:"
-msgstr "按父級符號庫 ID 篩選專案："
+msgstr "按照父符號庫 ID 篩選項目："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:113
 msgid "Filter items by parent symbol type:"
-msgstr "按父級符號型別篩選專案："
+msgstr "按照父符號類型篩選項目："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:116
 msgid "Non-power symbols"
@@ -10660,7 +10659,7 @@ msgstr "電源符號"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:58
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
 msgid "Filter items by net:"
-msgstr "按網路篩選專案："
+msgstr "按網路篩選項目："
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:140
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:102
@@ -11323,7 +11322,7 @@ msgstr "新建符號"
 #: eeschema/dialogs/dialog_tablecell_properties.cpp:55
 #: eeschema/dialogs/dialog_text_properties.cpp:72
 msgid "Note: individual item colors overridden in Preferences."
-msgstr "注意：單獨專案顏色在首選項中被覆蓋。"
+msgstr "注意：個別項目顏色在偏好設定中被覆蓋。"
 
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:48
 #: eeschema/dialogs/dialog_lib_textbox_properties_base.cpp:207
@@ -12121,10 +12120,9 @@ msgstr "跳過符號恢復"
 #: eeschema/dialogs/dialog_rescue_each.cpp:234
 #, c-format
 msgid "Instances of this symbol (%d items):"
-msgstr "此符號的例項（%d 項）："
+msgstr "此符號的實例（%d 項）："
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
-#, fuzzy
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -12132,10 +12130,10 @@ msgid ""
 "This setting can be changed from the \"Preferences\" dialog,\n"
 "and the tool can be activated manually from the \"Tools\" menu."
 msgstr ""
-"確定不再顯示恢復助手工具嗎?\n"
-"不會做任何變更。\n"
+"停止顯示此工具？\n"
+"不會進行任何更改。\n"
 "\n"
-"該設定可以從“符號庫”對話方塊進行變更，\n"
+"該設定可以從“偏好設定”對話方塊進行變更，\n"
 "並且可以從 “工具” 選單手動啟用該工具。"
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
@@ -12201,7 +12199,7 @@ msgstr "匯入："
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:48
 msgid "Formatting preferences"
-msgstr "格式偏好設定"
+msgstr "格式化偏好設定"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:51
 msgid "Field name templates"
@@ -12410,7 +12408,7 @@ msgstr "無標題圖框"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:386
 msgid "Note: item colors are overridden in the current color theme."
-msgstr "注意：專案配色在當前配色主題中被覆蓋。"
+msgstr "注意：項目配色在當前配色主題中被覆蓋。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:388
 #, c-format
@@ -12418,8 +12416,8 @@ msgid ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 msgstr ""
-"要檢視單個項目的顏色\"%s\"\n"
-"請在偏好設定 > 原理圖編輯器 > 顏色中取消選擇 。"
+"要檢視個別項目的顏色\"%s\"\n"
+"請在偏好設定 > 原理圖編輯器 > 顏色中取消勾選 。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:439
 #, c-format
@@ -13184,7 +13182,7 @@ msgstr "電源符號"
 #: pcbnew/footprint_chooser_frame.cpp:174
 #, c-format
 msgid " (%d items loaded)"
-msgstr " 選擇符號(共 %d 項)"
+msgstr " ( %d 項目載入)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -13279,9 +13277,8 @@ msgid "The Quantity column cannot be grouped by."
 msgstr "無法隱藏“位號”列。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:853
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "無法隱藏“位號”列。"
+msgstr "無法按項目編號列進行分組。"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1200
 #, fuzzy
@@ -14002,9 +13999,9 @@ msgid ""
 "and they will not be seen on the screen.  Are you\n"
 "sure you want to use these colors?"
 msgstr ""
-"有些專案的顏色與背景相同，\n"
+"有些項目的顏色與背景相同，\n"
 "在螢幕上它們將不可見。\n"
-"你確定要使用這些顏色嗎？"
+"您確定要使用這些顏色嗎？"
 
 #: eeschema/dialogs/panel_eeschema_color_settings.cpp:204
 msgid "(symbol editor only)"
@@ -14064,7 +14061,7 @@ msgstr "選擇&&高亮"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:94
 msgid "Draw selected child items"
-msgstr "繪製選定的子項"
+msgstr "繪製選定的子項目"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:97
 msgid "Fill selected shapes"
@@ -14099,7 +14096,7 @@ msgstr "高亮對應所選封裝的符號"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:151
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:136
 msgid "Center view on cross-probed items"
-msgstr "將被交叉探測專案居中顯示"
+msgstr "將視圖居中於十字標探索的項目上"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:153
 msgid "Ensures that cross-probed symbols are visible in the current view"
@@ -14108,7 +14105,7 @@ msgstr "確保交叉探測符號在當前檢視中可見"
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:157
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:142
 msgid "Zoom to fit cross-probed items"
-msgstr "縮放檢視至適合被交叉探測的專案"
+msgstr "將視圖縮放以適應十字標探索的項目"
 
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:161
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:146
@@ -14229,7 +14226,7 @@ msgstr "從選單中明確選擇。"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:138
 #: pcbnew/dialogs/panel_edit_options_base.cpp:210
 msgid "Add item(s) to selection"
-msgstr "增加專案到選中敷銅。"
+msgstr "將項目添加到選擇中"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:162
 #: pcbnew/dialogs/panel_edit_options_base.cpp:143
@@ -14241,7 +14238,7 @@ msgstr "Ctrl+Shift"
 #: pcbnew/dialogs/panel_edit_options_base.cpp:148
 #: pcbnew/dialogs/panel_edit_options_base.cpp:220
 msgid "Remove item(s) from selection"
-msgstr "從選區刪除專案。"
+msgstr "從選擇中移除項目"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:195
 #: pcbnew/dialogs/panel_edit_options_base.cpp:171
@@ -14276,7 +14273,7 @@ msgstr "自動放置欄位對齊到 50mil 網格 (&W)"
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:281
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:104
 msgid "Repeated Items"
-msgstr "重複項"
+msgstr "重複項目"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:296
 msgid "&Horizontal pitch:"
@@ -15327,7 +15324,7 @@ msgstr "匯流排以圖形方式連線，但不共享匯流排成員"
 
 #: eeschema/erc_item.cpp:127
 msgid "Invalid connection between bus and net items"
-msgstr "匯流排和網路專案之間的連線無效"
+msgstr "匯流排和網路項目之間的連接無效"
 
 #: eeschema/erc_item.cpp:131 pcbnew/drc/drc_item.cpp:197
 msgid "Unresolved text variable"
@@ -15795,7 +15792,7 @@ msgstr "沒有選中的檔案！"
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:265
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:295
 msgid "Items in the imported file could not be handled properly."
-msgstr "無法正確處理匯入檔案中的專案。"
+msgstr "無法正確處理匯入檔案中的項目。"
 
 #: eeschema/import_gfx/dialog_import_gfx_sch.cpp:275
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:305
@@ -16042,7 +16039,7 @@ msgstr "單位計數不一致。"
 #: eeschema/lib_symbol.cpp:324
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:730
 msgid "Graphic item count differs."
-msgstr "圖形物件計數不一致。"
+msgstr "圖形項目計數不一致。"
 
 #: eeschema/lib_symbol.cpp:336
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:744
@@ -16811,8 +16808,8 @@ msgstr "CADSTAR 設計包含沒有 KiCad 等效項的變體。僅主變體 ('%s'
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
-msgstr ""
-"CADSTAR 設計包含沒有 KiCad 等效項的分組專案。所有分組的專案都已取消分組。"
+msgstr "CADSTAR 設計包含了在 KiCad "
+"中沒有對應的已分組項目。任何已分組項目已被解除分組。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:383
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:160
@@ -16897,8 +16894,7 @@ msgstr "符號 '%s' 引用在庫中找不到的元件 '%s'。未載入符號"
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
-msgstr ""
-"符號 ID '%s' 引用庫符號 '%s'，在庫中找不到。您是否匯出了設計的所有專案？"
+msgstr "符號 ID '%s' 引用庫符號 '%s'，在庫中找不到。您是否匯出了設計的所有項目？"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:837
 #, c-format
@@ -17698,12 +17694,12 @@ msgstr "無法寫入繪製檔案到資料夾 \"%s\"。"
 #: eeschema/sch_reference_list.cpp:674
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)"
-msgstr "未批註專案： %s%s (單元 %d)"
+msgstr "項目未進行標註：%s%s（單位 %d）"
 
 #: eeschema/sch_reference_list.cpp:681
 #, c-format
 msgid "Item not annotated: %s%s"
-msgstr "未批註專案： %s%s"
+msgstr "項目未進行標註：%s%s"
 
 #: eeschema/sch_reference_list.cpp:699
 #, c-format
@@ -17713,12 +17709,12 @@ msgstr "錯誤：符號 %s%s%s(單元 %d) 超出定義的單元 (%d)"
 #: eeschema/sch_reference_list.cpp:738
 #, c-format
 msgid "Duplicate items %s%s%s\n"
-msgstr "重複專案 %s%s%s\n"
+msgstr "重複項目%s%s%s\n"
 
 #: eeschema/sch_reference_list.cpp:763
 #, c-format
 msgid "Differing unit counts for item %s%s%s and %s%s%s\n"
-msgstr "專案 %s%s%s 和 %s%s%s 的不同單位計數\n"
+msgstr "項目%s%s%s和%s%s%s的單位數不同\n"
 
 #: eeschema/sch_reference_list.cpp:779
 #, c-format
@@ -17813,7 +17809,7 @@ msgstr "背景顏色"
 
 #: eeschema/sch_sheet_path.cpp:57 include/board_item.h:415
 msgid "(Deleted Item)"
-msgstr "(刪除項)"
+msgstr "(已刪除項目)"
 
 #: eeschema/sch_sheet_pin.cpp:338
 #, c-format
@@ -20402,7 +20398,7 @@ msgstr "選擇節點"
 
 #: eeschema/tools/ee_actions.cpp:115
 msgid "Select a connection item under the cursor"
-msgstr "選擇游標下的連線項"
+msgstr "在游標下選擇一個連接項目"
 
 #: eeschema/tools/ee_actions.cpp:122
 msgid "Select Connection"
@@ -20607,7 +20603,7 @@ msgstr "新增文字"
 #: eeschema/tools/ee_actions.cpp:347 pagelayout_editor/tools/pl_actions.cpp:64
 #: pcbnew/tools/pcb_actions.cpp:175
 msgid "Add a text item"
-msgstr "新增文字項"
+msgstr "新增文字項目"
 
 #: eeschema/tools/ee_actions.cpp:355 eeschema/tools/ee_actions.cpp:553
 #: eeschema/tools/sch_drawing_tools.cpp:1885
@@ -20781,14 +20777,12 @@ msgid "Add global labels"
 msgstr "新增全域性標籤"
 
 #: eeschema/tools/ee_actions.cpp:546
-#, fuzzy
 msgid "Draw text items"
-msgstr "其他文字專案"
+msgstr "繪製文字項目"
 
 #: eeschema/tools/ee_actions.cpp:554
-#, fuzzy
 msgid "Draw text box items"
-msgstr "新增文字框專案"
+msgstr "繪製文字框項目"
 
 #: eeschema/tools/ee_actions.cpp:562 pcbnew/tools/pcb_actions.cpp:190
 #, fuzzy
@@ -20838,11 +20832,11 @@ msgstr "新增圖片"
 
 #: eeschema/tools/ee_actions.cpp:615
 msgid "Repeat Last Item"
-msgstr "重複最後項"
+msgstr "重複最後項目"
 
 #: eeschema/tools/ee_actions.cpp:616
 msgid "Duplicates the last drawn item"
-msgstr "複製最後繪製的專案"
+msgstr "複製上一個繪製的項目"
 
 #: eeschema/tools/ee_actions.cpp:621 pcbnew/tools/pcb_actions.cpp:535
 msgid "Rotate Clockwise"
@@ -20850,7 +20844,7 @@ msgstr "順時針旋轉"
 
 #: eeschema/tools/ee_actions.cpp:622 pcbnew/tools/pcb_actions.cpp:536
 msgid "Rotates selected item(s) clockwise"
-msgstr "將選中的專案順時針旋轉"
+msgstr "將選中的項目順時針旋轉"
 
 #: eeschema/tools/ee_actions.cpp:630 pcbnew/tools/pcb_actions.cpp:546
 msgid "Rotate Counterclockwise"
@@ -20858,7 +20852,7 @@ msgstr "逆時針旋轉"
 
 #: eeschema/tools/ee_actions.cpp:631
 msgid "Rotates selected item(s) counter-clockwise"
-msgstr "逆時針旋轉所選專案"
+msgstr "將選中的項目逆時針旋轉"
 
 #: eeschema/tools/ee_actions.cpp:639 pcbnew/tools/pcb_actions.cpp:571
 msgid "Mirror Vertically"
@@ -20866,7 +20860,7 @@ msgstr "垂直映象"
 
 #: eeschema/tools/ee_actions.cpp:640
 msgid "Flips selected item(s) from top to bottom"
-msgstr "從上到下翻轉選定的專案"
+msgstr "從上到下翻轉選中的項目"
 
 #: eeschema/tools/ee_actions.cpp:648 pcbnew/tools/pcb_actions.cpp:564
 msgid "Mirror Horizontally"
@@ -20874,7 +20868,7 @@ msgstr "水平映象"
 
 #: eeschema/tools/ee_actions.cpp:649
 msgid "Flips selected item(s) from left to right"
-msgstr "從左到右翻轉選定的專案"
+msgstr "從左到右翻轉選中的項目"
 
 #: eeschema/tools/ee_actions.cpp:656 pcbnew/tools/edit_tool_move_fct.cpp:146
 #: pcbnew/tools/pcb_actions.cpp:579
@@ -20883,7 +20877,7 @@ msgstr "交換"
 
 #: eeschema/tools/ee_actions.cpp:657 pcbnew/tools/pcb_actions.cpp:580
 msgid "Swaps selected items' positions"
-msgstr "交換所選專案的位置"
+msgstr "交換所選項目的位置"
 
 #: eeschema/tools/ee_actions.cpp:665 pcbnew/tools/pcb_actions.cpp:675
 msgid "Properties..."
@@ -20891,7 +20885,7 @@ msgstr "屬性..."
 
 #: eeschema/tools/ee_actions.cpp:666 pcbnew/tools/pcb_actions.cpp:676
 msgid "Displays item properties dialog"
-msgstr "顯示項屬性對話方塊"
+msgstr "顯示項目屬性對話方塊"
 
 #: eeschema/tools/ee_actions.cpp:674
 msgid "Edit Reference Designator..."
@@ -20992,7 +20986,7 @@ msgstr "修改為標籤"
 
 #: eeschema/tools/ee_actions.cpp:765
 msgid "Change existing item to a label"
-msgstr "將現有專案更改為標籤"
+msgstr "將現有項目更改為標籤"
 
 #: eeschema/tools/ee_actions.cpp:773
 msgid "Change to Directive Label"
@@ -21000,7 +20994,7 @@ msgstr "修改為指令標籤"
 
 #: eeschema/tools/ee_actions.cpp:774
 msgid "Change existing item to a directive label"
-msgstr "將現有專案更改為指令標籤"
+msgstr "將現有項目更改為指令標籤"
 
 #: eeschema/tools/ee_actions.cpp:782
 msgid "Change to Hierarchical Label"
@@ -21008,7 +21002,7 @@ msgstr "修改為層次標籤"
 
 #: eeschema/tools/ee_actions.cpp:783
 msgid "Change existing item to a hierarchical label"
-msgstr "將現有專案更改為分層標籤"
+msgstr "將現有項目更改為分層標籤"
 
 #: eeschema/tools/ee_actions.cpp:791
 msgid "Change to Global Label"
@@ -21016,7 +21010,7 @@ msgstr "修改為全域性標籤"
 
 #: eeschema/tools/ee_actions.cpp:792
 msgid "Change existing item to a global label"
-msgstr "將現有專案更改為全域性標籤"
+msgstr "將現有項目更改為全域性標籤"
 
 #: eeschema/tools/ee_actions.cpp:800
 msgid "Change to Text"
@@ -21024,7 +21018,7 @@ msgstr "改為註釋文字"
 
 #: eeschema/tools/ee_actions.cpp:801
 msgid "Change existing item to a text comment"
-msgstr "將現有專案更改為文字註釋"
+msgstr "將現有項目更改為文字註釋"
 
 #: eeschema/tools/ee_actions.cpp:809
 msgid "Change to Text Box"
@@ -21032,7 +21026,7 @@ msgstr "改為文字框"
 
 #: eeschema/tools/ee_actions.cpp:810
 msgid "Change existing item to a text box"
-msgstr "將現有專案更改為文字框"
+msgstr "將現有項目更改為文字框"
 
 #: eeschema/tools/ee_actions.cpp:818 eeschema/tools/sch_edit_tool.cpp:2563
 msgid "Cleanup Sheet Pins"
@@ -21410,7 +21404,7 @@ msgstr "在 PCB 上選擇"
 
 #: eeschema/tools/ee_actions.cpp:1119
 msgid "Select corresponding items in PCB editor"
-msgstr "在印刷電路板編輯器中選擇相應專案"
+msgstr "在印刷電路板編輯器中選擇相應項目"
 
 #: eeschema/tools/ee_actions.cpp:1138
 #, fuzzy
@@ -21642,7 +21636,7 @@ msgstr "移動"
 #: eeschema/tools/ee_actions.cpp:1375 pagelayout_editor/tools/pl_actions.cpp:87
 #: pcbnew/tools/pcb_actions.cpp:456
 msgid "Moves the selected item(s)"
-msgstr "移動選擇項"
+msgstr "移動所選項目"
 
 #: eeschema/tools/ee_actions.cpp:1384 eeschema/tools/sch_move_tool.cpp:383
 msgid "Drag"
@@ -21650,12 +21644,11 @@ msgstr "拖動"
 
 #: eeschema/tools/ee_actions.cpp:1385
 msgid "Drags the selected item(s)"
-msgstr "拖動所選專案"
+msgstr "拖曳所選項目"
 
 #: eeschema/tools/ee_actions.cpp:1392 eeschema/tools/sch_move_tool.cpp:1760
-#, fuzzy
 msgid "Align Items to Grid"
-msgstr "將元素與網格對齊"
+msgstr "將項目對齊到網格線"
 
 #: eeschema/tools/ee_actions.cpp:1400
 msgid "Save Current Sheet Copy As..."
@@ -21826,7 +21819,7 @@ msgstr "庫： "
 #: eeschema/tools/ee_inspection_tool.cpp:371
 #: pcbnew/tools/board_inspection_tool.cpp:1563
 msgid "Library item: "
-msgstr "庫篩選器: "
+msgstr "庫項目: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:381
 #: pcbnew/tools/board_inspection_tool.cpp:1581
@@ -21896,7 +21889,7 @@ msgstr "無法從 \"%s\" 載入圖片。"
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:680
 #: pcbnew/tools/drawing_tool.cpp:1718
 msgid "No graphic items found in file."
-msgstr "在檔案中沒找到圖形項。"
+msgstr "在檔案中沒找到圖形項目。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:833
 #: eeschema/tools/sch_drawing_tools.cpp:915
@@ -21913,7 +21906,7 @@ msgstr "結點位置不包含可連線的電線和/或引腳。"
 #: eeschema/tools/sch_drawing_tools.cpp:1493
 #: eeschema/tools/symbol_editor_drawing_tools.cpp:181
 msgid "Press <ESC> to cancel item creation."
-msgstr "按下 <ESC> 取消專案建立。"
+msgstr "按下 <ESC> 取消項目建立。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:1578
 msgid "Click over a sheet."
@@ -21941,9 +21934,8 @@ msgstr "按下 <ESC> 取消圖框建立。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2497
 #: eeschema/tools/sch_drawing_tools.cpp:2503
-#, fuzzy
 msgid "Modify sch item"
-msgstr "已修改"
+msgstr "修改原理圖項目"
 
 #: eeschema/tools/sch_edit_tool.cpp:81
 msgid "Symbol Unit"
@@ -21989,9 +21981,8 @@ msgid "Label value cannot go below zero"
 msgstr "標籤值不能小於零"
 
 #: eeschema/tools/sch_edit_tool.cpp:1343
-#, fuzzy
 msgid "Repeat Item"
-msgstr "重複項"
+msgstr "重複項目"
 
 #: eeschema/tools/sch_edit_tool.cpp:1560 eeschema/tools/sch_edit_tool.cpp:1563
 #: eeschema/tools/symbol_editor_edit_tool.cpp:558
@@ -22284,21 +22275,21 @@ msgstr "僅 %s"
 #: pcbnew/widgets/panel_selection_filter.cpp:183
 #: pcbnew/widgets/panel_selection_filter_base.cpp:19
 msgid "All items"
-msgstr "所有專案"
+msgstr "所有項目"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:192
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:22
 #: pcbnew/widgets/panel_selection_filter.cpp:184
 #: pcbnew/widgets/panel_selection_filter_base.cpp:23
 msgid "Locked items"
-msgstr "鎖定專案"
+msgstr "已鎖定項目"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:193
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:25
 #: pcbnew/widgets/panel_selection_filter.cpp:185
 #: pcbnew/widgets/panel_selection_filter_base.cpp:25
 msgid "Allow selection of locked items"
-msgstr "允許選中鎖定專案"
+msgstr "允許選擇已鎖定的項目"
 
 #: eeschema/widgets/panel_sch_selection_filter.cpp:199
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:45
@@ -22319,7 +22310,7 @@ msgstr "圖片"
 #: pcbnew/widgets/panel_selection_filter.cpp:195
 #: pcbnew/widgets/panel_selection_filter_base.cpp:65
 msgid "Other items"
-msgstr "其他專案"
+msgstr "其他項目"
 
 #: eeschema/widgets/panel_sch_selection_filter_base.cpp:47
 #, fuzzy
@@ -22633,7 +22624,7 @@ msgstr "繪圖模式"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:60
 msgid "Sketch flashed items"
-msgstr "專案快速草圖"
+msgstr "閃爍草稿項目"
 
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:63
 msgid "Sketch lines"
@@ -23155,7 +23146,7 @@ msgid ""
 "Therefore the size of some items is undefined"
 msgstr ""
 "警告：此檔案沒有 D 程式碼定義\n"
-"因此，某些專案的大小未定義"
+"因此某些項目的大小未定義"
 
 #: gerbview/readgerb.cpp:93
 msgid ""
@@ -23163,7 +23154,7 @@ msgid ""
 "Therefore the size of some items is undefined"
 msgstr ""
 "警告：此檔案缺少一些 D 程式碼定義\n"
-"因此，某些專案的大小未定義"
+"因此某些項目的大小未定義"
 
 #: gerbview/rs274d.cpp:413
 msgid "Invalid Code Number"
@@ -23193,11 +23184,11 @@ msgstr "RS274X: GerbView 命令反相被忽略"
 
 #: gerbview/toolbars_gerber.cpp:131
 msgid "Highlight items belonging to this component"
-msgstr "高亮顯示屬於此元件的專案"
+msgstr "突顯屬於該元件的項目"
 
 #: gerbview/toolbars_gerber.cpp:144
 msgid "Highlight items belonging to this net"
-msgstr "高亮顯示屬於此網路的專案"
+msgstr "突顯屬於該網路的項目"
 
 #: gerbview/toolbars_gerber.cpp:158 gerbview/toolbars_gerber.cpp:161
 msgid "Attr:"
@@ -23205,7 +23196,7 @@ msgstr "屬性："
 
 #: gerbview/toolbars_gerber.cpp:160
 msgid "Highlight items with this aperture attribute"
-msgstr "高亮顯示含此光圈（Aperture）屬性的專案"
+msgstr "突出顯示具有此孔徑屬性的項目"
 
 #: gerbview/toolbars_gerber.cpp:174 gerbview/toolbars_gerber.cpp:176
 msgid "DCode:"
@@ -23364,11 +23355,11 @@ msgstr "在輪廓模式下顯示線"
 
 #: gerbview/tools/gerbview_actions.cpp:201
 msgid "Sketch Flashed Items"
-msgstr "專案快速草圖"
+msgstr "閃爍草稿項目"
 
 #: gerbview/tools/gerbview_actions.cpp:202
 msgid "Show flashed items in outline mode"
-msgstr "在輪廓模式下顯示焊盤"
+msgstr "以輪廓模式顯示閃爍的項目"
 
 #: gerbview/tools/gerbview_actions.cpp:210
 msgid "Sketch Polygons"
@@ -23444,12 +23435,12 @@ msgstr "沒有檔案載入到活躍層 %d。"
 #: gerbview/tools/gerbview_selection_tool.cpp:68
 #, c-format
 msgid "Highlight Items of Component '%s'"
-msgstr "高亮元件 \"%s\" 的專案"
+msgstr "突出顯示元件 '%s' 的項目"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:76
 #, c-format
 msgid "Highlight Items of Net '%s'"
-msgstr "高亮網路 \"%s\" 的專案"
+msgstr "突出顯示網路 '%s' 的項目"
 
 #: gerbview/tools/gerbview_selection_tool.cpp:86
 #, c-format
@@ -23476,7 +23467,7 @@ msgstr "層"
 #: gerbview/widgets/gerbview_layer_widget.cpp:79
 #: gerbview/widgets/layer_widget.cpp:556
 msgid "Items"
-msgstr "專案"
+msgstr "項目"
 
 #: gerbview/widgets/gerbview_layer_widget.cpp:130
 msgid "Show DCodes identification"
@@ -23967,7 +23958,7 @@ msgstr "排除值文字"
 #: kicad/cli/command_pcb_export_dxf.cpp:54
 #: pcbnew/dialogs/dialog_plot_base.cpp:332
 msgid "Plot graphic items using their contours"
-msgstr "使用輪廓繪製圖形專案"
+msgstr "使用它們的輪廓繪製圖形項目"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:58
 #: kicad/cli/command_pcb_export_gerber.cpp:52
@@ -25746,7 +25737,7 @@ msgstr "終點 Y："
 
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.h:69
 msgid "New Item"
-msgstr "新建項"
+msgstr "新項目"
 
 #: pagelayout_editor/dialogs/dialogs_for_printing.cpp:234
 msgid "Print Drawing Sheet"
@@ -25897,7 +25888,7 @@ msgstr "應用"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:459
 msgid "Item Properties"
-msgstr "專案屬性"
+msgstr "項目屬性"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:502
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:385
@@ -26047,8 +26038,8 @@ msgid ""
 "Simulate page 1 or other pages to show how items\n"
 "which are not on all page are displayed"
 msgstr ""
-"該項示範顯示為第一頁，或後續頁。\n"
-"這並非所有圖框上都顯示"
+"模擬第1頁或其他頁面，\n"
+"以顯示未在所有頁面上的項目如何顯示"
 
 #: pagelayout_editor/tools/pl_actions.cpp:45
 msgid "Add Line"
@@ -26084,7 +26075,7 @@ msgstr "顯示設計檢查器"
 
 #: pagelayout_editor/tools/pl_actions.cpp:106
 msgid "Show the list of items in the drawing sheet"
-msgstr "顯示圖紙中專案的列表"
+msgstr "顯示圖紙中的項目列表"
 
 #: pagelayout_editor/tools/pl_actions.cpp:112
 msgid "Page Preview Settings..."
@@ -27308,11 +27299,11 @@ msgstr "新增穩壓器"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:113
 msgid "Enter a new item to the current list of available regulators"
-msgstr "在當前列表中輸入新的可用穩壓器項"
+msgstr "在當前列表中輸入新的可用穩壓器項目"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:118
 msgid "Remove an item from the current list of available regulators"
-msgstr "刪除當前列表中可用的穩壓器的項"
+msgstr "刪除當前列表中可用的穩壓器的項目"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:141
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:119
@@ -30322,7 +30313,7 @@ msgstr "點數"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:70
 msgid "Items Spacing"
-msgstr "物件間距"
+msgstr "項目間距"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:78
 msgid "Horizontal spacing:"
@@ -30441,16 +30432,15 @@ msgid "Grid Array"
 msgstr "網格陣列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:286
-#, fuzzy
 msgid "Items to Duplicate"
-msgstr "要複製的物件"
+msgstr "要複製的項目"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:288
 msgid ""
 "This is the position of the selected item,\n"
 "or the position of the group to duplicate"
 msgstr ""
-"這是所選物件的位置\n"
+"這是所選項目的位置\n"
 "或要複製的群組的位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:298
@@ -30513,7 +30503,7 @@ msgstr "正角表示一個逆時針旋轉。 0° 角將產生一個平分到“�
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:450
 msgid "Item count:"
-msgstr "物件數量:"
+msgstr "項目數量:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:455
 msgid "How many items in the array."
@@ -46321,7 +46311,7 @@ msgstr "開啟偏好設定"
 msgid ""
 "Automatic refill of zones can be turned off in Preferences if it becomes too "
 "slow."
-msgstr "自動補充區域可以在首選項中關閉，如果它變得太慢。"
+msgstr "自動補充區域可以在偏好設定中關閉，如果它變得太慢。"
 
 #: pcbnew/tools/zone_filler_tool.cpp:347
 msgid "Fill Zone"
