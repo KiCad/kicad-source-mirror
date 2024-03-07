@@ -263,7 +263,7 @@ void BOARD::IncrementTimeStamp()
         || !m_ZoneBBoxCache.empty()
         || m_CopperItemRTreeCache )
     {
-        std::unique_lock<std::shared_mutex> cacheLock( m_CachesMutex );
+        std::unique_lock<std::shared_mutex> writeLock( m_CachesMutex );
 
         m_IntersectsAreaCache.clear();
         m_EnclosedByAreaCache.clear();

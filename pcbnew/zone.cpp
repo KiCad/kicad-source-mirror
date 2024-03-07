@@ -345,25 +345,22 @@ const BOX2I ZONE::GetBoundingBox() const
     if( const BOARD* board = GetBoard() )
     {
         std::unordered_map<const ZONE*, BOX2I>& cache = board->m_ZoneBBoxCache;
-        std::shared_lock<std::shared_mutex>     readLock( const_cast<BOARD*>( board )->m_CachesMutex );
-        auto                                    cacheIter = cache.find( this );
 
-        if( cacheIter != cache.end() )
-            return cacheIter->second;
+        {
+            std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
 
-        readLock.unlock();
+            auto cacheIter = cache.find( this );
 
-        // if we get here we need an exclusive lock to cache the entry
-        std::unique_lock<std::shared_mutex> writeLock( const_cast<BOARD*>( board )->m_CachesMutex );
-
-        // check again for the cached item; it might have been computed meanwhile by another thread
-        cacheIter = cache.find( this );
-        if( cacheIter != cache.end() )
-            return cacheIter->second;
+            if( cacheIter != cache.end() )
+                return cacheIter->second;
+        }
 
         BOX2I bbox = m_Poly->BBox();
 
-        cache[ this ] = bbox;
+        {
+            std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+            cache[ this ] = bbox;
+        }
 
         return bbox;
     }
@@ -374,18 +371,9 @@ const BOX2I ZONE::GetBoundingBox() const
 
 void ZONE::CacheBoundingBox()
 {
-    BOARD*                                  board = GetBoard();
-    std::unordered_map<const ZONE*, BOX2I>& cache = board->m_ZoneBBoxCache;
-    std::shared_lock<std::shared_mutex>     readLock( board->m_CachesMutex );
-    auto                                    cacheIter = cache.find( this );
-
-    if( cacheIter == cache.end() ) {
-        readLock.unlock();
-        std::unique_lock<std::shared_mutex> writeLock(board->m_CachesMutex);
-        // check again in case another thread has already calculated the entry while we were waiting for the exclusive lock
-        if ( cache.count( this )  == 0 )
-            cache[this] = m_Poly->BBox();
-    }
+    // GetBoundingBox() will cache it for us, and there's no sense duplicating the somewhat tricky
+    // locking code.
+    GetBoundingBox();
 }
 
 

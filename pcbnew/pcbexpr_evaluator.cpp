@@ -58,28 +58,32 @@ public:
         // in the ENUM_MAP: one for the canonical layer name and one for the user layer name.
         // We need to check against both.
 
-        wxPGChoices&                        layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
-        const wxString&                     layerName = b->AsString();
-        BOARD*                              board = static_cast<PCBEXPR_CONTEXT*>( aCtx )->GetBoard();
-        std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
-        auto                                i = board->m_LayerExpressionCache.find( layerName );
-        LSET                                mask;
+        wxPGChoices&    layerMap = ENUM_MAP<PCB_LAYER_ID>::Instance().Choices();
+        const wxString& layerName = b->AsString();
+        BOARD*          board = static_cast<PCBEXPR_CONTEXT*>( aCtx )->GetBoard();
 
-        if( i == board->m_LayerExpressionCache.end() )
         {
-            for( unsigned ii = 0; ii < layerMap.GetCount(); ++ii )
-            {
-                wxPGChoiceEntry& entry = layerMap[ii];
+            std::shared_lock<std::shared_mutex> readLock( board->m_CachesMutex );
 
-                if( entry.GetText().Matches( layerName ) )
-                    mask.set( ToLAYER_ID( entry.GetValue() ) );
-            }
+            auto i = board->m_LayerExpressionCache.find( layerName );
 
-            board->m_LayerExpressionCache[ layerName ] = mask;
+            if( i != board->m_LayerExpressionCache.end() )
+                return i->second.Contains( m_layer );
         }
-        else
+
+        LSET mask;
+
+        for( unsigned ii = 0; ii < layerMap.GetCount(); ++ii )
         {
-            mask = i->second;
+            wxPGChoiceEntry& entry = layerMap[ii];
+
+            if( entry.GetText().Matches( layerName ) )
+                mask.set( ToLAYER_ID( entry.GetValue() ) );
+        }
+
+        {
+            std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
+            board->m_LayerExpressionCache[ layerName ] = mask;
         }
 
         return mask.Contains( m_layer );

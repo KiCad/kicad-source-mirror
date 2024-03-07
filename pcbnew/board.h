@@ -1227,7 +1227,7 @@ public:
     };
 
     // ------------ Run-time caches -------------
-    std::shared_mutex                                     m_CachesMutex;
+    mutable std::shared_mutex                             m_CachesMutex;
     std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsCourtyardCache;
     std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsFCourtyardCache;
     std::unordered_map<PTR_PTR_CACHE_KEY, bool>           m_IntersectsBCourtyardCache;
