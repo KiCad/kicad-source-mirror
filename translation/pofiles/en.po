@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-28 09:55-0800\n"
+"POT-Creation-Date: 2024-03-08 00:00+0100\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -492,6 +492,9 @@ msgstr "Background End"
 msgid "Background gradient end color"
 msgstr "Background gradient end color"
 
+msgid "Use board stackup colors"
+msgstr "Use board stackup colors"
+
 #, c-format
 msgid ""
 "Save and restore color and visibility combinations.\n"
@@ -518,6 +521,9 @@ msgstr ""
 
 msgid "Left double click or middle click to change color"
 msgstr "Left double click or middle click to change color"
+
+msgid "Uncheck 'Use board stackup colors' to allow color editing."
+msgstr "Uncheck 'Use board stackup colors' to allow color editing."
 
 #, c-format
 msgid "Show or hide %s"
@@ -2672,6 +2678,9 @@ msgstr "Dash-Dot"
 msgid "Dash-Dot-Dot"
 msgstr "Dash-Dot-Dot"
 
+msgid "Set color to transparent to use layer default color."
+msgstr "Set color to transparent to use layer default color."
+
 msgid ""
 "The netclasses have been changed outside the Setup dialog.\n"
 "Do you wish to reload them?"
@@ -2721,6 +2730,9 @@ msgstr "Schematic wire color"
 msgid "Schematic wire line style"
 msgstr "Schematic wire line style"
 
+msgid "PCB netclass color"
+msgstr "PCB netclass color"
+
 msgid "The default net class is required."
 msgstr "The default net class is required."
 
@@ -2755,6 +2767,9 @@ msgstr "DP Width"
 msgid "DP Gap"
 msgstr "DP Gap"
 
+msgid "PCB Color"
+msgstr "PCB Color"
+
 msgid "Wire Thickness"
 msgstr "Wire Thickness"
 
@@ -2769,6 +2784,9 @@ msgstr "Default"
 
 msgid "Set color to transparent to use KiCad default color."
 msgstr "Set color to transparent to use KiCad default color."
+
+msgid "Import colors from schematic"
+msgstr "Import colors from schematic"
 
 msgid "Netclass assignments:"
 msgstr "Netclass assignments:"
@@ -3903,6 +3921,14 @@ msgid "Failed to parse number from '%s'"
 msgstr "Failed to parse number from '%s'"
 
 #, c-format
+msgid "JSON error reading '%s': %s"
+msgstr "JSON error reading '%s': %s"
+
+#, c-format
+msgid "Error reading '%s': %s"
+msgstr "Error reading '%s': %s"
+
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
@@ -3913,14 +3939,6 @@ msgstr ""
 #, c-format
 msgid "Cannot read ZIP archive '%s'"
 msgstr "Cannot read ZIP archive '%s'"
-
-#, c-format
-msgid "JSON error reading '%s': %s"
-msgstr "JSON error reading '%s': %s"
-
-#, c-format
-msgid "Error reading '%s': %s"
-msgstr "Error reading '%s': %s"
 
 #, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
@@ -9121,18 +9139,6 @@ msgstr "Sheet border:"
 msgid "Sheet background:"
 msgstr "Sheet background:"
 
-msgid "Clicking on a pin selects the symbol"
-msgstr "Clicking on a pin selects the symbol"
-
-msgid ""
-"In schematic editor:\n"
-"If enabled, clicking on a pin select the parent symbol.\n"
-"If disabled, clicking on a pin select only the pin."
-msgstr ""
-"In schematic editor:\n"
-"If enabled, clicking on a pin select the parent symbol.\n"
-"If disabled, clicking on a pin select only the pin."
-
 msgid "Left Click Mouse Commands"
 msgstr "Left Click Mouse Commands"
 
@@ -9689,6 +9695,11 @@ msgstr "There is no symbol selected to save."
 
 msgid "Output path must not conflict with existing path\n"
 msgstr "Output path must not conflict with existing path\n"
+
+msgid ""
+"Output path must be specified to convert legacy and non-KiCad libraries\n"
+msgstr ""
+"Output path must be specified to convert legacy and non-KiCad libraries\n"
 
 msgid "Saving symbol library in updated format\n"
 msgstr "Saving symbol library in updated format\n"
@@ -10923,14 +10934,6 @@ msgstr ""
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Storage file not fully parsed (%d bytes remaining)."
 
-msgid "Blanket not currently supported."
-msgstr "Blanket not currently supported."
-
-#, c-format
-msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
-msgstr ""
-"Unknown or unexpected record ID %d found inside \"Additional\" section."
-
 msgid "Expected Altium Schematic file version 5.0"
 msgstr "Expected Altium Schematic file version 5.0"
 
@@ -10946,10 +10949,12 @@ msgstr "Parameter Set not currently supported."
 msgid "Compile mask not currently supported."
 msgstr "Compile mask not currently supported."
 
+msgid "Blanket not currently supported."
+msgstr "Blanket not currently supported."
+
 #, c-format
-msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
-msgstr ""
-"Unknown or unexpected record id %d found inside \"FileHeader\" section."
+msgid "Unknown or unexpected record id %d found in %s."
+msgstr "Unknown or unexpected record id %d found in %s."
 
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
@@ -11009,10 +11014,6 @@ msgstr "Error reading image %s."
 #, c-format
 msgid "File not found %s."
 msgstr "File not found %s."
-
-#, c-format
-msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Unknown or unexpected record id %d found in %s."
 
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Expected Altium Schematic Library file version 5.0"
@@ -13898,6 +13899,12 @@ msgstr "Export…"
 msgid "Export a symbol to a new library file"
 msgstr "Export a symbol to a new library file"
 
+msgid "Edit in a Text Editor..."
+msgstr "Edit in a Text Editor..."
+
+msgid "Open a library file with a text editor"
+msgstr "Open a library file with a text editor"
+
 msgid "Update Symbol Fields..."
 msgstr "Update Symbol Fields..."
 
@@ -15078,6 +15085,9 @@ msgstr "SPICE Netlist"
 msgid "No symbol library selected."
 msgstr "No symbol library selected."
 
+msgid "No text editor selected in KiCad. Please choose one."
+msgstr "No text editor selected in KiCad. Please choose one."
+
 msgid "No symbol selected"
 msgstr "No symbol selected"
 
@@ -16124,9 +16134,6 @@ msgstr "Upgrades the footprint library to the current kicad version format"
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr "Forces the footprint library to be resaved regardless of versioning"
 
-msgid "Footprint library path does not exist or is not accessible\n"
-msgstr "Footprint library path does not exist or is not accessible\n"
-
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 msgstr "Runs the Design Rules Check (DRC) on the PCB and creates a report"
 
@@ -16188,17 +16195,17 @@ msgstr "Output file format, options: step, glb (binary glTF)"
 msgid "Overwrite output file"
 msgstr "Overwrite output file"
 
-msgid "Use Grid Origin for output origin"
-msgstr "Use Grid Origin for output origin"
-
-msgid "Use Drill Origin for output origin"
-msgstr "Use Drill Origin for output origin"
-
 msgid "Exclude 3D models for components with 'Unspecified' footprint type"
 msgstr "Exclude 3D models for components with 'Unspecified' footprint type"
 
 msgid "Exclude 3D models for components with 'Do not populate' attribute"
 msgstr "Exclude 3D models for components with 'Do not populate' attribute"
+
+msgid "Use Grid Origin for output origin"
+msgstr "Use Grid Origin for output origin"
+
+msgid "Use Drill Origin for output origin"
+msgstr "Use Drill Origin for output origin"
 
 msgid ""
 "Substitute STEP or IGS models with the same name in place of VRML models"
@@ -27010,8 +27017,8 @@ msgstr "Trace length out of range"
 msgid "Skew between traces out of range"
 msgstr "Skew between traces out of range"
 
-msgid "Too many vias on a connection"
-msgstr "Too many vias on a connection"
+msgid "Too many or too few vias on a connection"
+msgstr "Too many or too few vias on a connection"
 
 msgid "Differential pair gap out of range"
 msgstr "Differential pair gap out of range"
@@ -27508,6 +27515,16 @@ msgstr "(%s max skew %s; actual %s; average net length %s; actual %s)"
 #, c-format
 msgid "(%s max count %d; actual %d)"
 msgstr "(%s max count %d; actual %d)"
+
+msgid "Too many vias on a connection"
+msgstr "Too many vias on a connection"
+
+#, c-format
+msgid "(%s min count %d; actual %d)"
+msgstr "(%s min count %d; actual %d)"
+
+msgid "Too few vias on a connection"
+msgstr "Too few vias on a connection"
 
 msgid "Gathering length-constrained connections..."
 msgstr "Gathering length-constrained connections..."
@@ -30731,6 +30748,9 @@ msgstr "Failed to plot to '%s'.\n"
 msgid "Failed to create output directory\n"
 msgstr "Failed to create output directory\n"
 
+msgid "Footprint library path does not exist or is not accessible\n"
+msgstr "Footprint library path does not exist or is not accessible\n"
+
 msgid "Loading footprint library\n"
 msgstr "Loading footprint library\n"
 
@@ -33883,6 +33903,12 @@ msgstr "Set opacity of %s"
 msgid "Set Netclass Color"
 msgstr "Set Netclass Color"
 
+msgid "Use Color from Schematic"
+msgstr "Use Color from Schematic"
+
+msgid "Clear Netclass Color"
+msgstr "Clear Netclass Color"
+
 #, c-format
 msgid "Highlight Nets in %s"
 msgstr "Highlight Nets in %s"
@@ -34189,9 +34215,6 @@ msgstr ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 
-msgid "KiCad Main Window"
-msgstr "KiCad Main Window"
-
 msgid "KiCad PCB Layout Editor"
 msgstr "KiCad PCB Layout Editor"
 
@@ -34221,6 +34244,33 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Clicking on a pin selects the symbol"
+#~ msgstr "Clicking on a pin selects the symbol"
+
+#~ msgid ""
+#~ "In schematic editor:\n"
+#~ "If enabled, clicking on a pin select the parent symbol.\n"
+#~ "If disabled, clicking on a pin select only the pin."
+#~ msgstr ""
+#~ "In schematic editor:\n"
+#~ "If enabled, clicking on a pin select the parent symbol.\n"
+#~ "If disabled, clicking on a pin select only the pin."
+
+#, c-format
+#~ msgid ""
+#~ "Unknown or unexpected record ID %d found inside \"Additional\" section."
+#~ msgstr ""
+#~ "Unknown or unexpected record ID %d found inside \"Additional\" section."
+
+#, c-format
+#~ msgid ""
+#~ "Unknown or unexpected record id %d found inside \"FileHeader\" section."
+#~ msgstr ""
+#~ "Unknown or unexpected record id %d found inside \"FileHeader\" section."
+
+#~ msgid "KiCad Main Window"
+#~ msgstr "KiCad Main Window"
 
 #~ msgid "Move board Left"
 #~ msgstr "Move board Left"
@@ -39292,9 +39342,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Board Colors"
 #~ msgstr "Board Colors"
-
-#~ msgid "Use board stackup colors"
-#~ msgstr "Use board stackup colors"
 
 #~ msgid "Use colors:"
 #~ msgstr "Use colors:"
