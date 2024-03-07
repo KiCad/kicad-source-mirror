@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-07 00:01+0000\n"
+"PO-Revision-Date: 2024-03-07 22:55+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -690,7 +690,7 @@ msgstr "사용자 ECO2 레이어 보기"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:68
 msgid "Through-hole Models"
-msgstr "관통형 모델"
+msgstr "관통홀 모델"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:69
 msgid "SMD Models"
@@ -4505,7 +4505,7 @@ msgstr "비아 패드 직경"
 
 #: common/dialogs/panel_setup_netclasses.cpp:541
 msgid "Via plated hole diameter"
-msgstr "비아 도금 구멍 직경"
+msgstr "비아 도금홀 직경"
 
 #: common/dialogs/panel_setup_netclasses.cpp:542
 msgid "Microvia pad diameter"
@@ -4513,7 +4513,7 @@ msgstr "마이크로비아 패드 직경"
 
 #: common/dialogs/panel_setup_netclasses.cpp:543
 msgid "Microvia plated hole diameter"
-msgstr "마이크로비아 도금 구멍 직경"
+msgstr "마이크로비아 도금홀 직경"
 
 #: common/dialogs/panel_setup_netclasses.cpp:544
 msgid "Differential pair track width"
@@ -6864,11 +6864,11 @@ msgstr "비아 홀 벽"
 
 #: common/layer_id.cpp:174
 msgid "Plated holes"
-msgstr "도금된 홀"
+msgstr "도금 홀"
 
 #: common/layer_id.cpp:175
 msgid "Plated hole walls"
-msgstr "도금된 홀 벽"
+msgstr "도금 홀 벽"
 
 #: common/layer_id.cpp:176
 msgid "Non-plated holes"
@@ -27592,11 +27592,11 @@ msgstr "비아를 둘러싼 패드의 직경 (환형 고리)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "클리어런스 홀 직경:"
+msgstr "홀 지름 클리어런스 :"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "접지면의 클리어런스 홀 직경"
+msgstr "접지면의 홀 지름 클리어런스"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -27650,8 +27650,8 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "주의:\n"
-"비아 패드 직경 >= 클리어런스 홀 직경.\n"
-"일부 매개변수는 구리 영역 내의 비아에 대해서 계산될 수 없습니다."
+"비아 패드 지름 >= 홀 지름 클리어런스 .\n"
+"일부 매개 변수는 구리 영역 내부의 비아에 대해 계산할 수 없습니다."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
 msgid "Thermal resistance:"
@@ -29733,7 +29733,7 @@ msgstr "보드 크기"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:196
 msgid "Subtract holes from board area"
-msgstr "기판 영역에서 홀 부분들을 뺍니다"
+msgstr "기판 영역에서 홀 빼기"
 
 #: pcbnew/dialogs/dialog_board_statistics_base.cpp:199
 msgid "Exclude footprints with no pads"
@@ -29861,7 +29861,7 @@ msgstr "중복 비아 삭제 (&d)"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:31
 msgid "remove vias on through hole pads and superimposed vias"
-msgstr "스루홀 패드와 겹쳐진 비아에서의 비아 삭제"
+msgstr "스루홀 패드와 중첩된 비아에서 비아 제거"
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:35
 msgid "Delete vias connected on only one layer"
@@ -32414,10 +32414,10 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
-"타원형 홀은 기판 제조 업체에 문제를 자주 일으킵니다.\n"
-"\"라우트 명령어 사용\" 은 G00 라우트 명령어를 사용합니다 (권장합니다)\n"
-"\"대체 모드\" 는 다른 드릴 / 라우트 명령어를 사용합니다 (G85)\n"
-"(권장하는 명령어가 동작하지 않을 때만 사용하세요)"
+"타원형 홀은 기판 제조 업체에서 자주 문제를 일으킵니다.\n"
+"\"라우트 명령 사용\" 은 G00 경로 명령을 사용합니다 (권장)\n"
+"\"대체 모드 사용\" 은 다른 드릴 / 경로 명령(G85)을 사용합니다\n"
+"(권장 명령이 작동하지 않는 경우에만 사용)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:78
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
@@ -33511,11 +33511,11 @@ msgstr "오류: 패드의 크기는 양수여야 합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1265
 msgid "Warning: Pad hole not inside pad shape."
-msgstr "경고: 패드 구멍이 패드 모양 안에 있지 않습니다."
+msgstr "경고: 패드 홀이 패드 형상 안에 있지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1278
 msgid "Warning: Pad hole will leave no copper."
-msgstr "주의: 패드 구멍에 구리가 놓여있지 않습니다."
+msgstr "경고: 패드 홀에 동박이 전혀 없습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1283
 msgid "Warning: Negative local clearance values will have no effect."
@@ -33553,8 +33553,8 @@ msgstr "오류: 패드에 레이어가 없습니다."
 msgid ""
 "Warning: Plated through holes should normally have a copper pad on at least "
 "one layer."
-msgstr ""
-"경고: 도금된 스루홀은 보통 적어도 한 층 이상의 구리 패드가 있어야 합니다."
+msgstr "경고: 도금 스루홀에는 일반적으로 적어도 한 층 이상에 구리 패드가 있어야 "
+"합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1349
 msgid "Error: Trapazoid delta is too large."
@@ -33562,7 +33562,7 @@ msgstr "오류: Trapazoid delta가 너무 큽니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1358
 msgid "Error: Through hole pad has no hole."
-msgstr "오류: 관통 구멍 패드에 구멍이 없습니다."
+msgstr "오류: 스루홀 패드에 홀이 없습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1365
 msgid ""
@@ -33801,11 +33801,11 @@ msgstr "오른쪽 하단"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:361
 msgid "Hole shape:"
-msgstr "구멍 모양:"
+msgstr "홀 모양:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:402
 msgid "Offset shape from hole"
-msgstr "홀에서의 오프셋 형상"
+msgstr "홀에서 오프셋 형상"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:458
 msgid "Specify pad to die length"
@@ -33871,15 +33871,14 @@ msgid ""
 "Castellated specify castellated through hole pads on a board edge\n"
 "These properties are specified in Gerber X2  files."
 msgstr ""
-"특수한 목적 또는 제약을 위해 기판 제조 파일에 추가할 수 있는 속성들:\n"
-"BGA 속성은 BGA 풋프린트 패드용입니다\n"
-"지역 기준은 상위 풋프린트에 대한 기준입니다\n"
-"전역 기준은 전체 기판에 대한 기준입니다\n"
-"테스트 포인트 패드는 거버 파일에서 테스트 포인트를 지정할 때 유용합니다\n"
-"방열 패드는 단열 패드를 지정합니다\n"
-"카스텔레이티드는 기판 가장자리의 단면에 위치한 성곽형 스루홀 패드를 지정합니"
-"다\n"
-"이러한 속성들은 거버 X2 파일에 지정되어 있습니다."
+"제작 파일에서 특별한 목적이나 제약 조건을 지정하는 선택적 속성:\n"
+"BGA 속성은 BGA 풋프린트 패드용\n"
+"지역 기준은 상위 풋프린트에 대한 기준\n"
+"전역 기준은 전체 기판에 대한 기준\n"
+"테스트 포인트 패드는 거버 파일에서 테스트 포인트를 지정할 때 유용\n"
+"히트싱크 패드는 방열 패드를 지정\n"
+"캐스텔레이션은 기판 가장자리에 있는 성곽형 스루홀 패드를 지정\n"
+"이러한 속성들은 거버 X2 파일에 지정합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558 pcbnew/pad.cpp:1901
 msgid "BGA pad"
@@ -33903,7 +33902,7 @@ msgstr "히트 싱크 패드"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 msgid "Castellated pad (through hole only)"
-msgstr "카스텔레이티드 패드 (스루홀 전용)"
+msgstr "성곽형 패드 (스루홀 전용)"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
@@ -35038,7 +35037,7 @@ msgstr "네트 변경되지 않은 채로 놔두기"
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:595
 #: pcbnew/dialogs/dialog_track_via_size.cpp:59
 msgid "Via hole size must be smaller than via diameter"
-msgstr "비아 홀 크기는 비아 직경보다 작아야 합니다"
+msgstr "비아 홀 크기는 비아 직경보다 작아야 함"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:604
 msgid "Via start layer and end layer cannot be the same"
@@ -35782,7 +35781,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
-msgstr "구리부터 홀 클리어런스:"
+msgstr "동박과 홀간 클리어런스:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:133
 msgid ""
@@ -35826,7 +35825,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
-msgstr "홀 간 클리어런스:"
+msgstr "홀-홀 간 클리어런스:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:206
 msgid ""
@@ -37723,7 +37722,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:373
 msgid "No via hole size defined."
-msgstr "비아 홀 크기가 정의되지 않았습니다."
+msgstr "비아 홀 크기 미정의."
 
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:387
 msgid "No differential pair gap defined."
@@ -37792,7 +37791,7 @@ msgstr "보드의 최대 실크 텍스트 두께 제한"
 
 #: pcbnew/drc/drc_engine.cpp:195
 msgid "board setup constraints hole"
-msgstr "기판 구성 제약 홀"
+msgstr "기판의 홀 제약조건 설정"
 
 #: pcbnew/drc/drc_engine.cpp:200
 msgid "board setup constraints edge"
@@ -37839,7 +37838,7 @@ msgstr "확인된 영역 연결 유형: %s."
 #: pcbnew/drc/drc_engine.cpp:642
 #, c-format
 msgid "Pad is not a through hole pad; connection will be: %s."
-msgstr "패드는 PTH 패드가 아닙니다; %s가 연결 됩니다."
+msgstr "패드는 스루홀 패드가 아님; %s가 연결됨."
 
 #: pcbnew/drc/drc_engine.cpp:759 pcbnew/drc/drc_engine.cpp:769
 #, c-format
@@ -37962,12 +37961,12 @@ msgstr "비아 지름 %s 점검: 최소 %s."
 #: pcbnew/drc/drc_engine.cpp:1011
 #, c-format
 msgid "Checking %s hole size: opt %s."
-msgstr "확인 중 %s 홀 크기: 선택 %s."
+msgstr "%s 홀 크기 확인: 최적 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1017
 #, c-format
 msgid "Checking %s hole size: min %s."
-msgstr "구멍 크기 %s 점검: 최소 %s."
+msgstr "%s 홀 크기 확인: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1027
 #, c-format
@@ -37987,7 +37986,7 @@ msgstr "클리어런스 %s 점검: 최소 %s."
 #: pcbnew/drc/drc_engine.cpp:1049
 #, c-format
 msgid "Checking %s hole to hole: min %s."
-msgstr "홀에서 홀까지 %s 점검: 최소 %s."
+msgstr "%s 홀-홀 확인: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1055 pcbnew/drc/drc_engine.cpp:1081
 #: pcbnew/drc/drc_engine.cpp:1528
@@ -38038,7 +38037,7 @@ msgstr "제약 조건 계층이 일치하지 않음."
 #: pcbnew/drc/drc_engine.cpp:1222
 #, c-format
 msgid "%s is not a drilled hole; rule ignored."
-msgstr "%s는 드릴 구멍이 아닙니다. 규칙이 무시되었습니다."
+msgstr "%s는 드릴홀이 아님; 규칙이 무시됨."
 
 #: pcbnew/drc/drc_engine.cpp:1232
 msgid "Unconditional constraint applied."
@@ -38186,11 +38185,11 @@ msgstr "홀 클리어런스 위반"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
-msgstr "드릴된 홀이 너무 가까움"
+msgstr "드릴홀이 서로 너무 가까움"
 
 #: pcbnew/drc/drc_item.cpp:109
 msgid "Drilled holes co-located"
-msgstr "드릴된 홀이 너무 가까이 배치됨"
+msgstr "드릴 홀이 함께 배치됨"
 
 #: pcbnew/drc/drc_item.cpp:113
 msgid "Copper connection too narrow"
@@ -38206,7 +38205,7 @@ msgstr "환형 폭"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Hole size out of range"
-msgstr "범위를 벗어난 구멍 크기"
+msgstr "홀 크기 범위를 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:129
 msgid "Via diameter"
@@ -38218,7 +38217,7 @@ msgstr "패드스택이 유효하지 않음"
 
 #: pcbnew/drc/drc_item.cpp:137
 msgid "Micro via hole size out of range"
-msgstr "범위를 벗어난 마이크로 비아 홀 크기"
+msgstr "마이크로 비아 홀 크기가 범위를 벗어남"
 
 #: pcbnew/drc/drc_item.cpp:141
 msgid "Courtyards overlap"
@@ -38513,7 +38512,7 @@ msgstr "배선과 비아 클리어런스 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:148
 msgid "Checking hole clearances..."
-msgstr "홀 클리어런스 확인 중..."
+msgstr "홀 클리어런스 확인..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:156
 msgid "Checking pad clearances..."
@@ -38610,15 +38609,15 @@ msgstr "실크에서 기판까지 모서리 클리어런스 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
-msgstr "패드 홀 확인 중..."
+msgstr "패드 홀 확인..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:93
 msgid "Checking via holes..."
-msgstr "비아 홀 확인 중..."
+msgstr "비아 홀 확인..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:98
 msgid "Checking micro-via holes..."
-msgstr "마이크로 비아 홀 확인 중..."
+msgstr "마이크로 비아 홀 확인..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:158
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:227
@@ -38636,7 +38635,7 @@ msgstr "(%s 최대 폭 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
-msgstr "홀과 홀 사이 클리어런스 확인 중..."
+msgstr "홀-홀 간 클리어런스 확인..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:304
 #, c-format
@@ -38753,7 +38752,7 @@ msgstr "%s 모따기된 모서리가 다름."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:342
 #, c-format
 msgid "%s shape offset from hole differs."
-msgstr "구멍의 %s 모양 오프셋이 다름."
+msgstr "홀의 %s 모양 오프셋이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:345
 #, c-format
@@ -38888,7 +38887,7 @@ msgstr "%s 해치 다듬기 양이 다름."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:523
 #, c-format
 msgid "%s minimum hatch hole setting differs."
-msgstr "%s 최소 해치 홀 설정이 다릅니다."
+msgstr "%s 최소 해치 홀 설정이 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:529
 #, c-format
@@ -39228,7 +39227,7 @@ msgstr "IDF 내보내기 실패:\n"
 
 #: pcbnew/exporters/exporter_vrml.cpp:810
 msgid "VRML Export Failed: Could not add holes to contours."
-msgstr "VRML 내보내기 실패: 윤곽에 홀을 추가할 수 없습니다."
+msgstr "VRML 내보내기 실패: 윤곽에 홀을 추가할 수 없음."
 
 #: pcbnew/exporters/exporter_vrml.cpp:1241
 msgid "No project when exporting the VRML file"
@@ -39603,7 +39602,7 @@ msgstr "(PTH 패드에는 구리레이어가 없습니다)"
 
 #: pcbnew/footprint.cpp:2795
 msgid "(PTH pad's hole leaves no copper)"
-msgstr "(PTH 패드의 홀은 구리를 남기지 않습니다)"
+msgstr "(PTH 패드의 홀은 구리를 제거하지 않음)"
 
 #: pcbnew/footprint.cpp:2804
 msgid "(SMD pad appears on both front and back copper)"
@@ -40973,11 +40972,11 @@ msgstr "모서리 반경 비율"
 
 #: pcbnew/pad.cpp:2006
 msgid "Hole Size X"
-msgstr "홀 사이즈 X"
+msgstr "홀 크기 X"
 
 #: pcbnew/pad.cpp:2012
 msgid "Hole Size Y"
-msgstr "홀 사이즈 Y"
+msgstr "홀 크기 Y"
 
 #: pcbnew/pad.cpp:2018
 msgid "Fabrication Property"
@@ -41434,12 +41433,12 @@ msgid ""
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
 "라이브러리 '%s'를 로딩:\n"
-"풋프린트 %s 패드 %s에 사각형 구멍이 있습니다(아직 지원되지 않음)."
+"풋프린트 %s 패드 %s에 사각형 홀(아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2795
 #, c-format
 msgid "Footprint %s pad %s has a square hole (not yet supported)."
-msgstr "풋프린트 %s 패드 %s에 사각형 홀이 존재합니다 (아직 지원되지 않음)."
+msgstr "풋프린트 %s 패드 %s에 사각형 홀이 존재함 (아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2825
 #, c-format
@@ -41540,7 +41539,7 @@ msgstr ""
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3057
 #, c-format
 msgid "Non-copper pad %s has a hole, which is not supported."
-msgstr "비 구리 패드 %s에 홀이 존재합니다. 이는 아직 지원되지 않습니다."
+msgstr "비 구리 패드 %s에 홀이 존재함. 이는 아직 지원되지 않음."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3062
 #, c-format
@@ -43280,7 +43279,7 @@ msgstr "치수 쌍 간격이 기판의 최소 클리어런스보다 작습니다
 
 #: pcbnew/router/pns_router.cpp:246
 msgid "Cannot start routing from a non-plated hole."
-msgstr "도금되지 않은 홀부터 라우팅을 시작할 수 없습니다."
+msgstr "도금되지 않은 홀에서 라우팅을 시작할 수 없음."
 
 #: pcbnew/router/pns_router.cpp:256
 #, c-format
@@ -43827,7 +43826,7 @@ msgstr "연결되지 않은 길이"
 
 #: pcbnew/tools/board_inspection_tool.cpp:386
 msgid "Diff pair uncoupled length resolution for:"
-msgstr "결합되지 않은 길이의 차동 쌍 해결:"
+msgstr "결합되지 않은 차동 쌍 길이 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:394
 #: pcbnew/tools/board_inspection_tool.cpp:995
@@ -43848,7 +43847,7 @@ msgstr "확인된 높이 제한: 최소 %s; 최대 %s."
 #: pcbnew/tools/board_inspection_tool.cpp:416
 #: pcbnew/tools/board_inspection_tool.cpp:1424
 msgid "Text thickness resolution for:"
-msgstr "텍스트 두께 해결:"
+msgstr "텍스트 두께 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:424
 #, c-format
@@ -43858,7 +43857,7 @@ msgstr "확인된 두께 제약 조건: 최소 %s; 최대 %s."
 #: pcbnew/tools/board_inspection_tool.cpp:431
 #: pcbnew/tools/board_inspection_tool.cpp:1331
 msgid "Track width resolution for:"
-msgstr "다음을 위한 배선 폭 계산:"
+msgstr "배선 폭 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:439
 #, c-format
@@ -43886,7 +43885,7 @@ msgstr "비아 직경"
 #: pcbnew/tools/board_inspection_tool.cpp:460
 #: pcbnew/tools/board_inspection_tool.cpp:1350
 msgid "Via diameter resolution for:"
-msgstr "다음을 위한 비아 직경 계산:"
+msgstr "비아 직경 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:468
 #, c-format
@@ -43900,7 +43899,7 @@ msgstr "비아 환형 폭"
 #: pcbnew/tools/board_inspection_tool.cpp:475
 #: pcbnew/tools/board_inspection_tool.cpp:1367
 msgid "Via annular width resolution for:"
-msgstr "다음을 위한 비아 환형 폭 계산:"
+msgstr "비아 환형 폭 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:483
 #, c-format
@@ -43915,21 +43914,21 @@ msgstr "홀 크기"
 #: pcbnew/tools/board_inspection_tool.cpp:491
 #: pcbnew/tools/board_inspection_tool.cpp:1388
 msgid "Hole size resolution for:"
-msgstr "구멍 크기 해상도:"
+msgstr "홀 크기 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:499
 #, c-format
 msgid "Resolved hole size constraints: min %s; max %s."
-msgstr "확인된 구멍 크기 제약 조건: 최소 %s, 최대 %s."
+msgstr "해결된 홀 크기 제약 조건: 최소 %s, 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:505
 msgid "Hole Clearance"
-msgstr "구멍 유격"
+msgstr "홀 간격"
 
 #: pcbnew/tools/board_inspection_tool.cpp:506
 #: pcbnew/tools/board_inspection_tool.cpp:1108
 msgid "Hole clearance resolution for:"
-msgstr "다음을 위한 홀 클리어런스 계산:"
+msgstr "홀 간격 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:514
 #: pcbnew/tools/board_inspection_tool.cpp:617
@@ -43959,21 +43958,21 @@ msgstr "확인된 최소 간격: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:529
 #: pcbnew/tools/board_inspection_tool.cpp:1263
 msgid "Physical hole clearance resolution for:"
-msgstr "물리적 홀 유격 해법:"
+msgstr "물리적 홀 간격 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:538
 #: pcbnew/tools/board_inspection_tool.cpp:1275
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "'물리적 구멍 간격' 제약 조건이 정의되지 않음."
+msgstr "'물리적 홀 간격' 제약 조건이 정의되지 않음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:549
 msgid "Hole to Hole"
-msgstr "구멍 대 구멍"
+msgstr "홀-홀"
 
 #: pcbnew/tools/board_inspection_tool.cpp:550
 #: pcbnew/tools/board_inspection_tool.cpp:1137
 msgid "Hole-to-hole clearance resolution for:"
-msgstr "구멍 대 구멍 유격 해법:"
+msgstr "홀-홀 간격 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:564
 msgid "Edge Clearance"
@@ -43982,17 +43981,17 @@ msgstr "가장자리 유격"
 #: pcbnew/tools/board_inspection_tool.cpp:565
 #: pcbnew/tools/board_inspection_tool.cpp:1176
 msgid "Edge clearance resolution for:"
-msgstr "다음을 위한 가장자리 클리어런스 계산:"
+msgstr "가장자리 클리어런스 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:609
 #: pcbnew/tools/board_inspection_tool.cpp:921
 msgid "Clearance resolution for:"
-msgstr "다음을 위한 클리어런스 계산:"
+msgstr "클리어런스 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:632
 #: pcbnew/tools/board_inspection_tool.cpp:1197
 msgid "Physical clearance resolution for:"
-msgstr "기계적 유격 분해능:"
+msgstr "물리적 클리어런스 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:641
 #: pcbnew/tools/board_inspection_tool.cpp:1209
@@ -44031,11 +44030,11 @@ msgstr "여러 개의 패드가 있는 풋프린트에 대한 클리어런스 �
 
 #: pcbnew/tools/board_inspection_tool.cpp:798
 msgid "Zone connection resolution for:"
-msgstr "다음을 위한 영역 연결 해결:"
+msgstr "영역 연결 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:806
 msgid "Thermal-relief gap resolution for:"
-msgstr "열 분산 갭 해결 방법:"
+msgstr "열 분산 갭 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:815
 #, c-format
@@ -44044,7 +44043,7 @@ msgstr "확인된 단열판 간격: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:820
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "열 분산 스포크 너비 해결 방법:"
+msgstr "열 분산 스포크 너비 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:829
 #, c-format
@@ -44053,7 +44052,7 @@ msgstr "확인된 스포크 너비: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:834
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "열 완화 최소 스포크 수 해결 방법:"
+msgstr "열 완화 최소 스포크 수 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:843
 #, c-format
@@ -44063,7 +44062,7 @@ msgstr "확인된 최소 스포크 수: %d."
 #: pcbnew/tools/board_inspection_tool.cpp:852
 #: pcbnew/tools/board_inspection_tool.cpp:900
 msgid "Zone clearance resolution for:"
-msgstr "구역 클리어런스 해결:"
+msgstr "영역 클리어런스 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:856
 #, c-format
@@ -44078,7 +44077,7 @@ msgstr "%s로 더 큰 물리적 유격에 의해 재정의 됨; 유격: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:882
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "%s에서 더 큰 물리적 구멍 간격으로 재정의됨; 간격: %s."
+msgstr "%s에서 더 큰 물리적 홀 간격으로 재정의됨; 간격: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:926
 msgid "Items belong to the same net. Min clearance is 0."
@@ -44099,7 +44098,7 @@ msgstr "차동 쌍"
 
 #: pcbnew/tools/board_inspection_tool.cpp:969
 msgid "Diff-pair gap resolution for:"
-msgstr "차동 쌍 간격 해결 방법:"
+msgstr "차동 쌍 간격 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:974
 #, c-format
@@ -44108,7 +44107,7 @@ msgstr "확인된 간격 제약조건: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:982
 msgid "Diff-pair max uncoupled length resolution for:"
-msgstr "차동쌍 최대 비연결 길이 해결 방법:"
+msgstr "차동쌍 최대 비연결 길이 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:988
 msgid "No 'diff_pair_uncoupled' constraints defined."
@@ -44117,15 +44116,15 @@ msgstr "정의된 '차동 쌍 연결 해제' 제약 조건이 없음."
 #: pcbnew/tools/board_inspection_tool.cpp:1019
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr "참고 : %s는 텐트입니다. 클리어런스는 구멍(holes)에만 적용됩니다."
+msgstr "참고 : %s는 텐트형; 클리어런스는 홀에만 적용됩니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1036
 msgid "Silkscreen clearance resolution for:"
-msgstr "다음을 위한 실크스크린 클리어런스 계산:"
+msgstr "실크스크린 클리어런스 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1064
 msgid "Courtyard clearance resolution for:"
-msgstr "다음을 위한 부품자리 클리어런스 해결:"
+msgstr "부품자리 클리어런스 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1192
 msgid "Physical Clearances"
@@ -44133,7 +44132,7 @@ msgstr "물리적 허용 범위"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1307
 msgid "Select an item for a constraints resolution report."
-msgstr "제약 조건 해결 보고서 항목을 선택하세요."
+msgstr "제약 조건 해결 방법 보고서 항목을 선택합니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1339
 #, c-format
@@ -44157,7 +44156,7 @@ msgstr "확인된 환형 폭 제약 조건: 최소 %s; 최적 %s; 최대 %s."
 #: pcbnew/tools/board_inspection_tool.cpp:1397
 #, c-format
 msgid "Resolved hole size constraints: min %s; opt %s; max %s."
-msgstr "확인된 구멍 크기 제약 조건: 최소 %s; 최적 %s; 최대 %s."
+msgstr "해결된 구멍 크기 제약 조건: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1416
 #, c-format
@@ -44175,7 +44174,7 @@ msgstr "킵아웃"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1441
 msgid "Keepout resolution for:"
-msgstr "다음을 위한 킵아웃 계산:"
+msgstr "킵아웃 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1451
 #: pcbnew/tools/board_inspection_tool.cpp:1475
@@ -46579,11 +46578,11 @@ msgstr "실제 유격"
 
 #: pcbnew/tools/pcb_control.cpp:1645
 msgid "Resolved hole clearance"
-msgstr "확인된 구멍 간격"
+msgstr "해결된 구멍 간격"
 
 #: pcbnew/tools/pcb_control.cpp:1650
 msgid "Actual hole clearance"
-msgstr "실제 홀 유격"
+msgstr "실제 홀 간격"
 
 #: pcbnew/tools/pcb_control.cpp:1683
 msgid "Resolved edge clearance"
@@ -47480,7 +47479,7 @@ msgstr "해치 간격"
 
 #: pcbnew/zone.cpp:1679
 msgid "Hatch Minimum Hole Ratio"
-msgstr "해치의 최소 구멍 비율"
+msgstr "해치의 최소 홀 비율"
 
 #: pcbnew/zone.cpp:1687
 msgid "Smoothing Effort"
