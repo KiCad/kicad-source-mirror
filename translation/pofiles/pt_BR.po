@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 09:55-0800\n"
-"PO-Revision-Date: 2024-03-05 20:01+0000\n"
+"PO-Revision-Date: 2024-03-07 22:55+0000\n"
 "Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -9282,7 +9282,7 @@ msgstr "O esquema foi salvo"
 
 #: cvpcb/toolbars_cvpcb.cpp:70
 msgid "Footprint Filters:"
-msgstr "Filtros do footprint:"
+msgstr "Filtros de footprint:"
 
 #: cvpcb/tools/cvpcb_actions.cpp:55
 msgid "View selected footprint"
@@ -11819,7 +11819,7 @@ msgstr "Excluir da simulação"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:303
 msgid "Footprint filters:"
-msgstr "Filtros do footprint:"
+msgstr "Filtros de footprint:"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:305
 msgid ""
@@ -48390,17 +48390,13 @@ msgstr "Continuar sem preenche novamente"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:41
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:49
-#, fuzzy
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
-"As zonas são preenchidas pelo nível de prioridade, o nível 3 tem prioridade "
-"mais alta do que o nível 2.\n"
-"Quando uma zona está dentro de uma outra zona:\n"
-"* Caso a prioridade seja maior, os seus contornos serão removidos da outra "
-"zona.\n"
-"* Caso a sua prioridade seja igual, um erro DRC é definido."
+"A zona principal tem a prioridade mais alta. Quando uma zona está dentro de "
+"outra zona, se a sua prioridade for maior, seus contornos são removidos da "
+"zona externa."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:99
 msgid "Repour"
