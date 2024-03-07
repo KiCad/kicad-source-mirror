@@ -154,7 +154,7 @@ bool DRC_TEST_PROVIDER_DISALLOW::Run()
                 PTR_PTR_LAYER_CACHE_KEY key = { ruleArea, copperZone, UNDEFINED_LAYER };
 
                 {
-                    std::unique_lock<std::shared_mutex> cacheLock( board->m_CachesMutex );
+                    std::unique_lock<std::shared_mutex> writeLock( board->m_CachesMutex );
                     board->m_IntersectsAreaCache[ key ] = isInside;
                 }
 

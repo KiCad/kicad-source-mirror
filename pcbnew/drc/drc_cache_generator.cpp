@@ -137,7 +137,7 @@ bool DRC_CACHE_GENERATOR::Run()
     std::future<void> retn = tp.submit(
             [&]()
             {
-                std::unique_lock<std::shared_mutex> cacheLock( m_board->m_CachesMutex );
+                std::unique_lock<std::shared_mutex> writeLock( m_board->m_CachesMutex );
 
                 if( !m_board->m_CopperItemRTreeCache )
                     m_board->m_CopperItemRTreeCache = std::make_shared<DRC_RTREE>();
@@ -185,8 +185,10 @@ bool DRC_CACHE_GENERATOR::Run()
                            rtree->Insert( aZone, layer );
                    }
 
-                   std::unique_lock<std::shared_mutex> cacheLock( m_board->m_CachesMutex );
-                   m_board->m_CopperZoneRTreeCache[ aZone ] = std::move( rtree );
+                   {
+                       std::unique_lock<std::shared_mutex> writeLock( m_board->m_CachesMutex );
+                       m_board->m_CopperZoneRTreeCache[ aZone ] = std::move( rtree );
+                   }
 
                    done.fetch_add( 1 );
                 }
