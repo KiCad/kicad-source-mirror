@@ -16,10 +16,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-05 20:01+0000\n"
+"PO-Revision-Date: 2024-03-09 10:01+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -769,7 +769,7 @@ msgstr "Eindkleur kleurverloop achtergrond"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 msgid "Use board stackup colors"
-msgstr "Board stackup kleuren"
+msgstr "Bordstapelingkleuren gebruiken"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:134
 #, c-format
@@ -805,7 +805,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:483
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "Ontvink ‘Bordstapelingkleuren gebruiken’ om kleuren te bewerken."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:533
 #: pcbnew/widgets/appearance_controls.cpp:2182
@@ -3606,7 +3606,7 @@ msgstr "Git-repository verwijderen"
 
 #: common/dialogs/panel_color_settings.cpp:50
 msgid "Reveal Themes in Finder"
-msgstr "Thema’s weergeven in Finder"
+msgstr "Thema’s in Finder weergeven"
 
 #: common/dialogs/panel_color_settings.cpp:134
 msgid "New theme name:"
@@ -4539,9 +4539,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Streep-stip-stip"
 
 #: common/dialogs/panel_setup_netclasses.cpp:189
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "Maak de kleur transparant en gebruik KiCad default kleuren."
+msgstr "Maak kleur transparant om standaardkleur van laag te gebruiken."
 
 #: common/dialogs/panel_setup_netclasses.cpp:379
 msgid ""
@@ -4608,9 +4607,8 @@ msgid "Schematic wire line style"
 msgstr "Draadlijnstijl schema"
 
 #: common/dialogs/panel_setup_netclasses.cpp:624
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Netklassekleur instellen"
+msgstr "PCB-netklassekleur"
 
 #: common/dialogs/panel_setup_netclasses.cpp:677
 msgid "The default net class is required."
@@ -4664,9 +4662,8 @@ msgid "DP Gap"
 msgstr "DP tusssenruimte"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Cursor"
+msgstr "PCB-kleur"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4709,12 +4706,11 @@ msgstr "Standaard"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:94
 msgid "Set color to transparent to use KiCad default color."
-msgstr "Maak de kleur transparant en gebruik KiCad default kleuren."
+msgstr "Maak kleur transparant om standaardkleur van KiCad te gebruiken."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:98
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Probe van schema's"
+msgstr "Kleuren importeren van schema"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:115
 msgid "Netclass assignments:"
@@ -12304,10 +12300,10 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Dit schema is gemaakt met behulp van oudere symboolbibliotheken die het "
-"schema kunnen breken. Sommige symbolen moeten mogelijk aan een andere "
-"symboolnaam worden gekoppeld. Sommige symbolen moeten mogelijk worden "
-"\"hersteld\" (gekopieerd en hernoemd) naar een nieuwe bibliotheek.\n"
+"Dit schema is gemaakt met oudere symboolbibliotheken waardoor het schema "
+"stuk kan gaan. Sommige symbolen moeten mogelijk aan een andere symboolnaam "
+"gekoppeld worden. Sommige symbolen moeten mogelijk worden \"hersteld\" ("
+"gekopieerd en hernoemd) naar een nieuwe bibliotheek.\n"
 "\n"
 "De volgende wijzigingen worden aanbevolen om het project bij te werken."
 
@@ -15185,6 +15181,8 @@ msgstr "Uitvoerpad moet niet conflicteren met bestaand pad\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Uitvoerpad moet opgegeven zijn om verouderde en niet-KiCad-bibliotheken om "
+"te zetten.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:913
 msgid "Saving symbol library in updated format\n"
@@ -15215,7 +15213,7 @@ msgstr "ERC-rapport opgeslagen naar %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
 msgid "Net Navigator"
-msgstr "Net-navigator"
+msgstr "Netnavigatie"
 
 #: eeschema/eeschema_settings.cpp:114 eeschema/sch_edit_frame.cpp:1967
 #: pcbnew/footprint_edit_frame.cpp:246 pcbnew/footprint_edit_frame.cpp:911
@@ -16636,7 +16634,7 @@ msgstr "Aanmaken symboolbibliotheekbestand '%s' mislukt."
 #: eeschema/project_rescue.cpp:873
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "Herstelbibliotheek %s kan niet worden opgeslagen."
+msgstr "Herstelbibliotheek %s kon niet worden opgeslagen."
 
 #: eeschema/project_rescue.cpp:896
 msgid "Error occurred saving project specific symbol library table."
@@ -20793,14 +20791,12 @@ msgid "Export a symbol to a new library file"
 msgstr "Symbool exporteren naar een nieuw bibliotheekbestand"
 
 #: eeschema/tools/ee_actions.cpp:249 pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Bewerken in teksteditor"
+msgstr "Bewerken in teksteditor..."
 
 #: eeschema/tools/ee_actions.cpp:250 pcbnew/tools/pcb_actions.cpp:774
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Lees of bewerk bestanden met tekst editor"
+msgstr "Bibliotheekbestand openen met teksteditor"
 
 #: eeschema/tools/ee_actions.cpp:256
 msgid "Update Symbol Fields..."
@@ -21848,11 +21844,11 @@ msgstr "Naar volgend blad verplaatsen op nummer"
 
 #: eeschema/tools/ee_actions.cpp:1303
 msgid "Hierarchy Navigator"
-msgstr "Hiërarchie-navigator"
+msgstr "Hiërarchienavigatie"
 
 #: eeschema/tools/ee_actions.cpp:1304
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr "Schemabladhiërarchie-navigatie weergeven of verbergen"
+msgstr "Hiërarchienavigatie voor schemabladen weergeven of verbergen"
 
 #: eeschema/tools/ee_actions.cpp:1316
 msgid "Add Wire"
@@ -22430,7 +22426,6 @@ msgstr "Geen symboolbibliotheek geselecteerd."
 
 #: eeschema/tools/symbol_editor_control.cpp:277
 #: pcbnew/tools/footprint_editor_control.cpp:594
-#, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr "Geen teksteditor geselecteerd in KiCad. Kies er een."
 
@@ -23809,7 +23804,7 @@ msgstr ""
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
 msgstr ""
-"Alle kleuren in dit thema terugzetten naar de KiCad-standaardinstellingen"
+"Alle kleuren in dit thema terugzetten naar de standaardkleuren van KiCad"
 
 #: include/kiway_player.h:224
 msgid "This file is already open."
@@ -23917,7 +23912,7 @@ msgstr "Exporteert de footprint of de hele footprintbibliotheek naar SVG"
 #: kicad/cli/command_fp_export_svg.cpp:45
 msgid "Color theme to use (will default to footprint editor settings)"
 msgstr ""
-"Kleurthema om te gebruiken (zal terugvallen op footprinteditorinstellingen)"
+"Kleurthema om te gebruiken (volgt standaard de footprinteditorinstellingen)"
 
 #: kicad/cli/command_fp_export_svg.cpp:50
 msgid "Specific footprint to export within the library"
@@ -25526,7 +25521,7 @@ msgstr "Opent de mappen in de standaard systeembestandsbeheerder"
 
 #: kicad/project_tree_pane.cpp:877
 msgid "Open the file in a Text Editor"
-msgstr "Open het bestand in een Tekst Editor"
+msgstr "Open bestand in een teksteditor"
 
 #: kicad/project_tree_pane.cpp:879
 msgid "Open files in a Text Editor"
@@ -32389,11 +32384,11 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Dit is de vrije afstand in procenten van de pad breedte en hoogte voor deze "
-"footprint.\n"
-"Een waarde van 10 betekent dat de horizontale vrije afstand 10 procent van "
-"de padbreedte is en de verticale vrije afstand 10% van de padhoogte.\n"
-"Deze waarde kan worden vervangen door een lokale padwaarde.\n"
+"Dit is de lokale vrije afstand in procenten van de padbreedte en -hoogte "
+"voor deze footprint.\n"
+"Een waarde van 10 betekent dat de horizontale vrije afstand 10% van de "
+"padbreedte is en de verticale vrije afstand 10% van de padhoogte.\n"
+"Deze waarde kan worden overschreven door een lokale padwaarde.\n"
 "De uiteindelijke vrije afstand is de som van deze waarde en de absolute "
 "vrije afstand.\n"
 "Een negatieve waarde betekent een kleinere maskeropening dan de padgrootte."
@@ -38806,9 +38801,8 @@ msgid "Skew between traces out of range"
 msgstr "Scheeftrekking tussen sporen buiten bereik"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Teveel via’s op een verbinding"
+msgstr "Te veel of te weinig via’s op een verbinding"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39497,21 +39491,20 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:209
 #, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s min aantal %d; werkelijk %d)"
+msgstr "(%s max aantal %d; werkelijk %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:214
 msgid "Too many vias on a connection"
-msgstr "Teveel via’s op een verbinding"
+msgstr "Te veel via’s op een verbinding"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
 msgstr "(%s min aantal %d; werkelijk %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Teveel via’s op een verbinding"
+msgstr "Te weinig via’s op een verbinding"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -47917,14 +47910,12 @@ msgid "Set Netclass Color"
 msgstr "Netklassekleur instellen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2340
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "PCB bijwerken van schema"
+msgstr "Kleur van schema gebruiken"
 
 #: pcbnew/widgets/appearance_controls.cpp:2349
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "Netkleur wissen"
+msgstr "Netklassekleur wissen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2357
 #, c-format
