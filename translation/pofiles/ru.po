@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-02-29 19:02+0000\n"
+"PO-Revision-Date: 2024-03-09 10:02+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -186,7 +186,7 @@ msgstr "Время обновления %.3f с"
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.cpp:2431
 #, c-format
 msgid "Loading %s..."
-msgstr "Загружается %s..."
+msgstr "Загрузка %s..."
 
 #: 3d-viewer/3d_rendering/opengl/render_3d_opengl.cpp:464
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:174
@@ -3706,7 +3706,7 @@ msgstr "Качественное сглаживание"
 
 #: common/dialogs/panel_common_settings_base.cpp:49
 msgid "Fallback graphics:"
-msgstr "Обычная графика:"
+msgstr "Резервная графика:"
 
 #: common/dialogs/panel_common_settings_base.cpp:70
 msgid "Helper Applications"
@@ -8173,7 +8173,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel_base.cpp:36
 msgid "Fallback graphics"
-msgstr "Обычная графика"
+msgstr "Резервная графика"
 
 #: common/widgets/gal_options_panel_base.cpp:37
 msgid ""
@@ -22484,7 +22484,7 @@ msgstr "Загрузка файлов..."
 #: gerbview/files.cpp:301 gerbview/files.cpp:308
 #, c-format
 msgid "Loading %u/%zu %s..."
-msgstr "Загружается %u/%zu %s..."
+msgstr "Загрузка %u/%zu %s..."
 
 #: gerbview/files.cpp:439
 #, c-format
@@ -47383,7 +47383,7 @@ msgstr "Проверка заливки зон..."
 
 #: pcbnew/zone_filler.cpp:107
 msgid "Building zone fills..."
-msgstr "Построение заливки зоны..."
+msgstr "Построение заливки зон..."
 
 #: pcbnew/zone_filler.cpp:521
 msgid "Removing isolated copper islands..."
