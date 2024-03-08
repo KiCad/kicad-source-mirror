@@ -879,19 +879,19 @@ void GERBER_PLOTTER::plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion )
 
 
 void GERBER_PLOTTER::plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle,
-                              const EDA_ANGLE& aEndAngle, int aRadius, bool aPlotInRegion )
+                              const EDA_ANGLE& aEndAngle, double aRadius, bool aPlotInRegion )
 {
     VECTOR2I start, end;
-    start.x = aCenter.x + KiROUND( aRadius * aStartAngle.Cos() );
-    start.y = aCenter.y + KiROUND( aRadius * aStartAngle.Sin() );
+    start.x = KiROUND( aCenter.x + aRadius * aStartAngle.Cos() );
+    start.y = KiROUND( aCenter.y + aRadius * aStartAngle.Sin() );
 
     if( !aPlotInRegion )
         MoveTo( start );
     else
         LineTo( start );
 
-    end.x = aCenter.x + KiROUND( aRadius * aEndAngle.Cos() );
-    end.y = aCenter.y + KiROUND( aRadius * aEndAngle.Sin() );
+    end.x = KiROUND( aCenter.x + aRadius * aEndAngle.Cos() );
+    end.y = KiROUND( aCenter.y + aRadius * aEndAngle.Sin() );
     VECTOR2D devEnd = userToDeviceCoordinates( end );
     // devRelCenter is the position on arc center relative to the arc start, in Gerber coord.
     VECTOR2D devRelCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );

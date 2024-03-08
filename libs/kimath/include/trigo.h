@@ -193,8 +193,7 @@ bool TestSegmentHit( const VECTOR2I& aRefPoint, const VECTOR2I& aStart, const VE
  */
 inline double GetLineLength( const VECTOR2I& aPointA, const VECTOR2I& aPointB )
 {
-    // Implicitly casted to double
-    return hypot( aPointA.x - aPointB.x, aPointA.y - aPointB.y );
+    return hypot( (double) aPointA.x - aPointB.x, (double) aPointA.y - aPointB.y );
 }
 
 // These are the usual degrees <-> radians conversion routines
