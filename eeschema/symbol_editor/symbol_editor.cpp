@@ -1282,7 +1282,7 @@ void SYMBOL_EDIT_FRAME::UpdateSymbolMsgPanelInfo()
     else if( m_bodyStyle == LIB_ITEM::BODY_STYLE::BASE )
         msg = _( "Standard" );
     else
-        wxT( "?" );
+        msg = wxT( "?" );
 
     AppendMsgPanel( _( "Body" ), msg, 8 );
 
