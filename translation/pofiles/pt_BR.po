@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-07 22:55+0000\n"
+"PO-Revision-Date: 2024-03-09 10:02+0000\n"
 "Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
@@ -48,23 +48,23 @@ msgstr "Todos os arquivos"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
-msgstr "Crie o contorno da placa"
+msgstr "Criar o contorno da placa"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:537
 msgid "Create layers"
-msgstr "Crie as camadas"
+msgstr "Criar camadas"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:898
 #: pcbnew/dialogs/dialog_footprint_checker.cpp:116
 msgid "No footprint loaded."
-msgstr "Nenhum footprint foi carregado."
+msgstr "Nenhum footprint carregado."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:915
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
 msgstr ""
-"O contorno do footprint ausente ou malformado. Execute o Verificador de "
+"O contorno do footprint está ausente ou malformado. Execute o Verificador de "
 "footprints para uma análise completa."
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:924
@@ -75,20 +75,20 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:261
 msgid "Create tracks and vias"
-msgstr "Crie as trilhas e as vias"
+msgstr "Criar trilhas e vias"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:710
 msgid "Create zones"
-msgstr "Crie as zonas"
+msgstr "Criar zonas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:794
 msgid "Build Tech layers"
-msgstr "Monte as camadas técnicas"
+msgstr "Criar camadas técnicas"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:826
 #, c-format
 msgid "Build Tech layer %d"
-msgstr "Monte a camada técnica %d"
+msgstr "Criar camada técnica %d"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1050
 msgid "Simplifying copper layer polygons"
@@ -101,15 +101,15 @@ msgstr "Calculando o revestimento de cobre"
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1129
 #, c-format
 msgid "Simplifying %d copper layers"
-msgstr "Simplificando os %d das camadas com cobre"
+msgstr "Simplificando %d camadas de cobre"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1172
 msgid "Simplify holes contours"
-msgstr "Simplifique os contornos dos furos"
+msgstr "Simplificar contornos de furos"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1192
 msgid "Build BVH for holes and vias"
-msgstr "Monte o BVH para os furos e as vias"
+msgstr "Criar hierarquia de volumes envolventes (BVH) para furos e vias"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:385
 msgid "OpenGL context creation error"
@@ -151,7 +151,7 @@ msgstr "Carregar OpenGL: placa"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:493
 msgid "Load OpenGL: holes and vias"
-msgstr "Carregar OpenGL: os furos e as vias"
+msgstr "Carregar OpenGL: furos e vias"
 
 #: 3d-viewer/3d_rendering/opengl/create_scene.cpp:547
 msgid "Load OpenGL: layers"
@@ -214,15 +214,15 @@ msgstr "Renderizando: %.0f %%"
 
 #: 3d-viewer/3d_rendering/raytracing/render_3d_raytrace.cpp:859
 msgid "Rendering: Post processing shader"
-msgstr "Renderizando: O oós processando do shader"
+msgstr "Renderizando: Shader de pós-processamento"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:51
 msgid "Export Current View as PNG..."
-msgstr "Exporte a visualização atual como PNG…"
+msgstr "Exportar visualização atual como PNG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:56
 msgid "Export Current View as JPEG..."
-msgstr "Exporte a visualização atual como JPEG…"
+msgstr "Exportar visualização atual como JPEG…"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:62
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:654
@@ -234,7 +234,7 @@ msgstr "Visualizador 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:70
 msgid "Copy 3D Image"
-msgstr "Copie a imagem 3D"
+msgstr "Copiar imagem 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:87
 msgid "3D Grid"
@@ -242,11 +242,11 @@ msgstr "Grade 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:125
 msgid "Raytracing"
-msgstr "Calculando a iluminação"
+msgstr "Raytracing"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:132
 msgid "Reset to Default Settings"
-msgstr "Redefina as configurações padrão"
+msgstr "Restaurar configurações padrão"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:139
 #: bitmap2component/bitmap2cmp_frame.cpp:307 cvpcb/menubar.cpp:78
@@ -291,11 +291,11 @@ msgstr "Recarregar a placa"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:62
 msgid "Copy 3D image to clipboard"
-msgstr "Copie a imagem 3D para a área de transferência"
+msgstr "Copiar imagem 3D para a área de transferência"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:67
 msgid "Render current view using Raytracing"
-msgstr "Renderize a tela atual utilizando a iluminação (Raytracing)"
+msgstr "Renderizar a tela atual com Raytracing"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:102
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:68
@@ -368,7 +368,7 @@ msgstr "Erro"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:780
 msgid "Failed to copy image to clipboard"
-msgstr "Houve uma falha ao copiar a imagem para a área de transferência"
+msgstr "Falha ao copiar imagem para área de transferência"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:791
 msgid "Can't save file"
@@ -386,27 +386,27 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:55
 msgid "Rotate X Clockwise"
-msgstr "Gire X no sentido horário"
+msgstr "Rotacionar em X no sentido horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:63
 msgid "Rotate X Counterclockwise"
-msgstr "Gire X no sentido anti-horário"
+msgstr "Rotacionar em X no sentido anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:71
 msgid "Rotate Y Clockwise"
-msgstr "Gire Y no sentido horário"
+msgstr "Rotacionar em Y no sentido horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:79
 msgid "Rotate Y Counterclockwise"
-msgstr "Gire Y no sentido anti-horário"
+msgstr "Rotacionar em Y no sentido anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:87
 msgid "Rotate Z Clockwise"
-msgstr "Gire Z no sentido horário"
+msgstr "Rotacionar em Z no sentido horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:95
 msgid "Rotate Z Counterclockwise"
-msgstr "Gire Z no sentido anti-horário"
+msgstr "Rotacionar em Z no sentido anti-horário"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:104
 msgid "Move Board Left"
@@ -430,15 +430,15 @@ msgstr "Visualização inicial"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr "Redesenhe na posição inicial e amplie"
+msgstr "Redesenhar na posição inicial e ampliar"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
-msgstr "Vire a placa"
+msgstr "Virar a placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:150
 msgid "Flip the board view"
-msgstr "Vire visualização da placa"
+msgstr "Virar visualização da placa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:158
 msgid "Toggle Orthographic Projection"
@@ -495,15 +495,15 @@ msgstr "Grade 3D com 1mm"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:254
 msgid "Render Realistic Materials"
-msgstr "Renderização real dos materiais"
+msgstr "Renderização realista dos materiais"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
-msgstr "Use todas as propriedades dos materiais de cada arquivo no modelo 3D"
+msgstr "Usar todas as propriedades dos materiais de cada modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
 msgid "Render Solid Colors"
-msgstr "Renderize cores sólidas"
+msgstr "Renderizar cores sólidas"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Use only the diffuse color property from 3D model file"
@@ -511,11 +511,11 @@ msgstr "Utilize apenas a propriedade difusa da cor do arquivo do modelo 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Render CAD Colors"
-msgstr "Renderize cores CAD"
+msgstr "Renderizar cores CAD"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:271
 msgid "Use a CAD color style based on the diffuse color of the material"
-msgstr "Utilize o estilo de cor do CAD com base na cor difusa do material"
+msgstr "Utilizar o estilo de cor do CAD com base na cor difusa do material"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:279
 msgid "Show Through Hole 3D Models"
@@ -561,7 +561,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:323
 msgid "Show Model Bounding Boxes"
-msgstr "Exiba as caixas delimitadoras do modelo"
+msgstr "Exibir as caixas delimitadoras do modelo"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:324
 msgid "Show 3D model bounding boxes in realtime renderer"
@@ -570,17 +570,17 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:331
 msgid "Show 3D Axis"
-msgstr "Mostre os eixos 3D"
+msgstr "Mostrar eixos 3D"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:338
 #: pcbnew/tools/pcb_actions.cpp:1349
 msgid "Show Appearance Manager"
-msgstr "Mostra gerenciador de aparência"
+msgstr "Mostrar gerenciador de aparência"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:339
 #: pcbnew/tools/pcb_actions.cpp:1350
 msgid "Show/hide the appearance manager"
-msgstr "Mostra/oculta o gerenciador de aparência"
+msgstr "Mostrar/ocultar o gerenciador de aparência"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Board Body"
@@ -588,7 +588,7 @@ msgstr "Corpo da placa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show board body"
-msgstr "Exiba o corpo da placa"
+msgstr "Exibir o corpo da placa"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
 msgid "F.Cu"
@@ -737,12 +737,12 @@ msgstr "Exibe as referências dos footprints"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Footprint Text"
-msgstr "Texto do footprint do componente"
+msgstr "Texto do footprint"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:78
 #: pcbnew/widgets/appearance_controls.cpp:339
 msgid "Show all footprint text"
-msgstr "Mostra todo o texto do footprint"
+msgstr "Mostrar todo o texto do footprint"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Off-board Silkscreen"
@@ -812,12 +812,14 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:483
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Desmarque 'Usar cores do empilhamento físico da placa' para permitir a "
+"edição de cores."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:533
 #: pcbnew/widgets/appearance_controls.cpp:2182
 #, c-format
 msgid "Show or hide %s"
-msgstr "Mostrar ou oculta %s"
+msgstr "Mostrar ou ocultar %s"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:594
 #: pcbnew/widgets/appearance_controls.cpp:2542
@@ -830,14 +832,14 @@ msgstr "Predefinições (%s+Tab):"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1890
 #: pcbnew/widgets/appearance_controls.cpp:2564
 msgid "Save preset..."
-msgstr "Salva predefinição..."
+msgstr "Salvar predefinição..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:609
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1470
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1891
 #: pcbnew/widgets/appearance_controls.cpp:2565
 msgid "Delete preset..."
-msgstr "Exclui predefinição..."
+msgstr "Excluir predefinição..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:715
 #: pcbnew/widgets/appearance_controls.cpp:2670
@@ -847,7 +849,7 @@ msgstr "Nome da predefinição da camada:"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:716
 #: pcbnew/widgets/appearance_controls.cpp:2671
 msgid "Save Layer Preset"
-msgstr "Salva predefinição da camada"
+msgstr "Salvar predefinição da camada"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:731
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1632
@@ -868,7 +870,7 @@ msgstr "Predefinições"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2070
 #: pcbnew/widgets/appearance_controls.cpp:2742
 msgid "Delete Preset"
-msgstr "Exclui predefinição"
+msgstr "Excluir predefinição"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:767
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1670
@@ -881,17 +883,17 @@ msgstr "Selecione a predefinição:"
 #: pcbnew/widgets/appearance_controls.cpp:2841
 #, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Portas de visualização (%s+Tab):"
+msgstr "Janelas de visualização (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:834
 #: pcbnew/widgets/appearance_controls.cpp:2850
 msgid "Save viewport..."
-msgstr "Salva a janela de visualização..."
+msgstr "Salvar a janela de visualização..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:835
 #: pcbnew/widgets/appearance_controls.cpp:2851
 msgid "Delete viewport..."
-msgstr "Exclui a janela de visualização..."
+msgstr "Excluir a janela de visualização..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
 #: pcbnew/widgets/appearance_controls.cpp:2900
@@ -901,7 +903,7 @@ msgstr "Nome da janela de visualização:"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
 #: pcbnew/widgets/appearance_controls.cpp:2900
 msgid "Save Viewport"
-msgstr "Salva a janela de visualização"
+msgstr "Salvar janela de visualização"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:906
 #: pcbnew/widgets/appearance_controls.cpp:2939
@@ -911,7 +913,7 @@ msgstr "Janelas de visualização"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:915
 #: pcbnew/widgets/appearance_controls.cpp:2948
 msgid "Delete Viewport"
-msgstr "Exclui a janela de visualização"
+msgstr "Excluir janela de visualização"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:916
 #: pcbnew/widgets/appearance_controls.cpp:2949
@@ -948,11 +950,11 @@ msgstr "Caminhos disponíveis:"
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:67
 #: common/dialogs/dialog_configure_paths_base.h:61
 msgid "Configure Paths"
-msgstr "Configure os caminhos"
+msgstr "Configurar caminhos"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.h:63
 msgid "Select 3D Model"
-msgstr "Selecione o modelo 3D"
+msgstr "Selecionar modelo 3D"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:23
 msgid "Render Options"
@@ -968,7 +970,7 @@ msgstr "Corte a serigrafia nas bordas da máscara de solda"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:41
 msgid "Show filled areas in zones"
-msgstr "Exiba as áreas preenchidas dentro das zonas"
+msgstr "Exibir áreas preenchidas dentro de zonas"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:44
 msgid "Use bare copper color for unplated copper (slow)"
@@ -1032,15 +1034,15 @@ msgstr "Opções da renderização"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:32
 msgid "Show model bounding boxes"
-msgstr "Exiba as caixas delimitadoras do modelo"
+msgstr "Exibir caixas delimitadoras do modelo"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:35
 msgid "Show copper and tech layers thickness (very slow)"
-msgstr "Mostrar o cobre e a tecnologia da espessura das camadas (muito lento)"
+msgstr "Mostras a espessura das camadas de cobre e técnicas (muito lento)"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:38
 msgid "Highlight items on rollover"
-msgstr "Itens em destaque na capotagem"
+msgstr "Destacar itens ao passar o mouse"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:44
 msgid "Anti-aliasing:"
@@ -1065,8 +1067,7 @@ msgstr "8x"
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:52
 msgid "3D-Viewer must be closed and re-opened to apply this setting"
 msgstr ""
-"A visualização 3D deve ser fechada e reaberta que está configuração seja "
-"aplicada"
+"A visualização 3D deve ser fechada e reaberta para aplicar essa configuração"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:56
 msgid "Selection color:"
@@ -1078,23 +1079,23 @@ msgstr "Enquanto se move"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:85
 msgid "Disable anti-aliasing"
-msgstr "Desative o anti serrilhamento da imagem"
+msgstr "Desativar antiserrilhamento"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:88
 msgid "Disable thickness"
-msgstr "Desative a espessura"
+msgstr "Desativar espessura"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:91
 msgid "Disable vias"
-msgstr "Desative as vias"
+msgstr "Desativar vias"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 msgid "Disable holes"
-msgstr "Desative os furos"
+msgstr "Desativar furos"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
-msgstr "Texturas processuais (lentas)"
+msgstr "Texturas procedurais (lento)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:31
 msgid "Add floor (slow)"
@@ -1326,7 +1327,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
-msgstr "Recarregue a placa e os modelos 3D"
+msgstr "Recarregar placa e modelos 3D"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:151
 #: bitmap2component/bitmap2cmp_frame.cpp:293
@@ -1348,13 +1349,13 @@ msgstr "Arquivos de imagem"
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
 #: pcbnew/menubar_pcb_editor.cpp:73
 msgid "Open Recent"
-msgstr "Recentemente aberto"
+msgstr "Abrir recente"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:283 eeschema/menubar.cpp:72
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
 msgid "Clear Recent Files"
-msgstr "Limpa os arquivos recentes"
+msgstr "Limpar arquivos recentes"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:400
 #: eeschema/tools/sch_drawing_tools.cpp:660
@@ -1366,7 +1367,7 @@ msgstr "Escolher uma imagem"
 #: eeschema/tools/sch_drawing_tools.cpp:661
 #: pagelayout_editor/pl_editor_frame.cpp:866 pcbnew/tools/drawing_tool.cpp:675
 msgid "Image Files"
-msgstr "Arquivos da imagem"
+msgstr "Arquivos de imagem"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
 msgid "Create Drawing Sheet File"
@@ -1382,15 +1383,15 @@ msgstr "Não foi possível criar o arquivo '%s'."
 
 #: bitmap2component/bitmap2cmp_frame.cpp:481
 msgid "Create PostScript File"
-msgstr "Crie o arquivo PostScript"
+msgstr "Criar arquivo PostScript"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:517
 msgid "Create Symbol Library"
-msgstr "Crie a biblioteca dos símbolos"
+msgstr "Criar biblioteca de símbolos"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:552
 msgid "Create Footprint Library"
-msgstr "Crie a biblioteca do footprint do componente"
+msgstr "Criar biblioteca de footprint"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:50 common/eda_draw_frame.cpp:668
 #: eeschema/dialogs/dialog_field_properties_base.cpp:220
@@ -1566,7 +1567,7 @@ msgstr "Não foi possível exportar para a área de transferência"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:540
 msgid "Error allocating memory for potrace bitmap"
-msgstr "houve um erro ao alocar a memória para o bitmap potrace"
+msgstr "Erro ao alocar memória para o bitmap potrace"
 
 #: bitmap2component/bitmap2cmp_panel.cpp:567
 #: common/widgets/wx_html_report_panel_base.cpp:41
@@ -1610,16 +1611,16 @@ msgstr "0000"
 #: common/widgets/gal_options_panel_base.cpp:87
 #: common/widgets/gal_options_panel_base.cpp:98
 msgid "pixels"
-msgstr "pontos"
+msgstr "pixels"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:61
 msgid "Image PPI:"
-msgstr "Imagem PPI:"
+msgstr "PPP da imagem:"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:73 eeschema/sch_bitmap.cpp:228
 #: pcbnew/pcb_reference_image.cpp:256
 msgid "PPI"
-msgstr "PPI"
+msgstr "PPP"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:77
 msgid "BPP:"
@@ -1745,12 +1746,12 @@ msgstr "Formato de saída"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 msgid "Export to File"
-msgstr "Exporte para o arquivo"
+msgstr "Exportar para arquivo"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:178
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
 msgid "Export to Clipboard"
-msgstr "Exporte para a área de transferência"
+msgstr "Exportar para a área de transferência"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -1761,8 +1762,8 @@ msgstr "Trabalhos em segundo plano"
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
-"Houve uma falha na expansão das variáveis do ambiente: faltando '%c' na "
-"posição %u em '%s'."
+"Falha na expansão das variáveis de ambiente: faltando '%c' na posição %u em "
+"'%s'."
 
 #: common/common.cpp:375
 #, c-format
@@ -1786,7 +1787,7 @@ msgstr ""
 
 #: common/common.cpp:696
 msgid "Unsupported Operating System"
-msgstr "O sistema operacional não compatível"
+msgstr "Sistema operacional não compatível"
 
 #: common/common.cpp:699
 msgid ""
@@ -1823,7 +1824,7 @@ msgstr "Pergunta"
 #: pcbnew/dialogs/dialog_export_vrml.cpp:214
 #: pcbnew/import_gfx/dialog_import_graphics.cpp:294 pcbnew/pcb_marker.cpp:203
 msgid "Warning"
-msgstr "Atenção"
+msgstr "Aviso"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
 msgid "File Open Warning"
@@ -1846,7 +1847,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc.cpp:313
 #: pcbnew/dialogs/dialog_unused_pad_layers.cpp:53
 msgid "Cancel"
-msgstr "Cancela"
+msgstr "Cancelar"
 
 #: common/confirm.cpp:165 common/confirm.cpp:170
 msgid "Open Anyway"
@@ -1865,15 +1866,15 @@ msgstr "Se não salvar, todas as alterações serão perdidas permanentemente."
 #: eeschema/widgets/tuner_slider_base.cpp:117
 #: pcbnew/footprint_libraries_utils.cpp:1004
 msgid "Save"
-msgstr "Salve"
+msgstr "Salvar"
 
 #: common/confirm.cpp:185 common/confirm.cpp:221
 msgid "Discard Changes"
-msgstr "Descarte as alterações"
+msgstr "Descartar alterações"
 
 #: common/confirm.cpp:188 common/confirm.cpp:267
 msgid "Apply to all"
-msgstr "Aplique para todos"
+msgstr "Aplicar para todos"
 
 #: common/confirm.cpp:233
 msgid "Your current changes will be permanently lost."
@@ -1881,7 +1882,7 @@ msgstr "As suas alterações atuais serão perdidas permanentemente."
 
 #: common/confirm.cpp:234 common/tool/actions.cpp:107
 msgid "Revert"
-msgstr "Reverta"
+msgstr "Reverter"
 
 #: common/confirm.cpp:260 common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:142
@@ -1985,7 +1986,7 @@ msgstr "Rastreador de bugs"
 
 #: common/dialog_about/AboutDialog_main.cpp:155
 msgid "Report or examine bugs - "
-msgstr "Reporte ou examine problemas - "
+msgstr "Reportar ou examinar bugs - "
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad users group and community"
@@ -15252,6 +15253,8 @@ msgstr "O caminho da saída não pode conflitar com um caminho já existente\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"O caminho de saída deve ser especificado para converter bibliotecas legadas "
+"ou não pertencentes ao KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:913
 msgid "Saving symbol library in updated format\n"
