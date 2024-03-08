@@ -552,6 +552,8 @@ void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping 
 {
     // Save the visibility of each existing gerber layer, in order to be able
     // to restore this visibility after layer reorder.
+    // Note: the visibility of other objects (D_CODE, negative objects ... )
+    // must be not modified
     for( int currlayer = GERBER_DRAWLAYERS_COUNT-1; currlayer >= 0; --currlayer )
     {
         GERBER_FILE_IMAGE* gerber = GetImagesList()->GetGbrImage( currlayer );
@@ -576,8 +578,8 @@ void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping 
 
     GetCanvas()->GetView()->ReorderLayerData( view_remapping );
 
-    // Restore visibility options
-    LSET newVisibility;
+    // Restore visibility of gerber layers
+    LSET newVisibility = GetVisibleLayers();
 
     for( int currlayer = GERBER_DRAWLAYERS_COUNT-1; currlayer >= 0; --currlayer )
     {
@@ -587,6 +589,8 @@ void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping 
         {
             if( gerber->HasFlag( CANDIDATE ) )
                 newVisibility.set( currlayer );
+            else
+                newVisibility.set( currlayer, false );
 
             gerber->ClearFlags( CANDIDATE );
         }
