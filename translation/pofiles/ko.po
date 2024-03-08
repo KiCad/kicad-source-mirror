@@ -31,7 +31,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
 "PO-Revision-Date: 2024-03-09 10:01+0000\n"
-"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
@@ -809,7 +809,7 @@ msgstr "왼쪽 더블 클릭 또는 중간 버튼 클릭을 통해 색상 변경
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "색상 편집을 허용하려면 '보드 스택업 색상 사용' 선택을 해제합니다."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -4468,7 +4468,7 @@ msgstr "네트클래스 이름이 이미 사용 중입니다."
 
 #: common/dialogs/panel_setup_netclasses.cpp:538
 msgid "Minimum copper clearance"
-msgstr "최소 구리 클리어런스"
+msgstr "최소 구리 공간거리"
 
 #: common/dialogs/panel_setup_netclasses.cpp:539
 msgid "Minimum track width"
@@ -4531,7 +4531,7 @@ msgstr "네트클래스:"
 #: pcbnew/tools/board_inspection_tool.cpp:539
 #: pcbnew/tools/board_inspection_tool.cpp:1106 pcbnew/zone.cpp:1719
 msgid "Clearance"
-msgstr "클리어런스"
+msgstr "공간거리"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:53
 #: pcb_calculator/pcb_calculator_frame.cpp:172
@@ -7289,7 +7289,7 @@ msgstr "현재 도구 완료"
 
 #: common/tool/actions.cpp:160
 msgid "Show Context Menu"
-msgstr "상황에 맞는 메뉴 표시"
+msgstr "상황별 메뉴 표시"
 
 #: common/tool/actions.cpp:161
 msgid "Perform the right-mouse-button action"
@@ -9244,7 +9244,7 @@ msgstr "번호 매기기"
 #: eeschema/dialogs/dialog_annotate_base.cpp:101
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:73
 msgid "Use first free number after:"
-msgstr "해당 번호 이후의 첫 번째 빈 번호부터 사용:"
+msgstr "이후 첫 번째 빈 번호를 사용:"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:107
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:79
@@ -14682,7 +14682,7 @@ msgstr "출력 경로는 기존 경로와 충돌하지 않아야 합니다\n"
 #: eeschema/eeschema_jobs_handler.cpp:896 pcbnew/pcbnew_jobs_handler.cpp:784
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
-msgstr ""
+msgstr "기존 라이브러리와 비KiCad 라이브러리를 변환하려면 출력 경로를 지정해야 함\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
@@ -18316,7 +18316,7 @@ msgstr "알 수 없는 키워드 "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1364
 msgid " context: "
-msgstr " 문맥: "
+msgstr " 문법: "
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1430
 msgid "Invalid ramp data"
@@ -18440,7 +18440,7 @@ msgstr "내부 오류가 감지되었습니다. 파형(waveform)이 있어야 �
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2563
 msgid "Internal error: Bad parser context."
-msgstr "내부 오류: 구문 분석기 문맥 오류."
+msgstr "내부 오류: 구문 분석기 문법 오류."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:2601
 msgid "Missing keyword."
@@ -18827,9 +18827,8 @@ msgstr ""
 msgid ""
 "You must run a TRAN simulation first; its resultswill be used for the fast "
 "Fourier transform."
-msgstr ""
-"먼저 TRAN 시뮬레이션을 실행해야 합니다. 그 결과는 고속 푸리에 변환에 사용됩니"
-"다."
+msgstr "TRAN 시뮬레이션을 먼저 실행해야 하며, 그 결과는 고속 푸리에 변환에 "
+"사용됩니다."
 
 #: eeschema/sim/simulator_frame.cpp:422
 msgid ""
@@ -25157,7 +25156,7 @@ msgstr "첫 페이지만"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:38
 msgid "Subsequent pages only"
-msgstr "후속 페이지만"
+msgstr "이후 페이지만 해당"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:161
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:474
@@ -25598,7 +25597,7 @@ msgstr "선 두께"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:74
 msgid "Minimum clearance"
-msgstr "최소 간격"
+msgstr "최소 공간거리"
 
 #: pcb_calculator/calculator_panels/panel_board_class_base.cpp:75
 msgid "Via: (diameter - drill)"
@@ -26011,7 +26010,7 @@ msgstr "kV"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:109
 msgid "Compute the clearance and creepage distances"
-msgstr "간격 및 연면 거리 계산하기"
+msgstr "공간거리와 연면거리 계산하기"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:119
 msgid "RMS Voltage:"
@@ -26191,8 +26190,8 @@ msgid ""
 "A coating that could easily delaminate in the lifespan of the product (such "
 "as a soldermask) should not be considered for a reduction."
 msgstr ""
-"코팅 및 포팅을 통해 공간거리 및 연면 거리를 줄일 수 있습니다. 계산기에서는 지"
-"원되지 않습니다.\n"
+"코팅 및 포팅을 통해 공간거리와 연면거리를 줄일 수 있습니다. 계산기에서 "
+"지원되지 않습니다.\n"
 "\n"
 "제품 수명 동안 쉽게 박리될 수 있는 코팅(예: 솔더마스크)은 감소를 고려해서는 "
 "안 됩니다."
@@ -26200,7 +26199,7 @@ msgstr ""
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:254
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:197
 msgid "Clearance:"
-msgstr "클리어런스:"
+msgstr "공간거리:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:268
 msgid "Creepage:"
@@ -26221,7 +26220,7 @@ msgid ""
 "solid: clearance\n"
 "dashed: creepage"
 msgstr ""
-"실선: 간격\n"
+"실선: 공간거리\n"
 "점선: 연면거리"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
@@ -26330,7 +26329,7 @@ msgstr "E1,E3,E6,E12"
 
 #: pcb_calculator/calculator_panels/panel_fusing_current.cpp:231
 msgid "Current calculation is underestimated due to long fusing time."
-msgstr "긴 융합 시간으로 인해 현재 계산이 과소 평가되었습니다."
+msgstr "용단 시간이 길어 전류 계산이 과소 예측되었습니다."
 
 #: pcb_calculator/calculator_panels/panel_fusing_current_base.cpp:31
 msgid "Ambient temperature:"
@@ -26718,7 +26717,7 @@ msgstr "T형"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Bridged tee"
-msgstr "브릿지 T형"
+msgstr "브리지 T형"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:24
 msgid "Resistive splitter"
@@ -26972,11 +26971,11 @@ msgstr "비아를 둘러싼 패드의 직경 (환형 고리)"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
-msgstr "홀 지름 클리어런스 :"
+msgstr "홀 지름 공간거리 :"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:87
 msgid "Diameter of clearance hole in ground plane(s)"
-msgstr "접지면의 홀 지름 클리어런스"
+msgstr "접지면의 홀 지름 공간거리"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:99
 msgid "Z0:"
@@ -27030,7 +27029,7 @@ msgid ""
 "Some parameters cannot be calculated for a via inside a copper zone."
 msgstr ""
 "주의:\n"
-"비아 패드 지름 >= 홀 지름 클리어런스 .\n"
+"비아 패드 지름 >= 홀 지름 공간거리 .\n"
 "일부 매개 변수는 구리 영역 내부의 비아에 대해 계산할 수 없습니다."
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:262
@@ -27112,7 +27111,7 @@ msgstr "주기:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:51
 msgid "Wavelength in vacuum:"
-msgstr "진공 속의 파장:"
+msgstr "진공 상태의 파장:"
 
 #: pcb_calculator/calculator_panels/panel_wavelength_base.cpp:63
 msgid "Wavelength in medium:"
@@ -27256,13 +27255,13 @@ msgstr ""
 "\n"
 "그러나 일부 사례는 이 계산기에서 다루지 않습니다:\n"
 "\n"
-"- 30kHz 이상의 주파수에서는 유전체 성능이 저하됩니다. IEC60664-4는 이러한 경"
-"우를 다룹니다.\n"
-"- 오염으로부터 보호하기 위해 컨포멀 코팅 또는 포팅을 사용하는 경우 IEC60664-3"
-"에 지정된 모든 조건이 충족되면 클리어런스 및 연면 거리를 줄일 수 있습니다. 솔"
-"더마스크는 일반적으로 컨포멀 코팅으로 간주되지 않습니다.\n"
-"- 공기 이외의 액체, 압축 공기 또는 가스를 통한 단열재는 IEC60664의 범위에 포"
-"함되지 않음"
+"- 30kHz 이상의 주파수에서는 유전체 성능이 저하됩니다. IEC60664-4는 이러한 "
+"경우를 다룹니다.\n"
+"- 오염으로부터 보호하기 위해 컨포멀 코팅 또는 포팅을 사용하는 경우 IEC60664-"
+"3에 지정된 모든 조건이 충족되면 공간거리 및 연면 거리를 줄일 수 있습니다. "
+"솔더마스크는 일반적으로 컨포멀 코팅으로 간주되지 않습니다.\n"
+"- 공기 이외의 액체, 압축 공기 또는 가스를 통한 단열재는 IEC60664의 범위에 "
+"포함되지 않음"
 
 #: pcb_calculator/pcb_calculator_frame.cpp:69
 msgid "KiCad Calculator Tools"
@@ -29445,9 +29444,7 @@ msgstr "전기적 속성"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:199
 msgid "Copper clearance for this zone (set to 0 to use the netclass clearance)"
-msgstr ""
-"해당 영역에 대한 구리 클리어런스 (0으로 설정하면 네트클래스 클리어런스를 그대"
-"로 사용합니다)"
+msgstr "이 영역의 구리 공간거리('네트클래스 공간거리'를 사용하려면 0으로 설정)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:210
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:76
@@ -29491,7 +29488,7 @@ msgstr "특정 영역의 채워진 영역과 단열판의 스포크에 연결된
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:245
 msgid "Clearance between pads in the same net and filled areas."
-msgstr "같은 네트와 채워진 영역에 존재하는 패드 사이의 클리어런스."
+msgstr "같은 네트와 채워진 영역에 존재하는 패드 사이의 공간거리."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:253
 msgid "Thermal spoke width:"
@@ -31263,7 +31260,7 @@ msgstr "라이브러리 풋프린트 편집..."
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:267
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:235
 msgid "Clearances"
-msgstr "클리어런스"
+msgstr "공간거리"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:269
 msgid "Set values to 0 to use Board Setup values."
@@ -31273,7 +31270,7 @@ msgstr "보드 설정 값을 사용하려면 이 값을 0으로 설정하십시�
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:949
 msgid "Pad clearance:"
-msgstr "패드 클리어런스:"
+msgstr "패드 공간거리:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:281
 msgid ""
@@ -31281,7 +31278,7 @@ msgid ""
 "If 0, the Netclass values are used\n"
 "This value can be superseded by a pad local value."
 msgstr ""
-"현재 풋프린트에 대한 모든 패드의 지역 네트 클리어런스 값을 의미합니다.\n"
+"현재 풋프린트에 대한 모든 패드의 지역 네트 공간거리 값을 의미합니다.\n"
 "0으로 설정될 경우, 네트클래스 값이 사용됩니다.\n"
 "이 값은 패드의 지역 값으로 대체될 수 있습니다."
 
@@ -31299,8 +31296,8 @@ msgid ""
 "This value can be superseded by a pad local value.\n"
 "If 0, the global value is used."
 msgstr ""
-"이 값은 해당 풋프린트의 패드와 솔더 마스크 간의 지역 클리어런스 값을 나타냅니"
-"다.\n"
+"이 값은 해당 풋프린트의 패드와 솔더 마스크 간의 지역 공간거리 값을 "
+"나타냅니다.\n"
 "이 값은 패드의 지역 값으로 대체될 수 있습니다.\n"
 "0으로 설정될 경우, 전역 값이 적용됩니다."
 
@@ -31315,7 +31312,7 @@ msgstr "패드 사이에 브리지 솔더 마스크 구멍 허용"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:975
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:103
 msgid "Solder paste absolute clearance:"
-msgstr "솔더 페이스트의 절대 클리어런스:"
+msgstr "솔더 페이스트의 절대 공간거리:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:310
 msgid ""
@@ -31326,10 +31323,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"이 값은 해당 풋프린트의 패드와 솔더 페이스트 간의 지역 유격 값을 나타냅니"
-"다.\n"
+"이 값은 해당 풋프린트의 패드와 솔더 페이스트 간의 지역 공간거리 값을 "
+"나타냅니다.\n"
 "이 값은 패드의 지역 값으로 대체될 수 있습니다.\n"
-"최종 유격 값은 이 값과 유격 값의 비율의 합으로 결정됩니다.\n"
+"최종 공간거리 값은 이 값과 공간거리 값 비율의 합으로 결정됩니다.\n"
 "값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:321
@@ -31337,7 +31334,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:988
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:118
 msgid "Solder paste relative clearance:"
-msgstr "솔더 페이스트의 상대 클리어런스:"
+msgstr "솔더 페이스트의 상대 공간거리:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
 #, c-format
@@ -31351,13 +31348,13 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"이것은 이 풋프린트에 대한 패드 너비와 높이의 백분율로 적용된 로컬 유격 비율입"
-"니다.\n"
-"값이 10이면 수평 유격 값이 패드 너비의 10% o 이고 수직 유격 값이 패드 높이의 "
-"10% o 임을 의미합니다.\n"
-"이 값은 패드 로컬 값으로 대체될 수 있습니다.\n"
-"최종 유격 값은 이 값과 절대 유격 값의 합입니다.\n"
-"값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다."
+"이 풋프린트에 대해 패드 너비와 높이의 백분율로 적용되는 로컬 공간거리 "
+"비율입니다.\n"
+"값이 10이면 가로 공간거리 값은 패드 너비의 10%, 세로 공간거리 값은 패드 "
+"높이의 10%를 의미합니다.\n"
+"이 값은 패드 로컬 값으로 대체할 수 있습니다.\n"
+"최종 공간거리 값은 이 값과 절대 공간거리 값의 합입니다.\n"
+"음수 값은 스텐실 조리개 크기가 패드 크기보다 작음을 의미합니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -31373,8 +31370,7 @@ msgstr "참고: 솔더 마스크와 페이스트의 값은 구리 레이어의 �
 msgid ""
 "Note: solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr ""
-"참고: 솔더 페이스트 클리어런스는 (절대값이나 상대값 모두) 최종 클리어런스를 "
+msgstr "참고: 솔더 페이스트 공간거리는 (절대값이나 상대값 모두) 최종 공간거리를 "
 "결정하는 데에 더해져 사용됩니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:358
@@ -31402,7 +31398,7 @@ msgstr "단열판"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:377
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:399
 msgid "Clearance Overrides and Settings"
-msgstr "클리어런스 재정의 및 설정"
+msgstr "공간거리 재정의 및 설정"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:390
 msgid ""
@@ -31480,10 +31476,10 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"이 값은 해당 풋프린트의 모든 패드에 대한 지역 네트 클리어런스 값을 나타냅니"
-"다.\n"
+"이 값은 해당 풋프린트의 모든 패드에 대한 지역 네트 공간거리 값을 나타냅니다."
+"\n"
 "0으로 설정할 경우, 네트클래스 값이 사용됩니다.\n"
-"이 값은 패드 속성에 위치한 지역 클리어런스와 설정 탭에서\n"
+"이 값은 패드 속성에 위치한 지역 공간거리와 설정 탭에서\n"
 "패드 단위로 재정의될 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:262
@@ -31495,9 +31491,9 @@ msgid ""
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
 "이 값은 해당 풋프린트의 패드와 솔더 마스크 간 \n"
-"지역 클리어런스 값을 나타냅니다.\n"
+"지역 공간거리 값을 나타냅니다.\n"
 "0으로 설정할 경우, 전역 값이 사용됩니다.\n"
-"이 값은 패드 속성에 위치한 지역 클리어런스와 설정 탭에서\n"
+"이 값은 패드 속성에 위치한 지역 공간거리와 설정 탭에서\n"
 "패드 단위로 재정의될 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:278
@@ -31511,10 +31507,10 @@ msgid ""
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
 "이 값은 해당 풋프린트의 패드와 솔더 페이스트 간 \n"
-"지역 유격 값을 나타냅니다.\n"
-"최종 유격 값은 이 값과 유격 값의 비율의 합으로 결정됩니다.\n"
+"지역 공간거리 값을 나타냅니다.\n"
+"최종 공간거리 값은 이 값과 공간거리 값의 비율의 합으로 결정됩니다.\n"
 "값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다.\n"
-"이 값은 패드 설정에 위치한 지역 유격과 설정 탭에서\n"
+"이 값은 패드 설정에 위치한 지역 공간거리와 설정 탭에서\n"
 "패드 별로 재정의할 수 있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
@@ -31530,13 +31526,14 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"이것은 이 풋프린트에 대한 패드 너비와 높이의 백분율로 적용된 로컬 클리어런스 "
+"이 풋프린트에 대해 패드 너비와 높이의 백분율로 적용되는 로컬 공간 거리 "
 "비율입니다.\n"
-"값이 10이면 수평 유격 값이 패드 너비의 10% o 이고 수직 클리어런스 값이 패드 "
-"높이의 10% o 임을 의미합니다.\n"
-"최종 유격 값은 이 값과 절대 유격 값의 합입니다.\n"
-"값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다.\n"
-"이 값은 패드 속성의 로컬 유격 및 설정 탭에서 패드별로 재정의할 수 있습니다."
+"값이 10이면 가로 공간거리 값은 패드 너비의 10%, 세로 공간거리 값은 패드 "
+"높이의 10%를 의미합니다.\n"
+"최종 간격 값은 이 값과 절대 간격 값의 합입니다.\n"
+"음수 값은 스텐실 조리개 크기가 패드 크기보다 작음을 의미합니다.\n"
+"이 값은 패드 속성의 로컬 공간거리 및 설정 탭에서 패드별로 재정의할 수 "
+"있습니다."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
@@ -32891,22 +32888,20 @@ msgstr "경고: 패드 홀에 동박이 전혀 없습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1267
 msgid "Warning: Negative local clearance values will have no effect."
-msgstr "경고: 음수 지역 클리어런스 값은 아무런 효과가 없습니다."
+msgstr "경고: 음수 지역 공간거리 값은 적용되지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1284
 msgid ""
 "Warning: Negative solder mask clearances larger than some shape primitives. "
 "Results may be surprising."
-msgstr ""
-"경고: 음수 솔더 마스크 클리어런스 값이 도형 기본 요소보다 큽니다. 뜻밖의 결과"
-"가 나올 수 있습니다."
+msgstr "경고: 음수 솔더 마스크 공간거리는 일부 형상 기본 요소보다 큽니다. 결과가 "
+"예상외로 나올 수 있습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1293
 msgid ""
 "Warning: Negative solder mask clearance larger than pad. No solder mask will "
 "be generated."
-msgstr ""
-"경고: 음수 솔더 마스크 클리어런스 값이 패드 값보다 더 큽니다. 솔더 마스크는 "
+msgstr "경고: 음수 솔더 마스크 공간거리 값이 패드 값보다 더 큽니다. 솔더 마스크는 "
 "생성되지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1312
@@ -33351,7 +33346,7 @@ msgstr "스포크 각도:"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:928
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1056
 msgid "Clearance Overrides"
-msgstr "클리어런스 재정의"
+msgstr "공간거리 재정의"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:931
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -33361,24 +33356,21 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:935
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
-msgstr ""
-"클리어런스 값이 양수일 경우, 패드보다 넓은 면적을 의미합니다 (일반적으로 마스"
-"크 클리어런스)."
+msgstr "양수 공간거리는 패드보다 큰 면적을 의미합니다(일반적으로 마스크 공간거리)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:939
 msgid ""
 "Negative clearance means area smaller than the pad (usual for paste "
 "clearance)."
-msgstr ""
-"클리어런스 값이 음수일 경우, 패드보다 작은 면적을 의미합니다 (일반적으로 페이"
-"스트 클리어런스)."
+msgstr "음수 공간거리는 패드보다 작은 영역을 의미합니다(일반적으로 페이스트 "
+"공간거리)."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:951
 msgid ""
 "This is the local net clearance for this pad.\n"
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
-"이 값은 현재 패드에 대한 지역 네트 클리어런스 값입니다.\n"
+"이 값은 현재 패드에 대한 지역 네트 공간거리 값입니다.\n"
 "0으로 설정될 경우, 풋프린트 지역 값 또는 네트클래스 값이 사용됩니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:964
@@ -33386,7 +33378,7 @@ msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"이 값은 현재 패드와 솔더 마스크 간의 지역 클리어런스 값입니다.\n"
+"이 값은 현재 패드와 솔더 마스크 간의 지역 공간거리 값입니다.\n"
 "0으로 설정될 경우, 풋프린트 지역 값 또는 전역 값이 사용됩니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:977
@@ -33397,9 +33389,9 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"이 값은 해당 패드와 솔더 페이스트 간 지역 클리어런스 값을 나타냅니다.\n"
+"이 값은 해당 패드와 솔더 페이스트 간 지역 공간거리 값을 나타냅니다.\n"
 "값이 0일 경우, 풋프린트 값 또는 전역 값이 사용됩니다.\n"
-"최종 클리어런스 값은 이 값과 클리어런스 값의 비율의 합으로 결정됩니다.\n"
+"최종 공간거리 값은 이 값과 공간거리 값의 비율의 합으로 결정됩니다.\n"
 "값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:990
@@ -33411,11 +33403,11 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"이 값은 해당 패드와 솔더 페이스트 간의 지역 클리어런스 값을 백분율로 나타냅니"
-"다.\n"
-"값이 10일 경우, 클리어런스 값은 패드 크기의 10 퍼센트라는 의미입니다.\n"
+"이 값은 해당 패드와 솔더 페이스트 간의 지역 공간거리 값을 백분율로 "
+"나타냅니다.\n"
+"값이 10일 경우, 공간거리 값은 패드 크기의 10 퍼센트라는 의미입니다.\n"
 "값이 0일 경우, 풋프린트 값 또는 전역 값이 사용됩니다.\n"
-"최종 클리어런스 값은 이 값과 클리어런스 값의 합으로 결정됩니다.\n"
+"최종 공간거리 값은 이 값과 공간거리 값의 합으로 결정됩니다.\n"
 "값이 음수일 경우, 패드 크기보다 마스크 크기가 작음을 의미합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1193
@@ -33748,8 +33740,8 @@ msgid ""
 msgstr ""
 "정확한 PostScript 출력을 위해 전역 폭 보정을 설정합니다.\n"
 "이 폭 보정은 배선의 폭과 패드, 비아 크기 오류를 보정하기 위해 설정됩니다.\n"
-"합리적인 폭 보정 값은 [-(최소배선폭-1), +(최소클리어런스값-1)] 범위 내에 있어"
-"야 합니다."
+"합리적인 폭 보정 값은 [-(최소 배선 폭-1), +(최소 공간거리 값-1)] 범위 내에 "
+"있어야 합니다."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:319
 msgid "Force A4 output"
@@ -34676,7 +34668,7 @@ msgstr "회전 명령을 위한 스텝 (&r):"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:40
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
-msgstr "컨텍스트 메뉴와 단축키 회전의 증감값을 (단위: 도) 설정합니다."
+msgstr "상황 별 메뉴 및 단축키 회전의 증분(도)을 설정합니다."
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:52
 msgid "Arc editing mode:"
@@ -34966,11 +34958,11 @@ msgstr "패드 번호 표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:69
 msgid "Clearance Outlines"
-msgstr "클리어런스 외곽선"
+msgstr "공간거리 외곽선"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Do not show clearances"
-msgstr "간격을 표시하지 않음"
+msgstr "공간거리 표시하지 않음"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing"
@@ -34978,7 +34970,7 @@ msgstr "배선 시에 표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing w/ via clearance at end"
-msgstr "배선 시 끝에 비아 클리어런스도 함께표시"
+msgstr "배선 시 끝에 비아 공간거리도 함께표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:85
 msgid "Show when routing and editing"
@@ -34990,7 +34982,7 @@ msgstr "항상 표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:91
 msgid "Show pad clearance"
-msgstr "패드 클리어런스 표시"
+msgstr "패드 공간거리 표시"
 
 #: pcbnew/dialogs/panel_pcb_display_options_base.cpp:110
 msgid "Show all fields when parent footprint is selected"
@@ -35103,7 +35095,7 @@ msgstr "화면상에서 Y축 값이 증가하는 방향을 선택하세요."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:46
 msgid "Minimum clearance:"
-msgstr "최소 클리어런스:"
+msgstr "최소 공간거리:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:51
 msgid ""
@@ -35111,9 +35103,9 @@ msgid ""
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
 msgstr ""
-"같은 네트에 존재하지 않는 두 개의 구리 개체 사이의 최소 클리어런스.   이 값"
-"이 설정되면, 해당 값은 절대적 최소값이 되며 네트클래스, 사용자 정의 규칙 또"
-"는 기타 설정으로 줄일 수 없게 됩니다."
+"같은 네트에 존재하지 않는 두 개의 구리 개체 사이의 최소 공간거리.   이 값이 "
+"설정되면, 해당 값은 절대적 최소값이 되며 네트클래스, 사용자 정의 규칙 또는 "
+"기타 설정으로 줄일 수 없게 됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -35161,7 +35153,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
-msgstr "동박과 홀간 클리어런스:"
+msgstr "동박과 홀간 공간거리:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:133
 msgid ""
@@ -35169,13 +35161,13 @@ msgid ""
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
 msgstr ""
-"홀과 연관성이 없는 구리 객체간의 클리어런스 최소값. 이 값이 설정되면, 해당 값"
-"은 절대적 최소값이 되며 사용자 정의 규칙 또는 기타 설정으로 줄일 수 없게 됩니"
-"다."
+"홀과 연관성이 없는 구리 객체간의 공간거리 최소값. 이 값이 설정되면, 해당 "
+"값은 절대적 최소값이 되며 사용자 정의 규칙 또는 기타 설정으로 줄일 수 없게 "
+"됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
-msgstr "카퍼와 보드외곽 간 간격:"
+msgstr "동박과 모서리 간 공간거리:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:149
 msgid ""
@@ -35183,9 +35175,9 @@ msgid ""
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
 msgstr ""
-"기판 모서리와 모든 구리 객체 간의 클리어런스 최소값.  이 값이 설정되면, 해당 "
-"값은 절대적 최소값이 되며 사용자 정의 규칙 또는 기타 설정으로 줄일 수 없게 됩"
-"니다."
+"기판 모서리와 모든 구리 객체 간의 공간거리 최소값.  이 값이 설정되면, 해당 "
+"값은 절대적 최소값이 되며 사용자 정의 규칙 또는 기타 설정으로 줄일 수 없게 "
+"됩니다."
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Holes"
@@ -35205,7 +35197,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
-msgstr "홀-홀 간 클리어런스:"
+msgstr "홀과 홀 간 공간거리:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:206
 msgid ""
@@ -35213,9 +35205,9 @@ msgid ""
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
 msgstr ""
-"드릴로 뚫은 두 개의 홀 사이의 클리어런스 최소값.  이 값이 설정되면, 해당 값"
-"은 절대적 최소값이 되며 사용자 정의 규칙 또는 기타 설정으로 줄일 수 없게 됩니"
-"다. (참고: 밀링된 홀에는 적용되지 않습니다.)"
+"드릴로 뚫은 두 개의 홀 사이의 공간거리 최소값.  이 값이 설정되면, 해당 값은 "
+"절대적 최소값이 되며 사용자 정의 규칙 또는 기타 설정으로 줄일 수 없게 "
+"됩니다. (참고: 밀링된 홀에는 적용되지 않습니다.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
 msgid "uVias"
@@ -35251,7 +35243,7 @@ msgstr "실크스크린"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:299
 msgid "Minimum item clearance:"
-msgstr "최소 개체 클리어런스:"
+msgstr "최소 개체 공간거리:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:304
 msgid ""
@@ -35259,9 +35251,9 @@ msgid ""
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
 msgstr ""
-"같은 실크스크린 레이어 상의 두 개체에 대한 최소 클리어런스.  이 값이 설정될 "
-"경우, 가독성을 높일 수 있습니다. (참고: 단일 풋 프린트 내의 여러 모양에는 적"
-"용되지 않습니다.)"
+"같은 실크스크린 레이어 상의 두 개체에 대한 최소 공간거리.  이 값이 설정될 "
+"경우, 가독성을 높일 수 있습니다. (참고: 단일 풋 프린트 내의 여러 모양에는 "
+"적용되지 않습니다.)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
 msgid "Minimum text height:"
@@ -35961,16 +35953,15 @@ msgid ""
 "Global clearance between pads and the solder mask.\n"
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
-"패드와 솔더 마스크 간의 전역 클리어런스 값입니다.\n"
+"패드와 솔더 마스크 간의 전역 공간거리 값입니다.\n"
 "풋프린트 또는 패드의 지역 값으로 대체될 수 있습니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:61
 msgid ""
 "Positive clearance means area bigger than the pad (usual for solder mask "
 "clearance)."
-msgstr ""
-"클리어런스가 양수일 땐 영역이 패드 크기보다 큼을 의미합니다 (대부분 솔더 마스"
-"크 클리어런스)."
+msgstr "양수 공간거리는 패드보다 큰 면적을 의미합니다(일반적으로 솔더 마스크 "
+"공간거리)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:69
 msgid "Solder mask minimum web width:"
@@ -35998,7 +35989,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:84
 msgid "Solder mask to copper clearance:"
-msgstr "구리 간극에 대한 솔더 마스크:"
+msgstr "솔더 마스크와 동박 간 공간거리:"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:95
 msgid "Allow bridged solder mask apertures between pads within footprints"
@@ -36010,17 +36001,16 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value ratio."
 msgstr ""
-"이 값은 패드와 솔더 페이스트 간의 전역 클리어런스값을 나타냅니다.\n"
+"이 값은 패드와 솔더 페이스트 간의 전역 공간거리 값을 나타냅니다.\n"
 "이 값은 각 풋프린트 또는 패드의 지역 값으로 대체될 수 있습니다.\n"
-"최종 클리어런스 값은 이 값과 클리어런스 값의 비율의 합으로 결정됩니다."
+"최종 공간거리 값은 이 값과 공간거리 값 비율의 합으로 결정됩니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:110
 msgid ""
 "Negative clearance means area smaller than the pad (usual for solder paste "
 "clearance)."
-msgstr ""
-"클리어런스가 음수일 땐 영역이 패드 크기보다 작음을 의미합니다 (대부분 솔더 페"
-"이스트 클리어런스)."
+msgstr "음수 공간거리는 패드보다 작은 면적을 의미합니다(일반적으로 솔더 페이스트 "
+"공간거리)."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:120
 msgid ""
@@ -36029,22 +36019,21 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "Final clearance value is the sum of this value and the clearance value."
 msgstr ""
-"이 값은 패드와 솔더 페이스트 간의 전역 클리어런스값을 백분율로 나타냅니다.\n"
-"값이 10일 경우, 클리어런스 값은 패드 크기의 10 퍼센트라는 의미입니다.\n"
+"이 값은 패드와 솔더 페이스트 간의 전역 공간거리 값을 백분율로 나타냅니다.\n"
+"값이 10일 경우, 공간거리 값은 패드 크기의 10 퍼센트라는 의미입니다.\n"
 "이 값은 각 풋프린트 또는 패드의 지역 값으로 대체될 수 있습니다.\n"
-"최종 클리어런스 값은 이 값과 클리어런스 값의 합으로 결정됩니다."
+"최종 공간거리 값은 이 값과 공간거리 값의 합으로 결정됩니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:125
 msgid "Additional clearance as a percentage of the pad size."
-msgstr "추가 클리어런스는 패드 사이즈에 대해 백분율로 지정됩니다."
+msgstr "추가 공간거리는 패드 사이즈에 대해 백분율로 표시합니다."
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:136
 msgid ""
 "Note: Solder paste clearances (absolute and relative) are added to determine "
 "the final clearance."
-msgstr ""
-"참고: 솔더 페이스트 클리어런스 (상대값과 절대값 모두) 는 최종 클리어런스를 결"
-"정하는 데에 더해져 사용됩니다."
+msgstr "참고: 최종 공간거리를 결정하기 위해 솔더 페이스트 공간거리(절대 및 상대)가 "
+"추가됩니다."
 
 #: pcbnew/dialogs/panel_setup_rules.cpp:105
 msgid "Cancel Changes?"
@@ -37195,7 +37184,7 @@ msgstr "패드는 스루홀 패드가 아님; %s가 연결됨."
 #: pcbnew/drc/drc_engine.cpp:759 pcbnew/drc/drc_engine.cpp:769
 #, c-format
 msgid "Local override on %s; clearance: %s."
-msgstr "%s에 대한 지역 재정의; 클리어런스: %s."
+msgstr "%s에 대한 지역 재정의; 공간거리: %s."
 
 #: pcbnew/drc/drc_engine.cpp:784 pcbnew/drc/drc_engine.cpp:1392
 #: pcbnew/drc/drc_engine.cpp:1408
@@ -37206,7 +37195,7 @@ msgstr "기판 최소값"
 #: pcbnew/drc/drc_engine.cpp:1402
 #, c-format
 msgid "Board minimum clearance: %s."
-msgstr "보드 최소 클리어런스: %s."
+msgstr "보드 최소 공간거리: %s."
 
 #: pcbnew/drc/drc_engine.cpp:796
 msgid "board minimum hole"
@@ -37215,7 +37204,7 @@ msgstr "기판 최소 홀"
 #: pcbnew/drc/drc_engine.cpp:799
 #, c-format
 msgid "Board minimum hole clearance: %s."
-msgstr "기판 최소 홀 클리어런스: %s."
+msgstr "기판 최소 홀 공간거리: %s."
 
 #: pcbnew/drc/drc_engine.cpp:818
 #, c-format
@@ -37253,7 +37242,7 @@ msgstr "--> 규칙에 실패했습니다. <--"
 #: pcbnew/drc/drc_engine.cpp:905
 #, c-format
 msgid "Checking %s clearance: %s."
-msgstr "%s 클리어런스 확인 중: %s."
+msgstr "%s 공간거리 확인: %s."
 
 #: pcbnew/drc/drc_engine.cpp:911
 #, c-format
@@ -37333,7 +37322,7 @@ msgstr "%s의 차동 쌍 유격 확인 중: 선택 %s."
 #: pcbnew/drc/drc_engine.cpp:1041
 #, c-format
 msgid "Checking %s clearance: min %s."
-msgstr "클리어런스 %s 점검: 최소 %s."
+msgstr "%s 공간거리 확인: 최소 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1049
 #, c-format
@@ -37353,7 +37342,7 @@ msgstr "%s 확인 중: 최소 %s; 최적 %s; 최대 %s."
 
 #: pcbnew/drc/drc_engine.cpp:1091
 msgid "Netclass clearances apply only between copper items."
-msgstr "네트클래스 간격은 구리 항목 간에만 적용됩니다."
+msgstr "네트클래스 공간거리는 동박 항목 간에만 적용됩니다."
 
 #: pcbnew/drc/drc_engine.cpp:1095 pcbnew/drc/drc_engine.cpp:1100
 #, c-format
@@ -37431,7 +37420,7 @@ msgstr "조건을 만족하지 못하였습니다; 규칙은 무시됩니다."
 #: pcbnew/drc/drc_engine.cpp:1342 pcbnew/drc/drc_engine.cpp:1364
 #, c-format
 msgid "Local clearance on %s: %s."
-msgstr "%s의 지역 클리어런스: %s."
+msgstr "%s의 지역 공간거리: %s."
 
 #: pcbnew/drc/drc_engine.cpp:1423
 #, c-format
@@ -37501,7 +37490,7 @@ msgstr "Edge.Cuts 레이어의 텍스트 (또는 치수)"
 
 #: pcbnew/drc/drc_item.cpp:69
 msgid "Clearance violation"
-msgstr "클리어런스 위반"
+msgstr "공간거리 위반"
 
 #: pcbnew/drc/drc_item.cpp:73
 msgid "Tracks crossing"
@@ -37509,7 +37498,7 @@ msgstr "배선 교차"
 
 #: pcbnew/drc/drc_item.cpp:77
 msgid "Board edge clearance violation"
-msgstr "기판 모서리 클리어런스 위반"
+msgstr "기판 모서리 공간거리 위반"
 
 #: pcbnew/drc/drc_item.cpp:81
 msgid "Copper zones intersect"
@@ -37533,7 +37522,7 @@ msgstr "배선에 연결되지 않은 끝이 존재"
 
 #: pcbnew/drc/drc_item.cpp:101
 msgid "Hole clearance violation"
-msgstr "홀 클리어런스 위반"
+msgstr "홀 공간거리 위반"
 
 #: pcbnew/drc/drc_item.cpp:105
 msgid "Drilled holes too close together"
@@ -37860,15 +37849,15 @@ msgstr "네트 연결 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:141
 msgid "Checking track & via clearances..."
-msgstr "배선과 비아 클리어런스 확인 중..."
+msgstr "배선과 비아 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:148
 msgid "Checking hole clearances..."
-msgstr "홀 클리어런스 확인..."
+msgstr "홀 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:156
 msgid "Checking pad clearances..."
-msgstr "패드 클리어런스 확인 중..."
+msgstr "패드 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:164
 msgid "Checking pads..."
@@ -37876,11 +37865,11 @@ msgstr "패드 확인 중..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:172
 msgid "Checking copper graphic clearances..."
-msgstr "구리 영역 간격을 확인 중..."
+msgstr "동박 그래픽 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:180
 msgid "Checking copper zone clearances..."
-msgstr "구리 영역 클리어런스 확인 중..."
+msgstr "동박 영역 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:268
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:535
@@ -37913,12 +37902,12 @@ msgstr "(네트 %s 와 %s)"
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:298
 #, c-format
 msgid "(%s clearance %s; actual %s)"
-msgstr "(%s 클리어런스 %s; 실제 값 %s)"
+msgstr "(%s 공간거리 %s; 실제값 %s)"
 
 #: pcbnew/drc/drc_test_provider_copper_clearance.cpp:339
 #, c-format
 msgid "(%s clearance %s; actual < 0)"
-msgstr "(%s 클리어런스 %s; 실제값 < 0)"
+msgstr "(%s 공간거리 %s; 실제값 < 0)"
 
 #: pcbnew/drc/drc_test_provider_courtyard_clearance.cpp:85
 msgid "Checking footprint courtyard definitions..."
@@ -37953,11 +37942,11 @@ msgstr "킵아웃 및 불허 제약 조건 확인..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:150
 msgid "Checking copper to board edge clearances..."
-msgstr "구리와 기판 모서리 클리어런스 확인 중..."
+msgstr "동박과 기판 모서리 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_edge_clearance.cpp:155
 msgid "Checking silk to board edge clearances..."
-msgstr "실크에서 기판까지 모서리 클리어런스 확인 중..."
+msgstr "실크와 기판 모서리 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_hole_size.cpp:75
 msgid "Checking pad holes..."
@@ -37987,7 +37976,7 @@ msgstr "(%s 최대 폭 %s; 실제 값 %s)"
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:120
 msgid "Checking hole to hole clearances..."
-msgstr "홀-홀 간 클리어런스 확인..."
+msgstr "홀과 홀 간 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_hole_to_hole.cpp:304
 #, c-format
@@ -38002,7 +37991,7 @@ msgstr "패드 %s"
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:200
 #, c-format
 msgid "%s has clearance override."
-msgstr "%s에 클리어런스 재정의가 있음."
+msgstr "%s에 공간거리 재정의가 있음."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:202
 #, c-format
@@ -38013,7 +38002,7 @@ msgstr "%s 에 솔더 마스크 확장 재정의가 있음."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:206
 #, c-format
 msgid "%s has solder paste clearance override."
-msgstr "%s에 솔더 페이스트 간격 재정의가 있음."
+msgstr "%s에 솔더 페이스트 공간거리 재정의가 있음."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:209
 #, c-format
@@ -38179,7 +38168,7 @@ msgstr "%s 패드 연결 속성이 다릅니다."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:455
 #, c-format
 msgid "%s local clearance differs."
-msgstr "%s 지역 클리어런스가 다름."
+msgstr "%s 지역 공간거리가 다름."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:457
 #, c-format
@@ -38282,7 +38271,7 @@ msgstr "부품자리 요구 사항 면제"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:598
 msgid "Pad clearance overridden."
-msgstr "패드 간격이 재정의됨."
+msgstr "패드 공간거리가 재정의 됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:600
 msgid "Solder mask expansion overridden."
@@ -38290,7 +38279,7 @@ msgstr "솔더 마스크 확장 재정의."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:602
 msgid "Solder paste absolute clearance overridden."
-msgstr "솔더 페이스트 절대 간격이 재정의됨."
+msgstr "솔더 페이스트 절대 공간거리가 재정의 됨."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:604
 msgid "Solder paste relative clearance overridden."
@@ -38412,12 +38401,12 @@ msgstr "물리적 항목 수집 중..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:183
 msgid "Checking physical clearances..."
-msgstr "물리적 여유 공간 확인 중..."
+msgstr "물리적 공간거리 확인..."
 
 #: pcbnew/drc/drc_test_provider_physical_clearance.cpp:531
 #, c-format
 msgid "Internal clearance violation (%s clearance %s; actual %s)"
-msgstr "내부 유격 위반 (%s 유격 %s; 실제 %s)"
+msgstr "내부 공간거리 위반 (%s 공간거리 %s; 실제 %s)"
 
 #: pcbnew/drc/drc_test_provider_schematic_parity.cpp:116
 #, c-format
@@ -38485,7 +38474,7 @@ msgstr "솔더 마스크 구축..."
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:769
 msgid "Checking solder mask to silk clearance..."
-msgstr "실크 클리어런스에 대한 솔더 마스크를 검사..."
+msgstr "솔더 마스크와 실크 공간거리 확인......"
 
 #: pcbnew/drc/drc_test_provider_solder_mask.cpp:774
 msgid "Checking solder mask web integrity..."
@@ -38767,10 +38756,10 @@ msgid ""
 "This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"기판의 영역이 다시 채워질 때, 구리 모서리 클리어런스가 사용됩니다 (기판 설정 "
-"> 디자인 규칙 > 제약 을 참조하세요).\n"
-"이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 다"
-"른 채움 결과를 내보낼 것입니다."
+"기판의 영역이 다시 채워질 때, 동박 모서리 공간거리가 사용됩니다 (기판 설정 > "
+"디자인 규칙 > 제약 을 참조하세요).\n"
+"이는 Edge Cuts 레이어에 기판 테두리 선 굵기를 사용하던 이전 KiCad 버전과는 "
+"다른 채움 결과를 내보낼 것입니다."
 
 #: pcbnew/files.cpp:524
 #, c-format
@@ -39010,7 +38999,7 @@ msgstr "재설정"
 
 #: pcbnew/footprint.cpp:3531 pcbnew/pad.cpp:2022
 msgid "Clearance Override"
-msgstr "클리어런스 재정의"
+msgstr "공간거리 재정의"
 
 #: pcbnew/footprint.cpp:3535 pcbnew/pad.cpp:2030
 msgid "Solderpaste Margin Override"
@@ -40249,7 +40238,7 @@ msgstr "홀 X / Y"
 #: pcbnew/zone.cpp:645
 #, c-format
 msgid "Min Clearance: %s"
-msgstr "최소 클리어런스: %s"
+msgstr "최소 공간거리: %s"
 
 #: pcbnew/pad.cpp:1234
 msgid "Trap"
@@ -40503,7 +40492,7 @@ msgstr "위반 보고서"
 
 #: pcbnew/pcb_edit_frame.cpp:2505
 msgid "Clearance Report"
-msgstr "클리어런스 보고서"
+msgstr "공간거리 보고서"
 
 #: pcbnew/pcb_edit_frame.cpp:2515
 msgid "Constraints Report"
@@ -41871,7 +41860,7 @@ msgstr ""
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2547
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
-msgstr "CZONE_CONTAINER \"%s\"에 대한 옳지 않은 Z 클리어런스 패드옵션"
+msgstr "CZONE_CONTAINER \"%s\"에 대한 옳지 않은 Z 공간거리 패드옵션"
 
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2844
 #: pcbnew/pcb_io/kicad_legacy/pcb_io_kicad_legacy.cpp:2883
@@ -42618,7 +42607,7 @@ msgstr ""
 #: pcbnew/router/pns_kicad_iface.cpp:655 pcbnew/router/pns_kicad_iface.cpp:745
 #: pcbnew/router/router_tool.cpp:798
 msgid "board minimum clearance"
-msgstr "보드 최소 클리어런스"
+msgstr "보드 최소 공간거리"
 
 #: pcbnew/router/pns_kicad_iface.cpp:669 pcbnew/router/pns_kicad_iface.cpp:744
 #: pcbnew/router/router_tool.cpp:760 pcbnew/router/router_tool.cpp:785
@@ -42665,7 +42654,7 @@ msgstr ""
 
 #: pcbnew/router/pns_router.cpp:213
 msgid "Diff pair gap is less than board minimum clearance."
-msgstr "치수 쌍 간격이 기판의 최소 클리어런스보다 작습니다."
+msgstr "차동 쌍 간격이 기판의 최소 공간거리보다 작습니다."
 
 #: pcbnew/router/pns_router.cpp:246
 msgid "Cannot start routing from a non-plated hole."
@@ -43313,17 +43302,17 @@ msgstr "해결된 홀 크기 제약 조건: 최소 %s, 최대 %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:436
 msgid "Hole Clearance"
-msgstr "홀 간격"
+msgstr "홀 공간거리"
 
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:1039
 msgid "Hole clearance resolution for:"
-msgstr "홀 간격 해법:"
+msgstr "홀 공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:445
 #: pcbnew/tools/board_inspection_tool.cpp:548
 msgid "Items belong to the same net. Clearance is 0."
-msgstr "개체가 같은 네트에 속해 있습니다. 클리어런스는 0으로 설정됩니다."
+msgstr "개체가 같은 네트에 속해 있습니다. 공간거리는 0으로 설정됩니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:454
 #: pcbnew/tools/board_inspection_tool.cpp:474
@@ -43343,17 +43332,17 @@ msgstr "개체가 같은 네트에 속해 있습니다. 클리어런스는 0으�
 #: pcbnew/tools/board_inspection_tool.cpp:1211
 #, c-format
 msgid "Resolved min clearance: %s."
-msgstr "확인된 최소 간격: %s."
+msgstr "해결된 최소 공간거리: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:460
 #: pcbnew/tools/board_inspection_tool.cpp:1194
 msgid "Physical hole clearance resolution for:"
-msgstr "물리적 홀 간격 해법:"
+msgstr "물리적 홀 공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:469
 #: pcbnew/tools/board_inspection_tool.cpp:1206
 msgid "No 'physical_hole_clearance' constraints defined."
-msgstr "'물리적 홀 간격' 제약 조건이 정의되지 않음."
+msgstr "'물리적 홀 공간거리' 제약 조건이 정의되지 않음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:480
 msgid "Hole to Hole"
@@ -43362,31 +43351,31 @@ msgstr "홀-홀"
 #: pcbnew/tools/board_inspection_tool.cpp:481
 #: pcbnew/tools/board_inspection_tool.cpp:1068
 msgid "Hole-to-hole clearance resolution for:"
-msgstr "홀-홀 간격 해법:"
+msgstr "홀과 홀간 공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:495
 msgid "Edge Clearance"
-msgstr "가장자리 유격"
+msgstr "모서리 공간거리"
 
 #: pcbnew/tools/board_inspection_tool.cpp:496
 #: pcbnew/tools/board_inspection_tool.cpp:1107
 msgid "Edge clearance resolution for:"
-msgstr "가장자리 클리어런스 해법:"
+msgstr "모서리 공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:540
 #: pcbnew/tools/board_inspection_tool.cpp:852
 msgid "Clearance resolution for:"
-msgstr "클리어런스 해법:"
+msgstr "공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:563
 #: pcbnew/tools/board_inspection_tool.cpp:1128
 msgid "Physical clearance resolution for:"
-msgstr "물리적 클리어런스 해법:"
+msgstr "물리적 공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:572
 #: pcbnew/tools/board_inspection_tool.cpp:1140
 msgid "No 'physical_clearance' constraints defined."
-msgstr "정의된 '물리적 유격' 제약 조건이 없음."
+msgstr "정의된 '물리적 공간거리' 제약 조건이 없음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:583
 #: pcbnew/tools/board_inspection_tool.cpp:1397
@@ -43400,24 +43389,23 @@ msgstr "다음을 위한 규칙:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:615
 msgid "Select two items for a clearance resolution report."
-msgstr "클리어런스 해결 보고서를 위해 두 개체를 선택하세요."
+msgstr "공간거리 해결 보고서를 위해 두 개체를 선택하세요."
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #: pcbnew/tools/board_inspection_tool.cpp:643
 msgid "Cannot generate clearance report on empty group."
-msgstr "빈 그룹으로는 클리어런스 보고서를 생성할 수 없습니다."
+msgstr "빈 그룹으로는 공간거리 보고서를 생성할 수 없습니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:658
 msgid "Cannot generate clearance report on footprint with no pads."
-msgstr "패드가 없는 풋프린트에 대한 클리어런스 보고서를 생성할 수 없음."
+msgstr "패드가 없는 풋프린트에 대한 공간거리 보고서를 생성할 수 없음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:673
 msgid ""
 "Cannot generate clearance report on footprint with multiple pads.  Select a "
 "single pad."
-msgstr ""
-"여러 개의 패드가 있는 풋프린트에 대한 클리어런스 보고서를 생성할 수 없음.  단"
-"일 패드를 선택."
+msgstr "여러 개의 패드가 있는 풋프린트에 대한 공간거리 보고서를 생성할 수 없음.  "
+"단일 패드를 선택."
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Zone connection resolution for:"
@@ -43453,35 +43441,35 @@ msgstr "확인된 최소 스포크 수: %d."
 #: pcbnew/tools/board_inspection_tool.cpp:783
 #: pcbnew/tools/board_inspection_tool.cpp:831
 msgid "Zone clearance resolution for:"
-msgstr "영역 클리어런스 해법:"
+msgstr "영역 공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:787
 #, c-format
 msgid "Zone clearance: %s."
-msgstr "구역 클리어런스: %s."
+msgstr "영역 공간거리: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:797
 #, c-format
 msgid "Overridden by larger physical clearance from %s;clearance: %s."
-msgstr "%s로 더 큰 물리적 유격에 의해 재정의 됨; 유격: %s."
+msgstr "%s로 더 큰 물리적 공간거리에 의해 재정의 됨; 공간거리: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:813
 #, c-format
 msgid "Overridden by larger physical hole clearance from %s; clearance: %s."
-msgstr "%s에서 더 큰 물리적 홀 간격으로 재정의됨; 간격: %s."
+msgstr "%s에서 더 큰 물리적 홀 공간거리로 재정의됨; 공간거리: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:857
 msgid "Items belong to the same net. Min clearance is 0."
-msgstr "아이템은 같은 네트에 속합니다. 최소 간격은 0."
+msgstr "항목은 같은 네트에 속합니다. 최소 공간거리는 0."
 
 #: pcbnew/tools/board_inspection_tool.cpp:872
 msgid "Min clearance is 0."
-msgstr "최소 간격은 0입니다."
+msgstr "최소 공간거리는 0입니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:876
 #, c-format
 msgid "Resolved clearance: %s; clearance will not be tested."
-msgstr "확인된 클리어런스: %s; 클리어런스는 테스트되지 않음."
+msgstr "해결된 공간거리: %s; 공간거리는 테스트되지 않음."
 
 #: pcbnew/tools/board_inspection_tool.cpp:899
 msgid "Diff Pair"
@@ -43507,19 +43495,19 @@ msgstr "정의된 '차동 쌍 연결 해제' 제약 조건이 없음."
 #: pcbnew/tools/board_inspection_tool.cpp:950
 #, c-format
 msgid "Note: %s is tented; clearance will only be applied to holes."
-msgstr "참고 : %s는 텐트형; 클리어런스는 홀에만 적용됩니다."
+msgstr "참고 : %s는 텐트형; 공간거리는 홀에만 적용됩니다."
 
 #: pcbnew/tools/board_inspection_tool.cpp:967
 msgid "Silkscreen clearance resolution for:"
-msgstr "실크스크린 클리어런스 해법:"
+msgstr "실크스크린 공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:995
 msgid "Courtyard clearance resolution for:"
-msgstr "부품자리 클리어런스 해법:"
+msgstr "부품자리 공간거리 해법:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1123
 msgid "Physical Clearances"
-msgstr "물리적 허용 범위"
+msgstr "물리적 공간거리"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1238
 msgid "Select an item for a constraints resolution report."
@@ -45393,12 +45381,12 @@ msgstr "기판의 통계 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1827
 msgid "Clearance Resolution"
-msgstr "클리어런스 해결"
+msgstr "공간거리 해결"
 
 #: pcbnew/tools/pcb_actions.cpp:1828
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
-msgstr "선택한 두 객체에 대하여 활성화된 레이어의 클리어런스 해법을 표시"
+msgstr "선택한 두 객체에 대하여 활성화된 레이어의 공간거리 해법을 표시"
 
 #: pcbnew/tools/pcb_actions.cpp:1834
 msgid "Constraints Resolution"
@@ -45951,27 +45939,27 @@ msgstr "DP 간격 제약 조건: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1597
 msgid "Resolved clearance"
-msgstr "확인된 클리어런스"
+msgstr "해결된 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:1602
 msgid "Actual clearance"
-msgstr "실제 유격"
+msgstr "실제 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:1645
 msgid "Resolved hole clearance"
-msgstr "해결된 구멍 간격"
+msgstr "해결된 홀 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:1650
 msgid "Actual hole clearance"
-msgstr "실제 홀 간격"
+msgstr "실제 홀 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:1683
 msgid "Resolved edge clearance"
-msgstr "확인된 가장자리 간격"
+msgstr "해결된 모서리 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:1688
 msgid "Resolved margin clearance"
-msgstr "확인된 여유 간격"
+msgstr "해결된 여유 공간거리"
 
 #: pcbnew/tools/pcb_control.cpp:1699
 msgid "Selected Items"
