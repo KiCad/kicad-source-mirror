@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-02 05:01+0000\n"
+"PO-Revision-Date: 2024-03-09 10:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -824,6 +824,8 @@ msgstr "Doppelklick links oder Mittelklick, um Farbe zu ändern"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Deaktivieren Sie \"Farben des Platinen-Lagenaufbaus verwenden\" um die Farbe "
+"ändern zu können."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -14937,6 +14939,8 @@ msgstr "Ausgabepfad darf nicht mit bestehendem Pfad in Konflikt stehen\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Um klassische und nicht-KiCad-Bibliotheken umzuwandeln muss der Ausgabepfad "
+"gegeben sein.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
