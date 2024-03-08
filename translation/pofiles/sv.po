@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-02-29 19:02+0000\n"
+"PO-Revision-Date: 2024-03-09 10:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -793,6 +793,8 @@ msgstr "Vänster dubbelklick eller mittklick för att ändra färg"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Deaktivera 'Använd färger från mönsterkortets lageruppbyggnad' för att "
+"tillåta redigering av färger."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -14791,6 +14793,8 @@ msgstr "Utmatningssökvägen får inte vara i konflikt med existerande sökväg\
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Utmatningssökväg måste specificeras för att konvertera äldre och icke-KiCad "
+"bibliotek\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
@@ -24045,7 +24049,7 @@ msgstr "Exportera GLB (binär GLTF)"
 
 #: kicad/kicad_cli.cpp:134
 msgid "Export STEP"
-msgstr "Exportera STEG"
+msgstr "Exportera STEP"
 
 #: kicad/kicad_cli.cpp:135
 msgid "Export VRML"
@@ -41650,8 +41654,8 @@ msgid ""
 "ignored."
 msgstr ""
 "CADSTAR-mallen '%s' har ett värde som inte är noll definierat för "
-"inställningen 'Sliver Width'. Det finns ingen KiCad-motsvarighet för detta, "
-"så denna inställning ignorerades."
+"inställningen 'Bredd på kopparstrimlor'. Det finns ingen KiCad-motsvarighet "
+"för detta, så denna inställning ignorerades."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1981
 #, c-format
