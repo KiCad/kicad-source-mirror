@@ -487,6 +487,8 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
 
         if( item->Type() == PCB_ZONE_T )
         {
+            m_frame->FocusOnItem( item, principalLayer );
+
             m_frame->GetBoard()->GetConnectivity()->RunOnUnconnectedEdges(
                     [&]( CN_EDGE& edge )
                     {
@@ -499,12 +501,25 @@ void DIALOG_DRC::OnDRCItemSelected( wxDataViewEvent& aEvent )
                             return true;
 
                         if( edge.GetSourceNode()->Parent() == a
-                                && edge.GetTargetNode()->Parent() == b )
+                            && edge.GetTargetNode()->Parent() == b )
                         {
-                            if( item == a )
-                                m_frame->FocusOnLocation( edge.GetSourcePos() );
+                            VECTOR2I focusPos;
+
+                            if( item == a && item == b )
+                            {
+                                focusPos = ( node->m_Type == RC_TREE_NODE::MAIN_ITEM )
+                                                   ? edge.GetSourcePos()
+                                                   : edge.GetTargetPos();
+                            }
                             else
-                                m_frame->FocusOnLocation( edge.GetTargetPos() );
+                            {
+                                focusPos = ( item == edge.GetSourceNode()->Parent() )
+                                                   ? edge.GetSourcePos()
+                                                   : edge.GetTargetPos();
+                            }
+
+                            m_frame->FocusOnLocation( focusPos );
+                            m_frame->RefreshCanvas();
 
                             return false;
                         }
