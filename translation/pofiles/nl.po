@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-05 10:02+0000\n"
+"PO-Revision-Date: 2024-03-09 10:01+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -98,7 +98,7 @@ msgstr "%d koperlagen vereenvoudigen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1154
 msgid "Simplify holes contours"
-msgstr "Vereenvoudig contouren van boorgaten"
+msgstr "Contouren van boorgaten vereenvoudigen"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:1174
 msgid "Build BVH for holes and vias"
@@ -766,7 +766,7 @@ msgstr "Eindkleur kleurverloop achtergrond"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:200
 msgid "Use board stackup colors"
-msgstr "Board stackup kleuren"
+msgstr "Bordstapelingkleuren gebruiken"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:134
 #, c-format
@@ -802,7 +802,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "Ontvink ‘Bordstapelingkleuren gebruiken’ om kleuren te bewerken."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -4654,7 +4654,7 @@ msgstr "Standaard"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:94
 msgid "Set color to transparent to use KiCad default color."
-msgstr "Maak de kleur transparant en gebruik KiCad default kleuren."
+msgstr "Maak kleur transparant om standaardkleur van KiCad te gebruiken."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:112
 msgid "Netclass assignments:"
@@ -6217,7 +6217,7 @@ msgstr "Geen fout"
 #: eeschema/tools/ee_actions.cpp:212 pcbnew/dialogs/panel_setup_rules.cpp:128
 #: pcbnew/tools/edit_tool.cpp:2252
 msgid "Cut"
-msgstr "Knip"
+msgstr "Knippen"
 
 #: common/grid_tricks.cpp:355
 msgid "Clear selected cells placing original contents on clipboard"
@@ -6586,7 +6586,7 @@ msgstr "ongedefinieerd"
 #: common/layer_id.cpp:107
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:1095
 msgid "Rescue"
-msgstr "Redding"
+msgstr "Herstellen"
 
 #: common/layer_id.cpp:111
 msgid "Wires"
@@ -12019,10 +12019,10 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"Dit schema is gemaakt met behulp van oudere symboolbibliotheken die het "
-"schema kunnen breken. Sommige symbolen moeten mogelijk aan een andere "
-"symboolnaam worden gekoppeld. Sommige symbolen moeten mogelijk worden "
-"\"gered\" (gekopieerd en hernoemd) naar een nieuwe bibliotheek.\n"
+"Dit schema is gemaakt met oudere symboolbibliotheken waardoor het schema "
+"stuk kan gaan. Sommige symbolen moeten mogelijk aan een andere symboolnaam "
+"gekoppeld worden. Sommige symbolen moeten mogelijk worden \"hersteld\" ("
+"gekopieerd en hernoemd) naar een nieuwe bibliotheek.\n"
 "\n"
 "De volgende wijzigingen worden aanbevolen om het project bij te werken."
 
@@ -13595,7 +13595,7 @@ msgstr "Back-upfout"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:360
 #: eeschema/dialogs/dialog_symbol_remap.cpp:514
 msgid "Continue with Rescue"
-msgstr "Doorgaan met redden"
+msgstr "Doorgaan met herstellen"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:361
 #: eeschema/dialogs/dialog_symbol_remap.cpp:515
@@ -14825,6 +14825,8 @@ msgstr "Uitvoerpad moet niet conflicteren met bestaand pad\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Uitvoerpad moet opgegeven zijn om verouderde en niet-KiCad-bibliotheken om "
+"te zetten.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
@@ -14855,7 +14857,7 @@ msgstr "ERC-rapport opgeslagen naar %s\n"
 
 #: eeschema/eeschema_settings.cpp:70
 msgid "Net Navigator"
-msgstr "Net-navigator"
+msgstr "Netnavigatie"
 
 #: eeschema/erc.cpp:73 eeschema/erc.cpp:90
 msgid "Input Pin"
@@ -15255,7 +15257,7 @@ msgstr "Niet-ondersteund schemabestand '%s'."
 
 #: eeschema/files-io.cpp:269
 msgid "Root"
-msgstr "Hoofd"
+msgstr "Hoofdblad"
 
 #: eeschema/files-io.cpp:274
 msgid ""
@@ -16198,7 +16200,7 @@ msgstr ""
 #: eeschema/project_rescue.cpp:324 eeschema/project_rescue.cpp:503
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr "Gewijzigd symbool redden %s tot %s"
+msgstr "Gewijzigd symbool %s herstellen naar %s"
 
 #: eeschema/project_rescue.cpp:597
 msgid "This project has nothing to rescue."
@@ -16206,7 +16208,7 @@ msgstr "Dit project heeft niets te herstellen."
 
 #: eeschema/project_rescue.cpp:612
 msgid "No symbols were rescued."
-msgstr "Er werden geen symbolen gered."
+msgstr "Er zijn geen symbolen hersteld."
 
 #: eeschema/project_rescue.cpp:720
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:224
@@ -16217,7 +16219,7 @@ msgstr "Aanmaken symboolbibliotheekbestand '%s' mislukt."
 #: eeschema/project_rescue.cpp:873
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "Reddingsbibliotheek %s kan niet worden opgeslagen."
+msgstr "Herstelbibliotheek %s kon niet worden opgeslagen."
 
 #: eeschema/project_rescue.cpp:896
 msgid "Error occurred saving project specific symbol library table."
@@ -21006,7 +21008,7 @@ msgstr "Paginanummer bewerken van het huidige of geselecteerde blad"
 
 #: eeschema/tools/ee_actions.cpp:1007
 msgid "Rescue Symbols..."
-msgstr "Symbolen redden..."
+msgstr "Symbolen herstellen..."
 
 #: eeschema/tools/ee_actions.cpp:1008
 msgid "Find old symbols in project and rename/rescue them"
@@ -21282,11 +21284,11 @@ msgstr "Naar volgend blad verplaatsen op nummer"
 
 #: eeschema/tools/ee_actions.cpp:1267
 msgid "Hierarchy Navigator"
-msgstr "Hiërarchie-navigator"
+msgstr "Hiërarchienavigatie"
 
 #: eeschema/tools/ee_actions.cpp:1268
 msgid "Show or hide the schematic sheet hierarchy navigator"
-msgstr "Schemabladhiërarchie-navigatie weergeven of verbergen"
+msgstr "Hiërarchienavigatie voor schemabladen weergeven of verbergen"
 
 #: eeschema/tools/ee_actions.cpp:1280
 msgid "Add Wire"
@@ -23171,7 +23173,7 @@ msgstr ""
 #: include/dialogs/panel_color_settings.h:50
 msgid "Reset all colors in this theme to the KiCad defaults"
 msgstr ""
-"Alle kleuren in dit thema terugzetten naar de KiCad-standaardinstellingen"
+"Alle kleuren in dit thema terugzetten naar de standaardkleuren van KiCad"
 
 #: include/kiway_player.h:224
 msgid "This file is already open."
@@ -23267,7 +23269,7 @@ msgstr "Exporteert de footprint of de hele footprintbibliotheek naar SVG"
 #: kicad/cli/command_fp_export_svg.cpp:45
 msgid "Color theme to use (will default to footprint editor settings)"
 msgstr ""
-"Kleurthema om te gebruiken (zal terugvallen op footprinteditorinstellingen)"
+"Kleurthema om te gebruiken (volgt standaard de footprinteditorinstellingen)"
 
 #: kicad/cli/command_fp_export_svg.cpp:50
 msgid "Specific footprint to export within the library"
@@ -24876,7 +24878,7 @@ msgstr "Opent de mappen in de standaard systeembestandsbeheerder"
 
 #: kicad/project_tree_pane.cpp:877
 msgid "Open the file in a Text Editor"
-msgstr "Open het bestand in een Tekst Editor"
+msgstr "Open bestand in een teksteditor"
 
 #: kicad/project_tree_pane.cpp:879
 msgid "Open files in a Text Editor"
@@ -24884,7 +24886,7 @@ msgstr "Open bestanden in een teksteditor"
 
 #: kicad/project_tree_pane.cpp:881
 msgid "Edit in a Text Editor"
-msgstr "Bewerken in een teksteditor"
+msgstr "Bewerken in teksteditor"
 
 #: kicad/project_tree_pane.cpp:889
 msgid "Rename File..."
@@ -31714,7 +31716,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Relatieve vrije afstand soldeerpasta:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
-#, c-format
+#, c-format, fuzzy
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -31725,11 +31727,11 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Dit is de vrije afstand in procenten van de pad breedte en hoogte voor deze "
-"footprint.\n"
-"Een waarde van 10 betekent dat de horizontale vrije afstand 10 procent van "
-"de padbreedte is en de verticale vrije afstand 10% van de padhoogte.\n"
-"Deze waarde kan worden vervangen door een lokale padwaarde.\n"
+"Dit is de lokale vrije afstand in procenten van de padbreedte en -hoogte "
+"voor deze footprint.\n"
+"Een waarde van 10 betekent dat de horizontale vrije afstand 10% van de "
+"padbreedte is en de verticale vrije afstand 10% van de padhoogte.\n"
+"Deze waarde kan worden overschreven door een lokale padwaarde.\n"
 "De uiteindelijke vrije afstand is de som van deze waarde en de absolute "
 "vrije afstand.\n"
 "Een negatieve waarde betekent een kleinere maskeropening dan de padgrootte."
@@ -35517,7 +35519,7 @@ msgstr "Oplopend naar rechts"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:31
 msgid "Increases left"
-msgstr "Verhoogt links"
+msgstr "Oplopend naar links"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:33
 msgid "X Axis"
@@ -35533,7 +35535,7 @@ msgstr "Oplopend omhoog"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:39
 msgid "Increases down"
-msgstr "Verhoogt naar beneden"
+msgstr "Oplopend omlaag"
 
 #: pcbnew/dialogs/panel_pcbnew_display_origin_base.cpp:41
 msgid "Y Axis"
@@ -38147,7 +38149,7 @@ msgstr "Scheeftrekking tussen sporen buiten bereik"
 
 #: pcbnew/drc/drc_item.cpp:241
 msgid "Too many vias on a connection"
-msgstr "Teveel via’s op een verbinding"
+msgstr "Te veel via’s op een verbinding"
 
 #: pcbnew/drc/drc_item.cpp:245
 msgid "Differential pair gap out of range"
@@ -38844,7 +38846,7 @@ msgstr ""
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:187
 #, c-format
 msgid "(%s max count %d; actual %d)"
-msgstr "(%s min aantal %d; werkelijk %d)"
+msgstr "(%s max aantal %d; werkelijk %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
 msgid "Gathering length-constrained connections..."
@@ -39384,7 +39386,7 @@ msgstr "Trefwoorden: %s"
 
 #: pcbnew/footprint.cpp:1295 pcbnew/footprint.cpp:1296
 msgid "Board Side"
-msgstr "Boordzijde"
+msgstr "Bordzijde"
 
 #: pcbnew/footprint.cpp:1296
 msgid "Back (Flipped)"
@@ -44613,7 +44615,7 @@ msgstr "Maakt een koper-zone uit de selectie"
 
 #: pcbnew/tools/pcb_actions.cpp:67
 msgid "Create Rule Area from Selection..."
-msgstr "Maak regelgebied van selectie..."
+msgstr "Regelgebied maken van selectie..."
 
 #: pcbnew/tools/pcb_actions.cpp:68
 msgid "Creates a rule area from the selection"
@@ -45949,7 +45951,7 @@ msgstr "Geeft bordstatistieken weer"
 
 #: pcbnew/tools/pcb_actions.cpp:1827
 msgid "Clearance Resolution"
-msgstr "Vrije afstand resolutie"
+msgstr "Vrije afstandresolutie"
 
 #: pcbnew/tools/pcb_actions.cpp:1828
 msgid ""
