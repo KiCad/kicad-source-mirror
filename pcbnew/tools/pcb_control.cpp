@@ -1588,19 +1588,21 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 PCB_LAYER_ID layer = overlap.CuStack().front();
 
                 constraint = drcEngine->EvalRules( CLEARANCE_CONSTRAINT, a, b, layer );
-
-                std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( layer ) );
-                std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( layer ) );
-
-                int actual_clearance = a_shape->GetClearance( b_shape.get() );
-
                 msgItems.emplace_back( _( "Resolved clearance" ),
                                        m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
 
-                if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
+                if( a->Type() != PCB_ZONE_T || b->Type() != PCB_ZONE_T )
                 {
-                    msgItems.emplace_back( _( "Actual clearance" ),
-                                           m_frame->MessageTextFromValue( actual_clearance ) );
+                    std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( layer ) );
+                    std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( layer ) );
+
+                    int actual_clearance = a_shape->GetClearance( b_shape.get() );
+
+                    if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
+                    {
+                        msgItems.emplace_back( _( "Actual clearance" ),
+                                            m_frame->MessageTextFromValue( actual_clearance ) );
+                    }
                 }
             }
         }
