@@ -292,7 +292,7 @@ protected:
      * be initialized before calling it if needed.
      */
     void plotArc( const VECTOR2I& aCenter, const EDA_ANGLE& aStartAngle, const EDA_ANGLE& aEndAngle,
-                  int aRadius, bool aPlotInRegion );
+                  double aRadius, bool aPlotInRegion );
     void plotArc( const SHAPE_ARC& aArc, bool aPlotInRegion );
 
     /**
