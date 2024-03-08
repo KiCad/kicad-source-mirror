@@ -4,15 +4,16 @@
 # Marcel Hecko <maco@blava.net>, 2022, 2023.
 # Milan Šalka <salka.milan@googlemail.com>, 2023.
 # Andrej Valek <andy@skyrain.eu>, 2024.
+# Marcel Hecko <marcel.hecko@moirelabs.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-03 06:01+0000\n"
-"Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
-"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/master-"
-"source/sk/>\n"
+"PO-Revision-Date: 2024-03-09 10:01+0000\n"
+"Last-Translator: Marcel Hecko <marcel.hecko@moirelabs.com>\n"
+"Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/"
+"master-source/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1299,6 +1300,8 @@ msgid ""
 "Show or hide the board body\n"
 "If hidden, show only copper and silkscreen layers."
 msgstr ""
+"Zobraziť, alebo schovať, telo dosky\n"
+"Ak schovať, tak budú zobrazené iba medené a sieťotlačové vrstvy."
 
 #: 3d-viewer/dialogs/panel_preview_3d_model_base.cpp:231
 msgid "Reload board and 3D models"
@@ -3409,7 +3412,7 @@ msgstr "Autor:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:152
 msgid "C&ommit"
-msgstr ""
+msgstr "Vykonať"
 
 #: common/dialogs/git/dialog_git_commit.cpp:169
 msgid "Commit message cannot be empty"
@@ -4498,10 +4501,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Čiarka-bodka-bodka"
 
 #: common/dialogs/panel_setup_netclasses.cpp:189
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr ""
-"Nastavte farbu na priehľadnú pre použitie prednstavených farieb KiCad-u."
+msgstr "Nastavte farbu na priehľadnú pre použitie prednastavených farieb."
 
 #: common/dialogs/panel_setup_netclasses.cpp:379
 msgid ""
@@ -4624,9 +4625,8 @@ msgid "DP Gap"
 msgstr "Medzera DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Kurzor"
+msgstr "Farba DPS"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4673,9 +4673,8 @@ msgstr ""
 "Nastavte farbu na priehľadnú pre použitie prednstavených farieb KiCad-u."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:98
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Sonda zo schém"
+msgstr "Importuj farby zo schémy"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:115
 msgid "Netclass assignments:"
@@ -6233,7 +6232,7 @@ msgstr "Nepodarilo sa zlúčiť."
 
 #: common/git/kicad_git_errors.cpp:59
 msgid "Rebase conflict encountered."
-msgstr ""
+msgstr "Pri \"rebase\" nastal konflikt."
 
 #: common/git/kicad_git_errors.cpp:62
 msgid "Failed to pull changes from remote repository."
@@ -6420,9 +6419,8 @@ msgstr "%s nie je podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
-#, fuzzy
 msgid "DXF construction lines not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Konštrukčné čiary v DXF nie sú zatiaľ podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:467
 #, fuzzy
@@ -6437,9 +6435,8 @@ msgstr "Momentálne nie je otvorená žiadna schéma."
 #: common/import_gfx/dxf_import_plugin.h:492
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "Momentálne nie je otvorená žiadna schéma."
+msgstr "Kóty z DXF zatiaľ nie sú podporované."
 
 #: common/import_gfx/dxf_import_plugin.h:506
 #, fuzzy
@@ -6970,9 +6967,8 @@ msgid "Courtyard collision shadow"
 msgstr ""
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "V názve logickej knižnice sa našiel neplatný znak"
+msgstr "V prezývke knižnice sa našiel neplatný znak"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -7051,9 +7047,9 @@ msgid "Unrecognized function '%s'"
 msgstr "Nerozpoznaná funkcia '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Unexpected units for '%s'"
-msgstr "Neočakávané '%s'"
+msgstr "Neočakávané jednotky pre '%s'"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1036
 #, c-format
@@ -7061,43 +7057,39 @@ msgid "Missing units for '%s'| (%s)"
 msgstr "Chýbajúce jednotky pre '%s' (%s)"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1156
-#, fuzzy, c-format
+#, c-format
 msgid "Type mismatch between '%s' and %lf"
-msgstr "Uout musí byť väčšie ako Uref"
+msgstr "Nezhoda typov medzi '%s' a %lf"
 
 #: common/libeval_compiler/libeval_compiler.cpp:1162
-#, fuzzy, c-format
+#, c-format
 msgid "Type mismatch between %lf and '%s'"
-msgstr "Uout musí byť väčšie ako Uref"
+msgstr "Nezhoda typu pre %lf a '%s'"
 
 #: common/notifications_manager.cpp:90
 #: kicad/dialogs/dialog_update_notice_base.cpp:63
-#, fuzzy
 msgid "View Details"
-msgstr "Detaily: %s"
+msgstr "Zobrazit podrobnosti"
 
 #: common/notifications_manager.cpp:95
 msgid "Dismiss"
-msgstr ""
+msgstr "Rozumiem"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Zarovnanie"
+msgstr "Oznámenia"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
-msgstr ""
+msgstr "Žiadne oznamy"
 
 #: common/pgm_base.cpp:209
-#, fuzzy
 msgid "No default editor found, you must choose one."
 msgstr "Nenájdený predvolený editor, musíte si ho zvoliť"
 
 #: common/pgm_base.cpp:229 common/pgm_base.cpp:231
-#, fuzzy
 msgid "Executable file"
-msgstr "Spustiteľné súbory ("
+msgstr "Spustitelný súbor"
 
 #: common/pgm_base.cpp:241
 msgid "Select Preferred Editor"
@@ -7139,19 +7131,19 @@ msgid "The KiCad language file for this language is not installed."
 msgstr "Jazykový súbor KiCad pre tento jazyk nie je nainštalovaný."
 
 #: common/plotters/PDF_plotter.cpp:880
-#, fuzzy, c-format
+#, c-format
 msgid "Page %s"
-msgstr "Strana 1"
+msgstr "Strana %s"
 
 #: common/plotters/PDF_plotter.cpp:884
-#, fuzzy, c-format
+#, c-format
 msgid "%s (Page %s)"
-msgstr "(strana %s)"
+msgstr "%s (strana %s)"
 
 #: common/plotters/PDF_plotter.cpp:1361
-#, fuzzy, c-format
+#, c-format
 msgid "Show Page %s"
-msgstr "Zobraziť hranice strany"
+msgstr "Zobraziť stránku %s"
 
 #: common/plotters/PDF_plotter.cpp:1372
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:889
@@ -7170,14 +7162,12 @@ msgid "This is the default net class."
 msgstr "Toto je predvolená trieda siete."
 
 #: common/project/project_archiver.cpp:53 kicad/pcm/pcm_task_manager.cpp:329
-#, fuzzy
 msgid "Could not open archive file."
-msgstr "Súbor archívu nejde otvoriť"
+msgstr "Súbor archívu nie je možné otvoriť."
 
 #: common/project/project_archiver.cpp:62 kicad/pcm/pcm_task_manager.cpp:337
-#, fuzzy
 msgid "Invalid archive file format."
-msgstr "Neplatný formát archívneho súboru"
+msgstr "Neplatný formát archívneho súboru."
 
 #: common/project/project_archiver.cpp:73
 #, fuzzy, c-format
@@ -7186,7 +7176,6 @@ msgstr "Rozbaliť súbor \"%s\""
 
 #: common/project/project_archiver.cpp:96 kicad/pcm/pcm_task_manager.cpp:251
 #: kicad/pcm/pcm_task_manager.cpp:294
-#, fuzzy
 msgid "Error extracting file!"
 msgstr "Chyba rozbalovania súboru!"
 
@@ -7214,33 +7203,32 @@ msgstr "Chyba rozbalovania súboru!"
 #: pcbnew/exporters/gendrill_file_writer_base.cpp:340
 #: pcbnew/exporters/gendrill_gerber_writer.cpp:105
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create file '%s'."
 msgstr "Nepodarilo sa vytvoriť súbor '%s'"
 
 #: common/project/project_archiver.cpp:233
-#, fuzzy, c-format
+#, c-format
 msgid "Archived file '%s'."
-msgstr "Súbor archívu \"%s\""
+msgstr "Súbor archívu \"%s\"."
 
 #: common/project/project_archiver.cpp:243
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to archive file '%s'."
 msgstr "Zlyhalo zálohovanie súboru \"%s\"."
 
 #: common/project/project_archiver.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "Zip archive '%s' created (%s uncompressed, %s compressed)."
-msgstr "Zip archív \"%s\" vytvorený (%s nekomprimované, %s komprimované)"
+msgstr "Zip archív \"%s\" vytvorený (%s nekomprimované, %s komprimované)."
 
 #: common/rc_item.cpp:425 eeschema/erc_item.cpp:340
 msgid "Excluded warning: "
 msgstr "Vylúčené varovanie: "
 
 #: common/rc_item.cpp:427 eeschema/erc_item.cpp:342
-#, fuzzy
 msgid "Excluded error: "
-msgstr "Vylúčené "
+msgstr "Vylúčená chyba: "
 
 #: common/rc_item.cpp:431 eeschema/erc_item.cpp:346
 msgid "Warning: "
@@ -7251,9 +7239,9 @@ msgid "Error: "
 msgstr "Chyba: "
 
 #: common/richio.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to open %s for reading."
-msgstr "Nie je možné otvoriť názov súboru '%s' na čítanie"
+msgstr "Nie je možné otvoriť súbor '%s' na čítanie."
 
 #: common/richio.cpp:251 common/richio.cpp:349
 msgid "Maximum line length exceeded"
@@ -7264,9 +7252,8 @@ msgid "Line length exceeded"
 msgstr "Prekročená dĺžka riadka"
 
 #: common/settings/bom_settings.cpp:119
-#, fuzzy
 msgid "Grouped By Value"
-msgstr "Zoskupiť podľa názvu"
+msgstr "Zoskupené podľa hodnoty"
 
 #: common/settings/bom_settings.cpp:119 common/settings/bom_settings.cpp:137
 #: common/settings/bom_settings.cpp:156
