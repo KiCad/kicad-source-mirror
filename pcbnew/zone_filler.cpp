@@ -1153,13 +1153,13 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                         else if( aItem->IsOnLayer( Edge_Cuts ) )
                         {
                             gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT,
-                                                                    aZone, aItem, Edge_Cuts ) );
+                                                                    aZone, aItem, aLayer ) );
                             ignoreLineWidths = true;
                         }
                         else if( aItem->IsOnLayer( Margin ) )
                         {
                             gap = std::max( gap, evalRulesForItems( EDGE_CLEARANCE_CONSTRAINT,
-                                                                    aZone, aItem, Margin ) );
+                                                                    aZone, aItem, aLayer ) );
                         }
 
                         if( gap > 0 )
