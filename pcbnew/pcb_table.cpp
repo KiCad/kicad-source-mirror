@@ -189,6 +189,20 @@ void PCB_TABLE::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
 {
     for( PCB_TABLECELL* cell : m_cells )
         cell->Flip( aCentre, aFlipLeftRight );
+
+    std::vector<PCB_TABLECELL*> oldCells = m_cells;
+    int                         rowOffset = 0;
+
+    for( int row = 0; row < GetRowCount(); ++row )
+    {
+        for( int col = 0; col < GetColCount(); ++col )
+            m_cells[ rowOffset + col ] = oldCells[ rowOffset + GetColCount() - 1 - col ];
+
+        rowOffset += GetColCount();
+    }
+
+    SetLayer( FlipLayer( GetLayer(), GetBoard()->GetCopperLayerCount() ) );
+    Normalize();
 }
 
 

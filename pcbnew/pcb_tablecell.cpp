@@ -34,6 +34,8 @@ PCB_TABLECELL::PCB_TABLECELL( BOARD_ITEM* aParent ) :
         m_colSpan( 1 ),
         m_rowSpan( 1 )
 {
+    if( IsBackLayer( aParent->GetLayer() ) )
+        SetMirrored( true );
 }
 
 

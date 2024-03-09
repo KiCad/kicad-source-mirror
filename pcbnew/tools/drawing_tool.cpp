@@ -25,6 +25,7 @@
 
 #include "drawing_tool.h"
 #include "geometry/shape_rect.h"
+#include "dialog_table_properties.h"
 
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
@@ -1135,43 +1136,53 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
         {
             if( !table )
             {
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-            PCB_LAYER_ID layer = m_frame->GetActiveLayer();
+                PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
-            table = new PCB_TABLE( m_frame->GetModel(), bds.GetLineThickness( layer ) );
-            table->SetColCount( 1 );
-            table->AddCell( new PCB_TABLECELL( table ) );
+                table = new PCB_TABLE( m_frame->GetModel(), bds.GetLineThickness( layer ) );
+                table->SetLayer( layer );
+                table->SetColCount( 1 );
+                table->AddCell( new PCB_TABLECELL( table ) );
 
-            table->SetLayer( layer );
-            table->SetPosition( cursorPos );
+                table->SetLayer( layer );
+                table->SetPosition( cursorPos );
 
-            if( !m_view->IsLayerVisible( layer ) )
-            {
-                m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
-                m_frame->GetCanvas()->Refresh();
-            }
+                if( !m_view->IsLayerVisible( layer ) )
+                {
+                    m_frame->GetAppearancePanel()->SetLayerVisible( layer, true );
+                    m_frame->GetCanvas()->Refresh();
+                }
 
-            m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, table );
-            m_view->Update( &selection() );
+                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, table );
+                m_view->Update( &selection() );
 
-            // update the cursor so it looks correct before another event
-            setCursor();
+                // update the cursor so it looks correct before another event
+                setCursor();
             }
             else
             {
                 table->ClearFlags();
-                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-
                 table->Normalize();
 
-                commit.Add( table, m_frame->GetScreen() );
-                commit.Push( _( "Draw Table" ) );
+                DIALOG_TABLE_PROPERTIES dlg( m_frame, table );
 
-                m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, table );
+                if( dlg.ShowQuasiModal() == wxID_OK )
+                {
+                    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+
+                    commit.Add( table, m_frame->GetScreen() );
+                    commit.Push( _( "Draw Table" ) );
+
+                    m_toolMgr->RunAction<EDA_ITEM*>( PCB_ACTIONS::selectItem, table );
+                    m_toolMgr->PostAction( ACTIONS::activatePointEditor );
+                }
+                else
+                {
+                    delete table;
+                }
+
                 table = nullptr;
-
-                m_toolMgr->PostAction( ACTIONS::activatePointEditor );
             }
         }
         else if( table && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )

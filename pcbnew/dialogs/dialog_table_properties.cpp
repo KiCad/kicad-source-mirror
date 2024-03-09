@@ -159,7 +159,12 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataToWindow()
     {
         for( int col = 0; col < m_table->GetColCount(); ++col )
         {
-            PCB_TABLECELL* tableCell = m_table->GetCell( row, col );
+            PCB_TABLECELL* tableCell;
+
+            if( IsBackLayer( m_table->GetLayer() ) )
+                tableCell = m_table->GetCell( row, m_table->GetColCount() - 1 - col );
+            else
+                tableCell = m_table->GetCell( row, col );
 
             if( tableCell->GetColSpan() == 0 || tableCell->GetRowSpan() == 0 )
                 m_grid->SetCellValue( row, col, coveredColor.GetAsString() );
@@ -292,8 +297,14 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
     {
         for( int col = 0; col < m_table->GetColCount(); ++col )
         {
-            PCB_TABLECELL* tableCell = m_table->GetCell( row, col );
-            wxString       txt = m_grid->GetCellValue( row, col );
+            PCB_TABLECELL* tableCell;
+
+            if( IsBackLayer( m_table->GetLayer() ) )
+                tableCell = m_table->GetCell( row, m_table->GetColCount() - 1 - col );
+            else
+                tableCell = m_table->GetCell( row, col );
+
+            wxString txt = m_grid->GetCellValue( row, col );
 
 #ifdef __WXMAC__
             // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting.

@@ -46,6 +46,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/drc_tool.h>
 #include <dialogs/dialog_dimension_properties.h>
+#include <dialogs/dialog_table_properties.h>
 #include <pcb_layer_box_selector.h>
 
 // Handles the selection of command events.
@@ -136,6 +137,13 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_TEXTBOX_T:
         ShowTextBoxPropertiesDialog( static_cast<PCB_TEXTBOX*>( aItem ) );
         break;
+
+    case PCB_TABLE_T:
+    {
+        DIALOG_TABLE_PROPERTIES dlg( this, static_cast<PCB_TABLE*>( aItem ) );
+        dlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+        break;
+    }
 
     case PCB_PAD_T:
         ShowPadPropertiesDialog( static_cast<PAD*>( aItem ) );

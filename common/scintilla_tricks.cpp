@@ -24,6 +24,7 @@
 
 #include <string_utils.h>
 #include <scintilla_tricks.h>
+#include <widgets/wx_grid.h>
 #include <wx/stc/stc.h>
 #include <gal/color4d.h>
 #include <dialog_shim.h>
@@ -255,6 +256,11 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     }
     else if( aEvent.GetKeyCode() == WXK_TAB )
     {
+        wxWindow* ancestor = m_te->GetParent();
+
+        while( ancestor && !dynamic_cast<WX_GRID*>( ancestor ) )
+            ancestor = ancestor->GetParent();
+
         if( aEvent.ControlDown() )
         {
             int flags = 0;
@@ -269,6 +275,47 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
 
             if( parent )
                 parent->NavigateIn( flags );
+        }
+        else if( dynamic_cast<WX_GRID*>( ancestor ) )
+        {
+            WX_GRID* grid = static_cast<WX_GRID*>( ancestor );
+            int      row = grid->GetGridCursorRow();
+            int      col = grid->GetGridCursorCol();
+
+            if( aEvent.ShiftDown() )
+            {
+                if( col > 0 )
+                {
+                    col--;
+                }
+                else if( row > 0 )
+                {
+                    col = (int) grid->GetNumberCols() - 1;
+
+                    if( row > 0 )
+                        row--;
+                    else
+                        row = (int) grid->GetNumberRows() - 1;
+                }
+            }
+            else
+            {
+                if( col < (int) grid->GetNumberCols() - 1 )
+                {
+                    col++;
+                }
+                else if( row < grid->GetNumberRows() - 1 )
+                {
+                    col = 0;
+
+                    if( row < grid->GetNumberRows() - 1 )
+                        row++;
+                    else
+                        row = 0;
+                }
+            }
+
+            grid->SetGridCursor( row, col );
         }
         else
         {
