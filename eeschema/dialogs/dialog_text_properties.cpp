@@ -536,7 +536,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
 
     if( !commit.Empty() )
-        commit.Push( _( "Edit Text" ), SKIP_CONNECTIVITY );
+        commit.Push( _( "Edit Text Properties" ) );
 
     return true;
 }

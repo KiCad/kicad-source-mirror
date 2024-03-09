@@ -134,6 +134,22 @@ void SCH_NO_CONNECT::Rotate( const VECTOR2I& aCenter )
 }
 
 
+bool SCH_NO_CONNECT::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                             const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this )
+        return false;
+
+    const SCH_NO_CONNECT* noConnect = dynamic_cast<const SCH_NO_CONNECT*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( noConnect, false );
+
+    return GetPosition() != noConnect->GetPosition();
+}
+
+
 std::vector<VECTOR2I> SCH_NO_CONNECT::GetConnectionPoints() const
 {
     return { m_pos };

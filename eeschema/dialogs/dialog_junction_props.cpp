@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2020 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -110,8 +110,7 @@ bool DIALOG_JUNCTION_PROPS::TransferDataFromWindow()
         m_frame->GetCanvas()->GetView()->Update( junction );
     }
 
-    commit.Push( m_junctions.size() == 1 ? _( "Edit Junction" ) : _( "Edit Junctions" ),
-                 SKIP_CONNECTIVITY );
+    commit.Push( m_junctions.size() == 1 ? _( "Edit Junction" ) : _( "Edit Junctions" ) );
 
     return true;
 }

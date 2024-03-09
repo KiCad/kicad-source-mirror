@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -228,6 +228,22 @@ bool SCH_JUNCTION::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy )
 
         return selRect.Collide( &junction, aAccuracy );
     }
+}
+
+
+bool SCH_JUNCTION::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                           const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this )
+        return false;
+
+    const SCH_JUNCTION* junction = dynamic_cast<const SCH_JUNCTION*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( junction, false );
+
+    return GetPosition() != junction->GetPosition();
 }
 
 

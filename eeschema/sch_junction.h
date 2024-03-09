@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -83,6 +83,9 @@ public:
     void GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList ) override;
 
     bool IsConnectable() const override { return true; }
+
+    bool HasConnectivityChanges( const SCH_ITEM* aItem,
+                                 const SCH_SHEET_PATH* aInstance = nullptr ) const override;
 
     std::vector<VECTOR2I> GetConnectionPoints() const override;
 

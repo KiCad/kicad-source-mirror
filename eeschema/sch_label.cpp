@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -406,6 +406,7 @@ VECTOR2I SCH_LABEL_BASE::GetSchematicTextOffset( const RENDER_SETTINGS* aSetting
 
     return text_offset;
 }
+
 
 void SCH_LABEL_BASE::SetPosition( const VECTOR2I& aPosition )
 {
@@ -1207,6 +1208,25 @@ bool SCH_LABEL_BASE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemL
 }
 
 
+bool SCH_LABEL_BASE::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                             const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this || !IsConnectable() )
+        return false;
+
+    const SCH_LABEL_BASE* label = dynamic_cast<const SCH_LABEL_BASE*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( label, false );
+
+    if( GetPosition() != label->GetPosition() )
+        return true;
+
+    return GetShownText( aInstance ) != label->GetShownText( aInstance );
+}
+
+
 void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString msg;
@@ -1336,7 +1356,8 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
                 properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Net" ),
                                                            connection->Name() ) );
 
-                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ), _( "Resolved netclass" ),
+                properties.emplace_back( wxString::Format( wxT( "!%s = %s" ),
+                                                           _( "Resolved netclass" ),
                                                            GetEffectiveNetClass()->GetName() ) );
             }
 
@@ -1405,15 +1426,18 @@ void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aO
         field.Print( aSettings, aOffset );
 }
 
+
 bool SCH_LABEL_BASE::AutoRotateOnPlacement() const
 {
     return m_autoRotateOnPlacement;
 }
 
+
 void SCH_LABEL_BASE::SetAutoRotateOnPlacement( bool autoRotate )
 {
     m_autoRotateOnPlacement = autoRotate;
 }
+
 
 SCH_LABEL::SCH_LABEL( const VECTOR2I& pos, const wxString& text ) :
         SCH_LABEL_BASE( pos, text, SCH_LABEL_T )
@@ -1615,6 +1639,7 @@ void SCH_DIRECTIVE_LABEL::CreateGraphicShape( const RENDER_SETTINGS* aRenderSett
         aPoints.emplace_back( VECTOR2I(             0, 0                        ) );
         aPoints.emplace_back( VECTOR2I(             0, m_pinLength - symbolSize ) );
         aPoints.emplace_back( VECTOR2I(             0, m_pinLength              ) );
+
         // These points are just used to bulk out the bounding box
         aPoints.emplace_back( VECTOR2I( -m_symbolSize, m_pinLength              ) );
         aPoints.emplace_back( VECTOR2I(             0, m_pinLength              ) );
@@ -2187,8 +2212,10 @@ static struct SCH_DIRECTIVE_LABEL_DESC
         propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
         propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Italic" ) );
         propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Bold" ) );
-        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Horizontal Justification" ) );
-        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ), _HKI( "Vertical Justification" ) );
+        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ),
+                      _HKI( "Horizontal Justification" ) );
+        propMgr.Mask( TYPE_HASH( SCH_DIRECTIVE_LABEL ), TYPE_HASH( EDA_TEXT ),
+                      _HKI( "Vertical Justification" ) );
     }
 } _SCH_DIRECTIVE_LABEL_DESC;
 

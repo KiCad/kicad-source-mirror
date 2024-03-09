@@ -1257,14 +1257,14 @@ int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
     m_frame->PutDataInPreviousState( undo_list );
 
     // Only rebuild the hierarchy navigator if there are sheet changes.
-    if( undo_list->ContainsItemType( SCH_SHEET_T ) )
-    {
-        m_frame->SetSheetNumberAndCount();
-        m_frame->UpdateHierarchyNavigator();
-    }
+    // if( undo_list->ContainsItemType( SCH_SHEET_T ) )
+    // {
+    //     m_frame->SetSheetNumberAndCount();
+    //     m_frame->UpdateHierarchyNavigator();
+    // }
 
-    m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
-    m_frame->TestDanglingEnds();
+    // m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
+    // m_frame->TestDanglingEnds();
 
     // Now push the old command to the RedoList
     undo_list->ReversePickersListOrder();
@@ -1302,14 +1302,14 @@ int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
     m_frame->PushCommandToUndoList( list );
 
     // Only rebuild the hierarchy navigator if there are sheet changes.
-    if( list->ContainsItemType( SCH_SHEET_T ) )
-    {
-        m_frame->SetSheetNumberAndCount();
-        m_frame->UpdateHierarchyNavigator();
-    }
+    // if( list->ContainsItemType( SCH_SHEET_T ) )
+    // {
+    //     m_frame->SetSheetNumberAndCount();
+    //     m_frame->UpdateHierarchyNavigator();
+    // }
 
-    m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
-    m_frame->TestDanglingEnds();
+    // m_frame->RecalculateConnections( nullptr, NO_CLEANUP );
+    // m_frame->TestDanglingEnds();
 
     m_toolMgr->GetTool<EE_SELECTION_TOOL>()->RebuildSelection();
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -163,6 +163,9 @@ public:
             return false;
         }
     }
+
+    bool HasConnectivityChanges( const SCH_ITEM* aItem,
+                                 const SCH_SHEET_PATH* aInstance = nullptr ) const override;
 
     LABEL_FLAG_SHAPE GetShape() const        { return m_shape; }
     void SetShape( LABEL_FLAG_SHAPE aShape ) { m_shape = aShape; }
@@ -472,7 +475,8 @@ private:
 class SCH_GLOBALLABEL : public SCH_LABEL_BASE
 {
 public:
-    SCH_GLOBALLABEL( const VECTOR2I& aPos = VECTOR2I( 0, 0 ), const wxString& aText = wxEmptyString );
+    SCH_GLOBALLABEL( const VECTOR2I& aPos = VECTOR2I( 0, 0 ),
+                     const wxString& aText = wxEmptyString );
 
     SCH_GLOBALLABEL( const SCH_GLOBALLABEL& aGlobalLabel );
 

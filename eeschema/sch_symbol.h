@@ -5,7 +5,7 @@
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2022 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -765,6 +765,9 @@ public:
     VECTOR2I GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 
     bool IsConnectable() const override { return true; }
+
+    bool HasConnectivityChanges( const SCH_ITEM* aItem,
+                                 const SCH_SHEET_PATH* aInstance = nullptr ) const override;
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
