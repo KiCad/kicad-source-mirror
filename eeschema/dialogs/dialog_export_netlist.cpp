@@ -70,6 +70,7 @@ enum PANEL_NETLIST_INDEX
     PANELORCADPCB2,  /* Handle Netlist format OracdPcb2 */
     PANELALLEGRO,    /* Handle Netlist format Allegro */
     PANELCADSTAR,    /* Handle Netlist format CadStar */
+    PANELPADS,       /* Handle Netlist format PADS */
     PANELSPICE,      /* Handle Netlist format Spice */
     PANELSPICEMODEL, /* Handle Netlist format Spice Model (subcircuit) */
     PANELCUSTOMBASE  /* First auxiliary panel (custom netlists).
@@ -263,6 +264,9 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent ) :
 
     m_PanelNetType[PANELALLEGRO] =
             new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Allegro" ), NET_TYPE_ALLEGRO, false );
+
+    m_PanelNetType[PANELPADS] =
+            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "PADS" ), NET_TYPE_PADS, false );
 
     m_PanelNetType[PANELCADSTAR] =
             new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "CadStar" ), NET_TYPE_CADSTAR, false );
@@ -512,6 +516,9 @@ bool DIALOG_EXPORT_NETLIST::TransferDataFromWindow()
     case NET_TYPE_ALLEGRO:
         break;
 
+    case NET_TYPE_PADS:
+        break;
+
     default:    // custom, NET_TYPE_CUSTOM1 and greater
     {
         title.Printf( _( "%s Export" ), currPage->m_TitleStringCtrl->GetValue() );
@@ -670,6 +677,12 @@ bool DIALOG_EXPORT_NETLIST::FilenamePrms( NETLIST_TYPE_ID aType, wxString * aExt
         fileExt = FILEEXT::AllegroNetlistFileExtension;
         fileWildcard = FILEEXT::AllegroNetlistFileWildcard();
         break;
+
+    case NET_TYPE_PADS:
+        fileExt = FILEEXT::PADSNetlistFileExtension;
+        fileWildcard = FILEEXT::PADSNetlistFileWildcard();
+        break;
+
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
         fileWildcard = FILEEXT::AllFilesWildcard();

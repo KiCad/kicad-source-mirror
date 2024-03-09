@@ -145,6 +145,7 @@ const std::string FILEEXT::CadstarNetlistFileExtension( "frp" );
 const std::string FILEEXT::OrCadPcb2NetlistFileExtension( "net" );
 const std::string FILEEXT::NetlistFileExtension( "net" );
 const std::string FILEEXT::AllegroNetlistFileExtension( "txt" );
+const std::string FILEEXT::PADSNetlistFileExtension( "asc" );
 const std::string FILEEXT::FootprintAssignmentFileExtension( "cmp" );
 const std::string FILEEXT::GerberFileExtension( "gbr" );
 const std::string FILEEXT::GerberJobFileExtension( "gbrjob" );
@@ -290,6 +291,12 @@ wxString FILEEXT::AllegroNetlistFileWildcard()
 {
     return _( "Allegro netlist files" )
             + AddFileExtListToFilter( { AllegroNetlistFileExtension } );
+}
+
+
+wxString FILEEXT::PADSNetlistFileWildcard()
+{
+    return _( "PADS netlist files" ) + AddFileExtListToFilter( { PADSNetlistFileExtension } );
 }
 
 

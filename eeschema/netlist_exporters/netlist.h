@@ -41,6 +41,7 @@ enum  NETLIST_TYPE_ID {
     NET_TYPE_SPICE,
     NET_TYPE_SPICE_MODEL,
     NET_TYPE_ALLEGRO,
+    NET_TYPE_PADS,
     NET_TYPE_CUSTOM1,   /* NET_TYPE_CUSTOM1
                          * is the first id for user netlist format
                          * NET_TYPE_CUSTOM1+CUSTOMPANEL_COUNTMAX-1

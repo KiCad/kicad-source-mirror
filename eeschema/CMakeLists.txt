@@ -424,6 +424,7 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_base.cpp
     netlist_exporters/netlist_exporter_cadstar.cpp
     netlist_exporters/netlist_exporter_kicad.cpp
+    netlist_exporters/netlist_exporter_pads.cpp
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_spice.cpp
     netlist_exporters/netlist_exporter_spice_model.cpp

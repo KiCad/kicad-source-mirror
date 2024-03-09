@@ -135,6 +135,7 @@ public:
     static const std::string OrCadPcb2NetlistFileExtension;
     static const std::string NetlistFileExtension;
     static const std::string AllegroNetlistFileExtension;
+    static const std::string PADSNetlistFileExtension;
     static const std::string GerberFileExtension;
     static const std::string GerberJobFileExtension;
     static const std::string HtmlFileExtension;
@@ -219,6 +220,7 @@ public:
     static wxString OrCadPcb2NetlistFileWildcard();
     static wxString NetlistFileWildcard();
     static wxString AllegroNetlistFileWildcard();
+    static wxString PADSNetlistFileWildcard();
     static wxString HtmlFileWildcard();
     static wxString CsvFileWildcard();
     static wxString PcbFileWildcard();
