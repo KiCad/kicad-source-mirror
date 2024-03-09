@@ -287,8 +287,8 @@ protected:
 
     /*
      * Symbol netlist format:
-     *   pinCount
-     *   fpFilters
+     *   pinNumber pinName <tab> pinNumber pinName...
+     *   fpFilter fpFilter...
      */
     std::string  m_symbolNetlist;
 };

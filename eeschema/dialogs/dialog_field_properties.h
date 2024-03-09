@@ -136,7 +136,7 @@ public:
 class DIALOG_SCH_FIELD_PROPERTIES : public DIALOG_FIELD_PROPERTIES
 {
 public:
-    DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
+    DIALOG_SCH_FIELD_PROPERTIES( SCH_EDIT_FRAME* aParent, const wxString& aTitle,
                                  const SCH_FIELD* aField );
 
     ~DIALOG_SCH_FIELD_PROPERTIES() {}
