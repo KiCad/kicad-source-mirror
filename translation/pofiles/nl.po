@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-09 10:01+0000\n"
+"PO-Revision-Date: 2024-03-10 11:02+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -31716,7 +31716,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Relatieve vrije afstand soldeerpasta:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
