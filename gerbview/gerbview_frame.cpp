@@ -600,6 +600,12 @@ void GERBVIEW_FRAME::RemapLayers( const std::unordered_map<int, int>& remapping 
 
     ReFillLayerWidget();
     syncLayerBox( true );
+
+    // Reordering draw layers need updating the view items
+    GetCanvas()->GetView()->RecacheAllItems();
+    GetCanvas()->GetView()->MarkDirty();
+    GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+
     GetCanvas()->Refresh();
 }
 
