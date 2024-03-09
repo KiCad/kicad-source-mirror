@@ -2756,7 +2756,7 @@ bool EDIT_TOOL::updateModificationPoint( PCB_SELECTION& aSelection )
         return false;
 
     // When there is only one item selected, the reference point is its position...
-    if( aSelection.Size() == 1 )
+    if( aSelection.Size() == 1 && aSelection.Front()->Type() != PCB_TABLE_T )
     {
         if( BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( aSelection.Front() ) )
             aSelection.SetReferencePoint( item->GetPosition() );

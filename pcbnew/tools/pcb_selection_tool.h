@@ -106,6 +106,10 @@ public:
     ///< Select a single item under cursor event handler.
     int CursorSelection( const TOOL_EVENT& aEvent );
 
+    int SelectColumns( const TOOL_EVENT& aEvent );
+    int SelectRows( const TOOL_EVENT& aEvent );
+    int SelectTable( const TOOL_EVENT& aEvent );
+
     ///< Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
     void ClearSelection( bool aQuietMode = false );

@@ -197,6 +197,9 @@ bool PCB_SELECTION_TOOL::Init()
                 return m_enteredGroup != nullptr;
             };
 
+    auto tableCellSelection = SELECTION_CONDITIONS::MoreThan( 0 )
+                                && SELECTION_CONDITIONS::OnlyTypes( { PCB_TABLECELL_T } );
+
     if( frame && frame->IsType( FRAME_PCB_EDITOR ) )
     {
         menu.AddMenu( selectMenu.get(), SELECTION_CONDITIONS::NotEmpty  );
@@ -208,6 +211,11 @@ bool PCB_SELECTION_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::groupEnter,     groupEnterCondition, 1 );
     menu.AddItem( PCB_ACTIONS::groupLeave,     inGroupCondition,    1 );
     menu.AddItem( PCB_ACTIONS::clearHighlight, haveHighlight,       1 );
+    menu.AddSeparator(                         haveHighlight,       1 );
+
+    menu.AddItem( ACTIONS::selectColumns,      tableCellSelection, 2 );
+    menu.AddItem( ACTIONS::selectRows,         tableCellSelection, 2 );
+    menu.AddItem( ACTIONS::selectTable,        tableCellSelection, 2 );
 
     menu.AddSeparator( 1 );
 
@@ -3905,6 +3913,105 @@ int PCB_SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_SELECTION_TOOL::SelectColumns( const TOOL_EVENT& aEvent )
+{
+    std::set<std::pair<PCB_TABLE*, int>> columns;
+    bool                                 added = false;
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        if( PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( item ) )
+        {
+            PCB_TABLE* table = static_cast<PCB_TABLE*>( cell->GetParent() );
+            columns.insert( std::make_pair( table, cell->GetColumn() ) );
+        }
+    }
+
+    for( auto& [ table, col ] : columns )
+    {
+        for( int row = 0; row < table->GetRowCount(); ++row )
+        {
+            PCB_TABLECELL* cell = table->GetCell( row, col );
+
+            if( !cell->IsSelected() )
+            {
+                select( table->GetCell( row, col ) );
+                added = true;
+            }
+        }
+    }
+
+    if( added )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    return 0;
+}
+
+
+int PCB_SELECTION_TOOL::SelectRows( const TOOL_EVENT& aEvent )
+{
+    std::set<std::pair<PCB_TABLE*, int>> rows;
+    bool                                 added = false;
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        if( PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( item ) )
+        {
+            PCB_TABLE* table = static_cast<PCB_TABLE*>( cell->GetParent() );
+            rows.insert( std::make_pair( table, cell->GetRow() ) );
+        }
+    }
+
+    for( auto& [ table, row ] : rows )
+    {
+        for( int col = 0; col < table->GetRowCount(); ++col )
+        {
+            PCB_TABLECELL* cell = table->GetCell( row, col );
+
+            if( !cell->IsSelected() )
+            {
+                select( table->GetCell( row, col ) );
+                added = true;
+            }
+        }
+    }
+
+    if( added )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    return 0;
+}
+
+
+int PCB_SELECTION_TOOL::SelectTable( const TOOL_EVENT& aEvent )
+{
+    std::set<PCB_TABLE*> tables;
+    bool                 added = false;
+
+    for( EDA_ITEM* item : m_selection )
+    {
+        if( PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( item ) )
+            tables.insert( static_cast<PCB_TABLE*>( cell->GetParent() ) );
+    }
+
+    ClearSelection();
+
+    for( PCB_TABLE* table : tables )
+    {
+        if( !table->IsSelected() )
+        {
+            select( table );
+            added = true;
+        }
+    }
+
+    if( added )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+    return 0;
+}
+
+
 void PCB_SELECTION_TOOL::setTransitions()
 {
     Go( &PCB_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
@@ -3935,6 +4042,9 @@ void PCB_SELECTION_TOOL::setTransitions()
         PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
     Go( &PCB_SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsMoved );
+    Go( &PCB_SELECTION_TOOL::SelectColumns,       ACTIONS::selectColumns.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SelectRows,          ACTIONS::selectRows.MakeEvent() );
+    Go( &PCB_SELECTION_TOOL::SelectTable,         ACTIONS::selectTable.MakeEvent() );
 
     Go( &PCB_SELECTION_TOOL::SelectAll,           ACTIONS::selectAll.MakeEvent() );
     Go( &PCB_SELECTION_TOOL::UnselectAll,         ACTIONS::unselectAll.MakeEvent() );

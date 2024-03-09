@@ -2400,7 +2400,7 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
     // Highlight selected tablecells with a background wash.
     for( PCB_TABLECELL* cell : aTable->GetCells() )
     {
-        if( cell->IsSelected() )
+        if( aTable->IsSelected() || cell->IsSelected() )
         {
             std::vector<VECTOR2I> corners = cell->GetCorners();
             std::deque<VECTOR2D>  pts;
