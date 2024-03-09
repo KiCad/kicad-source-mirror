@@ -431,17 +431,28 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     if( m_fieldId == FOOTPRINT_FIELD )
     {
-        LIB_SYMBOL* symbol = aField->GetParent();
-        wxString    netlist;
-
         /*
          * Symbol netlist format:
-         *   pinCount
-         *   fpFilters
+         *   pinNumber pinName <tab> pinNumber pinName...
+         *   fpFilter fpFilter...
          */
-        netlist << wxString::Format( wxS( "%d\r" ), symbol->GetPinCount() );
+        wxString netlist;
 
-        wxArrayString fpFilters = symbol->GetFPFilters();
+        std::vector<LIB_PIN*> pinList;
+
+        aField->GetParent()->GetPins( pinList, 0, 1 );   // All units, but a single convert
+
+        wxArrayString pins;
+
+        for( LIB_PIN* pin : pinList )
+            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+
+        if( !pins.IsEmpty() )
+            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
+
+        wxArrayString fpFilters = aField->GetParent()->GetFPFilters();
 
         if( !fpFilters.IsEmpty() )
             netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
@@ -475,7 +486,7 @@ void DIALOG_LIB_FIELD_PROPERTIES::UpdateField( LIB_FIELD* aField )
 }
 
 
-DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent,
+DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_EDIT_FRAME* aParent,
                                                           const wxString& aTitle,
                                                           const SCH_FIELD* aField ) :
         DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField ),
@@ -485,17 +496,27 @@ DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
     {
-        SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( aField->GetParent() );
-        wxString    netlist;
+        SCH_SYMBOL*    symbol = static_cast<SCH_SYMBOL*>( aField->GetParent() );
+        SCH_SHEET_PATH sheetPath = aParent->GetCurrentSheet();
 
         m_fieldId = aField->GetId();
 
         /*
          * Symbol netlist format:
-         *   pinCount
-         *   fpFilters
+         *   pinNumber pinName <tab> pinNumber pinName...
+         *   fpFilter fpFilter...
          */
-        netlist << wxString::Format( wxS( "%zu\r" ), symbol->GetFullPinCount() );
+        wxString netlist;
+
+        wxArrayString pins;
+
+        for( SCH_PIN* pin : symbol->GetPins( &sheetPath ) )
+            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+
+        if( !pins.IsEmpty() )
+            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
 
         wxArrayString fpFilters = symbol->GetLibSymbolRef()->GetFPFilters();
 

@@ -1148,10 +1148,10 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
             padNumber = UnescapeString( aPad->GetNumber() );
 
             if( dynamic_cast<CVPCB_SETTINGS*>( viewer_settings() ) )
-                netname = aPad->GetUnescapedShortNetname();
+                netname = aPad->GetPinFunction();
         }
 
-        if( displayOpts )
+        if( displayOpts && !dynamic_cast<CVPCB_SETTINGS*>( viewer_settings() ) )
         {
             if( displayOpts->m_NetNames == 1 || displayOpts->m_NetNames == 3 )
                 netname = aPad->GetUnescapedShortNetname();

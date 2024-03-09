@@ -92,6 +92,12 @@ void FOOTPRINT_PREVIEW_WIDGET::SetUserUnits( EDA_UNITS aUnits )
 }
 
 
+void FOOTPRINT_PREVIEW_WIDGET::SetPinFunctions( const std::map<wxString, wxString>& aPinFunctions )
+{
+    m_prev_panel->SetPinFunctions( aPinFunctions );
+}
+
+
 void FOOTPRINT_PREVIEW_WIDGET::DisplayFootprint( const LIB_ID& aFPID )
 {
     if( !m_prev_panel || m_libid == aFPID )

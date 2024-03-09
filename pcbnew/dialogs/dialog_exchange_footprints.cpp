@@ -408,12 +408,21 @@ void DIALOG_EXCHANGE_FOOTPRINTS::ViewAndSelectFootprint( wxCommandEvent& event )
     {
         /*
          * Symbol netlist format:
-         *   pinCount
-         *   fpFilters
+         *   pinNumber pinName <tab> pinNumber pinName...
+         *   fpFilter fpFilter...
          */
         wxString netlist;
 
-        netlist << wxString::Format( wxS( "%u\r" ), m_currentFootprint->GetUniquePadCount() );
+        wxArrayString pins;
+
+        for( const wxString& pad : m_currentFootprint->GetUniquePadNumbers() )
+            pins.push_back( pad + ' ' + wxEmptyString /* leave pinName empty */ );
+
+        if( !pins.IsEmpty() )
+            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
+
         netlist << EscapeString( m_currentFootprint->GetFilters(), CTX_LINE ) << wxS( "\r" );
 
         std::string payload( netlist.ToStdString() );

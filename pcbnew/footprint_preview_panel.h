@@ -55,6 +55,11 @@ public:
     virtual ~FOOTPRINT_PREVIEW_PANEL( );
 
     virtual void SetUserUnits( EDA_UNITS aUnits ) override { m_userUnits = aUnits; }
+    virtual void SetPinFunctions( const std::map<wxString, wxString>& aPinFunctions ) override
+    {
+        m_pinFunctions = aPinFunctions;
+    }
+
     virtual bool DisplayFootprint( const LIB_ID& aFPID ) override;
     virtual void DisplayFootprints( std::shared_ptr<FOOTPRINT> aFootprintA,
                                     std::shared_ptr<FOOTPRINT> aFootprintB ) override;
@@ -91,6 +96,7 @@ private:
     std::unique_ptr<BOARD>                      m_dummyBoard;
     std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_displayOptions;
     EDA_UNITS                                   m_userUnits;
+    std::map<wxString, wxString>                m_pinFunctions;
     std::shared_ptr<FOOTPRINT>                  m_currentFootprint;
     std::shared_ptr<FOOTPRINT>                  m_otherFootprint;
 };

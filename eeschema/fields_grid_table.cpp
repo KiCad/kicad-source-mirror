@@ -62,16 +62,24 @@ enum
 
 static wxString netList( SCH_SYMBOL* aSymbol, SCH_SHEET_PATH& aSheetPath )
 {
+    wxCHECK( aSymbol && aSymbol->GetLibSymbolRef(), wxEmptyString );
+
     /*
      * Symbol netlist format:
-     *   pinCount
-     *   fpFilters
+     *   pinNumber pinName <tab> pinNumber pinName...
+     *   fpFilter fpFilter...
      */
     wxString netlist;
 
-    netlist << wxString::Format( wxS( "%zu\r" ), aSymbol->GetFullPinCount() );
+    wxArrayString pins;
 
-    wxCHECK( aSymbol && aSymbol->GetLibSymbolRef(), wxEmptyString );
+    for( SCH_PIN* pin : aSymbol->GetPins( &aSheetPath ) )
+        pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+
+    if( !pins.IsEmpty() )
+        netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+    netlist << wxS( "\r" );
 
     wxArrayString fpFilters = aSymbol->GetLibSymbolRef()->GetFPFilters();
 
@@ -88,12 +96,24 @@ static wxString netList( LIB_SYMBOL* aSymbol )
 {
     /*
      * Symbol netlist format:
-     *   pinCount
-     *   fpFilters
+     *   pinNumber pinName <tab> pinNumber pinName...
+     *   fpFilter fpFilter...
      */
     wxString netlist;
 
-    netlist << wxString::Format( wxS( "%d\r" ), aSymbol->GetPinCount() );
+    std::vector<LIB_PIN*> pinList;
+
+    aSymbol->GetPins( pinList, 0, 1 );   // All units, but a single convert
+
+    wxArrayString pins;
+
+    for( LIB_PIN* pin : pinList )
+        pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+
+    if( !pins.IsEmpty() )
+        netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+    netlist << wxS( "\r" );
 
     wxArrayString fpFilters = aSymbol->GetFPFilters();
 

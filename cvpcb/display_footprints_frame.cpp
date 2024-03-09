@@ -465,21 +465,14 @@ void DISPLAY_FOOTPRINTS_FRAME::ReloadFootprint( FOOTPRINT* aFootprint )
         return;
 
     GetBoard()->DeleteAllFootprints();
-    GetBoard()->RemoveUnusedNets( nullptr );
     GetCanvas()->GetView()->Clear();
-
 
     for( PAD* pad : aFootprint->Pads() )
     {
         const COMPONENT_NET& net = m_currentComp->GetNet( pad->GetNumber() );
 
         if( !net.GetPinFunction().IsEmpty() )
-        {
-            NETINFO_ITEM* netinfo = new NETINFO_ITEM( GetBoard() );
-            netinfo->SetNetname( net.GetPinFunction() );
-            GetBoard()->Add( netinfo );
-            pad->SetNet( netinfo );
-        }
+            pad->SetPinFunction( net.GetPinFunction() );
     }
 
     GetBoard()->Add( aFootprint );
@@ -504,7 +497,6 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
         return;
 
     GetBoard()->DeleteAllFootprints();
-    GetBoard()->RemoveUnusedNets( nullptr );
     GetCanvas()->GetView()->Clear();
 
     INFOBAR_REPORTER infoReporter( m_infoBar );
@@ -528,12 +520,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
                 const COMPONENT_NET& net = comp->GetNet( pad->GetNumber() );
 
                 if( !net.GetPinFunction().IsEmpty() )
-                {
-                    NETINFO_ITEM* netinfo = new NETINFO_ITEM( GetBoard() );
-                    netinfo->SetNetname( net.GetPinFunction() );
-                    GetBoard()->Add( netinfo );
-                    pad->SetNet( netinfo );
-                }
+                    pad->SetPinFunction( net.GetPinFunction() );
             }
         }
 

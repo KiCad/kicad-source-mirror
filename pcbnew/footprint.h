@@ -798,6 +798,12 @@ public:
     unsigned GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
 
     /**
+     * Return the names of the unique, non-blank pads.
+     */
+    std::set<wxString>
+    GetUniquePadNumbers( INCLUDE_NPTH_T aIncludeNPTH = INCLUDE_NPTH_T(INCLUDE_NPTH) ) const;
+
+    /**
      * Return the next available pad number in the footprint.
      *
      * @param aFillSequenceGaps true if the numbering should "fill in" gaps in the sequence,

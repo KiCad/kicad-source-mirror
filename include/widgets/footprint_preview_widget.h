@@ -48,9 +48,8 @@ public:
     FOOTPRINT_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway );
 
     /**
-     * Return whether the widget initialized properly. This could return false
-     * if Kiway is not available. If this returns false, no other methods should
-     * be called.
+     * Return whether the widget initialized properly. This could return false if Kiway is
+     * not available. If this returns false, no other methods should be called.
      */
     bool IsInitialized() const { return m_prev_panel != nullptr; }
 
@@ -70,8 +69,15 @@ public:
     void SetUserUnits( EDA_UNITS aUnits );
 
     /**
-     * Set the currently displayed footprint. Any footprint passed in here
-     * must have been passed to CacheFootprint before.
+     * Set the pin functions from the symbol's netlist.  This allows us to display them in
+     * the corresponding pads.
+     * @param aPinFunctions a map from pin_number to pin_function
+     */
+    void SetPinFunctions( const std::map<wxString, wxString>& aPinFunctions );
+
+    /**
+     * Set the currently displayed footprint. Any footprint passed in here *MUST* have been
+     * passed to CacheFootprint before.
      */
     void DisplayFootprint( const LIB_ID& aFPID );
 
@@ -111,8 +117,15 @@ public:
     virtual void SetUserUnits( EDA_UNITS aUnits ) = 0;
 
     /**
-     * Set the currently displayed footprint. Any footprint passed in here
-     * must have been passed to CacheFootprint before.
+     * Set the pin functions from the symbol's netlist.  This allows us to display them in
+     * the corresponding pads.
+     * @param aPinFunctions a map from pin_number to pin_function
+     */
+    virtual void SetPinFunctions( const std::map<wxString, wxString>& aPinFunctions ) = 0;
+
+    /**
+     * Set the currently displayed footprint. Any footprint passed in here *MUST* have been
+     * passed to CacheFootprint before.
      */
     virtual bool DisplayFootprint( LIB_ID const& aFPID ) = 0;
 
@@ -139,8 +152,8 @@ public:
     virtual const KIGFX::COLOR4D& GetForegroundColor() const = 0;
 
     /**
-     * Return a footprint preview panel instance via Kiface. May return null
-     * if Kiway is not available or there is any error on load.
+     * Return a footprint preview panel instance via Kiface. May return null if Kiway is not
+     * available or there is any error on load.
      */
     static FOOTPRINT_PREVIEW_PANEL_BASE* Create( wxWindow* aParent, KIWAY& aKiway );
 };

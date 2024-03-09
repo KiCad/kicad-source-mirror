@@ -27,6 +27,7 @@
 #include <base_units.h>
 #include <board.h>
 #include <footprint.h>
+#include <pad.h>
 #include <pcb_dimension.h>
 #include <dpi_scaling_common.h>
 #include <eda_draw_frame.h>
@@ -125,6 +126,9 @@ void FOOTPRINT_PREVIEW_PANEL::renderFootprint( std::shared_ptr<FOOTPRINT> aFootp
                                              PCB_DIM_ORTHOGONAL_T,
                                              PCB_DIM_CENTER_T,
                                              PCB_DIM_RADIAL_T } );
+
+    for( PAD* pad : aFootprint->Pads() )
+        pad->SetPinFunction( m_pinFunctions[ pad->GetNumber() ] );
 
     // Ensure we are not using the high contrast mode to display the selected footprint
     KIGFX::PAINTER* painter = GetView()->GetPainter();

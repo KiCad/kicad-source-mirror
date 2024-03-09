@@ -229,6 +229,7 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     }
 }
 
+
 bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
 {
     if( aNode.m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
@@ -322,15 +323,18 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
         /*
          * Symbol netlist format:
-         *   pinCount
-         *   fpFilters
+         *   pinNumber pinName <tab> pinNumber pinName...
+         *   fpFilter fpFilter...
          */
-        std::vector<std::string> strings = split( payload, "\r" );
+        std::map<wxString, wxString> pinNames;
+        std::vector<std::string>     strings = split( payload, "\r" );
 
-        if( strings.size() >= 1 )
+        if( strings.size() >= 1 && !strings[0].empty() )
         {
-            wxString pinCountStr( strings[0] );
-            pinCountStr.ToInt( &m_pinCount );
+            for( const wxString& pin : wxSplit( strings[0], '\t' ) )
+                pinNames[ pin.BeforeFirst( ' ' ) ] = pin.AfterFirst( ' ' );
+
+            m_pinCount = pinNames.size();
 
             if( m_pinCount > 0 )
             {
@@ -353,6 +357,7 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             m_filterByFPFilters->Show( true );
         }
 
+        m_chooserPanel->GetViewerPanel()->SetPinFunctions( pinNames );
         break;
     }
 

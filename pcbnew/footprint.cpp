@@ -1587,7 +1587,7 @@ unsigned FOOTPRINT::GetPadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
 }
 
 
-unsigned FOOTPRINT::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+std::set<wxString> FOOTPRINT::GetUniquePadNumbers( INCLUDE_NPTH_T aIncludeNPTH ) const
 {
     std::set<wxString> usedNumbers;
 
@@ -1614,7 +1614,13 @@ unsigned FOOTPRINT::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
         usedNumbers.insert( pad->GetNumber() );
     }
 
-    return usedNumbers.size();
+    return usedNumbers;
+}
+
+
+unsigned FOOTPRINT::GetUniquePadCount( INCLUDE_NPTH_T aIncludeNPTH ) const
+{
+    return GetUniquePadNumbers( aIncludeNPTH ).size();
 }
 
 
