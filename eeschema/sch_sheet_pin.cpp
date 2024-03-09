@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -386,6 +386,25 @@ double SCH_SHEET_PIN::Similarity( const SCH_ITEM& aOther ) const
     similarity *= SCH_HIERLABEL::Similarity( aOther );
 
     return similarity;
+}
+
+
+bool SCH_SHEET_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                            const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this )
+        return false;
+
+    const SCH_SHEET_PIN* pin = dynamic_cast<const SCH_SHEET_PIN*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( pin, false );
+
+    if( GetPosition() != pin->GetPosition() )
+        return true;
+
+    return GetText() != pin->GetText();
 }
 
 

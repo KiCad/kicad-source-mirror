@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2023 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2494,13 +2494,13 @@ int SCH_DRAWING_TOOLS::doSyncSheetsPins( std::list<SCH_SHEET_PATH> sheetPaths )
                         {
                             commit.Modify( pin->GetParent(), aPath.LastScreen() );
                             aModify();
-                            commit.Push( _( "Modify sch item" ) );
+                            commit.Push( _( "Modify sheet pin" ) );
                         }
                         else
                         {
                             commit.Modify( aItem, aPath.LastScreen() );
                             aModify();
-                            commit.Push( _( "Modify sch item" ), SKIP_CONNECTIVITY );
+                            commit.Push( _( "Modify schematic item" ) );
                         }
 
                         updateItem( aItem, true );

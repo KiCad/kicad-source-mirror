@@ -84,6 +84,9 @@ public:
 
     bool IsConnectable() const override { return true; }
 
+    bool HasConnectivityChanges( const SCH_ITEM* aItem,
+                                 const SCH_SHEET_PATH* aInstance = nullptr ) const override;
+
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
         return ( aItem->Type() == SCH_LINE_T && aItem->GetLayer() == LAYER_WIRE ) ||

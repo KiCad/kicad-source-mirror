@@ -100,6 +100,9 @@ public:
 
     bool IsConnectable() const override { return true; }
 
+    bool HasConnectivityChanges( const SCH_ITEM* aItem,
+                                 const SCH_SHEET_PATH* aInstance = nullptr ) const override;
+
     bool IsDangling() const override
     {
         if( GetType() == ELECTRICAL_PINTYPE::PT_NC || GetType() == ELECTRICAL_PINTYPE::PT_NIC )
@@ -167,6 +170,8 @@ public:
     double Similarity( const SCH_ITEM& aItem ) const override;
 
     bool operator==( const SCH_ITEM& aItem ) const override;
+
+    bool operator!=( const SCH_PIN& aRhs ) const { return !( *this == aRhs ); }
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override {}

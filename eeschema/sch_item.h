@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -453,6 +453,27 @@ public:
     bool IsConnectivityDirty() const { return m_connectivity_dirty; }
 
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
+
+    /**
+     * Check if \a aItem has connectivity changes against this object.
+     *
+     * This provides granular per object  connectivity change testing to prevent the need
+     * to rebuild the #CONNECTION_GRAPH when object properties that have nothing to do with
+     * the schematic connectivity changes i.e. color, thickness, fill type. etc.
+     *
+     * @note Developers should override this method for all objects that are connectable.
+     *
+     * @param aItem is the item to test for connectivity changes.
+     * @param aInstance is the instance to test for connectivity changes.  This parameter is
+     *                  only meaningful for #SCH_SYMBOL objects.
+     *
+     * @return true if there are connectivity changes otherwise false.
+     */
+    virtual bool HasConnectivityChanges( const SCH_ITEM* aItem,
+                                         const SCH_SHEET_PATH* aInstance = nullptr ) const
+    {
+        return false;
+    }
 
     /// Updates the connection graph for all connections in this item
     void SetConnectionGraph( CONNECTION_GRAPH* aGraph );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2157,6 +2157,48 @@ VECTOR2I SCH_SYMBOL::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
                  wxT( "Cannot get physical position of pin." ) );
 
     return m_transform.TransformCoordinate( Pin->GetPosition() ) + m_pos;
+}
+
+
+bool SCH_SYMBOL::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                         const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this )
+        return false;
+
+    const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( symbol, false );
+
+    if( GetPosition() != symbol->GetPosition() )
+        return true;
+
+    if( GetLibId() != symbol->GetLibId() )
+        return true;
+
+    if( GetUnitSelection( aInstance ) != symbol->GetUnitSelection( aInstance ) )
+        return true;
+
+    if( GetRef( aInstance ) != symbol->GetRef( aInstance ) )
+        return true;
+
+    // Power symbol value field changes are connectivity changes.
+    if( IsPower()
+      && ( GetValueFieldText( true, aInstance, false ) != symbol->GetValueFieldText( true, aInstance, false ) ) )
+        return true;
+
+    if( m_pins.size() != symbol->m_pins.size() )
+        return true;
+
+    for( size_t i = 0; i < m_pins.size(); i++ )
+    {
+        if( m_pins[i]->HasConnectivityChanges( symbol->m_pins[i].get() ) )
+            return true;
+    }
+
+    return false;
 }
 
 

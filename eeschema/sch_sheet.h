@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ class SCH_SHEET : public SCH_ITEM
 public:
     SCH_SHEET( EDA_ITEM* aParent = nullptr, const VECTOR2I& aPos = VECTOR2I( 0, 0 ),
                VECTOR2I aSize = VECTOR2I( schIUScale.MilsToIU( MIN_SHEET_WIDTH ),
-                                      schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) ),
+                                          schIUScale.MilsToIU( MIN_SHEET_HEIGHT ) ),
                FIELDS_AUTOPLACED aAutoplaceFields = FIELDS_AUTOPLACED_AUTO );
 
     /**
@@ -346,6 +346,9 @@ public:
                               const SCH_SHEET_PATH*           aPath = nullptr ) override;
 
     bool IsConnectable() const override { return true; }
+
+    bool HasConnectivityChanges( const SCH_ITEM* aItem,
+                                 const SCH_SHEET_PATH* aInstance = nullptr ) const override;
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {

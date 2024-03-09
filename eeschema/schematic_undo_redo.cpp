@@ -291,43 +291,48 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         SCH_ITEM*   schItem = dynamic_cast<SCH_ITEM*>( eda_item );
 
         // Set connectable object connectivity status.
-        if( schItem && schItem->IsConnectable() )
+        auto updateConnectivityFlag = [&, this]()
         {
-            schItem->SetConnectivityDirty();
-
-            if( schItem->Type() == SCH_SYMBOL_T )
+            if( schItem && schItem->IsConnectable() )
             {
-                SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
+                schItem->SetConnectivityDirty();
 
-                wxCHECK2( symbol, continue );
+                if( schItem->Type() == SCH_SYMBOL_T )
+                {
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem );
 
-                for( SCH_PIN* pin : symbol->GetPins() )
-                    pin->SetConnectivityDirty();
+                    wxCHECK( symbol, /* void */ );
+
+                    for( SCH_PIN* pin : symbol->GetPins() )
+                        pin->SetConnectivityDirty();
+                }
+                else if( schItem->Type() == SCH_SHEET_T )
+                {
+                    SCH_SHEET* sheet = static_cast<SCH_SHEET*>( schItem );
+
+                    wxCHECK( sheet, /* void */ );
+
+                    for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                        pin->SetConnectivityDirty();
+                }
+
+                m_highlightedConnChanged = true;
+                dirtyConnectivity = true;
+
+                // Do a local clean up if there are any connectable objects in the commit.
+                if( connectivityCleanUp == NO_CLEANUP )
+                    connectivityCleanUp = LOCAL_CLEANUP;
+
+                // Do a full rebauild of the connectivity if there is a sheet in the commit.
+                if( schItem->Type() == SCH_SHEET_T )
+                    connectivityCleanUp = GLOBAL_CLEANUP;
             }
-            else if( schItem->Type() == SCH_SHEET_T )
-            {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( schItem );
-
-                wxCHECK2( sheet, continue );
-
-                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
-                    pin->SetConnectivityDirty();
-            }
-
-            m_highlightedConnChanged = true;
-            dirtyConnectivity = true;
-
-            // Do a local clean up if there are any connectable objects in the commit.
-            if( connectivityCleanUp == NO_CLEANUP )
-                connectivityCleanUp = LOCAL_CLEANUP;
-
-            // Do a full rebauild of the connectivity if there is a sheet in the commit.
-            if( schItem->Type() == SCH_SHEET_T )
-                connectivityCleanUp = GLOBAL_CLEANUP;
-        }
+        };
 
         if( status == UNDO_REDO::NEWITEM )
         {
+            updateConnectivityFlag();
+
             // If we are removing the current sheet, get out first
             if( eda_item->Type() == SCH_SHEET_T )
             {
@@ -342,6 +347,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( status == UNDO_REDO::DELETED )
         {
+            updateConnectivityFlag();
+
             // deleted items are re-inserted on undo
             AddToScreen( eda_item, screen );
             aList->SetPickedItemStatus( UNDO_REDO::NEWITEM, ii );
@@ -364,28 +371,32 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             item->Restore( this );
             *item = std::move( alt_item );
         }
-        else if( SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( eda_item ) )
+        else if( schItem )
         {
-            // everything else is modified in place
-            SCH_ITEM* alt_item = static_cast<SCH_ITEM*>( aList->GetPickedItemLink( ii ) );
+            SCH_ITEM* itemCopy = dynamic_cast<SCH_ITEM*>( aList->GetPickedItemLink( ii ) );
+
+            wxCHECK2( itemCopy, continue );
+
+            if( schItem->HasConnectivityChanges( itemCopy, &GetCurrentSheet() ) )
+                updateConnectivityFlag();
 
             // The root sheet is a pseudo object that owns the root screen object but is not on
             // the root screen so do not attempt to remove it from the screen it owns.
-            if( item != &Schematic().Root() )
-                RemoveFromScreen( item, screen );
+            if( schItem != &Schematic().Root() )
+                RemoveFromScreen( schItem, screen );
 
             switch( status )
             {
             case UNDO_REDO::CHANGED:
-                item->SwapData( alt_item );
-                bulkChangedItems.emplace_back( item );
+                schItem->SwapData( itemCopy );
+                bulkChangedItems.emplace_back( schItem );
 
                 // Special cases for items which have instance data
-                if( item->GetParent() && item->GetParent()->Type() == SCH_SYMBOL_T
-                        && item->Type() == SCH_FIELD_T )
+                if( schItem->GetParent() && schItem->GetParent()->Type() == SCH_SYMBOL_T
+                  && schItem->Type() == SCH_FIELD_T )
                 {
-                    SCH_FIELD*  field = static_cast<SCH_FIELD*>( item );
-                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
+                    SCH_FIELD*  field = static_cast<SCH_FIELD*>( schItem );
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( schItem->GetParent() );
 
                     if( field->GetId() == REFERENCE_FIELD )
                     {
@@ -404,14 +415,14 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 break;
             }
 
-            if( item->Type() == SCH_SYMBOL_T )
+            if( schItem->Type() == SCH_SYMBOL_T )
             {
-                SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
+                SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( schItem );
                 sym->UpdatePins();
             }
 
-            if( item != &Schematic().Root() )
-                AddToScreen( item, screen );
+            if( schItem != &Schematic().Root() )
+                AddToScreen( schItem, screen );
         }
     }
 
@@ -429,6 +440,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     if( dirtyConnectivity )
     {
+        wxLogTrace( wxS( "CONN_PROFILE" ),
+                    wxS( "Undo/redo %s clean up connectivity rebuild." ),
+                    ( connectivityCleanUp == LOCAL_CLEANUP ) ? wxS( "local" ) : wxS( "global" ) );
+
         SCH_COMMIT localCommit( m_toolManager );
 
         RecalculateConnections( &localCommit, connectivityCleanUp );

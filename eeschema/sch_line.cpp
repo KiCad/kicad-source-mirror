@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,8 @@ wxString SCH_LINE::FindWireSegmentNetNameRecursive( SCH_LINE *line,
     {
         if( connected->Type() == SCH_LINE_T )
         {
-            if( std::find(checkedLines.begin(), checkedLines.end(), connected ) == checkedLines.end() )
+            if( std::find(checkedLines.begin(), checkedLines.end(),
+                          connected ) == checkedLines.end() )
             {
                 SCH_LINE* connectedLine = static_cast<SCH_LINE*>( connected );
                 checkedLines.push_back( connectedLine );
@@ -712,6 +713,25 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
     }
 
     return aItem->GetLayer() == m_layer;
+}
+
+
+bool SCH_LINE::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                       const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this || !IsConnectable() )
+        return false;
+
+    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( line, false );
+
+    if( GetStartPoint() != line->GetStartPoint() )
+        return true;
+
+    return GetEndPoint() != line->GetEndPoint();
 }
 
 

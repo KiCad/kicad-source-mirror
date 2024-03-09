@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,7 +72,7 @@ bool DIALOG_IMAGE_PROPERTIES::TransferDataFromWindow()
         m_bitmap->SetPosition( VECTOR2I( m_posX.GetValue(), m_posY.GetValue() ) );
 
         if( !commit.Empty() )
-            commit.Push( _( "Image Properties" ), SKIP_CONNECTIVITY );
+            commit.Push( _( "Image Properties" ) );
 
         return true;
     }

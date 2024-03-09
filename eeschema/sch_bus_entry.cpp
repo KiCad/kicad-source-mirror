@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -421,6 +421,25 @@ bool SCH_BUS_ENTRY_BASE::IsDangling() const
 std::vector<VECTOR2I> SCH_BUS_ENTRY_BASE::GetConnectionPoints() const
 {
     return { m_pos, GetEnd() };
+}
+
+
+bool SCH_BUS_ENTRY_BASE::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                                 const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this )
+        return false;
+
+    const SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<const SCH_BUS_ENTRY_BASE*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( busEntry, false );
+
+    if( GetPosition() != busEntry->GetPosition() )
+        return true;
+
+    return GetEnd() != busEntry->GetEnd();
 }
 
 

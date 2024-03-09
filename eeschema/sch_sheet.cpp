@@ -1013,6 +1013,40 @@ bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListBy
 }
 
 
+bool SCH_SHEET::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                        const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this )
+        return false;
+
+    const SCH_SHEET* sheet = dynamic_cast<const SCH_SHEET*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( sheet, false );
+
+    if( GetPosition() != sheet->GetPosition() )
+        return true;
+
+    // Technically this cannot happen because undo/redo does not support reloading sheet
+    // file association changes.  This was just added so that it doesn't get missed should
+    // we ever fix the undo/redo issue.
+    if( ( GetFileName() != sheet->GetFileName() ) || ( GetName() != sheet->GetName() ) )
+        return true;
+
+    if( m_pins.size() != sheet->m_pins.size() )
+        return true;
+
+    for( size_t i = 0; i < m_pins.size(); i++ )
+    {
+        if( m_pins[i]->HasConnectivityChanges( sheet->m_pins[i] ) )
+            return true;
+    }
+
+    return false;
+}
+
+
 std::vector<VECTOR2I> SCH_SHEET::GetConnectionPoints() const
 {
     std::vector<VECTOR2I> retval;

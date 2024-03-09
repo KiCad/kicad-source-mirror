@@ -465,6 +465,25 @@ EDA_ITEM* SCH_PIN::Clone() const
 }
 
 
+bool SCH_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
+                                      const SCH_SHEET_PATH* aInstance ) const
+{
+    // Do not compare to ourself.
+    if( aItem == this )
+        return false;
+
+    const SCH_PIN* pin = dynamic_cast<const SCH_PIN*>( aItem );
+
+    // Don't compare against a different SCH_ITEM.
+    wxCHECK( pin, false );
+
+    if( GetPosition() != pin->GetPosition() )
+        return true;
+
+    return GetNumber() != pin->GetNumber();
+}
+
+
 bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
 {
     wxCHECK( m_libPin, false );

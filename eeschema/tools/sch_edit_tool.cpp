@@ -1577,7 +1577,7 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
         static_cast<SCH_ITEM*>( aField->GetParent() )->AutoAutoplaceFields( m_frame->GetScreen() );
 
     if( !commit.Empty() )
-        commit.Push( caption, SKIP_CONNECTIVITY );
+        commit.Push( caption );
 }
 
 

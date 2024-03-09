@@ -211,23 +211,28 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         if( schItem->IsSelected() )
             selectedModified = true;
 
-        if( !( aCommitFlags & SKIP_CONNECTIVITY ) && schItem->IsConnectable() )
+        auto updateConnectivityFlag = [&, this]()
         {
-            dirtyConnectivity = true;
+            if( schItem->IsConnectable() )
+            {
+                dirtyConnectivity = true;
 
-            // Do a local clean up if there are any connectable objects in the commit.
-            if( connectivityCleanUp == NO_CLEANUP )
-                connectivityCleanUp = LOCAL_CLEANUP;
+                // Do a local clean up if there are any connectable objects in the commit.
+                if( connectivityCleanUp == NO_CLEANUP )
+                    connectivityCleanUp = LOCAL_CLEANUP;
 
-            // Do a full rebauild of the connectivity if there is a sheet in the commit.
-            if( schItem->Type() == SCH_SHEET_T )
-                connectivityCleanUp = GLOBAL_CLEANUP;
-        }
+                // Do a full rebauild of the connectivity if there is a sheet in the commit.
+                if( schItem->Type() == SCH_SHEET_T )
+                    connectivityCleanUp = GLOBAL_CLEANUP;
+            }
+        };
 
         switch( changeType )
         {
         case CHT_ADD:
         {
+            updateConnectivityFlag();
+
             if( !( aCommitFlags & SKIP_UNDO ) )
                 undoList.PushItem( ITEM_PICKER( screen, schItem, UNDO_REDO::NEWITEM ) );
 
@@ -250,6 +255,8 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
 
         case CHT_REMOVE:
         {
+            updateConnectivityFlag();
+
             if( !( aCommitFlags & SKIP_UNDO ) )
                 undoList.PushItem( ITEM_PICKER( screen, schItem, UNDO_REDO::DELETED ) );
 
@@ -290,6 +297,19 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 ITEM_PICKER itemWrapper( screen, schItem, UNDO_REDO::CHANGED );
                 wxASSERT( ent.m_copy );
                 itemWrapper.SetLink( ent.m_copy );
+
+                const SCH_ITEM* itemCopy = static_cast<const SCH_ITEM*>( ent.m_copy );
+
+                wxCHECK2( itemCopy, continue );
+
+                SCH_SHEET_PATH currentSheet;
+
+                if( frame )
+                    currentSheet = frame->GetCurrentSheet();
+
+                if( itemCopy->HasConnectivityChanges( schItem, &currentSheet ) )
+                    updateConnectivityFlag();
+
                 undoList.PushItem( itemWrapper );
                 ent.m_copy = nullptr;   // We've transferred ownership to the undo list
             }
@@ -339,7 +359,12 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             frame->SaveCopyInUndoList( undoList, UNDO_REDO::UNSPECIFIED, false, dirtyConnectivity );
 
             if( dirtyConnectivity )
+            {
+                wxLogTrace( wxS( "CONN_PROFILE" ),
+                            wxS( "SCH_COMMIT::pushSchEdit() %s clean up connectivity rebuild." ),
+                            ( connectivityCleanUp == LOCAL_CLEANUP ) ? wxS( "local" ) : wxS( "global" ) );
                 frame->RecalculateConnections( this, connectivityCleanUp );
+            }
         }
     }
 

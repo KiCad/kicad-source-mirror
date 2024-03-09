@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,8 +166,7 @@ bool DIALOG_SHAPE_PROPERTIES::TransferDataFromWindow()
 
     if( !commit.Empty() )
     {
-        commit.Push( wxString::Format( _( "Edit %s" ), m_shape->EDA_SHAPE::GetFriendlyName() ),
-                     SKIP_CONNECTIVITY );
+        commit.Push( wxString::Format( _( "Edit %s" ), m_shape->EDA_SHAPE::GetFriendlyName() ) );
     }
 
     return true;
