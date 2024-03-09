@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-07 00:01+0000\n"
+"PO-Revision-Date: 2024-03-09 10:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -778,7 +778,7 @@ msgstr "背景渐变终止颜色"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 msgid "Use board stackup colors"
-msgstr "使用电路板层叠颜色"
+msgstr "使用电路板叠层颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:134
 #, c-format
@@ -810,7 +810,7 @@ msgstr "双击鼠标左键或点击中键修改颜色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:483
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "取消勾选 '使用电路板叠层颜色' 以允许进行编辑。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:533
 #: pcbnew/widgets/appearance_controls.cpp:2182
@@ -1745,10 +1745,10 @@ msgid "Background Jobs"
 msgstr "后台任务"
 
 #: common/common.cpp:287
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
-msgstr "环境变量扩展失败: 在 '%3$s' 的 %2$u 位置缺少 '%1$c'。"
+msgstr "环境变量展开失败: '%3$s' 中第 %2$u 处缺少 '%1$c'。"
 
 #: common/common.cpp:375
 #, c-format
@@ -2360,8 +2360,8 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"KiCad 首次使用新的 %s 库表来访问库。为了让 KiCad 能够访问 %s 库, 您必须配置全"
-"局 %s 库表。\n"
+"首次运行 KiCad 时使用了新的%s库表来访问库。\n"
+"为了使 KiCad 能够保存%s库信息以供下次访问, 您必须配置全局%s库表。\n"
 "请从以下选项中选择一个, 如果您不确定要选择哪个选项, 请使用默认选项。"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
@@ -4456,9 +4456,8 @@ msgid "Dash-Dot-Dot"
 msgstr "双点划线"
 
 #: common/dialogs/panel_setup_netclasses.cpp:189
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "将颜色设为透明 (#00000000), 以使用 Kicad 默认颜色。"
+msgstr "将颜色设为透明 (#00000000), 以使用层默认颜色。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:379
 msgid ""
@@ -4525,9 +4524,8 @@ msgid "Schematic wire line style"
 msgstr "连线样式"
 
 #: common/dialogs/panel_setup_netclasses.cpp:624
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "设置网络类颜色"
+msgstr "PCB 网络类颜色"
 
 #: common/dialogs/panel_setup_netclasses.cpp:677
 msgid "The default net class is required."
@@ -4581,9 +4579,8 @@ msgid "DP Gap"
 msgstr "差分对间隙"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "PCB 光标"
+msgstr "PCB 颜色"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4629,9 +4626,8 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "将颜色设为透明 (#00000000), 以使用 Kicad 默认颜色。"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:98
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "原理图探针"
+msgstr "从原理图中导入颜色"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:115
 msgid "Netclass assignments:"
@@ -6457,27 +6453,27 @@ msgid "Unexpected number of points in '%s'. Found %d but expected %d."
 msgstr "在 '%s' 中发现了非预期数量的点数。实际找到 %d 个, 但应为 %d 个。"
 
 #: common/io/cadstar/cadstar_archive_parser.h:43
-#, fuzzy, c-format
+#, c-format
 msgid "Missing node '%s' in '%s'"
 msgstr "在 '%2$s' 中缺少节点 '%1$s'"
 
 #: common/io/cadstar/cadstar_archive_parser.h:46
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown node '%s' in '%s'"
 msgstr "在 '%2$s' 出现未知节点 '%1$s'"
 
 #: common/io/cadstar/cadstar_archive_parser.h:49
-#, fuzzy, c-format
+#, c-format
 msgid "Missing Parameter '%s' in '%s'"
 msgstr "在 '%2$s' 中缺少参数 '%1$s'"
 
 #: common/io/cadstar/cadstar_archive_parser.h:52
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Parameter '%s' in '%s'"
 msgstr "在 '%2$s' 出现未知参数 '%1$s'"
 
 #: common/io/cadstar/cadstar_archive_parser.h:55
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse '%s' in '%s'"
 msgstr "无法解析 '%2$s' 中的 '%1$s'"
 
@@ -6523,7 +6519,7 @@ msgid "Cannot read ZIP archive '%s'"
 msgstr "无法读取 ZIP 压缩包 '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
 msgstr "无法解析 JSON 文件 '%2$s' 中的第 %1$d 行: %3$s"
 
@@ -8530,13 +8526,12 @@ msgid "Restore Defaults"
 msgstr "重置为默认值"
 
 #: common/widgets/widget_hotkey_list.cpp:493
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr ""
-"'%1$s' 已被 '%3$s' 中的 '%2$s' 操作所使用, 确定要修改其分配 (原有分配将被移"
-"除)?"
+msgstr "'%1$s' 已被 '%3$s' 中的 '%2$s' 操作所使用, 确定要修改其分配 "
+"(原有分配将被移除)?"
 
 #: common/widgets/widget_hotkey_list.cpp:499
 msgid "Confirm change"
@@ -9991,7 +9986,7 @@ msgid "Invalid symbol library identifier"
 msgstr "符号的库索引值无效"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:742
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading symbol %s from library %s.\n"
 "\n"
@@ -12472,7 +12467,7 @@ msgid "This action cannot be undone."
 msgstr "该操作无法撤销。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:541
-#, fuzzy, c-format
+#, c-format
 msgid "Create new file '%s' with contents of '%s'?"
 msgstr "创建包含 '%2$s' 内容的新文件 '%1$s'?"
 
@@ -14608,7 +14603,7 @@ msgid "Cancel Table Update"
 msgstr "取消更新表格"
 
 #: eeschema/dialogs/panel_sym_lib_table.cpp:456
-#, fuzzy, c-format
+#, c-format
 msgid "Illegal character '%c' in nickname '%s'"
 msgstr "在名称: '%2$s' 中出现非法字符 '%1$c'"
 
@@ -14933,7 +14928,7 @@ msgstr "输出路径不得与现有路径冲突\n"
 #: eeschema/eeschema_jobs_handler.cpp:887 pcbnew/pcbnew_jobs_handler.cpp:771
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
-msgstr ""
+msgstr "转换旧版库和非 KiCad 库时必须指定输出路径\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:913
 msgid "Saving symbol library in updated format\n"
@@ -15111,7 +15106,7 @@ msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr "当前配置中未启用封装库 '%s'。"
 
 #: eeschema/erc.cpp:1098 pcbnew/drc/drc_test_provider_library_parity.cpp:893
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in library '%s'."
 msgstr "在库 %2$s 中未找到封装 '%1$s'。"
 
@@ -15691,7 +15686,7 @@ msgstr "派生自"
 #: eeschema/widgets/panel_symbol_chooser.cpp:539
 #: eeschema/widgets/panel_symbol_chooser.cpp:598
 #: eeschema/widgets/symbol_preview_widget.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol %s from library '%s'."
 msgstr "从库 %2$s 加载符号 '%1$s' 出错。"
 
@@ -16207,17 +16202,17 @@ msgid "Sheet '%s' pin '%s'"
 msgstr "页面 '%s' 的引脚 '%s'"
 
 #: eeschema/net_navigator.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Label '%s' at %s, %s"
 msgstr "%2$s, %3$s 处的标签 '%1$s'"
 
 #: eeschema/net_navigator.cpp:116
-#, fuzzy, c-format
+#, c-format
 msgid "Global label '%s' at %s, %s"
 msgstr "%2$s, %3$s 处的全局标签 '%1$s'"
 
 #: eeschema/net_navigator.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Hierarchical label '%s' at %s, %s"
 msgstr "%2$s, %3$s 处的层次标签 '%1$s'"
 
@@ -16609,7 +16604,7 @@ msgstr "尚未支持空白。"
 
 #: eeschema/sch_io/altium/sch_io_altium.cpp:1046
 #: eeschema/sch_io/altium/sch_io_altium.cpp:4253
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown or unexpected record id %d found in %s."
 msgstr "在 %2$s 中发现未知或意外记录 ID %1$d。"
 
@@ -16997,7 +16992,7 @@ msgstr "无法在 '%s' 中找到有效的原理图文件"
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:274
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:468
 #: eeschema/sch_io/easyeda/sch_io_easyeda.cpp:473
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol '%s' from library '%s': %s"
 msgstr "从库 %2$s 加载符号 '%1$s' 出错: %3$s"
 
@@ -18931,7 +18926,7 @@ msgid "unknown"
 msgstr "未知"
 
 #: eeschema/sim/sim_lib_mgr.cpp:344
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading simulation model: could not find base model '%s' in library "
 "'%s'"
@@ -20216,7 +20211,7 @@ msgid "Change field '%s' value to '%s'."
 msgstr "将字段 '%s' 的值更改为 '%s'。"
 
 #: eeschema/tools/backannotate.cpp:534
-#, fuzzy, c-format
+#, c-format
 msgid "Add field '%s' with value '%s'."
 msgstr "添加值为 '%2$s' 的字段 '%1$s'。"
 
@@ -20374,14 +20369,12 @@ msgid "Export a symbol to a new library file"
 msgstr "将符号导出到新库文件"
 
 #: eeschema/tools/ee_actions.cpp:249 pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "在文本编辑器中编辑"
+msgstr "在文本编辑器中编辑..."
 
 #: eeschema/tools/ee_actions.cpp:250 pcbnew/tools/pcb_actions.cpp:774
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "在文本编辑器中打开文件"
+msgstr "使用文本编辑器打开库文件"
 
 #: eeschema/tools/ee_actions.cpp:256
 msgid "Update Symbol Fields..."
@@ -21987,9 +21980,8 @@ msgstr "未选中符号库。"
 
 #: eeschema/tools/symbol_editor_control.cpp:277
 #: pcbnew/tools/footprint_editor_control.cpp:594
-#, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr "在 KiCad 中未选择任何文本编辑器, 请选择一个。"
+msgstr "未在 KiCad 中配置任何文本编辑器, 请选择一个。"
 
 #: eeschema/tools/symbol_editor_control.cpp:351
 #: eeschema/widgets/panel_symbol_chooser.cpp:663
@@ -37918,9 +37910,8 @@ msgid "Skew between traces out of range"
 msgstr "走线之间的偏移超出范围"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "连接上的过孔太多"
+msgstr "连接上的过孔过多或过少"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -38608,17 +38599,16 @@ msgstr "(%s 最大数量 %d; 实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:214
 msgid "Too many vias on a connection"
-msgstr "连接上的过孔太多"
+msgstr "连接上的过孔过多"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s 最大数量 %d; 实际 %d)"
+msgstr "(%s 最小数量 %d; 实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "连接上的过孔太多"
+msgstr "连接上的过孔过少"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -38798,7 +38788,7 @@ msgid "(layer %s; %d spokes connected to isolated island)"
 msgstr "(层 %s; %d 条引线与孤岛相连)"
 
 #: pcbnew/drc/drc_test_provider_zone_connections.cpp:229
-#, fuzzy, c-format
+#, c-format
 msgid "(layer %s; %s min spoke count %d; actual %d)"
 msgstr "(层 %s 最小引线数量 %d; 实际 %d)"
 
@@ -39806,7 +39796,7 @@ msgstr "对比度模式 (&C)"
 
 #: pcbnew/menubar_footprint_editor.cpp:206
 msgid "&Load Footprint from PCB..."
-msgstr "从 PCB 加载封装(&L)..."
+msgstr "从 PCB 中加载封装(&L)..."
 
 #: pcbnew/menubar_footprint_editor.cpp:207
 msgid "Load a footprint from the current board into the editor"
@@ -40754,22 +40744,22 @@ msgid "Reference '%s'"
 msgstr "位号 '%s'"
 
 #: pcbnew/pcb_field.cpp:106
-#, fuzzy, c-format
+#, c-format
 msgid "Value '%s' of %s"
 msgstr "%2$s 的值 '%1$s'"
 
 #: pcbnew/pcb_field.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' of %s"
 msgstr "%2$s 的封装 '%1$s'"
 
 #: pcbnew/pcb_field.cpp:115
-#, fuzzy, c-format
+#, c-format
 msgid "Datasheet '%s' of %s"
 msgstr "%2$s 的数据手册 %1$s"
 
 #: pcbnew/pcb_field.cpp:123
-#, fuzzy, c-format
+#, c-format
 msgid "Field '%s' of %s"
 msgstr "%2$s 的字段'%1$s"
 
@@ -41098,33 +41088,33 @@ msgid "Footprint %s pad %s uses an unknown pad-shape."
 msgstr "封装 %s 焊盘 %s 使用未知的焊盘形状。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2995
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在 Altium 层 (%2$d) 上存在非铜焊盘 %1$s, 但在 KiCad 中没有对应的等效项。已将"
-"其移至 KiCad 的 Eco1_User 层。"
+"在 Altium 层 (%2$d) 上存在非铜焊盘 %1$s, 但在 KiCad 中没有对应的等效项。"
+"已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3017
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "正在加载 '%1$s' 库:\n"
-"在封装 %2$s 中发现在其 Altium 层 (%4$d) 上存在非铜焊盘 %3$s, 但在 KiCad 中没"
-"有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在封装 %2$s 中发现在其 Altium 层 (%4$d) 上存在非铜焊盘 %3$s, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3027
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在封装 %1$s 中发现在其 Altium 层 (%3$d) 上存在非铜焊盘 %2$s, 但在 KiCad 中没"
-"有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
+"在封装 %1$s 中发现在其 Altium 层 (%3$d) 上存在非铜焊盘 %2$s, 但在 KiCad "
+"中没有对应的等效项。已将其移至 KiCad 的 Eco1_User 层。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3050
 #, c-format
@@ -41205,9 +41195,9 @@ msgid "No footprints in library '%s'"
 msgstr "库 '%s' 中没有封装"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "在库 %2$s 中未找到封装 '%1$s'。"
+msgstr "在库 '%2$s' 中未找到封装 '%1$s'。"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:42
 msgid "Altium Designer PCB files"
@@ -41284,12 +41274,11 @@ msgstr ""
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:349
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The CADSTAR construction layer '%s' is on the outer surface of the board. It "
 "has been ignored."
-msgstr ""
-"CADSTAR 设计文件中包含泪滴。导入器还不支持, 所以设计文件中的泪滴被忽略了。"
+msgstr "CADSTAR 设计文件中包含位于电路板表面之外的层 '%s'。已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:588
 #, c-format
@@ -41738,20 +41727,20 @@ msgstr "从库 '%s' 加载封装时出错: %s"
 
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:525
 #: pcbnew/pcb_io/easyeda/pcb_io_easyeda_plugin.cpp:530
-#, fuzzy, c-format
+#, c-format
 msgid "Error reading footprint '%s' from library '%s': %s"
 msgstr "从库 '%2$s' 加载封装 %1$s 时出错: %3$s"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:342
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot load footprint '%s' from '%s'"
-msgstr "无法从 '%2$s' 加载封装 '%s'"
+msgstr "无法从 '%2$s' 加载封装 '%1$s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.cpp:380
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in project '%s'"
-msgstr "在工程 '%2$s 中未发现封装 '%s'"
+msgstr "在工程 '%2$s 中未发现封装 '%1$s'"
 
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:40
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro.h:45
@@ -42205,9 +42194,9 @@ msgid "%d is not a valid layer count"
 msgstr "%d 不是一个有效的层数"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:2631
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate NETCLASS name '%s' in file '%s' at line %d, offset %d."
-msgstr "文件 '%2$s' 中第 %3$d 行, 偏移量 %3$d 处的 NETCLASS 名称 '%1$s' 重复。"
+msgstr "文件 '%2$s' 中第 %3$d 行, 偏移量 %4$d 处的 NETCLASS 名称 '%1$s' 重复。"
 
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:3011
 #: pcbnew/pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.cpp:5652
@@ -42406,12 +42395,12 @@ msgid "Drawing"
 msgstr "图形"
 
 #: pcbnew/pcb_shape.cpp:486
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s on %s"
 msgstr "%3$s 上的 %1$s %2$s"
 
 #: pcbnew/pcb_shape.cpp:491
-#, fuzzy, c-format
+#, c-format
 msgid "%s on %s"
 msgstr "%2$s 上的 %1$s"
 
@@ -42432,17 +42421,17 @@ msgid "Display"
 msgstr "显示"
 
 #: pcbnew/pcb_text.cpp:386
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint Text '%s' of %s"
 msgstr "%2$s 上的封装文本 '%1$s'"
 
 #: pcbnew/pcb_text.cpp:390
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text '%s' on %s"
 msgstr "2$s 上的 PCB文本 '%1$s'"
 
 #: pcbnew/pcb_textbox.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text Box '%s' on %s"
 msgstr "%2$s 上的 PCB 文本框 '%1$s'"
 
@@ -46793,14 +46782,12 @@ msgid "Set Netclass Color"
 msgstr "设置网络类颜色"
 
 #: pcbnew/widgets/appearance_controls.cpp:2340
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "从原理图更新 PCB"
+msgstr "从原理图更新颜色"
 
 #: pcbnew/widgets/appearance_controls.cpp:2349
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "清除网络颜色"
+msgstr "清除网络类颜色"
 
 #: pcbnew/widgets/appearance_controls.cpp:2357
 #, c-format
