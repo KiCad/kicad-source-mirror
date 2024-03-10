@@ -47,6 +47,7 @@ bool g_resetFieldVisibilities[2] = { true,   false  };
 bool g_resetFieldEffects[2]      = { true,   false  };
 bool g_resetFieldPositions[2]    = { true,   false  };
 bool g_resetAttributes[2]        = { true,   false  };
+bool g_resetCustomPower[2]       = { false,  false  };
 
 
 DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBOL* aSymbol,
@@ -146,6 +147,7 @@ DIALOG_CHANGE_SYMBOLS::DIALOG_CHANGE_SYMBOLS( SCH_EDIT_FRAME* aParent, SCH_SYMBO
     m_resetFieldEffects->SetValue( g_resetFieldEffects[ (int) m_mode ] );
     m_resetFieldPositions->SetValue( g_resetFieldPositions[ (int) m_mode ] );
     m_resetAttributes->SetValue( g_resetAttributes[ (int) m_mode ] );
+    m_resetCustomPower->SetValue( g_resetCustomPower[ (int) m_mode ] );
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
     // because the update and change versions of this dialog have different controls.
@@ -227,6 +229,7 @@ DIALOG_CHANGE_SYMBOLS::~DIALOG_CHANGE_SYMBOLS()
     g_resetFieldEffects[ (int) m_mode ] = m_resetFieldEffects->GetValue();
     g_resetFieldPositions[ (int) m_mode ] = m_resetFieldPositions->GetValue();
     g_resetAttributes[ (int) m_mode ] = m_resetAttributes->GetValue();
+    g_resetCustomPower[ (int) m_mode ] = m_resetCustomPower->GetValue();
 }
 
 
@@ -671,7 +674,9 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
                     }
                     else if( i == VALUE_FIELD )
                     {
-                        symbol->SetValueFieldText( UnescapeString( libField->GetText() ) );
+                        if( ( symbol->IsPower() && m_resetCustomPower->IsChecked() )
+                            || !symbol->IsPower() )
+                            symbol->SetValueFieldText( UnescapeString( libField->GetText() ) );
                     }
                     else if( i == FOOTPRINT_FIELD )
                     {
