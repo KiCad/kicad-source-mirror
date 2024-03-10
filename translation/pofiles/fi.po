@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-02-29 19:01+0000\n"
+"PO-Revision-Date: 2024-03-11 13:01+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -426,7 +426,7 @@ msgstr "Kotinäkymä"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Piirrä uudelleen kotisijaintiin ja zoomaa"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -804,6 +804,7 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Poista valinta 'Käytä piirilevynpinon värejä' sallii värien muokkaamisen."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -14798,6 +14799,8 @@ msgstr "Lähtöpolku ei saa olla ristiriidassa olemassa olevan polun kanssa\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Lähtöpolku on määritettävä vanhojen ja muiden kuin KiCad-kirjastojen "
+"muuttamiseksi\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
@@ -19328,8 +19331,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> on ristiriidassa nastan "
-"%s%s kanssa sijainnissa <b>(%s, %s)</b> b> %s runkotyylillä."
+"<b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> ristiriidassa nastan "
+"%s%s sijainnissa <b>(%s, %s)</b> > %s runkotyyli."
 
 #: eeschema/symbol_checker.cpp:133
 #, c-format
@@ -19337,9 +19340,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> on ristiriidassa "
-"nastan %s%s kanssa sijainnissa <b>(%s, %s)</b> b> %s-runkotyylin yksiköissä "
-"%s ja %s."
+"<b>Kaksoisnasta %s</b> %s sijainnissa <b>(%s, %s)</b> ristiriidassa nastan "
+"%s%s sijainnissa <b>(%s, %s)</b> yksiköissä %s ja %s > %s runkotyyli."
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -19425,20 +19427,19 @@ msgstr ""
 "verkkoihin.)"
 
 #: eeschema/symbol_checker.cpp:305
-#, fuzzy, c-format
+#, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
 msgstr ""
-"<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%s, %s)</b> "
-"muunnetusta."
+"<b>Irti verkosta nasta %s</b> %s sijainnissa <b>(%s, %s)</b> %s rungosta."
 
 #: eeschema/symbol_checker.cpp:315
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
 msgstr ""
-"<b>Pinni %s</b> %s ei sovi ruudukon rasteriin sijainnissa <b>(%s, %s)</b> "
-"yksikössä %c."
+"<b>Irti verkosta nasta %s</b> %s sijainnissa <b>(%s, %s)</b> yksikössä %c "
+"%s-runkotyylissä."
 
 #: eeschema/symbol_checker.cpp:329
 #, c-format
@@ -21305,9 +21306,8 @@ msgid "Drags the selected item(s)"
 msgstr "Vetää valitut kohteet"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1759
-#, fuzzy
 msgid "Align Items to Grid"
-msgstr "Kohdista Elementit Ruudukkoon"
+msgstr "Kohdista kohteet ruudukkoon"
 
 #: eeschema/tools/ee_actions.cpp:1371
 msgid "Save Current Sheet Copy As..."
@@ -21338,20 +21338,16 @@ msgid "Save Workbook"
 msgstr "Tallenna työkirja"
 
 #: eeschema/tools/ee_actions.cpp:1405
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr ""
-"Lue nykyinen liitostiedosto ja luetteloi puuttuvat sekä ylimääräiset "
-"liitoskuvat"
+msgstr "Tallenna nykyiset analyysivälilehdet ja -asetukset"
 
 #: eeschema/tools/ee_actions.cpp:1413
 msgid "Save Workbook As..."
 msgstr "Tallenna Työkirja Nimellä..."
 
 #: eeschema/tools/ee_actions.cpp:1414
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
-msgstr "Tallenna nykyinen asiakirja toiseen sijaintiin"
+msgstr "Tallenna nykyiset analyysivälilehdet ja asetukset toiseen paikkaan"
 
 #: eeschema/tools/ee_actions.cpp:1420
 msgid "Export Current Plot as PNG..."
@@ -21908,9 +21904,8 @@ msgid "Change property"
 msgstr "Muuta ominaisuutta"
 
 #: eeschema/widgets/search_handlers.cpp:136
-#, fuzzy
 msgid "Excl. sim"
-msgstr "Poisto"
+msgstr "Poista. sim"
 
 #: eeschema/widgets/search_handlers.cpp:137
 #, fuzzy
@@ -21919,16 +21914,15 @@ msgstr "Poissuljettu materiaaliluettelosta"
 
 #: eeschema/widgets/search_handlers.cpp:138
 msgid "Excl. board"
-msgstr ""
+msgstr "Sulje pois. piirilevy"
 
 #: eeschema/widgets/search_handlers.cpp:355
 msgid "Hierarchical"
 msgstr "Hierarkkinen"
 
 #: eeschema/widgets/search_handlers.cpp:357
-#, fuzzy
 msgid "Directive"
-msgstr "Asetusnimike"
+msgstr "Direktiivi"
 
 #: eeschema/widgets/symbol_filedlg_save_as.h:33
 msgid "Do not update library tables"
@@ -22897,18 +22891,16 @@ msgid "Move Layer Up"
 msgstr "Siirrä Kerros Ylös"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
-msgstr "Siirrä nykyistä tasoa ylöspäin"
+msgstr "Siirrä nykyistä tasoa ylös"
 
 #: gerbview/tools/gerbview_actions.cpp:183
 msgid "Move Layer Down"
 msgstr "Siirrä Kerros Alas"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
-msgstr "Siirrä Nykyistä Kerrosta Alas"
+msgstr "Siirrä nykyistä tasoa alas"
 
 #: gerbview/tools/gerbview_actions.cpp:192
 msgid "Sketch Lines"
@@ -32401,13 +32393,12 @@ msgstr "Salli kupariviisteiden kattaa kaksi johdinraidan osaa"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
-"Sallii kupariviisteen leviämisen yli 2 johtimen segmentin, jos ensimmäinen "
-"johdinsegmentti on liian lyhyt"
+"Sallii kyynelpisaran ulottua kahden ensimmäisen 2 yhdistetyn johdinosion "
+"yli, jos ensimmäinen osio on liian lyhyt parhaan pituuden mukaiseksi."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -32439,9 +32430,8 @@ msgstr ""
 "eivät tarvitse kupariviisteitä."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
-#, fuzzy
 msgid "(as a percentage of pad/via minor dimension)"
-msgstr "(prosentteina anturan/läpiviennin koosta)"
+msgstr "(prosentteina anturasta/läpiviennistä pieni mittasuhde)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:706
@@ -34491,14 +34481,12 @@ msgstr ""
 "valintasuodattimessa."
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
-#, fuzzy
 msgid "Associated layer:"
-msgstr "Liitetty kerros"
+msgstr "Liitetty kerros:"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.h:63
-#, fuzzy
 msgid "Reference Image Properties"
-msgstr "Kuvan Ominaisuudet"
+msgstr "Viitekuvan ominaisuudet"
 
 #: pcbnew/dialogs/dialog_rule_area_properties.cpp:111
 #: pcbnew/tools/convert_tool.cpp:98
@@ -39332,7 +39320,7 @@ msgstr "Pituusrajoitukset: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "Segmenttejä ei voi virittää muiden virityskuvioiden sisällä."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
@@ -40674,35 +40662,41 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Monikulmamuoto tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium-kerroksen monikulmiossa %d ei ole KiCad-ekvivalenttia. Laita se "
-"Eco1_Userille"
+"Ladataan kirjastoa '%s':\n"
+"Jalanjälki %s sisältää katkoviivan Altium-kerroksessa (%d) ilman KiCad-"
+"vastinetta. Se on siirretty KiCad-kerrokseen Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Katkoääriviivat löytyvät Altium-kerroksesta (%d) ilman KiCad-vastinetta. Se "
-"on siirretty KiCad-kerrokseen Eco1_User."
+"Jalanjälki %s sisältää katkoviivan Altium-kerroksessa (%d) ilman KiCad-"
+"vastinetta. Se on siirretty KiCad-kerrokseen Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Monikulmamuoto tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr ""
+"Virhe ladattaessa kirjastoa '%s':\n"
+"Jalanjälki %s sisältää polygonin muodon, jonka tyyppi on %d (ei vielä "
+"tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Monikulmamuoto tyypiltään %d jätetty huomioitta (ei vielä tuettu)."
+msgstr ""
+"Jalanjälki %s sisältää polygonin muodon, jonka tyyppi on %d (ei vielä "
+"tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2352
 msgid "Loading zone fills..."
@@ -40717,13 +40711,14 @@ msgid "Loading pads..."
 msgstr "Ladataan anturoita..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"Jalanjälki %s anturaa %s ei ole merkitty monikerroksiseksi, mutta on "
-"läpireikäantura."
+"Virhe ladattaessa kirjastoa '%s':\n"
+"Jalanjälki %s antura %s ei ole merkitty monikerroksiseksi, vaan se on TH-"
+"antura."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2763
 #, c-format
@@ -40733,12 +40728,13 @@ msgstr ""
 "läpireikäantura."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"Jalanjäljen %s anturalla %s on neliön muotoinen reikä (Tätä ei tueta vielä)."
+"Ladataan kirjastoa '%s':\n"
+"Jalanjälki %s antura %s on neliöreikä (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2795
 #, c-format
@@ -40747,13 +40743,14 @@ msgstr ""
 "Jalanjäljen %s anturalla %s on neliön muotoinen reikä (Tätä ei tueta vielä)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"Jalanjäljen %s anturalla %s on reikäkierto %f astetta. KiCad tukee vain 90 "
+"Ladataan kirjastoa '%s':\n"
+"Jalanjälki %s anturan %s reiän kierto on %f astetta. KiCad tukee vain 90 "
 "asteen kiertoja."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2835
@@ -40766,11 +40763,13 @@ msgstr ""
 "asteen kiertoja."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Jalanjälki %s antura %s käyttää tuntemattoman tyyppistä reikää %d."
+msgstr ""
+"Virhe ladattaessa kirjastoa '%s':\n"
+"Jalanjälki %s antura %s käyttää tuntematonta reikää %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2859
 #, c-format
@@ -40778,27 +40777,29 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Jalanjälki %s antura %s käyttää tuntemattoman tyyppistä reikää %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"Jalanjäljen %s antura %s käyttää monimutkaista anturapinoa (jota ei vielä "
-"tueta.)"
+"Virhe ladattaessa kirjastoa '%s'\n"
+"Jalanjälki %s antura %s käyttää monimutkaista anturapinoa (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 "Jalanjäljen %s antura %s käyttää monimutkaista anturapinoa (jota ei vielä "
-"tueta.)"
+"tueta)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "Jalanjälki %s antura %s käyttää tuntematonta anturamuotoa."
+msgstr ""
+"Virhe ladattaessa kirjastoa '%s':\n"
+"Jalanjälki %s antura %s käyttää tuntematonta anturan muotoa."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2936
 #, c-format
@@ -40815,23 +40816,24 @@ msgstr ""
 "vastaavuutta. Se on siirretty KiCad:in kerrokselle Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Ei-kupariantura %s Löydetty Altium-kerroksesta (%d) Ilman KiCad-"
-"vastaavuutta. Se on siirretty KiCad:in kerrokselle Eco1_User."
+"Ladataan kirjastoa '%s':\n"
+"Jalanjälki %s ei-kupariantura %s löydetty Altium-kerroksesta (%d) ilman "
+"KiCad-vastinetta. Se on siirretty KiCad-kerrokseen Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Ei-kupariantura %s Löydetty Altium-kerroksesta (%d) Ilman KiCad-"
-"vastaavuutta. Se on siirretty KiCad:in kerrokselle Eco1_User."
+"Jalanjälki %s ei-kupariantura %s löydetty Altium-kerroksesta (%d) ilman "
+"KiCad-vastinetta. Se on siirretty KiCad-kerrokseen Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
@@ -40884,16 +40886,19 @@ msgid "Ignored barcode on Altium layer %d (not yet supported)."
 msgstr "Ohitettu viivakoodi Altium kerroksessa %d (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ohitettu viivakoodi Altium kerroksessa %d (ei vielä tuettu)."
+msgstr ""
+"Virhe ladattaessa kirjastoa '%s':\n"
+"Jalanjälki %s sisältää viivakoodin Altium-kerroksessa %d (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr "Ohitettu viivakoodi Altium kerroksessa %d (ei vielä tuettu)."
+msgstr ""
+"Jalanjälki %s sisältää viivakoodin Altium-kerroksessa %d (ei vielä tuettu)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3658
 msgid "Loading rectangles..."
@@ -40908,14 +40913,14 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "Altium Circuit Studio PCB tiedostot"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Ei jalanjälkiä kirjastossa"
+msgstr "Ei jalanjälkiä kirjastossa '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "Jalanjälkeä '%s' ei löytynyt kirjastoista '%s'."
+msgstr "Jalanjälkeä '%s' ei löydy kohteesta '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:42
 msgid "Altium Designer PCB files"
@@ -41035,6 +41040,9 @@ msgid ""
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
 msgstr ""
+"Jalanjälkimääritelmässä %s on kuparikomponentti, joka on liitetty anturaan "
+"useilla kerroksilla. Mukautettuja anturapinoja ei tueta KiCadissa. "
+"Kuparikohteet on tuotu graafisina elementteinä."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -42445,14 +42453,12 @@ msgid "Running DRC...\n"
 msgstr "DRC käynnissä...\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1055
-#, fuzzy
 msgid "Failed to find schematic for parity tests.\n"
-msgstr "Kytkentäkaaviotiedoston lataaminen epäonnistui\n"
+msgstr "Kytkentäkaavion löytäminen periteettitestiin epäonnistui.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1070
-#, fuzzy
 msgid "Failed to fetch schematic netlist for parity tests.\n"
-msgstr "Kytkentäkaaviotiedoston lataaminen epäonnistui\n"
+msgstr "Kytkentäkaaviotiedoston lataaminen epäonnistui.\n"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:1091 pcbnew/tools/drc_tool.cpp:194
 msgid "DRC"
@@ -44437,9 +44443,8 @@ msgid "Adds arcs tangent to the selected lines"
 msgstr "Lisää arcs tangentit valituille viivoille"
 
 #: pcbnew/tools/pcb_actions.cpp:613
-#, fuzzy
 msgid "Chamfer Lines..."
-msgstr "Viistelinjat"
+msgstr "Viistelinjat..."
 
 #: pcbnew/tools/pcb_actions.cpp:614
 msgid "Cut away corners between selected lines"
@@ -45421,76 +45426,72 @@ msgid "Align to Top"
 msgstr "Kohdista yläreunaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1881
-#, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
-msgstr "Kohdistaa valitut kohteet yläreunaan"
+msgstr "Tasaa valitut kohteet kohdistimen alla olevan kohteen yläreunaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1887 pcbnew/tools/placement_tool.cpp:275
 msgid "Align to Bottom"
 msgstr "Kohdista alareunaan"
 
 #: pcbnew/tools/pcb_actions.cpp:1888
-#, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
-msgstr "Kohdistaa valitut kohteet alareunaan"
+msgstr "Tasaa valitut kohteet kohteen alareunaan kohdistimen alle"
 
 #: pcbnew/tools/pcb_actions.cpp:1894 pcbnew/tools/placement_tool.cpp:330
 msgid "Align to Left"
 msgstr "Kohdista Vasemmalle"
 
 #: pcbnew/tools/pcb_actions.cpp:1895
-#, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
-msgstr "Kohdistaa valitut kohteet vasempaan reunaan"
+msgstr "Tasaa valitut kohteet kohteen vasempaan reunaan kohdistimen alla"
 
 #: pcbnew/tools/pcb_actions.cpp:1901 pcbnew/tools/placement_tool.cpp:385
 msgid "Align to Right"
 msgstr "Kohdista Oikealle"
 
 #: pcbnew/tools/pcb_actions.cpp:1902
-#, fuzzy
 msgid "Aligns selected items to the right edge of the item under the cursor"
-msgstr "Kohdistaa valitut kohteet oikeaan reunaan"
+msgstr "Tasaa valitut kohteet kohteen oikeaan reunaan kohdistimen alla"
 
 #: pcbnew/tools/pcb_actions.cpp:1908
 msgid "Align to Vertical Center"
 msgstr "Kohdista Pystysuoraan Keskelle"
 
 #: pcbnew/tools/pcb_actions.cpp:1909
-#, fuzzy
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
-msgstr "Kohdistaa valitut kohteet pystysuoraan keskelle"
+msgstr ""
+"Tasaa valitut kohteet kohdistimen alla olevan kohteen pystysuoraan keskelle"
 
 #: pcbnew/tools/pcb_actions.cpp:1915
 msgid "Align to Horizontal Center"
 msgstr "Kohdista Vaakasuoraan Keskelle"
 
 #: pcbnew/tools/pcb_actions.cpp:1916
-#, fuzzy
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
-msgstr "Kohdistaa valitut kohteet vaakasuoraan keskelle"
+msgstr ""
+"Tasaa valitut kohteet kohdistimen alla olevan kohteen vaakasuoraan keskelle"
 
 #: pcbnew/tools/pcb_actions.cpp:1922 pcbnew/tools/placement_tool.cpp:535
 msgid "Distribute Horizontally"
 msgstr "Levitä Vaakasuorassa"
 
 #: pcbnew/tools/pcb_actions.cpp:1923
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most item"
-msgstr "Levittää valitut kohteet pitkin vaaka-akselia"
+msgstr ""
+"Jakaa valitut kohteet vasemmanpuoleisimman ja oikeanpuoleisimman kohteen "
+"kesken"
 
 #: pcbnew/tools/pcb_actions.cpp:1929 pcbnew/tools/placement_tool.cpp:660
 msgid "Distribute Vertically"
 msgstr "Levitä Pystysuunnassa"
 
 #: pcbnew/tools/pcb_actions.cpp:1930
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most item"
-msgstr "Levittää valitut kohteet pitkin vaaka-akselia"
+msgstr "Jakaa valitut kohteet ylimmän ja alimman kohteen välillä"
 
 #: pcbnew/tools/pcb_actions.cpp:1945
 msgid "Create a corner"
@@ -45752,9 +45753,8 @@ msgid "Tune length of a single track"
 msgstr "Säädä yhden johtimen pituutta"
 
 #: pcbnew/tools/pcb_actions.cpp:2272
-#, fuzzy
 msgid "Tune Length of a Differential Pair"
-msgstr "Differentiaaliparin pituus-säätö"
+msgstr "Viritä differentiaaliparin pituus"
 
 #: pcbnew/tools/pcb_actions.cpp:2273
 msgid "Tune length of a differential pair"
@@ -46881,31 +46881,28 @@ msgstr "Vyöhyke %s %s"
 
 #: pcbnew/zone.cpp:1666
 msgid "Cannot be less than zone minimum width"
-msgstr "Ei voi olla pienempi, kuin kuparivyöhykkeen vähimmäisleveys."
+msgstr "Ei voi olla pienempi, kuin kuparivyöhykkeen vähimmäisleveys"
 
 #: pcbnew/zone.cpp:1672
-#, fuzzy
 msgid "Hatch Width"
-msgstr "Täyttöviivan leveys:"
+msgstr "Täyttöviivan leveys"
 
 #: pcbnew/zone.cpp:1679
-#, fuzzy
 msgid "Hatch Gap"
-msgstr "Täyttöviivan väli:"
+msgstr "Täyttöviivan väli"
 
 #: pcbnew/zone.cpp:1686
+#, fuzzy
 msgid "Hatch Minimum Hole Ratio"
-msgstr ""
+msgstr "Viivoita minimi reikäsuhde"
 
 #: pcbnew/zone.cpp:1694
-#, fuzzy
 msgid "Smoothing Effort"
-msgstr "Tasoituksen taso:"
+msgstr "Tasoituksen taso"
 
 #: pcbnew/zone.cpp:1700
-#, fuzzy
 msgid "Smoothing Amount"
-msgstr "Tasoitusmäärä:"
+msgstr "Tasoitusmäärä"
 
 #: pcbnew/zone.cpp:1706
 msgid "Remove Islands"
