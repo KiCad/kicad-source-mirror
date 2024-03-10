@@ -1700,6 +1700,7 @@ int SCH_EDIT_TOOL::ChangeSymbols( const TOOL_EVENT& aEvent )
 
     DIALOG_CHANGE_SYMBOLS dlg( m_frame, selectedSymbol, mode );
 
+    // QuasiModal required to invoke symbol browser
     dlg.ShowQuasiModal();
 
     return 0;
@@ -1933,11 +1934,20 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
                 SCH_TABLE*              table = static_cast<SCH_TABLE*>( cells[0]->GetParent() );
                 DIALOG_TABLE_PROPERTIES tableDlg( m_frame, table );
 
-                tableDlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+                tableDlg.ShowModal();
             }
         }
 
         break;
+
+    case SCH_TABLE_T:
+    {
+        DIALOG_TABLE_PROPERTIES dlg( m_frame, static_cast<SCH_TABLE*>( curr_item ) );
+
+        // QuasiModal required for Scintilla auto-complete
+        dlg.ShowQuasiModal();
+        break;
+    }
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
@@ -1946,7 +1956,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     {
         DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( curr_item ) );
 
-        // Must be quasi modal for syntax help
+        // QuasiModal for syntax help and Scintilla auto-complete
         dlg.ShowQuasiModal();
         break;
     }

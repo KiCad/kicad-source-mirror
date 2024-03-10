@@ -138,6 +138,7 @@ void PCB_BASE_FRAME::ShowPadPropertiesDialog( PAD* aPad )
 {
     DIALOG_PAD_PROPERTIES dlg( this, aPad );
 
+    // QuasiModal required for NET_SELECTOR
     dlg.ShowQuasiModal();
 }
 

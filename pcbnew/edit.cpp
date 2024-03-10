@@ -141,7 +141,9 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_TABLE_T:
     {
         DIALOG_TABLE_PROPERTIES dlg( this, static_cast<PCB_TABLE*>( aItem ) );
-        dlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+
+        //QuasiModal required for Scintilla auto-complete
+        dlg.ShowQuasiModal();
         break;
     }
 
@@ -164,6 +166,8 @@ void PCB_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_DIM_LEADER_T:
     {
         DIALOG_DIMENSION_PROPERTIES dlg( this, static_cast<PCB_DIMENSION_BASE*>( aItem ) );
+
+        // TODO: why is this QuasiModal?
         dlg.ShowQuasiModal();
         break;
     }

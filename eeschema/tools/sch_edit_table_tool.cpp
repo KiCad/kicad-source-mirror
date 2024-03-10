@@ -70,7 +70,8 @@ int SCH_EDIT_TABLE_TOOL::EditTable( const TOOL_EVENT& aEvent )
     {
         DIALOG_TABLE_PROPERTIES dlg( m_frame, parentTable );
 
-        dlg.ShowQuasiModal();   // Scintilla's auto-complete requires quasiModal
+        // QuasiModal required for Scintilla auto-complete
+        dlg.ShowQuasiModal();
     }
 
     if( clearSelection )

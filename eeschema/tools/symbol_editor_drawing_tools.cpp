@@ -527,6 +527,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
                     LIB_TEXTBOX*                  textbox = static_cast<LIB_TEXTBOX*>( item );
                     DIALOG_LIB_TEXTBOX_PROPERTIES dlg( m_frame, static_cast<LIB_TEXTBOX*>( item ) );
 
+                    // QuasiModal required for syntax help and Scintilla auto-complete
                     if( dlg.ShowQuasiModal() != wxID_OK )
                     {
                         cleanup();

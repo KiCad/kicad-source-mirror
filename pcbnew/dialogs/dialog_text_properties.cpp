@@ -256,6 +256,8 @@ DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 void PCB_BASE_EDIT_FRAME::ShowTextPropertiesDialog( PCB_TEXT* aText )
 {
     DIALOG_TEXT_PROPERTIES dlg( this, aText );
+
+    // QuasiModal required for Scintilla auto-complete
     dlg.ShowQuasiModal();
 }
 

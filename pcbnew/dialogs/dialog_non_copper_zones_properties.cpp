@@ -74,6 +74,7 @@ int InvokeNonCopperZonesEditor( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSetting
 {
     DIALOG_NON_COPPER_ZONES_EDITOR  dlg( aParent, aSettings, aConvertSettings );
 
+    // TODO: why does this require QuasiModal?
     return dlg.ShowQuasiModal();
 }
 

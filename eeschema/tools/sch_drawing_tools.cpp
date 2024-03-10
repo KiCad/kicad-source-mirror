@@ -61,6 +61,7 @@
 #include <dialogs/dialog_text_properties.h>
 #include <dialogs/dialog_wire_bus_properties.h>
 #include <dialogs/dialog_junction_props.h>
+#include <dialogs/dialog_table_properties.h>
 #include <import_gfx/dialog_import_gfx_sch.h>
 #include <sync_sheet_pin/sheet_synchronization_agent.h>
 #include <string_utils.h>
@@ -1296,7 +1297,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
     {
         DIALOG_LABEL_PROPERTIES dlg( m_frame, static_cast<SCH_LABEL_BASE*>( textItem ) );
 
-        // Must be quasi modal for syntax help
+        // QuasiModal required for syntax help and Scintilla auto-complete
         if( dlg.ShowQuasiModal() != wxID_OK )
         {
             delete labelItem;
@@ -2158,15 +2159,25 @@ int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
             table->SetFlags( IS_NEW );
             table->Normalize();
 
-            SCH_COMMIT commit( m_toolMgr );
-            commit.Add( table, m_frame->GetScreen() );
-            commit.Push( _( "Draw Table" ) );
+            DIALOG_TABLE_PROPERTIES dlg( m_frame, table );
 
-            m_selectionTool->AddItemToSel( table );
+            // QuasiModal required for Scintilla auto-complete
+            if( dlg.ShowQuasiModal() == wxID_OK )
+            {
+                SCH_COMMIT commit( m_toolMgr );
+                commit.Add( table, m_frame->GetScreen() );
+                commit.Push( _( "Draw Table" ) );
+
+                m_selectionTool->AddItemToSel( table );
+                m_toolMgr->PostAction( ACTIONS::activatePointEditor );
+            }
+            else
+            {
+                delete table;
+            }
+
             table = nullptr;
-
             m_view->ClearPreview();
-            m_toolMgr->PostAction( ACTIONS::activatePointEditor );
         }
         else if( table && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {

@@ -1167,6 +1167,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
 
                 DIALOG_TABLE_PROPERTIES dlg( m_frame, table );
 
+                // QuasiModal required for Scintilla auto-complete
                 if( dlg.ShowQuasiModal() == wxID_OK )
                 {
                     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );

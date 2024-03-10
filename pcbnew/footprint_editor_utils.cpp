@@ -215,6 +215,8 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_DIM_LEADER_T:
     {
         DIALOG_DIMENSION_PROPERTIES dlg( this, static_cast<PCB_DIMENSION_BASE*>( aItem ) );
+
+        // TODO: why is this QuasiModal?
         dlg.ShowQuasiModal();
         break;
     }

@@ -365,6 +365,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     wxString             msg = editFrame->StringFromValue( aInductorPattern.m_Length );
     WX_TEXT_ENTRY_DIALOG dlg( editFrame, _( "Length of Trace:" ), wxEmptyString, msg );
 
+    // TODO: why is this QuasiModal?
     if( dlg.ShowQuasiModal() != wxID_OK )
         return nullptr; // canceled by user
 
@@ -404,6 +405,7 @@ FOOTPRINT* MICROWAVE_TOOL::createMicrowaveInductor( MICROWAVE_INDUCTOR_PATTERN& 
     WX_TEXT_ENTRY_DIALOG cmpdlg( editFrame, _( "Component Value:" ), wxEmptyString, msg );
     cmpdlg.SetTextValidator( FOOTPRINT_NAME_VALIDATOR( &msg ) );
 
+    // TODO: why is this QuasiModal?
     if( ( cmpdlg.ShowQuasiModal() != wxID_OK ) || msg.IsEmpty() )
         return nullptr;    //  Aborted by user
 

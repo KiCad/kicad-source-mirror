@@ -480,6 +480,7 @@ int SIMULATOR_CONTROL::EditUserDefinedSignals( const TOOL_EVENT& aEvent )
 
     DIALOG_USER_DEFINED_SIGNALS dlg( m_simulatorFrame, &userSignals );
 
+    // QuasiModal required for syntax help and Scintilla auto-complete
     if( dlg.ShowQuasiModal() == wxID_OK )
         m_simulatorFrame->SetUserDefinedSignals( userSignals );
 
