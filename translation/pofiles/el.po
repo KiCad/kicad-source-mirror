@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-04 07:01+0000\n"
+"PO-Revision-Date: 2024-03-11 13:01+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/v8/el/>\n"
 "Language: el\n"
@@ -796,6 +796,8 @@ msgstr "Αριστερό διπλό κλικ ή μεσαίο κλικ για α�
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Κατάργηση επιλογής 'Χρήση χρωμάτων στοίβαξης πίνακα' για να επιτρέψετε την "
+"επεξεργασία χρωμάτων."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -14900,6 +14902,8 @@ msgstr ""
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Για τη μετατροπή βιβλιοθηκών παλαιού τύπου και όχι τύπου KiCad πρέπει να "
+"καθοριστεί η διαδρομή τοποθεσίας\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
