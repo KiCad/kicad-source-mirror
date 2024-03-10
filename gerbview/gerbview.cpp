@@ -39,6 +39,7 @@
 #include <string_utils.h>
 #include <dialogs/panel_gerbview_display_options.h>
 #include <dialogs/panel_gerbview_excellon_settings.h>
+#include <dialogs/panel_grid_settings.h>
 #include <dialogs/panel_gerbview_color_settings.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/ffile.h>
@@ -48,12 +49,13 @@ using json = nlohmann::json;
 
 namespace GERBV {
 
-static struct IFACE : public KIFACE_BASE
+static struct IFACE : public KIFACE_BASE, public UNITS_PROVIDER
 {
     // Of course all are virtual overloads, implementations of the KIFACE.
 
     IFACE( const char* aName, KIWAY::FACE_T aType ) :
-            KIFACE_BASE( aName, aType )
+            KIFACE_BASE( aName, aType ),
+            UNITS_PROVIDER( gerbIUScale, EDA_UNITS::MILLIMETRES )
     {}
 
     bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway ) override;
@@ -61,7 +63,7 @@ static struct IFACE : public KIFACE_BASE
     void OnKifaceEnd() override;
 
     wxWindow* CreateKiWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway,
-                            int aCtlBits = 0 ) override
+                              int aCtlBits = 0 ) override
     {
         switch( aClassId )
         {
@@ -73,6 +75,18 @@ static struct IFACE : public KIFACE_BASE
 
         case PANEL_GBR_EXCELLON_OPTIONS:
             return new PANEL_GERBVIEW_EXCELLON_SETTINGS( aParent );
+
+        case PANEL_GBR_GRIDS:
+        {
+            SETTINGS_MANAGER&  mgr = Pgm().GetSettingsManager();
+            APP_SETTINGS_BASE* cfg = mgr.GetAppSettings<GERBVIEW_SETTINGS>();
+            EDA_BASE_FRAME*    frame = aKiway->Player( FRAME_GERBER, false );
+
+            if( frame )
+                SetUserUnits( frame->GetUserUnits() );
+
+            return new PANEL_GRID_SETTINGS( aParent, this, frame, cfg, FRAME_GERBER );
+        }
 
         case PANEL_GBR_COLORS:
             return new PANEL_GERBVIEW_COLOR_SETTINGS( aParent );
