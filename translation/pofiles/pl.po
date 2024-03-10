@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-04 07:02+0000\n"
+"PO-Revision-Date: 2024-03-11 00:02+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -799,6 +799,7 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:483
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Odznacz opcję 'Użyj kolorów ze stosu warstw' by zezwolić na edycję kolorów."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:533
 #: pcbnew/widgets/appearance_controls.cpp:2182
@@ -4529,9 +4530,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Kreska-kropka-kropka"
 
 #: common/dialogs/panel_setup_netclasses.cpp:189
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "Ustaw kolor na przeźroczysty by użyć domyślnego koloru programu KiCad."
+msgstr "Ustaw przeźroczystość koloru by użyć domyślnego koloru warstwy."
 
 #: common/dialogs/panel_setup_netclasses.cpp:379
 msgid ""
@@ -4598,9 +4598,8 @@ msgid "Schematic wire line style"
 msgstr "Styl linii sygnałowej"
 
 #: common/dialogs/panel_setup_netclasses.cpp:624
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Ustaw kolor dla klasy sieci"
+msgstr "Kolor dla klasy sieci"
 
 #: common/dialogs/panel_setup_netclasses.cpp:677
 msgid "The default net class is required."
@@ -4654,9 +4653,8 @@ msgid "DP Gap"
 msgstr "Dystans DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Kursor PCB"
+msgstr "Kolor PCB"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4702,9 +4700,8 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Ustaw kolor na przeźroczysty by użyć domyślnego koloru programu KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:98
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Sondy ze schematu"
+msgstr "Importuj kolory ze schematu"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:115
 msgid "Netclass assignments:"
@@ -15204,6 +15201,8 @@ msgstr "Ścieżka wyjściowa nie może kolidować z istniejącą\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Musi zostać podana ścieżka wyjściowa, by dokonać konwersji bibliotek "
+"starszego typu lub spoza programu KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:913
 msgid "Saving symbol library in updated format\n"
@@ -20835,14 +20834,12 @@ msgid "Export a symbol to a new library file"
 msgstr "Eksportuje symbol do nowej biblioteki"
 
 #: eeschema/tools/ee_actions.cpp:249 pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Edytuj w edytorze tekstu"
+msgstr "Edytuj w edytorze tekstu..."
 
 #: eeschema/tools/ee_actions.cpp:250 pcbnew/tools/pcb_actions.cpp:774
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Otwórz plik w edytorze tekstu"
+msgstr "Otwórz plik biblioteki w edytorze tekstu"
 
 #: eeschema/tools/ee_actions.cpp:256
 msgid "Update Symbol Fields..."
@@ -22474,9 +22471,8 @@ msgstr "Nie wybrano biblioteki symboli."
 
 #: eeschema/tools/symbol_editor_control.cpp:277
 #: pcbnew/tools/footprint_editor_control.cpp:594
-#, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr "Edytor tekstu nie został zdefiniowany.  Proszę wybrać."
+msgstr "Edytor tekstu nie został zdefiniowany. Proszę wybrać."
 
 #: eeschema/tools/symbol_editor_control.cpp:351
 #: eeschema/widgets/panel_symbol_chooser.cpp:663
@@ -38867,9 +38863,8 @@ msgid "Skew between traces out of range"
 msgstr "Pochylenie między ścieżkami jest poza zakresem"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Za dużo przelotek na jednym połączeniu"
+msgstr "Za dużo lub zbyt mało przelotek w jednym połączeniu"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39563,14 +39558,13 @@ msgid "Too many vias on a connection"
 msgstr "Za dużo przelotek na jednym połączeniu"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s maks. liczba %d; obecnie %d)"
+msgstr "(%s min. liczba %d; obecnie %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Za dużo przelotek na jednym połączeniu"
+msgstr "Za mało przelotek w jednym połączeniu"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -48028,12 +48022,10 @@ msgid "Set Netclass Color"
 msgstr "Ustaw kolor dla klasy sieci"
 
 #: pcbnew/widgets/appearance_controls.cpp:2340
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "Uaktualnia PCB na podstawie schematu"
+msgstr "Użyj kolorów ze schematu"
 
 #: pcbnew/widgets/appearance_controls.cpp:2349
-#, fuzzy
 msgid "Clear Netclass Color"
 msgstr "Wyczyść kolor sieci"
 
