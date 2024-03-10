@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-09 10:02+0000\n"
+"PO-Revision-Date: 2024-03-11 13:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -958,7 +958,7 @@ msgstr "渲染选项"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:35
 msgid "Clip silkscreen at via annuli"
-msgstr "在过孔孔环处剪切丝印"
+msgstr "去除过孔孔环上的丝印"
 
 #: 3d-viewer/dialogs/panel_3D_display_options_base.cpp:38
 msgid "Clip silkscreen at solder mask edges"
@@ -26141,7 +26141,7 @@ msgstr "镍"
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:850
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:30
 msgid "Copper"
-msgstr "铜"
+msgstr "铜层"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion.cpp:54
 msgid "Copper-Aluminium"
@@ -27770,7 +27770,7 @@ msgstr "边缘连接器选项。"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:116
 msgid "Core"
-msgstr "Core"
+msgstr "核心"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:117
 msgid "PrePreg"
@@ -27931,7 +27931,7 @@ msgstr "移除介电层..."
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:79
 #: pcbnew/build_BOM_from_board.cpp:108
 msgid "Id"
-msgstr "Id"
+msgstr "编号"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:131
 msgid "Board thickness from stackup:"
@@ -28043,7 +28043,7 @@ msgstr "铝材质"
 #: pcbnew/exporters/exporter_vrml.cpp:276
 #: pcbnew/exporters/exporter_vrml.cpp:285
 msgid "Not specified"
-msgstr "未标明"
+msgstr "未指定"
 
 #: pcbnew/build_BOM_from_board.cpp:79
 msgid "Cannot export BOM: there are no footprints on the PCB."
@@ -28055,7 +28055,7 @@ msgstr "保存物料清单"
 
 #: pcbnew/build_BOM_from_board.cpp:109
 msgid "Designator"
-msgstr "指示符"
+msgstr "位号"
 
 #: pcbnew/build_BOM_from_board.cpp:111
 msgid "Quantity"
@@ -28067,7 +28067,7 @@ msgstr "名称"
 
 #: pcbnew/build_BOM_from_board.cpp:113
 msgid "Supplier and ref"
-msgstr "供应商和参考"
+msgstr "供应商编号"
 
 #: pcbnew/cleanup_item.cpp:46
 msgid "Remove track shorting two nets"
@@ -28657,7 +28657,7 @@ msgstr "电路板叠层"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:96
 msgid "Board Editor Layers"
-msgstr "电路板层编辑器"
+msgstr "板层编辑器"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
 msgid "Physical Stackup"
@@ -28695,7 +28695,7 @@ msgstr "预设尺寸"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:175
 msgid "Length-tuning Patterns"
-msgstr "长度调整"
+msgstr "长度调整模式"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:213
 msgid "Project is missing or read-only. Some settings will not be editable."
