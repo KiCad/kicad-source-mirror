@@ -118,9 +118,22 @@ void PlotInteractiveLayer( BOARD* aBoard, PLOTTER* aPlotter, const PCB_PLOT_PARA
                                                    _( "Keywords" ),
                                                    fp->GetKeywords() ) );
 #endif
-        aPlotter->HyperlinkMenu( fp->GetBoundingBox(), properties );
+        // Draw items are plotted with a position offset. So we need to move
+        // our boxes (which are not plotted) by the same offset.
+        VECTOR2I offset = -aPlotter->GetPlotOffsetUserUnits();
 
-        aPlotter->Bookmark( fp->GetBoundingBox(), fp->GetReference(), _( "Footprints" ) );
+        // Use a footprint bbox without texts to create the hyperlink area
+        BOX2I bbox = fp->GetBoundingBox( false, false );
+        bbox.Move( offset );
+        aPlotter->HyperlinkMenu( bbox, properties );
+
+        // Use a footprint bbox with visible texts only to create the bookmark area
+        // which is the area to zoom on ft selection
+        // However the bbox need to be inflated for a better look.
+        bbox = fp->GetBoundingBox( true, false );
+        bbox.Move( offset );
+        bbox.Inflate( bbox.GetWidth() /2, bbox.GetHeight() /2 );
+        aPlotter->Bookmark( bbox, fp->GetReference(), _( "Footprints" ) );
     }
 }
 

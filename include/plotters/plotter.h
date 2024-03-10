@@ -543,6 +543,12 @@ public:
      */
     virtual void EndBlock( void* aData ) {}
 
+    /**
+     * @return the plot offset in IUs, set by SetViewport() and used
+     * to plot items.
+     */
+    VECTOR2I GetPlotOffsetUserUnits() {return m_plotOffset; }
+
 
 protected:
     /**
@@ -630,6 +636,7 @@ protected:
     double GetDashMarkLenIU( int aLineWidth ) const;
 
     double GetDashGapLenIU( int aLineWidth ) const;
+
 
 protected:      // variables used in most of plotters:
     /// Plot scale - chosen by the user (even implicitly with 'fit in a4')
