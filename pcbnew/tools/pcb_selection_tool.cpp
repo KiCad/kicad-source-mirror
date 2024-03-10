@@ -3964,7 +3964,7 @@ int PCB_SELECTION_TOOL::SelectRows( const TOOL_EVENT& aEvent )
 
     for( auto& [ table, row ] : rows )
     {
-        for( int col = 0; col < table->GetRowCount(); ++col )
+        for( int col = 0; col < table->GetColCount(); ++col )
         {
             PCB_TABLECELL* cell = table->GetCell( row, col );
 
