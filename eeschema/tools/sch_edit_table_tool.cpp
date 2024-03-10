@@ -85,7 +85,8 @@ SCH_TABLECELL* SCH_EDIT_TABLE_TOOL::copyCell( SCH_TABLECELL* aSource )
 {
     SCH_TABLECELL* cell = new SCH_TABLECELL();
 
-    cell->SetEnd( aSource->GetEnd() - aSource->GetStart() );
+    cell->SetStart( aSource->GetStart() );
+    cell->SetEnd( aSource->GetEnd() );
     cell->SetFillMode( aSource->GetFillMode() );
     cell->SetFillColor( aSource->GetFillColor() );
 

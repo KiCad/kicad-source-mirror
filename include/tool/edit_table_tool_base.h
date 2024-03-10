@@ -133,6 +133,7 @@ protected:
         int      row = topmost->GetRow();
         T_TABLE* table = static_cast<T_TABLE*>( topmost->GetParent() );
         T_COMMIT commit( getToolMgr() );
+        VECTOR2I pos = table->GetPosition();
 
         // Make a copy of the source row before things start moving around
         std::vector<T_TABLECELL*> sources;
@@ -152,7 +153,10 @@ protected:
         for( int afterRow = table->GetRowCount() - 1; afterRow > row; afterRow-- )
             table->SetRowHeight( afterRow, table->GetRowHeight( afterRow - 1 ) );
 
+        table->SetPosition( pos );
         table->Normalize();
+
+        getToolMgr()->PostEvent( EVENTS::SelectedEvent );
 
         commit.Push( _( "Add Row Above" ) );
 
@@ -181,6 +185,7 @@ protected:
         int      row = bottommost->GetRow();
         T_TABLE* table = static_cast<T_TABLE*>( bottommost->GetParent() );
         T_COMMIT commit( getToolMgr() );
+        VECTOR2I pos = table->GetPosition();
 
         // Make a copy of the source row before things start moving around
         std::vector<T_TABLECELL*> sources;
@@ -200,7 +205,10 @@ protected:
         for( int afterRow = table->GetRowCount() - 1; afterRow > row; afterRow-- )
             table->SetRowHeight( afterRow, table->GetRowHeight( afterRow - 1 ) );
 
+        table->SetPosition( pos );
         table->Normalize();
+
+        getToolMgr()->PostEvent( EVENTS::SelectedEvent );
 
         commit.Push( _( "Add Row Below" ) );
 
@@ -227,6 +235,7 @@ protected:
         T_TABLE* table = static_cast<T_TABLE*>( leftmost->GetParent() );
         int      rowCount = table->GetRowCount();
         T_COMMIT commit( getToolMgr() );
+        VECTOR2I pos = table->GetPosition();
 
         // Make a copy of the source column before things start moving around
         std::vector<T_TABLECELL*> sources;
@@ -247,7 +256,10 @@ protected:
         for( int afterCol = table->GetColCount() - 1; afterCol > col; afterCol-- )
             table->SetColWidth( afterCol, table->GetColWidth( afterCol - 1 ) );
 
+        table->SetPosition( pos );
         table->Normalize();
+
+        getToolMgr()->PostEvent( EVENTS::SelectedEvent );
 
         commit.Push( _( "Add Column Before" ) );
 
@@ -274,6 +286,7 @@ protected:
         T_TABLE* table = static_cast<T_TABLE*>( rightmost->GetParent() );
         int      rowCount = table->GetRowCount();
         T_COMMIT commit( getToolMgr() );
+        VECTOR2I pos = table->GetPosition();
 
         // Make a copy of the source column before things start moving around
         std::vector<T_TABLECELL*> sources;
@@ -294,7 +307,10 @@ protected:
         for( int afterCol = table->GetColCount() - 1; afterCol > col; afterCol-- )
             table->SetColWidth( afterCol, table->GetColWidth( afterCol - 1 ) );
 
+        table->SetPosition( pos );
         table->Normalize();
+
+        getToolMgr()->PostEvent( EVENTS::SelectedEvent );
 
         commit.Push( _( "Add Column After" ) );
 
@@ -343,6 +359,8 @@ protected:
         {
             commit.Modify( table, getScreen() );
 
+            VECTOR2I pos = table->GetPosition();
+
             clearSelection();
             table->DeleteMarkedCells();
 
@@ -359,7 +377,10 @@ protected:
                 table->SetRowHeight( row, table->GetRowHeight( row + offset ) );
             }
 
+            table->SetPosition( pos );
             table->Normalize();
+
+            getToolMgr()->PostEvent( EVENTS::SelectedEvent );
         }
 
         if( deleted.size() > 1 )
@@ -412,6 +433,8 @@ protected:
         {
             commit.Modify( table, getScreen() );
 
+            VECTOR2I pos = table->GetPosition();
+
             clearSelection();
             table->DeleteMarkedCells();
             table->SetColCount( table->GetColCount() - deleted.size() );
@@ -429,7 +452,10 @@ protected:
                 table->SetColWidth( col, table->GetColWidth( col + offset ) );
             }
 
+            table->SetPosition( pos );
             table->Normalize();
+
+            getToolMgr()->PostEvent( EVENTS::SelectedEvent );
         }
 
         if( deleted.size() > 1 )
@@ -504,6 +530,8 @@ protected:
         table->Normalize();
         commit.Push( _( "Merge Cells" ) );
 
+        getToolMgr()->PostEvent( EVENTS::SelectedEvent );
+
         return 0;
     }
 
@@ -542,6 +570,8 @@ protected:
 
         table->Normalize();
         commit.Push( _( "Unmerge Cells" ) );
+
+        getToolMgr()->PostEvent( EVENTS::SelectedEvent );
 
         return 0;
     }

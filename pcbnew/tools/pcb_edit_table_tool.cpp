@@ -49,7 +49,8 @@ PCB_TABLECELL* PCB_EDIT_TABLE_TOOL::copyCell( PCB_TABLECELL* aSource )
 {
     PCB_TABLECELL* cell = new PCB_TABLECELL( aSource->GetParent() );
 
-    cell->SetEnd( aSource->GetEnd() - aSource->GetStart() );
+    cell->SetStart( aSource->GetStart() );
+    cell->SetEnd( aSource->GetEnd() );
 
     return cell;
 }
