@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-09 10:02+0000\n"
+"PO-Revision-Date: 2024-03-11 13:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -771,7 +771,7 @@ msgstr "Цвет конца градиента фона"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:200
 msgid "Use board stackup colors"
-msgstr "Использовать цвета из настроек слоёв"
+msgstr "Исп. цвета из структуры платы"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:134
 #, c-format
@@ -808,6 +808,8 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Снимите флажок 'Исп. цвета из структуры платы' чтобы можно было править "
+"цвета."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -14801,6 +14803,8 @@ msgstr "Выходной путь не должен конфликтовать �
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Для конвертации устаревших библиотек и библиотек других САПР, необходимо "
+"указать выходной путь\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
