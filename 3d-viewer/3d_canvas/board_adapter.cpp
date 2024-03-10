@@ -595,8 +595,10 @@ std::map<int, COLOR4D> BOARD_ADAPTER::GetLayerColors() const
     }
     else
     {
-        for( const auto& [ layer, color ] : GetDefaultColors() )
-            colors[ layer ] = color;
+        COLOR_SETTINGS* settings = Pgm().GetSettingsManager().GetColorSettings();
+
+        for( const auto& [ layer, defaultColor /* unused */ ] : GetDefaultColors() )
+            colors[ layer ] = settings->GetColor( layer );
     }
 
     if( m_Cfg->m_UseStackupColors && m_board )
