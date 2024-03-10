@@ -71,6 +71,18 @@ PANEL_GRID_SETTINGS::PANEL_GRID_SETTINGS( wxWindow* aParent, UNITS_PROVIDER* aUn
             m_checkGridOverrideWires->Show( false );
             m_gridOverrideWiresChoice->Show( false );
         }
+
+        if( m_frameType == FRAME_GERBER )
+        {
+            m_overridesLabel->Show( false );
+            m_staticline3->Show( false );
+
+            m_checkGridOverrideText->Show( false );
+            m_gridOverrideTextChoice->Show( false );
+
+            m_checkGridOverrideGraphics->Show( false );
+            m_gridOverrideGraphicsChoice->Show( false );
+        }
     }
 
     int hk1 = ACTIONS::gridFast1.GetHotKey();

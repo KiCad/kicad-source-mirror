@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -111,7 +111,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	bSizerRightCol->Add( m_staticline3, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
 	wxFlexGridSizer* fgGridOverrides;
-	fgGridOverrides = new wxFlexGridSizer( 0, 2, 4, 0 );
+	fgGridOverrides = new wxFlexGridSizer( 0, 2, 5, 0 );
 	fgGridOverrides->AddGrowableCol( 1 );
 	fgGridOverrides->SetFlexibleDirection( wxBOTH );
 	fgGridOverrides->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -122,7 +122,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideConnectedChoiceChoices;
 	m_gridOverrideConnectedChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideConnectedChoiceChoices, 0 );
 	m_gridOverrideConnectedChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideConnectedChoice, 0, wxALL, 5 );
+	fgGridOverrides->Add( m_gridOverrideConnectedChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_checkGridOverrideWires = new wxCheckBox( this, wxID_ANY, _("Wires:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideWires, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 8 );
@@ -130,7 +130,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideWiresChoiceChoices;
 	m_gridOverrideWiresChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideWiresChoiceChoices, 0 );
 	m_gridOverrideWiresChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideWiresChoice, 0, wxALL, 5 );
+	fgGridOverrides->Add( m_gridOverrideWiresChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_checkGridOverrideVias = new wxCheckBox( this, wxID_ANY, _("Vias:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideVias, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 8 );
@@ -138,7 +138,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideViasChoiceChoices;
 	m_gridOverrideViasChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideViasChoiceChoices, 0 );
 	m_gridOverrideViasChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideViasChoice, 0, wxALL, 5 );
+	fgGridOverrides->Add( m_gridOverrideViasChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_checkGridOverrideText = new wxCheckBox( this, wxID_ANY, _("Text:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideText, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 8 );
@@ -146,7 +146,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideTextChoiceChoices;
 	m_gridOverrideTextChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideTextChoiceChoices, 0 );
 	m_gridOverrideTextChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideTextChoice, 0, wxALL, 5 );
+	fgGridOverrides->Add( m_gridOverrideTextChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 	m_checkGridOverrideGraphics = new wxCheckBox( this, wxID_ANY, _("Graphics:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgGridOverrides->Add( m_checkGridOverrideGraphics, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxLEFT, 8 );
@@ -154,7 +154,7 @@ PANEL_GRID_SETTINGS_BASE::PANEL_GRID_SETTINGS_BASE( wxWindow* parent, wxWindowID
 	wxArrayString m_gridOverrideGraphicsChoiceChoices;
 	m_gridOverrideGraphicsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_gridOverrideGraphicsChoiceChoices, 0 );
 	m_gridOverrideGraphicsChoice->SetSelection( 0 );
-	fgGridOverrides->Add( m_gridOverrideGraphicsChoice, 0, wxALL, 5 );
+	fgGridOverrides->Add( m_gridOverrideGraphicsChoice, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerRightCol->Add( fgGridOverrides, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );

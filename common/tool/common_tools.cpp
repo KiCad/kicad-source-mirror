@@ -547,7 +547,7 @@ int COMMON_TOOLS::ToggleGridOverrides( const TOOL_EVENT& aEvent )
 int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
 {
     auto showGridPrefs =
-            [this]( wxString aParentName )
+            [this]( const wxString& aParentName )
             {
                 m_frame->CallAfter(
                         [this, aParentName]()
@@ -563,6 +563,7 @@ int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
     case FRAME_PCB_EDITOR:        showGridPrefs( _( "PCB Editor" ) );           break;
     case FRAME_FOOTPRINT_EDITOR:  showGridPrefs( _( "Footprint Editor" ) );     break;
     case FRAME_PL_EDITOR:         showGridPrefs( _( "Drawing Sheet Editor" ) ); break;
+    case FRAME_GERBER:            showGridPrefs( _( "Gerber Viewer" ) );        break;
     default:                      wxFAIL_MSG( "Unknown frame: " + GetName() );  break;
     }
 
