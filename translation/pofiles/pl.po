@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-04 07:01+0000\n"
+"PO-Revision-Date: 2024-03-10 11:02+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
@@ -797,6 +797,7 @@ msgstr ""
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Odznacz opcję 'Użyj kolorów ze stosu warstw' by zezwolić na edycję kolorów."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -14845,6 +14846,8 @@ msgstr "Ścieżka wyjściowa nie może kolidować z istniejącą\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Musi zostać podana ścieżka wyjściowa, by dokonać konwersji bibliotek "
+"starszego typu lub spoza programu KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
