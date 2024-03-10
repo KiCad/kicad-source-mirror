@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-04 07:01+0000\n"
+"PO-Revision-Date: 2024-03-11 00:02+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
-"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/master-"
-"source/el/>\n"
+"Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
+"master-source/el/>\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -798,6 +798,8 @@ msgstr "Αριστερό διπλό κλικ ή μεσαίο κλικ για α�
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:483
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
 msgstr ""
+"Κατάργηση επιλογής 'Χρήση χρωμάτων στοίβαξης πίνακα' για να επιτρέψετε την "
+"επεξεργασία χρωμάτων."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:533
 #: pcbnew/widgets/appearance_controls.cpp:2182
@@ -4544,11 +4546,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Παύλα-Τελεία-Τελεία"
 
 #: common/dialogs/panel_setup_netclasses.cpp:189
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr ""
-"Ορίστε το χρώμα σε διαφανές για να χρησιμοποιήσετε το προεπιλεγμένο χρώμα "
-"του KiCad."
+msgstr "Ορίστε το χρώμα σε διαφανές για χρήση του προεπιλεγμένου."
 
 #: common/dialogs/panel_setup_netclasses.cpp:379
 msgid ""
@@ -4617,7 +4616,7 @@ msgstr "Στυλ γραμμής καλωδίου σχηματικού"
 #: common/dialogs/panel_setup_netclasses.cpp:624
 #, fuzzy
 msgid "PCB netclass color"
-msgstr "Ορισμός Χρώματος Κλάσης Δικτύου"
+msgstr "Χρώμα κλάσης δικτύου PCB"
 
 #: common/dialogs/panel_setup_netclasses.cpp:677
 msgid "The default net class is required."
@@ -4671,9 +4670,8 @@ msgid "DP Gap"
 msgstr "Κενό Διαφορικού Ζεύγους"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Κέρσορας PCB"
+msgstr "Χρώμα PCB"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4721,9 +4719,8 @@ msgstr ""
 "του KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:98
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Μέτρηση στο σχηματικό"
+msgstr "Εισαγωγή χρωμάτων από σχηματικό"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:115
 msgid "Netclass assignments:"
@@ -15269,6 +15266,8 @@ msgstr ""
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Για τη μετατροπή βιβλιοθηκών παλαιού τύπου και όχι τύπου KiCad πρέπει να "
+"καθοριστεί η διαδρομή τοποθεσίας\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:913
 msgid "Saving symbol library in updated format\n"
