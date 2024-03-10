@@ -35,8 +35,8 @@
 
 SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString& aBraces,
                                     bool aSingleLine,
-                                    std::function<void( wxKeyEvent& )> onAcceptHandler,
-                                    std::function<void( wxStyledTextEvent& )> onCharAddedHandler ) :
+                                    std::function<void( wxKeyEvent& )> onAcceptFn,
+                                    std::function<void( wxStyledTextEvent& )> onCharAddedFn ) :
         m_te( aScintilla ),
         m_braces( aBraces ),
         m_lastCaretPos( -1 ),
@@ -44,8 +44,8 @@ SCINTILLA_TRICKS::SCINTILLA_TRICKS( wxStyledTextCtrl* aScintilla, const wxString
         m_lastSelEnd( -1 ),
         m_suppressAutocomplete( false ),
         m_singleLine( aSingleLine ),
-        m_onAcceptHandler( onAcceptHandler ),
-        m_onCharAddedHandler( onCharAddedHandler )
+        m_onAcceptFn( std::move( onAcceptFn ) ),
+        m_onCharAddedFn( std::move( onCharAddedFn ) )
 {
     // Always use LF as eol char, regardless the platform
     m_te->SetEOLMode( wxSTC_EOL_LF );
@@ -174,7 +174,7 @@ bool isCtrlSlash( wxKeyEvent& aEvent )
 
 void SCINTILLA_TRICKS::onChar( wxStyledTextEvent& aEvent )
 {
-    m_onCharAddedHandler( aEvent );
+    m_onCharAddedFn( aEvent );
 }
 
 
@@ -237,7 +237,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
         wxStyledTextEvent event;
         event.SetKey( ' ' );
         event.SetModifiers( wxMOD_CONTROL );
-        m_onCharAddedHandler( event );
+        m_onCharAddedFn( event );
 
         return;
     }
@@ -248,7 +248,7 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     if( ( aEvent.GetKeyCode() == WXK_RETURN || aEvent.GetKeyCode() == WXK_NUMPAD_ENTER )
         && ( m_singleLine || aEvent.ShiftDown() ) )
     {
-        m_onAcceptHandler( aEvent );
+        m_onAcceptFn( aEvent );
     }
     else if( ConvertSmartQuotesAndDashes( &c ) )
     {
@@ -542,8 +542,8 @@ void SCINTILLA_TRICKS::onScintillaUpdateUI( wxStyledTextEvent& aEvent )
 }
 
 
-void SCINTILLA_TRICKS::DoTextVarAutocomplete( std::function<void( const wxString& crossRef,
-                                                                  wxArrayString* tokens )> aTokenProvider )
+void SCINTILLA_TRICKS::DoTextVarAutocomplete(
+        const std::function<void( const wxString& xRef, wxArrayString* tokens )>& getTokensFn )
 {
     wxArrayString autocompleteTokens;
     int           text_pos = m_te->GetCurrentPos();
@@ -564,13 +564,13 @@ void SCINTILLA_TRICKS::DoTextVarAutocomplete( std::function<void( const wxString
         if( textVarRef( refStart ) )
         {
             partial = m_te->GetRange( start, text_pos );
-            aTokenProvider( m_te->GetRange( refStart, start-1 ), &autocompleteTokens );
+            getTokensFn( m_te->GetRange( refStart, start-1 ), &autocompleteTokens );
         }
     }
     else if( textVarRef( start ) )
     {
         partial = m_te->GetTextRange( start, text_pos );
-        aTokenProvider( wxEmptyString, &autocompleteTokens );
+        getTokensFn( wxEmptyString, &autocompleteTokens );
     }
 
     DoAutocomplete( partial, autocompleteTokens );

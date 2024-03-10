@@ -46,8 +46,8 @@ public:
 
     wxStyledTextCtrl* Scintilla() const { return m_te; }
 
-    void DoTextVarAutocomplete( std::function<void( const wxString& crossRef,
-                                                    wxArrayString* tokens )> aTokenProvider );
+    void DoTextVarAutocomplete(
+            const std::function<void( const wxString& xRef, wxArrayString* tokens )>& getTokensFn );
 
     void DoAutocomplete( const wxString& aPartial, const wxArrayString& aTokens );
 
@@ -75,8 +75,8 @@ protected:
                                                    //  stop handling (including monospaced font).
 
     // Process <return> in singleLine, and <shift> + <return> irrespective.
-    std::function<void( wxKeyEvent& aEvent )>        m_onAcceptHandler;
-    std::function<void( wxStyledTextEvent& aEvent )> m_onCharAddedHandler;
+    std::function<void( wxKeyEvent& aEvent )>        m_onAcceptFn;
+    std::function<void( wxStyledTextEvent& aEvent )> m_onCharAddedFn;
 };
 
 #endif  // SCINTILLA_TRICKS_H

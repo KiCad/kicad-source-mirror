@@ -60,12 +60,12 @@ wxSize GRID_CELL_ESCAPED_TEXT_RENDERER::GetBestSize( wxGrid & aGrid, wxGridCellA
 //-------- GRID_CELL_STC_EDITOR -----------------------------------------------------------------
 //
 
-GRID_CELL_STC_EDITOR::GRID_CELL_STC_EDITOR( bool aIgnoreCase,
-                                            std::function<void( wxStyledTextEvent&,
-                                                                SCINTILLA_TRICKS* )> aOnChar ) :
-    m_scintillaTricks( nullptr ),
-    m_ignoreCase( aIgnoreCase ),
-    m_onChar( aOnChar )
+GRID_CELL_STC_EDITOR::GRID_CELL_STC_EDITOR(
+                        bool aIgnoreCase,
+                        std::function<void( wxStyledTextEvent&, SCINTILLA_TRICKS* )> onCharFn ) :
+        m_scintillaTricks( nullptr ),
+        m_ignoreCase( aIgnoreCase ),
+        m_onCharFn( std::move( onCharFn ) )
 { }
 
 
@@ -92,15 +92,15 @@ void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandl
 
     m_scintillaTricks = new SCINTILLA_TRICKS(
             stc_ctrl(), wxEmptyString, true,
-            // onAccept handler
+            // onAcceptFn
             [this]( wxKeyEvent& aEvent )
             {
                 HandleReturn( aEvent );
             },
-            // onCharAdded handler
+            // onCharFn
             [this]( wxStyledTextEvent& aEvent )
             {
-                m_onChar( aEvent, m_scintillaTricks );
+                m_onCharFn( aEvent, m_scintillaTricks );
             } );
 
     stc_ctrl()->Bind( wxEVT_KILL_FOCUS, &GRID_CELL_STC_EDITOR::onFocusLoss, this );

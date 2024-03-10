@@ -89,9 +89,10 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( PCB_BASE_EDIT_FRAME* aFrame, P
                         [this, cell]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )
                         {
                             aScintillaTricks->DoTextVarAutocomplete(
-                                    [this, cell]( const wxString& crossRef, wxArrayString* tokens )
+                                    // getTokensFn
+                                    [this, cell]( const wxString& xRef, wxArrayString* tokens )
                                     {
-                                        m_frame->GetContextualTextVars( cell, crossRef, tokens );
+                                        m_frame->GetContextualTextVars( cell, xRef, tokens );
                                     } );
                         } ) );
             }

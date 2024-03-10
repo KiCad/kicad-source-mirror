@@ -48,11 +48,13 @@ PANEL_SETUP_RULES::PANEL_SETUP_RULES( wxWindow* aParentWindow, PCB_EDIT_FRAME* a
         m_helpWindow( nullptr )
 {
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textEditor, wxT( "()" ), false,
+            // onAcceptFn
             [this]( wxKeyEvent& aEvent )
             {
                 wxPostEvent( PAGED_DIALOG::GetDialog( this ),
                              wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
             },
+            // onCharFn
             [this]( wxStyledTextEvent& aEvent )
             {
                 onScintillaCharAdded( aEvent );

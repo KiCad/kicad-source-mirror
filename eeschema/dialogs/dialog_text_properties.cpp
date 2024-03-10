@@ -94,19 +94,20 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
 #endif
 
     m_scintillaTricks = new SCINTILLA_TRICKS( m_textCtrl, wxT( "{}" ), false,
-            // onAccept handler
+            // onAcceptFn
             [this]( wxKeyEvent& aEvent )
             {
                 wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
             },
 
-            // onCharAdded handler
+            // onCharFn
             [this]( wxStyledTextEvent& aEvent )
             {
                 m_scintillaTricks->DoTextVarAutocomplete(
-                        [this]( const wxString& crossRef, wxArrayString* tokens )
+                        // getTokensFn
+                        [this]( const wxString& xRef, wxArrayString* tokens )
                         {
-                            getContextualTextVars( crossRef, tokens );
+                            getContextualTextVars( xRef, tokens );
                         } );
             } );
 

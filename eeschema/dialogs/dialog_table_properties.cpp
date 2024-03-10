@@ -80,12 +80,14 @@ DIALOG_TABLE_PROPERTIES::DIALOG_TABLE_PROPERTIES( SCH_EDIT_FRAME* aFrame, SCH_TA
             else
             {
                 attr->SetEditor( new GRID_CELL_STC_EDITOR( true,
+                        // onCharFn
                         [this]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )
                         {
                             aScintillaTricks->DoTextVarAutocomplete(
-                                    [this]( const wxString& crossRef, wxArrayString* tokens )
+                                    // getTokensFn
+                                    [this]( const wxString& xRef, wxArrayString* tokens )
                                     {
-                                        getContextualTextVars( crossRef, tokens );
+                                        getContextualTextVars( xRef, tokens );
                                     } );
                         } ) );
             }
