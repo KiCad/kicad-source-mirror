@@ -42,6 +42,14 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
             0,
             min_value=0,
         )
+        # ErrorCorrectLevel: L = 7%, M = 15% Q = 25% H = 30%
+        self.AddParam(
+            "Barcode",
+            "Error Correction Level",
+            self.uString,
+            "M",
+            hint="One of L(7%), M(15%), Q(25%), H(30%)"
+        )
         self.AddParam(
             "Barcode",
             "Type Number",
@@ -63,6 +71,7 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
 
     def CheckParameters(self):
         self.Barcode = self.parameters['Barcode']['Contents']
+        self.RawECLevel = str(self.parameters['Barcode']['Error Correction Level']).upper()
         self.TypeNumber = self.parameters['Barcode']['Type Number']
         self.X = self.parameters['Barcode']['Qr Pixel Width']
         self.negative = self.parameters['Barcode']['Negative']
@@ -75,8 +84,14 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.module.Value().SetText(str(self.Barcode))
 
 
-        # ErrorCorrectLevel: L = 7%, M = 15% Q = 25% H = 30%
-        self.ECLevel = qrcode.ErrorCorrectLevel.M
+        if not (len(self.RawECLevel) == 1 and self.RawECLevel in "LMQH"):
+            self.GetParam("Barcode", "Error Correction Level").AddError(
+                '"Error Correction Level" must be one of L(7%), M(15%), Q(25%), H(30%)'
+            )
+            self.ECLevel = qrcode.ErrorCorrectLevel.M
+        else:
+            self.ECLevel = getattr(qrcode.ErrorCorrectLevel, self.RawECLevel)
+
 
         # Check if the content is too long
         # technically we don't need this conversion (TypeNumber=0 will be
