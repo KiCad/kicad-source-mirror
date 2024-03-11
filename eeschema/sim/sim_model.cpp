@@ -1646,19 +1646,20 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
     std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
     bool                  sourcePinsSorted = false;
 
-    auto lazySortSourcePins = [&sourcePins, &sourcePinsSorted]()
-    {
-        if( !sourcePinsSorted )
-        {
-            std::sort( sourcePins.begin(), sourcePins.end(),
-                       []( const LIB_PIN* lhs, const LIB_PIN* rhs )
-                       {
-                           return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
-                       } );
-        }
+    auto lazySortSourcePins =
+            [&sourcePins, &sourcePinsSorted]()
+            {
+                if( !sourcePinsSorted )
+                {
+                    std::sort( sourcePins.begin(), sourcePins.end(),
+                               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+                               {
+                                   return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
+                               } );
+                }
 
-        sourcePinsSorted = true;
-    };
+                sourcePinsSorted = true;
+            };
 
     FIELD_INFO deviceInfo;
     FIELD_INFO modelInfo;
