@@ -49,19 +49,20 @@ class PROJECT;
 #define SIM_REFERENCE_FIELD wxT( "Reference" )
 #define SIM_VALUE_FIELD wxT( "Value" )
 
-#define SIM_DEVICE_FIELD           wxT( "Sim.Device" )
-#define SIM_DEVICE_SUBTYPE_FIELD   wxT( "Sim.Type" )
-#define SIM_PINS_FIELD             wxT( "Sim.Pins" )
-#define SIM_PARAMS_FIELD           wxT( "Sim.Params" )
-#define SIM_LIBRARY_FIELD          wxT( "Sim.Library" )
-#define SIM_NAME_FIELD             wxT( "Sim.Name" )
+#define SIM_DEVICE_FIELD wxT( "Sim.Device" )
+#define SIM_DEVICE_SUBTYPE_FIELD wxT( "Sim.Type" )
+#define SIM_PINS_FIELD wxT( "Sim.Pins" )
+#define SIM_PARAMS_FIELD wxT( "Sim.Params" )
+#define SIM_LIBRARY_FIELD wxT( "Sim.Library" )
+#define SIM_NAME_FIELD wxT( "Sim.Name" )
+#define SIM_NODES_FORMAT_FIELD wxT( "Sim.NodesFormat" )
 
 #define SIM_LEGACY_ENABLE_FIELD_V7 wxT( "Sim.Enable" )
 #define SIM_LEGACY_PRIMITIVE_FIELD wxS( "Spice_Primitive" )
-#define SIM_LEGACY_MODEL_FIELD     wxS( "Spice_Model" )
-#define SIM_LEGACY_PINS_FIELD      wxS( "Spice_Node_Sequence" )
-#define SIM_LEGACY_ENABLE_FIELD    wxS( "Spice_Netlist_Enabled" )
-#define SIM_LEGACY_LIBRARY_FIELD   wxS( "Spice_Lib_File" )
+#define SIM_LEGACY_MODEL_FIELD wxS( "Spice_Model" )
+#define SIM_LEGACY_PINS_FIELD wxS( "Spice_Node_Sequence" )
+#define SIM_LEGACY_ENABLE_FIELD wxS( "Spice_Netlist_Enabled" )
+#define SIM_LEGACY_LIBRARY_FIELD wxS( "Spice_Lib_File" )
 
 
 class SIM_MODEL

@@ -36,6 +36,7 @@
 #include <sim/sim_library.h>
 #include <sim/sim_library_kibis.h>
 #include <sim/sim_model_kibis.h>
+#include <sim/sim_xspice_parser.h>
 #include <sch_screen.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
@@ -227,7 +228,7 @@ bool NETLIST_EXPORTER_SPICE::ReadSchematicAndLibraries( unsigned aNetlistOptions
             readModel( sheet, *symbol, spiceItem, aReporter );
             readPinNumbers( *symbol, spiceItem, pins );
             readPinNetNames( *symbol, spiceItem, pins, ncCounter );
-
+            readNodePattern( spiceItem );
             // TODO: transmission line handling?
 
             m_items.push_back( std::move( spiceItem ) );
@@ -506,7 +507,76 @@ void NETLIST_EXPORTER_SPICE::readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& a
         m_nets.insert( netName );
     }
 }
+void NETLIST_EXPORTER_SPICE::getNodePattern( SPICE_ITEM&               aItem,
+                                             std::vector<std::string>& aModifiers )
+{
+    std::string input = SIM_MODEL::GetFieldValue( &aItem.fields, SIM_NODES_FORMAT_FIELD, true );
+    
+    if( input == "" )
+        return;
 
+    tao::pegtl::string_input<>                    in( input, "Sim.NodesFormat field" );
+    std::unique_ptr<tao::pegtl::parse_tree::node> root;
+    std::string                                   singleNodeModifier;
+
+    try
+    {
+        root = tao::pegtl::parse_tree::parse<SIM_XSPICE_PARSER_GRAMMAR::nodeSequenceGrammar,
+                                             SIM_XSPICE_PARSER_GRAMMAR::spiceUnitSelector,
+                                             tao::pegtl::nothing,
+                                             SIM_XSPICE_PARSER_GRAMMAR::control>( in );
+        for( const auto& node : root->children )
+        {
+            if( node->is_type<SIM_XSPICE_PARSER_GRAMMAR::squareBracketC>() )
+            {
+                //we want ']' to close previous ?
+                aModifiers.back().append( node->string() );
+            }
+            else
+            { //rest goes to the new singleNodeModifier
+                singleNodeModifier.append( node->string() );
+            }
+
+            if( node->is_type<SIM_XSPICE_PARSER_GRAMMAR::nodeName>() )
+            {
+                aModifiers.push_back( singleNodeModifier );
+                singleNodeModifier.erase( singleNodeModifier.begin(), singleNodeModifier.end() );
+            }
+        }
+    }
+    catch( const tao::pegtl::parse_error& e )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Error in parsing model '%s', error: '%s'" ),
+                                          aItem.refName, e.what() ) );
+    }
+}
+void NETLIST_EXPORTER_SPICE::readNodePattern( SPICE_ITEM& aItem )
+{
+    std::vector<std::string> xspicePattern;
+    NETLIST_EXPORTER_SPICE::getNodePattern( aItem, xspicePattern );
+
+    if( xspicePattern.empty() )
+        return;
+
+    if( xspicePattern.size() != aItem.pinNetNames.size() )
+    {
+        THROW_IO_ERROR( wxString::Format( _( "Error in parsing model '%s', wrong number of nodes "
+                                             "'?' in Sim.NodesFormat compared to connections" ),
+                                          aItem.refName ) );
+        return;
+    }
+
+    auto itNetNames = aItem.pinNetNames.begin();
+
+    for( std::string& pattern : xspicePattern )
+    {
+        // ngspice does not care about aditional spaces, and we make sure that "%d?" is separated
+        const std::string netName = " " + *itNetNames + " ";
+        pattern.replace( pattern.find( "?" ), 1, netName );
+        *itNetNames = pattern;
+        ++itNetNames;
+    }
+}
 
 void NETLIST_EXPORTER_SPICE::writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
                                            const wxString& aPath )

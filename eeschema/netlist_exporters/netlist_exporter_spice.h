@@ -152,6 +152,8 @@ private:
                          const std::vector<PIN_INFO>& aPins );
     void readPinNetNames( SCH_SYMBOL& aSymbol, SPICE_ITEM& aItem,
                           const std::vector<PIN_INFO>& aPins, int& aNcCounter );
+    void getNodePattern( SPICE_ITEM& aItem, std::vector<std::string>& aModifiers );
+    void readNodePattern( SPICE_ITEM& aItem );
 
     void writeInclude( OUTPUTFORMATTER& aFormatter, unsigned aNetlistOptions,
                        const wxString& aPath );
