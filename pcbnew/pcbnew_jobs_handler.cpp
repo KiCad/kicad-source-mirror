@@ -569,6 +569,7 @@ int PCBNEW_JOBS_HANDLER::JobExportGerbers( JOB* aJob )
 
     BOARD* brd = LoadBoard( aGerberJob->m_filename, true );
     loadOverrideDrawingSheet( brd, aGerberJob->m_drawingSheet );
+    brd->GetProject()->ApplyTextVars( aJob->GetVarOverrides() );
 
     PCB_PLOT_PARAMS       boardPlotOptions = brd->GetPlotOptions();
     LSET                  plotOnAllLayersSelection = boardPlotOptions.GetPlotOnAllLayersSelection();
