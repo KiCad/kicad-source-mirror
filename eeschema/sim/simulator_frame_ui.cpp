@@ -50,6 +50,7 @@
 #include <dialogs/dialog_sim_format_value.h>
 #include <eeschema_settings.h>
 #include "kiplatform/app.h"
+#include "wx/clipbrd.h"
 
 
 SIM_TRACE_TYPE operator|( SIM_TRACE_TYPE aFirst, SIM_TRACE_TYPE aSecond )
@@ -168,11 +169,12 @@ void SIGNALS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
                 }
 
                 menu.AppendSeparator();
+                menu.Append( GRIDTRICKS_ID_COPY, _( "Copy Signal Name" ) + "\tCtrl+C" );
+
+                m_grid->PopupMenu( &menu );
             }
         }
     }
-
-    GRID_TRICKS::showPopupMenu( menu, aEvent );
 }
 
 
@@ -283,9 +285,25 @@ void SIGNALS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         for( const wxString& signal : signals )
             m_parent->DoFourier( signal, fundamental );
     }
-    else
+    else if( event.GetId() == GRIDTRICKS_ID_COPY )
     {
-        GRID_TRICKS::doPopupSelection( event );
+        wxLogNull doNotLog; // disable logging of failed clipboard actions
+        wxString  txt;
+
+        for( const wxString& signal : signals )
+        {
+            if( !txt.IsEmpty() )
+                txt += '\r';
+
+            txt += signal;
+        }
+
+        if( wxTheClipboard->Open() )
+        {
+            wxTheClipboard->SetData( new wxTextDataObject( txt ) );
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+            wxTheClipboard->Close();
+        }
     }
 }
 
