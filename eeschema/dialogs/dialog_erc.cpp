@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -730,6 +730,10 @@ void DIALOG_ERC::OnERCItemRClick( wxDataViewEvent& aEvent )
 
         if( rcItem->GetErrorCode() == ERCE_PIN_TO_PIN_ERROR )
             settings.SetSeverity( ERCE_PIN_TO_PIN_WARNING, RPT_SEVERITY_IGNORE );
+
+        // Clear the selection before deleting markers. It may be some selected ERC markers.
+        // Deleting a selected marker without deselecting it first generates a crash
+        m_parent->GetToolManager()->RunAction( EE_ACTIONS::clearSelection );
 
         SCH_SCREENS ScreenList( m_parent->Schematic().Root() );
         ScreenList.DeleteMarkers( MARKER_BASE::MARKER_ERC, rcItem->GetErrorCode() );
