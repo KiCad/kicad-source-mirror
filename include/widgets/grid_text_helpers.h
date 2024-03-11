@@ -60,6 +60,7 @@ public:
 
     wxString GetValue() const override;
 
+    void StartingKey( wxKeyEvent& event ) override;
     void Show( bool aShow, wxGridCellAttr *aAttr = nullptr ) override;
     void BeginEdit( int aRow, int aCol, wxGrid* aGrid ) override;
     bool EndEdit( int aRow, int aCol, const wxGrid*, const wxString&, wxString* aNewVal ) override;

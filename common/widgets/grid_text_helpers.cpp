@@ -121,6 +121,44 @@ wxString GRID_CELL_STC_EDITOR::GetValue() const
 }
 
 
+void GRID_CELL_STC_EDITOR::StartingKey( wxKeyEvent& event )
+{
+    int ch;
+
+    bool isPrintable;
+
+#if wxUSE_UNICODE
+    ch = event.GetUnicodeKey();
+
+    if( ch != WXK_NONE )
+        isPrintable = true;
+    else
+#endif // wxUSE_UNICODE
+    {
+        ch = event.GetKeyCode();
+        isPrintable = ch >= WXK_SPACE && ch < WXK_START;
+    }
+
+    switch( ch )
+    {
+    case WXK_DELETE:
+        // Delete the initial character when starting to edit with DELETE.
+        stc_ctrl()->DeleteRange( 0, 1 );
+        break;
+
+    case WXK_BACK:
+        // Delete the last character when starting to edit with BACKSPACE.
+        stc_ctrl()->DeleteBack();
+        break;
+
+    default:
+        if( isPrintable )
+            stc_ctrl()->WriteText( static_cast<wxChar>( ch ) );
+        break;
+    }
+}
+
+
 void GRID_CELL_STC_EDITOR::Show( bool aShow, wxGridCellAttr* aAttr )
 {
     if( !aShow )

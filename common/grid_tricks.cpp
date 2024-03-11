@@ -29,7 +29,7 @@
 #include <wx/clipbrd.h>
 #include <wx/log.h>
 #include <wx/stc/stc.h>
-#include <widgets/grid_readonly_text_helpers.h>
+#include <widgets/grid_text_helpers.h>
 
 
 // It works for table data on clipboard for an Excel spreadsheet,
@@ -91,7 +91,8 @@ void GRID_TRICKS::init()
 bool GRID_TRICKS::isTextEntry( int aRow, int aCol )
 {
     wxGridCellEditor* editor = m_grid->GetCellEditor( aRow, aCol );
-    bool              retval = ( dynamic_cast<wxTextEntry*>( editor ) );
+    bool              retval = ( dynamic_cast<wxTextEntry*>( editor )
+                              || dynamic_cast<GRID_CELL_STC_EDITOR*>( editor ) );
 
     editor->DecRef();
     return retval;
