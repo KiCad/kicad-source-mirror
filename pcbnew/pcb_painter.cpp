@@ -2355,12 +2355,10 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                 for( int row = 0; row < aTable->GetRowCount(); ++row )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
+                    VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                    {
-                        strokeLine( VECTOR2I( cell->GetEndX(), cell->GetStartY() ),
-                                    VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
-                    }
+                        strokeLine( topRight, cell->GetEnd() );
                 }
             }
         }
@@ -2372,12 +2370,10 @@ void PCB_PAINTER::draw( const PCB_TABLE* aTable, int aLayer )
                 for( int col = 0; col < aTable->GetColCount(); ++col )
                 {
                     PCB_TABLECELL* cell = aTable->GetCell( row, col );
+                    VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
 
                     if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
-                    {
-                        strokeLine( VECTOR2I( cell->GetStartX(), cell->GetEndY() ),
-                                    VECTOR2I( cell->GetEndX(), cell->GetEndY() ) );
-                    }
+                        strokeLine( botLeft, cell->GetEnd() );
                 }
             }
         }

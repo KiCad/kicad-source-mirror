@@ -35,6 +35,9 @@
 #include <pcb_track.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_tablecell.h>
+#include <pcb_table.h>
+#include <pcb_dimension.h>
 #include <connectivity/connectivity_data.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <board_commit.h>
@@ -46,7 +49,6 @@
 #include <core/thread_pool.h>
 #include <math/util.h>      // for KiROUND
 #include "zone_filler.h"
-#include "pcb_dimension.h"
 
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
@@ -828,19 +830,7 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
     }
 
     case PCB_TEXTBOX_T:
-    {
-        PCB_TEXTBOX* textbox = static_cast<PCB_TEXTBOX*>( aItem );
-
-        if( textbox->IsVisible() )
-            textbox->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE );
-
-        break;
-    }
-
     case PCB_TABLE_T:
-        // JEY TODO: tables
-        break;
-
     case PCB_SHAPE_T:
     case PCB_TARGET_T:
         aItem->TransformShapeToPolygon( aHoles, aLayer, aGap, m_maxError, ERROR_OUTSIDE,

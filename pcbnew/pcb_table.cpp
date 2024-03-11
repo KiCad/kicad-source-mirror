@@ -23,7 +23,9 @@
 
 #include <pcb_edit_frame.h>
 #include <pcb_table.h>
-
+#include <geometry/shape_simple.h>
+#include <geometry/shape_segment.h>
+#include <geometry/shape_compound.h>
 
 
 PCB_TABLE::PCB_TABLE( BOARD_ITEM* aParent, int aLineWidth ) :
@@ -224,12 +226,83 @@ const BOX2I PCB_TABLE::GetBoundingBox() const
 }
 
 
+std::shared_ptr<SHAPE> PCB_TABLE::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHING aFlash ) const
+{
+    VECTOR2I                        origin = GetPosition();
+    VECTOR2I                        end = GetEnd();
+    std::shared_ptr<SHAPE_COMPOUND> shape = std::make_shared<SHAPE_COMPOUND>();
+
+    std::vector<VECTOR2I> pts;
+
+    pts.emplace_back( origin );
+    pts.emplace_back( end.x, origin.y );
+    pts.emplace_back( end );
+    pts.emplace_back( origin.x, end.y );
+
+    shape->AddShape( new SHAPE_SIMPLE( pts ) );
+
+    auto addSeg =
+            [&shape]( const VECTOR2I& ptA, const VECTOR2I& ptB, int width )
+            {
+                shape->AddShape( new SHAPE_SEGMENT( ptA, ptB, width ) );
+            };
+
+    if( StrokeColumns() && GetSeparatorsStroke().GetWidth() >= 0)
+    {
+        for( int col = 0; col < GetColCount() - 1; ++col )
+        {
+            for( int row = 0; row < GetRowCount(); ++row )
+            {
+                PCB_TABLECELL* cell = GetCell( row, col );
+                VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
+
+                if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
+                    addSeg( topRight, cell->GetEnd(), GetSeparatorsStroke().GetWidth() );
+            }
+        }
+    }
+
+    if( StrokeRows() && GetSeparatorsStroke().GetWidth() >= 0 )
+    {
+        for( int row = 0; row < GetRowCount() - 1; ++row )
+        {
+            for( int col = 0; col < GetColCount(); ++col )
+            {
+                PCB_TABLECELL* cell = GetCell( row, col );
+                VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
+
+                if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
+                    addSeg( botLeft, cell->GetEnd(), GetSeparatorsStroke().GetWidth() );
+            }
+        }
+    }
+
+    if( StrokeExternal() && GetBorderStroke().GetWidth() >= 0 )
+    {
+        addSeg( pts[0], pts[1], GetBorderStroke().GetWidth() );
+        addSeg( pts[1], pts[2], GetBorderStroke().GetWidth() );
+        addSeg( pts[2], pts[3], GetBorderStroke().GetWidth() );
+        addSeg( pts[3], pts[0], GetBorderStroke().GetWidth() );
+    }
+
+    return shape;
+}
+
+
 void PCB_TABLE::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
                                          int aClearance, int aMaxError, ERROR_LOC aErrorLoc,
                                          bool aIgnoreLineWidth ) const
 {
+    int gap = aClearance;
+
+    if( StrokeColumns() || StrokeRows() )
+        gap = std::max( gap, aClearance + GetSeparatorsStroke().GetWidth() / 2 );
+
+    if( StrokeExternal() || StrokeHeader() )
+        gap = std::max( gap, aClearance + GetBorderStroke().GetWidth() / 2 );
+
     for( PCB_TABLECELL* cell : m_cells )
-        cell->TransformShapeToPolygon( aBuffer, aLayer, aClearance, aMaxError, aErrorLoc, false );
+        cell->TransformShapeToPolygon( aBuffer, aLayer, gap, aMaxError, aErrorLoc, false );
 }
 
 

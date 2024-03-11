@@ -32,6 +32,7 @@
 #include <pcb_group.h>
 #include <pcb_marker.h>
 #include <pcb_textbox.h>
+#include <pcb_table.h>
 #include <pcb_shape.h>
 #include <pad.h>
 #include <zone.h>
@@ -45,6 +46,7 @@
 #include <pcb_dimension.h>
 #include <project_pcb.h>
 #include <dialogs/dialog_dimension_properties.h>
+#include <dialogs/dialog_table_properties.h>
 
 using namespace std::placeholders;
 
@@ -203,6 +205,15 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( BOARD_ITEM* aItem )
     case PCB_TEXTBOX_T:
         ShowTextBoxPropertiesDialog( static_cast<PCB_TEXTBOX*>( aItem ) );
         break;
+
+    case PCB_TABLE_T:
+    {
+        DIALOG_TABLE_PROPERTIES dlg( this, static_cast<PCB_TABLE*>( aItem ) );
+
+        //QuasiModal required for Scintilla auto-complete
+        dlg.ShowQuasiModal();
+        break;
+    }
 
     case PCB_SHAPE_T :
         ShowGraphicItemPropertiesDialog( static_cast<PCB_SHAPE*>( aItem ) );
