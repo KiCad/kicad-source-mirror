@@ -655,6 +655,9 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
         return true;
     }
 
+    int dist = 0;
+    int closest_dist = sqrt( closest_dist_sq );
+
     // Collide arc segments
     for( size_t i = 0; i < ArcCount(); i++ )
     {
@@ -663,8 +666,28 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
         // The arcs in the chain should have zero width
         wxASSERT_MSG( arc.GetWidth() == 0, wxT( "Invalid arc width - should be zero" ) );
 
-        if( arc.Collide( aSeg, aClearance, aActual, aLocation ) )
-            return true;
+        if( arc.Collide( aSeg, aClearance, aActual || aLocation ? &dist : nullptr,
+                         aLocation ? &nearest : nullptr ) )
+        {
+            if( !aActual )
+                return true;
+
+            if( dist < closest_dist )
+            {
+                closest_dist = dist;
+            }
+        }
+    }
+
+    if( closest_dist_sq == 0 || closest_dist_sq < clearance_sq )
+    {
+        if( aLocation )
+            *aLocation = nearest;
+
+        if( aActual )
+            *aActual = sqrt( closest_dist_sq );
+
+        return true;
     }
 
     return false;

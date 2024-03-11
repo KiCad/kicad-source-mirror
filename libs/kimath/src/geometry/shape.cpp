@@ -57,8 +57,19 @@ int SHAPE::GetClearance( const SHAPE* aOther ) const
     std::vector<const SHAPE*> a_shapes;
     std::vector<const SHAPE*> b_shapes;
 
-    GetIndexableSubshapes( a_shapes );
-    aOther->GetIndexableSubshapes( b_shapes );
+    /// POLY_SETs contain a bunch of polygons that are triangulated.
+    /// But there are way more triangles than necessary for collision detection.
+    /// Triangles check three vertices each but for the outline, we only need one.
+    /// These are also fractured, so we don't need to worry about holes
+    if( Type() == SHAPE_TYPE::SH_POLY_SET )
+        a_shapes.push_back( &static_cast<const SHAPE_POLY_SET*>( this )->COutline( 0 ) );
+    else
+        GetIndexableSubshapes( a_shapes );
+
+    if( aOther->Type() == SHAPE_TYPE::SH_POLY_SET )
+        b_shapes.push_back( &static_cast<const SHAPE_POLY_SET*>( aOther )->COutline( 0 ) );
+    else
+        aOther->GetIndexableSubshapes( b_shapes );
 
     if( GetIndexableSubshapeCount() == 0 )
         a_shapes.push_back( this );
