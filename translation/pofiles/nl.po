@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-09 10:01+0000\n"
+"PO-Revision-Date: 2024-03-12 05:01+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -47684,7 +47684,7 @@ msgstr "Alle rattennestlijnen verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:928
 msgid "Set Net Color"
-msgstr "Net-kleur instellen"
+msgstr "Netkleur instellen"
 
 #: pcbnew/widgets/appearance_controls.cpp:930
 msgid "Clear Net Color"
