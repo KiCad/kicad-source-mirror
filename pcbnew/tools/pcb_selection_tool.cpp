@@ -3501,7 +3501,8 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         for( BOARD_ITEM* item : preferred )
             aCollector.Append( item );
 
-        return;
+        if( preferred.size() == 1 )
+            return;
     }
 
     // Prefer exact hits to sloppy ones
@@ -3633,8 +3634,10 @@ void PCB_SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector
         }
 
         if( haveItemOnActive )
+        {
             for( BOARD_ITEM* item : rejected )
                 aCollector.Transfer( item );
+        }
     }
 }
 
