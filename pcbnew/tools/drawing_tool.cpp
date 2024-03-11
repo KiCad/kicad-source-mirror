@@ -1162,6 +1162,8 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
             }
             else
             {
+                m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
+
                 table->ClearFlags();
                 table->Normalize();
 
@@ -1170,8 +1172,6 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
                 // QuasiModal required for Scintilla auto-complete
                 if( dlg.ShowQuasiModal() == wxID_OK )
                 {
-                    m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
-
                     commit.Add( table, m_frame->GetScreen() );
                     commit.Push( _( "Draw Table" ) );
 

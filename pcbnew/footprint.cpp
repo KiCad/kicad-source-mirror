@@ -735,6 +735,7 @@ void FOOTPRINT::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectiv
     case PCB_DIM_ORTHOGONAL_T:
     case PCB_SHAPE_T:
     case PCB_TEXTBOX_T:
+    case PCB_TABLE_T:
     case PCB_REFERENCE_IMAGE_T:
         if( aMode == ADD_MODE::APPEND )
             m_drawings.push_back( aBoardItem );
@@ -1689,6 +1690,8 @@ INSPECT_RESULT FOOTPRINT::Visit( INSPECTOR inspector, void* testData,
         case PCB_DIM_ORTHOGONAL_T:
         case PCB_SHAPE_T:
         case PCB_TEXTBOX_T:
+        case PCB_TABLE_T:
+        case PCB_TABLECELL_T:
             if( !drawingsScanned )
             {
                 if( IterateForward<BOARD_ITEM*>( m_drawings, inspector, testData, aScanTypes )

@@ -174,6 +174,7 @@ void FOOTPRINT_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( PCB_ACTIONS::placeReferenceImage );
     placeMenu->Add( PCB_ACTIONS::placeText );
     placeMenu->Add( PCB_ACTIONS::drawTextBox );
+    placeMenu->Add( PCB_ACTIONS::drawTable );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( PCB_ACTIONS::drawAlignedDimension );

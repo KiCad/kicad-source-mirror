@@ -412,7 +412,15 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             GENERAL_COLLECTORS_GUIDE guide = getCollectorsGuide();
             GENERAL_COLLECTOR        collector;
 
-            collector.Collect( board(), { PCB_TABLECELL_T }, evt->DragOrigin(), guide );
+            if( m_isFootprintEditor )
+            {
+                collector.Collect( board()->GetFirstFootprint(), { PCB_TABLECELL_T },
+                                   evt->DragOrigin(), guide );
+            }
+            else
+            {
+                collector.Collect( board(), { PCB_TABLECELL_T }, evt->DragOrigin(), guide );
+            }
 
             if( collector.GetCount() )
             {
