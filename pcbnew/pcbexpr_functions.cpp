@@ -873,7 +873,10 @@ static void memberOfSheetFunc( LIBEVAL::CONTEXT* aCtx, void* self )
     result->SetDeferredEval(
             [item, arg]() -> double
             {
-                FOOTPRINT* fp = item->GetParentFootprint();
+                FOOTPRINT* fp = dyn_cast<FOOTPRINT*>( item );
+
+                if( !fp )
+                    fp = item->GetParentFootprint();
 
                 if( !fp )
                     return 0.0;
@@ -882,7 +885,7 @@ static void memberOfSheetFunc( LIBEVAL::CONTEXT* aCtx, void* self )
                     return 1.0;
 
                 if( ( arg->AsString().Matches( wxT( "/" ) ) || arg->AsString().IsEmpty() )
-                    && fp->GetSheetname().IsEmpty() )
+                    && fp->GetSheetname() == wxT( "Root" ) )
                 {
                     return 1.0;
                 }
