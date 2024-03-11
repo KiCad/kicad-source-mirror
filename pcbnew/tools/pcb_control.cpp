@@ -1591,18 +1591,15 @@ int PCB_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
                 msgItems.emplace_back( _( "Resolved clearance" ),
                                        m_frame->MessageTextFromValue( constraint.m_Value.Min() ) );
 
-                if( a->Type() != PCB_ZONE_T || b->Type() != PCB_ZONE_T )
+                std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( layer ) );
+                std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( layer ) );
+
+                int actual_clearance = a_shape->GetClearance( b_shape.get() );
+
+                if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
                 {
-                    std::shared_ptr<SHAPE> a_shape( a_conn->GetEffectiveShape( layer ) );
-                    std::shared_ptr<SHAPE> b_shape( b_conn->GetEffectiveShape( layer ) );
-
-                    int actual_clearance = a_shape->GetClearance( b_shape.get() );
-
-                    if( actual_clearance > -1 && actual_clearance < std::numeric_limits<int>::max() )
-                    {
-                        msgItems.emplace_back( _( "Actual clearance" ),
-                                            m_frame->MessageTextFromValue( actual_clearance ) );
-                    }
+                    msgItems.emplace_back( _( "Actual clearance" ),
+                                        m_frame->MessageTextFromValue( actual_clearance ) );
                 }
             }
         }

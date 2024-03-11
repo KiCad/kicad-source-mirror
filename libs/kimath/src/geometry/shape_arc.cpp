@@ -261,13 +261,18 @@ bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance, int* aActual, VECTOR2I
     candidatePts.push_back( aSeg.A );
     candidatePts.push_back( aSeg.B );
 
+    bool any_collides = false;
+
     for( const VECTOR2I& candidate : candidatePts )
     {
-        if( Collide( candidate, aClearance, aActual, aLocation ) )
+        bool collides = Collide( candidate, aClearance, aActual, aLocation );
+        any_collides |= collides;
+
+        if( collides && ( !aActual || *aActual == 0 ) )
             return true;
     }
 
-    return false;
+    return any_collides;
 }
 
 
