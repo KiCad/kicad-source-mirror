@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-09 10:02+0000\n"
-"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
+"PO-Revision-Date: 2024-03-12 05:01+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/master-source/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -4556,7 +4556,6 @@ msgid "Dash-Dot-Dot"
 msgstr "Traço-ponto-ponto"
 
 #: common/dialogs/panel_setup_netclasses.cpp:189
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
 msgstr "Defina a cor como transparente para usar a cor padrão do KiCad."
 
@@ -4625,9 +4624,8 @@ msgid "Schematic wire line style"
 msgstr "Estilo da linha do fio esquemático"
 
 #: common/dialogs/panel_setup_netclasses.cpp:624
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Define cor classe da rede"
+msgstr "Cor da netclass da PCI"
 
 #: common/dialogs/panel_setup_netclasses.cpp:677
 msgid "The default net class is required."
@@ -4681,9 +4679,8 @@ msgid "DP Gap"
 msgstr "Lacuna do DP"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "Cursor da PCI"
+msgstr "Cor da PCI"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4729,9 +4726,8 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "Defina a cor como transparente para usar a cor padrão do KiCad."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:98
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Sonde a partir dos esquemas"
+msgstr "Importar cores do esquema"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:115
 msgid "Netclass assignments:"
@@ -20916,14 +20912,12 @@ msgid "Export a symbol to a new library file"
 msgstr "Exportar um símbolo para um novo arquivo de biblioteca"
 
 #: eeschema/tools/ee_actions.cpp:249 pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Edita num editor de texto"
+msgstr "Editar num editor de texto..."
 
 #: eeschema/tools/ee_actions.cpp:250 pcbnew/tools/pcb_actions.cpp:774
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Abrir os arquivos num editor de texto"
+msgstr "Abrir um arquivo da biblioteca com um editor de texto"
 
 #: eeschema/tools/ee_actions.cpp:256
 msgid "Update Symbol Fields..."
@@ -22559,9 +22553,8 @@ msgstr "Nenhum símbolo da biblioteca foi selecionada."
 
 #: eeschema/tools/symbol_editor_control.cpp:277
 #: pcbnew/tools/footprint_editor_control.cpp:594
-#, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr "Nenhum editor de texto foi selecionado no KiCad.  Escolha um."
+msgstr "Nenhum editor de texto foi selecionado no KiCad. Escolha um."
 
 #: eeschema/tools/symbol_editor_control.cpp:351
 #: eeschema/widgets/panel_symbol_chooser.cpp:663
@@ -30983,9 +30976,8 @@ msgid "Ref point pos Y:"
 msgstr "Ponto de ref. pos. Y:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:327
-#, fuzzy
 msgid "Array Settings"
-msgstr "Configurações da camada"
+msgstr "Configurações da matriz"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:329
 msgid "Set center by position"
@@ -38971,9 +38963,8 @@ msgid "Skew between traces out of range"
 msgstr "Inclinação entre os traços fora do alcance"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Muitas vias numa conexão"
+msgstr "Muitas ou poucas vias numa conexão"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39667,14 +39658,13 @@ msgid "Too many vias on a connection"
 msgstr "Muitas vias numa conexão"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s contagem máxima %d; real %d)"
+msgstr "(%s contagem min %d; atual %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Muitas vias numa conexão"
+msgstr "Muito poucas vias numa conexão"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -48150,14 +48140,12 @@ msgid "Set Netclass Color"
 msgstr "Define cor classe da rede"
 
 #: pcbnew/widgets/appearance_controls.cpp:2340
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "Atualizaa a PCI a partir do esquema"
+msgstr "Usar cores do esquema"
 
 #: pcbnew/widgets/appearance_controls.cpp:2349
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "Limpar a cor da net"
+msgstr "Limpar a cor da netclass"
 
 #: pcbnew/widgets/appearance_controls.cpp:2357
 #, c-format
