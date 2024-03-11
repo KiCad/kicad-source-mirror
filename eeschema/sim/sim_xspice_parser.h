@@ -24,9 +24,9 @@
 #define SIM_XSPCIE_PARSER_H_
 
 #include "sim/sim_value.h"
-#include <tao/pegtl.hpp>
-#include <tao/pegtl/eol.hpp>
-#include <tao/pegtl/rules.hpp>
+#include <pegtl.hpp>
+#include <pegtl/eol.hpp>
+#include <pegtl/rules.hpp>
 
 namespace SIM_XSPICE_PARSER_GRAMMAR
 {

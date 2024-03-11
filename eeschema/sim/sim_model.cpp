@@ -1486,80 +1486,6 @@ template bool SIM_MODEL::InferSimModel<LIB_SYMBOL, LIB_FIELD>( LIB_SYMBOL& aSymb
 template <typename T_symbol, typename T_field>
 void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
 {
-<<<<<<< HEAD
-=======
-    T_field* existing_deviceField = aSymbol.FindField( SIM_DEVICE_FIELD );
-    T_field* existing_deviceSubtypeField = aSymbol.FindField( SIM_DEVICE_SUBTYPE_FIELD );
-    T_field* existing_pinsField = aSymbol.FindField( SIM_PINS_FIELD );
-    T_field* existing_paramsField = aSymbol.FindField( SIM_PARAMS_FIELD );
-
-    wxString existing_deviceSubtype;
-
-    if( existing_deviceSubtypeField )
-        existing_deviceSubtype = existing_deviceSubtypeField->GetShownText( false ).Upper();
-
-    if( existing_deviceField
-        || existing_deviceSubtypeField
-        || existing_pinsField
-        || existing_paramsField )
-    {
-        // Has a current (V7+) model field.
-
-        // Up until 7.0RC2 we used '+' and '-' for potentiometer pins, which doesn't match
-        // SPICE.  Here we remap them to 'r0' and 'r1'.
-        if( existing_deviceSubtype == wxS( "POT" ) )
-        {
-            if( existing_pinsField )
-            {
-                wxString pinMap = existing_pinsField->GetText();
-                pinMap.Replace( wxS( "=+" ), wxS( "=r1" ) );
-                pinMap.Replace( wxS( "=-" ), wxS( "=r0" ) );
-                existing_pinsField->SetText( pinMap );
-            }
-        }
-
-        // Up until 8.0RC1 random voltage/current sources were a bit of a mess.
-        if( existing_deviceSubtype.StartsWith( wxS( "RAND" ) ) )
-        {
-            // Re-fetch value without resolving references.  If it's an indirect value then we
-            // can't migrate it.
-            existing_deviceSubtype = existing_deviceSubtypeField->GetText().Upper();
-
-            if( existing_deviceSubtype.Replace( wxS( "NORMAL" ), wxS( "GAUSSIAN" ) ) )
-                existing_deviceSubtypeField->SetText( existing_deviceSubtype );
-
-            if( existing_paramsField )
-            {
-                wxString params = existing_paramsField->GetText().Lower();
-                size_t   count = 0;
-
-                // We used to support 'min' and 'max' instead of 'range' and 'offset', but we
-                // wrote all 4 to the netlist which would cause ngspice to barf, so no one has
-                // working documents with min and max specified.  Just delete them if they're
-                // uninitialized.
-                count += params.Replace( wxS( "min=0 " ), wxEmptyString );
-                count += params.Replace( wxS( "max=0 " ), wxEmptyString );
-
-                // We used to use 'dt', but the correct ngspice name is 'ts'.
-                count += params.Replace( wxS( "dt=" ), wxS( "ts=" ) );
-
-                if( count )
-                    existing_paramsField->SetText( params );
-            }
-        }
-
-        // Up until 8.0.1 we treated a mutual inductance statement as a type of inductor --
-        // which is confusing because it doesn't represent a device at all.
-        if( existing_deviceSubtype == wxS( "MUTUAL" ) )
-        {
-            aSymbol.RemoveField( existing_deviceSubtypeField );
-            existing_deviceField->SetText( "K" );
-        }
-
-        return;
-    }
-
->>>>>>> a529ae9e3d (Mutual Inductor isn't an inductor.)
     class FIELD_INFO
     {
     public:
@@ -1731,12 +1657,9 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
                        } );
         }
 
-<<<<<<< HEAD
         sourcePinsSorted = true;
     };
 
-=======
->>>>>>> a529ae9e3d (Mutual Inductor isn't an inductor.)
     FIELD_INFO deviceInfo;
     FIELD_INFO modelInfo;
     FIELD_INFO deviceSubtypeInfo;
@@ -1888,11 +1811,8 @@ void SIM_MODEL::MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject )
         model = model.BeforeFirst( ' ', &modelLineParams );
         modelInfo.m_Text = model;
 
-<<<<<<< HEAD
         lazySortSourcePins();
 
-=======
->>>>>>> a529ae9e3d (Mutual Inductor isn't an inductor.)
         SIM_LIBRARY::MODEL simModel = libMgr.CreateModel( lib, model.ToStdString(),
                                                           emptyFields, sourcePins, reporter );
 
