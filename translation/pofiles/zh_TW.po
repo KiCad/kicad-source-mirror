@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-07 22:55+0000\n"
+"PO-Revision-Date: 2024-03-12 05:01+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -30534,17 +30534,17 @@ msgstr "項目數量:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:455
 msgid "How many items in the array."
-msgstr "陣列中有多少個專案。"
+msgstr "陣列中有多少個項目。"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:462
 msgid "Rotate items:"
-msgstr "旋轉物件:"
+msgstr "旋轉項目:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:468
 msgid ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
-msgstr "旋轉項以及移動 - 多個選擇將被一起旋轉"
+msgstr "旋轉項目並移動它 - 多個選擇將一起旋轉"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:490
 msgid "Numbering Options"
@@ -30585,7 +30585,7 @@ msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first defined layer."
 msgstr ""
-"此專案位於不存在的圖層上。\n"
+"此項目位於不存在的圖層上。\n"
 "已被移動到第一個定義層。"
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:312
@@ -30972,7 +30972,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_drc_base.cpp:125
 #, c-format
 msgid "Unconnected Items (%s)"
-msgstr "未連線專案 (%s)"
+msgstr "未連接的項目 (%s)"
 
 #: pcbnew/dialogs/dialog_drc_base.cpp:140
 #, c-format
@@ -31101,7 +31101,7 @@ msgstr "新封裝的庫 ID："
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:97
 msgid "Remove text items which are not in library footprint"
-msgstr "刪除不在庫封裝中的文字專案"
+msgstr "刪除不在庫封裝中的文字項目"
 
 #: pcbnew/dialogs/dialog_exchange_footprints_base.cpp:102
 msgid "Update/reset text layers and visibilities"
@@ -31663,7 +31663,7 @@ msgstr "包含敷銅 (&Z)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.h:57
 msgid "Filter Selected Items"
-msgstr "過濾選中項"
+msgstr "過濾所選項目"
 
 #: pcbnew/dialogs/dialog_find.cpp:250
 msgid "Searching..."
@@ -31676,7 +31676,7 @@ msgstr "未找到 ’%s‘"
 
 #: pcbnew/dialogs/dialog_find.cpp:390
 msgid "No more items to show"
-msgstr "沒有更多可顯示的專案"
+msgstr "沒有更多可顯示的項目"
 
 #: pcbnew/dialogs/dialog_find.cpp:392
 msgid "No hits"
@@ -31714,7 +31714,7 @@ msgstr "搜尋封裝值"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:70
 msgid "Search other text items"
-msgstr "搜尋其他文字項"
+msgstr "搜尋其他文字項目"
 
 #: pcbnew/dialogs/dialog_find_base.cpp:74
 msgid "Search DRC markers"
@@ -31775,8 +31775,7 @@ msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
-msgstr ""
-"鎖定的封裝無法在畫布上自由移動和定位，並且只有當“已鎖定專案”複選框在選擇篩選"
+msgstr "鎖定的封裝無法在畫布上自由移動和定位，並且只有當“已鎖定項目”複選框在選擇篩選"
 "器中啟用時才能被選中。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:408
@@ -31819,7 +31818,7 @@ msgstr "編輯封裝屬性"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:55
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:98
 msgid "Text Items"
-msgstr "文字項"
+msgstr "文字項目"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:61
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:54
@@ -32542,7 +32541,7 @@ msgstr "位號："
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:35
 msgid "(specify multiple items separated by spaces for successive placement)"
-msgstr "（指定多個專案，並用空格隔開以進行連續放置）"
+msgstr "（指定多個項目，並用空格隔開以進行連續放置）"
 
 #: pcbnew/dialogs/dialog_get_footprint_by_name_base.cpp:39
 msgid "Available footprints:"
