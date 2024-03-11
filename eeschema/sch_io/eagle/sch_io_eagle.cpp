@@ -1839,9 +1839,10 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
 
     SCH_FIELD* valueField = symbol->GetField( VALUE_FIELD );
     bool       userValue = m_userValue.at( libIdSymbolName );
+
     valueField->SetVisible( part->GetFieldById( VALUE_FIELD )->IsVisible() );
 
-    if( userValue && epart->value )
+    if( !userValue && epart->value )
     {
         valueField->SetText( *epart->value );
     }
