@@ -2773,6 +2773,11 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         }
         else if( aItem->GetParentFootprint() )
         {
+            // Footprint text selections are only allowed in footprint editor mode.
+            // Careful, though: we also get here through the PCB_FIELD_T case.
+            if( aItem->Type() == PCB_TEXT_T && !checkVisibilityOnly )
+                return false;
+
             if( !view()->IsVisible( text ) )
                 return false;
 
