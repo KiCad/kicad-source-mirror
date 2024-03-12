@@ -56,6 +56,8 @@ public:
     /// Called when clicking on a item:
     int CrossProbe( const TOOL_EVENT& aEvent );
 
+    void CrossProbe( const SCH_MARKER* aMarker );
+
     int ExcludeMarker( const TOOL_EVENT& aEvent );
 
     int CheckSymbol( const TOOL_EVENT& aEvent );

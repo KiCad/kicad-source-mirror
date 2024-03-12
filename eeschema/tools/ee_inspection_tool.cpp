@@ -164,22 +164,35 @@ int EE_INSPECTION_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
         SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
         DIALOG_ERC* dlg = frame ? frame->GetErcDialog() : nullptr;
 
-        if( dlg )
-        {
-            if( !dlg->IsShownOnScreen() )
-            {
-                dlg->Show( true );
-                dlg->Raise();
-            }
-
+        if( dlg && dlg->IsShownOnScreen() )
             dlg->SelectMarker( static_cast<SCH_MARKER*>( selection.Front() ) );
-        }
     }
 
     // Show the item info on a left click on this item
     UpdateMessagePanel( aEvent );
 
     return 0;
+}
+
+
+void EE_INSPECTION_TOOL::CrossProbe( const SCH_MARKER* aMarker )
+{
+    SCH_EDIT_FRAME* frame = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
+
+    wxCHECK( frame, /* void */ );
+
+    DIALOG_ERC* dlg = frame->GetErcDialog();
+
+    if( dlg )
+    {
+        if( !dlg->IsShownOnScreen() )
+        {
+            dlg->Show( true );
+            dlg->Raise();
+        }
+
+        dlg->SelectMarker( aMarker );
+    }
 }
 
 

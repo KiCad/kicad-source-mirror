@@ -250,18 +250,13 @@ int DRC_TOOL::NextMarker( const TOOL_EVENT& aEvent )
 
 int DRC_TOOL::CrossProbe( const TOOL_EVENT& aEvent )
 {
-    if( m_drcDialog )
+    if( m_drcDialog && m_drcDialog->IsShownOnScreen() )
     {
         PCB_SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<PCB_SELECTION_TOOL>();
         PCB_SELECTION&      selection = selectionTool->GetSelection();
 
         if( selection.GetSize() == 1 && selection.Front()->Type() == PCB_MARKER_T )
-        {
-            if( !m_drcDialog->IsShownOnScreen() )
-                m_drcDialog->Show( true );
-
             m_drcDialog->SelectMarker( static_cast<PCB_MARKER*>( selection.Front() ) );
-        }
     }
 
     return 0;

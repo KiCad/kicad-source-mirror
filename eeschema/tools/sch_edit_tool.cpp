@@ -26,13 +26,21 @@
 #include <tool/picker_tool.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/ee_selection_tool.h>
+#include <tools/ee_inspection_tool.h>
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <ee_actions.h>
 #include <confirm.h>
 #include <string_utils.h>
+#include <sch_bitmap.h>
+#include <sch_bus_entry.h>
+#include <sch_commit.h>
+#include <sch_edit_frame.h>
 #include <sch_item.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_marker.h>
 #include <sch_symbol.h>
 #include <sch_shape.h>
 #include <sch_sheet.h>
@@ -41,12 +49,7 @@
 #include <sch_textbox.h>
 #include <sch_bitmap.h>
 #include <sch_view.h>
-#include <sch_line.h>
-#include <sch_bus_entry.h>
-#include <sch_junction.h>
-#include <sch_edit_frame.h>
 #include <schematic.h>
-#include <sch_commit.h>
 #include <drawing_sheet/ds_proxy_view_item.h>
 #include <eeschema_id.h>
 #include <dialogs/dialog_change_symbols.h>
@@ -1719,7 +1722,7 @@ int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
+    EE_SELECTION& selection = m_selectionTool->RequestSelection();
     bool          clearSelection = selection.IsHover();
 
     if( selection.Empty() )
@@ -2003,7 +2006,16 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         break;
 
-    case SCH_MARKER_T:        // These items have no properties to edit
+    case SCH_MARKER_T:
+        if( SELECTION_CONDITIONS::OnlyTypes( { SCH_MARKER_T } )( selection ) )
+        {
+            EE_INSPECTION_TOOL* inspectionTool = m_toolMgr->GetTool<EE_INSPECTION_TOOL>();
+
+            if( inspectionTool )
+                inspectionTool->CrossProbe( static_cast<SCH_MARKER*> ( selection.Front() ) );
+        }
+        break;
+
     case SCH_NO_CONNECT_T:
         break;
 
