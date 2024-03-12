@@ -47,6 +47,7 @@
 
 DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo ) :
         DIALOG_ABOUT_BASE( aParent ),
+        m_images( nullptr ),
         m_info( aAppInfo )
 {
     wxASSERT( aParent != nullptr );
@@ -122,6 +123,9 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo ) 
 
 DIALOG_ABOUT::~DIALOG_ABOUT()
 {
+#ifndef __WXMAC__
+    delete m_images;
+#endif
 }
 
 

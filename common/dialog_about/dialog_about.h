@@ -80,6 +80,7 @@ private:
     wxStaticBitmap*  createStaticBitmap( wxScrolledWindow* aParent, wxBitmap* icon );
 
 private:
+    wxImageList*    m_images;
     wxString        m_titleName;
     wxString        m_untranslatedTitleName;
 
