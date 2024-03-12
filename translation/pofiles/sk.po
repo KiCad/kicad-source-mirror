@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-09 10:02+0000\n"
-"Last-Translator: Marcel Hecko <marcel.hecko@moirelabs.com>\n"
+"PO-Revision-Date: 2024-03-12 19:01+0000\n"
+"Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v8/sk/>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -413,7 +413,7 @@ msgstr "Základný pohľad"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Prekresliť na základnej pozícii a priblížiť"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -604,7 +604,7 @@ msgstr "Zobraziť spájkovaciu pastu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "F.Silkscreen"
-msgstr ""
+msgstr "F.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:60
 msgid "Show front silkscreen"
@@ -612,7 +612,7 @@ msgstr "Zobraziť predný popis"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "B.Silkscreen"
-msgstr ""
+msgstr "B.Silkscreen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:61
 msgid "Show back silkscreen"
@@ -707,7 +707,7 @@ msgstr "Zobraziť hodnoty puzdier"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:337
 msgid "References"
-msgstr "Referencia"
+msgstr "Referencie"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:77
 #: pcbnew/widgets/appearance_controls.cpp:337
@@ -765,7 +765,7 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through presets in the "
 "popup."
 msgstr ""
-"Ulož a obnov farby a nastavenie viditeľnosti.\n"
+"Uložiť a obnoviť farby a nastavenie viditeľnosti.\n"
 "Použiť %s+Tab pre aktiváciu.\n"
 "Nasledujúce okná sa budú cyklicky zobrazovať kým je aktívny %s."
 
@@ -777,7 +777,7 @@ msgid ""
 "Successive Tabs while holding %s down will cycle through viewports in the "
 "popup."
 msgstr ""
-"Ulož a obnov pozíciu kamery a priblíženie.\n"
+"Uložiť a obnoviť pozíciu kamery a priblíženie.\n"
 "Použiť %s+Tab pre aktiváciu.\n"
 "Nasledujúce okná sa budú cyklicky zobrazovať kým je aktívny %s."
 
@@ -1065,7 +1065,7 @@ msgstr "Zakázať prekovy"
 
 #: 3d-viewer/dialogs/panel_3D_opengl_options_base.cpp:94
 msgid "Disable holes"
-msgstr "Zakážte otvory"
+msgstr "Zakázať otvory"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:27
 msgid "Procedural textures (slow)"
@@ -1096,7 +1096,6 @@ msgid "Spread Factor %"
 msgstr "Faktor rozpätia%"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:62
-#, fuzzy
 msgid "Recursion Level"
 msgstr "Úroveň rekurzie"
 
@@ -1315,7 +1314,6 @@ msgid "KiCad Image Converter"
 msgstr "KiCad prevod obrázkov"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
-#, fuzzy
 msgid "Image files"
 msgstr "Súbory obrázkov"
 
@@ -1341,7 +1339,7 @@ msgstr "Zvoľte obrázok"
 #: eeschema/tools/sch_drawing_tools.cpp:655
 #: pagelayout_editor/pl_editor_frame.cpp:866 pcbnew/tools/drawing_tool.cpp:672
 msgid "Image Files"
-msgstr "Súbory obrázkov"
+msgstr "Súbory Obrázkov"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
 msgid "Create Drawing Sheet File"
@@ -1637,7 +1635,7 @@ msgstr "Čierna / biela prahová hodnota:"
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
-msgstr "Úpravou úrovne preveďte obrázok v odtieňoch sivej na čiernobiely."
+msgstr "Úpravou úrovne previesť obrázok v odtieňoch sivej na čiernobiely."
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:152
 #: gerbview/gerber_file_image.cpp:357
@@ -1664,11 +1662,11 @@ msgstr "Horná vrstva Fab"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer drawings"
-msgstr "Užívateľská kresba"
+msgstr "Používateľská kresba"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer comments"
-msgstr "Užívateľská kresba komentáre"
+msgstr "Používateľská vrstva komentáre"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:160
 msgid "User layer Eco1"
@@ -2258,11 +2256,11 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"Zadajte názov a hodnotu pre každú premennú prostredia. Šedé položky sú "
-"názvy, ktoré boli definované externe na úrovni systému alebo používateľa. "
-"Premenné prostredia definované na systémovej alebo užívateľskej úrovni majú "
-"prednosť pred tými, ktoré sú definované v tejto tabuľke. To znamená, že "
-"hodnoty v tejto tabuľke sú ignorované."
+"Zadať názov a hodnotu pre každú premennú prostredia. Šedé položky sú názvy, "
+"ktoré boli definované externe na úrovni systému alebo používateľa. Premenné "
+"prostredia definované na systémovej alebo užívateľskej úrovni majú prednosť "
+"pred tými, ktoré sú definované v tejto tabuľke. To znamená, že hodnoty v "
+"tejto tabuľke sú ignorované."
 
 #: common/dialogs/dialog_configure_paths.cpp:404
 msgid ""
@@ -2365,8 +2363,8 @@ msgstr "Kopírovať vlastnú globálnu tabuľku %s knižníc"
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Vyberte túto možnosť, aby ste skopírovali iný súbor tabuľky knižnice %s, ako "
-"je predvolený"
+"Vybrať túto možnosť, aby sa skopíroval iný súbor tabuľky knižnice %s, ako je "
+"predvolený"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
@@ -2378,7 +2376,7 @@ msgstr "Vytvoriť prázdnu globálnu tabuľku knižníc %s"
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
-"Vyberte túto možnosť, ak chcete definovať %s knižníc v tabuľkách knižníc "
+"Vybrať túto možnosť, aby sa definovali %s knižnice v tabuľkách knižníc "
 "špecifických pre projekt"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:69
@@ -2584,6 +2582,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
+"Tento projektový súbor obsahuje viacero kombinácií DPS+schém.\n"
+"Vybrať ktoré z nich sa majú importovať do KiCad-u."
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 msgid "Choose Project to Import"
@@ -2655,7 +2655,7 @@ msgstr "Import nastavení z predchádzajúcej verzie (žiadna sa nenašla)"
 
 #: common/dialogs/dialog_migrate_settings.cpp:138
 msgid "Select Settings Path"
-msgstr "Vyberte cestu k nastaveniu"
+msgstr "Vybrať cestu k nastaveniu"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:32
 msgid "How would you like to configure KiCad?"
@@ -2695,27 +2695,27 @@ msgstr "Nakonfigurovať cesty nastavenia KiCad-u"
 
 #: common/dialogs/dialog_page_settings.cpp:59
 msgid "A5 148x210mm"
-msgstr "A5 148x210mm"
+msgstr "A5 148x210 mm"
 
 #: common/dialogs/dialog_page_settings.cpp:60
 msgid "A4 210x297mm"
-msgstr "A4 210x297mm"
+msgstr "A4 210x297 mm"
 
 #: common/dialogs/dialog_page_settings.cpp:61
 msgid "A3 297x420mm"
-msgstr "A3 297x420mm"
+msgstr "A3 297x420 mm"
 
 #: common/dialogs/dialog_page_settings.cpp:62
 msgid "A2 420x594mm"
-msgstr "A2 420x594mm"
+msgstr "A2 420x594 mm"
 
 #: common/dialogs/dialog_page_settings.cpp:63
 msgid "A1 594x841mm"
-msgstr "A1 594x841mm"
+msgstr "A1 594x841 mm"
 
 #: common/dialogs/dialog_page_settings.cpp:64
 msgid "A0 841x1189mm"
-msgstr "A0 841x1189mm"
+msgstr "A0 841x1189 mm"
 
 #: common/dialogs/dialog_page_settings.cpp:65
 msgid "A 8.5x11in"
@@ -3255,7 +3255,7 @@ msgstr "Dostupné:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:39
 msgid "Enabled:"
-msgstr "Povoliť:"
+msgstr "Povolené:"
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:51
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:59
@@ -3338,7 +3338,7 @@ msgstr "Heslo"
 
 #: common/dialogs/git/dialog_git_commit.cpp:41
 msgid "Commit Changes"
-msgstr "Odoslať zmeny"
+msgstr "Commit-núť zmeny"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 msgid "Filename"
@@ -3369,7 +3369,7 @@ msgstr "Odstránené"
 
 #: common/dialogs/git/dialog_git_commit.cpp:124
 msgid "Commit Message:"
-msgstr "Správa comitu:"
+msgstr "Správa commit-u:"
 
 #: common/dialogs/git/dialog_git_commit.cpp:131
 msgid "Author:"
@@ -3381,7 +3381,7 @@ msgstr "Vykonať"
 
 #: common/dialogs/git/dialog_git_commit.cpp:169
 msgid "Commit message cannot be empty"
-msgstr "Správa comitu nemôže byť prázdna"
+msgstr "Správa commit-u nemôže byť prázdna"
 
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:382
@@ -3488,7 +3488,7 @@ msgstr "Vetva"
 
 #: common/dialogs/git/dialog_git_switch.cpp:54
 msgid "Last Commit"
-msgstr "Posledný comit"
+msgstr "Posledný commit"
 
 #: common/dialogs/git/dialog_git_switch.cpp:55
 msgid "Last Updated"
@@ -3507,7 +3507,7 @@ msgstr "Pridať"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:23
 msgid "Git Commit Data"
-msgstr ""
+msgstr "Git dáta commit-u"
 
 #: common/dialogs/git/panel_git_repos_base.cpp:33
 msgid "Use default values"
@@ -7100,7 +7100,7 @@ msgstr "Chyba rozbalovania súboru!"
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:153
 #, c-format
 msgid "Failed to create file '%s'."
-msgstr "Nepodarilo sa vytvoriť súbor '%s'"
+msgstr "Nepodarilo sa vytvoriť súbor '%s'."
 
 #: common/project/project_archiver.cpp:233
 #, c-format
@@ -7110,7 +7110,7 @@ msgstr "Súbor archívu \"%s\"."
 #: common/project/project_archiver.cpp:243
 #, c-format
 msgid "Failed to archive file '%s'."
-msgstr "Zlyhalo zálohovanie súboru \"%s\"."
+msgstr "Zlyhalo zálohovanie súboru '%s'."
 
 #: common/project/project_archiver.cpp:269
 #, c-format
@@ -17290,9 +17290,9 @@ msgstr "Soubory EasyEDA (JLCEDA) Std"
 
 #: eeschema/sch_io/easyedapro/sch_easyedapro_parser.cpp:72
 #: pcbnew/pcb_io/easyedapro/pcb_io_easyedapro_parser.cpp:73
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse value: '%s'"
-msgstr "Zlyhalo zálohovanie súboru \"%s\"."
+msgstr "Nepodarilo sa spracovať hodnotu %s."
 
 #: eeschema/sch_io/http_lib/sch_io_http_lib.cpp:59
 msgid "httplib plugin missing library table handle!"
@@ -18904,9 +18904,8 @@ msgid "Line exceeds maximum length."
 msgstr ""
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1051
-#, fuzzy
 msgid "Failed to read a double."
-msgstr "Nepodarilo sa vytvoriť súbor '%s'"
+msgstr "Nepodarilo sa prečíťať double."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:1057
 #: eeschema/sim/kibis/ibis_parser.cpp:1101
@@ -25746,13 +25745,12 @@ msgid "Initialize a new repository"
 msgstr "Nemožno otvoriť %s"
 
 #: kicad/project_tree_pane.cpp:939
-#, fuzzy
 msgid "Commit Project..."
-msgstr "Projekt:"
+msgstr "Commit-núť Projekt..."
 
 #: kicad/project_tree_pane.cpp:940 kicad/project_tree_pane.cpp:954
 msgid "Commit changes to the local repository"
-msgstr ""
+msgstr "Commit-núť zmeny do lokálneho repozitára"
 
 #: kicad/project_tree_pane.cpp:943
 msgid "Push"
@@ -25835,9 +25833,8 @@ msgid "Set default remote"
 msgstr "Použiť predvolené meno siete"
 
 #: kicad/project_tree_pane.cpp:1626
-#, fuzzy
 msgid "Failed to set default remote."
-msgstr "Nepodarilo sa vytvoriť súbor '%s'"
+msgstr "Nepodarilo sa nastaviť prednastavený remote."
 
 #: kicad/project_tree_pane.cpp:1643 kicad/project_tree_pane.cpp:1682
 #: kicad/project_tree_pane.cpp:1704
@@ -25899,9 +25896,9 @@ msgid "Failed to add file to index: %s"
 msgstr "Nepodarilo sa vymazať '%s'"
 
 #: kicad/project_tree_pane.cpp:2187
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to write index: %s"
-msgstr "Nepodarilo sa vytvoriť súbor '%s'"
+msgstr "Nepodarilo sa zapísať index: %s"
 
 #: kicad/project_tree_pane.cpp:2194
 #, fuzzy, c-format
@@ -25929,9 +25926,9 @@ msgid "Failed to create author signature: %s"
 msgstr "Nepodarilo sa vytvoriť dočasný súbor '%s'"
 
 #: kicad/project_tree_pane.cpp:2244
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create commit: %s"
-msgstr "Nepodarilo sa vytvoriť súbor '%s'"
+msgstr "Nepodarilo sa vytvoriť commit: %s"
 
 #: kicad/tools/kicad_manager_actions.cpp:43
 msgid "New Project..."
@@ -32241,9 +32238,9 @@ msgstr "Naozaj chcete prepísať existujúci súbor?"
 
 #: pcbnew/dialogs/dialog_export_vrml.cpp:268
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1623
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to create folder '%s'."
-msgstr "Nepodarilo sa vytvoriť súbor '%s'"
+msgstr "Nepodarilo sa vytvoriť adresár '%s'."
 
 #: pcbnew/dialogs/dialog_export_vrml_base.cpp:26
 msgid "Save VRML Board File"
@@ -34767,16 +34764,15 @@ msgstr "Pripojenie plôšky:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
 msgid "From parent footprint"
-msgstr "Z materskej stopy"
+msgstr "Z rodičovského puzdra"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:845
 msgid "Zone knockout:"
 msgstr "Vyřazení zóny:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:849
-#, fuzzy
 msgid "Pad shape"
-msgstr "Tvar podložky:"
+msgstr "Tvar plôšky"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:849
 #, fuzzy
@@ -34794,20 +34790,17 @@ msgid "Relief gap:"
 msgstr "Medzera pre tepelnú úľavu:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:881
-#, fuzzy
 msgid "Spoke width:"
-msgstr "Šírka lúča"
+msgstr "Šírka paprsku:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:892
-#, fuzzy
 msgid "Spoke angle:"
-msgstr "Uhol oblúka:"
+msgstr "Uhol paprsku:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:928
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:1056
-#, fuzzy
 msgid "Clearance Overrides"
-msgstr "Obrysy klírensu"
+msgstr "Izolačná medzera Prepísanie"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:931
 msgid "Set values to 0 to use parent footprint or netclass values."
@@ -34878,9 +34871,8 @@ msgid "Preview pad in sketch mode"
 msgstr "Ukážka podložky v režime náčrtu"
 
 #: pcbnew/dialogs/dialog_plot.cpp:141
-#, fuzzy
 msgid "Plot on All Layers"
-msgstr "Vykresliť všetky strany"
+msgstr "Kresliť na všetky vrstvy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:170
 #, fuzzy
@@ -34902,9 +34894,8 @@ msgid "Select Fab Layers"
 msgstr "Vybrať výrobné vrstvy"
 
 #: pcbnew/dialogs/dialog_plot.cpp:477
-#, fuzzy
 msgid "Select All Copper Layers"
-msgstr "Vybrať všetky medené vrstvy"
+msgstr "Vybrať všetky vrstvy medi"
 
 #: pcbnew/dialogs/dialog_plot.cpp:478
 #, fuzzy
