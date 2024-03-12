@@ -27,6 +27,7 @@
 #include <kiplatform/ui.h>
 #include <widgets/wx_grid.h>
 #include <board.h>
+#include <magic_enum.hpp>
 #include "dialog_swap_layers.h"
 
 
@@ -67,7 +68,8 @@ public:
 };
 
 
-DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray ) :
+DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent,
+                                        std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aArray ) :
     DIALOG_SWAP_LAYERS_BASE( aParent ),
     m_parent( aParent ),
     m_layerDestinations( aArray )
@@ -133,10 +135,20 @@ bool DIALOG_SWAP_LAYERS::TransferDataFromWindow()
 
     for( size_t layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
+        std::optional<PCB_LAYER_ID> src = magic_enum::enum_cast<PCB_LAYER_ID>( layer );
+        wxCHECK2( src.has_value(), continue );
+
         if( enabledCopperLayers.test( layer ) )
-            m_layerDestinations[ layer ] = (PCB_LAYER_ID) table->GetValueAsLong( row++, 1 );
+        {
+            std::optional<PCB_LAYER_ID> dest =
+                    magic_enum::enum_cast<PCB_LAYER_ID>( table->GetValueAsLong( row++, 1 ) );
+            wxCHECK2( dest.has_value(),  m_layerDestinations[ *src ] = *dest );
+            m_layerDestinations[ *src ] = *dest;
+        }
         else
-            m_layerDestinations[ layer ] = (PCB_LAYER_ID) layer;
+        {
+            m_layerDestinations[ *src ] = *src;
+        }
     }
 
     return true;

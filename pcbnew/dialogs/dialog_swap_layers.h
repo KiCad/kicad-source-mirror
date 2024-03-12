@@ -33,7 +33,8 @@ class LAYER_GRID_TABLE;
 class DIALOG_SWAP_LAYERS : public DIALOG_SWAP_LAYERS_BASE
 {
 public:
-    DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray );
+    DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent,
+                        std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aArray );
     ~DIALOG_SWAP_LAYERS() override;
 
 private:
@@ -45,7 +46,7 @@ private:
     void adjustGridColumns();
 
     PCB_BASE_EDIT_FRAME* m_parent;
-    PCB_LAYER_ID*        m_layerDestinations;
+    std::map<PCB_LAYER_ID, PCB_LAYER_ID>& m_layerDestinations;
 
     LAYER_GRID_TABLE*    m_gridTable;
 };
