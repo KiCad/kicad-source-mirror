@@ -164,8 +164,9 @@ namespace KIPLATFORM
          * Required to make the infinite mouse-drag work with fast movement.
          * See https://gitlab.com/kicad/code/kicad/-/issues/7207#note_1562089503
          * @param aWindow Window in which to position to mouse cursor
+         * @return true if infinite panning is supported
          */
-        void InfiniteDragPrepareWindow( wxWindow* aWindow );
+        bool InfiniteDragPrepareWindow( wxWindow* aWindow );
 
         /**
          * On Wayland, allows the cursor to freely move again after a drag (see `InfiniteDragPrepareWindow`).

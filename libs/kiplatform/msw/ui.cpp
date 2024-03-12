@@ -184,9 +184,9 @@ void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
 }
 
 
-void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
+bool KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 {
-    // Not needed on this platform
+    return true;
 }
 
 
