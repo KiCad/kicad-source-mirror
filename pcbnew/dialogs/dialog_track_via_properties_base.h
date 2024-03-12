@@ -71,7 +71,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_TrackEndYLabel;
 		wxTextCtrl* m_TrackEndYCtrl;
 		wxStaticText* m_TrackEndYUnit;
-		wxCheckBox* m_trackDesignRules;
 		wxStaticText* m_predefinedTrackWidthsLabel;
 		wxChoice* m_predefinedTrackWidthsCtrl;
 		wxStaticText* m_predefinedTrackWidthsUnits;
@@ -86,7 +85,6 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_ViaYLabel;
 		wxTextCtrl* m_ViaYCtrl;
 		wxStaticText* m_ViaYUnit;
-		wxCheckBox* m_viaDesignRules;
 		wxStaticText* m_predefinedViaSizesLabel;
 		wxChoice* m_predefinedViaSizesCtrl;
 		wxStaticText* m_predefinedViaSizesUnits;
@@ -135,10 +133,8 @@ class DIALOG_TRACK_VIA_PROPERTIES_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onViaNotFreeClicked( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onTrackNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onWidthSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onWidthEdit( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onViaNetclassCheck( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaSelect( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onViaEdit( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTeardropsUpdateUi( wxUpdateUIEvent& event ) { event.Skip(); }
