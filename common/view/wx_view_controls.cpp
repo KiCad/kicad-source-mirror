@@ -81,7 +81,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, EDA_DRAW_PANEL_GAL* aParentPane
         m_lastTimestamp( 0 ),
 #endif
         m_cursorPos( 0, 0 ),
-        m_updateCursor( true )
+        m_updateCursor( true ),
+        m_infinitePanWorks( false )
 {
     LoadSettings();
 
@@ -276,7 +277,8 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
             {
                 if( !justWarped )
                 {
-                    if( KIPLATFORM::UI::WarpPointer( m_parentPanel, x + warpX, y + warpY ) )
+                    if( m_infinitePanWorks
+                        && KIPLATFORM::UI::WarpPointer( m_parentPanel, x + warpX, y + warpY ) )
                     {
                         m_dragStartPoint += VECTOR2D( warpX, warpY );
                         justWarped = true;
@@ -452,7 +454,7 @@ void WX_VIEW_CONTROLS::onButton( wxMouseEvent& aEvent )
         {
             m_dragStartPoint = VECTOR2D( aEvent.GetX(), aEvent.GetY() );
             setState( DRAG_PANNING );
-            KIPLATFORM::UI::InfiniteDragPrepareWindow( m_parentPanel );
+            m_infinitePanWorks = KIPLATFORM::UI::InfiniteDragPrepareWindow( m_parentPanel );
 
 #if defined USE_MOUSE_CAPTURE
             if( !m_parentPanel->HasCapture() )

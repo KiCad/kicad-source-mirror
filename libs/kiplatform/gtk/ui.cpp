@@ -513,48 +513,54 @@ static bool wayland_warp_pointer( GtkWidget* aWidget, GdkDisplay* aDisplay, GdkW
 }
 
 
-void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
+bool KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 {
     wxLogTrace( traceWayland, wxS( "InfiniteDragPrepareWindow" ) );
-
-    if( s_wl_confined_pointer != NULL )
-    {
-        KIPLATFORM::UI::InfiniteDragReleaseWindow();
-    }
 
     GtkWidget*  widget = static_cast<GtkWidget*>( aWindow->GetHandle() );
     GdkDisplay* disp = gtk_widget_get_display( widget );
 
-    if( !GDK_IS_WAYLAND_DISPLAY( disp ) )
+    if( GDK_IS_WAYLAND_DISPLAY( disp ) )
     {
-        return;
+        if( s_wl_confined_pointer != NULL )
+        {
+            KIPLATFORM::UI::InfiniteDragReleaseWindow();
+        }
+
+        GdkSeat*   seat = gdk_display_get_default_seat( disp );
+        GdkDevice* ptrdev = gdk_seat_get_pointer( seat );
+        GdkWindow* win = aWindow->GTKGetDrawingWindow();
+
+        wl_display* wldisp = gdk_wayland_display_get_wl_display( disp );
+        wl_surface* wlsurf = gdk_wayland_window_get_wl_surface( win );
+        wl_pointer* wlptr = gdk_wayland_device_get_wl_pointer( ptrdev );
+
+        initialize_wayland( wldisp );
+
+        gint x, y, width, height;
+        gdk_window_get_geometry( gdk_window_get_toplevel( win ), &x, &y, &width, &height );
+
+        wxLogTrace( traceWayland, wxS( "Confine region: %d %d %d %d" ), x, y, width, height );
+
+        s_wl_confinement_region = wl_compositor_create_region( s_wl_compositor );
+        wl_region_add( s_wl_confinement_region, x, y, width, height );
+
+        s_wl_confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
+                s_wl_pointer_constraints, wlsurf, wlptr, s_wl_confinement_region,
+                ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
+
+        zwp_confined_pointer_v1_add_listener( s_wl_confined_pointer, &confined_pointer_listener,
+                                              NULL );
+
+        wl_display_roundtrip( wldisp );
+    }
+    else if( wxGetEnv( wxT( "WAYLAND_DISPLAY" ), nullptr ) )
+    {
+        // Not working under XWayland
+        return false;
     }
 
-    GdkSeat*   seat = gdk_display_get_default_seat( disp );
-    GdkDevice* ptrdev = gdk_seat_get_pointer( seat );
-    GdkWindow* win = aWindow->GTKGetDrawingWindow();
-
-    wl_display* wldisp = gdk_wayland_display_get_wl_display( disp );
-    wl_surface* wlsurf = gdk_wayland_window_get_wl_surface( win );
-    wl_pointer* wlptr = gdk_wayland_device_get_wl_pointer( ptrdev );
-
-    initialize_wayland( wldisp );
-
-    gint x, y, width, height;
-    gdk_window_get_geometry( gdk_window_get_toplevel( win ), &x, &y, &width, &height );
-
-    wxLogTrace( traceWayland, wxS( "Confine region: %d %d %d %d" ), x, y, width, height );
-
-    s_wl_confinement_region = wl_compositor_create_region( s_wl_compositor );
-    wl_region_add( s_wl_confinement_region, x, y, width, height );
-
-    s_wl_confined_pointer = zwp_pointer_constraints_v1_confine_pointer(
-            s_wl_pointer_constraints, wlsurf, wlptr, s_wl_confinement_region,
-            ZWP_POINTER_CONSTRAINTS_V1_LIFETIME_ONESHOT );
-
-    zwp_confined_pointer_v1_add_listener(s_wl_confined_pointer, &confined_pointer_listener, NULL);
-
-    wl_display_roundtrip( wldisp );
+    return true;
 };
 
 
@@ -579,9 +585,10 @@ void KIPLATFORM::UI::InfiniteDragReleaseWindow()
 #else // No Wayland support
 
 
-void KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
+bool KIPLATFORM::UI::InfiniteDragPrepareWindow( wxWindow* aWindow )
 {
-    // Not needed on X11
+    // Not working under XWayland
+    return !wxGetEnv( wxT( "WAYLAND_DISPLAY" ), nullptr );
 };
 
 

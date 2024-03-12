@@ -200,6 +200,9 @@ private:
     ///< Flag deciding whether the cursor position should be calculated using the mouse position.
     bool        m_updateCursor;
 
+    ///< Flag to indicate if infinite panning works on this platform.
+    bool m_infinitePanWorks;
+
     ///< A #ZOOM_CONTROLLER that determines zoom steps. This is platform-specific.
     std::unique_ptr<ZOOM_CONTROLLER> m_zoomController;
 };
