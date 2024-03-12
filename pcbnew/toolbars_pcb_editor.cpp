@@ -525,7 +525,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
         m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
                                            wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
-    UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
+    UpdateTrackWidthSelectBox( m_SelTrackWidthBox, true, true );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
     m_SelTrackWidthBox->SetToolTip( _( "Select the default width for new tracks. Note that this "
                                        "width can be overridden by the board minimum width, or by "
@@ -546,7 +546,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
         m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar, ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                                         wxDefaultPosition, wxDefaultSize, 0, nullptr );
 
-    UpdateViaSizeSelectBox( m_SelViaSizeBox );
+    UpdateViaSizeSelectBox( m_SelViaSizeBox, true, true );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
 
     m_auxiliaryToolBar->AddScaledSeparator( this );
@@ -641,7 +641,8 @@ static wxString ComboBoxUnits( EDA_UNITS aUnits, double aValue, bool aIncludeLab
 }
 
 
-void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aEdit )
+void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, bool aShowNetclass,
+                                                bool aShowEdit )
 {
     if( aTrackWidthSelectBox == nullptr )
         return;
@@ -655,7 +656,8 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
 
     aTrackWidthSelectBox->Clear();
 
-    aTrackWidthSelectBox->Append( _( "Track: use netclass width" ) );
+    if( aShowNetclass )
+        aTrackWidthSelectBox->Append( _( "Track: use netclass width" ) );
 
     for( unsigned ii = 1; ii < GetDesignSettings().m_TrackWidthList.size(); ii++ )
     {
@@ -667,7 +669,7 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
         aTrackWidthSelectBox->Append( msg );
     }
 
-    if( aEdit )
+    if( aShowEdit )
     {
         aTrackWidthSelectBox->Append( wxT( "---" ) );
         aTrackWidthSelectBox->Append( _( "Edit Pre-defined Sizes..." ) );
@@ -680,7 +682,8 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, 
 }
 
 
-void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aEdit )
+void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool aShowNetclass,
+                                             bool aShowEdit )
 {
     if( aViaSizeSelectBox == nullptr )
         return;
@@ -707,7 +710,8 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
             secondaryUnit = EDA_UNITS::MILS;
     }
 
-    aViaSizeSelectBox->Append( _( "Via: use netclass sizes" ) );
+    if( aShowNetclass )
+        aViaSizeSelectBox->Append( _( "Via: use netclass sizes" ) );
 
     for( unsigned ii = 1; ii < GetDesignSettings().m_ViasDimensionsList.size(); ii++ )
     {
@@ -735,7 +739,7 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, bool a
         aViaSizeSelectBox->Append( msg );
     }
 
-    if( aEdit )
+    if( aShowEdit )
     {
         aViaSizeSelectBox->Append( wxT( "---" ) );
         aViaSizeSelectBox->Append( _( "Edit Pre-defined Sizes..." ) );

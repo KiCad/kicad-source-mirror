@@ -130,9 +130,9 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
 
     buildFilterLists();
 
-    m_parent->UpdateTrackWidthSelectBox( m_trackWidthCtrl, false );
+    m_parent->UpdateTrackWidthSelectBox( m_trackWidthCtrl, false, false );
     m_trackWidthCtrl->Append( INDETERMINATE_ACTION );
-    m_parent->UpdateViaSizeSelectBox( m_viaSizesCtrl, false );
+    m_parent->UpdateViaSizeSelectBox( m_viaSizesCtrl, false, false );
     m_viaSizesCtrl->Append( INDETERMINATE_ACTION );
 
     m_layerCtrl->SetBoardFrame( m_parent );
@@ -184,9 +184,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::onUnitsChanged( wxCommandEvent& aEvent 
     int trackSel = m_trackWidthCtrl->GetSelection();
     int viaSel = m_viaSizesCtrl->GetSelection();
 
-    m_parent->UpdateTrackWidthSelectBox( m_trackWidthCtrl, false );
+    m_parent->UpdateTrackWidthSelectBox( m_trackWidthCtrl, false, false );
     m_trackWidthCtrl->Append( INDETERMINATE_ACTION );
-    m_parent->UpdateViaSizeSelectBox( m_viaSizesCtrl, false );
+    m_parent->UpdateViaSizeSelectBox( m_viaSizesCtrl, false, false );
     m_viaSizesCtrl->Append( INDETERMINATE_ACTION );
 
     m_trackWidthCtrl->SetSelection( trackSel );
@@ -317,7 +317,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
             int trackWidthIndex = m_trackWidthCtrl->GetSelection();
 
             if( trackWidthIndex >= 0 )
-                brdSettings.SetTrackWidthIndex( static_cast<unsigned>( trackWidthIndex ) );
+                brdSettings.SetTrackWidthIndex( static_cast<unsigned>( trackWidthIndex + 1 ) );
 
             m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
 
@@ -329,7 +329,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
             int          viaSizeIndex = m_viaSizesCtrl->GetSelection();
 
             if( viaSizeIndex >= 0 )
-                brdSettings.SetViaSizeIndex( static_cast<unsigned>( viaSizeIndex ) );
+                brdSettings.SetViaSizeIndex( static_cast<unsigned>( viaSizeIndex + 1 ) );
 
             m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
 
