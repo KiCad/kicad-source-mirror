@@ -185,7 +185,11 @@ void ANTIALIASING_SUPERSAMPLING::Present()
     glBindTexture( GL_TEXTURE_2D, compositor->GetBufferTexture( ssaaMainBuffer ) );
     compositor->SetBuffer( OPENGL_COMPOSITOR::DIRECT_RENDERING );
 
+    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE );
+
     draw_fullscreen_primitive();
+
+    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
 }
 
 
@@ -547,7 +551,11 @@ void ANTIALIASING_SMAA::Present()
     glActiveTexture( GL_TEXTURE1 );
     glBindTexture( GL_TEXTURE_2D, blendTex );
 
+    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_FALSE );
+
     pass_3_shader->Use();
     draw_fullscreen_triangle();
     pass_3_shader->Deactivate();
+
+    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
 }

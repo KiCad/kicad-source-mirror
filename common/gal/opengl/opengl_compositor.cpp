@@ -297,7 +297,7 @@ void OPENGL_COMPOSITOR::ClearBuffer( const COLOR4D& aColor )
 {
     wxASSERT( m_initialized );
 
-    glClearColor( aColor.r, aColor.g, aColor.b, 0.0f );
+    glClearColor( aColor.r, aColor.g, aColor.b, m_curFbo == DIRECT_RENDERING ? 1.0f : 0.0f );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT );
 }
 
