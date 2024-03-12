@@ -52,13 +52,6 @@ enum class IMAGES {
  */
 class DIALOG_ABOUT : public DIALOG_ABOUT_BASE
 {
-private:
-    wxImageList* m_images;
-    wxString     m_titleName;
-    wxString     m_untranslatedTitleName;
-
-    ABOUT_APP_INFO& m_info;
-
 public:
     DIALOG_ABOUT( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aAppInfo );
     ~DIALOG_ABOUT();
@@ -76,24 +69,21 @@ private:
     void onDonateClick( wxCommandEvent& event ) override;
 
     // Notebook pages
-    wxFlexGridSizer* createFlexGridSizer();
-    void             createNotebooks();
-    void             createNotebookPage( wxNotebook*         aParent,
-                                         const wxString&     aCaption,
-                                         IMAGES              aIconIndex,
-                                         const CONTRIBUTORS& aContributors );
-    void             createNotebookPageByCategory( wxNotebook*      aParent,
-                                                   const wxString&     aCaption,
-                                                   IMAGES              aIconIndex,
-                                                   const CONTRIBUTORS& aContributors );
-    void             createNotebookHtmlPage( wxNotebook*     aParent,
-                                             const wxString& aCaption,
-                                             IMAGES          aIconIndex,
-                                             const wxString& aHtmlMessage,
-                                             bool aSelection = false );
+    void createNotebooks();
+    void createNotebookPageByCategory( wxNotebook* aParent, const wxString& aCaption,
+                                       IMAGES aIconIndex, const CONTRIBUTORS& aContributors );
+    void createNotebookHtmlPage( wxNotebook* aParent, const wxString& aCaption,
+                                 IMAGES aIconIndex, const wxString& aHtmlMessage,
+                                 bool aSelection = false );
 
     wxStaticText* wxStaticTextRef( wxScrolledWindow* aParent, const wxString& aReference );
     wxStaticBitmap*  createStaticBitmap( wxScrolledWindow* aParent, wxBitmap* icon );
+
+private:
+    wxString        m_titleName;
+    wxString        m_untranslatedTitleName;
+
+    ABOUT_APP_INFO& m_info;
 };
 
 #endif // DIALOG_ABOUT_H

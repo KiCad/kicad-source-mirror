@@ -160,48 +160,27 @@ private:
 class CONTRIBUTOR
 {
 public:
-    CONTRIBUTOR( const wxString& aName,
-                 const wxString& aExtra = wxEmptyString,
-                 const wxString& aUrl = wxEmptyString,
-                 const wxString& aCategory = wxEmptyString,
-                 wxBitmap*       aIcon = NULL )
+    CONTRIBUTOR( const wxString& aName, const wxString& aCategory,
+                 const wxString& aUrl = wxEmptyString )
     {
         m_checked = false;
         m_name = aName;
         m_url = aUrl,
-        m_extra = aExtra;
         m_category = aCategory;
-        m_icon = aIcon;
-    }
-
-    CONTRIBUTOR( const wxString& aName,
-                 const wxString& aCategory,
-                 wxBitmap*       aIcon )
-    {
-        m_checked = false;
-        m_name = aName;
-        m_url = wxEmptyString,
-        m_extra = wxEmptyString;
-        m_category = aCategory;
-        m_icon = aIcon;
     }
 
     virtual ~CONTRIBUTOR() {}
 
     wxString& GetName()     { return m_name; }
-    wxString& GetExtra()    { return m_extra; }
     wxString& GetUrl()      { return m_url; }
     wxString& GetCategory() { return m_category; }
-    wxBitmap* GetIcon()     { return m_icon; }
     void SetChecked( bool status ) { m_checked = status; }
     bool IsChecked() { return m_checked; }
 
 private:
     wxString  m_name;
-    wxString  m_extra;
     wxString  m_url;
     wxString  m_category;
-    wxBitmap* m_icon;
     bool      m_checked;
 };
 

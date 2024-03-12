@@ -198,1223 +198,684 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
      */
 
     // The core developers
+#define ADD_DEV( name, category ) aInfo.AddDeveloper( new CONTRIBUTOR( name, category ) )
 #define LEAD_DEV _( "Lead Development Team" )
 #define FORMER_DEV _( "Lead Development Alumni" )
 #define CONTRIB_DEV _( "Additional Contributions By")
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jean-Pierre Charras" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Wayne Stambaugh" ), LEAD_DEV, nullptr ) );
+    ADD_DEV( wxT( "Jean-Pierre Charras" ), LEAD_DEV );
+    ADD_DEV( wxT( "Wayne Stambaugh" ), LEAD_DEV );
 
     // Alphabetical after the first two
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "John Beard" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jon Evans" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roberto Fernandez Bautista" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Seth Hillbrand" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ian McInerney" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mark Roszko" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thomas Pointhuber" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alex Shvartzkop" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mike Williams" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Tomasz Wlostowski" ), LEAD_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jeff Young" ), LEAD_DEV, nullptr ) );
+    ADD_DEV( wxT( "John Beard" ), LEAD_DEV );
+    ADD_DEV( wxT( "Jon Evans" ), LEAD_DEV );
+    ADD_DEV( wxT( "Roberto Fernandez Bautista" ), LEAD_DEV );
+    ADD_DEV( wxT( "Seth Hillbrand" ), LEAD_DEV );
+    ADD_DEV( wxT( "Ian McInerney" ), LEAD_DEV );
+    ADD_DEV( wxT( "Mark Roszko" ), LEAD_DEV );
+    ADD_DEV( wxT( "Thomas Pointhuber" ), LEAD_DEV );
+    ADD_DEV( wxT( "Alex Shvartzkop" ), LEAD_DEV );
+    ADD_DEV( wxT( "Mike Williams" ), LEAD_DEV );
+    ADD_DEV( wxT( "Tomasz Wlostowski" ), LEAD_DEV );
+    ADD_DEV( wxT( "Jeff Young" ), LEAD_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabien Corona" ), FORMER_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dick Hollenbeck" ), FORMER_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexis Lockwood" ), FORMER_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian Sidebotham" ), FORMER_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Orson (Maciej Sumiński)" ), FORMER_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mikolaj Wielgus" ), FORMER_DEV, nullptr ) );
+    ADD_DEV( wxT( "Fabien Corona" ), FORMER_DEV );
+    ADD_DEV( wxT( "Dick Hollenbeck" ), FORMER_DEV );
+    ADD_DEV( wxT( "Alexis Lockwood" ), FORMER_DEV );
+    ADD_DEV( wxT( "Brian Sidebotham" ), FORMER_DEV );
+    ADD_DEV( wxT( "Orson (Maciej Sumiński)" ), FORMER_DEV );
+    ADD_DEV( wxT( "Mikolaj Wielgus" ), FORMER_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Aberg" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yüksel Açikgöz" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Rohan Agrawal" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Agricola" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Erik Agsjö" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nabeel Ahmad" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Werner Almesberger" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Shawn Anastasio" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Collin Anderson" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Tom Andrews" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Subaru Arai" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mikael Arguedas" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lachlan Audas" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jean-Noel Avila" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Martin Aberg" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Yüksel Açikgöz" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Rohan Agrawal" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Johannes Agricola" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Erik Agsjö" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Nabeel Ahmad" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Werner Almesberger" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Shawn Anastasio" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Collin Anderson" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Tom Andrews" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Subaru Arai" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mikael Arguedas" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Lachlan Audas" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jean-Noel Avila" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Pascal Baerten" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Konstantin Baranovskiy" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roman Bashkov" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Beardsworth" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthew Beckler" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Konrad Beckmann" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Eduardo Behr" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "David Beinder" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Bennett" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Roman Beranek" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Francois Berder" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Berglund" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gustav Bergquist" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Cirilo Bernardo" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joël Bertrand" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andreas Beutling" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian F. G. Bidulock" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Anton Blanchard" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Steve Bollinger" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Blair Bonnett" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Markus Bonk" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Franck Bourdonnec" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Carlo Bramini" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthias Breithaupt" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Brüns" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andreas Buhr" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ryan Bunch" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Emery Burhan" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Pascal Baerten" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Konstantin Baranovskiy" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Roman Bashkov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michael Beardsworth" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Matthew Beckler" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Konrad Beckmann" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Eduardo Behr" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "David Beinder" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Frank Bennett" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Roman Beranek" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Francois Berder" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Martin Berglund" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Gustav Bergquist" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Cirilo Bernardo" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Joël Bertrand" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andreas Beutling" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Brian F. G. Bidulock" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Anton Blanchard" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Steve Bollinger" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Blair Bonnett" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Markus Bonk" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Franck Bourdonnec" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Carlo Bramini" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Matthias Breithaupt" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Stefan Brüns" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andreas Buhr" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ryan Bunch" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Emery Burhan" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Scott Candey" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Phinitnan Chanasabaeng" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Shivpratap Chauhan" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kevin Cozens" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joseph Y. Chen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexey Chernov" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Ciampa" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marcus Comstedt" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Diogo Condeco" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Colin Cooper" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Emile Cormier" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Garth Corral" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Sergio Costas" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kevin Cozens" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dan Cross" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Scott Candey" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Phinitnan Chanasabaeng" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Shivpratap Chauhan" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kevin Cozens" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Joseph Y. Chen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alexey Chernov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marco Ciampa" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marcus Comstedt" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Diogo Condeco" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Colin Cooper" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Emile Cormier" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Garth Corral" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Sergio Costas" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kevin Cozens" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dan Cross" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew D'Addesio" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin d'Allens" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Greg Davill" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Camille Delbegue" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Albin Dennevi" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ruben De Smet" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Dewing" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Okan Demir" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonas Diemer" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Dooks" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Pavel Dovgalyuk" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew Downing" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jan Dubiec" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lucas Dumont" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Andrew D'Addesio" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Martin d'Allens" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Greg Davill" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Camille Delbegue" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Albin Dennevi" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ruben De Smet" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alexander Dewing" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Okan Demir" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jonas Diemer" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ben Dooks" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Pavel Dovgalyuk" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andrew Downing" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jan Dubiec" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Lucas Dumont" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gerd Egidy" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jean Philippe Eimer" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Ellis" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Oleg Endo" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Damien Espitallier" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Paul Ewing" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Gerd Egidy" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jean Philippe Eimer" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ben Ellis" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Oleg Endo" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Damien Espitallier" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Paul Ewing" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrey Fedorushkov" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Julian Fellinger" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joe Ferner" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian Fiete" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thomas Figueroa" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gilbert J.M. Forkel" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vincenzo Fortunato" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Drew Fustini" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Andrey Fedorushkov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Julian Fellinger" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Joe Ferner" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Brian Fiete" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Thomas Figueroa" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Gilbert J.M. Forkel" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Vincenzo Fortunato" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Drew Fustini" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ronnie Gaensli" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christian Gagneraud" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Gamari" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ashutosh Gangwar" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alessandro Gatti" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hal Gentz" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Davide Gerhard" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Geselbracht" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Giulio Girardi" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jeff Glass" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Golubev" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Angus Gratton" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrea Greco" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Element Green" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mathias Grimmberger" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johan Grip" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hildo Guillardi Júnior" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Niki Guldbrand" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Tanay Gupta" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Guy" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Zoltan Gyarmati" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Ronnie Gaensli" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Christian Gagneraud" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ben Gamari" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ashutosh Gangwar" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alessandro Gatti" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Hal Gentz" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Davide Gerhard" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michael Geselbracht" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Giulio Girardi" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jeff Glass" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alexander Golubev" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Angus Gratton" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andrea Greco" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Element Green" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mathias Grimmberger" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Johan Grip" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Hildo Guillardi Júnior" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Niki Guldbrand" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Tanay Gupta" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alexander Guy" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Zoltan Gyarmati" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonathan Haas" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mark Hämmerling" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Hamminga" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ma Han" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Scott Hanson" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ben Harris" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lukas F. Hartmann" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jakob Haufe" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Aylons Hazzud" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Helmert" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hartmut Henkel" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian Henning" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Paulo Henrique Silva" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hans Henry von Tresckow" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Diego Herranz" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Hess" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "David Holdeman" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Laurens Holst" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yang Hongbo" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mario Hros" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Josue Huaroto" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matt Huszagh" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Torsten Hüter" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Jonathan Haas" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mark Hämmerling" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Stefan Hamminga" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ma Han" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Scott Hanson" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ben Harris" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Lukas F. Hartmann" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jakob Haufe" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Aylons Hazzud" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Stefan Helmert" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Hartmut Henkel" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Brian Henning" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Paulo Henrique Silva" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Hans Henry von Tresckow" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Diego Herranz" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marco Hess" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "David Holdeman" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Laurens Holst" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Yang Hongbo" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mario Hros" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Josue Huaroto" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Matt Huszagh" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Torsten Hüter" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "José Ignacio Romero" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Inacio" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kinichiro Inoguchi" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabián Inostroza" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vlad Ivanov" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andre Iwers" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "José Ignacio Romero" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marco Inacio" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kinichiro Inoguchi" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Fabián Inostroza" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Vlad Ivanov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andre Iwers" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hasan Jaafar" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "James Jackson" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jerry Jacobs" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christian Jacobsen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michal Jahelka" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Janitschke" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonathan Jara-Almonte" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Zhuang Jiezhi" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "José Jorge Enríquez" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Franck Jullien" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Hasan Jaafar" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "James Jackson" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jerry Jacobs" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Christian Jacobsen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michal Jahelka" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Martin Janitschke" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jonathan Jara-Almonte" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Zhuang Jiezhi" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "José Jorge Enríquez" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Franck Jullien" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Eeli Kaikkonen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lajos Kamocsay" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Povilas Kanapickas" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mikhail Karpenko" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kerusey Karyu" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Kavanagh" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Tom Keddie" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Graham Keeth" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yury Khalyavin" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Eldar Khayrullin" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Georges Khaznadar" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gary Kim" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ingo Kletti" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kliment" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Sylwester Kocjan" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Clemens Koller" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Asuki Kono" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jakub Kozdon" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hajo Nils Krabbenhöft" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Kueppers" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martijn Kuipers" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Eeli Kaikkonen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Lajos Kamocsay" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Povilas Kanapickas" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mikhail Karpenko" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kerusey Karyu" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michael Kavanagh" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Tom Keddie" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Graham Keeth" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Yury Khalyavin" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Eldar Khayrullin" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Georges Khaznadar" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Gary Kim" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ingo Kletti" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kliment" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Sylwester Kocjan" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Clemens Koller" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Asuki Kono" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jakub Kozdon" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Hajo Nils Krabbenhöft" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Simon Kueppers" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Martijn Kuipers" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Robbert Lagerweij" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dimitris Lampridis" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Langer" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kevin Lannen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mika Laitio" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Floris Lambrechts" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "lê văn lập" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Anton Lazarev" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dag Lem" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ludovic Léau-mercier" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Paul LeoNerd Evens" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonatan Liljedahl" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Huanyin Liu" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Lunev" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew Lutsenko" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mario Luzeiro" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Robbert Lagerweij" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dimitris Lampridis" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marco Langer" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kevin Lannen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mika Laitio" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Floris Lambrechts" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "lê văn lập" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Anton Lazarev" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dag Lem" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ludovic Léau-mercier" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Paul LeoNerd Evens" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jonatan Liljedahl" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Huanyin Liu" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alexander Lunev" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andrew Lutsenko" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mario Luzeiro" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Maibaum" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mateusz Majchrzycki" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Daniel Majewski" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Rachel Mant" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lorenzo Marcantonio" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Miklós Márton" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Mattila" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Steffen Mauch" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian Mayton" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Maui" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kirill Mavreshko" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Miles McCoo" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Charles McDowell" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Moses McKnight" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin McNamara" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Cameron McQuinn" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ievgenii Meshcheriakov" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ashley Mills" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christoph Moench-Tegeder" ), CONTRIB_DEV,
-                                         nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Peter Montgomery" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alejandro García Montoro" ), CONTRIB_DEV,
-                                         nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Chris Morgan" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Felix Morgner" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jan Mrázek" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Johannes Maibaum" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mateusz Majchrzycki" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Daniel Majewski" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Rachel Mant" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Lorenzo Marcantonio" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Miklós Márton" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marco Mattila" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Steffen Mauch" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Brian Mayton" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Maui" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kirill Mavreshko" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Miles McCoo" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Charles McDowell" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Moses McKnight" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Martin McNamara" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Cameron McQuinn" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ievgenii Meshcheriakov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ashley Mills" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Christoph Moench-Tegeder" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Peter Montgomery" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alejandro García Montoro" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Chris Morgan" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Felix Morgner" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jan Mrázek" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Narigon" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jon Neal" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Bastian Neumann" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Daniil Nikolaev" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kristian Nielsen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Érico Nogueira" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Allan Nordhøy" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Henrik Nyberg" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Michael Narigon" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jon Neal" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Bastian Neumann" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Daniil Nikolaev" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kristian Nielsen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Érico Nogueira" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Allan Nordhøy" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Henrik Nyberg" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kristoffer Ödmark" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Russell Oliver" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jason Oster" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Kristoffer Ödmark" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Russell Oliver" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jason Oster" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Palazzolo" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matus Pavelek" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "luz paz" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Miguel Angel Ajo Pelayo" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Patrick Pereira" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jacobo Aragunde Perez" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthew Petroff" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Pfister" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabian Pflug" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christian Pfluger" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Brian Piccioni" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nicolas Planel" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Paweł Płóciennik" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Carl Poirier" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Reece Pollack" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alain Portal" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrei Pozolotin" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Antia Puentes" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Zoltan Puskas" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Heikki Pulkkinen" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Frank Palazzolo" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Matus Pavelek" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "luz paz" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Miguel Angel Ajo Pelayo" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Patrick Pereira" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jacobo Aragunde Perez" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Matthew Petroff" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Johannes Pfister" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Fabian Pflug" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Christian Pfluger" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Brian Piccioni" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Nicolas Planel" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Paweł Płóciennik" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Carl Poirier" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Reece Pollack" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alain Portal" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andrei Pozolotin" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Antia Puentes" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Zoltan Puskas" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Heikki Pulkkinen" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Morgan Quigley" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Morgan Quigley" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Barabas Raffai" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Urja Rannikko" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hendrik v. Raven" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Joshua Redstone" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michele Renda" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jean-Samuel Reynaud" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dmitry Rezvanov" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Richter" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christoph Riehl" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thiadmer Riemersma" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Gregor Riepl" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "RigoLigoRLC" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ola Rinta-Koski" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Lubomir Rintel" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Érico Rolim" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marcus A. Romer" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Heiko Rosemann" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabio Rossi" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ian Roth" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Barabas Raffai" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Urja Rannikko" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Hendrik v. Raven" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Joshua Redstone" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michele Renda" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jean-Samuel Reynaud" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dmitry Rezvanov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Simon Richter" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Christoph Riehl" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Thiadmer Riemersma" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Gregor Riepl" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "RigoLigoRLC" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ola Rinta-Koski" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Lubomir Rintel" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Érico Rolim" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marcus A. Romer" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Heiko Rosemann" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Fabio Rossi" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ian Roth" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Clément Saccoccio" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "J. Morio Sakaguchi" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Schaak" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ross Schlaikjer" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Julius Schmidt" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Felix Schneider" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marvin Schmidt" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Carsten Schoenert" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Schubert" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michal Schulz" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Adrian Scripca" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Pradeepa Senanayake" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Serantoni" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Severinsen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Cheng Sheng" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yang Sheng" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Chetan Shinde" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Shuklin" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Adam Simpkins" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Slawomir Siudym" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Serantoni" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Guillaume Simard" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Sivak" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dominik Sliwa" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Blake Smith" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michal Sojka" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Rafael Sokolowski" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vesa Solonen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Ronald Sousa" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Craig Southeren" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Thomas Spindler" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Seppe Stas" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Bernhard Stegmaier" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Michael Steinberg" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Marco Sterbik" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Stock" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Stoilov" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hiroki Suenaga" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kuba Sunderland-Ober" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Clément Saccoccio" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "J. Morio Sakaguchi" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Simon Schaak" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ross Schlaikjer" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Julius Schmidt" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Felix Schneider" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marvin Schmidt" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Carsten Schoenert" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Simon Schubert" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michal Schulz" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Adrian Scripca" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Pradeepa Senanayake" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marco Serantoni" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Frank Severinsen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Cheng Sheng" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Yang Sheng" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Chetan Shinde" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alexander Shuklin" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Adam Simpkins" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Slawomir Siudym" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marco Serantoni" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Guillaume Simard" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Martin Sivak" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mateusz Skowroński" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dominik Sliwa" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Blake Smith" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michal Sojka" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Rafael Sokolowski" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Vesa Solonen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Ronald Sousa" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Craig Southeren" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Thomas Spindler" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Seppe Stas" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Bernhard Stegmaier" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Michael Steinberg" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Marco Sterbik" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Alexander Stock" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Martin Stoilov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Hiroki Suenaga" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kuba Sunderland-Ober" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nimish Telang" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Martin Thierer" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Karl Thorén" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Hiroshi Tokita" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Nimish Telang" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Martin Thierer" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Karl Thorén" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Hiroshi Tokita" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vladimir Ur" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yon Uriarte" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Matthias Urlichs" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Vladimir Uryvaev" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Vladimir Ur" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Yon Uriarte" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Matthias Urlichs" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Vladimir Uryvaev" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Henri Valta" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dave Vandenbout" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Edwin van den Oetelaar" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mark van Doesburg" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nils van Zuijlen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Fabio Varesano" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Benjamin Vernoux" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Villaro-Dixon" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Mark Visser" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Forrest Voight" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Tormod Volden" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Henri Valta" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dave Vandenbout" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Edwin van den Oetelaar" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mark van Doesburg" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Nils van Zuijlen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Fabio Varesano" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Benjamin Vernoux" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Frank Villaro-Dixon" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Mark Visser" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Forrest Voight" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Tormod Volden" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Bartek Wacławik" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Johannes Wågen" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Oliver Walters" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jonathan Warner" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dan Weatherill" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Stefan Weber" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Christian Weickhmann" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Bevan Weiss" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Simon Wells" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Dominik Wernberger" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jan Wichmann" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nick Winters" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Adam Wolf" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrzej Wolski" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Damian Wrobel" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew Wygle" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Bartek Wacławik" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Johannes Wågen" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Oliver Walters" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jonathan Warner" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dan Weatherill" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Stefan Weber" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Christian Weickhmann" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Bevan Weiss" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Simon Wells" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Dominik Wernberger" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Jan Wichmann" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Nick Winters" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Adam Wolf" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andrzej Wolski" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Damian Wrobel" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andrew Wygle" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Jiaxun Yang" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Robert Yates" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Yegor Yefremov" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kenta Yonekura" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Jiaxun Yang" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Robert Yates" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Yegor Yefremov" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kenta Yonekura" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Alexander Zakamaldin" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Frank Zeeman" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Henner Zeller" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Andrew Zonenberg" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Karl Zeilhofer" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Kevin Zheng" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Alexander Zakamaldin" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Frank Zeeman" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Henner Zeller" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Andrew Zonenberg" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Karl Zeilhofer" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Kevin Zheng" ), CONTRIB_DEV );
 
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "Nick Østergaard" ), CONTRIB_DEV, nullptr ) );
-    aInfo.AddDeveloper( new CONTRIBUTOR( wxT( "木 王" ), CONTRIB_DEV, nullptr ) );
+    ADD_DEV( wxT( "Nick Østergaard" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "木 王" ), CONTRIB_DEV );
 
     // The document writers
-    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Jean-Pierre Charras" ) ) );
-    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Marco Ciampa" ) ) );
-    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Jon Evans" ) ) );
-    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Dick Hollenbeck" ) ) );
-    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Graham Keeth" ) ) );
-    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Igor Plyatov" ) ) );
-    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Wayne Stambaugh" ) ) );
-    aInfo.AddDocWriter( new CONTRIBUTOR( wxS( "Fabrizio Tappero" ) ) );
+#define DOC_TEAM _( "Documentation Team" )
+#define ADD_WRITER( name, category ) aInfo.AddDocWriter( new CONTRIBUTOR( name, category ) )
+    ADD_WRITER( wxS( "Jean-Pierre Charras" ), DOC_TEAM );
+    ADD_WRITER( wxS( "Marco Ciampa" ), DOC_TEAM );
+    ADD_WRITER( wxS( "Jon Evans" ), DOC_TEAM );
+    ADD_WRITER( wxS( "Dick Hollenbeck" ), DOC_TEAM );
+    ADD_WRITER( wxS( "Graham Keeth" ), DOC_TEAM );
+    ADD_WRITER( wxS( "Igor Plyatov" ), DOC_TEAM );
+    ADD_WRITER( wxS( "Wayne Stambaugh" ), DOC_TEAM );
+    ADD_WRITER( wxS( "Fabrizio Tappero" ), DOC_TEAM );
 
     /* The translators
      * As category the language to which the translation was done is used
      */
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ondřej Čertík" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Czech (CS)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Martin Kratoška" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Czech (CS)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Radek Kuznik" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Czech (CS)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Roman Ondráček" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Czech (CS)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "René Široký" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Czech (CS)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jan Straka" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Czech (CS)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jan Vykydal" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Czech (CS)" ) ) );
+#define ADD_TRANSLATOR( name, category ) aInfo.AddTranslator( new CONTRIBUTOR( name, category ) )
+    ADD_TRANSLATOR( wxT( "Ondřej Čertík" ), wxS( "Czech (CS)" ) );
+    ADD_TRANSLATOR( wxT( "Martin Kratoška" ), wxS( "Czech (CS)" ) );
+    ADD_TRANSLATOR( wxT( "Radek Kuznik" ), wxS( "Czech (CS)" ) );
+    ADD_TRANSLATOR( wxT( "Roman Ondráček" ), wxS( "Czech (CS)" ) );
+    ADD_TRANSLATOR( wxT( "René Široký" ), wxS( "Czech (CS)" ) );
+    ADD_TRANSLATOR( wxT( "Jan Straka" ), wxS( "Czech (CS)" ) );
+    ADD_TRANSLATOR( wxT( "Jan Vykydal" ), wxS( "Czech (CS)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Mads Dyrmann" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Danish (DA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Henrik Kauhanen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Danish (DA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Nick Østergaard" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Danish (DA)" ) ) );
+    ADD_TRANSLATOR( wxS( "Mads Dyrmann" ), wxS( "Danish (DA)" ) );
+    ADD_TRANSLATOR( wxS( "Henrik Kauhanen" ), wxS( "Danish (DA)" ) );
+    ADD_TRANSLATOR( wxS( "Nick Østergaard" ), wxS( "Danish (DA)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Ettore Atalan" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Ivan Chuba" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Julian Daube" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Benedikt Freisen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Jonathan Haas" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mark Hämmerling" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Johannes Maibaum" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Henrik Kauhanen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mathias Neumann" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ken Ovo" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Karl Schuh" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Dominik Wernberger" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "German (DE)" ) ) );
+    ADD_TRANSLATOR( wxS( "Ettore Atalan" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxS( "Ivan Chuba" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxS( "Julian Daube" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxS( "Benedikt Freisen" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxS( "Jonathan Haas" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Mark Hämmerling" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Johannes Maibaum" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Henrik Kauhanen" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Mathias Neumann" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Ken Ovo" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Karl Schuh" ), wxS( "German (DE)" ) );
+    ADD_TRANSLATOR( wxT( "Dominik Wernberger" ), wxS( "German (DE)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Manolis Stefanis" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Greek (el_GR)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Athanasios Vlastos" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Greek (el_GR)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Milonas Kostas" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Greek (el_GR)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Michail Misirlis" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Greek (el_GR)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Aristeidis Kimirtzis" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Greek (el_GR)" ) ) );
+    ADD_TRANSLATOR( wxS( "Manolis Stefanis" ), wxS( "Greek (el_GR)" ) );
+    ADD_TRANSLATOR( wxS( "Athanasios Vlastos" ), wxS( "Greek (el_GR)" ) );
+    ADD_TRANSLATOR( wxS( "Milonas Kostas" ), wxS( "Greek (el_GR)" ) );
+    ADD_TRANSLATOR( wxS( "Michail Misirlis" ), wxS( "Greek (el_GR)" ) );
+    ADD_TRANSLATOR( wxS( "Aristeidis Kimirtzis" ), wxS( "Greek (el_GR)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Adolfo Jayme Barrientos" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish (ES)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Roberto Fernandez Bautista" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish (ES)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Figuero" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish (ES)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Augusto Fraga Giachero" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish (ES)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Pedro Martin del Valle" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish (ES)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Gabriel Martinez" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish (ES)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jose Perez" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish (ES)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish (ES)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "VicSanRoPe" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish - Latin American (ES)" ) ) );
+    ADD_TRANSLATOR( wxT( "Adolfo Jayme Barrientos" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "Roberto Fernandez Bautista" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "Iñigo Figuero" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "Augusto Fraga Giachero" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxS( "Pedro Martin del Valle" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxS( "Gabriel Martinez" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "Jose Perez" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "Iñigo Zuluaga" ), wxS( "Spanish (ES)" ) );
+    ADD_TRANSLATOR( wxT( "VicSanRoPe" ), wxS( "Spanish - Latin American (ES)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ulices Avila Hernandez" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Spanish - Latin American (ES)" ) ) );
+    ADD_TRANSLATOR( wxT( "Ulices Avila Hernandez" ), wxS( "Spanish - Latin American (ES)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Vesa Solonen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Alex Gellen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Toni Laiho" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Henrik Kauhanen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Toni Laiho" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "J. Lavoie" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Purkka Koodari" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Simo Mattila" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Petri Niemelä" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ola Rinta-Koski" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Riku Viitanen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Finnish (FI)" ) ) );
+    ADD_TRANSLATOR( wxT( "Vesa Solonen" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Alex Gellen" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Toni Laiho" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Henrik Kauhanen" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Toni Laiho" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "J. Lavoie" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Purkka Koodari" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Simo Mattila" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Petri Niemelä" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Ola Rinta-Koski" ), wxS( "Finnish (FI)" ) );
+    ADD_TRANSLATOR( wxT( "Riku Viitanen" ), wxS( "Finnish (FI)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jean-Pierre Charras" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "French (FR)" ) ) );
+    ADD_TRANSLATOR( wxT( "Jean-Pierre Charras" ), wxS( "French (FR)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Marco Ciampa" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Italian (IT)" ) ) );
+    ADD_TRANSLATOR( wxT( "Marco Ciampa" ), wxS( "Italian (IT)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Subaru Arai" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ji Yoon Choi" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Hidemichi Gotou" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Kinichiro Inoguchi" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Keisuke Nakao" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Norio Suzuki" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "starfort-jp" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Hiroshi Tokita" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Kenta Yonekura" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Kaoru Zenyouji" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Japanese (JA)" ) ) );
+    ADD_TRANSLATOR( wxT( "Subaru Arai" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Ji Yoon Choi" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Hidemichi Gotou" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Kinichiro Inoguchi" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Keisuke Nakao" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Norio Suzuki" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "starfort-jp" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Hiroshi Tokita" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Kenta Yonekura" ), wxS( "Japanese (JA)" ) );
+    ADD_TRANSLATOR( wxT( "Kaoru Zenyouji" ), wxS( "Japanese (JA)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "킴슨김랑기" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ji Yoon Choi" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "jeongsuAn" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "이상수" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "jehunseo" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Uibeom Jung" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "박준언" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "방준영" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "박기정" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "hokim" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "김낙환" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "이기형" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "남우근" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "강명구" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "김용재" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "서범기" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "김세영" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "이윤성" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "김랑기" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "KwonHyeokbeom" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Minsu Kim (0xGabriel)" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "pedrolinharesmoreira" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Korean (KO)" ) ) );
+    ADD_TRANSLATOR( wxT( "킴슨김랑기" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "Ji Yoon Choi" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "jeongsuAn" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "이상수" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "jehunseo" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "Uibeom Jung" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "박준언" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "방준영" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "박기정" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "hokim" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "김낙환" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "이기형" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "남우근" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "강명구" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "김용재" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "서범기" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "김세영" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "이윤성" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "김랑기" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "KwonHyeokbeom" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "Minsu Kim (0xGabriel)" ), wxS( "Korean (KO)" ) );
+    ADD_TRANSLATOR( wxT( "pedrolinharesmoreira" ), wxS( "Korean (KO)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Henrik Kauhanen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Lithuanian (LT)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Dainius Mazuika" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Lithuanian (LT)" ) ) );
+    ADD_TRANSLATOR( wxT( "Henrik Kauhanen" ), wxS( "Lithuanian (LT)" ) );
+    ADD_TRANSLATOR( wxT( "Dainius Mazuika" ), wxS( "Lithuanian (LT)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Arend-Jan van Hilten" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "CJ van der Hoeven" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Laurens Holst" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Pim Jansen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Henrik Kauhanen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Tom Niesse" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Christiaan Nieuwlaat" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Arend-Jan van Hilten" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Bas Wijnen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Dutch (NL)" ) ) );
+    ADD_TRANSLATOR( wxT( "Arend-Jan van Hilten" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "CJ van der Hoeven" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Laurens Holst" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Pim Jansen" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Henrik Kauhanen" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Tom Niesse" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Christiaan Nieuwlaat" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Arend-Jan van Hilten" ), wxS( "Dutch (NL)" ) );
+    ADD_TRANSLATOR( wxT( "Bas Wijnen" ), wxS( "Dutch (NL)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jarl Gjessing" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Norwegian (NO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Henrik Kauhanen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Norwegian (NO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Allan Nordhøy" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Norwegian (NO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Petter Reinholdtsen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Norwegian (NO)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Håvard Syslak" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Norwegian (NO)" ) ) );
+    ADD_TRANSLATOR( wxT( "Jarl Gjessing" ), wxS( "Norwegian (NO)" ) );
+    ADD_TRANSLATOR( wxT( "Henrik Kauhanen" ), wxS( "Norwegian (NO)" ) );
+    ADD_TRANSLATOR( wxT( "Allan Nordhøy" ), wxS( "Norwegian (NO)" ) );
+    ADD_TRANSLATOR( wxT( "Petter Reinholdtsen" ), wxS( "Norwegian (NO)" ) );
+    ADD_TRANSLATOR( wxT( "Håvard Syslak" ), wxS( "Norwegian (NO)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ivan Chuba" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Kerusey Karyu" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Krzysztof Kawa" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Eryk Michalak" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Filip Piękoś" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mark Roszko" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Mateusz Skowroński" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jan Sobków" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Grzegorz Szymaszek" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "ZbeeGin" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Polish (PL)" ) ) );
+    ADD_TRANSLATOR( wxT( "Ivan Chuba" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Kerusey Karyu" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Krzysztof Kawa" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Eryk Michalak" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Filip Piękoś" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Mark Roszko" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Mateusz Skowroński" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Jan Sobków" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "Grzegorz Szymaszek" ), wxS( "Polish (PL)" ) );
+    ADD_TRANSLATOR( wxT( "ZbeeGin" ), wxS( "Polish (PL)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Augusto Fraga Giachero" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Brazilian Portuguese (PT_BR)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Wellington Terumi Uemura" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Brazilian Portuguese (PT_BR)" ) ) );
+    ADD_TRANSLATOR( wxT( "Augusto Fraga Giachero" ), wxS( "Brazilian Portuguese (PT_BR)" ) );
+    ADD_TRANSLATOR( wxT( "Wellington Terumi Uemura" ), wxS( "Brazilian Portuguese (PT_BR)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Augusto Fraga Giachero" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Portuguese (PT)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Renie Marquet" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Portuguese (PT)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Rafael Silva" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Portuguese (PT)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "ssantos" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Portuguese (PT)" ) ) );
+    ADD_TRANSLATOR( wxT( "Augusto Fraga Giachero" ), wxS( "Portuguese (PT)" ) );
+    ADD_TRANSLATOR( wxT( "Renie Marquet" ), wxS( "Portuguese (PT)" ) );
+    ADD_TRANSLATOR( wxT( "Rafael Silva" ), wxS( "Portuguese (PT)" ) );
+    ADD_TRANSLATOR( wxT( "ssantos" ), wxS( "Portuguese (PT)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Igor Plyatov" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Russian (RU)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Дмитрий Дёмин" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Russian (RU)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Andrey Fedorushkov" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Russian (RU)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Eldar Khayrullin" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Russian (RU)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Konstantin Baranovskiy" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Russian (RU)" ) ) );
+    ADD_TRANSLATOR( wxT( "Igor Plyatov" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Дмитрий Дёмин" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Andrey Fedorushkov" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Eldar Khayrullin" ), wxS( "Russian (RU)" ) );
+    ADD_TRANSLATOR( wxT( "Konstantin Baranovskiy" ), wxS( "Russian (RU)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Hanna Breisand" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Swedish (SV)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Axel Henriksson"  ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Swedish (SV)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Richard Jonsson" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Swedish (SV)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Henrik Kauhanen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Swedish (SV)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Allan Nordhøy" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Swedish (SV)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Elias Sjögreen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Swedish (SV)" ) ) );
+    ADD_TRANSLATOR( wxT( "Hanna Breisand" ), wxS( "Swedish (SV)" ) );
+    ADD_TRANSLATOR( wxT( "Axel Henriksson"  ), wxS( "Swedish (SV)" ) );
+    ADD_TRANSLATOR( wxT( "Richard Jonsson" ), wxS( "Swedish (SV)" ) );
+    ADD_TRANSLATOR( wxT( "Henrik Kauhanen" ), wxS( "Swedish (SV)" ) );
+    ADD_TRANSLATOR( wxT( "Allan Nordhøy" ), wxS( "Swedish (SV)" ) );
+    ADD_TRANSLATOR( wxT( "Elias Sjögreen" ), wxS( "Swedish (SV)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Boonchai Kingrungped" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Thai (TH)" ) ) );
+    ADD_TRANSLATOR( wxT( "Boonchai Kingrungped" ), wxS( "Thai (TH)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Artem" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Ukrainian (UK)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Ivan Chuba" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Ukrainian (UK)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Stanislav Kaliuk" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Ukrainian (UK)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Alexsandr Kuzemko" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Ukrainian (UK)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Andrii Shelestov" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Ukrainian (UK)" ) ) );
+    ADD_TRANSLATOR( wxT( "Artem" ), wxS( "Ukrainian (UK)" ) );
+    ADD_TRANSLATOR( wxT( "Ivan Chuba" ), wxS( "Ukrainian (UK)" ) );
+    ADD_TRANSLATOR( wxT( "Stanislav Kaliuk" ), wxS( "Ukrainian (UK)" ) );
+    ADD_TRANSLATOR( wxT( "Alexsandr Kuzemko" ), wxS( "Ukrainian (UK)" ) );
+    ADD_TRANSLATOR( wxT( "Andrii Shelestov" ), wxS( "Ukrainian (UK)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "向阳阳" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "欠陥電気" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Liu Guang" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Taotieren" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Dingzhong Chen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "David Chen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Eric" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Hubert Hu" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Pinpang Liao" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Rigo Ligo" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Huanyin Liu" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Zhen Sun" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Jason Tan" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "yangyangdaji" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Li Yidong" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Tian Yunhao" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Lao Zhu" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Simplified Chinese (zh_CN)" ) ) );
+    ADD_TRANSLATOR( wxT( "向阳阳" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "欠陥電気" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Liu Guang" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Taotieren" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Dingzhong Chen" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "David Chen" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Eric" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Hubert Hu" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Pinpang Liao" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Rigo Ligo" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Huanyin Liu" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Zhen Sun" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Jason Tan" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "yangyangdaji" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Li Yidong" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Tian Yunhao" ), wxS( "Simplified Chinese (zh_CN)" ) );
+    ADD_TRANSLATOR( wxT( "Lao Zhu" ), wxS( "Simplified Chinese (zh_CN)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "撒景賢" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "David Chen" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "pon dahai" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "kai chiao chuang" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "William Lin" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Taotieren" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Li Yidong" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Traditional Chinese (zh_TW)" ) ) );
+    ADD_TRANSLATOR( wxT( "撒景賢" ), wxS( "Traditional Chinese (zh_TW)" ) );
+    ADD_TRANSLATOR( wxT( "David Chen" ), wxS( "Traditional Chinese (zh_TW)" ) );
+    ADD_TRANSLATOR( wxT( "pon dahai" ), wxS( "Traditional Chinese (zh_TW)" ) );
+    ADD_TRANSLATOR( wxT( "kai chiao chuang" ), wxS( "Traditional Chinese (zh_TW)" ) );
+    ADD_TRANSLATOR( wxT( "William Lin" ), wxS( "Traditional Chinese (zh_TW)" ) );
+    ADD_TRANSLATOR( wxT( "Taotieren" ), wxS( "Traditional Chinese (zh_TW)" ) );
+    ADD_TRANSLATOR( wxT( "Li Yidong" ), wxS( "Traditional Chinese (zh_TW)" ) );
 
-    aInfo.AddTranslator( new CONTRIBUTOR( wxT( "Remy Halvick" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Other" ) ) );
-
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "David J S Briscoe" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Other" ) ) );
-
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Dominique Laigle" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Other" ) ) );
-
-    aInfo.AddTranslator( new CONTRIBUTOR( wxS( "Paul Burke" ),
-                                          wxEmptyString,
-                                          wxEmptyString,
-                                          wxS( "Other" ) ) );
+    ADD_TRANSLATOR( wxT( "Remy Halvick" ), wxS( "Other" ) );
+    ADD_TRANSLATOR( wxS( "David J S Briscoe" ), wxS( "Other" ) );
+    ADD_TRANSLATOR( wxS( "Dominique Laigle" ), wxS( "Other" ) );
+    ADD_TRANSLATOR( wxS( "Paul Burke" ), wxS( "Other" ) );
 
 
     // Program credits for library team
 #define LIBRARIANS _( "Librarian Team" )
+#define ADD_LIBRARIAN( name ) aInfo.AddLibrarian( new CONTRIBUTOR( name, LIBRARIANS ) )
 
     // Lead librarians
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Carsten Presser"), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    ADD_LIBRARIAN( wxT( "Carsten Presser") );
 
     // Active librarians
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Geries AbuAkel" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Patrick Baus" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "John Beard" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jeremy Boynes" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Greg Cormier" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jan Sebastian Götte (jaseg)" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Petr Hodina" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Mikkel Jeppesen" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Aristeidis Kimirtzis" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Brandon Kirisaki" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Uli Köhler" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Andrew Lutsenko" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Jorge Neiva" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Valentin Ochs" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Carlos Nieves Ónega" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Dash Peters" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Armin Schoisswohl" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Martin Sotirov" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Kliment Yanev" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    ADD_LIBRARIAN( wxT( "Geries AbuAkel" ) );
+    ADD_LIBRARIAN( wxT( "Patrick Baus" ) );
+    ADD_LIBRARIAN( wxT( "John Beard" ) );
+    ADD_LIBRARIAN( wxT( "Jeremy Boynes" ) );
+    ADD_LIBRARIAN( wxT( "Greg Cormier" ) );
+    ADD_LIBRARIAN( wxT( "Jan Sebastian Götte (jaseg)" ) );
+    ADD_LIBRARIAN( wxT( "Petr Hodina" ) );
+    ADD_LIBRARIAN( wxT( "Mikkel Jeppesen" ) );
+    ADD_LIBRARIAN( wxT( "Aristeidis Kimirtzis" ) );
+    ADD_LIBRARIAN( wxT( "Brandon Kirisaki" ) );
+    ADD_LIBRARIAN( wxT( "Uli Köhler" ) );
+    ADD_LIBRARIAN( wxT( "Andrew Lutsenko" ) );
+    ADD_LIBRARIAN( wxT( "Jorge Neiva" ) );
+    ADD_LIBRARIAN( wxT( "Valentin Ochs" ) );
+    ADD_LIBRARIAN( wxT( "Carlos Nieves Ónega" ) );
+    ADD_LIBRARIAN( wxT( "Dash Peters" ) );
+    ADD_LIBRARIAN( wxT( "Armin Schoisswohl" ) );
+    ADD_LIBRARIAN( wxT( "Martin Sotirov" ) );
+    ADD_LIBRARIAN( wxT( "Kliment Yanev" ) );
 
     // Former librarians
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Christian Schlüter" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Rene Poeschl" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Antonio Vázquez Blanco " ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Daniel Giesbrecht" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Otavio Augusto Gomes" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "herostrat" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Diego Herranz" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Joel Guittet" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Chris Morgan" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Thomas Pointhuber" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Evan Shultz" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Bob Cousins" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Nick Østergaard" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
-    aInfo.AddLibrarian( new CONTRIBUTOR( wxT( "Oliver Walters" ), LIBRARIANS,
-                                         aInfo.CreateKiBitmap( BITMAPS::library ) ) );
+    ADD_LIBRARIAN( wxT( "Christian Schlüter" ) );
+    ADD_LIBRARIAN( wxT( "Rene Poeschl" ) );
+    ADD_LIBRARIAN( wxT( "Antonio Vázquez Blanco " ) );
+    ADD_LIBRARIAN( wxT( "Daniel Giesbrecht" ) );
+    ADD_LIBRARIAN( wxT( "Otavio Augusto Gomes" ) );
+    ADD_LIBRARIAN( wxT( "herostrat" ) );
+    ADD_LIBRARIAN( wxT( "Diego Herranz" ) );
+    ADD_LIBRARIAN( wxT( "Joel Guittet" ) );
+    ADD_LIBRARIAN( wxT( "Chris Morgan" ) );
+    ADD_LIBRARIAN( wxT( "Thomas Pointhuber" ) );
+    ADD_LIBRARIAN( wxT( "Evan Shultz" ) );
+    ADD_LIBRARIAN( wxT( "Bob Cousins" ) );
+    ADD_LIBRARIAN( wxT( "Nick Østergaard" ) );
+    ADD_LIBRARIAN( wxT( "Oliver Walters" ) );
 
-#define MODELS_3D_CONTRIBUTION _( "3D models by" )
+#define MODELS_3D_CONTRIBUTION _( "3D models" )
+#define SYMBOL_LIB_CONTRIBUTION _( "Symbols" )
+#define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Scripts by Maui" ),
-                                         wxS( "https://github.com/easyw" ),
-                                         wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D-generator" ),
                                          MODELS_3D_CONTRIBUTION,
-                                         aInfo.CreateKiBitmap( BITMAPS::three_d ) ) );
+                                         wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D-generator" ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
-                                         wxEmptyString,
-                                         wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D/-/graphs/master" ),
                                          MODELS_3D_CONTRIBUTION,
-                                         aInfo.CreateKiBitmap( BITMAPS::three_d ) ) );
+                                         wxS( "https://gitlab.com/kicad/libraries/kicad-packages3D/-/graphs/master" ) ) );
 
-#define SYMBOL_LIB_CONTRIBUTION _( "Symbols by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
-                                         wxEmptyString,
-                                         wxS( "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/master" ),
                                          SYMBOL_LIB_CONTRIBUTION,
-                                         aInfo.CreateKiBitmap( BITMAPS::add_component ) ) );
+                                         wxS( "https://gitlab.com/kicad/libraries/kicad-symbols/-/graphs/master" ) ) );
 
-#define FOOTPRINT_LIB_CONTRIBUTION _( "Footprints by" )
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "Scripts by Thomas Pointhuber" ),
-                                         wxEmptyString,
-                                         wxS( "https://gitlab.com/kicad/libraries/kicad-footprint-generator" ),
                                          FOOTPRINT_LIB_CONTRIBUTION,
-                                         aInfo.CreateKiBitmap( BITMAPS::module ) ) );
+                                         wxS( "https://gitlab.com/kicad/libraries/kicad-footprint-generator" ) ) );
     aInfo.AddLibrarian( new CONTRIBUTOR( wxS( "GitLab contributors" ),
-                                         wxEmptyString,
-                                         wxS( "https://gitlab.com/kicad/libraries/kicad-footprints/-/graphs/master" ),
                                          FOOTPRINT_LIB_CONTRIBUTION,
-                                         aInfo.CreateKiBitmap( BITMAPS::module ) ) );
+                                         wxS( "https://gitlab.com/kicad/libraries/kicad-footprints/-/graphs/master" ) ) );
 
     // Program credits for icons
-#define ICON_CONTRIBUTION _( "Icons by" )
-    aInfo.AddArtist( new CONTRIBUTOR( wxT( "Aleksandr Zyrianov" ),
-                                      wxEmptyString,
-                                      wxEmptyString,
-                                      ICON_CONTRIBUTION ) );
-    aInfo.AddArtist( new CONTRIBUTOR( wxT( "Anda Subero" ),
-                                      wxEmptyString,
-                                      wxEmptyString,
-                                      ICON_CONTRIBUTION ) );
-    aInfo.AddArtist( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ),
-                                      wxEmptyString,
-                                      wxEmptyString,
-                                      ICON_CONTRIBUTION ) );
-    aInfo.AddArtist( new CONTRIBUTOR( wxS( "Fabrizio Tappero" ),
-                                      wxEmptyString,
-                                      wxEmptyString,
-                                      ICON_CONTRIBUTION ) );
+#define ICON_CONTRIBUTION _( "Icons" )
+    aInfo.AddArtist( new CONTRIBUTOR( wxT( "Aleksandr Zyrianov" ), ICON_CONTRIBUTION ) );
+    aInfo.AddArtist( new CONTRIBUTOR( wxT( "Anda Subero" ), ICON_CONTRIBUTION ) );
+    aInfo.AddArtist( new CONTRIBUTOR( wxT( "Iñigo Zuluaga" ), ICON_CONTRIBUTION ) );
+    aInfo.AddArtist( new CONTRIBUTOR( wxS( "Fabrizio Tappero" ), ICON_CONTRIBUTION ) );
 
     // Program credits for package developers.
 #define PACKAGE_DEVS _( "Package Developers" )
 
-    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Steven Falco" ), PACKAGE_DEVS,
-                                        aInfo.CreateKiBitmap( BITMAPS::zip ) ) );
-    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Johannes Maibaum" ), PACKAGE_DEVS,
-                                        aInfo.CreateKiBitmap( BITMAPS::zip ) ) );
-    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Jean-Samuel Reynaud" ), PACKAGE_DEVS,
-                                        aInfo.CreateKiBitmap( BITMAPS::zip ) ) );
-    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Bernhard Stegmaier" ), PACKAGE_DEVS,
-                                        aInfo.CreateKiBitmap( BITMAPS::zip ) ) );
-    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Adam Wolf" ) , PACKAGE_DEVS,
-                                        aInfo.CreateKiBitmap( BITMAPS::zip ) ) );
-    aInfo.AddPackager( new CONTRIBUTOR( wxT( "Nick Østergaard" ), PACKAGE_DEVS,
-                                        aInfo.CreateKiBitmap( BITMAPS::zip ) ) );
+    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Steven Falco" ), PACKAGE_DEVS ) );
+    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Johannes Maibaum" ), PACKAGE_DEVS ) );
+    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Jean-Samuel Reynaud" ), PACKAGE_DEVS ) );
+    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Bernhard Stegmaier" ), PACKAGE_DEVS ) );
+    aInfo.AddPackager( new CONTRIBUTOR( wxS( "Adam Wolf" ) , PACKAGE_DEVS ) );
+    aInfo.AddPackager( new CONTRIBUTOR( wxT( "Nick Østergaard" ), PACKAGE_DEVS ) );
 }
 
 

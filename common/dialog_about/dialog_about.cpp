@@ -23,11 +23,7 @@
  */
 
 
-#include <config.h>
-#include <string>
-
 #include <build_version.h>
-
 #include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
 #include <wx/hyperlink.h>
@@ -43,16 +39,14 @@
  *  tools_xpm;              // Sheet of paper icon for license info tab
  */
 #include <bitmaps.h>
-#include <build_version.h>
 #include <dialogs/html_message_box.h>
 #include <tool/tool_manager.h>
 
 #include "dialog_about.h"
 
 
-DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
-    : DIALOG_ABOUT_BASE( aParent ),
-        m_images( nullptr ),
+DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo ) :
+        DIALOG_ABOUT_BASE( aParent ),
         m_info( aAppInfo )
 {
     wxASSERT( aParent != nullptr );
@@ -128,20 +122,6 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
 
 DIALOG_ABOUT::~DIALOG_ABOUT()
 {
-#ifndef __WXMAC__
-    delete m_images;
-#endif
-}
-
-
-wxFlexGridSizer* DIALOG_ABOUT::createFlexGridSizer()
-{
-    // three columns with vertical and horizontal extra space of two pixels
-    wxFlexGridSizer* fgSizer = new wxFlexGridSizer( 3, 2, 2 );
-    fgSizer->SetFlexibleDirection( wxHORIZONTAL );
-    fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-    return fgSizer;
 }
 
 
@@ -156,8 +136,8 @@ void DIALOG_ABOUT::createNotebooks()
 
     createNotebookPageByCategory( m_notebook, _( "Developers" ) , IMAGES::DEVELOPERS,
                                   m_info.GetDevelopers() );
-    createNotebookPage( m_notebook, _( "Doc Writers" ), IMAGES::DOCWRITERS,
-                        m_info.GetDocWriters() );
+    createNotebookPageByCategory( m_notebook, _( "Doc Writers" ), IMAGES::DOCWRITERS,
+                                  m_info.GetDocWriters() );
 
     createNotebookPageByCategory( m_notebook, _( "Librarians" ), IMAGES::LIBRARIANS,
                                   m_info.GetLibrarians() );
@@ -172,245 +152,54 @@ void DIALOG_ABOUT::createNotebooks()
     createNotebookHtmlPage( m_notebook, _( "License" ), IMAGES::LICENSE, m_info.GetLicense() );
 }
 
-void DIALOG_ABOUT::createNotebookPage( wxNotebook* aParent, const wxString& aCaption,
-                                       IMAGES aIconIndex, const CONTRIBUTORS& aContributors )
-{
-    wxPanel* outerPanel = new wxPanel( aParent );
-    wxBoxSizer* outerSizer = new wxBoxSizer( wxVERTICAL );
-
-    wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
-
-    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( outerPanel, wxID_ANY,
-                                                                wxDefaultPosition,
-                                                                wxDefaultSize,
-                                                                wxHSCROLL|wxVSCROLL );
-    m_scrolledWindow1->SetScrollRate( 5, 5 );
-
-    /* Panel for additional space at the left,
-     * but can also be used to show an additional bitmap.
-     */
-    wxPanel* panel1 = new wxPanel( m_scrolledWindow1 );
-
-    wxFlexGridSizer* fgSizer1 = createFlexGridSizer();
-
-    for( size_t i=0; i<aContributors.GetCount(); ++i )
-    {
-        CONTRIBUTOR* contributor = &aContributors.Item( i );
-
-        // Icon at first column
-        wxStaticBitmap* m_bitmap1 = createStaticBitmap( m_scrolledWindow1, contributor->GetIcon() );
-        fgSizer1->Add( m_bitmap1, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
-
-        // Name of contributor at second column
-        if ( contributor->GetName() != wxEmptyString )
-        {
-            wxStaticText* m_staticText1 = new wxStaticText( m_scrolledWindow1, wxID_ANY,
-                                                            contributor->GetName(),
-                                                            wxDefaultPosition, wxDefaultSize, 0 );
-            m_staticText1->Wrap( -1 );
-            fgSizer1->Add( m_staticText1, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
-        }
-        else
-        {
-            fgSizer1->AddSpacer( 5 );
-        }
-
-        // Email address of contributor at third column
-        if ( contributor->GetExtra() != wxEmptyString )
-        {
-            wxStaticText* hyperlink = wxStaticTextRef( m_scrolledWindow1,
-                                                        contributor->GetExtra() );
-            fgSizer1->Add( hyperlink, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
-        }
-        else
-        {
-            fgSizer1->AddSpacer( 5 );
-        }
-    }
-
-    bSizer->Add( panel1, 1, wxEXPAND|wxALL, 10 );
-    bSizer->Add( fgSizer1, 7, wxEXPAND|wxALL, 10 ); // adjust width of panel with first int value
-    m_scrolledWindow1->SetSizer( bSizer );
-    m_scrolledWindow1->Layout();
-    bSizer->Fit( m_scrolledWindow1 );
-
-    outerSizer->Add( m_scrolledWindow1, 1, wxEXPAND, 0 );
-    outerPanel->SetSizer( outerSizer );
-
-    aParent->AddPage( outerPanel, aCaption, false, static_cast<int>( aIconIndex ) );
-}
-
-
 void DIALOG_ABOUT::createNotebookPageByCategory( wxNotebook* aParent, const wxString& aCaption,
                                                  IMAGES aIconIndex,
                                                  const CONTRIBUTORS& aContributors )
 {
-    // The left justification between wxStaticText and wxHyperlinkCtrl is different so
-    // we must pad to make the alignment look decent.
-    //
-    // @todo Just make all of the contributor lists HTML so the alignment is consistent.
-    wxString padding;
-
-    // Of course the padding is different depending on the platform so we adjust the
-    // padding accordingly.
-#if defined( __WXGTK__ )
-    padding += wxS( "      " );
-#endif
-    wxPanel* outerPanel = new wxPanel( aParent );
-    wxBoxSizer* outerSizer = new wxBoxSizer( wxVERTICAL );
-
-    wxBoxSizer* bSizer = new wxBoxSizer( wxHORIZONTAL );
-
-    wxScrolledWindow* m_scrolledWindow1 = new wxScrolledWindow( outerPanel, wxID_ANY,
-                                                                wxDefaultPosition,
-                                                                wxDefaultSize,
-                                                                wxHSCROLL|wxVSCROLL );
-    m_scrolledWindow1->SetScrollRate( 5, 5 );
-
-    /* Panel for additional space at the left,
-     * but can also be used to show an additional bitmap.
-     */
-    wxPanel* panel1 = new wxPanel( m_scrolledWindow1 );
-
-    wxFlexGridSizer* fgSizer1 = createFlexGridSizer();
+    wxString html;
 
     for( size_t i=0; i < aContributors.GetCount(); ++i )
     {
         CONTRIBUTOR* contributor = &aContributors.Item( i );
+        wxString     category = contributor->GetCategory();
 
-        wxBitmap* icon = contributor->GetIcon();
-        wxString category = contributor->GetCategory();
+        // to construct the next row we expect to have a category and a contributor that was
+        // not considered up to now
+        if( category == wxEmptyString || contributor->IsChecked() )
+            continue;
 
-        /* to construct the next row we expect to have
-         * a category and a contributor that was not considered up to now
-         */
-        if( ( category != wxEmptyString ) && !( contributor->IsChecked() ) )
+        html += wxString::Format( wxS( "<p><b><u>%s:</u></b><ul>" ),
+                                  contributor->GetCategory() );
+
+        // Now, all contributors of the same category will follow
+        for( size_t j=0; j < aContributors.GetCount(); ++j )
         {
-            // Icon at first column
-            wxStaticBitmap* m_bitmap1 = createStaticBitmap( m_scrolledWindow1, icon );
-            fgSizer1->Add( m_bitmap1, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
+            CONTRIBUTOR* sub_contributor = &aContributors.Item( j );
 
-            // Category name at second column
-            wxStaticText* m_staticText1 = new wxStaticText( m_scrolledWindow1, wxID_ANY,
-                                                            contributor->GetCategory() + wxT( ":" ),
-                                                            wxDefaultPosition, wxDefaultSize, 0 );
-            m_staticText1->SetFont( m_staticText1->GetFont().Bold() );
-            m_staticText1->Wrap( -1 );
-            fgSizer1->Add( m_staticText1, 0, wxALIGN_LEFT|wxBOTTOM|wxEXPAND, 2 );
-
-            // Nothing at third column
-            fgSizer1->AddSpacer( 5 );
-
-            // Now, all contributors of the same category will follow
-            for( size_t j=0; j < aContributors.GetCount(); ++j )
+            if ( sub_contributor->GetCategory() == category )
             {
-                CONTRIBUTOR* sub_contributor = &aContributors.Item( j );
-
-                if ( sub_contributor->GetCategory() == category )
+                // No URL supplied, display normal text control
+                if( sub_contributor->GetUrl().IsEmpty() )
                 {
-                    // First column is empty
-                    fgSizer1->AddSpacer( 5 );
-
-                    wxControl* ctrl;
-
-                    // No URL supplied, display normal text control
-                    if( sub_contributor->GetUrl().IsEmpty() )
-                    {
-                        ctrl = new wxStaticText( m_scrolledWindow1, wxID_ANY,
-                                                 padding + wxT( "• " ) + sub_contributor->GetName(),
-                                                 wxDefaultPosition,
-                                                 wxDefaultSize, 0 );
-                    }
-                    else
-                    {
-                        // Display a hyperlink control instead
-                        ctrl = new wxHyperlinkCtrl( m_scrolledWindow1, wxID_ANY,
-                                                    wxT( "• " ) + sub_contributor->GetName(),
-                                                    sub_contributor->GetUrl(),
-                                                    wxDefaultPosition,
-                                                    wxDefaultSize,
-                                                    wxBORDER_NONE | wxHL_CONTEXTMENU | wxHL_ALIGN_LEFT );
-                    }
-
-                    m_staticText1->Wrap( -1 );
-
-                    fgSizer1->Add( ctrl, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
-
-                    // Email address of contributor at third column
-                    if( sub_contributor->GetExtra() != wxEmptyString )
-                    {
-                        wxStaticText* mail = wxStaticTextRef( m_scrolledWindow1,
-                                                              sub_contributor->GetExtra() );
-                        fgSizer1->Add( mail, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
-                    }
-                    else
-                    {
-                        fgSizer1->AddSpacer( 5 );
-                    }
-
-                    /* this contributor was added to the GUI,
-                     * thus can be ignored next time
-                     */
-                    sub_contributor->SetChecked( true );
+                    html += wxString::Format( wxS( "<li>%s</li>" ),
+                                              sub_contributor->GetName() );
                 }
+                else
+                {
+                    html += wxString::Format( wxS( "<li><a href='%s'>%s</a></li>" ),
+                                              sub_contributor->GetUrl(),
+                                              sub_contributor->GetName() );
+                }
+
+                // this contributor was added to the GUI, thus can be ignored next time
+                sub_contributor->SetChecked( true );
             }
         }
-        else
-        {
-            continue;
-        }
+
+        html += wxS( "</ul></p>" );
     }
 
-    /* Now, lets list the remaining contributors that have not been considered
-     * because they were not assigned to any category.
-     */
-    for ( size_t k=0; k < aContributors.GetCount(); ++k )
-    {
-        CONTRIBUTOR* contributor = &aContributors.Item( k );
-
-        if ( contributor->IsChecked() )
-            continue;
-
-        // Icon at first column
-        wxStaticBitmap* m_bitmap1 = createStaticBitmap( m_scrolledWindow1, contributor->GetIcon() );
-        fgSizer1->Add( m_bitmap1, 0, wxALIGN_CENTER|wxLEFT|wxRIGHT, 5 );
-
-        // Name of contributor at second column
-        if( contributor->GetName() != wxEmptyString )
-        {
-            wxStaticText* m_staticText1 = new wxStaticText( m_scrolledWindow1, wxID_ANY,
-                                                            contributor->GetName(),
-                                                            wxDefaultPosition, wxDefaultSize, 0 );
-            m_staticText1->Wrap( -1 );
-            fgSizer1->Add( m_staticText1, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
-        }
-        else
-        {
-            fgSizer1->AddSpacer( 5 );
-        }
-
-        // Email address of contributor at third column
-        if ( contributor->GetExtra() != wxEmptyString )
-        {
-            wxStaticText* mail = wxStaticTextRef( m_scrolledWindow1, contributor->GetExtra() );
-            fgSizer1->Add( mail, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
-        }
-        else
-        {
-            fgSizer1->AddSpacer( 5 );
-        }
-    }
-
-    bSizer->Add( panel1, 1, wxEXPAND|wxALL, 10 );
-    bSizer->Add( fgSizer1, 7, wxEXPAND|wxALL, 10 ); // adjust width of panel with first int value
-    m_scrolledWindow1->SetSizer( bSizer );
-    m_scrolledWindow1->Layout();
-    bSizer->Fit( m_scrolledWindow1 );
-
-    outerSizer->Add( m_scrolledWindow1, 1, wxEXPAND, 0 );
-    outerPanel->SetSizer( outerSizer );
-
-    aParent->AddPage( outerPanel, aCaption, false, static_cast<int>( aIconIndex ) );
+    createNotebookHtmlPage( aParent, aCaption, aIconIndex, html, true );
 }
 
 
@@ -440,34 +229,12 @@ void DIALOG_ABOUT::createNotebookHtmlPage( wxNotebook* aParent, const wxString& 
     htmlWindow->Connect( wxEVT_COMMAND_HTML_LINK_CLICKED,
                          wxHtmlLinkEventHandler( DIALOG_ABOUT::onHtmlLinkClicked ), NULL, this );
 
-    // no additional space around the HTML window as it is also the case by the other notebook pages
+    // no additional space around the HTML window as it is also the case by the other notebook
+    // pages
     bSizer->Add( htmlWindow, 1, wxEXPAND, 0 );
     panel->SetSizer( bSizer );
 
     aParent->AddPage( panel, aCaption, false, static_cast<int>( aIconIndex ) );
-}
-
-
-wxStaticText* DIALOG_ABOUT::wxStaticTextRef( wxScrolledWindow* aParent, const wxString& aReference )
-{
-    wxStaticText* text = new wxStaticText( aParent, wxID_ANY,
-                                           wxT( "(" ) + aReference + wxT( ")" ) );
-
-    return text;
-}
-
-
-wxStaticBitmap* DIALOG_ABOUT::createStaticBitmap( wxScrolledWindow* aParent, wxBitmap* aIcon )
-{
-    wxStaticBitmap* bitmap = new wxStaticBitmap( aParent, wxID_ANY, wxNullBitmap,
-                                                 wxDefaultPosition, wxDefaultSize, 0 );
-
-    if( aIcon )
-        bitmap->SetBitmap( *aIcon );
-    else
-        bitmap->SetBitmap( KiBitmapBundle( BITMAPS::right ) );
-
-    return bitmap;
 }
 
 
