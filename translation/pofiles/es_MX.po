@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-11 00:02+0000\n"
+"PO-Revision-Date: 2024-03-13 14:01+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -7537,7 +7537,7 @@ msgstr "Justificado a la izquierda"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "Campos y elementos de texto justificados a la izquierda"
 
 #: common/tool/actions.cpp:290 eeschema/tools/sch_edit_tool.cpp:2472
 #: pcbnew/tools/edit_tool.cpp:2125
@@ -7547,7 +7547,7 @@ msgstr "Justificado Vertical"
 
 #: common/tool/actions.cpp:291
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "Campos y elementos de texto justificados al centro"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2474
 #: pcbnew/tools/edit_tool.cpp:2127
@@ -7557,7 +7557,7 @@ msgstr "Justificado a la derecha"
 
 #: common/tool/actions.cpp:298
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "Campos y elementos de texto justificados a la derecha"
 
 #: common/tool/actions.cpp:304
 #, fuzzy
@@ -7577,6 +7577,8 @@ msgstr "Seleccionar columnas"
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
 msgstr ""
+"Seleccione la(s) columna(s) completas que contienen la(s) celda(s) "
+"seleccionada(s) actualmente"
 
 #: common/tool/actions.cpp:323
 #, fuzzy
@@ -7586,6 +7588,8 @@ msgstr "Seleccionar elemento(s)"
 #: common/tool/actions.cpp:324
 msgid "Select complete row(s) containing the current selected cell(s)"
 msgstr ""
+"Seleccione la(s) fila(s) completas que contienen la(s) celda(s) "
+"seleccionada(s) actualmente"
 
 #: common/tool/actions.cpp:330
 #, fuzzy
@@ -7615,6 +7619,7 @@ msgstr "Agregar alimentación"
 #: common/tool/actions.cpp:345
 msgid "Insert a new table row below the selected cell(s)"
 msgstr ""
+"Insertar una nueva fila de la tabla debajo de la(s) celda(s) seleccionada(s)"
 
 #: common/tool/actions.cpp:351 include/tool/edit_table_tool_base.h:252
 #, fuzzy
@@ -7624,6 +7629,7 @@ msgstr "Agregar esquina"
 #: common/tool/actions.cpp:352
 msgid "Insert a new table column before the selected cell(s)"
 msgstr ""
+"Insertar una nueva columna de tabla antes de la(s) celda(s) seleccionada(s)"
 
 #: common/tool/actions.cpp:358 include/tool/edit_table_tool_base.h:299
 #, fuzzy
@@ -7667,11 +7673,11 @@ msgstr "Fusionar polígonos seleccionados en un solo polígono"
 
 #: common/tool/actions.cpp:386 include/tool/edit_table_tool_base.h:544
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "Dividir celdas"
 
 #: common/tool/actions.cpp:387
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "Convierta las celdas de la tabla unidas en celdas separadas."
 
 #: common/tool/actions.cpp:394 eeschema/dialogs/dialog_table_properties.cpp:382
 #: pcbnew/dialogs/dialog_table_properties.cpp:358
@@ -15284,6 +15290,8 @@ msgstr "La ruta de salida no debe entrar en conflicto con la ruta existente\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Se debe especificar la ruta de salida para convertir bibliotecas antiguas y "
+"no KiCad.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:913
 msgid "Saving symbol library in updated format\n"
@@ -18322,7 +18330,7 @@ msgstr "No rellenar"
 #: eeschema/sch_table.cpp:401 pcbnew/pcb_table.cpp:249
 #, c-format
 msgid "%d Column Table"
-msgstr ""
+msgstr "%d columna de tabla"
 
 #: eeschema/sch_table.cpp:546 pcbnew/pcb_table.cpp:285
 #, fuzzy, c-format
@@ -18351,7 +18359,7 @@ msgstr "Eliminar generador"
 
 #: eeschema/sch_table.cpp:639 pcbnew/pcb_table.cpp:433
 msgid "Cell Separators"
-msgstr ""
+msgstr "Separadores de celda"
 
 #: eeschema/sch_table.cpp:643 pcbnew/pcb_table.cpp:437
 #, fuzzy
@@ -20615,6 +20623,8 @@ msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
 msgstr ""
+"Los cambios realizados en este cuadro de diálogo se producen inmediatamente; "
+"utilice Deshacer en cada documento afectado para deshacerlos"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
 #, fuzzy
@@ -20662,7 +20672,7 @@ msgstr "Cambiar la referencia \"%s\" a \"%s\"."
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
-msgstr ""
+msgstr "Romper asociación(es) de pines de hoja y etiquetas jerárquicas"
 
 #: eeschema/toolbars_symbol_viewer.cpp:51
 msgid "Display previous symbol"
@@ -22121,7 +22131,7 @@ msgstr "Nueva pestaña de análisis..."
 
 #: eeschema/tools/ee_actions.cpp:1423
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Crear una nueva pestaña que contenga un análisis de simulación"
 
 #: eeschema/tools/ee_actions.cpp:1431
 msgid "Open Workbook..."
@@ -22129,7 +22139,7 @@ msgstr "Abrir libro de trabajo..."
 
 #: eeschema/tools/ee_actions.cpp:1432
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Abrir un conjunto guardado de pestañas de análisis y ajustes"
 
 #: eeschema/tools/ee_actions.cpp:1440
 msgid "Save Workbook"
@@ -22186,6 +22196,8 @@ msgstr "Editar pestaña de análisis..."
 #: eeschema/tools/ee_actions.cpp:1487
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
+"Editar el comando SPICE de la pestaña de análisis actual y la configuración "
+"del gráfico"
 
 #: eeschema/tools/ee_actions.cpp:1494
 msgid "Run Simulation"
@@ -40861,6 +40873,7 @@ msgstr "Restricciones de longitud: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
+"No se pueden sintonizar segmentos dentro de otros patrones de sintonización."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
