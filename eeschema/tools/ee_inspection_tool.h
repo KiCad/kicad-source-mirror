@@ -56,6 +56,8 @@ public:
     /// Called when clicking on a item:
     int CrossProbe( const TOOL_EVENT& aEvent );
 
+    void CrossProbe( const SCH_MARKER* aMarker );
+
     wxString InspectERCErrorMenuText( const std::shared_ptr<RC_ITEM>& aERCItem );
     void InspectERCError( const std::shared_ptr<RC_ITEM>& aERCItem );
 
