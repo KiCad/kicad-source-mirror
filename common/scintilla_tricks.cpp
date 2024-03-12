@@ -338,10 +338,22 @@ void SCINTILLA_TRICKS::onCharHook( wxKeyEvent& aEvent )
     else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'X' )
     {
         m_te->Cut();
+
+        if( wxTheClipboard->Open() )
+        {
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+            wxTheClipboard->Close();
+        }
     }
     else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'C' )
     {
         m_te->Copy();
+
+        if( wxTheClipboard->Open() )
+        {
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+            wxTheClipboard->Close();
+        }
     }
     else if( aEvent.GetModifiers() == wxMOD_CONTROL && aEvent.GetKeyCode() == 'V' )
     {
