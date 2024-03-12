@@ -44,10 +44,8 @@ public:
 private:
     void onNetSelector( wxCommandEvent& aEvent );
     void onViaNotFreeClicked( wxCommandEvent& aEvent ) override;
-    void onTrackNetclassCheck( wxCommandEvent& aEvent ) override;
     void onWidthSelect( wxCommandEvent& aEvent ) override;
     void onWidthEdit( wxCommandEvent& aEvent ) override;
-    void onViaNetclassCheck( wxCommandEvent& aEvent ) override;
     void onViaSelect( wxCommandEvent& aEvent ) override;
     void onViaEdit( wxCommandEvent& aEvent ) override;
 
