@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-10 11:02+0000\n"
+"PO-Revision-Date: 2024-03-12 19:01+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -631,7 +631,7 @@ msgstr "Silkscreen achter weergeven"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "F.Mask"
-msgstr "F. masker"
+msgstr "F.Mask"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:62
 msgid "Show front solder mask"
@@ -766,7 +766,7 @@ msgstr "Eindkleur kleurverloop achtergrond"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:200
 msgid "Use board stackup colors"
-msgstr "Bordstapelingkleuren gebruiken"
+msgstr "Bordopbouwkleuren gebruiken"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:134
 #, c-format
@@ -802,7 +802,7 @@ msgstr ""
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr "Ontvink ‘Bordstapelingkleuren gebruiken’ om kleuren te bewerken."
+msgstr "Ontvink ‘Bordopbouwkleuren gebruiken’ om kleuren te bewerken."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -4601,11 +4601,11 @@ msgstr "Via gat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "uVia-grootte"
+msgstr "µVia-grootte"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 msgid "uVia Hole"
-msgstr "uVia gat"
+msgstr "µVia-gat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58
 msgid "DP Width"
@@ -6808,11 +6808,11 @@ msgstr "Verborgen tekst"
 
 #: common/layer_id.cpp:165
 msgid "SMD pads front"
-msgstr "SMD pads voorkant"
+msgstr "SMD-pads voorkant"
 
 #: common/layer_id.cpp:166
 msgid "SMD pads back"
-msgstr "SMD pads achterkant"
+msgstr "SMD-pads achterkant"
 
 #: common/layer_id.cpp:167
 msgid "Through-hole pads"
@@ -8656,7 +8656,7 @@ msgstr "SPICE-netlijstbestand"
 
 #: common/wildcards_and_files_ext.cpp:443
 msgid "CadStar netlist file"
-msgstr "CADSTAR netlistbestand"
+msgstr "CADSTAR-netlijstbestand"
 
 #: common/wildcards_and_files_ext.cpp:449
 msgid "Symbol footprint association files"
@@ -9148,7 +9148,7 @@ msgstr "Alle associaties verwijderen?"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
 msgid "Unable to create the footprint viewer frame"
-msgstr "Kan het scherm voor de voetafdrukviewer niet maken"
+msgstr "Kan het scherm voor de footprintviewer niet maken"
 
 #: eeschema/annotate.cpp:155
 msgid "Delete Annotation"
@@ -9901,7 +9901,7 @@ msgstr "%u verwijzing(en) toegewezen, %u niet gevonden"
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:664
 #, c-format
 msgid "All %u link(s) resolved"
-msgstr "Alle %u verwijzing(en) zijn opgelost"
+msgstr "Alle %u verwijzing(en) zijn bepaald"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:691
 msgid "Invalid symbol library identifier"
@@ -10253,7 +10253,7 @@ msgstr "Netlijstopdracht:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:460
 msgid "Save Netlist File"
-msgstr "Sla het Netlist-bestand op"
+msgstr "Netlijstbestand opslaan"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:517
 #, c-format
@@ -15010,7 +15010,7 @@ msgstr "Controle labels..."
 
 #: eeschema/erc.cpp:1224
 msgid "Checking for unresolved variables..."
-msgstr "Controle op onopgeloste variabelen..."
+msgstr "Controle op onbekende variabelen..."
 
 #: eeschema/erc.cpp:1232
 msgid "Checking SPICE models..."
@@ -15129,7 +15129,7 @@ msgstr "Ongeldige verbinding tussen bus- en netitems"
 
 #: eeschema/erc_item.cpp:135 pcbnew/drc/drc_item.cpp:197
 msgid "Unresolved text variable"
-msgstr "Onopgeloste tekstvariabele"
+msgstr "Onbekende tekstvariabele"
 
 #: eeschema/erc_item.cpp:139
 msgid "Undefined netclass"
@@ -16049,7 +16049,7 @@ msgstr "Bus van %s, %s naar %s, %s"
 
 #: eeschema/net_navigator.cpp:72
 msgid "Graphic line not connectable"
-msgstr "Grafsche lijn niet verbindbaar"
+msgstr "Lijntekening niet verbindbaar"
 
 #: eeschema/net_navigator.cpp:85
 #, c-format
@@ -17587,7 +17587,7 @@ msgstr ""
 #: eeschema/sch_screen.cpp:965
 #, c-format
 msgid "I/O error %s resolving library symbol %s"
-msgstr "I / O-fout %s bij het oplossen van bibliotheeksymbool %s"
+msgstr "I/O-fout %s bij het bepalen van bibliotheeksymbool %s"
 
 #: eeschema/sch_screen.cpp:985
 #, c-format
@@ -25725,7 +25725,7 @@ msgstr "Bestaand tekenbladbestand toevoegen aan het huidige bestand"
 
 #: pagelayout_editor/tools/pl_actions.cpp:105
 msgid "Show Design Inspector"
-msgstr "Ontwerpinspecteur weergeven"
+msgstr "Ontwerpinspectie weergeven"
 
 #: pagelayout_editor/tools/pl_actions.cpp:106
 msgid "Show the list of items in the drawing sheet"
@@ -28448,7 +28448,7 @@ msgstr "Koperlagen:"
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
 msgid "Select the number of copper layers in the stackup"
-msgstr "Selecteer het aantal koperlagen in de stapeling"
+msgstr "Selecteer het aantal koperlagen in de opbouw"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:53
@@ -28528,7 +28528,7 @@ msgstr "Id"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:131
 msgid "Board thickness from stackup:"
-msgstr "Borddikte van stapeling:"
+msgstr "Bordopbouwdikte:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:141
 msgid "Adjust Dielectric Thickness"
@@ -28839,7 +28839,7 @@ msgid ""
 "Front footprints will start at %s"
 msgstr ""
 "\n"
-"Voetafdrukken aan de voorkant beginnen bij %s"
+"Footprints aan de voorkant beginnen bij %s"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:350
 #, c-format
@@ -28848,11 +28848,11 @@ msgid ""
 "Back footprints will start at %s."
 msgstr ""
 "\n"
-"Voetafdrukken op de achterkant beginnen bij %s."
+"Footprints op de achterkant beginnen bij %s."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:351
 msgid "the last front footprint + 1"
-msgstr "de laatste voetafdruk aan de voorkant + 1"
+msgstr "de laatste footprint aan de voorkant + 1"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:359
 #, c-format
@@ -28861,7 +28861,7 @@ msgid ""
 "Front footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Voetafdrukken op de voorkant die beginnen met '%s' zullen dit voorvoegsel "
+"Footprints op de voorkant die beginnen met '%s' zullen dit voorvoegsel "
 "verliezen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:365
@@ -28871,7 +28871,7 @@ msgid ""
 "Front footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Voetafdrukken op de voorkant zullen het voorvoegsel '%s' krijgen."
+"Footprints op de voorkant zullen het voorvoegsel '%s' krijgen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:375
 #, c-format
@@ -28880,7 +28880,7 @@ msgid ""
 "Back footprints starting with '%s' will have the prefix removed."
 msgstr ""
 "\n"
-"Voetafdrukken op de achterkant die beginnen met '%s' zullen dit voorvoegsel "
+"Footprints op de achterkant die beginnen met '%s' zullen dit voorvoegsel "
 "verliezen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:381
@@ -28890,7 +28890,7 @@ msgid ""
 "Back footprints will have '%s' inserted as a prefix."
 msgstr ""
 "\n"
-"Voetafdrukken op de achterkant zullen het voorvoegsel '%s' krijgen."
+"Footprints op de achterkant zullen het voorvoegsel '%s' krijgen."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:389
 #, c-format
@@ -28900,12 +28900,12 @@ msgid ""
 "grid."
 msgstr ""
 "\n"
-"Voorafgaand aan het sorteren op %s, worden de coördinaten afgerond op een "
-"%s, %s raster."
+"Voorafgaand aan het sorteren op %s worden de coördinaten afgerond op een %s, "
+"%s raster."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:391
 msgid "footprint location"
-msgstr "footprint locatie"
+msgstr "footprintlocatie"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:392
 msgid "reference designator location"
@@ -28955,7 +28955,7 @@ msgid ""
 "No footprints"
 msgstr ""
 "\n"
-"Geen voetafdrukken"
+"Geen footprints"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:569
 #, c-format
@@ -29018,7 +29018,7 @@ msgid ""
 "RefDes: %s Footprint: %s:%s at %s on PCB."
 msgstr ""
 "\n"
-"RefDes: %s Voetafdruk: %s: %s bij %s op PCB."
+"RefDes: %s Footprint: %s: %s bij %s op PCB."
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:622
 msgid "Reannotate anyway?"
@@ -29041,7 +29041,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Voetafdrukken aan de voorkant"
+"Footprints op de voorkant"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:865
 msgid ""
@@ -29051,7 +29051,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Voetafdrukken op de achterkant"
+"Footprints op de achterkant"
 
 #: pcbnew/dialogs/dialog_board_reannotate.cpp:930
 msgid "Footprint not found in changelist"
@@ -29262,7 +29262,7 @@ msgstr "Instellingen importeren van een ander bord..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:83
 msgid "Board Stackup"
-msgstr "Bordstapeling"
+msgstr "Bordopbouw"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:96
 msgid "Board Editor Layers"
@@ -29270,7 +29270,7 @@ msgstr "Bordeditorlagen"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
 msgid "Physical Stackup"
-msgstr "Fysieke stapeling"
+msgstr "Fysieke opbouw"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:111
 msgid "Board Finish"
@@ -29575,7 +29575,7 @@ msgstr "Controle zones..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:150
 msgid "Rebuilding connectivity..."
-msgstr "Bordconnectiviteit herbouwen..."
+msgstr "Verbindingen herbouwen..."
 
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias.cpp:170
 msgid "Board cleanup"
@@ -32852,7 +32852,7 @@ msgstr "Netlijst laden en testen"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:135
 #: pcbnew/dialogs/dialog_import_netlist_base.h:70
 msgid "Import Netlist"
-msgstr "Importeer Netlist"
+msgstr "Netlijst importeren"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:160
 msgid "Please choose a valid netlist file."
@@ -32884,7 +32884,7 @@ msgstr "Gebruik tstamps (unieke ID’s) om symbolen en footprints te matchen.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:26
 msgid "Netlist file:"
-msgstr "Netlist-bestand:"
+msgstr "Netlijstbestand:"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:42
 msgid "Link footprints using component tstamps (unique ids)"
@@ -32910,7 +32910,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:53
 msgid "Replace footprints with those specified in netlist"
-msgstr "Vervang footprints door die gespecificeerd in netlist"
+msgstr "Footprints vervangen door die gespecificeerd in netlijst"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:56
 msgid "Delete footprints with no components in netlist"
@@ -32927,7 +32927,7 @@ msgstr "Alles deselecteren"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
 msgid "Board layers and physical stackup"
-msgstr "Bordlagen en fysieke stapeling"
+msgstr "Bordlagen en fysieke opbouw"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
@@ -33212,7 +33212,7 @@ msgstr "Rapport maken..."
 #: pcbnew/dialogs/dialog_net_inspector_base.h:72
 #: pcbnew/tools/pcb_actions.cpp:1320
 msgid "Net Inspector"
-msgstr "Netinspecteur"
+msgstr "Netinspectie"
 
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:127
 msgid "Convert to Non Copper Zone"
@@ -33719,7 +33719,7 @@ msgstr "Teardropvorm"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:835
 msgid "Pad connection:"
-msgstr "Padaansluiting:"
+msgstr "Padverbinding:"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
 msgid "From parent footprint"
@@ -33870,7 +33870,7 @@ msgstr "Alle lagen deselecteren"
 
 #: pcbnew/dialogs/dialog_plot.cpp:550
 msgid "Order as Board Stackup"
-msgstr "Volgorde als bordstapeling"
+msgstr "Volgorde als bordopbouw"
 
 #: pcbnew/dialogs/dialog_plot.cpp:952
 msgid "HPGL pen size constrained."
@@ -34098,7 +34098,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid "Include netlist attributes"
-msgstr "Voeg netlijstattributen toe"
+msgstr "Netlijstattributen toevoegen"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:233
 msgid ""
@@ -34106,9 +34106,9 @@ msgid ""
 "They are comments in the X1 format.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
-"Voeg netlistmetadata en diafragmaattributen toe aan Gerber-bestanden.\n"
+"Voeg netlijstmetadata en diafragmaattributen toe aan Gerber-bestanden.\n"
 "In X1-indeling zijn het commentaren.\n"
-"Wordt gebruikt om de connectiviteit in CAM-tools en Gerber-viewers te "
+"Wordt gebruikt om de verbindingen in CAM-tools en Gerber-viewers te "
 "controleren."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:237
@@ -35667,7 +35667,7 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
 msgid "uVias"
-msgstr "µvia’s"
+msgstr "µVia’s"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:242
 msgid "Minimum uVia diameter:"
@@ -35691,7 +35691,7 @@ msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
 msgstr ""
-"De minimale microvia-boorgatmaat. Indien ingevuld is dit het absolute "
+"De minimale boorgatmaat voor microvia’s. Indien ingevuld is dit het absolute "
 "minimum dat niet kan worden verlaagd door netklassen, aangepaste regels of "
 "andere instellingen."
 
@@ -35772,7 +35772,7 @@ msgstr "Lengteafstemming"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:443
 msgid "Include stackup height in track length calculations"
-msgstr "Stapelingshoogte meerekenen in spoorlengteberekeningen"
+msgstr "Opbouwhoogte meerekenen in spoorlengteberekeningen"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:444
 msgid ""
@@ -35782,7 +35782,7 @@ msgid ""
 msgstr ""
 "Indien aangevinkt wordt de afstand tussen koperlagen meegenomen in "
 "spoorlengteberekeningen voor sporen met via’s. Zo niet dan wordt de "
-"stapelinghoogte van via’s genegeerd."
+"opbouwhoogte van via’s genegeerd."
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
 msgid "When Adding Footprints to Board"
@@ -35802,8 +35802,7 @@ msgstr "Standaardwaarden bord toepassen op niet-koperen footprintvormen"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:435
 msgid "Use the Physical Stackup page to change the number of copper layers."
-msgstr ""
-"Gebruik de fysieke stapeling-pagina om het aantal koperlagen te wijzigen."
+msgstr "Gebruik de fysieke opbouw-pagina om het aantal koperlagen te wijzigen."
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:469
 #, c-format
@@ -35886,7 +35885,7 @@ msgstr "Niet op de print, testen"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:67
 msgid "If you want a fabrication layer for the front side of the board"
-msgstr "Als u een fabricagelaag wilt voor de voorkant van het bord"
+msgstr "Als u een fabricagelaag wilt voor de voorkant van de PCB"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:71
 msgid "Fab_Front"
@@ -35899,7 +35898,7 @@ msgstr "Niet op de print, fabricage"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:79
 msgid "If you want an adhesive template for the front side of the board"
-msgstr "Als u een lijmsjabloon wilt voor de voorzijde van het bord"
+msgstr "Als u een lijmsjabloon wilt voor de voorzijde van de PCB"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:83
 msgid "Adhes_Front"
@@ -37009,167 +37008,193 @@ msgstr ""
 "\n"
 "### Beperkingen\n"
 "\n"
-"| Beperkingstype            | "
-"Argumenttype                                                                                                           "
-"| "
-"Description                                                                                                                                                                                                                                                                                                                                                                                                                                             "
-"|\n"
-"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| Controleert de breedte van annulusringen op vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                   "
-"|\n"
-"| `assertion`               | \"&lt;"
-"expression>\"                                                                                                      "
-"| Controleert op de gegeven expressie."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                                "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| Specificeert de **elektrische** vrije ruimte tussen koperobjecten van "
-"verschillende netten.  (Zie `physical_clearance` als u de vrije ruimte "
+"| Beperkingstype            | Argumenttype                                   "
+"                                                                        | Des"
+"cription                                                                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                    |\n"
+"|---------------------------|------------------------------------------------"
+"------------------------------------------------------------------------|----"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"-----------------------------------------------------------------------------"
+"----------------------------------------------------|\n"
+"| `annular_width`           | min/opt/max                                    "
+"                                                                        | "
+"Controleert de breedte van annulusringen op vias.<br>                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"| `assertion`               | \"&lt;expression>\"                            "
+"                                                                          | "
+"Controleert op de gegeven expressie.<br>                                     "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"| `clearance`               | min                                            "
+"                                                                        | "
+"Specificeert de **elektrische** vrije afstand tussen koperobjecten van "
+"verschillende netten.  (Zie `physical_clearance` als u de vrije afstand "
 "tussen objecten ongeacht het net wilt specificeren.)<br><br>Maak om "
 "koperobjecten te laten overlappen (botsen) een `clearance`-beperking met een "
-"`min`-waarde kleiner dan nul (bijvoorbeeld `-1`)."
-"<br>                                                                                                     "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| Controleert de vrije ruimte tussen footprint-afbakeningen en genereert een "
+"`min`-waarde kleiner dan nul (bijvoorbeeld `-1`).<br>                        "
+"                                                                           |"
+"\n"
+"| `courtyard_clearance`     | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen footprint-afbakeningen en genereert een "
 "fout als twee afbakeningen dichter bij elkaar zijn dan de `min`-afstand.  "
 "Als een footprint geen afbakeningsvorm heeft worden er geen foutmeldingen "
-"gegenereerd door deze beperking."
-"<br>                                                                                                                                                                                     "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| Controleert de tussenruimte tussen gekoppelde sporen in een differentieel "
+"gegenereerd door deze beperking.<br>                                         "
+"                                                                             "
+"                                                              |\n"
+"| `diff_pair_gap`           | min/opt/max                                    "
+"                                                                        | "
+"Controleert de tussenruimte tussen gekoppelde sporen in een differentieel "
 "paar.  Gekoppelde sporen zijn segmenten die parallel aan elkaar lopen.  De "
 "tussenruimte van differentiele paren wordt niet getest op ongekoppelde delen "
-"van een differentieel paar (bijvoorbeeld de uitwaaiering van een component)."
-"<br>                                                                                                                                      "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| Controleert de afstand waar een differentieel paar ongekoppeld is "
-"gerouteerd van het andere polariteitsspoor in het paar (bijvoorbeeld waar "
-"het paar uitwaaiert van een component, of ongekoppeld wordt om een ander "
-"object zoals een via te passeren)."
-"<br>                                                                                                                                                                                             "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Geef één of meer objecttypes om te verbieden, gescheiden door spaties.  "
+"van een differentieel paar (bijvoorbeeld de uitwaaiering van een component).<"
+"br>                                                                          "
+"                                                            |\n"
+"| `diff_pair_uncoupled`     | max                                            "
+"                                                                        | "
+"Controleert de afstand waar een differentieel paar ongekoppeld is gerouteerd "
+"van het andere polariteitsspoor in het paar (bijvoorbeeld waar het paar "
+"uitwaaiert van een component, of ongekoppeld wordt om een ander object zoals "
+"een via te passeren).<br>                                                    "
+"                                                                             "
+"                                                            |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
+"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
+"Geef één of meer objecttypes om te verbieden, gescheiden door spaties.  "
 "Bijvoorbeeld, `(constraint disallow track)` of `(constraint disallow track "
 "via pad)`.  Als een object van dit type overeen komt met de regelvoorwaarde "
 "wordt een DRC-fout aangemaakt.<br><br>Deze beperking is in essentie "
 "hetzelfde als een weerregelgebied, maar kan gebruikt worden om meer "
-"specifieke weerbeperkingen te creëren."
-"<br>                                       |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Controleert de vrije ruimte tussen objecten en de bordrand.<br><br>Dit kan "
+"specifieke weerbeperkingen te "
+"creëren.<br>                                       |\n"
+"| `edge_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Controleert de vrije afstand tussen objecten en de bordrand.<br><br>Dit kan "
 "ook beschouwd worden als de “freestolerantie” aangezien de bordrand alle "
 "grafische items op de `Edge.Cuts`-laag zal omvatten, evenals eventuele "
-"*ovale* padgaten.  (Zie `physical_hole_clearance` voor de "
-"boortolerantie.)<br>                                                                                                                                               "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| Controleert de totale gerouteerde lengte voor de netten die overeenkomen "
-"met de regelvoorwaarde en genereert een fout voor elk net dat onder de `min`-"
+"*ovale* padgaten.  (Zie `physical_hole_clearance` voor de boortolerantie.)<br"
+">                                                                            "
+"                                                                  |\n"
+"| `length`                  | min/max                                        "
+"                                                                        | "
+"Controleert de totale gerouteerde lengte voor de netten die overeenkomen met "
+"de regelvoorwaarde en genereert een fout voor elk net dat onder de `min`-"
 "waarde (als opgegeven) of boven de `max`-waarde (als opgegeven) van de "
-"beperking ligt."
-"<br>                                                                                                                                                                                                        "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| Controleert de grootte (diameter) van een boorgat in een pad of via.  Voor "
+"beperking ligt.<br>                                                          "
+"                                                                             "
+"                                                                 |\n"
+"| `hole`                    | min/max                                        "
+"                                                                        | "
+"Controleert de grootte (diameter) van een boorgat in een pad of via.  Voor "
 "ovale gaten zal de kleinere (minore) diameter worden getest tegen de `min`-"
 "waarde (als opgegeven) en de grotere (majore) diameter zal worden getest "
-"tegen de `max`-waarde (als opgegeven)."
-"<br>                                                                                                                                                                               "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| Controleert de vrije ruimte tussen een boorgat in een pad of via en "
-"koperobjecten op een ander net.  De vrije ruimte wordt gemeten vanaf de "
-"diameter van het gat, niet vanuit het midden."
-"<br>                                                                                                                                                                                                                                                           "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| Controleert de vrije ruimte tussen mechanisch geboorde gaten in pads en "
-"via’s.  De vrije ruimte wordt gemeten tussen de diameters van de gaten, niet "
+"tegen de `max`-waarde (als opgegeven).<br>                                   "
+"                                                                             "
+"                                                               |\n"
+"| `hole_clearance`          | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen een boorgat in een pad of via en "
+"koperobjecten op een ander net.  De vrije afstand wordt gemeten vanaf de "
+"diameter van het gat, niet vanuit het midden.<br>                            "
+"                                                                             "
+"                                                                             "
+"                                                                   |\n"
+"| `hole_to_hole`            | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen mechanisch geboorde gaten in pads en via’"
+"s.  De vrije afstand wordt gemeten tussen de diameters van de gaten, niet "
 "tussen hun middelpunten.<br><br>Deze beperking bestaat puur ter bescherming "
-"van boorbitjes.  De vrije ruimte tussen **laser-geboorde** (microvia’s) "
-"gaten wordt niet gecontroleerd, noch de vrije ruimte tussen **gefreesde** "
-"(ovaalvormige) gaten en andere niet-mechanisch geboorde gaten.<br>   |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| Controleert de vrije ruimte tussen twee objecten op een gegeven laag "
-"(inclusief niet-koperlagen).<br><br>Hoewel dit meer algemene controles kan "
-"uitvoeren dan `clearance` is het veel langzamer.  Gebruik `clearance` waar "
-"mogelijk."
-"<br>                                                                                                                                                                                                                "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| Controleert de vrije ruimte tussen een boorgat in een pad of via en een "
-"ander object, ongeacht het net. De vrije ruimte wordt gemeten vanaf de "
+"van boorbitjes. De vrije afstand tussen **lasergeboorde** (microvia’s) gaten "
+"wordt niet gecontroleerd, noch de vrije afstand tussen **gefreesde** "
+"(ovaalvormige) gaten en andere niet-mechanisch geboorde gaten.<br> |\n"
+"| `physical_clearance`      | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen twee objecten op een gegeven laag ("
+"inclusief niet-koperlagen).<br><br>Hoewel dit meer algemene controles kan "
+"uitvoeren dan `clearance` is het veel langzamer.  Gebruik `clearance` waar mo"
+"gelijk.<br>                                                                  "
+"                                                                             "
+"                                                                |\n"
+"| `physical_hole_clearance` | min                                            "
+"                                                                        | "
+"Controleert de vrije afstand tussen een boorgat in een pad of via en een "
+"ander object, ongeacht het net. De vrije afstand wordt gemeten vanaf de "
 "diameter van het gat, niet het midden.<br><br>Dit kan ook worden beschouwd "
 "als de “boortolerantie” aangezien het alleen **ronde** gaten omvat (zie "
-"`edge_clearance` voor de freestolerantie)."
-"<br>                                                                                                        "
-"|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Controleert de vrije ruimte tussen objecten op silkscreenlagen en andere "
-"objecten."
-"<br>                                                                                                                                                                                                                                                                                                                                                                  "
-"|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| Controleert de totale scheeftrekking voor de netten die met de "
+"`edge_clearance` voor de freestolerantie).<br>                               "
+"                                                                       |\n"
+"| `silk_clearance`          | min/opt/max                                    "
+"                                                                        | "
+"Controleert de vrije afstand tussen objecten op silkscreenlagen en andere obj"
+"ecten.<br>                                                                   "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
+"| `skew`                    | max                                            "
+"                                                                        | "
+"Controleert de totale scheeftrekking voor de netten die met de "
 "regelvoorwaarde overeenkomen. Dat wil zeggen, het verschil tussen de lengte "
 "van elk net en het gemiddelde van alle lengtes van elk net dat overeenkomt "
 "met de regel.  Als de absolute waarde van het verschil tussen dat gemiddelde "
 "en de lengte van eender net boven de `max`-waarde van de beperking ligt, "
-"wordt een fout gegenereerd.<br>                                             "
-"|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| Geeft de breedte van de tussenruimte tussen een pad en een zone met een "
-"thermische ontlastingsverbinding."
-"<br>                                                                                                                                                                                                                                                                                                                                           "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| Geeft de breedte van de spaken die een pad met een zone verbinden via een "
-"thermische ontlastingsverbinding."
-"<br>                                                                                                                                                                                                                                                                                                                                         "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| Cotroleert de breedte van spoor- en boogsegmenten.  Voor elk segment dat "
-"een breedte onder de `min`-waarde (als opgegeven) of boven de `max`-waarde "
-"(als opgegeven) heeft wordt een fout gegenereerd."
-"<br>                                                                                                                                                                                                                                               "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| Telt het aantal via’s op elk net wat aan de regelvoorwaarde voldoet.  Als "
+"wordt een fout gegenereerd.<br>                                             |"
+"\n"
+"| `thermal_relief_gap`      | min                                            "
+"                                                                        | "
+"Geeft de breedte van de tussenruimte tussen een pad en een zone met een "
+"thermische ontlastingsverbinding.<br>                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                            |\n"
+"| `thermal_spoke_width`     | opt                                            "
+"                                                                        | "
+"Geeft de breedte van de spaken die een pad met een zone verbinden via een "
+"thermische ontlastingsverbinding.<br>                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                          |\n"
+"| `track_width`             | min/opt/max                                    "
+"                                                                        | "
+"Cotroleert de breedte van spoor- en boogsegmenten.  Voor elk segment dat een "
+"breedte onder de `min`-waarde (als opgegeven) of boven de `max`-waarde (als "
+"opgegeven) heeft wordt een fout gegenereerd.<br>                             "
+"                                                                             "
+"                                                                             "
+"                                                        |\n"
+"| `via_count`               | max                                            "
+"                                                                        | "
+"Telt het aantal via’s op elk net wat aan de regelvoorwaarde voldoet.  Als "
 "het aantal de `max`-waarde van de beperking overschrijft op eender van de "
-"overeenkomende netten, wordt er een fout gegenereerd voor dat net."
-"<br>                                                                                                                                                                                                                              "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Specificeert de verbinding die moet worden gemaakt tussen een zone en een "
-"pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
+"overeenkomende netten, wordt er een fout gegenereerd voor dat net.<br>       "
+"                                                                             "
+"                                                                             "
+"                                                             |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
+"                                                                        | "
+"Specificeert de verbinding die moet worden gemaakt tussen een zone en een pad"
+".<br>                                                                        "
+"                                                                             "
+"                                                                             "
+"                                                                             "
+"                                                       |\n"
 "\n"
 "\n"
 "### Items\n"
@@ -37340,25 +37365,25 @@ msgstr ""
 "\n"
 "    (rule \"Afstand tussen via’s van verschillende netten\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
+"\n"
 "\n"
 "    (rule \"Vrije afstand tussen pads van verschillende netten\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
 "\n"
 "\n"
-"    (rule \"Vrije ruimte tussen via-gat en spoor\"\n"
+"\n"
+"    (rule \"Vrije afstand tussen via-gat en spoor\"\n"
 "        (constraint hole_clearance (min 0.254mm))\n"
 "        (condition \"A.Type == 'Via' && B.Type == 'Track'\"))\n"
 "\n"
-"    (rule \"Vrije ruimte tussen pad en spoor\"\n"
+"    (rule \"Vrije afstand tussen pad en spoor\"\n"
 "        (constraint clearance (min 0.2mm))\n"
 "        (condition \"A.Type == 'Pad' && B.Type == 'Track'\"))\n"
 "\n"
 "\n"
-"    (rule \"vrije-ruimte-tot-1mm-uitsparing\"\n"
+"    (rule \"vrije-afstand-tot-1mm-uitsparing\"\n"
 "        (constraint edge_clearance (min 0.8mm))\n"
 "        (condition \"A.Layer == 'Edge.Cuts' && A.Line_Width == 1.0mm\"))\n"
 "\n"
@@ -37378,8 +37403,8 @@ msgstr ""
 "        (constraint diff_pair_gap (opt \"0.8mm\"))\n"
 "        (condition \"A.inDiffPair('/CLK')\"))\n"
 "\n"
-"    # Specificeer een grotere vrije ruimte rondom elk differentieel paar\n"
-"    (rule \"dp vrije ruimte\"\n"
+"    # Specificeer een grotere vrije afstand rondom elk differentieel paar\n"
+"    (rule \"dp vrije afstand\"\n"
 "        (constraint clearance (min \"1.5mm\"))\n"
 "        (condition \"A.inDiffPair('*') && !AB.isCoupledDiffPair()\"))\n"
 "\n"
@@ -37664,7 +37689,7 @@ msgstr "weergebied '%s'"
 #: pcbnew/drc/drc_engine.cpp:624
 #, c-format
 msgid "Resolved zone connection type: %s."
-msgstr "Opgelost type zoneverbinding: %s."
+msgstr "Zoneverbindingstype bepaald: %s."
 
 #: pcbnew/drc/drc_engine.cpp:642
 #, c-format
@@ -39101,7 +39126,7 @@ msgstr "Gerber-job bestand '%s' maken."
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:592
 msgid "Board stackup settings not up to date."
-msgstr "Instellingen voor bordstapeling zijn niet actueel."
+msgstr "Instellingen voor bordopbouw zijn niet actueel."
 
 #: pcbnew/exporters/step/exporter_step.cpp:502
 msgid "Determining PCB data\n"
@@ -39110,7 +39135,7 @@ msgstr "PCB-data bepalen\n"
 #: pcbnew/exporters/step/exporter_step.cpp:505
 #, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Borddikte van stapeling: %.3f mm\n"
+msgstr "Bordopbouwdikte: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:519
 #, c-format
@@ -39565,7 +39590,7 @@ msgstr "Geen footprint geselecteerd."
 
 #: pcbnew/footprint_editor_utils.cpp:247
 msgid "Edit Zone"
-msgstr "Bewerk Zone"
+msgstr "Zone bewerken"
 
 #: pcbnew/footprint_editor_utils.cpp:326
 #, c-format
@@ -40315,17 +40340,17 @@ msgstr "Kan %s niet toevoegen (footprint '%s' niet gevonden)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:162
 #, c-format
 msgid "Add %s (footprint '%s')."
-msgstr "Voeg %s (footprint '%s') toe."
+msgstr "%s (footprint '%s') toevoegen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:192
 #, c-format
 msgid "Added %s (footprint '%s')."
-msgstr "Voeg %s (footprint '%s') toe."
+msgstr "%s (footprint '%s') toegevoegd."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:210
 #, c-format
 msgid "Cannot update %s (no footprint assigned)."
-msgstr "Kan %s niet updaten (geen footprint toegewezen)."
+msgstr "Kan %s niet bijwerken (geen footprint toegewezen)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:222
 #, c-format
@@ -40340,7 +40365,7 @@ msgstr "Footprint %s wijzigen van '%s' naar '%s'."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:244
 #, c-format
 msgid "Changed %s footprint from '%s' to '%s'."
-msgstr "Footprint %s wijzigen van '%s' naar '%s'."
+msgstr "Footprint %s gewijzigd van '%s' naar '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:277
 #, c-format
@@ -40365,12 +40390,12 @@ msgstr "%s-waarde gewijzigd van %s naar %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:345
 #, c-format
 msgid "Update %s symbol association from %s to %s."
-msgstr "Update %s symboolassociatie van %s naar %s."
+msgstr "%s symboolassociatie bijwerken van %s naar %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:352
 #, c-format
 msgid "Updated %s symbol association from %s to %s."
-msgstr "Update %s symbool-associatie van %s naar %s."
+msgstr "%s symbool-associatie bijgewerkt van %s naar %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:399
 #, c-format
@@ -40465,12 +40490,12 @@ msgstr "%s 'niet plaatsen' fabricageattribuut verwijderd."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:702
 #, c-format
 msgid "Disconnect %s pin %s."
-msgstr "Maak pen %s %s los."
+msgstr "Verbinding %s pin %s verbreken."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:708
 #, c-format
 msgid "Disconnected %s pin %s."
-msgstr "%s pin %s losgekoppeld."
+msgstr "Verbinding %s pin %s verbroken."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:718
 #, c-format
@@ -40480,12 +40505,12 @@ msgstr "Geen net gevonden voor component %s pad %s (geen pin %s in symbool)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:779
 #, c-format
 msgid "Add net %s."
-msgstr "Voeg net toe %s."
+msgstr "Net %s toevoegen."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:789
 #, c-format
 msgid "Reconnect %s pin %s from %s to %s."
-msgstr "Sluit pen %s %s van %s weer aan op %s."
+msgstr "%s pin %s van %s weer verbinden met %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:797
 #, c-format
@@ -40495,7 +40520,7 @@ msgstr "%s pin %s van %s weer met %s verbonden."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:808
 #, c-format
 msgid "Connect %s pin %s to %s."
-msgstr "Verbind %s pin %s met %s."
+msgstr "%s pin %s verbinden met %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:815
 #, c-format
@@ -40505,12 +40530,12 @@ msgstr "%s pin %s verbonden met %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:896
 #, c-format
 msgid "Reconnect via from %s to %s."
-msgstr "Maak opnieuw verbinding via van %s naar %s."
+msgstr "Via opnieuw verbinden van %s naar %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:916
 #, c-format
 msgid "Reconnected via from %s to %s."
-msgstr "Via weer gekoppeld van %s naar %s."
+msgstr "Via opnieuw verbonden van %s naar %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:926
 #, c-format
@@ -40520,32 +40545,32 @@ msgstr "Via verbonden met onbekend net (%s)."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:971
 #, c-format
 msgid "Reconnect copper zone '%s' from %s to %s."
-msgstr "Koper-zone '%s' opnieuw gekoppeld van %s naar %s."
+msgstr "Koperzone '%s' opnieuw verbinden van %s naar %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:978
 #, c-format
 msgid "Reconnect copper zone from %s to %s."
-msgstr "Sluit de koperzone opnieuw aan van %s naar %s."
+msgstr "Koperzone opnieuw verbinden van %s naar %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1001
 #, c-format
 msgid "Reconnected copper zone '%s' from %s to %s."
-msgstr "Koper-zone '%s' opnieuw gekoppeld van %s naar %s."
+msgstr "Koperzone '%s' opnieuw verbonden van %s naar %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1008
 #, c-format
 msgid "Reconnected copper zone from %s to %s."
-msgstr "Koper-zone opnieuw gekoppeld van %s naar %s."
+msgstr "Koperzone opnieuw verbonden van %s naar %s."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1021
 #, c-format
 msgid "Copper zone '%s' has no pads connected."
-msgstr "Er zijn geen pad's gekoppeld aan koper-zone '%s'."
+msgstr "Er zijn geen pads verbonden met koperzone '%s'."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1029
 #, c-format
 msgid "Copper zone on layer %s at (%s, %s) has no pads connected."
-msgstr "Er zijn geen pad's gekoppeld aan koper-zone %s op (%s,%s)."
+msgstr "Er zijn geen pads verbonden met koperzone op laag %s op (%s,%s)."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1070
 #, c-format
@@ -40564,7 +40589,7 @@ msgstr "%s pad %s niet gevonden in %s."
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1130
 #, c-format
 msgid "Processing symbol '%s:%s'."
-msgstr "Verwerkingssymbool '%s: %s'."
+msgstr "Symbol '%s:%s' verwerken."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1199
 #, c-format
@@ -40608,7 +40633,7 @@ msgstr "Totaal aantal waarschuwingen: %d, fouten: %d."
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:271
 #, c-format
 msgid "Cannot find component with ref '%s' in netlist."
-msgstr "Kan component met ref '%s' niet vinden in netlist."
+msgstr "Kan component met ref '%s' niet vinden in netlijst."
 
 #: pcbnew/netlist_reader/kicad_netlist_reader.cpp:480
 #, c-format
@@ -40653,12 +40678,12 @@ msgstr ""
 #: pcbnew/netlist_reader/legacy_netlist_reader.cpp:242
 #, c-format
 msgid "Cannot find symbol %s in footprint filter section of netlist."
-msgstr "Kan symbool %s niet vinden in footprint filter sectie van netlist."
+msgstr "Kan symbool %s niet vinden in footprintfilter-sectie van netlijst."
 
 #: pcbnew/netlist_reader/netlist.cpp:63
 #, c-format
 msgid "Cannot open netlist file '%s'."
-msgstr "Kan netlist-bestand '%s' niet openen."
+msgstr "Kan netlijstbestand '%s' niet openen."
 
 #: pcbnew/netlist_reader/netlist.cpp:74
 #, c-format
@@ -40666,7 +40691,7 @@ msgid ""
 "Error loading netlist.\n"
 "%s"
 msgstr ""
-"Fout bij het laden van netlist.\n"
+"Fout bij het laden van netlijst.\n"
 "%s"
 
 #: pcbnew/netlist_reader/netlist.cpp:164
@@ -40677,7 +40702,7 @@ msgstr "Geen footprint gedefiniëerd voor symbool %s."
 #: pcbnew/netlist_reader/netlist.cpp:191
 #, c-format
 msgid "Footprint of %s changed: board footprint '%s', netlist footprint '%s'."
-msgstr "Footprint van %s gewijzigd: bordfootprint '%s', netlistfootprint '%s'."
+msgstr "Footprint van %s gewijzigd: bordfootprint '%s', netlijstfootprint '%s'."
 
 #: pcbnew/netlist_reader/netlist.cpp:214
 #, c-format
@@ -40973,8 +40998,8 @@ msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
 msgstr ""
-"Fout bij het lezen van de netlist.  Rapporteer dit probleem aub aan het "
-"KiCad team dmv het menu 'Help->Bug rapporteren'."
+"Fout bij het lezen van netlijst.  Rapporteer dit probleem aub aan het KiCad "
+"team dmv het menu 'Help->Bug rapporteren'."
 
 #: pcbnew/pcb_edit_frame.cpp:1929
 #, c-format
@@ -43423,7 +43448,7 @@ msgstr "Route differentieel paar: %s"
 #: pcbnew/router/router_tool.cpp:2654 pcbnew/router/router_tool.cpp:2664
 #, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Bepaalde netklasse: %s"
+msgstr "Netklasse bepaald: %s"
 
 #: pcbnew/router/router_tool.cpp:2661
 #, c-format
@@ -43743,12 +43768,12 @@ msgstr "Bepalen ongekoppelde lengte van differentieel paar voor:"
 #: pcbnew/tools/board_inspection_tool.cpp:926
 #, c-format
 msgid "Resolved max uncoupled length: %s."
-msgstr "Max ogekoppelde lengte bepaald: %s."
+msgstr "Max ongekoppelde lengte bepaald: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:332
 #: pcbnew/tools/board_inspection_tool.cpp:1339
 msgid "Text height resolution for:"
-msgstr "Oplossing teksthoogte voor:"
+msgstr "Teksthoogte bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:340
 #, c-format
@@ -43768,7 +43793,7 @@ msgstr "Tekstdiktebeperkingen bepaald: min %s; max %s."
 #: pcbnew/tools/board_inspection_tool.cpp:362
 #: pcbnew/tools/board_inspection_tool.cpp:1262
 msgid "Track width resolution for:"
-msgstr "Spoorbreedte resolutie voor:"
+msgstr "Spoorbreedte bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:370
 #, c-format
@@ -43796,7 +43821,7 @@ msgstr "Via diameter"
 #: pcbnew/tools/board_inspection_tool.cpp:391
 #: pcbnew/tools/board_inspection_tool.cpp:1281
 msgid "Via diameter resolution for:"
-msgstr "Via diameter resolutie voor:"
+msgstr "Viadiameter bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:399
 #, c-format
@@ -43810,12 +43835,12 @@ msgstr "Via annulus"
 #: pcbnew/tools/board_inspection_tool.cpp:406
 #: pcbnew/tools/board_inspection_tool.cpp:1298
 msgid "Via annular width resolution for:"
-msgstr "Resolutie annulusbreedte via voor:"
+msgstr "Annulusbreedte via bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:414
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "Breedtebeperkingen annulus opgelost: min %s; max %s."
+msgstr "Breedtebeperkingen annulus bepaald: min %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:421
 #: pcbnew/tools/board_inspection_tool.cpp:1318
@@ -43825,7 +43850,7 @@ msgstr "Boorgat afmeting"
 #: pcbnew/tools/board_inspection_tool.cpp:422
 #: pcbnew/tools/board_inspection_tool.cpp:1319
 msgid "Hole size resolution for:"
-msgstr "Gatmaat resolutie voor:"
+msgstr "Gatmaat bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:430
 #, c-format
@@ -43839,7 +43864,7 @@ msgstr "Vrije afstand gat"
 #: pcbnew/tools/board_inspection_tool.cpp:437
 #: pcbnew/tools/board_inspection_tool.cpp:1039
 msgid "Hole clearance resolution for:"
-msgstr "Vrije afstand voor boorgat resolutie voor:"
+msgstr "Vrije afstand van boorgat bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:445
 #: pcbnew/tools/board_inspection_tool.cpp:548
@@ -43869,7 +43894,7 @@ msgstr "Min vrije afstand bepaald: %s."
 #: pcbnew/tools/board_inspection_tool.cpp:460
 #: pcbnew/tools/board_inspection_tool.cpp:1194
 msgid "Physical hole clearance resolution for:"
-msgstr "Vrije ruimte fysiek gat bepalen voor:"
+msgstr "Vrije afstand fysiek gat bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:469
 #: pcbnew/tools/board_inspection_tool.cpp:1206
@@ -43892,12 +43917,12 @@ msgstr "Vrije afstand rand"
 #: pcbnew/tools/board_inspection_tool.cpp:496
 #: pcbnew/tools/board_inspection_tool.cpp:1107
 msgid "Edge clearance resolution for:"
-msgstr "Vrije afstand tot bordrand resolutie voor:"
+msgstr "Vrije afstand tot bordrand bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:540
 #: pcbnew/tools/board_inspection_tool.cpp:852
 msgid "Clearance resolution for:"
-msgstr "Vrije afstand resolutie voor:"
+msgstr "Vrije afstand bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:563
 #: pcbnew/tools/board_inspection_tool.cpp:1128
@@ -43921,7 +43946,7 @@ msgstr "Aannames voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:615
 msgid "Select two items for a clearance resolution report."
-msgstr "Selecteer twee items voor resolutie-rapport over de vrije afstand."
+msgstr "Selecteer twee items voor een rapport over de bepaalde vrije afstand."
 
 #: pcbnew/tools/board_inspection_tool.cpp:630
 #: pcbnew/tools/board_inspection_tool.cpp:643
@@ -43942,34 +43967,34 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:729
 msgid "Zone connection resolution for:"
-msgstr "Zone verbinding resolutie voor:"
+msgstr "Zoneverbinding bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:737
 msgid "Thermal-relief gap resolution for:"
-msgstr "Oplossing voor thermische ontlastingsruimte:"
+msgstr "Thermische ontlastingsruimte bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:746
 #, c-format
 msgid "Resolved thermal relief gap: %s."
-msgstr "Opgeloste thermische ontlastingsruimte: %s."
+msgstr "Thermische ontlastingsruimte bepaald: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:751
 msgid "Thermal-relief spoke width resolution for:"
-msgstr "Oplossing voor thermische spaakbreedte:"
+msgstr "Thermische spaakbreedte bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:760
 #, c-format
 msgid "Resolved spoke width: %s."
-msgstr "Opgeloste spaakbreedte: %s."
+msgstr "Spaakbreedte bepaald: %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:765
 msgid "Thermal-relief min spoke count resolution for:"
-msgstr "Oplossing voor minimum aantal thermische spaken:"
+msgstr "Minimum aantal thermische spaken bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:774
 #, c-format
 msgid "Resolved min spoke count: %d."
-msgstr "Opgeloste minimum aantal spaken: %d."
+msgstr "Minimum aantal spaken bepaald: %d."
 
 #: pcbnew/tools/board_inspection_tool.cpp:783
 #: pcbnew/tools/board_inspection_tool.cpp:831
@@ -44035,11 +44060,11 @@ msgstr ""
 
 #: pcbnew/tools/board_inspection_tool.cpp:967
 msgid "Silkscreen clearance resolution for:"
-msgstr "Vrije afstand voor silkscreen resolutie voor:"
+msgstr "Vrije afstand van silkscreen bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:995
 msgid "Courtyard clearance resolution for:"
-msgstr "Vrije afstandsresolutie afbakening voor:"
+msgstr "Vrije afstands van afbakening bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1123
 msgid "Physical Clearances"
@@ -44047,7 +44072,7 @@ msgstr "Fysieke vrije afstanden"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1238
 msgid "Select an item for a constraints resolution report."
-msgstr "Selecteer een item voor een rapport over het oplossen van beperkingen."
+msgstr "Selecteer een item voor een rapport over de bepaalde beperkingen."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1270
 #, c-format
@@ -44066,7 +44091,7 @@ msgstr "Via annulusbreedte"
 #: pcbnew/tools/board_inspection_tool.cpp:1307
 #, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "Breedtebeperkingen annulus opgelost: min %s; opt %s; max %s."
+msgstr "Breedtebeperkingen annulus bepaald: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1328
 #, c-format
@@ -44076,7 +44101,7 @@ msgstr "Gatmaatbeperkingen bepaald: min %s; opt %s; max %s."
 #: pcbnew/tools/board_inspection_tool.cpp:1347
 #, c-format
 msgid "Resolved height constraints: min %s; opt %s; max %s."
-msgstr "Hoogtebeperkingen hepaald: min %s; opt %s; max %s."
+msgstr "Hoogtebeperkingen bepaald: min %s; opt %s; max %s."
 
 #: pcbnew/tools/board_inspection_tool.cpp:1363
 #, c-format
@@ -44089,7 +44114,7 @@ msgstr "Weergebieden"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1372
 msgid "Keepout resolution for:"
-msgstr "Oplossing weergebied voor:"
+msgstr "Weergebied bepalen voor:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1382
 #: pcbnew/tools/board_inspection_tool.cpp:1406
@@ -44679,11 +44704,11 @@ msgstr "Bordeigenschappentabel toevoegen aan grafische laag"
 
 #: pcbnew/tools/pcb_actions.cpp:156
 msgid "Add Stackup Table"
-msgstr "Stapelingtabel toevoegen"
+msgstr "Opbouwtabel toevoegen"
 
 #: pcbnew/tools/pcb_actions.cpp:157
 msgid "Add a board stackup table on a graphic layer"
-msgstr "Bordstapelingtabel toevoegen op een grafische laag"
+msgstr "Bordopbouwtabel toevoegen op een grafische laag"
 
 #: pcbnew/tools/pcb_actions.cpp:163
 msgid "Add Reference Image"
@@ -45397,7 +45422,7 @@ msgstr "Netlijst importeren..."
 
 #: pcbnew/tools/pcb_actions.cpp:1005
 msgid "Read netlist and update board connectivity"
-msgstr "Netlijst inlezen en bordconnectiviteit bijwerken"
+msgstr "Netlijst inlezen en verbindingen bord bijwerken"
 
 #: pcbnew/tools/pcb_actions.cpp:1011
 msgid "Import Specctra Session..."
@@ -45457,11 +45482,11 @@ msgstr "IPC-2581-bestand genereren"
 
 #: pcbnew/tools/pcb_actions.cpp:1060
 msgid "IPC-D-356 Netlist File..."
-msgstr "IPC-D-356 netlijst-bestand..."
+msgstr "IPC-D-356 netlijstbestand..."
 
 #: pcbnew/tools/pcb_actions.cpp:1061
 msgid "Generate IPC-D-356 netlist file"
-msgstr "IPC-D-356 netlist-bestand genereren"
+msgstr "IPC-D-356 netlijstbestand genereren"
 
 #: pcbnew/tools/pcb_actions.cpp:1067
 msgid "Bill of Materials..."
@@ -45660,7 +45685,7 @@ msgstr "Weergave van geselecteerde item(s) in rattennest omschakelen"
 
 #: pcbnew/tools/pcb_actions.cpp:1321
 msgid "Show the net inspector"
-msgstr "Netinspecteur weergeven"
+msgstr "Netinspectie weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:1341
 msgid "Flip Board View"
@@ -45767,11 +45792,11 @@ msgstr "Alleen zonegrenzen weergeven"
 
 #: pcbnew/tools/pcb_actions.cpp:1433
 msgid "Draw Zone Fill Fracture Borders"
-msgstr "Zonevulling-breukgrenzen tekenen"
+msgstr "Breukgrenzen zonevulling tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:1439
 msgid "Draw Zone Fill Triangulation"
-msgstr "Zonevulling-triangulatie tekenen"
+msgstr "Triangulatie zonevulling tekenen"
 
 #: pcbnew/tools/pcb_actions.cpp:1445
 msgid "Toggle Zone Display"
@@ -45951,22 +45976,22 @@ msgstr "Geeft bordstatistieken weer"
 
 #: pcbnew/tools/pcb_actions.cpp:1827
 msgid "Clearance Resolution"
-msgstr "Vrije afstandresolutie"
+msgstr "Vrije afstand bepalen"
 
 #: pcbnew/tools/pcb_actions.cpp:1828
 msgid ""
 "Show clearance resolution for the active layer between two selected objects"
 msgstr ""
-"Vrije afstandresolutie weergeven voor de actieve laag tussen twee "
+"Vrije afstandsbepaling weergeven voor de actieve laag tussen twee "
 "geselecteerde objecten"
 
 #: pcbnew/tools/pcb_actions.cpp:1834
 msgid "Constraints Resolution"
-msgstr "Beperkingen oplossen"
+msgstr "Beperkingen bepalen"
 
 #: pcbnew/tools/pcb_actions.cpp:1835
 msgid "Show constraints resolution for the selected object"
-msgstr "Oplossing van beperkingen weergeven voor het geselecteerde object"
+msgstr "De bepaalde beperkingen weergeven voor het geselecteerde object"
 
 #: pcbnew/tools/pcb_actions.cpp:1842
 msgid "Show differences between board footprint and its library equivalent"
@@ -46176,8 +46201,8 @@ msgid ""
 "Selects and initiates moving the nearest unconnected footprint on each "
 "selected net."
 msgstr ""
-"Selecteert en begint met verplaatsen van de dichtstbijzijnde footprint op "
-"elk geselecteerd net."
+"Selecteert en begint met verplaatsen van de dichtstbijzijnde niet-verbonden "
+"footprint op elk geselecteerd net."
 
 #: pcbnew/tools/pcb_actions.cpp:2095
 msgid "Selects all footprints and tracks in the schematic sheet"
@@ -46546,7 +46571,7 @@ msgstr "DP-tussenruimtebeperkingen: %s"
 
 #: pcbnew/tools/pcb_control.cpp:1597
 msgid "Resolved clearance"
-msgstr "Vrije ruimte bepaald"
+msgstr "Bepaalde vrije afstand"
 
 #: pcbnew/tools/pcb_control.cpp:1602
 msgid "Actual clearance"
@@ -46554,19 +46579,19 @@ msgstr "Werkelijke vrije afstand"
 
 #: pcbnew/tools/pcb_control.cpp:1645
 msgid "Resolved hole clearance"
-msgstr "Vrije ruimte gat bepaald"
+msgstr "Bepaalde vrije afstand gat"
 
 #: pcbnew/tools/pcb_control.cpp:1650
 msgid "Actual hole clearance"
-msgstr "Daadwerkelijke vrije ruimte gat"
+msgstr "Werkelijke vrije afstand gat"
 
 #: pcbnew/tools/pcb_control.cpp:1683
 msgid "Resolved edge clearance"
-msgstr "Vrije ruimte rand bepaald"
+msgstr "Bepaalde vrije afstand rand"
 
 #: pcbnew/tools/pcb_control.cpp:1688
 msgid "Resolved margin clearance"
-msgstr "Vrije ruimte marge bepaald"
+msgstr "Bepaalde vrije afstand marge"
 
 #: pcbnew/tools/pcb_control.cpp:1699
 msgid "Selected Items"
@@ -46673,7 +46698,7 @@ msgstr "Zone(s) automatisch vullen"
 #: pcbnew/tools/zone_filler_tool.cpp:274
 #: pcbnew/widgets/appearance_controls.cpp:3324
 msgid "Open Preferences"
-msgstr "Open Voorkeuren"
+msgstr "Voorkeuren openen"
 
 #: pcbnew/tools/zone_filler_tool.cpp:286
 msgid ""
@@ -46779,7 +46804,7 @@ msgstr "Footprints voor"
 
 #: pcbnew/widgets/appearance_controls.cpp:333
 msgid "Show footprints that are on board's front"
-msgstr "Footprints weergeven op voorkant PCB"
+msgstr "Footprints weergeven op voorkant van PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
 msgid "Footprints Back"
@@ -46787,7 +46812,7 @@ msgstr "Footprints achter"
 
 #: pcbnew/widgets/appearance_controls.cpp:334
 msgid "Show footprints that are on board's back"
-msgstr "Footprints weergeven op achterkant PCB"
+msgstr "Footprints weergeven op achterkant van PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:335
 msgid "Through-hole Pads"
@@ -46871,11 +46896,11 @@ msgstr "Binnenste koperlagen"
 
 #: pcbnew/widgets/appearance_controls.cpp:382
 msgid "Front Layers"
-msgstr "Voorste lagen"
+msgstr "Voorlagen"
 
 #: pcbnew/widgets/appearance_controls.cpp:385
 msgid "Front Assembly View"
-msgstr "Voorkant montage bekijken"
+msgstr "Montage voorzijde weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:388
 msgid "Back Layers"
@@ -46883,7 +46908,7 @@ msgstr "Achterlagen"
 
 #: pcbnew/widgets/appearance_controls.cpp:391
 msgid "Back Assembly View"
-msgstr "Achterkant-montage bekijken"
+msgstr "Montage achterzijde weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:442
 #, c-format
@@ -46970,12 +46995,12 @@ msgstr "Netweergaveopties"
 #: pcbnew/widgets/appearance_controls.cpp:2470
 #, c-format
 msgid "Net colors (%s):"
-msgstr "Net kleuren (%s):"
+msgstr "Netkleuren (%s):"
 
 #: pcbnew/widgets/appearance_controls.cpp:700
 #: pcbnew/widgets/appearance_controls.cpp:2472
 msgid "Net colors:"
-msgstr "Net kleuren:"
+msgstr "Netkleuren:"
 
 #: pcbnew/widgets/appearance_controls.cpp:705
 #: pcbnew/widgets/appearance_controls.cpp:2475
@@ -47035,7 +47060,7 @@ msgstr "Alle rattennestlijnen verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:922
 msgid "Set Net Color"
-msgstr "Net-kleur instellen"
+msgstr "Netkleur instellen"
 
 #: pcbnew/widgets/appearance_controls.cpp:924
 msgid "Clear Net Color"
@@ -47044,7 +47069,7 @@ msgstr "Netkleur wissen"
 #: pcbnew/widgets/appearance_controls.cpp:930
 #, c-format
 msgid "Highlight %s"
-msgstr "Markeer %s"
+msgstr "%s markeren"
 
 #: pcbnew/widgets/appearance_controls.cpp:933
 #: pcbnew/widgets/appearance_controls.cpp:2332
@@ -47064,7 +47089,7 @@ msgstr "Alle netten weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:943
 msgid "Hide All Other Nets"
-msgstr "Verberg alle andere netten"
+msgstr "Alle andere netten verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:975
 #, c-format
@@ -47100,35 +47125,35 @@ msgstr "Deze laag weergeven of verbergen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1638
 msgid "Adhesive on board's front"
-msgstr "Lijm op voorkant van het PCB"
+msgstr "Lijm op voorzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1639
 msgid "Adhesive on board's back"
-msgstr "Lijm op achterkant van het PCB"
+msgstr "Lijm op achterzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1640
 msgid "Solder paste on board's front"
-msgstr "Soldeerpasta op de voorkant van de PCB"
+msgstr "Soldeerpasta op voorzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1641
 msgid "Solder paste on board's back"
-msgstr "Soldeerpasta op de achterkant van de PCB"
+msgstr "Soldeerpasta op achterzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1642
 msgid "Silkscreen on board's front"
-msgstr "Silkscreen op voorkant PCB"
+msgstr "Silkscreen op voorzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1643
 msgid "Silkscreen on board's back"
-msgstr "Silkscreen op achterkant PCB"
+msgstr "Silkscreen op achterzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1644
 msgid "Solder mask on board's front"
-msgstr "Soldeer masker op voorkant PCB"
+msgstr "Soldeermasker op voorzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1645
 msgid "Solder mask on board's back"
-msgstr "Soldeer masker op achterkant PCB"
+msgstr "Soldeermasker op achterzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1646
 msgid "Explanatory drawings"
@@ -47153,19 +47178,19 @@ msgstr "Omtrek bordrandmarge"
 
 #: pcbnew/widgets/appearance_controls.cpp:1652
 msgid "Footprint courtyards on board's front"
-msgstr "Footprintafbakening aan de voorkant van bord"
+msgstr "Footprintafbakening op voorzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1653
 msgid "Footprint courtyards on board's back"
-msgstr "Footprintafbakening op achterkant van bord"
+msgstr "Footprintafbakening op achterzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1654
 msgid "Footprint assembly on board's front"
-msgstr "Footprintassemblage op de voorkant van het bord"
+msgstr "Footprintmontage op voorzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1655
 msgid "Footprint assembly on board's back"
-msgstr "Footprintassemblage op de achterkant van het bord"
+msgstr "Footprintmontage op achterzijde PCB"
 
 #: pcbnew/widgets/appearance_controls.cpp:1656
 msgid "User defined layer 1"
@@ -47233,7 +47258,7 @@ msgstr "Verberg alle niet-koper lagen"
 
 #: pcbnew/widgets/appearance_controls.cpp:1833
 msgid "Show Only Front Assembly Layers"
-msgstr "Alleen frontmontagelagen weergeven"
+msgstr "Alleen montagelagen voorzijde weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:1836
 msgid "Show Only Front Layers"
@@ -47249,7 +47274,7 @@ msgstr "Alleen achterlagen weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:1851
 msgid "Show Only Back Assembly Layers"
-msgstr "Alleen achterste assemblagelagen weergeven"
+msgstr "Alleen montagelagen achterzijde weergeven"
 
 #: pcbnew/widgets/appearance_controls.cpp:2212
 #, c-format
@@ -47288,11 +47313,11 @@ msgstr ""
 
 #: pcbnew/widgets/appearance_controls_base.cpp:71
 msgid "Show the Net Inspector"
-msgstr "Laat de Net Inspector zien"
+msgstr "Netinspectie weergeven"
 
 #: pcbnew/widgets/appearance_controls_base.cpp:123
 msgid "Configure net classes"
-msgstr "Configureer netklassen"
+msgstr "Netklassen instellen"
 
 #: pcbnew/widgets/filedlg_hook_save_project.h:32
 msgid "Create a new project for this board"
@@ -47428,11 +47453,11 @@ msgstr "Teardropgebied"
 
 #: pcbnew/zone.cpp:697
 msgid "Copper Zone"
-msgstr "Koper zone"
+msgstr "Koperzone"
 
 #: pcbnew/zone.cpp:699
 msgid "Non-copper Zone"
-msgstr "Niet-koper zone"
+msgstr "Niet-koperzone"
 
 #: pcbnew/zone.cpp:834
 #, c-format
@@ -47512,7 +47537,7 @@ msgstr "Minimale breedte"
 
 #: pcbnew/zone.cpp:1734
 msgid "Pad Connections"
-msgstr "Pad-aansluitingen"
+msgstr "Padverbindingen"
 
 #: pcbnew/zone_filler.cpp:106
 msgid "Checking zone fills..."
