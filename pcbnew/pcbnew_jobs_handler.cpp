@@ -248,8 +248,8 @@ int PCBNEW_JOBS_HANDLER::JobExportRender( JOB* aJob )
             Pgm().GetSettingsManager().GetAppSettings<EDA_3D_VIEWER_SETTINGS>();
 
     if( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::TRANSPARENT
-        || aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::DEFAULT
-                   && aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG )
+        || ( aRenderJob->m_bgStyle == JOB_PCB_RENDER::BG_STYLE::DEFAULT
+             && aRenderJob->m_format == JOB_PCB_RENDER::FORMAT::PNG ) )
     {
         BOARD_ADAPTER::g_DefaultBackgroundTop = COLOR4D( 1.0, 1.0, 1.0, 0.0 );
         BOARD_ADAPTER::g_DefaultBackgroundBot = COLOR4D( 1.0, 1.0, 1.0, 0.0 );
