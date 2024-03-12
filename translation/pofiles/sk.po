@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-12 19:01+0000\n"
+"PO-Revision-Date: 2024-03-13 20:01+0000\n"
 "Last-Translator: Andrej Valek <andy@skyrain.eu>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/kicad/v8/sk/>\n"
 "Language: sk\n"
@@ -25758,7 +25758,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:944
 msgid "Push committed local changes to remote repository"
-msgstr ""
+msgstr "Uložiť lokálne commit-nuté zmeny do vzdialeného repozitára"
 
 #: kicad/project_tree_pane.cpp:947
 msgid "Pull"
@@ -25770,9 +25770,8 @@ msgid "Pull changes from remote repository into local"
 msgstr "Tlačiť schému"
 
 #: kicad/project_tree_pane.cpp:953
-#, fuzzy
 msgid "Commit File..."
-msgstr "Upraviť pole %s"
+msgstr "Commit-núť súbor..."
 
 #: kicad/project_tree_pane.cpp:968
 #, fuzzy
@@ -25879,11 +25878,11 @@ msgstr "Nie je možné vytvoriť adresár '%s'"
 
 #: kicad/project_tree_pane.cpp:2159
 msgid "Discarding commit due to empty commit message."
-msgstr ""
+msgstr "Zahodenie commit-u kvôli prázdnej správe commit-u."
 
 #: kicad/project_tree_pane.cpp:2165
 msgid "Discarding commit due to empty file selection."
-msgstr ""
+msgstr "Zahodenie commit-u kvôli nevybratému súboru."
 
 #: kicad/project_tree_pane.cpp:2171
 #, fuzzy, c-format
@@ -25916,9 +25915,9 @@ msgid "Failed to get HEAD reference: %s"
 msgstr "Nie je možné vytvoriť adresár '%s'"
 
 #: kicad/project_tree_pane.cpp:2218
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to get commit: %s"
-msgstr "Schému '%s' sa nepodarilo uložiť"
+msgstr "Nepodarilo sa získať commit: %s"
 
 #: kicad/project_tree_pane.cpp:2234
 #, fuzzy, c-format
@@ -25944,27 +25943,23 @@ msgstr "Nový projekt zo šablóny..."
 
 #: kicad/tools/kicad_manager_actions.cpp:53
 msgid "Create new project from template"
-msgstr "Vytvorte nový projekt zo šablóny"
+msgstr "Vytvoriť nový projekt zo šablóny"
 
 #: kicad/tools/kicad_manager_actions.cpp:60
-#, fuzzy
 msgid "Clone Project from Repository..."
-msgstr "Nový projekt zo šablóny..."
+msgstr "Naklonovať Projekt z repozitára..."
 
 #: kicad/tools/kicad_manager_actions.cpp:61
-#, fuzzy
 msgid "Clone a project from an existing repository"
-msgstr "Importuje puzdro z existujúceho súboru"
+msgstr "Klonovať projekt z existujúceho repozitára"
 
 #: kicad/tools/kicad_manager_actions.cpp:68
-#, fuzzy
 msgid "Open Demo Project..."
-msgstr "Otvoriť projekt..."
+msgstr "Otvoriť demo projekt..."
 
 #: kicad/tools/kicad_manager_actions.cpp:69
-#, fuzzy
 msgid "Open a demo project"
-msgstr "Otvorí existujúci projekt"
+msgstr "Otvoriť demo projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:77
 msgid "Open Project..."
@@ -25976,11 +25971,11 @@ msgstr "Otvorí existujúci projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:85
 msgid "Close Project"
-msgstr "Zavrieť projekt"
+msgstr "Zatvoriť projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:86
 msgid "Close the current project"
-msgstr "Zatvorte aktuálny projekt"
+msgstr "Zatvoriť aktuálny projekt"
 
 #: kicad/tools/kicad_manager_actions.cpp:105
 msgid "Edit schematic"
@@ -26017,7 +26012,7 @@ msgstr "Nástroje kalkulačky"
 
 #: kicad/tools/kicad_manager_actions.cpp:168
 msgid "Run component calculations, track width calculations, etc."
-msgstr "Spustite výpočty komponentov, výpočty šírky stopy atď."
+msgstr "Spustiť výpočty komponentov, výpočty šírky spoja atď."
 
 #: kicad/tools/kicad_manager_actions.cpp:178
 msgid "Edit drawing sheet borders and title block"
@@ -26025,7 +26020,7 @@ msgstr "Upraviť orámovanie a razítko"
 
 #: kicad/tools/kicad_manager_actions.cpp:187
 msgid "Run Plugin and Content Manager"
-msgstr "Spustí Správce plug-in a obsahu"
+msgstr "Spustiť správcu doplnkov sa obsahu"
 
 #: kicad/tools/kicad_manager_actions.cpp:193
 msgid "Open Text Editor"
@@ -26053,14 +26048,12 @@ msgstr ""
 "Chceš pokračovať?"
 
 #: kicad/tools/kicad_manager_control.cpp:152
-#, fuzzy
 msgid "Clone Project from Git Repository"
-msgstr "Vytvorte nový projekt zo šablóny"
+msgstr "Vytvoriť projekt z Git repozitára"
 
 #: kicad/tools/kicad_manager_control.cpp:174
-#, fuzzy
 msgid "Cloning Repository"
-msgstr "Prehľad"
+msgstr "Klonovanie repozitára"
 
 #: kicad/tools/kicad_manager_control.cpp:186
 #, fuzzy
@@ -44271,7 +44264,7 @@ msgstr "Presuňte aj tak"
 #: pcbnew/router/router_tool.cpp:1936 pcbnew/router/router_tool.cpp:2419
 #, c-format
 msgid "(%s to commit anyway.)"
-msgstr ""
+msgstr "(%s aj tak commit-núť.)"
 
 #: pcbnew/router/router_tool.cpp:1940 pcbnew/router/router_tool.cpp:2423
 #, fuzzy
