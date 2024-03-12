@@ -209,7 +209,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Left().Layer( 3 ).Position( 1 )
                       .TopDockable( false )
                       .BottomDockable( false )
-                      .CloseButton( true )
+                      .CloseButton( false )
                       .MinSize( FromDIP( wxSize( 120, 60 ) ) )
                       .BestSize( FromDIP( wxSize( 200, 200 ) ) )
                       .FloatingSize( FromDIP( wxSize( 200, 200 ) ) )
@@ -239,7 +239,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .MinSize( FromDIP( wxSize( 180, 60 ) ) )
                       .BestSize( FromDIP( wxSize( 180, 100 ) ) )
                       .FloatingSize( FromDIP( wxSize( 480, 200 ) ) )
-                      .CloseButton( true )
+                      .CloseButton( false )
                       .DestroyOnClose( false )
                       .Show( m_show_search ) );
 
