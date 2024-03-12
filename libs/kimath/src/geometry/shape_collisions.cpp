@@ -360,14 +360,19 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
         if( closest_dist > 0 && aActual )
         {
             std::vector<const SHAPE_LINE_CHAIN*> chains = {
-                static_cast<const SHAPE_LINE_CHAIN*>( &aA ),
-                static_cast<const SHAPE_LINE_CHAIN*>( &aB )
+                dynamic_cast<const SHAPE_LINE_CHAIN*>( &aA ),
+                dynamic_cast<const SHAPE_LINE_CHAIN*>( &aB )
             };
+
+            std::vector<const SHAPE*> shapes = { &aA, &aB };
 
             for( int ii = 0; ii < 2; ii++ )
             {
                 const SHAPE_LINE_CHAIN* chain = chains[ii];
-                const SHAPE_LINE_CHAIN* other = chains[( ii + 1 ) % 2];
+                const SHAPE* other = shapes[( ii + 1 ) % 2];
+
+                if( !chain )
+                    continue;
 
                 for( size_t jj = 0; jj < chain->ArcCount(); jj++ )
                 {
