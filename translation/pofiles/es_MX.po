@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-10 11:01+0000\n"
+"PO-Revision-Date: 2024-03-12 19:01+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "v8/es_MX/>\n"
@@ -14878,6 +14878,8 @@ msgstr "La ruta de salida no debe entrar en conflicto con la ruta existente\n"
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
 msgstr ""
+"Se debe especificar la ruta de salida para convertir bibliotecas antiguas y "
+"no KiCad.\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
@@ -21485,7 +21487,7 @@ msgstr "Nueva pestaña de análisis..."
 
 #: eeschema/tools/ee_actions.cpp:1387
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Crear una nueva pestaña que contenga un análisis de simulación"
 
 #: eeschema/tools/ee_actions.cpp:1395
 msgid "Open Workbook..."
@@ -21493,7 +21495,7 @@ msgstr "Abrir libro de trabajo..."
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Abrir un conjunto guardado de pestañas de análisis y ajustes"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
@@ -21550,6 +21552,8 @@ msgstr "Editar pestaña de análisis..."
 #: eeschema/tools/ee_actions.cpp:1451
 msgid "Edit the current analysis tab's SPICE command and plot setup"
 msgstr ""
+"Editar el comando SPICE de la pestaña de análisis actual y la configuración "
+"del gráfico"
 
 #: eeschema/tools/ee_actions.cpp:1458
 msgid "Run Simulation"
@@ -40109,6 +40113,7 @@ msgstr "Restricciones de longitud: %s"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
 msgstr ""
+"No se pueden sintonizar segmentos dentro de otros patrones de sintonización."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
