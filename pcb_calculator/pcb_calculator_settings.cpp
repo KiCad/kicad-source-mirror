@@ -35,7 +35,7 @@ const int pcbCalculatorSchemaVersion = 0;
 
 PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
         APP_SETTINGS_BASE( "pcb_calculator", pcbCalculatorSchemaVersion ), m_Attenuators(),
-        m_BoardClassUnits( 0 ), m_ColorCodeTolerance( 0 ), m_Electrical(), m_LastPage( 0 ),
+        m_BoardClassUnits( 0 ), m_ColorCodeTolerance( 0 ), m_Electrical(), m_LastPage( 1 ),
         m_Regulators(), m_cableSize(), m_wavelength(), m_TrackWidth(), m_TransLine(), m_ViaSize()
 {
     // Build settings:
@@ -43,7 +43,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
 
     m_params.emplace_back( new PARAM<int>( "color_code_tolerance", &m_ColorCodeTolerance, 0 ) );
 
-    m_params.emplace_back( new PARAM<int>( "last_page", &m_LastPage, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "last_page", &m_LastPage, 1 ) );
 
     m_params.emplace_back( new PARAM<int>( "translines.type", &m_TransLine.type, 0 ) );
 
