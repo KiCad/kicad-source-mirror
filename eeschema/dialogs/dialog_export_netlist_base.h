@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -109,7 +109,7 @@ class NETLIST_DIALOG_ADD_GENERATOR_BASE : public DIALOG_SHIM
 
 	public:
 
-		NETLIST_DIALOG_ADD_GENERATOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Script Generator Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		NETLIST_DIALOG_ADD_GENERATOR_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Add Script-based Netlist Exporter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 
 		~NETLIST_DIALOG_ADD_GENERATOR_BASE();
 

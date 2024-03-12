@@ -256,20 +256,33 @@ DIALOG_EXPORT_NETLIST::DIALOG_EXPORT_NETLIST( SCH_EDIT_FRAME* parent ) :
         page = nullptr;
 
     // Add notebook pages:
-    m_PanelNetType[PANELPCBNEW] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "KiCad" ), NET_TYPE_PCBNEW, false );
+    EXPORT_NETLIST_PAGE* page = nullptr;
+    wxStaticText*        label = nullptr;
 
-    m_PanelNetType[PANELORCADPCB2] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "OrcadPCB2" ), NET_TYPE_ORCADPCB2, false );
+    page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "KiCad" ), NET_TYPE_PCBNEW, false );
+    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in legacy KiCad format" ) );
+    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
+    m_PanelNetType[PANELPCBNEW] = page;
 
-    m_PanelNetType[PANELALLEGRO] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Allegro" ), NET_TYPE_ALLEGRO, false );
+    page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "OrcadPCB2" ), NET_TYPE_ORCADPCB2, false );
+    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in OrcadPCB2 format" ) );
+    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
+    m_PanelNetType[PANELORCADPCB2] = page;
 
-    m_PanelNetType[PANELPADS] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "PADS" ), NET_TYPE_PADS, false );
+    page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Allegro" ), NET_TYPE_ALLEGRO, false );
+    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in Allegro format" ) );
+    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
+    m_PanelNetType[PANELALLEGRO] = page;
 
-    m_PanelNetType[PANELCADSTAR] =
-            new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "CadStar" ), NET_TYPE_CADSTAR, false );
+    page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "PADS" ), NET_TYPE_PADS, false );
+    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in PADS format" ) );
+    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
+    m_PanelNetType[PANELPADS] = page;
+
+    page = new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "CadStar" ), NET_TYPE_CADSTAR, false );
+    label = new wxStaticText( page, wxID_ANY, _( "Export netlist in CadStar format" ) );
+    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
+    m_PanelNetType[PANELCADSTAR] = page;
 
     InstallPageSpice();
     InstallPageSpiceModel();
@@ -300,6 +313,9 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpice()
             new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Spice" ), NET_TYPE_SPICE, false );
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+
+    wxStaticText* label = new wxStaticText( page, wxID_ANY, _( "Export netlist in SPICE format" ) );
+    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
 
     page->m_CurSheetAsRoot = new wxCheckBox( page, ID_CUR_SHEET_AS_ROOT,
                                              _( "Use current sheet as root" ) );
@@ -350,6 +366,9 @@ void DIALOG_EXPORT_NETLIST::InstallPageSpiceModel()
             new EXPORT_NETLIST_PAGE( m_NoteBook, wxT( "Spice Model" ), NET_TYPE_SPICE_MODEL, false );
 
     SCHEMATIC_SETTINGS& settings = m_Parent->Schematic().Settings();
+
+    wxStaticText* label = new wxStaticText( page, wxID_ANY, _( "Export netlist as a SPICE .subckt model" ) );
+    page->m_LeftBoxSizer->Add( label, 0, wxBOTTOM, 10 );
 
     page->m_CurSheetAsRoot = new wxCheckBox( page, ID_CUR_SHEET_AS_ROOT,
                                              _( "Use current sheet as root" ) );
