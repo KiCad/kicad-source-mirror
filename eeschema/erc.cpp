@@ -560,6 +560,7 @@ int ERC_TESTER::TestMissingNetclasses()
 {
     int                            err_count = 0;
     std::shared_ptr<NET_SETTINGS>& settings = m_schematic->Prj().GetProjectFile().NetSettings();
+    wxString                       defaultNetclass = settings->m_DefaultNetClass->GetName();
 
     auto logError =
             [&]( const SCH_SHEET_PATH& sheet, SCH_ITEM* item, const wxString& netclass )
@@ -591,8 +592,11 @@ int ERC_TESTER::TestMissingNetclasses()
                             {
                                 wxString netclass = field->GetText();
 
-                                if( settings->m_NetClasses.count( netclass ) == 0 )
+                                if( !netclass.IsSameAs( defaultNetclass )
+                                        && settings->m_NetClasses.count( netclass ) == 0 )
+                                {
                                     logError( sheet, item, netclass );
+                                }
                             }
                         }
 
