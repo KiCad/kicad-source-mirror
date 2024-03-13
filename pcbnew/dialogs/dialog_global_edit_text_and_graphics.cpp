@@ -323,6 +323,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::onActionButtonChange( wxCommandEvent&
     m_fontLabel->Enable( enable );
     m_fontCtrl->Enable( enable );
 
+    m_centerOnFP->Enable( enable );
+
     enable = !enable;
     m_grid->Enable( enable );
 }
