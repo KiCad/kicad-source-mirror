@@ -1270,7 +1270,10 @@ void SIMULATOR_FRAME_UI::OnUpdateUI( wxUpdateUIEvent& event )
     if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( GetCurrentSimTab() ) )
     {
         if( plotTab->GetLegendPosition() != plotTab->m_LastLegendPosition )
+        {
+            plotTab->m_LastLegendPosition = plotTab->GetLegendPosition();
             OnModify();
+        }
     }
 }
 
