@@ -46,7 +46,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Items") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 0, 2, 4, 0 );
+	fgSizer3 = new wxFlexGridSizer( 0, 2, 5, 0 );
 	fgSizer3->AddGrowableCol( 1 );
 	fgSizer3->AddGrowableRow( 0 );
 	fgSizer3->AddGrowableRow( 1 );
@@ -216,7 +216,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	bSizer121 = new wxBoxSizer( wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerRightCol;
-	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 2, 0 );
+	fgSizerRightCol = new wxFlexGridSizer( 0, 3, 5, 0 );
 	fgSizerRightCol->AddGrowableCol( 1 );
 	fgSizerRightCol->SetFlexibleDirection( wxBOTH );
 	fgSizerRightCol->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -243,7 +243,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 
 	m_lengthUnitsSuffix = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _(" )"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lengthUnitsSuffix->Wrap( -1 );
-	bSizer131->Add( m_lengthUnitsSuffix, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer131->Add( m_lengthUnitsSuffix, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	fgSizerRightCol->Add( bSizer131, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -290,7 +290,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 
 	m_widthUnitsSuffix = new wxStaticText( sbAction->GetStaticBox(), wxID_ANY, _(" )"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_widthUnitsSuffix->Wrap( -1 );
-	bSizer1311->Add( m_widthUnitsSuffix, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizer1311->Add( m_widthUnitsSuffix, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
 	fgSizerRightCol->Add( bSizer1311, 0, wxALIGN_CENTER_VERTICAL, 5 );
@@ -316,7 +316,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	bSizer44 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_curvedEdges = new wxCheckBox( sbAction->GetStaticBox(), wxID_ANY, _("Curved edges"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
-	bSizer44->Add( m_curvedEdges, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizer44->Add( m_curvedEdges, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 
 
 	bSizer44->Add( 30, 0, 0, 0, 5 );
@@ -329,7 +329,7 @@ DIALOG_GLOBAL_EDIT_TEARDROPS_BASE::DIALOG_GLOBAL_EDIT_TEARDROPS_BASE( wxWindow* 
 	bSizer44->Add( m_curvePointsCtrl, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizer121->Add( bSizer44, 0, wxEXPAND|wxLEFT, 3 );
+	bSizer121->Add( bSizer44, 0, wxBOTTOM|wxEXPAND|wxLEFT, 3 );
 
 
 	bSizerShapeColumns->Add( bSizer121, 1, wxEXPAND|wxTOP, 5 );
