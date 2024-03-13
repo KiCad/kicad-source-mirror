@@ -46,7 +46,6 @@ class PANEL_FP_PROPERTIES_3D_MODEL : public PANEL_FP_PROPERTIES_3D_MODEL_BASE
 {
 
 public:
-
     PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME* aFrame, FOOTPRINT* aFootprint,
                                   DIALOG_SHIM* aDialogParent, wxWindow* aParent,
                                   wxWindowID aId = wxID_ANY,

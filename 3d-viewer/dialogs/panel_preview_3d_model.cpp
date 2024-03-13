@@ -41,6 +41,7 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <widgets/wx_infobar.h>
+#include <widgets/std_bitmap_button.h>
 #include <eda_3d_viewer_settings.h>
 #include <board_design_settings.h>
 
@@ -123,7 +124,8 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     // Create the 3D canvas
     m_previewPane = new EDA_3D_CANVAS( this,
                                        OGL_ATT_LIST::GetAttributesList( ANTIALIASING_MODE::AA_8X ),
-                                       m_boardAdapter, m_currentCamera, PROJECT_PCB::Get3DCacheManager( &aFrame->Prj() ) );
+                                       m_boardAdapter, m_currentCamera,
+                                       PROJECT_PCB::Get3DCacheManager( &aFrame->Prj() ) );
 
     m_boardAdapter.SetBoard( m_dummyBoard );
     m_boardAdapter.m_IsBoardView = false;
@@ -161,26 +163,6 @@ PANEL_PREVIEW_3D_MODEL::PANEL_PREVIEW_3D_MODEL( wxWindow* aParent, PCB_BASE_FRAM
     aFrame->Connect( EDA_EVT_UNITS_CHANGED,
                      wxCommandEventHandler( PANEL_PREVIEW_3D_MODEL::onUnitsChanged ),
                      nullptr, this );
-
-#ifdef __WXOSX__
-    // Call layout once to get the proper button sizes after the bitmaps have been set
-    Layout();
-
-    // The rounded-button style used has a small border on the left/right sides.
-    // This is automatically fixed in wx for buttons with a bitmap < 20, but not
-    // when the bitmap is set to be 26x26.
-    wxSize borderFix = wxSize( 4, 4 );
-
-    m_bpvTop->SetMinSize( m_bpvTop->GetSize() + borderFix );
-    m_bpvFront->SetMinSize( m_bpvFront->GetSize() + borderFix );
-    m_bpvBack->SetMinSize( m_bpvBack->GetSize() + borderFix );
-    m_bpvLeft->SetMinSize( m_bpvLeft->GetSize() + borderFix );
-    m_bpvRight->SetMinSize( m_bpvRight->GetSize() + borderFix );
-    m_bpvBottom->SetMinSize( m_bpvBottom->GetSize() + borderFix );
-    m_bpvISO->SetMinSize( m_bpvISO->GetSize() + borderFix );
-    m_bpUpdate->SetMinSize( m_bpUpdate->GetSize() + borderFix );
-    m_bpSettings->SetMinSize( m_bpSettings->GetSize() + borderFix );
-#endif
 }
 
 

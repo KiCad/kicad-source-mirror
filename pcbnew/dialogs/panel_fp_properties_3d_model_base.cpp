@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,10 +16,19 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 {
 	bSizerMain3D = new wxBoxSizer( wxVERTICAL );
 
-	m_modelsGrid = new WX_GRID( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
+	m_splitter1 = new wxSplitterWindow( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_3DSASH|wxSP_LIVE_UPDATE );
+	m_splitter1->SetSashGravity( 0.5 );
+	m_splitter1->Connect( wxEVT_IDLE, wxIdleEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::m_splitter1OnIdle ), NULL, this );
+	m_splitter1->SetMinimumPaneSize( 112 );
+
+	m_upperPanel = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxVERTICAL );
+
+	m_modelsGrid = new WX_GRID( m_upperPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxBORDER_SIMPLE );
 
 	// Grid
-	m_modelsGrid->CreateGrid( 3, 3 );
+	m_modelsGrid->CreateGrid( 2, 3 );
 	m_modelsGrid->EnableEditing( true );
 	m_modelsGrid->EnableGridLines( false );
 	m_modelsGrid->EnableDragGridSize( false );
@@ -46,36 +55,45 @@ PANEL_FP_PROPERTIES_3D_MODEL_BASE::PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* 
 
 	// Cell Defaults
 	m_modelsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
-	bSizerMain3D->Add( m_modelsGrid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer4->Add( m_modelsGrid, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_button3DShapeAdd = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_button3DShapeAdd = new STD_BITMAP_BUTTON( m_upperPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_button3DShapeAdd, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_button3DShapeBrowse = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_button3DShapeBrowse = new STD_BITMAP_BUTTON( m_upperPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_button3DShapeBrowse, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bSizer3DButtons->Add( 20, 0, 0, 0, 5 );
 
-	m_button3DShapeRemove = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_button3DShapeRemove = new STD_BITMAP_BUTTON( m_upperPanel, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_button3DShapeRemove, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_buttonConfig3DPaths = new wxButton( this, wxID_ANY, _("Configure Paths..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonConfig3DPaths = new wxButton( m_upperPanel, wxID_ANY, _("Configure Paths..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer3DButtons->Add( m_buttonConfig3DPaths, 0, wxALL, 5 );
 
 
-	bSizerMain3D->Add( bSizer3DButtons, 0, wxEXPAND|wxBOTTOM, 5 );
+	bSizer4->Add( bSizer3DButtons, 0, wxEXPAND|wxTOP|wxBOTTOM, 2 );
 
+
+	m_upperPanel->SetSizer( bSizer4 );
+	m_upperPanel->Layout();
+	bSizer4->Fit( m_upperPanel );
+	m_lowerPanel = new wxPanel( m_splitter1, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_LowerSizer3D = new wxBoxSizer( wxHORIZONTAL );
 
 
-	bSizerMain3D->Add( m_LowerSizer3D, 0, wxEXPAND|wxTOP, 5 );
+	m_lowerPanel->SetSizer( m_LowerSizer3D );
+	m_lowerPanel->Layout();
+	m_LowerSizer3D->Fit( m_lowerPanel );
+	m_splitter1->SplitHorizontally( m_upperPanel, m_lowerPanel, 112 );
+	bSizerMain3D->Add( m_splitter1, 1, wxEXPAND, 5 );
 
 
 	this->SetSizer( bSizerMain3D );

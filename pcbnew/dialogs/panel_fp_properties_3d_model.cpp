@@ -54,15 +54,18 @@ enum MODELS_TABLE_COLUMNS
     COL_SHOWN    = 2
 };
 
-PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
-        PCB_BASE_EDIT_FRAME* aFrame, FOOTPRINT* aFootprint, DIALOG_SHIM* aDialogParent,
-        wxWindow* aParent, wxWindowID aId, const wxPoint& aPos, const wxSize& aSize, long aStyle,
-        const wxString& aName ) :
-    PANEL_FP_PROPERTIES_3D_MODEL_BASE( aParent, aId, aPos, aSize, aStyle, aName ),
-    m_parentDialog( aDialogParent ),
-    m_frame( aFrame ),
-    m_footprint( aFootprint ),
-    m_inSelect( false )
+PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL( PCB_BASE_EDIT_FRAME* aFrame,
+                                                            FOOTPRINT* aFootprint,
+                                                            DIALOG_SHIM* aDialogParent,
+                                                            wxWindow* aParent, wxWindowID aId,
+                                                            const wxPoint& aPos,
+                                                            const wxSize& aSize, long aStyle,
+                                                            const wxString& aName ) :
+        PANEL_FP_PROPERTIES_3D_MODEL_BASE( aParent, aId, aPos, aSize, aStyle, aName ),
+        m_parentDialog( aDialogParent ),
+        m_frame( aFrame ),
+        m_footprint( aFootprint ),
+        m_inSelect( false )
 {
     m_modelsGrid->SetDefaultRowSize( m_modelsGrid->GetDefaultRowSize() + 4 );
 
@@ -90,8 +93,9 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
 
     // Filename
     attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parentDialog, m_modelsGrid, &cfg->m_lastFootprint3dDir,
-                                                wxT( "*.*" ), true, m_frame->Prj().GetProjectPath() ) );
+    attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parentDialog, m_modelsGrid,
+                                                &cfg->m_lastFootprint3dDir, wxT( "*.*" ), true,
+                                                m_frame->Prj().GetProjectPath() ) );
     m_modelsGrid->SetColAttr( COL_FILENAME, attr );
 
     // Show checkbox
@@ -104,7 +108,8 @@ PANEL_FP_PROPERTIES_3D_MODEL::PANEL_FP_PROPERTIES_3D_MODEL(
 
     PROJECT_PCB::Get3DCacheManager( &m_frame->Prj() )->GetResolver()->SetProgramBase( &Pgm() );
 
-    m_previewPane = new PANEL_PREVIEW_3D_MODEL( this, m_frame, m_footprint, &m_shapes3D_list );
+    m_previewPane = new PANEL_PREVIEW_3D_MODEL( m_lowerPanel, m_frame, m_footprint,
+                                                &m_shapes3D_list );
 
     m_LowerSizer3D->Add( m_previewPane, 1, wxEXPAND, 5 );
 

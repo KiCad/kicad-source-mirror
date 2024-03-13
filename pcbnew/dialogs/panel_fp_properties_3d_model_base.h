@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -26,6 +26,7 @@ class WX_GRID;
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/splitter.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -39,11 +40,14 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 
 	protected:
 		wxBoxSizer* bSizerMain3D;
+		wxSplitterWindow* m_splitter1;
+		wxPanel* m_upperPanel;
 		WX_GRID* m_modelsGrid;
 		STD_BITMAP_BUTTON* m_button3DShapeAdd;
 		STD_BITMAP_BUTTON* m_button3DShapeBrowse;
 		STD_BITMAP_BUTTON* m_button3DShapeRemove;
 		wxButton* m_buttonConfig3DPaths;
+		wxPanel* m_lowerPanel;
 		wxBoxSizer* m_LowerSizer3D;
 
 		// Virtual event handlers, override them in your derived class
@@ -62,6 +66,12 @@ class PANEL_FP_PROPERTIES_3D_MODEL_BASE : public wxPanel
 		PANEL_FP_PROPERTIES_3D_MODEL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 778,286 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 
 		~PANEL_FP_PROPERTIES_3D_MODEL_BASE();
+
+		void m_splitter1OnIdle( wxIdleEvent& )
+		{
+			m_splitter1->SetSashPosition( 112 );
+			m_splitter1->Disconnect( wxEVT_IDLE, wxIdleEventHandler( PANEL_FP_PROPERTIES_3D_MODEL_BASE::m_splitter1OnIdle ), NULL, this );
+		}
 
 };
 

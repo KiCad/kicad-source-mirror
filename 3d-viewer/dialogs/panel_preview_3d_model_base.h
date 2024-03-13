@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,8 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class STD_BITMAP_BUTTON;
+
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/gdicmn.h>
@@ -68,16 +70,16 @@ class PANEL_PREVIEW_3D_MODEL_BASE : public wxPanel
 		wxSlider* m_opacity;
 		wxStaticText* m_previewLabel;
 		wxBoxSizer* m_SizerPanelView;
-		wxBitmapButton* m_bpvISO;
-		wxBitmapButton* m_bpvBodyStyle;
-		wxBitmapButton* m_bpvLeft;
-		wxBitmapButton* m_bpvRight;
-		wxBitmapButton* m_bpvFront;
-		wxBitmapButton* m_bpvBack;
-		wxBitmapButton* m_bpvTop;
-		wxBitmapButton* m_bpvBottom;
-		wxBitmapButton* m_bpUpdate;
-		wxBitmapButton* m_bpSettings;
+		STD_BITMAP_BUTTON* m_bpvISO;
+		STD_BITMAP_BUTTON* m_bpvBodyStyle;
+		STD_BITMAP_BUTTON* m_bpvLeft;
+		STD_BITMAP_BUTTON* m_bpvRight;
+		STD_BITMAP_BUTTON* m_bpvFront;
+		STD_BITMAP_BUTTON* m_bpvBack;
+		STD_BITMAP_BUTTON* m_bpvTop;
+		STD_BITMAP_BUTTON* m_bpvBottom;
+		STD_BITMAP_BUTTON* m_bpUpdate;
+		STD_BITMAP_BUTTON* m_bpSettings;
 
 		// Virtual event handlers, override them in your derived class
 		virtual void onMouseWheelScale( wxMouseEvent& event ) { event.Skip(); }

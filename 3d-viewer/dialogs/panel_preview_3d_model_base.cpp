@@ -1,9 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-282-g1fa54006)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
+
+#include "widgets/std_bitmap_button.h"
 
 #include "panel_preview_3d_model_base.h"
 
@@ -21,7 +23,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	sbSizerScale = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scale") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerScale;
-	fgSizerScale = new wxFlexGridSizer( 0, 3, 2, 3 );
+	fgSizerScale = new wxFlexGridSizer( 0, 3, 1, 3 );
 	fgSizerScale->AddGrowableCol( 1 );
 	fgSizerScale->SetFlexibleDirection( wxBOTH );
 	fgSizerScale->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -57,16 +59,16 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerScale->Add( m_spinZscale, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerScale->Add( fgSizerScale, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
+	sbSizerScale->Add( fgSizerScale, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 2 );
 
 
-	bSizerLeft->Add( sbSizerScale, 0, wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	bSizerLeft->Add( sbSizerScale, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 	wxStaticBoxSizer* sbSizerRotation;
 	sbSizerRotation = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Rotation") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerRotate;
-	fgSizerRotate = new wxFlexGridSizer( 0, 3, 2, 3 );
+	fgSizerRotate = new wxFlexGridSizer( 0, 3, 1, 3 );
 	fgSizerRotate->AddGrowableCol( 1 );
 	fgSizerRotate->SetFlexibleDirection( wxBOTH );
 	fgSizerRotate->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -102,7 +104,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerRotate->Add( m_spinZrot, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerRotation->Add( fgSizerRotate, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
+	sbSizerRotation->Add( fgSizerRotate, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 2 );
 
 
 	bSizerLeft->Add( sbSizerRotation, 0, wxLEFT|wxRIGHT|wxEXPAND, 5 );
@@ -111,7 +113,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	sbSizerOffset = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Offset") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizerOffset;
-	fgSizerOffset = new wxFlexGridSizer( 0, 3, 2, 3 );
+	fgSizerOffset = new wxFlexGridSizer( 0, 3, 1, 3 );
 	fgSizerOffset->AddGrowableCol( 1 );
 	fgSizerOffset->SetFlexibleDirection( wxBOTH );
 	fgSizerOffset->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -147,7 +149,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	fgSizerOffset->Add( m_spinZoffset, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
-	sbSizerOffset->Add( fgSizerOffset, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
+	sbSizerOffset->Add( fgSizerOffset, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 2 );
 
 
 	bSizerLeft->Add( sbSizerOffset, 0, wxLEFT|wxRIGHT|wxEXPAND, 5 );
@@ -155,8 +157,8 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	wxStaticBoxSizer* sbSizer4;
 	sbSizer4 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Opacity") ), wxVERTICAL );
 
-	m_opacity = new wxSlider( sbSizer4->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
-	sbSizer4->Add( m_opacity, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_opacity = new wxSlider( sbSizer4->GetStaticBox(), wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	sbSizer4->Add( m_opacity, 0, wxRIGHT|wxLEFT, 2 );
 
 
 	bSizerLeft->Add( sbSizer4, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -174,7 +176,7 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 	m_previewLabel->Wrap( -1 );
 	m_previewLabel->SetFont( wxFont( 11, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
 
-	bSizer6->Add( m_previewLabel, 1, wxEXPAND|wxLEFT|wxRIGHT, 10 );
+	bSizer6->Add( m_previewLabel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 
 
 	bSizerRight->Add( bSizer6, 0, wxEXPAND, 5 );
@@ -193,53 +195,53 @@ PANEL_PREVIEW_3D_MODEL_BASE::PANEL_PREVIEW_3D_MODEL_BASE( wxWindow* parent, wxWi
 
 	bSizer3DButtons->Add( 0, 10, 0, 0, 5 );
 
-	m_bpvISO = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvISO = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_bpvISO->SetToolTip( _("Enable/disable orthographic projection") );
 
 	bSizer3DButtons->Add( m_bpvISO, 0, wxTOP, 5 );
 
-	m_bpvBodyStyle = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvBodyStyle = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_bpvBodyStyle->SetToolTip( _("Show or hide the board body\nIf hidden, show only copper and silkscreen layers.") );
 
-	bSizer3DButtons->Add( m_bpvBodyStyle, 0, wxTOP|wxBOTTOM, 5 );
+	bSizer3DButtons->Add( m_bpvBodyStyle, 0, wxTOP, 5 );
 
 
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_bpvLeft = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvLeft = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_bpvLeft, 0, wxBOTTOM, 5 );
 
-	m_bpvRight = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvRight = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_bpvRight, 0, wxBOTTOM, 5 );
 
-	m_bpvFront = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvFront = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_bpvFront, 0, wxBOTTOM, 5 );
 
-	m_bpvBack = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvBack = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_bpvBack, 0, wxBOTTOM, 5 );
 
-	m_bpvTop = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvTop = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_bpvTop, 0, wxBOTTOM, 5 );
 
-	m_bpvBottom = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpvBottom = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	bSizer3DButtons->Add( m_bpvBottom, 0, 0, 5 );
 
 
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_bpUpdate = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_bpUpdate = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_bpUpdate->SetToolTip( _("Reload board and 3D models") );
 
-	bSizer3DButtons->Add( m_bpUpdate, 0, wxBOTTOM, 5 );
+	bSizer3DButtons->Add( m_bpUpdate, 0, wxTOP, 5 );
 
-	m_bpSettings = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
-	bSizer3DButtons->Add( m_bpSettings, 0, wxBOTTOM, 5 );
+	m_bpSettings = new STD_BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	bSizer3DButtons->Add( m_bpSettings, 0, wxTOP, 5 );
 
 
 	bSizer3DButtons->Add( 0, 10, 0, 0, 5 );
 
 
-	bSizermain->Add( bSizer3DButtons, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
+	bSizermain->Add( bSizer3DButtons, 0, wxEXPAND|wxTOP, 5 );
 
 
 	this->SetSizer( bSizermain );
