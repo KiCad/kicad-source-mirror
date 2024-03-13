@@ -2984,6 +2984,7 @@ static SHAPE_POLY_SET partitionPolyIntoRegularCellGrid( const SHAPE_POLY_SET& aP
 void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
                                          std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* aHintData )
 {
+    std::unique_lock<std::mutex> lock( m_triangulationMutex );
     bool recalculate = !m_hash.IsValid();
     MD5_HASH hash;
 
