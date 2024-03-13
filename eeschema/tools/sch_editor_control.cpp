@@ -75,6 +75,14 @@
 #include <wx/filedlg.h>
 
 
+/**
+ * Flag to enable schematic paste debugging output.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar traceSchPaste[] = wxT( "KICAD_SCH_PASTE" );
+
+
 int SCH_EDITOR_CONTROL::New( const TOOL_EVENT& aEvent )
 {
     m_frame->NewProject();
@@ -1441,7 +1449,8 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol,
             newInstance = tmp;
             instanceFound = true;
 
-            wxLogDebug( wxS( "Pasting found symbol instance with reference %s, unit %d:"
+            wxLogTrace( traceSchPaste,
+                        wxS( "Pasting found symbol instance with reference %s, unit %d:"
                              "\n\tClipboard path: %s\n\tSymbol UUID: %s." ),
                         tmp.m_Reference, tmp.m_Unit,
                         aClipPath.AsString(), aSymbol->m_Uuid.AsString() );
@@ -1455,7 +1464,8 @@ void SCH_EDITOR_CONTROL::updatePastedSymbol( SCH_SYMBOL* aSymbol,
 
     if( !instanceFound )
     {
-        wxLogDebug( wxS( "Clipboard symbol instance **not** found:\n\tClipboard path: %s\n\t"
+        wxLogTrace( traceSchPaste,
+                    wxS( "Clipboard symbol instance **not** found:\n\tClipboard path: %s\n\t"
                          "Symbol UUID: %s." ),
                     aClipPath.AsString(), aSymbol->m_Uuid.AsString() );
 
