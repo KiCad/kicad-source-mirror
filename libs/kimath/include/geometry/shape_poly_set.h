@@ -32,6 +32,7 @@
 #include <deque>                        // for deque
 #include <iosfwd>                       // for string, stringstream
 #include <memory>
+#include <mutex>
 #include <set>                          // for set
 #include <stdexcept>                    // for out_of_range
 #include <stdlib.h>                     // for abs
@@ -1572,7 +1573,8 @@ protected:
     std::vector<POLYGON>                               m_polys;
     std::vector<std::unique_ptr<TRIANGULATED_POLYGON>> m_triangulatedPolys;
 
-    bool     m_triangulationValid = false;
+    bool        m_triangulationValid = false;
+    std::mutex  m_triangulationMutex;
 
 private:
     MD5_HASH m_hash;
