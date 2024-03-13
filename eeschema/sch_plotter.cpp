@@ -153,6 +153,19 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
         wxString    sheetName = sheetList[i].Last()->GetFields()[SHEETNAME].GetShownText( false );
 
+        if( aPlotSettings.m_PDFMetadata )
+        {
+            msg = wxS( "AUTHOR" );
+
+            if( m_schematic->ResolveTextVar( &sheetList[i], &msg, 0 ) )
+                plotter->SetAuthor( msg );
+
+            msg = wxS( "SUBJECT" );
+
+            if( m_schematic->ResolveTextVar( &sheetList[i], &msg, 0 ) )
+                plotter->SetSubject( msg );
+        }
+
         if( i == 0 )
         {
             try

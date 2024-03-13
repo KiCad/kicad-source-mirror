@@ -250,6 +250,7 @@ public:
         double   hpgl_pen_size;
         int      hpgl_origin;
         bool     pdf_property_popups;
+        bool     pdf_metadata;
         bool     open_file_after_plot;
     };
 

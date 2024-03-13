@@ -88,6 +88,7 @@ struct SCH_PLOT_SETTINGS
     double         m_HPGLPenSize; // for HPGL format only: pen size
     HPGL_PAGE_SIZE m_HPGLPaperSizeSelect;
     bool           m_PDFPropertyPopups;
+    bool           m_PDFMetadata;
     wxString       m_theme;
 
     wxString       m_outputDirectory;
@@ -104,6 +105,7 @@ struct SCH_PLOT_SETTINGS
         m_HPGLPenSize( 1.0 ),
         m_HPGLPaperSizeSelect( HPGL_PAGE_SIZE::DEFAULT ),
         m_PDFPropertyPopups( false ),
+        m_PDFMetadata( false ),
         m_theme(),
         m_outputDirectory(),
         m_outputFile(),

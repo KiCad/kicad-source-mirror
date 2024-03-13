@@ -192,6 +192,7 @@ public:
 public:
     bool        m_PDFFrontFPPropertyPopups;   ///< Generate PDF property popup menus for footprints
     bool        m_PDFBackFPPropertyPopups;    ///<   on front and/or back of board
+    bool        m_PDFMetadata;                ///< Generate PDF metadata for SUBJECT and AUTHOR
 
 private:
     friend class PCB_PLOT_PARAMS_PARSER;

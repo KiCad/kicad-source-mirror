@@ -151,8 +151,9 @@ public:
     virtual void SetDash( int aLineWidth, LINE_STYLE aLineStyle ) = 0;
 
     virtual void SetCreator( const wxString& aCreator ) { m_creator = aCreator; }
-
     virtual void SetTitle( const wxString& aTitle ) { m_title = aTitle; }
+    virtual void SetAuthor( const wxString& aAuthor ) { m_author = aAuthor; }
+    virtual void SetSubject( const wxString& aSubject ) { m_subject = aSubject; }
 
     /**
      * Add a line to the list of free lines to print at the beginning of the file.
@@ -669,6 +670,8 @@ protected:      // variables used in most of plotters:
     wxString         m_creator;
     wxString         m_filename;
     wxString         m_title;
+    wxString         m_author;
+    wxString         m_subject;
     PAGE_INFO        m_pageInfo;
     VECTOR2I         m_paperSize;           // Paper size in IU - not in mils
 

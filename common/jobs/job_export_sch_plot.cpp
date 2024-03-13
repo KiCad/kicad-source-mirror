@@ -34,6 +34,7 @@ JOB_EXPORT_SCH_PLOT::JOB_EXPORT_SCH_PLOT( bool aIsCli, SCH_PLOT_FORMAT aPlotForm
         m_HPGLPenSize( 1.0 ),
         m_HPGLPaperSizeSelect( JOB_HPGL_PAGE_SIZE::DEFAULT ),
         m_PDFPropertyPopups( true ),
+        m_PDFMetadata( true ),
         m_theme(),
         m_outputDirectory(),
         m_outputFile(),

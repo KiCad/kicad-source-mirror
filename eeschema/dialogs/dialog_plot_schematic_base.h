@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,6 +67,7 @@ class DIALOG_PLOT_SCHEMATIC_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_penWidthCtrl;
 		wxStaticText* m_penWidthUnits;
 		wxCheckBox* m_plotPDFPropertyPopups;
+		wxCheckBox* m_plotPDFMetadata;
 		wxStaticBoxSizer* m_otherOptions;
 		wxCheckBox* m_openFileAfterPlot;
 		WX_HTML_REPORT_PANEL* m_MessagesBox;

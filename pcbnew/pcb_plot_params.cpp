@@ -136,6 +136,7 @@ PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 
     m_PDFFrontFPPropertyPopups   = true;
     m_PDFBackFPPropertyPopups    = true;
+    m_PDFMetadata                = true;
 
     // This parameter controls if the NPTH pads will be plotted or not
     // it is a "local" parameter
@@ -223,6 +224,9 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1,
                               getTokenName( T_pdf_back_fp_property_popups ),
                               m_PDFBackFPPropertyPopups );
+    KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1,
+                              getTokenName( T_pdf_metadata ),
+                              m_PDFMetadata );
 
     // DXF options
     KICAD_FORMAT::FormatBool( aFormatter, aNestLevel + 1, getTokenName( T_dxfpolygonmode ),
@@ -332,6 +336,9 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams ) const
         return false;
 
     if( m_PDFBackFPPropertyPopups != aPcbPlotParams.m_PDFBackFPPropertyPopups )
+        return false;
+
+    if( m_PDFMetadata != aPcbPlotParams.m_PDFMetadata )
         return false;
 
     if( m_A4Output != aPcbPlotParams.m_A4Output )
@@ -575,6 +582,10 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
 
         case T_pdf_back_fp_property_popups:
             aPcbPlotParams->m_PDFFrontFPPropertyPopups = parseBool();
+            break;
+
+        case T_pdf_metadata:
+            aPcbPlotParams->m_PDFMetadata = parseBool();
             break;
 
         case T_dxfpolygonmode:

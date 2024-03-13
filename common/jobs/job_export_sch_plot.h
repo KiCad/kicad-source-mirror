@@ -91,6 +91,7 @@ public:
     double                m_HPGLPenSize; // for HPGL format only: pen size
     JOB_HPGL_PAGE_SIZE    m_HPGLPaperSizeSelect;
     bool                  m_PDFPropertyPopups;
+    bool                  m_PDFMetadata;
     wxString              m_theme;
 
     wxString m_outputDirectory;

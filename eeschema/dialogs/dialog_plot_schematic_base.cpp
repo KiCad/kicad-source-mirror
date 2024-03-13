@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.0-39-g3487c3cb)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -116,7 +116,7 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	sbOptions->Add( gbSizer1, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 
-	m_optionsSizer->Add( sbOptions, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_optionsSizer->Add( sbOptions, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 	wxBoxSizer* bOptionsRight;
 	bOptionsRight = new wxBoxSizer( wxVERTICAL );
@@ -163,6 +163,11 @@ DIALOG_PLOT_SCHEMATIC_BASE::DIALOG_PLOT_SCHEMATIC_BASE( wxWindow* parent, wxWind
 	m_plotPDFPropertyPopups = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Generate property popups"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_plotPDFPropertyPopups->SetValue(true);
 	sbSizer4->Add( m_plotPDFPropertyPopups, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+
+	m_plotPDFMetadata = new wxCheckBox( sbSizer4->GetStaticBox(), wxID_ANY, _("Generate metadata from AUTHOR && SUBJECT variables"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_plotPDFMetadata->SetToolTip( _("Generate PDF document properties from AUTHOR and SUBJECT text variables") );
+
+	sbSizer4->Add( m_plotPDFMetadata, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	bOptionsRight->Add( sbSizer4, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

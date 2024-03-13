@@ -1463,10 +1463,14 @@ function ShM(aEntries) {
              "/Producer (KiCad PDF)\n"
              "/CreationDate (%s)\n"
              "/Creator %s\n"
-             "/Title %s\n",
+             "/Title %s\n"
+             "/Author %s\n"
+             "/Subject %s\n",
              date_buf,
              encodeStringForPlotter( m_creator ).c_str(),
-             encodeStringForPlotter( m_title ).c_str() );
+             encodeStringForPlotter( m_title ).c_str(),
+             encodeStringForPlotter( m_author ).c_str(),
+             encodeStringForPlotter( m_subject ).c_str() );
 
     fputs( ">>\n", m_outputFile );
     closePdfObject();

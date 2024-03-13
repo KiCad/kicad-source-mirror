@@ -213,6 +213,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     settings.m_HPGLPenSize = aPlotJob->m_HPGLPenSize;
     settings.m_HPGLPlotOrigin = hpglOrigin;
     settings.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
+    settings.m_PDFMetadata = aPlotJob->m_PDFMetadata;
     settings.m_outputDirectory = aPlotJob->m_outputDirectory;
     settings.m_outputFile = aPlotJob->m_outputFile;
     settings.m_pageSizeSelect = pageSizeSelect;

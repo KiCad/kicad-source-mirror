@@ -111,6 +111,7 @@ void DIALOG_PLOT_SCHEMATIC::initDlg()
         setOpenFileAfterPlot( cfg->m_PlotPanel.open_file_after_plot );
 
         m_plotPDFPropertyPopups->SetValue( cfg->m_PlotPanel.pdf_property_popups );
+        m_plotPDFMetadata->SetValue( cfg->m_PlotPanel.pdf_metadata );
 
         // HPGL plot origin and unit system configuration
         m_plotOriginOpt->SetSelection( cfg->m_PlotPanel.hpgl_origin );
@@ -269,6 +270,7 @@ void DIALOG_PLOT_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 
         m_openFileAfterPlot->Enable( fmt == PLOT_FORMAT::PDF );
         m_plotPDFPropertyPopups->Enable( fmt == PLOT_FORMAT::PDF );
+        m_plotPDFMetadata->Enable( fmt == PLOT_FORMAT::PDF );
 
         m_paperSizeOption->Set( paperSizes );
         m_paperSizeOption->SetSelection( selection );
@@ -308,6 +310,7 @@ void DIALOG_PLOT_SCHEMATIC::getPlotOptions( RENDER_SETTINGS* aSettings )
         cfg->m_PlotPanel.hpgl_origin      = m_plotOriginOpt->GetSelection();
         cfg->m_PlotPanel.hpgl_paper_size  = static_cast<int>( m_HPGLPaperSizeSelect );
         cfg->m_PlotPanel.pdf_property_popups  = m_plotPDFPropertyPopups->GetValue();
+        cfg->m_PlotPanel.pdf_metadata         = m_plotPDFMetadata->GetValue();
         cfg->m_PlotPanel.open_file_after_plot = getOpenFileAfterPlot();
 
         // HPGL Pen Size is stored in mm in config
@@ -382,6 +385,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     plotSettings.m_useBackgroundColor = m_plotBackgroundColor->GetValue();
     plotSettings.m_theme = colors->GetFilename();
     plotSettings.m_PDFPropertyPopups = m_plotPDFPropertyPopups->GetValue();
+    plotSettings.m_PDFMetadata = m_plotPDFMetadata->GetValue();
     plotSettings.m_HPGLPaperSizeSelect = static_cast<HPGL_PAGE_SIZE>( m_HPGLPaperSizeSelect );
     plotSettings.m_HPGLPlotOrigin =
             static_cast<HPGL_PLOT_ORIGIN_AND_UNITS>( m_plotOriginOpt->GetSelection() );

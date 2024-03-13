@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -412,6 +412,11 @@ DIALOG_PLOT_BASE::DIALOG_PLOT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 
 	m_backFPPropertyPopups = new wxCheckBox( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Generate property popups for back footprints"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer4->Add( m_backFPPropertyPopups, wxGBPosition( 2, 0 ), wxGBSpan( 1, 2 ), wxRIGHT|wxLEFT, 5 );
+
+	m_pdfMetadata = new wxCheckBox( m_PDFOptionsSizer->GetStaticBox(), wxID_ANY, _("Generate metadata from AUTHOR && SUBJECT variables"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_pdfMetadata->SetToolTip( _("Generate PDF document properties from AUTHOR and SUBJECT text variables") );
+
+	gbSizer4->Add( m_pdfMetadata, wxGBPosition( 3, 0 ), wxGBSpan( 1, 2 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
 
 	m_PDFOptionsSizer->Add( gbSizer4, 1, wxEXPAND|wxBOTTOM, 5 );
