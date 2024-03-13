@@ -229,20 +229,8 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
 
 #endif
 
-    if( m_schSettings.GetDrawBoundingBoxes() )
-    {
-        BOX2I box = aItem->GetBoundingBox();
-
-        if( aItem->Type() == SCH_SYMBOL_T )
-            box = static_cast<const SCH_SYMBOL*>( aItem )->GetBodyBoundingBox();
-
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetStrokeColor( aItem->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 )
-                                                  : COLOR4D( 0.2, 0.2, 0.2, 1 ) );
-        m_gal->SetLineWidth( schIUScale.MilsToIU( 3 ) );
-        m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
-    }
+    // Enable draw bounding box on request. Some bboxes are handled locally.
+    bool drawBoundingBox = m_schSettings.GetDrawBoundingBoxes();
 
     switch( aItem->Type() )
     {
@@ -253,9 +241,11 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
             draw( static_cast<const LIB_SHAPE*>( aItem ), aLayer, aDimmed );
             break;
         case LIB_PIN_T:
+            drawBoundingBox = false;
             draw( static_cast<const LIB_PIN*>( aItem ), aLayer, aDimmed  );
             break;
         case LIB_FIELD_T:
+            drawBoundingBox = false;
             draw( static_cast<const LIB_FIELD*>( aItem ), aLayer, aDimmed  );
             break;
         case LIB_TEXT_T:
@@ -321,6 +311,25 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
 
         default: return;
     }
+
+    if( drawBoundingBox )
+        drawItemBoundingBox( aItem );
+}
+
+
+void SCH_PAINTER::drawItemBoundingBox( const EDA_ITEM* aItem )
+{
+    BOX2I box = aItem->GetBoundingBox();
+
+    if( aItem->Type() == SCH_SYMBOL_T )
+        box = static_cast<const SCH_SYMBOL*>( aItem )->GetBodyBoundingBox();
+
+    m_gal->SetIsFill( false );
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( aItem->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 )
+                                              : COLOR4D( 0.2, 0.2, 0.2, 1 ) );
+    m_gal->SetLineWidth( schIUScale.MilsToIU( 3 ) );
+    m_gal->DrawRectangle( box.GetOrigin(), box.GetEnd() );
 }
 
 
@@ -1111,6 +1120,9 @@ void SCH_PAINTER::draw( const LIB_FIELD* aField, int aLayer, bool aDimmed )
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
         m_gal->DrawLine( bbox.Centre(), VECTOR2I( 0, 0 ) );
     }
+
+    if( m_schSettings.GetDrawBoundingBoxes() )
+        drawItemBoundingBox( aField );
 }
 
 
@@ -1400,6 +1412,9 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
 
         return;
     }
+
+    if( m_schSettings.GetDrawBoundingBoxes() )
+        drawItemBoundingBox( aPin );
 
     VECTOR2I p0;
     VECTOR2I dir;
@@ -2666,14 +2681,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     }
 
     if( m_schSettings.GetDrawBoundingBoxes() )
-    {
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->SetStrokeColor( aField->IsSelected() ? COLOR4D( 1.0, 0.2, 0.2, 1 )
-                                                    : COLOR4D( 0.2, 0.2, 0.2, 1 ) );
-        m_gal->SetLineWidth( schIUScale.MilsToIU( 3 ) );
-        m_gal->DrawRectangle( bbox.GetOrigin(), bbox.GetEnd() );
-    }
+        drawItemBoundingBox( aField );
 
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );

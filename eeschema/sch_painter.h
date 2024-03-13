@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019-2020 CERN
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -146,6 +146,7 @@ public:
     void SetSchematic( SCHEMATIC* aSchematic ) { m_schematic = aSchematic; }
 
 private:
+    void drawItemBoundingBox( const EDA_ITEM* aItem );
     void draw( const EDA_ITEM*, int, bool aDimmed );
     void draw( const LIB_PIN* aPin, int aLayer, bool aDimmed );
     void draw( const LIB_SHAPE* aCircle, int aLayer, bool aDimmed );
