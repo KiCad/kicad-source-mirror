@@ -277,6 +277,15 @@ bool DRC_TEST_PROVIDER_HOLE_TO_HOLE::testHoleAgainstHole( BOARD_ITEM* aItem, SHA
     int                           epsilon = m_board->GetDesignSettings().GetDRCEpsilon();
     SEG::ecoord                   epsilon_sq = SEG::Square( epsilon );
 
+    // Blind-buried or microvias that don't overlap layers aren't an issue.
+    if( aItem->Type() == PCB_VIA_T && aOther->Type() == PCB_VIA_T )
+    {
+        LSET viaHoleLayers = static_cast<PCB_VIA*>( aItem )->GetLayerSet() & LSET::AllCuMask();
+
+        if( ( viaHoleLayers & static_cast<PCB_VIA*>( aOther )->GetLayerSet() ).none() )
+            return false;
+    }
+
     // Holes at same location generate a separate violation
     if( ( aHole->GetCenter() - otherHole->GetCenter() ).SquaredEuclideanNorm() < epsilon_sq )
     {
