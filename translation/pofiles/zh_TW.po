@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-12 05:01+0000\n"
+"PO-Revision-Date: 2024-03-13 14:01+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -759,7 +759,7 @@ msgstr "背景梯度終點"
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:203
 msgid "Use board stackup colors"
-msgstr "使用電路板層疊顏色"
+msgstr "使用電路板疊層顏色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:134
 #, c-format
@@ -791,7 +791,7 @@ msgstr "雙擊滑鼠左鍵或點選中鍵修改顏色"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:483
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "取消勾選「使用電路板疊層顏色」以允許進行顏色編輯。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:533
 #: pcbnew/widgets/appearance_controls.cpp:2182
@@ -28761,7 +28761,7 @@ msgstr "銅層："
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:24
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:32
 msgid "Select the number of copper layers in the stackup"
-msgstr "選擇壓板中的銅層數目"
+msgstr "選擇疊層中的銅層數目"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:28
 #: pcbnew/dialogs/panel_setup_tracks_and_vias_base.cpp:53
@@ -28841,7 +28841,7 @@ msgstr "ID"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:131
 msgid "Board thickness from stackup:"
-msgstr "電路板壓層厚度:"
+msgstr "電路板疊層厚度:"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:141
 msgid "Adjust Dielectric Thickness"
@@ -29555,7 +29555,7 @@ msgstr "從另一個電路板匯入設定..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:83
 msgid "Board Stackup"
-msgstr "電路板壓層"
+msgstr "電路板疊層"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:96
 msgid "Board Editor Layers"
@@ -29563,7 +29563,7 @@ msgstr "電路板編輯器圖層"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:104
 msgid "Physical Stackup"
-msgstr "物理壓層"
+msgstr "物理疊層"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:111
 msgid "Board Finish"
@@ -32554,7 +32554,7 @@ msgstr "獲取和移動封裝"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:23
 msgid "Items to Delete"
-msgstr "刪除項"
+msgstr "要刪除的項目"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:25
 #: pcbnew/tools/board_editor_control.cpp:88
@@ -32631,7 +32631,7 @@ msgstr "當前層："
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:72
 msgid "Delete Items"
-msgstr "刪除專案"
+msgstr "刪除項目"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:108
 #, fuzzy
@@ -32674,18 +32674,18 @@ msgstr "要佈線的導線"
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:46
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
 msgid "Filter Items"
-msgstr "專案篩選"
+msgstr "篩選項目"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:64
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:57
 msgid "Filter items by net class:"
-msgstr "按網路類篩選專案："
+msgstr "按網路類篩選項目："
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:78
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:71
 msgid "Filter items by layer:"
-msgstr "按層篩選專案："
+msgstr "按圖層篩選項目："
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:96
 msgid "Round pads only"
@@ -32876,15 +32876,15 @@ msgstr "設置淚滴"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:138
 msgid "Other text items"
-msgstr "其他文字專案"
+msgstr "其他文字項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:139
 msgid "Graphic items"
-msgstr "圖形項"
+msgstr "圖形項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:140
 msgid "Dimension items"
-msgstr "標註物件"
+msgstr "標註項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:258
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:183
@@ -32967,32 +32967,31 @@ msgstr "設定為圖層預設值："
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:34
 msgid "Other footprint text items"
-msgstr "其他封裝文字項"
+msgstr "其他封裝文字項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:37
 msgid "Footprint graphic items"
-msgstr "封裝圖形項"
+msgstr "封裝圖形項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:40
-#, fuzzy
 msgid "Footprint dimension items"
-msgstr "封裝標註物件"
+msgstr "封裝標註項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:46
 msgid "PCB graphic items"
-msgstr "PCB 圖形項"
+msgstr "PCB 圖形項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:49
 msgid "PCB text items"
-msgstr "PCB 文字項"
+msgstr "PCB 文字項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:52
 msgid "PCB dimension items"
-msgstr "PCB 標註物件"
+msgstr "PCB 標註項目"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
 msgid "Filter items by parent footprint library id:"
-msgstr "按父級封裝庫 ID 篩選專案："
+msgstr "按父級封裝庫 ID 篩選項目："
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:112
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:133
@@ -33176,7 +33175,7 @@ msgstr "取消所有"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:51
 msgid "Board layers and physical stackup"
-msgstr "電路板層和物理堆疊"
+msgstr "電路板層和物理疊層"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:54
 msgid "Solder mask/paste defaults"
@@ -33289,7 +33288,7 @@ msgstr "選擇銅層對"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:104
 msgid "Rotate around item anchor"
-msgstr "圍繞錨點選擇"
+msgstr "繞著定錨項目旋轉"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:107
 msgid "Rotate around selection center"
@@ -33341,7 +33340,7 @@ msgstr "使用極座標"
 
 #: pcbnew/dialogs/dialog_move_exact_base.h:69
 msgid "Move Item"
-msgstr "移動專案"
+msgstr "移動項目"
 
 #: pcbnew/dialogs/dialog_net_inspector.cpp:984 pcbnew/netinfo_item.cpp:89
 msgid "Net Code"
@@ -34089,7 +34088,7 @@ msgstr "取消全選所有層"
 
 #: pcbnew/dialogs/dialog_plot.cpp:550
 msgid "Order as Board Stackup"
-msgstr "電路板壓層"
+msgstr "電路板疊層"
 
 #: pcbnew/dialogs/dialog_plot.cpp:952
 msgid "HPGL pen size constrained."
@@ -34384,7 +34383,7 @@ msgstr "DXF 選項"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:334
 msgid "Uncheck to plot graphic items using their center lines"
-msgstr "取消選中以使用圖形專案的中心線繪製圖形項"
+msgstr "取消選中以使用圖形項目的中心線繪製圖形項"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:338
 msgid "Export units:"
@@ -34632,11 +34631,11 @@ msgstr "<選擇>"
 #: pcbnew/dialogs/dialog_position_relative.cpp:244
 #, c-format
 msgid "Reference item: %s"
-msgstr "基準項：%s"
+msgstr "基準項目：%s"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:22
 msgid "Reference item: <none selected>"
-msgstr "參考專案：<未選擇>"
+msgstr "參考項目：<未選擇>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:34
 msgid "Use Local Origin"
@@ -34648,19 +34647,19 @@ msgstr "使用網格原點"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:40
 msgid "Select Item..."
-msgstr "選擇專案..."
+msgstr "選擇項目..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
 msgid ""
 "Click and select a board item.\n"
 "The anchor position will be the position of the selected item."
 msgstr ""
-"點選並選擇一個板專案。\n"
-"錨點位置將成為所選專案的位置。"
+"點選並選擇一個電路板項目。\n"
+"錨點位置將成為所選項目的位置。"
 
 #: pcbnew/dialogs/dialog_position_relative_base.h:72
 msgid "Position Relative To Reference Item"
-msgstr "放置到參考項的相對位置"
+msgstr "放置到參考項目的相對位置"
 
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:112
 msgid "Right-click for layer selection commands."
@@ -34757,13 +34756,11 @@ msgid "Push Pad Properties"
 msgstr "推擠焊盤屬性"
 
 #: pcbnew/dialogs/dialog_reference_image_properties.cpp:86
-#, fuzzy
 msgid ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
 "filter."
-msgstr ""
-"鎖定的封裝無法在畫布上自由移動和定位，並且只有當“已鎖定專案”複選框在選擇篩選"
+msgstr "鎖定的項目無法在畫布上自由移動和定位，並且只有當“已鎖定項目”複選框在選擇篩選"
 "器中啟用時才能被選中。"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
@@ -34924,7 +34921,7 @@ msgstr "圓弧角度："
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:49
 msgid "Move items on:"
-msgstr "移動專案："
+msgstr "移動項目："
 
 #: pcbnew/dialogs/dialog_swap_layers.cpp:50
 msgid "To layer:"
@@ -35332,9 +35329,8 @@ msgid "Drag (free angle)"
 msgstr "拖動(自由角度)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:83
-#, fuzzy
 msgid "Flip board items left/right (default is top/bottom)"
-msgstr "翻轉板專案 L/R (預設值為 T/B)"
+msgstr "翻轉電路板項目 向左/向右 (預設值為 向上/向下)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 msgid "Allow free pads"
@@ -35492,11 +35488,11 @@ msgstr "新封裝的預設文字項："
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:73
 msgid "Default text items for new footprints:"
-msgstr "新封裝的預設文字項："
+msgstr "新封裝的預設文字項目："
 
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:149
 msgid "Default properties for new graphic items:"
-msgstr "新建圖形專案的預設屬性："
+msgstr "新建圖形項目的預設屬性："
 
 #: pcbnew/dialogs/panel_fp_lib_table.cpp:466
 #, c-format
@@ -35958,15 +35954,14 @@ msgstr "長度調整"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:443
 msgid "Include stackup height in track length calculations"
-msgstr "線上路長度計算中包括堆疊高度"
+msgstr "線上路長度計算中包括疊層高度"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:444
 msgid ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
-msgstr ""
-"啟用後，計算帶過孔的線路的長度時將包括銅層之間的距離。禁用時，過孔堆疊高度將"
+msgstr "啟用後，計算帶過孔的線路的長度時將包括銅層之間的距離。禁用時，過孔疊層高度將"
 "被忽略。"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
@@ -35991,7 +35986,7 @@ msgstr "沒有預設的封裝"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:435
 msgid "Use the Physical Stackup page to change the number of copper layers."
-msgstr "使用物理壓板頁更改銅層數。"
+msgstr "使用物理疊層頁更改銅層數。"
 
 #: pcbnew/dialogs/panel_setup_layers.cpp:469
 #, c-format
@@ -38824,7 +38819,7 @@ msgstr "已建立 Gerber 作業檔案 \"%s\"。"
 
 #: pcbnew/exporters/gerber_jobfile_writer.cpp:592
 msgid "Board stackup settings not up to date."
-msgstr "電路板壓層設定不是最新的。"
+msgstr "電路板疊層設定不是最新的。"
 
 #: pcbnew/exporters/step/exporter_step.cpp:502
 msgid "Determining PCB data\n"
@@ -38833,7 +38828,7 @@ msgstr "確定 PCB 資料\n"
 #: pcbnew/exporters/step/exporter_step.cpp:505
 #, c-format
 msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "電路板壓層厚度: %.3f mm\n"
+msgstr "電路板疊層厚度: %.3f mm\n"
 
 #: pcbnew/exporters/step/exporter_step.cpp:519
 #, c-format
@@ -43810,9 +43805,8 @@ msgid "Dielectric"
 msgstr "介電材料"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:354
-#, fuzzy
 msgid "Insert Board Stackup Table"
-msgstr "插入電路板壓層表"
+msgstr "插入電路板疊層表"
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:398
 msgid "BOARD CHARACTERISTICS"
@@ -44334,11 +44328,11 @@ msgstr "在圖形層上新增板特性表"
 
 #: pcbnew/tools/pcb_actions.cpp:156
 msgid "Add Stackup Table"
-msgstr "新增壓層表"
+msgstr "新增疊層表"
 
 #: pcbnew/tools/pcb_actions.cpp:157
 msgid "Add a board stackup table on a graphic layer"
-msgstr "在圖形層上新增板壓層表"
+msgstr "在圖形層上新增板疊層表"
 
 #: pcbnew/tools/pcb_actions.cpp:163
 #, fuzzy
