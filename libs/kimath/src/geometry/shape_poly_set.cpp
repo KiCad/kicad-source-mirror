@@ -3131,7 +3131,7 @@ SHAPE_POLY_SET &SHAPE_POLY_SET::operator=( const SHAPE_POLY_SET& aOther )
     }
 
     m_hash = aOther.m_hash;
-    m_triangulationValid = aOther.m_triangulationValid;
+    m_triangulationValid = aOther.m_triangulationValid.load();
 
     return *this;
 }
@@ -3233,25 +3233,16 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
                                          std::vector<std::unique_ptr<TRIANGULATED_POLYGON>>* aHintData )
 {
     std::unique_lock<std::mutex> lock( m_triangulationMutex );
-    bool recalculate = !m_hash.IsValid();
-    MD5_HASH hash;
 
-    if( !m_triangulationValid )
-        recalculate = true;
-
-    if( !recalculate )
+    if( m_triangulationValid && m_hash.IsValid() )
     {
-        hash = checksum();
-
-        if( m_hash != hash )
-        {
-            m_hash = hash;
-            recalculate = true;
-        }
+        if( m_hash == checksum() )
+            return;
     }
 
-    if( !recalculate )
-        return;
+    // Invalidate, in case anything goes wrong below
+    m_triangulationValid = false;
+    m_hash.SetValid( false );
 
     auto triangulate =
             []( SHAPE_POLY_SET& polySet, int forOutline,
@@ -3314,7 +3305,6 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
             };
 
     m_triangulatedPolys.clear();
-    m_triangulationValid = true;
 
     if( aPartition )
     {
@@ -3341,6 +3331,12 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
             {
                 wxLogTrace( TRIANGULATE_TRACE, "Failed to triangulate partitioned polygon %d", ii );
             }
+            else
+            {
+                m_hash = checksum();
+                // Set valid flag only after everything has been updated
+                m_triangulationValid = true;
+            }
         }
     }
     else
@@ -3355,9 +3351,13 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
         {
             wxLogTrace( TRIANGULATE_TRACE, "Failed to triangulate polygon" );
         }
+        else
+        {
+            m_hash = checksum();
+            // Set valid flag only after everything has been updated
+            m_triangulationValid = true;
+        }
     }
-
-    m_hash = checksum();
 }
 
 
