@@ -979,13 +979,20 @@ EELEMENT::EELEMENT( wxXmlNode* aElement )
     <!ATTLIST element
           name          %String;       #REQUIRED
           library       %String;       #REQUIRED
+          library_urn   %Urn;          ""
           package       %String;       #REQUIRED
+          package3d_urn %Urn;          ""
+          override_package3d_urn %Urn; ""
+          override_package_urn %Urn;    ""
+          override_locally_modified %Bool; "no"
           value         %String;       #REQUIRED
           x             %Coord;        #REQUIRED
           y             %Coord;        #REQUIRED
           locked        %Bool;         "no"
+          populate      %Bool;         "yes"
           smashed       %Bool;         "no"
           rot           %Rotation;     "R0"
+          grouprefs     IDREFS         #IMPLIED
           >
     */
 
@@ -1001,6 +1008,7 @@ EELEMENT::EELEMENT( wxXmlNode* aElement )
     y       = parseRequiredAttribute<ECOORD>( aElement, "y" );
 
     // optional
+    library_urn = parseOptionalAttribute<wxString>( aElement, "library_urn" );
     locked  = parseOptionalAttribute<bool>( aElement, "locked" );
     smashed = parseOptionalAttribute<bool>( aElement, "smashed" );
     rot     = parseOptionalAttribute<EROT>( aElement, "rot" );

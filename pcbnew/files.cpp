@@ -444,7 +444,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 }
 
 
-int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard )
+int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard, bool aShowUserMsg )
 {
     PCB_LAYER_COLLECTOR collector;
 
@@ -472,14 +472,15 @@ int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard )
         }
     }
 
-    if( mixed )
+    if( mixed && aShowUserMsg )
     {
         // If they had different widths then we can't ensure that fills will be the same.
-        DisplayInfoMessage( this, _( "If the zones on this board are refilled the Copper Edge Clearance "
-                         "setting will be used (see Board Setup > Design Rules > Constraints).\n"
-                         "This may result in different fills from previous KiCad versions which "
-                         "used the line thicknesses of the board boundary on the Edge Cuts "
-                          "layer." ) );
+        DisplayInfoMessage( this,
+                            _( "If the zones on this board are refilled the Copper Edge "
+                               "Clearance setting will be used (see Board Setup > Design "
+                               "Rules > Constraints).\n This may result in different fills "
+                               "from previous KiCad versions which used the line thicknesses "
+                               "of the board boundary on the Edge Cuts layer." ) );
     }
 
     return std::max( 0, edgeWidth / 2 );
@@ -745,7 +746,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // edge widths.
             if( !loadedBoard->m_LegacyCopperEdgeClearanceLoaded )
             {
-                int edgeClearance = inferLegacyEdgeClearance( loadedBoard );
+                // Do not show the inferred edge clearance warning dialog when loading third
+                // party boards.  For some reason the dialog completely hangs all of KiCad and
+                // the imported board cannot be saved.
+                int edgeClearance = inferLegacyEdgeClearance( loadedBoard, !converted );
                 loadedBoard->GetDesignSettings().m_CopperEdgeClearance = edgeClearance;
             }
 
