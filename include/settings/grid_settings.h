@@ -30,7 +30,7 @@ class UNITS_PROVIDER;
 /**
  * Common grid settings, available to every frame
  */
-struct GRID
+struct KICOMMON_API GRID
 {
     bool operator==( const GRID& aOther ) const;
 
@@ -53,11 +53,11 @@ struct GRID
     wxString y;
 };
 
-bool operator!=( const GRID& lhs, const GRID& rhs );
-bool operator<( const GRID& lhs, const GRID& rhs );
+KICOMMON_API bool operator!=( const GRID& lhs, const GRID& rhs );
+KICOMMON_API bool  operator<( const GRID& lhs, const GRID& rhs );
 
-void to_json( nlohmann::json& j, const GRID& g );
-void from_json( const nlohmann::json& j, GRID& g );
+KICOMMON_API void to_json( nlohmann::json& j, const GRID& g );
+KICOMMON_API void  from_json( const nlohmann::json& j, GRID& g );
 
 
 struct GRID_SETTINGS

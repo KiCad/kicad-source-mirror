@@ -21,6 +21,7 @@
 #	define JSON_SCHEMA_VALIDATOR_API
 #endif
 
+#include <json_common.h>
 #include <nlohmann/json.hpp>
 
 #ifdef NLOHMANN_JSON_VERSION_MAJOR

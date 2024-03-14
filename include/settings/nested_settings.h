@@ -28,7 +28,7 @@
  * NESTED_SETTINGS is a JSON_SETTINGS that lives inside a JSON_SETTINGS.
  * Instead of being backed by a JSON file on disk, it loads and stores to its parent.
  */
-class NESTED_SETTINGS : public JSON_SETTINGS
+class KICOMMON_API NESTED_SETTINGS : public JSON_SETTINGS
 {
 public:
     NESTED_SETTINGS( const std::string& aName, int aSchemaVersion, JSON_SETTINGS* aParent,
