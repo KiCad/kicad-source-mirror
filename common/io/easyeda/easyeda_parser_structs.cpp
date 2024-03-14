@@ -24,7 +24,7 @@
 
 #include "easyeda_parser_structs.h"
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <core/json_serializers.h>
 
 

@@ -44,6 +44,16 @@
 	#define APILOCAL
 #endif
 
+// We use APIVISIBLE to mark extern template declarations where we cannot use APIEXPORT
+// Because MSVC disallows mixing dllexport and extern templates, we can't just use APIEXPORT
+// However MSVC is fine with the dllexport in the cpp file and extern in the header
+// But we need the visibility declared on both instantiation and extern for GCC/Clang to make
+// the symbol visible
+#if defined( __GNUC__ ) || defined( __clang__ )
+	#define APIVISIBLE __attribute__ ((visibility("default")))
+#else
+	#define APIVISIBLE
+#endif
 
 #if defined(COMPILING_DLL)
 	#define KIFACE_API    APIEXPORT

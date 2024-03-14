@@ -97,6 +97,13 @@ set( KICOMMON_SRCS
     kicad_curl/kicad_curl.cpp
     kicad_curl/kicad_curl_easy.cpp
 
+    settings/aui_settings.cpp
+    settings/bom_settings.cpp
+    settings/grid_settings.cpp
+    settings/json_settings.cpp
+    settings/nested_settings.cpp
+    settings/parameters.cpp
+
     widgets/progress_reporter_base.cpp
     widgets/std_bitmap_button.cpp
 
@@ -134,6 +141,8 @@ set( KICOMMON_SRCS
 add_library( kicommon SHARED
     ${KICOMMON_SRCS}
     )
+
+set_target_properties(kicommon PROPERTIES CXX_VISIBILITY_PRESET hidden)
 
 target_link_libraries( kicommon
     core
@@ -564,15 +573,9 @@ set( COMMON_SRCS
     tool/zoom_tool.cpp
 
     settings/app_settings.cpp
-    settings/aui_settings.cpp
-    settings/bom_settings.cpp
     settings/color_settings.cpp
     settings/cvpcb_settings.cpp
     settings/common_settings.cpp
-    settings/grid_settings.cpp
-    settings/json_settings.cpp
-    settings/nested_settings.cpp
-    settings/parameters.cpp
     settings/settings_manager.cpp
     settings/kicad_settings.cpp
 

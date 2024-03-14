@@ -43,8 +43,6 @@
 #include <wx/stdstream.h>
 #include <wx/wfstream.h>
 
-const wxChar* const traceSettings = wxT( "KICAD_SETTINGS" );
-
 
 nlohmann::json::json_pointer JSON_SETTINGS_INTERNALS::PointerFromString( std::string aPath )
 {
@@ -591,23 +589,37 @@ std::optional<ValueType> JSON_SETTINGS::Get( const std::string& aPath ) const
 
 
 // Instantiate all required templates here to allow reducing scope of json.hpp
-template std::optional<bool> JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
-template std::optional<double> JSON_SETTINGS::Get<double>( const std::string& aPath ) const;
-template std::optional<float> JSON_SETTINGS::Get<float>( const std::string& aPath ) const;
-template std::optional<int> JSON_SETTINGS::Get<int>( const std::string& aPath ) const;
-template std::optional<unsigned int> JSON_SETTINGS::Get<unsigned int>( const std::string& aPath ) const;
-template std::optional<unsigned long long> JSON_SETTINGS::Get<unsigned long long>( const std::string& aPath ) const;
-template std::optional<std::string> JSON_SETTINGS::Get<std::string>( const std::string& aPath ) const;
-template std::optional<nlohmann::json> JSON_SETTINGS::Get<nlohmann::json>( const std::string& aPath ) const;
-template std::optional<KIGFX::COLOR4D> JSON_SETTINGS::Get<KIGFX::COLOR4D>( const std::string& aPath ) const;
-template std::optional<BOM_FIELD>  JSON_SETTINGS::Get<BOM_FIELD>( const std::string& aPath ) const;
-template std::optional<BOM_PRESET> JSON_SETTINGS::Get<BOM_PRESET>( const std::string& aPath ) const;
-template std::optional<BOM_FMT_PRESET> JSON_SETTINGS::Get<BOM_FMT_PRESET>( const std::string& aPath ) const;
-template std::optional<GRID>    JSON_SETTINGS::Get<GRID>( const std::string& aPath ) const;
-template std::optional<wxPoint> JSON_SETTINGS::Get<wxPoint>( const std::string& aPath ) const;
-template std::optional<wxSize> JSON_SETTINGS::Get<wxSize>( const std::string& aPath ) const;
-template std::optional<wxRect> JSON_SETTINGS::Get<wxRect>( const std::string& aPath ) const;
-template std::optional<wxAuiPaneInfo> JSON_SETTINGS::Get<wxAuiPaneInfo>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<bool> JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<double>
+                      JSON_SETTINGS::Get<double>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<float>
+                      JSON_SETTINGS::Get<float>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<int> JSON_SETTINGS::Get<int>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<unsigned int>
+                      JSON_SETTINGS::Get<unsigned int>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<unsigned long long>
+                      JSON_SETTINGS::Get<unsigned long long>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<std::string>
+                      JSON_SETTINGS::Get<std::string>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<nlohmann::json>
+                      JSON_SETTINGS::Get<nlohmann::json>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<KIGFX::COLOR4D>
+                      JSON_SETTINGS::Get<KIGFX::COLOR4D>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<BOM_FIELD>
+                      JSON_SETTINGS::Get<BOM_FIELD>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<BOM_PRESET>
+                      JSON_SETTINGS::Get<BOM_PRESET>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<BOM_FMT_PRESET>
+                      JSON_SETTINGS::Get<BOM_FMT_PRESET>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<GRID> JSON_SETTINGS::Get<GRID>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<wxPoint>
+                      JSON_SETTINGS::Get<wxPoint>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<wxSize>
+                      JSON_SETTINGS::Get<wxSize>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<wxRect>
+                      JSON_SETTINGS::Get<wxRect>( const std::string& aPath ) const;
+template KICOMMON_API std::optional<wxAuiPaneInfo>
+                      JSON_SETTINGS::Get<wxAuiPaneInfo>( const std::string& aPath ) const;
 
 template<typename ValueType>
 void JSON_SETTINGS::Set( const std::string& aPath, ValueType aVal )
@@ -617,24 +629,34 @@ void JSON_SETTINGS::Set( const std::string& aPath, ValueType aVal )
 
 
 // Instantiate all required templates here to allow reducing scope of json.hpp
-template void JSON_SETTINGS::Set<bool>( const std::string& aPath, bool aValue );
-template void JSON_SETTINGS::Set<double>( const std::string& aPath, double aValue );
-template void JSON_SETTINGS::Set<float>( const std::string& aPath, float aValue );
-template void JSON_SETTINGS::Set<int>( const std::string& aPath, int aValue );
-template void JSON_SETTINGS::Set<unsigned int>( const std::string& aPath, unsigned int aValue );
-template void JSON_SETTINGS::Set<unsigned long long>( const std::string& aPath, unsigned long long aValue );
-template void JSON_SETTINGS::Set<const char*>( const std::string& aPath, const char* aValue );
-template void JSON_SETTINGS::Set<std::string>( const std::string& aPath, std::string aValue );
-template void JSON_SETTINGS::Set<nlohmann::json>( const std::string& aPath, nlohmann::json aValue );
-template void JSON_SETTINGS::Set<KIGFX::COLOR4D>( const std::string& aPath, KIGFX::COLOR4D aValue );
-template void JSON_SETTINGS::Set<BOM_FIELD>( const std::string& aPath, BOM_FIELD aValue );
-template void JSON_SETTINGS::Set<BOM_PRESET>( const std::string& aPath, BOM_PRESET aValue );
-template void JSON_SETTINGS::Set<BOM_FMT_PRESET>( const std::string& aPath, BOM_FMT_PRESET aValue );
-template void JSON_SETTINGS::Set<GRID>( const std::string& aPath, GRID aValue );
-template void JSON_SETTINGS::Set<wxPoint>( const std::string& aPath, wxPoint aValue );
-template void JSON_SETTINGS::Set<wxSize>( const std::string& aPath, wxSize aValue );
-template void JSON_SETTINGS::Set<wxRect>( const std::string& aPath, wxRect aValue );
-template void JSON_SETTINGS::Set<wxAuiPaneInfo>( const std::string& aPath, wxAuiPaneInfo aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<bool>( const std::string& aPath, bool aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<double>( const std::string& aPath, double aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<float>( const std::string& aPath, float aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<int>( const std::string& aPath, int aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<unsigned int>( const std::string& aPath,
+                                                             unsigned int       aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<unsigned long long>( const std::string& aPath,
+                                                                   unsigned long long aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<const char*>( const std::string& aPath,
+                                                            const char*        aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<std::string>( const std::string& aPath,
+                                                            std::string        aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<nlohmann::json>( const std::string& aPath,
+                                                               nlohmann::json     aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<KIGFX::COLOR4D>( const std::string& aPath,
+                                                               KIGFX::COLOR4D     aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<BOM_FIELD>( const std::string& aPath,
+                                                          BOM_FIELD          aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<BOM_PRESET>( const std::string& aPath,
+                                                           BOM_PRESET         aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<BOM_FMT_PRESET>( const std::string& aPath,
+                                                               BOM_FMT_PRESET     aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<GRID>( const std::string& aPath, GRID aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<wxPoint>( const std::string& aPath, wxPoint aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<wxSize>( const std::string& aPath, wxSize aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<wxRect>( const std::string& aPath, wxRect aValue );
+template KICOMMON_API void JSON_SETTINGS::Set<wxAuiPaneInfo>( const std::string& aPath,
+                                                              wxAuiPaneInfo      aValue );
 
 
 void JSON_SETTINGS::registerMigration( int aOldSchemaVersion, int aNewSchemaVersion,
@@ -775,13 +797,13 @@ bool JSON_SETTINGS::fromLegacy( wxConfigBase* aConfig, const std::string& aKey,
 
 // Explicitly declare these because we only support a few types anyway, and it means we can keep
 // wxConfig detail out of the header file
-template bool JSON_SETTINGS::fromLegacy<int>( wxConfigBase*, const std::string&,
+template KICOMMON_API bool JSON_SETTINGS::fromLegacy<int>( wxConfigBase*, const std::string&,
                                               const std::string& );
 
-template bool JSON_SETTINGS::fromLegacy<double>( wxConfigBase*, const std::string&,
+template KICOMMON_API bool JSON_SETTINGS::fromLegacy<double>( wxConfigBase*, const std::string&,
                                                  const std::string& );
 
-template bool JSON_SETTINGS::fromLegacy<bool>( wxConfigBase*, const std::string&,
+template KICOMMON_API bool JSON_SETTINGS::fromLegacy<bool>( wxConfigBase*, const std::string&,
                                                const std::string& );
 
 
@@ -914,9 +936,10 @@ ResultType JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std
 }
 
 
-template std::string JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
+template KICOMMON_API std::string JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
                                                     const std::string& aKey, std::string aDefault );
 
 
-template bool JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson, const std::string& aKey,
+template KICOMMON_API bool JSON_SETTINGS::fetchOrDefault( const nlohmann::json& aJson,
+                                                         const std::string& aKey,
                                              bool aDefault );

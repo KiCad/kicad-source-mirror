@@ -29,7 +29,7 @@
 
 #include <ki_exception.h>
 #include <string_utils.h>
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 #include <core/json_serializers.h>
 
 #include <wx/log.h>

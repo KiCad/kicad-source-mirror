@@ -27,10 +27,13 @@
 #include <math/util.h>
 
 #include <optional>
+#include <gal/color4d.h>
 #include <settings/json_settings.h>
+#include <settings/bom_settings.h>
+#include <settings/grid_settings.h>
+#include <kicommon.h>
 
-
-class PARAM_BASE
+class KICOMMON_API PARAM_BASE
 {
 public:
     PARAM_BASE( std::string aJsonPath, bool aReadOnly ) :
@@ -167,7 +170,7 @@ protected:
 /**
  * Stores a path as a string with directory separators normalized to unix-style
  */
-class PARAM_PATH : public PARAM<wxString>
+class KICOMMON_API PARAM_PATH : public PARAM<wxString>
 {
 public:
     PARAM_PATH( const std::string& aJsonPath, wxString* aPtr, const wxString& aDefault,
@@ -299,7 +302,26 @@ public:
             m_setter( std::move( aSetter ) )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    {
+        if( m_readOnly )
+            return;
+
+        if( std::is_same<ValueType, nlohmann::json>::value )
+        {
+            if( std::optional<nlohmann::json> optval = aSettings->GetJson( m_path ) )
+                m_setter( *optval );
+            else
+                m_setter( m_default );
+        }
+        else
+        {
+            if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+                m_setter( *optval );
+            else
+                m_setter( m_default );
+        }
+    }
 
     void Store( JSON_SETTINGS* aSettings ) const override
     {
@@ -322,7 +344,22 @@ public:
         m_setter( m_default );
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( std::is_same<ValueType, nlohmann::json>::value )
+        {
+            if( std::optional<nlohmann::json> optval = aSettings->GetJson( m_path ) )
+                return *optval == m_getter();
+        }
+        else
+        {
+            if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
+                return *optval == m_getter();
+        }
+
+        // Not in file
+        return false;
+    }
 
 private:
     ValueType                        m_default;
@@ -330,6 +367,11 @@ private:
     std::function<void( ValueType )> m_setter;
 };
 
+
+extern template class APIVISIBLE PARAM_LAMBDA<bool>;
+extern template class APIVISIBLE PARAM_LAMBDA<int>;
+extern template class APIVISIBLE PARAM_LAMBDA<nlohmann::json>;
+extern template class APIVISIBLE PARAM_LAMBDA<std::string>;
 
 /**
  * Represents a parameter that has a scaling factor between the value in the file and the
@@ -439,21 +481,85 @@ public:
             m_default( std::move( aDefault ) )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    {
+        if( m_readOnly )
+            return;
 
-    void Store( JSON_SETTINGS* aSettings) const override;
+        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            std::vector<Type> val;
+
+            if( js->is_array() )
+            {
+                for( const auto& el : js->items() )
+                    val.push_back( el.value().get<Type>() );
+            }
+
+            *m_ptr = val;
+        }
+        else if( aResetIfMissing )
+            *m_ptr = m_default;
+    }
+
+    void Store( JSON_SETTINGS* aSettings ) const override
+    {
+        nlohmann::json js = nlohmann::json::array();
+
+        for( const auto& el : *m_ptr )
+            js.push_back( el );
+
+        aSettings->Set<nlohmann::json>( m_path, js );
+    }
 
     void SetDefault() override
     {
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_array() )
+            {
+                std::vector<Type> val;
+
+                for( const auto& el : js->items() )
+                {
+                    try
+                    {
+                        val.emplace_back( el.value().get<Type>() );
+                    }
+                    catch( ... )
+                    {
+                        // Probably typecast didn't work; skip this element
+                    }
+                }
+
+                return val == *m_ptr;
+            }
+        }
+
+        return false;
+    }
 
 protected:
     std::vector<Type>* m_ptr;
     std::vector<Type>  m_default;
 };
+
+
+extern template class APIVISIBLE PARAM_LIST<bool>;
+extern template class APIVISIBLE PARAM_LIST<int>;
+extern template class APIVISIBLE PARAM_LIST<double>;
+extern template class APIVISIBLE PARAM_LIST<KIGFX::COLOR4D>;
+//template KICOMMON_EXTERN_DECL class PARAM_LIST<FILE_INFO_PAIR>;
+extern template class APIVISIBLE PARAM_LIST<struct BOM_PRESET>;
+extern template class APIVISIBLE PARAM_LIST<struct BOM_FMT_PRESET>;
+extern template class APIVISIBLE PARAM_LIST<GRID>;
+extern template class APIVISIBLE PARAM_LIST<wxString>;
+
 
 template<typename Type>
 class PARAM_SET : public PARAM_BASE
@@ -473,27 +579,73 @@ public:
             m_default( aDefault )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    {
+        if( m_readOnly )
+            return;
 
-    void Store( JSON_SETTINGS* aSettings) const override;
+        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            std::set<Type> val;
+
+            if( js->is_array() )
+            {
+                for( const auto& el : js->items() )
+                    val.insert( el.value().get<Type>() );
+            }
+
+            *m_ptr = val;
+        }
+        else if( aResetIfMissing )
+            *m_ptr = m_default;
+    }
+
+    void Store( JSON_SETTINGS* aSettings) const override
+    {
+        nlohmann::json js = nlohmann::json::array();
+
+        for( const auto& el : *m_ptr )
+            js.push_back( el );
+
+        aSettings->Set<nlohmann::json>( m_path, js );
+    }
+
 
     void SetDefault() override
     {
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_array() )
+            {
+                std::set<Type> val;
+
+                for( const auto& el : js->items() )
+                    val.insert( el.value().get<Type>() );
+
+                return val == *m_ptr;
+            }
+        }
+
+        return false;
+    }
 
 protected:
     std::set<Type>* m_ptr;
     std::set<Type>  m_default;
 };
 
+extern template class APIVISIBLE PARAM_SET<wxString>;
+
 /**
  * Represents a list of strings holding directory paths.
  * Normalizes paths to unix directory separator style in the file.
  */
-class PARAM_PATH_LIST : public PARAM_LIST<wxString>
+class KICOMMON_API PARAM_PATH_LIST : public PARAM_LIST<wxString>
 {
 public:
     PARAM_PATH_LIST( const std::string& aJsonPath, std::vector<wxString>* aPtr,
@@ -563,16 +715,60 @@ public:
             m_default( aDefault )
     { }
 
-    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override;
+    void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
+    {
+        if( m_readOnly )
+            return;
 
-    void Store( JSON_SETTINGS* aSettings) const override;
+        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_object() )
+            {
+                m_ptr->clear();
+
+                for( const auto& el : js->items() )
+                    ( *m_ptr )[el.key()] = el.value().get<Value>();
+            }
+        }
+        else if( aResetIfMissing )
+            *m_ptr = m_default;
+    }
+
+    void Store( JSON_SETTINGS* aSettings) const override
+    {
+        nlohmann::json js( {} );
+
+        for( const auto& el : *m_ptr )
+            js[el.first] = el.second;
+
+        aSettings->Set<nlohmann::json>( m_path, js );
+    }
 
     virtual void SetDefault() override
     {
         *m_ptr = m_default;
     }
 
-    bool MatchesFile( JSON_SETTINGS* aSettings ) const override;
+    bool MatchesFile( JSON_SETTINGS* aSettings ) const override
+    {
+        if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
+        {
+            if( js->is_object() )
+            {
+                if( m_ptr->size() != js->size() )
+                    return false;
+
+                std::map<std::string, Value> val;
+
+                for( const auto& el : js->items() )
+                    val[el.key()] = el.value().get<Value>();
+
+                return val == *m_ptr;
+            }
+        }
+
+        return false;
+    }
 
 private:
     std::map<std::string, Value>* m_ptr;
@@ -580,10 +776,15 @@ private:
 };
 
 
+extern template class APIVISIBLE PARAM_MAP<int>;
+extern template class APIVISIBLE PARAM_MAP<double>;
+extern template class APIVISIBLE PARAM_MAP<bool>;
+
+
 /**
  * A helper for <wxString, wxString> maps
  */
-class PARAM_WXSTRING_MAP : public PARAM_BASE
+class KICOMMON_API PARAM_WXSTRING_MAP : public PARAM_BASE
 {
 public:
     PARAM_WXSTRING_MAP( const std::string& aJsonPath, std::map<wxString, wxString>* aPtr,

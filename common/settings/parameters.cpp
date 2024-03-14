@@ -22,192 +22,8 @@
 
 #include <nlohmann/json.hpp>
 
-#include <gal/color4d.h>
 #include <project/project_file.h>
 #include <settings/parameters.h>
-#include <settings/bom_settings.h>
-#include <settings/grid_settings.h>
-
-template <typename ValueType>
-void PARAM_LAMBDA<ValueType>::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
-{
-    if( m_readOnly )
-        return;
-
-    if( std::is_same<ValueType, nlohmann::json>::value )
-    {
-        if( std::optional<nlohmann::json> optval = aSettings->GetJson( m_path ) )
-            m_setter( *optval );
-        else
-            m_setter( m_default );
-    }
-    else
-    {
-        if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
-            m_setter( *optval );
-        else
-            m_setter( m_default );
-    }
-}
-
-
-template <typename ValueType>
-bool PARAM_LAMBDA<ValueType>::MatchesFile( JSON_SETTINGS* aSettings ) const
-{
-    if( std::is_same<ValueType, nlohmann::json>::value )
-    {
-        if( std::optional<nlohmann::json> optval = aSettings->GetJson( m_path ) )
-            return *optval == m_getter();
-    }
-    else
-    {
-        if( std::optional<ValueType> optval = aSettings->Get<ValueType>( m_path ) )
-            return *optval == m_getter();
-    }
-
-    // Not in file
-    return false;
-}
-
-
-// Instantiate all required templates here to allow reducing scope of json.hpp
-template class PARAM_LAMBDA<bool>;
-template class PARAM_LAMBDA<int>;
-template class PARAM_LAMBDA<nlohmann::json>;
-template class PARAM_LAMBDA<std::string>;
-
-template <typename ValueType>
-void PARAM_LIST<ValueType>::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
-{
-    if( m_readOnly )
-        return;
-
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
-    {
-        std::vector<ValueType> val;
-
-        if( js->is_array() )
-        {
-            for( const auto& el : js->items() )
-                val.push_back( el.value().get<ValueType>() );
-        }
-
-        *m_ptr = val;
-    }
-    else if( aResetIfMissing )
-        *m_ptr = m_default;
-}
-
-
-template <typename ValueType>
-void PARAM_LIST<ValueType>::Store( JSON_SETTINGS* aSettings ) const
-{
-    nlohmann::json js = nlohmann::json::array();
-
-    for( const auto& el : *m_ptr )
-        js.push_back( el );
-
-    aSettings->Set<nlohmann::json>( m_path, js );
-}
-
-
-template <typename ValueType>
-bool PARAM_LIST<ValueType>::MatchesFile( JSON_SETTINGS* aSettings ) const
-{
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
-    {
-        if( js->is_array() )
-        {
-            std::vector<ValueType> val;
-
-            for( const auto& el : js->items() )
-            {
-                try
-                {
-                    val.emplace_back( el.value().get<ValueType>() );
-                }
-                catch( ... )
-                {
-                    // Probably typecast didn't work; skip this element
-                }
-            }
-
-            return val == *m_ptr;
-        }
-    }
-
-    return false;
-}
-
-
-template class PARAM_LIST<bool>;
-template class PARAM_LIST<int>;
-template class PARAM_LIST<double>;
-template class PARAM_LIST<wxString>;
-template class PARAM_LIST<KIGFX::COLOR4D>;
-template class PARAM_LIST<FILE_INFO_PAIR>;
-template class PARAM_LIST<BOM_PRESET>;
-template class PARAM_LIST<BOM_FMT_PRESET>;
-template class PARAM_LIST<GRID>;
-
-
-template <typename ValueType>
-void PARAM_SET<ValueType>::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
-{
-    if( m_readOnly )
-        return;
-
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
-    {
-        std::set<ValueType> val;
-
-        if( js->is_array() )
-        {
-            for( const auto& el : js->items() )
-                val.insert( el.value().get<ValueType>() );
-        }
-
-        *m_ptr = val;
-    }
-    else if( aResetIfMissing )
-        *m_ptr = m_default;
-}
-
-
-template <typename ValueType>
-void PARAM_SET<ValueType>::Store( JSON_SETTINGS* aSettings ) const
-{
-    nlohmann::json js = nlohmann::json::array();
-
-    for( const auto& el : *m_ptr )
-        js.push_back( el );
-
-    aSettings->Set<nlohmann::json>( m_path, js );
-}
-
-
-template <typename ValueType>
-bool PARAM_SET<ValueType>::MatchesFile( JSON_SETTINGS* aSettings ) const
-{
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
-    {
-        if( js->is_array() )
-        {
-            std::set<ValueType> val;
-
-            for( const auto& el : js->items() )
-                val.insert( el.value().get<ValueType>() );
-
-            return val == *m_ptr;
-        }
-    }
-
-    return false;
-}
-
-
-template class PARAM_SET<wxString>;
-
 
 void PARAM_PATH_LIST::Store( JSON_SETTINGS* aSettings ) const
 {
@@ -238,66 +54,6 @@ bool PARAM_PATH_LIST::MatchesFile( JSON_SETTINGS* aSettings ) const
     return false;
 }
 
-
-template <typename Value>
-void PARAM_MAP<Value>::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
-{
-    if( m_readOnly )
-        return;
-
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
-    {
-        if( js->is_object() )
-        {
-            m_ptr->clear();
-
-            for( const auto& el : js->items() )
-                ( *m_ptr )[el.key()] = el.value().get<Value>();
-        }
-    }
-    else if( aResetIfMissing )
-        *m_ptr = m_default;
-}
-
-
-template <typename Value>
-void PARAM_MAP<Value>::Store( JSON_SETTINGS* aSettings ) const
-{
-    nlohmann::json js( {} );
-
-    for( const auto& el : *m_ptr )
-        js[el.first] = el.second;
-
-    aSettings->Set<nlohmann::json>( m_path, js );
-}
-
-
-template <typename Value>
-bool PARAM_MAP<Value>::MatchesFile( JSON_SETTINGS* aSettings ) const
-{
-    if( std::optional<nlohmann::json> js = aSettings->GetJson( m_path ) )
-    {
-        if( js->is_object() )
-        {
-            if( m_ptr->size() != js->size() )
-                return false;
-
-            std::map<std::string, Value> val;
-
-            for( const auto& el : js->items() )
-                val[el.key()] = el.value().get<Value>();
-
-            return val == *m_ptr;
-        }
-    }
-
-    return false;
-}
-
-
-template class PARAM_MAP<int>;
-template class PARAM_MAP<double>;
-template class PARAM_MAP<bool>;
 
 
 void PARAM_WXSTRING_MAP::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
@@ -359,3 +115,26 @@ bool PARAM_WXSTRING_MAP::MatchesFile( JSON_SETTINGS* aSettings ) const
 
     return false;
 }
+
+
+// Instantiate all required templates here and export
+template class KICOMMON_API PARAM_LAMBDA<bool>;
+template class KICOMMON_API PARAM_LAMBDA<int>;
+template class KICOMMON_API PARAM_LAMBDA<nlohmann::json>;
+template class KICOMMON_API PARAM_LAMBDA<std::string>;
+
+template class KICOMMON_API PARAM_LIST<bool>;
+template class KICOMMON_API PARAM_LIST<int>;
+template class KICOMMON_API PARAM_LIST<double>;
+template class KICOMMON_API PARAM_LIST<wxString>;
+template class KICOMMON_API PARAM_LIST<KIGFX::COLOR4D>;
+//template KICOMMON_API class PARAM_LIST<FILE_INFO_PAIR>;
+template class KICOMMON_API PARAM_LIST<struct BOM_PRESET>;
+template class KICOMMON_API PARAM_LIST<struct BOM_FMT_PRESET>;
+template class KICOMMON_API PARAM_LIST<GRID>;
+
+template class KICOMMON_API PARAM_SET<wxString>;
+
+template class KICOMMON_API PARAM_MAP<int>;
+template class KICOMMON_API PARAM_MAP<double>;
+template class KICOMMON_API PARAM_MAP<bool>;
