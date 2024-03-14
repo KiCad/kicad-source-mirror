@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1070,8 +1070,35 @@ bool EE_SELECTION_TOOL::CollectHits( EE_COLLECTOR& aCollector, const VECTOR2I& a
 void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I& aWhere,
                                          bool aCheckLocked, bool aSelectedOnly )
 {
+    SYMBOL_EDIT_FRAME* symbolEditorFrame = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
     for( int i = collector.GetCount() - 1; i >= 0; --i )
     {
+        if( symbolEditorFrame )
+        {
+            // Do not select invisible items if they are not displayed
+            EDA_ITEM* item = static_cast<EDA_ITEM*>( collector[i] );
+
+            if( item->Type() == LIB_FIELD_T )
+            {
+                if( !static_cast<LIB_FIELD*>( item )->IsVisible()
+                    && !symbolEditorFrame->GetShowInvisibleFields() )
+                {
+                    collector.Remove( i );
+                    continue;
+                }
+            }
+            else if( item->Type() == LIB_PIN_T )
+            {
+                if( !static_cast<LIB_PIN*>( item )->IsVisible()
+                    && !symbolEditorFrame->GetShowInvisiblePins() )
+                {
+                    collector.Remove( i );
+                    continue;
+                }
+            }
+        }
+
         if( !Selectable( collector[i], &aWhere ) )
         {
             collector.Remove( i );

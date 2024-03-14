@@ -1878,3 +1878,17 @@ void SYMBOL_EDIT_FRAME::updateSelectionFilterVisbility()
 
     selectionFilterPane.Show( showFilter );
 }
+
+
+bool SYMBOL_EDIT_FRAME::GetShowInvisibleFields()
+{
+    // Returns the current render option for invisible fields
+    return  GetRenderSettings()->m_ShowHiddenLibFields;
+}
+
+
+bool SYMBOL_EDIT_FRAME::GetShowInvisiblePins()
+{
+    // Returns the current render option for invisible pins
+    return  GetRenderSettings()->m_ShowHiddenLibPins;
+}

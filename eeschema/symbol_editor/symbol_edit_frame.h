@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -241,6 +241,9 @@ public:
 
     bool GetShowDeMorgan() const { return m_showDeMorgan; }
     void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
+
+    bool GetShowInvisibleFields();
+    bool GetShowInvisiblePins();
 
     void ClearMsgPanel() override
     {
