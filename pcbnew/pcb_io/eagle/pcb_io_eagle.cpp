@@ -1173,7 +1173,7 @@ void PCB_IO_EAGLE::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
         if( !urnOrdinal.IsEmpty() )
             pack_ref += wxS( "_" ) + urnOrdinal;
 
-        pack_ref = EscapeString( pack_ref, CTX_LIBID );
+        ReplaceIllegalFileNameChars( pack_ref, '_' );
 
         m_xpath->Value( pack_ref.ToUTF8() );
 
