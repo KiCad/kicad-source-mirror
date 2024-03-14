@@ -28,6 +28,7 @@
 #ifndef __SHAPE_POLY_SET_H
 #define __SHAPE_POLY_SET_H
 
+#include <atomic>
 #include <cstdio>
 #include <deque>                        // for deque
 #include <iosfwd>                       // for string, stringstream
@@ -1538,7 +1539,7 @@ protected:
     std::vector<POLYGON>                               m_polys;
     std::vector<std::unique_ptr<TRIANGULATED_POLYGON>> m_triangulatedPolys;
 
-    bool        m_triangulationValid = false;
+    std::atomic<bool> m_triangulationValid = false;
     std::mutex  m_triangulationMutex;
 
 private:
