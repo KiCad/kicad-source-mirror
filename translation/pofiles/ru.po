@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-11 13:01+0000\n"
+"PO-Revision-Date: 2024-03-15 21:01+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -1103,7 +1103,7 @@ msgstr "Сглаживание (медленно)"
 msgid ""
 "Screen space ambient occlusions and global illumination reflections (slow)"
 msgstr ""
-"Окружающие преграды пространства экрана и отражение глобального освещения "
+"Окружающее затенение в пространстве экрана и отражения глобального освещения "
 "(медленно)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:54
@@ -5059,7 +5059,7 @@ msgstr "Action-плагины"
 
 #: common/eda_base_frame.cpp:1183
 msgid "Realtime Renderer"
-msgstr "Рендеринг"
+msgstr "Быстрый рендерер"
 
 #: common/eda_base_frame.cpp:1184
 msgid "Raytracing Renderer"
