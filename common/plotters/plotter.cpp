@@ -706,7 +706,6 @@ void PLOTTER::Text( const VECTOR2I&       aPos,
     KIGFX::GAL_DISPLAY_OPTIONS empty_opts;
 
     SetColor( aColor );
-    SetCurrentLineWidth( aPenWidth, aData );
 
     if( aPenWidth == 0 && aBold ) // Use default values if aPenWidth == 0
         aPenWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
@@ -718,6 +717,7 @@ void PLOTTER::Text( const VECTOR2I&       aPos,
             // Stroke callback
             [&]( const VECTOR2I& aPt1, const VECTOR2I& aPt2 )
             {
+                SetCurrentLineWidth( aPenWidth );
                 MoveTo( aPt1 );
                 LineTo( aPt2 );
                 PenFinish();
