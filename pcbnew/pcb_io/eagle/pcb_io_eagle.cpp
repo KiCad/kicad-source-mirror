@@ -1138,6 +1138,15 @@ void PCB_IO_EAGLE::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
     if( !aLib )
         return;
 
+    wxString urn = aLib->GetAttribute( "urn" );
+
+    wxString urnOrdinal;
+
+    if( !urn.IsEmpty() )
+    {
+        urnOrdinal = urn.AfterLast( ':' );
+    }
+
     // library will have <xmlattr> node, skip that and get the single packages node
     wxXmlNode* packages = MapChildren( aLib )["packages"];
 
@@ -1160,7 +1169,11 @@ void PCB_IO_EAGLE::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
         m_xpath->push( "package", "name" );
 
         wxString pack_ref = package->GetAttribute( "name" );
-        ReplaceIllegalFileNameChars( pack_ref, '_' );
+
+        if( !urnOrdinal.IsEmpty() )
+            pack_ref += wxS( "_" ) + urnOrdinal;
+
+        pack_ref = EscapeString( pack_ref, CTX_LIBID );
 
         m_xpath->Value( pack_ref.ToUTF8() );
 
@@ -1248,13 +1261,21 @@ void PCB_IO_EAGLE::loadElements( wxXmlNode* aElements )
 
         m_xpath->Value( e.name.c_str() );
 
-        wxString pkg_key = makeKey( e.library, e.package );
+        wxString packageName = e.package;
+
+        if( e.library_urn )
+        {
+            wxString libOrdinal = *e.library_urn;
+            packageName = e.package + wxS( "_" ) + libOrdinal.AfterLast( ':' );
+        }
+
+        wxString pkg_key = makeKey( e.library, packageName );
         auto     it = m_templates.find( pkg_key );
 
         if( it == m_templates.end() )
         {
             wxString emsg = wxString::Format( _( "No '%s' package in library '%s'." ),
-                                              e.package, e.library );
+                                              packageName, e.library );
             THROW_IO_ERROR( emsg );
         }
 
@@ -3203,6 +3224,7 @@ void PCB_IO_EAGLE::cacheLib( const wxString& aLibPath )
 
             m_xpath->push( "eagle.drawing.library" );
             wxXmlNode* library = drawingChildren["library"];
+
             loadLibrary( library, nullptr );
             m_xpath->pop();
 

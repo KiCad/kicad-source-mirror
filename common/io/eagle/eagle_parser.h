@@ -817,6 +817,7 @@ struct EELEMENT
 {
     wxString name;
     wxString library;
+    opt_wxString library_urn;
     wxString package;
     wxString value;
     ECOORD   x;

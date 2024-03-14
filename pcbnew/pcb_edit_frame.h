@@ -804,7 +804,7 @@ protected:
 
     void onSize( wxSizeEvent& aEvent );
 
-    int inferLegacyEdgeClearance( BOARD* aBoard );
+    int inferLegacyEdgeClearance( BOARD* aBoard, bool aShowUserMsg = true );
 
     void redrawNetnames( wxTimerEvent& aEvent );
 
