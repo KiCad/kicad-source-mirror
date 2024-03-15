@@ -174,6 +174,14 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         reset();
         return;
     }
+    else if( aSelection.Size() == 1 )
+    {
+        m_caption->SetLabel( aSelection.Front()->GetFriendlyName() );
+    }
+    else
+    {
+        m_caption->SetLabel( wxString::Format( _( "%d objects selected" ), aSelection.Size() ) );
+    }
 
     // Get all the selected types
     std::set<TYPE_ID> types;
@@ -290,15 +298,6 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
             pgPropOrders[pgProp] = displayOrder[property];
             pgPropGroups[property->Group()].emplace_back( pgProp );
         }
-    }
-
-    if( aSelection.Size() > 1 )
-    {
-        m_caption->SetLabel( wxString::Format( _( "%d objects selected" ), aSelection.Size() ) );
-    }
-    else
-    {
-        m_caption->SetLabel( aSelection.Front()->GetFriendlyName() );
     }
 
     const wxString unspecifiedGroupCaption = _( "Basic Properties" );
