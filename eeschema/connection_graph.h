@@ -686,6 +686,11 @@ private:
     int ercCheckHierSheets();
 
     /**
+     * Check that a global label is instantiated more that once across the schematic heirarchy
+     */
+    int ercCheckSingleGlobalLabel();
+
+    /**
      * Get the number of pins in a given subgraph.
      *
      * @param aLocSubgraph Subgraph to search

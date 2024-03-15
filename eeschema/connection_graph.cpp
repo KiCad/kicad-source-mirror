@@ -2945,6 +2945,11 @@ int CONNECTION_GRAPH::RunERC()
         }
     }
 
+    if( settings.IsTestEnabled( ERCE_SINGLE_GLOBAL_LABEL ) )
+    {
+        error_count += ercCheckSingleGlobalLabel();
+    }
+
     return error_count;
 }
 
@@ -3707,6 +3712,56 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     }
 
     return ok;
+}
+
+
+int CONNECTION_GRAPH::ercCheckSingleGlobalLabel()
+{
+    int errors = 0;
+
+    std::map<wxString, std::tuple<int, const SCH_ITEM*, SCH_SHEET_PATH>> labelData;
+
+    for( const SCH_SHEET_PATH& sheet : m_sheetList )
+    {
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
+        {
+            SCH_TEXT* labelText = static_cast<SCH_TEXT*>( item );
+            wxString  resolvedLabelText =
+                    EscapeString( labelText->GetShownText( &sheet, false ), CTX_NETNAME );
+
+            if( labelData.find( resolvedLabelText ) == labelData.end() )
+            {
+                labelData[resolvedLabelText] = { 1, item, sheet };
+            }
+            else
+            {
+                std::get<0>( labelData[resolvedLabelText] ) += 1;
+                std::get<1>( labelData[resolvedLabelText] ) = nullptr;
+                std::get<2>( labelData[resolvedLabelText] ) = sheet;
+            }
+        }
+    }
+
+    for( const auto& label : labelData )
+    {
+        if( std::get<0>( label.second ) == 1 )
+        {
+            const SCH_SHEET_PATH& sheet = std::get<2>( label.second );
+            const SCH_ITEM*       item = std::get<1>( label.second );
+
+            std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SINGLE_GLOBAL_LABEL );
+            ercItem->SetItems( std::get<1>( label.second ) );
+            ercItem->SetSheetSpecificPath( sheet );
+            ercItem->SetItemsSheetPaths( sheet );
+
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
+            sheet.LastScreen()->Append( marker );
+
+            errors++;
+        }
+    }
+
+    return errors;
 }
 
 

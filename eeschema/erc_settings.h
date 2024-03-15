@@ -49,6 +49,7 @@ enum ERCE_T
     ERCE_NOCONNECT_NOT_CONNECTED, ///< A no connect symbol is not connected to anything.
     ERCE_LABEL_NOT_CONNECTED,     ///< Label not connected to anything.
     ERCE_SIMILAR_LABELS,          ///< 2 labels are equal for case insensitive comparisons.
+    ERCE_SINGLE_GLOBAL_LABEL,     ///< A global label only exists once in the schematic.
     ERCE_DIFFERENT_UNIT_FP,       ///< Different units of the same symbol have different
                                   ///<   footprints assigned.
     ERCE_MISSING_POWER_INPUT_PIN, ///< Symbol has power input pins that are not placed on the
@@ -80,6 +81,7 @@ enum ERCE_T
     ERCE_DIFFERENT_UNIT_VALUE,    ///< Units of same symbol have different values.
     ERCE_DUPLICATE_REFERENCE,     ///< More than one symbol with the same reference.
     ERCE_BUS_ENTRY_NEEDED,        ///< Importer failed to auto-place a bus entry.
+
 
     ERCE_LAST = ERCE_BUS_ENTRY_NEEDED,
 

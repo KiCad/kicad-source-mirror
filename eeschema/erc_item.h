@@ -195,6 +195,7 @@ private:
     static ERC_ITEM noConnectDangling;
     static ERC_ITEM labelDangling;
     static ERC_ITEM globalLabelDangling;
+    static ERC_ITEM singleGlobalLabel;
     static ERC_ITEM similarLabels;
     static ERC_ITEM differentUnitFootprint;
     static ERC_ITEM differentUnitNet;
