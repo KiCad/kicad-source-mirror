@@ -63,6 +63,8 @@ fedora_build_linux_kicad:
 
 fedora_build_linux_public:
   extends: .fedora_build_linux_base
+  tags:
+    - saas-linux-medium-amd64
   except:    
     variables:
       - $CI_PROJECT_ROOT_NAMESPACE == "kicad"
