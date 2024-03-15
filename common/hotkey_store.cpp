@@ -32,14 +32,18 @@
 class PSEUDO_ACTION : public TOOL_ACTION
 {
 public:
-    PSEUDO_ACTION( const wxString& aLabel, int aHotKey )
+    PSEUDO_ACTION( const wxString& aLabel, int aHotKey, int aHotKeyAlt = 0 )
     {
         m_friendlyName = aLabel;
         m_hotKey = aHotKey;
+        m_hotKeyAlt = aHotKeyAlt;
     }
 };
 
 static PSEUDO_ACTION* g_gesturePseudoActions[] = {
+    new PSEUDO_ACTION( _( "Accept Autocomplete" ), WXK_RETURN, WXK_NUMPAD_ENTER ),
+    new PSEUDO_ACTION( _( "Cancel Autocomplete" ), WXK_ESCAPE ),
+    new PSEUDO_ACTION( _( "Toggle Checkbox" ), WXK_SPACE ),
     new PSEUDO_ACTION( _( "Pan Left/Right" ), MD_CTRL + PSEUDO_WXK_WHEEL ),
     new PSEUDO_ACTION( _( "Pan Up/Down" ), MD_SHIFT + PSEUDO_WXK_WHEEL ),
     new PSEUDO_ACTION( _( "Finish Drawing" ), PSEUDO_WXK_DBLCLICK ),
