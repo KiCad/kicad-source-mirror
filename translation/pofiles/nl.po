@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-15 21:01+0000\n"
+"PO-Revision-Date: 2024-03-16 22:01+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -4518,7 +4518,7 @@ msgstr "Netklassenaam al in gebruik."
 
 #: common/dialogs/panel_setup_netclasses.cpp:538
 msgid "Minimum copper clearance"
-msgstr "Minimale vrije afstand rondom koper"
+msgstr "Minimale vrije afstand van koper"
 
 #: common/dialogs/panel_setup_netclasses.cpp:539
 msgid "Minimum track width"
@@ -4526,19 +4526,19 @@ msgstr "Minimale spoorbreedte"
 
 #: common/dialogs/panel_setup_netclasses.cpp:540
 msgid "Via pad diameter"
-msgstr "Via paddiameter"
+msgstr "Diameter viapad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:541
 msgid "Via plated hole diameter"
-msgstr "Diameter via geplateerd gat"
+msgstr "Diameter geplateerd viagat"
 
 #: common/dialogs/panel_setup_netclasses.cpp:542
 msgid "Microvia pad diameter"
-msgstr "Microvia paddiameter"
+msgstr "Diameter microviapad"
 
 #: common/dialogs/panel_setup_netclasses.cpp:543
 msgid "Microvia plated hole diameter"
-msgstr "Diameter microvia geplateerd gat"
+msgstr "Diameter geplateerd microviagat"
 
 #: common/dialogs/panel_setup_netclasses.cpp:544
 msgid "Differential pair track width"
@@ -4546,7 +4546,7 @@ msgstr "Spoorbreedte differentieel paar"
 
 #: common/dialogs/panel_setup_netclasses.cpp:545
 msgid "Differential pair gap"
-msgstr "Differentieel paar opening"
+msgstr "Tussenruimte differentieel paar"
 
 #: common/dialogs/panel_setup_netclasses.cpp:546
 msgid "Schematic wire thickness"
@@ -4597,15 +4597,15 @@ msgstr "Viamaat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:55
 msgid "Via Hole"
-msgstr "Via gat"
+msgstr "Viagat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "uVia Size"
-msgstr "µVia-grootte"
+msgstr "µViamaat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:57
 msgid "uVia Hole"
-msgstr "µVia-gat"
+msgstr "µViagat"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:58
 msgid "DP Width"
@@ -4613,7 +4613,7 @@ msgstr "DP-breedte"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:59
 msgid "DP Gap"
-msgstr "DP tusssenruimte"
+msgstr "DP-tussenruimte"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
 msgid "Wire Thickness"
@@ -4621,7 +4621,7 @@ msgstr "Draaddikte"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Bus Thickness"
-msgstr "Dikte bus"
+msgstr "Busdikte"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:63 common/eda_shape.cpp:2019
 #: common/stroke_params.cpp:219 eeschema/sch_bus_entry.cpp:653
@@ -35140,7 +35140,7 @@ msgstr "Borditems links/rechts omkeren (standaard is boven/onder)"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:86
 msgid "Allow free pads"
-msgstr "Vrije pad's toestaan"
+msgstr "Vrije pads toestaan"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:87
 msgid ""
@@ -37832,7 +37832,7 @@ msgstr "Controle %s: min %s."
 #: pcbnew/drc/drc_engine.cpp:1035
 #, c-format
 msgid "Checking %s diff pair gap: opt %s."
-msgstr "Controle %s differentieel paar: opt %s."
+msgstr "Controle %s differentieel paar tussenruimte: opt %s."
 
 #: pcbnew/drc/drc_engine.cpp:1041
 #, c-format
