@@ -194,10 +194,7 @@ void FP_CACHE::Load()
                 wxString fpName = fn.GetName();
 
                 if( !footprint )
-                {
-                    THROW_IO_ERROR( wxString::Format( _( "Unable to read file '%s'" ),
-                                                      fn.GetFullPath() ) );
-                }
+                    THROW_IO_ERROR( wxEmptyString );   // caught locally, just below...
 
                 footprint->SetFPID( LIB_ID( wxEmptyString, fpName ) );
                 m_footprints.insert( fpName, new FP_CACHE_ITEM( footprint, fn ) );
@@ -207,6 +204,8 @@ void FP_CACHE::Load()
                 if( !cacheError.IsEmpty() )
                     cacheError += wxT( "\n\n" );
 
+                cacheError += wxString::Format( _( "Unable to read file '%s'" ) + '\n',
+                                                fn.GetFullPath() );
                 cacheError += ioe.What();
             }
         } while( dir.GetNext( &fullName ) );
