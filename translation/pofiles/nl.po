@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-13 14:01+0000\n"
+"PO-Revision-Date: 2024-03-15 21:01+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -16164,7 +16164,7 @@ msgstr "Vallende rand klok"
 
 #: eeschema/lib_pin.cpp:1649 eeschema/pin_type.cpp:87
 msgid "NonLogic"
-msgstr "Non-logic"
+msgstr "Geen logische poort"
 
 #: eeschema/lib_pin.cpp:1666 eeschema/sch_pin.cpp:522 pcbnew/pad.cpp:993
 #: pcbnew/pad.cpp:1971
