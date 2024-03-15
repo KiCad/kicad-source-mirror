@@ -3336,6 +3336,7 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
     STROKE_PARAMS stroke( -1, LINE_STYLE::SOLID );
     T token = NextTok();
 
+    // Legacy locked
     if( token == T_locked )
     {
         textbox->SetLocked( true );
@@ -3347,41 +3348,6 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
 
     textbox->SetText( FromUTF8() );
 
-    NeedLEFT();
-    token = NextTok();
-
-    if( token == T_start )
-    {
-        int x = parseBoardUnits( "X coordinate" );
-        int y = parseBoardUnits( "Y coordinate" );
-        textbox->SetStart( VECTOR2I( x, y ) );
-        NeedRIGHT();
-
-        NeedLEFT();
-        token = NextTok();
-
-        if( token != T_end )
-            Expecting( T_end );
-
-        x = parseBoardUnits( "X coordinate" );
-        y = parseBoardUnits( "Y coordinate" );
-        textbox->SetEnd( VECTOR2I( x, y ) );
-        NeedRIGHT();
-    }
-    else if( token == T_pts )
-    {
-        textbox->SetShape( SHAPE_T::POLY );
-        textbox->GetPolyShape().RemoveAllContours();
-        textbox->GetPolyShape().NewOutline();
-
-        while( (token = NextTok() ) != T_RIGHT )
-            parseOutlinePoints( textbox->GetPolyShape().Outline( 0 ) );
-    }
-    else
-    {
-        Expecting( "start or pts" );
-    }
-
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {
         if( token != T_LEFT )
@@ -3391,6 +3357,43 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
 
         switch( token )
         {
+        case T_locked:
+             textbox->SetLocked( parseMaybeAbsentBool( true ) );
+            break;
+
+        case T_start:
+        {
+            int x = parseBoardUnits( "X coordinate" );
+            int y = parseBoardUnits( "Y coordinate" );
+             textbox->SetStart( VECTOR2I( x, y ) );
+            NeedRIGHT();
+
+            NeedLEFT();
+            token = NextTok();
+
+            if( token != T_end )
+                Expecting( T_end );
+
+            x = parseBoardUnits( "X coordinate" );
+            y = parseBoardUnits( "Y coordinate" );
+             textbox->SetEnd( VECTOR2I( x, y ) );
+            NeedRIGHT();
+            break;
+        }
+
+        case T_pts:
+        {
+             textbox->SetShape( SHAPE_T::POLY );
+             textbox->GetPolyShape().RemoveAllContours();
+             textbox->GetPolyShape().NewOutline();
+
+            while( (token = NextTok() ) != T_RIGHT )
+                parseOutlinePoints(  textbox->GetPolyShape().Outline( 0 ) );
+
+            NeedRIGHT();
+            break;
+        }
+
         case T_angle:
             // Set the angle of the text only, the coordinates of the box (a polygon) are
             // already at the right position, and must not be rotated
@@ -3434,7 +3437,7 @@ PCB_TEXTBOX* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXTBOX( BOARD_ITEM* aParent )
             break;
 
         default:
-            Expecting( "angle, width, layer, effects, render_cache, uuid or tstamp" );
+            Expecting( "locked, start, pts, angle, width, layer, effects, render_cache, uuid or tstamp" );
         }
     }
 
