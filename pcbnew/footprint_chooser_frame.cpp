@@ -37,6 +37,7 @@
 #include <3d_canvas/eda_3d_canvas.h>
 #include <project_pcb.h>
 #include <widgets/bitmap_button.h>
+#include <3d_viewer/eda_3d_viewer_frame.h>
 
 
 static wxArrayString s_FootprintHistoryList;
@@ -126,6 +127,11 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     frameSizer->Add( m_chooserPanel, 1, wxEXPAND );
 
+    SetBoard( new BOARD() );
+
+    // This board will only be used to hold a footprint for viewing
+    GetBoard()->SetBoardUse( BOARD_USE::FPHOLDER );
+
     build3DCanvas();    // must be called after creating m_chooserPanel
     m_preview3DCanvas->Show( !m_showFpMode );
 
@@ -157,6 +163,10 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     m_grButtonFpView->SetBitmap( KiBitmapBundle( BITMAPS::module ) );
     m_grButtonFpView->Check( m_showFpMode );
     buttonsSizer->Add( m_grButtonFpView, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+
+    m_show3DViewer = new wxCheckBox( bottomPanel, wxID_ANY, _( "3D Viewer Shown in Separate Window" ) );
+    buttonsSizer->Add( 30, 0, 0, 0, 5 );     // Add spacer
+    buttonsSizer->Add( m_show3DViewer, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
     wxButton*               okButton = new wxButton( bottomPanel, wxID_OK );
@@ -199,8 +209,13 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     m_grButton3DView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
                          wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
                          NULL, this );
+
     m_grButtonFpView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
                              wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ),
+                             NULL, this );
+
+    m_show3DViewer->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED ,
+                             wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onExternalViewer3DEnable ),
                              NULL, this );
 
     Connect( FP_SELECTION_EVENT,  // custom event fired by a PANEL_FOOTPRINT_CHOOSER
@@ -215,9 +230,15 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
 {
     // Disconnect Events
     m_grButton3DView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                            wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ), NULL, this );
+                                  wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
+                                  NULL, this );
     m_grButtonFpView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ), NULL, this );
+                                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ),
+                                NULL, this );
+
+    m_show3DViewer->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED ,
+                                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onExternalViewer3DEnable ),
+                                NULL, this );
 
     Disconnect( FP_SELECTION_EVENT,
                 wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), NULL, this );
@@ -227,6 +248,60 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
         cfg->m_FootprintChooser.use_fp_filters = m_filterByFPFilters->GetValue();
         cfg->m_FootprintChooser.filter_on_pin_count = m_filterByPinCount->GetValue();
     }
+}
+
+
+void FOOTPRINT_CHOOSER_FRAME::onExternalViewer3DEnable( wxCommandEvent& aEvent )
+{
+    if( aEvent.IsChecked() )
+    {
+        if( m_grButton3DView->IsChecked() )
+            Show3DViewerFrame();        // show external 3D viewer
+    }
+    else
+    {
+        // Close the external 3D viewer frame, if it is still enabled
+        EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
+
+        if( viewer3D )
+            viewer3D->Close( true );
+    }
+
+    updatePanelsVisibility();
+}
+
+
+void FOOTPRINT_CHOOSER_FRAME::Show3DViewerFrame()
+{
+    bool do_reload_board = true;    // reload board flag
+
+    // At EDA_3D_VIEWER_FRAME creation, the current board is loaded, so disable loading
+    // the current board if the 3D frame is not yet created
+    if( Get3DViewerFrame() == nullptr )
+        do_reload_board = false;
+
+    EDA_3D_VIEWER_FRAME* draw3DFrame = CreateAndShow3D_Frame();
+
+    // A stronger version of Raise() which promotes the window to its parent's level.
+    KIPLATFORM::UI::ReparentQuasiModal( draw3DFrame );
+
+    // And load or update the current board (if needed)
+    if( do_reload_board )
+        Update3DView( true, true );
+}
+
+
+void FOOTPRINT_CHOOSER_FRAME::Update3DView( bool aMarkDirty,
+                                            bool aRefresh, const wxString* aTitle )
+{
+    LIB_ID fpID = m_chooserPanel->GetSelectedLibId();
+    wxString footprintName;
+
+    if( fpID.IsValid() )
+        footprintName = fpID.Format();
+
+    wxString title = _( "3D Viewer" ) + wxT( " \u2014 " ) + footprintName;
+    PCB_BASE_FRAME::Update3DView( aMarkDirty, aRefresh, &title );
 }
 
 
@@ -474,17 +549,21 @@ void FOOTPRINT_CHOOSER_FRAME::closeFootprintChooser( wxCommandEvent& aEvent )
 
 void FOOTPRINT_CHOOSER_FRAME::onFpChanged( wxCommandEvent& event )
 {
-    if( m_showFpMode )      // the 3D viewer is not activated
-        return;
+    // Ensure a 3D display is activated if a 3D view is needed
+    if( !displayFootprintPanel() && !m_preview3DCanvas->IsShown() )
+    {
+        wxCommandEvent dummy_event;
+        on3DviewReq( dummy_event );
+    }
 
-    on3DviewReq( event );
+    updateViews();
 }
 
 
 void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
 {
     // Create the dummy board used by the 3D canvas
-    m_dummyBoard = new BOARD();
+    m_dummyBoard = GetBoard();
     m_dummyBoard->SetProject( &Prj(), true );
 
     // This board will only be used to hold a footprint for viewing
@@ -515,40 +594,77 @@ void FOOTPRINT_CHOOSER_FRAME::build3DCanvas()
 }
 
 
-
 void FOOTPRINT_CHOOSER_FRAME::on3DviewReq( wxCommandEvent& event )
 {
     m_showFpMode = false;
-
     m_grButtonFpView->Check( m_showFpMode );
     m_grButton3DView->Check( !m_showFpMode );
 
-    FOOTPRINT_PREVIEW_WIDGET* viewFpPanel = m_chooserPanel->GetViewerPanel();
-    viewFpPanel->Show( m_showFpMode );
-    m_preview3DCanvas->Show( !m_showFpMode );
-    m_dummyBoard->DeleteAllFootprints();
+    if( m_show3DViewer->IsChecked() )
+        Show3DViewerFrame();
 
-    if( m_chooserPanel->m_CurrFootprint )
-        m_dummyBoard->Add( (FOOTPRINT*)m_chooserPanel->m_CurrFootprint->Clone() );
-
-    m_preview3DCanvas->ReloadRequest();
-    m_preview3DCanvas->Request_refresh();
-    m_chooserPanel->m_RightPanel->Layout();
-    m_chooserPanel->m_RightPanel->Refresh();
+    updatePanelsVisibility();
 }
 
 
 void FOOTPRINT_CHOOSER_FRAME::onFpViewReq( wxCommandEvent& event )
 {
+    // Close 3D viewer frame, if it is still enabled
+    EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
+
+    if( viewer3D )
+        viewer3D->Close( true );
+
     m_showFpMode = true;
 
     m_grButtonFpView->Check( m_showFpMode );
     m_grButton3DView->Check( !m_showFpMode );
 
-    FOOTPRINT_PREVIEW_WIDGET* viewFpPanel = m_chooserPanel->GetViewerPanel();
-    viewFpPanel->Show( m_showFpMode );
-    m_preview3DCanvas->Show( !m_showFpMode );
+    updatePanelsVisibility();
+}
+
+
+bool FOOTPRINT_CHOOSER_FRAME::displayFootprintPanel()
+{
+    return Get3DViewerFrame() || m_showFpMode;
+}
+
+
+void FOOTPRINT_CHOOSER_FRAME::updateViews()
+{
+    EDA_3D_VIEWER_FRAME* viewer3D = Get3DViewerFrame();
+    bool reloadFp = viewer3D || m_preview3DCanvas->IsShown();
+
+    if( reloadFp )
+    {
+        m_dummyBoard->DeleteAllFootprints();
+
+        if( m_chooserPanel->m_CurrFootprint )
+            m_dummyBoard->Add( (FOOTPRINT*)m_chooserPanel->m_CurrFootprint->Clone() );
+
+    }
+
+    if( m_preview3DCanvas->IsShown() )
+    {
+        m_preview3DCanvas->ReloadRequest();
+        m_preview3DCanvas->Request_refresh();
+    }
+
+    if( viewer3D )
+    {
+        Update3DView( true, true );
+    }
+
     m_chooserPanel->m_RightPanel->Layout();
     m_chooserPanel->m_RightPanel->Refresh();
+}
+
+void FOOTPRINT_CHOOSER_FRAME::updatePanelsVisibility()
+{
+    FOOTPRINT_PREVIEW_WIDGET* viewFpPanel = m_chooserPanel->GetViewerPanel();
+    viewFpPanel->Show( displayFootprintPanel() );
+    m_preview3DCanvas->Show( !displayFootprintPanel() );
+
+    updateViews();
 }
 

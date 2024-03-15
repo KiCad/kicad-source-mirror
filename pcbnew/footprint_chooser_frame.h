@@ -73,6 +73,17 @@ protected:
 
 private:
     bool filterFootprint( LIB_TREE_NODE& aNode );
+    void Show3DViewerFrame();
+
+    /**
+     * @return true if the footprint must be displayed to the footprint panel
+     * when returning false, the 3D panel is displayed.
+     * true is returnned in footprint mode or in 3D mode using a separate 3D viewer frame
+     */
+    bool displayFootprintPanel();
+
+    /// @copydoc PCB_BASE_FRAME::Update3DView
+    void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr ) override;
 
     void OnPaint( wxPaintEvent& aEvent );
     void OnOK( wxCommandEvent& aEvent );
@@ -82,11 +93,24 @@ private:
 
     WINDOW_SETTINGS* GetWindowSettings( APP_SETTINGS_BASE* aCfg ) override;
     COLOR_SETTINGS* GetColorSettings( bool aForceRefresh ) const override;
-	void on3DviewReq( wxCommandEvent& event );
-	void onFpViewReq( wxCommandEvent& event );
+
+    void on3DviewReq( wxCommandEvent& event );
+    void onFpViewReq( wxCommandEvent& event );
+    void onExternalViewer3DEnable( wxCommandEvent& aEvent );
+
+    /**
+     * Show hide footprint view panel and/or 3d view panel according to the options
+     * (display 3D shapes and use external 3D viewer)
+     */
+    void updatePanelsVisibility();
+
+    /**
+     * Must be called after loading a new footprint: update footprint and/or 3D views
+     */
+    void updateViews();
 
     // A command event sent by a PANEL_FOOTPRINT_CHOOSER will fire this event:
-	void onFpChanged( wxCommandEvent& event );
+    void onFpChanged( wxCommandEvent& event );
 
     void build3DCanvas();
 
@@ -99,6 +123,7 @@ private:
     bool                     m_showFpMode;   // True to show the footprint, false for 3D model
     wxCheckBox*              m_filterByPinCount;
     wxCheckBox*              m_filterByFPFilters;
+    wxCheckBox*              m_show3DViewer;
 
     BOARD_ADAPTER            m_boardAdapter;
     EDA_3D_CANVAS*           m_preview3DCanvas;
