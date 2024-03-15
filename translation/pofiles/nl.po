@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-12 19:01+0000\n"
+"PO-Revision-Date: 2024-03-15 21:01+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -13535,10 +13535,10 @@ msgstr ""
 "symbolen over te zetten naar de nieuwe symboolbibliotheektabel. Het opnieuw "
 "toewijzen zal sommige projectbestanden veranderen en schema's zijn mogelijk "
 "niet compatibel met oudere versies van KiCad. Van alle bestanden die zijn "
-"gewijzigd wordt een back-up gemaakt in de map \"remap_backup\" in de "
+"gewijzigd wordt een back-up gemaakt in de map \"rescue-backup\" in de "
 "projectmap, mocht u wijzigingen ongedaan moeten maken. Als u ervoor kiest om "
-"deze stap over te slaan, bent u verantwoordelijk voor het handmatig opnieuw "
-"toewijzen van de symbolen."
+"deze stap over te slaan, bent u zelf verantwoordelijk voor het handmatig "
+"opnieuw toewijzen van de symbolen."
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
@@ -15771,7 +15771,7 @@ msgstr "Vallende rand klok"
 
 #: eeschema/lib_pin.cpp:1649 eeschema/pin_type.cpp:87
 msgid "NonLogic"
-msgstr "Non-logic"
+msgstr "Geen logische poort"
 
 #: eeschema/lib_pin.cpp:1666 eeschema/sch_pin.cpp:522 pcbnew/pad.cpp:986
 #: pcbnew/pad.cpp:1964
@@ -20273,7 +20273,7 @@ msgstr "Weergavenaam voor een eenheid instellen"
 
 #: eeschema/tools/ee_actions.cpp:257
 msgid "Add Symbol to Schematic"
-msgstr "Symbool aan schema toevoegen"
+msgstr "Symbool toevoegen aan schema"
 
 #: eeschema/tools/ee_actions.cpp:258
 msgid "Add the current symbol to the schematic"
@@ -40111,7 +40111,7 @@ msgstr "Footprint invoegen op het huidige bord"
 
 #: pcbnew/menubar_pcb_editor.cpp:104
 msgid "Resc&ue"
-msgstr "Redden"
+msgstr "&Herstellen"
 
 #: pcbnew/menubar_pcb_editor.cpp:105
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
@@ -44424,7 +44424,7 @@ msgstr "Vormen genezen"
 
 #: pcbnew/tools/edit_tool.cpp:2094 pcbnew/tools/pcb_actions.cpp:549
 msgid "Change Side / Flip"
-msgstr "Omdraaien"
+msgstr "Omkeren"
 
 #: pcbnew/tools/edit_tool.cpp:2406
 msgid "Move exact"
