@@ -51,6 +51,9 @@ bool PCB_VIEWER_TOOLS::Init()
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
     ctxMenu.AddSeparator( 1 );
 
+    ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, activeToolCondition, 2 );
+    ctxMenu.AddSeparator(                              activeToolCondition, 2 );
+
     frame()->AddStandardSubMenus( m_menu );
 
     return true;
