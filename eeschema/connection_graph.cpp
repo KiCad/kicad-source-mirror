@@ -2187,9 +2187,6 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                     }
                 }
 
-                if( netclass.IsEmpty() )
-                    return;
-
                 if( !driverSubgraph )
                     driverSubgraph = subgraphs.front();
 
