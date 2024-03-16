@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-15 21:01+0000\n"
-"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"PO-Revision-Date: 2024-03-16 22:01+0000\n"
+"Last-Translator: Dmitry Mikhirev <mikhirev@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -1703,7 +1703,7 @@ msgstr "Слой пользователя Eco2"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Symbol (.kicad_sym file)"
-msgstr "Символ (.kicad_sym файл)"
+msgstr "Символ (файл .kicad_sym)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
@@ -2708,8 +2708,8 @@ msgid ""
 "When checked, the symbol and footprint library tables from the previous "
 "version will be imported into this version"
 msgstr ""
-"Если отмечено, таблицы библиотек символов и посад.мест будут импортированы "
-"из предыдущей версии"
+"Если отмечено, таблицы библиотек символов и посадочных мест будут "
+"импортированы из предыдущей версии"
 
 #: common/dialogs/dialog_migrate_settings_base.cpp:69
 msgid "Start with default settings"
@@ -5106,7 +5106,7 @@ msgstr ""
 "%s\n"
 "KiCad закрылся до сохранения файла.\n"
 "\n"
-"Желаете восстановить последние авто-сохранённые изменения?"
+"Желаете восстановить последние автосохранённые изменения?"
 
 #: common/eda_base_frame.cpp:1379
 msgid "The auto save file could not be renamed to the board file name."
@@ -8676,7 +8676,7 @@ msgstr "Файл цепей CadStar"
 
 #: common/wildcards_and_files_ext.cpp:449
 msgid "Symbol footprint association files"
-msgstr "Файлы эквивалентностей символ/посад.место"
+msgstr "Файлы соответствий символ/посад.место"
 
 #: common/wildcards_and_files_ext.cpp:455
 msgid "Zip file"
@@ -8740,7 +8740,7 @@ msgstr "Ошибка загрузки файла эквивалентности"
 #: cvpcb/auto_associate.cpp:187
 #, c-format
 msgid "%lu footprint/symbol equivalences found."
-msgstr "Найдено %lu эквивалентностей посад.место/символ."
+msgstr "Найдено %lu соответствий посад.место/символ."
 
 #: cvpcb/auto_associate.cpp:263
 #, c-format
@@ -9091,7 +9091,7 @@ msgstr "Выбрать следующий символ без посад.мес�
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
 msgid "Select next symbol with no footprint assignment"
-msgstr "Выбрать следующий символ без назначенного посад.места"
+msgstr "Выбрать следующий символ без назначенного посадочного места"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Select previous unassigned symbol"
@@ -9099,7 +9099,7 @@ msgstr "Выбрать предыдущий символ без посад.ме�
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Выбрать предыдущий символ без назначенного посад.места"
+msgstr "Выбрать предыдущий символ без назначенного посадочного места"
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
 msgid "Assign footprint"
@@ -12015,8 +12015,8 @@ msgid ""
 msgstr ""
 "Эта схема составлена с применением устаревших библиотек символов, из-за "
 "которых схема может быть повреждена. Некоторые символы, возможно, "
-"потребуется переименовать, некоторые \"спасти\" (копировать и переименовать) "
-"в новой библиотеке.\n"
+"потребуется переименовать, некоторые \"восстановить\" (копировать и "
+"переименовать) в новой библиотеке.\n"
 "\n"
 "Рекомендуется применить следующие изменения для обновления проекта."
 
@@ -12035,7 +12035,7 @@ msgstr "Предпринятое действие"
 #: eeschema/dialogs/dialog_rescue_each.cpp:151
 #: eeschema/dialogs/dialog_rescue_each.cpp:301
 msgid "Rescue Symbols"
-msgstr "Спасение символов"
+msgstr "Восстановление символов"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:152
 msgid "Skip Symbol Rescue"
@@ -12083,7 +12083,7 @@ msgstr "Больше не показывать"
 #: eeschema/dialogs/dialog_rescue_each_base.h:67
 #: eeschema/project_rescue.cpp:598 eeschema/project_rescue.cpp:613
 msgid "Project Rescue Helper"
-msgstr "Помощник спасения проекта"
+msgstr "Помощник восстановления проекта"
 
 #: eeschema/dialogs/dialog_sch_import_settings.cpp:44
 #: eeschema/dialogs/dialog_sch_import_settings_base.h:65
@@ -13475,7 +13475,7 @@ msgstr "Править символ..."
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:241
 #: eeschema/tools/ee_actions.cpp:952
 msgid "Edit Library Symbol..."
-msgstr "Править символ библиотеки..."
+msgstr "Править библиотечный символ …"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:279
 #: eeschema/lib_pin.cpp:1669 eeschema/sch_pin.cpp:525
@@ -13584,12 +13584,12 @@ msgstr "Ошибка резервного копирования"
 #: eeschema/dialogs/dialog_symbol_remap.cpp:360
 #: eeschema/dialogs/dialog_symbol_remap.cpp:514
 msgid "Continue with Rescue"
-msgstr "Продолжить спасение"
+msgstr "Продолжить восстановление"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:361
 #: eeschema/dialogs/dialog_symbol_remap.cpp:515
 msgid "Abort Rescue"
-msgstr "Отменить"
+msgstr "Прервать восстановление"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:381
 #: eeschema/dialogs/dialog_symbol_remap.cpp:416
@@ -14084,7 +14084,7 @@ msgstr "Показать изображение посад.места в диа�
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:350
 msgid "Never show Rescue Symbols tool"
-msgstr "Не показывать диалог \"Спасение символов\""
+msgstr "Не показывать диалог \"Восстановление символов\""
 
 #: eeschema/dialogs/panel_setup_buses.cpp:267
 #, c-format
@@ -16157,26 +16157,26 @@ msgstr "Переименовать %s в %s"
 msgid ""
 "Cannot rescue symbol %s which is not available in any library or the cache."
 msgstr ""
-"Не удалось спасти символ %s, так как он отсутствует как в библиотеках, так и "
-"в кэше."
+"Не удалось восстановить символ %s, так как он отсутствует как в библиотеках, "
+"так и в кэше."
 
 #: eeschema/project_rescue.cpp:321 eeschema/project_rescue.cpp:497
 #, c-format
 msgid "Rescue symbol %s found only in cache library to %s."
-msgstr "Спасаемый символ %s найден лишь в кэше %s."
+msgstr "Восстанавливаемый символ %s найден лишь в кэше %s."
 
 #: eeschema/project_rescue.cpp:324 eeschema/project_rescue.cpp:503
 #, c-format
 msgid "Rescue modified symbol %s to %s"
-msgstr "Спасаемый символ %s заменён на %s"
+msgstr "Восстанавливаемый символ %s заменён на %s"
 
 #: eeschema/project_rescue.cpp:597
 msgid "This project has nothing to rescue."
-msgstr "В этом проекте нечего спасать."
+msgstr "В этом проекте нечего восстанавливать."
 
 #: eeschema/project_rescue.cpp:612
 msgid "No symbols were rescued."
-msgstr "Символы не были спасены."
+msgstr "Символы не были восстановлены."
 
 #: eeschema/project_rescue.cpp:720
 #: eeschema/symbol_editor/symbol_editor_import_export.cpp:224
@@ -16187,7 +16187,7 @@ msgstr "Не удалось создать файл библиотеки сим�
 #: eeschema/project_rescue.cpp:873
 #, c-format
 msgid "Failed to save rescue library %s."
-msgstr "Не удалось сохранить спасённую библиотеку %s."
+msgstr "Не удалось сохранить восстановленную библиотеку %s."
 
 #: eeschema/project_rescue.cpp:896
 msgid "Error occurred saving project specific symbol library table."
@@ -20947,11 +20947,11 @@ msgstr "Редактировать номер текущего или выбра
 
 #: eeschema/tools/ee_actions.cpp:1007
 msgid "Rescue Symbols..."
-msgstr "Спасти символы..."
+msgstr "Восстановить символы…"
 
 #: eeschema/tools/ee_actions.cpp:1008
 msgid "Find old symbols in project and rename/rescue them"
-msgstr "Найти старые символы в проекте и переименовать/спасти их"
+msgstr "Найти старые символы в проекте и переименовать/восстановить их"
 
 #: eeschema/tools/ee_actions.cpp:1014
 msgid "Remap Legacy Library Symbols..."
@@ -21325,7 +21325,7 @@ msgstr "Открыть рабочую книгу..."
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr "Открыть сохраненный набор вкладок и настроек анализа"
+msgstr "Открыть сохранённый набор вкладок и настроек анализа"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
@@ -23220,7 +23220,7 @@ msgstr "Обновляет библиотеку посадочных мест д
 #: kicad/cli/command_fp_upgrade.cpp:40
 msgid "Forces the footprint library to be resaved regardless of versioning"
 msgstr ""
-"Принудительное пересохранение библиотеки посад.мест независимо от версии"
+"Принудительное пересохранение библиотеки посадочных мест независимо от версии"
 
 #: kicad/cli/command_pcb_drc.cpp:47
 msgid "Runs the Design Rules Check (DRC) on the PCB and creates a report"
@@ -39937,7 +39937,7 @@ msgstr "Посад.место '%s' сохранено."
 #: pcbnew/load_select_footprint.cpp:376
 #, c-format
 msgid "Footprint library '%s' saved as '%s'."
-msgstr "Библиотека посад.мест '%s' сохранена как '%s'."
+msgstr "Библиотека посадочных мест '%s' сохранена как '%s'."
 
 #: pcbnew/menubar_footprint_editor.cpp:67
 #: pcbnew/menubar_footprint_editor.cpp:76
@@ -39983,7 +39983,7 @@ msgstr "Спасти"
 #: pcbnew/menubar_pcb_editor.cpp:105
 msgid "Clear board and get last rescue file automatically saved by PCB editor"
 msgstr ""
-"Очистить плату и загрузить последний спасённый файл, автоматически "
+"Очистить плату и загрузить последний файл восстановления, автоматически "
 "сохранённый редактором плат"
 
 #: pcbnew/menubar_pcb_editor.cpp:115
