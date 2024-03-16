@@ -211,21 +211,22 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
         if( schItem->IsSelected() )
             selectedModified = true;
 
-        auto updateConnectivityFlag = [&, this]()
-        {
-            if( schItem->IsConnectable() )
-            {
-                dirtyConnectivity = true;
+        auto updateConnectivityFlag =
+                [&]()
+                {
+                    if( schItem->IsConnectable() )
+                    {
+                        dirtyConnectivity = true;
 
-                // Do a local clean up if there are any connectable objects in the commit.
-                if( connectivityCleanUp == NO_CLEANUP )
-                    connectivityCleanUp = LOCAL_CLEANUP;
+                        // Do a local clean up if there are any connectable objects in the commit.
+                        if( connectivityCleanUp == NO_CLEANUP )
+                            connectivityCleanUp = LOCAL_CLEANUP;
 
-                // Do a full rebauild of the connectivity if there is a sheet in the commit.
-                if( schItem->Type() == SCH_SHEET_T )
-                    connectivityCleanUp = GLOBAL_CLEANUP;
-            }
-        };
+                        // Do a full rebauild of the connectivity if there is a sheet in the commit.
+                        if( schItem->Type() == SCH_SHEET_T )
+                            connectivityCleanUp = GLOBAL_CLEANUP;
+                    }
+                };
 
         switch( changeType )
         {

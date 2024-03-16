@@ -457,7 +457,7 @@ public:
     /**
      * Check if \a aItem has connectivity changes against this object.
      *
-     * This provides granular per object  connectivity change testing to prevent the need
+     * This provides granular per object connectivity change testing to prevent the need
      * to rebuild the #CONNECTION_GRAPH when object properties that have nothing to do with
      * the schematic connectivity changes i.e. color, thickness, fill type. etc.
      *
