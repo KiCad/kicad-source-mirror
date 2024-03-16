@@ -26,13 +26,14 @@
 # "minsu kim (0xGabriel)" <rlaalstn9601@gmail.com>, 2023.
 # pedrolinharesmoreira <pedrolinhares@unifei.edu.br>, 2023, 2024.
 # Pedro Moreira <pedroltmoreira@gmail.com>, 2024.
+# simmon <simmon@nplob.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-09 10:01+0000\n"
-"Last-Translator: 김랑기 <korearf@gmail.com>\n"
+"PO-Revision-Date: 2024-03-17 09:02+0000\n"
+"Last-Translator: simmon <simmon@nplob.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -7702,7 +7703,7 @@ msgstr "커서 중심 확대"
 
 #: common/tool/actions.cpp:556
 msgid "Zoom Out at Cursor"
-msgstr "커서 중심 축소"
+msgstr "커서를 중심으로 축소"
 
 #: common/tool/actions.cpp:562 common/widgets/mathplot.cpp:1450
 #: pcbnew/dialogs/panel_setup_rules.cpp:139
@@ -26454,7 +26455,7 @@ msgstr "선형 저항:"
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
 #, c-format
 msgid "Frequency for 100% skin depth:"
-msgstr "100% 표피 깊이를 위한 주파수:"
+msgstr "100% 침투 깊이를 위한 주파수:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:138
 msgid "Ampacity:"
