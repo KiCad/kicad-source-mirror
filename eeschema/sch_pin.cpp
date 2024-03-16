@@ -480,7 +480,10 @@ bool SCH_PIN::HasConnectivityChanges( const SCH_ITEM* aItem,
     if( GetPosition() != pin->GetPosition() )
         return true;
 
-    return GetNumber() != pin->GetNumber();
+    if( GetNumber() != pin->GetNumber() )
+        return true;
+
+    return GetName() != pin->GetName();
 }
 
 
