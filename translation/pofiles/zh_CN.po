@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-15 21:01+0000\n"
+"PO-Revision-Date: 2024-03-16 22:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -23110,7 +23110,7 @@ msgstr "为指定层绘制独立的 Gerber 文件"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:56
 msgid "Do not use the extended X2 format"
-msgstr "不使用扩展的 X2 格式"
+msgstr "不使用 Gerber X2 格式"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:60
 msgid "Do not generate netlist attributes"
@@ -31452,7 +31452,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:62
 msgid "PTH and NPTH in single file"
-msgstr "金属化 (PTH) 和非金属化 (NPTH) 孔在单个文件中"
+msgstr "合并金属化孔 (PTH) 和非金属化 (NPTH) 到单个文件中"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:63
 msgid ""
@@ -31461,7 +31461,7 @@ msgid ""
 "file."
 msgstr ""
 "不推荐。\n"
-"仅用于要求将金属化孔 (PTH) 和非金属化孔 (NPTH) 合并为单个文件的电路板厂。"
+"仅用于要求将金属化孔 (PTH) 和非金属化孔 (NPTH) 合并到单个文件的电路板厂。"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:67
 msgid "Use route command (recommended)"
@@ -31484,8 +31484,8 @@ msgid ""
 msgstr ""
 "椭圆形孔经常给板厂造成问题。\n"
 "\"使用铣孔命令\"使用常用的 G00 铣刀命令 (推荐)\n"
-"  \"使用备选模式\"使用另一个钻孔/铣刀命令 (G85)\n"
-"(仅当推荐的命令不起作用时才使用它)"
+"\"使用备选钻孔模式\"使用另一个钻孔/铣刀命令 (G85)\n"
+"(仅在推荐的命令不起作用时使用)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:78
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:84
@@ -31536,7 +31536,7 @@ msgstr "去掉后导零"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Keep zeros"
-msgstr "保留零"
+msgstr "保留所有零"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:114
 msgid "Zeros Format"
@@ -33300,15 +33300,15 @@ msgstr "Gerber 选项"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:200
 msgid "Use Protel filename extensions"
-msgstr "使用 Protel 文件扩展名"
+msgstr "使用 Protel Gerber 文件扩展名"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:201
 msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
 msgstr ""
-"使用 Protel Gerber 扩展 (.GBL, .GTL等...)\n"
-"不再推荐, 官方扩展名是 .gbr"
+"使用 Protel Gerber 文件扩展名 (.GBL, .GTL等...)\n"
+"不再推荐, 标准文件扩展名为 .gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid "Generate Gerber job file"
@@ -33340,7 +33340,7 @@ msgstr "4.6, 单位 mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid "Use extended X2 format (recommended)"
-msgstr "使用扩展的 X2 格式 (推荐)"
+msgstr "使用 Gerber X2 格式(推荐)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
 msgid ""
@@ -33356,7 +33356,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:232
 msgid "Include netlist attributes"
-msgstr "包括网络特性"
+msgstr "包含网表特性"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:233
 msgid ""
