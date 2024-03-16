@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-15 21:01+0000\n"
+"PO-Revision-Date: 2024-03-16 06:36+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -23747,7 +23747,7 @@ msgstr "为指定层绘制独立的 Gerber 文件"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:56
 msgid "Do not use the extended X2 format"
-msgstr "不使用扩展的 X2 格式"
+msgstr "不使用扩展 Gerber (X2) 格式"
 
 #: kicad/cli/command_pcb_export_gerber.cpp:60
 msgid "Do not generate netlist attributes"
@@ -33957,15 +33957,15 @@ msgstr "Gerber 选项"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:200
 msgid "Use Protel filename extensions"
-msgstr "使用 Protel 文件扩展名"
+msgstr "使用 Protel Gerber 文件扩展名"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:201
 msgid ""
 "Use Protel Gerber extensions (.GBL, .GTL, etc...)\n"
 "No longer recommended. The official extension is .gbr"
 msgstr ""
-"使用 Protel Gerber 扩展 (.GBL, .GTL等...)\n"
-"不再推荐, 官方扩展名是 .gbr"
+"使用 Protel Gerber 文件扩展名 (.GBL, .GTL等...)\n"
+"不再推荐, 标准文件扩展名为 .gbr"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:206
 msgid "Generate Gerber job file"
@@ -33997,7 +33997,7 @@ msgstr "4.6, 单位 mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:227
 msgid "Use extended X2 format (recommended)"
-msgstr "使用扩展的 X2 格式 (推荐)"
+msgstr "使用扩展 Gerber (X2) 格式(推荐)"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:228
 msgid ""
