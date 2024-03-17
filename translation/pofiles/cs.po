@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-04 07:01+0000\n"
+"PO-Revision-Date: 2024-03-18 12:01+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
@@ -6006,14 +6006,12 @@ msgid "Could not merge commits"
 msgstr "Nelze sloučit comity"
 
 #: common/git/git_pull_handler.cpp:257
-#, fuzzy
 msgid "Could not get repository index"
-msgstr "Soubor knihovny nelze otevřít."
+msgstr "Nelze získat index repozitáře"
 
 #: common/git/git_pull_handler.cpp:265
-#, fuzzy
 msgid "Could not get conflict iterator"
-msgstr "Nelze otevřít konfigurační soubor"
+msgstr "Nelze získat iterátor konfliktu"
 
 #: common/git/git_pull_handler.cpp:285 common/git/git_pull_handler.cpp:286
 msgid "Changed"
@@ -6137,19 +6135,16 @@ msgid "Failed to establish connection with remote repository."
 msgstr "Nepodařilo se analyzovat místně uložené úložiště.json."
 
 #: common/git/kicad_git_errors.cpp:68
-#, fuzzy
 msgid "Tag not found."
-msgstr " nenalezeno."
+msgstr "Značka nenalezena."
 
 #: common/git/kicad_git_errors.cpp:69
-#, fuzzy
 msgid "Failed to create tag."
-msgstr "Selhalo vytvoření souboru '%s'."
+msgstr "Selhalo vytvoření značky."
 
 #: common/git/kicad_git_errors.cpp:70
-#, fuzzy
 msgid "Failed to delete tag."
-msgstr "Nepodařilo se smazat '%s'"
+msgstr "Nepodařilo se smazat značku."
 
 #: common/git/kicad_git_errors.cpp:72
 msgid "Unknown error."
@@ -6298,9 +6293,8 @@ msgid "Memory was exhausted trying to load the DXF, it may be too large."
 msgstr "Nedostatek paměti pro načtení DXF, soubor může být příliš velký."
 
 #: common/import_gfx/dxf_import_plugin.cpp:1432
-#, fuzzy
 msgid "Invalid spline definition encountered"
-msgstr "Neplatná definice názvů vývodů"
+msgstr "Nalezena neplatná definice spline"
 
 #: common/import_gfx/dxf_import_plugin.h:210
 #, c-format
@@ -6309,14 +6303,12 @@ msgstr "%s není podporováno."
 
 #: common/import_gfx/dxf_import_plugin.h:458
 #: common/import_gfx/dxf_import_plugin.h:462
-#, fuzzy
 msgid "DXF construction lines not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "Konstrukční linky DXF nejsou v současné době podporovány."
 
 #: common/import_gfx/dxf_import_plugin.h:467
-#, fuzzy
 msgid "DXF arc-aligned text not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "DXF text zarovnaný do oblouku není v současné době podporován."
 
 #: common/import_gfx/dxf_import_plugin.h:472
 #: common/import_gfx/dxf_import_plugin.h:476
@@ -6326,34 +6318,28 @@ msgstr "Maska kompilace není aktuálně podporována."
 #: common/import_gfx/dxf_import_plugin.h:492
 #: common/import_gfx/dxf_import_plugin.h:496
 #: common/import_gfx/dxf_import_plugin.h:500
-#, fuzzy
 msgid "DXF dimensions not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "DXF rozměry nejsou v současné době podporovány."
 
 #: common/import_gfx/dxf_import_plugin.h:506
-#, fuzzy
 msgid "DXF hatches not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "DXF hatches nejsou momentálně podporovány."
 
 #: common/import_gfx/dxf_import_plugin.h:513
-#, fuzzy
 msgid "DXF traces not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "Trasování DXF se v současné době neprovozuje."
 
 #: common/import_gfx/dxf_import_plugin.h:518
-#, fuzzy
 msgid "DXF 3dfaces not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "DXF 3DFACES není v současné době podporován."
 
 #: common/import_gfx/dxf_import_plugin.h:523
-#, fuzzy
 msgid "DXF solids not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "DXF SOLID v současné době není podporován."
 
 #: common/import_gfx/dxf_import_plugin.h:528
-#, fuzzy
 msgid "DXF images not currently supported."
-msgstr "Maska kompilace není aktuálně podporována."
+msgstr "Obrázky DXF nejsou aktuálně podporovány."
 
 #: common/io/altium/altium_parser.cpp:56 common/richio.cpp:121
 #, c-format
@@ -6445,15 +6431,15 @@ msgid "Invalid Arc with radius %f and angle %f"
 msgstr "Neplatný oblouk s poloměrem %f a úhlem %f"
 
 #: common/io/easyeda/easyeda_parser_base.cpp:38
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to parse number from '%s'"
-msgstr "potřebuji číslo pro '%s'"
+msgstr "Nepodařilo se zpracovat číslo z '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:170
 #: common/io/easyedapro/easyedapro_import_utils.cpp:211
-#, fuzzy, c-format
+#, c-format
 msgid "JSON error reading '%s': %s"
-msgstr "Chyba při čtení obrázku %s."
+msgstr "Chyba JSON při čtení '%s': %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:174
 #: common/io/easyedapro/easyedapro_import_utils.cpp:215
@@ -6462,23 +6448,23 @@ msgid "Error reading '%s': %s"
 msgstr "Chyba při čtení '%s': %s"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:179
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"Soubor '%s' zřejmě není platný soubor projektu EasyEDA (JLCEDA) Pro. Projekt."
-"json nebyl nalezen."
+"'%s' se nezdá být platným projektem nebo souborem knihovny easyEDA (JLCEDA) "
+"Pro. Nelze najít project.json nebo device.json."
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:195
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot read ZIP archive '%s'"
-msgstr "Nelze otevřít soubor '%s'"
+msgstr "Nelze číst archiv zip '%s'"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse JSON line %d in '%s': %s"
-msgstr "Nelze najít %s vývod '%s'."
+msgstr "Nelze zpracovat řádek JSON %d v '%s': %s"
 
 #: common/kiway.cpp:243
 #, c-format
@@ -6852,9 +6838,8 @@ msgid "Courtyard collision shadow"
 msgstr ""
 
 #: common/lib_id.cpp:145
-#, fuzzy
 msgid "Illegal character found in library nickname"
-msgstr "Nedovolený znak nalezen v logickém názvu knihovny"
+msgstr "V přezdívce knihovny byl nalezen nepovolený znak"
 
 #: common/lib_table_grid_tricks.cpp:32
 msgid "Edit options..."
@@ -6873,14 +6858,12 @@ msgid "Deactivate selected"
 msgstr "Deaktivujte vyznačené"
 
 #: common/lib_table_grid_tricks.cpp:69
-#, fuzzy
 msgid "Set visible flag"
-msgstr "Viditelné vrstvy"
+msgstr "Nastavit viditelný příznak"
 
 #: common/lib_table_grid_tricks.cpp:72
-#, fuzzy
 msgid "Unset visible flag"
-msgstr "Viditelné vrstvy"
+msgstr "Zrušit nastavení viditelného příznaku"
 
 #: common/lib_table_grid_tricks.cpp:80
 #, c-format
@@ -7512,18 +7495,16 @@ msgid "Zoom to Selection"
 msgstr "Přiblížit na výběr"
 
 #: common/tool/actions.cpp:474 common/widgets/mathplot.cpp:1447
-#, fuzzy
 msgid "Undo Last Zoom"
-msgstr "Vrátit poslední změny"
+msgstr "Vrátit zpět poslední přiblížení"
 
 #: common/tool/actions.cpp:475 common/widgets/mathplot.cpp:1447
 msgid "Return zoom to level prior to last zoom action"
 msgstr ""
 
 #: common/tool/actions.cpp:481 common/widgets/mathplot.cpp:1448
-#, fuzzy
 msgid "Redo Last Zoom"
-msgstr "Zopakovat poslední příkaz"
+msgstr "Znovu poslední přiblížení"
 
 #: common/tool/actions.cpp:482 common/widgets/mathplot.cpp:1448
 msgid "Return zoom to level prior to last zoom undo"
@@ -7619,9 +7600,8 @@ msgid "Switch to Fast Grid 2"
 msgstr "Přepněte na rychlou mřížku 2"
 
 #: common/tool/actions.cpp:648
-#, fuzzy
 msgid "Cycle Fast Grid"
-msgstr "Přepněte na rychlou mřížku 1"
+msgstr "Přepněte na rychlou mřížku"
 
 #: common/tool/actions.cpp:655
 msgid "Switch to Next Grid"
@@ -7636,7 +7616,6 @@ msgid "Grid Origin"
 msgstr "Počátek mřížky"
 
 #: common/tool/actions.cpp:669
-#, fuzzy
 msgid "Place the grid origin point"
 msgstr "Nastavit počáteční bod mřížky"
 
@@ -7657,9 +7636,8 @@ msgid "Enables item-specific grids that override the current grid"
 msgstr ""
 
 #: common/tool/actions.cpp:703
-#, fuzzy
 msgid "Edit grid definitions"
-msgstr "Nastavit rozměry mřížky"
+msgstr "Upravit definice mřížky"
 
 #: common/tool/actions.cpp:709
 msgid "Grid Origin..."
@@ -8133,9 +8111,8 @@ msgstr ""
 "akceleraci KiCadu)"
 
 #: common/widgets/gal_options_panel_base.cpp:47
-#, fuzzy
 msgid "Grid Display"
-msgstr "Zobrazit"
+msgstr "Zobrazit mřížku"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:88
@@ -8164,9 +8141,8 @@ msgid "Grid thickness:"
 msgstr "Tloušťka mřížky:"
 
 #: common/widgets/gal_options_panel_base.cpp:91
-#, fuzzy
 msgid "Minimum grid spacing:"
-msgstr "Minimální rozteč mřížky:"
+msgstr "Minimální mezera mřížky:"
 
 #: common/widgets/gal_options_panel_base.cpp:102
 msgid "Snap to grid:"
@@ -8214,7 +8190,7 @@ msgstr "Vybrat cestu"
 
 #: common/widgets/lib_tree.cpp:99
 msgid "Sort by Best Match"
-msgstr ""
+msgstr "Seřadit podle nejlepší shody"
 
 #: common/widgets/lib_tree.cpp:100
 msgid "Sort Alphabetically"
@@ -8274,14 +8250,12 @@ msgid "Reset to Defaults"
 msgstr "Obnovit výchozí"
 
 #: common/widgets/paged_dialog.cpp:90
-#, fuzzy
 msgid "Reveal Preferences in Finder"
-msgstr "Odhalte témata ve vyhledávači"
+msgstr "Odhalte nasstavení ve vyhledávači"
 
 #: common/widgets/paged_dialog.cpp:92
-#, fuzzy
 msgid "Open Preferences Directory"
-msgstr "Otevřít Předvolby"
+msgstr "Otevřít adresář s předvolbami"
 
 #: common/widgets/paged_dialog.cpp:336
 #, c-format
@@ -15824,7 +15798,7 @@ msgstr "Nenalezeny žádné grafické položky v souboru."
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:680
 #, c-format
 msgid "%s differs."
-msgstr ""
+msgstr "%s se liší."
 
 #: eeschema/lib_symbol.cpp:347
 msgid "Pin count differs."
@@ -15867,7 +15841,7 @@ msgstr "Provedení pouzdra"
 
 #: eeschema/lib_symbol.cpp:453
 msgid "Symbol pin name offsets differ."
-msgstr ""
+msgstr "Posun názvu vývodu symbolu se liší."
 
 #: eeschema/lib_symbol.cpp:464
 #, fuzzy
@@ -21552,9 +21526,8 @@ msgstr "Knihovna: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:285
 #: pcbnew/tools/board_inspection_tool.cpp:1494
-#, fuzzy
 msgid "Library item: "
-msgstr "Filtr knihovny:"
+msgstr "Položka knihovny: "
 
 #: eeschema/tools/ee_inspection_tool.cpp:295
 #: pcbnew/tools/board_inspection_tool.cpp:1512
@@ -23603,7 +23576,7 @@ msgstr "Přesnost souřadnic gerber by měla být buď 5 nebo 6\n"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:39
 msgid "Generate a DXF from a list of layers"
-msgstr ""
+msgstr "Generovat DXF ze seznamu vrstev"
 
 #: kicad/cli/command_pcb_export_dxf.cpp:46
 #: kicad/cli/command_pcb_export_gerber.cpp:44
@@ -23996,11 +23969,11 @@ msgstr "Zkontrolovat aktualizace"
 #, c-format
 msgid ""
 "KiCad %s is now available (you have %s). Would you like to download it now?"
-msgstr ""
+msgstr "KiCad %s je nyní dostupný (máte %s). Chcete ho nyní stáhnout?"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:30
 msgid "A new version of KiCad is available!"
-msgstr ""
+msgstr "K dispozici je nová verze KiCadu!"
 
 #: kicad/dialogs/dialog_update_notice_base.cpp:52
 #, fuzzy
@@ -25013,9 +24986,8 @@ msgid "Commit File..."
 msgstr "Upravit pole..."
 
 #: kicad/project_tree_pane.cpp:968
-#, fuzzy
 msgid "Switch to branch "
-msgstr "Přepnout na vnitřní vrstvu 1"
+msgstr "Přepnout na větev "
 
 #: kicad/project_tree_pane.cpp:973
 msgid "Other..."
@@ -30846,9 +30818,8 @@ msgid "Version:"
 msgstr "Verze"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:82
-#, fuzzy
 msgid "Compress output"
-msgstr "Zkomprimovat soubor "
+msgstr "Komprimovat výstup"
 
 #: pcbnew/dialogs/dialog_export_2581_base.cpp:83
 msgid "Compress output into 'zip' file"
@@ -34941,9 +34912,8 @@ msgid "Track and Via Dimensions"
 msgstr "Spoje a prokovy Rozměry"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:55
-#, fuzzy
 msgid "Target skew: "
-msgstr "Cílové zkosení:"
+msgstr "Cílové zkosení: "
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties.cpp:86
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2105
@@ -39394,19 +39364,16 @@ msgid "Tuning"
 msgstr "Varování"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1374
-#, fuzzy
 msgid "too long"
-msgstr "Příliš dlouhé: "
+msgstr "příliš dlouhé"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1375
-#, fuzzy
 msgid "too short"
-msgstr "Příliš krátké: "
+msgstr "příliš krátké"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1376
-#, fuzzy
 msgid "tuned"
-msgstr "Vyladěné: "
+msgstr "vyladěné"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:1456
 #, fuzzy
@@ -41870,9 +41837,8 @@ msgid "Generating logistic section"
 msgstr "Generovat soubor pozic"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2901
-#, fuzzy
 msgid "Saving file"
-msgstr "Čtení souboru "
+msgstr "Ukládám soubor"
 
 #: pcbnew/pcb_io/ipc2581/pcb_io_ipc2581.cpp:2933
 #, fuzzy
@@ -45163,7 +45129,7 @@ msgstr "Vytvořit zprávu o všech pouzdrech z aktuální desky"
 
 #: pcbnew/tools/pcb_actions.cpp:1053
 msgid "IPC-2581 File (.xml)..."
-msgstr ""
+msgstr "Soubor IPC-2581 (.xml)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Generate an IPC-2581 file"
@@ -46188,9 +46154,8 @@ msgid "Rebuilds geometry of all generators"
 msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:2392
-#, fuzzy
 msgid "Rebuild Selected Generators"
-msgstr " Vybrat obecná nastavení"
+msgstr "Znovu sestavit vybrané generátory"
 
 #: pcbnew/tools/pcb_actions.cpp:2393
 msgid "Rebuilds geometry of selected generator(s)"
