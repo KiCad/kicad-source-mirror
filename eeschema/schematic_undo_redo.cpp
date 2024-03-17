@@ -271,6 +271,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     std::vector<SCH_ITEM*> bulkChangedItems;
     std::set<SCH_TABLE*>   changedTables;
     bool                   dirtyConnectivity = false;
+    bool                   rebuildHierarchyNavigator = false;
     SCH_CLEANUP_FLAGS      connectivityCleanUp = NO_CLEANUP;
 
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
@@ -336,6 +337,8 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             // If we are removing the current sheet, get out first
             if( eda_item->Type() == SCH_SHEET_T )
             {
+                rebuildHierarchyNavigator = true;
+
                 if( static_cast<SCH_SHEET*>( eda_item )->GetScreen() == GetScreen() )
                     GetToolManager()->PostAction( EE_ACTIONS::leaveSheet );
             }
@@ -347,6 +350,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
         else if( status == UNDO_REDO::DELETED )
         {
+            if( eda_item->Type() == SCH_SHEET_T )
+                rebuildHierarchyNavigator = true;
+
             updateConnectivityFlag();
 
             // deleted items are re-inserted on undo
@@ -388,6 +394,20 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             switch( status )
             {
             case UNDO_REDO::CHANGED:
+                if( schItem->Type() == SCH_SHEET_T )
+                {
+                    const SCH_SHEET* origSheet = static_cast<const SCH_SHEET*>( schItem );
+                    const SCH_SHEET* copySheet = static_cast<const SCH_SHEET*>( schItem );
+
+                    wxCHECK2( origSheet && copySheet, continue );
+
+                    if( ( origSheet->GetName() != copySheet->GetName() )
+                      || ( origSheet->GetFileName() != copySheet->GetFileName() ) )
+                    {
+                        rebuildHierarchyNavigator = true;
+                    }
+                }
+
                 schItem->SwapData( itemCopy );
                 bulkChangedItems.emplace_back( schItem );
 
@@ -452,7 +472,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         if( connectivityCleanUp == GLOBAL_CLEANUP )
         {
             SetSheetNumberAndCount();
-            UpdateHierarchyNavigator();
+
+            if( rebuildHierarchyNavigator )
+                UpdateHierarchyNavigator();
         }
     }
 }

@@ -1865,6 +1865,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         SCH_SHEET*     sheet = static_cast<SCH_SHEET*>( curr_item );
         bool           doClearAnnotation;
         bool           doRefresh = false;
+        bool           updateHierarchyNavigator = false;
 
         // Keep track of existing sheet paths. EditSheet() can modify this list.
         // Note that we use the validity checking/repairing version here just to make sure
@@ -1872,7 +1873,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         SCH_SHEET_LIST originalHierarchy( &m_frame->Schematic().Root(), true );
 
         doRefresh = m_frame->EditSheetProperties( sheet, &m_frame->GetCurrentSheet(),
-                                                  &doClearAnnotation );
+                                                  &doClearAnnotation, &updateHierarchyNavigator );
 
         // If the sheet file is changed and new sheet contents are loaded then we have to
         // clear the annotations on the new content (as it may have been set from some other
@@ -1891,10 +1892,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
 
         if( doRefresh )
-        {
             m_frame->GetCanvas()->Refresh();
+
+        if( updateHierarchyNavigator )
             m_frame->UpdateHierarchyNavigator();
-        }
 
         break;
     }

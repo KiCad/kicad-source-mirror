@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014-2020 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 2014-2024 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,8 @@ class DIALOG_SHEET_PROPERTIES : public DIALOG_SHEET_PROPERTIES_BASE
 {
 public:
     DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
-                             bool* aClearAnnotationNewItems );
+                             bool* aClearAnnotationNewItems,
+                             bool* aUpdateHierarchyNavigator );
 
     ~DIALOG_SHEET_PROPERTIES() override;
 
@@ -66,6 +67,7 @@ private:
     SCH_EDIT_FRAME*               m_frame;
     SCH_SHEET*                    m_sheet;
     bool*                         m_clearAnnotationNewItems;
+    bool*                         m_updateHierarchyNavigator;
 
     wxSize                        m_size;
     int                           m_delayedFocusRow;
