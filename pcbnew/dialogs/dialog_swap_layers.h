@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018-2021 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _DIALOG_SCRIPTING_H_
-#define _DIALOG_SCRIPTING_H_
+#ifndef DIALOG_SWAP_LAYERS_H
+#define DIALOG_SWAP_LAYERS_H
 
 #include "dialog_swap_layers_base.h"
 
@@ -45,10 +45,11 @@ private:
 
     void adjustGridColumns();
 
-    PCB_BASE_EDIT_FRAME* m_parent;
-    std::map<PCB_LAYER_ID, PCB_LAYER_ID>& m_layerDestinations;
+private:
+    PCB_BASE_EDIT_FRAME*                  m_parent;
+    std::map<PCB_LAYER_ID, PCB_LAYER_ID>& m_layerMap;
 
-    LAYER_GRID_TABLE*    m_gridTable;
+    LAYER_GRID_TABLE*                     m_gridTable;
 };
 
-#endif
+#endif  // DIALOG_SWAP_LAYERS_H
