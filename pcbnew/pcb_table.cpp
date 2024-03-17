@@ -75,6 +75,9 @@ void PCB_TABLE::swapData( BOARD_ITEM* aImage )
 
     PCB_TABLE* table = static_cast<PCB_TABLE*>( aImage );
 
+    std::swap( m_layer, table->m_layer );
+    std::swap( m_isLocked, table->m_isLocked );
+
     std::swap( m_strokeExternal, table->m_strokeExternal );
     std::swap( m_strokeHeader, table->m_strokeHeader );
     std::swap( m_borderStroke, table->m_borderStroke );
