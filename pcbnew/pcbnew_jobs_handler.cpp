@@ -1266,10 +1266,8 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
 
     commit.Push( _( "DRC" ), SKIP_UNDO | SKIP_SET_DIRTY );
 
-    // now "resolve" the drc exclusions again because its the only way to set exclusion status on
-    // a marker
-    for( PCB_MARKER* marker : brd->ResolveDRCExclusions( false ) )
-        brd->Add( marker );
+    // Update the exclusion status on any excluded markers that still exist.
+    brd->ResolveDRCExclusions( false );
 
     std::shared_ptr<DRC_ITEMS_PROVIDER> markersProvider = std::make_shared<DRC_ITEMS_PROVIDER>(
             brd, MARKER_BASE::MARKER_DRC, MARKER_BASE::MARKER_DRAWING_SHEET );

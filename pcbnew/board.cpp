@@ -326,17 +326,45 @@ void BOARD::UpdateRatsnestExclusions()
 }
 
 
+void BOARD::RecordDRCExclusions()
+{
+    m_designSettings->m_DrcExclusions.clear();
+    m_designSettings->m_DrcExclusionComments.clear();
+
+    for( PCB_MARKER* marker : m_markers )
+    {
+        if( marker->IsExcluded() )
+        {
+            wxString serialized = marker->Serialize();
+            m_designSettings->m_DrcExclusions.insert( serialized );
+            m_designSettings->m_DrcExclusionComments[ serialized ] = marker->GetComment();
+        }
+    }
+}
+
+
 std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 {
+    std::set<wxString>           exclusions = m_designSettings->m_DrcExclusions;
+    std::map<wxString, wxString> comments = m_designSettings->m_DrcExclusionComments;
+
+    m_designSettings->m_DrcExclusions.clear();
+    m_designSettings->m_DrcExclusionComments.clear();
+
     for( PCB_MARKER* marker : GetBoard()->Markers() )
     {
         wxString                     serialized = marker->Serialize();
-        std::set<wxString>::iterator it = m_designSettings->m_DrcExclusions.find( serialized );
+        std::set<wxString>::iterator it = exclusions.find( serialized );
 
-        if( it != m_designSettings->m_DrcExclusions.end() )
+        if( it != exclusions.end() )
         {
-            marker->SetExcluded( true, m_designSettings->m_DrcExclusionComments[serialized] );
-            m_designSettings->m_DrcExclusions.erase( it );
+            marker->SetExcluded( true, comments[ serialized ] );
+
+            // Exclusion still valid; store back to BOARD_DESIGN_SETTINGS
+            m_designSettings->m_DrcExclusions.insert( serialized );
+            m_designSettings->m_DrcExclusionComments[ serialized ] = comments[ serialized ];
+
+            exclusions.erase( it );
         }
     }
 
@@ -344,7 +372,7 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
     if( aCreateMarkers )
     {
-        for( const wxString& serialized : m_designSettings->m_DrcExclusions )
+        for( const wxString& serialized : exclusions )
         {
             PCB_MARKER* marker = PCB_MARKER::Deserialize( serialized );
 
@@ -364,13 +392,15 @@ std::vector<PCB_MARKER*> BOARD::ResolveDRCExclusions( bool aCreateMarkers )
 
             if( marker )
             {
-                marker->SetExcluded( true, m_designSettings->m_DrcExclusionComments[serialized] );
+                marker->SetExcluded( true, comments[ serialized ] );
                 newMarkers.push_back( marker );
+
+                // Exclusion still valid; store back to BOARD_DESIGN_SETTINGS
+                m_designSettings->m_DrcExclusions.insert( serialized );
+                m_designSettings->m_DrcExclusionComments[ serialized ] = comments[ serialized ];
             }
         }
     }
-
-    m_designSettings->m_DrcExclusions.clear();
 
     return newMarkers;
 }
@@ -2750,18 +2780,3 @@ bool BOARD::operator==( const BOARD_ITEM& aItem ) const
 }
 
 
-void BOARD::RecordDRCExclusions()
-{
-    m_designSettings->m_DrcExclusions.clear();
-    m_designSettings->m_DrcExclusionComments.clear();
-
-    for( PCB_MARKER* marker : m_markers )
-    {
-        if( marker->IsExcluded() )
-        {
-            wxString serialized = marker->Serialize();
-            m_designSettings->m_DrcExclusions.insert( serialized );
-            m_designSettings->m_DrcExclusionComments[ serialized ] = marker->GetComment();
-        }
-    }
-}
