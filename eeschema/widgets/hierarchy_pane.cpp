@@ -224,6 +224,31 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
         m_events_bound = false;
     }
 
+    std::set<SCH_SHEET_PATH> expandedNodes;
+
+    std::function<void( const wxTreeItemId& )> getExpandedNodes =
+            [&]( const wxTreeItemId& id )
+            {
+                wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+
+                TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
+                if( m_tree->IsExpanded( id ) )
+                    expandedNodes.emplace( itemData->m_SheetPath );
+
+                wxTreeItemIdValue cookie;
+                wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+
+                while( child.IsOk() )
+                {
+                    getExpandedNodes( child );
+                    child = m_tree->GetNextChild( id, cookie );
+                }
+            };
+
+    if( !m_tree->IsEmpty() )
+        getExpandedNodes( m_tree->GetRootItem() );
+
     m_list.clear();
     m_list.push_back( &m_frame->Schematic().Root() );
 
@@ -235,8 +260,35 @@ void HIERARCHY_PANE::UpdateHierarchyTree()
     buildHierarchyTree( &m_list, root );
     UpdateHierarchySelection();
 
-    if( m_tree->ItemHasChildren( root ) )
+    if( !expandedNodes.empty() )
+    {
+        std::function<void( const wxTreeItemId& )> expandNodes =
+                [&]( const wxTreeItemId& id )
+                {
+                    wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+
+                    TREE_ITEM_DATA* itemData =
+                            static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
+                    if( expandedNodes.find( itemData->m_SheetPath ) != expandedNodes.end() )
+                        m_tree->Expand( id );
+
+                    wxTreeItemIdValue cookie;
+                    wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+
+                    while( child.IsOk() )
+                    {
+                        expandNodes( child );
+                        child = m_tree->GetNextChild( id, cookie );
+                    }
+                };
+
+        expandNodes( m_tree->GetRootItem() );
+    }
+    else if( m_tree->ItemHasChildren( root ) )
+    {
         m_tree->Expand( root );
+    }
 
     if( eventsWereBound )
     {
@@ -282,8 +334,10 @@ void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
             {
                 TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
                 SCH_SHEET* sheet = itemData->m_SheetPath.Last();
-                wxString sheetNameLabel = formatPageString( sheet->GetFields()[SHEETNAME].GetShownText( false ),
-                                                       itemData->m_SheetPath.GetPageNumber() );
+                wxString sheetNameLabel =
+                        formatPageString( sheet->GetFields()[SHEETNAME].GetShownText( false ),
+                                          itemData->m_SheetPath.GetPageNumber() );
+
                 if( m_tree->GetItemText( id ) != sheetNameLabel )
                     m_tree->SetItemText( id, sheetNameLabel );
             };

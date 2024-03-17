@@ -45,10 +45,12 @@
 #include "wx/dcclient.h"
 
 DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHEET* aSheet,
-                                                  bool* aClearAnnotationNewItems ) :
+                                                  bool* aClearAnnotationNewItems,
+                                                  bool* aUpdateHierarchyNavigator ) :
     DIALOG_SHEET_PROPERTIES_BASE( aParent ),
     m_frame( aParent ),
     m_clearAnnotationNewItems( aClearAnnotationNewItems ),
+    m_updateHierarchyNavigator( aUpdateHierarchyNavigator ),
     m_borderWidth( aParent, m_borderWidthLabel, m_borderWidthCtrl, m_borderWidthUnits ),
     m_dummySheet( *aSheet ),
     m_dummySheetNameField( VECTOR2I( -1, -1 ), SHEETNAME, &m_dummySheet )
@@ -335,6 +337,10 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 
             return false;
         }
+        else if( m_updateHierarchyNavigator )
+        {
+            *m_updateHierarchyNavigator = true;
+        }
 
         if( clearFileName )
             currentScreen->SetFileName( wxEmptyString );
@@ -344,6 +350,9 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     }
 
     wxString newSheetname = m_fields->at( SHEETNAME ).GetText();
+
+    if( ( newSheetname != m_sheet->GetName() ) && m_updateHierarchyNavigator )
+        *m_updateHierarchyNavigator = true;
 
     if( newSheetname.IsEmpty() )
         newSheetname = _( "Untitled Sheet" );

@@ -574,9 +574,12 @@ public:
      * this sheet need to have their annotation cleared i.e. when an existing item list is used.
      * it can happens when the edited sheet used an existing file, or becomes a new instance
      * of a already existing sheet.
+     * @param aUpdateHierarchyNavigator is an optional flag to indicate the sheet changes require
+     *                                  the hierarchy navigator panel to be updated.
      */
     bool EditSheetProperties( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
-                              bool* aClearAnnotationNewItems );
+                              bool* aClearAnnotationNewItems,
+                              bool* aUpdateHierarchyNavigator = nullptr );
 
     void InitSheet( SCH_SHEET* aSheet, const wxString& aNewFilename );
 
