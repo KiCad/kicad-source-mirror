@@ -107,12 +107,24 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 }
 
 
-bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* aLayerMap )
+bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem,
+                                      std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aLayerMap )
 {
-    if( aLayerMap[ aItem->GetLayer() ] != aItem->GetLayer() )
+    LSET originalLayers = aItem->GetLayerSet();
+    LSET newLayers;
+
+    for( PCB_LAYER_ID original : originalLayers.Seq() )
+    {
+        if( aLayerMap.count( original ) )
+            newLayers.set( aLayerMap[ original ] );
+        else
+            newLayers.set( original );
+    }
+
+    if( originalLayers.Seq() != newLayers.Seq() )
     {
         m_commit->Modify( aItem );
-        aItem->SetLayer( aLayerMap[ aItem->GetLayer() ] );
+        aItem->SetLayerSet( newLayers );
         frame()->GetCanvas()->GetView()->Update( aItem, KIGFX::GEOMETRY );
         return true;
     }
@@ -123,7 +135,7 @@ bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem, PCB_LAYER_ID* aLayerMap
 
 int GLOBAL_EDIT_TOOL::SwapLayers( const TOOL_EVENT& aEvent )
 {
-    PCB_LAYER_ID layerMap[PCB_LAYER_ID_COUNT];
+    std::map<PCB_LAYER_ID, PCB_LAYER_ID> layerMap;
 
     DIALOG_SWAP_LAYERS dlg( frame(), layerMap );
 

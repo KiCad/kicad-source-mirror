@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,10 +23,8 @@
 
 #include <pcb_base_edit_frame.h>
 #include <grid_layer_box_helpers.h>
-#include <view/view.h>
 #include <kiplatform/ui.h>
 #include <widgets/wx_grid.h>
-#include <board.h>
 #include "dialog_swap_layers.h"
 
 
@@ -67,10 +65,11 @@ public:
 };
 
 
-DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent, PCB_LAYER_ID* aArray ) :
+DIALOG_SWAP_LAYERS::DIALOG_SWAP_LAYERS( PCB_BASE_EDIT_FRAME* aParent,
+                                        std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aLayerMap ) :
     DIALOG_SWAP_LAYERS_BASE( aParent ),
     m_parent( aParent ),
-    m_layerDestinations( aArray )
+    m_layerMap( aLayerMap )
 {
     m_gridTable = new LAYER_GRID_TABLE( m_parent->GetBoard()->GetCopperLayerCount() );
     m_grid->SetTable( m_gridTable );
@@ -131,12 +130,15 @@ bool DIALOG_SWAP_LAYERS::TransferDataFromWindow()
     wxGridTableBase* table = m_grid->GetTable();
     int row = 0;
 
-    for( size_t layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
+    for( int layer = 0; layer < PCB_LAYER_ID_COUNT; ++layer )
     {
         if( enabledCopperLayers.test( layer ) )
-            m_layerDestinations[ layer ] = (PCB_LAYER_ID) table->GetValueAsLong( row++, 1 );
-        else
-            m_layerDestinations[ layer ] = (PCB_LAYER_ID) layer;
+        {
+            int dest = table->GetValueAsLong( row++, 1 );
+
+            if( dest >= 0 && dest < PCB_LAYER_ID_COUNT && enabledCopperLayers.test( dest ) )
+                m_layerMap[ ToLAYER_ID( layer ) ] = ToLAYER_ID( dest );
+        }
     }
 
     return true;
