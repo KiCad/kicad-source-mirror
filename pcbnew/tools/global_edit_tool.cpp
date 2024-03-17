@@ -114,12 +114,21 @@ int GLOBAL_EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 bool GLOBAL_EDIT_TOOL::swapBoardItem( BOARD_ITEM* aItem,
                                       std::map<PCB_LAYER_ID, PCB_LAYER_ID>& aLayerMap )
 {
-    PCB_LAYER_ID original = aItem->GetLayer();
+    LSET originalLayers = aItem->GetLayerSet();
+    LSET newLayers;
 
-    if( aLayerMap.count( original ) && aLayerMap.at( original ) != original )
+    for( PCB_LAYER_ID original : originalLayers.Seq() )
+    {
+        if( aLayerMap.count( original ) )
+            newLayers.set( aLayerMap[ original ] );
+        else
+            newLayers.set( original );
+    }
+
+    if( originalLayers.Seq() != newLayers.Seq() )
     {
         m_commit->Modify( aItem );
-        aItem->SetLayer( aLayerMap.at( original ) );
+        aItem->SetLayerSet( newLayers );
         frame()->GetCanvas()->GetView()->Update( aItem, KIGFX::GEOMETRY );
         return true;
     }
