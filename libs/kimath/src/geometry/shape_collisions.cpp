@@ -302,6 +302,11 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
         closest_dist = 0;
         nearest = aA.GetPoint( 0 );
     }
+    else if( aA.IsClosed() && aB.GetPointCount() > 0 && aA.PointInside( aB.GetPoint( 0 ) ) )
+    {
+        closest_dist = 0;
+        nearest = aB.GetPoint( 0 );
+    }
     else
     {
         std::vector<SEG> a_segs;
