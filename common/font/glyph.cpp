@@ -82,19 +82,19 @@ std::unique_ptr<GLYPH> STROKE_GLYPH::Transform( const VECTOR2D& aGlyphSize, cons
     end.x *= aGlyphSize.x;
     end.y *= aGlyphSize.y;
 
-    if( aTilt )
+    if( aTilt != 0.0 )
         end.x -= end.y * aTilt;
 
     glyph->m_boundingBox.SetEnd( end );
     glyph->m_boundingBox.Offset( aOffset );
 
-    for( std::vector<VECTOR2D>& pointList : *glyph.get() )
+    for( std::vector<VECTOR2D>& pointList : *glyph )
     {
         for( VECTOR2D& point : pointList )
         {
             point *= aGlyphSize;
 
-            if( aTilt )
+            if( aTilt != 0.0 )
                 point.x -= point.y * aTilt;
 
             point += aOffset;
@@ -108,6 +108,18 @@ std::unique_ptr<GLYPH> STROKE_GLYPH::Transform( const VECTOR2D& aGlyphSize, cons
     }
 
     return glyph;
+}
+
+
+void STROKE_GLYPH::Move( const VECTOR2I& aOffset )
+{
+    m_boundingBox.Offset( aOffset );
+
+    for( std::vector<VECTOR2D>& pointList : *this )
+    {
+        for( VECTOR2D& point : pointList )
+            point += aOffset;
+    }
 }
 
 
