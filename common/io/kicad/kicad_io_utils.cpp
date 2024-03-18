@@ -229,6 +229,9 @@ void Prettify( std::string& aSource, char aQuoteChar )
         ++cursor;
     }
 
+    // newline required at end of line / file for POSIX compliance. Keeps git diffs clean.
+    formatted += '\n';
+
     aSource = std::move( formatted );
 }
 
