@@ -23,6 +23,7 @@
 
 #include <project/net_settings.h>
 #include <settings/parameters.h>
+#include <settings/json_settings_internals.h>
 #include <settings/settings_manager.h>
 #include <string_utils.h>
 #include <base_units.h>

@@ -26,7 +26,7 @@
 
 #include <memory>
 
-#include <json_common.h>
+#include <nlohmann/json.hpp>
 #include <core/json_serializers.h>
 #include <string_utils.h>
 

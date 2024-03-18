@@ -24,7 +24,7 @@
 #include "core/wx_stl_compat.h"
 
 #include <map>
-#include <json_common.h>
+#include <nlohmann/json.hpp>
 #include <core/json_serializers.h>
 #include <optional>
 #include <string>

@@ -36,13 +36,13 @@
 
 #include <notifications_manager.h>
 #include <widgets/kistatusbar.h>
-#include <json_common.h>
 
 #include "core/wx_stl_compat.h"
 
 #include <algorithm>
 #include <fstream>
 #include <map>
+#include <nlohmann/json.hpp>
 #include <core/json_serializers.h>
 #include <optional>
 #include <string>

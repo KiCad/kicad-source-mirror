@@ -28,27 +28,21 @@
 
 #include <functional>
 #include <optional>
-#include <settings/json_settings_internals.h>
-
-#include <kicommon.h>
+#include <nlohmann/json_fwd.hpp>
 
 class wxConfigBase;
 class NESTED_SETTINGS;
 class PARAM_BASE;
 class SETTINGS_MANAGER;
 
-class wxAuiPaneInfo;
-struct BOM_FIELD;
-struct BOM_PRESET;
-struct BOM_FMT_PRESET;
-struct GRID;
-
-namespace KIGFX
-{
-class COLOR4D;
-};
-
-#define traceSettings wxT( "KICAD_SETTINGS" )
+/**
+ * Flag to enable debug output of settings operations and management.
+ *
+ * Use "KICAD_SETTINGS" to enable.
+ *
+ * @ingroup trace_env_vars
+ */
+extern const wxChar* const traceSettings;
 
 enum class SETTINGS_LOC {
     USER,       ///< The main config directory (e.g. ~/.config/kicad/)
@@ -62,7 +56,7 @@ enum class SETTINGS_LOC {
 /// pimpl to allow hiding json.hpp
 class JSON_SETTINGS_INTERNALS;
 
-class KICOMMON_API JSON_SETTINGS
+class JSON_SETTINGS
 {
 public:
     friend class NESTED_SETTINGS;
@@ -346,32 +340,14 @@ protected:
 
 // Specializations to allow conversion between wxString and std::string via JSON_SETTINGS API
 
-template<> KICOMMON_API std::optional<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const;
+template<> std::optional<wxString> JSON_SETTINGS::Get( const std::string& aPath ) const;
 
-template<> KICOMMON_API void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString aVal );
+template<> void JSON_SETTINGS::Set<wxString>( const std::string& aPath, wxString aVal );
 
 // Specializations to allow directly reading/writing wxStrings from JSON
 
-KICOMMON_API void to_json( nlohmann::json& aJson, const wxString& aString );
+void to_json( nlohmann::json& aJson, const wxString& aString );
 
-KICOMMON_API void from_json( const nlohmann::json& aJson, wxString& aString );
-
-extern template std::optional<bool>   JSON_SETTINGS::Get<bool>( const std::string& aPath ) const;
-extern template std::optional<double> JSON_SETTINGS::Get<double>( const std::string& aPath ) const;
-extern template std::optional<float>  JSON_SETTINGS::Get<float>( const std::string& aPath ) const;
-extern template std::optional<int>    JSON_SETTINGS::Get<int>( const std::string& aPath ) const;
-extern template std::optional<unsigned int> JSON_SETTINGS::Get<unsigned int>( const std::string& aPath ) const;
-extern template std::optional<unsigned long long> JSON_SETTINGS::Get<unsigned long long>( const std::string& aPath ) const;
-extern template std::optional<std::string> JSON_SETTINGS::Get<std::string>( const std::string& aPath ) const;
-extern template std::optional<nlohmann::json> JSON_SETTINGS::Get<nlohmann::json>( const std::string& aPath ) const;
-extern template std::optional<KIGFX::COLOR4D> JSON_SETTINGS::Get<KIGFX::COLOR4D>( const std::string& aPath ) const;
-extern template std::optional<BOM_FIELD> JSON_SETTINGS::Get<BOM_FIELD>( const std::string& aPath ) const;
-extern template std::optional<BOM_PRESET> JSON_SETTINGS::Get<BOM_PRESET>( const std::string& aPath ) const;
-extern template std::optional<BOM_FMT_PRESET> JSON_SETTINGS::Get<BOM_FMT_PRESET>( const std::string& aPath ) const;
-extern template std::optional<GRID> JSON_SETTINGS::Get<GRID>( const std::string& aPath ) const;
-extern template std::optional<wxPoint> JSON_SETTINGS::Get<wxPoint>( const std::string& aPath ) const;
-extern template std::optional<wxSize> JSON_SETTINGS::Get<wxSize>( const std::string& aPath ) const;
-extern template std::optional<wxRect> JSON_SETTINGS::Get<wxRect>( const std::string& aPath ) const;
-extern template std::optional<wxAuiPaneInfo> JSON_SETTINGS::Get<wxAuiPaneInfo>( const std::string& aPath ) const;
+void from_json( const nlohmann::json& aJson, wxString& aString );
 
 #endif

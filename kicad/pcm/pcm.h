@@ -27,7 +27,6 @@
 #include <functional>
 #include <iostream>
 #include <map>
-#include <json_common.h>
 #include <nlohmann/json-schema.hpp>
 #include <thread>
 #include <tuple>

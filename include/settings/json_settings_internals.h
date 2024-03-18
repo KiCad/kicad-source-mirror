@@ -21,9 +21,10 @@
 #ifndef KICAD_JSON_SETTINGS_INTERNALS_H
 #define KICAD_JSON_SETTINGS_INTERNALS_H
 
-#include <json_common.h>
+// This is a pretty heavy file.  Try to use json_fwd.hpp most places.
+#include <nlohmann/json.hpp>
 
-class KICOMMON_API JSON_SETTINGS_INTERNALS : public nlohmann::json
+class JSON_SETTINGS_INTERNALS : public nlohmann::json
 {
     friend class JSON_SETTINGS;
 

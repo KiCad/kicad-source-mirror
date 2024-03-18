@@ -64,7 +64,7 @@ public:
 
     /**
      * Get a NETCLASS object from a given Netclass name string
-     *
+     * 
      * @param aNetClassName the Netclass name to resolve
      * @return shared pointer to the requested NETCLASS object, or the default NETCLASS
     */

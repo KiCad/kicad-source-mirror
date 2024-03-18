@@ -30,21 +30,21 @@ class wxPoint;
 class wxRect;
 class wxSize;
 
-KICOMMON_API void to_json( nlohmann::json& aJson, const wxPoint& aPoint );
-KICOMMON_API void from_json( const nlohmann::json& aJson, wxPoint& aPoint );
-KICOMMON_API bool operator<( const wxPoint& aLhs, const wxPoint& aRhs );
+extern void to_json( nlohmann::json& aJson, const wxPoint& aPoint );
+extern void from_json( const nlohmann::json& aJson, wxPoint& aPoint );
+extern bool operator<( const wxPoint& aLhs, const wxPoint& aRhs );
 
-KICOMMON_API void to_json( nlohmann::json& aJson, const wxSize& aPoint );
-KICOMMON_API void from_json( const nlohmann::json& aJson, wxSize& aPoint );
-KICOMMON_API bool operator<( const wxSize& aLhs, const wxSize& aRhs );
+extern void to_json( nlohmann::json& aJson, const wxSize& aPoint );
+extern void from_json( const nlohmann::json& aJson, wxSize& aPoint );
+extern bool operator<( const wxSize& aLhs, const wxSize& aRhs );
 
-KICOMMON_API void to_json( nlohmann::json& aJson, const wxRect& aRect );
-KICOMMON_API void from_json( const nlohmann::json& aJson, wxRect& aRect );
-KICOMMON_API bool operator<( const wxRect& aLhs, const wxRect& aRhs );
+extern void to_json( nlohmann::json& aJson, const wxRect& aRect );
+extern void from_json( const nlohmann::json& aJson, wxRect& aRect );
+extern bool operator<( const wxRect& aLhs, const wxRect& aRhs );
 
-KICOMMON_API void to_json( nlohmann::json& aJson, const wxAuiPaneInfo& aPaneInfo );
-KICOMMON_API void from_json( const nlohmann::json& aJson, wxAuiPaneInfo& aPaneInfo );
-KICOMMON_API bool operator<( const wxAuiPaneInfo& aLhs, const wxAuiPaneInfo& aRhs );
-KICOMMON_API bool operator==( const wxAuiPaneInfo& aLhs, const wxAuiPaneInfo& aRhs );
+extern void to_json( nlohmann::json& aJson, const wxAuiPaneInfo& aPaneInfo );
+extern void from_json( const nlohmann::json& aJson, wxAuiPaneInfo& aPaneInfo );
+extern bool operator<( const wxAuiPaneInfo& aLhs, const wxAuiPaneInfo& aRhs );
+extern bool operator==( const wxAuiPaneInfo& aLhs, const wxAuiPaneInfo& aRhs );
 
 #endif // _AUI_SETTINGS_H_

@@ -27,7 +27,7 @@
 #include <search_stack.h>
 #include <settings/settings_manager.h>
 #include <settings/common_settings.h>
-#include <settings/json_settings.h>
+#include <settings/json_settings_internals.h>
 #include <settings/parameters.h>
 #include <systemdirsappend.h>
 #include <trace_helpers.h>
