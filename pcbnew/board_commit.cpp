@@ -294,7 +294,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( boardItem->Type() == PCB_GROUP_T )
                 addedGroup = static_cast<PCB_GROUP*>( boardItem );
 
-            if( autofillZones && boardItem->Type() != PCB_MARKER_T )
+            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
                 dirtyIntersectingZones( boardItem, changeType );
 
             if( view && boardItem->Type() != PCB_NETINFO_T )
@@ -324,7 +324,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
             if( parentFP && !( parentFP->GetFlags() & STRUCT_DELETED ) )
                 ent.m_parent = parentFP->m_Uuid;
 
-            if( autofillZones )
+            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
                 dirtyIntersectingZones( boardItem, changeType );
 
             switch( boardItem->Type() )
@@ -452,7 +452,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, int aCommitFlags )
                 connectivity->Update( boardItem );
             }
 
-            if( m_isBoardEditor && autofillZones )
+            if( m_isBoardEditor && autofillZones && boardItem->Type() != PCB_MARKER_T )
             {
                 dirtyIntersectingZones( boardItemCopy, changeType );   // before
                 dirtyIntersectingZones( boardItem, changeType );       // after
