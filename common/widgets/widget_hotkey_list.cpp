@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -202,12 +202,14 @@ protected:
             // Let EVT_CHAR handle this one
             aEvent.DoAllowNextEvent();
 
-            // On Windows, wxEvent::Skip must NOT be called.
-            // On Linux and OSX, wxEvent::Skip MUST be called.
-            // No, I don't know why.
-#ifndef __WXMSW__
-            aEvent.Skip();
+#ifdef __WXMSW__
+            // On Windows, looks like a OnChar event is not generated when
+            // using the Alt key modifier. So ensure m_event is up to date
+            // to handle the right key code when releasing the key and therefore
+            // closing the dialog
+            m_event = aEvent;
 #endif
+            aEvent.Skip();
         }
         else
         {
