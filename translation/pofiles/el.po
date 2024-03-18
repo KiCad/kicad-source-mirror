@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-11 00:02+0000\n"
+"PO-Revision-Date: 2024-03-18 12:01+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -4614,7 +4614,6 @@ msgid "Schematic wire line style"
 msgstr "Στυλ γραμμής καλωδίου σχηματικού"
 
 #: common/dialogs/panel_setup_netclasses.cpp:624
-#, fuzzy
 msgid "PCB netclass color"
 msgstr "Χρώμα κλάσης δικτύου PCB"
 
@@ -7584,20 +7583,16 @@ msgid "Select Column(s)"
 msgstr "Επιλέξτε Στήλη(ες)"
 
 #: common/tool/actions.cpp:317
-#, fuzzy
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr ""
-"Επιλογή ολόκληρων στηλών που περιέχουν το(α) τρέχον επιλεγμένο(α) κελί(ιά)"
+msgstr "Επιλογή ολόκληρων στηλών που περιέχουν το τρέχον επιλεγμένο κελί"
 
 #: common/tool/actions.cpp:323
 msgid "Select Row(s)"
 msgstr "Επιλογή Σειράς(ών)"
 
 #: common/tool/actions.cpp:324
-#, fuzzy
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
-"Επιλογή ολόκληρων σειρών που περιέχουν το(α) τρέχον επιλεγμένο(α) κελί(ιά)"
+msgstr "Επιλογή ολόκληρων σειρών που περιέχουν το τρέχον επιλεγμένο κελί"
 
 #: common/tool/actions.cpp:330
 msgid "Select Table"
@@ -14007,13 +14002,11 @@ msgstr "Περίγραμμα κεφαλίδας"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:110
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:99
-#, fuzzy
 msgid "Row lines"
 msgstr "Γραμμές σειρών"
 
 #: eeschema/dialogs/dialog_table_properties_base.cpp:113
 #: pcbnew/dialogs/dialog_table_properties_base.cpp:102
-#, fuzzy
 msgid "Column lines"
 msgstr "Γραμμές στηλών"
 
@@ -14056,7 +14049,6 @@ msgstr "-- διάφορες τιμές --"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
-#, fuzzy
 msgid "Set Color..."
 msgstr "Καθορισμός Χρώματος..."
 
@@ -15504,7 +15496,6 @@ msgid "Checking for library symbol issues..."
 msgstr "Έλεγχος για θέματα με βιβλιοθήκη συμβόλων..."
 
 #: eeschema/erc.cpp:1352
-#, fuzzy
 msgid "Checking for footprint link issues..."
 msgstr "Έλεγχος προβλημάτων διασυνδέσεων αποτυπωμάτων..."
 
@@ -15636,7 +15627,6 @@ msgid "Symbol doesn't match copy in library"
 msgstr "Το σύμβολο δεν ταιριάζει με το αντίγραφο στη βιβλιοθήκη"
 
 #: eeschema/erc_item.cpp:155
-#, fuzzy
 msgid "Footprint link issue"
 msgstr "Πρόβλημα διασύνδεσης αποτυπώματος"
 
@@ -16442,25 +16432,21 @@ msgstr "Ύψος Πλαισίου"
 
 #: eeschema/lib_textbox.cpp:597 eeschema/sch_textbox.cpp:585
 #: pcbnew/pcb_textbox.cpp:727
-#, fuzzy
 msgid "Margin Left"
 msgstr "Περιθώριο Αριστερά"
 
 #: eeschema/lib_textbox.cpp:599 eeschema/sch_textbox.cpp:589
 #: pcbnew/pcb_textbox.cpp:731
-#, fuzzy
 msgid "Margin Top"
 msgstr "Περιθώριο Επάνω"
 
 #: eeschema/lib_textbox.cpp:601 eeschema/sch_textbox.cpp:593
 #: pcbnew/pcb_textbox.cpp:735
-#, fuzzy
 msgid "Margin Right"
 msgstr "Περιθώριο Δεξιά"
 
 #: eeschema/lib_textbox.cpp:603 eeschema/sch_textbox.cpp:597
 #: pcbnew/pcb_textbox.cpp:739
-#, fuzzy
 msgid "Margin Bottom"
 msgstr "Περιθώριο Κάτω"
 
@@ -18308,12 +18294,10 @@ msgid "%d Columns"
 msgstr "%d Στήλες"
 
 #: eeschema/sch_table.cpp:614 pcbnew/pcb_table.cpp:408
-#, fuzzy
 msgid "External Border"
 msgstr "Εξωτερικό Περίγραμμα"
 
 #: eeschema/sch_table.cpp:618 pcbnew/pcb_table.cpp:412
-#, fuzzy
 msgid "Header Border"
 msgstr "Περίγραμμα Κεφαλίδας"
 
@@ -18335,7 +18319,6 @@ msgid "Separators Width"
 msgstr "Πλάτος Διαχωριστών"
 
 #: eeschema/sch_table.cpp:648 pcbnew/pcb_table.cpp:442
-#, fuzzy
 msgid "Separators Style"
 msgstr "Στύλ Διαχωριστών"
 
@@ -20581,13 +20564,12 @@ msgid "[no library selected]"
 msgstr "[δεν επιλέχθηκε βιβλιοθήκη]"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.cpp:28
-#, fuzzy
 msgid ""
 "Changes made in this dialog occur immediately, use Undo in each affected "
 "document to undo them"
 msgstr ""
 "Οι αλλαγές που πραγματοποιούνται σε αυτό το παράθυρο διαλόγου εφαρμόζονται "
-"αμέσως, χρησιμοποιήστε την Αναίρεση σε κάθε έγγραφο για να τις αναιρέσετε"
+"αμέσως, χρησιμοποιήστε την Αναίρεση σε κάθε έγγραφο για επαναφορά"
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
 msgid "Synchronize sheet pins and hierarchical labels"
@@ -20926,14 +20908,12 @@ msgid "Export a symbol to a new library file"
 msgstr "Εξαγωγή συμβόλου σε νέο αρχείο βιβλιοθήκης"
 
 #: eeschema/tools/ee_actions.cpp:249 pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Επεξεργασία σε Επεξεργαστή Κειμένου"
+msgstr "Επεξεργασία με Επεξεργαστή Κειμένου..."
 
 #: eeschema/tools/ee_actions.cpp:250 pcbnew/tools/pcb_actions.cpp:774
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Άνοιγμα αρχείων με έναν Επεξεργαστή Κειμένου"
+msgstr "Άνοιγμα αρχείου βιβλιοθήκης με τον επεξεργαστή κειμένου"
 
 #: eeschema/tools/ee_actions.cpp:256
 msgid "Update Symbol Fields..."
@@ -22576,10 +22556,9 @@ msgstr "Δεν επιλέχθηκε βιβλιοθήκη σύμβολων."
 
 #: eeschema/tools/symbol_editor_control.cpp:277
 #: pcbnew/tools/footprint_editor_control.cpp:594
-#, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr ""
-"Δεν έχει επιλεχθεί επεξεργαστής κειμένου στο KiCad.  Παρακαλώ επιλέξτε έναν."
+"Δεν έχει επιλεγεί επεξεργαστής κειμένου στο KiCad. Παρακαλώ επιλέξτε έναν."
 
 #: eeschema/tools/symbol_editor_control.cpp:351
 #: eeschema/widgets/panel_symbol_chooser.cpp:663
@@ -28354,7 +28333,7 @@ msgid ""
 "refill.\n"
 msgstr ""
 "Ο πίνακας δείχνει την ηλεκτροχημική διαφορά δυναμικού για διάφορα μέταλλα "
-"και κράμματα. Η γαλβανική διάβρωση επειρεάζει μέταλλα σε επαφή και υπό "
+"και κράμματα. Η γαλβανική διάβρωση επηρεάζει μέταλλα σε επαφή και υπό "
 "κάποιες συνθήκες.<br>\n"
 "Η άνοδος ενός ηλεκτροχημικού ζεύγους οξυδώνεται και διαλύεται, ενώ στην "
 "κάθοδο παρατηρείται εναπόθεση διαλυμένων μετάλλων και ταυτόχρονα "
@@ -28362,8 +28341,8 @@ msgstr ""
 "Θετικός αριθμός υποδεικνύει ότι η γραμμή είναι ανοδική (-) και η στήλη "
 "καθοδική (+), θερμή και ψυχρή απόχρωση δείχνει το δυναμικό της γραμμής.<br>\n"
 "Το EN 50310 προτείνει διαφορά κάτω από 300mV. Γνωστές πρακτικές κάνουν χρήση "
-"τρίτου μετάλλου ανάμεσα στο κύριο ζεύγος(πχ επιφάνεια με φινίρισμα ENIG)."
-"<br>\n"
+"τρίτου μετάλλου ανάμεσα στο κύριο ζεύγος(πχ επιφάνεια με φινίρισμα ENIG).<br>"
+"\n"
 "Επιλεγμένα κελιά φαίνονται με το προεπιλεγμένο χρώμα του συστήματος κατα την "
 "επανασχεδίαση γραφικών του πίνακα.\n"
 
@@ -31113,9 +31092,8 @@ msgstr ""
 "Έχει μεταφερθεί στο πρώτο ορισμένο επίπεδο."
 
 #: pcbnew/dialogs/dialog_dimension_properties.cpp:312
-#, fuzzy
 msgid "Edit Dimension Properties"
-msgstr "Ιδιότητες Διαστάσεων"
+msgstr "Επεξεργασία Ιδιοτήτων Διαστάσεων"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:22
 msgid "Leader Format"
@@ -31457,19 +31435,19 @@ msgid "Remove all exclusions for violations of rule '%s'"
 msgstr "Κατάργηση εξαιρέσεων για παραβιάσεις του κανόνα '%s'"
 
 #: pcbnew/dialogs/dialog_drc.cpp:620
-#, fuzzy, c-format
+#, c-format
 msgid "They will be placed back in the %s list"
-msgstr "Θα τοποθετηθεί ξανά στη λίστα %s"
+msgstr "Θα τοποθετηθούν ξανά πίσω στη λίστα %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:632
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'..."
-msgstr "Εξαίρεση όλων των παραβιάσεων του κανόνα '%s'"
+msgstr "Εξαίρεση όλων των παραβιάσεων του κανόνα '%s'..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:634
-#, fuzzy, c-format
+#, c-format
 msgid "They will be excluded from the %s list"
-msgstr "Θα αποκλειστεί από τη λίστα %s"
+msgstr "Θα αποκλειστούν από τη λίστα %s"
 
 #: pcbnew/dialogs/dialog_drc.cpp:650 pcbnew/dialogs/dialog_drc.cpp:657
 msgid "Violation severities can also be edited in the Board Setup... dialog"
@@ -32365,9 +32343,8 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:614
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:640
-#, fuzzy
 msgid "Edit Footprint Properties"
-msgstr "Επεξεργασία ιδιοτήτων αποτυπώματος"
+msgstr "Επεξεργασία Ιδιοτήτων Αποτυπώματος"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:53
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:53
@@ -32475,7 +32452,7 @@ msgstr "Διάκενα"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:269
 #, fuzzy
 msgid "Leave values blank to use Board Setup values."
-msgstr "Ορίστε τις τιμές στο 0 για χρήση τιμών από Ρύθμιση Πλακέτας."
+msgstr "Αφήστε κενές τις τιμές για χρήση τιμών από Ρύθμιση Πλακέτας."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:279
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:247
@@ -33665,9 +33642,8 @@ msgid "Error loading footprint library table."
 msgstr "Σφάλμα κατά τη φόρτωση του καταλόγου βιβλιοθήκης αποτυπωμάτων."
 
 #: pcbnew/dialogs/dialog_group_properties.cpp:114
-#, fuzzy
 msgid "Edit Group Properties"
-msgstr "Ιδιότητες Ομάδας"
+msgstr "Επεξεργασία Ιδιοτήτων Ομάδας"
 
 #: pcbnew/dialogs/dialog_group_properties_base.cpp:30
 msgid "Group name:"
@@ -33758,9 +33734,8 @@ msgstr "Διαγραφή των αποτυπωμάτων χωρίς συνδεδ
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
-#, fuzzy
 msgid "Delete/replace footprints even if locked"
-msgstr "Διαγραφή φίλτρου αποτυπωμάτων"
+msgstr "Διαγραφή/αντικατάσταση αποτυπωμάτων ακόμη και αν είναι κλειδωμένα"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:62
 msgid "Delete tracks shorting multiple nets"
@@ -34246,9 +34221,8 @@ msgid "Pad Properties Warnings"
 msgstr "Προειδοποιήσεις Ιδιοτήτων Pad"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1669
-#, fuzzy
 msgid "Edit Pad Properties"
-msgstr "Επεξεργασία Ιδιοτήτων Ακροδέκτη"
+msgstr "Επεξεργασία Ιδιοτήτων Έδρας"
 
 #: pcbnew/dialogs/dialog_pad_properties.cpp:1702
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:371
@@ -35536,9 +35510,8 @@ msgid "Center Point"
 msgstr "Κεντρικό Σημείο"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:515
-#, fuzzy
 msgid "Edit Shape Properties"
-msgstr "Επεξεργασία Ιδιοτήτων Ακροδέκτη"
+msgstr "Επεξεργασία Ιδιοτήτων Σχήματος"
 
 #: pcbnew/dialogs/dialog_shape_properties.cpp:538
 msgid "Arc angle cannot be zero."
@@ -35683,9 +35656,8 @@ msgid "Parent footprint description"
 msgstr "Περιγραφή γονικού αποτυπώματος"
 
 #: pcbnew/dialogs/dialog_textbox_properties.cpp:381
-#, fuzzy
 msgid "Edit Text Box Properties"
-msgstr "Ιδιότητες Πλαισίου Κειμένου"
+msgstr "Επεξεργασία Ιδιοτήτων Πλαισίου Κειμένου"
 
 #: pcbnew/dialogs/dialog_textbox_properties_base.cpp:205
 msgid "Border style:"
@@ -35729,14 +35701,12 @@ msgstr ""
 "Τα επίπεδα έναρξης και τερματισμού της διέλευσης δεν μπορούν να είναι τα ίδια"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:800
-#, fuzzy
 msgid "Edit Track/Via Properties"
-msgstr "Επεξεργασία ιδιοτήτων διαδρόμου/διέλευσης"
+msgstr "Επεξεργασία Ιδιοτήτων Διαδρόμου/Διέλευσης"
 
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:865
-#, fuzzy
 msgid "Update Nets"
-msgstr "Ανανέωση λίστας δικτύου"
+msgstr "Ενημέρωση Δικτύων"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:41
 msgid "Automatically update via nets"
@@ -39049,9 +39019,8 @@ msgid "Skew between traces out of range"
 msgstr "Απόκλιση ανάμεσα σε διαδρόμους εκτός εμβέλειας"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Πολλαπλές διελεύσεις σε μια σύνδεση"
+msgstr "Πολλαπλές ή ελλιπείς διελεύσεις σε μια σύνδεση"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39750,14 +39719,13 @@ msgid "Too many vias on a connection"
 msgstr "Πολλαπλές διελεύσεις σε μια σύνδεση"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s μέγιστο πλήθος: %d; πραγματικό: %d)"
+msgstr "(%s μέγιστο πλήθος %d; πραγματικό %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Πολλαπλές διελεύσεις σε μια σύνδεση"
+msgstr "Ελλιπείς διελεύσεις σε μια σύνδεση"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -39953,9 +39921,8 @@ msgid "Checking thermal reliefs..."
 msgstr "Έλεγχος θερμικών εκτονώσεων..."
 
 #: pcbnew/edit_zone_helpers.cpp:84
-#, fuzzy
 msgid "Edit Zone Properties"
-msgstr "Επεξεργασία Ιδιοτήτων Ακροδέκτη"
+msgstr "Επεξεργασία Ιδιοτήτων Ζώνης"
 
 #: pcbnew/exporters/export_d356.cpp:380
 msgid "Export D-356 Test File"
@@ -40487,8 +40454,8 @@ msgstr "Επεξεργασία Zone"
 #, fuzzy
 msgid "Use Manage Footprint Libraries to edit the configuration."
 msgstr ""
-"Η τρέχουσα διαμόρφωση δεν περιλαμβάνει τη βιβλιοθήκη «%s». Χρησιμοποιήστε τη "
-"Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργασία της διαμόρφωσης."
+"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Αποτυπωμάτων για επεξεργασία της "
+"διαμόρφωσης."
 
 #: pcbnew/footprint_editor_utils.cpp:329
 msgid "Library not found in footprint library table."
@@ -41518,9 +41485,8 @@ msgid "Removed unused net %s."
 msgstr "Αφαίρεση μη χρησιμοποιούμενου net \"%s\"."
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1323
-#, fuzzy
 msgid "Update Netlist"
-msgstr "Ανανέωση λίστας δικτύου"
+msgstr "Ενημέρωση Λίστας Δικτύων"
 
 #: pcbnew/netlist_reader/board_netlist_updater.cpp:1344
 #, c-format
@@ -43748,9 +43714,9 @@ msgid "PCB Text '%s' on %s"
 msgstr "Κείμενο PCB '%s' στο %s"
 
 #: pcbnew/pcb_textbox.cpp:482
-#, fuzzy, c-format
+#, c-format
 msgid "PCB Text Box '%s' on %s"
-msgstr "Κείμενο PCB '%s' στο %s"
+msgstr "Πλαίσιο Κειμένου PCB '%s' στο %s"
 
 #: pcbnew/pcb_textbox.cpp:707
 msgid "Border Properties"
@@ -44631,9 +44597,8 @@ msgstr ""
 "να δημιουργήσετε ένα έργο PCB."
 
 #: pcbnew/tools/board_editor_control.cpp:1162
-#, fuzzy
 msgid "Place a Footprint"
-msgstr "Τοποθέτηση αποτυπώματος"
+msgstr "Τοποθέτηση Αποτυπώματος"
 
 #: pcbnew/tools/board_editor_control.cpp:1277 pcbnew/tools/pcb_actions.cpp:1189
 msgid "Lock"
@@ -45283,9 +45248,8 @@ msgid "Drag Arc Track"
 msgstr "Σύρσιμο Τόξου Διαδρόμου"
 
 #: pcbnew/tools/edit_tool.cpp:949
-#, fuzzy
 msgid "Edit Track Width/Via Size"
-msgstr "Επεξεργασία πλάτους διαδρόμων/μέγεθους διέλευσης"
+msgstr "Επεξεργασία Πλάτους Διαδρόμου/Μέγεθους Διέλευσης"
 
 #: pcbnew/tools/edit_tool.cpp:984
 msgid "At least two straight track segments must be selected."
@@ -45360,9 +45324,8 @@ msgid "Change Side / Flip"
 msgstr "Αλλαγή Πλευράς / Αναποδογύρισμα"
 
 #: pcbnew/tools/edit_tool.cpp:2519
-#, fuzzy
 msgid "Move Exactly"
-msgstr "Μετακίνηση με Ακρίβεια..."
+msgstr "Μετακίνηση με Ακρίβεια"
 
 #: pcbnew/tools/edit_tool.cpp:2681
 #, c-format
@@ -45382,9 +45345,8 @@ msgid "Copy canceled"
 msgstr "Αντιγραφή ακυρώθηκε"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:201
-#, fuzzy
 msgid "Pack Footprints"
-msgstr "Συγκέντρωση αποτυπωμάτων"
+msgstr "Συγκέντρωση Αποτυπωμάτων"
 
 #: pcbnew/tools/edit_tool_move_fct.cpp:327
 #, c-format
@@ -45434,9 +45396,8 @@ msgid "Regenerate Item"
 msgstr "Αναγέννηση Αντικειμένου"
 
 #: pcbnew/tools/global_edit_tool.cpp:242
-#, fuzzy
 msgid "Modify zones properties with zone manager"
-msgstr "Αλλαγή ιδιοτήτων ζώνης"
+msgstr "Επεξεργασία ιδιοτήτων ζώνης με Διαχειριστή Ζώνης"
 
 #: pcbnew/tools/group_tool.cpp:44
 msgid "Grouping"
@@ -45542,9 +45503,8 @@ msgstr ""
 "Πατήστε <esc> για ακύρωση όλων ή διπλό κλικ για εγγραφή"
 
 #: pcbnew/tools/pad_tool.cpp:401 pcbnew/tools/pad_tool.cpp:504
-#, fuzzy
 msgid "Renumber Pads"
-msgstr "Επαναρίθμηση εδρών"
+msgstr "Επαναρίθμηση Εδρών"
 
 #: pcbnew/tools/pad_tool.cpp:643
 msgid "Place pad"
@@ -45665,9 +45625,8 @@ msgstr ""
 "θα συμπεριληφθεί σε καμία έξοδο)"
 
 #: pcbnew/tools/pcb_actions.cpp:183
-#, fuzzy
 msgid "Add a line-wrapped text item"
-msgstr "Προσθήκη αναδιπλούμενου κειμένου"
+msgstr "Προσθήκη αντικειμένου αναδιπλούμενου κειμένου"
 
 #: pcbnew/tools/pcb_actions.cpp:200
 msgid "Increase Spacing"
@@ -46637,14 +46596,12 @@ msgstr "Προβολή ελεγκτή net"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:79
-#, fuzzy
 msgid "Zone Manager"
-msgstr "Διαχειριστής Έργου"
+msgstr "Διαχειριστής Ζώνης"
 
 #: pcbnew/tools/pcb_actions.cpp:1355
-#, fuzzy
 msgid "Show the zone manager dialog"
-msgstr "Προβολή/απόκρυψη του διαχειριστή εμφάνισης"
+msgstr "Προβολή διαλόγου διαχειριστή ζώνης"
 
 #: pcbnew/tools/pcb_actions.cpp:1361
 msgid "Flip Board View"
@@ -47569,9 +47526,8 @@ msgid "Selected Items"
 msgstr "Επιλεγμένα Αντικείμενα"
 
 #: pcbnew/tools/pcb_point_editor.cpp:700
-#, fuzzy
 msgid "Resize Table Cells"
-msgstr "Αφαίρεση Άκυρων Κελιών"
+msgstr "Αλλαγή Μεγέθους Κελιών Πίνακα"
 
 #: pcbnew/tools/pcb_point_editor.cpp:772
 msgid "Move Midpoint to Location"
@@ -48255,14 +48211,12 @@ msgid "Set Netclass Color"
 msgstr "Ορισμός Χρώματος Κλάσης Δικτύου"
 
 #: pcbnew/widgets/appearance_controls.cpp:2340
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "Ανανέωση PCB από Σχηματικό"
+msgstr "Χρήση Χρωμάτων από Σχηματικό"
 
 #: pcbnew/widgets/appearance_controls.cpp:2349
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "Καθαρισμός Χρώματος Δικτύου"
+msgstr "Καθαρισμός Χρώματος Κλάσης Δικτύου"
 
 #: pcbnew/widgets/appearance_controls.cpp:2357
 #, c-format
@@ -48524,17 +48478,13 @@ msgstr "Συνέχεια χωρίς Επαναγέμισμα"
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:34
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:39
-#, fuzzy
 msgid ""
 "Top zone has the highest priority. When a zone is inside another zone, if "
 "its priority is higher, its outlines are removed from the other zone."
 msgstr ""
-"Οι ζώνες γεμίζονται με σειρά προτεραιότητας, το επίπεδο 3 έχει μεγαλύτερη "
-"προτεραιότητα από το επίπεδο 2.\n"
-"Εάν μία ζώνη είναι μέσα σε μία άλλη ζώνη:\n"
-"* Εάν η προτεραιότητά της είναι υψηλότερη, τα περιγράμματά της αφαιρούνται "
-"από την άλλη ζώνη.\n"
-"* Εάν η προτεραιότητά της είναι ίδια, ορίζεται σφάλμα ΕΚΣ."
+"Οι ζώνες γεμίζονται με σειρά προτεραιότητας. Όταν μία ζώνη είναι μέσα σε μία "
+"άλλη ζώνη, εάν η προτεραιότητά της είναι υψηλότερη, τα περιγράμματά της "
+"αφαιρούνται από την άλλη ζώνη."
 
 #: pcbnew/zone_manager/dialog_zone_manager_base.cpp:81
 #, fuzzy
