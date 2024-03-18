@@ -332,7 +332,12 @@ SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forP
             VECTOR2I delta = forPosition - m_renderCachePos;
 
             for( std::unique_ptr<KIFONT::GLYPH>& glyph : m_renderCache )
-                static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() )->Move( delta );
+            {
+                if( glyph->IsOutline() )
+                    static_cast<KIFONT::OUTLINE_GLYPH*>( glyph.get() )->Move( delta );
+                else
+                    static_cast<KIFONT::STROKE_GLYPH*>( glyph.get() )->Move( delta );
+            }
 
             m_renderCachePos = forPosition;
         }

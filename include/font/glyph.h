@@ -120,6 +120,8 @@ public:
                                       double aTilt, const EDA_ANGLE& aAngle, bool aMirror,
                                       const VECTOR2I& aOrigin  );
 
+    void Move( const VECTOR2I& aOffset );
+
 private:
     bool  m_penIsDown = false;
     BOX2D m_boundingBox;
