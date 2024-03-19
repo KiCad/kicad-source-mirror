@@ -3252,11 +3252,17 @@ inline void result::result_impl::get_ref_impl(short column, T& result) const
     case SQL_C_DATE:
     {
         const date d = *ensure_pdata<date>(column);
-        std::tm st = {0};
+        std::tm st{};
         st.tm_year = d.year - 1900;
         st.tm_mon = d.month - 1;
         st.tm_mday = d.day;
-        char* old_lc_time = std::setlocale(LC_TIME, nullptr);
+        std::string old_lc_time_container;
+        const char* old_lc_time = nullptr;
+        if (char* olc_lc_time_ptr = std::setlocale(LC_TIME, nullptr))
+        {
+            old_lc_time_container = olc_lc_time_ptr;
+            old_lc_time = old_lc_time_container.c_str();
+        }
         std::setlocale(LC_TIME, "");
         char date_str[512];
         std::strftime(date_str, sizeof(date_str), "%Y-%m-%d", &st);
@@ -3264,15 +3270,20 @@ inline void result::result_impl::get_ref_impl(short column, T& result) const
         convert(date_str, result);
         return;
     }
-
     case SQL_C_TIME:
     {
         const time t = *ensure_pdata<time>(column);
-        std::tm st = {0};
+        std::tm st{};
         st.tm_hour = t.hour;
         st.tm_min = t.min;
         st.tm_sec = t.sec;
-        char* old_lc_time = std::setlocale(LC_TIME, nullptr);
+        std::string old_lc_time_container;
+        const char* old_lc_time = nullptr;
+        if (char* olc_lc_time_ptr = std::setlocale(LC_TIME, nullptr))
+        {
+            old_lc_time_container = olc_lc_time_ptr;
+            old_lc_time = old_lc_time_container.c_str();
+        }
         std::setlocale(LC_TIME, "");
         char date_str[512];
         std::strftime(date_str, sizeof(date_str), "%H:%M:%S", &st);
@@ -3280,18 +3291,23 @@ inline void result::result_impl::get_ref_impl(short column, T& result) const
         convert(date_str, result);
         return;
     }
-
     case SQL_C_TIMESTAMP:
     {
         const timestamp stamp = *ensure_pdata<timestamp>(column);
-        std::tm st = {0};
+        std::tm st{};
         st.tm_year = stamp.year - 1900;
         st.tm_mon = stamp.month - 1;
         st.tm_mday = stamp.day;
         st.tm_hour = stamp.hour;
         st.tm_min = stamp.min;
         st.tm_sec = stamp.sec;
-        char* old_lc_time = std::setlocale(LC_TIME, nullptr);
+        std::string old_lc_time_container;
+        const char* old_lc_time = nullptr;
+        if (char* olc_lc_time_ptr = std::setlocale(LC_TIME, nullptr))
+        {
+            old_lc_time_container = olc_lc_time_ptr;
+            old_lc_time = old_lc_time_container.c_str();
+        }
         std::setlocale(LC_TIME, "");
         char date_str[512];
         std::strftime(date_str, sizeof(date_str), "%Y-%m-%d %H:%M:%S %z", &st);
