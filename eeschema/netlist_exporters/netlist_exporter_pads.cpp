@@ -103,7 +103,6 @@ bool NETLIST_EXPORTER_PADS::WriteNetlist( const wxString& aOutFileName,
 bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
 {
     int ret       = 0;
-    int print_ter = 0;
 
     wxString initialSignalLine;
     wxString netName;
@@ -152,8 +151,6 @@ bool NETLIST_EXPORTER_PADS::writeListOfNets( FILE* f )
                     return ref_a == ref_b && a.first->GetShownNumber() == b.first->GetShownNumber();
                 } ),
                 sorted_items.end() );
-
-        print_ter = 0;
 
         std::vector<wxString> netConns;
 
