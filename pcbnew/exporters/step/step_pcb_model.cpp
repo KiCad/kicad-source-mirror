@@ -705,7 +705,9 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                     if( !mkEdge.IsDone() || mkEdge.Edge().IsNull() )
                     {
-                        ReportMessage( wxT( "failed to make edge, skipping\n" ) );
+                        ReportMessage( wxString::Format( wxT( "failed to make segment edge at (%d "
+                                                              "%d) -> (%d %d), skipping\n" ),
+                                                         aPt0.x, aPt0.y, aPt1.x, aPt1.y ) );
                     }
                     else
                     {
@@ -713,7 +715,9 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                         if( aMkWire.Error() != BRepLib_WireDone )
                         {
-                            ReportMessage( wxT( "failed to add edge to wire\n" ) );
+                            ReportMessage( wxString::Format( wxT( "failed to add segment edge "
+                                                                  "at (%d %d) -> (%d %d)\n" ),
+                                                             aPt0.x, aPt0.y, aPt1.x, aPt1.y ) );
                             return false;
                         }
                     }
@@ -749,7 +753,11 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
                     if( !aMkWire.IsDone() )
                     {
-                        ReportMessage( wxT( "failed to add curve\n" ) );
+                        ReportMessage( wxString::Format(
+                                wxT( "failed to add arc curve from (%d %d), arc p0 "
+                                     "(%d %d), mid (%d %d), p1 (%d %d)\n" ),
+                                aPt0.x, aPt0.y, aArc.GetP0().x, aArc.GetP0().y, aArc.GetArcMid().x,
+                                aArc.GetArcMid().y, aArc.GetP1().x, aArc.GetP1().y ) );
                         return false;
                     }
 
