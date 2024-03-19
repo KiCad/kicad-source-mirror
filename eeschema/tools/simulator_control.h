@@ -59,6 +59,8 @@ public:
     int SaveWorkbook( const TOOL_EVENT& aEvent );
     int ExportPlotAsPNG( const TOOL_EVENT& aEvent );
     int ExportPlotAsCSV( const TOOL_EVENT& aEvent );
+    int ExportPlotToClipboard( const TOOL_EVENT& aEvent );
+    int ExportPlotToSchematic( const TOOL_EVENT& aEvent );
     int Close( const TOOL_EVENT& aEvent );
 
     int Zoom( const TOOL_EVENT& aEvent );

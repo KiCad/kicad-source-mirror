@@ -1177,12 +1177,12 @@ public:
     void GetBoundingBox( double* bbox ) const;
 
     /** Draw the window on a wxBitmap, then save it to a file.
-     *  @param filename File name where to save the screenshot
-     *  @param type image type to be saved: see wxImage output file types for flags
-     *  @param imageSize Set a size for the output image. Default is the same as the screen size
-     *  @param fit Decide whether to fit the plot into the size*/
-    bool SaveScreenshot( const wxString& filename, wxBitmapType type = wxBITMAP_TYPE_BMP,
-                         wxSize imageSize = wxDefaultSize, bool fit = false );
+     *  @param aImage a wxImage where to save the screenshot
+     *  @param aImageSize Set a size for the output image. Default is the same as the screen size
+     *  @param aFit Decide whether to fit the plot into the size
+     */
+    bool SaveScreenshot( wxImage& aImage,
+                         wxSize aImageSize = wxDefaultSize, bool aFit = false );
 
     /** This value sets the zoom steps whenever the user clicks "Zoom in/out" or performs zoom with the mouse wheel.
      *  It must be a number above unity. This number is used for zoom in, and its inverse for zoom out.

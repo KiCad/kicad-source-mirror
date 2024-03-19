@@ -271,6 +271,8 @@ public:
     static TOOL_ACTION saveWorkbookAs;
     static TOOL_ACTION exportPlotAsPNG;
     static TOOL_ACTION exportPlotAsCSV;
+    static TOOL_ACTION exportPlotToClipboard;
+    static TOOL_ACTION exportPlotToSchematic;
     static TOOL_ACTION showSimulator;
     static TOOL_ACTION simProbe;
     static TOOL_ACTION simTune;

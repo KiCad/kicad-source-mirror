@@ -2329,20 +2329,19 @@ void mpWindow::GetBoundingBox( double* bbox ) const
 }
 
 
-bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type, wxSize imageSize,
-                               bool fit )
+bool mpWindow::SaveScreenshot( wxImage& aImage, wxSize aImageSize, bool aFit )
 {
     int sizeX, sizeY;
 
-    if( imageSize == wxDefaultSize )
+    if( aImageSize == wxDefaultSize )
     {
         sizeX = m_scrX;
         sizeY = m_scrY;
     }
     else
     {
-        sizeX = imageSize.x;
-        sizeY = imageSize.y;
+        sizeX = aImageSize.x;
+        sizeY = aImageSize.y;
         SetScr( sizeX, sizeY );
     }
 
@@ -2355,7 +2354,7 @@ bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type, wxSi
     screenDC.SetBrush( brush );
     screenDC.DrawRectangle( 0, 0, sizeX, sizeY );
 
-    if( fit )
+    if( aFit )
         Fit( m_minX, m_maxX, m_minY, m_maxY, &sizeX, &sizeY );
     else
         Fit( m_desiredXmin, m_desiredXmax, m_desiredYmin, m_desiredYmax, &sizeX, &sizeY );
@@ -2364,7 +2363,7 @@ bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type, wxSi
     for( mpLayer* layer : m_layers )
         layer->Plot( screenDC, *this );
 
-    if( imageSize != wxDefaultSize )
+    if( aImageSize != wxDefaultSize )
     {
         // Restore dimensions
         int bk_scrX = m_scrX;
@@ -2375,8 +2374,9 @@ bool mpWindow::SaveScreenshot( const wxString& filename, wxBitmapType type, wxSi
     }
 
     // Once drawing is complete, actually save screen shot
-    wxImage screenImage = screenBuffer.ConvertToImage();
-    return screenImage.SaveFile( filename, type );
+    aImage = screenBuffer.ConvertToImage();
+
+    return true;
 }
 
 

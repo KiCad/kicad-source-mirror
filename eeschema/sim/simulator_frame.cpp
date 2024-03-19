@@ -709,6 +709,8 @@ void SIMULATOR_FRAME::setupUIConditions()
 
     mgr->SetConditions( EE_ACTIONS::exportPlotAsPNG,       ENABLE( havePlot ) );
     mgr->SetConditions( EE_ACTIONS::exportPlotAsCSV,       ENABLE( havePlot ) );
+    mgr->SetConditions( EE_ACTIONS::exportPlotToClipboard, ENABLE( havePlot ) );
+    mgr->SetConditions( EE_ACTIONS::exportPlotToSchematic, ENABLE( havePlot ) );
 
     mgr->SetConditions( ACTIONS::zoomUndo,                 ENABLE( haveZoomUndo ) );
     mgr->SetConditions( ACTIONS::zoomRedo,                 ENABLE( haveZoomRedo ) );

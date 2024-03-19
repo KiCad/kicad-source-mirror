@@ -442,7 +442,6 @@ SIM_PLOT_TAB::SIM_PLOT_TAB( const wxString& aSimCommand, wxWindow* parent ) :
 
     m_plotWin->LimitView( true );
     m_plotWin->SetMargins( 30, 70, 45, 70 );
-
     UpdatePlotColors();
 
     updateAxes();

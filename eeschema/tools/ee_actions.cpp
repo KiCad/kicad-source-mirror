@@ -1462,6 +1462,18 @@ TOOL_ACTION EE_ACTIONS::exportPlotAsCSV( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Export Current Plot as CSV..." ) )
         .Icon( BITMAPS::export_file ) );
 
+TOOL_ACTION EE_ACTIONS::exportPlotToClipboard( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.exportToClipboard" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export Current Plot to Clipboard" ) )
+        .Icon( BITMAPS::export_png ) );
+
+TOOL_ACTION EE_ACTIONS::exportPlotToSchematic( TOOL_ACTION_ARGS()
+        .Name( "eeschema.Simulator.exportPlotToSchematic" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Export Current Plot to Schematic" ) )
+        .Icon( BITMAPS::export_png ) );
+
 TOOL_ACTION EE_ACTIONS::toggleLegend( TOOL_ACTION_ARGS()
         .Name( "eeschema.Simulator.toggleLegend" )
         .Scope( AS_GLOBAL )

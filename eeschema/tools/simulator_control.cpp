@@ -20,6 +20,8 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+#define wxUSE_BASE64 1
+#include <wx/base64.h>
 
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
@@ -40,6 +42,10 @@
 #include <scintilla_tricks.h>
 #include <sim/spice_circuit_model.h>
 #include <dialogs/dialog_user_defined_signals.h>
+#include <wx/clipbrd.h>
+#include <wx/dataobj.h>
+#include <wx/mstream.h>
+#include <string_utils.h>
 
 
 bool SIMULATOR_CONTROL::Init()
@@ -169,7 +175,88 @@ int SIMULATOR_CONTROL::ExportPlotAsPNG( const TOOL_EVENT& aEvent )
         if( saveDlg.ShowModal() == wxID_CANCEL )
             return -1;
 
-        plotTab->GetPlotWin()->SaveScreenshot( saveDlg.GetPath(), wxBITMAP_TYPE_PNG );
+        wxImage screenImage;
+        plotTab->GetPlotWin()->SaveScreenshot( screenImage );
+        screenImage.SaveFile( saveDlg.GetPath(), wxBITMAP_TYPE_PNG );
+    }
+
+    return 0;
+}
+
+
+int SIMULATOR_CONTROL::ExportPlotToClipboard( const TOOL_EVENT& aEvent )
+{
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
+    {
+        wxImage screenImage;
+        plotTab->GetPlotWin()->SaveScreenshot( screenImage );
+
+        if( wxTheClipboard->Open() )
+        {
+            wxBitmap bm( screenImage );
+
+            wxTheClipboard->SetData( new wxBitmapDataObject( bm ) );
+            wxTheClipboard->Flush(); // Allow data to be available after closing KiCad
+            wxTheClipboard->Close();
+        }
+    }
+
+    return 0;
+}
+
+
+int SIMULATOR_CONTROL::ExportPlotToSchematic( const TOOL_EVENT& aEvent )
+{
+    if( m_schematicFrame == nullptr )
+        return -1;
+
+    if( SIM_PLOT_TAB* plotTab = dynamic_cast<SIM_PLOT_TAB*>( getCurrentSimTab() ) )
+    {
+        wxWindow* blocking_dialog = m_schematicFrame->Kiway().GetBlockingDialog();
+
+        if( blocking_dialog )
+            blocking_dialog->Close( true );
+
+        wxImage screenImage;
+        plotTab->GetPlotWin()->SaveScreenshot( screenImage );
+
+        if( wxTheClipboard->Open() )
+        {
+            // Build a PNG bitmap:
+            wxMemoryOutputStream stream;
+            screenImage.SaveFile( stream, wxBITMAP_TYPE_PNG );
+            stream.Close();
+
+            // Create a SCH_BITMAP data string
+            wxString string;
+            string << "(image (at 0 0)\n";
+            string << "  (data\n";
+
+            wxMemoryBuffer buff;
+            buff.GetWriteBuf( stream.GetLength() );
+            stream.CopyTo( buff.GetData(), stream.GetLength() );
+            buff.SetDataLen( stream.GetLength() );
+
+            wxString out;
+            out << wxBase64Encode( buff );
+
+            #define MIME_BASE64_LENGTH 76
+            size_t first = 0;
+
+            while( first < out.Length() )
+            {
+                string << "    \"" << TO_UTF8( out( first, MIME_BASE64_LENGTH ) );
+                string << "\"\n";
+                first += MIME_BASE64_LENGTH;
+            }
+            string << "  )\n)\n";
+
+            wxTheClipboard->SetData( new wxTextDataObject( string ) );
+            wxTheClipboard->Close();
+
+            m_schematicFrame->GetToolManager()->PostAction( ACTIONS::paste );
+            m_schematicFrame->Raise();
+        }
     }
 
     return 0;
@@ -533,6 +620,9 @@ void SIMULATOR_CONTROL::setTransitions()
     Go( &SIMULATOR_CONTROL::SaveWorkbook,           EE_ACTIONS::saveWorkbookAs.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ExportPlotAsPNG,        EE_ACTIONS::exportPlotAsPNG.MakeEvent() );
     Go( &SIMULATOR_CONTROL::ExportPlotAsCSV,        EE_ACTIONS::exportPlotAsCSV.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ExportPlotToClipboard,  EE_ACTIONS::exportPlotToClipboard.MakeEvent() );
+    Go( &SIMULATOR_CONTROL::ExportPlotToSchematic,  EE_ACTIONS::exportPlotToSchematic.MakeEvent() );
+
     Go( &SIMULATOR_CONTROL::Close,                  ACTIONS::quit.MakeEvent() );
 
     Go( &SIMULATOR_CONTROL::Zoom,                   ACTIONS::zoomInCenter.MakeEvent() );

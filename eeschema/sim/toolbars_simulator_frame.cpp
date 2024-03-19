@@ -106,6 +106,9 @@ void SIMULATOR_FRAME::doReCreateMenuBar()
     fileMenu->AppendSeparator();
     fileMenu->Add( EE_ACTIONS::exportPlotAsPNG );
     fileMenu->Add( EE_ACTIONS::exportPlotAsCSV );
+    fileMenu->AppendSeparator();
+    fileMenu->Add( EE_ACTIONS::exportPlotToClipboard );
+    fileMenu->Add( EE_ACTIONS::exportPlotToSchematic );
 
     fileMenu->AppendSeparator();
     fileMenu->AddClose( _( "Simulator" ) );
