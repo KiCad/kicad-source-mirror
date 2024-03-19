@@ -892,21 +892,44 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
 
     // Support for more than one main outline (more than one board)
-    for( int cnt = 0; cnt < aOutline.OutlineCount(); cnt++ )
+    ReportMessage( wxString::Format( wxT( "Build board outlines (%d outlines) with %d points.\n" ),
+                                     aOutline.OutlineCount(), aOutline.FullPointCount() ) );
+#if 0
+    // This code should work, and it is working most of time
+    // However there are issues if the main outline is a circle with holes:
+    // holes from vias and pads are not working
+    // see bug https://gitlab.com/kicad/code/kicad/-/issues/17446
+    // (Holes are missing from STEP export with circular PCB outline)
+    // Hard to say if the bug is in our code or in OCC 7.7
+    if( !MakeShapes( m_board_outlines, aOutline, m_boardThickness, 0.0, aOrigin ) )
     {
-        const SHAPE_LINE_CHAIN& outline = aOutline.COutline( cnt );
-
-        ReportMessage( wxString::Format( wxT( "Build board main outline %d with %d points.\n" ),
-                                         cnt + 1, outline.PointCount() ) );
-
-        if( !MakeShapes( m_board_outlines, aOutline, m_boardThickness, 0.0, aOrigin ) )
+        // Error
+        ReportMessage( wxString::Format(
+                wxT( "OCC error creating main outline.\n" ) ) );
+    }
+#else
+    // Workaround for bug #17446 Holes are missing from STEP export with circular PCB outline
+    for( const SHAPE_POLY_SET::POLYGON& polygon : aOutline.CPolygons() )
+    {
+        for( size_t contId = 0; contId < polygon.size(); contId++ )
         {
-            // Error
-            ReportMessage( wxString::Format(
-                    wxT( "OCC error adding main outline polygon %d with %d points.\n" ), cnt + 1,
-                    outline.PointCount() ) );
+            const SHAPE_LINE_CHAIN& contour = polygon[contId];
+            SHAPE_POLY_SET polyset;
+            polyset.Append( contour );
+
+            if( contId == 0 ) // main Outline
+            {
+                if( !MakeShapes( m_board_outlines, polyset, m_boardThickness, 0.0, aOrigin ) )
+                    ReportMessage( wxT( "OCC error creating main outline.\n" ) );
+            }
+            else // Hole inside the main outline
+            {
+                if( !MakeShapes( m_boardCutouts, polyset, m_boardThickness, 0.0, aOrigin ) )
+                    ReportMessage( wxT( "OCC error creating hole in main outline.\n" ) );
+            }
         }
     }
+#endif
 
     Bnd_Box brdBndBox;
 
