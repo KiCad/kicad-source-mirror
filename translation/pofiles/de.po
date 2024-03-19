@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-09 10:01+0000\n"
+"PO-Revision-Date: 2024-03-20 16:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -4575,10 +4575,8 @@ msgid "Dash-Dot-Dot"
 msgstr "Strich-Punkt-Punkt"
 
 #: common/dialogs/panel_setup_netclasses.cpp:189
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr ""
-"Farbe auf transparent setzen, um die Standardfarbe von KiCad zu verwenden."
+msgstr "Farbe auf transparent setzen, um Standardlagenfarbe zu verwenden."
 
 #: common/dialogs/panel_setup_netclasses.cpp:379
 msgid ""
@@ -4645,9 +4643,8 @@ msgid "Schematic wire line style"
 msgstr "Linienstil Schaltplanverbindung"
 
 #: common/dialogs/panel_setup_netclasses.cpp:624
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "Netzklassenfarbe setzen"
+msgstr "Leiterplatten-Netzklassenfarbe"
 
 #: common/dialogs/panel_setup_netclasses.cpp:677
 msgid "The default net class is required."
@@ -4701,9 +4698,8 @@ msgid "DP Gap"
 msgstr "DP-Abstand"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "PCB Cursor"
+msgstr "Leiterplattenfarbe"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4750,9 +4746,8 @@ msgstr ""
 "Farbe auf transparent setzen, um die Standardfarbe von KiCad zu verwenden."
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:98
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "Tastkopf aus Schaltplan"
+msgstr "Farben aus Schaltplan importieren"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:115
 msgid "Netclass assignments:"
@@ -20959,14 +20954,12 @@ msgid "Export a symbol to a new library file"
 msgstr "Ein Symbol in eine neue Bibliotheksdatei exportieren"
 
 #: eeschema/tools/ee_actions.cpp:249 pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "Mit Texteditor bearbeiten"
+msgstr "Mit Texteditor bearbeiten..."
 
 #: eeschema/tools/ee_actions.cpp:250 pcbnew/tools/pcb_actions.cpp:774
-#, fuzzy
 msgid "Open a library file with a text editor"
-msgstr "Datei in einem Texteditor öffnen"
+msgstr "Eine Blibliotheksdatei mit Texteditor öffnen"
 
 #: eeschema/tools/ee_actions.cpp:256
 msgid "Update Symbol Fields..."
@@ -22612,10 +22605,9 @@ msgstr "Keine Symbolbibliothek gewählt."
 
 #: eeschema/tools/symbol_editor_control.cpp:277
 #: pcbnew/tools/footprint_editor_control.cpp:594
-#, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
 msgstr ""
-"Es wurde kein Texteditor für KiCad ausgewählt. Bitte wählen Sie einen aus."
+"Es wurde kein Texteditor in KiCad ausgewählt. Bitte wählen Sie einen aus."
 
 #: eeschema/tools/symbol_editor_control.cpp:351
 #: eeschema/widgets/panel_symbol_chooser.cpp:663
@@ -39064,9 +39056,8 @@ msgid "Skew between traces out of range"
 msgstr "Versatz zwischen Leiterbahnen außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Zu viele Vias in einer Verbindung"
+msgstr "Zu viele oder zu wenige Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39764,14 +39755,13 @@ msgid "Too many vias on a connection"
 msgstr "Zu viele Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s Maximalanzahl %d; tatsächlich: %d)"
+msgstr "(%s Minimalanzahl %d; tatsächlich: %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Zu viele Vias in einer Verbindung"
+msgstr "Zu wenige Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -48285,14 +48275,12 @@ msgid "Set Netclass Color"
 msgstr "Netzklassenfarbe setzen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2340
-#, fuzzy
 msgid "Use Color from Schematic"
-msgstr "Platine aus Schaltplan aktualisieren"
+msgstr "Farbe aus Schaltplan nutzen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2349
-#, fuzzy
 msgid "Clear Netclass Color"
-msgstr "Netzfarbe zurücksetzen"
+msgstr "Netzklassenfarbe zurücksetzen"
 
 #: pcbnew/widgets/appearance_controls.cpp:2357
 #, c-format
