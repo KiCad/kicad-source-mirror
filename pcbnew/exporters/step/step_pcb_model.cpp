@@ -686,8 +686,11 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
         {
             try
             {
-                auto addSegment = [&]( const VECTOR2D& aPt0, const VECTOR2D& aPt1 ) -> bool
+                auto addSegment = [&]( const VECTOR2I& aPt0, const VECTOR2I& aPt1 ) -> bool
                 {
+                    if( aPt0 == aPt1 )
+                        return false;
+
                     gp_Pnt start = toPoint( aPt0 );
                     gp_Pnt end = toPoint( aPt1 );
 
@@ -718,7 +721,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     return true;
                 };
 
-                auto addArc = [&]( const SHAPE_ARC& aArc ) -> bool
+                auto addArc = [&]( const VECTOR2I& aPt0, const SHAPE_ARC& aArc ) -> bool
                 {
                     // Do not export too short segments: they create broken shape because OCC thinks
                     Handle( Geom_Curve ) curve;
@@ -733,7 +736,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     }
                     else
                     {
-                        curve = GC_MakeArcOfCircle( toPoint( aArc.GetP0() ),
+                        curve = GC_MakeArcOfCircle( toPoint( aPt0 ),
                                                     toPoint( aArc.GetArcMid() ),
                                                     toPoint( aArc.GetP1() ) )
                                         .Value();
@@ -789,10 +792,10 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                             lastPt = firstPt;
                         }
 
-                        if( lastPt != currentArc.GetP0() )
-                            addSegment( lastPt, currentArc.GetP0() );
+                        if( addSegment( lastPt, currentArc.GetP0() ) )
+                            lastPt = currentArc.GetP0();
 
-                        if( addArc( currentArc ) )
+                        if( addArc( lastPt, currentArc ) )
                             lastPt = currentArc.GetP1();
                     }
                     else if( !isArc )
@@ -805,10 +808,10 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                             lastPt = firstPt;
                         }
 
-                        if( lastPt != seg.A )
-                            addSegment( lastPt, seg.A );
+                        if( addSegment( lastPt, seg.A ) )
+                            lastPt = seg.A;
 
-                        if( addSegment( seg.A, seg.B ) )
+                        if( addSegment( lastPt, seg.B ) )
                             lastPt = seg.B;
                     }
 
