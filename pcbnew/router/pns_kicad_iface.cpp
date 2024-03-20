@@ -1888,8 +1888,11 @@ void PNS_KICAD_IFACE_BASE::AddItem( PNS::ITEM* aItem )
 
 BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
 {
-    BOARD_CONNECTED_ITEM* newBI = nullptr;
-    auto net = static_cast<NETINFO_ITEM*>( aItem->Net() );
+    BOARD_CONNECTED_ITEM* newBoardItem = nullptr;
+    NETINFO_ITEM* net = static_cast<NETINFO_ITEM*>( aItem->Net() );
+
+    if( !net )
+        net = NETINFO_LIST::OrphanedItem();
 
     switch( aItem->Kind() )
     {
@@ -1900,7 +1903,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         new_arc->SetWidth( arc->Width() );
         new_arc->SetLayer( ToLAYER_ID( arc->Layers().Start() ) );
         new_arc->SetNet( net );
-        newBI = new_arc;
+        newBoardItem = new_arc;
         break;
     }
 
@@ -1914,7 +1917,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         track->SetWidth( seg->Width() );
         track->SetLayer( ToLAYER_ID( seg->Layers().Start() ) );
         track->SetNet( net );
-        newBI = track;
+        newBoardItem = track;
         break;
     }
 
@@ -1930,7 +1933,7 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
         via_board->SetIsFree( via->IsFree() );
         via_board->SetLayerPair( ToLAYER_ID( via->Layers().Start() ),
                                  ToLAYER_ID( via->Layers().End() ) );
-        newBI = via_board;
+        newBoardItem = via_board;
         break;
     }
 
@@ -1949,12 +1952,13 @@ BOARD_CONNECTED_ITEM* PNS_KICAD_IFACE::createBoardItem( PNS::ITEM* aItem )
 
     if( net->GetNetCode() <= 0 )
     {
-        NETINFO_ITEM* newNetInfo = newBI->GetNet();
+        NETINFO_ITEM* newNetInfo = newBoardItem->GetNet();
+
         newNetInfo->SetParent( m_board );
         newNetInfo->SetNetClass( m_board->GetDesignSettings().m_NetSettings->m_DefaultNetClass );
     }
 
-    return newBI;
+    return newBoardItem;
 }
 
 
