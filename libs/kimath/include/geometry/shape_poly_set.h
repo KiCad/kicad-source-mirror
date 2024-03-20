@@ -1084,6 +1084,14 @@ public:
     void Simplify( POLYGON_MODE aFastMode );
 
     /**
+     * Simplifies the lines in the polyset.  This checks intermediate points to see if they are
+     * collinear with their neighbors, and removes them if they are.
+     *
+     * @param aMaxError is the maximum error to allow when simplifying the lines.
+     */
+    void SimplifyOutlines( int aMaxError = 0 );
+
+    /**
      * Convert a self-intersecting polygon to one (or more) non self-intersecting polygon(s).
      *
      * Removes null segments.

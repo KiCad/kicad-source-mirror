@@ -56,6 +56,8 @@
 #include <math/box2.h>
 #include <math/vector2d.h>
 
+#include <wx/log.h>
+
 #define TRIANGULATE_TRACE "triangulate"
 class POLYGON_TRIANGULATION
 {
@@ -258,6 +260,23 @@ private:
                     && ( b.x - x ) * ( c.y - y ) - ( c.x - x ) * ( b.y - y ) >= 0;
         }
 
+        /**
+         * Returns the signed area of the polygon connected to the current vertex
+        */
+        double area() const
+        {
+            const VERTEX* p = this;
+            double a = 0.0;
+
+            do
+            {
+                a += ( p->x * p->next->y - p->next->x * p->y );
+                p = p->next;
+            } while( p != this );
+
+            return a / 2;
+        }
+
         const size_t i;
         const double x;
         const double y;
@@ -298,6 +317,35 @@ private:
         return x | ( y << 1 );
     }
 
+
+    /**
+     * Outputs a list of vertices that have not yet been triangulated.
+    */
+    void logRemaining()
+    {
+        std::set<VERTEX*> seen;
+
+        for( VERTEX& p : m_vertices )
+        {
+            if( !p.next || p.next == &p || seen.find( &p ) != seen.end() )
+                continue;
+
+            seen.insert( &p );
+
+            wxString msg = wxString::Format( "Remaining: %d,%d,", p.x, p.y );
+            VERTEX* q = p.next;
+
+            do
+            {
+                msg += wxString::Format( "%d,%d,", q->x, q->y );
+                seen.insert( q );
+                q = q->next;
+            } while ( q != &p );
+
+            msg.RemoveLast();
+            wxLogTrace( TRIANGULATE_TRACE, msg );
+        }
+    }
     /**
      * Iterate through the list to remove NULL triangles if they exist.
      *
@@ -583,7 +631,7 @@ private:
         {
             VERTEX* nextZ = origPoly->nextZ;
 
-            if( nextZ && *nextZ == *origPoly )
+            if( nextZ && nextZ != origPoly->next && nextZ != origPoly->prev && *nextZ == *origPoly )
             {
                 std::swap( origPoly->next, nextZ->next );
                 origPoly->next->prev = origPoly;
@@ -596,7 +644,7 @@ private:
 
             VERTEX* prevZ = origPoly->prevZ;
 
-            if( prevZ && *prevZ == *origPoly )
+            if( prevZ && prevZ != origPoly->next && prevZ != origPoly->prev && *prevZ == *origPoly )
             {
                 std::swap( origPoly->next, prevZ->next );
                 origPoly->next->prev = origPoly;

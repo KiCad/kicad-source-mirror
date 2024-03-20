@@ -1874,6 +1874,18 @@ void SHAPE_POLY_SET::Simplify( POLYGON_MODE aFastMode )
 }
 
 
+void SHAPE_POLY_SET::SimplifyOutlines( int aMaxError )
+{
+    for( POLYGON& paths : m_polys )
+    {
+        for( SHAPE_LINE_CHAIN& path : paths )
+        {
+            path.Simplify( aMaxError );
+        }
+    }
+}
+
+
 int SHAPE_POLY_SET::NormalizeAreaOutlines()
 {
     // We are expecting only one main outline, but this main outline can have holes
@@ -3025,11 +3037,23 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
                         ++pass;
 
                         if( pass == 1 )
+                        {
                             polySet.Fracture( PM_FAST );
+                        }
                         else if( pass == 2 )
+                        {
+                            polySet.SimplifyOutlines(
+                                    ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
+                        }
+                        // In Clipper2, there is only one type of simplification
+                        else if( pass == 3 && !ADVANCED_CFG::GetCfg().m_UseClipper2 )
+                        {
                             polySet.Fracture( PM_STRICTLY_SIMPLE );
+                        }
                         else
+                        {
                             break;
+                        }
 
                         triangulationValid = false;
                         hintData = nullptr;

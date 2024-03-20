@@ -545,6 +545,16 @@ public:
      */
     double m_OcePluginAngularDeflection;
 
+    /**
+     * The number of internal units that will be allowed to deflect from the base
+     * segment when creating a new segment.
+     *
+     * Setting name: "TriangulateSimplificationLevel"
+     * Valid values: 0 to 1000
+     * Default value: 50
+    */
+    int m_TriangulateSimplificationLevel;
+
 ///@}
 
 

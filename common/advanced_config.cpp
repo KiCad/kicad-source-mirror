@@ -107,6 +107,7 @@ static const wxChar PcbSelectionVisibilityRatio[] = wxT( "PcbSelectionVisibility
 static const wxChar MinimumSegmentLength[] = wxT( "MinimumSegmentLength" );
 static const wxChar OcePluginLinearDeflection[] = wxT( "OcePluginLinearDeflection" );
 static const wxChar OcePluginAngularDeflection[] = wxT( "OcePluginAngularDeflection" );
+static const wxChar TriangulateSimplificationLevel[] = wxT( "TriangulateSimplificationLevel" );
 } // namespace KEYS
 
 
@@ -254,6 +255,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_OcePluginLinearDeflection = 0.14;
     m_OcePluginAngularDeflection = 30;
+
+    m_TriangulateSimplificationLevel = 50;
 
     loadFromConfigFile();
 }
@@ -461,6 +464,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_DOUBLE( true, AC_KEYS::OcePluginAngularDeflection,
                                                     &m_OcePluginAngularDeflection,
                                                     m_OcePluginAngularDeflection, 0.01, 360.0 ) );
+
+    configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::TriangulateSimplificationLevel,
+                                                    &m_TriangulateSimplificationLevel,
+                                                    m_TriangulateSimplificationLevel, 0, 1000 ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
