@@ -472,3 +472,25 @@ double PCB_GROUP::Similarity( const BOARD_ITEM& aOther ) const
 
     return similarity / m_items.size();
 }
+
+
+static struct PCB_GROUP_DESC
+{
+    PCB_GROUP_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( PCB_GROUP );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_GROUP, BOARD_ITEM> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_GROUP ), TYPE_HASH( BOARD_ITEM ) );
+
+        propMgr.Mask( TYPE_HASH( PCB_GROUP ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ) );
+        propMgr.Mask( TYPE_HASH( PCB_GROUP ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ) );
+        propMgr.Mask( TYPE_HASH( PCB_GROUP ), TYPE_HASH( BOARD_ITEM ), _HKI( "Layer" ) );
+
+        const wxString groupTab = _HKI( "Group Properties" );
+
+        propMgr.AddProperty( new PROPERTY<PCB_GROUP, wxString>( _HKI( "Name" ),
+                    &PCB_GROUP::SetName, &PCB_GROUP::GetName ),
+                    groupTab );
+    }
+} _PCB_GROUP_DESC;
