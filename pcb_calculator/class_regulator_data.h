@@ -40,11 +40,11 @@
 class REGULATOR_DATA
 {
 public:
-    REGULATOR_DATA( const wxString& aName, double aVref, int aType, double aIadj = 0) :
+    REGULATOR_DATA( const wxString& aName, double aVrefMin, double aVrefTyp, double aVrefMax,
+                    int aType, double aIadjTyp = 0, double aIadjMax = 0 ) :
             m_Name( aName ),
-            m_Type( aType ),
-            m_Vref( aVref ),
-            m_Iadj( aIadj )
+            m_Type( aType ), m_VrefMin( aVrefMin ), m_VrefTyp( aVrefTyp ), m_VrefMax( aVrefMax ),
+            m_IadjTyp( aIadjTyp ), m_IadjMax( aIadjMax )
     {
     }
 
@@ -52,8 +52,11 @@ public:
     wxString m_Name;        // Regulator name
     int m_Type;             // type: with separate sense pin (normal) (=0)
                             // or adjustable 3 pins reg (=1)
-    double m_Vref;          // Vreference in volt
-    double m_Iadj;          // 3 pin type only: I adjust in micro amp
+    double m_VrefMin; // min Vreference in volt
+    double m_VrefTyp; // typ Vreference in volt
+    double m_VrefMax; // max Vreference in volt
+    double m_IadjTyp; // 3 pin type only: typ I adjust in micro amp
+    double m_IadjMax; // 3 pin type only: max I adjust in micro amp
 };
 
 // Helper class to store the list of known regulators
@@ -140,6 +143,8 @@ public:
 
         return list;
     }
+
+    void Clear() { m_List.clear(); }
 
     std::vector <REGULATOR_DATA*> m_List;
 };

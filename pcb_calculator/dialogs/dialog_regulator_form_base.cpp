@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,12 +34,24 @@ DIALOG_REGULATOR_FORM_BASE::DIALOG_REGULATOR_FORM_BASE( wxWindow* parent, wxWind
 
 	fgSizerPrms->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_staticTextVref = new wxStaticText( this, wxID_ANY, _("Vref:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextVref = new wxStaticText( this, wxID_ANY, _("Vref (min/typ/max):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextVref->Wrap( -1 );
 	fgSizerPrms->Add( m_staticTextVref, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_textCtrlVref = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPrms->Add( m_textCtrlVref, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	wxBoxSizer* bSizer2;
+	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_vrefMinVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_vrefMinVal, 0, wxALL, 5 );
+
+	m_vrefTypVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_vrefTypVal, 0, wxALL, 5 );
+
+	m_vrefMaxVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer2->Add( m_vrefMaxVal, 0, wxALL, 5 );
+
+
+	fgSizerPrms->Add( bSizer2, 1, wxEXPAND, 5 );
 
 	m_staticTextVrefUnit = new wxStaticText( this, wxID_ANY, _("Volt"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextVrefUnit->Wrap( -1 );
@@ -58,16 +70,28 @@ DIALOG_REGULATOR_FORM_BASE::DIALOG_REGULATOR_FORM_BASE( wxWindow* parent, wxWind
 
 	fgSizerPrms->Add( 0, 0, 1, wxEXPAND, 5 );
 
-	m_RegulIadjTitle = new wxStaticText( this, wxID_ANY, _("Iadj:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_RegulIadjTitle = new wxStaticText( this, wxID_ANY, _("Iadj (typ/max):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_RegulIadjTitle->Wrap( -1 );
 	fgSizerPrms->Add( m_RegulIadjTitle, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-	m_RegulIadjValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerPrms->Add( m_RegulIadjValue, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	wxBoxSizer* bSizer3;
+	bSizer3 = new wxBoxSizer( wxHORIZONTAL );
 
-	m_IadjUnitLabel = new wxStaticText( this, wxID_ANY, _("uA"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_IadjUnitLabel->Wrap( -1 );
-	fgSizerPrms->Add( m_IadjUnitLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	bSizer3->Add( 0, 0, 1, 0, 5 );
+
+	m_iadjTypVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_iadjTypVal, 0, wxALL, 5 );
+
+	m_iadjMaxVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer3->Add( m_iadjMaxVal, 0, wxALL, 5 );
+
+
+	fgSizerPrms->Add( bSizer3, 1, wxEXPAND, 5 );
+
+	m_labelUnitIadj = new wxStaticText( this, wxID_ANY, _("uA"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelUnitIadj->Wrap( -1 );
+	fgSizerPrms->Add( m_labelUnitIadj, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bSizerMain->Add( fgSizerPrms, 0, wxEXPAND, 5 );

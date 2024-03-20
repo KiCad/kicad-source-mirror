@@ -28,6 +28,17 @@
 #include <unordered_map>
 #include <settings/app_settings.h>
 
+// Deafult value for TI LM317
+#define DEFAULT_REGULATOR_RESTOL "1"
+#define DEFAULT_REGULATOR_R1 "0.240"
+#define DEFAULT_REGULATOR_R2 "0.720"
+#define DEFAULT_REGULATOR_VREF_MIN "1.20"
+#define DEFAULT_REGULATOR_VREF_TYP "1.25"
+#define DEFAULT_REGULATOR_VREF_MAX "1.30"
+#define DEFAULT_REGULATOR_VOUT_TYP "5"
+#define DEFAULT_REGULATOR_IADJ_TYP "50"
+#define DEFAULT_REGULATOR_IADJ_MAX "100"
+
 class PCB_CALCULATOR_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
@@ -63,10 +74,15 @@ public:
 
     struct REGULATORS
     {
+        wxString resTol;
         wxString r1;
         wxString r2;
-        wxString vref;
-        wxString vout;
+        wxString vrefMin;
+        wxString vrefTyp;
+        wxString vrefMax;
+        wxString voutTyp;
+        wxString iadjTyp;
+        wxString iadjMax;
         wxString data_file;
         wxString selected_regulator;
         int type;

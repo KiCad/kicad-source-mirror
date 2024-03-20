@@ -48,6 +48,9 @@ DIALOG_REGULATOR_FORM::~DIALOG_REGULATOR_FORM()
 
 bool DIALOG_REGULATOR_FORM::TransferDataFromWindow()
 {
+    wxTextCtrl* vref_values[] = { m_vrefMinVal, m_vrefTypVal, m_vrefMaxVal };
+    wxTextCtrl* iadj_values[] = { m_iadjTypVal, m_iadjMaxVal };
+
     if( !wxDialog::TransferDataFromWindow() )
         return false;
 
@@ -56,22 +59,38 @@ bool DIALOG_REGULATOR_FORM::TransferDataFromWindow()
     if( m_textCtrlName->GetValue().IsEmpty() )
         success = false;
 
-    if( m_textCtrlVref->GetValue().IsEmpty() )
+    for( const auto& val : vref_values )
     {
-        success = false;
-    }
-    else
-    {
-        double vref = DoubleFromString( m_textCtrlVref->GetValue() );
-
-        if( fabs( vref ) < 0.01 )
+        if( val->GetValue().IsEmpty() )
+        {
             success = false;
+        }
+        else
+        {
+            double vref = DoubleFromString( val->GetValue() );
+
+            if( fabs( vref ) < 0.1 )
+                success = false;
+        }
     }
 
     if( m_choiceRegType->GetSelection() == 1 )
     {
-        if( m_RegulIadjValue->GetValue().IsEmpty() )
-            success = false;
+        for( const auto& val : iadj_values )
+        {
+            if( val->GetValue().IsEmpty() )
+            {
+                success = false;
+            }
+            else
+            {
+                int  iadj = 0;
+                bool res = val->GetValue().ToInt( &iadj );
+
+                if( res == false || fabs( iadj ) < 1 )
+                    success = false;
+            }
+        }
     }
 
     return success;
@@ -81,7 +100,10 @@ bool DIALOG_REGULATOR_FORM::TransferDataFromWindow()
 void DIALOG_REGULATOR_FORM::UpdateDialog()
 {
     bool enbl = m_choiceRegType->GetSelection() == 1;
-    m_RegulIadjValue->Enable( enbl );
+    m_RegulIadjTitle->Show( enbl );
+    m_iadjTypVal->Show( enbl );
+    m_iadjMaxVal->Show( enbl );
+    m_labelUnitIadj->Show( enbl );
 }
 
 
@@ -89,10 +111,19 @@ void DIALOG_REGULATOR_FORM::CopyRegulatorDataToDialog( REGULATOR_DATA* aItem )
 {
     m_textCtrlName->SetValue( aItem->m_Name );
     wxString value;
-    value.Printf( wxT( "%g" ), aItem->m_Vref );
-    m_textCtrlVref->SetValue( value );
-    value.Printf( wxT( "%g" ), aItem->m_Iadj );
-    m_RegulIadjValue->SetValue( value );
+    value.Printf( wxT( "%.3g" ), aItem->m_VrefMin );
+    m_vrefMinVal->SetValue( value );
+    value.Printf( wxT( "%.3g" ), aItem->m_VrefTyp );
+    m_vrefTypVal->SetValue( value );
+    value.Printf( wxT( "%.3g" ), aItem->m_VrefMax );
+    m_vrefMaxVal->SetValue( value );
+
+
+    value.Printf( wxT( "%.3g" ), aItem->m_IadjTyp );
+    m_iadjTypVal->SetValue( value );
+    value.Printf( wxT( "%.3g" ), aItem->m_IadjMax );
+    m_iadjMaxVal->SetValue( value );
+
     m_choiceRegType->SetSelection( aItem->m_Type );
     UpdateDialog();
 }
@@ -100,13 +131,22 @@ void DIALOG_REGULATOR_FORM::CopyRegulatorDataToDialog( REGULATOR_DATA* aItem )
 
 REGULATOR_DATA* DIALOG_REGULATOR_FORM::BuildRegulatorFromData()
 {
-    double vref = DoubleFromString( m_textCtrlVref->GetValue() );
-    double iadj = DoubleFromString( m_RegulIadjValue->GetValue() );
+    double vrefmin = DoubleFromString( m_vrefMinVal->GetValue() );
+    double vreftyp = DoubleFromString( m_vrefTypVal->GetValue() );
+    double vrefmax = DoubleFromString( m_vrefMaxVal->GetValue() );
+
+    double iadjtyp = DoubleFromString( m_iadjTypVal->GetValue() );
+    double iadjmax = DoubleFromString( m_iadjMaxVal->GetValue() );
+
     int    type = m_choiceRegType->GetSelection();
 
     if( type != 1 )
-        iadj = 0.0;
+    {
+        iadjtyp = 0.0;
+        iadjmax = 0.0;
+    }
 
-    REGULATOR_DATA* item = new REGULATOR_DATA( m_textCtrlName->GetValue(), vref, type, iadj );
+    REGULATOR_DATA* item = new REGULATOR_DATA( m_textCtrlName->GetValue(), vrefmin, vreftyp,
+                                               vrefmax, type, iadjtyp, iadjmax );
     return item;
 }

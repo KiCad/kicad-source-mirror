@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -129,39 +129,80 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	bSizer9->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	wxFlexGridSizer* fgSizerRegParams;
-	fgSizerRegParams = new wxFlexGridSizer( 6, 4, 4, 0 );
-	fgSizerRegParams->AddGrowableCol( 2 );
+	fgSizerRegParams = new wxFlexGridSizer( 7, 6, 4, 0 );
+	fgSizerRegParams->AddGrowableCol( 1 );
 	fgSizerRegParams->SetFlexibleDirection( wxBOTH );
 	fgSizerRegParams->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
+
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+
+
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_labelValMin = new wxStaticText( this, wxID_ANY, _("min"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelValMin->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelValMin, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_labelValTyp = new wxStaticText( this, wxID_ANY, _("typ"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelValTyp->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelValTyp, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_labelValMax = new wxStaticText( this, wxID_ANY, _("max"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelValMax->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelValMax, 0, wxALIGN_CENTER|wxALL, 5 );
+
+
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+
 	m_rbRegulR1 = new wxRadioButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
-	m_rbRegulR1->SetValue( true );
 	fgSizerRegParams->Add( m_rbRegulR1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_labelRegultR1 = new wxStaticText( this, wxID_ANY, _("R1:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelRegultR1->Wrap( -1 );
 	fgSizerRegParams->Add( m_labelRegultR1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_RegulR1Value = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulR1Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_r1MinVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_r1MinVal->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
 
-	m_r1Units = new wxStaticText( this, wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_r1Units->Wrap( -1 );
-	fgSizerRegParams->Add( m_r1Units, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_r1MinVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_r1TypVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_r1TypVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_r1MaxVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_r1MaxVal->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
+
+	fgSizerRegParams->Add( m_r1MaxVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelUnitsR1 = new wxStaticText( this, wxID_ANY, _("kΩ"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelUnitsR1->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelUnitsR1, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rbRegulR2 = new wxRadioButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_rbRegulR2->SetValue( true );
 	fgSizerRegParams->Add( m_rbRegulR2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_labelRegultR2 = new wxStaticText( this, wxID_ANY, _("R2:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelRegultR2->Wrap( -1 );
 	fgSizerRegParams->Add( m_labelRegultR2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_RegulR2Value = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulR2Value, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_r2MinVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_r2MinVal->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
 
-	m_r2Units = new wxStaticText( this, wxID_ANY, _("kOhm"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_r2Units->Wrap( -1 );
-	fgSizerRegParams->Add( m_r2Units, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_r2MinVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_r2TypVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_r2TypVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_r2MaxVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_r2MaxVal->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
+
+	fgSizerRegParams->Add( m_r2MaxVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelUnitsR2 = new wxStaticText( this, wxID_ANY, _("kΩ"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelUnitsR2->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelUnitsR2, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_rbRegulVout = new wxRadioButton( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerRegParams->Add( m_rbRegulVout, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
@@ -170,12 +211,22 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	m_labelVout->Wrap( -1 );
 	fgSizerRegParams->Add( m_labelVout, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_RegulVoutValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulVoutValue, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_voutMinVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_voutMinVal->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
 
-	m_unitsVout = new wxStaticText( this, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_unitsVout->Wrap( -1 );
-	fgSizerRegParams->Add( m_unitsVout, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( m_voutMinVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_voutTypVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_voutTypVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_voutMaxVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_voutMaxVal->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
+
+	fgSizerRegParams->Add( m_voutMaxVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelUnitsVout = new wxStaticText( this, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelUnitsVout->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelUnitsVout, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -186,12 +237,18 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 
 	fgSizerRegParams->Add( m_labelVRef, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_RegulVrefValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulVrefValue, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+	m_vrefMinVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_vrefMinVal, 0, wxALL|wxEXPAND, 5 );
 
-	m_unitsVref = new wxStaticText( this, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_unitsVref->Wrap( -1 );
-	fgSizerRegParams->Add( m_unitsVref, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	m_vrefTypVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_vrefTypVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_vrefMaxVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_vrefMaxVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelUnitsVref = new wxStaticText( this, wxID_ANY, _("V"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelUnitsVref->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelUnitsVref, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 
 	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -202,18 +259,93 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 
 	fgSizerRegParams->Add( m_RegulIadjTitle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
-	m_RegulIadjValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerRegParams->Add( m_RegulIadjValue, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	m_IadjUnitLabel = new wxStaticText( this, wxID_ANY, _("uA"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_IadjUnitLabel->Wrap( -1 );
-	fgSizerRegParams->Add( m_IadjUnitLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_iadjTypVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_iadjTypVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_iadjMaxVal = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerRegParams->Add( m_iadjMaxVal, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelUnitsIadj = new wxStaticText( this, wxID_ANY, _("uA"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelUnitsIadj->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelUnitsIadj, 0, wxALIGN_CENTER_VERTICAL, 5 );
+
+
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_labelTolSumary = new wxStaticText( this, wxID_ANY, _("Overall tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelTolSumary->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelTolSumary, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_tolTotalMin = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_tolTotalMin->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
+
+	fgSizerRegParams->Add( m_tolTotalMin, 0, wxALL, 5 );
+
+
+	fgSizerRegParams->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_TolTotalMax = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
+	m_TolTotalMax->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
+
+	fgSizerRegParams->Add( m_TolTotalMax, 0, wxALL, 5 );
+
+	m_labelTotalPercent = new wxStaticText( this, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelTotalPercent->Wrap( -1 );
+	fgSizerRegParams->Add( m_labelTotalPercent, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	bSizer9->Add( fgSizerRegParams, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 10 );
 
+	wxBoxSizer* bSizerResTol;
+	bSizerResTol = new wxBoxSizer( wxHORIZONTAL );
+
+	m_labelResTol = new wxStaticText( this, wxID_ANY, _("Resistor tolerance:"), wxDefaultPosition, wxSize( -1,-1 ), 0 );
+	m_labelResTol->Wrap( -1 );
+	bSizerResTol->Add( m_labelResTol, 0, wxALIGN_CENTER|wxALL, 5 );
+
+
+	bSizerResTol->Add( 0, 0, 1, 0, 5 );
+
+	m_resTolVal = new wxTextCtrl( this, wxID_ANY, _("1"), wxDefaultPosition, wxSize( 45,-1 ), 0 );
+	bSizerResTol->Add( m_resTolVal, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_labelResTolUnit = new wxStaticText( this, wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelResTolUnit->Wrap( -1 );
+	bSizerResTol->Add( m_labelResTolUnit, 0, wxALIGN_CENTER|wxALL, 5 );
+
+
+	bSizer9->Add( bSizerResTol, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
+	wxBoxSizer* bSizerComment;
+	bSizerComment = new wxBoxSizer( wxHORIZONTAL );
+
+	m_labelKicadComment = new wxStaticText( this, wxID_ANY, _("Power Comment:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelKicadComment->Wrap( -1 );
+	bSizerComment->Add( m_labelKicadComment, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_textPowerComment = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize( 200,-1 ), wxTE_CENTER|wxTE_READONLY );
+	m_textPowerComment->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_3DLIGHT ) );
+
+	bSizerComment->Add( m_textPowerComment, 0, wxALL, 5 );
+
+
+	bSizerComment->Add( 0, 0, 1, wxEXPAND, 5 );
+
+	m_btCopyCB = new wxButton( this, wxID_ANY, _("Copy to Clipboard"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizerComment->Add( m_btCopyCB, 0, wxALL, 5 );
+
+
+	bSizer9->Add( bSizerComment, 1, wxEXPAND|wxLEFT|wxRIGHT, 5 );
+
 
 	bSizerRegulRight->Add( bSizer9, 0, 0, 5 );
+
+	m_RegulMessage = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_RegulMessage->Wrap( -1 );
+	bSizerRegulRight->Add( m_RegulMessage, 0, wxALL|wxEXPAND, 10 );
 
 	wxBoxSizer* bSizerRegulButtonCalcReset;
 	bSizerRegulButtonCalcReset = new wxBoxSizer( wxHORIZONTAL );
@@ -221,14 +353,13 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	m_buttonCalculate = new wxButton( this, wxID_ANY, _("Calculate"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonCalculate->SetMinSize( wxSize( 120,-1 ) );
 
-	bSizerRegulButtonCalcReset->Add( m_buttonCalculate, 0, wxTOP, 5 );
+	bSizerRegulButtonCalcReset->Add( m_buttonCalculate, 0, wxALL|wxTOP, 5 );
+
+
+	bSizerRegulButtonCalcReset->Add( 0, 0, 1, wxEXPAND, 5 );
 
 
 	bSizerRegulRight->Add( bSizerRegulButtonCalcReset, 0, wxEXPAND|wxLEFT, 5 );
-
-	m_RegulMessage = new wxStaticText( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_RegulMessage->Wrap( -1 );
-	bSizerRegulRight->Add( m_RegulMessage, 0, wxALL, 10 );
 
 
 	bSizerRegulRight->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -254,6 +385,7 @@ PANEL_REGULATOR_BASE::PANEL_REGULATOR_BASE( wxWindow* parent, wxWindowID id, con
 	m_buttonEditItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnEditRegulator ), NULL, this );
 	m_buttonAddItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnAddRegulator ), NULL, this );
 	m_buttonRemoveItem->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRemoveRegulator ), NULL, this );
+	m_btCopyCB->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnCopyCB ), NULL, this );
 	m_buttonCalculate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorCalcButtonClick ), NULL, this );
 	m_buttonRegulReset->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorResetButtonClick ), NULL, this );
 }
@@ -267,6 +399,7 @@ PANEL_REGULATOR_BASE::~PANEL_REGULATOR_BASE()
 	m_buttonEditItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnEditRegulator ), NULL, this );
 	m_buttonAddItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnAddRegulator ), NULL, this );
 	m_buttonRemoveItem->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRemoveRegulator ), NULL, this );
+	m_btCopyCB->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnCopyCB ), NULL, this );
 	m_buttonCalculate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorCalcButtonClick ), NULL, this );
 	m_buttonRegulReset->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_REGULATOR_BASE::OnRegulatorResetButtonClick ), NULL, this );
 

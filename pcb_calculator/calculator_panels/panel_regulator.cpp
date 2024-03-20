@@ -21,6 +21,7 @@
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
 #include <wx/msgdlg.h>
+#include <wx/clipbrd.h>
 
 #include <bitmaps.h>
 #include <calculator_panels/panel_regulator.h>
@@ -39,10 +40,6 @@ PANEL_REGULATOR::PANEL_REGULATOR( wxWindow* parent, wxWindowID id, const wxPoint
         PANEL_REGULATOR_BASE( parent, id, pos, size, style, name ),
         m_RegulatorListChanged( false )
 {
-    m_IadjUnitLabel->SetLabel( wxT( "µA" ) );
-    m_r1Units->SetLabel( wxT( "kΩ" ) );
-    m_r2Units->SetLabel( wxT( "kΩ" ) );
-
     m_bitmapRegul3pins->SetBitmap( KiBitmapBundle( BITMAPS::regul_3pins ) );
     m_bitmapRegul4pins->SetBitmap( KiBitmapBundle( BITMAPS::regul ) );
 
@@ -74,13 +71,33 @@ void PANEL_REGULATOR::OnRegulatorCalcButtonClick( wxCommandEvent& event )
 
 void PANEL_REGULATOR::OnRegulatorResetButtonClick( wxCommandEvent& event )
 {
-    m_RegulR1Value->SetValue( wxT( "10" ) );
-    m_RegulR2Value->SetValue( wxT( "10" ) );
-    m_RegulVrefValue->SetValue( wxT( "3" ) );
-    m_RegulVoutValue->SetValue( wxT( "12" ) );
-    m_choiceRegType->SetSelection( 0 );
-    m_rbRegulR1->SetValue( true );
-    m_rbRegulR2->SetValue( false );
+    m_resTolVal->SetValue( wxT( DEFAULT_REGULATOR_RESTOL ) );
+
+    m_r1MinVal->SetValue( wxT( "" ) );
+    m_r1TypVal->SetValue( wxT( DEFAULT_REGULATOR_R1 ) );
+    m_r1MaxVal->SetValue( wxT( "" ) );
+
+    m_r2MinVal->SetValue( wxT( "" ) );
+    m_r2TypVal->SetValue( wxT( DEFAULT_REGULATOR_R2 ) );
+    m_r2MaxVal->SetValue( wxT( "" ) );
+
+    m_vrefMinVal->SetValue( wxT( DEFAULT_REGULATOR_VREF_MIN ) );
+    m_vrefTypVal->SetValue( wxT( DEFAULT_REGULATOR_VREF_TYP ) );
+    m_vrefMaxVal->SetValue( wxT( DEFAULT_REGULATOR_VREF_MAX ) );
+
+    m_voutMinVal->SetValue( wxT( "" ) );
+    m_voutTypVal->SetValue( wxT( DEFAULT_REGULATOR_VOUT_TYP ) );
+    m_voutMaxVal->SetValue( wxT( "" ) );
+
+    m_iadjTypVal->SetValue( wxT( DEFAULT_REGULATOR_IADJ_TYP ) );
+    m_iadjMaxVal->SetValue( wxT( DEFAULT_REGULATOR_IADJ_MAX ) );
+
+    m_tolTotalMin->SetValue( wxT( "" ) );
+    m_TolTotalMax->SetValue( wxT( "" ) );
+
+    m_choiceRegType->SetSelection( 1 );
+    m_rbRegulR1->SetValue( false );
+    m_rbRegulR2->SetValue( true );
     m_rbRegulVout->SetValue( false );
     RegulatorPageUpdate();
 }
@@ -94,14 +111,24 @@ void PANEL_REGULATOR::RegulatorPageUpdate()
     case 0:
         m_bitmapRegul4pins->Show( true );
         m_bitmapRegul3pins->Show( false );
-        m_RegulIadjValue->Enable( false );
+
+        m_RegulIadjTitle->Show( false );
+        m_iadjTypVal->Show( false );
+        m_iadjMaxVal->Show( false );
+        m_labelUnitsIadj->Show( false );
+
         m_RegulFormula->SetLabel( wxT( "Vout = Vref * (R1 + R2) / R2" ) );
         break;
 
     case 1:
         m_bitmapRegul4pins->Show( false );
         m_bitmapRegul3pins->Show( true );
-        m_RegulIadjValue->Enable( true );
+
+        m_RegulIadjTitle->Show( true );
+        m_iadjTypVal->Show( true );
+        m_iadjMaxVal->Show( true );
+        m_labelUnitsIadj->Show( true );
+
         m_RegulFormula->SetLabel( wxT( "Vout = Vref * (R1 + R2) / R1 + Iadj * R2" ) );
         break;
     }
@@ -134,10 +161,19 @@ void PANEL_REGULATOR::OnRegulatorSelection( wxCommandEvent& event )
         m_lastSelectedRegulatorName = item->m_Name;
         m_choiceRegType->SetSelection( item->m_Type );
         wxString value;
-        value.Printf( wxT( "%g" ), item->m_Vref );
-        m_RegulVrefValue->SetValue( value );
-        value.Printf( wxT( "%g" ), item->m_Iadj );
-        m_RegulIadjValue->SetValue( value );
+
+        value.Printf( wxT( "%g" ), item->m_VrefMin );
+        m_vrefMinVal->SetValue( value );
+        value.Printf( wxT( "%g" ), item->m_VrefTyp );
+        m_vrefTypVal->SetValue( value );
+        value.Printf( wxT( "%g" ), item->m_VrefMax );
+        m_vrefMaxVal->SetValue( value );
+
+        value.Printf( wxT( "%g" ), item->m_IadjTyp );
+        m_iadjTypVal->SetValue( value );
+
+        value.Printf( wxT( "%g" ), item->m_IadjMax );
+        m_iadjMaxVal->SetValue( value );
     }
 
     // Call RegulatorPageUpdate to enable/disable tools,
@@ -156,8 +192,9 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
 
     wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
-    wxFileDialog dlg( topLevelParent, _( "Select PCB Calculator Data File" ),
-                      wxEmptyString, fullfilename, wildcard, wxFD_OPEN );
+    // Must be wxFD_SAVE, otherwise you cannot assign a file name
+    wxFileDialog dlg( topLevelParent, _( "Select PCB Calculator Data File" ), wxEmptyString,
+                      fullfilename, wildcard, wxFD_SAVE );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
@@ -171,8 +208,9 @@ void PANEL_REGULATOR::OnDataFileSelection( wxCommandEvent& event )
 
     if( wxFileExists( fullfilename ) && m_RegulatorList.GetCount() > 0 )  // Read file
     {
-        if( wxMessageBox( _( "Do you want to load this file and replace current regulator list?" ) )
-            != wxID_OK )
+        if( wxMessageBox( _( "Do you want to load this file and replace current regulator list?" ),
+                          wxASCII_STR( wxMessageBoxCaptionStr ), wxOK | wxCANCEL | wxCENTER, this )
+            != wxOK )
         {
             return;
         }
@@ -288,6 +326,18 @@ void PANEL_REGULATOR::SelectLastSelectedRegulator()
 }
 
 
+void PANEL_REGULATOR::OnCopyCB( wxCommandEvent& event )
+{
+    if( wxTheClipboard->Open() )
+    {
+        // This data objects are held by the clipboard,
+        // so do not delete them in the app.
+        wxTheClipboard->SetData( new wxTextDataObject( m_textPowerComment->GetValue() ) );
+        wxTheClipboard->Close();
+    }
+}
+
+
 void PANEL_REGULATOR::RegulatorsSolve()
 {
     int id;
@@ -310,7 +360,12 @@ void PANEL_REGULATOR::RegulatorsSolve()
         return;
     }
 
-    double r1, r2, vref, vout;
+    double restol;
+    double r1min, r1typ, r1max;
+    double r2min, r2typ, r2max;
+    double vrefmin, vreftyp, vrefmax;
+    double voutmin, vouttyp, voutmax, voutnom;
+    double toltotalmin, toltotalmax;
 
     wxString txt;
 
@@ -321,29 +376,46 @@ void PANEL_REGULATOR::RegulatorsSolve()
     int r2scale = 1000;
 
     // Read values from panel:
-    txt  = m_RegulR1Value->GetValue();
-    r1   = DoubleFromString( txt ) * r1scale;
-    txt  = m_RegulR2Value->GetValue();
-    r2   = DoubleFromString( txt ) * r2scale;
-    txt  = m_RegulVrefValue->GetValue();
-    vref = DoubleFromString( txt );
-    txt  = m_RegulVoutValue->GetValue();
-    vout = DoubleFromString( txt );
+    txt = m_resTolVal->GetValue();
+    restol = DoubleFromString( txt ) / 100;
+
+    txt = m_r1TypVal->GetValue();
+    r1typ = DoubleFromString( txt ) * r1scale;
+
+    txt = m_r2TypVal->GetValue();
+    r2typ = DoubleFromString( txt ) * r2scale;
+
+    txt = m_vrefMinVal->GetValue();
+    vrefmin = DoubleFromString( txt );
+    txt = m_vrefTypVal->GetValue();
+    vreftyp = DoubleFromString( txt );
+    txt = m_vrefMaxVal->GetValue();
+    vrefmax = DoubleFromString( txt );
+
+    txt = m_voutTypVal->GetValue();
+    vouttyp = DoubleFromString( txt );
+    voutnom = vouttyp;
 
     // Some tests:
-    if( vout < vref && id != 2 )
+    if( ( vouttyp < vrefmin || vouttyp < vreftyp || vouttyp < vrefmax ) && id != 2 )
     {
         m_RegulMessage->SetLabel( _( "Vout must be greater than vref" ) );
         return;
     }
 
-    if( vref == 0.0 )
+    if( vrefmin == 0.0 || vreftyp == 0.0 || vrefmax == 0.0 )
     {
         m_RegulMessage->SetLabel( _( "Vref set to 0 !" ) );
         return;
     }
 
-    if( ( r1 < 0 && id != 0 ) || ( r2 <= 0 && id != 1 ) )
+    if( vrefmin > vreftyp || vreftyp > vrefmax )
+    {
+        m_RegulMessage->SetLabel( _( "Vref must VrefMin < VrefTyp < VrefMax" ) );
+        return;
+    }
+
+    if( ( r1typ < 0 && id != 0 ) || ( r2typ <= 0 && id != 1 ) )
     {
         m_RegulMessage->SetLabel( _( "Incorrect value for R1 R2" ) );
         return;
@@ -353,81 +425,136 @@ void PANEL_REGULATOR::RegulatorsSolve()
     if( m_choiceRegType->GetSelection() == 1)
     {
         // 3 terminal regulator
-        txt = m_RegulIadjValue->GetValue();
-        double iadj = DoubleFromString( txt );
+        txt = m_iadjTypVal->GetValue();
+        double iadjtyp = DoubleFromString( txt );
+        txt = m_iadjMaxVal->GetValue();
+        double iadjmax = DoubleFromString( txt );
+
+        if( iadjtyp > iadjmax )
+        {
+            m_RegulMessage->SetLabel( _( "Iadj must IadjTyp < IadjMax" ) );
+            return;
+        }
 
         // iadj is given in micro amp, so convert it in amp.
-        iadj /= 1000000;
+        iadjtyp /= 1000000;
+        iadjmax /= 1000000;
 
         switch( id )
         {
         case 0:
-            r1 = vref * r2 / ( vout - vref - ( r2 * iadj ) );
+            // typical formula
+            r1typ = vreftyp * r2typ / ( vouttyp - vreftyp - ( r2typ * iadjtyp ) );
             break;
 
         case 1:
-            r2 = ( vout - vref ) / ( iadj + ( vref / r1 ) );
+            // typical formula
+            r2typ = ( vouttyp - vreftyp ) / ( iadjtyp + ( vreftyp / r1typ ) );
             break;
 
         case 2:
-            vout = vref * ( r1 + r2 ) / r1;
-            vout += r2 * iadj;
+            // typical formula
+            vouttyp = vreftyp * ( r1typ + r2typ ) / r1typ;
+            voutnom = vouttyp;
+            vouttyp += r2typ * iadjtyp;
             break;
         }
+
+        r1min = r1typ - r1typ * restol;
+        r1max = r1typ + r1typ * restol;
+
+        r2min = r2typ - r2typ * restol;
+        r2max = r2typ + r2typ * restol;
+
+        voutmin = vrefmin * ( r1max + r2min ) / r1max;
+        voutmin += r2min * iadjtyp;
+
+        voutmax = vrefmax * ( r1min + r2max ) / r1min;
+        voutmax += r2typ * iadjmax;
     }
     else
     {   // Standard 4 terminal regulator
         switch( id )
         {
-        case 0: r1 = ( vout / vref - 1 ) * r2;  break;
-        case 1: r2 = r1 / ( vout / vref - 1 );  break;
-        case 2: vout = vref * ( r1 + r2 ) / r2; break;
-        }
-    }
+        case 0:
+            // typical formula
+            r1typ = ( vouttyp / vreftyp - 1 ) * r2typ;
+            break;
 
-    // write values to panel:
-    txt.Printf( wxT( "%g" ), r1 / r1scale );
-    m_RegulR1Value->SetValue( txt );
-    txt.Printf( wxT( "%g" ), r2 / r2scale );
-    m_RegulR2Value->SetValue( txt );
-    txt.Printf( wxT( "%g" ), vref );
-    m_RegulVrefValue->SetValue( txt );
-    txt.Printf( wxT( "%g" ), vout );
-    m_RegulVoutValue->SetValue( txt );
-}
+        case 1:
+            // typical formula
+            r2typ = r1typ / ( vouttyp / vreftyp - 1 );
+            break;
 
-
-void PANEL_REGULATOR::Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg )
-{
-    // Save current parameter values in config.
-    aCfg->m_Regulators.r1 = m_RegulR1Value->GetValue();
-    aCfg->m_Regulators.r2 = m_RegulR2Value->GetValue();
-    aCfg->m_Regulators.vref = m_RegulVrefValue->GetValue();
-    aCfg->m_Regulators.vout = m_RegulVoutValue->GetValue();
-    aCfg->m_Regulators.data_file = GetDataFilename();
-    aCfg->m_Regulators.selected_regulator = m_lastSelectedRegulatorName;
-    aCfg->m_Regulators.type = m_choiceRegType->GetSelection();
-
-    // Store the parameter selection that was recently calculated (R1, R2 or Vout)
-    wxRadioButton* regprms[3] = { m_rbRegulR1, m_rbRegulR2, m_rbRegulVout };
-
-    for( int ii = 0; ii < 3; ii++ )
-    {
-        if( regprms[ii]->GetValue() )
-        {
-            aCfg->m_Regulators.last_param = ii;
+        case 2:
+            // typical formula
+            vouttyp = vreftyp * ( r1typ + r2typ ) / r2typ;
+            voutnom = vouttyp;
             break;
         }
+
+        r1min = r1typ - r1typ * restol;
+        r1max = r1typ + r1typ * restol;
+
+        r2min = r2typ - r2typ * restol;
+        r2max = r2typ + r2typ * restol;
+
+        voutmin = vrefmin * ( r1min + r2max ) / r2max;
+        voutmax = vrefmax * ( r1max + r2min ) / r2min;
     }
+
+    toltotalmin = voutmin / voutnom * 100.0 - 100.0;
+    toltotalmax = voutmax / voutnom * 100.0 - 100.0;
+
+    // write values to panel:
+    txt.Printf( wxT( "%g" ), round_to( r1min / r1scale ) );
+    m_r1MinVal->SetValue( txt );
+    txt.Printf( wxT( "%g" ), round_to( r1typ / r1scale ) );
+    m_r1TypVal->SetValue( txt );
+    txt.Printf( wxT( "%g" ), round_to( r1max / r1scale ) );
+    m_r1MaxVal->SetValue( txt );
+
+    txt.Printf( wxT( "%g" ), round_to( r2min / r2scale ) );
+    m_r2MinVal->SetValue( txt );
+    txt.Printf( wxT( "%g" ), round_to( r2typ / r2scale ) );
+    m_r2TypVal->SetValue( txt );
+    txt.Printf( wxT( "%g" ), round_to( r2max / r2scale ) );
+    m_r2MaxVal->SetValue( txt );
+
+    txt.Printf( wxT( "%g" ), round_to( voutmin ) );
+    m_voutMinVal->SetValue( txt );
+    txt.Printf( wxT( "%g" ), round_to( vouttyp ) );
+    m_voutTypVal->SetValue( txt );
+    txt.Printf( wxT( "%g" ), round_to( voutmax ) );
+    m_voutMaxVal->SetValue( txt );
+
+    txt.Printf( wxT( "%g" ), round_to( toltotalmin, 0.01 ) );
+    m_tolTotalMin->SetValue( txt );
+    txt.Printf( wxT( "%g" ), round_to( toltotalmax, 0.01 ) );
+    m_TolTotalMax->SetValue( txt );
+
+    txt = wxString::Format( "%gV [%gV .. %gV]", round_to( vouttyp, 0.01 ),
+                            round_to( voutmin, 0.01 ), round_to( voutmax, 0.01 ) );
+    m_textPowerComment->SetValue( txt );
 }
 
 
 void PANEL_REGULATOR::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 {
-    m_RegulR1Value->SetValue( aCfg->m_Regulators.r1 );
-    m_RegulR2Value->SetValue( aCfg->m_Regulators.r2 );
-    m_RegulVrefValue->SetValue( aCfg->m_Regulators.vref );
-    m_RegulVoutValue->SetValue( aCfg->m_Regulators.vout );
+    m_resTolVal->SetValue( aCfg->m_Regulators.resTol );
+
+    m_r1TypVal->SetValue( aCfg->m_Regulators.r1 );
+    m_r2TypVal->SetValue( aCfg->m_Regulators.r2 );
+
+    m_vrefMinVal->SetValue( aCfg->m_Regulators.vrefMin );
+    m_vrefTypVal->SetValue( aCfg->m_Regulators.vrefTyp );
+    m_vrefMaxVal->SetValue( aCfg->m_Regulators.vrefMax );
+
+    m_voutTypVal->SetValue( aCfg->m_Regulators.voutTyp );
+
+    m_iadjTypVal->SetValue( aCfg->m_Regulators.iadjTyp );
+    m_iadjMaxVal->SetValue( aCfg->m_Regulators.iadjMax );
+
     SetDataFilename( aCfg->m_Regulators.data_file );
     m_lastSelectedRegulatorName = aCfg->m_Regulators.selected_regulator;
     m_choiceRegType->SetSelection( aCfg->m_Regulators.type );
@@ -439,15 +566,27 @@ void PANEL_REGULATOR::LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg )
 
     for( int ii = 0; ii < 3; ii++ )
         regprms[ii]->SetValue( aCfg->m_Regulators.last_param == ii );
+
+    RegulatorPageUpdate();
 }
 
 
 void PANEL_REGULATOR::SaveSettings( PCB_CALCULATOR_SETTINGS *aCfg )
 {
-    aCfg->m_Regulators.r1 = m_RegulR1Value->GetValue();
-    aCfg->m_Regulators.r2 = m_RegulR2Value->GetValue();
-    aCfg->m_Regulators.vref = m_RegulVrefValue->GetValue();
-    m_RegulVoutValue->SetValue( aCfg->m_Regulators.vout );
+    aCfg->m_Regulators.resTol = m_resTolVal->GetValue();
+
+    aCfg->m_Regulators.r1 = m_r1TypVal->GetValue();
+    aCfg->m_Regulators.r2 = m_r2TypVal->GetValue();
+
+    aCfg->m_Regulators.vrefMin = m_vrefMinVal->GetValue();
+    aCfg->m_Regulators.vrefTyp = m_vrefTypVal->GetValue();
+    aCfg->m_Regulators.vrefMax = m_vrefMaxVal->GetValue();
+
+    m_voutTypVal->SetValue( aCfg->m_Regulators.voutTyp );
+
+    aCfg->m_Regulators.iadjTyp = m_iadjTypVal->GetValue();
+    aCfg->m_Regulators.iadjMax = m_iadjMaxVal->GetValue();
+
     aCfg->m_Regulators.data_file = GetDataFilename();
     aCfg->m_Regulators.selected_regulator = m_lastSelectedRegulatorName;
     aCfg->m_Regulators.type = m_choiceRegType->GetSelection();
@@ -490,4 +629,9 @@ void PANEL_REGULATOR::SetDataFilename( const wxString& aFilename )
         fn.SetExt( DataFileNameExt );
         m_regulators_fileNameCtrl->SetValue( fn.GetFullPath() );
     }
+}
+
+double PANEL_REGULATOR::round_to( double value, double precision )
+{
+    return std::round( value / precision ) * precision;
 }

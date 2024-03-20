@@ -55,6 +55,7 @@ bool PANEL_REGULATOR::ReadDataFile()
 
     // Switch the locale to standard C (needed to read/write floating point numbers)
     LOCALE_IO toggle;
+    m_RegulatorList.Clear();
 
     PCB_CALCULATOR_DATAFILE* datafile = new PCB_CALCULATOR_DATAFILE( &m_RegulatorList );
 
@@ -133,7 +134,7 @@ int PCB_CALCULATOR_DATAFILE::WriteHeader( OUTPUTFORMATTER* aFormatter ) const
 {
     int nestlevel = 0;
     aFormatter->Print( nestlevel++, "(datafile\n");
-    aFormatter->Print( nestlevel++, "(version 1)\n" );
+    aFormatter->Print( nestlevel++, "(version 2)\n" );
     aFormatter->Print( nestlevel++, "(date %s)\n",
                        aFormatter->Quotew( GetISO8601CurrentDateTime() ).c_str() );
     aFormatter->Print( nestlevel++, "(tool %s)\n",
@@ -152,14 +153,21 @@ void PCB_CALCULATOR_DATAFILE::Format( OUTPUTFORMATTER* aFormatter,
     for( REGULATOR_DATA* item : m_list->m_List )
     {
         aFormatter->Print( aNestLevel, "(%s %s\n", getTokenName( T_regulator ),
-                           aFormatter->Quotew(item->m_Name ).c_str() );
-        aFormatter->Print( aNestLevel+1, "(%s %g)\n", getTokenName( T_reg_vref ),
-                           item->m_Vref );
+                           aFormatter->Quotew( item->m_Name ).c_str() );
 
-        if( item->m_Iadj != 0 && item->m_Type == 1)
+        aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_vref_min ),
+                           item->m_VrefMin );
+        aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_vref_typ ),
+                           item->m_VrefTyp );
+        aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_vref_max ),
+                           item->m_VrefMax );
+
+        if( item->m_Type == 1 )
         {
-            aFormatter->Print( aNestLevel+1, "(%s %g)\n", getTokenName( T_reg_iadj ),
-                               item->m_Iadj );
+            aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_iadj_typ ),
+                               item->m_IadjTyp );
+            aFormatter->Print( aNestLevel + 1, "(%s %g)\n", getTokenName( T_reg_iadj_max ),
+                               item->m_IadjMax );
         }
 
         aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_reg_type ),
@@ -214,7 +222,22 @@ void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFIL
 {
     T token;
     wxString name;
-    double vref, iadj;
+    double   vrefmin, vreftyp, vrefmax = 0.0;
+    double   iadjtyp, iadjmax = 0.0;
+
+    auto parseToken = [&]()
+    {
+        double val;
+        token = NextTok();
+
+        if( token != T_NUMBER )
+            Expecting( T_NUMBER );
+
+        sscanf( CurText(), "%lf", &val );
+        NeedRIGHT();
+        return val;
+    };
+
     int type;
 
     while( ( token = NextTok() ) != T_RIGHT )
@@ -228,7 +251,11 @@ void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFIL
         if( token == T_regulator )
         {
             type = 0;
-            vref = 0.0;
+            vrefmin = 0.0;
+            vreftyp = 0.0;
+            vrefmax = 0.0;
+            iadjtyp = 0.0;
+            iadjmax = 0.0;
 
             // Read name
             token = NextTok();
@@ -244,25 +271,25 @@ void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFIL
 
                 switch( token )
                 {
-                case T_reg_vref:   // the voltage reference value
-                    token = NextTok();
-
-                    if( token != T_NUMBER )
-                        Expecting( T_NUMBER );
-
-                    sscanf( CurText(), "%lf" , &vref);
-                    NeedRIGHT();
+                // Parse legacy entry
+                case T_reg_vref:
+                    vreftyp = parseToken();
+                    vrefmin = vreftyp;
+                    vrefmax = vreftyp;
                     break;
 
-                case T_reg_iadj:   // the Iadj reference value
-                    token = NextTok();
+                case T_reg_vref_min: vrefmin = parseToken(); break;
+                case T_reg_vref_typ: vreftyp = parseToken(); break;
+                case T_reg_vref_max: vrefmax = parseToken(); break;
 
-                    if( token != T_NUMBER )
-                        Expecting( T_NUMBER );
-
-                    sscanf( CurText(), "%lf" , &iadj);
-                    NeedRIGHT();
+                // Parse legacy entry
+                case T_reg_iadj:
+                    iadjtyp = parseToken();
+                    iadjmax = iadjtyp;
                     break;
+
+                case T_reg_iadj_typ: iadjtyp = parseToken(); break;
+                case T_reg_iadj_max: iadjmax = parseToken(); break;
 
                 case T_reg_type:   // type: normal or 3 terminal reg
                     token = NextTok();
@@ -285,10 +312,8 @@ void PCB_CALCULATOR_DATAFILE_PARSER::ParseRegulatorDescr( PCB_CALCULATOR_DATAFIL
 
             if( ! name.IsEmpty() )
             {
-                if( type != 1 )
-                    iadj = 0.0;
-
-                REGULATOR_DATA* new_item = new REGULATOR_DATA( name, vref, type, iadj );
+                REGULATOR_DATA* new_item = new REGULATOR_DATA( name, vrefmin, vreftyp, vrefmax,
+                                                               type, iadjtyp, iadjmax );
                 aDataList->m_list->Add( new_item );
             }
         }

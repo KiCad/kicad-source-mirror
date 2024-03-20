@@ -42,6 +42,7 @@ public:
     void OnAddRegulator( wxCommandEvent& event ) override;
     void OnEditRegulator( wxCommandEvent& event ) override;
     void OnRemoveRegulator( wxCommandEvent& event ) override;
+    void OnCopyCB( wxCommandEvent& event ) override;
 
     // Methods from CALCULATOR_PANEL that must be overridden
     void LoadSettings( PCB_CALCULATOR_SETTINGS* aCfg ) override;
@@ -63,13 +64,6 @@ public:
     void RegulatorsSolve();
 
     /**
-     * Write regulators parameters in configuration.
-     *
-     * @param aCfg is the configuration settings.
-     */
-    void Regulators_WriteConfig( PCB_CALCULATOR_SETTINGS* aCfg );
-
-    /**
      * @return the full filename of the selected pcb_calculator data file
      */
     const wxString GetDataFilename();
@@ -85,6 +79,8 @@ public:
     // R/W data files:
     bool ReadDataFile();
     bool WriteDataFile();
+
+    static double round_to( double value, double precision = 0.001 );
 
 public:
     REGULATOR_LIST  m_RegulatorList;        // the list of known regulators

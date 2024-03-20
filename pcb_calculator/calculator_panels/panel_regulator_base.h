@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -52,26 +52,48 @@ class PANEL_REGULATOR_BASE : public CALCULATOR_PANEL
 		wxButton* m_buttonEditItem;
 		wxButton* m_buttonAddItem;
 		wxButton* m_buttonRemoveItem;
+		wxStaticText* m_labelValMin;
+		wxStaticText* m_labelValTyp;
+		wxStaticText* m_labelValMax;
 		wxRadioButton* m_rbRegulR1;
 		wxStaticText* m_labelRegultR1;
-		wxTextCtrl* m_RegulR1Value;
-		wxStaticText* m_r1Units;
+		wxTextCtrl* m_r1MinVal;
+		wxTextCtrl* m_r1TypVal;
+		wxTextCtrl* m_r1MaxVal;
+		wxStaticText* m_labelUnitsR1;
 		wxRadioButton* m_rbRegulR2;
 		wxStaticText* m_labelRegultR2;
-		wxTextCtrl* m_RegulR2Value;
-		wxStaticText* m_r2Units;
+		wxTextCtrl* m_r2MinVal;
+		wxTextCtrl* m_r2TypVal;
+		wxTextCtrl* m_r2MaxVal;
+		wxStaticText* m_labelUnitsR2;
 		wxRadioButton* m_rbRegulVout;
 		wxStaticText* m_labelVout;
-		wxTextCtrl* m_RegulVoutValue;
-		wxStaticText* m_unitsVout;
+		wxTextCtrl* m_voutMinVal;
+		wxTextCtrl* m_voutTypVal;
+		wxTextCtrl* m_voutMaxVal;
+		wxStaticText* m_labelUnitsVout;
 		wxStaticText* m_labelVRef;
-		wxTextCtrl* m_RegulVrefValue;
-		wxStaticText* m_unitsVref;
+		wxTextCtrl* m_vrefMinVal;
+		wxTextCtrl* m_vrefTypVal;
+		wxTextCtrl* m_vrefMaxVal;
+		wxStaticText* m_labelUnitsVref;
 		wxStaticText* m_RegulIadjTitle;
-		wxTextCtrl* m_RegulIadjValue;
-		wxStaticText* m_IadjUnitLabel;
-		wxButton* m_buttonCalculate;
+		wxTextCtrl* m_iadjTypVal;
+		wxTextCtrl* m_iadjMaxVal;
+		wxStaticText* m_labelUnitsIadj;
+		wxStaticText* m_labelTolSumary;
+		wxTextCtrl* m_tolTotalMin;
+		wxTextCtrl* m_TolTotalMax;
+		wxStaticText* m_labelTotalPercent;
+		wxStaticText* m_labelResTol;
+		wxTextCtrl* m_resTolVal;
+		wxStaticText* m_labelResTolUnit;
+		wxStaticText* m_labelKicadComment;
+		wxTextCtrl* m_textPowerComment;
+		wxButton* m_btCopyCB;
 		wxStaticText* m_RegulMessage;
+		wxButton* m_buttonCalculate;
 		wxButton* m_buttonRegulReset;
 
 		// Virtual event handlers, override them in your derived class
@@ -81,6 +103,7 @@ class PANEL_REGULATOR_BASE : public CALCULATOR_PANEL
 		virtual void OnEditRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddRegulator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRemoveRegulator( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCopyCB( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorCalcButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegulatorResetButtonClick( wxCommandEvent& event ) { event.Skip(); }
 

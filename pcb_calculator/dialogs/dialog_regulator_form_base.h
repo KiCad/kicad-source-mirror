@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -18,8 +18,8 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
-#include <wx/choice.h>
 #include <wx/sizer.h>
+#include <wx/choice.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -37,13 +37,16 @@ class DIALOG_REGULATOR_FORM_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textCtrlName;
 		wxStaticText* m_staticTextVref;
-		wxTextCtrl* m_textCtrlVref;
+		wxTextCtrl* m_vrefMinVal;
+		wxTextCtrl* m_vrefTypVal;
+		wxTextCtrl* m_vrefMaxVal;
 		wxStaticText* m_staticTextVrefUnit;
 		wxStaticText* m_staticTextType;
 		wxChoice* m_choiceRegType;
 		wxStaticText* m_RegulIadjTitle;
-		wxTextCtrl* m_RegulIadjValue;
-		wxStaticText* m_IadjUnitLabel;
+		wxTextCtrl* m_iadjTypVal;
+		wxTextCtrl* m_iadjMaxVal;
+		wxStaticText* m_labelUnitIadj;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

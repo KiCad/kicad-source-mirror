@@ -101,13 +101,29 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
             &m_Electrical.iec60664_altitude, 2000 ) );
 
     // Regulators params
-    m_params.emplace_back( new PARAM<wxString>( "regulators.r1", &m_Regulators.r1, "10" ) );
+    m_params.emplace_back( new PARAM<wxString>( "regulators.resTol", &m_Regulators.resTol,
+                                                DEFAULT_REGULATOR_RESTOL ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "regulators.r2", &m_Regulators.r2, "10" ) );
+    m_params.emplace_back(
+            new PARAM<wxString>( "regulators.r1", &m_Regulators.r1, DEFAULT_REGULATOR_R1 ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "regulators.vref", &m_Regulators.vref, "3" ) );
+    m_params.emplace_back(
+            new PARAM<wxString>( "regulators.r2", &m_Regulators.r2, DEFAULT_REGULATOR_R2 ) );
 
-    m_params.emplace_back( new PARAM<wxString>( "regulators.vout", &m_Regulators.vout, "12" ) );
+    m_params.emplace_back( new PARAM<wxString>( "regulators.vrefMin", &m_Regulators.vrefMin,
+                                                DEFAULT_REGULATOR_VREF_MIN ) );
+    m_params.emplace_back( new PARAM<wxString>( "regulators.vrefTyp", &m_Regulators.vrefTyp,
+                                                DEFAULT_REGULATOR_VREF_TYP ) );
+    m_params.emplace_back( new PARAM<wxString>( "regulators.vrefMax", &m_Regulators.vrefMax,
+                                                DEFAULT_REGULATOR_VREF_MAX ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "regulators.voutTyp", &m_Regulators.voutTyp,
+                                                DEFAULT_REGULATOR_VOUT_TYP ) );
+
+    m_params.emplace_back( new PARAM<wxString>( "regulators.iadjTyp", &m_Regulators.iadjTyp,
+                                                DEFAULT_REGULATOR_IADJ_TYP ) );
+    m_params.emplace_back( new PARAM<wxString>( "regulators.iadjMax", &m_Regulators.iadjMax,
+                                                DEFAULT_REGULATOR_IADJ_MAX ) );
 
     m_params.emplace_back( new PARAM<wxString>( "regulators.data_file",
             &m_Regulators.data_file, "" ) );
@@ -115,7 +131,7 @@ PCB_CALCULATOR_SETTINGS::PCB_CALCULATOR_SETTINGS() :
     m_params.emplace_back( new PARAM<wxString>( "regulators.selected_regulator",
             &m_Regulators.selected_regulator, "" ) );
 
-    m_params.emplace_back( new PARAM<int>( "regulators.type", &m_Regulators.type, 0 ) );
+    m_params.emplace_back( new PARAM<int>( "regulators.type", &m_Regulators.type, 1 ) );
 
     m_params.emplace_back( new PARAM<int>( "regulators.last_param", &m_Regulators.last_param, 0 ) );
 

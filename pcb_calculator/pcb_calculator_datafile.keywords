@@ -1,5 +1,10 @@
 regulators
 regulator
 reg_iadj
+reg_iadj_typ
+reg_iadj_max
 reg_vref
+reg_vref_min
+reg_vref_typ
+reg_vref_max
 reg_type
