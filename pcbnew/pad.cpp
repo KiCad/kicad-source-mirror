@@ -652,15 +652,21 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
         switch( aAttribute )
         {
         case PAD_ATTRIB::PTH:
-            m_layerMask = PAD::PTHMask();
+            m_layerMask |= LSET::AllCuMask();
             break;
 
         case PAD_ATTRIB::SMD:
         case PAD_ATTRIB::CONN:
             if( m_layerMask.test( F_Cu ) )
-                m_layerMask = { F_Cu };
+            {
+                m_layerMask &= ~LSET::AllCuMask();
+                m_layerMask.set( F_Cu );
+            }
             else
-                m_layerMask = { B_Cu };
+            {
+                m_layerMask &= ~LSET::AllCuMask();
+                m_layerMask.set( B_Cu );
+            }
 
             m_drill = VECTOR2I( 0, 0 );
             break;
