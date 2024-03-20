@@ -327,6 +327,9 @@ protected:
         T_TABLE*         table = static_cast<T_TABLE*>( selection[0]->GetParent() );
         std::vector<int> deleted;
 
+        for( T_TABLECELL* cell : table->GetCells() )
+            cell->ClearFlags( STRUCT_DELETED );
+
         for( int row = 0; row < table->GetRowCount(); ++row )
         {
             bool deleteRow = false;
@@ -400,6 +403,9 @@ protected:
 
         T_TABLE*         table = static_cast<T_TABLE*>( selection[0]->GetParent() );
         std::vector<int> deleted;
+
+        for( T_TABLECELL* cell : table->GetCells() )
+            cell->ClearFlags( STRUCT_DELETED );
 
         for( int col = 0; col < table->GetColCount(); ++col )
         {
