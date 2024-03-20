@@ -45,7 +45,9 @@
 #include <wx/string.h>
 #include <wx/arrstr.h>
 
-class SCRIPTING
+#include <kicommon.h>
+
+class KICOMMON_API SCRIPTING
 {
 public:
     SCRIPTING();
@@ -82,14 +84,15 @@ private:
  * @param aVar is the variable to set
  * @param aValue is the value to give it
  */
-void        UpdatePythonEnvVar( const wxString& aVar, const wxString& aValue );
+KICOMMON_API void UpdatePythonEnvVar( const wxString& aVar, const wxString& aValue );
 
-void        RedirectStdio();
-wxWindow*   CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );
-bool InitPythonScripting( const char* aStockScriptingPath, const char* aUserScriptingPath );
-bool IsWxPythonLoaded();
+KICOMMON_API void RedirectStdio();
+KICOMMON_API wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameId );
+KICOMMON_API bool       InitPythonScripting( const char* aStockScriptingPath,
+                                            const char* aUserScriptingPath );
+KICOMMON_API bool       IsWxPythonLoaded();
 
-class PyLOCK
+class KICOMMON_API PyLOCK
 {
     PyGILState_STATE gil_state;
 public:
@@ -97,8 +100,8 @@ public:
     ~PyLOCK()     { PyGILState_Release( gil_state ); }
 };
 
-wxString        PyStringToWx( PyObject* str );
-wxArrayString   PyArrayStringToWx( PyObject* arr );
-wxString        PyErrStringWithTraceback();
+KICOMMON_API wxString PyStringToWx( PyObject* str );
+KICOMMON_API wxArrayString PyArrayStringToWx( PyObject* arr );
+KICOMMON_API wxString       PyErrStringWithTraceback();
 
 #endif    // __PYTHON_SCRIPTING_H

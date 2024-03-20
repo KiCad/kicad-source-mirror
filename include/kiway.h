@@ -275,7 +275,7 @@ struct KIFACE
  * and a #NETLIST, (anything relating to production of a single #BOARD and added to class
  * #PROJECT.)
  */
-class KIWAY : public wxEvtHandler
+class KICOMMON_API KIWAY : public wxEvtHandler
 {
     friend struct PGM_SINGLE_TOP;        // can use set_kiface()
 
@@ -403,7 +403,7 @@ public:
      */
     virtual void ProjectChanged();
 
-    KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop = nullptr );
+    KIWAY( int aCtlBits, wxFrame* aTop = nullptr );
 
     /**
      * Overwrites previously set ctl bits, only for use in kicad.cpp to flip between
@@ -459,7 +459,6 @@ private:
     static KIFACE*  m_kiface[KIWAY_FACE_COUNT];
     static int      m_kiface_version[KIWAY_FACE_COUNT];
 
-    PGM_BASE*       m_program;
     int             m_ctl;
 
     wxFrame*        m_top;      // Usually m_top is the Project manager

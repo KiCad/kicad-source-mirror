@@ -26,6 +26,8 @@
 #ifndef BITMAP_TYPES_H_
 #define BITMAP_TYPES_H_
 
+#include <kicommon.h>
+
 //FIXME: cannot include only this file in wxWidgets 2.9.3
 // test if it works under stable release
 // #include <wx/bitmap.h>   // only to define wxBitmap
@@ -44,7 +46,7 @@ enum class BITMAP_TYPE
     BMP
 };
 
-BITMAP_STORE* GetBitmapStore();
+KICOMMON_API BITMAP_STORE* GetBitmapStore();
 
 /**
  * Construct a wxBitmap from an image identifier
@@ -52,17 +54,17 @@ BITMAP_STORE* GetBitmapStore();
  * @param aBitmap is from the BITMAPS enum in bitmaps_list.h
  * @param aHeightTag is the requested height tag for multi-res bitmaps (-1 for any)
  */
-wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag = -1 );
+KICOMMON_API wxBitmap KiBitmap( BITMAPS aBitmap, int aHeightTag = -1 );
 
-wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap );
+KICOMMON_API wxBitmapBundle KiBitmapBundle( BITMAPS aBitmap );
 
-wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap );
+KICOMMON_API wxBitmapBundle KiDisabledBitmapBundle( BITMAPS aBitmap );
 
 /**
  * Wipes out the scaled bitmap cache so that the icon theme can be changed.
  * TODO: move scaling system into BITMAP_STORE so this global doesn't need to exist
  */
-void ClearScaledBitmapCache();
+KICOMMON_API void ClearScaledBitmapCache();
 
 /**
  * Construct a wxBitmap from a memory record, scaling it if device DPI demands it.
@@ -75,8 +77,8 @@ void ClearScaledBitmapCache();
  * @param aHeight is the requested image height for the source bitmap, or -1 for any height
  * @param aQuantized if true scaling will be rounded to integers (2X, 3X, etc.).
  */
-wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight = -1,
-                         bool aQuantized = false );
+KICOMMON_API wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight = -1,
+                                      bool aQuantized = false );
 
 /**
  * Overload of the above function that takes another wxBitmap as a parameter.
@@ -84,13 +86,13 @@ wxBitmap KiScaledBitmap( BITMAPS aBitmap, wxWindow* aWindow, int aHeight = -1,
  * @param aBitmap is the source bitmap to scale
  * @param aWindow target window for scaling context
  */
-wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow );
+KICOMMON_API wxBitmap KiScaledBitmap( const wxBitmap& aBitmap, wxWindow* aWindow );
 
 /**
  * Return the automatic scale factor that would be used for a given window by
  * KiScaledBitmap and KiScaledSeparator.
  */
-int KiIconScale( wxWindow* aWindow );
+KICOMMON_API int KiIconScale( wxWindow* aWindow );
 
 /**
  * Allocate a wxBitmap on heap from a memory record, held in a BITMAPS.
@@ -98,6 +100,6 @@ int KiIconScale( wxWindow* aWindow );
  * @param aBitmap is from the BITMAPS enum in bitmaps_list.h
  * @return wxBitmap* - caller owns it.
  */
-wxBitmap* KiBitmapNew( BITMAPS aBitmap );
+KICOMMON_API wxBitmap* KiBitmapNew( BITMAPS aBitmap );
 
 #endif  // BITMAP_TYPES_H_

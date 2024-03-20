@@ -104,6 +104,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/polygon
     ${CMAKE_SOURCE_DIR}/common/geometry
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
+    ${CMAKE_SOURCE_DIR}/qa/mocks/include
     ${INC_AFTER}
 )
 

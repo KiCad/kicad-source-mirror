@@ -26,6 +26,7 @@
 #include <wx/bmpbndl.h>
 
 #include <bitmaps/bitmap_info.h>
+#include <kicommon.h>
 
 class ASSET_ARCHIVE;
 class wxImage;
@@ -33,7 +34,7 @@ class wxImage;
 
 namespace std
 {
-    template<> struct hash<std::pair<BITMAPS, int>>
+    template<> struct KICOMMON_API hash<std::pair<BITMAPS, int>>
     {
         size_t operator()( const std::pair<BITMAPS, int>& aPair ) const;
     };
@@ -42,7 +43,7 @@ namespace std
 /**
  * Helper to retrieve bitmaps while handling icon themes and scaling
  */
-class BITMAP_STORE
+class KICOMMON_API BITMAP_STORE
 {
 public:
     BITMAP_STORE();

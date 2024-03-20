@@ -28,7 +28,7 @@
 /**
  * Cross-probing behavior
  */
-struct CROSS_PROBING_SETTINGS
+struct KICOMMON_API CROSS_PROBING_SETTINGS
 {
     bool on_selection;  ///< Synchronize the selection for multiple items too
     bool center_on_items; ///< Automatically pan to cross-probed items
@@ -39,7 +39,7 @@ struct CROSS_PROBING_SETTINGS
 /**
  * Common cursor settings, available to every frame
  */
-struct CURSOR_SETTINGS
+struct KICOMMON_API CURSOR_SETTINGS
 {
     bool always_show_cursor;
     bool fullscreen_cursor;
@@ -57,7 +57,7 @@ enum class ARC_EDIT_MODE
 /**
 * Stores the window positioning/state
 */
-struct WINDOW_STATE
+struct KICOMMON_API WINDOW_STATE
 {
     bool maximized;
     int size_x;
@@ -70,7 +70,7 @@ struct WINDOW_STATE
 /**
  * Stores the common settings that are saved and loaded for each window / frame
  */
-struct WINDOW_SETTINGS
+struct KICOMMON_API WINDOW_SETTINGS
 {
     WINDOW_STATE state;
     wxString mru_path;
@@ -88,7 +88,7 @@ struct WINDOW_SETTINGS
  *
  * COMMON_SETTINGS stores settings that are always the same across all applications.
  */
-class APP_SETTINGS_BASE : public JSON_SETTINGS
+class KICOMMON_API APP_SETTINGS_BASE : public JSON_SETTINGS
 {
 public:
     struct FIND_REPLACE

@@ -54,8 +54,8 @@ int     KIWAY::m_kiface_version[KIWAY_FACE_COUNT];
 
 
 
-KIWAY::KIWAY( PGM_BASE* aProgram, int aCtlBits, wxFrame* aTop ):
-    m_program( aProgram ), m_ctl( aCtlBits ), m_top( nullptr ), m_blockingDialog( wxID_NONE )
+KIWAY::KIWAY( int aCtlBits, wxFrame* aTop ):
+     m_ctl( aCtlBits ), m_top( nullptr ), m_blockingDialog( wxID_NONE )
 {
     SetTop( aTop );     // hook player_destroy_handler() into aTop.
 
@@ -296,7 +296,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
         {
             KIFACE_GETTER_FUNC* ki_getter = (KIFACE_GETTER_FUNC*) addr;
 
-            KIFACE* kiface = ki_getter( &m_kiface_version[aFaceId], KIFACE_VERSION, m_program );
+            KIFACE* kiface = ki_getter( &m_kiface_version[aFaceId], KIFACE_VERSION, &Pgm() );
 
             // KIFACE_GETTER_FUNC function comment (API) says the non-NULL is unconditional.
             wxASSERT_MSG( kiface,
@@ -311,7 +311,7 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 
             try
             {
-                startSuccess = kiface->OnKifaceStart( m_program, m_ctl, this );
+                startSuccess = kiface->OnKifaceStart( &Pgm(), m_ctl, this );
             }
             catch (...)
             {

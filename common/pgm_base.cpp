@@ -1025,3 +1025,22 @@ void PGM_BASE::WritePdfBrowserInfos()
     GetCommonSettings()->m_System.pdf_viewer_name = GetPdfBrowserName();
     GetCommonSettings()->m_System.use_system_pdf_viewer = m_use_system_pdf_browser;
 }
+
+static PGM_BASE* process;
+
+PGM_BASE& Pgm()
+{
+    wxASSERT( process ); // KIFACE_GETTER has already been called.
+    return *process;
+}
+
+// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
+PGM_BASE* PgmOrNull()
+{
+    return process;
+}
+
+void SetPgm(PGM_BASE* pgm)
+{
+    process = pgm;
+}

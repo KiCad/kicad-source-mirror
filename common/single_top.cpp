@@ -60,7 +60,7 @@
 
 // Only a single KIWAY is supported in this single_top top level component,
 // which is dedicated to loading only a single DSO.
-KIWAY    Kiway( &Pgm(), KFCTL_STANDALONE );
+KIWAY    Kiway( KFCTL_STANDALONE );
 
 
 // implement a PGM_BASE and a wxApp side by side:
@@ -115,12 +115,6 @@ static struct PGM_SINGLE_TOP : public PGM_BASE
 
 } program;
 
-
-PGM_BASE& Pgm()
-{
-    return program;
-}
-
 // A module to allow Html module initialization/cleanup
 // When a wxHtmlWindow is used *only* in a dll/so module, the Html text is displayed
 // as plain text.
@@ -158,6 +152,7 @@ struct APP_SINGLE_TOP : public wxApp
 {
     APP_SINGLE_TOP() : wxApp()
     {
+        SetPgm( &program );
         // Init the environment each platform wants
         KIPLATFORM::ENV::Init();
     }

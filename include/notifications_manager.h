@@ -25,6 +25,7 @@
 #ifndef NOTIFICATIONS_MANAGER_H
 #define NOTIFICATIONS_MANAGER_H
 
+#include <kicommon.h>
 #include <functional>
 #include <vector>
 
@@ -36,7 +37,7 @@ class wxWindow;
 class wxCloseEvent;
 
 
-struct NOTIFICATION
+struct KICOMMON_API NOTIFICATION
 {
 public:
     wxString title; ///< Title of the notification
@@ -47,7 +48,7 @@ public:
 };
 
 
-class NOTIFICATIONS_MANAGER
+class KICOMMON_API NOTIFICATIONS_MANAGER
 {
     friend class NOTIFICATION_LIST;
 

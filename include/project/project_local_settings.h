@@ -31,7 +31,7 @@
 
 class PROJECT;
 
-struct PROJECT_FILE_STATE
+struct KICOMMON_API PROJECT_FILE_STATE
 {
     wxString fileName;
     bool open;
@@ -51,7 +51,7 @@ struct PROJECT_FILE_STATE
  * This file doesn't need to exist for a project to be loaded.  It will be created on-demand if
  * any of the things stored here are modified by the user.
  */
-class PROJECT_LOCAL_SETTINGS : public JSON_SETTINGS
+class KICOMMON_API PROJECT_LOCAL_SETTINGS : public JSON_SETTINGS
 {
 public:
     PROJECT_LOCAL_SETTINGS( PROJECT* aProject, const wxString& aFilename );

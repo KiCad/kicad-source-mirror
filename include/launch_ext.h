@@ -21,12 +21,14 @@
 #ifndef LAUNCH_EXT_H
 #define LAUNCH_EXT_H
 
+#include <kicommon.h>
+
 class wxString;
 
 /**
  * Launches the given file or folder in the host OS
  * @param aPath is a path to a file or folder
  */
-bool LaunchExternal( const wxString& aPath );
+KICOMMON_API bool LaunchExternal( const wxString& aPath );
 
 #endif

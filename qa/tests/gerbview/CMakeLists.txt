@@ -51,6 +51,7 @@ target_compile_definitions( qa_gerbview
 
 target_include_directories( qa_gerbview PRIVATE
     ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/qa/mocks/include
 )
 
 # Anytime we link to the kiface_objects, we have to add a dependency on the last object

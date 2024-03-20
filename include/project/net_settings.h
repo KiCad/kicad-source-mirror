@@ -30,7 +30,7 @@
  * NET_SETTINGS stores various net-related settings in a project context.  These settings are
  * accessible and editable from both the schematic and PCB editors.
  */
-class NET_SETTINGS : public NESTED_SETTINGS
+class KICOMMON_API NET_SETTINGS : public NESTED_SETTINGS
 {
 public:
     NET_SETTINGS( JSON_SETTINGS* aParent, const std::string& aPath );

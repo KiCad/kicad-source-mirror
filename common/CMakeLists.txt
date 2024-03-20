@@ -97,43 +97,83 @@ set( KICOMMON_SRCS
     kicad_curl/kicad_curl.cpp
     kicad_curl/kicad_curl_easy.cpp
 
+    settings/app_settings.cpp
     settings/aui_settings.cpp
     settings/bom_settings.cpp
+    settings/color_settings.cpp
+    settings/common_settings.cpp
     settings/grid_settings.cpp
     settings/json_settings.cpp
+    settings/kicad_settings.cpp
     settings/nested_settings.cpp
     settings/parameters.cpp
+    settings/settings_manager.cpp
 
+    project/board_project_settings.cpp
+    project/net_settings.cpp
+    project/project_archiver.cpp
+    project/project_file.cpp
+    project/project_local_settings.cpp
+
+    dialogs/dialog_migrate_settings.cpp
+    dialogs/dialog_migrate_settings_base.cpp
+
+    widgets/bitmap_button.cpp
+    widgets/kistatusbar.cpp
     widgets/progress_reporter_base.cpp
     widgets/std_bitmap_button.cpp
+    widgets/ui_common.cpp
+
+    database/database_lib_settings.cpp
 
     advanced_config.cpp
     asset_archive.cpp
     array_axis.cpp
     array_options.cpp
+    background_jobs_monitor.cpp
+    bitmap.cpp
     bitmap_info.cpp
+    bitmap_store.cpp
     build_version.cpp
+    common.cpp
     config_params.cpp
     confirm.cpp
+    dialog_shim.cpp
     dsnlexer.cpp
     eda_pattern_match.cpp
     eda_units.cpp
+    env_vars.cpp
     exceptions.cpp
+    gestfich.cpp
     kiid.cpp
+    kiway.cpp
+    kiway_express.cpp
+    kiway_holder.cpp
+    launch_ext.cpp
+    lib_table_base.cpp
     layer_id.cpp
     lib_id.cpp
     locale_io.cpp
     lset.cpp
     markup_parser.cpp
     netclass.cpp
+    notifications_manager.cpp
     page_info.cpp
     paths.cpp
+    project.cpp
     richio.cpp
+    search_stack.cpp
+    searchhelpfilefullpath.cpp
     string_utils.cpp
+    systemdirsappend.cpp
     ui_events.cpp
     trace_helpers.cpp
     wildcards_and_files_ext.cpp
     wx_filename.cpp
+
+    pgm_base.cpp
+
+    ../scripting/python_scripting.cpp
 
     io/kicad/kicad_io_utils.cpp    # needed by richio
     )
@@ -161,7 +201,18 @@ target_link_libraries( kicommon
    	${FREETYPE_LIBRARIES}
    	${HarfBuzz_LIBRARIES}
 	${Fontconfig_LIBRARIES}
+
+    # needed because of python_scripting.cpp
+    ${PYTHON_LIBRARIES}
     )
+
+
+if( KICAD_USE_SENTRY )
+    target_link_libraries( kicommon
+        sentry )
+
+    set_property(SOURCE pgm_base.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
+endif()
 
 include( ${KICAD_CMAKE_MODULE_PATH}/KiCadVersion.cmake )
 include( ${KICAD_CMAKE_MODULE_PATH}/CreateGitVersionHeader.cmake )
@@ -250,8 +301,6 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_import_choose_project_base.cpp
     dialogs/dialog_locked_items_query.cpp
     dialogs/dialog_locked_items_query_base.cpp
-    dialogs/dialog_migrate_settings.cpp
-    dialogs/dialog_migrate_settings_base.cpp
     dialogs/dialog_page_settings_base.cpp
     dialogs/dialog_paste_special.cpp
     dialogs/dialog_paste_special_base.cpp
@@ -301,7 +350,6 @@ endif()
 
 set( COMMON_WIDGET_SRCS
     widgets/app_progress_dialog.cpp
-    widgets/bitmap_button.cpp
     widgets/bitmap_toggle.cpp
     widgets/button_row_panel.cpp
     widgets/color_swatch.cpp
@@ -322,7 +370,6 @@ set( COMMON_WIDGET_SRCS
     widgets/html_window.cpp
     widgets/indicator_icon.cpp
     widgets/wx_infobar.cpp
-    widgets/kistatusbar.cpp
     widgets/layer_box_selector.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
@@ -336,7 +383,6 @@ set( COMMON_WIDGET_SRCS
     widgets/split_button.cpp
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
-    widgets/ui_common.cpp
     widgets/unit_binder.cpp
     widgets/widget_save_restore.cpp
     widgets/widget_hotkey_list.cpp
@@ -455,17 +501,12 @@ set( COMMON_SRCS
     ${COMMON_IMPORT_GFX_SRCS}
     ${COMMON_GIT_SRCS}
     jobs/job_dispatcher.cpp
-    background_jobs_monitor.cpp
     base_screen.cpp
     bin_mod.cpp
-    bitmap.cpp
     bitmap_base.cpp
-    bitmap_store.cpp
     board_printout.cpp
     cli_progress_reporter.cpp
     commit.cpp
-    common.cpp
-    dialog_shim.cpp
     dpi_scaling_common.cpp
     draw_panel_gal.cpp
     gal_display_options_common.cpp
@@ -479,7 +520,6 @@ set( COMMON_SRCS
     eda_text.cpp
     eda_tools.cpp
     env_paths.cpp
-    env_vars.cpp
     executable_names.cpp
     filename_resolver.cpp
     file_history.cpp
@@ -487,38 +527,27 @@ set( COMMON_SRCS
     footprint_filter.cpp
     footprint_info.cpp
     gbr_metadata.cpp
-    gestfich.cpp
     gr_basic.cpp
     grid_tricks.cpp
     hotkey_store.cpp
     hotkeys_basic.cpp
     kiface_base.cpp
-    kiway.cpp
-    kiway_express.cpp
-    kiway_holder.cpp
     kiway_player.cpp
-    launch_ext.cpp
-    lib_table_base.cpp
     lib_table_grid_tricks.cpp
     lib_tree_model.cpp
     lib_tree_model_adapter.cpp
     marker_base.cpp
-    notifications_manager.cpp
     origin_transforms.cpp
     printout.cpp
-    project.cpp
     ptree.cpp
     rc_item.cpp
     refdes_utils.cpp
     render_settings.cpp
     reporter.cpp
     scintilla_tricks.cpp
-    search_stack.cpp
-    searchhelpfilefullpath.cpp
     status_popup.cpp
     string_utf8_map.cpp
     stroke_params.cpp
-    systemdirsappend.cpp
     template_fieldnames.cpp
     textentry_tricks.cpp
     title_block.cpp
@@ -528,16 +557,6 @@ set( COMMON_SRCS
     xnode.cpp
     view/wx_view_controls.cpp
     )
-
-if( TRUE OR NOT USE_KIWAY_DLLS )
-#if( NOT USE_KIWAY_DLLS )
-    # We DO NOT want pgm_base.cpp linked into the KIFACE, only into the KIWAY.
-    # Check the map files to verify eda_pgm.o not being linked in.
-    list( APPEND COMMON_SRCS pgm_base.cpp )
-    if( KICAD_USE_SENTRY )
-        set_property(SOURCE pgm_base.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
-    endif()
-endif()
 
 set( COMMON_SRCS
     ${COMMON_SRCS}
@@ -572,18 +591,7 @@ set( COMMON_SRCS
     tool/zoom_menu.cpp
     tool/zoom_tool.cpp
 
-    settings/app_settings.cpp
-    settings/color_settings.cpp
     settings/cvpcb_settings.cpp
-    settings/common_settings.cpp
-    settings/settings_manager.cpp
-    settings/kicad_settings.cpp
-
-    project/board_project_settings.cpp
-    project/net_settings.cpp
-    project/project_archiver.cpp
-    project/project_file.cpp
-    project/project_local_settings.cpp
 
     properties/color4d_variant.cpp
     properties/eda_angle_variant.cpp
@@ -594,7 +602,6 @@ set( COMMON_SRCS
     properties/std_optional_variants.cpp
 
     database/database_connection.cpp
-    database/database_lib_settings.cpp
 
     http_lib/http_lib_connection.cpp
     http_lib/http_lib_settings.cpp

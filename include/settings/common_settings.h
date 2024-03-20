@@ -44,7 +44,7 @@ enum class ICON_THEME
 };
 
 
-class COMMON_SETTINGS : public JSON_SETTINGS
+class KICOMMON_API COMMON_SETTINGS : public JSON_SETTINGS
 {
 public:
     struct APPEARANCE

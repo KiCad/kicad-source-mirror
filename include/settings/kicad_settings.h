@@ -25,7 +25,7 @@
 #define PCM_DEFAULT_REPOSITORY_URL "https://repository.kicad.org/repository.json"
 
 
-class KICAD_SETTINGS : public APP_SETTINGS_BASE
+class KICOMMON_API KICAD_SETTINGS : public APP_SETTINGS_BASE
 {
 public:
     KICAD_SETTINGS();

@@ -35,6 +35,7 @@
 #include <symbol_editor/symbol_editor_settings.h>
 #include <wx/app.h>
 #include <wx/init.h>
+#include <mock_pgm_base.h>
 
 #include <qa_utils/wx_utils/wx_assert.h>
 
@@ -52,6 +53,7 @@ void wxAssertThrower( const wxString& aFile, int aLine, const wxString& aFunc,
 
 bool init_unit_test()
 {
+    SetPgm( new MOCK_PGM_BASE() );
     KIPLATFORM::APP::Init();
     boost::unit_test::framework::master_test_suite().p_name.value = "Common spice integration tests";
 

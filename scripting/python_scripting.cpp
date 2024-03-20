@@ -36,10 +36,7 @@
 #include <cstring>
 #include <string>
 
-#include <eda_base_frame.h>
 #include <env_vars.h>
-#include <gal/color4d.h>
-#include <gestfich.h>
 #include <trace_helpers.h>
 #include <string_utils.h>
 #include <macros.h>

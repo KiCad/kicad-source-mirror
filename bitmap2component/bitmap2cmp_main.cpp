@@ -69,8 +69,6 @@ static struct IFACE : public KIFACE_BASE
 
 using namespace BMP2CMP;
 
-static PGM_BASE* process;
-
 
 KIFACE_BASE& Kiface()
 {
@@ -82,25 +80,8 @@ KIFACE_BASE& Kiface()
 // KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
 KIFACE* KIFACE_GETTER( int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram )
 {
-    process = (PGM_BASE*) aProgram;
     return &kiface;
 }
-
-
-#if defined(BUILD_KIWAY_DLLS)
-PGM_BASE& Pgm()
-{
-    wxASSERT( process );    // KIFACE_GETTER has already been called.
-    return *process;
-}
-
-
-// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
-PGM_BASE* PgmOrNull()
-{
-    return process;
-}
-#endif
 
 
 bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits, KIWAY* aKiway )

@@ -39,7 +39,7 @@
  * Selection filtering that applies all the time (not the "filter selection" dialog that modifies
  * the current selection)
  */
-struct PCB_SELECTION_FILTER_OPTIONS
+struct KICOMMON_API PCB_SELECTION_FILTER_OPTIONS
 {
     bool lockedItems;   ///< Allow selecting locked items
     bool footprints;    ///< Allow selecting entire footprints
@@ -125,7 +125,7 @@ enum class RATSNEST_MODE
 };
 
 ///< BOM Data choices for IPC2581 export
-struct IP2581_BOM
+struct KICOMMON_API IP2581_BOM
 {
     wxString mfg;       ///< Manufacturer name column
     wxString MPN;     ///< Manufacturer part number column
@@ -137,7 +137,7 @@ struct IP2581_BOM
 /**
  * A saved set of layers that are visible.
  */
-struct LAYER_PRESET
+struct KICOMMON_API LAYER_PRESET
 {
     LAYER_PRESET( const wxString& aName = wxS( "" ) ) :
             name( aName ),
@@ -184,7 +184,7 @@ struct LAYER_PRESET
 };
 
 
-class PARAM_LAYER_PRESET : public PARAM_LAMBDA<nlohmann::json>
+class KICOMMON_API PARAM_LAYER_PRESET : public PARAM_LAMBDA<nlohmann::json>
 {
 public:
     PARAM_LAYER_PRESET( const std::string& aPath, std::vector<LAYER_PRESET>* aPresetList );
@@ -198,7 +198,7 @@ private:
 };
 
 
-struct VIEWPORT
+struct KICOMMON_API VIEWPORT
 {
     VIEWPORT( const wxString& aName = wxEmptyString ) :
             name( aName )
@@ -214,7 +214,7 @@ struct VIEWPORT
 };
 
 
-class PARAM_VIEWPORT : public PARAM_LAMBDA<nlohmann::json>
+class KICOMMON_API PARAM_VIEWPORT : public PARAM_LAMBDA<nlohmann::json>
 {
 public:
     PARAM_VIEWPORT( const std::string& aPath, std::vector<VIEWPORT>* aViewportList );
@@ -228,7 +228,7 @@ private:
 };
 
 
-struct VIEWPORT3D
+struct KICOMMON_API VIEWPORT3D
 {
     VIEWPORT3D( const wxString& aName = wxEmptyString ) :
             name( aName )
@@ -244,7 +244,7 @@ struct VIEWPORT3D
 };
 
 
-class PARAM_VIEWPORT3D : public PARAM_LAMBDA<nlohmann::json>
+class KICOMMON_API PARAM_VIEWPORT3D : public PARAM_LAMBDA<nlohmann::json>
 {
 public:
     PARAM_VIEWPORT3D( const std::string& aPath, std::vector<VIEWPORT3D>* aViewportList );
@@ -260,7 +260,7 @@ private:
 /**
  * Persisted state for the net inspector panel
  */
-struct PANEL_NET_INSPECTOR_SETTINGS
+struct KICOMMON_API PANEL_NET_INSPECTOR_SETTINGS
 {
     wxString              filter_text;
     bool                  filter_by_net_name;

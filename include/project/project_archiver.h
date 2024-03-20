@@ -21,6 +21,7 @@
 #define KICAD_PROJECT_ARCHIVER_H
 
 #include <wx/string.h>
+#include <kicommon.h>
 
 
 class PROJECT;
@@ -28,7 +29,7 @@ class REPORTER;
 class SETTINGS_MANAGER;
 
 
-class PROJECT_ARCHIVER
+class KICOMMON_API PROJECT_ARCHIVER
 {
 public:
     PROJECT_ARCHIVER();

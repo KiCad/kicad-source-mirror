@@ -300,7 +300,8 @@ public:
             m_default( std::move( aDefault ) ),
             m_getter( std::move( aGetter ) ),
             m_setter( std::move( aSetter ) )
-    { }
+    {
+    }
 
     void Load( JSON_SETTINGS* aSettings, bool aResetIfMissing = true ) const override
     {
@@ -367,11 +368,17 @@ private:
     std::function<void( ValueType )> m_setter;
 };
 
-
+#ifdef _MSC_VER
+template class KICOMMON_API PARAM_LAMBDA<bool>;
+template class KICOMMON_API PARAM_LAMBDA<int>;
+template class KICOMMON_API PARAM_LAMBDA<nlohmann::json>;
+template class KICOMMON_API PARAM_LAMBDA<std::string>;
+#else
 extern template class APIVISIBLE PARAM_LAMBDA<bool>;
 extern template class APIVISIBLE PARAM_LAMBDA<int>;
 extern template class APIVISIBLE PARAM_LAMBDA<nlohmann::json>;
 extern template class APIVISIBLE PARAM_LAMBDA<std::string>;
+#endif
 
 /**
  * Represents a parameter that has a scaling factor between the value in the file and the
@@ -550,15 +557,25 @@ protected:
 };
 
 
+#ifdef _MSC_VER
+template class KICOMMON_API PARAM_LIST<bool>;
+template class KICOMMON_API PARAM_LIST<int>;
+template class KICOMMON_API PARAM_LIST<double>;
+template class KICOMMON_API PARAM_LIST<KIGFX::COLOR4D>;
+template class KICOMMON_API PARAM_LIST<struct BOM_PRESET>;
+template class KICOMMON_API PARAM_LIST<struct BOM_FMT_PRESET>;
+template class KICOMMON_API PARAM_LIST<GRID>;
+template class KICOMMON_API PARAM_LIST<wxString>;
+#else
 extern template class APIVISIBLE PARAM_LIST<bool>;
 extern template class APIVISIBLE PARAM_LIST<int>;
 extern template class APIVISIBLE PARAM_LIST<double>;
 extern template class APIVISIBLE PARAM_LIST<KIGFX::COLOR4D>;
-//template KICOMMON_EXTERN_DECL class PARAM_LIST<FILE_INFO_PAIR>;
 extern template class APIVISIBLE PARAM_LIST<struct BOM_PRESET>;
 extern template class APIVISIBLE PARAM_LIST<struct BOM_FMT_PRESET>;
 extern template class APIVISIBLE PARAM_LIST<GRID>;
 extern template class APIVISIBLE PARAM_LIST<wxString>;
+#endif
 
 
 template<typename Type>
@@ -639,7 +656,11 @@ protected:
     std::set<Type>  m_default;
 };
 
+#ifdef _MSC_VER
+template class KICOMMON_API PARAM_SET<wxString>;
+#else
 extern template class APIVISIBLE PARAM_SET<wxString>;
+#endif
 
 /**
  * Represents a list of strings holding directory paths.
@@ -776,9 +797,15 @@ private:
 };
 
 
+#ifdef _MSC_VER
+template class KICOMMON_API PARAM_MAP<int>;
+template class KICOMMON_API PARAM_MAP<double>;
+template class KICOMMON_API PARAM_MAP<bool>;
+#else
 extern template class APIVISIBLE PARAM_MAP<int>;
 extern template class APIVISIBLE PARAM_MAP<double>;
 extern template class APIVISIBLE PARAM_MAP<bool>;
+#endif
 
 
 /**

@@ -1,6 +1,5 @@
 set( KIPYTHON_SRCS
     kipython_settings.cpp
-    python_scripting.cpp
 )
 
 add_library( scripting STATIC
@@ -12,6 +11,7 @@ target_link_libraries( scripting
     ${PYTHON_LIBRARIES}
     Boost::headers
     common
+    kicommon
 )
 
 target_include_directories( scripting PUBLIC

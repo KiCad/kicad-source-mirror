@@ -351,9 +351,6 @@ private:
 using namespace PCB;
 
 
-static PGM_BASE* process;
-
-
 KIFACE_BASE& Kiface() { return kiface; }
 
 
@@ -361,25 +358,8 @@ KIFACE_BASE& Kiface() { return kiface; }
 // KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
 KIFACE_API KIFACE* KIFACE_GETTER( int* aKIFACEversion, int aKiwayVersion, PGM_BASE* aProgram )
 {
-    process = aProgram;
     return &kiface;
 }
-
-
-#if defined( BUILD_KIWAY_DLL )
-PGM_BASE& Pgm()
-{
-    wxASSERT( process );    // KIFACE_GETTER has already been called.
-    return *process;
-}
-
-
-// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
-PGM_BASE* PgmOrNull()
-{
-    return process;
-}
-#endif
 
 
 /// The global footprint library table.  This is not dynamically allocated because

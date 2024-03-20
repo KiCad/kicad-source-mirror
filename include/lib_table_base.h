@@ -34,6 +34,7 @@
 #include <project.h>
 #include <string_utf8_map.h>
 #include <richio.h>
+#include <kicommon.h>
 
 class OUTPUTFORMATTER;
 class LIB_TABLE_LEXER;
@@ -55,14 +56,14 @@ typedef LIB_TABLE_ROWS::const_iterator     LIB_TABLE_ROWS_CITER;
  * store pointers the data is cloned.  Copying and assigning pointers would cause ownership
  * issues if the standard C++ containers were used.
  */
-LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow );
+KICOMMON_API LIB_TABLE_ROW* new_clone( const LIB_TABLE_ROW& aRow );
 
 
 /**
  * Hold a record identifying a library accessed by the appropriate plug in object in the
  * #LIB_TABLE.  This is an abstract base class from which to derive library specific rows.
  */
-class LIB_TABLE_ROW
+class KICOMMON_API LIB_TABLE_ROW
 {
 public:
     LIB_TABLE_ROW() :
@@ -292,7 +293,7 @@ private:
  *
  * @author Wayne Stambaugh
  */
-class LIB_TABLE : public PROJECT::_ELEM
+class KICOMMON_API LIB_TABLE : public PROJECT::_ELEM
 {
 public:
     /**

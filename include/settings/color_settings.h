@@ -48,7 +48,7 @@ using KIGFX::COLOR4D;
  * Each application (eeschema, gerbview, pcbnew) can have a different active color scheme selected.
  * The "child applications" (library editors) inherit from either eeschema or pcbnew.
  */
-class COLOR_SETTINGS : public JSON_SETTINGS
+class KICOMMON_API COLOR_SETTINGS : public JSON_SETTINGS
 {
 public:
     explicit COLOR_SETTINGS( const wxString& aFilename = wxT( "user" ),

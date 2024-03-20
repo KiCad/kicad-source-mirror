@@ -103,13 +103,8 @@ endif()
 
 add_executable( gerbview WIN32 MACOSX_BUNDLE
     ${CMAKE_SOURCE_DIR}/common/single_top.cpp
-    ${CMAKE_SOURCE_DIR}/common/pgm_base.cpp
     ${GERBVIEW_RESOURCES}
     )
-
-if( KICAD_USE_SENTRY )
-    set_property(SOURCE ${CMAKE_SOURCE_DIR}/common/pgm_base.cpp APPEND PROPERTY COMPILE_DEFINITIONS KICAD_SENTRY_DSN="${KICAD_SENTRY_DSN}")
-endif()
 
 set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp PROPERTIES
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_GERBER;BUILD_KIWAY_DLL"
@@ -120,6 +115,7 @@ target_link_libraries( gerbview
     gal
     common
     core
+    kicommon
     nlohmann_json
     ${wxWidgets_LIBRARIES}
     )

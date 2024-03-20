@@ -66,7 +66,7 @@ enum LAST_PATH_TYPE : unsigned int
  * There is either zero or one PROJECT_FILE for every PROJECT
  * (you can have a dummy PROJECT that has no file)
  */
-class PROJECT_FILE : public JSON_SETTINGS
+class KICOMMON_API PROJECT_FILE : public JSON_SETTINGS
 {
 public:
     /**

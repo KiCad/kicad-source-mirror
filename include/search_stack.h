@@ -26,6 +26,7 @@
 #ifndef SEARCH_STACK_H_
 #define SEARCH_STACK_H_
 
+#include <kicommon.h>
 #include <wx/filefn.h>
 #include <wx/filename.h>
 #include <project.h>
@@ -38,7 +39,7 @@
  * reminder that anything you put in here means searching work at some point in time.
  * (An alternative is to simply know where something is.)
  */
-class SEARCH_STACK : public wxPathList, public PROJECT::_ELEM
+class KICOMMON_API SEARCH_STACK : public wxPathList, public PROJECT::_ELEM
 {
 public:
     KICAD_T Type() override { return SEARCH_STACK_T; }

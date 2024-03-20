@@ -58,7 +58,7 @@ class PROJECT_LOCAL_SETTINGS;
  * Because it is in the neutral program top, which is not linked to by subsidiary DSOs,
  * any functions in this interface must be virtual.
  */
-class PROJECT
+class KICOMMON_API PROJECT
 {
 public:
     /**
@@ -69,7 +69,7 @@ public:
      * include derived class headers in this file, you are doing incompatible with the goal
      * of this class.  Keep knowledge of derived classes opaque to class PROJECT please.
     */
-    class _ELEM
+    class KICOMMON_API _ELEM
     {
     public:
         virtual ~_ELEM() {}

@@ -78,8 +78,6 @@ static struct IFACE : public KIFACE_BASE
 
 using namespace KIPYTHON;
 
-static PGM_BASE* process;
-
 KIFACE_BASE& Kiface()
 {
     return kiface;
@@ -90,22 +88,7 @@ KIFACE_BASE& Kiface()
 // KIFACE_GETTER will not have name mangling due to declaration in kiway.h.
 KIFACE* KIFACE_GETTER( int* aKIFACEversion, int aKIWAYversion, PGM_BASE* aProgram )
 {
-    process = (PGM_BASE*) aProgram;
     return &kiface;
-}
-
-
-PGM_BASE& Pgm()
-{
-    wxASSERT( process );    // KIFACE_GETTER has already been called.
-    return *process;
-}
-
-// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from
-// a python script or something else.
-PGM_BASE* PgmOrNull()
-{
-    return process;
 }
 
 

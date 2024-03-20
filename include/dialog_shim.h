@@ -25,6 +25,7 @@
 #ifndef DIALOG_SHIM_
 #define DIALOG_SHIM_
 
+#include <kicommon.h>
 #include <wx/dialog.h>
 #include <kiway_player.h>
 class wxGridEvent;
@@ -79,7 +80,7 @@ class WX_EVENT_LOOP;
  * <br>
  * in the dialog window's properties.
  */
-class DIALOG_SHIM : public wxDialog, public KIWAY_HOLDER
+class KICOMMON_API DIALOG_SHIM : public wxDialog, public KIWAY_HOLDER
 {
 public:
     DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,

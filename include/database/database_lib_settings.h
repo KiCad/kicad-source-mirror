@@ -32,7 +32,7 @@ enum class DATABASE_SOURCE_TYPE
 };
 
 
-struct DATABASE_SOURCE
+struct KICOMMON_API DATABASE_SOURCE
 {
     DATABASE_SOURCE_TYPE type;
     std::string          dsn;
@@ -43,15 +43,15 @@ struct DATABASE_SOURCE
 };
 
 
-struct DATABASE_FIELD_MAPPING
+struct KICOMMON_API DATABASE_FIELD_MAPPING
 {
-    const std::string column;             ///< Database column name
-    const std::string name;               ///< KiCad field name
-    const wxString    name_wx;            ///< KiCad field name (converted)
-    const bool        visible_on_add;     ///< Whether to show the field when placing the symbol
-    const bool        visible_in_chooser; ///< Whether the column is shown by default in the chooser
-    const bool        show_name;   ///< Whether or not to show the field name as well as its value
-    const bool inherit_properties; ///< Whether or not to inherit properties from symbol field
+    std::string column;             ///< Database column name
+    std::string name;               ///< KiCad field name
+    wxString    name_wx;            ///< KiCad field name (converted)
+    bool        visible_on_add;     ///< Whether to show the field when placing the symbol
+    bool        visible_in_chooser; ///< Whether the column is shown by default in the chooser
+    bool        show_name;   ///< Whether or not to show the field name as well as its value
+    bool        inherit_properties; ///< Whether or not to inherit properties from symbol field
 
     explicit DATABASE_FIELD_MAPPING( std::string aColumn, std::string aName, bool aVisibleOnAdd,
                                      bool aVisibleInChooser, bool aShowName,
@@ -59,7 +59,7 @@ struct DATABASE_FIELD_MAPPING
 };
 
 
-struct MAPPABLE_SYMBOL_PROPERTIES
+struct KICOMMON_API MAPPABLE_SYMBOL_PROPERTIES
 {
     std::string description;
     std::string footprint_filters;
@@ -83,7 +83,7 @@ struct MAPPABLE_SYMBOL_PROPERTIES
  * table called "Capacitors", with `key_col` set to "Part Number", the LIB_ID for a capacitor placed
  * from this table will look something like `PartsDB-Capacitors:CAP-001`
  */
-struct DATABASE_LIB_TABLE
+struct KICOMMON_API DATABASE_LIB_TABLE
 {
     std::string name;              ///< KiCad library nickname (will form part of the LIB_ID)
     std::string table;             ///< Database table to pull content from
@@ -96,14 +96,14 @@ struct DATABASE_LIB_TABLE
 };
 
 
-struct DATABASE_CACHE_SETTINGS
+struct KICOMMON_API DATABASE_CACHE_SETTINGS
 {
     int max_size;    ///< Maximum number of single-row results to cache
     int max_age;     ///< Max age of cached rows before they expire, in seconds
 };
 
 
-class DATABASE_LIB_SETTINGS : public JSON_SETTINGS
+class KICOMMON_API DATABASE_LIB_SETTINGS : public JSON_SETTINGS
 {
 public:
     DATABASE_LIB_SETTINGS( const std::string& aFilename );

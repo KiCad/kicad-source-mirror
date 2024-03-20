@@ -41,7 +41,7 @@ class LOCKFILE;
 #define PROJECT_BACKUPS_DIR_SUFFIX wxT( "-backups" )
 
 
-class SETTINGS_MANAGER
+class KICOMMON_API SETTINGS_MANAGER
 {
 public:
     SETTINGS_MANAGER( bool aHeadless = false );

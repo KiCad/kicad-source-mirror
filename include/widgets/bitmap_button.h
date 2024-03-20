@@ -25,6 +25,7 @@
 #ifndef BITMAP_BUTTON_H_
 #define BITMAP_BUTTON_H_
 
+#include <kicommon.h>
 #include <wx/bmpbndl.h>
 #include <wx/panel.h>
 #include <wx/colour.h>
@@ -37,7 +38,7 @@
  *     * It has a rectangle highlight when the mouse is hovering/pressed
  *     * It has the ability to be checked/toggled
  */
-class BITMAP_BUTTON : public wxPanel
+class KICOMMON_API BITMAP_BUTTON : public wxPanel
 {
 public:
     BITMAP_BUTTON( wxWindow* aParent, wxWindowID aId, const wxPoint& aPos = wxDefaultPosition,

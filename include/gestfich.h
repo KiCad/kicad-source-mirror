@@ -25,6 +25,7 @@
 #ifndef GESTFICH_H
 #define GESTFICH_H
 
+#include <kicommon.h>
 #include <wx/filename.h>
 #include <wx/process.h>
 
@@ -45,15 +46,16 @@ class EDA_LIST_DIALOG;
  * @param file the PDF file to open.
  * @return true is success or false if no PDF viewer found.
  */
-bool OpenPDF( const wxString& file );
-void OpenFile( const wxString& file );
+KICOMMON_API bool OpenPDF( const wxString& file );
+KICOMMON_API void  OpenFile( const wxString& file );
 
 /**
  * @param aSrcPath is the full filename of the source.
  * @param aDestPath is the full filename of the target
  * @param aErrors a wxString to *append* any errors to
  */
-void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& aErrors );
+KICOMMON_API void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath,
+                              wxString& aErrors );
 
 /**
  * Call the executable file \a aEditorName with the parameter \a aFileName.
@@ -64,7 +66,7 @@ void KiCopyFile( const wxString& aSrcPath, const wxString& aDestPath, wxString& 
  * In this case aFileName is a shortname and FindKicadFile() is called to return the path.
  * In the other case, aFileName is a full file name (passed prefixed with the path).
  */
-int ExecuteFile( const wxString& aEditorName, const wxString& aFileName = wxEmptyString,
+KICOMMON_API int ExecuteFile( const wxString& aEditorName, const wxString& aFileName = wxEmptyString,
                  wxProcess* aCallback = nullptr, bool aFileForKicad = true );
 
 /**
@@ -72,7 +74,7 @@ int ExecuteFile( const wxString& aEditorName, const wxString& aFileName = wxEmpt
  *
  * @param string string to modify.
  */
-void QuoteString( wxString& string );
+KICOMMON_API void QuoteString( wxString& string );
 
 /**
  * Search the executable file shortname in KiCad binary path and return full file
@@ -84,7 +86,7 @@ void QuoteString( wxString& string );
  *   - c:\\kicad or /usr/local/kicad (the default).
  *   - default binary path.
  */
-wxString FindKicadFile( const wxString& shortname );
+KICOMMON_API wxString FindKicadFile( const wxString& shortname );
 
 /**
  * Quote return value of wxFileName::GetFullPath().
@@ -96,13 +98,13 @@ wxString FindKicadFile( const wxString& shortname );
  * @param format if provided, can be used to transform the nature of the wrapped filename
  *               to another platform.
  */
-extern wxString QuoteFullPath( wxFileName& fn, wxPathFormat format = wxPATH_NATIVE );
+KICOMMON_API extern wxString QuoteFullPath( wxFileName& fn, wxPathFormat format = wxPATH_NATIVE );
 
 
 /**
  * Removes the directory \a aDirName and all its contents including
  * subdirectories and their files
  */
-bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = nullptr );
+KICOMMON_API bool RmDirRecursive( const wxString& aDirName, wxString* aErrors = nullptr );
 
 #endif /* GESTFICH_H */

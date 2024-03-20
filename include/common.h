@@ -32,6 +32,7 @@
 #ifndef INCLUDE__COMMON_H_
 #define INCLUDE__COMMON_H_
 
+#include <kicommon.h>
 #include <functional>
 #include <memory>
 
@@ -55,7 +56,7 @@ class REPORTER;
  * @param aBaseName is the name of the help file to search for (without extension).
  * @return the full path and filename if \a aBaseName is found, else wxEmptyString.
  */
-wxString SearchHelpFileFullPath( const wxString& aBaseName );
+KICOMMON_API wxString SearchHelpFileFullPath( const wxString& aBaseName );
 
 /**
  * Make \a aTargetFullFileName absolute and create the path of this file if it doesn't yet exist.
@@ -66,14 +67,14 @@ wxString SearchHelpFileFullPath( const wxString& aBaseName );
  * @param aReporter a point to a REPORTER object use to show messages (can be NULL)
  * @return true if \a aOutputDir already exists or was successfully created.
  */
-bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
-                                const wxString& aBaseFilename,
-                                REPORTER*       aReporter = nullptr );
+KICOMMON_API bool EnsureFileDirectoryExists( wxFileName*     aTargetFullFileName,
+                                             const wxString& aBaseFilename,
+                                             REPORTER*       aReporter = nullptr );
 
 /**
  * It's annoying to throw up nag dialogs when the extension isn't right.  Just fix it.
  */
-wxString EnsureFileExtension( const wxString& aFilename, const wxString& aExtension );
+KICOMMON_API wxString EnsureFileExtension( const wxString& aFilename, const wxString& aExtension );
 
 /**
  * Replace any environment variable & text variable references with their values.
@@ -81,34 +82,35 @@ wxString EnsureFileExtension( const wxString& aFilename, const wxString& aExtens
  * @param aString a string containing (perhaps) references to env var
  * @return the expanded environment variable.
  */
-const wxString ExpandEnvVarSubstitutions( const wxString& aString, const PROJECT* aProject );
+KICOMMON_API const wxString ExpandEnvVarSubstitutions( const wxString& aString,
+                                                       const PROJECT*  aProject );
 
 /**
  * Expand '${var-name}' templates in text.
  */
-wxString ExpandTextVars( const wxString& aSource,
-                         const std::function<bool( wxString* )>* aResolver );
+KICOMMON_API wxString ExpandTextVars( const wxString&                         aSource,
+                                      const std::function<bool( wxString* )>* aResolver );
 
-wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
+KICOMMON_API wxString ExpandTextVars( const wxString& aSource, const PROJECT* aProject );
 
 /**
  * Returns any variables unexpanded, e.g. ${VAR} -> VAR
  */
-wxString GetTextVars( const wxString& aSource );
+KICOMMON_API wxString GetTextVars( const wxString& aSource );
 
 /**
  * Returns true if the string is a text var, e.g starts with ${
  */
-bool IsTextVar( const wxString& aSource );
+KICOMMON_API bool IsTextVar( const wxString& aSource );
 
 /**
  * Replace any environment and/or text variables in file-path uris (leaving network-path URIs
  * alone).
  */
-const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
+KICOMMON_API const wxString ResolveUriByEnvVars( const wxString& aUri, PROJECT* aProject );
 
 
-long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
+KICOMMON_API long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
 
 
 /**
@@ -116,7 +118,7 @@ long long TimestampDir( const wxString& aDirPath, const wxString& aFilespec );
  *
  * @return true if the operating system is unsupported
  */
-bool WarnUserIfOperatingSystemUnsupported();
+KICOMMON_API bool WarnUserIfOperatingSystemUnsupported();
 
 
 #endif  // INCLUDE__COMMON_H_

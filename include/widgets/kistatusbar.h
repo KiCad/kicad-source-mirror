@@ -25,6 +25,8 @@
 #ifndef KISTATUSBAR_H
 #define KISTATUSBAR_H
 
+#include <kicommon.h>
+
 class wxGauge;
 class wxButton;
 class wxStaticText;
@@ -39,7 +41,7 @@ class BITMAP_BUTTON;
  * Background notifications button (FIELD_OFFSET_NOTIFICATION_BUTTON  offset id)
  */
 
-class KISTATUSBAR : public wxStatusBar
+class KICOMMON_API KISTATUSBAR : public wxStatusBar
 {
 public:
     KISTATUSBAR( int aNumberFields, wxWindow* parent, wxWindowID id );

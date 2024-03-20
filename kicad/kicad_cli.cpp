@@ -94,28 +94,6 @@ KIFACE_BASE& Kiface()
 }
 
 
-static PGM_KICAD program;
-
-
-PGM_BASE& Pgm()
-{
-    return program;
-}
-
-
-// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
-PGM_BASE* PgmOrNull()
-{
-    return &program;
-}
-
-
-PGM_KICAD& PgmTop()
-{
-    return program;
-}
-
-
 struct COMMAND_ENTRY
 {
     CLI::COMMAND* handler;
@@ -463,8 +441,9 @@ void PGM_KICAD::Destroy()
 }
 
 
-KIWAY Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE | KFCTL_CLI );
+KIWAY Kiway( KFCTL_CPP_PROJECT_SUITE | KFCTL_CLI );
 
+static PGM_KICAD program;
 
 /**
  * Not publicly visible because most of the action is in #PGM_KICAD these days.
@@ -473,6 +452,8 @@ struct APP_KICAD_CLI : public wxAppConsole
 {
     APP_KICAD_CLI() : wxAppConsole()
     {
+        SetPgm( &program );
+
         // Init the environment each platform wants
         KIPLATFORM::ENV::Init();
     }

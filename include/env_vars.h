@@ -25,6 +25,7 @@
 #ifndef ENV_VARS_H
 #define ENV_VARS_H
 
+#include <kicommon.h>
 #include <wx/string.h>
 #include <map>
 #include <vector>
@@ -43,19 +44,19 @@ namespace ENV_VAR
      * @param  aEnvVar the variable to check
      * @return         true if predefined
      */
-    bool IsEnvVarImmutable( const wxString& aEnvVar );
+    KICOMMON_API bool IsEnvVarImmutable( const wxString& aEnvVar );
 
     /**
      * Get the list of pre-defined environment variables.
      */
-    const ENV_VAR_LIST& GetPredefinedEnvVars();
+    KICOMMON_API const ENV_VAR_LIST& GetPredefinedEnvVars();
 
     /**
      * Constructs a versioned environment variable based on this KiCad major version
      * @param aBaseName is the suffix, like TEMPLATE_DIR
      * @return an environment variable name, like KICAD8_TEMPLATE_DIR
      */
-    wxString GetVersionedEnvVarName( const wxString& aBaseName );
+    KICOMMON_API wxString GetVersionedEnvVarName( const wxString& aBaseName );
 
     /**
      * Attempts to retrieve the value of a versioned environment variable, such as
@@ -65,8 +66,8 @@ namespace ENV_VAR
      * @param aMap is an ENV_VAR_MAP (@see environment.h)
      * @param aBaseName is the suffix for the environment variable (@see GetVersionedEnvVarName)
      */
-    std::optional<wxString> GetVersionedEnvVarValue( const std::map<wxString, ENV_VAR_ITEM>& aMap,
-                                                     const wxString& aBaseName );
+    KICOMMON_API std::optional<wxString> GetVersionedEnvVarValue( const std::map<wxString, ENV_VAR_ITEM>& aMap,
+                                                                  const wxString& aBaseName );
 
     /**
      * Look up long-form help text for a given environment variable.
@@ -78,7 +79,7 @@ namespace ENV_VAR
      * @return         A string with help for that variable. Empty if
      *                 no help available for this variable.
      */
-    wxString LookUpEnvVarHelp( const wxString& aEnvVar );
+    KICOMMON_API wxString LookUpEnvVarHelp( const wxString& aEnvVar );
 
     /**
      * Get an environment variable as a specific type, if set correctly
@@ -87,7 +88,7 @@ namespace ENV_VAR
      * @return an std::optional containing the value, if set and parseable, otherwise empty.
      */
     template <typename VAL_TYPE>
-    std::optional<VAL_TYPE> GetEnvVar( const wxString& aEnvVarName );
+    KICOMMON_API std::optional<VAL_TYPE> GetEnvVar( const wxString& aEnvVarName );
 
     /**
      * Get a string environment variable, if it is set.
@@ -96,7 +97,7 @@ namespace ENV_VAR
      * @return an std::optional containing the value, if set, otherwise empty.
      */
     template<>
-    std::optional<wxString> GetEnvVar( const wxString& aEnvVarName );
+    KICOMMON_API std::optional<wxString> GetEnvVar( const wxString& aEnvVarName );
 
     /**
      * Get a double from an environment variable, if set
@@ -106,7 +107,7 @@ namespace ENV_VAR
      * otherwise empty.
      */
     template <>
-    std::optional<double> GetEnvVar( const wxString& aEnvVarName );
+    KICOMMON_API std::optional<double> GetEnvVar( const wxString& aEnvVarName );
 };
 
 #endif /* ENV_VARS_H */

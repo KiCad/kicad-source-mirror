@@ -21,7 +21,7 @@
 * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include <nlohmann/json.hpp>
+#include <json_common.h>
 
 #include <settings/common_settings.h>
 #include <settings/parameters.h>

@@ -73,20 +73,6 @@ KIFACE_BASE& Kiface()
 
 static PGM_KICAD program;
 
-
-PGM_BASE& Pgm()
-{
-    return program;
-}
-
-
-// Similar to PGM_BASE& Pgm(), but return nullptr when a *.ki_face is run from a python script.
-PGM_BASE* PgmOrNull()
-{
-    return &program;
-}
-
-
 PGM_KICAD& PgmTop()
 {
     return program;
@@ -414,7 +400,7 @@ void PGM_KICAD::Destroy()
 }
 
 
-KIWAY  Kiway( &Pgm(), KFCTL_CPP_PROJECT_SUITE );
+KIWAY  Kiway( KFCTL_CPP_PROJECT_SUITE );
 
 #ifdef NDEBUG
 // Define a custom assertion handler
@@ -435,6 +421,8 @@ struct APP_KICAD : public wxApp
 {
     APP_KICAD() : wxApp()
     {
+        SetPgm( &program );
+
         // Init the environment each platform wants
         KIPLATFORM::ENV::Init();
     }

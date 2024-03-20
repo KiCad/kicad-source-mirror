@@ -2,7 +2,7 @@
 <wxFormBuilder_Project>
   <FileVersion major="1" minor="17"/>
   <object class="Project" expanded="true">
-    <property name="class_decoration">; </property>
+    <property name="class_decoration">KICOMMON_API; kicommon.h</property>
     <property name="code_generation">C++</property>
     <property name="disconnect_events">1</property>
     <property name="disconnect_mode">source_name</property>

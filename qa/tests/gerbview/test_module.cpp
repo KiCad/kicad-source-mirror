@@ -26,12 +26,14 @@
  */
 #include <boost/test/unit_test.hpp>
 #include <kiplatform/app.h>
+#include <mock_pgm_base.h>
 
 #include <wx/init.h>
 
 
 bool init_unit_test()
 {
+    SetPgm( new MOCK_PGM_BASE() );
     KIPLATFORM::APP::Init();
     boost::unit_test::framework::master_test_suite().p_name.value = "Gerbview module tests";
     return wxInitialize();

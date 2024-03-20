@@ -24,6 +24,8 @@
 #ifndef KIWAY_HOLDER_H_
 #define KIWAY_HOLDER_H_
 
+#include <kicommon.h>
+
 class KIWAY;
 class PROJECT;
 class wxWindow;
@@ -33,7 +35,7 @@ class wxWindow;
  *
  * It allows calls to Kiway() and SetKiway().
  */
-class KIWAY_HOLDER
+class KICOMMON_API KIWAY_HOLDER
 {
 public:
     enum HOLDER_TYPE { DIALOG, FRAME, PANEL };

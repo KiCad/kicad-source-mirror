@@ -25,6 +25,7 @@
 #ifndef BACKGROUND_JOBS_MONITOR_H
 #define BACKGROUND_JOBS_MONITOR_H
 
+#include <kicommon.h>
 #include <widgets/progress_reporter_base.h>
 #include <functional>
 #include <memory>
@@ -41,7 +42,7 @@ class BACKGROUND_JOBS_MONITOR;
 class wxWindow;
 class wxCloseEvent;
 
-class BACKGROUND_JOB_REPORTER : public PROGRESS_REPORTER_BASE
+class KICOMMON_API BACKGROUND_JOB_REPORTER : public PROGRESS_REPORTER_BASE
 {
 public:
     BACKGROUND_JOB_REPORTER( BACKGROUND_JOBS_MONITOR*        aMonitor,
@@ -69,7 +70,7 @@ private:
 };
 
 
-struct BACKGROUND_JOB
+struct KICOMMON_API BACKGROUND_JOB
 {
 public:
     wxString m_name;
@@ -81,7 +82,7 @@ public:
 };
 
 
-class BACKGROUND_JOBS_MONITOR
+class KICOMMON_API BACKGROUND_JOBS_MONITOR
 {
     friend class BACKGROUND_JOB_REPORTER;
     friend class BACKGROUND_JOB_LIST;
