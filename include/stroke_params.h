@@ -115,7 +115,7 @@ public:
 
     static void Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWidth,
                         const KIGFX::RENDER_SETTINGS* aRenderSettings,
-                        std::function<void( const VECTOR2I& a, const VECTOR2I& b )> aStroker );
+                        const std::function<void( const VECTOR2I& a, const VECTOR2I& b )>& aStroker );
 
 private:
     int            m_width;

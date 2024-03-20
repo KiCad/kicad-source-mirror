@@ -28,6 +28,7 @@
 #include <stroke_params.h>
 #include <trigo.h>
 #include <widgets/msgpanel.h>
+#include "geometry/shape_rect.h"
 
 using namespace STROKEPARAMS_T;
 
@@ -43,7 +44,7 @@ const std::map<LINE_STYLE, struct LINE_STYLE_DESC> lineTypeNames = {
 
 void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWidth,
                             const KIGFX::RENDER_SETTINGS* aRenderSettings,
-                            std::function<void( const VECTOR2I& a, const VECTOR2I& b )> aStroker )
+                            const std::function<void( const VECTOR2I& a, const VECTOR2I& b )>& aStroker )
 {
     double strokes[6] = { aWidth * 1.0, aWidth * 1.0, aWidth * 1.0, aWidth * 1.0, aWidth * 1.0,
                           aWidth * 1.0 };
@@ -83,18 +84,33 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
 
     switch( aShape->Type() )
     {
+    case SH_RECT:
+    {
+        SHAPE_LINE_CHAIN outline = static_cast<const SHAPE_RECT*>( aShape )->Outline();
+
+        for( int ii = 0; ii < outline.SegmentCount(); ++ii )
+        {
+            SEG seg = outline.GetSegment( ii );
+            SHAPE_SEGMENT line( seg.A, seg.B );
+            STROKE_PARAMS::Stroke( &line, aLineStyle, aWidth, aRenderSettings, aStroker );
+        }
+
+        break;
+    }
+
     case SH_SIMPLE:
     {
         const SHAPE_SIMPLE* poly = static_cast<const SHAPE_SIMPLE*>( aShape );
 
         for( size_t ii = 0; ii < poly->GetSegmentCount(); ++ii )
         {
-            SEG seg = poly->GetSegment( ii );
+            SEG seg = poly->GetSegment( (int) ii );
             SHAPE_SEGMENT line( seg.A, seg.B );
             STROKE_PARAMS::Stroke( &line, aLineStyle, aWidth, aRenderSettings, aStroker );
         }
-    }
+
         break;
+    }
 
     case SH_SEGMENT:
     {
@@ -102,7 +118,7 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
 
         VECTOR2D start = line->GetSeg().A;
         VECTOR2D end = line->GetSeg().B;
-        BOX2I    clip( start, VECTOR2I( end.x - start.x, end.y - start.y ) );
+        BOX2I    clip( start, VECTOR2I( KiROUND( end.x - start.x ), KiROUND( end.y - start.y ) ) );
         clip.Normalize();
 
         double theta = atan2( end.y - start.y, end.x - start.x );
@@ -125,8 +141,9 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
 
             start = next;
         }
-    }
+
         break;
+    }
 
     case SH_ARC:
     {
@@ -160,16 +177,19 @@ void STROKE_PARAMS::Stroke( const SHAPE* aShape, LINE_STYLE aLineStyle, int aWid
 
             if( i % 2 == 0 )
             {
-                VECTOR2I a( center.x + r * startAngle.Cos(), center.y + r * startAngle.Sin() );
-                VECTOR2I b( center.x + r * endAngle.Cos(),   center.y + r * endAngle.Sin() );
+                VECTOR2I a( center.x + KiROUND( r * startAngle.Cos() ),
+                            center.y + KiROUND( r * startAngle.Sin() ) );
+                VECTOR2I b( center.x + KiROUND( r * endAngle.Cos() ),
+                            center.y + KiROUND( r * endAngle.Sin() ) );
 
                 aStroker( a, b );
             }
 
             startAngle = endAngle;
         }
-    }
+
         break;
+    }
 
     case SH_CIRCLE:
         // A circle is always filled; a ring is represented by a 360° arc.
@@ -260,7 +280,7 @@ void STROKE_PARAMS_PARSER::ParseStroke( STROKE_PARAMS& aStroke )
         switch( token )
         {
         case T_width:
-            aStroke.SetWidth( parseDouble( "stroke width" ) * m_iuPerMM );
+            aStroke.SetWidth( KiROUND( parseDouble( "stroke width" ) * m_iuPerMM ) );
             NeedRIGHT();
             break;
 
