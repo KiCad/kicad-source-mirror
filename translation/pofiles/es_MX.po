@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-13 14:01+0000\n"
+"PO-Revision-Date: 2024-03-20 16:01+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -21001,9 +21001,8 @@ msgid "Add Symbol to Schematic"
 msgstr "Agregar símbolo en el esquema"
 
 #: eeschema/tools/ee_actions.cpp:270
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "Guardar el símbolo activo en la librería"
+msgstr "Agregar el símbolo actual al esquema"
 
 #: eeschema/tools/ee_actions.cpp:276
 msgid "Show Pin Electrical Types"
@@ -22113,7 +22112,6 @@ msgid "Drags the selected item(s)"
 msgstr "Arrastra el/los elemento/s seleccionado/s"
 
 #: eeschema/tools/ee_actions.cpp:1399 eeschema/tools/sch_move_tool.cpp:1760
-#, fuzzy
 msgid "Align Items to Grid"
 msgstr "Alinear elementos a la cuadrícula"
 
@@ -22146,19 +22144,18 @@ msgid "Save Workbook"
 msgstr "Guardar libro de trabajo"
 
 #: eeschema/tools/ee_actions.cpp:1441
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr ""
-"Leer el archivo de redes actual y listar las huellas faltantes y sobrantes"
+msgstr "Guardar el conjunto actual de pestañas y configuraciones de análisis"
 
 #: eeschema/tools/ee_actions.cpp:1449
 msgid "Save Workbook As..."
 msgstr "Guardar libro de trabajo como..."
 
 #: eeschema/tools/ee_actions.cpp:1450
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
-msgstr "Guardar el documento activo en otra localización"
+msgstr ""
+"Guardar el conjunto actual de pestañas y configuraciones de análisis a otra "
+"ubicación"
 
 #: eeschema/tools/ee_actions.cpp:1456
 msgid "Export Current Plot as PNG..."
@@ -22670,9 +22667,8 @@ msgid "SVG File Name"
 msgstr "Nombre de archivo SVG"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Editar pin"
+msgstr "Editar pines"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -23794,7 +23790,6 @@ msgid "Move Layer Up"
 msgstr "Mover capa hacia arriba"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
 msgstr "Mover la capa actual hacia arriba"
 
@@ -23803,7 +23798,6 @@ msgid "Move Layer Down"
 msgstr "Mover capa hacia abajo"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
 msgstr "Mover la capa actual hacia abajo"
 
@@ -26639,22 +26633,18 @@ msgid "Show Title Block in Preview Mode"
 msgstr "Mostrar bloque de título en modo de previsualización"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
 msgstr ""
-"Mostrar el bloque de título en modo de previsualización:\n"
-"los textos marcadores de posición se remplazan con datos de previsualización."
+"Los marcadores de posición de texto se reemplazarán con los datos de la "
+"vista previa"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "Mostrar bloque de título en modo de edición"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"Mostrar el bloque de título en modo de edición:\n"
-"los textos marcadores de posición se muestran como tokens ${palabra_clave} ."
+msgstr "Los marcadores de posición de texto se muestran como tokens ${keyword}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -33413,22 +33403,21 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
-msgstr "Permitir que la lágrima abarque dos segmentos de pista"
+msgstr "Permitir que las lágrimas abarquen dos segmentos de pista"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:147
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
-"Permitir que una lágrima se extienda a lo largo de 2 pistas si el segmento "
-"de la primer pista es demasiado corto"
+"Permitir que una lágrima se extienda a lo largo de las 2 primeras pistas si "
+"el segmento de la primer pista es demasiado corto para acomodar la mejor "
+"longitud."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -33458,9 +33447,8 @@ msgstr ""
 "Las pistas que son similares en tamaño al pad o vía no necesitan lágrimas."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
-#, fuzzy
 msgid "(as a percentage of pad/via minor dimension)"
-msgstr "(como porcentaje del tamaño del pad/vía)"
+msgstr "(como porcentaje del tamaño menor del pad/vía)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:706
@@ -42255,14 +42243,15 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Forma de polígono de tipo %d ignorado (todavía no soportada)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2141
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Se ha encontrado un polígono en una capa de Altium (%d) sin un equivalente "
-"de KiCad. Se ha movido a la capa de KiCad Eco1_User."
+"Cargando biblioteca '%s':\n"
+"La huella %s contiene un contorno discontinuo en la capa Altium (%d) sin "
+"equivalente en KiCad. Se ha movido a la capa Eco1_User de KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2150
 #, fuzzy, c-format
