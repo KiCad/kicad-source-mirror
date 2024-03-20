@@ -645,10 +645,32 @@ const BOX2I PAD::GetBoundingBox() const
 
 void PAD::SetAttribute( PAD_ATTRIB aAttribute )
 {
-    m_attribute = aAttribute;
+    if( m_attribute != aAttribute )
+    {
+        m_attribute = aAttribute;
 
-    if( aAttribute == PAD_ATTRIB::SMD )
-        m_drill = VECTOR2I( 0, 0 );
+        switch( aAttribute )
+        {
+        case PAD_ATTRIB::PTH:
+            m_layerMask = PAD::PTHMask();
+            break;
+
+        case PAD_ATTRIB::SMD:
+        case PAD_ATTRIB::CONN:
+            if( m_layerMask.test( F_Cu ) )
+                m_layerMask = { F_Cu };
+            else
+                m_layerMask = { B_Cu };
+
+            m_drill = VECTOR2I( 0, 0 );
+            break;
+
+        case PAD_ATTRIB::NPTH:
+            m_number = wxEmptyString;
+            SetNetCode( NETINFO_LIST::UNCONNECTED );
+            break;
+        }
+    }
 
     SetDirty();
 }
