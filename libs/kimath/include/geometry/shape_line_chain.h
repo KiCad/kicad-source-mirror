@@ -297,6 +297,15 @@ public:
      */
     int ShapeCount() const;
 
+
+    /**
+     * Simplify the line chain by removing colinear adjacent segments and duplicate vertices.
+     *
+     * @param aMaxError is the maximum error in internal units.  Setting to 0 means that the
+     * points must be exactly co-linear to be removed.
+     */
+    void Simplify( int aMaxError = 0 );
+
     /**
      * Return the number of points (vertices) in this line chain.
      *
@@ -639,14 +648,6 @@ public:
      * @return (optional) first found self-intersection point.
      */
     const std::optional<INTERSECTION> SelfIntersecting() const;
-
-    /**
-     * Simplify the line chain by removing colinear adjacent segments and duplicate vertices.
-     *
-     * @param aRemoveColinear controls the removal of colinear adjacent segments.
-     * @return reference to this line chain.
-     */
-    SHAPE_LINE_CHAIN& Simplify( bool aRemoveColinear = true );
 
     /**
      * Find the segment nearest the given point.
