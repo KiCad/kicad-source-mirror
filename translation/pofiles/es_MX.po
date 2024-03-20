@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-20 16:01+0000\n"
+"PO-Revision-Date: 2024-03-21 14:44+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -42254,25 +42254,28 @@ msgstr ""
 "equivalente en KiCad. Se ha movido a la capa Eco1_User de KiCad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2150
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Se ha encontrado un contorno discontinuo en una capa de Altium (%d) sin un "
-"equivalente de KiCad. Se ha movido a la capa de KiCad Eco1_User."
+"La huella %s contiene un contorno discontinuo en la capa Altium (%d) sin "
+"equivalente en KiCad. Se ha movido a la capa Eco1_User de KiCad ."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2188
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Forma de polígono de tipo %d ignorado (todavía no soportada)."
+msgstr ""
+"Error al cargar la biblioteca '%s':\n"
+"La huella %s contiene una forma de polígono del tipo %d (aún no compatible)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2196
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Forma de polígono de tipo %d ignorado (todavía no soportada)."
+msgstr ""
+"La huella %s contiene una forma de polígono del tipo %d (aún no compatible)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2351
 msgid "Loading zone fills..."
