@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-16 06:36+0000\n"
+"PO-Revision-Date: 2024-03-22 01:36+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
 "master-source/nl/>\n"
@@ -794,8 +794,8 @@ msgid ""
 msgstr ""
 "Camerapositie en zoom opslaan en herstellen.\n"
 "Gebruik %s+Tab om de kiezer te activeren.\n"
-"Opeenvolgende Tabs terwijl u %s ingedrukt houdt schakelt tussen de viewports "
-"in de pop-up."
+"Opeenvolgende Tabs terwijl u %s ingedrukt houdt schakelt tussen de "
+"weergavegebieden in de pop-up."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:473
 msgid "Left double click or middle click to change color"
@@ -875,42 +875,42 @@ msgstr "Voorinstelling selecteren:"
 #: pcbnew/widgets/appearance_controls.cpp:2841
 #, c-format
 msgid "Viewports (%s+Tab):"
-msgstr "Viewports (%s+Tab):"
+msgstr "Weergavegebieden (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:834
 #: pcbnew/widgets/appearance_controls.cpp:2850
 msgid "Save viewport..."
-msgstr "Viewport opslaan..."
+msgstr "Weergavegebied opslaan..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:835
 #: pcbnew/widgets/appearance_controls.cpp:2851
 msgid "Delete viewport..."
-msgstr "Viewport verwijderen..."
+msgstr "Weergavegebied verwijderen..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:866
 #: pcbnew/widgets/appearance_controls.cpp:2900
 msgid "Viewport name:"
-msgstr "Viewportnaam:"
+msgstr "Weergavegebiednaam:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:867
 #: pcbnew/widgets/appearance_controls.cpp:2900
 msgid "Save Viewport"
-msgstr "Viewport opslaan"
+msgstr "Weergavegebied opslaan"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:906
 #: pcbnew/widgets/appearance_controls.cpp:2939
 msgid "Viewports"
-msgstr "Viewports"
+msgstr "Weergavegebieden"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:915
 #: pcbnew/widgets/appearance_controls.cpp:2948
 msgid "Delete Viewport"
-msgstr "Viewport verwijderen"
+msgstr "Weergavegebied verwijderen"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:916
 #: pcbnew/widgets/appearance_controls.cpp:2949
 msgid "Select viewport:"
-msgstr "Viewport selecteren:"
+msgstr "Weergavegebied selecteren:"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:39
 #: pcbnew/widgets/appearance_controls_base.cpp:161
@@ -920,7 +920,7 @@ msgstr "Voorinstellingen (Ctrl+Tab):"
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:58
 #: pcbnew/widgets/appearance_controls_base.cpp:180
 msgid "Viewports (Alt+Tab):"
-msgstr "Viewports (Alt+Tab):"
+msgstr "Weergavegebieds (Alt+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D_base.cpp:62
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:67
@@ -1873,7 +1873,7 @@ msgstr "Uw huidige wijzigingen gaan definitief verloren."
 
 #: common/confirm.cpp:234 common/tool/actions.cpp:107
 msgid "Revert"
-msgstr "Terugdraaien"
+msgstr "Terugzetten"
 
 #: common/confirm.cpp:260 common/dialogs/git/dialog_git_auth.cpp:53
 #: common/dialogs/git/dialog_git_commit.cpp:142
@@ -2244,7 +2244,7 @@ msgstr "Voorbeeld (oud/nieuw):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:207
 msgid "Reset to Default"
-msgstr "Terugdraaien naar standaard"
+msgstr "Terugzetten naar standaard"
 
 #: common/dialogs/dialog_configure_paths.cpp:192
 #: common/dialogs/dialog_configure_paths.cpp:250
@@ -3352,7 +3352,7 @@ msgstr "Omlaag verplaatsen"
 #: common/dialogs/eda_view_switcher_base.cpp:19
 #: common/dialogs/eda_view_switcher_base.h:40
 msgid "View Preset Switcher"
-msgstr "Schakelaar beeldvoorinstellingen"
+msgstr "Voorinstellingschakelaar"
 
 #: common/dialogs/git/dialog_git_auth.cpp:27
 #: common/dialogs/git/dialog_git_repository_base.cpp:19
@@ -3453,7 +3453,7 @@ msgstr "Verbinding testen"
 
 #: common/dialogs/git/dialog_git_repository.cpp:337
 msgid "Connection successful"
-msgstr "Verbinding succesvol"
+msgstr "Verbinding geslaagd"
 
 #: common/dialogs/git/dialog_git_repository.cpp:341
 #, c-format
@@ -5403,7 +5403,7 @@ msgstr "Globaal label"
 #: common/eda_item.cpp:384 eeschema/sch_label.cpp:1219
 #: eeschema/tools/sch_edit_tool.cpp:202
 msgid "Hierarchical Label"
-msgstr "Hierarchisch label"
+msgstr "Hiërarchisch label"
 
 #: common/eda_item.cpp:385 eeschema/dialogs/dialog_symbol_fields_table.cpp:187
 #: eeschema/lib_field.cpp:543 eeschema/lib_field.h:84
@@ -5456,7 +5456,7 @@ msgstr "Nummervak"
 
 #: common/eda_shape.cpp:76 pcbnew/pad.cpp:1240
 msgid "Rect"
-msgstr "Vierkant"
+msgstr "Rechthoek"
 
 #: common/eda_shape.cpp:77 common/eda_shape.cpp:715 common/eda_shape.cpp:1938
 #: gerbview/gerber_draw_item.cpp:230
@@ -6722,11 +6722,11 @@ msgstr "Hiërarchische labels"
 
 #: common/layer_id.cpp:118 eeschema/sch_symbol.cpp:2732
 msgid "Pin numbers"
-msgstr "Pin nummers"
+msgstr "Pinnummers"
 
 #: common/layer_id.cpp:119 eeschema/sch_symbol.cpp:2737
 msgid "Pin names"
-msgstr "Pin namen"
+msgstr "Pinnamen"
 
 #: common/layer_id.cpp:120
 msgid "Symbol references"
@@ -6944,11 +6944,11 @@ msgstr "Microvia’s"
 
 #: common/layer_id.cpp:172
 msgid "Via holes"
-msgstr "Via gaten"
+msgstr "Viagaten"
 
 #: common/layer_id.cpp:173
 msgid "Via hole walls"
-msgstr "Via gat zijwanden"
+msgstr "Viagatwanden"
 
 #: common/layer_id.cpp:174
 msgid "Plated holes"
@@ -8791,7 +8791,7 @@ msgstr "OrcadPCB2-netlijstbestanden"
 
 #: common/wildcards_and_files_ext.cpp:285
 msgid "KiCad netlist files"
-msgstr "KiCad netlijstbestanden"
+msgstr "KiCad-netlijstbestanden"
 
 #: common/wildcards_and_files_ext.cpp:291
 msgid "Allegro netlist files"
@@ -9156,7 +9156,7 @@ msgstr "Schematoewijzing"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:41
 msgid "Cmp file assignment"
-msgstr "Cmp-bestands-toewijzing"
+msgstr "Cmp-bestandstoewijzing"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector_base.cpp:19
 msgid ""
@@ -9318,7 +9318,7 @@ msgstr "Volgende niet-toegewezen symbool selecteren"
 
 #: cvpcb/tools/cvpcb_actions.cpp:106
 msgid "Select next symbol with no footprint assignment"
-msgstr "Volgende symbool zonder footprint-toewijzing selecteren"
+msgstr "Volgende symbool zonder footprinttoewijzing selecteren"
 
 #: cvpcb/tools/cvpcb_actions.cpp:114
 msgid "Select previous unassigned symbol"
@@ -9326,7 +9326,7 @@ msgstr "Vorige niet-toegewezen symbool selecteren"
 
 #: cvpcb/tools/cvpcb_actions.cpp:115
 msgid "Select previous symbol with no footprint assignment"
-msgstr "Vorige symbool zonder footprint-toewijzing selecteren"
+msgstr "Vorige symbool zonder footprinttoewijzing selecteren"
 
 #: cvpcb/tools/cvpcb_actions.cpp:126
 msgid "Assign footprint"
@@ -9583,7 +9583,7 @@ msgstr "(bestand ontbreekt)"
 #: eeschema/dialogs/dialog_bom.cpp:294
 #, c-format
 msgid "The selected BOM generator script %s could not be found."
-msgstr "Het geselecteerde BOM-generatorscript %s kon niet gevonden worden."
+msgstr "Het geselecteerde BOM-generatiescript %s is niet gevonden."
 
 #: eeschema/dialogs/dialog_bom.cpp:299
 #, c-format
@@ -9612,7 +9612,7 @@ msgstr "Aanmaken bestand mislukt."
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
-msgstr "Generator bijnaam:"
+msgstr "Generatorbijnaam:"
 
 #: eeschema/dialogs/dialog_bom.cpp:387
 msgid "Add Generator"
@@ -9626,11 +9626,11 @@ msgstr "Bijnaam '%s' is al in gebruik."
 #: eeschema/dialogs/dialog_bom.cpp:425
 #: eeschema/dialogs/dialog_export_netlist.cpp:822
 msgid "Generator File"
-msgstr "Generator-bestand"
+msgstr "Generatorbestand"
 
 #: eeschema/dialogs/dialog_bom.cpp:444
 msgid "Generator file name not found."
-msgstr "Generator-bestandsnaam niet gevonden."
+msgstr "Generatorbestandsnaam niet gevonden."
 
 #: eeschema/dialogs/dialog_bom.cpp:465
 msgid "Bill of Materials Generation Help"
@@ -9638,7 +9638,7 @@ msgstr "Hulp bij genereren van stuklijsten"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:27
 msgid "BOM generator scripts:"
-msgstr "BOM-generatorscripts:"
+msgstr "BOM-generatiescripts:"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:71
 msgid "Add a new BOM generator and its command line to the list"
@@ -9652,7 +9652,7 @@ msgstr "Bewerk het scriptbestand in de teksteditor"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:84
 msgid "Remove the current generator script from list"
-msgstr "Verwijder het huidige generator-script uit de lijst"
+msgstr "Verwijder het huidige generatiescript uit de lijst"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:94
 msgid "Command line running the generator:"
@@ -9675,7 +9675,7 @@ msgstr ""
 #: eeschema/dialogs/dialog_bom_base.cpp:115
 msgid "Reset the list of BOM generator scripts to the default settings"
 msgstr ""
-"Zet de lijst met BOM-generatorscripts terug naar de standaardinstellingen"
+"Zet de lijst met BOM-generatiescripts terug naar de standaardinstellingen"
 
 #: eeschema/dialogs/dialog_bom_base.h:81
 msgid "Bill of Materials"
@@ -9765,9 +9765,10 @@ msgid ""
 msgstr ""
 "# 1. Samenvatting\n"
 "\n"
-"De stuklijst-tool maakt een BOM die alle componenten in het ontwerp opsomt.\n"
+"Het stuklijsthulpmiddel maakt een BOM die alle componenten in het ontwerp "
+"opsomt.\n"
 "\n"
-"De tool gebruikt een extern script om een BOM in het gewenste uitvoerformaat "
+"De tool gebruikt een extern script om een BOM in de gewenste uitvoerindeling "
 "te genereren. Het kiezen van een ander script verandert hoe de BOM wordt "
 "ingedeeld.\n"
 "\n"
@@ -9776,70 +9777,70 @@ msgstr ""
 "\n"
 "# 2. Gebruik\n"
 "\n"
-"Selecteer een generatorscript in de lijst van **BOM generator scripts**. "
+"Selecteer een generatiescript in de lijst van **BOM-generatiescripts**. "
 "Details voor de geselecteerde generator worden aan de rechterkant van het "
 "scherm getoond.\n"
 "\n"
-"Door op de knop **Generate** te klikken wordt een BOM gemaakt met de "
+"Door op de knop **Genereren** te klikken wordt een BOM gemaakt met de "
 "geselecteerde generator.\n"
 "\n"
-"De standaardinstellingen bieden verschillende keuzes voor generatorscripts, "
-"en er zijn ook enkele extra scripts samen met KiCad geïnstalleerd welke "
-"worden toegevoegd aan de lijst met de **+**-knop.\n"
+"De standaardinstellingen bieden verschillende keuzes voor generatiescripts, "
+"en er zijn ook enkele extra scripts samen met KiCad geïnstalleerd die aan de "
+"lijst kunnen worden toegevoegd met de **+**-knop.\n"
 "\n"
-"**Merk op:** Op Windows is er een extra optie **Consolevenster weergeven**. "
-"Wanneer deze optie niet is aangevinkt draaien BOM-generators in een "
-"verborgen consolevenster en wordt alle uitvoer omgeleid en weergegeven op "
-"het scherm. Wanneer deze optie is aangevinkt draaien BOM-generators in een "
-"zichtbaar consolevenster.\n"
+"**Opmerking:** Op Windows is er een extra optie **Consolevenster weergeven**"
+". Als deze optie niet is aangevinkt draaien BOM-generators in een verborgen "
+"consolevenster en wordt alle uitvoer omgeleid en weergegeven op het scherm. "
+"Wanneer deze optie wel is aangevinkt draaien BOM-generators in een zichtbaar "
+"consolevenster.\n"
 "\n"
-"# 3. Aangepaste generators en commandoregels\n"
+"# 3. Aangepaste generators en opdrachtregels\n"
 "\n"
-"Intern maakt KiCad een tussenliggend netlijstbestand in XML-formaat dat "
+"Intern maakt KiCad een tussenliggend netlijstbestand in XML-indeling dat "
 "informatie bevat over alle componenten in het ontwerp. Een BOM-"
-"generatorscript converteert het tussenliggende netlijstbestand naar het "
-"gewenste uitvoerformaat. KiCad voert de BOM-generatorscripts uit volgens de "
-"commandoregel die onderaan het BOM-scherm is opgegeven.\n"
+"generatiescript converteert het tussenliggende netlijstbestand naar de "
+"gewenste uitvoerindeling. KiCad voert de BOM-generatiescripts uit volgens de "
+"opdrachtregel die onderaan het BOM-scherm is opgegeven.\n"
 "\n"
-"De commandoregel accepteert format-parameters als bestandsnamen. Elke format-"
+"De opdrachtregel accepteert format-parameters als bestandsnamen. Elke format-"
 "parameter wordt vervangen door een projectspecifiek pad of bestandsnaam. De "
 "ondersteunde format-parameters zijn:\n"
 "\n"
 " * `%I`: absoluut pad en bestandsnaam van het tussenliggende "
 "netlijstbestand, dat de invoer is voor de BOM-generator\n"
-" * `%O`: absoluut pad en bestandsnaam van het BOM-bestand voor de uitvoer "
-"(zonder bestandsextensie)\n"
+" * `%O`: absoluut pad en bestandsnaam van het BOM-bestand voor de uitvoer ("
+"zonder bestandsextensie)\n"
 " * `%B`: basisbestandsnaam van BOM-bestand voor de uitvoer (zonder "
 "bestandsextensie)\n"
 " * `%P`: absoluut pad van de projectmap, zonder afsluitende schuine streep\n"
 "\n"
-"**Merk op:** de `%O` uitvoerbestandsparameter bevat geen bestandsextensie. "
-"KiCad zal proberen automatisch een geschikte extensie aan de commandoregel "
-"toe te voegen, maar een extensie moet mogelijk met de hand worden "
-"toegevoegd.\n"
+"**Opmerking:** de `%O` uitvoerbestandsparameter bevat geen bestandsextensie. "
+"KiCad zal proberen automatisch een geschikte extensie aan de opdrachtregel "
+"toe te voegen, maar een extensie moet mogelijk met de hand worden toegevoegd."
 "\n"
-"Python is de aanbevolen programmeertaal voor BOM-generatorscripts, maar "
+"\n"
+"Python is de aanbevolen programmeertaal voor BOM-generatiescripts, maar "
 "andere talen kunnen ook worden gebruikt.\n"
 "\n"
-"## Voorbeeldcommandoregels voor Python-scripts\n"
+"## Voorbeeldopdrachtregels voor Python-scripts\n"
 "\n"
-"De indeling van de commandoregel voor een Python-script is als volgt:\n"
+"De indeling van de opdrachtregel voor een Python-script is als volgt:\n"
 "\n"
 "```\n"
 "python <scriptbestandsnaam> <invoerbestandsnaam> <uitvoerbestandsnaam>\n"
 "```\n"
 "\n"
-"Op Windows, als het gewenste generatorscript voor een CSV-BOM `C:"
-"\\Users\\gebruikersnaam\\kicad\\my_python_script.py` is, zou de "
-"commandoregel zijn:\n"
+"Op Windows, als het gewenste generatiescript voor een CSV-BOM `C:\\Users"
+"\\gebruikersnaam\\kicad\\my_python_script.py` is, zou de opdrachtregel zijn:"
+"\n"
 "\n"
 "```\n"
 "python.exe C:\\Users\\gebruikersnaam\\kicad\\my_python_script.py \"%I\" \"%O."
 "csv\"\n"
 "```\n"
 "\n"
-"Op Linux, als het gewenste generatorscript voor een CSV-BOM `/home/"
-"gebruikersnaam/kicad/my_python_script.py` is, zou de commandoregel zijn:\n"
+"Op Linux, als het gewenste generatiescript voor een CSV-BOM `/home/"
+"gebruikersnaam/kicad/my_python_script.py` is, zou de opdrachtregel zijn:\n"
 "\n"
 "```\n"
 "python /home/gebruikersnaam/kicad/my_python_script.py \"%I\" \"%O.csv\"\n"
@@ -10519,7 +10520,7 @@ msgstr "Netlijstbestand opslaan"
 #: eeschema/dialogs/dialog_export_netlist.cpp:517
 #, c-format
 msgid "%s Export"
-msgstr "%s Exporteren"
+msgstr "%s exporteren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:556
 #: eeschema/netlist_exporters/netlist_generator.cpp:54
@@ -10535,7 +10536,7 @@ msgstr "externe simulator niet gevonden"
 msgid ""
 "Note: command line is usually: <tt>&lt;path to SPICE binary&gt; \"%I\"</tt>"
 msgstr ""
-"Merk op: opdrachtregel is doorgaans: <tt>&lt;pad naar SPICE-programma&gt; "
+"Opmerking: opdrachtregel is doorgaans: <tt>&lt;pad naar SPICE-programma&gt; "
 "\"%I\"</tt>"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:613
@@ -10556,7 +10557,7 @@ msgstr "U moet een opdrachtregel opgeven voor de netlijstgenerator"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:804
 msgid "You must provide a netlist generator title"
-msgstr "U moet een naam ingeven voor de net-list generator"
+msgstr "U moet een naam opgeven voor de netlijstgenerator"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:52
 msgid "Add Generator..."
@@ -10564,7 +10565,7 @@ msgstr "Generator toevoegen..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:55
 msgid "Remove Generator"
-msgstr "Verwijder Generator"
+msgstr "Generator verwijderen"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:103
 msgid "Command line to run the generator:"
@@ -12285,7 +12286,7 @@ msgstr "Bestand openen na plotten"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:173
 msgid "Open output file with associated application after successful plot"
-msgstr "Uitvoerbestand openen met bijbehorende applicatie na succesvolle plot"
+msgstr "Uitvoerbestand openen met bijbehorende applicatie na geslaagde plot"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.h:90
 msgid "Plot Schematic Options"
@@ -12430,7 +12431,7 @@ msgstr "Ernsten van overtredingen"
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:60
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:75
 msgid "Net classes"
-msgstr "Netto klassen"
+msgstr "Netklassen"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
@@ -13537,7 +13538,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
 msgid "View presets:"
-msgstr "Beeldvoorinstellingen:"
+msgstr "Voorinstellingen weergave:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:100
 msgid "Exclude DNP"
@@ -13625,7 +13626,7 @@ msgstr "Regelafbrekingen behouden"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
 msgid "Format presets:"
-msgstr "Indelingvoorinstellingen:"
+msgstr "Voorinstellingen indeling:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:273
 msgid "Output file:"
@@ -14157,7 +14158,7 @@ msgstr "Voorinstellingen stuklijst:"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
 msgid "Bill of Materials Formatting Presets:"
-msgstr "Voorinstellingen indeling stuklijst:"
+msgstr "Voorinstellingen stuklijstindeling:"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
@@ -15219,7 +15220,7 @@ msgstr "Netnavigatie"
 #: pcbnew/footprint_edit_frame.cpp:246 pcbnew/footprint_edit_frame.cpp:911
 #: pcbnew/pcb_edit_frame.cpp:308 pcbnew/pcb_edit_frame.cpp:1580
 msgid "Selection Filter"
-msgstr "Selectie Filter"
+msgstr "Selectiefilter"
 
 #: eeschema/erc.cpp:74 eeschema/erc.cpp:91
 msgid "Input Pin"
@@ -16739,7 +16740,7 @@ msgstr "Type busverbinding"
 #: pcbnew/pcb_track.cpp:1156 pcbnew/tools/pcb_control.cpp:1723
 #: pcbnew/zone.cpp:574
 msgid "Resolved Netclass"
-msgstr "Bepaalde netklasse"
+msgstr "Toegewezen netklasse"
 
 #: eeschema/sch_connection.cpp:435
 msgid "Connection Name"
@@ -16794,7 +16795,7 @@ msgstr "Schema-bestand '%s' bestaat al."
 
 #: eeschema/sch_edit_frame.cpp:1320
 msgid "Open Schematic"
-msgstr "Schema Openen"
+msgstr "Schema openen"
 
 #: eeschema/sch_edit_frame.cpp:1389
 msgid "Assigning footprints requires a fully annotated schematic."
@@ -16826,7 +16827,7 @@ msgstr "Schema-opschoning"
 #: eeschema/sch_edit_frame.cpp:1991
 #, c-format
 msgid "Highlighted net: %s"
-msgstr "Uitgelicht net: %s"
+msgstr "Gemarkeerd net: %s"
 
 #: eeschema/sch_edit_frame.cpp:2169
 msgid "Save Symbol to Schematic"
@@ -17808,7 +17809,7 @@ msgstr "Net"
 
 #: eeschema/sch_label.cpp:1339 eeschema/sch_line.cpp:914
 msgid "Resolved netclass"
-msgstr "Bepaalde netklasse"
+msgstr "Toegewezen netklasse"
 
 #: eeschema/sch_label.cpp:1356
 msgid "Hierarchical Labels"
@@ -20038,7 +20039,7 @@ msgstr "Symbool als SVG..."
 #: eeschema/symbol_editor/menubar_symbol_editor.cpp:86
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:103
 msgid "Library Editor"
-msgstr "Bibliotheek-editor"
+msgstr "Bibliotheekeditor"
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:117
 msgid "KiCad Symbol Editor"
@@ -20126,7 +20127,7 @@ msgstr "De huidige configuratie bevat geen symboolbibliotheek '%s'."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1449
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1460
 msgid "Use Manage Symbol Libraries to edit the configuration."
-msgstr "Gebruik Beheer symboolbibliotheken om de configuratie te bewerken."
+msgstr "Gebruik Symboolbibliotheken beheren om de configuratie te bewerken."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1450
 msgid "Library not found in symbol library table."
@@ -20145,12 +20146,12 @@ msgstr "Symboolbibliotheek niet ingeschakeld."
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1778
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1830
 msgid "Error saving global library table."
-msgstr "Fout bij opslaan van globale bibliotheek tabel."
+msgstr "Fout bij opslaan van globale bibliotheektabel."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1779
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1831
 msgid "Error saving project library table."
-msgstr "Fout bij opslaan van bibliotheek tabel."
+msgstr "Fout bij opslaan van bibliotheektabel."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:65
 msgid "[from schematic]"
@@ -20279,7 +20280,7 @@ msgstr "Symbool behouden"
 #: pcbnew/footprint_libraries_utils.cpp:1172
 #, c-format
 msgid "Revert '%s' to last version saved?"
-msgstr "'%s' terugzetten naar de laatst opgeslagen versie?"
+msgstr "'%s' terugzetten naar laatst opgeslagen versie?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:1036
 #, c-format
@@ -20602,7 +20603,7 @@ msgstr "'%s' referentie-aanduiding wijzigen naar '%s'."
 #: eeschema/tools/backannotate.cpp:403
 #, c-format
 msgid "Change %s footprint assignment from '%s' to '%s'."
-msgstr "%s footprint-toewijzing wijzigen van '%s' naar '%s'."
+msgstr "%s footprinttoewijzing wijzigen van '%s' naar '%s'."
 
 #: eeschema/tools/backannotate.cpp:420
 #, c-format
@@ -22291,7 +22292,7 @@ msgstr "Attribuut omschakelen"
 #: eeschema/tools/sch_editor_control.cpp:153
 #, c-format
 msgid "Revert '%s' (and all sub-sheets) to last version saved?"
-msgstr "'%s' (en alle subbladen) terugzetten naar de laatst opgeslagen versie?"
+msgstr "'%s' (en alle subbladen) terugzetten naar laatst opgeslagen versie?"
 
 #: eeschema/tools/sch_editor_control.cpp:343
 msgid "Include power symbols in schematic to the library?"
@@ -24456,7 +24457,7 @@ msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
 msgstr ""
-"Netlijst-uitvoerindeling, geldige opties: kicadsexpr, kicadxml, cadstar, "
+"Uitvoerindeling netlijst, geldige opties: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel"
 
 #: kicad/cli/command_sch_export_plot.cpp:64
@@ -25412,12 +25413,12 @@ msgstr "%d van %d bewerkingen mislukt."
 
 #: kicad/pcm/pcm_task_manager.cpp:668
 msgid "All operations completed successfully."
-msgstr "Alle bewerkingen succesvol voltooid."
+msgstr "Alle bewerkingen geslaagd."
 
 #: kicad/pcm/pcm_task_manager.cpp:673
 #, c-format
 msgid "%d out of %d operations were initialized but not successful."
-msgstr "%d van %d bewerkingen zijn geïnitialiseerd maar niet succesvol."
+msgstr "%d van %d bewerkingen zijn geïnitialiseerd maar niet geslaagd."
 
 #: kicad/project_template.cpp:52
 msgid "Could open the template path!"
@@ -29363,7 +29364,7 @@ msgstr "Onbekende opschoonactie"
 
 #: pcbnew/connectivity/connectivity_data.cpp:109
 msgid "Updating nets..."
-msgstr "Net-lijst bijwerken..."
+msgstr "Netlijst bijwerken..."
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:310
 #: pcbnew/convert_shape_list_to_polygon.cpp:455
@@ -29698,7 +29699,7 @@ msgstr "Footprint niet gevonden in de wijzigingslijst"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:30
 msgid "Footprint Order"
-msgstr "Footprint volgorde"
+msgstr "Footprintvolgorde"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:50
 msgid "Horizontally: top left to bottom right"
@@ -29710,11 +29711,11 @@ msgstr "Horizontaal: rechtsboven naar linksonder"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:72
 msgid "Horizontally: bottom left to top right"
-msgstr "Horizontaal: links onder naar rechts boven"
+msgstr "Horizontaal: linksonder naar rechtsboven"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:83
 msgid "Horizontally:: bottom right to top left"
-msgstr "Horizontaal :: rechtsonder naar linksboven"
+msgstr "Horizontaal: rechtsonder naar linksboven"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:91
 msgid "Vertically: top left to bottom right"
@@ -29722,7 +29723,7 @@ msgstr "Verticaal: linksboven naar rechtsonder"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:102
 msgid "Vertically: bottom left to top right"
-msgstr "Verticaal: linksonder naar rechts boven"
+msgstr "Verticaal: linksonder naar rechtsboven"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:113
 msgid "Vertically: top right to bottom left"
@@ -29734,7 +29735,7 @@ msgstr "Verticaal: rechtsonder naar linksboven"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:137
 msgid "Based on location of:"
-msgstr "Gebaseerd op locatie van:"
+msgstr "Op basis van locatie:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:141
 msgid "Reference Designator"
@@ -29742,7 +29743,7 @@ msgstr "Referentie-aanduiding"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:147
 msgid "Round locations to:"
-msgstr "Rond locaties af naar:"
+msgstr "Locaties afronden naar:"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:149
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:156
@@ -29757,7 +29758,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:168
 msgid "Reannotation Scope"
-msgstr "Reannotatiebereik"
+msgstr "Herannotatiebereik"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:184
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:155
@@ -29769,7 +29770,7 @@ msgstr "Voorkant"
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:155
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:569
 msgid "Back"
-msgstr "Achter"
+msgstr "Achterkant"
 
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:211
 msgid "Front reference start:"
@@ -30167,7 +30168,7 @@ msgstr "Tekeningen opschonen"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:22
 msgid "Merge lines into rectangles"
-msgstr "Voeg lijnen samen tot rechthoeken"
+msgstr "Lijnen samenvoegen tot rechthoeken"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:25
 msgid "Delete redundant graphics"
@@ -30175,7 +30176,7 @@ msgstr "Overtollige tekeningen verwijderen"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
 msgid "Merge overlapping graphics into pads"
-msgstr "Overlappende tekeningen samenvoegen in pads"
+msgstr "Overlappende tekeningen samenvoegen met pads"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:34
 msgid ""
@@ -30187,7 +30188,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr "Onderbrekingen in de bordgrenzen repareren"
+msgstr "Onderbrekingen in bordgrenzen repareren"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
@@ -32588,11 +32589,11 @@ msgstr "Pad-groepen welke verschillende netten mogen kortsluiten:"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list.cpp:153
 msgid "All footprint generator scripts were loaded"
-msgstr "Alle footprint-generator-scripts zijn geladen"
+msgstr "Alle footprintgeneratiescripts zijn geladen"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:65
 msgid "Available Footprint Generators"
-msgstr "Beschikbare footprint-generatoren"
+msgstr "Beschikbare footprintgeneratoren"
 
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:70
 msgid "Search paths:"
@@ -32648,7 +32649,7 @@ msgstr "Volledig aantal componenten: %d."
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:453
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:505
 msgid "File generation successful."
-msgstr "Bestand generatie succesvol."
+msgstr "Bestandsgeneratie geslaagd."
 
 #: pcbnew/dialogs/dialog_gen_footprint_position.cpp:370
 msgid "No footprint for automated placement."
@@ -32718,7 +32719,7 @@ msgstr "Negatieve X-coördinaten gebruiken voor footprints op onderste laag"
 
 #: pcbnew/dialogs/dialog_gen_footprint_position_file_base.h:77
 msgid "Generate Placement Files"
-msgstr "Genereer Plaatsing-bestanden"
+msgstr "Plaatsingsbestanden genereren"
 
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:41
 msgid "Export to GenCAD settings"
@@ -32994,11 +32995,11 @@ msgstr "Markeringen"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:49
 msgid "Clear board"
-msgstr "Duidelijk bord"
+msgstr "Bord leegmaken"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:58
 msgid "Filter Settings"
-msgstr "Filter instellingen"
+msgstr "Filterinstellingen"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:60
 msgid "Locked graphics"
@@ -33034,7 +33035,7 @@ msgstr "Laagfilter"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:105
 msgid "Current layer:"
-msgstr "Huidige Laag:"
+msgstr "Huidige laag:"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.h:72
 msgid "Delete Items"
@@ -33523,7 +33524,7 @@ msgstr "Wijzigingen toegepast op PCB"
 #: pcbnew/dialogs/dialog_import_netlist.cpp:238
 #, c-format
 msgid "Reading netlist file '%s'.\n"
-msgstr "Net-lijst bestand '%s' wordt gelezen.\n"
+msgstr "Netlijstbestand '%s' inlezen.\n"
 
 #: pcbnew/dialogs/dialog_import_netlist.cpp:242
 msgid "Using reference designators to match symbols and footprints.\n"
@@ -34928,7 +34929,7 @@ msgstr "Modus"
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:25
 #: pcbnew/router/router_tool.cpp:2697
 msgid "Highlight collisions"
-msgstr "Markeer botsingen"
+msgstr "Botsingen markeren"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:31
 msgid "Free angle mode"
@@ -34965,7 +34966,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:56
 msgid "Jump over obstacles"
-msgstr "Spring over obstakels"
+msgstr "Springen over obstakels"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:57
 msgid ""
@@ -34979,7 +34980,7 @@ msgstr ""
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
 #: pcbnew/router/router_tool.cpp:2698
 msgid "Walk around"
-msgstr "Omheen lopen"
+msgstr "Omlopen"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:82
 msgid "Remove redundant tracks"
@@ -35000,14 +35001,14 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
 msgid "Optimize pad connections"
-msgstr "Optimaliseer padverbindingen"
+msgstr "Padverbindingen optimaliseren"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:88
 msgid ""
 "When enabled, the router tries to break out pads/vias in a clean way, "
 "avoiding acute angles and jagged breakout traces."
 msgstr ""
-"Indien ingeschakeld, probeert de router pads / vias op een schone manier uit "
+"Indien ingeschakeld probeert de router pads / vias op een schone manier uit "
 "te breken, waarbij scherpe hoeken en gekartelde breakout-sporen worden "
 "vermeden."
 
@@ -35020,7 +35021,7 @@ msgid ""
 "When enabled, the router attempts to merge several jagged segments into a "
 "single straight one (dragging mode)."
 msgstr ""
-"Indien ingeschakeld, probeert de router verschillende gekartelde segmenten "
+"Indien ingeschakeld probeert de router verschillende gekartelde segmenten "
 "samen te voegen tot één rechte (sleepmodus)."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:97
@@ -35037,8 +35038,8 @@ msgid ""
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
 msgstr ""
-"Indien aangevinkt wordt het hele deel van het spoor dat zichtbaar is op het "
-"scherm geoptimaliseerd wanneer een segment wordt gesleept. Anders wordt "
+"Indien ingeschakeld wordt het hele deel van het spoor dat zichtbaar is op "
+"het scherm geoptimaliseerd wanneer een segment wordt gesleept. Anders wordt "
 "alleen het gebied in de buurt van het gesleepte segment geoptimaliseerd."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:107
@@ -35050,12 +35051,12 @@ msgid ""
 "When enabled, the posture of tracks will be guided by how the mouse is moved "
 "from the starting location"
 msgstr ""
-"Indien ingeschakeld, wordt de stand van de sporen bepaald door hoe de muis "
+"Indien ingeschakeld wordt de stand van de sporen bepaald door hoe de muis "
 "wordt verplaatst vanaf de startlocatie"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:112
 msgid "Fix all segments on click"
-msgstr "Herstel alle segmenten met een klik"
+msgstr "Alle segmenten vastzetten bij klikken"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:113
 msgid ""
@@ -35063,8 +35064,8 @@ msgid ""
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
 msgstr ""
-"Indien ingeschakeld, worden alle spoorsegmenten op hun plaats vastgezet tot "
-"aan de cursorlocatie. Indien uitgeschakeld, blijft het laatste segment (het "
+"Indien ingeschakeld worden alle spoorsegmenten op hun plaats vastgezet tot "
+"aan de cursorlocatie. Indien uitgeschakeld blijft het laatste segment (het "
 "dichtst bij de cursor) vrij en volgt het de cursor."
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
@@ -35751,7 +35752,7 @@ msgstr "PCB bijwerken van schema"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:29
 msgid "Constrain actions to H, V, 45 degrees"
-msgstr "Beperk acties tot H, V en 45 graden"
+msgstr "Acties beperken tot H, V en 45 graden"
 
 #: pcbnew/dialogs/panel_edit_options_base.cpp:35
 msgid "Step for &rotate commands:"
@@ -39892,7 +39893,7 @@ msgstr "Alle KiCad bordbestanden"
 
 #: pcbnew/files.cpp:173
 msgid "Open Board File"
-msgstr "Openen bord bestand"
+msgstr "Bordbestand openen"
 
 #: pcbnew/files.cpp:174
 msgid "Import Non KiCad Board File"
@@ -39900,7 +39901,7 @@ msgstr "Niet-KiCad bordbestand importeren"
 
 #: pcbnew/files.cpp:206
 msgid "Save Board File As"
-msgstr "Bewaar bordbestand als"
+msgstr "Bordbestand opslaan als"
 
 #: pcbnew/files.cpp:232
 msgid "Printed circuit board"
@@ -39914,7 +39915,7 @@ msgstr "Herstelbestand '%s' niet gevonden."
 #: pcbnew/files.cpp:304
 #, c-format
 msgid "OK to load recovery file '%s'?"
-msgstr "OK om herstel-bestand '%s' te laden?"
+msgstr "OK om herstelbestand '%s' te laden?"
 
 #: pcbnew/files.cpp:347
 #, c-format
@@ -39925,7 +39926,7 @@ msgstr ""
 
 #: pcbnew/files.cpp:361
 msgid "Current Board will be closed. Continue?"
-msgstr "Het huidige bestuur wordt gesloten. Doorgaan met?"
+msgstr "Het huidige bord wordt gesloten. Doorgaan?"
 
 #: pcbnew/files.cpp:478
 msgid ""
@@ -39947,7 +39948,7 @@ msgstr "PCB '%s' is al geopend door '%s' op '%s'."
 
 #: pcbnew/files.cpp:535
 msgid "The current PCB has been modified.  Save changes?"
-msgstr "De huidige print is aangepast. Wijzigingen opslaan?"
+msgstr "De huidige PCB is aangepast. Wijzigingen opslaan?"
 
 #: pcbnew/files.cpp:554
 #, c-format
@@ -39956,7 +39957,7 @@ msgstr "PCB '%s' bestaat niet. Wilt u deze aanmaken?"
 
 #: pcbnew/files.cpp:563
 msgid "Creating PCB"
-msgstr "Creëer PCB"
+msgstr "PCB wordt gemaakt"
 
 #: pcbnew/files.cpp:654
 msgid "File format is not supported"
@@ -39965,35 +39966,34 @@ msgstr "Bestandsindeling niet ondersteund"
 #: pcbnew/files.cpp:694 pcbnew/files.cpp:704
 #, c-format
 msgid "Error loading PCB '%s'."
-msgstr "Fout bij het laden van PCB '%s'."
+msgstr "Fout bij laden van PCB '%s'."
 
 #: pcbnew/files.cpp:713
 #, c-format
 msgid "Memory exhausted loading PCB '%s'"
-msgstr "Geheugen-fout bij het laden van PCB '%s'"
+msgstr "Geheugen vol bij laden van PCB '%s'"
 
 #: pcbnew/files.cpp:826
 #, c-format
 msgid "Error saving footprint %s to project specific library."
 msgstr ""
-"Fout bij het opslaan van de footprint %s naar de projectspecifieke "
+"Fout bij opslaan van footprint %s naar projectspecifieke "
 "footprintbibliotheek."
 
 #: pcbnew/files.cpp:857
 msgid "Error saving project specific footprint library table."
-msgstr ""
-"Fout bij het opslaan van de projectspecifieke footprintbibliotheektabel."
+msgstr "Fout bij opslaan van projectspecifieke footprintbibliotheektabel."
 
 #: pcbnew/files.cpp:949 pcbnew/files.cpp:1088 pcbnew/files.cpp:1256
 #: pcbnew/footprint_libraries_utils.cpp:268
 #, c-format
 msgid "Insufficient permissions to write file '%s'."
-msgstr "Onvoldoende rechten om het bestand '%s' op te slaan."
+msgstr "Onvoldoende rechten om bestand '%s' op te slaan."
 
 #: pcbnew/files.cpp:981 pcbnew/files.cpp:1133
 #, c-format
 msgid "Error saving custom rules file '%s'."
-msgstr "Fout bij het opslaan van aangepaste-regelsbestand '%s'."
+msgstr "Fout bij opslaan van aangepaste-regelsbestand '%s'."
 
 #: pcbnew/files.cpp:1007 pcbnew/files.cpp:1109
 #, c-format
@@ -40046,7 +40046,7 @@ msgid ""
 "Error generating IPC2581 file '%s'.\n"
 "Failed to rename temporary file '%s."
 msgstr ""
-"Fout bij genereren van IPC2581-bestand '%s'.\n"
+"Fout bij genereren IPC2581-bestand '%s'.\n"
 "Hernoemen van tijdelijk bestand '%s' mislukt."
 
 #: pcbnew/footprint.cpp:948 pcbnew/footprint_libraries_utils.cpp:1205
@@ -40235,7 +40235,7 @@ msgstr "[geen footprint geladen]"
 
 #: pcbnew/footprint_edit_frame.cpp:1042
 msgid "Updating Footprint Libraries"
-msgstr "Footprint-bibliotheken bijwerken"
+msgstr "Footprintbibliotheken bijwerken"
 
 #: pcbnew/footprint_edit_frame.cpp:1366
 msgid "No footprint selected."
@@ -41428,7 +41428,7 @@ msgstr "Boorgat X / Y"
 #: pcbnew/zone.cpp:639
 #, c-format
 msgid "Min Clearance: %s"
-msgstr "Min. vrije afstand: %s"
+msgstr "Min vrije afstand: %s"
 
 #: pcbnew/pad.cpp:1241
 msgid "Trap"
@@ -41615,8 +41615,7 @@ msgstr "KiCad PCB-editor"
 
 #: pcbnew/pcb_edit_frame.cpp:219
 msgid "Export netlist used to update schematics"
-msgstr ""
-"Het schema werd vroeger bijgewerkt tijdens het exporteren van de netlijst"
+msgstr "Netlijst exporteren om schema’s bij te werken"
 
 #: pcbnew/pcb_edit_frame.cpp:423
 msgid "New PCB file is unsaved"
@@ -41659,7 +41658,7 @@ msgstr ""
 #: pcbnew/pcb_edit_frame.cpp:1927
 #, c-format
 msgid "Schematic file '%s' not found."
-msgstr "Schema-bestand '%s' niet gevonden."
+msgstr "Schemabestand '%s' niet gevonden."
 
 #: pcbnew/pcb_edit_frame.cpp:1957
 msgid "Eeschema failed to load."
@@ -41675,7 +41674,7 @@ msgstr "Kon aangepaste ontwerpregels niet verwerken."
 
 #: pcbnew/pcb_edit_frame.cpp:2441
 msgid "Export Hyperlynx Layout"
-msgstr "Exporteer Hyperlynx Layout"
+msgstr "Hyperlynx-layout exporteren"
 
 #: pcbnew/pcb_edit_frame.cpp:2493
 msgid "Violation Report"
@@ -41683,11 +41682,11 @@ msgstr "Overtredingenrapport"
 
 #: pcbnew/pcb_edit_frame.cpp:2503
 msgid "Clearance Report"
-msgstr "Rapport over vrije afstand"
+msgstr "Vrije afstandrapport"
 
 #: pcbnew/pcb_edit_frame.cpp:2513
 msgid "Constraints Report"
-msgstr "Beperkingen rapport"
+msgstr "Beperkingenrapport"
 
 #: pcbnew/pcb_edit_frame.cpp:2523 pcbnew/tools/pcb_actions.cpp:1861
 msgid "Compare Footprint with Library"
@@ -41728,7 +41727,7 @@ msgstr "Bijgewerkingsvolgorde"
 
 #: pcbnew/pcb_generator.cpp:222
 msgid "Generator Properties"
-msgstr "Generator-eigenschappen"
+msgstr "Generatoreigenschappen"
 
 #: pcbnew/pcb_group.cpp:369
 #, c-format
@@ -44090,7 +44089,7 @@ msgstr "Route differentieel paar: %s"
 #: pcbnew/router/router_tool.cpp:2654 pcbnew/router/router_tool.cpp:2664
 #, c-format
 msgid "Resolved Netclass: %s"
-msgstr "Netklasse bepaald: %s"
+msgstr "Toegewezen netklasse: %s"
 
 #: pcbnew/router/router_tool.cpp:2661
 #, c-format
@@ -44303,11 +44302,11 @@ msgstr "Specctra DSN-bestand"
 
 #: pcbnew/tools/board_editor_control.cpp:435
 msgid "Export Board Netlist"
-msgstr "Net-lijst exporteren"
+msgstr "Bordnetlijst exporteren"
 
 #: pcbnew/tools/board_editor_control.cpp:436
 msgid "KiCad board netlist files"
-msgstr "KiCad bordnetlijstbestanden"
+msgstr "KiCad-bordnetlijstbestanden"
 
 #: pcbnew/tools/board_editor_control.cpp:450
 #, c-format
@@ -44877,7 +44876,7 @@ msgstr "Totale bordafmetingen: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:435
 msgid "Min track/spacing: "
-msgstr "Min. spoor/afstand: "
+msgstr "Min spoor/afstand: "
 
 #: pcbnew/tools/drawing_stackup_table_tool.cpp:445
 msgid "Copper Finish: "
@@ -45279,7 +45278,7 @@ msgstr "Zone maken van selectie..."
 
 #: pcbnew/tools/pcb_actions.cpp:61
 msgid "Creates a copper zone from the selection"
-msgstr "Maakt een koper-zone uit de selectie"
+msgstr "Maakt een koperzone van de selectie"
 
 #: pcbnew/tools/pcb_actions.cpp:67
 msgid "Create Rule Area from Selection..."
@@ -45900,7 +45899,7 @@ msgstr ""
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Global Deletions..."
-msgstr "Globale verwijderingen..."
+msgstr "Globaal verwijderen..."
 
 #: pcbnew/tools/pcb_actions.cpp:859
 msgid "Delete tracks, footprints and graphic items from board"
@@ -47582,8 +47581,8 @@ msgid ""
 msgstr ""
 "Beeldlocatie en zoom opslaan en herstellen.\n"
 "Gebruik %s+Tab om de kiezer te activeren.\n"
-"Opeenvolgende Tabs terwijl u %s ingedrukt houdt schakelt tussen de viewports "
-"in de pop-up."
+"Opeenvolgende Tabs terwijl u %s ingedrukt houdt schakelt tussen de "
+"weergavegebieden in de pop-up."
 
 #: pcbnew/widgets/appearance_controls.cpp:466
 msgid "Filter nets"
@@ -47986,7 +47985,7 @@ msgstr "Extra informatie weglaten"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:36
 msgid "Omit nets"
-msgstr "Net-lijst weglaten"
+msgstr "Netlijst weglaten"
 
 #: pcbnew/widgets/legacyfiledlg_netlist_options.h:38
 msgid "Do not prefix path with footprint UUID."
