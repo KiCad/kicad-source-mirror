@@ -368,7 +368,7 @@ private:
     std::function<void( ValueType )> m_setter;
 };
 
-#ifdef _MSC_VER
+#ifdef __WINDOWS__
 template class KICOMMON_API PARAM_LAMBDA<bool>;
 template class KICOMMON_API PARAM_LAMBDA<int>;
 template class KICOMMON_API PARAM_LAMBDA<nlohmann::json>;
@@ -557,7 +557,7 @@ protected:
 };
 
 
-#ifdef _MSC_VER
+#ifdef __WINDOWS__
 template class KICOMMON_API PARAM_LIST<bool>;
 template class KICOMMON_API PARAM_LIST<int>;
 template class KICOMMON_API PARAM_LIST<double>;
@@ -656,7 +656,7 @@ protected:
     std::set<Type>  m_default;
 };
 
-#ifdef _MSC_VER
+#ifdef __WINDOWS__
 template class KICOMMON_API PARAM_SET<wxString>;
 #else
 extern template class APIVISIBLE PARAM_SET<wxString>;
@@ -797,7 +797,7 @@ private:
 };
 
 
-#ifdef _MSC_VER
+#ifdef __WINDOWS__
 template class KICOMMON_API PARAM_MAP<int>;
 template class KICOMMON_API PARAM_MAP<double>;
 template class KICOMMON_API PARAM_MAP<bool>;

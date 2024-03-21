@@ -55,7 +55,6 @@ bool PARAM_PATH_LIST::MatchesFile( JSON_SETTINGS* aSettings ) const
 }
 
 
-
 void PARAM_WXSTRING_MAP::Load( JSON_SETTINGS* aSettings, bool aResetIfMissing ) const
 {
     if( m_readOnly )
@@ -116,7 +115,7 @@ bool PARAM_WXSTRING_MAP::MatchesFile( JSON_SETTINGS* aSettings ) const
     return false;
 }
 
-
+#if !defined( __MINGW32__ )
 // Instantiate all required templates here and export
 template class KICOMMON_API PARAM_LAMBDA<bool>;
 template class KICOMMON_API PARAM_LAMBDA<int>;
@@ -138,3 +137,4 @@ template class KICOMMON_API PARAM_SET<wxString>;
 template class KICOMMON_API PARAM_MAP<int>;
 template class KICOMMON_API PARAM_MAP<double>;
 template class KICOMMON_API PARAM_MAP<bool>;
+#endif
