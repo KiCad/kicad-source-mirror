@@ -32,8 +32,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-17 09:02+0000\n"
-"Last-Translator: simmon <simmon@nplob.com>\n"
+"PO-Revision-Date: 2024-03-21 14:44+0000\n"
+"Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
 "Language: ko\n"
@@ -8801,7 +8801,7 @@ msgstr "보고서 파일"
 
 #: common/wildcards_and_files_ext.cpp:395
 msgid "Component placement files"
-msgstr "컴포넌트 배치 파일"
+msgstr "부품 배치 파일"
 
 #: common/wildcards_and_files_ext.cpp:401
 msgid "VRML and X3D files"
@@ -18513,7 +18513,7 @@ msgstr "새로운 시트 버리기"
 #: eeschema/sim/kibis/ibis_parser.cpp:67 eeschema/sim/kibis/ibis_parser.cpp:96
 #: eeschema/sim/kibis/ibis_parser.cpp:119
 msgid "Dimension of matrices should be >= 1."
-msgstr "매트릭스의 차원은 >= 1이어야 합니다."
+msgstr "행렬의 치수 >= 1이어야 합니다."
 
 #: eeschema/sim/kibis/ibis_parser.cpp:73
 msgid "Bandwidth of banded matrices should be >= 1."
@@ -28517,11 +28517,11 @@ msgstr "네트 이름"
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:128
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:580
 msgid "Teardrops"
-msgstr "눈물 방울"
+msgstr "물방울모양"
 
 #: pcbnew/board_connected_item.cpp:237
 msgid "Enable Teardrops"
-msgstr "눈물방울 활성화"
+msgstr "물방울모양 활성화"
 
 #: pcbnew/board_connected_item.cpp:243
 msgid "Best Length Ratio"
@@ -28549,7 +28549,7 @@ msgstr "선호 영역 연결"
 
 #: pcbnew/board_connected_item.cpp:281
 msgid "Allow Teardrops To Span Two Tracks"
-msgstr "눈물방울이 두 개의 트랙에 걸쳐 있도록 허용"
+msgstr "물방울모양이 두 개의 트랙에 걸쳐 있도록 허용"
 
 #: pcbnew/board_connected_item.cpp:287
 msgid "Max Width Ratio"
@@ -29919,15 +29919,15 @@ msgstr "배선 및 비아 정리"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:202
 msgid "Teardrop on Vias/Pads Properties"
-msgstr "비아/패드 속성의 눈물방울"
+msgstr "비아/패드의 물방울모양 속성"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:206
 msgid "Teardrop on Tracks Properties"
-msgstr "트랙 속성의 눈물 방울"
+msgstr "트랙의 물방울모양 속성"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:210
 msgid "Teardrop Properties"
-msgstr "눈물 방울 속성"
+msgstr "물방울모양 속성"
 
 #: pcbnew/dialogs/dialog_copper_zones.cpp:216
 #: pcbnew/dialogs/dialog_non_copper_zones_properties.cpp:106
@@ -30852,7 +30852,7 @@ msgstr "설명서"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:359
 msgid "Choose how to position the text relative to the dimension line"
-msgstr "치수선을 기준으로 텍스트를 어떻게 정렬할 지 선택합니다"
+msgstr "치수선을 기준으로 텍스트를 어떻게 정렬할 지 선택"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:363
 msgid "Keep aligned with dimension"
@@ -30860,7 +30860,7 @@ msgstr "치수선을 따라 정렬하기"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:364
 msgid "Automatically set the text orientation to match the dimension lines"
-msgstr "치수선에 맞추어 자동으로 텍스트를 정렬합니다"
+msgstr "치수선에 맞추어 자동으로 텍스트를 정렬"
 
 #: pcbnew/dialogs/dialog_dimension_properties_base.cpp:378
 msgid "Dimension Line"
@@ -32644,28 +32644,28 @@ msgstr "항목 삭제"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:108
 msgid "Set teardrops to default values for shape"
-msgstr "티어드롭 모양을 기본값으로 설정하기"
+msgstr "물방울모양을 기본값으로 설정하기"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:109
 msgid "Set teardrops to specified values:"
-msgstr "티어드롭을 지정된 값으로 설정:"
+msgstr "물방울모양을 지정된 값으로 설정:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:113
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:120
 msgid "Add teardrops with default values for shape"
-msgstr "모양 기본값으로 티어드롭 추가하기"
+msgstr "모양 기본값으로 물방울모양 추가하기"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:114
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:129
 msgid "Add teardrops with specified values:"
-msgstr "지정된 값으로 티어드롭을 추가:"
+msgstr "지정된 값으로 물방울모양을 추가:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:483
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:487
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:491
 #: pcbnew/dialogs/dialog_global_edit_teardrops.cpp:510
 msgid "Edit Teardrops"
-msgstr "티어드롭 편집"
+msgstr "물방울모양 편집"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:27
 msgid "PTH pads"
@@ -32701,11 +32701,11 @@ msgstr "원형 패드만"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:99
 msgid "Existing teardrops only"
-msgstr "기존 티어드롭만 해당"
+msgstr "기존 물방울모양만 해당"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:114
 msgid "Remove teardrops"
-msgstr "눈물 방울 제거"
+msgstr "물방울모양 제거"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:123
 msgid "Edit default values in Board Setup"
@@ -32725,13 +32725,12 @@ msgstr "선호 영역 연결"
 msgid ""
 "Do not create teardrops on tracks connected to pads that are also connected "
 "to a copper zone."
-msgstr ""
-"구리 영역에도 연결되고 패드에 연결된 트랙에는 티어드롭을 만들지 않습니다."
+msgstr "구리 영역에 연결되고 패드에 연결된 트랙에는 물방울모양을 만들지 마세요."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
 msgid "Allow teardrops to span two track segments"
-msgstr "티어드롭이 두 개의 트랙 세그먼트에 걸쳐 있도록 허용하기"
+msgstr "물방울모양이 두 개의 트랙 세그먼트에 걸쳐 있도록 허용"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:147
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:381
@@ -32742,8 +32741,8 @@ msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
 msgstr ""
-"첫 번째 트랙 세그먼트가 너무 짧아 최적의 길이를 수용하지 못하는 경우 티어드롭"
-"이 연결된 처음 2개의 트랙 세그먼트에 걸쳐 확장되도록 허용합니다."
+"첫 번째 트랙 세그먼트가 너무 짧아 최적의 길이를 수용하지 못하는 경우 "
+"물방울모양이 연결된 처음 2개의 트랙 세그먼트에 걸쳐 확장되도록 허용합니다."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -32762,14 +32761,14 @@ msgid ""
 "Max pad/via size to track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
-"최대 패드/비아 크기 대 트랙 너비 비율로 눈물 방울을 생성합니다.\n"
-"100은 항상 눈물방울을 만듭니다."
+"물방울모양을 만들기 위한 최대 패드/비아 크기와 트랙 너비 비율입니다.\n"
+"100은 항상 물방울모양을 생성합니다."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:170
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:167
 msgid ""
 "Tracks which are similar in size to the pad or via do not need teardrops."
-msgstr "패드 또는 비아와 크기가 비슷한 트랙은 티어드롭이 필요하지 않습니다."
+msgstr "패드 또는 비아와 크기가 비슷한 트랙은 물방울모양이 필요하지 않습니다."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
 msgid "(as a percentage of pad/via minor dimension)"
@@ -32879,7 +32878,7 @@ msgstr "포인트:"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.h:112
 msgid "Set Teardrops"
-msgstr "티어드롭 설정"
+msgstr "물방울모양 설정"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics.cpp:138
 msgid "Other text items"
@@ -33205,7 +33204,7 @@ msgstr "사전 정의된 트랙 및 비아 치수"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:69
 msgid "Teardrop defaults"
-msgstr "눈물방울 기본값"
+msgstr "물방울모양 기본값"
 
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:72
 msgid "Length-tuning pattern defaults"
@@ -33929,37 +33928,36 @@ msgstr "성곽형 패드 (스루홀 전용)"
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:590
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:351
 msgid "Board contains legacy teardrops."
-msgstr "보드에는 기존 티어드롭이 포함되어 있습니다."
+msgstr "보드에는 기존 물방울모양이 포함되어 있습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:594
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:355
 msgid "Use Edit > Edit Teardrops to apply automatic teardrops."
-msgstr "자동 눈물 방울을 적용하려면 편집 > 티어드롭 편집을 사용합니다."
+msgstr "물방울모양을 자동 적용하려면 편집 > 물방울모양 편집을 사용합니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:610
 msgid "Add teardrops on pad's track connections"
-msgstr "패드의 트랙 연결부에 눈물방울 추가하기"
+msgstr "패드의 트랙 연결부에 물방울모양 추가하기"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:619
 msgid "Allow teardrops to span 2 track segments"
-msgstr "눈물방울이 2개의 트랙 세그먼트에 걸쳐 있도록 허용하기"
+msgstr "물방울모양이 2개의 트랙 세그먼트에 걸쳐 있도록 허용하기"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:621
 msgid ""
 "Allows a teardrop to spread over 2 tracks if the first track segment is too "
 "short"
-msgstr ""
-"첫 번째 트랙 세그먼트가 너무 짧은 경우 눈물방울이 2개의 트랙에 퍼지도록 허용"
-"함"
+msgstr "첫 번째 트랙 세그먼트가 너무 짧은 경우 물방울모양이 2개의 트랙에 퍼지도록 "
+"허용함"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:645
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:357
 msgid "Tracks which are similar in size to the pad do not need teardrops."
-msgstr "패드와 크기가 비슷한 트랙은 티어드롭이 필요하지 않습니다."
+msgstr "패드와 크기가 비슷한 트랙은 물방울모양이 필요하지 않습니다."
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:675
 msgid "Teardrop Shape"
-msgstr "눈물방울 모양"
+msgstr "물방울모양 형태"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:835
 msgid "Pad connection:"
@@ -35149,11 +35147,11 @@ msgstr "시작, 끝 그리고 연결된 레이어"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:377
 msgid "Add teardrops on via's track connections"
-msgstr "비아의 트랙 연결에 티어드롭 추가하기"
+msgstr "비아의 트랙 연결에 물방울모양 추가하기"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:404
 msgid "Tracks which are similar in size to the via do not need teardrops."
-msgstr "비아와 크기가 비슷한 트랙은 눈물방울이 필요하지 않습니다."
+msgstr "비아와 크기가 비슷한 트랙은 물방울모양이 필요하지 않습니다."
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:418
 msgid "(as a percentage of pad/via/track size)"
@@ -37643,7 +37641,7 @@ msgstr "곡선 점:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:384
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:569
 msgid "Allow teardrop to span two track segments"
-msgstr "티어드롭이 두 개의 트랙 세그먼트에 걸쳐 있도록 허용"
+msgstr "물방울모양이 두 개의 트랙 세그먼트에 걸쳐 있도록 허용"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:209
 msgid "Default properties for rectangular shapes:"
@@ -37651,7 +37649,7 @@ msgstr "직사각형 도형의 기본 속성:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:399
 msgid "Properties for track-to-track teardrops:"
-msgstr "트랙 간 티어드롭의 속성:"
+msgstr "트랙 간 물방울모양의 속성:"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:534
 msgid "Maximum track width"
@@ -37662,12 +37660,12 @@ msgid ""
 "Max track width ratio to create a teardrop.\n"
 "100 always creates a teardrop."
 msgstr ""
-"티어드롭을 생성할 최대 트랙 너비 비율입니다.\n"
-"100은 항상 티어드롭을 생성합니다."
+"물방을모양을 생성할 최대 트랙 너비 비율입니다.\n"
+"100은 항상 물방을모양을 생성합니다."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:542
 msgid "Tracks which are similar in size do not need teardrops."
-msgstr "크기가 비슷한 트랙은 티어드롭이 필요하지 않습니다."
+msgstr "크기가 비슷한 트랙은 물방울모양이 필요하지 않습니다."
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:21
 msgid "Default properties for new graphics and text:"
@@ -37680,7 +37678,7 @@ msgstr "새 치수 객체에 대한 기본 속성:"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:98
 msgid ""
 "Default units for dimensions (\"automatic\" to follow the chosen UI units)"
-msgstr "치수에 대한 기본 유닛 (\"자동\" 을 선택하면 UI가 고른 단위에 따릅니다)"
+msgstr "치수에 대한 기본 유닛 (\"자동\" 을 선택하면 UI가 고른 단위에 따름)"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:105
 msgid "Text position:"
@@ -37696,7 +37694,7 @@ msgstr "치수선에 텍스트 정렬"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:128
 msgid "When checked, dimension text will be kept aligned with dimension lines"
-msgstr "체크할 경우, 치수 텍스트는 치수 선에 맞추어 정렬됩니다"
+msgstr "체크할 경우, 치수 텍스트는 치수 선에 맞추어 정렬됨"
 
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:140
 msgid "How many digits of precision to show"
@@ -41024,7 +41022,7 @@ msgstr "접미사"
 #: pcbnew/pcb_dimension.cpp:550
 #, c-format
 msgid "Dimension '%s' on %s"
-msgstr "치수 '%s' (%s 위)"
+msgstr "치수 '%s' 의 %s"
 
 #: pcbnew/pcb_dimension.cpp:1416
 msgid "1234.0"
@@ -41325,7 +41323,7 @@ msgstr "치수 도면 로드 중..."
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1582
 #, c-format
 msgid "Ignored dimension of kind %d (not yet supported)."
-msgstr "%d 종류의 치수를 무시하였습니다 (아직 지원되지 않음)."
+msgstr "%d 종류의 치수를 무시함 (아직 지원되지 않음)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1623
 msgid "No 3D-models will be imported."
@@ -41812,16 +41810,15 @@ msgstr ""
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1548
 #, c-format
 msgid "Unexpected Dimension type (ID %s). This was not imported."
-msgstr "예기치 않은 치수 유형 (ID %s). 이는 불러와지지 않습니다."
+msgstr "잘못된 치수 유형(ID %s)입니다. 가져오지 못했습니다."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1683
 #, c-format
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr ""
-"치수 %s은(는) 각이 있는 치수로, KiCad에서 대응되지 않습니다. 이 객체는 불러와"
-"지지 않습니다."
+msgstr "치수 %s는 KiCad에 해당하는 치수가 없는 각도 치수입니다. 개체를 가져오지 "
+"못했습니다."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1723
 #, c-format
@@ -41976,8 +41973,8 @@ msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
 msgstr ""
-"CADSTAR 디자인에는 티어드롭이 포함되어 있습니다. 이 importer는 아직 그들을 지"
-"원하지 않으므로 디자인의 티어드롭은 무시되었습니다."
+"CADSTAR 디자인에는 물방울모양이 포함되어 있습니다. 이 불러오기 도구는 아직 "
+"그들을 지원하지 않으므로 디자인의 물방울모양은 무시되었습니다."
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2597
 #, c-format
@@ -45302,11 +45299,11 @@ msgstr "기판 전체의 텍스트와 그래픽 속성을 편집"
 
 #: pcbnew/tools/pcb_actions.cpp:851
 msgid "Edit Teardrops..."
-msgstr "티어드롭 편집..."
+msgstr "물방울모양 편집..."
 
 #: pcbnew/tools/pcb_actions.cpp:852
 msgid "Add, remove or edit teardrops globally across board"
-msgstr "전반적으로 티어드롭을 추가, 제거 또는 편집할 수 있음"
+msgstr "전반적으로 물방울모양을 추가, 제거 또는 편집하기"
 
 #: pcbnew/tools/pcb_actions.cpp:858
 msgid "Global Deletions..."
@@ -45502,11 +45499,11 @@ msgstr "Excellon 드릴 파일 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:1054
 msgid "Component Placement (.pos, .gbr)..."
-msgstr "컴포넌트 배치 (.pos, .gbr)..."
+msgstr "부품 배치 파일 (.pos, .gbr)..."
 
 #: pcbnew/tools/pcb_actions.cpp:1055
 msgid "Generate component placement file(s) for pick and place"
-msgstr "선택 및 배치를 위한 부품 배치 파일 생성"
+msgstr "픽 앤 플레이스용 부품 배치 파일 생성"
 
 #: pcbnew/tools/pcb_actions.cpp:1061
 msgid "Footprint Report (.rpt)..."
@@ -47433,7 +47430,7 @@ msgstr "규칙 영역"
 
 #: pcbnew/zone.cpp:689
 msgid "Teardrop Area"
-msgstr "눈물 방울 지역"
+msgstr "물방울모양 영역"
 
 #: pcbnew/zone.cpp:691
 msgid "Copper Zone"
