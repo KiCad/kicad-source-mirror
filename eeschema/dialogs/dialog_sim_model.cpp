@@ -119,10 +119,10 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BA
     grid->DedicateKey( WXK_DOWN );
 
 #if wxCHECK_VERSION( 3, 3, 0 )
-    grid->AddActionTrigger( wxPGKeyboardActions::Edit, WXK_RETURN );
-    grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_RETURN );
-    grid->AddActionTrigger( wxPGKeyboardActions::Edit, WXK_NUMPAD_ENTER );
-    grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_NUMPAD_ENTER );
+    grid->AddActionTrigger( wxPGKeyboardAction::Edit, WXK_RETURN );
+    grid->AddActionTrigger( wxPGKeyboardAction::NextProperty, WXK_RETURN );
+    grid->AddActionTrigger( wxPGKeyboardAction::Edit, WXK_NUMPAD_ENTER );
+    grid->AddActionTrigger( wxPGKeyboardAction::NextProperty, WXK_NUMPAD_ENTER );
 #else
     grid->AddActionTrigger( wxPG_ACTION_EDIT, WXK_RETURN );
     grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
