@@ -2143,6 +2143,9 @@ using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 
 int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 {
+    if( m_isFootprintEditor )
+        return 0;
+
     if( m_inDrawingTool )
         return 0;
 
