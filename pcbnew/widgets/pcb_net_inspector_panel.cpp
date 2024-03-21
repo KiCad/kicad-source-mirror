@@ -861,6 +861,11 @@ void PCB_NET_INSPECTOR_PANEL::onBoardChanged( wxCommandEvent& event )
     m_board_loaded = true;
     m_board_loading = true;
 
+    wxDataViewColumn* currentSorting = m_netsList->GetSortingColumn();
+
+    if( currentSorting )
+        currentSorting->UnsetAsSortKey();
+
     PROJECT_LOCAL_SETTINGS& localSettings = Pgm().GetSettingsManager().Prj().GetLocalSettings();
     auto&                   cfg = localSettings.m_NetInspectorPanel;
     m_searchCtrl->SetValue( cfg.filter_text );
