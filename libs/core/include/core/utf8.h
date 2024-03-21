@@ -27,6 +27,7 @@
 #ifndef UTF8_H_
 #define UTF8_H_
 
+#include <iostream>
 #include <string>
 #include <wx/string.h>
 
