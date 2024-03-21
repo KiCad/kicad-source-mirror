@@ -114,6 +114,10 @@ public:
     bool operator==( const std::string& rhs )   const   { return m_s == rhs; }
     bool operator==( const char* s )            const   { return m_s == s; }
 
+    bool operator!=( const UTF8& rhs ) const { return !( operator==( rhs ) ); }
+    bool operator<( const UTF8& rhs ) const { return m_s < rhs.m_s;  }
+    bool operator>( const UTF8& rhs ) const { return m_s > rhs.m_s;  }
+
     std::string::size_type find_first_of( const std::string& str,
                                           std::string::size_type pos = 0 ) const
     {
@@ -304,5 +308,7 @@ protected:
     std::string m_s;
 };
 
+
+std::ostream& operator<<( std::ostream& aStream, const UTF8& aRhs );
 
 #endif // UTF8_H_

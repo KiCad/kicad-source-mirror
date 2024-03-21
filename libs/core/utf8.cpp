@@ -239,3 +239,10 @@ UTF8& UTF8::operator+=( unsigned w_ch )
 
     return *this;
 }
+
+
+std::ostream& operator<<( std::ostream& aStream, const UTF8& aRhs )
+{
+    aStream << static_cast<const std::string&>( aRhs );
+    return aStream;
+}

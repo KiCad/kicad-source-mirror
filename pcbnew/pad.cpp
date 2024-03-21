@@ -53,6 +53,7 @@
 
 #include <memory>
 #include <macros.h>
+#include <magic_enum.hpp>
 #include "kiface_base.h"
 #include "pcbnew_settings.h"
 
@@ -552,8 +553,8 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
         break;
 
     default:
-        wxFAIL_MSG( wxT( "PAD::buildEffectiveShapes: Unsupported pad shape: " )
-                    + PAD_SHAPE_T_asString( effectiveShape ) );
+        wxFAIL_MSG( wxT( "PAD::buildEffectiveShapes: Unsupported pad shape: PAD_SHAPE::" )
+                    + wxString( magic_enum::enum_name( effectiveShape ) ) );
         break;
     }
 
@@ -1719,7 +1720,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 
     default:
         wxFAIL_MSG( wxT( "PAD::TransformShapeToPolygon no implementation for " )
-                    + PAD_SHAPE_T_asString( GetShape() ) );
+                    + wxString( magic_enum::enum_name( GetShape() ) ) );
         break;
     }
 }

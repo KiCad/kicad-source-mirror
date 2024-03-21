@@ -286,7 +286,7 @@ ABOARD6::ABOARD6( ALTIUM_BINARY_PARSER& aReader )
 
     for( size_t i = 1; i < std::numeric_limits<size_t>::max(); i++ )
     {
-        const wxString layeri    = wxT( "LAYER" ) + std::to_string( i );
+        const wxString layeri    = wxT( "LAYER" ) + wxString( std::to_string( i ) );
         const wxString layername = layeri + wxT( "NAME" );
 
         auto layernameit = props.find( layername );
@@ -334,7 +334,7 @@ ACLASS6::ACLASS6( ALTIUM_BINARY_PARSER& aReader )
 
     for( size_t i = 0; i < std::numeric_limits<size_t>::max(); i++ )
     {
-        auto mit = properties.find( wxT( "M" ) + std::to_string( i ) );
+        auto mit = properties.find( wxT( "M" ) + wxString( std::to_string( i ) ) );
 
         if( mit == properties.end() )
             break; // it doesn't seem like we know beforehand how many components are in the netclass
@@ -417,8 +417,9 @@ ADIMENSION6::ADIMENSION6( ALTIUM_BINARY_PARSER& aReader )
     for( int i = 0; i < refcount; i++ )
     {
         const std::string refi = "REFERENCE" + std::to_string( i ) + "POINT";
-        referencePoint.emplace_back( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, refi + wxT( "X" ), wxT( "0mil" ) ),
-                                     -ALTIUM_PROPS_UTILS::ReadKicadUnit( props, refi + wxT( "Y" ), wxT( "0mil" ) ) );
+        const wxString ref( refi );
+        referencePoint.emplace_back( ALTIUM_PROPS_UTILS::ReadKicadUnit( props, ref + wxT( "X" ), wxT( "0mil" ) ),
+                                     -ALTIUM_PROPS_UTILS::ReadKicadUnit( props, ref + wxT( "Y" ), wxT( "0mil" ) ) );
     }
 
     for( size_t i = 1; i < std::numeric_limits<size_t>::max(); i++ )

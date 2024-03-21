@@ -422,7 +422,10 @@ bool DIALOG_SIM_COMMAND::TransferDataFromWindow()
         }
 
         if( !ref.IsEmpty() )
-            ref = wxS( "," ) + m_circuitModel->GetItemName( std::string( ref.ToUTF8() ) );
+        {
+            ref = wxS( "," )
+                  + wxString( m_circuitModel->GetItemName( std::string( ref.ToUTF8() ) ) );
+        }
 
         m_simCommand.Printf( ".noise v(%s%s) %s %s %s %s %s %s",
                              output,

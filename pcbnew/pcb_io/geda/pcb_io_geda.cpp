@@ -230,7 +230,7 @@ void GPCB_FPL_CACHE::Load()
     }
 
     wxString fullName;
-    wxString fileSpec = wxT( "*." ) + FILEEXT::GedaPcbFootprintLibFileExtension;
+    wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::GedaPcbFootprintLibFileExtension );
 
     // wxFileName construction is egregiously slow.  Construct it once and just swap out
     // the filename thereafter.
@@ -301,7 +301,7 @@ bool GPCB_FPL_CACHE::IsModified()
 
 long long GPCB_FPL_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    wxString fileSpec = wxT( "*." ) + FILEEXT::GedaPcbFootprintLibFileExtension;
+    wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::GedaPcbFootprintLibFileExtension );
 
     return TimestampDir( aLibPath, fileSpec );
 }

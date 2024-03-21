@@ -1874,7 +1874,7 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
     for( const auto& a : epart->variant )
     {
         SCH_FIELD* field = symbol->AddField( *symbol->GetField( VALUE_FIELD ) );
-        field->SetName( wxT( "VARIANT_" ) + a.first );
+        field->SetName( wxT( "VARIANT_" ) + wxString( a.first ) );
         field->SetText( a.second );
         field->SetVisible( false );
     }

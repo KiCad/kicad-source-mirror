@@ -298,7 +298,7 @@ void FOOTPRINT_CHOOSER_FRAME::Update3DView( bool aMarkDirty,
     wxString footprintName;
 
     if( fpID.IsValid() )
-        footprintName = fpID.Format();
+        footprintName << fpID.Format();
 
     wxString title = _( "3D Viewer" ) + wxT( " \u2014 " ) + footprintName;
     PCB_BASE_FRAME::Update3DView( aMarkDirty, aRefresh, &title );

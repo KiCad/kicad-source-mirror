@@ -68,7 +68,7 @@ LIB_SYMBOL* SchGetLibSymbol( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable,
             wxCHECK_MSG( aCacheLib->IsCache(), nullptr, wxS( "Invalid cache library." ) );
 
             wxString cacheName = aLibId.GetLibNickname().wx_str();
-            cacheName += "_" + aLibId.GetLibItemName();
+            cacheName << "_" << aLibId.GetLibItemName();
             symbol = aCacheLib->FindSymbol( cacheName );
         }
     }

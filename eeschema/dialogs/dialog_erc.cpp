@@ -952,7 +952,7 @@ void DIALOG_ERC::deleteAllMarkers( bool aIncludeExclusions )
 
 void DIALOG_ERC::OnSaveReport( wxCommandEvent& aEvent )
 {
-    wxFileName fn( wxS( "ERC." ) + FILEEXT::ReportFileExtension );
+    wxFileName fn( wxS( "ERC." ) + wxString( FILEEXT::ReportFileExtension ) );
 
     wxFileDialog dlg( this, _( "Save Report File" ), Prj().GetProjectPath(), fn.GetFullName(),
                       FILEEXT::ReportFileWildcard() + wxS( "|" ) + FILEEXT::JsonFileWildcard(),

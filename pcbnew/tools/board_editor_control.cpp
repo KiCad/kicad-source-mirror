@@ -379,10 +379,10 @@ int BOARD_EDITOR_CONTROL::ImportSpecctraSession( const TOOL_EVENT& aEvent )
     wxString ext;
 
     wxFileName::SplitPath( fullFileName, &path, &name, &ext );
-    name += wxT( "." ) + FILEEXT::SpecctraSessionFileExtension;
+    name += wxT( "." ) + wxString( FILEEXT::SpecctraSessionFileExtension );
 
     fullFileName = wxFileSelector( _( "Specctra Session File" ), path, name,
-                                   wxT( "." ) + FILEEXT::SpecctraSessionFileExtension,
+                                   wxT( "." ) + wxString( FILEEXT::SpecctraSessionFileExtension ),
                                    FILEEXT::SpecctraSessionFileWildcard(), wxFD_OPEN | wxFD_CHANGE_DIR,
                                    frame() );
 

@@ -172,7 +172,7 @@ void FP_CACHE::Load()
     }
 
     wxString fullName;
-    wxString fileSpec = wxT( "*." ) + FILEEXT::KiCadFootprintFileExtension;
+    wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadFootprintFileExtension );
 
     // wxFileName construction is egregiously slow.  Construct it once and just swap out
     // the filename thereafter.
@@ -268,7 +268,7 @@ bool FP_CACHE::IsModified()
 
 long long FP_CACHE::GetTimestamp( const wxString& aLibPath )
 {
-    wxString fileSpec = wxT( "*." ) + FILEEXT::KiCadFootprintFileExtension;
+    wxString fileSpec = wxT( "*." ) + wxString( FILEEXT::KiCadFootprintFileExtension );
 
     return TimestampDir( aLibPath, fileSpec );
 }

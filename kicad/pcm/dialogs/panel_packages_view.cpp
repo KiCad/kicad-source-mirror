@@ -267,7 +267,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
                 for( const std::pair<const std::string, wxString>& entry : contact.contact )
                 {
                     details << wxT( "<li>" );
-                    details << entry.first + wxT( ": " ) + format_entry( entry );
+                    details << entry.first << wxT( ": " ) + format_entry( entry );
                     details << wxT( "</li>" );
                 }
 
@@ -286,7 +286,7 @@ void PANEL_PACKAGES_VIEW::setPackageDetails( const PACKAGE_VIEW_DATA& aPackageDa
         for( const std::pair<const std::string, wxString>& entry : package.resources )
         {
             details << wxT( "<li>" );
-            details << entry.first + wxT( ": " );
+            details << entry.first << wxT( ": " );
             details << format_entry( entry ) + wxT( "</li>" );
         }
 
