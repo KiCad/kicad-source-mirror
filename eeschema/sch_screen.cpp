@@ -2055,7 +2055,7 @@ int SCH_SCREENS::ChangeSymbolLibNickname( const wxString& aFrom, const wxString&
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
-            if( wxString( symbol->GetLibId().GetLibNickname() ) != aFrom )
+            if( symbol->GetLibId().GetLibNickname().wx_str() != aFrom )
                 continue;
 
             LIB_ID id = symbol->GetLibId();

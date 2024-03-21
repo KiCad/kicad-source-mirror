@@ -1802,7 +1802,7 @@ void SCH_SYMBOL::Show( int nestLevel, std::ostream& os ) const
     NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str()
                                  << " ref=\"" << TO_UTF8( GetField( REFERENCE_FIELD )->GetName() )
                                  << '"' << " chipName=\""
-                                 << wxString( GetLibId().Format() ) << '"' << m_pos
+                                 << GetLibId().Format().wx_str() << '"' << m_pos
                                  << " layer=\"" << m_layer
                                  << '"' << ">\n";
 
