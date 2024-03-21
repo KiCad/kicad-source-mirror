@@ -509,7 +509,10 @@ private:
 
             if( isEar( aPoint ) )
             {
-                m_result.AddTriangle( prev->i, aPoint->i, next->i );
+                // Tiny ears cannot be seen on the screen
+                if( !isTooSmall( aPoint ) )
+                    m_result.AddTriangle( prev->i, aPoint->i, next->i );
+
                 aPoint->remove();
 
                 // Skip one vertex as the triangle will account for the prev node
@@ -579,6 +582,25 @@ private:
 
         return true;
     }
+
+
+    /**
+     * Check whether a given vertex is too small to matter.
+     */
+
+    bool isTooSmall( const VERTEX* aPoint ) const
+    {
+        double min_area = ADVANCED_CFG::GetCfg().m_TriangulateMinimumArea;
+        double prev_sq_len = ( aPoint->prev->x - aPoint->x ) * ( aPoint->prev->x - aPoint->x ) +
+                             ( aPoint->prev->y - aPoint->y ) * ( aPoint->prev->y - aPoint->y );
+        double next_sq_len = ( aPoint->next->x - aPoint->x ) * ( aPoint->next->x - aPoint->x ) +
+                             ( aPoint->next->y - aPoint->y ) * ( aPoint->next->y - aPoint->y );
+        double opp_sq_len = ( aPoint->next->x - aPoint->prev->x ) * ( aPoint->next->x - aPoint->prev->x ) +
+                            ( aPoint->next->y - aPoint->prev->y ) * ( aPoint->next->y - aPoint->prev->y );
+
+        return ( prev_sq_len < min_area || next_sq_len < min_area || opp_sq_len < min_area );
+    }
+
 
     /**
      * Check whether the given vertex is in the middle of an ear.
