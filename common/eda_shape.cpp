@@ -1973,53 +1973,65 @@ static struct EDA_SHAPE_DESC
             return false;
         };
 
+        const wxString shapeProps = _HKI( "Shape Properties" );
+
         auto shape = new PROPERTY_ENUM<EDA_SHAPE, SHAPE_T>( _HKI( "Shape" ),
                      NO_SETTER( EDA_SHAPE, SHAPE_T ), &EDA_SHAPE::GetShape );
-        propMgr.AddProperty( shape );
+        propMgr.AddProperty( shape, shapeProps );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start X" ),
                     &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_X_COORD ) )
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isNotPolygonOrCircle );
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Start Y" ),
                     &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isNotPolygonOrCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Center X" ),
                     &EDA_SHAPE::SetStartX, &EDA_SHAPE::GetStartX, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_X_COORD ) )
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Center Y" ),
                     &EDA_SHAPE::SetStartY, &EDA_SHAPE::GetStartY, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Radius" ),
                     &EDA_SHAPE::SetRadius, &EDA_SHAPE::GetRadius, PROPERTY_DISPLAY::PT_SIZE,
-                    ORIGIN_TRANSFORMS::NOT_A_COORD ) )
+                    ORIGIN_TRANSFORMS::NOT_A_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End X" ),
                     &EDA_SHAPE::SetEndX, &EDA_SHAPE::GetEndX, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_X_COORD ) )
+                    ORIGIN_TRANSFORMS::ABS_X_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isNotPolygonOrCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "End Y" ),
                     &EDA_SHAPE::SetEndY, &EDA_SHAPE::GetEndY, PROPERTY_DISPLAY::PT_COORD,
-                    ORIGIN_TRANSFORMS::ABS_Y_COORD ) )
+                    ORIGIN_TRANSFORMS::ABS_Y_COORD ),
+                    shapeProps )
                 .SetAvailableFunc( isNotPolygonOrCircle );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, int>( _HKI( "Line Width" ),
-                    &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ) );
+                    &EDA_SHAPE::SetWidth, &EDA_SHAPE::GetWidth, PROPERTY_DISPLAY::PT_SIZE ),
+                    shapeProps );
 
         void ( EDA_SHAPE::*lineStyleSetter )( LINE_STYLE ) = &EDA_SHAPE::SetLineStyle;
-        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_STYLE>(
-                    _HKI( "Line Style" ), lineStyleSetter, &EDA_SHAPE::GetLineStyle ) );
+        propMgr.AddProperty( new PROPERTY_ENUM<EDA_SHAPE, LINE_STYLE>( _HKI( "Line Style" ),
+                    lineStyleSetter, &EDA_SHAPE::GetLineStyle ),
+                    shapeProps );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Line Color" ),
-                    &EDA_SHAPE::SetLineColor, &EDA_SHAPE::GetLineColor ) )
+                    &EDA_SHAPE::SetLineColor, &EDA_SHAPE::GetLineColor ),
+                    shapeProps )
                 .SetIsHiddenFromRulesEditor();
 
         auto angle = new PROPERTY<EDA_SHAPE, EDA_ANGLE>( _HKI( "Angle" ),
@@ -2033,7 +2045,7 @@ static struct EDA_SHAPE_DESC
 
                     return false;
                 } );
-        propMgr.AddProperty( angle );
+        propMgr.AddProperty( angle, shapeProps );
 
         auto fillAvailable =
                 [=]( INSPECTABLE* aItem ) -> bool
@@ -2056,11 +2068,13 @@ static struct EDA_SHAPE_DESC
                 };
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, bool>( _HKI( "Filled" ),
-                    &EDA_SHAPE::SetFilled, &EDA_SHAPE::IsFilled ) )
+                    &EDA_SHAPE::SetFilled, &EDA_SHAPE::IsFilled ),
+                    shapeProps )
                 .SetAvailableFunc( fillAvailable );
 
         propMgr.AddProperty( new PROPERTY<EDA_SHAPE, COLOR4D>( _HKI( "Fill Color" ),
-                    &EDA_SHAPE::SetFillColor, &EDA_SHAPE::GetFillColor ) )
+                    &EDA_SHAPE::SetFillColor, &EDA_SHAPE::GetFillColor ),
+                    shapeProps )
                 .SetAvailableFunc( fillAvailable )
                 .SetIsHiddenFromRulesEditor();
     }

@@ -183,3 +183,49 @@ void LIB_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
     aLayers[1]  = LAYER_DEVICE_BACKGROUND;
     aLayers[2]  = LAYER_SELECTION_SHADOWS;
 }
+
+
+static struct LIB_ITEM_DESC
+{
+    LIB_ITEM_DESC()
+    {
+        PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
+        REGISTER_TYPE( LIB_ITEM );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_ITEM, EDA_ITEM> );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_ITEM ), TYPE_HASH( EDA_ITEM ) );
+
+        auto multiUnit =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( aItem ) )
+                    {
+                        if( LIB_SYMBOL* symbol = libItem->GetParent() )
+                            return symbol->IsMulti();
+                    }
+
+                    return false;
+                };
+
+        auto multiBodyStyle =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( aItem ) )
+                    {
+                        if( LIB_SYMBOL* symbol = libItem->GetParent() )
+                            return symbol->HasAlternateBodyStyle();
+                    }
+
+                    return false;
+                };
+
+        propMgr.AddProperty( new PROPERTY<LIB_ITEM, int>( _HKI( "Unit" ),
+                    &LIB_ITEM::SetUnit, &LIB_ITEM::GetUnit ) )
+                .SetAvailableFunc( multiUnit );
+        propMgr.AddProperty( new PROPERTY<LIB_ITEM, int>( _HKI( "Body Style" ),
+                    &LIB_ITEM::SetBodyStyle, &LIB_ITEM::GetBodyStyle ) )
+                .SetAvailableFunc( multiBodyStyle );
+
+        propMgr.AddProperty( new PROPERTY<LIB_ITEM, bool>( _HKI( "Private" ),
+                    &LIB_ITEM::SetPrivate, &LIB_ITEM::IsPrivate ) );
+    }
+} _LIB_ITEM_DESC;

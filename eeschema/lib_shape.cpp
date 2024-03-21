@@ -600,7 +600,8 @@ static struct LIB_SHAPE_DESC
         FILL_T ( LIB_SHAPE::*fillModeGetter )() const = &LIB_SHAPE::GetFillMode;
 
         propMgr.AddProperty( new PROPERTY_ENUM< LIB_SHAPE, FILL_T>( _HKI( "Fill" ),
-                        fillModeSetter, fillModeGetter ) );
+                        fillModeSetter, fillModeGetter ),
+                        _HKI( "Shape Properties" ) );
     }
 } _LIB_SHAPE_DESC;
 

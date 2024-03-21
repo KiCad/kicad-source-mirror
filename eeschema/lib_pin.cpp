@@ -1661,7 +1661,8 @@ static struct LIB_PIN_DESC
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( LIB_PIN );
-        propMgr.InheritsAfter( TYPE_HASH( LIB_PIN ), TYPE_HASH( SCH_ITEM ) );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_PIN, LIB_ITEM> );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_PIN ), TYPE_HASH( LIB_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<LIB_PIN, wxString>( _HKI( "Pin Name" ),
                 &LIB_PIN::SetName, &LIB_PIN::GetName ) );
