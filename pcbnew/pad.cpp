@@ -554,7 +554,7 @@ void PAD::BuildEffectiveShapes( PCB_LAYER_ID aLayer ) const
 
     default:
         wxFAIL_MSG( wxT( "PAD::buildEffectiveShapes: Unsupported pad shape: PAD_SHAPE::" )
-                    + wxString( magic_enum::enum_name( effectiveShape ) ) );
+                    + wxString( std::string( magic_enum::enum_name( effectiveShape ) ) ) );
         break;
     }
 
@@ -1720,7 +1720,7 @@ void PAD::TransformShapeToPolygon( SHAPE_POLY_SET& aBuffer, PCB_LAYER_ID aLayer,
 
     default:
         wxFAIL_MSG( wxT( "PAD::TransformShapeToPolygon no implementation for " )
-                    + wxString( magic_enum::enum_name( GetShape() ) ) );
+                    + wxString( std::string( magic_enum::enum_name( GetShape() ) ) ) );
         break;
     }
 }
