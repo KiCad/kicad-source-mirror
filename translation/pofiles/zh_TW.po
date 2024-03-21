@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-13 14:01+0000\n"
-"Last-Translator: pominglee <pominglee@gmail.com>\n"
+"PO-Revision-Date: 2024-03-21 14:44+0000\n"
+"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -3248,7 +3248,7 @@ msgstr "篩選"
 
 #: common/dialogs/eda_list_dialog_base.cpp:22
 msgid "Items:"
-msgstr "專案："
+msgstr "項目："
 
 #: common/dialogs/eda_reorderable_list_dialog_base.cpp:32
 msgid "Available:"
