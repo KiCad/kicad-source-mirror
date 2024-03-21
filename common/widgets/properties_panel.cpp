@@ -87,11 +87,11 @@ PROPERTIES_PANEL::PROPERTIES_PANEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame ) 
 #endif
 
 #if wxCHECK_VERSION( 3, 3, 0 )
-    m_grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_RETURN );
-    m_grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_NUMPAD_ENTER );
-    m_grid->AddActionTrigger( wxPGKeyboardActions::NextProperty, WXK_DOWN );
-    m_grid->AddActionTrigger( wxPGKeyboardActions::PrevProperty, WXK_UP );
-    m_grid->AddActionTrigger( wxPGKeyboardActions::Edit, WXK_SPACE );
+    m_grid->AddActionTrigger( wxPGKeyboardAction::NextProperty, WXK_RETURN );
+    m_grid->AddActionTrigger( wxPGKeyboardAction::NextProperty, WXK_NUMPAD_ENTER );
+    m_grid->AddActionTrigger( wxPGKeyboardAction::NextProperty, WXK_DOWN );
+    m_grid->AddActionTrigger( wxPGKeyboardAction::PrevProperty, WXK_UP );
+    m_grid->AddActionTrigger( wxPGKeyboardAction::Edit, WXK_SPACE );
 #else
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_RETURN );
     m_grid->AddActionTrigger( wxPG_ACTION_NEXT_PROPERTY, WXK_NUMPAD_ENTER );

@@ -303,15 +303,25 @@ PGPROPERTY_DISTANCE::~PGPROPERTY_DISTANCE()
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
 bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString& aText,
-                                            int aArgFlags ) const
+                                            wxPGPropValFormatFlags aFlags ) const
+#else
+bool PGPROPERTY_DISTANCE::StringToDistance( wxVariant& aVariant, const wxString& aText,
+                                            int aFlags ) const
+#endif
 {
     // TODO(JE): Are there actual use cases for this?
     wxCHECK_MSG( false, false, wxS( "PGPROPERTY_DISTANCE::StringToDistance should not be used." ) );
 }
 
 
-wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aArgFlags ) const
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant,
+                                                wxPGPropValFormatFlags aFlags ) const
+#else
+wxString PGPROPERTY_DISTANCE::DistanceToString( wxVariant& aVariant, int aFlags ) const
+#endif
 {
     long distanceIU;
 
@@ -349,15 +359,25 @@ PGPROPERTY_AREA::PGPROPERTY_AREA( EDA_DRAW_FRAME* aParentFrame ) :
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+bool PGPROPERTY_AREA::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                     wxPGPropValFormatFlags aArgFlags ) const
+#else
 bool PGPROPERTY_AREA::StringToValue( wxVariant& aVariant, const wxString& aText,
                                     int aArgFlags ) const
+#endif
 {
     // TODO(JE): Are there actual use cases for this?
     wxCHECK_MSG( false, false, wxS( "PGPROPERTY_AREA::StringToValue should not be used." ) );
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxString PGPROPERTY_AREA::ValueToString( wxVariant& aVariant,
+                                         wxPGPropValFormatFlags aArgFlags ) const
+#else
 wxString PGPROPERTY_AREA::ValueToString( wxVariant& aVariant, int aArgFlags ) const
+#endif
 {
     wxCHECK( aVariant.GetType() == wxPG_VARIANT_TYPE_LONGLONG, wxEmptyString );
 
@@ -432,15 +452,25 @@ const wxPGEditor* PGPROPERTY_RATIO::DoGetEditorClass() const
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+bool PGPROPERTY_RATIO::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                      wxPGPropValFormatFlags aArgFlags ) const
+#else
 bool PGPROPERTY_RATIO::StringToValue( wxVariant& aVariant, const wxString& aText,
                                       int aArgFlags ) const
+#endif
 {
     // TODO(JE): Are there actual use cases for this?
     wxCHECK_MSG( false, false, wxS( "PGPROPERTY_RATIO::StringToValue should not be used." ) );
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxString PGPROPERTY_RATIO::ValueToString( wxVariant& aVariant,
+                                          wxPGPropValFormatFlags aArgFlags ) const
+#else
 wxString PGPROPERTY_RATIO::ValueToString( wxVariant& aVariant, int aArgFlags ) const
+#endif
 {
     double value;
 
@@ -490,7 +520,13 @@ wxValidator* PGPROPERTY_RATIO::DoGetValidator() const
 }
 
 
-bool PGPROPERTY_ANGLE::StringToValue( wxVariant& aVariant, const wxString& aText, int aArgFlags ) const
+#if wxCHECK_VERSION( 3, 3, 0 )
+bool PGPROPERTY_ANGLE::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                      wxPGPropValFormatFlags aArgFlags ) const
+#else
+bool PGPROPERTY_ANGLE::StringToValue( wxVariant& aVariant, const wxString& aText,
+                                      int aArgFlags ) const
+#endif
 {
     double value = 0.0;
 
@@ -512,7 +548,12 @@ bool PGPROPERTY_ANGLE::StringToValue( wxVariant& aVariant, const wxString& aText
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant,
+                                          wxPGPropValFormatFlags aArgFlags ) const
+#else
 wxString PGPROPERTY_ANGLE::ValueToString( wxVariant& aVariant, int aArgFlags ) const
+#endif
 {
     if( aVariant.GetType() == wxPG_VARIANT_TYPE_DOUBLE )
     {
@@ -570,7 +611,12 @@ void PGPROPERTY_COLORENUM::OnCustomPaint( wxDC& aDC, const wxRect& aRect,
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxString PGPROPERTY_STRING::ValueToString( wxVariant& aValue,
+                                           wxPGPropValFormatFlags aFlags ) const
+#else
 wxString PGPROPERTY_STRING::ValueToString( wxVariant& aValue, int aFlags ) const
+#endif
 {
     if( aValue.GetType() != wxPG_VARIANT_TYPE_STRING )
         return wxEmptyString;
@@ -579,8 +625,13 @@ wxString PGPROPERTY_STRING::ValueToString( wxVariant& aValue, int aFlags ) const
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+bool PGPROPERTY_STRING::StringToValue( wxVariant& aVariant, const wxString& aString,
+                                       wxPGPropValFormatFlags aArgFlags ) const
+#else
 bool PGPROPERTY_STRING::StringToValue( wxVariant& aVariant, const wxString& aString,
                                        int aFlags ) const
+#endif
 {
     aVariant = EscapeString( aString, CTX_QUOTED_STR );
     return true;
@@ -608,19 +659,33 @@ PGPROPERTY_COLOR4D::PGPROPERTY_COLOR4D( const wxString& aLabel, const wxString& 
         m_backgroundColor( aBackgroundColor )
 {
     SetEditor( PG_COLOR_EDITOR::EDITOR_NAME );
+#if wxCHECK_VERSION( 3, 3, 0 )
+    SetFlag( wxPGPropertyFlags::NoEditor );
+#else
     SetFlag( wxPG_PROP_NOEDITOR );
+#endif
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+bool PGPROPERTY_COLOR4D::StringToValue( wxVariant& aVariant, const wxString& aString,
+                                        wxPGPropValFormatFlags aArgFlags ) const
+#else
 bool PGPROPERTY_COLOR4D::StringToValue( wxVariant& aVariant, const wxString& aString,
                                         int aFlags ) const
+#endif
 {
     aVariant.SetData( new COLOR4D_VARIANT_DATA( aString ) );
     return true;
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+wxString PGPROPERTY_COLOR4D::ValueToString( wxVariant& aValue,
+                                            wxPGPropValFormatFlags aFlags ) const
+#else
 wxString PGPROPERTY_COLOR4D::ValueToString( wxVariant& aValue, int aFlags ) const
+#endif
 {
     wxString ret;
 

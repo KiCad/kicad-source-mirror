@@ -236,7 +236,12 @@ SIM_ENUM_PROPERTY::SIM_ENUM_PROPERTY( const wxString& aLabel, const wxString& aN
 }
 
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+bool SIM_ENUM_PROPERTY::IntToValue( wxVariant& aVariant, int aNumber,
+                                    wxPGPropValFormatFlags aArgFlags ) const
+#else
 bool SIM_ENUM_PROPERTY::IntToValue( wxVariant& aVariant, int aNumber, int aArgFlags ) const
+#endif
 {
     if( m_disabled )
         return false;

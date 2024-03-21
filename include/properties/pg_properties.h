@@ -48,8 +48,15 @@ public:
     ORIGIN_TRANSFORMS::COORD_TYPES_T CoordType() const { return m_coordType; }
 
 protected:
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToDistance( wxVariant& aVariant, const wxString& aText,
+                           wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const;
+    wxString DistanceToString( wxVariant& aVariant,
+                               wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const;
+#else
     bool StringToDistance( wxVariant& aVariant, const wxString& aText, int aArgFlags = 0 ) const;
     wxString DistanceToString( wxVariant& aVariant, int aArgFlags = 0 ) const;
+#endif
 
 protected:
     EDA_DRAW_FRAME*                  m_parentFrame;
@@ -62,11 +69,21 @@ class PGPROPERTY_AREA : public wxIntProperty
 public:
     PGPROPERTY_AREA( EDA_DRAW_FRAME* aParentFrame );
 
+    virtual ~PGPROPERTY_AREA()  = default;
+
 protected:
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+
+    wxString ValueToString( wxVariant& aVariant,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+#else
     bool StringToValue( wxVariant& aVariant, const wxString& aText,
                         int aArgFlags = 0 ) const override;
 
     wxString ValueToString( wxVariant& aVariant, int aArgFlags = 0 ) const override;
+#endif
 
     wxValidator* DoGetValidator() const override;
 
@@ -80,6 +97,21 @@ class PGPROPERTY_SIZE : public wxUIntProperty, public PGPROPERTY_DISTANCE
 public:
     PGPROPERTY_SIZE( EDA_DRAW_FRAME* aParentFrame );
 
+    virtual ~PGPROPERTY_SIZE()  = default;
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override
+    {
+        return StringToDistance( aVariant, aText, aFlags );
+    }
+
+    wxString ValueToString( wxVariant& aVariant,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override
+    {
+        return DistanceToString( aVariant, aFlags );
+    }
+#else
     bool StringToValue( wxVariant& aVariant, const wxString& aText,
                         int aArgFlags = 0 ) const override
     {
@@ -90,6 +122,7 @@ public:
     {
         return DistanceToString( aVariant, aArgFlags );
     }
+#endif
 
     bool ValidateValue( wxVariant& aValue, wxPGValidationInfo& aValidationInfo ) const override;
 
@@ -102,6 +135,21 @@ class PGPROPERTY_COORD : public wxIntProperty, public PGPROPERTY_DISTANCE
 public:
     PGPROPERTY_COORD( EDA_DRAW_FRAME* aParentFrame, ORIGIN_TRANSFORMS::COORD_TYPES_T aCoordType );
 
+    virtual ~PGPROPERTY_COORD()  = default;
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override
+    {
+        return StringToDistance( aVariant, aText, aFlags );
+    }
+
+    wxString ValueToString( wxVariant& aVariant,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override
+    {
+        return DistanceToString( aVariant, aFlags );
+    }
+#else
     bool StringToValue( wxVariant& aVariant, const wxString& aText,
                         int aArgFlags = 0 ) const override
     {
@@ -112,6 +160,7 @@ public:
     {
         return DistanceToString( aVariant, aArgFlags );
     }
+#endif
 
     wxValidator* DoGetValidator() const override;
 };
@@ -127,9 +176,19 @@ public:
     {
     }
 
+    virtual ~PGPROPERTY_ANGLE()  = default;
+
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+
+    wxString ValueToString( wxVariant& aVariant,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+#else
     bool StringToValue( wxVariant& aVariant, const wxString& aText,
                         int aArgFlags = 0 ) const override;
     wxString ValueToString( wxVariant& aVariant, int aArgFlags = 0 ) const override;
+#endif
 
     void SetScale( double aScale )
     {
@@ -155,8 +214,14 @@ public:
             wxEnumProperty( wxPG_LABEL, wxPG_LABEL, *aChoices, 0 ),
             m_colorFunc( []( int aDummy ) { return wxNullColour; } )
     {
+#if wxCHECK_VERSION( 3, 3, 0 )
+        SetFlag( wxPGPropertyFlags::CustomImage );
+#else
         SetFlag( wxPG_PROP_CUSTOMIMAGE );
+#endif
     }
+
+    virtual ~PGPROPERTY_COLORENUM()  = default;
 
     wxSize OnMeasureImage( int aItem = -1 ) const override;
 
@@ -186,10 +251,18 @@ public:
 
     virtual ~PGPROPERTY_RATIO() = default;
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+
+    wxString ValueToString( wxVariant& aVariant,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+#else
     bool StringToValue( wxVariant& aVariant, const wxString& aText,
                         int aArgFlags = 0 ) const override;
 
     wxString ValueToString( wxVariant& aVariant, int aArgFlags = 0 ) const override;
+#endif
 
     bool ValidateValue( wxVariant& aValue, wxPGValidationInfo& aValidationInfo ) const override;
 
@@ -206,10 +279,18 @@ public:
 
     virtual ~PGPROPERTY_STRING() = default;
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+
+    wxString ValueToString( wxVariant& aVariant,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+#else
     wxString ValueToString( wxVariant& aValue, int aFlags = 0 ) const override;
 
     bool StringToValue( wxVariant& aVariant, const wxString& aString,
                         int aFlags = 0 ) const override;
+#endif
 };
 
 
@@ -234,10 +315,18 @@ public:
 
     virtual ~PGPROPERTY_COLOR4D() = default;
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    bool StringToValue( wxVariant& aVariant, const wxString& aText,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+
+    wxString ValueToString( wxVariant& aVariant,
+            wxPGPropValFormatFlags aFlags = wxPGPropValFormatFlags::Null ) const override;
+#else
     wxString ValueToString( wxVariant& aValue, int aFlags = 0 ) const override;
 
      bool StringToValue( wxVariant &aVariant, const wxString &aText,
                         int aFlags = 0 ) const override;
+#endif
 
      void SetBackgroundColor( const KIGFX::COLOR4D& aColor ) { m_backgroundColor = aColor; }
      const KIGFX::COLOR4D& GetBackgroundColor() const { return m_backgroundColor; }

@@ -76,7 +76,11 @@ wxPGWindowList PG_UNIT_EDITOR::CreateControls( wxPropertyGrid* aPropGrid, wxPGPr
 {
     wxASSERT( m_unitBinder );
 
+#if wxCHECK_VERSION( 3, 3, 0 )
+    wxString text = aProperty->GetValueAsString( wxPGPropValFormatFlags::EditableValue );
+#else
     wxString text = aProperty->GetValueAsString( wxPG_EDITABLE_VALUE );
+#endif
     wxWindow* win = aPropGrid->GenerateEditorTextCtrl( aPos, aSize, text, nullptr, 0,
                                                        aProperty->GetMaxLength() );
     wxPGWindowList ret( win, nullptr );
