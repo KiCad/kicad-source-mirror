@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-18 12:01+0000\n"
+"PO-Revision-Date: 2024-03-22 01:36+0000\n"
 "Last-Translator: aris-kimi <aris_kimi@hotmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/kicad/"
 "master-source/el/>\n"
@@ -7547,7 +7547,6 @@ msgid "Left Justify"
 msgstr "Αρ. Στοίχιση"
 
 #: common/tool/actions.cpp:284
-#, fuzzy
 msgid "Left-justify fields and text items"
 msgstr "Αριστερή στοίχιση πεδίων και στοιχείων κειμένου"
 
@@ -7557,7 +7556,6 @@ msgid "Center Justify"
 msgstr "Κεντρική Στοίχιση"
 
 #: common/tool/actions.cpp:291
-#, fuzzy
 msgid "Center-justify fields and text items"
 msgstr "Κεντρική στοίχιση πεδίων και στοιχείων κειμένου"
 
@@ -15406,10 +15404,9 @@ msgid "Pin %s is connected to both %s and %s"
 msgstr "Ο ακροδέκτης %s είναι συνδεδεμένος και στο %s και στο %s"
 
 #: eeschema/erc.cpp:965
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'"
-msgstr ""
-"Η τρέχουσα παραμετροποίηση δεν περιλαμβάνει τη βιβλιοθήκη συμβόλου '%s'"
+msgstr "Η τρέχουσα παραμετροποίηση δεν περιλαμβάνει τη βιβλιοθήκη συμβόλου '%s'"
 
 #: eeschema/erc.cpp:980
 #, c-format
@@ -15433,14 +15430,14 @@ msgstr "Το '%s' δεν είναι έγκυρη αναφορά αποτυπώμ
 
 #: eeschema/erc.cpp:1080 pcbnew/drc/drc_test_provider_library_parity.cpp:843
 #: pcbnew/footprint_editor_utils.cpp:326
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the footprint library '%s'."
 msgstr ""
 "Η τρέχουσα παραμετροποίηση δεν περιλαμβάνει τη βιβλιοθήκη αποτυπωμάτων '%s'."
 
 #: eeschema/erc.cpp:1089 pcbnew/drc/drc_test_provider_library_parity.cpp:857
 #: pcbnew/footprint_editor_utils.cpp:338
-#, fuzzy, c-format
+#, c-format
 msgid "The footprint library '%s' is not enabled in the current configuration."
 msgstr ""
 "Η βιβλιοθήκη αποτυπωμάτων '%s' δεν είναι ενεργοποιημένη στην τρέχουσα "
@@ -20229,17 +20226,16 @@ msgid "Failed to save backup to '%s'."
 msgstr "Αποτυχία δημιουργίας αρχείου εφεδρείας '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1447
-#, fuzzy, c-format
+#, c-format
 msgid "The current configuration does not include the symbol library '%s'."
 msgstr ""
 "Η τρέχουσα παραμετροποίηση δεν περιλαμβάνει τη βιβλιοθήκη συμβόλου '%s'."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1449
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1460
-#, fuzzy
 msgid "Use Manage Symbol Libraries to edit the configuration."
 msgstr ""
-"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών Συμβόλων για επεξεργασία της "
+"Χρησιμοποιήστε τη Διαχείριση Βιβλιοθηκών για επεξεργασία της "
 "παραμετροποίησης."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1450
@@ -20247,7 +20243,7 @@ msgid "Library not found in symbol library table."
 msgstr "Η βιβλιοθήκη δεν βρέθηκε στον κατάλογο βιβλιοθήκης συμβόλων."
 
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:1458
-#, fuzzy, c-format
+#, c-format
 msgid "The symbol library '%s' is not enabled in the current configuration."
 msgstr ""
 "Η βιβλιοθήκη συμβόλου '%s' δεν είναι ενεργοποιημένη στην τρέχουσα "
@@ -21180,7 +21176,6 @@ msgid "Sync Sheet Pins"
 msgstr "Συγχρονισμός Ακροδεκτών Φύλλου"
 
 #: eeschema/tools/ee_actions.cpp:525 eeschema/tools/ee_actions.cpp:533
-#, fuzzy
 msgid "Synchronize sheet pins and hierarchical labels”"
 msgstr "Συγχρονισμός ακροδεκτών φύλλου και ιεραρχικών ετικετών"
 
