@@ -546,6 +546,17 @@ public:
     */
     int m_TriangulateSimplificationLevel;
 
+    /**
+     * The minimum area of a polygon that can be left over after triangulation and
+     * still consider the triangulation successful.  This is internal units, so
+     * it is square nm in pcbnew.
+     *
+     * Setting name: "TriangulateMinimumArea"
+     * Valid values: 0 to 100000
+     * Default value: 1000
+     */
+    int m_TriangulateMinimumArea;
+
 ///@}
 
 
