@@ -54,6 +54,7 @@
 #include <wx/utils.h>
 
 #include <config.h>
+#include <gestfich.h>
 
 
 SCRIPTING::SCRIPTING()
