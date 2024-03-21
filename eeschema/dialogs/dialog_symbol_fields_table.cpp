@@ -1039,6 +1039,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableCellClick( wxGridEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& aEvent )
 {
+    // Cross-probing should only work in Edit page
+    if( m_nbPages->GetSelection() != 0 )
+        return;
+
     // Multi-select can grab the rows that are expanded child refs, and also the row
     // containing the list of all child refs. Make sure we add refs/symbols uniquely
     std::set<SCH_REFERENCE> refs;
@@ -1063,10 +1067,10 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnTableRangeSelected( wxGridRangeSelectEvent& a
 
         if( refs.size() > 0 )
         {
-            // Use of full path based on UUID allows select of not yet annotated or duplicaded symbols
+            // Use of full path based on UUID allows select of not yet annotated or duplicated symbols
             wxString symbol_path = refs.begin()->GetFullPath();
 
-            // Focus only handles on item at this time
+            // Focus only handles one item at this time
             editor->FindSymbolAndItem( &symbol_path, nullptr, true, HIGHLIGHT_SYMBOL,
                                        wxEmptyString );
         }

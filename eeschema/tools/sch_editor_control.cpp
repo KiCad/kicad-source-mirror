@@ -2339,8 +2339,18 @@ int SCH_EDITOR_CONTROL::ExportNetlist( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::GenerateBOM( const TOOL_EVENT& aEvent )
 {
-    EditSymbolFields( aEvent );
-    m_frame->GetSymbolFieldsTableDialog()->ShowExportTab();
+    DIALOG_SYMBOL_FIELDS_TABLE* dlg = m_frame->GetSymbolFieldsTableDialog();
+
+    wxCHECK( dlg, 0 );
+
+    // Needed at least on Windows. Raise() is not enough
+    dlg->Show( true );
+
+    // Bring it to the top if already open.  Dual monitor users need this.
+    dlg->Raise();
+
+    dlg->ShowExportTab();
+
     return 0;
 }
 
