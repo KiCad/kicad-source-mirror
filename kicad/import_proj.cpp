@@ -152,7 +152,7 @@ void IMPORT_PROJ_HELPER::ImportIndividualFile( KICAD_T aFT, int aImportedFileTyp
     ss << aImportedFileType << '\n' << TO_UTF8( appImportFile );
 
     for( const auto& [key, value] : m_properties )
-        ss << '\n' << key << '\n' << wxString( value );
+        ss << '\n' << key << '\n' << value.wx_str();
 
     std::string packet = ss.str();
     frame->Kiway().ExpressMail( frame_type, MAIL_IMPORT_FILE, packet, m_frame );
