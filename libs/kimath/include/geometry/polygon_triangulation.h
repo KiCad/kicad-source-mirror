@@ -50,6 +50,7 @@
 #include <deque>
 #include <cmath>
 
+#include <advanced_config.h>
 #include <clipper.hpp>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
@@ -93,6 +94,10 @@ public:
         else
         {
             auto retval = earcutList( firstVertex );
+
+            if( !retval )
+                logRemaining();
+
             m_vertices.clear();
             return retval;
         }
@@ -324,7 +329,7 @@ private:
     void logRemaining()
     {
         std::set<VERTEX*> seen;
-
+        wxLog::EnableLogging();
         for( VERTEX& p : m_vertices )
         {
             if( !p.next || p.next == &p || seen.find( &p ) != seen.end() )
@@ -332,15 +337,27 @@ private:
 
             seen.insert( &p );
 
-            wxString msg = wxString::Format( "Remaining: %d,%d,", p.x, p.y );
+            // Don't both logging tiny areas
+            if( std::abs( p.area() ) < 10 )
+                continue;
+
+            int count = 1;
+            wxString msg = wxString::Format( "Remaining: %d,%d,", static_cast<int>( p.x ),
+                                             static_cast<int>( p.y ) );
             VERTEX* q = p.next;
 
             do
             {
-                msg += wxString::Format( "%d,%d,", q->x, q->y );
+                msg += wxString::Format( "%d,%d,", static_cast<int>( q->x ),
+                                         static_cast<int>( q->y ) );
                 seen.insert( q );
                 q = q->next;
-            } while ( q != &p );
+                count++;
+            } while( q != &p );
+
+            // Don't log anything that only has 2 or fewer points
+            if( count < 3 )
+                continue;
 
             msg.RemoveLast();
             wxLogTrace( TRIANGULATE_TRACE, msg );
@@ -362,12 +379,18 @@ private:
         {
             if( *p == *( p->next ) || area( p->prev, p, p->next ) == 0.0 )
             {
+                // This is a spike, remove it, leaving only one point
+                if( *( p->next ) == *( p->prev ) )
+                    p->next->remove();
+
                 p = p->prev;
                 p->next->remove();
                 retval = aStart;
 
                 if( p == p->next )
                     break;
+
+                continue;
             }
 
             p = p->next;
@@ -551,7 +574,10 @@ private:
         /*
          * At this point, our polygon should be fully tessellated.
          */
-        return( aPoint->prev == aPoint->next );
+        if( aPoint->prev != aPoint->next )
+            return std::abs( aPoint->area() > ADVANCED_CFG::GetCfg().m_TriangulateMinimumArea );
+
+        return true;
     }
 
     /**
