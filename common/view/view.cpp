@@ -622,6 +622,9 @@ void VIEW::SetCenter( const VECTOR2D& aCenter, const std::vector<BOX2D>& obscuri
     BOX2I bbox = unobscuredPoly.BBox();
     int   step = std::min( bbox.GetWidth(), bbox.GetHeight() ) / 10;
 
+    if( step < 20 )
+        step = 20;
+
     while( !unobscuredPoly.IsEmpty() )
     {
         unobscuredCenter = unobscuredPoly.BBox().Centre();
