@@ -74,6 +74,8 @@ PCB_NET_INSPECTOR_PANEL::PCB_NET_INSPECTOR_PANEL( wxWindow* parent, PCB_EDIT_FRA
                       &PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu, this );
     m_netsList->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED,
                       &PCB_NET_INSPECTOR_PANEL::OnNetsListItemActivated, this );
+    m_netsList->Bind( wxEVT_DATAVIEW_COLUMN_SORTED,
+                      &PCB_NET_INSPECTOR_PANEL::OnColumnSorted, this );
 }
 
 PCB_NET_INSPECTOR_PANEL::~PCB_NET_INSPECTOR_PANEL()
@@ -100,6 +102,8 @@ PCB_NET_INSPECTOR_PANEL::~PCB_NET_INSPECTOR_PANEL()
                         &PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu, this );
     m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_ACTIVATED,
                         &PCB_NET_INSPECTOR_PANEL::OnNetsListItemActivated, this );
+    m_netsList->Unbind( wxEVT_DATAVIEW_COLUMN_SORTED,
+                      &PCB_NET_INSPECTOR_PANEL::OnColumnSorted, this );
 }
 
 
@@ -344,13 +348,6 @@ void PCB_NET_INSPECTOR_PANEL::adjustListColumnSizes( PANEL_NET_INSPECTOR_SETTING
         }
     }
 
-    // Set / restore table sorting settings
-    if( !restoreSortColumn( cfg->sorting_column, cfg->sort_order_asc ) )
-    {
-        // By default sort by Name column
-        restoreSortColumn( COLUMN_NAME, true );
-    }
-
     m_netsList->Refresh();
 }
 
@@ -425,18 +422,19 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( bool rebuildColumns )
         prev_selected_netcodes.push_back( item->GetNetCode() );
     }
 
-    // At least on GTK, wxDVC will crash if you rebuild with a sorting column set.
     int  sorting_column_id = cfg->sorting_column;
     bool sort_order_asc = cfg->sort_order_asc;
 
-    if( !m_board_loading )
+    if( wxDataViewColumn* sorting_column = m_netsList->GetSortingColumn() )
     {
-        if( wxDataViewColumn* sorting_column = m_netsList->GetSortingColumn() )
+        if( !m_board_loading )
         {
             sorting_column_id = static_cast<int>( sorting_column->GetModelColumn() );
             sort_order_asc = sorting_column->IsSortOrderAscending();
-            sorting_column->UnsetAsSortKey();
         }
+
+        // On GTK, wxDVC will crash if you rebuild with a sorting column set.
+        sorting_column->UnsetAsSortKey();
     }
 
     if( rebuildColumns )
@@ -505,7 +503,11 @@ void PCB_NET_INSPECTOR_PANEL::buildNetsList( bool rebuildColumns )
     m_data_model->addItems( std::move( new_items ) );
 
     // Re-enable the sorting column
-    restoreSortColumn( sorting_column_id, sort_order_asc );
+    if( !restoreSortColumn( sorting_column_id, sort_order_asc ))
+    {
+        // By default sort by Name column
+        restoreSortColumn( COLUMN_NAME, true );
+    }
 
     // Try to restore the expanded groups
     if( m_board_loaded )
@@ -860,11 +862,6 @@ void PCB_NET_INSPECTOR_PANEL::onBoardChanged( wxCommandEvent& event )
 
     m_board_loaded = true;
     m_board_loading = true;
-
-    wxDataViewColumn* currentSorting = m_netsList->GetSortingColumn();
-
-    if( currentSorting )
-        currentSorting->UnsetAsSortKey();
 
     PROJECT_LOCAL_SETTINGS& localSettings = Pgm().GetSettingsManager().Prj().GetLocalSettings();
     auto&                   cfg = localSettings.m_NetInspectorPanel;
@@ -1610,6 +1607,12 @@ void PCB_NET_INSPECTOR_PANEL::highlightSelectedNets()
     m_frame->GetCanvas()->Refresh();
 
     m_highlighting_nets = false;
+}
+
+
+void PCB_NET_INSPECTOR_PANEL::OnColumnSorted( wxDataViewEvent& event )
+{
+    SaveSettings();
 }
 
 

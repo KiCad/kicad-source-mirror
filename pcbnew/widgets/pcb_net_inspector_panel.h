@@ -103,6 +103,7 @@ protected:
     void         OnHeaderContextMenu( wxCommandEvent& event );
     void         OnNetsListContextMenu( wxDataViewEvent& event );
     void         OnNetsListItemActivated( wxDataViewEvent& event );
+    void         OnColumnSorted( wxDataViewEvent& event );
 
 private:
     /*
