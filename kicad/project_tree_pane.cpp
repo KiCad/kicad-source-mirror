@@ -2236,7 +2236,14 @@ void PROJECT_TREE_PANE::onGitCommit( wxCommandEvent& aEvent )
         }
 
         git_oid           oid;
+        // Check if the libgit2 library version is 1.8.0 or higher
+#if( LIBGIT2_VER_MAJOR > 1 ) || ( LIBGIT2_VER_MAJOR == 1 && LIBGIT2_VER_MINOR >= 8 )
+        // For libgit2 version 1.8.0 and above
+        git_commit* const parents[1] = { parent };
+#else
+        // For libgit2 versions older than 1.8.0
         const git_commit* parents[1] = { parent };
+#endif
 
         if( git_commit_create( &oid, repo, "HEAD", author, author, nullptr, commit_msg.mb_str(), tree,
                            1, parents ) != 0 )
