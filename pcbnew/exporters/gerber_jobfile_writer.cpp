@@ -61,18 +61,8 @@ GERBER_JOBFILE_WRITER::GERBER_JOBFILE_WRITER( BOARD* aPcb, REPORTER* aReporter )
 std::string GERBER_JOBFILE_WRITER::formatStringFromUTF32( const wxString& aText )
 {
     std::string fmt_text; // the text after UTF32 to UTF8 conversion
+    fmt_text = aText.utf8_string();
 
-    for( unsigned long letter : aText )
-    {
-        if( letter >= ' ' && letter <= 0x7F )
-            fmt_text += char( letter );
-        else
-        {
-            char buff[16];
-            std::snprintf( buff, sizeof( buff ), "\\u%4.4lX", letter );
-            fmt_text += buff;
-        }
-    }
     return fmt_text;
 }
 
@@ -252,18 +242,18 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     wxString guid = GbrMakeProjectGUIDfromString( msg );
 
     // build the <project id> string: this is the board short filename (without ext)
-    // and all non ASCII chars are replaced by '_', to be compatible with .gbr files.
+    // and in UTF8 format.
     msg = fn.GetName();
 
-    // build the <rec> string. All non ASCII chars and comma are replaced by '_'
+    // build the <rev> string. All non ASCII chars are in UTF8 form
     wxString rev = ExpandTextVars( m_pcb->GetTitleBlock().GetRevision(), m_pcb->GetProject() );
 
     if( rev.IsEmpty() )
         rev = wxT( "rev?" );
 
-    m_json["GeneralSpecs"]["ProjectId"]["Name"] = msg.ToAscii();
+    m_json["GeneralSpecs"]["ProjectId"]["Name"] = msg.utf8_string().c_str();
     m_json["GeneralSpecs"]["ProjectId"]["GUID"] = guid;
-    m_json["GeneralSpecs"]["ProjectId"]["Revision"] = rev.ToAscii();
+    m_json["GeneralSpecs"]["ProjectId"]["Revision"] = rev.utf8_string().c_str();
 
     // output the board size in mm:
     BOX2I brect = m_pcb->GetBoardEdgesBoundingBox();
