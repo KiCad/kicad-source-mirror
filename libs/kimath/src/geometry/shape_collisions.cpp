@@ -361,31 +361,31 @@ static inline bool Collide( const SHAPE_LINE_CHAIN_BASE& aA, const SHAPE_LINE_CH
                 }
             }
         }
+    }
 
-        if( closest_dist > 0 && aActual )
+    if( (!aActual && !aLocation ) || closest_dist > 0 )
+    {
+        std::vector<const SHAPE_LINE_CHAIN*> chains = {
+            dynamic_cast<const SHAPE_LINE_CHAIN*>( &aA ),
+            dynamic_cast<const SHAPE_LINE_CHAIN*>( &aB )
+        };
+
+        std::vector<const SHAPE*> shapes = { &aA, &aB };
+
+        for( int ii = 0; ii < 2; ii++ )
         {
-            std::vector<const SHAPE_LINE_CHAIN*> chains = {
-                dynamic_cast<const SHAPE_LINE_CHAIN*>( &aA ),
-                dynamic_cast<const SHAPE_LINE_CHAIN*>( &aB )
-            };
+            const SHAPE_LINE_CHAIN* chain = chains[ii];
+            const SHAPE* other = shapes[( ii + 1 ) % 2];
 
-            std::vector<const SHAPE*> shapes = { &aA, &aB };
+            if( !chain )
+                continue;
 
-            for( int ii = 0; ii < 2; ii++ )
+            for( size_t jj = 0; jj < chain->ArcCount(); jj++ )
             {
-                const SHAPE_LINE_CHAIN* chain = chains[ii];
-                const SHAPE* other = shapes[( ii + 1 ) % 2];
+                const SHAPE_ARC& arc = chain->Arc( jj );
 
-                if( !chain )
-                    continue;
-
-                for( size_t jj = 0; jj < chain->ArcCount(); jj++ )
-                {
-                    const SHAPE_ARC& arc = chain->Arc( jj );
-
-                    if( arc.Collide( other, aClearance, aActual, aLocation ) )
-                        return true;
-                }
+                if( arc.Collide( other, aClearance, aActual, aLocation ) )
+                    return true;
             }
         }
     }

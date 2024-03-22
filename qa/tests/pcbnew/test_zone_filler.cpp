@@ -270,3 +270,32 @@ BOOST_FIXTURE_TEST_CASE( RegressionSliverZoneFillTests, ZONE_FILL_TEST_FIXTURE )
     }
 }
 
+
+BOOST_FIXTURE_TEST_CASE( RegressionTeardropFill, ZONE_FILL_TEST_FIXTURE )
+{
+
+    std::vector<std::pair<wxString,int>> tests = { { "teardrop_issue_JPC2", 5 }    // Arcs with teardrops connecting to pads
+                                };
+
+    for( auto& [ relPath, count ] : tests )
+    {
+        KI_TEST::LoadBoard( m_settingsManager, relPath, m_board );
+
+        BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
+
+        KI_TEST::FillZones( m_board.get() );
+
+        int zoneCount = 0;
+
+        for( ZONE* zone : m_board->Zones() )
+        {
+            if( zone->IsTeardropArea() )
+                zoneCount++;
+        }
+
+        BOOST_CHECK_MESSAGE( zoneCount == count, "Expected " << count << " teardrop zones in "
+                                                             << relPath << ", found "
+                                                             << zoneCount );
+    }
+}
+
