@@ -578,7 +578,7 @@ private:
          * At this point, our polygon should be fully tessellated.
          */
         if( aPoint->prev != aPoint->next )
-            return std::abs( aPoint->area() > ADVANCED_CFG::GetCfg().m_TriangulateMinimumArea );
+            return std::abs( aPoint->area() ) > ADVANCED_CFG::GetCfg().m_TriangulateMinimumArea;
 
         return true;
     }
