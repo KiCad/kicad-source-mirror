@@ -8,7 +8,7 @@
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    width="16"
    height="16"
-   inkscape:export-filename="../../32x32/mimetypes/application-x-kicad-footprint.png"
+   inkscape:export-filename="../../16x16/mimetypes/application-x-kicad-footprint.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
@@ -33,13 +33,13 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="128"
-     inkscape:cx="10.417969"
-     inkscape:cy="6.4023437"
+     inkscape:cx="9.640625"
+     inkscape:cy="6.4101562"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
-     inkscape:current-layer="g45763"
+     inkscape:current-layer="g45155"
      inkscape:snap-bbox="true"
      inkscape:object-paths="true"
      inkscape:snap-intersection-paths="true"
@@ -236,7 +236,7 @@
        style="stroke-width:2.05252" />
     <path
        id="path5943"
-       style="fill:#ffffff;fill-opacity:1;stroke:#bebebe;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="fill:#1a81c4;fill-opacity:1;stroke:#bebebe;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        d="M 30,2.0663655 V 14 c 0,2.217881 1.781942,4.065728 3.924528,4.062514 h 11.773585 z"
        sodipodi:nodetypes="csscc" />
     <g
