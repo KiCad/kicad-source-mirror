@@ -2349,7 +2349,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
         auto getJunctionSize =
             [&]( NETELEMENT_ID aJptNetElemId, const NET_PCB::CONNECTION_PCB& aConnectionToIgnore ) -> int
             {
-                int jptsize = 0;
+                int jptsize = std::numeric_limits<int>::max();
 
                 for( NET_PCB::CONNECTION_PCB connection : net.Connections )
                 {
@@ -2374,7 +2374,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadNets()
                     }
                 }
 
-                if( jptsize == 0 )
+                if( jptsize == std::numeric_limits<int>::max()
+                    && !aConnectionToIgnore.Route.RouteVertices.empty() )
                 {
                     // aConnectionToIgnore is actually the only one that has a route, so lets use that
                     // to determine junction size
