@@ -107,6 +107,7 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
 
             m_textColorBook->SetSelection( 1 );
             m_textColorSwatch->SetSwatchColor( cell->GetTextColor(), false );
+            m_textColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
             m_fillColorBook->SetSelection( 1 );
 
@@ -114,6 +115,8 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
                 m_fillColorSwatch->SetSwatchColor( cell->GetFillColor(), false );
             else
                 m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+
+            m_fillColorSwatch->SetDefaultColor( COLOR4D::UNSPECIFIED );
 
             m_marginLeft.SetValue( cell->GetMarginLeft() );
             m_marginTop.SetValue( cell->GetMarginTop() );
