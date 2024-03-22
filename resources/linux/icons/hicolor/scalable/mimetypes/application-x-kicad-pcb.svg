@@ -8,6 +8,9 @@
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
    width="256"
    height="256"
+   inkscape:export-filename="../../128x128/mimetypes/application-x-kicad-pcb.png"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -30,13 +33,13 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="1.8955546"
-     inkscape:cx="112.36817"
-     inkscape:cy="108.93909"
-     inkscape:window-x="4368"
-     inkscape:window-y="301"
+     inkscape:cx="60.14071"
+     inkscape:cy="109.46664"
+     inkscape:window-x="4082"
+     inkscape:window-y="210"
      inkscape:window-maximized="0"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1"
+     inkscape:current-layer="g4648"
      inkscape:snap-bbox="true"
      inkscape:object-paths="true"
      inkscape:snap-intersection-paths="true"
@@ -404,7 +407,7 @@
        id="path6035" />
     <path
        id="path5943"
-       style="fill:#ffffff;fill-opacity:1;stroke:#bebebe;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="fill:#72ad72;fill-opacity:1;stroke:#bebebe;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        d="m 156,2 v 47 c 0,8.735013 7.26484,16.012659 16,16 h 48 z"
        sodipodi:nodetypes="csscc" />
     <path

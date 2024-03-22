@@ -33,8 +33,8 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="64"
-     inkscape:cx="10"
-     inkscape:cy="13.742188"
+     inkscape:cx="8.4375"
+     inkscape:cy="13.757812"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -359,7 +359,7 @@
        ry="3.9148996" />
     <path
        id="path5943"
-       style="fill:#ffffff;fill-opacity:1;stroke:#bebebe;stroke-width:5.33333;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       style="fill:#1a81c4;fill-opacity:1;stroke:#bebebe;stroke-width:5.33333;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        d="M 61.999995,2.6662881 V 26.539574 c 0,4.436881 3.632462,8.133506 8.000094,8.127075 h 24.000288 z"
        sodipodi:nodetypes="csscc" />
   </g>

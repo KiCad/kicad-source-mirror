@@ -33,13 +33,13 @@
      id="namedview30"
      showgrid="true"
      inkscape:zoom="4"
-     inkscape:cx="178.75"
-     inkscape:cy="196.875"
+     inkscape:cx="132.25"
+     inkscape:cy="197.375"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:document-rotation="0"
-     inkscape:current-layer="Слой_1"
+     inkscape:current-layer="g868"
      inkscape:snap-bbox="true"
      inkscape:object-paths="true"
      inkscape:snap-intersection-paths="true"
@@ -178,7 +178,7 @@
          id="path6035" />
       <path
          id="path5943"
-         style="fill:#ffffff;fill-opacity:1;stroke:#bebebe;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         style="fill:#f2647e;fill-opacity:1;stroke:#bebebe;stroke-width:4;stroke-linecap:square;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
          d="m 156,2 v 47 c 0,8.735013 7.26484,16.012659 16,16 h 48 z"
          sodipodi:nodetypes="csscc" />
       <path
