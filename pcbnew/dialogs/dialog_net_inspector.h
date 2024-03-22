@@ -113,6 +113,7 @@ private:
     PCB_EDIT_FRAME* m_frame;
     bool            m_in_reporting = false;
     bool            m_in_build_nets_list = false;
+    bool            m_in_bulk_update = false;
     bool            m_filter_change_no_rebuild = false;
     wxSize          m_size;
 

@@ -1435,10 +1435,14 @@ void DIALOG_NET_INSPECTOR::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardIt
 
 void DIALOG_NET_INSPECTOR::OnBoardItemsAdded( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItem )
 {
+    m_in_bulk_update = true;
+
     for( BOARD_ITEM* item : aBoardItem )
     {
         OnBoardItemAdded( aBoard, item );
     }
+
+    m_in_bulk_update = false;
 }
 
 
@@ -1503,10 +1507,14 @@ void DIALOG_NET_INSPECTOR::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoard
 void DIALOG_NET_INSPECTOR::OnBoardItemsRemoved( BOARD& aBoard,
                                                 std::vector<BOARD_ITEM*>& aBoardItems )
 {
+    m_in_bulk_update = true;
+
     for( BOARD_ITEM* item : aBoardItems )
     {
         OnBoardItemRemoved( aBoard, item );
     }
+
+    m_in_bulk_update = false;
 }
 
 
@@ -1948,7 +1956,7 @@ void DIALOG_NET_INSPECTOR::onSelChanged( wxDataViewEvent&  )
 void DIALOG_NET_INSPECTOR::onSelChanged()
 {
     // ignore selection changes while the whole list is being rebuilt.
-    if( m_in_build_nets_list )
+    if( m_in_build_nets_list || m_in_bulk_update )
         return;
 
     RENDER_SETTINGS* renderSettings = m_frame->GetCanvas()->GetView()->GetPainter()->GetSettings();
