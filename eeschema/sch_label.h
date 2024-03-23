@@ -238,7 +238,8 @@ public:
      * Builds an array of { pageNumber, pageName } pairs.
      * @param pages [out] Array of { pageNumber, pageName } pairs.
      */
-    void GetIntersheetRefs( std::vector<std::pair<wxString, wxString>>* pages );
+    void GetIntersheetRefs( const SCH_SHEET_PATH* aPath,
+                            std::vector<std::pair<wxString, wxString>>* pages );
 
     /**
      * Return the list of system text vars & fields for this label.

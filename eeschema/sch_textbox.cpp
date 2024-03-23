@@ -419,6 +419,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground,
         return;
     }
 
+    SCH_SHEET_PATH*  sheet = &Schematic()->CurrentSheet();
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     int              penWidth = GetPenWidth();
     COLOR4D          color = GetStroke().GetColor();
@@ -456,7 +457,7 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground,
 
     std::vector<VECTOR2I> positions;
     wxArrayString strings_list;
-    wxStringSplit( GetShownText( true ), strings_list, '\n' );
+    wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
 
     GetLinePositions( positions, (int) strings_list.Count() );

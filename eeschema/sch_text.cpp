@@ -342,6 +342,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground,
     if( aBackground )
         return;
 
+    SCH_SHEET_PATH*  sheet = &Schematic()->CurrentSheet();
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     SCH_CONNECTION*  connection = Connection();
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
@@ -375,7 +376,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground,
 
     std::vector<VECTOR2I> positions;
     wxArrayString strings_list;
-    wxStringSplit( GetShownText( true ), strings_list, '\n' );
+    wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
 
     GetLinePositions( positions, (int) strings_list.Count() );

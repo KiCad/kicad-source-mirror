@@ -659,37 +659,20 @@ void SCHEMATIC::RecomputeIntersheetRefs( const std::function<void( SCH_GLOBALLAB
 
     pageRefsMap.clear();
 
-    SCH_SCREENS      screens( Root() );
-    std::vector<int> virtualPageNumbers;
-
-    /* Iterate over screens */
-    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+    for( const SCH_SHEET_PATH& sheet : GetSheets() )
     {
-        virtualPageNumbers.clear();
-
-        /* Find in which sheets this screen is used */
-        for( const SCH_SHEET_PATH& sheet : GetSheets() )
+        for( SCH_ITEM* item : sheet.LastScreen()->Items().OfType( SCH_GLOBAL_LABEL_T ) )
         {
-            if( sheet.LastScreen() == screen )
-                virtualPageNumbers.push_back( sheet.GetVirtualPageNumber() );
-        }
+            SCH_GLOBALLABEL* global = static_cast<SCH_GLOBALLABEL*>( item );
+            wxString         resolvedLabel = global->GetShownText( &sheet, false );
 
-        for( SCH_ITEM* item : screen->Items() )
-        {
-            if( item->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                SCH_GLOBALLABEL* globalLabel = static_cast<SCH_GLOBALLABEL*>( item );
-                std::set<int>&   virtualpageList = pageRefsMap[globalLabel->GetText()];
-
-                for( const int& pageNo : virtualPageNumbers )
-                    virtualpageList.insert( pageNo );
-            }
+            pageRefsMap[ resolvedLabel ].insert( sheet.GetVirtualPageNumber() );
         }
     }
 
     bool show = Settings().m_IntersheetRefsShow;
 
-    // Refresh all global labels.  Note that we have to collect them first as the
+    // Refresh all visible global labels.  Note that we have to collect them first as the
     // SCH_SCREEN::Update() call is going to invalidate the RTree iterator.
 
     std::vector<SCH_GLOBALLABEL*> currentSheetGlobalLabels;

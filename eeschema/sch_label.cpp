@@ -706,13 +706,15 @@ void SCH_LABEL_BASE::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 }
 
 
-void SCH_LABEL_BASE::GetIntersheetRefs( std::vector<std::pair<wxString, wxString>>* pages )
+void SCH_LABEL_BASE::GetIntersheetRefs( const SCH_SHEET_PATH* aPath,
+                                        std::vector<std::pair<wxString, wxString>>* pages )
 {
     wxCHECK( pages, /* void */ );
 
     if( Schematic() )
     {
-        auto it = Schematic()->GetPageRefsMap().find( GetText() );
+        wxString resolvedLabel = GetShownText( &Schematic()->CurrentSheet(), false );
+        auto     it = Schematic()->GetPageRefsMap().find( resolvedLabel );
 
         if( it != Schematic()->GetPageRefsMap().end() )
         {
@@ -1308,6 +1310,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
 {
     static std::vector<VECTOR2I> s_poly;
 
+    SCH_SHEET_PATH*  sheet = &Schematic()->CurrentSheet();
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
     SCH_CONNECTION*  connection = Connection();
     int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
@@ -1338,7 +1341,8 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
     }
     else
     {
-        aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font, GetFontMetrics() );
+        aPlotter->PlotText( textpos, color, GetShownText( sheet, true ), attrs, font,
+                            GetFontMetrics() );
 
         if( GetShape() == LABEL_FLAG_SHAPE::F_DOT )
         {
@@ -1840,7 +1844,7 @@ bool SCH_GLOBALLABEL::ResolveTextVar( const SCH_SHEET_PATH* aPath, wxString* tok
     {
         SCHEMATIC_SETTINGS& settings = schematic->Settings();
         wxString            ref;
-        auto                it = schematic->GetPageRefsMap().find( GetText() );
+        auto                it = schematic->GetPageRefsMap().find( GetShownText( aPath ) );
 
         if( it == schematic->GetPageRefsMap().end() )
         {

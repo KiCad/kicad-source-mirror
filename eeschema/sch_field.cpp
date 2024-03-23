@@ -351,13 +351,14 @@ SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forP
 
 void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    wxDC*    DC = aSettings->GetPrintDC();
-    COLOR4D  color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_layer );
-    bool     blackAndWhiteMode = GetGRForceBlackPenState();
-    VECTOR2I textpos;
-    int      penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
+    SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+    wxDC*           DC = aSettings->GetPrintDC();
+    COLOR4D         color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_layer );
+    bool            blackAndWhiteMode = GetGRForceBlackPenState();
+    VECTOR2I        textpos;
+    int             penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
 
-    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText( true ).IsEmpty() )
+    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText( sheet, true ).IsEmpty() )
         return;
 
     COLOR4D bg = aSettings->GetBackgroundColor();
@@ -416,7 +417,7 @@ void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         textpos += label->GetSchematicTextOffset( aSettings );
     }
 
-    GRPrintText( DC, textpos, color, GetShownText( true ), orient, GetTextSize(),
+    GRPrintText( DC, textpos, color, GetShownText( sheet, true ), orient, GetTextSize(),
                  GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
                  font, GetFontMetrics() );
 }
@@ -950,12 +951,14 @@ void SCH_FIELD::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 
     if( IsHypertext() )
     {
-        SCH_LABEL_BASE*                            label = static_cast<SCH_LABEL_BASE*>( m_parent );
-        std::vector<std::pair<wxString, wxString>> pages;
-        wxMenu                                     menu;
-        wxString                                   href;
+        SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( m_parent );
+        SCH_SHEET_PATH* sheet = &label->Schematic()->CurrentSheet();
+        wxMenu          menu;
+        wxString        href;
 
-        label->GetIntersheetRefs( &pages );
+        std::vector<std::pair<wxString, wxString>> pages;
+
+        label->GetIntersheetRefs( sheet, &pages );
 
         for( int i = 0; i < (int) pages.size(); ++i )
         {
@@ -1148,7 +1151,9 @@ bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground,
                       const SCH_PLOT_SETTINGS& aPlotSettings ) const
 {
-    if( GetShownText( true ).IsEmpty() || aBackground )
+    SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+
+    if( GetShownText( sheet, true ).IsEmpty() || aBackground )
         return;
 
     RENDER_SETTINGS* settings = aPlotter->RenderSettings();
@@ -1228,7 +1233,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground,
     attrs.m_Angle = orient;
     attrs.m_Multiline = false;
 
-    aPlotter->PlotText( textpos, color, GetShownText( true ), attrs, font, GetFontMetrics() );
+    aPlotter->PlotText( textpos, color, GetShownText( sheet, true ), attrs, font, GetFontMetrics() );
 
     if( IsHypertext() )
     {
@@ -1239,7 +1244,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground,
 
         wxCHECK( label, /* void */ );
 
-        label->GetIntersheetRefs( &pages );
+        label->GetIntersheetRefs( sheet, &pages );
 
         for( const std::pair<wxString, wxString>& page : pages )
             pageHrefs.push_back( wxT( "#" ) + page.first );
