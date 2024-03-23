@@ -59,6 +59,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         m_details_ctrl( nullptr ),
         m_inTimerEvent( false ),
         m_recentSearchesKey( aRecentSearchesKey ),
+        m_filtersSizer( nullptr ),
         m_skipNextRightClick( false ),
         m_previewWindow( nullptr ),
         m_previewDisabled( false )
@@ -132,7 +133,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
 
         m_sort_ctrl->Bind( wxEVT_CHAR_HOOK, &LIB_TREE::onTreeCharHook, this );
 
-        search_sizer->Add( m_sort_ctrl, 0, wxEXPAND | wxRIGHT, 5 );
+        search_sizer->Add( m_sort_ctrl, 0, wxEXPAND, 5 );
 
         sizer->Add( search_sizer, 0, wxEXPAND | wxBOTTOM, 5 );
 
@@ -164,6 +165,12 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
         Bind( wxEVT_TIMER, &LIB_TREE::onDebounceTimer, this, m_debounceTimer->GetId() );
     }
 
+    if( aFlags & FILTERS )
+    {
+        m_filtersSizer = new wxBoxSizer( wxVERTICAL );
+        sizer->Add( m_filtersSizer, 0, wxEXPAND | wxLEFT, 4 );
+    }
+
     // Tree control
     int dvFlags = ( aFlags & MULTISELECT ) ? wxDV_MULTIPLE : wxDV_SINGLE;
     m_tree_ctrl = new WX_DATAVIEWCTRL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, dvFlags );
@@ -175,7 +182,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, const wxString& aRecentSearchesKey, LIB_T
     m_tree_ctrl->SetRowHeight( rowHeight );
 #endif
 
-    sizer->Add( m_tree_ctrl, 5, wxRIGHT | wxBOTTOM | wxEXPAND, 5 );
+    sizer->Add( m_tree_ctrl, 5, wxEXPAND, 5 );
 
     // Description panel
     if( aFlags & DETAILS )

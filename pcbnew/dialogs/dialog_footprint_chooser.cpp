@@ -79,24 +79,28 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
 
     wxBoxSizer* bSizerBottom;
     bSizerBottom = new wxBoxSizer( wxHORIZONTAL );
-    // Add a spacer on the left
-    bSizerBottom->Add( 20, 0, 0, 0, 5 );
 
-	m_grButton3DView = new BITMAP_BUTTON( this, wxID_ANY,
-                                          wxNullBitmap, wxDefaultPosition, wxDefaultSize/*, wxBU_AUTODRAW|wxBORDER_NONE*/ );
+    bSizerBottom->Add( 0, 0, 1, 0, 5 );     // Add spacer to right-align buttons
+
+    BITMAP_BUTTON* separator = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap );
+    separator->SetIsSeparator();
+    bSizerBottom->Add( separator, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
+
+	m_grButton3DView = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap );
     m_grButton3DView->SetIsRadioButton();
     m_grButton3DView->SetBitmap( KiBitmapBundle( BITMAPS::shape_3d ) );
     m_grButton3DView->Check( !m_showFpMode );
-	bSizerBottom->Add( m_grButton3DView, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerBottom->Add( m_grButton3DView, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
-	m_grButtonFpView = new BITMAP_BUTTON( this, wxID_ANY,
-                                          wxNullBitmap, wxDefaultPosition, wxDefaultSize/*, wxBU_AUTODRAW|wxBORDER_NONE*/ );
+	m_grButtonFpView = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap );
     m_grButtonFpView->SetIsRadioButton();
     m_grButtonFpView->SetBitmap( KiBitmapBundle( BITMAPS::module ) );
     m_grButtonFpView->Check( m_showFpMode );
-	bSizerBottom->Add( m_grButtonFpView, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerBottom->Add( m_grButtonFpView, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
-    bSizerBottom->Add( 0, 0, 1, wxEXPAND, 5 );
+    separator = new BITMAP_BUTTON( this, wxID_ANY, wxNullBitmap );
+    separator->SetIsSeparator();
+    bSizerBottom->Add( separator, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
     if( aPreselect.IsValid() )
         m_chooserPanel->SetPreselect( aPreselect );
@@ -111,6 +115,7 @@ DIALOG_FOOTPRINT_CHOOSER::DIALOG_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aParent,
     sdbSizer->AddButton( cancelButton );
     sdbSizer->Realize();
 
+    bSizerBottom->Add( 20, 0, 0, 0, 5 );     // Add spacer
     bSizerBottom->Add( sdbSizer, 0, wxEXPAND | wxALL, 5 );
 
     m_SizerTop->Add( bSizerBottom, 0, wxEXPAND, 5 );

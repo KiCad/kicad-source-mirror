@@ -93,19 +93,6 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
 
     wxPanel*    bottomPanel = new wxPanel( this );
     wxBoxSizer* bottomSizer = new wxBoxSizer( wxVERTICAL );
-
-    m_filterByFPFilters = new wxCheckBox( bottomPanel, wxID_ANY, _( "Apply footprint filters" ) );
-    m_filterByPinCount = new wxCheckBox( bottomPanel, wxID_ANY, _( "Filter by pin count" ) );
-
-    m_filterByFPFilters->Show( false );
-    m_filterByPinCount->Show( false );
-
-    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
-    {
-        m_filterByFPFilters->SetValue( cfg->m_FootprintChooser.use_fp_filters );
-        m_filterByPinCount->SetValue( cfg->m_FootprintChooser.filter_on_pin_count );
-    }
-
     wxBoxSizer* frameSizer = new wxBoxSizer( wxVERTICAL );
 
     m_chooserPanel = new PANEL_FOOTPRINT_CHOOSER( this, this, s_FootprintHistoryList,
@@ -136,38 +123,33 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     build3DCanvas();    // must be called after creating m_chooserPanel
     m_preview3DCanvas->Show( !m_showFpMode );
 
-    // The m_filterByFPFilters can have a long string, if the symbol has a FP filter
-    // with many items, so give it its own sizer
-    wxBoxSizer* fpFilterSizerByFP = new wxBoxSizer( wxVERTICAL );
-    fpFilterSizerByFP->Add( m_filterByFPFilters, 0, wxLEFT | wxTOP | wxEXPAND, 5 );
-    bottomSizer->Add( fpFilterSizerByFP, 0, wxLEFT | wxTOP, 5 );
-
-    // buttonsSizer contains the m_filterByPinCount and BITMAP buttons
+    // buttonsSizer contains the BITMAP buttons
     wxBoxSizer* buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
-    buttonsSizer->Add( m_filterByPinCount, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
 
-    // Add a spacer between the wxCheckBox and bitmap buttons
-    buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+    buttonsSizer->Add( 0, 0, 1, 0, 5 );     // Add spacer to right-align buttons
 
-    m_grButton3DView = new BITMAP_BUTTON( bottomPanel, wxID_ANY,
-                                wxNullBitmap, wxDefaultPosition,
-                                wxDefaultSize/*, wxBU_AUTODRAW|wxBORDER_NONE*/ );
+    BITMAP_BUTTON* separator = new BITMAP_BUTTON( bottomPanel, wxID_ANY, wxNullBitmap );
+    separator->SetIsSeparator();
+    buttonsSizer->Add( separator, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
+
+    m_grButton3DView = new BITMAP_BUTTON( bottomPanel, wxID_ANY, wxNullBitmap );
     m_grButton3DView->SetIsRadioButton();
     m_grButton3DView->SetBitmap( KiBitmapBundle( BITMAPS::shape_3d ) );
     m_grButton3DView->Check( !m_showFpMode );
-    buttonsSizer->Add( m_grButton3DView, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+    buttonsSizer->Add( m_grButton3DView, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
-    m_grButtonFpView = new BITMAP_BUTTON( bottomPanel, wxID_ANY,
-                                          wxNullBitmap, wxDefaultPosition,
-                                          wxDefaultSize/*, wxBU_AUTODRAW|wxBORDER_NONE*/ );
+    m_grButtonFpView = new BITMAP_BUTTON( bottomPanel, wxID_ANY, wxNullBitmap );
     m_grButtonFpView->SetIsRadioButton();
     m_grButtonFpView->SetBitmap( KiBitmapBundle( BITMAPS::module ) );
     m_grButtonFpView->Check( m_showFpMode );
-    buttonsSizer->Add( m_grButtonFpView, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+    buttonsSizer->Add( m_grButtonFpView, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
 
-    m_show3DViewer = new wxCheckBox( bottomPanel, wxID_ANY, _( "3D Viewer Shown in Separate Window" ) );
-    buttonsSizer->Add( 30, 0, 0, 0, 5 );     // Add spacer
-    buttonsSizer->Add( m_show3DViewer, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+    separator = new BITMAP_BUTTON( bottomPanel, wxID_ANY, wxNullBitmap );
+    separator->SetIsSeparator();
+    buttonsSizer->Add( separator, 0, wxRIGHT | wxALIGN_CENTER_VERTICAL, 1 );
+
+    m_show3DViewer = new wxCheckBox( bottomPanel, wxID_ANY, _( "Show 3D viewer in own window" ) );
+    buttonsSizer->Add( m_show3DViewer, 0, wxALL | wxALIGN_CENTER_VERTICAL, 3 );
 
     wxStdDialogButtonSizer* sdbSizer = new wxStdDialogButtonSizer();
     wxButton*               okButton = new wxButton( bottomPanel, wxID_OK );
@@ -177,11 +159,9 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     sdbSizer->AddButton( cancelButton );
     sdbSizer->Realize();
 
-    // Add a spacer between the bitmap buttons and thesdbSizer
-    buttonsSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-    buttonsSizer->Add( sdbSizer, 1, wxALL, 5 );
-
-    bottomSizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
+    buttonsSizer->Add( 20, 0, 0, 0, 5 );     // Add spacer
+    buttonsSizer->Add( sdbSizer, 0, wxALL | wxALIGN_CENTER_VERTICAL, 5 );
+    bottomSizer->Add( buttonsSizer, 0, wxEXPAND, 5 );
 
     bottomPanel->SetSizer( bottomSizer );
     frameSizer->Add( bottomPanel, 0, wxEXPAND );
@@ -194,33 +174,21 @@ FOOTPRINT_CHOOSER_FRAME::FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aPare
     Layout();
     m_chooserPanel->FinishSetup();
 
-    m_filterByPinCount->Bind( wxEVT_CHECKBOX,
-            [&]( wxCommandEvent& evt )
-            {
-                m_chooserPanel->Regenerate();
-            } );
-
-    m_filterByFPFilters->Bind( wxEVT_CHECKBOX,
-            [&]( wxCommandEvent& evt )
-            {
-                m_chooserPanel->Regenerate();
-            } );
-
     // Connect Events
     m_grButton3DView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
-                         wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
-                         NULL, this );
+                               wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
+                               nullptr, this );
 
     m_grButtonFpView->Connect( wxEVT_COMMAND_BUTTON_CLICKED ,
-                             wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ),
-                             NULL, this );
+                               wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ),
+                               nullptr, this );
 
     m_show3DViewer->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED ,
                              wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onExternalViewer3DEnable ),
-                             NULL, this );
+                             nullptr, this );
 
     Connect( FP_SELECTION_EVENT,  // custom event fired by a PANEL_FOOTPRINT_CHOOSER
-             wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), NULL, this );
+             wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), nullptr, this );
 
     // Needed on Linux to fix the position of widgets in bottomPanel
     PostSizeEvent();
@@ -232,22 +200,25 @@ FOOTPRINT_CHOOSER_FRAME::~FOOTPRINT_CHOOSER_FRAME()
     // Disconnect Events
     m_grButton3DView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
                                   wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::on3DviewReq ),
-                                  NULL, this );
+                                  nullptr, this );
     m_grButtonFpView->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
-                                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ),
-                                NULL, this );
+                                  wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpViewReq ),
+                                  nullptr, this );
 
     m_show3DViewer->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED ,
                                 wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onExternalViewer3DEnable ),
-                                NULL, this );
+                                nullptr, this );
 
     Disconnect( FP_SELECTION_EVENT,
-                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), NULL, this );
+                wxCommandEventHandler( FOOTPRINT_CHOOSER_FRAME::onFpChanged ), nullptr, this );
 
     if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
     {
-        cfg->m_FootprintChooser.use_fp_filters = m_filterByFPFilters->GetValue();
-        cfg->m_FootprintChooser.filter_on_pin_count = m_filterByPinCount->GetValue();
+        if( m_filterByFPFilters )
+            cfg->m_FootprintChooser.use_fp_filters = m_filterByFPFilters->GetValue();
+
+        if( m_filterByPinCount )
+            cfg->m_FootprintChooser.filter_on_pin_count = m_filterByPinCount->GetValue();
     }
 }
 
@@ -306,6 +277,30 @@ void FOOTPRINT_CHOOSER_FRAME::Update3DView( bool aMarkDirty,
 }
 
 
+bool FOOTPRINT_CHOOSER_FRAME::filterByPinCount()
+{
+    if( m_filterByPinCount )
+        return m_filterByPinCount->GetValue();
+
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+        return cfg->m_FootprintChooser.filter_on_pin_count;
+
+    return false;
+}
+
+
+bool FOOTPRINT_CHOOSER_FRAME::filterByFPFilters()
+{
+    if( m_filterByFPFilters )
+        return m_filterByFPFilters->GetValue();
+
+    if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+        return cfg->m_FootprintChooser.use_fp_filters;
+
+    return false;
+}
+
+
 bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
 {
     if( aNode.m_Type == LIB_TREE_NODE::TYPE::LIBRARY )
@@ -313,7 +308,7 @@ bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
         // Normally lib nodes get scored by the max of their children's scores.  However, if a
         // lib node *has* no children then the scorer will call the filter on the lib node itself,
         // and we just want to return true if we're not filtering at all.
-        return !m_filterByPinCount->GetValue() && !m_filterByFPFilters->GetValue();
+        return !filterByPinCount() && !filterByFPFilters();
     }
 
     auto patternMatch =
@@ -339,13 +334,13 @@ bool FOOTPRINT_CHOOSER_FRAME::filterFootprint( LIB_TREE_NODE& aNode )
                 return false;
             };
 
-    if( m_pinCount > 0 && m_filterByPinCount->GetValue() )
+    if( m_pinCount > 0 && filterByPinCount() )
     {
         if( aNode.m_PinCount != m_pinCount )
             return false;
     }
 
-    if( !m_fpFilters.empty() && m_filterByFPFilters->GetValue() )
+    if( !m_fpFilters.empty() && filterByFPFilters() )
     {
         if( !patternMatch( aNode.m_LibId, m_fpFilters ) )
             return false;
@@ -386,6 +381,9 @@ COLOR_SETTINGS* FOOTPRINT_CHOOSER_FRAME::GetColorSettings( bool aForceRefresh ) 
 }
 
 
+static wxRect s_dialogRect( 0, 0, 0, 0 );
+
+
 void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     const std::string& payload = mail.GetPayload();
@@ -394,6 +392,10 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
     {
     case MAIL_SYMBOL_NETLIST:
     {
+        wxSizer*  filtersSizer = m_chooserPanel->GetFiltersSizer();
+        wxWindow* filtersWindow = filtersSizer->GetContainingWindow();
+        wxString  msg;
+
         m_pinCount = 0;
         m_fpFilters.clear();
 
@@ -414,9 +416,17 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
             if( m_pinCount > 0 )
             {
-                m_filterByPinCount->SetLabel( m_filterByPinCount->GetLabel()
-                                                + wxString::Format( wxS( " (%d)" ), m_pinCount ) );
-                m_filterByPinCount->Show( true );
+                msg.Printf( _( "Filter by pin count (%d)" ), m_pinCount );
+                m_filterByPinCount = new wxCheckBox( filtersWindow, wxID_ANY, msg );
+
+                m_filterByPinCount->Bind( wxEVT_CHECKBOX,
+                        [&]( wxCommandEvent& evt )
+                        {
+                            m_chooserPanel->Regenerate();
+                        } );
+
+                if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+                    m_filterByPinCount->SetValue( cfg->m_FootprintChooser.filter_on_pin_count );
             }
         }
 
@@ -428,12 +438,33 @@ void FOOTPRINT_CHOOSER_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
                 m_fpFilters.back()->SetPattern( filter.Lower() );
             }
 
-            m_filterByFPFilters->SetLabel( m_filterByFPFilters->GetLabel()
-                                            + wxString::Format( wxS( " (%s)" ), strings[1] ) );
-            m_filterByFPFilters->Show( true );
+            msg.Printf( _( "Apply footprint filters (%s)" ), strings[1] );
+            m_filterByFPFilters = new wxCheckBox( filtersWindow, wxID_ANY, msg );
+
+            m_filterByFPFilters->Bind( wxEVT_CHECKBOX,
+                    [&]( wxCommandEvent& evt )
+                    {
+                        m_chooserPanel->Regenerate();
+                    } );
+
+            if( PCBNEW_SETTINGS* cfg = dynamic_cast<PCBNEW_SETTINGS*>( Kiface().KifaceSettings() ) )
+                m_filterByFPFilters->SetValue( cfg->m_FootprintChooser.use_fp_filters );
         }
 
+        if( m_filterByFPFilters )
+            m_chooserPanel->GetFiltersSizer()->Add( m_filterByFPFilters, 0, wxEXPAND|wxBOTTOM, 4 );
+
+        if( m_filterByPinCount )
+            m_chooserPanel->GetFiltersSizer()->Add( m_filterByPinCount, 0, wxEXPAND|wxBOTTOM, 4 );
+
         m_chooserPanel->GetViewerPanel()->SetPinFunctions( pinNames );
+
+        // Save the wxFormBuilder size of the dialog...
+        if( s_dialogRect.GetSize().x == 0 || s_dialogRect.GetSize().y == 0 )
+            s_dialogRect = wxRect( wxWindow::GetPosition(), wxWindow::GetSize() );
+
+        // ... and then give it a kick to get it to layout the new items
+        GetSizer()->SetSizeHints( this );
         break;
     }
 
@@ -457,9 +488,6 @@ bool FOOTPRINT_CHOOSER_FRAME::ShowModal( wxString* aFootprint, wxWindow* aParent
 
     return KIWAY_PLAYER::ShowModal( aFootprint, aParent );
 }
-
-
-static wxRect s_dialogRect( 0, 0, 0, 0 );
 
 
 void FOOTPRINT_CHOOSER_FRAME::SetPosition( const wxPoint& aNewPosition )

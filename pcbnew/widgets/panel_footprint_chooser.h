@@ -73,14 +73,11 @@ public:
 
     wxWindow* GetFocusTarget() const { return m_tree->GetFocusTarget(); }
 
+    wxSizer* GetFiltersSizer() const { return m_tree->GetFiltersSizer(); }
+
     void Regenerate() { m_tree->Regenerate( true ); }
 
     FOOTPRINT_PREVIEW_WIDGET* GetViewerPanel() const { return m_preview_ctrl; }
-
-    wxPanel* m_RightPanel;
-    wxBoxSizer* m_RightPanelSizer;
-
-    const FOOTPRINT* m_CurrFootprint;
 
 protected:
     static constexpr int DblClickDelay = 100; // milliseconds
@@ -98,6 +95,12 @@ protected:
      * is a component, the component is picked.
      */
     void onFootprintChosen( wxCommandEvent& aEvent );
+
+public:
+    wxPanel*                  m_RightPanel;
+    wxBoxSizer*               m_RightPanelSizer;
+
+    const FOOTPRINT*          m_CurrFootprint;
 
 protected:
     wxTimer*                  m_dbl_click_timer;

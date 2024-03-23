@@ -122,7 +122,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     detailsPanel->SetSizer( detailsSizer );
 
     m_details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize );
-    detailsSizer->Add( m_details, 1, wxEXPAND | wxALL, 5 );
+    detailsSizer->Add( m_details, 1, wxEXPAND, 5 );
     detailsPanel->Layout();
     detailsSizer->Fit( detailsPanel );
 
@@ -130,7 +130,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
     m_vsplitter->SetMinimumPaneSize( 20 );
     m_vsplitter->SplitHorizontally( m_hsplitter, detailsPanel );
 
-    sizer->Add( m_vsplitter, 1, wxEXPAND | wxALL, 5 );
+    sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
 
     m_tree = new LIB_TREE( m_hsplitter, wxT( "footprints" ), fpTable, m_adapter,
                            LIB_TREE::FLAGS::ALL_WIDGETS, m_details );
@@ -143,7 +143,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
 
     m_preview_ctrl = new FOOTPRINT_PREVIEW_WIDGET( m_RightPanel, m_frame->Kiway() );
     m_preview_ctrl->SetUserUnits( m_frame->GetUserUnits() );
-    m_RightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND | wxALL, 5 );
+    m_RightPanelSizer->Add( m_preview_ctrl, 1, wxEXPAND, 5 );
 
     m_RightPanel->SetSizer( m_RightPanelSizer );
     m_RightPanel->Layout();

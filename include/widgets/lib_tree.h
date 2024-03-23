@@ -53,7 +53,8 @@ public:
     {
         NONE        = 0x00,
         SEARCH      = 0x01,
-        DETAILS     = 0x02,
+        FILTERS     = 0x02,
+        DETAILS     = 0x04,
         ALL_WIDGETS = 0x0F,
         MULTISELECT = 0x10
     };
@@ -151,6 +152,8 @@ public:
 
     wxWindow* GetFocusTarget();
 
+    wxSizer* GetFiltersSizer() { return m_filtersSizer; }
+
     /**
      * Focus the search widget if it exists
      */
@@ -241,6 +244,8 @@ protected:
     bool               m_inTimerEvent;
 
     wxString           m_recentSearchesKey;
+
+    wxBoxSizer*        m_filtersSizer;
 
     bool               m_skipNextRightClick;
 

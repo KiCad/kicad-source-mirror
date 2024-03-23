@@ -72,6 +72,8 @@ protected:
     FOOTPRINT_CHOOSER_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
 private:
+    bool filterByPinCount();
+    bool filterByFPFilters();
     bool filterFootprint( LIB_TREE_NODE& aNode );
     void Show3DViewerFrame();
 
