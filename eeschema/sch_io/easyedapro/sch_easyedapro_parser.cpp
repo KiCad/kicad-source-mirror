@@ -532,14 +532,14 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
         {
             VECTOR2D start, size;
             wxString mimeType, data;
-            double   angle = 0;
+            //double   angle = 0;
             int      upsideDown = 0;
 
             if( line.at( 3 ).is_number() )
             {
                 start = VECTOR2D( line.at( 3 ), line.at( 4 ) );
                 size = VECTOR2D( line.at( 5 ), line.at( 6 ) );
-                angle = line.at( 7 );
+                //angle = line.at( 7 );
                 upsideDown = line.at( 8 );
 
                 wxString imageUrl = line.at( 9 );
@@ -563,7 +563,7 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
 
                 start = VECTOR2D( line.at( 4 ), line.at( 5 ) );
                 size = VECTOR2D( line.at( 6 ), line.at( 7 ) );
-                angle = line.at( 8 );
+                //angle = line.at( 8 );
                 data = line.at( 9 ).get<wxString>();
             }
 
