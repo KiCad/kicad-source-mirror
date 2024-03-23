@@ -38,9 +38,12 @@ class SHAPE_COMPOUND;
 class SHAPE_POLY_SET;
 
 
-// These are only here for algorithmic safety, not to tell the user what to do
-#define TEXT_MIN_SIZE_MILS  1        ///< Minimum text size in mils
-#define TEXT_MAX_SIZE_MILS  10000    ///< Maximum text size in mils (10 inches)
+// These are only here for algorithmic safety, not to tell the user what to do.
+// PL_EDITOR has the least resolution (its internal units are microns), so the min size is chosen
+// to yield 1 in PL_EDITOR.
+// The max size chosen is somewhat arbitrary, but no one has complained yet.
+#define TEXT_MIN_SIZE_MM  0.001    ///< Minimum text size (1 micron).
+#define TEXT_MAX_SIZE_MM  250.0    ///< Maximum text size in mm (~10 inches)
 
 
 namespace KIGFX

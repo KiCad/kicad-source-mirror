@@ -364,8 +364,8 @@ void EDA_TEXT::SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize )
 
     if( aEnforceMinTextSize )
     {
-        int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
-        int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
+        int min = m_IuScale.get().mmToIU( TEXT_MIN_SIZE_MM );
+        int max = m_IuScale.get().mmToIU( TEXT_MAX_SIZE_MM );
 
         aNewSize = VECTOR2I( alg::clamp( min, aNewSize.x, max ),
                              alg::clamp( min, aNewSize.y, max ) );
@@ -380,8 +380,8 @@ void EDA_TEXT::SetTextSize( VECTOR2I aNewSize, bool aEnforceMinTextSize )
 
 void EDA_TEXT::SetTextWidth( int aWidth )
 {
-    int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
-    int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
+    int min = m_IuScale.get().mmToIU( TEXT_MIN_SIZE_MM );
+    int max = m_IuScale.get().mmToIU( TEXT_MAX_SIZE_MM );
 
     m_attributes.m_Size.x = alg::clamp( min, aWidth, max );
     ClearRenderCache();
@@ -391,8 +391,8 @@ void EDA_TEXT::SetTextWidth( int aWidth )
 
 void EDA_TEXT::SetTextHeight( int aHeight )
 {
-    int min = m_IuScale.get().MilsToIU( TEXT_MIN_SIZE_MILS );
-    int max = m_IuScale.get().MilsToIU( TEXT_MAX_SIZE_MILS );
+    int min = m_IuScale.get().mmToIU( TEXT_MIN_SIZE_MM );
+    int max = m_IuScale.get().mmToIU( TEXT_MAX_SIZE_MM );
 
     m_attributes.m_Size.y = alg::clamp( min, aHeight, max );
     ClearRenderCache();

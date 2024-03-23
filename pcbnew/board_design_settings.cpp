@@ -670,8 +670,8 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS( JSON_SETTINGS* aParent, const std:
             },
             {} ) );
 
-    int minTextSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
-    int maxTextSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+    int minTextSize = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
+    int maxTextSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
     int minStroke = 1;
     int maxStroke = pcbIUScale.mmToIU( 100 );
 

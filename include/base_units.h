@@ -62,9 +62,8 @@
 */
 
 /**
- * @brief some define and functions to convert a value in mils, decimils or mm
- * to the internal unit used in pcbnew, cvpcb or gerbview (nanometer or deci-mil)
- * depending on compile time option
+ * @brief some macros and functions to convert a value in mils, decimils or mm to the internal
+ * unit used in pcbnew, cvpcb or gerbview (nanometer or deci-mil) depending on compile time option
  */
 
 constexpr double GERB_IU_PER_MM = 1e5; // Gerbview IU is 10 nanometers.

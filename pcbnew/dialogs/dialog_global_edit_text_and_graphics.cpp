@@ -511,8 +511,8 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
 bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 {
-    int minTextSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
-    int maxTextSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+    int minTextSize = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
+    int maxTextSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
 
     if( !m_textWidth.Validate( minTextSize, maxTextSize )
         || !m_textHeight.Validate( minTextSize, maxTextSize ) )

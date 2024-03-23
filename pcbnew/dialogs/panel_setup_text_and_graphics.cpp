@@ -205,8 +205,8 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataFromWindow()
     // A minimal value for sizes and thickness
     const int minWidth = pcbIUScale.mmToIU( MINIMUM_LINE_WIDTH_MM );
     const int maxWidth = pcbIUScale.mmToIU( MAXIMUM_LINE_WIDTH_MM );
-    const int minSize  = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
-    const int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+    const int minSize  = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
+    const int maxSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
     wxString errorsMsg;
     UNITS_PROVIDER* unitProvider = m_Frame;
 

@@ -361,8 +361,8 @@ bool PANEL_FP_EDITOR_DEFAULTS::TransferDataFromWindow()
     // A minimal value for sizes and thickness:
     const int minWidth = pcbIUScale.mmToIU( MINIMUM_LINE_WIDTH_MM );
     const int maxWidth = pcbIUScale.mmToIU( MAXIMUM_LINE_WIDTH_MM );
-    const int minSize  = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
-    const int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+    const int minSize  = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
+    const int maxSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
     wxString errorsMsg;
 
     for( int i = 0; i < ROW_COUNT; ++i )
