@@ -4296,7 +4296,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchTextBoxContent( SCH_TEXTBOX* aTextBox )
             break;
 
         default:
-            if( SCH_TABLECELL* cell = dynamic_cast<SCH_TABLECELL*>( aTextBox ) )
+            if( dynamic_cast<SCH_TABLECELL*>( aTextBox ) != nullptr )
                 Expecting( "at, size, stroke, fill, effects, span or uuid" );
             else
                 Expecting( "at, size, stroke, fill, effects or uuid" );

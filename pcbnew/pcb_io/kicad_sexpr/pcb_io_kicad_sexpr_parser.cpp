@@ -3516,7 +3516,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseTextBoxContent( PCB_TEXTBOX* aTextBox )
             break;
 
         default:
-            if( PCB_TABLECELL* cell = dynamic_cast<PCB_TABLECELL*>( aTextBox ) )
+            if( dynamic_cast<PCB_TABLECELL*>( aTextBox ) != nullptr )
                 Expecting( "locked, start, pts, angle, width, layer, effects, span, render_cache, uuid or tstamp" );
             else
                 Expecting( "locked, start, pts, angle, width, layer, effects, render_cache, uuid or tstamp" );

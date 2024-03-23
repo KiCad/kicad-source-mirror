@@ -197,7 +197,7 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
             m_lockY1->SetLabel( wxString::Format( m_lockY1->GetLabel(), plotTab->GetLabelY1() ) );
             m_y1Units->SetLabel( plotTab->GetUnitsY1() );
 
-            double min, max;
+            double min = 0.0, max = 0.0;
             bool   locked = plotTab->GetY1Scale( &min, &max );
             m_lockY1->SetValue( locked );
 
@@ -214,7 +214,7 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
             m_lockY2->SetLabel( wxString::Format( m_lockY2->GetLabel(), plotTab->GetLabelY2() ) );
             m_y2Units->SetLabel( plotTab->GetUnitsY2() );
 
-            double min, max;
+            double min = 0.0, max = 0.0;
             bool   locked = plotTab->GetY2Scale( &min, &max );
             m_lockY2->SetValue( locked );
 
@@ -231,7 +231,7 @@ void DIALOG_SIM_COMMAND::SetPlotSettings( const SIM_TAB* aSimTab )
             m_lockY3->SetLabel( wxString::Format( m_lockY3->GetLabel(), plotTab->GetLabelY3() ) );
             m_y3Units->SetLabel( plotTab->GetUnitsY3() );
 
-            double min, max;
+            double min = 0.0, max = 0.0;
             bool   locked = plotTab->GetY3Scale( &min, &max );
             m_lockY3->SetValue( locked );
 
