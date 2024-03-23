@@ -86,6 +86,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, 
 
     settings->m_ShowPinsElectricalType = app_settings->m_LibViewPanel.show_pin_electrical_type;
     settings->m_ShowPinNumbers = app_settings->m_LibViewPanel.show_pin_numbers;
+    settings->m_ShowHiddenLibFields = false;
 
     m_outerSizer = new wxBoxSizer( wxVERTICAL );
 
