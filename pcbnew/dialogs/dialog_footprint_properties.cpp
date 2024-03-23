@@ -393,8 +393,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES::Validate()
             return false;
         }
 
-        int minSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
-        int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+        int minSize = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
+        int maxSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
         int width = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_WIDTH ) );
         int height = m_frame->ValueFromString( m_itemsGrid->GetCellValue( i, FPT_HEIGHT ) );
 

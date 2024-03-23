@@ -292,8 +292,8 @@ bool DIALOG_TEXTBOX_PROPERTIES::TransferDataFromWindow()
     if( !DIALOG_TEXTBOX_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
 
-    int minSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
-    int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+    int minSize = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
+    int maxSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
 
     if( !m_textWidth.Validate( minSize, maxSize ) || !m_textHeight.Validate( minSize, maxSize ) )
         return false;

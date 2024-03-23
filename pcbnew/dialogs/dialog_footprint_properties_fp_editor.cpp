@@ -441,8 +441,8 @@ bool DIALOG_FOOTPRINT_PROPERTIES_FP_EDITOR::Validate()
             return false;
         }
 
-        int minSize = pcbIUScale.MilsToIU( TEXT_MIN_SIZE_MILS );
-        int maxSize = pcbIUScale.MilsToIU( TEXT_MAX_SIZE_MILS );
+        int minSize = pcbIUScale.mmToIU( TEXT_MIN_SIZE_MM );
+        int maxSize = pcbIUScale.mmToIU( TEXT_MAX_SIZE_MM );
 
         if( field.GetTextWidth() < minSize || field.GetTextWidth() > maxSize )
         {
