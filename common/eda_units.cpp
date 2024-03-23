@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,22 @@
 #include <macros.h>
 #include <charconv>
 #include <wx/translation.h>
+
+
+static void removeTralingZeros( wxString& aText )
+{
+    int len = aText.length();
+    int removeLast = 0;
+
+    while( --len > 0 && aText[len] == '0' )
+        removeLast++;
+
+    if( len >= 0 && ( aText[len] == '.' || aText[len] == ',' ) )
+        removeLast++;
+
+    aText = aText.RemoveLast( removeLast );
+}
+
 
 bool EDA_UNIT_UTILS::IsImperialUnit( EDA_UNITS aUnit )
 {
@@ -305,29 +321,46 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
         break;
     }
 
-    char buf[50];
+    const wxChar* format = nullptr;
 
-    if( value_to_print != 0.0 && fabs( value_to_print ) <= 0.0001 )
+    switch( aUnits )
     {
-        int len = snprintf( buf, sizeof( buf ) - 1, "%.10f", value_to_print );
 
-        while( --len > 0 && buf[len] == '0' )
-            buf[len] = '\0';
+    case EDA_UNITS::MILS:
+#if defined( EESCHEMA )
+        format = wxT( "%.3f" );
+#else
+        format = wxT( "%.5f" );
+#endif
+        break;
 
-        if( len >= 0 && ( buf[len] == '.' || buf[len] == ',' ) )
-            buf[len] = '\0';
+    case EDA_UNITS::INCHES:
+#if defined( EESCHEMA )
+        format = wxT( "%.6f" );
+#else
+        format = wxT( "%.8f" );
+#endif
+        break;
+
+    default:
+        format = wxT( "%.10f" );
+        break;
     }
-    else
+
+    wxString text;
+    text.Printf( format, value_to_print );
+    removeTralingZeros( text );
+
+    if( value_to_print != 0.0 && ( text == wxS( "0" ) || text == wxS( "-0" ) ) )
     {
-        snprintf( buf, sizeof( buf ) - 1, "%.10g", value_to_print );
+        text.Printf( wxS( "%.10f" ), value_to_print );
+        removeTralingZeros( text );
     }
-
-    wxString stringValue( buf, wxConvUTF8 );
 
     if( aAddUnitsText )
-        stringValue += EDA_UNIT_UTILS::GetText( aUnits, aType );
+        text << EDA_UNIT_UTILS::GetText( aUnits, aType );
 
-    return stringValue;
+    return text;
 }
 
 
