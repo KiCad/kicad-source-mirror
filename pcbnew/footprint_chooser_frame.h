@@ -75,13 +75,6 @@ private:
     bool filterFootprint( LIB_TREE_NODE& aNode );
     void Show3DViewerFrame();
 
-    /**
-     * @return true if the footprint must be displayed to the footprint panel
-     * when returning false, the 3D panel is displayed.
-     * true is returnned in footprint mode or in 3D mode using a separate 3D viewer frame
-     */
-    bool displayFootprintPanel();
-
     /// @copydoc PCB_BASE_FRAME::Update3DView
     void Update3DView( bool aMarkDirty, bool aRefresh, const wxString* aTitle = nullptr ) override;
 
@@ -120,7 +113,8 @@ private:
 
 private:
     PANEL_FOOTPRINT_CHOOSER* m_chooserPanel;
-    bool                     m_showFpMode;   // True to show the footprint, false for 3D model
+    bool                     m_showFpMode; // True to show the footprint
+    bool                     m_show3DMode; // True to show the 3D model
     wxCheckBox*              m_filterByPinCount;
     wxCheckBox*              m_filterByFPFilters;
     wxCheckBox*              m_show3DViewer;

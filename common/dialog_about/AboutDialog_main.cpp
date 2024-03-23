@@ -392,6 +392,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
     ADD_DEV( wxT( "Eldar Khayrullin" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Georges Khaznadar" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Gary Kim" ), CONTRIB_DEV );
+    ADD_DEV( wxT( "Aristeidis Kimirtzis" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Ingo Kletti" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Kliment" ), CONTRIB_DEV );
     ADD_DEV( wxT( "Sylwester Kocjan" ), CONTRIB_DEV );

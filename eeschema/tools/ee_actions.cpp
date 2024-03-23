@@ -522,7 +522,7 @@ TOOL_ACTION EE_ACTIONS::syncSheetPins( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.syncSheetPins" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Sync Sheet Pins" ) )
-        .Tooltip( _( "Synchronize sheet pins and hierarchical labels”" ) )
+        .Tooltip( _( "Synchronize sheet pins and hierarchical labels" ) )
         .Icon( BITMAPS::import_hierarchical_label )
         .Flags( AF_ACTIVATE ) );
 
@@ -530,7 +530,7 @@ TOOL_ACTION EE_ACTIONS::syncAllSheetsPins( TOOL_ACTION_ARGS()
         .Name( "eeschema.InteractiveDrawing.syncAllSheetsPins" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Sync Sheet Pins" ) )
-        .Tooltip( _( "Synchronize sheet pins and hierarchical labels”" ) )
+        .Tooltip( _( "Synchronize sheet pins and hierarchical labels" ) )
         .Icon( BITMAPS::import_hierarchical_label )
         .Flags( AF_ACTIVATE ) );
 
