@@ -29,7 +29,7 @@
 #include <wx/translation.h>
 
 
-static void removeTralingZeros( wxString& aText )
+static void removeTrailingZeros( wxString& aText )
 {
     int len = aText.length();
     int removeLast = 0;
@@ -349,12 +349,12 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
 
     wxString text;
     text.Printf( format, value_to_print );
-    removeTralingZeros( text );
+    removeTrailingZeros( text );
 
     if( value_to_print != 0.0 && ( text == wxS( "0" ) || text == wxS( "-0" ) ) )
     {
         text.Printf( wxS( "%.10f" ), value_to_print );
-        removeTralingZeros( text );
+        removeTrailingZeros( text );
     }
 
     if( aAddUnitsText )
