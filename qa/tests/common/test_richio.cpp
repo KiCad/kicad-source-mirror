@@ -58,7 +58,13 @@ BOOST_AUTO_TEST_CASE( VPrint )
     output.clear();
 
     // Test 3: Edge case with zero characters
+    #ifdef __GNUC__
+    #pragma GCC diagnostic ignored "-Wformat-zero-length"
+    #endif
     StrPrintf( &output, "" );
+    #ifdef __GNUC__
+    #pragma GCC diagnostic warning "-Wformat-zero-length"
+    #endif
     BOOST_ASSERT( output.empty() );
 
     // Test 4: Mixing small and large strings

@@ -1864,7 +1864,7 @@ void PCB_TUNING_PATTERN::SetProperties( const STRING_ANY_MAP& aProps )
     aProps.get_to( "single_sided", m_settings.m_singleSided );
     aProps.get_to( "side", m_settings.m_initialSide );
 
-    bool rounded;
+    bool rounded = false;
     aProps.get_to( "rounded", rounded );
     m_settings.m_cornerStyle = rounded ? PNS::MEANDER_STYLE_ROUND : PNS::MEANDER_STYLE_CHAMFER;
 
