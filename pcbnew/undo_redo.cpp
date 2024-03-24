@@ -266,6 +266,76 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
     GetBoard()->IncrementTimeStamp();   // clear caches
 
+    // Enum to track the modification type of items. Used to enable bulk BOARD_LISTENER
+    // callbacks at the end of the undo / redo operation
+    enum ITEM_CHANGE_TYPE
+    {
+        ADDED,
+        DELETED,
+        CHANGED
+    };
+
+    std::unordered_map<EDA_ITEM*, ITEM_CHANGE_TYPE> item_changes;
+
+    auto update_item_change_state = [&]( EDA_ITEM* item, ITEM_CHANGE_TYPE change_type )
+    {
+        auto item_itr = item_changes.find( item );
+
+        if( item_itr == item_changes.end() )
+        {
+            // First time we've seen this item - tag the current change type
+            item_changes.insert( { item, change_type } );
+        }
+        else
+        {
+            // Update the item state based on the current and next change type
+            switch( item_itr->second )
+            {
+            case ITEM_CHANGE_TYPE::ADDED:
+            {
+                if( change_type == ITEM_CHANGE_TYPE::DELETED )
+                {
+                    // The item was previously added, now deleted - as far as bulk callbacks
+                    // are concerned, the item has never existed
+                    item_changes.erase( item_itr );
+                }
+                else if( change_type == ITEM_CHANGE_TYPE::ADDED )
+                {
+                    // Error condition - added an already added item
+                    wxASSERT_MSG( false, wxT( "Undo / Redo - should not add already added item" ) );
+                }
+
+                // For all other cases, the item remains as ADDED as seen by the bulk callbacks
+                break;
+            }
+            case ITEM_CHANGE_TYPE::DELETED:
+            {
+                // This is an error condition - item has already been deleted so should not
+                // be operated on further
+                wxASSERT_MSG( false, wxT( "Undo / Redo - should not alter already deleted item" ) );
+                break;
+            }
+            case ITEM_CHANGE_TYPE::CHANGED:
+            {
+                if( change_type == ITEM_CHANGE_TYPE::DELETED )
+                {
+                    item_itr->second = ITEM_CHANGE_TYPE::DELETED;
+                }
+                else if( change_type == ITEM_CHANGE_TYPE::ADDED )
+                {
+                    // This is an error condition - item has already been changed so should not
+                    // be added
+                    wxASSERT_MSG( false,
+                                  wxT( "Undo / Redo - should not add already changed item" ) );
+                }
+
+                // Otherwise, item remains CHANGED
+                break;
+            }
+            }
+        }
+    };
+
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
 
@@ -384,13 +454,14 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             view->Add( item );
             view->Hide( item, false );
             connectivity->Add( item );
-            item->GetBoard()->OnItemChanged( item );
+            update_item_change_state( eda_item, ITEM_CHANGE_TYPE::CHANGED );
             break;
         }
 
         case UNDO_REDO::NEWITEM:        /* new items are deleted */
             aList->SetPickedItemStatus( UNDO_REDO::DELETED, ii );
-            GetModel()->Remove( (BOARD_ITEM*) eda_item );
+            GetModel()->Remove( (BOARD_ITEM*) eda_item, REMOVE_MODE::BULK );
+            update_item_change_state( eda_item, ITEM_CHANGE_TYPE::DELETED );
 
             if( eda_item->Type() != PCB_NETINFO_T )
                 view->Remove( eda_item );
@@ -404,7 +475,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             eda_item->ClearFlags( UR_TRANSIENT );
 
-            GetModel()->Add( (BOARD_ITEM*) eda_item );
+            GetModel()->Add( (BOARD_ITEM*) eda_item, ADD_MODE::BULK_APPEND );
+            update_item_change_state( eda_item, ITEM_CHANGE_TYPE::ADDED );
 
             if( eda_item->Type() != PCB_NETINFO_T )
                 view->Add( eda_item );
@@ -494,6 +566,40 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     selTool->RebuildSelection();
 
     GetBoard()->SanitizeNetcodes();
+
+    // Invoke bulk BOARD_LISTENER callbacks
+    std::vector<BOARD_ITEM*> added_items, deleted_items, changed_items;
+
+    for( auto& item_itr : item_changes )
+    {
+        switch( item_itr.second )
+        {
+        case ITEM_CHANGE_TYPE::ADDED:
+        {
+            added_items.push_back( static_cast<BOARD_ITEM*>( item_itr.first ) );
+            break;
+        }
+        case ITEM_CHANGE_TYPE::DELETED:
+        {
+            deleted_items.push_back( static_cast<BOARD_ITEM*>( item_itr.first ) );
+            break;
+        }
+        case ITEM_CHANGE_TYPE::CHANGED:
+        {
+            changed_items.push_back( static_cast<BOARD_ITEM*>( item_itr.first ) );
+            break;
+        }
+        }
+    }
+
+    if( added_items.size() > 0 )
+        GetBoard()->FinalizeBulkAdd( added_items );
+
+    if( deleted_items.size() > 0 )
+        GetBoard()->FinalizeBulkRemove( deleted_items );
+
+    if( changed_items.size() > 0 )
+        GetBoard()->OnItemsChanged( changed_items );
 }
 
 
