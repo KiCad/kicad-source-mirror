@@ -2050,6 +2050,14 @@ static struct EDA_SHAPE_DESC
         auto fillAvailable =
                 [=]( INSPECTABLE* aItem ) -> bool
                 {
+                    if( EDA_ITEM* edaItem = dynamic_cast<EDA_ITEM*>( aItem ) )
+                    {
+                        // For some reason masking "Filled" and "Fill Color" at the
+                        // PCB_TABLECELL level doesn't work.
+                        if( edaItem->Type() == PCB_TABLECELL_T )
+                            return false;
+                    }
+
                     if( EDA_SHAPE* edaShape = dynamic_cast<EDA_SHAPE*>( aItem ) )
                     {
                         switch( edaShape->GetShape() )

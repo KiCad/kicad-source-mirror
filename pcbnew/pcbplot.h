@@ -37,6 +37,7 @@ class PLOTTER;
 class PCB_TEXT;
 class PAD;
 class PCB_SHAPE;
+class PCB_TABLE;
 class PCB_DIMENSION_BASE;
 class FOOTPRINT;
 class PCB_TARGET;
@@ -91,6 +92,7 @@ public:
     void PlotText( const EDA_TEXT* aText, PCB_LAYER_ID aLayer, bool aIsKnockout,
                    const KIFONT::METRICS& aFontMetrics );
     void PlotShape( const PCB_SHAPE* aShape );
+    void PlotTableBorders( const PCB_TABLE* aTable );
 
     /**
      * Plot a pad.

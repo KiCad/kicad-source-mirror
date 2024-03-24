@@ -162,14 +162,24 @@ static struct PCB_TABLECELL_DESC
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( PCB_TABLECELL );
 
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_TABLECELL, BOARD_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<PCB_TABLECELL, BOARD_CONNECTED_ITEM> );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_TABLECELL, PCB_TEXTBOX> );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_TABLECELL, PCB_SHAPE> );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_TABLECELL, EDA_SHAPE> );
         propMgr.AddTypeCast( new TYPE_CAST<PCB_TABLECELL, EDA_TEXT> );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( BOARD_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( BOARD_CONNECTED_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_TEXTBOX ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_SHAPE ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ) );
         propMgr.InheritsAfter( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ) );
+
+        propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position X" ) );
+        propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( BOARD_ITEM ), _HKI( "Position Y" ) );
+        propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_SHAPE ), _HKI( "Layer" ) );
+
+        propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
 
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_TEXTBOX ), _HKI( "Border" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( PCB_TEXTBOX ), _HKI( "Border Style" ) );
@@ -179,10 +189,10 @@ static struct PCB_TABLECELL_DESC
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Start Y" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "End X" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "End Y" ) );
-
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Shape" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Width" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Style" ) );
+        propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_SHAPE ), _HKI( "Line Color" ) );
 
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Visible" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Width" ) );
@@ -190,5 +200,6 @@ static struct PCB_TABLECELL_DESC
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Thickness" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Orientation" ) );
         propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Hyperlink" ) );
+        propMgr.Mask( TYPE_HASH( PCB_TABLECELL ), TYPE_HASH( EDA_TEXT ), _HKI( "Color" ) );
     }
 } _PCB_TABLECELL_DESC;

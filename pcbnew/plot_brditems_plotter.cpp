@@ -53,6 +53,8 @@
 #include <pcb_target.h>
 #include <pcb_text.h>
 #include <pcb_textbox.h>
+#include <pcb_tablecell.h>
+#include <pcb_table.h>
 #include <zone.h>
 
 #include <wx/debug.h>                         // for wxASSERT_MSG
@@ -364,6 +366,21 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItem( const BOARD_ITEM* item )
 
         if( textbox->IsBorderEnabled() )
             PlotShape( textbox );
+
+        m_plotter->SetTextMode( GetTextMode() );
+        break;
+    }
+
+    case PCB_TABLE_T:
+    {
+        const PCB_TABLE* table = static_cast<const PCB_TABLE*>( item );
+
+        m_plotter->SetTextMode( PLOT_TEXT_MODE::STROKE );
+
+        for( const PCB_TABLECELL* cell : table->GetCells() )
+            PlotText( cell, cell->GetLayer(), cell->IsKnockout(), cell->GetFontMetrics() );
+
+        PlotTableBorders( table );
 
         m_plotter->SetTextMode( GetTextMode() );
         break;
@@ -886,6 +903,112 @@ void BRDITEMS_PLOTTER::PlotShape( const PCB_SHAPE* aShape )
 
         for( SHAPE* shape : shapes )
             delete shape;
+    }
+}
+
+
+void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
+{
+    VECTOR2I     pos = aTable->GetPosition();
+    VECTOR2I     end = aTable->GetEnd();
+    int          lineWidth;
+    LINE_STYLE   lineStyle;
+    GBR_METADATA gbr_metadata;
+
+    if( const FOOTPRINT* parentFP = aTable->GetParentFootprint() )
+    {
+        gbr_metadata.SetCmpReference( parentFP->GetReference() );
+        gbr_metadata.SetNetAttribType( GBR_NETLIST_METADATA::GBR_NETINFO_CMP );
+    }
+
+    auto setupStroke =
+            [&]( const STROKE_PARAMS& stroke )
+            {
+                lineWidth = stroke.GetWidth();
+                lineStyle = stroke.GetLineStyle();
+            };
+
+    auto strokeShape =
+            [&]( const SHAPE& shape )
+            {
+                STROKE_PARAMS::Stroke( &shape, lineStyle, lineWidth, m_plotter->RenderSettings(),
+                        [&]( const VECTOR2I& a, const VECTOR2I& b )
+                        {
+                            m_plotter->ThickSegment( a, b, lineWidth, GetPlotMode(),
+                                                     &gbr_metadata );
+                        } );
+            };
+
+    auto strokeLine =
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
+            {
+                if( lineStyle <= LINE_STYLE::FIRST_TYPE )
+                {
+                    m_plotter->ThickSegment( ptA, ptB, lineWidth, GetPlotMode(), &gbr_metadata );
+                }
+                else
+                {
+                    SHAPE_SEGMENT seg( ptA, ptB );
+                    strokeShape( seg );
+                }
+            };
+
+    auto strokeRect =
+            [&]( const VECTOR2I& ptA, const VECTOR2I& ptB )
+            {
+                strokeLine( VECTOR2I( ptA.x, ptA.y ), VECTOR2I( ptB.x, ptA.y ) );
+                strokeLine( VECTOR2I( ptB.x, ptA.y ), VECTOR2I( ptB.x, ptB.y ) );
+                strokeLine( VECTOR2I( ptB.x, ptB.y ), VECTOR2I( ptA.x, ptB.y ) );
+                strokeLine( VECTOR2I( ptA.x, ptB.y ), VECTOR2I( ptA.x, ptA.y ) );
+            };
+
+    if( aTable->GetSeparatorsStroke().GetWidth() >= 0 )
+    {
+        setupStroke( aTable->GetSeparatorsStroke() );
+
+        if( aTable->StrokeColumns() )
+        {
+            for( int col = 0; col < aTable->GetColCount() - 1; ++col )
+            {
+                for( int row = 0; row < aTable->GetRowCount(); ++row )
+                {
+                    PCB_TABLECELL* cell = aTable->GetCell( row, col );
+                    VECTOR2I       topRight( cell->GetEndX(), cell->GetStartY() );
+
+                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
+                        strokeLine( topRight, cell->GetEnd() );
+                }
+            }
+        }
+
+        if( aTable->StrokeRows() )
+        {
+            for( int row = 0; row < aTable->GetRowCount() - 1; ++row )
+            {
+                for( int col = 0; col < aTable->GetColCount(); ++col )
+                {
+                    PCB_TABLECELL* cell = aTable->GetCell( row, col );
+                    VECTOR2I       botLeft( cell->GetStartX(), cell->GetEndY() );
+
+                    if( cell->GetColSpan() > 0 && cell->GetRowSpan() > 0 )
+                        strokeLine( botLeft, cell->GetEnd() );
+                }
+            }
+        }
+    }
+
+    if( aTable->GetBorderStroke().GetWidth() >= 0 )
+    {
+        setupStroke( aTable->GetBorderStroke() );
+
+        if( aTable->StrokeHeader() )
+        {
+            PCB_TABLECELL* cell = aTable->GetCell( 0, 0 );
+            strokeLine( VECTOR2I( pos.x, cell->GetEndY() ), VECTOR2I( end.x, cell->GetEndY() ) );
+        }
+
+        if( aTable->StrokeExternal() )
+            strokeRect( pos, end );
     }
 }
 
