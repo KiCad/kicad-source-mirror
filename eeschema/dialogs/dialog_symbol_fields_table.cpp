@@ -146,13 +146,17 @@ protected:
                 {
                     if( m_fieldsCtrl->GetTextValue( row, FIELD_NAME_COLUMN ) == fieldName )
                     {
-                        m_fieldsCtrl->SetToggleValue( show, row, SHOW_FIELD_COLUMN );
+                        if( m_grid->CommitPendingChanges( false ) )
+                            m_fieldsCtrl->SetToggleValue( show, row, SHOW_FIELD_COLUMN );
+
                         break;
                     }
                 }
             }
             else
+            {
                 GRID_TRICKS::doPopupSelection( event );
+            }
         }
     }
 

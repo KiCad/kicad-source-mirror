@@ -444,7 +444,7 @@ void GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         break;
 
     default:
-        if( menu_id >= GRIDTRICKS_FIRST_SHOWHIDE )
+        if( menu_id >= GRIDTRICKS_FIRST_SHOWHIDE && m_grid->CommitPendingChanges( false ) )
         {
             int col = menu_id - GRIDTRICKS_FIRST_SHOWHIDE;
 
