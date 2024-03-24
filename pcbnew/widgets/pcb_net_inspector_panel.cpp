@@ -963,9 +963,18 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsAdded( BOARD&                    aBoar
     if( !IsShownOnScreen() )
         return;
 
-    for( BOARD_ITEM* item : aBoardItems )
+    // Rebuild full netlist for large changes
+    if( aBoardItems.size() > 25 )
     {
-        OnBoardItemAdded( aBoard, item );
+        buildNetsList();
+        m_netsList->Refresh();
+    }
+    else
+    {
+        for( BOARD_ITEM* item : aBoardItems )
+        {
+            OnBoardItemAdded( aBoard, item );
+        }
     }
 }
 
@@ -1037,9 +1046,17 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsRemoved( BOARD&                    aBo
     if( !IsShownOnScreen() )
         return;
 
-    for( BOARD_ITEM* item : aBoardItems )
+    if( aBoardItems.size() > 25 )
     {
-        OnBoardItemRemoved( aBoard, item );
+        buildNetsList();
+        m_netsList->Refresh();
+    }
+    else
+    {
+        for( BOARD_ITEM* item : aBoardItems )
+        {
+            OnBoardItemRemoved( aBoard, item );
+        }
     }
 }
 
