@@ -885,9 +885,18 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
             if( !padBBox.Intersects( aZone->GetBoundingBox() ) )
                 continue;
 
-            if( pad->GetNetCode() != aZone->GetNetCode()
-                || pad->GetNetCode() <= 0
-                || pad->GetZoneLayerOverride( aLayer ) == ZLO_FORCE_NO_ZONE_CONNECTION )
+            bool noConnection = pad->GetNetCode() != aZone->GetNetCode();
+
+            if( !aZone->IsTeardropArea() )
+            {
+                if( aZone->GetNetCode() == 0
+                    || pad->GetZoneLayerOverride( aLayer ) == ZLO_FORCE_NO_ZONE_CONNECTION )
+                {
+                    noConnection = true;
+                }
+            }
+
+            if( noConnection )
             {
                 // collect these for knockout in buildCopperItemClearances()
                 aNoConnectionPads.push_back( pad );
@@ -1049,8 +1058,10 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
             {
                 if( aTrack->GetBoundingBox().Intersects( zone_boundingbox ) )
                 {
-                    bool sameNet = aTrack->GetNetCode() == aZone->GetNetCode()
-                                        && aZone->GetNetCode() != 0;
+                    bool sameNet = aTrack->GetNetCode() == aZone->GetNetCode();
+
+                    if( !aZone->IsTeardropArea() && aZone->GetNetCode() == 0 )
+                        sameNet = false;
 
                     int  gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
                                                   aZone, aTrack, aLayer );
@@ -1124,8 +1135,15 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
     auto knockoutGraphicClearance =
             [&]( BOARD_ITEM* aItem )
             {
-                int shapeNet = ( aItem->Type() == PCB_SHAPE_T ) ? static_cast<PCB_SHAPE*>( aItem )->GetNetCode() : -1;
-                bool sameNet = shapeNet == aZone->GetNetCode() && aZone->GetNetCode() != 0;
+                int shapeNet = -1;
+
+                if( aItem->Type() == PCB_SHAPE_T )
+                    shapeNet = static_cast<PCB_SHAPE*>( aItem )->GetNetCode();
+
+                bool sameNet = shapeNet == aZone->GetNetCode();
+
+                if( !aZone->IsTeardropArea() && aZone->GetNetCode() == 0 )
+                    sameNet = false;
 
                 // A item on the Edge_Cuts or Margin is always seen as on any layer:
                 if( aItem->IsOnLayer( aLayer )
@@ -1174,7 +1192,12 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
         {
             for( PAD* pad : footprint->Pads() )
             {
-                if( pad->GetNetCode() == aZone->GetNetCode() && aZone->GetNetCode() != 0 )
+                bool sameNet = pad->GetNetCode() == aZone->GetNetCode();
+
+                if( !aZone->IsTeardropArea() && aZone->GetNetCode() == 0 )
+                    sameNet = false;
+
+                if( sameNet )
                 {
                     if( pad->IsOnLayer( aLayer ) )
                         allowedNetTiePads.insert( pad );
