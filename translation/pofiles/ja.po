@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-07 00:01+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"PO-Revision-Date: 2024-03-25 13:17+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -413,7 +413,7 @@ msgstr "表示をホームへ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "本来の位置と倍率で再描画する"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -21262,8 +21262,9 @@ msgid "New Analysis Tab..."
 msgstr "新しい解析タブ..."
 
 #: eeschema/tools/ee_actions.cpp:1387
+#, fuzzy
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "シミュレーション解析を含む新しいタブを作成する"
 
 #: eeschema/tools/ee_actions.cpp:1395
 msgid "Open Workbook..."
@@ -21271,7 +21272,7 @@ msgstr "ワークブックを開く…"
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "保存された分析タブと設定を開く"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
