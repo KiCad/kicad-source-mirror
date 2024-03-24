@@ -60,6 +60,11 @@ public:
      */
     virtual void SaveSettings(){};
 
+    /**
+     * Prepare the panel when (re-)shown in the editor
+     */
+    virtual void OnShowPanel() {}
+
 protected:
     // User-driven UI events (override in derrived classes as required)
     virtual void OnSetFocus( wxFocusEvent& event ) { event.Skip(); }

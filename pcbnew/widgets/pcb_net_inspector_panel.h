@@ -84,6 +84,11 @@ public:
     virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) override;
 
     /**
+     * Prepare the panel when shown in the editor
+     */
+    virtual void OnShowPanel() override;
+
+    /**
      * Persist the net inspector configuration to project / global settings
      */
     virtual void SaveSettings() override;

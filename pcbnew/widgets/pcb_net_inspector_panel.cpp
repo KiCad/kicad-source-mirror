@@ -876,6 +876,9 @@ void PCB_NET_INSPECTOR_PANEL::onBoardChanged( wxCommandEvent& event )
 
 void PCB_NET_INSPECTOR_PANEL::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
+    if( !IsShownOnScreen() )
+        return;
+
     if( NETINFO_ITEM* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
     {
         // a new net has been added to the board.  add it to our list if it
@@ -957,6 +960,9 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoar
 void PCB_NET_INSPECTOR_PANEL::OnBoardItemsAdded( BOARD&                    aBoard,
                                                  std::vector<BOARD_ITEM*>& aBoardItems )
 {
+    if( !IsShownOnScreen() )
+        return;
+
     for( BOARD_ITEM* item : aBoardItems )
     {
         OnBoardItemAdded( aBoard, item );
@@ -966,6 +972,9 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsAdded( BOARD&                    aBoar
 
 void PCB_NET_INSPECTOR_PANEL::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
+    if( !IsShownOnScreen() )
+        return;
+
     if( NETINFO_ITEM* net = dynamic_cast<NETINFO_ITEM*>( aBoardItem ) )
     {
         m_data_model->deleteItem( m_data_model->findItem( net ) );
@@ -1025,6 +1034,9 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemRemoved( BOARD& aBoard, BOARD_ITEM* aBo
 void PCB_NET_INSPECTOR_PANEL::OnBoardItemsRemoved( BOARD&                    aBoard,
                                                    std::vector<BOARD_ITEM*>& aBoardItems )
 {
+    if( !IsShownOnScreen() )
+        return;
+
     for( BOARD_ITEM* item : aBoardItems )
     {
         OnBoardItemRemoved( aBoard, item );
@@ -1034,6 +1046,9 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsRemoved( BOARD&                    aBo
 
 void PCB_NET_INSPECTOR_PANEL::OnBoardNetSettingsChanged( BOARD& aBoard )
 {
+    if( !IsShownOnScreen() )
+        return;
+
     buildNetsList();
     m_netsList->Refresh();
 }
@@ -1041,6 +1056,9 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardNetSettingsChanged( BOARD& aBoard )
 
 void PCB_NET_INSPECTOR_PANEL::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBoardItem )
 {
+    if( !IsShownOnScreen() )
+        return;
+
     if( dynamic_cast<BOARD_CONNECTED_ITEM*>( aBoardItem ) != nullptr
         || dynamic_cast<FOOTPRINT*>( aBoardItem ) != nullptr )
     {
@@ -1053,6 +1071,9 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemChanged( BOARD& aBoard, BOARD_ITEM* aBo
 void PCB_NET_INSPECTOR_PANEL::OnBoardItemsChanged( BOARD&                    aBoard,
                                                    std::vector<BOARD_ITEM*>& aBoardItems )
 {
+    if( !IsShownOnScreen() )
+        return;
+
     buildNetsList();
     m_netsList->Refresh();
 }
@@ -1060,7 +1081,7 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsChanged( BOARD&                    aBo
 
 void PCB_NET_INSPECTOR_PANEL::OnBoardHighlightNetChanged( BOARD& aBoard )
 {
-    if( m_highlighting_nets )
+    if( m_highlighting_nets || !IsShownOnScreen() )
         return;
 
     if( !m_brd->IsHighLightNetON() )
@@ -1093,6 +1114,13 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardHighlightNetChanged( BOARD& aBoard )
  * UI-generated event handling
  * 
  * ***************************************************************************************/
+
+void PCB_NET_INSPECTOR_PANEL::OnShowPanel()
+{
+    buildNetsList();
+    OnBoardHighlightNetChanged( *m_brd );
+}
+
 
 void PCB_NET_INSPECTOR_PANEL::OnNetsListContextMenu( wxDataViewEvent& event )
 {

@@ -804,6 +804,7 @@ void PCB_EDIT_FRAME::ToggleNetInspector()
     {
         SetAuiPaneSize( m_auimgr, netInspectorPanel, settings->m_AuiPanels.net_inspector_width,
                         -1 );
+        m_netInspectorPanel->OnShowPanel();
     }
     else
     {
