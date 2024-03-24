@@ -1,7 +1,7 @@
 # Tokita, Hiroshi <tokita.hiroshi@gmail.com>, 2021, 2022, 2023.
 # Ji Yoon Choi <chichoon.choi@gmail.com>, 2021.
 # Tokita, Hiroshi <tokita.hiroshi@jp.fujitsu.com>, 2021, 2022.
-# co8 j <co8@nifty.com>, 2022, 2023.
+# co8 j <co8@nifty.com>, 2022, 2023, 2024.
 # Keisuke Nakao <chome@argv.org>, 2022, 2023.
 # Tokita, Hiroshi <tokita.hiroshi@fujitsu.com>, 2023.
 # Seth Hillbrand <seth@kipro-pcb.com>, 2023.
@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-07 00:01+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"PO-Revision-Date: 2024-03-25 13:17+0000\n"
+"Last-Translator: co8 j <co8@nifty.com>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -415,7 +415,7 @@ msgstr "表示をホームへ"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "本来の位置と倍率で再描画する"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -7568,7 +7568,7 @@ msgstr "電源を追加"
 
 #: common/tool/actions.cpp:345
 msgid "Insert a new table row below the selected cell(s)"
-msgstr ""
+msgstr "選択したセルの下に新しいテーブル行を挿入する"
 
 #: common/tool/actions.cpp:351 include/tool/edit_table_tool_base.h:252
 #, fuzzy
@@ -7577,7 +7577,7 @@ msgstr "角を追加"
 
 #: common/tool/actions.cpp:352
 msgid "Insert a new table column before the selected cell(s)"
-msgstr ""
+msgstr "選択したセルの前に新しいテーブル列を挿入する"
 
 #: common/tool/actions.cpp:358 include/tool/edit_table_tool_base.h:299
 #, fuzzy
@@ -7621,7 +7621,7 @@ msgstr "選択したポリゴンを一つのポリゴンにマージ"
 
 #: common/tool/actions.cpp:386 include/tool/edit_table_tool_base.h:544
 msgid "Unmerge Cells"
-msgstr ""
+msgstr "セルのマージを解除"
 
 #: common/tool/actions.cpp:387
 msgid "Turn merged table cells back into separate cells."
@@ -21897,8 +21897,9 @@ msgid "New Analysis Tab..."
 msgstr "新しい解析タブ..."
 
 #: eeschema/tools/ee_actions.cpp:1423
+#, fuzzy
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "シミュレーション解析を含む新しいタブを作成する"
 
 #: eeschema/tools/ee_actions.cpp:1431
 msgid "Open Workbook..."
@@ -21906,7 +21907,7 @@ msgstr "ワークブックを開く…"
 
 #: eeschema/tools/ee_actions.cpp:1432
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "保存された分析タブと設定を開く"
 
 #: eeschema/tools/ee_actions.cpp:1440
 msgid "Save Workbook"
