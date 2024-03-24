@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-18 12:01+0000\n"
+"PO-Revision-Date: 2024-03-24 12:46+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/"
 "master-source/cs/>\n"
@@ -838,7 +838,7 @@ msgstr "Přepsat existující přednastavení?"
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:2058
 #: pcbnew/widgets/appearance_controls.cpp:2730
 msgid "Presets"
-msgstr "Předvolby"
+msgstr "Přednastavení"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:766
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1669
@@ -6182,9 +6182,8 @@ msgid "Failed to merge branches."
 msgstr "Sloučení větví se nezdařilo."
 
 #: common/git/kicad_git_errors.cpp:44
-#, fuzzy
 msgid "Failed to clone repository."
-msgstr "Nelze načíst adresu URL repozitáře"
+msgstr "Clone repozitáře se nezdařilo."
 
 #: common/git/kicad_git_errors.cpp:45
 msgid "Remote repository not found."
@@ -6219,23 +6218,20 @@ msgid "Rebase conflict encountered."
 msgstr ""
 
 #: common/git/kicad_git_errors.cpp:62
-#, fuzzy
 msgid "Failed to pull changes from remote repository."
-msgstr "Nepodařilo se analyzovat místně uložené úložiště.json."
+msgstr "Selhalo pull změn ze vzdáleného repozitáře."
 
 #: common/git/kicad_git_errors.cpp:63
-#, fuzzy
 msgid "Failed to push changes to remote repository."
-msgstr "Nepodařilo se analyzovat místně uložené úložiště.json."
+msgstr "Selhalo push změn do vzdáleného repozitáře."
 
 #: common/git/kicad_git_errors.cpp:64
 msgid "No upstream branch configured."
 msgstr ""
 
 #: common/git/kicad_git_errors.cpp:65
-#, fuzzy
 msgid "Failed to establish connection with remote repository."
-msgstr "Nepodařilo se analyzovat místně uložené úložiště.json."
+msgstr "Nepodařilo se navázat spojení se vzdáleným repozitářem."
 
 #: common/git/kicad_git_errors.cpp:68
 msgid "Tag not found."
@@ -7054,9 +7050,8 @@ msgid "Dismiss"
 msgstr "Zamítnuto"
 
 #: common/notifications_manager.cpp:155
-#, fuzzy
 msgid "Notifications"
-msgstr "Zarovnání"
+msgstr "Oznámení"
 
 #: common/notifications_manager.cpp:175
 msgid "There are no notifications available"
@@ -7266,9 +7261,8 @@ msgid "TSV"
 msgstr "TSV"
 
 #: common/settings/bom_settings.cpp:239
-#, fuzzy
 msgid "Semicolons"
-msgstr "Neprůhledné barvy"
+msgstr "Středníky"
 
 #: common/settings/color_settings.cpp:336
 msgid "(Footprints)"
@@ -7432,9 +7426,8 @@ msgid "Unselect All"
 msgstr "Zrušit veškerý výběr"
 
 #: common/tool/actions.cpp:240
-#, fuzzy
 msgid "Unselect all items on screen"
-msgstr "Vyberte všechny položky na obrazovce"
+msgstr "Odznačit všechny položky na obrazovce"
 
 #: common/tool/actions.cpp:245
 msgid "Paste Special..."
@@ -7872,7 +7865,7 @@ msgstr "Počátek mřížky"
 
 #: common/tool/actions.cpp:786
 msgid "Place the grid origin point"
-msgstr "Nastavit počáteční bod mřížky"
+msgstr "Umístit počáteční bod mřížky"
 
 #: common/tool/actions.cpp:794
 msgid "Reset Grid Origin"
@@ -8367,7 +8360,7 @@ msgstr ""
 
 #: common/widgets/gal_options_panel_base.cpp:47
 msgid "Grid Display"
-msgstr "Zobrazit mřížku"
+msgstr "Zobrazení mřížky"
 
 #: common/widgets/gal_options_panel_base.cpp:57
 #: eeschema/dialogs/dialog_lib_shape_properties_base.cpp:88
@@ -8562,9 +8555,8 @@ msgid "Current key:"
 msgstr "Aktuální klávesa:"
 
 #: common/widgets/widget_hotkey_list.cpp:130
-#, fuzzy
 msgid "Clear assigned hotkey"
-msgstr "Vymazat přiřazenou klávesovou zkratku"
+msgstr "Vymazat přiřazenou kl. zkratku"
 
 #: common/widgets/widget_hotkey_list.cpp:154
 msgid "Set Hotkey"
@@ -8592,9 +8584,8 @@ msgid "Clear Assigned Hotkey"
 msgstr "Vymazat přiřazenou klávesovou zkratku"
 
 #: common/widgets/widget_hotkey_list.cpp:452
-#, fuzzy
 msgid "Clear Assigned Alternate"
-msgstr "Vymazat přiřazenou klávesovou zkratku"
+msgstr "Vymazat přiřazenou alternativu"
 
 #: common/widgets/widget_hotkey_list.cpp:453
 msgid "Restore Defaults"
@@ -8761,9 +8752,8 @@ msgid "KiCad netlist files"
 msgstr "Soubory netlistu KiCadu"
 
 #: common/wildcards_and_files_ext.cpp:291
-#, fuzzy
 msgid "Allegro netlist files"
-msgstr "Generovat netlist"
+msgstr "Soubory netlistu Allegro"
 
 #: common/wildcards_and_files_ext.cpp:298
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -9095,26 +9085,22 @@ msgid "Footprint association files:"
 msgstr "Soubory přiřazení pouzdra:"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:38
-#, fuzzy
 msgid "Add association file"
-msgstr "Soubor přiřazení pouzdra"
+msgstr "Přidat soubor přiřazení"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:53
-#, fuzzy
 msgid "Edit association file"
-msgstr "Soubor přiřazení pouzdra"
+msgstr "Upravit soubor přiřazení"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:61
-#, fuzzy
 msgid "Remove association file"
-msgstr "Smazat přidružení"
+msgstr "Smazat soubor přiřazení"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:72
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:169
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:163
-#, fuzzy
 msgid "Available path substitutions:"
-msgstr "Dostupné cesty:"
+msgstr "Dostupné náhrady cesty:"
 
 #: cvpcb/dialogs/fp_conflict_assignment_selector.cpp:37
 msgid "Ref"
@@ -9252,13 +9238,12 @@ msgid "Manage Footprint Association Files..."
 msgstr "Správa souborů přiřazení pouzdra..."
 
 #: cvpcb/tools/cvpcb_actions.cpp:65
-#, fuzzy
 msgid ""
 "Edit the footprint association files list.  These files are used to "
 "automatically assign footprint names from symbol values."
 msgstr ""
-"Konfigurovat seznam souborů přiřazení pouzder (.equ). Tyto soubory slouží k "
-"automatickému přiřazení názvu pouzdra z hodnoty součástky."
+"Upravit seznam souborů přiřazení pouzder.  Tyto soubory slouží k "
+"automatickému přiřazení názvu pouzdra z hodnot symbolů."
 
 #: cvpcb/tools/cvpcb_actions.cpp:73
 msgid "Save to Schematic"
@@ -10278,9 +10263,8 @@ msgid "Edit violation severities..."
 msgstr "Upravit závažnosti porušení..."
 
 #: eeschema/dialogs/dialog_erc.cpp:687
-#, fuzzy
 msgid "Edit connection grid spacing..."
-msgstr "Minimální rozteč mřížky:"
+msgstr "Upravit velikost spojovací mřížky..."
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:677 pcbnew/dialogs/dialog_drc.cpp:717
@@ -10440,9 +10424,8 @@ msgstr "Napsat směrnici pro uložení všech proudů (.probe alli)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:319
 #: eeschema/dialogs/dialog_sim_command_base.cpp:653
-#, fuzzy
 msgid "Save all power dissipations"
-msgstr "Max povolená odchylka:"
+msgstr "Uložit všechny ztrátové výkony"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:320
 msgid ""
@@ -10563,7 +10546,6 @@ msgid "Show the field name in addtion to its value"
 msgstr ""
 
 #: eeschema/dialogs/dialog_field_properties_base.cpp:103
-#, fuzzy
 msgid "Allow automatic placement"
 msgstr "Povolit automatické umístění"
 
@@ -10740,9 +10722,8 @@ msgid "Text Item Properties"
 msgstr "Vlastnosti textové položky"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics.cpp:598
-#, fuzzy
 msgid "Edit Text and Graphics"
-msgstr "Upravit vlastnosti textu a grafiky"
+msgstr "Upravit text a grafiku"
 
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:33
 msgid "Other symbol fields"
@@ -10946,7 +10927,7 @@ msgstr "Log analyzátoru Ibis"
 
 #: eeschema/dialogs/dialog_ibis_parser_reporter_base.h:46
 msgid "Ibis parser"
-msgstr ""
+msgstr "Analýza Ibis"
 
 #: eeschema/dialogs/dialog_image_properties.cpp:75
 #: eeschema/dialogs/dialog_image_properties_base.h:56
@@ -11800,14 +11781,12 @@ msgid "Text Box Properties"
 msgstr "Vlastnosti textového pole"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Line"
-msgstr "Upravit soubor"
+msgstr "Upravit řádek"
 
 #: eeschema/dialogs/dialog_line_properties.cpp:152
-#, fuzzy
 msgid "Edit Lines"
-msgstr "Přidat čáry"
+msgstr "Upravit řádky"
 
 #: eeschema/dialogs/dialog_line_properties_base.cpp:79
 msgid "Set width to 0 to use schematic's default line width."
@@ -11972,9 +11951,8 @@ msgid "Preview:"
 msgstr "Náhled:"
 
 #: eeschema/dialogs/dialog_pin_properties_base.cpp:188
-#, fuzzy
 msgid "Alternate pin function definitions"
-msgstr "Alternativní definice vývodů"
+msgstr "Definice alternativních funkcí vývodů"
 
 #: eeschema/dialogs/dialog_pin_properties_base.h:104
 msgid "Pin Properties"
@@ -12176,9 +12154,8 @@ msgid "Plot the background color if the output format supports it"
 msgstr "Pokud to výstupní formát podporuje, vykreslete barvu pozadí"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:100
-#, fuzzy
 msgid "Minimum line width:"
-msgstr "Minimální šířka:"
+msgstr "Minimální šířka čáry:"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:105
 msgid ""
@@ -12387,14 +12364,12 @@ msgstr "Třídy spojů"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:63
 #: eeschema/dialogs/dialog_schematic_setup.cpp:76
-#, fuzzy
 msgid "BOM Presets"
-msgstr "Předvolby"
+msgstr "Přednastavení BOM"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:66
-#, fuzzy
 msgid "BOM Format Presets"
-msgstr "Formát %s"
+msgstr "Přednastavení formátu BOM"
 
 #: eeschema/dialogs/dialog_schematic_find_base.cpp:31
 msgid "&Search for:"
@@ -13323,7 +13298,6 @@ msgid "Simulation Model Editor"
 msgstr "Editor simulačního modelu"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:46
-#, fuzzy
 msgid "Choose Symbol"
 msgstr "Zvolit symbol"
 
@@ -13505,9 +13479,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:63
-#, fuzzy
 msgid "View presets:"
-msgstr "Zobrazit předvolbu:"
+msgstr "Zobrazit přednastavení:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:100
 msgid "Exclude DNP"
@@ -13526,14 +13499,12 @@ msgid "Scope:"
 msgstr "Rozsah:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:163
-#, fuzzy
 msgid "Entire project"
-msgstr "Rozbalit projekt"
+msgstr "Celý projekt"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:169
-#, fuzzy
 msgid "Recursive"
-msgstr "Úroveň rekurze"
+msgstr "Rekurzivní"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:172
 #, fuzzy
@@ -13603,9 +13574,8 @@ msgid "Keep line breaks"
 msgstr "Bez spojů"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:257
-#, fuzzy
 msgid "Format presets:"
-msgstr "Formát %s"
+msgstr "Přednastavení formátu:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:273
 msgid "Output file:"
@@ -14143,7 +14113,7 @@ msgstr "Vlastnosti drátu & sběrnic"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:20
 msgid "Bill of Materials Presets:"
-msgstr "Předvolby rozpisky materiálu:"
+msgstr "Přednastavení rozpisky materiálu:"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
 #, fuzzy
@@ -14321,6 +14291,7 @@ msgstr "<ESC> odstraní zvýraznění sítě"
 msgid ""
 "First <ESC> in selection tool clears selection, next clears net highlighting"
 msgstr ""
+"První <ESC> ve výběrovém nástroji vymaže výběr, další vymaže zvýraznění sítě"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:67
 #: eeschema/dialogs/panel_sym_editing_options_base.cpp:20
@@ -16052,9 +16023,8 @@ msgid "Show Field Name"
 msgstr "Zobrazit název pole"
 
 #: eeschema/lib_item.cpp:80 eeschema/sch_pin.cpp:252
-#, fuzzy
 msgid "Body Style"
-msgstr "Styl okraje:"
+msgstr "Styl těla"
 
 #: eeschema/lib_item.cpp:84
 #, fuzzy
@@ -16211,9 +16181,8 @@ msgid "Body background color"
 msgstr "Barva pozadí vykreslení"
 
 #: eeschema/lib_shape.cpp:596
-#, fuzzy
 msgid "Fill color"
-msgstr "Barva plnění:"
+msgstr "Barva výplně"
 
 #: eeschema/lib_shape.cpp:602 pcbnew/dialogs/dialog_copper_zones_base.cpp:278
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:117
@@ -16561,9 +16530,8 @@ msgstr ""
 "Nenalezen žádný alternativní styl těla pro symbol '%s' v knihovně '%s'."
 
 #: eeschema/picksymbol.cpp:161 eeschema/tools/sch_edit_tool.cpp:1741
-#, fuzzy
 msgid "Change Body Style"
-msgstr "Styl okraje:"
+msgstr "Změnit styl těla"
 
 #: eeschema/picksymbol.cpp:178
 #, fuzzy
@@ -17824,9 +17792,8 @@ msgid "Hierarchical Label '%s'"
 msgstr "Hierarchické označení '%s'"
 
 #: eeschema/sch_label.cpp:2173
-#, fuzzy
 msgid "Pin length"
-msgstr "Délka vývodu:"
+msgstr "Délka vývodu"
 
 #: eeschema/sch_line.cpp:99
 msgid "Graphic Line"
@@ -20217,9 +20184,9 @@ msgid "The current symbol has been modified.  Save changes?"
 msgstr "Aktuální symbol byl změněn. Uložit změny?"
 
 #: eeschema/symbol_editor/symbol_editor.cpp:373
-#, fuzzy, c-format
+#, c-format
 msgid "Deriving from symbol '%s'."
-msgstr "Odvozeno od symbolu:"
+msgstr "Odvození ze symbolu '%s'."
 
 #: eeschema/symbol_editor/symbol_editor.cpp:393
 #: eeschema/symbol_editor/symbol_editor.cpp:698
@@ -20759,9 +20726,8 @@ msgid "Create a new symbol"
 msgstr "Vytvořit nový symbol"
 
 #: eeschema/tools/ee_actions.cpp:175
-#, fuzzy
 msgid "Derive from Existing Symbol"
-msgstr "Odvozeno od stávajícího symbolu:"
+msgstr "Odvozeno od existujícího symbolu"
 
 #: eeschema/tools/ee_actions.cpp:176
 #, fuzzy
@@ -27530,9 +27496,8 @@ msgid "Material names:"
 msgstr "Materiál"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:92
-#, fuzzy
 msgid "Chemical symbols"
-msgstr "Zvolit symbol"
+msgstr "Chemické symboly"
 
 #: pcb_calculator/calculator_panels/panel_galvanic_corrosion_base.cpp:95
 #, fuzzy
@@ -48101,9 +48066,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Manažer projektu"
+msgstr "Manažer projektu;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -48118,9 +48082,8 @@ msgid "KiCad PCB Calculator"
 msgstr "KiCad DPS kalkulátor"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "Kalkulátor DPS"
+msgstr "Kalkulátor DPS;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 msgid "PCB Calculator"
