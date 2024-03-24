@@ -59,7 +59,9 @@ void IO_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
     // a short filename will be printed (it is better for user, the full filename has no meaning).
     wxString srcname = aThrowersFile;
 
-    where.Printf( _( "from %s : %s() line %d" ),
+    // No need for translations of source code file/line messages (and wxWidget's translation
+    // stuff has bitten us before.  May be related to KICAD-YP.
+    where.Printf( wxS( "from %s : %s() line %d" ),
                   srcname.AfterLast( '/' ),
                   wxString( aThrowersFunction ),
                   aThrowersLineNumber );
@@ -87,7 +89,9 @@ void PARSE_ERROR::init( const wxString& aProblem, const char* aThrowersFile,
     // a short filename will be printed (it is better for user, the full filename has no meaning).
     wxString srcname = aThrowersFile;
 
-    where.Printf( _( "from %s : %s() line:%d" ),
+    // No need for translations of source code file/line messages (and wxWidget's translation
+    // stuff has bitten us before.  May be related to KICAD-YP.
+    where.Printf( wxS( "from %s : %s() line %d" ),
                   srcname.AfterLast( '/' ),
                   wxString( aThrowersFunction ),
                   aThrowersLineNumber );
