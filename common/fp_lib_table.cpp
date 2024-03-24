@@ -327,8 +327,9 @@ const FP_LIB_TABLE_ROW* FP_LIB_TABLE::FindRow( const wxString& aNickname, bool a
 
     if( !row )
     {
-        wxString msg = wxString::Format( _( "fp-lib-table files contain no library named '%s'." ),
-                                         aNickname );
+        // We don't generally show this string to the user (who is unlikely to know what
+        // "fp-lib-table" means), and translating it may produce Sentry KICAD-YP.
+        wxString msg = wxString::Format( wxS( "'%s' not found in fp-lib-table." ), aNickname );
         THROW_IO_ERROR( msg );
     }
 

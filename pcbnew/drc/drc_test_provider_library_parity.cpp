@@ -763,6 +763,12 @@ bool DRC_TEST_PROVIDER_LIBRARY_PARITY::Run()
         wxString             fpName = fpID.GetLibItemName();
         const LIB_TABLE_ROW* libTableRow = nullptr;
 
+        if( libName.IsEmpty() )
+        {
+            // Not much we can do here
+            continue;
+        }
+
         try
         {
             libTableRow = libTable->FindRow( libName );
