@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-10 11:02+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2024-03-26 14:01+0000\n"
+"Last-Translator: \"j.Kolod\" <jmkolod05@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -38033,7 +38033,7 @@ msgstr "Czytelność"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Missing connection between items"
-msgstr "Nieprawidłowe połączenie pomiędzy elementami"
+msgstr "Brak połączenia pomiędzy elementami"
 
 #: pcbnew/drc/drc_item.cpp:57
 msgid "Items shorting two nets"
