@@ -566,7 +566,17 @@ public:
      */
     int m_TriangulateMinimumArea;
 
-///@}
+    /**
+     * Enable the use of a cache-friendlier and therefore faster version of the
+     * polygon fracture algorithm.
+     *
+     * Setting name: "EnableCacheFriendlyFracture"
+     * Valid values: 0 or 1
+     * Default value: 1
+     */
+    bool m_EnableCacheFriendlyFracture;
+
+    ///@}
 
 
 private:

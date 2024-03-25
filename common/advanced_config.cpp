@@ -109,6 +109,7 @@ static const wxChar OcePluginLinearDeflection[] = wxT( "OcePluginLinearDeflectio
 static const wxChar OcePluginAngularDeflection[] = wxT( "OcePluginAngularDeflection" );
 static const wxChar TriangulateSimplificationLevel[] = wxT( "TriangulateSimplificationLevel" );
 static const wxChar TriangulateMinimumArea[] = wxT( "TriangulateMinimumArea" );
+static const wxChar EnableCacheFriendlyFracture[] = wxT( "EnableCacheFriendlyFracture" );
 } // namespace KEYS
 
 
@@ -259,6 +260,8 @@ ADVANCED_CFG::ADVANCED_CFG()
 
     m_TriangulateSimplificationLevel = 50;
     m_TriangulateMinimumArea = 1000;
+
+    m_EnableCacheFriendlyFracture = true;
 
     loadFromConfigFile();
 }
@@ -474,6 +477,10 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back( new PARAM_CFG_INT( true, AC_KEYS::TriangulateMinimumArea,
                                                     &m_TriangulateMinimumArea,
                                                     m_TriangulateMinimumArea, 0, 100000 ) );
+
+    configParams.push_back( new PARAM_CFG_BOOL( true, AC_KEYS::EnableCacheFriendlyFracture,
+                                                &m_EnableCacheFriendlyFracture,
+                                                m_EnableCacheFriendlyFracture ) );
 
     // Special case for trace mask setting...we just grab them and set them immediately
     // Because we even use wxLogTrace inside of advanced config
