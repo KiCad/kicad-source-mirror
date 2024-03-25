@@ -10,13 +10,14 @@
 # Eryk Michalak <gnu.ewm@protonmail.com>, 2023.
 # Filip Piękoś <filipalcatel@gmail.com>, 2023.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
+# "j.Kolod" <jmkolod05@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-11 00:02+0000\n"
-"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"PO-Revision-Date: 2024-03-26 14:01+0000\n"
+"Last-Translator: \"j.Kolod\" <jmkolod05@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -38680,7 +38681,7 @@ msgstr "Czytelność"
 
 #: pcbnew/drc/drc_item.cpp:53
 msgid "Missing connection between items"
-msgstr "Nieprawidłowe połączenie pomiędzy elementami"
+msgstr "Brak połączenia pomiędzy elementami"
 
 #: pcbnew/drc/drc_item.cpp:57
 msgid "Items shorting two nets"
