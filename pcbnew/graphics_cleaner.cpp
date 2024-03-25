@@ -36,7 +36,7 @@
 #include <tool/tool_manager.h>
 #include <tools/pad_tool.h>
 
-GRAPHICS_CLEANER::GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootprint,
+GRAPHICS_CLEANER::GRAPHICS_CLEANER( const DRAWINGS& aDrawings, FOOTPRINT* aParentFootprint,
                                     BOARD_COMMIT& aCommit, TOOL_MANAGER* aToolMgr ) :
         m_drawings( aDrawings ),
         m_parentFootprint( aParentFootprint ),

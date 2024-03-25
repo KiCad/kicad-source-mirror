@@ -55,7 +55,7 @@ public:
      *
      * Caller is also responsible for re-building connectivity afterwards.
      */
-    bool Fill( std::vector<ZONE*>& aZones, bool aCheck = false, wxWindow* aParent = nullptr );
+    bool Fill( const std::vector<ZONE*>& aZones, bool aCheck = false, wxWindow* aParent = nullptr );
 
     bool IsDebug() const { return m_debugZoneFiller; }
 

@@ -3075,7 +3075,9 @@ bool FABMASTER::loadGraphics( BOARD* aBoard )
 
 bool FABMASTER::orderZones( BOARD* aBoard )
 {
-    std::sort( aBoard->Zones().begin(), aBoard->Zones().end(),
+    std::vector<ZONE*> sortedZones;
+    std::copy( aBoard->Zones().begin(), aBoard->Zones().end(), std::back_inserter( sortedZones ) );
+    std::sort( sortedZones.begin(), sortedZones.end(),
             [&]( const ZONE* a, const ZONE* b )
             {
                 if( a->GetLayer() == b->GetLayer() )
@@ -3087,7 +3089,7 @@ bool FABMASTER::orderZones( BOARD* aBoard )
     PCB_LAYER_ID layer = UNDEFINED_LAYER;
     unsigned int priority = 0;
 
-    for( ZONE* zone : aBoard->Zones() )
+    for( ZONE* zone : sortedZones )
     {
         /// Rule areas do not have priorities
         if( zone->GetIsRuleArea() )

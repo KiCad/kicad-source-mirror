@@ -341,12 +341,11 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
     // delete the old tracks and vias but save locked tracks/vias; they will be re-added later
     std::vector<PCB_TRACK*> locked;
+    TRACKS tracks = aBoard->Tracks();
+    aBoard->RemoveAll( { PCB_TRACE_T } );
 
-    while( !aBoard->Tracks().empty() )
+    for( PCB_TRACK* track : tracks )
     {
-        PCB_TRACK* track = aBoard->Tracks().back();
-        aBoard->Tracks().pop_back();
-
         if( track->IsLocked() )
         {
             locked.push_back( track );
@@ -366,7 +365,7 @@ void SPECCTRA_DB::FromSESSION( BOARD* aBoard )
 
     // Add locked tracks: because they are exported as Fix tracks, they are not
     // in .ses file.
-    for( PCB_TRACK* track: locked )
+    for( PCB_TRACK* track : locked )
         aBoard->Add( track );
 
     if( m_session->placement )

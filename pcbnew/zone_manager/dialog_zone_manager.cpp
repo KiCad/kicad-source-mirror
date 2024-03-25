@@ -402,12 +402,18 @@ void DIALOG_ZONE_MANAGER::OnButtonApplyClick( wxCommandEvent& aEvent )
     m_filler = std::make_unique<ZONE_FILLER>( board, commit.get() );
     auto reporter = std::make_unique<WX_PROGRESS_REPORTER>( this, _( "Fill All Zones" ), 5 );
     m_filler->SetProgressReporter( reporter.get() );
-    board->Zones() = m_zonesContainer->GetClonedZoneList();
+
+    // TODO: replace these const_cast calls with a different solution that avoids mutating the
+    // container of the board.  This is relatively safe as-is because the original zones list is
+    // swapped back in below, but still should be changed to avoid invalidating the board state
+    // in case this code is refactored to be a non-modal dialog in the future.
+    const_cast<ZONES&>( board->Zones() ) = m_zonesContainer->GetClonedZoneList();
+
     //NOTE - Nether revert nor commit is needed here , cause the cloned zones are not owned by
     //       the pcb frame.
     m_zoneFillComplete = m_filler->Fill( board->Zones() );
     board->BuildConnectivity();
-    board->Zones() = m_zonesContainer->GetOriginalZoneList();
+    const_cast<ZONES&>( board->Zones() ) = m_zonesContainer->GetOriginalZoneList();
 
     if( auto gal = m_zoneViewer->GetZoneGAL() )
     {

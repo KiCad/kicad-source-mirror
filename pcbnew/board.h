@@ -312,22 +312,16 @@ public:
 
     const wxString &GetFileName() const { return m_fileName; }
 
-    TRACKS& Tracks() { return m_tracks; }
     const TRACKS& Tracks() const { return m_tracks; }
 
-    FOOTPRINTS& Footprints() { return m_footprints; }
     const FOOTPRINTS& Footprints() const { return m_footprints; }
 
-    DRAWINGS& Drawings() { return m_drawings; }
     const DRAWINGS& Drawings() const { return m_drawings; }
 
-    ZONES& Zones() { return m_zones; }
     const ZONES& Zones() const { return m_zones; }
 
-    GENERATORS&       Generators() { return m_generators; }
     const GENERATORS& Generators() const { return m_generators; }
 
-    MARKERS& Markers() { return m_markers; }
     const MARKERS& Markers() const { return m_markers; }
 
     const BOARD_ITEM_SET GetItemSet();
@@ -340,7 +334,6 @@ public:
      *   - If a group specifies a name, it must be unique
      *   - The graph of groups containing subgroups must be cyclic.
      */
-    GROUPS& Groups() { return m_groups; }
     const GROUPS& Groups() const { return m_groups; }
 
     const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
@@ -388,6 +381,16 @@ public:
 
     ///< @copydoc BOARD_ITEM_CONTAINER::Remove()
     void Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aMode = REMOVE_MODE::NORMAL ) override;
+
+    /**
+     * An efficient way to remove all items of a certain type from the board.
+     * Because of how items are stored, this method has some limitations in order to preserve
+     * performance: tracks, vias, and arcs are all removed together by PCB_TRACE_T, and all graphics
+     * and text object types are removed together by PCB_SHAPE_T.  If you need something more
+     * granular than that, use BOARD::Remove.
+     * @param aTypes is a list of one or more types to remove, or leave default to remove all
+     */
+    void RemoveAll( std::initializer_list<KICAD_T> aTypes = { TYPE_NOT_INIT } );
 
     /**
      * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for
@@ -1277,6 +1280,8 @@ private:
     int                 m_timeStamp;                // actually a modification counter
 
     wxString            m_fileName;
+
+    // These containers only have const accessors and must only be modified by Add()/Remove()
     MARKERS             m_markers;
     DRAWINGS            m_drawings;
     FOOTPRINTS          m_footprints;

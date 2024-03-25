@@ -973,10 +973,11 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     pastedItems.push_back( group );
                 }
 
-                clipBoard->Groups().clear();
+                clipBoard->RemoveAll( { PCB_GROUP_T } );
 
                 for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
                     pasteFootprintItemsToFootprintEditor( clipFootprint, board(), pastedItems );
+
 
                 for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
                 {
@@ -1002,7 +1003,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     }
                 }
 
-                clipBoard->Drawings().clear();
+                clipBoard->RemoveAll( { PCB_SHAPE_T } );
 
                 clipBoard->Visit(
                         [&]( EDA_ITEM* item, void* testData )
@@ -1106,7 +1107,7 @@ int PCB_CONTROL::AppendBoardFromFile( const TOOL_EVENT& aEvent )
 
 
 template<typename T>
-static void moveUnflaggedItems( std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
+static void moveUnflaggedItems( const std::deque<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
                                 bool aIsNew )
 {
     std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
@@ -1119,52 +1120,24 @@ static void moveUnflaggedItems( std::deque<T>& aList, std::vector<BOARD_ITEM*>& 
 
                 return doCopy;
             } );
-
-    if( aIsNew )
-        aList.clear();
 }
 
 
-static void moveUnflaggedItems( ZONES& aList, std::vector<BOARD_ITEM*>& aTarget, bool aIsNew )
+template<typename T>
+static void moveUnflaggedItems( const std::vector<T>& aList, std::vector<BOARD_ITEM*>& aTarget,
+                                bool aIsNew )
 {
-    if( aList.size() == 0 )
-        return;
-
-    auto obj = aList.front();
-    int idx = 0;
-
-    if( aIsNew )
-    {
-        obj = aList.back();
-        aList.pop_back();
-    }
-
-    for( ; obj ; )
-    {
-        if( obj->HasFlag( SKIP_STRUCT ) )
-            obj->ClearFlags( SKIP_STRUCT );
-        else
-            aTarget.push_back( obj );
-
-        if( aIsNew )
-        {
-            if( aList.size() )
+    std::copy_if( aList.begin(), aList.end(), std::back_inserter( aTarget ),
+            [aIsNew]( T aItem )
             {
-                obj = aList.back();
-                aList.pop_back();
-            }
-            else
-            {
-                obj = nullptr;
-            }
-        }
-        else
-        {
-            obj = idx < int(aList.size()-1) ? aList[++idx] : nullptr;
-        }
-    }
+                bool doCopy = ( aItem->GetFlags() & SKIP_STRUCT ) == 0;
+
+                aItem->ClearFlags( SKIP_STRUCT );
+                aItem->SetFlags( aIsNew ? IS_NEW : 0 );
+
+                return doCopy;
+            } );
 }
-
 
 
 bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aAnchorAtOrigin,
@@ -1187,6 +1160,17 @@ bool PCB_CONTROL::placeBoardItems( BOARD_COMMIT* aCommit, BOARD* aBoard, bool aA
     moveUnflaggedItems( aBoard->Groups(), items, isNew );
 
     moveUnflaggedItems( aBoard->Generators(), items, isNew );
+
+    if( isNew )
+        aBoard->RemoveAll();
+
+    // Reparent before calling pruneItemLayers, as SetLayer can have a dependence on the
+    // item's parent board being set correctly.
+    if( isNew )
+    {
+        for( BOARD_ITEM* item : items )
+            item->SetParent( board() );
+    }
 
     pruneItemLayers( items );
 

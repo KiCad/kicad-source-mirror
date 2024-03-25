@@ -36,7 +36,7 @@ class TOOL_MANAGER;
 class GRAPHICS_CLEANER
 {
 public:
-    GRAPHICS_CLEANER( DRAWINGS& aDrawings, FOOTPRINT* aParentFootprint, BOARD_COMMIT& aCommit,
+    GRAPHICS_CLEANER( const DRAWINGS& aDrawings, FOOTPRINT* aParentFootprint, BOARD_COMMIT& aCommit,
                       TOOL_MANAGER* aToolManager );
 
     /**
@@ -60,7 +60,7 @@ private:
     void mergePads();
 
 private:
-    DRAWINGS&     m_drawings;
+    const DRAWINGS& m_drawings;
     FOOTPRINT*    m_parentFootprint;  // nullptr if not in Footprint Editor
     BOARD_COMMIT& m_commit;
     TOOL_MANAGER* m_toolMgr;

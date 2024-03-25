@@ -848,20 +848,24 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
         m_ignoredList->InsertItem( m_ignoredList->GetItemCount(),
                                    wxT( " • " ) + rcItem->GetErrorText() );
 
-        std::vector<PCB_MARKER*>& markers = m_frame->GetBoard()->Markers();
+        BOARD* board = m_frame->GetBoard();
+        const std::vector<PCB_MARKER*>& markers = board->Markers();
 
-        for( unsigned i = 0; i < markers.size(); )
+        std::vector<BOARD_ITEM*> toRemove;
+
+        for( PCB_MARKER* marker : board->Markers() )
         {
-            if( markers[i]->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
+            if( marker->GetRCItem()->GetErrorCode() == rcItem->GetErrorCode() )
             {
-                m_frame->GetCanvas()->GetView()->Remove( markers.at( i ) );
-                markers.erase( markers.begin() + i );
-            }
-            else
-            {
-                ++i;
+                m_frame->GetCanvas()->GetView()->Remove( marker );
+                toRemove.emplace_back( marker );
             }
         }
+
+        for( BOARD_ITEM* marker : toRemove )
+            board->Remove( marker, REMOVE_MODE::BULK );
+
+        board->FinalizeBulkRemove( toRemove );
 
         if( rcItem->GetErrorCode() == DRCE_UNCONNECTED_ITEMS )
             m_frame->GetCanvas()->RedrawRatsnest();

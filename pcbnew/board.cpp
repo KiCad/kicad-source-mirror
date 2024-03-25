@@ -1086,6 +1086,90 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
 }
 
 
+void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
+{
+    std::vector<BOARD_ITEM*> removed;
+
+    if( aTypes.size() == 1 && *aTypes.begin() == TYPE_NOT_INIT )
+    {
+        aTypes = {
+            PCB_NETINFO_T, PCB_MARKER_T, PCB_GROUP_T, PCB_ZONE_T, PCB_GENERATOR_T, PCB_FOOTPRINT_T,
+            PCB_TRACE_T, PCB_SHAPE_T
+        };
+    }
+
+    for( const KICAD_T& type : aTypes )
+    {
+        switch( type )
+        {
+        case PCB_NETINFO_T:
+            std::copy( m_NetInfo.begin(), m_NetInfo.end(), std::back_inserter( removed ) );
+            m_NetInfo.clear();
+            break;
+
+        case PCB_MARKER_T:
+            std::copy( m_markers.begin(), m_markers.end(), std::back_inserter( removed ) );
+            m_markers.clear();
+            break;
+
+        case PCB_GROUP_T:
+            std::copy( m_groups.begin(), m_groups.end(), std::back_inserter( removed ) );
+            m_groups.clear();
+            break;
+
+        case PCB_ZONE_T:
+            std::copy( m_zones.begin(), m_zones.end(), std::back_inserter( removed ) );
+            m_zones.clear();
+            break;
+
+        case PCB_GENERATOR_T:
+            std::copy( m_generators.begin(), m_generators.end(), std::back_inserter( removed ) );
+            m_generators.clear();
+            break;
+
+        case PCB_FOOTPRINT_T:
+            std::copy( m_footprints.begin(), m_footprints.end(), std::back_inserter( removed ) );
+            m_footprints.clear();
+            break;
+
+        case PCB_TRACE_T:
+            std::copy( m_tracks.begin(), m_tracks.end(), std::back_inserter( removed ) );
+            m_tracks.clear();
+            break;
+
+        case PCB_ARC_T:
+        case PCB_VIA_T:
+            wxFAIL_MSG( wxT( "Use PCB_TRACE_T to remove all tracks, arcs, and vias" ) );
+            break;
+
+        case PCB_SHAPE_T:
+            std::copy( m_drawings.begin(), m_drawings.end(), std::back_inserter( removed ) );
+            m_drawings.clear();
+            break;
+
+        case PCB_DIM_ALIGNED_T:
+        case PCB_DIM_CENTER_T:
+        case PCB_DIM_RADIAL_T:
+        case PCB_DIM_ORTHOGONAL_T:
+        case PCB_DIM_LEADER_T:
+        case PCB_REFERENCE_IMAGE_T:
+        case PCB_FIELD_T:
+        case PCB_TEXT_T:
+        case PCB_TEXTBOX_T:
+        case PCB_TABLE_T:
+        case PCB_TARGET_T:
+            wxFAIL_MSG( wxT( "Use PCB_SHAPE_T to remove all graphics and text" ) );
+            break;
+
+        default:
+            wxFAIL_MSG( wxT( "BOARD::RemoveAll() needs more ::Type() support" ) );
+        }
+    }
+
+    FinalizeBulkRemove( removed );
+}
+
+
 wxString BOARD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     return wxString::Format( _( "PCB" ) );

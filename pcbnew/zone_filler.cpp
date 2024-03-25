@@ -87,7 +87,7 @@ void ZONE_FILLER::SetProgressReporter( PROGRESS_REPORTER* aReporter )
  *
  * Caller is also responsible for re-building connectivity afterwards.
  */
-bool ZONE_FILLER::Fill( std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aParent )
+bool ZONE_FILLER::Fill( const std::vector<ZONE*>& aZones, bool aCheck, wxWindow* aParent )
 {
     std::lock_guard<KISPINLOCK> lock( m_board->GetConnectivity()->GetLock() );
 
