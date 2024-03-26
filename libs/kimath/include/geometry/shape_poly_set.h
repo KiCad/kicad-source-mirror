@@ -122,6 +122,18 @@ public:
             virtual size_t GetPointCount() const override { return 3; }
             virtual size_t GetSegmentCount() const override { return 3; }
 
+            double Area() const
+            {
+                VECTOR2I& aa = parent->m_vertices[a];
+                VECTOR2I& bb = parent->m_vertices[b];
+                VECTOR2I& cc = parent->m_vertices[c];
+
+                VECTOR2D ba = bb - aa;
+                VECTOR2D cb = cc - bb;
+
+                return std::abs( cb.Cross( ba ) * 0.5 );
+            }
+
             int                   a;
             int                   b;
             int                   c;

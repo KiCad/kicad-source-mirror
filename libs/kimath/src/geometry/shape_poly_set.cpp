@@ -3301,6 +3301,11 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
                     triangulationValid = true;
                 }
 
+                if( triangulationValid && wxLog::IsLevelEnabled(wxLOG_Trace, wxLOG_COMPONENT) )
+                {
+
+                }
+
                 return triangulationValid;
             };
 
