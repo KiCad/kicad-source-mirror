@@ -61,6 +61,8 @@
 #include <netlist_exporter_spice_model.h>
 #include <netlist_exporter_kicad.h>
 #include <netlist_exporter_xml.h>
+#include <netlist_exporter_pads.h>
+#include <netlist_exporter_allegro.h>
 
 #include <fields_data_model.h>
 
@@ -305,6 +307,16 @@ int EESCHEMA_JOBS_HANDLER::JobExportNetlist( JOB* aJob )
     case JOB_EXPORT_SCH_NETLIST::FORMAT::KICADXML:
         fileExt = wxS( "xml" );
         helper = std::make_unique<NETLIST_EXPORTER_XML>( sch );
+        break;
+
+    case JOB_EXPORT_SCH_NETLIST::FORMAT::PADS:
+        fileExt = wxS( "asc" );
+        helper = std::make_unique<NETLIST_EXPORTER_PADS>( sch );
+        break;
+
+    case JOB_EXPORT_SCH_NETLIST::FORMAT::ALLEGRO:
+        fileExt = wxS( "txt" );
+        helper = std::make_unique<NETLIST_EXPORTER_ALLEGRO>( sch );
         break;
 
     default:

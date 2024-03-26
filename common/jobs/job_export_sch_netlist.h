@@ -40,7 +40,9 @@ public:
         ORCADPCB2,
         CADSTAR,
         SPICE,
-        SPICEMODEL
+        SPICEMODEL,
+        PADS,
+        ALLEGRO
     };
 
     FORMAT format;
