@@ -32,7 +32,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-21 14:44+0000\n"
+"PO-Revision-Date: 2024-03-26 14:01+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/"
 "master-source/ko/>\n"
@@ -10910,11 +10910,11 @@ msgstr "위치"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junction"
-msgstr "교차점 편집"
+msgstr "접합점 편집"
 
 #: eeschema/dialogs/dialog_junction_props.cpp:113
 msgid "Edit Junctions"
-msgstr "교차점 편집"
+msgstr "접합점 편집"
 
 #: eeschema/dialogs/dialog_junction_props_base.cpp:27
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:46
@@ -16339,7 +16339,7 @@ msgstr "'%s' 계층 라벨 %s, %s"
 #: eeschema/net_navigator.cpp:136
 #, c-format
 msgid "Junction at %s, %s"
-msgstr "%s 교차점, %s"
+msgstr "%s 접합점, %s"
 
 #: eeschema/net_navigator.cpp:146
 #, c-format
@@ -20790,7 +20790,7 @@ msgstr "접합 추가"
 
 #: eeschema/tools/ee_actions.cpp:458
 msgid "Draw junctions"
-msgstr "교차점 그리기"
+msgstr "접합점 그리기"
 
 #: eeschema/tools/ee_actions.cpp:468 eeschema/tools/sch_drawing_tools.cpp:985
 msgid "Add Wire to Bus Entry"
@@ -21114,11 +21114,11 @@ msgstr "참조되지 않은 시트 핀 제거"
 
 #: eeschema/tools/ee_actions.cpp:831 pcbnew/tools/pcb_actions.cpp:844
 msgid "Edit Text & Graphics Properties..."
-msgstr "텍스트 및 그래픽 속성 편집..."
+msgstr "텍스트와 그래픽 속성 편집..."
 
 #: eeschema/tools/ee_actions.cpp:832
 msgid "Edit text and graphics properties globally across schematic"
-msgstr "회로도 전체에서 전역적으로 텍스트 및 그래픽 속성 편집"
+msgstr "회로도 전체에서 텍스트 와 그래픽 속성 편집"
 
 #: eeschema/tools/ee_actions.cpp:838
 msgid "Symbol Properties..."
@@ -21355,7 +21355,7 @@ msgstr "프로젝트에서 오래된 심볼을 찾아, 이름을 바꾸거나 �
 
 #: eeschema/tools/ee_actions.cpp:1050
 msgid "Remap Legacy Library Symbols..."
-msgstr "이전 형식의 라이브러리 심볼을 매핑 ..."
+msgstr "이전 라이브러리 심볼 재 매핑..."
 
 #: eeschema/tools/ee_actions.cpp:1051
 msgid ""
@@ -45295,7 +45295,7 @@ msgstr "기판 전체의 배선과 비아 속성을 편집"
 
 #: pcbnew/tools/pcb_actions.cpp:845
 msgid "Edit Text and graphics properties globally across board"
-msgstr "기판 전체의 텍스트와 그래픽 속성을 편집"
+msgstr "기판 전체의 텍스트와 그래픽 속성 편집하기"
 
 #: pcbnew/tools/pcb_actions.cpp:851
 msgid "Edit Teardrops..."
