@@ -228,4 +228,12 @@ KICOMMON_API void to_json( nlohmann::json& aJson, const KIID& aKIID );
 
 KICOMMON_API void from_json( const nlohmann::json& aJson, KIID& aKIID );
 
+template<> struct KICOMMON_API std::hash<KIID>
+{
+    std::size_t operator()( const KIID& aId ) const
+    {
+        return aId.Hash();
+    }
+};
+
 #endif // KIID_H

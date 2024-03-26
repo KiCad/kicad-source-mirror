@@ -149,6 +149,8 @@ BOARD::~BOARD()
             item->SetParentGroup( nullptr );
     }
 
+    m_itemByIdCache.clear();
+
     // Clean up the owned elements
     DeleteMARKERs();
 
@@ -896,6 +898,8 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         return;
     }
 
+    m_itemByIdCache.insert( { aBoardItem->m_Uuid, aBoardItem } );
+
     switch( aBoardItem->Type() )
     {
     case PCB_NETINFO_T:
@@ -941,12 +945,20 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
         break;
 
     case PCB_FOOTPRINT_T:
-        if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
-            m_footprints.push_back( static_cast<FOOTPRINT*>( aBoardItem ) );
-        else
-            m_footprints.push_front( static_cast<FOOTPRINT*>( aBoardItem ) );
+    {
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aBoardItem );
 
+        if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
+            m_footprints.push_back( footprint );
+        else
+            m_footprints.push_front( footprint );
+
+        footprint->RunOnChildren( [&]( BOARD_ITEM* aChild )
+                                  {
+                                      m_itemByIdCache.insert( { aChild->m_Uuid, aChild } );
+                                  } );
         break;
+    }
 
     case PCB_DIM_ALIGNED_T:
     case PCB_DIM_CENTER_T:
@@ -960,12 +972,24 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode, bool aSkipConnectivity 
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_TARGET_T:
+    {
         if( aMode == ADD_MODE::APPEND || aMode == ADD_MODE::BULK_APPEND )
             m_drawings.push_back( aBoardItem );
         else
             m_drawings.push_front( aBoardItem );
 
+        if( aBoardItem->Type() == PCB_TABLE_T )
+        {
+            PCB_TABLE* table = static_cast<PCB_TABLE*>( aBoardItem );
+
+            table->RunOnChildren( [&]( BOARD_ITEM* aChild )
+                                  {
+                                      m_itemByIdCache.insert( { aChild->m_Uuid, aChild } );
+                                  } );
+        }
+
         break;
+    }
 
     // other types may use linked list
     default:
@@ -1009,6 +1033,8 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     // find these calls and fix them!  Don't send me no stinking' nullptr.
     wxASSERT( aBoardItem );
 
+    m_itemByIdCache.erase( aBoardItem->m_Uuid );
+
     switch( aBoardItem->Type() )
     {
     case PCB_NETINFO_T:
@@ -1043,8 +1069,17 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
         break;
 
     case PCB_FOOTPRINT_T:
+    {
         alg::delete_matching( m_footprints, aBoardItem );
+        FOOTPRINT* footprint = static_cast<FOOTPRINT*>( aBoardItem );
+
+        footprint->RunOnChildren( [&]( BOARD_ITEM* aChild )
+                                  {
+                                      m_itemByIdCache.erase( aChild->m_Uuid );
+                                  } );
+
         break;
+    }
 
     case PCB_TRACE_T:
     case PCB_ARC_T:
@@ -1064,8 +1099,21 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem, REMOVE_MODE aRemoveMode )
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_TARGET_T:
+    {
         alg::delete_matching( m_drawings, aBoardItem );
+
+        if( aBoardItem->Type() == PCB_TABLE_T )
+        {
+            PCB_TABLE* table = static_cast<PCB_TABLE*>( aBoardItem );
+
+            table->RunOnChildren( [&]( BOARD_ITEM* aChild )
+                                  {
+                                      m_itemByIdCache.erase( aChild->m_Uuid );
+                                  } );
+        }
+
         break;
+    }
 
     // other types may use linked list
     default:
@@ -1166,6 +1214,9 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
         }
     }
 
+    for( BOARD_ITEM* item : removed )
+        m_itemByIdCache.erase( item->m_Uuid );
+
     FinalizeBulkRemove( removed );
 }
 
@@ -1239,7 +1290,10 @@ void BOARD::DeleteAllFootprints()
     m_skipMaxClearanceCacheUpdate = true;
 
     for( FOOTPRINT* footprint : m_footprints )
+    {
+        m_itemByIdCache.erase( footprint->m_Uuid );
         delete footprint;
+    }
 
     m_footprints.clear();
     m_skipMaxClearanceCacheUpdate = false;
@@ -1251,6 +1305,9 @@ BOARD_ITEM* BOARD::GetItem( const KIID& aID ) const
 {
     if( aID == niluuid )
         return nullptr;
+
+    if( m_itemByIdCache.count( aID ) )
+        return m_itemByIdCache.at( aID );
 
     for( PCB_TRACK* track : Tracks() )
     {
