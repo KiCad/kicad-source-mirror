@@ -390,7 +390,10 @@ public:
      * granular than that, use BOARD::Remove.
      * @param aTypes is a list of one or more types to remove, or leave default to remove all
      */
-    void RemoveAll( std::initializer_list<KICAD_T> aTypes = { TYPE_NOT_INIT } );
+    void RemoveAll( std::initializer_list<KICAD_T> aTypes = { PCB_NETINFO_T, PCB_MARKER_T,
+                                                              PCB_GROUP_T, PCB_ZONE_T,
+                                                              PCB_GENERATOR_T, PCB_FOOTPRINT_T,
+                                                              PCB_TRACE_T, PCB_SHAPE_T } );
 
     /**
      * Must be used if Add() is used using a BULK_x ADD_MODE to generate a change event for

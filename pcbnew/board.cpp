@@ -1138,20 +1138,14 @@ void BOARD::RemoveAll( std::initializer_list<KICAD_T> aTypes )
 {
     std::vector<BOARD_ITEM*> removed;
 
-    if( aTypes.size() == 1 && *aTypes.begin() == TYPE_NOT_INIT )
-    {
-        aTypes = {
-            PCB_NETINFO_T, PCB_MARKER_T, PCB_GROUP_T, PCB_ZONE_T, PCB_GENERATOR_T, PCB_FOOTPRINT_T,
-            PCB_TRACE_T, PCB_SHAPE_T
-        };
-    }
-
     for( const KICAD_T& type : aTypes )
     {
         switch( type )
         {
         case PCB_NETINFO_T:
-            std::copy( m_NetInfo.begin(), m_NetInfo.end(), std::back_inserter( removed ) );
+            for( NETINFO_ITEM* item : m_NetInfo )
+                removed.emplace_back( item );
+
             m_NetInfo.clear();
             break;
 

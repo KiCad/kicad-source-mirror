@@ -849,7 +849,6 @@ void DIALOG_DRC::OnDRCItemRClick( wxDataViewEvent& aEvent )
                                    wxT( " • " ) + rcItem->GetErrorText() );
 
         BOARD* board = m_frame->GetBoard();
-        const std::vector<PCB_MARKER*>& markers = board->Markers();
 
         std::vector<BOARD_ITEM*> toRemove;
 
