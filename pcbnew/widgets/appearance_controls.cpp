@@ -1157,6 +1157,19 @@ void APPEARANCE_CONTROLS::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_
 }
 
 
+void APPEARANCE_CONTROLS::OnBoardCompositeUpdate( BOARD&                    aBoard,
+                                                  std::vector<BOARD_ITEM*>& aAddedItems,
+                                                  std::vector<BOARD_ITEM*>& aRemovedItems,
+                                                  std::vector<BOARD_ITEM*>& aDeletedItems )
+{
+    if( doesBoardItemNeedRebuild( aAddedItems ) || doesBoardItemNeedRebuild( aRemovedItems )
+        || doesBoardItemNeedRebuild( aDeletedItems ) )
+    {
+        handleBoardItemsChanged();
+    }
+}
+
+
 void APPEARANCE_CONTROLS::handleBoardItemsChanged()
 {
     Freeze();

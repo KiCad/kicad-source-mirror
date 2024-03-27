@@ -1097,6 +1097,19 @@ void PCB_NET_INSPECTOR_PANEL::OnBoardItemsChanged( BOARD&                    aBo
 }
 
 
+void PCB_NET_INSPECTOR_PANEL::OnBoardCompositeUpdate( BOARD&                    aBoard,
+                                                      std::vector<BOARD_ITEM*>& aAddedItems,
+                                                      std::vector<BOARD_ITEM*>& aRemovedItems,
+                                                      std::vector<BOARD_ITEM*>& aDeletedItems )
+{
+    if( !IsShownOnScreen() )
+        return;
+
+    buildNetsList();
+    m_netsList->Refresh();
+}
+
+
 void PCB_NET_INSPECTOR_PANEL::OnBoardHighlightNetChanged( BOARD& aBoard )
 {
     if( m_highlighting_nets || !IsShownOnScreen() )

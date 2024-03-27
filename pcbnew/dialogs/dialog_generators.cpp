@@ -342,6 +342,15 @@ void DIALOG_GENERATORS::OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_IT
 }
 
 
+void DIALOG_GENERATORS::OnBoardCompositeUpdate( BOARD&                    aBoard,
+                                                std::vector<BOARD_ITEM*>& aAddedItems,
+                                                std::vector<BOARD_ITEM*>& aRemovedItems,
+                                                std::vector<BOARD_ITEM*>& aDeletedItems )
+{
+    RebuildModels();
+}
+
+
 DIALOG_GENERATORS::DIALOG_GENERATORS( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         DIALOG_GENERATORS_BASE( aParent )
 {

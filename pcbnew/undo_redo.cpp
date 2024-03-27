@@ -601,14 +601,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         }
     }
 
-    if( added_items.size() > 0 )
-        GetBoard()->FinalizeBulkAdd( added_items );
-
-    if( deleted_items.size() > 0 )
-        GetBoard()->FinalizeBulkRemove( deleted_items );
-
-    if( changed_items.size() > 0 )
-        GetBoard()->OnItemsChanged( changed_items );
+    if( added_items.size() > 0 || deleted_items.size() > 0 || changed_items.size() > 0 )
+        GetBoard()->OnItemsCompositeUpdate( added_items, deleted_items, changed_items );
 }
 
 

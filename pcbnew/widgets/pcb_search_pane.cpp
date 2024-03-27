@@ -153,3 +153,13 @@ void PCB_SEARCH_PANE::OnBoardRatsnestChanged( BOARD& aBoard )
 
     RefreshSearch();
 }
+
+void PCB_SEARCH_PANE::OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
+                                              std::vector<BOARD_ITEM*>& aRemovedItems,
+                                              std::vector<BOARD_ITEM*>& aDeletedItems )
+{
+    if( !IsShownOnScreen() )
+        return;
+
+    RefreshSearch();
+}

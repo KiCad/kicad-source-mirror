@@ -252,6 +252,11 @@ public:
     virtual void OnBoardItemsChanged( BOARD& aBoard, std::vector<BOARD_ITEM*>& aBoardItem ) { }
     virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) { }
     virtual void OnBoardRatsnestChanged( BOARD& aBoard ) { }
+    virtual void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
+                                         std::vector<BOARD_ITEM*>& aRemovedItems,
+                                         std::vector<BOARD_ITEM*>& aDeletedItems )
+    {
+    }
 };
 
 /**
@@ -1192,6 +1197,14 @@ public:
       * been modified in some way.
       */
     void OnItemsChanged( std::vector<BOARD_ITEM*>& aItems );
+
+    /**
+      * Notify the board and its listeners that items on the board have
+      * been modified in a composite operations
+      */
+    void OnItemsCompositeUpdate( std::vector<BOARD_ITEM*>& aAddedItems,
+                                 std::vector<BOARD_ITEM*>& aRemovedItems,
+                                 std::vector<BOARD_ITEM*>& aChangedItems );
 
     /**
      * Notify the board and its listeners that the ratsnest has been recomputed.

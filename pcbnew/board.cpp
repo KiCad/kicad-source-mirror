@@ -2516,6 +2516,15 @@ void BOARD::OnItemsChanged( std::vector<BOARD_ITEM*>& aItems )
 }
 
 
+void BOARD::OnItemsCompositeUpdate( std::vector<BOARD_ITEM*>& aAddedItems,
+                                    std::vector<BOARD_ITEM*>& aRemovedItems,
+                                    std::vector<BOARD_ITEM*>& aChangedItems )
+{
+    InvokeListeners( &BOARD_LISTENER::OnBoardCompositeUpdate, *this, aAddedItems, aRemovedItems,
+                     aChangedItems );
+}
+
+
 void BOARD::OnRatsnestChanged()
 {
     InvokeListeners( &BOARD_LISTENER::OnBoardRatsnestChanged, *this );

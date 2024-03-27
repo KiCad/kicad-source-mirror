@@ -42,6 +42,9 @@ public:
                                       std::vector<BOARD_ITEM*>& aBoardItems ) override;
     virtual void OnBoardHighlightNetChanged( BOARD& aBoard ) override;
     virtual void OnBoardRatsnestChanged( BOARD& aBoard ) override;
+    virtual void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
+                                         std::vector<BOARD_ITEM*>& aRemovedItems,
+                                         std::vector<BOARD_ITEM*>& aDeletedItems ) override;
 
 private:
     void            onUnitsChanged( wxCommandEvent& event );
