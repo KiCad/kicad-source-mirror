@@ -978,13 +978,13 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 for( FOOTPRINT* clipFootprint : clipBoard->Footprints() )
                     pasteFootprintItemsToFootprintEditor( clipFootprint, board(), pastedItems );
 
-
                 for( BOARD_ITEM* clipDrawItem : clipBoard->Drawings() )
                 {
                     switch( clipDrawItem->Type() )
                     {
                     case PCB_TEXT_T:
                     case PCB_TEXTBOX_T:
+                    case PCB_TABLE_T:
                     case PCB_SHAPE_T:
                     case PCB_DIM_ALIGNED_T:
                     case PCB_DIM_CENTER_T:
@@ -996,6 +996,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                         break;
 
                     default:
+                        // Everything we *didn't* put into pastedItems is going to get nuked, so
+                        // make sure it's not still included in its parent group.
                         if( PCB_GROUP* parentGroup = clipDrawItem->GetParentGroup() )
                             parentGroup->RemoveItem( clipDrawItem );
 
@@ -1003,6 +1005,8 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                     }
                 }
 
+                // NB: PCB_SHAPE_T actually removes everything in Drawings() (including PCB_TEXTs,
+                // PCB_TABLES, dimensions, etc.), not just PCB_SHAPEs.)
                 clipBoard->RemoveAll( { PCB_SHAPE_T } );
 
                 clipBoard->Visit(
