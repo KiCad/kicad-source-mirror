@@ -228,7 +228,11 @@ public:
     }
 
     const LIB_ID& GetFPID() const { return m_fpid; }
-    void SetFPID( const LIB_ID& aFPID ) { m_fpid = aFPID; }
+    void          SetFPID( const LIB_ID& aFPID )
+    {
+        m_fpid = aFPID;
+        Footprint().SetText( aFPID.Format() );
+    }
 
     wxString GetFPIDAsString() const { return m_fpid.Format(); }
     void SetFPIDAsString( const wxString& aFPID ) { m_fpid.Parse( aFPID ); }
