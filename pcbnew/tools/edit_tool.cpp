@@ -2112,6 +2112,51 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 }
 
 
+void EDIT_TOOL::getChildItemsOfGroupsAndGenerators( EDA_ITEM*                        item,
+                                                    std::unordered_set<BOARD_ITEM*>& children )
+{
+    wxASSERT( item->Type() == PCB_GROUP_T || item->Type() == PCB_GENERATOR_T );
+
+    std::unordered_set<BOARD_ITEM*>& childItems = static_cast<PCB_GROUP*>( item )->GetItems();
+
+    for( BOARD_ITEM* childItem : childItems )
+    {
+        children.insert( childItem );
+
+        if( childItem->Type() == PCB_GROUP_T || childItem->Type() == PCB_GENERATOR_T )
+            getChildItemsOfGroupsAndGenerators( childItem, children );
+    }
+}
+
+
+void EDIT_TOOL::removeNonRootItems( std::unordered_set<EDA_ITEM*>& items )
+{
+    auto itr = items.begin();
+
+    while( itr != items.end() )
+    {
+        BOARD_ITEM* curItem = dynamic_cast<BOARD_ITEM*>( *itr );
+
+        if( curItem )
+        {
+            if( curItem->Type() == PCB_GROUP_T || curItem->Type() == PCB_GENERATOR_T )
+            {
+                std::unordered_set<BOARD_ITEM*> childItems;
+                getChildItemsOfGroupsAndGenerators( curItem, childItems );
+
+                std::for_each( childItems.begin(), childItems.end(),
+                               [&]( auto eraseItem )
+                               {
+                                   items.erase( eraseItem );
+                               } );
+            }
+        }
+
+        ++itr;
+    }
+}
+
+
 void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 {
     BOARD_COMMIT commit( this );
@@ -2119,7 +2164,12 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-    for( EDA_ITEM* item : aItems )
+    // Only delete items that are the root of a selected set (e.g. only delete grouped / generated
+    // items from the parent item, not individually) - issue #17527
+    std::unordered_set<EDA_ITEM*> rootItems( aItems.begin(), aItems.end() );
+    removeNonRootItems( rootItems );
+
+    for( EDA_ITEM* item : rootItems )
     {
         BOARD_ITEM* board_item = dynamic_cast<BOARD_ITEM*>( item );
         wxCHECK2( board_item, continue );
@@ -2213,7 +2263,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
             break;
 
         case PCB_GENERATOR_T:
-            if( aItems.Size() == 1 )
+            if( rootItems.size() == 1 )
             {
                 PCB_GENERATOR* generator = static_cast<PCB_GENERATOR*>( board_item );
 
