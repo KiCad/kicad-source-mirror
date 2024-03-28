@@ -30,7 +30,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-03-26 14:01+0000\n"
+"PO-Revision-Date: 2024-03-29 09:01+0000\n"
 "Last-Translator: 김랑기 <korearf@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/kicad/v8/ko/>\n"
 "Language: ko\n"
@@ -8325,7 +8325,7 @@ msgstr "연결된 단축키 삭제"
 
 #: common/widgets/widget_hotkey_list.cpp:452
 msgid "Clear Assigned Alternate"
-msgstr "할당된 대체 지우기"
+msgstr "할당된 대체 항목 지우기"
 
 #: common/widgets/widget_hotkey_list.cpp:453
 msgid "Restore Defaults"
@@ -9039,7 +9039,7 @@ msgstr "풋프린트 할당을 자동으로 수행하기"
 
 #: cvpcb/tools/cvpcb_actions.cpp:141
 msgid "Delete association"
-msgstr "관련성 삭제"
+msgstr "연결 삭제"
 
 #: cvpcb/tools/cvpcb_actions.cpp:142
 msgid "Delete selected footprint associations"
@@ -9075,7 +9075,7 @@ msgstr "풋프린트 리스트를 라이브러리별로 필터링"
 
 #: cvpcb/tools/cvpcb_association_tool.cpp:255
 msgid "Delete all associations?"
-msgstr "모든 관련성을 삭제하시겠습니까?"
+msgstr "모든 연결을 삭제하시겠습니까?"
 
 #: cvpcb/tools/cvpcb_control.cpp:181
 msgid "Unable to create the footprint viewer frame"
@@ -29184,7 +29184,7 @@ msgstr "선을 직사각형에 병합"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:25
 msgid "Delete redundant graphics"
-msgstr "중복 그래픽 삭제"
+msgstr "중복된 그래픽 삭제"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:28
 msgid "Merge overlapping graphics into pads"
