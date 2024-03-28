@@ -521,10 +521,11 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
     m_schematic = &aSchematic;
     m_out = aFormatter;
 
-    size_t i;
-    SCH_ITEM* item;
+    size_t                          i;
+    SCH_ITEM*                       item;
     std::map<wxString, LIB_SYMBOL*> libSymbols;
-    SCH_SCREEN* screen = aSelection->GetScreen();
+    SCH_SCREEN*                     screen = aSelection->GetScreen();
+    std::set<SCH_TABLE*>            promotedTables;
 
     for( i = 0; i < aSelection->GetSize(); ++i )
     {
@@ -555,8 +556,10 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
         m_out->Print( 0, "(lib_symbols\n" );
 
         for( const std::pair<const wxString, LIB_SYMBOL*>& libSymbol : libSymbols )
+        {
             SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( libSymbol.second, *m_out, 1,
                                                       libSymbol.first );
+        }
 
         m_out->Print( 0, ")\n\n" );
     }
@@ -611,6 +614,25 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
 
         case SCH_TEXTBOX_T:
             saveTextBox( static_cast<SCH_TEXTBOX*>( item ), 0 );
+            break;
+
+        case SCH_TABLECELL_T:
+        {
+            SCH_TABLE* table = static_cast<SCH_TABLE*>( item->GetParent() );
+
+            if( promotedTables.count( table ) )
+                break;
+
+            table->SetFlags( SKIP_STRUCT );
+            saveTable( table, 0 );
+            table->ClearFlags( SKIP_STRUCT );
+            promotedTables.insert( table );
+            break;
+        }
+
+        case SCH_TABLE_T:
+            item->ClearFlags( SKIP_STRUCT );
+            saveTable( static_cast<SCH_TABLE*>( item ), 0 );
             break;
 
         default:
@@ -1386,6 +1408,51 @@ void SCH_IO_KICAD_SEXPR::saveTextBox( SCH_TEXTBOX* aTextBox, int aNestLevel )
 
 void SCH_IO_KICAD_SEXPR::saveTable( SCH_TABLE* aTable, int aNestLevel )
 {
+    if( aTable->GetFlags() & SKIP_STRUCT )
+    {
+        aTable = static_cast<SCH_TABLE*>( aTable->Clone() );
+
+        int minCol = aTable->GetColCount();
+        int maxCol = -1;
+        int minRow = aTable->GetRowCount();
+        int maxRow = -1;
+
+        for( int row = 0; row < aTable->GetRowCount(); ++row )
+        {
+            for( int col = 0; col < aTable->GetColCount(); ++col )
+            {
+                SCH_TABLECELL* cell = aTable->GetCell( row, col );
+
+                if( cell->IsSelected() )
+                {
+                    minRow = std::min( minRow, row );
+                    maxRow = std::max( maxRow, row );
+                    minCol = std::min( minCol, col );
+                    maxCol = std::max( maxCol, col );
+                }
+                else
+                {
+                    cell->SetFlags( STRUCT_DELETED );
+                }
+            }
+        }
+
+        wxCHECK_MSG( maxCol >= minCol && maxRow >= minRow, /*void*/, wxT( "No selected cells!" ) );
+
+        int destRow = 0;
+
+        for( int row = minRow; row <= maxRow; row++ )
+            aTable->SetRowHeight( destRow++, aTable->GetRowHeight( row ) );
+
+        int destCol = 0;
+
+        for( int col = minCol; col <= maxCol; col++ )
+            aTable->SetColWidth( destCol++, aTable->GetColWidth( col ) );
+
+        aTable->DeleteMarkedCells();
+        aTable->SetColCount( ( maxCol - minCol ) + 1 );
+    }
+
     wxCHECK_RET( aTable != nullptr && m_out != nullptr, "" );
 
     m_out->Print( aNestLevel, "(table (column_count %d)\n",
@@ -1444,6 +1511,9 @@ void SCH_IO_KICAD_SEXPR::saveTable( SCH_TABLE* aTable, int aNestLevel )
 
     m_out->Print( aNestLevel + 1, ")\n" );  // Close `cells` token.
     m_out->Print( aNestLevel, ")\n" );      // Close `table` token.
+
+    if( aTable->GetFlags() & SKIP_STRUCT )
+        delete aTable;
 }
 
 

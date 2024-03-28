@@ -1336,10 +1336,10 @@ bool SCH_EDITOR_CONTROL::doCopy( bool aUseDuplicateClipboard )
         }
     }
 
-    STRING_FORMATTER formatter;
+    STRING_FORMATTER   formatter;
     SCH_IO_KICAD_SEXPR plugin;
-    SCH_SHEET_LIST   hierarchy = schematic.GetSheets();
-    SCH_SHEET_PATH   selPath = m_frame->GetCurrentSheet();
+    SCH_SHEET_LIST     hierarchy = schematic.GetSheets();
+    SCH_SHEET_PATH     selPath = m_frame->GetCurrentSheet();
 
     plugin.Format( &selection, &selPath, schematic, &formatter, true );
 
