@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-09 10:02+0000\n"
+"PO-Revision-Date: 2024-03-29 09:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -6830,7 +6830,7 @@ msgstr "Bakgrund"
 #: eeschema/sim/simulator_frame_ui.cpp:595
 #: eeschema/sim/simulator_frame_ui_base.cpp:167
 msgid "Cursor"
-msgstr "Muspekare"
+msgstr "Markör"
 
 #: common/layer_id.cpp:148
 msgid "Hovered items"
@@ -19579,12 +19579,12 @@ msgstr "Plotta"
 #: eeschema/sim/simulator_frame_ui.cpp:592
 #: eeschema/sim/simulator_frame_ui_base.cpp:114
 msgid "Cursor 1"
-msgstr "Pekare 1"
+msgstr "Markör 1"
 
 #: eeschema/sim/simulator_frame_ui.cpp:593
 #: eeschema/sim/simulator_frame_ui_base.cpp:115
 msgid "Cursor 2"
-msgstr "Pekare 2"
+msgstr "Markör 2"
 
 #: eeschema/sim/simulator_frame_ui.cpp:1151
 #: eeschema/sim/simulator_frame_ui.cpp:2548
