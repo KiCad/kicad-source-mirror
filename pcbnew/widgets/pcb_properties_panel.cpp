@@ -261,8 +261,20 @@ void PCB_PROPERTIES_PANEL::updateLists( const BOARD* aBoard )
     m_propMgr.GetProperty( TYPE_HASH( PCB_VIA ), _HKI( "Layer Bottom" ) )->SetChoices( layersCu );
 
     // Regenerate nets
+
+    std::vector<std::pair<wxString, int>> netNames;
+    netNames.reserve( aBoard->GetNetInfo().NetsByNetcode().size() );
+
     for( const auto& [ netCode, netInfo ] : aBoard->GetNetInfo().NetsByNetcode() )
-        nets.Add( UnescapeString( netInfo->GetNetname() ), netCode );
+        netNames.emplace_back( UnescapeString( netInfo->GetNetname() ), netCode );
+
+    std::sort( netNames.begin(), netNames.end(), []( const auto& a, const auto& b )
+    {
+        return a.first.CmpNoCase( b.first ) < 0;
+    } );
+
+    for( const auto& [ netName, netCode ] : netNames )
+        nets.Add( netName, netCode );
 
     auto netProperty = m_propMgr.GetProperty( TYPE_HASH( BOARD_CONNECTED_ITEM ), _HKI( "Net" ) );
     netProperty->SetChoices( nets );
