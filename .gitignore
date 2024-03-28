@@ -105,6 +105,7 @@ CMakeSettings.json
 .vscode/
 compile_commands.json
 /vcpkg_installed
+CMakePresets.json
 
 # Sublime Text
 *.sublime-*

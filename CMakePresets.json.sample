@@ -1,0 +1,73 @@
+{
+  "version": 2,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 14,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "dev-mode",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "vcpkg",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      }
+    },
+    {
+      "name": "KiCad",
+      "description": "This preset is var settings for KiCad",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": "out",
+        "CMAKE_PDB_OUTPUT_DIRECTORY": "out/pdb",
+        "KICAD_BUILD_QA_TESTS": "OFF",
+        "KICAD_BUILD_I18N": "ON",
+        "KICAD_SCRIPTING_WXPYTHON": "ON"
+      }
+    },
+    {
+      "name": "ci-std",
+      "description": "This preset makes sure the project actually builds with at least the specified standard",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_CXX_EXTENSIONS": "OFF",
+        "CMAKE_CXX_STANDARD": "17",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "ci-build",
+      "binaryDir": "${sourceDir}/build",
+      "hidden": true
+    },
+    {
+      "name": "ci-win64",
+      "inherits": [
+        "ci-std"
+      ],
+      "generator": "Ninja",
+      "hidden": true,
+      "cacheVariables": {
+        "KICAD_WIN32_DPI_AWARE": "ON"
+      }
+    },
+    {
+      "name": "ci-windows",
+      "inherits": [
+        "ci-build",
+        "ci-win64",
+        "dev-mode",
+        "vcpkg",
+        "KiCad"
+      ]
+    }
+  ]
+}
