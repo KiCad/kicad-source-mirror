@@ -1,22 +1,17 @@
 {
-  "version": 2,
-  "cmakeMinimumRequired": {
-    "major": 3,
-    "minor": 14,
-    "patch": 0
-  },
+  "version": 3,
   "configurePresets": [
     {
-      "name": "vcpkg",
+      "name": "base",
       "hidden": true,
-      "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-      }
-    },
-    {
-      "name": "KiCad",
-      "description": "This preset is var settings for KiCad",
-      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build",
+      "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      },
       "cacheVariables": {
         "KICAD_BUILD_QA_TESTS": "OFF",
         "KICAD_BUILD_I18N": "ON",
@@ -25,39 +20,36 @@
     },
     {
       "name": "win64",
-      "generator": "Ninja",
-      "binaryDir": "${sourceDir}/build",
       "hidden": true,
       "cacheVariables": {
         "KICAD_WIN32_DPI_AWARE": "ON",
         "CMAKE_INSTALL_PREFIX": "out",
         "CMAKE_PDB_OUTPUT_DIRECTORY": "out/pdb"
       },
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
       "inherits": [
-        "vcpkg",
-        "KiCad"
+        "base"
       ]
     },
     {
-      "name": "win64-Release",
-      "inherits": [
-        "win64",
-        "vcpkg",
-        "KiCad"
-      ],
+      "name": "x64-debug",
+      "displayName": "x64 Debug",
+      "description": "Sets debug build type and x64 arch",
+      "inherits": "win64",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
-      "name": "win64-Debug",
-      "inherits": [
-        "win64",
-        "vcpkg",
-        "KiCad"
-      ],
+      "name": "x64-release",
+      "displayName": "x64 Release",
+      "description": "Sets release build type",
+      "inherits": "win64",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Release"
       }
     }
   ]
