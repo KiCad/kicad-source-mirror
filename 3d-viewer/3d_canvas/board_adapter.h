@@ -331,8 +331,8 @@ public:
      */
     const MAP_POLY& GetPolyMap() const noexcept { return m_layers_poly; }
 
-    const SHAPE_POLY_SET* GetFrontPlatedPadPolys() { return m_frontPlatedPadPolys;  }
-    const SHAPE_POLY_SET* GetBackPlatedPadPolys() { return m_backPlatedPadPolys; }
+    const SHAPE_POLY_SET* GetFrontPlatedPadAndGraphicPolys() { return m_frontPlatedPadAndGraphicPolys;  }
+    const SHAPE_POLY_SET* GetBackPlatedPadAndGraphicPolys() { return m_backPlatedPadAndGraphicPolys; }
     const MAP_POLY& GetHoleIdPolysMap() const noexcept { return m_layerHoleIdPolys; }
     const MAP_POLY& GetHoleOdPolysMap() const noexcept { return m_layerHoleOdPolys; }
 
@@ -438,8 +438,8 @@ private:
     MAP_POLY          m_layers_poly;          ///< Amalgamated polygon contours for various types
                                               ///<   of items
 
-    SHAPE_POLY_SET*   m_frontPlatedPadPolys;
-    SHAPE_POLY_SET*   m_backPlatedPadPolys;
+    SHAPE_POLY_SET*   m_frontPlatedPadAndGraphicPolys;
+    SHAPE_POLY_SET*   m_backPlatedPadAndGraphicPolys;
     SHAPE_POLY_SET*   m_frontPlatedCopperPolys;
     SHAPE_POLY_SET*   m_backPlatedCopperPolys;
 

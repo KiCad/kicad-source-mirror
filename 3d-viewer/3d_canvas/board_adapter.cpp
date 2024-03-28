@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015-2023 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2023 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,8 +142,8 @@ BOARD_ADAPTER::BOARD_ADAPTER() :
     m_offboardPadsFront = nullptr;
     m_offboardPadsBack = nullptr;
 
-    m_frontPlatedPadPolys = nullptr;
-    m_backPlatedPadPolys = nullptr;
+    m_frontPlatedPadAndGraphicPolys = nullptr;
+    m_backPlatedPadAndGraphicPolys = nullptr;
     m_frontPlatedCopperPolys = nullptr;
     m_backPlatedCopperPolys = nullptr;
 
@@ -397,13 +397,18 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
                     break;
 
                 case BS_ITEM_TYPE_COPPER:
-                    if( item->GetBrdLayerId() == F_Cu )
-                        m_frontCopperThickness3DU = item->GetThickness() * m_biuTo3Dunits;
-                    else if( item->GetBrdLayerId() == B_Cu )
-                        m_backCopperThickness3DU = item->GetThickness() * m_biuTo3Dunits;
-                    else if( item->IsEnabled() )
-                        thickness += item->GetThickness();
+                {
+                    // The copper thickness must be > 0 to avoid draw issues (divide by 0 for instance)
+                    // We use a minimal arbitrary value = 1 micrometer here:
+                    int copper_thickness = std::max( item->GetThickness(), pcbIUScale.mmToIU( 0.001 ) );
 
+                    if( item->GetBrdLayerId() == F_Cu )
+                        m_frontCopperThickness3DU = copper_thickness * m_biuTo3Dunits;
+                    else if( item->GetBrdLayerId() == B_Cu )
+                        m_backCopperThickness3DU = copper_thickness * m_biuTo3Dunits;
+                    else if( item->IsEnabled() )
+                        thickness += copper_thickness;
+                }
                     break;
 
                 default:
@@ -449,7 +454,7 @@ void BOARD_ADAPTER::InitSettings( REPORTER* aStatusReporter, REPORTER* aWarningR
     for( ; layer < MAX_CU_LAYERS; layer++ )
     {
         m_layerZcoordBottom[layer] = -( m_boardBodyThickness3DU / 2.0f );
-        m_layerZcoordTop[layer]    = -( m_boardBodyThickness3DU / 2.0f ) - m_backCopperThickness3DU;
+        m_layerZcoordTop[layer]    = m_layerZcoordBottom[layer] - m_backCopperThickness3DU;
     }
 
     // This is the top of the copper layer thickness.
