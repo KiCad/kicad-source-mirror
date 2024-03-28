@@ -118,8 +118,8 @@ void BOARD_ADAPTER::destroyLayers()
 
     DELETE_AND_FREE_MAP( m_layers_poly );
 
-    DELETE_AND_FREE( m_frontPlatedPadPolys )
-    DELETE_AND_FREE( m_backPlatedPadPolys )
+    DELETE_AND_FREE( m_frontPlatedPadAndGraphicPolys )
+    DELETE_AND_FREE( m_backPlatedPadAndGraphicPolys )
     DELETE_AND_FREE( m_frontPlatedCopperPolys )
     DELETE_AND_FREE( m_backPlatedCopperPolys )
 
@@ -242,8 +242,8 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
 
     if( cfg.differentiate_plated_copper )
     {
-        m_frontPlatedPadPolys = new SHAPE_POLY_SET;
-        m_backPlatedPadPolys = new SHAPE_POLY_SET;
+        m_frontPlatedPadAndGraphicPolys = new SHAPE_POLY_SET;
+        m_backPlatedPadAndGraphicPolys = new SHAPE_POLY_SET;
         m_frontPlatedCopperPolys = new SHAPE_POLY_SET;
         m_backPlatedCopperPolys = new SHAPE_POLY_SET;
 
@@ -587,10 +587,10 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
             // ADD PLATED PADS contours
             for( FOOTPRINT* footprint : m_board->Footprints() )
             {
-                footprint->TransformPadsToPolySet( *m_frontPlatedPadPolys, F_Cu, 0, maxError,
+                footprint->TransformPadsToPolySet( *m_frontPlatedPadAndGraphicPolys, F_Cu, 0, maxError,
                                                    ERROR_INSIDE, true, false, true );
 
-                footprint->TransformPadsToPolySet( *m_backPlatedPadPolys, B_Cu, 0, maxError,
+                footprint->TransformPadsToPolySet( *m_backPlatedPadAndGraphicPolys, B_Cu, 0, maxError,
                                                    ERROR_INSIDE, true, false, true );
             }
         }
@@ -1067,21 +1067,33 @@ void BOARD_ADAPTER::createLayers( REPORTER* aStatusReporter )
                                                           SHAPE_POLY_SET::PM_FAST );
         }
 
-        // SUBTRACT PLATED COPPER FROM (UNPLATED) COPPER
+        // Subtract plated copper from unplated copper
+        bool hasF_Cu = false;
+        bool hasB_Cu = false;
+
         if( m_layers_poly.find( F_Cu ) != m_layers_poly.end() )
         {
-            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
+            m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedPadAndGraphicPolys, SHAPE_POLY_SET::PM_FAST );
             m_layers_poly[F_Cu]->BooleanSubtract( *m_frontPlatedCopperPolys, SHAPE_POLY_SET::PM_FAST );
+            hasF_Cu = true;
         }
 
         if( m_layers_poly.find( B_Cu ) != m_layers_poly.end() )
         {
-            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedPadPolys, SHAPE_POLY_SET::PM_FAST );
+            m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedPadAndGraphicPolys, SHAPE_POLY_SET::PM_FAST );
             m_layers_poly[B_Cu]->BooleanSubtract( *m_backPlatedCopperPolys, SHAPE_POLY_SET::PM_FAST );
+            hasB_Cu = true;
         }
 
-        m_frontPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
-        m_backPlatedPadPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
+        // Add plated graphic items to build vertical walls
+        if( hasF_Cu && m_frontPlatedCopperPolys->OutlineCount() )
+            m_frontPlatedPadAndGraphicPolys->Append( *m_frontPlatedCopperPolys );
+
+        if( hasB_Cu && m_backPlatedCopperPolys->OutlineCount() )
+            m_backPlatedPadAndGraphicPolys->Append( *m_backPlatedCopperPolys );
+
+        m_frontPlatedPadAndGraphicPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
+        m_backPlatedPadAndGraphicPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
         m_frontPlatedCopperPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
         m_backPlatedCopperPolys->Simplify( SHAPE_POLY_SET::PM_FAST );
 
