@@ -101,47 +101,6 @@ wxString SCH_LINE::GetFriendlyName() const
 }
 
 
-wxString SCH_LINE::GetNetname( const SCH_SHEET_PATH& aSheet )
-{
-    std::list<const SCH_LINE *> checkedLines;
-    checkedLines.push_back(this);
-    return FindWireSegmentNetNameRecursive( this, checkedLines, aSheet );
-}
-
-
-wxString SCH_LINE::FindWireSegmentNetNameRecursive( SCH_LINE *line,
-                                                    std::list<const SCH_LINE *> &checkedLines,
-                                                    const SCH_SHEET_PATH& aSheet ) const
-{
-    for ( auto connected : line->ConnectedItems( aSheet ) )
-    {
-        if( connected->Type() == SCH_LINE_T )
-        {
-            if( std::find(checkedLines.begin(), checkedLines.end(),
-                          connected ) == checkedLines.end() )
-            {
-                SCH_LINE* connectedLine = static_cast<SCH_LINE*>( connected );
-                checkedLines.push_back( connectedLine );
-
-                wxString netName = FindWireSegmentNetNameRecursive( connectedLine, checkedLines,
-                                                                    aSheet );
-
-                if( !netName.IsEmpty() )
-                    return netName;
-            }
-        }
-        else if( connected->Type() == SCH_LABEL_T
-                 || connected->Type() == SCH_GLOBAL_LABEL_T
-                 || connected->Type() == SCH_DIRECTIVE_LABEL_T)
-        {
-            return static_cast<SCH_TEXT*>( connected )->GetText();
-        }
-
-    }
-    return "";
-}
-
-
 EDA_ITEM* SCH_LINE::Clone() const
 {
     return new SCH_LINE( *this );
