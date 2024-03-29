@@ -432,7 +432,17 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
         {
         case UNDO_REDO::CHANGED:    /* Exchange old and new data for each item */
         {
-            BOARD_ITEM* item = (BOARD_ITEM*) eda_item;
+            BOARD_ITEM*           item = (BOARD_ITEM*) eda_item;
+            BOARD_ITEM_CONTAINER* parent = GetBoard();
+
+            if( item->GetParentFootprint() )
+            {
+                // We need the current item and it's parent, which may be different from what
+                // was stored if we're multiple frames up the undo stack.
+                item = GetBoard()->GetItem( item->m_Uuid );
+                parent = item->GetParentFootprint();
+            }
+
             BOARD_ITEM* image = (BOARD_ITEM*) aList->GetPickedItemLink( ii );
 
             view->Remove( item );
@@ -440,7 +450,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
 
             item->SwapItemData( image );
 
-            eda_item->ClearFlags( UR_TRANSIENT );
+            item->ClearFlags( UR_TRANSIENT );
             image->SetFlags( UR_TRANSIENT );
 
             if( PCB_GROUP* group = dynamic_cast<PCB_GROUP*>( item ) )
@@ -454,7 +464,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
             view->Add( item );
             view->Hide( item, false );
             connectivity->Add( item );
-            update_item_change_state( eda_item, ITEM_CHANGE_TYPE::CHANGED );
+            update_item_change_state( item, ITEM_CHANGE_TYPE::CHANGED );
             break;
         }
 
