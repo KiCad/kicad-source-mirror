@@ -409,11 +409,17 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM_SET& aSet, int aKindMask )
 
 NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
 {
-    OBSTACLES obs;
     COLLISION_SEARCH_OPTIONS opts;
 
     opts.m_kindMask = aKindMask;
     opts.m_limitCount = 1;
+
+    return CheckColliding( aItemA, opts );
+}
+
+NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, const COLLISION_SEARCH_OPTIONS& aOpts )
+{
+    OBSTACLES obs;
 
     if( aItemA->Kind() == ITEM::LINE_T )
     {
@@ -428,7 +434,7 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
             // Disabling the cache will lead to slowness.
 
             const SEGMENT s( *line, l.CSegment( i ) );
-            n += QueryColliding( &s, obs, opts );
+            n += QueryColliding( &s, obs, aOpts );
 
             if( n )
                 return OPT_OBSTACLE( *obs.begin() );
@@ -436,13 +442,13 @@ NODE::OPT_OBSTACLE NODE::CheckColliding( const ITEM* aItemA, int aKindMask )
 
         if( line->EndsWithVia() )
         {
-            n += QueryColliding( &line->Via(), obs, opts );
+            n += QueryColliding( &line->Via(), obs, aOpts );
 
             if( n )
                 return OPT_OBSTACLE( *obs.begin() );
         }
     }
-    else if( QueryColliding( aItemA, obs, opts ) > 0 )
+    else if( QueryColliding( aItemA, obs, aOpts ) > 0 )
     {
         return OPT_OBSTACLE( *obs.begin() );
     }
