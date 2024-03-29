@@ -120,15 +120,11 @@ PNS_LOG_VIEWER_FRAME::PNS_LOG_VIEWER_FRAME( wxFrame* frame ) :
         PNS_LOG_VIEWER_FRAME_BASE( frame ), m_rewindIter( 0 )
 {
     LoadSettings();
-    createView( this, PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+    createView( m_mainSplitter, PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
 
     m_reporter.reset( new WX_TEXT_CTRL_REPORTER( m_consoleText ) );
     m_galPanel->SetParent( m_mainSplitter );
-    m_mainSplitter->Initialize( m_galPanel.get() );
     m_mainSplitter->SplitHorizontally( m_galPanel.get(), m_panelProps );
-    m_galPanel->Layout();
-    m_topBarSizer->Layout();
-    m_mainSizer->Layout();
 
     Layout();
 
