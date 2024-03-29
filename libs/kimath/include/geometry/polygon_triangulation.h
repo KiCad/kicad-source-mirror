@@ -81,10 +81,10 @@ public:
         /// therefore cannot be polygons
         VERTEX* firstVertex = createList( aPoly );
 
-        wxLogTrace( TRIANGULATE_TRACE, "Created list with %f area", firstVertex->area() );
-
         if( !firstVertex || firstVertex->prev == firstVertex->next )
             return false;
+
+        wxLogTrace( TRIANGULATE_TRACE, "Created list with %f area", firstVertex->area() );
 
         firstVertex->updateList();
 
