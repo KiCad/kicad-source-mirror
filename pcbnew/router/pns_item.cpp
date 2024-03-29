@@ -103,7 +103,6 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     const SHAPE* shapeH = aHead->Shape();
     const HOLE*  holeH = aHead->Hole();
     int          lineWidthH = 0;
-    int          clearanceEpsilon = aNode->GetRuleResolver()->ClearanceEpsilon();
     bool         collisionsFound = false;
 
     if( this == aHead )  // we cannot be self-colliding
@@ -192,9 +191,6 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
     }
     else
     {
-        if( aCtx && !aCtx->options.m_useClearanceEpsilon )
-            clearanceEpsilon = 0;
-
         clearance = aNode->GetClearance( this, aHead, aCtx ? aCtx->options.m_useClearanceEpsilon
                                                            : false );
     }
@@ -215,8 +211,10 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
             int      actual;
             VECTOR2I pos;
 
-            if( shapeH->Collide( shapeI, clearance + lineWidthH + lineWidthI - clearanceEpsilon,
-                                 &actual, &pos ) )
+            // The extra "1" here is to account for the fact that the hulls are built to exactly
+            // the clearance distance, so we need to allow for no collision when exactly at the
+            // clearance distance.
+            if( shapeH->Collide( shapeI, clearance + lineWidthH + lineWidthI - 1, &actual, &pos ) )
             {
                 if( checkCastellation && aNode->QueryEdgeExclusions( pos ) )
                     return false;
@@ -244,7 +242,10 @@ bool ITEM::collideSimple( const ITEM* aHead, const NODE* aNode,
         else
         {
             // Fast method
-            if( shapeH->Collide( shapeI, clearance + lineWidthH + lineWidthI - clearanceEpsilon ) )
+            // The extra "1" here is to account for the fact that the hulls are built to exactly
+            // the clearance distance, so we need to allow for no collision when exactly at the
+            // clearance distance.
+            if( shapeH->Collide( shapeI, clearance + lineWidthH + lineWidthI - 1 ) )
             {
                 if( aCtx )
                 {
