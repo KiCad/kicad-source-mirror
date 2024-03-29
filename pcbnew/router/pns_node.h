@@ -279,8 +279,7 @@ public:
      * starting point.
      *
      * @param aLine the item to find collisions with
-     * @param aKindMask mask of obstacle types to take into account
-     * @param aRestrictedSet is an optional set of items that should be considered as obstacles
+     * @param aOpts options for the search
      * @return the obstacle, if found, otherwise empty.
      */
     OPT_OBSTACLE NearestObstacle( const LINE* aLine,
@@ -306,6 +305,16 @@ public:
      * @return the obstacle, if found, otherwise empty.
      */
     OPT_OBSTACLE CheckColliding( const ITEM_SET&  aSet, int aKindMask = ITEM::ANY_T );
+
+    /**
+     * Check if the item collides with anything else in the world, and if found, returns the
+     * obstacle.
+     *
+     * @param aItem the item to find collisions with
+     * @param aOpts options for the search
+     * @return the obstacle, if found, otherwise empty.
+     */
+    OPT_OBSTACLE CheckColliding( const ITEM* aItem, const COLLISION_SEARCH_OPTIONS& aOpts );
 
     /**
      * Find all items that contain the point \a aPoint.
