@@ -63,14 +63,6 @@ public:
 
     wxString GetFriendlyName() const override;
 
-    /**
-     * @brief This function travel though all the connected wire segments
-     * to look for connected labels.
-     * @param aSheet - the sheet where the current wire segment is located
-     * @return returns the name of the wire if connected labels found, otherwise empty string
-     */
-    wxString GetNetname(const SCH_SHEET_PATH &aSheet);
-
     bool IsType( const std::vector<KICAD_T>& aScanTypes ) const override
     {
         if( SCH_ITEM::IsType( aScanTypes ) )

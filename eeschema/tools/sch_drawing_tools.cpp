@@ -1184,6 +1184,24 @@ SCH_LINE* SCH_DRAWING_TOOLS::findWire( const VECTOR2I& aPosition )
 }
 
 
+wxString SCH_DRAWING_TOOLS::findWireLabelDriverName( SCH_LINE* aWire )
+{
+    wxASSERT( aWire->IsWire() );
+
+    SCH_SHEET_PATH sheetPath = m_frame->GetCurrentSheet();
+
+    if( SCH_CONNECTION* wireConnection = aWire->Connection( &sheetPath ) )
+    {
+        SCH_ITEM* wireDriver = wireConnection->Driver();
+
+        if( wireDriver && wireDriver->IsType( { SCH_LABEL_T, SCH_GLOBAL_LABEL_T } ) )
+            return wireConnection->LocalName();
+    }
+
+    return wxEmptyString;
+}
+
+
 SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType )
 {
     SCHEMATIC*          schematic = getModel<SCHEMATIC>();
@@ -1203,7 +1221,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         textItem = labelItem;
 
         if( SCH_LINE* wire = findWire( aPosition ) )
-            netName = wire->GetNetname( m_frame->GetCurrentSheet() );
+            netName = findWireLabelDriverName( wire );
 
         break;
 
@@ -1231,7 +1249,7 @@ SCH_TEXT* SCH_DRAWING_TOOLS::createNewText( const VECTOR2I& aPosition, int aType
         textItem = labelItem;
 
         if( SCH_LINE* wire = findWire( aPosition ) )
-            netName = wire->GetNetname( m_frame->GetCurrentSheet() );
+            netName = findWireLabelDriverName( wire );
 
         break;
 

@@ -60,6 +60,9 @@ public:
 private:
     SCH_LINE* findWire( const VECTOR2I& aPosition );
 
+    ///< Gets the (global) label name driving this wire, if it is driven by a label
+    wxString findWireLabelDriverName( SCH_LINE* aWire );
+
     SCH_TEXT* createNewText( const VECTOR2I& aPosition, int aType );
 
     SCH_HIERLABEL* importHierLabel( SCH_SHEET* aSheet );
