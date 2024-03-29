@@ -278,63 +278,62 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
     std::unordered_map<EDA_ITEM*, ITEM_CHANGE_TYPE> item_changes;
 
     auto update_item_change_state = [&]( EDA_ITEM* item, ITEM_CHANGE_TYPE change_type )
-    {
-        auto item_itr = item_changes.find( item );
+            {
+                auto item_itr = item_changes.find( item );
 
-        if( item_itr == item_changes.end() )
-        {
-            // First time we've seen this item - tag the current change type
-            item_changes.insert( { item, change_type } );
-        }
-        else
-        {
-            // Update the item state based on the current and next change type
-            switch( item_itr->second )
-            {
-            case ITEM_CHANGE_TYPE::ADDED:
-            {
-                if( change_type == ITEM_CHANGE_TYPE::DELETED )
+                if( item_itr == item_changes.end() )
                 {
-                    // The item was previously added, now deleted - as far as bulk callbacks
-                    // are concerned, the item has never existed
-                    item_changes.erase( item_itr );
-                }
-                else if( change_type == ITEM_CHANGE_TYPE::ADDED )
-                {
-                    // Error condition - added an already added item
-                    wxASSERT_MSG( false, wxT( "Undo / Redo - should not add already added item" ) );
+                    // First time we've seen this item - tag the current change type
+                    item_changes.insert( { item, change_type } );
+                    return;
                 }
 
-                // For all other cases, the item remains as ADDED as seen by the bulk callbacks
-                break;
-            }
-            case ITEM_CHANGE_TYPE::DELETED:
-            {
-                // This is an error condition - item has already been deleted so should not
-                // be operated on further
-                wxASSERT_MSG( false, wxT( "Undo / Redo - should not alter already deleted item" ) );
-                break;
-            }
-            case ITEM_CHANGE_TYPE::CHANGED:
-            {
-                if( change_type == ITEM_CHANGE_TYPE::DELETED )
+                // Update the item state based on the current and next change type
+                switch( item_itr->second )
                 {
-                    item_itr->second = ITEM_CHANGE_TYPE::DELETED;
-                }
-                else if( change_type == ITEM_CHANGE_TYPE::ADDED )
+                case ITEM_CHANGE_TYPE::ADDED:
                 {
-                    // This is an error condition - item has already been changed so should not
-                    // be added
-                    wxASSERT_MSG( false,
-                                  wxT( "Undo / Redo - should not add already changed item" ) );
-                }
+                    if( change_type == ITEM_CHANGE_TYPE::DELETED )
+                    {
+                        // The item was previously added, now deleted - as far as bulk callbacks
+                        // are concerned, the item has never existed
+                        item_changes.erase( item_itr );
+                    }
+                    else if( change_type == ITEM_CHANGE_TYPE::ADDED )
+                    {
+                        // Error condition - added an already added item
+                        wxASSERT_MSG( false, wxT( "UndoRedo: should not add already added item" ) );
+                    }
 
-                // Otherwise, item remains CHANGED
-                break;
-            }
-            }
-        }
-    };
+                    // For all other cases, the item remains as ADDED as seen by the bulk callbacks
+                    break;
+                }
+                case ITEM_CHANGE_TYPE::DELETED:
+                {
+                    // This is an error condition - item has already been deleted so should not
+                    // be operated on further
+                    wxASSERT_MSG( false, wxT( "UndoRedo: should not alter already deleted item" ) );
+                    break;
+                }
+                case ITEM_CHANGE_TYPE::CHANGED:
+                {
+                    if( change_type == ITEM_CHANGE_TYPE::DELETED )
+                    {
+                        item_itr->second = ITEM_CHANGE_TYPE::DELETED;
+                    }
+                    else if( change_type == ITEM_CHANGE_TYPE::ADDED )
+                    {
+                        // This is an error condition - item has already been changed so should not
+                        // be added
+                        wxASSERT_MSG( false,
+                                      wxT( "UndoRedo: should not add already changed item" ) );
+                    }
+
+                    // Otherwise, item remains CHANGED
+                    break;
+                }
+                }
+            };
 
     // Undo in the reverse order of list creation: (this can allow stacked changes
     // like the same item can be changes and deleted in the same complex command
