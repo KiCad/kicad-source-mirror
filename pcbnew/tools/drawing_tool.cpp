@@ -1081,8 +1081,6 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
 
     if( aEvent.HasPosition() )
         m_toolMgr->PrimeTool( aEvent.Position() );
-    else if( common_settings->m_Input.immediate_actions && !aEvent.IsReactivate() )
-        m_toolMgr->PrimeTool( { 0, 0 } );
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
