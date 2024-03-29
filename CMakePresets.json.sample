@@ -49,7 +49,7 @@
       "description": "Sets release build type",
       "inherits": "win64",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
     }
   ]
