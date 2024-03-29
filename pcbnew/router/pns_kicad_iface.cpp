@@ -93,7 +93,9 @@ namespace std
     {
         std::size_t operator()( const CLEARANCE_CACHE_KEY& k ) const
         {
-            return hash<const void*>()( k.A ) ^ hash<const void*>()( k.B ) ^ hash<int>()( k.Flag );
+            size_t retval = 0xBADC0FFEE0DDF00D;
+            hash_combine( retval, hash<const void*>()( k.A ), hash<const void*>()( k.B ), hash<int>()( k.Flag ) );
+            return retval;
         }
     };
 }
