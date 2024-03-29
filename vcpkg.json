@@ -45,7 +45,8 @@
   "overrides": [
     {
       "name": "glm",
-      "version": "0.9.9.8#2"
+      "version": "0.9.9.8#2",
+      "$comment": "Pinned due to bad vcpkg port updating to a non-real version"
     },
     {
       "name": "python3",
