@@ -23,6 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <i18n_utility.h>
 #include <pgm_base.h>
 #include <font/font.h>
 #include <settings/settings_manager.h>
