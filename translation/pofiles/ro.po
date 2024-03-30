@@ -6,17 +6,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2023-01-20 06:51+0000\n"
-"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ro/>\n"
+"PO-Revision-Date: 2024-03-31 02:20+0000\n"
+"Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
+"Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v8/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
@@ -414,7 +413,7 @@ msgstr "Vizualizare acasă"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Redesenarea la poziția inițială și zoom"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -2543,14 +2542,12 @@ msgid "Configure Global Library Table"
 msgstr "Configurați tabelul bibliotecii globale"
 
 #: common/dialogs/dialog_grid_settings.cpp:61
-#, fuzzy
 msgid "Grid size X out of range."
-msgstr "Foraj în afara razei de acțiune"
+msgstr "Dimensiunea grilă X este în afara intervalului."
 
 #: common/dialogs/dialog_grid_settings.cpp:68
-#, fuzzy
 msgid "Grid size Y out of range."
-msgstr "Foraj în afara razei de acțiune"
+msgstr "Dimensiunea grilă Y este în afara intervalului."
 
 #: common/dialogs/dialog_grid_settings_base.cpp:25
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:96
@@ -3507,9 +3504,8 @@ msgid "C&ommit"
 msgstr ""
 
 #: common/dialogs/git/dialog_git_commit.cpp:169
-#, fuzzy
 msgid "Commit message cannot be empty"
-msgstr "Numele variabilei nu poate fi gol."
+msgstr "Mesajul de confirmare nu poate fi gol"
 
 #: common/dialogs/git/dialog_git_repository.cpp:154
 #: common/dialogs/git/dialog_git_repository.cpp:382
@@ -3527,14 +3523,14 @@ msgid "Connection successful"
 msgstr "Conexiuni"
 
 #: common/dialogs/git/dialog_git_repository.cpp:341
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to '%s' "
-msgstr "Nu s-a putut deschide fișierul de arhivă."
+msgstr "Nu s-a putut conecta la \"%s "
 
 #: common/dialogs/git/dialog_git_repository.cpp:360
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open private key '%s'"
-msgstr "Nu s-a putut deschide fișierul de arhivă."
+msgstr "Nu s-a putut deschide cheia privată \"%s"
 
 #: common/dialogs/git/dialog_git_repository.cpp:373
 #, fuzzy
@@ -3547,9 +3543,9 @@ msgid "The selected file is not a valid SSH private key"
 msgstr "Fișierul selectat nu este valid sau este posibil să fie deteriorat!"
 
 #: common/dialogs/git/dialog_git_repository.cpp:398
-#, fuzzy, c-format
+#, c-format
 msgid "Could not open public key '%s'"
-msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
+msgstr "Nu s-a putut deschide cheia publică \"%s"
 
 #: common/dialogs/git/dialog_git_repository.cpp:417
 #: common/dialogs/git/dialog_git_repository.cpp:424
@@ -5212,7 +5208,7 @@ msgid "Insufficient permissions to folder '%s'."
 msgstr "Permisiuni insuficiente pentru folderul \"%s\"."
 
 #: common/eda_base_frame.cpp:1359
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Well this is potentially embarrassing!\n"
 "It appears that the last time you were editing\n"
@@ -5221,11 +5217,12 @@ msgid ""
 "\n"
 "Do you wish to open the auto-saved file instead?"
 msgstr ""
-"Ei bine, acest lucru este posibil jenant!\n"
-"Se pare că ultima dată când ai editat fișierul\n"
-"'%s'\n"
-"acesta nu a fost salvat corespunzător.  Doriți să restaurați ultimele "
-"modificări salvate pe care le-ați făcut?"
+"Ei bine, acest lucru este potențial jenant!\n"
+"Se pare că ultima dată când ai editat\n"
+"%s\n"
+"KiCad a fost inchis înainte de a salva.\n"
+"\n"
+"Doriți să deschideți în schimb fișierul salvat automat?"
 
 #: common/eda_base_frame.cpp:1379
 msgid "The auto save file could not be renamed to the board file name."
@@ -5895,9 +5892,8 @@ msgstr "Justificare verticală"
 #: pcbnew/pcb_dimension.cpp:1527 pcbnew/pcb_dimension.cpp:1563
 #: pcbnew/pcb_dimension.cpp:1604 pcbnew/pcb_dimension.cpp:1649
 #: pcbnew/pcb_dimension.cpp:1686 pcbnew/pcb_text.cpp:589
-#, fuzzy
 msgid "Hyperlink"
-msgstr "Hyperlynx..."
+msgstr "Hiperlink"
 
 #: common/eda_units.cpp:476 pcbnew/generators/pcb_tuning_pattern.cpp:205
 #, fuzzy
@@ -6149,14 +6145,14 @@ msgid "Invalid directory name, cannot remove root"
 msgstr ""
 
 #: common/gestfich.cpp:335
-#, fuzzy, c-format
+#, c-format
 msgid "Directory '%s' does not exist"
-msgstr "Unitatea \"%s\" nu se termină cu \"mil\"."
+msgstr "Directorul '%s' nu există"
 
 #: common/gestfich.cpp:345
-#, fuzzy, c-format
+#, c-format
 msgid "'%s' is not a directory"
-msgstr "'%s' nu a fost analizat complet."
+msgstr "'%s' nu este un director"
 
 #: common/gestfich.cpp:357
 #, fuzzy, c-format
@@ -6164,44 +6160,41 @@ msgid "Error removing directory '%s': %s"
 msgstr "Nu s-a reușit eliminarea directorului %s"
 
 #: common/git/git_clone_handler.cpp:49
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create directory '%s'"
-msgstr "Nu se poate crea directorul de ieșire '%s'."
+msgstr "Nu s-a putut crea directorul \"%s"
 
 #: common/git/git_clone_handler.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Could not clone repository '%s'"
-msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
+msgstr "Nu s-a putut clona depozitul '%s'"
 
 #: common/git/git_pull_handler.cpp:46
-#, fuzzy, c-format
+#, c-format
 msgid "Could not lookup remote '%s'"
-msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
+msgstr "Nu s-a putut căuta remote '%s'"
 
 #: common/git/git_pull_handler.cpp:59
-#, fuzzy, c-format
+#, c-format
 msgid "Could not connect to remote '%s'"
-msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
+msgstr "Could not connect to remote '%s'"
 
 #: common/git/git_pull_handler.cpp:69
-#, fuzzy, c-format
+#, c-format
 msgid "Could not fetch data from remote '%s'"
-msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
+msgstr "Nu s-a putut prelua date de la distanță \"%s"
 
 #: common/git/git_pull_handler.cpp:90
-#, fuzzy
 msgid "Could not read 'FETCH_HEAD'"
-msgstr "Nu s-a putut deschide fișierul de arhivă."
+msgstr "Nu s-a putut citi 'FETCH_HEAD'"
 
 #: common/git/git_pull_handler.cpp:98
-#, fuzzy
 msgid "Could not lookup commit"
-msgstr "Nu s-a putut deschide fișierul de arhivă."
+msgstr "Nu s-a putut căuta commit-ul"
 
 #: common/git/git_pull_handler.cpp:108
-#, fuzzy
 msgid "Could not analyze merge"
-msgstr "Nu s-a putut deschide fișierul de arhivă."
+msgstr "Nu s-a putut analiza fuziunea"
 
 #: common/git/git_pull_handler.cpp:118
 msgid "Invalid HEAD.  Cannot merge."
@@ -6221,9 +6214,8 @@ msgid "Failed to perform checkout operation."
 msgstr ""
 
 #: common/git/git_pull_handler.cpp:212
-#, fuzzy
 msgid "Could not lookup commit '{}'"
-msgstr "Nu s-a putut găsi fișierul de bibliotecă %s."
+msgstr "Nu s-a putut consulta commit-ul '{}'"
 
 #: common/git/git_pull_handler.cpp:249
 #, fuzzy
@@ -6270,9 +6262,9 @@ msgid "Received %u of %u objects"
 msgstr ""
 
 #: common/git/kicad_git_common.cpp:446
-#, fuzzy, c-format
+#, c-format
 msgid "* [updated] %s..%s %s"
-msgstr "Actualizat '%s' de la '%s' la '%s'."
+msgstr "* [actualizat] %s..%s %s"
 
 #: common/git/kicad_git_common.cpp:450
 #, fuzzy, c-format
@@ -13528,9 +13520,9 @@ msgstr "Simbol alimentare"
 #: eeschema/symbol_chooser_frame.cpp:112
 #: pcbnew/dialogs/dialog_footprint_chooser.cpp:104
 #: pcbnew/footprint_chooser_frame.cpp:180
-#, fuzzy, c-format
+#, c-format
 msgid " (%d items loaded)"
-msgstr "Nici o capsulă încărcată."
+msgstr " (%d elemente încărcate)"
 
 #: eeschema/dialogs/dialog_symbol_chooser.cpp:74
 msgid "Place repeated copies"
@@ -19666,9 +19658,8 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:831
 #: eeschema/sim/simulator_frame_ui.cpp:836
 #: eeschema/sim/simulator_frame_ui.cpp:1002
-#, fuzzy
 msgid " (phase)"
-msgstr "Fază"
+msgstr " (fază)"
 
 #: eeschema/sim/sim_tab.cpp:87 eeschema/sim/sim_tab.cpp:104
 #, fuzzy
@@ -19783,9 +19774,8 @@ msgstr ""
 #: eeschema/sim/simulator_frame_ui.cpp:731
 #: eeschema/sim/simulator_frame_ui.cpp:835
 #: eeschema/sim/simulator_frame_ui.cpp:1000
-#, fuzzy
 msgid " (amplitude)"
-msgstr "Timp:"
+msgstr " (amplitudine)"
 
 #: eeschema/sim/simulator_frame_ui.cpp:271
 #, c-format
@@ -27633,9 +27623,8 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:36
-#, fuzzy
 msgid "Voltage > 500 V:"
-msgstr " > 500 V"
+msgstr "Tensiune > 500 V:"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_ipc2221_base.cpp:43
 #, fuzzy
@@ -28773,7 +28762,6 @@ msgid ""
 msgstr ""
 
 #: pcb_calculator/r_calculator_help.h:2
-#, fuzzy
 msgid ""
 "- This calculator finds combinations of standard E-series (between 10Ω and "
 "1MΩ) to create arbitrary values.\n"
@@ -28790,18 +28778,6 @@ msgid ""
 "\tR1 | R2 |...| Rn\tresistors in parallel\n"
 "\tR1 + (R2|R3)...\t\tany combination of the above\n"
 msgstr ""
-"Seriile E sunt definite în IEC 60063.\n"
-"\n"
-"Valorile disponibile sunt aproximativ la intervale egale pe o scară "
-"logaritmică.\n"
-"\n"
-"\tE24(5%):  1.0 1.1 1.2 1.3 1.5 1.6 1.8 2.0 2.2 2.4 2.7 3.0 3.3 3.6 3.9 4.3 "
-"4.7 5.1 5.6 6.2 6.8 7.5 8.2 9.1\n"
-"\tE12(10%): 1.0 1.2 1.5 1.8 2.2 2.7 3.3 3.9 4.7 5.6 6.8 8.2\n"
-"\tE6(20%):  1.0 - 1.5 - 2.2 - 3.3 - 4.7 - 6.8 -\n"
-"\tE3(50%):  1.0 - - - 2.2 - - - 4.7 - - -\n"
-"\t\n"
-"\n"
 "- Acest calculator găsește combinații de serii E standard (între 10Ω și 1MΩ) "
 "pentru a crea valori arbitrare.\n"
 "- Puteți introduce rezistența necesară de la 0,0025 la 4000 kΩ.\n"
@@ -28813,9 +28789,9 @@ msgstr ""
 "\n"
 "Soluțiile sunt oferite în următoarele formate:\n"
 "\n"
-"\tR1 + R2 +...+ Rn rezistențe în serie\n"
-"\tR1 | R2 |...| Rn rezistențe în paralel\n"
-"\tR1 + (R2|R3)... orice combinație dintre cele de mai sus\n"
+"R1 + R2 +...+ Rn rezistențe în serie\n"
+"R1 | R2 |...| Rn rezistențe în paralel\n"
+"R1 + (R2|R3)... orice combinație dintre cele de mai sus\n"
 
 #: pcb_calculator/tracks_width_versus_current_formula.h:2
 msgid ""
@@ -49123,9 +49099,8 @@ msgid "[INFO] load failed: input line too long\n"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
-#, fuzzy
 msgid "bitmap2component;Bitmap;Converter;"
-msgstr "Convertor Bitmap în Componentă"
+msgstr "bitmap2component;Bitmap;Convertor;"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:12
 msgid "Bitmap to Component Converter"
@@ -49170,9 +49145,8 @@ msgid "gerbview;PCB;Gerber;"
 msgstr ""
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
-#, fuzzy
 msgid "Projectmanager;"
-msgstr "Manager de Proiect"
+msgstr "Manager de Proiect;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:13
 msgid "EDA Suite"
@@ -49188,9 +49162,8 @@ msgid "KiCad PCB Calculator"
 msgstr "KiCad Predefinit"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:11
-#, fuzzy
 msgid "PCB;Calculator;"
-msgstr "KiCad Predefinit"
+msgstr "PCB;Calculator;"
 
 #: resources/linux/launchers/org.kicad.pcbcalculator.desktop.in:12
 #, fuzzy
