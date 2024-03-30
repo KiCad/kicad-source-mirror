@@ -1037,24 +1037,26 @@ void ALTIUM_PCB::HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aV
             int              nextShape = lineChain.NextShape( i );
             bool             isLastShape = nextShape < 0;
 
-            PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::ARC );
-            m_board->Add( shape, ADD_MODE::APPEND );
+            std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::ARC );
 
             shape->SetStroke( stroke );
             shape->SetLayer( Edge_Cuts );
             shape->SetArcGeometry( currentArc.GetP0(), currentArc.GetArcMid(), currentArc.GetP1() );
+
+            m_board->Add( shape.release(), ADD_MODE::APPEND );
         }
         else
         {
             const SEG& seg = lineChain.Segment( i );
 
-            PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
-            m_board->Add( shape, ADD_MODE::APPEND );
+            std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
 
             shape->SetStroke( stroke );
             shape->SetLayer( Edge_Cuts );
             shape->SetStart( seg.A );
             shape->SetEnd( seg.B );
+
+            m_board->Add( shape.release(), ADD_MODE::APPEND );
         }
     }
 }
@@ -1120,9 +1122,7 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPc
         checkpoint();
         ACOMPONENT6 elem( reader );
 
-        FOOTPRINT* footprint = new FOOTPRINT( m_board );
-        m_board->Add( footprint, ADD_MODE::APPEND );
-        m_components.emplace_back( footprint );
+        std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
 
         LIB_ID fpID = AltiumToKiCadLibID( elem.sourcefootprintlibrary, elem.pattern );
 
@@ -1144,6 +1144,9 @@ void ALTIUM_PCB::ParseComponents6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPc
         footprint->Reference().SetVisible( elem.nameon );
         footprint->Value().SetVisible( elem.commenton );
         footprint->SetLayer( elem.layer == ALTIUM_LAYER::TOP_LAYER ? F_Cu : B_Cu );
+
+        m_components.emplace_back( footprint.get() );
+        m_board->Add( footprint.release(), ADD_MODE::APPEND );
 
         componentId++;
     }
@@ -1258,8 +1261,7 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     VECTOR2I referencePoint0 = aElem.referencePoint.at( 0 );
     VECTOR2I referencePoint1 = aElem.referencePoint.at( 1 );
 
-    PCB_DIM_ALIGNED* dimension = new PCB_DIM_ALIGNED( m_board, PCB_DIM_ALIGNED_T );
-    m_board->Add( dimension, ADD_MODE::APPEND );
+    std::unique_ptr<PCB_DIM_ALIGNED> dimension = std::make_unique<PCB_DIM_ALIGNED>( m_board, PCB_DIM_ALIGNED_T );
 
     dimension->SetPrecision( static_cast<DIM_PRECISION>( aElem.textprecision ) );
     dimension->SetLayer( klayer );
@@ -1338,6 +1340,8 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
     default:
         break;
     }
+
+    m_board->Add( dimension.release(), ADD_MODE::APPEND );
 }
 
 
@@ -1359,9 +1363,7 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
     VECTOR2I referencePoint0 = aElem.referencePoint.at( 0 );
     VECTOR2I referencePoint1 = aElem.referencePoint.at( 1 );
 
-    PCB_DIM_RADIAL* dimension = new PCB_DIM_RADIAL( m_board );
-    m_board->Add( dimension, ADD_MODE::APPEND );
-    m_radialDimensions.push_back( dimension );
+    std::unique_ptr<PCB_DIM_RADIAL> dimension = std::make_unique<PCB_DIM_RADIAL>( m_board );
 
     dimension->SetPrecision( static_cast<DIM_PRECISION>( aElem.textprecision ) );
     dimension->SetLayer( klayer );
@@ -1418,6 +1420,9 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
     int yAdjust = dimension->GetTextBox().GetCenter().y - dimension->GetTextPos().y;
     dimension->SetTextPos( dimension->GetTextPos() + VECTOR2I( 0, yAdjust + aElem.textgap ) );
     dimension->SetVertJustify( GR_TEXT_V_ALIGN_CENTER );
+
+    m_radialDimensions.push_back( dimension.get() );
+    m_board->Add( dimension.release(), ADD_MODE::APPEND );
 }
 
 
@@ -1441,13 +1446,15 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
         VECTOR2I last = referencePoint0;
         for( size_t i = 1; i < aElem.referencePoint.size(); i++ )
         {
-            PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
-            m_board->Add( shape, ADD_MODE::APPEND );
+            std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
+
             shape->SetLayer( klayer );
             shape->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
             shape->SetStart( last );
             shape->SetEnd( aElem.referencePoint.at( i ) );
             last = aElem.referencePoint.at( i );
+
+            m_board->Add( shape.release(), ADD_MODE::APPEND );
         }
 
         // arrow
@@ -1458,25 +1465,35 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
             if( dirVec.x != 0 || dirVec.y != 0 )
             {
                 double   scaling = EuclideanNorm( dirVec ) / aElem.arrowsize;
-                VECTOR2I arrVec = VECTOR2I( KiROUND( dirVec.x / scaling ),
-                                            KiROUND( dirVec.y / scaling ) );
+                VECTOR2I arrVec =
+                        VECTOR2I( KiROUND( dirVec.x / scaling ), KiROUND( dirVec.y / scaling ) );
                 RotatePoint( arrVec, EDA_ANGLE( 20.0, DEGREES_T ) );
 
-                PCB_SHAPE* shape1 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
-                m_board->Add( shape1, ADD_MODE::APPEND );
-                shape1->SetLayer( klayer );
-                shape1->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
-                shape1->SetStart( referencePoint0 );
-                shape1->SetEnd( referencePoint0 + arrVec );
+                {
+                    std::unique_ptr<PCB_SHAPE> shape1 =
+                            std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
+
+                    shape1->SetLayer( klayer );
+                    shape1->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
+                    shape1->SetStart( referencePoint0 );
+                    shape1->SetEnd( referencePoint0 + arrVec );
+
+                    m_board->Add( shape1.release(), ADD_MODE::APPEND );
+                }
 
                 RotatePoint( arrVec, EDA_ANGLE( -40.0, DEGREES_T ) );
 
-                PCB_SHAPE* shape2 = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
-                m_board->Add( shape2, ADD_MODE::APPEND );
-                shape2->SetLayer( klayer );
-                shape2->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
-                shape2->SetStart( referencePoint0 );
-                shape2->SetEnd( referencePoint0 + arrVec );
+                {
+                    std::unique_ptr<PCB_SHAPE> shape2 =
+                            std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
+
+                    shape2->SetLayer( klayer );
+                    shape2->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
+                    shape2->SetStart( referencePoint0 );
+                    shape2->SetEnd( referencePoint0 + arrVec );
+
+                    m_board->Add( shape2.release(), ADD_MODE::APPEND );
+                }
             }
         }
     }
@@ -1487,8 +1504,8 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
         return;
     }
 
-    PCB_TEXT* text = new PCB_TEXT( m_board );
-    m_board->Add( text, ADD_MODE::APPEND );
+    std::unique_ptr<PCB_TEXT> text = std::make_unique<PCB_TEXT>( m_board );
+
     text->SetText( aElem.textformat );
     text->SetPosition( aElem.textPoint.at( 0 ) );
     text->SetLayer( klayer );
@@ -1496,6 +1513,8 @@ void ALTIUM_PCB::HelperParseDimensions6Leader( const ADIMENSION6& aElem )
     text->SetTextThickness( aElem.textlinewidth );
     text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     text->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+
+    m_board->Add( text.release(), ADD_MODE::APPEND );
 }
 
 
@@ -1513,12 +1532,14 @@ void ALTIUM_PCB::HelperParseDimensions6Datum( const ADIMENSION6& aElem )
 
     for( size_t i = 0; i < aElem.referencePoint.size(); i++ )
     {
-        PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
-        m_board->Add( shape, ADD_MODE::APPEND );
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
+
         shape->SetLayer( klayer );
         shape->SetStroke( STROKE_PARAMS( aElem.linewidth, LINE_STYLE::SOLID ) );
         shape->SetStart( aElem.referencePoint.at( i ) );
         // shape->SetEnd( /* TODO: seems to be based on TEXTY */ );
+
+        m_board->Add( shape.release(), ADD_MODE::APPEND );
     }
 }
 
@@ -1538,12 +1559,14 @@ void ALTIUM_PCB::HelperParseDimensions6Center( const ADIMENSION6& aElem )
     VECTOR2I vec = VECTOR2I( 0, aElem.height / 2 );
     RotatePoint( vec, EDA_ANGLE( aElem.angle, DEGREES_T ) );
 
-    PCB_DIM_CENTER* dimension = new PCB_DIM_CENTER( m_board );
-    m_board->Add( dimension, ADD_MODE::APPEND );
+    std::unique_ptr<PCB_DIM_CENTER> dimension = std::make_unique<PCB_DIM_CENTER>( m_board );
+
     dimension->SetLayer( klayer );
     dimension->SetLineThickness( aElem.linewidth );
     dimension->SetStart( aElem.xy1 );
     dimension->SetEnd( aElem.xy1 + vec );
+
+    m_board->Add( dimension.release(), ADD_MODE::APPEND );
 }
 
 
@@ -1700,6 +1723,7 @@ void ALTIUM_PCB::ParseNets6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
         NETINFO_ITEM* netInfo = new NETINFO_ITEM( m_board, elem.name, 0 );
         m_board->Add( netInfo, ADD_MODE::APPEND );
 
+        // needs to be called after m_board->Add() as assign us the NetCode
         m_altiumToKicadNetcodes.push_back( netInfo->GetNetCode() );
     }
 
@@ -1739,9 +1763,8 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
             continue;
         }
 
-        ZONE* zone = new ZONE( m_board );
-        m_board->Add( zone, ADD_MODE::APPEND );
-        m_polygons.emplace_back( zone );
+        std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( m_board );
+        m_polygons.emplace_back( zone.get() );
 
         zone->SetNetCode( GetNetCode( elem.net ) );
         zone->SetPosition( elem.vertices.at( 0 ).position );
@@ -1749,7 +1772,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
         zone->SetAssignedPriority( elem.pourindex > 0 ? elem.pourindex : 0 );
         zone->Outline()->AddOutline( linechain );
 
-        HelperSetZoneLayers( zone, elem.layer );
+        HelperSetZoneLayers( *zone, elem.layer );
 
         if( elem.pourindex > m_highest_pour_index )
             m_highest_pour_index = elem.pourindex;
@@ -1820,7 +1843,7 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
             if( outer_plane == m_outer_plane.end()
                     || zone->GetBoundingBox().Contains( outer_plane->second->GetBoundingBox() ) )
             {
-                m_outer_plane[elem.layer] = zone;
+                m_outer_plane[elem.layer] = zone.get();
             }
         }
 
@@ -1847,6 +1870,8 @@ void ALTIUM_PCB::ParsePolygons6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbF
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                      ZONE::GetDefaultHatchPitch(), true );
+
+        m_board->Add( zone.release(), ADD_MODE::APPEND );
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -1993,14 +2018,13 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
             return;
         }
 
-        ZONE* zone = new ZONE( m_board );
-        m_board->Add( zone, ADD_MODE::APPEND );
+        std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( m_board );
 
         zone->SetIsRuleArea( true );
 
         if( aElem.is_keepout )
         {
-            HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
+            HelperSetZoneKeepoutRestrictions( *zone, aElem.keepoutrestrictions );
         }
         else if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT )
         {
@@ -2014,10 +2038,12 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
 
-        HelperSetZoneLayers( zone, aElem.layer );
+        HelperSetZoneLayers( *zone, aElem.layer );
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                      ZONE::GetDefaultHatchPitch(), true );
+
+        m_board->Add( zone.release(), ADD_MODE::APPEND );
     }
     else if( aElem.kind == ALTIUM_REGION_KIND::DASHED_OUTLINE )
     {
@@ -2044,14 +2070,14 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItem( const AREGION6& aElem )
             return;
         }
 
-        PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::POLY );
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::POLY );
 
         shape->SetPolyShape( linechain );
         shape->SetFilled( false );
         shape->SetLayer( klayer );
         shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), LINE_STYLE::DASH ) );
 
-        m_board->Add( shape, ADD_MODE::APPEND );
+        m_board->Add( shape.release(), ADD_MODE::APPEND );
     }
     else if( aElem.kind == ALTIUM_REGION_KIND::COPPER )
     {
@@ -2090,14 +2116,13 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
             return;
         }
 
-        ZONE* zone = new ZONE( aFootprint );
-        aFootprint->Add( zone, ADD_MODE::APPEND );
+        std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aFootprint );
 
         zone->SetIsRuleArea( true );
 
         if( aElem.is_keepout )
         {
-            HelperSetZoneKeepoutRestrictions( zone, aElem.keepoutrestrictions );
+            HelperSetZoneKeepoutRestrictions( *zone, aElem.keepoutrestrictions );
         }
         else if( aElem.kind == ALTIUM_REGION_KIND::POLYGON_CUTOUT )
         {
@@ -2111,10 +2136,12 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         zone->SetPosition( aElem.outline.at( 0 ).position );
         zone->Outline()->AddOutline( linechain );
 
-        HelperSetZoneLayers( zone, aElem.layer );
+        HelperSetZoneLayers( *zone, aElem.layer );
 
         zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                      ZONE::GetDefaultHatchPitch(), true );
+
+        aFootprint->Add( zone.release(), ADD_MODE::APPEND );
     }
     else if( aElem.kind == ALTIUM_REGION_KIND::COPPER )
     {
@@ -2168,7 +2195,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
             return;
         }
 
-        PCB_SHAPE* shape = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::POLY );
 
         shape->SetPolyShape( linechain );
         shape->SetFilled( false );
@@ -2179,7 +2206,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItem( FOOTPRINT*      aFoot
         else
             shape->SetStroke( STROKE_PARAMS( pcbIUScale.mmToIU( 0.1 ), LINE_STYLE::SOLID ) );
 
-        aFootprint->Add( shape, ADD_MODE::APPEND );
+        aFootprint->Add( shape.release(), ADD_MODE::APPEND );
     }
     else
     {
@@ -2230,7 +2257,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aE
         polySet.AddHole( hole_linechain );
     }
 
-    PCB_SHAPE* shape = new PCB_SHAPE( m_board, SHAPE_T::POLY );
+    std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::POLY );
 
     shape->SetPolyShape( polySet );
     shape->SetFilled( true );
@@ -2242,7 +2269,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToBoardItemOnLayer( const AREGION6& aE
         shape->SetNetCode( GetNetCode( aElem.net ) );
     }
 
-    m_board->Add( shape, ADD_MODE::APPEND );
+    m_board->Add( shape.release(), ADD_MODE::APPEND );
 }
 
 
@@ -2279,7 +2306,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
 
     if( aLayer == F_Cu || aLayer == B_Cu )
     {
-        PAD* pad = new PAD( aFootprint );
+        std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
 
         LSET padLayers;
         padLayers.set( aLayer );
@@ -2328,18 +2355,18 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
 
         pad->SetLayerSet( padLayers );
 
-        aFootprint->Add( pad, ADD_MODE::APPEND );
+        aFootprint->Add( pad.release(), ADD_MODE::APPEND );
     }
     else
     {
-        PCB_SHAPE* shape = new PCB_SHAPE( aFootprint, SHAPE_T::POLY );
+        std::unique_ptr<PCB_SHAPE> shape = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::POLY );
 
         shape->SetPolyShape( polySet );
         shape->SetFilled( true );
         shape->SetLayer( aLayer );
         shape->SetStroke( STROKE_PARAMS( 0 ) );
 
-        aFootprint->Add( shape, ADD_MODE::APPEND );
+        aFootprint->Add( shape.release(), ADD_MODE::APPEND );
     }
 }
 
@@ -2540,13 +2567,13 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItem( const AARC6& aElem, const int aPrimiti
 
         if( width > 1 )
         {
-            PCB_SHAPE* arc = new PCB_SHAPE( m_board );
+            std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( m_board );
 
-            ConvertArcs6ToPcbShape( aElem, arc );
+            ConvertArcs6ToPcbShape( aElem, arc.get() );
             arc->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             arc->SetLayer( layerExpansionMask.first );
 
-            m_board->Add( arc, ADD_MODE::APPEND );
+            m_board->Add( arc.release(), ADD_MODE::APPEND );
         }
     }
 }
@@ -2597,13 +2624,13 @@ void ALTIUM_PCB::ConvertArcs6ToFootprintItem( FOOTPRINT* aFootprint, const AARC6
 
         if( width > 1 )
         {
-            PCB_SHAPE* arc = new PCB_SHAPE( aFootprint );
+            std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( aFootprint );
 
-            ConvertArcs6ToPcbShape( aElem, arc );
+            ConvertArcs6ToPcbShape( aElem, arc.get() );
             arc->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             arc->SetLayer( layerExpansionMask.first );
 
-            aFootprint->Add( arc, ADD_MODE::APPEND );
+            aFootprint->Add( arc.release(), ADD_MODE::APPEND );
         }
     }
 }
@@ -2628,23 +2655,23 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
 
         // Create actual arc
         SHAPE_ARC shapeArc( shape.GetCenter(), shape.GetStart(), shape.GetArcAngle(), aElem.width );
-        PCB_ARC*  arc = new PCB_ARC( m_board, &shapeArc );
+        std::unique_ptr<PCB_ARC>  arc = std::make_unique<PCB_ARC>( m_board, &shapeArc );
 
         arc->SetWidth( aElem.width );
         arc->SetLayer( aLayer );
         arc->SetNetCode( GetNetCode( aElem.net ) );
 
-        m_board->Add( arc, ADD_MODE::APPEND );
+        m_board->Add( arc.release(), ADD_MODE::APPEND );
     }
     else
     {
-        PCB_SHAPE* arc = new PCB_SHAPE( m_board );
+        std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( m_board );
 
-        ConvertArcs6ToPcbShape( aElem, arc );
+        ConvertArcs6ToPcbShape( aElem, arc.get() );
         arc->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
         arc->SetLayer( aLayer );
 
-        m_board->Add( arc, ADD_MODE::APPEND );
+        m_board->Add( arc.release(), ADD_MODE::APPEND );
     }
 }
 
@@ -2652,13 +2679,13 @@ void ALTIUM_PCB::ConvertArcs6ToBoardItemOnLayer( const AARC6& aElem, PCB_LAYER_I
 void ALTIUM_PCB::ConvertArcs6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AARC6& aElem,
                                                      PCB_LAYER_ID aLayer )
 {
-    PCB_SHAPE* arc = new PCB_SHAPE( aFootprint );
+    std::unique_ptr<PCB_SHAPE> arc = std::make_unique<PCB_SHAPE>( aFootprint );
 
-    ConvertArcs6ToPcbShape( aElem, arc );
+    ConvertArcs6ToPcbShape( aElem, arc.get() );
     arc->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
     arc->SetLayer( aLayer );
 
-    aFootprint->Add( arc, ADD_MODE::APPEND );
+    aFootprint->Add( arc.release(), ADD_MODE::APPEND );
 }
 
 
@@ -2702,12 +2729,12 @@ void ALTIUM_PCB::ConvertPads6ToBoardItem( const APAD6& aElem )
     else
     {
         // We cannot add a pad directly into the PCB
-        FOOTPRINT* footprint = new FOOTPRINT( m_board );
+        std::unique_ptr<FOOTPRINT> footprint = std::make_unique<FOOTPRINT>( m_board );
         footprint->SetPosition( aElem.position );
 
-        ConvertPads6ToFootprintItemOnCopper( footprint, aElem );
+        ConvertPads6ToFootprintItemOnCopper( footprint.get(), aElem );
 
-        m_board->Add( footprint, ADD_MODE::APPEND );
+        m_board->Add( footprint.release(), ADD_MODE::APPEND );
     }
 }
 
@@ -2729,7 +2756,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItem( FOOTPRINT* aFootprint, const APAD6
 
 void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, const APAD6& aElem )
 {
-    PAD* pad = new PAD( aFootprint );
+    std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
 
     pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
 
@@ -2982,7 +3009,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     if( aElem.is_tent_bottom )
         pad->SetLayerSet( pad->GetLayerSet().reset( B_Mask ) );
 
-    aFootprint->Add( pad, ADD_MODE::APPEND );
+    aFootprint->Add( pad.release(), ADD_MODE::APPEND );
 }
 
 
@@ -2998,11 +3025,11 @@ void ALTIUM_PCB::ConvertPads6ToBoardItemOnNonCopper( const APAD6& aElem )
         klayer = Eco1_User;
     }
 
-    PCB_SHAPE* pad = new PCB_SHAPE( m_board );
+    std::unique_ptr<PCB_SHAPE> pad = std::make_unique<PCB_SHAPE>( m_board );
 
-    HelperParsePad6NonCopper( aElem, klayer, pad );
+    HelperParsePad6NonCopper( aElem, klayer, pad.get() );
 
-    m_board->Add( pad, ADD_MODE::APPEND );
+    m_board->Add( pad.release(), ADD_MODE::APPEND );
 }
 
 
@@ -3034,11 +3061,11 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnNonCopper( FOOTPRINT* aFootprint, 
         klayer = Eco1_User;
     }
 
-    PCB_SHAPE* pad = new PCB_SHAPE( aFootprint );
+    std::unique_ptr<PCB_SHAPE> pad = std::make_unique<PCB_SHAPE>( aFootprint );
 
-    HelperParsePad6NonCopper( aElem, klayer, pad );
+    HelperParsePad6NonCopper( aElem, klayer, pad.get() );
 
-    aFootprint->Add( pad, ADD_MODE::APPEND );
+    aFootprint->Add( pad.release(), ADD_MODE::APPEND );
 }
 
 
@@ -3219,8 +3246,7 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
         checkpoint();
         AVIA6 elem( reader );
 
-        PCB_VIA* via = new PCB_VIA( m_board );
-        m_board->Add( via, ADD_MODE::APPEND );
+        std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
         via->SetPosition( elem.position );
         via->SetWidth( elem.diameter );
@@ -3260,6 +3286,8 @@ void ALTIUM_PCB::ParseVias6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
 
         // we need VIATYPE set!
         via->SetLayerPair( start_klayer, end_klayer );
+
+        m_board->Add( via.release(), ADD_MODE::APPEND );
     }
 
     if( reader.GetRemainingBytes() != 0 )
@@ -3361,14 +3389,14 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItem( const ATRACK6& aElem, const int aPri
         int width = aElem.width + ( layerExpansionMask.second * 2 );
         if( width > 1 )
         {
-            PCB_SHAPE* seg = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
+            std::unique_ptr<PCB_SHAPE> seg = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
 
             seg->SetStart( aElem.start );
             seg->SetEnd( aElem.end );
             seg->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             seg->SetLayer( layerExpansionMask.first );
 
-            m_board->Add( seg, ADD_MODE::APPEND );
+            m_board->Add( seg.release(), ADD_MODE::APPEND );
         }
     }
 }
@@ -3419,14 +3447,14 @@ void ALTIUM_PCB::ConvertTracks6ToFootprintItem( FOOTPRINT* aFootprint, const ATR
         int width = aElem.width + ( layerExpansionMask.second * 2 );
         if( width > 1 )
         {
-            PCB_SHAPE* seg = new PCB_SHAPE( aFootprint, SHAPE_T::SEGMENT );
+            std::unique_ptr<PCB_SHAPE> seg = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::SEGMENT );
 
             seg->SetStart( aElem.start );
             seg->SetEnd( aElem.end );
             seg->SetStroke( STROKE_PARAMS( width, LINE_STYLE::SOLID ) );
             seg->SetLayer( layerExpansionMask.first );
 
-            aFootprint->Add( seg, ADD_MODE::APPEND );
+            aFootprint->Add( seg.release(), ADD_MODE::APPEND );
         }
     }
 }
@@ -3436,7 +3464,7 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAY
 {
     if( IsCopperLayer( aLayer ) && aElem.net != ALTIUM_NET_UNCONNECTED )
     {
-        PCB_TRACK* track = new PCB_TRACK( m_board );
+        std::unique_ptr<PCB_TRACK> track = std::make_unique<PCB_TRACK>( m_board );
 
         track->SetStart( aElem.start );
         track->SetEnd( aElem.end );
@@ -3444,18 +3472,18 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAY
         track->SetLayer( aLayer );
         track->SetNetCode( GetNetCode( aElem.net ) );
 
-        m_board->Add( track, ADD_MODE::APPEND );
+        m_board->Add( track.release(), ADD_MODE::APPEND );
     }
     else
     {
-        PCB_SHAPE* seg = new PCB_SHAPE( m_board, SHAPE_T::SEGMENT );
+        std::unique_ptr<PCB_SHAPE> seg = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::SEGMENT );
 
         seg->SetStart( aElem.start );
         seg->SetEnd( aElem.end );
         seg->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
         seg->SetLayer( aLayer );
 
-        m_board->Add( seg, ADD_MODE::APPEND );
+        m_board->Add( seg.release(), ADD_MODE::APPEND );
     }
 }
 
@@ -3463,14 +3491,14 @@ void ALTIUM_PCB::ConvertTracks6ToBoardItemOnLayer( const ATRACK6& aElem, PCB_LAY
 void ALTIUM_PCB::ConvertTracks6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATRACK6& aElem,
                                                        PCB_LAYER_ID aLayer )
 {
-    PCB_SHAPE* seg = new PCB_SHAPE( aFootprint, SHAPE_T::SEGMENT );
+    std::unique_ptr<PCB_SHAPE> seg = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::SEGMENT );
 
     seg->SetStart( aElem.start );
     seg->SetEnd( aElem.end );
     seg->SetStroke( STROKE_PARAMS( aElem.width, LINE_STYLE::SOLID ) );
     seg->SetLayer( aLayer );
 
-    aFootprint->Add( seg, ADD_MODE::APPEND );
+    aFootprint->Add( seg.release(), ADD_MODE::APPEND );
 }
 
 
@@ -3559,7 +3587,7 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItem( FOOTPRINT* aFootprint, const ATEX
 
 void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER_ID aLayer )
 {
-    PCB_TEXT* pcbText = new PCB_TEXT( m_board );
+    std::unique_ptr<PCB_TEXT> pcbText = std::make_unique<PCB_TEXT>( m_board );
 
     static const std::map<wxString, wxString> variableMap = {
         { "LAYER_NAME", "LAYER" },
@@ -3573,9 +3601,9 @@ void ALTIUM_PCB::ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER
     pcbText->SetPosition( aElem.position );
     pcbText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
 
-    ConvertTexts6ToEdaTextSettings( aElem, pcbText );
+    ConvertTexts6ToEdaTextSettings( aElem, *pcbText );
 
-    m_board->Add( pcbText, ADD_MODE::APPEND );
+    m_board->Add( pcbText.release(), ADD_MODE::APPEND );
 }
 
 
@@ -3614,37 +3642,37 @@ void ALTIUM_PCB::ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
     fpText->SetPosition( aElem.position );
     fpText->SetTextAngle( EDA_ANGLE( aElem.rotation, DEGREES_T ) );
 
-    ConvertTexts6ToEdaTextSettings( aElem, fpText );
+    ConvertTexts6ToEdaTextSettings( aElem, *fpText );
 }
 
 
-void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* aEdaText )
+void ALTIUM_PCB::ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT& aEdaText )
 {
-    aEdaText->SetTextSize( VECTOR2I( aElem.height, aElem.height ) ); // TODO: parse text width
+    aEdaText.SetTextSize( VECTOR2I( aElem.height, aElem.height ) ); // TODO: parse text width
 
     if( aElem.fonttype == ALTIUM_TEXT_TYPE::TRUETYPE )
     {
         KIFONT::FONT* font = KIFONT::FONT::GetFont( aElem.fontname, aElem.isBold, aElem.isItalic );
-        aEdaText->SetFont( font );
+        aEdaText.SetFont( font );
 
         if( font->IsOutline() )
         {
             // TODO: why is this required? Somehow, truetype size is calculated differently
             if( font->GetName().Contains( wxS( "Arial" ) ) )
-                aEdaText->SetTextSize( VECTOR2I( aElem.height * 0.63, aElem.height * 0.63 ) );
+                aEdaText.SetTextSize( VECTOR2I( aElem.height * 0.63, aElem.height * 0.63 ) );
             else
-                aEdaText->SetTextSize( VECTOR2I( aElem.height * 0.5, aElem.height * 0.5 ) );
+                aEdaText.SetTextSize( VECTOR2I( aElem.height * 0.5, aElem.height * 0.5 ) );
         }
     }
 
-    aEdaText->SetTextThickness( aElem.strokewidth );
-    aEdaText->SetBoldFlag( aElem.isBold );
-    aEdaText->SetItalic( aElem.isItalic );
-    aEdaText->SetMirrored( aElem.isMirrored );
+    aEdaText.SetTextThickness( aElem.strokewidth );
+    aEdaText.SetBoldFlag( aElem.isBold );
+    aEdaText.SetItalic( aElem.isItalic );
+    aEdaText.SetMirrored( aElem.isMirrored );
 
     // Altium position always specifies the bottom left corner
-    aEdaText->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-    aEdaText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+    aEdaText.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+    aEdaText.SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
 
     // TODO: correct the position and set proper justification
 }
@@ -3749,7 +3777,7 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItem( FOOTPRINT* aFootprint, const AFIL
 
 void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER_ID aLayer )
 {
-    PCB_SHAPE* fill = new PCB_SHAPE( m_board, SHAPE_T::RECTANGLE );
+    std::unique_ptr<PCB_SHAPE> fill = std::make_unique<PCB_SHAPE>( m_board, SHAPE_T::RECTANGLE );
 
     fill->SetFilled( true );
     fill->SetLayer( aLayer );
@@ -3770,14 +3798,14 @@ void ALTIUM_PCB::ConvertFills6ToBoardItemOnLayer( const AFILL6& aElem, PCB_LAYER
         fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
     }
 
-    m_board->Add( fill, ADD_MODE::APPEND );
+    m_board->Add( fill.release(), ADD_MODE::APPEND );
 }
 
 
 void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const AFILL6& aElem,
                                                       PCB_LAYER_ID aLayer )
 {
-    PCB_SHAPE* fill = new PCB_SHAPE( aFootprint, SHAPE_T::RECTANGLE );
+    std::unique_ptr<PCB_SHAPE> fill = std::make_unique<PCB_SHAPE>( aFootprint, SHAPE_T::RECTANGLE );
 
     fill->SetFilled( true );
     fill->SetLayer( aLayer );
@@ -3793,22 +3821,22 @@ void ALTIUM_PCB::ConvertFills6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, con
         fill->Rotate( center, EDA_ANGLE( aElem.rotation, DEGREES_T ) );
     }
 
-    aFootprint->Add( fill, ADD_MODE::APPEND );
+    aFootprint->Add( fill.release(), ADD_MODE::APPEND );
 }
 
 
-void ALTIUM_PCB::HelperSetZoneLayers( ZONE* aZone, const ALTIUM_LAYER aAltiumLayer )
+void ALTIUM_PCB::HelperSetZoneLayers( ZONE& aZone, const ALTIUM_LAYER aAltiumLayer )
 {
     LSET layerSet;
 
     for( PCB_LAYER_ID klayer : GetKicadLayersToIterate( aAltiumLayer ) )
         layerSet.set( klayer );
 
-    aZone->SetLayerSet( layerSet );
+    aZone.SetLayerSet( layerSet );
 }
 
 
-void ALTIUM_PCB::HelperSetZoneKeepoutRestrictions( ZONE* aZone, const uint8_t aKeepoutRestrictions )
+void ALTIUM_PCB::HelperSetZoneKeepoutRestrictions( ZONE& aZone, const uint8_t aKeepoutRestrictions )
 {
     bool keepoutRestrictionVia = ( aKeepoutRestrictions & 0x01 ) != 0;
     bool keepoutRestrictionTrack = ( aKeepoutRestrictions & 0x02 ) != 0;
@@ -3816,11 +3844,11 @@ void ALTIUM_PCB::HelperSetZoneKeepoutRestrictions( ZONE* aZone, const uint8_t aK
     bool keepoutRestrictionSMDPad = ( aKeepoutRestrictions & 0x08 ) != 0;
     bool keepoutRestrictionTHPad = ( aKeepoutRestrictions & 0x10 ) != 0;
 
-    aZone->SetDoNotAllowVias( keepoutRestrictionVia );
-    aZone->SetDoNotAllowTracks( keepoutRestrictionTrack );
-    aZone->SetDoNotAllowCopperPour( keepoutRestrictionCopper );
-    aZone->SetDoNotAllowPads( keepoutRestrictionSMDPad && keepoutRestrictionTHPad );
-    aZone->SetDoNotAllowFootprints( false );
+    aZone.SetDoNotAllowVias( keepoutRestrictionVia );
+    aZone.SetDoNotAllowTracks( keepoutRestrictionTrack );
+    aZone.SetDoNotAllowCopperPour( keepoutRestrictionCopper );
+    aZone.SetDoNotAllowPads( keepoutRestrictionSMDPad && keepoutRestrictionTHPad );
+    aZone.SetDoNotAllowFootprints( false );
 }
 
 
@@ -3828,19 +3856,19 @@ void ALTIUM_PCB::HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
                                                      const ALTIUM_LAYER aAltiumLayer,
                                                      const uint8_t      aKeepoutRestrictions )
 {
-    ZONE* zone = new ZONE( m_board );
+    std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( m_board );
 
     zone->SetIsRuleArea( true );
 
-    HelperSetZoneLayers( zone, aAltiumLayer );
-    HelperSetZoneKeepoutRestrictions( zone, aKeepoutRestrictions );
+    HelperSetZoneLayers( *zone, aAltiumLayer );
+    HelperSetZoneKeepoutRestrictions( *zone, aKeepoutRestrictions );
 
     aShape.EDA_SHAPE::TransformShapeToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, ERROR_INSIDE );
 
     zone->SetBorderDisplayStyle( ZONE_BORDER_DISPLAY_STYLE::DIAGONAL_EDGE,
                                  ZONE::GetDefaultHatchPitch(), true );
 
-    m_board->Add( zone, ADD_MODE::APPEND );
+    m_board->Add( zone.release(), ADD_MODE::APPEND );
 }
 
 
@@ -3849,12 +3877,12 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*         aFoo
                                                          const ALTIUM_LAYER aAltiumLayer,
                                                          const uint8_t      aKeepoutRestrictions )
 {
-    ZONE* zone = new ZONE( aFootprint );
+    std::unique_ptr<ZONE> zone = std::make_unique<ZONE>( aFootprint );
 
     zone->SetIsRuleArea( true );
 
-    HelperSetZoneLayers( zone, aAltiumLayer );
-    HelperSetZoneKeepoutRestrictions( zone, aKeepoutRestrictions );
+    HelperSetZoneLayers( *zone, aAltiumLayer );
+    HelperSetZoneKeepoutRestrictions( *zone, aKeepoutRestrictions );
 
     aShape.EDA_SHAPE::TransformShapeToPolygon( *zone->Outline(), 0, ARC_HIGH_DEF, ERROR_INSIDE );
 
@@ -3862,7 +3890,7 @@ void ALTIUM_PCB::HelperPcpShapeAsFootprintKeepoutRegion( FOOTPRINT*         aFoo
                                  ZONE::GetDefaultHatchPitch(), true );
 
     // TODO: zone->SetLocalCoord(); missing?
-    aFootprint->Add( zone, ADD_MODE::APPEND );
+    aFootprint->Add( zone.release(), ADD_MODE::APPEND );
 }
 
 

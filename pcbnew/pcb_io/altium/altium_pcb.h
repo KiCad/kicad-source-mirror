@@ -184,7 +184,7 @@ private:
     void ConvertTexts6ToBoardItemOnLayer( const ATEXT6& aElem, PCB_LAYER_ID aLayer );
     void ConvertTexts6ToFootprintItemOnLayer( FOOTPRINT* aFootprint, const ATEXT6& aElem,
                                               PCB_LAYER_ID aLayer );
-    void ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT* aEdaText );
+    void ConvertTexts6ToEdaTextSettings( const ATEXT6& aElem, EDA_TEXT& aEdaText );
     void ParseFills6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPcbFile,
                           const CFB::COMPOUND_FILE_ENTRY* aEntry );
     void ConvertFills6ToBoardItem( const AFILL6& aElem );
@@ -223,8 +223,8 @@ private:
 
     void HelperCreateBoardOutline( const std::vector<ALTIUM_VERTICE>& aVertices );
 
-    void HelperSetZoneLayers( ZONE* aZone, const ALTIUM_LAYER aAltiumLayer );
-    void HelperSetZoneKeepoutRestrictions( ZONE* aZone, const uint8_t aKeepoutRestrictions );
+    void HelperSetZoneLayers( ZONE& aZone, const ALTIUM_LAYER aAltiumLayer );
+    void HelperSetZoneKeepoutRestrictions( ZONE& aZone, const uint8_t aKeepoutRestrictions );
     void HelperPcpShapeAsBoardKeepoutRegion( const PCB_SHAPE&   aShape,
                                              const ALTIUM_LAYER aAltiumLayer,
                                              const uint8_t      aKeepoutRestrictions );
