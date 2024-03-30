@@ -73,7 +73,8 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_markersTreeModel( nullptr ),
         m_unconnectedTreeModel( nullptr ),
         m_fpWarningsTreeModel( nullptr ),
-        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING )
+        m_severities( RPT_SEVERITY_ERROR | RPT_SEVERITY_WARNING ),
+        m_lastUpdateUi( std::chrono::steady_clock::now() )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
 
@@ -209,8 +210,20 @@ bool DIALOG_DRC::updateUI()
 {
     double cur = alg::clamp( 0.0, (double) m_progress.load() / m_maxProgress, 1.0 );
 
-    m_gauge->SetValue( KiROUND( cur * 1000.0 ) );
-    Pgm().App().SafeYieldFor( this, wxEVT_CATEGORY_NATIVE_EVENTS );
+    int newValue = KiROUND( cur * 1000.0 );
+    m_gauge->SetValue( newValue );
+
+    // There is significant overhead on at least Windows when updateUi is called constantly thousands of times
+    // in the drc process and safeyieldfor is called each time.
+    // Gate the yield to a limited rate which still allows the UI to function without slowing down the main thread
+    // which is also running DRC
+    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+    if( std::chrono::duration_cast<std::chrono::milliseconds>( now - m_lastUpdateUi ).count()
+        > 100 )
+    {
+        Pgm().App().SafeYieldFor( this, wxEVT_CATEGORY_NATIVE_EVENTS );
+        m_lastUpdateUi = now;
+    }
 
     return !m_cancelled;
 }
