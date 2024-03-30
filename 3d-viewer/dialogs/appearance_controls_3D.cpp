@@ -83,6 +83,13 @@ const APPEARANCE_CONTROLS_3D::APPEARANCE_SETTING_3D APPEARANCE_CONTROLS_3D::s_la
     RR( _HKI( "Background End" ),         LAYER_3D_BACKGROUND_BOTTOM, _HKI( "Background gradient end color" ) ),
 };
 
+// The list of IDs that can have colors coming from the board stackup, and cannot be
+// modified if use colors from stackup is activated
+static std::vector<int> inStackupColors{ LAYER_3D_BOARD, LAYER_3D_COPPER_TOP,
+                                         LAYER_3D_COPPER_BOTTOM, LAYER_3D_SOLDERPASTE,
+                                         LAYER_3D_SILKSCREEN_TOP, LAYER_3D_SILKSCREEN_BOTTOM,
+                                         LAYER_3D_SOLDERMASK_TOP, LAYER_3D_SOLDERMASK_BOTTOM
+                                        };
 
 APPEARANCE_CONTROLS_3D::APPEARANCE_CONTROLS_3D( EDA_3D_VIEWER_FRAME* aParent,
                                                 wxWindow* aFocusOwner ) :
@@ -579,8 +586,14 @@ void APPEARANCE_CONTROLS_3D::UpdateLayerCtls()
         {
             setting->m_Ctl_color->SetSwatchColor( colors[ setting->m_Id ], false );
 
-            if( cfg )
-                setting->m_Ctl_color->SetReadOnly( cfg->m_UseStackupColors );
+            // if cfg->m_UseStackupColors is set, board colors cannot be modified locally, but
+            // other colors can be
+            if( std::find( inStackupColors.begin(), inStackupColors.end(), setting->m_Id )
+                != inStackupColors.end() )
+            {
+                if( cfg )
+                    setting->m_Ctl_color->SetReadOnly( cfg->m_UseStackupColors );
+            }
         }
     }
 
