@@ -356,7 +356,6 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
 
         std::shared_ptr<DRC_ENGINE> drcEngine( new DRC_ENGINE );
 
-        CONSOLE_LOG            consoleLog;
         BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
 
         bds.m_DRCEngine = drcEngine;
@@ -366,7 +365,7 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
 
         drcEngine->SetBoard( m_board.get() );
         drcEngine->SetDesignSettings( &bds );
-        drcEngine->SetLogReporter( new CONSOLE_MSG_REPORTER( &consoleLog ) );
+        drcEngine->SetLogReporter( aRpt );
         drcEngine->InitEngine( wxFileName() );
     }
     catch( const PARSE_ERROR& parse_error )
@@ -405,11 +404,11 @@ bool PNS_LOG_FILE::Load( const wxFileName& logFileName, REPORTER* aRpt )
         }
         else if( cmd == wxT( "event" ) )
         {
-            m_events.push_back( PNS::LOGGER::ParseEvent( line ) );
+            m_events.push_back( std::move( PNS::LOGGER::ParseEvent( line ) ) );
         }
         else if ( cmd == wxT( "added" ) )
         {
-            m_parsed_items.push_back( parseItemFromString( tokens ) );
+            m_parsed_items.push_back( std::move( parseItemFromString( tokens ) ) );
             m_commitState.m_addedItems.push_back( m_parsed_items.back().get() );
         }
         else if ( cmd == wxT( "removed" ) )

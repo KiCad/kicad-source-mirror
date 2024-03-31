@@ -907,10 +907,10 @@ void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
 
     for( auto& ent : entries )
     {
-        if ( ent.isHideOp )
+        if ( ent.m_isHideOp )
         {
 
-            auto parent = ent.item->Parent();
+            auto parent = ent.m_item->Parent();
             if( parent )
             {
 
@@ -919,8 +919,8 @@ void PNS_LOG_VIEWER_FRAME::updatePnsPreviewItems( int iter )
         }
         else
         {
-            ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( ent.item, view );
-            pitem->Update( ent.item );
+            ROUTER_PREVIEW_ITEM* pitem = new ROUTER_PREVIEW_ITEM( ent.m_item, view );
+            pitem->Update( ent.m_item );
             m_previewItems->Add(pitem);
     //        printf("DBG vadd %p total %d\n", pitem, m_previewItems->GetSize() );
         }

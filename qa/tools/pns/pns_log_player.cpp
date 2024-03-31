@@ -39,8 +39,6 @@ PNS_LOG_PLAYER::PNS_LOG_PLAYER()
 
 PNS_LOG_PLAYER::~PNS_LOG_PLAYER()
 {
-    if( m_debugDecorator )
-        delete m_debugDecorator;
 }
 
 void PNS_LOG_PLAYER::createRouter()
@@ -52,7 +50,9 @@ void PNS_LOG_PLAYER::createRouter()
     m_router->SetInterface( m_iface.get() );
     m_router->ClearWorld();
     m_router->SyncWorld();
-    m_router->LoadSettings( new PNS::ROUTING_SETTINGS( nullptr, "" ) );
+
+    m_routingSettings.reset( new PNS::ROUTING_SETTINGS( nullptr, "" ) );
+    m_router->LoadSettings( m_routingSettings.get() );
     m_router->Settings().SetMode( PNS::RM_Walkaround );
     m_router->Sizes().SetTrackWidth( 250000 );
 
@@ -83,6 +83,9 @@ const PNS_LOG_FILE::COMMIT_STATE PNS_LOG_PLAYER::GetRouterUpdatedItems()
     }
 
     // fixme: update the state with the head trace (not supported in current testsuite)
+    // Note: we own the head items (cloned inside GetUpdatedItems) - we need to delete them!
+    for( auto head : heads )
+        delete head;
 
     return state;
 }
@@ -351,17 +354,19 @@ void PNS_LOG_VIEW_TRACKER::SetStage( int aStage )
 void PNS_LOG_VIEW_TRACKER::HideItem( PNS::ITEM* aItem )
 {
     ENTRY ent;
-    ent.isHideOp = true;
-    ent.item = aItem;
-    m_vitems[m_currentStage].push_back( ent );
+    ent.m_isHideOp = true;
+    ent.m_item = aItem;
+    ent.m_ownedItem = nullptr; // I don't own it!
+    m_vitems[m_currentStage].push_back( std::move( ent ) );
 }
 
 void PNS_LOG_VIEW_TRACKER::DisplayItem( const PNS::ITEM* aItem )
 {
     ENTRY ent;
-    ent.isHideOp = false;
-    ent.item = aItem->Clone();
-    m_vitems[m_currentStage].push_back( ent );
+    ent.m_isHideOp = false;
+    ent.m_item = aItem->Clone();
+    ent.m_ownedItem.reset( ent.m_item ); //delete me when ENTRY is deleted
+    m_vitems[m_currentStage].push_back( std::move( ent ) );
     //printf("DBG disp cur %d cnt %d\n", m_currentStage, m_vitems[m_currentStage].size() );
 }
 

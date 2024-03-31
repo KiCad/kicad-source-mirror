@@ -120,6 +120,10 @@ OPTIMIZER::OPTIMIZER( NODE* aWorld ) :
 
 OPTIMIZER::~OPTIMIZER()
 {
+    for( OPT_CONSTRAINT* c : m_constraints )
+        delete c;
+
+    m_constraints.clear();
 }
 
 
@@ -417,16 +421,7 @@ bool OPTIMIZER::checkColliding( ITEM* aItem, bool aUpdateCache )
 }
 
 
-void OPTIMIZER::ClearConstraints()
-{
-    for( OPT_CONSTRAINT* c : m_constraints )
-        delete c;
-
-    m_constraints.clear();
-}
-
-
-void OPTIMIZER::AddConstraint ( OPT_CONSTRAINT *aConstraint )
+void OPTIMIZER::addConstraint ( OPT_CONSTRAINT *aConstraint )
 {
     m_constraints.push_back( aConstraint );
 }
@@ -633,20 +628,20 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
                  wxString::Format( "opt limit-corner-count root %d maxc %d mask %x",
                                    rootObtuseCorners, aLine->SegmentCount(), angleMask ) );
 
-        AddConstraint( c );
+        addConstraint( c );
     }
 
     if( m_effortLevel & PRESERVE_VERTEX )
     {
         auto c = new PRESERVE_VERTEX_CONSTRAINT( m_world, m_preservedVertex );
-        AddConstraint( c );
+        addConstraint( c );
     }
 
     if( m_effortLevel & RESTRICT_VERTEX_RANGE )
     {
         auto c = new RESTRICT_VERTEX_RANGE_CONSTRAINT( m_world, m_restrictedVertexRange.first,
                                                        m_restrictedVertexRange.second );
-        AddConstraint( c );
+        addConstraint( c );
     }
 
     if( m_effortLevel & RESTRICT_AREA )
@@ -654,13 +649,13 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult, LINE* aRoot )
         auto c = new AREA_CONSTRAINT( m_world, m_restrictArea, m_restrictAreaIsStrict );
         SHAPE_RECT r( m_restrictArea );
         PNS_DBG( dbg, AddShape, &r, YELLOW, 0, wxT( "area-constraint" ) );
-        AddConstraint( c );
+        addConstraint( c );
     }
 
     if( m_effortLevel & KEEP_TOPOLOGY )
     {
         auto c = new KEEP_TOPOLOGY_CONSTRAINT( m_world );
-        AddConstraint( c );
+        addConstraint( c );
     }
 
     // TODO: Fix for arcs

@@ -52,7 +52,7 @@ class PNS_KICAD_IFACE_BASE : public PNS::ROUTER_IFACE
 {
 public:
     PNS_KICAD_IFACE_BASE();
-    ~PNS_KICAD_IFACE_BASE();
+    ~PNS_KICAD_IFACE_BASE() override;
 
     void EraseView() override {};
     void SetBoard( BOARD* aBoard );
@@ -115,7 +115,7 @@ class PNS_KICAD_IFACE : public PNS_KICAD_IFACE_BASE
 {
 public:
     PNS_KICAD_IFACE();
-    ~PNS_KICAD_IFACE();
+    ~PNS_KICAD_IFACE() override;
 
     virtual void SetHostTool( PCB_TOOL_BASE* aTool );
 

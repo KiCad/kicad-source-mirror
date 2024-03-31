@@ -288,7 +288,7 @@ public:
         m_testFixture( aFixture )
     {}
 
-    ~MOCK_PNS_KICAD_IFACE() {}
+    ~MOCK_PNS_KICAD_IFACE() override {}
 
     void HideItem( PNS::ITEM* aItem ) override {};
     void DisplayItem( const PNS::ITEM* aItem, int aClearance, bool aEdit = false,

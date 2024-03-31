@@ -153,9 +153,6 @@ public:
         m_restrictAreaIsStrict = aStrict;
     }
 
-    void ClearConstraints();
-    void AddConstraint ( OPT_CONSTRAINT *aConstraint );
-
 private:
     static const int MaxCachedItems = 256;
 
@@ -169,6 +166,8 @@ private:
         bool m_isStatic;
     };
 
+
+    void addConstraint ( OPT_CONSTRAINT *aConstraint );
     bool mergeObtuse( LINE* aLine );
     bool mergeFull( LINE* aLine );
     bool mergeColinear( LINE* aLine );
