@@ -88,9 +88,13 @@ public:
 
         firstVertex->updateList();
 
-        if( aHintData )
+        /**
+         * If we have a hint data, we can skip the tesselation process as long as the
+         * the hint source did not need to subdivide the polygon.
+        */
+        if( aHintData && aHintData->Vertices().size() == m_vertices.size() )
         {
-            m_result.Triangles() = aHintData->Triangles();
+            m_result.SetTriangles( aHintData->Triangles() );
             return true;
         }
         else

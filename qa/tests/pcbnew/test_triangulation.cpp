@@ -78,7 +78,7 @@ BOOST_FIXTURE_TEST_CASE( RegressionTriangulationTests, TRIANGULATE_TEST_FIXTURE 
                 {
                     const auto tri_poly = poly->TriangulatedPolygon( ii );
 
-                    for( auto& tri : tri_poly->Triangles() )
+                    for( const auto& tri : tri_poly->Triangles() )
                         tri_area += tri.Area();
                 }
 
