@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-25 13:17+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"PO-Revision-Date: 2024-04-01 15:01+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -10254,9 +10254,8 @@ msgid "It will be placed back in the %s list"
 msgstr "%s リスト内に書き戻されます"
 
 #: eeschema/dialogs/dialog_erc.cpp:633 pcbnew/dialogs/dialog_drc.cpp:626
-#, fuzzy
 msgid "Exclude this violation..."
-msgstr "この違反を除外"
+msgstr "この違反を除外..."
 
 #: eeschema/dialogs/dialog_erc.cpp:634 pcbnew/dialogs/dialog_drc.cpp:627
 #, c-format
@@ -13931,27 +13930,23 @@ msgstr "シンボル プロパティを編集"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:43
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:39
-#, fuzzy
 msgid "Horizontal alignment:"
 msgstr "水平揃え:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:45
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:41
-#, fuzzy
 msgid "Horizontal alignment"
-msgstr "水平揃え:"
+msgstr "水平揃え"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:70
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:66
-#, fuzzy
 msgid "Vertical alignment:"
 msgstr "垂直揃え:"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:72
 #: pcbnew/dialogs/dialog_tablecell_properties_base.cpp:68
-#, fuzzy
 msgid "Vertical alignment"
-msgstr "垂直揃え:"
+msgstr "垂直揃え"
 
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:172
 #: eeschema/dialogs/dialog_tablecell_properties_base.cpp:218
@@ -15309,9 +15304,9 @@ msgid "Symbol '%s' not found in symbol library '%s'"
 msgstr "シンボル '%s' がシンボル ライブラリ '%s' 内に見つかりません"
 
 #: eeschema/erc.cpp:1018
-#, fuzzy, c-format
+#, c-format
 msgid "Symbol '%s' doesn't match copy in library '%s'"
-msgstr "フットプリント '%s' が、ライブラリ '%s' のコピーと一致しません。"
+msgstr "シンボル '%s' が、ライブラリ '%s' のコピーと一致しません"
 
 #: eeschema/erc.cpp:1066
 #, fuzzy, c-format
@@ -18149,9 +18144,9 @@ msgid "%d Column Table"
 msgstr ""
 
 #: eeschema/sch_table.cpp:546 pcbnew/pcb_table.cpp:285
-#, fuzzy, c-format
+#, c-format
 msgid "%d Columns"
-msgstr "列"
+msgstr "%d 列"
 
 #: eeschema/sch_table.cpp:614 pcbnew/pcb_table.cpp:408
 #, fuzzy
@@ -20454,9 +20449,8 @@ msgid "Change sheet pin to hierarchical label"
 msgstr "既存のアイテムを階層ラベルに変更"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
-#, fuzzy
 msgid "Change hierarchical label to sheet pin"
-msgstr "\"%s\" の階層ラベルを \"%s\" に変更します。"
+msgstr "階層ラベルをシートピンに変更します"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:109
 msgid "Break sheet pin and hierarchical label association(s)"
@@ -20754,9 +20748,8 @@ msgid "Export a symbol to a new library file"
 msgstr "新規ライブラリ ファイルにシンボルをエクスポート"
 
 #: eeschema/tools/ee_actions.cpp:249 pcbnew/tools/pcb_actions.cpp:773
-#, fuzzy
 msgid "Edit in a Text Editor..."
-msgstr "テキスト エディターで編集"
+msgstr "テキスト エディターで編集..."
 
 #: eeschema/tools/ee_actions.cpp:250 pcbnew/tools/pcb_actions.cpp:774
 #, fuzzy
@@ -22390,11 +22383,9 @@ msgstr "シンボル ライブラリが選択されていません。"
 
 #: eeschema/tools/symbol_editor_control.cpp:277
 #: pcbnew/tools/footprint_editor_control.cpp:594
-#, fuzzy
 msgid "No text editor selected in KiCad. Please choose one."
-msgstr ""
-"KiCad で使用するテキスト エディターが設定されていません。  一つ選択してくださ"
-"い。"
+msgstr "KiCadで使用するテキスト "
+"エディターが選択されていません。いずれかを選択してください。"
 
 #: eeschema/tools/symbol_editor_control.cpp:351
 #: eeschema/widgets/panel_symbol_chooser.cpp:663
@@ -22555,9 +22546,8 @@ msgstr "不正なフットプリントが指定されました"
 
 #: eeschema/widgets/sch_properties_panel.cpp:202
 #: pcbnew/widgets/pcb_properties_panel.cpp:231
-#, fuzzy
 msgid "Edit Properties"
-msgstr "プロパティを編集..."
+msgstr "プロパティを編集"
 
 #: eeschema/widgets/search_handlers.cpp:136
 msgid "Excl. sim"
@@ -31189,9 +31179,9 @@ msgid "They will be placed back in the %s list"
 msgstr "%s リスト内に書き戻されます"
 
 #: pcbnew/dialogs/dialog_drc.cpp:632
-#, fuzzy, c-format
+#, c-format
 msgid "Exclude all violations of rule '%s'..."
-msgstr "ルール '%s' への違反をすべて除外"
+msgstr "ルール '%s' への違反をすべて除外..."
 
 #: pcbnew/dialogs/dialog_drc.cpp:634
 #, fuzzy, c-format
