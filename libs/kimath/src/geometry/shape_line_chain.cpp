@@ -679,13 +679,13 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
         }
     }
 
-    if( closest_dist_sq == 0 || closest_dist_sq < clearance_sq )
+    if( closest_dist == 0 || closest_dist < aClearance )
     {
         if( aLocation )
             *aLocation = nearest;
 
         if( aActual )
-            *aActual = sqrt( closest_dist_sq );
+            *aActual = closest_dist;
 
         return true;
     }
