@@ -172,8 +172,23 @@ public:
         int GetSourceOutlineIndex() const { return m_sourceOutline; }
         void SetSourceOutlineIndex( int aIndex ) { m_sourceOutline = aIndex; }
 
-        std::deque<TRI>& Triangles() { return m_triangles; }
         const std::deque<TRI>& Triangles() const { return m_triangles; }
+        void SetTriangles( const std::deque<TRI>& aTriangles )
+        {
+            m_triangles.resize( aTriangles.size() );
+
+            for( size_t ii = 0; ii < aTriangles.size(); ii++ )
+            {
+                m_triangles[ii] = aTriangles[ii];
+                m_triangles[ii].parent = this;
+            }
+        }
+
+        const std::deque<VECTOR2I>& Vertices() const { return m_vertices; }
+        void SetVertices( const std::deque<VECTOR2I>& aVertices )
+        {
+            m_vertices = aVertices;
+        }
 
         size_t GetVertexCount() const
         {

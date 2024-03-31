@@ -3301,11 +3301,6 @@ void SHAPE_POLY_SET::cacheTriangulation( bool aPartition, bool aSimplify,
                     triangulationValid = true;
                 }
 
-                if( triangulationValid && wxLog::IsLevelEnabled(wxLOG_Trace, wxLOG_COMPONENT) )
-                {
-
-                }
-
                 return triangulationValid;
             };
 
@@ -3450,7 +3445,7 @@ void SHAPE_POLY_SET::GetIndexableSubshapes( std::vector<const SHAPE*>& aSubshape
 
     for( const std::unique_ptr<TRIANGULATED_POLYGON>& tpoly : m_triangulatedPolys )
     {
-        for( TRIANGULATED_POLYGON::TRI& tri : tpoly->Triangles() )
+        for( const TRIANGULATED_POLYGON::TRI& tri : tpoly->Triangles() )
             aSubshapes.push_back( &tri );
     }
 }
