@@ -657,7 +657,7 @@ bool SHAPE_LINE_CHAIN::Collide( const SEG& aSeg, int aClearance, int* aActual,
 
     int closest_dist = std::numeric_limits<int>::max();
 
-    if( closest_dist_sq < VECTOR2I ::ECOORD_MAX )
+    if( closest_dist_sq < VECTOR2I::ECOORD_MAX )
         closest_dist = sqrt( closest_dist_sq );
 
     // Collide arc segments
