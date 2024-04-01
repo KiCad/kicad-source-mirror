@@ -74,7 +74,7 @@ public:
         m_result.Clear();
 
         if( !m_bbox.GetWidth() || !m_bbox.GetHeight() )
-            return false;
+            return true;
 
         /// Place the polygon Vertices into a circular linked list
         /// and check for lists that have only 0, 1 or 2 elements and
@@ -84,7 +84,7 @@ public:
         wxLogTrace( TRIANGULATE_TRACE, "Created list with %f area", firstVertex->area() );
 
         if( !firstVertex || firstVertex->prev == firstVertex->next )
-            return false;
+            return true;
 
         firstVertex->updateList();
 
@@ -383,6 +383,57 @@ private:
         wxLogTrace( TRIANGULATE_TRACE, msg );
     }
 
+    /**
+     * Simplify the line chain by removing points that are too close to each other.
+     * If no points are removed, it returns nullptr.
+     */
+    VERTEX* simplifyList( VERTEX* aStart )
+    {
+        if( !aStart || aStart->next == aStart->prev )
+            return aStart;
+
+        VERTEX* p = aStart;
+        VERTEX* next = p->next;
+        VERTEX* retval = aStart;
+        int     count = 0;
+
+        double sq_dist = ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel;
+        sq_dist *= sq_dist;
+
+        do
+        {
+            VECTOR2D diff = VECTOR2D( next->x - p->x, next->y - p->y );
+
+            if( diff.SquaredEuclideanNorm() < sq_dist )
+            {
+                if( next == aStart )
+                {
+                    retval = p;
+                    aStart->remove();
+                    count++;
+                    break;
+                }
+
+                next = next->next;
+                p->next->remove();
+                count++;
+                retval = p;
+            }
+            else
+            {
+                p = next;
+                next = next->next;
+            }
+        } while( p != aStart && next && p );
+
+        wxLogTrace( TRIANGULATE_TRACE, "Removed %d points in simplifyList", count );
+
+        if( count )
+            return retval;
+
+        return nullptr;
+    }
+
 
     /**
      * Iterate through the list to remove NULL triangles if they exist.
@@ -394,10 +445,16 @@ private:
     VERTEX* removeNullTriangles( VERTEX* aStart )
     {
         VERTEX* retval = nullptr;
-        VERTEX* p = aStart->next;
         size_t count = 0;
 
-        while( p != aStart )
+        if( ( retval = simplifyList( aStart ) ) )
+            aStart = retval;
+
+        wxASSERT( aStart->next && aStart->prev );
+
+        VERTEX* p = aStart->next;
+
+        while( p != aStart && p->next && p->prev )
         {
             // We make a dummy triangle that is actually part of the existing line segment
             // and measure its area.  This will not be exactly zero due to floating point
@@ -414,11 +471,15 @@ private:
 
                 p = p->prev;
                 p->next->remove();
-                retval = aStart;
+                retval = p;
                 ++count;
 
                 if( p == p->next )
                     break;
+
+                // aStart was removed above, so we need to reset it
+                if( !aStart->next )
+                    aStart = p->prev;
 
                 continue;
             }
@@ -426,13 +487,17 @@ private:
             p = p->next;
         };
 
+        /// We've removed all possible triangles
+        if( !p->next || p->next == p || p->next == p->prev )
+            return p;
+
         // We needed an end point above that wouldn't be removed, so
         // here we do the final check for this as a Steiner point
-        VERTEX tmp( 0, 0.5 * ( aStart->prev->x + aStart->next->x ),
-                       0.5 * ( aStart->prev->y + aStart->next->y ), this );
-        double null_area = 4.0 * std::abs( area( aStart->prev, &tmp, aStart->next ) );
+        VERTEX tmp( 0, 0.5 * ( p->prev->x + p->next->x ),
+                       0.5 * ( p->prev->y + p->next->y ), this );
+        double null_area = 4.0 * std::abs( area( p->prev, &tmp, p->next ) );
 
-        if( std::abs( area( aStart->prev, aStart, aStart->next ) ) <= null_area )
+        if( std::abs( area( p->prev, p, p->next ) ) <= null_area )
         {
             retval = p->next;
             p->remove();
@@ -574,7 +639,7 @@ private:
              * We've searched the entire polygon for available ears and there are still
              * un-sliced nodes remaining.
              */
-            if( aPoint == stop )
+            if( aPoint == stop && aPoint->prev != aPoint->next )
             {
                 VERTEX* newPoint;
 
@@ -584,6 +649,10 @@ private:
                 // run the RemoveNullTriangles function after the first pass.
                 if( ( internal_pass == 2 ) && ( newPoint = removeNullTriangles( aPoint ) ) )
                 {
+                    // There are no remaining triangles in the list
+                    if( newPoint->next == newPoint->prev )
+                        break;
+
                     aPoint = newPoint;
                     stop = newPoint;
                     continue;

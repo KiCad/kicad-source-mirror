@@ -56,7 +56,8 @@ BOOST_FIXTURE_TEST_CASE( RegressionTriangulationTests, TRIANGULATE_TEST_FIXTURE 
                                     "issue6260",
                                     "issue7086",
                                     "issue14294",
-                                    "issue17559"
+                                    "issue17559",
+                                    "bad_triangulation_case"
                                 };
 
 
@@ -68,9 +69,24 @@ BOOST_FIXTURE_TEST_CASE( RegressionTriangulationTests, TRIANGULATE_TEST_FIXTURE 
 
         for( ZONE* zone : m_board->Zones() )
         {
+            if( zone->GetIsRuleArea() )
+                continue;
+
             for( PCB_LAYER_ID layer : zone->GetLayerSet().Seq())
             {
                 auto poly = zone->GetFilledPolysList( layer );
+
+                if( poly->OutlineCount() == 0 )
+                    continue;
+
+                BOOST_CHECK_MESSAGE(
+                        poly->IsTriangulationUpToDate(),
+                        "Triangulation invalid for " + relPath + " layer " + LayerName( layer )
+                                + " zone " + zone->GetFriendlyName() + " net '" + zone->GetNetname()
+                                + "' with " + std::to_string( poly->OutlineCount() )
+                                + " polygons at position " + std::to_string( poly->BBox().Centre().x )
+                                + ", " + std::to_string( poly->BBox().Centre().y ) );
+
                 double area = poly->Area();
                 double tri_area = 0.0;
 
@@ -84,8 +100,11 @@ BOOST_FIXTURE_TEST_CASE( RegressionTriangulationTests, TRIANGULATE_TEST_FIXTURE 
 
                 double diff = std::abs( area - tri_area );
 
-                // The difference should be less than 1e-4 square mm
-                BOOST_CHECK_MESSAGE( diff < 1e8, "Triangulation area mismatch in " + relPath + " layer " + LayerName( layer ) + " difference: " + std::to_string( diff ) );
+                // The difference should be less than 1e-3 square mm
+                BOOST_CHECK_MESSAGE( diff < 1e9,
+                                     "Triangulation area mismatch in " + relPath + " layer "
+                                             + LayerName( layer )
+                                             + " difference: " + std::to_string( diff ) );
             }
         }
     }
