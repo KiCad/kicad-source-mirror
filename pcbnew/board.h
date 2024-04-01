@@ -1153,10 +1153,10 @@ public:
 
     /**
      * Map all nets in the given board to nets with the same name (if any) in the destination
-     * board.  This allows us to share layouts which came from the same hierarchical sheet in
-     * the schematic.
+     * board.  If there are missing nets in the destination board, they will be created.
+     *
      */
-    void MapNets( const BOARD* aDestBoard );
+    void MapNets( BOARD* aDestBoard );
 
     void SanitizeNetcodes();
 

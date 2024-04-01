@@ -50,6 +50,17 @@ public:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
+    bool GetClearNets() const
+    {
+        return m_clearNetsCB->IsChecked();
+    }
+
+    void HideClearNets()
+    {
+        m_clearNetsCB->Hide();
+        finishDialogSettings();
+    }
+
 protected:
     virtual void onRadioBoxEvent( wxCommandEvent& event ) override;
 

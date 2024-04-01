@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,6 +17,7 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -33,6 +34,7 @@ class DIALOG_PASTE_SPECIAL_BASE : public DIALOG_SHIM
 
 	protected:
 		wxRadioBox* m_pasteOptions;
+		wxCheckBox* m_clearNetsCB;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;

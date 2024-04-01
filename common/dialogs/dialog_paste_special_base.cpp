@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,9 +21,14 @@ DIALOG_PASTE_SPECIAL_BASE::DIALOG_PASTE_SPECIAL_BASE( wxWindow* parent, wxWindow
 
 	wxString m_pasteOptionsChoices[] = { _("Assign unique reference designators to pasted symbols"), _("Keep existing reference designators, even if they are duplicated"), _("Clear reference designators on all pasted symbols") };
 	int m_pasteOptionsNChoices = sizeof( m_pasteOptionsChoices ) / sizeof( wxString );
-	m_pasteOptions = new wxRadioBox( this, wxID_ANY, _("Paste Options"), wxDefaultPosition, wxDefaultSize, m_pasteOptionsNChoices, m_pasteOptionsChoices, 1, wxRA_SPECIFY_COLS );
+	m_pasteOptions = new wxRadioBox( this, wxID_ANY, _("Reference Designators"), wxDefaultPosition, wxDefaultSize, m_pasteOptionsNChoices, m_pasteOptionsChoices, 1, wxRA_SPECIFY_COLS );
 	m_pasteOptions->SetSelection( 1 );
 	optionsSizer->Add( m_pasteOptions, 0, wxALL, 5 );
+
+	m_clearNetsCB = new wxCheckBox( this, wxID_ANY, _("Clear Net Assignments"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_clearNetsCB->SetToolTip( _("Remove the net information from all connected items before pasting") );
+
+	optionsSizer->Add( m_clearNetsCB, 0, wxALL, 5 );
 
 
 	m_mainSizer->Add( optionsSizer, 1, wxALL|wxEXPAND, 10 );

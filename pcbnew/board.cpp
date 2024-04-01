@@ -2461,7 +2461,7 @@ const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
 }
 
 
-void BOARD::MapNets( const BOARD* aDestBoard )
+void BOARD::MapNets( BOARD* aDestBoard )
 {
     for( BOARD_CONNECTED_ITEM* item : AllConnectedItems() )
     {
@@ -2470,7 +2470,12 @@ void BOARD::MapNets( const BOARD* aDestBoard )
         if( netInfo )
             item->SetNet( netInfo );
         else
-            item->SetNetCode( 0 );
+        {
+            NETINFO_ITEM* newNet = new NETINFO_ITEM( aDestBoard, item->GetNetname() );
+            aDestBoard->Add( newNet );
+            item->SetNet( newNet );
+
+        }
     }
 }
 

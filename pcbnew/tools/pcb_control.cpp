@@ -924,28 +924,36 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
         return 0;
 
     PASTE_MODE     mode = PASTE_MODE::KEEP_ANNOTATIONS;
+    bool           clear_nets = false;
     const wxString defaultRef = wxT( "REF**" );
 
     if( aEvent.IsAction( &ACTIONS::pasteSpecial ) )
     {
         DIALOG_PASTE_SPECIAL dlg( m_frame, &mode, defaultRef );
 
+        if( clipItem->Type() != PCB_T )
+            dlg.HideClearNets();
+
         if( dlg.ShowModal() == wxID_CANCEL )
             return 0;
+
+        clear_nets = dlg.GetClearNets();
     }
 
     bool isFootprintEditor = m_isFootprintEditor || frame()->IsType( FRAME_FOOTPRINT_EDITOR );
 
     if( clipItem->Type() == PCB_T )
     {
-        if( isFootprintEditor )
+        BOARD* clipBoard = static_cast<BOARD*>( clipItem );
+
+        if( isFootprintEditor || clear_nets )
         {
-            for( BOARD_CONNECTED_ITEM* item : static_cast<BOARD*>( clipItem )->AllConnectedItems() )
+            for( BOARD_CONNECTED_ITEM* item : clipBoard->AllConnectedItems() )
                 item->SetNet( NETINFO_LIST::OrphanedItem() );
         }
         else
         {
-            static_cast<BOARD*>( clipItem )->MapNets( m_frame->GetBoard() );
+            clipBoard->MapNets( m_frame->GetBoard() );
         }
     }
 
