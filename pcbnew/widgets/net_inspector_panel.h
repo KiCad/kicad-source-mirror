@@ -65,6 +65,11 @@ public:
      */
     virtual void OnShowPanel() {}
 
+    /**
+     * Notification from file loader when board changed and connectivity rebuilt
+     */
+    virtual void OnBoardChanged() {}
+
 protected:
     // User-driven UI events (override in derrived classes as required)
     virtual void OnSetFocus( wxFocusEvent& event ) { event.Skip(); }

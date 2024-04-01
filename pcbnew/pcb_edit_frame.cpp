@@ -1578,6 +1578,10 @@ void PCB_EDIT_FRAME::onBoardLoaded()
     // Updates any auto dimensions and the auxiliary toolbar tracks/via sizes
     unitsChangeRefresh();
 
+    // Sync the net inspector now we have connectivity calculated
+    if( m_netInspectorPanel )
+        m_netInspectorPanel->OnBoardChanged();
+
     // Display the loaded board:
     Zoom_Automatique( false );
 

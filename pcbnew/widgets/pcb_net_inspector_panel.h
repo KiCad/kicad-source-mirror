@@ -85,6 +85,10 @@ public:
     virtual void OnBoardCompositeUpdate( BOARD& aBoard, std::vector<BOARD_ITEM*>& aAddedItems,
                                          std::vector<BOARD_ITEM*>& aRemovedItems,
                                          std::vector<BOARD_ITEM*>& aDeletedItems ) override;
+    /**
+     * Update panel when board is changed
+     */
+    virtual void OnBoardChanged() override;
 
     /**
      * Prepare the panel when shown in the editor
@@ -187,7 +191,6 @@ private:
     void highlightSelectedNets();
 
     void onUnitsChanged( wxCommandEvent& event );
-    void onBoardChanged( wxCommandEvent& event );
     void onSettingsMenu( wxCommandEvent& event );
     void onItemContextMenu( wxCommandEvent& event );
     void onAddNet();

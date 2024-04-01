@@ -61,7 +61,6 @@ PCB_NET_INSPECTOR_PANEL::PCB_NET_INSPECTOR_PANEL( wxWindow* parent, PCB_EDIT_FRA
 
     // Connect to board events
     m_frame->Bind( EDA_EVT_UNITS_CHANGED, &PCB_NET_INSPECTOR_PANEL::onUnitsChanged, this );
-    m_frame->Bind( EDA_EVT_BOARD_CHANGED, &PCB_NET_INSPECTOR_PANEL::onBoardChanged, this );
 
     // Connect to wxDataViewCtrl events
     m_netsList->Bind( wxEVT_DATAVIEW_ITEM_EXPANDED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow,
@@ -89,7 +88,6 @@ PCB_NET_INSPECTOR_PANEL::~PCB_NET_INSPECTOR_PANEL()
 
     // Disconnect from board events
     m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &PCB_NET_INSPECTOR_PANEL::onUnitsChanged, this );
-    m_frame->Unbind( EDA_EVT_BOARD_CHANGED, &PCB_NET_INSPECTOR_PANEL::onBoardChanged, this );
 
     // Connect to wxDataViewCtrl events
     m_netsList->Unbind( wxEVT_DATAVIEW_ITEM_EXPANDED, &PCB_NET_INSPECTOR_PANEL::OnExpandCollapseRow,
@@ -854,7 +852,7 @@ void PCB_NET_INSPECTOR_PANEL::updateDisplayedRowValues( const std::optional<LIST
  * ***************************************************************************************/
 
 
-void PCB_NET_INSPECTOR_PANEL::onBoardChanged( wxCommandEvent& event )
+void PCB_NET_INSPECTOR_PANEL::OnBoardChanged()
 {
     m_brd = m_frame->GetBoard();
 
@@ -871,8 +869,6 @@ void PCB_NET_INSPECTOR_PANEL::onBoardChanged( wxCommandEvent& event )
     buildNetsList( true );
 
     m_board_loading = false;
-
-    event.Skip();
 }
 
 void PCB_NET_INSPECTOR_PANEL::OnBoardItemAdded( BOARD& aBoard, BOARD_ITEM* aBoardItem )
