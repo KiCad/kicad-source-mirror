@@ -11,13 +11,14 @@
 # Filip Piękoś <filipalcatel@gmail.com>, 2023.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
 # "j.Kolod" <jmkolod05@gmail.com>, 2024.
+# Marek <fotelpl@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-26 14:01+0000\n"
-"Last-Translator: \"j.Kolod\" <jmkolod05@gmail.com>\n"
+"PO-Revision-Date: 2024-04-02 11:49+0000\n"
+"Last-Translator: Marek <fotelpl@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
 "master-source/pl/>\n"
 "Language: pl\n"
@@ -636,7 +637,7 @@ msgstr "Pokaż maskę na stronie górnej"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "B.Mask"
-msgstr "Dolna sodermaski"
+msgstr "Dolna soldermaski"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:63
 msgid "Show back solder mask"
