@@ -189,7 +189,7 @@ endif(OCC_INCLUDE_DIR AND NOT ${OCC_INCLUDE_DIR} STREQUAL "OCC_INCLUDE_DIR-NOTFO
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(OCC REQUIRED_VARS OCC_INCLUDE_DIR VERSION_VAR OCC_VERSION_STRING)
 
-function(occ_lib_search SEARCH_LIST)
+macro(occ_lib_search SEARCH_LIST)
   foreach(lib IN LISTS ${SEARCH_LIST})
 #Use the specified library location if given
     find_library(OCC_TEMP_LIB ${lib} HINTS ${OCC_LIBRARY_DIR} NO_DEFAULT_PATH)
@@ -207,7 +207,7 @@ function(occ_lib_search SEARCH_LIST)
 
     unset(OCC_TEMP_LIB CACHE)
   endforeach(lib)
-endfunction()
+endmacro()
 
 if(OCC_FOUND)
     occ_lib_search( OCC_LIBS_COMMON )
