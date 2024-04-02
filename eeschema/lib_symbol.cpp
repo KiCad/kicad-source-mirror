@@ -1349,7 +1349,7 @@ LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName, bool aCaseInsensit
 
 
 const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
-                                        const bool      aCaseInsensitive ) const
+                                        bool aCaseInsensitive ) const
 {
     for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
@@ -1370,7 +1370,7 @@ const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetValueField()
+LIB_FIELD& LIB_SYMBOL::GetValueField() const
 {
     LIB_FIELD* field = GetFieldById( VALUE_FIELD );
     wxASSERT( field != nullptr );
@@ -1378,7 +1378,7 @@ LIB_FIELD& LIB_SYMBOL::GetValueField()
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetReferenceField()
+LIB_FIELD& LIB_SYMBOL::GetReferenceField() const
 {
     LIB_FIELD* field = GetFieldById( REFERENCE_FIELD );
     wxASSERT( field != nullptr );
@@ -1386,7 +1386,7 @@ LIB_FIELD& LIB_SYMBOL::GetReferenceField()
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetFootprintField()
+LIB_FIELD& LIB_SYMBOL::GetFootprintField() const
 {
     LIB_FIELD* field = GetFieldById( FOOTPRINT_FIELD );
     wxASSERT( field != nullptr );
@@ -1394,7 +1394,7 @@ LIB_FIELD& LIB_SYMBOL::GetFootprintField()
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetDatasheetField()
+LIB_FIELD& LIB_SYMBOL::GetDatasheetField() const
 {
     LIB_FIELD* field = GetFieldById( DATASHEET_FIELD );
     wxASSERT( field != nullptr );
@@ -1402,7 +1402,7 @@ LIB_FIELD& LIB_SYMBOL::GetDatasheetField()
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetDescriptionField()
+LIB_FIELD& LIB_SYMBOL::GetDescriptionField() const
 {
     LIB_FIELD* field = GetFieldById( DESCRIPTION_FIELD );
     wxASSERT( field != nullptr );

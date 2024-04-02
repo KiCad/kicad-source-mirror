@@ -462,7 +462,9 @@ std::unique_ptr<LIB_SYMBOL>  SCH_IO_DATABASE::loadSymbolFromRow( const wxString&
         symbol->SetName( aSymbolName );
     }
 
-    symbol->LibId().SetSubLibraryName( aTable.name );
+    LIB_ID libId = symbol->GetLibId();
+    libId.SetSubLibraryName( aTable.name );;
+    symbol->SetLibId( libId );
 
     if( aRow.count( aTable.footprints_col ) )
     {

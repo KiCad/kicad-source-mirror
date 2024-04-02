@@ -159,8 +159,10 @@ public:
     virtual void SetName( const wxString& aName );
     wxString GetName() const override { return m_name; }
 
-    LIB_ID& LibId() { return m_libId; }
-    LIB_ID GetLibId() const override { return m_libId; }
+    LIB_ID GetLIB_ID() const override { return m_libId; }
+    wxString GetDesc() override { return GetDescription(); }
+
+    const LIB_ID& GetLibId() const { return m_libId; }
     void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
 
     LIB_ID GetSourceLibId() const { return m_sourceLibId; }
@@ -175,7 +177,7 @@ public:
     }
 
     ///< Gets the Description field text value */
-    wxString GetDescription() override
+    wxString GetDescription() const
     {
         if( GetDescriptionField().GetText().IsEmpty() && IsAlias() )
         {
@@ -318,7 +320,7 @@ public:
     LIB_FIELD* FindField( const wxString& aFieldName, bool aCaseInsensitive = false );
 
     const LIB_FIELD* FindField( const wxString& aFieldName,
-                                const bool      aCaseInsensitive = false ) const;
+                                bool aCaseInsensitive = false ) const;
 
     /**
      * Return pointer to the requested field.
@@ -329,19 +331,19 @@ public:
     LIB_FIELD* GetFieldById( int aId ) const;
 
     /** Return reference to the value field. */
-    LIB_FIELD& GetValueField();
+    LIB_FIELD& GetValueField() const;
 
     /** Return reference to the reference designator field. */
-    LIB_FIELD& GetReferenceField();
+    LIB_FIELD& GetReferenceField() const;
 
     /** Return reference to the footprint field */
-    LIB_FIELD& GetFootprintField();
+    LIB_FIELD& GetFootprintField() const;
 
     /** Return reference to the datasheet field. */
-    LIB_FIELD& GetDatasheetField();
+    LIB_FIELD& GetDatasheetField() const;
 
     /** Return reference to the description field. */
-    LIB_FIELD& GetDescriptionField();
+    LIB_FIELD& GetDescriptionField() const;
 
     wxString GetPrefix();
 

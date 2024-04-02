@@ -96,7 +96,7 @@ PANEL_FOOTPRINT_CHOOSER::PANEL_FOOTPRINT_CHOOSER( PCB_BASE_FRAME* aFrame, wxTopL
                            historyInfos, false, true );
 
     if( historyInfos.size() )
-        adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
+        adapter->SetPreselectNode( historyInfos[0]->GetLIB_ID(), 0 );
 
     adapter->SetFilter( &m_filter );
     adapter->AddLibraries( m_frame );

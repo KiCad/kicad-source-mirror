@@ -83,7 +83,7 @@ std::vector<SEARCH_TERM> FOOTPRINT_INFO::GetSearchTerms()
 
     // Also include keywords as one long string, just in case
     terms.emplace_back( SEARCH_TERM( GetKeywords(), 1 ) );
-    terms.emplace_back( SEARCH_TERM( GetDescription(), 1 ) );
+    terms.emplace_back( SEARCH_TERM( GetDesc(), 1 ) );
 
     return terms;
 }

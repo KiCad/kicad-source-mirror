@@ -44,11 +44,11 @@ public:
     {
     }
 
-    virtual LIB_ID GetLibId() const = 0;
+    virtual LIB_ID GetLIB_ID() const = 0;
 
     virtual wxString GetName() const = 0;
     virtual wxString GetLibNickname() const = 0;
-    virtual wxString GetDescription() = 0;
+    virtual wxString GetDesc() = 0;
 
     /**
      * Retrieves a key/value map of the fields on this item that should be exposed to the library

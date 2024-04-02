@@ -193,7 +193,7 @@ LIB_TREE_NODE_ITEM::LIB_TREE_NODE_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
     m_LibId.SetLibItemName( aItem->GetName() );
 
     m_Name = aItem->GetName();
-    m_Desc = aItem->GetDescription();
+    m_Desc = aItem->GetDesc();
     m_Footprint = aItem->GetFootprint();
     m_PinCount = aItem->GetPinCount();
 
@@ -221,11 +221,11 @@ LIB_TREE_NODE_UNIT& LIB_TREE_NODE_ITEM::AddUnit( LIB_TREE_ITEM* aItem, int aUnit
 
 void LIB_TREE_NODE_ITEM::Update( LIB_TREE_ITEM* aItem )
 {
-    m_LibId.SetLibNickname( aItem->GetLibId().GetLibNickname() );
+    m_LibId.SetLibNickname( aItem->GetLIB_ID().GetLibNickname() );
     m_LibId.SetLibItemName( aItem->GetName() );
 
     m_Name = aItem->GetName();
-    m_Desc = aItem->GetDescription();
+    m_Desc = aItem->GetDesc();
 
     aItem->GetChooserFields( m_Fields );
 

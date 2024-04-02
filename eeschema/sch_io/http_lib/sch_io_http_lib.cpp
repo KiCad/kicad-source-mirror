@@ -380,7 +380,9 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
             symbol = originalSymbol->Duplicate();
             symbol->SetSourceLibId( symbolId );
 
-            symbol->LibId().SetSubLibraryName( aCategory.name );
+            LIB_ID libId = symbol->GetLibId();
+            libId.SetSubLibraryName( aCategory.name );
+            symbol->SetLibId( libId );
         }
         else if( !symbolId.IsValid() )
         {
@@ -403,7 +405,10 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
         // Actual symbol not found: return metadata only; error will be
         // indicated in the symbol chooser
         symbol = new LIB_SYMBOL( aSymbolName );
-        symbol->LibId().SetSubLibraryName( aCategory.name );
+
+        LIB_ID libId = symbol->GetLibId();
+        libId.SetSubLibraryName( aCategory.name );
+        symbol->SetLibId( libId );
     }
 
     symbol->SetExcludedFromBOM( aPart.exclude_from_bom );

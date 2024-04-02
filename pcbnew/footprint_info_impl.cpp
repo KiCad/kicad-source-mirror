@@ -323,7 +323,7 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( const wxString& aFilePath )
     {
         txtStream << fpinfo->GetLibNickname() << endl;
         txtStream << fpinfo->GetName() << endl;
-        txtStream << EscapeString( fpinfo->GetDescription(), CTX_LINE ) << endl;
+        txtStream << EscapeString( fpinfo->GetDesc(), CTX_LINE ) << endl;
         txtStream << EscapeString( fpinfo->GetKeywords(), CTX_LINE ) << endl;
         txtStream << wxString::Format( wxT( "%d" ), fpinfo->GetOrderNum() ) << endl;
         txtStream << wxString::Format( wxT( "%u" ), fpinfo->GetPadCount() ) << endl;

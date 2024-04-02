@@ -126,7 +126,7 @@ protected:
             if( parent )
             {
                 root_name = parent->GetName();
-                root_desc = parent->GetDescription();
+                root_desc = parent->GetDesc();
             }
 
             m_html.Replace( wxS( "__ALIASOF__" ), wxString::Format(  AliasOfFormat,

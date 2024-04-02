@@ -74,12 +74,12 @@ public:
 
     int GetPinCount() override { return GetUniquePadCount(); }
 
-    LIB_ID GetLibId() const override
+    LIB_ID GetLIB_ID() const override
     {
         return LIB_ID( m_nickname, m_fpname );
     }
 
-    wxString GetDescription() override
+    wxString GetDesc() override
     {
         ensure_loaded();
         return m_doc;
