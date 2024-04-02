@@ -659,6 +659,7 @@ void PCB_IO_IPC2581::addText( wxXmlNode* aContentNode, EDA_TEXT* aText, const KI
 
                 wxXmlNode* outline_node = appendNode( text_node, "Outline" );
                 wxXmlNode* poly_node = appendNode( outline_node, "Polygon" );
+                addLineDesc( outline_node, 0, LINE_STYLE::SOLID );
 
                 const std::vector<VECTOR2I>& pts = aPoly.CPoints();
                 wxXmlNode* point_node = appendNode( poly_node, "PolyBegin" );
@@ -1663,6 +1664,7 @@ void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
         wxXmlNode* padStackPadDefNode = appendNode( padStackDefNode, "PadstackPadDef" );
         addAttribute( padStackPadDefNode,  "layerRef", m_layer_name_map[layer] );
         addAttribute( padStackPadDefNode,  "padUse", "REGULAR" );
+        addLocationNode( padStackPadDefNode, aPad->GetOffset().x, aPad->GetOffset().y );
 
         if( aPad->HasHole() || !aPad->FlashLayer( layer ) )
         {
