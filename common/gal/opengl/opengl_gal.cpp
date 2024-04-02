@@ -1067,9 +1067,21 @@ void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
     if( seg_count % 2 != 0 )
         seg_count += 1;
 
+    // Our shaders have trouble rendering null line quads, so delegate this task to DrawSegment.
+    if( seg_count == 0 )
+    {
+        VECTOR2D p_start( aCenterPoint.x + cos( startAngle ) * aRadius,
+                          aCenterPoint.y + sin( startAngle ) * aRadius );
+
+        VECTOR2D p_end( aCenterPoint.x + cos( endAngle ) * aRadius,
+                        aCenterPoint.y + sin( endAngle ) * aRadius );
+
+        DrawSegment( p_start, p_end, aWidth );
+        return;
+    }
+
     // Recalculate alphaIncrement with a even integer number of segment
-    if( seg_count )
-        alphaIncrement = ( endAngle - startAngle ) / seg_count;
+    alphaIncrement = ( endAngle - startAngle ) / seg_count;
 
     Save();
     m_currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
