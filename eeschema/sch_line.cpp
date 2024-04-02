@@ -359,7 +359,7 @@ int SCH_LINE::GetPenWidth() const
 }
 
 
-void SCH_LINE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset )
+void SCH_LINE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& offset )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = GetLineColor();
@@ -903,7 +903,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground,
     if( aBackground )
         return;
 
-    auto*   settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    auto*   settings = static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     int     penWidth = std::max( GetPenWidth(), settings->GetMinPenWidth() );
     COLOR4D color = GetLineColor();
 

@@ -89,7 +89,7 @@ public:
      */
     virtual VECTOR2I GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) const;
 
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

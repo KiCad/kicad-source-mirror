@@ -30,11 +30,11 @@
 #include <set>
 
 #include <eda_item.h>
-#include <default_values.h>
 #include <sch_sheet_path.h>
 #include <netclass.h>
 #include <stroke_params.h>
 #include <layer_ids.h>
+#include <sch_render_settings.h>
 
 class CONNECTION_GRAPH;
 class SCH_CONNECTION;
@@ -44,15 +44,11 @@ class LINE_READER;
 class SCH_EDIT_FRAME;
 class PLOTTER;
 struct SCH_PLOT_SETTINGS;
-class NETLIST_OBJECT_LIST;
-class PLOTTER;
 
 namespace KIFONT
 {
 class METRICS;
 }
-
-using KIGFX::RENDER_SETTINGS;
 
 
 enum FIELDS_AUTOPLACED
@@ -249,14 +245,7 @@ public:
      */
     SCHEMATIC* Schematic() const;
 
-    /**
-     * @return true if the object is locked, else false.
-     */
     virtual bool IsLocked() const { return false; }
-
-    /**
-     * Set the 'lock' status to \a aLocked for of this item.
-     */
     virtual void SetLocked( bool aLocked ) {}
 
     /**
@@ -270,12 +259,6 @@ public:
      * Return the layer this item is on.
      */
     SCH_LAYER_ID GetLayer() const { return m_layer; }
-
-    /**
-     * Set the layer this item is on.
-     *
-     * @param aLayer The layer number.
-     */
     void SetLayer( SCH_LAYER_ID aLayer ) { m_layer = aLayer; }
 
     /**
@@ -297,11 +280,16 @@ public:
     /**
      * Return a measure of how likely the other object is to represent the same
      * object.  The scale runs from 0.0 (definitely different objects) to 1.0 (same)
-     *
-     * This is a pure virtual function.  Derived classes must implement this.
-    */
-    virtual double Similarity( const SCH_ITEM& aItem ) const = 0;
-    virtual bool operator==( const SCH_ITEM& aOtherItem ) const = 0;
+     */
+    virtual double Similarity( const SCH_ITEM& aItem ) const
+    {
+        wxCHECK_MSG( false, 0.0, wxT( "Similarity not implemented in " ) + GetClass() );
+    }
+
+    virtual bool operator==( const SCH_ITEM& aOtherItem ) const
+    {
+        wxCHECK_MSG( false, false, wxT( "operator== not implemented in " ) + GetClass() );
+    }
 
     /**
      * Print a schematic item.
@@ -311,36 +299,73 @@ public:
      * @param aOffset is the drawing offset (usually {0,0} but can be different when moving an
      *                object).
      */
-    virtual void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) = 0;
+    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "Print not implemented in " ) + GetClass() );
+    }
 
     /**
-     * Print the (optional) backaground elements if they exist
-     * @param aSettings Print settings
-     * @param aOffset is the drawing offset (usually {0,0} but can be different when moving an
-     *                object).
+     * Print just the background fills.
      */
+    virtual void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "PrintBackground not implemented in " ) + GetClass() );
+    }
 
-    virtual void PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) {};
+    /**
+     * Print item.
+     *
+     * @param aOffset - Position of the item.
+     * @param aMulti - unit if multiple units per symbol.
+     * @param aBodyStyle - Symbol alternate body style (DeMorgan) if available.
+     * @param aDimmed - Reduce brightness
+     */
+    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                        int aMulti, int aBodyStyle, bool aForceNoFill, bool aDimmed )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "Print not implemented in " ) + GetClass() );
+    }
+
+    /**
+     * Print just the background fills.
+     */
+    virtual void PrintBackground( const SCH_RENDER_SETTINGS *aSettings, const VECTOR2I &aOffset,
+                                  int aMulti, int aBodyStyle, bool aForceNoFill, bool aDimmed )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "PrintBackground not implemented in " ) + GetClass() );
+    }
 
     /**
      * Move the item by \a aMoveVector to a new position.
      */
-    virtual void Move( const VECTOR2I& aMoveVector ) = 0;
+    virtual void Move( const VECTOR2I& aMoveVector )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "Move not implemented in " ) + GetClass() );
+    }
 
     /**
      * Mirror item horizontally about \a aCenter.
      */
-    virtual void MirrorHorizontally( int aCenter ) = 0;
+    virtual void MirrorHorizontally( int aCenter )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "MirrorHorizontally not implemented in " ) + GetClass() );
+    }
 
     /**
      * Mirror item vertically about \a aCenter.
      */
-    virtual void MirrorVertically( int aCenter ) = 0;
+    virtual void MirrorVertically( int aCenter )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "MirrorVertically not implemented in " ) + GetClass() );
+    }
 
     /**
      * Rotate the item around \a aCenter 90 degrees in the clockwise direction.
      */
-    virtual void Rotate( const VECTOR2I& aCenter ) = 0;
+    virtual void Rotate( const VECTOR2I& aCenter )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "Rotate not implemented in " ) + GetClass() );
+    }
 
     /**
      * Add the schematic item end points to \a aItemList if the item has end points.
@@ -533,7 +558,16 @@ public:
      *                    aBackground true and then with aBackground false.
      */
     virtual void Plot( PLOTTER* aPlotter, bool aBackground,
-                       const SCH_PLOT_SETTINGS& aPlotSettings ) const;
+                       const SCH_PLOT_SETTINGS& aPlotSettings ) const
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "Plot not implemented in " ) + GetClass() );
+    }
+
+    virtual void Plot( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bool aBackground,
+                       const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed ) const
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "Plot not implemented in " ) + GetClass() );
+    }
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 

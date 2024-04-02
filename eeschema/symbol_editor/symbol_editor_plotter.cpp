@@ -29,7 +29,7 @@
 
 void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName, VECTOR2I aOffset )
 {
-    KIGFX::SCH_RENDER_SETTINGS renderSettings;
+    SCH_RENDER_SETTINGS renderSettings;
     renderSettings.LoadColors( GetColorSettings() );
     renderSettings.SetDefaultPenWidth( GetRenderSettings()->GetDefaultPenWidth() );
 
@@ -63,7 +63,7 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName, VECTOR2I a
     {
         constexpr bool background = true;
         TRANSFORM      temp;                 // Uses default transform
-        VECTOR2I        plotPos;
+        VECTOR2I       plotPos;
 
         plotPos.x = aOffset.x;
         plotPos.y = aOffset.y;
@@ -91,6 +91,7 @@ void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     if( !m_symbol )
         return;
 
+    const SCH_RENDER_SETTINGS* cfg = static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
     VECTOR2I pagesize = GetScreen()->GetPageSettings().GetSizeIU( schIUScale.IU_PER_MILS );
 
     /* Plot item centered to the page
@@ -101,8 +102,6 @@ void SYMBOL_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
     plot_offset.x = pagesize.x / 2;
     plot_offset.y = pagesize.y / 2;
 
-    m_symbol->PrintBackground( aSettings, plot_offset, m_unit, m_bodyStyle, LIB_SYMBOL_OPTIONS(),
-                               false );
-
-    m_symbol->Print( aSettings, plot_offset, m_unit, m_bodyStyle, LIB_SYMBOL_OPTIONS(), false );
+    m_symbol->PrintBackground( cfg, plot_offset, m_unit, m_bodyStyle, false, false );
+    m_symbol->Print( cfg, plot_offset, m_unit, m_bodyStyle, false, false );
 }

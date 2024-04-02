@@ -1451,17 +1451,16 @@ void SCH_EDIT_FRAME::OnExit( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::PrintPage( const RENDER_SETTINGS* aSettings )
 {
-    wxString fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
+    wxString                   fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
+    const SCH_RENDER_SETTINGS* cfg = static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
+    COLOR4D                    bg = GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
-    const wxBrush& brush =
-            wxBrush( GetColorSettings()->GetColor( LAYER_SCHEMATIC_BACKGROUND ).ToColour() );
-    aSettings->GetPrintDC()->SetBackground( brush );
-    aSettings->GetPrintDC()->Clear();
+    cfg->GetPrintDC()->SetBackground( wxBrush( bg.ToColour() ) );
+    cfg->GetPrintDC()->Clear();
 
-    aSettings->GetPrintDC()->SetLogicalFunction( wxCOPY );
-    GetScreen()->Print( aSettings );
-    PrintDrawingSheet( aSettings, GetScreen(), Schematic().GetProperties(), schIUScale.IU_PER_MILS,
-                       fileName );
+    cfg->GetPrintDC()->SetLogicalFunction( wxCOPY );
+    GetScreen()->Print( cfg );
+    PrintDrawingSheet( cfg, GetScreen(), Schematic().GetProperties(), schIUScale.IU_PER_MILS, fileName );
 }
 
 

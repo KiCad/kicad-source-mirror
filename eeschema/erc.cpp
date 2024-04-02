@@ -835,7 +835,7 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                     SCH_PIN* pin = static_cast<SCH_PIN*>( item );
                     const SCH_SHEET_PATH& sheet = subgraph->GetSheet();
 
-                    if( !pin->GetLibPin()->GetParent()->IsMulti() )
+                    if( !pin->GetLibPin()->GetParentSymbol()->IsMulti() )
                         continue;
 
                     wxString name = pin->GetParentSymbol()->GetRef( &sheet ) +

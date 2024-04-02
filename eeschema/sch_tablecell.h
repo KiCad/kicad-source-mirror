@@ -64,7 +64,7 @@ public:
     int  GetRowSpan() const { return m_rowSpan; }
     void SetRowSpan( int aSpan ) { m_rowSpan = aSpan; }
 
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
 
     void Plot( PLOTTER* aPlotter, bool aBackground,
                const SCH_PLOT_SETTINGS& aPlotSettings ) const override;

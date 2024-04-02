@@ -1147,15 +1147,14 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground,
     if( aBackground && !aPlotter->GetColorMode() )
         return;
 
-    auto*    settings = dynamic_cast<KIGFX::SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
-    bool     override = settings ? settings->m_OverrideItemColors : false;
-    COLOR4D  borderColor = GetBorderColor();
-    COLOR4D  backgroundColor = GetBackgroundColor();
+    SCH_RENDER_SETTINGS* cfg = static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    COLOR4D              borderColor = GetBorderColor();
+    COLOR4D              backgroundColor = GetBackgroundColor();
 
-    if( override || borderColor == COLOR4D::UNSPECIFIED )
+    if( cfg->m_OverrideItemColors || borderColor == COLOR4D::UNSPECIFIED )
         borderColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET );
 
-    if( override || backgroundColor == COLOR4D::UNSPECIFIED )
+    if( cfg->m_OverrideItemColors || backgroundColor == COLOR4D::UNSPECIFIED )
         backgroundColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET_BACKGROUND );
 
     if( aBackground && backgroundColor.a > 0.0 )
@@ -1195,20 +1194,18 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground,
 }
 
 
-void SCH_SHEET::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SHEET::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
-    wxDC*       DC = aSettings->GetPrintDC();
-    VECTOR2I    pos = m_pos + aOffset;
-    int         lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
-    const auto* settings = dynamic_cast<const KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
-    bool        override = settings && settings->m_OverrideItemColors;
-    COLOR4D     border = GetBorderColor();
-    COLOR4D     background = GetBackgroundColor();
+    wxDC*    DC = aSettings->GetPrintDC();
+    VECTOR2I pos = m_pos + aOffset;
+    int      lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    COLOR4D  border = GetBorderColor();
+    COLOR4D  background = GetBackgroundColor();
 
-    if( override || border == COLOR4D::UNSPECIFIED )
+    if( aSettings->m_OverrideItemColors || border == COLOR4D::UNSPECIFIED )
         border = aSettings->GetLayerColor( LAYER_SHEET );
 
-    if( override || background == COLOR4D::UNSPECIFIED )
+    if( aSettings->m_OverrideItemColors || background == COLOR4D::UNSPECIFIED )
         background = aSettings->GetLayerColor( LAYER_SHEET_BACKGROUND );
 
     if( GetGRForceBlackPenState() )     // printing in black & white

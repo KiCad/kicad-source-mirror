@@ -40,8 +40,6 @@
 #include <sch_textbox.h>
 #include <tools/sch_navigate_tool.h>
 
-using KIGFX::SCH_RENDER_SETTINGS;
-
 
 SCH_TEXTBOX::SCH_TEXTBOX( int aLineWidth, FILL_T aFillType, const wxString& text, KICAD_T aType ) :
         SCH_SHAPE( SHAPE_T::RECTANGLE, aLineWidth, aFillType, aType ),
@@ -264,7 +262,7 @@ KIFONT::FONT* SCH_TEXTBOX::getDrawFont() const
 }
 
 
-void SCH_TEXTBOX::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC*      DC = aSettings->GetPrintDC();
     int        penWidth = GetPenWidth();

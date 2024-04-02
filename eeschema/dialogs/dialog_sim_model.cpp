@@ -85,7 +85,7 @@ DIALOG_SIM_MODEL<T_symbol, T_field>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BA
     for( LIB_PIN* pin : aSymbol.GetAllLibPins() )
     {
         // De Morgan conversions are equivalences, not additional items to simulate
-        if( !pin->GetParent()->HasAlternateBodyStyle() || pin->GetBodyStyle() < 2 )
+        if( !pin->GetParentSymbol()->HasAlternateBodyStyle() || pin->GetBodyStyle() < 2 )
             m_sortedPartPins.push_back( pin );
     }
 

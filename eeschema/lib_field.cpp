@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2022 CERN
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -127,16 +127,15 @@ KIFONT::FONT* LIB_FIELD::getDrawFont() const
 }
 
 
-void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                       const TRANSFORM& aTransform, bool aDimmed )
+void LIB_FIELD::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                       bool aForceNoFill, bool aDimmed )
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color = aSettings->GetLayerColor( IsVisible() ? GetDefaultLayer() : LAYER_HIDDEN );
     COLOR4D  bg = aSettings->GetBackgroundColor();
     bool     blackAndWhiteMode = GetGRForceBlackPenState();
     int      penWidth = GetEffectivePenWidth( aSettings );
-    VECTOR2I text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;
-    wxString text = aData ? *static_cast<wxString*>( aData ) : GetText();
+    VECTOR2I text_pos = aSettings->m_Transform.TransformCoordinate( GetTextPos() ) + aOffset;
 
     if( blackAndWhiteMode || bg == COLOR4D::UNSPECIFIED )
         bg = COLOR4D::WHITE;
@@ -155,7 +154,7 @@ void LIB_FIELD::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
     if( !font )
         font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
-    GRPrintText( DC, text_pos, color, text, GetTextAngle(), GetTextSize(), GetHorizJustify(),
+    GRPrintText( DC, text_pos, color, GetText(), GetTextAngle(), GetTextSize(), GetHorizJustify(),
                  GetVertJustify(), penWidth, IsItalic(), IsBold(), font, GetFontMetrics() );
 }
 
@@ -411,9 +410,7 @@ wxString LIB_FIELD::GetFullText( int unit ) const
     wxString text = GetText();
     text << wxT( "?" );
 
-    wxCHECK( GetParent(), text );
-
-    if( GetParent()->IsMulti() )
+    if( GetParentSymbol() && GetParentSymbol()->IsMulti() )
         text << LIB_SYMBOL::LetterSubReference( unit, 'A' );
 
     return text;
@@ -600,10 +597,10 @@ bool LIB_FIELD::operator==( const LIB_ITEM& aItem ) const
     if( m_name != field.m_name )
         return false;
 
-    if( !m_parent || !aItem.GetParent() )
+    if( !m_parent || !aItem.GetParentSymbol() )
         return false;
 
-    if( m_parent->m_Uuid != aItem.GetParent()->m_Uuid )
+    if( m_parent->m_Uuid != aItem.GetParentSymbol()->m_Uuid )
         return false;
 
     if( m_id < MANDATORY_FIELDS )
@@ -626,7 +623,10 @@ double LIB_FIELD::Similarity( const LIB_ITEM& aItem ) const
     if( m_id != field.m_id && m_id < MANDATORY_FIELDS )
         return 0.0;
 
-    if( m_parent->m_Uuid != aItem.GetParent()->m_Uuid )
+    if( !m_parent || !aItem.GetParentSymbol() )
+        return false;
+
+    if( m_parent->m_Uuid != aItem.GetParentSymbol()->m_Uuid )
         return 0.0;
 
     if( m_id < MANDATORY_FIELDS )

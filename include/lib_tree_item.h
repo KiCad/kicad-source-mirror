@@ -76,7 +76,7 @@ public:
     /**
      * For items with units, return the number of units.
      */
-    virtual int GetUnitCount() const { return 0; }
+    virtual int GetSubUnitCount() const { return 0; }
 
     /**
      * For items with units, return an identifier for unit x.

@@ -324,7 +324,7 @@ public:
     void Plot( PLOTTER* aPlotter, bool aBackground,
                const SCH_PLOT_SETTINGS& aPlotSettings ) const override;
 
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
 
     /**
      * @brief autoRotateOnPlacement

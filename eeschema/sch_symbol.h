@@ -25,8 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __SYMBOL_H__
-#define __SYMBOL_H__
+#ifndef SCH_SYMBOL_H
+#define SCH_SYMBOL_H
 
 #include <eda_item.h>
 #include <core/typeinfo.h>
@@ -45,8 +45,8 @@
 #include <wx/string.h>
 
 #include <schematic.h>
+#include <symbol.h>
 #include <sch_field.h>
-#include <sch_item.h>
 #include <sch_pin.h>
 #include <sch_sheet_path.h>    // SCH_SYMBOL_INSTANCE
 #include <symbol_lib_table.h>
@@ -105,7 +105,7 @@ enum SYMBOL_ORIENTATION_PROP
 /**
  * Schematic symbol object.
  */
-class SCH_SYMBOL : public SCH_ITEM
+class SCH_SYMBOL : public SYMBOL
 {
 public:
     SCH_SYMBOL();
@@ -180,8 +180,6 @@ public:
     void SortInstances( bool ( *aSortFunction )( const SCH_SYMBOL_INSTANCE& aLhs,
                                                  const SCH_SYMBOL_INSTANCE& aRhs ) );
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
-
     /**
      * Return true for items which are moved with the anchor point at mouse cursor
      * and false for items moved with no reference to anchor.
@@ -200,7 +198,7 @@ public:
 
     void SetLibId( const LIB_ID& aName );
 
-    const LIB_ID& GetLibId() const { return m_lib_id; }
+    const LIB_ID& GetLibId() const override { return m_lib_id; }
 
     wxString GetSymbolIDAsString() const { return m_lib_id.Format(); }
 
@@ -243,12 +241,12 @@ public:
     /**
      * @return the associated LIB_SYMBOL's description field (or wxEmptyString).
      */
-    wxString GetDescription() const;
+    wxString GetDescription() const override;
 
     /**
      * @return the associated LIB_SYMBOL's keywords field (or wxEmptyString).
      */
-    wxString GetKeyWords() const;
+    wxString GetKeyWords() const override;
 
     /**
      * Return the documentation text for the given part alias
@@ -256,22 +254,12 @@ public:
     wxString GetDatasheet() const;
 
     int GetUnit() const { return m_unit; }
+    void SetUnit( int aUnit ) { m_unit = aUnit; }
 
     /**
      * Updates the cache of SCH_PIN objects for each pin
      */
     void UpdatePins();
-
-    /**
-     * Change the unit number to \a aUnit
-     *
-     * This has meaning only for symbols made up of multiple units per package.
-     *
-     * @note This also set the modified flag bit
-     *
-     * @param aUnit is the new unit to select.
-     */
-    void SetUnit( int aUnit );
 
     /**
      * Return true if the given unit \a aUnit has a display name set.
@@ -287,21 +275,12 @@ public:
      */
     wxString GetUnitDisplayName( int aUnit );
 
-    /**
-     * Change the unit number to \a aUnit without setting any internal flags.
-     * This has meaning only for symbols made up of multiple units per package.
-     *
-     * @note This also set the modified flag bit
-     *
-     * @param aUnit is the new unit to select.
-     */
-    void UpdateUnit( int aUnit );
-
     int  GetBodyStyle() const { return m_bodyStyle; }
     void SetBodyStyle( int aBodyStyle );
 
-    wxString GetPrefix() const { return m_prefix; }
+    bool HasAlternateBodyStyle() const override;
 
+    wxString GetPrefix() const { return m_prefix; }
     void SetPrefix( const wxString& aPrefix ) { m_prefix = aPrefix; }
 
     /**
@@ -321,7 +300,9 @@ public:
      *
      * @return the number of units per package or zero if the library entry cannot be found.
      */
-    int GetUnitCount() const;
+    int GetUnitCount() const override;
+
+    bool IsMulti() const override { return GetUnitCount() > 1; }
 
     /**
      * Compute the new transform matrix based on \a aOrientation for the symbol which is
@@ -556,7 +537,7 @@ public:
     {
         return GetRef( &Schematic()->CurrentSheet() );
     }
-    void SetRefProp( const wxString aRef )
+    void SetRefProp( const wxString& aRef )
     {
         SetRef( &Schematic()->CurrentSheet(), aRef );
     }
@@ -564,7 +545,7 @@ public:
     {
         return GetValueFieldText( false, &Schematic()->CurrentSheet(), false );
     }
-    void SetValueProp( const wxString aRef )
+    void SetValueProp( const wxString& aRef )
     {
         SetValueFieldText( aRef );
     }
@@ -655,7 +636,7 @@ public:
      * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
      *                moving an object)
      */
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     /**
      * Print only the background parts of a symbol (if any)
@@ -664,7 +645,7 @@ public:
      * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
      *                moving an object)
      */
-    void PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
+    void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
@@ -726,8 +707,6 @@ public:
 
     /// Set the selected unit of this symbol for all sheets.
     void SetUnitSelection( int aUnitSelection );
-
-    // Geometric transforms (used in block operations):
 
     void Move( const VECTOR2I& aMoveVector ) override
     {
@@ -869,7 +848,7 @@ public:
 
     bool GetShowPinNumbers() const
     {
-        return m_part && m_part->ShowPinNumbers();
+        return m_part && m_part->GetShowPinNumbers();
     }
 
     void SetShowPinNumbers( bool aShow )
@@ -878,7 +857,7 @@ public:
             m_part->SetShowPinNumbers( aShow );
     }
 
-    bool GetShowPinNames() const { return m_part && m_part->ShowPinNames(); }
+    bool GetShowPinNames() const { return m_part && m_part->GetShowPinNames(); }
 
     void SetShowPinNames( bool aShow )
     {
@@ -895,7 +874,8 @@ public:
      */
     bool IsSymbolLikePowerGlobalLabel() const;
 
-    bool IsPower() const;
+    bool IsPower() const override;
+    bool IsNormal() const override;
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 
@@ -950,4 +930,4 @@ private:
     static std::unordered_map<TRANSFORM, int> s_transformToOrientationCache;
 };
 
-#endif /* __SYMBOL_H__ */
+#endif /* SCH_SYMBOL_H */

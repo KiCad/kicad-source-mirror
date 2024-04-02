@@ -97,7 +97,7 @@ bool DIALOG_LIB_SHAPE_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    LIB_SYMBOL* symbol = m_shape->GetParent();
+    const SYMBOL* symbol = m_shape->GetParentSymbol();
 
     m_checkBorder->SetValue( m_shape->GetWidth() >= 0 );
 

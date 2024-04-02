@@ -633,7 +633,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
             VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
             VECTOR2I offset( -cursorPos.x, cursorPos.y );
 
-            symbol->SetOffset( offset );
+            symbol->Move( offset );
 
             // Refresh the view without changing the viewport
             auto center = m_view->GetCenter();

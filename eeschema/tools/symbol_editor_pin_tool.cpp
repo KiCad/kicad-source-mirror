@@ -121,22 +121,23 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
     LIB_PIN               original_pin( *aPin );
     DIALOG_PIN_PROPERTIES dlg( m_frame, aPin );
     SCH_COMMIT            commit( m_frame );
+    LIB_SYMBOL*           parentSymbol = dynamic_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() );
 
     if( aPin->GetEditFlags() == 0 )
-        commit.Modify( aPin->GetParent() );
+        commit.Modify( parentSymbol );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return false;
 
-    if( !aPin->IsNew() && m_frame->SynchronizePins() && aPin->GetParent() )
+    if( !aPin->IsNew() && m_frame->SynchronizePins() && parentSymbol )
     {
         LIB_PINS pinList;
-        aPin->GetParent()->GetPins( pinList );
+        parentSymbol->GetPins( pinList );
 
         // a pin can have a unit id = 0 (common to all units) to unit count
         // So we need a buffer size = GetUnitCount()+1 to store a value in a vector
         // when using the unit id of a pin as index
-        std::vector<bool> got_unit( aPin->GetParent()->GetUnitCount() + 1 );
+        std::vector<bool> got_unit( parentSymbol->GetUnitCount() + 1 );
 
         got_unit[static_cast<size_t>(aPin->GetUnit())] = true;
 
@@ -160,7 +161,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
                 if( aPin->GetBodyStyle() == 0 )
                 {
                     if( !aPin->GetUnit() || other->GetUnit() == aPin->GetUnit() )
-                        aPin->GetParent()->RemoveDrawItem( other );
+                        parentSymbol->RemoveDrawItem( other );
                 }
                 else if( other->GetBodyStyle() == aPin->GetBodyStyle() )
                 {
@@ -172,7 +173,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
                 if( aPin->GetUnit() == 0 )
                 {
                     if( !aPin->GetBodyStyle() || other->GetBodyStyle() == aPin->GetBodyStyle() )
-                        aPin->GetParent()->RemoveDrawItem( other );
+                        parentSymbol->RemoveDrawItem( other );
                 }
 
                 other->SetOrientation( aPin->GetOrientation() );
@@ -334,7 +335,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
     // to facilitate pin editing, create pins for all other units for the current body style
     // at the same position as aPin
 
-    for( ii = 1; ii <= aPin->GetParent()->GetUnitCount(); ii++ )
+    for( ii = 1; ii <= aPin->GetParentSymbol()->GetUnitCount(); ii++ )
     {
         if( ii == aPin->GetUnit() )
             continue;
@@ -352,7 +353,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
 
         try
         {
-            aPin->GetParent()->AddDrawItem( newPin );
+            dynamic_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() )->AddDrawItem( newPin );
         }
         catch( const boost::bad_pointer& e )
         {

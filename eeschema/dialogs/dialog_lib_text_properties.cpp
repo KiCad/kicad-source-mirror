@@ -125,11 +125,9 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
 {
     wxCHECK( m_commonToAllUnits, false );
 
-    LIB_SYMBOL* symbol = nullptr;
-
     if( m_graphicText )
     {
-        symbol = m_graphicText->GetParent();
+        const SYMBOL* symbol = m_graphicText->GetParentSymbol();
 
         wxCHECK( symbol, false );
 
@@ -144,8 +142,8 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         m_bold->Check( m_graphicText->IsBold() );
 
         m_privateCheckbox->SetValue( m_graphicText->IsPrivate() );
-        m_commonToAllUnits->SetValue( symbol && symbol->GetUnitCount() > 1
-                                && m_graphicText->GetUnit() == 0 );
+        m_commonToAllUnits->SetValue( symbol->GetUnitCount() > 1 && m_graphicText->GetUnit() == 0 );
+        m_commonToAllUnits->Enable( symbol->GetUnitCount() > 1 );
         m_commonToAllBodyStyles->SetValue( m_graphicText->GetBodyStyle() == 0 );
 
         if( m_graphicText->GetTextAngle().IsHorizontal() )
@@ -173,13 +171,14 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
     {
         SYMBOL_EDITOR_SETTINGS* cfg = m_parent->GetSettings();
         auto* tools = m_parent->GetToolManager()->GetTool<SYMBOL_EDITOR_DRAWING_TOOLS>();
-        symbol = m_parent->GetCurSymbol();
+        SYMBOL* symbol = m_parent->GetCurSymbol();
 
         wxCHECK( cfg && symbol && tools, false );
 
         m_textSize.SetValue( schIUScale.MilsToIU( cfg->m_Defaults.text_size ) );
 
         m_commonToAllUnits->SetValue( symbol->GetUnitCount() > 1 && !tools->GetDrawSpecificUnit() );
+        m_commonToAllUnits->Enable( symbol->GetUnitCount() > 1 );
         m_commonToAllBodyStyles->SetValue( !tools->GetDrawSpecificBodyStyle() );
 
         if( tools->GetLastTextAngle().IsHorizontal() )
@@ -187,8 +186,6 @@ bool DIALOG_LIB_TEXT_PROPERTIES::TransferDataToWindow()
         else
             m_vertical->Check();
     }
-
-    m_commonToAllUnits->Enable( symbol && symbol->GetUnitCount() > 1 );
 
     return true;
 }

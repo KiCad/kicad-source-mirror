@@ -166,11 +166,11 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
         // TODO: add anchor position token here.
 
-        if( !aSymbol->ShowPinNumbers() )
+        if( !aSymbol->GetShowPinNumbers() )
             aFormatter.Print( 0, " (pin_numbers hide)" );
 
         if( aSymbol->GetPinNameOffset() != schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET )
-          || !aSymbol->ShowPinNames() )
+          || !aSymbol->GetShowPinNames() )
         {
             aFormatter.Print( 0, " (pin_names" );
 
@@ -179,7 +179,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
                                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                                        aSymbol->GetPinNameOffset() ).c_str() );
 
-            if( !aSymbol->ShowPinNames() )
+            if( !aSymbol->GetShowPinNames() )
                 aFormatter.Print( 0, " hide" );
 
             aFormatter.Print( 0, ")" );

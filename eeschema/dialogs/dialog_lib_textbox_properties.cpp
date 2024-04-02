@@ -149,7 +149,7 @@ bool DIALOG_LIB_TEXTBOX_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    LIB_SYMBOL* symbol = m_currentText->GetParent();
+    const SYMBOL* symbol = m_currentText->GetParentSymbol();
 
     m_textCtrl->SetValue( m_currentText->GetText() );
     m_textCtrl->EmptyUndoBuffer();

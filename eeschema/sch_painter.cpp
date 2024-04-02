@@ -100,57 +100,6 @@ std::vector<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
 };
 
 
-SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
-        m_IsSymbolEditor( false ),
-        m_ShowUnit( 0 ),
-        m_ShowBodyStyle( 0 ),
-        m_ShowPinsElectricalType( true ),
-        m_ShowHiddenLibPins( true ),      // Force showing of hidden pin ( symbol editor specific)
-        m_ShowHiddenLibFields( true ),    // Force showing of hidden fields ( symbol editor specific)
-        m_ShowPinNumbers( false ),
-        m_ShowDisabled( false ),
-        m_ShowGraphicsDisabled( false ),
-        m_OverrideItemColors( false ),
-        m_LabelSizeRatio( DEFAULT_LABEL_SIZE_RATIO ),
-        m_TextOffsetRatio( DEFAULT_TEXT_OFFSET_RATIO ),
-        m_PinSymbolSize( DEFAULT_TEXT_SIZE * schIUScale.IU_PER_MILS / 2 )
-{
-    SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * schIUScale.IU_PER_MILS );
-    SetDashLengthRatio( 12 );       // From ISO 128-2
-    SetGapLengthRatio( 3 );         // From ISO 128-2
-
-    m_minPenWidth = ADVANCED_CFG::GetCfg().m_MinPlotPenWidth * schIUScale.IU_PER_MM;
-}
-
-
-void SCH_RENDER_SETTINGS::LoadColors( const COLOR_SETTINGS* aSettings )
-{
-    for( int layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; layer ++)
-        m_layerColors[ layer ] = aSettings->GetColor( layer );
-
-    for( int layer = GAL_LAYER_ID_START; layer < GAL_LAYER_ID_END; layer ++)
-        m_layerColors[ layer ] = aSettings->GetColor( layer );
-
-    m_backgroundColor = aSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
-
-    m_layerColors[LAYER_AUX_ITEMS] = m_layerColors[LAYER_SCHEMATIC_AUX_ITEMS];
-
-    m_OverrideItemColors = aSettings->GetOverrideSchItemColors();
-}
-
-
-COLOR4D SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
-{
-    return m_layerColors[ aLayer ];
-}
-
-
-bool SCH_RENDER_SETTINGS::GetShowPageLimits() const
-{
-    return eeconfig() && eeconfig()->m_Appearance.show_page_limits && !IsPrinting();
-}
-
-
 /**
  * Used when a LIB_SYMBOL is not found in library to draw a dummy shape.
  * This symbol is a 400 mils square with the text "??"
@@ -1123,7 +1072,7 @@ void SCH_PAINTER::draw( const LIB_FIELD* aField, int aLayer, bool aDimmed )
     // Draw the umbilical line when in the schematic editor
     if( aField->IsMoving() && m_schematic )
     {
-        m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
+        m_gal->SetLineWidth( m_schSettings.GetOutlineWidth() );
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
         m_gal->DrawLine( bbox.Centre(), VECTOR2I( 0, 0 ) );
     }
@@ -1630,7 +1579,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         }
     }
 
-    LIB_SYMBOL* libEntry = aPin->GetParent();
+    const SYMBOL* libEntry = aPin->GetParentSymbol();
 
     // Draw the labels
 
@@ -1644,8 +1593,8 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
     int   textOffset = libEntry->GetPinNameOffset();
     float nameStrokeWidth = getLineWidth( aPin, false );
     float numStrokeWidth = getLineWidth( aPin, false );
-    bool  showPinNames = libEntry->ShowPinNames();
-    bool  showPinNumbers = m_schSettings.m_ShowPinNumbers || libEntry->ShowPinNumbers();
+    bool  showPinNames = libEntry->GetShowPinNames();
+    bool  showPinNumbers = m_schSettings.m_ShowPinNumbers || libEntry->GetShowPinNumbers();
 
     nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), true );
     numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), true );
@@ -2485,7 +2434,7 @@ void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer )
                 lineStyle = stroke.GetLineStyle();
 
                 if( lineWidth == 0 )
-                    lineWidth = m_schSettings.m_defaultPenWidth;
+                    lineWidth = m_schSettings.GetDefaultPenWidth();
 
                 if( color == COLOR4D::UNSPECIFIED )
                     color = m_schSettings.GetLayerColor( LAYER_NOTES );
@@ -2910,7 +2859,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     {
         VECTOR2I parentPos = aField->GetParentPosition();
 
-        m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
+        m_gal->SetLineWidth( m_schSettings.GetOutlineWidth() );
         m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
         m_gal->DrawLine( bbox.Centre(), parentPos );
     }

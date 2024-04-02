@@ -394,6 +394,7 @@ set( EESCHEMA_SRCS
     sch_plotter.cpp
     sch_preview_panel.cpp
     sch_reference_list.cpp
+    sch_render_settings.cpp
     sch_screen.cpp
     sch_shape.cpp
     sch_sheet.cpp
@@ -410,6 +411,7 @@ set( EESCHEMA_SRCS
     schematic_settings.cpp
     schematic_undo_redo.cpp
     sheet.cpp
+    symbol.cpp
     symbol_async_loader.cpp
     symbol_checker.cpp
     symbol_chooser_frame.cpp

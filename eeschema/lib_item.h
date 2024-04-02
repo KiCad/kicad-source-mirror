@@ -28,6 +28,7 @@
 
 #include <eda_item.h>
 #include <eda_shape.h>
+#include <symbol.h>
 #include <transform.h>
 #include <render_settings.h>
 
@@ -175,17 +176,11 @@ public:
     /**
      * Draw an item
      *
-     * @param aDC Device Context (can be null)
      * @param aOffset Offset to draw
-     * @param aData Value or pointer used to pass others parameters, depending on body items.
-     *              Used for some items to force to force no fill mode ( has meaning only for
-     *              items what can be filled ). used in printing or moving objects mode or to
-     *              pass reference to the lib symbol for pins.
-     * @param aTransform Transform Matrix (rotation, mirror ..)
      * @param aDimmed Dim the color on the printout
      */
-    virtual void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                        const TRANSFORM& aTransform, bool aDimmed );
+    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                        bool aForceNoFill, bool aDimmed );
 
     virtual int GetPenWidth() const = 0;
 
@@ -206,9 +201,16 @@ public:
             return std::max( GetPenWidth(), aSettings->GetMinPenWidth() );
     }
 
-    LIB_SYMBOL* GetParent() const  // Replace EDA_ITEM::GetParent() with a more useful return-type
+    const SYMBOL* GetParentSymbol() const
     {
-        return (LIB_SYMBOL*) m_parent;
+        wxCHECK( m_parent->Type() == LIB_SYMBOL_T, nullptr );
+        return static_cast<const SYMBOL*>( m_parent );
+    }
+
+    SYMBOL* GetParentSymbol()
+    {
+        wxCHECK( m_parent->Type() == LIB_SYMBOL_T, nullptr );
+        return static_cast<SYMBOL*>( m_parent );
     }
 
     /**
@@ -381,15 +383,11 @@ protected:
     virtual int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const;
 
     /**
-     * Print the item to \a aDC.
-     *
      * @param aOffset A reference to a wxPoint object containing the offset where to draw
      *                from the object's current position.
-     * @param aData A pointer to any object specific data required to perform the draw.
-     * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
-    virtual void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                        const TRANSFORM& aTransform, bool aDimmed ) = 0;
+    virtual void print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                        bool aForceNoFill, bool aDimmed ) = 0;
 
 private:
     friend class LIB_SYMBOL;

@@ -570,7 +570,7 @@ int SYMBOL_EDITOR_CONTROL::ToggleProperties( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 {
-    KIGFX::SCH_RENDER_SETTINGS* renderSettings = m_frame->GetRenderSettings();
+    SCH_RENDER_SETTINGS* renderSettings = m_frame->GetRenderSettings();
     renderSettings->m_ShowPinsElectricalType = !renderSettings->m_ShowPinsElectricalType;
 
     // Update canvas
@@ -583,7 +583,7 @@ int SYMBOL_EDITOR_CONTROL::ShowElectricalTypes( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_CONTROL::ShowPinNumbers( const TOOL_EVENT& aEvent )
 {
-    KIGFX::SCH_RENDER_SETTINGS* renderSettings = m_frame->GetRenderSettings();
+    SCH_RENDER_SETTINGS* renderSettings = m_frame->GetRenderSettings();
     renderSettings->m_ShowPinNumbers = !renderSettings->m_ShowPinNumbers;
 
     // Update canvas

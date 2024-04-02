@@ -190,8 +190,8 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataToWindow()
     m_excludeFromBomCheckBox->SetValue( m_libEntry->GetExcludedFromBOM() );
     m_excludeFromBoardCheckBox->SetValue( m_libEntry->GetExcludedFromBoard() );
 
-    m_ShowPinNumButt->SetValue( m_libEntry->ShowPinNumbers() );
-    m_ShowPinNameButt->SetValue( m_libEntry->ShowPinNames() );
+    m_ShowPinNumButt->SetValue( m_libEntry->GetShowPinNumbers() );
+    m_ShowPinNameButt->SetValue( m_libEntry->GetShowPinNames() );
     m_PinsNameInsideButt->SetValue( m_libEntry->GetPinNameOffset() != 0 );
     m_pinNameOffset.ChangeValue( m_libEntry->GetPinNameOffset() );
 

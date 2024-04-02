@@ -227,7 +227,7 @@ int SCH_SHAPE::GetPenWidth() const
 }
 
 
-void SCH_SHAPE::PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SHAPE::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color;
@@ -293,7 +293,7 @@ void SCH_SHAPE::PrintBackground( const RENDER_SETTINGS* aSettings, const VECTOR2
 }
 
 
-void SCH_SHAPE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     int      penWidth = GetPenWidth();
     wxDC*    DC = aSettings->GetPrintDC();

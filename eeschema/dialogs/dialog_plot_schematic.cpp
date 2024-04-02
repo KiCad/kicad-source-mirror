@@ -370,7 +370,7 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
 {
     wxBusyCursor dummy;
 
-    KIGFX::SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
+    SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
 
     getPlotOptions( &renderSettings );
 

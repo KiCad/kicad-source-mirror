@@ -45,8 +45,6 @@
 #include <tools/sch_navigate_tool.h>
 #include <trigo.h>
 
-using KIGFX::SCH_RENDER_SETTINGS;
-
 
 SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
         SCH_ITEM( nullptr, aType ),
@@ -196,7 +194,7 @@ KIFONT::FONT* SCH_TEXT::getDrawFont() const
 }
 
 
-void SCH_TEXT::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_TEXT::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     COLOR4D  color = GetTextColor();
     bool     blackAndWhiteMode = GetGRForceBlackPenState();

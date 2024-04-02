@@ -88,7 +88,7 @@ public:
 
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
 
     bool operator<( const SCH_ITEM& aItem ) const override;
 

@@ -92,7 +92,7 @@ public:
     void SetExcludedFromSim( bool aExclude ) override { m_excludedFromSim = aExclude; }
     bool GetExcludedFromSim() const override { return m_excludedFromSim; }
 
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

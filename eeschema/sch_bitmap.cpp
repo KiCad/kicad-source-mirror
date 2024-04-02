@@ -134,7 +134,7 @@ const BOX2I SCH_BITMAP::GetBoundingBox() const
 }
 
 
-void SCH_BITMAP::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_BITMAP::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     VECTOR2I pos = m_pos + aOffset;
 

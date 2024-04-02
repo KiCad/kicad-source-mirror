@@ -294,10 +294,8 @@ public:
      *
      * @param aWidth is the new width.
      */
-    void SetOutlineWidth( float aWidth )
-    {
-        m_outlineWidth = aWidth;
-    }
+    void SetOutlineWidth( float aWidth ) { m_outlineWidth = aWidth; }
+    float GetOutlineWidth() const { return m_outlineWidth; }
 
     void SetHighlightFactor( float aFactor ) { m_highlightFactor = aFactor; }
     void SetSelectFactor( float aFactor ) { m_selectFactor = aFactor; }

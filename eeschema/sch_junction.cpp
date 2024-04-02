@@ -113,7 +113,7 @@ const BOX2I SCH_JUNCTION::GetBoundingBox() const
 }
 
 
-void SCH_JUNCTION::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_JUNCTION::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     wxDC*   DC    = aSettings->GetPrintDC();
     COLOR4D color = GetJunctionColor();

@@ -654,7 +654,7 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
     GRForceBlackPen( false );
     dc.SetUserScale( scale, scale );
 
-    KIGFX::SCH_RENDER_SETTINGS* cfg = GetRenderSettings();
+    SCH_RENDER_SETTINGS* cfg = GetRenderSettings();
 
     cfg->SetPrintDC( &dc );
 

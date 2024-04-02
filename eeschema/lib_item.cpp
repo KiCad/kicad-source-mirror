@@ -72,7 +72,7 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 
     aList.emplace_back( _( "Type" ), GetTypeName() );
 
-    if( LIB_SYMBOL* parent = GetParent() )
+    if( const SYMBOL* parent = GetParentSymbol() )
     {
         if( parent->GetUnitCount() )
             aList.emplace_back( _( "Unit" ), GetUnitDescription( m_unit ) );
@@ -169,10 +169,10 @@ const KIFONT::METRICS& LIB_ITEM::GetFontMetrics() const
 }
 
 
-void LIB_ITEM::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                      const TRANSFORM& aTransform, bool aDimmed )
+void LIB_ITEM::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                      bool aForceNoFill, bool aDimmed )
 {
-    print( aSettings, aOffset, aData, aTransform, aDimmed );
+    print( aSettings, aOffset, aForceNoFill, aDimmed );
 }
 
 
@@ -200,7 +200,7 @@ static struct LIB_ITEM_DESC
                 {
                     if( LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( aItem ) )
                     {
-                        if( LIB_SYMBOL* symbol = libItem->GetParent() )
+                        if( const SYMBOL* symbol = libItem->GetParentSymbol() )
                             return symbol->IsMulti();
                     }
 
@@ -212,7 +212,7 @@ static struct LIB_ITEM_DESC
                 {
                     if( LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( aItem ) )
                     {
-                        if( LIB_SYMBOL* symbol = libItem->GetParent() )
+                        if( const SYMBOL* symbol = libItem->GetParentSymbol() )
                             return symbol->HasAlternateBodyStyle();
                     }
 

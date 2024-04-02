@@ -210,7 +210,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
         if( cfg->m_Printing.monochrome )
             GRForceBlackPen( true );
 
-        KIGFX::SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
+        SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
         renderSettings.SetPrintDC( dc );
 
         if( cfg->m_Printing.use_theme && theme )
@@ -276,7 +276,7 @@ void SCH_PRINTOUT::PrintPage( SCH_SCREEN* aScreen )
         gal->SetWorldUnitLength( SCH_WORLD_UNIT );
 
         // Init the SCH_RENDER_SETTINGS used by the painter used to print schematic
-        KIGFX::SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
+        SCH_RENDER_SETTINGS* dstSettings = painter->GetSettings();
 
         dstSettings->m_ShowPinsElectricalType = false;
 

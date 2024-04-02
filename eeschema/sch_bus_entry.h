@@ -91,7 +91,7 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
 
     const BOX2I GetBoundingBox() const override;
 

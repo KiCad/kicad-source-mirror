@@ -326,12 +326,12 @@ SCH_DRAW_PANEL* SCH_BASE_FRAME::GetCanvas() const
 }
 
 
-KIGFX::SCH_RENDER_SETTINGS* SCH_BASE_FRAME::GetRenderSettings()
+SCH_RENDER_SETTINGS* SCH_BASE_FRAME::GetRenderSettings()
 {
     if( GetCanvas() && GetCanvas()->GetView() )
     {
         if( KIGFX::PAINTER* painter = GetCanvas()->GetView()->GetPainter() )
-            return static_cast<KIGFX::SCH_RENDER_SETTINGS*>( painter->GetSettings() );
+            return static_cast<SCH_RENDER_SETTINGS*>( painter->GetSettings() );
     }
 
     return nullptr;

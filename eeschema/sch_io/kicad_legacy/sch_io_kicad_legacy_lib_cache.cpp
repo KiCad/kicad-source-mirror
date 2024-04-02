@@ -1496,8 +1496,8 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
 
     aFormatter.Print( 0, " %d %d %c %c %d %c %c\n",
                       0, schIUScale.IUToMils( aSymbol->GetPinNameOffset() ),
-                      aSymbol->ShowPinNumbers() ? 'Y' : 'N',
-                      aSymbol->ShowPinNames() ? 'Y' : 'N',
+                      aSymbol->GetShowPinNumbers() ? 'Y' : 'N',
+                      aSymbol->GetShowPinNames() ? 'Y' : 'N',
                       aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
                       aSymbol->IsPower() ? 'P' : 'N' );
 

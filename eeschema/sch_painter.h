@@ -27,6 +27,7 @@
 #ifndef __SCH_PAINTER_H
 #define __SCH_PAINTER_H
 
+#include <sch_render_settings.h>
 #include <sch_symbol.h>
 
 #include <gal/painter.h>
@@ -63,71 +64,6 @@ namespace KIGFX
 {
 class GAL;
 class SCH_PAINTER;
-
-
-/**
- * Store schematic specific render settings.
- */
-class SCH_RENDER_SETTINGS : public RENDER_SETTINGS
-{
-public:
-    friend class SCH_PAINTER;
-
-    SCH_RENDER_SETTINGS();
-
-    void LoadColors( const COLOR_SETTINGS* aSettings ) override;
-
-    /// @copydoc RENDER_SETTINGS::GetColor()
-    virtual COLOR4D GetColor( const VIEW_ITEM* aItem, int aLayer ) const override;
-
-    bool IsBackgroundDark() const override
-    {
-        auto luma = m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ].GetBrightness();
-
-        return luma < 0.5;
-    }
-
-    const COLOR4D& GetBackgroundColor() const override
-    {
-        return m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ];
-    }
-
-    void SetBackgroundColor( const COLOR4D& aColor ) override
-    {
-        m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ] = aColor;
-    }
-
-    float GetDanglingIndicatorThickness() const
-    {
-        return (float) m_defaultPenWidth / 3.0F;
-    }
-
-    const COLOR4D& GetGridColor() override { return m_layerColors[ LAYER_SCHEMATIC_GRID ]; }
-
-    const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_SCHEMATIC_CURSOR ]; }
-
-    bool GetShowPageLimits() const override;
-
-public:
-    bool   m_IsSymbolEditor;
-
-    int    m_ShowUnit;               // Show all units if 0
-    int    m_ShowBodyStyle;          // Show all body styles if 0
-
-    bool   m_ShowPinsElectricalType;
-    bool   m_ShowHiddenLibPins;      // Force showing of hidden pin ( symbol editor specific)
-    bool   m_ShowHiddenLibFields;    // Force showing of hidden fields ( symbol editor specific)
-    bool   m_ShowPinNumbers;         // Force showing of pin numbers (normally symbol-specific)
-    bool   m_ShowDisabled;
-    bool   m_ShowGraphicsDisabled;
-
-    bool   m_OverrideItemColors;
-
-    double m_LabelSizeRatio;         // Proportion of font size to label box
-    double m_TextOffsetRatio;        // Proportion of font size to offset text above/below
-                                     // wires, buses, etc.
-    int    m_PinSymbolSize;
-};
 
 
 /**

@@ -224,8 +224,8 @@ private:
      * If \a aData not NULL, \a aData must point a wxString which is used instead of
      * the m_Text
      */
-    void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                const TRANSFORM& aTransform, bool aDimmed ) override;
+    void print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, bool aForceNoFill,
+                bool aDimmed ) override;
 
     /**
      * Calculate the new circle at \a aPosition when editing.

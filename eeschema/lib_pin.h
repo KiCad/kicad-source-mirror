@@ -147,12 +147,9 @@ public:
      * Print a pin, with or without the pin texts
      *
      * @param aOffset Offset to draw
-     * @param aData = used here as a boolean indicating whether or not to draw the pin
-     *                electrical types
-     * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    void print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                const TRANSFORM& aTransform, bool aDimmed ) override;
+    void print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, bool aForceNoFill,
+                bool aDimmed ) override;
 
     /**
      * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
@@ -207,7 +204,7 @@ public:
     bool IsGlobalPower() const
     {
         return GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN
-               && ( !IsVisible() || (LIB_SYMBOL*) GetParent()->IsPower() );
+               && ( !IsVisible() || GetParentSymbol()->IsPower() );
     }
 
     int GetPenWidth() const override;

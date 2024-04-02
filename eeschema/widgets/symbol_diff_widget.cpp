@@ -88,8 +88,7 @@ void SYMBOL_DIFF_WIDGET::DisplayDiff( LIB_SYMBOL* aSchSymbol, LIB_SYMBOL* aLibSy
         m_previewItem = aSchSymbol;
 
         // For symbols having a De Morgan body style, use the first style
-        auto settings =
-                static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+        auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
         settings->m_ShowUnit = ( m_previewItem->IsMulti() && !aUnit ) ? 1 : aUnit;
         settings->m_ShowBodyStyle = ( m_previewItem->HasAlternateBodyStyle() && !aConvert ) ? 1 : aConvert;

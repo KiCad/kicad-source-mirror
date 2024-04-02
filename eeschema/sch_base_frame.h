@@ -44,11 +44,7 @@
 #include <template_fieldnames.h>
 
 
-namespace KIGFX
-{
-    class SCH_RENDER_SETTINGS;
-}
-
+class SCH_RENDER_SETTINGS;
 class PAGE_INFO;
 class TITLE_BLOCK;
 class SYMBOL_VIEWER_FRAME;
@@ -111,7 +107,7 @@ public:
     void LoadSettings( APP_SETTINGS_BASE* aCfg ) override;
     void SaveSettings( APP_SETTINGS_BASE* aCfg ) override;
 
-    KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings();
+    SCH_RENDER_SETTINGS* GetRenderSettings();
 
     COLOR4D GetDrawBgColor() const override;
 

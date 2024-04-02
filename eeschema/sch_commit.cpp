@@ -133,11 +133,11 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
         {
             view->Update( symbol );
 
-            symbol->RunOnChildren(
+            symbol->RunOnLibChildren(
                     [&]( LIB_ITEM* aChild )
                     {
                         view->Update( aChild );
-                    });
+                    } );
         }
 
         if( !( aCommitFlags & SKIP_UNDO ) )

@@ -550,9 +550,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     if( aField == nullptr )
         return;
 
-    wxString    caption;
-    LIB_SYMBOL* parent = aField->GetParent();
-    wxCHECK( parent, /* void */ );
+    wxString caption;
 
     if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
         caption.Printf( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );

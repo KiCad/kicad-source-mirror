@@ -47,8 +47,6 @@
 #include <api/api_utils.h>
 #include <api/schematic/schematic_types.pb.h>
 
-using KIGFX::SCH_RENDER_SETTINGS;
-
 
 bool IncrementLabelMember( wxString& name, int aIncrement )
 {
@@ -1408,7 +1406,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
 }
 
 
-void SCH_LABEL_BASE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_LABEL_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     static std::vector<VECTOR2I> s_poly;
 

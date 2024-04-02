@@ -349,7 +349,7 @@ SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forP
 }
 
 
-void SCH_FIELD::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_FIELD::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
     wxDC*           DC = aSettings->GetPrintDC();

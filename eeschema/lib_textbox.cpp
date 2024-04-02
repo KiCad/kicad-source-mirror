@@ -39,9 +39,6 @@
 #include <lib_textbox.h>
 
 
-using KIGFX::SCH_RENDER_SETTINGS;
-
-
 LIB_TEXTBOX::LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth, FILL_T aFillType,
                           const wxString& text ) :
         LIB_SHAPE( aParent, SHAPE_T::RECTANGLE, aLineWidth, aFillType, LIB_TEXTBOX_T ),
@@ -252,23 +249,22 @@ KIFONT::FONT* LIB_TEXTBOX::getDrawFont() const
 }
 
 
-void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                         const TRANSFORM& aTransform, bool aDimmed )
+void LIB_TEXTBOX::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                         bool aForceNoFill, bool aDimmed )
 {
     if( IsPrivate() )
         return;
 
-    bool       forceNoFill = static_cast<bool>( aData );
     bool       blackAndWhiteMode = GetGRForceBlackPenState();
     int        penWidth = GetEffectivePenWidth( aSettings );
     COLOR4D    color = GetStroke().GetColor();
     LINE_STYLE lineStyle = GetStroke().GetLineStyle();
 
     wxDC*    DC = aSettings->GetPrintDC();
-    VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
-    VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
+    VECTOR2I pt1 = aSettings->m_Transform.TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I pt2 = aSettings->m_Transform.TransformCoordinate( m_end ) + aOffset;
 
-    if( !forceNoFill && GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode )
+    if( !aForceNoFill && GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode )
         GRFilledRect( DC, pt1, pt2, penWidth, GetFillColor(), GetFillColor() );
 
     if( penWidth > 0 )
@@ -303,12 +299,12 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
             for( SHAPE* shape : shapes )
             {
                 STROKE_PARAMS::Stroke( shape, lineStyle, penWidth, aSettings,
-                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                       {
-                                            VECTOR2I pts = aTransform.TransformCoordinate( a ) + aOffset;
-                                            VECTOR2I pte = aTransform.TransformCoordinate( b ) + aOffset;
-                                            GRLine( DC, pts.x, pts.y, pte.x, pte.y, penWidth, color );
-                                       } );
+                        [&]( const VECTOR2I& a, const VECTOR2I& b )
+                        {
+                            VECTOR2I pts = aSettings->m_Transform.TransformCoordinate( a ) + aOffset;
+                            VECTOR2I pte = aSettings->m_Transform.TransformCoordinate( b ) + aOffset;
+                            GRLine( DC, pts.x, pts.y, pte.x, pte.y, penWidth, color );
+                        } );
             }
 
             for( SHAPE* shape : shapes )
@@ -336,7 +332,7 @@ void LIB_TEXTBOX::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetMinPenWidth() );
 
-    if( aTransform.y1 )
+    if( aSettings->m_Transform.y1 )
     {
         text.SetTextAngle( text.GetTextAngle() == ANGLE_HORIZONTAL ? ANGLE_VERTICAL
                                                                    : ANGLE_HORIZONTAL );

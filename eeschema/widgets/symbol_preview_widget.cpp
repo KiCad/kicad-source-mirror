@@ -74,7 +74,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY* aKiway, 
     // Early initialization of the canvas background color,
     // before any OnPaint event is fired for the canvas using a wrong bg color
     KIGFX::VIEW* view = m_preview->GetView();
-    auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
     if( auto* theme = Pgm().GetSettingsManager().GetColorSettings( app_settings->m_ColorTheme ) )
         settings->LoadColors( theme );
@@ -187,7 +187,7 @@ void SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
 void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit, int aBodyStyle )
 {
     KIGFX::VIEW* view = m_preview->GetView();
-    auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
     std::unique_ptr< LIB_SYMBOL > symbol;
 
     try
@@ -277,8 +277,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_SYMBOL* aSymbol, int aUnit, int aBo
         m_previewItem = new LIB_SYMBOL( *aSymbol );
 
         // For symbols having a De Morgan body style, use the first style
-        auto settings =
-                static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+        auto settings = static_cast<SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
 
         // If unit isn't specified for a multi-unit part, pick the first.  (Otherwise we'll
         // draw all of them.)

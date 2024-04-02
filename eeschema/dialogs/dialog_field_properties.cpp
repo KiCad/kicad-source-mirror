@@ -432,6 +432,8 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     if( m_fieldId == FOOTPRINT_FIELD )
     {
+        const LIB_SYMBOL* parentSymbol = dynamic_cast<const LIB_SYMBOL*>( aField->GetParentSymbol() );
+
         /*
          * Symbol netlist format:
          *   pinNumber pinName <tab> pinNumber pinName...
@@ -441,7 +443,7 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
         std::vector<LIB_PIN*> pinList;
 
-        aField->GetParent()->GetPins( pinList, 0, 1 );   // All units, but a single convert
+        parentSymbol->GetPins( pinList, 0, 1 );   // All units, but a single convert
 
         wxArrayString pins;
 
@@ -453,7 +455,7 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
         netlist << wxS( "\r" );
 
-        wxArrayString fpFilters = aField->GetParent()->GetFPFilters();
+        wxArrayString fpFilters = parentSymbol->GetFPFilters();
 
         if( !fpFilters.IsEmpty() )
             netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );

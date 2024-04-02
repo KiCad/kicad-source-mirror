@@ -88,7 +88,7 @@ EESCHEMA_JOBS_HANDLER::EESCHEMA_JOBS_HANDLER( KIWAY* aKiway ) :
 }
 
 
-void EESCHEMA_JOBS_HANDLER::InitRenderSettings( KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
+void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSettings,
                                                 const wxString& aTheme, SCHEMATIC* aSch,
                                                 const wxString& aDrawingSheetOverride )
 {
@@ -149,8 +149,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
 
     sch->Prj().ApplyTextVars( aJob->GetVarOverrides() );
 
-    std::unique_ptr<KIGFX::SCH_RENDER_SETTINGS> renderSettings =
-            std::make_unique<KIGFX::SCH_RENDER_SETTINGS>();
+    std::unique_ptr<SCH_RENDER_SETTINGS> renderSettings = std::make_unique<SCH_RENDER_SETTINGS>();
     InitRenderSettings( renderSettings.get(), aPlotJob->m_theme, sch, aPlotJob->m_drawingSheet );
 
     std::unique_ptr<SCH_PLOTTER> schPlotter = std::make_unique<SCH_PLOTTER>( sch );
@@ -661,9 +660,9 @@ int EESCHEMA_JOBS_HANDLER::JobExportPythonBom( JOB* aJob )
 }
 
 
-int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*         aSvgJob,
-                                           KIGFX::SCH_RENDER_SETTINGS* aRenderSettings,
-                                           LIB_SYMBOL*                 symbol )
+int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
+                                           SCH_RENDER_SETTINGS* aRenderSettings,
+                                           LIB_SYMBOL*          symbol )
 {
     wxASSERT( symbol != nullptr );
 
@@ -844,7 +843,7 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
         wxFileName::Mkdir( svgJob->m_outputDirectory );
     }
 
-    KIGFX::SCH_RENDER_SETTINGS renderSettings;
+    SCH_RENDER_SETTINGS renderSettings;
     COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings( svgJob->m_colorTheme );
     renderSettings.LoadColors( cs );
     renderSettings.SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * schIUScale.IU_PER_MILS );

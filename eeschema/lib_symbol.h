@@ -4,7 +4,7 @@
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2022 CERN
- * Copyright (C) 2004-2023 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,10 +24,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef CLASS_LIBENTRY_H
-#define CLASS_LIBENTRY_H
+#ifndef LIB_SYMBOL_H
+#define LIB_SYMBOL_H
 
 #include <general.h>
+#include <symbol.h>
 #include <lib_tree_item.h>
 #include <lib_field.h>
 #include <vector>
@@ -59,28 +60,6 @@ enum LIBRENTRYOPTIONS
 extern bool operator<( const LIB_SYMBOL& aItem1, const LIB_SYMBOL& aItem2 );
 
 
-struct LIB_SYMBOL_OPTIONS
-{
-    TRANSFORM transform;            // Coordinate adjustment settings
-    bool force_draw_pin_text;       // Whether or not to force the drawing of pin names and numbers
-    bool draw_visible_fields;       // Whether to draw "visible" fields
-    bool draw_hidden_fields;        // Whether to draw "hidden" fields
-    bool show_elec_type;            // Whether to show the pin electrical type
-    bool show_connect_point;        // Whether to show the pin connect point marker (small circle)
-                                    // useful in dialog pin properties
-
-    LIB_SYMBOL_OPTIONS()
-    {
-        transform = DefaultTransform;
-        force_draw_pin_text = false;
-        draw_visible_fields = true;
-        draw_hidden_fields = true;
-        show_elec_type = false;
-        show_connect_point = false;
-    }
-};
-
-
 struct LIB_SYMBOL_UNIT
 {
     int m_unit;                       ///< The unit number.
@@ -95,7 +74,7 @@ struct LIB_SYMBOL_UNIT
  * A library symbol object is typically saved and loaded in a symbol library file (.lib).
  * Library symbols are different from schematic symbols.
  */
-class LIB_SYMBOL : public EDA_ITEM, public LIB_TREE_ITEM
+class LIB_SYMBOL : public SYMBOL, public LIB_TREE_ITEM
 {
 public:
     LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent = nullptr,
@@ -144,8 +123,6 @@ public:
      */
     LIB_SYMBOL_SPTR GetRootSymbol() const;
 
-    void ClearCaches();
-
     virtual wxString GetClass() const override
     {
         return wxT( "LIB_SYMBOL" );
@@ -161,8 +138,9 @@ public:
 
     LIB_ID GetLIB_ID() const override { return m_libId; }
     wxString GetDesc() override { return GetDescription(); }
+    int GetSubUnitCount() const override { return GetUnitCount(); }
 
-    const LIB_ID& GetLibId() const { return m_libId; }
+    const LIB_ID& GetLibId() const override { return m_libId; }
     void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
 
     LIB_ID GetSourceLibId() const { return m_sourceLibId; }
@@ -177,7 +155,7 @@ public:
     }
 
     ///< Gets the Description field text value */
-    wxString GetDescription() const
+    wxString GetDescription() const override
     {
         if( GetDescriptionField().GetText().IsEmpty() && IsAlias() )
         {
@@ -190,7 +168,7 @@ public:
 
     void SetKeyWords( const wxString& aKeyWords ) { m_keyWords = aKeyWords; }
 
-    wxString GetKeyWords() const
+    wxString GetKeyWords() const override
     {
         if( m_keyWords.IsEmpty() && IsAlias() )
         {
@@ -236,8 +214,6 @@ public:
         return m_fpFilters;
     }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
-
     /**
      * Get the bounding box for the symbol.
      *
@@ -269,8 +245,8 @@ public:
         return GetUnitBoundingBox( 0, 0 );
     }
 
-    bool IsPower() const;
-    bool IsNormal() const;
+    bool IsPower() const override;
+    bool IsNormal() const override;
 
     void SetPower();
     void SetNormal();
@@ -347,7 +323,8 @@ public:
 
     wxString GetPrefix();
 
-    void RunOnChildren( const std::function<void( LIB_ITEM* )>& aFunction );
+    // JEY TODO: reconcile with RunOnChildren when LIB_ITEM collapses to SCH_ITEM
+    void RunOnLibChildren( const std::function<void( LIB_ITEM* )>& aFunction );
 
     /**
      * Order optional field indices.
@@ -366,11 +343,10 @@ public:
      * @param aOffset - Position of symbol.
      * @param aMulti - unit if multiple units per symbol.
      * @param aBodyStyle - Symbol alternate body style (DeMorgan) if available.
-     * @param aOpts - Drawing options
      * @param aDimmed - Reduce brightness of symbol
      */
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aMulti,
-                int aBodyStyle, const LIB_SYMBOL_OPTIONS& aOpts, bool aDimmed );
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aMulti,
+                int aBodyStyle, bool aForceNoFill, bool aDimmed ) override;
 
     /**
      * Print just the background fills of a symbol
@@ -378,11 +354,10 @@ public:
      * @param aOffset - Position of symbol.
      * @param aMulti - unit if multiple units per symbol.
      * @param aBodyStyle - Symbol alternate body style (DeMorgan) if available.
-     * @param aOpts - Drawing options
      * @param aDimmed - Reduce brightness of symbol
      */
-    void PrintBackground( const RENDER_SETTINGS *aSettings, const VECTOR2I &aOffset, int aMulti,
-                          int aBodyStyle, const LIB_SYMBOL_OPTIONS &aOpts, bool aDimmed );
+    void PrintBackground( const SCH_RENDER_SETTINGS *aSettings, const VECTOR2I &aOffset,
+                          int aMulti, int aBodyStyle, bool aForceNoFill, bool aDimmed ) override;
 
     /**
      * Plot lib symbol to plotter.
@@ -398,7 +373,7 @@ public:
      * @param aDimmed - Reduce brightness of symbol
      */
     void Plot( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bool aBackground,
-               const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed ) const;
+               const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed ) const override;
 
     /**
      * Plot Lib Fields only of the symbol to plotter.
@@ -489,19 +464,14 @@ public:
      *
      * @param aOffset - Offset displacement.
      */
-    void SetOffset( const VECTOR2I& aOffset );
-
-    /**
-     * Remove duplicate draw items from list.
-     */
-    void RemoveDuplicateDrawItems();
+    void Move( const VECTOR2I& aOffset ) override;
 
     /**
      * Test if symbol has more than one body conversion type (DeMorgan).
      *
      * @return True if symbol has more than one conversion.
      */
-    bool HasAlternateBodyStyle() const;
+    bool HasAlternateBodyStyle() const override;
 
     /**
      * @return the highest pin number of the symbol's pins.
@@ -599,7 +569,7 @@ public:
      * @return true if the symbol has multiple units per symbol.
      * When true, the reference has a sub reference to identify symbol.
      */
-    bool IsMulti() const { return m_unitCount > 1; }
+    bool IsMulti() const override { return m_unitCount > 1; }
 
     static wxString LetterSubReference( int aUnit, int aFirstId );
 
@@ -615,56 +585,6 @@ public:
      * @param aDuplicatePins - Duplicate all pins from original body style if true.
      */
     void SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePins = true );
-
-    /**
-     * Set the offset in mils of the pin name text from the pin symbol.
-     *
-     * Set the offset to 0 to draw the pin name above the pin symbol.
-     *
-     * @param aOffset - The offset in mils.
-     */
-    void SetPinNameOffset( int aOffset ) { m_pinNameOffset = aOffset; }
-    int GetPinNameOffset() const { return m_pinNameOffset; }
-
-    /**
-     * Set or clear the pin name visibility flag.
-     *
-     * @param aShow - True to make the symbol pin names visible.
-     */
-    void SetShowPinNames( bool aShow ) { m_showPinNames = aShow; }
-    bool ShowPinNames() const { return m_showPinNames; }
-
-    /**
-     * Set or clear the pin number visibility flag.
-     *
-     * @param aShow - True to make the symbol pin numbers visible.
-     */
-    void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
-    bool ShowPinNumbers() const { return m_showPinNumbers; }
-
-    /**
-     * Set or clear the exclude from simulation flag.
-     *
-     * @param aExcludeFromSim true to exclude symbol from simulation
-     */
-    void SetExcludedFromSim( bool aExcludeFromSim ) { m_excludedFromSim = aExcludeFromSim; }
-    bool GetExcludedFromSim() const { return m_excludedFromSim; }
-
-    /**
-     * Set or clear the exclude from schematic bill of materials flag.
-     *
-     * @param aExcludeFromBOM true to exclude symbol from schematic bill of materials
-     */
-    void SetExcludedFromBOM( bool aExcludeFromBOM ) { m_excludedFromBOM = aExcludeFromBOM; }
-    bool GetExcludedFromBOM() const { return m_excludedFromBOM; }
-
-    /**
-     * Set or clear exclude from board netlist flag.
-     *
-     * @param aExcludeFromBoard true to exclude symbol from the board netlist
-     */
-    void SetExcludedFromBoard( bool aExcludeFromBoard ) { m_excludedFromBoard = aExcludeFromBoard; }
-    bool GetExcludedFromBoard() const { return m_excludedFromBoard; }
 
     /**
      * Comparison test that can be used for operators.
@@ -705,16 +625,6 @@ public:
     std::vector<struct LIB_SYMBOL_UNIT> GetUnitDrawItems();
 
     /**
-     * Return a list of unit numbers that are unique to this symbol.
-     *
-     * If the symbol is inherited (alias), the unique units of the parent symbol are returned.
-     * When comparing pins, the pin number is ignored.
-     *
-     * @return a list of unique unit numbers and their associated draw items.
-     */
-    std::vector<struct LIB_SYMBOL_UNIT> GetUniqueUnits();
-
-    /**
      * Return a list of item pointers for \a aUnit and \a aBodyStyle for this symbol.
      *
      * @note #LIB_FIELD objects are not included.
@@ -732,7 +642,7 @@ public:
      *
      * @return a measure of similarity from 1.0 (identical) to 0.0 (no similarity).
     */
-    double Similarity( const LIB_SYMBOL& aSymbol ) const;
+    double Similarity( const SCH_ITEM& aSymbol ) const override;
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -754,14 +664,6 @@ private:
     bool                m_unitsLocked;      ///< True if symbol has multiple units and changing one
                                             ///< unit does not automatically change another unit.
 
-    int                 m_pinNameOffset;    ///< The offset in mils to draw the pin name.  Set to
-                                            ///< 0 to draw the pin name above the pin.
-    bool                m_showPinNames;
-    bool                m_showPinNumbers;
-
-    bool                m_excludedFromSim;
-    bool                m_excludedFromBOM;
-    bool                m_excludedFromBoard;
     LIBRENTRYOPTIONS    m_options;          ///< Special symbol features such as POWER or NORMAL.)
 
     LIB_ITEMS_CONTAINER m_drawings;

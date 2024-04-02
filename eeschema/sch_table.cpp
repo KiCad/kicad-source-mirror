@@ -34,8 +34,6 @@
 #include <wx/log.h>
 #include <sch_table.h>
 
-using KIGFX::SCH_RENDER_SETTINGS;
-
 
 SCH_TABLE::SCH_TABLE( int aLineWidth ) :
         SCH_ITEM( nullptr, SCH_TABLE_T ),
@@ -238,7 +236,7 @@ void SCH_TABLE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 }
 
 
-void SCH_TABLE::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_TABLE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     for( SCH_TABLECELL* cell : m_cells )
         cell->Print( aSettings, aOffset );

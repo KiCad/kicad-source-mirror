@@ -28,8 +28,6 @@
 #include <sch_table.h>
 #include <sch_tablecell.h>
 
-using KIGFX::SCH_RENDER_SETTINGS;
-
 
 SCH_TABLECELL::SCH_TABLECELL( int aLineWidth, FILL_T aFillType ) :
         SCH_TEXTBOX( aLineWidth, aFillType, wxEmptyString, SCH_TABLECELL_T ),
@@ -98,7 +96,7 @@ wxString SCH_TABLECELL::GetAddr() const
 }
 
 
-void SCH_TABLECELL::Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_TABLECELL::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
 {
     if( m_colSpan >= 1 && m_rowSpan >= 1 )
         SCH_TEXTBOX::Print( aSettings, aOffset );

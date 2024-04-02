@@ -74,7 +74,7 @@ public:
 
     // pure virtuals:
     void SetPosition( const VECTOR2I& ) override {}
-    void Print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override {}
+    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override {}
     void Move( const VECTOR2I& aMoveVector ) override {}
     void MirrorHorizontally( int aCenter ) override {}
     void MirrorVertically( int aCenter ) override {}
@@ -348,7 +348,7 @@ void SCH_SHEET_PATH::UpdateAllScreenReferences() const
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
 
             symbol->GetField( REFERENCE_FIELD )->SetText( symbol->GetRef( this ) );
-            symbol->UpdateUnit( symbol->GetUnitSelection( this ) );
+            symbol->SetUnit( symbol->GetUnitSelection( this ) );
             LastScreen()->Update( item, false );
         }
         else if( item->Type() == SCH_GLOBAL_LABEL_T )

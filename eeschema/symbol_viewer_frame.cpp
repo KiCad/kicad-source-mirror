@@ -882,7 +882,7 @@ void SYMBOL_VIEWER_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg)
     cfg->m_LibViewPanel.lib_list_width = m_libListWidth;
     cfg->m_LibViewPanel.cmp_list_width = m_symbolListWidth;
 
-    if( KIGFX::SCH_RENDER_SETTINGS* renderSettings = GetRenderSettings() )
+    if( SCH_RENDER_SETTINGS* renderSettings = GetRenderSettings() )
     {
         cfg->m_LibViewPanel.show_pin_electrical_type = renderSettings->m_ShowPinsElectricalType;
         cfg->m_LibViewPanel.show_pin_numbers = renderSettings->m_ShowPinNumbers;

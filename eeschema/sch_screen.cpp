@@ -1065,7 +1065,7 @@ void SCH_SCREEN::SetConnectivityDirty()
 }
 
 
-void SCH_SCREEN::Print( const RENDER_SETTINGS* aSettings )
+void SCH_SCREEN::Print( const SCH_RENDER_SETTINGS* aSettings )
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
     std::vector<SCH_ITEM*> junctions;

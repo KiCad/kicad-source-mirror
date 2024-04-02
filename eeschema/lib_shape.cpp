@@ -259,21 +259,20 @@ int LIB_SHAPE::GetPenWidth() const
 }
 
 
-void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                       const TRANSFORM& aTransform, bool aDimmed )
+void LIB_SHAPE::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                       bool aForceNoFill, bool aDimmed )
 {
     if( IsPrivate() )
         return;
 
-    bool forceNoFill = static_cast<bool>( aData );
     int  penWidth = GetEffectivePenWidth( aSettings );
 
-    if( forceNoFill && IsFilled() && penWidth == 0 )
+    if( aForceNoFill && IsFilled() && penWidth == 0 )
         return;
 
     wxDC*    DC = aSettings->GetPrintDC();
-    VECTOR2I pt1 = aTransform.TransformCoordinate( m_start ) + aOffset;
-    VECTOR2I pt2 = aTransform.TransformCoordinate( m_end ) + aOffset;
+    VECTOR2I pt1 = aSettings->m_Transform.TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I pt2 = aSettings->m_Transform.TransformCoordinate( m_end ) + aOffset;
     VECTOR2I c;
     COLOR4D  color = GetStroke().GetColor();
 
@@ -302,7 +301,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         buffer = new VECTOR2I[ptCount];
 
         for( unsigned ii = 0; ii < ptCount; ++ii )
-            buffer[ii] = aTransform.TransformCoordinate( poly.CPoint( ii ) ) + aOffset;
+            buffer[ii] = aSettings->m_Transform.TransformCoordinate( poly.CPoint( ii ) ) + aOffset;
     }
     else if( GetShape() == SHAPE_T::BEZIER )
     {
@@ -310,11 +309,11 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
         buffer = new VECTOR2I[ptCount];
 
         for( size_t ii = 0; ii < ptCount; ++ii )
-            buffer[ii] = aTransform.TransformCoordinate( m_bezierPoints[ii] ) + aOffset;
+            buffer[ii] = aSettings->m_Transform.TransformCoordinate( m_bezierPoints[ii] ) + aOffset;
     }
     else if( GetShape() == SHAPE_T::ARC )
     {
-        c = aTransform.TransformCoordinate( getCenter() ) + aOffset;
+        c = aSettings->m_Transform.TransformCoordinate( getCenter() ) + aOffset;
 
         EDA_ANGLE t1, t2;
 
@@ -322,7 +321,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
         // N.B. The order of evaluation is critical here as MapAngles will modify t1, t2
         // and the Normalize routine depends on these modifications for the correct output
-        bool transformed = aTransform.MapAngles( &t1, &t2 );
+        bool transformed = aSettings->m_Transform.MapAngles( &t1, &t2 );
         EDA_ANGLE arc_angle =  ( t1 - t2 ).Normalize180();
         bool transformed2 = ( arc_angle > ANGLE_0 ) && ( arc_angle < ANGLE_180 );
 
@@ -332,7 +331,7 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
 
     COLOR4D fillColor = COLOR4D::UNSPECIFIED;
 
-    if( !forceNoFill )
+    if( !aForceNoFill )
     {
         if( GetFillMode() == FILL_T::FILLED_SHAPE )
             fillColor = color;
@@ -418,12 +417,12 @@ void LIB_SHAPE::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset
             for( SHAPE* shape : shapes )
             {
                 STROKE_PARAMS::Stroke( shape, GetEffectiveLineStyle(), penWidth, aSettings,
-                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                       {
-                                           VECTOR2I pts = aTransform.TransformCoordinate( a ) + aOffset;
-                                           VECTOR2I pte = aTransform.TransformCoordinate( b ) + aOffset;
-                                           GRLine( DC, pts.x, pts.y, pte.x, pte.y, penWidth, color );
-                                       } );
+                        [&]( const VECTOR2I& a, const VECTOR2I& b )
+                        {
+                            VECTOR2I pts = aSettings->m_Transform.TransformCoordinate( a ) + aOffset;
+                            VECTOR2I pte = aSettings->m_Transform.TransformCoordinate( b ) + aOffset;
+                            GRLine( DC, pts.x, pts.y, pte.x, pte.y, penWidth, color );
+                        } );
             }
 
             for( SHAPE* shape : shapes )

@@ -28,8 +28,9 @@
 #include <class_draw_panel_gal.h>
 
 
+class SCH_RENDER_SETTINGS;
+
 namespace KIGFX {
-    class SCH_RENDER_SETTINGS;
     class SCH_VIEW;
     namespace PREVIEW {
         class SELECTION_AREA;
@@ -52,7 +53,7 @@ public:
     /// @copydoc wxWindow::Refresh()
     void Refresh( bool aEraseBackground, const wxRect* aRect ) override;
 
-    KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings() const;
+    SCH_RENDER_SETTINGS* GetRenderSettings() const;
 
 
 protected:

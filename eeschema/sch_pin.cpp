@@ -318,7 +318,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     // with legacy global power pins on non-power symbols
     if( IsGlobalPower() )
     {
-        if( GetLibPin()->GetParent()->IsPower() )
+        if( GetLibPin()->GetParentSymbol()->IsPower() )
         {
             return EscapeString( GetParentSymbol()->GetValueFieldText( true, &aPath, false ),
                                  CTX_NETNAME );

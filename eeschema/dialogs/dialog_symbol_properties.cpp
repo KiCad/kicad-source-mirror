@@ -480,7 +480,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
     {
         // Ensure symbol unit is the currently selected unit (mandatory in complex hierarchies)
         // from the current sheet path, because it can be modified by previous calculations
-        m_symbol->UpdateUnit( m_symbol->GetUnitSelection( &GetParent()->GetCurrentSheet() ) );
+        m_symbol->SetUnit( m_symbol->GetUnitSelection( &GetParent()->GetCurrentSheet() ) );
 
         for( int ii = 1; ii <= m_symbol->GetUnitCount(); ii++ )
         {
@@ -537,8 +537,8 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     if( m_part )
     {
-        m_ShowPinNumButt->SetValue( m_part->ShowPinNumbers() );
-        m_ShowPinNameButt->SetValue( m_part->ShowPinNames() );
+        m_ShowPinNumButt->SetValue( m_part->GetShowPinNumbers() );
+        m_ShowPinNameButt->SetValue( m_part->GetShowPinNames() );
     }
 
     // Set the symbol's library name.

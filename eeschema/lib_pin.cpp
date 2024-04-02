@@ -72,7 +72,7 @@ const wxString LIB_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType
 
 static int internalPinDecoSize( const RENDER_SETTINGS* aSettings, const LIB_PIN &aPin )
 {
-    const KIGFX::SCH_RENDER_SETTINGS* settings = static_cast<const KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
+    const SCH_RENDER_SETTINGS* settings = static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
 
     if( settings && settings->m_PinSymbolSize )
         return settings->m_PinSymbolSize;
@@ -85,7 +85,7 @@ static int internalPinDecoSize( const RENDER_SETTINGS* aSettings, const LIB_PIN 
 // marker
 static int externalPinDecoSize( const RENDER_SETTINGS* aSettings, const LIB_PIN &aPin )
 {
-    const KIGFX::SCH_RENDER_SETTINGS* settings = static_cast<const KIGFX::SCH_RENDER_SETTINGS*>( aSettings );
+    const SCH_RENDER_SETTINGS* settings = static_cast<const SCH_RENDER_SETTINGS*>( aSettings );
 
     if( settings && settings->m_PinSymbolSize )
         return settings->m_PinSymbolSize;
@@ -195,37 +195,32 @@ VECTOR2I LIB_PIN::GetPinRoot() const
 }
 
 
-void LIB_PIN::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                     const TRANSFORM& aTransform, bool aDimmed )
+void LIB_PIN::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                     bool aForceNoFill, bool aDimmed )
 {
-    LIB_SYMBOL_OPTIONS* opts = (LIB_SYMBOL_OPTIONS*) aData;
-    bool                drawHiddenFields   = opts ? opts->draw_hidden_fields : false;
-    bool                showPinType        = opts ? opts->show_elec_type     : false;
-    bool                show_connect_point = opts ? opts->show_connect_point : false;
+    LIB_SYMBOL* part = dynamic_cast<LIB_SYMBOL*>( GetParentSymbol() );
 
-    LIB_SYMBOL* part = GetParent();
-
-    wxCHECK( part && opts, /* void */ );
+    wxCHECK( part && aSettings, /* void */ );
 
     /* Calculate pin orient taking in account the symbol orientation. */
-    PIN_ORIENTATION orient = PinDrawOrient( aTransform );
+    PIN_ORIENTATION orient = PinDrawOrient( aSettings->m_Transform );
 
     /* Calculate the pin position */
-    VECTOR2I pos1 = aTransform.TransformCoordinate( m_position ) + aOffset;
+    VECTOR2I pos1 = aSettings->m_Transform.TransformCoordinate( m_position ) + aOffset;
 
-    if( IsVisible() || drawHiddenFields )
+    if( IsVisible() || aSettings->m_ShowHiddenLibFields )
     {
         printPinSymbol( aSettings, pos1, orient, aDimmed );
 
         printPinTexts( aSettings, pos1, orient, part->GetPinNameOffset(),
-                       opts->force_draw_pin_text || part->ShowPinNumbers(),
-                       opts->force_draw_pin_text || part->ShowPinNames(),
+                       aSettings->m_ShowPinNumbers || part->GetShowPinNumbers(),
+                       aSettings->m_ShowPinNames || part->GetShowPinNames(),
                        aDimmed );
 
-        if( showPinType )
+        if( aSettings->m_ShowPinElectricalTypes )
             printPinElectricalTypeName( aSettings, pos1, orient, aDimmed );
 
-        if( show_connect_point
+        if( aSettings->m_ShowConnectionPoints
                 && m_type != ELECTRICAL_PINTYPE::PT_NC
                 && m_type != ELECTRICAL_PINTYPE::PT_NIC )
         {
@@ -1174,13 +1169,14 @@ void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset
     if( !IsVisible() || aBackground )
         return;
 
+    const SYMBOL* part = GetParentSymbol();
+
     PIN_ORIENTATION orient = PinDrawOrient( aTransform );
     VECTOR2I pos = aTransform.TransformCoordinate( m_position ) + aOffset;
 
     PlotSymbol( aPlotter, pos, orient, aDimmed );
-    PlotPinTexts( aPlotter, pos, orient, GetParent()->GetPinNameOffset(),
-                  GetParent()->ShowPinNumbers(), GetParent()->ShowPinNames(),
-                  aDimmed );
+    PlotPinTexts( aPlotter, pos, orient, part->GetPinNameOffset(), part->GetShowPinNumbers(),
+                  part->GetShowPinNames(), aDimmed );
 }
 
 
@@ -1279,14 +1275,14 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
         includeType = false;
     }
 
-    if( GetParent() )
+    if( const SYMBOL* parentSymbol = GetParentSymbol() )
     {
-        if( GetParent()->ShowPinNames() )
-            pinNameOffset = GetParent()->GetPinNameOffset();
+        if( parentSymbol->GetShowPinNames() )
+            pinNameOffset = parentSymbol->GetPinNameOffset();
         else
             includeName = false;
 
-        if( !GetParent()->ShowPinNumbers() )
+        if( !parentSymbol->GetShowPinNumbers() )
             includeNumber = false;
     }
 

@@ -203,9 +203,9 @@ LIB_TREE_NODE_ITEM::LIB_TREE_NODE_ITEM( LIB_TREE_NODE* aParent, LIB_TREE_ITEM* a
 
     m_IsRoot = aItem->IsRoot();
 
-    if( aItem->GetUnitCount() > 1 )
+    if( aItem->GetSubUnitCount() > 1 )
     {
-        for( int u = 1; u <= aItem->GetUnitCount(); ++u )
+        for( int u = 1; u <= aItem->GetSubUnitCount(); ++u )
             AddUnit( aItem, u );
     }
 }
@@ -234,7 +234,7 @@ void LIB_TREE_NODE_ITEM::Update( LIB_TREE_ITEM* aItem )
     m_IsRoot = aItem->IsRoot();
     m_Children.clear();
 
-    for( int u = 1; u <= aItem->GetUnitCount(); ++u )
+    for( int u = 1; u <= aItem->GetSubUnitCount(); ++u )
         AddUnit( aItem, u );
 }
 

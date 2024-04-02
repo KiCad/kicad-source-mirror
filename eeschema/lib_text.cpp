@@ -338,8 +338,8 @@ KIFONT::FONT* LIB_TEXT::getDrawFont() const
 }
 
 
-void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, void* aData,
-                      const TRANSFORM& aTransform, bool aDimmed )
+void LIB_TEXT::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
+                      bool aForceNoFill, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = GetTextColor();
@@ -367,7 +367,7 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     // draw text in schematic)
     EDA_ANGLE orient = GetTextAngle();
 
-    if( aTransform.y1 )  // Rotate symbol 90 degrees.
+    if( aSettings->m_Transform.y1 )  // Rotate symbol 90 degrees.
     {
         if( orient == ANGLE_HORIZONTAL )
             orient = ANGLE_VERTICAL;
@@ -397,7 +397,7 @@ void LIB_TEXT::print( const RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
     VECTOR2I txtpos = bBox.Centre();
 
     // Calculate pos according to mirror/rotation.
-    txtpos = aTransform.TransformCoordinate( txtpos ) + aOffset;
+    txtpos = aSettings->m_Transform.TransformCoordinate( txtpos ) + aOffset;
 
     GRPrintText( DC, txtpos, color, GetShownText( true ), orient, GetTextSize(),
                  GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
