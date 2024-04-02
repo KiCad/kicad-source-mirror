@@ -89,6 +89,8 @@ public:
      */
     virtual void ResetScore();
 
+    virtual void ForceScore( int aScore ) { m_Score = aScore; }
+
     /**
      * Store intrinsic ranks on all children of this node. See m_IntrinsicRank
      * member doc for more information.

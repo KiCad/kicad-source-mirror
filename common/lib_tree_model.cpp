@@ -295,18 +295,18 @@ LIB_TREE_NODE_ITEM& LIB_TREE_NODE_LIBRARY::AddItem( LIB_TREE_ITEM* aItem )
 void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const wxString& aLib,
                                          std::function<bool( LIB_TREE_NODE& aNode )>* aFilter )
 {
-    int newScore = 0;
+    int maxChildScore = 0;
 
     for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
     {
         child->UpdateScore( aMatcher, aLib, aFilter );
-        newScore = std::max( newScore, child->m_Score );
+        maxChildScore = std::max( maxChildScore, child->m_Score );
     }
 
     // Each time UpdateScore is called for a library, child (item) scores may go up or down.
     // If the all go down to zero, we need to make sure to drop the library from the list.
-    if( newScore > 0 )
-        m_Score = std::max( m_Score, newScore );
+    if( maxChildScore > 0 )
+        m_Score = std::max( m_Score, maxChildScore );
     else
         m_Score = 0;
 
@@ -320,7 +320,17 @@ void LIB_TREE_NODE_LIBRARY::UpdateScore( EDA_COMBINED_MATCHER* aMatcher, const w
 
     // aMatcher test is additive
     if( aMatcher )
-        m_Score += aMatcher->ScoreTerms( m_SearchTerms );
+    {
+        int ownScore = aMatcher->ScoreTerms( m_SearchTerms );
+        m_Score += ownScore;
+
+        // If we have a hit on a library, show all children in that library
+        if( maxChildScore <= 0 && ownScore > 0 )
+        {
+            for( std::unique_ptr<LIB_TREE_NODE>& child: m_Children )
+                child->ForceScore( 1 );
+        }
+    }
 
     // show all nodes if no search/filter/etc. criteria are given
     if( m_Children.empty() && !aMatcher && aLib.IsEmpty() && ( !aFilter || (*aFilter)(*this) ) )
