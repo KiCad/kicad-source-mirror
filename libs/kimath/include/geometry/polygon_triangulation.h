@@ -64,7 +64,7 @@ class POLYGON_TRIANGULATION
 {
 public:
     POLYGON_TRIANGULATION( SHAPE_POLY_SET::TRIANGULATED_POLYGON& aResult ) :
-        m_result( aResult )
+        m_vertices_original_size( 0 ), m_result( aResult )
     {};
 
     bool TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly,
@@ -86,6 +86,7 @@ public:
 
         wxLogTrace( TRIANGULATE_TRACE, "Created list with %f area", firstVertex->area() );
 
+        m_vertices_original_size = m_vertices.size();
         firstVertex->updateList();
 
         /**
@@ -1019,10 +1020,10 @@ private:
      */
     bool intersectsPolygon( const VERTEX* a, const VERTEX* b ) const
     {
-        for( auto it = m_vertices.begin(); it != m_vertices.end(); )
+        for( size_t ii = 0; ii < m_vertices_original_size; ii++ )
         {
-            const VERTEX* p = &*it;
-            const VERTEX* q = &*( ++it );
+            const VERTEX* p = &m_vertices[ii];
+            const VERTEX* q = &m_vertices[( ii + 1 ) % m_vertices_original_size];
 
             if( p->i == a->i || p->i == b->i || q->i == a->i || q->i == b->i )
                 continue;
@@ -1031,13 +1032,7 @@ private:
                 return true;
         }
 
-        if( m_vertices.front().i == a->i || m_vertices.front().i == b->i
-            || m_vertices.back().i == a->i || m_vertices.back().i == b->i )
-        {
-            return false;
-        }
-
-        return intersects( a, b, &m_vertices.back(), &m_vertices.front() );
+        return false;
     }
 
     /**
@@ -1110,6 +1105,7 @@ private:
 private:
     BOX2I                                 m_bbox;
     std::deque<VERTEX>                    m_vertices;
+    size_t                                m_vertices_original_size;
     SHAPE_POLY_SET::TRIANGULATED_POLYGON& m_result;
 };
 
