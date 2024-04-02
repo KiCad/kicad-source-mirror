@@ -833,10 +833,21 @@ void GERBER_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 {
     SetCurrentLineWidth( aWidth );
 
-    EDA_ANGLE endAngle = aStartAngle + aAngle;
+    double arcLength = std::abs( aRadius * aAngle.AsRadians() );
 
-    // aFill is not used here.
-    plotArc( aCenter, aStartAngle, endAngle, aRadius, false );
+    if( arcLength < 100 || std::abs( aAngle.AsDegrees() ) < 0.1 )
+    {
+        // Prevent plotting very short arcs as full circles, especially with 4.5 mm precision.
+        // Also reduce the risk of integer overflow issues.
+        polyArc( aCenter, aStartAngle, aAngle, aRadius, aFill, aWidth );
+    }
+    else
+    {
+        EDA_ANGLE endAngle = aStartAngle + aAngle;
+
+        // aFill is not used here.
+        plotArc( aCenter, aStartAngle, endAngle, aRadius, false );
+    }
 }
 
 

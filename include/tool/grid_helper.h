@@ -141,7 +141,7 @@ protected:
 
         double Distance( const VECTOR2I& aP ) const
         {
-            return ( aP - pos ).EuclideanNorm();
+            return VECTOR2D( (double) aP.x - pos.x, (double) aP.y - pos.y ).EuclideanNorm();
         }
     };
 

@@ -565,6 +565,13 @@ void HPGL_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
     if( aRadius <= 0 )
         return;
 
+    // Avoid integer overflow when calculating the center point
+    if( std::abs( aAngle.AsDegrees() ) < 5 )
+    {
+        polyArc( aCenter, aStartAngle, aAngle, aRadius, aFill, aWidth );
+        return;
+    }
+
     double const radius_device       = userToDeviceSize( aRadius );
     double const circumf_device      = 2.0 * M_PI * radius_device;
     double const target_chord_length = m_arcTargetChordLength;
