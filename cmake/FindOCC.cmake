@@ -27,7 +27,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 # Set the needed libraries
-set( OCC_LIBS
+set( OCC_LIBS_COMMON
     TKBinL
     TKBin
     TKBinTObj
@@ -45,7 +45,6 @@ set( OCC_LIBS
     TKGeomAlgo
     TKGeomBase
     TKHLR
-    TKIGES
     TKLCAF
     TKMath
     TKMesh
@@ -56,24 +55,36 @@ set( OCC_LIBS
     TKRWMesh
     TKService
     TKShHealing
-    TKSTEP209
-    TKSTEPAttr
-    TKSTEPBase
-    TKSTEP
-    TKSTL
     TKTObj
     TKTopAlgo
     TKV3d
-    TKVRML
     TKXCAF
-    TKXDEIGES
-    TKXDESTEP
     TKXMesh
     TKXmlL
     TKXml
     TKXmlTObj
     TKXmlXCAF
     TKXSBase
+)
+
+# Libraries valid pre-7.8.0
+set( OCC_LIBS_PRE_78
+    TKIGES
+    TKSTEP209
+    TKSTEPAttr
+    TKSTEPBase
+    TKSTEP
+    TKSTL
+    TKVRML
+    TKXDEIGES
+    TKXDESTEP
+)
+
+# Libraries for versions >= 7.8.0
+set( OCC_LIBS_POST_78
+    TKDEIGES
+    TKDESTEP
+    TKDESTL
 )
 
 set(OCC_TYPE "OpenCASCADE Standard Edition")
@@ -178,9 +189,8 @@ endif(OCC_INCLUDE_DIR AND NOT ${OCC_INCLUDE_DIR} STREQUAL "OCC_INCLUDE_DIR-NOTFO
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(OCC REQUIRED_VARS OCC_INCLUDE_DIR VERSION_VAR OCC_VERSION_STRING)
 
-if(OCC_FOUND)
-  foreach(lib IN LISTS OCC_LIBS)
-
+function(occ_lib_search SEARCH_LIST)
+  foreach(lib IN LISTS ${SEARCH_LIST})
 #Use the specified library location if given
     find_library(OCC_TEMP_LIB ${lib} HINTS ${OCC_LIBRARY_DIR} NO_DEFAULT_PATH)
     if(${OCC_TEMP_LIB} STREQUAL "OCC_TEMP_LIB-NOTFOUND")
@@ -197,11 +207,20 @@ if(OCC_FOUND)
 
     unset(OCC_TEMP_LIB CACHE)
   endforeach(lib)
+endfunction()
 
-  #Convert path names to absolute for cleaner display
-  get_filename_component(OCC_INCLUDE_DIR "${OCC_INCLUDE_DIR}" ABSOLUTE)
-  get_filename_component(OCC_LIBRARY_DIR "${OCC_LIBRARY_DIR}" ABSOLUTE)
-  message(STATUS "Found ${OCC_TYPE} version: ${OCC_VERSION_STRING}")
-  message(STATUS " ++ ${OCC_TYPE} include directory: ${OCC_INCLUDE_DIR}")
-  message(STATUS " ++ ${OCC_TYPE} shared libraries directory: ${OCC_LIBRARY_DIR}")
+if(OCC_FOUND)
+    occ_lib_search( OCC_LIBS_COMMON )
+    if(OCC_VERSION_STRING VERSION_LESS "7.8.0")
+        occ_lib_search( OCC_LIBS_PRE_78 )
+    else()
+        occ_lib_search( OCC_LIBS_POST_78 )
+    endif()
+
+    #Convert path names to absolute for cleaner display
+    get_filename_component(OCC_INCLUDE_DIR "${OCC_INCLUDE_DIR}" ABSOLUTE)
+    get_filename_component(OCC_LIBRARY_DIR "${OCC_LIBRARY_DIR}" ABSOLUTE)
+    message(STATUS "Found ${OCC_TYPE} version: ${OCC_VERSION_STRING}")
+    message(STATUS " ++ ${OCC_TYPE} include directory: ${OCC_INCLUDE_DIR}")
+    message(STATUS " ++ ${OCC_TYPE} shared libraries directory: ${OCC_LIBRARY_DIR}")
 endif(OCC_FOUND)
