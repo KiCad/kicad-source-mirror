@@ -610,10 +610,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText )
             break;
 
         case T_hide:
-            if( NextTok() == T_yes || NextTok() == T_no )
-                aText->SetVisible( !parseBool() );
-            else
-                aText->SetVisible( false );
+            aText->SetVisible( !parseMaybeAbsentBool( true ) );
             break;
 
         default:
