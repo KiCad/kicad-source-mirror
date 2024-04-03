@@ -2189,6 +2189,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
             if( sheetsPasted )
                 m_frame->UpdateHierarchyNavigator();
+            // UpdateHierarchyNavigator() will call RefreshNetNavigator()
+            else
+                m_frame->RefreshNetNavigator();
         }
         else
         {

@@ -1176,6 +1176,7 @@ void SCH_EDIT_FRAME::UpdateHierarchyNavigator()
 {
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CleanHistory();
     m_hierarchy->UpdateHierarchyTree();
+    RefreshNetNavigator();
 }
 
 
@@ -1702,6 +1703,7 @@ void SCH_EDIT_FRAME::initScreenZoom()
 void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FLAGS aCleanupFlags )
 {
     wxString            highlightedConn = GetHighlightedConnection();
+    bool                hasHighlightedConn = !highlightedConn.IsEmpty();
     SCHEMATIC_SETTINGS& settings = Schematic().Settings();
     SCH_SHEET_LIST      list = Schematic().GetSheets();
     SCH_COMMIT          localCommit( m_toolManager );
@@ -1739,9 +1741,17 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
                 SCH_CONNECTION* connection = aChangedItem->Connection();
 
-                if( connection
-                    && ( connection->Name() == highlightedConn || connection->HasDriverChanged() ) )
+                if( m_highlightedConnChanged )
+                    return;
+                else if( !hasHighlightedConn )
+                    // No highlighted connection, but connectivity has changed, so refresh the list of all nets
                     m_highlightedConnChanged = true;
+                else if( connection
+                         && ( connection->Name() == highlightedConn
+                              || connection->HasDriverChanged() ) )
+                {
+                    m_highlightedConnChanged = true;
+                }
             };
 
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
@@ -1875,15 +1885,11 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 return flags;
             } );
 
-    if( !highlightedConn.IsEmpty() )
+    if( m_highlightedConnChanged
+        || !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
     {
-        if( m_highlightedConnChanged
-          || !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
-        {
-            GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting );
-            RefreshNetNavigator();
-        }
-
+        GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting );
+        RefreshNetNavigator();
         m_highlightedConnChanged = false;
     }
 

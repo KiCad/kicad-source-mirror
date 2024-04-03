@@ -240,12 +240,23 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 {
     wxCHECK( m_netNavigator, /* void */ );
 
-    if( m_netNavigator->IsEmpty() && m_highlightedConn.IsEmpty() )
-        return;
-
-    if( !m_netNavigator->IsEmpty() && m_highlightedConn.IsEmpty() )
+    if( m_highlightedConn.IsEmpty() )
     {
         m_netNavigator->DeleteAllItems();
+
+        // Create a tree of all nets in the schematic.
+        wxTreeItemId rootId = m_netNavigator->AddRoot( _( "Nets" ), 0 );
+
+        const NET_MAP& netMap = m_schematic->ConnectionGraph()->GetNetMap();
+
+        for( const auto& net : netMap )
+        {
+            wxTreeItemId netId = m_netNavigator->AppendItem( rootId, UnescapeString( net.first.Name ) );
+            MakeNetNavigatorNode( net.first.Name, netId, aSelection );
+        }
+
+        m_netNavigator->Expand( rootId );
+
         return;
     }
 
@@ -365,7 +376,9 @@ void SCH_EDIT_FRAME::onNetNavigatorSelection( wxTreeEvent& aEvent )
     NET_NAVIGATOR_ITEM_DATA* itemData =
             dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( id ) );
 
-    wxCHECK( itemData, /* void */ );
+    // Just a net name when we have all nets displayed.
+    if( !itemData )
+        return;
 
     if( GetCurrentSheet() != itemData->GetSheetPath() )
     {
