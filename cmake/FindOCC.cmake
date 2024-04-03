@@ -83,6 +83,7 @@ set( OCC_LIBS_PRE_78
 # Libraries for versions >= 7.8.0
 set( OCC_LIBS_POST_78
     TKDEIGES
+    TKDEGLTF
     TKDESTEP
     TKDESTL
 )
