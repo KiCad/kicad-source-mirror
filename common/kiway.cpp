@@ -335,32 +335,6 @@ KIFACE* KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
                 return nullptr;
             }
         }
-
-        // In any of the failure cases above, dso.Unload() should be called here
-        // by dso destructor.
-        // However:
-
-        // There is a file installation bug. We only look for KIFACE's which we know
-        // to exist, and we did not find one.  If we do not find one, this is an
-        // installation bug.
-
-        msg = wxString::Format( _( "Fatal Installation Bug. File:\n"
-                                   "'%s'\ncould not be loaded\n" ), dname );
-
-        if( ! wxFileExists( dname ) )
-            msg << _( "It is missing.\n" );
-        else
-            msg << _( "Perhaps a shared library (.dll or .so) file is missing.\n" );
-
-        msg << _( "From command line: argv[0]:\n'" );
-        msg << wxStandardPaths::Get().GetExecutablePath() << wxT( "'\n" );
-
-        // This is a fatal error, one from which we cannot recover, nor do we want
-        // to protect against in client code which would require numerous noisy
-        // tests in numerous places.  So we inform the user that the installation
-        // is bad.  This exception will likely not get caught until way up in the
-        // wxApp derivative, at which point the process will exit gracefully.
-        THROW_IO_ERROR( msg );
     }
 
     return nullptr;
