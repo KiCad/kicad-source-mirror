@@ -37,13 +37,13 @@ using google::protobuf::Empty;
 API_HANDLER_COMMON::API_HANDLER_COMMON() :
         API_HANDLER()
 {
-    registerHandler<GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
+    registerHandler<commands::GetVersion, GetVersionResponse>( &API_HANDLER_COMMON::handleGetVersion );
     registerHandler<GetNetClasses, NetClassesResponse>( &API_HANDLER_COMMON::handleGetNetClasses );
     registerHandler<Ping, Empty>( &API_HANDLER_COMMON::handlePing );
 }
 
 
-HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion( GetVersion&,
+HANDLER_RESULT<GetVersionResponse> API_HANDLER_COMMON::handleGetVersion( commands::GetVersion&,
                                                                          const HANDLER_CONTEXT& )
 {
     GetVersionResponse reply;
