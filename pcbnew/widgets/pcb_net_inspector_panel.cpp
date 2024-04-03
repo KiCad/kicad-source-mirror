@@ -343,7 +343,8 @@ void PCB_NET_INSPECTOR_PANEL::adjustListColumnSizes( PANEL_NET_INSPECTOR_SETTING
         for( size_t ii = 0; ii < m_columns.size(); ++ii )
         {
             const int newWidth = cfg->col_widths[ii];
-            m_netsList->GetColumn( ii )->SetWidth( newWidth );
+            // Make sure we end up with something non-zero so we can resize it
+            m_netsList->GetColumn( ii )->SetWidth( std::max( newWidth, 10 ) );
             m_netsList->GetColumn( ii )->SetHidden( cfg->col_hidden[ii] );
         }
     }
@@ -1394,8 +1395,8 @@ void PCB_NET_INSPECTOR_PANEL::generateShowHideColumnMenu( wxMenu* target )
         wxMenuItem* opt = new wxMenuItem( target, ID_HIDE_COLUMN + i, m_columns[i].display_name,
                                           wxEmptyString, wxITEM_CHECK );
         wxDataViewColumn* col = getDisplayedColumnForModelField( i );
-        opt->Check( !col->IsHidden() );
         target->Append( opt );
+        opt->Check( !col->IsHidden() );
     }
 
     target->AppendSeparator();
@@ -1405,8 +1406,8 @@ void PCB_NET_INSPECTOR_PANEL::generateShowHideColumnMenu( wxMenu* target )
         wxMenuItem* opt = new wxMenuItem( target, ID_HIDE_COLUMN + i, m_columns[i].display_name,
                                           wxEmptyString, wxITEM_CHECK );
         wxDataViewColumn* col = getDisplayedColumnForModelField( i );
-        opt->Check( !col->IsHidden() );
         target->Append( opt );
+        opt->Check( !col->IsHidden() );
     }
 }
 
@@ -1501,6 +1502,8 @@ void PCB_NET_INSPECTOR_PANEL::onSettingsMenu( wxCommandEvent& event )
         {
             const int         columnId = event.GetId() - ID_HIDE_COLUMN;
             wxDataViewColumn* col = getDisplayedColumnForModelField( columnId );
+            // Make sure we end up with something non-zero so we can resize it
+            col->SetWidth( std::max( col->GetWidth(), 10 ) );
             col->SetHidden( !col->IsHidden() );
         }
         break;
