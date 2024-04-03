@@ -398,6 +398,9 @@ void PCB_IO_IPC2581::addLocationNode( wxXmlNode* aNode, const PCB_SHAPE& aShape 
     case SHAPE_T::ARC:
         pos = VECTOR2D( 0, 0 );
         break;
+
+    case SHAPE_T::UNDEFINED:
+        wxFAIL;
     }
 
     addLocationNode( aNode, pos.x, pos.y );
@@ -1065,6 +1068,9 @@ void PCB_IO_IPC2581::addShape( wxXmlNode* aContentNode, const PCB_SHAPE& aShape 
 
         break;
     }
+
+    case SHAPE_T::UNDEFINED:
+        wxFAIL;
     }
 
     if( !name.empty() )
