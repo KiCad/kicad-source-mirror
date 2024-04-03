@@ -862,7 +862,11 @@ else()
 endif()
 
 if( NOT Protobuf_PROTOC_EXECUTABLE )
+if( NOT KICAD_USE_CMAKE_FINDPROTOBUF)
     set( Protobuf_PROTOC_EXECUTABLE "protobuf::protoc" )
+else()
+    MESSAGE( FATAL_ERROR "Protobuf compiler not found. Please install protobuf-compiler." )
+endif()
 endif()
 
 if( NOT Protobuf_INCLUDE_DIR )
