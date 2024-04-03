@@ -272,4 +272,6 @@ if( MSVC )
     string( APPEND WARN_FLAGS_CXX " /wd4668" )
     # disable "definition of implicit copy constructor for 'X' is deprecated because it has a user-provided destructor"
     string( APPEND WARN_FLAGS_CXX " /wd5267" )
+    # disable "reinterpret_cast used between related classes"
+    string( APPEND WARN_FLAGS_CXX " /wd4946" )
 endif()
