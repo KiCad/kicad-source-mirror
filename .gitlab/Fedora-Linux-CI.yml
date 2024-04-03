@@ -154,7 +154,7 @@ fedora_report_metrics_public:
   parallel:
     matrix:
       # The name of the test without the qa_ prefix
-      - TEST: [python, cli, common, gerbview, pcbnew, pns_regressions, eeschema, kimath, sexpr, kicad2step, spice]
+      - TEST: [python, cli, common, gerbview, pcbnew, pns_regressions, eeschema, kimath, sexpr, kicad2step, spice, api]
 
 fedora_qa_kicad:
   extends: .fedora_qa
