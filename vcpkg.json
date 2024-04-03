@@ -5,6 +5,7 @@
   "license": "GPL-2.0+",
   "dependencies": [
     "boost-algorithm",
+    "boost-bimap",
     "boost-filesystem",
     "boost-functional",
     "boost-iterator",
