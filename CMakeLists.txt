@@ -160,6 +160,17 @@ cmake_dependent_option( KICAD_APPLE_MAKE_RELOCATEABLE_BUNDLE
     "On macOS, post-process the build to make it relocateable (default ON)"
     ON "APPLE" OFF )
 
+# CMake's FindProtobuf module doesn't work correctly on MacOS or Windows but is
+# required for Linux
+if( UNIX_NOT_APPLE )
+    set( KICAD_CMAKE_PROTOBUF_DEFAULT ON )
+else()
+    set( KICAD_CMAKE_PROTOBUF_DEFAULT OFF )
+endif()
+
+option( KICAD_USE_CMAKE_FINDPROTOBUF "Use FindProtobuf provided by CMake" ${KICAD_CMAKE_PROTOBUF_DEFAULT} )
+mark_as_advanced( KICAD_USE_CMAKE_FINDPROTOBUF )
+
 ####################################
 # Installation options
 ####################################
@@ -849,9 +860,6 @@ if( OCC_VERSION_STRING VERSION_LESS 7.5.0 )
                          "================================================================\n")
 endif()
 include_directories( SYSTEM ${OCC_INCLUDE_DIR} )
-
-option( KICAD_USE_CMAKE_FINDPROTOBUF "Use FindProtobuf provided by CMake" OFF )
-mark_as_advanced( KICAD_USE_CMAKE_FINDPROTOBUF )
 
 if( KICAD_USE_CMAKE_FINDPROTOBUF )
     include( FindProtobuf )
