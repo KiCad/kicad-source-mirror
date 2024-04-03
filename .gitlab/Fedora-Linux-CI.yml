@@ -40,6 +40,7 @@
     when: always
     paths:
       - build/linux/3d-viewer/
+      - build/linux/api/libkiapi.so*
       - build/linux/common/libkicommon.so*
       - build/linux/common/gal/libkigal.so*
       - build/linux/eeschema/_eeschema.kiface
