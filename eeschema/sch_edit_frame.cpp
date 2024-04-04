@@ -1889,7 +1889,10 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     {
         if( m_highlightedConnChanged
           || !Schematic().ConnectionGraph()->FindFirstSubgraphByName( highlightedConn ) )
+        {
+            GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting );
             RefreshNetNavigator();
+        }
 
         m_highlightedConnChanged = false;
     }
