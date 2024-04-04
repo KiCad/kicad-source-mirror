@@ -77,7 +77,7 @@ public:
 
     void MirrorHorizontally( int aCenter ) override {}
     void MirrorVertically( int aCenter ) override {}
-    void Rotate( const VECTOR2I& aCenter ) override {}
+    void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override {}
 
     VECTOR2I       GetPosition() const override { return GetTransformedPosition(); }
     const VECTOR2I GetLocalPosition() const { return m_position; }

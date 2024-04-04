@@ -78,7 +78,7 @@ public:
     void Move( const VECTOR2I& aMoveVector ) override {}
     void MirrorHorizontally( int aCenter ) override {}
     void MirrorVertically( int aCenter ) override {}
-    void Rotate( const VECTOR2I& aCenter ) override {}
+    void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override {}
 
     double Similarity( const SCH_ITEM& aOther ) const override
     {

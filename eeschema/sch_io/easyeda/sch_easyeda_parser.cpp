@@ -1503,16 +1503,16 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
                             {
                                 // Lines need special handling for some reason
                                 aSchItem->SetFlags( STARTPOINT );
-                                aSchItem->Rotate( RelPos( cmdAround ) );
+                                aSchItem->Rotate( RelPos( cmdAround ), false );
                                 aSchItem->ClearFlags( STARTPOINT );
 
                                 aSchItem->SetFlags( ENDPOINT );
-                                aSchItem->Rotate( RelPos( cmdAround ) );
+                                aSchItem->Rotate( RelPos( cmdAround ), false );
                                 aSchItem->ClearFlags( ENDPOINT );
                             }
                             else
                             {
-                                aSchItem->Rotate( RelPos( cmdAround ) );
+                                aSchItem->Rotate( RelPos( cmdAround ), false );
                             }
                         }
                     }

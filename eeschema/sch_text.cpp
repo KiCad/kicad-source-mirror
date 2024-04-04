@@ -92,10 +92,10 @@ void SCH_TEXT::MirrorVertically( int aCenter )
 }
 
 
-void SCH_TEXT::Rotate( const VECTOR2I& aCenter )
+void SCH_TEXT::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     VECTOR2I pt = GetTextPos();
-    RotatePoint( pt, aCenter, ANGLE_90 );
+    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
     VECTOR2I offset = pt - GetTextPos();
 
     Rotate90( false );

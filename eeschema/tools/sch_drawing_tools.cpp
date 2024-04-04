@@ -1112,11 +1112,13 @@ int SCH_DRAWING_TOOLS::SingleClickPlace( const TOOL_EVENT& aEvent )
             {
                 SCH_BUS_ENTRY_BASE* busItem = static_cast<SCH_BUS_ENTRY_BASE*>( previewItem );
 
-                // The bus entries only rotate in one direction
-                if( evt->IsAction( &EE_ACTIONS::rotateCW )
-                        || evt->IsAction( &EE_ACTIONS::rotateCCW ) )
+                if( evt->IsAction( &EE_ACTIONS::rotateCW ) )
                 {
-                    busItem->Rotate( busItem->GetPosition() );
+                    busItem->Rotate( busItem->GetPosition(), false );
+                }
+                else if( evt->IsAction( &EE_ACTIONS::rotateCCW ) )
+                {
+                    busItem->Rotate( busItem->GetPosition(), true );
                 }
                 else if( evt->IsAction( &EE_ACTIONS::mirrorV ) )
                 {

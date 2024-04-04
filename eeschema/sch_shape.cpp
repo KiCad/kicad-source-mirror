@@ -105,9 +105,9 @@ void SCH_SHAPE::MirrorVertically( int aCenter )
 }
 
 
-void SCH_SHAPE::Rotate( const VECTOR2I& aCenter )
+void SCH_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    rotate( aCenter, ANGLE_90 );
+    rotate( aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
 }
 
 

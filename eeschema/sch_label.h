@@ -222,7 +222,7 @@ public:
     bool IncrementLabel( int aIncrement );
 
     void Move( const VECTOR2I& aMoveVector ) override;
-    void Rotate( const VECTOR2I& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override;
     void Rotate90( bool aClockwise ) override;
 
     void MirrorSpinStyle( bool aLeftRight ) override;

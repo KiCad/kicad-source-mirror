@@ -105,9 +105,9 @@ void SCH_TEXTBOX::MirrorVertically( int aCenter )
 }
 
 
-void SCH_TEXTBOX::Rotate( const VECTOR2I& aCenter )
+void SCH_TEXTBOX::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    SCH_SHAPE::Rotate( aCenter );
+    SCH_SHAPE::Rotate( aCenter, aRotateCCW );
     SetTextAngle( GetTextAngle() == ANGLE_VERTICAL ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
 }
 

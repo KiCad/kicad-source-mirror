@@ -692,8 +692,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         {
             SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( head );
 
-            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                symbol->Rotate( rotPoint );
+            symbol->Rotate( rotPoint, !clockwise );
 
             if( m_frame->eeconfig()->m_AutoplaceFields.enable )
                 symbol->AutoAutoplaceFields( m_frame->GetScreen() );
@@ -718,8 +717,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             SCH_SHEET_PIN* pin   = static_cast<SCH_SHEET_PIN*>( head );
             SCH_SHEET*     sheet = pin->GetParent();
 
-            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                pin->Rotate( sheet->GetBodyBoundingBox().GetCenter() );
+            pin->Rotate( sheet->GetBoundingBox().GetCenter(), !clockwise );
 
             break;
         }
@@ -752,8 +750,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         case SCH_NO_CONNECT_T:
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
-            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                head->Rotate( rotPoint );
+            head->Rotate( rotPoint, !clockwise );
 
             break;
 
@@ -774,8 +771,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         case SCH_SHAPE_T:
         case SCH_TEXTBOX_T:
-            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                head->Rotate( rotPoint );
+            head->Rotate( rotPoint, !clockwise );
 
             break;
 
@@ -786,15 +782,13 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             BOX2I      box( table->GetPosition(), table->GetEnd() - table->GetPosition() );
             rotPoint = m_frame->GetNearestHalfGridPosition( box.GetCenter() );
 
-            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                head->Rotate( rotPoint );
+            head->Rotate( rotPoint, !clockwise );
 
             break;
         }
 
         case SCH_BITMAP_T:
-            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                head->Rotate( rotPoint );
+            head->Rotate( rotPoint, !clockwise );
 
             // The bitmap is cached in Opengl: clear the cache to redraw
             getView()->RecacheAllItems();
@@ -804,10 +798,9 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         {
             // Rotate the sheet on itself. Sheets do not have an anchor point.
             SCH_SHEET* sheet = static_cast<SCH_SHEET*>( head );
-            rotPoint = m_frame->GetNearestHalfGridPosition( sheet->GetRotationCenter() );
 
-            for( int i = 0; clockwise ? i < 3 : i < 1; ++i )
-                sheet->Rotate( rotPoint );
+            rotPoint = m_frame->GetNearestHalfGridPosition( sheet->GetRotationCenter() );
+            sheet->Rotate( rotPoint, !clockwise );
 
             break;
         }
@@ -864,7 +857,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                     SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
                     SCH_SHEET*     sheet = pin->GetParent();
 
-                    pin->Rotate( sheet->GetBodyBoundingBox().GetCenter() );
+                    pin->Rotate( sheet->GetBodyBoundingBox().GetCenter(), false );
                 }
             }
             else if( item->Type() == SCH_FIELD_T )
@@ -877,7 +870,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 {
                     SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
-                    field->Rotate( rotPoint );
+                    field->Rotate( rotPoint, false );
 
                     if( field->GetTextAngle().IsHorizontal() )
                         field->SetTextAngle( ANGLE_VERTICAL );
@@ -890,7 +883,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             }
             else
             {
-                item->Rotate( rotPoint );
+                item->Rotate( rotPoint, false );
             }
         }
 

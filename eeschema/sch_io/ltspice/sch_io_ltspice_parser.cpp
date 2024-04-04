@@ -370,18 +370,16 @@ void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLT
 {
     if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R90 )
     {
-        aShape->Rotate( VECTOR2I() );
-        aShape->Rotate( VECTOR2I() );
-        aShape->Rotate( VECTOR2I() );
+        aShape->Rotate( VECTOR2I(), true );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R180 )
     {
-        aShape->Rotate( VECTOR2I() );
-        aShape->Rotate( VECTOR2I() );
+        aShape->Rotate( VECTOR2I(), false );
+        aShape->Rotate( VECTOR2I(), false );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::R270 )
     {
-        aShape->Rotate( VECTOR2I() );
+        aShape->Rotate( VECTOR2I(), false );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M0 )
     {
@@ -390,7 +388,7 @@ void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLT
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M90 )
     {
         aShape->MirrorVertically( 0 );
-        aShape->Rotate( VECTOR2I() );
+        aShape->Rotate( VECTOR2I(), false );
     }
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M180 )
     {
@@ -399,9 +397,7 @@ void SCH_IO_LTSPICE_PARSER::RotateMirrorShape( LTSPICE_SCHEMATIC::LT_SYMBOL& aLT
     else if( aLTSymbol.SymbolOrientation == LTSPICE_SCHEMATIC::ORIENTATION::M270 )
     {
         aShape->MirrorVertically( 0 );
-        aShape->Rotate( VECTOR2I() );
-        aShape->Rotate( VECTOR2I() );
-        aShape->Rotate( VECTOR2I() );
+        aShape->Rotate( VECTOR2I(), true );
     }
 }
 

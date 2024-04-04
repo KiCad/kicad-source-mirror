@@ -230,18 +230,18 @@ BOOST_AUTO_TEST_CASE( Rotate )
                 {
                     schItem->ClearFieldsAutoplaced();
                     // Only rotating pins around the center of parent sheet works.
-                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
+                    schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
                 }
 
                 if( libItem != nullptr )
                 {
-                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
-                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter() );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
+                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
                 }
 
                 CompareItems( newItem.get(), item.get() );
@@ -260,18 +260,18 @@ BOOST_AUTO_TEST_CASE( Rotate )
                             if( schItem != nullptr )
                             {
                                 schItem->ClearFieldsAutoplaced();
-                                schItem->Rotate( aRef );
-                                schItem->Rotate( aRef );
-                                schItem->Rotate( aRef );
-                                schItem->Rotate( aRef );
+                                schItem->Rotate( aRef, false );
+                                schItem->Rotate( aRef, false );
+                                schItem->Rotate( aRef, false );
+                                schItem->Rotate( aRef, false );
                             }
 
                             if( libItem != nullptr )
                             {
-                                libItem->Rotate( aRef );
-                                libItem->Rotate( aRef );
-                                libItem->Rotate( aRef );
-                                libItem->Rotate( aRef );
+                                libItem->Rotate( aRef, false );
+                                libItem->Rotate( aRef, false );
+                                libItem->Rotate( aRef, false );
+                                libItem->Rotate( aRef, false );
                             }
 
                             CompareItems( item.get(), aOriginalItem );

@@ -162,10 +162,10 @@ void SCH_BITMAP::MirrorHorizontally( int aCenter )
 }
 
 
-void SCH_BITMAP::Rotate( const VECTOR2I& aCenter )
+void SCH_BITMAP::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    RotatePoint( m_pos, aCenter, ANGLE_90 );
-    m_bitmapBase->Rotate( false );
+    RotatePoint( m_pos, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+    m_bitmapBase->Rotate( aRotateCCW );
 }
 
 

@@ -362,7 +362,7 @@ public:
     /**
      * Rotate the item around \a aCenter 90 degrees in the clockwise direction.
      */
-    virtual void Rotate( const VECTOR2I& aCenter )
+    virtual void Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
     {
         wxCHECK_MSG( false, /*void*/, wxT( "Rotate not implemented in " ) + GetClass() );
     }

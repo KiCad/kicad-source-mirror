@@ -226,7 +226,7 @@ public:
         Offset( aMoveVector );
     }
 
-    void Rotate( const VECTOR2I& aCenter ) override;
+    void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override;
 
     /**
      * @copydoc SCH_ITEM::MirrorVertically()

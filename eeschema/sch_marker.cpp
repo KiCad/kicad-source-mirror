@@ -328,7 +328,7 @@ BITMAPS SCH_MARKER::GetMenuImage() const
 }
 
 
-void SCH_MARKER::Rotate( const VECTOR2I& aCenter )
+void SCH_MARKER::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     // Marker geometry isn't user-editable
 }

@@ -200,10 +200,10 @@ void SCH_TABLE::MirrorVertically( int aCenter )
 }
 
 
-void SCH_TABLE::Rotate( const VECTOR2I& aCenter )
+void SCH_TABLE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     for( SCH_TABLECELL* cell : m_cells )
-        cell->Rotate( aCenter );
+        cell->Rotate( aCenter, aRotateCCW );
 
     Normalize();
 }

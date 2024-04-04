@@ -842,12 +842,12 @@ void SCH_SHEET::Move( const VECTOR2I& aMoveVector )
 }
 
 
-void SCH_SHEET::Rotate( const VECTOR2I& aCenter )
+void SCH_SHEET::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     VECTOR2I prev = m_pos;
 
-    RotatePoint( m_pos, aCenter, ANGLE_90 );
-    RotatePoint( &m_size.x, &m_size.y, ANGLE_90 );
+    RotatePoint( m_pos, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+    RotatePoint( &m_size.x, &m_size.y, aRotateCCW ? ANGLE_270 : ANGLE_90 );
 
     if( m_size.x < 0 )
     {
@@ -864,7 +864,7 @@ void SCH_SHEET::Rotate( const VECTOR2I& aCenter )
     // Pins must be rotated first as that's how we determine vertical vs horizontal
     // orientation for auto-placement
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Rotate( aCenter );
+        sheetPin->Rotate( aCenter, aRotateCCW );
 
     if( m_fieldsAutoplaced == FIELDS_AUTOPLACED_AUTO )
     {

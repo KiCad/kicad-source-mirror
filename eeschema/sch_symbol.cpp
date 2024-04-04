@@ -2036,13 +2036,13 @@ void SCH_SYMBOL::MirrorVertically( int aCenter )
 }
 
 
-void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter )
+void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     VECTOR2I prev = m_pos;
 
-    RotatePoint( m_pos, aCenter, ANGLE_90 );
+    RotatePoint( m_pos, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
 
-    SetOrientation( SYM_ROTATE_COUNTERCLOCKWISE );
+    SetOrientation( aRotateCCW ? SYM_ROTATE_CLOCKWISE : SYM_ROTATE_COUNTERCLOCKWISE );
 
     for( SCH_FIELD& field : m_fields )
     {

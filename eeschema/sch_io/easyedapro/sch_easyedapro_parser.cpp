@@ -1006,16 +1006,16 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                         {
                             // Lines need special handling for some reason
                             schItem->SetFlags( STARTPOINT );
-                            schItem->Rotate( kstart );
+                            schItem->Rotate( kstart, false );
                             schItem->ClearFlags( STARTPOINT );
 
                             schItem->SetFlags( ENDPOINT );
-                            schItem->Rotate( kstart );
+                            schItem->Rotate( kstart, false );
                             schItem->ClearFlags( ENDPOINT );
                         }
                         else
                         {
-                            schItem->Rotate( kstart );
+                            schItem->Rotate( kstart, false );
                         }
                     }
 
@@ -1050,7 +1050,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     bitmap->SetPosition( kcenter );
 
                     for( double i = angle; i > 0; i -= 90 )
-                        bitmap->Rotate( kstart );
+                        bitmap->Rotate( kstart, false );
 
                     if( flipped )
                         bitmap->MirrorHorizontally( kstart.x );
@@ -1129,17 +1129,17 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
 
             wxString unitName = component->name;
 
-            LIB_ID libId =
-                    EASYEDAPRO::ToKiCadLibID( aLibName, newLibSymbol.GetLibId().GetLibItemName() );
+            LIB_ID libId = EASYEDAPRO::ToKiCadLibID( aLibName,
+                                                     newLibSymbol.GetLibId().GetLibItemName() );
 
-            std::unique_ptr<SCH_SYMBOL> schSym =
-                    std::make_unique<SCH_SYMBOL>( newLibSymbol, libId, &aSchematic->CurrentSheet(),
-                                                  esymInfo.partUnits[unitName] );
+            auto schSym = std::make_unique<SCH_SYMBOL>( newLibSymbol, libId,
+                                                        &aSchematic->CurrentSheet(),
+                                                        esymInfo.partUnits[unitName] );
 
             schSym->SetFootprintFieldText( newLibSymbol.GetFootprintField().GetText() );
 
             for( double i = component->rotation; i > 0; i -= 90 )
-                schSym->Rotate( VECTOR2I() );
+                schSym->Rotate( VECTOR2I(), false );
 
             if( component->mirror )
                 schSym->MirrorHorizontally( 0 );

@@ -892,10 +892,10 @@ bool SCH_FIELD::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 }
 
 
-void SCH_FIELD::Rotate( const VECTOR2I& aCenter )
+void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     VECTOR2I pt = GetPosition();
-    RotatePoint( pt, aCenter, ANGLE_90 );
+    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
     SetPosition( pt );
 }
 
