@@ -50,11 +50,28 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
         m_token( KIID().AsStdString() ),
         m_readyToReply( false )
 {
+    m_commonHandler = std::make_unique<API_HANDLER_COMMON>();
+    RegisterHandler( m_commonHandler.get() );
+
     if( !Pgm().GetCommonSettings()->m_Api.enable_server )
     {
         wxLogTrace( traceApi, "Server: disabled by user preferences." );
         return;
     }
+
+    Start();
+}
+
+
+KICAD_API_SERVER::~KICAD_API_SERVER()
+{
+}
+
+
+void KICAD_API_SERVER::Start()
+{
+    if( Running() )
+        return;
 
     wxFileName socket;
 #ifdef __WXMAC__
@@ -88,9 +105,6 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
             fmt::format( "ipc://{}", socket.GetFullPath().ToStdString() ) );
     m_server->SetCallback( [&]( std::string* aRequest ) { onApiRequest( aRequest ); } );
 
-    m_commonHandler = std::make_unique<API_HANDLER_COMMON>();
-    RegisterHandler( m_commonHandler.get() );
-
     m_logFilePath.AssignDir( PATHS::GetLogsPath() );
     m_logFilePath.SetName( s_logFileName );
 
@@ -106,8 +120,16 @@ KICAD_API_SERVER::KICAD_API_SERVER() :
 }
 
 
-KICAD_API_SERVER::~KICAD_API_SERVER()
+void KICAD_API_SERVER::Stop()
 {
+    if( !Running() )
+        return;
+
+    wxLogTrace( traceApi, "Stopping server" );
+    Unbind( API_REQUEST_EVENT, &KICAD_API_SERVER::handleApiEvent, this );
+
+    m_server->Stop();
+    m_server.reset( nullptr );
 }
 
 

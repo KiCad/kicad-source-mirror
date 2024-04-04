@@ -46,6 +46,10 @@ public:
 
     ~KICAD_API_SERVER();
 
+    void Start();
+
+    void Stop();
+
     bool Running() const;
 
     /**
