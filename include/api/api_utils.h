@@ -22,13 +22,16 @@
 #define KICAD_API_UTILS_H
 
 #include <optional>
+#include <google/protobuf/any.pb.h>
 
 #include <core/typeinfo.h>
 #include <lib_id.h>
 #include <api/common/types/base_types.pb.h>
-#include <google/protobuf/any.pb.h>
 #include <layer_ids.h>
+#include <geometry/shape_line_chain.h>
 #include <math/vector2d.h>
+
+class SHAPE_LINE_CHAIN;
 
 namespace kiapi::common
 {
@@ -42,6 +45,10 @@ types::LibraryIdentifier LibIdToProto( const LIB_ID& aId );
 void PackVector2( kiapi::common::types::Vector2& aOutput, const VECTOR2I aInput );
 
 VECTOR2I UnpackVector2( const types::Vector2& aInput );
+
+void PackPolyLine( kiapi::common::types::PolyLine& aOutput, const SHAPE_LINE_CHAIN& aSlc );
+
+SHAPE_LINE_CHAIN UnpackPolyLine( const kiapi::common::types::PolyLine& aInput );
 
 } // namespace kiapi::common
 

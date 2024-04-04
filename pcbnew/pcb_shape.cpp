@@ -61,37 +61,6 @@ PCB_SHAPE::~PCB_SHAPE()
 {
 }
 
-// TODO: lift out
-kiapi::common::types::PolyLine lineChainToProto( const SHAPE_LINE_CHAIN& aSlc )
-{
-    kiapi::common::types::PolyLine msg;
-
-    for( int vertex = 0; vertex < aSlc.PointCount(); vertex = aSlc.NextShape( vertex ) )
-    {
-        kiapi::common::types::PolyLineNode* node = msg.mutable_nodes()->Add();
-
-        if( aSlc.IsPtOnArc( vertex ) )
-        {
-            const SHAPE_ARC& arc = aSlc.Arc( aSlc.ArcIndex( vertex ) );
-            node->mutable_arc()->mutable_start()->set_x_nm( arc.GetP0().x );
-            node->mutable_arc()->mutable_start()->set_y_nm( arc.GetP0().y );
-            node->mutable_arc()->mutable_mid()->set_x_nm( arc.GetArcMid().x );
-            node->mutable_arc()->mutable_mid()->set_y_nm( arc.GetArcMid().y );
-            node->mutable_arc()->mutable_end()->set_x_nm( arc.GetP1().x );
-            node->mutable_arc()->mutable_end()->set_y_nm( arc.GetP1().y );
-        }
-        else
-        {
-            node->mutable_point()->set_x_nm( aSlc.CPoint( vertex ).x );
-            node->mutable_point()->set_y_nm( aSlc.CPoint( vertex ).y );
-        }
-    }
-
-    msg.set_closed( aSlc.IsClosed() );
-
-    return msg;
-}
-
 
 void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
 {
@@ -174,12 +143,15 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
                 continue;
 
             kiapi::common::types::PolygonWithHoles* polyMsg = polyset->mutable_polygons()->Add();
-            polyMsg->mutable_outline()->CopyFrom( lineChainToProto( poly.front() ) );
+            kiapi::common::PackPolyLine( *polyMsg->mutable_outline(), poly.front() );
 
             if( poly.size() > 1 )
             {
                 for( size_t hole = 1; hole < poly.size(); ++hole )
-                    polyMsg->mutable_holes()->Add( lineChainToProto( poly[hole] ) );
+                {
+                    kiapi::common::types::PolyLine* pl = polyMsg->mutable_holes()->Add();
+                    kiapi::common::PackPolyLine( *pl, poly[hole] );
+                }
             }
         }
         break;
@@ -200,32 +172,6 @@ void PCB_SHAPE::Serialize( google::protobuf::Any &aContainer ) const
     }
 
     aContainer.PackFrom( msg );
-}
-
-
-// TODO(JE) lift out
-SHAPE_LINE_CHAIN lineChainFromProto( const kiapi::common::types::PolyLine& aProto )
-{
-    SHAPE_LINE_CHAIN slc;
-
-    for( const kiapi::common::types::PolyLineNode& node : aProto.nodes() )
-    {
-        if( node.has_point() )
-        {
-            slc.Append( VECTOR2I( node.point().x_nm(), node.point().y_nm() ) );
-        }
-        else if( node.has_arc() )
-        {
-            slc.Append( SHAPE_ARC( VECTOR2I( node.arc().start().x_nm(), node.arc().start().y_nm() ),
-                                   VECTOR2I( node.arc().mid().x_nm(), node.arc().mid().y_nm() ),
-                                   VECTOR2I( node.arc().end().x_nm(), node.arc().end().y_nm() ),
-                                   0 /* don't care about width here */ ) );
-        }
-    }
-
-    slc.SetClosed( aProto.closed() );
-
-    return slc;
 }
 
 
@@ -303,10 +249,10 @@ bool PCB_SHAPE::Deserialize( const google::protobuf::Any &aContainer )
         {
             SHAPE_POLY_SET::POLYGON polygon;
 
-            polygon.emplace_back( lineChainFromProto( polygonWithHoles.outline() ) );
+            polygon.emplace_back( kiapi::common::UnpackPolyLine( polygonWithHoles.outline() ) );
 
             for( const kiapi::common::types::PolyLine& holeMsg : polygonWithHoles.holes() )
-                polygon.emplace_back( lineChainFromProto( holeMsg ) );
+                polygon.emplace_back( kiapi::common::UnpackPolyLine( holeMsg ) );
 
             sps.AddPolygon( polygon );
         }

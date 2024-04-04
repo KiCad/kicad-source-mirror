@@ -77,4 +77,56 @@ VECTOR2I UnpackVector2( const types::Vector2& aInput )
     return VECTOR2I( aInput.x_nm(), aInput.y_nm() );
 }
 
+
+void PackPolyLine( kiapi::common::types::PolyLine& aOutput, const SHAPE_LINE_CHAIN& aSlc )
+{
+    for( int vertex = 0; vertex < aSlc.PointCount(); vertex = aSlc.NextShape( vertex ) )
+    {
+        kiapi::common::types::PolyLineNode* node = aOutput.mutable_nodes()->Add();
+
+        if( aSlc.IsPtOnArc( vertex ) )
+        {
+            const SHAPE_ARC& arc = aSlc.Arc( aSlc.ArcIndex( vertex ) );
+            node->mutable_arc()->mutable_start()->set_x_nm( arc.GetP0().x );
+            node->mutable_arc()->mutable_start()->set_y_nm( arc.GetP0().y );
+            node->mutable_arc()->mutable_mid()->set_x_nm( arc.GetArcMid().x );
+            node->mutable_arc()->mutable_mid()->set_y_nm( arc.GetArcMid().y );
+            node->mutable_arc()->mutable_end()->set_x_nm( arc.GetP1().x );
+            node->mutable_arc()->mutable_end()->set_y_nm( arc.GetP1().y );
+        }
+        else
+        {
+            node->mutable_point()->set_x_nm( aSlc.CPoint( vertex ).x );
+            node->mutable_point()->set_y_nm( aSlc.CPoint( vertex ).y );
+        }
+    }
+
+    aOutput.set_closed( aSlc.IsClosed() );
+}
+
+
+SHAPE_LINE_CHAIN UnpackPolyLine( const kiapi::common::types::PolyLine& aInput )
+{
+    SHAPE_LINE_CHAIN slc;
+
+    for( const kiapi::common::types::PolyLineNode& node : aInput.nodes() )
+    {
+        if( node.has_point() )
+        {
+            slc.Append( VECTOR2I( node.point().x_nm(), node.point().y_nm() ) );
+        }
+        else if( node.has_arc() )
+        {
+            slc.Append( SHAPE_ARC( VECTOR2I( node.arc().start().x_nm(), node.arc().start().y_nm() ),
+                                   VECTOR2I( node.arc().mid().x_nm(), node.arc().mid().y_nm() ),
+                                   VECTOR2I( node.arc().end().x_nm(), node.arc().end().y_nm() ),
+                                   0 /* don't care about width here */ ) );
+        }
+    }
+
+    slc.SetClosed( aInput.closed() );
+
+    return slc;
+}
+
 } // namespace kiapi::common
