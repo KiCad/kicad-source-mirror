@@ -1037,7 +1037,6 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
 
     REENTRANCY_GUARD guard( &m_inDrawingTool );
 
-    COMMON_SETTINGS*             common_settings = Pgm().GetCommonSettings();
     PCB_TABLE*                   table = nullptr;
     const BOARD_DESIGN_SETTINGS& bds = m_frame->GetDesignSettings();
     BOARD_COMMIT                 commit( m_frame );
