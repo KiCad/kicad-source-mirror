@@ -120,3 +120,14 @@ target_include_directories( kiapi INTERFACE
 
 # Because when building internally, the generated files do not include the "api" base path
 target_include_directories( kiapi PUBLIC ${KIAPI_CPP_BASEPATH} )
+
+if( APPLE )
+    # puts library into the main kicad.app bundle in build tree
+    set_target_properties( kiapi PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${OSX_BUNDLE_BUILD_LIB_DIR}"
+        INSTALL_NAME_DIR "${OSX_BUNDLE_BUILD_LIB_DIR}"
+    )
+    set_target_properties( kiapi PROPERTIES INSTALL_RPATH
+            "@executable_path/../Frameworks" )
+    set_target_properties( kiapi PROPERTIES BUILD_WITH_INSTALL_RPATH 1 )
+endif()
