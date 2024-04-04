@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -34,6 +34,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	wxFlexGridSizer* fgSizerGridSize;
 	fgSizerGridSize = new wxFlexGridSizer( 0, 2, 5, 5 );
+	fgSizerGridSize->AddGrowableCol( 1 );
 	fgSizerGridSize->SetFlexibleDirection( wxBOTH );
 	fgSizerGridSize->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -155,7 +156,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	bSizerStaggerset->Add( m_labelStagger, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 	m_entryStagger = new TEXT_CTRL_EVAL( sbSizerStagger->GetStaticBox(), wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerStaggerset->Add( m_entryStagger, 0, wxRIGHT|wxLEFT, 5 );
+	bSizerStaggerset->Add( m_entryStagger, 1, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	sbSizerStagger->Add( bSizerStaggerset, 1, wxEXPAND, 5 );
@@ -244,7 +245,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	fgSizer1->Add( m_entryGridSecNumberingOffset, 0, wxALL, 5 );
 
-	m_labelGridNumberingStep = new wxStaticText( m_gridPadNumberingPanel, wxID_ANY, _("Pad numbering skip:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelGridNumberingStep = new wxStaticText( m_gridPadNumberingPanel, wxID_ANY, _("Pad numbering increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelGridNumberingStep->Wrap( -1 );
 	fgSizer1->Add( m_labelGridNumberingStep, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -259,7 +260,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	fgSizer1->Add( m_entryGridSecNumberingStep, 0, wxALL, 5 );
 
 
-	m_gridPadNumberingSizer->Add( fgSizer1, 1, wxEXPAND, 5 );
+	m_gridPadNumberingSizer->Add( fgSizer1, 0, wxEXPAND, 5 );
 
 
 	bSizer15->Add( m_gridPadNumberingSizer, 1, wxEXPAND|wxLEFT, 10 );
@@ -283,9 +284,9 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	bSizerCircLeft = new wxBoxSizer( wxVERTICAL );
 
 	wxStaticBoxSizer* sbSizerInfo;
-	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Items to Duplicate") ), wxVERTICAL );
+	sbSizerInfo = new wxStaticBoxSizer( new wxStaticBox( m_circularPanel, wxID_ANY, _("Reference Position") ), wxVERTICAL );
 
-	m_stInfoItems = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("This is the position of the selected item,\nor the position of the group to duplicate"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_stInfoItems = new wxStaticText( sbSizerInfo->GetStaticBox(), wxID_ANY, _("Position of the selected item (or  group) to duplicate"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_stInfoItems->Wrap( -1 );
 	sbSizerInfo->Add( m_stInfoItems, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -370,7 +371,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	wxBoxSizer* bSizerRadius;
 	bSizerRadius = new wxBoxSizer( wxVERTICAL );
 
-	m_labelCircRadius = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Radius from center to reference position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircRadius = new wxStaticText( sbSizerCircParams->GetStaticBox(), wxID_ANY, _("Radius of circular array:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircRadius->Wrap( -1 );
 	bSizerRadius->Add( m_labelCircRadius, 0, wxTOP|wxRIGHT, 5 );
 
@@ -434,7 +435,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	fgSizerDupPrms->SetFlexibleDirection( wxBOTH );
 	fgSizerDupPrms->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_labelCircAngle = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Angle:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircAngle = new wxStaticText( sbSizerDupPrms->GetStaticBox(), wxID_ANY, _("Angle between new items:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircAngle->Wrap( -1 );
 	fgSizerDupPrms->Add( m_labelCircAngle, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
@@ -517,7 +518,7 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_entryCircNumberingStart = new wxTextCtrl( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_entryCircNumberingStart, 1, wxALL, 5 );
 
-	m_labelCircNumStep = new wxStaticText( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad numbering skip:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircNumStep = new wxStaticText( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad numbering increment:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircNumStep->Wrap( -1 );
 	fgSizer2->Add( m_labelCircNumStep, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 

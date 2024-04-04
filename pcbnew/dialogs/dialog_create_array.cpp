@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -530,6 +530,7 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
         m_labelGridNumberingOffset->Enable( use_set_start_grid );
         m_entryGridPriNumberingOffset->Enable( use_set_start_grid );
         m_entryGridSecNumberingOffset->Enable( use_set_start_grid && num2d );
+        m_entryGridSecNumberingStep->Enable( use_set_start_grid && num2d );
 
         // disable the circular number offset in the same way
         const bool use_set_start_circ = m_rbCircStartNumberingOpt->GetSelection() == 1;
