@@ -70,8 +70,8 @@ public:
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override;
 
-    void MirrorHorizontally( const VECTOR2I& center );
-    void MirrorVertically( const VECTOR2I& center );
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override;
 
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;

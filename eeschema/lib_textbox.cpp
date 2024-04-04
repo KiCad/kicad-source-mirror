@@ -75,7 +75,7 @@ int LIB_TEXTBOX::GetLegacyTextMargin() const
 }
 
 
-void LIB_TEXTBOX::MirrorHorizontally( const VECTOR2I& center )
+void LIB_TEXTBOX::MirrorHorizontally( int aCenter )
 {
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_HORIZONTAL )
@@ -88,7 +88,7 @@ void LIB_TEXTBOX::MirrorHorizontally( const VECTOR2I& center )
 }
 
 
-void LIB_TEXTBOX::MirrorVertically( const VECTOR2I& center )
+void LIB_TEXTBOX::MirrorVertically( int aCenter )
 {
     // Text is NOT really mirrored; it just has its justification flipped
     if( GetTextAngle() == ANGLE_VERTICAL )

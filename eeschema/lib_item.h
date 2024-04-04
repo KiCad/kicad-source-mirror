@@ -310,14 +310,14 @@ public:
      *
      * @param aCenter Point to mirror around.
      */
-    virtual void MirrorHorizontal( const VECTOR2I& aCenter ) = 0;
+    virtual void MirrorHorizontally( int aCenter ) = 0;
 
     /**
      * Mirror the draw object along the MirrorVertical (Y) axis about \a aCenter point.
      *
      * @param aCenter Point to mirror around.
      */
-    virtual void MirrorVertical( const VECTOR2I& aCenter ) = 0;
+    virtual void MirrorVertically( int aCenter ) = 0;
 
     /**
      * Rotate the object about \a aCenter point.

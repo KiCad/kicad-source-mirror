@@ -296,25 +296,25 @@ void LIB_FIELD::MoveTo( const VECTOR2I& newPosition )
 }
 
 
-void LIB_FIELD::MirrorHorizontal( const VECTOR2I& center )
+void LIB_FIELD::MirrorHorizontally( int aCenter )
 {
     int x = GetTextPos().x;
 
-    x -= center.x;
+    x -= aCenter;
     x *= -1;
-    x += center.x;
+    x += aCenter;
 
     SetTextX( x );
 }
 
 
-void LIB_FIELD::MirrorVertical( const VECTOR2I& center )
+void LIB_FIELD::MirrorVertically( int aCenter )
 {
     int y = GetTextPos().y;
 
-    y -= center.y;
+    y -= aCenter;
     y *= -1;
-    y += center.y;
+    y += aCenter;
 
     SetTextY( y );
 }

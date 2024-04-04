@@ -237,8 +237,8 @@ public:
 
     VECTOR2I GetPinRoot() const;
 
-    void MirrorHorizontal( const VECTOR2I& aCenter ) override;
-    void MirrorVertical( const VECTOR2I& aCenter ) override;
+    void MirrorHorizontally( int aCenter ) override;
+    void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,

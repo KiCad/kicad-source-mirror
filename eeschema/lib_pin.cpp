@@ -1108,11 +1108,11 @@ void LIB_PIN::MoveTo( const VECTOR2I& aNewPosition )
 }
 
 
-void LIB_PIN::MirrorHorizontal( const VECTOR2I& aCenter )
+void LIB_PIN::MirrorHorizontally( int aCenter )
 {
-    m_position.x -= aCenter.x;
+    m_position.x -= aCenter;
     m_position.x *= -1;
-    m_position.x += aCenter.x;
+    m_position.x += aCenter;
 
     if( m_orientation == PIN_ORIENTATION::PIN_RIGHT )
         m_orientation = PIN_ORIENTATION::PIN_LEFT;
@@ -1121,11 +1121,11 @@ void LIB_PIN::MirrorHorizontal( const VECTOR2I& aCenter )
 }
 
 
-void LIB_PIN::MirrorVertical( const VECTOR2I& aCenter )
+void LIB_PIN::MirrorVertically( int aCenter )
 {
-    m_position.y -= aCenter.y;
+    m_position.y -= aCenter;
     m_position.y *= -1;
-    m_position.y += aCenter.y;
+    m_position.y += aCenter;
 
     if( m_orientation == PIN_ORIENTATION::PIN_UP )
         m_orientation = PIN_ORIENTATION::PIN_DOWN;

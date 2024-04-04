@@ -315,8 +315,8 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
 
                         if( libItem != nullptr )
                         {
-                            libItem->MirrorHorizontal( aRef );
-                            libItem->MirrorHorizontal( aRef );
+                            libItem->MirrorHorizontally( aRef.x );
+                            libItem->MirrorHorizontally( aRef.x );
                         }
 
                         CompareItems( item.get(), aOriginalItem );
@@ -360,8 +360,8 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
 
                         if( libItem != nullptr )
                         {
-                            libItem->MirrorVertical( aRef );
-                            libItem->MirrorVertical( aRef );
+                            libItem->MirrorVertically( aRef.y );
+                            libItem->MirrorVertically( aRef.y );
                         }
 
                         CompareItems( item.get(), aOriginalItem );

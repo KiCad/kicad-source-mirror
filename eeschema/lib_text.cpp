@@ -161,14 +161,14 @@ void LIB_TEXT::NormalizeJustification( bool inverse )
 }
 
 
-void LIB_TEXT::MirrorHorizontal( const VECTOR2I& center )
+void LIB_TEXT::MirrorHorizontally( int aCenter )
 {
     NormalizeJustification( false );
     int x = GetTextPos().x;
 
-    x -= center.x;
+    x -= aCenter;
     x *= -1;
-    x += center.x;
+    x += aCenter;
 
     if( GetTextAngle().IsHorizontal() )
     {
@@ -190,14 +190,14 @@ void LIB_TEXT::MirrorHorizontal( const VECTOR2I& center )
 }
 
 
-void LIB_TEXT::MirrorVertical( const VECTOR2I& center )
+void LIB_TEXT::MirrorVertically( int aCenter )
 {
     NormalizeJustification( false );
     int y = GetTextPos().y;
 
-    y -= center.y;
+    y -= aCenter;
     y *= -1;
-    y += center.y;
+    y += aCenter;
 
     if( GetTextAngle().IsHorizontal() )
     {

@@ -2583,10 +2583,10 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
             item.Rotate( VECTOR2I(0, 0 ), true );
 
         if( o.mirror_x )
-            item.MirrorVertical( VECTOR2I( 0, 0 ) );
+            item.MirrorVertically( 0 );
 
         if( o.mirror_y )
-            item.MirrorHorizontal( VECTOR2I( 0, 0 ) );
+            item.MirrorHorizontally( 0 );
     }
 }
 
@@ -2766,11 +2766,11 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     {
         if( static_cast<SCH_SYMBOL*>( aField->GetParent() )->GetTransform().y1 )
         {
-        // Rotate symbol 90 degrees.
-        if( orient.IsHorizontal() )
-            orient = ANGLE_VERTICAL;
-        else
-            orient = ANGLE_HORIZONTAL;
+            // Rotate symbol 90 degrees.
+            if( orient.IsHorizontal() )
+                orient = ANGLE_VERTICAL;
+            else
+                orient = ANGLE_HORIZONTAL;
         }
     }
 

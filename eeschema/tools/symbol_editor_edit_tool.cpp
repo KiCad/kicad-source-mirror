@@ -232,9 +232,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         default:
             if( xAxis )
-                item->MirrorVertical( mirrorPoint );
+                item->MirrorVertically( mirrorPoint.y );
             else
-                item->MirrorHorizontal( mirrorPoint );
+                item->MirrorHorizontally( mirrorPoint.x );
 
             break;
         }
@@ -251,9 +251,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             item = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
 
             if( xAxis )
-                item->MirrorVertical( mirrorPoint );
+                item->MirrorVertically( mirrorPoint.y );
             else
-                item->MirrorHorizontal( mirrorPoint );
+                item->MirrorHorizontally( mirrorPoint.x );
 
             m_frame->UpdateItem( item, false, true );
         }

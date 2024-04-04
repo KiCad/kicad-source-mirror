@@ -111,15 +111,15 @@ void LIB_SHAPE::Normalize()
 }
 
 
-void LIB_SHAPE::MirrorHorizontal( const VECTOR2I& aCenter )
+void LIB_SHAPE::MirrorHorizontally( int aCenter )
 {
-    flip( aCenter, true );
+    flip( VECTOR2I( aCenter, 0 ), true );
 }
 
 
-void LIB_SHAPE::MirrorVertical( const VECTOR2I& aCenter )
+void LIB_SHAPE::MirrorVertically( int aCenter )
 {
-    flip( aCenter, false );
+    flip( VECTOR2I( 0, aCenter ), false );
 }
 
 
