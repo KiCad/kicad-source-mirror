@@ -109,9 +109,9 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_SCREEN* aScreen, SCH_ITEM* aItem,
 
     if( aDirtyConnectivity )
     {
-        if( !aItem->IsConnectivityDirty()
-                && aItem->Connection()
-                && ( aItem->Connection()->Name() == m_highlightedConn ) )
+        if( !aItem->IsConnectivityDirty() && aItem->Connection()
+            && ( aItem->Connection()->Name() == m_highlightedConn
+                 || aItem->Connection()->HasDriverChanged() ) )
         {
             m_highlightedConnChanged = true;
         }

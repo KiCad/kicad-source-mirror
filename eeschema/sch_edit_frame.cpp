@@ -1739,7 +1739,8 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
                 SCH_CONNECTION* connection = aChangedItem->Connection();
 
-                if( connection && ( connection->Name() == highlightedConn ) )
+                if( connection
+                    && ( connection->Name() == highlightedConn || connection->HasDriverChanged() ) )
                     m_highlightedConnChanged = true;
             };
 
