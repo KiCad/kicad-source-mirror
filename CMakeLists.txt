@@ -1133,6 +1133,7 @@ list( APPEND CMAKE_CTEST_ARGUMENTS "--output-on-failure" )
 #================================================
 
 # Binaries ( CMake targets )
+add_subdirectory( api )
 add_subdirectory( resources )
 add_subdirectory( thirdparty )
 add_subdirectory( libs )
@@ -1147,7 +1148,7 @@ add_subdirectory( bitmap2component )
 add_subdirectory( pcb_calculator )
 add_subdirectory( plugins )             # 3D plugins must be built before kicad
 add_subdirectory( cvpcb )               # must be after pcbnew
-add_subdirectory( kicad )               # should follow pcbnew, eeschema
+add_subdirectory( kicad )               # should follow pcbnew, eeschema, api
 add_subdirectory( tools )
 add_subdirectory( utils )
 
@@ -1164,8 +1165,6 @@ endif ( KICAD_INSTALL_DEMOS )
 if( KICAD_BUILD_I18N )
     add_subdirectory( translation )
 endif()
-
-add_subdirectory( api )
 
 if( APPLE )
     set( KICAD_OSX_CODESIGN ON
