@@ -155,13 +155,47 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     fn.AssignDir( PATHS::GetStockPlugins3DPath() );
     checkPluginPath( std::string( fn.GetPathWithSep().ToUTF8() ), searchpaths );
 #else
-   // Search path on OS X is
-   // (1) Machine  /Library/Application Support/kicad/PlugIns/3d
-   checkPluginPath( PATHS::GetOSXKicadMachineDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+    	// Exe will be at <build_dir>/pcbnew/pcbnew.app/Contents/MacOS/pcbnew for standalone
+    	// Plugin will be at <build_dir>/kicad/KiCad.app/Contents/PlugIns/3d
+    	fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
 
-   // (2) Bundle   kicad.app/Contents/PlugIns/3d
-   fn.AssignDir( PATHS::GetStockPlugins3DPath() );
-   checkPluginPath( fn.GetPathWithSep(), searchpaths );
+        if( fn.GetName() == wxT( "kicad" ) )
+        {
+            fn.AppendDir( wxT( ".." ) ); // Contents
+        }
+        else
+        {
+            fn.AppendDir( wxT( ".." ) ); // Contents
+            fn.AppendDir( wxT( ".." ) ); // pcbnew.app
+            fn.AppendDir( wxT( ".." ) ); // pcbnew
+            fn.AppendDir( wxT( ".." ) ); // Build root
+            fn.AppendDir( wxT( "kicad" ) );
+            fn.AppendDir( wxT( "KiCad.app" ) );
+            fn.AppendDir( wxT( "Contents" ) );
+        }
+
+    	fn.AppendDir( wxT( "PlugIns" ) );
+    	fn.AppendDir( wxT( "3d" ) );
+    	fn.MakeAbsolute();
+
+    	std::string testpath = std::string( fn.GetPathWithSep().ToUTF8() );
+    	checkPluginPath( testpath, searchpaths );
+
+        // Also check when running KiCad manager from build dir
+
+    }
+    else
+    {
+    	// Search path on OS X is
+    	// (1) Machine  /Library/Application Support/kicad/PlugIns/3d
+    	checkPluginPath( PATHS::GetOSXKicadMachineDataDir() + wxT( "/PlugIns/3d" ), searchpaths );
+
+    	// (2) Bundle   kicad.app/Contents/PlugIns/3d
+    	fn.AssignDir( PATHS::GetStockPlugins3DPath() );
+    	checkPluginPath( fn.GetPathWithSep(), searchpaths );
+    }
 #endif
 
     std::list< wxString >::iterator sPL = searchpaths.begin();
