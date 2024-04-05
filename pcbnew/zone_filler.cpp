@@ -820,8 +820,11 @@ void ZONE_FILLER::addKnockout( BOARD_ITEM* aItem, PCB_LAYER_ID aLayer, int aGap,
         {
             if( text->IsKnockout() )
             {
-                int antiGap = -m_maxError * 2;   // Don't leave gaps around knockout text
-                text->TransformShapeToPolygon( aHoles, aLayer, antiGap, m_maxError, ERROR_OUTSIDE );
+                // Knockout text should only leave holes where the text is, not where the copper fill
+                // around it would be.
+                PCB_TEXT textCopy = *text;
+                textCopy.SetIsKnockout( false );
+                textCopy.TransformShapeToPolygon( aHoles, aLayer, 0, m_maxError, ERROR_OUTSIDE );
             }
             else
             {
