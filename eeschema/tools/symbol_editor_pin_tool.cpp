@@ -121,7 +121,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
     LIB_PIN               original_pin( *aPin );
     DIALOG_PIN_PROPERTIES dlg( m_frame, aPin );
     SCH_COMMIT            commit( m_frame );
-    LIB_SYMBOL*           parentSymbol = dynamic_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() );
+    LIB_SYMBOL*           parentSymbol = static_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() );
 
     if( aPin->GetEditFlags() == 0 )
         commit.Modify( parentSymbol );
@@ -340,7 +340,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
         if( ii == aPin->GetUnit() )
             continue;
 
-        newPin = (LIB_PIN*) aPin->Duplicate();
+        newPin = static_cast<LIB_PIN*>( aPin->Duplicate() );
 
         // To avoid mistakes, gives this pin a new pin number because
         // it does no have the save pin number as the master pin
@@ -353,7 +353,8 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
 
         try
         {
-            dynamic_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() )->AddDrawItem( newPin );
+            LIB_SYMBOL* symbol = static_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() );
+            symbol->AddDrawItem( newPin );
         }
         catch( const boost::bad_pointer& e )
         {

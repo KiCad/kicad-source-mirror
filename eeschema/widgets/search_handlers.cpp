@@ -154,9 +154,9 @@ int SYMBOL_SEARCH_HANDLER::Search( const wxString& aQuery )
     auto search =
             [frp]( SCH_ITEM* item, SCH_SHEET_PATH* sheet )
             {
-                if( item->Type() == SCH_SYMBOL_T )
+                if( item && item->Type() == SCH_SYMBOL_T )
                 {
-                    SCH_SYMBOL* sym = dynamic_cast<SCH_SYMBOL*>( item );
+                    SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( item );
 
                     // IsPower depends on non-missing lib symbol association
                     if( !sym->IsMissingLibSymbol() && sym->IsPower() )

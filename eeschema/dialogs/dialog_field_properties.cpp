@@ -432,7 +432,7 @@ DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParen
 
     if( m_fieldId == FOOTPRINT_FIELD )
     {
-        const LIB_SYMBOL* parentSymbol = dynamic_cast<const LIB_SYMBOL*>( aField->GetParentSymbol() );
+        const LIB_SYMBOL* parentSymbol = static_cast<const LIB_SYMBOL*>( aField->GetParentSymbol() );
 
         /*
          * Symbol netlist format:

@@ -82,6 +82,9 @@ void PackPolyLine( kiapi::common::types::PolyLine& aOutput, const SHAPE_LINE_CHA
 {
     for( int vertex = 0; vertex < aSlc.PointCount(); vertex = aSlc.NextShape( vertex ) )
     {
+        if( vertex < 0 )
+            break;
+
         kiapi::common::types::PolyLineNode* node = aOutput.mutable_nodes()->Add();
 
         if( aSlc.IsPtOnArc( vertex ) )

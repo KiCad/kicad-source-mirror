@@ -137,7 +137,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
     m_initialized( false )
 {
     // Creates a dummy pin to show on a panel, inside this dialog:
-    m_dummyParent = new LIB_SYMBOL( *dynamic_cast<LIB_SYMBOL*>( m_pin->GetParentSymbol() ) );
+    m_dummyParent = new LIB_SYMBOL( *static_cast<LIB_SYMBOL*>( m_pin->GetParentSymbol() ) );
     m_dummyPin = new LIB_PIN( *m_pin );
     m_dummyPin->SetParent( m_dummyParent );
     m_dummyParent->SetShowPinNames( true );
