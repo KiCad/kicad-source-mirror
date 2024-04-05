@@ -96,18 +96,19 @@ wxString SCH_TABLECELL::GetAddr() const
 }
 
 
-void SCH_TABLECELL::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_TABLECELL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                           const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     if( m_colSpan >= 1 && m_rowSpan >= 1 )
-        SCH_TEXTBOX::Print( aSettings, aOffset );
+        SCH_TEXTBOX::Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
 }
 
 
-void SCH_TABLECELL::Plot( PLOTTER* aPlotter, bool aBackground,
-                          const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_TABLECELL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                          int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( m_colSpan >= 1 && m_rowSpan >= 1 )
-        SCH_TEXTBOX::Plot( aPlotter, aBackground, aPlotSettings );
+        SCH_TEXTBOX::Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
 }
 
 

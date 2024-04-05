@@ -487,24 +487,32 @@ bool SCH_SYMBOL::HasUnitDisplayName( int aUnit )
 }
 
 
-void SCH_SYMBOL::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SYMBOL::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                                  const VECTOR2I& aOffset, bool aDimmed )
 {
     SCH_RENDER_SETTINGS cfg( *aSettings );
     cfg.m_Transform = m_transform;
     cfg.m_ShowVisibleLibFields = false;
     cfg.m_ShowHiddenLibFields = false;
 
+    if( GetDNP() )
+        aDimmed = true;
+
     if( m_part )
-        m_part->PrintBackground( &cfg, m_pos + aOffset, m_unit, m_bodyStyle, false, GetDNP() );
+        m_part->PrintBackground( &cfg, m_unit, m_bodyStyle, m_pos + aOffset, aDimmed );
 }
 
 
-void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     SCH_RENDER_SETTINGS cfg( *aSettings );
     cfg.m_Transform = m_transform;
     cfg.m_ShowVisibleLibFields = false;
     cfg.m_ShowHiddenLibFields = false;
+
+    if( m_DNP )
+        aDimmed = true;
 
     if( m_part )
     {
@@ -537,15 +545,15 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aO
             }
         }
 
-        tempSymbol.Print( &cfg, m_pos + aOffset, m_unit, m_bodyStyle, false, GetDNP() );
+        tempSymbol.Print( &cfg, m_unit, m_bodyStyle, m_pos + aOffset, false, aDimmed );
     }
     else    // Use dummy() part if the actual cannot be found.
     {
-        dummy()->Print( &cfg, m_pos + aOffset, 0, 0, false, GetDNP() );
+        dummy()->Print( &cfg, 0, 0, m_pos + aOffset, aForceNoFill, aDimmed );
     }
 
     for( SCH_FIELD& field : m_fields )
-        field.Print( &cfg, aOffset );
+        field.Print( &cfg, m_unit, m_bodyStyle, aOffset, aForceNoFill, aDimmed );
 
     if( m_DNP )
     {
@@ -805,7 +813,7 @@ void SCH_SYMBOL::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 }
 
 
-bool SCH_SYMBOL::IsAnnotated( const SCH_SHEET_PATH* aSheet )
+bool SCH_SYMBOL::IsAnnotated( const SCH_SHEET_PATH* aSheet ) const
 {
     KIID_PATH path = aSheet->Path();
 
@@ -897,7 +905,7 @@ void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 }
 
 
-const wxString SCH_SYMBOL::GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
+const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
                                               bool aAllowExtraText ) const
 {
     if( aResolve )
@@ -2165,7 +2173,7 @@ bool SCH_SYMBOL::HasConnectivityChanges( const SCH_ITEM* aItem,
 
     // Power symbol value field changes are connectivity changes.
     if( IsPower()
-      && ( GetValueFieldText( true, aInstance, false ) != symbol->GetValueFieldText( true, aInstance, false ) ) )
+      && ( GetValue( true, aInstance, false ) != symbol->GetValue( true, aInstance, false ) ) )
         return true;
 
     if( m_pins.size() != symbol->m_pins.size() )
@@ -2447,8 +2455,8 @@ bool SCH_SYMBOL::IsInNetlist() const
 }
 
 
-void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground,
-                       const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                       int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground )
         return;
@@ -2488,18 +2496,19 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground,
             }
         }
 
-        TRANSFORM temp = GetTransform();
+        getRenderSettings( aPlotter )->m_Transform = GetTransform();
         aPlotter->StartBlock( nullptr );
 
         for( bool local_background : { true, false } )
         {
-            tempSymbol.Plot( aPlotter, GetUnit(), GetBodyStyle(), local_background, m_pos, temp,
-                             GetDNP() );
+            tempSymbol.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(),
+                             m_pos, GetDNP() );
 
             for( SCH_FIELD field : m_fields )
             {
                 field.ClearRenderCache();
-                field.Plot( aPlotter, local_background, aPlotSettings );
+                field.Plot( aPlotter, local_background, aPlotOpts, GetUnit(), GetBodyStyle(),
+                            m_pos, GetDNP() );
             }
         }
 
@@ -2509,7 +2518,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground,
         SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
 
         // Plot attributes to a hypertext menu
-        if( aPlotSettings.m_PDFPropertyPopups )
+        if( aPlotOpts.m_PDFPropertyPopups )
         {
             std::vector<wxString> properties;
 
@@ -2535,6 +2544,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground,
         }
 
         aPlotter->EndBlock( nullptr );
+        getRenderSettings( aPlotter )->m_Transform = TRANSFORM();
 
         if( !m_part->IsPower() )
             aPlotter->Bookmark( GetBoundingBox(), GetRef( sheet ), _( "Symbols" ) );
@@ -2573,7 +2583,7 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
         LIB_PINS tempPins;
         tempSymbol.GetPins( tempPins, GetUnit(), GetBodyStyle() );
 
-        TRANSFORM transform = GetTransform();
+        SCH_PLOT_OPTS plotOpts;
 
         // Copy the pin info from the symbol to the temp pins
         for( unsigned i = 0; i < tempPins.size(); ++ i )
@@ -2584,7 +2594,7 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
             tempPin->SetName( symbolPin->GetShownName() );
             tempPin->SetType( symbolPin->GetType() );
             tempPin->SetShape( symbolPin->GetShape() );
-            tempPin->Plot( aPlotter, false, m_pos, transform, GetDNP() );
+            tempPin->Plot( aPlotter, false, plotOpts, GetUnit(), GetBodyStyle(), m_pos, GetDNP() );
         }
     }
 }

@@ -127,15 +127,15 @@ KIFONT::FONT* LIB_FIELD::getDrawFont() const
 }
 
 
-void LIB_FIELD::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                       bool aForceNoFill, bool aDimmed )
+void LIB_FIELD::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                       const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color = aSettings->GetLayerColor( IsVisible() ? GetDefaultLayer() : LAYER_HIDDEN );
     COLOR4D  bg = aSettings->GetBackgroundColor();
     bool     blackAndWhiteMode = GetGRForceBlackPenState();
     int      penWidth = GetEffectivePenWidth( aSettings );
-    VECTOR2I text_pos = aSettings->m_Transform.TransformCoordinate( GetTextPos() ) + aOffset;
+    VECTOR2I text_pos = aSettings->TransformCoordinate( GetTextPos() ) + aOffset;
 
     if( blackAndWhiteMode || bg == COLOR4D::UNSPECIFIED )
         bg = COLOR4D::WHITE;
@@ -332,18 +332,18 @@ void LIB_FIELD::Rotate( const VECTOR2I& center, bool aRotateCCW )
 }
 
 
-void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                      const TRANSFORM& aTransform, bool aDimmed ) const
+void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( GetText().IsEmpty() || aBackground )
         return;
 
-    RENDER_SETTINGS* renderSettings = aPlotter->RenderSettings();
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
 
     // Calculate the text orientation, according to the symbol orientation/mirror.
     EDA_ANGLE orient = GetTextAngle();
 
-    if( aTransform.y1 )  // Rotate symbol 90 deg.
+    if( renderSettings->m_Transform.y1 )  // Rotate symbol 90 deg.
     {
         if( orient.IsHorizontal() )
             orient = ANGLE_VERTICAL;
@@ -356,7 +356,7 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
 
     GR_TEXT_H_ALIGN_T hjustify = GR_TEXT_H_ALIGN_CENTER;
     GR_TEXT_V_ALIGN_T vjustify = GR_TEXT_V_ALIGN_CENTER;
-    VECTOR2I          textpos = aTransform.TransformCoordinate( bbox.Centre() ) + aOffset;
+    VECTOR2I          textpos = renderSettings->TransformCoordinate( bbox.Centre() ) + aOffset;
 
     COLOR4D color;
     COLOR4D bg;

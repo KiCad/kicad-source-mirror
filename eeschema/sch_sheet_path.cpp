@@ -74,7 +74,6 @@ public:
 
     // pure virtuals:
     void SetPosition( const VECTOR2I& ) override {}
-    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override {}
     void Move( const VECTOR2I& aMoveVector ) override {}
     void MirrorHorizontally( int aCenter ) override {}
     void MirrorVertically( int aCenter ) override {}

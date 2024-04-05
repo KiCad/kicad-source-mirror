@@ -1306,8 +1306,8 @@ void SCH_LABEL_BASE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
 }
 
 
-void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
-                           const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                           int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     static std::vector<VECTOR2I> s_poly;
 
@@ -1370,7 +1370,7 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
         }
 
         // Plot attributes to a hypertext menu
-        if( aPlotSettings.m_PDFPropertyPopups )
+        if( aPlotOpts.m_PDFPropertyPopups )
         {
             std::vector<wxString> properties;
 
@@ -1401,12 +1401,13 @@ void SCH_LABEL_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
         }
     }
 
-    for( const SCH_FIELD& field : m_fields )
-        field.Plot( aPlotter, aBackground, aPlotSettings );
+    for( SCH_FIELD& field : m_fields )
+        field.Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
 }
 
 
-void SCH_LABEL_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_LABEL_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                            const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     static std::vector<VECTOR2I> s_poly;
 
@@ -1446,7 +1447,7 @@ void SCH_LABEL_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I
     }
 
     for( SCH_FIELD& field : m_fields )
-        field.Print( aSettings, aOffset );
+        field.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
 }
 
 

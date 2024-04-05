@@ -146,9 +146,13 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
     {
         PRIORITY item_priority = GetDriverPriority( item );
 
-        if( item_priority == PRIORITY::PIN
-                && !static_cast<SCH_PIN*>( item )->GetParentSymbol()->IsInNetlist() )
-            continue;
+        if( item_priority == PRIORITY::PIN )
+        {
+            SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+
+            if( !static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() )->IsInNetlist() )
+                continue;
+        }
 
         if( item_priority >= PRIORITY::HIER_LABEL )
             strong_drivers.insert( item );
@@ -500,7 +504,7 @@ CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* 
     case SCH_PIN_T:
     {
         SCH_PIN* sch_pin = static_cast<SCH_PIN*>( aDriver );
-        SCH_SYMBOL* sym = sch_pin->GetParentSymbol();
+        const SCH_SYMBOL* sym = static_cast<SCH_SYMBOL*>( sch_pin->GetParentSymbol() );
 
         if( sch_pin->IsGlobalPower() )
             return PRIORITY::POWER_PIN;
@@ -1460,7 +1464,7 @@ void CONNECTION_GRAPH::generateGlobalPowerPinSubGraphs()
         // in the symbol, but we support legacy non-power symbols with global
         // power connections based on invisible, power-in, pin's names.
         if( pin->GetLibPin()->GetParentSymbol()->IsPower() )
-            connection->SetName( pin->GetParentSymbol()->GetValueFieldText( true, &sheet, false ) );
+            connection->SetName( pin->GetParentSymbol()->GetValue( true, &sheet, false ) );
         else
             connection->SetName( pin->GetShownName() );
 

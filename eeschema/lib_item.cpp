@@ -169,13 +169,6 @@ const KIFONT::METRICS& LIB_ITEM::GetFontMetrics() const
 }
 
 
-void LIB_ITEM::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                      bool aForceNoFill, bool aDimmed )
-{
-    print( aSettings, aOffset, aForceNoFill, aDimmed );
-}
-
-
 void LIB_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Basic fallback

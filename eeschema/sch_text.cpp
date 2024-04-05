@@ -194,7 +194,8 @@ KIFONT::FONT* SCH_TEXT::getDrawFont() const
 }
 
 
-void SCH_TEXT::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_TEXT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                      const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     COLOR4D  color = GetTextColor();
     bool     blackAndWhiteMode = GetGRForceBlackPenState();
@@ -334,8 +335,8 @@ void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground,
-                     const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                     int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground )
         return;

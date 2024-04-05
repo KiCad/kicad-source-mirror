@@ -134,7 +134,8 @@ const BOX2I SCH_BITMAP::GetBoundingBox() const
 }
 
 
-void SCH_BITMAP::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_BITMAP::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     VECTOR2I pos = m_pos + aOffset;
 
@@ -203,8 +204,8 @@ bool SCH_BITMAP::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) c
 }
 
 
-void SCH_BITMAP::Plot( PLOTTER* aPlotter, bool aBackground,
-                       const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_BITMAP::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                       int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground )
     {

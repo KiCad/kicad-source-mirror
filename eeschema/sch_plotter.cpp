@@ -84,11 +84,13 @@ SCH_PLOTTER::SCH_PLOTTER( SCH_EDIT_FRAME* aFrame ) :
 }
 
 
-wxFileName SCH_PLOTTER::getOutputFilenameSingle( const SCH_PLOT_SETTINGS& aPlotSettings,
-                                            REPORTER* aReporter, const wxString& aExt )
+wxFileName SCH_PLOTTER::getOutputFilenameSingle( const SCH_PLOT_OPTS& aPlotOpts,
+                                                 REPORTER* aReporter, const wxString& aExt )
 {
-    if( !aPlotSettings.m_outputFile.empty() )
-        return aPlotSettings.m_outputFile;
+    if( !aPlotOpts.m_outputFile.empty() )
+    {
+        return aPlotOpts.m_outputFile;
+    }
     else
     {
         wxString fname = m_schematic->GetUniqueFilenameForCurrentSheet();
@@ -99,14 +101,14 @@ wxFileName SCH_PLOTTER::getOutputFilenameSingle( const SCH_PLOT_SETTINGS& aPlotS
         fname.Replace( "/", "_" );
         fname.Replace( "\\", "_" );
 
-        return createPlotFileName( aPlotSettings, fname, aExt, aReporter );
+        return createPlotFileName( aPlotOpts, fname, aExt, aReporter );
     }
 
 }
 
 
-void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
-                                 RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
+void SCH_PLOTTER::createPDFFile( const SCH_PLOT_OPTS& aPlotOpts,
+                                 SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
     SCH_SHEET_PATH oldsheetpath = m_schematic->CurrentSheet(); // sheetpath is saved here
 
@@ -117,14 +119,14 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
      */
     SCH_SHEET_LIST sheetList;
 
-    if( aPlotSettings.m_plotAll || aPlotSettings.m_plotPages.size() > 0 )
+    if( aPlotOpts.m_plotAll || aPlotOpts.m_plotPages.size() > 0 )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
-        if( aPlotSettings.m_plotPages.size() > 0 )
-            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+        if( aPlotOpts.m_plotPages.size() > 0 )
+            sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
     }
     else
     {
@@ -135,7 +137,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
     // Allocate the plotter and set the job level parameter
     PDF_PLOTTER* plotter = new PDF_PLOTTER();
     plotter->SetRenderSettings( aRenderSettings );
-    plotter->SetColorMode( !aPlotSettings.m_blackAndWhite );
+    plotter->SetColorMode( !aPlotOpts.m_blackAndWhite );
     plotter->SetCreator( wxT( "Eeschema-PDF" ) );
     plotter->SetTitle( ExpandTextVars( m_schematic->RootScreen()->GetTitleBlock().GetTitle(),
                                        &m_schematic->Prj() ) );
@@ -153,7 +155,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
         wxString    sheetName = sheetList[i].Last()->GetFields()[SHEETNAME].GetShownText( false );
 
-        if( aPlotSettings.m_PDFMetadata )
+        if( aPlotOpts.m_PDFMetadata )
         {
             msg = wxS( "AUTHOR" );
 
@@ -171,7 +173,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
             try
             {
                 wxString ext = PDF_PLOTTER::GetDefaultFileExtension();
-                plotFileName = getOutputFilenameSingle( aPlotSettings, aReporter, ext );
+                plotFileName = getOutputFilenameSingle( aPlotOpts, aReporter, ext );
 
                 m_lastOutputFilePath = plotFileName.GetFullPath();
 
@@ -191,7 +193,7 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
                 }
 
                 // Open the plotter and do the first page
-                setupPlotPagePDF( plotter, screen, aPlotSettings );
+                setupPlotPagePDF( plotter, screen, aPlotOpts );
 
                 plotter->StartPlot( sheetList[i].GetPageNumber(), sheetName );
             }
@@ -213,11 +215,11 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
             /* For the following pages you need to close the (finished) page,
              *  reconfigure, and then start a new one */
             plotter->ClosePage();
-            setupPlotPagePDF( plotter, screen, aPlotSettings );
+            setupPlotPagePDF( plotter, screen, aPlotOpts );
             plotter->StartPage( sheetList[i].GetPageNumber(), sheetName );
         }
 
-        plotOneSheetPDF( plotter, screen, aPlotSettings );
+        plotOneSheetPDF( plotter, screen, aPlotOpts );
     }
 
     // Everything done, close the plot and restore the environment
@@ -233,9 +235,9 @@ void SCH_PLOTTER::createPDFFile( const SCH_PLOT_SETTINGS& aPlotSettings,
 
 
 void SCH_PLOTTER::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
-                                   const SCH_PLOT_SETTINGS& aPlotSettings )
+                                   const SCH_PLOT_OPTS& aPlotOpts )
 {
-    if( aPlotSettings.m_useBackgroundColor && aPlotter->GetColorMode() )
+    if( aPlotOpts.m_useBackgroundColor && aPlotter->GetColorMode() )
     {
         aPlotter->SetColor( aPlotter->RenderSettings()->GetBackgroundColor() );
         VECTOR2I end( aPlotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
@@ -243,7 +245,7 @@ void SCH_PLOTTER::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
         aPlotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
-    if( aPlotSettings.m_plotDrawingSheet )
+    if( aPlotOpts.m_plotDrawingSheet )
     {
         COLOR4D color = COLOR4D::BLACK;
 
@@ -262,19 +264,19 @@ void SCH_PLOTTER::plotOneSheetPDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
                           aScreen->GetFileName(), color, aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( aPlotter, aPlotSettings );
+    aScreen->Plot( aPlotter, aPlotOpts );
 }
 
 
 void SCH_PLOTTER::setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
-                                    const SCH_PLOT_SETTINGS& aPlotSettings )
+                                    const SCH_PLOT_OPTS& aPlotOpts )
 {
     PAGE_INFO   plotPage;                               // page size selected to plot
 
     // Considerations on page size and scaling requests
     const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
 
-    switch( aPlotSettings.m_pageSizeSelect )
+    switch( aPlotOpts.m_pageSizeSelect )
     {
     case PAGE_SIZE_A:
         plotPage.SetType( wxT( "A" ) );
@@ -302,8 +304,8 @@ void SCH_PLOTTER::setupPlotPagePDF( PLOTTER* aPlotter, SCH_SCREEN* aScreen,
 }
 
 
-void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
-                                 RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
+void SCH_PLOTTER::createPSFiles( const SCH_PLOT_OPTS& aPlotOpts,
+                                 SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
     SCH_SHEET_PATH oldsheetpath = m_schematic->CurrentSheet(); // sheetpath is saved here
     PAGE_INFO      plotPage;                                   // page size selected to plot
@@ -317,15 +319,15 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
      */
     SCH_SHEET_LIST sheetList;
 
-    if( aPlotSettings.m_plotAll )
+    if( aPlotOpts.m_plotAll )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
-        if( aPlotSettings.m_plotPages.size() > 0 )
+        if( aPlotOpts.m_plotPages.size() > 0 )
         {
-            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+            sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
         }
     }
     else
@@ -342,7 +344,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         SCH_SCREEN* screen = m_schematic->CurrentSheet().LastScreen();
         PAGE_INFO   actualPage = screen->GetPageSettings();
 
-        switch( aPlotSettings.m_pageSizeSelect )
+        switch( aPlotOpts.m_pageSizeSelect )
         {
         case PAGE_SIZE_A:
             plotPage.SetType( wxT( "A" ) );
@@ -373,7 +375,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
             fname.Replace( "/", "_" );
             fname.Replace( "\\", "_" );
             wxString   ext = PS_PLOTTER::GetDefaultFileExtension();
-            wxFileName plotFileName = createPlotFileName( aPlotSettings, fname, ext, aReporter );
+            wxFileName plotFileName = createPlotFileName( aPlotOpts, fname, ext, aReporter );
 
             m_lastOutputFilePath = plotFileName.GetFullPath();
 
@@ -381,7 +383,7 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
                 return;
 
             if( plotOneSheetPS( plotFileName.GetFullPath(), screen, aRenderSettings, actualPage,
-                                plot_offset, scale, aPlotSettings ) )
+                                plot_offset, scale, aPlotOpts ) )
             {
                 if( aReporter )
                 {
@@ -419,14 +421,14 @@ void SCH_PLOTTER::createPSFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
 
 bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen,
-                                            RENDER_SETTINGS* aRenderSettings,
-                                            const PAGE_INFO& aPageInfo, const VECTOR2I& aPlot0ffset,
-                                            double aScale, const SCH_PLOT_SETTINGS& aPlotSettings )
+                                  RENDER_SETTINGS* aRenderSettings, const PAGE_INFO& aPageInfo,
+                                  const VECTOR2I& aPlot0ffset, double aScale,
+                                  const SCH_PLOT_OPTS& aPlotOpts )
 {
     PS_PLOTTER* plotter = new PS_PLOTTER();
     plotter->SetRenderSettings( aRenderSettings );
     plotter->SetPageSettings( aPageInfo );
-    plotter->SetColorMode( !aPlotSettings.m_blackAndWhite );
+    plotter->SetColorMode( !aPlotOpts.m_blackAndWhite );
 
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlot0ffset, schIUScale.IU_PER_MILS / 10, aScale, false );
@@ -444,7 +446,7 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
 
     plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
 
-    if( aPlotSettings.m_useBackgroundColor && plotter->GetColorMode() )
+    if( aPlotOpts.m_useBackgroundColor && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
 
@@ -453,7 +455,7 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
         plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
-    if( aPlotSettings.m_plotDrawingSheet )
+    if( aPlotOpts.m_plotDrawingSheet )
     {
         wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
@@ -467,7 +469,7 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
                           aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( plotter, aPlotSettings );
+    aScreen->Plot( plotter, aPlotOpts );
 
     plotter->EndPlot();
     delete plotter;
@@ -476,22 +478,22 @@ bool SCH_PLOTTER::plotOneSheetPS( const wxString& aFileName, SCH_SCREEN* aScreen
 }
 
 
-void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
-                                  RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
+void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_OPTS& aPlotOpts,
+                                  SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
     wxString       msg;
     SCH_SHEET_PATH oldsheetpath = m_schematic->CurrentSheet();
     SCH_SHEET_LIST sheetList;
 
-    if( aPlotSettings.m_plotAll )
+    if( aPlotOpts.m_plotAll )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
-        if( aPlotSettings.m_plotPages.size() > 0 )
+        if( aPlotOpts.m_plotPages.size() > 0 )
         {
-            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+            sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
         }
     }
     else
@@ -520,7 +522,7 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
             fname.Replace( "/", "_" );
             fname.Replace( "\\", "_" );
             wxString   ext = SVG_PLOTTER::GetDefaultFileExtension();
-            wxFileName plotFileName = createPlotFileName( aPlotSettings, fname, ext, aReporter );
+            wxFileName plotFileName = createPlotFileName( aPlotOpts, fname, ext, aReporter );
 
             m_lastOutputFilePath = plotFileName.GetFullPath();
 
@@ -528,7 +530,7 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
                 return;
 
             bool success = plotOneSheetSVG( plotFileName.GetFullPath(), screen, aRenderSettings,
-                                            aPlotSettings );
+                                            aPlotOpts );
 
             if( !success )
             {
@@ -569,14 +571,14 @@ void SCH_PLOTTER::createSVGFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
 
 bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScreen,
-                                   RENDER_SETTINGS*         aRenderSettings,
-                                   const SCH_PLOT_SETTINGS& aPlotSettings )
+                                   RENDER_SETTINGS* aRenderSettings,
+                                   const SCH_PLOT_OPTS& aPlotOpts )
 {
     PAGE_INFO plotPage;
     // Adjust page size and scaling requests
     const PAGE_INFO& actualPage = aScreen->GetPageSettings(); // page size selected in schematic
 
-    switch( aPlotSettings.m_pageSizeSelect )
+    switch( aPlotOpts.m_pageSizeSelect )
     {
     case PAGE_SIZE_A:
         plotPage.SetType( wxT( "A" ) );
@@ -597,7 +599,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
     SVG_PLOTTER* plotter = new SVG_PLOTTER();
     plotter->SetRenderSettings( aRenderSettings );
     plotter->SetPageSettings( plotPage );
-    plotter->SetColorMode( aPlotSettings.m_blackAndWhite ? false : true );
+    plotter->SetColorMode( aPlotOpts.m_blackAndWhite ? false : true );
     VECTOR2I plot_offset;
 
     double  scalex = (double) plotPage.GetWidthMils() / actualPage.GetWidthMils();
@@ -620,7 +622,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
 
     plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
 
-    if( aPlotSettings.m_useBackgroundColor && plotter->GetColorMode() )
+    if( aPlotOpts.m_useBackgroundColor && plotter->GetColorMode() )
     {
         plotter->SetColor( plotter->RenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
         VECTOR2I end( plotter->PageSettings().GetWidthIU( schIUScale.IU_PER_MILS ),
@@ -628,7 +630,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
         plotter->Rect( VECTOR2I( 0, 0 ), end, FILL_T::FILLED_SHAPE, 1.0 );
     }
 
-    if( aPlotSettings.m_plotDrawingSheet )
+    if( aPlotOpts.m_plotDrawingSheet )
     {
         wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
@@ -642,7 +644,7 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
                           aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( plotter, aPlotSettings );
+    aScreen->Plot( plotter, aPlotOpts );
 
     plotter->EndPlot();
     delete plotter;
@@ -651,8 +653,8 @@ bool SCH_PLOTTER::plotOneSheetSVG( const wxString& aFileName, SCH_SCREEN* aScree
 }
 
 
-void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
-                                   RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
+void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_OPTS& aPlotOpts,
+                                   SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
     SCH_SCREEN*    screen = m_schematic->RootScreen();
     SCH_SHEET_PATH oldsheetpath = m_schematic->CurrentSheet();
@@ -664,15 +666,15 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
      */
     SCH_SHEET_LIST  sheetList;
 
-    if( aPlotSettings.m_plotAll )
+    if( aPlotOpts.m_plotAll )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
-        if( aPlotSettings.m_plotPages.size() > 0 )
+        if( aPlotOpts.m_plotPages.size() > 0 )
         {
-            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
+            sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
         }
     }
     else
@@ -697,7 +699,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         PAGE_INFO           plotPage = curPage;
 
         // if plotting on a page size other than curPage
-        plotPage.SetType( plot_sheet_list( aPlotSettings.m_HPGLPaperSizeSelect ) );
+        plotPage.SetType( plot_sheet_list( aPlotOpts.m_HPGLPaperSizeSelect ) );
 
         // Calculation of conversion scales.
         double  plot_scale = (double) plotPage.GetWidthMils() / curPage.GetWidthMils();
@@ -706,7 +708,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
         VECTOR2I plotOffset;
         wxString msg;
 
-        if( aPlotSettings.m_HPGLPlotOrigin == HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER )
+        if( aPlotOpts.m_HPGLPlotOrigin == HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER )
         {
             plotOffset.x = plotPage.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
             plotOffset.y = -plotPage.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
@@ -721,7 +723,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
             fname.Replace( "/", "_" );
             fname.Replace( "\\", "_" );
             wxString ext = HPGL_PLOTTER::GetDefaultFileExtension();
-            wxFileName plotFileName = createPlotFileName( aPlotSettings, fname, ext, aReporter );
+            wxFileName plotFileName = createPlotFileName( aPlotOpts, fname, ext, aReporter );
 
             if( !plotFileName.IsOk() )
                 return;
@@ -729,7 +731,7 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
             LOCALE_IO toggle;
 
             if( plotOneSheetHpgl( plotFileName.GetFullPath(), screen, curPage, aRenderSettings,
-                                  plotOffset, plot_scale, aPlotSettings ) )
+                                  plotOffset, plot_scale, aPlotOpts ) )
             {
                 if( aReporter )
                 {
@@ -765,13 +767,10 @@ void SCH_PLOTTER::createHPGLFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 }
 
 
-bool SCH_PLOTTER::plotOneSheetHpgl( const wxString&   aFileName,
-                                    SCH_SCREEN*       aScreen,
-                                    const PAGE_INFO&  aPageInfo,
-                                    RENDER_SETTINGS*  aRenderSettings,
-                                    const VECTOR2I&   aPlot0ffset,
-                                    double            aScale,
-                                    const SCH_PLOT_SETTINGS&   aPlotSettings )
+bool SCH_PLOTTER::plotOneSheetHpgl( const wxString& aFileName, SCH_SCREEN* aScreen,
+                                    const PAGE_INFO& aPageInfo, RENDER_SETTINGS* aRenderSettings,
+                                    const VECTOR2I& aPlot0ffset, double aScale,
+                                    const SCH_PLOT_OPTS& aPlotOpts )
 {
     HPGL_PLOTTER* plotter = new HPGL_PLOTTER();
     // Currently, plot units are in decimil
@@ -784,7 +783,7 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString&   aFileName,
     // TODO this could be configurable
     plotter->SetTargetChordLength( schIUScale.mmToIU( 0.6 ) );
 
-    switch( aPlotSettings.m_HPGLPlotOrigin )
+    switch( aPlotOpts.m_HPGLPlotOrigin )
     {
     case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_BOT_LEFT:
     case HPGL_PLOT_ORIGIN_AND_UNITS::PLOTTER_CENTER:
@@ -814,10 +813,10 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString&   aFileName,
 
     // Pen num and pen speed are not initialized here.
     // Default HPGL driver values are used
-    plotter->SetPenDiameter( aPlotSettings.m_HPGLPenSize );
+    plotter->SetPenDiameter( aPlotOpts.m_HPGLPenSize );
     plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
 
-    if( aPlotSettings.m_plotDrawingSheet )
+    if( aPlotOpts.m_plotDrawingSheet )
     {
         wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
@@ -830,7 +829,7 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString&   aFileName,
                           COLOR4D::BLACK, aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( plotter, aPlotSettings );
+    aScreen->Plot( plotter, aPlotOpts );
 
     plotter->EndPlot();
 
@@ -840,8 +839,8 @@ bool SCH_PLOTTER::plotOneSheetHpgl( const wxString&   aFileName,
 }
 
 
-void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
-                                  RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
+void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_OPTS& aPlotOpts,
+                                  SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
     SCH_SHEET_PATH  oldsheetpath = m_schematic->CurrentSheet();
 
@@ -852,16 +851,14 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
      */
     SCH_SHEET_LIST sheetList;
 
-    if( aPlotSettings.m_plotAll )
+    if( aPlotOpts.m_plotAll )
     {
         sheetList.BuildSheetList( &m_schematic->Root(), true );
         sheetList.SortByPageNumbers();
 
         // remove the non-selected pages if we are in plot pages mode
-        if( aPlotSettings.m_plotPages.size() > 0 )
-        {
-            sheetList.TrimToPageNumbers( aPlotSettings.m_plotPages );
-        }
+        if( aPlotOpts.m_plotPages.size() > 0 )
+            sheetList.TrimToPageNumbers( aPlotOpts.m_plotPages );
     }
     else
     {
@@ -889,7 +886,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
             fname.Replace( "/", "_" );
             fname.Replace( "\\", "_" );
             wxString   ext = DXF_PLOTTER::GetDefaultFileExtension();
-            wxFileName plotFileName = createPlotFileName( aPlotSettings, fname, ext, aReporter );
+            wxFileName plotFileName = createPlotFileName( aPlotOpts, fname, ext, aReporter );
 
             m_lastOutputFilePath = plotFileName.GetFullPath();
 
@@ -897,7 +894,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
                 return;
 
             if( plotOneSheetDXF( plotFileName.GetFullPath(), screen, aRenderSettings, plot_offset,
-                                 1.0, aPlotSettings ) )
+                                 1.0, aPlotOpts ) )
             {
                 if( aReporter )
                 {
@@ -938,7 +935,7 @@ void SCH_PLOTTER::createDXFFiles( const SCH_PLOT_SETTINGS& aPlotSettings,
 
 bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScreen,
                                    RENDER_SETTINGS* aRenderSettings, const VECTOR2I& aPlotOffset,
-                                   double aScale, const SCH_PLOT_SETTINGS& aPlotSettings )
+                                   double aScale, const SCH_PLOT_OPTS& aPlotOpts )
 {
     aRenderSettings->LoadColors( m_colorSettings );
     aRenderSettings->SetDefaultPenWidth( 0 );
@@ -948,7 +945,7 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
 
     plotter->SetRenderSettings( aRenderSettings );
     plotter->SetPageSettings( pageInfo );
-    plotter->SetColorMode( !aPlotSettings.m_blackAndWhite );
+    plotter->SetColorMode( !aPlotOpts.m_blackAndWhite );
 
     // Currently, plot units are in decimil
     plotter->SetViewport( aPlotOffset, schIUScale.IU_PER_MILS / 10, aScale, false );
@@ -966,7 +963,7 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
 
     plotter->StartPlot( m_schematic->CurrentSheet().GetPageNumber() );
 
-    if( aPlotSettings.m_plotDrawingSheet )
+    if( aPlotOpts.m_plotDrawingSheet )
     {
         wxString sheetName = m_schematic->CurrentSheet().Last()->GetName();
         wxString sheetPath = m_schematic->CurrentSheet().PathHumanReadable();
@@ -981,7 +978,7 @@ bool SCH_PLOTTER::plotOneSheetDXF( const wxString& aFileName, SCH_SCREEN* aScree
                           aScreen->GetVirtualPageNumber() == 1 );
     }
 
-    aScreen->Plot( plotter, aPlotSettings );
+    aScreen->Plot( plotter, aPlotOpts );
 
     // finish
     plotter->EndPlot();
@@ -1006,14 +1003,14 @@ void SCH_PLOTTER::restoreEnvironment( PDF_PLOTTER* aPlotter, SCH_SHEET_PATH& aOl
 }
 
 
-wxFileName SCH_PLOTTER::createPlotFileName( const SCH_PLOT_SETTINGS& aPlotSettings,
-                                            const wxString&          aPlotFileName,
+wxFileName SCH_PLOTTER::createPlotFileName( const SCH_PLOT_OPTS& aPlotOpts,
+                                            const wxString& aPlotFileName,
                                             const wxString& aExtension, REPORTER* aReporter )
 {
     wxFileName retv;
     wxFileName tmp;
 
-    tmp.SetPath( aPlotSettings.m_outputDirectory );
+    tmp.SetPath( aPlotOpts.m_outputDirectory );
     retv.SetPath( tmp.GetPath() );
 
     if( !aPlotFileName.IsEmpty() )
@@ -1047,20 +1044,20 @@ wxFileName SCH_PLOTTER::createPlotFileName( const SCH_PLOT_SETTINGS& aPlotSettin
 }
 
 
-void SCH_PLOTTER::Plot( PLOT_FORMAT aPlotFormat, const SCH_PLOT_SETTINGS& aPlotSettings,
-                        RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
+void SCH_PLOTTER::Plot( PLOT_FORMAT aPlotFormat, const SCH_PLOT_OPTS& aPlotOpts,
+                        SCH_RENDER_SETTINGS* aRenderSettings, REPORTER* aReporter )
 {
     SETTINGS_MANAGER& settingsMgr = Pgm().GetSettingsManager();
 
-    m_colorSettings = settingsMgr.GetColorSettings( aPlotSettings.m_theme );
+    m_colorSettings = settingsMgr.GetColorSettings( aPlotOpts.m_theme );
 
     switch( aPlotFormat )
     {
     default:
-    case PLOT_FORMAT::POST: createPSFiles( aPlotSettings, aRenderSettings, aReporter ); break;
-    case PLOT_FORMAT::DXF: createDXFFiles( aPlotSettings, aRenderSettings, aReporter ); break;
-    case PLOT_FORMAT::PDF: createPDFFile( aPlotSettings, aRenderSettings, aReporter ); break;
-    case PLOT_FORMAT::SVG: createSVGFiles( aPlotSettings, aRenderSettings, aReporter ); break;
-    case PLOT_FORMAT::HPGL: createHPGLFiles( aPlotSettings, aRenderSettings, aReporter ); break;
+    case PLOT_FORMAT::POST: createPSFiles( aPlotOpts, aRenderSettings, aReporter );   break;
+    case PLOT_FORMAT::DXF:  createDXFFiles( aPlotOpts, aRenderSettings, aReporter );  break;
+    case PLOT_FORMAT::PDF:  createPDFFile( aPlotOpts, aRenderSettings, aReporter );   break;
+    case PLOT_FORMAT::SVG:  createSVGFiles( aPlotOpts, aRenderSettings, aReporter );  break;
+    case PLOT_FORMAT::HPGL: createHPGLFiles( aPlotOpts, aRenderSettings, aReporter ); break;
     }
 }

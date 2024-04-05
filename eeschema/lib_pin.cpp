@@ -195,8 +195,8 @@ VECTOR2I LIB_PIN::GetPinRoot() const
 }
 
 
-void LIB_PIN::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                     bool aForceNoFill, bool aDimmed )
+void LIB_PIN::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                     const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     LIB_SYMBOL* part = dynamic_cast<LIB_SYMBOL*>( GetParentSymbol() );
 
@@ -206,7 +206,7 @@ void LIB_PIN::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
     PIN_ORIENTATION orient = PinDrawOrient( aSettings->m_Transform );
 
     /* Calculate the pin position */
-    VECTOR2I pos1 = aSettings->m_Transform.TransformCoordinate( m_position ) + aOffset;
+    VECTOR2I pos1 = aSettings->TransformCoordinate( m_position ) + aOffset;
 
     if( IsVisible() || aSettings->m_ShowHiddenLibFields )
     {
@@ -244,7 +244,7 @@ void LIB_PIN::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffs
 }
 
 
-void LIB_PIN::printPinSymbol( const RENDER_SETTINGS* aSettings, const VECTOR2I& aPos,
+void LIB_PIN::printPinSymbol( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aPos,
                               PIN_ORIENTATION aOrient, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
@@ -616,13 +616,14 @@ void LIB_PIN::printPinElectricalTypeName( const RENDER_SETTINGS* aSettings, VECT
 }
 
 
-void LIB_PIN::PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition,
-                          PIN_ORIENTATION aOrientation, bool aDimmed ) const
+void LIB_PIN::PlotPinType( PLOTTER *aPlotter, const VECTOR2I &aPosition,
+                           PIN_ORIENTATION aOrientation, bool aDimmed ) const
 {
-    int     MapX1, MapY1, x1, y1;
-    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_PIN );
-    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
-    int     penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
+    int                  MapX1, MapY1, x1, y1;
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    COLOR4D              color = renderSettings->GetLayerColor( LAYER_PIN );
+    COLOR4D              bg = renderSettings->GetBackgroundColor();
+    int                  penWidth = GetEffectivePenWidth( renderSettings );
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
@@ -1163,18 +1164,19 @@ void LIB_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                    const TRANSFORM& aTransform, bool aDimmed ) const
+void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                    int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( !IsVisible() || aBackground )
         return;
 
-    const SYMBOL* part = GetParentSymbol();
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    const SYMBOL*        part = GetParentSymbol();
+    PIN_ORIENTATION      orient = PinDrawOrient( renderSettings->m_Transform );
 
-    PIN_ORIENTATION orient = PinDrawOrient( aTransform );
-    VECTOR2I pos = aTransform.TransformCoordinate( m_position ) + aOffset;
+    VECTOR2I pos = renderSettings->TransformCoordinate( m_position ) + aOffset;
 
-    PlotSymbol( aPlotter, pos, orient, aDimmed );
+    PlotPinType( aPlotter, pos, orient, aDimmed );
     PlotPinTexts( aPlotter, pos, orient, part->GetPinNameOffset(), part->GetShowPinNumbers(),
                   part->GetShowPinNames(), aDimmed );
 }

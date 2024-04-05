@@ -625,14 +625,14 @@ static SPIN_STYLE orientLabel( SCH_PIN* aPin )
 
     ORIENT o = orientations[ 0 ];
 
-    SCH_SYMBOL* parentSymbol = aPin->GetParentSymbol();
+    const SCH_SYMBOL* parentSymbol = static_cast<const SCH_SYMBOL*>( aPin->GetParentSymbol() );
 
     if( !parentSymbol )
         return spin;
 
     int symbolOrientation = parentSymbol->GetOrientation();
 
-    for( auto& i : orientations )
+    for( const ORIENT& i : orientations )
     {
         if( i.flag == symbolOrientation )
         {

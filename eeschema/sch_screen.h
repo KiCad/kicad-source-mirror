@@ -256,7 +256,7 @@ public:
      *
      * @param[in] aPlotter The plotter object to plot to.
      */
-    void Plot( PLOTTER* aPlotter, const SCH_PLOT_SETTINGS& aPlotSettings ) const;
+    void Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const;
 
     /**
      * Remove \a aItem from the schematic associated with this screen.

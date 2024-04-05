@@ -262,7 +262,8 @@ KIFONT::FONT* SCH_TEXTBOX::getDrawFont() const
 }
 
 
-void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                         const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*      DC = aSettings->GetPrintDC();
     int        penWidth = GetPenWidth();
@@ -272,7 +273,7 @@ void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& a
     COLOR4D    color = GetStroke().GetColor();
     LINE_STYLE lineStyle = GetStroke().GetLineStyle();
 
-    if( GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode )
+    if( GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode && !aForceNoFill )
         GRFilledRect( DC, pt1, pt2, 0, GetFillColor(), GetFillColor() );
 
     if( penWidth > 0 )
@@ -408,12 +409,12 @@ BITMAPS SCH_TEXTBOX::GetMenuImage() const
 }
 
 
-void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground,
-                        const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                        int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground )
     {
-        SCH_SHAPE::Plot( aPlotter, aBackground, aPlotSettings );
+        SCH_SHAPE::Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
         return;
     }
 

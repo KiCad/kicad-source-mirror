@@ -1141,20 +1141,20 @@ bool SCH_SHEET::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 }
 
 
-void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground,
-                      const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground && !aPlotter->GetColorMode() )
         return;
 
-    SCH_RENDER_SETTINGS* cfg = static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
     COLOR4D              borderColor = GetBorderColor();
     COLOR4D              backgroundColor = GetBackgroundColor();
 
-    if( cfg->m_OverrideItemColors || borderColor == COLOR4D::UNSPECIFIED )
+    if( renderSettings->m_OverrideItemColors || borderColor == COLOR4D::UNSPECIFIED )
         borderColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET );
 
-    if( cfg->m_OverrideItemColors || backgroundColor == COLOR4D::UNSPECIFIED )
+    if( renderSettings->m_OverrideItemColors || backgroundColor == COLOR4D::UNSPECIFIED )
         backgroundColor = aPlotter->RenderSettings()->GetLayerColor( LAYER_SHEET_BACKGROUND );
 
     if( aBackground && backgroundColor.a > 0.0 )
@@ -1186,15 +1186,16 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground,
 
     // Plot sheet pins
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Plot( aPlotter, aBackground, aPlotSettings );
+        sheetPin->Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
 
     // Plot the fields
-    for( const SCH_FIELD& field : m_fields )
-        field.Plot( aPlotter, aBackground, aPlotSettings );
+    for( SCH_FIELD& field : m_fields )
+        field.Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
 }
 
 
-void SCH_SHEET::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SHEET::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                       const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*    DC = aSettings->GetPrintDC();
     VECTOR2I pos = m_pos + aOffset;
@@ -1217,10 +1218,10 @@ void SCH_SHEET::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOf
     GRRect( DC, pos, pos + m_size, lineWidth, border );
 
     for( SCH_FIELD& field : m_fields )
-        field.Print( aSettings, aOffset );
+        field.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
 
     for( SCH_SHEET_PIN* sheetPin : m_pins )
-        sheetPin->Print( aSettings, aOffset );
+        sheetPin->Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
 }
 
 

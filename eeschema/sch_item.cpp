@@ -33,6 +33,7 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <schematic.h>
+#include <symbol.h>
 #include <trace_helpers.h>
 #include <general.h>
 #include <netclass.h>
@@ -123,6 +124,22 @@ SCHEMATIC* SCH_ITEM::Schematic() const
     }
 
     return nullptr;
+}
+
+
+const SYMBOL* SCH_ITEM::GetParentSymbol() const
+{
+    wxCHECK( m_parent->Type() == SCH_SYMBOL_T, nullptr );
+
+    return static_cast<const SCH_SYMBOL*>( m_parent );
+}
+
+
+SYMBOL* SCH_ITEM::GetParentSymbol()
+{
+    wxCHECK( m_parent->Type() == SCH_SYMBOL_T, nullptr );
+
+    return static_cast<SCH_SYMBOL*>( m_parent );
 }
 
 

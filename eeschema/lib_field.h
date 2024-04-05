@@ -175,8 +175,11 @@ public:
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
-    void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-               const TRANSFORM& aTransform, bool aDimmed ) const override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override;
+
+    void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+               int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 
@@ -217,15 +220,6 @@ private:
      *      - Field height.
      */
     int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const override;
-
-    /**
-     * Print the field.
-     *
-     * If \a aData not NULL, \a aData must point a wxString which is used instead of
-     * the m_Text
-     */
-    void print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, bool aForceNoFill,
-                bool aDimmed ) override;
 
     /**
      * Calculate the new circle at \a aPosition when editing.

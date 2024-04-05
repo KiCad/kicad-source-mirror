@@ -253,8 +253,8 @@ void LIB_TEXT::Rotate( const VECTOR2I& center, bool aRotateCCW )
 }
 
 
-void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
-                     const TRANSFORM& aTransform, bool aDimmed ) const
+void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                     int aUnit, int aBodyStyle, const VECTOR2I& offset, bool aDimmed )
 {
     wxASSERT( plotter != nullptr );
 
@@ -264,7 +264,7 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
     if( aBackground )
         return;
 
-    RENDER_SETTINGS* settings = plotter->RenderSettings();
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( plotter );
 
     BOX2I bBox = GetBoundingBox();
     // convert coordinates from draw Y axis to symbol_editor Y axis
@@ -288,16 +288,16 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
 
     // The text orientation may need to be flipped if the transformation matrix causes xy
     // axes to be flipped.
-    int      t1  = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
-    VECTOR2I pos = aTransform.TransformCoordinate( txtpos ) + offset;
+    int      t1  = ( renderSettings->m_Transform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
+    VECTOR2I pos = renderSettings->TransformCoordinate( txtpos ) + offset;
     COLOR4D  color = GetTextColor();
-    COLOR4D  bg = settings->GetBackgroundColor();
+    COLOR4D  bg = renderSettings->GetBackgroundColor();
 
     if( !plotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
-        color = settings->GetLayerColor( LAYER_DEVICE );
+        color = renderSettings->GetLayerColor( LAYER_DEVICE );
 
     if( !IsVisible() )
-        bg = settings->GetLayerColor( LAYER_HIDDEN );
+        bg = renderSettings->GetLayerColor( LAYER_HIDDEN );
     else if( bg == COLOR4D::UNSPECIFIED || !plotter->GetColorMode() )
         bg = COLOR4D::WHITE;
 
@@ -307,12 +307,12 @@ void LIB_TEXT::Plot( PLOTTER* plotter, bool aBackground, const VECTOR2I& offset,
         color = color.Mix( bg, 0.5f );
     }
 
-    int penWidth = std::max( GetEffectiveTextPenWidth(), settings->GetMinPenWidth() );
+    int penWidth = std::max( GetEffectiveTextPenWidth(), renderSettings->GetMinPenWidth() );
 
     KIFONT::FONT* font = GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
+        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
     attrs.m_StrokeWidth = penWidth;
     attrs.m_Angle = t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL;
@@ -338,8 +338,8 @@ KIFONT::FONT* LIB_TEXT::getDrawFont() const
 }
 
 
-void LIB_TEXT::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                      bool aForceNoFill, bool aDimmed )
+void LIB_TEXT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                      const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = GetTextColor();

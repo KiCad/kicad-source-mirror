@@ -208,23 +208,23 @@ int EESCHEMA_JOBS_HANDLER::JobExportPlot( JOB* aJob )
     case JOB_PAGE_SIZE::PAGE_SIZE_AUTO: pageSizeSelect = PageFormatReq::PAGE_SIZE_AUTO; break;
     }
 
-    SCH_PLOT_SETTINGS settings;
-    settings.m_blackAndWhite = aPlotJob->m_blackAndWhite;
-    settings.m_HPGLPaperSizeSelect = hpglPageSize;
-    settings.m_HPGLPenSize = aPlotJob->m_HPGLPenSize;
-    settings.m_HPGLPlotOrigin = hpglOrigin;
-    settings.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
-    settings.m_PDFMetadata = aPlotJob->m_PDFMetadata;
-    settings.m_outputDirectory = aPlotJob->m_outputDirectory;
-    settings.m_outputFile = aPlotJob->m_outputFile;
-    settings.m_pageSizeSelect = pageSizeSelect;
-    settings.m_plotAll = aPlotJob->m_plotAll;
-    settings.m_plotDrawingSheet = aPlotJob->m_plotDrawingSheet;
-    settings.m_plotPages = aPlotJob->m_plotPages;
-    settings.m_theme = aPlotJob->m_theme;
-    settings.m_useBackgroundColor = aPlotJob->m_useBackgroundColor;
+    SCH_PLOT_OPTS plotOpts;
+    plotOpts.m_blackAndWhite = aPlotJob->m_blackAndWhite;
+    plotOpts.m_HPGLPaperSizeSelect = hpglPageSize;
+    plotOpts.m_HPGLPenSize = aPlotJob->m_HPGLPenSize;
+    plotOpts.m_HPGLPlotOrigin = hpglOrigin;
+    plotOpts.m_PDFPropertyPopups = aPlotJob->m_PDFPropertyPopups;
+    plotOpts.m_PDFMetadata = aPlotJob->m_PDFMetadata;
+    plotOpts.m_outputDirectory = aPlotJob->m_outputDirectory;
+    plotOpts.m_outputFile = aPlotJob->m_outputFile;
+    plotOpts.m_pageSizeSelect = pageSizeSelect;
+    plotOpts.m_plotAll = aPlotJob->m_plotAll;
+    plotOpts.m_plotDrawingSheet = aPlotJob->m_plotDrawingSheet;
+    plotOpts.m_plotPages = aPlotJob->m_plotPages;
+    plotOpts.m_theme = aPlotJob->m_theme;
+    plotOpts.m_useBackgroundColor = aPlotJob->m_useBackgroundColor;
 
-    schPlotter->Plot( format, settings, renderSettings.get(), m_reporter );
+    schPlotter->Plot( format, plotOpts, renderSettings.get(), m_reporter );
 
     return CLI::EXIT_CODES::OK;
 }
@@ -772,25 +772,23 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
                 return CLI::EXIT_CODES::ERR_INVALID_INPUT_FILE;
             }
 
-            LOCALE_IO toggle;
+            LOCALE_IO     toggle;
+            SCH_PLOT_OPTS plotOpts;
 
             plotter->StartPlot( wxT( "1" ) );
 
-            bool      background = true;
-            TRANSFORM temp; // Uses default transform
-            VECTOR2I  plotPos;
-
-            plotPos.x = pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2;
-            plotPos.y = pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2;
+            bool     background = true;
+            VECTOR2I offset( pageInfo.GetWidthIU( schIUScale.IU_PER_MILS ) / 2,
+                             pageInfo.GetHeightIU( schIUScale.IU_PER_MILS ) / 2 );
 
             // note, we want the fields from the original symbol pointer (in case of non-alias)
-            symbolToPlot->Plot( plotter, unit, bodyStyle, background, plotPos, temp, false );
-            symbol->PlotLibFields( plotter, unit, bodyStyle, background, plotPos, temp, false,
-                                   aSvgJob->m_includeHiddenFields );
+            symbolToPlot->Plot( plotter, background, plotOpts, unit, bodyStyle, offset, false );
+            symbol->PlotFields( plotter, background, plotOpts, unit, bodyStyle, offset, false,
+                                aSvgJob->m_includeHiddenFields );
 
-            symbolToPlot->Plot( plotter, unit, bodyStyle, !background, plotPos, temp, false );
-            symbol->PlotLibFields( plotter, unit, bodyStyle, !background, plotPos, temp, false,
-                                   aSvgJob->m_includeHiddenFields );
+            symbolToPlot->Plot( plotter, !background, plotOpts, unit, bodyStyle, offset, false );
+            symbol->PlotFields( plotter, !background, plotOpts, unit, bodyStyle, offset, false,
+                                aSvgJob->m_includeHiddenFields );
 
             plotter->EndPlot();
             delete plotter;

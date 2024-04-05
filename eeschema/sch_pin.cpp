@@ -204,12 +204,6 @@ bool SCH_PIN::Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData )
 }
 
 
-SCH_SYMBOL* SCH_PIN::GetParentSymbol() const
-{
-    return static_cast<SCH_SYMBOL*>( GetParent() );
-}
-
-
 wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
     LIB_PIN::ALT  localStorage;
@@ -223,8 +217,11 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 
     wxString itemDesc = m_libPin ? m_libPin->GetItemDescription( aUnitsProvider, alt ) :
                                    wxString( wxS( "Undefined library pin." ) );
+
+    const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( GetParentSymbol() );
+
     return wxString::Format( "Symbol %s %s",
-                             UnescapeString( GetParentSymbol()->GetField( REFERENCE_FIELD )->GetText() ),
+                             UnescapeString( symbol->GetField( REFERENCE_FIELD )->GetText() ),
                              itemDesc );
 }
 
@@ -232,25 +229,22 @@ wxString SCH_PIN::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
     wxString    msg;
-    SCH_SYMBOL* symbol = GetParentSymbol();
+    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( GetParentSymbol() );
 
     aList.emplace_back( _( "Type" ), _( "Pin" ) );
 
-    if( LIB_SYMBOL* libSymbol = symbol->GetLibSymbolRef().get() )
+    if( symbol->GetUnitCount() )
     {
-        if( libSymbol->GetUnitCount() )
-        {
-            msg = m_libPin ? LIB_ITEM::GetUnitDescription( m_libPin->GetUnit() ) :
-                             wxString( "Undefined library pin." );
-            aList.emplace_back( _( "Unit" ), msg );
-        }
+        msg = m_libPin ? LIB_ITEM::GetUnitDescription( m_libPin->GetUnit() ) :
+                         wxString( "Undefined library pin." );
+        aList.emplace_back( _( "Unit" ), msg );
+    }
 
-        if( libSymbol->HasAlternateBodyStyle() )
-        {
-            msg = m_libPin ? LIB_ITEM::GetBodyStyleDescription( m_libPin->GetBodyStyle() ) :
-                             wxString( "Undefined library pin." );
-            aList.emplace_back( _( "Body Style" ), msg );
-        }
+    if( symbol->HasAlternateBodyStyle() )
+    {
+        msg = m_libPin ? LIB_ITEM::GetBodyStyleDescription( m_libPin->GetBodyStyle() ) :
+                         wxString( "Undefined library pin." );
+        aList.emplace_back( _( "Body Style" ), msg );
     }
 
     aList.emplace_back( _( "Name" ), GetShownName() );
@@ -280,7 +274,6 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
             conn->AppendInfoToMsgPanel( aList );
     }
 #endif
-
 }
 
 
@@ -314,14 +307,15 @@ void SCH_PIN::ClearDefaultNetName( const SCH_SHEET_PATH* aPath )
 
 wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoConnect )
 {
+    const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( GetParentSymbol() );
+
     // Need to check for parent as power symbol to make sure we aren't dealing
     // with legacy global power pins on non-power symbols
     if( IsGlobalPower() )
     {
         if( GetLibPin()->GetParentSymbol()->IsPower() )
         {
-            return EscapeString( GetParentSymbol()->GetValueFieldText( true, &aPath, false ),
-                                 CTX_NETNAME );
+            return EscapeString( symbol->GetValue( true, &aPath, false ), CTX_NETNAME );
         }
         else
         {
@@ -352,7 +346,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
     bool annotated = true;
 
-    std::vector<SCH_PIN*> pins = GetParentSymbol()->GetPins( &aPath );
+    std::vector<SCH_PIN*> pins = symbol->GetPins( &aPath );
     bool has_multiple = false;
 
     for( SCH_PIN* pin : pins )
@@ -370,7 +364,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     wxString libPinShownNumber = m_libPin ? m_libPin->GetShownNumber() : wxString( "??" );
 
     // Use timestamp for unannotated symbols
-    if( GetParentSymbol()->GetRef( &aPath, false ).Last() == '?' )
+    if( symbol->GetRef( &aPath, false ).Last() == '?' )
     {
         name << GetParentSymbol()->m_Uuid.AsString();
 
@@ -382,7 +376,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     {
         // Pin names might not be unique between different units so we must have the
         // unit token in the reference designator
-        name << GetParentSymbol()->GetRef( &aPath, true );
+        name << symbol->GetRef( &aPath, true );
         name << "-" << EscapeString( libPinShownName, CTX_NETNAME );
 
         if( unconnected || has_multiple )
@@ -393,7 +387,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
     else
     {
         // Pin numbers are unique, so we skip the unit token
-        name << GetParentSymbol()->GetRef( &aPath, false );
+        name << symbol->GetRef( &aPath, false );
         name << "-Pad" << EscapeString( libPinShownNumber, CTX_NETNAME ) << ")";
     }
 
@@ -406,7 +400,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
 VECTOR2I SCH_PIN::GetTransformedPosition() const
 {
-    TRANSFORM t = GetParentSymbol()->GetTransform();
+    TRANSFORM t = static_cast<const SCH_SYMBOL*>( GetParentSymbol() )->GetTransform();
     return t.TransformCoordinate( GetLocalPosition() ) + GetParentSymbol()->GetPosition();
 }
 
@@ -414,14 +408,11 @@ VECTOR2I SCH_PIN::GetTransformedPosition() const
 const BOX2I SCH_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
                                      bool aIncludeElectricalType ) const
 {
-    TRANSFORM t = GetParentSymbol()->GetTransform();
-    BOX2I     r;
+    wxCHECK( m_libPin, BOX2I() );
 
-    if( m_libPin )
-        r = m_libPin->GetBoundingBox( aIncludeInvisiblePins, aIncludeNameAndNumber,
-                                      aIncludeElectricalType );
-    else
-        wxFAIL;
+    TRANSFORM t = static_cast<const SCH_SYMBOL*>( GetParentSymbol() )->GetTransform();
+    BOX2I     r = m_libPin->GetBoundingBox( aIncludeInvisiblePins, aIncludeNameAndNumber,
+                                            aIncludeElectricalType );
 
     r.RevertYAxis();
 

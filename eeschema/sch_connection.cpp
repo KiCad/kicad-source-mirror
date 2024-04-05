@@ -326,10 +326,11 @@ bool SCH_CONNECTION::IsDriver() const
 
     case SCH_PIN_T:
     {
-        SCH_PIN* pin = static_cast<SCH_PIN*>( Parent() );
+        const SCH_PIN*    pin = static_cast<const SCH_PIN*>( Parent() );
+        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( pin->GetParentSymbol() );
 
         // Only annotated symbols should drive nets.
-        return pin->IsGlobalPower() || pin->GetParentSymbol()->IsAnnotated( &m_sheet );
+        return pin->IsGlobalPower() || symbol->IsAnnotated( &m_sheet );
     }
 
     default:

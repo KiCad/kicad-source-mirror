@@ -249,8 +249,8 @@ KIFONT::FONT* LIB_TEXTBOX::getDrawFont() const
 }
 
 
-void LIB_TEXTBOX::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                         bool aForceNoFill, bool aDimmed )
+void LIB_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                         const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     if( IsPrivate() )
         return;
@@ -413,8 +413,8 @@ BITMAPS LIB_TEXTBOX::GetMenuImage() const
 }
 
 
-void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                        const TRANSFORM& aTransform, bool aDimmed ) const
+void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                        int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     wxASSERT( aPlotter != nullptr );
 
@@ -423,14 +423,14 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     if( aBackground )
     {
-        LIB_SHAPE::Plot( aPlotter, aBackground, aOffset, aTransform, aDimmed );
+        LIB_SHAPE::Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
         return;
     }
 
-    RENDER_SETTINGS* renderSettings = aPlotter->RenderSettings();
-    VECTOR2I         start = aTransform.TransformCoordinate( m_start ) + aOffset;
-    VECTOR2I         end = aTransform.TransformCoordinate( m_end ) + aOffset;
-    COLOR4D          bg = renderSettings->GetBackgroundColor();
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    VECTOR2I             start = renderSettings->TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I             end = renderSettings->TransformCoordinate( m_end ) + aOffset;
+    COLOR4D              bg = renderSettings->GetBackgroundColor();
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
@@ -479,7 +479,7 @@ void LIB_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOf
 
     penWidth = std::max( GetEffectiveTextPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
 
-    if( aTransform.y1 )
+    if( renderSettings->m_Transform.y1 )
     {
         text.SetTextAngle( text.GetTextAngle() == ANGLE_HORIZONTAL ? ANGLE_VERTICAL
                                                                    : ANGLE_HORIZONTAL );

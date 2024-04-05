@@ -349,7 +349,8 @@ SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forP
 }
 
 
-void SCH_FIELD::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_FIELD::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                       const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
     wxDC*           DC = aSettings->GetPrintDC();
@@ -1148,8 +1149,8 @@ bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 }
 
 
-void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground,
-                      const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
 

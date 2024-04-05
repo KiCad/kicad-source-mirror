@@ -317,9 +317,9 @@ void SCH_EDIT_FRAME::SendSelectItemsToPcb( const std::vector<EDA_ITEM*>& aItems,
 
         case SCH_PIN_T:
         {
-            SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
-            SCH_SYMBOL* symbol = pin->GetParentSymbol();
-            wxString    ref = symbol->GetField( REFERENCE_FIELD )->GetText();
+            SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+            SYMBOL*  symbol = pin->GetParentSymbol();
+            wxString ref = symbol->GetRef( &GetCurrentSheet(), false );
 
             parts.push_back( wxT( "P" ) + EscapeString( ref, CTX_IPC ) + wxT( "/" )
                              + EscapeString( pin->GetShownNumber(), CTX_IPC ) );

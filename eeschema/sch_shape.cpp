@@ -111,8 +111,8 @@ void SCH_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 }
 
 
-void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground,
-                      const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     int pen_size = GetPenWidth();
 
@@ -227,7 +227,8 @@ int SCH_SHAPE::GetPenWidth() const
 }
 
 
-void SCH_SHAPE::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SHAPE::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                                 const VECTOR2I& aOffset, bool aDimmed )
 {
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color;
@@ -289,11 +290,11 @@ void SCH_SHAPE::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VEC
     }
 
     delete[] buffer;
-
 }
 
 
-void SCH_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                       const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     int      penWidth = GetPenWidth();
     wxDC*    DC = aSettings->GetPrintDC();
@@ -336,7 +337,7 @@ void SCH_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOf
     else if( GetFillMode() == FILL_T::FILLED_WITH_COLOR )
         fillColor = GetFillColor();
 
-    if( fillColor != COLOR4D::UNSPECIFIED )
+    if( fillColor != COLOR4D::UNSPECIFIED && !aForceNoFill )
     {
         switch( GetShape() )
         {

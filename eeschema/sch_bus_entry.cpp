@@ -265,7 +265,8 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 }
 
 
-void SCH_BUS_ENTRY_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_BUS_ENTRY_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED ) ?
@@ -490,20 +491,20 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const BOX2I& aRect, bool aContained, int aAccu
 }
 
 
-void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground,
-                               const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_BUS_ENTRY_BASE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                               int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground )
         return;
 
-    SCH_RENDER_SETTINGS* cfg = static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
 
-    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED ) ? cfg->GetLayerColor( m_layer )
-                                                                   : GetBusEntryColor();
+    COLOR4D color = ( GetBusEntryColor() == COLOR4D::UNSPECIFIED )
+                            ? renderSettings->GetLayerColor( m_layer ) : GetBusEntryColor();
 
-    int penWidth = ( GetPenWidth() == 0 ) ? cfg->GetDefaultPenWidth() : GetPenWidth();
+    int penWidth = ( GetPenWidth() == 0 ) ? renderSettings->GetDefaultPenWidth() : GetPenWidth();
 
-    penWidth = std::max( penWidth, cfg->GetMinPenWidth() );
+    penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( color );

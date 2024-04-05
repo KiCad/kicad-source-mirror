@@ -102,7 +102,8 @@ int SCH_NO_CONNECT::GetPenWidth() const
 }
 
 
-void SCH_NO_CONNECT::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_NO_CONNECT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                            const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     int     half = GetSize() / 2;
@@ -188,8 +189,8 @@ bool SCH_NO_CONNECT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy
 }
 
 
-void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter, bool aBackground,
-                           const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                           int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground )
         return;

@@ -253,7 +253,7 @@ public:
      */
     wxString GetDatasheet() const;
 
-    int GetUnit() const { return m_unit; }
+    int GetUnit() const override { return m_unit; }
     void SetUnit( int aUnit ) { m_unit = aUnit; }
 
     /**
@@ -275,7 +275,7 @@ public:
      */
     wxString GetUnitDisplayName( int aUnit );
 
-    int  GetBodyStyle() const { return m_bodyStyle; }
+    int  GetBodyStyle() const override { return m_bodyStyle; }
     void SetBodyStyle( int aBodyStyle );
 
     bool HasAlternateBodyStyle() const override;
@@ -522,8 +522,18 @@ public:
     SCH_FIELD* FindField( const wxString& aFieldName, bool aIncludeDefaultFields = true,
                           bool aCaseInsensitive = false );
 
-    const wxString GetValueFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
-                                      bool aAllowExtraText ) const;
+    /**
+     * @return the reference for the instance on the given sheet.
+     */
+    const wxString GetRef( const SCH_SHEET_PATH* aSheet,
+                           bool aIncludeUnit = false ) const override;
+
+    /**
+     * @return the value for the instance on the given sheet.
+     */
+    const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
+                             bool aAllowExtraText ) const override;
+
     void SetValueFieldText( const wxString& aValue );
 
     const wxString GetFootprintFieldText( bool aResolve, const SCH_SHEET_PATH* aPath,
@@ -543,7 +553,7 @@ public:
     }
     wxString GetValueProp() const
     {
-        return GetValueFieldText( false, &Schematic()->CurrentSheet(), false );
+        return GetValue( false, &Schematic()->CurrentSheet(), false );
     }
     void SetValueProp( const wxString& aRef )
     {
@@ -629,24 +639,6 @@ public:
 
     std::vector<std::unique_ptr<SCH_PIN>>& GetRawPins() { return m_pins; }
 
-    /**
-     * Print a symbol.
-     *
-     * @param aSettings Render settings controlling output
-     * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
-     *                moving an object)
-     */
-    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
-
-    /**
-     * Print only the background parts of a symbol (if any)
-     *
-     * @param aSettings Render settings controlling output
-     * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
-     *                moving an object)
-     */
-    void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override;
-
     void SwapData( SCH_ITEM* aItem ) override;
 
     /**
@@ -658,13 +650,6 @@ public:
      * @return true if reference string is valid.
      */
     static bool IsReferenceStringValid( const wxString& aReferenceString );
-
-    /**
-     * Return the reference for the given sheet path.
-     *
-     * @return the reference for the sheet.
-     */
-    const wxString GetRef( const SCH_SHEET_PATH* aSheet, bool aIncludeUnit = false ) const;
 
     /**
      * Set the reference for the given sheet path for this symbol.
@@ -680,7 +665,7 @@ public:
      * @param aSheet is the sheet path to test.
      * @return true if the symbol exists on that sheet and has a valid reference.
      */
-    bool IsAnnotated( const SCH_SHEET_PATH* aSheet );
+    bool IsAnnotated( const SCH_SHEET_PATH* aSheet ) const;
 
     /**
      * Add a full hierarchical reference to this symbol.
@@ -804,8 +789,28 @@ public:
     bool HitTest( const VECTOR2I& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const BOX2I& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-    void Plot( PLOTTER* aPlotter, bool aBackground,
-               const SCH_PLOT_SETTINGS& aPlotSettings ) const override;
+    /**
+     * Print a symbol.
+     *
+     * @param aSettings Render settings controlling output
+     * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
+     *                moving an object)
+     */
+    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override;
+
+    /**
+     * Print only the background parts of a symbol (if any)
+     *
+     * @param aSettings Render settings controlling output
+     * @param aOffset is the drawing offset (usually VECTOR2I(0,0), but can be different when
+     *                moving an object)
+     */
+    void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                          const VECTOR2I& aOffset, bool aDimmed ) override;
+
+    void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+               int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
     /**
      * Plot just the symbol pins.  This is separated to match the GAL display order.  The pins

@@ -820,10 +820,10 @@ SCH_REFERENCE::SCH_REFERENCE( SCH_SYMBOL* aSymbol, LIB_SYMBOL* aLibSymbol,
 
     m_numRef = -1;
 
-    if( aSymbol->GetValueFieldText( false, &aSheetPath, false ).IsEmpty() )
+    if( aSymbol->GetValue( false, &aSheetPath, false ).IsEmpty() )
         aSymbol->SetValueFieldText( wxT( "~" ) );
 
-    m_value = aSymbol->GetValueFieldText( false, &aSheetPath, false );
+    m_value = aSymbol->GetValue( false, &aSheetPath, false );
 }
 
 

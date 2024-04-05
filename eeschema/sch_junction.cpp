@@ -113,7 +113,8 @@ const BOX2I SCH_JUNCTION::GetBoundingBox() const
 }
 
 
-void SCH_JUNCTION::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_JUNCTION::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                          const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*   DC    = aSettings->GetPrintDC();
     COLOR4D color = GetJunctionColor();
@@ -253,8 +254,8 @@ bool SCH_JUNCTION::doIsConnected( const VECTOR2I& aPosition ) const
 }
 
 
-void SCH_JUNCTION::Plot( PLOTTER* aPlotter, bool aBackground,
-                         const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_JUNCTION::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                         int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground )
         return;

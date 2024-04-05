@@ -131,14 +131,16 @@ void LIB_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 }
 
 
-void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                      const TRANSFORM& aTransform, bool aDimmed ) const
+void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( IsPrivate() )
         return;
 
-    VECTOR2I  start = aTransform.TransformCoordinate( m_start ) + aOffset;
-    VECTOR2I  end = aTransform.TransformCoordinate( m_end ) + aOffset;
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+
+    VECTOR2I start = renderSettings->TransformCoordinate( m_start ) + aOffset;
+    VECTOR2I end = renderSettings->TransformCoordinate( m_end ) + aOffset;
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -148,14 +150,14 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         cornerList.clear();
 
         for( const VECTOR2I& pt : poly.CPoints() )
-            cornerList.push_back( aTransform.TransformCoordinate( pt ) + aOffset );
+            cornerList.push_back( renderSettings->TransformCoordinate( pt ) + aOffset );
     }
     else if( GetShape() == SHAPE_T::BEZIER )
     {
         cornerList.clear();
 
         for( const VECTOR2I& pt : m_bezierPoints )
-            cornerList.push_back( aTransform.TransformCoordinate( pt ) + aOffset );
+            cornerList.push_back( renderSettings->TransformCoordinate( pt ) + aOffset );
     }
 
     int        penWidth;
@@ -178,7 +180,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
             break;
 
         case FILL_T::FILLED_WITH_BG_BODYCOLOR:
-            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
+            color = renderSettings->GetLayerColor( LAYER_DEVICE_BACKGROUND );
             break;
 
         default:
@@ -191,7 +193,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     else
     {
         if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
-            color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
+            color = renderSettings->GetLayerColor( LAYER_DEVICE );
 
         if( lineStyle == LINE_STYLE::DEFAULT )
             lineStyle = LINE_STYLE::SOLID;
@@ -201,10 +203,10 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
         else
             fill = FILL_T::NO_FILL;
 
-        penWidth = GetEffectivePenWidth( aPlotter->RenderSettings() );
+        penWidth = GetEffectivePenWidth( renderSettings );
     }
 
-    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+    COLOR4D bg = renderSettings->GetBackgroundColor();
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
@@ -222,7 +224,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
     {
     case SHAPE_T::ARC:
     {
-        VECTOR2I mid = aTransform.TransformCoordinate( GetArcMid() ) + aOffset;
+        VECTOR2I mid = renderSettings->TransformCoordinate( GetArcMid() ) + aOffset;
 
         aPlotter->Arc( start, mid, end, fill, penWidth );
         break;
@@ -230,7 +232,7 @@ void LIB_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffs
 
     case SHAPE_T::CIRCLE:
     {
-        VECTOR2I center = aTransform.TransformCoordinate( getCenter() ) + aOffset;
+        VECTOR2I center = renderSettings->TransformCoordinate( getCenter() ) + aOffset;
 
         aPlotter->Circle( center, GetRadius() * 2, fill, penWidth );
         break;
@@ -259,8 +261,8 @@ int LIB_SHAPE::GetPenWidth() const
 }
 
 
-void LIB_SHAPE::print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                       bool aForceNoFill, bool aDimmed )
+void LIB_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                       const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     if( IsPrivate() )
         return;

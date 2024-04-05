@@ -69,6 +69,11 @@ public:
 
     bool GetShowPageLimits() const override;
 
+    VECTOR2I TransformCoordinate( const VECTOR2I& aPoint ) const
+    {
+        return m_Transform.TransformCoordinate( aPoint );
+    }
+
 public:
     bool   m_IsSymbolEditor;
 

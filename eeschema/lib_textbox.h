@@ -94,8 +94,11 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& offset,
-               const TRANSFORM& aTransform, bool aDimmed ) const override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override;
+
+    void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+               int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
     EDA_ITEM* Clone() const override
     {
@@ -115,9 +118,6 @@ protected:
 
 private:
     int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const override;
-
-    void print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, bool aForceNoFill,
-                bool aDimmed ) override;
 
 private:
     int  m_marginLeft;

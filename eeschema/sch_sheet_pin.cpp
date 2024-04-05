@@ -65,10 +65,11 @@ EDA_ITEM* SCH_SHEET_PIN::Clone() const
 }
 
 
-void SCH_SHEET_PIN::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_SHEET_PIN::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                           const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     // The icon selection is handle by the virtual method CreateGraphicShape called by ::Print
-    SCH_HIERLABEL::Print( aSettings, aOffset );
+    SCH_HIERLABEL::Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
 }
 
 

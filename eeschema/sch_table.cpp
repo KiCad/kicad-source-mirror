@@ -236,10 +236,11 @@ void SCH_TABLE::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction
 }
 
 
-void SCH_TABLE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_TABLE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                       const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     for( SCH_TABLECELL* cell : m_cells )
-        cell->Print( aSettings, aOffset );
+        cell->Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
 
     wxDC*      DC = aSettings->GetPrintDC();
     VECTOR2I   pos = GetPosition();
@@ -438,11 +439,11 @@ bool SCH_TABLE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 }
 
 
-void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground,
-                      const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_TABLE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     for( SCH_TABLECELL* cell : m_cells )
-        cell->Plot( aPlotter, aBackground, aPlotSettings );
+        cell->Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
 
     if( aBackground )
         return;

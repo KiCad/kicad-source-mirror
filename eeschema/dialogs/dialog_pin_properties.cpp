@@ -407,7 +407,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     renderSettings.m_Transform = DefaultTransform;
     renderSettings.SetPrintDC( &dc );
 
-    m_dummyPin->Print( &renderSettings, -bBox.Centre(), false, false );
+    m_dummyPin->Print( &renderSettings, 0, 0, -bBox.Centre(), false, false );
 
     event.Skip();
 }

@@ -54,8 +54,6 @@ public:
         return wxT( "SCH_PIN" );
     }
 
-    SCH_SYMBOL* GetParentSymbol() const;
-
     LIB_PIN* GetLibPin() const { return m_libPin; }
 
     void ClearDefaultNetName( const SCH_SHEET_PATH* aPath );
@@ -71,7 +69,8 @@ public:
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset ) override {}
+    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override {}
 
     void Move( const VECTOR2I& aMoveVector ) override {}
 

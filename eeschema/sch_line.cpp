@@ -359,7 +359,8 @@ int SCH_LINE::GetPenWidth() const
 }
 
 
-void SCH_LINE::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& offset )
+void SCH_LINE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                      const VECTOR2I& offset, bool aForceNoFill, bool aDimmed )
 {
     wxDC*   DC = aSettings->GetPrintDC();
     COLOR4D color = GetLineColor();
@@ -897,18 +898,18 @@ bool SCH_LINE::doIsConnected( const VECTOR2I& aPosition ) const
 }
 
 
-void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground,
-                     const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                     int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     if( aBackground )
         return;
 
-    auto*   settings = static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
-    int     penWidth = std::max( GetPenWidth(), settings->GetMinPenWidth() );
-    COLOR4D color = GetLineColor();
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    int                  penWidth = std::max( GetPenWidth(), renderSettings->GetMinPenWidth() );
+    COLOR4D              color = GetLineColor();
 
     if( color == COLOR4D::UNSPECIFIED )
-        color = settings->GetLayerColor( GetLayer() );
+        color = renderSettings->GetLayerColor( GetLayer() );
 
     aPlotter->SetColor( color );
 
@@ -925,7 +926,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground,
     BOX2I                 bbox = GetBoundingBox();
     bbox.Inflate( GetPenWidth() * 3 );
 
-    if( aPlotSettings.m_PDFPropertyPopups )
+    if( aPlotOpts.m_PDFPropertyPopups )
     {
         if( GetLayer() == LAYER_WIRE )
         {

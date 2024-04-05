@@ -35,15 +35,16 @@
 #include <stroke_params.h>
 #include <layer_ids.h>
 #include <sch_render_settings.h>
+#include <plotters/plotter.h>
 
 class CONNECTION_GRAPH;
 class SCH_CONNECTION;
 class SCH_SHEET_PATH;
 class SCHEMATIC;
+class SYMBOL;
 class LINE_READER;
 class SCH_EDIT_FRAME;
-class PLOTTER;
-struct SCH_PLOT_SETTINGS;
+struct SCH_PLOT_OPTS;
 
 namespace KIFONT
 {
@@ -245,6 +246,9 @@ public:
      */
     SCHEMATIC* Schematic() const;
 
+    const SYMBOL* GetParentSymbol() const;
+    SYMBOL* GetParentSymbol();
+
     virtual bool IsLocked() const { return false; }
     virtual void SetLocked( bool aLocked ) {}
 
@@ -289,50 +293,6 @@ public:
     virtual bool operator==( const SCH_ITEM& aOtherItem ) const
     {
         wxCHECK_MSG( false, false, wxT( "operator== not implemented in " ) + GetClass() );
-    }
-
-    /**
-     * Print a schematic item.
-     *
-     * Each schematic item should have its own method
-     *
-     * @param aOffset is the drawing offset (usually {0,0} but can be different when moving an
-     *                object).
-     */
-    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
-    {
-        wxCHECK_MSG( false, /*void*/, wxT( "Print not implemented in " ) + GetClass() );
-    }
-
-    /**
-     * Print just the background fills.
-     */
-    virtual void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
-    {
-        wxCHECK_MSG( false, /*void*/, wxT( "PrintBackground not implemented in " ) + GetClass() );
-    }
-
-    /**
-     * Print item.
-     *
-     * @param aOffset - Position of the item.
-     * @param aMulti - unit if multiple units per symbol.
-     * @param aBodyStyle - Symbol alternate body style (DeMorgan) if available.
-     * @param aDimmed - Reduce brightness
-     */
-    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                        int aMulti, int aBodyStyle, bool aForceNoFill, bool aDimmed )
-    {
-        wxCHECK_MSG( false, /*void*/, wxT( "Print not implemented in " ) + GetClass() );
-    }
-
-    /**
-     * Print just the background fills.
-     */
-    virtual void PrintBackground( const SCH_RENDER_SETTINGS *aSettings, const VECTOR2I &aOffset,
-                                  int aMulti, int aBodyStyle, bool aForceNoFill, bool aDimmed )
-    {
-        wxCHECK_MSG( false, /*void*/, wxT( "PrintBackground not implemented in " ) + GetClass() );
     }
 
     /**
@@ -551,25 +511,52 @@ public:
     virtual void SetStroke( const STROKE_PARAMS& aStroke ) { wxCHECK( false, /* void */ ); }
 
     /**
-     * Plot the schematic item to \a aPlotter.
+     * Print an item.
      *
-     * @param aPlotter is the #PLOTTER object to plot to.
-     * @param aBackground a poor-man's Z-order.  The routine will get called twice, first with
-     *                    aBackground true and then with aBackground false.
+     * @param aUnit - Which unit to print.
+     * @param aBodyStyle - Which body style to print.
+     * @param aOffset - Relative offset.
+     * @param aForceNoFill - Disable printing of fills.
+     * @param aDimmed - Reduce brightness of item.
      */
-    virtual void Plot( PLOTTER* aPlotter, bool aBackground,
-                       const SCH_PLOT_SETTINGS& aPlotSettings ) const
+    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
     {
-        wxCHECK_MSG( false, /*void*/, wxT( "Plot not implemented in " ) + GetClass() );
+        wxCHECK_MSG( false, /*void*/, wxT( "Print not implemented in " ) + GetClass() );
     }
 
-    virtual void Plot( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bool aBackground,
-                       const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed ) const
+    /**
+     * Print just the background fills.
+     */
+    virtual void PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                                  const VECTOR2I& aOffset, bool aDimmed )
+    {
+        wxCHECK_MSG( false, /*void*/, wxT( "PrintBackground not implemented in " ) + GetClass() );
+    }
+
+    /**
+     * Plot the item to \a aPlotter.
+     *
+     * @param aBackground a poor-man's Z-order.  The routine will get called twice, first with
+     *                    aBackground true and then with aBackground false.
+     * @param aUnit - which unit to print.
+     * @param aBodyStyle - which body style to print.
+     * @param aOffset relative offset.
+     * @param aDimmed reduce brightness of item.
+     */
+    virtual void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                       int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed)
     {
         wxCHECK_MSG( false, /*void*/, wxT( "Plot not implemented in " ) + GetClass() );
     }
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
+
+protected:
+    SCH_RENDER_SETTINGS* getRenderSettings( PLOTTER* aPlotter ) const
+    {
+        return static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    }
 
 private:
     friend class CONNECTION_GRAPH;

@@ -143,13 +143,8 @@ public:
 
     ALT GetAlt( const wxString& aAlt ) { return m_alternates[ aAlt ]; }
 
-    /**
-     * Print a pin, with or without the pin texts
-     *
-     * @param aOffset Offset to draw
-     */
-    void print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, bool aForceNoFill,
-                bool aDimmed ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override;
 
     /**
      * Return the pin real orientation (PIN_UP, PIN_DOWN, PIN_RIGHT, PIN_LEFT),
@@ -209,19 +204,6 @@ public:
 
     int GetPenWidth() const override;
 
-    /**
-     * Plot the pin number and pin text info, given the pin line coordinates.
-     * Same as DrawPinTexts((), but output is the plotter
-     * The line must be vertical or horizontal.
-     * If TextInside then the text is been put inside (moving from x1, y1 in
-     * the opposite direction to x2,y2), otherwise all is drawn outside.
-     */
-    void PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIENTATION aPinOrient,
-                       int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const;
-
-    void PlotSymbol( PLOTTER *aPlotter, const VECTOR2I &aPosition, PIN_ORIENTATION aOrientation,
-                     bool aDimmed ) const;
-
     void Offset( const VECTOR2I& aOffset ) override;
 
     void MoveTo( const VECTOR2I& aNewPosition ) override;
@@ -241,8 +223,21 @@ public:
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
-    void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-               const TRANSFORM& aTransform, bool aDimmed ) const override;
+    /**
+     * Plot the pin number and pin text info, given the pin line coordinates.
+     * Same as DrawPinTexts((), but output is the plotter
+     * The line must be vertical or horizontal.
+     * If TextInside then the text is been put inside (moving from x1, y1 in
+     * the opposite direction to x2,y2), otherwise all is drawn outside.
+     */
+    void PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIENTATION aPinOrient,
+                       int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const;
+
+    void PlotPinType( PLOTTER *aPlotter, const VECTOR2I &aPosition, PIN_ORIENTATION aOrientation,
+                      bool aDimmed ) const;
+
+    void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+               int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
     BITMAPS GetMenuImage() const override;
 
@@ -287,7 +282,7 @@ protected:
      * Print the pin symbol without text.
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
-    void printPinSymbol( const RENDER_SETTINGS *aSettings, const VECTOR2I &aPos,
+    void printPinSymbol( const SCH_RENDER_SETTINGS *aSettings, const VECTOR2I &aPos,
                          PIN_ORIENTATION aOrientation, bool aDimmed );
 
     /**

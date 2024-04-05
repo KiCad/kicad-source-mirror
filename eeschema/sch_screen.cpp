@@ -1096,20 +1096,20 @@ void SCH_SCREEN::Print( const SCH_RENDER_SETTINGS* aSettings )
                } );
 
     for( SCH_ITEM* item : bitmaps )
-        item->Print( aSettings, VECTOR2I( 0, 0 ) );
+        item->Print( aSettings, 0, 0, VECTOR2I( 0, 0 ), false, false );
 
     for( SCH_ITEM* item : other )
-        item->PrintBackground( aSettings, VECTOR2I( 0, 0 ) );
+        item->PrintBackground( aSettings, 0, 0, VECTOR2I( 0, 0 ), false );
 
     for( SCH_ITEM* item : other )
-        item->Print( aSettings, VECTOR2I( 0, 0 ) );
+        item->Print( aSettings, 0, 0, VECTOR2I( 0, 0 ), false, false );
 
     for( SCH_ITEM* item : junctions )
-        item->Print( aSettings, VECTOR2I( 0, 0 ) );
+        item->Print( aSettings, 0, 0, VECTOR2I( 0, 0 ), false, false );
 }
 
 
-void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_SETTINGS& aPlotSettings ) const
+void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
 {
     // Ensure links are up to date, even if a library was reloaded for some reason:
     std::vector<SCH_ITEM*>   junctions;
@@ -1161,24 +1161,24 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_SETTINGS& aPlotSettings
     // Bitmaps are drawn first to ensure they are in the background
     // This is particularly important for the wxPostscriptDC (used in *nix printers) as
     // the bitmap PS command clears the screen
-    for( const SCH_ITEM* item : bitmaps )
+    for( SCH_ITEM* item : bitmaps )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter, background, aPlotSettings );
+        item->Plot( aPlotter, background, aPlotOpts, 0, 0, { 0, 0 }, false );
     }
 
     // Plot the background items
-    for( const SCH_ITEM* item : other )
+    for( SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter, background, aPlotSettings );
+        item->Plot( aPlotter, background, aPlotOpts, 0, 0, { 0, 0 }, false );
     }
 
     // Plot the foreground items
-    for( const SCH_ITEM* item : other )
+    for( SCH_ITEM* item : other )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter, !background, aPlotSettings );
+        item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
     }
 
     // After plotting the symbols as a group above (in `other`), we need to overplot the pins
@@ -1190,7 +1190,8 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_SETTINGS& aPlotSettings
         for( SCH_FIELD field : sym->GetFields() )
         {
             field.ClearRenderCache();
-            field.Plot( aPlotter, false, aPlotSettings );
+            field.Plot( aPlotter, false, aPlotOpts, sym->GetUnit(), sym->GetBodyStyle(), { 0, 0 },
+                        sym->GetDNP() );
         }
 
         sym->PlotPins( aPlotter );
@@ -1199,10 +1200,10 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_SETTINGS& aPlotSettings
             sym->PlotDNP( aPlotter );
     }
 
-    for( const SCH_ITEM* item : junctions )
+    for( SCH_ITEM* item : junctions )
     {
         aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
-        item->Plot( aPlotter, !background, aPlotSettings );
+        item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
     }
 }
 

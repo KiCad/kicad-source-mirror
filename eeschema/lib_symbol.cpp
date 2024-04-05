@@ -377,13 +377,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             bField = aRhs.FindField( aField->GetName() );
 
         if( !bField )
-        {
             tmp = 1;
-        }
         else
-        {
             tmp = aFieldItem->compare( *bField, aCompareFlags );
-        }
 
         if( tmp )
         {
@@ -738,42 +734,8 @@ wxString LIB_SYMBOL::LetterSubReference( int aUnit, int aFirstId )
 }
 
 
-void LIB_SYMBOL::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                                  int aUnit, int aBodyStyle, bool aForceNoFill, bool aDimmed )
-{
-    /* draw background for filled items using background option
-     * Solid lines will be drawn after the background
-     * Note also, background is not drawn when printing in black and white
-     */
-    if( !GetGRForceBlackPenState() )
-    {
-        for( LIB_ITEM& item : m_drawings )
-        {
-            // Do not print private items
-            if( item.IsPrivate() )
-                continue;
-
-            if( item.Type() == LIB_SHAPE_T )
-            {
-                LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
-
-                // Do not draw items not attached to the current part
-                if( aUnit && shape.m_unit && ( shape.m_unit != aUnit ) )
-                    continue;
-
-                if( aBodyStyle && shape.m_bodyStyle && ( shape.m_bodyStyle != aBodyStyle ) )
-                    continue;
-
-                if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
-                    shape.Print( aSettings, aOffset, false, aDimmed );
-            }
-        }
-    }
-}
-
-
-void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                        int aUnit, int aBodyStyle, bool aForceNoFill, bool aDimmed )
+void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     for( LIB_ITEM& item : m_drawings )
     {
@@ -801,11 +763,11 @@ void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aO
 
         if( item.Type() == LIB_PIN_T )
         {
-            item.Print( aSettings, aOffset, aForceNoFill, aDimmed );
+            item.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
         }
         else if( item.Type() == LIB_FIELD_T )
         {
-            item.Print( aSettings, aOffset, aForceNoFill, aDimmed );
+            item.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
         }
         else if( item.Type() == LIB_SHAPE_T )
         {
@@ -814,23 +776,58 @@ void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aO
             if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
                 aForceNoFill = true;
 
-            shape.Print( aSettings, aOffset, aForceNoFill, aDimmed );
+            shape.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
         }
         else
         {
-            item.Print( aSettings, aOffset, aForceNoFill, aDimmed );
+            item.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
         }
     }
 }
 
 
-void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aBodyStyle, bool aBackground,
-                       const VECTOR2I &aOffset, const TRANSFORM &aTransform, bool aDimmed ) const
+void LIB_SYMBOL::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                                  const VECTOR2I& aOffset, bool aDimmed )
+{
+    /* draw background for filled items using background option
+     * Solid lines will be drawn after the background
+     * Note also, background is not drawn when printing in black and white
+     */
+    if( !GetGRForceBlackPenState() )
+    {
+        for( LIB_ITEM& item : m_drawings )
+        {
+            // Do not print private items
+            if( item.IsPrivate() )
+                continue;
+
+            if( item.Type() == LIB_SHAPE_T )
+            {
+                LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
+
+                // Do not draw items not attached to the current part
+                if( aUnit && shape.m_unit && ( shape.m_unit != aUnit ) )
+                    continue;
+
+                if( aBodyStyle && shape.m_bodyStyle && ( shape.m_bodyStyle != aBodyStyle ) )
+                    continue;
+
+                if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                    shape.Print( aSettings, aUnit, aBodyStyle, aOffset, false, aDimmed );
+            }
+        }
+    }
+}
+
+
+void LIB_SYMBOL::Plot( PLOTTER *aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                       int aUnit, int aBodyStyle, const VECTOR2I &aOffset, bool aDimmed )
 {
     wxASSERT( aPlotter != nullptr );
 
-    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_DEVICE );
-    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    COLOR4D              color = renderSettings->GetLayerColor( LAYER_DEVICE );
+    COLOR4D              bg = renderSettings->GetBackgroundColor();
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
@@ -843,7 +840,7 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aBodyStyle, bool aBackg
 
     aPlotter->SetColor( color );
 
-    for( const LIB_ITEM& item : m_drawings )
+    for( LIB_ITEM& item : m_drawings )
     {
         // Do not plot private items
         if( item.IsPrivate() )
@@ -860,19 +857,20 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, int aUnit, int aBodyStyle, bool aBackg
         if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
             continue;
 
-        item.Plot( aPlotter, aBackground, aOffset, aTransform, aDimmed );
+        item.Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
     }
 }
 
 
-void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bool aBackground,
-                                const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed,
-                                bool aPlotHidden )
+void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                             int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed,
+                             bool aPlotHidden )
 {
     wxASSERT( aPlotter != nullptr );
 
-    COLOR4D color = aPlotter->RenderSettings()->GetLayerColor( LAYER_FIELDS );
-    COLOR4D bg = aPlotter->RenderSettings()->GetBackgroundColor();
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    COLOR4D              color = renderSettings->GetLayerColor( LAYER_FIELDS );
+    COLOR4D              bg = renderSettings->GetBackgroundColor();
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
@@ -890,16 +888,10 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bo
         if( item.Type() != LIB_FIELD_T )
             continue;
 
-        if( !aPlotHidden && !( (LIB_FIELD&) item ).IsVisible() )
-            continue;
+        LIB_FIELD& field = static_cast<LIB_FIELD&>( item );
 
-        if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
+        if( !aPlotHidden && !field.IsVisible() )
             continue;
-
-        if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
-            continue;
-
-        LIB_FIELD& field = (LIB_FIELD&) item;
 
         // The reference is a special case: we should change the basic text
         // to add '?' and the part id
@@ -911,7 +903,7 @@ void LIB_SYMBOL::PlotLibFields( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bo
             field.SetText( text );
         }
 
-        item.Plot( aPlotter, aBackground, aOffset, aTransform, aDimmed );
+        item.Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
         field.SetText( tmp );
     }
 }
@@ -1133,20 +1125,17 @@ const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle,
 
     for( const LIB_ITEM& item : m_drawings )
     {
-        if( item.m_unit > 0
-                && m_unitCount > 1
-                && aUnit > 0
-                && aUnit != item.m_unit )
-        {
+        if( item.m_unit > 0 && m_unitCount > 1 && aUnit > 0 && aUnit != item.m_unit )
             continue;
-        }
 
         if( item.m_bodyStyle > 0 && aBodyStyle > 0 && aBodyStyle != item.m_bodyStyle )
             continue;
 
         if( aIgnoreHiddenFields && ( item.Type() == LIB_FIELD_T )
             && !( (LIB_FIELD&) item ).IsVisible() )
+        {
             continue;
+        }
 
         bBox.Merge( item.GetBoundingBox() );
     }

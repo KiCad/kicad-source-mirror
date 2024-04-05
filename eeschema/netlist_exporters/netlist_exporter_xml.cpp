@@ -120,7 +120,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
         {
             for( SCH_ITEM* item : sheetList[i].LastScreen()->Items().OfType( SCH_SYMBOL_T ) )
             {
-                SCH_SYMBOL* symbol2 = (SCH_SYMBOL*) item;
+                SCH_SYMBOL* symbol2 = static_cast<SCH_SYMBOL*>( item );
 
                 wxString ref2 = symbol2->GetRef( &sheetList[i] );
 
@@ -132,7 +132,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
                 // The lowest unit number wins.  User should only set fields in any one unit.
 
                 // Value
-                candidate = symbol2->GetValueFieldText( m_resolveTextVars, &sheetList[i], false );
+                candidate = symbol2->GetValue( m_resolveTextVars, &sheetList[i], false );
 
                 if( !candidate.IsEmpty() && ( unit < minUnit || value.IsEmpty() ) )
                     value = candidate;
@@ -179,7 +179,7 @@ void NETLIST_EXPORTER_XML::addSymbolFields( XNODE* aNode, SCH_SYMBOL* aSymbol,
     }
     else
     {
-        value = aSymbol->GetValueFieldText( m_resolveTextVars, aSheet, false );
+        value = aSymbol->GetValue( m_resolveTextVars, aSheet, false );
         footprint = aSymbol->GetFootprintFieldText( m_resolveTextVars, aSheet, false );
 
         SCH_FIELD* datasheetField = aSymbol->GetField( DATASHEET_FIELD );
@@ -724,8 +724,8 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             {
                 if( item->Type() == SCH_PIN_T )
                 {
-                    SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
-                    SCH_SYMBOL* symbol = pin->GetParentSymbol();
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+                    SYMBOL*  symbol = pin->GetParentSymbol();
 
                     if( !symbol
                        || ( ( aCtl & GNL_OPT_BOM ) && symbol->GetExcludedFromBOM() )

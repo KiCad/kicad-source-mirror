@@ -323,6 +323,20 @@ public:
 
     wxString GetPrefix();
 
+    const wxString GetRef( const SCH_SHEET_PATH* aSheet, bool aIncludeUnit = false ) const override
+    {
+        return GetReferenceField().GetText();
+    }
+
+    const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
+                             bool aAllowExtraText ) const override
+    {
+        return GetValueField().GetText();
+    }
+
+    int GetUnit() const override { return 0; }
+    int GetBodyStyle() const override { return 0; }
+
     // JEY TODO: reconcile with RunOnChildren when LIB_ITEM collapses to SCH_ITEM
     void RunOnLibChildren( const std::function<void( LIB_ITEM* )>& aFunction );
 
@@ -337,59 +351,21 @@ public:
 
     int GetNextAvailableFieldId() const;
 
-    /**
-     * Print symbol.
-     *
-     * @param aOffset - Position of symbol.
-     * @param aMulti - unit if multiple units per symbol.
-     * @param aBodyStyle - Symbol alternate body style (DeMorgan) if available.
-     * @param aDimmed - Reduce brightness of symbol
-     */
-    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset, int aMulti,
-                int aBodyStyle, bool aForceNoFill, bool aDimmed ) override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) override;
+
+    void PrintBackground( const SCH_RENDER_SETTINGS *aSettings, int aUnit, int aBodyStyle,
+                          const VECTOR2I& aOffset, bool aDimmed ) override;
+
+    void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+               int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
     /**
-     * Print just the background fills of a symbol
-     *
-     * @param aOffset - Position of symbol.
-     * @param aMulti - unit if multiple units per symbol.
-     * @param aBodyStyle - Symbol alternate body style (DeMorgan) if available.
-     * @param aDimmed - Reduce brightness of symbol
+     * Plot symbol fields.
      */
-    void PrintBackground( const SCH_RENDER_SETTINGS *aSettings, const VECTOR2I &aOffset,
-                          int aMulti, int aBodyStyle, bool aForceNoFill, bool aDimmed ) override;
-
-    /**
-     * Plot lib symbol to plotter.
-     * Lib Fields not are plotted here, because this plot function
-     * is used to plot schematic items, which have they own fields
-     *
-     * @param aPlotter - Plotter object to plot to.
-     * @param aUnit - Symbol symbol to plot.
-     * @param aBodyStyle - Symbol alternate body style to plot.
-     * @param aBackground - A poor-man's Z-order.
-     * @param aOffset - Distance to shift the plot coordinates.
-     * @param aTransform - Symbol plot transform matrix.
-     * @param aDimmed - Reduce brightness of symbol
-     */
-    void Plot( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bool aBackground,
-               const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed ) const override;
-
-    /**
-     * Plot Lib Fields only of the symbol to plotter.
-     * is used to plot the full lib symbol, outside the schematic
-     *
-     * @param aPlotter - Plotter object to plot to.
-     * @param aUnit - Symbol to plot.
-     * @param aBodyStyle - Symbol alternate body style to plot.
-     * @param aBackground - A poor-man's Z-order.
-     * @param aOffset - Distance to shift the plot coordinates.
-     * @param aTransform - Symbol plot transform matrix.
-     * @param aDimmed - reduce brightness of fields
-     */
-    void PlotLibFields( PLOTTER* aPlotter, int aUnit, int aBodyStyle, bool aBackground,
-                        const VECTOR2I& aOffset, const TRANSFORM& aTransform, bool aDimmed,
-                        bool aPlotHidden = true );
+    void PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                     int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed,
+                     bool aPlotHidden );
 
     /**
      * Add a new draw \a aItem to the draw object list and sort according to \a aSort.

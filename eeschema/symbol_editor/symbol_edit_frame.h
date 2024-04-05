@@ -327,7 +327,7 @@ public:
      * @param aFullFileName is the full filename
      * @param aOffset is a plot offset, in iu
      */
-    void SVGPlotSymbol( const wxString& aFullFileName, VECTOR2I aOffset );
+    void SVGPlotSymbol( const wxString& aFullFileName, const VECTOR2I& aOffset );
 
     /**
      * Synchronize the library manager to the symbol library table, and then the symbol tree

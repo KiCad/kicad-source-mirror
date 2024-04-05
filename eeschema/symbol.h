@@ -91,6 +91,15 @@ public:
      */
     virtual int GetUnitCount() const = 0;
 
+    virtual const wxString GetRef( const SCH_SHEET_PATH* aSheet,
+                                   bool aIncludeUnit = false ) const = 0;
+
+    virtual const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
+                                     bool aAllowExtraText ) const = 0;
+
+    virtual int GetUnit() const = 0;
+    virtual int GetBodyStyle() const = 0;
+
     /**
      * Set the offset in mils of the pin name text from the pin symbol.
      *

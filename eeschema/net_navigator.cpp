@@ -79,7 +79,7 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         const SCH_PIN* pin = static_cast<const SCH_PIN*>( aItem );
         wxCHECK( pin, retv );
 
-        SCH_SYMBOL* symbol = pin->GetParentSymbol();
+        const SYMBOL* symbol = pin->GetParentSymbol();
         wxCHECK( symbol, retv );
 
         retv.Printf( _( "Symbol '%s' pin '%s'" ), symbol->GetRef( &aSheetPath, true ),

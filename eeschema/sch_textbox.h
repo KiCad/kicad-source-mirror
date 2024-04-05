@@ -92,8 +92,6 @@ public:
     void SetExcludedFromSim( bool aExclude ) override { m_excludedFromSim = aExclude; }
     bool GetExcludedFromSim() const override { return m_excludedFromSim; }
 
-    void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& offset ) override;
-
     void SwapData( SCH_ITEM* aItem ) override;
 
     bool operator<( const SCH_ITEM& aItem ) const override;
@@ -130,8 +128,11 @@ public:
 
     BITMAPS GetMenuImage() const override;
 
-    void Plot( PLOTTER* aPlotter, bool aBackground,
-               const SCH_PLOT_SETTINGS& aPlotSettings ) const override;
+    void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                const VECTOR2I& offset, bool aForceNoFill, bool aDimmed ) override;
+
+    void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+               int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) override;
 
     EDA_ITEM* Clone() const override
     {

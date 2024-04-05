@@ -376,7 +376,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
             if( symbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Updated %s (unit %s) from %s to %s." ),
-                            symbol->GetValueFieldText( true, sheet, false ),
+                            symbol->GetValue( true, sheet, false ),
                             symbol->SubReference( symbol->GetUnit(), false ),
                             prevRef,
                             newRef );
@@ -384,7 +384,7 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
             else
             {
                 msg.Printf( _( "Updated %s from %s to %s." ),
-                            symbol->GetValueFieldText( true, sheet, false ),
+                            symbol->GetValue( true, sheet, false ),
                             prevRef,
                             newRef );
             }
@@ -394,14 +394,14 @@ void SCH_EDIT_FRAME::AnnotateSymbols( SCH_COMMIT* aCommit, ANNOTATE_SCOPE_T  aAn
             if( symbol->GetUnitCount() > 1 )
             {
                 msg.Printf( _( "Annotated %s (unit %s) as %s." ),
-                            symbol->GetValueFieldText( true, sheet, false ),
+                            symbol->GetValue( true, sheet, false ),
                             symbol->SubReference( symbol->GetUnit(), false ),
                             newRef );
             }
             else
             {
                 msg.Printf( _( "Annotated %s as %s." ),
-                            symbol->GetValueFieldText( true, sheet, false ),
+                            symbol->GetValue( true, sheet, false ),
                             newRef );
             }
         }

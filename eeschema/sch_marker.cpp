@@ -253,7 +253,8 @@ SEVERITY SCH_MARKER::GetSeverity() const
 }
 
 
-void SCH_MARKER::Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset )
+void SCH_MARKER::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
     PrintMarker( aSettings, aOffset );
 }

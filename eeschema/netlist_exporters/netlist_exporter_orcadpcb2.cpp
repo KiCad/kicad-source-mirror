@@ -102,7 +102,7 @@ bool NETLIST_EXPORTER_ORCADPCB2::WriteNetlist( const wxString& aOutFileName,
 
             ret |= fprintf( f, "  %s", TO_UTF8( field ) );
 
-            field = symbol->GetValueFieldText( true, &sheet, false );
+            field = symbol->GetValue( true, &sheet, false );
             field.Replace( wxT( " " ), wxT( "_" ) );
 
             ret |= fprintf( f, " %s", TO_UTF8( field ) );

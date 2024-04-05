@@ -173,22 +173,13 @@ public:
      */
     virtual void CalcEdit( const VECTOR2I& aPosition ) {}
 
-    /**
-     * Draw an item
-     *
-     * @param aOffset Offset to draw
-     * @param aDimmed Dim the color on the printout
-     */
-    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                        bool aForceNoFill, bool aDimmed );
-
     virtual int GetPenWidth() const = 0;
 
     const wxString& GetDefaultFont() const;
 
     const KIFONT::METRICS& GetFontMetrics() const;
 
-    virtual int GetEffectivePenWidth( const RENDER_SETTINGS* aSettings ) const
+    virtual int GetEffectivePenWidth( const SCH_RENDER_SETTINGS* aSettings ) const
     {
         // For historical reasons, a stored value of 0 means "default width" and negative
         // numbers meant "don't stroke".
@@ -328,18 +319,29 @@ public:
     virtual void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) = 0;
 
     /**
-     * Plot the draw item using the plot object.
+     * Print an item.
      *
-     * @param aPlotter The plot object to plot to.
+     * @param aUnit - which unit to print.
+     * @param aBodyStyle - which body style to print.
+     * @param aOffset - relative offset.
+     * @param aForceNoFill - disable printing of fills.
+     * @param aDimmed - reduce brightness of item.
+     */
+    virtual void Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
+                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed ) = 0;
+
+    /**
+     * Plot the item to \a aPlotter.
+     *
      * @param aBackground a poor-man's Z-order.  The routine will get called twice, first with
      *                    aBackground true and then with aBackground false.
-     * @param aOffset Plot offset position.
-     * @param aFill Flag to indicate whether or not the object is filled.
-     * @param aTransform The plot transform.
-     * @param aDimmed if true, reduce color to background
+     * @param aUnit - which unit to print.
+     * @param aBodyStyle - which body style to print.
+     * @param aOffset relative offset.
+     * @param aDimmed reduce brightness of item.
      */
-    virtual void Plot( PLOTTER* aPlotter, bool aBackground, const VECTOR2I& aOffset,
-                       const TRANSFORM& aTransform, bool aDimmed ) const = 0;
+    virtual void Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
+                       int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed ) = 0;
 
     void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit() const { return m_unit; }
@@ -360,6 +362,11 @@ public:
 #endif
 
 protected:
+    SCH_RENDER_SETTINGS* getRenderSettings( PLOTTER* aPlotter ) const
+    {
+        return static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    }
+
     /**
      * Provide the draw object specific comparison called by the == and < operators.
      *
@@ -381,13 +388,6 @@ protected:
      *         object is greater than \a aOther object.
      */
     virtual int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const;
-
-    /**
-     * @param aOffset A reference to a wxPoint object containing the offset where to draw
-     *                from the object's current position.
-     */
-    virtual void print( const SCH_RENDER_SETTINGS* aSettings, const VECTOR2I& aOffset,
-                        bool aForceNoFill, bool aDimmed ) = 0;
 
 private:
     friend class LIB_SYMBOL;

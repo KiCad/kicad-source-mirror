@@ -236,13 +236,11 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
             {
                 if( item->Type() == SCH_PIN_T )
                 {
-                    SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
-                    SCH_SYMBOL* symbol = pin->GetParentSymbol();
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+                    SYMBOL*  symbol = pin->GetParentSymbol();
 
                     if( !symbol || symbol->GetExcludedFromBoard() )
-                    {
                         continue;
-                    }
 
                     net_record->m_Nodes.emplace_back( pin, sheet, nc );
                 }
@@ -320,8 +318,8 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         for( auto it = m_orderedSymbolsSheetpath.begin(); it != m_orderedSymbolsSheetpath.end();
              ++it )
         {
-            if( it->first->GetValueFieldText( false, &it->second, false )
-                != first_ele.first->GetValueFieldText( false, &first_ele.second, false ) )
+            if( it->first->GetValue( false, &it->second, false )
+                != first_ele.first->GetValue( false, &first_ele.second, false ) )
             {
                 continue;
             }
@@ -369,7 +367,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         SCH_SYMBOL* sym = ( beginIter->second ).first;
         SCH_SHEET_PATH sheetPath = ( beginIter->second ).second;
 
-        wxString valueText = sym->GetValueFieldText( false, &sheetPath, false );
+        wxString valueText = sym->GetValue( false, &sheetPath, false );
         wxString footprintText = sym->GetFootprintFieldText( false, &sheetPath, false);
         wxString deviceType = valueText + wxString("_") + footprintText;
 
