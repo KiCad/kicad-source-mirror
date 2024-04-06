@@ -823,6 +823,10 @@ protected:
 
     void onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent );
 
+#ifdef KICAD_IPC_API
+    void onPluginAvailabilityChanged( wxCommandEvent& aEvt );
+#endif
+
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox; // a combo box to display and select active layer
 

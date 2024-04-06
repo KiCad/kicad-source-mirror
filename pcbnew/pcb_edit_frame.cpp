@@ -268,12 +268,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
 #ifdef KICAD_IPC_API
     wxTheApp->Bind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
-            [&]( wxCommandEvent& aEvt )
-            {
-                wxLogTrace( traceApi, "PCB frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
-                ReCreateHToolbar();
-                aEvt.Skip();
-            } );
+                    &PCB_EDIT_FRAME::onPluginAvailabilityChanged, this );
 #endif
 
     m_propertiesPanel = new PCB_PROPERTIES_PANEL( this, this );
@@ -539,6 +534,8 @@ PCB_EDIT_FRAME::~PCB_EDIT_FRAME()
 
 #ifdef KICAD_IPC_API
     Pgm().GetApiServer().DeregisterHandler( m_apiHandler.get() );
+    wxTheApp->Unbind( EDA_EVT_PLUGIN_AVAILABILITY_CHANGED,
+                      &PCB_EDIT_FRAME::onPluginAvailabilityChanged, this );
 #endif
 
     // Close modeless dialogs
@@ -2630,3 +2627,12 @@ void PCB_EDIT_FRAME::onCloseModelessBookReporterDialogs( wxCommandEvent& aEvent 
         m_footprintDiffDlg = nullptr;
     }
 }
+
+#ifdef KICAD_IPC_API
+void PCB_EDIT_FRAME::onPluginAvailabilityChanged( wxCommandEvent& aEvt )
+{
+    wxLogTrace( traceApi, "PCB frame: EDA_EVT_PLUGIN_AVAILABILITY_CHANGED" );
+    ReCreateHToolbar();
+    aEvt.Skip();
+}
+#endif
