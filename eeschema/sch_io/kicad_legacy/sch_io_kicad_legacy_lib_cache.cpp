@@ -56,6 +56,9 @@
     ( LIB_VERSION( major, minor ) <= LIB_VERSION( 2, 4 ) )
 
 
+const int fill_tab[3] = { 'N', 'F', 'f' };
+
+
 SCH_IO_KICAD_LEGACY_LIB_CACHE::SCH_IO_KICAD_LEGACY_LIB_CACHE( const wxString& aFullPathAndFileName ) :
     SCH_IO_LIB_CACHE( aFullPathAndFileName )
 {
@@ -1573,7 +1576,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
 
         aFormatter.Print( 0, "DRAW\n" );
 
-        for( LIB_ITEM& item : aSymbol->GetDrawItems() )
+        for( SCH_ITEM& item : aSymbol->GetDrawItems() )
         {
             switch( item.Type() )
             {

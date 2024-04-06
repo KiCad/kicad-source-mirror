@@ -2137,7 +2137,7 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
                                EDEVICE* aDevice, int aGateNumber, const wxString& aGateName )
 {
     wxString               symbolName = aSymbolNode->GetAttribute( wxT( "name" ) );
-    std::vector<LIB_ITEM*> items;
+    std::vector<SCH_ITEM*> items;
 
     wxXmlNode* currentNode = aSymbolNode->GetChildren();
 
@@ -2256,11 +2256,11 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
         }
         else if( nodeName == wxT( "frame" ) )
         {
-            std::vector<LIB_ITEM*> frameItems;
+            std::vector<SCH_ITEM*> frameItems;
 
-            loadFrame( currentNode, frameItems );
+            loadSymbolFrame( currentNode, frameItems );
 
-            for( LIB_ITEM* item : frameItems )
+            for( SCH_ITEM* item : frameItems )
             {
                 item->SetParent( aSymbol.get() );
                 item->SetUnit( aGateNumber );
@@ -2338,7 +2338,7 @@ LIB_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymb
 }
 
 
-LIB_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
                                         wxXmlNode* aWireNode, int aGateNumber )
 {
     EWIRE ewire = EWIRE( aWireNode );
@@ -2546,7 +2546,7 @@ LIB_TEXT* SCH_IO_EAGLE::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
 }
 
 
-void SCH_IO_EAGLE::loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>& aItems )
+void SCH_IO_EAGLE::loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aItems )
 {
     EFRAME eframe( aFrameNode );
 

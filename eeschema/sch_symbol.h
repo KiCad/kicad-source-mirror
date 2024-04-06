@@ -55,7 +55,6 @@
 struct PICKED_SYMBOL;
 class KIID_PATH;
 class SCH_SCREEN;
-class LIB_ITEM;
 class LIB_PIN;
 class LIB_SYMBOL;
 class NETLIST_OBJECT_LIST;
@@ -762,7 +761,7 @@ public:
      * @param aType is the type of symbol library object to find or any if set to TYPE_NOT_INIT.
      * @return is the symbol library object if found otherwise NULL.
      */
-    LIB_ITEM* GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType = TYPE_NOT_INIT );
+    SCH_ITEM* GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType = TYPE_NOT_INIT );
 
     wxString GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const override;
 

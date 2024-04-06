@@ -27,7 +27,6 @@
 
 #include <eda_item.h>
 #include <sch_item.h>
-#include <lib_item.h>
 
 #include <sch_marker.h>
 #include <sch_junction.h>
@@ -175,7 +174,6 @@ BOOST_AUTO_TEST_CASE( Move )
                         VECTOR2I originalPos = item->GetPosition();
 
                         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
-                        LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
                         // Move to a point, then go back.
                         // This has to be an identity transformation.
@@ -186,14 +184,6 @@ BOOST_AUTO_TEST_CASE( Move )
                             BOOST_CHECK_EQUAL( schItem->GetPosition(), originalPos + aRef );
 
                             schItem->Move( -aRef );
-                        }
-
-                        if( libItem != nullptr )
-                        {
-                            libItem->MoveTo( libItem->GetPosition() + aRef );
-                            BOOST_CHECK_EQUAL( libItem->GetPosition(), originalPos + aRef );
-
-                            libItem->MoveTo( libItem->GetPosition() - aRef );
                         }
 
                         CompareItems( item.get(), aOriginalItem );
@@ -224,7 +214,6 @@ BOOST_AUTO_TEST_CASE( Rotate )
                 auto newItem = std::unique_ptr<EDA_ITEM>( item->Clone() );
 
                 SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( newItem.get() );
-                LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( newItem.get() );
 
                 if( schItem != nullptr )
                 {
@@ -234,14 +223,6 @@ BOOST_AUTO_TEST_CASE( Rotate )
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
                     schItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
-                }
-
-                if( libItem != nullptr )
-                {
-                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
-                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
-                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
-                    libItem->Rotate( m_sheet.GetBodyBoundingBox().GetCenter(), false );
                 }
 
                 CompareItems( newItem.get(), item.get() );
@@ -255,7 +236,6 @@ BOOST_AUTO_TEST_CASE( Rotate )
                             auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
 
                             SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
-                            LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
                             if( schItem != nullptr )
                             {
@@ -264,14 +244,6 @@ BOOST_AUTO_TEST_CASE( Rotate )
                                 schItem->Rotate( aRef, false );
                                 schItem->Rotate( aRef, false );
                                 schItem->Rotate( aRef, false );
-                            }
-
-                            if( libItem != nullptr )
-                            {
-                                libItem->Rotate( aRef, false );
-                                libItem->Rotate( aRef, false );
-                                libItem->Rotate( aRef, false );
-                                libItem->Rotate( aRef, false );
                             }
 
                             CompareItems( item.get(), aOriginalItem );
@@ -302,7 +274,6 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
                         auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
 
                         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
-                        LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
                         // Two mirrorings are an identity
                         // (warning: only for text items having no autoplaced fields).
@@ -311,12 +282,6 @@ BOOST_AUTO_TEST_CASE( MirrorHorizontally )
                             schItem->ClearFieldsAutoplaced();
                             schItem->MirrorHorizontally( aRef.x );
                             schItem->MirrorHorizontally( aRef.x );
-                        }
-
-                        if( libItem != nullptr )
-                        {
-                            libItem->MirrorHorizontally( aRef.x );
-                            libItem->MirrorHorizontally( aRef.x );
                         }
 
                         CompareItems( item.get(), aOriginalItem );
@@ -346,7 +311,6 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
                         auto item = std::unique_ptr<EDA_ITEM>( aOriginalItem->Clone() );
 
                         SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item.get() );
-                        LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( item.get() );
 
                         // Two mirrorings are an identity
                         // (warning only for text items having no autoplaced fields).
@@ -356,12 +320,6 @@ BOOST_AUTO_TEST_CASE( MirrorVertically )
                             schItem->ClearFieldsAutoplaced();
                             schItem->MirrorVertically( aRef.y );
                             schItem->MirrorVertically( aRef.y );
-                        }
-
-                        if( libItem != nullptr )
-                        {
-                            libItem->MirrorVertically( aRef.y );
-                            libItem->MirrorVertically( aRef.y );
                         }
 
                         CompareItems( item.get(), aOriginalItem );

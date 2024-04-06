@@ -30,7 +30,6 @@
 
 #include <sch_base_frame.h>
 #include <sch_screen.h>
-#include <lib_item.h>
 #include <ee_collectors.h>
 #include <optional>
 
@@ -389,7 +388,7 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
-    void FocusOnItem( LIB_ITEM* aItem );
+    void FocusOnItem( SCH_ITEM* aItem );
 
     /**
      * Load a symbol from the schematic to edit in place.

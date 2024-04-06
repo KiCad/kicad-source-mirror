@@ -181,7 +181,7 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
                 continue;
             }
 
-            LIB_PINS pinList;
+            std::vector<LIB_PIN*> pinList;
             pinList.clear();
             symbol->GetLibPins(pinList);
 
@@ -450,7 +450,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         fprintf( d, "PACKAGE '%s'\n", TO_UTF8( formatDevice( footprintText ) ) );
         fprintf( d, "CLASS IC\n" );
 
-        LIB_PINS pinList;
+        std::vector<LIB_PIN*> pinList;
         sym->GetLibSymbolRef()->GetPins( pinList, 0, 0 );
 
         /*
@@ -592,7 +592,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatPin( const LIB_PIN& aPin )
 }
 
 
-wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, LIB_PINS aPinList )
+wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, std::vector<LIB_PIN*> aPinList )
 {
     aName.MakeUpper();
     std::list<wxString> pinNameList;

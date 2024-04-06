@@ -371,7 +371,7 @@ void SCH_LINE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBody
     VECTOR2I   start = m_start;
     VECTOR2I   end = m_end;
     LINE_STYLE lineStyle = GetEffectiveLineStyle();
-    int        penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    int        penWidth = GetEffectivePenWidth( aSettings );
 
     if( lineStyle <= LINE_STYLE::FIRST_TYPE )
     {
@@ -905,7 +905,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
         return;
 
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
-    int                  penWidth = std::max( GetPenWidth(), renderSettings->GetMinPenWidth() );
+    int                  penWidth = GetEffectivePenWidth( renderSettings );
     COLOR4D              color = GetLineColor();
 
     if( color == COLOR4D::UNSPECIFIED )
@@ -924,7 +924,7 @@ void SCH_LINE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
     // Plot attributes to a hypertext menu
     std::vector<wxString> properties;
     BOX2I                 bbox = GetBoundingBox();
-    bbox.Inflate( GetPenWidth() * 3 );
+    bbox.Inflate( penWidth * 3 );
 
     if( aPlotOpts.m_PDFPropertyPopups )
     {

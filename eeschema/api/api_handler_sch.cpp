@@ -265,10 +265,6 @@ HANDLER_RESULT<ItemRequestStatus> API_HANDLER_SCH::handleCreateUpdateItemsIntern
                 schItem->Serialize( newItem );
                 commit->Modify( schItem );
             }
-            else if( LIB_ITEM* libItem = dynamic_cast<LIB_ITEM*>( edaItem ) )
-            {
-                // TODO: there is not currently a way to do this, haha
-            }
             else
             {
                 wxASSERT( false );

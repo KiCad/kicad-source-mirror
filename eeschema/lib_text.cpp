@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,6 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
-#include <lib_item.h>
 #include <general.h>
 #include <transform.h>
 #include <settings/color_settings.h>
@@ -38,8 +37,8 @@
 #include <default_values.h>    // For some default values
 #include <string_utils.h>
 
-LIB_TEXT::LIB_TEXT( LIB_SYMBOL* aParent ) :
-        LIB_ITEM( LIB_TEXT_T, aParent ),
+LIB_TEXT::LIB_TEXT( SCH_ITEM* aParent ) :
+        SCH_ITEM( aParent, LIB_TEXT_T ),
         EDA_TEXT( schIUScale, wxEmptyString )
 {
     SetTextSize( VECTOR2I( schIUScale.MilsToIU( DEFAULT_TEXT_SIZE ),
@@ -77,11 +76,11 @@ EDA_ITEM* LIB_TEXT::Clone() const
 }
 
 
-int LIB_TEXT::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
+int LIB_TEXT::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_TEXT_T );
 
-    int retv = LIB_ITEM::compare( aOther, aCompareFlags );
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
@@ -109,15 +108,9 @@ int LIB_TEXT::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 }
 
 
-void LIB_TEXT::Offset( const VECTOR2I& aOffset )
+void LIB_TEXT::Move( const VECTOR2I& aOffset )
 {
     EDA_TEXT::Offset( aOffset );
-}
-
-
-void LIB_TEXT::MoveTo( const VECTOR2I& newPosition )
-{
-    SetTextPos( newPosition );
 }
 
 
@@ -409,7 +402,7 @@ void LIB_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 {
     wxString msg;
 
-    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
+    getSymbolEditorMsgPanelInfo( aFrame, aList );
 
     // Don't use GetShownText() here; we want to show the user the variable references
     aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
@@ -491,18 +484,18 @@ void LIB_TEXT::CalcEdit( const VECTOR2I& aPosition )
 }
 
 
-bool LIB_TEXT::operator==( const LIB_ITEM& aOther ) const
+bool LIB_TEXT::operator==( const SCH_ITEM& aOther ) const
 {
     if( Type() != aOther.Type() )
         return false;
 
     const LIB_TEXT& other = static_cast<const LIB_TEXT&>( aOther );
 
-    return LIB_ITEM::operator==( aOther ) && EDA_TEXT::operator==( other );
+    return SCH_ITEM::operator==( aOther ) && EDA_TEXT::operator==( other );
 }
 
 
-double LIB_TEXT::Similarity( const LIB_ITEM& aOther ) const
+double LIB_TEXT::Similarity( const SCH_ITEM& aOther ) const
 {
     if( m_Uuid == aOther.m_Uuid )
         return 1.0;
@@ -524,9 +517,9 @@ static struct LIB_TEXT_DESC
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( LIB_TEXT );
-        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXT, LIB_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXT, SCH_ITEM> );
         propMgr.AddTypeCast( new TYPE_CAST<LIB_TEXT, EDA_TEXT> );
-        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXT ), TYPE_HASH( LIB_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_TEXT ), TYPE_HASH( SCH_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( LIB_TEXT ), TYPE_HASH( EDA_TEXT ) );
 
         propMgr.Mask( TYPE_HASH( LIB_TEXT ), TYPE_HASH( EDA_TEXT ), _HKI( "Mirrored" ) );

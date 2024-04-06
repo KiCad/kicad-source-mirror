@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,8 +94,8 @@ static int externalPinDecoSize( const RENDER_SETTINGS* aSettings, const LIB_PIN 
 }
 
 
-LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent ) :
-        LIB_ITEM( LIB_PIN_T, aParent ),
+LIB_PIN::LIB_PIN( SCH_ITEM* aParent ) :
+        SCH_ITEM( aParent, LIB_PIN_T, 0, 0 ),
         m_orientation( PIN_ORIENTATION::PIN_RIGHT ),
         m_shape( GRAPHIC_PINSHAPE::LINE ),
         m_type( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
@@ -121,11 +121,11 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent ) :
 }
 
 
-LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aNumber,
+LIB_PIN::LIB_PIN( SCH_ITEM* aParent, const wxString& aName, const wxString& aNumber,
                   PIN_ORIENTATION aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength,
                   int aNameTextSize, int aNumTextSize, int aBodyStyle, const VECTOR2I& aPos,
                   int aUnit ) :
-        LIB_ITEM( LIB_PIN_T, aParent ),
+        SCH_ITEM( aParent, LIB_PIN_T, aUnit, aBodyStyle ),
         m_position( aPos ),
         m_length( aLength ),
         m_orientation( aOrientation ),
@@ -137,8 +137,6 @@ LIB_PIN::LIB_PIN( LIB_SYMBOL* aParent, const wxString& aName, const wxString& aN
 {
     SetName( aName );
     SetNumber( aNumber );
-    SetUnit( aUnit );
-    SetBodyStyle( aBodyStyle );
 }
 
 
@@ -988,15 +986,18 @@ PIN_ORIENTATION LIB_PIN::PinDrawOrient( const TRANSFORM& aTransform ) const
 
 EDA_ITEM* LIB_PIN::Clone() const
 {
-    return new LIB_PIN( *this );
+    //return new LIB_PIN( *this );
+    SCH_ITEM* newPin = new LIB_PIN( *this );
+    wxASSERT( newPin->GetUnit() == m_unit && newPin->GetBodyStyle() == m_bodyStyle );
+    return newPin;
 }
 
 
-int LIB_PIN::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
+int LIB_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_PIN_T );
 
-    int retv = LIB_ITEM::compare( aOther, aCompareFlags );
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
@@ -1005,7 +1006,7 @@ int LIB_PIN::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 
     // When comparing units, we do not compare the part numbers.  If everything else is
     // identical, then we can just renumber the parts for the inherited symbol.
-    if( !( aCompareFlags & COMPARE_FLAGS::UNIT ) && m_number != tmp->m_number )
+    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT ) && m_number != tmp->m_number )
         return m_number.Cmp( tmp->m_number );
 
     int result = m_name.Cmp( tmp->m_name );
@@ -1092,20 +1093,14 @@ void LIB_PIN::ChangeLength( int aLength )
     }
 
     VECTOR2I offset = VECTOR2I( offsetX, offsetY );
-    Offset( offset );
+    Move( offset );
 
     m_length = aLength;
 }
 
-void LIB_PIN::Offset( const VECTOR2I& aOffset )
+void LIB_PIN::Move( const VECTOR2I& aOffset )
 {
     m_position += aOffset;
-}
-
-
-void LIB_PIN::MoveTo( const VECTOR2I& aNewPosition )
-{
-    m_position = aNewPosition;
 }
 
 
@@ -1184,7 +1179,7 @@ void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aP
 
 void LIB_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
+    getSymbolEditorMsgPanelInfo( aFrame, aList );
 
     aList.emplace_back( _( "Name" ), UnescapeString( GetShownName() ) );
     aList.emplace_back( _( "Number" ), GetShownNumber() );
@@ -1456,7 +1451,7 @@ wxString LIB_PIN::getItemDescription( ALT* aAlt ) const
 }
 
 
-bool LIB_PIN::operator==( const LIB_ITEM& aOther ) const
+bool LIB_PIN::operator==( const SCH_ITEM& aOther ) const
 {
     if( aOther.Type() != LIB_PIN_T )
         return false;
@@ -1524,7 +1519,7 @@ bool LIB_PIN::operator==( const LIB_ITEM& aOther ) const
 }
 
 
-double LIB_PIN::Similarity( const LIB_ITEM& aOther ) const
+double LIB_PIN::Similarity( const SCH_ITEM& aOther ) const
 {
     if( aOther.m_Uuid == m_Uuid )
         return 1.0;
@@ -1606,7 +1601,7 @@ void LIB_PIN::Show( int nestLevel, std::ostream& os ) const
 void LIB_PIN::CalcEdit( const VECTOR2I& aPosition )
 {
     if( IsMoving() )
-        MoveTo( aPosition );
+        SetPosition( aPosition );
 }
 
 
@@ -1659,8 +1654,8 @@ static struct LIB_PIN_DESC
 
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( LIB_PIN );
-        propMgr.AddTypeCast( new TYPE_CAST<LIB_PIN, LIB_ITEM> );
-        propMgr.InheritsAfter( TYPE_HASH( LIB_PIN ), TYPE_HASH( LIB_ITEM ) );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_PIN, SCH_ITEM> );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_PIN ), TYPE_HASH( SCH_ITEM ) );
 
         propMgr.AddProperty( new PROPERTY<LIB_PIN, wxString>( _HKI( "Pin Name" ),
                 &LIB_PIN::SetName, &LIB_PIN::GetName ) );

@@ -372,7 +372,7 @@ BOOST_AUTO_TEST_CASE( Compare )
     BOOST_CHECK_EQUAL( m_part_no_data.Compare( m_part_no_data ), 0 );
 
     // Test for identical LIB_SYMBOL.
-    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ), 0 );
 
     // Test name.
     testPart.SetName( "tart_name" );
@@ -411,22 +411,22 @@ BOOST_AUTO_TEST_CASE( Compare )
     // Draw item list size comparison tests.
     testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECTANGLE ) );
     m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::RECTANGLE ) );
-    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ), 0 );
     m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     testPart.RemoveDrawItem( &testPart.GetDrawItems()[LIB_SHAPE_T].front() );
     m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::RECTANGLE ) );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
 
     // Draw item list contents comparison tests.
     testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECTANGLE ) );
     m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::ARC ) );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
     testPart.RemoveDrawItem( &testPart.GetDrawItems()[LIB_SHAPE_T].front() );
     m_part_no_data.AddDrawItem( new LIB_PIN( &m_part_no_data ) );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_PIN_T].front() );
 
     // Footprint filter array comparison tests.
@@ -434,11 +434,11 @@ BOOST_AUTO_TEST_CASE( Compare )
     BOOST_CHECK( m_part_no_data.GetFPFilters() == footPrintFilters );
     footPrintFilters.Add( "b" );
     testPart.SetFPFilters( footPrintFilters );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     m_part_no_data.SetFPFilters( footPrintFilters );
     footPrintFilters.Clear();
     testPart.SetFPFilters( footPrintFilters );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     footPrintFilters.Clear();
     m_part_no_data.SetFPFilters( footPrintFilters );
     testPart.SetFPFilters( footPrintFilters );
@@ -446,70 +446,70 @@ BOOST_AUTO_TEST_CASE( Compare )
     // Description string tests.
     m_part_no_data.SetDescription( "b" );
     testPart.SetDescription( "b" );
-    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ), 0 );
     m_part_no_data.SetDescription( "a" );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     m_part_no_data.SetDescription( "c" );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     m_part_no_data.SetDescription( wxEmptyString );
     testPart.SetDescription( wxEmptyString );
 
     // Key word string tests.
     m_part_no_data.SetKeyWords( "b" );
     testPart.SetKeyWords( "b" );
-    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart ), 0 );
+    BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ), 0 );
     m_part_no_data.SetKeyWords( "a" );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     m_part_no_data.SetKeyWords( "c" );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     m_part_no_data.SetKeyWords( wxEmptyString );
     testPart.SetKeyWords( wxEmptyString );
 
     // Pin name offset comparison tests.
     testPart.SetPinNameOffset( testPart.GetPinNameOffset() + 1 );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     testPart.SetPinNameOffset( testPart.GetPinNameOffset() - 2 );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     testPart.SetPinNameOffset( testPart.GetPinNameOffset() + 1 );
 
     // Units locked flag comparison tests.
     testPart.LockUnits( true );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     testPart.LockUnits( false );
     m_part_no_data.LockUnits( true );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     m_part_no_data.LockUnits( false );
 
     // Include in BOM support tests.
     testPart.SetExcludedFromBOM( true );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     testPart.SetExcludedFromBOM( false );
     m_part_no_data.SetExcludedFromBOM( true );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     m_part_no_data.SetExcludedFromBOM( false );
 
     // Include on board support tests.
     testPart.SetExcludedFromBoard( true );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     testPart.SetExcludedFromBoard( false );
     m_part_no_data.SetExcludedFromBoard( true );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     m_part_no_data.SetExcludedFromBoard( false );
 
     // Show pin names flag comparison tests.
     m_part_no_data.SetShowPinNames( false );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     m_part_no_data.SetShowPinNames( true );
     testPart.SetShowPinNames( false );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     testPart.SetShowPinNames( true );
 
     // Show pin numbers flag comparison tests.
     m_part_no_data.SetShowPinNumbers( false );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) < 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
     m_part_no_data.SetShowPinNumbers( true );
     testPart.SetShowPinNumbers( false );
-    BOOST_CHECK( m_part_no_data.Compare( testPart ) > 0 );
+    BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     testPart.SetShowPinNumbers( true );
 
     // Time stamp comparison tests.

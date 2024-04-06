@@ -70,7 +70,7 @@ std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
 
 void LIB_SYMBOL::GetChooserFields( std::map<wxString, wxString>& aColumnMap )
 {
-    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
         LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
 
@@ -124,8 +124,6 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
     SYMBOL( aSymbol ),
     m_me( this, null_deleter() )
 {
-    LIB_ITEM* newItem;
-
     m_library        = aLibrary;
     m_name           = aSymbol.m_name;
     m_fpFilters      = wxArrayString( aSymbol.m_fpFilters );
@@ -140,21 +138,21 @@ LIB_SYMBOL::LIB_SYMBOL( const LIB_SYMBOL& aSymbol, SYMBOL_LIB* aLibrary ) :
 
     ClearSelected();
 
-    for( const LIB_ITEM& oldItem : aSymbol.m_drawings )
+    for( const SCH_ITEM& oldItem : aSymbol.m_drawings )
     {
         if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
             continue;
 
         try
         {
-            newItem = (LIB_ITEM*) oldItem.Clone();
+            SCH_ITEM* newItem = (SCH_ITEM*) oldItem.Clone();
             newItem->ClearSelected();
             newItem->SetParent( this );
             m_drawings.push_back( newItem );
         }
         catch( ... )
         {
-            wxFAIL_MSG( "Failed to clone LIB_ITEM." );
+            wxFAIL_MSG( "Failed to clone SCH_ITEM." );
             return;
         }
     }
@@ -171,7 +169,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     if( &aSymbol == this )
         return aSymbol;
 
-    LIB_ITEM* newItem;
+    SCH_ITEM* newItem;
 
     m_library        = aSymbol.m_library;
     m_name           = aSymbol.m_name;
@@ -194,12 +192,12 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
 
     m_drawings.clear();
 
-    for( const LIB_ITEM& oldItem : aSymbol.m_drawings )
+    for( const SCH_ITEM& oldItem : aSymbol.m_drawings )
     {
         if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
             continue;
 
-        newItem = (LIB_ITEM*) oldItem.Clone();
+        newItem = (SCH_ITEM*) oldItem.Clone();
         newItem->SetParent( this );
         m_drawings.push_back( newItem );
     }
@@ -241,7 +239,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     if( m_me == aRhs.m_me )
         return 0;
 
-    if( !aReporter && ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
+    if( !aReporter && ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) == 0 )
     {
         if( int tmp = m_name.Cmp( aRhs.m_name ) )
             return tmp;
@@ -279,9 +277,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     // Make sure shapes and pins are sorted. No need with fields as those are
     // matched by id/name.
 
-    std::set<const LIB_ITEM*, LIB_ITEM::cmp_items> aShapes;
-    std::set<const LIB_ITEM*>                      aFields;
-    std::set<const LIB_ITEM*, LIB_ITEM::cmp_items> aPins;
+    std::set<const SCH_ITEM*, SCH_ITEM::cmp_items> aShapes;
+    std::set<const SCH_ITEM*>                      aFields;
+    std::set<const SCH_ITEM*, SCH_ITEM::cmp_items> aPins;
 
     for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
     {
@@ -293,9 +291,9 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             aPins.insert( &(*it) );
     }
 
-    std::set<const LIB_ITEM*, LIB_ITEM::cmp_items> bShapes;
-    std::set<const LIB_ITEM*>                      bFields;
-    std::set<const LIB_ITEM*, LIB_ITEM::cmp_items> bPins;
+    std::set<const SCH_ITEM*, SCH_ITEM::cmp_items> bShapes;
+    std::set<const SCH_ITEM*>                      bFields;
+    std::set<const SCH_ITEM*, SCH_ITEM::cmp_items> bPins;
 
     for( auto it = aRhs.m_drawings.begin(); it != aRhs.m_drawings.end(); ++it )
     {
@@ -340,7 +338,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     }
     else
     {
-        for( const LIB_ITEM* aPinItem : aPins )
+        for( const SCH_ITEM* aPinItem : aPins )
         {
             const LIB_PIN* aPin = static_cast<const LIB_PIN*>( aPinItem );
             const LIB_PIN* bPin = aRhs.GetPin( aPin->GetNumber(), aPin->GetUnit(),
@@ -365,7 +363,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
         }
     }
 
-    for( const LIB_ITEM* aFieldItem : aFields )
+    for( const SCH_ITEM* aFieldItem : aFields )
     {
         const LIB_FIELD* aField = static_cast<const LIB_FIELD*>( aFieldItem );
         const LIB_FIELD* bField = nullptr;
@@ -441,7 +439,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             return retv;
     }
 
-    if( ( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::ERC ) == 0 )
+    if( ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) == 0 )
     {
         if( m_showPinNames != aRhs.m_showPinNames )
         {
@@ -606,7 +604,7 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         }
 
         // Grab all the rest of derived symbol fields.
-        for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+        for( const SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
         {
             const LIB_FIELD* aliasField = dynamic_cast<const LIB_FIELD*>( &item );
 
@@ -737,7 +735,7 @@ wxString LIB_SYMBOL::LetterSubReference( int aUnit, int aFirstId )
 void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                         const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
     {
         // Do not print private items
         if( item.IsPrivate() )
@@ -795,7 +793,7 @@ void LIB_SYMBOL::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUni
      */
     if( !GetGRForceBlackPenState() )
     {
-        for( LIB_ITEM& item : m_drawings )
+        for( SCH_ITEM& item : m_drawings )
         {
             // Do not print private items
             if( item.IsPrivate() )
@@ -840,7 +838,7 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
     aPlotter->SetColor( color );
 
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
     {
         // Do not plot private items
         if( item.IsPrivate() )
@@ -883,7 +881,7 @@ void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT
 
     aPlotter->SetColor( color );
 
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
     {
         if( item.Type() != LIB_FIELD_T )
             continue;
@@ -912,9 +910,9 @@ void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT
 void LIB_SYMBOL::FixupDrawItems()
 {
     std::vector<LIB_SHAPE*> potential_top_items;
-    std::vector<LIB_ITEM*>  bottom_items;
+    std::vector<SCH_ITEM*>  bottom_items;
 
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
     {
         if( item.Type() == LIB_SHAPE_T )
         {
@@ -932,14 +930,14 @@ void LIB_SYMBOL::FixupDrawItems()
     }
 
     std::sort( potential_top_items.begin(), potential_top_items.end(),
-               []( LIB_ITEM* a, LIB_ITEM* b )
+               []( SCH_ITEM* a, SCH_ITEM* b )
                {
                    return a->GetBoundingBox().GetArea() > b->GetBoundingBox().GetArea();
                } );
 
     for( LIB_SHAPE* item : potential_top_items )
     {
-        for( LIB_ITEM* bottom_item : bottom_items )
+        for( SCH_ITEM* bottom_item : bottom_items )
         {
             if( item->GetBoundingBox().Contains( bottom_item->GetBoundingBox() ) )
             {
@@ -951,7 +949,7 @@ void LIB_SYMBOL::FixupDrawItems()
 }
 
 
-void LIB_SYMBOL::RemoveDrawItem( LIB_ITEM* aItem )
+void LIB_SYMBOL::RemoveDrawItem( SCH_ITEM* aItem )
 {
     wxASSERT( aItem != nullptr );
 
@@ -976,7 +974,7 @@ void LIB_SYMBOL::RemoveDrawItem( LIB_ITEM* aItem )
 }
 
 
-void LIB_SYMBOL::AddDrawItem( LIB_ITEM* aItem, bool aSort )
+void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 {
     wxCHECK( aItem, /* void */ );
 
@@ -987,7 +985,7 @@ void LIB_SYMBOL::AddDrawItem( LIB_ITEM* aItem, bool aSort )
 }
 
 
-void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aBodyStyle ) const
+void LIB_SYMBOL::GetPins( std::vector<LIB_PIN*>& aList, int aUnit, int aBodyStyle ) const
 {
     /* Notes:
      * when aUnit == 0: no unit filtering
@@ -999,7 +997,7 @@ void LIB_SYMBOL::GetPins( LIB_PINS& aList, int aUnit, int aBodyStyle ) const
     LIB_SYMBOL_SPTR            parent = m_parent.lock();
     const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
 
-    for( const LIB_ITEM& item : drawItems[LIB_PIN_T] )
+    for( const SCH_ITEM& item : drawItems[LIB_PIN_T] )
     {
         // Unit filtering:
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
@@ -1034,7 +1032,7 @@ int LIB_SYMBOL::GetPinCount()
 
 LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle ) const
 {
-    LIB_PINS pinList;
+    std::vector<LIB_PIN*> pinList;
 
     GetPins( pinList, aUnit, aBodyStyle );
 
@@ -1053,13 +1051,13 @@ LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle 
 bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums, bool aTestNames,
                                    bool aTestType, bool aTestOrientation, bool aTestLength ) const
 {
-    LIB_PINS thisPinList;
+    std::vector<LIB_PIN*> thisPinList;
     GetPins( thisPinList, /* aUnit */ 0, /* aBodyStyle */ 0 );
 
     for( const LIB_PIN* eachThisPin : thisPinList )
     {
         wxASSERT( eachThisPin );
-        LIB_PINS otherPinList;
+        std::vector<LIB_PIN*> otherPinList;
         aOtherPart.GetPins( otherPinList, /* aUnit */ 0, /* aBodyStyle */ 0 );
         bool foundMatch = false;
 
@@ -1122,7 +1120,7 @@ const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle,
 {
     BOX2I bBox;     // Start with a fresh BOX2I so the Merge algorithm works
 
-    for( const LIB_ITEM& item : m_drawings )
+    for( const SCH_ITEM& item : m_drawings )
     {
         if( item.m_unit > 0 && m_unitCount > 1 && aUnit > 0 && aUnit != item.m_unit )
             continue;
@@ -1148,7 +1146,7 @@ const BOX2I LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aInc
 {
     BOX2I bbox;
 
-    for( const LIB_ITEM& item : m_drawings )
+    for( const SCH_ITEM& item : m_drawings )
     {
         if( item.m_unit > 0 && aUnit > 0 && aUnit != item.m_unit )
             continue;
@@ -1223,7 +1221,7 @@ void LIB_SYMBOL::GetFields( std::vector<LIB_FIELD*>& aList )
         aList.push_back( GetFieldById( id ) );
 
     // Now grab all the rest of fields.
-    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
         LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
 
@@ -1240,7 +1238,7 @@ void LIB_SYMBOL::GetFields( std::vector<LIB_FIELD>& aList )
         aList.push_back( *GetFieldById( id ) );
 
     // Now grab all the rest of fields.
-    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
         LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
 
@@ -1252,7 +1250,7 @@ void LIB_SYMBOL::GetFields( std::vector<LIB_FIELD>& aList )
 
 LIB_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
 {
-    for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( const SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
         LIB_FIELD* field = ( LIB_FIELD* ) &item;
 
@@ -1266,7 +1264,7 @@ LIB_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
 
 LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName, bool aCaseInsensitive )
 {
-    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
         if( aCaseInsensitive )
         {
@@ -1287,7 +1285,7 @@ LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName, bool aCaseInsensit
 const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
                                         bool aCaseInsensitive ) const
 {
-    for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( const SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
         const LIB_FIELD& field = static_cast<const LIB_FIELD&>( item );
 
@@ -1373,9 +1371,9 @@ wxString LIB_SYMBOL::GetPrefix()
 }
 
 
-void LIB_SYMBOL::RunOnLibChildren( const std::function<void( LIB_ITEM* )>& aFunction )
+void LIB_SYMBOL::RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction )
 {
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
         aFunction( &item );
 }
 
@@ -1385,7 +1383,7 @@ int LIB_SYMBOL::UpdateFieldOrdinals()
     int retv = 0;
     int lastOrdinal = MANDATORY_FIELDS;
 
-    for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
         LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
 
@@ -1419,24 +1417,24 @@ int LIB_SYMBOL::GetNextAvailableFieldId() const
 
 void LIB_SYMBOL::Move( const VECTOR2I& aOffset )
 {
-    for( LIB_ITEM& item : m_drawings )
-        item.Offset( aOffset );
+    for( SCH_ITEM& item : m_drawings )
+        item.Move( aOffset );
 }
 
 
 bool LIB_SYMBOL::HasAlternateBodyStyle() const
 {
-    for( const LIB_ITEM& item : m_drawings )
+    for( const SCH_ITEM& item : m_drawings )
     {
-        if( item.m_bodyStyle > LIB_ITEM::BODY_STYLE::BASE )
+        if( item.m_bodyStyle > BODY_STYLE::BASE )
             return true;
     }
 
     if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
     {
-        for( const LIB_ITEM& item : parent->GetDrawItems() )
+        for( const SCH_ITEM& item : parent->GetDrawItems() )
         {
-            if( item.m_bodyStyle > LIB_ITEM::BODY_STYLE::BASE )
+            if( item.m_bodyStyle > BODY_STYLE::BASE )
                 return true;
         }
     }
@@ -1451,7 +1449,7 @@ int LIB_SYMBOL::GetMaxPinNumber() const
     LIB_SYMBOL_SPTR            parent = m_parent.lock();
     const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
 
-    for( const LIB_ITEM& item : drawItems[LIB_PIN_T] )
+    for( const SCH_ITEM& item : drawItems[LIB_PIN_T] )
     {
         const LIB_PIN* pin = static_cast<const LIB_PIN*>( &item );
         long           currentPinNumber = 0;
@@ -1466,22 +1464,26 @@ int LIB_SYMBOL::GetMaxPinNumber() const
 
 void LIB_SYMBOL::ClearTempFlags()
 {
-    for( LIB_ITEM& item : m_drawings )
+    SCH_ITEM::ClearTempFlags();
+
+    for( SCH_ITEM& item : m_drawings )
         item.ClearTempFlags();
 }
 
 
 void LIB_SYMBOL::ClearEditFlags()
 {
-    for( LIB_ITEM& item : m_drawings )
+    SCH_ITEM::ClearEditFlags();
+
+    for( SCH_ITEM& item : m_drawings )
         item.ClearEditFlags();
 }
 
 
-LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType,
+SCH_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType,
                                       const VECTOR2I& aPoint )
 {
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
     {
         if( ( aUnit && item.m_unit && aUnit != item.m_unit )
                 || ( aBodyStyle && item.m_bodyStyle && aBodyStyle != item.m_bodyStyle )
@@ -1498,7 +1500,7 @@ LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType,
 }
 
 
-LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType,
+SCH_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType,
                                       const VECTOR2I& aPoint, const TRANSFORM& aTransform )
 {
     /* we use LocateDrawItem( int aUnit, int convert, KICAD_T type, const
@@ -1506,7 +1508,7 @@ LIB_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType,
      * because this function uses DefaultTransform as orient/mirror matrix
      * we temporary copy aTransform in DefaultTransform
      */
-    LIB_ITEM* item;
+    SCH_ITEM* item;
     TRANSFORM transform = DefaultTransform;
     DefaultTransform = aTransform;
 
@@ -1523,7 +1525,7 @@ INSPECT_RESULT LIB_SYMBOL::Visit( INSPECTOR aInspector, void* aTestData,
                                   const std::vector<KICAD_T>& aScanTypes )
 {
     // The part itself is never inspected, only its children
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
     {
         if( item.IsType( aScanTypes ) )
         {
@@ -1560,22 +1562,22 @@ void LIB_SYMBOL::SetUnitCount( int aCount, bool aDuplicateDrawItems )
         // Temporary storage for new items, as adding new items directly to
         // m_drawings may cause the buffer reallocation which invalidates the
         // iterators
-        std::vector< LIB_ITEM* > tmp;
+        std::vector<SCH_ITEM*> tmp;
 
-        for( LIB_ITEM& item : m_drawings )
+        for( SCH_ITEM& item : m_drawings )
         {
             if( item.m_unit != 1 )
                 continue;
 
             for( int j = prevCount + 1; j <= aCount; j++ )
             {
-                LIB_ITEM* newItem = (LIB_ITEM*) item.Duplicate();
+                SCH_ITEM* newItem = item.Duplicate();
                 newItem->m_unit = j;
                 tmp.push_back( newItem );
             }
         }
 
-        for( LIB_ITEM* item : tmp )
+        for( SCH_ITEM* item : tmp )
             m_drawings.push_back( item );
     }
 
@@ -1603,9 +1605,9 @@ void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePi
     {
         if( aDuplicatePins )
         {
-            std::vector<LIB_ITEM*> tmp;     // Temporarily store the duplicated pins here.
+            std::vector<SCH_ITEM*> tmp;     // Temporarily store the duplicated pins here.
 
-            for( LIB_ITEM& item : m_drawings )
+            for( SCH_ITEM& item : m_drawings )
             {
                 // Only pins are duplicated.
                 if( item.Type() != LIB_PIN_T )
@@ -1613,14 +1615,14 @@ void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePi
 
                 if( item.m_bodyStyle == 1 )
                 {
-                    LIB_ITEM* newItem = static_cast<LIB_ITEM*>( item.Duplicate() );
+                    SCH_ITEM* newItem = item.Duplicate();
                     newItem->m_bodyStyle = 2;
                     tmp.push_back( newItem );
                 }
             }
 
             // Transfer the new pins to the LIB_SYMBOL.
-            for( LIB_ITEM* item : tmp )
+            for( SCH_ITEM* item : tmp )
                 m_drawings.push_back( item );
         }
     }
@@ -1642,11 +1644,11 @@ void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePi
 }
 
 
-std::vector<LIB_ITEM*> LIB_SYMBOL::GetUnitDrawItems( int aUnit, int aBodyStyle )
+std::vector<SCH_ITEM*> LIB_SYMBOL::GetUnitDrawItems( int aUnit, int aBodyStyle )
 {
-    std::vector<LIB_ITEM*> unitItems;
+    std::vector<SCH_ITEM*> unitItems;
 
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
@@ -1667,7 +1669,7 @@ std::vector<struct LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 {
     std::vector<struct LIB_SYMBOL_UNIT> units;
 
-    for( LIB_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
@@ -1738,8 +1740,8 @@ bool LIB_SYMBOL::operator==( const LIB_SYMBOL& aOther ) const
             return false;
     }
 
-    const LIB_PINS thisPinList = GetAllLibPins();
-    const LIB_PINS otherPinList = aOther.GetAllLibPins();
+    const std::vector<LIB_PIN*> thisPinList = GetAllLibPins();
+    const std::vector<LIB_PIN*> otherPinList = aOther.GetAllLibPins();
 
     if( thisPinList.size() != otherPinList.size() )
         return false;
@@ -1771,12 +1773,12 @@ double LIB_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
     if( m_Uuid == aOther.m_Uuid )
         return 1.0;
 
-    for( const LIB_ITEM& item : m_drawings )
+    for( const SCH_ITEM& item : m_drawings )
     {
         totalItems += 1;
         double max_similarity = 0.0;
 
-        for( const LIB_ITEM& otherItem : other.m_drawings )
+        for( const SCH_ITEM& otherItem : other.m_drawings )
         {
             double temp_similarity = item.Similarity( otherItem );
             max_similarity = std::max( max_similarity, temp_similarity );

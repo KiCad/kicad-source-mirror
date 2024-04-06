@@ -362,8 +362,7 @@ set( EESCHEMA_SRCS
     gfx_import_utils.cpp
     picksymbol.cpp
     lib_field.cpp
-    lib_item.cpp
-    lib_pin.cpp
+        lib_pin.cpp
     lib_shape.cpp
     lib_symbol.cpp
     lib_text.cpp

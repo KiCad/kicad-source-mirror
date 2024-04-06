@@ -483,8 +483,8 @@ int SYMBOL_EDITOR_CONTROL::RenameSymbol( const TOOL_EVENT& aEvent )
 
 int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
 {
-    int convert = aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard ) ?
-            LIB_ITEM::BODY_STYLE::BASE : LIB_ITEM::BODY_STYLE::DEMORGAN;
+    int bodyStyle = aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard ) ? BODY_STYLE::BASE
+                                                                         : BODY_STYLE::DEMORGAN;
 
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
     {
@@ -492,7 +492,7 @@ int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
         SYMBOL_EDIT_FRAME* symbolEditor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-        symbolEditor->SetBodyStyle( convert );
+        symbolEditor->SetBodyStyle( bodyStyle );
 
         m_toolMgr->ResetTools( TOOL_BASE::MODEL_RELOAD );
         symbolEditor->RebuildView();
@@ -500,7 +500,7 @@ int SYMBOL_EDITOR_CONTROL::OnDeMorgan( const TOOL_EVENT& aEvent )
     else if( m_frame->IsType( FRAME_SCH_VIEWER ) )
     {
         SYMBOL_VIEWER_FRAME* symbolViewer = static_cast<SYMBOL_VIEWER_FRAME*>( m_frame );
-        symbolViewer->SetUnitAndBodyStyle( symbolViewer->GetUnit(), convert );
+        symbolViewer->SetUnitAndBodyStyle( symbolViewer->GetUnit(), bodyStyle );
     }
 
     return 0;

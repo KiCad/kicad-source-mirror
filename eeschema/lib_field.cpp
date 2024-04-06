@@ -39,8 +39,8 @@
 #include <settings/color_settings.h>
 
 
-LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId, const wxString& aName ) :
-        LIB_ITEM( LIB_FIELD_T, aParent ),
+LIB_FIELD::LIB_FIELD( SCH_ITEM* aParent, int aId, const wxString& aName ) :
+        SCH_ITEM( aParent, LIB_FIELD_T ),
         EDA_TEXT( schIUScale )
 {
     Init( aId );
@@ -49,7 +49,7 @@ LIB_FIELD::LIB_FIELD( LIB_SYMBOL* aParent, int aId, const wxString& aName ) :
 
 
 LIB_FIELD::LIB_FIELD( int aId ) :
-        LIB_ITEM( LIB_FIELD_T, nullptr ),
+        SCH_ITEM( nullptr, LIB_FIELD_T ),
         EDA_TEXT( schIUScale )
 {
     Init( aId );
@@ -57,7 +57,7 @@ LIB_FIELD::LIB_FIELD( int aId ) :
 
 
 LIB_FIELD::LIB_FIELD( int aId, const wxString& aName ) :
-        LIB_ITEM( LIB_FIELD_T, nullptr ),
+        SCH_ITEM( nullptr, LIB_FIELD_T ),
         EDA_TEXT( schIUScale )
 {
     Init( aId );
@@ -193,6 +193,23 @@ bool LIB_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 }
 
 
+bool LIB_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
+{
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    BOX2I sel = aRect;
+
+    if ( aAccuracy )
+        sel.Inflate( aAccuracy );
+
+    if( aContained )
+        return sel.Contains( GetBoundingBox() );
+
+    return sel.Intersects( GetBoundingBox() );
+}
+
+
 EDA_ITEM* LIB_FIELD::Clone() const
 {
     return new LIB_FIELD( *this );
@@ -213,11 +230,11 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 }
 
 
-int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
+int LIB_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_FIELD_T );
 
-    int retv = LIB_ITEM::compare( aOther, aCompareFlags );
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
@@ -226,7 +243,7 @@ int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 
     // Equality test will vary depending whether or not the field is mandatory.  Otherwise,
     // sorting is done by ordinal.
-    if( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::EQUALITY )
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
     {
         // Mandatory fields have fixed ordinals and their names can vary due to translated field
         // names.  Optional fields have fixed names and their ordinals can vary.
@@ -251,10 +268,10 @@ int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 
     bool ignoreFieldText = false;
 
-    if( m_id == REFERENCE_FIELD && !( aCompareFlags & COMPARE_FLAGS::EQUALITY ) )
+    if( m_id == REFERENCE_FIELD && !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY ) )
         ignoreFieldText = true;
 
-    if( m_id == VALUE_FIELD && ( aCompareFlags & COMPARE_FLAGS::ERC ) )
+    if( m_id == VALUE_FIELD && ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) )
         ignoreFieldText = true;
 
     if( !ignoreFieldText )
@@ -265,7 +282,7 @@ int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
             return retv;
     }
 
-    if( aCompareFlags & LIB_ITEM::COMPARE_FLAGS::EQUALITY )
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
     {
         if( GetTextPos().x != tmp->GetTextPos().x )
             return GetTextPos().x - tmp->GetTextPos().x;
@@ -284,13 +301,13 @@ int LIB_FIELD::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 }
 
 
-void LIB_FIELD::Offset( const VECTOR2I& aOffset )
+void LIB_FIELD::Move( const VECTOR2I& aOffset )
 {
     EDA_TEXT::Offset( aOffset );
 }
 
 
-void LIB_FIELD::MoveTo( const VECTOR2I& newPosition )
+void LIB_FIELD::SetPosition( const VECTOR2I& newPosition )
 {
     EDA_TEXT::SetTextPos( newPosition );
 }
@@ -534,7 +551,7 @@ void LIB_FIELD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_I
 {
     wxString msg;
 
-    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
+    getSymbolEditorMsgPanelInfo( aFrame, aList );
 
     // Don't use GetShownText(); we want to see the variable references here
     aList.emplace_back( _( "Field" ), UnescapeString( GetName() ) );
@@ -584,7 +601,7 @@ bool LIB_FIELD::IsMandatory() const
 }
 
 
-bool LIB_FIELD::operator==( const LIB_ITEM& aItem ) const
+bool LIB_FIELD::operator==( const SCH_ITEM& aItem ) const
 {
     if( aItem.Type() != LIB_FIELD_T )
         return false;
@@ -613,7 +630,7 @@ bool LIB_FIELD::operator==( const LIB_ITEM& aItem ) const
 }
 
 
-double LIB_FIELD::Similarity( const LIB_ITEM& aItem ) const
+double LIB_FIELD::Similarity( const SCH_ITEM& aItem ) const
 {
     if( aItem.Type() != LIB_FIELD_T )
         return 0.0;
@@ -648,9 +665,9 @@ static struct LIB_FIELD_DESC
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( LIB_FIELD );
-        propMgr.AddTypeCast( new TYPE_CAST<LIB_FIELD, LIB_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_FIELD, SCH_ITEM> );
         propMgr.AddTypeCast( new TYPE_CAST<LIB_FIELD, EDA_TEXT> );
-        propMgr.InheritsAfter( TYPE_HASH( LIB_FIELD ), TYPE_HASH( LIB_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_FIELD ), TYPE_HASH( SCH_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( LIB_FIELD ), TYPE_HASH( EDA_TEXT ) );
 
         propMgr.AddProperty( new PROPERTY<LIB_FIELD, bool>( _HKI( "Show Field Name" ),

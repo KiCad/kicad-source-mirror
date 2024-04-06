@@ -80,11 +80,11 @@ public:
 
     VECTOR2I GetCenter() const { return getCenter(); }
 
-    void BeginEdit( const VECTOR2I& aStartPoint )     { beginEdit( aStartPoint ); }
-    bool ContinueEdit( const VECTOR2I& aPosition )    { return continueEdit( aPosition ); }
-    void CalcEdit( const VECTOR2I& aPosition )        { calcEdit( aPosition ); }
-    void EndEdit()                                    { endEdit(); }
-    void SetEditState( int aState )                   { setEditState( aState ); }
+    void BeginEdit( const VECTOR2I& aStartPoint ) override  { beginEdit( aStartPoint ); }
+    bool ContinueEdit( const VECTOR2I& aPosition ) override { return continueEdit( aPosition ); }
+    void CalcEdit( const VECTOR2I& aPosition ) override     { calcEdit( aPosition ); }
+    void EndEdit( bool aClosed = false ) override           { endEdit(); }
+    void SetEditState( int aState )                         { setEditState( aState ); }
 
     void Move( const VECTOR2I& aOffset ) override;
 

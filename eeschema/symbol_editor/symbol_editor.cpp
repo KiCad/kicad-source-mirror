@@ -1277,9 +1277,9 @@ void SYMBOL_EDIT_FRAME::UpdateSymbolMsgPanelInfo()
 
     AppendMsgPanel( _( "Unit" ), msg, 8 );
 
-    if( m_bodyStyle == LIB_ITEM::BODY_STYLE::DEMORGAN )
+    if( m_bodyStyle == BODY_STYLE::DEMORGAN )
         msg = _( "Alternate" );
-    else if( m_bodyStyle == LIB_ITEM::BODY_STYLE::BASE )
+    else if( m_bodyStyle == BODY_STYLE::BASE )
         msg = _( "Standard" );
     else
         msg = wxT( "?" );

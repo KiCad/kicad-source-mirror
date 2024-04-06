@@ -39,7 +39,7 @@
 #include <lib_textbox.h>
 
 
-LIB_TEXTBOX::LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth, FILL_T aFillType,
+LIB_TEXTBOX::LIB_TEXTBOX( SCH_ITEM* aParent, int aLineWidth, FILL_T aFillType,
                           const wxString& text ) :
         LIB_SHAPE( aParent, SHAPE_T::RECTANGLE, aLineWidth, aFillType, LIB_TEXTBOX_T ),
         EDA_TEXT( schIUScale, text )
@@ -188,11 +188,11 @@ VECTOR2I LIB_TEXTBOX::GetDrawPos() const
 }
 
 
-int LIB_TEXTBOX::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
+int LIB_TEXTBOX::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == LIB_TEXTBOX_T );
 
-    int retv = LIB_ITEM::compare( aOther, aCompareFlags );
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
@@ -531,7 +531,7 @@ void LIB_TEXTBOX::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL
 }
 
 
-bool LIB_TEXTBOX::operator==( const LIB_ITEM& aOther ) const
+bool LIB_TEXTBOX::operator==( const SCH_ITEM& aOther ) const
 {
     if( aOther.Type() != LIB_TEXTBOX_T )
         return false;
@@ -542,7 +542,7 @@ bool LIB_TEXTBOX::operator==( const LIB_ITEM& aOther ) const
 }
 
 
-double LIB_TEXTBOX::Similarity( const LIB_ITEM& aOther ) const
+double LIB_TEXTBOX::Similarity( const SCH_ITEM& aOther ) const
 {
     if( m_Uuid == aOther.m_Uuid )
         return 1.0;

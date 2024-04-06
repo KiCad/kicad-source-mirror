@@ -70,7 +70,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         aMessages.push_back( msg );
     }
 
-    LIB_PINS pinList;
+    std::vector<LIB_PIN*> pinList;
     aSymbol->GetPins( pinList );
 
     // Test for duplicates:
@@ -126,7 +126,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                             pin->GetName(),
                             aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                             aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                            LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                            SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
             }
             else
             {
@@ -143,7 +143,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                             aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
                             aSymbol->GetUnitReference( next->GetUnit() ),
                             aSymbol->GetUnitReference( pin->GetUnit() ),
-                            LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                            SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
             }
         }
         else
@@ -250,7 +250,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 pinName,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                                LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                                SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
                 }
                 else
                 {
@@ -261,7 +261,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1,
-                                LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                                SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
                 }
             }
             else
@@ -308,7 +308,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 pinName,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
-                                LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                                SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
                 }
                 else
                 {
@@ -319,7 +319,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                 aUnitsProvider->MessageTextFromValue( pin->GetPosition().x ),
                                 aUnitsProvider->MessageTextFromValue( -pin->GetPosition().y ),
                                 'A' + pin->GetUnit() - 1,
-                                LIB_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
+                                SCH_ITEM::GetBodyStyleDescription( pin->GetBodyStyle() ).Lower() );
                  }
             }
             else
@@ -361,7 +361,7 @@ void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessag
 
     wxString msg;
 
-    for( const LIB_ITEM& item : aSymbol->GetDrawItems() )
+    for( const SCH_ITEM& item : aSymbol->GetDrawItems() )
     {
         if( item.Type() != LIB_SHAPE_T )
             continue;

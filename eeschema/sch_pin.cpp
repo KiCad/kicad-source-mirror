@@ -235,14 +235,14 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     if( symbol->GetUnitCount() )
     {
-        msg = m_libPin ? LIB_ITEM::GetUnitDescription( m_libPin->GetUnit() ) :
+        msg = m_libPin ? GetUnitDescription( m_libPin->GetUnit() ) :
                          wxString( "Undefined library pin." );
         aList.emplace_back( _( "Unit" ), msg );
     }
 
     if( symbol->HasAlternateBodyStyle() )
     {
-        msg = m_libPin ? LIB_ITEM::GetBodyStyleDescription( m_libPin->GetBodyStyle() ) :
+        msg = m_libPin ? GetBodyStyleDescription( m_libPin->GetBodyStyle() ) :
                          wxString( "Undefined library pin." );
         aList.emplace_back( _( "Body Style" ), msg );
     }

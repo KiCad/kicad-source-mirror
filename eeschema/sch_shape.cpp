@@ -114,10 +114,7 @@ void SCH_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 void SCH_SHAPE::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                       int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
-    int pen_size = GetPenWidth();
-
-    if( pen_size > 0 )
-        pen_size = std::max( pen_size, aPlotter->RenderSettings()->GetMinPenWidth() );
+    int pen_size = GetEffectivePenWidth( getRenderSettings( aPlotter ) );
 
     static std::vector<VECTOR2I> cornerList;
 
@@ -296,7 +293,7 @@ void SCH_SHAPE::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUnit
 void SCH_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
-    int      penWidth = GetPenWidth();
+    int      penWidth = GetEffectivePenWidth( aSettings );
     wxDC*    DC = aSettings->GetPrintDC();
     COLOR4D  color = GetStroke().GetColor();
 
@@ -364,10 +361,6 @@ void SCH_SHAPE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
         default:
             UNIMPLEMENTED_FOR( SHAPE_T_asString() );
         }
-    }
-    else
-    {
-        penWidth = std::max( penWidth, aSettings->GetMinPenWidth() );
     }
 
     if( penWidth > 0 )

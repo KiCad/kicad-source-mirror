@@ -377,13 +377,13 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
     auto demorganStandardCond =
             []( const SELECTION& )
             {
-                return m_bodyStyle == LIB_ITEM::BODY_STYLE::BASE;
+                return m_bodyStyle == BODY_STYLE::BASE;
             };
 
     auto demorganAlternateCond =
             []( const SELECTION& )
             {
-                return m_bodyStyle == LIB_ITEM::BODY_STYLE::DEMORGAN;
+                return m_bodyStyle == BODY_STYLE::DEMORGAN;
             };
 
     auto haveDatasheetCond =
@@ -410,7 +410,7 @@ void SYMBOL_VIEWER_FRAME::setupUIConditions()
 void SYMBOL_VIEWER_FRAME::SetUnitAndBodyStyle( int aUnit, int aBodyStyle )
 {
     m_unit = aUnit > 0 ? aUnit : 1;
-    m_bodyStyle = aBodyStyle > 0 ? aBodyStyle : LIB_ITEM::BODY_STYLE::BASE;
+    m_bodyStyle = aBodyStyle > 0 ? aBodyStyle : BODY_STYLE::BASE;
     m_selection_changed = false;
 
     updatePreviewSymbol();
@@ -640,7 +640,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateLibList()
                                         ? m_libList->GetBaseString( 0 ) : wxString( wxT( "" ) ) );
         m_currentSymbol.SetLibItemName( wxEmptyString );
         m_unit = 1;
-        m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;
+        m_bodyStyle = BODY_STYLE::BASE;
     }
 
     bool cmp_changed = ReCreateSymbolList();
@@ -715,7 +715,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     if( m_symbolList->IsEmpty() )
     {
         SetSelectedSymbol( wxEmptyString );
-        m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;
+        m_bodyStyle = BODY_STYLE::BASE;
         m_unit    = 1;
         return true;
     }
@@ -727,7 +727,7 @@ bool SYMBOL_VIEWER_FRAME::ReCreateSymbolList()
     {
         // Select the first library entry when the previous entry name does not exist in
         // the current library.
-        m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;
+        m_bodyStyle = BODY_STYLE::BASE;
         m_unit      = 1;
         index       = -1;
         changed     = true;
@@ -827,7 +827,7 @@ void SYMBOL_VIEWER_FRAME::SetSelectedSymbol( const wxString& aSymbolName )
         if( m_selection_changed )
         {
             m_unit = 1;
-            m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;
+            m_bodyStyle = BODY_STYLE::BASE;
             m_selection_changed = false;
         }
 

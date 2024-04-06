@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,12 +31,11 @@
 #include <eda_draw_frame.h>
 #include <general.h>
 #include <lib_shape.h>
-#include "plotters/plotter.h"
 
 
-LIB_SHAPE::LIB_SHAPE( LIB_SYMBOL* aParent, SHAPE_T aShape, int aLineWidth, FILL_T aFillType,
+LIB_SHAPE::LIB_SHAPE( SCH_ITEM* aParent, SHAPE_T aShape, int aLineWidth, FILL_T aFillType,
                       KICAD_T aType ) :
-    LIB_ITEM( aType, aParent ),
+    SCH_ITEM( aParent, aType ),
     EDA_SHAPE( aShape, aLineWidth, aFillType )
 {
     m_editState = 0;
@@ -67,9 +66,9 @@ EDA_ITEM* LIB_SHAPE::Clone() const
 }
 
 
-int LIB_SHAPE::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
+int LIB_SHAPE::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
-    int retv = LIB_ITEM::compare( aOther, aCompareFlags );
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
@@ -78,15 +77,9 @@ int LIB_SHAPE::compare( const LIB_ITEM& aOther, int aCompareFlags ) const
 }
 
 
-void LIB_SHAPE::Offset( const VECTOR2I& aOffset )
+void LIB_SHAPE::Move( const VECTOR2I& aOffset )
 {
     move( aOffset );
-}
-
-
-void LIB_SHAPE::MoveTo( const VECTOR2I& aPosition )
-{
-    setPosition( aPosition );
 }
 
 
@@ -448,7 +441,7 @@ const BOX2I LIB_SHAPE::GetBoundingBox() const
 
 void LIB_SHAPE::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList )
 {
-    LIB_ITEM::GetMsgPanelInfo( aFrame, aList );
+    getSymbolEditorMsgPanelInfo( aFrame, aList );
 
     ShapeGetMsgPanelInfo( aFrame, aList );
 }
@@ -520,18 +513,18 @@ void LIB_SHAPE::AddPoint( const VECTOR2I& aPosition )
 }
 
 
-bool LIB_SHAPE::operator==( const LIB_ITEM& aOther ) const
+bool LIB_SHAPE::operator==( const SCH_ITEM& aOther ) const
 {
     if( aOther.Type() != Type() )
         return false;
 
     const LIB_SHAPE& other = static_cast<const LIB_SHAPE&>( aOther );
 
-    return LIB_ITEM::operator==( aOther ) && EDA_SHAPE::operator==( other );
+    return SCH_ITEM::operator==( aOther ) && EDA_SHAPE::operator==( other );
 }
 
 
-double LIB_SHAPE::Similarity( const LIB_ITEM& aOther ) const
+double LIB_SHAPE::Similarity( const SCH_ITEM& aOther ) const
 {
     if( m_Uuid == aOther.m_Uuid )
         return 1.0;
@@ -564,9 +557,9 @@ static struct LIB_SHAPE_DESC
     {
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( LIB_SHAPE );
-        propMgr.AddTypeCast( new TYPE_CAST<LIB_SHAPE, LIB_ITEM> );
+        propMgr.AddTypeCast( new TYPE_CAST<LIB_SHAPE, SCH_ITEM> );
         propMgr.AddTypeCast( new TYPE_CAST<LIB_SHAPE, EDA_SHAPE> );
-        propMgr.InheritsAfter( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( LIB_ITEM ) );
+        propMgr.InheritsAfter( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( SCH_ITEM ) );
         propMgr.InheritsAfter( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( EDA_SHAPE ) );
 
         // Only polygons have meaningful Position properties.
@@ -580,9 +573,9 @@ static struct LIB_SHAPE_DESC
             return false;
         };
 
-        propMgr.OverrideAvailability( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( LIB_ITEM ),
+        propMgr.OverrideAvailability( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( SCH_ITEM ),
                                       _HKI( "Position X" ), isPolygon );
-        propMgr.OverrideAvailability( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( LIB_ITEM ),
+        propMgr.OverrideAvailability( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( SCH_ITEM ),
                                       _HKI( "Position Y" ), isPolygon );
 
         propMgr.Mask( TYPE_HASH( LIB_SHAPE ), TYPE_HASH( EDA_SHAPE ), _HKI( "Filled" ) );

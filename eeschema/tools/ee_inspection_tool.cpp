@@ -430,12 +430,12 @@ void EE_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
                                                 field.GetName( false ) ) );
                 fields.back().CopyText( field );
                 fields.back().SetAttributes( field );
-                fields.back().Offset( -symbol->GetPosition() );
+                fields.back().Move( -symbol->GetPosition() );
             }
 
             flattenedSchSymbol->SetFields( fields );
 
-            if( flattenedSchSymbol->Compare( *flattenedLibSymbol, LIB_ITEM::COMPARE_FLAGS::ERC,
+            if( flattenedSchSymbol->Compare( *flattenedLibSymbol, SCH_ITEM::COMPARE_FLAGS::ERC,
                                              r ) == 0 )
             {
                 r->Report( _( "No relevant differences detected." ) );

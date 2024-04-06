@@ -1416,7 +1416,7 @@ void SCH_LABEL_BASE::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int
     wxDC*           DC = aSettings->GetPrintDC();
     COLOR4D         color = aSettings->GetLayerColor( layer );
     bool            blackAndWhiteMode = GetGRForceBlackPenState();
-    int             penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    int             penWidth = GetEffectivePenWidth( aSettings );
     VECTOR2I        text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
     if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )

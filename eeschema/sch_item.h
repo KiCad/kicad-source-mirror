@@ -52,6 +52,16 @@ class METRICS;
 }
 
 
+enum BODY_STYLE : int
+{
+    BASE = 1,
+    DEMORGAN = 2
+};
+
+
+#define MINIMUM_SELECTION_DISTANCE 2 // Minimum selection distance in mils
+
+
 enum FIELDS_AUTOPLACED
 {
     FIELDS_AUTOPLACED_NO = 0,
@@ -161,7 +171,7 @@ typedef std::vector<SCH_ITEM*> SCH_ITEM_SET;
 class SCH_ITEM : public EDA_ITEM
 {
 public:
-    SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
+    SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType, int aUnit = 0, int aBodyStyle = 0 );
 
     SCH_ITEM( const SCH_ITEM& aItem );
 
@@ -217,6 +227,18 @@ public:
      *                sheet name) should be duplicated.  Use only for undo/redo operations.
      */
     SCH_ITEM* Duplicate( bool doClone = false ) const;
+
+    static wxString GetUnitDescription( int aUnit );
+    static wxString GetBodyStyleDescription( int aBodyStyle );
+
+    void SetUnit( int aUnit ) { m_unit = aUnit; }
+    int GetUnit() const { return m_unit; }
+
+    void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
+    int  GetBodyStyle() const { return m_bodyStyle; }
+
+    void SetPrivate( bool aPrivate ) { m_private = aPrivate; }
+    bool IsPrivate() const { return m_private; }
 
     virtual void SetExcludedFromSim( bool aExclude ) { }
     virtual bool GetExcludedFromSim() const { return false; }
@@ -275,6 +297,8 @@ public:
      */
     virtual int GetPenWidth() const { return 0; }
 
+    int GetEffectivePenWidth( const SCH_RENDER_SETTINGS* aSettings ) const;
+
     const wxString& GetDefaultFont() const;
 
     const KIFONT::METRICS& GetFontMetrics() const;
@@ -290,9 +314,25 @@ public:
         wxCHECK_MSG( false, 0.0, wxT( "Similarity not implemented in " ) + GetClass() );
     }
 
-    virtual bool operator==( const SCH_ITEM& aOtherItem ) const
+    /**
+     * Calculate the boilerplate similarity for all LIB_ITEMs without
+     * preventing the use above of a pure virtual function that catches at compile
+     * time when a new object has not been fully implemented
+    */
+    double SimilarityBase( const SCH_ITEM& aItem ) const
     {
-        wxCHECK_MSG( false, false, wxT( "operator== not implemented in " ) + GetClass() );
+        double similarity = 1.0;
+
+        if( m_unit != aItem.m_unit )
+            similarity *= 0.9;
+
+        if( m_bodyStyle != aItem.m_bodyStyle )
+            similarity *= 0.9;
+
+        if( m_private != aItem.m_private )
+            similarity *= 0.9;
+
+        return similarity;
     }
 
     /**
@@ -326,6 +366,47 @@ public:
     {
         wxCHECK_MSG( false, /*void*/, wxT( "Rotate not implemented in " ) + GetClass() );
     }
+
+    /**
+     * Begin drawing a symbol library draw item at \a aPosition.
+     *
+     * It typically would be called on a left click when a draw tool is selected in
+     * the symbol library editor and one of the graphics tools is selected.
+     *
+     * @param aPosition The position in drawing coordinates where the drawing was started.
+     *                  May or may not be required depending on the item being drawn.
+     */
+    virtual void BeginEdit( const VECTOR2I& aPosition ) {}
+
+    /**
+     * Continue an edit in progress at \a aPosition.
+     *
+     * This is used to perform the next action while drawing an item.  This would be
+     * called for each additional left click when the mouse is captured while the item
+     * is being drawn.
+     *
+     * @param aPosition The position of the mouse left click in drawing coordinates.
+     * @return True if additional mouse clicks are required to complete the edit in progress.
+     */
+    virtual bool ContinueEdit( const VECTOR2I& aPosition ) { return false; }
+
+    /**
+     * End an object editing action.
+     *
+     * This is used to end or abort an edit action in progress initiated by BeginEdit().
+     */
+    virtual void EndEdit( bool aClosed = false ) {}
+
+    /**
+     * Calculate the attributes of an item at \a aPosition when it is being edited.
+     *
+     * This method gets called by the Draw() method when the item is being edited.  This
+     * probably should be a pure virtual method but bezier curves are not yet editable in
+     * the symbol library editor.  Therefore, the default method does nothing.
+     *
+     * @param aPosition The current mouse position in drawing coordinates.
+     */
+    virtual void CalcEdit( const VECTOR2I& aPosition ) {}
 
     /**
      * Add the schematic item end points to \a aItemList if the item has end points.
@@ -542,13 +623,63 @@ public:
         wxCHECK_MSG( false, /*void*/, wxT( "Plot not implemented in " ) + GetClass() );
     }
 
-    virtual bool operator <( const SCH_ITEM& aItem ) const;
+    /**
+     * The list of flags used by the #compare function.
+     *
+     * UNIT  This flag relaxes unit, body-style and pin-number constraints.  It is used for
+     *       #SCH_ITEM object unit comparisons.
+     *
+     * EQUALITY  This flag relaxes ordering contstraints so that fields, etc. don't have to
+     *           appear in the same order to be considered equal.
+     *
+     * ERC  This flag relaxes constraints on data that is settable in the schematic editor.
+     *      It compares only symbol-editor-only data.
+     */
+    enum COMPARE_FLAGS : int
+    {
+        UNIT     = 0x01,
+        EQUALITY = 0x02,
+        ERC      = 0x04
+    };
+
+    virtual bool operator==( const SCH_ITEM& aOther ) const;
+
+    virtual bool operator<( const SCH_ITEM& aItem ) const;
 
 protected:
     SCH_RENDER_SETTINGS* getRenderSettings( PLOTTER* aPlotter ) const
     {
         return static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     }
+
+    struct cmp_items
+    {
+        bool operator()( const SCH_ITEM* aFirst, const SCH_ITEM* aSecond ) const;
+    };
+
+    void getSymbolEditorMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
+
+    /**
+     * Provide the draw object specific comparison called by the == and < operators.
+     *
+     * The base object sort order which always proceeds the derived object sort order
+     * is as follows:
+     *      - Symbol alternate part (DeMorgan) number.
+     *      - Symbol part number.
+     *      - KICAD_T enum value.
+     *      - Result of derived classes comparison.
+     *
+     * @note Make sure you call down to #SCH_ITEM::compare before doing any derived object
+     *       comparisons or you will break the sorting using the symbol library file format.
+     *
+     * @param aOther A reference to the other #SCH_ITEM to compare the arc against.
+     * @param aCompareFlags The flags used to perform the comparison.
+     *
+     * @return An integer value less than 0 if the object is less than \a aOther object,
+     *         zero if the object is equal to \a aOther object, or greater than 0 if the
+     *         object is greater than \a aOther object.
+     */
+    virtual int compare( const SCH_ITEM& aOther, int aCompareFlags = 0 ) const;
 
 private:
     friend class CONNECTION_GRAPH;
@@ -570,6 +701,9 @@ private:
 
 protected:
     SCH_LAYER_ID      m_layer;
+    int               m_unit;               // set to 0 if common to all units
+    int               m_bodyStyle;          // set to 0 if common to all body styles
+    bool              m_private;            // only shown in Symbol Editor
     FIELDS_AUTOPLACED m_fieldsAutoplaced;   // indicates status of field autoplacement
     VECTOR2I          m_storedPos;          // temp variable used in some move commands to store
                                             // an initial position of the item or mouse cursor
@@ -581,6 +715,9 @@ protected:
     std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*>    m_connection_map;
 
     bool                                                   m_connectivity_dirty;
+
+private:
+    friend class LIB_SYMBOL;
 };
 
 #ifndef SWIG

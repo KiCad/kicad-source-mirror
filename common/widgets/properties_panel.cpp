@@ -245,7 +245,12 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
     }
 
     EDA_ITEM* firstItem = aSelection.Front();
-    bool isFootprintEditor = m_frame->IsType( FRAME_FOOTPRINT_EDITOR );
+
+    bool isLibraryEditor = m_frame->IsType( FRAME_FOOTPRINT_EDITOR )
+                        || m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR );
+
+    bool isDesignEditor = m_frame->IsType( FRAME_PCB_EDITOR )
+                       || m_frame->IsType( FRAME_SCH );
 
     // Find a set of properties that is common to all selected items
     for( PROPERTY_BASE* property : commonProps )
@@ -253,7 +258,10 @@ void PROPERTIES_PANEL::rebuildProperties( const SELECTION& aSelection )
         if( property->IsHiddenFromPropertiesManager() )
             continue;
 
-        if( isFootprintEditor && property->IsHiddenFromLibraryEditors() )
+        if( isLibraryEditor && property->IsHiddenFromLibraryEditors() )
+            continue;
+
+        if( isDesignEditor && property->IsHiddenFromDesignEditors() )
             continue;
 
         if( propMgr.IsAvailableFor( TYPE_HASH( *firstItem ), property, firstItem ) )

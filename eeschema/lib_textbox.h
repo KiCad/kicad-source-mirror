@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ class HTML_MESSAGE_BOX;
 class LIB_TEXTBOX : public LIB_SHAPE, public EDA_TEXT
 {
 public:
-    LIB_TEXTBOX( LIB_SYMBOL* aParent, int aLineWidth = 0, FILL_T aFillType = FILL_T::NO_FILL,
+    LIB_TEXTBOX( SCH_ITEM* aParent, int aLineWidth = 0, FILL_T aFillType = FILL_T::NO_FILL,
                  const wxString& aText = wxEmptyString );
 
     LIB_TEXTBOX( const LIB_TEXTBOX& aText );
@@ -80,7 +80,7 @@ public:
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {
-        return LIB_ITEM::Matches( GetText(), aSearchData );
+        return SCH_ITEM::Matches( GetText(), aSearchData );
     }
 
     bool Replace( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) override
@@ -109,15 +109,15 @@ public:
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    double Similarity( const LIB_ITEM& aOther ) const override;
+    double Similarity( const SCH_ITEM& aOther ) const override;
 
-    bool operator==( const LIB_ITEM& aOther ) const override;
+    bool operator==( const SCH_ITEM& aOther ) const override;
 
 protected:
         KIFONT::FONT* getDrawFont() const override;
 
 private:
-    int compare( const LIB_ITEM& aOther, int aCompareFlags = 0 ) const override;
+    int compare( const SCH_ITEM& aOther, int aCompareFlags = 0 ) const override;
 
 private:
     int  m_marginLeft;

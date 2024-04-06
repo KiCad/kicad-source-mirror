@@ -1166,7 +1166,7 @@ void SCH_SHEET::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     {
         aPlotter->SetColor( borderColor );
 
-        int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetMinPenWidth() );
+        int penWidth = GetEffectivePenWidth( getRenderSettings( aPlotter ) );
         aPlotter->Rect( m_pos, m_pos + m_size, FILL_T::NO_FILL, penWidth );
     }
 
@@ -1199,7 +1199,7 @@ void SCH_SHEET::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
 {
     wxDC*    DC = aSettings->GetPrintDC();
     VECTOR2I pos = m_pos + aOffset;
-    int      lineWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    int      lineWidth = GetEffectivePenWidth( aSettings );
     COLOR4D  border = GetBorderColor();
     COLOR4D  background = GetBackgroundColor();
 

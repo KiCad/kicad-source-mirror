@@ -48,11 +48,36 @@
 #define BITMAP_FONT_SIZE_THRESHOLD 3
 
 
+wxString SCH_ITEM::GetUnitDescription( int aUnit )
+{
+    if( aUnit == 0 )
+        return _( "All" );
+    else
+        return LIB_SYMBOL::LetterSubReference( aUnit, 'A' );
+}
+
+
+wxString SCH_ITEM::GetBodyStyleDescription( int aBodyStyle )
+{
+    if( aBodyStyle == 0 )
+        return _( "All" );
+    else if( aBodyStyle == BODY_STYLE::DEMORGAN )
+        return _( "Alternate" );
+    else if( aBodyStyle == BODY_STYLE::BASE )
+        return _( "Standard" );
+    else
+        return wxT( "?" );
+}
+
+
 /* Constructor and destructor for SCH_ITEM */
 /* They are not inline because this creates problems with gcc at linking time in debug mode */
 
-SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType ) :
-    EDA_ITEM( aParent, aType )
+SCH_ITEM::SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType, int aUnit, int aBodyStyle ) :
+        EDA_ITEM( aParent, aType ),
+        m_unit( aUnit ),
+        m_bodyStyle( aBodyStyle ),
+        m_private( false )
 {
     m_layer              = LAYER_WIRE;   // It's only a default, in fact
     m_fieldsAutoplaced   = FIELDS_AUTOPLACED_NO;
@@ -64,6 +89,9 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
     EDA_ITEM( aItem )
 {
     m_layer              = aItem.m_layer;
+    m_unit               = aItem.m_unit;
+    m_bodyStyle          = aItem.m_bodyStyle;
+    m_private            = aItem.m_private;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
     m_connectivity_dirty = aItem.m_connectivity_dirty;
 }
@@ -72,6 +100,9 @@ SCH_ITEM::SCH_ITEM( const SCH_ITEM& aItem ) :
 SCH_ITEM& SCH_ITEM::operator=( const SCH_ITEM& aItem )
 {
     m_layer              = aItem.m_layer;
+    m_unit               = aItem.m_unit;
+    m_bodyStyle          = aItem.m_bodyStyle;
+    m_private            = aItem.m_private;
     m_fieldsAutoplaced   = aItem.m_fieldsAutoplaced;
     m_connectivity_dirty = aItem.m_connectivity_dirty;
 
@@ -123,26 +154,47 @@ SCHEMATIC* SCH_ITEM::Schematic() const
 
 const SYMBOL* SCH_ITEM::GetParentSymbol() const
 {
-    wxCHECK( m_parent->Type() == SCH_SYMBOL_T, nullptr );
+    const EDA_ITEM* parent = GetParent();
 
-    return static_cast<const SCH_SYMBOL*>( m_parent );
+    while( parent )
+    {
+        if( parent->Type() == SCH_SYMBOL_T )
+            return static_cast<const SCH_SYMBOL*>( parent );
+        else if( parent->Type() == LIB_SYMBOL_T )
+            return static_cast<const LIB_SYMBOL*>( parent );
+        else
+            parent = parent->GetParent();
+    }
+
+    return nullptr;
 }
 
 
 SYMBOL* SCH_ITEM::GetParentSymbol()
 {
-    wxCHECK( m_parent->Type() == SCH_SYMBOL_T, nullptr );
+    EDA_ITEM* parent = GetParent();
 
-    return static_cast<SCH_SYMBOL*>( m_parent );
+    while( parent )
+    {
+        if( parent->Type() == SCH_SYMBOL_T )
+            return static_cast<SCH_SYMBOL*>( parent );
+        else if( parent->Type() == LIB_SYMBOL_T )
+            return static_cast<LIB_SYMBOL*>( parent );
+        else
+            parent = parent->GetParent();
+    }
+
+    return nullptr;
 }
 
 
 void SCH_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     // Basic fallback
-    aCount     = 2;
-    aLayers[0] = LAYER_DEVICE;
-    aLayers[1] = LAYER_SELECTION_SHADOWS;
+    aCount      = 3;
+    aLayers[0]  = LAYER_DEVICE;
+    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
+    aLayers[2]  = LAYER_SELECTION_SHADOWS;
 }
 
 
@@ -316,18 +368,54 @@ void SCH_ITEM::ClearCaches()
 }
 
 
-bool SCH_ITEM::operator < ( const SCH_ITEM& aItem ) const
+bool SCH_ITEM::operator==( const SCH_ITEM& aOther ) const
 {
-    if( Type() != aItem.Type() )
-        return Type() < aItem.Type();
+    if( Type() != aOther.Type() )
+        return false;
 
-    if( GetPosition().x != aItem.GetPosition().x )
-        return GetPosition().x < aItem.GetPosition().x;
+    return compare( aOther, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) == 0;
+}
 
-    if( GetPosition().y != aItem.GetPosition().y )
-        return GetPosition().y < aItem.GetPosition().y;
 
-    return m_Uuid < aItem.m_Uuid;
+bool SCH_ITEM::operator<( const SCH_ITEM& aOther ) const
+{
+    if( Type() != aOther.Type() )
+        return Type() < aOther.Type();
+
+    return ( compare( aOther ) < 0 );
+}
+
+
+bool SCH_ITEM::cmp_items::operator()( const SCH_ITEM* aFirst, const SCH_ITEM* aSecond ) const
+{
+    return aFirst->compare( *aSecond, COMPARE_FLAGS::EQUALITY ) < 0;
+}
+
+
+int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
+{
+    if( Type() != aOther.Type() )
+        return Type() - aOther.Type();
+
+    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT ) && m_unit != aOther.m_unit )
+        return m_unit - aOther.m_unit;
+
+    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::UNIT ) && m_bodyStyle != aOther.m_bodyStyle )
+        return m_bodyStyle - aOther.m_bodyStyle;
+
+    if( IsPrivate() != aOther.IsPrivate() )
+        return IsPrivate() < aOther.IsPrivate();
+
+    if( GetPosition().x != aOther.GetPosition().x )
+        return GetPosition().x < aOther.GetPosition().x;
+
+    if( GetPosition().y != aOther.GetPosition().y )
+        return GetPosition().y < aOther.GetPosition().y;
+
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+        return 0;
+
+    return m_Uuid < aOther.m_Uuid;
 }
 
 
@@ -348,6 +436,20 @@ const KIFONT::METRICS& SCH_ITEM::GetFontMetrics() const
 }
 
 
+int SCH_ITEM::GetEffectivePenWidth( const SCH_RENDER_SETTINGS* aSettings ) const
+{
+    // For historical reasons, a stored value of 0 means "default width" and negative
+    // numbers meant "don't stroke".
+
+    if( GetPenWidth() < 0 )
+        return 0;
+    else if( GetPenWidth() == 0 )
+        return std::max( aSettings->GetDefaultPenWidth(), aSettings->GetMinPenWidth() );
+    else
+        return std::max( GetPenWidth(), aSettings->GetMinPenWidth() );
+}
+
+
 bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 {
     if( IsHypertext() )
@@ -360,38 +462,78 @@ bool SCH_ITEM::RenderAsBitmap( double aWorldScale ) const
 }
 
 
+void SCH_ITEM::getSymbolEditorMsgPanelInfo( EDA_DRAW_FRAME* aFrame,
+                                            std::vector<MSG_PANEL_ITEM>& aList )
+{
+    wxString msg;
+
+    aList.emplace_back( _( "Type" ), GetFriendlyName() );
+
+    if( const SYMBOL* parent = GetParentSymbol() )
+    {
+        if( parent->GetUnitCount() )
+            aList.emplace_back( _( "Unit" ), GetUnitDescription( m_unit ) );
+
+        if( parent->HasAlternateBodyStyle() )
+            aList.emplace_back( _( "Body Style" ), GetBodyStyleDescription( m_bodyStyle ) );
+    }
+
+    if( IsPrivate() )
+        aList.emplace_back( _( "Private" ), wxEmptyString );
+}
+
+
 static struct SCH_ITEM_DESC
 {
     SCH_ITEM_DESC()
     {
-#ifdef NOTYET
-        ENUM_MAP<SCH_LAYER_ID>& layerEnum = ENUM_MAP<SCH_LAYER_ID>::Instance();
-
-        if( layerEnum.Choices().GetCount() == 0 )
-        {
-            layerEnum.Undefined( SCH_LAYER_ID_END );
-
-            for( SCH_LAYER_ID value : magic_enum::enum_values<SCH_LAYER_ID>() )
-                layerEnum.Map( value, LayerName( value ) );
-        }
-#endif
-
         PROPERTY_MANAGER& propMgr = PROPERTY_MANAGER::Instance();
         REGISTER_TYPE( SCH_ITEM );
         propMgr.InheritsAfter( TYPE_HASH( SCH_ITEM ), TYPE_HASH( EDA_ITEM ) );
-
-#ifdef NOTYET
-        // Not sure if this will ever be needed
-        propMgr.AddProperty( new PROPERTY_ENUM<SCH_ITEM, SCH_LAYER_ID>( _HKI( "Layer" ),
-                &SCH_ITEM::SetLayer, &SCH_ITEM::GetLayer ) )
-                .SetIsHiddenFromPropertiesManager();
-#endif
 
 #ifdef NOTYET
         // Not yet functional in UI
         propMgr.AddProperty( new PROPERTY<SCH_ITEM, bool>( _HKI( "Locked" ),
                 &SCH_ITEM::SetLocked, &SCH_ITEM::IsLocked ) );
 #endif
+
+        auto multiUnit =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( aItem ) )
+                    {
+                        if( const SYMBOL* symbol = schItem->GetParentSymbol() )
+                            return symbol->IsMulti();
+                    }
+
+                    return false;
+                };
+
+        auto multiBodyStyle =
+                [=]( INSPECTABLE* aItem ) -> bool
+                {
+                    if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( aItem ) )
+                    {
+                        if( const SYMBOL* symbol = schItem->GetParentSymbol() )
+                            return symbol->HasAlternateBodyStyle();
+                    }
+
+                    return false;
+                };
+
+        propMgr.AddProperty( new PROPERTY<SCH_ITEM, int>( _HKI( "Unit" ),
+                    &SCH_ITEM::SetUnit, &SCH_ITEM::GetUnit ) )
+                .SetAvailableFunc( multiUnit )
+                .SetIsHiddenFromDesignEditors();
+
+        propMgr.AddProperty( new PROPERTY<SCH_ITEM, int>( _HKI( "Body Style" ),
+                    &SCH_ITEM::SetBodyStyle, &SCH_ITEM::GetBodyStyle ) )
+                .SetAvailableFunc( multiBodyStyle )
+                .SetIsHiddenFromDesignEditors();
+
+        propMgr.AddProperty( new PROPERTY<SCH_ITEM, bool>( _HKI( "Private" ),
+                    &SCH_ITEM::SetPrivate, &SCH_ITEM::IsPrivate ) )
+                .SetIsHiddenFromDesignEditors();
     }
 } _SCH_ITEM_DESC;
 

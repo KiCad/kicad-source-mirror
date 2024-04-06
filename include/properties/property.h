@@ -201,8 +201,9 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         m_display( aDisplay ),
         m_coordType( aCoordType ),
         m_hideFromPropertiesManager( false ),
-        m_hideFromRulesEditor( false ),
         m_hideFromLibraryEditors( false ),
+        m_hideFromDesignEditors( false ),
+        m_hideFromRulesEditor( false ),
         m_availFunc( [](INSPECTABLE*)->bool { return true; } ),
         m_writeableFunc( [](INSPECTABLE*)->bool { return true; } ),
         m_validator( NullValidator )
@@ -316,6 +317,13 @@ PROPERTY_BASE( const wxString& aName, PROPERTY_DISPLAY aDisplay = PT_DEFAULT,
         return *this;
     }
 
+    bool IsHiddenFromDesignEditors() const { return m_hideFromDesignEditors; }
+    PROPERTY_BASE& SetIsHiddenFromDesignEditors( bool aIsHidden = true )
+    {
+        m_hideFromDesignEditors = aIsHidden;
+        return *this;
+    }
+
     wxString Group() const { return m_group; }
     PROPERTY_BASE& SetGroup( const wxString& aGroup ) { m_group = aGroup; return *this; }
 
@@ -411,14 +419,12 @@ private:
     /// The coordinate type controls how distances are mapped to the user coordinate system
     ORIGIN_TRANSFORMS::COORD_TYPES_T m_coordType;
 
-    /// Some properties should not be shown in the Properties Manager GUI
-    bool m_hideFromPropertiesManager;
-
-    /// Some properties should not be shown in the Custom Rules editor autocomplete
-    bool m_hideFromRulesEditor;
-
-    /// This property should only be shown in the design editor, not the library editor
-    bool m_hideFromLibraryEditors;
+    bool m_hideFromPropertiesManager;   // Do not show in Properties Manager
+    bool m_hideFromLibraryEditors;      // Do not show in Properties Manager of symbol or
+                                        //   footprint editors
+    bool m_hideFromDesignEditors;       // Do not show in Properties Manager of schematic or
+                                        //   board editors
+    bool m_hideFromRulesEditor;         // Do not show in Custom Rules editor autocomplete
 
     /// Optional group identifier
     wxString m_group;

@@ -418,18 +418,16 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
         return;
     }
 
-    SCH_SHEET_PATH*  sheet = &Schematic()->CurrentSheet();
-    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
-    int              penWidth = GetPenWidth();
-    COLOR4D          color = GetStroke().GetColor();
-    LINE_STYLE       lineStyle = GetStroke().GetLineStyle();
+    SCH_SHEET_PATH*      sheet = &Schematic()->CurrentSheet();
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    int                  penWidth = GetEffectivePenWidth( renderSettings );
+    COLOR4D              color = GetStroke().GetColor();
+    LINE_STYLE           lineStyle = GetStroke().GetLineStyle();
 
     if( penWidth > 0 )
     {
-        penWidth = std::max( penWidth, settings->GetMinPenWidth() );
-
         if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
-            color = settings->GetLayerColor( m_layer );
+            color = renderSettings->GetLayerColor( m_layer );
 
         if( lineStyle == LINE_STYLE::DEFAULT )
             lineStyle = LINE_STYLE::SOLID;
@@ -443,15 +441,15 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
     KIFONT::FONT* font = GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
+        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
     color = GetTextColor();
 
     if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
-        color = settings->GetLayerColor( m_layer );
+        color = renderSettings->GetLayerColor( m_layer );
 
-    penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
-    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
+    penWidth = GetEffectiveTextPenWidth( renderSettings->GetDefaultPenWidth() );
+    penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
     std::vector<VECTOR2I> positions;

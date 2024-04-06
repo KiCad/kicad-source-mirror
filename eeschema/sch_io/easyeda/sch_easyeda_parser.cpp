@@ -522,7 +522,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
                         svgImportPlugin.Import();
 
                         for( std::unique_ptr<EDA_ITEM>& item : libsymImporter.GetItems() )
-                            aSymbol->AddDrawItem( static_cast<LIB_ITEM*>( item.release() ) );
+                            aSymbol->AddDrawItem( static_cast<SCH_ITEM*>( item.release() ) );
                     }
                     else
                     {
@@ -948,7 +948,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             TransformTextToBaseline( textItem, baselineAlign, true );
 
             if( added )
-                aSymbol->AddDrawItem( dynamic_cast<LIB_ITEM*>( textItem ) );
+                aSymbol->AddDrawItem( dynamic_cast<SCH_ITEM*>( textItem ) );
         }
     }
 }

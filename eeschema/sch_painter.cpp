@@ -36,7 +36,6 @@
 #include <gr_text.h>
 #include <lib_shape.h>
 #include <lib_field.h>
-#include <lib_item.h>
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <lib_textbox.h>
@@ -123,7 +122,7 @@ static LIB_SYMBOL* dummy()
 
         LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECTANGLE );
 
-        square->MoveTo( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
+        square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
         square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
@@ -294,7 +293,7 @@ bool SCH_PAINTER::nonCached( const EDA_ITEM* aItem )
 }
 
 
-bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem ) const
+bool SCH_PAINTER::isUnitAndConversionShown( const SCH_ITEM* aItem ) const
 {
     if( m_schSettings.m_ShowUnit            // showing a specific unit
             && aItem->GetUnit()             // item is unit-specific
@@ -478,10 +477,8 @@ float SCH_PAINTER::getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) c
 
     int pen = 0;
 
-    if( dynamic_cast<const LIB_ITEM*>( aItem ) )
-        pen = static_cast<const LIB_ITEM*>( aItem )->GetEffectivePenWidth( &m_schSettings );
-    else if( dynamic_cast<const SCH_ITEM*>( aItem ) )
-        pen = static_cast<const SCH_ITEM*>( aItem )->GetPenWidth();
+    if( const SCH_ITEM* item = dynamic_cast<const SCH_ITEM*>( aItem ) )
+        pen = item->GetEffectivePenWidth( &m_schSettings );
     else
         UNIMPLEMENTED_FOR( aItem->GetClass() );
 
@@ -724,7 +721,7 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
     // The parent must exist on the union of all its children's draw layers.  But that doesn't
     // mean we want to draw each child on the union.
     auto childOnLayer =
-            []( const LIB_ITEM& item, int layer )
+            []( const SCH_ITEM& item, int layer )
             {
                 int layers[512], layers_count;
                 item.ViewGetLayers( layers, layers_count );
@@ -738,7 +735,7 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
                 return false;
             };
 
-    for( const LIB_ITEM& item : drawnSymbol->GetDrawItems() )
+    for( const SCH_ITEM& item : drawnSymbol->GetDrawItems() )
     {
         if( !aDrawFields && item.Type() == LIB_FIELD_T )
             continue;
@@ -757,7 +754,7 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
 }
 
 
-bool SCH_PAINTER::setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimmed )
+bool SCH_PAINTER::setDeviceColors( const SCH_ITEM* aItem, int aLayer, bool aDimmed )
 {
     COLOR4D          bg = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
     const EDA_SHAPE* shape = dynamic_cast<const EDA_SHAPE*>( aItem );
@@ -2577,7 +2574,7 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
         }
     }
 
-    for( LIB_ITEM& item : symbol->GetDrawItems() )
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
     {
         for( int i = 0; i < o.n_rots; i++ )
             item.Rotate( VECTOR2I(0, 0 ), true );
@@ -2630,24 +2627,24 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     int bodyStyle = aSymbol->GetBodyStyle();
 
     // Use dummy symbol if the actual couldn't be found (or couldn't be locked).
-    LIB_SYMBOL* originalSymbol = aSymbol->GetLibSymbolRef() ?
-                                 aSymbol->GetLibSymbolRef().get() : dummy();
-    LIB_PINS  originalPins;
+    LIB_SYMBOL* originalSymbol = aSymbol->GetLibSymbolRef() ? aSymbol->GetLibSymbolRef().get()
+                                                            : dummy();
+    std::vector<LIB_PIN*> originalPins;
     originalSymbol->GetPins( originalPins, unit, bodyStyle );
 
     // Copy the source so we can re-orient and translate it.
     LIB_SYMBOL tempSymbol( *originalSymbol );
-    LIB_PINS tempPins;
+    std::vector<LIB_PIN*> tempPins;
     tempSymbol.GetPins( tempPins, unit, bodyStyle );
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
 
     orientSymbol( &tempSymbol, aSymbol->GetOrientation() );
 
-    for( LIB_ITEM& tempItem : tempSymbol.GetDrawItems() )
+    for( SCH_ITEM& tempItem : tempSymbol.GetDrawItems() )
     {
         tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
-        tempItem.MoveTo( tempItem.GetPosition() + (VECTOR2I) mapCoords( aSymbol->GetPosition() ) );
+        tempItem.Move( (VECTOR2I) mapCoords( aSymbol->GetPosition() ) );
 
         if( tempItem.Type() == LIB_TEXT_T )
         {

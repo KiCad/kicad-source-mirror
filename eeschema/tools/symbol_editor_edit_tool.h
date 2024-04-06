@@ -66,8 +66,8 @@ public:
 
 private:
     void editShapeProperties( LIB_SHAPE* aShape );
-    void editTextProperties( LIB_ITEM* aItem );
-    void editTextBoxProperties( LIB_ITEM* aItem );
+    void editTextProperties( SCH_ITEM* aItem );
+    void editTextBoxProperties( SCH_ITEM* aItem );
     void editFieldProperties( LIB_FIELD* aField );
     void editSymbolProperties();
     void handlePinDuplication(LIB_PIN* aOldPin, LIB_PIN* aNewPin, int &aSymbolLastPinNumber );

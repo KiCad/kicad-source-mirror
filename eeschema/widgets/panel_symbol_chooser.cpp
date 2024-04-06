@@ -604,9 +604,9 @@ void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
 
     if( symbol != nullptr )
     {
-        LIB_PINS   temp_pins;
-        LIB_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
-        wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
+        std::vector<LIB_PIN*> temp_pins;
+        LIB_FIELD*            fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
+        wxString              fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
         // All units, but only a single De Morgan variant.
         if( symbol->HasAlternateBodyStyle() )

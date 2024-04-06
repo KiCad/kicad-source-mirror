@@ -285,13 +285,13 @@ void CADSTAR_SCH_ARCHIVE_LOADER::copySymbolItems( std::unique_ptr<LIB_SYMBOL>& a
                                                   int aDestUnit, bool aOverrideFields )
 {
     // Ensure there are no items on the unit we want to load onto
-    for( LIB_ITEM* item : aDestSym->GetUnitDrawItems( aDestUnit, 0 /*aConvert*/ ) )
+    for( SCH_ITEM* item : aDestSym->GetUnitDrawItems( aDestUnit, 0 /*aConvert*/ ) )
         aDestSym->RemoveDrawItem( item );
 
     // Copy all draw items
-    for( LIB_ITEM* newItem : aSourceSym->GetUnitDrawItems( 1, 0 /*aConvert*/ ) )
+    for( SCH_ITEM* newItem : aSourceSym->GetUnitDrawItems( 1, 0 /*aConvert*/ ) )
     {
-        LIB_ITEM* itemCopy = static_cast<LIB_ITEM*>( newItem->Clone() );
+        SCH_ITEM* itemCopy = static_cast<SCH_ITEM*>( newItem->Clone() );
         itemCopy->SetParent( aDestSym.get() );
         itemCopy->SetUnit( aDestUnit );
         aDestSym->AddDrawItem( itemCopy );
@@ -880,7 +880,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     kiPart->SetShowPinNames( false );
                     kiPart->SetShowPinNumbers( false );
 
-                    LIB_PINS pins = kiPart->GetAllLibPins();
+                    std::vector<LIB_PIN*> pins = kiPart->GetAllLibPins();
                     wxCHECK( pins.size() == 1, /*void*/ );
 
                     pins.at( 0 )->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
@@ -3232,7 +3232,7 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
 
     LIB_ITEMS_CONTAINER& items = retval->GetDrawItems();
 
-    for( LIB_ITEM& item : items )
+    for( SCH_ITEM& item : items )
     {
         switch( item.Type() )
         {
@@ -3326,7 +3326,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
         }
     }
 
-    LIB_PINS pins;
+    std::vector<LIB_PIN*> pins;
     aSymbolToFix->GetPins( pins, aGateNumber );
 
     for( auto& pin : pins )

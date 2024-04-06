@@ -70,7 +70,7 @@ bool SYMBOL_EDITOR_DRAWING_TOOLS::Init()
     auto isDrawingCondition =
             [] ( const SELECTION& aSel )
             {
-                LIB_ITEM* item = (LIB_ITEM*) aSel.Front();
+                SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aSel.Front() );
                 return item && item->IsNew();
             };
 
@@ -95,7 +95,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
     EE_GRID_HELPER        grid( m_toolMgr );
     VECTOR2I              cursorPos;
     bool                  ignorePrimePosition = false;
-    LIB_ITEM*             item   = nullptr;
+    SCH_ITEM*             item   = nullptr;
     bool                  isText = aEvent.IsAction( &EE_ACTIONS::placeSymbolText );
     COMMON_SETTINGS*      common_settings = Pgm().GetCommonSettings();
 
@@ -685,14 +685,14 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( ACTIONS::cancelInteractive );
 
     KIGFX::VIEW_CONTROLS*  controls = getViewControls();
-    std::vector<LIB_ITEM*> newItems;      // all new items, including group
-    std::vector<LIB_ITEM*> selectedItems; // the group, or newItems if no group
+    std::vector<SCH_ITEM*> newItems;      // all new items, including group
+    std::vector<SCH_ITEM*> selectedItems; // the group, or newItems if no group
     EE_SELECTION           preview;
     SCH_COMMIT             commit( m_toolMgr );
 
     for( std::unique_ptr<EDA_ITEM>& ptr : list )
     {
-        LIB_ITEM* item = dynamic_cast<LIB_ITEM*>( ptr.get() );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( ptr.get() );
         wxCHECK2( item, continue );
 
         newItems.push_back( item );
@@ -707,7 +707,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
         commit.Modify( symbol, m_frame->GetScreen() );
 
         // Place the imported drawings
-        for( LIB_ITEM* item : newItems )
+        for( SCH_ITEM* item : newItems )
         {
             symbol->AddDrawItem( item );
             item->ClearEditFlags();
@@ -749,8 +749,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
     VECTOR2I delta = cursorPos;
     VECTOR2I currentOffset;
 
-    for( LIB_ITEM* item : selectedItems )
-        item->Offset( delta );
+    for( SCH_ITEM* item : selectedItems )
+        item->Move( delta );
 
     currentOffset += delta;
 
@@ -771,7 +771,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
         {
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
-            for( LIB_ITEM* item : newItems )
+            for( SCH_ITEM* item : newItems )
                 delete item;
 
             break;
@@ -780,8 +780,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
         {
             delta = VECTOR2I( cursorPos.x, -cursorPos.y ) - currentOffset;
 
-            for( LIB_ITEM* item : selectedItems )
-                item->Offset( delta );
+            for( SCH_ITEM* item : selectedItems )
+                item->Move( delta );
 
             currentOffset += delta;
 
@@ -796,7 +796,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
             commit.Modify( symbol, m_frame->GetScreen() );
 
             // Place the imported drawings
-            for( LIB_ITEM* item : newItems )
+            for( SCH_ITEM* item : newItems )
             {
                 symbol->AddDrawItem( item );
                 item->ClearEditFlags();

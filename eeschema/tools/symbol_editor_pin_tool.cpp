@@ -131,7 +131,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 
     if( !aPin->IsNew() && m_frame->SynchronizePins() && parentSymbol )
     {
-        LIB_PINS pinList;
+        std::vector<LIB_PIN*> pinList;
         parentSymbol->GetPins( pinList );
 
         // a pin can have a unit id = 0 (common to all units) to unit count
@@ -270,7 +270,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
         if( ( pin->GetEditFlags() & IS_LINKED ) == 0 )
             continue;
 
-        pin->MoveTo( aPin->GetPosition() );
+        pin->SetPosition( aPin->GetPosition() );
         pin->ClearFlags();
     }
 
@@ -296,7 +296,7 @@ LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_SYMBO
     if( m_frame->SynchronizePins() )
         pin->SetFlags( IS_LINKED );
 
-    pin->MoveTo( aPosition );
+    pin->SetPosition( aPosition );
     pin->SetLength( GetLastPinLength() );
     pin->SetOrientation( g_LastPinOrient );
     pin->SetType( g_LastPinType );
@@ -427,7 +427,7 @@ LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
     case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU(-settings->m_Repeat.pin_step);  break;
     }
 
-    pin->Offset( step );
+    pin->Move( step );
 
     wxString nextName = pin->GetName();
     IncrementLabelMember( nextName, settings->m_Repeat.label_delta );

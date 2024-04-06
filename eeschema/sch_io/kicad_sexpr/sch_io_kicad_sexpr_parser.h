@@ -38,7 +38,6 @@
 
 
 class LIB_SHAPE;
-class LIB_ITEM;
 class LIB_PIN;
 class LIB_TEXT;
 class PAGE_INFO;
@@ -90,7 +89,7 @@ public:
     LIB_SYMBOL* ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap,
                              int aFileVersion = SEXPR_SYMBOL_LIB_FILE_VERSION );
 
-    LIB_ITEM* ParseDrawItem();
+    SCH_ITEM* ParseDrawItem();
 
     /**
      * Parse the internal #LINE_READER object into \a aSheet.

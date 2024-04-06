@@ -151,8 +151,8 @@ void SCH_EDIT_FRAME::FlipBodyStyle( SCH_SYMBOL* aSymbol )
     // 2 = shape 2 = second (DeMorgan conversion) alternate body style
     // > 2 is not currently supported
     // When m_bodyStyle = val max, return to the first shape
-    if( aSymbol->GetBodyStyle() > LIB_ITEM::BODY_STYLE::DEMORGAN )
-        aSymbol->SetBodyStyle( LIB_ITEM::BODY_STYLE::BASE );
+    if( aSymbol->GetBodyStyle() > BODY_STYLE::DEMORGAN )
+        aSymbol->SetBodyStyle( BODY_STYLE::BASE );
 
     // If selected make sure all the now-included pins are selected
     if( aSymbol->IsSelected() )

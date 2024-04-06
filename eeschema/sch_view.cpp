@@ -143,7 +143,7 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
         return;
 
     // Draw the fields.
-    for( LIB_ITEM& item : aSymbol->GetDrawItems() )
+    for( SCH_ITEM& item : aSymbol->GetDrawItems() )
     {
         if( item.Type() == LIB_FIELD_T )
         {
@@ -168,7 +168,7 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
         }
     }
 
-    for( LIB_ITEM& item : drawnSymbol->GetDrawItems() )
+    for( SCH_ITEM& item : drawnSymbol->GetDrawItems() )
     {
         // Fields already drawn above.  (Besides, we don't want to show parent symbol fields as
         // users may be confused by shown fields that can not be edited.)

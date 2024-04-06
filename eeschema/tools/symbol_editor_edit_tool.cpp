@@ -158,7 +158,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     VECTOR2I    rotPoint;
     bool        ccw = ( aEvent.Matches( EE_ACTIONS::rotateCCW.MakeEvent() ) );
-    LIB_ITEM*   item = static_cast<LIB_ITEM*>( selection.Front() );
+    SCH_ITEM*   item = static_cast<SCH_ITEM*>( selection.Front() );
     SCH_COMMIT  localCommit( m_toolMgr );
     SCH_COMMIT* commit = dynamic_cast<SCH_COMMIT*>( aEvent.Commit() );
 
@@ -175,7 +175,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
-        item = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
+        item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
         item->Rotate( rotPoint, ccw );
         m_frame->UpdateItem( item, false, true );
     }
@@ -207,7 +207,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     VECTOR2I  mirrorPoint;
     bool      xAxis = ( aEvent.Matches( EE_ACTIONS::mirrorV.MakeEvent() ) );
-    LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
+    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
         saveCopyInUndoList( m_frame->GetCurSymbol(), UNDO_REDO::LIBEDIT );
@@ -248,7 +248,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
         {
-            item = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
+            item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
             if( xAxis )
                 item->MirrorVertically( mirrorPoint.y );
@@ -299,7 +299,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
     commit.Modify( symbol, m_frame->GetScreen() );
 
-    std::set<LIB_ITEM*> toDelete;
+    std::set<SCH_ITEM*> toDelete;
 
     for( EDA_ITEM* item : items )
     {
@@ -347,11 +347,11 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         }
         else
         {
-            toDelete.insert( (LIB_ITEM*) item );
+            toDelete.insert( (SCH_ITEM*) item );
         }
     }
 
-    for( LIB_ITEM* item : toDelete )
+    for( SCH_ITEM* item : toDelete )
         symbol->RemoveDrawItem( item );
 
     commit.Push( _( "Delete" ) );
@@ -449,7 +449,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     }
     else if( selection.Size() == 1 )
     {
-        LIB_ITEM* item = (LIB_ITEM*) selection.Front();
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
 
         // Save copy for undo if not in edit (edit command already handle the save copy)
         if( item->GetEditFlags() == 0 )
@@ -513,7 +513,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editShapeProperties( LIB_SHAPE* aShape )
 }
 
 
-void SYMBOL_EDITOR_EDIT_TOOL::editTextProperties( LIB_ITEM* aItem )
+void SYMBOL_EDITOR_EDIT_TOOL::editTextProperties( SCH_ITEM* aItem )
 {
     if ( aItem->Type() != LIB_TEXT_T )
         return;
@@ -529,7 +529,7 @@ void SYMBOL_EDITOR_EDIT_TOOL::editTextProperties( LIB_ITEM* aItem )
 }
 
 
-void SYMBOL_EDITOR_EDIT_TOOL::editTextBoxProperties( LIB_ITEM* aItem )
+void SYMBOL_EDITOR_EDIT_TOOL::editTextBoxProperties( SCH_ITEM* aItem )
 {
     if ( aItem->Type() != LIB_TEXTBOX_T )
         return;
@@ -765,7 +765,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
     if( !symbol || !selection.GetSize() )
         return 0;
 
-    for( LIB_ITEM& item : symbol->GetDrawItems() )
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
@@ -783,7 +783,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 
     delete partCopy;
 
-    for( LIB_ITEM& item : symbol->GetDrawItems() )
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
         item.ClearFlags( STRUCT_DELETED );
 
     if( m_toolMgr->SaveClipboard( formatter.GetString() ) )
@@ -826,15 +826,15 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
     commit.Modify( symbol );
     m_selectionTool->ClearSelection();
 
-    for( LIB_ITEM& item : symbol->GetDrawItems() )
+    for( SCH_ITEM& item : symbol->GetDrawItems() )
         item.ClearFlags( IS_NEW | IS_PASTED | SELECTED );
 
-    for( LIB_ITEM& item : newPart->GetDrawItems() )
+    for( SCH_ITEM& item : newPart->GetDrawItems() )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
 
-        LIB_ITEM* newItem = (LIB_ITEM*) item.Duplicate();
+        SCH_ITEM* newItem = item.Duplicate();
         newItem->SetParent( symbol );
         newItem->SetFlags( IS_NEW | IS_PASTED | SELECTED );
 
@@ -880,8 +880,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
-        LIB_ITEM* oldItem = static_cast<LIB_ITEM*>( selection.GetItem( ii ) );
-        LIB_ITEM* newItem = static_cast<LIB_ITEM*>( oldItem->Duplicate() );
+        SCH_ITEM* oldItem = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
+        SCH_ITEM* newItem = oldItem->Duplicate();
 
         if( newItem->Type() == LIB_PIN_T )
         {

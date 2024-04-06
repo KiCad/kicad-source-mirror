@@ -29,7 +29,6 @@
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
 #include <io/eagle/eagle_parser.h>
-#include <lib_item.h>
 #include <geometry/seg.h>
 
 #include <boost/ptr_container/ptr_map.hpp>
@@ -164,13 +163,13 @@ private:
                                        int aGateNumber );
     LIB_SHAPE*    loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
                                       wxXmlNode* aPolygonNode, int aGateNumber );
-    LIB_ITEM*     loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aWireNode,
+    SCH_ITEM*     loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aWireNode,
                                   int aGateNumber );
     LIB_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*, EPIN* epin,
                            int aGateNumber );
     LIB_TEXT*     loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aLibText,
                                   int aGateNumber );
-    void          loadFrame( wxXmlNode* aFrameNode, std::vector<LIB_ITEM*>& aLines );
+    void          loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aLines );
 
     void          loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
     void          loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;

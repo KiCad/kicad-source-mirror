@@ -1712,13 +1712,13 @@ int SCH_EDIT_TOOL::ChangeBodyStyle( const TOOL_EVENT& aEvent )
     SCH_SYMBOL* symbol = (SCH_SYMBOL*) selection.Front();
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganStandard )
-            && symbol->GetBodyStyle() == LIB_ITEM::BODY_STYLE::BASE )
+            && symbol->GetBodyStyle() == BODY_STYLE::BASE )
     {
         return 0;
     }
 
     if( aEvent.IsAction( &EE_ACTIONS::showDeMorganAlternate )
-            && symbol->GetBodyStyle() == LIB_ITEM::BODY_STYLE::DEMORGAN )
+            && symbol->GetBodyStyle() == BODY_STYLE::DEMORGAN )
     {
         return 0;
     }

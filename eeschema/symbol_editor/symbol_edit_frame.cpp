@@ -534,13 +534,13 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto demorganStandardCond =
             [this]( const SELECTION& )
             {
-                return m_bodyStyle == LIB_ITEM::BODY_STYLE::BASE;
+                return m_bodyStyle == BODY_STYLE::BASE;
             };
 
     auto demorganAlternateCond =
             [this]( const SELECTION& )
             {
-                return m_bodyStyle == LIB_ITEM::BODY_STYLE::DEMORGAN;
+                return m_bodyStyle == BODY_STYLE::DEMORGAN;
             };
 
     auto multiUnitModeCond =
@@ -1345,7 +1345,7 @@ void SYMBOL_EDIT_FRAME::HardRedraw()
         EE_SELECTION_TOOL* selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
         EE_SELECTION&      selection = selectionTool->GetSelection();
 
-        for( LIB_ITEM& item : m_symbol->GetDrawItems() )
+        for( SCH_ITEM& item : m_symbol->GetDrawItems() )
         {
             if( !alg::contains( selection, &item ) )
                 item.ClearSelected();
@@ -1378,11 +1378,11 @@ const BOX2I SYMBOL_EDIT_FRAME::GetDocumentExtents( bool aIncludeAllVisible ) con
 }
 
 
-void SYMBOL_EDIT_FRAME::FocusOnItem( LIB_ITEM* aItem )
+void SYMBOL_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
 {
     static KIID lastBrightenedItemID( niluuid );
 
-    LIB_ITEM* lastItem = nullptr;
+    SCH_ITEM* lastItem = nullptr;
 
     if( m_symbol )
     {

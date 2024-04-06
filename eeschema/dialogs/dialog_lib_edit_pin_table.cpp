@@ -155,7 +155,8 @@ public:
         return GetValue( m_rows[ aRow ], aCol, m_frame );
     }
 
-    static wxString GetValue( const LIB_PINS& pins, int aCol, EDA_DRAW_FRAME* aParentFrame )
+    static wxString GetValue( const std::vector<LIB_PIN*>& pins, int aCol,
+                              EDA_DRAW_FRAME* aParentFrame )
     {
         wxString fieldValue;
 
@@ -228,10 +229,10 @@ public:
             case COL_DEMORGAN:
                 switch( pin->GetBodyStyle() )
                 {
-                case LIB_ITEM::BODY_STYLE::BASE:
+                case BODY_STYLE::BASE:
                     val = DEMORGAN_STD;
                     break;
-                case LIB_ITEM::BODY_STYLE::DEMORGAN:
+                case BODY_STYLE::DEMORGAN:
                     val = DEMORGAN_ALT;
                     break;
                 default:
@@ -291,7 +292,7 @@ public:
             break;
         }
 
-        LIB_PINS pins = m_rows[ aRow ];
+        std::vector<LIB_PIN*> pins = m_rows[ aRow ];
 
         // If the NUMBER column is edited and the pins are grouped, renumber, and add or
         // remove pins based on the comma separated list of pins.
@@ -453,7 +454,7 @@ public:
         m_edited = true;
     }
 
-    static int findRow( const std::vector<LIB_PINS>& aRowSet, const wxString& aName )
+    static int findRow( const std::vector<std::vector<LIB_PIN*>>& aRowSet, const wxString& aName )
     {
         for( size_t i = 0; i < aRowSet.size(); ++i )
         {
@@ -464,8 +465,8 @@ public:
         return -1;
     }
 
-    static bool compare( const LIB_PINS& lhs, const LIB_PINS& rhs, int sortCol, bool ascending,
-                         EDA_DRAW_FRAME* parentFrame )
+    static bool compare( const std::vector<LIB_PIN*>& lhs, const std::vector<LIB_PIN*>& rhs,
+                         int sortCol, bool ascending, EDA_DRAW_FRAME* parentFrame )
     {
         wxString lhStr = GetValue( lhs, sortCol, parentFrame );
         wxString rhStr = GetValue( rhs, sortCol, parentFrame );
@@ -517,7 +518,7 @@ public:
         return res;
     }
 
-    void RebuildRows( const LIB_PINS& aPins, bool groupByName, bool groupBySelection )
+    void RebuildRows( const std::vector<LIB_PIN*>& aPins, bool groupByName, bool groupBySelection )
     {
         WX_GRID* grid = dynamic_cast<WX_GRID*>( GetView() );
         std::vector<LIB_PIN*> clear_flags;
@@ -557,7 +558,7 @@ public:
         m_rows.clear();
 
         if( groupBySelection )
-            m_rows.emplace_back( LIB_PINS() );
+            m_rows.emplace_back( std::vector<LIB_PIN*>() );
 
         for( LIB_PIN* pin : aPins )
         {
@@ -572,7 +573,7 @@ public:
 
                 if( rowIndex < 0 )
                 {
-                    m_rows.emplace_back( LIB_PINS() );
+                    m_rows.emplace_back( std::vector<LIB_PIN*>() );
                     rowIndex = m_rows.size() - 1;
                 }
 
@@ -589,7 +590,7 @@ public:
             ascending = GetView()->IsSortOrderAscending();
         }
 
-        for( LIB_PINS& row : m_rows )
+        for( std::vector<LIB_PIN*>& row : m_rows )
             SortPins( row );
 
         if( !groupBySelection )
@@ -597,7 +598,7 @@ public:
 
         if ( GetView() )
         {
-            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_rows.size() );
+            wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, (int) m_rows.size() );
             GetView()->ProcessTableMessage( msg );
 
             if( groupBySelection )
@@ -611,13 +612,14 @@ public:
     void SortRows( int aSortCol, bool ascending )
     {
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ aSortCol, ascending, this ]( const LIB_PINS& lhs, const LIB_PINS& rhs ) -> bool
+                   [ aSortCol, ascending, this ]( const std::vector<LIB_PIN*>& lhs,
+                                                  const std::vector<LIB_PIN*>& rhs ) -> bool
                    {
                        return compare( lhs, rhs, aSortCol, ascending, m_frame );
                    } );
     }
 
-    void SortPins( LIB_PINS& aRow )
+    void SortPins( std::vector<LIB_PIN*>& aRow )
     {
         std::sort( aRow.begin(), aRow.end(),
                    []( LIB_PIN* lhs, LIB_PIN* rhs ) -> bool
@@ -628,7 +630,7 @@ public:
 
     void AppendRow( LIB_PIN* aPin )
     {
-        LIB_PINS row;
+        std::vector<LIB_PIN*> row;
         row.push_back( aPin );
         m_rows.push_back( row );
 
@@ -639,9 +641,9 @@ public:
         }
     }
 
-    LIB_PINS RemoveRow( int aRow )
+    std::vector<LIB_PIN*> RemoveRow( int aRow )
     {
-        LIB_PINS removedRow = m_rows[ aRow ];
+        std::vector<LIB_PIN*> removedRow = m_rows[ aRow ];
 
         m_rows.erase( m_rows.begin() + aRow );
 
@@ -654,7 +656,7 @@ public:
         return removedRow;
     }
 
-    LIB_PINS GetRowPins( int aRow )
+    std::vector<LIB_PIN*> GetRowPins( int aRow )
     {
         return m_rows[ aRow ];
     }
@@ -693,21 +695,21 @@ private:
     }
 
 private:
-    SYMBOL_EDIT_FRAME*    m_frame;
+    SYMBOL_EDIT_FRAME*                 m_frame;
 
     // Because the rows of the grid can either be a single pin or a group of pins, the
-    // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINS
+    // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINs
     // contains only a single pin.
-    std::vector<LIB_PINS> m_rows;
-    int                   m_unitFilter;     // 0 to show pins for all units
+    std::vector<std::vector<LIB_PIN*>> m_rows;
+    int                                m_unitFilter;     // 0 to show pins for all units
 
-    bool                  m_edited;
+    bool                               m_edited;
 
-    DIALOG_LIB_EDIT_PIN_TABLE* m_pinTable;
-    LIB_SYMBOL*                m_symbol;    // Parent symbol that the pins belong to.
+    DIALOG_LIB_EDIT_PIN_TABLE*         m_pinTable;
+    LIB_SYMBOL*                        m_symbol;    // Parent symbol that the pins belong to.
 
-    std::unique_ptr<NUMERIC_EVALUATOR>             m_eval;
-    std::map< std::pair<LIB_PINS, int>, wxString > m_evalOriginal;
+    std::unique_ptr<NUMERIC_EVALUATOR> m_eval;
+    std::map< std::pair<std::vector<LIB_PIN*>, int>, wxString > m_evalOriginal;
 };
 
 
@@ -1016,7 +1018,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
     m_grid->SetGridCursor( nextSelRow, m_grid->GetGridCursorCol() );
     m_grid->SelectRow( nextSelRow );
 
-    LIB_PINS removedRow = m_dataModel->RemoveRow( curRow );
+    std::vector<LIB_PIN*> removedRow = m_dataModel->RemoveRow( curRow );
 
     for( LIB_PIN* pin : removedRow )
         m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
@@ -1044,7 +1046,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnCellSelected( wxGridEvent& event )
 
     if( event.GetRow() >= 0 && event.GetRow() < m_dataModel->GetNumberRows() )
     {
-        const LIB_PINS& pins = m_dataModel->GetRowPins( event.GetRow() );
+        const std::vector<LIB_PIN*>& pins = m_dataModel->GetRowPins( event.GetRow() );
 
         if( pins.size() == 1 && m_editFrame->GetCurSymbol() )
         {

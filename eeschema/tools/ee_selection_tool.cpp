@@ -32,7 +32,6 @@
 #include <ee_selection_tool.h>
 #include <eeschema_id.h>
 #include <symbol_edit_frame.h>
-#include <lib_item.h>
 #include <symbol_viewer_frame.h>
 #include <math/util.h>
 #include <geometry/shape_rect.h>
@@ -1686,12 +1685,7 @@ void EE_SELECTION_TOOL::updateReferencePoint()
     VECTOR2I refP( 0, 0 );
 
     if( m_selection.Size() > 0 )
-    {
-        if( m_isSymbolEditor )
-            refP = static_cast<LIB_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
-        else
-            refP = static_cast<SCH_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
-    }
+        refP = static_cast<SCH_ITEM*>( m_selection.GetTopLeftItem() )->GetPosition();
 
     m_selection.SetReferencePoint( refP );
 }
@@ -2405,7 +2399,7 @@ void EE_SELECTION_TOOL::RebuildSelection()
     {
         LIB_SYMBOL* start = static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
 
-        for( LIB_ITEM& item : start->GetDrawItems() )
+        for( SCH_ITEM& item : start->GetDrawItems() )
         {
             if( item.IsSelected() )
                 select( &item );
@@ -2495,12 +2489,12 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
     case LIB_PIN_T:
         if( symEditFrame )
         {
-            const LIB_ITEM* lib_item = static_cast<const LIB_ITEM*>( aItem );
+            const SCH_ITEM* sch_item = static_cast<const SCH_ITEM*>( aItem );
 
-            if( lib_item->GetUnit() && lib_item->GetUnit() != symEditFrame->GetUnit() )
+            if( sch_item->GetUnit() && sch_item->GetUnit() != symEditFrame->GetUnit() )
                 return false;
 
-            if( lib_item->GetBodyStyle() && lib_item->GetBodyStyle() != symEditFrame->GetBodyStyle() )
+            if( sch_item->GetBodyStyle() && sch_item->GetBodyStyle() != symEditFrame->GetBodyStyle() )
                 return false;
         }
 

@@ -123,7 +123,7 @@ LIB_SYMBOL* SCH_IO_LIB_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
 
         if( firstChild )
         {
-            for( LIB_ITEM& drawItem : aSymbol->GetDrawItems() )
+            for( SCH_ITEM& drawItem : aSymbol->GetDrawItems() )
             {
                 if( drawItem.Type() == LIB_FIELD_T )
                 {
@@ -133,7 +133,7 @@ LIB_SYMBOL* SCH_IO_LIB_CACHE::removeSymbol( LIB_SYMBOL* aSymbol )
                         continue;
                 }
 
-                LIB_ITEM* newItem = (LIB_ITEM*) drawItem.Clone();
+                SCH_ITEM* newItem = (SCH_ITEM*) drawItem.Clone();
                 drawItem.SetParent( firstChild );
                 firstChild->AddDrawItem( newItem );
             }

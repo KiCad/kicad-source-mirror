@@ -493,21 +493,21 @@ int ERC_TESTER::TestMissingUnits()
 
         for( int missing_unit : missing_units )
         {
-            LIB_PINS pins;
-            int convert = 0;
+            std::vector<LIB_PIN*> pins;
+            int                   bodyStyle = 0;
 
             for( size_t ii = 0; ii < refList.GetCount(); ++ii )
             {
                 if( refList.GetItem( ii ).GetUnit() == missing_unit )
                 {
-                    convert = refList.GetItem( ii ).GetSymbol()->GetBodyStyle();
+                    bodyStyle = refList.GetItem( ii ).GetSymbol()->GetBodyStyle();
                     break;
                 }
             }
 
-            libSymbol->GetPins( pins, missing_unit, convert );
+            libSymbol->GetPins( pins, missing_unit, bodyStyle );
 
-            for( auto pin : pins )
+            for( LIB_PIN* pin : pins )
             {
                 switch( pin->GetType() )
                 {
@@ -1012,7 +1012,7 @@ int ERC_TESTER::TestLibSymbolIssues()
             }
 
             std::unique_ptr<LIB_SYMBOL> flattenedSymbol = libSymbol->Flatten();
-            constexpr int flags = LIB_ITEM::COMPARE_FLAGS::EQUALITY | LIB_ITEM::COMPARE_FLAGS::ERC;
+            constexpr int flags = SCH_ITEM::COMPARE_FLAGS::EQUALITY | SCH_ITEM::COMPARE_FLAGS::ERC;
 
             if( settings.IsTestEnabled( ERCE_LIB_SYMBOL_MISMATCH )
                 && flattenedSymbol->Compare( *libSymbolInSchematic, flags ) != 0 )

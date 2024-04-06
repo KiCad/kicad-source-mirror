@@ -370,7 +370,7 @@ int SCH_EDITOR_CONTROL::ExportSymbolsToLibrary( const TOOL_EVENT& aEvent )
 
         if( libSymbols.count( id ) )
         {
-            wxASSERT_MSG( libSymbols[id]->Compare( *libSymbol, LIB_ITEM::COMPARE_FLAGS::ERC ) == 0,
+            wxASSERT_MSG( libSymbols[id]->Compare( *libSymbol, SCH_ITEM::COMPARE_FLAGS::ERC ) == 0,
                           "Two symbols have the same LIB_ID but are different!" );
         }
         else

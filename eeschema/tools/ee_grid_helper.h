@@ -32,7 +32,6 @@
 #include <ee_selection.h>
 
 class SCH_ITEM;
-class LIB_ITEM;
 
 
 class EE_GRID_HELPER : public GRID_HELPER

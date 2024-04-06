@@ -571,7 +571,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 {
     XNODE*                  xlibparts = node( wxT( "libparts" ) );   // auto_ptr
 
-    LIB_PINS                pinList;
+    std::vector<LIB_PIN*>   pinList;
     std::vector<LIB_FIELD*> fieldList;
 
     m_libraries.clear();

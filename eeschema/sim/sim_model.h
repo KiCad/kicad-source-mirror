@@ -33,6 +33,7 @@
 #include <reporter.h>
 #include <sch_field.h>
 #include <lib_field.h>
+#include <lib_pin.h>
 
 // Must be included after sch_field.h (exactly eda_shape.h) to avoid a colliding
 // declaration with a window header (under msys2)

@@ -40,12 +40,13 @@ class REPORTER;
 class SYMBOL_LIB;
 class LIB_SYMBOL;
 class LIB_FIELD;
+class LIB_PIN;
 class TEST_LIB_SYMBOL_FIXTURE;
 
 
 typedef std::shared_ptr<LIB_SYMBOL>       LIB_SYMBOL_SPTR;      ///< shared pointer to LIB_SYMBOL
 typedef std::weak_ptr<LIB_SYMBOL>         LIB_SYMBOL_REF;       ///< weak pointer to LIB_SYMBOL
-typedef MULTIVECTOR<LIB_ITEM, LIB_SHAPE_T, LIB_FIELD_T> LIB_ITEMS_CONTAINER;
+typedef MULTIVECTOR<SCH_ITEM, LIB_SHAPE_T, LIB_FIELD_T> LIB_ITEMS_CONTAINER;
 typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
 
@@ -64,7 +65,7 @@ struct LIB_SYMBOL_UNIT
 {
     int m_unit;                       ///< The unit number.
     int m_bodyStyle;                  ///< The alternate body style of the unit.
-    std::vector<LIB_ITEM*> m_items;   ///< The items unique to this unit and alternate body style.
+    std::vector<SCH_ITEM*> m_items;   ///< The items unique to this unit and alternate body style.
 };
 
 
@@ -96,7 +97,7 @@ public:
         LIB_SYMBOL* dupe = new LIB_SYMBOL( *this, m_library );
         const_cast<KIID&>( dupe->m_Uuid ) = KIID();
 
-        for( LIB_ITEM& item : dupe->m_drawings )
+        for( SCH_ITEM& item : dupe->m_drawings )
             const_cast<KIID&>( item.m_Uuid ) = KIID();
 
         return dupe;
@@ -337,8 +338,7 @@ public:
     int GetUnit() const override { return 0; }
     int GetBodyStyle() const override { return 0; }
 
-    // JEY TODO: reconcile with RunOnChildren when LIB_ITEM collapses to SCH_ITEM
-    void RunOnLibChildren( const std::function<void( LIB_ITEM* )>& aFunction );
+    void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
     /**
      * Order optional field indices.
@@ -373,14 +373,14 @@ public:
      * @param aItem is the new draw object to add to the symbol.
      * @param aSort is the flag to determine if the newly added item should be sorted.
      */
-    void AddDrawItem( LIB_ITEM* aItem, bool aSort = true );
+    void AddDrawItem( SCH_ITEM* aItem, bool aSort = true );
 
     /**
      * Remove draw \a aItem from list.
      *
      * @param aItem - Draw item to remove from list.
      */
-    void RemoveDrawItem( LIB_ITEM* aItem );
+    void RemoveDrawItem( SCH_ITEM* aItem );
 
     void RemoveField( LIB_FIELD* aField ) { RemoveDrawItem( aField ); }
 
@@ -397,7 +397,7 @@ public:
      * @param aBodyStyle - Symbol alternate body style of pins to collect.  Set to 0 to get pins
      *                     from any DeMorgan variant of symbol.
      */
-    void GetPins( LIB_PINS& aList, int aUnit = 0, int aBodyStyle = 0 ) const;
+    void GetPins( std::vector<LIB_PIN*>& aList, int aUnit = 0, int aBodyStyle = 0 ) const;
 
     /**
      * Return a list of pin pointers for all units / converts.  Used primarily for SPICE where
@@ -458,8 +458,8 @@ public:
     /**
      * Clears the status flag all draw objects in this symbol.
      */
-    void ClearTempFlags();
-    void ClearEditFlags();
+    void ClearTempFlags() override;
+    void ClearEditFlags() override;
 
     /**
      * Locate a draw object.
@@ -470,7 +470,7 @@ public:
      * @param aPoint - Coordinate for hit testing.
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_ITEM* LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType, const VECTOR2I& aPoint );
+    SCH_ITEM* LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType, const VECTOR2I& aPoint );
 
     /**
      * Locate a draw object (overlaid)
@@ -482,7 +482,7 @@ public:
      * @param aTransform = the transform matrix
      * @return The draw object if found.  Otherwise NULL.
      */
-    LIB_ITEM* LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType, const VECTOR2I& aPoint,
+    SCH_ITEM* LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType, const VECTOR2I& aPoint,
                               const TRANSFORM& aTransform );
 
     /**
@@ -578,7 +578,7 @@ public:
     bool operator==( const LIB_SYMBOL& aSymbol ) const;
     bool operator!=( const LIB_SYMBOL& aSymbol ) const
     {
-        return Compare( aSymbol, LIB_ITEM::COMPARE_FLAGS::EQUALITY ) != 0;
+        return Compare( aSymbol, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) != 0;
     }
 
     const LIB_SYMBOL& operator=( const LIB_SYMBOL& aSymbol );
@@ -593,7 +593,7 @@ public:
     std::unique_ptr< LIB_SYMBOL > Flatten() const;
 
     /**
-     * Return a list of LIB_ITEM objects separated by unit and convert number.
+     * Return a list of SCH_ITEM objects separated by unit and convert number.
      *
      * @note This does not include LIB_FIELD objects since they are not associated with
      *       unit and/or convert numbers.
@@ -610,7 +610,7 @@ public:
      *
      * @return a list of unit items.
      */
-    std::vector<LIB_ITEM*> GetUnitDrawItems( int aUnit, int aBodyStyle );
+    std::vector<SCH_ITEM*> GetUnitDrawItems( int aUnit, int aBodyStyle );
 
     /**
      * Return a measure of similarity between this symbol and \a aSymbol.

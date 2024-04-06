@@ -170,7 +170,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
-                LIB_ITEM* lib_item = static_cast<LIB_ITEM*>( selection.Front() );
+                SCH_ITEM* lib_item = static_cast<SCH_ITEM*>( selection.Front() );
 
                 // Pick up any synchronized pins
                 //
@@ -183,7 +183,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
 
                     for( EDA_ITEM* sel_item : selection )
                     {
-                        lib_item = static_cast<LIB_ITEM*>( sel_item );
+                        lib_item = static_cast<SCH_ITEM*>( sel_item );
 
                         if(  lib_item->Type() == LIB_PIN_T )
                         {
@@ -387,7 +387,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             [&]( EDA_ITEM* item, const VECTOR2I& delta )
             {
                 commit.Modify( item, m_frame->GetScreen() );
-                static_cast<LIB_ITEM*>( item )->Offset( mapCoords( delta ) );
+                static_cast<SCH_ITEM*>( item )->Move( mapCoords( delta ) );
                 updateItem( item, true );
             };
 
@@ -513,7 +513,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
 void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 {
-    static_cast<LIB_ITEM*>( aItem )->Offset( mapCoords( aDelta ) );
+    static_cast<SCH_ITEM*>( aItem )->Move( mapCoords( aDelta ) );
     aItem->SetFlags( IS_MOVING );
 }
 

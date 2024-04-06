@@ -142,7 +142,7 @@ private:
      * @param aPinList
      * @return wxString
      */
-    wxString formatFunction( wxString aName, LIB_PINS aPinList );
+    wxString formatFunction( wxString aName, std::vector<LIB_PIN*> aPinList );
 
     /**
      * Look up a field for a component group, which may have mismatched case, or

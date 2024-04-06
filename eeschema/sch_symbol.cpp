@@ -83,7 +83,7 @@ static LIB_SYMBOL* dummy()
 
         LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECTANGLE );
 
-        square->MoveTo( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
+        square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
         square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
 
         LIB_TEXT* text = new LIB_TEXT( symbol );
@@ -207,7 +207,7 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
     m_layer     = LAYER_DEVICE;
     m_pos       = pos;
     m_unit      = 1;  // In multi unit chip - which unit to draw.
-    m_bodyStyle = LIB_ITEM::BODY_STYLE::BASE;  // De Morgan Handling
+    m_bodyStyle = BODY_STYLE::BASE;  // De Morgan Handling
 
     // The rotation/mirror transformation matrix. pos normal
     m_transform = TRANSFORM();
@@ -516,11 +516,11 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
 
     if( m_part )
     {
-        LIB_PINS  libPins;
+        std::vector<LIB_PIN*>  libPins;
         m_part->GetPins( libPins, m_unit, m_bodyStyle );
 
         LIB_SYMBOL tempSymbol( *m_part );
-        LIB_PINS tempPins;
+        std::vector<LIB_PIN*> tempPins;
         tempSymbol.GetPins( tempPins, m_unit, m_bodyStyle );
 
         // Copy the pin info from the symbol to the temp pins
@@ -534,7 +534,7 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
             tempPin->SetShape( symbolPin->GetShape() );
         }
 
-        for( LIB_ITEM& item : tempSymbol.GetDrawItems() )
+        for( SCH_ITEM& item : tempSymbol.GetDrawItems() )
         {
             if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
             {
@@ -2215,7 +2215,7 @@ std::vector<VECTOR2I> SCH_SYMBOL::GetConnectionPoints() const
 }
 
 
-LIB_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
+SCH_ITEM* SCH_SYMBOL::GetDrawItem( const VECTOR2I& aPosition, KICAD_T aType )
 {
     if( m_part )
     {
@@ -2463,12 +2463,12 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
     if( m_part )
     {
-        LIB_PINS  libPins;
+        std::vector<LIB_PIN*>  libPins;
         m_part->GetPins( libPins, GetUnit(), GetBodyStyle() );
 
         // Copy the source so we can re-orient and translate it.
         LIB_SYMBOL tempSymbol( *m_part );
-        LIB_PINS tempPins;
+        std::vector<LIB_PIN*> tempPins;
         tempSymbol.GetPins( tempPins, GetUnit(), GetBodyStyle() );
 
         // Copy the pin info from the symbol to the temp pins
@@ -2485,7 +2485,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
                 tempPin->SetFlags( IS_DANGLING );
         }
 
-        for( LIB_ITEM& item : tempSymbol.GetDrawItems() )
+        for( SCH_ITEM& item : tempSymbol.GetDrawItems() )
         {
             if( EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( &item ) )
             {
@@ -2575,12 +2575,12 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
 {
     if( m_part )
     {
-        LIB_PINS  libPins;
+        std::vector<LIB_PIN*>  libPins;
         m_part->GetPins( libPins, GetUnit(), GetBodyStyle() );
 
         // Copy the source to stay const
         LIB_SYMBOL tempSymbol( *m_part );
-        LIB_PINS tempPins;
+        std::vector<LIB_PIN*> tempPins;
         tempSymbol.GetPins( tempPins, GetUnit(), GetBodyStyle() );
 
         SCH_PLOT_OPTS plotOpts;

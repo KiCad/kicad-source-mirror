@@ -23,7 +23,7 @@
 
 #include "dialog_lib_edit_pin_table_base.h"
 
-#include <lib_item.h>
+#include <lib_pin.h>
 #include <symbol_library.h>
 
 enum COL_ORDER
@@ -87,7 +87,7 @@ protected:
     int                   m_originalColWidths[ COL_COUNT ];
     std::bitset<64>       m_columnsShown;
     LIB_SYMBOL*           m_symbol;
-    LIB_PINS              m_pins;       // a copy of the pins owned by me
+    std::vector<LIB_PIN*> m_pins;       // a copy of the pins owned by me
     bool                  m_modified;   ///< true when there are unsaved changes
     wxSize                m_size;
 

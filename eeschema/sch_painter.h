@@ -35,7 +35,6 @@
 
 class LIB_PIN;
 class LIB_SHAPE;
-class LIB_ITEM;
 class LIB_SYMBOL;
 class LIB_FIELD;
 class LIB_TEXT;
@@ -121,7 +120,7 @@ private:
     // Indicates the item is drawn on a non-cached layer in OpenGL
     bool nonCached( const EDA_ITEM* aItem );
 
-    bool isUnitAndConversionShown( const LIB_ITEM* aItem ) const;
+    bool isUnitAndConversionShown( const SCH_ITEM* aItem ) const;
 
     float getShadowWidth( bool aForHighlight ) const;
     COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows,
@@ -132,7 +131,7 @@ private:
 
     int getOperatingPointTextSize() const;
 
-    bool setDeviceColors( const LIB_ITEM* aItem, int aLayer, bool aDimmed );
+    bool setDeviceColors( const SCH_ITEM* aItem, int aLayer, bool aDimmed );
 
     void triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
     void strokeText( const wxString& aText, const VECTOR2D& aPosition,

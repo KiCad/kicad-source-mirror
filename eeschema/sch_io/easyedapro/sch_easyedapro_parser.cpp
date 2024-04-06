@@ -601,7 +601,7 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
 
                 // TODO: rotation
                 for( std::unique_ptr<EDA_ITEM>& item : libsymImporter.GetItems() )
-                    ksymbol->AddDrawItem( static_cast<LIB_ITEM*>( item.release() ) );
+                    ksymbol->AddDrawItem( static_cast<SCH_ITEM*>( item.release() ) );
             }
             else
             {

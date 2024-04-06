@@ -687,7 +687,7 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
     if( aSvgJob->m_includeHiddenPins )
     {
         // horrible hack, TODO overhaul the Plot method to handle this
-        for( LIB_ITEM& item : symbolToPlot->GetDrawItems() )
+        for( SCH_ITEM& item : symbolToPlot->GetDrawItems() )
         {
             if( item.Type() != LIB_PIN_T )
                 continue;

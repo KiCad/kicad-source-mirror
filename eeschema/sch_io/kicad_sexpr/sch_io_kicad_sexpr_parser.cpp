@@ -290,7 +290,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
     wxString name;
     wxString error;
     wxString unitDisplayName;
-    LIB_ITEM* item;
+    SCH_ITEM* item;
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( wxEmptyString );
 
     symbol->SetUnitCount( 1 );
@@ -548,7 +548,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
 }
 
 
-LIB_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseDrawItem()
+SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseDrawItem()
 {
     switch( CurTok() )
     {

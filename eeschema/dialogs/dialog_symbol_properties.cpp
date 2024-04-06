@@ -501,7 +501,7 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataToWindow()
 
     if( m_part && m_part->HasAlternateBodyStyle() )
     {
-        if( m_symbol->GetBodyStyle() > LIB_ITEM::BODY_STYLE::BASE )
+        if( m_symbol->GetBodyStyle() > BODY_STYLE::BASE )
             m_cbAlternateSymbol->SetValue( true );
     }
     else
@@ -696,9 +696,9 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
     if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )
-        m_symbol->SetBodyStyle( LIB_ITEM::BODY_STYLE::DEMORGAN );
+        m_symbol->SetBodyStyle( BODY_STYLE::DEMORGAN );
     else
-        m_symbol->SetBodyStyle( LIB_ITEM::BODY_STYLE::BASE );
+        m_symbol->SetBodyStyle( BODY_STYLE::BASE );
 
     //Set the part selection in multiple part per package
     int unit_selection = m_unitChoice->IsEnabled() ? m_unitChoice->GetSelection() + 1 : 1;

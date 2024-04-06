@@ -1155,7 +1155,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
                     return a->Type() > b->Type();
                 } );
 
-    int defaultPenWidth = aPlotter->RenderSettings()->GetDefaultPenWidth();
+    auto* renderSettings = static_cast<const SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     constexpr bool background = true;
 
     // Bitmaps are drawn first to ensure they are in the background
@@ -1163,21 +1163,21 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
     // the bitmap PS command clears the screen
     for( SCH_ITEM* item : bitmaps )
     {
-        aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
+        aPlotter->SetCurrentLineWidth( item->GetEffectivePenWidth( renderSettings ) );
         item->Plot( aPlotter, background, aPlotOpts, 0, 0, { 0, 0 }, false );
     }
 
     // Plot the background items
     for( SCH_ITEM* item : other )
     {
-        aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
+        aPlotter->SetCurrentLineWidth( item->GetEffectivePenWidth( renderSettings ) );
         item->Plot( aPlotter, background, aPlotOpts, 0, 0, { 0, 0 }, false );
     }
 
     // Plot the foreground items
     for( SCH_ITEM* item : other )
     {
-        aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
+        aPlotter->SetCurrentLineWidth( item->GetEffectivePenWidth( renderSettings ) );
         item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
     }
 
@@ -1185,7 +1185,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
     // and symbols to ensure that they are always visible
     for( const SCH_SYMBOL* sym :symbols )
     {
-        aPlotter->SetCurrentLineWidth( std::max( sym->GetPenWidth(), defaultPenWidth ) );
+        aPlotter->SetCurrentLineWidth( sym->GetEffectivePenWidth( renderSettings ) );
 
         for( SCH_FIELD field : sym->GetFields() )
         {
@@ -1202,7 +1202,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
 
     for( SCH_ITEM* item : junctions )
     {
-        aPlotter->SetCurrentLineWidth( std::max( item->GetPenWidth(), defaultPenWidth ) );
+        aPlotter->SetCurrentLineWidth( item->GetEffectivePenWidth( renderSettings ) );
         item->Plot( aPlotter, !background, aPlotOpts, 0, 0, { 0, 0 }, false );
     }
 }

@@ -246,17 +246,17 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
             }
             // Enforce item ordering
             auto cmp =
-                    []( const LIB_ITEM* a, const LIB_ITEM* b )
+                    []( const SCH_ITEM* a, const SCH_ITEM* b )
                     {
                         return *a < *b;
                     };
 
-            std::multiset<LIB_ITEM*, decltype( cmp )> save_map( cmp );
+            std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
 
-            for( LIB_ITEM* item : unit.m_items )
+            for( SCH_ITEM* item : unit.m_items )
                 save_map.insert( item );
 
-            for( LIB_ITEM* item : save_map )
+            for( SCH_ITEM* item : save_map )
                 saveSymbolDrawItem( item, aFormatter, aNestLevel + 2 );
 
             aFormatter.Print( aNestLevel + 1, ")\n" );
@@ -327,10 +327,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol,
 }
 
 
-void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
                                                        int aNestLevel )
 {
-    wxCHECK_RET( aItem, "Invalid LIB_ITEM pointer." );
+    wxCHECK_RET( aItem, "Invalid SCH_ITEM pointer." );
 
     switch( aItem->Type() )
     {

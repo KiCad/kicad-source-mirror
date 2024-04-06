@@ -26,7 +26,6 @@
 
 class FILE_LINE_READER;
 class LIB_FIELD;
-class LIB_ITEM;
 class LIB_PIN;
 class LIB_TEXT;
 class LIB_TEXTBOX;
@@ -64,7 +63,7 @@ private:
 
     int m_fileFormatVersionAtLoad;
 
-    static void saveSymbolDrawItem( LIB_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
+    static void saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFORMATTER& aFormatter,
                                     int aNestLevel );
     static void saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter, int aNestLevel );
     static void savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );

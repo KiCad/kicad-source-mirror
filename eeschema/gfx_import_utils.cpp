@@ -134,7 +134,7 @@ void ConvertImageToLibShapes( LIB_SYMBOL* aSymbol, int unit, wxImage img, VECTOR
 
             shape->SetUnit( unit );
 
-            shape->Offset( offset );
+            shape->Move( offset );
 
             aSymbol->AddDrawItem( shape.release() );
         }

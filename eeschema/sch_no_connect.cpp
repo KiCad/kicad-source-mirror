@@ -107,7 +107,7 @@ void SCH_NO_CONNECT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int
 {
     wxDC*   DC = aSettings->GetPrintDC();
     int     half = GetSize() / 2;
-    int     penWidth = std::max( GetPenWidth(), aSettings->GetDefaultPenWidth() );
+    int     penWidth = GetEffectivePenWidth( aSettings );
     int     pX = m_pos.x + aOffset.x;
     int     pY = m_pos.y + aOffset.y;
     COLOR4D color = aSettings->GetLayerColor( LAYER_NOCONNECT );
@@ -198,7 +198,7 @@ void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_O
     int delta = GetSize() / 2;
     int pX = m_pos.x;
     int pY = m_pos.y;
-    int penWidth = std::max( GetPenWidth(), aPlotter->RenderSettings()->GetDefaultPenWidth() );
+    int penWidth = GetEffectivePenWidth( getRenderSettings( aPlotter ) );
 
     aPlotter->SetCurrentLineWidth( penWidth );
     aPlotter->SetColor( aPlotter->RenderSettings()->GetLayerColor( LAYER_NOCONNECT ) );

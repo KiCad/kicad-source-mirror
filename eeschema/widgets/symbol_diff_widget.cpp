@@ -133,7 +133,7 @@ void SYMBOL_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
         m_previewItem->SetForcedTransparency( val );
         view->Update( m_previewItem );
 
-        for( LIB_ITEM& child : m_previewItem->GetDrawItems() )
+        for( SCH_ITEM& child : m_previewItem->GetDrawItems() )
         {
             child.SetForcedTransparency( val );
             view->Update( &child );
@@ -152,7 +152,7 @@ void SYMBOL_DIFF_WIDGET::onSlider( wxScrollEvent& aEvent )
         m_libraryItem->SetForcedTransparency( val );
         view->Update( m_libraryItem );
 
-        for( LIB_ITEM& child : m_libraryItem->GetDrawItems() )
+        for( SCH_ITEM& child : m_libraryItem->GetDrawItems() )
         {
             child.SetForcedTransparency( val );
             view->Update( &child );

@@ -25,7 +25,6 @@
 #include <tool/tool_manager.h>
 #include <tools/ee_tool_base.h>
 
-#include <lib_item.h>
 #include <lib_symbol.h>
 
 #include <sch_screen.h>
@@ -133,8 +132,8 @@ void SCH_COMMIT::pushLibEdit( const wxString& aMessage, int aCommitFlags )
         {
             view->Update( symbol );
 
-            symbol->RunOnLibChildren(
-                    [&]( LIB_ITEM* aChild )
+            symbol->RunOnChildren(
+                    [&]( SCH_ITEM* aChild )
                     {
                         view->Update( aChild );
                     } );
@@ -424,7 +423,7 @@ EDA_ITEM* SCH_COMMIT::makeImage( EDA_ITEM* aItem ) const
         LIB_SYMBOL*        symbol = frame->GetCurSymbol();
         std::vector<KIID>  selected;
 
-        for( const LIB_ITEM& item : symbol->GetDrawItems() )
+        for( const SCH_ITEM& item : symbol->GetDrawItems() )
         {
             if( item.IsSelected() )
                 selected.push_back( item.m_Uuid );
@@ -432,7 +431,7 @@ EDA_ITEM* SCH_COMMIT::makeImage( EDA_ITEM* aItem ) const
 
         symbol = new LIB_SYMBOL( *symbol );
 
-        for( LIB_ITEM& item : symbol->GetDrawItems() )
+        for( SCH_ITEM& item : symbol->GetDrawItems() )
         {
             if( alg::contains( selected, item.m_Uuid ) )
                 item.SetSelected();
