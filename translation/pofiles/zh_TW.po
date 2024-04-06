@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-04-06 06:29+0000\n"
+"PO-Revision-Date: 2024-04-07 01:51+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hant/>\n"
@@ -9203,9 +9203,8 @@ msgid "Generating BOM requires a fully annotated schematic."
 msgstr "生成材料表 (BOM) 需要一張完全註釋的原理圖。"
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "建立檔案失敗。"
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -9502,9 +9501,8 @@ msgid "Update Symbols"
 msgstr "更新符號"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "*** 符號沒有找到 ***"
+msgstr "*** 沒有找到符合條件的符號 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:570
 msgid "*** symbol not found ***"
@@ -9639,18 +9637,16 @@ msgid "DSN:"
 msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "新名稱："
+msgstr "使用者名稱："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "密碼:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "聯結器："
+msgstr "連接字串："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:202
@@ -9660,9 +9656,8 @@ msgid "Libraries"
 msgstr "庫"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "使用者配置"
+msgstr "重新載入配置"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
 msgid "Reload the database library configuration file"
@@ -9673,20 +9668,17 @@ msgid "Caching"
 msgstr "搜尋中"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "圖框尺寸："
+msgstr "快取尺寸："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
-#, fuzzy
 msgid "How many database queries to cache"
-msgstr "要顯示多少位精度"
+msgstr "有多少個資料庫查詢存在快取中"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "快取符號："
+msgstr "快取逾時："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
@@ -9694,9 +9686,8 @@ msgid "Time in seconds that database queries will be cached for"
 msgstr "資料查詢的快取時間(以秒為單位)"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "KiCad 資料庫庫檔案"
+msgstr "資料庫函式庫設定"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:546
 #, c-format
@@ -9860,10 +9851,9 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "將所有“%s”違規的嚴重性等級修改為“錯誤”"
 
 #: eeschema/dialogs/dialog_erc.cpp:624 eeschema/dialogs/dialog_erc.cpp:630
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "違規嚴重程度也可以在“電路板設定...”對話方塊中進行編輯"
+msgstr "違規嚴重程度也可以在Schematic Setup...對話框中進行編輯"
 
 #: eeschema/dialogs/dialog_erc.cpp:628 pcbnew/dialogs/dialog_drc.cpp:651
 #, c-format
