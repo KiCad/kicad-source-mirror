@@ -54,6 +54,7 @@ set( QA_EESCHEMA_SRCS
     erc/test_erc_four_way.cpp
 	erc/test_erc_label_not_connected.cpp
 	erc/test_erc_stacking_pins.cpp
+    erc/test_erc_label_names.cpp
 	erc/test_erc_global_labels.cpp
 	erc/test_erc_no_connect.cpp
     erc/test_erc_hierarchical_schematics.cpp

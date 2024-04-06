@@ -116,6 +116,14 @@ ERC_ITEM ERC_ITEM::similarLabels( ERCE_SIMILAR_LABELS,
         _( "Labels are similar (lower/upper case difference only)"),
         wxT( "similar_labels" ) );
 
+ERC_ITEM ERC_ITEM::similarPower( ERCE_SIMILAR_POWER,
+        _( "Power pins are similar (lower/upper case difference only)"),
+        wxT( "similar_power" ) );
+
+ERC_ITEM ERC_ITEM::similarLabelAndPower( ERCE_SIMILAR_LABEL_AND_POWER,
+        _( "Power pin and label are similar (lower/upper case difference only)"),
+        wxT( "similar_label_and_power" ) );
+
 ERC_ITEM ERC_ITEM::singleGlobalLabel( ERCE_SINGLE_GLOBAL_LABEL,
         _( "Global label only appears once in the schematic"),
         wxT( "single_global_label" ) );
@@ -257,6 +265,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes(
             ERC_ITEM::unresolvedVariable,
             ERC_ITEM::simulationModelIssues,
             ERC_ITEM::similarLabels,
+            ERC_ITEM::similarPower,
+            ERC_ITEM::similarLabelAndPower,
             // Commented out until the logic for this element is coded
             // TODO: Add bus label syntax checking
             //                 ERC_ITEM::busLabelSyntax,
@@ -302,6 +312,8 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_LABEL_MULTIPLE_WIRES:    return std::make_shared<ERC_ITEM>( labelMultipleWires );
     case ERCE_LABEL_NOT_CONNECTED:     return std::make_shared<ERC_ITEM>( labelDangling );
     case ERCE_SIMILAR_LABELS:          return std::make_shared<ERC_ITEM>( similarLabels );
+    case ERCE_SIMILAR_POWER:           return std::make_shared<ERC_ITEM>( similarPower );
+    case ERCE_SIMILAR_LABEL_AND_POWER: return std::make_shared<ERC_ITEM>( similarLabelAndPower );
     case ERCE_SINGLE_GLOBAL_LABEL:     return std::make_shared<ERC_ITEM>( singleGlobalLabel );
     case ERCE_DIFFERENT_UNIT_FP:       return std::make_shared<ERC_ITEM>( differentUnitFootprint );
     case ERCE_DIFFERENT_UNIT_NET:      return std::make_shared<ERC_ITEM>( differentUnitNet );

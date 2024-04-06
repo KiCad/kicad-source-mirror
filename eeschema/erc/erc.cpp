@@ -44,6 +44,7 @@
 #include <sch_rule_area.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
+#include <sch_pin.h>
 #include <sch_textbox.h>
 #include <sch_line.h>
 #include <schematic.h>
@@ -1084,8 +1085,39 @@ int ERC_TESTER::TestMultUnitPinConflicts()
 int ERC_TESTER::TestSimilarLabels()
 {
     int errors = 0;
+    std::unordered_map<wxString, std::tuple<wxString, SCH_ITEM*, SCH_SHEET_PATH>> generalMap;
 
-    std::unordered_map<wxString, std::pair<SCH_LABEL_BASE*, SCH_SHEET_PATH>> labelMap;
+    auto logError = [&]( const wxString& normalized, SCH_ITEM* item, const SCH_SHEET_PATH& sheet )
+    {
+        auto& [otherText, otherItem, otherSheet] = generalMap.at( normalized );
+        ERCE_T typeOfWarning = ERCE_SIMILAR_LABELS;
+
+        if( item->Type() == SCH_PIN_T && otherItem->Type() == SCH_PIN_T )
+        {
+            //Two Pins
+            typeOfWarning = ERCE_SIMILAR_POWER;
+        }
+        else if( item->Type() == SCH_PIN_T || otherItem->Type() == SCH_PIN_T )
+        {
+            //Pin and Label
+            typeOfWarning = ERCE_SIMILAR_LABEL_AND_POWER;
+        }
+        else
+        {
+            //Two Labels
+            typeOfWarning = ERCE_SIMILAR_LABELS;
+        }
+
+        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( typeOfWarning );
+        ercItem->SetItems( item, otherItem );
+        ercItem->SetSheetSpecificPath( sheet );
+        ercItem->SetItemsSheetPaths( sheet, otherSheet );
+
+        SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
+        sheet.LastScreen()->Append( marker );
+    };
+
+    const NET_MAP& nets = m_schematic->ConnectionGraph()->GetNetMap();
 
     for( const std::pair<NET_NAME_CODE_CACHE_KEY, std::vector<CONNECTION_SUBGRAPH*>> net : m_nets )
     {
@@ -1102,27 +1134,47 @@ int ERC_TESTER::TestSimilarLabels()
                 case SCH_GLOBAL_LABEL_T:
                 {
                     SCH_LABEL_BASE* label = static_cast<SCH_LABEL_BASE*>( item );
+                    wxString        unnormalized = label->GetShownText( &sheet, false );
+                    wxString        normalized = unnormalized.Lower();
 
-                    wxString normalized = label->GetShownText( &sheet, false ).Lower();
-
-                    if( !labelMap.count( normalized ) )
+                    if( !generalMap.count( normalized ) )
                     {
-                        labelMap[normalized] = std::make_pair( label, sheet );
-                        break;
+                        generalMap[normalized] = std::make_tuple( unnormalized, label, sheet );
                     }
 
-                    auto& [ otherLabel, otherSheet ] = labelMap.at( normalized );
+                    auto& [otherText, otherItem, otherSheet] = generalMap.at( normalized );
 
-                    if( otherLabel->GetShownText( &otherSheet, false )
-                            != label->GetShownText( &sheet, false ) )
+                    if( unnormalized != otherText )
                     {
-                        std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_SIMILAR_LABELS );
-                        ercItem->SetItems( label, labelMap.at( normalized ).first );
-                        ercItem->SetSheetSpecificPath( sheet );
-                        ercItem->SetItemsSheetPaths( sheet, labelMap.at( normalized ).second );
+                        logError( normalized, label, sheet );
+                        errors += 1;
+                    }
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem, label->GetPosition() );
-                        sheet.LastScreen()->Append( marker );
+                    break;
+                }
+                case SCH_PIN_T:
+                {
+                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
+
+                    if( !pin->IsGlobalPower() )
+                    {
+                        continue;
+                    }
+
+                    SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
+                    wxString    unnormalized = symbol->GetValue( true, &sheet, false );
+                    wxString    normalized = unnormalized.Lower();
+
+                    if( !generalMap.count( normalized ) )
+                    {
+                        generalMap[normalized] = std::make_tuple( unnormalized, pin, sheet );
+                    }
+
+                    auto& [otherText, otherItem, otherSheet] = generalMap.at( normalized );
+
+                    if( unnormalized != otherText )
+                    {
+                        logError( normalized, pin, sheet );
                         errors += 1;
                     }
 
@@ -1135,7 +1187,6 @@ int ERC_TESTER::TestSimilarLabels()
             }
         }
     }
-
     return errors;
 }
 
@@ -1601,7 +1652,9 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
 
     // Test similar labels (i;e. labels which are identical when
     // using case insensitive comparisons)
-    if( m_settings.IsTestEnabled( ERCE_SIMILAR_LABELS ) )
+    if( m_settings.IsTestEnabled( ERCE_SIMILAR_LABELS )
+        || m_settings.IsTestEnabled( ERCE_SIMILAR_POWER )
+        || m_settings.IsTestEnabled( ERCE_SIMILAR_LABEL_AND_POWER ) )
     {
         if( aProgressReporter )
             aProgressReporter->AdvancePhase( _( "Checking labels..." ) );
