@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-21 14:44+0000\n"
-"Last-Translator: pondahai <dahai.pon@gmail.com>\n"
+"PO-Revision-Date: 2024-04-06 06:29+0000\n"
+"Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -415,7 +415,7 @@ msgstr "主視圖"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "在初始位置重新繪製並進行縮放"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -4432,9 +4432,8 @@ msgid "Dash-Dot-Dot"
 msgstr "雙點劃線"
 
 #: common/dialogs/panel_setup_netclasses.cpp:189
-#, fuzzy
 msgid "Set color to transparent to use layer default color."
-msgstr "將顏色設為透明以使用 Kicad 預設顏色。"
+msgstr "將顏色設置為透明以使用圖層的預設顏色。"
 
 #: common/dialogs/panel_setup_netclasses.cpp:379
 msgid ""
@@ -4501,9 +4500,8 @@ msgid "Schematic wire line style"
 msgstr "原理圖線樣式"
 
 #: common/dialogs/panel_setup_netclasses.cpp:624
-#, fuzzy
 msgid "PCB netclass color"
-msgstr "設定網路類顏色"
+msgstr "PCB 網路類別顏色"
 
 #: common/dialogs/panel_setup_netclasses.cpp:677
 msgid "The default net class is required."
@@ -4557,9 +4555,8 @@ msgid "DP Gap"
 msgstr "差分對間距"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:60
-#, fuzzy
 msgid "PCB Color"
-msgstr "PCB游標"
+msgstr "PCB 顏色"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:61
 msgid "Wire Thickness"
@@ -4605,9 +4602,8 @@ msgid "Set color to transparent to use KiCad default color."
 msgstr "將顏色設為透明以使用 Kicad 預設顏色。"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:98
-#, fuzzy
 msgid "Import colors from schematic"
-msgstr "原理圖探針"
+msgstr "從原理圖導入顏色"
 
 #: common/dialogs/panel_setup_netclasses_base.cpp:115
 msgid "Netclass assignments:"
@@ -5205,16 +5201,14 @@ msgstr "文字框"
 
 #: common/eda_item.cpp:352 common/eda_item.cpp:379 eeschema/sch_table.cpp:546
 #: pcbnew/pcb_table.cpp:285
-#, fuzzy
 msgid "Table"
-msgstr "引腳列表"
+msgstr "表格"
 
 #: common/eda_item.cpp:353 common/eda_item.cpp:380
 #: eeschema/sch_tablecell.cpp:118 pcbnew/pcb_tablecell.cpp:98
 #: pcbnew/pcb_tablecell.h:48
-#, fuzzy
 msgid "Table Cell"
-msgstr "列表名稱"
+msgstr "表格儲存格"
 
 #: common/eda_item.cpp:354 common/eda_item.cpp:355 pcbnew/pcb_track.cpp:1051
 msgid "Track"
@@ -7393,9 +7387,8 @@ msgstr "刪除單擊的項目"
 
 #: common/tool/actions.cpp:283 eeschema/tools/sch_edit_tool.cpp:2470
 #: pcbnew/tools/edit_tool.cpp:2123
-#, fuzzy
 msgid "Left Justify"
-msgstr "X 對齊"
+msgstr "靠左對齊"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
@@ -7403,9 +7396,8 @@ msgstr "將字段和文本項目靠左對齊"
 
 #: common/tool/actions.cpp:290 eeschema/tools/sch_edit_tool.cpp:2472
 #: pcbnew/tools/edit_tool.cpp:2125
-#, fuzzy
 msgid "Center Justify"
-msgstr "X 對齊"
+msgstr "置中對齊"
 
 #: common/tool/actions.cpp:291
 msgid "Center-justify fields and text items"
@@ -7413,46 +7405,40 @@ msgstr "將字段和文本項目靠中對齊"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2474
 #: pcbnew/tools/edit_tool.cpp:2127
-#, fuzzy
 msgid "Right Justify"
-msgstr "X 對齊"
+msgstr "靠右對齊"
 
 #: common/tool/actions.cpp:298
 msgid "Right-justify fields and text items"
 msgstr "將字段和文本項目靠右對齊"
 
 #: common/tool/actions.cpp:304
-#, fuzzy
 msgid "Expand All"
-msgstr "更新全部"
+msgstr "展開全部"
 
 #: common/tool/actions.cpp:310
-#, fuzzy
 msgid "Collapse All"
-msgstr "全部替換"
+msgstr "全部摺疊"
 
 #: common/tool/actions.cpp:316
-#, fuzzy
 msgid "Select Column(s)"
-msgstr "選擇列"
+msgstr "選擇行"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "選擇包含當前選定儲存格的完整行"
 
 #: common/tool/actions.cpp:323
-#, fuzzy
 msgid "Select Row(s)"
-msgstr "選擇專案"
+msgstr "選擇列"
 
 #: common/tool/actions.cpp:324
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "選擇包含當前選定儲存格的完整列(s)"
 
 #: common/tool/actions.cpp:330
-#, fuzzy
 msgid "Select Table"
-msgstr "全選"
+msgstr "選擇表格"
 
 #: common/tool/actions.cpp:331
 #, fuzzy
