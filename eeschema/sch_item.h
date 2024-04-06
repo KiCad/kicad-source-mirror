@@ -389,14 +389,6 @@ public:
     virtual std::vector<VECTOR2I> GetConnectionPoints() const { return {}; }
 
     /**
-     * Clears all of the connection items from the list.
-     *
-     * The vector release method is used to prevent the item pointers from being deleted.
-     * Do not use the vector erase method on the connection list.
-     */
-    void ClearConnections() { m_connections.clear(); }
-
-    /**
      * Test the item to see if it is connected to \a aPoint.
      *
      * @param aPoint is a reference to a VECTOR2I object containing the coordinates to test.
@@ -578,18 +570,17 @@ private:
 
 protected:
     SCH_LAYER_ID      m_layer;
-    EDA_ITEMS         m_connections;      // List of items connected to this item.
-    FIELDS_AUTOPLACED m_fieldsAutoplaced; // indicates status of field autoplacement
-    VECTOR2I          m_storedPos;        // a temporary variable used in some move commands
-                                          // to store a initial pos of the item or mouse cursor
+    FIELDS_AUTOPLACED m_fieldsAutoplaced;   // indicates status of field autoplacement
+    VECTOR2I          m_storedPos;          // temp variable used in some move commands to store
+                                            // an initial position of the item or mouse cursor
 
     /// Store pointers to other items that are connected to this one, per sheet.
     std::map<SCH_SHEET_PATH, SCH_ITEM_SET, SHEET_PATH_CMP> m_connected_items;
 
     /// Store connectivity information, per sheet.
-    std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;
+    std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*>    m_connection_map;
 
-    bool              m_connectivity_dirty;
+    bool                                                   m_connectivity_dirty;
 };
 
 #ifndef SWIG

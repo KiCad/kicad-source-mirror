@@ -68,7 +68,7 @@ std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
 }
 
 
-void LIB_SYMBOL::GetChooserFields( std::map<wxString , wxString>& aColumnMap )
+void LIB_SYMBOL::GetChooserFields( std::map<wxString, wxString>& aColumnMap )
 {
     for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
@@ -912,7 +912,7 @@ void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT
 void LIB_SYMBOL::FixupDrawItems()
 {
     std::vector<LIB_SHAPE*> potential_top_items;
-    std::vector<LIB_ITEM*> bottom_items;
+    std::vector<LIB_ITEM*>  bottom_items;
 
     for( LIB_ITEM& item : m_drawings )
     {
@@ -936,7 +936,6 @@ void LIB_SYMBOL::FixupDrawItems()
                {
                    return a->GetBoundingBox().GetArea() > b->GetBoundingBox().GetArea();
                } );
-
 
     for( LIB_SHAPE* item : potential_top_items )
     {
@@ -1028,8 +1027,8 @@ int LIB_SYMBOL::GetPinCount()
 {
     std::vector<LIB_PIN*> pinList;
 
-    GetPins( pinList, 0, 1 );   // All units, but a single convert
-    return pinList.size();
+    GetPins( pinList, 0 /* all units */, 1 /* single body style */ );
+    return (int) pinList.size();
 }
 
 
@@ -1204,10 +1203,10 @@ void LIB_SYMBOL::SetFields( const std::vector<LIB_FIELD>& aFields )
 {
     deleteAllFields();
 
-    for( size_t ii = 0; ii < aFields.size(); ++ii )
+    for( const LIB_FIELD& src : aFields )
     {
         // drawings is a ptr_vector, new and copy an object on the heap.
-        LIB_FIELD* field = new LIB_FIELD( aFields[ ii ] );
+        LIB_FIELD* field = new LIB_FIELD( src );
 
         field->SetParent( this );
         m_drawings.push_back( field );
@@ -1290,16 +1289,17 @@ const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
 {
     for( const LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
+        const LIB_FIELD& field = static_cast<const LIB_FIELD&>( item );
+
         if( aCaseInsensitive )
         {
-            if( static_cast<const LIB_FIELD*>( &item )->GetCanonicalName().Upper()
-                == aFieldName.Upper() )
-                return static_cast<const LIB_FIELD*>( &item );
+            if( field.GetCanonicalName().Upper() == aFieldName.Upper() )
+                return &field;
         }
         else
         {
-            if( static_cast<const LIB_FIELD*>( &item )->GetCanonicalName() == aFieldName )
-                return static_cast<const LIB_FIELD*>( &item );
+            if( field.GetCanonicalName() == aFieldName )
+                return &field;
         }
     }
 
@@ -1387,9 +1387,7 @@ int LIB_SYMBOL::UpdateFieldOrdinals()
 
     for( LIB_ITEM& item : m_drawings[ LIB_FIELD_T ] )
     {
-        LIB_FIELD* field = dynamic_cast<LIB_FIELD*>( &item );
-
-        wxCHECK2( field, continue );
+        LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
 
         // Mandatory fields were already resolved always have the same ordinal values.
         if( field->IsMandatory() )
@@ -1605,7 +1603,7 @@ void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePi
     {
         if( aDuplicatePins )
         {
-            std::vector< LIB_ITEM* > tmp;     // Temporarily store the duplicated pins here.
+            std::vector<LIB_ITEM*> tmp;     // Temporarily store the duplicated pins here.
 
             for( LIB_ITEM& item : m_drawings )
             {
@@ -1615,21 +1613,20 @@ void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePi
 
                 if( item.m_bodyStyle == 1 )
                 {
-                    LIB_ITEM* newItem = (LIB_ITEM*) item.Duplicate();
+                    LIB_ITEM* newItem = static_cast<LIB_ITEM*>( item.Duplicate() );
                     newItem->m_bodyStyle = 2;
                     tmp.push_back( newItem );
                 }
             }
 
             // Transfer the new pins to the LIB_SYMBOL.
-            for( unsigned i = 0;  i < tmp.size();  i++ )
-                m_drawings.push_back( tmp[i] );
+            for( LIB_ITEM* item : tmp )
+                m_drawings.push_back( item );
         }
     }
     else
     {
-        // Delete converted shape items because the converted shape does
-        // not exist
+        // Delete converted shape items because the converted shape does not exist
         LIB_ITEMS_CONTAINER::ITERATOR i = m_drawings.begin();
 
         while( i != m_drawings.end() )
