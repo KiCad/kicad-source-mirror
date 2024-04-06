@@ -79,7 +79,7 @@ public:
         return aItem && aItem->Type() == LIB_FIELD_T;
     }
 
-    wxString GetTypeName() const override
+    wxString GetFriendlyName() const override
     {
         return _( "Field" );
     }

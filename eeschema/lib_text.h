@@ -55,7 +55,7 @@ public:
         return aItem && aItem->Type() == LIB_TEXT_T;
     }
 
-    wxString GetTypeName() const override
+    wxString GetFriendlyName() const override
     {
         return _( "Text" );
     }

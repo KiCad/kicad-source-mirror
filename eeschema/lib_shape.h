@@ -49,7 +49,7 @@ public:
         return aItem && aItem->Type() == LIB_SHAPE_T;
     }
 
-    wxString GetTypeName() const override
+    wxString GetFriendlyName() const override
     {
         return ShowShape();
     }

@@ -98,12 +98,6 @@ public:
         ERC      = 0x04
     };
 
-    /**
-     * Provide a user-consumable name of the object type.  Perform localization when
-     * called so that run-time language selection works.
-     */
-    virtual wxString GetTypeName() const = 0;
-
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         if( !aItem )

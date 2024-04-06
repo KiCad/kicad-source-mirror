@@ -60,7 +60,7 @@ public:
         return aItem && aItem->Type() == LIB_PIN_T;
     }
 
-    wxString GetTypeName() const override
+    wxString GetFriendlyName() const override
     {
         return _( "Pin" );
     }

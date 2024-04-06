@@ -70,7 +70,7 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
 {
     wxString msg;
 
-    aList.emplace_back( _( "Type" ), GetTypeName() );
+    aList.emplace_back( _( "Type" ), GetFriendlyName() );
 
     if( const SYMBOL* parent = GetParentSymbol() )
     {
