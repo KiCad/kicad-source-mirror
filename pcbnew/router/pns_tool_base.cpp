@@ -36,6 +36,7 @@ using namespace std::placeholders;
 #include "pns_solid.h"
 #include "pns_dragger.h"
 
+const unsigned int PNS::TOOL_BASE::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 
 using namespace KIGFX;
 
@@ -321,6 +322,8 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
     GAL*     gal = m_toolMgr->GetView()->GetGAL();
     VECTOR2I pos = aEvent.HasPosition() ? (VECTOR2I) aEvent.Position() : m_startSnapPoint;
 
+    pos = GetClampedCoords( pos, COORDS_PADDING );
+
     controls()->ForceCursorPosition( false );
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
     m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
@@ -345,7 +348,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     controls()->ForceCursorPosition( false );
 
-    VECTOR2I mousePos = controls()->GetMousePosition();
+    VECTOR2I mousePos = GetClampedCoords( controls()->GetMousePosition(), COORDS_PADDING );
 
     if( m_router->GetState() == ROUTER::ROUTE_TRACK && aEvent.IsDrag() )
     {

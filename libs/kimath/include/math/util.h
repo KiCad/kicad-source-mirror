@@ -76,6 +76,39 @@ template <typename T> inline constexpr T Clamp( const T& lower, const T& value, 
     _Pragma( "GCC diagnostic ignored \"-Wimplicit-int-float-conversion\"" )
 #endif
 
+
+/**
+ * Perform a cast between numerical types. Will clamp the return value to numerical type limits.
+ *
+ * In Debug build an assert fires if will not fit into the return type.
+ */
+template <typename in_type = long long int, typename ret_type = int>
+inline constexpr ret_type KiCheckedCast( in_type v )
+{
+    if constexpr( std::is_same_v<in_type, long long int> && std::is_same_v<ret_type, int> )
+    {
+        if( v > std::numeric_limits<int>::max() )
+        {
+            kimathLogOverflow( double( v ), typeid( int ).name() );
+
+            return std::numeric_limits<int>::max();
+        }
+        else if( v < std::numeric_limits<int>::lowest() )
+        {
+            kimathLogOverflow( double( v ), typeid( int ).name() );
+
+            return std::numeric_limits<int>::lowest();
+        }
+
+        return int( v );
+    }
+    else
+    {
+        return v;
+    }
+}
+
+
 /**
  * Round a floating point number to an integer using "round halfway cases away from zero".
  *

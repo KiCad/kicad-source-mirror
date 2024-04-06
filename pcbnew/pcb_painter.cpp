@@ -767,7 +767,7 @@ void PCB_PAINTER::renderNetNameForSegment( const SHAPE_SEGMENT& aSeg, const COLO
     viewport.SetEnd( VECTOR2D( matrix * screenSize ) );
     viewport.Normalize();
 
-    BOX2I clipBox( viewport.GetOrigin(), viewport.GetSize() );
+    BOX2I clipBox = BOX2ISafe( viewport );
     SEG   visibleSeg( aSeg.GetSeg().A, aSeg.GetSeg().B );
 
     ClipLine( &clipBox, visibleSeg.A.x, visibleSeg.A.y, visibleSeg.B.x, visibleSeg.B.y );

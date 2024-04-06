@@ -248,32 +248,34 @@ VECTOR2I EDIT_TOOL::getSafeMovement( const VECTOR2I& aMovement, const BOX2I& aSo
 {
     typedef std::numeric_limits<int> coord_limits;
 
-    int max = coord_limits::max();
-    int min = -max;
+    static const double max = coord_limits::max() - (int) COORDS_PADDING;
+    static const double min = -max;
 
-    double left = aBBoxOffset.x + aSourceBBox.GetPosition().x;
-    double top = aBBoxOffset.y + aSourceBBox.GetPosition().y;
-
-    double right = left + aSourceBBox.GetSize().x;
-    double bottom = top + aSourceBBox.GetSize().y;
+    BOX2D testBox( aSourceBBox.GetPosition(), aSourceBBox.GetSize() );
+    testBox.Offset( aBBoxOffset );
 
     // Do not restrict movement if bounding box is already out of bounds
-    if( left < min || top < min || right > max || bottom > max )
+    if( testBox.GetLeft() < min || testBox.GetTop() < min || testBox.GetRight() > max
+        || testBox.GetBottom() > max )
+    {
         return aMovement;
+    }
 
-    // Constrain moving bounding box to coordinates limits
-    VECTOR2D tryMovement( aMovement );
-    VECTOR2D bBoxOrigin( aSourceBBox.GetPosition() + aBBoxOffset );
-    VECTOR2D clampedBBoxOrigin = GetClampedCoords( bBoxOrigin + tryMovement, COORDS_PADDING );
+    testBox.Offset( aMovement );
 
-    tryMovement = clampedBBoxOrigin - bBoxOrigin;
+    if( testBox.GetLeft() < min )
+        testBox.Offset( min - testBox.GetLeft(), 0 );
 
-    VECTOR2D bBoxEnd( aSourceBBox.GetEnd() + aBBoxOffset );
-    VECTOR2D clampedBBoxEnd = GetClampedCoords( bBoxEnd + tryMovement, COORDS_PADDING );
+    if( max < testBox.GetRight() )
+        testBox.Offset( -( testBox.GetRight() - max ), 0 );
 
-    tryMovement = clampedBBoxEnd - bBoxEnd;
+    if( testBox.GetTop() < min )
+        testBox.Offset( 0, min - testBox.GetTop() );
 
-    return GetClampedCoords<double, int>( tryMovement );
+    if( max < testBox.GetBottom() )
+        testBox.Offset( 0, -( testBox.GetBottom() - max ) );
+
+    return KiROUND( testBox.GetPosition() - aBBoxOffset - aSourceBBox.GetPosition() );
 }
 
 
@@ -407,7 +409,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
     bool            restore_state = false;
     VECTOR2I        originalPos;
-    VECTOR2I        totalMovement;
     VECTOR2D        bboxMovement;
     BOX2I           originalBBox;
     bool            updateBBox = true;
@@ -493,12 +494,7 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
 
                     for( EDA_ITEM* item : sel_items )
                     {
-                        BOX2I viewBBOX = item->ViewBBox();
-
-                        if( originalBBox.GetWidth() == 0 && originalBBox.GetHeight() == 0 )
-                            originalBBox = viewBBOX;
-                        else
-                            originalBBox.Merge( viewBBOX );
+                        originalBBox.Merge( item->ViewBBox() );
                     }
 
                     updateBBox = false;
@@ -514,7 +510,6 @@ bool EDIT_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, BOARD_COMMIT* aCommit
                 selection.SetReferencePoint( m_cursor );
 
                 prevPos = m_cursor;
-                totalMovement += movement;
                 bboxMovement += movement;
 
                 // Drag items to the current cursor position

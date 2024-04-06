@@ -658,7 +658,7 @@ void ROUTER_TOOL::handleCommonEvents( TOOL_EVENT& aEvent )
     if( aEvent.Category() == TC_VIEW || aEvent.Category() == TC_MOUSE )
     {
         BOX2D viewAreaD = getView()->GetGAL()->GetVisibleWorldExtents();
-        m_router->SetVisibleViewArea( BOX2I( viewAreaD.GetOrigin(), viewAreaD.GetSize() ) );
+        m_router->SetVisibleViewArea( BOX2ISafe( viewAreaD ) );
     }
 
     if( !ADVANCED_CFG::GetCfg().m_EnableRouterDump )
@@ -2238,7 +2238,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     }
 
     GAL*     gal = m_toolMgr->GetView()->GetGAL();
-    VECTOR2I p0 = controls()->GetCursorPosition( false );
+    VECTOR2I p0 = GetClampedCoords( controls()->GetCursorPosition( false ), COORDS_PADDING );
     VECTOR2I p = p0;
 
     m_gridHelper->SetUseGrid( gal->GetGridSnapping() && !aEvent.DisableGridSnapping()  );
@@ -2265,7 +2265,8 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
         if( editFrame->GetMoveWarpsCursor() )
             tweakedMousePos = footprint->GetPosition(); // Use footprint anchor to warp mouse
         else
-            tweakedMousePos = controls()->GetCursorPosition(); // Just use current mouse pos
+            tweakedMousePos = GetClampedCoords( controls()->GetCursorPosition(),
+                                                COORDS_PADDING ); // Just use current mouse pos
 
         // We tweak the mouse position using the value from above, and then use that as the
         // start position to prevent the footprint from jumping when we start dragging.
@@ -2317,7 +2318,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     // Set the initial visible area
     BOX2D viewAreaD = getView()->GetGAL()->GetVisibleWorldExtents();
-    m_router->SetVisibleViewArea( BOX2I( viewAreaD.GetOrigin(), viewAreaD.GetSize() ) );
+    m_router->SetVisibleViewArea( BOX2ISafe( viewAreaD ) );
 
     // Send an initial movement to prime the collision detection
     m_router->Move( p, nullptr );
@@ -2550,7 +2551,8 @@ int ROUTER_TOOL::InlineBreakTrack( const TOOL_EVENT& aEvent )
     {
         // If we're here from a hotkey, then get the current mouse position so we know
         // where to break the track.
-        m_startSnapPoint = snapToItem( m_startItem, controls()->GetCursorPosition() );
+        m_startSnapPoint = snapToItem(
+                m_startItem, GetClampedCoords( controls()->GetCursorPosition(), COORDS_PADDING ) );
     }
 
     if( m_startItem && m_startItem->IsLocked() )

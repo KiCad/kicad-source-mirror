@@ -1166,15 +1166,7 @@ void VIEW::Redraw()
                    ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
 
     rect.Normalize();
-    BOX2I recti( rect.GetPosition(), rect.GetSize() );
-
-    // The view rtree uses integer positions.  Large screens can overflow this size so in
-    // this case, simply set the rectangle to the full rtree.
-    if( rect.GetWidth() > std::numeric_limits<int>::max()
-            || rect.GetHeight() > std::numeric_limits<int>::max() )
-    {
-        recti.SetMaximum();
-    }
+    BOX2I recti = BOX2ISafe( rect );
 
     redrawRect( recti );
 

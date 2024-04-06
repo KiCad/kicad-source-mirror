@@ -104,7 +104,7 @@ void DS_PROXY_VIEW_ITEM::ViewDraw( int aLayer, VIEW* aView ) const
 
     buildDrawList( aView, m_properties, &drawList );
 
-    BOX2I viewport( aView->GetViewport().GetOrigin(), aView->GetViewport().GetSize() );
+    BOX2I viewport = BOX2ISafe( aView->GetViewport() );
 
     // Draw the title block normally even if the view is flipped
     bool flipped = gal->IsFlippedX();

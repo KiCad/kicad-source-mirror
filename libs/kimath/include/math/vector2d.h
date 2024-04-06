@@ -584,8 +584,9 @@ std::ostream& operator<<( std::ostream& aStream, const VECTOR2<T>& aVector )
 }
 
 /* Default specializations */
-typedef VECTOR2<double>       VECTOR2D;
-typedef VECTOR2<int>          VECTOR2I;
+typedef VECTOR2<double>        VECTOR2D;
+typedef VECTOR2<int>           VECTOR2I;
+typedef VECTOR2<long long int> VECTOR2L;
 
 /* KiROUND specialization for vectors */
 inline VECTOR2I KiROUND( const VECTOR2D& vec )

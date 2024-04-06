@@ -684,9 +684,8 @@ const BOX2I PCB_TRACK::GetBoundingBox() const
     xmin -= radius;
 
     // return a rectangle which is [pos,dim) in nature.  therefore the +1
-    BOX2I ret( VECTOR2I( xmin, ymin ), VECTOR2I( xmax - xmin + 1, ymax - ymin + 1 ) );
-
-    return ret;
+    return BOX2ISafe( VECTOR2I( xmin, ymin ),
+                      VECTOR2L( (int64_t) xmax - xmin + 1, (int64_t) ymax - ymin + 1 ) );
 }
 
 
@@ -1114,7 +1113,7 @@ double PCB_TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         VECTOR2I start( GetStart() );
         VECTOR2I end( GetEnd() );
         BOX2D    viewport = aView->GetViewport();
-        BOX2I    clipBox( viewport.GetOrigin(), viewport.GetSize() );
+        BOX2I    clipBox = BOX2ISafe( viewport );
 
         ClipLine( &clipBox, start.x, start.y, end.x, end.y );
 

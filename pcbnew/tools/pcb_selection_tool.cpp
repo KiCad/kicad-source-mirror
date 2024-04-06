@@ -2379,8 +2379,8 @@ void PCB_SELECTION_TOOL::FindItem( BOARD_ITEM* aItem )
 
             KIGFX::PCB_VIEW* pcbView = canvas()->GetView();
             BOX2D            screenBox = pcbView->GetViewport();
-            VECTOR2I         screenSize = screenBox.GetSize();
-            BOX2I            screenRect( screenBox.GetOrigin(), screenSize / marginFactor );
+            VECTOR2D         screenSize = screenBox.GetSize();
+            BOX2I            screenRect = BOX2ISafe( screenBox.GetOrigin(), screenSize / marginFactor );
 
             if( !screenRect.Contains( aItem->GetBoundingBox() ) )
             {
@@ -3151,7 +3151,7 @@ int PCB_SELECTION_TOOL::hitTestDistance( const VECTOR2I& aWhere, BOARD_ITEM* aIt
                                          int aMaxDistance ) const
 {
     BOX2D viewportD = getView()->GetViewport();
-    BOX2I viewport( VECTOR2I( viewportD.GetPosition() ), VECTOR2I( viewportD.GetSize() ) );
+    BOX2I viewport = BOX2ISafe( viewportD );
     int   distance = INT_MAX;
     SEG   loc( aWhere, aWhere );
 
@@ -3754,7 +3754,7 @@ void PCB_SELECTION_TOOL::FilterCollectorForFootprints( GENERAL_COLLECTOR& aColle
 {
     const RENDER_SETTINGS* settings = getView()->GetPainter()->GetSettings();
     BOX2D viewport = getView()->GetViewport();
-    BOX2I extents( viewport.GetPosition(), viewport.GetSize() );
+    BOX2I extents = BOX2ISafe( viewport );
 
     bool need_direct_hit = false;
     FOOTPRINT* single_fp = nullptr;

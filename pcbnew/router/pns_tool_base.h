@@ -80,6 +80,8 @@ protected:
     ROUTER*          m_router;
 
     bool             m_cancelled;
+
+    static const unsigned int COORDS_PADDING; // Padding from coordinates limits for this tool
 };
 
 }
