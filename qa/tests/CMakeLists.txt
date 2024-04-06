@@ -38,13 +38,26 @@ if( KICAD_TEST_XML_OUTPUT )
 endif()
 
 # avoid formatting this otherwise you will introduce whitespace into the PATH string
-    set( QA_PATH_REPLACEMENT
-"PATH=${CMAKE_BINARY_DIR}/kicad/;\
+    set( NEW_PATHS
+"${CMAKE_BINARY_DIR}/kicad/;\
 ${CMAKE_BINARY_DIR}/common/;\
 ${CMAKE_BINARY_DIR}/common/gal/;\
 ${CMAKE_BINARY_DIR}/pcbnew/;\
 ${CMAKE_BINARY_DIR}/eeschema/;\
-$ENV{PATH};" )
+" )
+
+set( EXTRA_PYTEST_ENVIRONMENT "" )
+
+if( APPLE )
+    # We need to use the installed kicad-cli not the build dir to run these tests
+    set( NEW_PATHS
+"${CMAKE_INSTALL_PREFIX}/KiCad.app/Contents/MacOS;\
+${NEW_PATHS};" )
+    get_filename_component( CAIRO_LIB_BASE "${CAIRO_LIBRARY}" DIRECTORY )
+    set( EXTRA_PYTEST_ENVIRONMENT "DYLD_FALLBACK_LIBRARY_PATH=${CAIRO_LIB_BASE}" )
+endif()
+
+set( QA_PATH_REPLACEMENT "PATH=${NEW_PATHS};$ENV{PATH}" )
 
 if (UNIX)
   string(REPLACE ";" ":" QA_PATH_REPLACEMENT "${QA_PATH_REPLACEMENT}")
@@ -61,7 +74,7 @@ add_test(NAME qa_python
 
 set_tests_properties( qa_python
     PROPERTIES
-        ENVIRONMENT "${QA_PATH_REPLACEMENT};PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH}"
+        ENVIRONMENT "${QA_PATH_REPLACEMENT};PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
 )
 endif()
 
@@ -72,5 +85,5 @@ add_test(NAME qa_cli
 
 set_tests_properties( qa_cli
     PROPERTIES
-        ENVIRONMENT "${QA_PATH_REPLACEMENT};KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH}"
+        ENVIRONMENT "${QA_PATH_REPLACEMENT};KICAD_RUN_FROM_BUILD_DIR=1;PYTHONPATH=${CMAKE_BINARY_DIR}/pcbnew;${PYTHON_QA_PATH};${EXTRA_PYTEST_ENVIRONMENT}"
 )
