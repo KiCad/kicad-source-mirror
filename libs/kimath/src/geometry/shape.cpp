@@ -62,14 +62,26 @@ int SHAPE::GetClearance( const SHAPE* aOther ) const
     /// Triangles check three vertices each but for the outline, we only need one.
     /// These are also fractured, so we don't need to worry about holes
     if( Type() == SHAPE_TYPE::SH_POLY_SET )
-        a_shapes.push_back( &static_cast<const SHAPE_POLY_SET*>( this )->COutline( 0 ) );
+    {
+        const SHAPE_POLY_SET* polySet = static_cast<const SHAPE_POLY_SET*>( this );
+        if( polySet->OutlineCount() > 0 )
+            a_shapes.push_back( &polySet->COutline( 0 ) );
+    }
     else
+    {
         GetIndexableSubshapes( a_shapes );
+    }
 
     if( aOther->Type() == SHAPE_TYPE::SH_POLY_SET )
-        b_shapes.push_back( &static_cast<const SHAPE_POLY_SET*>( aOther )->COutline( 0 ) );
+    {
+        const SHAPE_POLY_SET* polySet = static_cast<const SHAPE_POLY_SET*>( aOther );
+        if( polySet->OutlineCount() > 0 )
+            b_shapes.push_back( &polySet->COutline( 0 ) );
+    }
     else
+    {
         aOther->GetIndexableSubshapes( b_shapes );
+    }
 
     if( GetIndexableSubshapeCount() == 0 )
         a_shapes.push_back( this );
