@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-04-06 06:29+0000\n"
+"PO-Revision-Date: 2024-04-07 01:51+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -7523,9 +7523,8 @@ msgstr ""
 
 #: common/tool/actions.cpp:394 eeschema/dialogs/dialog_table_properties.cpp:382
 #: pcbnew/dialogs/dialog_table_properties.cpp:358
-#, fuzzy
 msgid "Edit Table"
-msgstr "編輯標籤"
+msgstr "編輯表格"
 
 #: common/tool/actions.cpp:405
 msgid "Cycle Arc Editing Mode"
@@ -9454,9 +9453,8 @@ msgid "Generating BOM requires a fully annotated schematic."
 msgstr "生成材料表 (BOM) 需要一張完全註釋的原理圖。"
 
 #: eeschema/dialogs/dialog_bom.cpp:351
-#, fuzzy
 msgid "Failed to create file."
-msgstr "建立檔案 \"%s\" 失敗。"
+msgstr "建立檔案失敗。"
 
 #: eeschema/dialogs/dialog_bom.cpp:387 eeschema/dialogs/dialog_bom_base.cpp:45
 msgid "Generator nickname:"
@@ -9753,9 +9751,8 @@ msgid "Update Symbols"
 msgstr "更新符號"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:533
-#, fuzzy
 msgid "*** No symbols matching criteria found ***"
-msgstr "*** 符號沒有找到 ***"
+msgstr "*** 沒有找到符合條件的符號 ***"
 
 #: eeschema/dialogs/dialog_change_symbols.cpp:570
 msgid "*** symbol not found ***"
@@ -9890,18 +9887,16 @@ msgid "DSN:"
 msgstr "DSN:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:45
-#, fuzzy
 msgid "Username:"
-msgstr "新名稱："
+msgstr "使用者名稱："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:54
 msgid "Password:"
 msgstr "密碼:"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:71
-#, fuzzy
 msgid "Connection String:"
-msgstr "聯結器："
+msgstr "連接字串："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:99
 #: eeschema/symbol_editor/symbol_edit_frame.cpp:205
@@ -9911,9 +9906,8 @@ msgid "Libraries"
 msgstr "庫"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:104
-#, fuzzy
 msgid "Reload Configuration"
-msgstr "使用者配置"
+msgstr "重新載入配置"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:105
 msgid "Reload the database library configuration file"
@@ -9924,20 +9918,17 @@ msgid "Caching"
 msgstr "搜尋中"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:127
-#, fuzzy
 msgid "Cache size:"
-msgstr "圖框尺寸："
+msgstr "快取尺寸："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:129
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:134
-#, fuzzy
 msgid "How many database queries to cache"
-msgstr "要顯示多少位精度"
+msgstr "有多少個資料庫查詢存在快取中"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:138
-#, fuzzy
 msgid "Cache timeout:"
-msgstr "快取符號："
+msgstr "快取逾時："
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:140
 #: eeschema/dialogs/dialog_database_lib_settings_base.cpp:145
@@ -9945,9 +9936,8 @@ msgid "Time in seconds that database queries will be cached for"
 msgstr "資料查詢的快取時間(以秒為單位)"
 
 #: eeschema/dialogs/dialog_database_lib_settings_base.h:79
-#, fuzzy
 msgid "Database Library Settings"
-msgstr "KiCad 資料庫庫檔案"
+msgstr "資料庫函式庫設定"
 
 #: eeschema/dialogs/dialog_edit_symbols_libid.cpp:546
 #, c-format
@@ -10091,9 +10081,8 @@ msgid "appropriate"
 msgstr "適當"
 
 #: eeschema/dialogs/dialog_erc.cpp:624 pcbnew/dialogs/dialog_drc.cpp:609
-#, fuzzy
 msgid "Edit exclusion comment..."
-msgstr "編輯模擬模型..."
+msgstr "編輯排除註釋..."
 
 #: eeschema/dialogs/dialog_erc.cpp:627 pcbnew/dialogs/dialog_drc.cpp:612
 msgid "Remove exclusion for this violation"
@@ -10105,9 +10094,8 @@ msgid "It will be placed back in the %s list"
 msgstr "它將放回 %s 列表中"
 
 #: eeschema/dialogs/dialog_erc.cpp:633 pcbnew/dialogs/dialog_drc.cpp:626
-#, fuzzy
 msgid "Exclude this violation..."
-msgstr "排除此違規"
+msgstr "排除此違規..."
 
 #: eeschema/dialogs/dialog_erc.cpp:634 pcbnew/dialogs/dialog_drc.cpp:627
 #, c-format
@@ -10120,10 +10108,9 @@ msgid "Change severity to Error for all '%s' violations"
 msgstr "將所有“%s”違規的嚴重性等級修改為“錯誤”"
 
 #: eeschema/dialogs/dialog_erc.cpp:654 eeschema/dialogs/dialog_erc.cpp:661
-#, fuzzy
 msgid ""
 "Violation severities can also be edited in the Schematic Setup... dialog"
-msgstr "違規嚴重程度也可以在“電路板設定...”對話方塊中進行編輯"
+msgstr "違規嚴重程度也可以在Schematic Setup...對話框中進行編輯"
 
 #: eeschema/dialogs/dialog_erc.cpp:659 pcbnew/dialogs/dialog_drc.cpp:655
 #, c-format
@@ -10158,15 +10145,13 @@ msgstr "編輯連接的網格間距..."
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:677 pcbnew/dialogs/dialog_drc.cpp:717
-#, fuzzy
 msgid "Optional comment:"
-msgstr "水平(X)方向計數："
+msgstr "可選註解："
 
 #: eeschema/dialogs/dialog_erc.cpp:698 eeschema/dialogs/dialog_erc.cpp:729
 #: pcbnew/dialogs/dialog_drc.cpp:677 pcbnew/dialogs/dialog_drc.cpp:717
-#, fuzzy
 msgid "Exclusion Comment"
-msgstr "排除"
+msgstr "排除註釋"
 
 #: eeschema/dialogs/dialog_erc.cpp:803
 #: eeschema/dialogs/dialog_schematic_setup.cpp:96
