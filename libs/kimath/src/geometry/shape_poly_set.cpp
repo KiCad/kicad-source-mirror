@@ -1552,7 +1552,7 @@ static void fractureSingleCacheFriendly( SHAPE_POLY_SET::POLYGON& paths )
         total_point_count += path.PointCount();
     }
 
-    if( total_point_count > std::numeric_limits<FractureEdge::Index>::max() )
+    if( total_point_count > (size_t) std::numeric_limits<FractureEdge::Index>::max() )
     {
         wxLogWarning( wxT( "Polygon has more points than int limit" ) );
         return;

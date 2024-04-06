@@ -93,8 +93,8 @@ bool DIALOG_TABLECELL_PROPERTIES::TransferDataToWindow()
         return false;
 
     bool              firstCell = true;
-    GR_TEXT_H_ALIGN_T hAlign;
-    GR_TEXT_V_ALIGN_T vAlign;
+    GR_TEXT_H_ALIGN_T hAlign = GR_TEXT_H_ALIGN_INDETERMINATE;
+    GR_TEXT_V_ALIGN_T vAlign = GR_TEXT_V_ALIGN_INDETERMINATE;
 
     for( PCB_TABLECELL* cell : m_cells )
     {
