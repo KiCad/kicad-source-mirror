@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-04-07 01:51+0000\n"
+"PO-Revision-Date: 2024-04-07 18:15+0000\n"
 "Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
@@ -2870,7 +2870,7 @@ msgstr "自定義圖框寬度。"
 #: common/dialogs/dialog_page_settings_base.cpp:369
 #: common/dialogs/dialog_page_settings_base.cpp:381
 msgid "Export to other sheets"
-msgstr "匯出到其他圖框"
+msgstr "匯出到其他圖紙"
 
 #: common/dialogs/dialog_page_settings_base.cpp:148 common/rc_item.cpp:444
 #: eeschema/erc_item.cpp:360 eeschema/sch_marker.cpp:296
@@ -2878,7 +2878,7 @@ msgstr "匯出到其他圖框"
 #: gerbview/widgets/gerbview_layer_widget.cpp:136 pcbnew/pcb_marker.cpp:214
 #: pcbnew/widgets/appearance_controls.cpp:350
 msgid "Drawing Sheet"
-msgstr "圖紙"
+msgstr "繪製圖紙"
 
 #: common/dialogs/dialog_page_settings_base.cpp:164
 #: eeschema/dialogs/dialog_sim_model_base.cpp:38
@@ -2896,12 +2896,12 @@ msgstr "標題欄引數"
 #: common/dialogs/dialog_page_settings_base.cpp:196
 #, c-format
 msgid "Number of sheets: %d"
-msgstr "共 %d 頁"
+msgstr "圖紙數目：共 %d 頁"
 
 #: common/dialogs/dialog_page_settings_base.cpp:203
 #, c-format
 msgid "Sheet number: %d"
-msgstr "第 %d 頁"
+msgstr "圖紙編號：第 %d 頁"
 
 #: common/dialogs/dialog_page_settings_base.cpp:216
 msgid "Issue Date:"
@@ -5318,7 +5318,7 @@ msgstr "圖紙頁碼"
 #: common/eda_item.cpp:389 eeschema/dialogs/dialog_migrate_buses.cpp:113
 #: pcbnew/tools/pcb_actions.cpp:2114
 msgid "Sheet"
-msgstr "圖框"
+msgstr "圖紙"
 
 #: common/eda_item.cpp:396
 msgid "SCH Screen"
@@ -6614,7 +6614,7 @@ msgstr "符號欄位"
 
 #: common/layer_id.cpp:123
 msgid "Sheet references"
-msgstr "圖框參考"
+msgstr "圖紙參考"
 
 #: common/layer_id.cpp:124
 msgid "Net class references"
@@ -6648,23 +6648,23 @@ msgstr "引腳"
 
 #: common/layer_id.cpp:131
 msgid "Sheet borders"
-msgstr "圖框邊框"
+msgstr "圖紙邊框"
 
 #: common/layer_id.cpp:132
 msgid "Sheet backgrounds"
-msgstr "圖框背景"
+msgstr "圖紙背景"
 
 #: common/layer_id.cpp:133
 msgid "Sheet names"
-msgstr "圖框名稱"
+msgstr "圖紙名稱"
 
 #: common/layer_id.cpp:134
 msgid "Sheet fields"
-msgstr "圖框欄位"
+msgstr "圖紙欄位"
 
 #: common/layer_id.cpp:135
 msgid "Sheet file names"
-msgstr "圖框檔名"
+msgstr "圖紙檔名"
 
 #: common/layer_id.cpp:136
 #: eeschema/dialogs/dialog_global_edit_text_and_graphics_base.cpp:63
@@ -6724,7 +6724,7 @@ msgstr "背景"
 #: eeschema/sim/simulator_frame_ui.cpp:595
 #: eeschema/sim/simulator_frame_ui_base.cpp:167
 msgid "Cursor"
-msgstr "游標"
+msgstr "遊標"
 
 #: common/layer_id.cpp:148
 msgid "Hovered items"
@@ -9300,12 +9300,12 @@ msgstr "網路 %s 以圖形方式連線到匯流排 %s，但不是匯流排的�
 #: eeschema/connection_graph.cpp:3776
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
-msgstr "圖紙頁碼 %s 在圖框內沒有匹配的分層標籤"
+msgstr "圖紙頁碼 %s 在圖紙內沒有匹配的分層標籤"
 
 #: eeschema/connection_graph.cpp:3794
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
-msgstr "層次標籤 %s 在父圖框內沒有匹配的圖紙頁碼"
+msgstr "層次標籤 %s 在父圖紙內沒有匹配的圖紙頁碼"
 
 #: eeschema/cross-probing.cpp:155
 #, c-format
@@ -20142,9 +20142,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/sync_sheet_pin/dialog_sync_sheet_pins_base.h:50
-#, fuzzy
 msgid "Synchronize sheet pins and hierarchical labels"
-msgstr "將現有專案更改為分層標籤"
+msgstr "同步圖紙頁碼與分層標籤"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:24
 #, fuzzy
@@ -20176,9 +20175,8 @@ msgid "Delete Hierarchical Labels"
 msgstr "分層標籤"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:99
-#, fuzzy
 msgid "Change sheet pin to hierarchical label"
-msgstr "將現有專案更改為分層標籤"
+msgstr "更改圖紙頁碼為分層標籤"
 
 #: eeschema/sync_sheet_pin/panel_sync_sheet_pins_base.cpp:104
 #, fuzzy
