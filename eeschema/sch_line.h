@@ -332,17 +332,6 @@ public:
     bool operator==( const SCH_ITEM& aOther ) const override;
 
 private:
-    /**
-     * @brief Recursively called function to travel through the connected wires and find a connected
-     * net name label
-     * @param line - the wire segment to start the recursive lookup
-     * @param checkedLines - a lsit containing the already checked wire segments, to prevent the
-     * infinite recursion in the case if someone draws a rectangle for e.g.
-     * @param aSheet - the sheet where the lookup is performed
-     * @return With the net name if a connected label found, otherwise with an empty string
-     */
-    wxString FindWireSegmentNetNameRecursive( SCH_LINE *line, std::list<const SCH_LINE*>& checkedLines,
-                                              const SCH_SHEET_PATH &aSheet ) const;
     bool doIsConnected( const VECTOR2I& aPosition ) const override;
 
 private:
