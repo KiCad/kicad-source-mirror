@@ -917,6 +917,10 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
     if( !m_boardAdapter.GetBoard() )
         return;
 
+    // Building the 3D models late crashes on recent versions of macOS
+    // Unclear the exact mechanism, but as a workaround, just build them
+    // all the time.  See https://gitlab.com/kicad/code/kicad/-/issues/17198
+#ifndef __WXMAC__
     if( !m_boardAdapter.m_IsPreviewer
           && !m_boardAdapter.m_Cfg->m_Render.show_footprints_normal
           && !m_boardAdapter.m_Cfg->m_Render.show_footprints_insert
@@ -924,6 +928,7 @@ void RENDER_3D_OPENGL::load3dModels( REPORTER* aStatusReporter )
     {
         return;
     }
+#endif
 
     // Go for all footprints
     for( const FOOTPRINT* footprint : m_boardAdapter.GetBoard()->Footprints() )
