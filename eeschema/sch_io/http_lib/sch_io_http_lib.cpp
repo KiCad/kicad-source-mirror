@@ -453,15 +453,32 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
         }
         else
         {
-            // Generic fields
-            field = new LIB_FIELD( symbol->GetNextAvailableFieldId() );
-            field->SetName( fieldName );
+            // Check if field exists, if so replace Text and adjust visiblity.
+            //
+            // This proves useful in situations where, for instance, an individual requires a particular value, such as
+            // the material type showcased at a specific position for a capacitor. Subsequently, this value could be defined
+            // in the symbol itself and then, potentially, be modified by the HTTP library as necessary.
+            field = symbol->FindField( fieldName );
 
-            field->SetText( std::get<0>( fieldProperties ) );
-            field->SetVisible( std::get<1>( fieldProperties ) );
-            symbol->AddField( field );
+            if( field != nullptr )
+            {
+                // adjust values accordingly
+                field->SetText( std::get<0>( fieldProperties ) );
+                field->SetVisible( std::get<1>( fieldProperties ) );
+            }
+            else
+            {
+                // Generic fields
+                field = new LIB_FIELD( symbol->GetNextAvailableFieldId() );
+                field->SetName( fieldName );
 
-            m_customFields.insert( fieldName );
+                field->SetText( std::get<0>( fieldProperties ) );
+                field->SetVisible( std::get<1>( fieldProperties ) );
+                symbol->AddField( field );
+
+                m_customFields.insert( fieldName );
+            }
+
         }
     }
 
