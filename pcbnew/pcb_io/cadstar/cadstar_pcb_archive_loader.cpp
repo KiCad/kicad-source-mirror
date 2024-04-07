@@ -1238,14 +1238,14 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
     {
         if( csPadcode.SlotLength != UNDEFINED_VALUE )
         {
-            pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
+            pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
             pad->SetDrillSize( { getKiCadLength( (long long) csPadcode.SlotLength +
                                                  (long long) csPadcode.DrillDiameter ),
                                  getKiCadLength( csPadcode.DrillDiameter ) } );
         }
         else
         {
-            pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
+            pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
             pad->SetDrillSize( { getKiCadLength( csPadcode.DrillDiameter ),
                     getKiCadLength( csPadcode.DrillDiameter ) } );
         }

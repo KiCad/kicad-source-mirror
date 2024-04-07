@@ -209,7 +209,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
         pad->SetShape( PAD_SHAPE::CIRCLE );
         pad->SetAttribute( PAD_ATTRIB::NPTH );
 
-        pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+        pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
         pad->SetDrillSize( VECTOR2I( m_Hole, m_Hole ) );
         pad->SetSize( VECTOR2I( m_Hole, m_Hole ) );
 
@@ -291,7 +291,7 @@ void PCAD_PAD::AddToFootprint( FOOTPRINT* aFootprint, const EDA_ANGLE& aRotation
         pad->SetDelta( VECTOR2I( 0, 0 ) );
         pad->SetOrientation( m_Rotation + aRotation );
 
-        pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+        pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
         pad->SetOffset( VECTOR2I( 0, 0 ) );
         pad->SetDrillSize( VECTOR2I( m_Hole, m_Hole ) );
 

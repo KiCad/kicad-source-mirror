@@ -1,6 +1,6 @@
 %rename(AddPrimitiveShape) PAD::AddPrimitive;
 
-%include pad_shapes.h
+%include padstack.h
 %include pad.h
 
 %rename(Get) operator   PAD*;
@@ -13,6 +13,8 @@ const int PAD_SHAPE_RECT = (const int)PAD_SHAPE::RECTANGLE;
 
 %{
 const int PAD_SHAPE_RECT = (const int)PAD_SHAPE::RECTANGLE;
+const int PAD_DRILL_SHAPE_CIRCLE = (const int)PAD_DRILL_SHAPE::CIRCLE;
+const int PAD_DRILL_SHAPE_OBLONG = (const int)PAD_DRILL_SHAPE::OBLONG;
 %}
 
 %extend PAD

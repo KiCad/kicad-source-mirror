@@ -31,7 +31,7 @@
 #include <board_connected_item.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_compound.h>
-#include <pad_shapes.h>
+#include <padstack.h>
 #include <geometry/eda_angle.h>
 #include <geometry/geometry_utils.h>
 #include <core/arraydim.h>
@@ -355,8 +355,8 @@ public:
         return m_orient.AsDegrees();
     }
 
-    void SetDrillShape( PAD_DRILL_SHAPE_T aShape ) { m_drillShape = aShape; m_shapesDirty = true; }
-    PAD_DRILL_SHAPE_T GetDrillShape() const     { return m_drillShape; }
+    void SetDrillShape( PAD_DRILL_SHAPE aShape ) { m_drillShape = aShape; m_shapesDirty = true; }
+    PAD_DRILL_SHAPE GetDrillShape() const     { return m_drillShape; }
 
     bool IsDirty() const
     {
@@ -789,7 +789,7 @@ private:
     VECTOR2I          m_drill;              // Drill diameter (x == y) or slot dimensions (x != y)
     VECTOR2I          m_size;               // X and Y size (relative to orient 0)
 
-    PAD_DRILL_SHAPE_T m_drillShape;         // PAD_DRILL_SHAPE_CIRCLE, PAD_DRILL_SHAPE_OBLONG
+    PAD_DRILL_SHAPE   m_drillShape;         // PAD_DRILL_SHAPE::CIRCLE, PAD_DRILL_SHAPE::OBLONG
 
     double            m_roundedCornerScale; // Scaling factor of min(width, height) to corner
                                             //   radius, default 0.25

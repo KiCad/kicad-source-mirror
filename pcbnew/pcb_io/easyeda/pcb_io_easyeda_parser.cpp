@@ -852,7 +852,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 pad->SetAttribute( PAD_ATTRIB::PTH );
                 pad->SetShape( PAD_SHAPE::CIRCLE );
                 pad->SetSize( VECTOR2I( kdia, kdia ) );
-                pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+                pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
                 pad->SetDrillSize( VECTOR2I( kdrill, kdrill ) );
 
                 footprint->Add( pad.release(), ADD_MODE::APPEND );
@@ -911,7 +911,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             pad->SetAttribute( PAD_ATTRIB::NPTH );
             pad->SetShape( PAD_SHAPE::CIRCLE );
             pad->SetSize( VECTOR2I( kdia, kdia ) );
-            pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+            pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
             pad->SetDrillSize( VECTOR2I( kdia, kdia ) );
 
             padContainer->Add( pad.release(), ADD_MODE::APPEND );
@@ -1039,7 +1039,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                 if( holeL > 0 )
                 {
-                    pad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
+                    pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
 
                     if( size.x < size.y )
                         pad->SetDrillSize( VECTOR2I( holeD, holeL ) );
@@ -1048,7 +1048,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
                 }
                 else
                 {
-                    pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+                    pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
                     pad->SetDrillSize( VECTOR2I( holeD, holeD ) );
                 }
             }

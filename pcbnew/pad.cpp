@@ -79,7 +79,7 @@ PAD::PAD( FOOTPRINT* parent ) :
     SetShape( PAD_SHAPE::CIRCLE );               // Default pad shape is PAD_CIRCLE.
     SetAnchorPadShape( PAD_SHAPE::CIRCLE );      // Default shape for custom shaped pads
                                                  // is PAD_CIRCLE.
-    SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );     // Default pad drill shape is a circle.
+    SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );     // Default pad drill shape is a circle.
     m_attribute           = PAD_ATTRIB::PTH;     // Default pad type is plated through hole
     SetProperty( PAD_PROP::NONE );               // no special fabrication property
 
@@ -427,12 +427,12 @@ bool PAD::FlashLayer( int aLayer, bool aOnlyCheckIfPermitted ) const
 
     if( GetAttribute() == PAD_ATTRIB::NPTH && IsCopperLayer( aLayer ) )
     {
-        if( GetShape() == PAD_SHAPE::CIRCLE && GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+        if( GetShape() == PAD_SHAPE::CIRCLE && GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
         {
             if( GetOffset() == VECTOR2I( 0, 0 ) && GetDrillSize().x >= GetSize().x )
                 return false;
         }
-        else if( GetShape() == PAD_SHAPE::OVAL && GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
+        else if( GetShape() == PAD_SHAPE::OVAL && GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
         {
             if( GetOffset() == VECTOR2I( 0, 0 )
                     && GetDrillSize().x >= GetSize().x && GetDrillSize().y >= GetSize().y )
@@ -1264,7 +1264,7 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
 
     if( m_drill.x > 0 || m_drill.y > 0 )
     {
-        if( GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+        if( GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
         {
             aList.emplace_back( _( "Hole" ),
                                 wxString::Format( wxT( "%s" ),
@@ -1362,7 +1362,8 @@ int PAD::Compare( const PAD* aPadRef, const PAD* aPadCmp )
           static_cast<int>( aPadCmp->m_attribute ) ) != 0 )
         return diff;
 
-    if( ( diff = aPadRef->m_drillShape - aPadCmp->m_drillShape ) != 0 )
+    if( ( diff = static_cast<int>( aPadRef->m_drillShape ) -
+          static_cast<int>( aPadCmp->m_drillShape ) ) != 0 )
         return diff;
 
     if( ( diff = aPadRef->m_drill.x - aPadCmp->m_drill.x ) != 0 )

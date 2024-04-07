@@ -591,7 +591,7 @@ int PAD_TOOL::PlacePad( const TOOL_EVENT& aEvent )
 
                 // Gives an acceptable drill size: it cannot be 0, but from pad master
                 // it is currently 0, therefore change it:
-                pad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+                pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
                 int hole_size = pad->GetSizeX() / 2;
                 pad->SetDrillSize( VECTOR2I( hole_size, hole_size ) );
 

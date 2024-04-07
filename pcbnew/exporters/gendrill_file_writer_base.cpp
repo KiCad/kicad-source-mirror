@@ -147,7 +147,7 @@ void GENDRILL_WRITER_BASE::buildHolesList( DRILL_LAYER_PAIR aLayerPair,
                 new_hole.m_Hole_Size.x    = new_hole.m_Hole_Size.y = new_hole.m_Hole_Diameter;
 
                 // Convert oblong holes that are actually circular into drill hits
-                if( pad->GetDrillShape() != PAD_DRILL_SHAPE_CIRCLE &&
+                if( pad->GetDrillShape() != PAD_DRILL_SHAPE::CIRCLE &&
                         pad->GetDrillSizeX() != pad->GetDrillSizeY() )
                 {
                     new_hole.m_Hole_Shape = 1; // oval flag set

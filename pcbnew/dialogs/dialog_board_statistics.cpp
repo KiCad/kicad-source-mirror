@@ -299,7 +299,7 @@ void DIALOG_BOARD_STATISTICS::getDataFromPCB()
             }
 
             DRILL_LINE_ITEM drill( via->GetDrillValue(), via->GetDrillValue(),
-                                   PAD_DRILL_SHAPE_CIRCLE, true, false, via->TopLayer(),
+                                   PAD_DRILL_SHAPE::CIRCLE, true, false, via->TopLayer(),
                                    via->BottomLayer() );
 
             auto it = m_drillTypes.begin();
@@ -509,8 +509,8 @@ void DIALOG_BOARD_STATISTICS::updateDrillGrid()
 
         switch( line.shape )
         {
-        case PAD_DRILL_SHAPE_CIRCLE: shapeStr = _( "Round" ); break;
-        case PAD_DRILL_SHAPE_OBLONG: shapeStr = _( "Slot" );  break;
+        case PAD_DRILL_SHAPE::CIRCLE: shapeStr = _( "Round" ); break;
+        case PAD_DRILL_SHAPE::OBLONG: shapeStr = _( "Slot" );  break;
         default:                     shapeStr = _( "???" );   break;
         }
 

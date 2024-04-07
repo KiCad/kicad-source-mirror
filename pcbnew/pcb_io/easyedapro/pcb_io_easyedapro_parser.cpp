@@ -640,7 +640,7 @@ std::unique_ptr<PAD> PCB_IO_EASYEDAPRO_PARSER::createPAD( FOOTPRINT*            
 
             if( holeShape == wxS( "SLOT" ) )
             {
-                pad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
+                pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
             }
 
             pad->SetDrillSize( ScaleSize( drill ) );

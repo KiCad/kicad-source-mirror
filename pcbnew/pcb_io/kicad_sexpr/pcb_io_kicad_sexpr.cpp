@@ -1522,7 +1522,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
     {
         m_out->Print( 0, " (drill" );
 
-        if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
+        if( aPad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
             m_out->Print( 0, " oval" );
 
         if( sz.x > 0 )

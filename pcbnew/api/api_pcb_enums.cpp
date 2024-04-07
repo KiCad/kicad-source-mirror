@@ -23,7 +23,7 @@
 #include <api/board/board_types.pb.h>
 #include <wx/wx.h>
 
-#include <pad_shapes.h>
+#include <padstack.h>
 #include <zones.h>
 
 using namespace kiapi::board;

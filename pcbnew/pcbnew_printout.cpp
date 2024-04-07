@@ -308,9 +308,9 @@ KIGFX::PCB_PRINT_PAINTER::PCB_PRINT_PAINTER( GAL* aGal ) :
 { }
 
 
-int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const PAD* aPad ) const
+PAD_DRILL_SHAPE KIGFX::PCB_PRINT_PAINTER::getDrillShape( const PAD* aPad ) const
 {
-    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillShape( aPad ) : PAD_DRILL_SHAPE_CIRCLE;
+    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillShape( aPad ) : PAD_DRILL_SHAPE::CIRCLE;
 }
 
 

@@ -151,7 +151,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
     {
         for( PAD* pad : footprint->Pads() )
         {
-            if( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE )
+            if( pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE )
             {
                 if( pad->GetDrillSize().x != 0 )
                 {

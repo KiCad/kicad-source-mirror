@@ -907,7 +907,7 @@ void EXPORTER_PCB_VRML::ExportVrmlPadHole( PAD* aPad )
         if( ( aPad->GetAttribute() != PAD_ATTRIB::NPTH ) )
             pth = true;
 
-        if( aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
+        if( aPad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
         {
             // Oblong hole (slot)
 

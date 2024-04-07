@@ -4840,7 +4840,7 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
 
                 switch( token )
                 {
-                case T_oval: pad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG ); break;
+                case T_oval: pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG ); break;
 
                 case T_NUMBER:
                 {

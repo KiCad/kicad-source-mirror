@@ -33,7 +33,7 @@
 #include <stroke_params.h>
 
 // Board-specific
-#include <pad_shapes.h>
+#include <padstack.h>
 #include <zones.h>
 
 using namespace kiapi::common;

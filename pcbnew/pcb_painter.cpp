@@ -514,7 +514,7 @@ int PCB_PAINTER::getLineThickness( int aActualThickness ) const
 }
 
 
-int PCB_PAINTER::getDrillShape( const PAD* aPad ) const
+PAD_DRILL_SHAPE PCB_PAINTER::getDrillShape( const PAD* aPad ) const
 {
     return aPad->GetDrillShape();
 }

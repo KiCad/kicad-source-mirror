@@ -754,7 +754,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
         m_choiceFabProperty->Enable( false );
     }
 
-    if( m_previewPad->GetDrillShape() != PAD_DRILL_SHAPE_OBLONG )
+    if( m_previewPad->GetDrillShape() != PAD_DRILL_SHAPE::OBLONG )
         m_holeShapeCtrl->SetSelection( 0 );
     else
         m_holeShapeCtrl->SetSelection( 1 );
@@ -1382,7 +1382,7 @@ bool DIALOG_PAD_PROPERTIES::padValuesOK()
     case PAD_ATTRIB::NPTH:   // Not plated, but through hole, a hole is expected
     case PAD_ATTRIB::PTH:    // Pad through hole, a hole is also expected
         if( drill_size.x <= 0
-            || ( drill_size.y <= 0 && m_previewPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
+            || ( drill_size.y <= 0 && m_previewPad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG ) )
         {
             error_msgs.Add( _( "Error: Through hole pad has no hole." ) );
         }
@@ -1833,12 +1833,12 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
 
     if( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
     {
-        aPad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+        aPad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
         aPad->SetDrillSize( VECTOR2I( m_holeX.GetIntValue(), m_holeX.GetIntValue() ) );
     }
     else
     {
-        aPad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
+        aPad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
         aPad->SetDrillSize( VECTOR2I( m_holeX.GetIntValue(), m_holeY.GetIntValue() ) );
     }
 

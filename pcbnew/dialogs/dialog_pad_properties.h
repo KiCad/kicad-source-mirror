@@ -31,7 +31,7 @@
 #include <wx/valnum.h>
 #include <board.h>
 #include <footprint.h>
-#include <pad_shapes.h>
+#include <padstack.h>
 #include <pcb_shape.h>
 #include <origin_viewitem.h>
 #include <dialog_pad_properties_base.h>

@@ -3065,7 +3065,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
         if( !aElem.sizeAndShape || aElem.sizeAndShape->holeshape == ALTIUM_PAD_HOLE_SHAPE::ROUND )
         {
-            pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
+            pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
             pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) );
         }
         else
@@ -3102,7 +3102,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     }
                 }
 
-                pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
+                pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
                 pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) ); // Workaround
                 // TODO: elem.sizeAndShape->slotsize was 0 in testfile. Either use holesize in
                 //  this case or rect holes have a different id
@@ -3110,7 +3110,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
 
             case ALTIUM_PAD_HOLE_SHAPE::SLOT:
             {
-                pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_OBLONG );
+                pad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
                 EDA_ANGLE slotRotation( aElem.sizeAndShape->slotrotation, DEGREES_T );
 
                 slotRotation.Normalize();
@@ -3187,7 +3187,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
                     }
                 }
 
-                pad->SetDrillShape( PAD_DRILL_SHAPE_T::PAD_DRILL_SHAPE_CIRCLE );
+                pad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
                 pad->SetDrillSize( VECTOR2I( aElem.holesize, aElem.holesize ) ); // Workaround
                 break;
             }
@@ -3288,7 +3288,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     if( pad->GetAttribute() == PAD_ATTRIB::NPTH && pad->HasHole() )
     {
         // KiCad likes NPTH pads to be the same size & shape as their holes
-        pad->SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE_CIRCLE ? PAD_SHAPE::CIRCLE
+        pad->SetShape( pad->GetDrillShape() == PAD_DRILL_SHAPE::CIRCLE ? PAD_SHAPE::CIRCLE
                                                                       : PAD_SHAPE::OVAL );
         pad->SetSize( pad->GetDrillSize() );
     }

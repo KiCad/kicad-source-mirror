@@ -97,7 +97,7 @@ public:
     }
 
 protected:
-    int getDrillShape( const PAD* aPad ) const override;
+    PAD_DRILL_SHAPE getDrillShape( const PAD* aPad ) const override;
 
     SHAPE_SEGMENT getPadHoleShape( const PAD* aPad ) const override;
 

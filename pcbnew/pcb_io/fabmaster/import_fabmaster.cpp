@@ -43,7 +43,7 @@
 #include <board_item.h>
 #include <footprint.h>
 #include <pad.h>
-#include <pad_shapes.h>
+#include <padstack.h>
 #include <pcb_shape.h>
 #include <pcb_text.h>
 #include <pcb_track.h>
@@ -2380,9 +2380,9 @@ bool FABMASTER::loadFootprints( BOARD* aBoard )
                             }
 
                             if( pad.drill_size_x == pad.drill_size_y )
-                                newpad->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+                                newpad->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
                             else
-                                newpad->SetDrillShape( PAD_DRILL_SHAPE_OBLONG );
+                                newpad->SetDrillShape( PAD_DRILL_SHAPE::OBLONG );
 
                             newpad->SetDrillSize( VECTOR2I( pad.drill_size_x, pad.drill_size_y ) );
                         }

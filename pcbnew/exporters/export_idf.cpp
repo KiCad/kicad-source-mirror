@@ -346,7 +346,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
 
             if( tstr.empty() || !tstr.compare( "0" ) || !tstr.compare( "~" )
                 || ( kplate == IDF3::NPTH )
-                || ( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ) )
+                || ( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG ) )
                 pintype = "MTG";
             else
                 pintype = "PIN";
@@ -359,7 +359,7 @@ static void idf_export_footprint( BOARD* aPcb, FOOTPRINT* aFootprint, IDF3_BOARD
             // 5. Assoc. part : BOARD | NOREFDES | PANEL | {"refdes"}
             // 6. type : PIN | VIA | MTG | TOOL | { "other" }
             // 7. owner : MCAD | ECAD | UNOWNED
-            if( ( pad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG )
+            if( ( pad->GetDrillShape() == PAD_DRILL_SHAPE::OBLONG )
                 && ( pad->GetDrillSize().x != pad->GetDrillSize().y ) )
             {
                 // NOTE: IDF does not have direct support for slots;

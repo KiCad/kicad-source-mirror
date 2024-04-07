@@ -1014,21 +1014,21 @@ void BRDITEMS_PLOTTER::PlotTableBorders( const PCB_TABLE* aTable )
 }
 
 
-void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const VECTOR2I& aDrillPos,
+void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE aDrillShape, const VECTOR2I& aDrillPos,
                                          const VECTOR2I& aDrillSize, const VECTOR2I& aPadSize,
                                          const EDA_ANGLE& aOrientation, int aSmallDrill )
 {
     VECTOR2I drillSize = aDrillSize;
 
     // Small drill marks have no significance when applied to slots
-    if( aSmallDrill && aDrillShape == PAD_DRILL_SHAPE_CIRCLE )
+    if( aSmallDrill && aDrillShape == PAD_DRILL_SHAPE::CIRCLE )
         drillSize.x = std::min( aSmallDrill, drillSize.x );
 
     // Round holes only have x diameter, slots have both
     drillSize.x -= getFineWidthAdj();
     drillSize.x = Clamp( 1, drillSize.x, aPadSize.x - 1 );
 
-    if( aDrillShape == PAD_DRILL_SHAPE_OBLONG )
+    if( aDrillShape == PAD_DRILL_SHAPE::OBLONG )
     {
         drillSize.y -= getFineWidthAdj();
         drillSize.y = Clamp( 1, drillSize.y, aPadSize.y - 1 );
@@ -1073,7 +1073,7 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
             if( ( via->GetLayerSet() & m_layerMask ).none() )
                 continue;
 
-            plotOneDrillMark( PAD_DRILL_SHAPE_CIRCLE, via->GetStart(),
+            plotOneDrillMark( PAD_DRILL_SHAPE::CIRCLE, via->GetStart(),
                               VECTOR2I( via->GetDrillValue(), 0 ), VECTOR2I( via->GetWidth(), 0 ),
                               ANGLE_0, smallDrill );
         }

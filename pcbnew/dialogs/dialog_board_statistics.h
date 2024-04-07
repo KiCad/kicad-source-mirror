@@ -31,7 +31,7 @@
 #include <footprint.h>
 #include <pcb_track.h>
 #include <dialog_board_statistics_base.h>
-#include <pad_shapes.h>
+#include <padstack.h>
 #include <pcb_base_frame.h>
 #include <pcb_edit_frame.h>
 #include <project.h>
@@ -97,7 +97,7 @@ public:
             COL_STOP_LAYER
         };
 
-        DRILL_LINE_ITEM( int aXSize, int aYSize, PAD_DRILL_SHAPE_T aShape, bool aIsPlated,
+        DRILL_LINE_ITEM( int aXSize, int aYSize, PAD_DRILL_SHAPE aShape, bool aIsPlated,
                          bool aIsPad, PCB_LAYER_ID aStartLayer, PCB_LAYER_ID aStopLayer ) :
                 xSize( aXSize ),
                 ySize( aYSize ),
@@ -129,7 +129,8 @@ public:
                 case COL_COUNT:
                     return compareDrillParameters( aLeft.qty, aRight.qty );
                 case COL_SHAPE:
-                    return compareDrillParameters( aLeft.shape, aRight.shape );
+                    return compareDrillParameters( static_cast<int>( aLeft.shape ),
+                                                   static_cast<int>( aRight.shape ) );
                 case COL_X_SIZE:
                     return compareDrillParameters( aLeft.xSize, aRight.xSize );
                 case COL_Y_SIZE:
@@ -158,7 +159,7 @@ public:
 
         int               xSize;
         int               ySize;
-        PAD_DRILL_SHAPE_T shape;
+        PAD_DRILL_SHAPE shape;
         bool              isPlated;
         bool              isPad;
         PCB_LAYER_ID      startLayer;

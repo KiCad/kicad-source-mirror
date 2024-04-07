@@ -24,7 +24,7 @@
 #ifndef PCBPLOT_H_
 #define PCBPLOT_H_
 
-#include <pad_shapes.h>         // for PAD_DRILL_SHAPE_T
+#include <padstack.h>         // for PAD_DRILL_SHAPE
 #include <pcb_plot_params.h>
 #include <settings/color_settings.h>
 #include <settings/settings_manager.h>
@@ -131,7 +131,7 @@ private:
      *
      * It compensate and clamp the drill mark size depending on the current plot options.
      */
-    void plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const VECTOR2I& aDrillPos,
+    void plotOneDrillMark( PAD_DRILL_SHAPE aDrillShape, const VECTOR2I& aDrillPos,
                            const VECTOR2I& aDrillSize, const VECTOR2I& aPadSize,
                            const EDA_ANGLE& aOrientation, int aSmallDrill );
 

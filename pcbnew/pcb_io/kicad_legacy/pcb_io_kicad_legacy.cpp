@@ -1449,7 +1449,7 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             BIU offs_x  = biuParse( data, &data );
             BIU offs_y  = biuParse( data, &data );
 
-            PAD_DRILL_SHAPE_T drShape = PAD_DRILL_SHAPE_CIRCLE;
+            PAD_DRILL_SHAPE drShape = PAD_DRILL_SHAPE::CIRCLE;
 
             data = strtok_r( (char*) data, delims, &saveptr );
 
@@ -1457,7 +1457,7 @@ void PCB_IO_KICAD_LEGACY::loadPAD( FOOTPRINT* aFootprint )
             {
                 if( data[0] == 'O' )
                 {
-                    drShape = PAD_DRILL_SHAPE_OBLONG;
+                    drShape = PAD_DRILL_SHAPE::OBLONG;
 
                     data    = strtok_r( nullptr, delims, &saveptr );
                     drill_x = biuParse( data );

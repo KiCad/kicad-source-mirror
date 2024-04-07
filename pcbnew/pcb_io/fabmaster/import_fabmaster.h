@@ -28,7 +28,7 @@
 
 #include <eda_text.h>
 #include <geometry/shape_arc.h>
-#include <pad_shapes.h>
+#include <padstack.h>
 
 #include <deque>
 #include <functional>

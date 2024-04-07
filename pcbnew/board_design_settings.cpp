@@ -1490,7 +1490,7 @@ void BOARD_DESIGN_SETTINGS::SetDefaultMasterPad()
 {
     m_Pad_Master.get()->SetSizeX( pcbIUScale.mmToIU( DEFAULT_PAD_WIDTH_MM ) );
     m_Pad_Master.get()->SetSizeY( pcbIUScale.mmToIU( DEFAULT_PAD_HEIGTH_MM ) );
-    m_Pad_Master.get()->SetDrillShape( PAD_DRILL_SHAPE_CIRCLE );
+    m_Pad_Master.get()->SetDrillShape( PAD_DRILL_SHAPE::CIRCLE );
     m_Pad_Master.get()->SetDrillSize(
             VECTOR2I( pcbIUScale.mmToIU( DEFAULT_PAD_DRILL_DIAMETER_MM ), 0 ) );
     m_Pad_Master.get()->SetShape( PAD_SHAPE::ROUNDRECT );

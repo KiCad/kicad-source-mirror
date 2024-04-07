@@ -30,6 +30,7 @@
 
 #include <frame_type.h>
 #include <gal/painter.h>
+#include <padstack.h>   // PAD_DRILL_SHAPE
 #include <pcb_display_options.h>
 #include <math/vector2d.h>
 #include <memory>
@@ -205,7 +206,7 @@ protected:
     /**
      * Return drill shape of a pad.
      */
-    virtual int getDrillShape( const PAD* aPad ) const;
+    virtual PAD_DRILL_SHAPE getDrillShape( const PAD* aPad ) const;
 
     /**
      * Return hole shape for a pad (internal units).
