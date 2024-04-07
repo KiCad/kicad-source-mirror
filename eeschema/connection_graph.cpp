@@ -3647,6 +3647,33 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph )
     if( label_map.empty() )
         return true;
 
+    // No-connects on net neighbors will be noticed before, but to notice them on bus parents we
+    // need to walk the graph
+    for( auto pair : aSubgraph->m_bus_parents )
+    {
+        for( CONNECTION_SUBGRAPH* busParent : pair.second )
+        {
+            if( busParent->m_no_connect )
+            {
+                has_nc = true;
+                break;
+            }
+
+            CONNECTION_SUBGRAPH* hp = busParent->m_hier_parent;
+
+            while( hp )
+            {
+                if( hp->m_no_connect )
+                {
+                    has_nc = true;
+                    break;
+                }
+
+                hp = hp->m_hier_parent;
+            }
+        }
+    }
+
     wxString netName = GetResolvedSubgraphName( aSubgraph );
 
     wxCHECK_MSG( m_schematic, true, wxS( "Null m_schematic in CONNECTION_GRAPH::ercCheckLabels" ) );
