@@ -160,4 +160,9 @@ BOOST_AUTO_TEST_CASE( ZoneConnectionStyle )
     testEnums<ZONE_CONNECTION, kiapi::board::types::ZoneConnectionStyle>();
 }
 
+BOOST_AUTO_TEST_CASE( UnconnectedLayerRemoval )
+{
+    testEnums<PADSTACK::UNCONNECTED_LAYER_MODE, kiapi::board::types::UnconnectedLayerRemoval>();
+}
+
 BOOST_AUTO_TEST_SUITE_END()

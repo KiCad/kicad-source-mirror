@@ -898,7 +898,6 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
                 anchorPad = aComponent.ComponentPads.at( compCopper.AssociatedPadIDs.front() );
 
             std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
-            pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
             pad->SetAttribute( PAD_ATTRIB::SMD );
             pad->SetLayerSet( copperLayers );
             pad->SetNumber( anchorPad.Identifier.IsEmpty()
@@ -1341,8 +1340,6 @@ PAD* CADSTAR_PCB_ARCHIVE_LOADER::getKiCadPad( const COMPONENT_PAD& aCadstarPad, 
 
         m_padcodesTested.insert( csPadcode.ID );
     }
-
-    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
 
     return pad.release();
 }

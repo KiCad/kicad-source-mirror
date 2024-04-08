@@ -2450,8 +2450,6 @@ void PCB_IO_EAGLE::packageHole( FOOTPRINT* aFootprint, wxXmlNode* aTree, bool aC
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
 
-    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
-
     pad->SetShape( PAD_SHAPE::CIRCLE );
     pad->SetAttribute( PAD_ATTRIB::NPTH );
 
@@ -2492,8 +2490,6 @@ void PCB_IO_EAGLE::packageSMD( FOOTPRINT* aFootprint, wxXmlNode* aTree ) const
     PAD* pad = new PAD( aFootprint );
     aFootprint->Add( pad );
     transferPad( e, pad );
-
-    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
 
     pad->SetShape( PAD_SHAPE::RECTANGLE );
     pad->SetAttribute( PAD_ATTRIB::SMD );

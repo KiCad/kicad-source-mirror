@@ -103,3 +103,45 @@ ZONE_CONNECTION FromProtoEnum( types::ZoneConnectionStyle aValue )
                      "Unhandled case in FromProtoEnum<types::ZoneConnectionStyle>" );
     }
 }
+
+
+template<>
+types::UnconnectedLayerRemoval ToProtoEnum( PADSTACK::UNCONNECTED_LAYER_MODE aValue )
+{
+    switch( aValue )
+    {
+    case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:
+        return types::UnconnectedLayerRemoval::ULR_KEEP;
+
+    case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:
+        return types::UnconnectedLayerRemoval::ULR_REMOVE;
+
+    case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
+        return types::UnconnectedLayerRemoval::ULR_REMOVE_EXCEPT_START_AND_END;
+
+    default:
+        wxCHECK_MSG( false, types::UnconnectedLayerRemoval::ULR_UNKNOWN,
+                     "Unhandled case in ToProtoEnum<PADSTACK::UNCONNECTED_LAYER_MODE>");
+    }
+}
+
+
+template<>
+PADSTACK::UNCONNECTED_LAYER_MODE FromProtoEnum( types::UnconnectedLayerRemoval aValue )
+{
+    switch( aValue )
+    {
+    case types::UnconnectedLayerRemoval::ULR_KEEP:
+        return PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
+
+    case types::UnconnectedLayerRemoval::ULR_REMOVE:
+        return PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL;
+
+    case types::UnconnectedLayerRemoval::ULR_REMOVE_EXCEPT_START_AND_END:
+        return PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
+
+    default:
+        wxCHECK_MSG( false, PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL,
+                     "Unhandled case in FromProtoEnum<types::UnconnectedLayerRemoval>");
+    }
+}

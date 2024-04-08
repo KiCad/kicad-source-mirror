@@ -4699,9 +4699,6 @@ PAD* PCB_IO_KICAD_SEXPR_PARSER::parsePAD( FOOTPRINT* aParent )
 
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aParent );
 
-    // File only contains a token if KeepTopBottom is true
-    pad->SetKeepTopBottom( false );
-
     NeedSYMBOLorNUMBER();
     pad->SetNumber( FromUTF8() );
 
@@ -5286,11 +5283,11 @@ bool PCB_IO_KICAD_SEXPR_PARSER::parsePAD_option( PAD* aPad )
             switch( token )
             {
             case T_outline:
-                aPad->SetCustomShapeInZoneOpt( CUST_PAD_SHAPE_IN_ZONE_OUTLINE );
+                aPad->SetCustomShapeInZoneOpt( PADSTACK::CUSTOM_SHAPE_ZONE_MODE::OUTLINE );
                 break;
 
             case T_convexhull:
-                aPad->SetCustomShapeInZoneOpt( CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL );
+                aPad->SetCustomShapeInZoneOpt( PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL );
                 break;
 
             default:
@@ -5715,8 +5712,7 @@ PCB_VIA* PCB_IO_KICAD_SEXPR_PARSER::parsePCB_VIA()
     std::unique_ptr<PCB_VIA> via = std::make_unique<PCB_VIA>( m_board );
 
     // File format default is no-token == no-feature.
-    via->SetRemoveUnconnected( false );
-    via->SetKeepStartEnd( false );
+    via->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {

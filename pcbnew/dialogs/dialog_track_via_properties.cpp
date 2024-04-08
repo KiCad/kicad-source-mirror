@@ -115,12 +115,13 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     auto getAnnularRingSelection =
             []( const PCB_VIA* via ) -> int
             {
-                if( !via->GetRemoveUnconnected() )
-                    return 0;
-                else if( via->GetKeepStartEnd() )
-                    return 1;
-                else
-                    return 2;
+                switch( via->Padstack().UnconnectedLayerMode() )
+                {
+                default:
+                case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:                    return 0;
+                case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END: return 1;
+                case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:                  return 2;
+                }
             };
 
     // Look for values that are common for every item that is selected
@@ -649,15 +650,16 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
                 switch( m_annularRingsCtrl->GetSelection() )
                 {
                 case 0:
-                    v->SetRemoveUnconnected( false );
+                    v->Padstack().SetUnconnectedLayerMode(
+                            PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
                     break;
                 case 1:
-                    v->SetRemoveUnconnected( true );
-                    v->SetKeepStartEnd( true );
+                    v->Padstack().SetUnconnectedLayerMode(
+                            PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
                     break;
                 case 2:
-                    v->SetRemoveUnconnected( true );
-                    v->SetKeepStartEnd( false );
+                    v->Padstack().SetUnconnectedLayerMode(
+                            PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
                     break;
                 default:
                     break;

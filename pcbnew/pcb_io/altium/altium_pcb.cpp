@@ -2568,7 +2568,6 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         LSET padLayers;
         padLayers.set( aLayer );
 
-        pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetShape( PAD_SHAPE::CUSTOM );
         pad->SetThermalSpokeAngle( ANGLE_90 );
@@ -3015,8 +3014,6 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItem( FOOTPRINT* aFootprint, const APAD6
 void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, const APAD6& aElem )
 {
     std::unique_ptr<PAD> pad = std::make_unique<PAD>( aFootprint );
-
-    pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
 
     pad->SetNumber( aElem.name );
     pad->SetNetCode( GetNetCode( aElem.net ) );

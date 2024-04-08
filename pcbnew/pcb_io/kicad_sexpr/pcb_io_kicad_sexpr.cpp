@@ -1697,7 +1697,7 @@ void PCB_IO_KICAD_SEXPR::format( const PAD* aPad, int aNestLevel ) const
         m_out->Print( 0, "\n");
         m_out->Print( aNestLevel+1, "(options" );
 
-        if( aPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
+        if( aPad->GetCustomShapeInZoneOpt() == PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
             m_out->Print( 0, " (clearance convexhull)" );
         #if 1   // Set to 1 to output the default option
         else
@@ -2199,12 +2199,20 @@ void PCB_IO_KICAD_SEXPR::format( const PCB_TRACK* aTrack, int aNestLevel ) const
                       m_out->Quotew( LSET::Name( layer1 ) ).c_str(),
                       m_out->Quotew( LSET::Name( layer2 ) ).c_str() );
 
-        if( via->GetRemoveUnconnected() )
+        switch( via->Padstack().UnconnectedLayerMode() )
         {
-            KICAD_FORMAT::FormatBool( m_out, 0, "remove_unused_layers",
-                                      via->GetRemoveUnconnected() );
+        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:
+            m_out->Print( 0, "(remove_unused_layers yes)" );
+            m_out->Print( 0, "(keep_end_layers no)" );
+            break;
 
-            KICAD_FORMAT::FormatBool( m_out, 0, "keep_end_layers", via->GetKeepStartEnd() );
+        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
+            m_out->Print( 0, "(remove_unused_layers yes)" );
+            m_out->Print( 0, "(keep_end_layers yes)" );
+            break;
+
+        case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:
+            break;
         }
 
         if( via->IsLocked() )

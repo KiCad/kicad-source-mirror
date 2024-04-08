@@ -676,7 +676,7 @@ void DIALOG_PAD_PROPERTIES::initValues()
     case ZONE_CONNECTION::NONE:      m_ZoneConnectionChoice->SetSelection( 3 ); break;
     }
 
-    if( m_previewPad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
+    if( m_previewPad->GetCustomShapeInZoneOpt() == PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL )
         m_ZoneCustomPadShape->SetSelection( 1 );
     else
         m_ZoneCustomPadShape->SetSelection( 0 );
@@ -1620,9 +1620,8 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     m_currentPad->SetAnchorPadShape( m_masterPad->GetAnchorPadShape() );
     m_currentPad->ReplacePrimitives( m_masterPad->GetPrimitives() );
 
+    m_currentPad->SetPadstack( m_masterPad->Padstack() );
     m_currentPad->SetLayerSet( m_masterPad->GetLayerSet() );
-    m_currentPad->SetRemoveUnconnected( m_masterPad->GetRemoveUnconnected() );
-    m_currentPad->SetKeepTopBottom( m_masterPad->GetKeepTopBottom() );
 
     m_currentPad->SetNumber( m_masterPad->GetNumber() );
 
@@ -1947,8 +1946,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     // shapes are convex to begin with, this really only makes any difference for custom
     // pad shapes.
     aPad->SetCustomShapeInZoneOpt( m_ZoneCustomPadShape->GetSelection() == 0 ?
-                                   CUST_PAD_SHAPE_IN_ZONE_OUTLINE :
-                                   CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL );
+                                   PADSTACK::CUSTOM_SHAPE_ZONE_MODE::OUTLINE :
+                                   PADSTACK::CUSTOM_SHAPE_ZONE_MODE::CONVEXHULL );
 
     switch( aPad->GetAttribute() )
     {
@@ -2001,8 +2000,7 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     LSET padLayerMask = LSET();
     int  copperLayersChoice = m_rbCopperLayersSel->GetSelection();
 
-    aPad->SetRemoveUnconnected( false );
-    aPad->SetKeepTopBottom( false );
+    aPad->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
 
     switch( m_padType->GetSelection() )
     {
@@ -2017,14 +2015,14 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
         case 1:
             // Front, back and connected
             padLayerMask |= LSET::AllCuMask();
-            aPad->SetRemoveUnconnected( true );
-            aPad->SetKeepTopBottom( true );
+            aPad->Padstack().SetUnconnectedLayerMode(
+                    PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END );
             break;
 
         case 2:
             // Connected only
             padLayerMask |= LSET::AllCuMask();
-            aPad->SetRemoveUnconnected( true );
+            aPad->Padstack().SetUnconnectedLayerMode( PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
             break;
 
         case 3:

@@ -43,6 +43,7 @@
 #include <geometry/shape_segment.h>
 #include <core/minoptmax.h>
 #include <core/arraydim.h>
+#include <padstack.h>
 
 class PCB_TRACK;
 class PCB_VIA;
@@ -410,6 +411,10 @@ public:
     VIATYPE GetViaType() const { return m_viaType; }
     void SetViaType( VIATYPE aViaType ) { m_viaType = aViaType; }
 
+    const PADSTACK& Padstack() const              { return m_padStack; }
+    PADSTACK& Padstack()                          { return m_padStack; }
+    void SetPadstack( const PADSTACK& aPadstack ) { m_padStack = aPadstack; }
+
     bool HasHole() const override
     {
         return true;
@@ -422,6 +427,9 @@ public:
 
     bool IsTented() const override;
     int GetSolderMaskExpansion() const;
+
+    PCB_LAYER_ID GetLayer() const override;
+    void SetLayer( PCB_LAYER_ID aLayer ) override;
 
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;
 
@@ -494,25 +502,55 @@ public:
     int GetMinAnnulus( PCB_LAYER_ID aLayer, wxString* aSource ) const;
 
     /**
+     * @deprecated - use Padstack().SetUnconnectedLayerMode()
      * Sets the unconnected removal property.  If true, the copper is removed on zone fill
      * or when specifically requested when the via is not connected on a layer.
      */
-    void SetRemoveUnconnected( bool aSet )      { m_removeUnconnectedLayer = aSet; }
-    bool GetRemoveUnconnected() const           { return m_removeUnconnectedLayer; }
+    void SetRemoveUnconnected( bool aSet )
+    {
+        m_padStack.SetUnconnectedLayerMode( aSet
+                ? PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL
+                : PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL );
+    }
+
+    bool GetRemoveUnconnected() const
+    {
+        return m_padStack.UnconnectedLayerMode() != PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL;
+    }
 
     /**
+     * @deprecated - use Padstack().SetUnconnectedLayerMode()
      * Sets whether we keep the start and end annular rings even if they are not connected
      */
-    void SetKeepStartEnd( bool aSet )      { m_keepStartEndLayer = aSet; }
-    bool GetKeepStartEnd() const           { return m_keepStartEndLayer; }
+    void SetKeepStartEnd( bool aSet )
+    {
+        m_padStack.SetUnconnectedLayerMode( aSet
+                ? PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END
+                : PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL );
+    }
+
+    bool GetKeepStartEnd() const
+    {
+        return m_padStack.UnconnectedLayerMode()
+               == PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END;
+    }
 
     bool ConditionallyFlashed( PCB_LAYER_ID aLayer ) const
     {
-        if( !m_removeUnconnectedLayer )
+        switch( m_padStack.UnconnectedLayerMode() )
+        {
+        case PADSTACK::UNCONNECTED_LAYER_MODE::KEEP_ALL:
             return false;
 
-        if( m_keepStartEndLayer && ( aLayer == m_layer || aLayer == m_bottomLayer ) )
-            return false;
+        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_ALL:
+            return true;
+
+        case PADSTACK::UNCONNECTED_LAYER_MODE::REMOVE_EXCEPT_START_AND_END:
+        {
+            if( aLayer == m_padStack.Drill().start || aLayer == m_padStack.Drill().end )
+                return false;
+        }
+        }
 
         return true;
     }
@@ -547,14 +585,17 @@ public:
      *
      * @param aDrill is the new drill diameter
      */
-    void SetDrill( int aDrill )             { m_drill = aDrill; }
+    void SetDrill( int aDrill )
+    {
+        m_padStack.Drill().size = { aDrill, aDrill };
+    }
 
     /**
      * Return the local drill setting for this PCB_VIA.
      *
      * @note Use GetDrillValue() to get the calculated value.
      */
-    int GetDrill() const                    { return m_drill; }
+    int GetDrill() const                    { return m_padStack.Drill().size.x; }
 
     /**
      * Calculate the drill value for vias (m_drill if > 0, or default drill value for the board).
@@ -566,7 +607,10 @@ public:
     /**
      * Set the drill value for vias to the default value #UNDEFINED_DRILL_DIAMETER.
      */
-    void SetDrillDefault()      { m_drill = UNDEFINED_DRILL_DIAMETER; }
+    void SetDrillDefault()
+    {
+        m_padStack.Drill().size = { UNDEFINED_DRILL_DIAMETER, UNDEFINED_DRILL_DIAMETER };
+    }
 
     /**
      * Check if the via is a free via (as opposed to one created on a track by the router).
@@ -611,15 +655,10 @@ protected:
     wxString layerMaskDescribe() const override;
 
 private:
-    /// The bottom layer of the via (the top layer is in m_layer)
-    PCB_LAYER_ID m_bottomLayer;
-
     VIATYPE      m_viaType;                  ///< through, blind/buried or micro
 
-    int          m_drill;                    ///< for vias: via drill (- 1 for default value)
+    PADSTACK     m_padStack;
 
-    bool         m_removeUnconnectedLayer;   ///< Remove annular rings on unconnected layers
-    bool         m_keepStartEndLayer;        ///< Keep the start and end annular rings
     bool         m_isFree;                   ///< "Free" vias don't get their nets auto-updated
 
     std::mutex                                     m_zoneLayerOverridesMutex;
