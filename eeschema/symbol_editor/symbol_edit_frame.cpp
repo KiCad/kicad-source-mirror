@@ -323,8 +323,8 @@ void SYMBOL_EDIT_FRAME::LoadSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::LoadSettings( GetSettings() );
 
     GetRenderSettings()->m_ShowPinsElectricalType = m_settings->m_ShowPinElectricalType;
-    GetRenderSettings()->m_ShowHiddenLibPins = m_settings->m_ShowHiddenLibPins;
-    GetRenderSettings()->m_ShowHiddenLibFields = m_settings->m_ShowHiddenLibFields;
+    GetRenderSettings()->m_ShowHiddenPins = m_settings->m_ShowHiddenPins;
+    GetRenderSettings()->m_ShowHiddenFields = m_settings->m_ShowHiddenFields;
     GetRenderSettings()->SetDefaultFont( wxEmptyString );
 }
 
@@ -338,10 +338,10 @@ void SYMBOL_EDIT_FRAME::SaveSettings( APP_SETTINGS_BASE* aCfg )
     SCH_BASE_FRAME::SaveSettings( GetSettings() );
 
     m_settings->m_ShowPinElectricalType  = GetRenderSettings()->m_ShowPinsElectricalType;
-    m_settings->m_ShowHiddenLibPins = GetRenderSettings()->m_ShowHiddenLibPins;
-    m_settings->m_ShowHiddenLibFields = GetRenderSettings()->m_ShowHiddenLibFields;
+    m_settings->m_ShowHiddenPins = GetRenderSettings()->m_ShowHiddenPins;
+    m_settings->m_ShowHiddenFields = GetRenderSettings()->m_ShowHiddenFields;
 
-    m_settings->m_LibWidth               = m_treePane->GetSize().x;
+    m_settings->m_LibWidth = m_treePane->GetSize().x;
 
     m_settings->m_LibrarySortMode = m_treePane->GetLibTree()->GetSortMode();
 
@@ -497,13 +497,13 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     auto hiddenPinCond =
             [this]( const SELECTION& )
             {
-                return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenLibPins;
+                return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenPins;
             };
 
     auto hiddenFieldCond =
             [this]( const SELECTION& )
             {
-                return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenLibFields;
+                return GetRenderSettings() && GetRenderSettings()->m_ShowHiddenFields;
             };
 
     auto showCompTreeCond =
@@ -522,8 +522,8 @@ void SYMBOL_EDIT_FRAME::setupUIConditions()
     mgr->SetConditions( ACTIONS::toggleBoundingBoxes,    CHECK( cond.BoundingBoxes() ) );
     mgr->SetConditions( EE_ACTIONS::showSymbolTree,      CHECK( showCompTreeCond ) );
     mgr->SetConditions( ACTIONS::showProperties,         CHECK( propertiesCond ) );
-    mgr->SetConditions( EE_ACTIONS::showHiddenLibPins,   CHECK( hiddenPinCond ) );
-    mgr->SetConditions( EE_ACTIONS::showHiddenLibFields, CHECK( hiddenFieldCond ) );
+    mgr->SetConditions( EE_ACTIONS::showHiddenPins,      CHECK( hiddenPinCond ) );
+    mgr->SetConditions( EE_ACTIONS::showHiddenFields,    CHECK( hiddenFieldCond ) );
 
     auto demorganCond =
             [this]( const SELECTION& )
@@ -1253,8 +1253,8 @@ void SYMBOL_EDIT_FRAME::CommonSettingsChanged( bool aEnvVarsChanged, bool aTextV
     SYMBOL_EDITOR_SETTINGS* cfg = mgr->GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
 
     GetRenderSettings()->m_ShowPinsElectricalType = cfg->m_ShowPinElectricalType;
-    GetRenderSettings()->m_ShowHiddenLibPins = cfg->m_ShowHiddenLibPins;
-    GetRenderSettings()->m_ShowHiddenLibFields = cfg->m_ShowHiddenLibFields;
+    GetRenderSettings()->m_ShowHiddenPins = cfg->m_ShowHiddenPins;
+    GetRenderSettings()->m_ShowHiddenFields = cfg->m_ShowHiddenFields;
 
     GetGalDisplayOptions().ReadWindowSettings( cfg->m_Window );
 
@@ -1883,12 +1883,12 @@ void SYMBOL_EDIT_FRAME::updateSelectionFilterVisbility()
 bool SYMBOL_EDIT_FRAME::GetShowInvisibleFields()
 {
     // Returns the current render option for invisible fields
-    return  GetRenderSettings()->m_ShowHiddenLibFields;
+    return  GetRenderSettings()->m_ShowHiddenFields;
 }
 
 
 bool SYMBOL_EDIT_FRAME::GetShowInvisiblePins()
 {
     // Returns the current render option for invisible pins
-    return  GetRenderSettings()->m_ShowHiddenLibPins;
+    return  GetRenderSettings()->m_ShowHiddenPins;
 }

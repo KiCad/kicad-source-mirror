@@ -81,9 +81,9 @@ public:
     int    m_ShowBodyStyle;          // Show all body styles if 0
 
     bool   m_ShowPinsElectricalType;
-    bool   m_ShowHiddenLibPins;      // Force showing of hidden pin ( symbol editor specific)
-    bool   m_ShowHiddenLibFields;    // Force showing of hidden fields ( symbol editor specific)
-    bool   m_ShowVisibleLibFields;
+    bool   m_ShowHiddenPins;
+    bool   m_ShowHiddenFields;
+    bool   m_ShowVisibleFields;
     bool   m_ShowPinNumbers;         // Force showing of pin numbers (normally symbol-specific)
     bool   m_ShowPinNames;           // Force showing of pin names (normally symbol-specific)
     bool   m_ShowPinElectricalTypes;

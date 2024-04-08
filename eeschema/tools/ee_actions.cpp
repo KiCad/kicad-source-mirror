@@ -319,15 +319,15 @@ TOOL_ACTION EE_ACTIONS::toggleSyncedPinsMode( TOOL_ACTION_ARGS()
                      "Enabled by default for multiunit parts with interchangeable units." ) )
         .Icon( BITMAPS::pin2pin ) );
 
-TOOL_ACTION EE_ACTIONS::showHiddenLibPins( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.showHiddenLibPins" )
+TOOL_ACTION EE_ACTIONS::showHiddenPins( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showHiddenPins" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Hidden Pins" ) )
         .Tooltip( _( "Toggle display of hidden pins" ) )
         .Icon( BITMAPS::hidden_pin ) );
 
-TOOL_ACTION EE_ACTIONS::showHiddenLibFields( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.showHiddenLibFields" )
+TOOL_ACTION EE_ACTIONS::showHiddenFields( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.showHiddenFields" )
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Hidden Fields" ) )
         .Tooltip( _( "Toggle display of hidden text fields" ) )

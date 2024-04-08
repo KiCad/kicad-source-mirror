@@ -206,7 +206,7 @@ void LIB_PIN::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyS
     /* Calculate the pin position */
     VECTOR2I pos1 = aSettings->TransformCoordinate( m_position ) + aOffset;
 
-    if( IsVisible() || aSettings->m_ShowHiddenLibFields )
+    if( IsVisible() || aSettings->m_ShowHiddenFields )
     {
         printPinSymbol( aSettings, pos1, orient, aDimmed );
 

@@ -492,8 +492,8 @@ void SCH_SYMBOL::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUni
 {
     SCH_RENDER_SETTINGS cfg( *aSettings );
     cfg.m_Transform = m_transform;
-    cfg.m_ShowVisibleLibFields = false;
-    cfg.m_ShowHiddenLibFields = false;
+    cfg.m_ShowVisibleFields = false;
+    cfg.m_ShowHiddenFields = false;
 
     if( GetDNP() )
         aDimmed = true;
@@ -508,8 +508,8 @@ void SCH_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
 {
     SCH_RENDER_SETTINGS cfg( *aSettings );
     cfg.m_Transform = m_transform;
-    cfg.m_ShowVisibleLibFields = false;
-    cfg.m_ShowHiddenLibFields = false;
+    cfg.m_ShowVisibleFields = false;
+    cfg.m_ShowHiddenFields = false;
 
     if( m_DNP )
         aDimmed = true;

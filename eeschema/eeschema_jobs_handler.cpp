@@ -684,19 +684,6 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
         }
     }
 
-    if( aSvgJob->m_includeHiddenPins )
-    {
-        // horrible hack, TODO overhaul the Plot method to handle this
-        for( SCH_ITEM& item : symbolToPlot->GetDrawItems() )
-        {
-            if( item.Type() != LIB_PIN_T )
-                continue;
-
-            LIB_PIN& pin = static_cast<LIB_PIN&>( item );
-            pin.SetVisible( true );
-        }
-    }
-
     // iterate from unit 1, unit 0 would be "all units" which we don't want
     for( int unit = 1; unit < symbol->GetUnitCount() + 1; unit++ )
     {
@@ -783,12 +770,10 @@ int EESCHEMA_JOBS_HANDLER::doSymExportSvg( JOB_SYM_EXPORT_SVG*  aSvgJob,
 
             // note, we want the fields from the original symbol pointer (in case of non-alias)
             symbolToPlot->Plot( plotter, background, plotOpts, unit, bodyStyle, offset, false );
-            symbol->PlotFields( plotter, background, plotOpts, unit, bodyStyle, offset, false,
-                                aSvgJob->m_includeHiddenFields );
+            symbol->PlotFields( plotter, background, plotOpts, unit, bodyStyle, offset, false );
 
             symbolToPlot->Plot( plotter, !background, plotOpts, unit, bodyStyle, offset, false );
-            symbol->PlotFields( plotter, !background, plotOpts, unit, bodyStyle, offset, false,
-                                aSvgJob->m_includeHiddenFields );
+            symbol->PlotFields( plotter, !background, plotOpts, unit, bodyStyle, offset, false );
 
             plotter->EndPlot();
             delete plotter;
@@ -845,6 +830,8 @@ int EESCHEMA_JOBS_HANDLER::JobSymExportSvg( JOB* aJob )
     COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings( svgJob->m_colorTheme );
     renderSettings.LoadColors( cs );
     renderSettings.SetDefaultPenWidth( DEFAULT_LINE_WIDTH_MILS * schIUScale.IU_PER_MILS );
+    renderSettings.m_ShowHiddenPins = svgJob->m_includeHiddenPins;
+    renderSettings.m_ShowHiddenFields = svgJob->m_includeHiddenFields;
 
     int exitCode = CLI::EXIT_CODES::OK;
 

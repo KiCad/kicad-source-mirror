@@ -68,7 +68,7 @@ void SYMBOL_EDIT_FRAME::SVGPlotSymbol( const wxString& aFullFileName, const VECT
         m_symbol->Plot( plotter, background, plotOpts, GetUnit(), GetBodyStyle(), aOffset, false );
         m_symbol->Plot( plotter, !background, plotOpts, GetUnit(), GetBodyStyle(), aOffset, false );
         m_symbol->PlotFields( plotter, !background, plotOpts, GetUnit(), GetBodyStyle(), aOffset,
-                              false, GetShowInvisibleFields() );
+                              false );
     }
 
     plotter->EndPlot();

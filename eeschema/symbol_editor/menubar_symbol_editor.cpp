@@ -125,9 +125,9 @@ void SYMBOL_EDIT_FRAME::doReCreateMenuBar()
     viewMenu->Add( ACTIONS::zoomRedraw );
 
     viewMenu->AppendSeparator();
-    viewMenu->Add( EE_ACTIONS::showSymbolTree,        ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::showHiddenLibPins,     ACTION_MENU::CHECK );
-    viewMenu->Add( EE_ACTIONS::showHiddenLibFields,   ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::showSymbolTree,   ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::showHiddenPins,   ACTION_MENU::CHECK );
+    viewMenu->Add( EE_ACTIONS::showHiddenFields, ACTION_MENU::CHECK );
 
 
     //-- Place menu -----------------------------------------------

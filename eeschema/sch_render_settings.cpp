@@ -35,9 +35,9 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
         m_ShowUnit( 0 ),
         m_ShowBodyStyle( 0 ),
         m_ShowPinsElectricalType( true ),
-        m_ShowHiddenLibPins( true ),      // Force showing of hidden pin ( symbol editor specific)
-        m_ShowHiddenLibFields( true ),    // Force showing of hidden fields ( symbol editor specific)
-        m_ShowVisibleLibFields( true ),
+        m_ShowHiddenPins( true ),
+        m_ShowHiddenFields( true ),
+        m_ShowVisibleFields( true ),
         m_ShowPinNumbers( false ),
         m_ShowPinNames( false ),
         m_ShowPinElectricalTypes( false ),

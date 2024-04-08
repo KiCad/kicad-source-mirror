@@ -230,8 +230,8 @@ public:
     // Miscellaneous
     static TOOL_ACTION toggleHiddenPins;
     static TOOL_ACTION toggleHiddenFields;
-    static TOOL_ACTION showHiddenLibPins;
-    static TOOL_ACTION showHiddenLibFields;
+    static TOOL_ACTION showHiddenPins;
+    static TOOL_ACTION showHiddenFields;
     static TOOL_ACTION toggleDirectiveLabels;
     static TOOL_ACTION toggleERCWarnings;
     static TOOL_ACTION toggleERCErrors;

@@ -752,10 +752,10 @@ void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
         {
             LIB_FIELD& field = static_cast<LIB_FIELD&>( item );
 
-            if( field.IsVisible() && !aSettings->m_ShowVisibleLibFields )
+            if( field.IsVisible() && !aSettings->m_ShowVisibleFields )
                 continue;
 
-            if( !field.IsVisible() && !aSettings->m_ShowHiddenLibFields )
+            if( !field.IsVisible() && !aSettings->m_ShowHiddenFields )
                 continue;
         }
 
@@ -861,8 +861,7 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
 
 void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
-                             int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed,
-                             bool aPlotHidden )
+                             int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
     wxASSERT( aPlotter != nullptr );
 
@@ -888,7 +887,7 @@ void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT
 
         LIB_FIELD& field = static_cast<LIB_FIELD&>( item );
 
-        if( !aPlotHidden && !field.IsVisible() )
+        if( !renderSettings->m_ShowHiddenFields && !field.IsVisible() )
             continue;
 
         // The reference is a special case: we should change the basic text

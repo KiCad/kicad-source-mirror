@@ -402,7 +402,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     SCH_RENDER_SETTINGS renderSettings( *symbolEditor->GetRenderSettings() );
     renderSettings.m_ShowPinNumbers = true;
     renderSettings.m_ShowPinNames = true;
-    renderSettings.m_ShowHiddenLibFields = true;
+    renderSettings.m_ShowHiddenFields = true;
     renderSettings.m_ShowConnectionPoints = true;
     renderSettings.m_Transform = DefaultTransform;
     renderSettings.SetPrintDC( &dc );

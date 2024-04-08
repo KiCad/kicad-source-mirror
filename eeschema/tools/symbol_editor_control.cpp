@@ -606,11 +606,11 @@ int SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode( const TOOL_EVENT& aEvent )
 }
 
 
-int SYMBOL_EDITOR_CONTROL::ToggleHiddenLibPins( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    editFrame->GetRenderSettings()->m_ShowHiddenLibPins =
-                    !editFrame->GetRenderSettings()->m_ShowHiddenLibPins;
+    editFrame->GetRenderSettings()->m_ShowHiddenPins =
+                    !editFrame->GetRenderSettings()->m_ShowHiddenPins;
 
     getView()->UpdateAllItems( KIGFX::REPAINT );
     editFrame->GetCanvas()->Refresh();
@@ -619,11 +619,11 @@ int SYMBOL_EDITOR_CONTROL::ToggleHiddenLibPins( const TOOL_EVENT& aEvent )
 }
 
 
-int SYMBOL_EDITOR_CONTROL::ToggleHiddenLibFields( const TOOL_EVENT& aEvent )
+int SYMBOL_EDITOR_CONTROL::ToggleHiddenFields( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDIT_FRAME* editFrame = getEditFrame<SYMBOL_EDIT_FRAME>();
-    editFrame->GetRenderSettings()->m_ShowHiddenLibFields =
-                    !editFrame->GetRenderSettings()->m_ShowHiddenLibFields;
+    editFrame->GetRenderSettings()->m_ShowHiddenFields =
+                    !editFrame->GetRenderSettings()->m_ShowHiddenFields;
 
     getView()->UpdateAllItems( KIGFX::REPAINT );
     editFrame->GetCanvas()->Refresh();
@@ -827,6 +827,6 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenLibPins,   EE_ACTIONS::showHiddenLibPins.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenLibFields, EE_ACTIONS::showHiddenLibFields.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::showHiddenPins.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::ToggleHiddenFields,    EE_ACTIONS::showHiddenFields.MakeEvent() );
 }

@@ -364,8 +364,7 @@ public:
      * Plot symbol fields.
      */
     void PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
-                     int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed,
-                     bool aPlotHidden );
+                     int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed );
 
     /**
      * Add a new draw \a aItem to the draw object list and sort according to \a aSort.

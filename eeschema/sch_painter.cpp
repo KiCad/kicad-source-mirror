@@ -1029,7 +1029,7 @@ void SCH_PAINTER::draw( const LIB_FIELD* aField, int aLayer, bool aDimmed )
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
         bool force_show = m_schematic ? eeconfig()->m_Appearance.show_hidden_fields
-                                      : m_schSettings.m_ShowHiddenLibFields;
+                                      : m_schSettings.m_ShowHiddenFields;
 
         if( force_show )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows, aDimmed );
@@ -1362,7 +1362,8 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
             return;
 
         bool force_show = m_schematic ? eeconfig()->m_Appearance.show_hidden_pins
-                                      : m_schSettings.m_ShowHiddenLibPins;
+                                      : m_schSettings.m_ShowHiddenPins;
+
         if( force_show )
         {
             color = getRenderColor( aPin, LAYER_HIDDEN, drawingShadows, aDimmed );
