@@ -2496,7 +2496,9 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
             }
         }
 
-        getRenderSettings( aPlotter )->m_Transform = GetTransform();
+        SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+        TRANSFORM            savedTransform = renderSettings->m_Transform;
+        renderSettings->m_Transform = GetTransform();
         aPlotter->StartBlock( nullptr );
 
         for( bool local_background : { true, false } )
@@ -2544,7 +2546,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
         }
 
         aPlotter->EndBlock( nullptr );
-        getRenderSettings( aPlotter )->m_Transform = TRANSFORM();
+        renderSettings->m_Transform = savedTransform;
 
         if( !m_part->IsPower() )
             aPlotter->Bookmark( GetBoundingBox(), GetRef( sheet ), _( "Symbols" ) );
@@ -2554,6 +2556,10 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
 void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
 {
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    TRANSFORM            savedTransform = renderSettings->m_Transform;
+    renderSettings->m_Transform = GetTransform();
+
     BOX2I bbox = GetBodyAndPinsBoundingBox();
 
     COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
@@ -2568,6 +2574,8 @@ void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
                             bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
                             3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
                             FILLED, nullptr );
+
+    renderSettings->m_Transform = savedTransform;
 }
 
 
@@ -2575,6 +2583,10 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
 {
     if( m_part )
     {
+        SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+        TRANSFORM            savedTransform = renderSettings->m_Transform;
+        renderSettings->m_Transform = GetTransform();
+
         std::vector<LIB_PIN*>  libPins;
         m_part->GetPins( libPins, GetUnit(), GetBodyStyle() );
 
@@ -2596,6 +2608,8 @@ void SCH_SYMBOL::PlotPins( PLOTTER* aPlotter ) const
             tempPin->SetShape( symbolPin->GetShape() );
             tempPin->Plot( aPlotter, false, plotOpts, GetUnit(), GetBodyStyle(), m_pos, GetDNP() );
         }
+
+        renderSettings->m_Transform = savedTransform;
     }
 }
 

@@ -371,6 +371,8 @@ void DIALOG_PLOT_SCHEMATIC::plotSchematic( bool aPlotAll )
     wxBusyCursor dummy;
 
     SCH_RENDER_SETTINGS renderSettings( *m_parent->GetRenderSettings() );
+    renderSettings.m_ShowHiddenPins = false;
+    renderSettings.m_ShowHiddenFields = false;
 
     getPlotOptions( &renderSettings );
 
