@@ -28,10 +28,10 @@
 # mc: - DRC = TT
 # mc: - net = connessione
 # mc: - link = collegamento
-# mc: - Browser = TT o esploratore, a seconda del contesto (web browser e esploratore impronte/simboli/librerie)
-# mc: - Nickname = Denominazione
-# mc: - Die = TT
-# mc: - Dia = diametro (per chiarezza)
+# mc: - browser = TT o esploratore, a seconda del contesto (web browser e esploratore impronte/simboli/librerie)
+# mc: - nickname = Denominazione
+# mc: - die = TT
+# mc: - dia = diametro (per chiarezza)
 # mc: - legacy = obsoleto (o datato o vecchio, a seconda del contesto)
 # mc: - assembly = assemblaggio
 # mc: - neckdown = restringimento (è la strozzatura che avviene quando si passa per esempio tra due via)
@@ -66,7 +66,7 @@
 # mc: - fillet = stond(o/amento)
 # mc: - edge = spigolo
 # mc: - edge cut = bordo scheda (sarebbe il bordo di ritaglio della scheda)
-# mc: - Layout editor (norma UNI 8187, ISO 7200):
+# mc: - layout editor (norma UNI 8187, ISO 7200):
 # mc:   - (page) layout = disposizione (pagina)
 # mc:   - title block = secondo le norme UNI, riquadro (delle) iscrizioni, gergalmente detto cartiglio.
 # mc:   - frame/sheer references = squadratura
@@ -84,9 +84,9 @@
 # mc: - flip = capovolgi
 # mc: - mirror-ed = (rende) speculare
 # mc: - bottom/top layer = strato inferiore/superiore
-# mc: - Loss Tangent = Tangente di perdita
-# mc: - Edge card connectors = Connettori a filo scheda
-# mc: - Stackup TT = impilazione, sequenza e spessori strati di CS multistrato, di Core e Prereg (strato pre-impregnato di resina)
+# mc: - loss tangent = tangente di perdita
+# mc: - edge card connectors = Connettori a filo scheda
+# mc: - stackup TT = impilazione, sequenza e spessori strati di CS multistrato, di Core e Prereg (strato pre-impregnato di resina)
 # mc: - fiducial = allineatore
 # mc: - castellated = dentellato
 # mc: - annotation = annotazione
@@ -94,7 +94,7 @@
 # mc: - power / power supply = potenza / alimentazione
 # mc: - backup = TT ("salvataggio aggiuntivo di sicurezza" sarebbe stato veramente troppo lungo)
 # mc: - leader = bollatura (thanks t.me/kicadit)
-# mc: - HatchBorder = tratteggio (thanks t.me/kicadit)
+# mc: - hatchborder = tratteggio (thanks t.me/kicadit)
 # mc: - constraints = vincoli
 # mc: - BOM - Distinta base
 # mc: - sweep = TT
@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-07 23:59+0100\n"
-"PO-Revision-Date: 2024-02-15 11:31+0100\n"
+"PO-Revision-Date: 2024-04-08 23:14+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -526,7 +526,7 @@ msgstr "Vista origine"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:141
 msgid "Redraw at the home position and zoom"
-msgstr ""
+msgstr "Ridisegna alla posizione origine e zooma"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:149
 msgid "Flip Board"
@@ -870,9 +870,8 @@ msgstr "Colore fine gradiente sfondo"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:118
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:200
-#, fuzzy
 msgid "Use board stackup colors"
-msgstr "Inserisci tabella stack-up scheda"
+msgstr "Usa colori stackup scheda"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:134
 #, c-format
@@ -906,7 +905,7 @@ msgstr "Doppio clic sinistro o clic centrale per cambiare colore"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:472
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "Deseleziona 'Usa colori dello stackup scheda' per permettere la modifica dei colori."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:522
 #: pcbnew/widgets/appearance_controls.cpp:2171
@@ -14944,7 +14943,7 @@ msgstr ""
 #: eeschema/eeschema_jobs_handler.cpp:896 pcbnew/pcbnew_jobs_handler.cpp:784
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
-msgstr ""
+msgstr "Il percorso di uscita deve essere specificato per convertire le librerie tradizionali e non KiCad\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:922
 msgid "Saving symbol library in updated format\n"
@@ -20388,9 +20387,8 @@ msgid "Add Symbol to Schematic"
 msgstr "Aggiungi simbolo allo schema"
 
 #: eeschema/tools/ee_actions.cpp:258
-#, fuzzy
 msgid "Add the current symbol to the schematic"
-msgstr "Aggiungi simbolo allo schema"
+msgstr "Aggiungi il simbolo corrente allo schema"
 
 #: eeschema/tools/ee_actions.cpp:264
 msgid "Show Pin Electrical Types"
@@ -21472,7 +21470,6 @@ msgid "Drags the selected item(s)"
 msgstr "Trascina gli elementi selezionati"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1759
-#, fuzzy
 msgid "Align Items to Grid"
 msgstr "Allinea elementi alla griglia"
 
@@ -21490,7 +21487,7 @@ msgstr "Nuova scheda analisi..."
 
 #: eeschema/tools/ee_actions.cpp:1387
 msgid "Create a new tab containing a simulation analysis"
-msgstr ""
+msgstr "Crea una nuova scheda con un'analisi di simulazione"
 
 #: eeschema/tools/ee_actions.cpp:1395
 msgid "Open Workbook..."
@@ -21498,25 +21495,23 @@ msgstr "Apri libretto di lavoro..."
 
 #: eeschema/tools/ee_actions.cpp:1396
 msgid "Open a saved set of analysis tabs and settings"
-msgstr ""
+msgstr "Apri un insieme salvato di impostazioni e schede di analisi"
 
 #: eeschema/tools/ee_actions.cpp:1404
 msgid "Save Workbook"
 msgstr "Salva libretto di lavoro"
 
 #: eeschema/tools/ee_actions.cpp:1405
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr "Rende lo strato corrente meno trasparente"
+msgstr "Salva l'insieme corrente di impostazioni e schede di analisi"
 
 #: eeschema/tools/ee_actions.cpp:1413
 msgid "Save Workbook As..."
 msgstr "Salva libretto di lavoro come..."
 
 #: eeschema/tools/ee_actions.cpp:1414
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
-msgstr "Salva il documento corrente in un'altra posizione"
+msgstr "Salva l'insieme corrente di impostazioni e schede di analisi in un'altra posizione"
 
 #: eeschema/tools/ee_actions.cpp:1420
 msgid "Export Current Plot as PNG..."
@@ -21554,7 +21549,7 @@ msgstr "Modifica scheda analisi..."
 
 #: eeschema/tools/ee_actions.cpp:1451
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
+msgstr "Modifica il comando SPICE della scheda di analisi corrente e l'impostazione del grafico"
 
 #: eeschema/tools/ee_actions.cpp:1458
 msgid "Run Simulation"
@@ -22002,9 +21997,8 @@ msgid "SVG File Name"
 msgstr "Nome file SVG"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "Modifica linee"
+msgstr "Modifica pin"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -23066,7 +23060,6 @@ msgid "Move Layer Up"
 msgstr "Sposta strato in alto"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
 msgstr "Sposta strato corrente in alto"
 
@@ -23075,7 +23068,6 @@ msgid "Move Layer Down"
 msgstr "Sposta strato in basso"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
 msgstr "Sposta strato corrente in basso"
 
@@ -25857,22 +25849,16 @@ msgid "Show Title Block in Preview Mode"
 msgstr "Mostra riquadro iscrizioni in modalità anteprima"
 
 #: pagelayout_editor/tools/pl_actions.cpp:120
-#, fuzzy
 msgid "Text placeholders will be replaced with preview data"
-msgstr ""
-"Mostra il riquadro iscrizioni nell'anteprima:\n"
-"i segnaposto dei testi verranno rimpiazzati dalle anteprime dei dati."
+msgstr "I segnaposto dei testi verranno rimpiazzati dalle anteprime dei dati"
 
 #: pagelayout_editor/tools/pl_actions.cpp:126
 msgid "Show Title Block in Edit Mode"
 msgstr "Mostra riquadro iscrizioni in modalità modifica"
 
 #: pagelayout_editor/tools/pl_actions.cpp:127
-#, fuzzy
 msgid "Text placeholders are shown as ${keyword} tokens"
-msgstr ""
-"Mostra il riquadro iscrizioni in modalità modifica:\n"
-"i segnaposto dei testi vengono visualizzati come elementi ${parolachiave}."
+msgstr "I segnaposto dei testi vengono visualizzati come elementi ${parolachiave}"
 
 #: pagelayout_editor/tools/pl_edit_tool.cpp:530
 msgid "Error writing objects to clipboard"
@@ -26222,7 +26208,7 @@ msgid "Linear resistance:"
 msgstr "Resistenza lineare:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, fuzzy, c-format
+#, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "Freq. per 100% profondità di pelle:"
 
@@ -31826,7 +31812,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -31837,16 +31823,11 @@ msgid ""
 "clearance value.\n"
 "A negative value means a smaller stencil aperture size than pad size."
 msgstr ""
-"Questo è il rapporto distanza locale applicato come percentuale tra la "
-"larghezza e l'altezza piazzola per questa impronta.\n"
-"Il valore 10 indica che la distanza orizzontale sarà pari al 10% della "
-"larghezza della piazzola, e la distanza verticale al 10% dell'altezza della "
-"piazzola.\n"
+"Questo è il rapporto distanza locale applicato come percentuale tra la larghezza e l'altezza piazzola per questa impronta.\n"
+"Il valore 10 indica che la distanza orizzontale sarà pari al 10% della larghezza della piazzola, e la distanza verticale al 10% dell'altezza della piazzola.\n"
 "Questo valore può essere superato da un valore locale della piazzola.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di "
-"distanza assoluto.\n"
-"Un valore negativo indica una dimensione di apertura dalla maschera "
-"(stencil) minore rispetto alla dimensione della piazzola."
+"La distanza finale sarà data dalla somma di questo valore e il valore di distanza assoluto.\n"
+"Un valore negativo indica una dimensione di apertura dalla maschera (stencil) minore rispetto alla dimensione della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:346
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:314
@@ -32010,7 +31991,7 @@ msgstr ""
 "scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32022,17 +32003,11 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local Clearance "
 "and Settings tab of Pad Properties."
 msgstr ""
-"Questo è il locale rapporto di distanza in percentuale della larghezza e "
-"altezza per questa impronta.\n"
-"Un valore di 10 indica che la distanza orizzontale sarà pari al 10% della "
-"larghezza della piazzola, e il valore di distanza verticale al "
-"10% dell'altezza della piazzola.\n"
-"La distanza finale sarà data dalla somma di questo valore e il valore di "
-"distanza assoluto.\n"
-"Un valore negativo indica un valore di apertura dalla maschera (stencil) "
-"minore rispetto alla dimensione della piazzola.\n"
-"Questo valore può essere scavalcato, piazzola per piazzola, dal valore di "
-"Distanza locale e Impostazioni nella scheda delle proprietà della piazzola."
+"Questo è il locale rapporto di distanza in percentuale alla larghezza e altezza per questa impronta.\n"
+"Un valore di 10 indica che la distanza orizzontale sarà pari al 10% della larghezza della piazzola, e il valore di distanza verticale al 10% dell'altezza della piazzola.\n"
+"La distanza finale sarà data dalla somma di questo valore e il valore di distanza assoluto.\n"
+"Un valore negativo indica un valore di apertura dalla maschera (stencil) minore rispetto alla dimensione della piazzola.\n"
+"Questo valore può essere scavalcato, piazzola per piazzola, dal valore di Distanza locale e Impostazioni nella scheda delle proprietà della piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:342
 msgid "Net Ties"
@@ -32589,7 +32564,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:380
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
 msgstr "Permetti lacrime estese su due segmenti di pista"
 
@@ -32598,13 +32572,10 @@ msgstr "Permetti lacrime estese su due segmenti di pista"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:196
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:386
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:571
-#, fuzzy
 msgid ""
 "Allows a teardrop to extend over the first 2 connected track segments if the "
 "first track segment is too short to accommodate the best length."
-msgstr ""
-"Permetti alle lacrime di estendersi su 2 piste se il primo segmento di pista "
-"è troppo corto"
+msgstr "Consenti a una lacrima di estendersi sui primi 2 segmenti di piste collegati se il primo segmento è troppo corto."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:163
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:637
@@ -32635,9 +32606,8 @@ msgstr ""
 "Piste simili in dimensione alla piazzola o via non necessitano di lacrime."
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:181
-#, fuzzy
 msgid "(as a percentage of pad/via minor dimension)"
-msgstr "(come percentuale dimensione piazzola/via)"
+msgstr "(come percentuale dimensione minore di piazzola/via)"
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:224
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:706
@@ -39996,7 +39966,7 @@ msgstr "Vincoli lunghezza: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2324
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "Impossibile regolare i segmenti all'interno di altri modelli di regolazione."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2357
 msgid "Tune"
@@ -41030,17 +41000,14 @@ msgid "Suppress Trailing Zeroes"
 msgstr "Sopprimi gli zeri finali"
 
 #: pcbnew/pcb_dimension.cpp:1508
-#, fuzzy
 msgid "Crossbar Height"
 msgstr "Altezza crossbar"
 
 #: pcbnew/pcb_dimension.cpp:1512
-#, fuzzy
 msgid "Extension Line Overshoot"
 msgstr "Overshoot linea estensione"
 
 #: pcbnew/pcb_dimension.cpp:1589
-#, fuzzy
 msgid "Leader Length"
 msgstr "Lunghezza leader"
 
@@ -41216,9 +41183,7 @@ msgstr "Lo stream pads6 ha una lunghezza inattesa per il subrecord 6: %d."
 msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
-msgstr ""
-"Lo strato Altium (%d) senza equivalente KiCad. È stato spostato sullo strato "
-"KiCad Eco1_User."
+msgstr "Strato Altium (%d) senza equivalente KiCad. È stato spostato sullo strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:443
 #, c-format
@@ -41299,9 +41264,7 @@ msgstr "Caricamento modelli 3D componenti..."
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
-msgstr ""
-"Dimensione sullo strato Altium (%d) senza equivalente KiCad. È stata "
-"spostata sullo strato KiCad Eco1_User."
+msgstr "Dimensione sullo strato Altium (%d) senza equivalente KiCad. È stata spostata sullo strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1555
 msgid "Loading dimension drawings..."
@@ -41354,35 +41317,35 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "Forma poligono ignorata di tipo %d (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2142
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Contorno tratteggiato trovato su strato Altium (%d) senza equivalente KiCad. "
-"È stato spostato nello strato KiCad Eco1_User."
+"Caricamento della libreria '%s':\n"
+"L'impronta %s contiene un contorno tratteggiato su uno strato Altium (%d) senza equivalenza KiCad. È stato spostato nello strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2151
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
-msgstr ""
-"Contorno tratteggiato trovato su strato Altium (%d) senza equivalente KiCad. "
-"È stato spostato nello strato KiCad Eco1_User."
+msgstr "L'impronta %s contiene un contorno tratteggiato sullo stratp Altium (%d) senza equivalenza KiCad. È stato spostato nello strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2189
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Forma poligono ignorata di tipo %d (non ancora supportata)."
+msgstr ""
+"Errore durante il caricamento della libreria '%s':\n"
+"L'impronta %s contiene una forma poligonale di tipo %d (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2197
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "Forma poligono ignorata di tipo %d (non ancora supportata)."
+msgstr "L'impronta %s contiene una forma poligonale di tipo %d (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2352
 msgid "Loading zone fills..."
@@ -41397,13 +41360,13 @@ msgid "Loading pads..."
 msgstr "Caricamento piazzole..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2755
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"Impronta %s piazzola %s non è marcata come multistrato, ma è una piazzola "
-"passante."
+"Errore durante il caricamento della libreria '%s':\n"
+"Impronta %s piazzola %s non è contrassegnata come multistrato, ma è una piazzola TH."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2763
 #, c-format
@@ -41413,12 +41376,13 @@ msgstr ""
 "passante."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2787
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
-"La piazzola %s dell'impronta %s ha un foro quadrato (non ancora supportato)."
+"Caricamento della libreria '%s':\n"
+"L'impronta %s piazzola %s ha un foro quadrato (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2795
 #, c-format
@@ -41427,14 +41391,14 @@ msgstr ""
 "La piazzola %s dell'impronta %s ha un foro quadrato (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2825
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
-"La piazzola %s dell'impronta %s ha una rotazione del foro di %f gradi. KiCad "
-"supporta solo rotazioni di 90 gradi."
+"Caricamento della libreria '%s':\n"
+"Impronta %s piazzola %s ha una rotazione del foro di %f gradi. KiCad supporta solo rotazioni di 90 gradi."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2835
 #, c-format
@@ -41446,11 +41410,13 @@ msgstr ""
 "supporta solo rotazioni di 90 gradi."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2850
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "Impronta %s piazzola %s usa un foro di tipo sconosciuto %d."
+msgstr ""
+"Errore nel caricamento libreria '%s':\n"
+"Impronta %s piazzola %s usa un foro di tipo sconosciuto %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2859
 #, c-format
@@ -41458,27 +41424,29 @@ msgid "Footprint %s pad %s uses a hole of unknown kind %d."
 msgstr "Impronta %s piazzola %s usa un foro di tipo sconosciuto %d."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2879
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
-"L'impronta %s piazzola %s usa una pad stack complessa (non ancora "
-"supportata)."
+"Errore durante il caricamento della libreria '%s':\n"
+"L'impronta %s piazzola %s usa una pad stack complessa (non ancora supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2887
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s pad %s uses a complex pad stack (not yet supported)."
 msgstr ""
 "L'impronta %s piazzola %s usa una pad stack complessa (non ancora "
 "supportata)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2928
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "Impronta %s piazzola %s usa una forma piazzola sconosciuta."
+msgstr ""
+"Errore durante il caricamento della libreria '%s':\n"
+"Impronta %s piazzola %s usa una forma piazzola sconosciuta."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2936
 #, c-format
@@ -41495,23 +41463,21 @@ msgstr ""
 "stata spostata sullo strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3018
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Piazzola non rame %s sullo strato Altium (%d) senza equivalente KiCad. È "
-"stata spostata sullo strato KiCad Eco1_User."
+"Caricando la libreria '%s':\n"
+"Impronta %s piazzola non rame %s sullo strato Altium (%d) senza equivalente KiCad. È stata spostata sullo strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3028
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
-msgstr ""
-"Piazzola non rame %s sullo strato Altium (%d) senza equivalente KiCad. È "
-"stata spostata sullo strato KiCad Eco1_User."
+msgstr "Impronta %s piazzola non rame %s sullo strato Altium (%d) senza equivalente KiCad. È stata spostata sullo strato KiCad Eco1_User."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3051
 #, c-format
@@ -41564,18 +41530,18 @@ msgstr ""
 "Codice a barre sullo strato Altium %d ignorato (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3540
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains barcode on Altium layer %d (not yet supported)."
 msgstr ""
-"Codice a barre sullo strato Altium %d ignorato (non ancora supportato)."
+"Errore durante il caricamento della libreria '%s':\n"
+"L'impronta %s contiene un codice a barre sullo strato Altium %d (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3548
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains barcode on Altium layer %d (not yet supported)."
-msgstr ""
-"Codice a barre sullo strato Altium %d ignorato (non ancora supportato)."
+msgstr "L'impronta %s contiene un codice a barre sullo strato Altium %d (non ancora supportato)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3658
 msgid "Loading rectangles..."
@@ -41590,14 +41556,14 @@ msgid "Altium Circuit Studio PCB files"
 msgstr "File C.S. Altium Circuit Studio"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:269
-#, fuzzy, c-format
+#, c-format
 msgid "No footprints in library '%s'"
-msgstr "Nessuna impronta nella libreria"
+msgstr "Nessuna impronta nella libreria '%s'"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "Impronta '%s' non trovata nella libreria '%s'."
+msgstr "Impronta '%s' non trovata in '%s'."
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:42
 msgid "Altium Designer PCB files"
@@ -46133,76 +46099,68 @@ msgid "Align to Top"
 msgstr "Allinea in alto"
 
 #: pcbnew/tools/pcb_actions.cpp:1881
-#, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al bordo superiore"
+msgstr "Allinea gli elementi selezionati al bordo superiore dell'elemento sotto il puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1887 pcbnew/tools/placement_tool.cpp:275
 msgid "Align to Bottom"
 msgstr "Allinea in basso"
 
 #: pcbnew/tools/pcb_actions.cpp:1888
-#, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al bordo inferiore"
+msgstr "Allinea gli elementi selezionati al bordo inferiore dell'elemento sotto il puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1894 pcbnew/tools/placement_tool.cpp:330
 msgid "Align to Left"
 msgstr "Allinea a sinistra"
 
 #: pcbnew/tools/pcb_actions.cpp:1895
-#, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al bordo sinistro"
+msgstr "Allinea gli elementi selezionati al bordo sinistro dell'elemento sotto il puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1901 pcbnew/tools/placement_tool.cpp:385
 msgid "Align to Right"
 msgstr "Allinea a destra"
 
 #: pcbnew/tools/pcb_actions.cpp:1902
-#, fuzzy
 msgid "Aligns selected items to the right edge of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al bordo destro"
+msgstr "Allinea gli elementi selezionati al bordo destro dell'elemento sotto il puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1908
 msgid "Align to Vertical Center"
 msgstr "Allinea al centro verticale"
 
 #: pcbnew/tools/pcb_actions.cpp:1909
-#, fuzzy
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al centro verticale"
+msgstr "Allinea gli elementi selezionati al centro verticale dell'elemento sotto il puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1915
 msgid "Align to Horizontal Center"
 msgstr "Allinea al centro orizzontale"
 
 #: pcbnew/tools/pcb_actions.cpp:1916
-#, fuzzy
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
-msgstr "Allinea gli elementi selezionati al centro orizzontale"
+msgstr "Allinea gli elementi selezionati al centro orizzontale dell'elemento sotto il puntatore"
 
 #: pcbnew/tools/pcb_actions.cpp:1922 pcbnew/tools/placement_tool.cpp:535
 msgid "Distribute Horizontally"
 msgstr "Distribuisci orizzontalmente"
 
 #: pcbnew/tools/pcb_actions.cpp:1923
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most item"
-msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
+msgstr "Distribuisce gli elementi selezionati tra l'elemento più a sinistra e quello più a destra"
 
 #: pcbnew/tools/pcb_actions.cpp:1929 pcbnew/tools/placement_tool.cpp:660
 msgid "Distribute Vertically"
 msgstr "Distribuisci verticalmente"
 
 #: pcbnew/tools/pcb_actions.cpp:1930
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most item"
-msgstr "Distribuisce gli elementi selezionati lungo l'asse orizzontale"
+msgstr "Distribuisce gli elementi selezionati tra l'elemento più in alto e quello più in basso"
 
 #: pcbnew/tools/pcb_actions.cpp:1945
 msgid "Create a corner"
@@ -47835,137 +47793,3 @@ msgstr "Simbolo schema di KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Foglo di disegno KiCad"
-
-#~ msgid "KiCad Main Window"
-#~ msgstr "Finestra principale KiCad"
-
-#~ msgid "Move board Left"
-#~ msgstr "Sposta scheda a sinistra"
-
-#~ msgid "Move board Right"
-#~ msgstr "Sposta scheda a destra"
-
-#~ msgid "Move board Up"
-#~ msgstr "Sposta scheda in alto"
-
-#~ msgid "Move board Down"
-#~ msgstr "Sposta scheda in basso"
-
-#~ msgid "Home view"
-#~ msgstr "Vista origine"
-
-#~ msgid "Edit the SPICE command and plot setup for the current analysis tab"
-#~ msgstr ""
-#~ "Modifica il comando SPICE e le impostazioni dei grafici per la scheda "
-#~ "analisi corrente"
-
-#~ msgid "Best length:"
-#~ msgstr "Lunghezza migliore:"
-
-#~ msgid "Maximum length:"
-#~ msgstr "Lunghezza massima:"
-
-#~ msgid "Best height:"
-#~ msgstr "Altezza migliore:"
-
-#~ msgid "Create array"
-#~ msgstr "Crea schiera"
-
-#~ msgid "Edit footprint properties"
-#~ msgstr "Modifica proprietà impronta"
-
-#~ msgid "Switch to Inner layer 1"
-#~ msgstr "Passa allo strato interno 1"
-
-#~ msgid "Switch to Inner layer 2"
-#~ msgstr "Passa allo strato interno 2"
-
-#~ msgid "Switch to Inner layer 3"
-#~ msgstr "Passa allo strato interno 3"
-
-#~ msgid "Switch to Inner layer 4"
-#~ msgstr "Passa allo strato interno 4"
-
-#~ msgid "Switch to Inner layer 5"
-#~ msgstr "Passa allo strato interno 5"
-
-#~ msgid "Switch to Inner layer 6"
-#~ msgstr "Passa allo strato interno 6"
-
-#~ msgid "Switch to Inner layer 7"
-#~ msgstr "Passa allo strato interno 7"
-
-#~ msgid "Switch to Inner layer 8"
-#~ msgstr "Passa allo strato interno 8"
-
-#~ msgid "Switch to Inner layer 9"
-#~ msgstr "Passa allo strato interno 9"
-
-#~ msgid "Switch to Inner layer 10"
-#~ msgstr "Passa allo strato interno 10"
-
-#~ msgid "Switch to Inner layer 11"
-#~ msgstr "Passa allo strato interno 11"
-
-#~ msgid "Switch to Inner layer 12"
-#~ msgstr "Passa allo strato interno 12"
-
-#~ msgid "Switch to Inner layer 13"
-#~ msgstr "Passa allo strato interno 13"
-
-#~ msgid "Switch to Inner layer 14"
-#~ msgstr "Passa allo strato interno 14"
-
-#~ msgid "Switch to Inner layer 15"
-#~ msgstr "Passa allo strato interno 15"
-
-#~ msgid "Switch to Inner layer 16"
-#~ msgstr "Passa allo strato interno 16"
-
-#~ msgid "Switch to Inner layer 17"
-#~ msgstr "Passa allo strato interno 17"
-
-#~ msgid "Switch to Inner layer 18"
-#~ msgstr "Passa allo strato interno 18"
-
-#~ msgid "Switch to Inner layer 19"
-#~ msgstr "Passa allo strato interno 19"
-
-#~ msgid "Switch to Inner layer 20"
-#~ msgstr "Passa allo strato interno 20"
-
-#~ msgid "Switch to Inner layer 21"
-#~ msgstr "Passa allo strato interno 21"
-
-#~ msgid "Switch to Inner layer 22"
-#~ msgstr "Passa allo strato interno 22"
-
-#~ msgid "Switch to Inner layer 23"
-#~ msgstr "Passa allo strato interno 23"
-
-#~ msgid "Switch to Inner layer 24"
-#~ msgstr "Passa allo strato interno 24"
-
-#~ msgid "Switch to Inner layer 25"
-#~ msgstr "Passa allo strato interno 25"
-
-#~ msgid "Switch to Inner layer 26"
-#~ msgstr "Passa allo strato interno 26"
-
-#~ msgid "Switch to Inner layer 27"
-#~ msgstr "Passa allo strato interno 27"
-
-#~ msgid "Switch to Inner layer 28"
-#~ msgstr "Passa allo strato interno 28"
-
-#~ msgid "Switch to Inner layer 29"
-#~ msgstr "Passa allo strato interno 29"
-
-#~ msgid "Switch to Inner layer 30"
-#~ msgstr "Passa allo strato interno 30"
-
-#~ msgid "Switch to Copper (B.Cu) layer"
-#~ msgstr "Passa allo strato rame (B.Cu)"
-
-#~ msgid "Distributes selected items along the vertical axis"
-#~ msgstr "Distribuisce gli elementi selezionati lungo l'asse verticale"
