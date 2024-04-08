@@ -1157,11 +1157,11 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( GetShownText( sheet, true ).IsEmpty() || aBackground )
         return;
 
-    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
-    COLOR4D          color = settings->GetLayerColor( GetLayer() );
-    int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    COLOR4D              color = renderSettings->GetLayerColor( GetLayer() );
+    int                  penWidth = GetEffectiveTextPenWidth( renderSettings->GetDefaultPenWidth() );
 
-    COLOR4D bg = settings->GetBackgroundColor();;
+    COLOR4D bg = renderSettings->GetBackgroundColor();;
 
     if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
         bg = COLOR4D::WHITE;
@@ -1169,12 +1169,12 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
         color = GetTextColor();
 
-    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
+    penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );
 
     // clamp the pen width to be sure the text is readable
     penWidth = std::min( penWidth, std::min( GetTextSize().x, GetTextSize().y ) / 4 );
 
-    if( !IsVisible() )
+    if( !IsVisible() && !renderSettings->m_ShowHiddenFields )
         return;
 
     // Calculate the text orientation, according to the symbol orientation/mirror
@@ -1219,13 +1219,13 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
     {
         SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( m_parent );
-        textpos += label->GetSchematicTextOffset( settings );
+        textpos += label->GetSchematicTextOffset( renderSettings );
     }
 
     KIFONT::FONT* font = GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
+        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_StrokeWidth = penWidth;
@@ -1250,7 +1250,7 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
         for( const std::pair<wxString, wxString>& page : pages )
             pageHrefs.push_back( wxT( "#" ) + page.first );
 
-        bbox.Offset( label->GetSchematicTextOffset( settings ) );
+        bbox.Offset( label->GetSchematicTextOffset( renderSettings ) );
 
         aPlotter->HyperlinkMenu( bbox, pageHrefs );
     }

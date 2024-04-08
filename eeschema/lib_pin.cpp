@@ -1162,14 +1162,17 @@ void LIB_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 void LIB_PIN::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                     int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
-    if( !IsVisible() || aBackground )
+    if( aBackground )
         return;
 
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
-    const SYMBOL*        part = GetParentSymbol();
-    PIN_ORIENTATION      orient = PinDrawOrient( renderSettings->m_Transform );
 
-    VECTOR2I pos = renderSettings->TransformCoordinate( m_position ) + aOffset;
+    if( !IsVisible() && !renderSettings->m_ShowHiddenPins )
+        return;
+
+    const SYMBOL*   part = GetParentSymbol();
+    PIN_ORIENTATION orient = PinDrawOrient( renderSettings->m_Transform );
+    VECTOR2I        pos = renderSettings->TransformCoordinate( m_position ) + aOffset;
 
     PlotPinType( aPlotter, pos, orient, aDimmed );
     PlotPinTexts( aPlotter, pos, orient, part->GetPinNameOffset(), part->GetShowPinNumbers(),

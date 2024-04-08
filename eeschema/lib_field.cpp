@@ -357,6 +357,9 @@ void LIB_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
 
+    if( !IsVisible() && !renderSettings->m_ShowHiddenFields )
+        return;
+
     // Calculate the text orientation, according to the symbol orientation/mirror.
     EDA_ANGLE orient = GetTextAngle();
 
