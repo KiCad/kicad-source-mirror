@@ -94,6 +94,8 @@ void EESCHEMA_JOBS_HANDLER::InitRenderSettings( SCH_RENDER_SETTINGS* aRenderSett
 {
     COLOR_SETTINGS* cs = Pgm().GetSettingsManager().GetColorSettings( aTheme );
     aRenderSettings->LoadColors( cs );
+    aRenderSettings->m_ShowHiddenPins = false;
+    aRenderSettings->m_ShowHiddenFields = false;
 
     aRenderSettings->SetDefaultPenWidth( aSch->Settings().m_DefaultLineWidth );
     aRenderSettings->m_LabelSizeRatio = aSch->Settings().m_LabelSizeRatio;
