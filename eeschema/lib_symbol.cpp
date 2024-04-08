@@ -169,23 +169,17 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
     if( &aSymbol == this )
         return aSymbol;
 
-    SCH_ITEM* newItem;
+    SYMBOL::operator=( aSymbol );
 
-    m_library        = aSymbol.m_library;
-    m_name           = aSymbol.m_name;
-    m_fpFilters      = wxArrayString( aSymbol.m_fpFilters );
-    m_unitCount      = aSymbol.m_unitCount;
-    m_unitsLocked    = aSymbol.m_unitsLocked;
-    m_pinNameOffset  = aSymbol.m_pinNameOffset;
-    m_showPinNumbers = aSymbol.m_showPinNumbers;
-    m_showPinNames   = aSymbol.m_showPinNames;
-    m_excludedFromSim = aSymbol.m_excludedFromSim;
-    m_excludedFromBOM = aSymbol.m_excludedFromBOM;
-    m_excludedFromBoard = aSymbol.m_excludedFromBoard;
-    m_lastModDate    = aSymbol.m_lastModDate;
-    m_options        = aSymbol.m_options;
-    m_libId          = aSymbol.m_libId;
-    m_keyWords       = aSymbol.m_keyWords;
+    m_library     = aSymbol.m_library;
+    m_name        = aSymbol.m_name;
+    m_fpFilters   = wxArrayString( aSymbol.m_fpFilters );
+    m_unitCount   = aSymbol.m_unitCount;
+    m_unitsLocked = aSymbol.m_unitsLocked;
+    m_lastModDate = aSymbol.m_lastModDate;
+    m_options     = aSymbol.m_options;
+    m_libId       = aSymbol.m_libId;
+    m_keyWords    = aSymbol.m_keyWords;
 
     m_unitDisplayNames.clear();
     aSymbol.CopyUnitDisplayNames( m_unitDisplayNames );
@@ -197,7 +191,7 @@ const LIB_SYMBOL& LIB_SYMBOL::operator=( const LIB_SYMBOL& aSymbol )
         if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
             continue;
 
-        newItem = (SCH_ITEM*) oldItem.Clone();
+        SCH_ITEM* newItem = (SCH_ITEM*) oldItem.Clone();
         newItem->SetParent( this );
         m_drawings.push_back( newItem );
     }

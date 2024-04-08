@@ -2354,7 +2354,7 @@ bool SCH_SYMBOL::operator!=( const SCH_SYMBOL& aSymbol ) const
 }
 
 
-SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
+SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_SYMBOL& aItem )
 {
     wxCHECK_MSG( Type() == aItem.Type(), *this,
                  wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +
@@ -2362,7 +2362,7 @@ SCH_SYMBOL& SCH_SYMBOL::operator=( const SCH_ITEM& aItem )
 
     if( &aItem != this )
     {
-        SCH_ITEM::operator=( aItem );
+        SYMBOL::operator=( aItem );
 
         SCH_SYMBOL* c = (SCH_SYMBOL*) &aItem;
 
@@ -2791,19 +2791,6 @@ static struct SCH_SYMBOL_DESC
                                                              &SCH_SYMBOL::SetShowPinNames,
                                                              &SCH_SYMBOL::GetShowPinNames ) )
                 .SetAvailableFunc( hasLibPart );
-
-        auto isMultiUnitSymbol =
-                []( INSPECTABLE* aItem ) -> bool
-                {
-                    if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( aItem ) )
-                        return symbol->GetUnitCount() > 1;
-
-                    return false;
-                };
-
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, int>( _HKI( "Unit" ),
-                    &SCH_SYMBOL::SetUnit, &SCH_SYMBOL::GetUnit ) )
-                .SetAvailableFunc( isMultiUnitSymbol );
 
         const wxString groupFields = _HKI( "Fields" );
 

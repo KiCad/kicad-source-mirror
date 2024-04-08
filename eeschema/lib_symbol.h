@@ -335,9 +335,6 @@ public:
         return GetValueField().GetText();
     }
 
-    int GetUnit() const override { return 0; }
-    int GetBodyStyle() const override { return 0; }
-
     void RunOnChildren( const std::function<void( SCH_ITEM* )>& aFunction ) override;
 
     /**

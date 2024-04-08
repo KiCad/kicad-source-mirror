@@ -252,9 +252,6 @@ public:
      */
     wxString GetDatasheet() const;
 
-    int GetUnit() const override { return m_unit; }
-    void SetUnit( int aUnit ) { m_unit = aUnit; }
-
     /**
      * Updates the cache of SCH_PIN objects for each pin
      */
@@ -274,8 +271,7 @@ public:
      */
     wxString GetUnitDisplayName( int aUnit );
 
-    int  GetBodyStyle() const override { return m_bodyStyle; }
-    void SetBodyStyle( int aBodyStyle );
+    void SetBodyStyle( int aBodyStyle ) override;
 
     bool HasAlternateBodyStyle() const override;
 
@@ -772,7 +768,7 @@ public:
     bool operator==( const SCH_SYMBOL& aSymbol) const;
     bool operator!=( const SCH_SYMBOL& aSymbol) const;
 
-    SCH_SYMBOL& operator=( const SCH_ITEM& aItem );
+    SCH_SYMBOL& operator=( const SCH_SYMBOL& aItem );
 
     bool IsReplaceable() const override { return true; }
 

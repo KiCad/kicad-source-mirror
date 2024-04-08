@@ -231,10 +231,10 @@ public:
     static wxString GetUnitDescription( int aUnit );
     static wxString GetBodyStyleDescription( int aBodyStyle );
 
-    void SetUnit( int aUnit ) { m_unit = aUnit; }
+    virtual void SetUnit( int aUnit ) { m_unit = aUnit; }
     int GetUnit() const { return m_unit; }
 
-    void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
+    virtual void SetBodyStyle( int aBodyStyle ) { m_bodyStyle = aBodyStyle; }
     int  GetBodyStyle() const { return m_bodyStyle; }
 
     void SetPrivate( bool aPrivate ) { m_private = aPrivate; }

@@ -65,6 +65,21 @@ public:
             m_excludedFromBoard( base.m_excludedFromBoard )
     { };
 
+    SYMBOL& operator=( const SYMBOL& aItem )
+    {
+        SCH_ITEM::operator=( aItem );
+
+        m_pinNameOffset    = aItem.m_pinNameOffset;
+        m_showPinNames      = aItem.m_showPinNames;
+        m_showPinNumbers    = aItem.m_showPinNumbers;
+
+        m_excludedFromSim   = aItem.m_excludedFromSim;
+        m_excludedFromBOM   = aItem.m_excludedFromBOM;
+        m_excludedFromBoard = aItem.m_excludedFromBoard;
+
+        return *this;
+    };
+
     virtual ~SYMBOL() { };
 
     virtual const LIB_ID& GetLibId() const = 0;
@@ -96,9 +111,6 @@ public:
 
     virtual const wxString GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
                                      bool aAllowExtraText ) const = 0;
-
-    virtual int GetUnit() const = 0;
-    virtual int GetBodyStyle() const = 0;
 
     /**
      * Set the offset in mils of the pin name text from the pin symbol.
