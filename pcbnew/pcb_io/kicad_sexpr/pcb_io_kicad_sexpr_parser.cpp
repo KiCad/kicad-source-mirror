@@ -3224,6 +3224,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
     FOOTPRINT* parentFP = dynamic_cast<FOOTPRINT*>( aText->GetParent() );
     bool hasAngle       = false;    // Old files do not have a angle specified.
                                     // in this case it is 0 expected to be 0
+    bool hasPos         = false;
 
     // By default, texts in footprints have a locked rotation (i.e. rot = -90 ... 90 deg)
     if( parentFP )
@@ -3240,6 +3241,7 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
         {
             VECTOR2I pt;
 
+            hasPos = true;
             pt.x = parseBoardUnits( "X coordinate" );
             pt.y = parseBoardUnits( "Y coordinate" );
             aText->SetTextPos( pt );
@@ -3346,7 +3348,12 @@ void PCB_IO_KICAD_SEXPR_PARSER::parsePCB_TEXT_effects( PCB_TEXT* aText )
 
         // Move and rotate the text to its board coordinates
         aText->Rotate( { 0, 0 }, parentFP->GetOrientation() );
-        aText->Move( parentFP->GetPosition() );
+
+        // Only move offset from parent position if we read a position from the file.
+        // These positions are relative to the parent footprint. If we don't have a position
+        // then the text defaults to the parent position and moving again will double it.
+        if (hasPos)
+            aText->Move( parentFP->GetPosition() );
     }
 }
 

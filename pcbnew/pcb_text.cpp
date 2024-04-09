@@ -55,8 +55,8 @@ PCB_TEXT::PCB_TEXT( BOARD_ITEM* parent, KICAD_T idtype ) :
 }
 
 
-PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent ) :
-        BOARD_ITEM( aParent, PCB_TEXT_T ),
+PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent, KICAD_T idtype) :
+        BOARD_ITEM( aParent, idtype ),
         EDA_TEXT( pcbIUScale )
 {
     SetKeepUpright( true );
