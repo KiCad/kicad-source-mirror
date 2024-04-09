@@ -187,10 +187,6 @@ void DIALOG_FIELD_PROPERTIES::init()
     m_TextValueSelectButton->SetBitmap( KiBitmapBundle( BITMAPS::small_library ) );
     m_TextValueSelectButton->Show( m_fieldId == FOOTPRINT_FIELD );
 
-    if( m_fieldId == FOOTPRINT_FIELD )
-    {
-    }
-
     m_TextCtrl->Enable( true );
 
     GetSizer()->SetSizeHints( this );
@@ -370,8 +366,8 @@ bool DIALOG_FIELD_PROPERTIES::TransferDataFromWindow()
         m_text = EnsureFileExtension( m_text, FILEEXT::KiCadSchematicFileExtension );
     }
 
-    m_position = VECTOR2I( m_posX.GetValue(), m_posY.GetValue() );
-    m_size = m_textSize.GetValue();
+    m_position = VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() );
+    m_size = m_textSize.GetIntValue();
 
     if( m_fontCtrl->HaveFontSelection() )
         m_font = m_fontCtrl->GetFontSelection( m_bold->IsChecked(), m_italic->IsChecked() );
