@@ -24,6 +24,7 @@
 #include <vector>
 #include <string>
 #include <wx/string.h>
+#include <widgets/report_severity.h>
 
 class REPORTER;
 class PROGRESS_REPORTER;
@@ -186,6 +187,10 @@ public:
      *   #SCH_IO, which has been avoided to date.
      */
     virtual void GetLibraryOptions( STRING_UTF8_MAP* aListToAppendTo ) const;
+
+    virtual void Report( const wxString& aText, SEVERITY aSeverity = RPT_SEVERITY_UNDEFINED );
+
+    virtual void AdvanceProgressPhase();
 
 protected:
     // Delete the zero-argument base constructor to force proper construction

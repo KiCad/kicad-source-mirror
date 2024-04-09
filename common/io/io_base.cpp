@@ -21,7 +21,9 @@
 #include <unordered_set>
 
 #include <io/io_base.h>
+#include <progress_reporter.h>
 #include <ki_exception.h>
+#include <reporter.h>
 #include <wildcards_and_files_ext.h>
 
 #include <wx/filename.h>
@@ -114,4 +116,25 @@ bool IO_BASE::CanReadLibrary( const wxString& aFileName ) const
     }
 
     return false;
+}
+
+
+void IO_BASE::Report( const wxString& aText, SEVERITY aSeverity )
+{
+    if( !m_reporter )
+        return;
+
+    m_reporter->Report( aText, aSeverity );
+}
+
+
+void IO_BASE::AdvanceProgressPhase()
+{
+    if( !m_progressReporter )
+        return;
+
+    if( !m_progressReporter->KeepRefreshing() )
+        THROW_IO_ERROR( _( "Loading file canceled by user." ) );
+
+    m_progressReporter->AdvancePhase();
 }

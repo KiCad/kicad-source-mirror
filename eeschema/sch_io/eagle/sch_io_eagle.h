@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2021-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2021-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -31,7 +31,6 @@
 #include <io/eagle/eagle_parser.h>
 #include <geometry/seg.h>
 
-#include <boost/ptr_container/ptr_map.hpp>
 
 class EDA_TEXT;
 class KIWAY;
@@ -58,19 +57,24 @@ class wxXmlNode;
 struct EAGLE_LIBRARY
 {
     wxString name;
-    boost::ptr_map<wxString, LIB_SYMBOL> KiCadSymbols;
-    std::unordered_map<wxString, wxXmlNode*> SymbolNodes;
-    std::unordered_map<wxString, int> GateUnit;
+    std::map<wxString, std::unique_ptr<LIB_SYMBOL>> KiCadSymbols;
+
+    /**
+     * Map Eagle gate unit number (which are strings) to KiCad library symbol unit number.
+     *
+     * The look up name is #EDEVICE name + #EDEVICE name + #EGATE name separated by underscores.
+     * Hashing would be faster but it would be nearly impossible to debug so use string look up
+     * for now.
+     */
+    std::unordered_map<wxString, int> GateToUnitMap;
     std::unordered_map<wxString, wxString> package;
 };
-
-typedef boost::ptr_map<wxString, EPART> EPART_LIST;
 
 
 /**
  * A #SCH_IO derivation for loading 6.x+ Eagle schematic files.
  *
- * As with all SCH_IO there is no UI dependencies i.e. windowing calls allowed.
+ * As with all #SCH_IO objects there are no UI dependencies i.e. windowing calls allowed.
  */
 class SCH_IO_EAGLE : public SCH_IO
 {
@@ -111,20 +115,22 @@ public:
     bool IsLibraryWritable( const wxString& aLibraryPath ) override { return false; }
 
 private:
-    void checkpoint();
-
     bool          checkHeader( const wxString& aFileName ) const;
     wxXmlDocument loadXmlDocument( const wxString& aFileName );
     long long     getLibraryTimestamp( const wxString& aLibraryPath ) const;
     void          ensureLoadedLibrary( const wxString& aLibraryPath );
 
-    void loadDrawing( wxXmlNode* aDrawingNode );
-    void loadLayerDefs( wxXmlNode* aLayers );
-    void loadSchematic( wxXmlNode* aSchematicNode );
-    void loadSheet( wxXmlNode* aSheetNode, int sheetcount );
-    void loadInstance( wxXmlNode* aInstanceNode );
-    EAGLE_LIBRARY* loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY* aEagleLib );
-    void countNets( wxXmlNode* aSchematicNode );
+    void loadDrawing( const std::unique_ptr<EDRAWING>& aDrawing );
+    void loadLayerDefs( const std::vector<std::unique_ptr<ELAYER>>& aLayers );
+    void loadSchematic( const ESCHEMATIC& aSchematic );
+    void loadSheet( const std::unique_ptr<ESHEET>& aSheet );
+    void loadInstance( const std::unique_ptr<EINSTANCE>& aInstance,
+                       const std::map<wxString, std::unique_ptr<EPART>>& aParts );
+
+    SCH_SHEET* loadModuleInstance( const std::unique_ptr<EMODULEINST>& aModuleInstance );
+
+    EAGLE_LIBRARY* loadLibrary( const ELIBRARY* aLibrary, EAGLE_LIBRARY* aEagleLib );
+    void countNets( const ESCHEMATIC& aSchematic );
 
     /// Move any labels on the wire to the new end point of the wire.
     void moveLabels( SCH_LINE* aWire, const VECTOR2I& aNewEndPoint );
@@ -139,29 +145,41 @@ private:
     std::pair<VECTOR2I, const SEG*> findNearestLinePoint( const VECTOR2I&         aPoint,
                                                           const std::vector<SEG>& aLines ) const;
 
-    void          loadSegments( wxXmlNode* aSegmentsNode, const wxString& aNetName,
+    void          loadSegments( const std::vector<std::unique_ptr<ESEGMENT>>& aSegments,
+                                const wxString& aNetName,
                                 const wxString& aNetClass );
-    SCH_SHAPE*    loadPolyLine( wxXmlNode* aPolygonNode );
-    SCH_ITEM*     loadWire( wxXmlNode* aWireNode, SEG& endpoints );
-    SCH_SHAPE*    loadCircle( wxXmlNode* aCircleNode );
-    SCH_SHAPE*    loadRectangle( wxXmlNode* aRectNode );
-    SCH_TEXT*     loadLabel( wxXmlNode* aLabelNode, const wxString& aNetName );
-    SCH_JUNCTION* loadJunction( wxXmlNode* aJunction );
-    SCH_TEXT*     loadPlainText( wxXmlNode* aSchText );
-    void          loadFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aItems );
+    SCH_SHAPE*    loadPolyLine( const std::unique_ptr<EPOLYGON>& aPolygon );
+    SCH_ITEM*     loadWire( const std::unique_ptr<EWIRE>& aWire, SEG& endpoints );
+    SCH_SHAPE*    loadCircle( const std::unique_ptr<ECIRCLE>& aCircle );
+    SCH_SHAPE*    loadRectangle( const std::unique_ptr<ERECT>& aRect );
+    SCH_TEXT*     loadLabel( const std::unique_ptr<ELABEL>& aLabel, const wxString& aNetName );
+    SCH_JUNCTION* loadJunction( const std::unique_ptr<EJUNCTION>&  aJunction );
+    SCH_TEXT*     loadPlainText( const std::unique_ptr<ETEXT>& aSchText );
+    void          loadFrame( const std::unique_ptr<EFRAME>& aFrame,
+                             std::vector<SCH_ITEM*>& aItems );
 
-    bool          loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                              EDEVICE* aDevice, int aGateNumber, const wxString& aGateName );
-    SCH_SHAPE*    loadSymbolCircle( wxXmlNode* aCircleNode, int aGateNumber );
-    SCH_SHAPE*    loadSymbolRectangle( wxXmlNode* aRectNode, int aGateNumber );
-    SCH_SHAPE*    loadSymbolPolyLine( wxXmlNode* aPolygonNode, int aGateNumber );
-    SCH_ITEM*     loadSymbolWire( wxXmlNode* aWireNode, int aGateNumber );
-    SCH_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*, EPIN* epin,
+    bool          loadSymbol( const std::unique_ptr<ESYMBOL>& aEsymbol,
+                              std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                              const std::unique_ptr<EDEVICE>& aDevice, int aGateNumber,
+                              const wxString& aGateName );
+    SCH_SHAPE*    loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                    const std::unique_ptr<ECIRCLE>& aCircle,
+                                    int aGateNumber );
+    SCH_SHAPE*    loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                       const std::unique_ptr<ERECT>& aRectangle,
+                                       int aGateNumber );
+    SCH_SHAPE*    loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                      const std::unique_ptr<EPOLYGON>& aPolygon, int aGateNumber );
+    SCH_ITEM*     loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                  const std::unique_ptr<EWIRE>& aWire,
+                                  int aGateNumber );
+    SCH_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, const std::unique_ptr<EPIN>& aPin,
                            int aGateNumber );
-    SCH_TEXT*     loadSymbolText( wxXmlNode* aLibText, int aGateNumber );
-    void          loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aLines );
-
-    void          loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
+    SCH_TEXT*     loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+                                  const std::unique_ptr<ETEXT>& aText,
+                                  int aGateNumber );
+    void          loadTextAttributes( EDA_TEXT* aText,
+                                      const std::unique_ptr<ETEXT>& aAttributes ) const;
     void          loadFieldAttributes( SCH_FIELD* aField, const SCH_TEXT* aText ) const;
 
     ///< Move net labels that are detached from any wire to the nearest wire
@@ -230,18 +248,19 @@ private:
     wxFileName  m_filename;
     wxString    m_libName;        ///< Library name to save symbols
     SCHEMATIC*  m_schematic;      ///< Passed to Load(), the schematic object being loaded
+    EMODULE*    m_module;         ///< The current module being loaded or nullptr
 
-    EPART_MAP                          m_partlist;
+    std::map<wxString, const EPART*>   m_partlist;
     std::map<wxString, long long>      m_timestamps;
     std::map<wxString, EAGLE_LIBRARY>  m_eagleLibs;
+    std::map<wxString, std::unique_ptr<EMODULE>> m_eagleModules;
+
     std::unordered_map<wxString, bool> m_userValue; ///< deviceset/@uservalue for device.
 
     IO_RELEASER<SCH_IO>               m_pi;                ///< PI to create KiCad symbol library.
     std::unique_ptr<STRING_UTF8_MAP>  m_properties;        ///< Library plugin properties.
 
-    unsigned                          m_doneCount;
-    unsigned                          m_lastProgressCount;
-    unsigned                          m_totalCount;        ///< for progress reporting
+    int m_sheetIndex;
 
     std::map<wxString, int>           m_netCounts;
     std::map<int, SCH_LAYER_ID>       m_layerMap;
@@ -270,6 +289,9 @@ private:
 
     ///< Positions of pins and wire endings mapped to its parent
     std::map<VECTOR2I, std::set<const EDA_ITEM*>> m_connPoints;
+
+    ///< The fully parsed Eagle schematic file.
+    std::unique_ptr<EAGLE_DOC> m_eagleDoc;
 };
 
 #endif  // SCH_IO_EAGLE_H_

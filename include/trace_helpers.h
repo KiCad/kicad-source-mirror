@@ -234,6 +234,13 @@ extern KICOMMON_API const wxChar* const traceUiProfile;
  */
 extern KICOMMON_API const wxChar* const traceGit;
 
+/*
+ * Flag to enable Eagle I/O debug tracing.
+ *
+ * Use "KICAD_EAGLE_IO" to enable.
+ */
+extern KICOMMON_API const wxChar* const traceEagleIo;
+
 ///@}
 
 /**
