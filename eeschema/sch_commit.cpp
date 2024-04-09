@@ -208,7 +208,18 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
             schematic = schItem->Schematic();
 
         if( schItem->IsSelected() )
+        {
             selectedModified = true;
+        }
+        else
+        {
+            schItem->RunOnChildren(
+                    [&selectedModified]( SCH_ITEM* aChild )
+                    {
+                        if( aChild->IsSelected() )
+                            selectedModified = true;
+                    } );
+        }
 
         auto updateConnectivityFlag =
                 [&]()

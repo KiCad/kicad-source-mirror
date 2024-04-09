@@ -1578,20 +1578,27 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
 
 int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 {
-    EE_SELECTION sel;
-
-    if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
-        sel = m_selectionTool->RequestSelection( { SCH_FIELD_LOCATE_REFERENCE_T, SCH_SYMBOL_T } );
-    else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
-        sel = m_selectionTool->RequestSelection( { SCH_FIELD_LOCATE_VALUE_T, SCH_SYMBOL_T } );
-    else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
-        sel = m_selectionTool->RequestSelection( { SCH_FIELD_LOCATE_FOOTPRINT_T, SCH_SYMBOL_T } );
+    EE_SELECTION sel = m_selectionTool->RequestSelection( { SCH_FIELD_T, SCH_SYMBOL_T } );
 
     if( sel.Size() != 1 )
         return 0;
 
     bool      clearSelection = sel.IsHover();
     EDA_ITEM* item = sel.Front();
+
+    if( item->Type() == SCH_FIELD_T )
+    {
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+        if( ( aEvent.IsAction( &EE_ACTIONS::editReference ) && field->GetId() != REFERENCE_FIELD )
+         || ( aEvent.IsAction( &EE_ACTIONS::editValue )     && field->GetId() != VALUE_FIELD     )
+         || ( aEvent.IsAction( &EE_ACTIONS::editFootprint ) && field->GetId() != FOOTPRINT_FIELD ) )
+        {
+            item = field->GetParentSymbol();
+            m_selectionTool->ClearSelection( true );
+            m_selectionTool->AddItemToSel( item );
+        }
+    }
 
     if( item->Type() == SCH_SYMBOL_T )
     {
