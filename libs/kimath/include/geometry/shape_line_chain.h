@@ -299,6 +299,11 @@ public:
 
 
     /**
+     * Remove the duplicate points from the line chain.
+    */
+    void RemoveDuplicatePoints();
+
+    /**
      * Simplify the line chain by removing colinear adjacent segments and duplicate vertices.
      *
      * @param aMaxError is the maximum error in internal units.  Setting to 0 means that the

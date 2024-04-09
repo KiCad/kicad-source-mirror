@@ -1085,7 +1085,7 @@ const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex,
     }
 
     // Remove duplicate verts, but do NOT remove colinear segments here!
-    pl.Line().Simplify( false );
+    pl.Line().RemoveDuplicatePoints();
 
     // TODO: maintain actual segment index under simplification system
     if( aOriginSegmentIndex && *aOriginSegmentIndex >= pl.SegmentCount() )
