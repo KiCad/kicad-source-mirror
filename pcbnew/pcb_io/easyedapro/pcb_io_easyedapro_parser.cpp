@@ -57,6 +57,8 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <project.h>
 #include <fix_board_shape.h>
+#include <pcb_reference_image.h>
+#include <core/mirror.h>
 
 
 static const wxString QUERY_MODEL_UUID_KEY = wxS( "JLC_3DModel_Q" );
@@ -848,7 +850,7 @@ FOOTPRINT* PCB_IO_EASYEDAPRO_PARSER::ParseFootprint( const nlohmann::json&      
         else if( type == wxS( "REGION" ) )
         {
             wxString uuid = line.at( 1 );
-            
+
             // if( line.at( 2 ).is_number() )
             //     int unk = line.at( 2 ).get<int>();
             // else if( line.at( 2 ).is_string() )
@@ -1389,7 +1391,7 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
         else if( type == wxS( "IMAGE" ) )
         {
             wxString uuid = line.at( 1 );
-            
+
             // if( line.at( 2 ).is_number() )
             //     int unk = line.at( 2 ).get<int>();
             // else if( line.at( 2 ).is_string() )
@@ -1467,10 +1469,94 @@ void PCB_IO_EASYEDAPRO_PARSER::ParseBoard(
             if( group )
                 aBoard->Add( group.release(), ADD_MODE::APPEND );
         }
+        else if( type == wxS( "OBJ" ) )
+        {
+            VECTOR2D start, size;
+            wxString mimeType, base64Data;
+            double   angle = 0;
+            int      flipped = 0;
+
+            if( !line.at( 3 ).is_number() )
+                continue;
+
+            int          layer = line.at( 3 ).get<int>();
+            PCB_LAYER_ID klayer = LayerToKi( layer );
+
+            start = VECTOR2D( line.at( 5 ), line.at( 6 ) );
+            size = VECTOR2D( line.at( 7 ), line.at( 8 ) );
+            angle = line.at( 9 );
+            flipped = line.at( 10 );
+
+            wxString imageUrl = line.at( 11 );
+
+            if( imageUrl.BeforeFirst( ':' ) == wxS( "blob" ) )
+            {
+                wxString objectId = imageUrl.AfterLast( ':' );
+
+                if( auto blob = get_opt( aBlobMap, objectId ) )
+                {
+                    wxString blobUrl = blob->url;
+
+                    if( blobUrl.BeforeFirst( ':' ) == wxS( "data" ) )
+                    {
+                        wxArrayString paramsArr =
+                                wxSplit( blobUrl.AfterFirst( ':' ).BeforeFirst( ',' ), ';', '\0' );
+
+                        base64Data = blobUrl.AfterFirst( ',' );
+
+                        if( paramsArr.size() > 0 )
+                            mimeType = paramsArr[0];
+                    }
+                }
+            }
+
+            VECTOR2D kstart = ScalePos( start );
+            VECTOR2D ksize = ScaleSize( size );
+
+            if( mimeType.empty() || base64Data.empty() )
+                continue;
+
+            wxMemoryBuffer buf = wxBase64Decode( base64Data );
+
+            if( mimeType == wxS( "image/svg+xml" ) )
+            {
+                // Not yet supported by EasyEDA
+            }
+            else
+            {
+                VECTOR2D kcenter = kstart + ksize / 2;
+
+                std::unique_ptr<PCB_REFERENCE_IMAGE> bitmap =
+                        std::make_unique<PCB_REFERENCE_IMAGE>( aBoard, kcenter, klayer );
+
+                wxImage::SetDefaultLoadFlags( wxImage::GetDefaultLoadFlags()
+                                              & ~wxImage::Load_Verbose );
+
+                if( bitmap->ReadImageFile( buf ) )
+                {
+                    double scaleFactor = ScaleSize( size.x ) / bitmap->GetSize().x;
+                    bitmap->SetImageScale( scaleFactor );
+
+                    // TODO: support non-90-deg angles
+                    bitmap->Rotate( kstart, EDA_ANGLE( angle, DEGREES_T ) );
+
+                    if( flipped )
+                    {
+                        int x = bitmap->GetPosition().x;
+                        MIRROR( x, KiROUND( kstart.x ) );
+                        bitmap->SetX( x );
+
+                        bitmap->MutableImage()->Mirror( false );
+                    }
+
+                    aBoard->Add( bitmap.release(), ADD_MODE::APPEND );
+                }
+            }
+        }
         else if( type == wxS( "STRING" ) )
         {
             wxString uuid = line.at( 1 );
-            
+
             // if( line.at( 2 ).is_number() )
             //     int unk = line.at( 2 ).get<int>();
             // else if( line.at( 2 ).is_string() )
