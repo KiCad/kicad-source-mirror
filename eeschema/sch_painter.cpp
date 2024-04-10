@@ -1907,8 +1907,8 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
     if( drawingShadows && !( aLine->IsBrightened() || aLine->IsSelected() ) )
         return;
 
-    // Line end dangling status isn't updated until the line is finished drawing,
-    // so don't warn them about ends that are probably connected
+    // Line end dangling status isn't updated until the line is finished drawing, so don't warn
+    // them about ends that are probably connected
     if( aLine->IsNew() && drawingDangling )
         return;
 
@@ -1921,10 +1921,12 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         if( ( aLine->IsWire() && aLine->IsStartDangling() )
             || ( drawingShadows && aLine->IsSelected() && !aLine->HasFlag( STARTPOINT ) ) )
         {
-            COLOR4D danglingColor =
-                    ( drawingShadows && !aLine->HasFlag( STARTPOINT ) ) ? color.Inverted() : color;
-            drawDanglingIndicator( aLine->GetStartPoint(), danglingColor,
-                                   KiROUND( getLineWidth( aLine, drawingShadows ) ),
+            COLOR4D indicatorColor( color );
+
+            if( drawingShadows && !aLine->HasFlag( STARTPOINT ) )
+                indicatorColor.Invert();
+
+            drawDanglingIndicator( aLine->GetStartPoint(), indicatorColor, KiROUND( width ),
                                    aLine->IsWire() && aLine->IsStartDangling(), drawingShadows,
                                    aLine->IsBrightened() );
         }
@@ -1932,10 +1934,12 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         if( ( aLine->IsWire() && aLine->IsEndDangling() )
             || ( drawingShadows && aLine->IsSelected() && !aLine->HasFlag( ENDPOINT ) ) )
         {
-            COLOR4D danglingColor =
-                    ( drawingShadows && !aLine->HasFlag( ENDPOINT ) ) ? color.Inverted() : color;
-            drawDanglingIndicator( aLine->GetEndPoint(), danglingColor,
-                                   KiROUND( getLineWidth( aLine, drawingShadows ) ),
+            COLOR4D indicatorColor( color );
+
+            if( drawingShadows && !aLine->HasFlag( ENDPOINT ) )
+                indicatorColor.Invert();
+
+            drawDanglingIndicator( aLine->GetEndPoint(), indicatorColor, KiROUND( width ),
                                    aLine->IsWire() && aLine->IsEndDangling(), drawingShadows,
                                    aLine->IsBrightened() );
         }
@@ -1988,22 +1992,21 @@ void SCH_PAINTER::draw( const SCH_LINE* aLine, int aLayer )
         SHAPE_SEGMENT line( aLine->GetStartPoint(), aLine->GetEndPoint() );
 
         STROKE_PARAMS::Stroke( &line, lineStyle, KiROUND( width ), &m_schSettings,
-                               [&]( const VECTOR2I& a, const VECTOR2I& b )
-                               {
-                                    // DrawLine has problem with 0 length lines
-                                    // so draw a line with a minimal length
-                                    if( a == b )
-                                        m_gal->DrawLine( a+1, b );
-                                    else
-                                        m_gal->DrawLine( a, b );
-                               } );
+                [&]( const VECTOR2I& a, const VECTOR2I& b )
+                {
+                    // DrawLine has problem with 0 length lines so enforce minimum
+                    if( a == b )
+                        m_gal->DrawLine( a+1, b );
+                    else
+                        m_gal->DrawLine( a, b );
+                } );
     }
 }
 
 
 void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
 {
-    bool       drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
+    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
 
     if( m_schSettings.IsPrinting() && drawingShadows )
         return;
@@ -2087,8 +2090,7 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer )
     }
     else if( aLayer == LAYER_NOTES_BACKGROUND )
     {
-       // Do not fill the shape in B&W print mode, to avoid to visible items
-        // inside the shape
+        // Do not fill the shape in B&W print mode, to avoid to visible items inside the shape
         if( aShape->IsFilled() && !m_schSettings.PrintBlackAndWhiteReq() )
         {
             m_gal->SetIsFill( true );
@@ -2645,7 +2647,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     for( SCH_ITEM& tempItem : tempSymbol.GetDrawItems() )
     {
         tempItem.SetFlags( aSymbol->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
-        tempItem.Move( (VECTOR2I) mapCoords( aSymbol->GetPosition() ) );
+        tempItem.Move( mapCoords( aSymbol->GetPosition() ) );
 
         if( tempItem.Type() == LIB_TEXT_T )
         {
