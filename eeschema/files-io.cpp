@@ -267,6 +267,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
                 // Make ${SHEETNAME} work on the root sheet until we properly support
                 // naming the root sheet
                 Schematic().Root().SetName( _( "Root" ) );
+                wxLogDebug( "Loaded schematic with root sheet UUID %s", Schematic().Root().m_Uuid.AsString() );
             }
 
             if( !pi->GetError().IsEmpty() )

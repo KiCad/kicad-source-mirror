@@ -151,7 +151,7 @@ public:
                                          std::vector<DANGLING_END_ITEM>& aItemListByPos );
 };
 
-typedef std::vector<SCH_ITEM*> SCH_ITEM_SET;
+typedef std::vector<SCH_ITEM*> SCH_ITEM_VEC;
 
 
 /**
@@ -429,12 +429,17 @@ public:
     /**
      * Retrieve the set of items connected to this item on the given sheet.
      */
-    SCH_ITEM_SET& ConnectedItems( const SCH_SHEET_PATH& aPath );
+    const SCH_ITEM_VEC& ConnectedItems( const SCH_SHEET_PATH& aPath );
 
     /**
      * Add a connection link between this item and another.
      */
     void AddConnectionTo( const SCH_SHEET_PATH& aPath, SCH_ITEM* aItem );
+
+    /**
+     * Clear all connections to this item.
+     */
+    void ClearConnectedItems( const SCH_SHEET_PATH& aPath );
 
     /**
      * Create a new connection object associated with this object.
@@ -563,7 +568,7 @@ protected:
                                           // to store a initial pos of the item or mouse cursor
 
     /// Store pointers to other items that are connected to this one, per sheet.
-    std::map<SCH_SHEET_PATH, SCH_ITEM_SET, SHEET_PATH_CMP> m_connected_items;
+    std::map<SCH_SHEET_PATH, SCH_ITEM_VEC, SHEET_PATH_CMP> m_connected_items;
 
     /// Store connectivity information, per sheet.
     std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;

@@ -274,7 +274,7 @@ bool SCH_LABEL_BASE::IsType( const std::vector<KICAD_T>& aScanTypes ) const
     if( m_connected_items.find( Schematic()->CurrentSheet() ) == m_connected_items.end() )
         return false;
 
-    const SCH_ITEM_SET& item_set = m_connected_items.at( Schematic()->CurrentSheet() );
+    const SCH_ITEM_VEC& item_set = m_connected_items.at( Schematic()->CurrentSheet() );
 
     for( KICAD_T scanType : aScanTypes )
     {

@@ -51,7 +51,7 @@ void LoadSheetSchematicContents( const std::string& fileName, SCH_SHEET* sheet )
     wxASSERT( fileStream.is_open() );
     STDISTREAM_LINE_READER reader;
     reader.SetStream( fileStream );
-    SCH_IO_KICAD_SEXPR_PARSER parser( &reader );
+    SCH_IO_KICAD_SEXPR_PARSER parser( &reader, nullptr, 0, sheet );
     parser.ParseSchematic( sheet );
 }
 

@@ -1744,12 +1744,16 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         {
             for( SCH_ITEM* item : GetScreen()->Items().Overlapping( pt ) )
             {
+                // Leave this check in place.  Overlapping items are not necessarily connectable.
+                if( !item->IsConnectable() )
+                    continue;
+
                 if( item->Type() == SCH_LINE_T )
                 {
                     if( item->HitTest( pt ) )
                         changed_items.insert( item );
                 }
-                else if( item->Type() == SCH_SYMBOL_T )
+                else if( item->Type() == SCH_SYMBOL_T && item->IsConnected( pt ) )
                 {
                     SCH_SYMBOL*           symbol = static_cast<SCH_SYMBOL*>( item );
                     std::vector<SCH_PIN*> pins = symbol->GetPins();
@@ -1767,7 +1771,6 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 }
                 else
                 {
-                    // Non-connectable objects have already been pruned.
                     if( item->IsConnected( pt ) )
                         changed_items.insert( item );
                 }
@@ -1786,21 +1789,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         for( auto&[ path, item ] : all_items )
         {
             wxCHECK2( item, continue );
-
-            switch( item->Type() )
-            {
-            case SCH_FIELD_T:
-            case SCH_PIN_T:
-            {
-                SCH_ITEM* parent = static_cast<SCH_ITEM*>( item->GetParent() );
-                wxCHECK2( parent, continue );
-                parent->SetConnectivityDirty();
-                break;
-            }
-
-            default:
-                item->SetConnectivityDirty();
-            }
+            item->SetConnectivityDirty();
         }
 
         new_graph.Recalculate( list, false, &changeHandler );

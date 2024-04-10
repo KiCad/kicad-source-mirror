@@ -301,6 +301,8 @@ private:
     /// A cache of connections that are part of this subgraph but that don't have
     /// an owning element (i.e. bus members)
     std::set<SCH_CONNECTION*> m_bus_element_connections;
+
+    std::mutex m_driver_mutex;
 };
 
 struct NET_NAME_CODE_CACHE_KEY
