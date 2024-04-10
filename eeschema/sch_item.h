@@ -179,7 +179,7 @@ public:
 
     virtual ~SCH_ITEM();
 
-    virtual wxString GetClass() const override
+    wxString GetClass() const override
     {
         return wxT( "SCH_ITEM" );
     }
@@ -440,7 +440,7 @@ public:
      */
     virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemListByType,
                                       std::vector<DANGLING_END_ITEM>& aItemListByPos,
-                                      const SCH_SHEET_PATH*           aPath = nullptr )
+                                      const SCH_SHEET_PATH*           aSheet = nullptr )
     {
         return false;
     }

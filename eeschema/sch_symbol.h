@@ -890,10 +890,6 @@ private:
 
     VECTOR2I    m_pos;
     LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
-    int         m_unit;         ///< The unit for multiple part per package symbols.
-    int         m_bodyStyle;    ///< The alternate body style for symbols that have more than
-                                ///<   one body style defined.  Currently only used for symbols
-                                ///<   that have a DeMorgan conversion.
     wxString    m_prefix;       ///< C, R, U, Q etc - the first character(s) which typically
                                 ///<   indicate what the symbol is. Determined, upon placement,
                                 ///<   from the library symbol.  Created upon file load, by the
