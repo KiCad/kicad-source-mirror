@@ -257,7 +257,16 @@ std::shared_ptr<NETCLASS> SCH_ITEM::GetEffectiveNetClass( const SCH_SHEET_PATH* 
 }
 
 
-SCH_ITEM_SET& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
+void SCH_ITEM::ClearConnectedItems( const SCH_SHEET_PATH& aSheet )
+{
+    auto it = m_connected_items.find( aSheet );
+
+    if( it != m_connected_items.end() )
+        it->second.clear();
+}
+
+
+const SCH_ITEM_VEC& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
 {
     return m_connected_items[ aSheet ];
 }
@@ -265,13 +274,17 @@ SCH_ITEM_SET& SCH_ITEM::ConnectedItems( const SCH_SHEET_PATH& aSheet )
 
 void SCH_ITEM::AddConnectionTo( const SCH_SHEET_PATH& aSheet, SCH_ITEM* aItem )
 {
-    SCH_ITEM_SET& set = m_connected_items[ aSheet ];
+    SCH_ITEM_VEC& vec = m_connected_items[ aSheet ];
 
     // The vector elements are small, so reserve 1k at a time to prevent re-allocations
-    if( set.size() == set.capacity() )
-        set.reserve( set.size() + 4096 );
+    if( vec.size() == vec.capacity() )
+        vec.reserve( vec.size() + 4096 );
 
-    set.emplace_back( aItem );
+    // Add item to the correct place in the sorted vector if it is not already there
+    auto it = std::lower_bound( vec.begin(), vec.end(), aItem );
+
+    if( it == vec.end() || *it != aItem )
+        vec.insert( it, aItem );
 }
 
 

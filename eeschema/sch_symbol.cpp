@@ -755,7 +755,6 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     // the same symbol references, but perhaps this is best.
     if( ref.IsEmpty() && !GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
     {
-        const_cast<SCH_SYMBOL*>( this )->SetRef( sheet, GetField( REFERENCE_FIELD )->GetText() );
         ref = GetField( REFERENCE_FIELD )->GetText();
     }
 

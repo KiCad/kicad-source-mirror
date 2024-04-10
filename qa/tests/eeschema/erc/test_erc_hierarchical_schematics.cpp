@@ -49,7 +49,7 @@ BOOST_FIXTURE_TEST_CASE( ERCHierarchicalSchematics, ERC_REGRESSION_TEST_FIXTURE 
             {
                 { "issue10926_1",                  3 },
                 { "issue12814",                    0 },
-                { "ERC_dynamic_power_symbol_test", 5 }
+                { "ERC_dynamic_power_symbol_test", 2 }
             };
 
     for( const std::pair<wxString, int>& test : tests )

@@ -61,6 +61,7 @@ set( QA_EESCHEMA_SRCS
     test_lib_part.cpp
     test_netlist_exporter_kicad.cpp
     test_ee_item.cpp
+    test_incremental_netlister.cpp
     test_legacy_power_symbols.cpp
     test_pin_numbers.cpp
     test_sch_netclass.cpp
