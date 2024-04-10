@@ -49,7 +49,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	// Label Appearance
 
 	// Cell Defaults
-	m_EnvVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
+	m_EnvVars->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
 	m_EnvVars->SetMinSize( wxSize( 604,170 ) );
 
 	sbEnvVars->Add( m_EnvVars, 1, wxALL|wxEXPAND, 5 );
@@ -70,7 +70,7 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	sbEnvVars->Add( bSizerEnvVarBtns, 0, wxEXPAND, 5 );
 
 
-	bSizerMain->Add( sbEnvVars, 1, wxEXPAND|wxALL, 5 );
+	bSizerMain->Add( sbEnvVars, 1, wxALL|wxEXPAND, 5 );
 
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
