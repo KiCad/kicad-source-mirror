@@ -63,14 +63,6 @@ void GRID_CELL_TEXT_BUTTON::SetSize( const wxRect& aRect )
 
 #if defined( __WXMAC__ )
     rect.Inflate( 2 );      // ignore FOCUS_RING
-#elif defined( __WXGTK__ )
-    rect.Inflate( -3 );     // The -3 is a very sad hack here.  Some GTK themes overrun the
-                            // default -1, preventing display.  Unfortunately, we don't appear to
-                            // have a good method of finding the current margin needed.
-                            // Some GTK resize events seem to update the cell size but not all and
-                            // not consistently.
-#else
-    rect.Inflate( -1 );
 #endif
 
     Combo()->SetSize( rect, wxSIZE_ALLOW_MINUS_ONE );
@@ -232,6 +224,8 @@ void GRID_CELL_SYMBOL_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new TEXT_BUTTON_SYMBOL_CHOOSER( aParent, m_dlg, m_preselect );
 
+    Combo()->SetMargins( 0, 0 );
+
     wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
 
@@ -242,7 +236,7 @@ public:
     TEXT_BUTTON_FP_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
                             const wxString& aSymbolNetlist, const wxString& aPreselect ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxTE_PROCESS_ENTER ),
+                         wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_preselect( aPreselect ),
             m_symbolNetlist( aSymbolNetlist.ToStdString() )
@@ -299,6 +293,8 @@ void GRID_CELL_FPID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg, m_symbolNetlist, m_preselect );
 
+    Combo()->SetMargins( 0, 0 );
+
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set
     if ( m_validator )
@@ -316,7 +312,7 @@ class TEXT_BUTTON_URL : public wxComboCtrl
 public:
     TEXT_BUTTON_URL( wxWindow* aParent, DIALOG_SHIM* aParentDlg, SEARCH_STACK* aSearchStack ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxTE_PROCESS_ENTER ),
+                         wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_searchStack( aSearchStack )
     {
@@ -350,6 +346,8 @@ void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new TEXT_BUTTON_URL( aParent, m_dlg, m_searchStack );
 
+    Combo()->SetMargins( 0, 0 );
+
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set
     if ( m_validator )
@@ -370,7 +368,7 @@ public:
                               bool aNormalize = false,
                               const wxString& aNormalizeBasePath = wxEmptyString ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxTE_PROCESS_ENTER ),
+                         wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
@@ -390,7 +388,7 @@ public:
                               bool aNormalize = false,
                               const wxString& aNormalizeBasePath = wxEmptyString ) :
             wxComboCtrl( aParent, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize,
-                         wxTE_PROCESS_ENTER ),
+                         wxTE_PROCESS_ENTER | wxBORDER_NONE ),
             m_dlg( aParentDlg ),
             m_grid( aGrid ),
             m_currentDir( aCurrentDir ),
@@ -505,6 +503,8 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
     else
         m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, m_fileFilter,
                                                   m_normalize, m_normalizeBasePath );
+
+    Combo()->SetMargins( 0, 0 );
 
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set
