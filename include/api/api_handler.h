@@ -92,7 +92,7 @@ protected:
             HANDLER_RESULT<ResponseType>( HandlerType::* aHandler )( RequestType&,
                                                                      const HANDLER_CONTEXT& ) )
     {
-        std::string typeName = RequestType().GetFriendlyName();
+        std::string typeName = RequestType().GetTypeName();
 
         wxASSERT_MSG( !m_handlers.count( typeName ),
                       wxString::Format( "Duplicate API handler for type %s", typeName ) );
@@ -138,7 +138,7 @@ private:
         if( !aRequest.message().UnpackTo( &aDest ) )
         {
             std::string msg = fmt::format( "could not unpack message of type {} from request",
-                                           aDest.GetFriendlyName() );
+                                           aDest.GetTypeName() );
             aReply.mutable_status()->set_status( ApiStatusCode::AS_BAD_REQUEST );
             aReply.mutable_status()->set_error_message( msg );
             return false;
