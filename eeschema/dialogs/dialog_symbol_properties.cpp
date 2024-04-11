@@ -195,26 +195,55 @@ public:
         }
     }
 
-    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  ) override
+    wxGridCellAttr* GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind aKind ) override
     {
+        // This is needed to support alternating row colors
+        auto enhanceAttr = [this, &aRow, &aCol,
+                            &aKind]( wxGridCellAttr* aInputAttr ) -> wxGridCellAttr*
+        {
+            if( aInputAttr == nullptr )
+                return nullptr;
+
+            wxGridCellAttr* attr = aInputAttr;
+
+            if( wxGridCellAttrProvider* provider = GetAttrProvider() )
+            {
+                wxGridCellAttr* providerAttr = provider->GetAttr( aRow, aCol, aKind );
+
+                if( providerAttr )
+                {
+                    attr = new wxGridCellAttr;
+                    attr->SetKind( wxGridCellAttr::Merged );
+
+                    attr->MergeWith( aInputAttr );
+                    aInputAttr->DecRef();
+
+                    attr->MergeWith( providerAttr );
+                    providerAttr->DecRef();
+                }
+            }
+
+            return attr;
+        };
+
         switch( aCol )
         {
         case COL_NUMBER:
         case COL_BASE_NAME:
             m_readOnlyAttr->IncRef();
-            return m_readOnlyAttr;
+            return enhanceAttr( m_readOnlyAttr );
 
         case COL_ALT_NAME:
             m_nameAttrs[ aRow ]->IncRef();
-            return m_nameAttrs[ aRow ];
+            return enhanceAttr( m_nameAttrs[ aRow ] );
 
         case COL_TYPE:
             m_typeAttr->IncRef();
-            return m_typeAttr;
+            return enhanceAttr( m_typeAttr );
 
         case COL_SHAPE:
             m_shapeAttr->IncRef();
-            return m_shapeAttr;
+            return enhanceAttr( m_shapeAttr );
 
         default:
             wxFAIL;
