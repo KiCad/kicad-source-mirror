@@ -689,7 +689,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
 
     PROF_TIMER build_graph( "buildConnectionGraph" );
 
-    buildConnectionGraph( aChangedItemHandler );
+    buildConnectionGraph( aChangedItemHandler, aUnconditional );
 
     if( wxLog::IsAllowedTraceMask( DanglingProfileMask ) )
         build_graph.Show();
@@ -1928,7 +1928,7 @@ void CONNECTION_GRAPH::processSubGraphs()
 //     on some portion of the items.
 
 
-void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* aChangedItemHandler )
+void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* aChangedItemHandler, bool aUnconditional )
 {
     // Recache all bus aliases for later use
     wxCHECK_RET( m_schematic, wxT( "Connection graph cannot be built without schematic pointer" ) );
@@ -2286,6 +2286,17 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
 
     for( const auto& [ netname, subgraphs ] : m_net_name_to_subgraphs_map )
         checkNetclassDrivers( subgraphs );
+
+    if( !aUnconditional )
+    {
+        for( auto& [ netname, netclass ] : oldAssignments )
+        {
+            if( netSettings->m_NetClassLabelAssignments.count( netname ) )
+                continue;
+
+            netSettings->m_NetClassLabelAssignments[ netname ] = netclass;
+        }
+    }
 }
 
 
