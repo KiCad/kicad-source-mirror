@@ -44,7 +44,7 @@ public:
     ~DIALOG_SHEET_PROPERTIES() override;
 
 private:
-    bool onSheetFilenameChanged( const wxString& aNewFilename );
+    bool onSheetFilenameChanged( const wxString& aNewFilename, bool* aIsUndoable );
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
