@@ -27,6 +27,7 @@
 #include <sch_bus_entry.h>
 #include <sch_line.h>
 #include <sch_junction.h>
+#include <sch_no_connect.h>
 #include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <string_utils.h>
@@ -136,6 +137,16 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
         retv.Printf( _( "Junction at %s, %s" ),
                      aUnitsProvider->MessageTextFromValue( junction->GetPosition().x ),
                      aUnitsProvider->MessageTextFromValue( junction->GetPosition().y ) );
+        break;
+    }
+    case SCH_NO_CONNECT_T:
+    {
+        const SCH_NO_CONNECT* nc = static_cast<const SCH_NO_CONNECT*>( aItem );
+        wxCHECK( nc, retv );
+
+        retv.Printf( _( "No-Connect at %s, %s" ),
+                     aUnitsProvider->MessageTextFromValue( nc->GetPosition().x ),
+                     aUnitsProvider->MessageTextFromValue( nc->GetPosition().y ) );
         break;
     }
     case SCH_BUS_WIRE_ENTRY_T:
