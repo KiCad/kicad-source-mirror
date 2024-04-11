@@ -397,7 +397,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList )
                 if( schItem->Type() == SCH_SHEET_T )
                 {
                     const SCH_SHEET* origSheet = static_cast<const SCH_SHEET*>( schItem );
-                    const SCH_SHEET* copySheet = static_cast<const SCH_SHEET*>( schItem );
+                    const SCH_SHEET* copySheet = static_cast<const SCH_SHEET*>( itemCopy );
 
                     wxCHECK2( origSheet && copySheet, continue );
 

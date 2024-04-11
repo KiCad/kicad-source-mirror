@@ -34,6 +34,7 @@
 #include <wildcards_and_files_ext.h>
 #include <widgets/std_bitmap_button.h>
 #include <kiplatform/ui.h>
+#include <sch_commit.h>
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <schematic.h>
@@ -259,8 +260,16 @@ static bool positioningChanged( FIELDS_GRID_TABLE<SCH_FIELD>* a, std::vector<SCH
 
 bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
 {
+    wxCHECK( m_sheet && m_frame, false );
+
     if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
+
+    SCH_COMMIT commit( m_frame );
+
+    commit.Modify( m_sheet, m_frame->GetScreen() );
+
+    bool isUndoable = true;
 
     // Sheet file names can be relative or absolute.
     wxString sheetFileName = m_fields->at( SHEETFILENAME ).GetText();
@@ -330,7 +339,7 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
             }
         }
 
-        if( !onSheetFilenameChanged( newRelativeFilename ) )
+        if( !onSheetFilenameChanged( newRelativeFilename, &isUndoable ) )
         {
             if( clearFileName )
                 currentScreen->SetFileName( wxEmptyString );
@@ -416,14 +425,26 @@ bool DIALOG_SHEET_PROPERTIES::TransferDataFromWindow()
     for( SCH_ITEM* item : m_frame->GetScreen()->Items().OfType( SCH_SHEET_T ) )
         m_frame->UpdateItem( item );
 
-    m_frame->OnModify();
+    if( isUndoable )
+    {
+        commit.Push( _( "Edit Sheet Properties" ) );
+    }
+    else
+    {
+        // If we are renaming files, the undo/redo list becomes invalid and must be cleared.
+        m_frame->ClearUndoRedoList();
+        m_frame->OnModify();
+    }
 
     return true;
 }
 
 
-bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename )
+bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilename,
+                                                      bool* aIsUndoable )
 {
+    wxCHECK( aIsUndoable, false );
+
     wxString   msg;
     wxFileName sheetFileName(
             EnsureFileExtension( aNewFilename, FILEEXT::KiCadSchematicFileExtension ) );
@@ -503,7 +524,6 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
     }
     else                                    // Existing sheet.
     {
-        bool isUndoable = true;
         isExistingSheet = true;
 
         if( !m_frame->AllowCaseSensitiveFileNameClashes( newAbsoluteFilename ) )
@@ -524,7 +544,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
         if( newAbsoluteFilename.Cmp( oldAbsoluteFilename ) != 0 )
         {
             // Sheet file name changes cannot be undone.
-            isUndoable = false;
+            *aIsUndoable = false;
 
             if( useScreen || loadFromFile )           // Load from existing file.
             {
@@ -561,12 +581,6 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
                 renameFile = true;
             }
         }
-
-        // If we are renaming files, the undo/redo list becomes invalid and must be cleared
-        if( isUndoable )
-            m_frame->SaveCopyInUndoList( m_frame->GetScreen(), m_sheet, UNDO_REDO::CHANGED, false );
-        else
-            m_frame->ClearUndoRedoList();
 
         if( renameFile )
         {
