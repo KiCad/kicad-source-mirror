@@ -703,7 +703,9 @@ const wxString LIB_SYMBOL::GetLibraryName() const
 
 bool LIB_SYMBOL::IsPower() const
 {
-    if( LIB_SYMBOL_SPTR parent = m_parent.lock() )
+    std::shared_ptr<LIB_SYMBOL> parent;
+
+    if( !m_parent.expired() && ( parent = m_parent.lock() ) )
     {
         if( parent->IsRoot() )
             return parent->m_options == ENTRY_POWER;
