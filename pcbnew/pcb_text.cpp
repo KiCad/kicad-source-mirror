@@ -69,11 +69,11 @@ PCB_TEXT::PCB_TEXT( FOOTPRINT* aParent, KICAD_T idtype) :
     {
         SetTextPos( aParent->GetPosition() );
 
+        // N.B. Do not automatically set text effects
+        // These are optional in the file format and so need to be defaulted
+        // to off.
         if( IsBackLayer( aParent->GetLayer() ) )
-        {
             SetLayer( B_SilkS );
-            SetMirrored( true );
-        }
     }
 }
 
