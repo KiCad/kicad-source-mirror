@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-08 00:00+0100\n"
-"PO-Revision-Date: 2024-03-29 09:01+0000\n"
+"PO-Revision-Date: 2024-04-12 21:01+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -32797,7 +32797,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:108
 msgid "Drill Units"
-msgstr "Borraggregat"
+msgstr "Borrfilens måttenheter"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:112
 msgid "Decimal format (recommended)"
@@ -33491,7 +33491,7 @@ msgstr "Ta bort fotavtryck utan komponenter i netlist"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:56
 msgid "Replace footprints with those specified in netlist"
-msgstr "Ersätt fotavtryck med de som anges i netlista"
+msgstr "Ersätt fotavtryck med dem som anges i nätlista"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:59
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:43
@@ -35649,7 +35649,7 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:37
 msgid "Replace footprints with those specified in the schematic"
-msgstr "Byt ut fotavtryck mot de som anges i schemat"
+msgstr "Byt ut fotavtryck mot dem som anges i kretsschemat"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.cpp:39
 msgid ""
