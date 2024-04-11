@@ -305,7 +305,7 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     case SCOPE::SCOPE_SHEET_RECURSIVE: m_radioRecursive->SetValue( true );    break;
     }
 
-    m_outputFileName->SetValue( cfg->m_FieldEditorPanel.export_filename );
+    m_outputFileName->SetValue( m_schSettings.m_BomExportFileName );
 
     Center();
 
@@ -1338,12 +1338,13 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnClose( wxCloseEvent& aEvent )
 
     // Save all our settings since we're really closing
     savePresetsToSchematic();
+    m_schSettings.m_BomExportFileName = m_outputFileName->GetValue();
+
     EESCHEMA_SETTINGS* cfg = m_parent->eeconfig();
 
     cfg->m_FieldEditorPanel.width = GetSize().x;
     cfg->m_FieldEditorPanel.height = GetSize().y;
     cfg->m_FieldEditorPanel.page = m_nbPages->GetSelection();
-    cfg->m_FieldEditorPanel.export_filename = m_outputFileName->GetValue();
 
     if( m_radioHighlight->GetValue() )
         cfg->m_FieldEditorPanel.selection_mode = 0;
