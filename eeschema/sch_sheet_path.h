@@ -58,10 +58,6 @@ struct SCH_SYMBOL_INSTANCE
 };
 
 
-extern bool SortSymbolInstancesByProjectUuid( const SCH_SYMBOL_INSTANCE& aLhs,
-                                              const SCH_SYMBOL_INSTANCE& aRhs );
-
-
 /**
  * A simple container for sheet instance information.
  */

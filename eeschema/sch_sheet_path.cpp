@@ -94,16 +94,6 @@ public:
 #endif
 };
 
-
-bool SortSymbolInstancesByProjectUuid( const SCH_SYMBOL_INSTANCE& aLhs,
-                                       const SCH_SYMBOL_INSTANCE& aRhs )
-{
-    wxCHECK( !aLhs.m_Path.empty() && !aRhs.m_Path.empty(), false );
-
-    return aLhs.m_Path[0] < aRhs.m_Path[0];
-}
-
-
 namespace std
 {
     size_t hash<SCH_SHEET_PATH>::operator()( const SCH_SHEET_PATH& path ) const

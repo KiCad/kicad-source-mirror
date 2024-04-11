@@ -648,9 +648,6 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 {
     wxCHECK_RET( aSymbol != nullptr && m_out != nullptr, "" );
 
-    // Sort symbol instance data to minimize file churn.
-    aSymbol->SortInstances( SortSymbolInstancesByProjectUuid );
-
     std::string     libName;
 
     wxString symbol_name = aSymbol->GetLibId().Format();

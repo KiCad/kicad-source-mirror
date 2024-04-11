@@ -176,9 +176,6 @@ public:
 
     void RemoveInstance( const KIID_PATH& aInstancePath );
 
-    void SortInstances( bool ( *aSortFunction )( const SCH_SYMBOL_INSTANCE& aLhs,
-                                                 const SCH_SYMBOL_INSTANCE& aRhs ) );
-
     /**
      * Return true for items which are moved with the anchor point at mouse cursor
      * and false for items moved with no reference to anchor.
