@@ -283,6 +283,32 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
             // NB: via holes are not checked.  There is a presumption that a physical object goes
             // through a pad hole, which is not the case for via holes.
             //
+            bool checkFront = false;
+            bool checkBack = false;
+
+            constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, F_Cu );
+            clearance = constraint.GetValue().Min();
+
+            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+                checkFront = true;
+
+            constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpB, fpA, F_Cu );
+            clearance = constraint.GetValue().Min();
+
+            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+                checkFront = true;
+
+            constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpA, fpB, B_Cu );
+            clearance = constraint.GetValue().Min();
+
+            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+                checkBack = true;
+
+            constraint = m_drcEngine->EvalRules( COURTYARD_CLEARANCE_CONSTRAINT, fpB, fpA, B_Cu );
+            clearance = constraint.GetValue().Min();
+
+            if( constraint.GetSeverity() != RPT_SEVERITY_IGNORE && clearance >= 0 )
+                checkBack = true;
 
             auto testPadAgainstCourtyards =
                     [&]( const PAD* pad, const FOOTPRINT* fp )
@@ -305,13 +331,13 @@ bool DRC_TEST_PROVIDER_COURTYARD_CLEARANCE::testCourtyardClearances()
                             const SHAPE_POLY_SET&          front = fp->GetCourtyard( F_CrtYd );
                             const SHAPE_POLY_SET&          back = fp->GetCourtyard( B_CrtYd );
 
-                            if( front.OutlineCount() > 0 && front.Collide( hole.get(), 0 ) )
+                            if( checkFront && front.OutlineCount() > 0 && front.Collide( hole.get(), 0 ) )
                             {
                                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( errorCode );
                                 drce->SetItems( pad, fp );
                                 reportViolation( drce, pad->GetPosition(), F_CrtYd );
                             }
-                            else if( back.OutlineCount() > 0 && back.Collide( hole.get(), 0 ) )
+                            else if( checkBack && back.OutlineCount() > 0 && back.Collide( hole.get(), 0 ) )
                             {
                                 std::shared_ptr<DRC_ITEM> drce = DRC_ITEM::Create( errorCode );
                                 drce->SetItems( pad, fp );
