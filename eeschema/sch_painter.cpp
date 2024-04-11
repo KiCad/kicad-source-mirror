@@ -2175,11 +2175,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
 
     if( !( aText->IsVisible() || aText->IsForceVisible() ) )
     {
-        // Currently invisible texts are always shown in symbol editor
-        bool force_show = m_schematic ? eeconfig()->m_Appearance.show_hidden_fields
-                                      : true;
-
-        if( force_show )
+        if( m_schSettings.m_IsSymbolEditor || eeconfig()->m_Appearance.show_hidden_fields )
             color = getRenderColor( aText, LAYER_HIDDEN, drawingShadows );
         else
             return;
@@ -2200,13 +2196,13 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer )
     {
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
-        attrs.m_StrokeWidth += getShadowWidth( !aText->IsSelected() );
+        attrs.m_StrokeWidth += KiROUND( getShadowWidth( !aText->IsSelected() ) );
         attrs.m_Underlined = false;
 
         // Fudge factors to match 6.0 positioning
-        // New text stroking has width dependent offset but we need to
-        // center the shadow on the stroke.  NB this offset is in font.cpp also
-        double fudge = getShadowWidth( !aText->IsSelected() ) / 1.52;
+        // New text stroking has width dependent offset but we need to center the shadow on the
+        // stroke.  NB this offset is in font.cpp also.
+        int fudge = KiROUND( getShadowWidth( !aText->IsSelected() ) / 1.52 );
 
         if( attrs.m_Halign == GR_TEXT_H_ALIGN_LEFT && attrs.m_Angle == ANGLE_0 )
             text_offset.x -= fudge;
@@ -2414,7 +2410,7 @@ void SCH_PAINTER::draw( const SCH_TEXTBOX* aTextBox, int aLayer )
 void SCH_PAINTER::draw( const SCH_TABLE* aTable, int aLayer )
 {
     for( SCH_TABLECELL* cell : aTable->GetCells() )
-        draw( static_cast<SCH_TEXTBOX*>( cell ), aLayer );
+        draw( cell, aLayer );
 
     if( aLayer == LAYER_SELECTION_SHADOWS )
         return;
