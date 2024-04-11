@@ -196,6 +196,9 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
                     m_TemplateFieldNames.AddTemplateFieldNames( cfg->m_Drawing.field_names );
             }, {} ) );
 
+    m_params.emplace_back( new PARAM<wxString>( "bom_export_filename",
+            &m_BomExportFileName, "" ) );
+
     m_params.emplace_back( new PARAM<BOM_PRESET>( "bom_settings",
             &m_BomSettings, BOM_PRESET::GroupedByValue() ) );
     m_params.emplace_back( new PARAM_LIST<BOM_PRESET>( "bom_presets",

@@ -105,6 +105,8 @@ public:
 
     TEMPLATES m_TemplateFieldNames;
 
+    wxString  m_BomExportFileName;
+
     /// List of stored BOM presets
     BOM_PRESET                  m_BomSettings;
     std::vector<BOM_PRESET>     m_BomPresets;
