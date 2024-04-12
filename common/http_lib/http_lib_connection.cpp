@@ -204,7 +204,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             return false;
         }
 
-        nlohmann::json response = nlohmann::json::parse( res );
+        nlohmann::ordered_json response = nlohmann::ordered_json::parse( res );
         std::string    key = "";
         std::string    value = "";
 
@@ -253,6 +253,9 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             aFetchedPart.exclude_from_sim = boolFromString( exclude, false );
         }
 
+        // remove previously loaded fields
+        aFetchedPart.fields.clear();
+
         // Extract available fields
         for( const auto& field : response.at( "fields" ).items() )
         {
@@ -274,10 +277,8 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
             }
 
             // Add field to fields list
-            if( key.length() )
-            {
-                aFetchedPart.fields[key] = std::make_tuple( value, visible );
-            }
+            aFetchedPart.fields.push_back(
+                    std::make_pair( key, std::make_tuple( value, visible ) ) );
         }
     }
     catch( const std::exception& e )
@@ -321,8 +322,6 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
         res = curl->GetBuffer();
 
         nlohmann::json response = nlohmann::json::parse( res );
-        std::string    key = "";
-        std::string    value = "";
 
         for( nlohmann::json& item : response )
         {
@@ -334,7 +333,8 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
             if( item.contains( "description" ) )
             {
                 // At this point we don't display anything so just set it to false
-                part.fields["description"] = std::make_tuple( item.at( "description" ), false );
+                part.fields.push_back( std::make_pair(
+                        "description", std::make_tuple( item.at( "description" ), false ) ) );
             }
 
             // API might not want to return an optional name.
