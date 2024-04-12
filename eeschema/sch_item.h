@@ -651,16 +651,16 @@ public:
 
     virtual bool operator<( const SCH_ITEM& aItem ) const;
 
+    struct cmp_items
+    {
+        bool operator()( const SCH_ITEM* aFirst, const SCH_ITEM* aSecond ) const;
+    };
+
 protected:
     SCH_RENDER_SETTINGS* getRenderSettings( PLOTTER* aPlotter ) const
     {
         return static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     }
-
-    struct cmp_items
-    {
-        bool operator()( const SCH_ITEM* aFirst, const SCH_ITEM* aSecond ) const;
-    };
 
     void getSymbolEditorMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList );
 

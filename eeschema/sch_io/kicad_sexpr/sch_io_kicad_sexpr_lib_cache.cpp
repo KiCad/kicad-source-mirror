@@ -198,6 +198,17 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
         aSymbol->GetFields( fields );
 
+        std::sort( fields.begin(), fields.end(),
+                   []( const LIB_FIELD* a, const LIB_FIELD* b )
+                   {
+                        // Mandatory fields are always first.  They are only ones with fixed
+                        // field IDs.  The rest are sorted by their comparison operator.
+                        if( a->IsMandatory() || b->IsMandatory() )
+                            return a->GetId() < b->GetId();
+
+                        return a->Compare( b ) < 0;
+                   } );
+
         for( LIB_FIELD* field : fields )
             saveField( field, aFormatter, aNestLevel + 1 );
 
@@ -244,19 +255,16 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
                 aFormatter.Print( aNestLevel + 2, "(unit_name %s)\n",
                                   aFormatter.Quotes( name ).c_str() );
             }
-            // Enforce item ordering
-            auto cmp =
-                    []( const SCH_ITEM* a, const SCH_ITEM* b )
-                    {
-                        return *a < *b;
-                    };
 
-            std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
+            std::vector<SCH_ITEM*> save_vec;
+            save_vec.reserve( unit.m_items.size() );
 
             for( SCH_ITEM* item : unit.m_items )
-                save_map.insert( item );
+                save_vec.push_back( item );
 
-            for( SCH_ITEM* item : save_map )
+            std::sort( save_vec.begin(), save_vec.end(), SCH_ITEM::cmp_items());
+
+            for( SCH_ITEM* item : save_vec )
                 saveSymbolDrawItem( item, aFormatter, aNestLevel + 2 );
 
             aFormatter.Print( aNestLevel + 1, ")\n" );
@@ -273,6 +281,17 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
                           aFormatter.Quotew( parent->GetName() ).c_str() );
 
         aSymbol->GetFields( fields );
+
+        std::sort( fields.begin(), fields.end(),
+                   []( const LIB_FIELD* a, const LIB_FIELD* b )
+                   {
+                        // Mandatory fields are always first.  They are only ones with fixed
+                        // field IDs.  The rest are sorted by their comparison operator.
+                        if( a->IsMandatory() || b->IsMandatory() )
+                            return a->GetId() < b->GetId();
+
+                        return a->Compare( b ) < 0;
+                   } );
 
         for( LIB_FIELD* field : fields )
             saveField( field, aFormatter, aNestLevel + 1 );
