@@ -78,12 +78,12 @@ EDA_ITEM* LIB_TEXT::Clone() const
 
 int LIB_TEXT::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
+    wxASSERT( aOther.Type() == LIB_TEXT_T );
+
     int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
-
-    wxASSERT( aOther.Type() == LIB_TEXT_T );
 
     const LIB_TEXT* tmp = ( LIB_TEXT* ) &aOther;
 

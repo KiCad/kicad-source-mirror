@@ -789,29 +789,7 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             field.SetText( value );
     }
 
-    std::vector<SCH_PIN*> pins;
-    pins.reserve( aSymbol->GetRawPins().size() );
-
     for( const std::unique_ptr<SCH_PIN>& pin : aSymbol->GetRawPins() )
-        pins.push_back( pin.get() );
-
-    std::sort( pins.begin(), pins.end(), []( const SCH_PIN* a, const SCH_PIN* b )
-    {
-        int cmp = StrNumCmp( a->GetName(), b->GetName() );
-
-        if( cmp != 0 )
-            return cmp < 0;
-
-        cmp = StrNumCmp( a->GetNumber(), b->GetNumber() );
-
-        if( cmp != 0 )
-            return cmp < 0;
-
-        // The UUID is used as a tie breaker to ensure a stable sort.
-        return a->m_Uuid < b->m_Uuid;
-    } );
-
-    for( SCH_PIN* pin : pins )
     {
         if( pin->GetAlt().IsEmpty() )
         {
@@ -837,21 +815,10 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
         SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
         bool project_open = false;
 
-        std::vector<SCH_SYMBOL_INSTANCE> orderedInstances = aSymbol->GetInstances();
-        std::sort( orderedInstances.begin(), orderedInstances.end(), []( const SCH_SYMBOL_INSTANCE& a, const SCH_SYMBOL_INSTANCE& b )
+        for( size_t i = 0; i < aSymbol->GetInstances().size(); i++ )
         {
-            if( a.m_ProjectName != b.m_ProjectName )
-                return a.m_ProjectName < b.m_ProjectName;
-
-            return a.m_Path < b.m_Path;
-        } );
-
-        for( size_t ii = 0; ii < orderedInstances.size(); ++ii )
-        {
-            SCH_SYMBOL_INSTANCE& inst = orderedInstances[ii];
-
             // Zero length KIID_PATH objects are not valid and will cause a crash below.
-            wxCHECK2( inst.m_Path.size(), continue );
+            wxCHECK2( aSymbol->GetInstances()[i].m_Path.size(), continue );
 
             // If the instance data is part of this design but no longer has an associated sheet
             // path, don't save it.  This prevents large amounts of orphaned instance data for the
@@ -859,11 +826,11 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             //
             // Keep all instance data when copying to the clipboard.  It may be needed on paste.
             if( !aForClipboard
-              && ( inst.m_Path[0] == rootSheetUuid )
-              && !fullHierarchy.GetSheetPathByKIIDPath( inst.m_Path ) )
+              && ( aSymbol->GetInstances()[i].m_Path[0] == rootSheetUuid )
+              && !fullHierarchy.GetSheetPathByKIIDPath( aSymbol->GetInstances()[i].m_Path ) )
             {
-                if( project_open && ( ( &inst == &orderedInstances.back() )
-                  || lastProjectUuid != orderedInstances[ii + 1].m_Path[0] ) )
+                if( project_open && ( ( i + 1 == aSymbol->GetInstances().size() )
+                  || lastProjectUuid != aSymbol->GetInstances()[i+1].m_Path[0] ) )
                 {
                     m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
                     project_open = false;
@@ -872,23 +839,23 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
                 continue;
             }
 
-            if( lastProjectUuid != inst.m_Path[0] )
+            if( lastProjectUuid != aSymbol->GetInstances()[i].m_Path[0] )
             {
                 wxString projectName;
 
-                if( inst.m_Path[0] == rootSheetUuid )
+                if( aSymbol->GetInstances()[i].m_Path[0] == rootSheetUuid )
                     projectName = aSchematic.Prj().GetProjectName();
                 else
-                    projectName = inst.m_ProjectName;
+                    projectName = aSymbol->GetInstances()[i].m_ProjectName;
 
-                lastProjectUuid = inst.m_Path[0];
+                lastProjectUuid = aSymbol->GetInstances()[i].m_Path[0];
                 m_out->Print( aNestLevel + 2, "(project %s\n",
                               m_out->Quotew( projectName ).c_str() );
                 project_open = true;
             }
 
             wxString path;
-            KIID_PATH tmp = inst.m_Path;
+            KIID_PATH tmp = aSymbol->GetInstances()[i].m_Path;
 
             if( aForClipboard && aRelativePath )
                 tmp.MakeRelativeTo( aRelativePath->Path() );
@@ -898,12 +865,12 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
             m_out->Print( aNestLevel + 3, "(path %s\n",
                           m_out->Quotew( path ).c_str() );
             m_out->Print( aNestLevel + 4, "(reference %s) (unit %d)\n",
-                          m_out->Quotew( inst.m_Reference ).c_str(),
-                          inst.m_Unit );
+                          m_out->Quotew( aSymbol->GetInstances()[i].m_Reference ).c_str(),
+                          aSymbol->GetInstances()[i].m_Unit );
             m_out->Print( aNestLevel + 3, ")\n" );
 
-            if( project_open && ( ( &inst == &orderedInstances.back() )
-              || lastProjectUuid != orderedInstances[ii + 1].m_Path[0] ) )
+            if( project_open && ( ( i + 1 == aSymbol->GetInstances().size() )
+              || lastProjectUuid != aSymbol->GetInstances()[i+1].m_Path[0] ) )
             {
                 m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
                 project_open = false;
