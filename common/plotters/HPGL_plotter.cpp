@@ -305,7 +305,7 @@ bool HPGL_PLOTTER::EndPlot()
             }
         }
 
-        VECTOR2I   loc          = m_items.begin()->loc_start;
+        VECTOR2D   loc          = m_items.begin()->loc_start;
         bool       pen_up       = true;
         LINE_STYLE current_dash = LINE_STYLE::SOLID;
         int        current_pen  = m_penNumber;
