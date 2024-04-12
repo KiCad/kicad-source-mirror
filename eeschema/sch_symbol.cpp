@@ -239,10 +239,7 @@ EDA_ITEM* SCH_SYMBOL::Clone() const
 
 bool SCH_SYMBOL::IsMissingLibSymbol() const
 {
-    if( !m_part )
-        return true;
-
-    return false;
+    return m_part == nullptr;
 }
 
 
@@ -455,8 +452,7 @@ bool SCH_SYMBOL::HasAlternateBodyStyle() const
 
 void SCH_SYMBOL::SetTransform( const TRANSFORM& aTransform )
 {
-    if( m_transform != aTransform )
-        m_transform = aTransform;
+    m_transform = aTransform;
 }
 
 
@@ -635,7 +631,7 @@ void SCH_SYMBOL::AddHierarchicalReference( const KIID_PATH& aPath, const wxStrin
             wxLogTrace( traceSchSheetPaths, wxS( "Removing symbol instance:\n"
                                                  "  sheet path %s\n"
                                                  "  reference %s, unit %d from symbol %s." ),
-                                            aPath.AsString(),
+                        aPath.AsString(),
                         m_instanceReferences[ii].m_Reference,
                         m_instanceReferences[ii].m_Unit,
                         m_Uuid.AsString() );
@@ -746,9 +742,7 @@ const wxString SCH_SYMBOL::GetRef( const SCH_SHEET_PATH* sheet, bool aIncludeUni
     // file.  It will also mean that multiple instances of the same sheet by default all have
     // the same symbol references, but perhaps this is best.
     if( ref.IsEmpty() && !GetField( REFERENCE_FIELD )->GetText().IsEmpty() )
-    {
         ref = GetField( REFERENCE_FIELD )->GetText();
-    }
 
     if( ref.IsEmpty() )
         ref = UTIL::GetRefDesUnannotated( m_prefix );
@@ -895,7 +889,7 @@ void SCH_SYMBOL::SetUnitSelection( int aUnitSelection )
 
 
 const wxString SCH_SYMBOL::GetValue( bool aResolve, const SCH_SHEET_PATH* aPath,
-                                              bool aAllowExtraText ) const
+                                     bool aAllowExtraText ) const
 {
     if( aResolve )
         return GetField( VALUE_FIELD )->GetShownText( aPath, aAllowExtraText );
@@ -1037,16 +1031,15 @@ void SCH_SYMBOL::UpdateFields( const SCH_SHEET_PATH* aPath, bool aUpdateStyle, b
 {
     if( m_part )
     {
-        std::vector<LIB_FIELD*> fields;
-
+        std::vector<SCH_FIELD*> fields;
         m_part->GetFields( fields );
 
-        for( const LIB_FIELD* libField : fields )
+        for( const SCH_FIELD* libField : fields )
         {
-            int id = libField->GetId();
+            int        id = libField->GetId();
             SCH_FIELD* schField;
 
-            if( id >= 0 && id < MANDATORY_FIELDS )
+            if( libField->IsMandatory() )
             {
                 schField = GetFieldById( id );
             }
@@ -2404,7 +2397,7 @@ bool SCH_SYMBOL::doIsConnected( const VECTOR2I& aPosition ) const
 {
     VECTOR2I new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_pos );
 
-    for( const auto& pin : m_pins )
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
     {
         if( pin->GetType() == ELECTRICAL_PINTYPE::PT_NC )
             continue;

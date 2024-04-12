@@ -64,21 +64,21 @@ private:
     void AdjustGridColumns();
 
 private:
-    SCH_EDIT_FRAME*               m_frame;
-    SCH_SHEET*                    m_sheet;
-    bool*                         m_clearAnnotationNewItems;
-    bool*                         m_updateHierarchyNavigator;
+    SCH_EDIT_FRAME*    m_frame;
+    SCH_SHEET*         m_sheet;
+    bool*              m_clearAnnotationNewItems;
+    bool*              m_updateHierarchyNavigator;
 
-    wxSize                        m_size;
-    int                           m_delayedFocusRow;
-    int                           m_delayedFocusColumn;
-    std::bitset<64>               m_shownColumns;
+    wxSize             m_size;
+    int                m_delayedFocusRow;
+    int                m_delayedFocusColumn;
+    std::bitset<64>    m_shownColumns;
 
-    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
-    UNIT_BINDER                   m_borderWidth;
+    FIELDS_GRID_TABLE* m_fields;
+    UNIT_BINDER        m_borderWidth;
 
-    SCH_SHEET                     m_dummySheet;
-    SCH_FIELD                     m_dummySheetNameField;
+    SCH_SHEET          m_dummySheet;
+    SCH_FIELD          m_dummySheetNameField;
 };
 
 #endif // DIALOG_SHEET_PROPERTIES_H

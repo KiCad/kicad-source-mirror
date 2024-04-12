@@ -120,7 +120,6 @@ public:
         case LIB_TEXT_T:            return new LIB_TEXT( &m_symbol );
         case LIB_TEXTBOX_T:         return new LIB_TEXTBOX( &m_symbol, 0, FILL_T::NO_FILL, "test" );
         case LIB_PIN_T:             return new LIB_PIN( &m_symbol );
-        case LIB_FIELD_T:           return new LIB_FIELD( &m_symbol );
 
         case SCHEMATIC_T:
         case SCH_PIN_T:

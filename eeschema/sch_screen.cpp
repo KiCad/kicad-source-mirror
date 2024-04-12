@@ -1155,7 +1155,7 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
                     return a->Type() > b->Type();
                 } );
 
-    auto* renderSettings = static_cast<const SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
+    auto* renderSettings = static_cast<SCH_RENDER_SETTINGS*>( aPlotter->RenderSettings() );
     constexpr bool background = true;
 
     // Bitmaps are drawn first to ensure they are in the background
@@ -1183,8 +1183,11 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
 
     // After plotting the symbols as a group above (in `other`), we need to overplot the pins
     // and symbols to ensure that they are always visible
+    TRANSFORM savedTransform = renderSettings->m_Transform;
+
     for( const SCH_SYMBOL* sym :symbols )
     {
+        renderSettings->m_Transform = sym->GetTransform();
         aPlotter->SetCurrentLineWidth( sym->GetEffectivePenWidth( renderSettings ) );
 
         for( SCH_FIELD field : sym->GetFields() )
@@ -1199,6 +1202,8 @@ void SCH_SCREEN::Plot( PLOTTER* aPlotter, const SCH_PLOT_OPTS& aPlotOpts ) const
         if( sym->GetDNP() )
             sym->PlotDNP( aPlotter );
     }
+
+    renderSettings->m_Transform = savedTransform;
 
     for( SCH_ITEM* item : junctions )
     {
@@ -2164,7 +2169,7 @@ void SCH_SCREEN::MigrateSimModels()
     for( SCH_ITEM* item : Items().OfType( SCH_SYMBOL_T ) )
     {
         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
-        SIM_MODEL::MigrateSimModel<SCH_SYMBOL, SCH_FIELD>( *symbol, &Schematic()->Prj() );
+        SIM_MODEL::MigrateSimModel<SCH_SYMBOL>( *symbol, &Schematic()->Prj() );
     }
 }
 

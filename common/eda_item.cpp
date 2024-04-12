@@ -400,7 +400,6 @@ static struct EDA_ITEM_DESC
             .Map( LIB_TEXT_T,              _HKI( "Text" ) )
             .Map( LIB_TEXTBOX_T,           _HKI( "Text Box" ) )
             .Map( LIB_PIN_T,               _HKI( "Pin" ) )
-            .Map( LIB_FIELD_T,             _HKI( "Symbol Field" ) )
 
             .Map( GERBER_LAYOUT_T,         _HKI( "Gerber Layout" ) )
             .Map( GERBER_DRAW_ITEM_T,      _HKI( "Draw Item" ) )

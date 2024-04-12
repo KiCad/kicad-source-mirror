@@ -36,7 +36,6 @@
 class LIB_PIN;
 class LIB_SHAPE;
 class LIB_SYMBOL;
-class LIB_FIELD;
 class LIB_TEXT;
 class LIB_TEXTBOX;
 class SCH_SYMBOL;
@@ -88,7 +87,6 @@ private:
     void draw( const LIB_SHAPE* aCircle, int aLayer, bool aDimmed );
     void draw( const LIB_SYMBOL* aSymbol, int, bool aDrawFields = true, int aUnit = 0,
                int aBodyStyle = 0, bool aDimmed = false );
-    void draw( const LIB_FIELD* aField, int aLayer, bool aDimmed );
     void draw( const LIB_TEXT* aText, int aLayer, bool aDimmed );
     void draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed );
     void draw( const SCH_SYMBOL* aSymbol, int aLayer );

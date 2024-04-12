@@ -1772,10 +1772,10 @@ void SCH_IO_KICAD_SEXPR::GetAvailableSymbolFields( std::vector<wxString>& aNames
 
     for( LIB_SYMBOL_MAP::const_iterator it = symbols.begin();  it != symbols.end();  ++it )
     {
-        std::vector<LIB_FIELD*> fields;
+        std::vector<SCH_FIELD*> fields;
         it->second->GetFields( fields );
 
-        for( LIB_FIELD* field : fields )
+        for( SCH_FIELD* field : fields )
         {
             if( field->IsMandatory() )
                 continue;

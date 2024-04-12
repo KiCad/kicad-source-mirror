@@ -331,7 +331,7 @@ TOOL_ACTION EE_ACTIONS::showHiddenFields( TOOL_ACTION_ARGS()
         .Scope( AS_GLOBAL )
         .FriendlyName( _( "Show Hidden Fields" ) )
         .Tooltip( _( "Toggle display of hidden text fields" ) )
-        .Icon( BITMAPS::spreadsheet ) );
+        .Icon( BITMAPS::text_sketch ) );
 
 
 // SYMBOL_EDITOR_DRAWING_TOOLS

@@ -1548,19 +1548,18 @@ void SCH_EDIT_TOOL::editFieldText( SCH_FIELD* aField )
     wxString caption;
 
     // Use title caps for mandatory fields.  "Edit Sheet name Field" looks dorky.
-    if( parentType == SCH_SYMBOL_T && aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
+    if( parentType == SCH_SYMBOL_T && aField->IsMandatory() )
     {
-        wxString translated_fieldname;
-        translated_fieldname = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(),
-                                                                        DO_TRANSLATE );
+        wxString translated_fieldname = TEMPLATE_FIELDNAME::GetDefaultFieldName( aField->GetId(),
+                                                                                 DO_TRANSLATE );
         caption.Printf( _( "Edit %s Field" ), TitleCaps( translated_fieldname ) );
     }
-    else if( parentType == SCH_SHEET_T && aField->GetId() < SHEET_MANDATORY_FIELDS )
+    else if( parentType == SCH_SHEET_T && aField->IsMandatory() )
         caption.Printf( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );
     else
         caption.Printf( _( "Edit '%s' Field" ), aField->GetName() );
 
-    DIALOG_SCH_FIELD_PROPERTIES dlg( m_frame, caption, aField );
+    DIALOG_FIELD_PROPERTIES dlg( m_frame, caption, aField );
 
     // The footprint field dialog can invoke a KIWAY_PLAYER so we must use a quasi-modal
     if( dlg.ShowQuasiModal() != wxID_OK )

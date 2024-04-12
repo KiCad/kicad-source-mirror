@@ -456,12 +456,12 @@ void SYMBOL_EDIT_FRAME::CreateNewSymbol( const wxString& aInheritFrom )
         // Inherit the parent mandatory field attributes.
         for( int id = 0; id < MANDATORY_FIELDS; ++id )
         {
-            LIB_FIELD* field = new_symbol.GetFieldById( id );
+            SCH_FIELD* field = new_symbol.GetFieldById( id );
 
             // the MANDATORY_FIELDS are exactly that in RAM.
             wxCHECK( field, /* void */ );
 
-            LIB_FIELD* parentField = parent->GetFieldById( id );
+            SCH_FIELD* parentField = parent->GetFieldById( id );
 
             wxCHECK( parentField, /* void */ );
 

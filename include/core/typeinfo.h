@@ -206,12 +206,6 @@ enum KICAD_T
     LIB_PIN_T,
 
     /*
-     * Fields are not saved inside the "DRAW/ENDDRAW".  Add new draw item
-     * types before this line.
-     */
-    LIB_FIELD_T,
-
-    /*
      * For GerbView: item types:
      */
     GERBER_LAYOUT_T,
@@ -422,8 +416,6 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case LIB_TEXT_T:
     case LIB_TEXTBOX_T:
     case LIB_PIN_T:
-
-    case LIB_FIELD_T:
         return true;
 
     default:

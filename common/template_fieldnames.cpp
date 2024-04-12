@@ -72,7 +72,7 @@ const wxString TEMPLATE_FIELDNAME::GetDefaultFieldName( int aFieldNdx, bool aTra
     case VALUE_FIELD:       return _( VALUE_CANONICAL );       // The symbol value
     case FOOTPRINT_FIELD:   return _( FOOTPRINT_CANONICAL );   // The footprint for use with Pcbnew
     case DATASHEET_FIELD:   return _( DATASHEET_CANONICAL );   // Link to a datasheet for symbol
-    case DESCRIPTION_FIELD: return _( DESCRIPTION_CANONICAL );     // The symbol description
+    case DESCRIPTION_FIELD: return _( DESCRIPTION_CANONICAL ); // The symbol description
     default:                return wxString::Format( _( "Field%d" ), aFieldNdx );
     }
 }
@@ -208,13 +208,19 @@ void TEMPLATES::resolveTemplates()
 
     for( const TEMPLATE_FIELDNAME& global : m_globals )
     {
+        bool overriddenInProject = false;
+
         for( const TEMPLATE_FIELDNAME& project : m_project )
         {
             if( global.m_Name == project.m_Name )
-                continue;
+            {
+                overriddenInProject = true;
+                break;
+            }
         }
 
-        m_resolved.push_back( global );
+        if( !overriddenInProject )
+            m_resolved.push_back( global );
     }
 
     m_resolvedDirty = false;

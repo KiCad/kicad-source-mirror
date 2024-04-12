@@ -3796,7 +3796,7 @@ void SCH_IO_ALTIUM::ParseLibDesignator( const std::map<wxString, wxString>& aPro
     for( LIB_SYMBOL* symbol : aSymbol )
     {
         bool emptyRef = elem.text.IsEmpty();
-        LIB_FIELD& refField = symbol->GetReferenceField();
+        SCH_FIELD& refField = symbol->GetReferenceField();
 
         if( emptyRef )
             refField.SetText( wxT( "X" ) );
@@ -3958,7 +3958,7 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
 
     for( LIB_SYMBOL* libSymbol : aSymbol )
     {
-        LIB_FIELD*  field = nullptr;
+        SCH_FIELD*  field = nullptr;
         wxString    upperName = elem.name.Upper();
 
         if( upperName == "COMMENT" )
@@ -3988,7 +3988,7 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
             while( libSymbol->FindField( fieldName ) )
                 fieldName = wxString::Format( "%s_%d", fieldNameStem, disambiguate++ );
 
-            LIB_FIELD* new_field = new LIB_FIELD( fieldIdx, fieldName );
+            SCH_FIELD* new_field = new SCH_FIELD( libSymbol, fieldIdx, fieldName );
             libSymbol->AddField( new_field );
             field = new_field;
         }
@@ -4046,7 +4046,7 @@ void SCH_IO_ALTIUM::ParseImplementation( const std::map<wxString, wxString>& aPr
             LIB_ID fpLibId = AltiumToKiCadLibID( libName, elem.name );
 
             symbol->SetFPFilters( fpFilters );
-            LIB_FIELD& footprintField = symbol->GetFootprintField();
+            SCH_FIELD& footprintField = symbol->GetFootprintField();
             footprintField.SetText( fpLibId.Format() );
         }
 
@@ -4269,7 +4269,7 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
             LIB_SYMBOL* symbol = symbols[ii];
             symbol->FixupDrawItems();
 
-            LIB_FIELD& valField = symbol->GetValueField();
+            SCH_FIELD& valField = symbol->GetValueField();
 
             if( valField.GetText().IsEmpty() )
                 valField.SetText( name );

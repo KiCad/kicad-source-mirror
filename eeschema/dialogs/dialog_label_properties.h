@@ -61,21 +61,21 @@ private:
     bool TransferDataFromWindow() override;
 
 private:
-    SCH_EDIT_FRAME*               m_Parent;
-    int                           m_width;
-    int                           m_delayedFocusRow;
-    int                           m_delayedFocusColumn;
+    SCH_EDIT_FRAME*       m_Parent;
+    int                   m_width;
+    int                   m_delayedFocusRow;
+    int                   m_delayedFocusColumn;
 
-    SCH_LABEL_BASE*               m_currentLabel;
-    wxTextEntry*                  m_activeTextEntry;
-    SCH_NETNAME_VALIDATOR         m_netNameValidator;
+    SCH_LABEL_BASE*       m_currentLabel;
+    wxTextEntry*          m_activeTextEntry;
+    SCH_NETNAME_VALIDATOR m_netNameValidator;
 
-    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
-    std::bitset<64>               m_shownColumns;
+    FIELDS_GRID_TABLE*    m_fields;
+    std::bitset<64>       m_shownColumns;
 
-    UNIT_BINDER                   m_textSize;
+    UNIT_BINDER           m_textSize;
 
-    HTML_MESSAGE_BOX*             m_helpWindow;
+    HTML_MESSAGE_BOX*     m_helpWindow;
 };
 
 

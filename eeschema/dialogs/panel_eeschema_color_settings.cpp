@@ -359,13 +359,13 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         LIB_SYMBOL* symbol = new LIB_SYMBOL( wxEmptyString );
         VECTOR2I p( 2625, -1600 );
 
-        LIB_FIELD& ref = symbol->GetReferenceField();
+        SCH_FIELD& ref = symbol->GetReferenceField();
 
         ref.SetText( wxT( "U1" ) );
         ref.SetPosition( MILS_POINT( p.x + 30, p.y + 260 ) );
         ref.SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
 
-        LIB_FIELD& value = symbol->GetValueField();
+        SCH_FIELD& value = symbol->GetValueField();
 
         value.SetText( wxT( "OPA604" ) );
         value.SetPosition( MILS_POINT( p.x + 30, p.y + 180 ) );

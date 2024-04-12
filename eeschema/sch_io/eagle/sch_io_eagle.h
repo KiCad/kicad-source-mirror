@@ -52,7 +52,6 @@ class STRING_UTF8_MAP;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
 class LIB_SHAPE;
-class LIB_FIELD;
 class LIB_RECTANGLE;
 class LIB_POLYLINE;
 class LIB_PIN;
@@ -172,7 +171,7 @@ private:
     void          loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aLines );
 
     void          loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
-    void          loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const;
+    void          loadFieldAttributes( SCH_FIELD* aField, const LIB_TEXT* aText ) const;
 
     ///< Move net labels that are detached from any wire to the nearest wire
     void adjustNetLabels();

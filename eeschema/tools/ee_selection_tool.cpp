@@ -566,7 +566,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     if( static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->IsSymbolAlias() )
                     {
-                        m_selection = RequestSelection( { LIB_FIELD_T } );
+                        m_selection = RequestSelection( { SCH_FIELD_T } );
                     }
                     else
                     {
@@ -574,7 +574,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                                                           LIB_TEXT_T,
                                                           LIB_TEXTBOX_T,
                                                           LIB_PIN_T,
-                                                          LIB_FIELD_T } );
+                                                          SCH_FIELD_T } );
                     }
                 }
                 else
@@ -1076,11 +1076,11 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
         if( symbolEditorFrame )
         {
             // Do not select invisible items if they are not displayed
-            EDA_ITEM* item = static_cast<EDA_ITEM*>( collector[i] );
+            EDA_ITEM* item = collector[i];
 
-            if( item->Type() == LIB_FIELD_T )
+            if( item->Type() == SCH_FIELD_T )
             {
-                if( !static_cast<LIB_FIELD*>( item )->IsVisible()
+                if( !static_cast<SCH_FIELD*>( item )->IsVisible()
                     && !symbolEditorFrame->GetShowInvisibleFields() )
                 {
                     collector.Remove( i );
@@ -1649,7 +1649,6 @@ bool EE_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
     case SCH_FIELD_T:
     case LIB_TEXT_T:
     case LIB_TEXTBOX_T:
-    case LIB_FIELD_T:
         if( !m_filter.text )
             return false;
 
@@ -2442,7 +2441,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
 
     // Do not allow selection of anything except fields when the current symbol in the symbol
     // editor is a derived symbol.
-    if( symEditFrame && symEditFrame->IsSymbolAlias() && aItem->Type() != LIB_FIELD_T )
+    if( symEditFrame && symEditFrame->IsSymbolAlias() && aItem->Type() != SCH_FIELD_T )
         return false;
 
     switch( aItem->Type() )
@@ -2481,7 +2480,7 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
     case LIB_SYMBOL_T:    // In symbol_editor we do not want to select the symbol itself.
         return false;
 
-    case LIB_FIELD_T:     // LIB_FIELD object can always be edited.
+    case SCH_FIELD_T:     // SCH_FIELD object can always be edited.
         break;
 
     case LIB_SHAPE_T:

@@ -1392,11 +1392,10 @@ void SYMBOL_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
                 lastItem = pin;
         }
 
-        std::vector<LIB_FIELD*> fields;
-
+        std::vector<SCH_FIELD*> fields;
         m_symbol->GetFields( fields );
 
-        for( LIB_FIELD* field : fields )
+        for( SCH_FIELD* field : fields )
         {
             if( field->m_Uuid == lastBrightenedItemID )
                 lastItem = field;
@@ -1637,13 +1636,13 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
     int orientation = aSymbol->GetOrientation() & ~( SYM_MIRROR_X | SYM_MIRROR_Y );
     int mirror = aSymbol->GetOrientation() & ( SYM_MIRROR_X | SYM_MIRROR_Y );
 
-    std::vector<LIB_FIELD> fullSetOfFields;
+    std::vector<SCH_FIELD> fullSetOfFields;
 
     for( int i = 0; i < (int) aSymbol->GetFields().size(); ++i )
     {
         const SCH_FIELD& field = aSymbol->GetFields()[i];
         VECTOR2I         pos = field.GetPosition() - aSymbol->GetPosition();
-        LIB_FIELD        libField( symbol.get(), field.GetId() );
+        SCH_FIELD        libField( symbol.get(), field.GetId() );
 
         if( i >= MANDATORY_FIELDS && !field.GetName( false ).IsEmpty() )
             libField.SetName( field.GetName( false ) );

@@ -422,11 +422,11 @@ void EE_INSPECTION_TOOL::DiffSymbol( SCH_SYMBOL* symbol )
         }
         else
         {
-            std::vector<LIB_FIELD> fields;
+            std::vector<SCH_FIELD> fields;
 
             for( SCH_FIELD& field : symbol->GetFields() )
             {
-                fields.emplace_back( LIB_FIELD( flattenedLibSymbol.get(), field.GetId(),
+                fields.emplace_back( SCH_FIELD( flattenedLibSymbol.get(), field.GetId(),
                                                 field.GetName( false ) ) );
                 fields.back().CopyText( field );
                 fields.back().SetAttributes( field );

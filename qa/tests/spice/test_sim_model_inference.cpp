@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE( InferPassiveValues )
         symbol->GetReferenceField().SetText( testCase.reference );
         symbol->GetValueField().SetText( testCase.value );
 
-        std::vector<LIB_FIELD> fields;
+        std::vector<SCH_FIELD> fields;
         fields.emplace_back( symbol->GetReferenceField() );
         fields.emplace_back( symbol->GetValueField() );
 

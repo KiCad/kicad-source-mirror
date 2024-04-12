@@ -18,7 +18,6 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <lib_field.h>
 #include <lib_pin.h>
 #include <lib_shape.h>
 #include <lib_symbol.h>
@@ -99,7 +98,6 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
     case LIB_TEXT_T:            return std::make_unique<LIB_TEXT>( parentLibSymbol );
     case LIB_TEXTBOX_T:         return std::make_unique<LIB_TEXTBOX>( parentLibSymbol );
     case LIB_PIN_T:             return std::make_unique<LIB_PIN>( parentLibSymbol );
-    case LIB_FIELD_T:           return std::make_unique<LIB_FIELD>( parentLibSymbol );
 
     default:
         return nullptr;

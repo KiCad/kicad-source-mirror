@@ -57,7 +57,7 @@ DIALOG_SHEET_PROPERTIES::DIALOG_SHEET_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_S
     m_dummySheetNameField( VECTOR2I( -1, -1 ), SHEETNAME, &m_dummySheet )
 {
     m_sheet = aSheet;
-    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_grid, m_sheet );
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_sheet );
     m_delayedFocusRow = SHEETNAME;
     m_delayedFocusColumn = FDC_VALUE;
 
@@ -246,7 +246,7 @@ static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 }
 
 
-static bool positioningChanged( FIELDS_GRID_TABLE<SCH_FIELD>* a, std::vector<SCH_FIELD>& b )
+static bool positioningChanged( FIELDS_GRID_TABLE* a, std::vector<SCH_FIELD>& b )
 {
     for( size_t i = 0; i < SHEET_MANDATORY_FIELDS; ++i )
     {

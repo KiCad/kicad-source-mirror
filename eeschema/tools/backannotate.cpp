@@ -552,7 +552,7 @@ void BACK_ANNOTATE::applyChangelist()
             for( SCH_FIELD& field : symbol->GetFields() )
             {
                 // Never delete mandatory fields
-                if( field.GetId() < MANDATORY_FIELDS )
+                if( field.IsMandatory() )
                     continue;
 
                 if( fpData.m_fieldsMap.find( field.GetCanonicalName() )

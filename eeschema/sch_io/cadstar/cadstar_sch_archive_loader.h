@@ -42,7 +42,6 @@ struct CADSTAR_PART_ENTRY;
 class BUS_ALIAS;
 class EDA_TEXT;
 class SPIN_STYLE;
-class LIB_FIELD;
 class LIB_SYMBOL;
 class REPORTER;
 class SCH_SYMBOL;
@@ -192,11 +191,11 @@ private:
                                const wxString&              aFootprintAlternate );
 
     void loadLibrarySymbolShapeVertices( const std::vector<VERTEX>& aCadstarVertices,
-                                         VECTOR2I aSymbolOrigin, LIB_SYMBOL* aSymbol,
+                                         const VECTOR2I& aSymbolOrigin, LIB_SYMBOL* aSymbol,
                                          int aGateNumber, int aLineThickness );
 
     void applyToLibraryFieldAttribute( const ATTRIBUTE_LOCATION& aCadstarAttrLoc,
-                                       VECTOR2I aSymbolOrigin, LIB_FIELD* aKiCadField );
+                                       const VECTOR2I& aSymbolOrigin, SCH_FIELD* aKiCadField );
 
     //Helper Functions for loading symbols in schematic
     SCH_SYMBOL* loadSchematicSymbol( const SYMBOL& aCadstarSymbol, const LIB_SYMBOL& aKiCadPart,
@@ -237,7 +236,8 @@ private:
                             const ALIGNMENT&     aCadstarAlignment,
                             const JUSTIFICATION& aCadstarJustification,
                             const long long aCadstarOrientAngle = 0,
-                            bool aMirrored = false );
+                            bool aMirrored = false,
+                            bool aInvertY = false );
 
     SCH_TEXT* getKiCadSchText( const TEXT& aCadstarTextElement );
 
@@ -338,7 +338,7 @@ private:
     double getPolarRadius( const VECTOR2I& aPoint );
 
 
-    static LIB_FIELD* addNewFieldToSymbol( const wxString&              aFieldName,
+    static SCH_FIELD* addNewFieldToSymbol( const wxString&              aFieldName,
                                            std::unique_ptr<LIB_SYMBOL>& aKiCadSymbol );
 
 }; // CADSTAR_SCH_ARCHIVE_LOADER

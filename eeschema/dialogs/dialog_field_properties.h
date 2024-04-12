@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2004-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,6 @@
 
 #include <dialog_field_properties_base.h>
 #include <widgets/unit_binder.h>
-#include <lib_field.h>
-#include <template_fieldnames.h>
 
 class SCH_BASE_FRAME;
 class SCH_FIELD;
@@ -39,8 +37,6 @@ class SCH_COMMIT;
 
 
 /**
- * A base class to edit schematic and symbol library fields.
- *
  * This class is setup in expectation of its children possibly using Kiway player so
  * #DIALOG_SHIM::ShowQuasiModal is required when calling any subclasses.
  */
@@ -48,21 +44,27 @@ class DIALOG_FIELD_PROPERTIES : public DIALOG_FIELD_PROPERTIES_BASE
 {
 public:
     DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                             const EDA_TEXT* aTextItem );
+                             const SCH_FIELD* aField );
 
     ~DIALOG_FIELD_PROPERTIES() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    SCH_BASE_FRAME* GetParent() { return dynamic_cast< SCH_BASE_FRAME* >( wxDialog::GetParent() ); }
+    SCH_BASE_FRAME* GetParent() { return dynamic_cast<SCH_BASE_FRAME*>( wxDialog::GetParent() ); }
 
     const wxString& GetText() const { return m_text; }
+
+    void UpdateField( SCH_FIELD* aField );
+
+    void UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath );
 
 protected:
     void init();
 
     void updateText( EDA_TEXT* aText );
+
+    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
 
     /**
      * Handle the select button next to the text value field. The current assumption
@@ -78,7 +80,7 @@ protected:
      * Used to select the variant part of some text fields (for instance, the question mark
      * or number in a reference).
      */
-    virtual void OnSetFocusText( wxFocusEvent& event ) override;
+    void OnSetFocusText( wxFocusEvent& event ) override;
 
     void onOrientButton( wxCommandEvent &aEvent );
     void onHAlignButton( wxCommandEvent &aEvent );
@@ -108,46 +110,9 @@ protected:
 
     SCINTILLA_TRICKS* m_scintillaTricks;
     std::string       m_netlist;
-};
 
-
-/**
- * Handle editing a single symbol field in the symbol editor.
- *
- * @note Use ShowQuasiModal when calling this class!
- */
-class DIALOG_LIB_FIELD_PROPERTIES : public DIALOG_FIELD_PROPERTIES
-{
-public:
-    DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                                 const LIB_FIELD* aField );
-
-    ~DIALOG_LIB_FIELD_PROPERTIES() {}
-
-    void UpdateField( LIB_FIELD* aField );
-};
-
-
-/**
- * Handle editing a single symbol field in the schematic editor.
- *
- * @note Use ShowQuasiModal when calling this class!
- */
-class DIALOG_SCH_FIELD_PROPERTIES : public DIALOG_FIELD_PROPERTIES
-{
-public:
-    DIALOG_SCH_FIELD_PROPERTIES( SCH_EDIT_FRAME* aParent, const wxString& aTitle,
-                                 const SCH_FIELD* aField );
-
-    ~DIALOG_SCH_FIELD_PROPERTIES() {}
-
-    void onScintillaCharAdded( wxStyledTextEvent &aEvent );
-
-    void UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aField, SCH_SHEET_PATH* aSheetPath );
-
-private:
-    const SCH_FIELD* m_field;
-    bool m_isSheetFilename;
+    const SCH_FIELD*  m_field;
+    bool              m_isSheetFilename;
 };
 
 #endif    // DIALOG_FIELD_PROPERTIES_H

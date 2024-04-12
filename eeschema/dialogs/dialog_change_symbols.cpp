@@ -285,7 +285,7 @@ void DIALOG_CHANGE_SYMBOLS::updateFieldsList()
 
     // Load non-mandatory fields from all matching symbols and their library symbols
     std::vector<SCH_FIELD*> fields;
-    std::vector<LIB_FIELD*> libFields;
+    std::vector<SCH_FIELD*> libFields;
     std::set<wxString>      fieldNames;
 
     for( SCH_SHEET_PATH& instance : hierarchy )
@@ -415,7 +415,7 @@ void DIALOG_CHANGE_SYMBOLS::onOkButtonClicked( wxCommandEvent& aEvent )
         {
             if( i < MANDATORY_FIELDS )
             {
-                LIB_FIELD dummy_field( i );
+                SCH_FIELD dummy_field( nullptr, i );
                 m_updateFields.insert( dummy_field.GetCanonicalName() );
             }
             else
@@ -636,7 +636,7 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
         for( unsigned i = 0; i < symbol->GetFields().size(); ++i )
         {
             SCH_FIELD& field = symbol->GetFields()[i];
-            LIB_FIELD* libField = nullptr;
+            SCH_FIELD* libField = nullptr;
 
             // Mandatory fields always exist in m_updateFields, but these names can be translated.
             // so use GetCanonicalName().
@@ -715,12 +715,12 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
             }
         }
 
-        std::vector<LIB_FIELD*> libFields;
+        std::vector<SCH_FIELD*> libFields;
         symbol->GetLibSymbolRef()->GetFields( libFields );
 
         for( unsigned i = MANDATORY_FIELDS; i < libFields.size(); ++i )
         {
-            const LIB_FIELD& libField = *libFields[i];
+            const SCH_FIELD& libField = *libFields[i];
 
             if( !alg::contains( m_updateFields, libField.GetCanonicalName() ) )
                 continue;

@@ -920,8 +920,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::loadLibraryCoppers( const SYMDEF_PCB& aComponen
             pad->SetSize( { anchorSize, anchorSize } );
             pad->SetPosition( anchorPos );
 
-            SHAPE_POLY_SET shapePolys = getPolySetFromCadstarShape( compCopper.Shape,
-                                                                    lineThickness,
+            SHAPE_POLY_SET shapePolys = getPolySetFromCadstarShape( compCopper.Shape, lineThickness,
                                                                     aFootprint );
             shapePolys.Move( -anchorPos );
             pad->AddPrimitivePoly( shapePolys, 0, true );
@@ -2633,11 +2632,14 @@ int CADSTAR_PCB_ARCHIVE_LOADER::loadNetVia(
 }
 
 
-void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
-        const TEXT& aCadstarText, BOARD_ITEM_CONTAINER* aContainer, const GROUP_ID& aCadstarGroupID,
-        const LAYER_ID& aCadstarLayerOverride, const VECTOR2I& aMoveVector,
-        const double& aRotationAngle, const double& aScalingFactor,
-        const VECTOR2I& aTransformCentre, const bool& aMirrorInvert )
+void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText( const TEXT& aCadstarText,
+                                                  BOARD_ITEM_CONTAINER* aContainer,
+                                                  const GROUP_ID& aCadstarGroupID,
+                                                  const LAYER_ID& aCadstarLayerOverride,
+                                                  const VECTOR2I& aMoveVector,
+                                                  double aRotationAngle, double aScalingFactor,
+                                                  const VECTOR2I& aTransformCentre,
+                                                  bool aMirrorInvert )
 {
     PCB_TEXT* txt = new PCB_TEXT( aContainer );
     aContainer->Add( txt );
@@ -2646,10 +2648,8 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
     EDA_ANGLE rotationAngle( aRotationAngle, TENTHS_OF_A_DEGREE_T );
     VECTOR2I  rotatedTextPos = getKiCadPoint( aCadstarText.Position );
     RotatePoint( rotatedTextPos, aTransformCentre, rotationAngle );
-    rotatedTextPos.x =
-            KiROUND( (double) ( rotatedTextPos.x - aTransformCentre.x ) * aScalingFactor );
-    rotatedTextPos.y =
-            KiROUND( (double) ( rotatedTextPos.y - aTransformCentre.y ) * aScalingFactor );
+    rotatedTextPos.x = KiROUND( ( rotatedTextPos.x - aTransformCentre.x ) * aScalingFactor );
+    rotatedTextPos.y = KiROUND( ( rotatedTextPos.y - aTransformCentre.y ) * aScalingFactor );
     rotatedTextPos += aTransformCentre;
     txt->SetTextPos( rotatedTextPos );
     txt->SetPosition( rotatedTextPos );
@@ -2713,9 +2713,7 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
     }
 
     if( aMirrorInvert )
-    {
         txt->Flip( aTransformCentre, true );
-    }
 
     //scale it after flipping:
     if( aScalingFactor != 1.0 )
@@ -2744,14 +2742,10 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
     if( isLayerSet( layersToDrawOn ) )
     {
         //Make a copy on each layer
-
-        LSEQ      layers = getKiCadLayerSet( layersToDrawOn ).Seq();
-        PCB_TEXT* newtxt;
-
-        for( PCB_LAYER_ID layer : layers )
+        for( PCB_LAYER_ID layer : getKiCadLayerSet( layersToDrawOn ).Seq() )
         {
             txt->SetLayer( layer );
-            newtxt = static_cast<PCB_TEXT*>( txt->Duplicate() );
+            PCB_TEXT* newtxt = static_cast<PCB_TEXT*>( txt->Duplicate() );
             m_board->Add( newtxt, ADD_MODE::APPEND );
 
             if( !aCadstarGroupID.IsEmpty() )
@@ -2774,15 +2768,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarText(
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
                                                    const PCB_LAYER_ID& aKiCadLayer,
-                                                   const int& aLineThickness,
+                                                   int aLineThickness,
                                                    const wxString& aShapeName,
                                                    BOARD_ITEM_CONTAINER* aContainer,
                                                    const GROUP_ID& aCadstarGroupID,
                                                    const VECTOR2I& aMoveVector,
-                                                   const double& aRotationAngle,
-                                                   const double& aScalingFactor,
+                                                   double aRotationAngle, double aScalingFactor,
                                                    const VECTOR2I& aTransformCentre,
-                                                   const bool& aMirrorInvert )
+                                                   bool aMirrorInvert )
 {
     auto drawAsOutline = [&]()
     {
@@ -2844,16 +2837,16 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarShape( const SHAPE& aCadstarShape,
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarCutoutsAsShapes( const std::vector<CUTOUT>& aCutouts,
                                                              const PCB_LAYER_ID& aKiCadLayer,
-                                                             const int& aLineThickness,
+                                                             int aLineThickness,
                                                              BOARD_ITEM_CONTAINER* aContainer,
                                                              const GROUP_ID& aCadstarGroupID,
                                                              const VECTOR2I& aMoveVector,
-                                                             const double& aRotationAngle,
-                                                             const double& aScalingFactor,
+                                                             double aRotationAngle,
+                                                             double aScalingFactor,
                                                              const VECTOR2I& aTransformCentre,
-                                                             const bool& aMirrorInvert )
+                                                             bool aMirrorInvert )
 {
-    for( CUTOUT cutout : aCutouts )
+    for( const CUTOUT& cutout : aCutouts )
     {
         drawCadstarVerticesAsShapes( cutout.Vertices, aKiCadLayer, aLineThickness, aContainer,
                                      aCadstarGroupID, aMoveVector, aRotationAngle, aScalingFactor,
@@ -2864,14 +2857,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarCutoutsAsShapes( const std::vector<C
 
 void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsShapes( const std::vector<VERTEX>& aCadstarVertices,
                                                               const PCB_LAYER_ID& aKiCadLayer,
-                                                              const int& aLineThickness,
+                                                              int aLineThickness,
                                                               BOARD_ITEM_CONTAINER* aContainer,
                                                               const GROUP_ID& aCadstarGroupID,
                                                               const VECTOR2I& aMoveVector,
-                                                              const double& aRotationAngle,
-                                                              const double& aScalingFactor,
+                                                              double aRotationAngle,
+                                                              double aScalingFactor,
                                                               const VECTOR2I& aTransformCentre,
-                                                              const bool& aMirrorInvert )
+                                                              bool aMirrorInvert )
 {
     std::vector<PCB_SHAPE*> shapes = getShapesFromVertices( aCadstarVertices, aContainer,
                                                             aCadstarGroupID, aMoveVector,
@@ -2888,15 +2881,14 @@ void CADSTAR_PCB_ARCHIVE_LOADER::drawCadstarVerticesAsShapes( const std::vector<
 }
 
 
-std::vector<PCB_SHAPE*> CADSTAR_PCB_ARCHIVE_LOADER::getShapesFromVertices(
-                                                    const std::vector<VERTEX>& aCadstarVertices,
-                                                    BOARD_ITEM_CONTAINER* aContainer,
-                                                    const GROUP_ID& aCadstarGroupID,
-                                                    const VECTOR2I& aMoveVector,
-                                                    const double& aRotationAngle,
-                                                    const double& aScalingFactor,
-                                                    const VECTOR2I& aTransformCentre,
-                                                    const bool& aMirrorInvert )
+std::vector<PCB_SHAPE*>
+CADSTAR_PCB_ARCHIVE_LOADER::getShapesFromVertices( const std::vector<VERTEX>& aCadstarVertices,
+                                                   BOARD_ITEM_CONTAINER* aContainer,
+                                                   const GROUP_ID& aCadstarGroupID,
+                                                   const VECTOR2I& aMoveVector,
+                                                   double aRotationAngle, double aScalingFactor,
+                                                   const VECTOR2I& aTransformCentre,
+                                                   bool aMirrorInvert )
 {
     std::vector<PCB_SHAPE*> shapes;
 
@@ -2925,10 +2917,10 @@ PCB_SHAPE* CADSTAR_PCB_ARCHIVE_LOADER::getShapeFromVertex( const POINT& aCadstar
                                                            BOARD_ITEM_CONTAINER* aContainer,
                                                            const GROUP_ID& aCadstarGroupID,
                                                            const VECTOR2I& aMoveVector,
-                                                           const double& aRotationAngle,
-                                                           const double& aScalingFactor,
+                                                           double aRotationAngle,
+                                                           double aScalingFactor,
                                                            const VECTOR2I& aTransformCentre,
-                                                           const bool& aMirrorInvert )
+                                                           bool aMirrorInvert )
 {
     PCB_SHAPE* shape = nullptr;
     bool       cw = false;
@@ -3037,13 +3029,13 @@ ZONE* CADSTAR_PCB_ARCHIVE_LOADER::getZoneFromCadstarShape( const SHAPE& aCadstar
 
 
 SHAPE_POLY_SET CADSTAR_PCB_ARCHIVE_LOADER::getPolySetFromCadstarShape( const SHAPE& aCadstarShape,
-                                                                       const int& aLineThickness,
+                                                                       int aLineThickness,
                                                                        BOARD_ITEM_CONTAINER* aContainer,
                                                                        const VECTOR2I& aMoveVector,
-                                                                       const double& aRotationAngle,
-                                                                       const double& aScalingFactor,
+                                                                       double aRotationAngle,
+                                                                       double aScalingFactor,
                                                                        const VECTOR2I& aTransformCentre,
-                                                                       const bool& aMirrorInvert )
+                                                                       bool aMirrorInvert )
 {
     GROUP_ID noGroup = wxEmptyString;
 

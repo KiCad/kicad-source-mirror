@@ -54,7 +54,7 @@ DIALOG_LABEL_PROPERTIES::DIALOG_LABEL_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_L
     COLOR_SETTINGS* colorSettings = m_Parent->GetColorSettings();
     COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
-    m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_grid, m_currentLabel );
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_currentLabel );
     m_width = 100;  // Will be later set to a better value
     m_delayedFocusRow = -1;
     m_delayedFocusColumn = FDC_VALUE;
@@ -407,7 +407,7 @@ static bool positioningChanged( const SCH_FIELD& a, const SCH_FIELD& b )
 }
 
 
-static bool positioningChanged( FIELDS_GRID_TABLE<SCH_FIELD>* a, std::vector<SCH_FIELD>& b )
+static bool positioningChanged( FIELDS_GRID_TABLE* a, std::vector<SCH_FIELD>& b )
 {
     for( size_t i = 0; i < a->size() && i < b.size(); ++i )
     {

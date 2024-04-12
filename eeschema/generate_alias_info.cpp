@@ -161,7 +161,7 @@ protected:
     }
 
 
-    wxString GetHtmlFieldRow( const LIB_FIELD& aField ) const
+    wxString GetHtmlFieldRow( const SCH_FIELD& aField ) const
     {
         wxString name = aField.GetCanonicalName();
         wxString text;
@@ -214,11 +214,11 @@ protected:
     void SetHtmlFieldTable()
     {
         wxString                fieldtable;
-        std::vector<LIB_FIELD*> fields;
+        std::vector<SCH_FIELD*> fields;
 
         m_symbol->GetFields( fields );
 
-        for( const LIB_FIELD* field: fields )
+        for( const SCH_FIELD* field: fields )
             fieldtable += GetHtmlFieldRow( *field );
 
         if( m_symbol->IsAlias() )
@@ -228,11 +228,11 @@ protected:
             // Append all of the unique parent fields if this is an alias.
             if( parent )
             {
-                std::vector<LIB_FIELD*> parentFields;
+                std::vector<SCH_FIELD*> parentFields;
 
                 parent->GetFields( parentFields );
 
-                for( const LIB_FIELD* parentField : parentFields )
+                for( const SCH_FIELD* parentField : parentFields )
                 {
                     if( m_symbol->FindField( parentField->GetCanonicalName() ) )
                         continue;

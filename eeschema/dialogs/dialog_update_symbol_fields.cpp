@@ -82,7 +82,7 @@ DIALOG_UPDATE_SYMBOL_FIELDS::~DIALOG_UPDATE_SYMBOL_FIELDS()
 void DIALOG_UPDATE_SYMBOL_FIELDS::updateFieldsList()
 {
     // Load non-mandatory fields from the parent part
-    std::vector<LIB_FIELD*>      libFields;
+    std::vector<SCH_FIELD*>      libFields;
     std::set<wxString>           fieldNames;
     std::unique_ptr<LIB_SYMBOL>  flattenedParent = m_symbol->GetParent().lock()->Flatten();
 
@@ -143,14 +143,14 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
     bool resetEffects = m_resetFieldEffects->GetValue();
     bool resetPositions = m_resetFieldPositions->GetValue();
 
-    std::vector<LIB_FIELD> fields;
-    std::vector<LIB_FIELD> result;
+    std::vector<SCH_FIELD> fields;
+    std::vector<SCH_FIELD> result;
     m_symbol->GetFields( fields );
 
-    for( LIB_FIELD& field : fields )
+    for( SCH_FIELD& field : fields )
     {
         bool       copy = true;
-        LIB_FIELD* parentField = nullptr;
+        SCH_FIELD* parentField = nullptr;
 
         if( alg::contains( m_updateFields, field.GetName() ) )
         {
@@ -195,12 +195,12 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
             result.emplace_back( std::move( field ) );
     }
 
-    std::vector<LIB_FIELD*> parentFields;
+    std::vector<SCH_FIELD*> parentFields;
     int                     idx = result.size();
 
     flattenedParent->GetFields( parentFields );
 
-    for( LIB_FIELD* parentField : parentFields )
+    for( SCH_FIELD* parentField : parentFields )
     {
         if( !alg::contains( m_updateFields, parentField->GetName() ) )
             continue;
@@ -208,7 +208,7 @@ void DIALOG_UPDATE_SYMBOL_FIELDS::onOkButtonClicked( wxCommandEvent& aEvent )
         if( !m_symbol->FindField( parentField->GetName() ) )
         {
             result.emplace_back( m_symbol, idx++ );
-            LIB_FIELD* newField = &result.back();
+            SCH_FIELD* newField = &result.back();
 
             newField->SetName( parentField->GetCanonicalName() );
             newField->SetText( parentField->GetText() );

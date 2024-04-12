@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@
 //    wxPG_NATIVE_DOUBLE_BUFFERING flag is not set.
 // 2. wxPropertyGridManager->ShowHeader() segfaults when called from this dialog's constructor.
 
-template <typename T_symbol, typename T_field>
+template <typename T>
 class DIALOG_SIM_MODEL : public DIALOG_SIM_MODEL_BASE
 {
 public:
@@ -61,8 +61,8 @@ public:
         MODEL
     };
 
-    DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame, T_symbol& aSymbol,
-                      std::vector<T_field>& aFields );
+    DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame, T& aSymbol,
+                      std::vector<SCH_FIELD>& aFields );
 
     ~DIALOG_SIM_MODEL();
 
@@ -121,27 +121,27 @@ private:
     bool isIbisLoaded() { return dynamic_cast<const SIM_LIBRARY_KIBIS*>( library() ); }
 
 private:
-    EDA_BASE_FRAME*        m_frame;
-    T_symbol&              m_symbol;
-    std::vector<T_field>&  m_fields;
+    EDA_BASE_FRAME*         m_frame;
+    T&                      m_symbol;
+    std::vector<SCH_FIELD>& m_fields;
 
-    SIM_LIB_MGR            m_libraryModelsMgr;
-    SIM_LIB_MGR            m_builtinModelsMgr;
-    wxString               m_prevLibrary;
-    const SIM_MODEL*       m_prevModel;
+    SIM_LIB_MGR             m_libraryModelsMgr;
+    SIM_LIB_MGR             m_builtinModelsMgr;
+    wxString                m_prevLibrary;
+    const SIM_MODEL*        m_prevModel;
 
     std::vector<LIB_PIN*>                          m_sortedPartPins; //< Pins of the current part.
     std::map<SIM_MODEL::DEVICE_T, SIM_MODEL::TYPE> m_curModelTypeOfDeviceType;
     SIM_MODEL::TYPE                                m_curModelType;
 
-    SCINTILLA_TRICKS*      m_scintillaTricksCode;
-    SCINTILLA_TRICKS*      m_scintillaTricksSubckt;
+    SCINTILLA_TRICKS*       m_scintillaTricksCode;
+    SCINTILLA_TRICKS*       m_scintillaTricksSubckt;
 
-    wxPGProperty*          m_firstCategory;            // Used to add principal parameters to root.
-    wxPGProperty*          m_prevParamGridSelection;
+    wxPGProperty*           m_firstCategory;            // Used to add principal parameters to root.
+    wxPGProperty*           m_prevParamGridSelection;
 
-    int                    m_lastParamGridWidth;
-    bool                   m_inKillFocus;
+    int                     m_lastParamGridWidth;
+    bool                    m_inKillFocus;
 };
 
 #endif /* DIALOG_SIM_MODEL_H */

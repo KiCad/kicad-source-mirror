@@ -64,7 +64,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::Init()
                 {
                     for( EDA_ITEM* item : sel )
                     {
-                        if( item->Type() != LIB_FIELD_T )
+                        if( item->Type() != SCH_FIELD_T )
                             return false;
                     }
                 }
@@ -124,7 +124,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
     EE_SELECTION& selection = m_frame->IsSymbolAlias()
-                                            ? m_selectionTool->RequestSelection( { LIB_FIELD_T } )
+                                            ? m_selectionTool->RequestSelection( { SCH_FIELD_T } )
                                             : m_selectionTool->RequestSelection();
     bool          unselect = selection.IsHover();
 

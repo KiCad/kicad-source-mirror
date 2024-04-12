@@ -143,7 +143,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
 
                         for( const std::pair<int, wxString>& fieldDef : i.Fields )
                         {
-                            LIB_FIELD* field = storageList.back().GetFieldById( fieldDef.first );
+                            SCH_FIELD* field = storageList.back().GetFieldById( fieldDef.first );
 
                             if( field )
                                 field->SetText( fieldDef.second );
@@ -545,7 +545,7 @@ void PANEL_SYMBOL_CHOOSER::showFootprintFor( LIB_ID const& aLibId )
     if( !symbol )
         return;
 
-    LIB_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
+    SCH_FIELD* fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
     wxString   fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
     showFootprint( fp_name );
@@ -605,7 +605,7 @@ void PANEL_SYMBOL_CHOOSER::populateFootprintSelector( LIB_ID const& aLibId )
     if( symbol != nullptr )
     {
         std::vector<LIB_PIN*> temp_pins;
-        LIB_FIELD*            fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
+        SCH_FIELD*            fp_field = symbol->GetFieldById( FOOTPRINT_FIELD );
         wxString              fp_name = fp_field ? fp_field->GetFullText() : wxString( "" );
 
         // All units, but only a single De Morgan variant.

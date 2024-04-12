@@ -62,7 +62,7 @@ DIALOG_LIB_SYMBOL_PROPERTIES::DIALOG_LIB_SYMBOL_PROPERTIES( SYMBOL_EDIT_FRAME* a
 {
     // Give a bit more room for combobox editors
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
-    m_fields = new FIELDS_GRID_TABLE<LIB_FIELD>( this, aParent, m_grid, m_libEntry );
+    m_fields = new FIELDS_GRID_TABLE( this, aParent, m_grid, m_libEntry );
     m_grid->SetTable( m_fields );
     m_grid->PushEventHandler( new FIELDS_GRID_TRICKS( m_grid, this,
                                                       [&]( wxCommandEvent& aEvent )
@@ -256,7 +256,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::Validate()
     // Check for missing field names.
     for( int ii = MANDATORY_FIELDS; ii < (int) m_fields->size(); ++ii )
     {
-        LIB_FIELD& field = m_fields->at( ii );
+        SCH_FIELD& field = m_fields->at( ii );
         wxString   fieldName = field.GetName( false );
 
         if( fieldName.IsEmpty() && !field.GetText().IsEmpty() )
@@ -359,7 +359,7 @@ bool DIALOG_LIB_SYMBOL_PROPERTIES::TransferDataFromWindow()
 
     for( int ii = m_fields->GetNumberRows() - 1; ii >= MANDATORY_FIELDS; ii-- )
     {
-        LIB_FIELD&      field = m_fields->at( ii );
+        SCH_FIELD&      field = m_fields->at( ii );
         const wxString& fieldName = field.GetCanonicalName();
 
         if( fieldName.IsEmpty() && field.GetText().IsEmpty() )
@@ -512,7 +512,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnAddField( wxCommandEvent& event )
 
     SYMBOL_EDITOR_SETTINGS* settings = m_Parent->GetSettings();
     int       fieldID = (int) m_fields->size();
-    LIB_FIELD newField( m_libEntry, fieldID );
+    SCH_FIELD newField( m_libEntry, fieldID );
 
     newField.SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
                                     schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
@@ -587,7 +587,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveUp( wxCommandEvent& event )
 
     if( i > MANDATORY_FIELDS )
     {
-        LIB_FIELD tmp = m_fields->at( (unsigned) i );
+        SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
         m_fields->insert( m_fields->begin() + i - 1, tmp );
         m_grid->ForceRefresh();
@@ -613,7 +613,7 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnMoveDown( wxCommandEvent& event )
 
     if( i >= MANDATORY_FIELDS && i + 1 < m_fields->GetNumberRows() )
     {
-        LIB_FIELD tmp = m_fields->at( (unsigned) i );
+        SCH_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
         m_fields->insert( m_fields->begin() + i + 1, tmp );
         m_grid->ForceRefresh();
@@ -635,9 +635,9 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    std::vector<LIB_FIELD> fields;
+    std::vector<SCH_FIELD> fields;
 
-    for( const LIB_FIELD& field : *m_fields )
+    for( const SCH_FIELD& field : *m_fields )
         fields.emplace_back( field );
 
     DIALOG_SIM_MODEL dialog( this, m_parentFrame, *m_libEntry, fields );
@@ -646,11 +646,11 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
         return;
 
     // Add in any new fields
-    for( const LIB_FIELD& editedField : fields )
+    for( const SCH_FIELD& editedField : fields )
     {
         bool found = false;
 
-        for( LIB_FIELD& existingField : *m_fields )
+        for( SCH_FIELD& existingField : *m_fields )
         {
             if( existingField.GetName() == editedField.GetName() )
             {
@@ -671,10 +671,10 @@ void DIALOG_LIB_SYMBOL_PROPERTIES::OnEditSpiceModel( wxCommandEvent& event )
     // Remove any deleted fields
     for( int ii = (int) m_fields->size() - 1; ii >= 0; --ii )
     {
-        LIB_FIELD& existingField = m_fields->at( ii );
+        SCH_FIELD& existingField = m_fields->at( ii );
         bool       found = false;
 
-        for( LIB_FIELD& editedField : fields )
+        for( SCH_FIELD& editedField : fields )
         {
             if( editedField.GetName() == existingField.GetName() )
             {

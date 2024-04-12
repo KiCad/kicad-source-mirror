@@ -415,7 +415,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
     symbol->SetExcludedFromBoard( aPart.exclude_from_board );
     symbol->SetExcludedFromSim( aPart.exclude_from_sim );
 
-    LIB_FIELD* field;
+    SCH_FIELD* field;
 
     for( auto& _field : aPart.fields )
     {
@@ -474,7 +474,7 @@ LIB_SYMBOL* SCH_IO_HTTP_LIB::loadSymbolFromPart( const wxString&          aSymbo
             else
             {
                 // Generic fields
-                field = new LIB_FIELD( symbol->GetNextAvailableFieldId() );
+                field = new SCH_FIELD( nullptr, symbol->GetNextAvailableFieldId() );
                 field->SetName( fieldName );
 
                 field->SetText( std::get<0>( fieldProperties ) );

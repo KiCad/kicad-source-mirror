@@ -37,7 +37,6 @@
 #include <sch_edit_frame.h>
 #include <ee_collectors.h>
 #include <sch_symbol.h>
-#include <lib_field.h>
 #include <template_fieldnames.h>
 #include <symbol_library.h>
 #include <sch_validators.h>
@@ -50,19 +49,20 @@
 
 
 DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const wxString& aTitle,
-                                                  const EDA_TEXT* aTextItem ) :
+                                                  const SCH_FIELD* aField ) :
     DIALOG_FIELD_PROPERTIES_BASE( aParent, wxID_ANY, aTitle ),
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
     m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true ),
     m_font( nullptr ),
     m_firstFocus( true ),
-    m_scintillaTricks( nullptr )
+    m_scintillaTricks( nullptr ),
+    m_field( aField )
 {
     COLOR_SETTINGS* colorSettings = aParent->GetColorSettings();
     COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
-    wxASSERT( aTextItem );
+    wxASSERT( m_field );
 
     m_note->SetFont( KIUI::GetInfoFont( this ).Italic() );
     m_note->Show( false );
@@ -134,20 +134,142 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
     m_vAlignCenter->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onVAlignButton, this );
     m_vAlignBottom->Bind( wxEVT_BUTTON, &DIALOG_FIELD_PROPERTIES::onVAlignButton, this );
 
-    m_text = aTextItem->GetText();
-    m_isItalic = aTextItem->IsItalic();
-    m_isBold = aTextItem->IsBold();
-    m_color = aTextItem->GetTextColor();
-    m_position = aTextItem->GetTextPos();
-    m_size = aTextItem->GetTextWidth();
-    m_isVertical = aTextItem->GetTextAngle().IsVertical();
-    m_verticalJustification = aTextItem->GetVertJustify();
-    m_horizontalJustification = aTextItem->GetHorizJustify();
-    m_isVisible = aTextItem->IsVisible();
+    // show text variable cross-references in a human-readable format
+    if( aField->Schematic() )
+        m_text = aField->Schematic()->ConvertKIIDsToRefs( aField->GetText() );
+    else
+        m_text = aField->GetText();
 
-    // These should be initialized in the child classes implementing dialogs for lib and sch items.
-    m_isNameVisible  = false;
-    m_allowAutoplace = true;
+    m_font = m_field->GetFont();
+    m_isItalic = aField->IsItalic();
+    m_isBold = aField->IsBold();
+    m_color = aField->GetTextColor();
+    m_position = aField->GetTextPos();
+    m_size = aField->GetTextWidth();
+    m_isVertical = aField->GetTextAngle().IsVertical();
+    m_verticalJustification = aField->GetVertJustify();
+    m_horizontalJustification = aField->GetHorizJustify();
+    m_isVisible = aField->IsVisible();
+
+    m_isSheetFilename = false;
+
+    if( aField->GetParent() && aField->GetParent()->Type() == LIB_SYMBOL_T )
+    {
+        const LIB_SYMBOL* symbol = static_cast<const LIB_SYMBOL*>( aField->GetParentSymbol() );
+
+        /*
+         * Symbol netlist format:
+         *   pinNumber pinName <tab> pinNumber pinName...
+         *   fpFilter fpFilter...
+         */
+        wxString netlist;
+
+        std::vector<LIB_PIN*> pinList;
+        symbol->GetPins( pinList, 0, 1 );   // All units, but a single convert
+
+        wxArrayString pins;
+
+        for( LIB_PIN* pin : pinList )
+            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+
+        if( !pins.IsEmpty() )
+            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
+
+        wxArrayString fpFilters = symbol->GetFPFilters();
+
+        if( !fpFilters.IsEmpty() )
+            netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
+
+        m_netlist = netlist;
+    }
+    else if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
+    {
+        const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( aField->GetParentSymbol() );
+        SCH_SHEET_PATH    sheetPath = static_cast<SCH_EDIT_FRAME*>( aParent )->GetCurrentSheet();
+
+        m_fieldId = aField->GetId();
+
+        /*
+         * Symbol netlist format:
+         *   pinNumber pinName <tab> pinNumber pinName...
+         *   fpFilter fpFilter...
+         */
+        wxString netlist;
+
+        wxArrayString pins;
+
+        for( SCH_PIN* pin : symbol->GetPins( &sheetPath ) )
+            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
+
+        if( !pins.IsEmpty() )
+            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
+
+        wxArrayString fpFilters = symbol->GetLibSymbolRef()->GetFPFilters();
+
+        if( !fpFilters.IsEmpty() )
+            netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
+
+        netlist << wxS( "\r" );
+
+        m_netlist = netlist;
+    }
+    else if( aField->GetParent() && aField->GetParent()->Type() == SCH_SHEET_T )
+    {
+        switch( aField->GetId() )
+        {
+        case SHEETNAME:
+            m_fieldId = SHEETNAME_V;
+            break;
+
+        case SHEETFILENAME:
+            m_isSheetFilename = true;
+            m_fieldId = SHEETFILENAME_V;
+            m_note->SetLabel( wxString::Format( m_note->GetLabel(),
+                              _( "Sheet filename can only be modified in Sheet Properties dialog." ) ) );
+            m_note->Show( true );
+            break;
+
+        default:
+            m_fieldId = SHEETUSERFIELD_V;
+            break;
+        }
+    }
+    else if( aField->GetParent() && aField->GetParent()->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
+    {
+        m_fieldId = LABELUSERFIELD_V;
+    }
+
+    m_textLabel->SetLabel( aField->GetName() + wxS( ":" ) );
+
+    m_position = m_field->GetPosition();
+
+    m_isNameVisible = m_field->IsNameShown();
+    m_allowAutoplace = m_field->CanAutoplace();
+
+    m_horizontalJustification = m_field->GetEffectiveHorizJustify();
+    m_verticalJustification = m_field->GetEffectiveVertJustify();
+
+    m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED,
+                            &DIALOG_FIELD_PROPERTIES::onScintillaCharAdded, this );
+    m_StyledTextCtrl->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED,
+                            &DIALOG_FIELD_PROPERTIES::onScintillaCharAdded, this );
+
+    m_nameVisible->Show();
+    m_cbAllowAutoPlace->Show();
+
+    init();
+
+    if( m_isSheetFilename || m_field->IsNamedVariable() )
+    {
+        m_StyledTextCtrl->Enable( false );
+        m_TextCtrl->Enable( false );
+    }
 }
 
 
@@ -414,63 +536,7 @@ void DIALOG_FIELD_PROPERTIES::updateText( EDA_TEXT* aText )
 }
 
 
-DIALOG_LIB_FIELD_PROPERTIES::DIALOG_LIB_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent,
-                                                          const wxString& aTitle,
-                                                          const LIB_FIELD* aField ) :
-        DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField )
-{
-    m_fieldId        = aField->GetId();
-    m_isNameVisible  = aField->IsNameShown();
-    m_allowAutoplace = aField->CanAutoplace();
-
-    if( m_fieldId == VALUE_FIELD )
-        m_text = UnescapeString( aField->GetText() );
-
-    if( m_fieldId == FOOTPRINT_FIELD )
-    {
-        const LIB_SYMBOL* parentSymbol = static_cast<const LIB_SYMBOL*>( aField->GetParentSymbol() );
-
-        /*
-         * Symbol netlist format:
-         *   pinNumber pinName <tab> pinNumber pinName...
-         *   fpFilter fpFilter...
-         */
-        wxString netlist;
-
-        std::vector<LIB_PIN*> pinList;
-
-        parentSymbol->GetPins( pinList, 0, 1 );   // All units, but a single convert
-
-        wxArrayString pins;
-
-        for( LIB_PIN* pin : pinList )
-            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
-
-        if( !pins.IsEmpty() )
-            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
-
-        netlist << wxS( "\r" );
-
-        wxArrayString fpFilters = parentSymbol->GetFPFilters();
-
-        if( !fpFilters.IsEmpty() )
-            netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
-
-        netlist << wxS( "\r" );
-
-        m_netlist = netlist;
-    }
-
-    m_font = aField->GetFont();
-
-    m_nameVisible->Show();
-    m_cbAllowAutoPlace->Show();
-
-    init();
-}
-
-
-void DIALOG_LIB_FIELD_PROPERTIES::UpdateField( LIB_FIELD* aField )
+void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_FIELD* aField )
 {
     aField->SetText( m_text );
 
@@ -485,114 +551,14 @@ void DIALOG_LIB_FIELD_PROPERTIES::UpdateField( LIB_FIELD* aField )
 }
 
 
-DIALOG_SCH_FIELD_PROPERTIES::DIALOG_SCH_FIELD_PROPERTIES( SCH_EDIT_FRAME* aParent,
-                                                          const wxString& aTitle,
-                                                          const SCH_FIELD* aField ) :
-        DIALOG_FIELD_PROPERTIES( aParent, aTitle, aField ),
-        m_field( aField )
-{
-    m_isSheetFilename = false;
-
-    if( aField->GetParent() && aField->GetParent()->Type() == SCH_SYMBOL_T )
-    {
-        SCH_SYMBOL*    symbol = static_cast<SCH_SYMBOL*>( aField->GetParent() );
-        SCH_SHEET_PATH sheetPath = aParent->GetCurrentSheet();
-
-        m_fieldId = aField->GetId();
-
-        /*
-         * Symbol netlist format:
-         *   pinNumber pinName <tab> pinNumber pinName...
-         *   fpFilter fpFilter...
-         */
-        wxString netlist;
-
-        wxArrayString pins;
-
-        for( SCH_PIN* pin : symbol->GetPins( &sheetPath ) )
-            pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
-
-        if( !pins.IsEmpty() )
-            netlist << EscapeString( wxJoin( pins, '\t' ), CTX_LINE );
-
-        netlist << wxS( "\r" );
-
-        wxArrayString fpFilters = symbol->GetLibSymbolRef()->GetFPFilters();
-
-        if( !fpFilters.IsEmpty() )
-            netlist << EscapeString( wxJoin( fpFilters, ' ' ), CTX_LINE );
-
-        netlist << wxS( "\r" );
-
-        m_netlist = netlist;
-    }
-    else if( aField->GetParent() && aField->GetParent()->Type() == SCH_SHEET_T )
-    {
-        switch( aField->GetId() )
-        {
-        case SHEETNAME:
-            m_fieldId = SHEETNAME_V;
-            break;
-
-        case SHEETFILENAME:
-            m_isSheetFilename = true;
-            m_fieldId = SHEETFILENAME_V;
-            m_note->SetLabel( wxString::Format( m_note->GetLabel(),
-                              _( "Sheet filename can only be modified in Sheet Properties dialog." ) ) );
-            m_note->Show( true );
-            break;
-
-        default:
-            m_fieldId = SHEETUSERFIELD_V;
-            break;
-        }
-    }
-    else if( aField->GetParent() && aField->GetParent()->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
-    {
-        m_fieldId = LABELUSERFIELD_V;
-    }
-
-    // show text variable cross-references in a human-readable format
-    m_text = aField->Schematic()->ConvertKIIDsToRefs( aField->GetText() );
-
-    m_font = m_field->GetFont();
-
-    m_textLabel->SetLabel( aField->GetName() + wxS( ":" ) );
-
-    m_position = m_field->GetPosition();
-
-    m_isNameVisible = m_field->IsNameShown();
-    m_allowAutoplace = m_field->CanAutoplace();
-
-    m_horizontalJustification = m_field->GetEffectiveHorizJustify();
-    m_verticalJustification = m_field->GetEffectiveVertJustify();
-
-    m_StyledTextCtrl->Bind( wxEVT_STC_CHARADDED, &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded,
-                            this );
-    m_StyledTextCtrl->Bind( wxEVT_STC_AUTOCOMP_CHAR_DELETED,
-                            &DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded, this );
-
-    m_nameVisible->Show();
-    m_cbAllowAutoPlace->Show();
-
-    init();
-
-    if( m_isSheetFilename || m_field->IsNamedVariable() )
-    {
-        m_StyledTextCtrl->Enable( false );
-        m_TextCtrl->Enable( false );
-    }
-}
-
-
-void DIALOG_SCH_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
+void DIALOG_FIELD_PROPERTIES::onScintillaCharAdded( wxStyledTextEvent &aEvent )
 {
     m_field->OnScintillaCharAdded( m_scintillaTricks, aEvent );
 }
 
 
-void DIALOG_SCH_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aField,
-                                               SCH_SHEET_PATH* aSheetPath )
+void DIALOG_FIELD_PROPERTIES::UpdateField( SCH_COMMIT* aCommit, SCH_FIELD* aField,
+                                           SCH_SHEET_PATH* aSheetPath )
 {
     SCH_EDIT_FRAME* editFrame = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
     SCH_ITEM*       parent = dynamic_cast<SCH_ITEM*>( aField->GetParent() );

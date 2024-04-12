@@ -880,7 +880,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSym
 }
 
 
-LIB_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol )
+SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol )
 {
     wxCHECK_MSG( CurTok() == T_property, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a property." ) );
@@ -888,7 +888,7 @@ LIB_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
 
     wxString name;
     wxString value;
-    std::unique_ptr<LIB_FIELD> field = std::make_unique<LIB_FIELD>( aSymbol.get(),
+    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( aSymbol.get(),
                                                                     MANDATORY_FIELDS );
 
     T token = NextTok();
@@ -983,7 +983,7 @@ LIB_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
     }
 
     // Due to an bug when in #LIB_SYMBOL::Flatten, duplicate ids slipped through
-    // when writing files.  This section replaces duplicate #LIB_FIELD indices on
+    // when writing files.  This section replaces duplicate #SCH_FIELD indices on
     // load.
     if( ( field->GetId() >= MANDATORY_FIELDS ) && m_fieldIDsRead.count( field->GetId() ) )
     {
@@ -995,9 +995,9 @@ LIB_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
         field->SetId( nextAvailableId );
     }
 
-    LIB_FIELD* existingField;
+    SCH_FIELD* existingField;
 
-    if( field->GetId() < MANDATORY_FIELDS )
+    if( field->IsMandatory() )
     {
         existingField = aSymbol->GetFieldById( field->GetId() );
 
@@ -1007,7 +1007,7 @@ LIB_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
     }
     else if( name == "ki_keywords" )
     {
-        // Not a LIB_FIELD object yet.
+        // Not a SCH_FIELD object yet.
         aSymbol->SetKeyWords( value );
         return nullptr;
     }
@@ -1019,7 +1019,7 @@ LIB_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
     }
     else if( name == "ki_fp_filters" )
     {
-        // Not a LIB_FIELD object yet.
+        // Not a SCH_FIELD object yet.
         wxArrayString filters;
         wxStringTokenizer tokenizer( value );
 
@@ -1034,7 +1034,7 @@ LIB_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
     }
     else if( name == "ki_locked" )
     {
-        // This is a temporary LIB_FIELD object until interchangeable units are determined on
+        // This is a temporary SCH_FIELD object until interchangeable units are determined on
         // the fly.
         aSymbol->LockUnits( true );
         return nullptr;

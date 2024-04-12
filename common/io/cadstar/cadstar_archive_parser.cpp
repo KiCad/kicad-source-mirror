@@ -2775,21 +2775,15 @@ wxString CADSTAR_ARCHIVE_PARSER::HandleTextOverbar( wxString aCadstarString )
 }
 
 
-void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem )
+void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem, bool aInvertY )
 {
     if( !aKiCadTextItem->GetText().IsEmpty() )
     {
         VECTOR2I positionOffset( 0, aKiCadTextItem->GetInterline() );
         RotatePoint( positionOffset, aKiCadTextItem->GetTextAngle() );
 
-        EDA_ITEM* textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
-
-        if( textEdaItem &&
-            ( textEdaItem->Type() == LIB_TEXT_T || textEdaItem->Type() == LIB_FIELD_T ) )
-        {
-            // Y coordinate increases upwards in the symbol editor
+        if( aInvertY )
             positionOffset.y = -positionOffset.y;
-        }
 
         //Count num of additional lines
         wxString text = aKiCadTextItem->GetText();

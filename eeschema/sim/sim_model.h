@@ -32,7 +32,6 @@
 
 #include <reporter.h>
 #include <sch_field.h>
-#include <lib_field.h>
 #include <lib_pin.h>
 
 // Must be included after sch_field.h (exactly eda_shape.h) to avoid a colliding
@@ -409,8 +408,7 @@ public:
     static SPICE_INFO SpiceInfo( TYPE aType );
 
 
-    template <typename T>
-    static TYPE ReadTypeFromFields( const std::vector<T>& aFields, REPORTER& aReporter );
+    static TYPE ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPORTER& aReporter );
 
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<LIB_PIN*>& aPins,
                                               REPORTER& aReporter );
@@ -419,23 +417,20 @@ public:
                                               const std::vector<LIB_PIN*>& aPins,
                                               REPORTER& aReporter );
 
-    template <typename T>
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel,
                                               const std::vector<LIB_PIN*>& aPins,
-                                              const std::vector<T>& aFields,
+                                              const std::vector<SCH_FIELD>& aFields,
                                               REPORTER& aReporter );
 
-    template <typename T>
-    static std::unique_ptr<SIM_MODEL> Create( const std::vector<T>& aFields,
+    static std::unique_ptr<SIM_MODEL> Create( const std::vector<SCH_FIELD>& aFields,
                                               const std::vector<LIB_PIN*>& aPins,
                                               bool aResolved, REPORTER& aReporter );
 
-    template <typename T>
-    static std::string GetFieldValue( const std::vector<T>* aFields, const wxString& aFieldName,
+    static std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields,
+                                      const wxString& aFieldName,
                                       bool aResolve = true );
 
-    template <typename T>
-    static void SetFieldValue( std::vector<T>& aFields, const wxString& aFieldName,
+    static void SetFieldValue( std::vector<SCH_FIELD>& aFields, const wxString& aFieldName,
                                const std::string& aValue );
 
     const SPICE_GENERATOR& SpiceGenerator() const { return *m_spiceGenerator; }
@@ -450,11 +445,10 @@ public:
     SIM_MODEL( SIM_MODEL&& aOther ) = default;
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
 
-    template <typename T>
-    void ReadDataFields( const std::vector<T>* aFields, const std::vector<LIB_PIN*>& aPins );
+    void ReadDataFields( const std::vector<SCH_FIELD>* aFields,
+                         const std::vector<LIB_PIN*>& aPins );
 
-    template <typename T>
-    void WriteFields( std::vector<T>& aFields ) const;
+    void WriteFields( std::vector<SCH_FIELD>& aFields ) const;
 
     SPICE_INFO GetSpiceInfo() const { return SpiceInfo( GetType() ); }
 
@@ -519,13 +513,13 @@ public:
 
     virtual void SwitchSingleEndedDiff( bool aDiff ) { };
 
-    template <class T_symbol, class T_field>
-    static bool InferSimModel( T_symbol& aSymbol, std::vector<T_field>* aFields, bool aResolve,
+    template <class T>
+    static bool InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool aResolve,
                                SIM_VALUE_GRAMMAR::NOTATION aNotation, wxString* aDeviceType,
                                wxString* aModelType, wxString* aModelParams, wxString* aPinMap );
 
-    template <class T_symbol, class T_field>
-    static void MigrateSimModel( T_symbol& aSymbol, const PROJECT* aProject );
+    template <class T>
+    static void MigrateSimModel( T& aSymbol, const PROJECT* aProject );
 
 protected:
     static std::unique_ptr<SIM_MODEL> Create( TYPE aType );
@@ -541,12 +535,6 @@ protected:
     virtual void doSetParamValue( int aParamIndex, const std::string& aValue );
 
 private:
-    template <typename T>
-    void doReadDataFields( const std::vector<T>* aFields, const std::vector<LIB_PIN*>& aPins );
-
-    template <typename T>
-    void doWriteFields( std::vector<T>& aFields ) const;
-
     virtual bool requiresSpiceModelLine( const SPICE_ITEM& aItem ) const;
 
 protected:

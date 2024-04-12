@@ -662,7 +662,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::getGroupField( int aGroupIndex, const wxArray
 
         for( const wxString& field : aFieldArray )
         {
-            if( LIB_FIELD* fld = sym->GetLibSymbolRef()->FindField( field, true ) )
+            if( SCH_FIELD* fld = sym->GetLibSymbolRef()->FindField( field, true ) )
             {
                 wxString fieldText = fld->GetShownText( false, 0 );
 

@@ -215,10 +215,10 @@ void SCH_IO_CADSTAR_ARCHIVE::GetAvailableSymbolFields( std::vector<wxString>& aN
 
     for( auto& [libnameStr, libSymbol] : m_libCache )
     {
-        std::vector<LIB_FIELD*> fields;
+        std::vector<SCH_FIELD*> fields;
         libSymbol->GetFields( fields );
 
-        for( LIB_FIELD* field : fields )
+        for( SCH_FIELD* field : fields )
         {
             if( field->IsMandatory() )
                 continue;

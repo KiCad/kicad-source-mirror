@@ -21,7 +21,6 @@
 #include <wx/log.h>
 
 #include <lib_shape.h>
-#include <lib_field.h>
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <macros.h>
@@ -397,7 +396,7 @@ LIB_SYMBOL* SCH_IO_KICAD_LEGACY_LIB_CACHE::LoadPart( LINE_READER& aReader, int a
     // Don't set the library alias, this is determined by the symbol library table.
     symbol->SetLibId( LIB_ID( wxEmptyString, symbol->GetName() ) );
 
-    LIB_FIELD& reference = symbol->GetReferenceField();
+    SCH_FIELD& reference = symbol->GetReferenceField();
 
     if( prefix == "~" )
     {
@@ -501,12 +500,12 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadAliases( std::unique_ptr<LIB_SYMBOL>& aS
             // Inherit the parent mandatory field attributes.
             for( int id = 0; id < MANDATORY_FIELDS; ++id )
             {
-                LIB_FIELD* field = newSymbol->GetFieldById( id );
+                SCH_FIELD* field = newSymbol->GetFieldById( id );
 
                 // the MANDATORY_FIELDS are exactly that in RAM.
                 wxASSERT( field );
 
-                LIB_FIELD* parentField = aSymbol->GetFieldById( id );
+                SCH_FIELD* parentField = aSymbol->GetFieldById( id );
 
                 wxASSERT( parentField );
 
@@ -540,7 +539,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
     if( sscanf( line + 1, "%d", &id ) != 1 || id < 0 )
         SCH_PARSE_ERROR( "invalid field ID", aReader, line + 1 );
 
-    LIB_FIELD* field;
+    SCH_FIELD* field;
 
     if( id >= 0 && id < MANDATORY_FIELDS )
     {
@@ -553,7 +552,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
     }
     else
     {
-        field = new LIB_FIELD( aSymbol.get(), id );
+        field = new SCH_FIELD( aSymbol.get(), id );
         aSymbol->AddDrawItem( field, false );
     }
 
@@ -664,7 +663,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
         // Fields in RAM must always have names, because we are trying to get
         // less dependent on field ids and more dependent on names.
         // Plus assumptions are made in the field editors.
-        field->m_name = GetCanonicalFieldName( id );
+        field->SetName( GetCanonicalFieldName( id ) );
 
         // Ensure the VALUE field = the symbol name (can be not the case
         // with malformed libraries: edited by hand, or converted from other tools)
@@ -686,7 +685,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadField( std::unique_ptr<LIB_SYMBOL>& aSym
         while( aSymbol->FindField( candidateFieldName ) != nullptr )
             candidateFieldName = wxString::Format( "%s_%d", fieldName, ++suffix );
 
-        field->m_name = candidateFieldName;
+        field->SetName( candidateFieldName );
     }
 }
 
@@ -1481,7 +1480,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
         }
     }
 
-    LIB_FIELD&  value = aSymbol->GetValueField();
+    SCH_FIELD&  value = aSymbol->GetValueField();
 
     // First line: it s a comment (symbol name for readers)
     aFormatter.Print( 0, "#\n# %s\n#\n", TO_UTF8( value.GetText() ) );
@@ -1490,7 +1489,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
     aFormatter.Print( 0, "DEF" );
     aFormatter.Print( 0, " %s", TO_UTF8( value.GetText() ) );
 
-    LIB_FIELD& reference = aSymbol->GetReferenceField();
+    SCH_FIELD& reference = aSymbol->GetReferenceField();
 
     if( !reference.GetText().IsEmpty() )
         aFormatter.Print( 0, " %s", TO_UTF8( reference.GetText() ) );
@@ -1518,7 +1517,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
         aFormatter.Print( 0, "Ti %d/%d/%d %d:%d:%d\n", year, mon, day, hour, min, sec );
     }
 
-    std::vector<LIB_FIELD*> fields;
+    std::vector<SCH_FIELD*> fields;
     aSymbol->GetFields( fields );
 
     // Mandatory fields:
@@ -1581,7 +1580,6 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
             switch( item.Type() )
             {
             default:
-            case LIB_FIELD_T:     /* Fields have already been saved above. */  break;
             case LIB_PIN_T:       savePin( (LIB_PIN* ) &item, aFormatter );    break;
             case LIB_TEXT_T:      saveText( ( LIB_TEXT* ) &item, aFormatter ); break;
             case LIB_SHAPE_T:
@@ -1673,10 +1671,10 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveCircle( LIB_SHAPE* aCircle, OUTPUTFORMAT
 }
 
 
-void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const LIB_FIELD* aField,
+void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const SCH_FIELD* aField,
                                                OUTPUTFORMATTER& aFormatter )
 {
-    wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
+    wxCHECK_RET( aField && aField->Type() == SCH_FIELD_T, "Invalid SCH_FIELD object." );
 
     int      hjustify, vjustify;
     int      id = aField->GetId();
@@ -1715,8 +1713,8 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const LIB_FIELD* aField,
      */
     wxString defName = TEMPLATE_FIELDNAME::GetDefaultFieldName( id );
 
-    if( id >= MANDATORY_FIELDS && !aField->m_name.IsEmpty() && aField->m_name != defName )
-        aFormatter.Print( 0, " %s", EscapedUTF8( aField->m_name ).c_str() );
+    if( id >= MANDATORY_FIELDS && !aField->GetName().IsEmpty() && aField->GetName() != defName )
+        aFormatter.Print( 0, " %s", EscapedUTF8( aField->GetName() ).c_str() );
 
     aFormatter.Print( 0, "\n" );
 }

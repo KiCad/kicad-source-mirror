@@ -70,9 +70,9 @@ std::vector<SEARCH_TERM> LIB_SYMBOL::GetSearchTerms()
 
 void LIB_SYMBOL::GetChooserFields( std::map<wxString, wxString>& aColumnMap )
 {
-    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
 
         if( field->ShowInChooser() )
             aColumnMap[field->GetName()] = field->EDA_TEXT::GetShownText( false );
@@ -107,9 +107,10 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
 
     // Add the MANDATORY_FIELDS in RAM only.  These are assumed to be present
     // when the field editors are invoked.
-    m_drawings[LIB_FIELD_T].reserve( MANDATORY_FIELDS );
+    m_drawings[SCH_FIELD_T].reserve( MANDATORY_FIELDS );
+
     for( int i = 0; i < MANDATORY_FIELDS; i++ )
-        m_drawings[LIB_FIELD_T].push_back( new LIB_FIELD( this, i ) );
+        m_drawings[SCH_FIELD_T].push_back( new SCH_FIELD( this, i ) );
 
     SetName( aName );
 
@@ -279,7 +280,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     {
         if( it->Type() == LIB_SHAPE_T )
             aShapes.insert( &(*it) );
-        else if( it->Type() == LIB_FIELD_T )
+        else if( it->Type() == SCH_FIELD_T )
             aFields.insert( &(*it) );
         else if( it->Type() == LIB_PIN_T )
             aPins.insert( &(*it) );
@@ -293,7 +294,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     {
         if( it->Type() == LIB_SHAPE_T )
             bShapes.insert( &(*it) );
-        else if( it->Type() == LIB_FIELD_T )
+        else if( it->Type() == SCH_FIELD_T )
             bFields.insert( &(*it) );
         else if( it->Type() == LIB_PIN_T )
             bPins.insert( &(*it) );
@@ -359,11 +360,11 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
     for( const SCH_ITEM* aFieldItem : aFields )
     {
-        const LIB_FIELD* aField = static_cast<const LIB_FIELD*>( aFieldItem );
-        const LIB_FIELD* bField = nullptr;
+        const SCH_FIELD* aField = static_cast<const SCH_FIELD*>( aFieldItem );
+        const SCH_FIELD* bField = nullptr;
         int              tmp = 0;
 
-        if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
+        if( aField->IsMandatory() )
             bField = aRhs.GetFieldById( aField->GetId() );
         else
             bField = aRhs.FindField( aField->GetName() );
@@ -598,20 +599,18 @@ std::unique_ptr< LIB_SYMBOL > LIB_SYMBOL::Flatten() const
         }
 
         // Grab all the rest of derived symbol fields.
-        for( const SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+        for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
         {
-            const LIB_FIELD* aliasField = dynamic_cast<const LIB_FIELD*>( &item );
-
-            wxCHECK2( aliasField, continue );
+            const SCH_FIELD* aliasField = static_cast<const SCH_FIELD*>( &item );
 
             // Mandatory fields were already resolved.
             if( aliasField->IsMandatory() )
                 continue;
 
-            LIB_FIELD* newField = new LIB_FIELD( *aliasField );
+            SCH_FIELD* newField = new SCH_FIELD( *aliasField );
             newField->SetParent( retv.get() );
 
-            LIB_FIELD* parentField = retv->FindField( aliasField->GetName() );
+            SCH_FIELD* parentField = retv->FindField( aliasField->GetName() );
 
             if( !parentField )  // Derived symbol field does not exist in parent symbol.
             {
@@ -744,24 +743,19 @@ void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
         if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
             continue;
 
-        if( item.Type() == LIB_FIELD_T )
-        {
-            LIB_FIELD& field = static_cast<LIB_FIELD&>( item );
-
-            if( field.IsVisible() && !aSettings->m_ShowVisibleFields )
-                continue;
-
-            if( !field.IsVisible() && !aSettings->m_ShowHiddenFields )
-                continue;
-        }
-
         if( item.Type() == LIB_PIN_T )
         {
             item.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
         }
-        else if( item.Type() == LIB_FIELD_T )
+        else if( item.Type() == SCH_FIELD_T )
         {
-            item.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
+            SCH_FIELD& field = static_cast<SCH_FIELD&>( item );
+
+            if( ( field.IsVisible() && aSettings->m_ShowVisibleFields )
+                || ( !field.IsVisible() && aSettings->m_ShowHiddenFields ) )
+            {
+                item.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
+            }
         }
         else if( item.Type() == LIB_SHAPE_T )
         {
@@ -842,7 +836,7 @@ void LIB_SYMBOL::Plot( PLOTTER *aPlotter, bool aBackground, const SCH_PLOT_OPTS&
 
         // LIB_FIELDs are not plotted here, because this plot function is used to plot schematic
         // items which have their own SCH_FIELDs
-        if( item.Type() == LIB_FIELD_T )
+        if( item.Type() == SCH_FIELD_T )
             continue;
 
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
@@ -876,27 +870,20 @@ void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT
 
     aPlotter->SetColor( color );
 
-    for( SCH_ITEM& item : m_drawings )
+    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        if( item.Type() != LIB_FIELD_T )
-            continue;
-
-        LIB_FIELD& field = static_cast<LIB_FIELD&>( item );
+        SCH_FIELD& field = static_cast<SCH_FIELD&>( item );
 
         if( !renderSettings->m_ShowHiddenFields && !field.IsVisible() )
             continue;
 
         // The reference is a special case: we should change the basic text
         // to add '?' and the part id
-        wxString tmp = field.GetShownText( true );
+        wxString tmp = field.GetText();
 
-        if( field.GetId() == REFERENCE_FIELD )
-        {
-            wxString text = field.GetFullText( aUnit );
-            field.SetText( text );
-        }
-
+        field.SetText( field.GetFullText( aUnit ) );
         item.Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
+
         field.SetText( tmp );
     }
 }
@@ -950,9 +937,9 @@ void LIB_SYMBOL::RemoveDrawItem( SCH_ITEM* aItem )
 
     // none of the MANDATORY_FIELDS may be removed in RAM, but they may be
     // omitted when saving to disk.
-    if( aItem->Type() == LIB_FIELD_T )
+    if( aItem->Type() == SCH_FIELD_T )
     {
-        if( static_cast<LIB_FIELD*>( aItem )->IsMandatory() )
+        if( static_cast<SCH_FIELD*>( aItem )->IsMandatory() )
             return;
     }
 
@@ -1028,13 +1015,10 @@ int LIB_SYMBOL::GetPinCount()
 LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle ) const
 {
     std::vector<LIB_PIN*> pinList;
-
     GetPins( pinList, aUnit, aBodyStyle );
 
     for( LIB_PIN* pin : pinList )
     {
-        wxASSERT( pin->Type() == LIB_PIN_T );
-
         if( aNumber == pin->GetNumber() )
             return pin;
     }
@@ -1123,10 +1107,10 @@ const BOX2I LIB_SYMBOL::GetUnitBoundingBox( int aUnit, int aBodyStyle,
         if( item.m_bodyStyle > 0 && aBodyStyle > 0 && aBodyStyle != item.m_bodyStyle )
             continue;
 
-        if( aIgnoreHiddenFields && ( item.Type() == LIB_FIELD_T )
-            && !( (LIB_FIELD&) item ).IsVisible() )
+        if( aIgnoreHiddenFields && item.Type() == SCH_FIELD_T )
         {
-            continue;
+            if( !static_cast<const SCH_FIELD&>( item ).IsVisible() )
+                continue;
         }
 
         bBox.Merge( item.GetBoundingBox() );
@@ -1152,7 +1136,7 @@ const BOX2I LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aInc
         if( item.IsPrivate() && !aIncludePrivateItems )
             continue;
 
-        if( item.Type() == LIB_FIELD_T )
+        if( item.Type() == SCH_FIELD_T )
             continue;
 
         if( item.Type() == LIB_PIN_T )
@@ -1182,24 +1166,24 @@ const BOX2I LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aInc
 
 void LIB_SYMBOL::deleteAllFields()
 {
-    m_drawings[ LIB_FIELD_T ].clear();
+    m_drawings[ SCH_FIELD_T ].clear();
 }
 
 
-void LIB_SYMBOL::AddField( LIB_FIELD* aField )
+void LIB_SYMBOL::AddField( SCH_FIELD* aField )
 {
     AddDrawItem( aField );
 }
 
 
-void LIB_SYMBOL::SetFields( const std::vector<LIB_FIELD>& aFields )
+void LIB_SYMBOL::SetFields( const std::vector<SCH_FIELD>& aFieldsList )
 {
     deleteAllFields();
 
-    for( const LIB_FIELD& src : aFields )
+    for( const SCH_FIELD& src : aFieldsList )
     {
         // drawings is a ptr_vector, new and copy an object on the heap.
-        LIB_FIELD* field = new LIB_FIELD( src );
+        SCH_FIELD* field = new SCH_FIELD( src );
 
         field->SetParent( this );
         m_drawings.push_back( field );
@@ -1209,16 +1193,16 @@ void LIB_SYMBOL::SetFields( const std::vector<LIB_FIELD>& aFields )
 }
 
 
-void LIB_SYMBOL::GetFields( std::vector<LIB_FIELD*>& aList )
+void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD*>& aList )
 {
     // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
     for( int id = 0; id < MANDATORY_FIELDS; ++id )
         aList.push_back( GetFieldById( id ) );
 
     // Now grab all the rest of fields.
-    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
 
         if( !field->IsMandatory() )
             aList.push_back( field );
@@ -1226,16 +1210,16 @@ void LIB_SYMBOL::GetFields( std::vector<LIB_FIELD*>& aList )
 }
 
 
-void LIB_SYMBOL::GetFields( std::vector<LIB_FIELD>& aList )
+void LIB_SYMBOL::GetFields( std::vector<SCH_FIELD>& aList )
 {
     // Grab the MANDATORY_FIELDS first, in expected order given by enum MANDATORY_FIELD_T
     for( int id = 0; id < MANDATORY_FIELDS; ++id )
         aList.push_back( *GetFieldById( id ) );
 
     // Now grab all the rest of fields.
-    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
 
         if( !field->IsMandatory() )
             aList.push_back( *field );
@@ -1243,11 +1227,11 @@ void LIB_SYMBOL::GetFields( std::vector<LIB_FIELD>& aList )
 }
 
 
-LIB_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
+SCH_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
 {
-    for( const SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        LIB_FIELD* field = ( LIB_FIELD* ) &item;
+        SCH_FIELD* field = ( SCH_FIELD* ) &item;
 
         if( field->GetId() == aId )
             return field;
@@ -1257,19 +1241,19 @@ LIB_FIELD* LIB_SYMBOL::GetFieldById( int aId ) const
 }
 
 
-LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName, bool aCaseInsensitive )
+SCH_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName, bool aCaseInsensitive )
 {
-    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
         if( aCaseInsensitive )
         {
-            if( static_cast<LIB_FIELD*>( &item )->GetCanonicalName().Upper() == aFieldName.Upper() )
-                return static_cast<LIB_FIELD*>( &item );
+            if( static_cast<SCH_FIELD*>( &item )->GetCanonicalName().Upper() == aFieldName.Upper() )
+                return static_cast<SCH_FIELD*>( &item );
         }
         else
         {
-            if( static_cast<LIB_FIELD*>( &item )->GetCanonicalName() == aFieldName )
-                return static_cast<LIB_FIELD*>( &item );
+            if( static_cast<SCH_FIELD*>( &item )->GetCanonicalName() == aFieldName )
+                return static_cast<SCH_FIELD*>( &item );
         }
     }
 
@@ -1277,12 +1261,12 @@ LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName, bool aCaseInsensit
 }
 
 
-const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
+const SCH_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
                                         bool aCaseInsensitive ) const
 {
-    for( const SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( const SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        const LIB_FIELD& field = static_cast<const LIB_FIELD&>( item );
+        const SCH_FIELD& field = static_cast<const SCH_FIELD&>( item );
 
         if( aCaseInsensitive )
         {
@@ -1300,41 +1284,41 @@ const LIB_FIELD* LIB_SYMBOL::FindField( const wxString& aFieldName,
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetValueField() const
+SCH_FIELD& LIB_SYMBOL::GetValueField() const
 {
-    LIB_FIELD* field = GetFieldById( VALUE_FIELD );
+    SCH_FIELD* field = GetFieldById( VALUE_FIELD );
     wxASSERT( field != nullptr );
     return *field;
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetReferenceField() const
+SCH_FIELD& LIB_SYMBOL::GetReferenceField() const
 {
-    LIB_FIELD* field = GetFieldById( REFERENCE_FIELD );
+    SCH_FIELD* field = GetFieldById( REFERENCE_FIELD );
     wxASSERT( field != nullptr );
     return *field;
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetFootprintField() const
+SCH_FIELD& LIB_SYMBOL::GetFootprintField() const
 {
-    LIB_FIELD* field = GetFieldById( FOOTPRINT_FIELD );
+    SCH_FIELD* field = GetFieldById( FOOTPRINT_FIELD );
     wxASSERT( field != nullptr );
     return *field;
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetDatasheetField() const
+SCH_FIELD& LIB_SYMBOL::GetDatasheetField() const
 {
-    LIB_FIELD* field = GetFieldById( DATASHEET_FIELD );
+    SCH_FIELD* field = GetFieldById( DATASHEET_FIELD );
     wxASSERT( field != nullptr );
     return *field;
 }
 
 
-LIB_FIELD& LIB_SYMBOL::GetDescriptionField() const
+SCH_FIELD& LIB_SYMBOL::GetDescriptionField() const
 {
-    LIB_FIELD* field = GetFieldById( DESCRIPTION_FIELD );
+    SCH_FIELD* field = GetFieldById( DESCRIPTION_FIELD );
     wxASSERT( field != nullptr );
     return *field;
 }
@@ -1378,9 +1362,9 @@ int LIB_SYMBOL::UpdateFieldOrdinals()
     int retv = 0;
     int lastOrdinal = MANDATORY_FIELDS;
 
-    for( SCH_ITEM& item : m_drawings[ LIB_FIELD_T ] )
+    for( SCH_ITEM& item : m_drawings[ SCH_FIELD_T ] )
     {
-        LIB_FIELD* field = static_cast<LIB_FIELD*>( &item );
+        SCH_FIELD* field = static_cast<SCH_FIELD*>( &item );
 
         // Mandatory fields were already resolved always have the same ordinal values.
         if( field->IsMandatory() )
@@ -1503,11 +1487,10 @@ SCH_ITEM* LIB_SYMBOL::LocateDrawItem( int aUnit, int aBodyStyle, KICAD_T aType,
      * because this function uses DefaultTransform as orient/mirror matrix
      * we temporary copy aTransform in DefaultTransform
      */
-    SCH_ITEM* item;
     TRANSFORM transform = DefaultTransform;
     DefaultTransform = aTransform;
 
-    item = LocateDrawItem( aUnit, aBodyStyle, aType, aPoint );
+    SCH_ITEM* item = LocateDrawItem( aUnit, aBodyStyle, aType, aPoint );
 
     // Restore matrix
     DefaultTransform = transform;
@@ -1602,12 +1585,8 @@ void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePi
         {
             std::vector<SCH_ITEM*> tmp;     // Temporarily store the duplicated pins here.
 
-            for( SCH_ITEM& item : m_drawings )
+            for( SCH_ITEM& item : m_drawings[ LIB_PIN_T ] )
             {
-                // Only pins are duplicated.
-                if( item.Type() != LIB_PIN_T )
-                    continue;
-
                 if( item.m_bodyStyle == 1 )
                 {
                     SCH_ITEM* newItem = item.Duplicate();
@@ -1645,7 +1624,7 @@ std::vector<SCH_ITEM*> LIB_SYMBOL::GetUnitDrawItems( int aUnit, int aBodyStyle )
 
     for( SCH_ITEM& item : m_drawings )
     {
-        if( item.Type() == LIB_FIELD_T )
+        if( item.Type() == SCH_FIELD_T )
             continue;
 
         if( ( aBodyStyle == -1 && item.GetUnit() == aUnit )
@@ -1660,13 +1639,13 @@ std::vector<SCH_ITEM*> LIB_SYMBOL::GetUnitDrawItems( int aUnit, int aBodyStyle )
 }
 
 
-std::vector<struct LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
+std::vector<LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 {
-    std::vector<struct LIB_SYMBOL_UNIT> units;
+    std::vector<LIB_SYMBOL_UNIT> units;
 
     for( SCH_ITEM& item : m_drawings )
     {
-        if( item.Type() == LIB_FIELD_T )
+        if( item.Type() == SCH_FIELD_T )
             continue;
 
         int unit = item.GetUnit();
@@ -1680,7 +1659,7 @@ std::vector<struct LIB_SYMBOL_UNIT> LIB_SYMBOL::GetUnitDrawItems()
 
         if( it == units.end() )
         {
-            struct LIB_SYMBOL_UNIT newUnit;
+            LIB_SYMBOL_UNIT newUnit;
             newUnit.m_unit = item.GetUnit();
             newUnit.m_bodyStyle = item.GetBodyStyle();
             newUnit.m_items.push_back( &item );

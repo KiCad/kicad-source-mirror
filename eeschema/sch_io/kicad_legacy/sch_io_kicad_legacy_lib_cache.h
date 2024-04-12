@@ -29,7 +29,6 @@
 #include "sch_io/sch_io_lib_cache.h"
 
 class FILE_LINE_READER;
-class LIB_FIELD;
 class LIB_PIN;
 class LIB_SHAPE;
 class LIB_TEXT;
@@ -89,7 +88,7 @@ private:
     static void     saveArc( LIB_SHAPE* aArc, OUTPUTFORMATTER& aFormatter );
     static void     saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMATTER& aFormatter );
     static void     saveCircle( LIB_SHAPE* aCircle, OUTPUTFORMATTER& aFormatter );
-    static void     saveField( const LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter );
+    static void     saveField( const SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter );
     static void     savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter );
     static void     savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFORMATTER& aFormatter );
     static void     saveRectangle( LIB_SHAPE* aRectangle, OUTPUTFORMATTER& aFormatter );

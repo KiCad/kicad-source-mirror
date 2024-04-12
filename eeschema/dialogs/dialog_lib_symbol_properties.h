@@ -78,7 +78,7 @@ public:
     SYMBOL_EDIT_FRAME* m_Parent;
     LIB_SYMBOL*        m_libEntry;
 
-    FIELDS_GRID_TABLE<LIB_FIELD>* m_fields;
+    FIELDS_GRID_TABLE* m_fields;
 
     UNIT_BINDER        m_pinNameOffset;
 

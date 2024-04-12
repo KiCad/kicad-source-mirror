@@ -126,9 +126,8 @@ static wxString netList( LIB_SYMBOL* aSymbol )
 }
 
 
-template <class T>
-FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame,
-                                         WX_GRID* aGrid, LIB_SYMBOL* aSymbol ) :
+FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
+                                      LIB_SYMBOL* aSymbol ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_grid( aGrid ),
@@ -147,9 +146,8 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
 }
 
 
-template <class T>
-FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame,
-                                         WX_GRID* aGrid, SCH_SYMBOL* aSymbol ) :
+FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
+                                      SCH_SYMBOL* aSymbol ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_grid( aGrid ),
@@ -168,9 +166,8 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
 }
 
 
-template <class T>
-FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame,
-                                         WX_GRID* aGrid, SCH_SHEET* aSheet ) :
+FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
+SCH_SHEET* aSheet ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_grid( aGrid ),
@@ -188,9 +185,8 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
 }
 
 
-template <class T>
-FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame,
-                                         WX_GRID* aGrid, SCH_LABEL_BASE* aLabel ) :
+FIELDS_GRID_TABLE::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
+                                      SCH_LABEL_BASE* aLabel ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
         m_grid( aGrid ),
@@ -208,8 +204,7 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
 }
 
 
-template <class T>
-void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
+void FIELDS_GRID_TABLE::initGrid( WX_GRID* aGrid )
 {
     // Build the various grid cell attributes.
     // NOTE: validators and cellAttrs are member variables to get the destruction order
@@ -230,7 +225,13 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
 
     m_valueAttr = new wxGridCellAttr;
 
-    if constexpr ( std::is_same_v<T, SCH_FIELD> )
+    if( m_parentType == LIB_SYMBOL_T )
+    {
+        GRID_CELL_TEXT_EDITOR* valueEditor = new GRID_CELL_TEXT_EDITOR();
+        valueEditor->SetValidator( m_valueValidator );
+        m_valueAttr->SetEditor( valueEditor );
+    }
+    else
     {
         GRID_CELL_STC_EDITOR* valueEditor = new GRID_CELL_STC_EDITOR( true,
                 [this]( wxStyledTextEvent& aEvent, SCINTILLA_TRICKS* aScintillaTricks )
@@ -238,12 +239,6 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
                     SCH_FIELD& valueField = static_cast<SCH_FIELD&>( this->at( VALUE_FIELD ) );
                     valueField.OnScintillaCharAdded( aScintillaTricks, aEvent );
                 } );
-        m_valueAttr->SetEditor( valueEditor );
-    }
-    else
-    {
-        GRID_CELL_TEXT_EDITOR* valueEditor = new GRID_CELL_TEXT_EDITOR();
-        valueEditor->SetValidator( m_valueValidator );
         m_valueAttr->SetEditor( valueEditor );
     }
 
@@ -341,12 +336,11 @@ void FIELDS_GRID_TABLE<T>::initGrid( WX_GRID* aGrid )
 
     m_eval = std::make_unique<NUMERIC_EVALUATOR>( m_frame->GetUserUnits() );
 
-    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
+    m_frame->Bind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE::onUnitsChanged, this );
 }
 
 
-template <class T>
-FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
+FIELDS_GRID_TABLE::~FIELDS_GRID_TABLE()
 {
     m_readOnlyAttr->DecRef();
     m_fieldNameAttr->DecRef();
@@ -364,12 +358,11 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_fontAttr->DecRef();
     m_colorAttr->DecRef();
 
-    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE<T>::onUnitsChanged, this );
+    m_frame->Unbind( EDA_EVT_UNITS_CHANGED, &FIELDS_GRID_TABLE::onUnitsChanged, this );
 }
 
 
-template <class T>
-void FIELDS_GRID_TABLE<T>::onUnitsChanged( wxCommandEvent& aEvent )
+void FIELDS_GRID_TABLE::onUnitsChanged( wxCommandEvent& aEvent )
 {
     if( GetView() )
         GetView()->ForceRefresh();
@@ -378,8 +371,7 @@ void FIELDS_GRID_TABLE<T>::onUnitsChanged( wxCommandEvent& aEvent )
 }
 
 
-template <class T>
-wxString FIELDS_GRID_TABLE<T>::GetColLabelValue( int aCol )
+wxString FIELDS_GRID_TABLE::GetColLabelValue( int aCol )
 {
     switch( aCol )
     {
@@ -403,8 +395,7 @@ wxString FIELDS_GRID_TABLE<T>::GetColLabelValue( int aCol )
 }
 
 
-template <class T>
-bool FIELDS_GRID_TABLE<T>::CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
+bool FIELDS_GRID_TABLE::CanGetValueAs( int aRow, int aCol, const wxString& aTypeName )
 {
     switch( aCol )
     {
@@ -434,15 +425,13 @@ bool FIELDS_GRID_TABLE<T>::CanGetValueAs( int aRow, int aCol, const wxString& aT
 }
 
 
-template <class T>
-bool FIELDS_GRID_TABLE<T>::CanSetValueAs( int aRow, int aCol, const wxString& aTypeName )
+bool FIELDS_GRID_TABLE::CanSetValueAs( int aRow, int aCol, const wxString& aTypeName )
 {
     return CanGetValueAs( aRow, aCol, aTypeName );
 }
 
 
-template <class T>
-wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
+wxGridCellAttr* FIELDS_GRID_TABLE::GetAttr( int aRow, int aCol, wxGridCellAttr::wxAttrKind  )
 {
     wxGridCellAttr* tmp;
 
@@ -570,13 +559,12 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
 }
 
 
-template <class T>
-wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
+wxString FIELDS_GRID_TABLE::GetValue( int aRow, int aCol )
 {
     wxCHECK( aRow < GetNumberRows(), wxEmptyString );
 
-    wxGrid*  grid = GetView();
-    const T& field = this->at( (size_t) aRow );
+    wxGrid*          grid = GetView();
+    const SCH_FIELD& field = this->at( (size_t) aRow );
 
     if( grid->GetGridCursorRow() == aRow && grid->GetGridCursorCol() == aCol
             && grid->IsCellEditControlShown() )
@@ -690,11 +678,10 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
 }
 
 
-template <class T>
-bool FIELDS_GRID_TABLE<T>::GetValueAsBool( int aRow, int aCol )
+bool FIELDS_GRID_TABLE::GetValueAsBool( int aRow, int aCol )
 {
     wxCHECK( aRow < GetNumberRows(), false );
-    const T& field = this->at( (size_t) aRow );
+    const SCH_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
@@ -710,13 +697,12 @@ bool FIELDS_GRID_TABLE<T>::GetValueAsBool( int aRow, int aCol )
 }
 
 
-template <class T>
-void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue )
+void FIELDS_GRID_TABLE::SetValue( int aRow, int aCol, const wxString &aValue )
 {
     wxCHECK( aRow < GetNumberRows(), /*void*/ );
-    T& field = this->at( (size_t) aRow );
-    VECTOR2I pos;
-    wxString value = aValue;
+    SCH_FIELD& field = this->at( (size_t) aRow );
+    VECTOR2I   pos;
+    wxString   value = aValue;
 
     switch( aCol )
     {
@@ -879,11 +865,10 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
 }
 
 
-template <class T>
-void FIELDS_GRID_TABLE<T>::SetValueAsBool( int aRow, int aCol, bool aValue )
+void FIELDS_GRID_TABLE::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
     wxCHECK( aRow < GetNumberRows(), /*void*/ );
-    T& field = this->at( (size_t) aRow );
+    SCH_FIELD& field = this->at( (size_t) aRow );
 
     switch( aCol )
     {
@@ -914,12 +899,6 @@ void FIELDS_GRID_TABLE<T>::SetValueAsBool( int aRow, int aCol, bool aValue )
 
     m_dialog->OnModify();
 }
-
-
-// Explicit Instantiations
-
-template class FIELDS_GRID_TABLE<SCH_FIELD>;
-template class FIELDS_GRID_TABLE<LIB_FIELD>;
 
 
 void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu, wxGridEvent& aEvent )
@@ -969,8 +948,7 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
 }
 
 
-template <class T>
-wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue ) const
+wxString FIELDS_GRID_TABLE::StringFromBool( bool aValue ) const
 {
     if( aValue )
         return wxT( "1" );
@@ -979,8 +957,7 @@ wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue ) const
 }
 
 
-template <class T>
-bool FIELDS_GRID_TABLE<T>::BoolFromString( wxString aValue ) const
+bool FIELDS_GRID_TABLE::BoolFromString( wxString aValue ) const
 {
     if( aValue == wxS( "1" ) )
     {

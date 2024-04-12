@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -169,24 +169,13 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
 }
 
 
-template <typename T>
 SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
                                      const std::vector<LIB_PIN*>& aPins,
-                                     const std::vector<T>& aFields, REPORTER& aReporter )
+                                     const std::vector<SCH_FIELD>& aFields, REPORTER& aReporter )
 {
     m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aFields, aReporter ) );
     return *m_models.back();
 }
-
-template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
-                                              const std::vector<LIB_PIN*>& aPins,
-                                              const std::vector<SCH_FIELD>& aFields,
-                                              REPORTER& aReporter );
-template SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
-                                              const std::vector<LIB_PIN*>& aPins,
-                                              const std::vector<LIB_FIELD>& aFields,
-                                              REPORTER& aReporter );
-
 
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
                                              REPORTER& aReporter )
@@ -259,8 +248,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
 }
 
 
-template <typename T>
-SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<T>& aFields,
+SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFields,
                                              const std::vector<LIB_PIN*>& aPins, bool aResolved,
                                              REPORTER& aReporter )
 {
@@ -278,18 +266,10 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<T>& aFields,
     }
 }
 
-template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFields,
-                                                      const std::vector<LIB_PIN*>& aPins,
-                                                      bool aResolved, REPORTER& aReporter );
-template SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<LIB_FIELD>& aFields,
-                                                      const std::vector<LIB_PIN*>& aPins,
-                                                      bool aResolved, REPORTER& aReporter );
 
-
-template <typename T>
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                                              const std::string& aBaseModelName,
-                                             const std::vector<T>& aFields,
+                                             const std::vector<SCH_FIELD>& aFields,
                                              const std::vector<LIB_PIN*>& aPins,
                                              REPORTER& aReporter )
 {

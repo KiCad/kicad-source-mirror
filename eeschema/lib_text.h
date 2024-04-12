@@ -33,7 +33,7 @@
  * Define a symbol library graphical text item.
  *
  * This is only a graphical text item.  Field text like the reference designator,
- * symbol value, etc. are not LIB_TEXT items.  See the #LIB_FIELD class for the
+ * symbol value, etc. are not LIB_TEXT items.  See the #SCH_FIELD class for the
  * field item definition.
  */
 class LIB_TEXT : public SCH_ITEM, public EDA_TEXT

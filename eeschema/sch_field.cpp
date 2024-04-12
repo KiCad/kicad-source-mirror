@@ -34,14 +34,11 @@
 #include <wx/menu.h>
 #include <base_units.h>
 #include <common.h>     // for ExpandTextVars
-#include <eda_item.h>
 #include <sch_edit_frame.h>
 #include <plotters/plotter.h>
 #include <bitmaps.h>
-#include <core/kicad_algo.h>
 #include <core/mirror.h>
 #include <kiway.h>
-#include <general.h>
 #include <symbol_library.h>
 #include <sch_symbol.h>
 #include <sch_field.h>
@@ -50,8 +47,6 @@
 #include <settings/color_settings.h>
 #include <string_utils.h>
 #include <trace_helpers.h>
-#include <trigo.h>
-#include <eeschema_id.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_navigate_tool.h>
 #include <font/outline_font.h>
@@ -59,36 +54,44 @@
 
 SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
                       const wxString& aName ) :
-    SCH_ITEM( aParent, SCH_FIELD_T ),
-    EDA_TEXT( schIUScale, wxEmptyString ),
-    m_id( 0 ),
-    m_showName( false ),
-    m_allowAutoPlace( true ),
-    m_renderCacheValid( false ),
-    m_lastResolvedColor( COLOR4D::UNSPECIFIED )
+        SCH_ITEM( aParent, SCH_FIELD_T ),
+        EDA_TEXT( schIUScale, wxEmptyString ),
+        m_id( 0 ),
+        m_showName( false ),
+        m_allowAutoPlace( true ),
+        m_autoAdded( false ),
+        m_showInChooser( true ),
+        m_renderCacheValid( false ),
+        m_lastResolvedColor( COLOR4D::UNSPECIFIED )
 {
-    SetName( aName );
+    if( aName.IsEmpty() )
+        SetName( TEMPLATE_FIELDNAME::GetDefaultFieldName( aFieldId ) );
+    else
+        SetName( aName );
+
     SetTextPos( aPos );
     SetId( aFieldId );  // will also set the layer
     SetVisible( false );
 }
 
 
-SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, int aFieldId, const wxString& aName ) :
-    SCH_FIELD( VECTOR2I(), aFieldId, aParent, aName )
+SCH_FIELD::SCH_FIELD( SCH_ITEM* aParent, int aFieldId, const wxString& aName) :
+        SCH_FIELD( VECTOR2I(), aFieldId, aParent, aName )
 {
 }
 
 
 SCH_FIELD::SCH_FIELD( const SCH_FIELD& aField ) :
-    SCH_ITEM( aField ),
-    EDA_TEXT( aField )
+        SCH_ITEM( aField ),
+        EDA_TEXT( aField )
 {
-    m_id             = aField.m_id;
-    m_name           = aField.m_name;
-    m_showName       = aField.m_showName;
-    m_allowAutoPlace = aField.m_allowAutoPlace;
+    m_id              = aField.m_id;
+    m_name            = aField.m_name;
+    m_showName        = aField.m_showName;
+    m_allowAutoPlace  = aField.m_allowAutoPlace;
     m_isNamedVariable = aField.m_isNamedVariable;
+    m_autoAdded       = aField.m_autoAdded;
+    m_showInChooser   = aField.m_showInChooser;
 
     m_renderCache.clear();
 
@@ -142,6 +145,12 @@ EDA_ITEM* SCH_FIELD::Clone() const
 }
 
 
+void SCH_FIELD::Copy( SCH_FIELD* aTarget ) const
+{
+    *aTarget = *this;
+}
+
+
 void SCH_FIELD::SetId( int aId )
 {
     m_id = aId;
@@ -155,7 +164,7 @@ void SCH_FIELD::SetId( int aId )
         default:            SetLayer( LAYER_SHEETFIELDS );   break;
         }
     }
-    else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    else if( m_parent && ( m_parent->Type() == SCH_SYMBOL_T || m_parent->Type() == LIB_SYMBOL_T ) )
     {
         switch( m_id )
         {
@@ -218,6 +227,9 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     if( IsNameShown() && aAllowExtraText )
         text = GetShownName() << wxS( ": " ) << text;
 
+    if( !aPath )
+        return text;
+
     if( text == wxS( "~" ) ) // Legacy placeholder for empty string
     {
         text = wxS( "" );
@@ -267,9 +279,23 @@ wxString SCH_FIELD::GetShownText( bool aAllowExtraText, int aDepth ) const
     if( SCHEMATIC* schematic = Schematic() )
         return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
     else
-        return EDA_TEXT::GetShownText( aAllowExtraText, aDepth );
+        return GetShownText( nullptr, aAllowExtraText, aDepth );
 }
 
+
+wxString SCH_FIELD::GetFullText( int unit ) const
+{
+    if( GetId() != REFERENCE_FIELD )
+        return GetText();
+
+    wxString text = GetText();
+    text << wxT( "?" );
+
+    if( GetParentSymbol() && GetParentSymbol()->IsMulti() )
+        text << LIB_SYMBOL::LetterSubReference( unit, 'A' );
+
+    return text;
+}
 
 
 int SCH_FIELD::GetPenWidth() const
@@ -352,15 +378,20 @@ SCH_FIELD::GetRenderCache( const wxString& forResolvedText, const VECTOR2I& forP
 void SCH_FIELD::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                        const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
-    SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
-    wxDC*           DC = aSettings->GetPrintDC();
-    COLOR4D         color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_layer );
-    bool            blackAndWhiteMode = GetGRForceBlackPenState();
-    VECTOR2I        textpos;
-    int             penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
+    wxString text;
 
-    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText( sheet, true ).IsEmpty() )
+    if( Schematic() )
+        text = GetShownText( &Schematic()->CurrentSheet(), true );
+    else
+        text = GetShownText( true );
+
+    if( ( !IsVisible() && !IsForceVisible() ) || text.IsEmpty() )
         return;
+
+    wxDC*   DC = aSettings->GetPrintDC();
+    COLOR4D color = aSettings->GetLayerColor( IsForceVisible() ? LAYER_HIDDEN : m_layer );
+    bool    blackAndWhiteMode = GetGRForceBlackPenState();
+    int     penWidth = GetEffectiveTextPenWidth( aSettings->GetDefaultPenWidth() );
 
     COLOR4D bg = aSettings->GetBackgroundColor();
 
@@ -373,58 +404,62 @@ void SCH_FIELD::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBod
     if( !blackAndWhiteMode && GetTextColor() != COLOR4D::UNSPECIFIED )
         color = GetTextColor();
 
-    // Calculate the text orientation according to the symbol orientation.
-    EDA_ANGLE orient = GetTextAngle();
-
-    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    if( aDimmed )
     {
-        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
+        color.Desaturate( );
+        color = color.Mix( bg, 0.5f );
+    }
 
-        if( parentSymbol && parentSymbol->GetTransform().y1 )  // Rotate symbol 90 degrees.
+    // Calculate the text orientation according to the symbol orientation.
+    EDA_ANGLE         orient = GetTextAngle();
+    VECTOR2I          textpos = GetTextPos();
+    GR_TEXT_H_ALIGN_T hjustify = GetHorizJustify();
+    GR_TEXT_V_ALIGN_T vjustify = GetVertJustify();
+    KIFONT::FONT*     font = GetFont();
+
+    if( !font )
+        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
+
+    if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
+    {
+        textpos = aSettings->TransformCoordinate( GetTextPos() ) + aOffset;
+    }
+    else if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    {
+        /*
+         * Calculate the text justification, according to the symbol orientation/mirror.
+         * This is a bit complicated due to cumulative calculations:
+         * - numerous cases (mirrored or not, rotation)
+         * - the GRText function will also recalculate H and V justifications according to the
+         *   text orientation.
+         * - when symbol is mirrored, the text is not mirrored and justifications are complicated
+         *   to calculate so the easier way is to use no justifications (centered text) and use
+         *   GetBoundingBox to know the text coordinate considered as centered
+         */
+        hjustify = GR_TEXT_H_ALIGN_CENTER;
+        vjustify = GR_TEXT_V_ALIGN_CENTER;
+        textpos = GetBoundingBox().Centre() + aOffset;
+
+        if( aSettings->m_Transform.y1 )  // Rotate symbol 90 degrees.
         {
             if( orient == ANGLE_HORIZONTAL )
                 orient = ANGLE_VERTICAL;
             else
                 orient = ANGLE_HORIZONTAL;
         }
-
-        if( parentSymbol && parentSymbol->GetDNP() )
-        {
-            color.Desaturate();
-            color = color.Mix( bg, 0.5f );
-        }
     }
-
-    KIFONT::FONT* font = GetFont();
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
-
-    /*
-     * Calculate the text justification, according to the symbol orientation/mirror.
-     * This is a bit complicated due to cumulative calculations:
-     * - numerous cases (mirrored or not, rotation)
-     * - the GRText function will also recalculate H and V justifications according to the text
-     *   orientation.
-     * - When a symbol is mirrored, the text is not mirrored and justifications are complicated
-     *   to calculate so the more easily way is to use no justifications (centered text) and use
-     *   GetBoundingBox to know the text coordinate considered as centered
-     */
-    textpos = GetBoundingBox().Centre() + aOffset;
-
-    if( GetParent() && GetParent()->Type() == SCH_GLOBAL_LABEL_T )
+    else if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
     {
         SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( GetParent() );
         textpos += label->GetSchematicTextOffset( aSettings );
     }
 
-    GRPrintText( DC, textpos, color, GetShownText( sheet, true ), orient, GetTextSize(),
-                 GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(), IsBold(),
-                 font, GetFontMetrics() );
+    GRPrintText( DC, textpos, color, text, orient, GetTextSize(), hjustify, vjustify, penWidth,
+                 IsItalic(), IsBold(), font, GetFontMetrics() );
 }
 
 
-void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
+void SCH_FIELD::ImportValues( const SCH_FIELD& aSource )
 {
     SetAttributes( aSource );
     SetNameShown( aSource.IsNameShown() );
@@ -434,12 +469,11 @@ void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 
 void SCH_FIELD::SwapData( SCH_ITEM* aItem )
 {
+    wxCHECK_RET( aItem && aItem->Type() == SCH_FIELD_T, wxT( "Cannot swap with invalid item." ) );
+
     SCH_ITEM::SwapFlags( aItem );
 
-    wxCHECK_RET( ( aItem != nullptr ) && ( aItem->Type() == SCH_FIELD_T ),
-                 wxT( "Cannot swap field data with invalid item." ) );
-
-    SCH_FIELD* item = (SCH_FIELD*) aItem;
+    SCH_FIELD* item = static_cast<SCH_FIELD*>( aItem );
 
     std::swap( m_layer, item->m_layer );
     std::swap( m_showName, item->m_showName );
@@ -474,7 +508,7 @@ COLOR4D SCH_FIELD::GetFieldColor() const
 
 void SCH_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 2;
+    aCount = 2;
 
     switch( m_id )
     {
@@ -484,6 +518,17 @@ void SCH_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
     }
 
     aLayers[1] = LAYER_SELECTION_SHADOWS;
+}
+
+
+SCH_LAYER_ID SCH_FIELD::GetDefaultLayer() const
+{
+    switch( m_id )
+    {
+        case REFERENCE_FIELD: return LAYER_REFERENCEPART;
+        case VALUE_FIELD:     return LAYER_VALUEPART;
+        default:              return LAYER_FIELDS;
+    }
 }
 
 
@@ -511,41 +556,67 @@ EDA_ANGLE SCH_FIELD::GetDrawRotation() const
 
 const BOX2I SCH_FIELD::GetBoundingBox() const
 {
-    // Calculate the text bounding box:
-    BOX2I bbox = GetTextBox();
+    BOX2I bbox;
 
-    // Calculate the bounding box position relative to the parent:
-    VECTOR2I origin = GetParentPosition();
-    VECTOR2I pos = GetTextPos() - origin;
-    VECTOR2I begin = bbox.GetOrigin() - origin;
-    VECTOR2I end = bbox.GetEnd() - origin;
-    RotatePoint( begin, pos, GetTextAngle() );
-    RotatePoint( end, pos, GetTextAngle() );
-
-    // Now, apply the symbol transform (mirror/rot)
-    TRANSFORM transform;
-
-    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
     {
-        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
+        /*
+         * Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position
+         * when calling GetTextBox() that works using top to bottom Y axis orientation.
+         */
+        bbox = GetTextBox( -1, true );
+        bbox.RevertYAxis();
 
-        // Due to the Y axis direction, we must mirror the bounding box,
-        // relative to the text position:
-        MIRROR( begin.y, pos.y );
-        MIRROR( end.y,   pos.y );
+        // We are using now a bottom to top Y axis.
+        VECTOR2I orig = bbox.GetOrigin();
+        VECTOR2I end = bbox.GetEnd();
 
-        transform = parentSymbol->GetTransform();
+        RotatePoint( orig, GetTextPos(), -GetTextAngle() );
+        RotatePoint( end, GetTextPos(), -GetTextAngle() );
+
+        bbox.SetOrigin( orig );
+        bbox.SetEnd( end );
+
+        // We are using now a top to bottom Y axis:
+        bbox.RevertYAxis();
     }
     else
     {
-        transform = TRANSFORM( 1, 0, 0, 1 );  // identity transform
+        bbox = GetTextBox();
+
+        // Calculate the bounding box position relative to the parent:
+        VECTOR2I origin = GetParentPosition();
+        VECTOR2I pos = GetTextPos() - origin;
+        VECTOR2I begin = bbox.GetOrigin() - origin;
+        VECTOR2I end = bbox.GetEnd() - origin;
+        RotatePoint( begin, pos, GetTextAngle() );
+        RotatePoint( end, pos, GetTextAngle() );
+
+        // Now, apply the symbol transform (mirror/rot)
+        TRANSFORM transform;
+
+        if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+        {
+            SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
+
+            // Due to the Y axis direction, we must mirror the bounding box, relative to the
+            // text position:
+            MIRROR( begin.y, pos.y );
+            MIRROR( end.y,   pos.y );
+
+            transform = parentSymbol->GetTransform();
+        }
+        else
+        {
+            transform = TRANSFORM( 1, 0, 0, 1 );  // identity transform
+        }
+
+        bbox.SetOrigin( transform.TransformCoordinate( begin ) );
+        bbox.SetEnd( transform.TransformCoordinate( end ) );
+
+        bbox.Move( origin );
+        bbox.Normalize();
     }
-
-    bbox.SetOrigin( transform.TransformCoordinate( begin ) );
-    bbox.SetEnd( transform.TransformCoordinate( end ) );
-
-    bbox.Move( origin );
-    bbox.Normalize();
 
     return bbox;
 }
@@ -898,12 +969,50 @@ void SCH_FIELD::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
     VECTOR2I pt = GetPosition();
     RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
     SetPosition( pt );
+
+    SetTextAngle( GetTextAngle() != ANGLE_HORIZONTAL ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
+}
+
+
+void SCH_FIELD::MirrorHorizontally( int aCenter )
+{
+    int x = GetTextPos().x;
+
+    x -= aCenter;
+    x *= -1;
+    x += aCenter;
+
+    SetTextX( x );
+}
+
+
+void SCH_FIELD::MirrorVertically( int aCenter )
+{
+    int y = GetTextPos().y;
+
+    y -= aCenter;
+    y *= -1;
+    y += aCenter;
+
+    SetTextY( y );
+}
+
+
+void SCH_FIELD::BeginEdit( const VECTOR2I& aPosition )
+{
+    SetTextPos( aPosition );
+}
+
+
+void SCH_FIELD::CalcEdit( const VECTOR2I& aPosition )
+{
+    SetTextPos( aPosition );
 }
 
 
 wxString SCH_FIELD::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( "%s '%s'", GetName(), KIUI::EllipsizeMenuText( GetText() ) );
+    return wxString::Format( "%s '%s'", UnescapeString( GetName() ), KIUI::EllipsizeMenuText( GetText() ) );
 }
 
 
@@ -1010,53 +1119,42 @@ void SCH_FIELD::SetText( const wxString& aText )
 
 wxString SCH_FIELD::GetName( bool aUseDefaultName ) const
 {
-    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    if( m_parent && ( m_parent->Type() == SCH_SYMBOL_T || m_parent->Type() == LIB_SYMBOL_T ) )
     {
-        if( m_id >= 0 && m_id < MANDATORY_FIELDS )
+        if( IsMandatory() )
             return GetCanonicalFieldName( m_id );
         else if( m_name.IsEmpty() && aUseDefaultName )
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( m_id );
-        else
-            return m_name;
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
-        if( m_id >= 0 && m_id < SHEET_MANDATORY_FIELDS )
+        if( IsMandatory() )
             return SCH_SHEET::GetDefaultFieldName( m_id );
         else if( m_name.IsEmpty() && aUseDefaultName )
             return SCH_SHEET::GetDefaultFieldName( m_id );
-        else
-            return m_name;
     }
     else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
     {
         return SCH_LABEL_BASE::GetDefaultFieldName( m_name, aUseDefaultName );
     }
-    else
-    {
-        wxFAIL_MSG( "Unhandled field owner type." );
-        return m_name;
-    }
+
+    return m_name;
 }
 
 
 wxString SCH_FIELD::GetCanonicalName() const
 {
-    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    if( m_parent && ( m_parent->Type() == SCH_SYMBOL_T || m_parent->Type() == LIB_SYMBOL_T ) )
     {
-        if( m_id >= 0 && m_id < MANDATORY_FIELDS )
+        if( IsMandatory() )
             return GetCanonicalFieldName( m_id );
-        else
-            return m_name;
     }
     else if( m_parent && m_parent->Type() == SCH_SHEET_T )
     {
-        switch( m_id )
-        {
-        case  SHEETNAME:     return wxT( "Sheetname" );
-        case  SHEETFILENAME: return wxT( "Sheetfile" );
-        default:             return m_name;
-        }
+        if( m_id == SHEETNAME )
+            return wxT( "Sheetname" );
+        else if( m_id == SHEETFILENAME )
+            return wxT( "Sheetfile" );
     }
     else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
     {
@@ -1071,27 +1169,15 @@ wxString SCH_FIELD::GetCanonicalName() const
         {
             return wxT( "Intersheetrefs" );
         }
-        else
-        {
-            return m_name;
-        }
     }
-    else
-    {
-        if( m_parent )
-        {
-            wxFAIL_MSG( wxString::Format( "Unhandled field owner type (id %d, parent type %d).",
-                                           m_id, m_parent->Type() ) );
-        }
 
-        return m_name;
-    }
+    return m_name;
 }
 
 
 BITMAPS SCH_FIELD::GetMenuImage() const
 {
-    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
+    if( m_parent && ( m_parent->Type() == SCH_SYMBOL_T || m_parent->Type() == LIB_SYMBOL_T ) )
     {
         switch( m_id )
         {
@@ -1109,14 +1195,22 @@ BITMAPS SCH_FIELD::GetMenuImage() const
 bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
     // Do not hit test hidden or empty fields.
-    if( !IsVisible() || GetShownText( true ).IsEmpty() )
+    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText( true ).IsEmpty() )
         return false;
 
     BOX2I rect = GetBoundingBox();
 
+    // Text in symbol editor can have additional chars (ie: reference designators U? or U?A)
+    if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
+    {
+        SCH_FIELD temp( *this );
+        temp.SetText( GetFullText() );
+        rect = temp.GetBoundingBox();
+    }
+
     rect.Inflate( aAccuracy );
 
-    if( GetParent() && GetParent()->Type() == SCH_GLOBAL_LABEL_T )
+    if( m_parent && m_parent->Type() == SCH_GLOBAL_LABEL_T )
     {
         SCH_GLOBALLABEL* label = static_cast<SCH_GLOBALLABEL*>( GetParent() );
         rect.Offset( label->GetSchematicTextOffset( nullptr ) );
@@ -1129,7 +1223,10 @@ bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     // Do not hit test hidden fields.
-    if( !IsVisible() || GetShownText( true ).IsEmpty() )
+    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText( true ).IsEmpty() )
+        return false;
+
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
     BOX2I rect = aRect;
@@ -1152,9 +1249,14 @@ bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) co
 void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                       int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
-    SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+    wxString text;
 
-    if( GetShownText( sheet, true ).IsEmpty() || aBackground )
+    if( Schematic() )
+        text = GetShownText( &Schematic()->CurrentSheet(), true );
+    else
+        text = GetShownText( true );
+
+    if( ( !IsVisible() && !IsForceVisible() ) || text.IsEmpty() || aBackground )
         return;
 
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
@@ -1168,6 +1270,12 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
     if( aPlotter->GetColorMode() && GetTextColor() != COLOR4D::UNSPECIFIED )
         color = GetTextColor();
+
+    if( aDimmed )
+    {
+        color.Desaturate( );
+        color = color.Mix( bg, 0.5f );
+    }
 
     penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );
 
@@ -1183,24 +1291,16 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     GR_TEXT_H_ALIGN_T hjustify = GetHorizJustify();
     GR_TEXT_V_ALIGN_T vjustify = GetVertJustify();
 
+    if( renderSettings->m_Transform.y1 )  // Rotate symbol 90 deg.
+    {
+        if( orient.IsHorizontal() )
+            orient = ANGLE_VERTICAL;
+        else
+            orient = ANGLE_HORIZONTAL;
+    }
+
     if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
-
-        if( parentSymbol->GetDNP() )
-        {
-            color.Desaturate();
-            color = color.Mix( bg, 0.5f );
-        }
-
-        if( parentSymbol->GetTransform().y1 )  // Rotate symbol 90 deg.
-        {
-            if( orient.IsHorizontal() )
-                orient = ANGLE_VERTICAL;
-            else
-                orient = ANGLE_HORIZONTAL;
-        }
-
         /*
          * Calculate the text justification, according to the symbol orientation/mirror.  This is
          * a bit complicated due to cumulative calculations:
@@ -1209,8 +1309,8 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
          *    to the text orientation
          *  - when a symbol is mirrored the text is not, and justifications become a nightmare
          *
-         *  So the easier way is to use no justifications (centered text) and use GetBoundingBox to
-         *  know the text coordinate considered as centered.
+         *  So the easier way is to use no justifications (centered text) and use GetBoundingBox
+         *  to know the text coordinate considered as centered.
          */
         hjustify = GR_TEXT_H_ALIGN_CENTER;
         vjustify = GR_TEXT_V_ALIGN_CENTER;
@@ -1234,9 +1334,9 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
     attrs.m_Angle = orient;
     attrs.m_Multiline = false;
 
-    aPlotter->PlotText( textpos, color, GetShownText( sheet, true ), attrs, font, GetFontMetrics() );
+    aPlotter->PlotText( textpos, color, text, attrs, font, GetFontMetrics() );
 
-    if( IsHypertext() )
+    if( IsHypertext() && Schematic() )
     {
         SCH_LABEL_BASE*                            label = static_cast<SCH_LABEL_BASE*>( m_parent );
         std::vector<std::pair<wxString, wxString>> pages;
@@ -1245,10 +1345,10 @@ void SCH_FIELD::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& 
 
         wxCHECK( label, /* void */ );
 
-        label->GetIntersheetRefs( sheet, &pages );
+        label->GetIntersheetRefs( &Schematic()->CurrentSheet(), &pages );
 
-        for( const std::pair<wxString, wxString>& page : pages )
-            pageHrefs.push_back( wxT( "#" ) + page.first );
+        for( const auto& [ pageNumber, sheetName ] : pages )
+            pageHrefs.push_back( wxT( "#" ) + pageNumber );
 
         bbox.Offset( label->GetSchematicTextOffset( renderSettings ) );
 
@@ -1299,7 +1399,16 @@ VECTOR2I SCH_FIELD::GetParentPosition() const
 }
 
 
-bool SCH_FIELD::operator <( const SCH_ITEM& aItem ) const
+bool SCH_FIELD::IsMandatory() const
+{
+    if( m_parent && m_parent->Type() == SCH_SHEET_T )
+        return m_id >= 0 && m_id < SHEET_MANDATORY_FIELDS;
+    else
+        return m_id >= 0 && m_id < MANDATORY_FIELDS;
+}
+
+
+bool SCH_FIELD::operator<( const SCH_ITEM& aItem ) const
 {
     if( Type() != aItem.Type() )
         return Type() < aItem.Type();
@@ -1335,6 +1444,13 @@ bool SCH_FIELD::operator==(const SCH_ITEM& aOther) const
 
 bool SCH_FIELD::operator==( const SCH_FIELD& aOther ) const
 {
+    // Identical fields of different symbols are not equal.
+    if( !GetParentSymbol() || !aOther.GetParentSymbol()
+        || GetParentSymbol()->m_Uuid != aOther.GetParentSymbol()->m_Uuid )
+    {
+        return false;
+    }
+
     if( GetId() != aOther.GetId() )
         return false;
 
@@ -1350,10 +1466,7 @@ bool SCH_FIELD::operator==( const SCH_FIELD& aOther ) const
     if( CanAutoplace() != aOther.CanAutoplace() )
         return false;
 
-    if( GetText() != aOther.GetText() )
-        return false;
-
-    return true;
+    return EDA_TEXT::operator==( aOther );
 }
 
 
@@ -1378,6 +1491,10 @@ double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
             similarity *= 0.5;
     }
 
+    similarity *= SimilarityBase( aOther );
+
+    similarity *= EDA_TEXT::Similarity( field );
+
     if( GetPosition() != field.GetPosition() )
         similarity *= 0.5;
 
@@ -1390,10 +1507,78 @@ double SCH_FIELD::Similarity( const SCH_ITEM& aOther ) const
     if( CanAutoplace() != field.CanAutoplace() )
         similarity *= 0.5;
 
-    if( GetText() != field.GetText() )
-        similarity *= Levenshtein( field );
-
     return similarity;
+}
+
+
+int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
+{
+    wxASSERT( aOther.Type() == SCH_FIELD_T );
+
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
+
+    if( retv )
+        return retv;
+
+    const SCH_FIELD* tmp = static_cast<const SCH_FIELD*>( &aOther );
+
+    // Equality test will vary depending whether or not the field is mandatory.  Otherwise,
+    // sorting is done by ordinal.
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+    {
+        // Mandatory fields have fixed ordinals and their names can vary due to translated field
+        // names.  Optional fields have fixed names and their ordinals can vary.
+        if( IsMandatory() )
+        {
+            if( m_id != tmp->m_id )
+                return m_id - tmp->m_id;
+        }
+        else
+        {
+            retv = m_name.Cmp( tmp->m_name );
+
+            if( retv )
+                return retv;
+        }
+    }
+    else    // assume we're sorting
+    {
+        if( m_id != tmp->m_id )
+            return m_id - tmp->m_id;
+    }
+
+    bool ignoreFieldText = false;
+
+    if( m_id == REFERENCE_FIELD && !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY ) )
+        ignoreFieldText = true;
+
+    if( m_id == VALUE_FIELD && ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) )
+        ignoreFieldText = true;
+
+    if( !ignoreFieldText )
+    {
+        retv = GetText().CmpNoCase( tmp->GetText() );
+
+        if( retv != 0 )
+            return retv;
+    }
+
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+    {
+        if( GetTextPos().x != tmp->GetTextPos().x )
+            return GetTextPos().x - tmp->GetTextPos().x;
+
+        if( GetTextPos().y != tmp->GetTextPos().y )
+            return GetTextPos().y - tmp->GetTextPos().y;
+    }
+
+    if( GetTextWidth() != tmp->GetTextWidth() )
+        return GetTextWidth() - tmp->GetTextWidth();
+
+    if( GetTextHeight() != tmp->GetTextHeight() )
+        return GetTextHeight() - tmp->GetTextHeight();
+
+    return 0;
 }
 
 

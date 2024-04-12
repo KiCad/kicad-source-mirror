@@ -64,24 +64,20 @@ bool SYMBOL_EDITOR_EDIT_TOOL::Init()
     auto haveSymbolCondition =
             [&]( const SELECTION& sel )
             {
-                return m_isSymbolEditor &&
-                       static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->GetCurSymbol();
+                return m_isSymbolEditor && m_frame->GetCurSymbol();
             };
 
     auto canEdit =
             [&]( const SELECTION& sel )
             {
-                SYMBOL_EDIT_FRAME* editor = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-                wxCHECK( editor, false );
-
-                if( !editor->IsSymbolEditable() )
+                if( !m_frame->IsSymbolEditable() )
                     return false;
 
-                if( editor->IsSymbolAlias() )
+                if( m_frame->IsSymbolAlias() )
                 {
                     for( EDA_ITEM* item : sel )
                     {
-                        if( item->Type() != LIB_FIELD_T )
+                        if( item->Type() != SCH_FIELD_T )
                             return false;
                     }
                 }
@@ -186,7 +182,6 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     }
     else
     {
-
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
 
@@ -218,9 +213,9 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
         switch( item->Type() )
         {
-        case LIB_FIELD_T:
+        case SCH_FIELD_T:
         {
-            LIB_FIELD* field = static_cast<LIB_FIELD*>( item );
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
             if( xAxis )
                 field->SetVertJustify( TO_VJUSTIFY( -field->GetVertJustify() ) );
@@ -475,8 +470,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             editTextBoxProperties( item );
             break;
 
-        case LIB_FIELD_T:
-            editFieldProperties( (LIB_FIELD*) item );
+        case SCH_FIELD_T:
+            editFieldProperties( static_cast<SCH_FIELD*>( item ) );
             break;
 
         default:
@@ -545,19 +540,19 @@ void SYMBOL_EDITOR_EDIT_TOOL::editTextBoxProperties( SCH_ITEM* aItem )
 }
 
 
-void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
+void SYMBOL_EDITOR_EDIT_TOOL::editFieldProperties( SCH_FIELD* aField )
 {
     if( aField == nullptr )
         return;
 
     wxString caption;
 
-    if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
+    if( aField->IsMandatory() )
         caption.Printf( _( "Edit %s Field" ), TitleCaps( aField->GetName() ) );
     else
         caption.Printf( _( "Edit '%s' Field" ), aField->GetName() );
 
-    DIALOG_LIB_FIELD_PROPERTIES dlg( m_frame, caption, aField );
+    DIALOG_FIELD_PROPERTIES dlg( m_frame, caption, aField );
 
     // The dialog may invoke a kiway player for footprint fields
     // so we must use a quasimodal dialog.
@@ -767,7 +762,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Copy( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM& item : symbol->GetDrawItems() )
     {
-        if( item.Type() == LIB_FIELD_T )
+        if( item.Type() == SCH_FIELD_T )
             continue;
 
         wxASSERT( !item.HasFlag( STRUCT_DELETED ) );
@@ -831,7 +826,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     for( SCH_ITEM& item : newPart->GetDrawItems() )
     {
-        if( item.Type() == LIB_FIELD_T )
+        if( item.Type() == SCH_FIELD_T )
             continue;
 
         SCH_ITEM* newItem = item.Duplicate();

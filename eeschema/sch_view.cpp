@@ -145,14 +145,8 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
     // Draw the fields.
     for( SCH_ITEM& item : aSymbol->GetDrawItems() )
     {
-        if( item.Type() == LIB_FIELD_T )
-        {
-            LIB_FIELD* field = static_cast< LIB_FIELD* >( &item );
-
-            wxCHECK2( field, continue );
-
+        if( item.Type() == SCH_FIELD_T )
             Add( &item );
-        }
     }
 
     LIB_SYMBOL* drawnSymbol = aSymbol;
@@ -172,7 +166,7 @@ void SCH_VIEW::DisplaySymbol( LIB_SYMBOL* aSymbol )
     {
         // Fields already drawn above.  (Besides, we don't want to show parent symbol fields as
         // users may be confused by shown fields that can not be edited.)
-        if( item.Type() == LIB_FIELD_T )
+        if( item.Type() == SCH_FIELD_T )
             continue;
 
         Add( &item );

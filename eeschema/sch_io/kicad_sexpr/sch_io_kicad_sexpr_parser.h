@@ -193,7 +193,7 @@ private:
                         bool aEnforceMinTextSize = true );
     void parsePinNames( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 
-    LIB_FIELD* parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol );
+    SCH_FIELD* parseProperty( std::unique_ptr<LIB_SYMBOL>& aSymbol );
 
     LIB_SHAPE* parseArc();
     LIB_SHAPE* parseBezier();

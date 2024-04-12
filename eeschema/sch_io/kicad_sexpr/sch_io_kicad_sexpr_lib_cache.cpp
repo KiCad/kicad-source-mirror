@@ -140,7 +140,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
               LOCALE_IO toggle );
 
     int nextFreeFieldId = MANDATORY_FIELDS;
-    std::vector<LIB_FIELD*> fields;
+    std::vector<SCH_FIELD*> fields;
     std::string name = aFormatter.Quotew( aSymbol->GetLibId().GetLibItemName().wx_str() );
     std::string unitName = aSymbol->GetLibId().GetLibItemName();
 
@@ -198,7 +198,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
         aSymbol->GetFields( fields );
 
-        for( LIB_FIELD* field : fields )
+        for( SCH_FIELD* field : fields )
             saveField( field, aFormatter, aNestLevel + 1 );
 
         nextFreeFieldId = aSymbol->GetNextAvailableFieldId();
@@ -208,7 +208,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
         // locked flag state.
         if( aSymbol->UnitsLocked() )
         {
-            LIB_FIELD locked( nextFreeFieldId, "ki_locked" );
+            SCH_FIELD locked( nullptr, nextFreeFieldId, "ki_locked" );
             saveField( &locked, aFormatter, aNestLevel + 1 );
             nextFreeFieldId += 1;
         }
@@ -274,7 +274,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
 
         aSymbol->GetFields( fields );
 
-        for( LIB_FIELD* field : fields )
+        for( SCH_FIELD* field : fields )
             saveField( field, aFormatter, aNestLevel + 1 );
 
         nextFreeFieldId = aSymbol->GetNextAvailableFieldId();
@@ -294,7 +294,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol,
 
     if( !aSymbol->GetKeyWords().IsEmpty() )
     {
-        LIB_FIELD keywords( aNextFreeFieldId, wxString( "ki_keywords" ) );
+        SCH_FIELD keywords( nullptr, aNextFreeFieldId, wxString( "ki_keywords" ) );
         keywords.SetVisible( false );
         keywords.SetText( aSymbol->GetKeyWords() );
         saveField( &keywords, aFormatter, aNestLevel + 1 );
@@ -318,7 +318,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveDcmInfoAsFields( LIB_SYMBOL* aSymbol,
                 tmp += " " + curr_filter;
         }
 
-        LIB_FIELD description( aNextFreeFieldId, wxString( "ki_fp_filters" ) );
+        SCH_FIELD description( nullptr, aNextFreeFieldId, wxString( "ki_fp_filters" ) );
         description.SetVisible( false );
         description.SetText( tmp );
         saveField( &description, aFormatter, aNestLevel + 1 );
@@ -389,14 +389,14 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFO
 }
 
 
-void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( LIB_FIELD* aField, OUTPUTFORMATTER& aFormatter,
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter,
                                               int aNestLevel )
 {
-    wxCHECK_RET( aField && aField->Type() == LIB_FIELD_T, "Invalid LIB_FIELD object." );
+    wxCHECK_RET( aField && aField->Type() == SCH_FIELD_T, "Invalid SCH_FIELD object." );
 
     wxString fieldName = aField->GetName();
 
-    if( aField->GetId() >= 0 && aField->GetId() < MANDATORY_FIELDS )
+    if( aField->IsMandatory() )
         fieldName = GetCanonicalFieldName( aField->GetId() );
 
     aFormatter.Print( aNestLevel, "(property %s %s (at %s %s %g)",

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mikolaj Wielgus
- * Copyright (C) 2022-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2022-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +25,8 @@
 #ifndef SIM_LIB_MGR_H
 #define SIM_LIB_MGR_H
 
-#include <memory>
 #include <map>
 #include <vector>
-#include <string>
 
 #include <sim/sim_library.h>
 #include <sim/sim_model.h>
@@ -55,23 +53,20 @@ public:
     SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins,
                             REPORTER& aReporter );
 
-    template <typename T>
     SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins,
-                            const std::vector<T>& aFields, REPORTER& aReporter );
+                            const std::vector<SCH_FIELD>& aFields, REPORTER& aReporter );
 
     // TODO: The argument can be made const.
     SIM_LIBRARY::MODEL CreateModel( const SCH_SHEET_PATH* aSheetPath, SCH_SYMBOL& aSymbol,
                                     REPORTER& aReporter );
 
-    template <typename T>
-    SIM_LIBRARY::MODEL CreateModel( const std::vector<T>& aFields,
+    SIM_LIBRARY::MODEL CreateModel( const std::vector<SCH_FIELD>& aFields,
                                     const std::vector<LIB_PIN*>& aPins, bool aResolved,
                                     REPORTER& aReporter );
 
-    template <typename T>
     SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath,
                                     const std::string& aBaseModelName,
-                                    const std::vector<T>& aFields,
+                                    const std::vector<SCH_FIELD>& aFields,
                                     const std::vector<LIB_PIN*>& aPins, REPORTER& aReporter );
 
     void SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel );

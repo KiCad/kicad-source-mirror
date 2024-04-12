@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE( DefaultDrawings )
  */
 BOOST_AUTO_TEST_CASE( DefaultFields )
 {
-    std::vector<LIB_FIELD> fields;
+    std::vector<SCH_FIELD> fields;
     m_part_no_data.GetFields( fields );
 
     // Should get the 4 default fields
@@ -122,13 +122,13 @@ BOOST_AUTO_TEST_CASE( DefaultFields )
  */
 BOOST_AUTO_TEST_CASE( AddedFields )
 {
-    std::vector<LIB_FIELD> fields;
+    std::vector<SCH_FIELD> fields;
     m_part_no_data.GetFields( fields );
 
     // Ctor takes non-const ref (?!)
     const std::string newFieldName = "new_field";
     wxString          nonConstNewFieldName = newFieldName;
-    fields.push_back( LIB_FIELD( 42, nonConstNewFieldName ) );
+    fields.push_back( SCH_FIELD( nullptr, 42, nonConstNewFieldName ) );
 
     // fairly roundabout way to add a field, but it is what it is
     m_part_no_data.SetFields( fields );
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE( AddedFields )
 
     // Check by-id lookup
 
-    LIB_FIELD* gotNewField = m_part_no_data.GetFieldById( 42 );
+    SCH_FIELD* gotNewField = m_part_no_data.GetFieldById( 42 );
 
     BOOST_REQUIRE_NE( gotNewField, nullptr );
 
@@ -627,12 +627,12 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK( *parent == *ref );
 
     ref->SetName( "child" );
-    LIB_FIELD* field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
+    SCH_FIELD* field = new SCH_FIELD( nullptr, MANDATORY_FIELDS, "Manufacturer" );
     field->SetText( "KiCad" );
     child->AddField( field );
     field->SetParent( child.get() );
 
-    field = new LIB_FIELD( MANDATORY_FIELDS, "Manufacturer" );
+    field = new SCH_FIELD( nullptr, MANDATORY_FIELDS, "Manufacturer" );
     field->SetText( "KiCad" );
     ref->AddField( field );
     field->SetParent( ref.get() );
@@ -640,12 +640,12 @@ BOOST_AUTO_TEST_CASE( Inheritance )
     BOOST_CHECK( *ref == *child->Flatten() );
 
     ref->SetName( "grandchild" );
-    field = new LIB_FIELD( MANDATORY_FIELDS + 1, "MPN" );
+    field = new SCH_FIELD( nullptr, MANDATORY_FIELDS + 1, "MPN" );
     field->SetText( "123456" );
     grandChild->AddField( field );
     field->SetParent( grandChild.get() );
 
-    field = new LIB_FIELD( MANDATORY_FIELDS + 1, "MPN" );
+    field = new SCH_FIELD( nullptr, MANDATORY_FIELDS + 1, "MPN" );
     field->SetText( "123456" );
     ref->AddField( field );
     field->SetParent( ref.get() );

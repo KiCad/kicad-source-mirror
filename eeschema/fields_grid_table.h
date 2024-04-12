@@ -24,7 +24,6 @@
 #ifndef FIELDS_GRID_TABLE_H
 #define FIELDS_GRID_TABLE_H
 
-#include <sch_validators.h>
 #include <wx/grid.h>
 #include <sch_symbol.h>
 #include <grid_tricks.h>
@@ -45,8 +44,8 @@ public:
     {}
 
 protected:
-    virtual void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
-    virtual void doPopupSelection( wxCommandEvent& event ) override;
+    void showPopupMenu( wxMenu& menu, wxGridEvent& aEvent ) override;
+    void doPopupSelection( wxCommandEvent& event ) override;
     DIALOG_SHIM* m_dlg;
 };
 
@@ -73,8 +72,7 @@ enum FIELDS_DATA_COL_ORDER
 };
 
 
-template <class T>
-class FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<T>
+class FIELDS_GRID_TABLE : public wxGridTableBase, public std::vector<SCH_FIELD>
 {
 public:
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* aFrame, WX_GRID* aGrid,
@@ -85,7 +83,7 @@ public:
                        SCH_SHEET* aSheet );
     FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* aFrame, WX_GRID* aGrid,
                        SCH_LABEL_BASE* aLabel );
-    ~FIELDS_GRID_TABLE();
+    ~FIELDS_GRID_TABLE() override;
 
     int GetNumberRows() override { return (int) this->size(); }
     int GetNumberCols() override { return FDC_COUNT; }

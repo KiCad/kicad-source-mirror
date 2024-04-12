@@ -168,7 +168,7 @@ LIB_SYMBOL* SYMBOL_LIB::FindSymbol( const wxString& aName ) const
         if( !symbol->GetLib() )
             symbol->SetLib( const_cast<SYMBOL_LIB*>( this ) );
 
-        SIM_MODEL::MigrateSimModel<LIB_SYMBOL, LIB_FIELD>( *symbol, nullptr );
+        SIM_MODEL::MigrateSimModel<LIB_SYMBOL>( *symbol, nullptr );
     }
 
     return symbol;

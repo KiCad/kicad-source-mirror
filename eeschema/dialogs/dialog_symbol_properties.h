@@ -99,18 +99,18 @@ private:
     virtual void onUpdateEditLibrarySymbol( wxUpdateUIEvent& event ) override;
 
 private:
-    SCH_SYMBOL*                   m_symbol;
-    LIB_SYMBOL*                   m_part;
+    SCH_SYMBOL*               m_symbol;
+    LIB_SYMBOL*               m_part;
 
-    wxSize                        m_fieldsSize;
-    wxSize                        m_lastRequestedFieldsSize;
-    wxSize                        m_pinsSize;
-    wxSize                        m_lastRequestedPinsSize;
-    bool                          m_editorShown;
-    std::bitset<64>               m_shownColumns;
+    wxSize                    m_fieldsSize;
+    wxSize                    m_lastRequestedFieldsSize;
+    wxSize                    m_pinsSize;
+    wxSize                    m_lastRequestedPinsSize;
+    bool                      m_editorShown;
+    std::bitset<64>           m_shownColumns;
 
-    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
-    SCH_PIN_TABLE_DATA_MODEL*     m_dataModel;
+    FIELDS_GRID_TABLE*        m_fields;
+    SCH_PIN_TABLE_DATA_MODEL* m_dataModel;
 };
 
 #endif // DIALOG_SYMBOL_PROPERTIES_H

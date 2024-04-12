@@ -29,8 +29,8 @@
 
 #include <general.h>
 #include <symbol.h>
+#include <sch_field.h>
 #include <lib_tree_item.h>
-#include <lib_field.h>
 #include <vector>
 #include <core/multivector.h>
 
@@ -39,14 +39,13 @@ class OUTPUTFORMATTER;
 class REPORTER;
 class SYMBOL_LIB;
 class LIB_SYMBOL;
-class LIB_FIELD;
 class LIB_PIN;
 class TEST_LIB_SYMBOL_FIXTURE;
 
 
 typedef std::shared_ptr<LIB_SYMBOL>       LIB_SYMBOL_SPTR;      ///< shared pointer to LIB_SYMBOL
 typedef std::weak_ptr<LIB_SYMBOL>         LIB_SYMBOL_REF;       ///< weak pointer to LIB_SYMBOL
-typedef MULTIVECTOR<SCH_ITEM, LIB_SHAPE_T, LIB_FIELD_T> LIB_ITEMS_CONTAINER;
+typedef MULTIVECTOR<SCH_ITEM, SCH_FIELD_T, LIB_PIN_T> LIB_ITEMS_CONTAINER;
 typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
 
@@ -269,22 +268,22 @@ public:
      *
      * @param aFieldsList is a set of fields to import, removing all previous fields.
      */
-    void SetFields( const std::vector<LIB_FIELD>& aFieldsList );
+    void SetFields( const std::vector<SCH_FIELD>& aFieldsList );
 
     /**
      * Return a list of fields within this symbol.
      *
      * @param aList - List to add fields to
      */
-    void GetFields( std::vector<LIB_FIELD*>& aList );
-    void GetFields( std::vector<LIB_FIELD>& aList );
+    void GetFields( std::vector<SCH_FIELD*>& aList );
+    void GetFields( std::vector<SCH_FIELD>& aList );
 
     /**
      * Add a field.  Takes ownership of the pointer.
      */
-    void AddField( LIB_FIELD* aField );
+    void AddField( SCH_FIELD* aField );
 
-    void AddField( LIB_FIELD& aField ) { AddField( new LIB_FIELD( aField ) ); }
+    void AddField( SCH_FIELD& aField ) { AddField( new SCH_FIELD( aField ) ); }
 
     /**
      * Find a field within this symbol matching \a aFieldName and returns it
@@ -294,9 +293,9 @@ public:
      *
      * @return the field if found or NULL if the field was not found.
      */
-    LIB_FIELD* FindField( const wxString& aFieldName, bool aCaseInsensitive = false );
+    SCH_FIELD* FindField( const wxString& aFieldName, bool aCaseInsensitive = false );
 
-    const LIB_FIELD* FindField( const wxString& aFieldName,
+    const SCH_FIELD* FindField( const wxString& aFieldName,
                                 bool aCaseInsensitive = false ) const;
 
     /**
@@ -305,22 +304,22 @@ public:
      * @param aId - Id of field to return.
      * @return The field if found, otherwise NULL.
      */
-    LIB_FIELD* GetFieldById( int aId ) const;
+    SCH_FIELD* GetFieldById( int aId ) const;
 
     /** Return reference to the value field. */
-    LIB_FIELD& GetValueField() const;
+    SCH_FIELD& GetValueField() const;
 
     /** Return reference to the reference designator field. */
-    LIB_FIELD& GetReferenceField() const;
+    SCH_FIELD& GetReferenceField() const;
 
     /** Return reference to the footprint field */
-    LIB_FIELD& GetFootprintField() const;
+    SCH_FIELD& GetFootprintField() const;
 
     /** Return reference to the datasheet field. */
-    LIB_FIELD& GetDatasheetField() const;
+    SCH_FIELD& GetDatasheetField() const;
 
     /** Return reference to the description field. */
-    LIB_FIELD& GetDescriptionField() const;
+    SCH_FIELD& GetDescriptionField() const;
 
     wxString GetPrefix();
 
@@ -378,9 +377,9 @@ public:
      */
     void RemoveDrawItem( SCH_ITEM* aItem );
 
-    void RemoveField( LIB_FIELD* aField ) { RemoveDrawItem( aField ); }
+    void RemoveField( SCH_FIELD* aField ) { RemoveDrawItem( aField ); }
 
-    size_t GetFieldCount() const { return m_drawings.size( LIB_FIELD_T ); }
+    size_t GetFieldCount() const { return m_drawings.size( SCH_FIELD_T ); }
 
     /**
      * Return a list of pin object pointers from the draw item list.
@@ -591,7 +590,7 @@ public:
     /**
      * Return a list of SCH_ITEM objects separated by unit and convert number.
      *
-     * @note This does not include LIB_FIELD objects since they are not associated with
+     * @note This does not include SCH_FIELD objects since they are not associated with
      *       unit and/or convert numbers.
      */
     std::vector<struct LIB_SYMBOL_UNIT> GetUnitDrawItems();
@@ -599,7 +598,7 @@ public:
     /**
      * Return a list of item pointers for \a aUnit and \a aBodyStyle for this symbol.
      *
-     * @note #LIB_FIELD objects are not included.
+     * @note #SCH_FIELD objects are not included.
      *
      * @param aUnit is the unit number of the item, -1 includes all units.
      * @param aBodyStyle is the alternate body styple of the item, -1 includes all body styles.

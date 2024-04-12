@@ -23,7 +23,7 @@
 
 /**
  * @file
- * Test utils (e.g. print helpers and test predicates for LIB_FIELD objects
+ * Test utils (e.g. print helpers and test predicates for SCH_FIELD objects
  */
 
 #ifndef QA_EESCHEMA_LIB_FIELD_TEST_UTILS__H
@@ -37,20 +37,20 @@
 namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 template <>
-struct print_log_value<LIB_FIELD>
+struct print_log_value<SCH_FIELD>
 {
-    inline void operator()( std::ostream& os, LIB_FIELD const& f )
+    inline void operator()( std::ostream& os, SCH_FIELD const& f )
     {
-        os << "LIB_FIELD[ " << f.GetCanonicalName() << " ]";
+        os << "SCH_FIELD[ " << f.GetCanonicalName() << " ]";
     }
 };
 
 template <>
-struct print_log_value<std::vector<LIB_FIELD>>
+struct print_log_value<std::vector<SCH_FIELD>>
 {
-    inline void operator()( std::ostream& os, std::vector<LIB_FIELD> const& f )
+    inline void operator()( std::ostream& os, std::vector<SCH_FIELD> const& f )
     {
-        os << "LIB_FIELDS[ " << f.size() << " ]";
+        os << "SCH_FIELDS[ " << f.size() << " ]";
     }
 };
 }
@@ -62,13 +62,12 @@ namespace KI_TEST
 
 /**
  * Predicate to check a field name is as expected
- * @param  aField    LIB_FIELD to check the name
+ * @param  aField SCH_FIELD to check the name
  * @param  aExpectedName the expected field name
  * @param  aExpectedId the expected field id
- * @return           true if match
+ * @return  true if match
  */
-bool FieldNameIdMatches( const LIB_FIELD& aField, const std::string& aExpectedName,
-                         int aExpectedId )
+bool FieldNameIdMatches( const SCH_FIELD& aField, const std::string& aExpectedName, int aExpectedId )
 {
     bool       ok = true;
     const auto gotName = aField.GetCanonicalName();
@@ -91,17 +90,15 @@ bool FieldNameIdMatches( const LIB_FIELD& aField, const std::string& aExpectedNa
 }
 
 /**
- * Predicate to check that the mandatory fields in a LIB_FIELDS object look sensible
- * @param  aFields the fields to check
- * @return         true if valid
+ * Predicate to check that the mandatory fields look sensible
  */
-bool AreDefaultFieldsCorrect( const std::vector<LIB_FIELD>& aFields )
+bool AreDefaultFieldsCorrect( const std::vector<SCH_FIELD>& aFields )
 {
     const unsigned expectedCount = MANDATORY_FIELD_T::MANDATORY_FIELDS;
+
     if( aFields.size() < expectedCount )
     {
-        BOOST_TEST_INFO(
-                "Expected at least " << expectedCount << " fields, got " << aFields.size() );
+        BOOST_TEST_INFO( "Expected at least " << expectedCount << " fields, got " << aFields.size() );
         return false;
     }
 

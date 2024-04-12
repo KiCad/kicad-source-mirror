@@ -36,7 +36,6 @@
 
 class EDA_TEXT;
 class LIB_SHAPE;
-class LIB_FIELD;
 class LIB_PIN;
 class SCH_LABEL_BASE;
 class SCH_SYMBOL;

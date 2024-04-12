@@ -35,7 +35,6 @@
 #include <geometry/shape_rect.h>
 #include <gr_text.h>
 #include <lib_shape.h>
-#include <lib_field.h>
 #include <lib_pin.h>
 #include <lib_text.h>
 #include <lib_textbox.h>
@@ -192,10 +191,6 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
         case LIB_PIN_T:
             drawBoundingBox = false;
             draw( static_cast<const LIB_PIN*>( aItem ), aLayer, aDimmed  );
-            break;
-        case LIB_FIELD_T:
-            drawBoundingBox = false;
-            draw( static_cast<const LIB_FIELD*>( aItem ), aLayer, aDimmed  );
             break;
         case LIB_TEXT_T:
             draw( static_cast<const LIB_TEXT*>( aItem ), aLayer, aDimmed  );
@@ -452,7 +447,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
     }
 
     if( m_schSettings.m_ShowDisabled
-            || ( m_schSettings.m_ShowGraphicsDisabled && aItem->Type() != LIB_FIELD_T ) )
+            || ( m_schSettings.m_ShowGraphicsDisabled && aItem->Type() != SCH_FIELD_T ) )
     {
         color = color.Darken( 0.5f );
     }
@@ -519,10 +514,6 @@ float SCH_PAINTER::getTextThickness( const EDA_ITEM* aItem ) const
     case SCH_TEXTBOX_T:
     case SCH_TABLECELL_T:
         pen = static_cast<const SCH_TEXTBOX*>( aItem )->GetEffectiveTextPenWidth( pen );
-        break;
-
-    case LIB_FIELD_T:
-        pen = std::max( pen, static_cast<const LIB_FIELD*>( aItem )->GetEffectiveTextPenWidth() );
         break;
 
     case LIB_TEXT_T:
@@ -737,7 +728,7 @@ void SCH_PAINTER::draw( const LIB_SYMBOL* aSymbol, int aLayer, bool aDrawFields,
 
     for( const SCH_ITEM& item : drawnSymbol->GetDrawItems() )
     {
-        if( !aDrawFields && item.Type() == LIB_FIELD_T )
+        if( !aDrawFields && item.Type() == SCH_FIELD_T )
             continue;
 
         if( !childOnLayer( item, aLayer ) )
@@ -994,88 +985,6 @@ void SCH_PAINTER::draw( const LIB_SHAPE* aShape, int aLayer, bool aDimmed )
             drawShape( aShape );
         }
     }
-}
-
-
-void SCH_PAINTER::draw( const LIB_FIELD* aField, int aLayer, bool aDimmed )
-{
-    bool drawingShadows = aLayer == LAYER_SELECTION_SHADOWS;
-
-    if( drawingShadows && !( aField->IsBrightened() || aField->IsSelected() ) )
-        return;
-
-    if( !isUnitAndConversionShown( aField ) )
-        return;
-
-    // Must check layer as fields are sometimes drawn by their parent rather than
-    // directly from the view.
-    int  layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
-    int  layers_count;
-    bool foundLayer = false;
-
-    aField->ViewGetLayers( layers, layers_count );
-
-    for( int i = 0; i < layers_count; ++i )
-    {
-        if( layers[i] == aLayer )
-            foundLayer = true;
-    }
-
-    if( !foundLayer )
-        return;
-
-    COLOR4D color = getRenderColor( aField, aLayer, drawingShadows, aDimmed );
-
-    if( !( aField->IsVisible() || aField->IsForceVisible() ) )
-    {
-        bool force_show = m_schematic ? eeconfig()->m_Appearance.show_hidden_fields
-                                      : m_schSettings.m_ShowHiddenFields;
-
-        if( force_show )
-            color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows, aDimmed );
-        else
-            return;
-    }
-
-    m_gal->SetStrokeColor( color );
-    m_gal->SetFillColor( color );
-
-    BOX2I bbox = aField->GetBoundingBox();
-
-    if( drawingShadows && getFont( aField )->IsOutline() )
-    {
-        bbox.Inflate( KiROUND( getTextThickness( aField ) * 2 ) );
-
-        m_gal->SetIsStroke( false );
-        m_gal->SetIsFill( true );
-        m_gal->DrawRectangle( bbox.GetPosition(), bbox.GetEnd() );
-    }
-    else
-    {
-        VECTOR2I        textpos = bbox.Centre();
-        TEXT_ATTRIBUTES attrs( aField->GetAttributes() );
-
-        attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
-        attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
-        attrs.m_StrokeWidth = KiROUND( getTextThickness( aField ) );
-
-        if( drawingShadows )
-            attrs.m_StrokeWidth += getShadowWidth( !aField->IsSelected() );
-
-        strokeText( UnescapeString( aField->GetShownText( true ) ), textpos, attrs,
-                    aField->GetFontMetrics() );
-    }
-
-    // Draw the umbilical line when in the schematic editor
-    if( aField->IsMoving() && m_schematic )
-    {
-        m_gal->SetLineWidth( m_schSettings.GetOutlineWidth() );
-        m_gal->SetStrokeColor( getRenderColor( aField, LAYER_SCHEMATIC_ANCHOR, drawingShadows ) );
-        m_gal->DrawLine( bbox.Centre(), VECTOR2I( 0, 0 ) );
-    }
-
-    if( m_schSettings.GetDrawBoundingBoxes() )
-        drawItemBoundingBox( aField );
 }
 
 
@@ -2735,7 +2644,24 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     if( drawingShadows && !( aField->IsBrightened() || aField->IsSelected() ) )
         return;
 
-    if( !drawingShadows && aField->GetLayer() != aLayer )
+    if( !isUnitAndConversionShown( aField ) )
+        return;
+
+    // Must check layer as fields are sometimes drawn by their parent rather than directly
+    // from the view.
+    int  layers[KIGFX::VIEW::VIEW_MAX_LAYERS];
+    int  layers_count;
+    bool foundLayer = false;
+
+    aField->ViewGetLayers( layers, layers_count );
+
+    for( int i = 0; i < layers_count; ++i )
+    {
+        if( layers[i] == aLayer )
+            foundLayer = true;
+    }
+
+    if( !foundLayer )
         return;
 
     aLayer = aField->GetLayer();
@@ -2744,7 +2670,10 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
 
     if( !( aField->IsVisible() || aField->IsForceVisible() ) )
     {
-        if( !m_schematic || eeconfig()->m_Appearance.show_hidden_fields )
+        bool force_show = m_schematic ? eeconfig()->m_Appearance.show_hidden_fields
+                                      : m_schSettings.m_ShowHiddenFields;
+
+        if( force_show )
             color = getRenderColor( aField, LAYER_HIDDEN, drawingShadows, aDimmed );
         else
             return;
@@ -2851,7 +2780,7 @@ void SCH_PAINTER::draw( const SCH_FIELD* aField, int aLayer, bool aDimmed )
     }
 
     // Draw the umbilical line
-    if( aField->IsMoving() )
+    if( aField->IsMoving() && m_schematic )
     {
         VECTOR2I parentPos = aField->GetParentPosition();
 

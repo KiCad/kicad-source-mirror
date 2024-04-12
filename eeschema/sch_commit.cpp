@@ -413,10 +413,7 @@ EDA_ITEM* SCH_COMMIT::parentObject( EDA_ITEM* aItem ) const
 {
     EDA_ITEM* parent = aItem->GetParent();
 
-    if( parent && parent->Type() == SCH_SYMBOL_T )
-        return parent;
-
-    if( parent && parent->Type() == LIB_SYMBOL_T )
+    if( parent && ( parent->Type() == SCH_SYMBOL_T || parent->Type() == LIB_SYMBOL_T ) )
         return parent;
 
     if( m_isLibEditor )

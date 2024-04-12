@@ -1804,10 +1804,10 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
             symbol->MirrorHorizontally( einstance.x.ToSchUnits() );
     }
 
-    std::vector<LIB_FIELD*> partFields;
+    std::vector<SCH_FIELD*> partFields;
     part->GetFields( partFields );
 
-    for( const LIB_FIELD* field : partFields )
+    for( const SCH_FIELD* field : partFields )
     {
         symbol->GetFieldById( field->GetId() )->ImportValues( *field );
         symbol->GetFieldById( field->GetId() )->SetTextPos( (VECTOR2I)symbol->GetPosition()
@@ -2042,7 +2042,7 @@ EAGLE_LIBRARY* SCH_IO_EAGLE::loadLibrary( wxXmlNode* aLibraryNode, EAGLE_LIBRARY
             libSymbol->SetUnitCount( gates_count );
             libSymbol->LockUnits( true );
 
-            LIB_FIELD* reference = libSymbol->GetFieldById( REFERENCE_FIELD );
+            SCH_FIELD* reference = libSymbol->GetFieldById( REFERENCE_FIELD );
 
             if( prefix.length() == 0 )
             {
@@ -2230,7 +2230,7 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
             if( libtext->GetText() == wxT( "${REFERENCE}" ) )
             {
                 // Move text & attributes to Reference field and discard LIB_TEXT item
-                LIB_FIELD* field = aSymbol->GetFieldById( REFERENCE_FIELD );
+                SCH_FIELD* field = aSymbol->GetFieldById( REFERENCE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
 
                 // Show Reference field if Eagle reference was uppercase
@@ -2239,7 +2239,7 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
             else if( libtext->GetText() == wxT( "${VALUE}" ) )
             {
                 // Move text & attributes to Value field and discard LIB_TEXT item
-                LIB_FIELD* field = aSymbol->GetFieldById( VALUE_FIELD );
+                SCH_FIELD* field = aSymbol->GetFieldById( VALUE_FIELD );
                 loadFieldAttributes( field, libtext.get() );
 
                 // Show Value field if Eagle reference was uppercase
@@ -2781,7 +2781,7 @@ void SCH_IO_EAGLE::loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) 
 }
 
 
-void SCH_IO_EAGLE::loadFieldAttributes( LIB_FIELD* aField, const LIB_TEXT* aText ) const
+void SCH_IO_EAGLE::loadFieldAttributes( SCH_FIELD* aField, const LIB_TEXT* aText ) const
 {
     aField->SetTextPos( aText->GetPosition() );
     aField->SetTextSize( aText->GetTextSize() );
