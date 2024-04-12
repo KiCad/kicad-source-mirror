@@ -190,12 +190,12 @@ VECTOR2I LIB_TEXTBOX::GetDrawPos() const
 
 int LIB_TEXTBOX::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
-    wxASSERT( aOther.Type() == LIB_TEXTBOX_T );
-
     int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
+
+    wxASSERT( aOther.Type() == LIB_TEXTBOX_T );
 
     const LIB_TEXTBOX* tmp = static_cast<const LIB_TEXTBOX*>( &aOther );
 

@@ -232,12 +232,13 @@ void LIB_FIELD::Copy( LIB_FIELD* aTarget ) const
 
 int LIB_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
-    wxASSERT( aOther.Type() == LIB_FIELD_T );
 
     int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
+
+    wxASSERT( aOther.Type() == LIB_FIELD_T );
 
     const LIB_FIELD* tmp = ( LIB_FIELD* ) &aOther;
 

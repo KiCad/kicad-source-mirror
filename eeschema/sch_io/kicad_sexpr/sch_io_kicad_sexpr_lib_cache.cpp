@@ -244,14 +244,16 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
                 aFormatter.Print( aNestLevel + 2, "(unit_name %s)\n",
                                   aFormatter.Quotes( name ).c_str() );
             }
-            // Enforce item ordering
-            auto cmp =
-                    []( const SCH_ITEM* a, const SCH_ITEM* b )
-                    {
-                        return *a < *b;
-                    };
 
-            std::multiset<SCH_ITEM*, decltype( cmp )> save_map( cmp );
+            auto set_cmp = []( SCH_ITEM* a, SCH_ITEM* b ) -> bool
+            {
+                if( *a == *b )
+                    return a->m_Uuid < b->m_Uuid;
+
+                return SCH_ITEM::cmp_items()(a, b);
+            };
+
+            std::set<SCH_ITEM*, decltype(set_cmp)> save_map(set_cmp);
 
             for( SCH_ITEM* item : unit.m_items )
                 save_map.insert( item );

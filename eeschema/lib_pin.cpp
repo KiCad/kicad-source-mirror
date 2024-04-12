@@ -995,12 +995,12 @@ EDA_ITEM* LIB_PIN::Clone() const
 
 int LIB_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
-    wxASSERT( aOther.Type() == LIB_PIN_T );
-
     int retv = SCH_ITEM::compare( aOther, aCompareFlags );
 
     if( retv )
         return retv;
+
+    wxASSERT( aOther.Type() == LIB_PIN_T );
 
     const LIB_PIN* tmp = (LIB_PIN*) &aOther;
 
