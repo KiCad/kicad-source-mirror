@@ -493,7 +493,7 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::FindItem( const LIB_ID& aLibId )
 {
     for( std::unique_ptr<LIB_TREE_NODE>& lib: m_tree.m_Children )
     {
-        if( lib->m_Name != aLibId.GetLibNickname() )
+        if( lib->m_Name != aLibId.GetLibNickname().wx_str() )
             continue;
 
         // if part name is not specified, return the library node
@@ -502,7 +502,7 @@ wxDataViewItem LIB_TREE_MODEL_ADAPTER::FindItem( const LIB_ID& aLibId )
 
         for( std::unique_ptr<LIB_TREE_NODE>& alias: lib->m_Children )
         {
-            if( alias->m_Name == aLibId.GetLibItemName() )
+            if( alias->m_Name == aLibId.GetLibItemName().wx_str() )
                 return ToItem( alias.get() );
         }
 
