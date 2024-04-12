@@ -1116,7 +1116,7 @@ void EDA_BASE_FRAME::ShowPreferences( wxString aStartPage, wxString aStartParent
     #endif
 
     #define LAZY_CTOR( key )                                                \
-            [=]( wxWindow* aParent )                                        \
+            [this, kiface]( wxWindow* aParent )                             \
             {                                                               \
                 return kiface->CreateKiWindow( aParent, key, &Kiway() );    \
             }
