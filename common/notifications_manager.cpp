@@ -132,7 +132,7 @@ private:
     void onDismiss( wxHyperlinkEvent& aEvent )
     {
         CallAfter(
-                [=]()
+                [this]()
                 {
                     // This will cause this panel to get deleted
                     m_manager->Remove( m_notification->key );
