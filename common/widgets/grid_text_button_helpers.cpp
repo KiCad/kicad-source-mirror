@@ -41,6 +41,16 @@
 #include <eda_doc.h>
 
 
+static void setTextMargins( wxTextEntryBase* aEntry )
+{
+#if defined( __WXMSW__ )
+    aEntry->SetMargins( 2, 2 );
+#elif defined( __WXGTK__ )
+    aEntry->SetMargins( 0, 0 );
+#endif
+}
+
+
 //-------- Renderer ---------------------------------------------------------------------
 // None required; just render as normal text.
 
@@ -219,8 +229,7 @@ void GRID_CELL_SYMBOL_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                          wxEvtHandler* aEventHandler )
 {
     m_control = new TEXT_BUTTON_SYMBOL_CHOOSER( aParent, m_dlg, m_preselect );
-
-    Combo()->SetMargins( 0, 0 );
+    setTextMargins( Combo() );
 
     wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
@@ -304,8 +313,7 @@ void GRID_CELL_FPID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
     m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg, m_symbolNetlist, m_preselect );
-
-    Combo()->SetMargins( 0, 0 );
+    setTextMargins( Combo() );
 
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set
@@ -357,8 +365,7 @@ void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                    wxEvtHandler* aEventHandler )
 {
     m_control = new TEXT_BUTTON_URL( aParent, m_dlg, m_searchStack );
-
-    Combo()->SetMargins( 0, 0 );
+    setTextMargins( Combo() );
 
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set
@@ -516,7 +523,7 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
         m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_grid, m_currentDir, m_fileFilter,
                                                   m_normalize, m_normalizeBasePath );
 
-    Combo()->SetMargins( 0, 0 );
+    setTextMargins( Combo() );
 
 #if wxUSE_VALIDATORS
     // validate text in textctrl, if validator is set
