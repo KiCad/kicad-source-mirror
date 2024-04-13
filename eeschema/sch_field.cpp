@@ -509,26 +509,27 @@ COLOR4D SCH_FIELD::GetFieldColor() const
 void SCH_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 2;
-
-    switch( m_id )
-    {
-    case REFERENCE_FIELD: aLayers[0] = LAYER_REFERENCEPART; break;
-    case VALUE_FIELD:     aLayers[0] = LAYER_VALUEPART;     break;
-    default:              aLayers[0] = LAYER_FIELDS;        break;
-    }
-
+    aLayers[0] = GetDefaultLayer();
     aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
 
 SCH_LAYER_ID SCH_FIELD::GetDefaultLayer() const
 {
-    switch( m_id )
+    if( m_parent && ( m_parent->Type() == LIB_SYMBOL_T || m_parent->Type() == SCH_SYMBOL_T ) )
     {
-        case REFERENCE_FIELD: return LAYER_REFERENCEPART;
-        case VALUE_FIELD:     return LAYER_VALUEPART;
-        default:              return LAYER_FIELDS;
+        if( m_id == REFERENCE_FIELD )
+            return LAYER_REFERENCEPART;
+        else if( m_id == VALUE_FIELD )
+            return LAYER_VALUEPART;
     }
+    else if( m_parent && m_parent->Type() == SCH_LABEL_T )
+    {
+        if( GetCanonicalName() == wxT( "Netclass" ) )
+            return LAYER_NETCLASS_REFS;
+    }
+
+    return LAYER_FIELDS;
 }
 
 
