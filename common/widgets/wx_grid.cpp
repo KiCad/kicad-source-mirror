@@ -25,6 +25,8 @@
 #include <wx/tokenzr.h>
 #include <wx/dc.h>
 #include <wx/settings.h>
+#include <wx/event.h> // Needed for textentry.h on MSW
+#include <wx/textentry.h>
 
 #include <widgets/wx_grid.h>
 #include <widgets/ui_common.h>
@@ -37,6 +39,21 @@
 #include <settings/common_settings.h>
 
 #define MIN_GRIDCELL_MARGIN FromDIP( 3 )
+
+
+void WX_GRID::CellEditorSetMargins( wxTextEntryBase* aEntry )
+{
+    // This is consistent with wxGridCellTextEditor. But works differently across platforms or course.
+    aEntry->SetMargins( 0, 0 );
+}
+
+
+void WX_GRID::CellEditorTransformSizeRect( wxRect& aRect )
+{
+#if defined( __WXMSW__ ) || defined( __WXGTK__ )
+    aRect.Deflate( 2 );
+#endif
+}
 
 
 wxColour getBorderColour()

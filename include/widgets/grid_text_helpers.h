@@ -29,6 +29,26 @@ class wxStyledTextCtrl;
 class wxStyledTextEvent;
 class SCINTILLA_TRICKS;
 
+
+/**
+ * This class works around a bug in wxGrid where the first keystroke doesn't get sent through
+ * the validator if the editor wasn't already open.
+ */
+class GRID_CELL_TEXT_EDITOR : public wxGridCellTextEditor
+{
+public:
+    GRID_CELL_TEXT_EDITOR();
+
+    void SetSize( const wxRect& aRect ) override;
+
+    virtual void SetValidator( const wxValidator& validator ) override;
+    virtual void StartingKey( wxKeyEvent& event ) override;
+
+protected:
+    std::unique_ptr<wxValidator> m_validator;
+};
+
+
 /**
  * A text renderer that can unescape text for display
  * This is useful where it's desired to keep the underlying storage escaped.
@@ -51,6 +71,7 @@ public:
     GRID_CELL_STC_EDITOR( bool aIgnoreCase,
                           std::function<void( wxStyledTextEvent&, SCINTILLA_TRICKS* )> onCharFn );
 
+    void SetSize( const wxRect& aRect ) override;
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
 
     wxGridCellEditor* Clone() const override

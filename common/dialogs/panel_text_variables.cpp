@@ -29,6 +29,7 @@
 #include <project.h>
 #include <grid_tricks.h>
 #include <widgets/std_bitmap_button.h>
+#include <widgets/grid_text_helpers.h>
 
 #include <algorithm>
 

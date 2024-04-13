@@ -30,7 +30,8 @@
 #include <pcb_base_frame.h>
 #include <footprint.h>
 #include "grid_layer_box_helpers.h"
-#include "widgets/grid_text_button_helpers.h"
+#include <widgets/grid_text_button_helpers.h>
+#include <widgets/grid_text_helpers.h>
 
 enum
 {

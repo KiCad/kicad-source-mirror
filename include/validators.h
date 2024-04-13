@@ -51,23 +51,6 @@
 
 
 /**
- * This class works around a bug in wxGrid where the first keystroke doesn't get sent through
- * the validator if the editor wasn't already open.
- */
-class GRID_CELL_TEXT_EDITOR : public wxGridCellTextEditor
-{
-public:
-    GRID_CELL_TEXT_EDITOR();
-
-    virtual void SetValidator( const wxValidator& validator ) override;
-    virtual void StartingKey( wxKeyEvent& event ) override;
-
-protected:
-    std::unique_ptr<wxValidator> m_validator;
-};
-
-
-/**
  * This class provides a custom wxValidator object for limiting the allowable characters when
  * defining footprint names.  Since the introduction of the PRETTY footprint library format,
  * footprint names cannot have any characters that would prevent file creation on any platform.
