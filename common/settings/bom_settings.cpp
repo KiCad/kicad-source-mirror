@@ -246,6 +246,6 @@ std::vector<BOM_FMT_PRESET> BOM_FMT_PRESET::BuiltInPresets()
 }
 
 #if !defined( __MINGW32__ )
-template class KICOMMON_API PARAM_LIST<struct BOM_PRESET>;
-template class KICOMMON_API PARAM_LIST<struct BOM_FMT_PRESET>;
+template class KICOMMON_API PARAM_LIST<BOM_PRESET>;
+template class KICOMMON_API PARAM_LIST<BOM_FMT_PRESET>;
 #endif

@@ -100,7 +100,7 @@ KICOMMON_API bool operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rh
 KICOMMON_API void to_json( nlohmann::json& j, const BOM_FMT_PRESET& f );
 KICOMMON_API void from_json( const nlohmann::json& j, BOM_FMT_PRESET& f );
 
-extern template class APIVISIBLE PARAM_LIST<struct BOM_PRESET>;
-extern template class APIVISIBLE PARAM_LIST<struct BOM_FMT_PRESET>;
+extern template class APIVISIBLE PARAM_LIST<BOM_PRESET>;
+extern template class APIVISIBLE PARAM_LIST<BOM_FMT_PRESET>;
 
 #endif
