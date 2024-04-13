@@ -174,7 +174,7 @@ void SYMBOL_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIBRARY& aL
             auto aliasIt = std::find_if( aliases.begin(), aliases.end(),
                     [&] ( const LIB_SYMBOL* a )
                     {
-                        return a->GetName() == (*nodeIt)->m_LibId.GetLibItemName();
+                        return a->GetName() == (*nodeIt)->m_LibId.GetLibItemName().wx_str();
                     } );
 
             if( aliasIt != aliases.end() )

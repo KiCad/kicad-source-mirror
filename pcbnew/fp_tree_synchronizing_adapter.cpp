@@ -278,7 +278,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
     switch( node->m_Type )
     {
     case LIB_TREE_NODE::LIBRARY:
-        if( node->m_Name == m_frame->GetLoadedFPID().GetLibNickname() )
+        if( node->m_Name == m_frame->GetLoadedFPID().GetLibNickname().wx_str() )
         {
             // mark the current library if it's collapsed
             if( !m_widget->IsExpanded( ToItem( node ) ) )

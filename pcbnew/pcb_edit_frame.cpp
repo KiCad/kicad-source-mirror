@@ -2349,7 +2349,7 @@ void PCB_EDIT_FRAME::ExchangeFootprint( FOOTPRINT* aExisting, FOOTPRINT* aNew,
     processTextItem( aExisting->Value(), aNew->Value(),
                      // reset value text only when it is a proxy for the footprint ID
                      // (cf replacing value "MountingHole-2.5mm" with "MountingHole-4.0mm")
-                     aExisting->GetValue() == aExisting->GetFPID().GetLibItemName(),
+                     aExisting->GetValue() == aExisting->GetFPID().GetLibItemName().wx_str(),
                      resetTextLayers, resetTextEffects, aUpdated );
 
     // Copy fields in accordance with the reset* flags
