@@ -52,7 +52,7 @@ DIALOG_SYNC_SHEET_PINS::DIALOG_SYNC_SHEET_PINS( wxWindow* aParent,
     wxImageList* imageList = new wxImageList( SYNC_SHEET_PIN_PREFERENCE::NORMAL_WIDTH,
                                               SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT );
 
-    for( const auto [icon_idx, bitmap] : SYNC_SHEET_PIN_PREFERENCE::GetBookctrlPageIcon() )
+    for( const auto& [icon_idx, bitmap] : SYNC_SHEET_PIN_PREFERENCE::GetBookctrlPageIcon() )
     {
         imageList->Add( KiBitmap( bitmap, SYNC_SHEET_PIN_PREFERENCE::NORMAL_HEIGHT ) );
     }
