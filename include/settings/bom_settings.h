@@ -38,10 +38,10 @@ struct KICOMMON_API BOM_FIELD
 };
 
 KICOMMON_API bool operator!=( const BOM_FIELD& lhs, const BOM_FIELD& rhs );
-KICOMMON_API bool  operator<( const BOM_FIELD& lhs, const BOM_FIELD& rhs );
+KICOMMON_API bool operator<( const BOM_FIELD& lhs, const BOM_FIELD& rhs );
 
 KICOMMON_API void to_json( nlohmann::json& j, const BOM_FIELD& f );
-KICOMMON_API void  from_json( const nlohmann::json& j, BOM_FIELD& f );
+KICOMMON_API void from_json( const nlohmann::json& j, BOM_FIELD& f );
 
 
 // A complete preset defining a BOM "View" with a list of all the fields to show,
@@ -67,10 +67,10 @@ struct KICOMMON_API BOM_PRESET
 };
 
 KICOMMON_API bool operator!=( const BOM_PRESET& lhs, const BOM_PRESET& rhs );
-KICOMMON_API bool  operator<( const BOM_PRESET& lhs, const BOM_PRESET& rhs );
+KICOMMON_API bool operator<( const BOM_PRESET& lhs, const BOM_PRESET& rhs );
 
 KICOMMON_API void to_json( nlohmann::json& j, const BOM_PRESET& f );
-KICOMMON_API void  from_json( const nlohmann::json& j, BOM_PRESET& f );
+KICOMMON_API void from_json( const nlohmann::json& j, BOM_PRESET& f );
 
 
 // A formatting preset, like CSV (Comma Separated Values)
@@ -95,10 +95,12 @@ struct KICOMMON_API BOM_FMT_PRESET
 };
 
 KICOMMON_API bool operator!=( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
-KICOMMON_API bool  operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
+KICOMMON_API bool operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rhs );
 
 KICOMMON_API void to_json( nlohmann::json& j, const BOM_FMT_PRESET& f );
-KICOMMON_API void  from_json( const nlohmann::json& j, BOM_FMT_PRESET& f );
+KICOMMON_API void from_json( const nlohmann::json& j, BOM_FMT_PRESET& f );
 
+extern template class APIVISIBLE PARAM_LIST<struct BOM_PRESET>;
+extern template class APIVISIBLE PARAM_LIST<struct BOM_FMT_PRESET>;
 
 #endif

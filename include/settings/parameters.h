@@ -29,7 +29,6 @@
 #include <optional>
 #include <gal/color4d.h>
 #include <settings/json_settings.h>
-#include <settings/bom_settings.h>
 #include <settings/grid_settings.h>
 #include <kicommon.h>
 
@@ -562,8 +561,6 @@ template class KICOMMON_API PARAM_LIST<bool>;
 template class KICOMMON_API PARAM_LIST<int>;
 template class KICOMMON_API PARAM_LIST<double>;
 template class KICOMMON_API PARAM_LIST<KIGFX::COLOR4D>;
-template class KICOMMON_API PARAM_LIST<struct BOM_PRESET>;
-template class KICOMMON_API PARAM_LIST<struct BOM_FMT_PRESET>;
 template class KICOMMON_API PARAM_LIST<GRID>;
 template class KICOMMON_API PARAM_LIST<wxString>;
 #else
@@ -571,8 +568,6 @@ extern template class APIVISIBLE PARAM_LIST<bool>;
 extern template class APIVISIBLE PARAM_LIST<int>;
 extern template class APIVISIBLE PARAM_LIST<double>;
 extern template class APIVISIBLE PARAM_LIST<KIGFX::COLOR4D>;
-extern template class APIVISIBLE PARAM_LIST<struct BOM_PRESET>;
-extern template class APIVISIBLE PARAM_LIST<struct BOM_FMT_PRESET>;
 extern template class APIVISIBLE PARAM_LIST<GRID>;
 extern template class APIVISIBLE PARAM_LIST<wxString>;
 #endif

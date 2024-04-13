@@ -128,8 +128,6 @@ template class KICOMMON_API PARAM_LIST<double>;
 template class KICOMMON_API PARAM_LIST<wxString>;
 template class KICOMMON_API PARAM_LIST<KIGFX::COLOR4D>;
 //template KICOMMON_API class PARAM_LIST<FILE_INFO_PAIR>;
-template class KICOMMON_API PARAM_LIST<struct BOM_PRESET>;
-template class KICOMMON_API PARAM_LIST<struct BOM_FMT_PRESET>;
 template class KICOMMON_API PARAM_LIST<GRID>;
 
 template class KICOMMON_API PARAM_SET<wxString>;

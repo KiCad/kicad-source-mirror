@@ -244,3 +244,8 @@ std::vector<BOM_FMT_PRESET> BOM_FMT_PRESET::BuiltInPresets()
 {
     return { BOM_FMT_PRESET::CSV(), BOM_FMT_PRESET::TSV(), BOM_FMT_PRESET::Semicolons() };
 }
+
+#if !defined( __MINGW32__ )
+template class KICOMMON_API PARAM_LIST<struct BOM_PRESET>;
+template class KICOMMON_API PARAM_LIST<struct BOM_FMT_PRESET>;
+#endif
