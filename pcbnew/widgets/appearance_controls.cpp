@@ -2239,7 +2239,7 @@ void APPEARANCE_CONTROLS::rebuildObjects()
                     aSetting->ctl_opacity = slider;
 
                     auto opacitySliderHandler =
-                            [=]( wxCommandEvent& aEvent )
+                            [this, layer]( wxCommandEvent& aEvent )
                             {
                                 wxSlider* ctrl = static_cast<wxSlider*>( aEvent.GetEventObject() );
                                 int value = ctrl->GetValue();
