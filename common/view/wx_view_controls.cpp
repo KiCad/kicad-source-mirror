@@ -847,7 +847,7 @@ void WX_VIEW_CONTROLS::WarpMouseCursor( const VECTOR2D& aPosition, bool aWorldCo
 void WX_VIEW_CONTROLS::CenterOnCursor()
 {
     const VECTOR2I& screenSize = m_view->GetGAL()->GetScreenPixelSize();
-    VECTOR2I screenCenter( screenSize / 2 );
+    VECTOR2D screenCenter( screenSize / 2 );
 
     if( GetMousePosition( false ) != screenCenter )
     {
