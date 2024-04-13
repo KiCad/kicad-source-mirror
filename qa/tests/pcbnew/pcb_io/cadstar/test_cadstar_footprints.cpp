@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE( CadstarFootprintImport )
                                                                 false, nullptr );
                 BOOST_CHECK( eagleFp );
 
-                BOOST_CHECK_EQUAL( wxT( "REF**" ), eagleFp->GetReference() );
+                BOOST_CHECK_EQUAL( "REF**", eagleFp->GetReference() );
                 BOOST_CHECK_EQUAL( footprintName, eagleFp->GetValue() );
 
                 FOOTPRINT* kicadFp =

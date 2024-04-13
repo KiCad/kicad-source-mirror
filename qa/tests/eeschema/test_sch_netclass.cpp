@@ -44,9 +44,9 @@ BOOST_AUTO_TEST_CASE( TestSubsheetNetclass )
         wxString name = label->GetText();
 
         if( name == wxT( "B" ) || name == wxT( "D" ) )
-            BOOST_CHECK_EQUAL( label->GetEffectiveNetClass( &path )->GetName(), wxT( "net_02" ) );
+            BOOST_CHECK_EQUAL( label->GetEffectiveNetClass( &path )->GetName(), "net_02" );
         else
-            BOOST_CHECK_EQUAL( label->GetEffectiveNetClass( &path )->GetName(), wxT( "net_01" ) );
+            BOOST_CHECK_EQUAL( label->GetEffectiveNetClass( &path )->GetName(), "net_01" );
     }
 }
 

@@ -92,7 +92,7 @@ BOOST_AUTO_TEST_CASE( AltiumPcbLibImport )
                                                                   false, nullptr );
                 BOOST_CHECK( altiumFp );
 
-                BOOST_CHECK_EQUAL( wxT( "REF**" ), altiumFp->GetReference() );
+                BOOST_CHECK_EQUAL( "REF**", altiumFp->GetReference() );
                 BOOST_CHECK_EQUAL( footprintName, altiumFp->GetValue() );
 
                 FOOTPRINT* kicadFp = kicadPlugin.FootprintLoad( kicadLibraryPath, footprintName,
