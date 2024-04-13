@@ -94,7 +94,7 @@ TOOL_ACTION CVPCB_ACTIONS::changeFocusRight( TOOL_ACTION_ARGS()
 TOOL_ACTION CVPCB_ACTIONS::changeFocusLeft( TOOL_ACTION_ARGS()
         .Name( "cvpcb.Control.changeFocusLeft" )
         .Scope( AS_GLOBAL )
-        .DefaultHotkey( MD_SHIFT + WXK_TAB )
+        .DefaultHotkey( MD_SHIFT + static_cast<int>( WXK_TAB ) )
         .Flags( AF_NONE )
         .Parameter( CVPCB_MAINFRAME::CHANGE_FOCUS_LEFT ) );
 

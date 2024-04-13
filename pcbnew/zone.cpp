@@ -299,7 +299,7 @@ void ZONE::ViewGetLayers( int aLayers[], int& aCount ) const
     for( PCB_LAYER_ID layer : m_layerSet.Seq() )
     {
         aLayers[ aCount++ ] = layer;                     // For outline (always full opacity)
-        aLayers[ aCount++ ] = layer + LAYER_ZONE_START;  // For fill (obeys global zone opacity)
+        aLayers[ aCount++ ] = layer + static_cast<int>( LAYER_ZONE_START );  // For fill (obeys global zone opacity)
     }
 
     if( IsConflicting() )
