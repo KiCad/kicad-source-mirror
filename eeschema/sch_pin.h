@@ -169,6 +169,7 @@ public:
     double Similarity( const SCH_ITEM& aItem ) const override;
 
     bool operator==( const SCH_ITEM& aItem ) const override;
+    bool operator==( const SCH_PIN& aItem ) const;
 
     bool operator!=( const SCH_PIN& aRhs ) const { return !( *this == aRhs ); }
 

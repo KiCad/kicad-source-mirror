@@ -3312,39 +3312,45 @@ bool FOOTPRINT::operator==( const BOARD_ITEM& aOther ) const
 
     const FOOTPRINT& other = static_cast<const FOOTPRINT&>( aOther );
 
-    if( m_pads.size() != other.m_pads.size() )
+    return *this == other;
+}
+
+
+bool FOOTPRINT::operator==( const FOOTPRINT& aOther ) const
+{
+    if( m_pads.size() != aOther.m_pads.size() )
         return false;
 
     for( size_t ii = 0; ii < m_pads.size(); ++ii )
     {
-        if( !( *m_pads[ii] == *other.m_pads[ii] ) )
+        if( !( *m_pads[ii] == *aOther.m_pads[ii] ) )
             return false;
     }
 
-    if( m_drawings.size() != other.m_drawings.size() )
+    if( m_drawings.size() != aOther.m_drawings.size() )
         return false;
 
     for( size_t ii = 0; ii < m_drawings.size(); ++ii )
     {
-        if( !( *m_drawings[ii] == *other.m_drawings[ii] ) )
+        if( !( *m_drawings[ii] == *aOther.m_drawings[ii] ) )
             return false;
     }
 
-    if( m_zones.size() != other.m_zones.size() )
+    if( m_zones.size() != aOther.m_zones.size() )
         return false;
 
     for( size_t ii = 0; ii < m_zones.size(); ++ii )
     {
-        if( !( *m_zones[ii] == *other.m_zones[ii] ) )
+        if( !( *m_zones[ii] == *aOther.m_zones[ii] ) )
             return false;
     }
 
-    if( m_fields.size() != other.m_fields.size() )
+    if( m_fields.size() != aOther.m_fields.size() )
         return false;
 
     for( size_t ii = 0; ii < m_fields.size(); ++ii )
     {
-        if( !( *m_fields[ii] == *other.m_fields[ii] ) )
+        if( !( *m_fields[ii] == *aOther.m_fields[ii] ) )
             return false;
     }
 

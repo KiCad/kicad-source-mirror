@@ -218,7 +218,13 @@ bool PCB_FIELD::operator==( const BOARD_ITEM& aOther ) const
 
     const PCB_FIELD& other = static_cast<const PCB_FIELD&>( aOther );
 
-    return m_id == other.m_id && m_name == other.m_name && EDA_TEXT::operator==( other );
+    return *this == other;
+}
+
+
+bool PCB_FIELD::operator==( const PCB_FIELD& aOther ) const
+{
+    return m_id == aOther.m_id && m_name == aOther.m_name && EDA_TEXT::operator==( aOther );
 }
 
 

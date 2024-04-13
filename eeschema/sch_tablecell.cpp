@@ -162,12 +162,15 @@ bool SCH_TABLECELL::operator==( const SCH_ITEM& aOtherItem ) const
 
     const SCH_TABLECELL& other = static_cast<const SCH_TABLECELL&>( aOtherItem );
 
-    return     m_colSpan == other.m_colSpan
-            && m_rowSpan == other.m_rowSpan
-            && SCH_TEXTBOX::operator==( other );
+    return *this == other;
 }
 
 
+bool SCH_TABLECELL::operator==( const SCH_TABLECELL& aOtherItem ) const
+{
+    return m_colSpan == aOtherItem.m_colSpan && m_rowSpan == aOtherItem.m_rowSpan
+           && SCH_TEXTBOX::operator==( aOtherItem );
+}
 
 static struct SCH_TABLECELL_DESC
 {

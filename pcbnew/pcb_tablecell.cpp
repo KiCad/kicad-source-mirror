@@ -140,7 +140,6 @@ double PCB_TABLECELL::Similarity( const BOARD_ITEM& aBoardItem ) const
     return similarity;
 }
 
-
 bool PCB_TABLECELL::operator==( const BOARD_ITEM& aBoardItem ) const
 {
     if( aBoardItem.Type() != Type() )
@@ -148,9 +147,14 @@ bool PCB_TABLECELL::operator==( const BOARD_ITEM& aBoardItem ) const
 
     const PCB_TABLECELL& other = static_cast<const PCB_TABLECELL&>( aBoardItem );
 
-    return     m_colSpan == other.m_colSpan
-            && m_rowSpan == other.m_rowSpan
-            && PCB_TEXTBOX::operator==( other );
+    return *this == other;
+}
+
+bool PCB_TABLECELL::operator==( const PCB_TABLECELL& aOther ) const
+{
+    return     m_colSpan == aOther.m_colSpan
+            && m_rowSpan == aOther.m_rowSpan
+            && PCB_TEXTBOX::operator==( aOther );
 }
 
 

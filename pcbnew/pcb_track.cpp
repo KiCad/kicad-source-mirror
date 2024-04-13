@@ -163,8 +163,16 @@ bool PCB_TRACK::operator==( const BOARD_ITEM& aOther ) const
 
     const PCB_TRACK& other = static_cast<const PCB_TRACK&>( aOther );
 
-    return m_Start == other.m_Start && m_End == other.m_End && m_layer == other.m_layer &&
-           m_Width == other.m_Width;
+    return *this == other;
+}
+
+
+bool PCB_TRACK::operator==( const PCB_TRACK& aOther ) const
+{
+    return m_Start == aOther.m_Start
+        && m_End == aOther.m_End
+        && m_layer == aOther.m_layer
+        && m_Width == aOther.m_Width;
 }
 
 

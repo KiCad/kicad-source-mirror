@@ -111,6 +111,7 @@ public:
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
+    bool operator==( const PCB_FIELD& aOther ) const;
     bool operator==( const BOARD_ITEM& aOther ) const override;
 
 protected:

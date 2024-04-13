@@ -786,6 +786,7 @@ public:
 
     double Similarity( const BOARD_ITEM& aOther ) const override;
 
+    bool operator==( const ZONE& aOther ) const;
     bool operator==( const BOARD_ITEM& aOther ) const override;
 
 #if defined(DEBUG)

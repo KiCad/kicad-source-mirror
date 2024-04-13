@@ -1393,53 +1393,58 @@ bool ZONE::operator==( const BOARD_ITEM& aOther ) const
         return false;
 
     const ZONE& other = static_cast<const ZONE&>( aOther );
+    return *this == other;
+}
 
-    if( GetIsRuleArea() != other.GetIsRuleArea() )
+
+bool ZONE::operator==( const ZONE& aOther ) const
+{
+    if( GetIsRuleArea() != aOther.GetIsRuleArea() )
         return false;
 
-    if( GetLayerSet() != other.GetLayerSet() )
+    if( GetLayerSet() != aOther.GetLayerSet() )
         return false;
 
-    if( GetNetCode() != other.GetNetCode() )
+    if( GetNetCode() != aOther.GetNetCode() )
         return false;
 
     if( GetIsRuleArea() )
     {
-        if( GetDoNotAllowCopperPour() != other.GetDoNotAllowCopperPour() )
+        if( GetDoNotAllowCopperPour() != aOther.GetDoNotAllowCopperPour() )
             return false;
-        if( GetDoNotAllowTracks() != other.GetDoNotAllowTracks() )
+        if( GetDoNotAllowTracks() != aOther.GetDoNotAllowTracks() )
             return false;
-        if( GetDoNotAllowVias() != other.GetDoNotAllowVias() )
+        if( GetDoNotAllowVias() != aOther.GetDoNotAllowVias() )
             return false;
-        if( GetDoNotAllowFootprints() != other.GetDoNotAllowFootprints() )
+        if( GetDoNotAllowFootprints() != aOther.GetDoNotAllowFootprints() )
             return false;
-        if( GetDoNotAllowPads() != other.GetDoNotAllowPads() )
+        if( GetDoNotAllowPads() != aOther.GetDoNotAllowPads() )
             return false;
     }
     else
     {
-        if( GetAssignedPriority() != other.GetAssignedPriority() )
+        if( GetAssignedPriority() != aOther.GetAssignedPriority() )
             return false;
 
-        if( GetMinThickness() != other.GetMinThickness() )
+        if( GetMinThickness() != aOther.GetMinThickness() )
             return false;
 
-        if( GetCornerSmoothingType() != other.GetCornerSmoothingType() )
+        if( GetCornerSmoothingType() != aOther.GetCornerSmoothingType() )
             return false;
 
-        if( GetCornerRadius() != other.GetCornerRadius() )
+        if( GetCornerRadius() != aOther.GetCornerRadius() )
             return false;
 
-        if( GetTeardropParams() != other.GetTeardropParams() )
+        if( GetTeardropParams() != aOther.GetTeardropParams() )
             return false;
     }
 
-    if( GetNumCorners() != other.GetNumCorners() )
+    if( GetNumCorners() != aOther.GetNumCorners() )
         return false;
 
     for( int ii = 0; ii < GetNumCorners(); ii++ )
     {
-        if( GetCornerPosition( ii ) != other.GetCornerPosition( ii ) )
+        if( GetCornerPosition( ii ) != aOther.GetCornerPosition( ii ) )
             return false;
     }
 

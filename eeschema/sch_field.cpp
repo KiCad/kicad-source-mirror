@@ -1321,29 +1321,36 @@ bool SCH_FIELD::operator <( const SCH_ITEM& aItem ) const
     return GetName() < field->GetName();
 }
 
-bool SCH_FIELD::operator==( const SCH_ITEM& aOther ) const
+
+bool SCH_FIELD::operator==(const SCH_ITEM& aOther) const
 {
     if( Type() != aOther.Type() )
         return false;
 
     const SCH_FIELD& field = static_cast<const SCH_FIELD&>( aOther );
 
-    if( GetId() != field.GetId() )
+    return *this == field;
+}
+
+
+bool SCH_FIELD::operator==( const SCH_FIELD& aOther ) const
+{
+    if( GetId() != aOther.GetId() )
         return false;
 
-    if( GetPosition() != field.GetPosition() )
+    if( GetPosition() != aOther.GetPosition() )
         return false;
 
-    if( IsNamedVariable() != field.IsNamedVariable() )
+    if( IsNamedVariable() != aOther.IsNamedVariable() )
         return false;
 
-    if( IsNameShown() != field.IsNameShown() )
+    if( IsNameShown() != aOther.IsNameShown() )
         return false;
 
-    if( CanAutoplace() != field.CanAutoplace() )
+    if( CanAutoplace() != aOther.CanAutoplace() )
         return false;
 
-    if( GetText() != field.GetText() )
+    if( GetText() != aOther.GetText() )
         return false;
 
     return true;

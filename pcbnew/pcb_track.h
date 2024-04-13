@@ -244,6 +244,7 @@ public:
     virtual double Similarity( const BOARD_ITEM& aOther ) const override;
 
     virtual bool operator==( const BOARD_ITEM& aOther ) const override;
+    virtual bool operator==( const PCB_TRACK& aOther ) const;
 
     /**
      * Set the cached scale.
