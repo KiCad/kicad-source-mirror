@@ -59,13 +59,7 @@ wxString GRID_CELL_TEXT_BUTTON::GetValue() const
 
 void GRID_CELL_TEXT_BUTTON::SetSize( const wxRect& aRect )
 {
-    wxRect rect( aRect );
-
-#if defined( __WXMAC__ )
-    rect.Inflate( 2 );      // ignore FOCUS_RING
-#endif
-
-    Combo()->SetSize( rect, wxSIZE_ALLOW_MINUS_ONE );
+    Combo()->SetSize( aRect, wxSIZE_ALLOW_MINUS_ONE );
 }
 
 
