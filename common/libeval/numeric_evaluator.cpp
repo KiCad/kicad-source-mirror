@@ -176,7 +176,7 @@ void NUMERIC_EVALUATOR::newString( const wxString& aString )
     Clear();
 
     m_originalText = aString;
-    m_token.input = aString.mb_str();
+    m_token.input = aString.utf8_str();
     m_token.inputLen = strlen( m_token.input );
     m_token.outputLen = std::max<std::size_t>( 64, m_token.inputLen + 1 );
     m_token.pos = 0;
@@ -272,8 +272,9 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
                         m_token.token[ idx++ ] = ch;
                     }
 
-                    ch = m_token.input[ ++m_token.pos ];
-                } while( isdigit( ch ) || isDecimalSeparator( ch ) );
+                    ch = m_token.input[++m_token.pos];
+                    // the below static cast is to avoid partial unicode chars triggering an assert in isdigit on msvc
+                } while( isdigit( static_cast<unsigned char>( ch ) ) || isDecimalSeparator( ch ) );
 
                 m_token.token[ idx ] = 0;
             };
@@ -373,8 +374,9 @@ NUMERIC_EVALUATOR::Token NUMERIC_EVALUATOR::getToken()
     {
         /* End of input */
     }
-    else if( isdigit( ch ) || isDecimalSeparator( ch ) )
+    else if( isdigit( static_cast<unsigned char>( ch ) ) || isDecimalSeparator( ch ) )
     {
+        // the above static cast is to avoid partial unicode chars triggering an assert in isdigit on msvc
         // VALUE
         extractNumber( &siScaler );
         retval.token = VALUE;
