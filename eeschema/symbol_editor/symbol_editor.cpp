@@ -708,7 +708,7 @@ void SYMBOL_EDIT_FRAME::saveSymbolCopyAs()
                     // @todo Either check the selecteced library to see if the parent symbol name
                     //       is in the new library and/or copy the parent symbol as well.  This is
                     //       the lazy solution to ensure derived symbols do not get orphaned.
-                    if( symbol->IsAlias() && newLib != old_lib_id.GetLibNickname() )
+                    if( symbol->IsAlias() && newLib != old_lib_id.GetLibNickname().wx_str() )
                     {
                         DisplayError( this, _( "Derived symbols must be saved in the same library "
                                                "as their parent symbol." ) );
@@ -971,7 +971,7 @@ void SYMBOL_EDIT_FRAME::Revert( bool aConfirm )
         if( symbolName.IsEmpty() )
         {
             LIB_ID curr_libId = GetCurSymbol()->GetLibId();
-            reload_currentSymbol = libName == curr_libId.GetLibNickname();
+            reload_currentSymbol = libName == curr_libId.GetLibNickname().wx_str();
 
             if( reload_currentSymbol )
                 curr_symbolName = curr_libId.GetUniStringLibItemName();
