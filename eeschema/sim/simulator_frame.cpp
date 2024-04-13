@@ -518,7 +518,7 @@ bool SIMULATOR_FRAME::LoadWorkbook( const wxString& aPath )
 
         // Successfully loading a workbook does not count as modifying it.  Clear the modified
         // flag after all the EVT_WORKBOOK_MODIFIED events have been processed.
-        CallAfter( [=]()
+        CallAfter( [this]()
                    {
                        m_workbookModified = false;
                    } );
