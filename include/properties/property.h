@@ -719,7 +719,7 @@ private:
     std::unordered_map<wxString, T> m_reverseMap;
     T                               m_undefined;      // Returned if the string is not recognized
 
-    ENUM_MAP<T>()
+    ENUM_MAP()
     {
     }
 };

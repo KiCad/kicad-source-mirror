@@ -49,7 +49,7 @@ public:
     template <typename T>
     struct LINE_ITEM
     {
-        LINE_ITEM<T>( T aAttribute, const wxString& aTitle ) :
+        LINE_ITEM( T aAttribute, const wxString& aTitle ) :
                 attribute( aAttribute ),
                 title( aTitle ),
                 qty( 0 )
