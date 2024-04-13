@@ -640,7 +640,7 @@ void SIMULATOR_FRAME_UI::LoadSettings( EESCHEMA_SETTINGS* aCfg )
 void SIMULATOR_FRAME_UI::SaveSettings( EESCHEMA_SETTINGS* aCfg )
 {
     EESCHEMA_SETTINGS::SIMULATOR& settings = aCfg->m_Simulator;
-    
+
     settings.view.plot_panel_width          = m_splitterLeftRight->GetSashPosition();
     settings.view.plot_panel_height         = m_splitterPlotAndConsole->GetSashPosition();
     settings.view.signal_panel_height       = m_splitterSignals->GetSashPosition();
@@ -1862,7 +1862,7 @@ void SIMULATOR_FRAME_UI::applyUserDefinedSignals()
 
     for( const auto& [ id, signal ] : m_userDefinedSignals )
     {
-        std::string cmd = "let user{} = {}";
+        constexpr const char* cmd = "let user{} = {}";
 
         simulator()->Command( "echo " + fmt::format( cmd, id, signal.ToStdString() ) );
         simulator()->Command( fmt::format( cmd, id, quoteNetNames( signal ).ToStdString() ) );
