@@ -71,45 +71,45 @@ const nlohmann::json patch_schema = R"patch({
 namespace nlohmann
 {
 
-json_patch::json_patch(json &&patch)
-    : j_(std::move(patch))
+json_patch::json_patch( json&& patch ) : j_( std::move( patch ) )
 {
-	validateJsonPatch(j_);
+    validateJsonPatch( j_ );
 }
 
-json_patch::json_patch(const json &patch)
-    : j_(std::move(patch))
+json_patch::json_patch( const json& patch ) : j_( std::move( patch ) )
 {
-	validateJsonPatch(j_);
+    validateJsonPatch( j_ );
 }
 
-json_patch &json_patch::add(const json::json_pointer &ptr, json value)
+json_patch& json_patch::add( const json::json_pointer& ptr, json value )
 {
-	j_.push_back(json{{"op", "add"}, {"path", ptr.to_string()}, {"value", std::move(value)}});
-	return *this;
+    j_.push_back(
+            json{ { "op", "add" }, { "path", ptr.to_string() }, { "value", std::move( value ) } } );
+    return *this;
 }
 
-json_patch &json_patch::replace(const json::json_pointer &ptr, json value)
+json_patch& json_patch::replace( const json::json_pointer& ptr, json value )
 {
-	j_.push_back(json{{"op", "replace"}, {"path", ptr.to_string()}, {"value", std::move(value)}});
-	return *this;
+    j_.push_back( json{
+            { "op", "replace" }, { "path", ptr.to_string() }, { "value", std::move( value ) } } );
+    return *this;
 }
 
-json_patch &json_patch::remove(const json::json_pointer &ptr)
+json_patch& json_patch::remove( const json::json_pointer& ptr )
 {
-	j_.push_back(json{{"op", "remove"}, {"path", ptr.to_string()}});
-	return *this;
+    j_.push_back( json{ { "op", "remove" }, { "path", ptr.to_string() } } );
+    return *this;
 }
 
-void json_patch::validateJsonPatch(json const &patch)
+void json_patch::validateJsonPatch( json const& patch )
 {
-	// static put here to have it created at the first usage of validateJsonPatch
-	static nlohmann::json_schema::json_validator patch_validator(patch_schema);
+    // static put here to have it created at the first usage of validateJsonPatch
+    static nlohmann::json_schema::json_validator patch_validator( patch_schema );
 
-	patch_validator.validate(patch);
+    patch_validator.validate( patch );
 
-	for (auto const &op : patch)
-		json::json_pointer(op["path"].get<std::string>());
+    for( auto const& op : patch )
+        json::json_pointer( op["path"].get<std::string>() );
 }
 
 } // namespace nlohmann
