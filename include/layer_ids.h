@@ -173,7 +173,7 @@ enum NETNAMES_LAYER_ID: int
 };
 
 /// Macro for obtaining netname layer for a given PCB layer
-#define NETNAMES_LAYER_INDEX( layer )   ( NETNAMES_LAYER_ID_START + layer )
+#define NETNAMES_LAYER_INDEX( layer )   ( static_cast<int>( NETNAMES_LAYER_ID_START ) + layer )
 
 #define GAL_UI_LAYER_COUNT 10
 
@@ -414,7 +414,7 @@ inline SCH_LAYER_ID operator++( SCH_LAYER_ID& a )
 }
 
 // number of draw layers in Gerbview
-#define GERBER_DRAWLAYERS_COUNT PCB_LAYER_ID_COUNT
+#define GERBER_DRAWLAYERS_COUNT static_cast<int>( PCB_LAYER_ID_COUNT )
 
 /// GerbView draw layers
 enum GERBVIEW_LAYER_ID: int
