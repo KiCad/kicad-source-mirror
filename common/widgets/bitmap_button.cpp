@@ -196,7 +196,7 @@ void BITMAP_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
     if( !hasFlag( wxCONTROL_DISABLED )
             && ( m_acceptDraggedInClicks || hasFlag( wxCONTROL_PRESSED | wxCONTROL_FOCUSED ) ) )
     {
-        GetEventHandler()->CallAfter( [=]()
+        GetEventHandler()->CallAfter( [this]()
                                       {
                                           wxCommandEvent evt( wxEVT_BUTTON, GetId() );
                                           evt.SetEventObject( this );
@@ -220,7 +220,7 @@ void BITMAP_BUTTON::OnLeftButtonDown( wxMouseEvent& aEvent )
             clearFlag( wxCONTROL_CHECKED );
 
             GetEventHandler()->CallAfter(
-                    [=]()
+                    [this]()
                     {
                         wxCommandEvent evt( wxEVT_BUTTON, GetId() );
                         evt.SetEventObject( this );
@@ -233,7 +233,7 @@ void BITMAP_BUTTON::OnLeftButtonDown( wxMouseEvent& aEvent )
             setFlag( wxCONTROL_CHECKED );
 
             GetEventHandler()->CallAfter(
-                    [=]()
+                    [this]()
                     {
                         wxCommandEvent evt( wxEVT_BUTTON, GetId() );
                         evt.SetEventObject( this );

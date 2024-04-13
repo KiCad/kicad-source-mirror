@@ -160,7 +160,7 @@ void GRID_CELL_COLOR_SELECTOR::BeginEdit( int row, int col, wxGrid* grid )
     m_value.SetFromWxString( grid->GetTable()->GetValue( row, col ) );
 
     grid->CallAfter(
-            [=]()
+            [this, row, col]()
             {
                 DIALOG_COLOR_PICKER dialog( m_parent, m_value, false );
 
