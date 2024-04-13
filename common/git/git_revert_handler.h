@@ -26,8 +26,7 @@
 
 #include <git2.h>
 #include <vector>
-
-class wxString;
+#include <wx/string.h>
 
 class GIT_REVERT_HANDLER
 {

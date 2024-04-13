@@ -211,31 +211,6 @@ public:
     bool Init( IbisParser& aParser );
 };
 
-
-class KIBIS : public KIBIS_ANY
-{
-public:
-    KIBIS() : KIBIS_ANY( this ), m_file( this )
-    {
-        m_valid = false;
-    }; // Constructor for unitialized KIBIS members
-
-    KIBIS( std::string aFileName, REPORTER* aReporter = nullptr );
-
-    REPORTER*                    m_reporter;
-    std::vector<KIBIS_COMPONENT> m_components;
-    std::vector<KIBIS_MODEL>     m_models;
-    KIBIS_FILE                   m_file;
-
-    /** @brief Absolute path of the directory that will be used for caching.  */
-    std::string m_cacheDir = "";
-
-    /** @brief Return the model with name aName . Nullptr if not found */
-    KIBIS_MODEL* GetModel( std::string aName );
-    /** @brief Return the component with name aName . Nullptr if not found */
-    KIBIS_COMPONENT* GetComponent( std::string aName );
-};
-
 class KIBIS_MODEL : public KIBIS_ANY
 {
 public:
@@ -452,6 +427,30 @@ public:
      *  @return pointer to a KIBIS_PIN, or nullptr if there is no matching pin
      */
     KIBIS_PIN* GetPin( std::string aPinNumber );
+};
+
+class KIBIS : public KIBIS_ANY
+{
+public:
+    KIBIS() : KIBIS_ANY( this ), m_file( this )
+    {
+        m_valid = false;
+    }; // Constructor for unitialized KIBIS members
+
+    KIBIS( std::string aFileName, REPORTER* aReporter = nullptr );
+
+    REPORTER*                    m_reporter;
+    std::vector<KIBIS_COMPONENT> m_components;
+    std::vector<KIBIS_MODEL>     m_models;
+    KIBIS_FILE                   m_file;
+
+    /** @brief Absolute path of the directory that will be used for caching.  */
+    std::string m_cacheDir = "";
+
+    /** @brief Return the model with name aName . Nullptr if not found */
+    KIBIS_MODEL* GetModel( std::string aName );
+    /** @brief Return the component with name aName . Nullptr if not found */
+    KIBIS_COMPONENT* GetComponent( std::string aName );
 };
 
 #endif

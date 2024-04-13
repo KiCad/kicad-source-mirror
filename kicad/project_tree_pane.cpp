@@ -712,7 +712,11 @@ bool PROJECT_TREE_PANE::hasChangedFiles()
     if( !repo )
         return false;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-field-initializers"
     git_status_options opts = GIT_STATUS_OPTIONS_INIT;
+#pragma clang diagnostic pop
+
     opts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
     opts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED | GIT_STATUS_OPT_RENAMES_HEAD_TO_INDEX
                  | GIT_STATUS_OPT_SORT_CASE_SENSITIVELY;

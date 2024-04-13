@@ -173,23 +173,6 @@ struct CADSTAR_PART_ENTRY
 };
 
 
-struct CADSTAR_PART_SYMBOL_ENTRY
-{
-    CADSTAR_PART_SYMBOL_ENTRY() {};
-
-    CADSTAR_PART_SYMBOL_ENTRY( std::string aName, std::optional<std::string> aAlternate,
-                               std::vector<CADSTAR_PART_PIN> aPins ) :
-            m_SymbolName( aName ),
-            m_SymbolAlternateName( aAlternate ),
-            m_Pins( aPins )
-    {};
-
-    std::string                   m_SymbolName;
-    std::optional<std::string>    m_SymbolAlternateName;
-    std::vector<CADSTAR_PART_PIN> m_Pins;
-};
-
-
 struct CADSTAR_PART_PIN
 {
     CADSTAR_PART_PIN() :
@@ -211,6 +194,23 @@ struct CADSTAR_PART_PIN
     CADSTAR_PIN_POSITION       m_Position;
     CADSTAR_PIN_TYPE           m_Type;
     std::optional<long>        m_Loading;
+};
+
+
+struct CADSTAR_PART_SYMBOL_ENTRY
+{
+    CADSTAR_PART_SYMBOL_ENTRY() {};
+
+    CADSTAR_PART_SYMBOL_ENTRY( std::string aName, std::optional<std::string> aAlternate,
+                               std::vector<CADSTAR_PART_PIN> aPins ) :
+            m_SymbolName( aName ),
+            m_SymbolAlternateName( aAlternate ),
+            m_Pins( aPins )
+    {};
+
+    std::string                   m_SymbolName;
+    std::optional<std::string>    m_SymbolAlternateName;
+    std::vector<CADSTAR_PART_PIN> m_Pins;
 };
 
 
