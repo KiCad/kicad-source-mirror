@@ -123,6 +123,8 @@ void GRID_CELL_STC_EDITOR::SetSize( const wxRect& aRect )
 
 #if defined( __WXMSW__ )
     rect.Offset( -1, 1 );
+#elif defined( __WXGTK__ )
+    rect.Offset( -1, 3 );
 #endif
 
     wxGridCellEditor::SetSize( rect );
