@@ -1063,7 +1063,7 @@ void DIALOG_DRC::SelectMarker( const PCB_MARKER* aMarker )
         m_markersTreeModel->SelectMarker( aMarker );
 
         CallAfter(
-                [=]
+                [this, aMarker]
                 {
                     m_markersTreeModel->CenterMarker( aMarker );
                 } );
