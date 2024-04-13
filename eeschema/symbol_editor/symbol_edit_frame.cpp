@@ -855,7 +855,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
                                                        wxEmptyString );
 
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                [=]( wxHyperlinkEvent& aEvent )
+                [this]( wxHyperlinkEvent& aEvent )
                 {
                     InvokeSchEditSymbolLibTable( &Kiway(), this );
                 } ) );
@@ -890,7 +890,7 @@ void SYMBOL_EDIT_FRAME::SetCurSymbol( LIB_SYMBOL* aSymbol, bool aUpdateZoom )
 
         wxHyperlinkCtrl* button = new wxHyperlinkCtrl( infobar, wxID_ANY, link, wxEmptyString );
         button->Bind( wxEVT_COMMAND_HYPERLINK, std::function<void( wxHyperlinkEvent& aEvent )>(
-                [=]( wxHyperlinkEvent& aEvent )
+                [this, rootSymbolName, unit, bodyStyle]( wxHyperlinkEvent& aEvent )
                 {
                     LoadSymbolFromCurrentLib( rootSymbolName, unit, bodyStyle );
                 } ) );
