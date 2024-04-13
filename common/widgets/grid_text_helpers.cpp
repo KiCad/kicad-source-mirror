@@ -21,7 +21,54 @@
 #include <string_utils.h>
 #include <wx/stc/stc.h>
 #include <widgets/grid_text_helpers.h>
+#include <widgets/wx_grid.h>
 #include <scintilla_tricks.h>
+
+
+//-------- GRID_CELL_TEXT_EDITOR ------------------------------------------------------
+//
+
+GRID_CELL_TEXT_EDITOR::GRID_CELL_TEXT_EDITOR() : wxGridCellTextEditor()
+{
+}
+
+
+void GRID_CELL_TEXT_EDITOR::SetValidator( const wxValidator& validator )
+{
+    // keep our own copy because wxGridCellTextEditor's is annoyingly private
+    m_validator.reset( static_cast<wxValidator*>( validator.Clone() ) );
+
+    wxGridCellTextEditor::SetValidator( *m_validator );
+}
+
+
+void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
+{
+    if( m_validator )
+    {
+        m_validator.get()->SetWindow( Text() );
+        m_validator.get()->ProcessEvent( event );
+    }
+
+    if( event.GetSkipped() )
+    {
+        wxGridCellTextEditor::StartingKey( event );
+        event.Skip( false );
+    }
+}
+
+
+void GRID_CELL_TEXT_EDITOR::SetSize( const wxRect& aRect )
+{
+    wxRect rect( aRect );
+    WX_GRID::CellEditorTransformSizeRect( rect );
+
+#if defined( __WXMSW__ )
+    rect.Offset( 0, 1 );
+#endif
+
+    wxGridCellEditor::SetSize( rect );
+}
 
 
 //-------- GRID_CELL_ESCAPED_TEXT_RENDERER ------------------------------------------------------
@@ -69,9 +116,23 @@ GRID_CELL_STC_EDITOR::GRID_CELL_STC_EDITOR( bool aIgnoreCase,
 { }
 
 
+void GRID_CELL_STC_EDITOR::SetSize( const wxRect& aRect )
+{
+    wxRect rect( aRect );
+    WX_GRID::CellEditorTransformSizeRect( rect );
+
+#if defined( __WXMSW__ )
+    rect.Offset( -1, 1 );
+#endif
+
+    wxGridCellEditor::SetSize( rect );
+}
+
+
 void GRID_CELL_STC_EDITOR::Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler )
 {
-    m_control = new wxStyledTextCtrl( aParent );
+    m_control = new wxStyledTextCtrl( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                      wxBORDER_NONE );
 
     stc_ctrl()->SetTabIndents( false );
     stc_ctrl()->SetBackSpaceUnIndents( false );

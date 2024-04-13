@@ -39,35 +39,6 @@
 #include <wx/log.h>
 #include <wx/combo.h>
 
-GRID_CELL_TEXT_EDITOR::GRID_CELL_TEXT_EDITOR() : wxGridCellTextEditor()
-{
-}
-
-
-void GRID_CELL_TEXT_EDITOR::SetValidator( const wxValidator& validator )
-{
-    // keep our own copy because wxGridCellTextEditor's is annoyingly private
-    m_validator.reset( static_cast<wxValidator*>( validator.Clone() ) );
-
-    wxGridCellTextEditor::SetValidator( *m_validator );
-}
-
-
-void GRID_CELL_TEXT_EDITOR::StartingKey( wxKeyEvent& event )
-{
-    if( m_validator )
-    {
-        m_validator.get()->SetWindow( Text() );
-        m_validator.get()->ProcessEvent( event );
-    }
-
-    if( event.GetSkipped() )
-    {
-        wxGridCellTextEditor::StartingKey( event );
-        event.Skip( false );
-    }
-}
-
 
 FOOTPRINT_NAME_VALIDATOR::FOOTPRINT_NAME_VALIDATOR( wxString* aValue ) :
     wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue )

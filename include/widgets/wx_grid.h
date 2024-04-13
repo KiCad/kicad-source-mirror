@@ -34,6 +34,8 @@
 #include <units_provider.h>
 #include <libeval/numeric_evaluator.h>
 
+class wxTextEntryBase;
+
 
 class WX_GRID : public wxGrid
 {
@@ -149,6 +151,16 @@ public:
         if( GetNumberRows() )
             DeleteRows( 0, GetNumberRows() );
     }
+
+    /**
+     * A helper function to set OS-specific margins for text-based cell editors.
+     */
+    static void CellEditorSetMargins( wxTextEntryBase* aEntry );
+
+    /**
+     * A helper function to tweak sizes of text-based cell editors depending on OS.
+     */
+    static void CellEditorTransformSizeRect( wxRect& aRect );
 
 protected:
     /**

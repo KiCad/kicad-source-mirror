@@ -34,6 +34,7 @@
 #include <pgm_base.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
+#include <widgets/grid_text_helpers.h>
 #include <widgets/std_bitmap_button.h>
 
 #include <algorithm>
