@@ -53,7 +53,7 @@ public:
             m_scanTypes( {} ),
             // Inspect() is virtual so calling it from a class common inspector preserves
             // polymorphism.
-            m_inspector( [=]( EDA_ITEM* aItem, void* aTestData )
+            m_inspector( [this]( EDA_ITEM* aItem, void* aTestData )
                          {
                              return this->Inspect( aItem, aTestData );
                          } )
