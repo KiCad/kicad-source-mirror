@@ -190,7 +190,8 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
     std::string res = "";
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
-    curl->SetURL( m_source.root_url + fmt::format( http_endpoint_parts + "/{}.json", aPartID ) );
+    std::string url = m_source.root_url + fmt::format( "{}/{}.json", http_endpoint_parts, aPartID );
+    curl->SetURL( url );
 
     try
     {
@@ -309,8 +310,9 @@ bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
     std::string res = "";
 
     std::unique_ptr<KICAD_CURL_EASY> curl = createCurlEasyObject();
+
     curl->SetURL( m_source.root_url
-                    + fmt::format( http_endpoint_parts + "/category/{}.json", aCategory.id ) );
+                  + fmt::format( "{}/category/{}.json", http_endpoint_parts, aCategory.id ) );
 
     try
     {
