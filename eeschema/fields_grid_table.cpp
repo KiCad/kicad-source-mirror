@@ -131,7 +131,6 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
                                          WX_GRID* aGrid, LIB_SYMBOL* aSymbol ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_grid( aGrid ),
         m_parentType( SCH_SYMBOL_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aSymbol ),
@@ -152,7 +151,6 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
                                          WX_GRID* aGrid, SCH_SYMBOL* aSymbol ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_grid( aGrid ),
         m_parentType( SCH_SYMBOL_T ),
         m_mandatoryFieldCount( MANDATORY_FIELDS ),
         m_part( aSymbol->GetLibSymbolRef().get() ),
@@ -173,7 +171,6 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
                                          WX_GRID* aGrid, SCH_SHEET* aSheet ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_grid( aGrid ),
         m_parentType( SCH_SHEET_T ),
         m_mandatoryFieldCount( SHEET_MANDATORY_FIELDS ),
         m_part( nullptr ),
@@ -193,7 +190,6 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_EDIT_FRAME* a
                                          WX_GRID* aGrid, SCH_LABEL_BASE* aLabel ) :
         m_frame( aFrame ),
         m_dialog( aDialog ),
-        m_grid( aGrid ),
         m_parentType( SCH_LABEL_LOCATE_ANY_T ),
         m_mandatoryFieldCount( aLabel->GetMandatoryFieldCount() ),
         m_part( nullptr ),

@@ -127,8 +127,6 @@ private:
      */
     void jobUpdated( std::shared_ptr<BACKGROUND_JOB> aJob );
 
-    BACKGROUND_JOB_LIST* m_jobListDialog;
-
     /**
      * Holds a reference to all active background jobs
      * Access to this vector should be protected by locks since threads may Create or Remove at will

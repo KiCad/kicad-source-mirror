@@ -118,7 +118,6 @@ protected:
 private:
     SCH_BASE_FRAME* m_frame;
     DIALOG_SHIM*    m_dialog;
-    WX_GRID*        m_grid;
     KICAD_T         m_parentType;
     int             m_mandatoryFieldCount;
     LIB_SYMBOL*     m_part;
