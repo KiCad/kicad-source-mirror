@@ -86,9 +86,9 @@ const wxString& BASE_SCREEN::GetPageNumber() const
 void BASE_SCREEN::Show( int nestLevel, std::ostream& os ) const
 {
     // for now, make it look like XML, expand on this later.
-    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << wxS( ">\n" );
+    NestedSpace( nestLevel, os ) << '<' << GetClass().Lower().mb_str() << ">\n";
 
-    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << wxS( ">\n" );
+    NestedSpace( nestLevel, os ) << "</" << GetClass().Lower().mb_str() << ">\n";
 }
 
 #endif
