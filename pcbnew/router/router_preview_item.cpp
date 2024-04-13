@@ -148,7 +148,7 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
         m_type = PR_SHAPE;
         m_width = 0;
         m_color = COLOR4D( 0.7, 0.7, 0.7, 0.8 );
-        m_depth = m_originDepth - ( PCB_LAYER_ID_COUNT * LayerDepthFactor );
+        m_depth = m_originDepth - ( static_cast<double>( PCB_LAYER_ID_COUNT ) * LayerDepthFactor );
 
         delete m_shape;
         m_shape = nullptr;

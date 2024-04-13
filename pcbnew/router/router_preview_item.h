@@ -73,7 +73,7 @@ public:
      * currently hard-coded via GAL::AdvanceDepth take a depth of 0.1)
      */
     static constexpr double LayerDepthFactor = 0.0001;
-    static constexpr double PathOverlayDepth = LayerDepthFactor * LAYER_ZONE_END;
+    static constexpr double PathOverlayDepth = LayerDepthFactor * static_cast<double>( LAYER_ZONE_END );
 
     ROUTER_PREVIEW_ITEM( const SHAPE& aShape, KIGFX::VIEW* aView = nullptr );
     ROUTER_PREVIEW_ITEM( const PNS::ITEM* aItem = nullptr, KIGFX::VIEW* aView = nullptr,
