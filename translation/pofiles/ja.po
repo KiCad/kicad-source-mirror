@@ -14,10 +14,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-01 15:01+0000\n"
+"PO-Revision-Date: 2024-04-15 06:54+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/master-"
-"source/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
+"master-source/ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5681,9 +5681,8 @@ msgid "Bezier"
 msgstr "ベジェ曲線"
 
 #: common/eda_shape.cpp:1981 eeschema/lib_shape.cpp:598
-#, fuzzy
 msgid "Shape Properties"
-msgstr "シートのプロパティ"
+msgstr "形状のプロパティ"
 
 #: common/eda_shape.cpp:1987 eeschema/sch_table.cpp:604
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:489
@@ -6475,9 +6474,8 @@ msgid "Cancel Autocomplete"
 msgstr "更新の終了"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "ロックを切り替え"
+msgstr "チェックボックスを切り替え"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -11243,9 +11241,8 @@ msgid "untitled"
 msgstr "名称未設定"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:590
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "ラベルのプロパティ"
+msgstr "ラベルのプロパティを編集"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -12806,9 +12803,8 @@ msgstr ""
 "にある '%s' のチェックを外します。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "シートピンのプロパティ"
+msgstr "シートのプロパティを編集"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -14216,9 +14212,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:532
 #: pcbnew/dialogs/dialog_text_properties.cpp:536
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "テキストのプロパティ"
+msgstr "テキストのプロパティを編集"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -19824,9 +19819,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "フーリエ解析を実行..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "信号位相:"
+msgstr "信号名をコピー"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:770
@@ -22903,24 +22897,20 @@ msgstr ""
 "調整の必要があります"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "指定した値に設定:"
+msgstr "E24系列の値に制限."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "指定した値に設定:"
+msgstr "E48系列の値に制限."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "指定した値に設定:"
+msgstr "E96系列の値に制限"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "指定した値に設定:"
+msgstr "E192系列の値に制限."
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -23901,7 +23891,6 @@ msgid "Move Layer Up"
 msgstr "レイヤーを上に移動"
 
 #: gerbview/tools/gerbview_actions.cpp:176
-#, fuzzy
 msgid "Move current layer up"
 msgstr "現在のレイヤーを上に移動"
 
@@ -23910,7 +23899,6 @@ msgid "Move Layer Down"
 msgstr "レイヤーを下へ移動"
 
 #: gerbview/tools/gerbview_actions.cpp:184
-#, fuzzy
 msgid "Move current layer down"
 msgstr "現在のレイヤーを下に移動"
 
@@ -33474,7 +33462,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:375
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
 msgstr "ティアドロップが2つの配線セグメントを跨ぐことを許容"
 
@@ -38991,9 +38978,8 @@ msgid "Skew between traces out of range"
 msgstr "配線間の遅延が許容範囲外"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "接続上のビアが多すぎる"
+msgstr "接続上のビアが多すぎるか少なすぎる"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39689,14 +39675,13 @@ msgid "Too many vias on a connection"
 msgstr "接続上のビアが多すぎる"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s 最大カウント %d; 現状 %d)"
+msgstr "(%s 最小カウント %d; 現状 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "接続上のビアが多すぎる"
+msgstr "接続上のビアが少なすぎる"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -42353,9 +42338,9 @@ msgid "No footprints in library '%s'"
 msgstr "ライブラリ '%s' にフットプリントがありません"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.cpp:290
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint '%s' not found in '%s'."
-msgstr "フットプリント '%s' がライブラリ'%s'にありません。"
+msgstr "フットプリント '%s' が'%s' に含まれていません。"
 
 #: pcbnew/pcb_io/altium/pcb_io_altium_designer.h:42
 msgid "Altium Designer PCB files"
@@ -48545,9 +48530,9 @@ msgid "thermal reliefs for PTH"
 msgstr "PTH用のサーマルリリーフ"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] ロードに失敗しました: 入力行が長すぎます\n"
+msgstr "[INFO] ロードに失敗しました: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
