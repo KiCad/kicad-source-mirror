@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-07 23:59+0100\n"
+"POT-Creation-Date: 2024-04-14 14:22-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3283,6 +3283,9 @@ msgstr "Height"
 msgid "Bezier"
 msgstr "Bezier"
 
+msgid "Shape Properties"
+msgstr "Shape Properties"
+
 msgid "Start X"
 msgstr "Start X"
 
@@ -3435,16 +3438,8 @@ msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Deprecated version of KICAD_SYMBOL_DIR."
 
 #, c-format
-msgid "from %s : %s() line %d"
-msgstr "from %s : %s() line %d"
-
-#, c-format
 msgid "%s in '%s', line %d, offset %d."
 msgstr "%s in '%s', line %d, offset %d."
-
-#, c-format
-msgid "from %s : %s() line:%d"
-msgstr "from %s : %s() line:%d"
 
 #, c-format
 msgid ""
@@ -3517,10 +3512,6 @@ msgid ""
 msgstr ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-
-#, c-format
-msgid "fp-lib-table files contain no library named '%s'."
-msgstr "fp-lib-table files contain no library named '%s'."
 
 msgid "Added by Plugin and Content Manager"
 msgstr "Added by Plugin and Content Manager"
@@ -3748,6 +3739,15 @@ msgstr "Select All"
 
 msgid "Select all cells"
 msgstr "Select all cells"
+
+msgid "Accept Autocomplete"
+msgstr "Accept Autocomplete"
+
+msgid "Cancel Autocomplete"
+msgstr "Cancel Autocomplete"
+
+msgid "Toggle Checkbox"
+msgstr "Toggle Checkbox"
 
 msgid "Pan Left/Right"
 msgstr "Pan Left/Right"
@@ -6284,6 +6284,9 @@ msgstr "Update/reset field positions"
 msgid "Update/reset symbol attributes"
 msgstr "Update/reset symbol attributes"
 
+msgid "Reset custom power symbols"
+msgstr "Reset custom power symbols"
+
 msgid "Update Symbols from Library"
 msgstr "Update Symbols from Library"
 
@@ -6894,8 +6897,8 @@ msgstr "Label can not be empty."
 msgid "untitled"
 msgstr "untitled"
 
-msgid "Edit Label"
-msgstr "Edit Label"
+msgid "Edit Label Properties"
+msgstr "Edit Label Properties"
 
 msgid "The first field is mandatory."
 msgstr "The first field is mandatory."
@@ -7861,6 +7864,9 @@ msgstr ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
 
+msgid "Edit Sheet Properties"
+msgstr "Edit Sheet Properties"
+
 #, c-format
 msgid ""
 "Cannot normalize new sheet schematic file path:\n"
@@ -8737,8 +8743,8 @@ msgstr ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 
-msgid "Edit Text"
-msgstr "Edit Text"
+msgid "Edit Text Properties"
+msgstr "Edit Text Properties"
 
 msgid "Link:"
 msgstr "Link:"
@@ -10737,14 +10743,6 @@ msgstr ""
 msgid "Storage file not fully parsed (%d bytes remaining)."
 msgstr "Storage file not fully parsed (%d bytes remaining)."
 
-msgid "Blanket not currently supported."
-msgstr "Blanket not currently supported."
-
-#, c-format
-msgid "Unknown or unexpected record ID %d found inside \"Additional\" section."
-msgstr ""
-"Unknown or unexpected record ID %d found inside \"Additional\" section."
-
 msgid "Expected Altium Schematic file version 5.0"
 msgstr "Expected Altium Schematic file version 5.0"
 
@@ -10760,10 +10758,12 @@ msgstr "Parameter Set not currently supported."
 msgid "Compile mask not currently supported."
 msgstr "Compile mask not currently supported."
 
+msgid "Blanket not currently supported."
+msgstr "Blanket not currently supported."
+
 #, c-format
-msgid "Unknown or unexpected record id %d found inside \"FileHeader\" section."
-msgstr ""
-"Unknown or unexpected record id %d found inside \"FileHeader\" section."
+msgid "Unknown or unexpected record id %d found in %s."
+msgstr "Unknown or unexpected record id %d found in %s."
 
 #, c-format
 msgid "Symbol \"%s\" in sheet \"%s\" at index %d replaced with symbol \"%s\"."
@@ -10823,10 +10823,6 @@ msgstr "Error reading image %s."
 #, c-format
 msgid "File not found %s."
 msgstr "File not found %s."
-
-#, c-format
-msgid "Unknown or unexpected record id %d found in %s."
-msgstr "Unknown or unexpected record id %d found in %s."
 
 msgid "Expected Altium Schematic Library file version 5.0"
 msgstr "Expected Altium Schematic Library file version 5.0"
@@ -12749,6 +12745,9 @@ msgstr "Measure Integral"
 
 msgid "Perform Fourier Analysis..."
 msgstr "Perform Fourier Analysis..."
+
+msgid "Copy Signal Name"
+msgstr "Copy Signal Name"
 
 msgid " (amplitude)"
 msgstr " (amplitude)"
@@ -14897,6 +14896,18 @@ msgstr "Tune %s"
 #, c-format
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr "%s has simulation model of type '%s %s'; only RLC passives be tuned"
+
+msgid "Limit to E24 series values."
+msgstr "Limit to E24 series values."
+
+msgid "Limit to E48 series values."
+msgstr "Limit to E48 series values."
+
+msgid "Limit to E96 series values"
+msgstr "Limit to E96 series values"
+
+msgid "Limit to E192 series values"
+msgstr "Limit to E192 series values"
 
 msgid "Current data will be lost?"
 msgstr "Current data will be lost?"
@@ -24188,14 +24199,8 @@ msgstr "Start X:"
 msgid "End X:"
 msgstr "End X:"
 
-msgid "Use net class / custom rule widths"
-msgstr "Use net class / custom rule widths"
-
 msgid "Pre-defined sizes:"
 msgstr "Pre-defined sizes:"
-
-msgid "Use net class / custom rule sizes"
-msgstr "Use net class / custom rule sizes"
 
 msgid "Via diameter:"
 msgstr "Via diameter:"
@@ -26712,8 +26717,8 @@ msgstr "Trace length out of range"
 msgid "Skew between traces out of range"
 msgstr "Skew between traces out of range"
 
-msgid "Too many vias on a connection"
-msgstr "Too many vias on a connection"
+msgid "Too many or too few vias on a connection"
+msgstr "Too many or too few vias on a connection"
 
 msgid "Differential pair gap out of range"
 msgstr "Differential pair gap out of range"
@@ -27219,6 +27224,16 @@ msgstr "(%s max skew %s; actual %s; average net length %s; actual %s)"
 msgid "(%s max count %d; actual %d)"
 msgstr "(%s max count %d; actual %d)"
 
+msgid "Too many vias on a connection"
+msgstr "Too many vias on a connection"
+
+#, c-format
+msgid "(%s min count %d; actual %d)"
+msgstr "(%s min count %d; actual %d)"
+
+msgid "Too few vias on a connection"
+msgstr "Too few vias on a connection"
+
 msgid "Gathering length-constrained connections..."
 msgstr "Gathering length-constrained connections..."
 
@@ -27525,12 +27540,12 @@ msgstr "Current Board will be closed. Continue?"
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-"This may result in different fills from previous KiCad versions which used "
+" This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-"This may result in different fills from previous KiCad versions which used "
+" This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 
 #, c-format
@@ -33829,8 +33844,9 @@ msgstr "solid"
 msgid "thermal reliefs for PTH"
 msgstr "thermal reliefs for PTH"
 
-msgid "[INFO] load failed: input line too long\n"
-msgstr "[INFO] load failed: input line too long\n"
+#, c-format
+msgid "[INFO] load failed: %s"
+msgstr "[INFO] load failed: %s"
 
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
@@ -33948,6 +33964,56 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#, c-format
+#~ msgid "from %s : %s() line %d"
+#~ msgstr "from %s : %s() line %d"
+
+#, c-format
+#~ msgid "from %s : %s() line:%d"
+#~ msgstr "from %s : %s() line:%d"
+
+#, c-format
+#~ msgid "fp-lib-table files contain no library named '%s'."
+#~ msgstr "fp-lib-table files contain no library named '%s'."
+
+#~ msgid "Edit Label"
+#~ msgstr "Edit Label"
+
+#~ msgid "Edit Text"
+#~ msgstr "Edit Text"
+
+#, c-format
+#~ msgid ""
+#~ "Unknown or unexpected record ID %d found inside \"Additional\" section."
+#~ msgstr ""
+#~ "Unknown or unexpected record ID %d found inside \"Additional\" section."
+
+#, c-format
+#~ msgid ""
+#~ "Unknown or unexpected record id %d found inside \"FileHeader\" section."
+#~ msgstr ""
+#~ "Unknown or unexpected record id %d found inside \"FileHeader\" section."
+
+#~ msgid "Use net class / custom rule widths"
+#~ msgstr "Use net class / custom rule widths"
+
+#~ msgid "Use net class / custom rule sizes"
+#~ msgstr "Use net class / custom rule sizes"
+
+#~ msgid ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance setting "
+#~ "will be used (see Board Setup > Design Rules > Constraints).\n"
+#~ "This may result in different fills from previous KiCad versions which "
+#~ "used the line thicknesses of the board boundary on the Edge Cuts layer."
+#~ msgstr ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance setting "
+#~ "will be used (see Board Setup > Design Rules > Constraints).\n"
+#~ "This may result in different fills from previous KiCad versions which "
+#~ "used the line thicknesses of the board boundary on the Edge Cuts layer."
+
+#~ msgid "[INFO] load failed: input line too long\n"
+#~ msgstr "[INFO] load failed: input line too long\n"
 
 #~ msgid "KiCad Main Window"
 #~ msgstr "KiCad Main Window"
