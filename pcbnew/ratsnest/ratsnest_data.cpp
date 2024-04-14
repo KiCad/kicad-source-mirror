@@ -388,7 +388,10 @@ void RN_NET::OptimizeRNEdges()
                     {
                         CN_ZONE_LAYER* zoneLayerB = dynamic_cast<CN_ZONE_LAYER*>( itemB );
 
-                        if( zoneLayerB && zoneLayerB->Layer() == zoneLayerA->Layer() )
+                        if( !zoneLayerB || zoneLayerB == zoneLayerA )
+                            continue;
+
+                        if( zoneLayerB->Layer() == zoneLayerA->Layer() )
                         {
                             // Process the first matching layer.  We don't really care if it's
                             // the "best" layer or not, as anything will be better than the
