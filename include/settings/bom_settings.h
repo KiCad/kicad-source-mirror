@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Mike Williams <mike@mikebwilliams.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -100,7 +100,12 @@ KICOMMON_API bool operator<( const BOM_FMT_PRESET& lhs, const BOM_FMT_PRESET& rh
 KICOMMON_API void to_json( nlohmann::json& j, const BOM_FMT_PRESET& f );
 KICOMMON_API void from_json( const nlohmann::json& j, BOM_FMT_PRESET& f );
 
+#if defined( __MINGW32__ )
+template class KICOMMON_API PARAM_LIST<struct BOM_PRESET>;
+template class KICOMMON_API PARAM_LIST<struct BOM_FMT_PRESET>;
+#else
 extern template class APIVISIBLE PARAM_LIST<BOM_PRESET>;
 extern template class APIVISIBLE PARAM_LIST<BOM_FMT_PRESET>;
+#endif
 
 #endif
