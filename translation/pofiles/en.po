@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-08 00:00+0100\n"
+"POT-Creation-Date: 2024-04-14 14:22-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -998,6 +998,9 @@ msgstr "Export to File"
 msgid "Export to Clipboard"
 msgstr "Export to Clipboard"
 
+msgid "Modification from API"
+msgstr "Modification from API"
+
 msgid "Background Jobs"
 msgstr "Background Jobs"
 
@@ -1141,20 +1144,23 @@ msgstr "Lead Development Alumni"
 msgid "Additional Contributions By"
 msgstr "Additional Contributions By"
 
+msgid "Documentation Team"
+msgstr "Documentation Team"
+
 msgid "Librarian Team"
 msgstr "Librarian Team"
 
-msgid "3D models by"
-msgstr "3D models by"
+msgid "3D models"
+msgstr "3D models"
 
-msgid "Symbols by"
-msgstr "Symbols by"
+msgid "Symbols"
+msgstr "Symbols"
 
-msgid "Footprints by"
-msgstr "Footprints by"
+msgid "Footprints"
+msgstr "Footprints"
 
-msgid "Icons by"
-msgstr "Icons by"
+msgid "Icons"
+msgstr "Icons"
 
 msgid "Package Developers"
 msgstr "Package Developers"
@@ -1747,8 +1753,14 @@ msgstr "Keep existing reference designators, even if they are duplicated"
 msgid "Clear reference designators on all pasted symbols"
 msgstr "Clear reference designators on all pasted symbols"
 
-msgid "Paste Options"
-msgstr "Paste Options"
+msgid "Reference Designators"
+msgstr "Reference Designators"
+
+msgid "Clear Net Assignments"
+msgstr "Clear Net Assignments"
+
+msgid "Remove the net information from all connected items before pasting"
+msgstr "Remove the net information from all connected items before pasting"
 
 msgid "Paste Special"
 msgstr "Paste Special"
@@ -2209,6 +2221,12 @@ msgstr ""
 "When enabled, certain hotkeys that cycle between settings will show a popup "
 "indicator briefly to indicate the change in settings."
 
+msgid "Use alternating row colors in tables"
+msgstr "Use alternating row colors in tables"
+
+msgid "When enabled, use a different color for every other table row"
+msgstr "When enabled, use a different color for every other table row"
+
 msgid "Icon theme:"
 msgstr "Icon theme:"
 
@@ -2663,6 +2681,74 @@ msgstr "Automatically remove uninstalled libraries"
 msgid "Library nickname prefix:"
 msgstr "Library nickname prefix:"
 
+#, c-format
+msgid "Listening at %s"
+msgstr "Listening at %s"
+
+msgid "This installation of KiCad does not have API support enabled."
+msgstr "This installation of KiCad does not have API support enabled."
+
+msgid "KiCad API is not enabled; external Python plugins will not be available"
+msgstr ""
+"KiCad API is not enabled; external Python plugins will not be available"
+
+msgid ""
+"No valid Python interpreter chosen; external Python plugins will not be "
+"available"
+msgstr ""
+"No valid Python interpreter chosen; external Python plugins will not be "
+"available"
+
+#, c-format
+msgid "Found %s"
+msgstr "Found %s"
+
+msgid "Not a valid Python 3 interpreter"
+msgstr "Not a valid Python 3 interpreter"
+
+msgid "KiCad API"
+msgstr "KiCad API"
+
+msgid ""
+"When the KiCad API is enabled, plugins and other software running on this "
+"computer can connect to KiCad."
+msgstr ""
+"When the KiCad API is enabled, plugins and other software running on this "
+"computer can connect to KiCad."
+
+msgid "Enable KiCad API"
+msgstr "Enable KiCad API"
+
+msgid ""
+"Enable the KiCad API.  Doing so will allow third-party software running on "
+"your computer to access KiCad."
+msgstr ""
+"Enable the KiCad API.  Doing so will allow third-party software running on "
+"your computer to access KiCad."
+
+msgid "Python Interpreter"
+msgstr "Python Interpreter"
+
+msgid "Path to Python interpreter:"
+msgstr "Path to Python interpreter:"
+
+msgid "Select the path to a Python interpreter"
+msgstr "Select the path to a Python interpreter"
+
+msgid "*.*"
+msgstr "*.*"
+
+msgid "Detect Automatically"
+msgstr "Detect Automatically"
+
+msgid ""
+"No Python interpreter chosen; external Python plugins will not be available"
+msgstr ""
+"No Python interpreter chosen; external Python plugins will not be available"
+
+msgid "Python interpreter status"
+msgstr "Python interpreter status"
+
 msgid "Solid"
 msgstr "Solid"
 
@@ -3019,6 +3105,9 @@ msgstr "Annotation Options"
 msgid "Field Name Templates"
 msgstr "Field Name Templates"
 
+msgid "Simulator"
+msgstr "Simulator"
+
 msgid "Footprint Editor"
 msgstr "Footprint Editor"
 
@@ -3051,6 +3140,9 @@ msgstr "Drawing Sheet Editor"
 
 msgid "Packages and Updates"
 msgstr "Packages and Updates"
+
+msgid "Plugins"
+msgstr "Plugins"
 
 #, c-format
 msgid "Insufficient permissions to folder '%s'."
@@ -3129,6 +3221,9 @@ msgstr "Search"
 
 msgid "Properties"
 msgstr "Properties"
+
+msgid "Net Inspector"
+msgstr "Net Inspector"
 
 msgid "Screen"
 msgstr "Screen"
@@ -3232,9 +3327,6 @@ msgstr "Sheet"
 msgid "SCH Screen"
 msgstr "SCH Screen"
 
-msgid "Symbol Field"
-msgstr "Symbol Field"
-
 msgid "Gerber Layout"
 msgstr "Gerber Layout"
 
@@ -3300,6 +3392,9 @@ msgstr "Height"
 
 msgid "Bezier"
 msgstr "Bezier"
+
+msgid "Shape Properties"
+msgstr "Shape Properties"
 
 msgid "Start X"
 msgstr "Start X"
@@ -3453,16 +3548,8 @@ msgid "Deprecated version of KICAD_SYMBOL_DIR."
 msgstr "Deprecated version of KICAD_SYMBOL_DIR."
 
 #, c-format
-msgid "from %s : %s() line %d"
-msgstr "from %s : %s() line %d"
-
-#, c-format
 msgid "%s in '%s', line %d, offset %d."
 msgstr "%s in '%s', line %d, offset %d."
-
-#, c-format
-msgid "from %s : %s() line:%d"
-msgstr "from %s : %s() line:%d"
 
 #, c-format
 msgid ""
@@ -3535,10 +3622,6 @@ msgid ""
 msgstr ""
 "Duplicate library nickname '%s' found in footprint library table file line "
 "%d."
-
-#, c-format
-msgid "fp-lib-table files contain no library named '%s'."
-msgstr "fp-lib-table files contain no library named '%s'."
 
 msgid "Added by Plugin and Content Manager"
 msgstr "Added by Plugin and Content Manager"
@@ -3767,6 +3850,15 @@ msgstr "Select All"
 msgid "Select all cells"
 msgstr "Select all cells"
 
+msgid "Accept Autocomplete"
+msgstr "Accept Autocomplete"
+
+msgid "Cancel Autocomplete"
+msgstr "Cancel Autocomplete"
+
+msgid "Toggle Checkbox"
+msgstr "Toggle Checkbox"
+
 msgid "Pan Left/Right"
 msgstr "Pan Left/Right"
 
@@ -3955,29 +4047,6 @@ msgstr "Failed to load kiface library '%s'."
 #, c-format
 msgid "Could not read instance name and version from kiface library '%s'."
 msgstr "Could not read instance name and version from kiface library '%s'."
-
-#, c-format
-msgid ""
-"Fatal Installation Bug. File:\n"
-"'%s'\n"
-"could not be loaded\n"
-msgstr ""
-"Fatal Installation Bug. File:\n"
-"'%s'\n"
-"could not be loaded\n"
-
-msgid "It is missing.\n"
-msgstr "It is missing.\n"
-
-msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
-msgstr "Perhaps a shared library (.dll or .so) file is missing.\n"
-
-msgid ""
-"From command line: argv[0]:\n"
-"'"
-msgstr ""
-"From command line: argv[0]:\n"
-"'"
 
 msgid "Error loading editor."
 msgstr "Error loading editor."
@@ -4740,6 +4809,18 @@ msgstr "Zoom In"
 msgid "Zoom Out"
 msgstr "Zoom Out"
 
+msgid "Zoom In Horizontally"
+msgstr "Zoom In Horizontally"
+
+msgid "Zoom Out Horizontally"
+msgstr "Zoom Out Horizontally"
+
+msgid "Zoom In Vertically"
+msgstr "Zoom In Vertically"
+
+msgid "Zoom Out Vertically"
+msgstr "Zoom Out Vertically"
+
 msgid "Center on Cursor"
 msgstr "Center on Cursor"
 
@@ -5033,6 +5114,12 @@ msgstr "Open \"Donate to KiCad\" in a web browser"
 
 msgid "Report Bug"
 msgstr "Report Bug"
+
+msgid "Refresh Plugins"
+msgstr "Refresh Plugins"
+
+msgid "Reload all python plugins and refresh plugin menus"
+msgstr "Reload all python plugins and refresh plugin menus"
 
 msgid "Can not switch to project manager in stand-alone mode."
 msgstr "Can not switch to project manager in stand-alone mode."
@@ -5448,6 +5535,9 @@ msgstr "KiCad netlist files"
 
 msgid "Allegro netlist files"
 msgstr "Allegro netlist files"
+
+msgid "PADS netlist files"
+msgstr "PADS netlist files"
 
 msgid "EasyEDA (JLCEDA) Std backup archive"
 msgstr "EasyEDA (JLCEDA) Std backup archive"
@@ -5922,6 +6012,12 @@ msgstr "Annotated %s as %s."
 msgid "Annotation complete."
 msgstr "Annotation complete."
 
+msgid "Added items via API"
+msgstr "Added items via API"
+
+msgid "Created items via API"
+msgstr "Created items via API"
+
 #, c-format
 msgid ""
 "Script file:\n"
@@ -6395,6 +6491,9 @@ msgstr "Update/reset field positions"
 msgid "Update/reset symbol attributes"
 msgstr "Update/reset symbol attributes"
 
+msgid "Reset custom power symbols"
+msgstr "Reset custom power symbols"
+
 msgid "Update Symbols from Library"
 msgstr "Update Symbols from Library"
 
@@ -6483,9 +6582,6 @@ msgstr ""
 "Error loading symbol %s from library %s.\n"
 "\n"
 "%s"
-
-msgid "Symbols"
-msgstr "Symbols"
 
 msgid "Current Library Reference"
 msgstr "Current Library Reference"
@@ -6655,8 +6751,26 @@ msgstr "Delete Marker"
 msgid "Electrical Rules Checker"
 msgstr "Electrical Rules Checker"
 
+msgid "Export netlist in legacy KiCad format"
+msgstr "Export netlist in legacy KiCad format"
+
+msgid "Export netlist in OrcadPCB2 format"
+msgstr "Export netlist in OrcadPCB2 format"
+
+msgid "Export netlist in Allegro format"
+msgstr "Export netlist in Allegro format"
+
+msgid "Export netlist in PADS format"
+msgstr "Export netlist in PADS format"
+
+msgid "Export netlist in CadStar format"
+msgstr "Export netlist in CadStar format"
+
 msgid "Export Netlist"
 msgstr "Export Netlist"
+
+msgid "Export netlist in SPICE format"
+msgstr "Export netlist in SPICE format"
 
 msgid "Use current sheet as root"
 msgstr "Use current sheet as root"
@@ -6696,6 +6810,9 @@ msgstr ""
 "Usually '<path to SPICE binary> \"%I\"'\n"
 "%I will be replaced by the netlist filepath"
 
+msgid "Export netlist as a SPICE .subckt model"
+msgstr "Export netlist as a SPICE .subckt model"
+
 msgid "Netlist command:"
 msgstr "Netlist command:"
 
@@ -6732,26 +6849,26 @@ msgstr "You must provide a netlist generator command string"
 msgid "You must provide a netlist generator title"
 msgstr "You must provide a netlist generator title"
 
-msgid "Add Generator..."
-msgstr "Add Generator..."
+msgid "Add Exporter..."
+msgstr "Add Exporter..."
 
-msgid "Remove Generator"
-msgstr "Remove Generator"
+msgid "Remove Exporter"
+msgstr "Remove Exporter"
 
-msgid "Command line to run the generator:"
-msgstr "Command line to run the generator:"
+msgid "Command line to run the exporter:"
+msgstr "Command line to run the exporter:"
 
-msgid "Browse Generators..."
-msgstr "Browse Generators..."
+msgid "Browse Scripts..."
+msgstr "Browse Scripts..."
 
-msgid "Script Generator Properties"
-msgstr "Script Generator Properties"
-
-msgid "Illegal reference designator value!"
-msgstr "Illegal reference designator value!"
+msgid "Add Script-based Netlist Exporter"
+msgstr "Add Script-based Netlist Exporter"
 
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
 msgstr "Sheet filename can only be modified in Sheet Properties dialog."
+
+msgid "Illegal reference designator value!"
+msgstr "Illegal reference designator value!"
 
 msgid ""
 "Intersheet reference visibility is controlled globally from Schematic Setup "
@@ -7727,6 +7844,13 @@ msgstr "PDF Options"
 msgid "Generate property popups"
 msgstr "Generate property popups"
 
+msgid "Generate metadata from AUTHOR && SUBJECT variables"
+msgstr "Generate metadata from AUTHOR && SUBJECT variables"
+
+msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
+msgstr ""
+"Generate PDF document properties from AUTHOR and SUBJECT text variables"
+
 msgid "Other options"
 msgstr "Other options"
 
@@ -7980,6 +8104,9 @@ msgid ""
 msgstr ""
 "To see individual item colors uncheck '%s'\n"
 "in Preferences > Schematic Editor > Colors."
+
+msgid "Edit Sheet Properties"
+msgstr "Edit Sheet Properties"
 
 #, c-format
 msgid ""
@@ -9420,6 +9547,48 @@ msgstr "Generate warning"
 msgid "Generate error"
 msgstr "Generate error"
 
+msgid "No action"
+msgstr "No action"
+
+msgid "Pan left/right"
+msgstr "Pan left/right"
+
+msgid "Pan right/left"
+msgstr "Pan right/left"
+
+msgid "Pan up/down"
+msgstr "Pan up/down"
+
+msgid "Zoom horizontally"
+msgstr "Zoom horizontally"
+
+msgid "Zoom vertically"
+msgstr "Zoom vertically"
+
+msgid "Modifier"
+msgstr "Modifier"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "None:"
+msgstr "None:"
+
+msgid "Ctrl:"
+msgstr "Ctrl:"
+
+msgid "Shift:"
+msgstr "Shift:"
+
+msgid "Alt:"
+msgstr "Alt:"
+
+msgid "Horizontal touchpad movement:"
+msgstr "Horizontal touchpad movement:"
+
+msgid "Any:"
+msgstr "Any:"
+
 msgid "Use schematic editor color theme"
 msgstr "Use schematic editor color theme"
 
@@ -9923,6 +10092,9 @@ msgstr "Global label not connected anywhere else in the schematic"
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Labels are similar (lower/upper case difference only)"
 
+msgid "Global label only appears once in the schematic"
+msgstr "Global label only appears once in the schematic"
+
 msgid "Different footprint assigned in another unit of the symbol"
 msgstr "Different footprint assigned in another unit of the symbol"
 
@@ -10162,6 +10334,10 @@ msgid "Import Schematic"
 msgstr "Import Schematic"
 
 #, c-format
+msgid "Insufficient permissions to read file '%s'."
+msgstr "Insufficient permissions to read file '%s'."
+
+#, c-format
 msgid "No loader can read the specified file: '%s'."
 msgstr "No loader can read the specified file: '%s'."
 
@@ -10351,21 +10527,6 @@ msgstr "Default units:"
 msgid "Import Vector Graphics File"
 msgstr "Import Vector Graphics File"
 
-msgid "H Justification"
-msgstr "H Justification"
-
-msgid "V Justification"
-msgstr "V Justification"
-
-msgid "Show Field Name"
-msgstr "Show Field Name"
-
-msgid "Body Style"
-msgstr "Body Style"
-
-msgid "Private"
-msgstr "Private"
-
 msgid "Pos X"
 msgstr "Pos X"
 
@@ -10539,6 +10700,12 @@ msgstr "Exclude from board settings differ."
 msgid "Unit %s"
 msgstr "Unit %s"
 
+msgid "H Justification"
+msgstr "H Justification"
+
+msgid "V Justification"
+msgstr "V Justification"
+
 #, c-format
 msgid "Graphic Text '%s'"
 msgstr "Graphic Text '%s'"
@@ -10667,6 +10834,10 @@ msgid "Junction at %s, %s"
 msgstr "Junction at %s, %s"
 
 #, c-format
+msgid "No-Connect at %s, %s"
+msgstr "No-Connect at %s, %s"
+
+#, c-format
 msgid "Bus to wire entry from %s, %s to %s, %s"
 msgstr "Bus to wire entry from %s, %s to %s, %s"
 
@@ -10678,6 +10849,9 @@ msgstr "Bus to bus entry from %s, %s to %s, %s"
 msgid "Unhandled item type %d"
 msgstr "Unhandled item type %d"
 
+msgid "Nets"
+msgstr "Nets"
+
 msgid "Failed to create directory 'devices' ."
 msgstr "Failed to create directory 'devices' ."
 
@@ -10688,6 +10862,18 @@ msgstr "Failed to create file '%s'.\n"
 #, c-format
 msgid "Could not open file '%s' to write IBIS model"
 msgstr "Could not open file '%s' to write IBIS model"
+
+#, c-format
+msgid "Error in parsing model '%s', error: '%s'"
+msgstr "Error in parsing model '%s', error: '%s'"
+
+#, c-format
+msgid ""
+"Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
+"compared to connections"
+msgstr ""
+"Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
+"compared to connections"
 
 #, c-format
 msgid "Could not find library file '%s'"
@@ -10912,6 +11098,9 @@ msgstr "Save Symbol to Schematic"
 msgid "Compare Symbol with Library"
 msgstr "Compare Symbol with Library"
 
+msgid "Symbol Field"
+msgstr "Symbol Field"
+
 #, c-format
 msgid "Go to Page %s (%s)"
 msgstr "Go to Page %s (%s)"
@@ -10921,6 +11110,9 @@ msgstr "Back to Previous Selected Sheet"
 
 msgid "Sheet References"
 msgstr "Sheet References"
+
+msgid "Show Field Name"
+msgstr "Show Field Name"
 
 #, c-format
 msgid ""
@@ -11567,8 +11759,11 @@ msgstr "Plugin type “%s” is not found."
 msgid "Unknown SCH_FILE_T value: %d"
 msgstr "Unknown SCH_FILE_T value: %d"
 
-msgid "Layer"
-msgstr "Layer"
+msgid "Body Style"
+msgstr "Body Style"
+
+msgid "Private"
+msgstr "Private"
 
 msgid "Locked"
 msgstr "Locked"
@@ -12919,9 +13114,6 @@ msgid ""
 msgstr ""
 "Simulation provided no plots. Please refer to console window for results."
 
-msgid "Simulator"
-msgstr "Simulator"
-
 msgid "Spice Simulator"
 msgstr "Spice Simulator"
 
@@ -12987,6 +13179,9 @@ msgstr "Measure Integral"
 
 msgid "Perform Fourier Analysis..."
 msgstr "Perform Fourier Analysis..."
+
+msgid "Copy Signal Name"
+msgstr "Copy Signal Name"
 
 msgid " (amplitude)"
 msgstr " (amplitude)"
@@ -14094,9 +14289,6 @@ msgstr "Add sheet pins"
 msgid "Sync Sheet Pins"
 msgstr "Sync Sheet Pins"
 
-msgid "Synchronize sheet pins and hierarchical labels”"
-msgstr "Synchronize sheet pins and hierarchical labels”"
-
 msgid "Add Global Label"
 msgstr "Add Global Label"
 
@@ -14769,6 +14961,12 @@ msgstr "Export Current Plot as PNG..."
 msgid "Export Current Plot as CSV..."
 msgstr "Export Current Plot as CSV..."
 
+msgid "Export Current Plot to Clipboard"
+msgstr "Export Current Plot to Clipboard"
+
+msgid "Export Current Plot to Schematic"
+msgstr "Export Current Plot to Schematic"
+
 msgid "Show Legend"
 msgstr "Show Legend"
 
@@ -14917,8 +15115,11 @@ msgstr "Draw Table"
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Press <ESC> to cancel sheet creation."
 
-msgid "Modify sch item"
-msgstr "Modify sch item"
+msgid "Modify sheet pin"
+msgstr "Modify sheet pin"
+
+msgid "Modify schematic item"
+msgstr "Modify schematic item"
 
 msgid "Symbol Unit"
 msgstr "Symbol Unit"
@@ -15225,6 +15426,18 @@ msgstr "Tune %s"
 msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 
+msgid "Limit to E24 series values."
+msgstr "Limit to E24 series values."
+
+msgid "Limit to E48 series values."
+msgstr "Limit to E48 series values."
+
+msgid "Limit to E96 series values"
+msgstr "Limit to E96 series values"
+
+msgid "Limit to E192 series values"
+msgstr "Limit to E192 series values"
+
 msgid "Current data will be lost?"
 msgstr "Current data will be lost?"
 
@@ -15360,6 +15573,9 @@ msgstr "Deselect all"
 #, c-format
 msgid "Select Layer: %s"
 msgstr "Select Layer: %s"
+
+msgid "Layer"
+msgstr "Layer"
 
 msgid "DCodes"
 msgstr "DCodes"
@@ -16456,6 +16672,75 @@ msgstr ""
 msgid "No drawing sheet"
 msgstr "No drawing sheet"
 
+msgid "Renders the PCB in 3D view to PNG or JPEG image"
+msgstr "Renders the PCB in 3D view to PNG or JPEG image"
+
+msgid "Image width"
+msgstr "Image width"
+
+msgid "Image height"
+msgstr "Image height"
+
+#, c-format
+msgid "Render from side. Options: %s"
+msgstr "Render from side. Options: %s"
+
+msgid ""
+"Image background. Options: transparent, opaque. Default: transparent for "
+"PNG, opaque for JPEG"
+msgstr ""
+"Image background. Options: transparent, opaque. Default: transparent for "
+"PNG, opaque for JPEG"
+
+#, c-format
+msgid "Render quality. Options: %s"
+msgstr "Render quality. Options: %s"
+
+#, c-format
+msgid "Color preset. Options: %s, %s, %s, ..."
+msgstr "Color preset. Options: %s, %s, %s, ..."
+
+msgid ""
+"Enables floor, shadows and post-processing, even if disabled in quality "
+"preset"
+msgstr ""
+"Enables floor, shadows and post-processing, even if disabled in quality "
+"preset"
+
+msgid "Use perspective projection instead of orthogonal"
+msgstr "Use perspective projection instead of orthogonal"
+
+msgid "Camera zoom"
+msgstr "Camera zoom"
+
+msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
+msgstr "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
+
+msgid ""
+"Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
+"e.g.: '-10,2,0'"
+msgstr ""
+"Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
+"e.g.: '-10,2,0'"
+
+msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
+msgstr "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
+
+msgid "Invalid background\n"
+msgstr "Invalid background\n"
+
+msgid "Invalid rotation format\n"
+msgstr "Invalid rotation format\n"
+
+msgid "Invalid pan format\n"
+msgstr "Invalid pan format\n"
+
+msgid "Invalid pivot format\n"
+msgstr "Invalid pivot format\n"
+
+msgid "Invalid image format\n"
+msgstr "Invalid image format\n"
+
 msgid "Schematics"
 msgstr "Schematics"
 
@@ -16509,16 +16794,19 @@ msgstr "Export a netlist"
 
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
-"orcadpcb2, spice, spicemodel"
+"orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
-"orcadpcb2, spice, spicemodel"
+"orcadpcb2, spice, spicemodel, pads, allegro"
 
 msgid "Color theme to use (will default to schematic settings)"
 msgstr "Color theme to use (will default to schematic settings)"
 
 msgid "Do not generate property popups in PDF"
 msgstr "Do not generate property popups in PDF"
+
+msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
+msgstr "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
 
 msgid "Avoid setting a background color (regardless of theme)"
 msgstr "Avoid setting a background color (regardless of theme)"
@@ -16926,9 +17214,6 @@ msgstr "Installed (%d)"
 
 msgid "Manage..."
 msgstr "Manage..."
-
-msgid "Action"
-msgstr "Action"
 
 msgid "Package"
 msgstr "Package"
@@ -18837,8 +19122,14 @@ msgstr "Vout must be greater than vref"
 msgid "Vref set to 0 !"
 msgstr "Vref set to 0 !"
 
+msgid "Vref must VrefMin < VrefTyp < VrefMax"
+msgstr "Vref must VrefMin < VrefTyp < VrefMax"
+
 msgid "Incorrect value for R1 R2"
 msgstr "Incorrect value for R1 R2"
+
+msgid "Iadj must IadjTyp < IadjMax"
+msgstr "Iadj must IadjTyp < IadjMax"
 
 msgid "Type:"
 msgstr "Type:"
@@ -18890,8 +19181,14 @@ msgstr "Enter a new item to the current list of available regulators"
 msgid "Remove an item from the current list of available regulators"
 msgstr "Remove an item from the current list of available regulators"
 
+msgid "typ"
+msgstr "typ"
+
 msgid "R1:"
 msgstr "R1:"
+
+msgid "kΩ"
+msgstr "kΩ"
 
 msgid "R2:"
 msgstr "R2:"
@@ -18914,6 +19211,21 @@ msgstr "Iadj:"
 
 msgid "For 3 terminal regulators only, the  Adjust pin current."
 msgstr "For 3 terminal regulators only, the  Adjust pin current."
+
+msgid "Overall tolerance:"
+msgstr "Overall tolerance:"
+
+msgid "Resistor tolerance:"
+msgstr "Resistor tolerance:"
+
+msgid "1"
+msgstr "1"
+
+msgid "Power Comment:"
+msgstr "Power Comment:"
+
+msgid "Copy to Clipboard"
+msgstr "Copy to Clipboard"
 
 #, c-format
 msgid "Attenuation more than %f dB"
@@ -19228,8 +19540,14 @@ msgstr "relative permeability"
 msgid "Data file error."
 msgstr "Data file error."
 
+msgid "Vref (min/typ/max):"
+msgstr "Vref (min/typ/max):"
+
 msgid "Volt"
 msgstr "Volt"
+
+msgid "Iadj (typ/max):"
+msgstr "Iadj (typ/max):"
 
 msgid "Regulator Parameters"
 msgstr "Regulator Parameters"
@@ -19712,6 +20030,9 @@ msgstr "km/h"
 msgid "mi/h"
 msgstr "mi/h"
 
+msgid "Deleted items via API"
+msgstr "Deleted items via API"
+
 msgid "Create Array"
 msgstr "Create Array"
 
@@ -19740,9 +20061,6 @@ msgstr "Vias"
 
 msgid "Track Segments"
 msgstr "Track Segments"
-
-msgid "Nets"
-msgstr "Nets"
 
 msgid "Unrouted"
 msgstr "Unrouted"
@@ -20460,9 +20778,6 @@ msgstr "Front reference start:"
 msgid "Starting reference designation for front."
 msgstr "Starting reference designation for front."
 
-msgid "1"
-msgstr "1"
-
 msgid "Default is 1"
 msgstr "Default is 1"
 
@@ -20530,9 +20845,6 @@ msgid ""
 msgstr ""
 "Do not re-annotate this type \n"
 "of reference (R means R*)"
-
-msgid "Reference Designators"
-msgstr "Reference Designators"
 
 msgid "Geographical Reannotation"
 msgstr "Geographical Reannotation"
@@ -20723,8 +21035,8 @@ msgstr "Update Footprint"
 msgid "Update PCB"
 msgstr "Update PCB"
 
-msgid "Graphics Cleanup"
-msgstr "Graphics Cleanup"
+msgid "Cleanup Graphics"
+msgstr "Cleanup Graphics"
 
 msgid "Merge lines into rectangles"
 msgstr "Merge lines into rectangles"
@@ -20750,9 +21062,6 @@ msgstr "Tolerance:"
 
 msgid "Changes to be applied:"
 msgstr "Changes to be applied:"
-
-msgid "Cleanup Graphics"
-msgstr "Cleanup Graphics"
 
 msgid "Build Changes"
 msgstr "Build Changes"
@@ -21148,21 +21457,17 @@ msgstr "Secondary axis numbering:"
 msgid "Pad numbering start:"
 msgstr "Pad numbering start:"
 
-msgid "Pad numbering skip:"
-msgstr "Pad numbering skip:"
+msgid "Pad numbering increment:"
+msgstr "Pad numbering increment:"
 
 msgid "Grid Array"
 msgstr "Grid Array"
 
-msgid "Items to Duplicate"
-msgstr "Items to Duplicate"
+msgid "Reference Position"
+msgstr "Reference Position"
 
-msgid ""
-"This is the position of the selected item,\n"
-"or the position of the group to duplicate"
-msgstr ""
-"This is the position of the selected item,\n"
-"or the position of the group to duplicate"
+msgid "Position of the selected item (or  group) to duplicate"
+msgstr "Position of the selected item (or  group) to duplicate"
 
 msgid "Ref point pos X:"
 msgstr "Ref point pos X:"
@@ -21185,8 +21490,8 @@ msgstr "Center pos Y:"
 msgid "Set center by radius"
 msgstr "Set center by radius"
 
-msgid "Radius from center to reference position:"
-msgstr "Radius from center to reference position:"
+msgid "Radius of circular array:"
+msgstr "Radius of circular array:"
 
 msgid "Distance between Ref point and Center pos."
 msgstr "Distance between Ref point and Center pos."
@@ -21199,6 +21504,9 @@ msgstr "Angle between Ref point and Center pos."
 
 msgid "Duplication Settings"
 msgstr "Duplication Settings"
+
+msgid "Angle between new items:"
+msgstr "Angle between new items:"
 
 msgid ""
 "Positive angles represent an anti-clockwise rotation. An angle of 0 will "
@@ -22683,9 +22991,6 @@ msgstr "Zones"
 msgid "Board outlines"
 msgstr "Board outlines"
 
-msgid "Footprints"
-msgstr "Footprints"
-
 msgid "Tracks && vias"
 msgstr "Tracks && vias"
 
@@ -23168,91 +23473,6 @@ msgstr "Use polar coordinates"
 msgid "Move Item"
 msgstr "Move Item"
 
-msgid "Net Code"
-msgstr "Net Code"
-
-msgid "Net Name"
-msgstr "Net Name"
-
-msgid "Pad Count"
-msgstr "Pad Count"
-
-msgid "Via Count"
-msgstr "Via Count"
-
-msgid "Via Length"
-msgstr "Via Length"
-
-msgid "Track Length"
-msgstr "Track Length"
-
-msgid "Die Length"
-msgstr "Die Length"
-
-msgid "Total Length"
-msgstr "Total Length"
-
-msgid "Net Length"
-msgstr "Net Length"
-
-msgid "Net name:"
-msgstr "Net name:"
-
-msgid "New Net"
-msgstr "New Net"
-
-#, c-format
-msgid "Net name '%s' is already in use."
-msgstr "Net name '%s' is already in use."
-
-msgid "Rename Net"
-msgstr "Rename Net"
-
-msgid "Net name cannot be empty."
-msgstr "Net name cannot be empty."
-
-#, c-format
-msgid "Net '%s' is in use.  Delete anyway?"
-msgstr "Net '%s' is in use.  Delete anyway?"
-
-#, c-format
-msgid "Delete all nets in group '%s'?"
-msgstr "Delete all nets in group '%s'?"
-
-msgid "Report file"
-msgstr "Report file"
-
-#, c-format
-msgid "%s (%s)"
-msgstr "%s (%s)"
-
-msgid "Net name filter:"
-msgstr "Net name filter:"
-
-msgid "Show zero pad nets"
-msgstr "Show zero pad nets"
-
-msgid "Group by:"
-msgstr "Group by:"
-
-msgid "Wildcard"
-msgstr "Wildcard"
-
-msgid "RegEx"
-msgstr "RegEx"
-
-msgid "Wildcard Substr"
-msgstr "Wildcard Substr"
-
-msgid "RegEx Substr"
-msgstr "RegEx Substr"
-
-msgid "Create Report..."
-msgstr "Create Report…"
-
-msgid "Net Inspector"
-msgstr "Net Inspector"
-
 msgid "Convert to Non Copper Zone"
 msgstr "Convert to Non Copper Zone"
 
@@ -23414,6 +23634,9 @@ msgstr "SMD Aperture"
 
 msgid "Pad number:"
 msgstr "Pad number:"
+
+msgid "Net name:"
+msgstr "Net name:"
 
 msgid "Pad shape:"
 msgstr "Pad shape:"
@@ -24493,14 +24716,8 @@ msgstr "Start X:"
 msgid "End X:"
 msgstr "End X:"
 
-msgid "Use net class / custom rule widths"
-msgstr "Use net class / custom rule widths"
-
 msgid "Pre-defined sizes:"
 msgstr "Pre-defined sizes:"
-
-msgid "Use net class / custom rule sizes"
-msgstr "Use net class / custom rule sizes"
 
 msgid "Via diameter:"
 msgstr "Via diameter:"
@@ -27832,12 +28049,12 @@ msgstr "Current Board will be closed. Continue?"
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-"This may result in different fills from previous KiCad versions which used "
+" This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-"This may result in different fills from previous KiCad versions which used "
+" This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 
 #, c-format
@@ -28043,8 +28260,16 @@ msgstr "footprint %s"
 msgid "Footprint Chooser"
 msgstr "Footprint Chooser"
 
-msgid "Apply footprint filters"
-msgstr "Apply footprint filters"
+msgid "Show 3D viewer in own window"
+msgstr "Show 3D viewer in own window"
+
+#, c-format
+msgid "Filter by pin count (%d)"
+msgstr "Filter by pin count (%d)"
+
+#, c-format
+msgid "Apply footprint filters (%s)"
+msgstr "Apply footprint filters (%s)"
 
 msgid "KiCad Footprint Editor"
 msgstr "KiCad Footprint Editor"
@@ -28607,6 +28832,15 @@ msgstr "Shape has no points."
 
 msgid "Place microwave feature"
 msgstr "Place microwave feature"
+
+msgid "Net Name"
+msgstr "Net Name"
+
+msgid "Net Code"
+msgstr "Net Code"
+
+msgid "Net Length"
+msgstr "Net Length"
 
 msgid "On Board"
 msgstr "On Board"
@@ -29325,6 +29559,10 @@ msgstr "No 3D-models will be imported."
 #, c-format
 msgid "File not found: '%s'. 3D-model not imported."
 msgstr "File not found: '%s'. 3D-model not imported."
+
+#, c-format
+msgid "Unable to write file '%s'."
+msgstr "Unable to write file '%s'."
 
 msgid "Loading nets..."
 msgstr "Loading nets..."
@@ -30734,6 +30972,16 @@ msgstr "Successfully exported VRML to %s"
 
 msgid "Error exporting VRML"
 msgstr "Error exporting VRML"
+
+#, c-format
+msgid "Actual image size: %dx%d"
+msgstr "Actual image size: %dx%d"
+
+msgid "Successfully created 3D render image"
+msgstr "Successfully created 3D render image"
+
+msgid "Error creating 3D render image"
+msgstr "Error creating 3D render image"
 
 msgid "Successfully created svg file"
 msgstr "Successfully created svg file"
@@ -32507,12 +32755,6 @@ msgstr "Default Pad Properties…"
 msgid "Edit the pad properties used when creating new pads"
 msgstr "Edit the pad properties used when creating new pads"
 
-msgid "Refresh Plugins"
-msgstr "Refresh Plugins"
-
-msgid "Reload all python plugins and refresh plugin menus"
-msgstr "Reload all python plugins and refresh plugin menus"
-
 msgid "Reveal Plugin Folder in Finder"
 msgstr "Reveal Plugin Folder in Finder"
 
@@ -32722,8 +32964,11 @@ msgstr "Local Ratsnest"
 msgid "Toggle ratsnest display of selected item(s)"
 msgstr "Toggle ratsnest display of selected item(s)"
 
-msgid "Show the net inspector"
-msgstr "Show the net inspector"
+msgid "Show Net Inspector"
+msgstr "Show Net Inspector"
+
+msgid "Show/hide the net inspector"
+msgstr "Show/hide the net inspector"
 
 msgid "Zone Manager"
 msgstr "Zone Manager"
@@ -33948,6 +34193,9 @@ msgstr "Omit nets"
 msgid "Do not prefix path with footprint UUID."
 msgstr "Do not prefix path with footprint UUID."
 
+msgid "Configure netlist inspector"
+msgstr "Configure netlist inspector"
+
 msgid "No footprint selected"
 msgstr "No footprint selected"
 
@@ -33956,6 +34204,109 @@ msgstr "Rule Areas"
 
 msgid "Dimensions"
 msgstr "Dimensions"
+
+msgid "Netclass"
+msgstr "Netclass"
+
+msgid "Total Length"
+msgstr "Total Length"
+
+msgid "Via Count"
+msgstr "Via Count"
+
+msgid "Via Length"
+msgstr "Via Length"
+
+msgid "Track Length"
+msgstr "Track Length"
+
+msgid "Die Length"
+msgstr "Die Length"
+
+msgid "Pad Count"
+msgstr "Pad Count"
+
+msgid "Highlight Selected Net"
+msgstr "Highlight Selected Net"
+
+msgid "Rename Selected Net"
+msgstr "Rename Selected Net"
+
+msgid "Delete Selected Net"
+msgstr "Delete Selected Net"
+
+msgid "Add Net"
+msgstr "Add Net"
+
+msgid "Highlight Selected Nets"
+msgstr "Highlight Selected Nets"
+
+msgid "Delete Selected Nets"
+msgstr "Delete Selected Nets"
+
+msgid "Remove Selected Custom Group"
+msgstr "Remove Selected Custom Group"
+
+msgid "New Group"
+msgstr "New Group"
+
+msgid "Filter by Net Name"
+msgstr "Filter by Net Name"
+
+msgid "Filter by Netclass"
+msgstr "Filter by Netclass"
+
+msgid "Group by Netclass"
+msgstr "Group by Netclass"
+
+msgid "Add Custom Group"
+msgstr "Add Custom Group"
+
+msgid "Remove All Custom Groups"
+msgstr "Remove All Custom Groups"
+
+msgid "Show Zero Pad Nets"
+msgstr "Show Zero Pad Nets"
+
+msgid "Show Unconnected Nets"
+msgstr "Show Unconnected Nets"
+
+msgid "Save Net Inspector Report"
+msgstr "Save Net Inspector Report"
+
+msgid "Show / Hide Columns"
+msgstr "Show / Hide Columns"
+
+msgid "Save Net Inspector Report File"
+msgstr "Save Net Inspector Report File"
+
+msgid "Report file"
+msgstr "Report file"
+
+#, c-format
+msgid "%s (%s)"
+msgstr "%s (%s)"
+
+msgid "New Net"
+msgstr "New Net"
+
+#, c-format
+msgid "Net name '%s' is already in use."
+msgstr "Net name '%s' is already in use."
+
+msgid "Rename Net"
+msgstr "Rename Net"
+
+msgid "Net name cannot be empty."
+msgstr "Net name cannot be empty."
+
+#, c-format
+msgid "Net '%s' is in use.  Delete anyway?"
+msgstr "Net '%s' is in use.  Delete anyway?"
+
+#, c-format
+msgid "Delete all nets in group '%s'?"
+msgstr "Delete all nets in group '%s'?"
 
 msgid "Priority"
 msgstr "Priority"
@@ -34125,8 +34476,9 @@ msgstr "solid"
 msgid "thermal reliefs for PTH"
 msgstr "thermal reliefs for PTH"
 
-msgid "[INFO] load failed: input line too long\n"
-msgstr "[INFO] load failed: input line too long\n"
+#, c-format
+msgid "[INFO] load failed: %s"
+msgstr "[INFO] load failed: %s"
 
 msgid "bitmap2component;Bitmap;Converter;"
 msgstr "bitmap2component;Bitmap;Converter;"
@@ -34244,6 +34596,153 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "3D models by"
+#~ msgstr "3D models by"
+
+#~ msgid "Symbols by"
+#~ msgstr "Symbols by"
+
+#~ msgid "Footprints by"
+#~ msgstr "Footprints by"
+
+#~ msgid "Icons by"
+#~ msgstr "Icons by"
+
+#~ msgid "Paste Options"
+#~ msgstr "Paste Options"
+
+#, c-format
+#~ msgid "from %s : %s() line %d"
+#~ msgstr "from %s : %s() line %d"
+
+#, c-format
+#~ msgid "from %s : %s() line:%d"
+#~ msgstr "from %s : %s() line:%d"
+
+#, c-format
+#~ msgid "fp-lib-table files contain no library named '%s'."
+#~ msgstr "fp-lib-table files contain no library named '%s'."
+
+#, c-format
+#~ msgid ""
+#~ "Fatal Installation Bug. File:\n"
+#~ "'%s'\n"
+#~ "could not be loaded\n"
+#~ msgstr ""
+#~ "Fatal Installation Bug. File:\n"
+#~ "'%s'\n"
+#~ "could not be loaded\n"
+
+#~ msgid "It is missing.\n"
+#~ msgstr "It is missing.\n"
+
+#~ msgid "Perhaps a shared library (.dll or .so) file is missing.\n"
+#~ msgstr "Perhaps a shared library (.dll or .so) file is missing.\n"
+
+#~ msgid ""
+#~ "From command line: argv[0]:\n"
+#~ "'"
+#~ msgstr ""
+#~ "From command line: argv[0]:\n"
+#~ "'"
+
+#~ msgid "Add Generator..."
+#~ msgstr "Add Generator..."
+
+#~ msgid "Remove Generator"
+#~ msgstr "Remove Generator"
+
+#~ msgid "Command line to run the generator:"
+#~ msgstr "Command line to run the generator:"
+
+#~ msgid "Browse Generators..."
+#~ msgstr "Browse Generators..."
+
+#~ msgid "Script Generator Properties"
+#~ msgstr "Script Generator Properties"
+
+#~ msgid "Synchronize sheet pins and hierarchical labels”"
+#~ msgstr "Synchronize sheet pins and hierarchical labels”"
+
+#~ msgid "Modify sch item"
+#~ msgstr "Modify sch item"
+
+#~ msgid ""
+#~ "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
+#~ "orcadpcb2, spice, spicemodel"
+#~ msgstr ""
+#~ "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
+#~ "orcadpcb2, spice, spicemodel"
+
+#~ msgid "Graphics Cleanup"
+#~ msgstr "Graphics Cleanup"
+
+#~ msgid "Pad numbering skip:"
+#~ msgstr "Pad numbering skip:"
+
+#~ msgid "Items to Duplicate"
+#~ msgstr "Items to Duplicate"
+
+#~ msgid ""
+#~ "This is the position of the selected item,\n"
+#~ "or the position of the group to duplicate"
+#~ msgstr ""
+#~ "This is the position of the selected item,\n"
+#~ "or the position of the group to duplicate"
+
+#~ msgid "Radius from center to reference position:"
+#~ msgstr "Radius from center to reference position:"
+
+#~ msgid "Net name filter:"
+#~ msgstr "Net name filter:"
+
+#~ msgid "Show zero pad nets"
+#~ msgstr "Show zero pad nets"
+
+#~ msgid "Group by:"
+#~ msgstr "Group by:"
+
+#~ msgid "Wildcard"
+#~ msgstr "Wildcard"
+
+#~ msgid "RegEx"
+#~ msgstr "RegEx"
+
+#~ msgid "Wildcard Substr"
+#~ msgstr "Wildcard Substr"
+
+#~ msgid "RegEx Substr"
+#~ msgstr "RegEx Substr"
+
+#~ msgid "Create Report..."
+#~ msgstr "Create Report…"
+
+#~ msgid "Use net class / custom rule widths"
+#~ msgstr "Use net class / custom rule widths"
+
+#~ msgid "Use net class / custom rule sizes"
+#~ msgstr "Use net class / custom rule sizes"
+
+#~ msgid ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance setting "
+#~ "will be used (see Board Setup > Design Rules > Constraints).\n"
+#~ "This may result in different fills from previous KiCad versions which "
+#~ "used the line thicknesses of the board boundary on the Edge Cuts layer."
+#~ msgstr ""
+#~ "If the zones on this board are refilled the Copper Edge Clearance setting "
+#~ "will be used (see Board Setup > Design Rules > Constraints).\n"
+#~ "This may result in different fills from previous KiCad versions which "
+#~ "used the line thicknesses of the board boundary on the Edge Cuts layer."
+
+#~ msgid "Apply footprint filters"
+#~ msgstr "Apply footprint filters"
+
+#~ msgid "Show the net inspector"
+#~ msgstr "Show the net inspector"
+
+#~ msgid "[INFO] load failed: input line too long\n"
+#~ msgstr "[INFO] load failed: input line too long\n"
 
 #~ msgid "Clicking on a pin selects the symbol"
 #~ msgstr "Clicking on a pin selects the symbol"
@@ -45243,9 +45742,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Special Tools"
 #~ msgstr "Special Tools"
-
-#~ msgid "Highlight Selected Net"
-#~ msgstr "Highlight Selected Net"
 
 #~ msgid "Hide Net"
 #~ msgstr "Hide Net"
@@ -58502,9 +58998,6 @@ msgstr "KiCad Drawing Sheet"
 #~ msgid "Ω"
 #~ msgstr "Ω"
 
-#~ msgid "kΩ"
-#~ msgstr "kΩ"
-
 #~ msgid "Optional prefix for component side reference designations (i.e. F_)"
 #~ msgstr "Optional prefix for component side reference designations (i.e. F_)"
 
@@ -64886,9 +65379,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Rotate Block CCW"
 #~ msgstr "Rotate Block CCW"
-
-#~ msgid "Copy to Clipboard"
-#~ msgstr "Copy to Clipboard"
 
 #~ msgid "Marker Error Info"
 #~ msgstr "Marker Error Info"
