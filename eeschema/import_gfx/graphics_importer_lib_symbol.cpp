@@ -27,9 +27,8 @@
 
 #include <lib_symbol.h>
 #include <lib_shape.h>
-#include <lib_text.h>
+#include <sch_text.h>
 #include <memory>
-#include <tuple>
 
 
 GRAPHICS_IMPORTER_LIB_SYMBOL::GRAPHICS_IMPORTER_LIB_SYMBOL( LIB_SYMBOL* aSymbol, int aUnit ) :
@@ -186,17 +185,16 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddText( const VECTOR2D& aOrigin, const wxStr
                                             double aOrientation, GR_TEXT_H_ALIGN_T aHJustify,
                                             GR_TEXT_V_ALIGN_T aVJustify, const COLOR4D& aColor )
 {
-    std::unique_ptr<LIB_TEXT> textItem = std::make_unique<LIB_TEXT>( m_symbol );
+    auto textItem = std::make_unique<SCH_TEXT>( MapCoordinate( aOrigin ), aText, LAYER_DEVICE );
+    textItem->SetParent( m_symbol );
     textItem->SetUnit( m_unit );
     textItem->SetTextColor( aColor );
     textItem->SetTextThickness( MapLineWidth( aThickness ) );
-    textItem->SetTextPos( MapCoordinate( aOrigin ) );
     textItem->SetTextAngle( EDA_ANGLE( aOrientation, DEGREES_T ) );
     textItem->SetTextWidth( aWidth * ImportScalingFactor().x );
     textItem->SetTextHeight( aHeight * ImportScalingFactor().y );
     textItem->SetVertJustify( aVJustify );
     textItem->SetHorizJustify( aHJustify );
-    textItem->SetText( aText );
 
     addItem( std::move( textItem ) );
 }

@@ -76,7 +76,6 @@ KICAD_T FromProtoEnum( types::KiCadObjectType aValue )
     case types::KiCadObjectType::KOT_SCH_PIN:               return SCH_PIN_T;
     case types::KiCadObjectType::KOT_LIB_SYMBOL:            return LIB_SYMBOL_T;
     // case types::KiCadObjectType::KOT_LIB_SHAPE:             return LIB_SHAPE_T;
-    // case types::KiCadObjectType::KOT_LIB_TEXT:              return LIB_TEXT_T;
     // case types::KiCadObjectType::KOT_LIB_TEXTBOX:           return LIB_TEXTBOX_T;
     // case types::KiCadObjectType::KOT_LIB_PIN:               return LIB_PIN_T;
     case types::KiCadObjectType::KOT_WSG_LINE:              return WSG_LINE_T;
@@ -139,7 +138,6 @@ types::KiCadObjectType ToProtoEnum( KICAD_T aValue )
     case SCH_PIN_T:              return types::KiCadObjectType::KOT_SCH_PIN;
     case LIB_SYMBOL_T:           return types::KiCadObjectType::KOT_LIB_SYMBOL;
     // case LIB_SHAPE_T:            return types::KiCadObjectType::KOT_LIB_SHAPE;
-    // case LIB_TEXT_T:             return types::KiCadObjectType::KOT_LIB_TEXT;
     // case LIB_TEXTBOX_T:          return types::KiCadObjectType::KOT_LIB_TEXTBOX;
     // case LIB_PIN_T:              return types::KiCadObjectType::KOT_LIB_PIN;
     case WSG_LINE_T:             return types::KiCadObjectType::KOT_WSG_LINE;

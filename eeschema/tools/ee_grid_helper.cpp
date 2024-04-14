@@ -377,7 +377,6 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
         return GRID_CONNECTABLE;
 
     case SCH_FIELD_T:
-    case LIB_TEXT_T:
     case SCH_TEXT_T:
         return GRID_TEXT;
 

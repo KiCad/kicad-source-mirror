@@ -201,7 +201,6 @@ enum KICAD_T
      */
     LIB_SYMBOL_T,
     LIB_SHAPE_T,
-    LIB_TEXT_T,
     LIB_TEXTBOX_T,
     LIB_PIN_T,
 
@@ -413,7 +412,6 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
 
     case LIB_SYMBOL_T:
     case LIB_SHAPE_T:
-    case LIB_TEXT_T:
     case LIB_TEXTBOX_T:
     case LIB_PIN_T:
         return true;

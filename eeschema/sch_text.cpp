@@ -46,13 +46,14 @@
 #include <trigo.h>
 
 
-SCH_TEXT::SCH_TEXT( const VECTOR2I& pos, const wxString& text, KICAD_T aType ) :
+SCH_TEXT::SCH_TEXT( const VECTOR2I& aPos, const wxString& aText, SCH_LAYER_ID aLayer,
+                    KICAD_T aType ) :
         SCH_ITEM( nullptr, aType ),
-        EDA_TEXT( schIUScale, text )
+        EDA_TEXT( schIUScale, aText )
 {
-    m_layer = LAYER_NOTES;
+    m_layer = aLayer;
 
-    SetTextPos( pos );
+    SetTextPos( aPos );
     SetMultilineAllowed( true );
 
     m_excludedFromSim = false;
@@ -74,33 +75,168 @@ VECTOR2I SCH_TEXT::GetSchematicTextOffset( const RENDER_SETTINGS* aSettings ) co
 }
 
 
+void SCH_TEXT::NormalizeJustification( bool inverse )
+{
+    if( GetHorizJustify() == GR_TEXT_H_ALIGN_CENTER && GetVertJustify() == GR_TEXT_V_ALIGN_CENTER )
+        return;
+
+    VECTOR2I delta( 0, 0 );
+    BOX2I    bbox = GetTextBox();
+
+    if( GetTextAngle().IsHorizontal() )
+    {
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+            delta.x = bbox.GetWidth() / 2;
+        else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            delta.x = - bbox.GetWidth() / 2;
+
+        if( GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+            delta.y = - bbox.GetHeight() / 2;
+        else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+            delta.y = bbox.GetHeight() / 2;
+    }
+    else
+    {
+        if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+            delta.y = bbox.GetWidth() / 2;
+        else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+            delta.y = - bbox.GetWidth() / 2;
+
+        if( GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+            delta.x = + bbox.GetHeight() / 2;
+        else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+            delta.x = - bbox.GetHeight() / 2;
+    }
+
+    if( inverse )
+        SetTextPos( GetTextPos() - delta );
+    else
+        SetTextPos( GetTextPos() + delta );
+}
+
+
 void SCH_TEXT::MirrorHorizontally( int aCenter )
 {
-    if( GetTextAngle() == ANGLE_HORIZONTAL )
-        FlipHJustify();
+    if( m_layer == LAYER_DEVICE )
+    {
+        NormalizeJustification( false );
+        int x = GetTextPos().x;
 
-    SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
+        x -= aCenter;
+        x *= -1;
+        x += aCenter;
+
+        if( GetTextAngle().IsHorizontal() )
+        {
+            if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+                SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        }
+        else
+        {
+            if( GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+                SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+                SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        }
+
+        SetTextX( x );
+        NormalizeJustification( true );
+    }
+    else
+    {
+        if( GetTextAngle() == ANGLE_HORIZONTAL )
+            FlipHJustify();
+
+        SetTextX( MIRRORVAL( GetTextPos().x, aCenter ) );
+    }
 }
 
 
 void SCH_TEXT::MirrorVertically( int aCenter )
 {
-    if( GetTextAngle() == ANGLE_VERTICAL )
-        FlipHJustify();
+    if( m_layer == LAYER_DEVICE )
+    {
+        NormalizeJustification( false );
+        int y = GetTextPos().y;
 
-    SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
+        y -= aCenter;
+        y *= -1;
+        y += aCenter;
+
+        if( GetTextAngle().IsHorizontal() )
+        {
+            if( GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+                SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+                SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+        }
+        else
+        {
+            if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+                SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+        }
+
+        SetTextY( y );
+        NormalizeJustification( true );
+    }
+    else
+    {
+        if( GetTextAngle() == ANGLE_VERTICAL )
+            FlipHJustify();
+
+        SetTextY( MIRRORVAL( GetTextPos().y, aCenter ) );
+    }
 }
 
 
 void SCH_TEXT::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    VECTOR2I pt = GetTextPos();
-    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
-    VECTOR2I offset = pt - GetTextPos();
+    if( m_layer == LAYER_DEVICE )
+    {
+        NormalizeJustification( false );
+        EDA_ANGLE rot_angle = aRotateCCW ? -ANGLE_90 : ANGLE_90;
 
-    Rotate90( false );
+        VECTOR2I pt = GetTextPos();
+        RotatePoint( pt, aCenter, rot_angle );
+        SetTextPos( pt );
 
-    SetTextPos( GetTextPos() + offset );
+        if( GetTextAngle().IsHorizontal() )
+        {
+            SetTextAngle( ANGLE_VERTICAL );
+        }
+        else
+        {
+            // 180° rotation is a mirror
+
+            if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
+                SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+            else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
+                SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
+
+            if( GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
+                SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
+            else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
+                SetVertJustify( GR_TEXT_V_ALIGN_TOP );
+
+            SetTextAngle( ANGLE_0 );
+        }
+
+        NormalizeJustification( true );
+    }
+    else
+    {
+        VECTOR2I pt = GetTextPos();
+        RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+        VECTOR2I offset = pt - GetTextPos();
+
+        Rotate90( false );
+
+        SetTextPos( GetTextPos() + offset );
+    }
 }
 
 
@@ -197,53 +333,133 @@ KIFONT::FONT* SCH_TEXT::getDrawFont() const
 void SCH_TEXT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                       const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
-    COLOR4D  color = GetTextColor();
-    bool     blackAndWhiteMode = GetGRForceBlackPenState();
-    VECTOR2I text_offset = aOffset + GetSchematicTextOffset( aSettings );
+    COLOR4D color = GetTextColor();
+    COLOR4D bg = aSettings->GetBackgroundColor();
+    bool    blackAndWhiteMode = GetGRForceBlackPenState();
 
     if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( m_layer );
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
+
+    if( !IsVisible() )
+        bg = aSettings->GetLayerColor( LAYER_HIDDEN );
+
+    if( aDimmed )
+    {
+        color.Desaturate( );
+        color = color.Mix( bg, 0.5f );
+    }
 
     KIFONT::FONT* font = GetFont();
 
     if( !font )
         font = KIFONT::FONT::GetFont( aSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
-    // Adjust text drawn in an outline font to more closely mimic the positioning of
-    // SCH_FIELD text.
-    if( font->IsOutline() )
+    if( m_layer == LAYER_DEVICE )
     {
-        BOX2I    firstLineBBox = GetTextBox( 0 );
-        int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
-        int      adjust = KiROUND( sizeDiff * 0.4 );
-        VECTOR2I adjust_offset( 0, - adjust );
+        wxDC* DC = aSettings->GetPrintDC();
+        int   penWidth = std::max( GetEffectiveTextPenWidth(), aSettings->GetDefaultPenWidth() );
 
-        RotatePoint( adjust_offset, GetDrawRotation() );
-        text_offset += adjust_offset;
+        // Calculate the text orientation, according to the symbol orientation/mirror (needed when
+        // draw text in schematic)
+        EDA_ANGLE orient = GetTextAngle();
+
+        if( aSettings->m_Transform.y1 )  // Rotate symbol 90 degrees.
+        {
+            if( orient == ANGLE_HORIZONTAL )
+                orient = ANGLE_VERTICAL;
+            else
+                orient = ANGLE_HORIZONTAL;
+        }
+
+        /*
+         * Calculate the text justification, according to the symbol orientation/mirror.
+         * This is a bit complicated due to cumulative calculations:
+         * - numerous cases (mirrored or not, rotation)
+         * - the GRText function will also recalculate H and V justifications according to the text
+         *   orientation.
+         * - When a symbol is mirrored, the text is not mirrored and justifications are complicated
+         *   to calculate so the more easily way is to use no justifications (centered text) and
+         *   use GetBoundingBox to know the text coordinate considered as centered
+        */
+        BOX2I bBox = GetBoundingBox();
+
+        // convert coordinates from draw Y axis to symbol_editor Y axis:
+        bBox.RevertYAxis();
+        VECTOR2I txtpos = bBox.Centre();
+
+        // Calculate pos according to mirror/rotation.
+        txtpos = aSettings->m_Transform.TransformCoordinate( txtpos ) + aOffset;
+
+        GRPrintText( DC, txtpos, color, GetShownText( true ), orient, GetTextSize(),
+                     GR_TEXT_H_ALIGN_CENTER, GR_TEXT_V_ALIGN_CENTER, penWidth, IsItalic(),
+                     IsBold(), font, GetFontMetrics() );
     }
+    else
+    {
+        VECTOR2I text_offset = aOffset + GetSchematicTextOffset( aSettings );
 
-    EDA_TEXT::Print( aSettings, text_offset, color );
+        // Adjust text drawn in an outline font to more closely mimic the positioning of
+        // SCH_FIELD text.
+        if( font->IsOutline() )
+        {
+            BOX2I    firstLineBBox = GetTextBox( 0 );
+            int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
+            int      adjust = KiROUND( sizeDiff * 0.4 );
+            VECTOR2I adjust_offset( 0, - adjust );
+
+            RotatePoint( adjust_offset, GetDrawRotation() );
+            text_offset += adjust_offset;
+        }
+
+        EDA_TEXT::Print( aSettings, text_offset, color );
+    }
 }
 
 
 const BOX2I SCH_TEXT::GetBoundingBox() const
 {
-    BOX2I bbox = GetTextBox();
-
-    if( !GetTextAngle().IsZero() ) // Rotate bbox.
+    if( m_layer == LAYER_DEVICE ) // TODO: remove upside-down coordinate system in symbol editor
     {
-        VECTOR2I pos = bbox.GetOrigin();
+        BOX2I bbox = GetTextBox( -1, true );
+        bbox.RevertYAxis();
+
+        // We are using now a bottom to top Y axis.
+        VECTOR2I orig = bbox.GetOrigin();
         VECTOR2I end = bbox.GetEnd();
 
-        RotatePoint( pos, GetTextPos(), GetTextAngle() );
-        RotatePoint( end, GetTextPos(), GetTextAngle() );
+        RotatePoint( orig, GetTextPos(), -GetTextAngle() );
+        RotatePoint( end, GetTextPos(), -GetTextAngle() );
 
-        bbox.SetOrigin( pos );
+        bbox.SetOrigin( orig );
         bbox.SetEnd( end );
-    }
 
-    bbox.Normalize();
-    return bbox;
+        // We are using now a top to bottom Y axis:
+        bbox.RevertYAxis();
+
+        return bbox;
+    }
+    else
+    {
+        BOX2I bbox = GetTextBox();
+
+        if( !GetTextAngle().IsZero() ) // Rotate bbox.
+        {
+            VECTOR2I pos = bbox.GetOrigin();
+            VECTOR2I end = bbox.GetEnd();
+
+            RotatePoint( pos, GetTextPos(), GetTextAngle() );
+            RotatePoint( end, GetTextPos(), GetTextAngle() );
+
+            bbox.SetOrigin( pos );
+            bbox.SetEnd( end );
+        }
+
+        bbox.Normalize();
+        return bbox;
+    }
 }
 
 
@@ -309,28 +525,76 @@ BITMAPS SCH_TEXT::GetMenuImage() const
 
 bool SCH_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    BOX2I bBox = GetBoundingBox();
-    bBox.Inflate( aAccuracy );
-    return bBox.Contains( aPosition );
+    if( m_layer == LAYER_DEVICE ) // TODO: remove upside-down coordinate system in symbol editor
+    {
+        EDA_TEXT tmp_text( *this );
+        tmp_text.SetTextPos( DefaultTransform.TransformCoordinate( GetTextPos() ) );
+
+        /* The text orientation may need to be flipped if the
+         * transformation matrix causes xy axes to be flipped.
+         * this simple algo works only for schematic matrix (rot 90 or/and mirror)
+         */
+        bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
+
+        tmp_text.SetTextAngle( t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
+        return tmp_text.TextHitTest( aPosition, aAccuracy );
+    }
+    else
+    {
+        BOX2I bBox = GetBoundingBox();
+        bBox.Inflate( aAccuracy );
+        return bBox.Contains( aPosition );
+    }
 }
 
 
 bool SCH_TEXT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    BOX2I bBox = GetBoundingBox();
-    bBox.Inflate( aAccuracy );
+    if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
 
-    if( aContained )
-        return aRect.Contains( bBox );
+    BOX2I rect = aRect;
 
-    return aRect.Intersects( bBox );
+    rect.Inflate( aAccuracy );
+
+    if( m_layer == LAYER_DEVICE ) // TODO: remove upside-down coordinate system in symbol editor
+    {
+        BOX2I bBox = GetTextBox();
+        bBox.RevertYAxis();
+
+        if( aContained )
+            return rect.Contains( bBox );
+
+        return rect.Intersects( bBox, GetTextAngle() );
+    }
+    else
+    {
+        BOX2I bBox = GetBoundingBox();
+
+        if( aContained )
+            return aRect.Contains( bBox );
+
+        return aRect.Intersects( bBox );
+    }
+}
+
+
+void SCH_TEXT::BeginEdit( const VECTOR2I& aPosition )
+{
+    SetTextPos( aPosition );
+}
+
+
+void SCH_TEXT::CalcEdit( const VECTOR2I& aPosition )
+{
+    SetTextPos( aPosition );
 }
 
 
 void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 2;
-    aLayers[0] = m_layer;
+    aLayers[0] = IsPrivate() ? LAYER_PRIVATE_NOTES : m_layer;
     aLayers[1] = LAYER_SELECTION_SHADOWS;
 }
 
@@ -338,61 +602,114 @@ void SCH_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                      int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
-    if( aBackground )
+    if( aBackground || IsPrivate() )
         return;
 
-    SCH_SHEET_PATH*  sheet = &Schematic()->CurrentSheet();
-    RENDER_SETTINGS* settings = aPlotter->RenderSettings();
-    SCH_CONNECTION*  connection = Connection();
-    int              layer = ( connection && connection->IsBus() ) ? LAYER_BUS : m_layer;
-    COLOR4D          color = GetTextColor();
-    int              penWidth = GetEffectiveTextPenWidth( settings->GetDefaultPenWidth() );
-    VECTOR2I         text_offset = GetSchematicTextOffset( aPlotter->RenderSettings() );
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    COLOR4D              color = GetTextColor();
+    COLOR4D              bg = renderSettings->GetBackgroundColor();
 
     if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
-        color = settings->GetLayerColor( layer );
+    {
+        SCH_CONNECTION* connection = Connection();
 
-    penWidth = std::max( penWidth, settings->GetMinPenWidth() );
+        if( connection && connection->IsBus() )
+            color = renderSettings->GetLayerColor( LAYER_BUS );
+        else
+            color = renderSettings->GetLayerColor( m_layer );
+    }
+
+    if( !IsVisible() )
+        bg = renderSettings->GetLayerColor( LAYER_HIDDEN );
+    else if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+    {
+        color.Desaturate( );
+        color = color.Mix( bg, 0.5f );
+    }
+
+    int penWidth = GetEffectiveTextPenWidth( renderSettings->GetDefaultPenWidth() );
+    penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
     KIFONT::FONT* font = GetFont();
 
     if( !font )
-        font = KIFONT::FONT::GetFont( settings->GetDefaultFont(), IsBold(), IsItalic() );
-
-    // Adjust text drawn in an outline font to more closely mimic the positioning of
-    // SCH_FIELD text.
-    if( font->IsOutline() )
-    {
-        BOX2I    firstLineBBox = GetTextBox( 0 );
-        int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
-        int      adjust = KiROUND( sizeDiff * 0.4 );
-        VECTOR2I adjust_offset( 0, - adjust );
-
-        RotatePoint( adjust_offset, GetDrawRotation() );
-        text_offset += adjust_offset;
-    }
-
-    std::vector<VECTOR2I> positions;
-    wxArrayString strings_list;
-    wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
-    positions.reserve( strings_list.Count() );
-
-    GetLinePositions( positions, (int) strings_list.Count() );
+        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
 
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_StrokeWidth = penWidth;
-    attrs.m_Multiline = false;
 
-    for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
+    if( m_layer == LAYER_DEVICE )
     {
-        VECTOR2I  textpos = positions[ii] + text_offset;
-        wxString& txt = strings_list.Item( ii );
-        aPlotter->PlotText( textpos, color, txt, attrs, font, GetFontMetrics() );
-    }
+        BOX2I bBox = GetBoundingBox();
+        // convert coordinates from draw Y axis to symbol_editor Y axis
+        bBox.RevertYAxis();
 
-    if( HasHyperlink() )
-        aPlotter->HyperlinkBox( GetBoundingBox(), GetHyperlink() );
+        /*
+         * Calculate the text justification, according to the symbol orientation/mirror.  This is
+         * a bit complicated due to cumulative calculations:
+         *  - numerous cases (mirrored or not, rotation)
+         *  - the plotter's Text() function will also recalculate H and V justifications according
+         *    to the text orientation
+         *  - when a symbol is mirrored the text is not, and justifications become a nightmare
+         *
+         *  So the easier way is to use no justifications (centered text) and use GetBoundingBox to
+         *  know the text coordinate considered as centered.
+         */
+        VECTOR2I txtpos = bBox.Centre();
+        attrs.m_Halign = GR_TEXT_H_ALIGN_CENTER;
+        attrs.m_Valign = GR_TEXT_V_ALIGN_CENTER;
+
+        // The text orientation may need to be flipped if the transformation matrix causes xy
+        // axes to be flipped.
+        if( ( renderSettings->m_Transform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL ) )
+            attrs.m_Angle = ANGLE_HORIZONTAL;
+        else
+            attrs.m_Angle = ANGLE_VERTICAL;
+
+        aPlotter->PlotText( renderSettings->TransformCoordinate( txtpos ) + aOffset, color,
+                            GetText(), attrs, font, GetFontMetrics() );
+    }
+    else
+    {
+        SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
+        VECTOR2I        text_offset = GetSchematicTextOffset( aPlotter->RenderSettings() );
+
+        // Adjust text drawn in an outline font to more closely mimic the positioning of
+        // SCH_FIELD text.
+        if( font->IsOutline() )
+        {
+            BOX2I    firstLineBBox = GetTextBox( 0 );
+            int      sizeDiff = firstLineBBox.GetHeight() - GetTextSize().y;
+            int      adjust = KiROUND( sizeDiff * 0.4 );
+            VECTOR2I adjust_offset( 0, - adjust );
+
+            RotatePoint( adjust_offset, GetDrawRotation() );
+            text_offset += adjust_offset;
+        }
+
+        std::vector<VECTOR2I> positions;
+        wxArrayString strings_list;
+        wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
+        positions.reserve( strings_list.Count() );
+
+        GetLinePositions( positions, (int) strings_list.Count() );
+
+        attrs.m_Multiline = false;
+
+        for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
+        {
+            VECTOR2I  textpos = positions[ii] + text_offset;
+            wxString& txt = strings_list.Item( ii );
+            aPlotter->PlotText( textpos, color, txt, attrs, font, GetFontMetrics() );
+        }
+
+        if( HasHyperlink() )
+            aPlotter->HyperlinkBox( GetBoundingBox(), GetHyperlink() );
+    }
 }
 
 
@@ -401,7 +718,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     wxString msg;
 
     // Don't use GetShownText() here; we want to show the user the variable references
-    aList.emplace_back( _( "Graphic Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
+    aList.emplace_back( _( "Text" ), KIUI::EllipsizeStatusText( aFrame, GetText() ) );
 
     if( m_excludedFromSim )
         aList.emplace_back( _( "Exclude from" ), _( "Simulation" ) );
@@ -422,7 +739,24 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_IT
     case GR_TEXT_H_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
     }
 
-    aList.emplace_back( _( "Justification" ), msg );
+    if( m_layer == LAYER_DEVICE )
+    {
+        aList.emplace_back( _( "H Justification" ), msg );
+
+        switch ( GetVertJustify() )
+        {
+        case GR_TEXT_V_ALIGN_TOP:           msg = _( "Top" );          break;
+        case GR_TEXT_V_ALIGN_CENTER:        msg = _( "Center" );       break;
+        case GR_TEXT_V_ALIGN_BOTTOM:        msg = _( "Bottom" );       break;
+        case GR_TEXT_V_ALIGN_INDETERMINATE: msg = INDETERMINATE_STATE; break;
+        }
+
+        aList.emplace_back( _( "V Justification" ), msg );
+    }
+    else
+    {
+        aList.emplace_back( _( "Justification" ), msg );
+    }
 }
 
 bool SCH_TEXT::operator==( const SCH_ITEM& aOther ) const
@@ -444,12 +778,15 @@ bool SCH_TEXT::operator==( const SCH_ITEM& aOther ) const
 
 double SCH_TEXT::Similarity( const SCH_ITEM& aOther ) const
 {
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
     if( Type() != aOther.Type() )
         return 0.0;
 
     const SCH_TEXT* other = static_cast<const SCH_TEXT*>( &aOther );
 
-    double retval = 1.0;
+    double retval = SimilarityBase( aOther );
 
     if( GetLayer() != other->GetLayer() )
         retval *= 0.9;
@@ -460,6 +797,38 @@ double SCH_TEXT::Similarity( const SCH_ITEM& aOther ) const
     retval *= EDA_TEXT::Similarity( *other );
 
     return retval;
+}
+
+
+int SCH_TEXT::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
+{
+    wxASSERT( aOther.Type() == SCH_TEXT_T );
+
+    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
+
+    if( retv )
+        return retv;
+
+    const SCH_TEXT& tmp = static_cast<const SCH_TEXT&>( aOther );
+
+    int result = GetText().CmpNoCase( tmp.GetText() );
+
+    if( result != 0 )
+        return result;
+
+    if( GetTextPos().x != tmp.GetTextPos().x )
+        return GetTextPos().x - tmp.GetTextPos().x;
+
+    if( GetTextPos().y != tmp.GetTextPos().y )
+        return GetTextPos().y - tmp.GetTextPos().y;
+
+    if( GetTextWidth() != tmp.GetTextWidth() )
+        return GetTextWidth() - tmp.GetTextWidth();
+
+    if( GetTextHeight() != tmp.GetTextHeight() )
+        return GetTextHeight() - tmp.GetTextHeight();
+
+    return 0;
 }
 
 

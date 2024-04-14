@@ -354,7 +354,7 @@ TOOL_ACTION EE_ACTIONS::placeSymbolText( TOOL_ACTION_ARGS()
         .Tooltip( _( "Add a text item" ) )
         .Icon( BITMAPS::text )
         .Flags( AF_ACTIVATE )
-        .Parameter( LIB_TEXT_T ) );
+        .Parameter( SCH_TEXT_T ) );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolTextBox( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolDrawing.drawSymbolTextBox" )

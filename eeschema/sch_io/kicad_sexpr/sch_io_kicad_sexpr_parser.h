@@ -39,7 +39,7 @@
 
 class LIB_SHAPE;
 class LIB_PIN;
-class LIB_TEXT;
+class LIB_TEXTBOX;
 class PAGE_INFO;
 class SCH_BITMAP;
 class SCH_BUS_WIRE_ENTRY;
@@ -201,7 +201,7 @@ private:
     LIB_PIN* parsePin();
     LIB_SHAPE* parsePolyLine();
     LIB_SHAPE* parseRectangle();
-    LIB_TEXT* parseText();
+    SCH_TEXT* parseSymbolText();
     LIB_TEXTBOX* parseTextBox();
 
     void parsePAGE_INFO( PAGE_INFO& aPageInfo );

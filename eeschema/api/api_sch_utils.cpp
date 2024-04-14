@@ -21,9 +21,7 @@
 #include <lib_pin.h>
 #include <lib_shape.h>
 #include <lib_symbol.h>
-#include <lib_text.h>
 #include <lib_textbox.h>
-
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_field.h>
@@ -31,7 +29,6 @@
 #include <sch_label.h>
 #include <sch_line.h>
 #include <sch_no_connect.h>
-#include <sch_pin.h>
 #include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
@@ -95,7 +92,6 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
 
     case LIB_SYMBOL_T:          return nullptr; // TODO: ctor currently requires non-null name
     case LIB_SHAPE_T:           return std::make_unique<LIB_SHAPE>( parentLibSymbol );
-    case LIB_TEXT_T:            return std::make_unique<LIB_TEXT>( parentLibSymbol );
     case LIB_TEXTBOX_T:         return std::make_unique<LIB_TEXTBOX>( parentLibSymbol );
     case LIB_PIN_T:             return std::make_unique<LIB_PIN>( parentLibSymbol );
 

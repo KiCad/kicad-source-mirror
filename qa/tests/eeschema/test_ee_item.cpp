@@ -45,7 +45,6 @@
 #include <sch_sheet.h>
 
 #include <lib_shape.h>
-#include <lib_text.h>
 #include <lib_textbox.h>
 #include <lib_pin.h>
 
@@ -117,7 +116,6 @@ public:
 
         case SCH_SHEET_T:           return new SCH_SHEET();
         case LIB_SHAPE_T:           return new LIB_SHAPE( &m_symbol, SHAPE_T::ARC );
-        case LIB_TEXT_T:            return new LIB_TEXT( &m_symbol );
         case LIB_TEXTBOX_T:         return new LIB_TEXTBOX( &m_symbol, 0, FILL_T::NO_FILL, "test" );
         case LIB_PIN_T:             return new LIB_PIN( &m_symbol );
 

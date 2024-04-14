@@ -24,6 +24,7 @@
  */
 
 #include <sch_edit_frame.h>
+#include <symbol_edit_frame.h>
 #include <widgets/bitmap_button.h>
 #include <widgets/font_choice.h>
 #include <widgets/color_swatch.h>
@@ -39,7 +40,7 @@
 #include <gr_text.h>
 
 
-DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITEM* aTextItem ) :
+DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITEM* aTextItem ) :
         DIALOG_TEXT_PROPERTIES_BASE( aParent ),
         m_frame( aParent ),
         m_currentItem( aTextItem ),
@@ -49,6 +50,8 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
         m_scintillaTricks( nullptr ),
         m_helpWindow( nullptr )
 {
+    m_isSymbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( aParent ) != nullptr;
+
     COLOR_SETTINGS* colorSettings = m_frame->GetColorSettings();
     COLOR4D         schematicBackground = colorSettings->GetColor( LAYER_SCHEMATIC_BACKGROUND );
 
@@ -152,23 +155,38 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_ITE
 
     m_separator5->SetIsSeparator();
 
-    SCH_SHEET_LIST sheetList = m_frame->Schematic().GetSheets();
-    sheetList.SortByPageNumbers( false );
+    m_fgSymbolEditor->Show( m_isSymbolEditor );
 
-    for( const SCH_SHEET_PATH& sheet : sheetList )
+    if( SCH_EDIT_FRAME* schematicEditor = dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
     {
-        wxString sheetPageNum = sheet.GetPageNumber();
-        wxString sheetName = sheet.size() == 1 ? _( "<root sheet>" ) : sheet.Last()->GetName();
+        SCH_SHEET_LIST sheetList = schematicEditor->Schematic().GetSheets();
+        sheetList.SortByPageNumbers( false );
 
-        m_hyperlinkCombo->Append( wxT( "#" ) + sheetPageNum,
-                                  wxString::Format( _( "Page %s (%s)" ), sheetPageNum, sheetName ) );
-        m_pageNumbers.push_back( sheetPageNum );
+        for( const SCH_SHEET_PATH& sheet : sheetList )
+        {
+            wxString sheetPageNum = sheet.GetPageNumber();
+            wxString sheetName = sheet.size() == 1 ? _( "<root sheet>" )
+                                                   : sheet.Last()->GetName();
+
+            m_hyperlinkCombo->Append( wxT( "#" ) + sheetPageNum,
+                                      wxString::Format( _( "Page %s (%s)" ),
+                                                        sheetPageNum,
+                                                        sheetName ) );
+            m_pageNumbers.push_back( sheetPageNum );
+        }
+
+        m_hyperlinkCombo->Append( wxT( "---" ) );
+        m_hyperlinkCombo->Append( wxT( "file://" ), wxT( "file://..." ) );
+        m_hyperlinkCombo->Append( wxT( "http://" ), wxT( "http://..." ) );
+        m_hyperlinkCombo->Append( wxT( "https://" ), wxT( "https://..." ) );
     }
-
-    m_hyperlinkCombo->Append( wxT( "---" ) );
-    m_hyperlinkCombo->Append( wxT( "file://" ), wxT( "file://..." ) );
-    m_hyperlinkCombo->Append( wxT( "http://" ), wxT( "http://..." ) );
-    m_hyperlinkCombo->Append( wxT( "https://" ), wxT( "https://..." ) );
+    else
+    {
+        m_excludeFromSim->Hide();
+        m_syntaxHelp->Hide();
+        m_hyperlinkCb->Hide();
+        m_hyperlinkCombo->Hide();
+    }
 
     SetupStandardButtons();
     Layout();
@@ -199,22 +217,28 @@ DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 void DIALOG_TEXT_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
                                                     wxArrayString*  aTokens )
 {
+    SCHEMATIC* schematic = m_currentItem->Schematic();
+
     if( !aCrossRef.IsEmpty() )
     {
-        SCH_SHEET_LIST     sheets = m_frame->Schematic().GetSheets();
-        SCH_REFERENCE_LIST refs;
-        SCH_SYMBOL*        refSymbol = nullptr;
+        SCH_SYMBOL* refSymbol = nullptr;
 
-        sheets.GetSymbols( refs );
-
-        for( int jj = 0; jj < (int) refs.GetCount(); jj++ )
+        if( schematic )
         {
-            SCH_REFERENCE& ref = refs[jj];
+            SCH_SHEET_LIST     sheets = m_currentItem->Schematic()->GetSheets();
+            SCH_REFERENCE_LIST refs;
 
-            if( ref.GetSymbol()->GetRef( &ref.GetSheetPath(), true ) == aCrossRef )
+            sheets.GetSymbols( refs );
+
+            for( int jj = 0; jj < (int) refs.GetCount(); jj++ )
             {
-                refSymbol = ref.GetSymbol();
-                break;
+                SCH_REFERENCE& ref = refs[jj];
+
+                if( ref.GetSymbol()->GetRef( &ref.GetSheetPath(), true ) == aCrossRef )
+                {
+                    refSymbol = ref.GetSymbol();
+                    break;
+                }
             }
         }
 
@@ -223,8 +247,6 @@ void DIALOG_TEXT_PROPERTIES::getContextualTextVars( const wxString& aCrossRef,
     }
     else
     {
-        SCHEMATIC* schematic = m_currentItem->Schematic();
-
         if( schematic && schematic->CurrentSheet().Last() )
         {
             schematic->CurrentSheet().Last()->GetContextualTextVars( aTokens );
@@ -243,16 +265,20 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    SCHEMATIC& schematic = m_frame->Schematic();
-
     m_hyperlinkCb->SetValue( m_currentText->HasHyperlink() );
     m_hyperlinkCombo->SetValue( m_currentText->GetHyperlink() );
 
+    wxString text = m_currentText->GetText();
+
     // show text variable cross-references in a human-readable format
-    m_textCtrl->SetValue( schematic.ConvertKIIDsToRefs( m_currentText->GetText() ) );
+    if( SCHEMATIC* schematic = m_currentItem->Schematic() )
+        text = schematic->ConvertKIIDsToRefs( text );
+
+    m_textCtrl->SetValue( text );
     m_textCtrl->EmptyUndoBuffer();
 
-    m_excludeFromSim->SetValue( m_currentItem->GetExcludedFromSim() );
+    if( !m_isSymbolEditor )
+        m_excludeFromSim->SetValue( m_currentItem->GetExcludedFromSim() );
 
     m_fontCtrl->SetFontSelection( m_currentText->GetFont() );
     m_textSize.SetValue( m_currentText->GetTextWidth() );
@@ -313,6 +339,17 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
 
         m_fillColorLabel->Enable( textBox->IsFilled() );
         m_fillColorSwatch->Enable( textBox->IsFilled() );
+    }
+
+    if( m_isSymbolEditor )
+    {
+        SYMBOL* symbol = m_currentItem->GetParentSymbol();
+
+        m_privateCheckbox->SetValue( m_currentItem->IsPrivate() );
+        m_commonToAllUnits->SetValue( symbol->IsMulti() && m_currentItem->GetUnit() == 0 );
+        m_commonToAllUnits->Enable( symbol->IsMulti() );
+        m_commonToAllBodyStyles->SetValue( symbol->HasAlternateBodyStyle() && m_currentItem->GetBodyStyle() == 0 );
+        m_commonToAllBodyStyles->Enable( symbol->HasAlternateBodyStyle() );
     }
 
     return true;
@@ -416,7 +453,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         return false;
 
     SCH_COMMIT commit( m_frame );
-    wxString   text;
 
     /* save old text in undo list if not already in edit */
     if( m_currentItem->GetEditFlags() == 0 )
@@ -424,8 +460,11 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_frame->GetCanvas()->Refresh();
 
+    wxString text = m_textCtrl->GetValue();
+
     // convert any text variable cross-references to their UUIDs
-    text = m_frame->Schematic().ConvertRefsToKIIDs( m_textCtrl->GetValue() );
+    if( SCHEMATIC* schematic = m_currentItem->Schematic() )
+        text = schematic->ConvertRefsToKIIDs( m_textCtrl->GetValue() );
 
 #ifdef __WXMAC__
     // On macOS CTRL+Enter produces '\r' instead of '\n' regardless of EOL setting
@@ -454,7 +493,24 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_currentItem->SetExcludedFromSim( m_excludeFromSim->GetValue() );
 
-    if( !m_currentText->ValidateHyperlink( m_hyperlinkCombo->GetValue() ) )
+    if( m_isSymbolEditor )
+    {
+        SYMBOL_EDIT_FRAME* symbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
+
+        m_currentItem->SetPrivate( m_privateCheckbox->GetValue() );
+
+        if( !m_commonToAllUnits->GetValue() )
+            m_currentItem->SetUnit( symbolEditor->GetUnit() );
+        else
+            m_currentItem->SetUnit( 0 );
+
+        if( !m_commonToAllBodyStyles->GetValue() )
+            m_currentItem->SetBodyStyle( symbolEditor->GetBodyStyle() );
+        else
+            m_currentItem->SetBodyStyle( 0 );
+    }
+
+    if( !EDA_TEXT::ValidateHyperlink( m_hyperlinkCombo->GetValue() ) )
     {
         DisplayError( this, _( "Invalid hyperlink destination. Please enter either a valid URL "
                                "(e.g. file:// or http(s)://) or \"#<page number>\" to create "
@@ -467,7 +523,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
     }
 
     if( m_currentText->GetTextWidth() != m_textSize.GetValue() )
-        m_currentText->SetTextSize( VECTOR2I( m_textSize.GetValue(), m_textSize.GetValue() ) );
+        m_currentText->SetTextSize( VECTOR2I( m_textSize.GetIntValue(), m_textSize.GetIntValue() ) );
 
     if( m_fontCtrl->HaveFontSelection() )
     {

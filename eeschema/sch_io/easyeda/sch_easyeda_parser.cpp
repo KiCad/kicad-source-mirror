@@ -30,7 +30,6 @@
 #include <sch_sheet_pin.h>
 #include <sch_line.h>
 #include <lib_shape.h>
-#include <lib_text.h>
 #include <sch_no_connect.h>
 #include <sch_label.h>
 #include <sch_junction.h>
@@ -899,19 +898,20 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             if( textType == wxS( "P" ) )
             {
                 textItem = &aSymbol->GetReferenceField();
+                textItem->SetTextPos( RelPosSym( pos ) );
+                textItem->SetText( textStr );
             }
             else if( textType == wxS( "N" ) )
             {
                 textItem = &aSymbol->GetValueField();
+                textItem->SetTextPos( RelPosSym( pos ) );
+                textItem->SetText( textStr );
             }
             else
             {
-                textItem = new LIB_TEXT( aSymbol );
+                textItem = new SCH_TEXT( RelPosSym( pos ), textStr, LAYER_DEVICE );
                 added = true;
             }
-
-            textItem->SetTextPos( RelPosSym( pos ) );
-            textItem->SetText( textStr );
 
             textItem->SetTextAngleDegrees( ( 360 - angle ) % 360 );
             textItem->SetVertJustify( GR_TEXT_V_ALIGN_TOP );

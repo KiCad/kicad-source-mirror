@@ -24,7 +24,6 @@
 #include <build_version.h>
 #include <lib_shape.h>
 #include <lib_symbol.h>
-#include <lib_text.h>
 #include <lib_textbox.h>
 #include <locale_io.h>
 #include <macros.h>
@@ -375,8 +374,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFO
         savePin( static_cast<LIB_PIN*>( aItem ), aFormatter, aNestLevel );
         break;
 
-    case LIB_TEXT_T:
-        saveText( static_cast<LIB_TEXT*>( aItem ), aFormatter, aNestLevel );
+    case SCH_TEXT_T:
+        saveText( static_cast<SCH_TEXT*>( aItem ), aFormatter, aNestLevel );
         break;
 
     case LIB_TEXTBOX_T:
@@ -471,10 +470,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFor
 }
 
 
-void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveText( LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter,
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveText( SCH_TEXT* aText, OUTPUTFORMATTER& aFormatter,
                                              int aNestLevel )
 {
-    wxCHECK_RET( aText && aText->Type() == LIB_TEXT_T, "Invalid LIB_TEXT object." );
+    wxCHECK_RET( aText && aText->Type() == SCH_TEXT_T, "Invalid SCH_TEXT object." );
 
     aFormatter.Print( aNestLevel, "(text%s %s (at %s %s %g)\n",
                       aText->IsPrivate() ? " private" : "",

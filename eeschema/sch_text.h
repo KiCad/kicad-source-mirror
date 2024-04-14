@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,7 +28,6 @@
 
 #include <eda_text.h>
 #include <sch_item.h>
-#include <sch_field.h>
 #include <sch_connection.h>   // for CONNECTION_TYPE
 #include <schematic.h>
 
@@ -39,20 +38,25 @@ class SCH_TEXT : public SCH_ITEM, public EDA_TEXT
 {
 public:
     SCH_TEXT( const VECTOR2I& aPos = { 0, 0 }, const wxString& aText = wxEmptyString,
-              KICAD_T aType = SCH_TEXT_T );
+              SCH_LAYER_ID aLayer = LAYER_NOTES, KICAD_T aType = SCH_TEXT_T );
 
     SCH_TEXT( const SCH_TEXT& aText );
 
-    ~SCH_TEXT() { }
+    ~SCH_TEXT() override { }
 
-    static inline bool ClassOf( const EDA_ITEM* aItem )
+    static bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && SCH_TEXT_T == aItem->Type();
     }
 
-    virtual wxString GetClass() const override
+    wxString GetClass() const override
     {
         return wxT( "SCH_TEXT" );
+    }
+
+    wxString GetFriendlyName() const override
+    {
+        return _( "Text" );
     }
 
     virtual wxString GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraText,
@@ -104,12 +108,17 @@ public:
         EDA_TEXT::Offset( aMoveVector );
     }
 
+    void NormalizeJustification( bool inverse );
+
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW ) override;
 
     virtual void Rotate90( bool aClockwise );
     virtual void MirrorSpinStyle( bool aLeftRight );
+
+    void BeginEdit( const VECTOR2I& aStartPoint ) override;
+    void CalcEdit( const VECTOR2I& aPosition ) override;
 
     bool Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const override
     {
@@ -121,7 +130,7 @@ public:
         return EDA_TEXT::Replace( aSearchData );
     }
 
-    virtual bool IsReplaceable() const override { return true; }
+    bool IsReplaceable() const override { return true; }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -148,9 +157,9 @@ public:
 
     void GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    virtual double Similarity( const SCH_ITEM& aItem ) const override;
+    double Similarity( const SCH_ITEM& aItem ) const override;
 
-    virtual bool operator==( const SCH_ITEM& aItem ) const override;
+    bool operator==( const SCH_ITEM& aItem ) const override;
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
@@ -162,6 +171,18 @@ protected:
     KIFONT::FONT* getDrawFont() const override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
+
+    /**
+     * @copydoc SCH_ITEM::compare()
+     *
+     * The text specific sort order is as follows:
+     *      - Text string, case insensitive compare.
+     *      - Text horizontal (X) position.
+     *      - Text vertical (Y) position.
+     *      - Text width.
+     *      - Text height.
+     */
+    int compare( const SCH_ITEM& aOther, int aCompareFlags = 0 ) const override;
 
 protected:
     bool            m_excludedFromSim;

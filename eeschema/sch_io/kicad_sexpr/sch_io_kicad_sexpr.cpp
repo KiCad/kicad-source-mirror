@@ -49,13 +49,8 @@
 #include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <sch_screen.h>
-#include <lib_shape.h>
 #include <lib_pin.h>
-#include <lib_text.h>
-#include <lib_textbox.h>
-#include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <io/kicad/kicad_io_utils.h>
-#include <sch_file_versions.h>
 #include <schematic_lexer.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr_parser.h>

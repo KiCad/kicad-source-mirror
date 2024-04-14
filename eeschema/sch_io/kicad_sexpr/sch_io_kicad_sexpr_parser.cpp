@@ -38,7 +38,6 @@
 #include <lib_id.h>
 #include <lib_shape.h>
 #include <lib_pin.h>
-#include <lib_text.h>
 #include <lib_textbox.h>
 #include <math/util.h>                           // KiROUND, Clamp
 #include <font/font.h>
@@ -577,7 +576,7 @@ SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseDrawItem()
         break;
 
     case T_text:
-        return parseText();
+        return parseSymbolText();
         break;
 
     case T_text_box:
@@ -1756,14 +1755,15 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseRectangle()
 }
 
 
-LIB_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseText()
+SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolText()
 {
     wxCHECK_MSG( CurTok() == T_text, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text token." ) );
 
     T token;
-    std::unique_ptr<LIB_TEXT> text = std::make_unique<LIB_TEXT>( nullptr );
+    std::unique_ptr<SCH_TEXT> text = std::make_unique<SCH_TEXT>();
 
+    text->SetLayer( LAYER_DEVICE );
     text->SetUnit( m_unit );
     text->SetBodyStyle( m_bodyStyle );
     token = NextTok();
@@ -1799,7 +1799,7 @@ LIB_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseText()
             break;
 
         case T_effects:
-            parseEDA_TEXT( static_cast<EDA_TEXT*>( text.get() ), true );
+            parseEDA_TEXT( text.get(), true );
             break;
 
         default:

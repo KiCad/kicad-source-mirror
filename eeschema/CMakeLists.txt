@@ -127,8 +127,6 @@ set( EESCHEMA_DLGS
     dialogs/dialog_lib_shape_properties_base.cpp
     dialogs/dialog_lib_symbol_properties.cpp
     dialogs/dialog_lib_symbol_properties_base.cpp
-    dialogs/dialog_lib_text_properties.cpp
-    dialogs/dialog_lib_text_properties_base.cpp
     dialogs/dialog_lib_textbox_properties.cpp
     dialogs/dialog_lib_textbox_properties_base.cpp
     dialogs/dialog_line_properties.cpp
@@ -364,7 +362,6 @@ set( EESCHEMA_SRCS
     lib_pin.cpp
     lib_shape.cpp
     lib_symbol.cpp
-    lib_text.cpp
     lib_textbox.cpp
     libarch.cpp
     menubar.cpp

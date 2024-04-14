@@ -40,7 +40,6 @@
 #include <lib_shape.h>
 #include <lib_id.h>
 #include <lib_pin.h>
-#include <lib_text.h>
 #include <lib_textbox.h>
 
 #include <sch_bitmap.h>
@@ -1521,7 +1520,7 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        LIB_TEXT*   textItem = new LIB_TEXT( symbol );
+        SCH_TEXT*   textItem = new SCH_TEXT( { 0, 0 }, elem.text, LAYER_DEVICE );
         symbol->AddDrawItem( textItem, false );
 
         /// Handle labels that are in a library symbol, not on schematic
@@ -1531,10 +1530,9 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
             textItem->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, schsym ) );
 
         textItem->SetUnit( std::max( 0, elem.ownerpartid ) );
-        textItem->SetText( elem.text );
         SetTextPositioning( textItem, elem.justification, elem.orientation );
 
-        size_t fontId = static_cast<int>( elem.fontId );
+        size_t fontId = elem.fontId;
 
         if( m_altiumSheet && fontId > 0 && fontId <= m_altiumSheet->fonts.size() )
         {

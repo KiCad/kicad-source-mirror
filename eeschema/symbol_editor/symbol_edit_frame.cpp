@@ -38,7 +38,6 @@
 #include <kiway_express.h>
 #include <symbol_edit_frame.h>
 #include <lib_symbol_library_manager.h>
-#include <lib_text.h>
 #include <symbol_editor_settings.h>
 #include <paths.h>
 #include <pgm_base.h>

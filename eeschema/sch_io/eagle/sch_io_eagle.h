@@ -166,12 +166,11 @@ private:
                                   int aGateNumber );
     LIB_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*, EPIN* epin,
                            int aGateNumber );
-    LIB_TEXT*     loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aLibText,
-                                  int aGateNumber );
+    SCH_TEXT*     loadSymbolText( wxXmlNode* aLibText, int aGateNumber );
     void          loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aLines );
 
     void          loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) const;
-    void          loadFieldAttributes( SCH_FIELD* aField, const LIB_TEXT* aText ) const;
+    void          loadFieldAttributes( SCH_FIELD* aField, const SCH_TEXT* aText ) const;
 
     ///< Move net labels that are detached from any wire to the nearest wire
     void adjustNetLabels();

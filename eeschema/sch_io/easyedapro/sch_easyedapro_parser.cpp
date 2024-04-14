@@ -34,7 +34,6 @@
 #include <sch_line.h>
 #include <sch_bitmap.h>
 #include <lib_shape.h>
-#include <lib_text.h>
 #include <sch_no_connect.h>
 #include <sch_label.h>
 #include <sch_junction.h>
@@ -513,14 +512,11 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
             wxString textStr = line.at( 5 );
             wxString fontStyleStr = line.at( 6 );
 
-            std::unique_ptr<LIB_TEXT> text = std::make_unique<LIB_TEXT>( ksymbol );
-
-            text->SetPosition( ScalePosSym( pos ) );
-            text->SetText( UnescapeHTML( textStr ) );
+            auto text = std::make_unique<SCH_TEXT>( ScalePosSym( pos ), UnescapeHTML( textStr ),
+                                                    LAYER_DEVICE );
 
             text->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
             text->SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-
             text->SetTextAngleDegrees( angle );
 
             text->SetUnit( currentUnit );

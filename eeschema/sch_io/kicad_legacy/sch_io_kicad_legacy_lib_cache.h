@@ -75,8 +75,7 @@ private:
     void              loadDocs();
     static LIB_SHAPE* loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
     static LIB_SHAPE* loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
-    static LIB_TEXT*  loadText( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader,
-                                int aMajorVersion, int aMinorVersion );
+    static SCH_TEXT*  loadText( LINE_READER& aReader, int aMajorVersion, int aMinorVersion );
     static LIB_SHAPE* loadRect( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
     static LIB_PIN*   loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
     static LIB_SHAPE* loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
@@ -92,7 +91,7 @@ private:
     static void     savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter );
     static void     savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFORMATTER& aFormatter );
     static void     saveRectangle( LIB_SHAPE* aRectangle, OUTPUTFORMATTER& aFormatter );
-    static void     saveText( const LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter );
+    static void     saveText( const SCH_TEXT* aText, OUTPUTFORMATTER& aFormatter );
 
     int             m_versionMajor;
     int             m_versionMinor;

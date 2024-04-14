@@ -397,7 +397,6 @@ static struct EDA_ITEM_DESC
 
             .Map( LIB_SYMBOL_T,            _HKI( "Symbol" ) )
             .Map( LIB_SHAPE_T,             _HKI( "Graphic" ) )
-            .Map( LIB_TEXT_T,              _HKI( "Text" ) )
             .Map( LIB_TEXTBOX_T,           _HKI( "Text Box" ) )
             .Map( LIB_PIN_T,               _HKI( "Pin" ) )
 

@@ -178,8 +178,8 @@ SPIN_STYLE SPIN_STYLE::MirrorX()
     {
     case SPIN_STYLE::UP:     newSpin = SPIN_STYLE::BOTTOM; break;
     case SPIN_STYLE::BOTTOM: newSpin = SPIN_STYLE::UP;     break;
-    case SPIN_STYLE::LEFT:                                      break;
-    case SPIN_STYLE::RIGHT:                                     break;
+    case SPIN_STYLE::LEFT:                                 break;
+    case SPIN_STYLE::RIGHT:                                break;
     }
 
     return SPIN_STYLE( newSpin );
@@ -194,8 +194,8 @@ SPIN_STYLE SPIN_STYLE::MirrorY()
     {
     case SPIN_STYLE::LEFT:   newSpin = SPIN_STYLE::RIGHT; break;
     case SPIN_STYLE::RIGHT:  newSpin = SPIN_STYLE::LEFT;  break;
-    case SPIN_STYLE::UP:                                       break;
-    case SPIN_STYLE::BOTTOM:                                   break;
+    case SPIN_STYLE::UP:                                  break;
+    case SPIN_STYLE::BOTTOM:                              break;
     }
 
     return SPIN_STYLE( newSpin );
@@ -203,7 +203,7 @@ SPIN_STYLE SPIN_STYLE::MirrorY()
 
 
 SCH_LABEL_BASE::SCH_LABEL_BASE( const VECTOR2I& aPos, const wxString& aText, KICAD_T aType ) :
-        SCH_TEXT( aPos, aText, aType ),
+        SCH_TEXT( aPos, aText, LAYER_NOTES, aType ),
         m_shape( L_UNSPECIFIED ),
         m_connectionType( CONNECTION_TYPE::NONE ),
         m_isDangling( true ),

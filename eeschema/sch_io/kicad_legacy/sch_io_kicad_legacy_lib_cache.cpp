@@ -22,7 +22,7 @@
 
 #include <lib_shape.h>
 #include <lib_pin.h>
-#include <lib_text.h>
+#include <sch_text.h>
 #include <macros.h>
 #include <richio.h>
 #include <string_utils.h>
@@ -720,8 +720,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::loadDrawEntries( std::unique_ptr<LIB_SYMBOL>
             break;
 
         case 'T':    // Text
-            aSymbol->AddDrawItem( loadText( aSymbol, aReader, aMajorVersion, aMinorVersion ),
-                                  false );
+            aSymbol->AddDrawItem( loadText( aReader, aMajorVersion, aMinorVersion ), false );
             break;
 
         case 'S':    // Square
@@ -949,35 +948,23 @@ LIB_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadCircle( std::unique_ptr<LIB_SYMBOL
 }
 
 
-LIB_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                                   LINE_READER&                 aReader,
-                                                   int                          aMajorVersion,
-                                                   int                          aMinorVersion )
+SCH_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
+                                                   int aMajorVersion, int aMinorVersion )
 {
     const char* line = aReader.Line();
 
     wxCHECK_MSG( strCompare( "T", line, &line ), nullptr, "Invalid LIB_TEXT definition" );
 
-    LIB_TEXT* text = new LIB_TEXT( aSymbol.get() );
-    double    angleInTenths = parseInt( aReader, line, &line );
-
-    text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
-
+    double   angleInTenths;
     VECTOR2I center;
+    VECTOR2I size;
+    wxString str;
+
+    angleInTenths = parseInt( aReader, line, &line );
 
     center.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     center.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
-    text->SetPosition( center );
-
-    VECTOR2I size;
-
     size.x = size.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
-    text->SetTextSize( size );
-    text->SetVisible( !parseInt( aReader, line, &line ) );
-    text->SetUnit( parseInt( aReader, line, &line ) );
-    text->SetBodyStyle( parseInt( aReader, line, &line ) );
-
-    wxString str;
 
     // If quoted string loading fails, load as not quoted string.
     if( *line == '"' )
@@ -1000,7 +987,12 @@ LIB_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( std::unique_ptr<LIB_SYMBOL>& 
         str.Replace( "''", "\"" );
     }
 
-    text->SetText( str );
+    SCH_TEXT* text = new SCH_TEXT( center, str, LAYER_DEVICE );
+    text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
+    text->SetTextSize( size );
+    text->SetVisible( !parseInt( aReader, line, &line ) );
+    text->SetUnit( parseInt( aReader, line, &line ) );
+    text->SetBodyStyle( parseInt( aReader, line, &line ) );
 
     // Here things are murky and not well defined.  At some point it appears the format
     // was changed to add text properties.  However rather than add the token to the end of
@@ -1579,23 +1571,23 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
         {
             switch( item.Type() )
             {
-            default:
-            case LIB_PIN_T:       savePin( (LIB_PIN* ) &item, aFormatter );    break;
-            case LIB_TEXT_T:      saveText( ( LIB_TEXT* ) &item, aFormatter ); break;
+            case LIB_PIN_T:    savePin( static_cast<LIB_PIN*>( &item ), aFormatter );   break;
+            case SCH_TEXT_T:   saveText( static_cast<SCH_TEXT*>( &item ), aFormatter ); break;
             case LIB_SHAPE_T:
             {
                 LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
 
                 switch( shape.GetShape() )
                 {
-                case SHAPE_T::ARC:    saveArc( &shape, aFormatter );           break;
-                case SHAPE_T::BEZIER: saveBezier( &shape, aFormatter );        break;
-                case SHAPE_T::CIRCLE: saveCircle( &shape, aFormatter );        break;
-                case SHAPE_T::POLY:   savePolyLine( &shape, aFormatter );      break;
-                case SHAPE_T::RECTANGLE:   saveRectangle( &shape, aFormatter );     break;
+                case SHAPE_T::ARC:       saveArc( &shape, aFormatter );        break;
+                case SHAPE_T::BEZIER:    saveBezier( &shape, aFormatter );     break;
+                case SHAPE_T::CIRCLE:    saveCircle( &shape, aFormatter );     break;
+                case SHAPE_T::POLY:      savePolyLine( &shape, aFormatter );   break;
+                case SHAPE_T::RECTANGLE: saveRectangle( &shape, aFormatter );  break;
                 default:                                                       break;
                 }
             }
+            default: break;
             }
         }
 
@@ -1821,9 +1813,9 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveRectangle( LIB_SHAPE* aRectangle,
 }
 
 
-void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveText( const LIB_TEXT* aText, OUTPUTFORMATTER& aFormatter )
+void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveText( const SCH_TEXT* aText, OUTPUTFORMATTER& aFormatter )
 {
-    wxCHECK_RET( aText && aText->Type() == LIB_TEXT_T, "Invalid LIB_TEXT object." );
+    wxCHECK_RET( aText && aText->Type() == SCH_TEXT_T, "Invalid SCH_TEXT object." );
 
     wxString text = aText->GetText();
 

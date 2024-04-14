@@ -571,7 +571,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     else
                     {
                         m_selection = RequestSelection( { LIB_SHAPE_T,
-                                                          LIB_TEXT_T,
+                                                          SCH_TEXT_T,
                                                           LIB_TEXTBOX_T,
                                                           LIB_PIN_T,
                                                           SCH_FIELD_T } );
@@ -1647,7 +1647,6 @@ bool EE_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
     case SCH_TABLE_T:
     case SCH_TABLECELL_T:
     case SCH_FIELD_T:
-    case LIB_TEXT_T:
     case LIB_TEXTBOX_T:
         if( !m_filter.text )
             return false;
@@ -2480,11 +2479,11 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
     case LIB_SYMBOL_T:    // In symbol_editor we do not want to select the symbol itself.
         return false;
 
-    case SCH_FIELD_T:     // SCH_FIELD object can always be edited.
+    case SCH_FIELD_T:     // SCH_FIELD objects are not unit/body-style-specific.
         break;
 
     case LIB_SHAPE_T:
-    case LIB_TEXT_T:
+    case SCH_TEXT_T:
     case LIB_PIN_T:
         if( symEditFrame )
         {

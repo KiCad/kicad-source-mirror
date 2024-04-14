@@ -43,7 +43,6 @@
 #include <lib_shape.h>
 #include <lib_id.h>
 #include <lib_pin.h>
-#include <lib_text.h>
 #include <project.h>
 #include <project_sch.h>
 #include <sch_bus_entry.h>
@@ -2224,8 +2223,7 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
         }
         else if( nodeName == wxT( "text" ) )
         {
-            std::unique_ptr<LIB_TEXT> libtext( loadSymbolText( aSymbol, currentNode,
-                                                               aGateNumber ) );
+            std::unique_ptr<SCH_TEXT> libtext( loadSymbolText( currentNode, aGateNumber ) );
 
             if( libtext->GetText() == wxT( "${REFERENCE}" ) )
             {
@@ -2515,15 +2513,10 @@ LIB_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*
 }
 
 
-LIB_TEXT* SCH_IO_EAGLE::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                        wxXmlNode* aLibText, int aGateNumber )
+SCH_TEXT* SCH_IO_EAGLE::loadSymbolText( wxXmlNode* aLibText, int aGateNumber )
 {
-    std::unique_ptr<LIB_TEXT> libtext = std::make_unique<LIB_TEXT>( aSymbol.get() );
-    ETEXT                     etext( aLibText );
-
-    libtext->SetUnit( aGateNumber );
-    libtext->SetPosition( VECTOR2I( etext.x.ToSchUnits(), etext.y.ToSchUnits() ) );
-
+    ETEXT             etext( aLibText );
+    VECTOR2I          pos( etext.x.ToSchUnits(), etext.y.ToSchUnits() );
     const wxString&   eagleText = aLibText->GetNodeContent();
     wxString          adjustedText;
     wxStringTokenizer tokenizer( eagleText, "\r\n" );
@@ -2539,7 +2532,12 @@ LIB_TEXT* SCH_IO_EAGLE::loadSymbolText( std::unique_ptr<LIB_SYMBOL>& aSymbol,
         adjustedText += tmp;
     }
 
-    libtext->SetText( adjustedText.IsEmpty() ? wxString( wxT( "~" ) ) : adjustedText );
+    if( adjustedText.IsEmpty() )
+        adjustedText = wxT( "~" );
+
+    auto libtext = std::make_unique<SCH_TEXT>( pos, adjustedText, LAYER_DEVICE );
+
+    libtext->SetUnit( aGateNumber );
     loadTextAttributes( libtext.get(), etext );
 
     return libtext.release();
@@ -2599,9 +2597,8 @@ void SCH_IO_EAGLE::loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*
 
         for( i = 0; i < eframe.rows; i++ )
         {
-            LIB_TEXT* legendText = new LIB_TEXT( nullptr );
-            legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
-            legendText->SetText( wxString( legendChar ) );
+            SCH_TEXT* legendText = new SCH_TEXT( VECTOR2I( legendPosX, KiROUND( legendPosY ) ),
+                                                 wxString( legendChar ), LAYER_DEVICE );
             legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
                                                schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
@@ -2640,9 +2637,8 @@ void SCH_IO_EAGLE::loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*
 
         for( i = 0; i < eframe.rows; i++ )
         {
-            LIB_TEXT* legendText = new LIB_TEXT( nullptr );
-            legendText->SetPosition( VECTOR2I( legendPosX, KiROUND( legendPosY ) ) );
-            legendText->SetText( wxString( legendChar ) );
+            SCH_TEXT* legendText = new SCH_TEXT( VECTOR2I( legendPosX, KiROUND( legendPosY ) ),
+                                                 wxString( legendChar ), LAYER_DEVICE );
             legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
                                                schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
@@ -2681,9 +2677,8 @@ void SCH_IO_EAGLE::loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*
 
         for( i = 0; i < eframe.columns; i++ )
         {
-            LIB_TEXT* legendText = new LIB_TEXT( nullptr );
-            legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
-            legendText->SetText( wxString( legendChar ) );
+            SCH_TEXT* legendText = new SCH_TEXT( VECTOR2I( KiROUND( legendPosX ), legendPosY ),
+                                                 wxString( legendChar ), LAYER_DEVICE );
             legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
                                                schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
@@ -2722,9 +2717,8 @@ void SCH_IO_EAGLE::loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*
 
         for( i = 0; i < eframe.columns; i++ )
         {
-            LIB_TEXT* legendText = new LIB_TEXT( nullptr );
-            legendText->SetPosition( VECTOR2I( KiROUND( legendPosX ), legendPosY ) );
-            legendText->SetText( wxString( legendChar ) );
+            SCH_TEXT* legendText = new SCH_TEXT( VECTOR2I( KiROUND( legendPosX ), legendPosY ),
+                                                 wxString( legendChar ), LAYER_DEVICE );
             legendText->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 90 ),
                                                schIUScale.MilsToIU( 100 ) ) );
             aItems.push_back( legendText );
@@ -2781,7 +2775,7 @@ void SCH_IO_EAGLE::loadTextAttributes( EDA_TEXT* aText, const ETEXT& aAttribs ) 
 }
 
 
-void SCH_IO_EAGLE::loadFieldAttributes( SCH_FIELD* aField, const LIB_TEXT* aText ) const
+void SCH_IO_EAGLE::loadFieldAttributes( SCH_FIELD* aField, const SCH_TEXT* aText ) const
 {
     aField->SetTextPos( aText->GetPosition() );
     aField->SetTextSize( aText->GetTextSize() );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2020-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,8 @@ class HTML_MESSAGE_BOX;
 class DIALOG_TEXT_PROPERTIES : public DIALOG_TEXT_PROPERTIES_BASE
 {
 public:
-    DIALOG_TEXT_PROPERTIES( SCH_EDIT_FRAME* parent, SCH_ITEM* aTextItem );
-    ~DIALOG_TEXT_PROPERTIES();
+    DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* parent, SCH_ITEM* aTextItem );
+    ~DIALOG_TEXT_PROPERTIES() override;
 
 private:
     void getContextualTextVars( const wxString& aCrossRef, wxArrayString* aTokens );
@@ -59,7 +59,8 @@ private:
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-    SCH_EDIT_FRAME*       m_frame;
+    SCH_BASE_FRAME*       m_frame;
+    bool                  m_isSymbolEditor;
     SCH_ITEM*             m_currentItem;
     EDA_TEXT*             m_currentText;
     UNIT_BINDER           m_textSize;

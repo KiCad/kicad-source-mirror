@@ -788,7 +788,7 @@ SCH_TEXT* SCH_IO_LTSPICE_PARSER::CreateSCH_TEXT( VECTOR2I aOffset, const wxStrin
                                                  LTSPICE_SCHEMATIC::JUSTIFICATION aJustification )
 {
     VECTOR2I  pos = ToKicadCoords( aOffset ) + m_originOffset;
-    SCH_TEXT* textItem = new SCH_TEXT( pos, aText, SCH_TEXT_T );
+    SCH_TEXT* textItem = new SCH_TEXT( pos, aText );
 
     textItem->SetTextSize( ToKicadFontSize( aFontSize ) );
     textItem->SetVisible( true );

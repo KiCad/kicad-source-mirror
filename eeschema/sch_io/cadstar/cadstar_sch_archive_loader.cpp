@@ -31,7 +31,6 @@
 #include <core/kicad_algo.h>
 #include <eda_text.h>
 #include <lib_shape.h>
-#include <lib_text.h>
 #include <macros.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
@@ -1696,9 +1695,9 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
     for( std::pair<TEXT_ID, TEXT> textPair : csSym.Texts )
     {
         TEXT csText = textPair.second;
+        VECTOR2I pos = getKiCadLibraryPoint( csText.Position, csSym.Origin );
+        auto     libtext = std::make_unique<SCH_TEXT>( pos, csText.Text, LAYER_DEVICE );
 
-        std::unique_ptr<LIB_TEXT> libtext = std::make_unique<LIB_TEXT>( kiSym.get() );
-        libtext->SetText( csText.Text );
         libtext->SetUnit( gateNumber );
         libtext->SetPosition( getKiCadLibraryPoint( csText.Position, csSym.Origin ) );
         libtext->SetMultilineAllowed( true ); // temporarily so that we calculate bbox correctly
@@ -1720,7 +1719,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
                 RotatePoint( linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
 
-                LIB_TEXT* textLine = static_cast<LIB_TEXT*>( libtext->Duplicate() );
+                SCH_TEXT* textLine = static_cast<SCH_TEXT*>( libtext->Duplicate() );
                 textLine->SetText( strings[ii] );
                 textLine->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
                 textLine->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
@@ -3064,12 +3063,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     EDA_ITEM*  textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
     wxCHECK( textEdaItem, /* void */ ); // ensure this is a EDA_ITEM
 
-    switch( textEdaItem->Type() )
-    {
-    // Some KiCad schematic text items only permit a limited amount of angles
-    // and text justifications
-    case LIB_TEXT_T:
-    case SCH_FIELD_T:
+    if( textEdaItem->Type() == SCH_FIELD_T || aInvertY )
     {
         // Spin style not used. All text justifications are permitted. However, only orientations
         // of 0 deg or 90 deg are supported
@@ -3101,10 +3095,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
 
         aKiCadTextItem->SetTextAngle( angle );
         setAlignment( aKiCadTextItem, textAlignment );
-        return;
     }
-
-    case SCH_TEXT_T:
+    else if( textEdaItem->Type() == SCH_TEXT_T )
     {
         // Note spin style in a SCH_TEXT results in a vertical alignment GR_TEXT_V_ALIGN_BOTTOM
         // so need to adjust the location of the text element based on Cadstar's original text
@@ -3122,6 +3114,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
         case SPIN_STYLE::UP:     pos = { bb.GetRight() - off, bb.GetBottom()       }; break;
         case SPIN_STYLE::LEFT:   pos = { bb.GetRight()      , bb.GetBottom() + off }; break;
         case SPIN_STYLE::RIGHT:  pos = { bb.GetLeft()       , bb.GetBottom() + off }; break;
+        default:                 wxFAIL_MSG( "Unexpected Spin Style" );               break;
         }
 
         aKiCadTextItem->SetTextPos( pos );
@@ -3147,23 +3140,22 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
             aKiCadTextItem->SetTextAngle( ANGLE_VERTICAL );
             aKiCadTextItem->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
             break;
+
+        default:
+            wxFAIL_MSG( "Unexpected Spin Style" );
+            break;
         }
 
         aKiCadTextItem->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-        break;
     }
-
-    // We don't want to change position of net labels as that would break connectivity
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIER_LABEL_T:
-    case SCH_SHEET_PIN_T:
-        static_cast<SCH_LABEL_BASE*>( aKiCadTextItem )->SetSpinStyle( spin );
-        return;
-
-    default:
+    else if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( aKiCadTextItem ) )
+    {
+        // We don't want to change position of net labels as that would break connectivity
+        label->SetSpinStyle( spin );
+    }
+    else
+    {
         wxFAIL_MSG( "Unexpected item type" );
-        return;
     }
 }
 
@@ -3246,9 +3238,9 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
             break;
         }
 
-        case KICAD_T::LIB_TEXT_T:
+        case KICAD_T::SCH_TEXT_T:
         {
-            LIB_TEXT& txt = static_cast<LIB_TEXT&>( item );
+            SCH_TEXT& txt = static_cast<SCH_TEXT&>( item );
 
             txt.SetPosition( scalePt( txt.GetPosition() ) );
             txt.SetTextSize( scaleSize( txt.GetTextSize() ) );

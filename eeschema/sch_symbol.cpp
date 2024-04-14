@@ -27,7 +27,6 @@
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <lib_pin.h>
-#include <lib_text.h>
 #include <lib_shape.h>
 #include <pgm_base.h>
 #include <sch_symbol.h>
@@ -86,10 +85,9 @@ static LIB_SYMBOL* dummy()
         square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
         square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
 
-        LIB_TEXT* text = new LIB_TEXT( symbol );
+        SCH_TEXT* text = new SCH_TEXT( { 0, 0 }, wxT( "??"), LAYER_DEVICE );
 
         text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
-        text->SetText( wxString( wxT( "??" ) ) );
 
         symbol->AddDrawItem( square );
         symbol->AddDrawItem( text );

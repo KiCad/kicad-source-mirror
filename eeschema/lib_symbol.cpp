@@ -971,6 +971,8 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 {
     wxCHECK( aItem, /* void */ );
 
+    aItem->SetParent( this );
+
     m_drawings.push_back( aItem );
 
     if( aSort )
