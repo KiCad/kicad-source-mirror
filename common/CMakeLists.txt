@@ -46,18 +46,6 @@ add_custom_target(
     COMMENT "Generating version string header"
     )
 
-# A shared library subsetted from common which restricts what can go into
-# a single_top link image.  By not linking to common, we control what does
-# statically go into single_top link images.  My current thinking is that only
-# wxWidgets should be a shared link from single top, everything else should be
-# statically bound into it. Otherwise you will have DSO loading probs. After it
-# sets the LIB PATHS however, we want the *.kiface modules to use shared linking.
-add_library( singletop STATIC EXCLUDE_FROM_ALL
-    eda_doc.cpp
-    kiway.cpp
-    kiway_holder.cpp )
-
-
 # A shared library used by multiple *.kiface files and one or two program
 # launchers.  Object files can migrate into here over time, but only if they are
 # surely needed and certainly used from more than one place without recompilation.

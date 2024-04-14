@@ -638,15 +638,7 @@ set_source_files_properties( ${CMAKE_SOURCE_DIR}/common/single_top.cpp pcbnew.cp
     COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB_EDITOR;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
     )
 target_link_libraries( pcbnew
-    #singletop  # replaces common, giving us restrictive control and link warnings.
-    # There's way too much crap coming in from common yet.
-    common
-    gal
-    scripting
-    core
-    nlohmann_json
-    rectpack2d
-    argparse::argparse
+    kicommon
     ${wxWidgets_LIBRARIES}
     )
 
