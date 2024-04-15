@@ -39,6 +39,7 @@ JOB_EXPORT_SCH_BOM::JOB_EXPORT_SCH_BOM( bool aIsCli ) :
     m_sortField(),
     m_sortAsc( true ),
     m_filterString(),
-    m_excludeDNP( false )
+    m_excludeDNP( false ),
+    m_includeExcludedFromBOM( false )
 {
 }

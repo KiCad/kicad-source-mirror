@@ -856,6 +856,7 @@ void FIELDS_EDITOR_GRID_DATA_MODEL::ApplyBomPreset( const BOM_PRESET& aPreset )
 
     SetFilter( aPreset.filterString );
     SetExcludeDNP( aPreset.excludeDNP );
+    SetIncludeExcludedFromBOM( aPreset.includeExcludedFromBOM );
 
     RebuildRows();
 }

@@ -216,10 +216,6 @@ DIALOG_SYMBOL_FIELDS_TABLE::DIALOG_SYMBOL_FIELDS_TABLE( SCH_EDIT_FRAME* parent )
     m_filter->SetDescriptiveText( _( "Filter" ) );
     m_dataModel = new FIELDS_EDITOR_GRID_DATA_MODEL( m_symbolsList );
 
-    // We want to show excluded symbols because the Edit page needs to show all symbols,
-    // they will still be excluded from the export.
-    m_dataModel->SetIncludeExcludedFromBOM( true );
-
     LoadFieldNames();   // loads rows into m_fieldsCtrl and columns into m_dataModel
 
     // Now that the fields are loaded we can set the initial location of the splitter
@@ -896,6 +892,16 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExcludeDNPToggled( wxCommandEvent& event )
 }
 
 
+void DIALOG_SYMBOL_FIELDS_TABLE::OnShowExcludedToggled( wxCommandEvent& event )
+{
+    m_dataModel->SetIncludeExcludedFromBOM( m_checkShowExcluded->GetValue() );
+    m_dataModel->RebuildRows();
+    m_grid->ForceRefresh();
+
+    syncBomPresetSelection();
+}
+
+
 void DIALOG_SYMBOL_FIELDS_TABLE::OnColSort( wxGridEvent& aEvent )
 {
     int         sortCol = aEvent.GetCol();
@@ -1156,13 +1162,8 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnPreviewRefresh( wxCommandEvent& event )
 
 void DIALOG_SYMBOL_FIELDS_TABLE::PreviewRefresh()
 {
-    m_dataModel->SetIncludeExcludedFromBOM( false );
     m_dataModel->RebuildRows();
-
     m_textOutput->SetValue( m_dataModel->Export( GetCurrentBomFmtSettings() ) );
-
-    m_dataModel->SetIncludeExcludedFromBOM( true );
-    m_dataModel->RebuildRows();
 }
 
 
@@ -1468,7 +1469,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::rebuildBomPresetsWidget()
         m_cbBomPresets->Append( wxGetTranslation( pair.first ),
                                 static_cast<void*>( &pair.second ) );
 
-        if( pair.first == BOM_PRESET::GroupedByValue().name )
+        if( pair.first == BOM_PRESET::DefaultEditing().name )
             default_idx = idx;
 
         idx++;
@@ -1790,6 +1791,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::doApplyBomPreset( const BOM_PRESET& aPreset )
     m_groupSymbolsBox->SetValue( m_dataModel->GetGroupingEnabled() );
     m_filter->ChangeValue( m_dataModel->GetFilter() );
     m_checkExcludeDNP->SetValue( m_dataModel->GetExcludeDNP() );
+    m_checkShowExcluded->SetValue( m_dataModel->GetIncludeExcludedFromBOM() );
 
     SetupAllColumnProperties();
 

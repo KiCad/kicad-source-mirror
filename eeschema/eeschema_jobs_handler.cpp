@@ -524,6 +524,7 @@ int EESCHEMA_JOBS_HANDLER::JobExportBom( JOB* aJob )
         preset.filterString = aBomJob->m_filterString;
         preset.groupSymbols = ( aBomJob->m_fieldsGroupBy.size() > 0 );
         preset.excludeDNP = aBomJob->m_excludeDNP;
+        preset.includeExcludedFromBOM = aBomJob->m_includeExcludedFromBOM;
     }
 
     dataModel.ApplyBomPreset( preset );

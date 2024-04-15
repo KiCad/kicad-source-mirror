@@ -168,6 +168,7 @@ int CLI::SCH_EXPORT_BOM_COMMAND::doPerform( KIWAY& aKiway )
     bomJob->m_sortAsc = m_argParser.get<bool>( ARG_SORT_ASC );
     bomJob->m_filterString = From_UTF8( m_argParser.get<std::string>( ARG_FILTER ).c_str() );
     bomJob->m_excludeDNP = m_argParser.get<bool>( ARG_EXCLUDE_DNP );
+    bomJob->m_includeExcludedFromBOM = m_argParser.get<bool>( ARG_INCLUDE_EXCLUDED_FROM_BOM );
 
     if( !wxFile::Exists( bomJob->m_filename ) )
     {

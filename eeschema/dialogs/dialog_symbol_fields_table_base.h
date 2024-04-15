@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf-dirty)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,6 +67,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		wxSearchCtrl* m_filter;
 		wxStaticLine* m_staticline31;
 		wxCheckBox* m_checkExcludeDNP;
+		wxCheckBox* m_checkShowExcluded;
 		wxStaticLine* m_staticline32;
 		wxCheckBox* m_groupSymbolsBox;
 		wxStaticLine* m_staticline3;
@@ -119,6 +120,7 @@ class DIALOG_SYMBOL_FIELDS_TABLE_BASE : public DIALOG_SHIM
 		virtual void OnFilterMouseMoved( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExcludeDNPToggled( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnShowExcludedToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGroupSymbolsToggled( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRegroupSymbols( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTableValueChanged( wxGridEvent& event ) { event.Skip(); }

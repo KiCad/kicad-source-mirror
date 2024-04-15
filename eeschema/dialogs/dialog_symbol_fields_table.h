@@ -71,6 +71,7 @@ private:
     void OnColumnItemToggled( wxDataViewEvent& event ) override;
     void OnGroupSymbolsToggled( wxCommandEvent& event ) override;
     void OnExcludeDNPToggled( wxCommandEvent& event ) override;
+    void OnShowExcludedToggled( wxCommandEvent& event ) override;
     void OnRegroupSymbols( wxCommandEvent& aEvent ) override;
     void OnScopeChanged( wxCommandEvent& aEvent ) override;
     void UpdateScope();

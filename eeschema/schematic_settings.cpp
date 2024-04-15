@@ -199,8 +199,8 @@ SCHEMATIC_SETTINGS::SCHEMATIC_SETTINGS( JSON_SETTINGS* aParent, const std::strin
     m_params.emplace_back( new PARAM<wxString>( "bom_export_filename",
             &m_BomExportFileName, "${PROJECTNAME}.csv" ) );
 
-    m_params.emplace_back( new PARAM<BOM_PRESET>( "bom_settings",
-            &m_BomSettings, BOM_PRESET::GroupedByValue() ) );
+    m_params.emplace_back(
+            new PARAM<BOM_PRESET>( "bom_settings", &m_BomSettings, BOM_PRESET::DefaultEditing() ) );
     m_params.emplace_back( new PARAM_LIST<BOM_PRESET>( "bom_presets",
             &m_BomPresets, {} ) );
 

@@ -56,9 +56,11 @@ struct KICOMMON_API BOM_PRESET
     wxString               filterString;
     bool                   groupSymbols = false;
     bool                   excludeDNP = false;
+    bool                   includeExcludedFromBOM = false;
 
     bool operator==( const BOM_PRESET& rhs ) const;
 
+    static BOM_PRESET DefaultEditing();
     static BOM_PRESET GroupedByValue();
     static BOM_PRESET GroupedByValueFootprint();
     static BOM_PRESET Attributes();

@@ -77,6 +77,9 @@ namespace CLI
 #define ARG_EXCLUDE_DNP "--exclude-dnp"
 #define ARG_EXCLUDE_DNP_DESC "Exclude symbols marked Do-Not-Populate."
 
+#define ARG_INCLUDE_EXCLUDED_FROM_BOM "--include-excluded-from-bom"
+#define ARG_INCLUDE_EXCLUDED_FROM_BOM_DESC "Include symbols marked 'Exclude from BOM'."
+
 class SCH_EXPORT_BOM_COMMAND : public COMMAND
 {
 public:
