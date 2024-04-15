@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-15 06:54+0000\n"
+"PO-Revision-Date: 2024-04-16 08:02+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/v8/ja/>\n"
 "Language: ja\n"
@@ -9754,9 +9754,8 @@ msgid "Update/reset symbol attributes"
 msgstr "シンボルの属性を更新/リセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "電源シンボルとして定義"
+msgstr "カスタム電源シンボルをリセット"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -21248,7 +21247,6 @@ msgid "Drags the selected item(s)"
 msgstr "選択したアイテムをドラッグ"
 
 #: eeschema/tools/ee_actions.cpp:1363 eeschema/tools/sch_move_tool.cpp:1759
-#, fuzzy
 msgid "Align Items to Grid"
 msgstr "グリッドに揃える"
 
@@ -21265,7 +21263,6 @@ msgid "New Analysis Tab..."
 msgstr "新しい解析タブ..."
 
 #: eeschema/tools/ee_actions.cpp:1387
-#, fuzzy
 msgid "Create a new tab containing a simulation analysis"
 msgstr "シミュレーション解析を含む新しいタブを作成する"
 
@@ -21282,20 +21279,16 @@ msgid "Save Workbook"
 msgstr "ワークブックを保存"
 
 #: eeschema/tools/ee_actions.cpp:1405
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings"
-msgstr ""
-"現在のネットリスト ファイルを読み込み、見つからないか余分なフットプリントをリ"
-"スト表示"
+msgstr "現在の解析タブと設定を保存する"
 
 #: eeschema/tools/ee_actions.cpp:1413
 msgid "Save Workbook As..."
 msgstr "ワークブックを保存…"
 
 #: eeschema/tools/ee_actions.cpp:1414
-#, fuzzy
 msgid "Save the current set of analysis tabs and settings to another location"
-msgstr "現在のドキュメントを別の場所に保存"
+msgstr "現在の解析タブと設定を別の場所に保存"
 
 #: eeschema/tools/ee_actions.cpp:1420
 msgid "Export Current Plot as PNG..."
@@ -21776,9 +21769,8 @@ msgid "SVG File Name"
 msgstr "SVGファイル名"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:648
-#, fuzzy
 msgid "Edit Pins"
-msgstr "ラインを編集"
+msgstr "ピンを編集"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Symbol is not derived from another symbol."
@@ -40993,35 +40985,40 @@ msgid "Ignored polygon shape of kind %d (not yet supported)."
 msgstr "種別 %d のポリゴン形状は無視されました。(まだサポートされていません)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2141
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium レイヤー (%d) にあるポリゴンは KiCad と等価ではありません。KiCadの "
-"Eco1_User レイヤーに移動しました。"
+"ライブラリ '%s' の読み込みエラー:\n"
+"フットプリント %s が含むAltium レイヤー (%d) にある破線の外形線は KiCad "
+"と等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2150
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"Altium レイヤー (%d) にある破線の外形線は KiCad と等価ではありません。KiCad"
-"の Eco1_User レイヤーに移動しました。"
+"フットプリント %s が含む、Altium レイヤー (%d) にある破線の外形線は KiCad "
+"と等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2188
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "種別 %d のポリゴン形状は無視されました。(まだサポートされていません)."
+msgstr ""
+"ライブラリ '%s' の読み込みエラー:\n"
+"フットプリント %s に含まれる種別 %d "
+"のポリゴン形状は無視されました。(まだサポートされていません)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2196
-#, fuzzy, c-format
+#, c-format
 msgid "Footprint %s contains polygon shape of kind %d (not yet supported)."
-msgstr "種別 %d のポリゴン形状は無視されました。(まだサポートされていません)."
+msgstr "フットプリント %s 種別 %d "
+"のポリゴン形状は無視されました。(まだサポートされていません)."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2351
 msgid "Loading zone fills..."
@@ -41036,13 +41033,14 @@ msgid "Loading pads..."
 msgstr "パッドをロードしています..."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2754
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s is not marked as multilayer, but is a TH pad."
 msgstr ""
-"フットプリント %s のパッド%s はマルチレイヤーとしてマークされていませんが、TH"
-"パッドです。"
+"ライブラリ '%s' の読み込みエラー:\n"
+"フットプリント %s のパッド%s "
+"はマルチレイヤーとしてマークされていませんが、THパッドです。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2762
 #, c-format
@@ -41052,11 +41050,12 @@ msgstr ""
 "パッドです。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2786
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a square hole (not yet supported)."
 msgstr ""
+"ライブラリ '%s' の読み込みエラー:\n"
 "フットプリント %s の パッド '%s' は角穴を持っています(未サポートです)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2794
@@ -41066,12 +41065,13 @@ msgstr ""
 "フットプリント %s の パッド '%s' は角穴を持っています(未サポートです)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2824
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s pad %s has a hole-rotation of %f degrees. KiCad only supports "
 "90 degree rotations."
 msgstr ""
+"ライブラリ '%s' の読み込みエラー:\n"
 "フットプリント %s の パッド '%s' は %f 度回転した穴を持っています。KiCad は "
 "90 度の回転のみサポートしています。"
 
@@ -41085,11 +41085,13 @@ msgstr ""
 "90 度の回転のみサポートしています。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2849
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses a hole of unknown kind %d."
-msgstr "フットプリント %s のパッド %s は未知の穴の種別 %dを使用しています。"
+msgstr ""
+"ライブラリ '%s' の読み込みエラー:\n"
+"フットプリント %s のパッド %s は未知の穴の種別 %dを使用しています。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2858
 #, c-format
@@ -41114,11 +41116,13 @@ msgstr ""
 "ポートされていません)。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2927
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error loading library '%s':\n"
 "Footprint %s pad %s uses an unknown pad-shape."
-msgstr "フットプリント %s のパッド%sは不明なパッド形状を使用しています。"
+msgstr ""
+"ライブラリ '%s' の読み込みエラー:\n"
+"フットプリント %s のパッド%sは不明なパッド形状を使用しています。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2935
 #, c-format
@@ -41135,23 +41139,24 @@ msgstr ""
 "KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3017
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Loading library '%s':\n"
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad と等価ではありません。"
-"KiCadの Eco1_User レイヤーに移動しました。"
+"ライブラリ '%s' の読み込みエラー:\n"
+"フットプリント %s 非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad "
+"と等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3027
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad と等価ではありません。"
-"KiCadの Eco1_User レイヤーに移動しました。"
+"フットプリント %s 非銅箔パッド %s (Altium レイヤー (%d) にある)は KiCad "
+"と等価ではありません。KiCadの Eco1_User レイヤーに移動しました。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3050
 #, c-format
@@ -45776,20 +45781,18 @@ msgid "Distribute Horizontally"
 msgstr "水平方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1923
-#, fuzzy
 msgid ""
 "Distributes selected items between the left-most item and the right-most item"
-msgstr "選択したアイテムを水平方向に配置"
+msgstr "選択したアイテムを最も左のアイテムと最も右のアイテムの間に等間隔に配置します"
 
 #: pcbnew/tools/pcb_actions.cpp:1929 pcbnew/tools/placement_tool.cpp:660
 msgid "Distribute Vertically"
 msgstr "垂直方向に配置"
 
 #: pcbnew/tools/pcb_actions.cpp:1930
-#, fuzzy
 msgid ""
 "Distributes selected items between the top-most item and the bottom-most item"
-msgstr "選択したアイテムを水平方向に配置"
+msgstr "選択したアイテムを最も上のアイテムと最も下のアイテムの間に等間隔に配置します"
 
 #: pcbnew/tools/pcb_actions.cpp:1945
 msgid "Create a corner"
