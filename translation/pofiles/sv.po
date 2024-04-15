@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-12 21:01+0000\n"
+"PO-Revision-Date: 2024-04-16 08:02+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -5478,9 +5478,8 @@ msgid "Bezier"
 msgstr "Bézier"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Arkegenskaper"
+msgstr "Formegenskaper"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6241,19 +6240,16 @@ msgid "Select all cells"
 msgstr "Markera alla celler"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Numrering slutförd."
+msgstr "Acceptera automatisk komplettering"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Avbryt nuvarande verktyg"
+msgstr "Avbryt automatisk komplettering"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Växla lås"
+msgstr "Växla kryssruta"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -7977,7 +7973,7 @@ msgid ""
 "For information on how to help the KiCad project, visit %s"
 msgstr ""
 "Det gick inte att starta standardwebbläsaren.\n"
-"Besök %s för information om hur du stödjer KiCad-projektet."
+"Information om hur du stödjer KiCad-projektet finns på %s"
 
 #: common/tool/common_control.cpp:297
 msgid "Get involved with KiCad"
@@ -9781,9 +9777,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Uppdatera/återställ symbolattribut"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Definiera som strömförsörjningssymbol"
+msgstr "Nollställ användardefinierade strömförsörjningssymboler"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10775,9 +10770,8 @@ msgid "untitled"
 msgstr "namnlös"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Egenskaper för etiketter"
+msgstr "Redigera egenskaper för etiketter"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -12334,9 +12328,8 @@ msgstr ""
 "för att se enskilda objekts färger."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Arkegenskaper"
+msgstr "Redigera arkegenskaper"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13647,9 +13640,8 @@ msgstr ""
 "hyperlänk till en sida i detta kretsschema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Textegenskaper"
+msgstr "Redigera textegenskaper"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -19040,9 +19032,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Utför Fourier-analys..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Signalfas:"
+msgstr "Kopiera signalnamn"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -21964,24 +21955,20 @@ msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr "%s har simulationsmodell av typ '%s %s'; bara passiva RLC kan justeras"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ställ in till angivna värden:"
+msgstr "Begränsa till E24-seriens värden."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ställ in till angivna värden:"
+msgstr "Begränsa till E48-seriens värden."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Ställ in till angivna värden:"
+msgstr "Begränsa till E96-seriens värden"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Ställ in till angivna värden:"
+msgstr "Begränsa till E192-seriens värden"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -30017,11 +30004,7 @@ msgstr "Sprida:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:148
 msgid "Value -1,  0 or 1 disable this option."
-msgstr ""
-"Antal rader/kolumner innan förskjutningen är ett steg i kolumn/rad.\n"
-"Negativt värde ger motsatt riktning (nedåt till vänster för \"rader\", uppåt "
-"till höger för \"kolumner\")\n"
-"Värden -1,  0 eller 1 deaktiverar detta alternativ."
+msgstr "Värden -1,  0 eller 1 deaktiverar detta alternativ."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:158
 msgid "Rows"
@@ -38065,9 +38048,8 @@ msgid "Skew between traces out of range"
 msgstr "Längdskillnad mellan ledare utanför tillåtet intervall"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "För många vior på en anslutning"
+msgstr "För många eller för få vior på en anslutning"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -38770,14 +38752,13 @@ msgid "Too many vias on a connection"
 msgstr "För många vior på en anslutning"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s max antal %d; faktiskt %d)"
+msgstr "(%s min antal %d; faktiskt %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "För många vior på en anslutning"
+msgstr "För få vior på en anslutning"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -39177,16 +39158,15 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Aktuellt mönsterkort kommer att stängas. Vill du fortsätta?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 " This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Om zonerna på det här kortet återfylls kommer inställningen för koppar till "
-"kant-avstånd att användas (se Mönsterkortsinställningar > Designregler > "
-"Begränsningar).\n"
+"Om zonerna på det här mönsterkortet återfylls kommer inställningen för "
+"koppar till kant-avstånd att användas (se Mönsterkortsinställningar > "
+"Designregler > Begränsningar).\n"
 "Detta kan resultera i fyllningar som skiljer sig från tidigare Kicad-"
 "versioner som använde linjetjockleken för mönsterkortskanten på Edge Cuts-"
 "lagret."
@@ -47448,9 +47428,9 @@ msgid "thermal reliefs for PTH"
 msgstr "Termiska avlastningar för genompläterade hål (PTH)"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] belastning misslyckades: inmatningsraden för lång\n"
+msgstr "[INFO] inläsning misslyckades: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
