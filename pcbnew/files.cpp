@@ -4,7 +4,7 @@
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2023 CERN (www.cern.ch)
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -478,7 +478,7 @@ int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard, bool aShowUserMsg )
         DisplayInfoMessage( this,
                             _( "If the zones on this board are refilled the Copper Edge "
                                "Clearance setting will be used (see Board Setup > Design "
-                               "Rules > Constraints).\n This may result in different fills "
+                               "Rules > Constraints).\nThis may result in different fills "
                                "from previous KiCad versions which used the line thicknesses "
                                "of the board boundary on the Edge Cuts layer." ) );
     }
