@@ -112,7 +112,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-08 23:14+0200\n"
+"PO-Revision-Date: 2024-04-15 19:50+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
 "source/it/>\n"
@@ -5607,9 +5607,8 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Proprietà foglio"
+msgstr "Proprietà forma"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6373,19 +6372,16 @@ msgid "Select all cells"
 msgstr "Seleziona tutte le celle"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "annotazione completa."
+msgstr "Accetta autocompletamento"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Annulla strumento corrente"
+msgstr "Annulla autocompletamento"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Commuta blocco"
+msgstr "Commuta spunta"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -9918,9 +9914,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Aggiorna/reimposta attributi di fabbricazione"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Imposta come simbolo di potenza"
+msgstr "Imposta simboli di potenza personalizzati"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10918,9 +10913,8 @@ msgid "untitled"
 msgstr "senza-titolo"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Proprietà etichetta"
+msgstr "Modifica proprietà etichetta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -12478,9 +12472,8 @@ msgstr ""
 "in Preferenze > Editor degli schemi > Colori."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Proprietà foglio"
+msgstr "Modifica proprietà foglio"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13788,9 +13781,8 @@ msgstr ""
 "collegamento ipertestuale a una pagina in questo schema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Proprietà testo"
+msgstr "Modifica proprietà testo"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -19211,9 +19203,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Esegui analisi di Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Nome impronta"
+msgstr "Copia nome segnale"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -22139,24 +22130,20 @@ msgstr ""
 "essere regolati"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Imposta a valori specificati:"
+msgstr "Imposta a valori serie E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Imposta a valori specificati:"
+msgstr "Limita a valori serie E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Imposta a valori specificati:"
+msgstr "Limita a valori serie E96."
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Imposta a valori specificati:"
+msgstr "Limita a valori serie E192."
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -26248,7 +26235,6 @@ msgid "Linear resistance:"
 msgstr "Resistenza lineare:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
-#, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "Freq. per 100% profondità di pelle:"
 
@@ -31852,7 +31838,6 @@ msgid "Solder paste relative clearance:"
 msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
-#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32036,7 +32021,6 @@ msgstr ""
 "scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
-#, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -37145,158 +37129,28 @@ msgstr ""
 "\n"
 "### Vincoli\n"
 "\n"
-"| Tipo vincolo              | Tipo "
-"argomento                                                                                                         "
-"| "
-"Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                             "
-"|\n"
+"| Tipo vincolo              | Tipo argomento                                                                                                         | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                             |\n"
 "|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/"
-"max                                                                                                            "
-"| Checks the width of annular rings on vias."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
-"|\n"
-"| `clearance`               | "
-"min                                                                                                                    "
-"| Specifies the **electrical** clearance between copper objects of different "
-"nets.  (See `physical_clearance` if you wish to specify clearance between "
-"objects regardless of net.)<br><br>To allow copper objects to overlap "
-"(collide), create a `clearance` constraint with the `min` value less than "
-"zero (for example, `-1`)."
-"<br>                                                                                                                      "
-"|\n"
-"| `courtyard_clearance`     | "
-"min                                                                                                                    "
-"| Checks the clearance between footprint courtyards and generates an error "
-"if any two courtyards are closer than the `min` distance.  If a footprint "
-"does not have a courtyard shape, no errors will be generated from this "
-"constraint."
-"<br>                                                                                                                                                                                                               "
-"|\n"
-"| `diff_pair_gap`           | min/opt/"
-"max                                                                                                            "
-"| Checks the gap between coupled tracks in a differential pair.  Coupled "
-"tracks are segments that are parallel to each other.  Differential pair gap "
-"is not tested on uncoupled portions of a differential pair (for example, the "
-"fanout from a component)."
-"<br>                                                                                                                                                                                           "
-"|\n"
-"| `diff_pair_uncoupled`     | "
-"max                                                                                                                    "
-"| Checks the distance that a differential pair track is routed uncoupled "
-"from the other polarity track in the pair (for example, where the pair fans "
-"out from a component, or becomes uncoupled to pass around another object "
-"such as a via)."
-"<br>                                                                                                                                                                                                         "
-"|\n"
-"| `disallow`                | "
-"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
-"| Specify one or more object types to disallow, separated by spaces.  For "
-"example, `(constraint disallow track)` or `(constraint disallow track via "
-"pad)`.  If an object of this type matches the rule condition, a DRC error "
-"will be created.<br><br>This constraint is essentially the same as a keepout "
-"rule area, but can be used to create more specific keepout restrictions."
-"<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Checks the clearance between objects and the board edge.<br><br>This can "
-"also be thought of as the \"milling tolerance\" as the board edge will "
-"include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
-"pad holes.  (See `physical_hole_clearance` for the drilling "
-"tolerance.)<br>                                                                                                                                                    "
-"|\n"
-"| `length`                  | min/"
-"max                                                                                                                "
-"| Checks the total routed length for the nets that match the rule condition "
-"and generates an error for each net that is below the `min` value (if "
-"specified) or above the `max` value (if specified) of the constraint."
-"<br>                                                                                                                                                                                                                               "
-"|\n"
-"| `hole`                    | min/"
-"max                                                                                                                "
-"| Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
-"holes, the smaller (minor) diameter will be tested against the `min` value "
-"(if specified) and the larger (major) diameter will be tested against the "
-"`max` value (if specified)."
-"<br>                                                                                                                                                                                            "
-"|\n"
-"| `hole_clearance`          | "
-"min                                                                                                                    "
-"| Checks the clearance between a drilled hole in a pad or via and copper "
-"objects on a different net.  The clearance is measured from the diameter of "
-"the hole, not its center."
-"<br>                                                                                                                                                                                                                                                                        "
-"|\n"
-"| `hole_to_hole`            | "
-"min                                                                                                                    "
-"| Checks the clearance between mechanically-drilled holes in pads and vias.  "
-"The clearance is measured between the diameters of the holes, not between "
-"their centers.<br><br>This constraint is soley for the protection of drill "
-"bits.  The clearance between **laser-drilled** (microvias) and other non-"
-"mechanically-drilled holes is not checked, nor is the clearance between "
-"**milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
-"| `physical_clearance`      | "
-"min                                                                                                                    "
-"| Checks the clearance between two objects on a given layer (including non-"
-"copper layers).<br><br>While this can perform more general-purpose checks "
-"than `clearance`, it is much slower.  Use `clearance` where possible."
-"<br>                                                                                                                                                                                                                            "
-"|\n"
-"| `physical_hole_clearance` | "
-"min                                                                                                                    "
-"| Checks the clearance between a drilled hole in a pad or via and another "
-"object, regardless of net. The clearance is measured from the diameter of "
-"the hole, not its center.<br><br>This can also be thought of as the "
-"\"drilling tolerance\" as it only includes **round** holes (see "
-"`edge_clearance` for the milling tolerance)."
-"<br>                                                                                                                    "
-"|\n"
-"| `silk_clearance`          | min/opt/"
-"max                                                                                                            "
-"| Checks the clearance between objects on silkscreen layers and other "
-"objects."
-"<br>                                                                                                                                                                                                                                                                                                                                                                        "
-"|\n"
-"| `skew`                    | "
-"max                                                                                                                    "
-"| Checks the total skew for the nets that match the rule condition, that is, "
-"the difference between the length of each net and the average of all the "
-"lengths of each net that is matched by the rule.  If the absolute value of "
-"the difference between that average and the length of any one net is above "
-"the constraint `max` value, an error will be generated."
-"<br>                                                                                   "
-"|\n"
-"| `thermal_relief_gap`      | "
-"min                                                                                                                    "
-"| Specifies the width of the gap between a pad and a zone with a thermal-"
-"relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                           "
-"|\n"
-"| `thermal_spoke_width`     | "
-"opt                                                                                                                    "
-"| Specifies the width of the spokes connecting a pad to a zone with a "
-"thermal-relief connection."
-"<br>                                                                                                                                                                                                                                                                                                                                                      "
-"|\n"
-"| `track_width`             | min/opt/"
-"max                                                                                                            "
-"| Checks the width of track and arc segments.  An error will be generated "
-"for each segment that has a width below the `min` value (if specified) or "
-"above the `max` value (if specified)."
-"<br>                                                                                                                                                                                                                                                             "
-"|\n"
-"| `via_count`               | "
-"max                                                                                                                    "
-"| Counts the number of vias on every net matched by the rule condition.  If "
-"that number exceeds the constraint `max` value on any matched net, an error "
-"will be generated for that net."
-"<br>                                                                                                                                                                                                                                                               "
-"|\n"
-"| `zone_connection`         | "
-"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
-"| Specifies the connection to be made between a zone and a pad."
-"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
-"|\n"
+"| `annular_width`           | min/opt/max                                                                                                            | Checks the width of annular rings on vias.<br>                                                                                                                                                                                                                                                                                                                                                                                                          |\n"
+"| `clearance`               | min                                                                                                                    | Specifies the **electrical** clearance between copper objects of different nets.  (See `physical_clearance` if you wish to specify clearance between objects regardless of net.)<br><br>To allow copper objects to overlap (collide), create a `clearance` constraint with the `min` value less than zero (for example, `-1`).<br>                                                                                                                      |\n"
+"| `courtyard_clearance`     | min                                                                                                                    | Checks the clearance between footprint courtyards and generates an error if any two courtyards are closer than the `min` distance.  If a footprint does not have a courtyard shape, no errors will be generated from this constraint.<br>                                                                                                                                                                                                               |\n"
+"| `diff_pair_gap`           | min/opt/max                                                                                                            | Checks the gap between coupled tracks in a differential pair.  Coupled tracks are segments that are parallel to each other.  Differential pair gap is not tested on uncoupled portions of a differential pair (for example, the fanout from a component).<br>                                                                                                                                                                                           |\n"
+"| `diff_pair_uncoupled`     | max                                                                                                                    | Checks the distance that a differential pair track is routed uncoupled from the other polarity track in the pair (for example, where the pair fans out from a component, or becomes uncoupled to pass around another object such as a via).<br>                                                                                                                                                                                                         |\n"
+"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | Specify one or more object types to disallow, separated by spaces.  For example, `(constraint disallow track)` or `(constraint disallow track via pad)`.  If an object of this type matches the rule condition, a DRC error will be created.<br><br>This constraint is essentially the same as a keepout rule area, but can be used to create more specific keepout restrictions.<br>                                                                   |\n"
+"| `edge_clearance`          | min/opt/max                                                                                                            | Checks the clearance between objects and the board edge.<br><br>This can also be thought of as the \"milling tolerance\" as the board edge will include all graphical items on the `Edge.Cuts` layer as well as any *oval* pad holes.  (See `physical_hole_clearance` for the drilling tolerance.)<br>                                                                                                                                                    |\n"
+"| `length`                  | min/max                                                                                                                | Checks the total routed length for the nets that match the rule condition and generates an error for each net that is below the `min` value (if specified) or above the `max` value (if specified) of the constraint.<br>                                                                                                                                                                                                                               |\n"
+"| `hole`                    | min/max                                                                                                                | Checks the size (diameter) of a drilled hole in a pad or via.  For oval holes, the smaller (minor) diameter will be tested against the `min` value (if specified) and the larger (major) diameter will be tested against the `max` value (if specified).<br>                                                                                                                                                                                            |\n"
+"| `hole_clearance`          | min                                                                                                                    | Checks the clearance between a drilled hole in a pad or via and copper objects on a different net.  The clearance is measured from the diameter of the hole, not its center.<br>                                                                                                                                                                                                                                                                        |\n"
+"| `hole_to_hole`            | min                                                                                                                    | Checks the clearance between mechanically-drilled holes in pads and vias.  The clearance is measured between the diameters of the holes, not between their centers.<br><br>This constraint is soley for the protection of drill bits.  The clearance between **laser-drilled** (microvias) and other non-mechanically-drilled holes is not checked, nor is the clearance between **milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
+"| `physical_clearance`      | min                                                                                                                    | Checks the clearance between two objects on a given layer (including non-copper layers).<br><br>While this can perform more general-purpose checks than `clearance`, it is much slower.  Use `clearance` where possible.<br>                                                                                                                                                                                                                            |\n"
+"| `physical_hole_clearance` | min                                                                                                                    | Checks the clearance between a drilled hole in a pad or via and another object, regardless of net. The clearance is measured from the diameter of the hole, not its center.<br><br>This can also be thought of as the \"drilling tolerance\" as it only includes **round** holes (see `edge_clearance` for the milling tolerance).<br>                                                                                                                    |\n"
+"| `silk_clearance`          | min/opt/max                                                                                                            | Checks the clearance between objects on silkscreen layers and other objects.<br>                                                                                                                                                                                                                                                                                                                                                                        |\n"
+"| `skew`                    | max                                                                                                                    | Checks the total skew for the nets that match the rule condition, that is, the difference between the length of each net and the average of all the lengths of each net that is matched by the rule.  If the absolute value of the difference between that average and the length of any one net is above the constraint `max` value, an error will be generated.<br>                                                                                   |\n"
+"| `thermal_relief_gap`      | min                                                                                                                    | Specifies the width of the gap between a pad and a zone with a thermal-relief connection.<br>                                                                                                                                                                                                                                                                                                                                                           |\n"
+"| `thermal_spoke_width`     | opt                                                                                                                    | Specifies the width of the spokes connecting a pad to a zone with a thermal-relief connection.<br>                                                                                                                                                                                                                                                                                                                                                      |\n"
+"| `track_width`             | min/opt/max                                                                                                            | Checks the width of track and arc segments.  An error will be generated for each segment that has a width below the `min` value (if specified) or above the `max` value (if specified).<br>                                                                                                                                                                                                                                                             |\n"
+"| `via_count`               | max                                                                                                                    | Counts the number of vias on every net matched by the rule condition.  If that number exceeds the constraint `max` value on any matched net, an error will be generated for that net.<br>                                                                                                                                                                                                                                                               |\n"
+"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`                                                                                 | Specifies the connection to be made between a zone and a pad.<br>                                                                                                                                                                                                                                                                                                                                                                                       |\n"
 "\n"
 "\n"
 "### Items\n"
@@ -37349,8 +37203,7 @@ msgstr ""
 "\n"
 "### Notes\n"
 "\n"
-"Version clause must be the first clause.  It indicates the syntax version of "
-"the file so that \n"
+"Version clause must be the first clause.  It indicates the syntax version of the file so that \n"
 "future rules parsers can perform automatic updates.  It should be\n"
 "set to \"1\".\n"
 "\n"
@@ -37367,8 +37220,7 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's principal "
-"courtyard.\n"
+"True if any part of `A` lies within the given footprint's principal courtyard.\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
@@ -37386,14 +37238,12 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "True if all of `A` lies within the given zone's outline.\n"
 "\n"
-"NB: this is potentially a more expensive call than `intersectsArea()`.  Use "
-"`intersectsArea()`\n"
+"NB: this is potentially a more expensive call than `intersectsArea()`.  Use `intersectsArea()`\n"
 "where possible.\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
-"The value of the given field. Only footprints have fields, so a field is "
-"only returned if\n"
+"The value of the given field. Only footprints have fields, so a field is only returned if\n"
 "`A` is a footprint.\n"
 "<br><br>\n"
 "\n"
@@ -37403,8 +37253,7 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<net_name>')\n"
 "True if `A` has a net that is part of the specified differential pair.\n"
-"`<net_name>` is the base name of the differential pair.  For example, "
-"`inDiffPair('/CLK')`\n"
+"`<net_name>` is the base name of the differential pair.  For example, `inDiffPair('/CLK')`\n"
 "matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
@@ -37418,14 +37267,12 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_reference>')\n"
-"True if `A` is a member of a footprint matching the given reference "
-"designator.  The\n"
+"True if `A` is a member of a footprint matching the given reference designator.  The\n"
 "reference can contain wildcards.\n"
 "<br><br>\n"
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
-"True if `A` is a member of the given schematic sheet. The sheet path can "
-"contain wildcards.\n"
+"True if `A` is a member of the given schematic sheet. The sheet path can contain wildcards.\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
@@ -37459,13 +37306,11 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
-"Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -37560,8 +37405,7 @@ msgstr ""
 "\n"
 "### Documentation\n"
 "\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad."
-"org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"For the full documentation see [https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default properties for round shapes:"
@@ -38265,9 +38109,8 @@ msgid "Skew between traces out of range"
 msgstr "Skew tra piste fuori campo"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Troppi via su una connessione"
+msgstr "Troppi o troppo pochi via su una connessione"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -38969,14 +38812,13 @@ msgid "Too many vias on a connection"
 msgstr "Troppi via su una connessione"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s conteggio max %d; reale %d)"
+msgstr "(%s conteggio min %d; reale %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Troppi via su una connessione"
+msgstr "Troppo pochi via su una connessione"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -39381,18 +39223,14 @@ msgid "Current Board will be closed. Continue?"
 msgstr "La scheda corrente verrà chiusa. Continuare?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 " This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Se le zone su questa scheda vengono ri-riempite, verranno usate le "
-"impostazioni sulla distanza dal bordo rame (vedere Impostazioni scheda > "
-"Regole di progettazione > Vincoli).\n"
-"Ciò può portare a riempimenti diversi dalle versioni precedenti di KiCad che "
-"usavano lo spessore della linea del bordo scheda sullo strato Edge Cuts."
+"Se le zone su questa scheda vengono ri-riempite, verranno usate le impostazioni sulla distanza dal bordo rame (vedere Impostazioni scheda > Regole di progettazione > Vincoli).\n"
+"Ciò può portare a riempimenti diversi dalle versioni precedenti di KiCad che usavano lo spessore linea del bordo scheda sullo strato Edge Cuts."
 
 #: pcbnew/files.cpp:525
 #, c-format
@@ -47735,9 +47573,9 @@ msgid "thermal reliefs for PTH"
 msgstr "raccordi termici per fori metallizzati"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] caricamento fallito: riga in ingresso troppo lunga\n"
+msgstr "[INFO] caricamento fallito: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
@@ -47891,41 +47729,3 @@ msgstr "Simbolo schema di KiCad"
 #: resources/linux/mime/kicad-kicad.xml.in:69
 msgid "KiCad Drawing Sheet"
 msgstr "Foglo di disegno KiCad"
-
-#, c-format
-#~ msgid "from %s : %s() line %d"
-#~ msgstr "da %s : %s() riga: %d"
-
-#, c-format
-#~ msgid "from %s : %s() line:%d"
-#~ msgstr "da %s : %s() riga:%d"
-
-#, c-format
-#~ msgid "fp-lib-table files contain no library named '%s'."
-#~ msgstr "I file fp-lib-table non contengono librerie con denominazione '%s'."
-
-#~ msgid "Edit Label"
-#~ msgstr "Modifica etichetta"
-
-#~ msgid "Edit Text"
-#~ msgstr "Modifica testo"
-
-#, c-format
-#~ msgid ""
-#~ "Unknown or unexpected record ID %d found inside \"Additional\" section."
-#~ msgstr ""
-#~ "ID record sconosciuto o inatteso %d trovato dentro la sezione "
-#~ "\"Additional\"."
-
-#, c-format
-#~ msgid ""
-#~ "Unknown or unexpected record id %d found inside \"FileHeader\" section."
-#~ msgstr ""
-#~ "ID record sconosciuto o inatteso %d trovato dentro la sezione "
-#~ "\"FileHeader\"."
-
-#~ msgid "Use net class / custom rule widths"
-#~ msgstr "Usa larghezze netclass / regole personalizzate"
-
-#~ msgid "Use net class / custom rule sizes"
-#~ msgstr "Usa dimensioni netclass / regole personalizzate"
