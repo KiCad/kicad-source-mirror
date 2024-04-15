@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-03-09 10:02+0000\n"
-"Last-Translator: Pedro Moreira <pedroltmoreira@gmail.com>\n"
+"PO-Revision-Date: 2024-04-15 06:54+0000\n"
+"Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -5518,9 +5518,8 @@ msgid "Bezier"
 msgstr "Bézier"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Propriedades da folha"
+msgstr "Propriedades da forma"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6288,27 +6287,24 @@ msgid "Select all cells"
 msgstr "Selecione todas as células"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Anotação concluída."
+msgstr "Aceitar o preenchimento automático"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Cancele a ferramenta atual"
+msgstr "Cancelar o preenchimento automático"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Alterna bloqueio"
+msgstr "Alternar a caixa de seleção"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
-msgstr "Desloque a Esquerda/Direita"
+msgstr "Desloque à esquerda/direita"
 
 #: common/hotkey_store.cpp:48
 msgid "Pan Up/Down"
-msgstr "Desloque Cima/Baixo"
+msgstr "Desloque para cima/para baixo"
 
 #: common/hotkey_store.cpp:49
 msgid "Finish Drawing"
@@ -9845,9 +9841,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Atualiza/redefine os atributos do símbolo"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Defina como um símbolo de alimentação"
+msgstr "Redefinir os símbolos de energia personalizados"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10846,9 +10841,8 @@ msgid "untitled"
 msgstr "sem título"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Propriedades do rótulo"
+msgstr "Editar as propriedades da etiqueta"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -12415,9 +12409,8 @@ msgstr ""
 "em Preferências> Editor esquemático > Cores."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Propriedades da folha"
+msgstr "Editar as propriedades da folha"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13729,9 +13722,8 @@ msgstr ""
 "página neste esquema."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Propriedades do texto"
+msgstr "Editar as propriedades do texto"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -19204,9 +19196,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Realizar a análise Fourier..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Fase do sinal:"
+msgstr "Copiar o nome do sinal"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -22144,24 +22135,20 @@ msgstr ""
 "ser ajustados"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ajuste para os valores informados:"
+msgstr "Limite para os valores da série E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ajuste para os valores informados:"
+msgstr "Limite para os valores da série E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Ajuste para os valores informados:"
+msgstr "Limite para os valores da série E96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Ajuste para os valores informados:"
+msgstr "Limite para os valores da série E192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -38331,9 +38318,8 @@ msgid "Skew between traces out of range"
 msgstr "Inclinação entre os traços fora do alcance"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Muitas vias numa conexão"
+msgstr "Há muitas ou poucas vias numa conexão"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39036,14 +39022,13 @@ msgid "Too many vias on a connection"
 msgstr "Muitas vias numa conexão"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s contagem máxima %d; real %d)"
+msgstr "(%s contagem min %d; real %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Muitas vias numa conexão"
+msgstr "Muito poucas vias numa conexão"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -39450,19 +39435,18 @@ msgid "Current Board will be closed. Continue?"
 msgstr "A placa atual será fechada. Prosseguir?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 " This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Se as zonas nesta placa forem preenchidas novamente, a configuração do "
-"isolamento da borda com cobre será usada (consulte a configuração da placa> "
-"Regras do projeto> Restrições).\n"
-"Isso pode resultar preenchimentos diferentes através das diferentes versões "
-"do KiCad, que usavam as espessuras da linha no limite da borda na camada de "
-"corte."
+"Se as regiões desta placa forem preenchidas novamente, a configuração do "
+"isolamento da borda de cobre será usada (consulte Configuração da placa > "
+"Regras de design > Restrições).\n"
+" Isso pode resultar em preenchimentos diferentes das versões anteriores do "
+"KiCad que usavam as espessuras de linha do limite da placa na camada Edge "
+"Cuts (Cortes de borda)."
 
 #: pcbnew/files.cpp:525
 #, c-format
@@ -47823,9 +47807,9 @@ msgid "thermal reliefs for PTH"
 msgstr "alívios térmicos para PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] o carregamento falhou: a linha de entrada é muito longa\n"
+msgstr "[INFO] o carregamento falhou: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
