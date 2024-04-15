@@ -891,6 +891,10 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
     std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( aSymbol.get(),
                                                                     MANDATORY_FIELDS );
 
+    // By default, fieds are visible.
+    // Invisible fields have the hide style or keyword specified in file
+    field->SetVisible( true );
+
     T token = NextTok();
 
     if( !IsSymbol( token ) )

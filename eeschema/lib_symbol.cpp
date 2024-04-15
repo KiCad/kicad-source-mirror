@@ -112,6 +112,17 @@ LIB_SYMBOL::LIB_SYMBOL( const wxString& aName, LIB_SYMBOL* aParent, SYMBOL_LIB* 
     for( int i = 0; i < MANDATORY_FIELDS; i++ )
         m_drawings[SCH_FIELD_T].push_back( new SCH_FIELD( this, i ) );
 
+    // Ensure reference and value fields are visible when creating a lib symbol
+    // whatever the SCH_FIELD Ctor default value is.
+    GetReferenceField().SetVisible( true );
+    GetValueField().SetVisible( true );
+
+    // Set visibilty to false for these other mandatory fields (at lest for now)
+    // whatever the SCH_FIELD Ctor default value is.
+    GetFootprintField().SetVisible( false );
+    GetDatasheetField().SetVisible( false );
+    GetDescriptionField().SetVisible( false );
+
     SetName( aName );
 
     if( aParent )

@@ -71,7 +71,7 @@ SCH_FIELD::SCH_FIELD( const VECTOR2I& aPos, int aFieldId, SCH_ITEM* aParent,
 
     SetTextPos( aPos );
     SetId( aFieldId );  // will also set the layer
-    SetVisible( false );
+    SetVisible( true );
 }
 
 
