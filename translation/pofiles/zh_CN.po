@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-03-25 13:18+0000\n"
+"PO-Revision-Date: 2024-04-16 08:02+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -383,7 +383,7 @@ msgstr "无法保存文件"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 msgid "Set Pivot"
-msgstr "设置旋转中心点"
+msgstr "设置 Pivot"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Place point around which the board will be rotated (middle mouse click)"
@@ -5415,9 +5415,8 @@ msgid "Bezier"
 msgstr "贝塞尔曲线"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "形状属性..."
+msgstr "形状属性"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6167,19 +6166,16 @@ msgid "Select all cells"
 msgstr "选择所有单元格"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "批注完成。"
+msgstr "接受自动完成"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "取消当前工具"
+msgstr "放弃自动完成"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "切换锁定"
+msgstr "切换复选框"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -9647,9 +9643,8 @@ msgid "Update/reset symbol attributes"
 msgstr "更新/重置符号特性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "定义为电源符号"
+msgstr "重置自定义电源符号"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -12166,9 +12161,8 @@ msgstr ""
 "请在偏好设置 > 原理图编辑器 > 颜色选项中取消勾选 '%s'。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "图纸属性"
+msgstr "编辑图纸属性"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13460,9 +13454,8 @@ msgstr ""
 "码>\" 来创建指向此原理图中某一页的超链接。"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "文本属性"
+msgstr "编辑文本属性"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -18715,9 +18708,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "进行傅立叶分析..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "信号相位："
+msgstr "复制信号名称"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -21580,24 +21572,20 @@ msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr "%s 具有类型为 '%s %s' 的仿真模型, 只能调整RLC无源元件"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "设置为指定值:"
+msgstr "限制为 E24 系列值"
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "设置为指定值:"
+msgstr "限制为 E48 系列值"
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "设置为指定值:"
+msgstr "限制为 E96 系列值"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "设置为指定值:"
+msgstr "限制为 E192 系列值"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -37986,14 +37974,13 @@ msgid "Too many vias on a connection"
 msgstr "连接上的过孔过多"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s 最大数量 %d; 实际 %d)"
+msgstr "(%s 最小数量 %d; 实际 %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "连接上的过孔过多"
+msgstr "连接上的过孔过少"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -46475,9 +46462,9 @@ msgid "thermal reliefs for PTH"
 msgstr "用于金属化孔 (PTH) 的缓释热焊盘 (花焊盘)"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[信息] 加载失败: 输入行太长\n"
+msgstr "[INFO] 加载失败: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
