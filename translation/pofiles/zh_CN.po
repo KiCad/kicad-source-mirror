@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-03-25 13:17+0000\n"
+"PO-Revision-Date: 2024-04-15 09:47+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hans/>\n"
@@ -385,7 +385,7 @@ msgstr "无法保存文件"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 msgid "Set Pivot"
-msgstr "设置旋转中心点"
+msgstr "设置 Pivot"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:48
 msgid "Place point around which the board will be rotated (middle mouse click)"
@@ -1742,9 +1742,8 @@ msgid "Export to Clipboard"
 msgstr "导出到剪贴板"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "形状修改"
+msgstr "通过 API 修改"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -2001,16 +2000,14 @@ msgid "Additional Contributions By"
 msgstr "附加贡献"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "文档"
+msgstr "文档团队"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
 msgstr "库团队"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
 msgstr "3D 模型"
 
@@ -2034,7 +2031,6 @@ msgid "Footprints"
 msgstr "封装"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
 msgstr "图标"
 
@@ -3033,13 +3029,12 @@ msgid "Reference Designators"
 msgstr "位号"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
-msgstr "备选分配"
+msgstr "清除网络分配"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
-msgstr ""
+msgstr "粘贴前删除所有连接项目的网络信息"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -3783,11 +3778,11 @@ msgstr "启用后, 连续按下某些快捷键将弹出一个窗口, 并简要�
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "交替着色表格的行"
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "When enabled, use a different color for every other table row"
-msgstr ""
+msgstr "启用后, 每隔一行表格都会使用不同的颜色"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Icon theme:"
@@ -4464,84 +4459,81 @@ msgid "Library nickname prefix:"
 msgstr "库名称前缀:"
 
 #: common/dialogs/panel_plugin_settings.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "现有路径:"
+msgstr "监听 %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:111
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "当前安装的 KiCad 未启用 API 支持。"
 
 #: common/dialogs/panel_plugin_settings.cpp:120
 msgid "KiCad API is not enabled; external Python plugins will not be available"
-msgstr ""
+msgstr "未启用 KiCad API; 外部 Python 插件不可用"
 
 #: common/dialogs/panel_plugin_settings.cpp:131
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
-msgstr ""
+msgstr "未选择有效的 Python 解释器; 外部 Python 插件不可用"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "找不到文件 %s。"
+msgstr "找到 %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "不是有效的 Python 3 解释器"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
-msgstr ""
+msgstr "启用 KiCad API 后, 系统中运行的第三方软件和插件就可以通过 API 连接到 KiCad。"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "启用 KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
-msgstr ""
+msgstr "启用 KiCad API。 这将允许系统中运行的第三方软件访问 KiCad。"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Python 解释器"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Python 解释器路径:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "删除当前项目中添加的最后一个点"
+msgstr "选择 Python 解释器的路径"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "自动批注"
+msgstr "自动检测"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
-msgstr ""
+msgstr "未选择 Python 解释器; 外部 Python 插件不可用"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Python 解释器状态"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1953
 #: common/stroke_params.cpp:37
@@ -5193,9 +5185,8 @@ msgid "Packages and Updates"
 msgstr "扩展和更新"
 
 #: common/eda_base_frame.cpp:1253
-#, fuzzy
 msgid "Plugins"
-msgstr "插件 (%d)"
+msgstr "插件"
 
 #: common/eda_base_frame.cpp:1336
 #, c-format
@@ -5636,9 +5627,8 @@ msgid "Bezier"
 msgstr "贝塞尔曲线"
 
 #: common/eda_shape.cpp:1981 eeschema/lib_shape.cpp:598
-#, fuzzy
 msgid "Shape Properties"
-msgstr "图纸属性"
+msgstr "形状属性"
 
 #: common/eda_shape.cpp:1987 eeschema/sch_table.cpp:604
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:489
@@ -6408,19 +6398,16 @@ msgid "Select all cells"
 msgstr "选择所有单元格"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "批注完成。"
+msgstr "接受自动完成"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "取消当前工具"
+msgstr "放弃自动完成"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "切换锁定"
+msgstr "切换复选框"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -7793,24 +7780,20 @@ msgid "Zoom Out"
 msgstr "缩小"
 
 #: common/tool/actions.cpp:574 common/tool/actions.cpp:575
-#, fuzzy
 msgid "Zoom In Horizontally"
-msgstr "水平镜像"
+msgstr "水平放大"
 
 #: common/tool/actions.cpp:581 common/tool/actions.cpp:582
-#, fuzzy
 msgid "Zoom Out Horizontally"
-msgstr "水平镜像"
+msgstr "水平缩小"
 
 #: common/tool/actions.cpp:588 common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom In Vertically"
-msgstr "垂直镜像"
+msgstr "垂直放大"
 
 #: common/tool/actions.cpp:595 common/tool/actions.cpp:596
-#, fuzzy
 msgid "Zoom Out Vertically"
-msgstr "垂直镜像"
+msgstr "垂直缩小"
 
 #: common/tool/actions.cpp:604 common/widgets/mathplot.cpp:1383
 msgid "Center on Cursor"
@@ -8839,9 +8822,8 @@ msgid "Allegro netlist files"
 msgstr "Allegro 网表文件"
 
 #: common/wildcards_and_files_ext.cpp:299
-#, fuzzy
 msgid "PADS netlist files"
-msgstr "SPICE 网表文件"
+msgstr "PADS 网表文件"
 
 #: common/wildcards_and_files_ext.cpp:305
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -9448,12 +9430,11 @@ msgstr "批注完成。"
 
 #: eeschema/api/api_handler_sch.cpp:256 pcbnew/api/api_handler_pcb.cpp:342
 msgid "Added items via API"
-msgstr ""
+msgstr "通过 API 添加项目"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
-#, fuzzy
 msgid "Created items via API"
-msgstr "创建线条"
+msgstr "通过 API 创建项目"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -10042,9 +10023,8 @@ msgid "Update/reset symbol attributes"
 msgstr "更新/重置符号特性"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "定义为电源符号"
+msgstr "重置自定义电源符号"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10442,29 +10422,24 @@ msgid "Electrical Rules Checker"
 msgstr "电气规则检查 (ERC)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:263
-#, fuzzy
 msgid "Export netlist in legacy KiCad format"
-msgstr "将数据导出为 Pcbnew 格式"
+msgstr "将网表导出为旧版 KiCad 格式"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:268
-#, fuzzy
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "将数据导出为 Pcbnew 格式"
+msgstr "将网表导出为 OrcadPCB2 格式"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:273
-#, fuzzy
 msgid "Export netlist in Allegro format"
-msgstr "将数据导出为 Pcbnew 格式"
+msgstr "将网表导出为 Allegro 格式"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:278
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "导出 GenCAD 格式"
+msgstr "将网表导出为 PADS 格式"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:283
-#, fuzzy
 msgid "Export netlist in CadStar format"
-msgstr "导出 GenCAD 格式"
+msgstr "将网表导出为 CadStar 格式"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:291
 #: eeschema/dialogs/dialog_export_netlist_base.h:73
@@ -10472,9 +10447,8 @@ msgid "Export Netlist"
 msgstr "导出网表"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:317
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "将数据导出为 Pcbnew 格式"
+msgstr "将网表导出为 SPICE 格式"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:321
 #: eeschema/dialogs/dialog_export_netlist.cpp:374
@@ -10530,7 +10504,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:370
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "将网表导出为 SPICE .subckt 模型"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:424
 msgid "Netlist command:"
@@ -10580,28 +10554,24 @@ msgid "You must provide a netlist generator title"
 msgstr "必须提供网表生成器的标题内容"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:50
-#, fuzzy
 msgid "Add Exporter..."
-msgstr "导出..."
+msgstr "添加导出器..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:53
-#, fuzzy
 msgid "Remove Exporter"
-msgstr "移除拐角"
+msgstr "移除导出器"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:101
-#, fuzzy
 msgid "Command line to run the exporter:"
-msgstr "运行生成器命令:"
+msgstr "导出器运行命令:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:116
-#, fuzzy
 msgid "Browse Scripts..."
-msgstr "浏览生成器..."
+msgstr "浏览脚本..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "添加基于脚本的网表导出器"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:234
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -12281,12 +12251,12 @@ msgstr "生成属性弹窗"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 #: pcbnew/dialogs/dialog_plot_base.cpp:416
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "从 AUTHOR && SUBJECT 变量生成元数据"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:168
 #: pcbnew/dialogs/dialog_plot_base.cpp:417
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
-msgstr ""
+msgstr "从 AUTHOR 和 SUBJECT 文本变量生成 PDF 文档属性"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:175
 msgid "Other options"
@@ -12641,9 +12611,8 @@ msgstr ""
 "请在偏好设置 > 原理图编辑器 > 颜色选项中取消勾选 '%s'。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "编辑图纸引脚属性"
+msgstr "编辑图纸属性"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -14741,42 +14710,35 @@ msgstr "生成错误"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
-#, fuzzy
 msgid "No action"
-msgstr "未连接"
+msgstr "无动作"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:42
 #: eeschema/dialogs/panel_simulator_preferences.cpp:63
-#, fuzzy
 msgid "Pan left/right"
-msgstr "左/右平移:"
+msgstr "左/右平移"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:43
-#, fuzzy
 msgid "Pan right/left"
-msgstr "向右平移"
+msgstr "左/右平移"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:44
-#, fuzzy
 msgid "Pan up/down"
-msgstr "上/下平移:"
+msgstr "上/下平移"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:64
-#, fuzzy
 msgid "Zoom horizontally"
-msgstr "水平镜像"
+msgstr "水平缩放"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:47
-#, fuzzy
 msgid "Zoom vertically"
-msgstr "垂直镜像"
+msgstr "垂直缩放"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
-#, fuzzy
 msgid "Modifier"
-msgstr "修改"
+msgstr "修改器"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:113
@@ -14788,32 +14750,28 @@ msgid "Action"
 msgstr "操作"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:54
-#, fuzzy
 msgid "None:"
-msgstr "无"
+msgstr "无:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
-#, fuzzy
 msgid "Ctrl:"
-msgstr "Ctrl"
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
-#, fuzzy
 msgid "Shift:"
-msgstr "Shift"
+msgstr "Shift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
-msgstr ""
+msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal touchpad movement:"
-msgstr "水平(X)方向数量:"
+msgstr "触摸板水平移动:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "任意:"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -15512,9 +15470,8 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "标签相似 (只有大小写的区别)"
 
 #: eeschema/erc_item.cpp:99
-#, fuzzy
 msgid "Global label only appears once in the schematic"
-msgstr "在原理图中的任何其他位置都未连接全局标签"
+msgstr "在原理图中只出现一次的全局标签"
 
 #: eeschema/erc_item.cpp:103
 msgid "Different footprint assigned in another unit of the symbol"
@@ -15812,9 +15769,9 @@ msgid "Import Schematic"
 msgstr "导入原理图"
 
 #: eeschema/files-io.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read file '%s'."
-msgstr "写入文件 '%s' 的权限不足。"
+msgstr "读取文件 '%s' 的权限不足。"
 
 #: eeschema/files-io.cpp:786
 #, c-format
@@ -16507,9 +16464,9 @@ msgid "Junction at %s, %s"
 msgstr "%s, %s处的结点"
 
 #: eeschema/net_navigator.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at %s, %s"
-msgstr "未连接"
+msgstr "%s, %s 处没有连接"
 
 #: eeschema/net_navigator.cpp:157
 #, c-format
@@ -16552,16 +16509,17 @@ msgid "Could not open file '%s' to write IBIS model"
 msgstr "打不开 '%s' 文件来写入 IBIS 模型"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Error in parsing model '%s', error: '%s'"
-msgstr "加载电路板 '%s' 时出错: %s"
+msgstr "解析模型 '%s' 时出错: '%s'"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:563
 #, c-format
 msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
-msgstr ""
+msgstr "模型解析错误: 在模型 '%s' 中, Sim.NodesFormat 中的节点 '?' "
+"数量与连接数量不匹配"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:599
 #, c-format
@@ -19477,9 +19435,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "进行傅立叶分析..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "信号相位："
+msgstr "复制信号名称"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:770
@@ -21823,14 +21780,12 @@ msgid "Export Current Plot as CSV..."
 msgstr "导出当前绘图为 CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1468
-#, fuzzy
 msgid "Export Current Plot to Clipboard"
-msgstr "将绘图导出到剪贴板"
+msgstr "将当前绘图导出到剪贴板"
 
 #: eeschema/tools/ee_actions.cpp:1474
-#, fuzzy
 msgid "Export Current Plot to Schematic"
-msgstr "导出当前绘图为 CSV..."
+msgstr "将当前绘图导出到原理图"
 
 #: eeschema/tools/ee_actions.cpp:1480
 msgid "Show Legend"
@@ -22049,12 +22004,10 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "按下 <ESC> 取消图纸创建。"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2528
-#, fuzzy
 msgid "Modify sheet pin"
-msgstr "添加图纸引脚"
+msgstr "修改图纸引脚"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2534
-#, fuzzy
 msgid "Modify schematic item"
 msgstr "修改原理图项目"
 
@@ -22497,24 +22450,20 @@ msgid "%s has simulation model of type '%s %s'; only RLC passives be tuned"
 msgstr "%s 具有类型为 '%s %s' 的仿真模型, 只能调整RLC无源元件"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "设置为指定值:"
+msgstr "限制为 E24 系列值"
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "设置为指定值:"
+msgstr "限制为 E48 系列值"
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "设置为指定值:"
+msgstr "限制为 E96 系列值"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "设置为指定值:"
+msgstr "限制为 E192 系列值"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -24252,92 +24201,84 @@ msgstr "无图纸"
 
 #: kicad/cli/command_pcb_render.cpp:167
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr ""
+msgstr "在 3D 视图中渲染 PCB 并导出为 PNG 或 JPEG 图像"
 
 #: kicad/cli/command_pcb_render.cpp:173
-#, fuzzy
 msgid "Image width"
-msgstr "页宽度"
+msgstr "图像宽度"
 
 #: kicad/cli/command_pcb_render.cpp:179
-#, fuzzy
 msgid "Image height"
-msgstr "页高度"
+msgstr "图像高度"
 
 #: kicad/cli/command_pcb_render.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Render from side. Options: %s"
-msgstr "渲染选项："
+msgstr "从侧面渲染。选项: %s"
 
 #: kicad/cli/command_pcb_render.cpp:190
 msgid ""
 "Image background. Options: transparent, opaque. Default: transparent for "
 "PNG, opaque for JPEG"
-msgstr ""
+msgstr "图像背景。选项: 透明, 不透明。默认: PNG 为透明, JPEG 为不透明"
 
 #: kicad/cli/command_pcb_render.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Render quality. Options: %s"
-msgstr "渲染选项"
+msgstr "渲染质量。选项: %s"
 
 #: kicad/cli/command_pcb_render.cpp:204
 #, c-format
 msgid "Color preset. Options: %s, %s, %s, ..."
-msgstr ""
+msgstr "颜色预设。选项: %s, %s, %s, ..."
 
 #: kicad/cli/command_pcb_render.cpp:210
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "preset"
-msgstr ""
+msgstr "强制启用地面, 阴影和后处理 (不管是否已在质量预设中禁用)"
 
 #: kicad/cli/command_pcb_render.cpp:215
 msgid "Use perspective projection instead of orthogonal"
-msgstr ""
+msgstr "使用透视投影而不是正交投影"
 
 #: kicad/cli/command_pcb_render.cpp:221
-#, fuzzy
 msgid "Camera zoom"
-msgstr "相机选项"
+msgstr "相机缩放"
 
 #: kicad/cli/command_pcb_render.cpp:226
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
-msgstr ""
+msgstr "平移摄像机, 格式为 'X,Y,Z', 例如: '3,0,0'"
 
 #: kicad/cli/command_pcb_render.cpp:231
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
-msgstr ""
+msgstr "以厘米为单位, 设置相对于电路板中心的 Pivot, 格式为 'X,Y,Z', 例如: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:238
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
-msgstr ""
+msgstr "旋转电路板, 格式为 'X,Y,Z', 例如: '-45,0,45' (isometic 视图)"
 
 #: kicad/cli/command_pcb_render.cpp:262
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "主体背景"
+msgstr "无效的背景\n"
 
 #: kicad/cli/command_pcb_render.cpp:268
-#, fuzzy
 msgid "Invalid rotation format\n"
-msgstr "无效的报告格式\n"
+msgstr "无效旋转格式\n"
 
 #: kicad/cli/command_pcb_render.cpp:274
-#, fuzzy
 msgid "Invalid pan format\n"
-msgstr "无效的格式\n"
+msgstr "无效平移格式\n"
 
 #: kicad/cli/command_pcb_render.cpp:280
-#, fuzzy
 msgid "Invalid pivot format\n"
-msgstr "无效的报告格式\n"
+msgstr "无效的 Pivot 格式\n"
 
 #: kicad/cli/command_pcb_render.cpp:295
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "无效的格式\n"
+msgstr "无效的图像格式\n"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -24396,13 +24337,12 @@ msgid "Export a netlist"
 msgstr "导出网表"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
-#, fuzzy
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
-"网表输出格式, 有效选项: kicadsexpr、kicadxml、cadstar, 或 cadpcb2、spice、"
-"spicemodel"
+"网表输出格式, 有效选项: kicadsexpr, kicadxml, cadstar, orcadpcb2, spice, "
+"spicemodel, pads, allegro"
 
 #: kicad/cli/command_sch_export_plot.cpp:65
 msgid "Color theme to use (will default to schematic settings)"
@@ -24414,7 +24354,7 @@ msgstr "不在 PDF 中生成属性弹窗"
 
 #: kicad/cli/command_sch_export_plot.cpp:85
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
-msgstr ""
+msgstr "不从 AUTHOR 和 SUBJECT 变量生成 PDF 元数据"
 
 #: kicad/cli/command_sch_export_plot.cpp:94
 msgid "Avoid setting a background color (regardless of theme)"
@@ -27505,9 +27445,8 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "移除当前列表中可用的稳压器的项"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:147
-#, fuzzy
 msgid "typ"
-msgstr "数量"
+msgstr "typ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:119
@@ -27554,9 +27493,8 @@ msgid "Overall tolerance:"
 msgstr "花焊盘到区域间隙："
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
-#, fuzzy
 msgid "Resistor tolerance:"
-msgstr "阻抗:"
+msgstr "阻值精度:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:312
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:217
@@ -27579,9 +27517,8 @@ msgid "Power Comment:"
 msgstr "注释:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
-#, fuzzy
 msgid "Copy to Clipboard"
-msgstr "导出到剪贴板"
+msgstr "复制到剪贴板"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
 #, c-format
@@ -28024,7 +27961,7 @@ msgstr "数据文件错误。"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr ""
+msgstr "Vref (min/typ/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
@@ -28032,7 +27969,7 @@ msgstr "V"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
 msgid "Iadj (typ/max):"
-msgstr ""
+msgstr "Iadj (typ/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -28684,9 +28621,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:472
-#, fuzzy
 msgid "Deleted items via API"
-msgstr "删除项目"
+msgstr "通过 API 删除项目"
 
 #: pcbnew/array_creator.cpp:232 pcbnew/dialogs/dialog_create_array_base.h:142
 msgid "Create Array"
@@ -30657,23 +30593,20 @@ msgstr "焊盘编号开始:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:248
 #: pcbnew/dialogs/dialog_create_array_base.cpp:521
-#, fuzzy
 msgid "Pad numbering increment:"
-msgstr "焊盘编号开始:"
+msgstr "焊盘编号增量:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:278
 msgid "Grid Array"
 msgstr "栅格阵列"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:287
-#, fuzzy
 msgid "Reference Position"
-msgstr "位号"
+msgstr "参考位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
-#, fuzzy
 msgid "Position of the selected item (or  group) to duplicate"
-msgstr "选中项目的位置或要创建副本的组的位置"
+msgstr "要创建副本的选中项目或组的位置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Ref point pos X:"
@@ -30704,9 +30637,8 @@ msgid "Set center by radius"
 msgstr "根据半径设置圆心"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:374
-#, fuzzy
 msgid "Radius of circular array:"
-msgstr "圆形阵列"
+msgstr "圆形阵列的半径:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:382
 msgid "Distance between Ref point and Center pos."
@@ -30725,9 +30657,8 @@ msgid "Duplication Settings"
 msgstr "复制设置"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:438
-#, fuzzy
 msgid "Angle between new items:"
-msgstr "参考点与中心点之间的角度。"
+msgstr "新项目之间的夹角:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:443
 msgid ""
@@ -39636,17 +39567,17 @@ msgstr "封装选择器"
 #: pcbnew/footprint_chooser_frame.cpp:151
 #, fuzzy
 msgid "Show 3D viewer in own window"
-msgstr "显示 3D 查看器窗口"
+msgstr "在独立窗口中打开 3D 查看器"
 
 #: pcbnew/footprint_chooser_frame.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "Filter by pin count (%d)"
-msgstr "根据引脚数量筛选"
+msgstr "根据引脚数量筛选 (%d)"
 
 #: pcbnew/footprint_chooser_frame.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Apply footprint filters (%s)"
-msgstr "应用封装筛选器"
+msgstr "应用封装筛选器 (%s)"
 
 #: pcbnew/footprint_edit_frame.cpp:116
 msgid "KiCad Footprint Editor"
@@ -41307,9 +41238,9 @@ msgid "File not found: '%s'. 3D-model not imported."
 msgstr "找不到文件: '%s'。未导入 3D 模型。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write file '%s'."
-msgstr "无法读取文件 '%s'。"
+msgstr "无法写入文件 '%s'。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1720
 msgid "Loading nets..."
@@ -42995,19 +42926,17 @@ msgid "Error exporting VRML"
 msgstr "导出 VRML 出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "Actual image size: %dx%d"
-msgstr "实际大小"
+msgstr "实际图像大小: %dx%d"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:397
-#, fuzzy
 msgid "Successfully created 3D render image"
-msgstr "已成功创建 svg 文件"
+msgstr "已成功创建 3D 渲染图像"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:400
-#, fuzzy
 msgid "Error creating 3D render image"
-msgstr "创建 svg 文件出错"
+msgstr "成功创建 3D 渲染图像出错"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:435
 msgid "Successfully created svg file"
@@ -45626,14 +45555,12 @@ msgid "Toggle ratsnest display of selected item(s)"
 msgstr "切换所选项目的飞线的显示状态"
 
 #: pcbnew/tools/pcb_actions.cpp:1343
-#, fuzzy
 msgid "Show Net Inspector"
 msgstr "显示网络检查器"
 
 #: pcbnew/tools/pcb_actions.cpp:1344
-#, fuzzy
 msgid "Show/hide the net inspector"
-msgstr "显示网络检查"
+msgstr "显示 / 隐藏 网络检查器"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:79
@@ -47242,9 +47169,8 @@ msgstr "不要在路径名称前添加封装 UUID。"
 
 #: pcbnew/widgets/net_inspector_panel.cpp:46
 #: pcbnew/widgets/net_inspector_panel.cpp:96
-#, fuzzy
 msgid "Configure netlist inspector"
-msgstr "配置网络类"
+msgstr "配置网表检查器"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:338
 msgid "No footprint selected"
@@ -47262,9 +47188,8 @@ msgstr "测量标注"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:680
-#, fuzzy
 msgid "Netclass"
-msgstr "网络类:"
+msgstr "网络类"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:124
 msgid "Total Length"
@@ -47296,90 +47221,73 @@ msgid "Highlight Selected Net"
 msgstr "高亮所选的网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1188
-#, fuzzy
 msgid "Rename Selected Net"
-msgstr "全部重新选区部分"
+msgstr "重命名选中网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1192
-#, fuzzy
 msgid "Delete Selected Net"
-msgstr "删除所选项"
+msgstr "删除选中网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1199
-#, fuzzy
 msgid "Add Net"
-msgstr "添加文本"
+msgstr "添加网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
-#, fuzzy
 msgid "Highlight Selected Nets"
-msgstr "高亮所选的网络"
+msgstr "高亮选中网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1214
-#, fuzzy
 msgid "Delete Selected Nets"
-msgstr "删除所选项"
+msgstr "删除选中网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1351
-#, fuzzy
 msgid "Remove Selected Custom Group"
-msgstr "从组合中移除项目"
+msgstr "从自定义分组中移除选中项目"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1248
-#, fuzzy
 msgid "New Group"
-msgstr "分组"
+msgstr "新建分组"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1321
-#, fuzzy
 msgid "Filter by Net Name"
-msgstr "筛选网络"
+msgstr "按网络名称筛选"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1326
-#, fuzzy
 msgid "Filter by Netclass"
-msgstr "按网络类筛选项目:"
+msgstr "按网络类筛选"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1340
-#, fuzzy
 msgid "Group by Netclass"
-msgstr "按名称分组"
+msgstr "按网络类分组"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1346
-#, fuzzy
 msgid "Add Custom Group"
-msgstr "自定义规则"
+msgstr "添加自定义分组"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1361
-#, fuzzy
 msgid "Remove All Custom Groups"
-msgstr "从组合中移除项目"
+msgstr "移除所有自定义分组"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1369
-#, fuzzy
 msgid "Show Zero Pad Nets"
 msgstr "显示 0 焊盘网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1374
-#, fuzzy
 msgid "Show Unconnected Nets"
-msgstr "未连接"
+msgstr "显示未连接网络"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
-#, fuzzy
 msgid "Save Net Inspector Report"
-msgstr "网络检查"
+msgstr "保持网络检查器报告"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1392
-#, fuzzy
 msgid "Show / Hide Columns"
-msgstr "显示隐藏引脚"
+msgstr "显示 / 隐藏 列"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1556
-#, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "保存报告文件"
+msgstr "保存网络检查器报告文件"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1557
 msgid "Report file"
@@ -47642,9 +47550,9 @@ msgid "thermal reliefs for PTH"
 msgstr "用于金属化孔 (PTH) 的缓释热焊盘 (花焊盘)"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[信息] 加载失败: 输入行太长\n"
+msgstr "[INFO] 加载失败: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
