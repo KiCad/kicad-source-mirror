@@ -15,10 +15,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-03-17 09:02+0000\n"
-"Last-Translator: Dmitry Mikhirev <mikhirev@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/master-"
-"source/ru/>\n"
+"PO-Revision-Date: 2024-04-15 09:47+0000\n"
+"Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/kicad/"
+"master-source/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5000,7 +5000,7 @@ msgstr "Прямоугольник"
 #: common/drawing_sheet/ds_draw_item.cpp:137
 #: common/drawing_sheet/ds_draw_item.cpp:337
 msgid "Imported Shape"
-msgstr "Импортированный символ"
+msgstr "Импортированная форма"
 
 # "Image" и "Bitmap" переводятся на русский как "Изображение",
 # но это вызывает ошибку - они должны отлчаться. Поэтому
@@ -5739,9 +5739,8 @@ msgid "Bezier"
 msgstr "Кривая Безье"
 
 #: common/eda_shape.cpp:1981 eeschema/lib_shape.cpp:598
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Свойства листа"
+msgstr "Свойства формы"
 
 #: common/eda_shape.cpp:1987 eeschema/sch_table.cpp:604
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:489
@@ -6521,19 +6520,16 @@ msgid "Select all cells"
 msgstr "Выбрать все ячейки"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Аннотация завершена."
+msgstr "Применить автозаполнение"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Отменить текущий инструмент"
+msgstr "Отменить автозаполнение"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Заблокировать/разблокировать"
+msgstr "Переключить флажок"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -10233,9 +10229,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Обновить/сбросить свойства символа"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Создать как символ питания"
+msgstr "Сбросить особые символы питания"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -11298,9 +11293,8 @@ msgid "untitled"
 msgstr "без имени"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:590
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Свойства метки"
+msgstr "Править свойства метки"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:673
 msgid "The first field is mandatory."
@@ -12866,9 +12860,8 @@ msgstr ""
 "в меню Настройки > Редактор схем > Цвета."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Свойства вывода листа"
+msgstr "Править свойства листа"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -14276,9 +14269,8 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:532
 #: pcbnew/dialogs/dialog_text_properties.cpp:536
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Свойства текста"
+msgstr "Править свойства текста"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -19872,9 +19864,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Выполнить анализ Фурье..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Фаза сигнала:"
+msgstr "Скопировать имя сигнала"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:770
@@ -22968,24 +22959,20 @@ msgstr ""
 "настроены"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Установить указанные значения:"
+msgstr "Ограничить значениями ряда E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Установить указанные значения:"
+msgstr "Ограничить значениями ряда E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Установить указанные значения:"
+msgstr "Ограничить значениями ряда E96."
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Установить указанные значения:"
+msgstr "Ограничить значениями ряда E192."
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -39162,9 +39149,8 @@ msgid "Skew between traces out of range"
 msgstr "Перекос между дорожками превышает предел"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Слишком много перех.отв. для одного соединения"
+msgstr "Слишком много или мало перех.отв. на соединении"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39856,14 +39842,13 @@ msgid "Too many vias on a connection"
 msgstr "Слишком много перех.отв. для одного соединения"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:219
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s макс. кол. %d; текущее %d)"
+msgstr "(%s мин. кол. %d; текущее %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:224
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Слишком много перех.отв. для одного соединения"
+msgstr "Слишком мало перех.отв. на соединении"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:254
 msgid "Gathering length-constrained connections..."
@@ -48762,9 +48747,9 @@ msgid "thermal reliefs for PTH"
 msgstr "терморазгрузка для PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] загрузка не удалась: слишком длинная строка на входе\n"
+msgstr "[INFO] загрузка не удалась: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
