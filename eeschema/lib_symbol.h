@@ -45,7 +45,7 @@ class TEST_LIB_SYMBOL_FIXTURE;
 
 typedef std::shared_ptr<LIB_SYMBOL>       LIB_SYMBOL_SPTR;      ///< shared pointer to LIB_SYMBOL
 typedef std::weak_ptr<LIB_SYMBOL>         LIB_SYMBOL_REF;       ///< weak pointer to LIB_SYMBOL
-typedef MULTIVECTOR<SCH_ITEM, SCH_TEXT_T, LIB_PIN_T> LIB_ITEMS_CONTAINER;
+typedef MULTIVECTOR<SCH_ITEM, SCH_SHAPE_T, LIB_PIN_T> LIB_ITEMS_CONTAINER;
 typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
 

@@ -27,7 +27,7 @@
 #include <bitmaps.h>
 #include <core/mirror.h>
 #include <lib_pin.h>
-#include <lib_shape.h>
+#include <sch_shape.h>
 #include <pgm_base.h>
 #include <sch_symbol.h>
 #include <sch_sheet_path.h>
@@ -80,16 +80,15 @@ static LIB_SYMBOL* dummy()
     {
         symbol = new LIB_SYMBOL( wxEmptyString );
 
-        LIB_SHAPE* square = new LIB_SHAPE( symbol, SHAPE_T::RECTANGLE );
+        SCH_SHAPE* square = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
 
         square->SetPosition( VECTOR2I( schIUScale.MilsToIU( -200 ), schIUScale.MilsToIU( 200 ) ) );
         square->SetEnd( VECTOR2I( schIUScale.MilsToIU( 200 ), schIUScale.MilsToIU( -200 ) ) );
+        symbol->AddDrawItem( square );
 
         SCH_TEXT* text = new SCH_TEXT( { 0, 0 }, wxT( "??"), LAYER_DEVICE );
 
         text->SetTextSize( VECTOR2I( schIUScale.MilsToIU( 150 ), schIUScale.MilsToIU( 150 ) ) );
-
-        symbol->AddDrawItem( square );
         symbol->AddDrawItem( text );
     }
 

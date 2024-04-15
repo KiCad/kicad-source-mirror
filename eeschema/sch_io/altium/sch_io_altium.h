@@ -26,6 +26,7 @@
 #define _SCH_IO_ALTIUM_H_
 
 #include <memory>
+#include <sch_sheet_path.h>
 #include <vector>
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>

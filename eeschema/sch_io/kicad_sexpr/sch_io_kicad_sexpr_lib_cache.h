@@ -27,7 +27,7 @@
 class FILE_LINE_READER;
 class LIB_PIN;
 class SCH_TEXT;
-class LIB_TEXTBOX;
+class SCH_TEXTBOX;
 class LINE_READER;
 class SCH_IO_KICAD_SEXPR;
 
@@ -67,7 +67,7 @@ private:
     static void saveField( SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter, int aNestLevel );
     static void savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
     static void saveText( SCH_TEXT* aText, OUTPUTFORMATTER& aFormatter, int aNestLevel = 0 );
-    static void saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter,
+    static void saveTextBox( SCH_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter,
                              int aNestLevel = 0 );
 
     static void saveDcmInfoAsFields( LIB_SYMBOL* aSymbol, OUTPUTFORMATTER& aFormatter,

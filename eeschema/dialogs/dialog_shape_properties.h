@@ -26,7 +26,7 @@
 
 
 class SCH_SHAPE;
-class SCH_EDIT_FRAME;
+class SCH_BASE_FRAME;
 
 
 #include <dialog_shape_properties_base.h>
@@ -36,17 +36,24 @@ class SCH_EDIT_FRAME;
 class DIALOG_SHAPE_PROPERTIES : public DIALOG_SHAPE_PROPERTIES_BASE
 {
 public:
-    DIALOG_SHAPE_PROPERTIES( SCH_EDIT_FRAME* aParent, SCH_SHAPE* aShape );
+    DIALOG_SHAPE_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_SHAPE* aShape );
+    ~DIALOG_SHAPE_PROPERTIES() override;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
-private:
-    void onBorderChecked( wxCommandEvent& aEvent) override;
-    void onFillChecked( wxCommandEvent& aEvent ) override;
+    bool GetApplyToAllConversions() { return m_checkApplyToAllBodyStyles->IsChecked(); }
+    bool GetApplyToAllUnits()       { return m_checkApplyToAllUnits->IsChecked(); }
 
 private:
-    SCH_EDIT_FRAME* m_frame;
+    void onBorderChecked( wxCommandEvent& aEvent) override;
+    void onBorderSwatch( wxCommandEvent& aEvent );
+    void onFillChecked( wxCommandEvent& aEvent ) override;
+    void onFillRadioButton(wxCommandEvent &aEvent) override;
+    void onCustomColorSwatch( wxCommandEvent& aEvent );
+
+private:
+    SCH_BASE_FRAME* m_frame;
     SCH_SHAPE*      m_shape;
     UNIT_BINDER     m_borderWidth;
 };

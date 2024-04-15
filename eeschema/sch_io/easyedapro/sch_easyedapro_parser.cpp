@@ -30,16 +30,13 @@
 #include <sch_io/sch_io_mgr.h>
 #include <schematic.h>
 #include <sch_sheet.h>
-#include <sch_sheet_pin.h>
 #include <sch_line.h>
 #include <sch_bitmap.h>
-#include <lib_shape.h>
 #include <sch_no_connect.h>
 #include <sch_label.h>
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
-#include <sch_bus_entry.h>
 #include <string_utils.h>
 #include <bezier_curves.h>
 #include <wx/base64.h>
@@ -429,8 +426,7 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
             VECTOR2D end( line.at( 4 ), line.at( 5 ) );
             wxString styleStr = line.at( 9 );
 
-            std::unique_ptr<LIB_SHAPE> rect =
-                    std::make_unique<LIB_SHAPE>( ksymbol, SHAPE_T::RECTANGLE );
+            auto rect = std::make_unique<SCH_SHAPE>( SHAPE_T::RECTANGLE, LAYER_DEVICE );
 
             rect->SetStart( ScalePosSym( start ) );
             rect->SetEnd( ScalePosSym( end ) );
@@ -446,8 +442,7 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
             double   radius = line.at( 4 );
             wxString styleStr = line.at( 5 );
 
-            std::unique_ptr<LIB_SHAPE> circle =
-                    std::make_unique<LIB_SHAPE>( ksymbol, SHAPE_T::CIRCLE );
+            auto circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE, LAYER_DEVICE );
 
             circle->SetCenter( ScalePosSym( center ) );
             circle->SetEnd( circle->GetCenter() + VECTOR2I( ScaleSize( radius ), 0 ) );
@@ -470,7 +465,7 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
 
             VECTOR2D kcenter = CalcArcCenter( kstart, kmid, kend );
 
-            std::unique_ptr<LIB_SHAPE> shape = std::make_unique<LIB_SHAPE>( ksymbol, SHAPE_T::ARC );
+            auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE );
 
             shape->SetStart( kstart );
             shape->SetEnd( kend );
@@ -492,13 +487,10 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
             std::vector<double> points = line.at( 2 );
             wxString            styleStr = line.at( 4 );
 
-            std::unique_ptr<LIB_SHAPE> shape =
-                    std::make_unique<LIB_SHAPE>( ksymbol, SHAPE_T::POLY );
+            auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
 
             for( size_t i = 1; i < points.size(); i += 2 )
-            {
                 shape->AddPoint( ScalePosSym( VECTOR2D( points[i - 1], points[i] ) ) );
-            }
 
             shape->SetUnit( currentUnit );
             ApplyLineStyle( lineStyles, shape, styleStr );

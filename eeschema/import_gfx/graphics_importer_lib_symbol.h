@@ -29,11 +29,8 @@
 
 #include <import_gfx/graphics_importer.h>
 
-#include <layer_ids.h>
 
 class LIB_SYMBOL;
-class LIB_SHAPE;
-class LIB_TEXT;
 
 class GRAPHICS_IMPORTER_LIB_SYMBOL : public GRAPHICS_IMPORTER
 {

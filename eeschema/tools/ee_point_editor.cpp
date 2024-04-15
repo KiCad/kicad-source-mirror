@@ -42,10 +42,7 @@ using namespace std::placeholders;
 #include <sch_table.h>
 #include <sch_tablecell.h>
 #include <sch_shape.h>
-#include <sch_sheet_pin.h>
 #include <symbol_edit_frame.h>
-#include <lib_shape.h>
-#include <lib_textbox.h>
 
 
 // Few constants to avoid using bare numbers for point indices
@@ -83,12 +80,12 @@ enum LINE_POINTS
 };
 
 
-enum BEZIER_CURVE_POINTS
+enum BEZIER_POINTS
 {
-    BEZIER_CURVE_START,
-    BEZIER_CURVE_CONTROL_POINT1,
-    BEZIER_CURVE_CONTROL_POINT2,
-    BEZIER_CURVE_END
+    BEZIER_START,
+    BEZIER_CTRL_PT1,
+    BEZIER_CTRL_PT2,
+    BEZIER_END
 };
 
 
@@ -105,116 +102,30 @@ public:
         // Generate list of edit points based on the item type
         switch( aItem->Type() )
         {
-        case LIB_SHAPE_T:
-        {
-            LIB_SHAPE* shape = static_cast<LIB_SHAPE*>( aItem );
-
-            switch( shape->GetShape() )
-            {
-            case SHAPE_T::ARC:
-                points->AddPoint( mapCoords( shape->GetPosition() ) );
-                points->AddPoint( mapCoords( shape->GetStart() ) );
-                points->AddPoint( mapCoords( shape->GetEnd() ) );
-                break;
-
-            case SHAPE_T::CIRCLE:
-                points->AddPoint( mapCoords( shape->GetPosition() ) );
-                points->AddPoint( mapCoords( shape->GetEnd() ) );
-                break;
-
-            case SHAPE_T::RECTANGLE:
-            {
-                shape->Normalize();
-
-                VECTOR2I topLeft = mapCoords( shape->GetPosition() );
-                VECTOR2I botRight = mapCoords( shape->GetEnd() );
-
-                points->AddPoint( topLeft );
-                points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
-                points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-                points->AddPoint( botRight );
-
-                points->AddLine( points->Point( RECT_TOPLEFT ), points->Point( RECT_TOPRIGHT ) );
-                points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
-                points->AddLine( points->Point( RECT_TOPRIGHT ), points->Point( RECT_BOTRIGHT ) );
-                points->Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_RIGHT ) ) );
-                points->AddLine( points->Point( RECT_BOTRIGHT ), points->Point( RECT_BOTLEFT ) );
-                points->Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_BOT ) ) );
-                points->AddLine( points->Point( RECT_BOTLEFT ), points->Point( RECT_TOPLEFT ) );
-                points->Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_LEFT ) ) );
-
-                break;
-            }
-
-            case SHAPE_T::POLY:
-                for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                    points->AddPoint( mapCoords( pt ) );
-
-                break;
-
-            case SHAPE_T::BEZIER:
-                points->AddPoint( mapCoords( shape->GetStart() ) );
-                points->AddPoint( mapCoords( shape->GetBezierC1() ) );
-                points->AddPoint( mapCoords( shape->GetBezierC2() ) );
-                points->AddPoint( mapCoords( shape->GetEnd() ) );
-                break;
-
-            default:
-                UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
-            }
-
-            break;
-        }
-
-        case LIB_TEXTBOX_T:
-        {
-            LIB_TEXTBOX* textBox = static_cast<LIB_TEXTBOX*>( aItem );
-
-            textBox->Normalize();
-
-            VECTOR2I topLeft = mapCoords( textBox->GetPosition() );
-            VECTOR2I botRight = mapCoords( textBox->GetEnd() );
-
-            points->AddPoint( topLeft );
-            points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
-            points->AddPoint( VECTOR2I( topLeft.x, botRight.y ) );
-            points->AddPoint( botRight );
-
-            points->AddLine( points->Point( RECT_TOPLEFT ), points->Point( RECT_TOPRIGHT ) );
-            points->Line( RECT_TOP ).SetConstraint( new EC_PERPLINE( points->Line( RECT_TOP ) ) );
-            points->AddLine( points->Point( RECT_TOPRIGHT ), points->Point( RECT_BOTRIGHT ) );
-            points->Line( RECT_RIGHT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_RIGHT ) ) );
-            points->AddLine( points->Point( RECT_BOTRIGHT ), points->Point( RECT_BOTLEFT ) );
-            points->Line( RECT_BOT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_BOT ) ) );
-            points->AddLine( points->Point( RECT_BOTLEFT ), points->Point( RECT_TOPLEFT ) );
-            points->Line( RECT_LEFT ).SetConstraint( new EC_PERPLINE( points->Line( RECT_LEFT ) ) );
-
-            break;
-        }
-
         case SCH_SHAPE_T:
         {
             SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
+            bool       invertY = shape->GetLayer() == LAYER_DEVICE;
 
             switch( shape->GetShape() )
             {
             case SHAPE_T::ARC:
-                points->AddPoint( shape->GetPosition() );
-                points->AddPoint( shape->GetStart() );
-                points->AddPoint( shape->GetEnd() );
+                points->AddPoint( mapCoords( shape->GetPosition(), invertY ) );
+                points->AddPoint( mapCoords( shape->GetStart(), invertY ) );
+                points->AddPoint( mapCoords( shape->GetEnd(), invertY ) );
                 break;
 
             case SHAPE_T::CIRCLE:
-                points->AddPoint( shape->GetPosition() );
-                points->AddPoint( shape->GetEnd() );
+                points->AddPoint( mapCoords( shape->GetPosition(), invertY ) );
+                points->AddPoint( mapCoords( shape->GetEnd(), invertY ) );
                 break;
 
             case SHAPE_T::RECTANGLE:
             {
                 shape->Normalize();
 
-                VECTOR2I topLeft = shape->GetPosition();
-                VECTOR2I botRight = shape->GetEnd();
+                VECTOR2I topLeft = mapCoords( shape->GetPosition(), invertY );
+                VECTOR2I botRight = mapCoords( shape->GetEnd(), invertY );
 
                 points->AddPoint( topLeft );
                 points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
@@ -235,15 +146,15 @@ public:
 
             case SHAPE_T::POLY:
                 for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                    points->AddPoint( pt );
+                    points->AddPoint( mapCoords( pt, invertY ) );
 
                 break;
 
             case SHAPE_T::BEZIER:
-                points->AddPoint( shape->GetStart() );
-                points->AddPoint( shape->GetBezierC1() );
-                points->AddPoint( shape->GetBezierC2() );
-                points->AddPoint( shape->GetEnd() );
+                points->AddPoint( mapCoords( shape->GetStart(), invertY ) );
+                points->AddPoint( mapCoords( shape->GetBezierC1(), invertY ) );
+                points->AddPoint( mapCoords( shape->GetBezierC2(), invertY ) );
+                points->AddPoint( mapCoords( shape->GetEnd(), invertY ) );
                 break;
 
             default:
@@ -255,12 +166,13 @@ public:
 
         case SCH_TEXTBOX_T:
         {
-            SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( aItem );
+            SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( aItem );
+            bool         invertY = textbox->GetLayer() == LAYER_DEVICE;
 
-            textBox->Normalize();
+            textbox->Normalize();
 
-            VECTOR2I topLeft = textBox->GetPosition();
-            VECTOR2I botRight = textBox->GetEnd();
+            VECTOR2I topLeft = mapCoords( textbox->GetPosition(), invertY );
+            VECTOR2I botRight = mapCoords( textbox->GetEnd(), invertY );
 
             points->AddPoint( topLeft );
             points->AddPoint( VECTOR2I( botRight.x, topLeft.y ) );
@@ -460,8 +372,8 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
     const EE_SELECTION& selection = m_selectionTool->GetSelection();
 
-    if( selection.Size() != 1 || !selection.Front()->IsType( { LIB_SHAPE_T, SCH_SHAPE_T,
-                                                               LIB_TEXTBOX_T, SCH_TEXTBOX_T,
+    if( selection.Size() != 1 || !selection.Front()->IsType( { SCH_SHAPE_T,
+                                                               SCH_TEXTBOX_T,
                                                                SCH_TABLECELL_T,
                                                                SCH_SHEET_T,
                                                                SCH_ITEM_LOCATE_GRAPHIC_LINE_T,
@@ -720,168 +632,10 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
     switch( item->Type() )
     {
-    case LIB_SHAPE_T:
-    {
-        LIB_SHAPE* shape = static_cast<LIB_SHAPE*>( item );
-
-        switch( shape->GetShape() )
-        {
-        case SHAPE_T::ARC:
-            if( getEditedPointIndex() == ARC_CENTER )
-            {
-                shape->SetEditState( 4 );
-                shape->CalcEdit( mapCoords( m_editPoints->Point( ARC_CENTER ).GetPosition() ) );
-            }
-            else if( getEditedPointIndex() == ARC_START )
-            {
-                shape->SetEditState( 2 );
-                shape->CalcEdit( mapCoords( m_editPoints->Point( ARC_START ).GetPosition() ) );
-            }
-            else if( getEditedPointIndex() == ARC_END )
-            {
-                shape->SetEditState( 3 );
-                shape->CalcEdit( mapCoords( m_editPoints->Point( ARC_END ).GetPosition() ) );
-            }
-            break;
-
-        case SHAPE_T::CIRCLE:
-            shape->SetPosition( mapCoords( m_editPoints->Point( CIRC_CENTER ).GetPosition() ) );
-            shape->SetEnd( mapCoords( m_editPoints->Point( CIRC_END ).GetPosition() ) );
-            break;
-
-        case SHAPE_T::POLY:
-            shape->GetPolyShape().RemoveAllContours();
-            shape->GetPolyShape().NewOutline();
-
-            for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
-            {
-                VECTOR2I pt = mapCoords( m_editPoints->Point( i ).GetPosition() );
-                shape->GetPolyShape().Append( pt.x, pt.y, -1, -1, true );
-            }
-
-            break;
-
-        case SHAPE_T::RECTANGLE:
-        {
-            EE_GRID_HELPER gridHelper( m_toolMgr );
-            VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-            VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-            VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-            VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
-
-            gridHelper.SetSnap( aSnapToGrid );
-
-            pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
-                             botLeft, botRight, &gridHelper );
-
-            if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
-                    || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
-                    || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
-                    || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
-            {
-                shape->SetPosition( mapCoords( topLeft ) );
-                shape->SetEnd( mapCoords( botRight ) );
-            }
-            else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
-            {
-                shape->SetStartY( mapCoords( topLeft ).y );
-            }
-            else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
-            {
-                shape->SetStartX( mapCoords( topLeft ).x );
-            }
-            else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
-            {
-                shape->SetEndY( mapCoords( botRight ).y );
-            }
-            else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
-            {
-                shape->SetEndX( mapCoords( botRight ).x );
-            }
-
-            for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
-            {
-                if( !isModified( m_editPoints->Line( i ) ) )
-                {
-                    m_editPoints->Line( i ).SetConstraint(
-                            new EC_PERPLINE( m_editPoints->Line( i ) ) );
-                }
-            }
-
-            break;
-        }
-
-        case SHAPE_T::BEZIER:
-            shape->SetStart( mapCoords( m_editPoints->Point( BEZIER_CURVE_START ).GetPosition() ) );
-            shape->SetBezierC1( mapCoords( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition() ) );
-            shape->SetBezierC2( mapCoords( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition() ) );
-            shape->SetEnd( mapCoords( m_editPoints->Point( BEZIER_CURVE_END ).GetPosition() ) );
-
-            shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
-            break;
-
-        default:
-            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
-        }
-
-        break;
-    }
-
-    case LIB_TEXTBOX_T:
-    {
-        LIB_TEXTBOX*   textbox = static_cast<LIB_TEXTBOX*>( item );
-        EE_GRID_HELPER gridHelper( m_toolMgr );
-        VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
-        VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
-        VECTOR2I       botLeft = m_editPoints->Point( RECT_BOTLEFT ).GetPosition();
-        VECTOR2I       botRight = m_editPoints->Point( RECT_BOTRIGHT ).GetPosition();
-
-        gridHelper.SetSnap( aSnapToGrid );
-
-        pinEditedCorner( schIUScale.MilsToIU( 1 ), schIUScale.MilsToIU( 1 ), topLeft, topRight,
-                         botLeft, botRight, &gridHelper );
-
-        if( isModified( m_editPoints->Point( RECT_TOPLEFT ) )
-                || isModified( m_editPoints->Point( RECT_TOPRIGHT ) )
-                || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
-                || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
-        {
-            textbox->SetPosition( mapCoords( topLeft ) );
-            textbox->SetEnd( mapCoords( botRight ) );
-        }
-        else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
-        {
-            textbox->SetStartY( mapCoords( topLeft ).y );
-        }
-        else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
-        {
-            textbox->SetStartX( mapCoords( topLeft ).x );
-        }
-        else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
-        {
-            textbox->SetEndY( mapCoords( botRight ).y );
-        }
-        else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
-        {
-            textbox->SetEndX( mapCoords( botRight ).x );
-        }
-
-        for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
-        {
-            if( !isModified( m_editPoints->Line( i ) ) )
-            {
-                m_editPoints->Line( i ).SetConstraint(
-                        new EC_PERPLINE( m_editPoints->Line( i ) ) );
-            }
-        }
-
-        textbox->ClearRenderCache();
-        break;
-    }
-
     case SCH_SHAPE_T:
     {
         SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
+        bool       invertY = true;
 
         switch( shape->GetShape() )
         {
@@ -889,23 +643,23 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
             if( getEditedPointIndex() == ARC_CENTER )
             {
                 shape->SetEditState( 4 );
-                shape->CalcEdit( m_editPoints->Point( ARC_CENTER ).GetPosition() );
+                shape->CalcEdit( mapCoords( m_editPoints->Point( ARC_CENTER ).GetPosition(), invertY ) );
             }
             else if( getEditedPointIndex() == ARC_START )
             {
                 shape->SetEditState( 2 );
-                shape->CalcEdit( m_editPoints->Point( ARC_START ).GetPosition() );
+                shape->CalcEdit( mapCoords( m_editPoints->Point( ARC_START ).GetPosition(), invertY ) );
             }
             else if( getEditedPointIndex() == ARC_END )
             {
                 shape->SetEditState( 3 );
-                shape->CalcEdit( m_editPoints->Point( ARC_END ).GetPosition() );
+                shape->CalcEdit( mapCoords( m_editPoints->Point( ARC_END ).GetPosition(), invertY ) );
             }
             break;
 
         case SHAPE_T::CIRCLE:
-            shape->SetPosition( m_editPoints->Point( CIRC_CENTER ).GetPosition() );
-            shape->SetEnd( m_editPoints->Point( CIRC_END ).GetPosition() );
+            shape->SetPosition( mapCoords( m_editPoints->Point( CIRC_CENTER ).GetPosition(), invertY ) );
+            shape->SetEnd( mapCoords( m_editPoints->Point( CIRC_END ).GetPosition(), invertY ) );
             break;
 
         case SHAPE_T::POLY:
@@ -914,7 +668,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
             for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
             {
-                VECTOR2I pt = m_editPoints->Point( i ).GetPosition();
+                VECTOR2I pt = mapCoords( m_editPoints->Point( i ).GetPosition(), invertY );
                 shape->GetPolyShape().Append( pt.x, pt.y, -1, -1, true );
             }
 
@@ -938,24 +692,24 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
                     || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
                     || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
             {
-                shape->SetPosition( topLeft );
-                shape->SetEnd( botRight );
+                shape->SetPosition( mapCoords( topLeft, invertY ) );
+                shape->SetEnd( mapCoords( botRight, invertY ) );
             }
             else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
             {
-                shape->SetStartY( topLeft.y );
+                shape->SetStartY( mapCoords( topLeft, invertY ).y );
             }
             else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
             {
-                shape->SetStartX( topLeft.x );
+                shape->SetStartX( mapCoords( topLeft, invertY ).x );
             }
             else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
             {
-                shape->SetEndY( botRight.y );
+                shape->SetEndY( mapCoords( botRight, invertY ).y );
             }
             else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
             {
-                shape->SetEndX( botRight.x );
+                shape->SetEndX( mapCoords( botRight, invertY ).x );
             }
 
             for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
@@ -971,10 +725,10 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
         }
 
         case SHAPE_T::BEZIER:
-            shape->SetStart( m_editPoints->Point( BEZIER_CURVE_START ).GetPosition() );
-            shape->SetBezierC1( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition() );
-            shape->SetBezierC2( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition() );
-            shape->SetEnd( m_editPoints->Point( BEZIER_CURVE_END ).GetPosition() );
+            shape->SetStart( mapCoords( m_editPoints->Point( BEZIER_START ).GetPosition(), invertY ) );
+            shape->SetBezierC1( mapCoords( m_editPoints->Point( BEZIER_CTRL_PT1 ).GetPosition(), invertY ) );
+            shape->SetBezierC2( mapCoords( m_editPoints->Point( BEZIER_CTRL_PT2 ).GetPosition(), invertY ) );
+            shape->SetEnd( mapCoords( m_editPoints->Point( BEZIER_END ).GetPosition(), invertY ) );
 
             shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
             break;
@@ -988,7 +742,8 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
     case SCH_TEXTBOX_T:
     {
-        SCH_TEXTBOX*   textBox = static_cast<SCH_TEXTBOX*>( item );
+        SCH_TEXTBOX*   textbox = static_cast<SCH_TEXTBOX*>( item );
+        bool           invertY = textbox->GetLayer() == LAYER_DEVICE;
         EE_GRID_HELPER gridHelper( m_toolMgr );
         VECTOR2I       topLeft = m_editPoints->Point( RECT_TOPLEFT ).GetPosition();
         VECTOR2I       topRight = m_editPoints->Point( RECT_TOPRIGHT ).GetPosition();
@@ -1005,24 +760,24 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
                 || isModified( m_editPoints->Point( RECT_BOTRIGHT ) )
                 || isModified( m_editPoints->Point( RECT_BOTLEFT ) ) )
         {
-            textBox->SetPosition( topLeft );
-            textBox->SetEnd( botRight );
+            textbox->SetPosition( mapCoords( topLeft, invertY ) );
+            textbox->SetEnd( mapCoords( botRight, invertY ) );
         }
         else if( isModified( m_editPoints->Line( RECT_TOP ) ) )
         {
-            textBox->SetStartY( topLeft.y );
+            textbox->SetStartY( mapCoords( topLeft, invertY ).y );
         }
         else if( isModified( m_editPoints->Line( RECT_LEFT ) ) )
         {
-            textBox->SetStartX( topLeft.x );
+            textbox->SetStartX( mapCoords( topLeft, invertY ).x );
         }
         else if( isModified( m_editPoints->Line( RECT_BOT ) ) )
         {
-            textBox->SetEndY( botRight.y );
+            textbox->SetEndY( mapCoords( botRight, invertY ).y );
         }
         else if( isModified( m_editPoints->Line( RECT_RIGHT ) ) )
         {
-            textBox->SetEndX( botRight.x );
+            textbox->SetEndX( mapCoords( botRight, invertY ).x );
         }
 
         for( unsigned i = 0; i < m_editPoints->LinesSize(); ++i )
@@ -1034,7 +789,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
             }
         }
 
-        textBox->ClearRenderCache();
+        textbox->ClearRenderCache();
         break;
     }
 
@@ -1223,112 +978,22 @@ void EE_POINT_EDITOR::updatePoints()
 
     switch( item->Type() )
     {
-    case LIB_SHAPE_T:
-    {
-        LIB_SHAPE* shape = static_cast<LIB_SHAPE*>( item );
-
-        switch( shape->GetShape() )
-        {
-        case SHAPE_T::ARC:
-            m_editPoints->Point( ARC_CENTER ).SetPosition( mapCoords( shape->GetPosition() ) );
-            m_editPoints->Point( ARC_START ).SetPosition( mapCoords( shape->GetStart() ) );
-            m_editPoints->Point( ARC_END ).SetPosition( mapCoords( shape->GetEnd() ) );
-            break;
-
-        case SHAPE_T::CIRCLE:
-            m_editPoints->Point( CIRC_CENTER ).SetPosition( mapCoords( shape->GetPosition() ) );
-            m_editPoints->Point( CIRC_END ).SetPosition( mapCoords( shape->GetEnd() ) );
-            break;
-
-        case SHAPE_T::POLY:
-        {
-            if( (int) m_editPoints->PointsSize() != shape->GetPointCount() )
-            {
-                getView()->Remove( m_editPoints.get() );
-                m_editedPoint = nullptr;
-                m_editPoints = EDIT_POINTS_FACTORY::Make( item, m_frame );
-                getView()->Add( m_editPoints.get() );
-            }
-            else
-            {
-                int ii = 0;
-
-                for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                    m_editPoints->Point( ii++ ).SetPosition( mapCoords( pt ) );
-            }
-
-            break;
-        }
-
-        case SHAPE_T::RECTANGLE:
-        {
-            // point editor works only with rectangles having width and height > 0
-            // Some symbols can have rectangles with width or height < 0
-            // So normalize the size:
-            BOX2I dummy;
-            dummy.SetOrigin( mapCoords( shape->GetPosition() ) );
-            dummy.SetEnd( mapCoords( shape->GetEnd() ) );
-            dummy.Normalize();
-            VECTOR2I topLeft = dummy.GetPosition();
-            VECTOR2I botRight = dummy.GetEnd();
-
-            m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
-            m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
-            m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
-            m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-            break;
-        }
-
-        case SHAPE_T::BEZIER:
-            m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( mapCoords( shape->GetStart() ) );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( mapCoords( shape->GetBezierC1() ) );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( mapCoords( shape->GetBezierC2() ) );
-            m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( mapCoords( shape->GetEnd() ) );
-            break;
-
-        default:
-            UNIMPLEMENTED_FOR( shape->SHAPE_T_asString() );
-        }
-
-        break;
-    }
-
-    case LIB_TEXTBOX_T:
-    {
-        LIB_TEXTBOX* textbox = static_cast<LIB_TEXTBOX*>( item );
-
-        // point editor works only with rectangles having width and height > 0
-        // Some symbols can have rectangles with width or height < 0
-        // So normalize the size:
-        BOX2I dummy;
-        dummy.SetOrigin( mapCoords( textbox->GetPosition() ) );
-        dummy.SetEnd( mapCoords( textbox->GetEnd() ) );
-        dummy.Normalize();
-        VECTOR2I topLeft = dummy.GetPosition();
-        VECTOR2I botRight = dummy.GetEnd();
-
-        m_editPoints->Point( RECT_TOPLEFT ).SetPosition( topLeft );
-        m_editPoints->Point( RECT_TOPRIGHT ).SetPosition( VECTOR2I( botRight.x, topLeft.y ) );
-        m_editPoints->Point( RECT_BOTLEFT ).SetPosition( VECTOR2I( topLeft.x, botRight.y ) );
-        m_editPoints->Point( RECT_BOTRIGHT ).SetPosition( botRight );
-        break;
-    }
-
     case SCH_SHAPE_T:
     {
         SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
+        bool       invertY = true;
 
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            m_editPoints->Point( ARC_CENTER ).SetPosition( shape->GetPosition() );
-            m_editPoints->Point( ARC_START ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( ARC_END ).SetPosition( shape->GetEnd() );
+            m_editPoints->Point( ARC_CENTER ).SetPosition( mapCoords( shape->GetPosition(), invertY ) );
+            m_editPoints->Point( ARC_START ).SetPosition( mapCoords( shape->GetStart(), invertY ) );
+            m_editPoints->Point( ARC_END ).SetPosition( mapCoords( shape->GetEnd(), invertY ) );
             break;
 
         case SHAPE_T::CIRCLE:
-            m_editPoints->Point( CIRC_CENTER ).SetPosition( shape->GetPosition() );
-            m_editPoints->Point( CIRC_END ).SetPosition( shape->GetEnd() );
+            m_editPoints->Point( CIRC_CENTER ).SetPosition( mapCoords( shape->GetPosition(), invertY ) );
+            m_editPoints->Point( CIRC_END ).SetPosition( mapCoords( shape->GetEnd(), invertY ) );
             break;
 
         case SHAPE_T::POLY:
@@ -1345,7 +1010,7 @@ void EE_POINT_EDITOR::updatePoints()
                 int ii = 0;
 
                 for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
-                    m_editPoints->Point( ii++ ).SetPosition( pt );
+                    m_editPoints->Point( ii++ ).SetPosition( mapCoords( pt, invertY ) );
             }
 
             break;
@@ -1357,8 +1022,8 @@ void EE_POINT_EDITOR::updatePoints()
             // Some symbols can have rectangles with width or height < 0
             // So normalize the size:
             BOX2I dummy;
-            dummy.SetOrigin( shape->GetPosition() );
-            dummy.SetEnd( shape->GetEnd() );
+            dummy.SetOrigin( mapCoords( shape->GetPosition(), invertY ) );
+            dummy.SetEnd( mapCoords( shape->GetEnd(), invertY ) );
             dummy.Normalize();
             VECTOR2I topLeft = dummy.GetPosition();
             VECTOR2I botRight = dummy.GetEnd();
@@ -1371,10 +1036,10 @@ void EE_POINT_EDITOR::updatePoints()
         }
 
         case SHAPE_T::BEZIER:
-            m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( shape->GetBezierC1() );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( shape->GetBezierC2() );
-            m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( shape->GetEnd() );
+            m_editPoints->Point( BEZIER_START ).SetPosition( mapCoords( shape->GetStart(), invertY ) );
+            m_editPoints->Point( BEZIER_CTRL_PT1 ).SetPosition( mapCoords( shape->GetBezierC1(), invertY ) );
+            m_editPoints->Point( BEZIER_CTRL_PT2 ).SetPosition( mapCoords( shape->GetBezierC2(), invertY ) );
+            m_editPoints->Point( BEZIER_END ).SetPosition( mapCoords( shape->GetEnd(), invertY ) );
             break;
 
         default:
@@ -1386,14 +1051,15 @@ void EE_POINT_EDITOR::updatePoints()
 
     case SCH_TEXTBOX_T:
     {
-        SCH_TEXTBOX* textBox = static_cast<SCH_TEXTBOX*>( item );
+        SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( item );
+        bool         invertY = textbox->GetLayer() == LAYER_DEVICE;
 
         // point editor works only with rectangles having width and height > 0
         // Some symbols can have rectangles with width or height < 0
         // So normalize the size:
         BOX2I dummy;
-        dummy.SetOrigin( textBox->GetPosition() );
-        dummy.SetEnd( textBox->GetEnd() );
+        dummy.SetOrigin( mapCoords( textbox->GetPosition(), invertY ) );
+        dummy.SetEnd( mapCoords( textbox->GetEnd(), invertY ) );
         dummy.Normalize();
         VECTOR2I topLeft = dummy.GetPosition();
         VECTOR2I botRight = dummy.GetEnd();
@@ -1483,10 +1149,11 @@ void EE_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 
 bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 {
-    if( !m_editPoints || !m_editedPoint || m_editPoints->GetParent()->Type() != LIB_SHAPE_T )
+    if( !m_editPoints || !m_editedPoint || m_editPoints->GetParent()->Type() != SCH_SHAPE_T )
         return false;
 
-    LIB_SHAPE* shape = static_cast<LIB_SHAPE*>( m_editPoints->GetParent() );
+    SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
+    bool       invertY = shape->GetLayer() == LAYER_DEVICE;
 
     if( shape->GetPolyShape().IsEmpty() )
         return false;
@@ -1498,7 +1165,7 @@ bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     for( const VECTOR2I& pt : poly.CPoints() )
     {
-        if( pt == mapCoords( m_editedPoint->GetPosition() ) )
+        if( pt == mapCoords( m_editedPoint->GetPosition(), invertY ) )
             return true;
     }
 
@@ -1508,10 +1175,10 @@ bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
 bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
 {
-    if( !m_editPoints || m_editPoints->GetParent()->Type() != LIB_SHAPE_T )
+    if( !m_editPoints || m_editPoints->GetParent()->Type() != SCH_SHAPE_T )
         return false;
 
-    LIB_SHAPE* shape = static_cast<LIB_SHAPE*>( m_editPoints->GetParent() );
+    SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
 
     if( shape->GetShape() != SHAPE_T::POLY )
         return false;
@@ -1525,17 +1192,18 @@ bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
 
 int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 {
-    if( !m_editPoints || m_editPoints->GetParent()->Type() != LIB_SHAPE_T )
+    if( !m_editPoints || m_editPoints->GetParent()->Type() != SCH_SHAPE_T )
         return 0;
 
-    LIB_SHAPE*        shape = static_cast<LIB_SHAPE*>( m_editPoints->GetParent() );
+    SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
+    bool              invertY = shape->GetLayer() == LAYER_DEVICE;
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
     SCH_COMMIT        commit( m_toolMgr );
 
     commit.Modify( shape, m_frame->GetScreen() );
 
     VECTOR2I cursor = getViewControls()->GetCursorPosition( !aEvent.DisableGridSnapping() );
-    VECTOR2I pos = mapCoords( cursor );
+    VECTOR2I pos = mapCoords( cursor, invertY );
     int      currentMinDistance = INT_MAX;
     int      closestLineStart = 0;
 
@@ -1563,10 +1231,10 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
 int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 {
-    if( !m_editPoints || !m_editedPoint || m_editPoints->GetParent()->Type() != LIB_SHAPE_T )
+    if( !m_editPoints || !m_editedPoint || m_editPoints->GetParent()->Type() != SCH_SHAPE_T )
         return 0;
 
-    LIB_SHAPE*        shape = static_cast<LIB_SHAPE*>( m_editPoints->GetParent() );
+    SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
     SCH_COMMIT        commit( m_toolMgr );
 

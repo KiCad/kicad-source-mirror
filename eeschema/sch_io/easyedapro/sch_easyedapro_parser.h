@@ -30,17 +30,11 @@
 #include <sch_io/sch_io_mgr.h>
 #include <pin_type.h>
 #include <layer_ids.h>
-#include <wx/filename.h>
 #include <plotters/plotter.h>
 
 
 class EDA_TEXT;
-class LIB_SHAPE;
-class LIB_PIN;
-class SCH_LABEL_BASE;
 class SCH_SYMBOL;
-class SCH_TEXT;
-class SCH_SHAPE;
 
 namespace EASYEDAPRO
 {

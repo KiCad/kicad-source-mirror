@@ -51,11 +51,7 @@ class SCH_FIELD;
 class STRING_UTF8_MAP;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
-class LIB_SHAPE;
-class LIB_RECTANGLE;
-class LIB_POLYLINE;
 class LIB_PIN;
-class LIB_TEXT;
 class wxXmlNode;
 
 
@@ -156,14 +152,10 @@ private:
 
     bool          loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBOL>& aSymbol,
                               EDEVICE* aDevice, int aGateNumber, const wxString& aGateName );
-    LIB_SHAPE*    loadSymbolCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aCircleNode,
-                                    int aGateNumber );
-    LIB_SHAPE*    loadSymbolRectangle( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aRectNode,
-                                       int aGateNumber );
-    LIB_SHAPE*    loadSymbolPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol,
-                                      wxXmlNode* aPolygonNode, int aGateNumber );
-    SCH_ITEM*     loadSymbolWire( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aWireNode,
-                                  int aGateNumber );
+    SCH_SHAPE*    loadSymbolCircle( wxXmlNode* aCircleNode, int aGateNumber );
+    SCH_SHAPE*    loadSymbolRectangle( wxXmlNode* aRectNode, int aGateNumber );
+    SCH_SHAPE*    loadSymbolPolyLine( wxXmlNode* aPolygonNode, int aGateNumber );
+    SCH_ITEM*     loadSymbolWire( wxXmlNode* aWireNode, int aGateNumber );
     LIB_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*, EPIN* epin,
                            int aGateNumber );
     SCH_TEXT*     loadSymbolText( wxXmlNode* aLibText, int aGateNumber );

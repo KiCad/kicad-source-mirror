@@ -44,8 +44,6 @@
 #include <sch_sheet_pin.h>
 #include <sch_sheet.h>
 
-#include <lib_shape.h>
-#include <lib_textbox.h>
 #include <lib_pin.h>
 
 #include <erc_settings.h>
@@ -84,10 +82,10 @@ public:
         case SCH_BUS_WIRE_ENTRY_T:  return new SCH_BUS_WIRE_ENTRY();
         case SCH_BUS_BUS_ENTRY_T:   return new SCH_BUS_BUS_ENTRY();
         case SCH_LINE_T:            return new SCH_LINE();
-        case SCH_SHAPE_T:           return new SCH_SHAPE( SHAPE_T::ARC );
+        case SCH_SHAPE_T:           return new SCH_SHAPE( SHAPE_T::ARC, LAYER_NOTES );
         case SCH_BITMAP_T:          return new SCH_BITMAP();
         case SCH_TEXT_T:            return new SCH_TEXT( VECTOR2I( 0, 0 ), "test text" );
-        case SCH_TEXTBOX_T:         return new SCH_TEXTBOX( 0, FILL_T::NO_FILL, "test textbox" );
+        case SCH_TEXTBOX_T:         return new SCH_TEXTBOX( LAYER_NOTES, 0, FILL_T::NO_FILL, "test textbox" );
         case SCH_TABLECELL_T:       return new SCH_TABLECELL();
         case SCH_TABLE_T:
         {
@@ -115,8 +113,6 @@ public:
                                       "test aPin" );
 
         case SCH_SHEET_T:           return new SCH_SHEET();
-        case LIB_SHAPE_T:           return new LIB_SHAPE( &m_symbol, SHAPE_T::ARC );
-        case LIB_TEXTBOX_T:         return new LIB_TEXTBOX( &m_symbol, 0, FILL_T::NO_FILL, "test" );
         case LIB_PIN_T:             return new LIB_PIN( &m_symbol );
 
         case SCHEMATIC_T:

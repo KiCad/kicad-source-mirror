@@ -45,14 +45,12 @@
 #include <sch_item.h>
 #include <sch_line.h>
 #include <sch_bus_entry.h>
-#include <sch_junction.h>
 #include <sch_marker.h>
 #include <sch_no_connect.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>
-#include <lib_shape.h>
 #include <schematic.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
@@ -570,9 +568,9 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        m_selection = RequestSelection( { LIB_SHAPE_T,
+                        m_selection = RequestSelection( { SCH_SHAPE_T,
                                                           SCH_TEXT_T,
-                                                          LIB_TEXTBOX_T,
+                                                          SCH_TEXTBOX_T,
                                                           LIB_PIN_T,
                                                           SCH_FIELD_T } );
                     }
@@ -1355,7 +1353,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
     {
         EDA_ITEM*   item = collector[ i ];
         SCH_LINE*   line = dynamic_cast<SCH_LINE*>( item );
-        LIB_SHAPE*  shape = dynamic_cast<LIB_SHAPE*>( item );
+        SCH_SHAPE*  shape = dynamic_cast<SCH_SHAPE*>( item );
         SCH_TABLE*  table = dynamic_cast<SCH_TABLE*>( item );
 
         // Lines are hard to hit.  Give them a bit more slop to still be considered "exact".
@@ -1391,8 +1389,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
     // Find the closest item.  (Note that at this point all hits are either exact or non-exact.)
     VECTOR2I  pos( aPos );
-    SEG       poss( m_isSymbolEditor ? mapCoords( pos ) : pos,
-                    m_isSymbolEditor ? mapCoords( pos ) : pos );
+    SEG       poss( mapCoords( pos, m_isSymbolEditor ), mapCoords( pos, m_isSymbolEditor ) );
     EDA_ITEM* closest = nullptr;
     int       closestDist = INT_MAX / 4;
 
@@ -1636,7 +1633,6 @@ bool EE_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
     }
 
     case SCH_SHAPE_T:
-    case LIB_SHAPE_T:
         if( !m_filter.graphics )
             return false;
 
@@ -1647,7 +1643,6 @@ bool EE_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
     case SCH_TABLE_T:
     case SCH_TABLECELL_T:
     case SCH_FIELD_T:
-    case LIB_TEXTBOX_T:
         if( !m_filter.text )
             return false;
 
@@ -2482,8 +2477,9 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
     case SCH_FIELD_T:     // SCH_FIELD objects are not unit/body-style-specific.
         break;
 
-    case LIB_SHAPE_T:
+    case SCH_SHAPE_T:
     case SCH_TEXT_T:
+    case SCH_TEXTBOX_T:
     case LIB_PIN_T:
         if( symEditFrame )
         {

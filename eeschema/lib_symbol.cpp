@@ -33,7 +33,7 @@
 #include <symbol_library.h>
 #include <lib_pin.h>
 #include <settings/color_settings.h>
-#include <lib_shape.h>
+#include <sch_shape.h>
 
 #include <memory>
 
@@ -289,7 +289,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
     for( auto it = m_drawings.begin(); it != m_drawings.end(); ++it )
     {
-        if( it->Type() == LIB_SHAPE_T )
+        if( it->Type() == SCH_SHAPE_T )
             aShapes.insert( &(*it) );
         else if( it->Type() == SCH_FIELD_T )
             aFields.insert( &(*it) );
@@ -303,7 +303,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
 
     for( auto it = aRhs.m_drawings.begin(); it != aRhs.m_drawings.end(); ++it )
     {
-        if( it->Type() == LIB_SHAPE_T )
+        if( it->Type() == SCH_SHAPE_T )
             bShapes.insert( &(*it) );
         else if( it->Type() == SCH_FIELD_T )
             bFields.insert( &(*it) );
@@ -768,9 +768,9 @@ void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
                 item.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
             }
         }
-        else if( item.Type() == LIB_SHAPE_T )
+        else if( item.Type() == SCH_SHAPE_T )
         {
-            LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
+            SCH_SHAPE& shape = static_cast<SCH_SHAPE&>( item );
 
             if( shape.GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
                 aForceNoFill = true;
@@ -800,9 +800,9 @@ void LIB_SYMBOL::PrintBackground( const SCH_RENDER_SETTINGS* aSettings, int aUni
             if( item.IsPrivate() )
                 continue;
 
-            if( item.Type() == LIB_SHAPE_T )
+            if( item.Type() == SCH_SHAPE_T )
             {
-                LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
+                SCH_SHAPE& shape = static_cast<SCH_SHAPE&>( item );
 
                 // Do not draw items not attached to the current part
                 if( aUnit && shape.m_unit && ( shape.m_unit != aUnit ) )
@@ -902,14 +902,14 @@ void LIB_SYMBOL::PlotFields( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT
 
 void LIB_SYMBOL::FixupDrawItems()
 {
-    std::vector<LIB_SHAPE*> potential_top_items;
+    std::vector<SCH_SHAPE*> potential_top_items;
     std::vector<SCH_ITEM*>  bottom_items;
 
     for( SCH_ITEM& item : m_drawings )
     {
-        if( item.Type() == LIB_SHAPE_T )
+        if( item.Type() == SCH_SHAPE_T )
         {
-            LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
+            SCH_SHAPE& shape = static_cast<SCH_SHAPE&>( item );
 
             if( shape.GetFillMode() == FILL_T::FILLED_WITH_COLOR )
                 potential_top_items.push_back( &shape );
@@ -928,7 +928,7 @@ void LIB_SYMBOL::FixupDrawItems()
                    return a->GetBoundingBox().GetArea() > b->GetBoundingBox().GetArea();
                } );
 
-    for( LIB_SHAPE* item : potential_top_items )
+    for( SCH_SHAPE* item : potential_top_items )
     {
         for( SCH_ITEM* bottom_item : bottom_items )
         {

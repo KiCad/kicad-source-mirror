@@ -30,7 +30,6 @@
 #include <core/mirror.h>
 #include <core/kicad_algo.h>
 #include <eda_text.h>
-#include <lib_shape.h>
 #include <macros.h>
 #include <progress_reporter.h>
 #include <string_utils.h>
@@ -1621,7 +1620,8 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
         }
         else
         {
-            LIB_SHAPE* shape = new LIB_SHAPE( kiSym.get(), SHAPE_T::POLY );
+            SCH_SHAPE* shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
+
             shape->SetPolyShape( fig.Shape.ConvertToPolySet(
                     [&]( const VECTOR2I& aPt )
                     {
@@ -1989,7 +1989,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
     {
         cur = &aCadstarVertices.at( i );
 
-        LIB_SHAPE* shape      = nullptr;
+        SCH_SHAPE* shape      = nullptr;
         bool       cw         = false;
         VECTOR2I   startPoint = getKiCadLibraryPoint( prev->End, aSymbolOrigin );
         VECTOR2I   endPoint   = getKiCadLibraryPoint( cur->End, aSymbolOrigin );
@@ -2009,7 +2009,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
         switch( cur->Type )
         {
         case VERTEX_TYPE::POINT:
-            shape = new LIB_SHAPE( aSymbol, SHAPE_T::POLY );
+            shape = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             shape->AddPoint( startPoint );
             shape->AddPoint( endPoint );
             break;
@@ -2021,7 +2021,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadLibrarySymbolShapeVertices( const std::vect
 
         case VERTEX_TYPE::ANTICLOCKWISE_SEMICIRCLE:
         case VERTEX_TYPE::ANTICLOCKWISE_ARC:
-            shape = new LIB_SHAPE( aSymbol, SHAPE_T::ARC );
+            shape = new SCH_SHAPE( SHAPE_T::ARC, LAYER_DEVICE );
 
             shape->SetPosition( centerPoint );
 
@@ -2374,11 +2374,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
                   "First vertex should always be a point vertex" );
 
     auto pointTransform =
-        [&]( const VECTOR2I& aV )
-        {
-            return applyTransform( getKiCadPoint( aV ), aMoveVector, aRotation,
-                                   aScalingFactor, aTransformCentre, aMirrorInvert );
-        };
+            [&]( const VECTOR2I& aV )
+            {
+                return applyTransform( getKiCadPoint( aV ), aMoveVector, aRotation,
+                                       aScalingFactor, aTransformCentre, aMirrorInvert );
+            };
 
     for( size_t ii = 1; ii < aCadstarVertices.size(); ii++ )
     {
@@ -2396,12 +2396,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
         {
             SHAPE_ARC tempArc = cur->BuildArc( transformedStartPoint, pointTransform );
 
-            SCH_SHAPE* arcShape = new SCH_SHAPE( SHAPE_T::ARC, lineWidth );
+            SCH_SHAPE* arcShape = new SCH_SHAPE( SHAPE_T::ARC, LAYER_NOTES, lineWidth );
             arcShape->SetArcGeometry( tempArc.GetP0(), tempArc.GetArcMid(), tempArc.GetP1() );
 
             loadItemOntoKiCadSheet( aCadstarSheetID, arcShape );
-        }
             break;
+        }
 
         case VERTEX_TYPE::POINT:
         {
@@ -2415,13 +2415,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadShapeVertices( const std::vector<VERTEX>& a
             segment->SetEndPoint( transformedEndPoint );
 
             loadItemOntoKiCadSheet( aCadstarSheetID, segment );
-         }
             break;
+        }
 
         default:
             wxFAIL_MSG( "Unknown CADSTAR Vertex type" );
         }
-
 
         prev = cur;
     }
@@ -3209,9 +3208,9 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
     {
         switch( item.Type() )
         {
-        case KICAD_T::LIB_SHAPE_T:
+        case KICAD_T::SCH_SHAPE_T:
         {
-            LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( item );
+            SCH_SHAPE& shape = static_cast<SCH_SHAPE&>( item );
 
             if( shape.GetShape() == SHAPE_T::ARC )
             {
@@ -3268,11 +3267,11 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
     // Note: Need the custom comparison function to ensure the map is sorted correctly
     std::map<VECTOR2I, SHAPE_LINE_CHAIN, decltype( compLambda )> uniqueSegments( compLambda );
 
-    LIB_ITEMS_CONTAINER::ITERATOR shapeIt = aSymbolToFix->GetDrawItems().begin( LIB_SHAPE_T );
+    LIB_ITEMS_CONTAINER::ITERATOR shapeIt = aSymbolToFix->GetDrawItems().begin( SCH_SHAPE_T );
 
-    for( ; shapeIt != aSymbolToFix->GetDrawItems().end( LIB_SHAPE_T ); ++shapeIt )
+    for( ; shapeIt != aSymbolToFix->GetDrawItems().end( SCH_SHAPE_T ); ++shapeIt )
     {
-        LIB_SHAPE& shape = static_cast<LIB_SHAPE&>( *shapeIt );
+        SCH_SHAPE& shape = static_cast<SCH_SHAPE&>( *shapeIt );
 
         if( aGateNumber > 0 && shape.GetUnit() != aGateNumber )
             continue;

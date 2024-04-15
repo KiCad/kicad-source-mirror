@@ -24,7 +24,6 @@
 #include <settings/settings_manager.h>
 
 #include <connection_graph.h>
-#include <lib_textbox.h>
 #include <schematic.h>
 #include <sch_screen.h>
 

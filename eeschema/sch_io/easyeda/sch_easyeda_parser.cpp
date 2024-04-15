@@ -27,20 +27,16 @@
 #include <sch_io/sch_io_mgr.h>
 #include <schematic.h>
 #include <sch_sheet.h>
-#include <sch_sheet_pin.h>
 #include <sch_line.h>
-#include <lib_shape.h>
 #include <sch_no_connect.h>
 #include <sch_label.h>
 #include <sch_junction.h>
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
 #include <sch_bitmap.h>
-#include <sch_bus_entry.h>
 #include <string_utils.h>
 #include <bezier_curves.h>
 #include <wx/base64.h>
-#include <wx/url.h>
 #include <wx/mstream.h>
 #include <gfx_import_utils.h>
 #include <import_gfx/svg_import_plugin.h>
@@ -179,7 +175,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
 {
     if( aStyle == EASYEDA::POWER_FLAG_STYLE::CIRCLE || aStyle == EASYEDA::POWER_FLAG_STYLE::ARROW )
     {
-        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line1 );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
@@ -187,7 +183,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
 
         if( aStyle == EASYEDA::POWER_FLAG_STYLE::CIRCLE )
         {
-            LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
+            SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
             aKsymbol->AddDrawItem( circle );
             circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), LINE_STYLE::SOLID ) );
             circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -75 ) } );
@@ -195,7 +191,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         }
         else
         {
-            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line2 );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
@@ -208,13 +204,13 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
     }
     else if( aStyle == EASYEDA::POWER_FLAG_STYLE::WAVE )
     {
-        LIB_SHAPE* line = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line );
         line->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line->AddPoint( { 0, 0 } );
         line->AddPoint( { 0, schIUScale.MilsToIU( -72 ) } );
 
-        LIB_SHAPE* bezier = new LIB_SHAPE( aKsymbol, SHAPE_T::BEZIER );
+        SCH_SHAPE* bezier = new SCH_SHAPE( SHAPE_T::BEZIER, LAYER_DEVICE );
         aKsymbol->AddDrawItem( bezier );
         bezier->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), LINE_STYLE::SOLID ) );
         bezier->AddPoint( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -50 ) } );
@@ -229,7 +225,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
              || aStyle == EASYEDA::POWER_FLAG_STYLE::EARTH
              || aStyle == EASYEDA::POWER_FLAG_STYLE::GOST_ARROW )
     {
-        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line1 );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
@@ -237,25 +233,25 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
 
         if( aStyle == EASYEDA::POWER_FLAG_STYLE::POWER_GROUND )
         {
-            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line2 );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
 
-            LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line3 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line3 );
             line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line3->AddPoint( { schIUScale.MilsToIU( -70 ), schIUScale.MilsToIU( -120 ) } );
             line3->AddPoint( { schIUScale.MilsToIU( 70 ), schIUScale.MilsToIU( -120 ) } );
 
-            LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line4 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line4 );
             line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line4->AddPoint( { schIUScale.MilsToIU( -40 ), schIUScale.MilsToIU( -140 ) } );
             line4->AddPoint( { schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( -140 ) } );
 
-            LIB_SHAPE* line5 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line5 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line5 );
             line5->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line5->AddPoint( { schIUScale.MilsToIU( -10 ), schIUScale.MilsToIU( -160 ) } );
@@ -263,7 +259,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         }
         else if( aStyle == EASYEDA::POWER_FLAG_STYLE::SIGNAL_GROUND )
         {
-            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line2 );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
@@ -273,7 +269,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         }
         else if( aStyle == EASYEDA::POWER_FLAG_STYLE::EARTH )
         {
-            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line2 );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -150 ), schIUScale.MilsToIU( -200 ) } );
@@ -281,7 +277,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
             line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
             line2->AddPoint( { schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( -200 ) } );
 
-            LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line3 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line3 );
             line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line3->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
@@ -289,7 +285,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         }
         else // EASYEDA::POWER_FLAG_STYLE::GOST_ARROW
         {
-            LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+            SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             aKsymbol->AddDrawItem( line2 );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
             line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
@@ -304,25 +300,25 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
     else if( aStyle == EASYEDA::POWER_FLAG_STYLE::GOST_POWER_GROUND
              || aStyle == EASYEDA::POWER_FLAG_STYLE::GOST_EARTH )
     {
-        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line1 );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, schIUScale.MilsToIU( -160 ) } );
 
-        LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line2 );
         line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -160 ) } );
         line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -160 ) } );
 
-        LIB_SHAPE* line3 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line3 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line3 );
         line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line3->AddPoint( { schIUScale.MilsToIU( -60 ), schIUScale.MilsToIU( -200 ) } );
         line3->AddPoint( { schIUScale.MilsToIU( 60 ), schIUScale.MilsToIU( -200 ) } );
 
-        LIB_SHAPE* line4 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line4 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line4 );
         line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line4->AddPoint( { schIUScale.MilsToIU( -20 ), schIUScale.MilsToIU( -240 ) } );
@@ -331,7 +327,7 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
         if( aStyle == EASYEDA::POWER_FLAG_STYLE::GOST_POWER_GROUND )
             return { 0, schIUScale.MilsToIU( 300 ) };
 
-        LIB_SHAPE* circle = new LIB_SHAPE( aKsymbol, SHAPE_T::CIRCLE );
+        SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
         aKsymbol->AddDrawItem( circle );
         circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -160 ) } );
@@ -341,13 +337,13 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
     }
     else if( aStyle == EASYEDA::POWER_FLAG_STYLE::GOST_BAR )
     {
-        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line1 );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, schIUScale.MilsToIU( -200 ) } );
 
-        LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line2 );
         line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -200 ) } );
@@ -363,13 +359,13 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, EASYEDA::POWER_F
                                RPT_SEVERITY_WARNING );
         }
 
-        LIB_SHAPE* line1 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line1 );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
         line1->AddPoint( { 0, schIUScale.MilsToIU( -100 ) } );
 
-        LIB_SHAPE* line2 = new LIB_SHAPE( aKsymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         aKsymbol->AddDrawItem( line2 );
         line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line2->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( -100 ) } );
@@ -406,7 +402,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
                         RelPosSym( VECTOR2I( Convert( ptArr[i - 1] ), Convert( ptArr[i] ) ) ) );
             }
 
-            std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
+            auto line = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
 
             if( elType == wxS( "PG" ) )
                 chain.SetClosed( true );
@@ -449,8 +445,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
             for( SHAPE_LINE_CHAIN outline : lineChains )
             {
-                std::unique_ptr<LIB_SHAPE> shape =
-                        std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
+                auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
 
                 outline.Mirror( false, true );
 
@@ -631,7 +626,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             if( cw )
                 std::swap( start, end );
 
-            std::unique_ptr<LIB_SHAPE> shape = std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::ARC );
+            auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE );
 
             shape->SetStart( RelPosSym( start ) );
             shape->SetEnd( RelPosSym( end ) );
@@ -669,8 +664,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
             //if( cr.x == 0 )
             {
-                std::unique_ptr<LIB_SHAPE> rect =
-                        std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::RECTANGLE );
+                auto rect = std::make_unique<SCH_SHAPE>( SHAPE_T::RECTANGLE, LAYER_DEVICE );
 
                 rect->SetStart( RelPosSym( start ) );
                 rect->SetEnd( RelPosSym( start + size ) );
@@ -694,8 +688,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
         }
         else if( elType == wxS( "E" ) )
         {
-            std::unique_ptr<LIB_SHAPE> circle =
-                    std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::CIRCLE );
+            auto circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE, LAYER_DEVICE );
 
             VECTOR2D   center( Convert( arr[1] ), Convert( arr[2] ) );
             VECTOR2D   radius( Convert( arr[3] ), Convert( arr[4] ) ); // TODO: corner radius
@@ -755,8 +748,8 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
             // M360,290h10 or M 420 300 h -5
             wxString lineData = pinPathColorParts[0];
-            wxRegEx  regex(
-                    wxS( "^M\\s*([-\\d.]+)[,\\s]([-\\d.]+)\\s*([h|v])\\s*([-\\d.]+)\\s*$" ) );
+            wxRegEx  regex( wxS( "^M\\s*([-\\d.]+)[,\\s]([-\\d.]+)\\s*([h|v])\\s*([-\\d.]+)\\s*$" ) );
+
             if( regex.Matches( lineData ) )
             {
                 startPoint.x = Convert( regex.GetMatch( lineData, 1 ) );
@@ -816,8 +809,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
                     {
                         VECTOR2D dotPos( Convert( dotParts[1] ), Convert( dotParts[2] ) );
 
-                        std::unique_ptr<LIB_SHAPE> circle =
-                                std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::CIRCLE );
+                        auto circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE, LAYER_DEVICE );
 
                         circle->SetCenter( RelPosSym( dotPos ) );
                         circle->SetEnd( RelPosSym(
@@ -835,8 +827,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
                         for( SHAPE_LINE_CHAIN outline : lineChains )
                         {
-                            std::unique_ptr<LIB_SHAPE> shape =
-                                    std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
+                            auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
 
                             outline.Mirror( false, true );
 

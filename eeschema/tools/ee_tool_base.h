@@ -202,20 +202,22 @@ protected:
 };
 
 
-// For LibEdit
-inline VECTOR2I mapCoords( const wxPoint& aCoord )
+//
+// TODO: nuke symbol editor's upside-down coordinate system
+//
+inline VECTOR2I mapCoords( const wxPoint& aCoord, bool aInvertY )
 {
-    return VECTOR2I( aCoord.x, -aCoord.y );
+    return VECTOR2I( aCoord.x, aInvertY ? -aCoord.y : aCoord.y );
 }
 
-inline VECTOR2I mapCoords( const VECTOR2I& aCoord )
+inline VECTOR2I mapCoords( const VECTOR2I& aCoord, bool aInvertY )
 {
-    return VECTOR2I( aCoord.x, -aCoord.y );
+    return VECTOR2I( aCoord.x, aInvertY ? -aCoord.y : aCoord.y );
 }
 
-inline VECTOR2I mapCoords( const int x, const int y )
+inline VECTOR2I mapCoords( const int x, const int y, bool aInvertY )
 {
-    return VECTOR2I( x, -y );
+    return VECTOR2I( x, aInvertY ? -y : y );
 }
 
 #endif

@@ -26,7 +26,7 @@
 
 #include <stdint.h>
 #include <lib_symbol.h>
-#include <lib_shape.h>
+#include <sch_shape.h>
 #include <import_gfx/graphics_importer_lib_symbol.h>
 #include <import_gfx/svg_import_plugin.h>
 
@@ -118,8 +118,7 @@ void ConvertImageToLibShapes( LIB_SYMBOL* aSymbol, int unit, wxImage img, VECTOR
 
         for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
         {
-            std::unique_ptr<LIB_SHAPE> shape =
-                    std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
+            auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
 
             shape->SetPolyShape( poly );
 

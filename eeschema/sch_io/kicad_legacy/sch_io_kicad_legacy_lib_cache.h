@@ -30,8 +30,8 @@
 
 class FILE_LINE_READER;
 class LIB_PIN;
-class LIB_SHAPE;
-class LIB_TEXT;
+class SCH_SHAPE;
+class SCH_TEXT;
 class LINE_READER;
 class SCH_IO_KICAD_LEGACY;
 
@@ -73,24 +73,24 @@ private:
     static void       loadFootprintFilters( std::unique_ptr<LIB_SYMBOL>& aSymbol,
                                             LINE_READER& aReader );
     void              loadDocs();
-    static LIB_SHAPE* loadArc( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
-    static LIB_SHAPE* loadCircle( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static SCH_SHAPE* loadArc( LINE_READER& aReader );
+    static SCH_SHAPE* loadCircle( LINE_READER& aReader );
     static SCH_TEXT*  loadText( LINE_READER& aReader, int aMajorVersion, int aMinorVersion );
-    static LIB_SHAPE* loadRect( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static SCH_SHAPE* loadRect( LINE_READER& aReader );
     static LIB_PIN*   loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
-    static LIB_SHAPE* loadPolyLine( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
-    static LIB_SHAPE* loadBezier( std::unique_ptr<LIB_SYMBOL>& aSymbol, LINE_READER& aReader );
+    static SCH_SHAPE* loadPolyLine( LINE_READER& aReader );
+    static SCH_SHAPE* loadBezier( LINE_READER& aReader );
 
     static FILL_T   parseFillMode( LINE_READER& aReader, const char* aLine, const char** aOutput );
 
     void            saveDocFile();
-    static void     saveArc( LIB_SHAPE* aArc, OUTPUTFORMATTER& aFormatter );
-    static void     saveBezier( LIB_SHAPE* aBezier, OUTPUTFORMATTER& aFormatter );
-    static void     saveCircle( LIB_SHAPE* aCircle, OUTPUTFORMATTER& aFormatter );
+    static void     saveArc( SCH_SHAPE* aArc, OUTPUTFORMATTER& aFormatter );
+    static void     saveBezier( SCH_SHAPE* aBezier, OUTPUTFORMATTER& aFormatter );
+    static void     saveCircle( SCH_SHAPE* aCircle, OUTPUTFORMATTER& aFormatter );
     static void     saveField( const SCH_FIELD* aField, OUTPUTFORMATTER& aFormatter );
     static void     savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter );
-    static void     savePolyLine( LIB_SHAPE* aPolyLine, OUTPUTFORMATTER& aFormatter );
-    static void     saveRectangle( LIB_SHAPE* aRectangle, OUTPUTFORMATTER& aFormatter );
+    static void     savePolyLine( SCH_SHAPE* aPolyLine, OUTPUTFORMATTER& aFormatter );
+    static void     saveRectangle( SCH_SHAPE* aRectangle, OUTPUTFORMATTER& aFormatter );
     static void     saveText( const SCH_TEXT* aText, OUTPUTFORMATTER& aFormatter );
 
     int             m_versionMajor;

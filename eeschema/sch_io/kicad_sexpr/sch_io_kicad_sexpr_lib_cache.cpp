@@ -22,9 +22,9 @@
 #include <wx/log.h>
 #include <base_units.h>
 #include <build_version.h>
-#include <lib_shape.h>
+#include <sch_shape.h>
 #include <lib_symbol.h>
-#include <lib_textbox.h>
+#include <sch_textbox.h>
 #include <locale_io.h>
 #include <macros.h>
 #include <richio.h>
@@ -333,9 +333,9 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFO
 
     switch( aItem->Type() )
     {
-    case LIB_SHAPE_T:
+    case SCH_SHAPE_T:
     {
-        LIB_SHAPE*    shape = static_cast<LIB_SHAPE*>( aItem );
+        SCH_SHAPE*    shape = static_cast<SCH_SHAPE*>( aItem );
         STROKE_PARAMS stroke = shape->GetStroke();
         FILL_T        fillMode = shape->GetFillMode();
         COLOR4D       fillColor = shape->GetFillColor();
@@ -378,8 +378,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFO
         saveText( static_cast<SCH_TEXT*>( aItem ), aFormatter, aNestLevel );
         break;
 
-    case LIB_TEXTBOX_T:
-        saveTextBox( static_cast<LIB_TEXTBOX*>( aItem ), aFormatter, aNestLevel );
+    case SCH_TEXTBOX_T:
+        saveTextBox( static_cast<SCH_TEXTBOX*>( aItem ), aFormatter, aNestLevel );
         break;
 
     default:
@@ -489,10 +489,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveText( SCH_TEXT* aText, OUTPUTFORMATTER& a
 }
 
 
-void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveTextBox( LIB_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter,
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveTextBox( SCH_TEXTBOX* aTextBox, OUTPUTFORMATTER& aFormatter,
                                                 int aNestLevel )
 {
-    wxCHECK_RET( aTextBox && aTextBox->Type() == LIB_TEXTBOX_T, "Invalid LIB_TEXTBOX object." );
+    wxCHECK_RET( aTextBox && aTextBox->Type() == SCH_TEXTBOX_T, "Invalid SCH_TEXTBOX object." );
 
     aFormatter.Print( aNestLevel, "(text_box%s %s\n",
                       aTextBox->IsPrivate() ? " private" : "",

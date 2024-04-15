@@ -30,13 +30,11 @@
 #include <sch_io/sch_io_mgr.h>
 #include <pin_type.h>
 #include <layer_ids.h>
-#include <wx/filename.h>
 #include <plotters/plotter.h>
 #include <sch_io/ltspice/ltspice_schematic.h>
 
 
 class EDA_TEXT;
-class LIB_SHAPE;
 class LIB_PIN;
 class SCH_LABEL_BASE;
 class SCH_SYMBOL;
@@ -109,7 +107,7 @@ public:
      * @param aIndex index.
      */
     void CreateLines( LIB_SYMBOL* aSymbol, LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                      LIB_SHAPE* aShape );
+                      SCH_SHAPE* aShape );
 
     /**
      * Method for plotting Schematic Lines from Asy files
@@ -244,7 +242,7 @@ public:
     /**
      * Create a symbol rect.
      */
-    void CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, LIB_SHAPE* aRectangle );
+    void CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aRectangle );
 
     /**
      * Create a schematic rect.
@@ -259,7 +257,7 @@ public:
     /**
      * Create a symbol arc.
      */
-    void CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, LIB_SHAPE* aArc );
+    void CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aArc );
 
     /**
      * Create a schematic arc.
@@ -269,7 +267,7 @@ public:
     /**
      * Create a symbol circle.
      */
-    void CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, LIB_SHAPE* aCircle );
+    void CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_SHAPE* aCircle );
 
     /**
      * Create a schematic circle.

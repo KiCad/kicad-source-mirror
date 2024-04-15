@@ -2282,7 +2282,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
             case SCH_TEXTBOX_T:
             {
-                SCH_TEXTBOX* new_textbox = new SCH_TEXTBOX( 0, FILL_T::NO_FILL, txt );
+                SCH_TEXTBOX* new_textbox = new SCH_TEXTBOX( LAYER_NOTES, 0, FILL_T::NO_FILL, txt );
                 BOX2I        bbox = item->GetBoundingBox();
 
                 if( SCH_LABEL_BASE* label = dynamic_cast<SCH_LABEL_BASE*>( item ) )

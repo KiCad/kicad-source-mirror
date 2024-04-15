@@ -24,7 +24,7 @@
 #include <vector>
 #include <sch_symbol.h>
 #include <eda_draw_frame.h>
-#include <lib_shape.h>
+#include <sch_shape.h>
 #include <macros.h>
 
 // helper function to sort pins by pin num
@@ -47,7 +47,7 @@ static void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& 
  * @param aUnitsProvider a frame to format coordinates in messages
  */
 void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
-                    int aGridForPins, EDA_DRAW_FRAME* aUnitsProvider )
+                     int aGridForPins, EDA_DRAW_FRAME* aUnitsProvider )
 {
     if( !aSymbol )
         return;
@@ -363,10 +363,10 @@ void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessag
 
     for( const SCH_ITEM& item : aSymbol->GetDrawItems() )
     {
-        if( item.Type() != LIB_SHAPE_T )
+        if( item.Type() != SCH_SHAPE_T )
             continue;
 
-        const LIB_SHAPE* shape = static_cast<const LIB_SHAPE*>( &item );
+        const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( &item );
 
         switch( shape->GetShape() )
         {

@@ -29,7 +29,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 // Code under test
-#include <lib_shape.h>
+#include <sch_shape.h>
 #include <lib_pin.h>
 
 #include "lib_field_test_utils.h"
@@ -409,22 +409,22 @@ BOOST_AUTO_TEST_CASE( Compare )
     m_part_no_data.SetNormal();
 
     // Draw item list size comparison tests.
-    testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECTANGLE ) );
-    m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::RECTANGLE ) );
+    testPart.AddDrawItem( new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE ) );
+    m_part_no_data.AddDrawItem( new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE ) );
     BOOST_CHECK_EQUAL( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ), 0 );
-    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[SCH_SHAPE_T].front() );
     BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) < 0 );
-    testPart.RemoveDrawItem( &testPart.GetDrawItems()[LIB_SHAPE_T].front() );
-    m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::RECTANGLE ) );
+    testPart.RemoveDrawItem( &testPart.GetDrawItems()[SCH_SHAPE_T].front() );
+    m_part_no_data.AddDrawItem( new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
-    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[SCH_SHAPE_T].front() );
 
     // Draw item list contents comparison tests.
-    testPart.AddDrawItem( new LIB_SHAPE( &testPart, SHAPE_T::RECTANGLE ) );
-    m_part_no_data.AddDrawItem( new LIB_SHAPE( &m_part_no_data, SHAPE_T::ARC ) );
+    testPart.AddDrawItem( new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE ) );
+    m_part_no_data.AddDrawItem( new SCH_SHAPE( SHAPE_T::ARC, LAYER_DEVICE ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
-    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_SHAPE_T].front() );
-    testPart.RemoveDrawItem( &testPart.GetDrawItems()[LIB_SHAPE_T].front() );
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[SCH_SHAPE_T].front() );
+    testPart.RemoveDrawItem( &testPart.GetDrawItems()[SCH_SHAPE_T].front() );
     m_part_no_data.AddDrawItem( new LIB_PIN( &m_part_no_data ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_PIN_T].front() );

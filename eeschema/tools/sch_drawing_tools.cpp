@@ -1886,7 +1886,7 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
             if( isTextBox )
             {
-                SCH_TEXTBOX* textbox = new SCH_TEXTBOX( 0, m_lastTextboxFillStyle );
+                SCH_TEXTBOX* textbox = new SCH_TEXTBOX( LAYER_NOTES, 0, m_lastTextboxFillStyle );
 
                 textbox->SetTextSize( VECTOR2I( sch_settings.m_DefaultTextSize,
                                                 sch_settings.m_DefaultTextSize ) );
@@ -1907,12 +1907,12 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
             else
             {
-                item = new SCH_SHAPE( type, 0, m_lastFillStyle );
+                item = new SCH_SHAPE( type, LAYER_NOTES, 0, m_lastFillStyle );
 
                 item->SetStroke( m_lastStroke );
                 item->SetFillColor( m_lastFillColor );
                 item->SetParent( schematic );
-                description = wxString::Format( _( "Add %s" ), item->EDA_SHAPE::GetFriendlyName() );
+                description = wxString::Format( _( "Add %s" ), item->GetFriendlyName() );
             }
 
             item->SetFlags( IS_NEW );

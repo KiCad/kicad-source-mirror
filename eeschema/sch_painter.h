@@ -34,10 +34,7 @@
 
 
 class LIB_PIN;
-class LIB_SHAPE;
 class LIB_SYMBOL;
-class LIB_TEXT;
-class LIB_TEXTBOX;
 class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_JUNCTION;
@@ -84,18 +81,15 @@ private:
     void drawItemBoundingBox( const EDA_ITEM* aItem );
     void draw( const EDA_ITEM*, int, bool aDimmed );
     void draw( const LIB_PIN* aPin, int aLayer, bool aDimmed );
-    void draw( const LIB_SHAPE* aCircle, int aLayer, bool aDimmed );
     void draw( const LIB_SYMBOL* aSymbol, int, bool aDrawFields = true, int aUnit = 0,
                int aBodyStyle = 0, bool aDimmed = false );
-    void draw( const LIB_TEXT* aText, int aLayer, bool aDimmed );
-    void draw( const LIB_TEXTBOX* aTextBox, int aLayer, bool aDimmed );
     void draw( const SCH_SYMBOL* aSymbol, int aLayer );
+    void draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed );
     void draw( const SCH_JUNCTION* aJct, int aLayer );
     void draw( const SCH_FIELD* aField, int aLayer, bool aDimmed );
-    void draw( const SCH_SHAPE* aShape, int aLayer );
-    void draw( const SCH_TEXTBOX* aTextBox, int aLayer );
+    void draw( const SCH_TEXTBOX* aTextBox, int aLayer, bool aDimmed );
     void draw( const SCH_TEXT* aText, int aLayer, bool aDimmed );
-    void draw( const SCH_TABLE* aTable, int aLayer );
+    void draw( const SCH_TABLE* aTable, int aLayer, bool aDimmed );
     void draw( const SCH_LABEL* aText, int aLayer );
     void draw( const SCH_DIRECTIVE_LABEL* aLabel, int aLayer );
     void draw( const SCH_HIERLABEL* aLabel, int aLayer );
@@ -139,7 +133,8 @@ private:
     void knockoutText( const wxString& aText, const VECTOR2D& aPosition,
                        const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
     void boxText( const wxString& aText, const VECTOR2D& aPosition,
-                  const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
+                  const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics,
+                  bool aInvertY );
 
     wxString expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext );
 

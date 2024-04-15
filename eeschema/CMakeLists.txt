@@ -123,12 +123,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_lib_edit_pin_table_base.cpp
     dialogs/dialog_lib_new_symbol.cpp
     dialogs/dialog_lib_new_symbol_base.cpp
-    dialogs/dialog_lib_shape_properties.cpp
-    dialogs/dialog_lib_shape_properties_base.cpp
     dialogs/dialog_lib_symbol_properties.cpp
     dialogs/dialog_lib_symbol_properties_base.cpp
-    dialogs/dialog_lib_textbox_properties.cpp
-    dialogs/dialog_lib_textbox_properties_base.cpp
     dialogs/dialog_line_properties.cpp
     dialogs/dialog_line_properties_base.cpp
     dialogs/dialog_migrate_buses.cpp
@@ -360,9 +356,7 @@ set( EESCHEMA_SRCS
     gfx_import_utils.cpp
     picksymbol.cpp
     lib_pin.cpp
-    lib_shape.cpp
     lib_symbol.cpp
-    lib_textbox.cpp
     libarch.cpp
     menubar.cpp
     net_navigator.cpp

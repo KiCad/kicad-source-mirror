@@ -27,7 +27,6 @@
 #ifndef CLASS_PIN_H
 #define CLASS_PIN_H
 
-#include <iostream>
 #include <pin_type.h>
 #include <lib_symbol.h>
 
@@ -185,16 +184,15 @@ public:
     const BOX2I GetBoundingBox() const override { return GetBoundingBox( false, true, true ); }
 
     /**
-     * @param aIncludeInvisibles - if false, do not include labels for invisible pins
-     *      in the calculation.
+     * @param aIncludeLabelsOnInvisblePins - if false, do not include labels for invisible pins
+     *                                       in the calculation.
      */
-    const BOX2I GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
+    const BOX2I GetBoundingBox( bool aIncludeLabelsOnInvisblePins, bool aIncludeNameAndNumber,
                                 bool aIncludeElectricalType ) const;
 
     /**
-     * Return whether this pin forms a global power connection: i.e., is part of
-     * a power symbol and of type POWER_IN, or is a legacy invisible global
-     * power pin on a symbol.
+     * Return whether this pin forms a global power connection: i.e., is part of a power symbol
+     * and of type POWER_IN, or is a legacy invisible global power pin on a symbol.
      */
     bool IsGlobalPower() const
     {
@@ -222,11 +220,9 @@ public:
     void Rotate( const VECTOR2I& aCenter, bool aRotateCCW = true ) override;
 
     /**
-     * Plot the pin number and pin text info, given the pin line coordinates.
-     * Same as DrawPinTexts((), but output is the plotter
-     * The line must be vertical or horizontal.
-     * If TextInside then the text is been put inside (moving from x1, y1 in
-     * the opposite direction to x2,y2), otherwise all is drawn outside.
+     * Plot the pin name and number.
+     * @param aTextInside - draw the names & numbers inside the symbol body (ie: in the opposite
+     *                      direction of \a aPinOrient).
      */
     void PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIENTATION aPinOrient,
                        int aTextInside, bool aDrawPinNum, bool aDrawPinName, bool aDimmed ) const;

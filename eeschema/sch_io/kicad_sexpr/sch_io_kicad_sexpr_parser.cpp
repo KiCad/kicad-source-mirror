@@ -36,9 +36,7 @@
 
 #include <base_units.h>
 #include <lib_id.h>
-#include <lib_shape.h>
 #include <lib_pin.h>
-#include <lib_textbox.h>
 #include <math/util.h>                           // KiROUND, Clamp
 #include <font/font.h>
 #include <string_utils.h>
@@ -552,15 +550,15 @@ SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseDrawItem()
     switch( CurTok() )
     {
     case T_arc:
-        return parseArc();
+        return parseSymbolArc();
         break;
 
     case T_bezier:
-        return parseBezier();
+        return parseSymbolBezier();
         break;
 
     case T_circle:
-        return parseCircle();
+        return parseSymbolCircle();
         break;
 
     case T_pin:
@@ -568,11 +566,11 @@ SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseDrawItem()
         break;
 
     case T_polyline:
-        return parsePolyLine();
+        return parseSymbolPolyLine();
         break;
 
     case T_rectangle:
-        return parseRectangle();
+        return parseSymbolRectangle();
         break;
 
     case T_text:
@@ -580,7 +578,7 @@ SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseDrawItem()
         break;
 
     case T_text_box:
-        return parseTextBox();
+        return parseSymbolTextBox();
         break;
 
     default:
@@ -1083,7 +1081,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
 }
 
 
-LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseArc()
+SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolArc()
 {
     wxCHECK_MSG( CurTok() == T_arc, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as an arc." ) );
@@ -1102,7 +1100,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseArc()
     EDA_ANGLE     endAngle = ANGLE_90;
     bool          hasAngles = false;
 
-    std::unique_ptr<LIB_SHAPE> arc = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::ARC );
+    std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE );
 
     arc->SetUnit( m_unit );
     arc->SetBodyStyle( m_bodyStyle );
@@ -1270,7 +1268,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseArc()
 }
 
 
-LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseBezier()
+SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolBezier()
 {
     wxCHECK_MSG( CurTok() == T_bezier, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a bezier." ) );
@@ -1279,7 +1277,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseBezier()
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
     FILL_PARAMS   fill;
 
-    std::unique_ptr<LIB_SHAPE> bezier = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::BEZIER );
+    std::unique_ptr<SCH_SHAPE> bezier = std::make_unique<SCH_SHAPE>( SHAPE_T::BEZIER, LAYER_DEVICE );
 
     bezier->SetUnit( m_unit );
     bezier->SetBodyStyle( m_bodyStyle );
@@ -1351,7 +1349,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseBezier()
 }
 
 
-LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseCircle()
+SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolCircle()
 {
     wxCHECK_MSG( CurTok() == T_circle, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a circle." ) );
@@ -1362,7 +1360,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseCircle()
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
     FILL_PARAMS   fill;
 
-    std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::CIRCLE );
+    std::unique_ptr<SCH_SHAPE> circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE, LAYER_DEVICE );
 
     circle->SetUnit( m_unit );
     circle->SetBodyStyle( m_bodyStyle );
@@ -1627,7 +1625,7 @@ LIB_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
 }
 
 
-LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parsePolyLine()
+SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPolyLine()
 {
     wxCHECK_MSG( CurTok() == T_polyline, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a poly." ) );
@@ -1635,7 +1633,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parsePolyLine()
     T token;
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
     FILL_PARAMS fill;
-    std::unique_ptr<LIB_SHAPE> poly = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::POLY );
+    std::unique_ptr<SCH_SHAPE> poly = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
 
     poly->SetUnit( m_unit );
     poly->SetBodyStyle( m_bodyStyle );
@@ -1695,7 +1693,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parsePolyLine()
 }
 
 
-LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseRectangle()
+SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolRectangle()
 {
     wxCHECK_MSG( CurTok() == T_rectangle, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a rectangle." ) );
@@ -1703,7 +1701,7 @@ LIB_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseRectangle()
     T token;
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
     FILL_PARAMS fill;
-    std::unique_ptr<LIB_SHAPE> rectangle = std::make_unique<LIB_SHAPE>( nullptr, SHAPE_T::RECTANGLE );
+    auto rectangle = std::make_unique<SCH_SHAPE>( SHAPE_T::RECTANGLE, LAYER_DEVICE );
 
     rectangle->SetUnit( m_unit );
     rectangle->SetBodyStyle( m_bodyStyle );
@@ -1811,7 +1809,7 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolText()
 }
 
 
-LIB_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseTextBox()
+SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolTextBox()
 {
     wxCHECK_MSG( CurTok() == T_text_box, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a text box." ) );
@@ -1830,7 +1828,7 @@ LIB_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseTextBox()
     bool          foundSize = false;
     bool          foundMargins = false;
 
-    std::unique_ptr<LIB_TEXTBOX> textBox = std::make_unique<LIB_TEXTBOX>( nullptr );
+    std::unique_ptr<SCH_TEXTBOX> textBox = std::make_unique<SCH_TEXTBOX>( LAYER_DEVICE );
 
     textBox->SetUnit( m_unit );
     textBox->SetBodyStyle( m_bodyStyle );
@@ -3618,9 +3616,8 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchPolyLine()
     T             token;
     STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
     FILL_PARAMS   fill;
-    int           layer = LAYER_NOTES;
 
-    std::unique_ptr<SCH_SHAPE> polyline = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, layer );
+    std::unique_ptr<SCH_SHAPE> polyline = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_NOTES );
 
     for( token = NextTok(); token != T_RIGHT; token = NextTok() )
     {

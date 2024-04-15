@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,15 +31,14 @@
 #include <tools/symbol_editor_pin_tool.h>
 #include <tools/ee_grid_helper.h>
 #include <dialogs/dialog_text_properties.h>
-#include <lib_shape.h>
-#include <lib_textbox.h>
+#include <sch_shape.h>
+#include <sch_textbox.h>
 #include <pgm_base.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <string_utils.h>
 #include <wx/msgdlg.h>
 #include <import_gfx/dialog_import_gfx_sch.h>
-#include "dialog_lib_textbox_properties.h"
 
 static void* g_lastPinWeakPtr;
 
@@ -361,7 +360,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
     VECTOR2I                cursorPos;
     SHAPE_T                 shapeType = toolType == SHAPE_T::SEGMENT ? SHAPE_T::POLY : toolType;
     LIB_SYMBOL*             symbol = m_frame->GetCurSymbol();
-    LIB_SHAPE*              item = nullptr;
+    SCH_SHAPE*              item = nullptr;
     wxString                description;
 
     if( m_inDrawShape )
@@ -461,8 +460,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
 
             if( isTextBox )
             {
-                LIB_TEXTBOX* textbox = new LIB_TEXTBOX( symbol, lineWidth, m_lastFillStyle );
+                SCH_TEXTBOX* textbox = new SCH_TEXTBOX( LAYER_DEVICE, lineWidth, m_lastFillStyle );
 
+                textbox->SetParent( symbol );
                 textbox->SetTextSize( VECTOR2I( schIUScale.MilsToIU( settings->m_Defaults.text_size ),
                                                 schIUScale.MilsToIU( settings->m_Defaults.text_size ) ) );
 
@@ -478,8 +478,9 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
             }
             else
             {
-                item = new LIB_SHAPE( symbol, shapeType, lineWidth, m_lastFillStyle );
-                description = wxString::Format( _( "Add %s" ), item->EDA_SHAPE::GetFriendlyName() );
+                item = new SCH_SHAPE( shapeType, LAYER_DEVICE, lineWidth, m_lastFillStyle );
+                item->SetParent( symbol );
+                description = wxString::Format( _( "Add %s" ), item->GetFriendlyName() );
             }
 
             item->SetStroke( m_lastStroke );
@@ -524,8 +525,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
 
                 if( isTextBox )
                 {
-                    LIB_TEXTBOX*                  textbox = static_cast<LIB_TEXTBOX*>( item );
-                    DIALOG_LIB_TEXTBOX_PROPERTIES dlg( m_frame, static_cast<LIB_TEXTBOX*>( item ) );
+                    SCH_TEXTBOX*           textbox = static_cast<SCH_TEXTBOX*>( item );
+                    DIALOG_TEXT_PROPERTIES dlg( m_frame, static_cast<SCH_TEXTBOX*>( item ) );
 
                     // QuasiModal required for syntax help and Scintilla auto-complete
                     if( dlg.ShowQuasiModal() != wxID_OK )

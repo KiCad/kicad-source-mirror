@@ -421,7 +421,7 @@ void SCH_TEXT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBody
 
 const BOX2I SCH_TEXT::GetBoundingBox() const
 {
-    if( m_layer == LAYER_DEVICE ) // TODO: remove upside-down coordinate system in symbol editor
+    if( m_layer == LAYER_DEVICE ) // TODO: nuke symbol editor's upside-down coordinate system
     {
         BOX2I bbox = GetTextBox( -1, true );
         bbox.RevertYAxis();
@@ -525,7 +525,7 @@ BITMAPS SCH_TEXT::GetMenuImage() const
 
 bool SCH_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    if( m_layer == LAYER_DEVICE ) // TODO: remove upside-down coordinate system in symbol editor
+    if( m_layer == LAYER_DEVICE ) // TODO: nuke symbol editor's upside-down coordinate system
     {
         EDA_TEXT tmp_text( *this );
         tmp_text.SetTextPos( DefaultTransform.TransformCoordinate( GetTextPos() ) );
@@ -557,7 +557,7 @@ bool SCH_TEXT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
 
     rect.Inflate( aAccuracy );
 
-    if( m_layer == LAYER_DEVICE ) // TODO: remove upside-down coordinate system in symbol editor
+    if( m_layer == LAYER_DEVICE ) // TODO: nuke symbol editor's upside-down coordinate system
     {
         BOX2I bBox = GetTextBox();
         bBox.RevertYAxis();

@@ -35,19 +35,20 @@ class HTML_MESSAGE_BOX;
 class SCH_TEXTBOX : public SCH_SHAPE, public EDA_TEXT
 {
 public:
-    SCH_TEXTBOX( int aLineWidth = 0, FILL_T aFillType = FILL_T::NO_FILL,
-                 const wxString& aText = wxEmptyString, KICAD_T aType = SCH_TEXTBOX_T );
+    SCH_TEXTBOX( SCH_LAYER_ID aLayer = LAYER_NOTES, int aLineWidth = 0,
+                 FILL_T aFillType = FILL_T::NO_FILL, const wxString& aText = wxEmptyString,
+                 KICAD_T aType = SCH_TEXTBOX_T );
 
     SCH_TEXTBOX( const SCH_TEXTBOX& aText );
 
     ~SCH_TEXTBOX() { }
 
-    static inline bool ClassOf( const EDA_ITEM* aItem )
+    static bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && SCH_TEXTBOX_T == aItem->Type();
     }
 
-    virtual wxString GetClass() const override
+    wxString GetClass() const override
     {
         return wxT( "SCH_TEXTBOX" );
     }
@@ -74,12 +75,12 @@ public:
 
     wxString GetShownText( bool aAllowExtraText, int aDepth = 0 ) const override
     {
-        SCHEMATIC* schematic = Schematic();
+        SCH_SHEET_PATH* sheetPath = nullptr;
 
-        if( schematic )
-            return GetShownText( &schematic->CurrentSheet(), aAllowExtraText, aDepth );
-        else
-            return GetText();
+        if( SCHEMATIC* schematic = Schematic() )
+            sheetPath = &schematic->CurrentSheet();
+
+        return GetShownText( sheetPath, aAllowExtraText, aDepth );
     }
 
     bool IsHypertext() const override
@@ -149,6 +150,8 @@ protected:
     KIFONT::FONT* getDrawFont() const override;
 
     const KIFONT::METRICS& getFontMetrics() const override { return GetFontMetrics(); }
+
+    int compare( const SCH_ITEM& aOther, int aCompareFlags = 0 ) const override;
 
 protected:
     bool m_excludedFromSim;

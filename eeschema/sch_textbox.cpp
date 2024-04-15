@@ -34,18 +34,17 @@
 #include <wx/log.h>
 #include <dialogs/html_message_box.h>
 #include <project/project_file.h>
-#include <project/net_settings.h>
-#include <core/kicad_algo.h>
 #include <trigo.h>
 #include <sch_textbox.h>
 #include <tools/sch_navigate_tool.h>
 
 
-SCH_TEXTBOX::SCH_TEXTBOX( int aLineWidth, FILL_T aFillType, const wxString& text, KICAD_T aType ) :
-        SCH_SHAPE( SHAPE_T::RECTANGLE, aLineWidth, aFillType, aType ),
-        EDA_TEXT( schIUScale, text )
+SCH_TEXTBOX::SCH_TEXTBOX( SCH_LAYER_ID aLayer, int aLineWidth, FILL_T aFillType,
+                          const wxString& aText, KICAD_T aType ) :
+        SCH_SHAPE( SHAPE_T::RECTANGLE, aLayer, aLineWidth, aFillType, aType ),
+        EDA_TEXT( schIUScale, aText )
 {
-    m_layer = LAYER_NOTES;
+    m_layer = aLayer;
 
     SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
     SetVertJustify( GR_TEXT_V_ALIGN_TOP );
@@ -75,7 +74,10 @@ SCH_TEXTBOX::SCH_TEXTBOX( const SCH_TEXTBOX& aText ) :
 
 int SCH_TEXTBOX::GetLegacyTextMargin() const
 {
-    return KiROUND( GetStroke().GetWidth() / 2.0 ) + KiROUND( GetTextSize().y * 0.75 );
+    if( m_layer == LAYER_DEVICE )
+        return KiROUND( GetTextSize().y * 0.8 );
+    else
+        return KiROUND( GetStroke().GetWidth() / 2.0 ) + KiROUND( GetTextSize().y * 0.75 );
 }
 
 
@@ -120,9 +122,19 @@ void SCH_TEXTBOX::Rotate90( bool aClockwise )
 
 VECTOR2I SCH_TEXTBOX::GetDrawPos() const
 {
-    BOX2I bbox( m_start, m_end - m_start );
+    BOX2I bbox;
 
-    bbox.Normalize();
+    if( m_layer == LAYER_DEVICE )   // TODO: nuke symbol editor's upside-down coordinate system
+    {
+        bbox = BOX2I( VECTOR2I( std::min( m_start.x, m_end.x ), std::min( -m_start.y, -m_end.y ) ),
+                      VECTOR2I( abs( m_end.x - m_start.x ), abs( m_end.y - m_start.y ) ) );
+    }
+    else
+    {
+        bbox = BOX2I( m_start, m_end - m_start );
+
+        bbox.Normalize();
+    }
 
     VECTOR2I pos( bbox.GetLeft() + m_marginLeft, bbox.GetBottom() - m_marginBottom );
 
@@ -265,13 +277,20 @@ KIFONT::FONT* SCH_TEXTBOX::getDrawFont() const
 void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBodyStyle,
                          const VECTOR2I& aOffset, bool aForceNoFill, bool aDimmed )
 {
+    if( IsPrivate() )
+        return;
+
     wxDC*      DC = aSettings->GetPrintDC();
-    int        penWidth = GetPenWidth();
+    int        penWidth = GetEffectivePenWidth( aSettings );
     bool       blackAndWhiteMode = GetGRForceBlackPenState();
     VECTOR2I   pt1 = GetStart();
     VECTOR2I   pt2 = GetEnd();
     COLOR4D    color = GetStroke().GetColor();
+    COLOR4D    bg = aSettings->GetBackgroundColor();
     LINE_STYLE lineStyle = GetStroke().GetLineStyle();
+
+    if( bg == COLOR4D::UNSPECIFIED || GetGRForceBlackPenState() )
+        bg = COLOR4D::WHITE;
 
     if( GetFillMode() == FILL_T::FILLED_WITH_COLOR && !blackAndWhiteMode && !aForceNoFill )
         GRFilledRect( DC, pt1, pt2, 0, GetFillColor(), GetFillColor() );
@@ -282,6 +301,12 @@ void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aB
 
         if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
             color = aSettings->GetLayerColor( m_layer );
+
+        if( aDimmed )
+        {
+            color.Desaturate( );
+            color = color.Mix( bg, 0.5f );
+        }
 
         if( lineStyle == LINE_STYLE::DEFAULT )
             lineStyle = LINE_STYLE::SOLID;
@@ -297,10 +322,19 @@ void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aB
             for( SHAPE* shape : shapes )
             {
                 STROKE_PARAMS::Stroke( shape, lineStyle, penWidth, aSettings,
-                                       [&]( const VECTOR2I& a, const VECTOR2I& b )
-                                       {
-                                           GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
-                                       } );
+                        [&]( const VECTOR2I& a, const VECTOR2I& b )
+                        {
+                            if( m_layer == LAYER_DEVICE )
+                            {
+                                VECTOR2I ptA = aSettings->TransformCoordinate( a ) + aOffset;
+                                VECTOR2I ptB = aSettings->TransformCoordinate( b ) + aOffset;
+                                GRLine( DC, ptA.x, ptA.y, ptB.x, ptB.y, penWidth, color );
+                            }
+                            else
+                            {
+                                GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
+                            }
+                        } );
             }
 
             for( SHAPE* shape : shapes )
@@ -313,7 +347,34 @@ void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aB
     if( blackAndWhiteMode || color == COLOR4D::UNSPECIFIED )
         color = aSettings->GetLayerColor( m_layer );
 
-    EDA_TEXT::Print( aSettings, aOffset, color );
+    if( aDimmed )
+    {
+        color.Desaturate( );
+        color = color.Mix( bg, 0.5f );
+    }
+
+    if( m_layer == LAYER_DEVICE )
+    {
+        SCH_TEXTBOX temp( *this );
+
+        if( aSettings->m_Transform.y1 )
+        {
+            temp.SetTextAngle( temp.GetTextAngle() == ANGLE_HORIZONTAL ? ANGLE_VERTICAL
+                                                                       : ANGLE_HORIZONTAL );
+        }
+
+        // NB: GetDrawPos() will want Symbol Editor (upside-down) coordinates
+        temp.SetStart( VECTOR2I( pt1.x, -pt1.y ) );
+        temp.SetEnd( VECTOR2I( pt2.x, -pt2.y ) );
+
+        GRPrintText( DC, temp.GetDrawPos(), color, temp.GetShownText( true ), temp.GetTextAngle(),
+                     temp.GetTextSize(), temp.GetHorizJustify(), temp.GetVertJustify(), penWidth,
+                     temp.IsItalic(), temp.IsBold(), getDrawFont(), GetFontMetrics() );
+    }
+    else
+    {
+        EDA_TEXT::Print( aSettings, aOffset, color );
+    }
 }
 
 
@@ -345,11 +406,6 @@ wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtr
             text = ExpandTextVars( text, &textResolver );
     }
 
-    KIFONT::FONT* font = GetFont();
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( GetDefaultFont(), IsBold(), IsItalic() );
-
     VECTOR2I size = GetEnd() - GetStart();
     int      colWidth;
 
@@ -358,7 +414,8 @@ wxString SCH_TEXTBOX::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtr
     else
         colWidth = abs( size.x ) - ( GetMarginLeft() + GetMarginRight() );
 
-    font->LinebreakText( text, colWidth, GetTextSize(), GetTextThickness(), IsBold(), IsItalic() );
+    getDrawFont()->LinebreakText( text, colWidth, GetTextSize(), GetTextThickness(), IsBold(),
+                                  IsItalic() );
 
     return text;
 }
@@ -399,7 +456,7 @@ void SCH_TEXTBOX::DoHypertextAction( EDA_DRAW_FRAME* aFrame ) const
 
 wxString SCH_TEXTBOX::GetItemDescription( UNITS_PROVIDER* aUnitsProvider ) const
 {
-    return wxString::Format( _( "Graphic Text Box" ) );
+    return wxString::Format( _( "Text Box" ) );
 }
 
 
@@ -412,22 +469,32 @@ BITMAPS SCH_TEXTBOX::GetMenuImage() const
 void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& aPlotOpts,
                         int aUnit, int aBodyStyle, const VECTOR2I& aOffset, bool aDimmed )
 {
+    if( IsPrivate() )
+        return;
+
     if( aBackground )
     {
         SCH_SHAPE::Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
         return;
     }
 
-    SCH_SHEET_PATH*      sheet = &Schematic()->CurrentSheet();
+    SCH_SHEET_PATH*      sheet = Schematic() ? &Schematic()->CurrentSheet() : nullptr;
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
     int                  penWidth = GetEffectivePenWidth( renderSettings );
     COLOR4D              color = GetStroke().GetColor();
+    COLOR4D              bg = renderSettings->GetBackgroundColor();
     LINE_STYLE           lineStyle = GetStroke().GetLineStyle();
 
     if( penWidth > 0 )
     {
         if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
             color = renderSettings->GetLayerColor( m_layer );
+
+        if( aDimmed )
+        {
+            color.Desaturate( );
+            color = color.Mix( bg, 0.5f );
+        }
 
         if( lineStyle == LINE_STYLE::DEFAULT )
             lineStyle = LINE_STYLE::SOLID;
@@ -438,15 +505,21 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
         aPlotter->SetDash( penWidth, LINE_STYLE::SOLID );
     }
 
-    KIFONT::FONT* font = GetFont();
-
-    if( !font )
-        font = KIFONT::FONT::GetFont( renderSettings->GetDefaultFont(), IsBold(), IsItalic() );
+    KIFONT::FONT* font = getDrawFont();
 
     color = GetTextColor();
 
     if( !aPlotter->GetColorMode() || color == COLOR4D::UNSPECIFIED )
         color = renderSettings->GetLayerColor( m_layer );
+
+    if( bg == COLOR4D::UNSPECIFIED || !aPlotter->GetColorMode() )
+        bg = COLOR4D::WHITE;
+
+    if( aDimmed )
+    {
+        color.Desaturate( );
+        color = color.Mix( bg, 0.5f );
+    }
 
     penWidth = GetEffectiveTextPenWidth( renderSettings->GetDefaultPenWidth() );
     penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );
@@ -457,7 +530,27 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
     wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
 
-    GetLinePositions( positions, (int) strings_list.Count() );
+    if( m_layer == LAYER_DEVICE )
+    {
+        VECTOR2I    start = renderSettings->TransformCoordinate( m_start ) + aOffset;
+        VECTOR2I    end = renderSettings->TransformCoordinate( m_end ) + aOffset;
+        SCH_TEXTBOX temp( *this );
+
+        if( renderSettings->m_Transform.y1 )
+        {
+            temp.SetTextAngle( temp.GetTextAngle() == ANGLE_HORIZONTAL ? ANGLE_VERTICAL
+                                                                       : ANGLE_HORIZONTAL );
+        }
+
+        // NB: GetDrawPos() will want Symbol Editor (upside-down) coordinates
+        temp.SetStart( VECTOR2I( start.x, -start.y ) );
+        temp.SetEnd( VECTOR2I( end.x, -end.y ) );
+        temp.GetLinePositions( positions, (int) strings_list.Count() );
+    }
+    else
+    {
+        GetLinePositions( positions, (int) strings_list.Count() );
+    }
 
     TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_StrokeWidth = penWidth;
@@ -528,12 +621,15 @@ bool SCH_TEXTBOX::operator==( const SCH_ITEM& aOther ) const
 
 double SCH_TEXTBOX::Similarity( const SCH_ITEM& aOther ) const
 {
+    if( m_Uuid == aOther.m_Uuid )
+        return 1.0;
+
     if( aOther.Type() != Type() )
         return 0.0;
 
     auto other = static_cast<const SCH_TEXTBOX&>( aOther );
 
-    double similarity = 1.0;
+    double similarity = SimilarityBase( other );
 
     if( m_excludedFromSim != other.m_excludedFromSim )
         similarity *= 0.9;
@@ -554,6 +650,56 @@ double SCH_TEXTBOX::Similarity( const SCH_ITEM& aOther ) const
     similarity *= EDA_TEXT::Similarity( other );
 
     return similarity;
+}
+
+
+int SCH_TEXTBOX::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
+{
+    wxASSERT( aOther.Type() == SCH_TEXTBOX_T );
+
+    int retv = SCH_SHAPE::compare( aOther, aCompareFlags );
+
+    if( retv )
+        return retv;
+
+    const SCH_TEXTBOX* tmp = static_cast<const SCH_TEXTBOX*>( &aOther );
+
+    int result = GetText().CmpNoCase( tmp->GetText() );
+
+    if( result != 0 )
+        return result;
+
+    if( GetTextWidth() != tmp->GetTextWidth() )
+        return GetTextWidth() - tmp->GetTextWidth();
+
+    if( GetTextHeight() != tmp->GetTextHeight() )
+        return GetTextHeight() - tmp->GetTextHeight();
+
+    if( IsBold() != tmp->IsBold() )
+        return IsBold() - tmp->IsBold();
+
+    if( IsItalic() != tmp->IsItalic() )
+        return IsItalic() - tmp->IsItalic();
+
+    if( GetHorizJustify() != tmp->GetHorizJustify() )
+        return GetHorizJustify() - tmp->GetHorizJustify();
+
+    if( GetTextAngle().AsTenthsOfADegree() != tmp->GetTextAngle().AsTenthsOfADegree() )
+        return GetTextAngle().AsTenthsOfADegree() - tmp->GetTextAngle().AsTenthsOfADegree();
+
+    if( GetMarginLeft() != tmp->GetMarginLeft() )
+        return GetMarginLeft() - tmp->GetMarginLeft();
+
+    if( GetMarginTop() != tmp->GetMarginTop() )
+        return GetMarginTop() - tmp->GetMarginTop();
+
+    if( GetMarginRight() != tmp->GetMarginRight() )
+        return GetMarginRight() - tmp->GetMarginRight();
+
+    if( GetMarginBottom() != tmp->GetMarginBottom() )
+        return GetMarginBottom() - tmp->GetMarginBottom();
+
+    return 0;
 }
 
 

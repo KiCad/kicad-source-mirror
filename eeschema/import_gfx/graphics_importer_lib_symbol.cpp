@@ -26,7 +26,7 @@
 #include "graphics_importer_lib_symbol.h"
 
 #include <lib_symbol.h>
-#include <lib_shape.h>
+#include <sch_shape.h>
 #include <sch_text.h>
 #include <memory>
 
@@ -81,7 +81,8 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddLine( const VECTOR2D& aStart, const VECTOR
     if( pt0 == pt1 )
         return;
 
-    std::unique_ptr<LIB_SHAPE> line = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
+    std::unique_ptr<SCH_SHAPE> line = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
+    line->SetParent( m_symbol );
     line->SetUnit( m_unit );
     line->SetStroke( MapStrokeParams( aStroke ) );
 
@@ -96,7 +97,8 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddCircle( const VECTOR2D& aCenter, double aR
                                               const IMPORTED_STROKE& aStroke, bool aFilled,
                                               const COLOR4D& aFillColor )
 {
-    std::unique_ptr<LIB_SHAPE> circle = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::CIRCLE );
+    std::unique_ptr<SCH_SHAPE> circle = std::make_unique<SCH_SHAPE>( SHAPE_T::CIRCLE, LAYER_DEVICE );
+    circle->SetParent( m_symbol );
     circle->SetUnit( m_unit );
     circle->SetFillColor( aFillColor );
     circle->SetFilled( aFilled );
@@ -111,7 +113,8 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddCircle( const VECTOR2D& aCenter, double aR
 void GRAPHICS_IMPORTER_LIB_SYMBOL::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
                                            const EDA_ANGLE& aAngle, const IMPORTED_STROKE& aStroke )
 {
-    std::unique_ptr<LIB_SHAPE> arc = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::ARC );
+    std::unique_ptr<SCH_SHAPE> arc = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE );
+    arc->SetParent( m_symbol );
     arc->SetUnit( m_unit );
 
     /**
@@ -160,7 +163,8 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddPolygon( const std::vector<VECTOR2D>& aVer
     if( convertedPoints.empty() )
         return;
 
-    std::unique_ptr<LIB_SHAPE> polygon = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::POLY );
+    std::unique_ptr<SCH_SHAPE> polygon = std::make_unique<SCH_SHAPE>( SHAPE_T::POLY, LAYER_DEVICE );
+    polygon->SetParent( m_symbol );
     polygon->SetUnit( m_unit );
 
     if( aFilled )
@@ -205,7 +209,8 @@ void GRAPHICS_IMPORTER_LIB_SYMBOL::AddSpline( const VECTOR2D& aStart,
                                               const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
                                               const IMPORTED_STROKE& aStroke )
 {
-    std::unique_ptr<LIB_SHAPE> spline = std::make_unique<LIB_SHAPE>( m_symbol, SHAPE_T::BEZIER );
+    std::unique_ptr<SCH_SHAPE> spline = std::make_unique<SCH_SHAPE>( SHAPE_T::BEZIER, LAYER_DEVICE );
+    spline->SetParent( m_symbol );
     spline->SetUnit( m_unit );
     spline->SetStroke( MapStrokeParams( aStroke ) );
     spline->SetStart( MapCoordinate( aStart ) );

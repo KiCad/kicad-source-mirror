@@ -37,7 +37,7 @@
 #include <dialogs/html_message_box.h>
 #include <scintilla_tricks.h>
 #include <dialog_text_properties.h>
-#include <gr_text.h>
+#include <string_utils.h>
 
 
 DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITEM* aTextItem ) :
@@ -86,6 +86,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( SCH_BASE_FRAME* aParent, SCH_ITE
         m_panelFillColor->Show( false );
         m_filledCtrl->Show( false );
     }
+
+    // DIALOG_SHIM needs a unique hash_key because classname is not sufficient because the
+    // different text item types (and even whether or not we're within the symbol editor) cause
+    // different dialog layouts).
+    m_hash_key = TO_UTF8( GetTitle() + aParent->GetName() );
 
     m_textCtrl->SetEOLMode( wxSTC_EOL_LF );
 
@@ -493,10 +498,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     m_currentItem->SetExcludedFromSim( m_excludeFromSim->GetValue() );
 
-    if( m_isSymbolEditor )
+    if( SYMBOL_EDIT_FRAME* symbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame ) )
     {
-        SYMBOL_EDIT_FRAME* symbolEditor = dynamic_cast<SYMBOL_EDIT_FRAME*>( m_frame );
-
         m_currentItem->SetPrivate( m_privateCheckbox->GetValue() );
 
         if( !m_commonToAllUnits->GetValue() )

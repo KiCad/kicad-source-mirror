@@ -24,13 +24,12 @@
 #include <sch_edit_frame.h>
 #include <widgets/msgpanel.h>
 #include <string_utils.h>
-#include <schematic.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>
 
 
 SCH_TABLECELL::SCH_TABLECELL( int aLineWidth, FILL_T aFillType ) :
-        SCH_TEXTBOX( aLineWidth, aFillType, wxEmptyString, SCH_TABLECELL_T ),
+        SCH_TEXTBOX( LAYER_NOTES, aLineWidth, aFillType, wxEmptyString, SCH_TABLECELL_T ),
         m_colSpan( 1 ),
         m_rowSpan( 1 )
 {

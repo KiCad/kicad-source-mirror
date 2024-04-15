@@ -94,12 +94,12 @@ enum CIRCLE_POINTS
 };
 
 
-enum BEZIER_CURVE_POINTS
+enum BEZIER_POINTS
 {
-    BEZIER_CURVE_START,
-    BEZIER_CURVE_CONTROL_POINT1,
-    BEZIER_CURVE_CONTROL_POINT2,
-    BEZIER_CURVE_END
+    BEZIER_START,
+    BEZIER_CTRL_PT1,
+    BEZIER_CTRL_PT2,
+    BEZIER_END
 };
 
 
@@ -1398,14 +1398,14 @@ void PCB_POINT_EDITOR::updateItem( BOARD_COMMIT* aCommit )
         }
 
         case SHAPE_T::BEZIER:
-            if( isModified( m_editPoints->Point( BEZIER_CURVE_START ) ) )
-                shape->SetStart( m_editPoints->Point( BEZIER_CURVE_START ).GetPosition() );
-            else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ) ) )
-                shape->SetBezierC1( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).GetPosition() );
-            else if( isModified( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ) ) )
-                shape->SetBezierC2( m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).GetPosition() );
-            else if( isModified( m_editPoints->Point( BEZIER_CURVE_END ) ) )
-                shape->SetEnd( m_editPoints->Point( BEZIER_CURVE_END ).GetPosition() );
+            if( isModified( m_editPoints->Point( BEZIER_START ) ) )
+                shape->SetStart( m_editPoints->Point( BEZIER_START ).GetPosition() );
+            else if( isModified( m_editPoints->Point( BEZIER_CTRL_PT1 ) ) )
+                shape->SetBezierC1( m_editPoints->Point( BEZIER_CTRL_PT1 ).GetPosition() );
+            else if( isModified( m_editPoints->Point( BEZIER_CTRL_PT2 ) ) )
+                shape->SetBezierC2( m_editPoints->Point( BEZIER_CTRL_PT2 ).GetPosition() );
+            else if( isModified( m_editPoints->Point( BEZIER_END ) ) )
+                shape->SetEnd( m_editPoints->Point( BEZIER_END ).GetPosition() );
 
             shape->RebuildBezierToSegmentsPointsList( shape->GetWidth() );
             break;
@@ -1981,10 +1981,10 @@ void PCB_POINT_EDITOR::updatePoints()
         }
 
         case SHAPE_T::BEZIER:
-            m_editPoints->Point( BEZIER_CURVE_START ).SetPosition( shape->GetStart() );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT1 ).SetPosition( shape->GetBezierC1() );
-            m_editPoints->Point( BEZIER_CURVE_CONTROL_POINT2 ).SetPosition( shape->GetBezierC2() );
-            m_editPoints->Point( BEZIER_CURVE_END ).SetPosition( shape->GetEnd() );
+            m_editPoints->Point( BEZIER_START ).SetPosition( shape->GetStart() );
+            m_editPoints->Point( BEZIER_CTRL_PT1 ).SetPosition( shape->GetBezierC1() );
+            m_editPoints->Point( BEZIER_CTRL_PT2 ).SetPosition( shape->GetBezierC2() );
+            m_editPoints->Point( BEZIER_END ).SetPosition( shape->GetEnd() );
             break;
 
         default:        // suppress warnings

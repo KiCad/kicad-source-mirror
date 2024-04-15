@@ -1249,7 +1249,7 @@ void LIB_PIN::validateExtentsCache( KIFONT::FONT* aFont, int aSize, const wxStri
 }
 
 
-const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNameAndNumber,
+const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
                                      bool aIncludeElectricalType ) const
 {
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
@@ -1269,9 +1269,10 @@ const BOX2I LIB_PIN::GetBoundingBox( bool aIncludeInvisiblePins, bool aIncludeNa
     bool     includeType = aIncludeElectricalType;
     int      minsizeV = TARGET_PIN_RADIUS;
 
-    if( !aIncludeInvisiblePins && !IsVisible() )
+    if( !aIncludeLabelsOnInvisiblePins && !IsVisible() )
     {
         includeName = false;
+        includeNumber = false;
         includeType = false;
     }
 

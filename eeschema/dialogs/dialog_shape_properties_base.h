@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -27,6 +27,9 @@ class WX_INFOBAR;
 #include <wx/panel.h>
 #include <wx/bmpcbox.h>
 #include <wx/gbsizer.h>
+#include <wx/radiobut.h>
+#include <wx/statbox.h>
+#include <wx/simplebook.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -43,11 +46,21 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		// Private event handlers
 		void _wxFB_onBorderChecked( wxCommandEvent& event ){ onBorderChecked( event ); }
 		void _wxFB_onFillChecked( wxCommandEvent& event ){ onFillChecked( event ); }
+		void _wxFB_onFillRadioButton( wxCommandEvent& event ){ onFillRadioButton( event ); }
+		void _wxFB_onFill( wxCommandEvent& event ){ onFill( event ); }
 
 
 	protected:
+		enum
+		{
+			NO_FILL = 1000,
+			FILLED_SHAPE,
+			FILLED_WITH_BG_BODYCOLOR,
+			FILLED_WITH_COLOR
+		};
+
 		WX_INFOBAR* m_infoBar;
-		wxGridBagSizer* m_textEntrySizer;
+		wxGridBagSizer* m_borderSizer;
 		wxCheckBox* m_borderCheckbox;
 		wxStaticText* m_borderWidthLabel;
 		wxTextCtrl* m_borderWidthCtrl;
@@ -57,12 +70,25 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		COLOR_SWATCH* m_borderColorSwatch;
 		wxStaticText* m_borderStyleLabel;
 		wxBitmapComboBox* m_borderStyleCombo;
+		wxStaticText* m_helpLabel1;
+		wxSimplebook* m_fillBook;
+		wxPanel* m_schematicPage;
+		wxGridBagSizer* m_fillSizer;
 		wxCheckBox* m_filledCtrl;
 		wxStaticText* m_fillColorLabel;
 		wxPanel* m_panelFillColor;
 		COLOR_SWATCH* m_fillColorSwatch;
-		wxStaticText* m_helpLabel1;
 		wxStaticText* m_helpLabel2;
+		wxPanel* m_symbolEditorPage;
+		wxRadioButton* m_rbFillNone;
+		wxRadioButton* m_rbFillOutline;
+		wxRadioButton* m_rbFillBackground;
+		wxRadioButton* m_rbFillCustom;
+		COLOR_SWATCH* m_customColorSwatch;
+		wxBoxSizer* m_symbolEditorSizer;
+		wxCheckBox* m_privateCheckbox;
+		wxCheckBox* m_checkApplyToAllUnits;
+		wxCheckBox* m_checkApplyToAllBodyStyles;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
@@ -70,6 +96,8 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		// Virtual event handlers, override them in your derived class
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFillChecked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFillRadioButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onFill( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

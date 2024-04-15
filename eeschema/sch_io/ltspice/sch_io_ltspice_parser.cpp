@@ -26,12 +26,8 @@
 
 #include <sch_io/ltspice/sch_io_ltspice_parser.h>
 #include <sch_io/ltspice/ltspice_schematic.h>
-#include <sch_io/sch_io_mgr.h>
 #include <schematic.h>
-#include <sch_sheet.h>
-#include <sch_sheet_pin.h>
 #include <sch_line.h>
-#include <lib_shape.h>
 #include <sch_label.h>
 #include <sch_edit_frame.h>
 #include <sch_shape.h>
@@ -109,7 +105,7 @@ void SCH_IO_LTSPICE_PARSER::readIncludes( std::vector<LTSPICE_SCHEMATIC::LT_ASC>
 
 void SCH_IO_LTSPICE_PARSER::CreateLines( LIB_SYMBOL* aSymbol,
                                          LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
-                                         int aIndex, LIB_SHAPE* shape )
+                                         int aIndex, SCH_SHAPE* shape )
 {
     LTSPICE_SCHEMATIC::LINE& lt_line = aLTSymbol.Lines[aIndex];
 
@@ -280,7 +276,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
 {
     for( int j = 0; j < (int) aLtSymbol.Lines.size(); j++ )
     {
-        LIB_SHAPE* line = new LIB_SHAPE( aLibSymbol, SHAPE_T::POLY );
+        SCH_SHAPE* line = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
 
         CreateLines( aLibSymbol, aLtSymbol, j, line );
         aLibSymbol->AddDrawItem( line );
@@ -288,7 +284,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
 
     for( int j = 0; j < (int) aLtSymbol.Circles.size(); j++ )
     {
-        LIB_SHAPE* circle = new LIB_SHAPE( aLibSymbol, SHAPE_T::CIRCLE );
+        SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
 
         CreateCircle( aLtSymbol, j, circle );
         aLibSymbol->AddDrawItem( circle );
@@ -296,7 +292,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
 
     for( int j = 0; j < (int) aLtSymbol.Arcs.size(); j++ )
     {
-        LIB_SHAPE* arc = new LIB_SHAPE( aLibSymbol, SHAPE_T::ARC );
+        SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, LAYER_DEVICE );
 
         CreateArc( aLtSymbol, j, arc );
         aLibSymbol->AddDrawItem( arc );
@@ -304,7 +300,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
 
     for( int j = 0; j < (int) aLtSymbol.Rectangles.size(); j++ )
     {
-        LIB_SHAPE* rectangle = new LIB_SHAPE( aLibSymbol, SHAPE_T::RECTANGLE );
+        SCH_SHAPE* rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
 
         CreateRect( aLtSymbol, j, rectangle );
         aLibSymbol->AddDrawItem( rectangle );
@@ -822,7 +818,7 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
                                                       std::vector<LTSPICE_SCHEMATIC::WIRE>& aWires )
 {
     LIB_SYMBOL* lib_symbol = new LIB_SYMBOL( wxS( "GND" ) );
-    LIB_SHAPE*  shape = new LIB_SHAPE( lib_symbol, SHAPE_T::POLY );
+    SCH_SHAPE*  shape = new SCH_SHAPE( SHAPE_T::POLY,LAYER_DEVICE );
 
     shape->AddPoint( ToInvertedKicadCoords( { 16, 0 } ) );
     shape->AddPoint( ToInvertedKicadCoords( { -16, 0 } ) );
@@ -1245,7 +1241,7 @@ void SCH_IO_LTSPICE_PARSER::CreateFields( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
 
 
 void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                        LIB_SHAPE* aRectangle )
+                                        SCH_SHAPE* aRectangle )
 {
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
 
@@ -1330,7 +1326,7 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
 
 
 void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                       LIB_SHAPE* aArc )
+                                       SCH_SHAPE* aArc )
 {
     LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
 
@@ -1380,7 +1376,7 @@ void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
 
 
 void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                          LIB_SHAPE* aCircle )
+                                          SCH_SHAPE* aCircle )
 {
     LTSPICE_SCHEMATIC::CIRCLE& lt_circle = aLTSymbol.Circles[aIndex];
 

@@ -380,10 +380,8 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
     case SCH_TEXT_T:
         return GRID_TEXT;
 
-    case LIB_SHAPE_T:
     case SCH_SHAPE_T:
     // The text box's border lines are what need to be on the graphic grid
-    case LIB_TEXTBOX_T:
     case SCH_TEXTBOX_T:
     case SCH_BITMAP_T:
         return GRID_GRAPHICS;

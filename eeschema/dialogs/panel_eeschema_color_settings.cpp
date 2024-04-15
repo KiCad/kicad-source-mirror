@@ -24,7 +24,7 @@
 #include <gal/gal_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <layer_ids.h>
-#include <lib_shape.h>
+#include <sch_shape.h>
 #include <math/vector2wx.h>
 #include <page_info.h>
 #include <panel_eeschema_color_settings.h>
@@ -375,8 +375,9 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         symbol->SetShowPinNumbers( true );
         symbol->SetPinNameOffset( 0 );
 
-        LIB_SHAPE* comp_body = new LIB_SHAPE( symbol, SHAPE_T::POLY );
+        SCH_SHAPE* comp_body = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
 
+        comp_body->SetParent( symbol );
         comp_body->SetUnit( 0 );
         comp_body->SetBodyStyle( 0 );
         comp_body->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );

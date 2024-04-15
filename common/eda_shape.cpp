@@ -5,7 +5,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2023 CERN
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -701,7 +701,7 @@ void EDA_SHAPE::SetArcAngleAndEnd( const EDA_ANGLE& aAngle, bool aCheckNegativeA
 }
 
 
-wxString EDA_SHAPE::GetFriendlyName() const
+wxString EDA_SHAPE::getFriendlyName() const
 {
     if( IsProxyItem() )
     {
@@ -733,7 +733,7 @@ void EDA_SHAPE::ShapeGetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PA
     wxString msg;
 
     wxString shape = _( "Shape" );
-    aList.emplace_back( shape, GetFriendlyName() );
+    aList.emplace_back( shape, getFriendlyName() );
 
     switch( m_shape )
     {
@@ -1322,12 +1322,7 @@ void EDA_SHAPE::DupPolyPointsList( std::vector<VECTOR2I>& aBuffer ) const
 bool EDA_SHAPE::IsPolyShapeValid() const
 {
     // return true if the polygonal shape is valid (has more than 2 points)
-    if( GetPolyShape().OutlineCount() == 0 )
-        return false;
-
-    const SHAPE_LINE_CHAIN& outline = static_cast<const SHAPE_POLY_SET&>( GetPolyShape() ).Outline( 0 );
-
-    return outline.PointCount() > 2;
+    return GetPolyShape().OutlineCount() > 0 && GetPolyShape().Outline( 0 ).PointCount() > 2;
 }
 
 
@@ -1335,10 +1330,7 @@ int EDA_SHAPE::GetPointCount() const
 {
     // return the number of corners of the polygonal shape
     // this shape is expected to be only one polygon without hole
-    if( GetPolyShape().OutlineCount() )
-        return GetPolyShape().VertexCount( 0 );
-
-    return 0;
+    return GetPolyShape().OutlineCount() ? GetPolyShape().VertexCount( 0 ) : 0;
 }
 
 

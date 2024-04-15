@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras jp.charras at wanadoo.fr
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -118,8 +118,6 @@ public:
 
     void SetShape( SHAPE_T aShape )            { m_shape = aShape; }
     SHAPE_T GetShape() const                   { return m_shape; }
-
-    wxString GetFriendlyName() const;
 
     /**
      * Return the starting point of the graphic.
@@ -346,7 +344,9 @@ public:
     bool operator==( const EDA_SHAPE& aOther ) const;
 
 protected:
-    void    setPosition( const VECTOR2I& aPos );
+    wxString getFriendlyName() const;
+
+    void     setPosition( const VECTOR2I& aPos );
     VECTOR2I getPosition() const;
 
     virtual void setFilled( bool aFlag )
