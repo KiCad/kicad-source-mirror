@@ -17,10 +17,10 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-02 11:49+0000\n"
-"Last-Translator: Marek <fotelpl@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/master-"
-"source/pl/>\n"
+"PO-Revision-Date: 2024-04-17 14:55+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/kicad/"
+"master-source/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1742,9 +1742,8 @@ msgid "Export to Clipboard"
 msgstr "Eksportuj do schowka"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Modyfikacja kształtu"
+msgstr "Modyfikacja z pomocą API"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -2010,16 +2009,14 @@ msgid "Additional Contributions By"
 msgstr "Dodatkowe wsparcie przez"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Dokumentacja"
+msgstr "Grupa odpowiedzialna za dokumentację"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
 msgstr "Grupa twórców bibliotek"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
 msgstr "Modele 3D"
 
@@ -2043,9 +2040,8 @@ msgid "Footprints"
 msgstr "Footprinty"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Ikona"
+msgstr "Ikony"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -3063,13 +3059,14 @@ msgid "Reference Designators"
 msgstr "Oznaczenia"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
-msgstr "Alternatywne przypisanie"
+msgstr "Wyczyść przypisania sieci"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
 msgstr ""
+"Usuwa informacje o sieci ze wszystkich połączonych elementów podczas "
+"wklejania"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -3824,11 +3821,13 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Używaj mieszanego kolorowania rzędów w tabelach"
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "When enabled, use a different color for every other table row"
 msgstr ""
+"Gdy opcja jest włączona, używa łatwego do rozróżnienia kolorowania "
+"poszczególnych rzędów"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Icon theme:"
@@ -4540,84 +4539,91 @@ msgid "Library nickname prefix:"
 msgstr "Prefiks nazwy skrótowej biblioteki:"
 
 #: common/dialogs/panel_plugin_settings.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "Istniejąca ścieżka:"
+msgstr "Nasłuchiwanie na %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:111
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "Ta instalacja programu KiCad nie posiada włączonego wsparcia API."
 
 #: common/dialogs/panel_plugin_settings.cpp:120
 msgid "KiCad API is not enabled; external Python plugins will not be available"
 msgstr ""
+"KiCad API nie jest aktywny; zewnętrzne wtyczki w języku Python nie będą "
+"dostępne"
 
 #: common/dialogs/panel_plugin_settings.cpp:131
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Nie wybrano prawidłowego interpretera języka Python; zewnętrzne wtyczki w "
+"języku Python nie będą dostępne"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "Nie znaleziono pliku %s."
+msgstr "Znaleziono %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Nie jest prawidłowym interpreterem języka Python w wersji 3"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"Gdy KiCad API jest włączone, wtyczki i inne oprogramowanie działające na tym "
+"komputerze może łączyć się z programem KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "Włącz KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"Włącz KiCad API.  Dzięki temu oprogramowanie innych firm działające na Twoim "
+"komputerze będzie miało dostęp do programu KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Interpreter języka Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Ścieżka do interpretera języka Python:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Usuwa ostatni punkt dodany do bieżącego elementu"
+msgstr "Wybiera ścieżkę dostępu do interpretera języka Python"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Numeruj automatycznie"
+msgstr "Wykryj automatycznie"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Nie wybrano interpretera języka Python; zewnętrzne wtyczki w języku Python "
+"nie będą dostępne"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Status interpretera języka Python"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1953
 #: common/stroke_params.cpp:37
@@ -5269,9 +5275,8 @@ msgid "Packages and Updates"
 msgstr "Pakiety i aktualizacje"
 
 #: common/eda_base_frame.cpp:1253
-#, fuzzy
 msgid "Plugins"
-msgstr "Wtyczki (%d)"
+msgstr "Wtyczki"
 
 #: common/eda_base_frame.cpp:1336
 #, c-format
@@ -5713,9 +5718,8 @@ msgid "Bezier"
 msgstr "Krzywa Beziera"
 
 #: common/eda_shape.cpp:1981 eeschema/lib_shape.cpp:598
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Właściwości arkusza"
+msgstr "Właściwości kształtu"
 
 #: common/eda_shape.cpp:1987 eeschema/sch_table.cpp:604
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:489
@@ -6498,19 +6502,16 @@ msgid "Select all cells"
 msgstr "Zaznacz wszystkie komórki"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Numerowanie wykonane."
+msgstr "Zaakceptuj automatyczne kompletowanie"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Anuluj bieżące narzędzie"
+msgstr "Anuluj automatyczne kompletowanie"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Przełącz blokadę"
+msgstr "Przełącz zaznaczenie"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -7891,24 +7892,20 @@ msgid "Zoom Out"
 msgstr "Pomniejsz"
 
 #: common/tool/actions.cpp:574 common/tool/actions.cpp:575
-#, fuzzy
 msgid "Zoom In Horizontally"
-msgstr "Odbij poziomo"
+msgstr "Powiększ w poziomie"
 
 #: common/tool/actions.cpp:581 common/tool/actions.cpp:582
-#, fuzzy
 msgid "Zoom Out Horizontally"
-msgstr "Odbij poziomo"
+msgstr "Pomniejsz w poziomie"
 
 #: common/tool/actions.cpp:588 common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom In Vertically"
-msgstr "Odbij pionowo"
+msgstr "Powiększ w pionie"
 
 #: common/tool/actions.cpp:595 common/tool/actions.cpp:596
-#, fuzzy
 msgid "Zoom Out Vertically"
-msgstr "Odbij pionowo"
+msgstr "Pomniejsz w pionie"
 
 #: common/tool/actions.cpp:604 common/widgets/mathplot.cpp:1383
 msgid "Center on Cursor"
@@ -8947,9 +8944,8 @@ msgid "Allegro netlist files"
 msgstr "Pliki listy sieci programu Allegro"
 
 #: common/wildcards_and_files_ext.cpp:299
-#, fuzzy
 msgid "PADS netlist files"
-msgstr "Plik listy sieci SPICE"
+msgstr "Pliki listy sieci PADS"
 
 #: common/wildcards_and_files_ext.cpp:305
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -9584,12 +9580,11 @@ msgstr "Numerowanie wykonane."
 
 #: eeschema/api/api_handler_sch.cpp:256 pcbnew/api/api_handler_pcb.cpp:342
 msgid "Added items via API"
-msgstr ""
+msgstr "Dodane elementy poprzez API"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
-#, fuzzy
 msgid "Created items via API"
-msgstr "Utwórz linie"
+msgstr "Utworzone elementy poprzez API"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -10208,9 +10203,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Uaktualnij/zresetuj atrybuty symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Utwórz symbol jako symbol zasilania"
+msgstr "Zresetuj własne symbole zasilania"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10614,29 +10608,24 @@ msgid "Electrical Rules Checker"
 msgstr "Sprawdzanie poprawności elektrycznej (ERC)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:263
-#, fuzzy
 msgid "Export netlist in legacy KiCad format"
-msgstr "Eksportuj dane w formacie Pcbnew"
+msgstr "Eksportuj listę sieci w starszym formacie programu KiCad"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:268
-#, fuzzy
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Eksportuj dane w formacie Pcbnew"
+msgstr "Eksportuj listę sieci w formacie OrcadPCB2"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:273
-#, fuzzy
 msgid "Export netlist in Allegro format"
-msgstr "Eksportuj dane w formacie Pcbnew"
+msgstr "Eksportuj listę sieci w formacie Allegro"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:278
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "Eksportuj dane w formacie Pcbnew"
+msgstr "Eksportuj listę sieci w formacie PADS"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:283
-#, fuzzy
 msgid "Export netlist in CadStar format"
-msgstr "Eksportuj dane w formacie Pcbnew"
+msgstr "Eksportuj listę sieci w formacie CadStar"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:291
 #: eeschema/dialogs/dialog_export_netlist_base.h:73
@@ -10644,9 +10633,8 @@ msgid "Export Netlist"
 msgstr "Eksportuj listę sieci"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:317
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "Eksportuj dane w formacie Pcbnew"
+msgstr "Eksportuj listę sieci w formacie SPICE"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:321
 #: eeschema/dialogs/dialog_export_netlist.cpp:374
@@ -10704,7 +10692,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:370
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "Eksportuj listę sieci jako model .subckt programu SPICE"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:424
 msgid "Netlist command:"
@@ -10758,28 +10746,24 @@ msgid "You must provide a netlist generator title"
 msgstr "Musisz podać nazwę generatora listy sieci"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:50
-#, fuzzy
 msgid "Add Exporter..."
-msgstr "Eksportuj..."
+msgstr "Dodaj eksporter..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:53
-#, fuzzy
 msgid "Remove Exporter"
-msgstr "Usuń narożnik"
+msgstr "Usuń eksporter"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:101
-#, fuzzy
 msgid "Command line to run the exporter:"
-msgstr "Linia poleceń służąca do uruchomienia generatora:"
+msgstr "Linia poleceń służąca do uruchomienia eksportera:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:116
-#, fuzzy
 msgid "Browse Scripts..."
-msgstr "Przeglądaj generatory..."
+msgstr "Przeglądaj skrypty..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "Dodaje eksporter listy sieci w formie skryptu"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:234
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -12858,9 +12842,8 @@ msgstr ""
 "we Właściwości > Edytor Schematów > Kolory."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Edycja właściwości arkusza pinów"
+msgstr "Edycja właściwości arkusza"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -14993,42 +14976,35 @@ msgstr "Generuj błąd"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
-#, fuzzy
 msgid "No action"
-msgstr "Nie podłączony"
+msgstr "Brak akcji"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:42
 #: eeschema/dialogs/panel_simulator_preferences.cpp:63
-#, fuzzy
 msgid "Pan left/right"
-msgstr "Panoramuj w lewo/prawo:"
+msgstr "Panoramuj w lewo/prawo"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:43
-#, fuzzy
 msgid "Pan right/left"
-msgstr "Panoramuj w prawo"
+msgstr "Panoramuj w prawo/lewo"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:44
-#, fuzzy
 msgid "Pan up/down"
-msgstr "Panoramuj w górę/dół:"
+msgstr "Panoramuj w górę/dół"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:64
-#, fuzzy
 msgid "Zoom horizontally"
-msgstr "Odbij poziomo"
+msgstr "Powiększ poziomo"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:47
-#, fuzzy
 msgid "Zoom vertically"
-msgstr "Odbij pionowo"
+msgstr "Powiększ pionowo"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
-#, fuzzy
 msgid "Modifier"
-msgstr "Zmodyfikowano"
+msgstr "Modyfikator"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:113
@@ -15040,32 +15016,28 @@ msgid "Action"
 msgstr "Akcja"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:54
-#, fuzzy
 msgid "None:"
-msgstr "Brak"
+msgstr "Brak:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
-#, fuzzy
 msgid "Ctrl:"
-msgstr "Ctrl"
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
-#, fuzzy
 msgid "Shift:"
-msgstr "Shift"
+msgstr "Shift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
-msgstr ""
+msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal touchpad movement:"
-msgstr "Liczba poziomo:"
+msgstr "Ruch płytką dotykową poziomo:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "Dowolny:"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -15795,9 +15767,8 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Etykiety są podobne (różnią się tylko wielkością liter)"
 
 #: eeschema/erc_item.cpp:99
-#, fuzzy
 msgid "Global label only appears once in the schematic"
-msgstr "Globalna etykieta nie jest połączona z innym elementem"
+msgstr "Globalna etykieta występuje tylko raz na schemacie"
 
 #: eeschema/erc_item.cpp:103
 msgid "Different footprint assigned in another unit of the symbol"
@@ -16115,9 +16086,9 @@ msgid "Import Schematic"
 msgstr "Importuj Schemat"
 
 #: eeschema/files-io.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read file '%s'."
-msgstr "Niewystarczające uprawnienia by zapisać plik '%s'."
+msgstr "Niewystarczające uprawnienia by odczytać plik '%s'."
 
 #: eeschema/files-io.cpp:786
 #, c-format
@@ -16816,9 +16787,9 @@ msgid "Junction at %s, %s"
 msgstr "Łącze na pozycji %s, %s"
 
 #: eeschema/net_navigator.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at %s, %s"
-msgstr "Niepołączone"
+msgstr "Niepołączone na poz %s, %s"
 
 #: eeschema/net_navigator.cpp:157
 #, c-format
@@ -22313,9 +22284,8 @@ msgid "Export Current Plot to Clipboard"
 msgstr "Eksportuj rysunek do schowka"
 
 #: eeschema/tools/ee_actions.cpp:1474
-#, fuzzy
 msgid "Export Current Plot to Schematic"
-msgstr "Eksportuj bieżący wykres jako plik CSV..."
+msgstr "Eksportuj bieżący wykres na schemat"
 
 #: eeschema/tools/ee_actions.cpp:1480
 msgid "Show Legend"
@@ -22991,14 +22961,12 @@ msgstr ""
 "dostrajane"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ustaw na wartość:"
+msgstr "Ogranicz do ciągu wartości E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ustaw na wartość:"
+msgstr "Ogranicz do ciągu wartości E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
 #, fuzzy
@@ -24856,9 +24824,8 @@ msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr ""
 
 #: kicad/cli/command_pcb_render.cpp:262
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Białe tło"
+msgstr "Niepoprawne tło\n"
 
 #: kicad/cli/command_pcb_render.cpp:268
 #, fuzzy
@@ -30412,7 +30379,7 @@ msgstr "Ustawienia projektowe płytki"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:57
 msgid "Import Settings from Another Board..."
-msgstr "Importuj ustawienia z innej płtki..."
+msgstr "Importuj ustawienia z innej płytki..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:83
 msgid "Board Stackup"
@@ -31336,11 +31303,9 @@ msgid "Reference Position"
 msgstr "Oznaczenie"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
-#, fuzzy
 msgid "Position of the selected item (or  group) to duplicate"
 msgstr ""
-"Jest to pozycja zaznaczonego elementu\n"
-"lub pozycja grupy do powielenia"
+"Jest to pozycja zaznaczonego elementu (lub  grupy elementów) do powielenia"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Ref point pos X:"
@@ -31392,9 +31357,8 @@ msgid "Duplication Settings"
 msgstr "Ustawienia powielania"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:438
-#, fuzzy
 msgid "Angle between new items:"
-msgstr "Kąt pomiędzy punktem referencyjnym a centralnym."
+msgstr "Kąt pomiędzy nowymi elementami:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:443
 msgid ""
@@ -47471,7 +47435,7 @@ msgstr "Przełącza trasowanie na tryb podświetlenia kolizji"
 
 #: pcbnew/tools/pcb_actions.cpp:2241
 msgid "Router Shove Mode"
-msgstr "Trasowanie w trybie ropychania"
+msgstr "Trasowanie w trybie rozpychania"
 
 #: pcbnew/tools/pcb_actions.cpp:2242
 msgid "Switch router to shove mode"
@@ -48886,9 +48850,9 @@ msgid "thermal reliefs for PTH"
 msgstr "łącza termiczne dla PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] Wczytywanie nie powiodło się: wprowadzona linia jest za długa\n"
+msgstr "[INFO] Wczytywanie nie powiodło się: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
