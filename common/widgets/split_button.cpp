@@ -175,7 +175,7 @@ void SPLIT_BUTTON::OnLeftButtonUp( wxMouseEvent& aEvent )
         wxASSERT( pEventHandler );
 
         pEventHandler->CallAfter(
-                [=]()
+                [this]()
                 {
                     wxCommandEvent evt( wxEVT_BUTTON, GetId() );
                     evt.SetEventObject( this );
