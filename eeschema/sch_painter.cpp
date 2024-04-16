@@ -1607,6 +1607,9 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
         // Do not fill the shape in B&W print mode, to avoid to visible items inside the shape
         if( aShape->IsFilled() && !m_schSettings.PrintBlackAndWhiteReq() )
         {
+            if( aShape->GetFillMode() == FILL_T::FILLED_WITH_BG_BODYCOLOR )
+                color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
+
             m_gal->SetIsFill( true );
             m_gal->SetIsStroke( false );
             m_gal->SetFillColor( color );
