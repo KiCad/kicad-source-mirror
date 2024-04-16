@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-15 09:47+0000\n"
+"PO-Revision-Date: 2024-04-16 18:01+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -3101,7 +3101,7 @@ msgstr "Netzzuordnung zurücksetzen"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
-msgstr ""
+msgstr "Entferne Netzinformation aller verbundener Elemente vor dem Einfügen"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -3860,11 +3860,12 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Abwechselnde Farbe für Tabellenzeilen nutzen"
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "When enabled, use a different color for every other table row"
 msgstr ""
+"Wenn aktiv, wird für jede zweite Tabellenzeile eine andere Farbe verwendet"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Icon theme:"
@@ -4584,17 +4585,20 @@ msgstr "Erwarte Verbindung an %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:111
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "Diese KiCad-Installation hat die API-Unterstützung nicht aktiviert."
 
 #: common/dialogs/panel_plugin_settings.cpp:120
 msgid "KiCad API is not enabled; external Python plugins will not be available"
 msgstr ""
+"KiCAD API ist nicht aktiviert; externe Python-Plugins sind nicht verfügbar"
 
 #: common/dialogs/panel_plugin_settings.cpp:131
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Kein gültiger Python-Interpreter gewählt; externe Python-Plugins sind nicht "
+"verfügbar"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
 #, c-format
@@ -4603,7 +4607,7 @@ msgstr "%s gefunden"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Kein gültiger Python 3-Interpreter"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
 msgid "KiCad API"
@@ -4614,24 +4618,28 @@ msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"Wenn die KiCad API aktiviert ist, können Plugins und andere Software, die "
+"auf diesem Computer laufen, eine Verbindung zu KiCad herstellen."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "KiCad API aktivieren"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"KiCad API aktivieren.  Dadurch kann Software von Drittanbietern, die auf "
+"Ihrem Computer läuft, auf KiCad zugreifen."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Python-Interpreter"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Pfad zum Python-Interpreter:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "Select the path to a Python interpreter"
@@ -4639,7 +4647,7 @@ msgstr "Pfad zum Pythoninterpreter wählen"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
 msgid "Detect Automatically"
@@ -4649,10 +4657,11 @@ msgstr "Automatisch erkennen"
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Kein Python-Interpreter gewählt; externe Python-Plugins sind nicht verfügbar"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Python-Interpreter Status"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1953
 #: common/stroke_params.cpp:37
@@ -9639,11 +9648,11 @@ msgstr "Annotation vollständig."
 
 #: eeschema/api/api_handler_sch.cpp:256 pcbnew/api/api_handler_pcb.cpp:342
 msgid "Added items via API"
-msgstr ""
+msgstr "Mittels API hinzugfügte Elemente"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
 msgid "Created items via API"
-msgstr "Elemete mittels API erstellen"
+msgstr "Mittels API erstellte Elemente"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -10759,7 +10768,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:370
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "Netzliste als SPICE .subckt-Modell exportieren"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:424
 msgid "Netlist command:"
@@ -10832,7 +10841,7 @@ msgstr "Scripte durchsuchen..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "Sciptbasierten Netzlistenexport hinzufügen"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:234
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -12548,12 +12557,12 @@ msgstr "Popups für Eigenschaften erzeugen"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 #: pcbnew/dialogs/dialog_plot_base.cpp:416
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "Metadaten aus AUTHOR && SUBJECT Variablen erzeugen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:168
 #: pcbnew/dialogs/dialog_plot_base.cpp:417
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
-msgstr ""
+msgstr "PDF-Dokumenteigenschaften aus AUTHOR && SUBJECT Textvariablen erzeugen"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:175
 msgid "Other options"
@@ -15109,7 +15118,7 @@ msgstr "Umschalt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
-msgstr ""
+msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
 msgid "Horizontal touchpad movement:"
