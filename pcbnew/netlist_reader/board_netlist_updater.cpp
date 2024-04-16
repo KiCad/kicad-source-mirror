@@ -774,7 +774,9 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( FOOTPRINT* aFootprint
 
             if( pad->IsNoConnectPad() )
             {
-                for( int jj = 0; !padNetnames.insert( netName ).second; jj++ )
+                netName = wxString::Format( wxS( "%s" ), net.GetNetName() );
+
+                for( int jj = 1; !padNetnames.insert( netName ).second; jj++ )
                     netName = wxString::Format( wxS( "%s_%d" ), net.GetNetName(), jj );
             }
 
