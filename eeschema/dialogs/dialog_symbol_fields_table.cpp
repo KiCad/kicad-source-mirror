@@ -1296,6 +1296,7 @@ void DIALOG_SYMBOL_FIELDS_TABLE::OnExport( wxCommandEvent& aEvent )
         return;
     }
 
+    out.Close(); // close the file before we tell the user it's done with the info modal :workflow meme:
     msg.Printf( _( "Wrote BOM output to '%s'" ), outputFile.GetFullPath() );
     DisplayInfoMessage( this, msg );
 }
