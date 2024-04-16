@@ -275,6 +275,8 @@ private:
 
     wxXmlNode* appendNode( wxXmlNode* aParent, const wxString& aName );
 
+    void appendNode( wxXmlNode* aParent, wxXmlNode* aNode );
+
     void insertNode( wxXmlNode* aParent, wxXmlNode* aNode );
 
     void insertNodeAfter( wxXmlNode* aPrev, wxXmlNode* aNode );

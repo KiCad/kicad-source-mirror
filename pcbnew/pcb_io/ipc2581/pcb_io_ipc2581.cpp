@@ -96,6 +96,7 @@ void PCB_IO_IPC2581::insertNode( wxXmlNode* aParent, wxXmlNode* aNode )
 
     aParent->SetChildren( aNode );
     aNode->SetParent( aParent );
+    m_total_bytes += 2 * aNode->GetName().size() + 5;
 }
 
 
@@ -106,6 +107,7 @@ void PCB_IO_IPC2581::insertNodeAfter( wxXmlNode* aPrev, wxXmlNode* aNode )
     aNode->SetNext( aPrev->GetNext() );
     aPrev->SetNext( aNode );
     aNode->SetParent( aPrev->GetParent() );
+    m_total_bytes += 2 * aNode->GetName().size() + 5;
 }
 
 
@@ -119,30 +121,36 @@ wxXmlNode* PCB_IO_IPC2581::insertNode( wxXmlNode* aParent, const wxString& aName
 }
 
 
-wxXmlNode* PCB_IO_IPC2581::appendNode( wxXmlNode* aParent, const wxString& aName )
+void PCB_IO_IPC2581::appendNode( wxXmlNode* aParent, wxXmlNode* aNode )
 {
     // AddChild iterates through the entire list of children, so we want to avoid
     // that if possible.  When we share a parent and our next sibling is null,
     // then we are the last child and can just append to the end of the list.
 
     static wxXmlNode* lastNode = nullptr;
-    wxXmlNode* node = new wxXmlNode( wxXML_ELEMENT_NODE, aName );
 
     if( lastNode && lastNode->GetParent() == aParent && lastNode->GetNext() == nullptr )
     {
-        node->SetParent( aParent );
-        lastNode->SetNext( node );
+        aNode->SetParent( aParent );
+        lastNode->SetNext( aNode );
     }
     else
     {
-        aParent->AddChild( node );
+        aParent->AddChild( aNode );
     }
 
-    lastNode = node;
+    lastNode = aNode;
 
     // Opening tag, closing tag, brackets and the closing slash
-    m_total_bytes += 2 * aName.size() + 5;
+    m_total_bytes += 2 * aNode->GetName().size() + 5;
+}
 
+
+wxXmlNode* PCB_IO_IPC2581::appendNode( wxXmlNode* aParent, const wxString& aName )
+{
+    wxXmlNode* node = new wxXmlNode( wxXML_ELEMENT_NODE, aName );
+
+    appendNode( aParent, node );
     return node;
 }
 
@@ -233,7 +241,7 @@ wxString PCB_IO_IPC2581::componentName( FOOTPRINT* aFootprint )
 
     while( !tryInsert( name ) )
     {
-        name = wxString::Format( "%s%d", name, suffix );
+        name = wxString::Format( "%s_%d", baseName, suffix++ );
     }
 
     m_footprint_refdes_reverse_dict[aFootprint] = name;
@@ -1192,9 +1200,6 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 
     for( FOOTPRINT* fp_it : m_board->Footprints() )
     {
-        if( fp_it->GetAttributes() & FP_EXCLUDE_FROM_BOM )
-            continue;
-
         std::unique_ptr<FOOTPRINT> fp( static_cast<FOOTPRINT*>( fp_it->Clone() ) );
         fp->SetParentGroup( nullptr );
         fp->SetPosition( {0, 0} );
@@ -1232,7 +1237,7 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
 
         // TODO: The options are "ELECTRICAL", "MECHANICAL", "PROGRAMMABLE", "DOCUMENT", "MATERIAL"
         //      We need to figure out how to determine this.
-        if( entry->m_pads == 0 )
+        if( entry->m_pads == 0 || fp_it->GetAttributes() & FP_EXCLUDE_FROM_BOM )
             entry->m_type = "DOCUMENT";
         else
             entry->m_type = "ELECTRICAL";
@@ -1243,9 +1248,9 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
             ( *bom_iter )->m_count++;
 
         REFDES refdes;
-        refdes.m_name = fp->Reference().GetShownText( false );
+        refdes.m_name = componentName( fp_it );
         refdes.m_pkg = fp->GetFPID().GetLibItemName().wx_str();
-        refdes.m_populate = !fp->IsDNP();
+        refdes.m_populate = !fp->IsDNP() && !( fp->GetAttributes() & FP_EXCLUDE_FROM_BOM );
         refdes.m_layer = m_layer_name_map[fp_it->GetLayer()];
 
         ( *bom_iter )->m_refdes->push_back( refdes );
@@ -1290,14 +1295,14 @@ wxXmlNode* PCB_IO_IPC2581::generateBOMSection( wxXmlNode* aEcadNode )
         for( const REFDES& refdes : *( entry->m_refdes ) )
         {
             wxXmlNode* refdesNode = appendNode( bomEntryNode, "RefDes" );
-            addAttribute( refdesNode,  "name", genString( refdes.m_name, "CMP" ) );
+            addAttribute( refdesNode,  "name", refdes.m_name );
             addAttribute( refdesNode,  "packageRef", genString( refdes.m_pkg, "PKG" ) );
             addAttribute( refdesNode,  "populate", refdes.m_populate ? "true" : "false" );
             addAttribute( refdesNode,  "layerRef", refdes.m_layer );
         }
 
         wxXmlNode* characteristicsNode = appendNode( bomEntryNode, "Characteristics" );
-        addAttribute( characteristicsNode,  "category", "ELECTRICAL" );
+        addAttribute( characteristicsNode,  "category", entry->m_type );
 
         for( const auto& prop : *( entry->m_props ) )
         {
@@ -1603,8 +1608,8 @@ void PCB_IO_IPC2581::addPad( wxXmlNode* aContentNode, const PAD* aPad, PCB_LAYER
     {
         wxXmlNode* pinRefNode = appendNode( padNode, "PinRef" );
 
-        addAttribute( pinRefNode,  "pin", pinName( aPad ) );
         addAttribute( pinRefNode,  "componentRef", componentName( fp ) );
+        addAttribute( pinRefNode,  "pin", pinName( aPad ) );
     }
 }
 
@@ -1994,7 +1999,7 @@ wxXmlNode* PCB_IO_IPC2581::addPackage( wxXmlNode* aContentNode, FOOTPRINT* aFp )
         if( is_back )
         {
             if( !otherSideViewNode )
-                otherSideViewNode = appendNode( packageNode, "OtherSideView" );
+                otherSideViewNode = new wxXmlNode( wxXML_ELEMENT_NODE, "OtherSideView" );
 
             parent = otherSideViewNode;
         }
