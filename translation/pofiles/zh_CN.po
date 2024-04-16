@@ -37,7 +37,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
 "PO-Revision-Date: 2024-04-16 08:02+0000\n"
-"Last-Translator: CloverGit <w991593239@163.com>\n"
+"Last-Translator: Hubert Hu <qinghan.hu@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -10625,9 +10625,8 @@ msgid "untitled"
 msgstr "无标题"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "标签属性"
+msgstr "编辑标签属性"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -37271,9 +37270,8 @@ msgid "Skew between traces out of range"
 msgstr "走线之间的偏移超出范围"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "连接上的过孔过多"
+msgstr "连接上的过孔过多或过少"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
