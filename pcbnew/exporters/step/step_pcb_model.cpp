@@ -851,18 +851,32 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                 if( !makeWireFromChain( mkWire, contour ) )
                     continue;
 
-                wxASSERT( mkWire.IsDone() );
+                if( !mkWire.IsDone() )
+                {
+                    ReportMessage( wxString::Format(
+                            _( "Wire not done (contour %d, points %d): OCC error %d\n" ),
+                            static_cast<int>( contId ), static_cast<int>( contour.PointCount() ),
+                            static_cast<int>( mkWire.Error() ) ) );
+                }
 
                 if( contId == 0 ) // Outline
-                    mkFace = BRepBuilderAPI_MakeFace( mkWire.Wire() );
+                {
+                    if( mkWire.IsDone() )
+                        mkFace = BRepBuilderAPI_MakeFace( mkWire.Wire() );
+                    else
+                        continue;
+                }
                 else // Hole
-                    mkFace.Add( mkWire );
+                {
+                    if( mkWire.IsDone() )
+                        mkFace.Add( mkWire );
+                }
             }
             catch( const Standard_Failure& e )
             {
                 ReportMessage(
                         wxString::Format( wxT( "MakeShapes (contour %d): OCC exception: %s\n" ),
-                                          contId, e.GetMessageString() ) );
+                                          static_cast<int>( contId ), e.GetMessageString() ) );
                 return false;
             }
         }
