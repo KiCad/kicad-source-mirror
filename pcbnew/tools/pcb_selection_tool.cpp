@@ -2739,6 +2739,15 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
                 }
             };
 
+    auto layerVisible =
+            [&]( PCB_LAYER_ID aLayer )
+            {
+                if( m_isFootprintEditor )
+                    return view()->IsLayerVisible( aLayer );
+                else
+                    return board()->IsLayerVisible( aLayer );
+            };
+
     if( settings->GetHighContrast() )
     {
         const std::set<int> activeLayers = settings->GetHighContrastLayers();
@@ -2828,6 +2837,13 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     const PCB_TEXT* text = nullptr;
     const PCB_FIELD* field = nullptr;
 
+    // Most footprint children can only be selected in the footprint editor.
+    if( aItem->GetParentFootprint() && !m_isFootprintEditor && !checkVisibilityOnly )
+    {
+        if( aItem->Type() != PCB_FIELD_T && aItem->Type() != PCB_PAD_T )
+            return false;
+    }
+
     switch( aItem->Type() )
     {
     case PCB_ZONE_T:
@@ -2841,15 +2857,6 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         if( zone->IsTeardropArea() && !board()->LegacyTeardrops() )
             return false;
 
-        // A footprint zone is only selectable within the footprint editor
-        if( zone->GetParent()
-                && zone->GetParent()->Type() == PCB_FOOTPRINT_T
-                && !m_isFootprintEditor
-                && !checkVisibilityOnly )
-        {
-            return false;
-        }
-
         // zones can exist on multiple layers!
         if( !( zone->GetLayerSet() & visibleLayers() ).any() )
             return false;
@@ -2861,16 +2868,8 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
         if( !board()->IsElementVisible( LAYER_TRACKS ) || ( options.m_TrackOpacity == 0.00 ) )
             return false;
 
-        if( m_isFootprintEditor )
-        {
-            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
-                return false;
-        }
-        else
-        {
-            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
-                return false;
-        }
+        if( !layerVisible( aItem->GetLayer() ) )
+            return false;
 
         break;
 
@@ -2900,27 +2899,21 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     case PCB_TEXT_T:
         text = static_cast<const PCB_TEXT*>( aItem );
 
-        if( m_isFootprintEditor )
+        if( !text->IsVisible() )
         {
-            if( !text->IsVisible() && !view()->IsLayerVisible( LAYER_HIDDEN_TEXT ) )
-                return false;
-
-            if( !view()->IsLayerVisible( text->GetLayer() ) )
+            if( !m_isFootprintEditor || !view()->IsLayerVisible( LAYER_HIDDEN_TEXT ) )
                 return false;
         }
-        else if( aItem->GetParentFootprint() )
+
+        if( !layerVisible( text->GetLayer() ) )
+            return false;
+
+        // Apply the LOD visibility test as well
+        if( !view()->IsVisible( text ) )
+            return false;
+
+        if( aItem->GetParentFootprint() )
         {
-            // Footprint text selections are only allowed in footprint editor mode.
-            // Careful, though: we also get here through the PCB_FIELD_T case.
-            if( aItem->Type() == PCB_TEXT_T && !checkVisibilityOnly )
-                return false;
-
-            if( !view()->IsVisible( text ) )
-                return false;
-
-            if( !board()->IsLayerVisible( text->GetLayer() ) )
-                return false;
-
             int controlLayer = LAYER_FP_TEXT;
 
             if( text->GetText() == wxT( "${REFERENCE}" ) )
@@ -2948,20 +2941,8 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     case PCB_TEXTBOX_T:
     case PCB_TABLE_T:
     case PCB_TABLECELL_T:
-        if( m_isFootprintEditor )
-        {
-            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
-                return false;
-        }
-        else if( aItem->GetParentFootprint() )
-        {
-            // Footprint shape selections are only allowed in footprint editor mode.
-            if( !checkVisibilityOnly )
-                return false;
-
-            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
-                return false;
-        }
+        if( !layerVisible( aItem->GetLayer() ) )
+            return false;
 
         if( aItem->Type() == PCB_TABLECELL_T )
         {
@@ -2978,20 +2959,8 @@ bool PCB_SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibili
     case PCB_DIM_CENTER_T:
     case PCB_DIM_RADIAL_T:
     case PCB_DIM_ORTHOGONAL_T:
-        if( m_isFootprintEditor )
-        {
-            if( !view()->IsLayerVisible( aItem->GetLayer() ) )
-                return false;
-        }
-        else if( aItem->GetParentFootprint() )
-        {
-            // Footprint dimension selections are only allowed in footprint editor mode.
-            if( !checkVisibilityOnly )
-                return false;
-
-            if( !board()->IsLayerVisible( aItem->GetLayer() ) )
-                return false;
-        }
+        if( !layerVisible( aItem->GetLayer() ) )
+            return false;
 
         break;
 
