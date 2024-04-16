@@ -1240,7 +1240,11 @@ void BOARD::DeleteMARKERs()
 {
     // the vector does not know how to delete the PCB_MARKER, it holds pointers
     for( PCB_MARKER* marker : m_markers )
+    {
+        // We also must clear the cache
+        m_itemByIdCache.erase( marker->m_Uuid );
         delete marker;
+    }
 
     m_markers.clear();
 }
@@ -1256,6 +1260,8 @@ void BOARD::DeleteMARKERs( bool aWarningsAndErrors, bool aExclusions )
         if( ( marker->GetSeverity() == RPT_SEVERITY_EXCLUSION && aExclusions )
                 || ( marker->GetSeverity() != RPT_SEVERITY_EXCLUSION && aWarningsAndErrors ) )
         {
+            // We also must clear the cache
+            m_itemByIdCache.erase( marker->m_Uuid );
             delete marker;
         }
         else
