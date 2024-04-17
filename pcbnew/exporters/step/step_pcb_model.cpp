@@ -1029,6 +1029,27 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
             cut.SetTools( holelist );
             cut.Build();
 
+            if( cut.HasErrors() || cut.HasWarnings() )
+            {
+                ReportMessage( wxString::Format(
+                        _( "\n** Got problems while cutting %s number %d **\n" ), aWhat, cnt ) );
+                shapeBbox.Dump();
+
+                if( cut.HasErrors() )
+                {
+                    ReportMessage( _( "Errors:\n" ) );
+                    cut.DumpErrors( std::cout );
+                }
+
+                if( cut.HasWarnings() )
+                {
+                    ReportMessage( _( "Warnings:\n" ) );
+                    cut.DumpWarnings( std::cout );
+                }
+
+                std::cout << "\n";
+            }
+
             shape = cut.Shape();
         }
     };
