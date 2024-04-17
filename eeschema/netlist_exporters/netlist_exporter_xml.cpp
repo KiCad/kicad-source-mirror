@@ -725,7 +725,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
                 if( item->Type() == SCH_PIN_T )
                 {
                     SCH_PIN* pin = static_cast<SCH_PIN*>( item );
-                    SYMBOL*  symbol = pin->GetParentSymbol();
+                    SCH_SYMBOL*  symbol = static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
 
                     if( !symbol
                        || ( ( aCtl & GNL_OPT_BOM ) && symbol->GetExcludedFromBOM() )
