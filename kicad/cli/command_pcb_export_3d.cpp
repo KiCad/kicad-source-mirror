@@ -63,7 +63,8 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
     {
         m_argParser.add_argument( ARG_FORMAT )
                 .default_value( std::string( "step" ) )
-                .help( UTF8STDSTR( _( "Output file format, options: step, glb (binary glTF)" ) ) );
+                .help( UTF8STDSTR(
+                        _( "Output file format, options: step, brep, glb (binary glTF)" ) ) );
     }
 
     m_argParser.add_argument( ARG_FORCE, "-f" )
@@ -81,7 +82,8 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                     _( "Exclude 3D models for components with 'Do not populate' attribute" ) ) )
             .flag();
 
-    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::BREP
+        || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         m_argParser.add_argument( ARG_GRID_ORIGIN )
                 .help( UTF8STDSTR( _( "Use Grid Origin for output origin" ) ) )
@@ -153,7 +155,8 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 {
     std::unique_ptr<JOB_EXPORT_PCB_3D> step( new JOB_EXPORT_PCB_3D( true ) );
 
-    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::BREP
+        || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
         step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
@@ -182,6 +185,8 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
 
         if( format == wxS( "step" ) )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;
+        else if( format == wxS( "brep" ) )
+            step->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP;
         else if( format == wxS( "glb" ) )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;
         else
@@ -260,7 +265,8 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         step->m_hasUserOrigin = true;
     }
 
-    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
+    if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::BREP
+        || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         wxString minDistance =
                 From_UTF8( m_argParser.get<std::string>( ARG_MIN_DISTANCE ).c_str() );

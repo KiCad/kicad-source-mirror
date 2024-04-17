@@ -168,6 +168,9 @@ public:
     // write the assembly model in STEP format
     bool WriteSTEP( const wxString& aFileName, bool aOptimize );
 
+    // write the assembly in BREP format
+    bool WriteBREP( const wxString& aFileName );
+
     /**
      * Write the assembly in binary GLTF Format
      *

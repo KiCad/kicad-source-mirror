@@ -34,6 +34,7 @@ public:
     {
         UNKNOWN, // defefer to arg
         STEP,
+        BREP,
         GLB,
         VRML
     };

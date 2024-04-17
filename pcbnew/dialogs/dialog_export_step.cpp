@@ -444,6 +444,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     if( fn.GetExt() == FILEEXT::GltfBinaryFileExtension )
         cmdK2S.Append( wxT( " glb" ) );
+    else if( fn.GetExt() == FILEEXT::BrepFileExtension )
+        cmdK2S.Append( wxT( " brep" ) );
     else
         cmdK2S.Append( wxT( " step" ) );
 

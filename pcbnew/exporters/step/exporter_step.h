@@ -63,6 +63,7 @@ public:
     enum class FORMAT
     {
         STEP,
+        BREP,
         GLB
     };
 

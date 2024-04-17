@@ -33,6 +33,7 @@
 #include <wx/stdpaths.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
+#include <wx/stdstream.h>
 
 #include <decompress.hpp>
 
@@ -77,6 +78,7 @@
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
+#include <BRepTools.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 
 #include <BRepBndLib.hxx>
@@ -1227,6 +1229,45 @@ bool STEP_PCB_MODEL::WriteSTEP( const wxString& aFileName, bool aOptimize )
     wxSetWorkingDirectory( currCWD );
 
     return success;
+}
+
+
+bool STEP_PCB_MODEL::WriteBREP( const wxString& aFileName )
+{
+    if( !isBoardOutlineValid() )
+    {
+        ReportMessage( wxString::Format( wxT( "No valid PCB assembly; cannot create output file "
+                                              "'%s'.\n" ),
+                                         aFileName ) );
+        return false;
+    }
+
+    wxFileName fn( aFileName );
+
+    // s_assy = shape tool for the source
+    Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( m_doc->Main() );
+
+    // retrieve all free shapes within the assembly
+    TDF_LabelSequence freeShapes;
+    s_assy->GetFreeShapes( freeShapes );
+
+    for( Standard_Integer i = 1; i <= freeShapes.Length(); ++i )
+    {
+        TDF_Label    label = freeShapes.Value( i );
+        TopoDS_Shape shape;
+        m_assy->GetShape( label, shape );
+
+        wxFileName fn( aFileName );
+
+        if( freeShapes.Length() > 1 )
+            fn.SetName( wxString::Format( "%s_%s", fn.GetName(), i ) );
+
+        wxFFileOutputStream ffStream( fn.GetFullPath() );
+        wxStdOutputStream   stdStream( ffStream );
+        BRepTools::Write( shape, stdStream, false, false, TopTools_FormatVersion_VERSION_1 );
+    }
+
+    return true;
 }
 
 
