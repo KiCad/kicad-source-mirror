@@ -2452,10 +2452,10 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
             // Pin anchors have to be allowed for auto-starting wires.
             if( aPos )
             {
-                EE_GRID_HELPER grid( m_toolMgr );
+                EE_GRID_HELPER    grid( m_toolMgr );
+                GRID_HELPER_GRIDS pinGrid = grid.GetItemGrid( pin );
 
-                if( pin->IsPointClickableAnchor( grid.BestSnapAnchor(
-                            *aPos, grid.GetItemGrid( static_cast<const SCH_ITEM*>( aItem ) ) ) ) )
+                if( pin->IsPointClickableAnchor( grid.BestSnapAnchor( *aPos, pinGrid ) ) )
                     return true;
             }
 
@@ -2475,7 +2475,14 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
         return false;
 
     case SCH_FIELD_T:     // SCH_FIELD objects are not unit/body-style-specific.
+    {
+        const SCH_FIELD* field = static_cast<const SCH_FIELD*>( aItem );
+
+        if( !field->IsVisible() && !( symEditFrame && symEditFrame->GetShowInvisibleFields() ) )
+            return false;
+
         break;
+    }
 
     case SCH_SHAPE_T:
     case SCH_TEXT_T:

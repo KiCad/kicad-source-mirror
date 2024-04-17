@@ -1204,8 +1204,7 @@ BITMAPS SCH_FIELD::GetMenuImage() const
 
 bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    // Do not hit test hidden or empty fields.
-    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText( true ).IsEmpty() )
+    if( GetShownText( true ).IsEmpty() )
         return false;
 
     BOX2I rect = GetBoundingBox();
@@ -1232,8 +1231,7 @@ bool SCH_FIELD::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 
 bool SCH_FIELD::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
-    // Do not hit test hidden fields.
-    if( ( !IsVisible() && !IsForceVisible() ) || GetShownText( true ).IsEmpty() )
+    if( GetShownText( true ).IsEmpty() )
         return false;
 
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
