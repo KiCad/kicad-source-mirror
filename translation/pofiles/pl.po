@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-02 11:49+0000\n"
-"Last-Translator: Marek <fotelpl@gmail.com>\n"
+"PO-Revision-Date: 2024-04-17 14:21+0000\n"
+"Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -5489,9 +5489,8 @@ msgid "Bezier"
 msgstr "Krzywa Beziera"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Właściwości arkusza"
+msgstr "Właściwości kształtu"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6254,19 +6253,16 @@ msgid "Select all cells"
 msgstr "Zaznacz wszystkie komórki"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Numerowanie wykonane."
+msgstr "Zaakceptuj automatyczne kompletowanie"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Anuluj bieżące narzędzie"
+msgstr "Anuluj automatyczne kompletowanie"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Przełącz blokadę"
+msgstr "Przełącz zaznaczenie"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -9810,9 +9806,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Uaktualnij/zresetuj atrybuty symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Utwórz symbol jako symbol zasilania"
+msgstr "Zresetuj własne symbole zasilania"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10811,9 +10806,8 @@ msgid "untitled"
 msgstr "bez_nazwy"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Właściwości etykiety"
+msgstr "Edycja właściwości etykiety"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -12380,9 +12374,8 @@ msgstr ""
 "we Właściwości > Edytor Schematów > Kolory."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Właściwości arkusza"
+msgstr "Edycja właściwości arkusza"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13690,9 +13683,8 @@ msgstr ""
 "schemacie."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Właściwości tekstu"
+msgstr "Edytuj właściwości tekstu"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -22069,14 +22061,12 @@ msgstr ""
 "dostrajane"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Ustaw na wartość:"
+msgstr "Ogranicz do ciągu wartości E24."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Ustaw na wartość:"
+msgstr "Ogranicz do ciągu wartości E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
 #, fuzzy
@@ -29326,7 +29316,7 @@ msgstr "Ustawienia projektowe płytki"
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:57
 msgid "Import Settings from Another Board..."
-msgstr "Importuj ustawienia z innej płtki..."
+msgstr "Importuj ustawienia z innej płytki..."
 
 #: pcbnew/dialogs/dialog_board_setup.cpp:83
 msgid "Board Stackup"
@@ -38943,14 +38933,13 @@ msgid "Too many vias on a connection"
 msgstr "Za dużo przelotek na jednym połączeniu"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s maks. liczba %d; obecnie %d)"
+msgstr "(%s min. liczba %d; obecnie %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Za dużo przelotek na jednym połączeniu"
+msgstr "Za mało przelotek w jednym połączeniu"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -46459,7 +46448,7 @@ msgstr "Przełącza trasowanie na tryb podświetlenia kolizji"
 
 #: pcbnew/tools/pcb_actions.cpp:2227
 msgid "Router Shove Mode"
-msgstr "Trasowanie w trybie ropychania"
+msgstr "Trasowanie w trybie rozpychania"
 
 #: pcbnew/tools/pcb_actions.cpp:2228
 msgid "Switch router to shove mode"
@@ -47713,9 +47702,9 @@ msgid "thermal reliefs for PTH"
 msgstr "łącza termiczne dla PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] Wczytywanie nie powiodło się: wprowadzona linia jest za długa\n"
+msgstr "[INFO] Wczytywanie nie powiodło się: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
