@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-16 08:02+0000\n"
+"PO-Revision-Date: 2024-04-18 07:23+0000\n"
 "Last-Translator: dsa-t <dudesuchamazing@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/kicad/v8/ru/>\n"
 "Language: ru\n"
@@ -39162,7 +39162,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Текущая плата будет закрыта. Продолжить?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
