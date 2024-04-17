@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-03-31 02:20+0000\n"
-"Last-Translator: Alex Gellen <alex.n.gellen@gmail.com>\n"
+"PO-Revision-Date: 2024-04-18 07:23+0000\n"
+"Last-Translator: Nicoara Alex <alex.nicoara@yahoo.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/kicad/v8/ro/>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
@@ -303,9 +303,8 @@ msgstr "Filtrează rețele"
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:582
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:629
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:817
-#, fuzzy
 msgid "legacy colors"
-msgstr "Folosiți culori:"
+msgstr "culorile moștenite"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:720
 msgid "3D Image File Name"
@@ -579,9 +578,8 @@ msgid "Show/hide the appearance manager"
 msgstr "%s Proprietăți"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
-#, fuzzy
 msgid "Board Body"
-msgstr "Corpul plăci:"
+msgstr "Corpul plăci"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:55
 msgid "Show board body"
@@ -592,18 +590,16 @@ msgid "F.Cu"
 msgstr "F.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:56
-#, fuzzy
 msgid "Show front copper / surface finish color"
-msgstr "Cupru / finisaj de suprafață:"
+msgstr "Afișați culoarea față de cupru/finisare a suprafeței"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
 msgid "B.Cu"
 msgstr "B.Cu"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:57
-#, fuzzy
 msgid "Show back copper / surface finish color"
-msgstr "Cupru / finisaj de suprafață:"
+msgstr "Afișați culoarea din spate a cuprului / finisajului de suprafață"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:58
 #, fuzzy
@@ -616,9 +612,8 @@ msgid "Show adhesive"
 msgstr "Arată straturile adezive"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
-#, fuzzy
 msgid "Solder Paste"
-msgstr "Pastă de sudură:"
+msgstr "Pastă de lipit"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:59
 #, fuzzy
