@@ -1243,8 +1243,6 @@ bool STEP_PCB_MODEL::WriteBREP( const wxString& aFileName )
         return false;
     }
 
-    wxFileName fn( aFileName );
-
     // s_assy = shape tool for the source
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( m_doc->Main() );
 
