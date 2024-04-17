@@ -731,19 +731,47 @@ bool SETTINGS_MANAGER::GetPreviousVersionPaths( std::vector<wxString>* aPaths )
         }
     }
 
+    alg::delete_if( *aPaths, []( const wxString& aPath ) -> bool
+    {
+        wxFileName fulldir = wxFileName::DirName( aPath );
+        const wxArrayString& dirs = fulldir.GetDirs();
+
+        if( dirs.empty() || !fulldir.IsDirReadable() )
+            return true;
+
+        std::string ver = dirs.back().ToStdString();
+
+        if( !extractVersion( ver ) )
+            return true;
+
+        return false;
+    } );
+
     std::sort( aPaths->begin(), aPaths->end(),
                [&]( const wxString& a, const wxString& b ) -> bool
                {
-                   wxString verA = wxFileName::DirName( a ).GetDirs().back();
-                   wxString verB = wxFileName::DirName( b ).GetDirs().back();
+                   wxFileName aPath = wxFileName::DirName( a );
+                   wxFileName bPath = wxFileName::DirName( b );
 
-                   if( !extractVersion( verA.ToStdString() )
-                       || !extractVersion( verB.ToStdString() ) )
-                   {
+                   const wxArrayString& aDirs = aPath.GetDirs();
+                   const wxArrayString& bDirs = bPath.GetDirs();
+
+                   if( aDirs.empty() )
                        return false;
-                   }
 
-                   return compareVersions( verA.ToStdString(), verB.ToStdString() ) >= 0;
+                   if( bDirs.empty() )
+                       return true;
+
+                   std::string verA = aDirs.back().ToStdString();
+                   std::string verB = bDirs.back().ToStdString();
+
+                   if( !extractVersion( verA ) )
+                       return false;
+
+                   if( !extractVersion( verB ) )
+                       return true;
+
+                   return compareVersions( verA, verB ) >= 0;
                } );
 
     return aPaths->size() > 0;
