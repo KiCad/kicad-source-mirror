@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2020, 2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -33,6 +33,7 @@
 
 #include <atomic>
 #include <chrono>
+#include <sstream>
 #include <string>
 #include <iostream>
 #include <iomanip>
@@ -153,9 +154,18 @@ public:
 
     std::string to_string()
     {
-        char tmp[1024];
-        snprintf( tmp, sizeof( tmp ), "%s: %-6.1fms", m_name.c_str(), msecs() );
-        return tmp;
+        std::string retv;
+
+        if( !m_name.empty() )
+            retv = m_name + ": ";
+
+        std::stringstream time;
+
+        Show( time );
+
+        retv += time.get();
+
+        return retv;
     }
 
 private:

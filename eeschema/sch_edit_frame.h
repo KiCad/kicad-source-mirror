@@ -232,7 +232,7 @@ public:
     /**
      * Update the hierarchy navigation tree and history
      */
-    void UpdateHierarchyNavigator();
+    void UpdateHierarchyNavigator( bool aRefreshNetNavigator = true );
 
     /**
      * Update the hierarchy navigation tree labels.

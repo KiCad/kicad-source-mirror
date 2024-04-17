@@ -21,6 +21,7 @@
  */
 
 #include <wx/log.h>
+#include <core/profile.h>
 #include <tool/tool_manager.h>
 #include <kiface_base.h>
 #include <sch_edit_frame.h>
@@ -31,6 +32,7 @@
 #include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <string_utils.h>
+#include <trace_helpers.h>
 #include <connection_graph.h>
 #include <widgets/wx_aui_utils.h>
 #include <tools/ee_actions.h>
@@ -251,6 +253,12 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 {
     wxCHECK( m_netNavigator, /* void */ );
 
+    size_t     nodeCnt = 0;
+
+    m_netNavigator->Freeze();
+
+    PROF_TIMER timer;
+
     if( m_highlightedConn.IsEmpty() )
     {
         m_netNavigator->DeleteAllItems();
@@ -262,22 +270,27 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
 
         for( const auto& net : netMap )
         {
-            wxTreeItemId netId = m_netNavigator->AppendItem( rootId, UnescapeString( net.first.Name ) );
+            // Skip bus member subgraphs for the moment.
+            if( net.first.Name.IsEmpty() )
+                continue;
+
+            nodeCnt++;
+            wxTreeItemId netId = m_netNavigator->AppendItem( rootId,
+                                                             UnescapeString( net.first.Name ) );
             MakeNetNavigatorNode( net.first.Name, netId, aSelection );
         }
 
         m_netNavigator->Expand( rootId );
-
-        return;
     }
-
-    if( !m_netNavigator->IsEmpty() )
+    else if( !m_netNavigator->IsEmpty() )
     {
         const wxString shownNetName = m_netNavigator->GetItemText( m_netNavigator->GetRootItem() );
 
         if( shownNetName != m_highlightedConn )
         {
             m_netNavigator->DeleteAllItems();
+
+            nodeCnt++;
 
             wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
@@ -293,6 +306,8 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
                 itemData = dynamic_cast<NET_NAVIGATOR_ITEM_DATA*>( m_netNavigator->GetItemData( selection ) );
 
             m_netNavigator->DeleteAllItems();
+            nodeCnt++;
+
             wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
             MakeNetNavigatorNode( m_highlightedConn, rootId, itemData );
@@ -300,10 +315,19 @@ void SCH_EDIT_FRAME::RefreshNetNavigator( const NET_NAVIGATOR_ITEM_DATA* aSelect
     }
     else
     {
+        nodeCnt++;
+
         wxTreeItemId rootId = m_netNavigator->AddRoot( UnescapeString( m_highlightedConn ), 0 );
 
         MakeNetNavigatorNode( m_highlightedConn, rootId, aSelection );
     }
+
+    timer.Stop();
+
+    wxLogTrace( traceUiProfile, wxS( "Adding %zu nodes to net navigator took %s." ),
+                nodeCnt, timer.to_string() );
+
+    m_netNavigator->Thaw();
 }
 
 

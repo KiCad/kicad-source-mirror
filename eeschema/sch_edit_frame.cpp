@@ -1172,11 +1172,13 @@ void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::UpdateHierarchyNavigator()
+void SCH_EDIT_FRAME::UpdateHierarchyNavigator( bool aRefreshNetNavigator )
 {
     m_toolManager->GetTool<SCH_NAVIGATE_TOOL>()->CleanHistory();
     m_hierarchy->UpdateHierarchyTree();
-    RefreshNetNavigator();
+
+    if( aRefreshNetNavigator )
+        RefreshNetNavigator();
 }
 
 
@@ -1743,9 +1745,13 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
                 if( m_highlightedConnChanged )
                     return;
-                else if( !hasHighlightedConn )
-                    // No highlighted connection, but connectivity has changed, so refresh the list of all nets
+
+                if( !hasHighlightedConn )
+                {
+                    // No highlighted connection, but connectivity has changed, so refresh
+                    // the list of all nets
                     m_highlightedConnChanged = true;
+                }
                 else if( connection
                          && ( connection->Name() == highlightedConn
                               || connection->HasDriverChanged() ) )
