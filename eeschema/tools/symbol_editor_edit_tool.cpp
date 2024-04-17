@@ -281,7 +281,7 @@ static std::vector<KICAD_T> nonFields =
 int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
     LIB_SYMBOL*           symbol = m_frame->GetCurSymbol();
-    std::deque<EDA_ITEM*> items = m_selectionTool->RequestSelection( nonFields ).GetItems();
+    std::deque<EDA_ITEM*> items = m_selectionTool->RequestSelection().GetItems();
     SCH_COMMIT            commit( m_frame );
 
     if( items.empty() )
@@ -293,6 +293,8 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     commit.Modify( symbol, m_frame->GetScreen() );
 
     std::set<SCH_ITEM*> toDelete;
+    int                 fieldsHidden = 0;
+    int                 fieldsAlreadyHidden = 0;
 
     for( EDA_ITEM* item : items )
     {
@@ -338,16 +340,44 @@ int SYMBOL_EDITOR_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else
+        else if( item->Type() == SCH_FIELD_T )
         {
-            toDelete.insert( (SCH_ITEM*) item );
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+            // Hide "deleted" fields
+            if( field->IsVisible() )
+            {
+                field->SetVisible( false );
+                fieldsHidden++;
+            }
+            else
+            {
+                fieldsAlreadyHidden++;
+            }
+        }
+        else if( SCH_ITEM* schItem = dynamic_cast<SCH_ITEM*>( item ) )
+        {
+            toDelete.insert( schItem );
         }
     }
 
     for( SCH_ITEM* item : toDelete )
         symbol->RemoveDrawItem( item );
 
-    commit.Push( _( "Delete" ) );
+    if( toDelete.size() == 0 )
+    {
+        if( fieldsHidden == 1 )
+            commit.Push( _( "Hide Field" ) );
+        else if( fieldsHidden > 1 )
+            commit.Push( _( "Hide Fields" ) );
+        else if( fieldsAlreadyHidden > 0 )
+            m_frame->ShowInfoBarError( _( "Use the Symbol Properties dialog to remove fields." ) );
+    }
+    else
+    {
+        commit.Push( _( "Delete" ) );
+    }
+
     m_frame->RebuildView();
     return 0;
 }

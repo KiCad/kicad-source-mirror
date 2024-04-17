@@ -2264,7 +2264,8 @@ void EDIT_TOOL::removeNonRootItems( std::unordered_set<EDA_ITEM*>& items )
 
 void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 {
-    BOARD_COMMIT commit( this );
+    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+    BOARD_COMMIT         commit( this );
 
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
@@ -2273,6 +2274,10 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
     // items from the parent item, not individually) - issue #17527
     std::unordered_set<EDA_ITEM*> rootItems( aItems.begin(), aItems.end() );
     removeNonRootItems( rootItems );
+
+    int itemsDeleted = 0;
+    int fieldsHidden = 0;
+    int fieldsAlreadyHidden = 0;
 
     for( EDA_ITEM* item : rootItems )
     {
@@ -2287,11 +2292,25 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         switch( item->Type() )
         {
         case PCB_FIELD_T:
+        {
+            PCB_FIELD* field = static_cast<PCB_FIELD*>( board_item );
+
             wxASSERT( parentFP );
             commit.Modify( parentFP );
-            static_cast<PCB_TEXT*>( board_item )->SetVisible( false );
+
+            if( field->IsVisible() )
+            {
+                field->SetVisible( false );
+                fieldsHidden++;
+            }
+            else
+            {
+                fieldsAlreadyHidden++;
+            }
+
             getView()->Update( board_item );
             break;
+        }
 
         case PCB_TEXT_T:
         case PCB_SHAPE_T:
@@ -2305,12 +2324,14 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         case PCB_DIM_RADIAL_T:
         case PCB_DIM_ORTHOGONAL_T:
             commit.Remove( board_item );
+            itemsDeleted++;
             break;
 
         case PCB_TABLECELL_T:
             // Clear contents of table cell
             commit.Modify( board_item );
             static_cast<PCB_TABLECELL*>( board_item )->SetText( wxEmptyString );
+            itemsDeleted++;
             break;
 
         case PCB_GROUP_T:
@@ -2327,6 +2348,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                          } );
 
             commit.Remove( board_item );
+            itemsDeleted++;
             break;
 
         case PCB_PAD_T:
@@ -2335,6 +2357,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                 commit.Modify( parentFP );
                 getView()->Remove( board_item );
                 parentFP->Remove( board_item );
+                itemsDeleted++;
             }
 
             break;
@@ -2372,6 +2395,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
 
             // Remove the entire zone otherwise
             commit.Remove( board_item );
+            itemsDeleted++;
             break;
 
         case PCB_GENERATOR_T:
@@ -2395,6 +2419,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
                 commit.Remove( board_item );
             }
 
+            itemsDeleted++;
             break;
 
         default:
@@ -2411,9 +2436,22 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         m_selectionTool->ExitGroup();
 
     if( aIsCut )
+    {
         commit.Push( _( "Cut" ) );
+    }
+    else if( itemsDeleted == 0 )
+    {
+        if( fieldsHidden == 1 )
+            commit.Push( _( "Hide Field" ) );
+        else if( fieldsHidden > 1 )
+            commit.Push( _( "Hide Fields" ) );
+        else if( fieldsAlreadyHidden > 0 )
+            editFrame->ShowInfoBarError( _( "Use the Footprint Properties dialog to remove fields." ) );
+    }
     else
+    {
         commit.Push( _( "Delete" ) );
+    }
 }
 
 
