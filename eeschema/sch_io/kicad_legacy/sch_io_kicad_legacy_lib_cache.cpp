@@ -957,12 +957,18 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
     VECTOR2I center;
     VECTOR2I size;
     wxString str;
+    bool     visible;
+    int      unit;
+    int      bodyStyle;
 
     angleInTenths = parseInt( aReader, line, &line );
 
     center.x = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     center.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
     size.x = size.y = schIUScale.MilsToIU( parseInt( aReader, line, &line ) );
+    visible = !parseInt( aReader, line, &line );
+    unit = parseInt( aReader, line, &line );
+    bodyStyle = parseInt( aReader, line, &line );
 
     // If quoted string loading fails, load as not quoted string.
     if( *line == '"' )
@@ -988,9 +994,9 @@ SCH_TEXT* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadText( LINE_READER& aReader,
     SCH_TEXT* text = new SCH_TEXT( center, str, LAYER_DEVICE );
     text->SetTextAngle( EDA_ANGLE( angleInTenths, TENTHS_OF_A_DEGREE_T ) );
     text->SetTextSize( size );
-    text->SetVisible( !parseInt( aReader, line, &line ) );
-    text->SetUnit( parseInt( aReader, line, &line ) );
-    text->SetBodyStyle( parseInt( aReader, line, &line ) );
+    text->SetVisible( visible );
+    text->SetUnit( unit );
+    text->SetBodyStyle( bodyStyle );
 
     // Here things are murky and not well defined.  At some point it appears the format
     // was changed to add text properties.  However rather than add the token to the end of
