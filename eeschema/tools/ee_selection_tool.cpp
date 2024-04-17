@@ -2237,45 +2237,40 @@ void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
     VECTOR2I bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
     VECTOR2D screenSize = getView()->GetViewport().GetSize();
 
-    // This code tries to come up with a zoom factor that doesn't simply zoom in
-    // to the cross probed symbol, but instead shows a reasonable amount of the
-    // circuit around it to provide context.  This reduces or eliminates the need
-    // to manually change the zoom because it's too close.
+    // This code tries to come up with a zoom factor that doesn't simply zoom in to the cross
+    // probed symbol, but instead shows a reasonable amount of the circuit around it to provide
+    // context.  This reduces the need to manually change the zoom because it's too close.
 
-    // Using the default text height as a constant to compare against, use the
-    // height of the bounding box of visible items for a footprint to figure out
-    // if this is a big symbol (like a processor) or a small symbol (like a resistor).
-    // This ratio is not useful by itself as a scaling factor.  It must be "bent" to
-    // provide good scaling at varying symbol sizes.  Bigger symbols need less
-    // scaling than small ones.
+    // Using the default text height as a constant to compare against, use the height of the
+    // bounding box of visible items for a footprint to figure out if this is a big symbol (like
+    // a processor) or a small symbol (like a resistor).  This ratio is not useful by itself as a
+    // scaling factor.  It must be "bent" to provide good scaling at varying symbol sizes.  Bigger
+    // symbols need less scaling than small ones.
     double currTextHeight = schIUScale.MilsToIU( DEFAULT_TEXT_SIZE );
 
     double compRatio = bbSize.y / currTextHeight; // Ratio of symbol to text height
     double compRatioBent = 1.0;
 
-    // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
-    // with symbols of varying sizes (e.g. 0402 package and 200 pin BGA).
-    // "first" is used as the input and "second" as the output
-    //
-    // "first" = compRatio (symbol height / default text height)
-    // "second" = Amount to scale ratio by
-    std::vector<std::pair<double, double>> lut{ { 1.25, 16 }, // 32
-                                                { 2.5, 12 },  //24
-                                                { 5, 8 },     // 16
-                                                { 6, 6 },     //
-                                                { 10, 4 },    //8
-                                                { 20, 2 },    //4
-                                                { 40, 1.5 },  // 2
-                                                { 100, 1 } };
+    // LUT to scale zoom ratio to provide reasonable schematic context.  Must work with symbols
+    // of varying sizes (e.g. 0402 package and 200 pin BGA).
+    // Each entry represents a compRatio (symbol height / default text height) and an amount to
+    // scale by.
+    std::vector<std::pair<double, double>> lut{ { 1.25,  16 },
+                                                {  2.5,  12 },
+                                                {    5,   8 },
+                                                {    6,   6 },
+                                                {   10,   4 },
+                                                {   20,   2 },
+                                                {   40, 1.5 },
+                                                {  100,   1 } };
 
     std::vector<std::pair<double, double>>::iterator it;
 
     // Large symbol default is last LUT entry (1:1).
     compRatioBent = lut.back().second;
 
-    // Use LUT to do linear interpolation of "compRatio" within "first", then
-    // use that result to linearly interpolate "second" which gives the scaling
-    // factor needed.
+    // Use LUT to do linear interpolation of "compRatio" within "first", then use that result to
+    // linearly interpolate "second" which gives the scaling factor needed.
     if( compRatio >= lut.front().first )
     {
         for( it = lut.begin(); it < lut.end() - 1; it++ )
@@ -2295,24 +2290,23 @@ void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
         compRatioBent = lut.front().second; // Small symbol default is first entry
     }
 
-    // This is similar to the original KiCad code that scaled the zoom to make sure
-    // symbols were visible on screen.  It's simply a ratio of screen size to
-    // symbol size, and its job is to zoom in to make the component fullscreen.
-    // Earlier in the code the symbol BBox is given a 20% margin to add some
-    // breathing room. We compare the height of this enlarged symbol bbox to the
-    // default text height.  If a symbol will end up with the sides clipped, we
-    // adjust later to make sure it fits on screen.
+    // This is similar to the original KiCad code that scaled the zoom to make sure symbols were
+    // visible on screen.  It's simply a ratio of screen size to symbol size, and its job is to
+    // zoom in to make the component fullscreen.  Earlier in the code the symbol BBox is given a
+    // 20% margin to add some breathing room.  We compare the height of this enlarged symbol bbox
+    // to the default text height.  If a symbol will end up with the sides clipped, we adjust
+    // later to make sure it fits on screen.
     screenSize.x = std::max( 10.0, screenSize.x );
     screenSize.y = std::max( 10.0, screenSize.y );
     double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
 
     // Original KiCad code for how much to scale the zoom
-    double kicadRatio =
-            std::max( fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
+    double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
+                                  fabs( bbSize.y / screenSize.y ) );
 
-    // If the width of the part we're probing is bigger than what the screen width
-    // will be after the zoom, then punt and use the KiCad zoom algorithm since it
-    // guarantees the part's width will be encompassed within the screen.
+    // If the width of the part we're probing is bigger than what the screen width will be after
+    // the zoom, then punt and use the KiCad zoom algorithm since it guarantees the part's width
+    // will be encompassed within the screen.
     if( bbSize.x > screenSize.x * ratio * compRatioBent )
     {
         // Use standard KiCad zoom for parts too wide to fit on screen/
@@ -2322,8 +2316,8 @@ void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
                     "Part TOO WIDE for screen.  Using normal KiCad zoom ratio: %1.5f", ratio );
     }
 
-    // Now that "compRatioBent" holds our final scaling factor we apply it to the
-    // original fullscreen zoom ratio to arrive at the final ratio itself.
+    // Now that "compRatioBent" holds our final scaling factor we apply it to the original
+    // fullscreen zoom ratio to arrive at the final ratio itself.
     ratio *= compRatioBent;
 
     bool alwaysZoom = false; // DEBUG - allows us to minimize zooming or not
