@@ -36,8 +36,8 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-17 14:21+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2024-04-18 07:23+0000\n"
+"Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -78,9 +78,8 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:931
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr ""
-"电路板缺少板框或板框形状异常 (如板框线条没有闭合)。可用设计规则检查 (DRC) 分"
-"析原因。"
+msgstr "电路板缺少外框或外框形状异常 (如板外框线条没有闭合)。可用设计规则检查 (DRC) "
+"分析原因。"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
 msgid "Create tracks and vias"
@@ -752,7 +751,7 @@ msgstr "板外丝印层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:79
 msgid "Do not clip silk layers to board outline"
-msgstr "避免板边裁剪丝印层"
+msgstr "避免电路板外框裁剪丝印层"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:81
 msgid "3D Axis"
@@ -25668,7 +25667,7 @@ msgstr "<= 2%"
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:22
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:54
 msgid "Tolerance"
-msgstr "误差"
+msgstr "精度容差"
 
 #: pcb_calculator/calculator_panels/panel_color_code_base.cpp:34
 msgid "1st Band"
@@ -28163,7 +28162,7 @@ msgstr "(不是闭合形状)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:516
 msgid "(multiple board outlines not supported)"
-msgstr "(不支持多电路板轮廓)"
+msgstr "(不支持多个电路板外框)"
 
 #: pcbnew/convert_shape_list_to_polygon.cpp:652
 #, c-format
@@ -28956,12 +28955,12 @@ msgstr "(不会考虑合并出现在 Net Tie 焊盘组中的焊盘。)"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:41
 msgid "Fix discontinuities in board outlines"
-msgstr "修复未闭合的电路板板外框"
+msgstr "修复未闭合的电路板外框"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:46
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:178
 msgid "Tolerance:"
-msgstr "容差:"
+msgstr "精度容差:"
 
 #: pcbnew/dialogs/dialog_cleanup_graphics_base.cpp:67
 #: pcbnew/dialogs/dialog_cleanup_tracks_and_vias_base.cpp:72
@@ -30387,7 +30386,7 @@ msgid ""
 "Board outline is missing or not closed using %.3f mm tolerance.\n"
 "Run DRC for a full analysis."
 msgstr ""
-"电路板轮廓缺失或未用 %.3f mm 公差闭合。\n"
+"电路板外框缺失或外框形状的闭合误差超过允许的容差值: %.3f mm。\n"
 "运行设计规则检查 (DRC) 进行全面分析。"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:412
@@ -30524,7 +30523,7 @@ msgstr "导出锡膏图形。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:188
 msgid "Board outline chaining tolerance:"
-msgstr "电路板边框公差:"
+msgstr "电路板外框容差:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:192
 msgid "Tight (0.001 mm)"
@@ -30542,7 +30541,7 @@ msgstr "松散 (0.1 mm)"
 msgid ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
-msgstr "当构建电路板边框时, 公差设定了两个被视为联结的点的距离。"
+msgstr "容差用于设定在构造电路板外框时, 两个被视为连结点的最小距离值。"
 
 #: pcbnew/dialogs/dialog_export_step_base.h:93
 msgid "Export STEP / GLTF"
@@ -30731,7 +30730,7 @@ msgstr "包含走线 (&T)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:45
 msgid "Include &board outline layer"
-msgstr "包含电路板边框层 (&B)"
+msgstr "包含电路板外框层 (&B)"
 
 #: pcbnew/dialogs/dialog_filter_selection_base.cpp:48
 msgid "Include &vias"
@@ -31642,7 +31641,7 @@ msgstr "覆铜"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:31
 msgid "Board outlines"
-msgstr "电路板边框"
+msgstr "电路板外框"
 
 #: pcbnew/dialogs/dialog_global_deletion_base.cpp:34
 #: pcbnew/widgets/panel_selection_filter.cpp:191
@@ -38054,7 +38053,7 @@ msgstr "(层 %s)"
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:379
 msgid "Checking board outline..."
-msgstr "正在检查电路板边框..."
+msgstr "正在检查电路板外框..."
 
 #: pcbnew/drc/drc_test_provider_misc.cpp:387
 msgid "Checking disabled layers..."
@@ -38242,7 +38241,7 @@ msgstr "它们已被导出为椭圆焊盘。"
 #: pcbnew/exporters/step/exporter_step.cpp:382
 #: pcbnew/specctra_import_export/specctra_export.cpp:119
 msgid "Board outline is malformed. Run DRC for a full analysis."
-msgstr "PCB 轮廓异常, 请运行 DRC 来进行全面分析。"
+msgstr "PCB 外框异常, 请运行 DRC 来进行全面分析。"
 
 #: pcbnew/exporters/export_idf.cpp:653 pcbnew/exporters/export_idf.cpp:662
 #: pcbnew/exporters/export_idf.cpp:670
@@ -38339,7 +38338,7 @@ msgid ""
 "Check that the board has a valid outline and models."
 msgstr ""
 "无法创建 %s 文件。\n"
-"检查电路板是否具有有效的轮廓和模型。"
+"检查电路板是否具有有效的外框和模型。"
 
 #: pcbnew/exporters/step/exporter_step.cpp:571
 #, c-format
