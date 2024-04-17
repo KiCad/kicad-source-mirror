@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-03-22 01:36+0000\n"
+"PO-Revision-Date: 2024-04-18 07:23+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -4062,7 +4062,7 @@ msgstr "Ik ga akkoord met het doorsturen van anonieme gegevens"
 
 #: common/dialogs/panel_data_collection_base.cpp:35
 msgid "Reset Unique Id"
-msgstr "Reset unieke ID"
+msgstr "Uniek ID terugzetten"
 
 #: common/dialogs/panel_grid_settings.cpp:54
 msgid "Footprints/pads:"
@@ -5499,9 +5499,8 @@ msgid "Bezier"
 msgstr "Bézier"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Blad eigenschappen"
+msgstr "Vormeigenschappen"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6260,19 +6259,16 @@ msgid "Select all cells"
 msgstr "Alle cellen selecteren"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Ongedaan maken"
+msgstr "Automatisch aanvullen accepteren"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Ongedaan maken"
+msgstr "Automatisch aanvullen annuleren"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Vergrendeling omschakelen"
+msgstr "Selectievakje omschakelen"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
@@ -9805,9 +9801,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Symboolattributen bijwerken/terugzetten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Definieer als voedingssymbool"
+msgstr "Aangepaste voedingssymbolen terugzetten"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -10781,7 +10776,7 @@ msgstr "Hiërarchische labeleigenschappen"
 #: eeschema/dialogs/dialog_label_properties.cpp:101
 #: eeschema/dialogs/dialog_label_properties_base.h:118
 msgid "Label Properties"
-msgstr "Label Instellingen"
+msgstr "Labeleigenschappen"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:102
 msgid "Directive Label Properties"
@@ -10803,9 +10798,8 @@ msgid "untitled"
 msgstr "naamloos"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Label Instellingen"
+msgstr "Labeleigenschappen bewerken"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -11115,7 +11109,7 @@ msgstr "Dubbele pinnen:"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:137
 msgid "Group by name"
-msgstr "Groepeer op naam"
+msgstr "Groeperen op naam"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:140
 msgid "Group Selected"
@@ -12363,9 +12357,8 @@ msgstr ""
 "in Voorkeuren > Schema-editor > Kleuren."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Blad eigenschappen"
+msgstr "Bladeigenschappen bewerken"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -13672,9 +13665,8 @@ msgstr ""
 "schema te maken."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Teksteigenschappen"
+msgstr "Teksteigenschappen bewerken"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -19095,9 +19087,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Fourieranalyse uitvoeren..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Signaal fase:"
+msgstr "Signaalnaam kopiëren"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -22022,24 +22013,20 @@ msgstr ""
 "afgestemd"
 
 #: eeschema/widgets/tuner_slider_base.cpp:43
-#, fuzzy
 msgid "Limit to E24 series values."
-msgstr "Instellen op de volgende waardes:"
+msgstr "Beperken tot waarden E24-serie."
 
 #: eeschema/widgets/tuner_slider_base.cpp:53
-#, fuzzy
 msgid "Limit to E48 series values."
-msgstr "Instellen op de volgende waardes:"
+msgstr "Beperken tot waarden E48-serie."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Instellen op de volgende waardes:"
+msgstr "Beperken tot waarden E96-serie"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Instellen op de volgende waardes:"
+msgstr "Beperken tot waarden E192-serie"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -30128,7 +30115,7 @@ msgstr "Omgekeerde nummering op afwisselende rijen/kolommen"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:187
 #: pcbnew/dialogs/dialog_create_array_base.cpp:478
 msgid "Use first free number"
-msgstr "Gebruik het eerste gratis nummer"
+msgstr "Eerst beschikbare nummer gebruiken"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:187
 #: pcbnew/dialogs/dialog_create_array_base.cpp:478
@@ -30162,7 +30149,7 @@ msgstr "Nummering van secundaire assen:"
 #: pcbnew/dialogs/dialog_create_array_base.cpp:227
 #: pcbnew/dialogs/dialog_create_array_base.cpp:499
 msgid "Pad numbering start:"
-msgstr "Padnummering start:"
+msgstr "Start padnummering:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:241
 #: pcbnew/dialogs/dialog_create_array_base.cpp:506
@@ -30268,7 +30255,7 @@ msgstr "Aantal items in de reeks."
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:451
 msgid "Rotate items:"
-msgstr "Roteer items:"
+msgstr "Items roteren:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:457
 msgid ""
@@ -38174,9 +38161,8 @@ msgid "Skew between traces out of range"
 msgstr "Scheeftrekking tussen sporen buiten bereik"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Te veel via’s op een verbinding"
+msgstr "Te veel of te weinig via’s op een verbinding"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -38880,14 +38866,13 @@ msgid "Too many vias on a connection"
 msgstr "Te veel via’s op een verbinding"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s max aantal %d; werkelijk %d)"
+msgstr "(%s min aantal %d; werkelijk %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Te veel via’s op een verbinding"
+msgstr "Te weinig via’s op een verbinding"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -39286,7 +39271,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Het huidige bord wordt gesloten. Doorgaan?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -47596,9 +47580,9 @@ msgid "thermal reliefs for PTH"
 msgstr "thermische ontlastingen voor PTH"
 
 #: plugins/3d/vrml/vrml.cpp:238
-#, fuzzy, c-format
+#, c-format
 msgid "[INFO] load failed: %s"
-msgstr "[INFO] laden mislukt: invoerregel te lang\n"
+msgstr "[INFO] laden mislukt: %s"
 
 #: resources/linux/launchers/org.kicad.bitmap2component.desktop.in:6
 msgid "bitmap2component;Bitmap;Converter;"
