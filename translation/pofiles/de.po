@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-16 08:01+0000\n"
+"PO-Revision-Date: 2024-04-17 14:21+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/v8/de/>\n"
 "Language: de\n"
@@ -10888,9 +10888,8 @@ msgid "untitled"
 msgstr "unbenannt"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:602
-#, fuzzy
 msgid "Edit Label Properties"
-msgstr "Eigenschaften des Bezeichners"
+msgstr "Bezeichnereigenschaften bearbeiten"
 
 #: eeschema/dialogs/dialog_label_properties.cpp:685
 msgid "The first field is mandatory."
@@ -13774,9 +13773,8 @@ msgstr ""
 "eine Seite in diesem Schaltplan zu erstellen."
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Texteigenschaften"
+msgstr "Texteigenschaften bearbeiten"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -38415,9 +38413,8 @@ msgid "Skew between traces out of range"
 msgstr "Versatz zwischen Leiterbahnen außerhalb des zulässigen Bereichs"
 
 #: pcbnew/drc/drc_item.cpp:242
-#, fuzzy
 msgid "Too many or too few vias on a connection"
-msgstr "Zu viele Vias in einer Verbindung"
+msgstr "Zu viele oder zu wenige Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_item.cpp:246
 msgid "Differential pair gap out of range"
@@ -39124,14 +39121,13 @@ msgid "Too many vias on a connection"
 msgstr "Zu viele Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:199
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min count %d; actual %d)"
-msgstr "(%s Maximalanzahl %d; tatsächlich: %d)"
+msgstr "(%s Minimalanzahl %d; tatsächlich: %d)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:204
-#, fuzzy
 msgid "Too few vias on a connection"
-msgstr "Zu viele Vias in einer Verbindung"
+msgstr "Zu wenige Vias in einer Verbindung"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:234
 msgid "Gathering length-constrained connections..."
@@ -39534,7 +39530,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Die aktuelle Platine wird geschlossen. Fortfahren?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
