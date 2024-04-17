@@ -1196,6 +1196,17 @@ void PAD::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITEM>& 
     if( GetAttribute() == PAD_ATTRIB::SMD || GetAttribute() == PAD_ATTRIB::CONN )
         aList.emplace_back( _( "Layer" ), layerMaskDescribe() );
 
+    if( aFrame->GetName() == FOOTPRINT_EDIT_FRAME_NAME )
+    {
+        if( GetAttribute() == PAD_ATTRIB::SMD )
+        {
+            const std::shared_ptr<SHAPE_POLY_SET>& poly = PAD::GetEffectivePolygon();
+            double area = poly->Area();
+
+            aList.emplace_back( _( "Area" ), aFrame->MessageTextFromValue( area, true, EDA_DATA_TYPE::AREA ) );
+        }
+    }
+
     // Show the pad shape, attribute and property
     wxString props = ShowPadAttr();
 
