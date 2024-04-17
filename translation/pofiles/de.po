@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-16 18:01+0000\n"
+"PO-Revision-Date: 2024-04-17 14:55+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -10821,17 +10821,14 @@ msgid "You must provide a netlist generator title"
 msgstr "Sie müssen einen Netzlistengenerator-Titel angeben"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:50
-#, fuzzy
 msgid "Add Exporter..."
 msgstr "Exporter hinzufügen..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:53
-#, fuzzy
 msgid "Remove Exporter"
 msgstr "Exporter entfernen"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:101
-#, fuzzy
 msgid "Command line to run the exporter:"
 msgstr "Befehlszeile zum Ausführen des Exporters:"
 
@@ -15853,9 +15850,8 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Bezeichner sind gleich (Unterschiede nur in Groß-/Kleinschreibung)"
 
 #: eeschema/erc_item.cpp:99
-#, fuzzy
 msgid "Global label only appears once in the schematic"
-msgstr "Ein globaler Bezeichner ist nirgendwo sonst im Schaltplan verbunden"
+msgstr "Globaler Bezeichner ist nur einmal Schaltplan vorhanden"
 
 #: eeschema/erc_item.cpp:103
 msgid "Different footprint assigned in another unit of the symbol"
@@ -16174,9 +16170,9 @@ msgid "Import Schematic"
 msgstr "Schaltplanimport"
 
 #: eeschema/files-io.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read file '%s'."
-msgstr "Unzureichende Berechtigungen zum Schreiben der Datei \"%s\"."
+msgstr "Unzureichende Berechtigungen zum Lesen der Datei \"%s\"."
 
 #: eeschema/files-io.cpp:786
 #, c-format
@@ -16930,9 +16926,9 @@ msgid "Could not open file '%s' to write IBIS model"
 msgstr "Konnte Datei \"%s\" nicht öffnen, um IBIS-Modell zu schreiben"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Error in parsing model '%s', error: '%s'"
-msgstr "Fehler beim Einlesen der Platine '%s': %s"
+msgstr "Fehler beim Parsen des Modell \"%s\", Fehler: \"%s\""
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:563
 #, c-format
@@ -16940,6 +16936,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
+"Fehler beim Parsen des Modells \"%s\", falsche Anzahl von Knoten \"?\" im "
+"Sim.NodesFormat im Vergleich zu Verbindungen"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:599
 #, c-format
@@ -22402,9 +22400,8 @@ msgid "Export Current Plot as CSV..."
 msgstr "Aktuellen Plot als CSV exportieren..."
 
 #: eeschema/tools/ee_actions.cpp:1468
-#, fuzzy
 msgid "Export Current Plot to Clipboard"
-msgstr "Als Bild in die Zwischenablage exportieren"
+msgstr "Aktuellen Plot in Zwischenablage exportieren"
 
 #: eeschema/tools/ee_actions.cpp:1474
 msgid "Export Current Plot to Schematic"
@@ -22635,12 +22632,10 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "Drücken Sie <ESC>, um die Erzeugung des Schaltplanblatts abzubrechen."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2528
-#, fuzzy
 msgid "Modify sheet pin"
-msgstr "Schaltplanpins hinzufügen"
+msgstr "Schaltplanpins ändern"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2534
-#, fuzzy
 msgid "Modify schematic item"
 msgstr "Schaltplanelement ändern"
 
@@ -24896,17 +24891,15 @@ msgstr "Kein Zeichnungsblatt"
 
 #: kicad/cli/command_pcb_render.cpp:167
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr ""
+msgstr "Rendert die Leiterplatte in 3D-Ansicht als PNG- oder JPEG-Bild"
 
 #: kicad/cli/command_pcb_render.cpp:173
-#, fuzzy
 msgid "Image width"
-msgstr "Seitenbreite"
+msgstr "Grafikbreite"
 
 #: kicad/cli/command_pcb_render.cpp:179
-#, fuzzy
 msgid "Image height"
-msgstr "Seitenhöhe"
+msgstr "Grafikhöhe"
 
 #: kicad/cli/command_pcb_render.cpp:185
 #, c-format
@@ -24918,6 +24911,8 @@ msgid ""
 "Image background. Options: transparent, opaque. Default: transparent for "
 "PNG, opaque for JPEG"
 msgstr ""
+"Bildhintergrund. Optionen: transparent, undurchsichtig. Standard: "
+"transparent für PNG, undurchsichtig für JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:198
 #, c-format
@@ -24927,60 +24922,61 @@ msgstr "Renderqualität. Optionen: %s"
 #: kicad/cli/command_pcb_render.cpp:204
 #, c-format
 msgid "Color preset. Options: %s, %s, %s, ..."
-msgstr ""
+msgstr "Farbvoreinstellung. Optionen: %s, %s, %s, ..."
 
 #: kicad/cli/command_pcb_render.cpp:210
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "preset"
 msgstr ""
+"Aktiviert Boden, Schatten und Nachbearbeitung, auch wenn in "
+"Qualitätsvoreinstellung deaktiviert"
 
 #: kicad/cli/command_pcb_render.cpp:215
 msgid "Use perspective projection instead of orthogonal"
-msgstr ""
+msgstr "Perspektivische statt orthogonaler Projektion verwenden"
 
 #: kicad/cli/command_pcb_render.cpp:221
-#, fuzzy
 msgid "Camera zoom"
-msgstr "Kameraoptionen"
+msgstr "Kamerazoom"
 
 #: kicad/cli/command_pcb_render.cpp:226
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
-msgstr ""
+msgstr "Kamera schwenken, Format \"X,Y,Z\" z.B.: \"3,0,0\""
 
 #: kicad/cli/command_pcb_render.cpp:231
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
+"Drehpunkt relativ zur Platinenmitte in Zentimetern festlegen, Format \"X,Y,"
+"Z\" z.B.: \"-10,2,0\""
 
 #: kicad/cli/command_pcb_render.cpp:238
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
 msgstr ""
+"Drehung der Platine, Format \"X,Y,Z\" z.B.: \"-45,0,45\" für isometrische "
+"Ansicht"
 
 #: kicad/cli/command_pcb_render.cpp:262
 msgid "Invalid background\n"
 msgstr "Weißer Hintergrund\n"
 
 #: kicad/cli/command_pcb_render.cpp:268
-#, fuzzy
 msgid "Invalid rotation format\n"
-msgstr "Ungültiges Berichtsformat\n"
+msgstr "Unzulässiges Rotationsformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:274
-#, fuzzy
 msgid "Invalid pan format\n"
-msgstr "Ungültiges Format\n"
+msgstr "Unzulässiges Schwenkformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:280
-#, fuzzy
 msgid "Invalid pivot format\n"
-msgstr "Ungültiges Berichtsformat\n"
+msgstr "Unzulässiges Drehpunktformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:295
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "Ungültiges Format\n"
+msgstr "Unzulässiges Grafikformat\n"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -25052,13 +25048,12 @@ msgid "Export a netlist"
 msgstr "Eine Netzliste exportieren"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
-#, fuzzy
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
 "Ausgabeformat für Netzliste; gültige Optionen: kicadsexpr, kicadxml, "
-"cadstar, orcadpcb2, spice, spicemodel"
+"cadstar, orcadpcb2, spice, spicemodel, pads, allegro"
 
 #: kicad/cli/command_sch_export_plot.cpp:65
 msgid "Color theme to use (will default to schematic settings)"
@@ -25070,7 +25065,7 @@ msgstr "Keine Popups für Eigenschaften im PDF erzeugen"
 
 #: kicad/cli/command_sch_export_plot.cpp:85
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
-msgstr ""
+msgstr "Keine PDF-Metadaten aus AUTHOR und SUBJECT Variablen erzeugen"
 
 #: kicad/cli/command_sch_export_plot.cpp:94
 msgid "Avoid setting a background color (regardless of theme)"
@@ -28160,7 +28155,7 @@ msgstr "Vref ist auf 0 gesetzt!"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:414
 msgid "Vref must VrefMin < VrefTyp < VrefMax"
-msgstr ""
+msgstr "Vref muss VrefMin < VrefTyp < VrefMax entsprechen"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:420
 msgid "Incorrect value for R1 R2"
@@ -28168,7 +28163,7 @@ msgstr "Inkorrekte Werte für R1 R2"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:435
 msgid "Iadj must IadjTyp < IadjMax"
-msgstr ""
+msgstr "Iadj muss IadjTyp < IadjMax entsprechen"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:60
@@ -28241,9 +28236,8 @@ msgid "Remove an item from the current list of available regulators"
 msgstr "Entfernt ein Element von der Liste der möglichen Spannungsregler"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:147
-#, fuzzy
 msgid "typ"
-msgstr "Menge"
+msgstr "typ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:119
@@ -28285,14 +28279,12 @@ msgid "For 3 terminal regulators only, the  Adjust pin current."
 msgstr "Nur beim dreibeinigen Typ: Die Stromstärke des Regeleingangs."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
-#, fuzzy
 msgid "Overall tolerance:"
-msgstr "Wärmeabstand:"
+msgstr "Gesamttoleranz:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
-#, fuzzy
 msgid "Resistor tolerance:"
-msgstr "Widerstand:"
+msgstr "Widerstandstoleranz:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:312
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:217
@@ -28315,9 +28307,8 @@ msgid "Power Comment:"
 msgstr "Kommentar:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
-#, fuzzy
 msgid "Copy to Clipboard"
-msgstr "Export in Zwischenablage"
+msgstr "In Zwischenablage kopieren"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
 #, c-format
@@ -28762,7 +28753,7 @@ msgstr "Datendatei Fehler."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr ""
+msgstr "Vref (min/typ/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
@@ -28770,7 +28761,7 @@ msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
 msgid "Iadj (typ/max):"
-msgstr ""
+msgstr "Iadj (typ/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -29443,9 +29434,8 @@ msgid "mi/h"
 msgstr "mi/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:472
-#, fuzzy
 msgid "Deleted items via API"
-msgstr "Elemente entfernen"
+msgstr "Mittels API gelöschte Elemente"
 
 #: pcbnew/array_creator.cpp:232 pcbnew/dialogs/dialog_create_array_base.h:142
 msgid "Create Array"
@@ -31450,25 +31440,20 @@ msgstr "Start Pad-Nummerierung:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:248
 #: pcbnew/dialogs/dialog_create_array_base.cpp:521
-#, fuzzy
 msgid "Pad numbering increment:"
-msgstr "Start Pad-Nummerierung:"
+msgstr "Pad-Nummerierung-Schrittweite:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:278
 msgid "Grid Array"
 msgstr "Raster-Array"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:287
-#, fuzzy
 msgid "Reference Position"
-msgstr "Referenzbezeichner"
+msgstr "Referenzposition"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
-#, fuzzy
 msgid "Position of the selected item (or  group) to duplicate"
-msgstr ""
-"Dies ist die Position des ausgewählten Elements\n"
-"oder die Position der zu duplizierenden Gruppe"
+msgstr "Position des/der zu duplizierenden gewählten Elements/Gruppe"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Ref point pos X:"
@@ -31499,9 +31484,8 @@ msgid "Set center by radius"
 msgstr "Mitte anhand Radius setzen"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:374
-#, fuzzy
 msgid "Radius of circular array:"
-msgstr "Radius des kreisförmigen Arrays"
+msgstr "Radius des kreisförmigen Arrays:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:382
 msgid "Distance between Ref point and Center pos."
@@ -40485,7 +40469,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Die aktuelle Platine wird geschlossen. Fortfahren?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -40761,9 +40744,8 @@ msgid "Footprint Chooser"
 msgstr "Footprint-Auswahl"
 
 #: pcbnew/footprint_chooser_frame.cpp:151
-#, fuzzy
 msgid "Show 3D viewer in own window"
-msgstr "Im 3D-Betrachter anzeigen"
+msgstr "3D-Betrachter in eigenem Fenster zeigen"
 
 #: pcbnew/footprint_chooser_frame.cpp:419
 #, c-format
@@ -42483,9 +42465,9 @@ msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Datei nicht gefunden: \"%s\". 3D-Modell nicht importiert."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write file '%s'."
-msgstr "Kann Datei \"%s\" nicht lesen."
+msgstr "Kann Datei \"%s\" nicht schreiben."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1720
 msgid "Loading nets..."
