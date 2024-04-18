@@ -217,34 +217,121 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
 
 bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
 {
-    const std::shared_ptr<SHAPE_POLY_SET>& pad_shape = aPad->GetEffectivePolygon( ERROR_INSIDE );
     bool success = true;
-    VECTOR2I pos = aPad->GetPosition();
 
     for( PCB_LAYER_ID pcb_layer = F_Cu; ; pcb_layer = B_Cu )
     {
         TopoDS_Shape curr_shape;
-        double Zpos = pcb_layer == F_Cu ? m_boardThickness : -m_copperThickness;
+        double       Zpos = pcb_layer == F_Cu ? m_boardThickness : -m_copperThickness;
 
         if( aPad->IsOnLayer( pcb_layer ) )
         {
-            // Make a shape on top/bottom copper layer: a cylinder for rond shapes (pad or via)
-            // and a polygon for other shapes:
-            if( aPad->GetShape() == PAD_SHAPE::CIRCLE )
+            // Make a shape on top/bottom copper layer
+            std::shared_ptr<SHAPE> effShapePtr = aPad->GetEffectiveShape( pcb_layer );
+
+            wxCHECK( effShapePtr->Type() == SHAPE_TYPE::SH_COMPOUND, false );
+            SHAPE_COMPOUND* compoundShape = static_cast<SHAPE_COMPOUND*>( effShapePtr.get() );
+
+            std::vector<TopoDS_Shape> topodsShapes;
+
+            for( SHAPE* shape : compoundShape->Shapes() )
             {
-                curr_shape = BRepPrimAPI_MakeCylinder(
-                                pcbIUScale.IUTomm( aPad->GetSizeX() ) * 0.5, m_copperThickness ).Shape();
-                gp_Trsf shift;
-                shift.SetTranslation( gp_Vec( pcbIUScale.IUTomm( pos.x - aOrigin.x ),
-                                              -pcbIUScale.IUTomm( pos.y - aOrigin.y ),
-                                              Zpos ) );
-                BRepBuilderAPI_Transform round_shape( curr_shape, shift );
-                m_board_copper_pads.push_back( round_shape.Shape() );
+                if( shape->Type() == SHAPE_TYPE::SH_SEGMENT
+                    || shape->Type() == SHAPE_TYPE::SH_CIRCLE )
+                {
+                    VECTOR2I start, end;
+                    int      width = 0;
+
+                    if( shape->Type() == SHAPE_TYPE::SH_SEGMENT )
+                    {
+                        SHAPE_SEGMENT* sh_seg = static_cast<SHAPE_SEGMENT*>( shape );
+
+                        start = sh_seg->GetSeg().A;
+                        end = sh_seg->GetSeg().B;
+                        width = sh_seg->GetWidth();
+                    }
+                    else if( shape->Type() == SHAPE_TYPE::SH_CIRCLE )
+                    {
+                        SHAPE_CIRCLE* sh_circ = static_cast<SHAPE_CIRCLE*>( shape );
+
+                        start = end = sh_circ->GetCenter();
+                        width = sh_circ->GetRadius() * 2;
+                    }
+
+                    TopoDS_Shape topods_shape;
+
+                    if( MakeShapeAsThickSegment( topods_shape, start, end, width, m_copperThickness,
+                                                 Zpos, aOrigin ) )
+                    {
+                        topodsShapes.emplace_back( topods_shape );
+                    }
+                    else
+                    {
+                        success = false;
+                    }
+                }
+                else
+                {
+                    SHAPE_POLY_SET polySet;
+                    shape->TransformToPolygon( polySet, ARC_HIGH_DEF, ERROR_INSIDE );
+
+                    success &= MakeShapes( topodsShapes, polySet, m_copperThickness, Zpos, aOrigin );
+                }
+            }
+
+            // Fuse shapes
+            if( topodsShapes.size() == 1 )
+            {
+                m_board_copper_pads.emplace_back( topodsShapes.front() );
             }
             else
             {
-                success = MakeShapes( m_board_copper_pads, *pad_shape, m_copperThickness, Zpos,
-                                      aOrigin );
+                BRepAlgoAPI_Fuse     mkFuse;
+                TopTools_ListOfShape shapeArguments, shapeTools;
+
+                for( TopoDS_Shape& sh : topodsShapes )
+                {
+                    if( sh.IsNull() )
+                        continue;
+
+                    if( shapeArguments.IsEmpty() )
+                        shapeArguments.Append( sh );
+                    else
+                        shapeTools.Append( sh );
+                }
+
+                mkFuse.SetRunParallel( true );
+                mkFuse.SetToFillHistory( false );
+                mkFuse.SetArguments( shapeArguments );
+                mkFuse.SetTools( shapeTools );
+                mkFuse.Build();
+
+                if( mkFuse.IsDone() )
+                {
+                    TopoDS_Shape fusedShape = mkFuse.Shape();
+
+                    ShapeUpgrade_UnifySameDomain unify( fusedShape, false, true, false );
+                    unify.History() = nullptr;
+                    unify.Build();
+
+                    TopoDS_Shape unifiedShapes = unify.Shape();
+
+                    if( !unifiedShapes.IsNull() )
+                    {
+                        m_board_copper_pads.emplace_back( unifiedShapes );
+                    }
+                    else
+                    {
+                        ReportMessage(
+                                _( "** ShapeUpgrade_UnifySameDomain produced a null shape **\n" ) );
+                        m_board_copper_pads.emplace_back( fusedShape );
+                    }
+            }
+            else
+            {
+                    for( TopoDS_Shape& sh : topodsShapes )
+                        m_board_copper_pads.emplace_back( sh );
+                }
             }
         }
 
