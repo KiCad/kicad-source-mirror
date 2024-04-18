@@ -813,6 +813,14 @@ public:
      */
     void PlotPins( PLOTTER* aPlotter ) const;
 
+    /**
+     * Plot the red 'X' over the symbol.  This is separated to allow it being used from the
+     * screen plot function, overlapping the pins
+     *
+     * @param aPlotter the #PLOTTER object used to draw the X
+     */
+    void PlotDNP( PLOTTER* aPlotter ) const;
+
     EDA_ITEM* Clone() const override;
 
 #if defined(DEBUG)
