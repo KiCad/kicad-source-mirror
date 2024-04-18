@@ -635,7 +635,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
     case SCH_SHAPE_T:
     {
         SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
-        bool       invertY = true;
+        bool       invertY = shape->GetLayer() == LAYER_DEVICE;
 
         switch( shape->GetShape() )
         {
@@ -981,7 +981,7 @@ void EE_POINT_EDITOR::updatePoints()
     case SCH_SHAPE_T:
     {
         SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
-        bool       invertY = true;
+        bool       invertY = shape->GetLayer() == LAYER_DEVICE;
 
         switch( shape->GetShape() )
         {

@@ -76,15 +76,20 @@ void SCH_SHAPE::Normalize()
 {
     if( GetShape() == SHAPE_T::RECTANGLE )
     {
-        VECTOR2I size = GetEnd() - GetPosition();
+        bool invertY = m_layer == LAYER_DEVICE;
 
-        if( size.y < 0 )
+        VECTOR2I size = GetEnd() - GetPosition();
+        bool     swapY = invertY ? size.y > 0
+                                 : size.y < 0;
+        bool     swapX = size.x < 0;
+
+        if( swapY )
         {
             SetStartY( GetStartY() + size.y );
             SetEndY( GetStartY() - size.y );
         }
 
-        if( size.x < 0 )
+        if( swapX )
         {
             SetStartX( GetStartX() + size.x );
             SetEndX( GetStartX() - size.x );
