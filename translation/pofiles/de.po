@@ -25,7 +25,7 @@ msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-17 14:55+0000\n"
+"PO-Revision-Date: 2024-04-19 14:03+0000\n"
 "Last-Translator: \"Pferd O.\" <frank.0228@ich-war-hier.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/kicad/"
 "master-source/de/>\n"
@@ -44274,14 +44274,12 @@ msgid "Actual image size: %dx%d"
 msgstr "Tatsächliche Bildgröße: %dx%d"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:397
-#, fuzzy
 msgid "Successfully created 3D render image"
-msgstr "SVG-Datei erfolgreich erstellt"
+msgstr "3D-Rendergrafik erfolgreich erstellt"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:400
-#, fuzzy
 msgid "Error creating 3D render image"
-msgstr "Fehler beim Erstellen der SVG-Datei"
+msgstr "Fehler beim Erstellen der 3D-Rendergrafik"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:435
 msgid "Successfully created svg file"
@@ -46999,14 +46997,12 @@ msgid "Toggle ratsnest display of selected item(s)"
 msgstr "Netzlinien-Anzeige der ausgewählte(n) Element(e) umschalten"
 
 #: pcbnew/tools/pcb_actions.cpp:1343
-#, fuzzy
 msgid "Show Net Inspector"
 msgstr "Netzinspektor anzeigen"
 
 #: pcbnew/tools/pcb_actions.cpp:1344
-#, fuzzy
 msgid "Show/hide the net inspector"
-msgstr "Den Netzinspektor anzeigen"
+msgstr "Netzinspektor anzeigen/verstecken"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:79
@@ -48681,9 +48677,8 @@ msgstr "Dem Pfad keine Footprint-UUID voranstellen."
 
 #: pcbnew/widgets/net_inspector_panel.cpp:46
 #: pcbnew/widgets/net_inspector_panel.cpp:96
-#, fuzzy
 msgid "Configure netlist inspector"
-msgstr "Netzklassen konfigurieren"
+msgstr "Netzklasseninspektor konfigurieren"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:338
 msgid "No footprint selected"
@@ -48701,9 +48696,8 @@ msgstr "Bemaßungen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:680
-#, fuzzy
 msgid "Netclass"
-msgstr "Netzklassen"
+msgstr "Netzklasse"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:124
 msgid "Total Length"
@@ -48730,94 +48724,77 @@ msgid "Pad Count"
 msgstr "Pad-Anzahl"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1171
-#, fuzzy
 msgid "Highlight Selected Net"
 msgstr "Ausgewähltes Netz hervorheben"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1188
-#, fuzzy
 msgid "Rename Selected Net"
-msgstr "Ausgewählte erneuern"
+msgstr "Ausgewähltes Netz umbenennen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1192
-#, fuzzy
 msgid "Delete Selected Net"
-msgstr "Entfernt gewählte Elemente"
+msgstr "Ausgewähltes Netz löschen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1199
-#, fuzzy
 msgid "Add Net"
-msgstr "Text hinzufügen"
+msgstr "Netz hinzufügen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
-#, fuzzy
 msgid "Highlight Selected Nets"
-msgstr "Ausgewähltes Netz hervorheben"
+msgstr "Ausgewählte Netze hervorheben"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1214
-#, fuzzy
 msgid "Delete Selected Nets"
-msgstr "Entfernt gewählte Elemente"
+msgstr "Ausgewählte Netze löschen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1351
-#, fuzzy
 msgid "Remove Selected Custom Group"
-msgstr "Elemente aus der Gruppe heraus lösen"
+msgstr "Ausgewählte benutzerdefinierte Gruppe löschen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1248
-#, fuzzy
 msgid "New Group"
-msgstr "Gruppe"
+msgstr "Neue Gruppe"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1321
-#, fuzzy
 msgid "Filter by Net Name"
-msgstr "Netze filtern"
+msgstr "Nach Netznamen filtern"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1326
 msgid "Filter by Netclass"
 msgstr "Netzklasse filtern"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1340
-#, fuzzy
 msgid "Group by Netclass"
-msgstr "Nach Name gruppieren"
+msgstr "Nach Netzklasse gruppieren"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1346
-#, fuzzy
 msgid "Add Custom Group"
-msgstr "Benutzerdefinierte Regeln"
+msgstr "Benutzerdefinierte Gruppe hinzufügen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1361
-#, fuzzy
 msgid "Remove All Custom Groups"
-msgstr "Elemente aus der Gruppe heraus lösen"
+msgstr "Alle benutzerdefinierten Gruppen löschen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1369
-#, fuzzy
 msgid "Show Zero Pad Nets"
-msgstr "Zeige Netzen mit keinen Pads"
+msgstr "Netze ohne Pads zeigen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1374
-#, fuzzy
 msgid "Show Unconnected Nets"
-msgstr "Unverbunden"
+msgstr "Unverbundene Netze zeigen"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
-#, fuzzy
 msgid "Save Net Inspector Report"
-msgstr "Netzinspektor"
+msgstr "Netzinspektorbericht speichern"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1392
-#, fuzzy
 msgid "Show / Hide Columns"
-msgstr "Verborgene Pins anzeigen"
+msgstr "Spalten anzeigen/ausblenden"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1556
-#, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "Protokolldatei speichern"
+msgstr "Netzinspektorberichtdatei speichern"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1557
 msgid "Report file"
