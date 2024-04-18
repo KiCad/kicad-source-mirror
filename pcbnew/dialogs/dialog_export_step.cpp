@@ -379,7 +379,16 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     wxString path = m_outputFileName->GetValue();
     m_parent->SetLastPath( LAST_PATH_STEP, path );
 
+    // Build the absolute path of current output directory to preselect it in the file browser.
+    std::function<bool( wxString* )> textResolver =
+            [&]( wxString* token ) -> bool
+            {
+                return m_parent->GetBoard()->ResolveTextVar( token, 0 );
+            };
+
+    path = ExpandTextVars( path, &textResolver );
     path = ExpandEnvVarSubstitutions( path, &Prj() );
+    path = Prj().AbsolutePath( path );
 
     if( path.IsEmpty() )
     {
