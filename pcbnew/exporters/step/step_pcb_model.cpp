@@ -1374,7 +1374,12 @@ bool STEP_PCB_MODEL::WriteBREP( const wxString& aFileName )
 
         wxFFileOutputStream ffStream( fn.GetFullPath() );
         wxStdOutputStream   stdStream( ffStream );
+
+#if OCC_VERSION_HEX >= 0x070600
         BRepTools::Write( shape, stdStream, false, false, TopTools_FormatVersion_VERSION_1 );
+#else
+        BRepTools::Write( shape, stdStream );
+#endif
     }
 
     return true;
