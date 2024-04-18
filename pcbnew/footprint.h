@@ -1050,6 +1050,7 @@ private:
     SHAPE_POLY_SET  m_courtyard_cache_front;  // Note that a footprint can have both front and back
     SHAPE_POLY_SET  m_courtyard_cache_back;   // courtyards populated.
     mutable int     m_courtyard_cache_timestamp;
+    mutable std::mutex      m_courtyard_cache_mutex;
 };
 
 #endif     // FOOTPRINT_H
