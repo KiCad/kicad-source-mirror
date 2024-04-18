@@ -2031,29 +2031,6 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_DRAWING_TOOLS::initSharedInstancePageNumbers( const SCH_SHEET_PATH& aAddedSheet )
-{
-    SCH_SHEET_LIST fullHierarchy = m_frame->Schematic().GetFullHierarchy();
-    SCH_SHEET_LIST instances = fullHierarchy.FindAllSheetsForScreen( aAddedSheet.LastScreen() );
-
-    long pageNo;
-    long addedSheetPageNo;
-
-    if( aAddedSheet.GetPageNumber().ToLong( &addedSheetPageNo ) )
-        pageNo = addedSheetPageNo + 1;
-    else
-        pageNo = (signed)( fullHierarchy.size() - instances.size() + 1 );
-
-    for( SCH_SHEET_PATH& sheet : instances )
-    {
-        if( sheet == aAddedSheet )
-            continue;
-
-        sheet.SetPageNumber( wxString::Format( wxS( "%ld" ), pageNo++ ) );
-    }
-}
-
-
 int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
 {
     SCHEMATIC* schematic = getModel<SCHEMATIC>();
@@ -2430,7 +2407,6 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
                 SCH_SHEET_PATH newPath = m_frame->GetCurrentSheet();
                 newPath.push_back( sheet );
-                initSharedInstancePageNumbers( newPath );
 
                 m_frame->UpdateHierarchyNavigator();
                 m_selectionTool->AddItemToSel( sheet );

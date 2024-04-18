@@ -637,6 +637,12 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
         // It's safe to set the sheet screen now.
         m_sheet->SetScreen( useScreen );
+
+        SCH_SHEET_LIST sheetHierarchy( m_sheet );  // The hierarchy of the loaded file.
+
+        sheetHierarchy.AddNewSymbolInstances( currentSheet );
+        sheetHierarchy.AddNewSheetInstances( currentSheet,
+                                             fullHierarchy.GetLastVirtualPageNumber() );
     }
     else if( loadFromFile )
     {
