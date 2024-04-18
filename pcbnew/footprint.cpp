@@ -67,8 +67,7 @@ FOOTPRINT::FOOTPRINT( BOARD* parent ) :
         m_visibleBBoxCacheTimeStamp( 0 ),
         m_textExcludedBBoxCacheTimeStamp( 0 ),
         m_hullCacheTimeStamp( 0 ),
-        m_initial_comments( nullptr ),
-        m_courtyard_cache_timestamp( 0 )
+        m_initial_comments( nullptr )
 {
     m_attributes   = 0;
     m_layer        = F_Cu;
@@ -2224,7 +2223,6 @@ void FOOTPRINT::Rotate( const VECTOR2I& aRotCentre, const EDA_ANGLE& aAngle )
     m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
     m_hullCacheTimeStamp = 0;
-    m_courtyard_cache_timestamp = 0;
 }
 
 
@@ -2289,7 +2287,6 @@ void FOOTPRINT::Flip( const VECTOR2I& aCentre, bool aFlipLeftRight )
     m_boundingBoxCacheTimeStamp = 0;
     m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
-    m_courtyard_cache_timestamp = 0;
 
     m_cachedHull.Mirror( aFlipLeftRight, !aFlipLeftRight, m_pos );
 
@@ -2391,7 +2388,6 @@ void FOOTPRINT::SetOrientation( const EDA_ANGLE& aNewAngle )
     m_boundingBoxCacheTimeStamp = 0;
     m_visibleBBoxCacheTimeStamp = 0;
     m_textExcludedBBoxCacheTimeStamp = 0;
-    m_courtyard_cache_timestamp = 0;
 
     m_cachedHull.Rotate( angleChange, GetPosition() );
 }
@@ -2799,8 +2795,11 @@ const SHAPE_POLY_SET& FOOTPRINT::GetCourtyard( PCB_LAYER_ID aLayer ) const
 {
     std::lock_guard<std::mutex> lock( m_courtyard_cache_mutex );
 
-    if( GetBoard() && GetBoard()->GetTimeStamp() > m_courtyard_cache_timestamp )
+    if( m_courtyard_cache_front_hash != m_courtyard_cache_front.GetHash()
+        || m_courtyard_cache_back_hash != m_courtyard_cache_back.GetHash() )
+    {
         const_cast<FOOTPRINT*>( this )->BuildCourtyardCaches();
+    }
 
     if( IsBackLayer( aLayer ) )
         return m_courtyard_cache_back;
@@ -2814,8 +2813,6 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     m_courtyard_cache_front.RemoveAllContours();
     m_courtyard_cache_back.RemoveAllContours();
     ClearFlags( MALFORMED_COURTYARDS );
-
-    m_courtyard_cache_timestamp = GetBoard()->GetTimeStamp();
 
     // Build the courtyard area from graphic items on the courtyard.
     // Only PCB_SHAPE_T have meaning, graphic texts are ignored.
@@ -2905,6 +2902,9 @@ void FOOTPRINT::BuildCourtyardCaches( OUTLINE_ERROR_HANDLER* aErrorHandler )
     {
         SetFlags( MALFORMED_B_COURTYARD );
     }
+
+    m_courtyard_cache_front_hash = m_courtyard_cache_front.GetHash();
+    m_courtyard_cache_back_hash = m_courtyard_cache_back.GetHash();
 }
 
 
