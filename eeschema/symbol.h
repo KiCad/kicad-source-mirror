@@ -41,6 +41,7 @@ public:
         m_excludedFromSim = false;
         m_excludedFromBOM = false;
         m_excludedFromBoard = false;
+        m_DNP = false;
     };
 
     SYMBOL( KICAD_T idType ) :
@@ -152,7 +153,13 @@ public:
     void SetExcludedFromBoard( bool aExcludeFromBoard ) { m_excludedFromBoard = aExcludeFromBoard; }
     bool GetExcludedFromBoard() const { return m_excludedFromBoard; }
 
-    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+    /**
+     * Set or clear the 'Do Not Populate' flaga
+     */
+    bool GetDNP() const { return m_DNP; }
+    void SetDNP( bool aDNP ) { m_DNP = aDNP; }
+
+ void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
 protected:
     int           m_pinNameOffset;         ///< The offset in mils to draw the pin name.  Set to
@@ -163,6 +170,7 @@ protected:
     bool          m_excludedFromSim;
     bool          m_excludedFromBOM;
     bool          m_excludedFromBoard;
+    bool          m_DNP;                   ///< True if symbol is set to 'Do Not Populate'.
 };
 
 #endif  //  SYMBOL_H

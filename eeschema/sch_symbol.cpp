@@ -99,7 +99,6 @@ static LIB_SYMBOL* dummy()
 SCH_SYMBOL::SCH_SYMBOL() :
     SYMBOL( nullptr, SCH_SYMBOL_T )
 {
-    m_DNP = false;
     Init( VECTOR2I( 0, 0 ) );
 }
 
@@ -139,7 +138,6 @@ SCH_SYMBOL::SCH_SYMBOL( const LIB_SYMBOL& aSymbol, const LIB_ID& aLibId,
     m_excludedFromSim = m_part->GetExcludedFromSim();
     m_excludedFromBOM = m_part->GetExcludedFromBOM();
     m_excludedFromBoard = m_part->GetExcludedFromBoard();
-    m_DNP = false;
 }
 
 
@@ -222,9 +220,6 @@ void SCH_SYMBOL::Init( const VECTOR2I& pos )
 
     m_prefix = wxString( wxT( "U" ) );
     m_isInNetlist = true;
-    m_excludedFromSim = false;
-    m_excludedFromBOM = false;
-    m_excludedFromBoard = false;
 }
 
 
@@ -2754,14 +2749,12 @@ static struct SCH_SYMBOL_DESC
                     return false;
                 };
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Pin numbers" ),
-                                                             &SCH_SYMBOL::SetShowPinNumbers,
-                                                             &SCH_SYMBOL::GetShowPinNumbers ) )
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin numbers" ),
+                    &SYMBOL::SetShowPinNumbers, &SYMBOL::GetShowPinNumbers ) )
                 .SetAvailableFunc( hasLibPart );
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Pin names" ),
-                                                             &SCH_SYMBOL::SetShowPinNames,
-                                                             &SCH_SYMBOL::GetShowPinNames ) )
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Pin names" ),
+                    &SYMBOL::SetShowPinNames, &SYMBOL::GetShowPinNames ) )
                 .SetAvailableFunc( hasLibPart );
 
         const wxString groupFields = _HKI( "Fields" );
@@ -2784,18 +2777,18 @@ static struct SCH_SYMBOL_DESC
 
         const wxString groupAttributes = _HKI( "Attributes" );
 
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Board" ),
-                &SCH_SYMBOL::SetExcludedFromBoard, &SCH_SYMBOL::GetExcludedFromBoard ),
-                groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Simulation" ),
-                &SCH_SYMBOL::SetExcludedFromSim, &SCH_SYMBOL::GetExcludedFromSim ),
-                groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Exclude From Bill of Materials" ),
-                &SCH_SYMBOL::SetExcludedFromBOM, &SCH_SYMBOL::GetExcludedFromBOM ),
-                groupAttributes );
-        propMgr.AddProperty( new PROPERTY<SCH_SYMBOL, bool>( _HKI( "Do not Populate" ),
-                &SCH_SYMBOL::SetDNP, &SCH_SYMBOL::GetDNP ),
-                groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Board" ),
+                    &SYMBOL::SetExcludedFromBoard, &SYMBOL::GetExcludedFromBoard ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Simulation" ),
+                    &SYMBOL::SetExcludedFromSim, &SYMBOL::GetExcludedFromSim ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Exclude From Bill of Materials" ),
+                    &SYMBOL::SetExcludedFromBOM, &SYMBOL::GetExcludedFromBOM ),
+                    groupAttributes );
+        propMgr.AddProperty( new PROPERTY<SYMBOL, bool>( _HKI( "Do not Populate" ),
+                    &SYMBOL::SetDNP, &SYMBOL::GetDNP ),
+                    groupAttributes );
     }
 } _SCH_SYMBOL_DESC;
 
