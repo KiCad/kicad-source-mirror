@@ -2551,6 +2551,8 @@ std::shared_ptr<SHAPE> FOOTPRINT::GetEffectiveShape( PCB_LAYER_ID aLayer, FLASHI
 
 const SHAPE_POLY_SET& FOOTPRINT::GetCourtyard( PCB_LAYER_ID aLayer ) const
 {
+    std::lock_guard<std::mutex> lock( m_courtyard_cache_mutex );
+
     if( GetBoard() && GetBoard()->GetTimeStamp() > m_courtyard_cache_timestamp )
         const_cast<FOOTPRINT*>( this )->BuildCourtyardCaches();
 
