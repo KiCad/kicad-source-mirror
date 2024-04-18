@@ -2425,6 +2425,7 @@ void EDIT_TOOL::DeleteItems( const PCB_SELECTION& aItems, bool aIsCut )
         default:
             wxASSERT_MSG( parentFP == nullptr, wxT( "Try to delete an item living in a footprint" ) );
             commit.Remove( board_item );
+            itemsDeleted++;
             break;
         }
     }
