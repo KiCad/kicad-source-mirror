@@ -69,8 +69,6 @@ private:
 
     void sizeSheet( SCH_SHEET* aSheet, const VECTOR2I& aPos );
 
-    void initSharedInstancePageNumbers( const SCH_SHEET_PATH& aAddedSheet );
-
     ///< Set up handlers for various events.
     void setTransitions() override;
 
