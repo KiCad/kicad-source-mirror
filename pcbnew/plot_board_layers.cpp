@@ -507,9 +507,10 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     // and use a dummy  CUSTOM pad to plot the final shape.
                     PAD dummy( *pad );
                     // Build the dummy pad outline with coordinates relative to the pad position
-                    // and orientation 0. The actual pos and rotation will be taken in account
-                    // later by the plot function
+                    // pad offset and orientation 0. The actual pos, offset and rotation will be
+                    // taken in account later by the plot function
                     dummy.SetPosition( VECTOR2I( 0, 0 ) );
+                    dummy.SetOffset( VECTOR2I( 0, 0 ) );
                     dummy.SetOrientation( ANGLE_0 );
                     SHAPE_POLY_SET outline;
                     dummy.TransformShapeToPolygon( outline, UNDEFINED_LAYER, 0, maxError,
@@ -528,7 +529,9 @@ void PlotStandardLayer( BOARD* aBoard, PLOTTER* aPlotter, LSET aLayerMask,
                     // anchor will be added to the pad shape when plotting the pad.
                     // So we set the anchor size to 0
                     dummy.SetSize( VECTOR2I( 0, 0 ) );
+                    // Restore pad position and offset
                     dummy.SetPosition( pad->GetPosition() );
+                    dummy.SetOffset( pad->GetOffset() );
                     dummy.SetOrientation( pad->GetOrientation() );
 
                     itemplotter.PlotPad( &dummy, color, padPlotMode );
