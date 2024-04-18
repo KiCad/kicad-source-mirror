@@ -267,10 +267,11 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << " without C++ ABI" << eol;
 #endif
 
-    aMsg << eol;
-
     // Add build settings config (build options):
+#if defined( KICAD_USE_EGL ) || ! defined( NDEBUG )
+    aMsg << eol;
     aMsg << "Build settings:" << eol;
+#endif
 
 #ifdef KICAD_USE_EGL
     aMsg << indent4 << "KICAD_USE_EGL=" << ON;
@@ -304,6 +305,20 @@ wxString GetVersionInfoData( const wxString& aTitle, bool aHtml, bool aBrief )
     aMsg << OFF;
 #endif
 #endif
+
+    wxLocale* locale = wxGetLocale();
+
+    if( locale )
+    {
+        aMsg << eol;
+        aMsg << "Locale: " << eol;
+        aMsg << indent4 << "Lang: " << locale->GetCanonicalName() << eol;
+        aMsg << indent4 << "Enc: " << locale->GetSystemEncodingName() << eol;
+        aMsg << indent4 << "Num: "
+             << wxString::Format( "%d%s%.1f", 1,
+                                  locale->GetInfo( wxLocaleInfo::wxLOCALE_THOUSANDS_SEP ), 234.5 )
+             << eol;
+    }
 
     return aMsg;
 }
