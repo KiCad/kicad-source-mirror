@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-17 14:21+0000\n"
+"PO-Revision-Date: 2024-04-18 07:23+0000\n"
 "Last-Translator: ZbeeGin <zbeegin@op.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/kicad/v8/pl/>\n"
 "Language: pl\n"
@@ -19128,9 +19128,8 @@ msgid "Perform Fourier Analysis..."
 msgstr "Przeprowadzam Analizę Fouriera..."
 
 #: eeschema/sim/simulator_frame_ui.cpp:172
-#, fuzzy
 msgid "Copy Signal Name"
-msgstr "Faza sygnału:"
+msgstr "Kopiuj nazwę sygnału"
 
 #: eeschema/sim/simulator_frame_ui.cpp:216
 #: eeschema/sim/simulator_frame_ui.cpp:749
@@ -22069,14 +22068,12 @@ msgid "Limit to E48 series values."
 msgstr "Ogranicz do ciągu wartości E48."
 
 #: eeschema/widgets/tuner_slider_base.cpp:61
-#, fuzzy
 msgid "Limit to E96 series values"
-msgstr "Ustaw na wartość:"
+msgstr "Ogranicz do ciągu wartości E96"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
-#, fuzzy
 msgid "Limit to E192 series values"
-msgstr "Ustaw na wartość:"
+msgstr "Ogranicz do ciągu wartości E192"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -39338,7 +39335,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Bieżąca płytka zostanie zamknięta. Kontynuwać?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39348,7 +39344,7 @@ msgstr ""
 "Gdy strefy na tej płytce są wypełniane ponownie użyta będzie wartość z pola "
 "Prześwit wobec krawędzi (zobacz Ustawienia płytki > Reguły projektowe -> "
 "Ograniczenia).\n"
-"Może to doprowadzić do sytuacji, gdzie obecne wypełnienie będzie się różnić "
+" Może to doprowadzić do sytuacji, gdzie obecne wypełnienie będzie się różnić "
 "od tego jakie używane było w poprzednich wydaniach, które używały wartości "
 "pobranej z grubości linii brzegowych umieszczonych na warstwie Edge.Cuts."
 
