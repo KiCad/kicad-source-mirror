@@ -44,6 +44,7 @@
 #include <string_utils.h>
 #include <build_version.h>
 #include <geometry/shape_segment.h>
+#include <geometry/shape_circle.h>
 
 #include "step_pcb_model.h"
 #include "streamwrapper.h"
@@ -80,6 +81,8 @@
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepTools.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
+#include <BRepAlgoAPI_Fuse.hxx>
+#include <ShapeUpgrade_UnifySameDomain.hxx>
 
 #include <BRepBndLib.hxx>
 #include <Bnd_BoundSortBox.hxx>
