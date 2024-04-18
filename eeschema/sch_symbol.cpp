@@ -2427,6 +2427,9 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
     if( aBackground )
         return;
 
+    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
+    COLOR_SETTINGS*      colors = Pgm().GetSettingsManager().GetColorSettings();
+
     if( m_part )
     {
         std::vector<LIB_PIN*>  libPins;
@@ -2462,8 +2465,7 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
             }
         }
 
-        SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
-        TRANSFORM            savedTransform = renderSettings->m_Transform;
+        TRANSFORM savedTransform = renderSettings->m_Transform;
         renderSettings->m_Transform = GetTransform();
         aPlotter->StartBlock( nullptr );
 
@@ -2481,7 +2483,18 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
         }
 
         if( m_DNP )
-            PlotDNP( aPlotter );
+        {
+            BOX2I bbox = GetBodyAndPinsBoundingBox();
+            int   strokeWidth = 3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS );
+
+            aPlotter->SetColor( colors->GetColor( LAYER_DNP_MARKER ) );
+
+            aPlotter->ThickSegment( bbox.GetOrigin(), bbox.GetEnd(), strokeWidth, FILLED, nullptr );
+
+            aPlotter->ThickSegment( bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
+                                    bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
+                                    strokeWidth, FILLED, nullptr );
+        }
 
         SCH_SHEET_PATH* sheet = &Schematic()->CurrentSheet();
 
@@ -2517,31 +2530,6 @@ void SCH_SYMBOL::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS&
         if( !m_part->IsPower() )
             aPlotter->Bookmark( GetBoundingBox(), GetRef( sheet ), _( "Symbols" ) );
     }
-}
-
-
-void SCH_SYMBOL::PlotDNP( PLOTTER* aPlotter ) const
-{
-    SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
-    TRANSFORM            savedTransform = renderSettings->m_Transform;
-    renderSettings->m_Transform = GetTransform();
-
-    BOX2I bbox = GetBodyAndPinsBoundingBox();
-
-    COLOR_SETTINGS* colors = Pgm().GetSettingsManager().GetColorSettings();
-
-    aPlotter->SetColor( colors->GetColor( LAYER_DNP_MARKER ) );
-
-    aPlotter->ThickSegment( bbox.GetOrigin(), bbox.GetEnd(),
-                            3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
-                            FILLED, nullptr );
-
-    aPlotter->ThickSegment( bbox.GetOrigin() + VECTOR2I( bbox.GetWidth(), 0 ),
-                            bbox.GetOrigin() + VECTOR2I( 0, bbox.GetHeight() ),
-                            3.0 * schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ),
-                            FILLED, nullptr );
-
-    renderSettings->m_Transform = savedTransform;
 }
 
 
