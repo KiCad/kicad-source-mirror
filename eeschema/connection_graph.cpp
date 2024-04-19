@@ -750,6 +750,19 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
                     }
                 }
             }
+            else if( item->Type() == SCH_SHEET_T )
+            {
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                {
+                    if( pin->IsConnectivityDirty() )
+                    {
+                        items.push_back( pin );
+                        dirty_items.insert( pin );
+                    }
+                }
+            }
 
             // Ensure the hierarchy info stored in the SCH_SCREEN (such as symbol units) reflects
             // the current SCH_SHEET_PATH
