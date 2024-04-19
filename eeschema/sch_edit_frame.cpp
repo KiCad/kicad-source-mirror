@@ -2396,7 +2396,7 @@ void SCH_EDIT_FRAME::SetHighlightedConnection( const wxString& aConnection,
 
 void SCH_EDIT_FRAME::unitsChangeRefresh()
 {
-    if( m_netNavigator && !m_highlightedConn.IsEmpty() )
+    if( m_netNavigator )
     {
         NET_NAVIGATOR_ITEM_DATA itemData;
         wxTreeItemId selection = m_netNavigator->GetSelection();
