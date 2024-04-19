@@ -752,9 +752,9 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
             }
             else if( item->Type() == SCH_SHEET_T )
             {
-                SCH_SHEET* sheetItem = static_cast<SCH_SHEET*>( item );
+                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
 
-                for( SCH_SHEET_PIN* pin : sheetItem->GetPins() )
+                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
                 {
                     if( pin->IsConnectivityDirty() )
                     {
