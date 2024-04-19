@@ -119,6 +119,7 @@ private:
     static bool        m_optimizeStep;   // remember last preference for Optimize STEP file (stored only for the session)
     static bool        m_exportTracks;   // remember last preference to export tracks (stored only for the session)
     static bool        m_exportZones;    // remember last preference to export tracks (stored only for the session)
+    static bool        m_fuseShapes;     // remember last preference to export tracks (stored only for the session)
     wxString           m_boardPath;      // path to the exported board file
     static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
 };
@@ -128,6 +129,7 @@ int  DIALOG_EXPORT_STEP::m_toleranceLastChoice = -1;     // Use default
 bool DIALOG_EXPORT_STEP::m_optimizeStep = true;
 bool DIALOG_EXPORT_STEP::m_exportTracks = false;
 bool DIALOG_EXPORT_STEP::m_exportZones = false;
+bool DIALOG_EXPORT_STEP::m_fuseShapes = false;
 
 DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString& aBoardPath ) :
     DIALOG_EXPORT_STEP_BASE( aParent )
@@ -180,6 +182,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_cbOptimizeStep->SetValue( m_optimizeStep );
     m_cbExportTracks->SetValue( m_exportTracks );
     m_cbExportZones->SetValue( m_exportZones );
+    m_cbFuseShapes->SetValue( m_fuseShapes );
     m_cbRemoveUnspecified->SetValue( m_noUnspecified );
     m_cbRemoveDNP->SetValue( m_noDNP );
     m_cbSubstModels->SetValue( cfg->m_ExportStep.replace_models );
@@ -275,6 +278,7 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
     m_optimizeStep = m_cbOptimizeStep->GetValue();
     m_exportTracks = m_cbExportTracks->GetValue();
     m_exportZones = m_cbExportZones->GetValue();
+    m_fuseShapes = m_cbFuseShapes->GetValue();
 }
 
 
@@ -383,6 +387,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     m_optimizeStep = m_cbOptimizeStep->GetValue();
     m_exportTracks = m_cbExportTracks->GetValue();
     m_exportZones = m_cbExportZones->GetValue();
+    m_fuseShapes = m_cbFuseShapes->GetValue();
 
     switch( m_choiceTolerance->GetSelection() )
     {
@@ -475,6 +480,9 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     if( m_exportZones )
         cmdK2S.Append( wxT( " --include-zones" ) );
+
+    if( m_fuseShapes )
+        cmdK2S.Append( wxT( " --fuse-shapes" ) );
 
     // Note: for some reason, using \" to insert a quote in a format string, under MacOS
     // wxString::Format does not work. So use a %c format in string

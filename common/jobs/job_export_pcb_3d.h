@@ -63,6 +63,7 @@ public:
     double                    m_BoardOutlinesChainingEpsilon;
     bool                      m_exportTracks;
     bool                      m_exportZones;
+    bool                      m_fuseShapes;
     JOB_EXPORT_PCB_3D::FORMAT m_format;
 
     VRML_UNITS m_vrmlUnits;

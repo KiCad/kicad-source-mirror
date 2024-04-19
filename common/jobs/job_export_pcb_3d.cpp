@@ -40,6 +40,7 @@ JOB_EXPORT_PCB_3D::JOB_EXPORT_PCB_3D( bool aIsCli ) :
     m_BoardOutlinesChainingEpsilon( 0.01 ),     // 0.01 mm is a good value
     m_exportTracks( false ),     // Time consuming if true
     m_exportZones( false ),      // Time consuming if true
+    m_fuseShapes( false ),       // Time consuming if true
     m_format( JOB_EXPORT_PCB_3D::FORMAT::UNKNOWN ),
     m_vrmlUnits( JOB_EXPORT_PCB_3D::VRML_UNITS::METERS ),
     m_vrmlModelDir( wxEmptyString ),

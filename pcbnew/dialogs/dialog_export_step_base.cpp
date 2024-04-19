@@ -142,12 +142,6 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	sbOtherOptions->Add( m_cbOptimizeStep, 0, wxBOTTOM|wxRIGHT, 5 );
 
-	m_cbFuseShapes_hidden = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Fuse shapes (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_cbFuseShapes_hidden->Hide();
-	m_cbFuseShapes_hidden->SetToolTip( _("Combine intersecting geometry into one shape.") );
-
-	sbOtherOptions->Add( m_cbFuseShapes_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
-
 	m_cbExportCompound_hidden = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export as Compound shape"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportCompound_hidden->Hide();
 	m_cbExportCompound_hidden->SetToolTip( _("Merges all shapes into a single Compound shape. Useful for external software that does de-duplication based on shape names.") );
@@ -166,6 +160,11 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_cbExportZones->SetToolTip( _("Export zones on external copper layers.") );
 
 	sbOtherOptions->Add( m_cbExportZones, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbFuseShapes = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Fuse shapes (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cbFuseShapes->SetToolTip( _("Combine intersecting geometry into one shape.") );
+
+	sbOtherOptions->Add( m_cbFuseShapes, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbExportSilkscreen_hidden = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export silkscreen"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportSilkscreen_hidden->Hide();

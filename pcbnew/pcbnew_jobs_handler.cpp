@@ -192,6 +192,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         EXPORTER_STEP_PARAMS params;
         params.m_exportTracks = aStepJob->m_exportTracks;
         params.m_exportZones = aStepJob->m_exportZones;
+        params.m_fuseShapes = aStepJob->m_fuseShapes;
         params.m_includeUnspecified = aStepJob->m_includeUnspecified;
         params.m_includeDNP = aStepJob->m_includeDNP;
         params.m_BoardOutlinesChainingEpsilon = aStepJob->m_BoardOutlinesChainingEpsilon;

@@ -39,6 +39,7 @@
 #define ARG_BOARD_ONLY "--board-only"
 #define ARG_INCLUDE_TRACKS "--include-tracks"
 #define ARG_INCLUDE_ZONES "--include-zones"
+#define ARG_FUSE_SHAPES "--fuse-shapes"
 #define ARG_NO_OPTIMIZE_STEP "--no-optimize-step"
 #define ARG_FORMAT "--format"
 #define ARG_VRML_UNITS "--units"
@@ -111,6 +112,10 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .help( UTF8STDSTR( _( "Export zones" ) ) )
                 .flag();
 
+        m_argParser.add_argument( ARG_FUSE_SHAPES )
+                .help( UTF8STDSTR( _( "Fuse overlapping geometry together" ) ) )
+                .flag();
+
         m_argParser.add_argument( ARG_MIN_DISTANCE )
                 .default_value( std::string( "0.01mm" ) )
                 .help( UTF8STDSTR(
@@ -163,6 +168,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         step->m_substModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
         step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
         step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
+        step->m_fuseShapes = m_argParser.get<bool>( ARG_FUSE_SHAPES );
         step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
     }
 

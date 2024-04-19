@@ -110,6 +110,9 @@ public:
     // aThickness > THICKNESS_MIN == use aThickness
     void SetPCBThickness( double aThickness );
 
+    // enable fusing the geometry
+    void SetFuseShapes( bool aValue );
+
     // Set the max distance (in mm) to consider 2 points have the same coordinates
     // and can be merged
     void OCCSetMergeMaxDistance( double aDistance = OCC_MAX_DISTANCE_TO_MERGE_POINTS );
@@ -229,6 +232,7 @@ private:
     Handle( XCAFDoc_ShapeTool )     m_assy;
     TDF_Label                       m_assy_label;
     bool                            m_hasPCB;           // set true if CreatePCB() has been invoked
+    bool                            m_fuseShapes;       // fuse geometry together
     std::vector<TDF_Label>          m_pcb_labels;       // labels for the PCB model (one by main outline)
     MODEL_MAP                       m_models;           // map of file names to model labels
     int                             m_components;       // number of successfully loaded components;
@@ -252,6 +256,7 @@ private:
     std::vector<TopoDS_Shape> m_board_copper_zones;
     std::vector<TopoDS_Shape> m_board_copper_tracks;
     std::vector<TopoDS_Shape> m_board_copper_pads;
+    std::vector<TopoDS_Shape> m_board_copper_fused;
 
     /// Name of the PCB, which will most likely be the file name of the path.
     wxString                        m_pcbName;

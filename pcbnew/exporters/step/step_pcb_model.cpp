@@ -209,6 +209,7 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
     m_maxError = pcbIUScale.mmToIU( ARC_TO_SEGMENT_MAX_ERROR_MM );
+    m_fuseShapes = false;
 }
 
 
@@ -329,9 +330,9 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
                                 _( "** ShapeUpgrade_UnifySameDomain produced a null shape **\n" ) );
                         m_board_copper_pads.emplace_back( fusedShape );
                     }
-            }
-            else
-            {
+                }
+                else
+                {
                     for( TopoDS_Shape& sh : topodsShapes )
                         m_board_copper_pads.emplace_back( sh );
                 }
@@ -541,6 +542,12 @@ void STEP_PCB_MODEL::SetPCBThickness( double aThickness )
         m_boardThickness = BOARD_THICKNESS_MIN_MM;
     else
         m_boardThickness = aThickness;
+}
+
+
+void STEP_PCB_MODEL::SetFuseShapes( bool aValue )
+{
+    m_fuseShapes = aValue;
 }
 
 
@@ -1110,8 +1117,6 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
             BRepAlgoAPI_Cut cut;
 
-            // This helps cutting circular holes in zones where a hole is already cut in Clipper
-            cut.SetFuzzyValue( 0.0005 );
             cut.SetRunParallel( true );
             cut.SetToFillHistory( false );
 
@@ -1218,9 +1223,95 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     Quantity_Color copper_color( m_copperColor[0], m_copperColor[1], m_copperColor[2],
                                  Quantity_TOC_RGB );
 
+    if( m_fuseShapes )
+    {
+        ReportMessage( wxT( "Fusing shapes\n" ) );
+
+        auto iterateCopperItems = [this]( std::function<void( TopoDS_Shape& )> aFn )
+        {
+            for( TopoDS_Shape& shape : m_board_copper_tracks )
+                aFn( shape );
+
+            for( TopoDS_Shape& shape : m_board_copper_zones )
+                aFn( shape );
+
+            for( TopoDS_Shape& shape : m_board_copper_pads )
+                aFn( shape );
+        };
+
+        BRepAlgoAPI_Fuse     mkFuse;
+        TopTools_ListOfShape shapeArguments, shapeTools;
+
+        iterateCopperItems(
+                [&]( TopoDS_Shape& sh )
+                {
+                    if( sh.IsNull() )
+                        return;
+
+                    if( shapeArguments.IsEmpty() )
+                        shapeArguments.Append( sh );
+                    else
+                        shapeTools.Append( sh );
+                } );
+
+        mkFuse.SetRunParallel( true );
+        mkFuse.SetToFillHistory( false );
+        mkFuse.SetArguments( shapeArguments );
+        mkFuse.SetTools( shapeTools );
+        mkFuse.Build();
+
+        if( mkFuse.HasErrors() || mkFuse.HasWarnings() )
+        {
+            ReportMessage( _( "** Got problems while fusing shapes **\n" ) );
+
+            if( mkFuse.HasErrors() )
+            {
+                ReportMessage( _( "Errors:\n" ) );
+                mkFuse.DumpErrors( std::cout );
+            }
+
+            if( mkFuse.HasWarnings() )
+            {
+                ReportMessage( _( "Warnings:\n" ) );
+                mkFuse.DumpWarnings( std::cout );
+            }
+
+            std::cout << "\n";
+        }
+
+        if( mkFuse.IsDone() )
+        {
+            ReportMessage( wxT( "Removing extra faces\n" ) );
+
+            TopoDS_Shape fusedShape = mkFuse.Shape();
+
+            ShapeUpgrade_UnifySameDomain unify( fusedShape, false, true, false );
+            unify.History() = nullptr;
+            unify.Build();
+
+            TopoDS_Shape unifiedShapes = unify.Shape();
+
+            if( !unifiedShapes.IsNull() )
+            {
+                m_board_copper_fused.emplace_back( unifiedShapes );
+            }
+            else
+            {
+                ReportMessage( _( "** ShapeUpgrade_UnifySameDomain produced a null shape **\n" ) );
+                m_board_copper_fused.emplace_back( fusedShape );
+            }
+
+            m_board_copper_tracks.clear();
+            m_board_copper_zones.clear();
+            m_board_copper_pads.clear();
+        }
+    }
+
     pushToAssembly( m_board_copper_tracks, copper_color, "track" );
     pushToAssembly( m_board_copper_zones, copper_color, "zone" );
     pushToAssembly( m_board_copper_pads, copper_color, "pad" );
+    pushToAssembly( m_board_copper_fused, copper_color, "copper" );
+
     pushToAssembly( m_board_outlines, board_color, "PCB" );
 
 #if( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )

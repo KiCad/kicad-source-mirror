@@ -56,6 +56,7 @@ public:
             m_boardOnly( false ),
             m_exportTracks( false ),
             m_exportZones( false ),
+            m_fuseShapes( false ),
             m_optimizeStep( true ),
             m_format( FORMAT::STEP )
     {};
@@ -81,6 +82,7 @@ public:
     bool     m_boardOnly;
     bool     m_exportTracks;
     bool     m_exportZones;
+    bool     m_fuseShapes;
     bool     m_optimizeStep;
     FORMAT   m_format;
 

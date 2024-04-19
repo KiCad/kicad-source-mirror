@@ -402,6 +402,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     m_pcbModel->SetCopperColor( m_copperColor.r, m_copperColor.g, m_copperColor.b );
 
     m_pcbModel->SetPCBThickness( m_boardThickness );
+    m_pcbModel->SetFuseShapes( m_params.m_fuseShapes );
 
     // Note: m_params.m_BoardOutlinesChainingEpsilon is used only to build the board outlines,
     // not to set OCC chaining epsilon (much smaller)
