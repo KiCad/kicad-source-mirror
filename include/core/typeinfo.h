@@ -536,40 +536,4 @@ constexpr bool IsTypeCorrect( KICAD_T aType )
         || IsMiscType( aType );
 }
 
-constexpr bool IsTypeAvailable( KICAD_T aType )
-{
-    if( !IsInstantiableType( aType ) )
-        return false;
-
-    if( IsEeschemaType( aType ) )
-    {
-#ifdef EESCHEMA
-        return true;
-#endif // EESCHEMA
-    }
-
-    if( IsPcbnewType( aType ) )
-    {
-#ifdef PCBNEW
-        return true;
-#endif // PCBNEW
-    }
-
-    if( IsGerbviewType( aType ) )
-    {
-#ifdef GERBVIEW
-        return true;
-#endif // GERBVIEW
-    }
-
-    if( IsPageLayoutEditorType( aType ) )
-    {
-#ifdef PL_EDITOR
-        return true;
-#endif // PL_EDITOR
-    }
-
-    return false;
-}
-
 #endif // __KICAD_TYPEINFO_H

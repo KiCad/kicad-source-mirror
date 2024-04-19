@@ -302,6 +302,7 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
                                               EDA_DATA_TYPE aType )
 {
     double value_to_print = aValue;
+    bool   is_eeschema = ( aIuScale.IU_PER_MM == SCH_IU_PER_MM );
 
     switch( aType )
     {
@@ -327,19 +328,11 @@ wxString EDA_UNIT_UTILS::UI::StringFromValue( const EDA_IU_SCALE& aIuScale, EDA_
     {
 
     case EDA_UNITS::MILS:
-#if defined( EESCHEMA )
-        format = wxT( "%.3f" );
-#else
-        format = wxT( "%.5f" );
-#endif
+        format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" );
         break;
 
     case EDA_UNITS::INCHES:
-#if defined( EESCHEMA )
-        format = wxT( "%.6f" );
-#else
-        format = wxT( "%.8f" );
-#endif
+        format = is_eeschema ? wxT( "%.6f" ) : wxT( "%.8f" );
         break;
 
     default:
@@ -415,6 +408,7 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     wxString      text;
     const wxChar* format;
     double        value = aValue;
+    bool          is_eeschema = ( aIuScale.IU_PER_MM == SCH_IU_PER_MM );
 
     switch( aType )
     {
@@ -440,43 +434,23 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     {
     default:
     case EDA_UNITS::MICROMETRES:
-#if defined( EESCHEMA )
-        format = wxT( "%.0f" );
-#else
-        format = wxT( "%.1f" );
-#endif
+        format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.1f" );
         break;
 
     case EDA_UNITS::MILLIMETRES:
-#if defined( EESCHEMA )
-        format = wxT( "%.2f" );
-#else
-        format = wxT( "%.4f" );
-#endif
+        format = is_eeschema ? wxT( "%.2f" ) : wxT( "%.4f" );
         break;
 
     case EDA_UNITS::CENTIMETRES:
-#if defined( EESCHEMA )
-        format = wxT( "%.3f" );
-#else
-        format = wxT( "%.5f" );
-#endif
+        format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.5f" );
         break;
 
     case EDA_UNITS::MILS:
-#if defined( EESCHEMA )
-        format = wxT( "%.0f" );
-#else
-        format = wxT( "%.2f" );
-#endif
+        format = is_eeschema ? wxT( "%.0f" ) : wxT( "%.2f" );
         break;
 
     case EDA_UNITS::INCHES:
-#if defined( EESCHEMA )
-        format = wxT( "%.3f" );
-#else
-        format = wxT( "%.4f" );
-#endif
+        format = is_eeschema ? wxT( "%.3f" ) : wxT( "%.4f" );
         break;
 
     case EDA_UNITS::DEGREES:
