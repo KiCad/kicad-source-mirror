@@ -2218,6 +2218,19 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 new_label->SetAttributes( *sourceText, false );
                 new_label->SetSpinStyle( spinStyle );
                 new_label->SetHyperlink( href );
+
+                if( item->Type() == SCH_GLOBAL_LABEL_T || item->Type() == SCH_HIER_LABEL_T )
+                {
+                    if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::UP )
+                        new_label->MirrorVertically( position.y );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::BOTTOM )
+                        new_label->MirrorVertically( position.y );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::LEFT )
+                        new_label->MirrorHorizontally( position.x );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::RIGHT )
+                        new_label->MirrorHorizontally( position.x );
+                }
+
                 newtext = new_label;
                 break;
             }
@@ -2230,6 +2243,19 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 new_label->SetAttributes( *sourceText, false );
                 new_label->SetSpinStyle( spinStyle );
                 new_label->SetHyperlink( href );
+
+                if( item->Type() == SCH_LABEL_T )
+                {
+                    if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::UP )
+                        new_label->MirrorVertically( position.y );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::BOTTOM )
+                        new_label->MirrorVertically( position.y );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::LEFT )
+                        new_label->MirrorHorizontally( position.x );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::RIGHT )
+                        new_label->MirrorHorizontally( position.x );
+                }
+
                 newtext = new_label;
                 break;
             }
@@ -2242,6 +2268,19 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
                 new_label->SetAttributes( *sourceText, false );
                 new_label->SetSpinStyle( spinStyle );
                 new_label->SetHyperlink( href );
+
+                if( item->Type() == SCH_LABEL_T )
+                {
+                    if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::UP )
+                        new_label->MirrorVertically( position.y );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::BOTTOM )
+                        new_label->MirrorVertically( position.y );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::LEFT )
+                        new_label->MirrorHorizontally( position.x );
+                    else if( static_cast<SCH_LABEL_BASE*>( item )->GetSpinStyle() == SPIN_STYLE::SPIN::RIGHT )
+                        new_label->MirrorHorizontally( position.x );
+                }
+
                 newtext = new_label;
                 break;
             }
