@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,9 +16,9 @@ BEGIN_EVENT_TABLE( DIALOG_SHAPE_PROPERTIES_BASE, DIALOG_SHIM )
 	EVT_CHECKBOX( wxID_ANY, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onBorderChecked )
 	EVT_CHECKBOX( wxID_ANY, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onFillChecked )
 	EVT_RADIOBUTTON( NO_FILL, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onFillRadioButton )
-	EVT_RADIOBUTTON( FILLED_SHAPE, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onFill )
-	EVT_RADIOBUTTON( FILLED_WITH_BG_BODYCOLOR, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onFill )
-	EVT_RADIOBUTTON( FILLED_WITH_COLOR, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onFill )
+	EVT_RADIOBUTTON( FILLED_SHAPE, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onFillRadioButton )
+	EVT_RADIOBUTTON( FILLED_WITH_BG_BODYCOLOR, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onFillRadioButton )
+	EVT_RADIOBUTTON( FILLED_WITH_COLOR, DIALOG_SHAPE_PROPERTIES_BASE::_wxFB_onFillRadioButton )
 END_EVENT_TABLE()
 
 DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
@@ -174,7 +174,7 @@ DIALOG_SHAPE_PROPERTIES_BASE::DIALOG_SHAPE_PROPERTIES_BASE( wxWindow* parent, wx
 	m_rbFillCustom = new wxRadioButton( bSizerFill->GetStaticBox(), FILLED_WITH_COLOR, _("Fill with:"), wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_rbFillCustom, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_customColorSwatch = new COLOR_SWATCH( bSizerFill->GetStaticBox(), FILLED_WITH_COLOR, wxDefaultPosition, wxDefaultSize, 0 );
+	m_customColorSwatch = new COLOR_SWATCH( bSizerFill->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 );
 	gbSizer1->Add( m_customColorSwatch, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
 

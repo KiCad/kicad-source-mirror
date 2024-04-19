@@ -315,10 +315,21 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 }
 
 
+// A helper function to know if a EDA_ITEM is a member of a footprint
+static bool IsItemFPMember( const EDA_ITEM* aItem )
+{
+    return aItem->GetParent() && ( aItem->GetParent()->Type() == LIB_SYMBOL_T
+                                   || aItem->GetParent()->Type() == SCH_SYMBOL_T );
+}
+
+
 COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows,
                                      bool aDimmed ) const
 {
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
+    // Graphic items of a SYMBOL frequently use the LAYER_DEVICE layer color
+    // (i.e. when no specific color is set)
+    bool isFpMember = IsItemFPMember( aItem );
 
     if( aItem->Type() == SCH_LINE_T )
     {
@@ -348,14 +359,22 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
             const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
 
             if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
-                color = shape->GetFillColor();
+            {
+                if( !isFpMember || shape->GetFillColor() != COLOR4D::UNSPECIFIED )
+                    color = shape->GetFillColor();
+                if( isFpMember && shape->GetFillMode() == FILL_T::FILLED_SHAPE )
+                    color = shape->GetStroke().GetColor();
+            }
             else
-                color = shape->GetStroke().GetColor();
+            {
+                if( !isFpMember || shape->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+                    color = shape->GetStroke().GetColor();
+            }
 
             // A filled shape means filled; if they didn't specify a fill colour then use the
             // border colour.
             if( color == COLOR4D::UNSPECIFIED )
-                color = m_schSettings.GetLayerColor( LAYER_NOTES );
+                color = m_schSettings.GetLayerColor( isFpMember ? LAYER_DEVICE : LAYER_NOTES );
         }
         else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
         {
@@ -371,12 +390,13 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
             if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
                 color = textBox->GetFillColor();
-            else
+            else if( !isFpMember || textBox->GetTextColor() != COLOR4D::UNSPECIFIED )
                 color = textBox->GetTextColor();
         }
         else if( const EDA_TEXT* otherTextItem = dynamic_cast<const EDA_TEXT*>( aItem ) )
         {
-            color = otherTextItem->GetTextColor();
+            if( !isFpMember || otherTextItem->GetTextColor() != COLOR4D::UNSPECIFIED )
+                color = otherTextItem->GetTextColor();
         }
     }
 
@@ -1679,7 +1699,9 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     case SCH_HIER_LABEL_T:      aLayer = LAYER_HIERLABEL;     break;
     case SCH_GLOBAL_LABEL_T:    aLayer = LAYER_GLOBLABEL;     break;
     case SCH_DIRECTIVE_LABEL_T: aLayer = LAYER_NETCLASS_REFS; break;
-    case SCH_LABEL_T:           aLayer = LAYER_LOCLABEL;      break;
+    case SCH_TEXT_T:
+        aLayer = IsItemFPMember( aText ) ? LAYER_DEVICE : LAYER_NOTES;
+        break;
     default:                    aLayer = LAYER_NOTES;         break;
     }
 

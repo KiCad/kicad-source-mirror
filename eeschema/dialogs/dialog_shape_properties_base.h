@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -47,7 +47,6 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		void _wxFB_onBorderChecked( wxCommandEvent& event ){ onBorderChecked( event ); }
 		void _wxFB_onFillChecked( wxCommandEvent& event ){ onFillChecked( event ); }
 		void _wxFB_onFillRadioButton( wxCommandEvent& event ){ onFillRadioButton( event ); }
-		void _wxFB_onFill( wxCommandEvent& event ){ onFill( event ); }
 
 
 	protected:
@@ -97,7 +96,6 @@ class DIALOG_SHAPE_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void onBorderChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFillChecked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFillRadioButton( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onFill( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

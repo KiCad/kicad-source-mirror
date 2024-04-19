@@ -248,30 +248,30 @@ void DIALOG_SHAPE_PROPERTIES::onFillRadioButton( wxCommandEvent& event )
     if( event.GetId() == NO_FILL )
     {
         m_rbFillNone->SetValue( true );
-        m_fillColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
+        m_customColorSwatch->SetSwatchColor( COLOR4D::UNSPECIFIED, false );
     }
     else if( event.GetId() == FILLED_SHAPE )
     {
         m_rbFillOutline->SetValue( true );
 
-        COLOR4D color = m_shape->GetStroke().GetColor();
+        COLOR4D color = m_borderColorSwatch->GetSwatchColor();
 
-        if( color == COLOR4D::UNSPECIFIED )
+        if( color == COLOR4D::UNSPECIFIED || !m_rbFillOutline->GetValue() )
             color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE );
 
-        m_fillColorSwatch->SetSwatchColor( color, false );
+        m_customColorSwatch->SetSwatchColor( color, false );
     }
     else if( event.GetId() == FILLED_WITH_BG_BODYCOLOR )
     {
         m_rbFillBackground->SetValue( true );
 
         COLOR4D color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE_BACKGROUND );
-        m_fillColorSwatch->SetSwatchColor( color, false );
+        m_customColorSwatch->SetSwatchColor( color, false );
     }
     else if( event.GetId() == FILLED_WITH_COLOR )
     {
         m_rbFillCustom->SetValue( true );
-        m_fillColorSwatch->GetNewSwatchColor();
+        m_customColorSwatch->GetNewSwatchColor();
     }
 }
 
@@ -280,6 +280,19 @@ void DIALOG_SHAPE_PROPERTIES::onBorderSwatch( wxCommandEvent& aEvent )
 {
     if( m_rbFillOutline->GetValue() )
         m_fillColorSwatch->SetSwatchColor( m_borderColorSwatch->GetSwatchColor(), false );
+
+    if( m_rbFillOutline->IsEnabled() && m_rbFillOutline->GetValue() )
+    {
+        COLOR4D color = COLOR4D::UNSPECIFIED;
+
+        if( m_rbFillOutline->GetValue() )
+            color = m_fillColorSwatch->GetSwatchColor();
+
+        if( color == COLOR4D::UNSPECIFIED )
+            color = m_frame->GetRenderSettings()->GetLayerColor( LAYER_DEVICE );
+
+        m_customColorSwatch->SetSwatchColor( color, false );
+    }
 }
 
 
