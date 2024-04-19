@@ -551,8 +551,11 @@ void SCH_SHEET_PATH::SetPageNumber( const wxString& aPageNumber )
 }
 
 
-void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath )
+void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
+                                            const wxString& aProjectName )
 {
+    wxCHECK( !aProjectName.IsEmpty(), /* void */ );
+
     SCH_SHEET_PATH newSheetPath( aPrefixSheetPath );
     SCH_SHEET_PATH currentSheetPath( *this );
 
@@ -569,12 +572,16 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
 
         if( symbol->GetInstance( newSymbolInstance, Path(), true ) )
         {
+            newSymbolInstance.m_ProjectName = aProjectName;
             // Use an existing symbol instance for this path if it exists.
+
             newSymbolInstance.m_Path = newSheetPath.Path();
             symbol->AddHierarchicalReference( newSymbolInstance );
         }
         else if( !symbol->GetInstances().empty() )
         {
+            newSymbolInstance.m_ProjectName = aProjectName;
+
             // Use the first symbol instance if any symbol instance data exists.
             newSymbolInstance = symbol->GetInstances()[0];
             newSymbolInstance.m_Path = newSheetPath.Path();
@@ -582,6 +589,8 @@ void SCH_SHEET_PATH::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPa
         }
         else
         {
+            newSymbolInstance.m_ProjectName = aProjectName;
+
             // Fall back to the last saved symbol field and unit settings if there is no
             // instance data.
             newSymbolInstance.m_Path = newSheetPath.Path();
@@ -1226,10 +1235,11 @@ void SCH_SHEET_LIST::SetInitialPageNumbers()
 }
 
 
-void SCH_SHEET_LIST::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath )
+void SCH_SHEET_LIST::AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
+                                            const wxString& aProjectName )
 {
     for( SCH_SHEET_PATH& sheetPath : *this )
-        sheetPath.AddNewSymbolInstances( aPrefixSheetPath );
+        sheetPath.AddNewSymbolInstances( aPrefixSheetPath, aProjectName );
 }
 
 
