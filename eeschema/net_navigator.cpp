@@ -175,6 +175,16 @@ static wxString GetNetNavigatorItemText( const SCH_ITEM* aItem,
                      aUnitsProvider->MessageTextFromValue( entry->GetEnd().y ) );
         break;
     }
+    case SCH_DIRECTIVE_LABEL_T:
+    {
+        const SCH_DIRECTIVE_LABEL* entry = static_cast<const SCH_DIRECTIVE_LABEL*>( aItem );
+        wxCHECK( entry, retv );
+
+        retv.Printf( _( "Netclass label '%s' at %s, %s" ), UnescapeString( entry->GetText() ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetPosition().x ),
+                     aUnitsProvider->MessageTextFromValue( entry->GetPosition().y ) );
+        break;
+    }
     default:
         retv.Printf( _( "Unhandled item type %d" ), aItem->Type() );
     }
