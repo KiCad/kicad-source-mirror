@@ -705,7 +705,15 @@ void PCB_PAINTER::draw( const PCB_TRACK* aTrack, int aLayer )
             return;
 
         SHAPE_SEGMENT trackShape( { aTrack->GetStart(), aTrack->GetEnd() }, aTrack->GetWidth() );
-        renderNetNameForSegment( trackShape, color, aTrack->GetUnescapedShortNetname() );
+        wxString netname = aTrack->GetUnescapedShortNetname();
+
+        for( const auto& netinfo : aTrack->GetBoard()->GetNetInfo() )
+        {
+            if( netinfo->GetUnescapedShortNetname() == netname )
+                netname = UnescapeString( aTrack->GetNetname() );
+        }
+
+        renderNetNameForSegment( trackShape, color, netname );
         return;
     }
     else if( IsCopperLayer( aLayer ) || aLayer == LAYER_LOCKED_ITEM_SHADOW )
@@ -1158,6 +1166,12 @@ void PCB_PAINTER::draw( const PAD* aPad, int aLayer )
 
         if( netname.IsEmpty() && padNumber.IsEmpty() )
             return;
+
+        for( const auto& netinfo : board->GetNetInfo() )
+        {
+            if( netinfo->GetUnescapedShortNetname() == netname )
+                netname = UnescapeString( aPad->GetNetname() );
+        }
 
         BOX2I    padBBox = aPad->GetBoundingBox();
         VECTOR2D position = padBBox.Centre();
