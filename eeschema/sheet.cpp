@@ -570,7 +570,7 @@ bool SCH_EDIT_FRAME::LoadSheetFromFile( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurr
     newScreen->MigrateSimModels();
 
     // Attempt to create new symbol instances using the instance data loaded above.
-    sheetHierarchy.AddNewSymbolInstances( *aCurrentSheet );
+    sheetHierarchy.AddNewSymbolInstances( *aCurrentSheet, Prj().GetProjectName() );
 
     // Add new sheet instance data.
     sheetHierarchy.AddNewSheetInstances( *aCurrentSheet, hierarchy.GetLastVirtualPageNumber() );

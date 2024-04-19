@@ -640,7 +640,7 @@ bool DIALOG_SHEET_PROPERTIES::onSheetFilenameChanged( const wxString& aNewFilena
 
         SCH_SHEET_LIST sheetHierarchy( m_sheet );  // The hierarchy of the loaded file.
 
-        sheetHierarchy.AddNewSymbolInstances( currentSheet );
+        sheetHierarchy.AddNewSymbolInstances( currentSheet, m_frame->Prj().GetProjectName() );
         sheetHierarchy.AddNewSheetInstances( currentSheet,
                                              fullHierarchy.GetLastVirtualPageNumber() );
     }

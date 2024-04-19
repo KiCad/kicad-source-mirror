@@ -395,8 +395,13 @@ public:
      *    from the library symbol.
      *  - If all else fails, set the reference to "U?", the unit to 1, and everything else to
      *    an empty string.
+     *
+     * @param aPrefixSheetPath is the sheet path to prefix to this sheet path for the new symbol
+     *        instance.
+     * @param aProjectName is the name of the project for the new symbol instance data.
      */
-    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
+    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
+                                const wxString& aProjectName );
 
     void RemoveSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
 
@@ -669,8 +674,10 @@ public:
      * with \a aPrefixSheetPath.
      *
      * @param aPrefixSheetPath is the sheet path to append the new symbol instances to.
+     * @param aProjectName is the name of the project for the new symbol instance data.
      */
-    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath );
+    void AddNewSymbolInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
+                                const wxString& aProjectName );
 
     void AddNewSheetInstances( const SCH_SHEET_PATH& aPrefixSheetPath,
                                int aLastVirtualPageNumber );
