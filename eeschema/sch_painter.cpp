@@ -527,21 +527,21 @@ static bool isFieldsLayer( int aLayer )
 
 
 void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
-                              const TEXT_ATTRIBUTES& aAttributes,
+                              const TEXT_ATTRIBUTES& aAttrs,
                               const KIFONT::METRICS& aFontMetrics )
 {
-    KIFONT::FONT* font = aAttributes.m_Font;
+    KIFONT::FONT* font = aAttrs.m_Font;
 
     if( !font )
     {
-        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttributes.m_Bold,
-                                      aAttributes.m_Italic );
+        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold,
+                                      aAttrs.m_Italic );
     }
 
     m_gal->SetIsFill( font->IsOutline() );
     m_gal->SetIsStroke( font->IsStroke() );
 
-    font->Draw( m_gal, aText, aPosition, aAttributes, aFontMetrics );
+    font->Draw( m_gal, aText, aPosition, aAttrs, aFontMetrics );
 }
 
 
@@ -2848,13 +2848,13 @@ void SCH_PAINTER::draw( const SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
         if( aEntry->IsDanglingStart() )
         {
             m_gal->DrawCircle( aEntry->GetPosition(),
-                               aEntry->GetPenWidth() + ( TARGET_BUSENTRY_RADIUS / 2 ) );
+                               aEntry->GetPenWidth() + KiROUND( TARGET_BUSENTRY_RADIUS / 2.0 ) );
         }
 
         if( aEntry->IsDanglingEnd() )
         {
             m_gal->DrawCircle( aEntry->GetEnd(),
-                               aEntry->GetPenWidth() + ( TARGET_BUSENTRY_RADIUS / 2 ) );
+                               aEntry->GetPenWidth() + KiROUND( TARGET_BUSENTRY_RADIUS / 2.0 ) );
         }
     }
     else

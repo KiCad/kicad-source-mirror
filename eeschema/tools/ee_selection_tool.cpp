@@ -1384,14 +1384,13 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         {
             EDA_ITEM* item = collector[ i ];
 
-            if( !exactHits.count( item ) )
+            if( !exactHits.contains( item ) )
                 collector.Transfer( item );
         }
     }
 
     // Find the closest item.  (Note that at this point all hits are either exact or non-exact.)
-    VECTOR2I  pos( aPos );
-    SEG       poss( mapCoords( pos, m_isSymbolEditor ), mapCoords( pos, m_isSymbolEditor ) );
+    SEG       poss( mapCoords( aPos, m_isSymbolEditor ), mapCoords( aPos, m_isSymbolEditor ) );
     EDA_ITEM* closest = nullptr;
     int       closestDist = INT_MAX / 4;
 
@@ -1400,7 +1399,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
         BOX2I bbox = item->GetBoundingBox();
         int   dist = INT_MAX / 4;
 
-        if( exactHits.count( item ) )
+        if( exactHits.contains( item ) )
         {
             if( item->Type() == SCH_PIN_T || item->Type() == SCH_JUNCTION_T )
             {
@@ -1417,7 +1416,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
             if( line )
             {
                 dist = KiROUND( DistanceLinePoint( line->GetStartPoint(),
-                                                   line->GetEndPoint(), pos ) );
+                                                   line->GetEndPoint(), aPos ) );
             }
             else if( field )
             {
@@ -1463,14 +1462,14 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
 
                 SHAPE_RECT rect( bbox.GetPosition(), bbox.GetWidth(), bbox.GetHeight() );
 
-                if( bbox.Contains( pos ) )
-                    dist = KiROUND( EuclideanNorm( bbox.GetCenter() - pos ) );
+                if( bbox.Contains( aPos ) )
+                    dist = KiROUND( EuclideanNorm( bbox.GetCenter() - aPos ) );
                 else
                     rect.Collide( poss, closestDist, &dist );
             }
             else
             {
-                dist = KiROUND( EuclideanNorm( bbox.GetCenter() - pos ) );
+                dist = KiROUND( EuclideanNorm( bbox.GetCenter() - aPos ) );
             }
         }
         else
@@ -2235,7 +2234,7 @@ void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
     BOX2I bbox = aBBox;
     bbox.Normalize();
 
-    VECTOR2I bbSize = bbox.Inflate( bbox.GetWidth() * 0.2f ).GetSize();
+    VECTOR2I bbSize = bbox.Inflate( KiROUND( bbox.GetWidth() * 0.2f ) ).GetSize();
     VECTOR2D screenSize = getView()->GetViewport().GetSize();
 
     // This code tries to come up with a zoom factor that doesn't simply zoom in to the cross
@@ -2274,7 +2273,7 @@ void EE_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
     // linearly interpolate "second" which gives the scaling factor needed.
     if( compRatio >= lut.front().first )
     {
-        for( it = lut.begin(); it < lut.end() - 1; it++ )
+        for( it = lut.begin(); it < lut.end() - 1; ++it )
         {
             if( it->first <= compRatio && next( it )->first >= compRatio )
             {
@@ -2590,6 +2589,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
 
     if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )
         getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
+
     getView()->Update( aItem, KIGFX::REPAINT );
 }
 
@@ -2638,6 +2638,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
 
     if( aItem->GetParent() && aItem->GetParent()->Type() != SCHEMATIC_T )
         getView()->Update( aItem->GetParent(), KIGFX::REPAINT );
+
     getView()->Update( aItem, KIGFX::REPAINT );
 }
 
@@ -2645,7 +2646,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
 bool EE_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 20;
-    double         margin = getView()->ToWorld( GRIP_MARGIN );
+    int            margin = KiROUND( getView()->ToWorld( GRIP_MARGIN ) );
 
     // Check if the point is located within any of the currently selected items bounding boxes
     for( EDA_ITEM* item : m_selection )

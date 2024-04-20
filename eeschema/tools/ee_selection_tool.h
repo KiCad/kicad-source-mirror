@@ -267,19 +267,19 @@ private:
      * Highlight the item visually.
      *
      * @param aItem The item to be highlighted.
-     * @param aHighlightMode Either SELECTED or BRIGHTENED
+     * @param aMode Either SELECTED or BRIGHTENED
      * @param aGroup [otpional] A group to add the item to.
      */
-    void highlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) override;
+    void highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup = nullptr ) override;
 
     /**
      * Unhighlight the item visually.
      *
      * @param aItem is an item to be highlighted.
-     * @param aHighlightMode should be either SELECTED or BRIGHTENED
+     * @param aMode should be either SELECTED or BRIGHTENED
      * @param aGroup [optional] A group to remove the item from.
      */
-    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr ) override;
+    void unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup = nullptr ) override;
 
     /**
      * Set the reference point to the anchor of the top-left item.

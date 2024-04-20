@@ -52,7 +52,7 @@ public:
 
     SCH_PIN( LIB_SYMBOL* aParentSymbol, const wxString& aName, const wxString& aNumber,
              PIN_ORIENTATION aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength,
-             int aNameTextSize, int aNumTextSize, int aConvert, const VECTOR2I& aPos, int aUnit );
+             int aNameTextSize, int aNumTextSize, int aBodyStyle, const VECTOR2I& aPos, int aUnit );
 
     SCH_PIN( SCH_PIN* aLibPin, SCH_SYMBOL* aParentSymbol );
 
@@ -289,8 +289,8 @@ public:
      * @param aIncludeLabelsOnInvisiblePins - if false, do not include labels for invisible pins
      *                                       in the calculation.
      */
-    const BOX2I GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
-                                bool aIncludeElectricalType ) const;
+    BOX2I GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
+                          bool aIncludeElectricalType ) const;
 
     /**
      * Return whether this pin forms a global power connection: i.e., is part of a power symbol
@@ -357,7 +357,7 @@ public:
      * @param aType is the electrical type (see enum ELECTRICAL_PINTYPE )
      * @return The electrical name for a pin type (see enun MsgPinElectricType for names).
      */
-    static const wxString GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType );
+    static wxString GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType );
 
     bool IsConnectable() const override { return true; }
 
@@ -393,10 +393,10 @@ public:
     const wxString& GetOperatingPoint() const { return m_operatingPoint; }
     void SetOperatingPoint( const wxString& aText ) { m_operatingPoint = aText; }
 
-    double Similarity( const SCH_ITEM& aItem ) const override;
+    double Similarity( const SCH_ITEM& aOther ) const override;
 
-    bool operator==( const SCH_ITEM& aItem ) const override;
-    bool operator!=( const SCH_ITEM& aItem ) const { return !operator==( aItem ); }
+    bool operator==( const SCH_ITEM& aOther ) const override;
+    bool operator!=( const SCH_ITEM& aOther ) const { return !operator==( aOther ); }
     bool operator<( const SCH_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) < 0; }
     bool operator>( const SCH_PIN& aRhs ) const { return compare( aRhs, EQUALITY ) > 0; }
 

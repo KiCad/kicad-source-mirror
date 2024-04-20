@@ -42,7 +42,7 @@
 // small margin in internal units between the pin text and the pin line
 #define PIN_TEXT_MARGIN 4
 
-const wxString SCH_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
+wxString SCH_PIN::GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE aType )
 {
     // These strings are the canonical name of the electrictal type
     // Not translated, no space in name, only ASCII chars.
@@ -163,7 +163,7 @@ SCH_PIN::SCH_PIN( SCH_PIN* aLibPin, SCH_SYMBOL* aParentSymbol ) :
 
     SetName( m_libPin->GetName() );
     SetNumber( m_libPin->GetNumber() );
-    SetPosition( m_libPin->GetPosition() );
+    m_position = m_libPin->GetPosition();
 
     m_layer = LAYER_PIN;
 }
@@ -255,7 +255,7 @@ bool SCH_PIN::IsStacked( const SCH_PIN* aPin ) const
 }
 
 
-bool SCH_PIN::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxDat ) const
+bool SCH_PIN::Matches( const EDA_SEARCH_DATA& aSearchData, void* aAuxData ) const
 {
     const SCH_SEARCH_DATA& schSearchData =
             dynamic_cast<const SCH_SEARCH_DATA&>( aSearchData );
@@ -1205,7 +1205,7 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         return m_nameTextSize.value_or( 0 ) - tmp->m_nameTextSize.value_or( 0 );
 
     if( m_alternates.size() != tmp->m_alternates.size() )
-        return (int) m_alternates.size() - tmp->m_alternates.size();
+        return static_cast<int>( m_alternates.size() - tmp->m_alternates.size() );
 
     auto lhsItem = m_alternates.begin();
     auto rhsItem = tmp->m_alternates.begin();
@@ -1568,8 +1568,8 @@ void SCH_PIN::validateExtentsCache( KIFONT::FONT* aFont, int aSize, const wxStri
 }
 
 
-const BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
-                                     bool aIncludeElectricalType ) const
+BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aIncludeNameAndNumber,
+                               bool aIncludeElectricalType ) const
 {
     if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
     {
@@ -1747,7 +1747,7 @@ bool SCH_PIN::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
     wxCHECK( m_libPin, false );
 
     // Reciprocal checking is done in CONNECTION_GRAPH anyway
-    return !( m_libPin->GetType() == ELECTRICAL_PINTYPE::PT_NC );
+    return m_libPin->GetType() != ELECTRICAL_PINTYPE::PT_NC;
 }
 
 
