@@ -30,9 +30,8 @@
 #include <map>
 #include <utility>
 
-#include <reporter.h>
 #include <sch_field.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 
 // Must be included after sch_field.h (exactly eda_shape.h) to avoid a colliding
 // declaration with a window header (under msys2)
@@ -44,6 +43,7 @@ struct SPICE_ITEM;
 class SPICE_GENERATOR;
 class SIM_MODEL_SERIALIZER;
 class PROJECT;
+class REPORTER;
 
 
 #define SIM_REFERENCE_FIELD wxT( "Reference" )
@@ -410,20 +410,20 @@ public:
 
     static TYPE ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPORTER& aReporter );
 
-    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<LIB_PIN*>& aPins,
+    static std::unique_ptr<SIM_MODEL> Create( TYPE aType, const std::vector<SCH_PIN*>& aPins,
                                               REPORTER& aReporter );
 
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel,
-                                              const std::vector<LIB_PIN*>& aPins,
+                                              const std::vector<SCH_PIN*>& aPins,
                                               REPORTER& aReporter );
 
     static std::unique_ptr<SIM_MODEL> Create( const SIM_MODEL* aBaseModel,
-                                              const std::vector<LIB_PIN*>& aPins,
+                                              const std::vector<SCH_PIN*>& aPins,
                                               const std::vector<SCH_FIELD>& aFields,
                                               REPORTER& aReporter );
 
     static std::unique_ptr<SIM_MODEL> Create( const std::vector<SCH_FIELD>& aFields,
-                                              const std::vector<LIB_PIN*>& aPins,
+                                              const std::vector<SCH_PIN*>& aPins,
                                               bool aResolved, REPORTER& aReporter );
 
     static std::string GetFieldValue( const std::vector<SCH_FIELD>* aFields,
@@ -446,7 +446,7 @@ public:
     SIM_MODEL& operator=(SIM_MODEL&& aOther ) = delete;
 
     void ReadDataFields( const std::vector<SCH_FIELD>* aFields,
-                         const std::vector<LIB_PIN*>& aPins );
+                         const std::vector<SCH_PIN*>& aPins );
 
     void WriteFields( std::vector<SCH_FIELD>& aFields ) const;
 
@@ -529,7 +529,7 @@ protected:
     SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerator,
                std::unique_ptr<SIM_MODEL_SERIALIZER> aSerializer );
 
-    void createPins( const std::vector<LIB_PIN*>& aSymbolPins );
+    void createPins( const std::vector<SCH_PIN*>& aSymbolPins );
 
     virtual int doFindParam( const std::string& aParamName ) const;
     virtual void doSetParamValue( int aParamIndex, const std::string& aValue );

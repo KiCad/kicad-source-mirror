@@ -23,7 +23,8 @@
 
 #include <qa_utils/wx_utils/unit_test_utils.h>
 #include <sim/sim_model.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
+#include <lib_symbol.h>
 
 class TEST_SIM_MODEL_INFERENCE
 {
@@ -82,8 +83,8 @@ BOOST_AUTO_TEST_CASE( InferPassiveValues )
     };
 
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( "symbol", nullptr );
-    symbol->AddDrawItem( new LIB_PIN( symbol.get() ) );
-    symbol->AddDrawItem( new LIB_PIN( symbol.get() ) );
+    symbol->AddDrawItem( new SCH_PIN( symbol.get() ) );
+    symbol->AddDrawItem( new SCH_PIN( symbol.get() ) );
 
     wxString deviceType;
     wxString modelType;

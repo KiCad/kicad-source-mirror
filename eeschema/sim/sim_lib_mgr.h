@@ -47,13 +47,13 @@ public:
 
     void SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter );
 
-    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins,
+    SIM_MODEL& CreateModel( SIM_MODEL::TYPE aType, const std::vector<SCH_PIN*>& aPins,
                             REPORTER& aReporter );
 
-    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins,
+    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
                             REPORTER& aReporter );
 
-    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<LIB_PIN*>& aPins,
+    SIM_MODEL& CreateModel( const SIM_MODEL* aBaseModel, const std::vector<SCH_PIN*>& aPins,
                             const std::vector<SCH_FIELD>& aFields, REPORTER& aReporter );
 
     // TODO: The argument can be made const.
@@ -61,13 +61,13 @@ public:
                                     REPORTER& aReporter );
 
     SIM_LIBRARY::MODEL CreateModel( const std::vector<SCH_FIELD>& aFields,
-                                    const std::vector<LIB_PIN*>& aPins, bool aResolved,
+                                    const std::vector<SCH_PIN*>& aPins, bool aResolved,
                                     REPORTER& aReporter );
 
     SIM_LIBRARY::MODEL CreateModel( const wxString& aLibraryPath,
                                     const std::string& aBaseModelName,
                                     const std::vector<SCH_FIELD>& aFields,
-                                    const std::vector<LIB_PIN*>& aPins, REPORTER& aReporter );
+                                    const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter );
 
     void SetModel( int aIndex, std::unique_ptr<SIM_MODEL> aModel );
 

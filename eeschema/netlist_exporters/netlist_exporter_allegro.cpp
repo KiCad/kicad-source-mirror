@@ -124,7 +124,7 @@ bool NETLIST_EXPORTER_ALLEGRO::CompareSymbolRef( const wxString& aRefText1,
 }
 
 
-bool NETLIST_EXPORTER_ALLEGRO::CompareLibPin( const LIB_PIN* aPin1, const LIB_PIN* aPin2 )
+bool NETLIST_EXPORTER_ALLEGRO::CompareLibPin( const SCH_PIN* aPin1, const SCH_PIN* aPin2 )
 {
     // return "lhs < rhs"
     return StrNumCmp( aPin1->GetShownNumber(), aPin2->GetShownNumber(), true ) < 0;
@@ -177,18 +177,10 @@ void NETLIST_EXPORTER_ALLEGRO::extractComponentsInfo()
             SCH_SYMBOL* symbol = findNextSymbol( item, &sheet );
 
             if( !symbol || symbol->GetExcludedFromBoard() )
-            {
                 continue;
-            }
 
-            std::vector<LIB_PIN*> pinList;
-            pinList.clear();
-            symbol->GetLibPins(pinList);
-
-            if( !pinList.size() )
-            {
+            if( symbol->GetLibPins().empty() )
                 continue;
-            }
 
             m_packageProperties.insert( std::pair<wxString,
                                         wxString>( sheet.PathHumanReadable(),
@@ -450,8 +442,7 @@ void NETLIST_EXPORTER_ALLEGRO::toAllegroPackages()
         fprintf( d, "PACKAGE '%s'\n", TO_UTF8( formatDevice( footprintText ) ) );
         fprintf( d, "CLASS IC\n" );
 
-        std::vector<LIB_PIN*> pinList;
-        sym->GetLibSymbolRef()->GetPins( pinList, 0, 0 );
+        std::vector<SCH_PIN*> pinList = sym->GetLibSymbolRef()->GetAllLibPins();
 
         /*
          * We must erase redundant Pins references in pinList
@@ -584,7 +575,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatText( wxString aString )
 }
 
 
-wxString NETLIST_EXPORTER_ALLEGRO::formatPin( const LIB_PIN& aPin )
+wxString NETLIST_EXPORTER_ALLEGRO::formatPin( const SCH_PIN& aPin )
 {
     wxString   pinName4Telesis = aPin.GetName() + wxString( "__" ) + aPin.GetNumber();
     std::regex reg( "[^A-Za-z0-9_+?/-]" );
@@ -592,7 +583,7 @@ wxString NETLIST_EXPORTER_ALLEGRO::formatPin( const LIB_PIN& aPin )
 }
 
 
-wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, std::vector<LIB_PIN*> aPinList )
+wxString NETLIST_EXPORTER_ALLEGRO::formatFunction( wxString aName, std::vector<SCH_PIN*> aPinList )
 {
     aName.MakeUpper();
     std::list<wxString> pinNameList;

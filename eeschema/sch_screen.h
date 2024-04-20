@@ -55,7 +55,7 @@
 class BUS_ALIAS;
 class EDA_ITEM;
 class LIB_SYMBOL;
-class LIB_PIN;
+class SCH_PIN;
 class SCH_SYMBOL;
 class SCH_LINE;
 class SCH_LABEL_BASE;
@@ -368,7 +368,7 @@ public:
      *                      point of the pin.
      * @return The pin item if found, otherwise NULL.
      */
-    LIB_PIN* GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol = nullptr,
+    SCH_PIN* GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol = nullptr,
                      bool aEndPointOnly = false ) const;
 
     /**

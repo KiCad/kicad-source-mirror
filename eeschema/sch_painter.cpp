@@ -32,7 +32,7 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_rect.h>
 #include <gr_text.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <math/util.h>
 #include <pgm_base.h>
 #include <sch_bitmap.h>
@@ -88,7 +88,7 @@ std::vector<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
     SCH_SHEET_PIN_T,
     LIB_SYMBOL_T, SCH_SYMBOL_T,
     SCH_SHEET_T,
-    LIB_PIN_T, SCH_PIN_T
+    SCH_PIN_T
 };
 
 
@@ -178,9 +178,9 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
         case LIB_SYMBOL_T:
             draw( static_cast<const LIB_SYMBOL*>( aItem ), aLayer );
             break;
-        case LIB_PIN_T:
+        case SCH_PIN_T:
             drawBoundingBox = false;
-            draw( static_cast<const LIB_PIN*>( aItem ), aLayer, aDimmed  );
+            draw( static_cast<const SCH_PIN*>( aItem ), aLayer, aDimmed  );
             break;
         case SCH_SYMBOL_T:
             draw( static_cast<const SCH_SYMBOL*>( aItem ), aLayer );
@@ -315,21 +315,13 @@ float SCH_PAINTER::getShadowWidth( bool aForHighlight ) const
 }
 
 
-// A helper function to know if a EDA_ITEM is a member of a footprint
-static bool IsItemFPMember( const EDA_ITEM* aItem )
-{
-    return aItem->GetParent() && ( aItem->GetParent()->Type() == LIB_SYMBOL_T
-                                   || aItem->GetParent()->Type() == SCH_SYMBOL_T );
-}
-
-
-COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows,
+COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDrawingShadows,
                                      bool aDimmed ) const
 {
     COLOR4D color = m_schSettings.GetLayerColor( aLayer );
     // Graphic items of a SYMBOL frequently use the LAYER_DEVICE layer color
     // (i.e. when no specific color is set)
-    bool isFpMember = IsItemFPMember( aItem );
+    bool isSymbolChild = aItem->GetParentSymbol() != nullptr;
 
     if( aItem->Type() == SCH_LINE_T )
     {
@@ -360,21 +352,22 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
             if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
             {
-                if( !isFpMember || shape->GetFillColor() != COLOR4D::UNSPECIFIED )
+                if( !isSymbolChild || shape->GetFillColor() != COLOR4D::UNSPECIFIED )
                     color = shape->GetFillColor();
-                if( isFpMember && shape->GetFillMode() == FILL_T::FILLED_SHAPE )
+
+                if( isSymbolChild && shape->GetFillMode() == FILL_T::FILLED_SHAPE )
                     color = shape->GetStroke().GetColor();
             }
             else
             {
-                if( !isFpMember || shape->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
+                if( !isSymbolChild || shape->GetStroke().GetColor() != COLOR4D::UNSPECIFIED )
                     color = shape->GetStroke().GetColor();
             }
 
             // A filled shape means filled; if they didn't specify a fill colour then use the
             // border colour.
             if( color == COLOR4D::UNSPECIFIED )
-                color = m_schSettings.GetLayerColor( isFpMember ? LAYER_DEVICE : LAYER_NOTES );
+                color = m_schSettings.GetLayerColor( isSymbolChild ? LAYER_DEVICE : LAYER_NOTES );
         }
         else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
         {
@@ -390,12 +383,12 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 
             if( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_NOTES_BACKGROUND )
                 color = textBox->GetFillColor();
-            else if( !isFpMember || textBox->GetTextColor() != COLOR4D::UNSPECIFIED )
+            else if( !isSymbolChild || textBox->GetTextColor() != COLOR4D::UNSPECIFIED )
                 color = textBox->GetTextColor();
         }
         else if( const EDA_TEXT* otherTextItem = dynamic_cast<const EDA_TEXT*>( aItem ) )
         {
-            if( !isFpMember || otherTextItem->GetTextColor() != COLOR4D::UNSPECIFIED )
+            if( !isSymbolChild || otherTextItem->GetTextColor() != COLOR4D::UNSPECIFIED )
                 color = otherTextItem->GetTextColor();
         }
     }
@@ -424,8 +417,8 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
         if( aDrawingShadows )
             color = m_schSettings.GetLayerColor( LAYER_SELECTION_SHADOWS );
     }
-    else if( aItem->IsSelected()
-                && ( aLayer == LAYER_DEVICE_BACKGROUND || aLayer == LAYER_SHEET_BACKGROUND ) )
+    else if( aItem->IsSelected() && ( aLayer == LAYER_DEVICE_BACKGROUND
+                                   || aLayer == LAYER_SHEET_BACKGROUND ) )
     {
         // Selected items will be painted over all other items, so make backgrounds translucent so
         // that non-selected overlapping objects are visible
@@ -452,17 +445,11 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDr
 }
 
 
-float SCH_PAINTER::getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) const
+float SCH_PAINTER::getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows ) const
 {
     wxCHECK( aItem, static_cast<float>( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ) ) );
 
-    int pen = 0;
-
-    if( const SCH_ITEM* item = dynamic_cast<const SCH_ITEM*>( aItem ) )
-        pen = item->GetEffectivePenWidth( &m_schSettings );
-    else
-        UNIMPLEMENTED_FOR( aItem->GetClass() );
-
+    int   pen = aItem->GetEffectivePenWidth( &m_schSettings );
     float width = pen;
 
     if( aItem->IsBrightened() || aItem->IsSelected() )
@@ -475,7 +462,7 @@ float SCH_PAINTER::getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) c
 }
 
 
-float SCH_PAINTER::getTextThickness( const EDA_ITEM* aItem ) const
+float SCH_PAINTER::getTextThickness( const SCH_ITEM* aItem ) const
 {
     int pen = m_schSettings.GetDefaultPenWidth();
 
@@ -540,20 +527,21 @@ static bool isFieldsLayer( int aLayer )
 
 
 void SCH_PAINTER::strokeText( const wxString& aText, const VECTOR2D& aPosition,
-                              const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics )
+                              const TEXT_ATTRIBUTES& aAttributes,
+                              const KIFONT::METRICS& aFontMetrics )
 {
-    KIFONT::FONT* font = aAttrs.m_Font;
+    KIFONT::FONT* font = aAttributes.m_Font;
 
     if( !font )
     {
-        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttrs.m_Bold,
-                                      aAttrs.m_Italic );
+        font = KIFONT::FONT::GetFont( eeconfig()->m_Appearance.default_font, aAttributes.m_Bold,
+                                      aAttributes.m_Italic );
     }
 
     m_gal->SetIsFill( font->IsOutline() );
     m_gal->SetIsStroke( font->IsStroke() );
 
-    font->Draw( m_gal, aText, aPosition, aAttrs, aFontMetrics );
+    font->Draw( m_gal, aText, aPosition, aAttributes, aFontMetrics );
 }
 
 
@@ -620,8 +608,10 @@ void SCH_PAINTER::knockoutText( const wxString& aText, const VECTOR2D& aPosition
 
 void SCH_PAINTER::boxText( const wxString& aText, const VECTOR2D& aPosition,
                            const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics,
-                           bool invertY )
+                           bool aInvertY )
 {
+    bool invertY = aInvertY;
+
     KIFONT::FONT* font = aAttrs.m_Font;
 
     if( !font )
@@ -812,7 +802,7 @@ bool SCH_PAINTER::setDeviceColors( const SCH_ITEM* aItem, int aLayer, bool aDimm
 }
 
 
-int SCH_PAINTER::internalPinDecoSize( const LIB_PIN &aPin )
+int SCH_PAINTER::internalPinDecoSize( const SCH_PIN &aPin )
 {
     if( m_schSettings.m_PinSymbolSize > 0 )
         return m_schSettings.m_PinSymbolSize;
@@ -823,7 +813,7 @@ int SCH_PAINTER::internalPinDecoSize( const LIB_PIN &aPin )
 
 // Utility for getting the size of the 'external' pin decorators (as a radius)
 // i.e. the negation circle, the polarity 'slopes' and the nonlogic marker
-int SCH_PAINTER::externalPinDecoSize( const LIB_PIN &aPin )
+int SCH_PAINTER::externalPinDecoSize( const SCH_PIN &aPin )
 {
     if( m_schSettings.m_PinSymbolSize > 0 )
         return m_schSettings.m_PinSymbolSize;
@@ -849,7 +839,7 @@ void SCH_PAINTER::drawPinDanglingIndicator( const VECTOR2I& aPos, const COLOR4D&
 }
 
 
-void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
+void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 {
     if( !isUnitAndConversionShown( aPin ) )
         return;
@@ -993,6 +983,7 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
     {
         switch( aPin->GetShape() )
         {
+        default:
         case GRAPHIC_PINSHAPE::LINE:
             m_gal->DrawLine( p0, pos );
             break;
@@ -1091,22 +1082,17 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
         }
     }
 
-    const SYMBOL* libEntry = aPin->GetParentSymbol();
+    if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children )
+        return;
 
     // Draw the labels
-
-    if( libEntry->Type() == LIB_SYMBOL_T )
-    {
-        if( drawingShadows && !eeconfig()->m_Selection.draw_selected_children )
-            return;
-    }
-
-    float penWidth = (float) m_schSettings.GetDefaultPenWidth();
-    int   textOffset = libEntry->GetPinNameOffset();
-    float nameStrokeWidth = getLineWidth( aPin, false );
-    float numStrokeWidth = getLineWidth( aPin, false );
-    bool  showPinNames = libEntry->GetShowPinNames();
-    bool  showPinNumbers = m_schSettings.m_ShowPinNumbers || libEntry->GetShowPinNumbers();
+    const SYMBOL* symbol = aPin->GetParentSymbol();
+    float         penWidth = (float) m_schSettings.GetDefaultPenWidth();
+    int           textOffset = symbol->GetPinNameOffset();
+    float         nameStrokeWidth = getLineWidth( aPin, false );
+    float         numStrokeWidth = getLineWidth( aPin, false );
+    bool          showPinNames = symbol->GetShowPinNames();
+    bool          showPinNumbers = m_schSettings.m_ShowPinNumbers || symbol->GetShowPinNumbers();
 
     nameStrokeWidth = Clamp_Text_PenSize( nameStrokeWidth, aPin->GetNameTextSize(), true );
     numStrokeWidth = Clamp_Text_PenSize( numStrokeWidth, aPin->GetNumberTextSize(), true );
@@ -1245,12 +1231,12 @@ void SCH_PAINTER::draw( const LIB_PIN* aPin, int aLayer, bool aDimmed )
                 else if( nonCached( aPin ) && renderTextAsBitmap )
                 {
                     bitmapText( text[i], aPos, attrs );
-                    const_cast<LIB_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
+                    const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
                 else
                 {
                     strokeText( text[i], aPos, attrs, aPin->GetFontMetrics() );
-                    const_cast<LIB_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
+                    const_cast<SCH_PIN*>( aPin )->SetFlags( IS_SHOWN_AS_BITMAP );
                 }
             };
 
@@ -1695,14 +1681,13 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
 
     switch( aText->Type() )
     {
-    case SCH_SHEET_PIN_T:       aLayer = LAYER_SHEETLABEL;    break;
-    case SCH_HIER_LABEL_T:      aLayer = LAYER_HIERLABEL;     break;
-    case SCH_GLOBAL_LABEL_T:    aLayer = LAYER_GLOBLABEL;     break;
-    case SCH_DIRECTIVE_LABEL_T: aLayer = LAYER_NETCLASS_REFS; break;
-    case SCH_TEXT_T:
-        aLayer = IsItemFPMember( aText ) ? LAYER_DEVICE : LAYER_NOTES;
-        break;
-    default:                    aLayer = LAYER_NOTES;         break;
+    case SCH_SHEET_PIN_T:       aLayer = LAYER_SHEETLABEL;                        break;
+    case SCH_HIER_LABEL_T:      aLayer = LAYER_HIERLABEL;                         break;
+    case SCH_GLOBAL_LABEL_T:    aLayer = LAYER_GLOBLABEL;                         break;
+    case SCH_DIRECTIVE_LABEL_T: aLayer = LAYER_NETCLASS_REFS;                     break;
+    case SCH_TEXT_T:            aLayer = aText->GetParentSymbol() ? LAYER_DEVICE
+                                                                  : LAYER_NOTES;  break;
+    default:                    aLayer = LAYER_NOTES;                             break;
     }
 
     COLOR4D color = getRenderColor( aText, aLayer, drawingShadows, aDimmed );
@@ -2259,13 +2244,11 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
                                                             : dummy();
     bool        invertY = true;
 
-    std::vector<LIB_PIN*> originalPins;
-    originalSymbol->GetPins( originalPins, unit, bodyStyle );
+    std::vector<SCH_PIN*> originalPins = originalSymbol->GetPins( unit, bodyStyle );
 
     // Copy the source so we can re-orient and translate it.
-    LIB_SYMBOL tempSymbol( *originalSymbol );
-    std::vector<LIB_PIN*> tempPins;
-    tempSymbol.GetPins( tempPins, unit, bodyStyle );
+    LIB_SYMBOL            tempSymbol( *originalSymbol );
+    std::vector<SCH_PIN*> tempPins = tempSymbol.GetPins( unit, bodyStyle );
 
     tempSymbol.SetFlags( aSymbol->GetFlags() );
 
@@ -2296,7 +2279,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     for( unsigned i = 0; i < tempPins.size(); ++ i )
     {
         SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
-        LIB_PIN* tempPin = tempPins[ i ];
+        SCH_PIN* tempPin = tempPins[ i ];
 
         tempPin->ClearFlags();
         tempPin->SetFlags( symbolPin->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED,
@@ -2319,7 +2302,7 @@ void SCH_PAINTER::draw( const SCH_SYMBOL* aSymbol, int aLayer )
     for( unsigned i = 0; i < tempPins.size(); ++i )
     {
         SCH_PIN* symbolPin = aSymbol->GetPin( originalPins[ i ] );
-        LIB_PIN* tempPin = tempPins[ i ];
+        SCH_PIN* tempPin = tempPins[ i ];
 
         symbolPin->ClearFlags();
         tempPin->ClearFlags( IS_DANGLING );             // Clear this temporary flag

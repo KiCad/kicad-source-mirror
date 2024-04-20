@@ -96,7 +96,7 @@ INSPECT_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
         // Special selection rules apply to pins of different units when edited in synchronized
         // pins mode.  Leave it to EE_SELECTION_TOOL::Selectable() to decide what to do with them.
 
-        if( schItem && schItem->Type() != LIB_PIN_T )
+        if( schItem && schItem->Type() != SCH_PIN_T )
         {
             if( m_Unit && schItem->GetUnit() && schItem->GetUnit() != m_Unit )
                 return INSPECT_RESULT::CONTINUE;

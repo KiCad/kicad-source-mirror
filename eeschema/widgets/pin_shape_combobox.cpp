@@ -29,7 +29,7 @@
 #include "pin_shape_combobox.h"
 
 #include <bitmaps.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 
 PinShapeComboBox::PinShapeComboBox( wxWindow* parent,
         wxWindowID id,

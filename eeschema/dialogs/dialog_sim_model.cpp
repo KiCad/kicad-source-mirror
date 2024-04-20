@@ -79,7 +79,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
 {
     m_browseButton->SetBitmap( KiBitmapBundle( BITMAPS::small_folder ) );
 
-    for( LIB_PIN* pin : aSymbol.GetAllLibPins() )
+    for( SCH_PIN* pin : aSymbol.GetAllLibPins() )
     {
         // De Morgan conversions are equivalences, not additional items to simulate
         if( !pin->GetParentSymbol()->HasAlternateBodyStyle() || pin->GetBodyStyle() < 2 )
@@ -87,7 +87,7 @@ DIALOG_SIM_MODEL<T>::DIALOG_SIM_MODEL( wxWindow* aParent, EDA_BASE_FRAME* aFrame
     }
 
     std::sort( m_sortedPartPins.begin(), m_sortedPartPins.end(),
-               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               []( const SCH_PIN* lhs, const SCH_PIN* rhs )
                {
                    // We sort by StrNumCmp because SIM_MODEL_BASE sorts with it too.
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
@@ -1064,7 +1064,7 @@ int DIALOG_SIM_MODEL<T>::findSymbolPinRow( const wxString& aSymbolPinNumber ) co
 {
     for( int row = 0; row < static_cast<int>( m_sortedPartPins.size() ); ++row )
     {
-        LIB_PIN* pin = m_sortedPartPins[row];
+        SCH_PIN* pin = m_sortedPartPins[row];
 
         if( pin->GetNumber() == aSymbolPinNumber )
             return row;
@@ -1107,7 +1107,7 @@ const SIM_LIBRARY* DIALOG_SIM_MODEL<T>::library() const
 template <typename T>
 wxString DIALOG_SIM_MODEL<T>::getSymbolPinString( int symbolPinIndex ) const
 {
-    LIB_PIN* pin = m_sortedPartPins.at( symbolPinIndex );
+    SCH_PIN* pin = m_sortedPartPins.at( symbolPinIndex );
     wxString pinNumber;
     wxString pinName;
 

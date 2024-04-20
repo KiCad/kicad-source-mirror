@@ -364,7 +364,6 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
     switch( aItem->Type() )
     {
     case LIB_SYMBOL_T:
-    case LIB_PIN_T:
     case SCH_SYMBOL_T:
     case SCH_PIN_T:
     case SCH_SHEET_PIN_T:

@@ -654,9 +654,7 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
             }
             else if( item->Type() == SCH_SHEET_T )
             {
-                SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-
-                for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+                for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
                 {
                     if( pin->IsConnectivityDirty() )
                     {
@@ -976,7 +974,7 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
 
     for( auto it = m_net_name_to_code_map.begin(); it != m_net_name_to_code_map.end(); )
     {
-        if( codes_to_remove.find( it->second ) != codes_to_remove.end() )
+        if( codes_to_remove.contains( it->second ) )
             it = m_net_name_to_code_map.erase( it );
         else
             ++it;
@@ -984,7 +982,7 @@ void CONNECTION_GRAPH::removeSubgraphs( std::set<CONNECTION_SUBGRAPH*>& aSubgrap
 
     for( auto it = m_bus_name_to_code_map.begin(); it != m_bus_name_to_code_map.end(); )
     {
-        if( codes_to_remove.find( it->second ) != codes_to_remove.end() )
+        if( codes_to_remove.contains( it->second ) )
             it = m_bus_name_to_code_map.erase( it );
         else
             ++it;
@@ -1657,7 +1655,7 @@ void CONNECTION_GRAPH::processSubGraphs()
             {
                 wxString new_name = create_new_name( connection );
 
-                while( m_net_name_to_subgraphs_map.count( new_name ) )
+                while( m_net_name_to_subgraphs_map.contains( new_name ) )
                     new_name = create_new_name( connection );
 
                 wxLogTrace( ConnTrace,
@@ -2388,7 +2386,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
             {
                 if( !candidate->m_strong_driver
                     || candidate->m_hier_ports.empty()
-                    || visited.count( candidate ) )
+                    || visited.contains( candidate ) )
                 {
                     continue;
                 }
@@ -2425,7 +2423,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph, boo
             for( CONNECTION_SUBGRAPH* candidate : it->second )
             {
                 if( candidate->m_hier_pins.empty()
-                    || visited.count( candidate )
+                    || visited.contains( candidate )
                     || candidate->m_driver_connection->Type() != aParent->m_driver_connection->Type() )
                 {
                     continue;
@@ -3470,7 +3468,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             if( pin )
             {
                 ercItem->SetItems( pin, aSubgraph->m_no_connect );
-                pos = pin->GetTransformedPosition();
+                pos = pin->GetPosition();
             }
             else
             {
@@ -3586,7 +3584,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
             ercItem->SetItemsSheetPaths( sheet );
             ercItem->SetItems( pin );
 
-            SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetTransformedPosition() );
+            SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
             screen->Append( marker );
 
             ok = false;
@@ -3611,8 +3609,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph 
                     ercItem->SetItemsSheetPaths( sheet );
                     ercItem->SetItems( testPin );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem,
-                                                         testPin->GetTransformedPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, testPin->GetPosition() );
                     screen->Append( marker );
 
                     ok = false;

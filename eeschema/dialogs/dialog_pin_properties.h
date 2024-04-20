@@ -33,7 +33,7 @@
 
 #include <dialog_pin_properties_base.h>
 #include <widgets/unit_binder.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <symbol_edit_frame.h>
 
 
@@ -53,7 +53,7 @@ class ALT_PIN_DATA_MODEL;
 class DIALOG_PIN_PROPERTIES : public DIALOG_PIN_PROPERTIES_BASE
 {
 public:
-    DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN* aPin );
+    DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin );
     ~DIALOG_PIN_PROPERTIES() override;
 
     bool TransferDataToWindow() override;
@@ -73,10 +73,10 @@ protected:
 
 private:
     SYMBOL_EDIT_FRAME*  m_frame;
-    LIB_PIN*            m_pin;
+    SCH_PIN*            m_pin;
 
     LIB_SYMBOL*         m_dummyParent;
-    LIB_PIN*            m_dummyPin;                   // a working copy used to show changes
+    SCH_PIN*            m_dummyPin;                   // a working copy used to show changes
 
     UNIT_BINDER         m_posX;
     UNIT_BINDER         m_posY;

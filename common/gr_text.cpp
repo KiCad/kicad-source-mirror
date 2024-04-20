@@ -151,8 +151,13 @@ void GRPrintText( wxDC* aDC, const VECTOR2I& aPos, const COLOR4D& aColor, const 
     if( !aFont )
         aFont = KIFONT::FONT::GetFont();
 
-    if( aWidth == 0 && aBold ) // Use default values if aWidth == 0
-        aWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
+    if( aWidth == 0 ) // Use default values if aWidth == 0
+    {
+        if( aBold )
+            aWidth = GetPenSizeForBold( std::min( aSize.x, aSize.y ) );
+        else
+            aWidth = GetPenSizeForNormal( std::min( aSize.x, aSize.y ) );
+    }
 
     if( aWidth < 0 )
     {

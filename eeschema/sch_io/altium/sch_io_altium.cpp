@@ -37,8 +37,7 @@
 #include <project/net_settings.h>
 
 #include <lib_id.h>
-#include <lib_pin.h>
-
+#include <sch_pin.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>
@@ -1202,7 +1201,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
         symbol = libSymbolIt->second;
     }
 
-    LIB_PIN*    pin = new LIB_PIN( symbol );
+    SCH_PIN* pin = new SCH_PIN( symbol );
 
     // Make sure that these are visible when initializing the symbol
     // This may be overriden by the file data but not by the pin defaults
@@ -3213,7 +3212,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         libSymbol->SetLibId( libId );
 
         // generate graphic
-        LIB_PIN* pin = new LIB_PIN( libSymbol );
+        SCH_PIN* pin = new SCH_PIN( libSymbol );
         libSymbol->AddDrawItem( pin, false );
 
         pin->SetName( elem.text );

@@ -35,7 +35,7 @@
 
 
 class EDA_TEXT;
-class LIB_PIN;
+class SCH_PIN;
 class SCH_LABEL_BASE;
 class SCH_SYMBOL;
 class SCH_TEXT;
@@ -252,7 +252,7 @@ public:
     /**
      * Create a pin from an asy file.
      */
-    void CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, LIB_PIN* aPin );
+    void CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex, SCH_PIN* aPin );
 
     /**
      * Create a symbol arc.

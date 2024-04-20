@@ -81,7 +81,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 {
     KICAD_T type = aEvent.Parameter<KICAD_T>();
     auto*   settings = Pgm().GetSettingsManager().GetAppSettings<SYMBOL_EDITOR_SETTINGS>();
-    auto*   pinTool = type == LIB_PIN_T ? m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() : nullptr;
+    auto*   pinTool = type == SCH_PIN_T ? m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>() : nullptr;
 
     if( m_inTwoClickPlace )
         return 0;
@@ -208,7 +208,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 switch( type )
                 {
-                case LIB_PIN_T:
+                case SCH_PIN_T:
                 {
                     item = pinTool->CreatePin( VECTOR2I( cursorPos.x, -cursorPos.y ), symbol );
                     g_lastPinWeakPtr = item;
@@ -281,8 +281,8 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 switch( item->Type() )
                 {
-                case LIB_PIN_T:
-                    pinTool->PlacePin( static_cast<LIB_PIN*>( item ) );
+                case SCH_PIN_T:
+                    pinTool->PlacePin( static_cast<SCH_PIN*>( item ) );
                     item->ClearEditFlags();
                     commit.Push( _( "Add Pin" ) );
                     break;
@@ -830,15 +830,13 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 {
     SYMBOL_EDITOR_PIN_TOOL* pinTool = m_toolMgr->GetTool<SYMBOL_EDITOR_PIN_TOOL>();
     LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
-    LIB_PIN*      sourcePin = nullptr;
+    SCH_PIN*      sourcePin = nullptr;
 
     if( !symbol )
         return 0;
 
     // See if we have a pin matching our weak ptr
-    std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
-
-    for( LIB_PIN* test : pins )
+    for( SCH_PIN* test : symbol->GetAllLibPins() )
     {
         if( (void*) test == g_lastPinWeakPtr )
         {
@@ -849,7 +847,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
     if( sourcePin )
     {
-        LIB_PIN* pin = pinTool->RepeatPin( sourcePin );
+        SCH_PIN* pin = pinTool->RepeatPin( sourcePin );
         g_lastPinWeakPtr = pin;
 
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection );

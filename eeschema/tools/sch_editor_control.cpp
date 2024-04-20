@@ -570,7 +570,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
                 {
                     try
                     {
-                        LIB_PIN* pin = static_cast<SCH_PIN*>( item )->GetLibPin();
+                        SCH_PIN*    pin = static_cast<SCH_PIN*>( item )->GetLibPin();
                         SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item->GetParent() );
 
                         wxString           msg;
@@ -2110,16 +2110,16 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             for( EDA_ITEM* item : selection.Items() )
             {
                 SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
-                LIB_PIN*  lib_pin = dynamic_cast<LIB_PIN*>( item );
+                SCH_PIN*  pin = dynamic_cast<SCH_PIN*>( item );
 
                 if( sch_item && sch_item->IsConnectable() )
                 {
                     for( const VECTOR2I& pt : sch_item->GetConnectionPoints() )
                         processPt( pt );
                 }
-                else if( lib_pin )
+                else if( pin )
                 {
-                    processPt( lib_pin->GetPosition() );
+                    processPt( pin->GetPosition() );
                 }
             }
 

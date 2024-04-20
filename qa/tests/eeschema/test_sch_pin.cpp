@@ -36,7 +36,7 @@ public:
     {
         m_parent_part = new LIB_SYMBOL( "parent_part", nullptr );
 
-        m_lib_pin = new LIB_PIN( m_parent_part );
+        m_lib_pin = new SCH_PIN( m_parent_part );
         m_parent_part->AddDrawItem( m_lib_pin );
 
         // give the pin some kind of data we can use to test
@@ -61,7 +61,7 @@ public:
     }
 
     LIB_SYMBOL* m_parent_part;
-    LIB_PIN*    m_lib_pin;
+    SCH_PIN*    m_lib_pin;
 
     SCH_SYMBOL* m_parent_symbol;
     SCH_PIN*    m_sch_pin;       // owned by m_parent_symbol, not us

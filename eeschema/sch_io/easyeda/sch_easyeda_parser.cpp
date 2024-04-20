@@ -845,7 +845,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
                 }
             }
 
-            std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( aSymbol );
+            std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( aSymbol );
 
             pin->SetName( pinName );
             pin->SetNumber( pinNumber );
@@ -1006,7 +1006,7 @@ std::pair<LIB_SYMBOL*, bool> SCH_EASYEDA_PARSER::MakePowerSymbol( const wxString
     ksymbol->SetShowPinNames( false );
     ksymbol->SetShowPinNumbers( false );
 
-    std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( ksymbol.get() );
+    std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( ksymbol.get() );
 
     pin->SetName( aNetname );
     pin->SetNumber( wxS( "1" ) );

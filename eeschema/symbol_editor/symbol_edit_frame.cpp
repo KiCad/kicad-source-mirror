@@ -1385,7 +1385,7 @@ void SYMBOL_EDIT_FRAME::FocusOnItem( SCH_ITEM* aItem )
 
     if( m_symbol )
     {
-        for( LIB_PIN* pin : m_symbol->GetAllLibPins() )
+        for( SCH_PIN* pin : m_symbol->GetAllLibPins() )
         {
             if( pin->m_Uuid == lastBrightenedItemID )
                 lastItem = pin;

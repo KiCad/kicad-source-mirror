@@ -421,7 +421,7 @@ TYPE SIM_MODEL::ReadTypeFromFields( const std::vector<SCH_FIELD>& aFields, REPOR
 
 
 void SIM_MODEL::ReadDataFields( const std::vector<SCH_FIELD>* aFields,
-                                const std::vector<LIB_PIN*>& aPins )
+                                const std::vector<SCH_PIN*>& aPins )
 {
     bool diffMode = GetFieldValue( aFields, SIM_LIBRARY_KIBIS::DIFF_FIELD ) == "1";
     SwitchSingleEndedDiff( diffMode );
@@ -489,7 +489,7 @@ void SIM_MODEL::WriteFields( std::vector<SCH_FIELD>& aFields ) const
 }
 
 
-std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_PIN*>& aPins,
+std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<SCH_PIN*>& aPins,
                                               REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model = Create( aType );
@@ -509,7 +509,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( TYPE aType, const std::vector<LIB_
 
 
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
-                                              const std::vector<LIB_PIN*>& aPins,
+                                              const std::vector<SCH_PIN*>& aPins,
                                               REPORTER& aReporter )
 {
     std::unique_ptr<SIM_MODEL> model;
@@ -546,7 +546,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 
 
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
-                                              const std::vector<LIB_PIN*>& aPins,
+                                              const std::vector<SCH_PIN*>& aPins,
                                               const std::vector<SCH_FIELD>& aFields,
                                               REPORTER& aReporter )
 {
@@ -594,7 +594,7 @@ std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const SIM_MODEL* aBaseModel,
 
 
 std::unique_ptr<SIM_MODEL> SIM_MODEL::Create( const std::vector<SCH_FIELD>& aFields,
-                                              const std::vector<LIB_PIN*>& aPins,
+                                              const std::vector<SCH_PIN*>& aPins,
                                               bool aResolved, REPORTER& aReporter )
 {
     TYPE type = ReadTypeFromFields( aFields, aReporter );
@@ -980,7 +980,7 @@ SIM_MODEL::SIM_MODEL( TYPE aType, std::unique_ptr<SPICE_GENERATOR> aSpiceGenerat
 }
 
 
-void SIM_MODEL::createPins( const std::vector<LIB_PIN*>& aSymbolPins )
+void SIM_MODEL::createPins( const std::vector<SCH_PIN*>& aSymbolPins )
 {
     // Default pin sequence: model pins are the same as symbol pins.
     // Excess model pins are set as Not Connected.
@@ -1225,7 +1225,7 @@ bool SIM_MODEL::InferSimModel( T& aSymbol, std::vector<SCH_FIELD>* aFields, bool
     wxString              library = GetFieldValue( aFields, SIM_LIBRARY_FIELD, aResolve );
     wxString              modelName = GetFieldValue( aFields, SIM_NAME_FIELD, aResolve );
     wxString              value = GetFieldValue( aFields, SIM_VALUE_FIELD, aResolve );
-    std::vector<LIB_PIN*> pins = aSymbol.GetAllLibPins();
+    std::vector<SCH_PIN*> pins = aSymbol.GetAllLibPins();
 
     *aDeviceType = GetFieldValue( aFields, SIM_DEVICE_FIELD, aResolve );
     *aModelType = GetFieldValue( aFields, SIM_DEVICE_SUBTYPE_FIELD, aResolve );
@@ -1527,7 +1527,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
             };
 
     auto generateDefaultPinMapFromSymbol =
-            []( const std::vector<LIB_PIN*>& sourcePins )
+            []( const std::vector<SCH_PIN*>& sourcePins )
             {
                 wxString pinMap;
 
@@ -1549,7 +1549,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
 
     wxString              prefix = aSymbol.GetPrefix();
     SCH_FIELD*            valueField = aSymbol.FindField( wxT( "Value" ) );
-    std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
+    std::vector<SCH_PIN*> sourcePins = aSymbol.GetAllLibPins();
     bool                  sourcePinsSorted = false;
 
     auto lazySortSourcePins =
@@ -1558,7 +1558,7 @@ void SIM_MODEL::MigrateSimModel( T& aSymbol, const PROJECT* aProject )
                 if( !sourcePinsSorted )
                 {
                     std::sort( sourcePins.begin(), sourcePins.end(),
-                               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+                               []( const SCH_PIN* lhs, const SCH_PIN* rhs )
                                {
                                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                                } );

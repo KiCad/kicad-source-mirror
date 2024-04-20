@@ -23,8 +23,7 @@
 
 #include "dialog_lib_edit_pin_table_base.h"
 
-#include <lib_pin.h>
-#include <symbol_library.h>
+#include <sch_pin.h>
 
 enum COL_ORDER
 {
@@ -73,8 +72,8 @@ public:
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnCancel( wxCommandEvent& event ) override;
     void OnClose( wxCloseEvent& event ) override;
-    void AddPin( LIB_PIN* pin );
-    void RemovePin( LIB_PIN* pin );
+    void AddPin( SCH_PIN* pin );
+    void RemovePin( SCH_PIN* pin );
     bool IsDisplayGrouped();
 
 protected:
@@ -87,7 +86,7 @@ protected:
     int                   m_originalColWidths[ COL_COUNT ];
     std::bitset<64>       m_columnsShown;
     LIB_SYMBOL*           m_symbol;
-    std::vector<LIB_PIN*> m_pins;       // a copy of the pins owned by me
+    std::vector<SCH_PIN*> m_pins;       // a copy of the pins owned by me
     bool                  m_modified;   ///< true when there are unsaved changes
     wxSize                m_size;
 

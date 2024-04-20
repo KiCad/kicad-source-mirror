@@ -39,7 +39,6 @@
 #include <io/eagle/eagle_parser.h>
 #include <string_utils.h>
 #include <lib_id.h>
-#include <lib_pin.h>
 #include <project.h>
 #include <project_sch.h>
 #include <sch_bus_entry.h>
@@ -50,6 +49,7 @@
 #include <sch_io/kicad_legacy/sch_io_kicad_legacy.h>
 #include <sch_marker.h>
 #include <sch_screen.h>
+#include <sch_pin.h>
 #include <sch_shape.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
@@ -1967,10 +1967,7 @@ void SCH_IO_EAGLE::loadInstance( wxXmlNode* aInstanceNode )
 
     symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
 
-    std::vector<LIB_PIN*> pins;
-    symbol->GetLibPins( pins );
-
-    for( const LIB_PIN* pin : pins )
+    for( const SCH_PIN* pin : symbol->GetLibPins() )
         m_connPoints[symbol->GetPinPhysicalPosition( pin )].emplace( pin );
 
     if( part->IsPower() )
@@ -2153,7 +2150,7 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
         else if( nodeName == wxT( "pin" ) )
         {
             EPIN                     ePin = EPIN( currentNode );
-            std::unique_ptr<LIB_PIN> pin( loadPin( aSymbol, currentNode, &ePin, aGateNumber ) );
+            std::unique_ptr<SCH_PIN> pin( loadPin( aSymbol, currentNode, &ePin, aGateNumber ) );
             pincount++;
 
             pin->SetType( ELECTRICAL_PINTYPE::PT_BIDI );
@@ -2192,7 +2189,7 @@ bool SCH_IO_EAGLE::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_SYMBO
 
                         for( unsigned i = 0; i < pads.GetCount(); i++ )
                         {
-                            LIB_PIN* apin = new LIB_PIN( *pin );
+                            SCH_PIN* apin = new SCH_PIN( *pin );
 
                             wxString padname( pads[i] );
                             apin->SetNumber( padname );
@@ -2429,10 +2426,10 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( wxXmlNode* aPolygonNode, int aGateN
 }
 
 
-LIB_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aPin,
+SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode* aPin,
                                 EPIN* aEPin, int aGateNumber )
 {
-    std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( aSymbol.get() );
+    std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( aSymbol.get() );
     pin->SetPosition( VECTOR2I( aEPin->x.ToSchUnits(), aEPin->y.ToSchUnits() ) );
     pin->SetName( aEPin->name );
     pin->SetUnit( aGateNumber );
@@ -3481,7 +3478,7 @@ const SEG* SCH_IO_EAGLE::SEG_DESC::LabelAttached( const SCH_TEXT* aLabel ) const
 
 // TODO could be used to place junctions, instead of IsJunctionNeeded()
 // (see SCH_EDIT_FRAME::importFile())
-bool SCH_IO_EAGLE::checkConnections( const SCH_SYMBOL* aSymbol, const LIB_PIN* aPin ) const
+bool SCH_IO_EAGLE::checkConnections( const SCH_SYMBOL* aSymbol, const SCH_PIN* aPin ) const
 {
     wxCHECK( aSymbol && aPin, false );
 
@@ -3511,12 +3508,11 @@ void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScr
 
     int                   unit      = aSymbol->GetUnit();
     const wxString        reference = aSymbol->GetField( REFERENCE_FIELD )->GetText();
-    std::vector<LIB_PIN*> pins;
-    aSymbol->GetLibSymbolRef()->GetPins( pins );
-    std::set<int> missingUnits;
+    std::vector<SCH_PIN*> pins      = aSymbol->GetLibSymbolRef()->GetAllLibPins();
+    std::set<int>         missingUnits;
 
     // Search all units for pins creating implicit connections
-    for( const LIB_PIN* pin : pins )
+    for( const SCH_PIN* pin : pins )
     {
         if( pin->GetType() == ELECTRICAL_PINTYPE::PT_POWER_IN )
         {
@@ -3536,11 +3532,12 @@ void SCH_IO_EAGLE::addImplicitConnections( SCH_SYMBOL* aSymbol, SCH_SCREEN* aScr
 
                     switch( pin->GetOrientation() )
                     {
-                    case PIN_ORIENTATION::PIN_LEFT:
-                        netLabel->SetSpinStyle( SPIN_STYLE::RIGHT );
-                        break;
+                    default:
                     case PIN_ORIENTATION::PIN_RIGHT:
                         netLabel->SetSpinStyle( SPIN_STYLE::LEFT );
+                        break;
+                    case PIN_ORIENTATION::PIN_LEFT:
+                        netLabel->SetSpinStyle( SPIN_STYLE::RIGHT );
                         break;
                     case PIN_ORIENTATION::PIN_UP:
                         netLabel->SetSpinStyle( SPIN_STYLE::UP );

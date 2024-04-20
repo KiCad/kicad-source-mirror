@@ -32,6 +32,7 @@
 #include <qa_utils/wx_utils/unit_test_utils.h>
 
 #include <template_fieldnames.h>
+#include <sch_field.h>
 
 
 namespace BOOST_TEST_PRINT_NAMESPACE_OPEN

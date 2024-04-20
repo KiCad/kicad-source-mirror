@@ -370,8 +370,8 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFO
         break;
     }
 
-    case LIB_PIN_T:
-        savePin( static_cast<LIB_PIN*>( aItem ), aFormatter, aNestLevel );
+    case SCH_PIN_T:
+        savePin( static_cast<SCH_PIN*>( aItem ), aFormatter, aNestLevel );
         break;
 
     case SCH_TEXT_T:
@@ -419,10 +419,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
 }
 
 
-void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter,
+void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( SCH_PIN* aPin, OUTPUTFORMATTER& aFormatter,
                                             int aNestLevel )
 {
-    wxCHECK_RET( aPin && aPin->Type() == LIB_PIN_T, "Invalid LIB_PIN object." );
+    wxCHECK_RET( aPin && aPin->Type() == SCH_PIN_T, "Invalid SCH_PIN object." );
 
     aPin->ClearFlags( IS_CHANGED );
 
@@ -458,7 +458,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( LIB_PIN* aPin, OUTPUTFORMATTER& aFor
                                                            aPin->GetNumberTextSize() ).c_str() );
 
 
-    for( const std::pair<const wxString, LIB_PIN::ALT>& alt : aPin->GetAlternates() )
+    for( const std::pair<const wxString, SCH_PIN::ALT>& alt : aPin->GetAlternates() )
     {
         aFormatter.Print( aNestLevel + 1, "(alternate %s %s %s)\n",
                           aFormatter.Quotew( alt.second.m_Name ).c_str(),

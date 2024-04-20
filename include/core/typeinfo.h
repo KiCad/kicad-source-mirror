@@ -150,7 +150,7 @@ enum KICAD_T
     SCH_FIELD_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
-    LIB_PIN_T,
+    SCH_PIN_T,
 
     // Schematic draw Items.  The order of these items effects the sort order.
     // It is currently ordered to mimic the old Eeschema locate behavior where
@@ -171,7 +171,6 @@ enum KICAD_T
     SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
-    SCH_PIN_T,
 
     // Be prudent with these types:
     // they should be used only to locate a specific field type among SCH_FIELD_Ts
@@ -409,7 +408,6 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCHEMATIC_T:
 
     case LIB_SYMBOL_T:
-    case LIB_PIN_T:
         return true;
 
     default:

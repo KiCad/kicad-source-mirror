@@ -36,7 +36,7 @@
 
 #include <base_units.h>
 #include <lib_id.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <math/util.h>                           // KiROUND, Clamp
 #include <font/font.h>
 #include <string_utils.h>
@@ -1415,7 +1415,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolCircle()
 }
 
 
-LIB_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
+SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
 {
     auto parseType = [&]( T token ) -> ELECTRICAL_PINTYPE
                      {
@@ -1470,7 +1470,7 @@ LIB_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
     T                        token;
     wxString                 tmp;
     wxString                 error;
-    std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( nullptr );
+    std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( nullptr );
 
     pin->SetUnit( m_unit );
     pin->SetBodyStyle( m_bodyStyle );
@@ -1592,7 +1592,7 @@ LIB_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
 
         case T_alternate:
         {
-            LIB_PIN::ALT alt;
+            SCH_PIN::ALT alt;
 
             token = NextTok();
 

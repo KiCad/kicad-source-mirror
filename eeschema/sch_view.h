@@ -34,7 +34,7 @@
 class SCH_SHEET;
 class SCH_SCREEN;
 class LIB_SYMBOL;
-class LIB_PIN;
+class SCH_PIN;
 class SCH_BASE_FRAME;
 class DS_PROXY_VIEW_ITEM;
 

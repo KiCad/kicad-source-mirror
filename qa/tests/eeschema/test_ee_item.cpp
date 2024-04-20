@@ -43,8 +43,7 @@
 #include <sch_symbol.h>
 #include <sch_sheet_pin.h>
 #include <sch_sheet.h>
-
-#include <lib_pin.h>
+#include <sch_pin.h>
 
 #include <erc_settings.h>
 
@@ -53,7 +52,7 @@ class TEST_EE_ITEM_FIXTURE
 public:
     SCH_SHEET                 m_sheet;
     LIB_SYMBOL                m_symbol;
-    LIB_PIN                   m_pin;
+    SCH_PIN                   m_pin;
     std::shared_ptr<ERC_ITEM> m_ercItem;
 
     TEST_EE_ITEM_FIXTURE() :
@@ -113,10 +112,9 @@ public:
                                       "test aPin" );
 
         case SCH_SHEET_T:           return new SCH_SHEET();
-        case LIB_PIN_T:             return new LIB_PIN( &m_symbol );
+        case SCH_PIN_T:             return new SCH_PIN( &m_symbol );
 
         case SCHEMATIC_T:
-        case SCH_PIN_T:
         case LIB_SYMBOL_T:          return nullptr;
 
         default:

@@ -99,15 +99,10 @@ static wxString netList( LIB_SYMBOL* aSymbol )
      *   pinNumber pinName <tab> pinNumber pinName...
      *   fpFilter fpFilter...
      */
-    wxString netlist;
-
-    std::vector<LIB_PIN*> pinList;
-
-    aSymbol->GetPins( pinList, 0, 1 );   // All units, but a single convert
-
+    wxString      netlist;
     wxArrayString pins;
 
-    for( LIB_PIN* pin : pinList )
+    for( SCH_PIN* pin : aSymbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
         pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
 
     if( !pins.IsEmpty() )

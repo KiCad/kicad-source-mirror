@@ -51,7 +51,7 @@ class SCH_FIELD;
 class STRING_UTF8_MAP;
 class LIB_SYMBOL;
 class SYMBOL_LIB;
-class LIB_PIN;
+class SCH_PIN;
 class wxXmlNode;
 
 
@@ -156,7 +156,7 @@ private:
     SCH_SHAPE*    loadSymbolRectangle( wxXmlNode* aRectNode, int aGateNumber );
     SCH_SHAPE*    loadSymbolPolyLine( wxXmlNode* aPolygonNode, int aGateNumber );
     SCH_ITEM*     loadSymbolWire( wxXmlNode* aWireNode, int aGateNumber );
-    LIB_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*, EPIN* epin,
+    SCH_PIN*      loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*, EPIN* epin,
                            int aGateNumber );
     SCH_TEXT*     loadSymbolText( wxXmlNode* aLibText, int aGateNumber );
     void          loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*>& aLines );
@@ -181,7 +181,7 @@ private:
     wxFileName      getLibFileName();
 
     ///< Checks if there are other wires or pins at the position of the tested pin
-    bool checkConnections( const SCH_SYMBOL* aSymbol, const LIB_PIN* aPin ) const;
+    bool checkConnections( const SCH_SYMBOL* aSymbol, const SCH_PIN* aPin ) const;
 
     /**
      * Create net labels to emulate implicit connections in Eagle.

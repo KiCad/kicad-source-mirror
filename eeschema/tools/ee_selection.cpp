@@ -65,11 +65,11 @@ EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
     for( EDA_ITEM* item : m_items )
     {
         SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
-        LIB_PIN*  lib_pin = dynamic_cast<LIB_PIN*>( item );
+        SCH_PIN*  pin = dynamic_cast<SCH_PIN*>( item );
 
         // Prefer connection points (which should remain on grid)
 
-        if( ( sch_item && sch_item->IsConnectable() ) || lib_pin )
+        if( ( sch_item && sch_item->IsConnectable() ) || pin )
             processItem( item, &topLeftConnectedItem, &topLeftConnectedPos );
 
         processItem( item, &topLeftItem, &topLeftPos );

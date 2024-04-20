@@ -345,7 +345,7 @@ TOOL_ACTION EE_ACTIONS::placeSymbolPin( TOOL_ACTION_ARGS()
         .Tooltip( _( "Add a pin" ) )
         .Icon( BITMAPS::pin )
         .Flags( AF_ACTIVATE )
-        .Parameter( LIB_PIN_T ) );
+        .Parameter( SCH_PIN_T ) );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolText( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolDrawing.placeSymbolText" )

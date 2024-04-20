@@ -42,7 +42,7 @@
 
 #include <symbol_library.h>
 #include <connection_graph.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <sch_symbol.h>
 #include <sch_junction.h>
 #include <sch_line.h>
@@ -1220,11 +1220,11 @@ void SCH_SCREEN::ClearDrawingState()
 }
 
 
-LIB_PIN* SCH_SCREEN::GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol,
+SCH_PIN* SCH_SCREEN::GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol,
                              bool aEndPointOnly ) const
 {
     SCH_SYMBOL*  candidate = nullptr;
-    LIB_PIN*     pin = nullptr;
+    SCH_PIN*     pin = nullptr;
 
     for( SCH_ITEM* item : Items().Overlapping( SCH_SYMBOL_T, aPosition ) )
     {
@@ -1237,10 +1237,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol,
             if( !candidate->GetLibSymbolRef() )
                 continue;
 
-            std::vector<LIB_PIN*> pins;
-            candidate->GetLibPins( pins );
-
-            for( LIB_PIN* test_pin : pins )
+            for( SCH_PIN* test_pin : candidate->GetLibPins() )
             {
                 if( candidate->GetPinPhysicalPosition( test_pin ) == aPosition )
                 {
@@ -1254,7 +1251,7 @@ LIB_PIN* SCH_SCREEN::GetPin( const VECTOR2I& aPosition, SCH_SYMBOL** aSymbol,
         }
         else
         {
-            pin = (LIB_PIN*) candidate->GetDrawItem( aPosition, LIB_PIN_T );
+            pin = static_cast<SCH_PIN*>( candidate->GetDrawItem( aPosition, SCH_PIN_T ) );
 
             if( pin )
                 break;

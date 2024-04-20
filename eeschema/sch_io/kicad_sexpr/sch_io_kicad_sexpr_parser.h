@@ -37,7 +37,7 @@
 #include <default_values.h>    // For some default values
 
 
-class LIB_PIN;
+class SCH_PIN;
 class PAGE_INFO;
 class SCH_BITMAP;
 class SCH_BUS_WIRE_ENTRY;
@@ -196,7 +196,7 @@ private:
     SCH_SHAPE* parseSymbolArc();
     SCH_SHAPE* parseSymbolBezier();
     SCH_SHAPE* parseSymbolCircle();
-    LIB_PIN* parsePin();
+    SCH_PIN* parsePin();
     SCH_SHAPE* parseSymbolPolyLine();
     SCH_SHAPE* parseSymbolRectangle();
     SCH_TEXT* parseSymbolText();

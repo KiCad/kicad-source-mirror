@@ -20,8 +20,9 @@
 #include <magic_enum.hpp>
 #include <wx/log.h>
 
+#include <lib_symbol.h>
 #include <sch_shape.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <sch_text.h>
 #include <macros.h>
 #include <richio.h>
@@ -1080,12 +1081,12 @@ SCH_SHAPE* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadRect( LINE_READER& aReader )
 }
 
 
-LIB_PIN* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
+SCH_PIN* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol,
                                                  LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
 
-    wxCHECK_MSG( strCompare( "X", line, &line ), nullptr, "Invalid LIB_PIN definition" );
+    wxCHECK_MSG( strCompare( "X", line, &line ), nullptr, "Invalid SCH_PIN definition" );
 
     wxString name;
     wxString number;
@@ -1233,8 +1234,7 @@ LIB_PIN* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aS
                            aReader.LineNumber(), pos );
     }
 
-
-    LIB_PIN* pin = new LIB_PIN( aSymbol.get(),
+    SCH_PIN* pin = new SCH_PIN( aSymbol.get(),
                                 ConvertToNewOverbarNotation( name ),
                                 ConvertToNewOverbarNotation( number ),
                                 orientation,
@@ -1263,7 +1263,7 @@ LIB_PIN* SCH_IO_KICAD_LEGACY_LIB_CACHE::loadPin( std::unique_ptr<LIB_SYMBOL>& aS
 
         int flags = 0;
 
-        for( int j = tmp.size(); j > 0; )
+        for( int j = (int) tmp.size(); j > 0; )
         {
             switch( tmp[--j].GetValue() )
             {
@@ -1572,8 +1572,8 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMA
         {
             switch( item.Type() )
             {
-            case LIB_PIN_T:
-                savePin( static_cast<LIB_PIN*>( &item ), aFormatter );
+            case SCH_PIN_T:
+                savePin( static_cast<SCH_PIN*>( &item ), aFormatter );
 
                 break;
             case SCH_TEXT_T:
@@ -1723,9 +1723,9 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::saveField( const SCH_FIELD* aField,
 }
 
 
-void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePin( const LIB_PIN* aPin, OUTPUTFORMATTER& aFormatter )
+void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePin( const SCH_PIN* aPin, OUTPUTFORMATTER& aFormatter )
 {
-    wxCHECK_RET( aPin && aPin->Type() == LIB_PIN_T, "Invalid LIB_PIN object." );
+    wxCHECK_RET( aPin && aPin->Type() == SCH_PIN_T, "Invalid SCH_PIN object." );
 
     int      Etype;
 
@@ -1784,7 +1784,7 @@ void SCH_IO_KICAD_LEGACY_LIB_CACHE::savePin( const LIB_PIN* aPin, OUTPUTFORMATTE
 
     aFormatter.Print( 0, "\n" );
 
-    const_cast<LIB_PIN*>( aPin )->ClearFlags( IS_CHANGED );
+    const_cast<SCH_PIN*>( aPin )->ClearFlags( IS_CHANGED );
 }
 
 

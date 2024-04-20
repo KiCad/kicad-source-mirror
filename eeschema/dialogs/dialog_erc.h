@@ -26,11 +26,9 @@
 #define _DIALOG_ERC_H_
 
 #include <wx/htmllbox.h>
-#include <lib_pin.h>        // For PINTYPE_COUNT definition
 
 #include <dialog_erc_base.h>
 #include <widgets/progress_reporter_base.h>
-#include <erc_settings.h>
 
 
 /**

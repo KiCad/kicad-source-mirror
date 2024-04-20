@@ -26,7 +26,7 @@
 #include <ki_exception.h>
 #include <locale_io.h>
 #include <pegtl/contrib/parse_tree.hpp>
-#include <lib_pin.h>
+#include <sch_pin.h>
 
 
 void SIM_LIBRARY_KIBIS::ReadFile( const wxString& aFilePath, REPORTER& aReporter )
@@ -41,11 +41,11 @@ void SIM_LIBRARY_KIBIS::ReadFile( const wxString& aFilePath, REPORTER& aReporter
         return;
     }
 
-    LIB_PIN pinA( nullptr );
-    LIB_PIN pinB( nullptr );
+    SCH_PIN pinA( nullptr );
+    SCH_PIN pinB( nullptr );
     pinA.SetNumber( wxT( "1" ) );
     pinB.SetNumber( wxT( "2" ) );
-    std::vector<LIB_PIN*> pins = { &pinA, &pinB };
+    std::vector<SCH_PIN*> pins = { &pinA, &pinB };
 
     for( KIBIS_COMPONENT& kcomp : m_kibis.m_components )
     {

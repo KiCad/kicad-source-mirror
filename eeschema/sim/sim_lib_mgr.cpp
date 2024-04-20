@@ -153,7 +153,7 @@ void SIM_LIB_MGR::SetLibrary( const wxString& aLibraryPath, REPORTER& aReporter 
 }
 
 
-SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, const std::vector<LIB_PIN*>& aPins,
+SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, const std::vector<SCH_PIN*>& aPins,
                                      REPORTER& aReporter )
 {
     m_models.push_back( SIM_MODEL::Create( aType, aPins, aReporter ) );
@@ -162,7 +162,7 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( SIM_MODEL::TYPE aType, const std::vector<LI
 
 
 SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
-                                     const std::vector<LIB_PIN*>& aPins, REPORTER& aReporter )
+                                     const std::vector<SCH_PIN*>& aPins, REPORTER& aReporter )
 {
     m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aReporter ) );
     return *m_models.back();
@@ -170,7 +170,7 @@ SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
 
 
 SIM_MODEL& SIM_LIB_MGR::CreateModel( const SIM_MODEL* aBaseModel,
-                                     const std::vector<LIB_PIN*>& aPins,
+                                     const std::vector<SCH_PIN*>& aPins,
                                      const std::vector<SCH_FIELD>& aFields, REPORTER& aReporter )
 {
     m_models.push_back( SIM_MODEL::Create( aBaseModel, aPins, aFields, aReporter ) );
@@ -232,10 +232,10 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
         storeInValue = true;
     }
 
-    std::vector<LIB_PIN*> sourcePins = aSymbol.GetAllLibPins();
+    std::vector<SCH_PIN*> sourcePins = aSymbol.GetAllLibPins();
 
     std::sort( sourcePins.begin(), sourcePins.end(),
-               []( const LIB_PIN* lhs, const LIB_PIN* rhs )
+               []( const SCH_PIN* lhs, const SCH_PIN* rhs )
                {
                    return StrNumCmp( lhs->GetNumber(), rhs->GetNumber(), true ) < 0;
                } );
@@ -249,7 +249,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const SCH_SHEET_PATH* aSheetPath, S
 
 
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFields,
-                                             const std::vector<LIB_PIN*>& aPins, bool aResolved,
+                                             const std::vector<SCH_PIN*>& aPins, bool aResolved,
                                              REPORTER& aReporter )
 {
     std::string libraryPath = SIM_MODEL::GetFieldValue( &aFields, SIM_LIBRARY::LIBRARY_FIELD );
@@ -270,7 +270,7 @@ SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const std::vector<SCH_FIELD>& aFiel
 SIM_LIBRARY::MODEL SIM_LIB_MGR::CreateModel( const wxString& aLibraryPath,
                                              const std::string& aBaseModelName,
                                              const std::vector<SCH_FIELD>& aFields,
-                                             const std::vector<LIB_PIN*>& aPins,
+                                             const std::vector<SCH_PIN*>& aPins,
                                              REPORTER& aReporter )
 {
     wxString     path;

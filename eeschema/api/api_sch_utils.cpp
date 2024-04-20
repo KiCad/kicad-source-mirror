@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <lib_symbol.h>
 #include <sch_bitmap.h>
 #include <sch_bus_entry.h>
@@ -41,10 +41,6 @@
 std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer )
 {
     SCH_ITEM* parentSchItem = dynamic_cast<SCH_ITEM*>( aContainer );
-    LIB_SYMBOL* parentLibSymbol = nullptr;
-
-    if( aContainer && aContainer->Type() == LIB_SYMBOL_T )
-        parentLibSymbol = static_cast<LIB_SYMBOL*>( aContainer );
 
     switch( aType )
     {
@@ -83,13 +79,13 @@ std::unique_ptr<EDA_ITEM> CreateItemForType( KICAD_T aType, EDA_ITEM* aContainer
 
     case SCH_PIN_T:
     {
-        // TODO: constructing currently requires LIB_PIN and SCH_SYMBOL ptr,
-        // or SCH_SYMBOL and number+alt.  Need to determine ideal default ctor.
+        if( aContainer && aContainer->Type() == LIB_SYMBOL_T )
+            return std::make_unique<SCH_PIN>( static_cast<LIB_SYMBOL*>( aContainer ) );
+
         return nullptr;
     }
 
     case LIB_SYMBOL_T:          return nullptr; // TODO: ctor currently requires non-null name
-    case LIB_PIN_T:             return std::make_unique<LIB_PIN>( parentLibSymbol );
 
     default:
         return nullptr;

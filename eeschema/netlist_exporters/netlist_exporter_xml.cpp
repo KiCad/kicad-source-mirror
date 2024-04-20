@@ -41,7 +41,7 @@
 
 #include <set>
 
-static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 );
+static bool sortPinsByNumber( SCH_PIN* aPin1, SCH_PIN* aPin2 );
 
 bool NETLIST_EXPORTER_XML::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions,
                                          REPORTER& aReporter )
@@ -570,8 +570,6 @@ XNODE* NETLIST_EXPORTER_XML::makeLibraries()
 XNODE* NETLIST_EXPORTER_XML::makeLibParts()
 {
     XNODE*                  xlibparts = node( wxT( "libparts" ) );   // auto_ptr
-
-    std::vector<LIB_PIN*>   pinList;
     std::vector<SCH_FIELD*> fieldList;
 
     m_libraries.clear();
@@ -621,8 +619,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
         }
 
         //----- show the pins here ------------------------------------
-        pinList.clear();
-        lcomp->GetPins( pinList, 0, 0 );
+        std::vector<SCH_PIN*> pinList = lcomp->GetPins( 0, 0 );
 
         /*
          * We must erase redundant Pins references in pinList
@@ -633,6 +630,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
          * found more than once.
          */
         sort( pinList.begin(), pinList.end(), sortPinsByNumber );
+
         for( int ii = 0; ii < (int)pinList.size()-1; ii++ )
         {
             if( pinList[ii]->GetNumber() == pinList[ii+1]->GetNumber() )
@@ -647,6 +645,7 @@ XNODE* NETLIST_EXPORTER_XML::makeLibParts()
             XNODE*     pins;
 
             xlibpart->AddChild( pins = node( wxT( "pins" ) ) );
+
             for( unsigned i=0; i<pinList.size();  ++i )
             {
                 XNODE*     pin;
@@ -683,7 +682,9 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     struct NET_NODE
     {
-        NET_NODE( SCH_PIN* aPin, const SCH_SHEET_PATH& aSheet ) : m_Pin( aPin ), m_Sheet( aSheet )
+        NET_NODE( SCH_PIN* aPin, const SCH_SHEET_PATH& aSheet ) :
+                m_Pin( aPin ),
+                m_Sheet( aSheet )
         {}
 
         SCH_PIN*       m_Pin;
@@ -692,7 +693,10 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
     struct NET_RECORD
     {
-        NET_RECORD( const wxString& aName ) : m_Name( aName ), m_HasNoConnect( false ){};
+        NET_RECORD( const wxString& aName ) :
+                m_Name( aName ),
+                m_HasNoConnect( false )
+        {};
 
         wxString              m_Name;
         bool                  m_HasNoConnect;
@@ -724,8 +728,8 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
             {
                 if( item->Type() == SCH_PIN_T )
                 {
-                    SCH_PIN* pin = static_cast<SCH_PIN*>( item );
-                    SCH_SYMBOL*  symbol = static_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
+                    SCH_PIN*    pin = static_cast<SCH_PIN*>( item );
+                    SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( pin->GetParentSymbol() );
 
                     if( !symbol
                        || ( ( aCtl & GNL_OPT_BOM ) && symbol->GetExcludedFromBOM() )
@@ -755,7 +759,7 @@ XNODE* NETLIST_EXPORTER_XML::makeListOfNets( unsigned aCtl )
 
         // Netlist ordering: Net name, then ref des, then pin name
         std::sort( net_record->m_Nodes.begin(), net_record->m_Nodes.end(),
-        []( const NET_NODE& a, const NET_NODE& b )
+                []( const NET_NODE& a, const NET_NODE& b )
                 {
                     wxString refA = a.m_Pin->GetParentSymbol()->GetRef( &a.m_Sheet );
                     wxString refB = b.m_Pin->GetParentSymbol()->GetRef( &b.m_Sheet );
@@ -852,7 +856,7 @@ XNODE* NETLIST_EXPORTER_XML::node( const wxString& aName,
 }
 
 
-static bool sortPinsByNumber( LIB_PIN* aPin1, LIB_PIN* aPin2 )
+static bool sortPinsByNumber( SCH_PIN* aPin1, SCH_PIN* aPin2 )
 {
     // return "lhs < rhs"
     return StrNumCmp( aPin1->GetShownNumber(), aPin2->GetShownNumber(), true ) < 0;

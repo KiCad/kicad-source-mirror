@@ -27,9 +27,9 @@
 #ifndef LIB_SYMBOL_H
 #define LIB_SYMBOL_H
 
-#include <general.h>
 #include <symbol.h>
 #include <sch_field.h>
+#include <sch_pin.h>
 #include <lib_tree_item.h>
 #include <vector>
 #include <core/multivector.h>
@@ -39,13 +39,12 @@ class OUTPUTFORMATTER;
 class REPORTER;
 class SYMBOL_LIB;
 class LIB_SYMBOL;
-class LIB_PIN;
 class TEST_LIB_SYMBOL_FIXTURE;
 
 
 typedef std::shared_ptr<LIB_SYMBOL>       LIB_SYMBOL_SPTR;      ///< shared pointer to LIB_SYMBOL
 typedef std::weak_ptr<LIB_SYMBOL>         LIB_SYMBOL_REF;       ///< weak pointer to LIB_SYMBOL
-typedef MULTIVECTOR<SCH_ITEM, SCH_SHAPE_T, LIB_PIN_T> LIB_ITEMS_CONTAINER;
+typedef MULTIVECTOR<SCH_ITEM, SCH_SHAPE_T, SCH_PIN_T> LIB_ITEMS_CONTAINER;
 typedef LIB_ITEMS_CONTAINER::ITEM_PTR_VECTOR LIB_ITEMS;
 
 
@@ -387,18 +386,17 @@ public:
      * Note pin objects are owned by the draw list of the symbol.  Deleting any of the objects
      * will leave list in a unstable state and will likely segfault when the list is destroyed.
      *
-     * @param aList - Pin list to place pin object pointers into.
      * @param aUnit - Unit number of pins to collect.  Set to 0 to get pins from any symbol unit.
      * @param aBodyStyle - Symbol alternate body style of pins to collect.  Set to 0 to get pins
      *                     from any DeMorgan variant of symbol.
      */
-    void GetPins( std::vector<LIB_PIN*>& aList, int aUnit = 0, int aBodyStyle = 0 ) const;
+    std::vector<SCH_PIN*> GetPins( int aUnit = 0, int aBodyStyle = 0 ) const;
 
     /**
      * Return a list of pin pointers for all units / converts.  Used primarily for SPICE where
      * we want to treat all unit as a single part.
      */
-    std::vector<LIB_PIN*> GetAllLibPins() const;
+    std::vector<SCH_PIN*> GetAllLibPins() const;
 
     /**
      * @return a count of pins for all units / converts.
@@ -414,7 +412,7 @@ public:
      *                   required.
      * @return The pin object if found.  Otherwise NULL.
      */
-    LIB_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 ) const;
+    SCH_PIN* GetPin( const wxString& aNumber, int aUnit = 0, int aBodyStyle = 0 ) const;
 
     /**
      * Return true if this symbol's pins do not match another symbol's pins. This is used to

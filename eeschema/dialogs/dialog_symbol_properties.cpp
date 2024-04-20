@@ -100,7 +100,7 @@ public:
 
         for( const SCH_PIN& pin : *this )
         {
-            LIB_PIN*        lib_pin = pin.GetLibPin();
+            SCH_PIN*        lib_pin = pin.GetLibPin();
             wxGridCellAttr* attr = nullptr;
 
             if( lib_pin->GetAlternates().empty() )
@@ -114,7 +114,7 @@ public:
                 wxArrayString choices;
                 choices.push_back( lib_pin->GetName() );
 
-                for( const std::pair<const wxString, LIB_PIN::ALT>& alt : lib_pin->GetAlternates() )
+                for( const std::pair<const wxString, SCH_PIN::ALT>& alt : lib_pin->GetAlternates() )
                     choices.push_back( alt.first );
 
                 attr = new wxGridCellAttr();

@@ -39,6 +39,7 @@
 #include <sch_edit_frame.h>       // SYMBOL_ORIENTATION_T
 #include <sch_junction.h>
 #include <sch_line.h>
+#include <sch_pin.h>
 #include <sch_shape.h>
 #include <sch_no_connect.h>
 #include <sch_text.h>
@@ -49,7 +50,6 @@
 #include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <sch_screen.h>
-#include <lib_pin.h>
 #include <io/kicad/kicad_io_utils.h>
 #include <schematic_lexer.h>
 #include <sch_io/kicad_sexpr/sch_io_kicad_sexpr.h>

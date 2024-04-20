@@ -28,7 +28,7 @@
 #include <macros.h>
 
 // helper function to sort pins by pin num
-static bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst );
+static bool sort_by_pin_number( const SCH_PIN* ref, const SCH_PIN* tst );
 
 static void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
                                      EDA_DRAW_FRAME* aUnitsProvider );
@@ -70,8 +70,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
         aMessages.push_back( msg );
     }
 
-    std::vector<LIB_PIN*> pinList;
-    aSymbol->GetPins( pinList );
+    std::vector<SCH_PIN*> pinList = aSymbol->GetPins();
 
     // Test for duplicates:
     // Sort pins by pin num, so 2 duplicate pins
@@ -88,8 +87,8 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
 
     for( unsigned ii = 1; ii < pinList.size(); ii++ )
     {
-        LIB_PIN* pin  = pinList[ii - 1];
-        LIB_PIN* next = pinList[ii];
+        SCH_PIN* pin  = pinList[ii - 1];
+        SCH_PIN* next = pinList[ii];
 
         if( pin->GetNumber() != next->GetNumber() )
             continue;
@@ -207,7 +206,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
             aMessages.push_back( msg );
         }
 
-        LIB_PIN* pin = pinList[0];
+        SCH_PIN* pin = pinList[0];
 
         if( pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_IN
                 && pin->GetType() != ELECTRICAL_PINTYPE::PT_POWER_OUT )
@@ -226,7 +225,7 @@ void CheckLibSymbol( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessages,
     }
 
 
-    for( LIB_PIN* pin : pinList )
+    for( SCH_PIN* pin : pinList )
     {
         wxString pinName = pin->GetName();
 
@@ -408,7 +407,7 @@ void CheckLibSymbolGraphics( LIB_SYMBOL* aSymbol, std::vector<wxString>& aMessag
 }
 
 
-bool sort_by_pin_number( const LIB_PIN* ref, const LIB_PIN* tst )
+bool sort_by_pin_number( const SCH_PIN* ref, const SCH_PIN* tst )
 {
     // Use number as primary key
     int test = ref->GetNumber().Cmp( tst->GetNumber() );

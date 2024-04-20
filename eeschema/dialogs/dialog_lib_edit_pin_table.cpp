@@ -23,8 +23,8 @@
 
 #include "dialog_lib_edit_pin_table.h"
 #include "grid_tricks.h"
-#include "lib_pin.h"
-#include "pin_numbers.h"
+#include <sch_pin.h>
+#include <pin_numbers.h>
 #include "pgm_base.h"
 #include <base_units.h>
 #include <bitmaps.h>
@@ -155,7 +155,7 @@ public:
         return GetValue( m_rows[ aRow ], aCol, m_frame );
     }
 
-    static wxString GetValue( const std::vector<LIB_PIN*>& pins, int aCol,
+    static wxString GetValue( const std::vector<SCH_PIN*>& pins, int aCol,
                               EDA_DRAW_FRAME* aParentFrame )
     {
         wxString fieldValue;
@@ -163,7 +163,7 @@ public:
         if( pins.empty() )
             return fieldValue;
 
-        for( LIB_PIN* pin : pins )
+        for( SCH_PIN* pin : pins )
         {
             wxString val;
 
@@ -292,7 +292,7 @@ public:
             break;
         }
 
-        std::vector<LIB_PIN*> pins = m_rows[ aRow ];
+        std::vector<SCH_PIN*> pins = m_rows[ aRow ];
 
         // If the NUMBER column is edited and the pins are grouped, renumber, and add or
         // remove pins based on the comma separated list of pins.
@@ -316,8 +316,8 @@ public:
                 else
                 {
                     // Create new pins
-                    LIB_PIN* newPin = new LIB_PIN( this->m_symbol );
-                    LIB_PIN* last = pins.back();
+                    SCH_PIN* newPin = new SCH_PIN( this->m_symbol );
+                    SCH_PIN* last = pins.back();
 
                     newPin->SetNumber( pinName );
                     newPin->SetName( last->GetName() );
@@ -361,7 +361,7 @@ public:
             return;
         }
 
-        for( LIB_PIN* pin : pins )
+        for( SCH_PIN* pin : pins )
         {
             switch( aCol )
             {
@@ -454,7 +454,7 @@ public:
         m_edited = true;
     }
 
-    static int findRow( const std::vector<std::vector<LIB_PIN*>>& aRowSet, const wxString& aName )
+    static int findRow( const std::vector<std::vector<SCH_PIN*>>& aRowSet, const wxString& aName )
     {
         for( size_t i = 0; i < aRowSet.size(); ++i )
         {
@@ -465,7 +465,7 @@ public:
         return -1;
     }
 
-    static bool compare( const std::vector<LIB_PIN*>& lhs, const std::vector<LIB_PIN*>& rhs,
+    static bool compare( const std::vector<SCH_PIN*>& lhs, const std::vector<SCH_PIN*>& rhs,
                          int sortCol, bool ascending, EDA_DRAW_FRAME* parentFrame )
     {
         wxString lhStr = GetValue( lhs, sortCol, parentFrame );
@@ -518,10 +518,10 @@ public:
         return res;
     }
 
-    void RebuildRows( const std::vector<LIB_PIN*>& aPins, bool groupByName, bool groupBySelection )
+    void RebuildRows( const std::vector<SCH_PIN*>& aPins, bool groupByName, bool groupBySelection )
     {
         WX_GRID* grid = dynamic_cast<WX_GRID*>( GetView() );
-        std::vector<LIB_PIN*> clear_flags;
+        std::vector<SCH_PIN*> clear_flags;
 
         clear_flags.reserve( aPins.size() );
 
@@ -529,7 +529,7 @@ public:
         {
             if( groupBySelection )
             {
-                for( LIB_PIN* pin : aPins )
+                for( SCH_PIN* pin : aPins )
                     pin->ClearTempFlags();
 
                 int firstSelectedRow;
@@ -539,7 +539,7 @@ public:
 
                 for( int ii = 0; ii < selectedRowCount; ++ii )
                 {
-                    for( LIB_PIN* pin : m_rows[ firstSelectedRow + ii ] )
+                    for( SCH_PIN* pin : m_rows[ firstSelectedRow + ii ] )
                     {
                         pin->SetFlags( CANDIDATE );
                         clear_flags.push_back( pin );
@@ -558,9 +558,9 @@ public:
         m_rows.clear();
 
         if( groupBySelection )
-            m_rows.emplace_back( std::vector<LIB_PIN*>() );
+            m_rows.emplace_back( std::vector<SCH_PIN*>() );
 
-        for( LIB_PIN* pin : aPins )
+        for( SCH_PIN* pin : aPins )
         {
             if( m_unitFilter == -1 || pin->GetUnit() == 0 || pin->GetUnit() == m_unitFilter )
             {
@@ -573,7 +573,7 @@ public:
 
                 if( rowIndex < 0 )
                 {
-                    m_rows.emplace_back( std::vector<LIB_PIN*>() );
+                    m_rows.emplace_back( std::vector<SCH_PIN*>() );
                     rowIndex = m_rows.size() - 1;
                 }
 
@@ -590,7 +590,7 @@ public:
             ascending = GetView()->IsSortOrderAscending();
         }
 
-        for( std::vector<LIB_PIN*>& row : m_rows )
+        for( std::vector<SCH_PIN*>& row : m_rows )
             SortPins( row );
 
         if( !groupBySelection )
@@ -605,32 +605,32 @@ public:
                 GetView()->SelectRow( 0 );
         }
 
-        for( LIB_PIN* pin : clear_flags )
+        for( SCH_PIN* pin : clear_flags )
             pin->ClearFlags( CANDIDATE );
     }
 
     void SortRows( int aSortCol, bool ascending )
     {
         std::sort( m_rows.begin(), m_rows.end(),
-                   [ aSortCol, ascending, this ]( const std::vector<LIB_PIN*>& lhs,
-                                                  const std::vector<LIB_PIN*>& rhs ) -> bool
+                   [ aSortCol, ascending, this ]( const std::vector<SCH_PIN*>& lhs,
+                                                  const std::vector<SCH_PIN*>& rhs ) -> bool
                    {
                        return compare( lhs, rhs, aSortCol, ascending, m_frame );
                    } );
     }
 
-    void SortPins( std::vector<LIB_PIN*>& aRow )
+    void SortPins( std::vector<SCH_PIN*>& aRow )
     {
         std::sort( aRow.begin(), aRow.end(),
-                   []( LIB_PIN* lhs, LIB_PIN* rhs ) -> bool
+                   []( SCH_PIN* lhs, SCH_PIN* rhs ) -> bool
                    {
                        return PIN_NUMBERS::Compare( lhs->GetNumber(), rhs->GetNumber() ) < 0;
                    } );
     }
 
-    void AppendRow( LIB_PIN* aPin )
+    void AppendRow( SCH_PIN* aPin )
     {
-        std::vector<LIB_PIN*> row;
+        std::vector<SCH_PIN*> row;
         row.push_back( aPin );
         m_rows.push_back( row );
 
@@ -641,9 +641,9 @@ public:
         }
     }
 
-    std::vector<LIB_PIN*> RemoveRow( int aRow )
+    std::vector<SCH_PIN*> RemoveRow( int aRow )
     {
-        std::vector<LIB_PIN*> removedRow = m_rows[ aRow ];
+        std::vector<SCH_PIN*> removedRow = m_rows[ aRow ];
 
         m_rows.erase( m_rows.begin() + aRow );
 
@@ -656,7 +656,7 @@ public:
         return removedRow;
     }
 
-    std::vector<LIB_PIN*> GetRowPins( int aRow )
+    std::vector<SCH_PIN*> GetRowPins( int aRow )
     {
         return m_rows[ aRow ];
     }
@@ -698,9 +698,9 @@ private:
     SYMBOL_EDIT_FRAME*                 m_frame;
 
     // Because the rows of the grid can either be a single pin or a group of pins, the
-    // data model is a 2D vector.  If we're in the single pin case, each row's LIB_PINs
+    // data model is a 2D vector.  If we're in the single pin case, each row's SCH_PINs
     // contains only a single pin.
-    std::vector<std::vector<LIB_PIN*>> m_rows;
+    std::vector<std::vector<SCH_PIN*>> m_rows;
     int                                m_unitFilter;     // 0 to show pins for all units
 
     bool                               m_edited;
@@ -709,7 +709,7 @@ private:
     LIB_SYMBOL*                        m_symbol;    // Parent symbol that the pins belong to.
 
     std::unique_ptr<NUMERIC_EVALUATOR> m_eval;
-    std::map< std::pair<std::vector<LIB_PIN*>, int>, wxString > m_evalOriginal;
+    std::map< std::pair<std::vector<SCH_PIN*>, int>, wxString > m_evalOriginal;
 };
 
 
@@ -866,7 +866,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 
     // This is our copy of the pins.  If they were transferred to the part on an OK, then
     // m_pins will already be empty.
-    for( LIB_PIN* pin : m_pins )
+    for( SCH_PIN* pin : m_pins )
         delete pin;
 
     WINDOW_THAWER thawer( m_editFrame );
@@ -879,10 +879,10 @@ DIALOG_LIB_EDIT_PIN_TABLE::~DIALOG_LIB_EDIT_PIN_TABLE()
 bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataToWindow()
 {
     // Make a copy of the pins for editing
-    std::vector<LIB_PIN*> pins = m_symbol->GetAllLibPins();
+    std::vector<SCH_PIN*> pins = m_symbol->GetAllLibPins();
 
-    for( LIB_PIN* pin : pins )
-        m_pins.push_back( new LIB_PIN( *pin ) );
+    for( SCH_PIN* pin : pins )
+        m_pins.push_back( new SCH_PIN( *pin ) );
 
     m_dataModel->RebuildRows( m_pins, m_cbGroup->GetValue(), false );
 
@@ -908,16 +908,14 @@ bool DIALOG_LIB_EDIT_PIN_TABLE::TransferDataFromWindow()
         return false;
 
     // Delete the part's pins
-    std::vector<LIB_PIN*> pins = m_symbol->GetAllLibPins();
+    std::vector<SCH_PIN*> pins = m_symbol->GetAllLibPins();
 
-    for( LIB_PIN* pin : pins )
+    for( SCH_PIN* pin : pins )
         m_symbol->RemoveDrawItem( pin );
 
     // Transfer our pins to the part
-    for( LIB_PIN* pin : m_pins )
-    {
+    for( SCH_PIN* pin : m_pins )
         m_symbol->AddDrawItem( pin );
-    }
 
     m_pins.clear();
 
@@ -948,12 +946,12 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    LIB_PIN* newPin = new LIB_PIN( this->m_symbol );
+    SCH_PIN* newPin = new SCH_PIN( this->m_symbol );
 
     // Copy the settings of the last pin onto the new pin.
     if( m_pins.size() > 0 )
     {
-        LIB_PIN* last = m_pins.back();
+        SCH_PIN* last = m_pins.back();
 
         newPin->SetOrientation( last->GetOrientation() );
         newPin->SetType( last->GetType() );
@@ -991,7 +989,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
 }
 
 
-void DIALOG_LIB_EDIT_PIN_TABLE::AddPin( LIB_PIN* pin )
+void DIALOG_LIB_EDIT_PIN_TABLE::AddPin( SCH_PIN* pin )
 {
     m_pins.push_back( pin );
     updateSummary();
@@ -1018,16 +1016,16 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
     m_grid->SetGridCursor( nextSelRow, m_grid->GetGridCursorCol() );
     m_grid->SelectRow( nextSelRow );
 
-    std::vector<LIB_PIN*> removedRow = m_dataModel->RemoveRow( curRow );
+    std::vector<SCH_PIN*> removedRow = m_dataModel->RemoveRow( curRow );
 
-    for( LIB_PIN* pin : removedRow )
+    for( SCH_PIN* pin : removedRow )
         m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
 
     updateSummary();
 }
 
 
-void DIALOG_LIB_EDIT_PIN_TABLE::RemovePin( LIB_PIN* pin )
+void DIALOG_LIB_EDIT_PIN_TABLE::RemovePin( SCH_PIN* pin )
 {
     m_pins.erase( std::find( m_pins.begin(), m_pins.end(), pin ) );
     updateSummary();
@@ -1042,15 +1040,15 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnCellEdited( wxGridEvent& event )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnCellSelected( wxGridEvent& event )
 {
-    LIB_PIN* pin = nullptr;
+    SCH_PIN* pin = nullptr;
 
     if( event.GetRow() >= 0 && event.GetRow() < m_dataModel->GetNumberRows() )
     {
-        const std::vector<LIB_PIN*>& pins = m_dataModel->GetRowPins( event.GetRow() );
+        const std::vector<SCH_PIN*>& pins = m_dataModel->GetRowPins( event.GetRow() );
 
         if( pins.size() == 1 && m_editFrame->GetCurSymbol() )
         {
-            for( LIB_PIN* candidate : m_editFrame->GetCurSymbol()->GetAllLibPins() )
+            for( SCH_PIN* candidate : m_editFrame->GetCurSymbol()->GetAllLibPins() )
             {
                 if( candidate->GetNumber() == pins.at( 0 )->GetNumber() )
                 {
@@ -1256,7 +1254,7 @@ void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
 {
     PIN_NUMBERS pinNumbers;
 
-    for( LIB_PIN* pin : m_pins )
+    for( SCH_PIN* pin : m_pins )
     {
         if( pin->GetNumber().Length() )
             pinNumbers.insert( pin->GetNumber() );

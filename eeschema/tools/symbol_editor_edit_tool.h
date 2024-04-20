@@ -70,7 +70,7 @@ private:
     void editTextBoxProperties( SCH_ITEM* aItem );
     void editFieldProperties( SCH_FIELD* aField );
     void editSymbolProperties();
-    void handlePinDuplication(LIB_PIN* aOldPin, LIB_PIN* aNewPin, int &aSymbolLastPinNumber );
+    void handlePinDuplication(SCH_PIN* aOldPin, SCH_PIN* aNewPin, int &aSymbolLastPinNumber );
 
     ///< Set up handlers for various events.
     void setTransitions() override;

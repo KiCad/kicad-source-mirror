@@ -103,7 +103,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
                 return editor->IsSymbolEditable() && !editor->IsSymbolAlias();
             };
 
-    auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyTypes( { LIB_PIN_T } );
+    auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyTypes( { SCH_PIN_T } );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
@@ -116,9 +116,9 @@ bool SYMBOL_EDITOR_PIN_TOOL::Init()
 }
 
 
-bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
+bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( SCH_PIN* aPin )
 {
-    LIB_PIN               original_pin( *aPin );
+    SCH_PIN               original_pin( *aPin );
     DIALOG_PIN_PROPERTIES dlg( m_frame, aPin );
     SCH_COMMIT            commit( m_frame );
     LIB_SYMBOL*           parentSymbol = static_cast<LIB_SYMBOL*>( aPin->GetParentSymbol() );
@@ -131,9 +131,6 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 
     if( !aPin->IsNew() && m_frame->SynchronizePins() && parentSymbol )
     {
-        std::vector<LIB_PIN*> pinList;
-        parentSymbol->GetPins( pinList );
-
         // a pin can have a unit id = 0 (common to all units) to unit count
         // So we need a buffer size = GetUnitCount()+1 to store a value in a vector
         // when using the unit id of a pin as index
@@ -141,7 +138,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 
         got_unit[static_cast<size_t>(aPin->GetUnit())] = true;
 
-        for( LIB_PIN* other : pinList )
+        for( SCH_PIN* other : parentSymbol->GetPins() )
         {
             if( other == aPin )
                 continue;
@@ -209,14 +206,14 @@ bool SYMBOL_EDITOR_PIN_TOOL::EditPinProperties( LIB_PIN* aPin )
 }
 
 
-bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
+bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( SCH_PIN* aPin )
 {
     LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
     bool        ask_for_pin = true;   // Test for another pin in same position in other units
 
-    std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
+    std::vector<SCH_PIN*> pins = symbol->GetAllLibPins();
 
-    for( LIB_PIN* test : pins )
+    for( SCH_PIN* test : pins )
     {
         if( test == aPin || aPin->GetPosition() != test->GetPosition() || test->GetEditFlags() )
             continue;
@@ -265,7 +262,7 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
     }
 
     // Put linked pins in new position, and clear flags
-    for( LIB_PIN* pin : pins )
+    for( SCH_PIN* pin : pins )
     {
         if( ( pin->GetEditFlags() & IS_LINKED ) == 0 )
             continue;
@@ -284,11 +281,11 @@ bool SYMBOL_EDITOR_PIN_TOOL::PlacePin( LIB_PIN* aPin )
 /*
  * Create a new pin.
  */
-LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_SYMBOL* aSymbol )
+SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_SYMBOL* aSymbol )
 {
     aSymbol->ClearTempFlags();
 
-    LIB_PIN* pin = new LIB_PIN( aSymbol );
+    SCH_PIN* pin = new SCH_PIN( aSymbol );
 
     pin->SetFlags( IS_NEW );
 
@@ -317,10 +314,10 @@ LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_SYMBO
 }
 
 
-void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
+void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( SCH_PIN* aPin )
 {
     int      ii;
-    LIB_PIN* newPin;
+    SCH_PIN* newPin;
 
     // if "synchronize pins editing" option is off, do not create any similar pin for other
     // units and/or shapes: each unit is edited regardless other units or body
@@ -340,7 +337,7 @@ void SYMBOL_EDITOR_PIN_TOOL::CreateImagePins( LIB_PIN* aPin )
         if( ii == aPin->GetUnit() )
             continue;
 
-        newPin = static_cast<LIB_PIN*>( aPin->Duplicate() );
+        newPin = static_cast<SCH_PIN*>( aPin->Duplicate() );
 
         // To avoid mistakes, gives this pin a new pin number because
         // it does no have the save pin number as the master pin
@@ -373,15 +370,14 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 {
     LIB_SYMBOL*   symbol = m_frame->GetCurSymbol();
     EE_SELECTION& selection = m_selectionTool->GetSelection();
-    LIB_PIN*      sourcePin = dynamic_cast<LIB_PIN*>( selection.Front() );
+    SCH_PIN*      sourcePin = dynamic_cast<SCH_PIN*>( selection.Front() );
 
     if( !sourcePin )
         return 0;
 
     saveCopyInUndoList( symbol, UNDO_REDO::LIBEDIT );
-    std::vector<LIB_PIN*> pins = symbol->GetAllLibPins();
 
-    for( LIB_PIN* pin : pins )
+    for( SCH_PIN* pin : symbol->GetAllLibPins() )
     {
         if( pin == sourcePin )
             continue;
@@ -409,9 +405,9 @@ int SYMBOL_EDITOR_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
 
 
 // Create a new pin based on the previous pin with an incremented pin number.
-LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
+SCH_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const SCH_PIN* aSourcePin )
 {
-    LIB_PIN* pin = (LIB_PIN*) aSourcePin->Duplicate();
+    SCH_PIN* pin = static_cast<SCH_PIN*>( aSourcePin->Duplicate() );
     VECTOR2I step;
 
     pin->ClearFlags();
@@ -421,10 +417,11 @@ LIB_PIN* SYMBOL_EDITOR_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
 
     switch( pin->GetOrientation() )
     {
+    default:
+    case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU(-settings->m_Repeat.pin_step);  break;
     case PIN_ORIENTATION::PIN_UP:    step.x = schIUScale.MilsToIU(settings->m_Repeat.pin_step);   break;
     case PIN_ORIENTATION::PIN_DOWN:  step.x = schIUScale.MilsToIU(settings->m_Repeat.pin_step);   break;
     case PIN_ORIENTATION::PIN_LEFT:  step.y = schIUScale.MilsToIU(-settings->m_Repeat.pin_step);  break;
-    case PIN_ORIENTATION::PIN_RIGHT: step.y = schIUScale.MilsToIU(-settings->m_Repeat.pin_step);  break;
     }
 
     pin->Move( step );

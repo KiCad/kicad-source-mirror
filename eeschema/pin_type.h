@@ -47,7 +47,8 @@ enum class ELECTRICAL_PINTYPE
     PT_OPENEMITTER,   ///< pin type open emitter
     PT_NC,            ///< not connected (must be left open)
 
-    PT_LAST_OPTION = PT_NC ///< sentinel value, set to last usable enum option
+    PT_LAST_OPTION = PT_NC, ///< sentinel value, set to last usable enum option
+    PT_INHERIT
 };
 
 #define ELECTRICAL_PINTYPES_TOTAL ( static_cast<int>( ELECTRICAL_PINTYPE::PT_LAST_OPTION ) + 1 )
@@ -64,7 +65,8 @@ enum class GRAPHIC_PINSHAPE
     FALLING_EDGE_CLOCK,
     NONLOGIC,
 
-    LAST_OPTION = NONLOGIC ///< this is the sentinel value, must be set to last enum value
+    LAST_OPTION = NONLOGIC, ///< this is the sentinel value, must be set to last enum value
+    INHERIT
 };
 
 #define GRAPHIC_PINSHAPES_TOTAL ( static_cast<int>( GRAPHIC_PINSHAPE::LAST_OPTION ) + 1 )
@@ -77,6 +79,9 @@ enum class PIN_ORIENTATION {
     PIN_LEFT  = 'L',
     PIN_UP    = 'U',
     PIN_DOWN  = 'D',
+
+    LAST_OPTION = PIN_DOWN,
+    INHERIT   = 'I'
 };
 
 
@@ -88,8 +93,8 @@ BITMAPS PinShapeGetBitmap( GRAPHIC_PINSHAPE shape );
 wxString ElectricalPinTypeGetText( ELECTRICAL_PINTYPE );
 BITMAPS ElectricalPinTypeGetBitmap( ELECTRICAL_PINTYPE );
 
-wxString PinOrientationName( PIN_ORIENTATION aPinOrientation );
-BITMAPS PinOrientationGetBitmap( PIN_ORIENTATION aPinOrientation );
+wxString PinOrientationName( PIN_ORIENTATION aOrientation );
+BITMAPS PinOrientationGetBitmap( PIN_ORIENTATION aOrientation );
 PIN_ORIENTATION PinOrientationCode( size_t index );
 int PinOrientationIndex( PIN_ORIENTATION code );
 

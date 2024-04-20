@@ -25,7 +25,7 @@
 #include <bitmaps.h>
 #include <sch_painter.h>
 #include <symbol_edit_frame.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <dialog_pin_properties.h>
 #include <confirm.h>
 #include <kiplatform/ui.h>
@@ -36,7 +36,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <wx/hyperlink.h>
 
-class ALT_PIN_DATA_MODEL : public wxGridTableBase, public std::vector<LIB_PIN::ALT>
+class ALT_PIN_DATA_MODEL : public wxGridTableBase, public std::vector<SCH_PIN::ALT>
 {
 public:
     ALT_PIN_DATA_MODEL( EDA_UNITS aUserUnits )
@@ -99,7 +99,7 @@ public:
         }
     }
 
-    void AppendRow( const LIB_PIN::ALT& aAlt )
+    void AppendRow( const SCH_PIN::ALT& aAlt )
     {
         push_back( aAlt );
 
@@ -123,7 +123,7 @@ public:
 };
 
 
-DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN* aPin ) :
+DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, SCH_PIN* aPin ) :
     DIALOG_PIN_PROPERTIES_BASE( parent ),
     m_frame( parent ),
     m_pin( aPin ),
@@ -138,7 +138,7 @@ DIALOG_PIN_PROPERTIES::DIALOG_PIN_PROPERTIES( SYMBOL_EDIT_FRAME* parent, LIB_PIN
 {
     // Creates a dummy pin to show on a panel, inside this dialog:
     m_dummyParent = new LIB_SYMBOL( *static_cast<LIB_SYMBOL*>( m_pin->GetParentSymbol() ) );
-    m_dummyPin = new LIB_PIN( *m_pin );
+    m_dummyPin = new SCH_PIN( *m_pin );
     m_dummyPin->SetParent( m_dummyParent );
     m_dummyParent->SetShowPinNames( true );
     m_dummyParent->SetShowPinNumbers( true );
@@ -306,7 +306,7 @@ bool DIALOG_PIN_PROPERTIES::TransferDataToWindow()
 
     m_checkApplyToAllParts->SetToolTip( commonUnitsToolTip );
 
-    for( const std::pair<const wxString, LIB_PIN::ALT>& alt : m_pin->GetAlternates() )
+    for( const std::pair<const wxString, SCH_PIN::ALT>& alt : m_pin->GetAlternates() )
         m_alternatesDataModel->AppendRow( alt.second );
 
     return true;
@@ -364,10 +364,10 @@ bool DIALOG_PIN_PROPERTIES::TransferDataFromWindow()
     m_pin->SetUnit( m_checkApplyToAllParts->GetValue() ? 0 : m_frame->GetUnit() );
     m_pin->SetVisible( m_checkShow->GetValue() );
 
-    std::map<wxString, LIB_PIN::ALT>& alternates = m_pin->GetAlternates();
+    std::map<wxString, SCH_PIN::ALT>& alternates = m_pin->GetAlternates();
     alternates.clear();
 
-    for( const LIB_PIN::ALT& alt : *m_alternatesDataModel )
+    for( const SCH_PIN::ALT& alt : *m_alternatesDataModel )
         alternates[ alt.m_Name ] = alt;
 
     return true;
@@ -450,7 +450,7 @@ void DIALOG_PIN_PROPERTIES::OnAddAlternate( wxCommandEvent& event )
     if( !m_alternatesGrid->CommitPendingChanges() )
         return;
 
-    LIB_PIN::ALT newAlt;
+    SCH_PIN::ALT newAlt;
     newAlt.m_Name = wxEmptyString;
     newAlt.m_Type = m_pin->GetType();
     newAlt.m_Shape = m_pin->GetShape();

@@ -34,7 +34,7 @@
 #include <erc_sch_pin_context.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <string_utils.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <project_sch.h>
 #include <project/project_file.h>
 #include <project/net_settings.h>
@@ -493,8 +493,7 @@ int ERC_TESTER::TestMissingUnits()
 
         for( int missing_unit : missing_units )
         {
-            std::vector<LIB_PIN*> pins;
-            int                   bodyStyle = 0;
+            int bodyStyle = 0;
 
             for( size_t ii = 0; ii < refList.GetCount(); ++ii )
             {
@@ -505,9 +504,7 @@ int ERC_TESTER::TestMissingUnits()
                 }
             }
 
-            libSymbol->GetPins( pins, missing_unit, bodyStyle );
-
-            for( LIB_PIN* pin : pins )
+            for( SCH_PIN* pin : libSymbol->GetPins( missing_unit, bodyStyle ) )
             {
                 switch( pin->GetType() )
                 {
@@ -728,7 +725,7 @@ int ERC_TESTER::TestPinToPin()
             ERC_SCH_PIN_CONTEXT& refPin = *refIt;
             ELECTRICAL_PINTYPE refType = refPin.Pin()->GetType();
 
-            if( DrivenPinTypes.count( refType ) )
+            if( DrivenPinTypes.contains( refType ) )
             {
                 // needsDriver will be the pin shown in the error report eventually, so try to
                 // upgrade to a "better" pin if possible: something visible and only a power symbol
@@ -762,9 +759,9 @@ int ERC_TESTER::TestPinToPin()
                 ELECTRICAL_PINTYPE testType = testPin.Pin()->GetType();
 
                 if( ispowerNet )
-                    hasDriver |= ( DrivingPowerPinTypes.count( testType ) != 0 );
+                    hasDriver |= DrivingPowerPinTypes.contains( testType );
                 else
-                    hasDriver |= ( DrivingPinTypes.count( testType ) != 0 );
+                    hasDriver |= DrivingPinTypes.contains( testType );
 
                 PIN_ERROR erc = settings.GetPinMapValue( refType, testType );
 
@@ -782,8 +779,7 @@ int ERC_TESTER::TestPinToPin()
                                               ElectricalPinTypeGetText( refType ),
                                               ElectricalPinTypeGetText( testType ) ) );
 
-                    SCH_MARKER* marker = new SCH_MARKER( ercItem,
-                                                         refPin.Pin()->GetTransformedPosition() );
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, refPin.Pin()->GetPosition() );
                     pinToScreenMap[refPin.Pin()]->Append( marker );
                     errors++;
                 }
@@ -802,8 +798,7 @@ int ERC_TESTER::TestPinToPin()
                 ercItem->SetSheetSpecificPath( needsDriver.Sheet() );
                 ercItem->SetItemsSheetPaths( needsDriver.Sheet() );
 
-                SCH_MARKER* marker = new SCH_MARKER( ercItem,
-                                                     needsDriver.Pin()->GetTransformedPosition() );
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, needsDriver.Pin()->GetPosition() );
                 pinToScreenMap[needsDriver.Pin()]->Append( marker );
                 errors++;
             }
@@ -860,8 +855,7 @@ int ERC_TESTER::TestMultUnitPinConflicts()
                         ercItem->SetSheetSpecificPath( sheet );
                         ercItem->SetItemsSheetPaths( sheet, sheet );
 
-                        SCH_MARKER* marker = new SCH_MARKER( ercItem,
-                                                             pin->GetTransformedPosition() );
+                        SCH_MARKER* marker = new SCH_MARKER( ercItem, pin->GetPosition() );
                         sheet.LastScreen()->Append( marker );
                         errors += 1;
                     }
@@ -1159,7 +1153,7 @@ int ERC_TESTER::TestOffGridEndpoints()
 
                 for( SCH_PIN* pin : symbol->GetPins( nullptr ) )
                 {
-                    VECTOR2I pinPos = pin->GetTransformedPosition();
+                    VECTOR2I pinPos = pin->GetPosition();
 
                     if( ( pinPos.x % gridSize ) != 0 || ( pinPos.y % gridSize ) != 0 )
                     {

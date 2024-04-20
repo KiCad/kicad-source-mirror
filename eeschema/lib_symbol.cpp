@@ -27,12 +27,11 @@
 #include <sch_draw_panel.h>
 #include <plotters/plotter.h>
 #include <sch_screen.h>
-#include <richio.h>
 #include <template_fieldnames.h>
 #include <transform.h>
 #include <symbol_library.h>
-#include <lib_pin.h>
 #include <settings/color_settings.h>
+#include <sch_pin.h>
 #include <sch_shape.h>
 
 #include <memory>
@@ -293,7 +292,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             aShapes.insert( &(*it) );
         else if( it->Type() == SCH_FIELD_T )
             aFields.insert( &(*it) );
-        else if( it->Type() == LIB_PIN_T )
+        else if( it->Type() == SCH_PIN_T )
             aPins.insert( &(*it) );
     }
 
@@ -307,7 +306,7 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
             bShapes.insert( &(*it) );
         else if( it->Type() == SCH_FIELD_T )
             bFields.insert( &(*it) );
-        else if( it->Type() == LIB_PIN_T )
+        else if( it->Type() == SCH_PIN_T )
             bPins.insert( &(*it) );
     }
 
@@ -346,8 +345,8 @@ int LIB_SYMBOL::Compare( const LIB_SYMBOL& aRhs, int aCompareFlags, REPORTER* aR
     {
         for( const SCH_ITEM* aPinItem : aPins )
         {
-            const LIB_PIN* aPin = static_cast<const LIB_PIN*>( aPinItem );
-            const LIB_PIN* bPin = aRhs.GetPin( aPin->GetNumber(), aPin->GetUnit(),
+            const SCH_PIN* aPin = static_cast<const SCH_PIN*>( aPinItem );
+            const SCH_PIN* bPin = aRhs.GetPin( aPin->GetNumber(), aPin->GetUnit(),
                                                aPin->GetBodyStyle() );
 
             if( !bPin )
@@ -754,7 +753,7 @@ void LIB_SYMBOL::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBo
         if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
             continue;
 
-        if( item.Type() == LIB_PIN_T )
+        if( item.Type() == SCH_PIN_T )
         {
             item.Print( aSettings, aUnit, aBodyStyle, aOffset, aForceNoFill, aDimmed );
         }
@@ -980,8 +979,10 @@ void LIB_SYMBOL::AddDrawItem( SCH_ITEM* aItem, bool aSort )
 }
 
 
-void LIB_SYMBOL::GetPins( std::vector<LIB_PIN*>& aList, int aUnit, int aBodyStyle ) const
+std::vector<SCH_PIN*> LIB_SYMBOL::GetPins( int aUnit, int aBodyStyle ) const
 {
+    std::vector<SCH_PIN*> pins;
+
     /* Notes:
      * when aUnit == 0: no unit filtering
      * when aBodyStyle == 0: no body style filtering
@@ -992,7 +993,7 @@ void LIB_SYMBOL::GetPins( std::vector<LIB_PIN*>& aList, int aUnit, int aBodyStyl
     LIB_SYMBOL_SPTR            parent = m_parent.lock();
     const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
 
-    for( const SCH_ITEM& item : drawItems[LIB_PIN_T] )
+    for( const SCH_ITEM& item : drawItems[SCH_PIN_T] )
     {
         // Unit filtering:
         if( aUnit && item.m_unit && ( item.m_unit != aUnit ) )
@@ -1002,35 +1003,29 @@ void LIB_SYMBOL::GetPins( std::vector<LIB_PIN*>& aList, int aUnit, int aBodyStyl
         if( aBodyStyle && item.m_bodyStyle && ( item.m_bodyStyle != aBodyStyle ) )
             continue;
 
-        aList.push_back( (LIB_PIN*) &item );
+        // TODO: get rid of const_cast.  (It used to be a C-style cast so was less noticeable.)
+        pins.push_back( const_cast<SCH_PIN*>( static_cast<const SCH_PIN*>( &item ) ) );
     }
+
+    return pins;
 }
 
 
-std::vector<LIB_PIN*> LIB_SYMBOL::GetAllLibPins() const
+std::vector<SCH_PIN*> LIB_SYMBOL::GetAllLibPins() const
 {
-    std::vector<LIB_PIN*> pinList;
-
-    GetPins( pinList, 0, 0 );
-    return pinList;
+    return GetPins( 0, 0 );
 }
 
 
 int LIB_SYMBOL::GetPinCount()
 {
-    std::vector<LIB_PIN*> pinList;
-
-    GetPins( pinList, 0 /* all units */, 1 /* single body style */ );
-    return (int) pinList.size();
+    return (int) GetPins( 0 /* all units */, 1 /* single body style */ ).size();
 }
 
 
-LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle ) const
+SCH_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle ) const
 {
-    std::vector<LIB_PIN*> pinList;
-    GetPins( pinList, aUnit, aBodyStyle );
-
-    for( LIB_PIN* pin : pinList )
+    for( SCH_PIN* pin : GetPins( aUnit, aBodyStyle ) )
     {
         if( aNumber == pin->GetNumber() )
             return pin;
@@ -1043,17 +1038,15 @@ LIB_PIN* LIB_SYMBOL::GetPin( const wxString& aNumber, int aUnit, int aBodyStyle 
 bool LIB_SYMBOL::PinsConflictWith( const LIB_SYMBOL& aOtherPart, bool aTestNums, bool aTestNames,
                                    bool aTestType, bool aTestOrientation, bool aTestLength ) const
 {
-    std::vector<LIB_PIN*> thisPinList;
-    GetPins( thisPinList, /* aUnit */ 0, /* aBodyStyle */ 0 );
+    std::vector<SCH_PIN*> thisPinList = GetAllLibPins();
 
-    for( const LIB_PIN* eachThisPin : thisPinList )
+    for( const SCH_PIN* eachThisPin : thisPinList )
     {
         wxASSERT( eachThisPin );
-        std::vector<LIB_PIN*> otherPinList;
-        aOtherPart.GetPins( otherPinList, /* aUnit */ 0, /* aBodyStyle */ 0 );
+        std::vector<SCH_PIN*> otherPinList = aOtherPart.GetAllLibPins();
         bool foundMatch = false;
 
-        for( const LIB_PIN* eachOtherPin : otherPinList )
+        for( const SCH_PIN* eachOtherPin : otherPinList )
         {
             wxASSERT( eachOtherPin );
 
@@ -1152,9 +1145,9 @@ const BOX2I LIB_SYMBOL::GetBodyBoundingBox( int aUnit, int aBodyStyle, bool aInc
         if( item.Type() == SCH_FIELD_T )
             continue;
 
-        if( item.Type() == LIB_PIN_T )
+        if( item.Type() == SCH_PIN_T )
         {
-            const LIB_PIN& pin = static_cast<const LIB_PIN&>( item );
+            const SCH_PIN& pin = static_cast<const SCH_PIN&>( item );
 
             if( pin.IsVisible() )
             {
@@ -1441,9 +1434,9 @@ int LIB_SYMBOL::GetMaxPinNumber() const
     LIB_SYMBOL_SPTR            parent = m_parent.lock();
     const LIB_ITEMS_CONTAINER& drawItems = parent ? parent->m_drawings : m_drawings;
 
-    for( const SCH_ITEM& item : drawItems[LIB_PIN_T] )
+    for( const SCH_ITEM& item : drawItems[SCH_PIN_T] )
     {
-        const LIB_PIN* pin = static_cast<const LIB_PIN*>( &item );
+        const SCH_PIN* pin = static_cast<const SCH_PIN*>( &item );
         long           currentPinNumber = 0;
 
         if( pin->GetNumber().ToLong( &currentPinNumber ) )
@@ -1598,7 +1591,7 @@ void LIB_SYMBOL::SetHasAlternateBodyStyle( bool aHasAlternate, bool aDuplicatePi
         {
             std::vector<SCH_ITEM*> tmp;     // Temporarily store the duplicated pins here.
 
-            for( SCH_ITEM& item : m_drawings[ LIB_PIN_T ] )
+            for( SCH_ITEM& item : m_drawings[ SCH_PIN_T ] )
             {
                 if( item.m_bodyStyle == 1 )
                 {
@@ -1727,8 +1720,8 @@ bool LIB_SYMBOL::operator==( const LIB_SYMBOL& aOther ) const
             return false;
     }
 
-    const std::vector<LIB_PIN*> thisPinList = GetAllLibPins();
-    const std::vector<LIB_PIN*> otherPinList = aOther.GetAllLibPins();
+    const std::vector<SCH_PIN*> thisPinList = GetAllLibPins();
+    const std::vector<SCH_PIN*> otherPinList = aOther.GetAllLibPins();
 
     if( thisPinList.size() != otherPinList.size() )
         return false;
@@ -1777,12 +1770,12 @@ double LIB_SYMBOL::Similarity( const SCH_ITEM& aOther ) const
         similarity += max_similarity;
     }
 
-    for( const LIB_PIN* pin : GetAllLibPins() )
+    for( const SCH_PIN* pin : GetAllLibPins() )
     {
         totalItems += 1;
         double max_similarity = 0.0;
 
-        for( const LIB_PIN* otherPin : other.GetAllLibPins() )
+        for( const SCH_PIN* otherPin : other.GetAllLibPins() )
         {
             double temp_similarity = pin->Similarity( *otherPin );
             max_similarity = std::max( max_similarity, temp_similarity );

@@ -353,7 +353,6 @@ set( EESCHEMA_SRCS
     generate_alias_info.cpp
     gfx_import_utils.cpp
     picksymbol.cpp
-    lib_pin.cpp
     lib_symbol.cpp
     libarch.cpp
     menubar.cpp

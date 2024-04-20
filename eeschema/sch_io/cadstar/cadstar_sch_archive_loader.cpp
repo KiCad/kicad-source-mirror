@@ -143,7 +143,7 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
         for( auto& [storedPinNum, termID] : m_symDefTerminalsMap[symbolID] )
         {
             wxCHECK( termID > 0 && sym.m_Pins.size() >= size_t( termID ), nullptr );
-            LIB_PIN* pin = kiSymDef->GetPin( storedPinNum );
+            SCH_PIN* pin = kiSymDef->GetPin( storedPinNum );
             size_t   termIdx = size_t( termID ) - 1;
 
             // For now leave numerical pin number. Otherwise, when loading the
@@ -234,7 +234,7 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
             {
                 for(  const CADSTAR_PART_PIN& csPin : csPinVector )
                 {
-                    std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( retSym.get() );
+                    std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( retSym.get() );
 
                     long pinNum = csPin.m_Identifier;
                     pin->SetNumber( wxString::Format( "%ld", pinNum ) );
@@ -878,7 +878,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     kiPart->SetShowPinNames( false );
                     kiPart->SetShowPinNumbers( false );
 
-                    std::vector<LIB_PIN*> pins = kiPart->GetAllLibPins();
+                    std::vector<SCH_PIN*> pins = kiPart->GetAllLibPins();
                     wxCHECK( pins.size() == 1, /*void*/ );
 
                     pins.at( 0 )->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
@@ -1652,7 +1652,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
         TERMINAL term = termPair.second;
         wxString pinNum = wxString::Format( "%ld", term.ID );
         wxString pinName = wxEmptyString;
-        std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( kiSym.get() );
+        std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( kiSym.get() );
 
         // Assume passive pin for now (we will set it later once we load the parts)
         pin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
@@ -1829,7 +1829,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& a
     for( auto&& [storedPinNum, termID] : m_symDefTerminalsMap[aSymdefID] )
     {
         PART::DEFINITION::PIN csPin = getPartDefinitionPin( aCadstarPart, aGateID, termID );
-        LIB_PIN*              pin = kiSymDef->GetPin( storedPinNum );
+        SCH_PIN*              pin = kiSymDef->GetPin( storedPinNum );
 
         wxString pinName = HandleTextOverbar( csPin.Label );
         wxString pinNum = HandleTextOverbar( csPin.Name );
@@ -2132,7 +2132,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
     {
         TERMINAL_TO_PINNUM_MAP termNumMap = m_pinNumsMap.at( partGateIndex );
 
-        std::map<wxString, LIB_PIN*> pinNumToLibPinMap;
+        std::map<wxString, SCH_PIN*> pinNumToLibPinMap;
 
         for( auto& term : termNumMap )
         {
@@ -2147,7 +2147,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
                     if( aOldPinNum == aNewPinNum )
                         return;
 
-                    LIB_PIN* libpin = pinNumToLibPinMap.at( aOldPinNum );
+                    SCH_PIN* libpin = pinNumToLibPinMap.at( aOldPinNum );
                     libpin->SetNumber( HandleTextOverbar( aNewPinNum ) );
                 };
 
@@ -3228,9 +3228,9 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
             break;
         }
 
-        case KICAD_T::LIB_PIN_T:
+        case KICAD_T::SCH_PIN_T:
         {
-            LIB_PIN& pin = static_cast<LIB_PIN&>( item );
+            SCH_PIN& pin = static_cast<SCH_PIN&>( item );
 
             pin.SetPosition( scalePt( pin.GetPosition() ) );
             pin.SetLength( scaleLen( pin.GetLength() ) );
@@ -3298,10 +3298,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int
         }
     }
 
-    std::vector<LIB_PIN*> pins;
-    aSymbolToFix->GetPins( pins, aGateNumber );
-
-    for( auto& pin : pins )
+    for( SCH_PIN* pin : aSymbolToFix->GetPins( aGateNumber ) )
     {
         auto setPinOrientation =
                 [&]( const EDA_ANGLE& aAngle )

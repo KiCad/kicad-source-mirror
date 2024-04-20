@@ -33,7 +33,7 @@
 #include <gal/painter.h>
 
 
-class LIB_PIN;
+class SCH_PIN;
 class LIB_SYMBOL;
 class SCH_SYMBOL;
 class SCH_FIELD;
@@ -80,7 +80,7 @@ public:
 private:
     void drawItemBoundingBox( const EDA_ITEM* aItem );
     void draw( const EDA_ITEM*, int, bool aDimmed );
-    void draw( const LIB_PIN* aPin, int aLayer, bool aDimmed );
+    void draw( const SCH_PIN* aPin, int aLayer, bool aDimmed );
     void draw( const LIB_SYMBOL* aSymbol, int, bool aDrawFields = true, int aUnit = 0,
                int aBodyStyle = 0, bool aDimmed = false );
     void draw( const SCH_SYMBOL* aSymbol, int aLayer );
@@ -106,8 +106,8 @@ private:
     void drawDanglingIndicator( const VECTOR2I& aPos, const COLOR4D& aColor, int aWidth,
                                 bool aDangling, bool aDrawingShadows, bool aBrightened );
 
-    int internalPinDecoSize( const LIB_PIN &aPin );
-    int externalPinDecoSize( const LIB_PIN &aPin );
+    int internalPinDecoSize( const SCH_PIN &aPin );
+    int externalPinDecoSize( const SCH_PIN &aPin );
 
     // Indicates the item is drawn on a non-cached layer in OpenGL
     bool nonCached( const EDA_ITEM* aItem );
@@ -115,11 +115,11 @@ private:
     bool isUnitAndConversionShown( const SCH_ITEM* aItem ) const;
 
     float getShadowWidth( bool aForHighlight ) const;
-    COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aDrawingShadows,
+    COLOR4D getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDrawingShadows,
                             bool aDimmed = false ) const;
     KIFONT::FONT* getFont( const EDA_TEXT* aText ) const;
-    float getLineWidth( const EDA_ITEM* aItem, bool aDrawingShadows ) const;
-    float getTextThickness( const EDA_ITEM* aItem ) const;
+    float getLineWidth( const SCH_ITEM* aItem, bool aDrawingShadows ) const;
+    float getTextThickness( const SCH_ITEM* aItem ) const;
 
     int getOperatingPointTextSize() const;
 

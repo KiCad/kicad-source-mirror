@@ -308,7 +308,7 @@ void SCH_IO_LTSPICE_PARSER::CreateSymbol( LTSPICE_SCHEMATIC::LT_SYMBOL& aLtSymbo
 
     for( int j = 0; j < (int) aLtSymbol.Pins.size(); j++ )
     {
-        LIB_PIN* pin = new LIB_PIN( aLibSymbol );
+        SCH_PIN* pin = new SCH_PIN( aLibSymbol );
 
         CreatePin( aLtSymbol, j, pin );
         aLibSymbol->AddDrawItem( pin );
@@ -833,7 +833,7 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
     lib_symbol->AddDrawItem( shape );
     lib_symbol->SetPower();
 
-    LIB_PIN* pin = new LIB_PIN( lib_symbol );
+    SCH_PIN* pin = new SCH_PIN( lib_symbol );
 
     pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
     pin->SetPosition( ToInvertedKicadCoords( { 0, 0 } ) );
@@ -1272,7 +1272,7 @@ void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
 
 
 void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, int aIndex,
-                                       LIB_PIN* aPin )
+                                       SCH_PIN* aPin )
 {
     LTSPICE_SCHEMATIC::LT_PIN& lt_pin = aLTSymbol.Pins[aIndex];
     wxString                   device = aLTSymbol.Name.Lower();

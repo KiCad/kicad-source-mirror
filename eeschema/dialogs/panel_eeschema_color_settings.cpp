@@ -389,7 +389,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
 
         addItem( comp_body );
 
-        LIB_PIN* pin = new LIB_PIN( symbol );
+        SCH_PIN* pin = new SCH_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x - 300, p.y + 100 ) );
         pin->SetLength( schIUScale.MilsToIU( 100 ) );
@@ -403,7 +403,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         endPointsByType.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
 
-        pin = new LIB_PIN( symbol );
+        pin = new SCH_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x - 300, p.y - 100 ) );
         pin->SetLength( schIUScale.MilsToIU( 100 ) );
@@ -417,7 +417,7 @@ void PANEL_EESCHEMA_COLOR_SETTINGS::createPreviewItems()
         endPointsByType.emplace_back( PIN_END, pin, mapLibItemPosition( pin->GetPosition() ) );
         symbol->AddDrawItem( pin );
 
-        pin = new LIB_PIN( symbol );
+        pin = new SCH_PIN( symbol );
 
         pin->SetPosition( MILS_POINT( p.x + 300, p.y ) );
         pin->SetLength( schIUScale.MilsToIU( 100 ) );

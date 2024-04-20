@@ -709,7 +709,7 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
             EASYEDAPRO::PIN_INFO pinInfo;
             pinInfo.pin = *epin;
 
-            std::unique_ptr<LIB_PIN> pin = std::make_unique<LIB_PIN>( ksymbol );
+            std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( ksymbol );
 
             pin->SetUnit( unitId );
 
@@ -1141,7 +1141,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     ApplyAttrToField( fontStyles, schSym->GetField( VALUE_FIELD ), *globalNetAttr,
                                       false, true, compAttrs, schSym.get() );
 
-                    for( LIB_PIN* pin : schSym->GetAllLibPins() )
+                    for( SCH_PIN* pin : schSym->GetAllLibPins() )
                         pin->SetName( globalNetAttr->value );
                 }
                 else

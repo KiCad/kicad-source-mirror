@@ -22,7 +22,7 @@
 
 #include <eda_shape.h>
 #include <kiid.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <sch_sheet_pin.h>
 #include <sch_text.h>
 

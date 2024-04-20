@@ -162,14 +162,10 @@ DIALOG_FIELD_PROPERTIES::DIALOG_FIELD_PROPERTIES( SCH_BASE_FRAME* aParent, const
          *   pinNumber pinName <tab> pinNumber pinName...
          *   fpFilter fpFilter...
          */
-        wxString netlist;
-
-        std::vector<LIB_PIN*> pinList;
-        symbol->GetPins( pinList, 0, 1 );   // All units, but a single convert
-
+        wxString      netlist;
         wxArrayString pins;
 
-        for( LIB_PIN* pin : pinList )
+        for( SCH_PIN* pin : symbol->GetPins( 0 /* all units */, 1 /* single bodyStyle */ ) )
             pins.push_back( pin->GetNumber() + ' ' + pin->GetShownName() );
 
         if( !pins.IsEmpty() )

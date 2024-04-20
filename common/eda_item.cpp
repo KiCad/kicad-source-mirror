@@ -396,7 +396,6 @@ static struct EDA_ITEM_DESC
             .Map( SCH_SCREEN_T,            _HKI( "SCH Screen" ) )
 
             .Map( LIB_SYMBOL_T,            _HKI( "Symbol" ) )
-            .Map( LIB_PIN_T,               _HKI( "Pin" ) )
 
             .Map( GERBER_LAYOUT_T,         _HKI( "Gerber Layout" ) )
             .Map( GERBER_DRAW_ITEM_T,      _HKI( "Draw Item" ) )

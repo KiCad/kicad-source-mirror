@@ -53,10 +53,9 @@
 #include <boost/range/adaptor/reversed.hpp>
 
 #include <sch_edit_frame.h>
-#include <hotkeys_basic.h>
 #include <sch_symbol.h>
 #include <sch_line.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include <kiface_base.h>
 #include <algorithm>
 #include <tool/tool_manager.h>

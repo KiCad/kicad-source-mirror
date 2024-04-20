@@ -24,7 +24,7 @@
 #include <bitmaps.h>
 #include <cstddef>
 #include <magic_enum.hpp>
-#include <lib_pin.h>
+#include <sch_pin.h>
 #include "pgm_base.h"
 
 
@@ -141,8 +141,11 @@ void InitTables()
 
     for( PIN_ORIENTATION orientation : magic_enum::enum_values<PIN_ORIENTATION>() )
     {
-        g_orientationIcons.push_back( PinOrientationGetBitmap( orientation ) );
-        g_orientationNames.push_back( PinOrientationName( orientation ) );
+        if( orientation != PIN_ORIENTATION::INHERIT )
+        {
+            g_orientationIcons.push_back( PinOrientationGetBitmap( orientation ) );
+            g_orientationNames.push_back( PinOrientationName( orientation ) );
+        }
     }
 }
 

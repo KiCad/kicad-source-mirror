@@ -144,7 +144,7 @@ private:
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
         EE_SELECTION&      selection = selTool->GetSelection();
         SCH_PIN*           pin = dynamic_cast<SCH_PIN*>( selection.Front() );
-        LIB_PIN*           libPin = pin ? pin->GetLibPin() : nullptr;
+        SCH_PIN*           libPin = pin ? pin->GetLibPin() : nullptr;
 
         Clear();
 
@@ -2054,6 +2054,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     case SCH_NO_CONNECT_T:
+    case SCH_PIN_T:
         break;
 
     default:                // Unexpected item

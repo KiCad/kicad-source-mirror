@@ -30,7 +30,8 @@
 
 // Code under test
 #include <sch_shape.h>
-#include <lib_pin.h>
+#include <sch_pin.h>
+#include <lib_symbol.h>
 
 #include "lib_field_test_utils.h"
 
@@ -425,9 +426,9 @@ BOOST_AUTO_TEST_CASE( Compare )
     BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
     m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[SCH_SHAPE_T].front() );
     testPart.RemoveDrawItem( &testPart.GetDrawItems()[SCH_SHAPE_T].front() );
-    m_part_no_data.AddDrawItem( new LIB_PIN( &m_part_no_data ) );
+    m_part_no_data.AddDrawItem( new SCH_PIN( &m_part_no_data ) );
     BOOST_CHECK( m_part_no_data.Compare( testPart, SCH_ITEM::COMPARE_FLAGS::EQUALITY ) > 0 );
-    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[LIB_PIN_T].front() );
+    m_part_no_data.RemoveDrawItem( &m_part_no_data.GetDrawItems()[SCH_PIN_T].front() );
 
     // Footprint filter array comparison tests.
     wxArrayString footPrintFilters;
@@ -529,7 +530,7 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 1, 1 ).size() == 0 );
 
     // A single unique unit with 1 pin common to all units and all body styles.
-    LIB_PIN* pin1 = new LIB_PIN( &m_part_no_data );
+    SCH_PIN* pin1 = new SCH_PIN( &m_part_no_data );
     m_part_no_data.AddDrawItem( pin1 );
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems( 0, 0 ).size() == 1 );
 
@@ -543,7 +544,7 @@ BOOST_AUTO_TEST_CASE( GetUnitItems )
 
     // Two unique units with pin 1 assigned to unit 1 and body style 1 and pin 2 assigned to
     // unit 2 and body style 1.
-    LIB_PIN* pin2 = new LIB_PIN( &m_part_no_data );
+    SCH_PIN* pin2 = new SCH_PIN( &m_part_no_data );
     m_part_no_data.SetUnitCount( 2 );
     pin2->SetUnit( 2 );
     pin2->SetBodyStyle( 2 );
@@ -571,7 +572,7 @@ BOOST_AUTO_TEST_CASE( GetUnitDrawItems )
     BOOST_CHECK( m_part_no_data.GetUnitDrawItems().size() == 0 );
 
     // A single unique unit with 1 pin common to all units and all body styles.
-    LIB_PIN* pin1 = new LIB_PIN( &m_part_no_data );
+    SCH_PIN* pin1 = new SCH_PIN( &m_part_no_data );
     pin1->SetNumber( "1" );
     m_part_no_data.AddDrawItem( pin1 );
     std::vector<struct LIB_SYMBOL_UNIT> units = m_part_no_data.GetUnitDrawItems();
@@ -679,7 +680,7 @@ BOOST_AUTO_TEST_CASE( CopyConstructor )
 BOOST_AUTO_TEST_CASE( IsPowerTest )
 {
     std::unique_ptr<LIB_SYMBOL> symbol = std::make_unique<LIB_SYMBOL>( "power" );
-    LIB_PIN* pin = new LIB_PIN( symbol.get() );
+    SCH_PIN* pin = new SCH_PIN( symbol.get() );
     pin->SetNumber( "1" );
     pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
     pin->SetVisible( false );

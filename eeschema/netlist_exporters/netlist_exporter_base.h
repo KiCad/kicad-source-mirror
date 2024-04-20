@@ -26,10 +26,8 @@
 #ifndef NETLIST_EXPORTER_H
 #define NETLIST_EXPORTER_H
 
-#include <lib_pin.h>
 #include <sch_symbol.h>
 #include <sch_label.h>
-#include <sch_sheet.h>
 #include <schematic.h>
 
 /**
@@ -91,10 +89,6 @@ struct PIN_INFO
 class NETLIST_EXPORTER_BASE
 {
 public:
-    /**
-     * @param aMasterList we take ownership of this here.
-     * @param aLibTable is the symbol library table of the project.
-     */
     NETLIST_EXPORTER_BASE( SCHEMATIC_IFACE* aSchematic ) :
         m_schematic( aSchematic )
     {

@@ -571,7 +571,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                         m_selection = RequestSelection( { SCH_SHAPE_T,
                                                           SCH_TEXT_T,
                                                           SCH_TEXTBOX_T,
-                                                          LIB_PIN_T,
+                                                          SCH_PIN_T,
                                                           SCH_FIELD_T } );
                     }
                 }
@@ -666,11 +666,12 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                         switch( pin->GetOrientation() )
                         {
-                        case PIN_ORIENTATION::PIN_LEFT:
-                            stub = VECTOR2I( 1 * wireGrid.x, 0 );
-                            break;
+                        default:
                         case PIN_ORIENTATION::PIN_RIGHT:
                             stub = VECTOR2I( -1 * wireGrid.x, 0 );
+                            break;
+                        case PIN_ORIENTATION::PIN_LEFT:
+                            stub = VECTOR2I( 1 * wireGrid.x, 0 );
                             break;
                         case PIN_ORIENTATION::PIN_UP:
                             stub = VECTOR2I( 0, 1 * wireGrid.y );
@@ -731,11 +732,12 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                         switch( pin->GetOrientation() )
                         {
-                        case PIN_ORIENTATION::PIN_LEFT:
-                            label->SetSpinStyle( SPIN_STYLE::SPIN::RIGHT );
-                            break;
+                        default:
                         case PIN_ORIENTATION::PIN_RIGHT:
                             label->SetSpinStyle( SPIN_STYLE::SPIN::LEFT );
+                            break;
+                        case PIN_ORIENTATION::PIN_LEFT:
+                            label->SetSpinStyle( SPIN_STYLE::SPIN::RIGHT );
                             break;
                         case PIN_ORIENTATION::PIN_UP:
                             label->SetSpinStyle( SPIN_STYLE::SPIN::BOTTOM );
@@ -1085,9 +1087,9 @@ void EE_SELECTION_TOOL::narrowSelection( EE_COLLECTOR& collector, const VECTOR2I
                     continue;
                 }
             }
-            else if( item->Type() == LIB_PIN_T )
+            else if( item->Type() == SCH_PIN_T )
             {
-                if( !static_cast<LIB_PIN*>( item )->IsVisible()
+                if( !static_cast<SCH_PIN*>( item )->IsVisible()
                     && !symbolEditorFrame->GetShowInvisiblePins() )
                 {
                     collector.Remove( i );
@@ -1607,7 +1609,6 @@ bool EE_SELECTION_TOOL::itemPassesFilter( EDA_ITEM* aItem )
 
     case SCH_PIN_T:
     case SCH_SHEET_PIN_T:
-    case LIB_PIN_T:
         if( !m_filter.pins )
             return false;
 
@@ -2438,6 +2439,15 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
     {
         const SCH_PIN* pin = static_cast<const SCH_PIN*>( aItem );
 
+        if( symEditFrame )
+        {
+            if( pin->GetUnit() && pin->GetUnit() != symEditFrame->GetUnit() )
+                return false;
+
+            if( pin->GetBodyStyle() && pin->GetBodyStyle() != symEditFrame->GetBodyStyle() )
+                return false;
+        }
+
         if( !pin->IsVisible() && !m_frame->GetShowAllPins() )
             return false;
 
@@ -2481,7 +2491,6 @@ bool EE_SELECTION_TOOL::Selectable( const EDA_ITEM* aItem, const VECTOR2I* aPos,
     case SCH_SHAPE_T:
     case SCH_TEXT_T:
     case SCH_TEXTBOX_T:
-    case LIB_PIN_T:
         if( symEditFrame )
         {
             const SCH_ITEM* sch_item = static_cast<const SCH_ITEM*>( aItem );

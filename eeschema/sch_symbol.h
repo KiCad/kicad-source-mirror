@@ -46,6 +46,7 @@
 
 #include <schematic.h>
 #include <symbol.h>
+#include <lib_symbol.h>
 #include <sch_field.h>
 #include <sch_pin.h>
 #include <sch_sheet_path.h>    // SCH_SYMBOL_INSTANCE
@@ -55,7 +56,6 @@
 struct PICKED_SYMBOL;
 class KIID_PATH;
 class SCH_SCREEN;
-class LIB_PIN;
 class LIB_SYMBOL;
 class NETLIST_OBJECT_LIST;
 class SYMBOL_LIB;
@@ -596,17 +596,18 @@ public:
     SCH_PIN* GetPin( const wxString& number ) const;
 
     /**
-     * Populate a vector with all the pins from the library object.
+     * Populate a vector with all the pins from the library object that match the current unit
+     * and bodyStyle.
      *
      * @param aPinsList is the list to populate with all of the pins.
      */
-    void GetLibPins( std::vector<LIB_PIN*>& aPinsList ) const;
+    std::vector<SCH_PIN*> GetLibPins() const;
 
     /**
-     * @return a list of pin pointers for all units / converts.  Used primarily for SPICE where
+     * @return a list of pin pointers for all units / bodyStyles.  Used primarily for SPICE where
      * we want to treat all units together as a single SPICE element.
      */
-    std::vector<LIB_PIN*> GetAllLibPins() const;
+    std::vector<SCH_PIN*> GetAllLibPins() const;
 
     /**
      * @return a count of pins for all units.
@@ -614,9 +615,9 @@ public:
     size_t GetFullPinCount() { return m_part ? m_part->GetPinCount() : 0; }
 
     /**
-     * @return the SCH_PIN associated with a particular LIB_PIN.
+     * @return the instance SCH_PIN associated with a particular SCH_PIN from the LIB_SYMBOL.
      */
-    SCH_PIN* GetPin( LIB_PIN* aLibPin ) const;
+    SCH_PIN* GetPin( SCH_PIN* aLibPin ) const;
 
     /**
      * Retrieve a list of the SCH_PINs for the given sheet path.
@@ -718,7 +719,7 @@ public:
                               std::vector<DANGLING_END_ITEM>& aItemListByPos,
                               const SCH_SHEET_PATH*           aPath = nullptr ) override;
 
-    VECTOR2I GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
+    VECTOR2I GetPinPhysicalPosition( const SCH_PIN* Pin ) const;
 
     bool IsConnectable() const override { return true; }
 
@@ -843,6 +844,12 @@ public:
     bool IsPower() const override;
     bool IsNormal() const override;
 
+    /*
+     * We don't currently support changing these at the schematic level.
+     */
+    bool GetShowPinNames() const override { return m_part && m_part->GetShowPinNames(); }
+    bool GetShowPinNumbers() const override { return m_part && m_part->GetShowPinNumbers(); }
+
     double Similarity( const SCH_ITEM& aOther ) const override;
 
     bool operator==( const SCH_ITEM& aOther ) const override;
@@ -854,6 +861,7 @@ private:
 
     void Init( const VECTOR2I& pos = VECTOR2I( 0, 0 ) );
 
+private:
     VECTOR2I    m_pos;
     LIB_ID      m_lib_id;       ///< Name and library the symbol was loaded from, i.e. 74xx:74LS00.
     wxString    m_prefix;       ///< C, R, U, Q etc - the first character(s) which typically
@@ -877,8 +885,8 @@ private:
                                                  ///<   PROJECT's libraries.
     bool                        m_isInNetlist;   ///< True if the symbol should appear in netlist
 
-    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< a SCH_PIN for every LIB_PIN (all units)
-    std::unordered_map<LIB_PIN*, SCH_PIN*> m_pinMap;   ///< library pin pointer : SCH_PIN's index
+    std::vector<std::unique_ptr<SCH_PIN>>  m_pins;     ///< a SCH_PIN for every SCH_PIN (all units)
+    std::unordered_map<SCH_PIN*, SCH_PIN*> m_pinMap;   ///< library pin pointer : SCH_PIN's index
 
     // Defines the hierarchical path and reference of the symbol.  This allows support for multiple
     // references to a single sub-sheet.
