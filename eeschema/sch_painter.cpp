@@ -1685,6 +1685,7 @@ void SCH_PAINTER::draw( const SCH_TEXT* aText, int aLayer, bool aDimmed )
     case SCH_HIER_LABEL_T:      aLayer = LAYER_HIERLABEL;                         break;
     case SCH_GLOBAL_LABEL_T:    aLayer = LAYER_GLOBLABEL;                         break;
     case SCH_DIRECTIVE_LABEL_T: aLayer = LAYER_NETCLASS_REFS;                     break;
+    case SCH_LABEL_T:           aLayer = LAYER_LOCLABEL;                          break;
     case SCH_TEXT_T:            aLayer = aText->GetParentSymbol() ? LAYER_DEVICE
                                                                   : LAYER_NOTES;  break;
     default:                    aLayer = LAYER_NOTES;                             break;
