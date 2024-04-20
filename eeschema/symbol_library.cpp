@@ -312,11 +312,11 @@ SYMBOL_LIB* SYMBOL_LIBS::AddLibrary( const wxString& aFileName, SYMBOL_LIBS::ite
 
 bool SYMBOL_LIBS::ReloadLibrary( const wxString &aFileName )
 {
-    SYMBOL_LIB *lib;
-    wxFileName fn = aFileName;
+    wxFileName  fn = aFileName;
+    SYMBOL_LIB* lib = FindLibrary( fn.GetName() );
 
     // Check if the library already exists.
-    if( !( lib = FindLibrary( fn.GetName() ) ) )
+    if( !lib )
         return false;
 
     // Create a clone of the library pointer in case we need to re-add it
