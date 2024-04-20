@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-16 18:01+0000\n"
+"PO-Revision-Date: 2024-04-21 22:07+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -793,7 +793,7 @@ msgstr "左ダブルクリックまたは中クリックで色の変更"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:490
 msgid "Uncheck 'Use board stackup colors' to allow color editing."
-msgstr ""
+msgstr "[基板スタックアップの色を使用]のチェックを外すと色を編集できます。"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:540
 #: pcbnew/widgets/appearance_controls.cpp:2194
@@ -6464,14 +6464,12 @@ msgid "Select all cells"
 msgstr "すべてのセルを選択"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "更新の終了"
+msgstr "オートコンプリートを承認"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "更新の終了"
+msgstr "オートコンプリートをキャンセル"
 
 #: common/hotkey_store.cpp:46
 msgid "Toggle Checkbox"
@@ -15427,7 +15425,8 @@ msgstr "出力パスは既存のパスと衝突しないようにする必要が
 #: eeschema/eeschema_jobs_handler.cpp:886 pcbnew/pcbnew_jobs_handler.cpp:964
 msgid ""
 "Output path must be specified to convert legacy and non-KiCad libraries\n"
-msgstr ""
+msgstr "以前の形式のライブラリもしくはKiCad以外のライブラリを変換するには、"
+"出力パスを指定する必要があります\n"
 
 #: eeschema/eeschema_jobs_handler.cpp:912
 msgid "Saving symbol library in updated format\n"
@@ -22243,7 +22242,7 @@ msgstr "解析タブを編集..."
 
 #: eeschema/tools/ee_actions.cpp:1499
 msgid "Edit the current analysis tab's SPICE command and plot setup"
-msgstr ""
+msgstr "現在の解析タブの SPICE コマンドとプロット設定を編集"
 
 #: eeschema/tools/ee_actions.cpp:1506
 msgid "Run Simulation"
@@ -22902,7 +22901,7 @@ msgstr "E96系列の値に制限"
 
 #: eeschema/widgets/tuner_slider_base.cpp:69
 msgid "Limit to E192 series values"
-msgstr "E192系列の値に制限."
+msgstr "E192系列の値に制限"
 
 #: gerbview/clear_gbr_drawlayers.cpp:47
 msgid "Current data will be lost?"
@@ -40072,17 +40071,17 @@ msgid "Current Board will be closed. Continue?"
 msgstr "現在の基板は閉じられます。続けますか？"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
 " This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"基板のゾーンが塗りつぶされる場合には、基板端クリアランス設定が使用されます "
-"(基板の設定 > デザインルール > 制約 を参照)。\n"
-"これにより、Edge Cuts レイヤーにおける基板外形線の太さを使用していた以前の"
-"バージョンの KiCad とは異なった塗りつぶしの結果となります。"
+"基板のゾーンが塗りつぶされる場合には、基板端クリアランス設定が使用されます ("
+"基板の設定 > デザインルール > 制約 を参照)。\n"
+"これにより、Edge Cuts "
+"レイヤーの基板外形線の太さを使用していた以前のバージョンの KiCad "
+"とは異なる結果の塗りつぶしとなる可能性があります。"
 
 #: pcbnew/files.cpp:525
 #, c-format
@@ -40708,7 +40707,7 @@ msgstr "長さの制約: %s"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2327
 msgid "Unable to tune segments inside other tuning patterns."
-msgstr ""
+msgstr "他の調整パターン内のセグメントを調整することはできません。"
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2360
 msgid "Tune"
@@ -46845,56 +46844,50 @@ msgid "Align to Top"
 msgstr "上寄せ"
 
 #: pcbnew/tools/pcb_actions.cpp:1895
-#, fuzzy
 msgid "Aligns selected items to the top edge of the item under the cursor"
-msgstr "選択したアイテムを上辺へ整列"
+msgstr "選択したアイテムをカーソル下の項目の上端に揃えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1901 pcbnew/tools/placement_tool.cpp:275
 msgid "Align to Bottom"
 msgstr "下寄せ"
 
 #: pcbnew/tools/pcb_actions.cpp:1902
-#, fuzzy
 msgid "Aligns selected items to the bottom edge of the item under the cursor"
-msgstr "選択したアイテムを下辺へ整列"
+msgstr "選択したアイテムをカーソル下の項目の下端に揃えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1908 pcbnew/tools/placement_tool.cpp:330
 msgid "Align to Left"
 msgstr "左寄せ"
 
 #: pcbnew/tools/pcb_actions.cpp:1909
-#, fuzzy
 msgid "Aligns selected items to the left edge of the item under the cursor"
-msgstr "選択したアイテムを左辺へ整列"
+msgstr "選択したアイテムをカーソル下の項目の左端に揃えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1915 pcbnew/tools/placement_tool.cpp:385
 msgid "Align to Right"
 msgstr "右寄せ"
 
 #: pcbnew/tools/pcb_actions.cpp:1916
-#, fuzzy
 msgid "Aligns selected items to the right edge of the item under the cursor"
-msgstr "選択したアイテムを右辺へ整列"
+msgstr "選択したアイテムをカーソル下の項目の右端に揃えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1922
 msgid "Align to Vertical Center"
 msgstr "垂直中央寄せ"
 
 #: pcbnew/tools/pcb_actions.cpp:1923
-#, fuzzy
 msgid ""
 "Aligns selected items to the vertical center of the item under the cursor"
-msgstr "選択したアイテムを垂直中央に配置"
+msgstr "選択したアイテムをカーソルのあるアイテムの垂直中央に揃えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1929
 msgid "Align to Horizontal Center"
 msgstr "水平中央寄せ"
 
 #: pcbnew/tools/pcb_actions.cpp:1930
-#, fuzzy
 msgid ""
 "Aligns selected items to the horizontal center of the item under the cursor"
-msgstr "選択したアイテムを水平中央に配置"
+msgstr "選択したアイテムをカーソルのあるアイテムの水平中央に揃えます"
 
 #: pcbnew/tools/pcb_actions.cpp:1936 pcbnew/tools/placement_tool.cpp:535
 msgid "Distribute Horizontally"
