@@ -316,17 +316,18 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
                                                 job.env_path ) );
         PYTHON_MANAGER manager( Pgm().GetCommonSettings()->m_Api.python_interpreter );
 
-        manager.Execute( wxString::Format( wxS( "-m venv %s"), job.env_path ),
-                [=]( int aRetVal, const wxString& aOutput, const wxString& aError )
+        manager.Execute(
+                wxString::Format( wxS( "-m venv %s" ), job.env_path ),
+                [this]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
-                    wxLogTrace( traceApi, wxString::Format( "Manager: venv (%d): %s",
-                                                            aRetVal, aOutput ) );
+                    wxLogTrace( traceApi,
+                                wxString::Format( "Manager: venv (%d): %s", aRetVal, aOutput ) );
 
                     if( !aError.IsEmpty() )
                         wxLogTrace( traceApi, wxString::Format( "Manager: venv err: %s", aError ) );
 
-                    wxCommandEvent* evt = new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED,
-                                                              wxID_ANY );
+                    wxCommandEvent* evt =
+                            new wxCommandEvent( EDA_EVT_PLUGIN_MANAGER_JOB_FINISHED, wxID_ANY );
                     QueueEvent( evt );
                 } );
     }
@@ -384,7 +385,7 @@ void API_PLUGIN_MANAGER::processNextJob( wxCommandEvent& aEvent )
             wxLogTrace( traceApi, "Manager: calling python `%s`", cmd );
 
             manager.Execute( cmd,
-                [=]( int aRetVal, const wxString& aOutput, const wxString& aError )
+                [this, job]( int aRetVal, const wxString& aOutput, const wxString& aError )
                 {
                     wxLogTrace( traceApi, wxString::Format( "Manager: pip (%d): %s",
                                                             aRetVal, aOutput ) );
