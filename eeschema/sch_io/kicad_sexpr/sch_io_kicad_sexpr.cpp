@@ -783,73 +783,77 @@ void SCH_IO_KICAD_SEXPR::saveSymbol( SCH_SYMBOL* aSymbol, const SCHEMATIC& aSche
 
     if( !aSymbol->GetInstances().empty() )
     {
+        std::map<KIID, std::vector<SCH_SYMBOL_INSTANCE>> projectInstances;
+
         m_out->Print( aNestLevel + 1, "(instances\n" );
 
+        wxString projectName;
         KIID lastProjectUuid;
         KIID rootSheetUuid = aSchematic.Root().m_Uuid;
         SCH_SHEET_LIST fullHierarchy = aSchematic.GetSheets();
-        bool project_open = false;
 
-        for( size_t i = 0; i < aSymbol->GetInstances().size(); i++ )
+        for( const SCH_SYMBOL_INSTANCE& inst : aSymbol->GetInstances() )
         {
             // Zero length KIID_PATH objects are not valid and will cause a crash below.
-            wxCHECK2( aSymbol->GetInstances()[i].m_Path.size(), continue );
+            wxCHECK2( inst.m_Path.size(), continue );
 
             // If the instance data is part of this design but no longer has an associated sheet
             // path, don't save it.  This prevents large amounts of orphaned instance data for the
             // current project from accumulating in the schematic files.
-            //
-            // Keep all instance data when copying to the clipboard.  It may be needed on paste.
-            if( !aForClipboard
-              && ( aSymbol->GetInstances()[i].m_Path[0] == rootSheetUuid )
-              && !fullHierarchy.GetSheetPathByKIIDPath( aSymbol->GetInstances()[i].m_Path ) )
-            {
-                if( project_open && ( ( i + 1 == aSymbol->GetInstances().size() )
-                  || lastProjectUuid != aSymbol->GetInstances()[i+1].m_Path[0] ) )
-                {
-                    m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
-                    project_open = false;
-                }
+            bool isOrphaned = ( inst.m_Path[0] == rootSheetUuid )
+                              && !fullHierarchy.GetSheetPathByKIIDPath( inst.m_Path );
 
+            // Keep all instance data when copying to the clipboard.  They may be needed on paste.
+            if( !aForClipboard && isOrphaned )
                 continue;
-            }
 
-            if( lastProjectUuid != aSymbol->GetInstances()[i].m_Path[0] )
+            auto it = projectInstances.find( inst.m_Path[0] );
+
+            if( it == projectInstances.end() )
             {
-                wxString projectName;
-
-                if( aSymbol->GetInstances()[i].m_Path[0] == rootSheetUuid )
-                    projectName = aSchematic.Prj().GetProjectName();
-                else
-                    projectName = aSymbol->GetInstances()[i].m_ProjectName;
-
-                lastProjectUuid = aSymbol->GetInstances()[i].m_Path[0];
-                m_out->Print( aNestLevel + 2, "(project %s\n",
-                              m_out->Quotew( projectName ).c_str() );
-                project_open = true;
+                projectInstances[ inst.m_Path[0] ] = { inst };
             }
-
-            wxString path;
-            KIID_PATH tmp = aSymbol->GetInstances()[i].m_Path;
-
-            if( aForClipboard && aRelativePath )
-                tmp.MakeRelativeTo( aRelativePath->Path() );
-
-            path = tmp.AsString();
-
-            m_out->Print( aNestLevel + 3, "(path %s\n",
-                          m_out->Quotew( path ).c_str() );
-            m_out->Print( aNestLevel + 4, "(reference %s) (unit %d)\n",
-                          m_out->Quotew( aSymbol->GetInstances()[i].m_Reference ).c_str(),
-                          aSymbol->GetInstances()[i].m_Unit );
-            m_out->Print( aNestLevel + 3, ")\n" );
-
-            if( project_open && ( ( i + 1 == aSymbol->GetInstances().size() )
-              || lastProjectUuid != aSymbol->GetInstances()[i+1].m_Path[0] ) )
+            else
             {
-                m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
-                project_open = false;
+                it->second.emplace_back( inst );
             }
+        }
+
+        for( auto& [uuid, instances] : projectInstances )
+        {
+            wxCHECK2( instances.size(), continue );
+
+            // Sort project instances by KIID_PATH.
+            std::sort( instances.begin(), instances.end(),
+                       []( SCH_SYMBOL_INSTANCE& aLhs, SCH_SYMBOL_INSTANCE& aRhs )
+                       {
+                           return aLhs.m_Path < aRhs.m_Path;
+                       } );
+
+            projectName = instances[0].m_ProjectName;
+
+            m_out->Print( aNestLevel + 2, "(project %s\n",
+                          m_out->Quotew( projectName ).c_str() );
+
+            for( const SCH_SYMBOL_INSTANCE& instance : instances )
+            {
+                wxString path;
+                KIID_PATH tmp = instance.m_Path;
+
+                if( aForClipboard && aRelativePath )
+                    tmp.MakeRelativeTo( aRelativePath->Path() );
+
+                path = tmp.AsString();
+
+                m_out->Print( aNestLevel + 3, "(path %s\n",
+                              m_out->Quotew( path ).c_str() );
+                m_out->Print( aNestLevel + 4, "(reference %s) (unit %d)\n",
+                              m_out->Quotew( instance.m_Reference ).c_str(),
+                              instance.m_Unit );
+                m_out->Print( aNestLevel + 3, ")\n" );
+            }
+
+            m_out->Print( aNestLevel + 2, ")\n" );  // Closes `project`.
         }
 
         m_out->Print( aNestLevel + 1, ")\n" );  // Closes `instances`.
