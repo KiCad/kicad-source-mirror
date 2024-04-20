@@ -257,6 +257,11 @@ protected:
         if( fpid.IsEmpty() )
             fpid = m_preselect;
 
+        // Disable the button until we have finished processing it.  Normally this is not an issue
+        // but if the footprint chooser is loading for the first time, it can be slow enough that
+        // multiple clicks will cause multiple instances of the footprint loader process to start
+        Disable();
+
         KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_FOOTPRINT_CHOOSER, true, m_dlg );
 
         if( !m_symbolNetlist.empty() )
@@ -269,6 +274,7 @@ protected:
             SetValue( fpid );
 
         frame->Destroy();
+        Enable();
     }
 
 protected:
