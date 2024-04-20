@@ -1247,7 +1247,7 @@ int PCBNEW_JOBS_HANDLER::JobExportDrc( JOB* aJob )
                 KICAD_NETLIST_READER netlistReader( lineReader, netlist.get() );
                 netlistReader.LoadNetlist();
             }
-            catch( const IO_ERROR& e )
+            catch( const IO_ERROR& )
             {
                 m_reporter->Report( _( "Failed to fetch schematic netlist for parity tests.\n" ),
                                     RPT_SEVERITY_INFO );
