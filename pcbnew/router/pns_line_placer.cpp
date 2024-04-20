@@ -877,6 +877,10 @@ bool LINE_PLACER::splitHeadTail( const LINE& aNewLine, const LINE& aOldTail, LIN
         if( !found )
             i--;
 
+        // If the old tail doesn't have any points of the new line, we can't split it.
+        if( i >= l2.PointCount() )
+            i = l2.PointCount() - 1;
+
         newHead.Clear();
 
         if( i == 0 )
