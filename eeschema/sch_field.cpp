@@ -195,15 +195,30 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
                 return symbol->ResolveTextVar( aPath, token, aDepth + 1 );
             };
 
+    std::function<bool( wxString* )> schematicResolver =
+            [&]( wxString* token ) -> bool
+            {
+                if( SCHEMATIC* schematic = Schematic() )
+                    return schematic->ResolveTextVar( aPath, token, aDepth + 1 );
+
+                return false;
+            };
+
     std::function<bool( wxString* )> sheetResolver =
             [&]( wxString* token ) -> bool
             {
                 SCH_SHEET* sheet = static_cast<SCH_SHEET*>( m_parent );
 
+                SCHEMATIC* schematic = Schematic();
                 SCH_SHEET_PATH path = *aPath;
                 path.push_back( sheet );
 
-                return sheet->ResolveTextVar( &path, token, aDepth + 1 );
+                bool retval = sheet->ResolveTextVar( &path, token, aDepth + 1 );
+
+                if( schematic )
+                    retval |= schematic->ResolveTextVar( &path, token, aDepth + 1 );
+
+                return retval;
             };
 
     std::function<bool( wxString* )> labelResolver =
@@ -222,7 +237,8 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
     {
         text = wxS( "" );
     }
-    else if( HasTextVars() )
+
+    for( int ii = 0; ii < 10 && text.Contains( wxT( "${" ) ); ++ii )
     {
         if( aDepth < 10 )
         {
@@ -233,7 +249,10 @@ wxString SCH_FIELD::GetShownText( const SCH_SHEET_PATH* aPath, bool aAllowExtraT
             else if( m_parent && m_parent->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
                 text = ExpandTextVars( text, &labelResolver );
             else if( Schematic() )
+            {
                 text = ExpandTextVars( text, &Schematic()->Prj() );
+                text = ExpandTextVars( text, &schematicResolver );
+            }
         }
     }
 
