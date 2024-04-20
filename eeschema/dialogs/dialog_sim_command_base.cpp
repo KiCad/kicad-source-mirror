@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -109,7 +109,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_dcEnable2 = new wxCheckBox( m_pgDC, wxID_ANY, _("Source 2"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_dcEnable2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_dcEnable2->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	gbSizer1->Add( m_dcEnable2, wxGBPosition( 0, 3 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -135,7 +135,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_staticText411 = new wxStaticText( m_pgDC, wxID_ANY, _("Source 1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText411->Wrap( -1 );
-	m_staticText411->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxEmptyString ) );
+	m_staticText411->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
 
 	gbSizer1->Add( m_staticText411, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
@@ -642,16 +642,16 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_fixIncludePaths = new wxCheckBox( m_panelCommand, wxID_ANY, _("Add full path for .include library directives"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_fixIncludePaths->SetValue(true);
-	bSizer88->Add( m_fixIncludePaths, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer88->Add( m_fixIncludePaths, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_saveAllVoltages = new wxCheckBox( m_panelCommand, wxID_ANY, _("Save all voltages"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer88->Add( m_saveAllVoltages, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer88->Add( m_saveAllVoltages, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_saveAllCurrents = new wxCheckBox( m_panelCommand, wxID_ANY, _("Save all currents"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer88->Add( m_saveAllCurrents, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer88->Add( m_saveAllCurrents, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_saveAllDissipations = new wxCheckBox( m_panelCommand, wxID_ANY, _("Save all power dissipations"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer88->Add( m_saveAllDissipations, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizer88->Add( m_saveAllDissipations, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_compatibilityModeSizer = new wxBoxSizer( wxHORIZONTAL );
 
@@ -684,7 +684,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY1 = new wxBoxSizer( wxVERTICAL );
 
 	m_lockY1 = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Fixed %s scale"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_bSizerY1->Add( m_lockY1, 0, wxRIGHT|wxLEFT, 5 );
+	m_bSizerY1->Add( m_lockY1, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	m_bSizerY1->Add( 0, 2, 1, wxEXPAND, 5 );
@@ -723,7 +723,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY2 = new wxBoxSizer( wxVERTICAL );
 
 	m_lockY2 = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Fixed %s scale"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_bSizerY2->Add( m_lockY2, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_bSizerY2->Add( m_lockY2, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	m_bSizerY2->Add( 0, 2, 1, wxEXPAND, 5 );
@@ -760,7 +760,7 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 	m_bSizerY3 = new wxBoxSizer( wxVERTICAL );
 
 	m_lockY3 = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Fixed %s scale"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_bSizerY3->Add( m_lockY3, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_bSizerY3->Add( m_lockY3, 0, wxTOP|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	m_bSizerY3->Add( 0, 2, 1, wxEXPAND, 5 );
@@ -801,14 +801,14 @@ DIALOG_SIM_COMMAND_BASE::DIALOG_SIM_COMMAND_BASE( wxWindow* parent, wxWindowID i
 
 	m_grid = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Show grid"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_grid->SetValue(true);
-	bSizerCheckboxes->Add( m_grid, 0, wxALL, 5 );
+	bSizerCheckboxes->Add( m_grid, 0, wxALL|wxEXPAND, 5 );
 
 	m_legend = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Show legend"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerCheckboxes->Add( m_legend, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerCheckboxes->Add( m_legend, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 	m_dottedSecondary = new wxCheckBox( m_panelPlotSetup, wxID_ANY, _("Dotted current/phase"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_dottedSecondary->SetValue(true);
-	bSizerCheckboxes->Add( m_dottedSecondary, 0, wxRIGHT|wxLEFT, 5 );
+	bSizerCheckboxes->Add( m_dottedSecondary, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
 	bPlotSetupSizer->Add( bSizerCheckboxes, 0, wxEXPAND|wxLEFT, 5 );
