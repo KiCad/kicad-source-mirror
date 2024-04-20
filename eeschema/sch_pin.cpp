@@ -940,8 +940,10 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
     if( !aDrawPinNum && !aDrawPinName )
         return;
 
-    int     name_offset = schIUScale.MilsToIU( PIN_TEXT_MARGIN );
-    int     num_offset  = schIUScale.MilsToIU( PIN_TEXT_MARGIN );
+    int namePenWidth = settings->GetDefaultPenWidth();
+    int numPenWidth  = settings->GetDefaultPenWidth();
+    int name_offset = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + namePenWidth;
+    int num_offset  = schIUScale.MilsToIU( PIN_TEXT_MARGIN ) + numPenWidth;
 
     /* Get the num and name colors */
     COLOR4D nameColor = settings->GetLayerColor( LAYER_PINNAM );
@@ -976,6 +978,7 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                  GR_TEXT_V_ALIGN_T vJustify )
             {
                 TEXT_ATTRIBUTES attrs;
+                attrs.m_StrokeWidth = namePenWidth;
                 attrs.m_Angle = angle;
                 attrs.m_Size = VECTOR2I( GetNameTextSize(), GetNameTextSize() );
                 attrs.m_Halign = hJustify;
@@ -990,6 +993,7 @@ void SCH_PIN::PlotPinTexts( PLOTTER *aPlotter, const VECTOR2I &aPinPos, PIN_ORIE
                  GR_TEXT_V_ALIGN_T vJustify )
             {
                 TEXT_ATTRIBUTES attrs;
+                attrs.m_StrokeWidth = numPenWidth;
                 attrs.m_Angle = angle;
                 attrs.m_Size = VECTOR2I( GetNumberTextSize(), GetNumberTextSize() );
                 attrs.m_Halign = hJustify;
