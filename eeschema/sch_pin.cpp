@@ -35,8 +35,7 @@
 #include <symbol_editor/symbol_editor_settings.h>
 #include <trigo.h>
 #include <string_utils.h>
-#include "sch_painter.h"
-#include "plotters/plotter.h"
+#include <plotters/plotter.h>
 
 
 // small margin in internal units between the pin text and the pin line
@@ -103,7 +102,7 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol ) :
         m_orientation( PIN_ORIENTATION::PIN_RIGHT ),
         m_shape( GRAPHIC_PINSHAPE::LINE ),
         m_type( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
-        m_attributes( 0 ),
+        m_hidden( false ),
         m_isDangling( true )
 {
     // Use the application settings for pin sizes if exists.
@@ -139,7 +138,7 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol, const wxString& aName, const wxStri
         m_orientation( aOrientation ),
         m_shape( GRAPHIC_PINSHAPE::LINE ),
         m_type( aPinType ),
-        m_attributes( 0 ),
+        m_hidden( false ),
         m_numTextSize( aNumTextSize ),
         m_nameTextSize( aNameTextSize ),
         m_isDangling( true )
@@ -151,7 +150,7 @@ SCH_PIN::SCH_PIN( LIB_SYMBOL* aParentSymbol, const wxString& aName, const wxStri
 }
 
 
-SCH_PIN::SCH_PIN( SCH_PIN* aLibPin, SCH_SYMBOL* aParentSymbol ) :
+SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin ) :
         SCH_ITEM( aParentSymbol, SCH_PIN_T, 0, 0 ),
         m_libPin( aLibPin ),
         m_orientation( PIN_ORIENTATION::INHERIT ),
@@ -176,11 +175,9 @@ SCH_PIN::SCH_PIN( SCH_PIN* aLibPin, SCH_SYMBOL* aParentSymbol ) :
 SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt ) :
         SCH_ITEM( aParentSymbol, SCH_PIN_T ),
         m_libPin( nullptr ),
-        m_length( 0 ),
         m_orientation( PIN_ORIENTATION::INHERIT ),
         m_shape( GRAPHIC_PINSHAPE::INHERIT ),
         m_type( ELECTRICAL_PINTYPE::PT_INHERIT ),
-        m_attributes( 0 ),
         m_number( aNumber ),
         m_alt( aAlt ),
         m_isDangling( true )
@@ -199,7 +196,7 @@ SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
         m_orientation( aPin.m_orientation ),
         m_shape( aPin.m_shape ),
         m_type( aPin.m_type ),
-        m_attributes( aPin.m_attributes ),
+        m_hidden( aPin.m_hidden ),
         m_numTextSize( aPin.m_numTextSize ),
         m_nameTextSize( aPin.m_nameTextSize ),
         m_isDangling( aPin.m_isDangling )
@@ -224,7 +221,7 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
     m_orientation = aPin.m_orientation;
     m_shape = aPin.m_shape;
     m_type = aPin.m_type;
-    m_attributes = aPin.m_attributes;
+    m_hidden = aPin.m_hidden;
     m_numTextSize = aPin.m_numTextSize;
     m_nameTextSize = aPin.m_nameTextSize;
     m_isDangling = aPin.m_isDangling;
@@ -240,6 +237,135 @@ VECTOR2I SCH_PIN::GetPosition() const
     else
         return m_position;
 }
+
+PIN_ORIENTATION SCH_PIN::GetOrientation() const
+{
+    if( m_orientation == PIN_ORIENTATION::INHERIT )
+    {
+        wxCHECK_MSG( m_libPin, PIN_ORIENTATION::PIN_RIGHT, wxS( "Can't inherit without a libPin!" ) );
+
+        return m_libPin->GetOrientation();
+    }
+
+    return m_orientation;
+}
+
+
+GRAPHIC_PINSHAPE SCH_PIN::GetShape() const
+{
+    if( !m_alt.IsEmpty() )
+    {
+        wxCHECK_MSG( m_libPin, GRAPHIC_PINSHAPE::LINE, wxS( "Can't specify alternate without a "
+                                                            "libPin!" ) );
+
+        return m_libPin->GetAlt( m_alt ).m_Shape;
+    }
+    else if( m_shape == GRAPHIC_PINSHAPE::INHERIT )
+    {
+        wxCHECK_MSG( m_libPin, GRAPHIC_PINSHAPE::LINE, wxS( "Can't inherit without a libPin!" ) );
+
+        return m_libPin->GetShape();
+    }
+
+    return m_shape;
+}
+
+
+int SCH_PIN::GetLength() const
+{
+    if( !m_length.has_value() )
+    {
+        wxCHECK_MSG( m_libPin, 0, wxS( "Can't inherit without a libPin!" ) );
+
+        return m_libPin->GetLength();
+    }
+
+    return m_length.value();
+}
+
+
+ELECTRICAL_PINTYPE SCH_PIN::GetType() const
+{
+    if( !m_alt.IsEmpty() )
+    {
+        wxCHECK_MSG( m_libPin, ELECTRICAL_PINTYPE::PT_UNSPECIFIED, wxS( "Can't specify alternate "
+                                                                        "without a libPin!" ) );
+
+        return m_libPin->GetAlt( m_alt ).m_Type;
+    }
+    else if( m_type == ELECTRICAL_PINTYPE::PT_INHERIT )
+    {
+        wxCHECK_MSG( m_libPin, ELECTRICAL_PINTYPE::PT_UNSPECIFIED, wxS( "Can't inherit without a "
+                                                                        "libPin!" ) );
+
+        return m_libPin->GetType();
+    }
+
+    return m_type;
+}
+
+
+wxString SCH_PIN::GetCanonicalElectricalTypeName() const
+{
+    if( m_type == ELECTRICAL_PINTYPE::PT_INHERIT )
+    {
+        wxCHECK_MSG( m_libPin, GetCanonicalElectricalTypeName( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
+                     wxS( "Can't inherit without a m_libPin!" ) );
+
+        return m_libPin->GetCanonicalElectricalTypeName();
+    }
+
+    return GetCanonicalElectricalTypeName( m_type );
+}
+
+
+wxString SCH_PIN::GetElectricalTypeName() const
+{
+    if( m_type == ELECTRICAL_PINTYPE::PT_INHERIT )
+    {
+        wxCHECK_MSG( m_libPin, ElectricalPinTypeGetText( ELECTRICAL_PINTYPE::PT_UNSPECIFIED ),
+                     wxS( "Can't inherit without a m_libPin!" ) );
+
+        return m_libPin->GetElectricalTypeName();
+    }
+
+    return ElectricalPinTypeGetText( m_type );
+}
+
+
+bool SCH_PIN::IsVisible() const
+{
+    if( !m_hidden.has_value() )
+    {
+        wxCHECK_MSG( m_libPin, true, wxS( "Can't inherit without a libPin!" ) );
+
+        return m_libPin->IsVisible();
+    }
+
+    return !m_hidden.value();
+}
+
+
+const wxString& SCH_PIN::GetName() const
+{
+    if( !m_alt.IsEmpty() )
+        return m_alt;
+    else if( m_libPin )
+        return m_libPin->GetName();
+
+    return m_name;
+}
+
+
+void SCH_PIN::SetName( const wxString& aName )
+{
+    m_name = aName;
+
+    // pin name string does not support spaces
+    m_name.Replace( wxT( " " ), wxT( "_" ) );
+    m_nameExtentsCache.m_Extents = VECTOR2I();
+}
+
 
 bool SCH_PIN::IsStacked( const SCH_PIN* aPin ) const
 {
@@ -331,6 +457,60 @@ wxString SCH_PIN::GetShownNumber() const
         return wxEmptyString;
     else
         return m_number;
+}
+
+
+void SCH_PIN::SetNumber( const wxString& aNumber )
+{
+    m_number = aNumber;
+
+    // pin number string does not support spaces
+    m_number.Replace( wxT( " " ), wxT( "_" ) );
+    m_numExtentsCache.m_Extents = VECTOR2I();
+}
+
+
+int SCH_PIN::GetNameTextSize() const
+{
+    if( !m_nameTextSize.has_value() )
+    {
+        wxCHECK_MSG( m_libPin, schIUScale.MilsToIU( DEFAULT_PINNAME_SIZE ),
+                     wxS( "Can't inherit without a libPin!" ) );
+
+        return m_libPin->GetNameTextSize();
+    }
+    wxASSERT( !m_libPin );
+
+    return m_nameTextSize.value();
+}
+
+
+void SCH_PIN::SetNameTextSize( int aSize )
+{
+    m_nameTextSize = aSize;
+    m_nameExtentsCache.m_Extents = VECTOR2I();
+}
+
+
+int SCH_PIN::GetNumberTextSize() const
+{
+    if( !m_numTextSize.has_value() )
+    {
+        wxCHECK_MSG( m_libPin, schIUScale.MilsToIU( DEFAULT_PINNUM_SIZE ),
+                     wxS( "Can't inherit without a libPin!" ) );
+
+        return m_libPin->GetNumberTextSize();
+    }
+    wxASSERT( !m_libPin );
+
+    return m_numTextSize.value();
+}
+
+
+void SCH_PIN::SetNumberTextSize( int aSize )
+{
+    m_numTextSize = aSize;
+    m_numExtentsCache.m_Extents = VECTOR2I();
 }
 
 
@@ -1195,8 +1375,8 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
     if( m_type != tmp->m_type )
         return static_cast<int>( m_type ) - static_cast<int>( tmp->m_type );
 
-    if( m_attributes != tmp->m_attributes )
-        return m_attributes - tmp->m_attributes;
+    if( m_hidden != tmp->m_hidden )
+        return m_hidden.value_or( false ) - tmp->m_hidden.value_or( false );
 
     if( m_numTextSize != tmp->m_numTextSize )
         return m_numTextSize.value_or( 0 ) - tmp->m_numTextSize.value_or( 0 );
@@ -1879,7 +2059,7 @@ bool SCH_PIN::operator==( const SCH_ITEM& aOther ) const
         if( m_name != other->m_name )
             return false;
 
-        if( m_attributes != other->m_attributes )
+        if( m_hidden != other->m_hidden )
             return false;
 
         if( m_numTextSize != other->m_numTextSize )
@@ -1967,7 +2147,7 @@ double SCH_PIN::Similarity( const SCH_ITEM& aOther ) const
     if( m_type != other->m_type )
         similarity *= 0.9;
 
-    if( m_attributes != other->m_attributes )
+    if( m_hidden != other->m_hidden )
         similarity *= 0.9;
 
     if( m_numTextSize != other->m_numTextSize )

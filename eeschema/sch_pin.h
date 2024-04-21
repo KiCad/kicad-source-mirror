@@ -34,9 +34,6 @@ class SCH_SYMBOL;
 // Circle diameter drawn at the active end of pins:
 #define TARGET_PIN_RADIUS   schIUScale.MilsToIU( 15 )
 
-// Pin visibility flag bit:
-#define PIN_INVISIBLE 1    // Set makes pin invisible
-
 
 class SCH_PIN : public SCH_ITEM
 {
@@ -54,7 +51,7 @@ public:
              PIN_ORIENTATION aOrientation, ELECTRICAL_PINTYPE aPinType, int aLength,
              int aNameTextSize, int aNumTextSize, int aBodyStyle, const VECTOR2I& aPos, int aUnit );
 
-    SCH_PIN( SCH_PIN* aLibPin, SCH_SYMBOL* aParentSymbol );
+    SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin );
 
     SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt );
 
@@ -82,41 +79,13 @@ public:
     SCH_PIN* GetLibPin() const { return m_libPin; }
     void SetLibPin( SCH_PIN* aLibPin ) { m_libPin = aLibPin; }
 
-    PIN_ORIENTATION GetOrientation() const
-    {
-        if( m_libPin )
-            return m_libPin->GetOrientation();
-
-        return m_orientation;
-    }
-
+    PIN_ORIENTATION GetOrientation() const;
     void SetOrientation( PIN_ORIENTATION aOrientation ) { m_orientation = aOrientation; }
 
-    GRAPHIC_PINSHAPE GetShape() const
-    {
-        if( m_libPin )
-        {
-            if( !m_alt.IsEmpty() )
-                return m_libPin->GetAlt( m_alt ).m_Shape;
-            else
-                return m_libPin->GetShape();
-        }
-
-        return m_shape;
-    }
-
+    GRAPHIC_PINSHAPE GetShape() const;
     void SetShape( GRAPHIC_PINSHAPE aShape ) { m_shape = aShape; }
 
-    int GetLength() const
-    {
-        if( m_libPin )
-            return m_libPin->GetLength();
-        else
-            wxCHECK_MSG( m_length.has_value(), 0, wxS( "lib pin must have length defined!" ) );
-
-        return m_length.value();
-    }
-
+    int GetLength() const;
     void SetLength( int aLength ) { m_length = aLength; }
 
     /**
@@ -126,117 +95,27 @@ public:
      */
     void ChangeLength( int aLength );
 
-    ELECTRICAL_PINTYPE GetType() const
-    {
-        if( m_libPin )
-        {
-            if( !m_alt.IsEmpty() )
-                return m_libPin->GetAlt( m_alt ).m_Type;
-            else
-                return m_libPin->GetType();
-        }
-
-        return m_type;
-    }
-
+    ELECTRICAL_PINTYPE GetType() const;
     void SetType( ELECTRICAL_PINTYPE aType ) { m_type = aType; }
+    wxString GetCanonicalElectricalTypeName() const;
+    wxString GetElectricalTypeName() const;
 
-    wxString GetCanonicalElectricalTypeName() const
-    {
-        if( m_libPin )
-            return m_libPin->GetCanonicalElectricalTypeName();
+    bool IsVisible() const;
+    void SetVisible( bool aVisible ) { m_hidden = !aVisible; }
 
-        return GetCanonicalElectricalTypeName( m_type );
-    }
-
-    wxString GetElectricalTypeName() const
-    {
-        if( m_libPin )
-            return m_libPin->GetElectricalTypeName();
-
-        return ElectricalPinTypeGetText( m_type );
-    }
-
-    bool IsVisible() const
-    {
-        if( m_libPin )
-            return m_libPin->IsVisible();
-
-        return ( m_attributes & PIN_INVISIBLE ) == 0;
-    }
-
-    void SetVisible( bool aVisible )
-    {
-        if( aVisible )
-            m_attributes &= ~PIN_INVISIBLE;
-        else
-            m_attributes |= PIN_INVISIBLE;
-    }
-
-    const wxString& GetName() const
-    {
-        if( !m_alt.IsEmpty() )
-            return m_alt;
-        else if( m_libPin )
-            return m_libPin->GetName();
-
-        return m_name;
-    }
-
+    const wxString& GetName() const;
     wxString GetShownName() const;
-
-    void SetName( const wxString& aName )
-    {
-        m_name = aName;
-
-        // pin name string does not support spaces
-        m_name.Replace( wxT( " " ), wxT( "_" ) );
-        m_nameExtentsCache.m_Extents = VECTOR2I();
-    }
+    void SetName( const wxString& aName );
 
     const wxString& GetNumber() const { return m_number; }
     wxString GetShownNumber() const;
+    void SetNumber( const wxString& aNumber );
 
-    void SetNumber( const wxString& aNumber )
-    {
-        m_number = aNumber;
+    int GetNameTextSize() const;
+    void SetNameTextSize( int aSize );
 
-        // pin number string does not support spaces
-        m_number.Replace( wxT( " " ), wxT( "_" ) );
-        m_numExtentsCache.m_Extents = VECTOR2I();
-    }
-
-    int GetNameTextSize() const
-    {
-        if( m_libPin )
-            return m_libPin->GetNameTextSize();
-        else
-            wxCHECK_MSG( m_nameTextSize.has_value(), 0, wxS( "lib pin must have sizes defined!" ) );
-
-        return m_nameTextSize.value();
-    }
-
-    void SetNameTextSize( int aSize )
-    {
-        m_nameTextSize = aSize;
-        m_nameExtentsCache.m_Extents = VECTOR2I();
-    }
-
-    int GetNumberTextSize() const
-    {
-        if( m_libPin )
-            return m_libPin->GetNumberTextSize();
-        else
-            wxCHECK_MSG( m_numTextSize.has_value(), 0, wxS( "lib pin must have sizes defined!" ) );
-
-        return m_numTextSize.value();
-    }
-
-    void SetNumberTextSize( int aSize )
-    {
-        m_numTextSize = aSize;
-        m_numExtentsCache.m_Extents = VECTOR2I();
-    }
+    int GetNumberTextSize() const;
+    void SetNumberTextSize( int aSize );
 
     std::map<wxString, ALT>& GetAlternates()
     {
@@ -463,7 +342,7 @@ protected:
     PIN_ORIENTATION         m_orientation;     // Pin orientation (Up, Down, Left, Right)
     GRAPHIC_PINSHAPE        m_shape;           // Shape drawn around pin
     ELECTRICAL_PINTYPE      m_type;            // Electrical type of the pin.
-    int                     m_attributes;      // Set bit 0 to indicate pin is invisible.
+    std::optional<bool>     m_hidden;
     wxString                m_name;
     wxString                m_number;
     std::optional<int>      m_numTextSize;     // Pin num and Pin name sizes

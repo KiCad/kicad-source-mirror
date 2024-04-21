@@ -379,7 +379,7 @@ void SCH_SYMBOL::UpdatePins()
         else
         {
             // This is a pin that was not found in the symbol, so create a new one.
-            pin = m_pins.emplace_back( std::make_unique<SCH_PIN>( SCH_PIN( libPin, this ) ) ).get();
+            pin = m_pins.emplace_back( std::make_unique<SCH_PIN>( SCH_PIN( this, libPin ) ) ).get();
         }
 
         m_pinMap[ libPin ] = pin;
