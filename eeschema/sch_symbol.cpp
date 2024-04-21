@@ -1103,6 +1103,29 @@ SCH_PIN* SCH_SYMBOL::GetPin( const wxString& aNumber ) const
 }
 
 
+const SCH_PIN* SCH_SYMBOL::GetPin( const VECTOR2I& aPos ) const
+{
+    for( const std::unique_ptr<SCH_PIN>& pin : m_pins )
+    {
+        int pin_unit      = pin->GetLibPin() ? pin->GetLibPin()->GetUnit()
+                                             : GetUnit();
+        int pin_bodyStyle = pin->GetLibPin() ? pin->GetLibPin()->GetBodyStyle()
+                                             : GetBodyStyle();
+
+        if( pin_unit > 0 && pin_unit != GetUnit() )
+            continue;
+
+        if( pin_bodyStyle > 0 && pin_bodyStyle != GetBodyStyle() )
+            continue;
+
+        if( pin->IsPointClickableAnchor( aPos ) )
+            return pin.get();
+    }
+
+    return nullptr;
+}
+
+
 std::vector<SCH_PIN*> SCH_SYMBOL::GetLibPins() const
 {
     if( m_part )
