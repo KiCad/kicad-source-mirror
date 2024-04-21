@@ -33,8 +33,6 @@ namespace PNS
 class LINK_HOLDER : public ITEM
 {
 public:
-    typedef std::vector<LINKED_ITEM*> LINKS;
-
     LINK_HOLDER( PnsKind aKind ) : ITEM( aKind )
     {}
 
@@ -46,8 +44,8 @@ public:
 
     ///< Return the list of links from the owning node that constitute this
     ///< line (or NULL if the line is not linked).
-    LINKS& Links() { return m_links; }
-    const LINKS& Links() const { return m_links; }
+    std::vector<LINKED_ITEM*>& Links() { return m_links; }
+    const std::vector<LINKED_ITEM*>& Links() const { return m_links; }
 
     bool IsLinked() const
     {
@@ -102,7 +100,7 @@ protected:
 
     ///< List of segments in the owning NODE (ITEM::m_owner) that constitute this line, or NULL
     ///< if the line is not a part of any node.
-    LINKS m_links;
+    std::vector<LINKED_ITEM*> m_links;
 };
 
 } // namespace PNS
