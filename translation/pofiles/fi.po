@@ -18,10 +18,10 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-03-11 00:02+0000\n"
-"Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
-"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/master-"
-"source/fi/>\n"
+"PO-Revision-Date: 2024-04-21 22:07+0000\n"
+"Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/"
+"master-source/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31163,7 +31163,7 @@ msgstr "Aloitusarvosta"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:196
 msgid "Initial Pad Number"
-msgstr "Alustettu Anturan Numero"
+msgstr "Ensimmäinen anturan numero"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:200
 msgid "Continuous (1, 2, 3...)"
@@ -31192,9 +31192,8 @@ msgstr "Antura-numeroinnin alku:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:248
 #: pcbnew/dialogs/dialog_create_array_base.cpp:521
-#, fuzzy
 msgid "Pad numbering increment:"
-msgstr "Antura-numeroinnin alku:"
+msgstr "Antura-numeroinnin askel:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:278
 msgid "Grid Array"
@@ -37233,7 +37232,7 @@ msgstr "Edge_Cuts reunavälys"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:675
 msgid "Eco1"
-msgstr "Eco1()"
+msgstr "Eco1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:678
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:688
@@ -37244,7 +37243,7 @@ msgstr "Apu-"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:685
 msgid "Eco2"
-msgstr "Eco2()"
+msgstr "Eco2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:693
 msgid "If you want a separate layer for comments or notes"
