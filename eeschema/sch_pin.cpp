@@ -1564,7 +1564,7 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     aList.emplace_back( _( "Name" ), UnescapeString( GetShownName() ) );
     aList.emplace_back( _( "Number" ), GetShownNumber() );
-    aList.emplace_back( _( "Type" ), ElectricalPinTypeGetText( m_type ) );
+    aList.emplace_back( _( "Type" ), ElectricalPinTypeGetText( GetType() ) );
     aList.emplace_back( _( "Style" ), PinShapeGetText( m_shape ) );
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
