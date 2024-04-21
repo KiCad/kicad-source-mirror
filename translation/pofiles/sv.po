@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-16 08:02+0000\n"
+"PO-Revision-Date: 2024-04-21 22:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/v8/sv/>\n"
 "Language: sv\n"
@@ -29915,8 +29915,8 @@ msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
 msgstr ""
-"Kunde inte bestämma numreringsstart från '%s': förväntat värde "
-"överensstämmer med alfabetet '%s'."
+"Kunde inte bestämma numreringsstart från '%s': förväntar värde "
+"överensstämmande med alfabetet '%s'."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:365
 msgid "step value"
@@ -30028,11 +30028,11 @@ msgstr "Vertikalt, sedan horisontellt"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:180
 msgid "Numbering Direction"
-msgstr "Nummerriktning"
+msgstr "Numreringsriktning"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:184
 msgid "Reverse numbering on alternate rows/columns"
-msgstr "Omvänd numrering på alternativa rader / kolumner"
+msgstr "Omvänd numrering på alternerande rader / kolumner"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:187
 #: pcbnew/dialogs/dialog_create_array_base.cpp:478
@@ -30046,7 +30046,7 @@ msgstr "Från startvärde"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:189
 msgid "Initial Pad Number"
-msgstr "Ursprungligt lödytenummer"
+msgstr "Första lödytenummer"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:193
 msgid "Continuous (1, 2, 3...)"
@@ -30062,16 +30062,16 @@ msgstr "System för numrering av lödytor"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:199
 msgid "Primary axis numbering:"
-msgstr "Primär axelnummerering:"
+msgstr "Numrering i primära axelns riktning:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:208
 msgid "Secondary axis numbering:"
-msgstr "Sekundär axelnummerering:"
+msgstr "Numrering i sekundära axelns riktning:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:227
 #: pcbnew/dialogs/dialog_create_array_base.cpp:499
 msgid "Pad numbering start:"
-msgstr "Pad-numreringsstart:"
+msgstr "Startvärde för numrering av lödytor:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:241
 #: pcbnew/dialogs/dialog_create_array_base.cpp:506
@@ -30190,11 +30190,11 @@ msgstr "Numreringsalternativ"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:480
 msgid "Initial Pad Number:"
-msgstr "Ursprungligt lödytenummer:"
+msgstr "Första lödytenummer:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:484
 msgid "Pad Numbering:"
-msgstr "Pad numrering:"
+msgstr "Lödytenumrering:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:526
 msgid "Circular Array"
