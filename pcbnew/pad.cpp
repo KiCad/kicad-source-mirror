@@ -824,7 +824,11 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
             else
             {
                 m_layerMask &= ~LSET::AllCuMask();
-                m_layerMask.set( B_Cu );
+
+                // A SMD can be a "aperture pad", with no copper layer.
+                // So ensure we can set the bottom copper layer
+                if( !IsAperturePad() )
+                    m_layerMask.set( B_Cu );
             }
 
             m_drill = VECTOR2I( 0, 0 );
@@ -1679,8 +1683,10 @@ const BOX2I PAD::ViewBBox() const
 void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 {
     SetShape( aMasterPad.GetShape() );
-    SetLayerSet( aMasterPad.GetLayerSet() );
     SetAttribute( aMasterPad.GetAttribute() );
+    // SetAttribute() can change m_layerMask. be sure we keep the original mask
+    // by calling SetLayerSet() after SetAttribute()
+    SetLayerSet( aMasterPad.GetLayerSet() );
     SetProperty( aMasterPad.GetProperty() );
 
     // Must be after setting attribute and layerSet
