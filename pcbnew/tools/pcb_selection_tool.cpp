@@ -414,8 +414,11 @@ int PCB_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( m_isFootprintEditor )
             {
-                collector.Collect( board()->GetFirstFootprint(), { PCB_TABLECELL_T },
-                                   evt->DragOrigin(), guide );
+                if( board()->GetFirstFootprint() )
+                {
+                    collector.Collect( board()->GetFirstFootprint(), { PCB_TABLECELL_T },
+                                       evt->DragOrigin(), guide );
+                }
             }
             else
             {
