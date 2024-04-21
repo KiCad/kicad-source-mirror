@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-16 18:01+0000\n"
+"PO-Revision-Date: 2024-04-21 22:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
 "master-source/sv/>\n"
@@ -1738,9 +1738,8 @@ msgid "Export to Clipboard"
 msgstr "Exportera till urklipp"
 
 #: common/api/api_handler.cpp:27
-#, fuzzy
 msgid "Modification from API"
-msgstr "Modifiera form"
+msgstr "Ändring från API"
 
 #: common/background_jobs_monitor.cpp:97
 msgid "Background Jobs"
@@ -2005,16 +2004,14 @@ msgid "Additional Contributions By"
 msgstr "Ytterligare bidrag från"
 
 #: common/dialog_about/AboutDialog_main.cpp:600
-#, fuzzy
 msgid "Documentation Team"
-msgstr "Dokumentation"
+msgstr "Dokumentationsgruppen"
 
 #: common/dialog_about/AboutDialog_main.cpp:800
 msgid "Librarian Team"
 msgstr "Biblioteksgruppen"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
 msgstr "3D-modeller"
 
@@ -2038,9 +2035,8 @@ msgid "Footprints"
 msgstr "Fotavtryck"
 
 #: common/dialog_about/AboutDialog_main.cpp:865
-#, fuzzy
 msgid "Icons"
-msgstr "Ikon"
+msgstr "Ikoner"
 
 #: common/dialog_about/AboutDialog_main.cpp:872
 msgid "Package Developers"
@@ -3055,13 +3051,12 @@ msgid "Reference Designators"
 msgstr "Referensbeteckningar"
 
 #: common/dialogs/dialog_paste_special_base.cpp:28
-#, fuzzy
 msgid "Clear Net Assignments"
-msgstr "Alternativ uppgift"
+msgstr "Rensa nättilldelningar"
 
 #: common/dialogs/dialog_paste_special_base.cpp:29
 msgid "Remove the net information from all connected items before pasting"
-msgstr ""
+msgstr "Ta bort nätinformation från alla anslutna objekt innan de klistras in"
 
 #: common/dialogs/dialog_paste_special_base.h:48
 msgid "Paste Special"
@@ -3814,11 +3809,11 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings_base.cpp:162
 msgid "Use alternating row colors in tables"
-msgstr ""
+msgstr "Tillämpa alternerande färger för rader i tabeller"
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "When enabled, use a different color for every other table row"
-msgstr ""
+msgstr "När aktiverat används olika färger för varannan tabellrad"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Icon theme:"
@@ -4526,84 +4521,91 @@ msgid "Library nickname prefix:"
 msgstr "Prefix för bibliotekets kortnamn:"
 
 #: common/dialogs/panel_plugin_settings.cpp:103
-#, fuzzy, c-format
+#, c-format
 msgid "Listening at %s"
-msgstr "Befintlig sökväg:"
+msgstr "Inväntar anslutning på %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:111
 msgid "This installation of KiCad does not have API support enabled."
-msgstr ""
+msgstr "Denna KiCad-installation har inte API-stöd aktiverat."
 
 #: common/dialogs/panel_plugin_settings.cpp:120
 msgid "KiCad API is not enabled; external Python plugins will not be available"
 msgstr ""
+"KiCad API är inte aktiverat, varför Python-insticksprogram inte kommer att "
+"vara tillgängliga"
 
 #: common/dialogs/panel_plugin_settings.cpp:131
 msgid ""
 "No valid Python interpreter chosen; external Python plugins will not be "
 "available"
 msgstr ""
+"Ingen giltig Python-tolk vald; externa Python-insticksprogram kommer inte "
+"att vara tillgängliga"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "Hittade "
+msgstr "Hittade %s"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr ""
+msgstr "Otiltig Python 3-tolk"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
-#, fuzzy
 msgid "KiCad API"
-msgstr "KiCad"
+msgstr "KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:23
 msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
+"När KiCad-API är aktiverat, kan insticksprogram och annan mjukvara som körs "
+"på denna dator ansluta till KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
-msgstr ""
+msgstr "Aktivera KiCad API"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:28
 msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
+"Aktivera KiCad API.  Detta kommer att tillåta tredjepartsmjukvara som körs "
+"på din dator att få åtkomst till KiCad."
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
 msgid "Python Interpreter"
-msgstr ""
+msgstr "Python-tolk"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:45
 msgid "Path to Python interpreter:"
-msgstr ""
+msgstr "Sökväg till Python-tolk:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "Ta bort den sista punkten som lagts till i det aktuella objektet"
+msgstr "Välj sökväg till en Python-tolk"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
-msgstr ""
+msgstr "*.*"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:52
-#, fuzzy
 msgid "Detect Automatically"
-msgstr "Numrera automatiskt"
+msgstr "Upptäck automatiskt"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:58
 msgid ""
 "No Python interpreter chosen; external Python plugins will not be available"
 msgstr ""
+"Ingen Python-tolk vald; externa Python-insticksprogram kommer inte att vara "
+"tillgängliga"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:60
 msgid "Python interpreter status"
-msgstr ""
+msgstr "Status för Python-tolk"
 
 #: common/dialogs/panel_setup_netclasses.cpp:95 common/eda_shape.cpp:1953
 #: common/stroke_params.cpp:37
@@ -5256,9 +5258,8 @@ msgid "Packages and Updates"
 msgstr "Paket och uppdateringar"
 
 #: common/eda_base_frame.cpp:1253
-#, fuzzy
 msgid "Plugins"
-msgstr "Insticksprogram (%d)"
+msgstr "Insticksprogram"
 
 #: common/eda_base_frame.cpp:1336
 #, c-format
@@ -7642,7 +7643,6 @@ msgid "Right-justify fields and text items"
 msgstr "Högerjustera fält och textobjekt"
 
 #: common/tool/actions.cpp:304
-#, fuzzy
 msgid "Expand All"
 msgstr "Expandera alla"
 
@@ -7877,24 +7877,20 @@ msgid "Zoom Out"
 msgstr "Zooma ut"
 
 #: common/tool/actions.cpp:574 common/tool/actions.cpp:575
-#, fuzzy
 msgid "Zoom In Horizontally"
-msgstr "Spegelvänd horisontellt"
+msgstr "Zooma in horisontellt"
 
 #: common/tool/actions.cpp:581 common/tool/actions.cpp:582
-#, fuzzy
 msgid "Zoom Out Horizontally"
-msgstr "Spegelvänd horisontellt"
+msgstr "Zooma ut horisontellt"
 
 #: common/tool/actions.cpp:588 common/tool/actions.cpp:589
-#, fuzzy
 msgid "Zoom In Vertically"
-msgstr "Spegelvänd vertikalt"
+msgstr "Zooma in vertikalt"
 
 #: common/tool/actions.cpp:595 common/tool/actions.cpp:596
-#, fuzzy
 msgid "Zoom Out Vertically"
-msgstr "Spegelvänd vertikalt"
+msgstr "Zooma ut vertikalt"
 
 #: common/tool/actions.cpp:604 common/widgets/mathplot.cpp:1383
 msgid "Center on Cursor"
@@ -8929,9 +8925,8 @@ msgid "Allegro netlist files"
 msgstr "Allegro nätlistefiler"
 
 #: common/wildcards_and_files_ext.cpp:299
-#, fuzzy
 msgid "PADS netlist files"
-msgstr "SPICE nätlistefil"
+msgstr "PADS nätlistefiler"
 
 #: common/wildcards_and_files_ext.cpp:305
 msgid "EasyEDA (JLCEDA) Std backup archive"
@@ -9560,12 +9555,11 @@ msgstr "Numrering slutförd."
 
 #: eeschema/api/api_handler_sch.cpp:256 pcbnew/api/api_handler_pcb.cpp:342
 msgid "Added items via API"
-msgstr ""
+msgstr "Objekt tillagda via API"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
-#, fuzzy
 msgid "Created items via API"
-msgstr "Skapa linjer"
+msgstr "Objekt skapade via API"
 
 #: eeschema/bom_plugins.cpp:46
 #, c-format
@@ -10586,29 +10580,24 @@ msgid "Electrical Rules Checker"
 msgstr "Kontrollera elektriska regler (ERC)"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:263
-#, fuzzy
 msgid "Export netlist in legacy KiCad format"
-msgstr "Exportera data i Pcbnew-format"
+msgstr "Exportera nätlista i äldre KiCad-format"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:268
-#, fuzzy
 msgid "Export netlist in OrcadPCB2 format"
-msgstr "Exportera data i Pcbnew-format"
+msgstr "Exportera nätlista i OrcadPCB2-format"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:273
-#, fuzzy
 msgid "Export netlist in Allegro format"
-msgstr "Exportera data i Pcbnew-format"
+msgstr "Exportera nätlista i Allegro-format"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:278
-#, fuzzy
 msgid "Export netlist in PADS format"
-msgstr "Exportera GenCAD format"
+msgstr "Exportera nätlista i PADS-format"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:283
-#, fuzzy
 msgid "Export netlist in CadStar format"
-msgstr "Exportera GenCAD format"
+msgstr "Exportera nätlista i CadStar-format"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:291
 #: eeschema/dialogs/dialog_export_netlist_base.h:73
@@ -10616,9 +10605,8 @@ msgid "Export Netlist"
 msgstr "Exportera nätlista"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:317
-#, fuzzy
 msgid "Export netlist in SPICE format"
-msgstr "Exportera data i Pcbnew-format"
+msgstr "Exportera nätlista i SPICE-format"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:321
 #: eeschema/dialogs/dialog_export_netlist.cpp:374
@@ -10676,7 +10664,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:370
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "Exportera nätlista som en SPICE .subckt-modell"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:424
 msgid "Netlist command:"
@@ -10728,28 +10716,24 @@ msgid "You must provide a netlist generator title"
 msgstr "Du måste tillhandahålla en titel för nätlistegeneratorn"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:50
-#, fuzzy
 msgid "Add Exporter..."
-msgstr "Exportera..."
+msgstr "Lägg till exporterare..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:53
-#, fuzzy
 msgid "Remove Exporter"
-msgstr "Ta bort hörnet"
+msgstr "Ta bort exporterare"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:101
-#, fuzzy
 msgid "Command line to run the exporter:"
-msgstr "Kommandorad för att köra generatorn:"
+msgstr "Kommandorad för att köra exporteraren:"
 
 #: eeschema/dialogs/dialog_export_netlist_base.cpp:116
-#, fuzzy
 msgid "Browse Scripts..."
-msgstr "Bläddra bland generatorer..."
+msgstr "Bläddra bland skript..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "Lägg till skriptbaserade nätlisteexporterare"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:234
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -12448,12 +12432,13 @@ msgstr "Skapa popuprutor för egenskaper"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 #: pcbnew/dialogs/dialog_plot_base.cpp:416
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "Generera metadata från variablerna AUTHOR && SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:168
 #: pcbnew/dialogs/dialog_plot_base.cpp:417
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
 msgstr ""
+"Generera egenskaper för PDF-dokument från textvariablerna AUTHOR och SUBJECT"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:175
 msgid "Other options"
@@ -14948,42 +14933,35 @@ msgstr "Rapportera fel"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:41
 #: eeschema/dialogs/panel_simulator_preferences.cpp:62
-#, fuzzy
 msgid "No action"
-msgstr "Ingen förbindelse"
+msgstr "Ingen åtgärd"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:42
 #: eeschema/dialogs/panel_simulator_preferences.cpp:63
-#, fuzzy
 msgid "Pan left/right"
-msgstr "Panorera vänster/höger:"
+msgstr "Panorera vänster/höger"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:43
-#, fuzzy
 msgid "Pan right/left"
-msgstr "Panorera till Höger"
+msgstr "Panorera höger/vänster"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:44
-#, fuzzy
 msgid "Pan up/down"
-msgstr "Panorera upp/ner:"
+msgstr "Panorera upp/ner"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences.cpp:64
-#, fuzzy
 msgid "Zoom horizontally"
-msgstr "Spegelvänd horisontellt"
+msgstr "Zooma horisontellt"
 
 #: eeschema/dialogs/panel_simulator_preferences.cpp:47
-#, fuzzy
 msgid "Zoom vertically"
-msgstr "Spegelvänd vertikalt"
+msgstr "Zooma vertikalt"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:46
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:109
-#, fuzzy
 msgid "Modifier"
-msgstr "Modifierad"
+msgstr "Modifierare"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:50
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:113
@@ -14995,32 +14973,28 @@ msgid "Action"
 msgstr "Åtgärd"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:54
-#, fuzzy
 msgid "None:"
-msgstr "Inget"
+msgstr "Ingen:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:63
-#, fuzzy
 msgid "Ctrl:"
-msgstr "Ctrl"
+msgstr "Ctrl:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:72
-#, fuzzy
 msgid "Shift:"
-msgstr "Skift"
+msgstr "Skift:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
-msgstr ""
+msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
-#, fuzzy
 msgid "Horizontal touchpad movement:"
-msgstr "Antal kolumner:"
+msgstr "Horisontell rörelse på pekplatta:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:117
 msgid "Any:"
-msgstr ""
+msgstr "Godtycklig:"
 
 #: eeschema/dialogs/panel_sym_color_settings_base.cpp:24
 msgid "Use schematic editor color theme"
@@ -15741,9 +15715,8 @@ msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Etiketterna liknar varandra (endast små och stora bokstäver skiljer)"
 
 #: eeschema/erc_item.cpp:99
-#, fuzzy
 msgid "Global label only appears once in the schematic"
-msgstr "Global etikett inte ansluten någon annanstans i schemat"
+msgstr "Global etikett förekommer bara en gång i schemat"
 
 #: eeschema/erc_item.cpp:103
 msgid "Different footprint assigned in another unit of the symbol"
@@ -16053,9 +16026,9 @@ msgid "Import Schematic"
 msgstr "Importera kretsschema"
 
 #: eeschema/files-io.cpp:764
-#, fuzzy, c-format
+#, c-format
 msgid "Insufficient permissions to read file '%s'."
-msgstr "Otillräckliga behörigheter för att spara filen '%s'."
+msgstr "Otillräckliga behörigheter för att läsa filen '%s'."
 
 #: eeschema/files-io.cpp:786
 #, c-format
@@ -16754,9 +16727,9 @@ msgid "Junction at %s, %s"
 msgstr "Knutpunkt vid %s, %s"
 
 #: eeschema/net_navigator.cpp:147
-#, fuzzy, c-format
+#, c-format
 msgid "No-Connect at %s, %s"
-msgstr "Inga anslutningar"
+msgstr "Ingen anslutning vid %s, %s"
 
 #: eeschema/net_navigator.cpp:157
 #, c-format
@@ -16799,9 +16772,9 @@ msgid "Could not open file '%s' to write IBIS model"
 msgstr "Kunde inte öppna fil '%s' för att skriva IBIS-modell"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:549
-#, fuzzy, c-format
+#, c-format
 msgid "Error in parsing model '%s', error: '%s'"
-msgstr "Fel vid inläsning av mönsterkort '%s':%s"
+msgstr "Fel vid tolkning av modell '%s', fel: '%s'"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:563
 #, c-format
@@ -16809,6 +16782,8 @@ msgid ""
 "Error in parsing model '%s', wrong number of nodes '?' in Sim.NodesFormat "
 "compared to connections"
 msgstr ""
+"Fel vid tolkning av modell '%s', fel antal noder '?' i Sim.NodesFormat "
+"jämfört med anslutningar"
 
 #: eeschema/netlist_exporters/netlist_exporter_spice.cpp:599
 #, c-format
@@ -22208,14 +22183,12 @@ msgid "Export Current Plot as CSV..."
 msgstr "Exportera aktuell plott som CSV..."
 
 #: eeschema/tools/ee_actions.cpp:1468
-#, fuzzy
 msgid "Export Current Plot to Clipboard"
-msgstr "Exportera ritning till Urklipp"
+msgstr "Exportera aktuell plott till urklipp"
 
 #: eeschema/tools/ee_actions.cpp:1474
-#, fuzzy
 msgid "Export Current Plot to Schematic"
-msgstr "Exportera aktuell plott som CSV..."
+msgstr "Exportera aktuell plott till kretsschema"
 
 #: eeschema/tools/ee_actions.cpp:1480
 msgid "Show Legend"
@@ -22437,12 +22410,10 @@ msgid "Press <ESC> to cancel sheet creation."
 msgstr "Tryck på <ESC> för att avbryta skapande av ritningsark."
 
 #: eeschema/tools/sch_drawing_tools.cpp:2528
-#, fuzzy
 msgid "Modify sheet pin"
-msgstr "Lägg till ett arkstift"
+msgstr "Modifiera arkstift"
 
 #: eeschema/tools/sch_drawing_tools.cpp:2534
-#, fuzzy
 msgid "Modify schematic item"
 msgstr "Modifiera kretsschemaobjekt"
 
@@ -24684,92 +24655,90 @@ msgstr "Inget ritningsark"
 
 #: kicad/cli/command_pcb_render.cpp:167
 msgid "Renders the PCB in 3D view to PNG or JPEG image"
-msgstr ""
+msgstr "Renderar mönsterkortet i 3D-vy som PNG eller JPEG-bild"
 
 #: kicad/cli/command_pcb_render.cpp:173
-#, fuzzy
 msgid "Image width"
-msgstr "Sidans bredd"
+msgstr "Bildens bredd"
 
 #: kicad/cli/command_pcb_render.cpp:179
-#, fuzzy
 msgid "Image height"
-msgstr "Sidans höjd"
+msgstr "Bildens höjd"
 
 #: kicad/cli/command_pcb_render.cpp:185
-#, fuzzy, c-format
+#, c-format
 msgid "Render from side. Options: %s"
-msgstr "Renderingsalternativ"
+msgstr "Rendera från sidan. Alternativ: %s"
 
 #: kicad/cli/command_pcb_render.cpp:190
 msgid ""
 "Image background. Options: transparent, opaque. Default: transparent for "
 "PNG, opaque for JPEG"
 msgstr ""
+"Bildens bakgrund. Alternativ: transparent, ogenomskinlig. Förinställning: "
+"transparent för PNG, ogenomskinlig för JPEG"
 
 #: kicad/cli/command_pcb_render.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "Render quality. Options: %s"
-msgstr "Allmäna inställningar"
+msgstr "Renderingskvalitet. Alternativ: %s"
 
 #: kicad/cli/command_pcb_render.cpp:204
 #, c-format
 msgid "Color preset. Options: %s, %s, %s, ..."
-msgstr ""
+msgstr "Färgförinställningar. Alternativ: %s, %s, %s, ..."
 
 #: kicad/cli/command_pcb_render.cpp:210
 msgid ""
 "Enables floor, shadows and post-processing, even if disabled in quality "
 "preset"
 msgstr ""
+"Aktiverar golv, skuggor och efterbehandling, även om dessa är deaktiverade i "
+"kvalitetsförinställning"
 
 #: kicad/cli/command_pcb_render.cpp:215
 msgid "Use perspective projection instead of orthogonal"
-msgstr ""
+msgstr "Använd perspektivprojektion istället för ortogonal"
 
 #: kicad/cli/command_pcb_render.cpp:221
-#, fuzzy
 msgid "Camera zoom"
-msgstr "Kamera-alternativ"
+msgstr "Kamerazoom"
 
 #: kicad/cli/command_pcb_render.cpp:226
 msgid "Pan camera, format 'X,Y,Z' e.g.: '3,0,0'"
-msgstr ""
+msgstr "Panorera kamera, format 'X,Y,Z' t.ex.: '3,0,0'"
 
 #: kicad/cli/command_pcb_render.cpp:231
 msgid ""
 "Set pivot point relative to the board center in centimeters, format 'X,Y,Z' "
 "e.g.: '-10,2,0'"
 msgstr ""
+"Ställ in vridningscentrum relativt mönsterkortets centrum i centimeter, "
+"format 'X,Y,Z' t.ex.: '-10,2,0'"
 
 #: kicad/cli/command_pcb_render.cpp:238
 msgid "Rotate board, format 'X,Y,Z' e.g.: '-45,0,45' for isometric view"
-msgstr ""
+msgstr "Rotera mönsterkort, format 'X,Y,Z' t.ex.: '-45,0,45' för isometrisk vy"
 
 #: kicad/cli/command_pcb_render.cpp:262
-#, fuzzy
 msgid "Invalid background\n"
-msgstr "Vit bakgrund"
+msgstr "Ogiltig bakgrund\n"
 
 #: kicad/cli/command_pcb_render.cpp:268
-#, fuzzy
 msgid "Invalid rotation format\n"
-msgstr "Ogiltigt rapportformat\n"
+msgstr "Ogiltigt rotationsformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:274
-#, fuzzy
 msgid "Invalid pan format\n"
-msgstr "Ogiltigt format\n"
+msgstr "Ogiltigt panoreringsformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:280
-#, fuzzy
 msgid "Invalid pivot format\n"
-msgstr "Ogiltigt rapportformat\n"
+msgstr "Ogiltigt vridningsformat\n"
 
 #: kicad/cli/command_pcb_render.cpp:295
-#, fuzzy
 msgid "Invalid image format\n"
-msgstr "Ogiltigt format\n"
+msgstr "Ogiltigt bildformat\n"
 
 #: kicad/cli/command_sch.h:31
 msgid "Schematics"
@@ -24837,13 +24806,12 @@ msgid "Export a netlist"
 msgstr "Exportera en nätlista"
 
 #: kicad/cli/command_sch_export_netlist.cpp:40
-#, fuzzy
 msgid ""
 "Netlist output format, valid options: kicadsexpr, kicadxml, cadstar, "
 "orcadpcb2, spice, spicemodel, pads, allegro"
 msgstr ""
 "Nätlistans utmatningsformat; giltiga alternativ: kicadsexpr, kicadxml, "
-"cadstar, orcadpcb2, spice, spicemodel"
+"cadstar, orcadpcb2, spice, spicemodel, pads, allegro"
 
 #: kicad/cli/command_sch_export_plot.cpp:65
 msgid "Color theme to use (will default to schematic settings)"
@@ -24857,7 +24825,7 @@ msgstr "Skapa inte popuprutor för egenskaper i PDF"
 
 #: kicad/cli/command_sch_export_plot.cpp:85
 msgid "Do not generate PDF metadata from AUTHOR and SUBJECT variables"
-msgstr ""
+msgstr "Skapa inte PDF-metadata från variablerna AUTHOR och SUBJECT"
 
 #: kicad/cli/command_sch_export_plot.cpp:94
 msgid "Avoid setting a background color (regardless of theme)"
@@ -27925,7 +27893,7 @@ msgstr "Vref satt till 0!"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:414
 msgid "Vref must VrefMin < VrefTyp < VrefMax"
-msgstr ""
+msgstr "Vref måste uppfylla VrefMin < VrefTyp < VrefMax"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:420
 msgid "Incorrect value for R1 R2"
@@ -27933,7 +27901,7 @@ msgstr "Felaktigt värde för R1 R2"
 
 #: pcb_calculator/calculator_panels/panel_regulator.cpp:435
 msgid "Iadj must IadjTyp < IadjMax"
-msgstr ""
+msgstr "Iadj måste uppfylla IadjTyp < IadjMax"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:27
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:60
@@ -28008,9 +27976,8 @@ msgstr ""
 "spänningsregulatorer"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:147
-#, fuzzy
 msgid "typ"
-msgstr "Antal"
+msgstr "typ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:161
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:119
@@ -28020,7 +27987,7 @@ msgstr "R1:"
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:178
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:203
 msgid "kΩ"
-msgstr ""
+msgstr "kΩ"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:186
 #: pcb_calculator/calculator_panels/panel_rf_attenuators_base.cpp:130
@@ -28052,14 +28019,12 @@ msgid "For 3 terminal regulators only, the  Adjust pin current."
 msgstr "Endast för treterminalsregulatorer:  Strömstyrkan i avkänningsstiftet."
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:278
-#, fuzzy
 msgid "Overall tolerance:"
-msgstr "Värmeavstånd:"
+msgstr "Total tolerans:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:305
-#, fuzzy
 msgid "Resistor tolerance:"
-msgstr "Motstånd:"
+msgstr "Motståndstolerans:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:312
 #: pcbnew/dialogs/dialog_board_reannotate_base.cpp:217
@@ -28077,14 +28042,12 @@ msgid "1"
 msgstr "1"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:325
-#, fuzzy
 msgid "Power Comment:"
-msgstr "Kommentar:"
+msgstr "Strömförsörjningskommentar:"
 
 #: pcb_calculator/calculator_panels/panel_regulator_base.cpp:337
-#, fuzzy
 msgid "Copy to Clipboard"
-msgstr "Exportera till urklipp"
+msgstr "Kopiera till urklipp"
 
 #: pcb_calculator/calculator_panels/panel_rf_attenuators.cpp:220
 #, c-format
@@ -28533,7 +28496,7 @@ msgstr "Fel i datafilen."
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:37
 msgid "Vref (min/typ/max):"
-msgstr ""
+msgstr "Vref (min/typ/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:56
 msgid "Volt"
@@ -28541,7 +28504,7 @@ msgstr "Volt"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.cpp:73
 msgid "Iadj (typ/max):"
-msgstr ""
+msgstr "Iadj (typ/max):"
 
 #: pcb_calculator/dialogs/dialog_regulator_form_base.h:60
 msgid "Regulator Parameters"
@@ -29208,9 +29171,8 @@ msgid "mi/h"
 msgstr "miles/h"
 
 #: pcbnew/api/api_handler_pcb.cpp:472
-#, fuzzy
 msgid "Deleted items via API"
-msgstr "Ta bort objekt"
+msgstr "Ta bort objekt via API"
 
 #: pcbnew/array_creator.cpp:232 pcbnew/dialogs/dialog_create_array_base.h:142
 msgid "Create Array"
@@ -31048,8 +31010,8 @@ msgid ""
 "Could not determine numbering start from '%s': expected value consistent "
 "with alphabet '%s'."
 msgstr ""
-"Kunde inte bestämma numreringsstart från '%s': förväntat värde "
-"överensstämmer med alfabetet '%s'."
+"Kunde inte bestämma numreringsstart från '%s': förväntar värde "
+"överensstämmande med alfabetet '%s'."
 
 #: pcbnew/dialogs/dialog_create_array.cpp:363
 msgid "step value"
@@ -31162,11 +31124,11 @@ msgstr "Vertikalt, sedan horisontellt"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:187
 msgid "Numbering Direction"
-msgstr "Nummerriktning"
+msgstr "Numreringsriktning"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:191
 msgid "Reverse numbering on alternate rows/columns"
-msgstr "Omvänd numrering på alternativa rader / kolumner"
+msgstr "Omvänd numrering på alternerande rader / kolumner"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:194
 #: pcbnew/dialogs/dialog_create_array_base.cpp:493
@@ -31180,7 +31142,7 @@ msgstr "Från startvärde"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:196
 msgid "Initial Pad Number"
-msgstr "Ursprungligt lödytenummer"
+msgstr "Första lödytenummer"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:200
 msgid "Continuous (1, 2, 3...)"
@@ -31196,38 +31158,34 @@ msgstr "System för numrering av lödytor"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:206
 msgid "Primary axis numbering:"
-msgstr "Primär axelnummerering:"
+msgstr "Numrering i primära axelns riktning:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:215
 msgid "Secondary axis numbering:"
-msgstr "Sekundär axelnummerering:"
+msgstr "Numrering i sekundära axelns riktning:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:234
 #: pcbnew/dialogs/dialog_create_array_base.cpp:514
 msgid "Pad numbering start:"
-msgstr "Pad-numreringsstart:"
+msgstr "Startvärde för numrering av lödytor:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:248
 #: pcbnew/dialogs/dialog_create_array_base.cpp:521
-#, fuzzy
 msgid "Pad numbering increment:"
-msgstr "Pad-numreringsstart:"
+msgstr "Ökningssteg för lödytenumrering:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:278
 msgid "Grid Array"
 msgstr "Rutnät"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:287
-#, fuzzy
 msgid "Reference Position"
-msgstr "Referensbeteckning"
+msgstr "Referensposition"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:289
-#, fuzzy
 msgid "Position of the selected item (or  group) to duplicate"
 msgstr ""
-"Detta är positionen för det valda objektet,\n"
-"eller positionen för gruppen som ska dupliceras"
+"Detta är positionen för det valda objektet eller gruppen som ska dupliceras"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:299
 msgid "Ref point pos X:"
@@ -31258,9 +31216,8 @@ msgid "Set center by radius"
 msgstr "Definiera centrum efter radie"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:374
-#, fuzzy
 msgid "Radius of circular array:"
-msgstr "Cirkulär matris"
+msgstr "Radie för cirkulär matris:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:382
 msgid "Distance between Ref point and Center pos."
@@ -31279,9 +31236,8 @@ msgid "Duplication Settings"
 msgstr "Dupliceringsinställningar"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:438
-#, fuzzy
 msgid "Angle between new items:"
-msgstr "Vinkel mellan referenspunkt och mittpunkt."
+msgstr "Vinkel mellan nya objekt:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:443
 msgid ""
@@ -31315,11 +31271,11 @@ msgstr "Numreringsalternativ"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:495
 msgid "Initial Pad Number:"
-msgstr "Ursprungligt lödytenummer:"
+msgstr "Första lödytenummer:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:499
 msgid "Pad Numbering:"
-msgstr "Pad numrering:"
+msgstr "Lödytenumrering:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:544
 msgid "Circular Array"
@@ -35670,9 +35626,8 @@ msgid "Swap Layers"
 msgstr "Byt lager"
 
 #: pcbnew/dialogs/dialog_target_properties.cpp:109
-#, fuzzy
 msgid "Edit Alignment Target"
-msgstr "Redigera Alignment Target"
+msgstr "Redigera mål att justera riktning mot"
 
 #: pcbnew/dialogs/dialog_target_properties_base.cpp:50
 msgid "Shape:"
@@ -39721,10 +39676,9 @@ msgid "(%s max length %s; actual %s)"
 msgstr "(%s max längd: %s; faktisk: %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:168
-#, fuzzy, c-format
+#, c-format
 msgid "(%s min skew %s; actual %s; average net length %s; actual %s)"
-msgstr ""
-"(%s max skevning: %s; faktisk: %s; genomsnittlig nätlängd: %s; faktisk: %s)"
+msgstr "(%s min skevning %s; faktisk %s; genomsnittlig nätlängd %s; faktisk %s)"
 
 #: pcbnew/drc/drc_test_provider_matched_length.cpp:177
 #, c-format
@@ -40424,19 +40378,18 @@ msgid "Footprint Chooser"
 msgstr "Fotavtrycksväljare"
 
 #: pcbnew/footprint_chooser_frame.cpp:151
-#, fuzzy
 msgid "Show 3D viewer in own window"
-msgstr "Visa 3D-visningsfönster"
+msgstr "Visa 3D-visning i eget fönster"
 
 #: pcbnew/footprint_chooser_frame.cpp:419
-#, fuzzy, c-format
+#, c-format
 msgid "Filter by pin count (%d)"
-msgstr "Filtrera efter antal stift"
+msgstr "Filtrera efter antal stift (%d)"
 
 #: pcbnew/footprint_chooser_frame.cpp:441
-#, fuzzy, c-format
+#, c-format
 msgid "Apply footprint filters (%s)"
-msgstr "Tillämpa fotavtrycksfilter"
+msgstr "Tillämpa fotavtrycksfilter (%s)"
 
 #: pcbnew/footprint_edit_frame.cpp:116
 msgid "KiCad Footprint Editor"
@@ -42119,9 +42072,9 @@ msgid "File not found: '%s'. 3D-model not imported."
 msgstr "Filen hittades inte: '%s'. 3D-modell inte importerad."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1701
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write file '%s'."
-msgstr "Kunde inte läsa fil '%s'."
+msgstr "Kunde inte skriva fil '%s'."
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1720
 msgid "Loading nets..."
@@ -43872,19 +43825,17 @@ msgid "Error exporting VRML"
 msgstr "Fel vid export av VRML"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:392
-#, fuzzy, c-format
+#, c-format
 msgid "Actual image size: %dx%d"
-msgstr "Verklig storlek"
+msgstr "Verklig bildstorlek: %dx%d"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:397
-#, fuzzy
 msgid "Successfully created 3D render image"
-msgstr "Lyckades skapa svg-fil"
+msgstr "Lyckades skapa 3D-renderingsbild"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:400
-#, fuzzy
 msgid "Error creating 3D render image"
-msgstr "Fel vid försök att skapa svg-fil"
+msgstr "Fel vid försök att skapa 3D-renderingsbild"
 
 #: pcbnew/pcbnew_jobs_handler.cpp:435
 msgid "Successfully created svg file"
@@ -46561,14 +46512,12 @@ msgid "Toggle ratsnest display of selected item(s)"
 msgstr "Växla visning av nätlinjer för markerade objekt"
 
 #: pcbnew/tools/pcb_actions.cpp:1343
-#, fuzzy
 msgid "Show Net Inspector"
 msgstr "Visa nätinspektören"
 
 #: pcbnew/tools/pcb_actions.cpp:1344
-#, fuzzy
 msgid "Show/hide the net inspector"
-msgstr "Visa nätinspektören"
+msgstr "Visa/dölj nätinspektören"
 
 #: pcbnew/tools/pcb_actions.cpp:1349
 #: pcbnew/zone_manager/dialog_zone_manager_base.h:79
@@ -48211,9 +48160,8 @@ msgstr "Prefigera inte sökvägen med fotavtryckets UUID."
 
 #: pcbnew/widgets/net_inspector_panel.cpp:46
 #: pcbnew/widgets/net_inspector_panel.cpp:96
-#, fuzzy
 msgid "Configure netlist inspector"
-msgstr "Konfigurera nätklasser"
+msgstr "Konfigurera nätlisteinspektören"
 
 #: pcbnew/widgets/panel_footprint_chooser.cpp:338
 msgid "No footprint selected"
@@ -48231,9 +48179,8 @@ msgstr "Måttsättning"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:122
 #: pcbnew/widgets/pcb_net_inspector_panel_data_model.h:680
-#, fuzzy
 msgid "Netclass"
-msgstr "Nätklasser"
+msgstr "Nätklass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:124
 msgid "Total Length"
@@ -48264,90 +48211,73 @@ msgid "Highlight Selected Net"
 msgstr "Framhäv det valda nätet"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1188
-#, fuzzy
 msgid "Rename Selected Net"
-msgstr "Återskapa valda"
+msgstr "Byt namn på valda nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1192
-#, fuzzy
 msgid "Delete Selected Net"
-msgstr "Raderar valda objekt"
+msgstr "Radera valt nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1199
-#, fuzzy
 msgid "Add Net"
-msgstr "Lägg till text"
+msgstr "Lägg till nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1212
-#, fuzzy
 msgid "Highlight Selected Nets"
-msgstr "Framhäv det valda nätet"
+msgstr "Framhäv valda nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1214
-#, fuzzy
 msgid "Delete Selected Nets"
-msgstr "Raderar valda objekt"
+msgstr "Radera valda nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1221
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1351
-#, fuzzy
 msgid "Remove Selected Custom Group"
-msgstr "Ta bort objekt från gruppen"
+msgstr "Ta bort vald användardefinierad grupp"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1248
-#, fuzzy
 msgid "New Group"
-msgstr "Grupp"
+msgstr "Ny grupp"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1321
-#, fuzzy
 msgid "Filter by Net Name"
-msgstr "Filtrera nät"
+msgstr "Filtrera efter nätnamn"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1326
-#, fuzzy
 msgid "Filter by Netclass"
-msgstr "Filtrera objekt efter nätklass:"
+msgstr "Filtrera efter nätklass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1340
-#, fuzzy
 msgid "Group by Netclass"
-msgstr "Gruppera efter namn"
+msgstr "Gruppera efter nätklass"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1346
-#, fuzzy
 msgid "Add Custom Group"
-msgstr "Användardefinierade regler"
+msgstr "Lägg till användardefinierad grupp"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1361
-#, fuzzy
 msgid "Remove All Custom Groups"
-msgstr "Ta bort objekt från gruppen"
+msgstr "Ta bort alla användardefinierade grupper"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1369
-#, fuzzy
 msgid "Show Zero Pad Nets"
 msgstr "Visa nät utan lödytor"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1374
-#, fuzzy
 msgid "Show Unconnected Nets"
-msgstr "Ej ansluten"
+msgstr "Visa icke anslutna nät"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1383
-#, fuzzy
 msgid "Save Net Inspector Report"
-msgstr "Nätinspektör"
+msgstr "Spara rapport från nätinspektör"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1392
-#, fuzzy
 msgid "Show / Hide Columns"
-msgstr "Visa dolda stift"
+msgstr "Visa / dölj kolumner"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1556
-#, fuzzy
 msgid "Save Net Inspector Report File"
-msgstr "Spara rapportfil"
+msgstr "Spara nätinspektörens rapportfil"
 
 #: pcbnew/widgets/pcb_net_inspector_panel.cpp:1557
 msgid "Report file"
