@@ -1679,8 +1679,12 @@ const BOX2I PAD::ViewBBox() const
 void PAD::ImportSettingsFrom( const PAD& aMasterPad )
 {
     SetShape( aMasterPad.GetShape() );
+    // Layer Set should be updated before calling SetAttribute()
     SetLayerSet( aMasterPad.GetLayerSet() );
     SetAttribute( aMasterPad.GetAttribute() );
+    // Unfortunately, SetAttribute() can change m_layerMask.
+    // Be sure we keep the original mask by calling SetLayerSet() after SetAttribute()
+    SetLayerSet( aMasterPad.GetLayerSet() );
     SetProperty( aMasterPad.GetProperty() );
 
     // Must be after setting attribute and layerSet
