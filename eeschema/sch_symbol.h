@@ -636,6 +636,15 @@ public:
     SCH_PIN* GetPin( LIB_PIN* aLibPin ) const;
 
     /**
+     * Return the #SCH_PIN object found at \a aPosition.
+     *
+     * @param aPosition is the position of the pin to fetch.
+     *
+     * @return the #SCH_PIN object found at \a aPosition or nullptr.
+     */
+    const SCH_PIN* GetPin( const VECTOR2I& aPosition ) const;
+
+    /**
      * Retrieve a list of the SCH_PINs for the given sheet path.
      *
      * Since a symbol can have a different unit on a different instance of a sheet,

@@ -953,6 +953,19 @@ OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HE
             if( possibleConnection.IsBus() )
                 newEvt = EE_ACTIONS::drawBus.MakeEvent();
         }
+        else if( aItem->Type() == SCH_SYMBOL_T )
+        {
+            const SCH_SYMBOL* symbol = static_cast<const SCH_SYMBOL*>( aItem );
+
+            wxCHECK( symbol, OPT_TOOL_EVENT() );
+
+            const SCH_PIN* pin = symbol->GetPin( pos );
+
+            wxCHECK( pin, OPT_TOOL_EVENT() );
+
+            if( !pin->IsVisible() && !m_frame->eeconfig()->m_Appearance.show_hidden_pins )
+                return OPT_TOOL_EVENT();
+        }
 
         newEvt->SetMousePosition( pos );
         newEvt->SetHasPosition( true );
