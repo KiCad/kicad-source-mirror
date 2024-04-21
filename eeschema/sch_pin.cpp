@@ -1565,14 +1565,14 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
     aList.emplace_back( _( "Name" ), UnescapeString( GetShownName() ) );
     aList.emplace_back( _( "Number" ), GetShownNumber() );
     aList.emplace_back( _( "Type" ), ElectricalPinTypeGetText( GetType() ) );
-    aList.emplace_back( _( "Style" ), PinShapeGetText( m_shape ) );
+    aList.emplace_back( _( "Style" ), PinShapeGetText( GetShape() ) );
 
     aList.emplace_back( _( "Visible" ), IsVisible() ? _( "Yes" ) : _( "No" ) );
 
     // Display pin length
     aList.emplace_back( _( "Length" ), aFrame->MessageTextFromValue( GetLength(), true ) );
 
-    aList.emplace_back( _( "Orientation" ), PinOrientationName( m_orientation ) );
+    aList.emplace_back( _( "Orientation" ), PinOrientationName( GetOrientation() ) );
 
     if( dynamic_cast<LIB_SYMBOL*>( symbol ) )
     {
