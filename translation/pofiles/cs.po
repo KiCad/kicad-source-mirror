@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-03-24 12:46+0000\n"
+"PO-Revision-Date: 2024-04-21 22:07+0000\n"
 "Last-Translator: Jan Straka <bach@email.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/kicad/v8/cs/>\n"
 "Language: cs\n"
@@ -5436,9 +5436,8 @@ msgid "Bezier"
 msgstr "Bezierova křivka"
 
 #: common/eda_shape.cpp:1976 eeschema/lib_shape.cpp:604
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Vlastnosti listu"
+msgstr "Vlastnosti tvaru"
 
 #: common/eda_shape.cpp:1982 pcbnew/pcb_textbox.cpp:670
 #: pcbnew/pcb_track.cpp:1498
@@ -6201,14 +6200,12 @@ msgid "Select all cells"
 msgstr "Vybrat všechny buňky"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Dokončení aktualizace"
+msgstr "Přijmout automatické dokončování"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Dokončení aktualizace"
+msgstr "Zrušit automatické dokončování"
 
 #: common/hotkey_store.cpp:46
 #, fuzzy
@@ -7356,9 +7353,8 @@ msgid "Delete clicked items"
 msgstr "Odstranit položky, na které jste klikli"
 
 #: common/tool/actions.cpp:288
-#, fuzzy
 msgid "Cycle Arc Editing Mode"
-msgstr "Přepíná režim edice oblouků"
+msgstr "Přepíná režim edice oblouku"
 
 #: common/tool/actions.cpp:289
 msgid "Switch to a different method of editing arcs"
@@ -9720,9 +9716,8 @@ msgid "Update/reset symbol attributes"
 msgstr "Aktualizovat/resetovat atributy symbolu"
 
 #: eeschema/dialogs/dialog_change_symbols_base.cpp:151
-#, fuzzy
 msgid "Reset custom power symbols"
-msgstr "Vytvoří součástku jako symbol napájení"
+msgstr "Obnovit vlastní symboly napájení"
 
 #: eeschema/dialogs/dialog_change_symbols_base.h:102
 msgid "Update Symbols from Library"
@@ -11240,9 +11235,8 @@ msgstr "Smazat alternativní styl těla (DeMorgan) ze symbolu?"
 #: eeschema/symbol_editor/symbol_editor.cpp:387
 #: eeschema/symbol_editor/symbol_editor.cpp:692
 #: eeschema/tools/symbol_editor_control.cpp:369
-#, fuzzy
 msgid "Symbol must have a name."
-msgstr "Pole musí mít název."
+msgstr "Symbol musí mít název."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:335
 #, c-format
@@ -11309,7 +11303,6 @@ msgstr ""
 "kořenové symboly."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:170
-#, fuzzy
 msgid "Number of units:"
 msgstr "Počet jednotek:"
 
@@ -11964,7 +11957,6 @@ msgid "Instances of this symbol (%d items):"
 msgstr "Příklady tohoto symbolu (%d položky):"
 
 #: eeschema/dialogs/dialog_rescue_each.cpp:297
-#, fuzzy
 msgid ""
 "Stop showing this tool?\n"
 "No changes will be made.\n"
@@ -11975,7 +11967,7 @@ msgstr ""
 "Již nezobrazovat tento nástroj?\n"
 "Nebudou provedeny žádné změny.\n"
 "\n"
-"Toto nastavení lze změnit z dialogového okna \"Knihovny součástek\"\n"
+"Toto nastavení lze změnit pomocí dialogu \"Předvolby\"\n"
 "a nástroj lze aktivovat ručně z menu \"Nástroje\"."
 
 #: eeschema/dialogs/dialog_rescue_each_base.cpp:28
@@ -12263,9 +12255,8 @@ msgstr ""
 "v Předvolby > Editor schémat > Barvy."
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:430
-#, fuzzy
 msgid "Edit Sheet Properties"
-msgstr "Vlastnosti listu"
+msgstr "Upravit vlastnosti listu"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:469
 #, c-format
@@ -12363,9 +12354,8 @@ msgid "Sheet Properties"
 msgstr "Vlastnosti listu"
 
 #: eeschema/dialogs/dialog_sim_command.cpp:271
-#, fuzzy
 msgid "A DC source must be specified."
-msgstr "List musí mít specifikovaný soubor."
+msgstr "Musí být zadán zdroj DC."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:364
 msgid "Source 1 and Source 2 must be different."
@@ -12376,9 +12366,8 @@ msgid "A frequency range must be specified."
 msgstr "Je nutné zadat kmitočtový rozsah."
 
 #: eeschema/dialogs/dialog_sim_command.cpp:615
-#, fuzzy
 msgid "New Simulation Tab"
-msgstr "Simulace"
+msgstr "Nová karta Simulace"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:21
 msgid "Analysis type:"
@@ -12641,14 +12630,12 @@ msgid "Find:"
 msgstr "Hledat:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles and Zeros"
-msgstr "Nulový pól"
+msgstr "Póly a nuly"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
-#, fuzzy
 msgid "Poles"
-msgstr "Díry"
+msgstr "Póly"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:623
 msgid "Zeros"
@@ -12693,9 +12680,9 @@ msgstr "Příkaz SPICE"
 #: eeschema/dialogs/dialog_sim_command_base.cpp:686
 #: eeschema/dialogs/dialog_sim_command_base.cpp:725
 #: eeschema/dialogs/dialog_sim_command_base.cpp:762
-#, fuzzy, c-format
+#, c-format
 msgid "Fixed %s scale"
-msgstr "Pole %s \"%s\""
+msgstr "Pevná %s stupnice"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:697
 #: eeschema/dialogs/dialog_sim_command_base.cpp:736
@@ -12714,19 +12701,16 @@ msgid "Show grid"
 msgstr "Zobrazovat mřížku"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:806
-#, fuzzy
 msgid "Show legend"
-msgstr "Zobrazit &legendu"
+msgstr "Zobrazit legendu"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:809
-#, fuzzy
 msgid "Dotted current/phase"
 msgstr "Tečkovaný proud/fáze"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:819
-#, fuzzy
 msgid "Margins:"
-msgstr "Margin"
+msgstr "Margin:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:829
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:551
@@ -12763,9 +12747,8 @@ msgid "Right:"
 msgstr "Vpravo:"
 
 #: eeschema/dialogs/dialog_sim_command_base.cpp:889
-#, fuzzy
 msgid "Plot Setup"
-msgstr "Nastavení stránky"
+msgstr "Nastavení vykreslení"
 
 #: eeschema/dialogs/dialog_sim_command_base.h:219
 msgid "Simulation Analysis"
@@ -12936,9 +12919,8 @@ msgid "Differential"
 msgstr "Diferenciální"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:76
-#, fuzzy
 msgid "Pin model:"
-msgstr "Režim tisku"
+msgstr "Model vývodu:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:83
 msgid "Waveform:"
@@ -12953,9 +12935,8 @@ msgid "Device:"
 msgstr "Zařízení:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:118
-#, fuzzy
 msgid "Device type:"
-msgstr "Typ Spice:"
+msgstr "Typ zařízení:"
 
 #: eeschema/dialogs/dialog_sim_model_base.cpp:145
 #: eeschema/widgets/search_handlers.cpp:133
@@ -13098,19 +13079,17 @@ msgid "Rename Field"
 msgstr "Přejmenovat pole"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:757
-#, fuzzy, c-format
+#, c-format
 msgid "Field name %s already exists. Cannot rename over existing field."
-msgstr "Soubor '%s' již existuje. Chcete tento soubor přepsat?"
+msgstr "Název pole %s již existuje. Nelze přejmenovat na existující pole."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:849
-#, fuzzy
 msgid "The Quantity column cannot be grouped by."
-msgstr "Sloupec Reference nelze skrýt."
+msgstr "Sloupec Množství nelze seskupit."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:857
-#, fuzzy
 msgid "The Item Number column cannot be grouped by."
-msgstr "Sloupec Reference nelze skrýt."
+msgstr "Sloupec Číslo položky nelze použít pro seskupení."
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1208
 msgid "Bill of Materials Output File"
@@ -13139,9 +13118,8 @@ msgid "Changes are unsaved. Export unsaved data?"
 msgstr "Změny nejsou uloženy. Exportovat neuložená data?"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1262
-#, fuzzy
 msgid "No filename specified in exporter"
-msgstr "Název soubor není zvolen"
+msgstr "Nezadaný název souboru v exportéru"
 
 #: eeschema/dialogs/dialog_symbol_fields_table.cpp:1276
 #, fuzzy, c-format
@@ -13229,9 +13207,8 @@ msgid "Edit"
 msgstr "Upravit"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:211
-#, fuzzy
 msgid "Field delimiter:"
-msgstr "Milimetr"
+msgstr "Oddělovač polí:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:215
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:233
@@ -13239,18 +13216,16 @@ msgid ","
 msgstr ","
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:220
-#, fuzzy
 msgid "String delimiter:"
-msgstr "Počáteční hodnota:"
+msgstr "Oddělovač řetězců:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:224
 msgid "\""
 msgstr "\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:229
-#, fuzzy
 msgid "Reference delimiter:"
-msgstr "Reference schématu"
+msgstr "Referenční oddělovač:"
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:238
 #, fuzzy
@@ -13429,9 +13404,8 @@ msgid "Base Pin Name"
 msgstr "Název základního vývodu"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:305
-#, fuzzy
 msgid "Pin Functions"
-msgstr "Upravit propojení"
+msgstr "Funkce vývodu"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:318
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:384
@@ -13587,9 +13561,8 @@ msgid ""
 msgstr ""
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
-#, fuzzy
 msgid "Edit Text Properties"
-msgstr "Vlastnosti textu"
+msgstr "Upravit vlastnosti textu"
 
 #: eeschema/dialogs/dialog_text_properties_base.cpp:292
 msgid "Link:"
@@ -13715,9 +13688,8 @@ msgid "Bill of Materials Presets:"
 msgstr "Přednastavení rozpisky materiálu:"
 
 #: eeschema/dialogs/panel_bom_presets_base.cpp:60
-#, fuzzy
 msgid "Bill of Materials Formatting Presets:"
-msgstr "Nápověda při generování seznamu materiálu"
+msgstr "Definované formáty BOM:"
 
 #: eeschema/dialogs/panel_eeschema_annotation_options_base.cpp:20
 msgid "Automatically annotate symbols"
@@ -21356,7 +21328,7 @@ msgstr "Uloží kopii aktuálního listu na jiném místě nebo pod jiným jmén
 
 #: eeschema/tools/ee_actions.cpp:1386
 msgid "New Analysis Tab..."
-msgstr ""
+msgstr "Nová karta Analýza..."
 
 #: eeschema/tools/ee_actions.cpp:1387
 msgid "Create a new tab containing a simulation analysis"
@@ -21461,7 +21433,7 @@ msgstr "Uživatelem definované signály"
 
 #: eeschema/tools/ee_actions.cpp:1487
 msgid "Add, edit or delete user-defined simulation signals"
-msgstr ""
+msgstr "Přidat, upravit nebo odstranit uživatelem definované signály simulace"
 
 #: eeschema/tools/ee_actions.cpp:1493
 #, fuzzy
@@ -21489,7 +21461,7 @@ msgstr "Symboly"
 #: eeschema/tools/ee_inspection_tool.cpp:293
 #: pcbnew/tools/board_inspection_tool.cpp:1489
 msgid "Summary"
-msgstr ""
+msgstr "Shrnutí"
 
 #: eeschema/tools/ee_inspection_tool.cpp:295
 #, fuzzy
@@ -24963,7 +24935,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:943
 msgid "Push"
-msgstr ""
+msgstr "Push"
 
 #: kicad/project_tree_pane.cpp:944
 msgid "Push committed local changes to remote repository"
@@ -24971,7 +24943,7 @@ msgstr ""
 
 #: kicad/project_tree_pane.cpp:947
 msgid "Pull"
-msgstr ""
+msgstr "Pull"
 
 #: kicad/project_tree_pane.cpp:948
 #, fuzzy
@@ -30952,7 +30924,7 @@ msgstr "STEP soubory"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:342
 msgid "Binary glTF files"
-msgstr ""
+msgstr "Binární soubory glTF"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:349
 #, fuzzy
@@ -34927,7 +34899,7 @@ msgstr "Přepsat zámky"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:45
 msgid "(from 'rule name')"
-msgstr ""
+msgstr "(z 'název pravidla')"
 
 #: pcbnew/dialogs/dialog_tuning_pattern_properties_base.cpp:49
 #: pcbnew/dialogs/panel_setup_tuning_patterns_base.cpp:38
@@ -47334,7 +47306,7 @@ msgstr "Zobrazit soubory Gerber"
 
 #: resources/linux/launchers/org.kicad.gerbview.desktop.in:14
 msgid "gerbview;PCB;Gerber;"
-msgstr ""
+msgstr "gerbview;DPS;Gerber;"
 
 #: resources/linux/launchers/org.kicad.kicad.desktop.in:10
 msgid "Projectmanager;"
@@ -47366,7 +47338,7 @@ msgstr "Kalkulačka pro různé výpočty související s elektronikou"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:5
 msgid "pcbnew;PCB;Circuit;Layout;Design;Editor;Footprint;"
-msgstr ""
+msgstr "pcbnew;DPS;Obvod;Rozvržení;Návrh;Editor;Pouzdro;"
 
 #: resources/linux/launchers/org.kicad.pcbnew.desktop.in:12
 msgid "KiCad PCB Editor (Standalone)"
