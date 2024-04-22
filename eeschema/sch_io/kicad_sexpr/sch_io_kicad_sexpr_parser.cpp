@@ -955,7 +955,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
             break;
 
         case T_at:
-            field->SetPosition( parseXY() );
+            field->SetPosition( parseXY( true ) );
             field->SetTextAngle( EDA_ANGLE( parseDouble( "text angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
@@ -1123,18 +1123,18 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolArc()
         switch( token )
         {
         case T_start:
-            startPoint = parseXY();
+            startPoint = parseXY( true );
             NeedRIGHT();
             break;
 
         case T_mid:
-            midPoint = parseXY();
+            midPoint = parseXY( true );
             NeedRIGHT();
             hasMidPoint = true;
             break;
 
         case T_end:
-            endPoint = parseXY();
+            endPoint = parseXY( true );
             NeedRIGHT();
             break;
 
@@ -1149,7 +1149,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolArc()
                 switch( token )
                 {
                 case T_at:
-                    center = parseXY();
+                    center = parseXY( true );
                     NeedRIGHT();
                     break;
 
@@ -1315,11 +1315,11 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolBezier()
 
                 switch( ii )
                 {
-                case 0: bezier->SetStart( parseXY() );    break;
-                case 1: bezier->SetBezierC1( parseXY() ); break;
-                case 2: bezier->SetBezierC2( parseXY() ); break;
-                case 3: bezier->SetEnd( parseXY() );      break;
-                default: Unexpected( "control point" );   break;
+                case 0:  bezier->SetStart( parseXY( true ) );    break;
+                case 1:  bezier->SetBezierC1( parseXY( true ) ); break;
+                case 2:  bezier->SetBezierC2( parseXY( true ) ); break;
+                case 3:  bezier->SetEnd( parseXY( true ) );      break;
+                default: Unexpected( "control point" );          break;
                 }
 
                 NeedRIGHT();
@@ -1383,7 +1383,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolCircle()
         switch( token )
         {
         case T_center:
-            center = parseXY();
+            center = parseXY( true );
             NeedRIGHT();
             break;
 
@@ -1501,7 +1501,7 @@ SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
         switch( token )
         {
         case T_at:
-            pin->SetPosition( parseXY() );
+            pin->SetPosition( parseXY( true ) );
 
             switch( parseInt( "pin orientation" ) )
             {
@@ -1668,7 +1668,7 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPolyLine()
                 if( token != T_xy )
                     Expecting( "xy" );
 
-                poly->AddPoint( parseXY() );
+                poly->AddPoint( parseXY( true ) );
 
                 NeedRIGHT();
             }
@@ -1726,12 +1726,12 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolRectangle()
         switch( token )
         {
         case T_start:
-            rectangle->SetPosition( parseXY() );
+            rectangle->SetPosition( parseXY( true ) );
             NeedRIGHT();
             break;
 
         case T_end:
-            rectangle->SetEnd( parseXY() );
+            rectangle->SetEnd( parseXY( true ) );
             NeedRIGHT();
             break;
 
@@ -1792,7 +1792,7 @@ SCH_TEXT* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolText()
         switch( token )
         {
         case T_at:
-            text->SetPosition( parseXY() );
+            text->SetPosition( parseXY( true ) );
             // Yes, LIB_TEXT is really decidegrees even though all the others are degrees. :(
             text->SetTextAngle( EDA_ANGLE( parseDouble( "text angle" ), TENTHS_OF_A_DEGREE_T ) );
             NeedRIGHT();
@@ -1860,24 +1860,24 @@ SCH_TEXTBOX* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolTextBox()
         switch( token )
         {
         case T_start:       // Legacy token during 6.99 development; fails to handle angle
-            pos = parseXY();
+            pos = parseXY( true );
             NeedRIGHT();
             break;
 
         case T_end:         // Legacy token during 6.99 development; fails to handle angle
-            end = parseXY();
+            end = parseXY( true );
             foundEnd = true;
             NeedRIGHT();
             break;
 
         case T_at:
-            pos = parseXY();
+            pos = parseXY( true );
             textBox->SetTextAngle( EDA_ANGLE( parseDouble( "textbox angle" ), DEGREES_T ) );
             NeedRIGHT();
             break;
 
         case T_size:
-            size = parseXY();
+            size = parseXY( true );
             foundSize = true;
             NeedRIGHT();
             break;
@@ -2897,9 +2897,9 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
             switch( static_cast<int>( parseDouble( "symbol orientation" ) ) )
             {
             case 0:    transform = TRANSFORM();                 break;
-            case 90:   transform = TRANSFORM( 0, -1, -1, 0 );   break;
-            case 180:  transform = TRANSFORM( -1, 0, 0, 1 );    break;
-            case 270:  transform = TRANSFORM( 0, 1, 1, 0 );     break;
+            case 90:   transform = TRANSFORM( 0, 1, -1, 0 );    break;
+            case 180:  transform = TRANSFORM( -1, 0, 0, -1 );   break;
+            case 270:  transform = TRANSFORM( 0, -1, 1, 0 );    break;
             default:   Expecting( "0, 90, 180, or 270" );
             }
 

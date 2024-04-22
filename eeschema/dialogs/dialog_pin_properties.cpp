@@ -390,6 +390,8 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
 
     // Calculate a suitable scale to fit the available draw area
     BOX2I  bBox = m_dummyPin->GetBoundingBox( true, true, false );
+    bBox.Inflate( schIUScale.MilsToIU( DANGLING_SYMBOL_SIZE ) );
+
     double xscale = (double) dc_size.x / bBox.GetWidth();
     double yscale = (double) dc_size.y / bBox.GetHeight();
     double scale = std::min( xscale, yscale );
@@ -404,7 +406,7 @@ void DIALOG_PIN_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     renderSettings.m_ShowPinNames = true;
     renderSettings.m_ShowHiddenFields = true;
     renderSettings.m_ShowConnectionPoints = true;
-    renderSettings.m_Transform = DefaultTransform;
+    renderSettings.m_Transform = TRANSFORM();
     renderSettings.SetPrintDC( &dc );
 
     m_dummyPin->Print( &renderSettings, 0, 0, -bBox.Centre(), false, false );

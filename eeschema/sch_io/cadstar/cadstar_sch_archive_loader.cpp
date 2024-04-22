@@ -1703,7 +1703,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
         libtext->SetMultilineAllowed( true ); // temporarily so that we calculate bbox correctly
 
         applyTextSettings( libtext.get(), csText.TextCodeID, csText.Alignment, csText.Justification,
-                           csText.OrientAngle, csText.Mirror, true );
+                           csText.OrientAngle, csText.Mirror );
 
         // Split out multi line text items into individual text elements
         if( csText.Text.Contains( "\n" ) )
@@ -1714,7 +1714,7 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
             for( size_t ii = 0; ii < strings.size(); ++ii )
             {
-                BOX2I    bbox = libtext->GetTextBox( ii, true );
+                BOX2I    bbox = libtext->GetTextBox( ii );
                 VECTOR2I linePos = { bbox.GetLeft(), -bbox.GetBottom() };
 
                 RotatePoint( linePos, libtext->GetTextPos(), -libtext->GetTextAngle() );
@@ -2058,7 +2058,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyToLibraryFieldAttribute( const ATTRIBUTE_L
 
     applyTextSettings( aKiCadField, aCadstarAttrLoc.TextCodeID, aCadstarAttrLoc.Alignment,
                        aCadstarAttrLoc.Justification, aCadstarAttrLoc.OrientAngle,
-                       aCadstarAttrLoc.Mirror, true );
+                       aCadstarAttrLoc.Mirror );
 }
 
 
@@ -2985,8 +2985,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
                                                     const ALIGNMENT&     aCadstarAlignment,
                                                     const JUSTIFICATION& aCadstarJustification,
                                                     const long long      aCadstarOrientAngle,
-                                                    bool                 aMirrored,
-                                                    bool                 aInvertY )
+                                                    bool                 aMirrored )
 {
     applyTextCodeIfExists( aKiCadTextItem, aCadstarTextCodeID );
     aKiCadTextItem->SetTextAngle( getAngle( aCadstarOrientAngle ) );
@@ -3009,7 +3008,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
                 {
                 case ALIGNMENT::NO_ALIGNMENT: // Bottom left of the first line
                     //No exact KiCad equivalent, so lets move the position of the text
-                    FixTextPositionNoAlignment( aText, aInvertY );
+                    FixTextPositionNoAlignment( aText );
                     KI_FALLTHROUGH;
                 case ALIGNMENT::BOTTOMLEFT:
                     aText->SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
@@ -3062,7 +3061,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::applyTextSettings( EDA_TEXT*            aKiCadT
     EDA_ITEM*  textEdaItem = dynamic_cast<EDA_ITEM*>( aKiCadTextItem );
     wxCHECK( textEdaItem, /* void */ ); // ensure this is a EDA_ITEM
 
-    if( textEdaItem->Type() == SCH_FIELD_T || aInvertY )
+    if( textEdaItem->Type() == SCH_FIELD_T )
     {
         // Spin style not used. All text justifications are permitted. However, only orientations
         // of 0 deg or 90 deg are supported

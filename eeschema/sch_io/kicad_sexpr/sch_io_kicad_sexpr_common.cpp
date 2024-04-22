@@ -208,15 +208,28 @@ const char* getTextTypeToken( KICAD_T aType )
 }
 
 
+std::string formatIU( const int& aValue )
+{
+    return EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aValue );
+}
+
+
+std::string formatIU( const VECTOR2I& aPt, bool aInvertY )
+{
+    VECTOR2I pt( aPt.x, aInvertY ? -aPt.y : aPt.y );
+    return EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt );
+}
+
+
 void formatArc( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aArc,
                 bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                const COLOR4D& aFillColor, const KIID& aUuid )
+                const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
 {
     aFormatter->Print( aNestLevel, "(arc%s (start %s) (mid %s) (end %s)\n",
                        aIsPrivate ? " private" : "",
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aArc->GetStart() ).c_str(),
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aArc->GetArcMid() ).c_str(),
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aArc->GetEnd() ).c_str() );
+                       formatIU( aArc->GetStart(), aInvertY ).c_str(),
+                       formatIU( aArc->GetArcMid(), aInvertY ).c_str(),
+                       formatIU( aArc->GetEnd(), aInvertY ).c_str() );
 
     aStroke.Format( aFormatter, schIUScale, aNestLevel + 1 );
     aFormatter->Print( 0, "\n" );
@@ -232,13 +245,12 @@ void formatArc( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aArc,
 
 void formatCircle( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aCircle,
                    bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                   const COLOR4D& aFillColor, const KIID& aUuid )
+                   const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
 {
-    aFormatter->Print( aNestLevel, "(circle%s (center %s %s) (radius %s)\n",
+    aFormatter->Print( aNestLevel, "(circle%s (center %s) (radius %s)\n",
                        aIsPrivate ? " private" : "",
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aCircle->GetStart().x ).c_str(),
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aCircle->GetStart().y ).c_str(),
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aCircle->GetRadius() ).c_str() );
+                       formatIU( aCircle->GetStart(), aInvertY ).c_str(),
+                       formatIU( aCircle->GetRadius() ).c_str() );
 
     aStroke.Format( aFormatter, schIUScale, aNestLevel + 1 );
     aFormatter->Print( 0, "\n" );
@@ -254,14 +266,12 @@ void formatCircle( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aCirc
 
 void formatRect( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aRect,
                  bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                 const COLOR4D& aFillColor, const KIID& aUuid )
+                 const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
 {
-    aFormatter->Print( aNestLevel, "(rectangle%s (start %s %s) (end %s %s)\n",
+    aFormatter->Print( aNestLevel, "(rectangle%s (start %s) (end %s)\n",
                        aIsPrivate ? " private" : "",
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aRect->GetStart().x ).c_str(),
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aRect->GetStart().y ).c_str(),
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aRect->GetEnd().x ).c_str(),
-                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aRect->GetEnd().y ).c_str() );
+                       formatIU( aRect->GetStart(), aInvertY ).c_str(),
+                       formatIU( aRect->GetEnd(), aInvertY ).c_str() );
     aStroke.Format( aFormatter, schIUScale, aNestLevel + 1 );
     aFormatter->Print( 0, "\n" );
     formatFill( aFormatter, aNestLevel + 1, aFillMode, aFillColor );
@@ -276,7 +286,7 @@ void formatRect( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aRect,
 
 void formatBezier( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aBezier,
                    bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                   const COLOR4D& aFillColor, const KIID& aUuid )
+                   const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
 {
     aFormatter->Print( aNestLevel, "(bezier%s (pts ",
                        aIsPrivate ? " private" : "" );
@@ -284,9 +294,8 @@ void formatBezier( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aBezi
     for( const VECTOR2I& pt : { aBezier->GetStart(), aBezier->GetBezierC1(),
                                 aBezier->GetBezierC2(), aBezier->GetEnd() } )
     {
-        aFormatter->Print( 0, " (xy %s %s)",
-                           EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.x ).c_str(),
-                           EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.y ).c_str() );
+        aFormatter->Print( 0, " (xy %s)",
+                           formatIU( pt, aInvertY ).c_str() );
     }
 
     aFormatter->Print( 0, ")\n" );  // Closes pts token on same line.
@@ -305,12 +314,11 @@ void formatBezier( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aBezi
 
 void formatPoly( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aPolyLine,
                  bool aIsPrivate, const STROKE_PARAMS& aStroke, FILL_T aFillMode,
-                 const COLOR4D& aFillColor, const KIID& aUuid )
+                 const COLOR4D& aFillColor, bool aInvertY, const KIID& aUuid )
 {
     int newLine = 0;
     int lineCount = 1;
-    aFormatter->Print( aNestLevel, "(polyline%s\n",
-                       aIsPrivate ? " private" : "" );
+    aFormatter->Print( aNestLevel, "(polyline%s\n", aIsPrivate ? " private" : "" );
     aFormatter->Print( aNestLevel + 1, "(pts" );
 
     for( const VECTOR2I& pt : aPolyLine->GetPolyShape().Outline( 0 ).CPoints() )
@@ -318,17 +326,13 @@ void formatPoly( OUTPUTFORMATTER* aFormatter, int aNestLevel, EDA_SHAPE* aPolyLi
         if( newLine == 4 || !ADVANCED_CFG::GetCfg().m_CompactSave )
         {
             aFormatter->Print( 0, "\n" );
-            aFormatter->Print( aNestLevel + 2, "(xy %s %s)",
-                               EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.x ).c_str(),
-                               EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.y ).c_str() );
+            aFormatter->Print( aNestLevel + 2, "(xy %s)", formatIU( pt, aInvertY ).c_str() );
             newLine = 0;
             lineCount += 1;
         }
         else
         {
-            aFormatter->Print( 0, " (xy %s %s)",
-                               EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.x ).c_str(),
-                               EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pt.y ).c_str() );
+            aFormatter->Print( 0, " (xy %s)", formatIU( pt, aInvertY ).c_str() );
         }
 
         newLine += 1;

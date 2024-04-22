@@ -1581,36 +1581,38 @@ void SCH_SYMBOL::SetOrientation( int aOrientation )
     {
     case SYM_ORIENT_0:
     case SYM_NORMAL:                    // default transform matrix
-        m_transform.x1 = 1;
-        m_transform.y2 = -1;
-        m_transform.x2 = m_transform.y1 = 0;
+        m_transform = TRANSFORM();
         break;
 
     case SYM_ROTATE_COUNTERCLOCKWISE:  // Rotate + (incremental rotation)
-        temp.x1   = temp.y2 = 0;
+        temp.x1   = 0;
         temp.y1   = 1;
         temp.x2   = -1;
+        temp.y2   = 0;
         transform = true;
         break;
 
     case SYM_ROTATE_CLOCKWISE:          // Rotate - (incremental rotation)
-        temp.x1   = temp.y2 = 0;
+        temp.x1   = 0;
         temp.y1   = -1;
         temp.x2   = 1;
+        temp.y2   = 0;
         transform = true;
         break;
 
-    case SYM_MIRROR_Y:                  // Mirror Y (incremental rotation)
+    case SYM_MIRROR_Y:                  // Mirror Y (incremental transform)
         temp.x1   = -1;
+        temp.y1   = 0;
+        temp.x2   = 0;
         temp.y2   = 1;
-        temp.y1   = temp.x2 = 0;
         transform = true;
         break;
 
-    case SYM_MIRROR_X:                  // Mirror X (incremental rotation)
+    case SYM_MIRROR_X:                  // Mirror X (incremental transform)
         temp.x1   = 1;
+        temp.y1   = 0;
+        temp.x2   = 0;
         temp.y2   = -1;
-        temp.y1   = temp.x2 = 0;
         transform = true;
         break;
 
@@ -1811,25 +1813,7 @@ BOX2I SCH_SYMBOL::doGetBoundingBox( bool aIncludePins, bool aIncludeFields ) con
     else
         bBox = dummy()->GetBodyBoundingBox( m_unit, m_bodyStyle, aIncludePins, false );
 
-    int x0 = bBox.GetX();
-    int xm = bBox.GetRight();
-
-    // We must reverse Y values, because matrix orientation
-    // suppose Y axis normal for the library items coordinates,
-    // m_transform reverse Y values, but bBox is already reversed!
-    int y0 = -bBox.GetY();
-    int ym = -bBox.GetBottom();
-
-    // Compute the real Boundary box (rotated, mirrored ...)
-    int x1 = m_transform.x1 * x0 + m_transform.y1 * y0;
-    int y1 = m_transform.x2 * x0 + m_transform.y2 * y0;
-    int x2 = m_transform.x1 * xm + m_transform.y1 * ym;
-    int y2 = m_transform.x2 * xm + m_transform.y2 * ym;
-
-    bBox.SetX( x1 );
-    bBox.SetY( y1 );
-    bBox.SetWidth( x2 - x1 );
-    bBox.SetHeight( y2 - y1 );
+    bBox = m_transform.TransformCoordinate( bBox );
     bBox.Normalize();
 
     bBox.Offset( m_pos );
@@ -2037,9 +2021,9 @@ void SCH_SYMBOL::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     VECTOR2I prev = m_pos;
 
-    RotatePoint( m_pos, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+    RotatePoint( m_pos, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
 
-    SetOrientation( aRotateCCW ? SYM_ROTATE_CLOCKWISE : SYM_ROTATE_COUNTERCLOCKWISE );
+    SetOrientation( aRotateCCW ? SYM_ROTATE_COUNTERCLOCKWISE : SYM_ROTATE_CLOCKWISE );
 
     for( SCH_FIELD& field : m_fields )
     {

@@ -516,15 +516,20 @@ void SCH_PIN::SetNumberTextSize( int aSize )
 
 VECTOR2I SCH_PIN::GetPinRoot() const
 {
-    int length = GetLength();
+    if( const SCH_SYMBOL* symbol = dynamic_cast<const SCH_SYMBOL*>( GetParentSymbol() ) )
+    {
+        const TRANSFORM& t = symbol->GetTransform();
+        wxCHECK( m_libPin, GetPosition() );
+        return t.TransformCoordinate( m_libPin->GetPinRoot() ) + symbol->GetPosition();
+    }
 
     switch( GetOrientation() )
     {
     default:
-    case PIN_ORIENTATION::PIN_RIGHT: return VECTOR2I( m_position.x + length, -( m_position.y ) );
-    case PIN_ORIENTATION::PIN_LEFT:  return VECTOR2I( m_position.x - length, -( m_position.y ) );
-    case PIN_ORIENTATION::PIN_UP:    return VECTOR2I( m_position.x, -( m_position.y + length ) );
-    case PIN_ORIENTATION::PIN_DOWN:  return VECTOR2I( m_position.x, -( m_position.y - length ) );
+    case PIN_ORIENTATION::PIN_RIGHT: return m_position + VECTOR2I(  GetLength(), 0 );
+    case PIN_ORIENTATION::PIN_LEFT:  return m_position + VECTOR2I( -GetLength(), 0 );
+    case PIN_ORIENTATION::PIN_UP:    return m_position + VECTOR2I( 0, -GetLength() );
+    case PIN_ORIENTATION::PIN_DOWN:  return m_position + VECTOR2I( 0,  GetLength() );
     }
 }
 
@@ -1301,8 +1306,8 @@ PIN_ORIENTATION SCH_PIN::PinDrawOrient( const TRANSFORM& aTransform ) const
     {
     default:
     case PIN_ORIENTATION::PIN_RIGHT:  end.x = 1;   break;
-    case PIN_ORIENTATION::PIN_UP:     end.y = 1;   break;
-    case PIN_ORIENTATION::PIN_DOWN:   end.y = -1;  break;
+    case PIN_ORIENTATION::PIN_UP:     end.y = -1;  break;
+    case PIN_ORIENTATION::PIN_DOWN:   end.y = 1;   break;
     case PIN_ORIENTATION::PIN_LEFT:   end.x = -1;  break;
     }
 
@@ -1483,23 +1488,10 @@ void SCH_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
     if( dynamic_cast<LIB_SYMBOL*>( GetParentSymbol() ) )
     {
-        EDA_ANGLE rot_angle = aRotateCCW ? -ANGLE_90 : ANGLE_90;
-
-        RotatePoint( m_position, aCenter, rot_angle );
-
         if( aRotateCCW )
         {
-            switch( GetOrientation() )
-            {
-            default:
-            case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_UP;    break;
-            case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
-            case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
-            case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
-            }
-        }
-        else
-        {
+            RotatePoint( m_position, aCenter, -ANGLE_90 );
+
             switch( GetOrientation() )
             {
             default:
@@ -1507,6 +1499,19 @@ void SCH_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
             case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
             case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_UP;    break;
             case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
+            }
+        }
+        else
+        {
+            RotatePoint( m_position, aCenter, ANGLE_90 );
+
+            switch( GetOrientation() )
+            {
+            default:
+            case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_UP;    break;
+            case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
+            case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
+            case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
             }
         }
     }
@@ -1576,11 +1581,8 @@ void SCH_PIN::GetMsgPanelInfo( EDA_DRAW_FRAME* aFrame, std::vector<MSG_PANEL_ITE
 
     if( dynamic_cast<LIB_SYMBOL*>( symbol ) )
     {
-        VECTOR2I pinpos = GetPosition();
-        pinpos.y = -pinpos.y;   // Display coords are top to bottom; lib item coords are bottom to top
-
-        aList.emplace_back( _( "Pos X" ), aFrame->MessageTextFromValue( pinpos.x, true ) );
-        aList.emplace_back( _( "Pos Y" ), aFrame->MessageTextFromValue( pinpos.y, true ) );
+        aList.emplace_back( _( "Pos X" ), aFrame->MessageTextFromValue( GetPosition().x, true ) );
+        aList.emplace_back( _( "Pos Y" ), aFrame->MessageTextFromValue( GetPosition().y, true ) );
     }
     else
     {
@@ -1758,8 +1760,6 @@ BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aInclude
         BOX2I r = m_libPin->GetBoundingBox( aIncludeLabelsOnInvisiblePins, aIncludeNameAndNumber,
                                             aIncludeElectricalType );
 
-        r.RevertYAxis();
-
         r = symbol->GetTransform().TransformCoordinate( r );
         r.Offset( symbol->GetPosition() );
         r.Normalize();
@@ -1838,17 +1838,17 @@ BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aInclude
     {
         // pin name is inside the body (or invisible)
         // pin number is above the line
-        begin.y = std::max( minsizeV, numberTextHeight );
+        begin.y = std::min( -minsizeV, -numberTextHeight );
         begin.x = std::min( -typeTextLength, GetLength() - ( numberTextLength / 2 ) );
 
         end.x = GetLength() + nameTextLength;
-        end.y = std::min( -minsizeV, -nameTextHeight / 2 );
+        end.y = std::max( minsizeV, nameTextHeight / 2 );
     }
     else
     {
         // pin name is above pin line
         // pin number is below line
-        begin.y = std::max( minsizeV, nameTextHeight );
+        begin.y = std::min( -minsizeV, -nameTextHeight );
         begin.x = -typeTextLength;
         begin.x = std::min( begin.x, ( GetLength() - numberTextLength ) / 2 );
         begin.x = std::min( begin.x, ( GetLength() - nameTextLength ) / 2 );
@@ -1856,7 +1856,7 @@ BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aInclude
         end.x = GetLength();
         end.x = std::max( end.x, ( GetLength() + nameTextLength ) / 2 );
         end.x = std::max( end.x, ( GetLength() + numberTextLength ) / 2 );
-        end.y = std::min( -minsizeV, -numberTextHeight );
+        end.y = std::max( minsizeV, numberTextHeight );
     }
 
     // Now, calculate boundary box corners position for the actual pin orientation
@@ -1864,13 +1864,13 @@ BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aInclude
     {
     case PIN_ORIENTATION::PIN_UP:
         // Pin is rotated and texts positions are mirrored
-        RotatePoint( begin, VECTOR2I( 0, 0 ), -ANGLE_90 );
-        RotatePoint( end, VECTOR2I( 0, 0 ), -ANGLE_90 );
+        RotatePoint( begin, VECTOR2I( 0, 0 ), ANGLE_90 );
+        RotatePoint( end, VECTOR2I( 0, 0 ), ANGLE_90 );
         break;
 
     case PIN_ORIENTATION::PIN_DOWN:
-        RotatePoint( begin, VECTOR2I( 0, 0 ), ANGLE_90 );
-        RotatePoint( end, VECTOR2I( 0, 0 ), ANGLE_90 );
+        RotatePoint( begin, VECTOR2I( 0, 0 ), -ANGLE_90 );
+        RotatePoint( end, VECTOR2I( 0, 0 ), -ANGLE_90 );
         begin.x = -begin.x;
         end.x = -end.x;
         break;
@@ -1892,9 +1892,6 @@ BOX2I SCH_PIN::GetBoundingBox( bool aIncludeLabelsOnInvisiblePins, bool aInclude
     bbox.SetEnd( end );
     bbox.Normalize();
     bbox.Inflate( ( GetPenWidth() / 2 ) + 1 );
-
-    // Draw Y axis is reversed in schematic:
-    bbox.RevertYAxis();
 
     return bbox;
 }

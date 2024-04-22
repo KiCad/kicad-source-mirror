@@ -195,48 +195,13 @@ void SCH_TEXT::MirrorVertically( int aCenter )
 
 void SCH_TEXT::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    if( m_layer == LAYER_DEVICE )
-    {
-        NormalizeJustification( false );
-        EDA_ANGLE rot_angle = aRotateCCW ? -ANGLE_90 : ANGLE_90;
+    VECTOR2I pt = GetTextPos();
+    RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
+    VECTOR2I offset = pt - GetTextPos();
 
-        VECTOR2I pt = GetTextPos();
-        RotatePoint( pt, aCenter, rot_angle );
-        SetTextPos( pt );
+    Rotate90( false );
 
-        if( GetTextAngle().IsHorizontal() )
-        {
-            SetTextAngle( ANGLE_VERTICAL );
-        }
-        else
-        {
-            // 180° rotation is a mirror
-
-            if( GetHorizJustify() == GR_TEXT_H_ALIGN_LEFT )
-                SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
-            else if( GetHorizJustify() == GR_TEXT_H_ALIGN_RIGHT )
-                SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
-
-            if( GetVertJustify() == GR_TEXT_V_ALIGN_TOP )
-                SetVertJustify( GR_TEXT_V_ALIGN_BOTTOM );
-            else if( GetVertJustify() == GR_TEXT_V_ALIGN_BOTTOM )
-                SetVertJustify( GR_TEXT_V_ALIGN_TOP );
-
-            SetTextAngle( ANGLE_0 );
-        }
-
-        NormalizeJustification( true );
-    }
-    else
-    {
-        VECTOR2I pt = GetTextPos();
-        RotatePoint( pt, aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
-        VECTOR2I offset = pt - GetTextPos();
-
-        Rotate90( false );
-
-        SetTextPos( GetTextPos() + offset );
-    }
+    SetTextPos( GetTextPos() + offset );
 }
 
 
@@ -384,10 +349,7 @@ void SCH_TEXT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBody
          *   to calculate so the more easily way is to use no justifications (centered text) and
          *   use GetBoundingBox to know the text coordinate considered as centered
         */
-        BOX2I bBox = GetBoundingBox();
-
-        // convert coordinates from draw Y axis to symbol_editor Y axis:
-        bBox.RevertYAxis();
+        BOX2I    bBox = GetBoundingBox();
         VECTOR2I txtpos = bBox.Centre();
 
         // Calculate pos according to mirror/rotation.
@@ -421,45 +383,22 @@ void SCH_TEXT::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aBody
 
 const BOX2I SCH_TEXT::GetBoundingBox() const
 {
-    if( m_layer == LAYER_DEVICE ) // TODO: nuke symbol editor's upside-down coordinate system
-    {
-        BOX2I bbox = GetTextBox( -1, true );
-        bbox.RevertYAxis();
+    BOX2I bbox = GetTextBox();
 
-        // We are using now a bottom to top Y axis.
-        VECTOR2I orig = bbox.GetOrigin();
+    if( !GetTextAngle().IsZero() ) // Rotate bbox.
+    {
+        VECTOR2I pos = bbox.GetOrigin();
         VECTOR2I end = bbox.GetEnd();
 
-        RotatePoint( orig, GetTextPos(), -GetTextAngle() );
-        RotatePoint( end, GetTextPos(), -GetTextAngle() );
+        RotatePoint( pos, GetTextPos(), GetTextAngle() );
+        RotatePoint( end, GetTextPos(), GetTextAngle() );
 
-        bbox.SetOrigin( orig );
+        bbox.SetOrigin( pos );
         bbox.SetEnd( end );
-
-        // We are using now a top to bottom Y axis:
-        bbox.RevertYAxis();
-
-        return bbox;
     }
-    else
-    {
-        BOX2I bbox = GetTextBox();
 
-        if( !GetTextAngle().IsZero() ) // Rotate bbox.
-        {
-            VECTOR2I pos = bbox.GetOrigin();
-            VECTOR2I end = bbox.GetEnd();
-
-            RotatePoint( pos, GetTextPos(), GetTextAngle() );
-            RotatePoint( end, GetTextPos(), GetTextAngle() );
-
-            bbox.SetOrigin( pos );
-            bbox.SetEnd( end );
-        }
-
-        bbox.Normalize();
-        return bbox;
-    }
+    bbox.Normalize();
+    return bbox;
 }
 
 
@@ -525,26 +464,9 @@ BITMAPS SCH_TEXT::GetMenuImage() const
 
 bool SCH_TEXT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    if( m_layer == LAYER_DEVICE ) // TODO: nuke symbol editor's upside-down coordinate system
-    {
-        EDA_TEXT tmp_text( *this );
-        tmp_text.SetTextPos( DefaultTransform.TransformCoordinate( GetTextPos() ) );
-
-        /* The text orientation may need to be flipped if the
-         * transformation matrix causes xy axes to be flipped.
-         * this simple algo works only for schematic matrix (rot 90 or/and mirror)
-         */
-        bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != ANGLE_HORIZONTAL );
-
-        tmp_text.SetTextAngle( t1 ? ANGLE_HORIZONTAL : ANGLE_VERTICAL );
-        return tmp_text.TextHitTest( aPosition, aAccuracy );
-    }
-    else
-    {
-        BOX2I bBox = GetBoundingBox();
-        bBox.Inflate( aAccuracy );
-        return bBox.Contains( aPosition );
-    }
+    BOX2I bBox = GetBoundingBox();
+    bBox.Inflate( aAccuracy );
+    return bBox.Contains( aPosition );
 }
 
 
@@ -554,28 +476,14 @@ bool SCH_TEXT::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) con
         return false;
 
     BOX2I rect = aRect;
+    BOX2I bBox = GetBoundingBox();
 
     rect.Inflate( aAccuracy );
 
-    if( m_layer == LAYER_DEVICE ) // TODO: nuke symbol editor's upside-down coordinate system
-    {
-        BOX2I bBox = GetTextBox();
-        bBox.RevertYAxis();
+    if( aContained )
+        return aRect.Contains( bBox );
 
-        if( aContained )
-            return rect.Contains( bBox );
-
-        return rect.Intersects( bBox, GetTextAngle() );
-    }
-    else
-    {
-        BOX2I bBox = GetBoundingBox();
-
-        if( aContained )
-            return aRect.Contains( bBox );
-
-        return aRect.Intersects( bBox );
-    }
+    return aRect.Intersects( bBox );
 }
 
 
@@ -645,8 +553,6 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS& a
     if( m_layer == LAYER_DEVICE )
     {
         BOX2I bBox = GetBoundingBox();
-        // convert coordinates from draw Y axis to symbol_editor Y axis
-        bBox.RevertYAxis();
 
         /*
          * Calculate the text justification, according to the symbol orientation/mirror.  This is

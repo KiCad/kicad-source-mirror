@@ -1205,27 +1205,27 @@ void SCH_IO_KICAD_SEXPR::saveShape( SCH_SHAPE* aShape, int aNestLevel )
     {
     case SHAPE_T::ARC:
         formatArc( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
-                   aShape->GetFillColor(), aShape->m_Uuid );
+                   aShape->GetFillColor(), false, aShape->m_Uuid );
         break;
 
     case SHAPE_T::CIRCLE:
         formatCircle( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
-                      aShape->GetFillColor(), aShape->m_Uuid );
+                      aShape->GetFillColor(), false, aShape->m_Uuid );
         break;
 
     case SHAPE_T::RECTANGLE:
         formatRect( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
-                    aShape->GetFillColor(), aShape->m_Uuid );
+                    aShape->GetFillColor(), false, aShape->m_Uuid );
         break;
 
     case SHAPE_T::BEZIER:
         formatBezier( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
-                      aShape->GetFillColor(), aShape->m_Uuid );
+                      aShape->GetFillColor(), false, aShape->m_Uuid );
         break;
 
     case SHAPE_T::POLY:
         formatPoly( m_out, aNestLevel, aShape, false, aShape->GetStroke(), aShape->GetFillMode(),
-                    aShape->GetFillColor(), aShape->m_Uuid );
+                    aShape->GetFillColor(), false, aShape->m_Uuid );
         break;
 
     default:

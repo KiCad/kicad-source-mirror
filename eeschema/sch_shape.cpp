@@ -76,20 +76,15 @@ void SCH_SHAPE::Normalize()
 {
     if( GetShape() == SHAPE_T::RECTANGLE )
     {
-        bool invertY = m_layer == LAYER_DEVICE;
-
         VECTOR2I size = GetEnd() - GetPosition();
-        bool     swapY = invertY ? size.y > 0
-                                 : size.y < 0;
-        bool     swapX = size.x < 0;
 
-        if( swapY )
+        if( size.y < 0 )
         {
             SetStartY( GetStartY() + size.y );
             SetEndY( GetStartY() - size.y );
         }
 
-        if( swapX )
+        if( size.x < 0 )
         {
             SetStartX( GetStartX() + size.x );
             SetEndX( GetStartX() - size.x );
@@ -112,27 +107,22 @@ void SCH_SHAPE::MirrorVertically( int aCenter )
 
 void SCH_SHAPE::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
 {
-    rotate( aCenter, aRotateCCW ? ANGLE_270 : ANGLE_90 );
+    rotate( aCenter, aRotateCCW ? ANGLE_90 : ANGLE_270 );
 }
 
 
 bool SCH_SHAPE::HitTest( const VECTOR2I& aPosition, int aAccuracy ) const
 {
-    if( m_layer == LAYER_DEVICE )
-        return hitTest( DefaultTransform.TransformCoordinate( aPosition ), aAccuracy );
-    else
-        return hitTest( aPosition, aAccuracy );
+    return hitTest( aPosition, aAccuracy );
 }
+
 
 bool SCH_SHAPE::HitTest( const BOX2I& aRect, bool aContained, int aAccuracy ) const
 {
     if( m_flags & (STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    if( m_layer == LAYER_DEVICE )
-        return hitTest( DefaultTransform.TransformCoordinate( aRect ), aContained, aAccuracy );
-    else
-        return hitTest( aRect, aContained, aAccuracy );
+    return hitTest( aRect, aContained, aAccuracy );
 }
 
 
@@ -298,12 +288,7 @@ int SCH_SHAPE::GetEffectiveWidth() const
 
 const BOX2I SCH_SHAPE::GetBoundingBox() const
 {
-    BOX2I bbox = getBoundingBox();
-
-    if( m_layer == LAYER_DEVICE )   // TODO: nuke symbol editor's upside-down coordinate system
-        bbox.RevertYAxis();
-
-    return bbox;
+    return getBoundingBox();
 }
 
 

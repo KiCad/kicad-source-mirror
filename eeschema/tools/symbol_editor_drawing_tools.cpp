@@ -210,14 +210,13 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
                 {
                 case SCH_PIN_T:
                 {
-                    item = pinTool->CreatePin( VECTOR2I( cursorPos.x, -cursorPos.y ), symbol );
+                    item = pinTool->CreatePin( cursorPos, symbol );
                     g_lastPinWeakPtr = item;
                     break;
                 }
                 case SCH_TEXT_T:
                 {
-                    SCH_TEXT* text = new SCH_TEXT( VECTOR2I( cursorPos.x, -cursorPos.y ),
-                                                   wxEmptyString, LAYER_DEVICE );
+                    SCH_TEXT* text = new SCH_TEXT( cursorPos, wxEmptyString, LAYER_DEVICE );
 
                     text->SetParent( symbol );
 
@@ -487,7 +486,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
             item->SetFillColor( m_lastFillColor );
 
             item->SetFlags( IS_NEW );
-            item->BeginEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) );
+            item->BeginEdit( cursorPos );
 
             if( m_drawSpecificUnit )
                 item->SetUnit( m_frame->GetUnit() );
@@ -560,7 +559,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::doDrawShape( const TOOL_EVENT& aEvent, std::opt
         }
         else if( item && ( evt->IsAction( &ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            item->CalcEdit( VECTOR2I( cursorPos.x, -cursorPos.y ) );
+            item->CalcEdit( cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }
@@ -632,15 +631,11 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
                 continue;
 
             VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->DisableGridSnapping() );
-            VECTOR2I offset( -cursorPos.x, cursorPos.y );
 
-            symbol->Move( offset );
+            symbol->Move( -cursorPos );
 
             // Refresh the view without changing the viewport
-            auto center = m_view->GetCenter();
-            center.x += offset.x;
-            center.y -= offset.y;
-            m_view->SetCenter( center );
+            m_view->SetCenter( m_view->GetCenter() + cursorPos );
             m_view->RecacheAllItems();
             m_frame->OnModify();
         }
@@ -779,7 +774,7 @@ int SYMBOL_EDITOR_DRAWING_TOOLS::ImportGraphics( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsMotion() )
         {
-            delta = VECTOR2I( cursorPos.x, -cursorPos.y ) - currentOffset;
+            delta = cursorPos - currentOffset;
 
             for( SCH_ITEM* item : selectedItems )
                 item->Move( delta );

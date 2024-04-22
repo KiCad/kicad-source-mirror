@@ -144,12 +144,13 @@ private:
         return parseInternalUnits( GetTokenText( aToken ) );
     }
 
-    VECTOR2I parseXY()
+    VECTOR2I parseXY( bool aInvertY = false )
     {
         VECTOR2I xy;
 
         xy.x = parseInternalUnits( "X coordinate" );
-        xy.y = parseInternalUnits( "Y coordinate" );
+        xy.y = aInvertY ? -parseInternalUnits( "Y coordinate" )
+                        :  parseInternalUnits( "Y coordinate" );
 
         return xy;
     }

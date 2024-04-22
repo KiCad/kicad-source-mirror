@@ -936,7 +936,7 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
 
             textItem->SetTextSize( VECTOR2I( ktextSize, ktextSize ) );
 
-            TransformTextToBaseline( textItem, baselineAlign, true );
+            TransformTextToBaseline( textItem, baselineAlign );
 
             if( added )
                 aSymbol->AddDrawItem( dynamic_cast<SCH_ITEM*>( textItem ) );
@@ -1418,7 +1418,7 @@ void SCH_EASYEDA_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aRoot
 
             textItem->SetTextSize( VECTOR2I( ktextSize, ktextSize ) );
 
-            TransformTextToBaseline( textItem.get(), baselineAlign, false );
+            TransformTextToBaseline( textItem.get(), baselineAlign );
 
             createdItems.push_back( std::move( textItem ) );
         }

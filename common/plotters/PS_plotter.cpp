@@ -528,12 +528,6 @@ void PS_PLOTTER::Circle( const VECTOR2I& pos, int diametre, FILL_T fill, int wid
 }
 
 
-VECTOR2D mapCoords( const VECTOR2D& aSource )
-{
-    return VECTOR2D( aSource.x, aSource.y );
-}
-
-
 void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
                       const EDA_ANGLE& aAngle, double aRadius, FILL_T aFill, int aWidth )
 {
@@ -551,8 +545,8 @@ void PS_PLOTTER::Arc( const VECTOR2D& aCenter, const EDA_ANGLE& aStartAngle,
 
     VECTOR2D  start_device = userToDeviceCoordinates( start );
     VECTOR2D  end_device = userToDeviceCoordinates( end );
-    EDA_ANGLE startAngle( mapCoords( start_device - center_device ) );
-    EDA_ANGLE endAngle( mapCoords( end_device - center_device ) );
+    EDA_ANGLE startAngle( start_device - center_device );
+    EDA_ANGLE endAngle( end_device - center_device );
 
     // userToDeviceCoordinates gets our start/ends out of order
     if( !m_plotMirror ^ ( aAngle < ANGLE_0 ) )

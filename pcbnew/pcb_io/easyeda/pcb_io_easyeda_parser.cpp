@@ -832,7 +832,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             if( !font.IsEmpty() )
                 text->SetFont( KIFONT::FONT::GetFont( font ) );
 
-            TransformTextToBaseline( text, wxEmptyString, false );
+            TransformTextToBaseline( text, wxEmptyString );
 
             if( add )
                 aContainer->Add( text, ADD_MODE::APPEND );

@@ -236,8 +236,7 @@ private:
                             const ALIGNMENT&     aCadstarAlignment,
                             const JUSTIFICATION& aCadstarJustification,
                             const long long aCadstarOrientAngle = 0,
-                            bool aMirrored = false,
-                            bool aInvertY = false );
+                            bool aMirrored = false );
 
     SCH_TEXT* getKiCadSchText( const TEXT& aCadstarTextElement );
 

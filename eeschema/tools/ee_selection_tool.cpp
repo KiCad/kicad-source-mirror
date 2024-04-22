@@ -1403,7 +1403,7 @@ void EE_SELECTION_TOOL::GuessSelectionCandidates( EE_COLLECTOR& collector, const
     }
 
     // Find the closest item.  (Note that at this point all hits are either exact or non-exact.)
-    SEG       poss( mapCoords( aPos, m_isSymbolEditor ), mapCoords( aPos, m_isSymbolEditor ) );
+    SEG       poss( aPos, aPos );
     EDA_ITEM* closest = nullptr;
     int       closestDist = INT_MAX / 4;
 

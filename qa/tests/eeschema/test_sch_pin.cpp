@@ -43,7 +43,7 @@ public:
         m_lib_pin->SetNumber( "42" );
         m_lib_pin->SetName( "pinname" );
         m_lib_pin->SetType( ELECTRICAL_PINTYPE::PT_INPUT );
-        m_lib_pin->SetPosition( VECTOR2I( 1, -2 ) ); // local coord system is upside-down
+        m_lib_pin->SetPosition( VECTOR2I( 1, 2 ) );
 
         SCH_SHEET_PATH path;
         m_parent_symbol = new SCH_SYMBOL( *m_parent_part, m_parent_part->GetLibId(), &path, 0, 0,
@@ -80,8 +80,7 @@ BOOST_AUTO_TEST_CASE( DefaultProperties )
 {
     BOOST_CHECK_EQUAL( m_sch_pin->GetParentSymbol(), m_parent_symbol );
 
-    // Note: local coord system is upside-down; schematic coord system is not.
-    BOOST_CHECK_EQUAL( m_sch_pin->GetLocalPosition(), VECTOR2I( 1, -2 ) );
+    BOOST_CHECK_EQUAL( m_sch_pin->GetLocalPosition(), VECTOR2I( 1, 2 ) );
     BOOST_CHECK_EQUAL( m_sch_pin->GetPosition(), VECTOR2I( 2, 4 ) );
 
     BOOST_CHECK_EQUAL( m_sch_pin->IsVisible(), m_lib_pin->IsVisible() );

@@ -288,12 +288,11 @@ public:
      * locate functions....)
      *
      * @param aLine The line of text to consider.  Pass -1 for all lines.
-     * @param aInvertY Invert the Y axis when calculating bounding box.
      * @return the rect containing the line of text (i.e. the position and the size of one line)
      *         this rectangle is calculated for 0 orient text.
      *         If orientation is not 0 the rect must be rotated to match the physical area
      */
-    BOX2I GetTextBox( int aLine = -1, bool aInvertY = false ) const;
+    BOX2I GetTextBox( int aLine = -1 ) const;
 
     /**
      * Return the distance between two lines of text.
@@ -431,7 +430,6 @@ private:
     mutable bool     m_bounding_box_cache_valid;
     mutable VECTOR2I m_bounding_box_cache_pos;
     mutable int      m_bounding_box_cache_line;
-    mutable bool     m_bounding_box_cache_inverted;
     mutable BOX2I    m_bounding_box_cache;
 
     TEXT_ATTRIBUTES  m_attributes;
