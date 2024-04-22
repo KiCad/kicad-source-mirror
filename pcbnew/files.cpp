@@ -291,7 +291,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         wxFileName currfn = Prj().AbsolutePath( GetBoard()->GetFileName() );
         wxFileName fn = currfn;
 
-        wxString rec_name = GetAutoSaveFilePrefix() + fn.GetName();
+        wxString rec_name = FILEEXT::AutoSaveFilePrefix + fn.GetName();
         fn.SetName( rec_name );
 
         if( !fn.FileExists() )
@@ -1061,7 +1061,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool addToHistory,
     // Delete auto save file on successful save.
     wxFileName autoSaveFileName = pcbFileName;
 
-    autoSaveFileName.SetName( GetAutoSaveFilePrefix() + pcbFileName.GetName() );
+    autoSaveFileName.SetName( FILEEXT::AutoSaveFilePrefix + pcbFileName.GetName() );
 
     if( autoSaveFileName.FileExists() )
         wxRemoveFile( autoSaveFileName.GetFullPath() );
@@ -1169,7 +1169,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
     wxFileName autoSaveFileName = tmpFileName;
 
     // Auto save file name is the board file name prepended with autosaveFilePrefix string.
-    autoSaveFileName.SetName( GetAutoSaveFilePrefix() + autoSaveFileName.GetName() );
+    autoSaveFileName.SetName( FILEEXT::AutoSaveFilePrefix + autoSaveFileName.GetName() );
 
     if( !autoSaveFileName.IsOk() )
         return false;

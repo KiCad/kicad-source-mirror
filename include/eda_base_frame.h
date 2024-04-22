@@ -611,14 +611,6 @@ protected:
     ///< Default style flags used for wxAUI toolbars.
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
 
-    /**
-     * @return the string to prepend to a file name for automatic save.
-     */
-    static wxString GetAutoSaveFilePrefix()
-    {
-        return wxT( "_autosave-" );
-    }
-
     virtual void doReCreateMenuBar() {}
 
     /**

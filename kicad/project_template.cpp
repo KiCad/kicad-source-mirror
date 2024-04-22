@@ -85,7 +85,8 @@ public:
         wxString   path( fn.GetPathWithSep() );
 
         bool exclude = fn.GetName().Contains( "fp-info-cache" )
-                       || fn.GetName().StartsWith( "_autosave-" ) || fn.GetExt().Contains( "lck" );
+                       || fn.GetName().StartsWith( FILEEXT::AutoSaveFilePrefix )
+                       || fn.GetExt().Contains( "lck" );
 
         if( !exclude )
             m_files.emplace_back( wxFileName( filename ) );

@@ -325,7 +325,7 @@ void PCB_EDIT_FRAME::OnExportSTEP( wxCommandEvent& event )
         }
 
         // Use auto-saved board for export
-        brdFile.SetName( GetAutoSaveFilePrefix() + brdFile.GetName() );
+        brdFile.SetName( FILEEXT::AutoSaveFilePrefix + brdFile.GetName() );
     }
 
     DIALOG_EXPORT_STEP dlg( this, brdFile.GetFullPath() );

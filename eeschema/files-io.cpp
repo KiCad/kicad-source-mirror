@@ -894,7 +894,7 @@ bool SCH_EDIT_FRAME::saveSchematicFile( SCH_SHEET* aSheet, const wxString& aSave
     {
         // Delete auto save file.
         wxFileName autoSaveFileName = schematicFileName;
-        autoSaveFileName.SetName( GetAutoSaveFilePrefix() + schematicFileName.GetName() );
+        autoSaveFileName.SetName( FILEEXT::AutoSaveFilePrefix + schematicFileName.GetName() );
 
         if( autoSaveFileName.FileExists() )
         {
@@ -1324,7 +1324,7 @@ bool SCH_EDIT_FRAME::doAutoSave()
         tmpFileName = fn = screens.GetScreen( i )->GetFileName();
 
         // Auto save file name is the normal file name prefixed with GetAutoSavePrefix().
-        fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
+        fn.SetName( FILEEXT::AutoSaveFilePrefix + fn.GetName() );
 
         if( saveSchematicFile( screens.GetSheet( i ), fn.GetFullPath() ) )
         {
@@ -1554,7 +1554,7 @@ bool SCH_EDIT_FRAME::updateAutoSaveFile()
         fn = screens.GetScreen( i )->GetFileName();
 
         // Auto save file name is the normal file name prefixed with GetAutoSavePrefix().
-        fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
+        fn.SetName( FILEEXT::AutoSaveFilePrefix + fn.GetName() );
         autoSavedFiles.emplace_back( fn.GetFullPath() );
     }
 
@@ -1643,7 +1643,7 @@ void SCH_EDIT_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
             wxString tmp = recoveredFn.GetName();
 
             // Strip "_autosave-" prefix from the auto save file name.
-            tmp.Replace( GetAutoSaveFilePrefix(), wxS( "" ), false );
+            tmp.Replace( FILEEXT::AutoSaveFilePrefix, wxS( "" ), false );
             recoveredFn.SetName( tmp );
 
             wxFileName backupFn = recoveredFn;
