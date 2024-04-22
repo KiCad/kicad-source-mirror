@@ -9,13 +9,14 @@
 # 2tama3 <2tama3@gmail.com>, 2023.
 # SubaruArai <subaruletian.arai@minebea.com>, 2024.
 # dsa-t <dudesuchamazing@gmail.com>, 2024.
+# Yutaro Urata2 <yutarourata03@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
 "PO-Revision-Date: 2024-04-23 00:07+0000\n"
-"Last-Translator: co8 j <co8@nifty.com>\n"
+"Last-Translator: Yutaro Urata2 <yutarourata03@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -3810,7 +3811,7 @@ msgstr "テーブルの行の色が交互になるようにする"
 
 #: common/dialogs/panel_common_settings_base.cpp:163
 msgid "When enabled, use a different color for every other table row"
-msgstr ""
+msgstr "有効にすると、一行おきにテーブルの色をかえます"
 
 #: common/dialogs/panel_common_settings_base.cpp:173
 msgid "Icon theme:"
@@ -7615,7 +7616,7 @@ msgstr "垂直に整列"
 
 #: common/tool/actions.cpp:284
 msgid "Left-justify fields and text items"
-msgstr ""
+msgstr "テキストとフィールドを左寄せします"
 
 #: common/tool/actions.cpp:290 eeschema/tools/sch_edit_tool.cpp:2493
 #: pcbnew/tools/edit_tool.cpp:2125
@@ -7625,7 +7626,7 @@ msgstr "垂直に整列"
 
 #: common/tool/actions.cpp:291
 msgid "Center-justify fields and text items"
-msgstr ""
+msgstr "フィールドとテキストを中央に寄せます"
 
 #: common/tool/actions.cpp:297 eeschema/tools/sch_edit_tool.cpp:2495
 #: pcbnew/tools/edit_tool.cpp:2127
@@ -7635,7 +7636,7 @@ msgstr "X位置調整"
 
 #: common/tool/actions.cpp:298
 msgid "Right-justify fields and text items"
-msgstr ""
+msgstr "フィールドとテキストを右寄せします"
 
 #: common/tool/actions.cpp:304
 #, fuzzy
@@ -7654,7 +7655,7 @@ msgstr "列を選択"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "今セレクトしてあるセルが入ってる行を選択します"
 
 #: common/tool/actions.cpp:323
 #, fuzzy
@@ -7663,7 +7664,7 @@ msgstr "アイテムを選択"
 
 #: common/tool/actions.cpp:324
 msgid "Select complete row(s) containing the current selected cell(s)"
-msgstr ""
+msgstr "今セレクトしてあるセルが入ってる列を選択します"
 
 #: common/tool/actions.cpp:330
 #, fuzzy
@@ -7749,7 +7750,7 @@ msgstr "セルのマージを解除"
 
 #: common/tool/actions.cpp:387
 msgid "Turn merged table cells back into separate cells."
-msgstr ""
+msgstr "マージしたテーブルをセルにわけます。"
 
 #: common/tool/actions.cpp:394 eeschema/dialogs/dialog_table_properties.cpp:384
 #: pcbnew/dialogs/dialog_table_properties.cpp:370
@@ -9570,7 +9571,7 @@ msgstr "アノテーション完了。"
 
 #: eeschema/api/api_handler_sch.cpp:256 pcbnew/api/api_handler_pcb.cpp:342
 msgid "Added items via API"
-msgstr ""
+msgstr "API からアイテムを追加しました"
 
 #: eeschema/api/api_handler_sch.cpp:274 pcbnew/api/api_handler_pcb.cpp:341
 #, fuzzy
@@ -10675,7 +10676,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:370
 msgid "Export netlist as a SPICE .subckt model"
-msgstr ""
+msgstr "ネットリストを .subckt SPICE モデルとしてエクスポートする"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:424
 msgid "Netlist command:"
@@ -10747,7 +10748,7 @@ msgstr "ジェネレーターを参照..."
 
 #: eeschema/dialogs/dialog_export_netlist_base.h:112
 msgid "Add Script-based Netlist Exporter"
-msgstr ""
+msgstr "スクリプトを利用するネットリストエクスポーターを追加する"
 
 #: eeschema/dialogs/dialog_field_properties.cpp:234
 msgid "Sheet filename can only be modified in Sheet Properties dialog."
@@ -12443,12 +12444,12 @@ msgstr "プロパティのポップアップを生成"
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:167
 #: pcbnew/dialogs/dialog_plot_base.cpp:416
 msgid "Generate metadata from AUTHOR && SUBJECT variables"
-msgstr ""
+msgstr "AUTHORとSUBJECTの変数からメタデータを生成する"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:168
 #: pcbnew/dialogs/dialog_plot_base.cpp:417
 msgid "Generate PDF document properties from AUTHOR and SUBJECT text variables"
-msgstr ""
+msgstr "AUTHOR と SUBJECTのテキスト変数からPDFドキュメントのプロパティを生成する"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:175
 msgid "Other options"
@@ -15004,7 +15005,7 @@ msgstr "Shift"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:81
 msgid "Alt:"
-msgstr ""
+msgstr "Alt:"
 
 #: eeschema/dialogs/panel_simulator_preferences_base.cpp:96
 #, fuzzy
