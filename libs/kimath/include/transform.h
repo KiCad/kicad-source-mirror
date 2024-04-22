@@ -53,9 +53,19 @@ public:
     /**
      * The default construct creates a transform that draws object is the normal orientation.
      */
-    TRANSFORM() : x1( 1 ), y1( 0 ), x2( 0 ), y2( -1 ) {}
+    TRANSFORM() :
+            x1( 1 ),
+            y1( 0 ),
+            x2( 0 ),
+            y2( -1 )
+    {}
 
-    TRANSFORM( int ax1, int ay1, int ax2, int ay2 ) : x1( ax1 ), y1( ay1 ), x2( ax2 ), y2( ay2 ) {}
+    TRANSFORM( int ax1, int ay1, int ax2, int ay2 ) :
+            x1( ax1 ),
+            y1( ay1 ),
+            x2( ax2 ),
+            y2( ay2 )
+    {}
 
     bool operator==( const TRANSFORM& aTransform ) const;
 

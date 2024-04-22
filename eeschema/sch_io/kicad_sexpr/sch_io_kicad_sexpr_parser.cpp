@@ -498,7 +498,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
                 case T_rectangle:
                 case T_text:
                 case T_text_box:
-                    item = ParseDrawItem();
+                    item = ParseSymbolDrawItem();
 
                     wxCHECK_MSG( item, nullptr, "Invalid draw item pointer." );
 
@@ -524,7 +524,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
         case T_rectangle:
         case T_text:
         case T_text_box:
-            item = ParseDrawItem();
+            item = ParseSymbolDrawItem();
 
             wxCHECK_MSG( item, nullptr, "Invalid draw item pointer." );
 
@@ -545,7 +545,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
 }
 
 
-SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseDrawItem()
+SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbolDrawItem()
 {
     switch( CurTok() )
     {
@@ -562,7 +562,7 @@ SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseDrawItem()
         break;
 
     case T_pin:
-        return parsePin();
+        return parseSymbolPin();
         break;
 
     case T_polyline:
@@ -796,7 +796,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
             NeedSYMBOL();
             wxString hyperlink = FromUTF8();
 
-            if( !aText->ValidateHyperlink( hyperlink ) )
+            if( !EDA_TEXT::ValidateHyperlink( hyperlink ) )
             {
                 THROW_PARSE_ERROR( wxString::Format( _( "Invalid hyperlink url '%s'" ), hyperlink ),
                                    CurSource(), CurLine(), CurLineNumber(), CurOffset() );
@@ -1415,54 +1415,56 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolCircle()
 }
 
 
-SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parsePin()
+SCH_PIN* SCH_IO_KICAD_SEXPR_PARSER::parseSymbolPin()
 {
-    auto parseType = [&]( T token ) -> ELECTRICAL_PINTYPE
-                     {
-                         switch( token )
-                         {
-                         case T_input:          return ELECTRICAL_PINTYPE::PT_INPUT;
-                         case T_output:         return ELECTRICAL_PINTYPE::PT_OUTPUT;
-                         case T_bidirectional:  return ELECTRICAL_PINTYPE::PT_BIDI;
-                         case T_tri_state:      return ELECTRICAL_PINTYPE::PT_TRISTATE;
-                         case T_passive:        return ELECTRICAL_PINTYPE::PT_PASSIVE;
-                         case T_unspecified:    return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
-                         case T_power_in:       return ELECTRICAL_PINTYPE::PT_POWER_IN;
-                         case T_power_out:      return ELECTRICAL_PINTYPE::PT_POWER_OUT;
-                         case T_open_collector: return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
-                         case T_open_emitter:   return ELECTRICAL_PINTYPE::PT_OPENEMITTER;
-                         case T_unconnected:
-                         case T_no_connect:     return ELECTRICAL_PINTYPE::PT_NC;
-                         case T_free:           return ELECTRICAL_PINTYPE::PT_NIC;
+    auto parseType =
+            [&]( T token ) -> ELECTRICAL_PINTYPE
+            {
+                switch( token )
+                {
+                case T_input:          return ELECTRICAL_PINTYPE::PT_INPUT;
+                case T_output:         return ELECTRICAL_PINTYPE::PT_OUTPUT;
+                case T_bidirectional:  return ELECTRICAL_PINTYPE::PT_BIDI;
+                case T_tri_state:      return ELECTRICAL_PINTYPE::PT_TRISTATE;
+                case T_passive:        return ELECTRICAL_PINTYPE::PT_PASSIVE;
+                case T_unspecified:    return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
+                case T_power_in:       return ELECTRICAL_PINTYPE::PT_POWER_IN;
+                case T_power_out:      return ELECTRICAL_PINTYPE::PT_POWER_OUT;
+                case T_open_collector: return ELECTRICAL_PINTYPE::PT_OPENCOLLECTOR;
+                case T_open_emitter:   return ELECTRICAL_PINTYPE::PT_OPENEMITTER;
+                case T_unconnected:
+                case T_no_connect:     return ELECTRICAL_PINTYPE::PT_NC;
+                case T_free:           return ELECTRICAL_PINTYPE::PT_NIC;
 
-                         default:
-                             Expecting( "input, output, bidirectional, tri_state, passive, "
-                                        "unspecified, power_in, power_out, open_collector, "
-                                        "open_emitter, free or no_connect" );
-                             return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
-                         }
-                     };
+                default:
+                    Expecting( "input, output, bidirectional, tri_state, passive, unspecified, "
+                               "power_in, power_out, open_collector, open_emitter, free or "
+                               "no_connect" );
+                    return ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
+                }
+            };
 
-    auto parseShape = [&]( T token ) -> GRAPHIC_PINSHAPE
-                      {
-                          switch( token )
-                          {
-                          case T_line:            return GRAPHIC_PINSHAPE::LINE;
-                          case T_inverted:        return GRAPHIC_PINSHAPE::INVERTED;
-                          case T_clock:           return GRAPHIC_PINSHAPE::CLOCK;
-                          case T_inverted_clock:  return GRAPHIC_PINSHAPE::INVERTED_CLOCK;
-                          case T_input_low:       return GRAPHIC_PINSHAPE::INPUT_LOW;
-                          case T_clock_low:       return GRAPHIC_PINSHAPE::CLOCK_LOW;
-                          case T_output_low:      return GRAPHIC_PINSHAPE::OUTPUT_LOW;
-                          case T_edge_clock_high: return GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK;
-                          case T_non_logic:       return GRAPHIC_PINSHAPE::NONLOGIC;
+    auto parseShape =
+            [&]( T token ) -> GRAPHIC_PINSHAPE
+            {
+                switch( token )
+                {
+                case T_line:            return GRAPHIC_PINSHAPE::LINE;
+                case T_inverted:        return GRAPHIC_PINSHAPE::INVERTED;
+                case T_clock:           return GRAPHIC_PINSHAPE::CLOCK;
+                case T_inverted_clock:  return GRAPHIC_PINSHAPE::INVERTED_CLOCK;
+                case T_input_low:       return GRAPHIC_PINSHAPE::INPUT_LOW;
+                case T_clock_low:       return GRAPHIC_PINSHAPE::CLOCK_LOW;
+                case T_output_low:      return GRAPHIC_PINSHAPE::OUTPUT_LOW;
+                case T_edge_clock_high: return GRAPHIC_PINSHAPE::FALLING_EDGE_CLOCK;
+                case T_non_logic:       return GRAPHIC_PINSHAPE::NONLOGIC;
 
-                          default:
-                              Expecting( "line, inverted, clock, inverted_clock, input_low, "
-                                         "clock_low, output_low, edge_clock_high, non_logic" );
-                              return GRAPHIC_PINSHAPE::LINE;
-                          }
-                      };
+                default:
+                    Expecting( "line, inverted, clock, inverted_clock, input_low, clock_low, "
+                               "output_low, edge_clock_high, non_logic" );
+                    return GRAPHIC_PINSHAPE::LINE;
+                }
+            };
 
     wxCHECK_MSG( CurTok() == T_pin, nullptr,
                  wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a pin token." ) );
@@ -2364,7 +2366,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseSchSheetInstances( SCH_SHEET* aRootSheet, S
                     else
                     {
                         // Whitespaces are not permitted
-                        for( wxString ch : whitespaces )
+                        for( const wxString& ch : whitespaces )
                             numReplacements += instance.m_PageNumber.Replace( ch, wxEmptyString );
 
                     }

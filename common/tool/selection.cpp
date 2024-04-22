@@ -201,28 +201,28 @@ const std::vector<KIGFX::VIEW_ITEM*> SELECTION::updateDrawList() const
 
 bool SELECTION::AreAllItemsIdentical() const
 {
-    return ( std::all_of( m_items.begin() + 1, m_items.end(),
-                    [&]( const EDA_ITEM* r )
-                    {
-                        return r->Type() == m_items.front()->Type();
-                    } ) );
+    return std::all_of( m_items.begin() + 1, m_items.end(),
+            [&]( const EDA_ITEM* r )
+            {
+                return r->Type() == m_items.front()->Type();
+            } );
 }
 
 
 bool SELECTION::OnlyContains( std::vector<KICAD_T> aList ) const
 {
-    return ( std::all_of( m_items.begin(), m_items.end(),
+    return std::all_of( m_items.begin(), m_items.end(),
             [&]( const EDA_ITEM* r )
             {
                 return r->IsType( aList );
-            } ) );
+            } );
 }
 
 
 const std::vector<EDA_ITEM*> SELECTION::GetItemsSortedBySelectionOrder() const
 {
-    using pairedIterators =
-            std::pair<decltype( m_items.begin() ), decltype( m_itemsOrders.begin() )>;
+    using pairedIterators = std::pair<decltype( m_items.begin() ),
+                                      decltype( m_itemsOrders.begin() )>;
 
     // Create a vector of all {selection item, selection order} iterator pairs
     std::vector<pairedIterators> pairs;

@@ -174,9 +174,11 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::SaveSymbol( LIB_SYMBOL* aSymbol, OUTPUTFORMAT
             aFormatter.Print( 0, " (pin_names" );
 
             if( aSymbol->GetPinNameOffset() != schIUScale.MilsToIU( DEFAULT_PIN_NAME_OFFSET ) )
+            {
                 aFormatter.Print( 0, " (offset %s)",
                                   EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                                        aSymbol->GetPinNameOffset() ).c_str() );
+            }
 
             if( !aSymbol->GetShowPinNames() )
                 aFormatter.Print( 0, " hide" );

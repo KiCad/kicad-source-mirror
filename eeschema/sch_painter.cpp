@@ -250,6 +250,12 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
 
 void SCH_PAINTER::drawItemBoundingBox( const EDA_ITEM* aItem )
 {
+    if( const SCH_ITEM* item = dynamic_cast<const SCH_ITEM*>( aItem ) )
+    {
+        if( item->IsPrivate() && !m_schSettings.m_IsSymbolEditor )
+            return;
+    }
+
     BOX2I box = aItem->GetBoundingBox();
 
     if( aItem->Type() == SCH_SYMBOL_T )
@@ -2191,7 +2197,7 @@ static void orientSymbol( LIB_SYMBOL* symbol, int orientation )
     for( SCH_ITEM& item : symbol->GetDrawItems() )
     {
         for( int i = 0; i < o.n_rots; i++ )
-            item.Rotate( VECTOR2I(0, 0 ), true );
+            item.Rotate( VECTOR2I( 0, 0 ), true );
 
         if( o.mirror_x )
             item.MirrorVertically( 0 );

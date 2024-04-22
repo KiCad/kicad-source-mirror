@@ -87,7 +87,7 @@ public:
     LIB_SYMBOL* ParseSymbol( LIB_SYMBOL_MAP& aSymbolLibMap,
                              int aFileVersion = SEXPR_SYMBOL_LIB_FILE_VERSION );
 
-    SCH_ITEM* ParseDrawItem();
+    SCH_ITEM* ParseSymbolDrawItem();
 
     /**
      * Parse the internal #LINE_READER object into \a aSheet.
@@ -139,12 +139,12 @@ private:
 
     int parseInternalUnits( const char* aExpected );
 
-    inline int parseInternalUnits( TSCHEMATIC_T::T aToken )
+    int parseInternalUnits( TSCHEMATIC_T::T aToken )
     {
         return parseInternalUnits( GetTokenText( aToken ) );
     }
 
-    inline VECTOR2I parseXY()
+    VECTOR2I parseXY()
     {
         VECTOR2I xy;
 
@@ -196,7 +196,7 @@ private:
     SCH_SHAPE* parseSymbolArc();
     SCH_SHAPE* parseSymbolBezier();
     SCH_SHAPE* parseSymbolCircle();
-    SCH_PIN* parsePin();
+    SCH_PIN* parseSymbolPin();
     SCH_SHAPE* parseSymbolPolyLine();
     SCH_SHAPE* parseSymbolRectangle();
     SCH_TEXT* parseSymbolText();

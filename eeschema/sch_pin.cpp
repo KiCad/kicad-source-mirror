@@ -1711,7 +1711,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH& aPath, bool aForceNoC
 
 const BOX2I SCH_PIN::ViewBBox() const
 {
-    return GetBoundingBox( false, true, true );
+    return GetBoundingBox( false, true, m_flags & SHOW_ELEC_TYPE );
 }
 
 

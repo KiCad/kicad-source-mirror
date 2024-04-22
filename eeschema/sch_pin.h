@@ -161,7 +161,7 @@ public:
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
     const BOX2I GetBoundingBox() const override
     {
-        return GetBoundingBox( false, true, m_layer == LAYER_DEVICE );
+        return GetBoundingBox( false, true, m_flags & SHOW_ELEC_TYPE );
     }
 
     /**

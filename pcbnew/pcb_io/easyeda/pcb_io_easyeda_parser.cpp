@@ -286,9 +286,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
         }
         else if( elType == wxS( "CIRCLE" ) )
         {
-            std::unique_ptr<PCB_SHAPE> shape =
-                    std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::CIRCLE );
-
+            auto   shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::CIRCLE );
             double width = ConvertSize( arr[4] );
             shape->SetWidth( width );
 
@@ -311,9 +309,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
         }
         else if( elType == wxS( "RECT" ) )
         {
-            std::unique_ptr<PCB_SHAPE> shape =
-                    std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::RECTANGLE );
-
+            auto   shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::RECTANGLE );
             double width = ConvertSize( arr[8] );
             shape->SetWidth( width );
 
@@ -447,10 +443,8 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             {
                 for( int segId = 0; segId < chain.SegmentCount(); segId++ )
                 {
-                    SEG seg = chain.CSegment( segId );
-
-                    std::unique_ptr<PCB_SHAPE> shape =
-                            std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::SEGMENT );
+                    SEG  seg = chain.CSegment( segId );
+                    auto shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::SEGMENT );
 
                     shape->SetLayer( layer );
                     shape->SetWidth( lineWidth );
@@ -476,8 +470,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             {
                 for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
                 {
-                    std::unique_ptr<PCB_SHAPE> shape =
-                            std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
+                    auto shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
 
                     shape->SetLayer( Edge_Cuts );
                     shape->SetFilled( false );
@@ -600,19 +593,20 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
             else
             {
                 // arr[1] is "stroke Width" per docs
-                int minThickness =
-                        std::max( pcbIUScale.mmToIU( 0.03 ), int( ConvertSize( arr[1] ) ) );
+                int minThickness = std::max( pcbIUScale.mmToIU( 0.03 ),
+                                             int( ConvertSize( arr[1] ) ) );
                 zone->SetMinThickness( minThickness );
             }
 
             if( arr.size() > 18 )
             {
-                zone->SetThermalReliefSpokeWidth(
-                        std::max( int( ConvertSize( arr[18] ) ), zone->GetMinThickness() ) );
+                zone->SetThermalReliefSpokeWidth( std::max( int( ConvertSize( arr[18] ) ),
+                                                            zone->GetMinThickness() ) );
             }
             else
             {
-                wxFAIL_MSG( wxString::Format( "COPPERAREA unexpected size %d: %s ", arr.size(),
+                wxFAIL_MSG( wxString::Format( "COPPERAREA unexpected size %d: %s ",
+                                              arr.size(),
                                               shape ) );
 
                 zone->SetThermalReliefSpokeWidth( zone->GetMinThickness() );
@@ -760,8 +754,7 @@ void PCB_IO_EASYEDA_PARSER::ParseToBoardItemContainer(
 
                         for( const SHAPE_POLY_SET::POLYGON& poly : polySet.CPolygons() )
                         {
-                            std::unique_ptr<PCB_SHAPE> shape =
-                                    std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
+                            auto shape = std::make_unique<PCB_SHAPE>( aContainer, SHAPE_T::POLY );
 
                             shape->SetFilled( true );
                             shape->SetPolyShape( poly );
