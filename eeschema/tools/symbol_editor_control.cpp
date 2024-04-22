@@ -172,8 +172,8 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
     {
         SYMBOL_EDIT_FRAME* editFrame = static_cast<SYMBOL_EDIT_FRAME*>( m_frame );
 
-        LIB_ID          sel = editFrame->GetTreeLIBID();
-        const wxString& libName = sel.GetLibNickname();
+        LIB_ID          target = editFrame->GetTargetLibId();
+        const wxString& libName = target.GetLibNickname();
         wxString        msg;
 
         if( libName.IsEmpty() )
@@ -196,7 +196,7 @@ int SYMBOL_EDITOR_CONTROL::AddSymbol( const TOOL_EVENT& aEvent )
         }
         else if( aEvent.IsAction( &EE_ACTIONS::deriveFromExistingSymbol ) )
         {
-            editFrame->CreateNewSymbol( sel.GetLibItemName() );
+            editFrame->CreateNewSymbol( target.GetLibItemName() );
         }
         else if( aEvent.IsAction( &EE_ACTIONS::importSymbol ) )
         {
