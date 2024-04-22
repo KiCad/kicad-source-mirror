@@ -540,7 +540,7 @@ PCBNEW_SETTINGS::PCBNEW_SETTINGS()
             &m_Plot.as_item_checkboxes, false ) );
 
     m_params.emplace_back( new PARAM<wxString>( "window.footprint_text_shown_columns",
-            &m_FootprintTextShownColumns, "0 1 2 3 4 5 6" ) );
+            &m_FootprintTextShownColumns, "0 1 2 3 4 5 7" ) );
 
     m_params.emplace_back( new PARAM<int>( "footprint_wizard_list.width",
             &m_FootprintWizardList.width, -1 ) );
