@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2022 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,8 +37,11 @@
 #define ARG_MIN_DISTANCE "--min-distance"
 #define ARG_USER_ORIGIN "--user-origin"
 #define ARG_BOARD_ONLY "--board-only"
+#define ARG_NO_BOARD_BODY "--no-board-body"
+#define ARG_NO_COMPONENTS "--no-components"
 #define ARG_INCLUDE_TRACKS "--include-tracks"
 #define ARG_INCLUDE_ZONES "--include-zones"
+#define ARG_INCLUDE_INNER_COPPER "--include-inner-copper"
 #define ARG_FUSE_SHAPES "--fuse-shapes"
 #define ARG_NO_OPTIMIZE_STEP "--no-optimize-step"
 #define ARG_FORMAT "--format"
@@ -103,13 +106,24 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .help( UTF8STDSTR( _( "Only generate a board with no components" ) ) )
                 .flag();
 
+        m_argParser.add_argument( ARG_NO_BOARD_BODY )
+                .help( UTF8STDSTR( _( "Exclude board body" ) ) )
+                .flag();
+
+        m_argParser.add_argument( ARG_NO_COMPONENTS )
+                .help( UTF8STDSTR( _( "Exclude 3D models for components" ) ) )
+                .flag();
+
         m_argParser.add_argument( ARG_INCLUDE_TRACKS )
                 .help( UTF8STDSTR( _( "Export tracks" ) ) )
-                .implicit_value( true )
-                .default_value( false );
+                .flag();
 
         m_argParser.add_argument( ARG_INCLUDE_ZONES )
                 .help( UTF8STDSTR( _( "Export zones" ) ) )
+                .flag();
+
+        m_argParser.add_argument( ARG_INCLUDE_INNER_COPPER )
+                .help( UTF8STDSTR( _( "Export elements on inner copper layers" ) ) )
                 .flag();
 
         m_argParser.add_argument( ARG_FUSE_SHAPES )
@@ -166,8 +180,11 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
         step->m_useGridOrigin = m_argParser.get<bool>( ARG_GRID_ORIGIN );
         step->m_substModels = m_argParser.get<bool>( ARG_SUBST_MODELS );
+        step->m_exportBoardBody = !m_argParser.get<bool>( ARG_NO_BOARD_BODY );
+        step->m_exportComponents = !m_argParser.get<bool>( ARG_NO_COMPONENTS );
         step->m_exportTracks = m_argParser.get<bool>( ARG_INCLUDE_TRACKS );
         step->m_exportZones = m_argParser.get<bool>( ARG_INCLUDE_ZONES );
+        step->m_exportInnerCopper = m_argParser.get<bool>( ARG_INCLUDE_INNER_COPPER );
         step->m_fuseShapes = m_argParser.get<bool>( ARG_FUSE_SHAPES );
         step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
     }

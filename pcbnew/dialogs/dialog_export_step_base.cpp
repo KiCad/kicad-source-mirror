@@ -151,15 +151,24 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_staticline1 = new wxStaticLine( sbOtherOptions->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	sbOtherOptions->Add( m_staticline1, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
 
+	m_cbExportBody = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export board body"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbOtherOptions->Add( m_cbExportBody, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbExportComponents = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export components"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbOtherOptions->Add( m_cbExportComponents, 0, wxBOTTOM|wxRIGHT, 5 );
+
 	m_cbExportTracks = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export tracks, pads and vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportTracks->SetToolTip( _("Export tracks, pads and vias on external copper layers.") );
 
-	sbOtherOptions->Add( m_cbExportTracks, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	sbOtherOptions->Add( m_cbExportTracks, 0, wxBOTTOM|wxRIGHT, 5 );
 
 	m_cbExportZones = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export zones"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbExportZones->SetToolTip( _("Export zones on external copper layers.") );
 
 	sbOtherOptions->Add( m_cbExportZones, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	m_cbExportInnerCopper = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Export inner copper layers"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbOtherOptions->Add( m_cbExportInnerCopper, 0, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 
 	m_cbFuseShapes = new wxCheckBox( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Fuse shapes (time consuming)"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_cbFuseShapes->SetToolTip( _("Combine intersecting geometry into one shape.") );

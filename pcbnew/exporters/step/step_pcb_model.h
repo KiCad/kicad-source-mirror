@@ -31,17 +31,14 @@
 #include <utility>
 #include <vector>
 
-#include <Standard_Version.hxx>
-#include <BRepBuilderAPI_MakeWire.hxx>
-#include <TDocStd_Document.hxx>
-#include <XCAFApp_Application.hxx>
-#include <XCAFDoc_ShapeTool.hxx>
+#include <Standard_Handle.hxx>
+#include <TDF_Label.hxx>
 #include <TopoDS_Shape.hxx>
-#include <TopoDS_Edge.hxx>
 
 #include <math/vector2d.h>
 #include <math/vector3.h>
 #include <geometry/shape_poly_set.h>
+#include <board_stackup_manager/board_stackup.h>
 
 /**
  * Default distance between points to treat them as separate ones (mm)
@@ -69,6 +66,10 @@ static constexpr double ARC_TO_SEGMENT_MAX_ERROR_MM = 0.005;
 
 class PAD;
 
+class TDocStd_Document;
+class XCAFApp_Application;
+class XCAFDoc_ShapeTool;
+
 typedef std::pair< std::string, TDF_Label > MODEL_DATUM;
 typedef std::map< std::string, TDF_Label > MODEL_MAP;
 
@@ -93,7 +94,7 @@ public:
     bool AddTrackSegment( const PCB_TRACK* aTrack, const VECTOR2D& aOrigin );
 
     // add a set of polygons (must be in final position) on top or bottom of the board as copper
-    bool AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop,
+    bool AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LAYER_ID aLayer,
                                  const VECTOR2D& aOrigin, bool aTrack );
 
     // add a component at the given position and orientation
@@ -104,14 +105,11 @@ public:
     void SetBoardColor( double r, double g, double b );
     void SetCopperColor( double r, double g, double b );
 
-    // set the thickness of the PCB (mm); the top of the PCB shall be at Z = aThickness
-    // aThickness < 0.0 == use default thickness
-    // aThickness <= THICKNESS_MIN == use THICKNESS_MIN
-    // aThickness > THICKNESS_MIN == use aThickness
-    void SetPCBThickness( double aThickness );
+    void SetEnabledLayers( const LSET& aLayers );
 
-    // enable fusing the geometry
     void SetFuseShapes( bool aValue );
+
+    void SetStackup( const BOARD_STACKUP& aStackup );
 
     // Set the max distance (in mm) to consider 2 points have the same coordinates
     // and can be merged
@@ -120,7 +118,7 @@ public:
     void SetMaxError( int aMaxError ) { m_maxError = aMaxError; }
 
     // create the PCB model using the current outlines and drill holes
-    bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin );
+    bool CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool aPushBoardBody );
 
     /**
      * Convert a SHAPE_POLY_SET to TopoDS_Shape's (polygonal vertical prisms)
@@ -196,12 +194,9 @@ private:
      */
     bool isBoardOutlineValid();
 
-    /** create one solid board using current outline and drill holes set
-     * @param aIdx is the main outline index
-     * @param aOutline is the set of outlines with holes
-     * @param aOrigin is the coordinate origin for 3 view
-     */
-    bool createOneBoard( int aIdx, SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin );
+    void getLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPos, double& aThickness );
+
+    void getBoardBodyZPlacement( double& aZPos, double& aThickness );
 
     /**
      * Load a 3D model data.
@@ -240,8 +235,8 @@ private:
     double                          m_angleprec;        // angle numeric precision
     double                          m_boardColor[3];    // board body, RGB values
     double                          m_copperColor[3];   // copper, RGB values
-    double                          m_boardThickness;   // PCB thickness, mm
-    double                          m_copperThickness;  // copper thickness, mm
+    BOARD_STACKUP                   m_stackup;          // board stackup
+    LSET                            m_enabledLayers;    // a set of layers enabled for export
 
     double                          m_minx;             // leftmost curve point
     double                          m_mergeOCCMaxDist;  // minimum distance (mm) below which two

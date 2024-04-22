@@ -68,8 +68,11 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbOptimizeStep;
 		wxCheckBox* m_cbExportCompound_hidden;
 		wxStaticLine* m_staticline1;
+		wxCheckBox* m_cbExportBody;
+		wxCheckBox* m_cbExportComponents;
 		wxCheckBox* m_cbExportTracks;
 		wxCheckBox* m_cbExportZones;
+		wxCheckBox* m_cbExportInnerCopper;
 		wxCheckBox* m_cbFuseShapes;
 		wxCheckBox* m_cbExportSilkscreen_hidden;
 		wxCheckBox* m_cbExportSoldermask_hidden;

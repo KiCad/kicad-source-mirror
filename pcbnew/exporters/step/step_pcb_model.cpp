@@ -45,6 +45,8 @@
 #include <build_version.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_circle.h>
+#include <board_stackup_manager/board_stackup.h>
+#include <board_stackup_manager/stackup_predefined_prms.h>
 
 #include "step_pcb_model.h"
 #include "streamwrapper.h"
@@ -59,27 +61,33 @@
 #include <STEPCAFControl_Reader.hxx>
 #include <STEPCAFControl_Writer.hxx>
 #include <APIHeaderSection_MakeHeader.hxx>
+#include <Standard_Failure.hxx>
 #include <Standard_Version.hxx>
 #include <TCollection_ExtendedString.hxx>
+#include <TDocStd_Document.hxx>
 #include <TDataStd_Name.hxx>
 #include <TDataStd_TreeNode.hxx>
 #include <TDF_LabelSequence.hxx>
 #include <TDF_ChildIterator.hxx>
 #include <TopExp_Explorer.hxx>
+#include <XCAFApp_Application.hxx>
 #include <XCAFDoc.hxx>
 #include <XCAFDoc_DocumentTool.hxx>
 #include <XCAFDoc_ColorTool.hxx>
+#include <XCAFDoc_ShapeTool.hxx>
 
 #include <BRep_Tool.hxx>
 #include <BRepMesh_IncrementalMesh.hxx>
 #include <BRepBuilderAPI.hxx>
-#include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_Transform.hxx>
 #include <BRepBuilderAPI_GTransform.hxx>
+#include <BRepBuilderAPI_MakeEdge.hxx>
+#include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepTools.hxx>
+#include <BRepLib_MakeWire.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
 #include <ShapeUpgrade_UnifySameDomain.hxx>
@@ -87,19 +95,10 @@
 #include <BRepBndLib.hxx>
 #include <Bnd_BoundSortBox.hxx>
 
-#include <TopoDS.hxx>
-#include <TopoDS_Wire.hxx>
-#include <TopoDS_Face.hxx>
-#include <TopoDS_Compound.hxx>
-#include <TopoDS_Builder.hxx>
-#include <Standard_Failure.hxx>
-
 #include <Geom_Curve.hxx>
-#include <Geom_BezierCurve.hxx>
 #include <Geom_TrimmedCurve.hxx>
 
 #include <gp_Ax2.hxx>
-#include <gp_Circ.hxx>
 #include <gp_Dir.hxx>
 #include <gp_Pnt.hxx>
 #include <GC_MakeArcOfCircle.hxx>
@@ -203,8 +202,6 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_components = 0;
     m_precision = USER_PREC;
     m_angleprec = USER_ANGLE_PREC;
-    m_boardThickness = BOARD_THICKNESS_DEFAULT_MM;
-    m_copperThickness = COPPER_THICKNESS_DEFAULT_MM;
     m_mergeOCCMaxDist = OCC_MAX_DISTANCE_TO_MERGE_POINTS;
     m_minx = 1.0e10;    // absurdly large number; any valid PCB X value will be smaller
     m_pcbName = aPcbName;
@@ -219,141 +216,149 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
         m_doc->Close();
 }
 
+
 bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
 {
     bool success = true;
 
-    for( PCB_LAYER_ID pcb_layer = F_Cu; ; pcb_layer = B_Cu )
+    for( PCB_LAYER_ID pcb_layer : aPad->GetLayerSet().Seq() )
     {
+        if( !IsCopperLayer( pcb_layer ) )
+            continue;
+
+        if( !m_enabledLayers.Contains( pcb_layer ) )
+            continue;
+
         TopoDS_Shape curr_shape;
-        double       Zpos = pcb_layer == F_Cu ? m_boardThickness : -m_copperThickness;
 
-        if( aPad->IsOnLayer( pcb_layer ) )
+        double Zpos, thickness;
+        getLayerZPlacement( pcb_layer, Zpos, thickness );
+
+        // Make a shape on copper layers
+        std::shared_ptr<SHAPE> effShapePtr = aPad->GetEffectiveShape( pcb_layer );
+
+        wxCHECK( effShapePtr->Type() == SHAPE_TYPE::SH_COMPOUND, false );
+        SHAPE_COMPOUND* compoundShape = static_cast<SHAPE_COMPOUND*>( effShapePtr.get() );
+
+        std::vector<TopoDS_Shape> topodsShapes;
+
+        for( SHAPE* shape : compoundShape->Shapes() )
         {
-            // Make a shape on top/bottom copper layer
-            std::shared_ptr<SHAPE> effShapePtr = aPad->GetEffectiveShape( pcb_layer );
-
-            wxCHECK( effShapePtr->Type() == SHAPE_TYPE::SH_COMPOUND, false );
-            SHAPE_COMPOUND* compoundShape = static_cast<SHAPE_COMPOUND*>( effShapePtr.get() );
-
-            std::vector<TopoDS_Shape> topodsShapes;
-
-            for( SHAPE* shape : compoundShape->Shapes() )
+            if( shape->Type() == SHAPE_TYPE::SH_SEGMENT || shape->Type() == SHAPE_TYPE::SH_CIRCLE )
             {
-                if( shape->Type() == SHAPE_TYPE::SH_SEGMENT
-                    || shape->Type() == SHAPE_TYPE::SH_CIRCLE )
+                VECTOR2I start, end;
+                int      width = 0;
+
+                if( shape->Type() == SHAPE_TYPE::SH_SEGMENT )
                 {
-                    VECTOR2I start, end;
-                    int      width = 0;
+                    SHAPE_SEGMENT* sh_seg = static_cast<SHAPE_SEGMENT*>( shape );
 
-                    if( shape->Type() == SHAPE_TYPE::SH_SEGMENT )
-                    {
-                        SHAPE_SEGMENT* sh_seg = static_cast<SHAPE_SEGMENT*>( shape );
+                    start = sh_seg->GetSeg().A;
+                    end = sh_seg->GetSeg().B;
+                    width = sh_seg->GetWidth();
+                }
+                else if( shape->Type() == SHAPE_TYPE::SH_CIRCLE )
+                {
+                    SHAPE_CIRCLE* sh_circ = static_cast<SHAPE_CIRCLE*>( shape );
 
-                        start = sh_seg->GetSeg().A;
-                        end = sh_seg->GetSeg().B;
-                        width = sh_seg->GetWidth();
-                    }
-                    else if( shape->Type() == SHAPE_TYPE::SH_CIRCLE )
-                    {
-                        SHAPE_CIRCLE* sh_circ = static_cast<SHAPE_CIRCLE*>( shape );
+                    start = end = sh_circ->GetCenter();
+                    width = sh_circ->GetRadius() * 2;
+                }
 
-                        start = end = sh_circ->GetCenter();
-                        width = sh_circ->GetRadius() * 2;
-                    }
+                TopoDS_Shape topods_shape;
 
-                    TopoDS_Shape topods_shape;
-
-                    if( MakeShapeAsThickSegment( topods_shape, start, end, width, m_copperThickness,
-                                                 Zpos, aOrigin ) )
-                    {
-                        topodsShapes.emplace_back( topods_shape );
-                    }
-                    else
-                    {
-                        success = false;
-                    }
+                if( MakeShapeAsThickSegment( topods_shape, start, end, width, thickness, Zpos,
+                                             aOrigin ) )
+                {
+                    topodsShapes.emplace_back( topods_shape );
                 }
                 else
                 {
-                    SHAPE_POLY_SET polySet;
-                    shape->TransformToPolygon( polySet, ARC_HIGH_DEF, ERROR_INSIDE );
-
-                    success &= MakeShapes( topodsShapes, polySet, m_copperThickness, Zpos, aOrigin );
+                    success = false;
                 }
-            }
-
-            // Fuse shapes
-            if( topodsShapes.size() == 1 )
-            {
-                m_board_copper_pads.emplace_back( topodsShapes.front() );
             }
             else
             {
-                BRepAlgoAPI_Fuse     mkFuse;
-                TopTools_ListOfShape shapeArguments, shapeTools;
+                SHAPE_POLY_SET polySet;
+                shape->TransformToPolygon( polySet, ARC_HIGH_DEF, ERROR_INSIDE );
 
-                for( TopoDS_Shape& sh : topodsShapes )
-                {
-                    if( sh.IsNull() )
-                        continue;
-
-                    if( shapeArguments.IsEmpty() )
-                        shapeArguments.Append( sh );
-                    else
-                        shapeTools.Append( sh );
-                }
-
-                mkFuse.SetRunParallel( true );
-                mkFuse.SetToFillHistory( false );
-                mkFuse.SetArguments( shapeArguments );
-                mkFuse.SetTools( shapeTools );
-                mkFuse.Build();
-
-                if( mkFuse.IsDone() )
-                {
-                    TopoDS_Shape fusedShape = mkFuse.Shape();
-
-                    ShapeUpgrade_UnifySameDomain unify( fusedShape, false, true, false );
-                    unify.History() = nullptr;
-                    unify.Build();
-
-                    TopoDS_Shape unifiedShapes = unify.Shape();
-
-                    if( !unifiedShapes.IsNull() )
-                    {
-                        m_board_copper_pads.emplace_back( unifiedShapes );
-                    }
-                    else
-                    {
-                        ReportMessage(
-                                _( "** ShapeUpgrade_UnifySameDomain produced a null shape **\n" ) );
-                        m_board_copper_pads.emplace_back( fusedShape );
-                    }
-                }
-                else
-                {
-                    for( TopoDS_Shape& sh : topodsShapes )
-                        m_board_copper_pads.emplace_back( sh );
-                }
+                success &= MakeShapes( topodsShapes, polySet, thickness, Zpos, aOrigin );
             }
         }
 
-        if( pcb_layer == B_Cu )
-            break;
+        // Fuse shapes
+        if( topodsShapes.size() == 1 )
+        {
+            m_board_copper_pads.emplace_back( topodsShapes.front() );
+        }
+        else
+        {
+            BRepAlgoAPI_Fuse     mkFuse;
+            TopTools_ListOfShape shapeArguments, shapeTools;
+
+            for( TopoDS_Shape& sh : topodsShapes )
+            {
+                if( sh.IsNull() )
+                    continue;
+
+                if( shapeArguments.IsEmpty() )
+                    shapeArguments.Append( sh );
+                else
+                    shapeTools.Append( sh );
+            }
+
+            mkFuse.SetRunParallel( true );
+            mkFuse.SetToFillHistory( false );
+            mkFuse.SetArguments( shapeArguments );
+            mkFuse.SetTools( shapeTools );
+            mkFuse.Build();
+
+            if( mkFuse.IsDone() )
+            {
+                TopoDS_Shape fusedShape = mkFuse.Shape();
+
+                ShapeUpgrade_UnifySameDomain unify( fusedShape, false, true, false );
+                unify.History() = nullptr;
+                unify.Build();
+
+                TopoDS_Shape unifiedShapes = unify.Shape();
+
+                if( !unifiedShapes.IsNull() )
+                {
+                    m_board_copper_pads.emplace_back( unifiedShapes );
+                }
+                else
+                {
+                    ReportMessage(
+                            _( "** ShapeUpgrade_UnifySameDomain produced a null shape **\n" ) );
+                    m_board_copper_pads.emplace_back( fusedShape );
+                }
+            }
+            else
+            {
+                for( TopoDS_Shape& sh : topodsShapes )
+                    m_board_copper_pads.emplace_back( sh );
+            }
+        }
     }
 
     if( aPad->GetAttribute() == PAD_ATTRIB::PTH && aPad->IsOnLayer( F_Cu )
         && aPad->IsOnLayer( B_Cu ) )
     {
+        double f_pos, f_thickness;
+        double b_pos, b_thickness;
+        getLayerZPlacement( F_Cu, f_pos, f_thickness );
+        getLayerZPlacement( B_Cu, b_pos, b_thickness );
+        double top = std::max( f_pos, f_pos + f_thickness );
+        double bottom = std::min( b_pos, b_pos + b_thickness );
+
         TopoDS_Shape plating;
 
         std::shared_ptr<SHAPE_SEGMENT> seg_hole = aPad->GetEffectiveHoleShape();
         double width = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
 
         if( MakeShapeAsThickSegment( plating, seg_hole->GetSeg().A, seg_hole->GetSeg().B, width,
-                                     m_boardThickness + m_copperThickness * 2, -m_copperThickness,
-                                     aOrigin ) )
+                                     ( top - bottom ), bottom, aOrigin ) )
         {
             m_board_copper_pads.push_back( plating );
         }
@@ -394,15 +399,16 @@ bool STEP_PCB_MODEL::AddTrackSegment( const PCB_TRACK* aTrack, const VECTOR2D& a
 {
     PCB_LAYER_ID pcblayer = aTrack->GetLayer();
 
-    if( pcblayer != F_Cu && pcblayer != B_Cu )
-        return false;
+    if( !m_enabledLayers.Contains( pcblayer ) )
+        return true;
 
     TopoDS_Shape shape;
-    double zposition = pcblayer == F_Cu ? m_boardThickness : -m_copperThickness;
+
+    double zposition, thickness;
+    getLayerZPlacement( pcblayer, zposition, thickness );
 
     bool success = MakeShapeAsThickSegment( shape, aTrack->GetStart(), aTrack->GetEnd(),
-                                            aTrack->GetWidth(), m_copperThickness,
-                                            zposition, aOrigin );
+                                            aTrack->GetWidth(), thickness, zposition, aOrigin );
 
     if( success )
         m_board_copper_tracks.push_back( shape );
@@ -411,7 +417,65 @@ bool STEP_PCB_MODEL::AddTrackSegment( const PCB_TRACK* aTrack, const VECTOR2D& a
 }
 
 
-bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, bool aOnTop,
+void STEP_PCB_MODEL::getLayerZPlacement( const PCB_LAYER_ID aLayer, double& aZPos,
+                                         double& aThickness )
+{
+    int  z = 0;
+    int  thickness = 0;
+    bool wasPrepreg = false;
+
+    const std::vector<BOARD_STACKUP_ITEM*>& materials = m_stackup.GetList();
+
+    for( auto it = materials.rbegin(); it != materials.rend(); ++it )
+    {
+        const BOARD_STACKUP_ITEM* item = *it;
+
+        if( item->GetType() == BS_ITEM_TYPE_COPPER )
+        {
+            // Inner copper position is usually inside prepreg
+            if( ( wasPrepreg || aLayer == B_Cu ) && aLayer != F_Cu )
+                thickness = -item->GetThickness();
+            else
+                thickness = item->GetThickness();
+
+            if( item->GetBrdLayerId() == aLayer )
+                break;
+
+            z += thickness;
+        }
+        else if( item->GetType() == BS_ITEM_TYPE_DIELECTRIC )
+        {
+            wasPrepreg = ( item->GetTypeName() == KEY_PREPREG );
+
+            // Dielectric can have sub-layers. Layer 0 is the main layer
+            // Not frequent, but possible
+            for( int idx = 0; idx < item->GetSublayersCount(); idx++ )
+                z += item->GetThickness( idx );
+        }
+    }
+
+    aZPos = pcbIUScale.IUTomm( z );
+    aThickness = pcbIUScale.IUTomm( thickness );
+}
+
+
+void STEP_PCB_MODEL::getBoardBodyZPlacement( double& aZPos, double& aThickness )
+{
+    double f_pos, f_thickness;
+    double b_pos, b_thickness;
+    getLayerZPlacement( F_Cu, f_pos, f_thickness );
+    getLayerZPlacement( B_Cu, b_pos, b_thickness );
+    double top = std::min( f_pos, f_pos + f_thickness );
+    double bottom = std::max( b_pos, b_pos + b_thickness );
+
+    aThickness = ( top - bottom );
+    aZPos = bottom;
+
+    wxASSERT( aZPos == 0.0 );
+}
+
+
+bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, PCB_LAYER_ID aLayer,
                                              const VECTOR2D& aOrigin, bool aTrack )
 {
     bool success = true;
@@ -419,14 +483,18 @@ bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, 
     if( aPolyShapes->IsEmpty() )
         return true;
 
-    double z_pos = aOnTop ? m_boardThickness : -m_copperThickness;
+    if( !m_enabledLayers.Contains( aLayer ) )
+        return true;
 
-    if( !MakeShapes( aTrack ? m_board_copper_tracks : m_board_copper_zones, *aPolyShapes,
-                     m_copperThickness, z_pos, aOrigin ) )
+    double z_pos, thickness;
+    getLayerZPlacement( aLayer, z_pos, thickness );
+
+    if( !MakeShapes( aTrack ? m_board_copper_tracks : m_board_copper_zones, *aPolyShapes, thickness,
+                     z_pos, aOrigin ) )
     {
-        ReportMessage( wxString::Format(
-                wxT( "Could not add shape (%d points) to copper layer on %s.\n" ),
-                aPolyShapes->FullPointCount(), aOnTop ? wxT( "top" ) : wxT( "bottom" ) ) );
+        ReportMessage(
+                wxString::Format( wxT( "Could not add shape (%d points) to copper layer on %s.\n" ),
+                                  aPolyShapes->FullPointCount(), LayerName( aLayer ) ) );
 
         success = false;
     }
@@ -446,7 +514,15 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     const double margin = 0.01; // a small margin on the Z axix to be sure the hole
                                 // is bigger than the board with copper
                                 // must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
-    double holeZsize = m_boardThickness + ( m_copperThickness * 2 ) + ( margin * 2 );
+
+    double f_pos, f_thickness;
+    double b_pos, b_thickness;
+    getLayerZPlacement( F_Cu, f_pos, f_thickness );
+    getLayerZPlacement( B_Cu, b_pos, b_thickness );
+    double top = std::max( f_pos, f_pos + f_thickness );
+    double bottom = std::min( b_pos, b_pos + b_thickness );
+
+    double holeZsize = ( top - bottom ) + ( margin * 2 );
 
     std::shared_ptr<SHAPE_SEGMENT> seg_hole = aPad->GetEffectiveHoleShape();
 
@@ -456,7 +532,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     TopoDS_Shape copperHole, boardHole;
 
     if( MakeShapeAsThickSegment( copperHole, seg_hole->GetSeg().A, seg_hole->GetSeg().B,
-                                 copperDrill, holeZsize, -m_copperThickness - margin, aOrigin ) )
+                                 copperDrill, holeZsize, bottom - margin, aOrigin ) )
     {
         m_copperCutouts.push_back( copperHole );
     }
@@ -466,7 +542,7 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     }
 
     if( MakeShapeAsThickSegment( boardHole, seg_hole->GetSeg().A, seg_hole->GetSeg().B, boardDrill,
-                                 holeZsize, -m_copperThickness - margin, aOrigin ) )
+                                 holeZsize, bottom - margin, aOrigin ) )
     {
         m_boardCutouts.push_back( boardHole );
     }
@@ -534,20 +610,21 @@ bool STEP_PCB_MODEL::AddComponent( const std::string& aFileNameUTF8, const std::
 }
 
 
-void STEP_PCB_MODEL::SetPCBThickness( double aThickness )
+void STEP_PCB_MODEL::SetEnabledLayers( const LSET& aLayers )
 {
-    if( aThickness < 0.0 )
-        m_boardThickness = BOARD_THICKNESS_DEFAULT_MM;
-    else if( aThickness < BOARD_THICKNESS_MIN_MM )
-        m_boardThickness = BOARD_THICKNESS_MIN_MM;
-    else
-        m_boardThickness = aThickness;
+    m_enabledLayers = aLayers;
 }
 
 
 void STEP_PCB_MODEL::SetFuseShapes( bool aValue )
 {
     m_fuseShapes = aValue;
+}
+
+
+void STEP_PCB_MODEL::SetStackup( const BOARD_STACKUP& aStackup )
+{
+    m_stackup = aStackup;
 }
 
 
@@ -1001,7 +1078,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 }
 
 
-bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
+bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool aPushBoardBody )
 {
     if( m_hasPCB )
     {
@@ -1014,10 +1091,14 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     Handle( XCAFDoc_ColorTool ) colorTool = XCAFDoc_DocumentTool::ColorTool( m_doc->Main() );
     m_hasPCB = true; // whether or not operations fail we note that CreatePCB has been invoked
 
-
     // Support for more than one main outline (more than one board)
     ReportMessage( wxString::Format( wxT( "Build board outlines (%d outlines) with %d points.\n" ),
                                      aOutline.OutlineCount(), aOutline.FullPointCount() ) );
+
+    double boardThickness;
+    double boardZPos;
+    getBoardBodyZPlacement( boardZPos, boardThickness );
+
 #if 0
     // This code should work, and it is working most of time
     // However there are issues if the main outline is a circle with holes:
@@ -1025,7 +1106,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     // see bug https://gitlab.com/kicad/code/kicad/-/issues/17446
     // (Holes are missing from STEP export with circular PCB outline)
     // Hard to say if the bug is in our code or in OCC 7.7
-    if( !MakeShapes( m_board_outlines, aOutline, m_boardThickness, 0.0, aOrigin ) )
+    if( !MakeShapes( m_board_outlines, aOutline, boardThickness, boardZPos, aOrigin ) )
     {
         // Error
         ReportMessage( wxString::Format(
@@ -1043,18 +1124,19 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
 
             if( contId == 0 ) // main Outline
             {
-                if( !MakeShapes( m_board_outlines, polyset, m_boardThickness, 0.0, aOrigin ) )
+                if( !MakeShapes( m_board_outlines, polyset, boardThickness, boardZPos, aOrigin ) )
                     ReportMessage( wxT( "OCC error creating main outline.\n" ) );
             }
             else // Hole inside the main outline
             {
-                if( !MakeShapes( m_boardCutouts, polyset, m_boardThickness, 0.0, aOrigin ) )
+                if( !MakeShapes( m_boardCutouts, polyset, boardThickness, boardZPos, aOrigin ) )
                     ReportMessage( wxT( "OCC error creating hole in main outline.\n" ) );
             }
         }
     }
 #endif
 
+    // Even if we've disabled board body export, we still need the shapes for bounding box calculations.
     Bnd_Box brdBndBox;
 
     for( const TopoDS_Shape& brdShape : m_board_outlines )
@@ -1312,7 +1394,8 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin )
     pushToAssembly( m_board_copper_pads, copper_color, "pad" );
     pushToAssembly( m_board_copper_fused, copper_color, "copper" );
 
-    pushToAssembly( m_board_outlines, board_color, "PCB" );
+    if( aPushBoardBody )
+        pushToAssembly( m_board_outlines, board_color, "PCB" );
 
 #if( defined OCC_VERSION_HEX ) && ( OCC_VERSION_HEX > 0x070101 )
     m_assy->UpdateAssemblies();
@@ -1719,10 +1802,17 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
     // Offset board thickness
     aOffset.z += BOARD_OFFSET;
 
+    double boardThickness;
+    double boardZPos;
+    getBoardBodyZPlacement( boardZPos, boardThickness );
+    double top = std::max( boardZPos, boardZPos + boardThickness );
+    double bottom = std::min( boardZPos, boardZPos + boardThickness );
+
     gp_Trsf lRot;
 
     if( aBottom )
     {
+        aOffset.z -= bottom;
         lRot.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ), aRotation );
         lPos.Multiply( lRot );
         lRot.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 1.0, 0.0, 0.0 ) ), M_PI );
@@ -1730,7 +1820,7 @@ bool STEP_PCB_MODEL::getModelLocation( bool aBottom, VECTOR2D aPosition, double 
     }
     else
     {
-        aOffset.z += m_boardThickness;
+        aOffset.z += top;
         lRot.SetRotation( gp_Ax1( gp_Pnt( 0.0, 0.0, 0.0 ), gp_Dir( 0.0, 0.0, 1.0 ) ), aRotation );
         lPos.Multiply( lRot );
     }
