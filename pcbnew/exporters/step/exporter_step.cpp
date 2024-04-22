@@ -39,6 +39,7 @@
 #include <filename_resolver.h>
 #include <trace_helpers.h>
 #include <project_pcb.h>
+#include <wildcards_and_files_ext.h>
 
 #include <Message.hxx>                // OpenCascade messenger
 #include <Message_PrinterOStream.hxx> // OpenCascade output messenger
@@ -152,6 +153,9 @@ EXPORTER_STEP::EXPORTER_STEP( BOARD* aBoard, const EXPORTER_STEP_PARAMS& aParams
     // m_pcbName is used later to identify items in step file
     wxFileName fn( aBoard->GetFileName() );
     m_pcbBaseName = fn.GetName();
+
+    // Remove the autosave prefix
+    m_pcbBaseName.StartsWith( FILEEXT::AutoSaveFilePrefix, &m_pcbBaseName );
 
     m_resolver = std::make_unique<FILENAME_RESOLVER>();
     m_resolver->Set3DConfigDir( wxT( "" ) );
