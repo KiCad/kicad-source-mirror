@@ -455,8 +455,11 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     if( isMouseClick( type ) )
     {
-        if( m_toolMgr->GetToolHolder() && m_toolMgr->GetToolHolder()->GetToolCanvas() )
+        if( m_toolMgr->GetToolHolder() && m_toolMgr->GetToolHolder()->GetToolCanvas() &&
+            !m_toolMgr->GetToolHolder()->GetToolCanvas()->HasFocus() )
+        {
             m_toolMgr->GetToolHolder()->GetToolCanvas()->SetFocus();
+        }
     }
 
     // Mouse handling
