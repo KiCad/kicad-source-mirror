@@ -88,6 +88,7 @@
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepTools.hxx>
 #include <BRepLib_MakeWire.hxx>
+#include <BRepAlgoAPI_Check.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
 #include <ShapeUpgrade_UnifySameDomain.hxx>
@@ -107,6 +108,7 @@
 #include <RWGltf_CafWriter.hxx>
 
 #include <macros.h>
+#include <advanced_config.h>
 
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
@@ -189,6 +191,197 @@ MODEL3D_FORMAT_TYPE fileType( const char* aFileName )
         return FMT_IGES;
 
     return FMT_NONE;
+}
+
+
+static VECTOR2D CircleCenterFrom3Points( const VECTOR2D& p1, const VECTOR2D& p2,
+                                         const VECTOR2D& p3 )
+{
+    VECTOR2D center;
+
+    // Move coordinate origin to p2, to simplify calculations
+    VECTOR2D b = p1 - p2;
+    VECTOR2D d = p3 - p2;
+    double   bc = ( b.x * b.x + b.y * b.y ) / 2.0;
+    double   cd = ( -d.x * d.x - d.y * d.y ) / 2.0;
+    double   det = -b.x * d.y + d.x * b.y;
+
+    // We're fine with divisions by 0
+    det = 1.0 / det;
+    center.x = ( -bc * d.y - cd * b.y ) * det;
+    center.y = ( b.x * cd + d.x * bc ) * det;
+    center += p2;
+
+    return center;
+}
+
+
+static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aSrc )
+{
+    // An algo that takes 3 points, calculates a circle center,
+    // then tries to find as many points fitting the circle.
+
+    static const double c_radiusDeviation = 1000.0;
+    static const double c_arcCenterDeviation = 1000.0;
+    static const double c_relLengthDeviation = 0.8;
+    static const int    c_last_none = -1000; // Meaning no arc cannot be constructed
+
+    if( aSrc.PointCount() < 4 )
+        return aSrc;
+
+    if( !aSrc.IsClosed() )
+        return aSrc; // non-closed polygons are not supported
+
+    SHAPE_LINE_CHAIN dst;
+
+    int jEndIdx = aSrc.PointCount() - 3;
+
+    for( int i = 0; i < aSrc.PointCount(); i++ )
+    {
+        int first = i - 3;
+        int last = c_last_none;
+
+        VECTOR2D p0 = aSrc.CPoint( i - 3 );
+        VECTOR2D p1 = aSrc.CPoint( i - 2 );
+        VECTOR2D p2 = aSrc.CPoint( i - 1 );
+
+        VECTOR2D v01 = p1 - p0;
+        VECTOR2D v12 = p2 - p1;
+
+        bool defective = false;
+
+        double d01 = v01.EuclideanNorm();
+        double d12 = v12.EuclideanNorm();
+
+        // Check distance differences between 3 first points
+        defective |= std::abs( d01 - d12 ) > ( std::max( d01, d12 ) * c_relLengthDeviation );
+
+        if( !defective )
+        {
+            // Check angles between 3 first points
+            EDA_ANGLE a01( v01 );
+            EDA_ANGLE a12( v12 );
+
+            double a_diff = ( a01 - a12 ).Normalize180().AsDegrees();
+
+            defective |= std::abs( a_diff ) < 0.1;
+
+            // Larger angles are allowed for smaller geometry
+            if( d01 < pcbIUScale.mmToIU( 1.0 ) )
+                defective |= std::abs( a_diff ) >= 46.0;
+            else
+                defective |= std::abs( a_diff ) >= 30.0;
+        }
+
+        if( !defective )
+        {
+            // Find last point lying on the circle created from 3 first points
+            VECTOR2D center = CircleCenterFrom3Points( p0, p1, p2 );
+            double   radius = ( p0 - center ).EuclideanNorm();
+            VECTOR2D p_prev = p2;
+
+            for( int j = i; j <= jEndIdx; j++ )
+            {
+                VECTOR2D p_test = aSrc.CPoint( j );
+
+                double rad_test = ( p_test - center ).EuclideanNorm();
+                double d_tl = ( p_test - p_prev ).EuclideanNorm();
+
+                if( std::abs( radius - rad_test ) > c_radiusDeviation )
+                    break;
+
+                if( std::abs( d_tl - d01 ) > ( std::max( d_tl, d01 ) * c_relLengthDeviation ) )
+                    break;
+
+                last = j;
+                p_prev = p_test;
+            }
+        }
+
+        if( last != c_last_none )
+        {
+            // Try to add an arc, testing for self-interference
+            SHAPE_ARC arc( aSrc.CPoint( first ), aSrc.CPoint( ( first + last ) / 2 ),
+                           aSrc.CPoint( last ), 0 );
+
+            SHAPE_LINE_CHAIN testChain = dst;
+
+            testChain.Append( arc );
+            testChain.Append( aSrc.Slice( last, -3 ) );
+            testChain.SetClosed( aSrc.IsClosed() );
+
+            if( !testChain.SelfIntersectingWithArcs() )
+            {
+                // Add arc
+                dst.Append( arc );
+
+                i = last + 3;
+            }
+            else
+            {
+                // Self-interference
+                last = c_last_none;
+            }
+        }
+
+        if( last == c_last_none )
+        {
+            if( first < 0 )
+                jEndIdx = first + aSrc.PointCount();
+
+            // Add point
+            dst.Append( p0 );
+        }
+    }
+
+    dst.SetClosed( true );
+
+    // Try to merge arcs
+    int iarc0 = dst.ArcIndex( 0 );
+    int iarc1 = dst.ArcIndex( dst.GetSegmentCount() - 1 );
+
+    if( iarc0 != -1 && iarc1 != -1 )
+    {
+        if( iarc0 == iarc1 )
+        {
+            SHAPE_ARC arc = dst.Arc( iarc0 );
+
+            VECTOR2D p0 = arc.GetP0();
+            VECTOR2D p1 = arc.GetP1();
+
+            // If we have only one arc and the gap is small, make it a circle
+            if( ( p1 - p0 ).EuclideanNorm() < pcbIUScale.mmToIU( 1.0 ) )
+            {
+                dst.Clear();
+                dst.Append( SHAPE_ARC( arc.GetCenter(), arc.GetP0(), ANGLE_360 ) );
+            }
+        }
+        else
+        {
+            // Merge first and last arcs if they are similar
+            SHAPE_ARC arc0 = dst.Arc( iarc0 );
+            SHAPE_ARC arc1 = dst.Arc( iarc1 );
+
+            VECTOR2D ac0 = arc0.GetCenter();
+            VECTOR2D ac1 = arc1.GetCenter();
+
+            double ar0 = arc0.GetRadius();
+            double ar1 = arc1.GetRadius();
+
+            if( std::abs( ar0 - ar1 ) <= c_radiusDeviation
+                && ( ac0 - ac1 ).EuclideanNorm() <= c_arcCenterDeviation )
+            {
+                dst.RemoveShape( 0 );
+                dst.RemoveShape( -1 );
+
+                SHAPE_ARC merged( arc1.GetP0(), arc1.GetArcMid(), arc0.GetP1(), 0 );
+
+                dst.Append( merged );
+            }
+        }
+    }
+
+    return dst;
 }
 
 
@@ -282,7 +475,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
                 SHAPE_POLY_SET polySet;
                 shape->TransformToPolygon( polySet, ARC_HIGH_DEF, ERROR_INSIDE );
 
-                success &= MakeShapes( topodsShapes, polySet, thickness, Zpos, aOrigin );
+                success &= MakeShapes( topodsShapes, polySet, false, thickness, Zpos, aOrigin );
             }
         }
 
@@ -489,8 +682,8 @@ bool STEP_PCB_MODEL::AddCopperPolygonShapes( const SHAPE_POLY_SET* aPolyShapes, 
     double z_pos, thickness;
     getLayerZPlacement( aLayer, z_pos, thickness );
 
-    if( !MakeShapes( aTrack ? m_board_copper_tracks : m_board_copper_zones, *aPolyShapes, thickness,
-                     z_pos, aOrigin ) )
+    if( !MakeShapes( aTrack ? m_board_copper_tracks : m_board_copper_zones, *aPolyShapes, true,
+                     thickness, z_pos, aOrigin ) )
     {
         ReportMessage(
                 wxString::Format( wxT( "Could not add shape (%d points) to copper layer on %s.\n" ),
@@ -843,11 +1036,26 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
 }
 
 
-bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
+static wxString formatBBox( const BOX2I& aBBox )
+{
+    wxString       str;
+    UNITS_PROVIDER up( pcbIUScale, EDA_UNITS::MILLIMETRES );
+
+    str << "x0: " << up.StringFromValue( aBBox.GetLeft(), false ) << "; ";
+    str << "y0: " << up.StringFromValue( aBBox.GetTop(), false ) << "; ";
+    str << "x1: " << up.StringFromValue( aBBox.GetRight(), false ) << "; ";
+    str << "y1: " << up.StringFromValue( aBBox.GetBottom(), false );
+
+    return str;
+}
+
+
+bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet, bool aConvertToArcs,
                                  double aThickness, double aZposition, const VECTOR2D& aOrigin )
 {
     SHAPE_POLY_SET simplified = aPolySet;
     simplified.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+    simplified.SimplifyOutlines( ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
 
     auto toPoint = [&]( const VECTOR2D& aKiCoords ) -> gp_Pnt
     {
@@ -1015,37 +1223,97 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
             return true;
         };
 
+        auto tryMakeWire = [&makeWireFromChain,
+                            &aZposition]( const SHAPE_LINE_CHAIN& aContour ) -> TopoDS_Wire
+        {
+            TopoDS_Wire      wire;
+            BRepLib_MakeWire mkWire;
+
+            makeWireFromChain( mkWire, aContour );
+
+            if( mkWire.IsDone() )
+            {
+                wire = mkWire.Wire();
+            }
+            else
+            {
+                ReportMessage(
+                        wxString::Format( _( "Wire not done (contour points %d): OCC error %d\n" ),
+                                          static_cast<int>( aContour.PointCount() ),
+                                          static_cast<int>( mkWire.Error() ) ) );
+
+                ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ), aZposition,
+                                                 formatBBox( aContour.BBox() ) ) );
+            }
+
+            if( !wire.IsNull() )
+            {
+                BRepAlgoAPI_Check check( wire, false, true );
+                check.Perform();
+
+                if( !check.IsValid() )
+                {
+                    ReportMessage( wxString::Format( _( "\nWire self-interference check "
+                                                        "failed\n" ) ) );
+
+                    ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ), aZposition,
+                                                     formatBBox( aContour.BBox() ) ) );
+
+                    wire.Nullify();
+                }
+            }
+
+            return wire;
+        };
+
         BRepBuilderAPI_MakeFace mkFace;
 
         for( size_t contId = 0; contId < polygon.size(); contId++ )
         {
-            const SHAPE_LINE_CHAIN& contour = polygon[contId];
-            BRepLib_MakeWire        mkWire;
-
             try
             {
-                if( !makeWireFromChain( mkWire, contour ) )
-                    continue;
+                TopoDS_Wire wire;
 
-                if( !mkWire.IsDone() )
+                // Try to approximate the polygon with arcs first
+                if( aConvertToArcs )
+                    wire = tryMakeWire( approximateLineChainWithArcs( polygon[contId] ) );
+
+                // Fall back to original shape
+                if( wire.IsNull() )
                 {
-                    ReportMessage( wxString::Format(
-                            _( "Wire not done (contour %d, points %d): OCC error %d\n" ),
-                            static_cast<int>( contId ), static_cast<int>( contour.PointCount() ),
-                            static_cast<int>( mkWire.Error() ) ) );
+                    wire = tryMakeWire( polygon[contId] );
+
+                    if( aConvertToArcs && !wire.IsNull() )
+                        ReportMessage( wxString::Format( _( "Using non-simplified polygon.\n" ) ) );
                 }
 
                 if( contId == 0 ) // Outline
                 {
-                    if( mkWire.IsDone() )
-                        mkFace = BRepBuilderAPI_MakeFace( mkWire.Wire() );
+                    if( !wire.IsNull() )
+                        mkFace = BRepBuilderAPI_MakeFace( wire );
                     else
+                    {
+                        ReportMessage( wxString::Format( _( "\n** Outline skipped **\n" ) ) );
+
+                        ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ),
+                                                         aZposition,
+                                                         formatBBox( polygon[contId].BBox() ) ) );
+
                         continue;
+                    }
                 }
                 else // Hole
                 {
-                    if( mkWire.IsDone() )
-                        mkFace.Add( mkWire );
+                    if( !wire.IsNull() )
+                        mkFace.Add( wire );
+                    else
+                    {
+                        ReportMessage( wxString::Format( _( "\n** Hole skipped **\n" ) ) );
+
+                        ReportMessage( wxString::Format( _( "z: %g; bounding box: %s\n" ),
+                                                         aZposition,
+                                                         formatBBox( polygon[contId].BBox() ) ) );
+                    }
                 }
             }
             catch( const Standard_Failure& e )
@@ -1106,7 +1374,7 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
     // see bug https://gitlab.com/kicad/code/kicad/-/issues/17446
     // (Holes are missing from STEP export with circular PCB outline)
     // Hard to say if the bug is in our code or in OCC 7.7
-    if( !MakeShapes( m_board_outlines, aOutline, boardThickness, boardZPos, aOrigin ) )
+    if( !MakeShapes( m_board_outlines, aOutline, false, boardThickness, boardZPos, aOrigin ) )
     {
         // Error
         ReportMessage( wxString::Format(
@@ -1119,18 +1387,24 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
         for( size_t contId = 0; contId < polygon.size(); contId++ )
         {
             const SHAPE_LINE_CHAIN& contour = polygon[contId];
-            SHAPE_POLY_SET polyset;
+            SHAPE_POLY_SET          polyset;
             polyset.Append( contour );
 
             if( contId == 0 ) // main Outline
             {
-                if( !MakeShapes( m_board_outlines, polyset, boardThickness, boardZPos, aOrigin ) )
+                if( !MakeShapes( m_board_outlines, polyset, false, boardThickness, boardZPos,
+                                 aOrigin ) )
+                {
                     ReportMessage( wxT( "OCC error creating main outline.\n" ) );
+                }
             }
             else // Hole inside the main outline
             {
-                if( !MakeShapes( m_boardCutouts, polyset, boardThickness, boardZPos, aOrigin ) )
+                if( !MakeShapes( m_boardCutouts, polyset, false, boardThickness, boardZPos,
+                                 aOrigin ) )
+                {
                     ReportMessage( wxT( "OCC error creating hole in main outline.\n" ) );
+                }
             }
         }
     }

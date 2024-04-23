@@ -124,12 +124,14 @@ public:
      * Convert a SHAPE_POLY_SET to TopoDS_Shape's (polygonal vertical prisms)
      * @param aShapes is the TopoDS_Shape list to append to
      * @param aPolySet is a polygon set
+     * @param aConvertToArcs set to approximate with arcs
      * @param aThickness is the height of the created prism
      * @param aOrigin is the origin of the coordinates
      * @return true if success
      */
     bool MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE_POLY_SET& aPolySet,
-                     double aThickness, double aZposition, const VECTOR2D& aOrigin );
+                     bool aConvertToArcs, double aThickness, double aZposition,
+                     const VECTOR2D& aOrigin );
 
     /**
      * Convert a SHAPE_LINE_CHAIN containing only one 360 deg arc to a TopoDS_Shape
