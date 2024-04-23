@@ -926,8 +926,11 @@ inline BOX2I BOX2ISafe( const VECTOR2I& aPos, const VECTOR2<S>& aSize )
     constexpr int64_t high = std::numeric_limits<int>::max();
     constexpr int64_t low = -std::numeric_limits<int>::max();
 
-    int64_t right = std::clamp( int64_t( aPos.x ) + aSize.x, low, high );
-    int64_t bottom = std::clamp( int64_t( aPos.y ) + aSize.y, low, high );
+    int64_t ext_right = int64_t( aPos.x ) + aSize.x;
+    int64_t ext_bottom = int64_t( aPos.y ) + aSize.y;
+
+    int64_t right = std::clamp( ext_right, low, high );
+    int64_t bottom = std::clamp( ext_bottom, low, high );
 
     return BOX2I( aPos, VECTOR2L( right - aPos.x, bottom - aPos.y ) );
 }
