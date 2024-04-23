@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2013-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -648,11 +648,18 @@ public:
     bool CheckClearance( const VECTOR2I& aP, const int aDist) const;
 
     /**
-     * Check if the line chain is self-intersecting.
+     * Check if the line chain is self-intersecting. Only processes line segments (not arcs).
      *
      * @return (optional) first found self-intersection point.
      */
     const std::optional<INTERSECTION> SelfIntersecting() const;
+
+    /**
+     * Check if the line chain is self-intersecting. Also processes arcs. Might be slower.
+     *
+     * @return (optional) first found self-intersection point.
+     */
+    const std::optional<INTERSECTION> SelfIntersectingWithArcs() const;
 
     /**
      * Find the segment nearest the given point.

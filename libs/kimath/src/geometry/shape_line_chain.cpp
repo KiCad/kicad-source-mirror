@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
- * Copyright (C) 2013-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -32,6 +32,7 @@
 #include <clipper.hpp>
 #include <clipper2/clipper.h>
 #include <core/kicad_algo.h> // for alg::run_on_pair
+#include <geometry/circle.h>
 #include <geometry/seg.h>    // for SEG, OPT_VECTOR2I
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
@@ -1815,6 +1816,233 @@ const std::optional<SHAPE_LINE_CHAIN::INTERSECTION> SHAPE_LINE_CHAIN::SelfInters
                     is.index_our = s1;
                     is.index_their = s2;
                     is.p = *p;
+                    return is;
+                }
+            }
+        }
+    }
+
+    return std::optional<SHAPE_LINE_CHAIN::INTERSECTION>();
+}
+
+
+struct BOX2I_MINMAX
+{
+    BOX2I_MINMAX() : m_Left( 0 ), m_Top( 0 ), m_Right( 0 ), m_Bottom( 0 ) {}
+
+    BOX2I_MINMAX( int aLeft, int aTop, int aRight, int aBottom ) :
+            m_Left( aLeft ), m_Top( aTop ), m_Right( aRight ), m_Bottom( aBottom )
+    {
+    }
+
+    BOX2I_MINMAX( const BOX2I& aBox ) :
+            m_Left( aBox.GetLeft() ), m_Top( aBox.GetTop() ), m_Right( aBox.GetRight() ),
+            m_Bottom( aBox.GetBottom() )
+    {
+    }
+
+    BOX2I_MINMAX( const SHAPE_ARC& aArc ) : BOX2I_MINMAX( aArc.BBox() ) {}
+
+    BOX2I_MINMAX( const SEG& aSeg )
+    {
+        m_Left = std::min( aSeg.A.x, aSeg.B.x );
+        m_Right = std::max( aSeg.A.x, aSeg.B.x );
+        m_Top = std::min( aSeg.A.y, aSeg.B.y );
+        m_Bottom = std::max( aSeg.A.y, aSeg.B.y );
+    }
+
+    inline bool Intersects( const BOX2I_MINMAX& aOther ) const
+    {
+        // calculate the left common area coordinate:
+        int left = std::max( m_Left, aOther.m_Left );
+        // calculate the right common area coordinate:
+        int right = std::min( m_Right, aOther.m_Right );
+        // calculate the upper common area coordinate:
+        int top = std::max( m_Top, aOther.m_Top );
+        // calculate the lower common area coordinate:
+        int bottom = std::min( m_Bottom, aOther.m_Bottom );
+
+        // if a common area exists, it must have a positive (null accepted) size
+        return left <= right && top <= bottom;
+    }
+
+    int m_Left;
+    int m_Top;
+    int m_Right;
+    int m_Bottom;
+};
+
+
+struct SHAPE_KEY
+{
+    SHAPE_KEY( int aFirstIdx, int aArcIdx, const BOX2I_MINMAX& aBBox ) :
+            m_FirstIdx( aFirstIdx ), m_ArcIdx( aArcIdx ), m_BBox( aBBox )
+    {
+    }
+
+    int          m_FirstIdx;
+    int          m_ArcIdx;
+    BOX2I_MINMAX m_BBox;
+};
+
+
+const std::optional<SHAPE_LINE_CHAIN::INTERSECTION>
+SHAPE_LINE_CHAIN::SelfIntersectingWithArcs() const
+{
+    auto pointsClose = []( const VECTOR2I& aPt1, const VECTOR2I& aPt2 ) -> bool
+    {
+        return ( VECTOR2D( aPt1 ) - aPt2 ).SquaredEuclideanNorm() <= 2.0;
+    };
+
+    auto collideArcSeg = [&pointsClose]( const SHAPE_ARC& aArc, const SEG& aSeg, int aClearance = 0,
+                                         VECTOR2I* aLocation = nullptr )
+    {
+        VECTOR2I center = aArc.GetCenter();
+        CIRCLE   circle( center, aArc.GetRadius() );
+
+        std::vector<VECTOR2I> candidatePts = circle.Intersect( aSeg );
+
+        for( const VECTOR2I& candidate : candidatePts )
+        {
+            // Skip shared points
+            if( aArc.GetP1() == aSeg.A && pointsClose( candidate, aSeg.A ) )
+                continue;
+
+            if( aSeg.B == aArc.GetP0() && pointsClose( candidate, aSeg.B ) )
+                continue;
+
+            bool collides = aArc.Collide( candidate, aClearance, nullptr, aLocation );
+
+            if( collides )
+                return true;
+        }
+
+        return false;
+    };
+
+    auto collideArcArc = [&pointsClose]( const SHAPE_ARC& aArc1, const SHAPE_ARC& aArc2,
+                                         VECTOR2I* aLocation = nullptr )
+    {
+        std::vector<VECTOR2I> candidatePts;
+
+        aArc1.Intersect( aArc2, &candidatePts );
+
+        for( const VECTOR2I& candidate : candidatePts )
+        {
+            // Skip shared points
+            if( aArc1.GetP1() == aArc2.GetP0() && pointsClose( candidate, aArc1.GetP1() ) )
+                continue;
+
+            if( aArc2.GetP1() == aArc1.GetP0() && pointsClose( candidate, aArc2.GetP1() ) )
+                continue;
+
+            if( aLocation )
+                *aLocation = candidate;
+
+            return true;
+        }
+
+        return false;
+    };
+
+    auto collideSegSeg = [this]( int s1, int s2, INTERSECTION& is )
+    {
+        SEG seg1 = CSegment( s1 );
+        SEG seg2 = CSegment( s2 );
+
+        const VECTOR2I s2a = seg2.A, s2b = seg2.B;
+
+        if( s1 + 1 != s2 && seg1.Contains( s2a ) )
+        {
+            is.index_our = s1;
+            is.index_their = s2;
+            is.p = s2a;
+            return true;
+        }
+        else if( seg1.Contains( s2b ) &&
+                 // for closed polylines, the ending point of the
+                 // last segment == starting point of the first segment
+                 // this is a normal case, not self intersecting case
+                 !( IsClosed() && s1 == 0 && s2 == SegmentCount() - 1 ) )
+        {
+            is.index_our = s1;
+            is.index_their = s2;
+            is.p = s2b;
+            return true;
+        }
+        else
+        {
+            OPT_VECTOR2I p = seg1.Intersect( seg2, true );
+
+            if( p )
+            {
+                is.index_our = s1;
+                is.index_their = s2;
+                is.p = *p;
+                return true;
+            }
+        }
+
+        return false;
+    };
+
+    INTERSECTION is;
+
+    std::vector<SHAPE_KEY> shapeCache;
+    for( int si = 0; si != -1; si = NextShape( si ) )
+    {
+        int arci = ArcIndex( si );
+
+        shapeCache.emplace_back( si, arci,
+                                 arci == -1 ? BOX2I_MINMAX( CSegment( si ) )
+                                            : BOX2I_MINMAX( Arc( arci ) ) );
+    }
+
+    for( size_t sk1 = 0; sk1 < shapeCache.size(); sk1++ )
+    {
+        for( size_t sk2 = sk1 + 1; sk2 < shapeCache.size(); sk2++ )
+        {
+            VECTOR2I         loc;
+            const SHAPE_KEY& k1 = shapeCache[sk1];
+            const SHAPE_KEY& k2 = shapeCache[sk2];
+
+            if( !k1.m_BBox.Intersects( k2.m_BBox ) )
+                continue;
+
+            if( k1.m_ArcIdx == -1 && k2.m_ArcIdx == -1 )
+            {
+                if( collideSegSeg( k1.m_FirstIdx, k2.m_FirstIdx, is ) )
+                {
+                    return is;
+                }
+            }
+            else if( k1.m_ArcIdx != -1 && k2.m_ArcIdx == -1 )
+            {
+                if( collideArcSeg( Arc( k1.m_ArcIdx ), CSegment( k2.m_FirstIdx ), 0, &loc ) )
+                {
+                    is.index_our = k1.m_FirstIdx;
+                    is.index_their = k2.m_FirstIdx;
+                    is.p = loc;
+                    return is;
+                }
+            }
+            else if( k1.m_ArcIdx == -1 && k2.m_ArcIdx != -1 )
+            {
+                if( collideArcSeg( Arc( k2.m_ArcIdx ), CSegment( k1.m_FirstIdx ), 0, &loc ) )
+                {
+                    is.index_our = k1.m_FirstIdx;
+                    is.index_their = k2.m_FirstIdx;
+                    is.p = loc;
+                    return is;
+                }
+            }
+            else if( k1.m_ArcIdx != -1 && k2.m_ArcIdx != -1 )
+            {
+                if( collideArcArc( Arc( k1.m_ArcIdx ), Arc( k2.m_ArcIdx ), &loc ) )
+                {
+                    is.index_our = k1.m_FirstIdx;
+                    is.index_their = k2.m_FirstIdx;
+                    is.p = loc;
                     return is;
                 }
             }
