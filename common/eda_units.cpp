@@ -464,13 +464,6 @@ wxString EDA_UNIT_UTILS::UI::MessageTextFromValue( const EDA_IU_SCALE& aIuScale,
     }
 
     text.Printf( format, value );
-    removeTrailingZeros( text );
-
-    if( value != 0.0 && ( text == wxS( "0" ) || text == wxS( "-0" ) ) )
-    {
-        text.Printf( wxS( "%.10f" ), value );
-        removeTrailingZeros( text );
-    }
 
     if( aAddUnitsText )
         text += EDA_UNIT_UTILS::GetText( aUnits, aType );
