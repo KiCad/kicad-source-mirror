@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -39,7 +39,8 @@ public:
 
     SHAPE_ARC() :
         SHAPE( SH_ARC ),
-        m_width( 0 )
+        m_width( 0 ),
+        m_radius( 0 )
     {};
 
     /**
@@ -112,7 +113,7 @@ public:
     const VECTOR2I& GetP0() const { return m_start; }
     const VECTOR2I& GetP1() const { return m_end; }
     const VECTOR2I& GetArcMid() const { return m_mid; }
-    VECTOR2I GetCenter() const;
+    const VECTOR2I& GetCenter() const;
 
     const BOX2I BBox( int aClearance = 0 ) const override;
 
@@ -256,7 +257,7 @@ private:
                ( ecoord{ aB.y } - aA.y ) * ( ecoord{ aC.x } - aA.x );
     }
 
-    void update_bbox();
+    void update_values();
 
     bool sliceContainsPoint( const VECTOR2I& p ) const;
 
@@ -264,9 +265,11 @@ private:
     VECTOR2I m_start;
     VECTOR2I m_mid;
     VECTOR2I m_end;
-
     int      m_width;
-    BOX2I    m_bbox;
+
+    BOX2I    m_bbox;   // Calculated value
+    VECTOR2I m_center; // Calculated value
+    double   m_radius; // Calculated value
 };
 
 // Required for Boost Test BOOST_CHECK_EQUAL:

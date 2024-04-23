@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2019-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019-2024 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint
     m_mid = VECTOR2I( KiROUND( mid.x ), KiROUND( mid.y ) );
     m_end = VECTOR2I( KiROUND( end.x ), KiROUND( end.y ) );
 
-    update_bbox();
+    update_values();
 }
 
 
@@ -70,7 +70,7 @@ SHAPE_ARC::SHAPE_ARC( const VECTOR2I& aArcStart, const VECTOR2I& aArcMid,
         m_end( aArcEnd ),
         m_width( aWidth )
 {
-    update_bbox();
+    update_values();
 }
 
 
@@ -174,7 +174,7 @@ SHAPE_ARC::SHAPE_ARC( const SEG& aSegmentA, const SEG& aSegmentB, int aRadius, i
         RotatePoint( m_mid, arcCenter, midPointRotAngle );
     }
 
-    update_bbox();
+    update_values();
 }
 
 
@@ -186,6 +186,8 @@ SHAPE_ARC::SHAPE_ARC( const SHAPE_ARC& aOther )
     m_mid = aOther.m_mid;
     m_width = aOther.m_width;
     m_bbox = aOther.m_bbox;
+    m_center = aOther.m_center;
+    m_radius = aOther.m_radius;
 }
 
 
@@ -201,7 +203,7 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndAngle( const VECTOR2I& aStart, const 
 
     RotatePoint( m_mid, center, -aAngle / 2.0 );
 
-    update_bbox();
+    update_values();
 
     return *this;
 }
@@ -233,7 +235,7 @@ SHAPE_ARC& SHAPE_ARC::ConstructFromStartEndCenter( const VECTOR2I& aStart, const
 
     RotatePoint( m_mid, aCenter, -angle / 2.0 );
 
-    update_bbox();
+    update_values();
 
     return *this;
 }
@@ -316,8 +318,11 @@ int SHAPE_ARC::Intersect( const SHAPE_ARC& aArc, std::vector<VECTOR2I>* aIpsBuff
 }
 
 
-void SHAPE_ARC::update_bbox()
+void SHAPE_ARC::update_values()
 {
+    m_center = CalcArcCenter( m_start, m_mid, m_end );
+    m_radius = std::sqrt( ( VECTOR2D( m_start ) - m_center ).SquaredEuclideanNorm() );
+
     std::vector<VECTOR2I> points;
     // Put start and end points in the point list
     points.push_back( m_start );
@@ -336,18 +341,14 @@ void SHAPE_ARC::update_bbox()
     // very large radius means the arc is similar to a segment
     // so do not try to add more points, center cannot be handled
     // Very large is here > INT_MAX/2
-    double d_radius = GetRadius();
-
-    if( d_radius < (double)INT_MAX/2.0 )
+    if( m_radius < (double)INT_MAX/2.0 )
     {
-        VECTOR2I center = GetCenter();
-
-        const int radius = KiROUND( d_radius );
+        const int radius = KiROUND( m_radius );
 
         // count through quadrants included in arc
         for( int quad_angle = quad_angle_start; quad_angle <= quad_angle_end; ++quad_angle )
         {
-            VECTOR2I  quad_pt = center;
+            VECTOR2I quad_pt = m_center;
 
             switch( quad_angle % 4 )
             {
@@ -471,9 +472,9 @@ EDA_ANGLE SHAPE_ARC::GetEndAngle() const
 }
 
 
-VECTOR2I SHAPE_ARC::GetCenter() const
+const VECTOR2I& SHAPE_ARC::GetCenter() const
 {
-    return CalcArcCenter( m_start, m_mid, m_end );
+    return m_center;
 }
 
 
@@ -504,7 +505,7 @@ EDA_ANGLE SHAPE_ARC::GetCentralAngle() const
 
 double SHAPE_ARC::GetRadius() const
 {
-    return std::sqrt( ( m_start - GetCenter() ).SquaredEuclideanNorm() );
+    return m_radius;
 }
 
 
@@ -579,7 +580,7 @@ void SHAPE_ARC::Move( const VECTOR2I& aVector )
     m_start += aVector;
     m_end += aVector;
     m_mid += aVector;
-    update_bbox();
+    update_values();
 }
 
 
@@ -589,7 +590,7 @@ void SHAPE_ARC::Rotate( const EDA_ANGLE& aAngle, const VECTOR2I& aCenter )
     RotatePoint( m_end, aCenter, aAngle );
     RotatePoint( m_mid, aCenter, aAngle );
 
-    update_bbox();
+    update_values();
 }
 
 
@@ -609,7 +610,7 @@ void SHAPE_ARC::Mirror( bool aX, bool aY, const VECTOR2I& aVector )
         m_mid.y = -m_mid.y + 2 * aVector.y;
     }
 
-    update_bbox();
+    update_values();
 }
 
 
@@ -619,7 +620,7 @@ void SHAPE_ARC::Mirror( const SEG& axis )
     m_end = axis.ReflectPoint( m_end );
     m_mid = axis.ReflectPoint( m_mid );
 
-    update_bbox();
+    update_values();
 }
 
 
