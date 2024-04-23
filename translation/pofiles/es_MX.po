@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: KiCad Spanish Translation\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-02 11:49+0000\n"
+"PO-Revision-Date: 2024-04-24 02:07+0000\n"
 "Last-Translator: Ulices <hasecilu@tuta.io>\n"
 "Language-Team: Spanish (Mexico) <https://hosted.weblate.org/projects/kicad/"
 "master-source/es_MX/>\n"
@@ -5728,9 +5728,8 @@ msgid "Bezier"
 msgstr "Bezier"
 
 #: common/eda_shape.cpp:1981 eeschema/lib_shape.cpp:598
-#, fuzzy
 msgid "Shape Properties"
-msgstr "Propiedades de la página"
+msgstr "Propiedades de la forma"
 
 #: common/eda_shape.cpp:1987 eeschema/sch_table.cpp:604
 #: eeschema/sch_tablecell.cpp:191 pcbnew/pcb_table.cpp:489
@@ -6512,19 +6511,16 @@ msgid "Select all cells"
 msgstr "Seleccionar todas las celdas"
 
 #: common/hotkey_store.cpp:44
-#, fuzzy
 msgid "Accept Autocomplete"
-msgstr "Actualización completa"
+msgstr "Aceptar autocompletar"
 
 #: common/hotkey_store.cpp:45
-#, fuzzy
 msgid "Cancel Autocomplete"
-msgstr "Actualización completa"
+msgstr "Cancelar autocompletar"
 
 #: common/hotkey_store.cpp:46
-#, fuzzy
 msgid "Toggle Checkbox"
-msgstr "Alternar bloqueo"
+msgstr "Alternar casilla de verificación"
 
 #: common/hotkey_store.cpp:47
 msgid "Pan Left/Right"
