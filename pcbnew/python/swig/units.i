@@ -34,34 +34,34 @@
     def ToMM(iu):
         if type(iu) in [int,float]:
             return float(iu) / float(pcbIUScale.IU_PER_MM)
-        elif type(iu) in [wxPoint,wxSize,VECTOR2I]:
+        elif type(iu) in [wxPoint,wxSize,VECTOR2I,VECTOR2L]:
             return tuple(map(ToMM,iu))
         else:
-            raise TypeError("ToMM() expects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(iu)))
+            raise TypeError("ToMM() expects int, float, wxPoint, wxSize, VECTOR2I or VECTOR2L, instead got type " + str(type(iu)))
 
     def FromMM(mm):
         if type(mm) in [int,float]:
             return int(float(mm) * float(pcbIUScale.IU_PER_MM))
-        elif type(mm) in [wxPoint,wxSize,VECTOR2I]:
+        elif type(mm) in [wxPoint,wxSize,VECTOR2I,VECTOR2L]:
             return tuple(map(FromMM,mm))
         else:
-            raise TypeError("FromMM() expects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(mm)))
+            raise TypeError("FromMM() expects int, float, wxPoint, wxSize, VECTOR2I or VECTOR2L, instead got type " + str(type(mm)))
 
     def ToMils(iu):
         if type(iu) in [int,float]:
             return float(iu) / float(pcbIUScale.IU_PER_MILS)
-        elif type(iu) in [wxPoint,wxSize,VECTOR2I]:
+        elif type(iu) in [wxPoint,wxSize,VECTOR2I,VECTOR2L]:
             return tuple(map(ToMils,iu))
         else:
-            raise TypeError("ToMils() expects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(iu)))
+            raise TypeError("ToMils() expects int, float, wxPoint, wxSize, VECTOR2I or VECTOR2L, instead got type " + str(type(iu)))
 
     def FromMils(mils):
         if type(mils) in [int,float]:
             return int(float(mils)*float(pcbIUScale.IU_PER_MILS))
-        elif type(mils) in [wxPoint,wxSize,VECTOR2I]:
+        elif type(mils) in [wxPoint,wxSize,VECTOR2I,VECTOR2L]:
             return tuple(map(FromMils,mils))
         else:
-            raise TypeError("FromMils() expects int, float, wxPoint, wxSize or VECTOR2I, instead got type " + str(type(mils)))
+            raise TypeError("FromMils() expects int, float, wxPoint, wxSize, VECTOR2I or VECTOR2L, instead got type " + str(type(mils)))
 
     def PutOnGridMM(value, gridSizeMM):
         thresh = FromMM(gridSizeMM)
