@@ -204,6 +204,7 @@ public:
     static TOOL_ACTION spacingDecrease;
     static TOOL_ACTION amplIncrease;
     static TOOL_ACTION amplDecrease;
+    static TOOL_ACTION lengthTunerSettings;
     static TOOL_ACTION drawAlignedDimension;
     static TOOL_ACTION drawCenterDimension;
     static TOOL_ACTION drawRadialDimension;
