@@ -4,4 +4,6 @@ if( COMPILER_SUPPORTS_WARNINGS )
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARN_FLAGS_C}")
 endif()
 
-add_subdirectory( idftools )
+if( KICAD_IDF_TOOLS )
+    add_subdirectory( idftools )
+endif()
