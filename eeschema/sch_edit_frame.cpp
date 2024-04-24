@@ -1789,6 +1789,26 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
 
             for( SCH_SHEET_PATH& path : paths )
                 item_paths.insert( std::make_pair( path, item ) );
+
+            item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItemLink( ii ) );
+
+            if( !item || !item->IsConnectable() )
+                continue;
+
+            tmp_pts = item->GetConnectionPoints();
+            pts.insert( pts.end(), tmp_pts.begin(), tmp_pts.end() );
+            changed_items.insert( item );
+
+            // We have to directly add the pins here because the link may not exist on the schematic
+            // anymore and so won't be picked up by GetScreen()->Items().Overlapping() below.
+            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+            {
+                std::vector<SCH_PIN*> pins = symbol->GetPins();
+                changed_items.insert( pins.begin(), pins.end() );
+            }
+
+            for( SCH_SHEET_PATH& path : paths )
+                item_paths.insert( std::make_pair( path, item ) );
         }
 
         for( VECTOR2I& pt: pts )
