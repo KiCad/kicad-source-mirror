@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2016-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -220,7 +220,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         detailsPanel->SetSizer( detailsSizer );
 
         m_details = new HTML_WINDOW( detailsPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize  );
-        detailsSizer->Add( m_details, 1, wxEXPAND, 5 );
+        detailsSizer->Add( m_details, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
         detailsPanel->Layout();
         detailsSizer->Fit( detailsPanel );
 
@@ -228,7 +228,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
         m_vsplitter->SetMinimumPaneSize( 20 );
         m_vsplitter->SplitHorizontally( m_hsplitter, detailsPanel );
 
-        sizer->Add( m_vsplitter, 1, wxEXPAND, 5 );
+        sizer->Add( m_vsplitter, 1, wxEXPAND | wxBOTTOM, 5 );
     }
 
     wxPanel*    treePanel = new wxPanel( m_hsplitter );
@@ -238,7 +238,7 @@ PANEL_SYMBOL_CHOOSER::PANEL_SYMBOL_CHOOSER( SCH_BASE_FRAME* aFrame, wxWindow* aP
     m_tree = new LIB_TREE( treePanel, m_showPower ? wxT( "power" ) : wxT( "symbols" ),
                            libs, m_adapter, LIB_TREE::FLAGS::ALL_WIDGETS, m_details );
 
-    treeSizer->Add( m_tree, 1, wxEXPAND, 5 );
+    treeSizer->Add( m_tree, 1, wxALL | wxEXPAND, 5 );
     treePanel->Layout();
     treeSizer->Fit( treePanel );
 
@@ -385,7 +385,7 @@ wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
     {
         FOOTPRINT_LIST* fp_list = FOOTPRINT_LIST::GetInstance( m_frame->Kiway() );
 
-        sizer->Add( m_symbol_preview, 11, wxEXPAND | wxBOTTOM, 5 );
+        sizer->Add( m_symbol_preview, 11, wxEXPAND | wxALL, 5 );
 
         if ( fp_list )
         {
@@ -397,14 +397,14 @@ wxPanel* PANEL_SYMBOL_CHOOSER::constructRightPanel( wxWindow* aParent )
         }
 
         if( m_fp_sel_ctrl )
-            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxTOP | wxBOTTOM, 4 );
+            sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
 
         if( m_fp_preview )
-            sizer->Add( m_fp_preview, 10, wxEXPAND, 5 );
+            sizer->Add( m_fp_preview, 10, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 5 );
     }
     else
     {
-        sizer->Add( m_symbol_preview, 1, wxEXPAND, 5 );
+        sizer->Add( m_symbol_preview, 1, wxEXPAND | wxALL, 5 );
     }
 
     panel->SetSizer( sizer );
