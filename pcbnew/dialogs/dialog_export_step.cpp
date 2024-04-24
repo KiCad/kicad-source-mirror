@@ -508,6 +508,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     if( m_fuseShapes )
         cmdK2S.Append( wxT( " --fuse-shapes" ) );
 
+    // TODO: --net-filter
+
     // Note: for some reason, using \" to insert a quote in a format string, under MacOS
     // wxString::Format does not work. So use a %c format in string
     int quote = '\'';

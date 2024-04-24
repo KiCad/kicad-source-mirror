@@ -206,6 +206,7 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
         params.m_useGridOrigin = aStepJob->m_useGridOrigin;
         params.m_boardOnly = aStepJob->m_boardOnly;
         params.m_optimizeStep = aStepJob->m_optimizeStep;
+        params.m_netFilter = aStepJob->m_netFilter;
 
         switch( aStepJob->m_format )
         {

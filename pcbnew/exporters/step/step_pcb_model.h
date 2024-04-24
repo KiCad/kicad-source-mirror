@@ -111,6 +111,8 @@ public:
 
     void SetStackup( const BOARD_STACKUP& aStackup );
 
+    void SetNetFilter( const wxString& aFilter );
+
     // Set the max distance (in mm) to consider 2 points have the same coordinates
     // and can be merged
     void OCCSetMergeMaxDistance( double aDistance = OCC_MAX_DISTANCE_TO_MERGE_POINTS );
@@ -239,6 +241,7 @@ private:
     double                          m_copperColor[3];   // copper, RGB values
     BOARD_STACKUP                   m_stackup;          // board stackup
     LSET                            m_enabledLayers;    // a set of layers enabled for export
+    wxString                        m_netFilter;        // remove nets not matching this wildcard
 
     double                          m_minx;             // leftmost curve point
     double                          m_mergeOCCMaxDist;  // minimum distance (mm) below which two

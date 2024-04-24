@@ -73,6 +73,7 @@ public:
     };
 
     wxString m_outputFile;
+    wxString m_netFilter;
 
     VECTOR2D m_origin;
 

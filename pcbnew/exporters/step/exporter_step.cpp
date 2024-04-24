@@ -24,6 +24,7 @@
  */
 
 #include "exporter_step.h"
+#include <advanced_config.h>
 #include <board.h>
 #include <board_design_settings.h>
 #include <footprint.h>
@@ -172,7 +173,8 @@ EXPORTER_STEP::~EXPORTER_STEP()
 
 bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOrigin )
 {
-    bool hasdata = false;
+    bool              hasdata = false;
+    std::vector<PAD*> padsMatchingNetFilter;
 
     // Dump the pad holes into the PCB
     for( PAD* pad : aFootprint->Pads() )
@@ -180,11 +182,16 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
         if( m_pcbModel->AddPadHole( pad, aOrigin ) )
             hasdata = true;
 
+        if( !m_params.m_netFilter.IsEmpty() && !pad->GetNetname().Matches( m_params.m_netFilter ) )
+            continue;
+
         if( m_params.m_exportTracksVias )
         {
             if( m_pcbModel->AddPadShape( pad, aOrigin ) )
                 hasdata = true;
         }
+
+        padsMatchingNetFilter.push_back( pad );
     }
 
     // Build 3D shapes of the footprint graphic items on external layers:
@@ -192,13 +199,42 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
     {
         int maxError = m_board->GetDesignSettings().m_MaxError;
 
-        for( PCB_LAYER_ID pcblayer : aFootprint->GetLayerSet().CuStack() )
+        for( PCB_LAYER_ID pcblayer : LSET( aFootprint->GetLayerSet() & LSET::AllCuMask() ).Seq() )
         {
-            aFootprint->TransformFPShapesToPolySet( m_poly_copper_shapes[pcblayer], pcblayer, 0,
-                                                    maxError, ERROR_INSIDE,
+            SHAPE_POLY_SET buffer;
+
+            aFootprint->TransformFPShapesToPolySet( buffer, pcblayer, 0, maxError, ERROR_INSIDE,
                                                     false, /* include text */
                                                     true,  /* include shapes */
                                                     false /* include private items */ );
+
+            if( m_params.m_netFilter.IsEmpty() )
+            {
+                m_poly_copper_shapes[pcblayer].Append( buffer );
+            }
+            else
+            {
+                // Only add shapes colliding with any matching pads
+                for( const SHAPE_POLY_SET::POLYGON& poly : buffer.CPolygons() )
+                {
+                    bool connectsToPad = false;
+
+                    for( PAD* pad : padsMatchingNetFilter )
+                    {
+                        if( !pad->IsOnLayer( pcblayer ) )
+                            continue;
+
+                        std::shared_ptr<SHAPE_POLY_SET> padPoly = pad->GetEffectivePolygon();
+                        SHAPE_POLY_SET                  gfxPoly( poly );
+
+                        if( padPoly->Collide( &gfxPoly ) )
+                        {
+                            m_poly_copper_shapes[pcblayer].Append( gfxPoly );
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -301,6 +337,9 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
 bool EXPORTER_STEP::buildTrack3DShape( PCB_TRACK* aTrack, VECTOR2D aOrigin )
 {
+    if( !m_params.m_netFilter.IsEmpty() && !aTrack->GetNetname().Matches( m_params.m_netFilter ) )
+        return true;
+
     if( aTrack->Type() == PCB_VIA_T )
     {
         return m_pcbModel->AddViaShape( static_cast<const PCB_VIA*>( aTrack ), aOrigin );
@@ -329,11 +368,17 @@ void EXPORTER_STEP::buildZones3DShape( VECTOR2D aOrigin )
 {
     for( ZONE* zone : m_board->Zones() )
     {
+        if( !m_params.m_netFilter.IsEmpty() && !zone->GetNetname().Matches( m_params.m_netFilter ) )
+            continue;
+
         for( PCB_LAYER_ID layer : zone->GetLayerSet().CuStack() )
         {
             SHAPE_POLY_SET copper_shape;
             zone->TransformSolidAreasShapesToPolygon( layer, copper_shape );
             copper_shape.Unfracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+            copper_shape.SimplifyOutlines(
+                    ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
 
             m_pcbModel->AddCopperPolygonShapes( &copper_shape, layer, aOrigin, false );
         }
@@ -347,6 +392,9 @@ bool EXPORTER_STEP::buildGraphic3DShape( BOARD_ITEM* aItem, VECTOR2D aOrigin )
 
     if( !graphic )
         return false;
+
+    if( !m_params.m_netFilter.IsEmpty() && !graphic->GetNetname().Matches( m_params.m_netFilter ) )
+        return true;
 
     PCB_LAYER_ID pcblayer = graphic->GetLayer();
 
@@ -405,6 +453,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     m_pcbModel->SetStackup( m_board->GetDesignSettings().GetStackupDescriptor() );
     m_pcbModel->SetEnabledLayers( layersToExport );
     m_pcbModel->SetFuseShapes( m_params.m_fuseShapes );
+    m_pcbModel->SetNetFilter( m_params.m_netFilter );
 
     // Note: m_params.m_BoardOutlinesChainingEpsilon is used only to build the board outlines,
     // not to set OCC chaining epsilon (much smaller)

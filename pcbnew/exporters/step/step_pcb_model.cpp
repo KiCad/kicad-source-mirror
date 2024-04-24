@@ -108,7 +108,6 @@
 #include <RWGltf_CafWriter.hxx>
 
 #include <macros.h>
-#include <advanced_config.h>
 
 static constexpr double USER_PREC = 1e-4;
 static constexpr double USER_ANGLE_PREC = 1e-6;
@@ -510,7 +509,7 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
             {
                 TopoDS_Shape fusedShape = mkFuse.Shape();
 
-                ShapeUpgrade_UnifySameDomain unify( fusedShape, false, true, false );
+                ShapeUpgrade_UnifySameDomain unify( fusedShape, true, true, false );
                 unify.History() = nullptr;
                 unify.Build();
 
@@ -821,6 +820,12 @@ void STEP_PCB_MODEL::SetStackup( const BOARD_STACKUP& aStackup )
 }
 
 
+void STEP_PCB_MODEL::SetNetFilter( const wxString& aFilter )
+{
+    m_netFilter = aFilter;
+}
+
+
 void STEP_PCB_MODEL::SetBoardColor( double r, double g, double b )
 {
     m_boardColor[0] = r;
@@ -1055,7 +1060,6 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 {
     SHAPE_POLY_SET simplified = aPolySet;
     simplified.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
-    simplified.SimplifyOutlines( ADVANCED_CFG::GetCfg().m_TriangulateSimplificationLevel );
 
     auto toPoint = [&]( const VECTOR2D& aKiCoords ) -> gp_Pnt
     {
@@ -1637,11 +1641,11 @@ bool STEP_PCB_MODEL::CreatePCB( SHAPE_POLY_SET& aOutline, VECTOR2D aOrigin, bool
 
         if( mkFuse.IsDone() )
         {
-            ReportMessage( wxT( "Removing extra faces\n" ) );
+            ReportMessage( wxT( "Removing extra edges/faces\n" ) );
 
             TopoDS_Shape fusedShape = mkFuse.Shape();
 
-            ShapeUpgrade_UnifySameDomain unify( fusedShape, false, true, false );
+            ShapeUpgrade_UnifySameDomain unify( fusedShape, true, true, false );
             unify.History() = nullptr;
             unify.Build();
 

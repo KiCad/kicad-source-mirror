@@ -44,6 +44,7 @@
 #define ARG_INCLUDE_INNER_COPPER "--include-inner-copper"
 #define ARG_FUSE_SHAPES "--fuse-shapes"
 #define ARG_NO_OPTIMIZE_STEP "--no-optimize-step"
+#define ARG_NET_FILTER "--net-filter"
 #define ARG_FORMAT "--format"
 #define ARG_VRML_UNITS "--units"
 #define ARG_VRML_MODELS_DIR "--models-dir"
@@ -135,6 +136,11 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
                 .help( UTF8STDSTR(
                         _( "Minimum distance between points to treat them as separate ones" ) ) )
                 .metavar( "MIN_DIST" );
+
+        m_argParser.add_argument( ARG_NET_FILTER )
+                .default_value( std::string() )
+                .help( UTF8STDSTR( _(
+                        "Only include copper items belonging to nets matching this wildcard" ) ) );
     }
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )
@@ -187,6 +193,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
         step->m_exportInnerCopper = m_argParser.get<bool>( ARG_INCLUDE_INNER_COPPER );
         step->m_fuseShapes = m_argParser.get<bool>( ARG_FUSE_SHAPES );
         step->m_boardOnly = m_argParser.get<bool>( ARG_BOARD_ONLY );
+        step->m_netFilter = From_UTF8( m_argParser.get<std::string>( ARG_NET_FILTER ).c_str() );
     }
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP )

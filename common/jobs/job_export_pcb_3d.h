@@ -56,6 +56,7 @@ public:
     bool                      m_includeDNP;
     bool                      m_substModels;
     bool                      m_optimizeStep;
+    wxString                  m_netFilter;
     wxString                  m_filename;
     wxString                  m_outputFile;
     double                    m_xOrigin;
