@@ -27,6 +27,7 @@
 #include <sch_edit_frame.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
+#include <sch_commit.h>
 #include <schematic.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
@@ -47,11 +48,7 @@ class TREE_ITEM_DATA : public wxTreeItemData
 public:
     SCH_SHEET_PATH m_SheetPath;
 
-    TREE_ITEM_DATA( SCH_SHEET_PATH& sheet ) :
-            wxTreeItemData()
-    {
-        m_SheetPath = sheet;
-    }
+    TREE_ITEM_DATA( SCH_SHEET_PATH& sheet ) : wxTreeItemData(), m_SheetPath( sheet ) {}
 };
 
 
@@ -110,8 +107,8 @@ HIERARCHY_PANE::HIERARCHY_PANE( SCH_EDIT_FRAME* aParent ) :
     Bind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
     Bind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
     Bind( wxEVT_CHAR_HOOK, &HIERARCHY_PANE::onCharHook, this );
+    m_tree->Bind( wxEVT_TREE_END_LABEL_EDIT, &HIERARCHY_PANE::onTreeEditFinished, this );
     m_tree->Bind( wxEVT_RIGHT_UP, &HIERARCHY_PANE::onRightClick, this );
-
     m_events_bound = true;
 }
 
@@ -122,6 +119,7 @@ HIERARCHY_PANE::~HIERARCHY_PANE()
     Unbind( wxEVT_TREE_SEL_CHANGED, &HIERARCHY_PANE::onSelectSheetPath, this );
     Unbind( wxEVT_TREE_ITEM_RIGHT_CLICK, &HIERARCHY_PANE::onTreeItemRightClick, this );
     Unbind( wxEVT_CHAR_HOOK, &HIERARCHY_PANE::onCharHook, this );
+    m_tree->Unbind( wxEVT_TREE_END_LABEL_EDIT, &HIERARCHY_PANE::onTreeEditFinished, this );
     m_tree->Unbind( wxEVT_RIGHT_UP, &HIERARCHY_PANE::onRightClick, this );
 }
 
@@ -136,8 +134,9 @@ void HIERARCHY_PANE::buildHierarchyTree( SCH_SHEET_PATH* aList, const wxTreeItem
         SCH_SHEET* sheet = static_cast<SCH_SHEET*>( aItem );
         aList->push_back( sheet );
 
-        wxString sheetName = formatPageString( sheet->GetFields()[SHEETNAME].GetShownText( false ),
-                                               aList->GetPageNumber() );
+        wxString     sheetNameBase = sheet->GetFields()[SHEETNAME].GetShownText( false );
+        wxString     sheetName = formatPageString( sheetNameBase, aList->GetPageNumber() );
+        wxString     sheetNumber = aList->GetPageNumber();
         wxTreeItemId child = m_tree->AppendItem( aParent, sheetName, 0, 1 );
         m_tree->SetItemData( child, new TREE_ITEM_DATA( *aList ) );
 
@@ -326,7 +325,6 @@ void HIERARCHY_PANE::onSelectSheetPath( wxTreeEvent& aEvent )
     SetCursor( wxCURSOR_ARROW );
 }
 
-
 void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
 {
     // Update the labels of the hierarchical tree of the schematic.
@@ -337,8 +335,8 @@ void HIERARCHY_PANE::UpdateLabelsHierarchyTree()
             [&]( const wxTreeItemId& id )
             {
                 TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
-                SCH_SHEET* sheet = itemData->m_SheetPath.Last();
-                wxString sheetNameLabel =
+                SCH_SHEET*      sheet = itemData->m_SheetPath.Last();
+                wxString        sheetNameLabel =
                         formatPageString( sheet->GetFields()[SHEETNAME].GetShownText( false ),
                                           itemData->m_SheetPath.GetPageNumber() );
 
@@ -393,16 +391,24 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
 
     if( itemData )
     {
-        ctxMenu.Append( 1, _( "Edit Page Number" ) );
+        ctxMenu.Append( EDIT_PAGE_NUMBER, _( "Edit Page Number" ) );
+        // The root item cannot be renamed
+        if( m_tree->GetRootItem() != aItem.GetID() )
+        {
+            ctxMenu.Append( RENAME, _( "Rename" ), _( "Change name of this sheet" ) );
+        }
+
         ctxMenu.AppendSeparator();
     }
+    ctxMenu.Append( EXPAND_ALL, ACTIONS::expandAll.GetMenuItem() );
+    ctxMenu.Append( COLLAPSE_ALL, ACTIONS::collapseAll.GetMenuItem() );
 
-    ctxMenu.Append( 2, ACTIONS::expandAll.GetMenuItem() );
-    ctxMenu.Append( 3, ACTIONS::collapseAll.GetMenuItem() );
 
-    switch( GetPopupMenuSelectionFromUser( ctxMenu ) )
+    int selected = GetPopupMenuSelectionFromUser( ctxMenu );
+
+    switch( selected )
     {
-    case 1:
+    case EDIT_PAGE_NUMBER:
     {
         wxString msg;
         wxString sheetPath = itemData->m_SheetPath.PathHumanReadable( false, true );
@@ -439,14 +445,62 @@ void HIERARCHY_PANE::onRightClick( wxTreeItemId aItem )
 
         break;
     }
-    case 2:
+    case EXPAND_ALL:
         m_tree->ExpandAll();
         break;
-
-    case 3:
+    case COLLAPSE_ALL:
         m_tree->CollapseAll();
         break;
+    case RENAME:
+        m_tree->SetItemText( aItem, itemData->m_SheetPath.Last()->GetName() );
+        m_tree->EditLabel( aItem );
+        setIdenticalSheetsHighlighted( itemData->m_SheetPath );
+        break;
     }
+}
+
+
+void HIERARCHY_PANE::onTreeEditFinished( wxTreeEvent& event )
+{
+    TREE_ITEM_DATA* data = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( event.GetItem() ) );
+    wxString        newName = event.GetLabel();
+
+    if( !newName.IsEmpty() )
+    {
+        // The editor holds only the page name as a text, while normally
+        // the tree items displaying it suffixed with the page number
+        if( data->m_SheetPath.Last()->GetName() != newName )
+        {
+            const SCH_SHEET* parentSheet =
+                    data->m_SheetPath.GetSheet( data->m_SheetPath.size() - 2 );
+
+            if( parentSheet )
+            {
+                SCH_COMMIT commit( m_frame );
+                commit.Modify( &data->m_SheetPath.Last()->GetFields()[SHEETNAME],
+                               parentSheet->GetScreen() );
+
+                data->m_SheetPath.Last()->SetName( newName );
+
+                renameIdenticalSheets( data->m_SheetPath, newName, &commit );
+
+                if( !commit.Empty() )
+                    commit.Push( _( "Renaming sheet" ) );
+
+                if( data->m_SheetPath == m_frame->GetCurrentSheet() )
+                {
+                    m_frame->OnPageSettingsChange();
+                }
+            }
+        }
+    }
+
+    m_tree->SetItemText( event.GetItem(), formatPageString( data->m_SheetPath.Last()->GetName(),
+                                                            data->m_SheetPath.GetPageNumber() ) );
+    setIdenticalSheetsHighlighted( data->m_SheetPath, false );
+    // The event needs to be rejected otherwise the SetItemText call above
+    // will be ineffective (the treeview item will hold the editor's content)
+    event.Veto();
 }
 
 
@@ -475,6 +529,10 @@ void HIERARCHY_PANE::onCharHook( wxKeyEvent& aKeyStroke )
         m_tree->CollapseAll();
         return;
     }
+    else
+    {
+        aKeyStroke.Skip();
+    }
 }
 
 
@@ -491,4 +549,73 @@ wxString HIERARCHY_PANE::getRootString()
 wxString HIERARCHY_PANE::formatPageString( const wxString& aName, const wxString& aPage )
 {
     return aName + wxT( " " ) + wxString::Format( _( "(page %s)" ), aPage );
+}
+
+void HIERARCHY_PANE::setIdenticalSheetsHighlighted( const SCH_SHEET_PATH& path, bool highLighted )
+{
+    std::function<void( const wxTreeItemId& )> recursiveDescent = [&]( const wxTreeItemId& id )
+    {
+        wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+
+        TREE_ITEM_DATA* itemData = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
+        if( itemData->m_SheetPath.Cmp( path ) != 0 && itemData->m_SheetPath.Last() == path.Last() )
+        {
+            wxFont font = m_tree->GetItemFont( id );
+            font.SetUnderlined( highLighted );
+            m_tree->SetItemFont( id, font );
+        }
+
+        wxTreeItemIdValue cookie;
+        wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+
+        while( child.IsOk() )
+        {
+            recursiveDescent( child );
+            child = m_tree->GetNextChild( id, cookie );
+        }
+    };
+
+    recursiveDescent( m_tree->GetRootItem() );
+}
+
+void HIERARCHY_PANE::renameIdenticalSheets( const SCH_SHEET_PATH& renamedSheet,
+                                            const wxString newName, SCH_COMMIT* commit )
+{
+    std::function<void( const wxTreeItemId& )> recursiveDescent = [&]( const wxTreeItemId& id )
+    {
+        wxCHECK_RET( id.IsOk(), wxT( "Invalid tree item" ) );
+
+        TREE_ITEM_DATA* data = static_cast<TREE_ITEM_DATA*>( m_tree->GetItemData( id ) );
+
+        const SCH_SHEET* parentSheet = data->m_SheetPath.GetSheet( data->m_SheetPath.size() - 2 );
+
+        if( parentSheet && data->m_SheetPath.Cmp( renamedSheet ) != 0
+            && data->m_SheetPath.Last() == renamedSheet.Last() )
+        {
+            commit->Modify( &data->m_SheetPath.Last()->GetFields()[SHEETNAME],
+                            parentSheet->GetScreen() );
+
+            data->m_SheetPath.Last()->SetName( newName );
+
+            if( data->m_SheetPath == m_frame->GetCurrentSheet() )
+            {
+                m_frame->OnPageSettingsChange();
+            }
+
+            m_tree->SetItemText( id, formatPageString( data->m_SheetPath.Last()->GetName(),
+                                                       data->m_SheetPath.GetPageNumber() ) );
+        }
+
+        wxTreeItemIdValue cookie;
+        wxTreeItemId      child = m_tree->GetFirstChild( id, cookie );
+
+        while( child.IsOk() )
+        {
+            recursiveDescent( child );
+            child = m_tree->GetNextChild( id, cookie );
+        }
+    };
+
+    recursiveDescent( m_tree->GetRootItem() );
 }

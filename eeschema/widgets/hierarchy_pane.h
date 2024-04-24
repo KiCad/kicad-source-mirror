@@ -34,6 +34,7 @@
 #include "widgets/wx_panel.h"
 
 
+class SCH_COMMIT;
 class SCH_EDIT_FRAME;
 class SCH_SHEET_PATH;
 
@@ -51,7 +52,8 @@ class HIERARCHY_TREE : public wxTreeCtrl
 public:
     HIERARCHY_TREE( HIERARCHY_PANE* parent ) :
             wxTreeCtrl( (wxWindow*) parent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                        wxTR_HAS_BUTTONS, wxDefaultValidator, wxT( "HierachyTreeCtrl" ) )
+                        wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS, wxDefaultValidator,
+                        wxT( "HierachyTreeCtrl" ) )
     {
     }
 
@@ -67,6 +69,14 @@ private:
 class HIERARCHY_PANE : public WX_PANEL
 {
 public:
+    enum ContextMenuAction
+    {
+        EDIT_PAGE_NUMBER,
+        EXPAND_ALL,
+        COLLAPSE_ALL,
+        RENAME
+    };
+
     HIERARCHY_PANE( SCH_EDIT_FRAME* aParent );
 
     ~HIERARCHY_PANE();
@@ -109,6 +119,8 @@ private:
     void onRightClick( wxMouseEvent& aEvent );
     void onRightClick( wxTreeItemId aItem );
     void onCharHook( wxKeyEvent& aKeyStroke );
+    void onTreeRightClick( wxTreeEvent& event );
+    void onTreeEditFinished( wxTreeEvent& event );
 
     /**
      * @return String with page number in parenthesis
@@ -119,6 +131,18 @@ private:
      * @return String with page number in parenthesis
     */
     wxString formatPageString( const wxString& aName, const wxString& aPage );
+
+    /**
+     * When renaming the sheets in tree it is helpful to highlight
+     * the identical sheets which got renamed by renaming the current sheet.
+     */
+    void setIdenticalSheetsHighlighted( const SCH_SHEET_PATH& path, bool highLighted = true );
+
+    /**
+     * Rename all sheets in a hierarchial desing which has the same source renamed sheet
+     */
+    void renameIdenticalSheets( const SCH_SHEET_PATH& renamedSheet, const wxString newName,
+                                SCH_COMMIT* commit );
 
 private:
     SCH_SHEET_PATH  m_list;
