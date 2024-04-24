@@ -2439,6 +2439,16 @@ TOOL_ACTION PCB_ACTIONS::generatorsShowManager( TOOL_ACTION_ARGS()
 
 // LENGTH_TUNER_TOOL
 //
+TOOL_ACTION PCB_ACTIONS::lengthTunerSettings( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.LengthTuner.Settings" )
+        .Scope( AS_CONTEXT )
+        .DefaultHotkey( MD_CTRL + 'L' )
+        // Don't be tempted to remove "Modern Toolset only".  It's in the legacy property name.
+        .LegacyHotkeyName( "Length Tuning Settings (Modern Toolset only)" )
+        .MenuText( _( "Length Tuning Settings..." ) )
+        .Tooltip( _( "Displays tuning pattern properties dialog" ) )
+        .Icon( BITMAPS::router_len_tuner_setup ) );
+
 TOOL_ACTION PCB_ACTIONS::ddAppendBoard( TOOL_ACTION_ARGS()
         .Name( "pcbnew.Control.DdAppendBoard" )
         .Scope( AS_GLOBAL ) );

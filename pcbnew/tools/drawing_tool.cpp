@@ -258,6 +258,7 @@ bool DRAWING_TOOL::Init()
     ctxMenu.AddItem( PCB_ACTIONS::spacingDecrease,     tuningToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::amplIncrease,        tuningToolActive, 200 );
     ctxMenu.AddItem( PCB_ACTIONS::amplDecrease,        tuningToolActive, 200 );
+    ctxMenu.AddItem( PCB_ACTIONS::lengthTunerSettings, tuningToolActive, 200 );
 
     ctxMenu.AddCheckItem( PCB_ACTIONS::toggleHV45Mode, !tuningToolActive, 250 );
     ctxMenu.AddSeparator( 500 );

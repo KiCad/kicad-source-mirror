@@ -2280,7 +2280,7 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 if( collector.GetCount() > 0 )
                 {
-                    double min_dist_sq = std::numeric_limits<double>().max();
+                    double min_dist_sq = std::numeric_limits<double>::max();
 
                     for( EDA_ITEM* candidate : collector )
                     {
@@ -2323,8 +2323,8 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 if( dynamic_cast<PCB_TUNING_PATTERN*>( m_pickerItem->GetParentGroup() ) )
                 {
-                    m_frame->ShowInfoBarWarning(
-                            _( "Unable to tune segments inside other tuning patterns." ) );
+                    m_frame->ShowInfoBarWarning( _( "Unable to tune segments inside other "
+                                                    "tuning patterns." ) );
                 }
                 else
                 {
@@ -2381,6 +2381,10 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 m_tuningPattern->SetSpacing( placer->MeanderSettings().m_spacing );
                 updateTuningPattern();
             }
+            else
+            {
+                m_frame->ShowInfoBarWarning( _( "Select a track to tune first." ) );
+            }
         }
         else if( evt->IsAction( &PCB_ACTIONS::amplIncrease )
                  || evt->IsAction( &PCB_ACTIONS::amplDecrease ) )
@@ -2393,8 +2397,13 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
                 m_tuningPattern->SetMaxAmplitude( placer->MeanderSettings().m_maxAmplitude );
                 updateTuningPattern();
             }
+            else
+            {
+                m_frame->ShowInfoBarWarning( _( "Select a track to tune first." ) );
+            }
         }
-        else if( evt->IsAction( &PCB_ACTIONS::properties ) )
+        else if( evt->IsAction( &PCB_ACTIONS::properties )
+                || evt->IsAction( &PCB_ACTIONS::lengthTunerSettings ) )
         {
             if( m_tuningPattern )
             {
@@ -2413,6 +2422,10 @@ int DRAWING_TOOL::PlaceTuningPattern( const TOOL_EVENT& aEvent )
 
                 if( dlg.ShowModal() == wxID_OK )
                     updateTuningPattern();
+            }
+            else
+            {
+                m_frame->ShowInfoBarWarning( _( "Select a track to tune first." ) );
             }
         }
         // TODO: It'd be nice to be able to say "don't allow any non-trivial editing actions",
