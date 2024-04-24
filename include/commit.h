@@ -111,7 +111,7 @@ public:
     ///< before the modification.
     COMMIT& Modified( EDA_ITEM* aItem, EDA_ITEM* aCopy, BASE_SCREEN *aScreen = nullptr )
     {
-        return createModified( aItem, aCopy );
+        return createModified( aItem, aCopy, 0, aScreen );
     }
 
     template<class Range>
