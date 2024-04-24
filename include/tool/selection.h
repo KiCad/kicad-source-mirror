@@ -131,12 +131,12 @@ public:
     /**
      * Returns a copy of this selection of items sorted by their X then Y position.
      *
-     * @return Vector of sorted items
+     * @return std::vector of sorted items
      */
-    const std::vector<EDA_ITEM*> GetItemsSortedByTypeAndXY( bool leftBeforeRight = true,
-                                                            bool topBeforeBottom = true ) const;
+    std::vector<EDA_ITEM*> GetItemsSortedByTypeAndXY( bool leftBeforeRight = true,
+                                                      bool topBeforeBottom = true ) const;
 
-    const std::vector<EDA_ITEM*> GetItemsSortedBySelectionOrder() const;
+    std::vector<EDA_ITEM*> GetItemsSortedBySelectionOrder() const;
 
     /// Returns the center point of the selection area bounding box.
     virtual VECTOR2I GetCenter() const;
