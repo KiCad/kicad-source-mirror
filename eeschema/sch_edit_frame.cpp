@@ -1718,7 +1718,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     {
         PICKED_ITEMS_LIST* changed_list = m_undoList.m_CommandsList.back();
         std::set<SCH_ITEM*> changed_items;
-        std::vector<VECTOR2I> pts;
+        std::set<VECTOR2I> pts;
         std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> item_paths;
 
         for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
@@ -1733,7 +1733,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
             SCH_SHEET_PATHS& paths = screen->GetClientSheetPaths();
 
             std::vector<VECTOR2I> tmp_pts = item->GetConnectionPoints();
-            pts.insert( pts.end(), tmp_pts.begin(), tmp_pts.end() );
+            pts.insert( tmp_pts.begin(), tmp_pts.end() );
             changed_items.insert( item );
 
             for( SCH_SHEET_PATH& path : paths )
@@ -1745,7 +1745,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 continue;
 
             tmp_pts = item->GetConnectionPoints();
-            pts.insert( pts.end(), tmp_pts.begin(), tmp_pts.end() );
+            pts.insert( tmp_pts.begin(), tmp_pts.end() );
             changed_items.insert( item );
 
             // We have to directly add the pins here because the link may not exist on the schematic
@@ -1760,7 +1760,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
                 item_paths.insert( std::make_pair( path, item ) );
         }
 
-        for( VECTOR2I& pt: pts )
+        for( const VECTOR2I& pt: pts )
         {
             for( SCH_ITEM* item : GetScreen()->Items().Overlapping( pt ) )
             {

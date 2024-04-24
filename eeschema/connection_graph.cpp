@@ -85,6 +85,47 @@ void CONNECTION_SUBGRAPH::RemoveItem( SCH_ITEM* aItem )
 }
 
 
+void CONNECTION_SUBGRAPH::ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem )
+{
+    m_items.erase( aOldItem );
+    m_items.insert( aNewItem );
+
+    m_drivers.erase( aOldItem );
+    m_drivers.insert( aNewItem );
+
+    if( aOldItem == m_driver )
+    {
+        m_driver = aNewItem;
+        m_driver_connection = aNewItem->GetOrInitConnection( m_sheet, m_graph );
+    }
+
+    SCH_CONNECTION* old_conn = aOldItem->Connection( &m_sheet );
+    SCH_CONNECTION* new_conn = aNewItem->GetOrInitConnection( m_sheet, m_graph );
+
+    if( old_conn && new_conn )
+    {
+        new_conn->Clone( *old_conn );
+
+        if( old_conn->IsDriver() )
+            new_conn->SetDriver( aNewItem );
+
+        new_conn->ClearDirty();
+    }
+
+    if( aOldItem->Type() == SCH_SHEET_PIN_T )
+    {
+        m_hier_pins.erase( static_cast<SCH_SHEET_PIN*>( aOldItem ) );
+        m_hier_pins.insert( static_cast<SCH_SHEET_PIN*>( aNewItem ) );
+    }
+
+    if( aOldItem->Type() == SCH_HIER_LABEL_T )
+    {
+        m_hier_ports.erase( static_cast<SCH_HIERLABEL*>( aOldItem ) );
+        m_hier_ports.insert( static_cast<SCH_HIERLABEL*>( aNewItem ) );
+    }
+}
+
+
 bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCheckMultipleDrivers )
 {
     std::lock_guard lock( m_driver_mutex );
@@ -573,6 +614,53 @@ void CONNECTION_GRAPH::Merge( CONNECTION_GRAPH& aGraph )
     m_last_net_code = std::max( m_last_net_code, aGraph.m_last_net_code );
     m_last_subgraph_code = std::max( m_last_subgraph_code, aGraph.m_last_subgraph_code );
 
+}
+
+
+void CONNECTION_GRAPH::ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem )
+{
+    wxCHECK2( aOldItem->Type() == aNewItem->Type(), return );
+
+    auto exchange = [&]( SCH_ITEM* aOld, SCH_ITEM* aNew )
+    {
+        auto it = m_item_to_subgraph_map.find( aOld );
+
+        if( it == m_item_to_subgraph_map.end() )
+            return;
+
+        CONNECTION_SUBGRAPH* sg = it->second;
+
+        sg->ExchangeItem( aOld, aNew );
+
+        m_item_to_subgraph_map.erase( it );
+        m_item_to_subgraph_map.emplace( aNew, sg );
+
+        for( auto it2 = m_items.begin(); it2 != m_items.end(); ++it2 )
+        {
+            if( *it2 == aOld )
+            {
+                *it2 = aNew;
+                break;
+            }
+        }
+    };
+
+    exchange( aOldItem, aNewItem );
+
+    if( aOldItem->Type() == SCH_SYMBOL_T )
+    {
+        SCH_SYMBOL* oldSymbol = static_cast<SCH_SYMBOL*>( aOldItem );
+        SCH_SYMBOL* newSymbol = static_cast<SCH_SYMBOL*>( aNewItem );
+        std::vector<SCH_PIN*> oldPins = oldSymbol->GetPins( &m_schematic->CurrentSheet() );
+        std::vector<SCH_PIN*> newPins = newSymbol->GetPins( &m_schematic->CurrentSheet() );
+
+        wxCHECK2( oldPins.size() == newPins.size(), return );
+
+        for( size_t ii = 0; ii < oldPins.size(); ii++ )
+        {
+            exchange( oldPins[ii], newPins[ii] );
+        }
+    }
 }
 
 

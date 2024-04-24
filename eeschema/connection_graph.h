@@ -199,6 +199,11 @@ public:
 
     void RemoveItem( SCH_ITEM* aItem );
 
+    /**
+     * Replaces all references to #aOldItem with #aNewItem in the subgraph.
+    */
+    void ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem );
+
     // Use this to keep a connection pointer that is not owned by any item
     // This will be destroyed with the subgraph
     void StoreImplicitConnection( SCH_CONNECTION* aConnection )
@@ -455,6 +460,11 @@ public:
     void Merge( CONNECTION_GRAPH& aGraph );
 
     void RemoveItem( SCH_ITEM* aItem );
+
+    /**
+     * Replace all references to #aOldItem with #aNewItem in the graph.
+    */
+    void ExchangeItem( SCH_ITEM* aOldItem, SCH_ITEM* aNewItem );
 
 private:
     /**
