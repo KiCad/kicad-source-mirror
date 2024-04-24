@@ -140,6 +140,8 @@ public:
     struct NETCLASS_PANEL
     {
         int sash_pos;
+        wxString eeschema_visible_columns;
+        wxString pcbnew_visible_columns;
     };
 
     struct PACKAGE_MANAGER

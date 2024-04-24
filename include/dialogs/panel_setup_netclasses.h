@@ -89,6 +89,7 @@ private:
     int                   m_hoveredCol;         // Column being hovered over, for tooltips
     wxString              m_lastPattern;
 
+    std::bitset<64>       m_shownColumns;
     int                   m_lastNetclassGridWidth;
 };
 
