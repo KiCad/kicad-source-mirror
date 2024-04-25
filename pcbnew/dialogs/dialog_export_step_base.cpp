@@ -193,6 +193,15 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	sbOtherOptions->Add( m_cbExportSolderpaste_hidden, 0, wxBOTTOM|wxRIGHT, 5 );
 
+	m_staticTextNetFilter = new wxStaticText( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Net filter (supports wildcards):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNetFilter->Wrap( -1 );
+	sbOtherOptions->Add( m_staticTextNetFilter, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+
+	m_txtNetFilter = new wxTextCtrl( sbOtherOptions->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_txtNetFilter->SetToolTip( _("Only copper items belonging to nets matching this filter will be exported.") );
+
+	sbOtherOptions->Add( m_txtNetFilter, 0, wxALL|wxEXPAND, 5 );
+
 	m_staticTextTolerance = new wxStaticText( sbOtherOptions->GetStaticBox(), wxID_ANY, _("Board outline chaining tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTolerance->Wrap( -1 );
 	sbOtherOptions->Add( m_staticTextTolerance, 0, wxLEFT|wxRIGHT|wxTOP, 5 );

@@ -123,6 +123,7 @@ private:
     static bool        m_exportZones;    // remember last preference to export zones (stored only for the session)
     static bool        m_fuseShapes;     // remember last preference to fuse shapes (stored only for the session)
     static bool        m_exportInnerCopper; // remember last preference to export inner layers (stored only for the session)
+    wxString           m_netFilter;      // filter copper nets
     wxString           m_boardPath;      // path to the exported board file
     static int         m_toleranceLastChoice;  // Store m_tolerance option during a session
 };
@@ -185,6 +186,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_noUnspecified = cfg->m_ExportStep.no_unspecified;
     m_noDNP       = cfg->m_ExportStep.no_dnp;
 
+    m_txtNetFilter->SetValue( m_netFilter );
     m_cbOptimizeStep->SetValue( m_optimizeStep );
     m_cbExportBody->SetValue( m_exportBoardBody );
     m_cbExportComponents->SetValue( m_exportComponents );
@@ -283,6 +285,7 @@ DIALOG_EXPORT_STEP::~DIALOG_EXPORT_STEP()
         cfg->m_ExportStep.no_dnp = m_cbRemoveDNP->GetValue();
     }
 
+    m_netFilter = m_txtNetFilter->GetValue();
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
     m_optimizeStep = m_cbOptimizeStep->GetValue();
     m_exportBoardBody = m_cbExportBody->GetValue();
@@ -393,6 +396,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         DisplayErrorMessage( this, _( "No filename for output file" ) );
         return;
     }
+
+    m_netFilter = m_txtNetFilter->GetValue();
 
     double tolerance;   // default value in mm
     m_toleranceLastChoice = m_choiceTolerance->GetSelection();
@@ -508,12 +513,16 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     if( m_fuseShapes )
         cmdK2S.Append( wxT( " --fuse-shapes" ) );
 
-    // TODO: --net-filter
-
     // Note: for some reason, using \" to insert a quote in a format string, under MacOS
     // wxString::Format does not work. So use a %c format in string
     int quote = '\'';
     int dblquote = '"';
+
+    if( !m_netFilter.empty() )
+    {
+        cmdK2S.Append( wxString::Format( wxT( " --net-filter %c%s%c" ), dblquote, m_netFilter,
+                                         dblquote ) );
+    }
 
     switch( GetOriginOption() )
     {

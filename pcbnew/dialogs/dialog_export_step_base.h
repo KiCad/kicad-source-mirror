@@ -77,6 +77,8 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbExportSilkscreen_hidden;
 		wxCheckBox* m_cbExportSoldermask_hidden;
 		wxCheckBox* m_cbExportSolderpaste_hidden;
+		wxStaticText* m_staticTextNetFilter;
+		wxTextCtrl* m_txtNetFilter;
 		wxStaticText* m_staticTextTolerance;
 		wxChoice* m_choiceTolerance;
 		wxStdDialogButtonSizer* m_sdbSizer;
