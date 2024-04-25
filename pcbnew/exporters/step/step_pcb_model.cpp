@@ -389,6 +389,37 @@ static SHAPE_LINE_CHAIN approximateLineChainWithArcs( const SHAPE_LINE_CHAIN& aS
 }
 
 
+static TopoDS_Shape getOneShape( Handle( XCAFDoc_ShapeTool ) aShapeTool )
+{
+    TDF_LabelSequence theLabels;
+    aShapeTool->GetFreeShapes( theLabels );
+
+    TopoDS_Shape aShape;
+
+    if( theLabels.Length() == 1 )
+        return aShapeTool->GetShape( theLabels.Value( 1 ) );
+
+    TopoDS_Compound aCompound;
+    BRep_Builder    aBuilder;
+    aBuilder.MakeCompound( aCompound );
+
+    for( TDF_LabelSequence::Iterator anIt( theLabels ); anIt.More(); anIt.Next() )
+    {
+        TopoDS_Shape aFreeShape;
+
+        if( !aShapeTool->GetShape( anIt.Value(), aFreeShape ) )
+            continue;
+
+        aBuilder.Add( aCompound, aFreeShape );
+    }
+
+    if( aCompound.NbChildren() > 0 )
+        aShape = aCompound;
+
+    return aShape;
+}
+
+
 STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
 {
     m_app = XCAFApp_Application::GetApplication();
@@ -1878,30 +1909,19 @@ bool STEP_PCB_MODEL::WriteBREP( const wxString& aFileName )
     // s_assy = shape tool for the source
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( m_doc->Main() );
 
-    // retrieve all free shapes within the assembly
-    TDF_LabelSequence freeShapes;
-    s_assy->GetFreeShapes( freeShapes );
+    // retrieve assembly as a single shape
+    TopoDS_Shape shape = getOneShape( s_assy );
 
-    for( Standard_Integer i = 1; i <= freeShapes.Length(); ++i )
-    {
-        TDF_Label    label = freeShapes.Value( i );
-        TopoDS_Shape shape;
-        m_assy->GetShape( label, shape );
+    wxFileName fn( aFileName );
 
-        wxFileName fn( aFileName );
-
-        if( freeShapes.Length() > 1 )
-            fn.SetName( wxString::Format( "%s_%s", fn.GetName(), i ) );
-
-        wxFFileOutputStream ffStream( fn.GetFullPath() );
-        wxStdOutputStream   stdStream( ffStream );
+    wxFFileOutputStream ffStream( fn.GetFullPath() );
+    wxStdOutputStream   stdStream( ffStream );
 
 #if OCC_VERSION_HEX >= 0x070600
-        BRepTools::Write( shape, stdStream, false, false, TopTools_FormatVersion_VERSION_1 );
+    BRepTools::Write( shape, stdStream, false, false, TopTools_FormatVersion_VERSION_1 );
 #else
-        BRepTools::Write( shape, stdStream );
+    BRepTools::Write( shape, stdStream );
 #endif
-    }
 
     return true;
 }
@@ -1923,8 +1943,8 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
     // s_assy = shape tool for the source
     Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( m_doc->Main() );
 
-    // retrieve the shape from the assembly
-    const TopoDS_Shape shape = s_assy->GetOneShape();
+    // retrieve assembly as a single shape
+    const TopoDS_Shape shape = getOneShape( s_assy );
 
     std::map<wxString, std::vector<int>> groups[4];
     TopExp_Explorer                      exp;
