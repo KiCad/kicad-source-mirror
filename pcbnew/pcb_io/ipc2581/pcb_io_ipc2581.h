@@ -85,7 +85,7 @@ public:
 
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( _HKI( "IPC-2581 Production File" ), { "xml" } );
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override
