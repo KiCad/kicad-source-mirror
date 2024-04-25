@@ -480,6 +480,8 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
         cmdK2S.Append( wxT( " glb" ) );
     else if( fn.GetExt() == FILEEXT::BrepFileExtension )
         cmdK2S.Append( wxT( " brep" ) );
+    else if( fn.GetExt() == FILEEXT::XaoFileExtension )
+        cmdK2S.Append( wxT( " xao" ) );
     else
         cmdK2S.Append( wxT( " step" ) );
 

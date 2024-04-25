@@ -62,6 +62,7 @@
 #include <STEPCAFControl_Writer.hxx>
 #include <APIHeaderSection_MakeHeader.hxx>
 #include <Standard_Failure.hxx>
+#include <Standard_Handle.hxx>
 #include <Standard_Version.hxx>
 #include <TCollection_ExtendedString.hxx>
 #include <TDocStd_Document.hxx>
@@ -70,6 +71,7 @@
 #include <TDF_LabelSequence.hxx>
 #include <TDF_ChildIterator.hxx>
 #include <TopExp_Explorer.hxx>
+#include <TopoDS.hxx>
 #include <XCAFApp_Application.hxx>
 #include <XCAFDoc.hxx>
 #include <XCAFDoc_DocumentTool.hxx>
@@ -84,10 +86,13 @@
 #include <BRepBuilderAPI_MakeEdge.hxx>
 #include <BRepBuilderAPI_MakeWire.hxx>
 #include <BRepBuilderAPI_MakeFace.hxx>
+#include <BRepBuilderAPI_MakeVertex.hxx>
+#include <BRepExtrema_DistShapeShape.hxx>
 #include <BRepPrimAPI_MakePrism.hxx>
 #include <BRepPrimAPI_MakeCylinder.hxx>
 #include <BRepTools.hxx>
 #include <BRepLib_MakeWire.hxx>
+#include <BRepAdaptor_Surface.hxx>
 #include <BRepAlgoAPI_Check.hxx>
 #include <BRepAlgoAPI_Cut.hxx>
 #include <BRepAlgoAPI_Fuse.hxx>
@@ -438,6 +443,8 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
                 thickness -= 0.01;
         }
 
+        TopoDS_Shape testShape;
+
         // Make a shape on copper layers
         std::shared_ptr<SHAPE> effShapePtr = aPad->GetEffectiveShape( pcb_layer );
 
@@ -475,6 +482,12 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
                                              aOrigin ) )
                 {
                     topodsShapes.emplace_back( topods_shape );
+
+                    if( testShape.IsNull() )
+                    {
+                        MakeShapeAsThickSegment( testShape, start, end, width, 0.0,
+                                                 Zpos + thickness, aOrigin );
+                    }
                 }
                 else
                 {
@@ -487,6 +500,16 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
                 shape->TransformToPolygon( polySet, ARC_HIGH_DEF, ERROR_INSIDE );
 
                 success &= MakeShapes( topodsShapes, polySet, false, thickness, Zpos, aOrigin );
+
+                if( testShape.IsNull() )
+                {
+                    std::vector<TopoDS_Shape> testShapes;
+
+                    MakeShapes( testShapes, polySet, false, 0.0, Zpos + thickness, aOrigin );
+
+                    if( testShapes.size() > 0 )
+                        testShape = testShapes.front();
+                }
             }
         }
 
@@ -542,6 +565,29 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool
             {
                 for( TopoDS_Shape& sh : topodsShapes )
                     m_board_copper_pads.emplace_back( sh );
+            }
+        }
+
+        if( !aVia && !testShape.IsNull() )
+        {
+            if( pcb_layer == F_Cu || pcb_layer == B_Cu )
+            {
+                wxString name;
+
+                name << "Pad_";
+
+                if( pcb_layer == F_Cu )
+                    name << 'F' << '_';
+                else if( pcb_layer == B_Cu )
+                    name << 'B' << '_';
+
+                name << aPad->GetParentFootprint()->GetReferenceAsString() << '_'
+                     << aPad->GetNumber() << '_' << aPad->GetShortNetname();
+
+                gp_Pnt point( pcbIUScale.IUTomm( aPad->GetX() - aOrigin.x ),
+                              -pcbIUScale.IUTomm( aPad->GetY() - aOrigin.y ), Zpos + thickness );
+
+                m_pad_points[name] = { point, testShape };
             }
         }
     }
@@ -1032,20 +1078,26 @@ bool STEP_PCB_MODEL::MakeShapeAsThickSegment( TopoDS_Shape& aShape,
         gp_Pln plane( coords3D[0], gp::DZ() );
         face = BRepBuilderAPI_MakeFace( plane, wire );
     }
-    catch(  const Standard_Failure& e )
+    catch( const Standard_Failure& e )
     {
-        ReportMessage(
-                wxString::Format( wxT( "MakeShapeThickSegment: OCC exception: %s\n" ),
-                                  e.GetMessageString() ) );
+        ReportMessage( wxString::Format( wxT( "MakeShapeThickSegment: OCC exception: %s\n" ),
+                                         e.GetMessageString() ) );
         return false;
     }
 
-    aShape = BRepPrimAPI_MakePrism( face, gp_Vec( 0, 0, aThickness ) );
-
-    if( aShape.IsNull() )
+    if( aThickness != 0.0 )
     {
-        ReportMessage( wxT( "failed to create a prismatic shape\n" ) );
-        return false;
+        aShape = BRepPrimAPI_MakePrism( face, gp_Vec( 0, 0, aThickness ) );
+
+        if( aShape.IsNull() )
+        {
+            ReportMessage( wxT( "failed to create a prismatic shape\n" ) );
+            return false;
+        }
+    }
+    else
+    {
+        aShape = face;
     }
 
     return success;
@@ -1139,8 +1191,7 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
                     }
                     else
                     {
-                        curve = GC_MakeArcOfCircle( toPoint( aPt0 ),
-                                                    toPoint( aArc.GetArcMid() ),
+                        curve = GC_MakeArcOfCircle( toPoint( aPt0 ), toPoint( aArc.GetArcMid() ),
                                                     toPoint( aArc.GetP1() ) )
                                         .Value();
                     }
@@ -1342,13 +1393,20 @@ bool STEP_PCB_MODEL::MakeShapes( std::vector<TopoDS_Shape>& aShapes, const SHAPE
 
         if( mkFace.IsDone() )
         {
-            TopoDS_Shape prism = BRepPrimAPI_MakePrism( mkFace, gp_Vec( 0, 0, aThickness ) );
-            aShapes.push_back( prism );
-
-            if( prism.IsNull() )
+            if( aThickness != 0.0 )
             {
-                ReportMessage( wxT( "Failed to create a prismatic shape\n" ) );
-                return false;
+                TopoDS_Shape prism = BRepPrimAPI_MakePrism( mkFace, gp_Vec( 0, 0, aThickness ) );
+                aShapes.push_back( prism );
+
+                if( prism.IsNull() )
+                {
+                    ReportMessage( wxT( "Failed to create a prismatic shape\n" ) );
+                    return false;
+                }
+            }
+            else
+            {
+                aShapes.push_back( mkFace );
             }
         }
         else
@@ -1844,6 +1902,163 @@ bool STEP_PCB_MODEL::WriteBREP( const wxString& aFileName )
         BRepTools::Write( shape, stdStream );
 #endif
     }
+
+    return true;
+}
+
+
+bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
+{
+    wxFileName fn( aFileName );
+
+    wxFFileOutputStream ffStream( fn.GetFullPath() );
+    wxStdOutputStream   file( ffStream );
+
+    if( !ffStream.IsOk() )
+    {
+        ReportMessage( wxString::Format( "Could not open file '%s'", fn.GetFullPath() ) );
+        return false;
+    }
+
+    // s_assy = shape tool for the source
+    Handle( XCAFDoc_ShapeTool ) s_assy = XCAFDoc_DocumentTool::ShapeTool( m_doc->Main() );
+
+    // retrieve the shape from the assembly
+    const TopoDS_Shape shape = s_assy->GetOneShape();
+
+    std::map<wxString, std::vector<int>> groups[4];
+    TopExp_Explorer                      exp;
+    int                                  faceIndex = 0;
+
+    for( exp.Init( shape, TopAbs_FACE ); exp.More(); exp.Next() )
+    {
+        TopoDS_Shape subShape = exp.Current();
+
+        Bnd_Box bbox;
+        BRepBndLib::Add( subShape, bbox );
+
+        for( const auto& [padKey, pair] : m_pad_points )
+        {
+            const auto& [point, padTestShape] = pair;
+
+            if( bbox.IsOut( point ) )
+                continue;
+
+            BRepAdaptor_Surface surface( TopoDS::Face( subShape ) );
+
+            if( surface.GetType() != GeomAbs_Plane )
+                continue;
+
+            BRepExtrema_DistShapeShape dist( padTestShape, subShape );
+            dist.Perform();
+
+            if( !dist.IsDone() )
+                continue;
+
+            std::cout << padKey << " " << dist.Value() << std::endl;
+
+            if( dist.Value() < Precision::Approximation() )
+            {
+                // Push as a face group
+                groups[2][padKey].push_back( faceIndex );
+            }
+        }
+
+        faceIndex++;
+    }
+
+    // Based on Gmsh code
+    file << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << std::endl;
+    file << "<XAO version=\"1.0\" author=\"KiCad\">" << std::endl;
+    file << "  <geometry name=\"" << fn.GetName() << "\">" << std::endl;
+    file << "    <shape format=\"BREP\"><![CDATA[";
+#if OCC_VERSION_HEX < 0x070600
+    BRepTools::Write( shape, file );
+#else
+    BRepTools::Write( shape, file, Standard_True, Standard_True, TopTools_FormatVersion_VERSION_1 );
+#endif
+    file << "]]></shape>" << std::endl;
+    file << "    <topology>" << std::endl;
+
+    TopTools_IndexedMapOfShape mainMap;
+    TopExp::MapShapes( shape, mainMap );
+    std::set<int> topo[4];
+
+    static const TopAbs_ShapeEnum c_dimShapeTypes[] = { TopAbs_VERTEX, TopAbs_EDGE, TopAbs_FACE,
+                                                        TopAbs_SOLID };
+
+    static const std::string c_dimLabel[] = { "vertex", "edge", "face", "solid" };
+    static const std::string c_dimLabels[] = { "vertices", "edges", "faces", "solids" };
+
+    for( int dim = 0; dim < 4; dim++ )
+    {
+        for( exp.Init( shape, c_dimShapeTypes[dim] ); exp.More(); exp.Next() )
+        {
+            TopoDS_Shape subShape = exp.Current();
+            int          idx = mainMap.FindIndex( subShape );
+
+            if( idx && !topo[dim].count( idx ) )
+                topo[dim].insert( idx );
+        }
+    }
+
+    for( int dim = 0; dim <= 3; dim++ )
+    {
+        std::string labels = c_dimLabels[dim];
+        std::string label = c_dimLabel[dim];
+
+        file << "      <" << labels << " count=\"" << topo[dim].size() << "\">" << std::endl;
+        int index = 0;
+
+        for( auto p : topo[dim] )
+        {
+            std::string name( "" );
+            file << "        <" << label << " index=\"" << index << "\" "
+                 << "name=\"" << name << "\" "
+                 << "reference=\"" << p << "\"/>" << std::endl;
+
+            index++;
+        }
+        file << "      </" << labels << ">" << std::endl;
+    }
+
+    file << "    </topology>" << std::endl;
+    file << "  </geometry>" << std::endl;
+    file << "  <groups count=\""
+         << groups[0].size() + groups[1].size() + groups[2].size() + groups[3].size() << "\">"
+         << std::endl;
+    for( int dim = 0; dim <= 3; dim++ )
+    {
+        std::string label = c_dimLabel[dim];
+
+        for( auto g : groups[dim] )
+        {
+            //std::string name = model->getPhysicalName( dim, g.first );
+            wxString name = g.first;
+
+            if( name.empty() )
+            { // create same unique name as for MED export
+                std::ostringstream gs;
+                gs << "G_" << dim << "D_" << g.first;
+                name = gs.str();
+            }
+            file << "    <group name=\"" << name << "\" dimension=\"" << label;
+//#if 1
+//            // Gmsh XAO extension: also save the physical tag, so that XAO can be used
+//            // to serialize OCC geometries, ready to be used by GetDP, GmshFEM & co
+//            file << "\" tag=\"" << g.first;
+//#endif
+            file << "\" count=\"" << g.second.size() << "\">" << std::endl;
+            for( auto index : g.second )
+            {
+                file << "      <element index=\"" << index << "\"/>" << std::endl;
+            }
+            file << "    </group>" << std::endl;
+        }
+    }
+    file << "  </groups>" << std::endl;
+    file << "  <fields count=\"0\"/>" << std::endl;
+    file << "</XAO>" << std::endl;
 
     return true;
 }

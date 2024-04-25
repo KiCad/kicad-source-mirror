@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2022 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -133,7 +133,7 @@ void PCB_EDIT_FRAME::doReCreateMenuBar()
                         ID_GEN_EXPORT_FILE_VRML, BITMAPS::export3d );
     submenuExport->Add( _( "IDFv3..." ), _( "Export IDF 3D board representation" ),
                         ID_GEN_EXPORT_FILE_IDF3, BITMAPS::export_idf );
-    submenuExport->Add( _( "STEP..." ), _( "Export STEP 3D board representation" ),
+    submenuExport->Add( _( "STEP / BREP / XAO..." ), _( "Export STEP / BREP / XAO 3D board representation" ),
                         ID_GEN_EXPORT_FILE_STEP, BITMAPS::export_step );
     submenuExport->Add( _( "SVG..." ), _( "Export SVG board representation" ),
                         ID_GEN_PLOT_SVG, BITMAPS::export_svg );

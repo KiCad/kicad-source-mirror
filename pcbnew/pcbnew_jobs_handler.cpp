@@ -135,6 +135,8 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::BREP: fn.SetExt( FILEEXT::BrepFileExtension );
             break;
+        case JOB_EXPORT_PCB_3D::FORMAT::XAO: fn.SetExt( FILEEXT::XaoFileExtension );
+            break;
         case JOB_EXPORT_PCB_3D::FORMAT::GLB: fn.SetExt( FILEEXT::GltfBinaryFileExtension );
             break;
         default:
@@ -215,6 +217,9 @@ int PCBNEW_JOBS_HANDLER::JobExportStep( JOB* aJob )
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::BREP:
             params.m_format = EXPORTER_STEP_PARAMS::FORMAT::BREP;
+            break;
+        case JOB_EXPORT_PCB_3D::FORMAT::XAO:
+            params.m_format = EXPORTER_STEP_PARAMS::FORMAT::XAO;
             break;
         case JOB_EXPORT_PCB_3D::FORMAT::GLB:
             params.m_format = EXPORTER_STEP_PARAMS::FORMAT::GLB;

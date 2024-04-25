@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,6 +198,7 @@ const std::string FILEEXT::StepFileExtension( "step" );
 const std::string FILEEXT::StepFileAbrvExtension( "stp" );
 const std::string FILEEXT::GltfBinaryFileExtension( "glb" );
 const std::string FILEEXT::BrepFileExtension( "brep" );
+const std::string FILEEXT::XaoFileExtension( "xao" );
 
 const wxString FILEEXT::GerberFileExtensionsRegex( "(gbr|gko|pho|(g[tb][alops])|(gm?\\d\\d*)|(gp[tb]))" );
 

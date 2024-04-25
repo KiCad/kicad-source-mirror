@@ -69,7 +69,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
         m_argParser.add_argument( ARG_FORMAT )
                 .default_value( std::string( "step" ) )
                 .help( UTF8STDSTR(
-                        _( "Output file format, options: step, brep, glb (binary glTF)" ) ) );
+                        _( "Output file format, options: step, brep, xao, glb (binary glTF)" ) ) );
     }
 
     m_argParser.add_argument( ARG_FORCE, "-f" )
@@ -88,6 +88,7 @@ CLI::PCB_EXPORT_3D_COMMAND::PCB_EXPORT_3D_COMMAND( const std::string&        aNa
             .flag();
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::BREP
+        || m_format == JOB_EXPORT_PCB_3D::FORMAT::XAO
         || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         m_argParser.add_argument( ARG_GRID_ORIGIN )
@@ -181,6 +182,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
     std::unique_ptr<JOB_EXPORT_PCB_3D> step( new JOB_EXPORT_PCB_3D( true ) );
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::BREP
+        || m_format == JOB_EXPORT_PCB_3D::FORMAT::XAO
         || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         step->m_useDrillOrigin = m_argParser.get<bool>( ARG_DRILL_ORIGIN );
@@ -217,6 +219,8 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::STEP;
         else if( format == wxS( "brep" ) )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::BREP;
+        else if( format == wxS( "xao" ) )
+            step->m_format = JOB_EXPORT_PCB_3D::FORMAT::XAO;
         else if( format == wxS( "glb" ) )
             step->m_format = JOB_EXPORT_PCB_3D::FORMAT::GLB;
         else
@@ -296,6 +300,7 @@ int CLI::PCB_EXPORT_3D_COMMAND::doPerform( KIWAY& aKiway )
     }
 
     if( m_format == JOB_EXPORT_PCB_3D::FORMAT::STEP || m_format == JOB_EXPORT_PCB_3D::FORMAT::BREP
+        || m_format == JOB_EXPORT_PCB_3D::FORMAT::XAO
         || m_format == JOB_EXPORT_PCB_3D::FORMAT::GLB )
     {
         wxString minDistance =

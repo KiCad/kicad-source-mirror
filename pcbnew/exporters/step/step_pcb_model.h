@@ -176,6 +176,9 @@ public:
     // write the assembly in BREP format
     bool WriteBREP( const wxString& aFileName );
 
+    // write the assembly in XAO format with pad faces as groups
+    bool WriteXAO( const wxString& aFileName );
+
     /**
      * Write the assembly in binary GLTF Format
      *
@@ -258,6 +261,9 @@ private:
     std::vector<TopoDS_Shape> m_board_copper_tracks;
     std::vector<TopoDS_Shape> m_board_copper_pads;
     std::vector<TopoDS_Shape> m_board_copper_fused;
+
+    // Data for pads
+    std::map<wxString, std::pair<gp_Pnt, TopoDS_Shape>> m_pad_points;
 
     /// Name of the PCB, which will most likely be the file name of the path.
     wxString                        m_pcbName;

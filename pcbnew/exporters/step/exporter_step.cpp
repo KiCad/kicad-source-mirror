@@ -121,6 +121,7 @@ wxString EXPORTER_STEP_PARAMS::GetDefaultExportExtension()
     {
     case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "step" );
     case EXPORTER_STEP_PARAMS::FORMAT::BREP: return wxS( "brep" );
+    case EXPORTER_STEP_PARAMS::FORMAT::XAO:  return wxS( "xao" );
     case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "glb" );
     default:                                 return wxEmptyString; // shouldn't happen
     }
@@ -133,6 +134,7 @@ wxString EXPORTER_STEP_PARAMS::GetFormatName()
     // honestly these names shouldn't be translated since they are mostly industry standard acronyms
     case EXPORTER_STEP_PARAMS::FORMAT::STEP: return wxS( "STEP" );
     case EXPORTER_STEP_PARAMS::FORMAT::BREP: return wxS( "BREP" );
+    case EXPORTER_STEP_PARAMS::FORMAT::XAO:  return wxS( "XAO" );
     case EXPORTER_STEP_PARAMS::FORMAT::GLB:  return wxS( "Binary GLTF" );
     default:                                 return wxEmptyString; // shouldn't happen
     }
@@ -542,6 +544,8 @@ bool EXPORTER_STEP::Export()
             success = m_pcbModel->WriteSTEP( m_outputFile, m_params.m_optimizeStep );
         else if( m_params.m_format == EXPORTER_STEP_PARAMS::FORMAT::BREP )
             success = m_pcbModel->WriteBREP( m_outputFile );
+        else if( m_params.m_format == EXPORTER_STEP_PARAMS::FORMAT::XAO )
+            success = m_pcbModel->WriteXAO( m_outputFile );
         else if( m_params.m_format == EXPORTER_STEP_PARAMS::FORMAT::GLB )
             success = m_pcbModel->WriteGLTF( m_outputFile );
 

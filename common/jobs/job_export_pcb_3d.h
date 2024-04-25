@@ -35,6 +35,7 @@ public:
         UNKNOWN, // defefer to arg
         STEP,
         BREP,
+        XAO,
         GLB,
         VRML
     };
