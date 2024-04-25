@@ -187,7 +187,7 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
 
         if( m_params.m_exportTracksVias )
         {
-            if( m_pcbModel->AddPadShape( pad, aOrigin ) )
+            if( m_pcbModel->AddPadShape( pad, aOrigin, false ) )
                 hasdata = true;
         }
 
@@ -217,8 +217,6 @@ bool EXPORTER_STEP::buildFootprint3DShapes( FOOTPRINT* aFootprint, VECTOR2D aOri
                 // Only add shapes colliding with any matching pads
                 for( const SHAPE_POLY_SET::POLYGON& poly : buffer.CPolygons() )
                 {
-                    bool connectsToPad = false;
-
                     for( PAD* pad : padsMatchingNetFilter )
                     {
                         if( !pad->IsOnLayer( pcblayer ) )

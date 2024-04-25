@@ -399,6 +399,9 @@ STEP_PCB_MODEL::STEP_PCB_MODEL( const wxString& aPcbName )
     m_pcbName = aPcbName;
     m_maxError = pcbIUScale.mmToIU( ARC_TO_SEGMENT_MAX_ERROR_MM );
     m_fuseShapes = false;
+
+    // TODO: make configurable
+    m_platingThickness = pcbIUScale.mmToIU( 0.025 );
 }
 
 
@@ -409,7 +412,7 @@ STEP_PCB_MODEL::~STEP_PCB_MODEL()
 }
 
 
-bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
+bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia )
 {
     bool success = true;
 
@@ -425,6 +428,15 @@ bool STEP_PCB_MODEL::AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin )
 
         double Zpos, thickness;
         getLayerZPlacement( pcb_layer, Zpos, thickness );
+
+        if( !aVia )
+        {
+            // Pad surface as a separate face for FEM simulations.
+            if( pcb_layer == F_Cu )
+                thickness += 0.01;
+            else if( pcb_layer == B_Cu )
+                thickness -= 0.01;
+        }
 
         // Make a shape on copper layers
         std::shared_ptr<SHAPE> effShapePtr = aPad->GetEffectiveShape( pcb_layer );
@@ -579,7 +591,7 @@ bool STEP_PCB_MODEL::AddViaShape( const PCB_VIA* aVia, const VECTOR2D& aOrigin )
 
     if( AddPadHole( &dummy, aOrigin ) )
     {
-        if( !AddPadShape( &dummy, aOrigin ) )
+        if( !AddPadShape( &dummy, aOrigin, true ) )
             return false;
     }
 
@@ -700,9 +712,6 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     if( aPad == nullptr || !aPad->GetDrillSize().x )
         return false;
 
-    // TODO: make configurable
-    int platingThickness = aPad->GetAttribute() == PAD_ATTRIB::PTH ? pcbIUScale.mmToIU( 0.025 ) : 0;
-
     const double margin = 0.01; // a small margin on the Z axix to be sure the hole
                                 // is bigger than the board with copper
                                 // must be > OCC_MAX_DISTANCE_TO_MERGE_POINTS
@@ -719,6 +728,8 @@ bool STEP_PCB_MODEL::AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin )
     std::shared_ptr<SHAPE_SEGMENT> seg_hole = aPad->GetEffectiveHoleShape();
 
     double boardDrill = std::min( aPad->GetDrillSize().x, aPad->GetDrillSize().y );
+
+    int    platingThickness = aPad->GetAttribute() == PAD_ATTRIB::PTH ? m_platingThickness : 0;
     double copperDrill = boardDrill - platingThickness * 2;
 
     TopoDS_Shape copperHole, boardHole;

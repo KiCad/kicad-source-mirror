@@ -85,7 +85,7 @@ public:
     bool AddPadHole( const PAD* aPad, const VECTOR2D& aOrigin );
 
     // add a pad shape (must be in final position)
-    bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin );
+    bool AddPadShape( const PAD* aPad, const VECTOR2D& aOrigin, bool aVia );
 
     // add a via shape
     bool AddViaShape( const PCB_VIA* aVia, const VECTOR2D& aOrigin );
@@ -232,6 +232,7 @@ private:
     TDF_Label                       m_assy_label;
     bool                            m_hasPCB;           // set true if CreatePCB() has been invoked
     bool                            m_fuseShapes;       // fuse geometry together
+    int                             m_platingThickness; // plating thickness for TH pads/vias
     std::vector<TDF_Label>          m_pcb_labels;       // labels for the PCB model (one by main outline)
     MODEL_MAP                       m_models;           // map of file names to model labels
     int                             m_components;       // number of successfully loaded components;
