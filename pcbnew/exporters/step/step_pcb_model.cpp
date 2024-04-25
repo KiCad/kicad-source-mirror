@@ -1975,8 +1975,6 @@ bool STEP_PCB_MODEL::WriteXAO( const wxString& aFileName )
             if( !dist.IsDone() )
                 continue;
 
-            std::cout << padKey << " " << dist.Value() << std::endl;
-
             if( dist.Value() < Precision::Approximation() )
             {
                 // Push as a face group
