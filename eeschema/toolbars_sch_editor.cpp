@@ -175,6 +175,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::placeJunction,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeLabel,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeClassLabel,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawRuleArea,           ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeGlobalLabel,       ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeHierLabel,         ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawSheet,              ACTION_TOOLBAR::TOGGLE );

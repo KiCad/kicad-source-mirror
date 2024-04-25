@@ -26,6 +26,7 @@
 
 #include <preview_items/simple_overlay_item.h>
 
+#include <gal/color4d.h>
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_line_chain.h>
 
@@ -46,6 +47,12 @@ class POLYGON_ITEM : public SIMPLE_OVERLAY_ITEM
 
 public:
     POLYGON_ITEM();
+
+    ///< Sets the color of the preview outline
+    void SetLineColor( KIGFX::COLOR4D lineColor );
+
+    ///< Sets the color of the outline leader line
+    void SetLeaderColor( KIGFX::COLOR4D leaderColor );
 
     ///< Gets the bounding box of the polygon
     virtual const BOX2I ViewBBox() const override;
@@ -70,6 +77,12 @@ private:
 
     ///< polygon fill
     SHAPE_POLY_SET m_polyfill;
+
+    ///< the preview outline color
+    KIGFX::COLOR4D m_lineColor;
+
+    ///< the preview leader line color
+    KIGFX::COLOR4D m_leaderColor;
 
     static const double POLY_LINE_WIDTH;
 };

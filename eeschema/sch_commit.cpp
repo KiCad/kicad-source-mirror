@@ -221,22 +221,21 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                     } );
         }
 
-        auto updateConnectivityFlag =
-                [&]()
-                {
-                    if( schItem->IsConnectable() )
-                    {
-                        dirtyConnectivity = true;
+        auto updateConnectivityFlag = [&]()
+        {
+            if( schItem->IsConnectable() || ( schItem->Type() == SCH_RULE_AREA_T ) )
+            {
+                dirtyConnectivity = true;
 
-                        // Do a local clean up if there are any connectable objects in the commit.
-                        if( connectivityCleanUp == NO_CLEANUP )
-                            connectivityCleanUp = LOCAL_CLEANUP;
+                // Do a local clean up if there are any connectable objects in the commit.
+                if( connectivityCleanUp == NO_CLEANUP )
+                    connectivityCleanUp = LOCAL_CLEANUP;
 
-                        // Do a full rebauild of the connectivity if there is a sheet in the commit.
-                        if( schItem->Type() == SCH_SHEET_T )
-                            connectivityCleanUp = GLOBAL_CLEANUP;
-                    }
-                };
+                // Do a full rebauild of the connectivity if there is a sheet in the commit.
+                if( schItem->Type() == SCH_SHEET_T )
+                    connectivityCleanUp = GLOBAL_CLEANUP;
+            }
+        };
 
         switch( changeType )
         {
@@ -318,8 +317,11 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                 if( frame )
                     currentSheet = frame->GetCurrentSheet();
 
-                if( itemCopy->HasConnectivityChanges( schItem, &currentSheet ) )
+                if( itemCopy->HasConnectivityChanges( schItem, &currentSheet )
+                    || ( itemCopy->Type() == SCH_RULE_AREA_T ) )
+                {
                     updateConnectivityFlag();
+                }
 
                 undoList.PushItem( itemWrapper );
                 ent.m_copy = nullptr;   // We've transferred ownership to the undo list

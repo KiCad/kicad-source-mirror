@@ -103,4 +103,5 @@
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230808  // Move Sim.Enable field to exclude_from_sim attr
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20230819  // Allow multiple library symbol inheritance depth.
 //#define SEXPR_SCHEMATIC_FILE_VERSION 20231120  // generator_version; V8 cleanups
-#define   SEXPR_SCHEMATIC_FILE_VERSION 20240101  // Tables.
+//#define SEXPR_SCHEMATIC_FILE_VERSION 20240101  // Tables.
+#define   SEXPR_SCHEMATIC_FILE_VERSION 20240417  // Rule areas

@@ -32,6 +32,7 @@
 #include <tools/sch_line_wire_bus_tool.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/ee_grid_helper.h>
+#include <tools/rule_area_create_helper.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <ee_actions.h>
 #include <sch_edit_frame.h>
@@ -45,6 +46,7 @@
 #include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
+#include <sch_rule_area.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
@@ -55,6 +57,7 @@
 #include <sch_bitmap.h>
 #include <schematic.h>
 #include <sch_commit.h>
+#include <scoped_set_reset.h>
 #include <symbol_library.h>
 #include <eeschema_settings.h>
 #include <dialogs/dialog_label_properties.h>
@@ -90,6 +93,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         m_lastTextboxStroke( 0, LINE_STYLE::DEFAULT, COLOR4D::UNSPECIFIED ),
         m_mruPath( wxEmptyString ),
         m_lastAutoLabelRotateOnPlacement( false ),
+        m_drawingRuleArea( false ),
         m_inDrawingTool( false )
 {
 }
@@ -105,8 +109,16 @@ bool SCH_DRAWING_TOOLS::Init()
                 return m_frame->GetCurrentSheet().Last() != &m_frame->Schematic().Root();
             };
 
+    auto inDrawingRuleArea =
+            [&]( const SELECTION& aSel )
+            {
+                return m_drawingRuleArea;
+            };
+
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
     ctxMenu.AddItem( EE_ACTIONS::leaveSheet, belowRootSheetCondition, 150 );
+    ctxMenu.AddItem( EE_ACTIONS::closeOutline, inDrawingRuleArea, 200 );
+    ctxMenu.AddItem( EE_ACTIONS::deleteLastPoint, inDrawingRuleArea, 200 );
 
     return true;
 }
@@ -2033,6 +2045,178 @@ int SCH_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_DRAWING_TOOLS::DrawRuleArea( const TOOL_EVENT& aEvent )
+{
+    if( m_inDrawingTool )
+        return 0;
+
+    REENTRANCY_GUARD       guard( &m_inDrawingTool );
+    SCOPED_SET_RESET<bool> scopedDrawMode( m_drawingRuleArea, true );
+
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    EE_GRID_HELPER        grid( m_toolMgr );
+    VECTOR2I              cursorPos;
+
+    RULE_AREA_CREATE_HELPER ruleAreaTool( *getView(), m_frame, m_toolMgr );
+    POLYGON_GEOM_MANAGER    polyGeomMgr( ruleAreaTool );
+    bool                    started = false;
+
+    // We might be running as the same shape in another co-routine.  Make sure that one
+    // gets whacked.
+    m_toolMgr->DeactivateTool();
+
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+
+    m_frame->PushTool( aEvent );
+
+    auto setCursor =
+            [&]()
+            {
+                m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::PENCIL );
+            };
+
+    auto cleanup = [&]()
+    {
+        polyGeomMgr.Reset();
+        started = false;
+        getViewControls()->SetAutoPan( false );
+        getViewControls()->CaptureCursor( false );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
+    };
+
+    Activate();
+
+    // Must be done after Activate() so that it gets set into the correct context
+    getViewControls()->ShowCursor( true );
+    //m_controls->ForceCursorPosition( false );
+
+    // Set initial cursor
+    setCursor();
+
+    if( aEvent.HasPosition() )
+        m_toolMgr->PrimeTool( aEvent.Position() );
+
+    // Main loop: keep receiving events
+    while( TOOL_EVENT* evt = Wait() )
+    {
+        setCursor();
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( getView()->GetGAL()->GetGridSnapping() && !evt->DisableGridSnapping() );
+
+        cursorPos = grid.Align( controls->GetMousePosition(), GRID_HELPER_GRIDS::GRID_CONNECTABLE );
+        controls->ForceCursorPosition( true, cursorPos );
+
+        polyGeomMgr.SetLeaderMode( m_frame->eeconfig()->m_Drawing.line_mode == LINE_MODE_FREE
+                                           ? POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT
+                                           : POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45 );
+
+        if( evt->IsCancelInteractive() )
+        {
+            if( started )
+            {
+                cleanup();
+            }
+            else
+            {
+                m_frame->PopTool( aEvent );
+
+                // We've handled the cancel event.  Don't cancel other tools
+                evt->SetPassEvent( false );
+                break;
+            }
+        }
+        else if( evt->IsActivate() )
+        {
+            if( started )
+                cleanup();
+
+            if( evt->IsPointEditor() )
+            {
+                // don't exit (the point editor runs in the background)
+            }
+            else if( evt->IsMoveTool() )
+            {
+                // leave ourselves on the stack so we come back after the move
+                break;
+            }
+            else
+            {
+                m_frame->PopTool( aEvent );
+                break;
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            if( !started )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        // events that lock in nodes
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT )
+                 || evt->IsAction( &EE_ACTIONS::closeOutline ) )
+        {
+            // Check if it is double click / closing line (so we have to finish the zone)
+            const bool endPolygon = evt->IsDblClick( BUT_LEFT )
+                                    || evt->IsAction( &EE_ACTIONS::closeOutline )
+                                    || polyGeomMgr.NewPointClosesOutline( cursorPos );
+
+            if( endPolygon )
+            {
+                polyGeomMgr.SetFinished();
+                polyGeomMgr.Reset();
+
+                started = false;
+                getViewControls()->SetAutoPan( false );
+                getViewControls()->CaptureCursor( false );
+            }
+            // adding a corner
+            else if( polyGeomMgr.AddPoint( cursorPos ) )
+            {
+                if( !started )
+                {
+                    started = true;
+
+                    getViewControls()->SetAutoPan( true );
+                    getViewControls()->CaptureCursor( true );
+                }
+            }
+        }
+        else if( started
+                 && ( evt->IsAction( &EE_ACTIONS::deleteLastPoint )
+                      || evt->IsAction( &ACTIONS::doDelete ) || evt->IsAction( &ACTIONS::undo ) ) )
+        {
+            if( std::optional<VECTOR2I> last = polyGeomMgr.DeleteLastCorner() )
+            {
+                cursorPos = last.value();
+                getViewControls()->WarpMouseCursor( cursorPos, true );
+                getViewControls()->ForceCursorPosition( true, cursorPos );
+                polyGeomMgr.SetCursorPosition( cursorPos );
+            }
+            else
+            {
+                cleanup();
+            }
+        }
+        else if( started && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        {
+            polyGeomMgr.SetCursorPosition( cursorPos );
+        }
+        else
+        {
+            evt->SetPassEvent();
+        }
+
+    } // end while
+
+    getViewControls()->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
+    m_frame->GetCanvas()->SetCurrentCursor( KICURSOR::ARROW );
+    return 0;
+}
+
+
 int SCH_DRAWING_TOOLS::DrawTable( const TOOL_EVENT& aEvent )
 {
     SCHEMATIC* schematic = getModel<SCHEMATIC>();
@@ -2640,6 +2824,7 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawCircle.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawArc.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawShape,           EE_ACTIONS::drawTextBox.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawRuleArea,        EE_ACTIONS::drawRuleArea.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawTable,           EE_ACTIONS::drawTable.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceImage,          EE_ACTIONS::placeImage.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::ImportGraphics,      EE_ACTIONS::importGraphics.MakeEvent() );

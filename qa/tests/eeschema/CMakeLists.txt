@@ -56,6 +56,7 @@ set( QA_EESCHEMA_SRCS
 	erc/test_erc_global_labels.cpp
 	erc/test_erc_no_connect.cpp
     erc/test_erc_hierarchical_schematics.cpp
+    erc/test_erc_rule_areas.cpp
 
     test_eagle_plugin.cpp
     test_lib_part.cpp

@@ -30,6 +30,8 @@
 #include <sch_field.h>
 #include <sch_connection.h>   // for CONNECTION_TYPE
 
+class SCH_RULE_AREA;
+
 
 /*
  * Spin style for labels of all kinds on schematics
@@ -474,9 +476,24 @@ public:
     void MirrorHorizontally( int aCenter ) override;
     void MirrorVertically( int aCenter ) override;
 
+    /// @brief Adds an entry to the connected rule area cache
+    void AddConnectedRuleArea( SCH_RULE_AREA* aRuleArea );
+
+    /// @brief Removes all rule areas from the cache
+    void ClearConnectedRuleAreas();
+
+    /// @brief Removes a specific rule area from the cache
+    void RemoveConnectedRuleArea( SCH_RULE_AREA* aRuleArea );
+
+    /// @brief Determines dangling state from connectivity and cached connected rule areas
+    virtual bool IsDangling() const override;
+
 private:
     int       m_pinLength;
     int       m_symbolSize;
+
+    /// Cache of any rule areas with borders which this label connects to
+    std::unordered_set<SCH_RULE_AREA*> m_connected_rule_areas;
 };
 
 

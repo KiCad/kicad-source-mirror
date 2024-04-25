@@ -122,6 +122,7 @@ wxString LayerName( int aLayer )
     case LAYER_FIELDS:                  return _( "Symbol fields" );
     case LAYER_INTERSHEET_REFS:         return _( "Sheet references" );
     case LAYER_NETCLASS_REFS:           return _( "Net class references" );
+    case LAYER_RULE_AREAS:              return _( "Rule areas" );
     case LAYER_DEVICE:                  return _( "Symbol body outlines" );
     case LAYER_DEVICE_BACKGROUND:       return _( "Symbol body fills" );
     case LAYER_NOTES:                   return _( "Schematic text && graphics" );

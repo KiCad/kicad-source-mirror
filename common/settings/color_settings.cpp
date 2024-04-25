@@ -75,6 +75,7 @@ COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) 
     CLR( "schematic.label_hier",        LAYER_HIERLABEL              );
     CLR( "schematic.label_local",       LAYER_LOCLABEL               );
     CLR( "schematic.netclass_flag",     LAYER_NETCLASS_REFS          );
+    CLR( "schematic.rule_area",         LAYER_RULE_AREAS             );
     CLR( "schematic.no_connect",        LAYER_NOCONNECT              );
     CLR( "schematic.note",              LAYER_NOTES                  );
     CLR( "schematic.private_note",      LAYER_PRIVATE_NOTES          );

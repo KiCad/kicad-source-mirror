@@ -46,6 +46,7 @@
 #include <sch_edit_frame.h>          // SYM_ORIENT_XXX
 #include <sch_field.h>
 #include <sch_line.h>
+#include <sch_rule_area.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
 #include <sch_tablecell.h>
@@ -2745,6 +2746,10 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
             screen->Append( parseSchBezier() );
             break;
 
+        case T_rule_area:
+            screen->Append( parseSchRuleArea() );
+            break;
+
         case T_netclass_flag:       // present only during early development of 7.0
             KI_FALLTHROUGH;
 
@@ -2782,7 +2787,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::ParseSchematic( SCH_SHEET* aSheet, bool aIsCopya
         default:
             Expecting( "symbol, paper, page, title_block, bitmap, sheet, junction, no_connect, "
                        "bus_entry, line, bus, text, label, class_label, global_label, "
-                       "hierarchical_label, symbol_instances, or bus_alias" );
+                       "hierarchical_label, symbol_instances, rule_area, or bus_alias" );
         }
     }
 
@@ -3924,6 +3929,43 @@ SCH_SHAPE* SCH_IO_KICAD_SEXPR_PARSER::parseSchRectangle()
     }
 
     return rectangle.release();
+}
+
+
+SCH_RULE_AREA* SCH_IO_KICAD_SEXPR_PARSER::parseSchRuleArea()
+{
+    wxCHECK_MSG( CurTok() == T_rule_area, nullptr,
+                 wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as a rule area." ) );
+
+    T             token;
+    STROKE_PARAMS stroke( schIUScale.MilsToIU( DEFAULT_LINE_WIDTH_MILS ), LINE_STYLE::DEFAULT );
+    FILL_PARAMS   fill;
+    std::unique_ptr<SCH_RULE_AREA> ruleArea = std::make_unique<SCH_RULE_AREA>();
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_polyline:
+        {
+            std::unique_ptr<SCH_SHAPE> poly( parseSchPolyLine() );
+            ruleArea->SetPolyShape( poly->GetPolyShape() );
+            ruleArea->SetStroke( poly->GetStroke() );
+            ruleArea->SetFillMode( poly->GetFillMode() );
+            ruleArea->SetFillColor( poly->GetFillColor() );
+            break;
+        }
+        default:
+            Expecting( "polyline" );
+        }
+    }
+
+    return ruleArea.release();
 }
 
 

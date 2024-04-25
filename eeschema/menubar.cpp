@@ -248,8 +248,9 @@ void SCH_EDIT_FRAME::doReCreateMenuBar()
     placeMenu->Add( EE_ACTIONS::placeNoConnect );
     placeMenu->Add( EE_ACTIONS::placeJunction );
     placeMenu->Add( EE_ACTIONS::placeLabel );
-    placeMenu->Add( EE_ACTIONS::placeClassLabel );
     placeMenu->Add( EE_ACTIONS::placeGlobalLabel );
+    placeMenu->Add( EE_ACTIONS::placeClassLabel );
+    placeMenu->Add( EE_ACTIONS::drawRuleArea );
 
     placeMenu->AppendSeparator();
     placeMenu->Add( EE_ACTIONS::placeHierLabel );

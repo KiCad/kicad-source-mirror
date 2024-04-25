@@ -43,6 +43,7 @@ class SCH_JUNCTION;
 class SCH_NO_CONNECT;
 class SCH_LINE;
 class SCH_SHAPE;
+class SCH_RULE_AREA;
 class SCH_BUS_ENTRY_BASE;
 class SCH_TEXT;
 class SCH_TEXTBOX;
@@ -151,6 +152,7 @@ private:
     void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry, int aNestLevel );
     void saveLine( SCH_LINE* aLine, int aNestLevel );
     void saveShape( SCH_SHAPE* aShape, int aNestLevel );
+    void saveRuleArea( SCH_RULE_AREA* aRuleArea, int aNestLevel );
     void saveText( SCH_TEXT* aText, int aNestLevel );
     void saveTextBox( SCH_TEXTBOX* aText, int aNestLevel );
     void saveTable( SCH_TABLE* aTable, int aNestLevel );

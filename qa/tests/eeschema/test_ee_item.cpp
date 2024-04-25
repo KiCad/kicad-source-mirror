@@ -33,6 +33,7 @@
 #include <sch_no_connect.h>
 #include <sch_bus_entry.h>
 #include <sch_line.h>
+#include <sch_rule_area.h>
 #include <sch_shape.h>
 #include <sch_bitmap.h>
 #include <sch_text.h>
@@ -81,6 +82,24 @@ public:
         case SCH_BUS_WIRE_ENTRY_T:  return new SCH_BUS_WIRE_ENTRY();
         case SCH_BUS_BUS_ENTRY_T:   return new SCH_BUS_BUS_ENTRY();
         case SCH_LINE_T:            return new SCH_LINE();
+        case SCH_RULE_AREA_T:
+        {
+            SHAPE_POLY_SET ruleShape;
+
+            ruleShape.NewOutline();
+            auto& outline = ruleShape.Outline( 0 );
+            outline.Append( VECTOR2I( 20000, 20000) );
+            outline.Append( VECTOR2I( 22000, 20000) );
+            outline.Append( VECTOR2I( 22000, 22000) );
+            outline.Append( VECTOR2I( 20000, 22000) );
+            outline.SetClosed( true );
+            outline.Simplify( true );
+
+            SCH_RULE_AREA* ruleArea = new SCH_RULE_AREA();
+            ruleArea->SetPolyShape( ruleShape );
+
+            return ruleArea;
+        }
         case SCH_SHAPE_T:           return new SCH_SHAPE( SHAPE_T::ARC, LAYER_NOTES );
         case SCH_BITMAP_T:          return new SCH_BITMAP();
         case SCH_TEXT_T:            return new SCH_TEXT( VECTOR2I( 0, 0 ), "test text" );

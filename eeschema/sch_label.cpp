@@ -1808,6 +1808,30 @@ wxString SCH_DIRECTIVE_LABEL::GetItemDescription( UNITS_PROVIDER* aUnitsProvider
 }
 
 
+void SCH_DIRECTIVE_LABEL::AddConnectedRuleArea( SCH_RULE_AREA* aRuleArea )
+{
+    m_connected_rule_areas.insert( aRuleArea );
+}
+
+
+void SCH_DIRECTIVE_LABEL::ClearConnectedRuleAreas()
+{
+    m_connected_rule_areas.clear();
+}
+
+
+void SCH_DIRECTIVE_LABEL::RemoveConnectedRuleArea( SCH_RULE_AREA* aRuleArea )
+{
+    m_connected_rule_areas.erase( aRuleArea );
+}
+
+
+bool SCH_DIRECTIVE_LABEL::IsDangling() const
+{
+    return m_isDangling && m_connected_rule_areas.empty();
+}
+
+
 SCH_GLOBALLABEL::SCH_GLOBALLABEL( const VECTOR2I& pos, const wxString& text ) :
         SCH_LABEL_BASE( pos, text, SCH_GLOBAL_LABEL_T )
 {

@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <api/api_handler_sch.h>
 #include <api/api_server.h>
 #include <base_units.h>
@@ -36,6 +37,7 @@
 #include <eeschema_id.h>
 #include <executable_names.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <geometry/shape_segment.h>
 #include <gestfich.h>
 #include <dialogs/html_message_box.h>
 #include <core/ignore.h>
@@ -59,6 +61,7 @@
 #include <sch_sheet_pin.h>
 #include <schematic.h>
 #include <sch_commit.h>
+#include <sch_rule_area.h>
 #include <settings/settings_manager.h>
 #include <advanced_config.h>
 #include <sim/simulator_frame.h>
@@ -85,6 +88,7 @@
 #include <tools/sch_move_tool.h>
 #include <tools/sch_navigate_tool.h>
 #include <tools/sch_find_replace_tool.h>
+#include <unordered_set>
 #include <view/view_controls.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/hierarchy_pane.h>
@@ -756,6 +760,7 @@ void SCH_EDIT_FRAME::setupUIConditions()
     CURRENT_TOOL( EE_ACTIONS::placeClassLabel );
     CURRENT_TOOL( EE_ACTIONS::placeGlobalLabel );
     CURRENT_TOOL( EE_ACTIONS::placeHierLabel );
+    CURRENT_TOOL( EE_ACTIONS::drawRuleArea );
     CURRENT_TOOL( EE_ACTIONS::drawSheet );
     CURRENT_TOOL( EE_ACTIONS::placeSheetPin );
     CURRENT_TOOL( EE_ACTIONS::syncSheetPins );
@@ -1763,52 +1768,150 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
     if( !ADVANCED_CFG::GetCfg().m_IncrementalConnectivity || aCleanupFlags == GLOBAL_CLEANUP
             || m_undoList.m_CommandsList.empty() )
     {
+        // Update all rule areas so we can cascade implied connectivity changes
+        std::unordered_set<SCH_SCREEN*> all_screens;
+
+        for( const SCH_SHEET_PATH& path : list )
+            all_screens.insert( path.LastScreen() );
+
+        SCH_RULE_AREA::UpdateRuleAreasInScreens( all_screens, GetCanvas()->GetView() );
+
+        // Recalculate all connectivity
         Schematic().ConnectionGraph()->Recalculate( list, true, &changeHandler );
     }
     else
     {
+        struct CHANGED_ITEM
+        {
+            SCH_ITEM*   item;
+            SCH_ITEM*   linked_item;
+            SCH_SCREEN* screen;
+        };
+
         PICKED_ITEMS_LIST* changed_list = m_undoList.m_CommandsList.back();
-        std::set<SCH_ITEM*> changed_items;
-        std::set<VECTOR2I> pts;
+
+        // Final change sets
+        std::set<SCH_ITEM*>                            changed_items;
+        std::set<VECTOR2I>                             pts;
         std::set<std::pair<SCH_SHEET_PATH, SCH_ITEM*>> item_paths;
 
-        for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
+        // Working change sets
+        std::unordered_set<SCH_SCREEN*>                  changed_screens;
+        std::set<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>> changed_rule_areas;
+        std::vector<CHANGED_ITEM>                        changed_connectable_items;
+
+        // Lambda to add an item to the connectivity update sets
+        auto addItemToChangeSet =
+                [&changed_items, &pts, &item_paths, &changed_screens]( CHANGED_ITEM itemData )
         {
-            SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
+            SCH_SHEET_PATHS& paths = itemData.screen->GetClientSheetPaths();
 
-            // Ignore objects that are not connectable.
-            if( !item || !item->IsConnectable() )
-                continue;
-
-            SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( changed_list->GetScreenForItem( ii ) );
-            SCH_SHEET_PATHS& paths = screen->GetClientSheetPaths();
-
-            std::vector<VECTOR2I> tmp_pts = item->GetConnectionPoints();
+            std::vector<VECTOR2I> tmp_pts = itemData.item->GetConnectionPoints();
             pts.insert( tmp_pts.begin(), tmp_pts.end() );
-            changed_items.insert( item );
+            changed_items.insert( itemData.item );
 
             for( SCH_SHEET_PATH& path : paths )
-                item_paths.insert( std::make_pair( path, item ) );
+                item_paths.insert( std::make_pair( path, itemData.item ) );
 
-            item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItemLink( ii ) );
+            if( !itemData.linked_item || !itemData.linked_item->IsConnectable() )
+                return;
 
-            if( !item || !item->IsConnectable() )
-                continue;
-
-            tmp_pts = item->GetConnectionPoints();
+            tmp_pts = itemData.linked_item->GetConnectionPoints();
             pts.insert( tmp_pts.begin(), tmp_pts.end() );
-            changed_items.insert( item );
+            changed_items.insert( itemData.linked_item );
 
             // We have to directly add the pins here because the link may not exist on the schematic
             // anymore and so won't be picked up by GetScreen()->Items().Overlapping() below.
-            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( item ) )
+            if( SCH_SYMBOL* symbol = dynamic_cast<SCH_SYMBOL*>( itemData.linked_item ) )
             {
                 std::vector<SCH_PIN*> pins = symbol->GetPins();
                 changed_items.insert( pins.begin(), pins.end() );
             }
 
             for( SCH_SHEET_PATH& path : paths )
-                item_paths.insert( std::make_pair( path, item ) );
+                item_paths.insert( std::make_pair( path, itemData.linked_item ) );
+        };
+
+        // Get all changed connectable items and determine all changed screens
+        for( unsigned ii = 0; ii < changed_list->GetCount(); ++ii )
+        {
+            SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItem( ii ) );
+
+            if( item )
+            {
+                SCH_SCREEN* screen =
+                        static_cast<SCH_SCREEN*>( changed_list->GetScreenForItem( ii ) );
+                changed_screens.insert( screen );
+
+                if( item->Type() == SCH_RULE_AREA_T )
+                {
+                    SCH_RULE_AREA* ruleArea = static_cast<SCH_RULE_AREA*>( item );
+
+                    // Clear item and directive associations for this rule area
+                    ruleArea->ResetDirectivesAndItems( GetCanvas()->GetView() );
+
+                    changed_rule_areas.insert( { ruleArea, screen } );
+                }
+                else if( item->IsConnectable() )
+                {
+                    SCH_ITEM* linked_item =
+                            dynamic_cast<SCH_ITEM*>( changed_list->GetPickedItemLink( ii ) );
+                    changed_connectable_items.push_back( { item, linked_item, screen } );
+                }
+            }
+        }
+
+        // Update rule areas in changed screens to propagate any directive connectivity changes
+        std::vector<std::pair<SCH_RULE_AREA*, SCH_SCREEN*>> forceUpdateRuleAreas =
+                SCH_RULE_AREA::UpdateRuleAreasInScreens( changed_screens, GetCanvas()->GetView() );
+
+        std::for_each( forceUpdateRuleAreas.begin(), forceUpdateRuleAreas.end(),
+                       [&]( std::pair<SCH_RULE_AREA*, SCH_SCREEN*>& updatedRuleArea )
+                       {
+                           changed_rule_areas.insert( updatedRuleArea );
+                       } );
+
+        // If a SCH_RULE_AREA was changed, we need to add all past and present contained items to
+        // update their connectivity
+        for( const std::pair<SCH_RULE_AREA*, SCH_SCREEN*>& changedRuleArea : changed_rule_areas )
+        {
+            for( SCH_ITEM* containedItem :
+                 changedRuleArea.first->GetPastAndPresentContainedItems() )
+            {
+                addItemToChangeSet( { containedItem, nullptr, changedRuleArea.second } );
+            }
+        }
+
+        // Add all changed items, and associated items, to the change set
+        for( CHANGED_ITEM& changed_item_data : changed_connectable_items )
+        {
+            addItemToChangeSet( changed_item_data );
+
+            // If a SCH_DIRECTIVE_LABEL was changed which is attached to a SCH_RULE_AREA, we need
+            // to add the contained items to the change set to force update of their connectivity
+            if( changed_item_data.item->Type() == SCH_DIRECTIVE_LABEL_T )
+            {
+                const std::vector<VECTOR2I> labelConnectionPoints =
+                        changed_item_data.item->GetConnectionPoints();
+
+                EE_RTREE::EE_TYPE candidateRuleAreas =
+                        changed_item_data.screen->Items().Overlapping(
+                                SCH_RULE_AREA_T, changed_item_data.item->GetBoundingBox() );
+
+                for( SCH_ITEM* candidateRuleArea : candidateRuleAreas )
+                {
+                    SCH_RULE_AREA*      ruleArea = static_cast<SCH_RULE_AREA*>( candidateRuleArea );
+                    std::vector<SHAPE*> borderShapes = ruleArea->MakeEffectiveShapes( true );
+
+                    if( ruleArea->GetPolyShape().CollideEdge( labelConnectionPoints[0], nullptr,
+                                                              5 ) )
+                    {
+                        for( SCH_ITEM* containedItem : ruleArea->GetPastAndPresentContainedItems() )
+                            addItemToChangeSet(
+                                    { containedItem, nullptr, changed_item_data.screen } );
+                    }
+                }
+            }
         }
 
         for( const VECTOR2I& pt: pts )

@@ -42,6 +42,7 @@
 #include <sch_pin.h>
 #include <sch_shape.h>
 #include <sch_no_connect.h>
+#include <sch_rule_area.h>
 #include <sch_text.h>
 #include <sch_textbox.h>
 #include <sch_table.h>
@@ -470,6 +471,10 @@ void SCH_IO_KICAD_SEXPR::Format( SCH_SHEET* aSheet )
         case SCH_SHAPE_T:
             saveShape( static_cast<SCH_SHAPE*>( item ), 1 );
             break;
+        
+        case SCH_RULE_AREA_T:
+            saveRuleArea( static_cast<SCH_RULE_AREA*>( item ), 1 );
+            break;
 
         case SCH_TEXT_T:
         case SCH_LABEL_T:
@@ -597,6 +602,10 @@ void SCH_IO_KICAD_SEXPR::Format( EE_SELECTION* aSelection, SCH_SHEET_PATH* aSele
 
         case SCH_SHAPE_T:
             saveShape( static_cast<SCH_SHAPE*>( item ), 0 );
+            break;
+
+        case SCH_RULE_AREA_T:
+            saveRuleArea( static_cast<SCH_RULE_AREA*>( item ), 0 );
             break;
 
         case SCH_TEXT_T:
@@ -1231,6 +1240,16 @@ void SCH_IO_KICAD_SEXPR::saveShape( SCH_SHAPE* aShape, int aNestLevel )
     default:
         UNIMPLEMENTED_FOR( aShape->SHAPE_T_asString() );
     }
+}
+
+
+void SCH_IO_KICAD_SEXPR::saveRuleArea( SCH_RULE_AREA* aRuleArea, int aNestLevel )
+{
+    wxCHECK_RET( aRuleArea != nullptr && m_out != nullptr, "" );
+
+    m_out->Print( aNestLevel, "(rule_area " );
+    saveShape( aRuleArea, aNestLevel + 1 );
+    m_out->Print( aNestLevel, ")\n" );
 }
 
 

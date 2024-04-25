@@ -41,6 +41,7 @@
 #include <sch_edit_frame.h>
 #include <sch_marker.h>
 #include <sch_reference_list.h>
+#include <sch_rule_area.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <sch_textbox.h>
@@ -1229,6 +1230,73 @@ int ERC_TESTER::TestSimModelIssues()
 }
 
 
+int ERC_TESTER::RunRuleAreaERC()
+{
+    int           numErrors = 0;
+    ERC_SETTINGS& settings = m_schematic->ErcSettings();
+
+    if( !settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
+        return 0;
+
+    std::map<SCH_SCREEN*, std::vector<SCH_RULE_AREA*>> allScreenRuleAreas;
+
+    SCH_SCREENS screens( m_schematic->Root() );
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen != nullptr; screen = screens.GetNext() )
+    {
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_RULE_AREA_T ) )
+        {
+            allScreenRuleAreas[screen].push_back( static_cast<SCH_RULE_AREA*>( item ) );
+        }
+    }
+
+    if( settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
+        numErrors += TestRuleAreaOverlappingRuleAreasERC( allScreenRuleAreas );
+
+    return numErrors;
+}
+
+
+int ERC_TESTER::TestRuleAreaOverlappingRuleAreasERC(
+        std::map<SCH_SCREEN*, std::vector<SCH_RULE_AREA*>>& allScreenRuleAreas )
+{
+    int numErrors = 0;
+
+    for( auto screenRuleAreas : allScreenRuleAreas )
+    {
+        std::vector<SCH_RULE_AREA*>& ruleAreas = screenRuleAreas.second;
+
+        for( std::size_t i = 0; i < ruleAreas.size(); ++i )
+        {
+            SHAPE_POLY_SET& polyFirst = ruleAreas[i]->GetPolyShape();
+
+            for( std::size_t j = i + 1; j < ruleAreas.size(); ++j )
+            {
+                SHAPE_POLY_SET polySecond = ruleAreas[j]->GetPolyShape();
+                if( polyFirst.Collide( &polySecond ) )
+                {
+                    numErrors++;
+
+                    SCH_SCREEN*    screen = screenRuleAreas.first;
+                    SCH_SHEET_PATH firstSheet = screen->GetClientSheetPaths()[0];
+
+                    std::shared_ptr<ERC_ITEM> ercItem =
+                            ERC_ITEM::Create( ERCE_OVERLAPPING_RULE_AREAS );
+                    ercItem->SetItems( ruleAreas[i], ruleAreas[j] );
+                    ercItem->SetSheetSpecificPath( firstSheet );
+                    ercItem->SetItemsSheetPaths( firstSheet, firstSheet );
+
+                    SCH_MARKER* marker = new SCH_MARKER( ercItem, ruleAreas[i]->GetPosition() );
+                    screen->Append( marker );
+                }
+            }
+        }
+    }
+
+    return numErrors;
+}
+
+
 void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                            KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter )
 {
@@ -1266,6 +1334,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
     }
 
     m_schematic->ConnectionGraph()->RunERC();
+
+    if( aProgressReporter )
+        aProgressReporter->AdvancePhase( _( "Checking rule areas..." ) );
+
+    if( settings.IsTestEnabled( ERCE_OVERLAPPING_RULE_AREAS ) )
+    {
+        RunRuleAreaERC();
+    }
 
     if( aProgressReporter )
         aProgressReporter->AdvancePhase( _( "Checking units..." ) );

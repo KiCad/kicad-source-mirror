@@ -23,6 +23,7 @@
 #define _CONNECTION_GRAPH_H
 
 #include <mutex>
+#include <utility>
 #include <vector>
 
 #include <erc_settings.h>
@@ -122,7 +123,12 @@ public:
     /// Return the candidate net name for a driver.
     const wxString& GetNameForDriver( SCH_ITEM* aItem ) const;
 
-    const wxString GetNetclassForDriver( SCH_ITEM* aItem ) const;
+    /// Return the resolved netclasses for the item, and the source item providing the netclass
+    /// @param aItem the item to query for netclass assignments
+    /// @param returnAll If true, return all assigned netclasses (for ERC). If false, stop on first
+    ///                  netclass (for connectivity).
+    const std::vector<std::pair<wxString, SCH_ITEM*>>
+    GetNetclassesForDriver( SCH_ITEM* aItem, bool returnAll ) const;
 
     /// Combine another subgraph on the same sheet into this one.
     void Absorb( CONNECTION_SUBGRAPH* aOther );

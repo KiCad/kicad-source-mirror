@@ -119,6 +119,10 @@ ERC_ITEM ERC_ITEM::netclassConflict( ERCE_NETCLASS_CONFLICT,
         _( "Conflicting netclass assignments" ),
         wxT( "conflicting_netclasses" ) );
 
+ERC_ITEM ERC_ITEM::overlappingRuleAreas( ERCE_OVERLAPPING_RULE_AREAS,
+        _( "Overlapping rule areas" ),
+        wxT( "overlapping_rule_areas" ) );
+
 ERC_ITEM ERC_ITEM::netNotBusMember( ERCE_BUS_ENTRY_CONFLICT,
         _( "Net is graphically connected to a bus but not a bus member" ),
         wxT( "net_not_bus_member" ) );
@@ -239,7 +243,8 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::missingUnits,
                  ERC_ITEM::missingInputPin,
                  ERC_ITEM::missingBidiPin,
-                 ERC_ITEM::missingPowerInputPin
+                 ERC_ITEM::missingPowerInputPin,
+                 ERC_ITEM::overlappingRuleAreas
          } );
 
 
@@ -269,6 +274,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_BUS_TO_BUS_CONFLICT:     return std::make_shared<ERC_ITEM>( busToBusConflict );
     case ERCE_BUS_TO_NET_CONFLICT:     return std::make_shared<ERC_ITEM>( busToNetConflict );
     case ERCE_NETCLASS_CONFLICT:       return std::make_shared<ERC_ITEM>( netclassConflict );
+    case ERCE_OVERLAPPING_RULE_AREAS:  return std::make_shared<ERC_ITEM>( overlappingRuleAreas );
     case ERCE_GLOBLABEL:               return std::make_shared<ERC_ITEM>( globalLabelDangling );
     case ERCE_UNRESOLVED_VARIABLE:     return std::make_shared<ERC_ITEM>( unresolvedVariable );
     case ERCE_UNDEFINED_NETCLASS:      return std::make_shared<ERC_ITEM>( undefinedNetclass );

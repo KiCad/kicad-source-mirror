@@ -79,6 +79,7 @@ std::vector<KICAD_T> SCH_PAINTER::g_ScaledSelectionTypes = {
     SCH_BUS_BUS_ENTRY_T,
     SCH_LINE_T,
     SCH_SHAPE_T,
+    SCH_RULE_AREA_T,
     SCH_BITMAP_T,
     SCH_TEXT_T,
     SCH_GLOBAL_LABEL_T,
@@ -192,6 +193,9 @@ void SCH_PAINTER::draw( const EDA_ITEM* aItem, int aLayer, bool aDimmed )
             draw( static_cast<const SCH_LINE*>( aItem ), aLayer );
             break;
         case SCH_SHAPE_T:
+            draw( static_cast<const SCH_SHAPE*>( aItem ), aLayer, aDimmed );
+            break;
+        case SCH_RULE_AREA_T:
             draw( static_cast<const SCH_SHAPE*>( aItem ), aLayer, aDimmed );
             break;
         case SCH_TEXT_T:
@@ -352,7 +356,7 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
             else
                 color = sheet->GetBorderColor();
         }
-        else if( aItem->Type() == SCH_SHAPE_T )
+        else if( aItem->Type() == SCH_SHAPE_T || aItem->Type() == SCH_RULE_AREA_T )
         {
             const SCH_SHAPE* shape = static_cast<const SCH_SHAPE*>( aItem );
 
@@ -373,7 +377,17 @@ COLOR4D SCH_PAINTER::getRenderColor( const SCH_ITEM* aItem, int aLayer, bool aDr
             // A filled shape means filled; if they didn't specify a fill colour then use the
             // border colour.
             if( color == COLOR4D::UNSPECIFIED )
-                color = m_schSettings.GetLayerColor( isSymbolChild ? LAYER_DEVICE : LAYER_NOTES );
+            {
+                if( aItem->Type() == SCH_RULE_AREA_T )
+                {
+                    color = m_schSettings.GetLayerColor( LAYER_RULE_AREAS );
+                }
+                else
+                {
+                    color = m_schSettings.GetLayerColor( isSymbolChild ? LAYER_DEVICE
+                                                                       : LAYER_NOTES );
+                }
+            }
         }
         else if( aItem->IsType( { SCH_LABEL_LOCATE_ANY_T } ) )
         {
@@ -1566,11 +1580,20 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
 
                 case SHAPE_T::POLY:
                 {
-                    const SHAPE_LINE_CHAIN poly = shape->GetPolyShape().Outline( 0 );
-                    std::deque<VECTOR2D>   mappedPts;
+                    const std::vector<SHAPE*> polySegments = shape->MakeEffectiveShapes( true );
+                    std::deque<VECTOR2D> mappedPts;
 
-                    for( const VECTOR2I& pt : poly.CPoints() )
-                        mappedPts.push_back( MAP_COORDS( pt ) );
+                    for( SHAPE* polySegment : polySegments )
+                    {
+                        mappedPts.push_back( MAP_COORDS(
+                                static_cast<SHAPE_SEGMENT*>( polySegment )->GetSeg().A ) );
+                    }
+
+                    mappedPts.push_back( MAP_COORDS(
+                                static_cast<SHAPE_SEGMENT*>( polySegments.back() )->GetSeg().B ) );
+
+                    for( SHAPE* polySegment : polySegments )
+                        delete polySegment;
 
                     m_gal->DrawPolygon( mappedPts );
                     break;
@@ -1629,7 +1652,8 @@ void SCH_PAINTER::draw( const SCH_SHAPE* aShape, int aLayer, bool aDimmed )
             drawShape( aShape );
         }
     }
-    else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES || aLayer == LAYER_PRIVATE_NOTES )
+    else if( aLayer == LAYER_DEVICE || aLayer == LAYER_NOTES || aLayer == LAYER_PRIVATE_NOTES
+             || aLayer == LAYER_RULE_AREAS )
     {
         float lineWidth = getLineWidth( aShape, drawingShadows );
 

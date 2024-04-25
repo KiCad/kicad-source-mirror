@@ -373,6 +373,7 @@ GRID_HELPER_GRIDS EE_GRID_HELPER::GetItemGrid( const EDA_ITEM* aItem ) const
     case SCH_HIER_LABEL_T:
     case SCH_LABEL_T:
     case SCH_DIRECTIVE_LABEL_T:
+    case SCH_RULE_AREA_T:
         return GRID_CONNECTABLE;
 
     case SCH_FIELD_T:

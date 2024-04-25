@@ -1,0 +1,43 @@
+(kicad_sch
+	(version 20240417)
+	(generator "eeschema")
+	(generator_version "8.99")
+	(uuid "e77939c4-758d-4d0c-a6e5-dc441c8c54c9")
+	(paper "A4")
+	(lib_symbols)
+	(rule_area
+		(polyline
+			(pts
+				(xy 81.28 64.77) (xy 107.95 64.77) (xy 107.95 97.79) (xy 106.68 99.06) (xy 100.33 99.06) (xy 81.28 80.01)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 29482117-50fb-4bf0-9227-b57a2a024196)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 63.5 48.26) (xy 95.25 48.26) (xy 95.25 76.2) (xy 92.71 78.74) (xy 67.31 78.74) (xy 63.5 74.93)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid fb9e0dd5-7b94-4714-b095-086e21d4076e)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

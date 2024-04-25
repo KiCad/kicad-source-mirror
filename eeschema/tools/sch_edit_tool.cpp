@@ -41,6 +41,7 @@
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_marker.h>
+#include <sch_rule_area.h>
 #include <sch_symbol.h>
 #include <sch_shape.h>
 #include <sch_sheet.h>
@@ -314,6 +315,7 @@ bool SCH_EDIT_TOOL::Init()
                 case SCH_GLOBAL_LABEL_T:
                 case SCH_HIER_LABEL_T:
                 case SCH_DIRECTIVE_LABEL_T:
+                case SCH_RULE_AREA_T:
                 case SCH_FIELD_T:
                 case SCH_SHAPE_T:
                 case SCH_BITMAP_T:
@@ -619,6 +621,7 @@ bool SCH_EDIT_TOOL::Init()
 
 const std::vector<KICAD_T> SCH_EDIT_TOOL::RotatableItems = {
     SCH_SHAPE_T,
+    SCH_RULE_AREA_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
     SCH_TABLE_T,
@@ -769,6 +772,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             break;
         }
 
+        case SCH_RULE_AREA_T:
         case SCH_SHAPE_T:
         case SCH_TEXTBOX_T:
             head->Rotate( rotPoint, !clockwise );
@@ -1116,6 +1120,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
 const std::vector<KICAD_T> swappableItems = {
     SCH_SHAPE_T,
+    SCH_RULE_AREA_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
     SCH_LABEL_T,
@@ -1359,6 +1364,7 @@ static std::vector<KICAD_T> deletableItems =
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
     SCH_SHAPE_T,
+    SCH_RULE_AREA_T,
     SCH_TEXT_T,
     SCH_TEXTBOX_T,
     SCH_TABLECELL_T,    // Clear contents
@@ -1433,6 +1439,11 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             // Clear contents of table cell
             commit.Modify( item, m_frame->GetScreen() );
             static_cast<SCH_TABLECELL*>( sch_item )->SetText( wxEmptyString );
+        }
+        else if( sch_item->Type() == SCH_RULE_AREA_T )
+        {
+            sch_item->SetFlags( STRUCT_DELETED );
+            commit.Remove( item, m_frame->GetScreen() );
         }
         else
         {
@@ -1994,6 +2005,15 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
             getView()->RecacheAllItems();
         }
 
+        break;
+    }
+
+    case SCH_RULE_AREA_T:
+    {
+        DIALOG_SHAPE_PROPERTIES dlg( m_frame, static_cast<SCH_SHAPE*>( curr_item ) );
+        dlg.SetTitle( _( "Rule Area Properties" ) );
+
+        dlg.ShowModal();
         break;
     }
 

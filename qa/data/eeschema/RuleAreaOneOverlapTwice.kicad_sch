@@ -1,0 +1,75 @@
+(kicad_sch
+	(version 20240417)
+	(generator "eeschema")
+	(generator_version "8.99")
+	(uuid "e77939c4-758d-4d0c-a6e5-dc441c8c54c9")
+	(paper "A4")
+	(lib_symbols)
+	(rule_area
+		(polyline
+			(pts
+				(xy 193.04 80.01) (xy 229.87 80.01) (xy 231.14 81.28) (xy 231.14 111.76) (xy 205.74 111.76) (xy 199.39 105.41)
+				(xy 199.39 102.87) (xy 193.04 96.52)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 205fcd89-40f4-4d53-8543-c72a408467cf)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 215.9 100.33) (xy 215.9 135.89) (xy 250.19 135.89) (xy 255.27 130.81) (xy 255.27 109.22) (xy 246.38 100.33)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 4953ad1a-332e-4324-a6e9-44125580b5ce)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 90.17 52.07) (xy 64.77 52.07) (xy 64.77 71.12) (xy 73.66 80.01) (xy 77.47 80.01) (xy 90.17 67.31)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid 9e60651e-f0c3-4ab3-88c0-5b67a7585ce9)
+		)
+	)
+	(rule_area
+		(polyline
+			(pts
+				(xy 80.01 66.04) (xy 107.95 66.04) (xy 110.49 68.58) (xy 110.49 100.33) (xy 85.09 100.33) (xy 74.93 90.17)
+				(xy 74.93 71.12)
+			)
+			(stroke
+				(width 0)
+				(type dash)
+			)
+			(fill
+				(type none)
+			)
+			(uuid a2990ee5-6b66-496f-a7b1-0402651214fa)
+		)
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+)

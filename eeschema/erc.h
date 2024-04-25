@@ -27,6 +27,8 @@
 #define ERC_H
 
 #include <erc_settings.h>
+#include <vector>
+#include <map>
 
 
 class SCH_SHEET_LIST;
@@ -36,6 +38,8 @@ class SCH_EDIT_FRAME;
 class PROGRESS_REPORTER;
 struct KIFACE;
 class PROJECT;
+class SCREEN;
+class SCH_RULE_AREA;
 
 
 extern const wxString CommentERC_H[];
@@ -140,6 +144,17 @@ public:
      * @return
      */
     int TestMissingNetclasses();
+
+    /**
+     * Tests for rule area ERC issues
+     */
+    int RunRuleAreaERC();
+
+    /**
+     * Runs ERC to check for overlapping rule areas
+     */
+    int TestRuleAreaOverlappingRuleAreasERC(
+            std::map<SCH_SCREEN*, std::vector<SCH_RULE_AREA*>>& allScreenRuleAreas );
 
     void RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aEditFrame,
                    KIFACE* aCvPcb, PROJECT* aProject, PROGRESS_REPORTER* aProgressReporter );

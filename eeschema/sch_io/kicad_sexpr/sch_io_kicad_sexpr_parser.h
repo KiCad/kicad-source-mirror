@@ -45,6 +45,7 @@ class SCH_SYMBOL;
 class SCH_FIELD;
 class SCH_ITEM;
 class SCH_SHAPE;
+class SCH_RULE_AREA;
 class SCH_JUNCTION;
 class SCH_LINE;
 class SCH_NO_CONNECT;
@@ -221,6 +222,7 @@ private:
     SCH_SHAPE* parseSchCircle();
     SCH_SHAPE* parseSchRectangle();
     SCH_SHAPE* parseSchBezier();
+    SCH_RULE_AREA* parseSchRuleArea();
     SCH_TEXT* parseSchText();
     SCH_TEXTBOX* parseSchTextBox();
     void parseSchTextBoxContent( SCH_TEXTBOX* aTextBox );

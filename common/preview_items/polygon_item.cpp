@@ -33,6 +33,20 @@ const double POLYGON_ITEM::POLY_LINE_WIDTH = 1;
 POLYGON_ITEM::POLYGON_ITEM() :
         SIMPLE_OVERLAY_ITEM()
 {
+    m_lineColor = KIGFX::COLOR4D::UNSPECIFIED;
+    m_leaderColor = KIGFX::COLOR4D::UNSPECIFIED;
+}
+
+
+void POLYGON_ITEM::SetLineColor( KIGFX::COLOR4D lineColor )
+{
+    m_lineColor = lineColor;
+}
+
+
+void POLYGON_ITEM::SetLeaderColor( KIGFX::COLOR4D leaderColor )
+{
+    m_leaderColor = leaderColor;
 }
 
 
@@ -62,8 +76,13 @@ void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
     KIGFX::GAL&      gal = *aView->GetGAL();
     RENDER_SETTINGS* renderSettings = aView->GetPainter()->GetSettings();
 
+    gal.SetIsStroke( true );
+
     if( m_lockedChain.PointCount() >= 2 )
     {
+        if( m_lineColor != KIGFX::COLOR4D::UNSPECIFIED )
+            gal.SetStrokeColor( m_lineColor );
+
         gal.SetLineWidth( (float) aView->ToWorld( POLY_LINE_WIDTH ) );
         gal.DrawPolyline( m_lockedChain );
     }
@@ -71,7 +90,11 @@ void POLYGON_ITEM::drawPreviewShape( KIGFX::VIEW* aView ) const
     // draw the leader line in a different color
     if( m_leaderChain.PointCount() >= 2 )
     {
-        gal.SetStrokeColor( renderSettings->GetLayerColor( LAYER_AUX_ITEMS ) );
+        if( m_leaderColor != KIGFX::COLOR4D::UNSPECIFIED )
+            gal.SetStrokeColor( m_leaderColor );
+        else
+            gal.SetStrokeColor( renderSettings->GetLayerColor( LAYER_AUX_ITEMS ) );
+
         gal.DrawPolyline( m_leaderChain );
     }
 

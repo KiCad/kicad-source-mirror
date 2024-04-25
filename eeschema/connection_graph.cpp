@@ -36,6 +36,7 @@
 #include <sch_line.h>
 #include <sch_marker.h>
 #include <sch_pin.h>
+#include <sch_rule_area.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_sheet_pin.h>
@@ -430,10 +431,35 @@ const wxString& CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
 }
 
 
-const wxString CONNECTION_SUBGRAPH::GetNetclassForDriver( SCH_ITEM* aItem ) const
+const std::vector<std::pair<wxString, SCH_ITEM*>>
+CONNECTION_SUBGRAPH::GetNetclassesForDriver( SCH_ITEM* aItem, bool returnAll ) const
 {
-    wxString netclass;
+    std::vector<std::pair<wxString, SCH_ITEM*>> foundNetclasses;
 
+    const std::unordered_set<SCH_RULE_AREA*>& ruleAreaCache = aItem->GetRuleAreaCache();
+
+    // Get netclasses on attached rule areas
+    for( SCH_RULE_AREA* ruleArea : ruleAreaCache )
+    {
+        const std::vector<std::pair<wxString, SCH_ITEM*>> ruleNetclasses =
+                ruleArea->GetResolvedNetclasses();
+
+        if( ruleNetclasses.size() > 0 )
+        {
+            if( returnAll )
+            {
+                foundNetclasses.insert( foundNetclasses.end(), ruleNetclasses.begin(),
+                                        ruleNetclasses.end() );
+            }
+            else
+            {
+                foundNetclasses.push_back( ruleNetclasses[0] );
+                return foundNetclasses;
+            }
+        }
+    }
+
+    // Get netclasses on child fields
     aItem->RunOnChildren(
             [&]( SCH_ITEM* aChild )
             {
@@ -443,15 +469,19 @@ const wxString CONNECTION_SUBGRAPH::GetNetclassForDriver( SCH_ITEM* aItem ) cons
 
                     if( field->GetCanonicalName() == wxT( "Netclass" ) )
                     {
-                        netclass = field->GetText();
-                        return false;
+                        wxString netclass = field->GetText();
+
+                        if( netclass != wxEmptyString )
+                            foundNetclasses.push_back( { field->GetText(), aItem } );
+
+                        return returnAll;
                     }
                 }
 
                 return true;
             } );
 
-    return netclass;
+    return foundNetclasses;
 }
 
 
@@ -742,7 +772,9 @@ void CONNECTION_GRAPH::Recalculate( const SCH_SHEET_LIST& aSheetList, bool aUnco
             }
             else if( item->Type() == SCH_SHEET_T )
             {
-                for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                SCH_SHEET* sheetItem = static_cast<SCH_SHEET*>( item );
+
+                for( SCH_SHEET_PIN* pin : sheetItem->GetPins() )
                 {
                     if( pin->IsConnectivityDirty() )
                     {
@@ -2347,10 +2379,14 @@ void CONNECTION_GRAPH::buildConnectionGraph( std::function<void( SCH_ITEM* )>* a
                 {
                     for( SCH_ITEM* item : subgraph->m_items )
                     {
-                        netclass = subgraph->GetNetclassForDriver( item );
+                        const std::vector<std::pair<wxString, SCH_ITEM*>> netclassesWithProviders =
+                                subgraph->GetNetclassesForDriver( item, false );
 
-                        if( !netclass.IsEmpty() )
+                        if( netclassesWithProviders.size() > 0 )
+                        {
+                            netclass = netclassesWithProviders[0].first;
                             break;
+                        }
                     }
 
                     if( !netclass.IsEmpty() )
@@ -3188,40 +3224,52 @@ bool CONNECTION_GRAPH::ercCheckNetclassConflicts( const std::vector<CONNECTION_S
     wxString              firstNetclass;
     SCH_ITEM*             firstNetclassDriver = nullptr;
     const SCH_SHEET_PATH* firstNetclassDriverSheet = nullptr;
+    bool                  conflictFound = false;
 
     for( const CONNECTION_SUBGRAPH* subgraph : subgraphs )
     {
         for( SCH_ITEM* item : subgraph->m_items )
         {
-            const wxString netclass = subgraph->GetNetclassForDriver( item );
+            const std::vector<std::pair<wxString, SCH_ITEM*>> netclassesWithProvider =
+                    subgraph->GetNetclassesForDriver( item, true );
 
-            if( netclass.IsEmpty() )
+            if( netclassesWithProvider.size() == 0 )
                 continue;
 
-            if( netclass != firstNetclass )
+            auto checkNetclass = [&]( const std::pair<wxString, SCH_ITEM*>& netclass )
             {
-                if( !firstNetclassDriver )
+                if( netclass.first != firstNetclass )
                 {
-                    firstNetclass = netclass;
-                    firstNetclassDriver = item;
-                    firstNetclassDriverSheet = &subgraph->GetSheet();
-                    continue;
+                    if( !firstNetclassDriver )
+                    {
+                        firstNetclass = netclass.first;
+                        firstNetclassDriver = netclass.second;
+                        firstNetclassDriverSheet = &subgraph->GetSheet();
+                    }
+                    else
+                    {
+                        conflictFound = true;
+
+                        std::shared_ptr<ERC_ITEM> ercItem =
+                                ERC_ITEM::Create( ERCE_NETCLASS_CONFLICT );
+                        ercItem->SetItems( firstNetclassDriver, netclass.second );
+                        ercItem->SetSheetSpecificPath( subgraph->GetSheet() );
+                        ercItem->SetItemsSheetPaths( *firstNetclassDriverSheet,
+                                                     subgraph->GetSheet() );
+
+                        SCH_MARKER* marker =
+                                new SCH_MARKER( ercItem, netclass.second->GetPosition() );
+                        subgraph->m_sheet.LastScreen()->Append( marker );
+                    }
                 }
+            };
 
-                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_NETCLASS_CONFLICT );
-                ercItem->SetItems( firstNetclassDriver, item );
-                ercItem->SetSheetSpecificPath( subgraph->GetSheet() );
-                ercItem->SetItemsSheetPaths( *firstNetclassDriverSheet, subgraph->GetSheet() );
-
-                SCH_MARKER* marker = new SCH_MARKER( ercItem, item->GetPosition() );
-                subgraph->m_sheet.LastScreen()->Append( marker );
-
-                return false;
-            }
+            for( const std::pair<wxString, SCH_ITEM*>& netclass : netclassesWithProvider )
+                checkNetclass( netclass );
         }
     }
 
-    return true;
+    return conflictFound;
 }
 
 

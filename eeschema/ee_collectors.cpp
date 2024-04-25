@@ -51,7 +51,8 @@ const std::vector<KICAD_T> EE_COLLECTOR::EditableItems = {
     SCH_BITMAP_T,
     SCH_LINE_T,
     SCH_BUS_WIRE_ENTRY_T,
-    SCH_JUNCTION_T
+    SCH_JUNCTION_T,
+    SCH_RULE_AREA_T
 };
 
 
@@ -76,7 +77,8 @@ const std::vector<KICAD_T> EE_COLLECTOR::MovableItems =
     SCH_FIELD_T,
     SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
-    SCH_SHEET_T
+    SCH_SHEET_T,
+    SCH_RULE_AREA_T
 };
 
 

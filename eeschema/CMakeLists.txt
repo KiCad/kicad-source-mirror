@@ -383,6 +383,7 @@ set( EESCHEMA_SRCS
     sch_render_settings.cpp
     sch_screen.cpp
     sch_shape.cpp
+    sch_rule_area.cpp
     sch_sheet.cpp
     sch_sheet_path.cpp
     sch_sheet_pin.cpp
@@ -431,6 +432,7 @@ set( EESCHEMA_SRCS
     tools/ee_point_editor.cpp
     tools/ee_selection.cpp
     tools/ee_selection_tool.cpp
+    tools/rule_area_create_helper.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_edit_table_tool.cpp
     tools/sch_edit_tool.cpp

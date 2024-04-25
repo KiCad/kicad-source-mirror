@@ -167,6 +167,7 @@ enum KICAD_T
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
     SCH_HIER_LABEL_T,
+    SCH_RULE_AREA_T,
     SCH_DIRECTIVE_LABEL_T,
     SCH_SYMBOL_T,
     SCH_SHEET_PIN_T,
@@ -373,6 +374,7 @@ constexpr bool IsEeschemaType( const KICAD_T aType )
     case SCH_BUS_BUS_ENTRY_T:
     case SCH_LINE_T:
     case SCH_SHAPE_T:
+    case SCH_RULE_AREA_T:
     case SCH_BITMAP_T:
     case SCH_TEXT_T:
     case SCH_TEXTBOX_T:

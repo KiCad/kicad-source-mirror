@@ -56,6 +56,7 @@ public:
     int SingleClickPlace( const TOOL_EVENT& aEvent );
     int TwoClickPlace( const TOOL_EVENT& aEvent );
     int DrawShape( const TOOL_EVENT& aEvent );
+    int DrawRuleArea( const TOOL_EVENT& aEvent );
     int DrawTable( const TOOL_EVENT& aEvent );
     int DrawSheet( const TOOL_EVENT& aEvent );
     int PlaceImage( const TOOL_EVENT& aEvent );
@@ -103,6 +104,7 @@ private:
     STROKE_PARAMS              m_lastTextboxStroke;
     wxString                   m_mruPath;
     bool                       m_lastAutoLabelRotateOnPlacement;
+    bool                       m_drawingRuleArea;
 
     bool                                    m_inDrawingTool; // Re-entrancy guard
     std::unique_ptr<STATUS_TEXT_POPUP>      m_statusPopup;

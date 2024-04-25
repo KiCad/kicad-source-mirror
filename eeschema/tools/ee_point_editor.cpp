@@ -164,6 +164,16 @@ public:
             break;
         }
 
+        case SCH_RULE_AREA_T:
+        {
+            SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( aItem );
+
+            for( const VECTOR2I& pt : shape->GetPolyShape().Outline( 0 ).CPoints() )
+                points->AddPoint( pt );
+
+            break;
+        }
+
         case SCH_TEXTBOX_T:
         {
             SCH_TEXTBOX* textbox = static_cast<SCH_TEXTBOX*>( aItem );
@@ -373,6 +383,7 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
     const EE_SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 || !selection.Front()->IsType( { SCH_SHAPE_T,
+                                                               SCH_RULE_AREA_T,
                                                                SCH_TEXTBOX_T,
                                                                SCH_TABLECELL_T,
                                                                SCH_SHEET_T,
@@ -632,6 +643,7 @@ void EE_POINT_EDITOR::updateParentItem( bool aSnapToGrid ) const
 
     switch( item->Type() )
     {
+    case SCH_RULE_AREA_T:
     case SCH_SHAPE_T:
     {
         SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
@@ -1149,8 +1161,16 @@ void EE_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 
 bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 {
-    if( !m_editPoints || !m_editedPoint || m_editPoints->GetParent()->Type() != SCH_SHAPE_T )
+    bool isRuleArea = false;
+
+    if( m_editPoints )
+        isRuleArea = m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T;
+
+    if( !m_editPoints || !m_editedPoint
+        || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T || isRuleArea ) )
+    {
         return false;
+    }
 
     SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
     bool       invertY = shape->GetLayer() == LAYER_DEVICE;
@@ -1165,7 +1185,10 @@ bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     for( const VECTOR2I& pt : poly.CPoints() )
     {
-        if( pt == mapCoords( m_editedPoint->GetPosition(), invertY ) )
+        VECTOR2I adjustedPos = isRuleArea ? m_editedPoint->GetPosition()
+                                          : mapCoords( m_editedPoint->GetPosition(), invertY );
+
+        if( pt == adjustedPos )
             return true;
     }
 
@@ -1175,8 +1198,12 @@ bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
 bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
 {
-    if( !m_editPoints || m_editPoints->GetParent()->Type() != SCH_SHAPE_T )
+    if( !m_editPoints
+        || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T
+              || m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T ) )
+    {
         return false;
+    }
 
     SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
 
@@ -1192,7 +1219,9 @@ bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
 
 int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 {
-    if( !m_editPoints || m_editPoints->GetParent()->Type() != SCH_SHAPE_T )
+    if( !m_editPoints
+        || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T
+              || m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T ) )
         return 0;
 
     SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
@@ -1206,8 +1235,12 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     VECTOR2I pos = mapCoords( cursor, invertY );
     int      currentMinDistance = INT_MAX;
     int      closestLineStart = 0;
+    unsigned numPoints = poly.GetPointCount();
 
-    for( unsigned i = 0; i < poly.GetPointCount() - 1; ++i )
+    if( !shape->IsClosed() )
+        numPoints -= 1;
+
+    for( unsigned i = 0; i < numPoints; ++i )
     {
         int distance = (int) DistanceLinePoint( poly.CPoint( i ),
                                                 poly.CPoint( i + 1 ), pos );
@@ -1231,8 +1264,12 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
 int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 {
-    if( !m_editPoints || !m_editedPoint || m_editPoints->GetParent()->Type() != SCH_SHAPE_T )
+    if( !m_editPoints || !m_editedPoint
+        || !( m_editPoints->GetParent()->Type() == SCH_SHAPE_T
+              || m_editPoints->GetParent()->Type() == SCH_RULE_AREA_T ) )
+    {
         return 0;
+    }
 
     SCH_SHAPE*        shape = static_cast<SCH_SHAPE*>( m_editPoints->GetParent() );
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );

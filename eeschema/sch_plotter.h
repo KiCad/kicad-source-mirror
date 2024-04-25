@@ -27,6 +27,7 @@
 #ifndef SCH_PLOTTER_H
 #define SCH_PLOTTER_H
 
+#include <wx/filename.h>
 #include <wx/string.h>
 #include <wx/gdicmn.h>
 #include <page_info.h>
