@@ -1680,6 +1680,8 @@ int SCH_DRAWING_TOOLS::TwoClickPlace( const TOOL_EVENT& aEvent )
 
                 if( m_dialogSyncSheetPin && m_dialogSyncSheetPin->GetPlacementTemplate() )
                 {
+                    m_frame->PopTool( aEvent );
+                    m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
                     m_dialogSyncSheetPin->EndPlaceItem( item );
                     m_dialogSyncSheetPin->Show( true );
                     break;
