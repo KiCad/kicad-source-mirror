@@ -85,7 +85,7 @@ public:
 
     const IO_BASE::IO_FILE_DESC GetBoardFileDesc() const override
     {
-        return IO_BASE::IO_FILE_DESC( wxEmptyString, {} );
+        return IO_BASE::IO_FILE_DESC( wxEmptyString, {}, {}, false, false, true );
     }
 
     const IO_BASE::IO_FILE_DESC GetLibraryDesc() const override

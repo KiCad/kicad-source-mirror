@@ -41,12 +41,15 @@ public:
         std::vector<std::string> m_FileExtensions; ///< Filter used for file pickers if m_IsFile is true
         std::vector<std::string> m_ExtensionsInDir; ///< In case of folders: extensions of files inside
         bool                     m_IsFile;          ///< Whether the library is a folder or a file
+        bool                     m_CanRead;         ///< Whether the IO can read this file type
+        bool                     m_CanWrite;        ///< Whether the IO can write this file type
 
         IO_FILE_DESC( const wxString& aDescription, const std::vector<std::string>& aFileExtensions,
-                      const std::vector<std::string>& aExtsInFolder = {}, bool aIsFile = true ) :
+                      const std::vector<std::string>& aExtsInFolder = {}, bool aIsFile = true,
+                      bool aCanRead = true, bool aCanWrite = true ) :
                 m_Description( aDescription ),
                 m_FileExtensions( aFileExtensions ), m_ExtensionsInDir( aExtsInFolder ),
-                m_IsFile( aIsFile )
+                m_IsFile( aIsFile ), m_CanRead( aCanRead ), m_CanWrite( aCanWrite )
         {
         }
 

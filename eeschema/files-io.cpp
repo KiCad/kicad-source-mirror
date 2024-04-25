@@ -715,7 +715,7 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
 
         const IO_BASE::IO_FILE_DESC& desc = pi->GetSchematicFileDesc();
 
-        if( desc.m_FileExtensions.empty() )
+        if( desc.m_FileExtensions.empty() || !desc.m_CanRead )
             continue;
 
         if( !fileFiltersStr.IsEmpty() )

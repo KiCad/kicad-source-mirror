@@ -112,7 +112,7 @@ bool AskLoadBoardFileName( PCB_EDIT_FRAME* aParent, wxString* aFileName, int aCt
 
         const IO_BASE::IO_FILE_DESC& desc = pi->GetBoardFileDesc();
 
-        if( desc.m_FileExtensions.empty() )
+        if( desc.m_FileExtensions.empty() || !desc.m_CanRead )
             continue;
 
         descriptions.emplace_back( desc );
