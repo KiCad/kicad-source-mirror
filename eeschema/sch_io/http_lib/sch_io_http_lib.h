@@ -78,20 +78,22 @@ public:
     const wxString& GetError() const override { return m_lastError; }
 
 private:
-
     void ensureSettings( const wxString& aSettingsPath );
 
     void ensureConnection();
 
     void connect();
 
-    LIB_SYMBOL* loadSymbolFromPart( const wxString& aSymbolName,
-                                    const HTTP_LIB_CATEGORY& aCategory,
+    void syncCache();
+
+    void syncCache( const HTTP_LIB_CATEGORY& category );
+
+    LIB_SYMBOL* loadSymbolFromPart( const wxString& aSymbolName, const HTTP_LIB_CATEGORY& aCategory,
                                     const HTTP_LIB_PART& aPart );
 
     SYMBOL_LIB_TABLE* m_libTable;
 
-     /// Generally will be null if no valid connection is established
+    /// Generally will be null if no valid connection is established
     std::unique_ptr<HTTP_LIB_CONNECTION> m_conn;
 
     std::unique_ptr<HTTP_LIB_SETTINGS> m_settings;
@@ -110,9 +112,8 @@ private:
     wxString datasheet_field = "datasheet";
     wxString reference_field = "reference";
 
-     //     category.id       category
+    //     category.id       category
     std::map<std::string, HTTP_LIB_CATEGORY> m_cachedCategories;
-
 };
 
 #endif // SCH_IO_HTTP_LIB_H_
