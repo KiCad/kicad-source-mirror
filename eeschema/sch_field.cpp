@@ -1542,7 +1542,13 @@ int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == SCH_FIELD_T );
 
-    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
+    int compareFlags = aCompareFlags;
+
+    // For ERC tests, the field position has no matter, so do not test it
+    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC )
+        compareFlags |= SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS;
+
+    int retv = SCH_ITEM::compare( aOther, compareFlags );
 
     if( retv )
         return retv;
@@ -1599,11 +1605,15 @@ int SCH_FIELD::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
             return GetTextPos().y - tmp->GetTextPos().y;
     }
 
-    if( GetTextWidth() != tmp->GetTextWidth() )
-        return GetTextWidth() - tmp->GetTextWidth();
+    // For ERC tests, the field size has no matter, so do not test it
+    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) )
+    {
+        if( GetTextWidth() != tmp->GetTextWidth() )
+            return GetTextWidth() - tmp->GetTextWidth();
 
-    if( GetTextHeight() != tmp->GetTextHeight() )
-        return GetTextHeight() - tmp->GetTextHeight();
+        if( GetTextHeight() != tmp->GetTextHeight() )
+            return GetTextHeight() - tmp->GetTextHeight();
+    }
 
     return 0;
 }

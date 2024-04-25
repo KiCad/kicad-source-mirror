@@ -654,17 +654,20 @@ public:
      * UNIT  This flag relaxes unit, body-style and pin-number constraints.  It is used for
      *       #SCH_ITEM object unit comparisons.
      *
-     * EQUALITY  This flag relaxes ordering contstraints so that fields, etc. don't have to
+     * EQUALITY  This flag relaxes ordering constraints so that fields, etc. don't have to
      *           appear in the same order to be considered equal.
      *
      * ERC  This flag relaxes constraints on data that is settable in the schematic editor.
      *      It compares only symbol-editor-only data.
+     *
+     * SKIP_TST_POS   This flag relaxes comparisons on position (mainly for fields) for ERC.
      */
     enum COMPARE_FLAGS : int
     {
-        UNIT     = 0x01,
-        EQUALITY = 0x02,
-        ERC      = 0x04
+        UNIT          = 0x01,
+        EQUALITY      = 0x02,
+        ERC           = 0x04,
+        SKIP_TST_POS  = 0x08
     };
 
     virtual bool operator==( const SCH_ITEM& aOther ) const;

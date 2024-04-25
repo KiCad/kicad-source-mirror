@@ -417,18 +417,30 @@ int SCH_ITEM::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         return m_bodyStyle - aOther.m_bodyStyle;
 
     if( IsPrivate() != aOther.IsPrivate() )
-        return IsPrivate() < aOther.IsPrivate();
+        return IsPrivate() ? 1 : -1;
 
-    if( GetPosition().x != aOther.GetPosition().x )
-        return GetPosition().x < aOther.GetPosition().x;
+    if( !( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::SKIP_TST_POS ) )
+    {
+        if( GetPosition().x != aOther.GetPosition().x )
+            return GetPosition().x - aOther.GetPosition().x;
 
-    if( GetPosition().y != aOther.GetPosition().y )
-        return GetPosition().y < aOther.GetPosition().y;
+        if( GetPosition().y != aOther.GetPosition().y )
+            return GetPosition().y - aOther.GetPosition().y;
+    }
 
-    if( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+    if( ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::EQUALITY )
+        || ( aCompareFlags & SCH_ITEM::COMPARE_FLAGS::ERC ) )
+    {
         return 0;
+    }
 
-    return m_Uuid < aOther.m_Uuid;
+    if( m_Uuid < aOther.m_Uuid )
+        return -1;
+
+    if( m_Uuid > aOther.m_Uuid )
+        return 1;
+
+    return 0;
 }
 
 
