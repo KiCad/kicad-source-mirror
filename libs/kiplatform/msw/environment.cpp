@@ -25,6 +25,7 @@
 #include <wx/string.h>
 #include <wx/tokenzr.h>
 #include <wx/app.h>
+#include <wx/uri.h>
 
 #include <Windows.h>
 #include <shellapi.h>
@@ -163,6 +164,11 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
     HINTERNET                            proxyResolveSession = NULL;
     bool                                 success = false;
 
+    wxURI uri( aURL );
+
+    LPWSTR proxyStr = NULL;
+    LPWSTR bypassProxyStr = NULL;
+
     if( WinHttpGetIEProxyConfigForCurrentUser( &ieProxyConfig ) )
     {
         // welcome to the wonderful world of IE
@@ -220,42 +226,92 @@ bool KIPLATFORM::ENV::GetSystemProxyConfig( const wxString& aURL, PROXY_CONFIG& 
                                                          &autoProxyOptions, &autoProxyInfo );
             }
 
+            if( autoProxyDetect )
+            {
+                if( autoProxyInfo.dwAccessType == WINHTTP_ACCESS_TYPE_NAMED_PROXY )
+                {
+                    proxyStr = autoProxyInfo.lpszProxy;
+                    bypassProxyStr = autoProxyInfo.lpszProxyBypass;
+                }
+            }
+
             WinHttpCloseHandle( proxyResolveSession );
         }
-
     }
 
-    if( autoProxyDetect )
+    if( !autoProxyDetect && ieProxyConfig.lpszProxy != NULL )
     {
-        if( autoProxyInfo.dwAccessType == WINHTTP_ACCESS_TYPE_NAMED_PROXY )
-        {
-            // autoProxyInfo will return a list of proxies that are semicolon delimited
-            // todo...maybe figure out better selection logic
-            wxString          proxyList = autoProxyInfo.lpszProxy;
-            wxStringTokenizer tokenizer( proxyList, wxT( ";" ) );
+        proxyStr = ieProxyConfig.lpszProxy;
+        bypassProxyStr = ieProxyConfig.lpszProxyBypass;
+    }
 
-            if( tokenizer.HasMoreTokens() )
+    bool bypassed = false;
+    if( bypassProxyStr != NULL )
+    {
+        wxStringTokenizer tokenizer( bypassProxyStr, wxT( ";" ) );
+
+        while( tokenizer.HasMoreTokens() )
+        {
+            wxString host = tokenizer.GetNextToken();
+
+            if( host == uri.GetServer() )
             {
-                aCfg.host = tokenizer.GetNextToken();
+                // the given url has a host in the proxy bypass list
+                return false;
             }
 
-            success = true;
+            // <local> is a special case that says all local sites bypass
+            // the windows way for considering local is any host without periods in the name that would imply
+            // some non-internal dns resolution
+            if( host == "<local>" )
+            {
+                if( !uri.GetServer().Contains( "." ) )
+                {
+                    // great its a local uri that is bypassed
+                    bypassed = true;
+                    break;
+                }
+            }
         }
     }
-    else
+
+    if( !bypassed && proxyStr != NULL )
     {
-        if( ieProxyConfig.lpszProxy != NULL )
+        // proxyStr can be in the following format per MSDN
+        //([<scheme>=][<scheme>"://"]<server>[":"<port>])
+        //and separated by semicolons or whitespace
+        wxStringTokenizer tokenizer( proxyStr, wxT( "; \t" ) );
+
+        while( tokenizer.HasMoreTokens() )
         {
-            // ie proxy configs may return : or :: for an empty proxy
+            wxString entry = tokenizer.GetNextToken();
 
-            aCfg.host = ieProxyConfig.lpszProxy;
-
-            if(aCfg.host != ":" && aCfg.host != "::")
+            // deal with the [<scheme>=] part, which may or may not exist
+            if( entry.Contains( "=" ) )
             {
+                wxString scheme = entry.BeforeFirst( '=' ).Lower();
+                entry = entry.AfterFirst( '=' );
+
+                // skip processing if the scheme doesnt match
+                if( scheme != uri.GetScheme().Lower() )
+                {
+                    continue;
+                }
+
+                // we continue with the [<scheme>=] stripped off if we matched
+            }
+
+            // is the entry left not empty? we just take the first result
+            // : and :: are also special cases we want to ignore
+            if( entry != "" && entry != ":" && entry != "::" )
+            {
+                aCfg.host = entry;
                 success = true;
+                break;
             }
         }
     }
+
 
     // We have to clean up the strings the win32 api returned
     if( autoProxyInfo.lpszProxy )
