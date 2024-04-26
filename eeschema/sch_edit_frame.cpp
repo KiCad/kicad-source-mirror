@@ -1801,8 +1801,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( SCH_COMMIT* aCommit, SCH_CLEANUP_FL
         std::vector<CHANGED_ITEM>                        changed_connectable_items;
 
         // Lambda to add an item to the connectivity update sets
-        auto addItemToChangeSet =
-                [&changed_items, &pts, &item_paths, &changed_screens]( CHANGED_ITEM itemData )
+        auto addItemToChangeSet = [&changed_items, &pts, &item_paths]( CHANGED_ITEM itemData )
         {
             SCH_SHEET_PATHS& paths = itemData.screen->GetClientSheetPaths();
 
