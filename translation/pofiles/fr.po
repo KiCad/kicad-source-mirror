@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-15 10:38+0200\n"
+"PO-Revision-Date: 2024-04-25 11:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -21117,7 +21117,7 @@ msgstr "Chemin réseau : pas de suivi des modifications du répetoire"
 
 #: kicad/project_tree_pane.cpp:1385
 msgid "Local path: monitoring folder changes"
-msgstr "Chemin local : suivi des modifications du réperoire"
+msgstr "Chemin local : suivi des modifications du répertoire"
 
 #: kicad/project_tree_pane.cpp:1542
 msgid "The selected directory is already a git project."
