@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-14 14:22-0700\n"
-"PO-Revision-Date: 2024-04-21 22:07+0000\n"
+"PO-Revision-Date: 2024-04-26 15:49+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hans/>\n"
@@ -45,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.1\n"
 "X-Poedit-KeywordsList: _HKI;_\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -26731,7 +26731,7 @@ msgstr "过孔焊盘直径:"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:73
 msgid "Diameter of pad surrounding via (annular ring)"
-msgstr "通过 (环形环) 的焊盘直径"
+msgstr "过孔 (孔环) 的焊盘直径"
 
 #: pcb_calculator/calculator_panels/panel_via_size_base.cpp:85
 msgid "Clearance hole diameter:"
@@ -34167,7 +34167,7 @@ msgstr "结束层:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:316
 msgid "Annular rings:"
-msgstr "环形圈:"
+msgstr "孔环:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:320
 msgid "Start, end, and connected layers"
@@ -34797,15 +34797,14 @@ msgstr "两个铜箔项目之间的最小宽度。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:96
 msgid "Minimum annular width:"
-msgstr "最小环形宽度:"
+msgstr "最小孔环宽度:"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:101
 msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr ""
-"最小环形宽度。一旦设置, 这是一个绝对的最小值, 不能通过网络类、自定义规则或其"
-"他设置减少。"
+msgstr "最小孔环宽度。一旦设置, 这是一个绝对的最小值, "
+"不能通过网络类、自定义规则或其他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
@@ -36945,7 +36944,7 @@ msgstr "正检查 %s 走线宽度: 最小%s。"
 #: pcbnew/drc/drc_engine.cpp:988
 #, c-format
 msgid "Checking %s annular width: min %s."
-msgstr "正检查 %s 环形宽度: 最小 %s。"
+msgstr "正检查 %s 孔环宽度: 最小 %s。"
 
 #: pcbnew/drc/drc_engine.cpp:996
 #, c-format
@@ -37200,7 +37199,7 @@ msgstr "走线宽度"
 
 #: pcbnew/drc/drc_item.cpp:121
 msgid "Annular width"
-msgstr "环形宽度"
+msgstr "孔环宽度"
 
 #: pcbnew/drc/drc_item.cpp:125
 msgid "Hole size out of range"
@@ -37477,17 +37476,17 @@ msgstr "缺少严重性名称。"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:88
 msgid "Checking pad & via annular rings..."
-msgstr "检查焊盘和过孔环形孔..."
+msgstr "检查焊盘和过孔孔环..."
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:248
 #, c-format
 msgid "(%s min annular width %s; actual %s)"
-msgstr "(%s 最小环形宽度 %s; 实际 %s)"
+msgstr "(%s 最小孔环宽度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_annular_width.cpp:256
 #, c-format
 msgid "(%s max annular width %s; actual %s)"
-msgstr "(%s 最大环形宽度 %s; 实际 %s)"
+msgstr "(%s 最大孔环宽度 %s; 实际 %s)"
 
 #: pcbnew/drc/drc_test_provider_connection_width.cpp:630
 msgid "Checking nets for minimum connection width..."
@@ -41894,7 +41893,7 @@ msgstr "过孔 %s (%s)"
 
 #: pcbnew/pcb_track.cpp:364
 msgid "removed annular ring"
-msgstr "移除通孔环"
+msgstr "移除通孔孔环"
 
 #: pcbnew/pcb_track.cpp:1055
 msgid "Track (arc)"
@@ -41924,7 +41923,7 @@ msgstr "通孔"
 #: pcbnew/pcb_track.cpp:1152
 #, c-format
 msgid "Min Annular Width: %s"
-msgstr "最小环形宽度: %s"
+msgstr "最小孔环宽度: %s"
 
 #: pcbnew/pcb_track.cpp:1168
 msgid "NetCode"
@@ -42850,17 +42849,17 @@ msgstr "解析完成的直径约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:405
 msgid "Via Annulus"
-msgstr "过孔环"
+msgstr "过孔孔环"
 
 #: pcbnew/tools/board_inspection_tool.cpp:406
 #: pcbnew/tools/board_inspection_tool.cpp:1298
 msgid "Via annular width resolution for:"
-msgstr "过孔环形宽度解析:"
+msgstr "过孔孔环宽度解析:"
 
 #: pcbnew/tools/board_inspection_tool.cpp:414
 #, c-format
 msgid "Resolved annular width constraints: min %s; max %s."
-msgstr "解析完成的环形宽度约束: 最小 %s; 最大 %s。"
+msgstr "解析完成的孔环宽度约束: 最小 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:421
 #: pcbnew/tools/board_inspection_tool.cpp:1318
@@ -43101,12 +43100,12 @@ msgstr "解析完成的直径约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1297
 msgid "Via Annular Width"
-msgstr "过孔环形宽度"
+msgstr "过孔孔环宽度"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1307
 #, c-format
 msgid "Resolved annular width constraints: min %s; opt %s; max %s."
-msgstr "解析完成的环形宽度约束: 最小 %s; 最优 %s; 最大 %s。"
+msgstr "解析完成的孔环宽度约束: 最小 %s; 最优 %s; 最大 %s。"
 
 #: pcbnew/tools/board_inspection_tool.cpp:1328
 #, c-format
