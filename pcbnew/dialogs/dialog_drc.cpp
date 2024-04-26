@@ -77,6 +77,7 @@ DIALOG_DRC::DIALOG_DRC( PCB_EDIT_FRAME* aEditorFrame, wxWindow* aParent ) :
         m_lastUpdateUi( std::chrono::steady_clock::now() )
 {
     SetName( DIALOG_DRC_WINDOW_NAME ); // Set a window name to be able to find it
+    KIPLATFORM::UI::SetFloatLevel( this );
 
     m_frame = aEditorFrame;
     m_currentBoard = m_frame->GetBoard();
@@ -292,6 +293,9 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         m_messages->Flush();
 
         Raise();
+
+        // set float level again, it can be lost due to window events during test run
+        KIPLATFORM::UI::SetFloatLevel( this );
         return;
     }
 
@@ -362,6 +366,8 @@ void DIALOG_DRC::OnRunDRCClick( wxCommandEvent& aEvent )
         m_sdbSizerOK->Enable( true );
     }
 
+    // set float level again, it can be lost due to window events during test run
+    KIPLATFORM::UI::SetFloatLevel( this );
     refreshEditor();
 }
 

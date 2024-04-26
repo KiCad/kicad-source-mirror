@@ -194,3 +194,8 @@ void KIPLATFORM::UI::InfiniteDragReleaseWindow()
 {
     // Not needed on this platform
 }
+
+
+void KIPLATFORM::UI::SetFloatLevel( wxWindow* aWindow )
+{
+}

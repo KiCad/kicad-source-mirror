@@ -283,7 +283,7 @@ bool KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
             }
 
             wxLogTrace( traceWayland, wxS( "*** Warp to %d %d failed ***" ), aX, aY );
-            
+
             return false;
         }
 #endif
@@ -311,6 +311,11 @@ bool KIPLATFORM::UI::WarpPointer( wxWindow* aWindow, int aX, int aY )
 
 
 void KIPLATFORM::UI::ImmControl( wxWindow* aWindow, bool aEnable )
+{
+}
+
+
+void KIPLATFORM::UI::SetFloatLevel( wxWindow* aWindow )
 {
 }
 

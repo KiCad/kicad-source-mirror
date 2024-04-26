@@ -172,6 +172,11 @@ namespace KIPLATFORM
          * On Wayland, allows the cursor to freely move again after a drag (see `InfiniteDragPrepareWindow`).
          */
         void InfiniteDragReleaseWindow();
+
+        /**
+         * Intended to set the floating window level in macOS on a window
+         */
+        void SetFloatLevel( wxWindow* aWindow );
     }
 }
 

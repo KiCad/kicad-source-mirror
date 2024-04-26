@@ -194,3 +194,10 @@ void KIPLATFORM::UI::InfiniteDragReleaseWindow()
 {
     // Not needed on this platform
 }
+
+
+void KIPLATFORM::UI::SetFloatLevel( wxWindow* aWindow )
+{
+    // On OSX we need to forcefully give the focus to the window
+    [[aWindow->GetHandle() window] setLevel:NSFloatingWindowLevel];
+}
