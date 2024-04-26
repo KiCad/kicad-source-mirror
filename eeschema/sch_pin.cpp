@@ -172,7 +172,8 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin ) :
  * Create a proxy pin from an alternate pin designation.
  * The SCH_PIN data will be filled in when the pin is resolved (see SCH_SYMBOL::UpdatePins).
  */
-SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt ) :
+SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt,
+                  const KIID& aUuid ) :
         SCH_ITEM( aParentSymbol, SCH_PIN_T ),
         m_libPin( nullptr ),
         m_orientation( PIN_ORIENTATION::INHERIT ),
@@ -184,6 +185,7 @@ SCH_PIN::SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxSt
 {
     wxASSERT( aParentSymbol );
 
+    const_cast<KIID&>( m_Uuid ) = aUuid;
     m_layer = LAYER_PIN;
 }
 

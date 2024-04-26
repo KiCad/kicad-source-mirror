@@ -3172,12 +3172,10 @@ SCH_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseSchematicSymbol()
                 }
             }
 
-            symbol->GetRawPins().emplace_back( std::make_unique<SCH_PIN>( symbol.get(),
-                                                                          number, alt ) );
-
-            const_cast<KIID&>( symbol->GetRawPins().back()->m_Uuid ) = uuid;
-        }
+            symbol->GetRawPins().emplace_back( std::make_unique<SCH_PIN>( symbol.get(), number,
+                                                                          alt, uuid ) );
             break;
+        }
 
         default:
             Expecting( "lib_id, lib_name, at, mirror, uuid, on_board, in_bom, dnp, "

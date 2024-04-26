@@ -53,7 +53,8 @@ public:
 
     SCH_PIN( SCH_SYMBOL* aParentSymbol, SCH_PIN* aLibPin );
 
-    SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt );
+    SCH_PIN( SCH_SYMBOL* aParentSymbol, const wxString& aNumber, const wxString& aAlt,
+             const KIID& aUuid );
 
     SCH_PIN( const SCH_PIN& aPin );
 
