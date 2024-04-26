@@ -1570,10 +1570,6 @@ SFVEC4F RENDER_3D_RAYTRACE_BASE::shadeHit( const SFVEC4F& aBgColor, const RAY& a
 
                     sum_color += add;
                 }
-                else
-                {
-                    sum_color += aBgColor;
-                }
             }
 
             outColor += (sum_color / SFVEC4F( (float)reflection_number_of_samples) );
