@@ -448,9 +448,7 @@ bool EXPORTER_STEP::buildBoard3DShapes()
     m_pcbModel->SetBoardColor( m_solderMaskColor.r, m_solderMaskColor.g, m_solderMaskColor.b );
     m_pcbModel->SetCopperColor( m_copperColor.r, m_copperColor.g, m_copperColor.b );
 
-    wxCHECK( m_board->GetDesignSettings().m_HasStackup, false );
-
-    m_pcbModel->SetStackup( m_board->GetDesignSettings().GetStackupDescriptor() );
+    m_pcbModel->SetStackup( m_board->GetStackupOrDefault() );
     m_pcbModel->SetEnabledLayers( layersToExport );
     m_pcbModel->SetFuseShapes( m_params.m_fuseShapes );
     m_pcbModel->SetNetFilter( m_params.m_netFilter );

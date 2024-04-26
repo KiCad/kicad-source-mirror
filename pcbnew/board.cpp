@@ -2174,6 +2174,17 @@ void BOARD::GetSortedPadListByXthenYCoord( std::vector<PAD*>& aVector, int aNetC
 }
 
 
+BOARD_STACKUP BOARD::GetStackupOrDefault() const
+{
+    if( GetDesignSettings().m_HasStackup )
+        return GetDesignSettings().GetStackupDescriptor();
+
+    BOARD_STACKUP stackup;
+    stackup.BuildDefaultStackupList( &GetDesignSettings(), GetCopperLayerCount() );
+    return stackup;
+}
+
+
 std::tuple<int, double, double> BOARD::GetTrackLength( const PCB_TRACK& aTrack ) const
 {
     int    count = 0;

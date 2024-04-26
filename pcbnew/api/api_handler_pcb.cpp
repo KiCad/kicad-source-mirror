@@ -494,22 +494,10 @@ HANDLER_RESULT<BoardStackupResponse> API_HANDLER_PCB::handleGetStackup( GetBoard
     if( !documentValidation )
         return tl::unexpected( documentValidation.error() );
 
-    const BOARD* board = frame()->GetBoard();
-    BoardStackupResponse response;
+    BoardStackupResponse  response;
     google::protobuf::Any any;
-    const BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
 
-    if( frame()->GetBoard()->GetDesignSettings().m_HasStackup )
-    {
-        const BOARD_STACKUP& stackup = bds.GetStackupDescriptor();
-        stackup.Serialize( any );
-    }
-    else
-    {
-        BOARD_STACKUP stackup;
-        stackup.BuildDefaultStackupList( &bds, board->GetCopperLayerCount() );
-        stackup.Serialize( any );
-    }
+    frame()->GetBoard()->GetStackupOrDefault().Serialize( any );
 
     any.UnpackTo( response.mutable_stackup() );
 

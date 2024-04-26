@@ -26,6 +26,7 @@
 #define CLASS_BOARD_H_
 
 #include <board_item_container.h>
+#include <board_stackup_manager/board_stackup.h>
 #include <common.h> // Needed for stl hash extensions
 #include <convert_shape_list_to_polygon.h> // for OUTLINE_ERROR_HANDLER
 #include <hash.h>
@@ -659,6 +660,8 @@ public:
      * @return the BOARD_DESIGN_SETTINGS for this BOARD
      */
     BOARD_DESIGN_SETTINGS& GetDesignSettings() const;
+
+    BOARD_STACKUP GetStackupOrDefault() const;
 
     // Tented vias are vias covered by solder mask. So because the solder mask is a negative
     // layer, tented vias are NOT plotted on solder mask layers
