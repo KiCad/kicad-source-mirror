@@ -183,7 +183,6 @@ void KICAD_NETLIST_PARSER::parseNet()
      *  (node (ref "U9") (pin "M6") (pin_function "reset")))
      */
 
-    COMPONENT* component = NULL;
     wxString   code;
     wxString   name;
     wxString   reference;
@@ -257,25 +256,18 @@ void KICAD_NETLIST_PARSER::parseNet()
                 }
             }
 
-            if( strtol( code.c_str(), NULL, 10 ) >= 1 )
+            // Don't assume component will be found; it might be "DNP" or "Exclude from board".
+            if( COMPONENT* component = m_netlist->GetComponentByReference( reference ) )
             {
-                if( name.IsEmpty() )      // Give a dummy net name like N-000009
-                    name = wxT("N-00000") + code;
-
-                component = m_netlist->GetComponentByReference( reference );
-
-                // Cannot happen if the netlist is valid.
-                if( component == NULL )
+                if( strtol( code.c_str(), nullptr, 10 ) >= 1 )
                 {
-                    wxString msg;
-                    msg.Printf( _( "Cannot find component with ref '%s' in netlist." ),
-                                reference );
-                    THROW_PARSE_ERROR( msg, m_lineReader->GetSource(), m_lineReader->Line(),
-                                       m_lineReader->LineNumber(), m_lineReader->Length() );
-                }
+                    if( name.IsEmpty() )      // Give a dummy net name like N-000009
+                        name = wxT("N-00000") + code;
 
-                component->AddNet( pin_number, name, pin_function, pin_type );
+                    component->AddNet( pin_number, name, pin_function, pin_type );
+                }
             }
+
             break;
 
         default:
