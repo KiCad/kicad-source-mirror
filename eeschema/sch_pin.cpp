@@ -1342,11 +1342,6 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
 {
     wxASSERT( aOther.Type() == SCH_PIN_T );
 
-    int retv = SCH_ITEM::compare( aOther, aCompareFlags );
-
-    if( retv )
-        return retv;
-
     const SCH_PIN* tmp = (SCH_PIN*) &aOther;
 
     // When comparing units, we do not compare the part numbers.  If everything else is
@@ -1397,7 +1392,7 @@ int SCH_PIN::compare( const SCH_ITEM& aOther, int aCompareFlags ) const
         const ALT& lhsAlt = lhsItem->second;
         const ALT& rhsAlt = rhsItem->second;
 
-        retv = lhsAlt.m_Name.Cmp( rhsAlt.m_Name );
+        int retv = lhsAlt.m_Name.Cmp( rhsAlt.m_Name );
 
         if( retv )
             return retv;
