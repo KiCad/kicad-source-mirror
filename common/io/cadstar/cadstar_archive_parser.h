@@ -1423,7 +1423,7 @@ public:
      * provided text element has been initialised with a position and orientation.
      * @param aKiCadTextItem a Kicad item to correct
      */
-    static void FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem, bool aInvertY = false );
+    static void FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem );
 
     static wxString generateLibName( const wxString& aRefName, const wxString& aAlternateName );
 

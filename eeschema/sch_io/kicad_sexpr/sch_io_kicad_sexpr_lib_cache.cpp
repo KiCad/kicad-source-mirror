@@ -346,23 +346,23 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveSymbolDrawItem( SCH_ITEM* aItem, OUTPUTFO
         switch( shape->GetShape() )
         {
         case SHAPE_T::ARC:
-            formatArc( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
+            formatArc( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor, true );
             break;
 
         case SHAPE_T::CIRCLE:
-            formatCircle( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
+            formatCircle( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor, true );
             break;
 
         case SHAPE_T::RECTANGLE:
-            formatRect( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
+            formatRect( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor, true );
             break;
 
         case SHAPE_T::BEZIER:
-            formatBezier(&aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
+            formatBezier(&aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor, true );
             break;
 
         case SHAPE_T::POLY:
-            formatPoly( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor );
+            formatPoly( &aFormatter, aNestLevel, shape, isPrivate, stroke, fillMode, fillColor, true );
             break;
 
         default:
@@ -406,7 +406,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveField( SCH_FIELD* aField, OUTPUTFORMATTER
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                            aField->GetPosition().x ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aField->GetPosition().y ).c_str(),
+                                                           -aField->GetPosition().y ).c_str(),
                       aField->GetTextAngle().AsDegrees() );
 
     if( aField->IsNameShown() )
@@ -434,7 +434,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::savePin( SCH_PIN* aPin, OUTPUTFORMATTER& aFor
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                            aPin->GetPosition().x ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aPin->GetPosition().y ).c_str(),
+                                                           -aPin->GetPosition().y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( getPinAngle( aPin->GetOrientation() ) ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                            aPin->GetLength() ).c_str() );
@@ -483,7 +483,7 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveText( SCH_TEXT* aText, OUTPUTFORMATTER& a
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
                                                            aText->GetPosition().x ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale,
-                                                           aText->GetPosition().y ).c_str(),
+                                                           -aText->GetPosition().y ).c_str(),
                       (double) aText->GetTextAngle().AsTenthsOfADegree() );
 
     aText->EDA_TEXT::Format( &aFormatter, aNestLevel, 0 );
@@ -505,10 +505,10 @@ void SCH_IO_KICAD_SEXPR_LIB_CACHE::saveTextBox( SCH_TEXTBOX* aTextBox, OUTPUTFOR
 
     aFormatter.Print( aNestLevel + 1, "(at %s %s %s) (size %s %s) (margins %s %s %s %s)\n",
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, pos.y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, -pos.y ).c_str(),
                       EDA_UNIT_UTILS::FormatAngle( aTextBox->GetTextAngle() ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.x ).c_str(),
-                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, size.y ).c_str(),
+                      EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, -size.y ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginLeft() ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginTop() ).c_str(),
                       EDA_UNIT_UTILS::FormatInternalUnits( schIUScale, aTextBox->GetMarginRight() ).c_str(),

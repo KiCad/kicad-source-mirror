@@ -225,7 +225,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 if( lib_item->IsNew() )
                 {
                     m_anchorPos = selection.GetReferencePoint();
-                    VECTOR2I delta = m_cursor - mapCoords( m_anchorPos, true );
+                    VECTOR2I delta = m_cursor - m_anchorPos;
 
                     // Drag items to the current cursor position
                     for( EDA_ITEM* item : selection )
@@ -385,7 +385,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
             [&]( EDA_ITEM* item, const VECTOR2I& delta )
             {
                 commit.Modify( item, m_frame->GetScreen() );
-                static_cast<SCH_ITEM*>( item )->Move( mapCoords( delta, true ) );
+                static_cast<SCH_ITEM*>( item )->Move( delta );
                 updateItem( item, true );
             };
 
@@ -509,7 +509,7 @@ int SYMBOL_EDITOR_MOVE_TOOL::AlignElements( const TOOL_EVENT& aEvent )
 
 void SYMBOL_EDITOR_MOVE_TOOL::moveItem( EDA_ITEM* aItem, const VECTOR2I& aDelta )
 {
-    static_cast<SCH_ITEM*>( aItem )->Move( mapCoords( aDelta, true ) );
+    static_cast<SCH_ITEM*>( aItem )->Move( aDelta );
     aItem->SetFlags( IS_MOVING );
 }
 

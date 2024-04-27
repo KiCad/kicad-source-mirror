@@ -2775,15 +2775,12 @@ wxString CADSTAR_ARCHIVE_PARSER::HandleTextOverbar( wxString aCadstarString )
 }
 
 
-void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem, bool aInvertY )
+void CADSTAR_ARCHIVE_PARSER::FixTextPositionNoAlignment( EDA_TEXT* aKiCadTextItem )
 {
     if( !aKiCadTextItem->GetText().IsEmpty() )
     {
         VECTOR2I positionOffset( 0, aKiCadTextItem->GetInterline() );
         RotatePoint( positionOffset, aKiCadTextItem->GetTextAngle() );
-
-        if( aInvertY )
-            positionOffset.y = -positionOffset.y;
 
         //Count num of additional lines
         wxString text = aKiCadTextItem->GetText();

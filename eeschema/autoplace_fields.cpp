@@ -227,7 +227,7 @@ protected:
      */
     SIDE getPinSide( SCH_PIN* aPin )
     {
-        PIN_ORIENTATION pin_orient = aPin->GetLibPin()->PinDrawOrient( m_symbol->GetTransform() );
+        PIN_ORIENTATION pin_orient = aPin->PinDrawOrient( m_symbol->GetTransform() );
 
         switch( pin_orient )
         {

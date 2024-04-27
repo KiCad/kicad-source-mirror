@@ -719,16 +719,6 @@ public:
     }
 
     /**
-     * Mirror the rectangle from the X axis (negate Y pos and size).
-     */
-    void RevertYAxis()
-    {
-        m_Pos.y  = -m_Pos.y;
-        m_Size.y = -m_Size.y;
-        Normalize();
-    }
-
-    /**
      * Return the area of the rectangle.
      *
      * @return The area of the rectangle.

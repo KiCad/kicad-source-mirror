@@ -68,7 +68,7 @@ double EASYEDA_PARSER_BASE::RelPosY( const wxString& aValue )
 
 
 void EASYEDA_PARSER_BASE::TransformTextToBaseline( EDA_TEXT*       textItem,
-                                                   const wxString& baselineAlign, bool invertY )
+                                                   const wxString& baselineAlign )
 {
     int upOffset = 0;
 
@@ -102,9 +102,6 @@ void EASYEDA_PARSER_BASE::TransformTextToBaseline( EDA_TEXT*       textItem,
 
     VECTOR2I offset( 0, -upOffset );
     RotatePoint( offset, textItem->GetTextAngle() );
-
-    if( invertY )
-        offset.y = -offset.y;
 
     textItem->SetTextPos( textItem->GetTextPos() + offset );
 }

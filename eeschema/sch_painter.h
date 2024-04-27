@@ -133,8 +133,7 @@ private:
     void knockoutText( const wxString& aText, const VECTOR2D& aPosition,
                        const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
     void boxText( const wxString& aText, const VECTOR2D& aPosition,
-                  const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics,
-                  bool aInvertY );
+                  const TEXT_ATTRIBUTES& aAttrs, const KIFONT::METRICS& aFontMetrics );
 
     wxString expandLibItemTextVars( const wxString& aSourceText, const SCH_SYMBOL* aSymbolContext );
 

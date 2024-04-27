@@ -93,8 +93,7 @@ EDA_TEXT::EDA_TEXT( const EDA_IU_SCALE& aIuScale, const wxString& aText ) :
         m_IuScale( aIuScale ),
         m_render_cache_font( nullptr ),
         m_bounding_box_cache_valid( false ),
-        m_bounding_box_cache_line( -1 ),
-        m_bounding_box_cache_inverted( false )
+        m_bounding_box_cache_line( -1 )
 {
     SetTextSize( VECTOR2I( EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ),
                            EDA_UNIT_UTILS::Mils2IU( m_IuScale, DEFAULT_SIZE_TEXT ) ) );
@@ -140,7 +139,6 @@ EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
     m_bounding_box_cache_valid = aText.m_bounding_box_cache_valid;
     m_bounding_box_cache = aText.m_bounding_box_cache;
     m_bounding_box_cache_line = aText.m_bounding_box_cache_line;
-    m_bounding_box_cache_inverted = aText.m_bounding_box_cache_inverted;
 }
 
 
@@ -564,14 +562,13 @@ int EDA_TEXT::GetInterline() const
 }
 
 
-BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
+BOX2I EDA_TEXT::GetTextBox( int aLine ) const
 {
     VECTOR2I drawPos = GetDrawPos();
 
     if( m_bounding_box_cache_valid
             && m_bounding_box_cache_pos == drawPos
-            && m_bounding_box_cache_line == aLine
-            && m_bounding_box_cache_inverted == aInvertY  )
+            && m_bounding_box_cache_line == aLine )
     {
         return m_bounding_box_cache;
     }
@@ -617,9 +614,6 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
 
     if( text.Contains( wxT( "~{" ) ) )
         overbarOffset = extents.y / 6;
-
-    if( aInvertY )
-        pos.y = -pos.y;
 
     bbox.SetOrigin( pos );
 
@@ -696,7 +690,6 @@ BOX2I EDA_TEXT::GetTextBox( int aLine, bool aInvertY ) const
     m_bounding_box_cache_valid = true;
     m_bounding_box_cache_pos = drawPos;
     m_bounding_box_cache_line = aLine;
-    m_bounding_box_cache_inverted = aInvertY;
     m_bounding_box_cache = bbox;
 
     return bbox;

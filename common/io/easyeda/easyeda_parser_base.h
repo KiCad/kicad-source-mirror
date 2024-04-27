@@ -60,7 +60,7 @@ public:
         return ScalePos( aVec - m_relOrigin );
     }
 
-    void TransformTextToBaseline( EDA_TEXT* textItem, const wxString& baselineAlign, bool invertY );
+    void TransformTextToBaseline( EDA_TEXT* textItem, const wxString& baselineAlign );
 
     std::vector<SHAPE_LINE_CHAIN> ParseLineChains( const wxString& aData, int aArcMinSegLen,
                                                    bool aForceClosed );

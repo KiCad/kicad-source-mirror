@@ -165,7 +165,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 )
         rotPoint = item->GetPosition();
     else
-        rotPoint = m_frame->GetNearestHalfGridPosition( mapCoords( selection.GetCenter(), true ) );
+        rotPoint = m_frame->GetNearestHalfGridPosition( selection.GetCenter() );
 
     for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
     {
@@ -237,7 +237,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
     else
     {
-        mirrorPoint = m_frame->GetNearestHalfGridPosition( mapCoords( selection.GetCenter(), true ) );
+        mirrorPoint = m_frame->GetNearestHalfGridPosition( selection.GetCenter() );
 
         for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
         {
@@ -920,7 +920,7 @@ int SYMBOL_EDITOR_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection );
     m_toolMgr->RunAction<EDA_ITEMS*>( EE_ACTIONS::addItemsToSel, &newItems );
 
-    selection.SetReferencePoint( mapCoords( getViewControls()->GetCursorPosition( true ), true ) );
+    selection.SetReferencePoint( getViewControls()->GetCursorPosition( true ) );
 
     if( m_toolMgr->RunSynchronousAction( EE_ACTIONS::move, &commit ) )
         commit.Push( _( "Duplicate" ) );

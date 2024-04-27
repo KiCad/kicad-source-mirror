@@ -57,7 +57,7 @@ public:
             x1( 1 ),
             y1( 0 ),
             x2( 0 ),
-            y2( -1 )
+            y2( 1 )
     {}
 
     TRANSFORM( int ax1, int ay1, int ax2, int ay2 ) :

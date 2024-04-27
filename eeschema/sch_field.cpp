@@ -585,67 +585,36 @@ EDA_ANGLE SCH_FIELD::GetDrawRotation() const
 
 const BOX2I SCH_FIELD::GetBoundingBox() const
 {
-    BOX2I bbox;
+    BOX2I bbox = GetTextBox();
 
-    if( m_parent && m_parent->Type() == LIB_SYMBOL_T )
+    // Calculate the bounding box position relative to the parent:
+    VECTOR2I origin = GetParentPosition();
+    VECTOR2I pos = GetTextPos() - origin;
+    VECTOR2I begin = bbox.GetOrigin() - origin;
+    VECTOR2I end = bbox.GetEnd() - origin;
+    RotatePoint( begin, pos, GetTextAngle() );
+    RotatePoint( end, pos, GetTextAngle() );
+
+    // Now, apply the symbol transform (mirror/rot)
+    TRANSFORM transform;
+
+    if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
     {
-        /*
-         * Y coordinates for LIB_ITEMS are bottom to top, so we must invert the Y position
-         * when calling GetTextBox() that works using top to bottom Y axis orientation.
-         */
-        bbox = GetTextBox( -1, true );
-        bbox.RevertYAxis();
+        SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
 
-        // We are using now a bottom to top Y axis.
-        VECTOR2I orig = bbox.GetOrigin();
-        VECTOR2I end = bbox.GetEnd();
+        // Due to the Y axis direction, we must mirror the bounding box, relative to the
+        // text position:
+        MIRROR( begin.y, pos.y );
+        MIRROR( end.y,   pos.y );
 
-        RotatePoint( orig, GetTextPos(), -GetTextAngle() );
-        RotatePoint( end, GetTextPos(), -GetTextAngle() );
-
-        bbox.SetOrigin( orig );
-        bbox.SetEnd( end );
-
-        // We are using now a top to bottom Y axis:
-        bbox.RevertYAxis();
+        transform = parentSymbol->GetTransform();
     }
-    else
-    {
-        bbox = GetTextBox();
 
-        // Calculate the bounding box position relative to the parent:
-        VECTOR2I origin = GetParentPosition();
-        VECTOR2I pos = GetTextPos() - origin;
-        VECTOR2I begin = bbox.GetOrigin() - origin;
-        VECTOR2I end = bbox.GetEnd() - origin;
-        RotatePoint( begin, pos, GetTextAngle() );
-        RotatePoint( end, pos, GetTextAngle() );
+    bbox.SetOrigin( transform.TransformCoordinate( begin ) );
+    bbox.SetEnd( transform.TransformCoordinate( end ) );
 
-        // Now, apply the symbol transform (mirror/rot)
-        TRANSFORM transform;
-
-        if( m_parent && m_parent->Type() == SCH_SYMBOL_T )
-        {
-            SCH_SYMBOL* parentSymbol = static_cast<SCH_SYMBOL*>( m_parent );
-
-            // Due to the Y axis direction, we must mirror the bounding box, relative to the
-            // text position:
-            MIRROR( begin.y, pos.y );
-            MIRROR( end.y,   pos.y );
-
-            transform = parentSymbol->GetTransform();
-        }
-        else
-        {
-            transform = TRANSFORM( 1, 0, 0, 1 );  // identity transform
-        }
-
-        bbox.SetOrigin( transform.TransformCoordinate( begin ) );
-        bbox.SetEnd( transform.TransformCoordinate( end ) );
-
-        bbox.Move( origin );
-        bbox.Normalize();
-    }
+    bbox.Move( origin );
+    bbox.Normalize();
 
     return bbox;
 }
