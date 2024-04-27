@@ -37,7 +37,7 @@
 # KiCad.
 #
 # Note: This version string should follow the semantic versioning system
-set( KICAD_SEMANTIC_VERSION "8.0.2" )
+set( KICAD_SEMANTIC_VERSION "8.0.2-unknown" )
 
 # Default the version to the semantic version.
 # This is overridden by the git repository tag though (if using git)
