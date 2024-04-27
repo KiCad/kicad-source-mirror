@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-14 14:22-0700\n"
+"POT-Creation-Date: 2024-04-26 19:51-0700\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -3297,6 +3297,9 @@ msgstr "Bus Entry"
 msgid "Bitmap"
 msgstr "Bitmap"
 
+msgid "Rule Area"
+msgstr "Rule Area"
+
 msgid "Net Label"
 msgstr "Net Label"
 
@@ -4103,6 +4106,9 @@ msgstr "Sheet references"
 msgid "Net class references"
 msgstr "Net class references"
 
+msgid "Rule areas"
+msgstr "Rule areas"
+
 msgid "Symbol body outlines"
 msgstr "Symbol body outlines"
 
@@ -4461,11 +4467,14 @@ msgstr "Maximum line length exceeded"
 msgid "Line length exceeded"
 msgstr "Line length exceeded"
 
-msgid "Grouped By Value"
-msgstr "Grouped By Value"
+msgid "Default Editing"
+msgstr "Default Editing"
 
 msgid "Reference"
 msgstr "Reference"
+
+msgid "Grouped By Value"
+msgstr "Grouped By Value"
 
 msgid "Grouped By Value and Footprint"
 msgstr "Grouped By Value and Footprint"
@@ -7333,43 +7342,6 @@ msgstr "Pin name inside"
 msgid "New Symbol"
 msgstr "New Symbol"
 
-msgid "Note: individual item colors overridden in Preferences."
-msgstr "Note: individual item colors overridden in Preferences."
-
-msgid "Border"
-msgstr "Border"
-
-msgid "Set border width to 0 to use schematic's default symbol line width."
-msgstr "Set border width to 0 to use schematic's default symbol line width."
-
-msgid "Fill Style"
-msgstr "Fill Style"
-
-msgid "Do not fill"
-msgstr "Do not fill"
-
-msgid "Fill with body outline color"
-msgstr "Fill with body outline color"
-
-msgid "Fill with body background color"
-msgstr "Fill with body background color"
-
-msgid "Fill with:"
-msgstr "Fill with:"
-
-msgid "Private to Symbol Editor"
-msgstr "Private to Symbol Editor"
-
-msgid "Common to all &units in symbol"
-msgstr "Common to all &units in symbol"
-
-msgid "Common to all body &styles (De Morgan)"
-msgstr "Common to all body &styles (De Morgan)"
-
-#, c-format
-msgid "%s Properties"
-msgstr "%s Properties"
-
 msgid "References must start with a letter."
 msgstr "References must start with a letter."
 
@@ -7546,18 +7518,6 @@ msgstr "Edit Simulation Model..."
 msgid "Library Symbol Properties"
 msgstr "Library Symbol Properties"
 
-msgid "Text can not be empty."
-msgstr "Text can not be empty."
-
-msgid "Background fill"
-msgstr "Background fill"
-
-msgid "Private to symbol editor"
-msgstr "Private to symbol editor"
-
-msgid "Text Box Properties"
-msgstr "Text Box Properties"
-
 msgid "Edit Line"
 msgstr "Edit Line"
 
@@ -7678,6 +7638,12 @@ msgstr "Used by the ERC."
 
 msgid "Graphic style:"
 msgstr "Graphic style:"
+
+msgid "Common to all &units in symbol"
+msgstr "Common to all &units in symbol"
+
+msgid "Common to all body &styles (De Morgan)"
+msgstr "Common to all body &styles (De Morgan)"
 
 msgid "&Visible"
 msgstr "&Visible"
@@ -8048,18 +8014,46 @@ msgstr ""
 "Error importing settings from project:\n"
 "Project file %s could not be loaded."
 
+msgid "Note: individual item colors overridden in Preferences."
+msgstr "Note: individual item colors overridden in Preferences."
+
 #, c-format
 msgid "Edit %s"
 msgstr "Edit %s"
 
-msgid "Filled shape"
-msgstr "Filled shape"
+msgid "Border"
+msgstr "Border"
 
 msgid "Set border width to 0 to use schematic's default line width."
 msgstr "Set border width to 0 to use schematic's default line width."
 
+msgid "Filled shape"
+msgstr "Filled shape"
+
 msgid "Clear colors to use Schematic Editor colors."
 msgstr "Clear colors to use Schematic Editor colors."
+
+msgid "Fill Style"
+msgstr "Fill Style"
+
+msgid "Do not fill"
+msgstr "Do not fill"
+
+msgid "Fill with body outline color"
+msgstr "Fill with body outline color"
+
+msgid "Fill with body background color"
+msgstr "Fill with body background color"
+
+msgid "Fill with:"
+msgstr "Fill with:"
+
+msgid "Private to Symbol Editor"
+msgstr "Private to Symbol Editor"
+
+#, c-format
+msgid "%s Properties"
+msgstr "%s Properties"
 
 msgid "Edit Sheet Pin Properties"
 msgstr "Edit Sheet Pin Properties"
@@ -8713,6 +8707,9 @@ msgstr "View presets:"
 msgid "Exclude DNP"
 msgstr "Exclude DNP"
 
+msgid "Show 'Exclude from BOM'"
+msgstr "Show 'Exclude from BOM'"
+
 msgid "Group symbols"
 msgstr "Group symbols"
 
@@ -9019,12 +9016,18 @@ msgstr "Edit table properties and cell contents"
 msgid "Table Cell Properties"
 msgstr "Table Cell Properties"
 
+msgid "Text Box Properties"
+msgstr "Text Box Properties"
+
 msgid "<root sheet>"
 msgstr "<root sheet>"
 
 #, c-format
 msgid "Page %s (%s)"
 msgstr "Page %s (%s)"
+
+msgid "Text can not be empty."
+msgstr "Text can not be empty."
 
 msgid ""
 "Invalid hyperlink destination. Please enter either a valid URL (e.g. file:// "
@@ -9037,6 +9040,9 @@ msgstr ""
 
 msgid "Edit Text Properties"
 msgstr "Edit Text Properties"
+
+msgid "Background fill"
+msgstr "Background fill"
 
 msgid "Link:"
 msgstr "Link:"
@@ -10017,6 +10023,9 @@ msgstr "Checking bus conflicts..."
 msgid "Checking conflicts..."
 msgstr "Checking conflicts..."
 
+msgid "Checking rule areas..."
+msgstr "Checking rule areas..."
+
 msgid "Checking units..."
 msgstr "Checking units..."
 
@@ -10109,6 +10118,9 @@ msgstr "More than one name given to this bus or net"
 
 msgid "Conflicting netclass assignments"
 msgstr "Conflicting netclass assignments"
+
+msgid "Overlapping rule areas"
+msgstr "Overlapping rule areas"
 
 msgid "Net is graphically connected to a bus but not a bus member"
 msgstr "Net is graphically connected to a bus but not a bus member"
@@ -10527,117 +10539,6 @@ msgstr "Default units:"
 msgid "Import Vector Graphics File"
 msgstr "Import Vector Graphics File"
 
-msgid "Pos X"
-msgstr "Pos X"
-
-msgid "Pos Y"
-msgstr "Pos Y"
-
-msgid "Flags"
-msgstr "Flags"
-
-#, c-format
-msgid "Pin %s [%s, %s, %s]"
-msgstr "Pin %s [%s, %s, %s]"
-
-#, c-format
-msgid "Pin %s [%s, %s]"
-msgstr "Pin %s [%s, %s]"
-
-#, c-format
-msgid "Hidden pin %s [%s, %s, %s]"
-msgstr "Hidden pin %s [%s, %s, %s]"
-
-#, c-format
-msgid "Hidden pin %s [%s, %s]"
-msgstr "Hidden pin %s [%s, %s]"
-
-msgid "Free"
-msgstr "Free"
-
-msgid "Unspecified"
-msgstr "Unspecified"
-
-msgid "Power input"
-msgstr "Power input"
-
-msgid "Power output"
-msgstr "Power output"
-
-msgid "Open collector"
-msgstr "Open collector"
-
-msgid "Open emitter"
-msgstr "Open emitter"
-
-msgid "Unconnected"
-msgstr "Unconnected"
-
-msgid "Inverted"
-msgstr "Inverted"
-
-msgid "Clock"
-msgstr "Clock"
-
-msgid "Inverted clock"
-msgstr "Inverted clock"
-
-msgid "Input low"
-msgstr "Input low"
-
-msgid "Clock low"
-msgstr "Clock low"
-
-msgid "Output low"
-msgstr "Output low"
-
-msgid "Falling edge clock"
-msgstr "Falling edge clock"
-
-msgid "NonLogic"
-msgstr "NonLogic"
-
-msgid "Pin Name"
-msgstr "Pin Name"
-
-msgid "Position X"
-msgstr "Position X"
-
-msgid "Position Y"
-msgstr "Position Y"
-
-#, c-format
-msgid "Arc with radius %s"
-msgstr "Arc with radius %s"
-
-#, c-format
-msgid "Circle with radius %s"
-msgstr "Circle with radius %s"
-
-#, c-format
-msgid "Rectangle with width %s height %s"
-msgstr "Rectangle with width %s height %s"
-
-#, c-format
-msgid "Polyline with %d points"
-msgstr "Polyline with %d points"
-
-#, c-format
-msgid "Bezier Curve with %d points"
-msgstr "Bezier Curve with %d points"
-
-msgid "Body outline color"
-msgstr "Body outline color"
-
-msgid "Body background color"
-msgstr "Body background color"
-
-msgid "Fill color"
-msgstr "Fill color"
-
-msgid "Fill"
-msgstr "Fill"
-
 msgid "Power flag differs."
 msgstr "Power flag differs."
 
@@ -10699,40 +10600,6 @@ msgstr "Exclude from board settings differ."
 #, c-format
 msgid "Unit %s"
 msgstr "Unit %s"
-
-msgid "H Justification"
-msgstr "H Justification"
-
-msgid "V Justification"
-msgstr "V Justification"
-
-#, c-format
-msgid "Graphic Text '%s'"
-msgstr "Graphic Text '%s'"
-
-msgid "Graphic Text Box"
-msgstr "Graphic Text Box"
-
-msgid "Bold Italic"
-msgstr "Bold Italic"
-
-msgid "Box Width"
-msgstr "Box Width"
-
-msgid "Box Height"
-msgstr "Box Height"
-
-msgid "Margin Left"
-msgstr "Margin Left"
-
-msgid "Margin Top"
-msgstr "Margin Top"
-
-msgid "Margin Right"
-msgstr "Margin Right"
-
-msgid "Margin Bottom"
-msgstr "Margin Bottom"
 
 #, c-format
 msgid "Failed to add symbol %s to library file '%s'."
@@ -10846,6 +10713,10 @@ msgid "Bus to bus entry from %s, %s to %s, %s"
 msgstr "Bus to bus entry from %s, %s to %s, %s"
 
 #, c-format
+msgid "Netclass label '%s' at %s, %s"
+msgstr "Netclass label '%s' at %s, %s"
+
+#, c-format
 msgid "Unhandled item type %d"
 msgstr "Unhandled item type %d"
 
@@ -10904,6 +10775,51 @@ msgstr "Set Pin Function"
 
 msgid "none"
 msgstr "none"
+
+msgid "Free"
+msgstr "Free"
+
+msgid "Unspecified"
+msgstr "Unspecified"
+
+msgid "Power input"
+msgstr "Power input"
+
+msgid "Power output"
+msgstr "Power output"
+
+msgid "Open collector"
+msgstr "Open collector"
+
+msgid "Open emitter"
+msgstr "Open emitter"
+
+msgid "Unconnected"
+msgstr "Unconnected"
+
+msgid "Inverted"
+msgstr "Inverted"
+
+msgid "Clock"
+msgstr "Clock"
+
+msgid "Inverted clock"
+msgstr "Inverted clock"
+
+msgid "Input low"
+msgstr "Input low"
+
+msgid "Clock low"
+msgstr "Clock low"
+
+msgid "Output low"
+msgstr "Output low"
+
+msgid "Falling edge clock"
+msgstr "Falling edge clock"
+
+msgid "NonLogic"
+msgstr "NonLogic"
 
 msgid "Print Schematic"
 msgstr "Print Schematic"
@@ -11100,6 +11016,12 @@ msgstr "Compare Symbol with Library"
 
 msgid "Symbol Field"
 msgstr "Symbol Field"
+
+msgid "H Justification"
+msgstr "H Justification"
+
+msgid "V Justification"
+msgstr "V Justification"
 
 #, c-format
 msgid "Go to Page %s (%s)"
@@ -11510,10 +11432,6 @@ msgid "httplib plugin missing library table handle!"
 msgstr "httplib plugin missing library table handle!"
 
 #, c-format
-msgid "Error retriving data from HTTP library %s: %s"
-msgstr "Error retriving data from HTTP library %s: %s"
-
-#, c-format
 msgid "HTTP library settings file %s missing or invalid"
 msgstr "HTTP library settings file %s missing or invalid"
 
@@ -11540,6 +11458,10 @@ msgstr "HTTP library settings file %s has an invalid library type"
 #, c-format
 msgid "Could not connect to %s. Errors: %s"
 msgstr "Could not connect to %s. Errors: %s"
+
+#, c-format
+msgid "Error retriving data from HTTP library %s: %s"
+msgstr "Error retriving data from HTTP library %s: %s"
 
 msgid "KiCad HTTP library files"
 msgstr "KiCad HTTP library files"
@@ -11780,6 +11702,9 @@ msgstr "Tri-State"
 msgid "Hierarchical Sheet Pin"
 msgstr "Hierarchical Sheet Pin"
 
+msgid "Bold Italic"
+msgstr "Bold Italic"
+
 msgid "Justification"
 msgstr "Justification"
 
@@ -11874,6 +11799,37 @@ msgstr "ERC Marker"
 msgid "No Connect"
 msgstr "No Connect"
 
+msgid "Pos X"
+msgstr "Pos X"
+
+msgid "Pos Y"
+msgstr "Pos Y"
+
+#, c-format
+msgid "Pin %s [%s, %s, %s]"
+msgstr "Pin %s [%s, %s, %s]"
+
+#, c-format
+msgid "Pin %s [%s, %s]"
+msgstr "Pin %s [%s, %s]"
+
+#, c-format
+msgid "Hidden pin %s [%s, %s, %s]"
+msgstr "Hidden pin %s [%s, %s, %s]"
+
+#, c-format
+msgid "Hidden pin %s [%s, %s]"
+msgstr "Hidden pin %s [%s, %s]"
+
+msgid "Pin Name"
+msgstr "Pin Name"
+
+msgid "Position X"
+msgstr "Position X"
+
+msgid "Position Y"
+msgstr "Position Y"
+
 #, c-format
 msgid "Plotted to '%s'.\n"
 msgstr "Plotted to '%s'.\n"
@@ -11915,6 +11871,9 @@ msgstr "Differing unit counts for item %s%s%s and %s%s%s\n"
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Different values for %s%d%s (%s) and %s%d%s (%s)"
+
+msgid "Schematic rule area"
+msgstr "Schematic rule area"
 
 #, c-format
 msgid "Setting schematic symbol '%s %s' library identifier to '%s'."
@@ -11963,6 +11922,18 @@ msgstr "Polyline, %d points"
 #, c-format
 msgid "Bezier Curve, %d points"
 msgstr "Bezier Curve, %d points"
+
+msgid "Body outline color"
+msgstr "Body outline color"
+
+msgid "Body background color"
+msgstr "Body background color"
+
+msgid "Fill color"
+msgstr "Fill color"
+
+msgid "Fill"
+msgstr "Fill"
 
 msgid "Sheet Name"
 msgstr "Sheet Name"
@@ -12106,8 +12077,9 @@ msgstr "Cell Width"
 msgid "Cell Height"
 msgstr "Cell Height"
 
-msgid "Graphic Text"
-msgstr "Graphic Text"
+#, c-format
+msgid "Graphic Text '%s'"
+msgstr "Graphic Text '%s'"
 
 msgid "Align center"
 msgstr "Align center"
@@ -12393,8 +12365,26 @@ msgstr ""
 "<i>Note that markup has precedence over bus definitions.</i>\n"
 "\n"
 
+msgid "Box Width"
+msgstr "Box Width"
+
+msgid "Box Height"
+msgstr "Box Height"
+
 msgid "Margins"
 msgstr "Margins"
+
+msgid "Margin Left"
+msgstr "Margin Left"
+
+msgid "Margin Top"
+msgstr "Margin Top"
+
+msgid "Margin Right"
+msgstr "Margin Right"
+
+msgid "Margin Bottom"
+msgstr "Margin Bottom"
 
 msgid "Signal name contains '{' and '}' but is not a valid bus name"
 msgstr "Signal name contains '{' and '}' but is not a valid bus name"
@@ -14331,6 +14321,24 @@ msgstr "Add Image"
 msgid "Add bitmap images"
 msgstr "Add bitmap images"
 
+msgid "Add Rule Area"
+msgstr "Add Rule Area"
+
+msgid "Draw rule area"
+msgstr "Draw rule area"
+
+msgid "Delete Last Point"
+msgstr "Delete Last Point"
+
+msgid "Delete the last point added to the current item"
+msgstr "Delete the last point added to the current item"
+
+msgid "Close Outline"
+msgstr "Close Outline"
+
+msgid "Close the in progress outline"
+msgstr "Close the in progress outline"
+
 msgid "Repeat Last Item"
 msgstr "Repeat Last Item"
 
@@ -15076,6 +15084,9 @@ msgstr "Move Point"
 msgid "Add Corner"
 msgstr "Add Corner"
 
+msgid "Draw Rule Area"
+msgstr "Draw Rule Area"
+
 msgid "Press <ESC> to cancel symbol creation."
 msgstr "Press <ESC> to cancel symbol creation."
 
@@ -15158,6 +15169,9 @@ msgstr "Edit %s Field"
 #, c-format
 msgid "Edit '%s' Field"
 msgstr "Edit '%s' Field"
+
+msgid "Rule Area Properties"
+msgstr "Rule Area Properties"
 
 msgid "<empty>"
 msgstr "<empty>"
@@ -15311,6 +15325,15 @@ msgstr "Can't save file '%s'."
 msgid "SVG File Name"
 msgstr "SVG File Name"
 
+msgid "Hide Field"
+msgstr "Hide Field"
+
+msgid "Hide Fields"
+msgstr "Hide Fields"
+
+msgid "Use the Symbol Properties dialog to remove fields."
+msgstr "Use the Symbol Properties dialog to remove fields."
+
 msgid "Edit Pins"
 msgstr "Edit Pins"
 
@@ -15343,9 +15366,18 @@ msgstr "Create a new project for this schematic"
 msgid "Edit Page Number"
 msgstr "Edit Page Number"
 
+msgid "Rename"
+msgstr "Rename"
+
+msgid "Change name of this sheet"
+msgstr "Change name of this sheet"
+
 #, c-format
 msgid "Enter page number for sheet path %s"
 msgstr "Enter page number for sheet path %s"
+
+msgid "Renaming sheet"
+msgstr "Renaming sheet"
 
 #, c-format
 msgid "(page %s)"
@@ -16405,8 +16437,8 @@ msgstr "Invalid report format\n"
 msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "Export utilities (Gerbers, drill, position files, etc)"
 
-msgid "Output file format, options: step, glb (binary glTF)"
-msgstr "Output file format, options: step, glb (binary glTF)"
+msgid "Output file format, options: step, brep, xao, glb (binary glTF)"
+msgstr "Output file format, options: step, brep, xao, glb (binary glTF)"
 
 msgid "Overwrite output file"
 msgstr "Overwrite output file"
@@ -16431,14 +16463,29 @@ msgstr ""
 msgid "Only generate a board with no components"
 msgstr "Only generate a board with no components"
 
+msgid "Exclude board body"
+msgstr "Exclude board body"
+
+msgid "Exclude 3D models for components"
+msgstr "Exclude 3D models for components"
+
 msgid "Export tracks"
 msgstr "Export tracks"
 
 msgid "Export zones"
 msgstr "Export zones"
 
+msgid "Export elements on inner copper layers"
+msgstr "Export elements on inner copper layers"
+
+msgid "Fuse overlapping geometry together"
+msgstr "Fuse overlapping geometry together"
+
 msgid "Minimum distance between points to treat them as separate ones"
 msgstr "Minimum distance between points to treat them as separate ones"
+
+msgid "Only include copper items belonging to nets matching this wildcard"
+msgstr "Only include copper items belonging to nets matching this wildcard"
 
 msgid "Do not optimize STEP file (enables writing parametric curves)"
 msgstr "Do not optimize STEP file (enables writing parametric curves)"
@@ -17026,6 +17073,12 @@ msgstr "Export GLB (binary GLTF)"
 
 msgid "Export STEP"
 msgstr "Export STEP"
+
+msgid "Export BREP"
+msgstr "Export BREP"
+
+msgid "Export XAO"
+msgstr "Export XAO"
 
 msgid "Export VRML"
 msgstr "Export VRML"
@@ -22115,12 +22168,6 @@ msgstr ""
 "Disables writing parametric curves. Optimizes file size and write/read "
 "times, but may reduce compatibility with other software."
 
-msgid "Fuse shapes (time consuming)"
-msgstr "Fuse shapes (time consuming)"
-
-msgid "Combine intersecting geometry into one shape."
-msgstr "Combine intersecting geometry into one shape."
-
 msgid "Export as Compound shape"
 msgstr "Export as Compound shape"
 
@@ -22131,6 +22178,12 @@ msgstr ""
 "Merges all shapes into a single Compound shape. Useful for external software "
 "that does de-duplication based on shape names."
 
+msgid "Export board body"
+msgstr "Export board body"
+
+msgid "Export components"
+msgstr "Export components"
+
 msgid "Export tracks, pads and vias"
 msgstr "Export tracks, pads and vias"
 
@@ -22139,6 +22192,15 @@ msgstr "Export tracks, pads and vias on external copper layers."
 
 msgid "Export zones on external copper layers."
 msgstr "Export zones on external copper layers."
+
+msgid "Export inner copper layers"
+msgstr "Export inner copper layers"
+
+msgid "Fuse shapes (time consuming)"
+msgstr "Fuse shapes (time consuming)"
+
+msgid "Combine intersecting geometry into one shape."
+msgstr "Combine intersecting geometry into one shape."
 
 msgid "Export silkscreen"
 msgstr "Export silkscreen"
@@ -22157,6 +22219,14 @@ msgstr "Export solder paste"
 
 msgid "Export solder paste graphics."
 msgstr "Export solder paste graphics."
+
+msgid "Net filter (supports wildcards):"
+msgstr "Net filter (supports wildcards):"
+
+msgid ""
+"Only copper items belonging to nets matching this filter will be exported."
+msgstr ""
+"Only copper items belonging to nets matching this filter will be exported."
 
 msgid "Board outline chaining tolerance:"
 msgstr "Board outline chaining tolerance:"
@@ -22177,8 +22247,8 @@ msgstr ""
 "Tolerance sets the distance between two points that are considered joined "
 "when building the board outlines."
 
-msgid "Export STEP / GLTF"
-msgstr "Export STEP / GLTF"
+msgid "Export STEP / BREP / XAO / GLTF"
+msgstr "Export STEP / BREP / XAO / GLTF"
 
 #, c-format
 msgid "Process failed with exit code %d"
@@ -24559,9 +24629,6 @@ msgstr "Keep out footprints"
 
 msgid "Raise a DRC error if a footprint courtyard overlaps this area"
 msgstr "Raise a DRC error if a footprint courtyard overlaps this area"
-
-msgid "Rule Area Properties"
-msgstr "Rule Area Properties"
 
 msgid "Center Point"
 msgstr "Center Point"
@@ -27938,10 +28005,6 @@ msgid "Determining PCB data\n"
 msgstr "Determining PCB data\n"
 
 #, c-format
-msgid "Board Thickness from stackup: %.3f mm\n"
-msgstr "Board Thickness from stackup: %.3f mm\n"
-
-#, c-format
 msgid "Build %s data\n"
 msgstr "Build %s data\n"
 
@@ -27996,6 +28059,41 @@ msgstr ""
 "\n"
 "Export time %.3f s\n"
 
+msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
+msgstr "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
+
+#, c-format
+msgid "Wire not done (contour points %d): OCC error %d\n"
+msgstr "Wire not done (contour points %d): OCC error %d\n"
+
+#, c-format
+msgid "z: %g; bounding box: %s\n"
+msgstr "z: %g; bounding box: %s\n"
+
+msgid ""
+"\n"
+"Wire self-interference check failed\n"
+msgstr ""
+"\n"
+"Wire self-interference check failed\n"
+
+msgid "Using non-simplified polygon.\n"
+msgstr "Using non-simplified polygon.\n"
+
+msgid ""
+"\n"
+"** Outline skipped **\n"
+msgstr ""
+"\n"
+"** Outline skipped **\n"
+
+msgid ""
+"\n"
+"** Hole skipped **\n"
+msgstr ""
+"\n"
+"** Hole skipped **\n"
+
 #, c-format
 msgid "Build holes for %s\n"
 msgstr "Build holes for %s\n"
@@ -28003,6 +28101,20 @@ msgstr "Build holes for %s\n"
 #, c-format
 msgid "Cutting %d/%d %s\n"
 msgstr "Cutting %d/%d %s\n"
+
+#, c-format
+msgid ""
+"\n"
+"** Got problems while cutting %s number %d **\n"
+msgstr ""
+"\n"
+"** Got problems while cutting %s number %d **\n"
+
+msgid "Errors:\n"
+msgstr "Errors:\n"
+
+msgid "Warnings:\n"
+msgstr "Warnings:\n"
 
 msgid "shapes"
 msgstr "shapes"
@@ -28015,6 +28127,9 @@ msgstr "tracks"
 
 msgid "zones"
 msgstr "zones"
+
+msgid "** Got problems while fusing shapes **\n"
+msgstr "** Got problems while fusing shapes **\n"
 
 msgid "All KiCad Board Files"
 msgstr "All KiCad Board Files"
@@ -28536,6 +28651,9 @@ msgstr "Unable to tune segments inside other tuning patterns."
 msgid "Tune"
 msgstr "Tune"
 
+msgid "Select a track to tune first."
+msgstr "Select a track to tune first."
+
 msgid "Single track"
 msgstr "Single track"
 
@@ -28713,11 +28831,11 @@ msgstr "IDFv3..."
 msgid "Export IDF 3D board representation"
 msgstr "Export IDF 3D board representation"
 
-msgid "STEP..."
-msgstr "STEP..."
+msgid "STEP / BREP / XAO..."
+msgstr "STEP / BREP / XAO..."
 
-msgid "Export STEP 3D board representation"
-msgstr "Export STEP 3D board representation"
+msgid "Export STEP / BREP / XAO 3D board representation"
+msgstr "Export STEP / BREP / XAO 3D board representation"
 
 msgid "SVG..."
 msgstr "SVG..."
@@ -29098,10 +29216,6 @@ msgstr "Update Netlist"
 #, c-format
 msgid "Total warnings: %d, errors: %d."
 msgstr "Total warnings: %d, errors: %d."
-
-#, c-format
-msgid "Cannot find component with ref '%s' in netlist."
-msgstr "Cannot find component with ref '%s' in netlist."
 
 #, c-format
 msgid ""
@@ -30459,9 +30573,6 @@ msgstr "Saving file"
 
 msgid "Failed to save file to buffer"
 msgstr "Failed to save file to buffer"
-
-msgid "IPC-2581 Production File"
-msgstr "IPC-2581 Production File"
 
 #, c-format
 msgid "File '%s' has an unrecognized version: %d."
@@ -32033,6 +32144,9 @@ msgstr "Tolerance value:"
 msgid "Change Side / Flip"
 msgstr "Change Side / Flip"
 
+msgid "Use the Footprint Properties dialog to remove fields."
+msgstr "Use the Footprint Properties dialog to remove fields."
+
 msgid "Move Exactly"
 msgstr "Move Exactly"
 
@@ -32331,9 +32445,6 @@ msgstr "Add Vias"
 msgid "Add free-standing vias"
 msgstr "Add free-standing vias"
 
-msgid "Add Rule Area"
-msgstr "Add Rule Area"
-
 msgid "Add a rule area (keepout)"
 msgstr "Add a rule area (keepout)"
 
@@ -32391,18 +32502,6 @@ msgstr "Toggle Snapping Between Active and All Layers"
 msgid "Toggles between snapping on all visible layers and only the active area"
 msgstr ""
 "Toggles between snapping on all visible layers and only the active area"
-
-msgid "Delete Last Point"
-msgstr "Delete Last Point"
-
-msgid "Delete the last point added to the current item"
-msgstr "Delete the last point added to the current item"
-
-msgid "Close Outline"
-msgstr "Close Outline"
-
-msgid "Close the in progress outline"
-msgstr "Close the in progress outline"
 
 msgid "Show the design rules checker window"
 msgstr "Show the design rules checker window"
@@ -33572,6 +33671,12 @@ msgstr "Generators Manager"
 msgid "Show a manager dialog for Generator objects"
 msgstr "Show a manager dialog for Generator objects"
 
+msgid "Length Tuning Settings..."
+msgstr "Length Tuning Settings…"
+
+msgid "Displays tuning pattern properties dialog"
+msgstr "Displays tuning pattern properties dialog"
+
 msgid "Don't show again"
 msgstr "Don't show again"
 
@@ -34362,9 +34467,6 @@ msgstr "Filled Area"
 msgid "Corner Count"
 msgstr "Corner Count"
 
-msgid "Rule Area"
-msgstr "Rule Area"
-
 msgid "Teardrop Area"
 msgstr "Teardrop Area"
 
@@ -34596,6 +34698,64 @@ msgstr "KiCad Schematic Symbol"
 
 msgid "KiCad Drawing Sheet"
 msgstr "KiCad Drawing Sheet"
+
+#~ msgid "Set border width to 0 to use schematic's default symbol line width."
+#~ msgstr "Set border width to 0 to use schematic's default symbol line width."
+
+#~ msgid "Private to symbol editor"
+#~ msgstr "Private to symbol editor"
+
+#~ msgid "Flags"
+#~ msgstr "Flags"
+
+#, c-format
+#~ msgid "Arc with radius %s"
+#~ msgstr "Arc with radius %s"
+
+#, c-format
+#~ msgid "Circle with radius %s"
+#~ msgstr "Circle with radius %s"
+
+#, c-format
+#~ msgid "Rectangle with width %s height %s"
+#~ msgstr "Rectangle with width %s height %s"
+
+#, c-format
+#~ msgid "Polyline with %d points"
+#~ msgstr "Polyline with %d points"
+
+#, c-format
+#~ msgid "Bezier Curve with %d points"
+#~ msgstr "Bezier Curve with %d points"
+
+#~ msgid "Graphic Text Box"
+#~ msgstr "Graphic Text Box"
+
+#~ msgid "Graphic Text"
+#~ msgstr "Graphic Text"
+
+#~ msgid "Output file format, options: step, glb (binary glTF)"
+#~ msgstr "Output file format, options: step, glb (binary glTF)"
+
+#~ msgid "Export STEP / GLTF"
+#~ msgstr "Export STEP / GLTF"
+
+#, c-format
+#~ msgid "Board Thickness from stackup: %.3f mm\n"
+#~ msgstr "Board Thickness from stackup: %.3f mm\n"
+
+#~ msgid "STEP..."
+#~ msgstr "STEP..."
+
+#~ msgid "Export STEP 3D board representation"
+#~ msgstr "Export STEP 3D board representation"
+
+#, c-format
+#~ msgid "Cannot find component with ref '%s' in netlist."
+#~ msgstr "Cannot find component with ref '%s' in netlist."
+
+#~ msgid "IPC-2581 Production File"
+#~ msgstr "IPC-2581 Production File"
 
 #~ msgid "3D models by"
 #~ msgstr "3D models by"
@@ -38906,9 +39066,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Add bitmap image"
 #~ msgstr "Add bitmap image"
-
-#~ msgid "Length Tuning Settings..."
-#~ msgstr "Length Tuning Settings…"
 
 #~ msgid "Sets the length tuning parameters for currently routed item."
 #~ msgstr "Sets the length tuning parameters for currently routed item."
@@ -45763,9 +45920,6 @@ msgstr "KiCad Drawing Sheet"
 
 #~ msgid "Alias Name"
 #~ msgstr "Alias Name"
-
-#~ msgid "Rename"
-#~ msgstr "Rename"
 
 #~ msgid "Alias Members"
 #~ msgstr "Alias Members"
