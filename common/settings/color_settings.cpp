@@ -36,7 +36,7 @@ const wxString COLOR_SETTINGS::COLOR_BUILTIN_CLASSIC = "_builtin_classic";
 
 
 COLOR_SETTINGS::COLOR_SETTINGS( const wxString& aFilename, bool aAbsolutePath ) :
-        JSON_SETTINGS( std::move( aFilename ), SETTINGS_LOC::COLORS, colorsSchemaVersion ),
+        JSON_SETTINGS( aFilename, SETTINGS_LOC::COLORS, colorsSchemaVersion ),
         m_overrideSchItemColors( false )
 {
     if( aAbsolutePath )
