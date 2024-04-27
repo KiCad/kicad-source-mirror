@@ -113,6 +113,7 @@ void SCH_EDIT_FRAME::ShowSchematicSetupDialog( const wxString& aInitialPage )
 
         Prj().IncrementTextVarsTicker();
         Prj().IncrementNetclassesTicker();
+        Pgm().GetSettingsManager().SaveProject();
 
         GetRenderSettings()->SetDefaultPenWidth( Schematic().Settings().m_DefaultLineWidth );
         GetRenderSettings()->m_LabelSizeRatio  = Schematic().Settings().m_LabelSizeRatio;
