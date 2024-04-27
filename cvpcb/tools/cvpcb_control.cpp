@@ -34,6 +34,7 @@
 #include <tools/cvpcb_actions.h>
 #include <tools/cvpcb_control.h>
 #include <wx/settings.h>
+#include <wx/msgdlg.h>
 
 using namespace std::placeholders;
 

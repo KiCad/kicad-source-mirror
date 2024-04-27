@@ -22,8 +22,8 @@
  */
 
 #include <vector>
-#include <sch_symbol.h>
 #include <eda_draw_frame.h>
+#include <lib_symbol.h>
 #include <sch_shape.h>
 #include <macros.h>
 

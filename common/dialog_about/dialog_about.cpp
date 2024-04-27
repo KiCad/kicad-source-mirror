@@ -24,6 +24,7 @@
 
 
 #include <build_version.h>
+#include <eda_base_frame.h>
 #include <wx/clipbrd.h>
 #include <wx/msgdlg.h>
 #include <wx/hyperlink.h>

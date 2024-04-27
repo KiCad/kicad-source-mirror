@@ -19,10 +19,10 @@
 
 #include <dialogs/dialog_print_generic.h>
 
-#include <confirm.h>
 #include <eda_draw_frame.h>
 #include <printout.h>
 #include <pgm_base.h>
+#include <confirm.h>
 
 #include <wx/print.h>
 #include <wx/printdlg.h>

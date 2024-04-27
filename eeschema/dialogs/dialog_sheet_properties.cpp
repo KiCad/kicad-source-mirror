@@ -29,6 +29,7 @@
 #include <wx/tooltip.h>
 #include <common.h>
 #include <confirm.h>
+#include <kidialog.h>
 #include <validators.h>
 #include <wx_filename.h>
 #include <wildcards_and_files_ext.h>

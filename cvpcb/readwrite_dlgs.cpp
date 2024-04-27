@@ -33,6 +33,7 @@
 #include <cvpcb_mainframe.h>
 #include <fp_conflict_assignment_selector.h>
 #include <project_pcb.h>
+#include <wx/msgdlg.h>
 
 
 /**

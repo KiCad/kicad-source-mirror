@@ -36,6 +36,7 @@
 #include <kiway.h>
 #include <tool/tool_manager.h>
 #include <tools/kicad_manager_actions.h>
+#include <wx/msgdlg.h>
 
 #include "kicad_manager_frame.h"
 #include "project_tree.h"

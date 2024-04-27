@@ -29,6 +29,7 @@
 #include <wx/listctrl.h>
 #include <wx/event.h>
 #include <wx/sizer.h>
+#include <wx/timer.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 

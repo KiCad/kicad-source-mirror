@@ -37,6 +37,7 @@
 #include <tools/pcb_actions.h>
 #include <tools/tool_event_utils.h>
 #include <tools/zone_filler_tool.h>
+#include <view/view_controls.h>
 
 
 void PCB_TOOL_BASE::doInteractiveItemPlacement( const TOOL_EVENT&        aTool,

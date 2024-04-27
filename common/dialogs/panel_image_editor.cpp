@@ -23,11 +23,12 @@
  */
 
 #include <wx/dcclient.h>
-#include <confirm.h>
+#include <wx/msgdlg.h>
 #include <bitmap_base.h>
 #include <pcb_base_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
+#include <confirm.h>
 
 #include <dialogs/panel_image_editor.h>
 

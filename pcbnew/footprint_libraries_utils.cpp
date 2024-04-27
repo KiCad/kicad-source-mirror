@@ -25,6 +25,7 @@
 #include <pgm_base.h>
 #include <kiface_base.h>
 #include <confirm.h>
+#include <kidialog.h>
 #include <string_utils.h>
 #include <macros.h>
 #include <pcb_edit_frame.h>
@@ -51,6 +52,7 @@
 #include <project/project_file.h>
 #include <footprint_editor_settings.h>
 #include <footprint_viewer_frame.h>
+#include <view/view_controls.h>
 #include <wx/choicdlg.h>
 #include <wx/filedlg.h>
 #include <wx/fswatcher.h>

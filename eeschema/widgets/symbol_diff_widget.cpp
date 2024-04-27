@@ -21,6 +21,7 @@
 #include <sch_painter.h>
 #include <eeschema_settings.h>
 #include <settings/settings_manager.h>
+#include <lib_symbol.h>
 #include <sch_view.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
@@ -46,7 +47,7 @@ SYMBOL_DIFF_WIDGET::SYMBOL_DIFF_WIDGET( wxWindow* aParent,
     m_outerSizer->Add( bottomSizer, 0, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, 10 );
 
     Layout();
-    
+
     m_slider->Bind( wxEVT_SCROLL_TOP, &SYMBOL_DIFF_WIDGET::onSlider, this );
    	m_slider->Bind( wxEVT_SCROLL_BOTTOM, &SYMBOL_DIFF_WIDGET::onSlider, this );
    	m_slider->Bind( wxEVT_SCROLL_LINEUP, &SYMBOL_DIFF_WIDGET::onSlider, this );

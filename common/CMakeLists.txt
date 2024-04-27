@@ -133,6 +133,7 @@ set( KICOMMON_SRCS
     exceptions.cpp
     gestfich.cpp
     json_conversions.cpp
+    kidialog.cpp
     kiid.cpp
     kiway.cpp
     kiway_express.cpp

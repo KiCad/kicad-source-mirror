@@ -25,6 +25,7 @@
 #include <qa_utils/wx_utils/wx_assert.h>
 
 // Code under test
+#include <lib_symbol.h>
 #include <sch_pin.h>
 #include <sch_symbol.h>
 

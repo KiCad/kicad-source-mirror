@@ -24,6 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_base_frame.h>
+
 #include <advanced_config.h>
 #include <bitmaps.h>
 #include <bitmap_store.h>
@@ -66,6 +68,7 @@
 #include <wx/display.h>
 #include <wx/stdpaths.h>
 #include <wx/string.h>
+#include <wx/msgdlg.h>
 #include <kiplatform/app.h>
 #include <kiplatform/io.h>
 #include <kiplatform/ui.h>

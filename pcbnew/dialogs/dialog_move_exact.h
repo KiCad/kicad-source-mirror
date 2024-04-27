@@ -26,6 +26,8 @@
 #define __DIALOG_MOVE_EXACT__
 
 #include <vector>
+#include <math/box2.h>
+#include <geometry/eda_angle.h>
 #include <widgets/unit_binder.h>
 
 #include <dialogs/dialog_move_exact_base.h>

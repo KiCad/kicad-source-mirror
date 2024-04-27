@@ -34,6 +34,7 @@
 #include <sch_shape.h>
 #include <sch_textbox.h>
 #include <pgm_base.h>
+#include <view/view_controls.h>
 #include <symbol_editor/symbol_editor_settings.h>
 #include <settings/settings_manager.h>
 #include <string_utils.h>

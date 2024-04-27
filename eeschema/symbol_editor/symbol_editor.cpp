@@ -25,6 +25,7 @@
 
 #include <pgm_base.h>
 #include <confirm.h>
+#include <kidialog.h>
 #include <kiway.h>
 #include <widgets/wx_infobar.h>
 #include <tools/ee_actions.h>

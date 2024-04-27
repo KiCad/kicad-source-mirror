@@ -27,6 +27,7 @@
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
+#include <zone_settings.h>
 #include <widgets/unit_binder.h>
 #include <wx/statbox.h>
 #include <wx/statline.h>

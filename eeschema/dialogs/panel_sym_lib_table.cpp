@@ -50,6 +50,7 @@
 #include <widgets/std_bitmap_button.h>
 #include <sch_file_versions.h>
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 #include <project_sch.h>
 
 

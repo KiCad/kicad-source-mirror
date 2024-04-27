@@ -34,6 +34,7 @@
 #include <wx/dcclient.h>
 #include <wx/menu.h>
 #include <wx/msgdlg.h>
+#include <wx/sizer.h>
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/treelist.h>

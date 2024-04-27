@@ -52,6 +52,7 @@
 #include <dialogs/eda_view_switcher.h>
 #include <wx/checkbox.h>
 #include <wx/hyperlink.h>
+#include <wx/msgdlg.h>
 #include <wx/radiobut.h>
 #include <wx/sizer.h>
 #include <wx/slider.h>

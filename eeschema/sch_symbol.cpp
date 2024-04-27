@@ -195,6 +195,11 @@ SCH_SYMBOL::SCH_SYMBOL( const SCH_SYMBOL& aSymbol ) :
 }
 
 
+SCH_SYMBOL::~SCH_SYMBOL()
+{
+}
+
+
 void SCH_SYMBOL::Init( const VECTOR2I& pos )
 {
     m_layer     = LAYER_DEVICE;
@@ -1141,6 +1146,12 @@ std::vector<SCH_PIN*> SCH_SYMBOL::GetAllLibPins() const
         return m_part->GetAllLibPins();
 
     return std::vector<SCH_PIN*>();
+}
+
+
+size_t SCH_SYMBOL::GetFullPinCount() const
+{
+    return m_part ? m_part->GetPinCount() : 0;
 }
 
 
@@ -2584,6 +2595,18 @@ void SCH_SYMBOL::ClearBrightenedPins()
 {
     for( std::unique_ptr<SCH_PIN>& pin : m_pins )
         pin->ClearBrightened();
+}
+
+
+bool SCH_SYMBOL::SCH_SYMBOL::GetShowPinNumbers() const
+{
+    return m_part && m_part->GetShowPinNumbers();
+}
+
+
+bool SCH_SYMBOL::GetShowPinNames() const
+{
+    return m_part && m_part->GetShowPinNames();
 }
 
 

@@ -23,6 +23,7 @@
 
 #include <dialogs/dialog_hotkey_list.h>
 #include <kiface_base.h>
+#include <eda_base_frame.h>
 #include <panel_hotkeys_editor.h>
 #include <widgets/ui_common.h>
 

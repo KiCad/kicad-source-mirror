@@ -26,9 +26,13 @@
 
 #include <dialog_shim.h>
 #include <git2.h>
+#include <vector>
 
 class wxCheckBox;
+class wxTextCtrl;
 class wxListCtrl;
+class wxButton;
+
 class DIALOG_GIT_COMMIT : public DIALOG_SHIM
 {
 public:

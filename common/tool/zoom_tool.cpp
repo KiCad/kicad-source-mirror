@@ -24,6 +24,7 @@
 #include <tool/tool_manager.h>
 #include <tool/zoom_tool.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <math/vector2wx.h>
 
 

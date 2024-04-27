@@ -25,6 +25,7 @@
 #include <sch_io/sch_io.h>
 #include <sch_io/sch_io_mgr.h>
 #include <wildcards_and_files_ext.h>
+#include <optional>
 
 
 class DATABASE_LIB_SETTINGS;

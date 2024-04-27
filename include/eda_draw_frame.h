@@ -28,6 +28,7 @@
 
 #include <api/api_plugin.h>
 #include <eda_base_frame.h>
+#include <eda_search_data.h>
 #include <kiway_player.h>
 #include <gal/gal_display_options.h>
 #include <gal_display_options_common.h>

@@ -36,6 +36,7 @@
 #include <wildcards_and_files_ext.h>
 #include <bitmaps/bitmap_types.h>
 #include <confirm.h>
+#include <kidialog.h>
 #include <gestfich.h> // To open with a text editor
 #include <wx/filedlg.h>
 #include "wx/generic/textdlgg.h"

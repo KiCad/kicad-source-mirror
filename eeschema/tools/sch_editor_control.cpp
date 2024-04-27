@@ -73,11 +73,13 @@
 #include <tools/sch_move_tool.h>
 #include <drawing_sheet/ds_proxy_undo_item.h>
 #include <eda_list_dialog.h>
+#include <view/view_controls.h>
 #include <wildcards_and_files_ext.h>
 #include <wx_filename.h>
 #include <sch_sheet_path.h>
 #include <wx/filedlg.h>
 #include <wx/treectrl.h>
+#include <wx/msgdlg.h>
 #include "sch_edit_table_tool.h"
 
 #ifdef KICAD_IPC_API

@@ -37,6 +37,7 @@
 #include <widgets/wx_html_report_panel.h>
 #include <plotters/plotters_pslike.h>
 #include <wx/dirdlg.h>
+#include <wx/msgdlg.h>
 #include <pgm_base.h>
 #include <project/project_file.h>
 #include <exporters/export_svg.h>

@@ -53,6 +53,7 @@
 #include <widgets/appearance_controls.h>
 #include <widgets/wx_infobar.h>
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 
 #include <bitmaps.h>
 #include <board.h>
@@ -76,6 +77,7 @@
 #include <string_utils.h>
 #include <zone.h>
 #include <fix_board_shape.h>
+#include <view/view_controls.h>
 
 const unsigned int DRAWING_TOOL::COORDS_PADDING = pcbIUScale.mmToIU( 20 );
 

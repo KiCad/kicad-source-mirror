@@ -23,6 +23,7 @@
 
 #include <pcb_edit_frame.h>
 #include <pcb_table.h>
+#include <board.h>
 #include <geometry/shape_simple.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_compound.h>

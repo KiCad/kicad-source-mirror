@@ -38,6 +38,7 @@
 #include <math/vector2wx.h>
 
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <eda_base_frame.h>
 #include <tool/tool_base.h>
 #include <tool/tool_interactive.h>

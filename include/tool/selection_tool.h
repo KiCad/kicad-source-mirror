@@ -28,8 +28,10 @@
 #include <math/vector2d.h>
 #include <tool/tool_interactive.h>
 #include <wx/timer.h>
+#include <eda_item.h>
 
 class COLLECTOR;
+class KIID;
 
 
 class SELECTION_TOOL : public TOOL_INTERACTIVE, public wxEvtHandler

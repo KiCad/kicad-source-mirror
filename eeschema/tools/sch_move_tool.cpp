@@ -42,6 +42,7 @@
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
 #include <pgm_base.h>
+#include <view/view_controls.h>
 #include <settings/settings_manager.h>
 #include "sch_move_tool.h"
 

@@ -26,8 +26,10 @@
 
 #include <bitmaps.h>
 #include <confirm.h>
+#include <kidialog.h>
 #include <validators.h>
 #include <dialogs/html_message_box.h>
+#include <settings/common_settings.h>
 #include <filename_resolver.h>
 #include <env_vars.h>
 #include <grid_tricks.h>

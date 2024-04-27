@@ -44,13 +44,15 @@
 #include <common.h>
 #include <widgets/wx_html_report_box.h>
 #include <dialogs/dialog_text_entry.h>
-#include <wx/ffile.h>
-#include <wx/filedlg.h>
-#include <wx/hyperlink.h>
 #include <erc_item.h>
 #include <eeschema_settings.h>
 #include <string_utils.h>
 #include <kiplatform/ui.h>
+
+#include <wx/ffile.h>
+#include <wx/filedlg.h>
+#include <wx/hyperlink.h>
+#include <wx/msgdlg.h>
 
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_ERC_DIALOG, wxCommandEvent );

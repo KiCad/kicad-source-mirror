@@ -23,13 +23,10 @@
 
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
-#include <widgets/wx_grid.h>
 #include <grid_tricks.h>
 #include <eda_text.h>
 #include <panel_setup_text_and_graphics.h>
-
-#include <wx/treebook.h>
-#include <confirm.h>
+#include <kidialog.h>
 
 
 // Columns of layer classes grid

@@ -39,6 +39,7 @@
 #include <board_stackup_manager/panel_board_stackup.h>
 
 #include <wx/choicdlg.h>
+#include <wx/msgdlg.h>
 #include <eda_list_dialog.h>
 
 

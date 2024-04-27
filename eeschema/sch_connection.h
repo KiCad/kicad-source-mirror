@@ -28,12 +28,12 @@
 #include <wx/regex.h>
 #include <bus_alias.h>
 #include <sch_sheet_path.h>
+#include <widgets/msgpanel.h>
 
 
 class CONNECTION_GRAPH;
 class SCH_ITEM;
 class SCH_SHEET_PATH;
-class MSG_PANEL_ITEM;
 
 
 enum class CONNECTION_TYPE

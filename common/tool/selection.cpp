@@ -219,6 +219,46 @@ bool SELECTION::OnlyContains( std::vector<KICAD_T> aList ) const
 }
 
 
+const std::vector<EDA_ITEM*> SELECTION::GetItemsSortedByTypeAndXY( bool leftBeforeRight,
+                                                                   bool topBeforeBottom ) const
+{
+    std::vector<EDA_ITEM*> sorted_items = std::vector<EDA_ITEM*>( m_items.begin(), m_items.end() );
+
+    std::sort( sorted_items.begin(), sorted_items.end(),
+               [&]( EDA_ITEM* a, EDA_ITEM* b )
+               {
+                   if( a->Type() == b->Type() )
+                   {
+                       if( a->GetSortPosition().x == b->GetSortPosition().x )
+                       {
+                           // Ensure deterministic sort
+                           if( a->GetSortPosition().y == b->GetSortPosition().y )
+                               return a->m_Uuid < b->m_Uuid;
+
+                           if( topBeforeBottom )
+                               return a->GetSortPosition().y < b->GetSortPosition().y;
+                           else
+                               return a->GetSortPosition().y > b->GetSortPosition().y;
+                       }
+                       else if( leftBeforeRight )
+                       {
+                           return a->GetSortPosition().x < b->GetSortPosition().x;
+                       }
+                       else
+                       {
+                           return a->GetSortPosition().x > b->GetSortPosition().x;
+                       }
+                   }
+                   else
+                   {
+                       return a->Type() < b->Type();
+                   }
+               } );
+
+    return sorted_items;
+}
+
+
 const std::vector<EDA_ITEM*> SELECTION::GetItemsSortedBySelectionOrder() const
 {
     using pairedIterators = std::pair<decltype( m_items.begin() ),

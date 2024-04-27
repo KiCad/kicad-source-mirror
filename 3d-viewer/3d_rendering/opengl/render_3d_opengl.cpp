@@ -30,6 +30,7 @@
 #include "render_3d_opengl.h"
 #include "opengl_utils.h"
 #include "common_ogl/ogl_utils.h"
+#include <board.h>
 #include <footprint.h>
 #include <3d_math.h>
 #include <glm/geometric.hpp>

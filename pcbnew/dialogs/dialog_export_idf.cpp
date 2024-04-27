@@ -28,7 +28,7 @@
 #include <dialog_export_idf_base.h>
 #include <pcbnew_settings.h>
 #include <project/project_file.h> // LAST_PATH_TYPE
-#include <confirm.h>
+#include <kidialog.h>
 
 
 class DIALOG_EXPORT_IDF3: public DIALOG_EXPORT_IDF3_BASE

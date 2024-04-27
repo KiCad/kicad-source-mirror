@@ -35,6 +35,7 @@
 #include <wx/zstream.h>
 #include <wx/wfstream.h>
 #include <wx/datstrm.h>
+#include <wx/tokenzr.h>
 
 #include <advanced_config.h>
 #include <eda_text.h> // for IsGotoPageHref

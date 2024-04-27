@@ -27,6 +27,7 @@
 #include <string>
 
 #include <confirm.h>
+#include <kidialog.h>
 #include <core/arraydim.h>
 #include <core/thread_pool.h>
 #include <gestfich.h>

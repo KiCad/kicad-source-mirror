@@ -29,6 +29,7 @@
 
 #include <sch_io/sch_io_mgr.h>
 #include <pin_type.h>
+#include <core/typeinfo.h>
 #include <layer_ids.h>
 #include <plotters/plotter.h>
 #include <sch_io/ltspice/ltspice_schematic.h>

@@ -24,7 +24,6 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include <confirm.h>
 #include <eda_draw_frame.h>
 #include <kiface_base.h>
 #include <macros.h>
@@ -54,6 +53,7 @@
 #include <core/profile.h>
 
 #include <pgm_base.h>
+#include <confirm.h>
 
 EDA_DRAW_PANEL_GAL::EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                         const wxPoint& aPosition, const wxSize& aSize,

@@ -52,6 +52,7 @@
 #include <preview_items/draw_context.h>
 #include <preview_items/preview_utils.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 
 #include <router/pns_dp_meander_placer.h>
 #include <router/pns_meander_placer_base.h>

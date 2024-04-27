@@ -50,6 +50,7 @@
 #include <wx/grid.h>
 #include <wx/textdlg.h>
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 #include <dialogs/eda_view_switcher.h>
 #include "dialog_symbol_fields_table.h"
 #include <fields_data_model.h>

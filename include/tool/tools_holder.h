@@ -25,8 +25,8 @@
 #define  TOOL_HOLDER_H
 
 #include <vector>
-#include <view/view_controls.h>
 #include <tool/selection.h>
+#include <settings/common_settings.h>
 
 struct ACTION_CONDITIONS;
 

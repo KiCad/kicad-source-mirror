@@ -38,6 +38,7 @@
 #include <wx/textentry.h>
 #include <wx/log.h>
 #include <wx/combo.h>
+#include <wx/msgdlg.h>
 
 
 FOOTPRINT_NAME_VALIDATOR::FOOTPRINT_NAME_VALIDATOR( wxString* aValue ) :

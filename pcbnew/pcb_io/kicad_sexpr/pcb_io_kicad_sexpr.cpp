@@ -58,6 +58,7 @@
 #include <wx/dir.h>
 #include <wx/ffile.h>
 #include <wx/log.h>
+#include <wx/msgdlg.h>
 #include <build_version.h>
 
 // For some reason wxWidgets is built with wxUSE_BASE64 unset so expose the wxWidgets

@@ -29,6 +29,7 @@
 #include <macros.h>
 #include <string_utils.h>
 #include <pcb_edit_frame.h>
+#include <board.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
 #include <footprint.h>

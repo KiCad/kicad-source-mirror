@@ -25,7 +25,7 @@
 #include <tools/ee_selection_tool.h>
 #include <symbol_edit_frame.h>
 #include <sch_commit.h>
-#include <confirm.h>
+#include <kidialog.h>
 #include <ee_actions.h>
 #include <dialogs/dialog_pin_properties.h>
 #include <settings/settings_manager.h>

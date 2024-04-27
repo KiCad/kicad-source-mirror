@@ -27,7 +27,7 @@
 #include <kicad_manager_frame.h>
 #include <kiplatform/policy.h>
 #include <confirm.h>
-#include <eda_tools.h>
+#include <kidialog.h>
 #include <project/project_file.h>
 #include <project/project_local_settings.h>
 #include <settings/settings_manager.h>
@@ -41,14 +41,9 @@
 #include <git/git_clone_handler.h>
 #include <gestfich.h>
 #include <paths.h>
-#include <wx/checkbox.h>
 #include <wx/dir.h>
 #include <wx/filedlg.h>
 #include "dialog_pcm.h"
-#include <macros.h>
-#include <sch_io/sch_io_mgr.h>
-#include <pcb_io/pcb_io_mgr.h>
-#include <import_proj.h>
 
 #include "widgets/filedlg_new_project.h"
 

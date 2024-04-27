@@ -25,6 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <eda_shape.h>
+
 #include <bezier_curves.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <eda_draw_frame.h>
@@ -33,7 +35,7 @@
 #include <geometry/shape_circle.h>
 #include <macros.h>
 #include <math/util.h>      // for KiROUND
-#include <eda_shape.h>
+#include <eda_item.h>
 #include <plotters/plotter.h>
 
 

@@ -45,6 +45,7 @@
 #include <symbol_lib_table.h>
 #include <env_paths.h>
 #include <project_sch.h>
+#include <wx/msgdlg.h>
 
 #include <dialog_symbol_remap.h>
 

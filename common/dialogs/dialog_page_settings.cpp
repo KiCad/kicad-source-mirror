@@ -22,7 +22,6 @@
 #include <bitmaps.h>
 #include <base_screen.h>
 #include <common.h>     // ExpandEnvVarSubstitutions
-#include <confirm.h>
 #include <core/arraydim.h>
 #include <dialogs/dialog_page_settings.h>
 #include <eda_draw_frame.h>
@@ -43,6 +42,7 @@
 #include <wx/tokenzr.h>
 #include <wx/filedlg.h>
 #include <wx/dcmemory.h>
+#include <wx/msgdlg.h>
 
 #define MAX_PAGE_EXAMPLE_SIZE 200
 

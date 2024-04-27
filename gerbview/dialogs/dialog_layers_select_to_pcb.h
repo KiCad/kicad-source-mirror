@@ -30,6 +30,7 @@
 #define DIALOG_LAYERS_SELECT_TO_PCB_H_
 
 #include <dialogs/dialog_layers_select_to_pcb_base.h>
+#include <layer_ids.h>
 
 class GERBVIEW_FRAME;
 

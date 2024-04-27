@@ -22,134 +22,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <confirm.h>
+
+#include <functional>
 #include <wx/app.h>
 #include <wx/stockitem.h>
 #include <wx/richmsgdlg.h>
+#include <wx/msgdlg.h>
 #include <wx/choicdlg.h>
 #include <wx/crt.h>
-#include <confirm.h>
-#include <functional>
-#include <unordered_map>
-
-// Set of dialogs that have been chosen not to be shown again
-static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
-
-
-KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, const wxString& aCaption,
-                    long aStyle )
-    : wxRichMessageDialog( aParent, aMessage, aCaption, aStyle | wxCENTRE | wxSTAY_ON_TOP ),
-      m_hash( 0 ),
-      m_cancelMeansCancel( true )
-{
-}
-
-
-KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage, KD_TYPE aType,
-                    const wxString& aCaption )
-    : wxRichMessageDialog( aParent, aMessage, getCaption( aType, aCaption ), getStyle( aType ) ),
-      m_hash( 0 ),
-      m_cancelMeansCancel( true )
-{
-}
-
-
-void KIDIALOG::DoNotShowCheckbox( wxString aUniqueId, int line )
-{
-    ShowCheckBox( _( "Do not show again" ), false );
-
-    m_hash = std::hash<wxString>{}( aUniqueId ) + line;
-}
-
-
-bool KIDIALOG::DoNotShowAgain() const
-{
-    return doNotShowAgainDlgs.count( m_hash ) > 0;
-}
-
-
-void KIDIALOG::ForceShowAgain()
-{
-    doNotShowAgainDlgs.erase( m_hash );
-}
-
-
-bool KIDIALOG::Show( bool aShow )
-{
-    // We should check the do-not-show-again setting only when the dialog is displayed
-    if( aShow )
-    {
-        // Check if this dialog should be shown to the user
-        auto it = doNotShowAgainDlgs.find( m_hash );
-
-        if( it != doNotShowAgainDlgs.end() )
-            return it->second;
-    }
-
-    int ret = wxRichMessageDialog::Show( aShow );
-
-    // Has the user asked not to show the dialog again?
-    // Note that we don't save a Cancel value unless the Cancel button is being used for some
-    // other function (which is actually more common than it being used for Cancel).
-    if( IsCheckBoxChecked() && (!m_cancelMeansCancel || ret != wxID_CANCEL ) )
-        doNotShowAgainDlgs[m_hash] = ret;
-
-    return ret;
-}
-
-
-int KIDIALOG::ShowModal()
-{
-    // Check if this dialog should be shown to the user
-    auto it = doNotShowAgainDlgs.find( m_hash );
-
-    if( it != doNotShowAgainDlgs.end() )
-        return it->second;
-
-    int ret = wxRichMessageDialog::ShowModal();
-
-    // Has the user asked not to show the dialog again?
-    // Note that we don't save a Cancel value unless the Cancel button is being used for some
-    // other function (which is actually more common than it being used for Cancel).
-    if( IsCheckBoxChecked() && (!m_cancelMeansCancel || ret != wxID_CANCEL ) )
-        doNotShowAgainDlgs[m_hash] = ret;
-
-    return ret;
-}
-
-
-wxString KIDIALOG::getCaption( KD_TYPE aType, const wxString& aCaption )
-{
-    if( !aCaption.IsEmpty() )
-        return aCaption;
-
-    switch( aType )
-    {
-    case KD_NONE:       /* fall through */
-    case KD_INFO:       return _( "Message" );
-    case KD_QUESTION:   return _( "Question" );
-    case KD_WARNING:    return _( "Warning" );
-    case KD_ERROR:      return _( "Error" );
-    }
-
-    return wxEmptyString;
-}
-
-
-long KIDIALOG::getStyle( KD_TYPE aType )
-{
-    long style = wxOK | wxCENTRE | wxSTAY_ON_TOP;
-
-    switch( aType )
-    {
-    case KD_NONE:       break;
-    case KD_INFO:       style |= wxICON_INFORMATION; break;
-    case KD_QUESTION:   style |= wxICON_QUESTION; break;
-    case KD_WARNING:    style |= wxICON_WARNING; break;
-    case KD_ERROR:      style |= wxICON_ERROR; break;
-    }
-
-    return style;
-}
 
 
 bool AskOverrideLock( wxWindow* aParent, const wxString& aMessage )

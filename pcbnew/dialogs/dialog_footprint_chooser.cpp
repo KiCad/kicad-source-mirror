@@ -29,6 +29,7 @@
 #include <widgets/panel_footprint_chooser.h>
 #include <3d_canvas/eda_3d_canvas.h>
 #include <common_ogl/ogl_attr_list.h>
+#include <board.h>
 #include <project_pcb.h>
 #include <board_design_settings.h>
 #include <pgm_base.h>

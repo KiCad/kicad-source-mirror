@@ -36,6 +36,7 @@
 #include "../3d_rendering/raytracing/shapes2D/filled_circle_2d.h"
 #include "raytracing/shapes2D/triangle_2d.h"
 #include <board_design_settings.h>
+#include <board.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_text.h>

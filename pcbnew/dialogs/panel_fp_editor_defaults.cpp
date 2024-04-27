@@ -24,16 +24,15 @@
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <footprint_editor_settings.h>
-#include <widgets/wx_grid.h>
 #include <template_fieldnames.h>
 #include <widgets/std_bitmap_button.h>
 #include <grid_tricks.h>
-#include <eda_base_frame.h>
 #include <eda_text.h>
 #include <panel_fp_editor_defaults.h>
 #include <grid_layer_box_helpers.h>
 #include <bitmaps.h>
 #include <confirm.h>
+#include <kidialog.h>
 
 class TEXT_ITEMS_GRID_TABLE : public wxGridTableBase
 {

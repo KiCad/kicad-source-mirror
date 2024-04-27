@@ -30,6 +30,7 @@
 #include <grid_tricks.h>
 #include <scintilla_tricks.h>
 #include <confirm.h>
+#include <board.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
 #include <footprint.h>

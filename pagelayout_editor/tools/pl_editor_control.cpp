@@ -37,6 +37,7 @@
 #include "tools/pl_actions.h"
 #include "tools/pl_editor_control.h"
 #include "tools/pl_selection_tool.h"
+#include <wx/msgdlg.h>
 
 
 bool PL_EDITOR_CONTROL::Init()

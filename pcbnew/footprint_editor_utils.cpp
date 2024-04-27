@@ -45,6 +45,7 @@
 #include <pcb_layer_box_selector.h>
 #include <pcb_dimension.h>
 #include <project_pcb.h>
+#include <view/view_controls.h>
 #include <dialogs/dialog_dimension_properties.h>
 #include <dialogs/dialog_table_properties.h>
 

@@ -29,7 +29,7 @@
 #include <widgets/msgpanel.h>
 #include <bitmaps.h>
 #include <eda_draw_frame.h>
-#include <general.h>
+#include <gr_basic.h>
 #include <schematic.h>
 #include <sch_shape.h>
 

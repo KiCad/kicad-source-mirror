@@ -42,6 +42,7 @@
 #include <pcb_marker.h>
 #include <pgm_base.h>
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 #include <wx/wupdlock.h>
 #include <widgets/appearance_controls.h>
 #include <widgets/ui_common.h>

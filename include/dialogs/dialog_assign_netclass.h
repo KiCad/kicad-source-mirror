@@ -25,6 +25,7 @@
 #define DIALOG_ASSIGN_NETCLASS_H
 
 #include <dialogs/dialog_assign_netclass_base.h>
+#include <set>
 
 
 class EDA_BASE_FRAME;

@@ -23,7 +23,8 @@
 
 #include <dialogs/dialog_book_reporter.h>
 #include <widgets/wx_html_report_box.h>
-#include <wx/wxhtml.h>
+#include <wx/event.h>
+#include <kiway_player.h>
 
 
 wxDEFINE_EVENT( EDA_EVT_CLOSE_DIALOG_BOOK_REPORTER, wxCommandEvent );

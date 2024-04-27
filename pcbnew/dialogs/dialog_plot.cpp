@@ -48,6 +48,7 @@
 #include <macros.h>
 
 #include <wx/dirdlg.h>
+#include <wx/msgdlg.h>
 
 
 LSET DIALOG_PLOT::s_lastLayerSet;

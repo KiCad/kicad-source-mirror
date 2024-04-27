@@ -26,6 +26,7 @@ using namespace std::placeholders;
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
 #include <pcbnew_settings.h>
+#include <view/view_controls.h>
 
 #include <tools/pcb_grid_helper.h>
 #include <wx/log.h>

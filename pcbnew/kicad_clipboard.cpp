@@ -39,7 +39,7 @@
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr.h>
 #include <pcb_io/kicad_sexpr/pcb_io_kicad_sexpr_parser.h>
 #include <kicad_clipboard.h>
-#include "confirm.h"
+#include <kidialog.h>
 
 CLIPBOARD_IO::CLIPBOARD_IO():
         PCB_IO_KICAD_SEXPR(CTL_FOR_CLIPBOARD ),

@@ -26,12 +26,12 @@
 #define DIALOG_GIT_SWITCH_H
 
 #include <dialog_shim.h>
+#include <wx/timer.h>
 #include <git2.h>
 
 class wxButton;
 class wxListView;
 class wxTextCtrl;
-class wxTimer;
 class wxListEvent;
 
 struct BranchData

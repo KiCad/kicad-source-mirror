@@ -25,6 +25,7 @@
 
 #include <kiface_base.h>
 #include <confirm.h>
+#include <board.h>
 #include <pcb_edit_frame.h>
 #include <pcbnew_settings.h>
 #include <zone_settings.h>

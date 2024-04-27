@@ -47,6 +47,7 @@
 #include <tools/gerbview_control.h>
 #include <trigo.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <base_screen.h>
 #include <gerbview_painter.h>
 #include <wx/wupdlock.h>

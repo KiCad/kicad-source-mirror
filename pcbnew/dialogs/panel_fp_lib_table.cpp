@@ -37,6 +37,7 @@
 #include <wx/grid.h>
 #include <wx/dirdlg.h>
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 
 #include <project.h>
 #include <env_vars.h>
@@ -69,6 +70,7 @@
 #include <paths.h>
 #include <macros.h>
 #include <project_pcb.h>
+#include <common.h>
 
 // clang-format off
 

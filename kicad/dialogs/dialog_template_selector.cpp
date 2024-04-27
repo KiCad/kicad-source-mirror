@@ -25,6 +25,7 @@
 #include "dialog_template_selector.h"
 #include <bitmaps.h>
 #include <widgets/std_bitmap_button.h>
+#include <widgets/ui_common.h>
 #include <wx_filename.h>
 #include <wx/dir.h>
 #include <wx/dirdlg.h>

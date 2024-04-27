@@ -29,6 +29,7 @@
 #include <common.h>
 
 #include <fp_conflict_assignment_selector.h>
+#include <widgets/ui_common.h>
 
 
 DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR::DIALOG_FP_CONFLICT_ASSIGNMENT_SELECTOR( wxWindow* aParent )

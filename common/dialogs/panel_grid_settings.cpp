@@ -22,12 +22,12 @@
  */
 
 #include <bitmaps.h>
-#include <confirm.h>
 #include <wx/textdlg.h>
 #include <dialogs/panel_grid_settings.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/std_bitmap_button.h>
 #include <common.h>
+#include <confirm.h>
 #include <settings/app_settings.h>
 #include <eda_draw_frame.h>
 #include <tool/tool_manager.h>

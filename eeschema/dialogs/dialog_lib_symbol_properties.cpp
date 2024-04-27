@@ -41,6 +41,7 @@
 #include <dialog_lib_symbol_properties.h>
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
+#include <wx/msgdlg.h>
 
 
 int DIALOG_LIB_SYMBOL_PROPERTIES::m_lastOpenedPage = 0;

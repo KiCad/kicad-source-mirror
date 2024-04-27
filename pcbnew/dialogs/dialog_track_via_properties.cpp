@@ -31,11 +31,10 @@
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_track.h>
-#include <pcb_edit_frame.h>
 #include <confirm.h>
+#include <kidialog.h>
 #include <connectivity/connectivity_data.h>
 #include <board_commit.h>
-#include <macros.h>
 
 DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParent,
                                                           const PCB_SELECTION& aItems ) :

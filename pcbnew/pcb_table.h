@@ -27,6 +27,7 @@
 
 #include <pcb_tablecell.h>
 #include <board_item.h>
+#include <board_item_container.h>
 
 
 class PCB_TABLE : public BOARD_ITEM_CONTAINER

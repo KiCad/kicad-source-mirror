@@ -39,6 +39,7 @@
 #include <math/vector2d.h>
 #include <advanced_config.h>
 #include <gal/graphics_abstraction_layer.h>
+#include <view/view_controls.h>
 #include <tool/actions.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection.h>

@@ -41,6 +41,7 @@
 #include <wx/tokenzr.h>
 #include <wx/choicdlg.h>
 #include <wx/dcclient.h>
+#include <wx/msgdlg.h>
 #include <grid_tricks.h>
 #include <widgets/grid_text_button_helpers.h>
 #include <kiplatform/ui.h>

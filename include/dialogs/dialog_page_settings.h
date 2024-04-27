@@ -27,6 +27,8 @@
 #include <dialog_page_settings_base.h>
 
 class DS_DATA_MODEL;
+class EDA_DRAW_FRAME;
+class BASE_SCREEN;
 
 /*!
  * DIALOG_PAGES_SETTINGS class declaration

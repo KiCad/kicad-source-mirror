@@ -23,6 +23,7 @@
  */
 
 #include <wx/log.h>
+#include <wx/msgdlg.h>
 #include <fmt/format.h>
 
 #include <tool/tool_manager.h>
@@ -36,6 +37,7 @@
 #include <macros.h>
 #include <string_utils.h>
 #include <view/view.h>
+#include <view/view_controls.h>
 #include <math/util.h>      // for KiROUND
 
 #include "tools/pl_selection_tool.h"

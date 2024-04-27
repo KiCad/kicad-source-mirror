@@ -36,7 +36,12 @@
 
 #include <tool/tool_base.h>
 #include <tool/tool_event.h>
-#include <view/view_controls.h>
+
+namespace KIGFX
+{
+class VIEW_CONTROLS;
+struct VC_SETTINGS;
+}
 
 class COMMIT;
 class TOOLS_HOLDER;

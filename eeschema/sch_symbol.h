@@ -32,7 +32,6 @@
 #include <core/typeinfo.h>
 #include <layer_ids.h>
 #include <lib_id.h>
-#include <widgets/msgpanel.h>
 
 #include <memory>
 #include <string>
@@ -40,13 +39,10 @@
 #include <vector>
 #include <wx/arrstr.h>
 #include <wx/chartype.h>
-#include <wx/fdrepdlg.h>
-#include <wx/gdicmn.h>
 #include <wx/string.h>
 
 #include <schematic.h>
 #include <symbol.h>
-#include <lib_symbol.h>
 #include <sch_field.h>
 #include <sch_pin.h>
 #include <sch_sheet_path.h>    // SCH_SYMBOL_INSTANCE
@@ -57,6 +53,7 @@ struct PICKED_SYMBOL;
 class KIID_PATH;
 class SCH_SCREEN;
 class LIB_SYMBOL;
+class MSG_PANEL_ITEM;
 class NETLIST_OBJECT_LIST;
 class SYMBOL_LIB;
 class SYMBOL_LIBS;
@@ -137,7 +134,7 @@ public:
      */
     SCH_SYMBOL( const SCH_SYMBOL& aSymbol );
 
-    ~SCH_SYMBOL() { }
+    ~SCH_SYMBOL();
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
@@ -612,7 +609,7 @@ public:
     /**
      * @return a count of pins for all units.
      */
-    size_t GetFullPinCount() { return m_part ? m_part->GetPinCount() : 0; }
+    size_t GetFullPinCount() const;
 
     /**
      * @return the instance SCH_PIN associated with a particular SCH_PIN from the LIB_SYMBOL.
@@ -856,8 +853,8 @@ public:
     /*
      * We don't currently support changing these at the schematic level.
      */
-    bool GetShowPinNames() const override { return m_part && m_part->GetShowPinNames(); }
-    bool GetShowPinNumbers() const override { return m_part && m_part->GetShowPinNumbers(); }
+    bool GetShowPinNames() const override;
+    bool GetShowPinNumbers() const override;
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 

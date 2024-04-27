@@ -28,6 +28,7 @@
 #include <pcb_reference_image.h>
 #include <tool/tool_manager.h>
 #include <tool/actions.h>
+#include <board.h>
 #include <pcb_layer_box_selector.h>
 
 

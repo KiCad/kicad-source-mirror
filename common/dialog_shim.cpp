@@ -526,7 +526,7 @@ int DIALOG_SHIM::ShowQuasiModal()
 
     m_qmodal_showing = true;
 
-    WX_EVENT_LOOP event_loop;
+    wxGUIEventLoop event_loop;
 
     m_qmodal_loop = &event_loop;
 

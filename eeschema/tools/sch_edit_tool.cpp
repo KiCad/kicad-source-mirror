@@ -71,6 +71,7 @@
 #include <settings/settings_manager.h>
 #include <symbol_editor_settings.h>
 #include <core/kicad_algo.h>
+#include <view/view_controls.h>
 #include <wx/textdlg.h>
 #include <project/net_settings.h>
 

@@ -23,6 +23,7 @@
 #include <widgets/wx_panel.h>
 #include <widgets/paged_dialog.h>
 #include <widgets/wx_treebook.h>
+#include <widgets/ui_common.h>
 
 #include <wx/button.h>
 #include <wx/grid.h>

@@ -131,7 +131,7 @@ bool KIWAY_PLAYER::ShowModal( wxString* aResult, wxWindow* aResultantFocusWindow
         for( unsigned ii = 0; ii < enabledTopLevelWindows.size(); ii++ )
             enabledTopLevelWindows[ii]->Enable( true );
 
-        WX_EVENT_LOOP event_loop;
+        wxGUIEventLoop event_loop;
         m_modal_loop = &event_loop;
         event_loop.Run();
 

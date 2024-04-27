@@ -22,6 +22,7 @@
 #define DIALOG_UPDATE_SYMBOL_FIELDS_H
 
 #include <dialog_update_symbol_fields_base.h>
+#include <set>
 
 class LIB_ID;
 class LIB_SYMBOL;

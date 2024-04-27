@@ -44,11 +44,12 @@ using namespace std::placeholders;
 #include <dialogs/dialog_track_via_size.h>
 #include <math/vector2wx.h>
 #include <paths.h>
+#include <confirm.h>
+#include <kidialog.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/appearance_controls.h>
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
-#include <confirm.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <bitmaps.h>
 #include <string_utils.h>
@@ -62,6 +63,7 @@ using namespace std::placeholders;
 #include <tools/drc_tool.h>
 #include <tools/zone_filler_tool.h>
 #include <drc/drc_interactive_courtyard_clearance.h>
+#include <view/view_controls.h>
 
 #include <project.h>
 #include <project/project_file.h>

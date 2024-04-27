@@ -45,6 +45,7 @@
 #include <drc/drc_item.h>
 #include <pad.h>
 #include <project_pcb.h>
+#include <view/view_controls.h>
 
 
 BOARD_INSPECTION_TOOL::BOARD_INSPECTION_TOOL() :

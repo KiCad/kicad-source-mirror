@@ -56,11 +56,13 @@
 #include "tools/pl_point_editor.h"
 #include "invoke_pl_editor_dialog.h"
 #include "tools/pl_editor_control.h"
+#include <view/view_controls.h>
 #include <zoom_defines.h>
 
 #include <wx/filedlg.h>
 #include <wx/print.h>
 #include <wx/treebook.h>
+#include <wx/msgdlg.h>
 
 
 BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )

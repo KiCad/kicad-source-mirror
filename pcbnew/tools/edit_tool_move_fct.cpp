@@ -48,6 +48,7 @@
 #include <drc/drc_item.h>
 #include <drc/drc_rule.h>
 #include <drc/drc_interactive_courtyard_clearance.h>
+#include <view/view_controls.h>
 
 
 int EDIT_TOOL::Swap( const TOOL_EVENT& aEvent )

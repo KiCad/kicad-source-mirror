@@ -37,6 +37,7 @@
 #include <wildcards_and_files_ext.h>
 
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 
 
 DIALOG_CONFIG_EQUFILES::DIALOG_CONFIG_EQUFILES( wxWindow* aParent ) :

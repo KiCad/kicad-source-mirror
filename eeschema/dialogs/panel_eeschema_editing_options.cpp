@@ -23,10 +23,12 @@
  */
 
 #include <pgm_base.h>
+#include <layer_ids.h>
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
 #include <eeschema_settings.h>
 #include "panel_eeschema_editing_options.h"
+#include <widgets/ui_common.h>
 
 
 PANEL_EESCHEMA_EDITING_OPTIONS::PANEL_EESCHEMA_EDITING_OPTIONS( wxWindow* aWindow,

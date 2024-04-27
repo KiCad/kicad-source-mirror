@@ -29,6 +29,7 @@
 #include <sim/simulator_frame.h>
 #include <sim/sim_plot_tab.h>
 #include <confirm.h>
+#include <eda_pattern_match.h>
 
 #include <wx/tokenzr.h>
 

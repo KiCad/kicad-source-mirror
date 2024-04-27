@@ -31,6 +31,7 @@
 #define _BBOX_3D_H_
 
 #include <plugins/3dapi/xv3d_types.h>   // SFVEC2F
+#include <glm/mat4x4.hpp>
 
 struct RAY;
 

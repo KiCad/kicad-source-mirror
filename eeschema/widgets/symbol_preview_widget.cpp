@@ -23,6 +23,7 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <math/vector2wx.h>
 #include <symbol_lib_table.h>
+#include <lib_symbol.h>
 #include <sch_preview_panel.h>
 #include <pgm_base.h>
 #include <sch_painter.h>

@@ -28,6 +28,7 @@
 
 #include <sch_symbol.h>
 #include <sch_label.h>
+#include <sch_sheet.h>
 #include <schematic.h>
 
 /**
@@ -63,11 +64,7 @@ public:
 struct LIB_SYMBOL_LESS_THAN
 {
     // a "less than" test on two LIB_SYMBOLs (.m_name wxStrings)
-    bool operator()( LIB_SYMBOL* const& libsymbol1, LIB_SYMBOL* const& libsymbol2 ) const
-    {
-        // Use case specific GetName() wxString compare
-        return libsymbol1->GetLibId() < libsymbol2->GetLibId();
-    }
+    bool operator()( LIB_SYMBOL* const& libsymbol1, LIB_SYMBOL* const& libsymbol2 ) const;
 };
 
 

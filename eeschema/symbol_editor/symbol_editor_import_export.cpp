@@ -24,6 +24,7 @@
  */
 
 #include <confirm.h>
+#include <kidialog.h>
 #include <common.h>
 #include <symbol_lib_table.h>
 #include <symbol_edit_frame.h>

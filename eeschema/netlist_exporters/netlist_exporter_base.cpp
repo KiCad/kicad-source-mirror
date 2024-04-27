@@ -34,6 +34,15 @@
 #include <schematic.h>
 
 
+// a "less than" test on two LIB_SYMBOLs (.m_name wxStrings)
+bool LIB_SYMBOL_LESS_THAN::operator()( LIB_SYMBOL* const& libsymbol1,
+                                       LIB_SYMBOL* const& libsymbol2 ) const
+{
+    // Use case specific GetName() wxString compare
+    return libsymbol1->GetLibId() < libsymbol2->GetLibId();
+}
+
+
 wxString NETLIST_EXPORTER_BASE::MakeCommandLine( const wxString& aFormatString,
                                                  const wxString& aNetlistFile,
                                                  const wxString& aFinalFile,

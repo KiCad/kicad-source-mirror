@@ -39,7 +39,9 @@
 #include <macros.h>
 #include <widgets/indicator_icon.h>
 #include <widgets/wx_ellipsized_static_text.h>
+#include <widgets/ui_common.h>
 #include <wx/checkbox.h>
+#include <wx/menu.h>
 
 #include <algorithm>
 

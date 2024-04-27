@@ -34,6 +34,7 @@
 #include "../3d_rendering/raytracing/shapes2D/round_segment_2d.h"
 #include "../3d_rendering/raytracing/shapes2D/triangle_2d.h"
 #include <board_adapter.h>
+#include <board.h>
 #include <footprint.h>
 #include <pad.h>
 #include <pcb_text.h>

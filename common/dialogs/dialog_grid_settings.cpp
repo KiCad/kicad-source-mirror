@@ -22,8 +22,7 @@
  */
 
 #include <bitmaps.h>
-#include <confirm.h>
-#include <wx/textdlg.h>
+#include <wx/msgdlg.h>
 #include <dialogs/dialog_grid_settings.h>
 #include <widgets/std_bitmap_button.h>
 #include <common.h>

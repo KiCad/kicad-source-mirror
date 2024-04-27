@@ -33,6 +33,7 @@
 #include <footprint_edit_frame.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
+#include <kidialog.h>
 #include <gestfich.h> // To open with a text editor
 #include <widgets/wx_infobar.h>
 #include <footprint.h>
@@ -46,6 +47,7 @@
 #include <kiway.h>
 #include <drc/drc_item.h>
 #include <project_pcb.h>
+#include <view/view_controls.h>
 
 #include <memory>
 

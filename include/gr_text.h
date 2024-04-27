@@ -25,8 +25,11 @@
 #ifndef GR_TEXT_H
 #define GR_TEXT_H
 
-#include <eda_item.h>
 #include <font/text_attributes.h>
+#include <wx/gdicmn.h>
+
+class wxDC;
+
 
 namespace KIGFX
 {

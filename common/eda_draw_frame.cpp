@@ -61,6 +61,7 @@
 #include <trace_helpers.h>
 #include <view/view.h>
 #include <drawing_sheet/ds_draw_item.h>
+#include <view/view_controls.h>
 #include <widgets/msgpanel.h>
 #include <widgets/properties_panel.h>
 #include <widgets/net_inspector_panel.h>

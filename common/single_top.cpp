@@ -36,6 +36,7 @@
 
 #include <typeinfo>
 #include <wx/cmdline.h>
+#include <wx/dialog.h>
 #include <wx/filename.h>
 #include <wx/stdpaths.h>
 #include <wx/snglinst.h>

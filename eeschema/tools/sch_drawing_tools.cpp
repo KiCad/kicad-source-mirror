@@ -70,6 +70,7 @@
 #include <string_utils.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" ),

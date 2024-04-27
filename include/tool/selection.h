@@ -30,8 +30,9 @@
 #include <optional>
 #include <core/typeinfo.h>
 #include <deque>
-#include <eda_item.h>
 #include <view/view_group.h>
+
+class EDA_ITEM;
 
 
 class SELECTION : public KIGFX::VIEW_GROUP
@@ -133,44 +134,7 @@ public:
      * @return Vector of sorted items
      */
     const std::vector<EDA_ITEM*> GetItemsSortedByTypeAndXY( bool leftBeforeRight = true,
-                                                            bool topBeforeBottom = true ) const
-    {
-        std::vector<EDA_ITEM*> sorted_items = std::vector<EDA_ITEM*>( m_items.begin(),
-                                                                      m_items.end() );
-
-        std::sort( sorted_items.begin(), sorted_items.end(),
-                [&]( EDA_ITEM* a, EDA_ITEM* b )
-                {
-                    if( a->Type() == b->Type() )
-                    {
-                        if( a->GetSortPosition().x == b->GetSortPosition().x )
-                        {
-                            // Ensure deterministic sort
-                            if( a->GetSortPosition().y == b->GetSortPosition().y )
-                                return a->m_Uuid < b->m_Uuid;
-
-                            if( topBeforeBottom )
-                                return a->GetSortPosition().y < b->GetSortPosition().y;
-                            else
-                                return a->GetSortPosition().y > b->GetSortPosition().y;
-                        }
-                        else if( leftBeforeRight )
-                        {
-                            return a->GetSortPosition().x < b->GetSortPosition().x;
-                        }
-                        else
-                        {
-                            return a->GetSortPosition().x > b->GetSortPosition().x;
-                        }
-                    }
-                    else
-                    {
-                        return a->Type() < b->Type();
-                    }
-                } );
-
-        return sorted_items;
-    }
+                                                            bool topBeforeBottom = true ) const;
 
     const std::vector<EDA_ITEM*> GetItemsSortedBySelectionOrder() const;
 

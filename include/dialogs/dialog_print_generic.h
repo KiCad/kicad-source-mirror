@@ -25,6 +25,7 @@
 #include <widgets/unit_binder.h>
 
 class EDA_DRAW_FRAME;
+class APP_SETTINGS_BASE;
 struct PRINTOUT_SETTINGS;
 class wxPageSetupDialogData;
 class wxPrintout;

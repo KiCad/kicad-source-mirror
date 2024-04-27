@@ -38,6 +38,7 @@
 #include <3d_viewer/tools/eda_3d_actions.h>
 #include <3d_viewer/tools/eda_3d_controller.h>
 #include <3d_viewer/tools/eda_3d_conditions.h>
+#include <board.h>
 #include <advanced_config.h>
 #include <bitmaps.h>
 #include <board_design_settings.h>

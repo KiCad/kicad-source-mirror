@@ -25,6 +25,7 @@
  */
 
 #include <bitmaps.h>
+#include <board.h>
 #include <footprint.h>
 #include <pad.h>
 #include <dialog_exchange_footprints.h>

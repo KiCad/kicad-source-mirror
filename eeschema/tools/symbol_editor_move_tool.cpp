@@ -31,6 +31,7 @@
 #include <sch_shape.h>
 #include <sch_commit.h>
 #include <wx/log.h>
+#include <view/view_controls.h>
 #include "symbol_editor_move_tool.h"
 #include "symbol_editor_pin_tool.h"
 

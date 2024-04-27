@@ -27,6 +27,7 @@
 #include <pcb_base_frame.h>
 #include <kiface_base.h>
 #include <fp_lib_table.h>
+#include <board.h>
 #include <footprint.h>
 #include <project_pcb.h>
 

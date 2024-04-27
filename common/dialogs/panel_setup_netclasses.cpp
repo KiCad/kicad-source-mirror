@@ -29,7 +29,6 @@
 #include <eda_draw_frame.h>
 #include <bitmaps.h>
 #include <netclass.h>
-#include <confirm.h>
 #include <gal/painter.h>
 #include <grid_tricks.h>
 #include <dialogs/panel_setup_netclasses.h>
@@ -43,6 +42,7 @@
 #include <widgets/wx_panel.h>
 #include <widgets/std_bitmap_button.h>
 #include <project/net_settings.h>
+#include <confirm.h>
 
 
 // columns of netclasses grid

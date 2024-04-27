@@ -26,10 +26,15 @@
 #define DIALOG_SHIM_
 
 #include <kicommon.h>
+#include <eda_units.h>
+#include <kiway_holder.h>
 #include <wx/dialog.h>
-#include <kiway_player.h>
-class wxGridEvent;
+#include <map>
 
+class EDA_BASE_FRAME;
+
+class wxGridEvent;
+class wxGUIEventLoop;
 
 
 struct WINDOW_THAWER
@@ -62,7 +67,6 @@ protected:
 
 
 class WDO_ENABLE_DISABLE;
-class WX_EVENT_LOOP;
 
 // These macros are for DIALOG_SHIM only, NOT for KIWAY_PLAYER.  KIWAY_PLAYER
 // has its own support for quasi modal and its platform specific issues are different
@@ -216,7 +220,7 @@ protected:
     wxWindow*              m_initialFocusTarget;
     bool                   m_isClosing;
 
-    WX_EVENT_LOOP*         m_qmodal_loop;  // points to nested event_loop, NULL means not qmodal
+    wxGUIEventLoop*        m_qmodal_loop;  // points to nested event_loop, NULL means not qmodal
                                            // and dismissed
     bool                   m_qmodal_showing;
     WDO_ENABLE_DISABLE*    m_qmodal_parent_disabler;

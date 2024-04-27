@@ -22,6 +22,7 @@
  */
 
 #include <pcb_base_edit_frame.h>
+#include <board.h>
 #include <grid_layer_box_helpers.h>
 #include <kiplatform/ui.h>
 #include <widgets/wx_grid.h>

@@ -34,6 +34,7 @@
 #include <board.h>
 #include <board_commit.h>
 #include <bitmaps.h>
+#include <view/view_controls.h>
 
 
 ALIGN_DISTRIBUTE_TOOL::ALIGN_DISTRIBUTE_TOOL() :

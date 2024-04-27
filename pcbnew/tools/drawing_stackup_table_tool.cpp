@@ -37,6 +37,7 @@
 #include <pcb_shape.h>
 #include <pcb_group.h>
 #include <pcb_text.h>
+#include <view/view_controls.h>
 #include <string_utils.h>
 #include <wx/utils.h>
 

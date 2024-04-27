@@ -27,6 +27,7 @@
 #include <eda_view_switcher_base.h>
 
 class EDA_DRAW_FRAME;
+class wxTimer;
 
 /**
  * Similar to EDA_VIEW_SWITCHER, this dialog is a popup that shows feedback when using a hotkey to

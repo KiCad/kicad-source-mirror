@@ -59,6 +59,7 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/button.h>
+#include <wx/msgdlg.h>
 
 
 CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :

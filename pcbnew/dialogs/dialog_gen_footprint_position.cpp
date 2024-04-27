@@ -42,6 +42,7 @@
 #include "gerber_placefile_writer.h"
 
 #include <wx/dirdlg.h>
+#include <wx/msgdlg.h>
 
 
 /**

@@ -66,6 +66,7 @@
 #include <tools/symbol_editor_edit_tool.h>
 #include <tools/symbol_editor_move_tool.h>
 #include <tools/symbol_editor_pin_tool.h>
+#include <view/view_controls.h>
 #include <widgets/app_progress_dialog.h>
 #include <widgets/wx_infobar.h>
 #include <widgets/lib_tree.h>
@@ -77,6 +78,7 @@
 #include <wildcards_and_files_ext.h>
 #include <panel_sym_lib_table.h>
 #include <string_utils.h>
+#include <wx/msgdlg.h>
 
 
 bool SYMBOL_EDIT_FRAME::m_showDeMorgan = false;

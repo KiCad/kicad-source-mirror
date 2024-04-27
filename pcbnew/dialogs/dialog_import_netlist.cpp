@@ -38,7 +38,9 @@
 #include <project/project_file.h>  // LAST_PATH_TYPE
 #include <dialog_import_netlist.h>
 #include <widgets/wx_html_report_panel.h>
+#include <view/view_controls.h>
 #include <wx/filedlg.h>
+#include <wx/msgdlg.h>
 
 
 void PCB_EDIT_FRAME::InstallNetlistFrame()

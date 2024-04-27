@@ -49,6 +49,7 @@
 
 #include <wx/filedlg.h>
 #include <wx/log.h>
+#include <wx/msgdlg.h>
 #include <wx/textdlg.h>
 
 wxString s_bomHelpInfo =

@@ -26,6 +26,7 @@
 #include <kiface_base.h>
 #include <kiway.h>
 #include <kiway_express.h>
+#include <board.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <kiplatform/ui.h>

@@ -31,7 +31,7 @@
 #include <pgm_base.h>
 #include <board.h>
 #include <confirm.h>
-#include <bitmaps.h>
+#include <kidialog.h>
 #include <widgets/std_bitmap_button.h>
 #include "dialog_export_step_base.h"
 #include "dialog_export_step_process.h"

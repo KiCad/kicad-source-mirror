@@ -28,6 +28,7 @@
 #include <bitmaps.h>
 #include <board_commit.h>
 #include <board_design_settings.h>
+#include <board.h>
 #include <footprint.h>
 #include <confirm.h>
 #include <dialogs/dialog_text_entry.h>

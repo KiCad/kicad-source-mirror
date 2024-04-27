@@ -39,6 +39,7 @@
 #include <symbol_lib_table.h>
 #include <wildcards_and_files_ext.h>
 #include <project_sch.h>
+#include <wx/msgdlg.h>
 
 #include <cctype>
 #include <map>

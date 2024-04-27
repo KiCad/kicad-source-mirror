@@ -29,6 +29,7 @@
 #include <tool/selection_tool.h>
 #include <view/view.h>
 #include <eda_draw_frame.h>
+#include <eda_item.h>
 
 
 SELECTION_TOOL::SELECTION_TOOL( const std::string& aName ) :

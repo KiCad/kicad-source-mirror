@@ -44,6 +44,8 @@
 #include <wx/clipbrd.h>
 #include <wx/dcmemory.h>
 #include <wx/log.h>
+#include <wx/msgdlg.h>
+#include <wx/richmsgdlg.h>
 
 
 bool SCH_EDIT_FRAME::CheckSheetForRecursion( SCH_SHEET* aSheet, SCH_SHEET_PATH* aCurrentSheet )

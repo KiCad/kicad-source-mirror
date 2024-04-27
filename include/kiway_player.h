@@ -39,9 +39,7 @@ class KIFACE_BASE;
 class TOOL_MANAGER;
 class KIWAY_EXPRESS;
 
-#define WX_EVENT_LOOP      wxGUIEventLoop
-class WX_EVENT_LOOP;
-
+class wxGUIEventLoop;
 class wxSocketServer;
 class wxSocketBase;
 class wxSocketEvent;
@@ -192,7 +190,7 @@ protected:
     bool            m_modal;        // true if frame is intended to be modal, not modeless
 
     ///< Points to nested event_loop. NULL means not modal and dismissed.
-    WX_EVENT_LOOP*  m_modal_loop;
+    wxGUIEventLoop* m_modal_loop;
     wxWindow*       m_modal_resultant_parent; // the window caller in modal mode
     wxString        m_modal_string;
     bool            m_modal_ret_val;    // true if a selection was made

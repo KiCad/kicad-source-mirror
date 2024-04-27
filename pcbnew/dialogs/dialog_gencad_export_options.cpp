@@ -27,13 +27,11 @@
 #include "dialog_gencad_export_options.h"
 
 #include <pcb_edit_frame.h>
-#include <board.h>
-#include <project.h>
-#include <confirm.h>
+#include <kidialog.h>
 #include <wildcards_and_files_ext.h>
 #include <wx/checkbox.h>
 #include <wx/filepicker.h>
-#include <wx/statline.h>
+#include <wx/sizer.h>
 
 
 DIALOG_GENCAD_EXPORT_OPTIONS::DIALOG_GENCAD_EXPORT_OPTIONS( PCB_EDIT_FRAME* aParent,

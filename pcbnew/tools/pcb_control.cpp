@@ -49,6 +49,7 @@
 #include <wildcards_and_files_ext.h>
 #include <zone.h>
 #include <confirm.h>
+#include <kidialog.h>
 #include <connectivity/connectivity_data.h>
 #include <core/kicad_algo.h>
 #include <dialogs/hotkey_cycle_popup.h>

@@ -68,6 +68,7 @@
 #include <wx/ffile.h>
 #include <wx/filedlg.h>
 #include <wx/log.h>
+#include <wx/richmsgdlg.h>
 #include <wx/stdpaths.h>
 #include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>

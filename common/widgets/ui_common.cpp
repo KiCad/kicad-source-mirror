@@ -20,6 +20,8 @@
 #include <wx/dcclient.h>
 #include <wx/checkbox.h>
 #include <wx/choice.h>
+#include <wx/menu.h>
+#include <wx/menuitem.h>
 #include <wx/listbox.h>
 #include <wx/dataview.h>
 #include <wx/radiobut.h>
@@ -35,6 +37,7 @@
 #include <dialog_shim.h>
 #include <pgm_base.h>
 #include <wx/settings.h>
+#include <settings/common_settings.h>
 #include <bitmaps/bitmap_types.h>
 #include <string_utils.h>
 

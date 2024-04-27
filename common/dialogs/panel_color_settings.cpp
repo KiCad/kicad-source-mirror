@@ -27,10 +27,12 @@
 #include <settings/common_settings.h>
 #include <settings/settings_manager.h>
 #include <validators.h>
+#include <widgets/ui_common.h>
 #include <widgets/color_swatch.h>
 #include <widgets/wx_panel.h>
 
 #include <wx/msgdlg.h>
+#include <wx/menu.h>
 #include <wx/textdlg.h>
 
 // Button ID starting point

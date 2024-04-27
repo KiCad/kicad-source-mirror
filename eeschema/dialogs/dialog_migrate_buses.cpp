@@ -26,6 +26,7 @@
 #include <tool/actions.h>
 #include <dialog_migrate_buses.h>
 #include <sch_label.h>
+#include <view/view_controls.h>
 
 /**
  * Migrates buses using legacy multi-label joining behavior.

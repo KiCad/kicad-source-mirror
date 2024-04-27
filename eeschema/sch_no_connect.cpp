@@ -36,6 +36,7 @@
 #include <default_values.h>    // For some default values
 #include <core/mirror.h>
 #include <trigo.h>
+#include <gr_basic.h>
 
 
 SCH_NO_CONNECT::SCH_NO_CONNECT( const VECTOR2I& pos ) :
