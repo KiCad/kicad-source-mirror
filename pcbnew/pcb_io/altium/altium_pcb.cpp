@@ -2321,6 +2321,7 @@ void ALTIUM_PCB::ConvertShapeBasedRegions6ToFootprintItemOnLayer( FOOTPRINT*    
         pad->SetKeepTopBottom( false ); // TODO: correct? This seems to be KiCad default on import
         pad->SetAttribute( PAD_ATTRIB::SMD );
         pad->SetShape( PAD_SHAPE::CUSTOM );
+        pad->SetThermalSpokeAngle( ANGLE_90 );
 
         int      anchorSize = 1;
         VECTOR2I anchorPos = linechain.CPoint( 0 );
@@ -2773,6 +2774,7 @@ void ALTIUM_PCB::ConvertPads6ToFootprintItemOnCopper( FOOTPRINT* aFootprint, con
     pad->SetPosition( aElem.position );
     pad->SetOrientationDegrees( aElem.direction );
     pad->SetSize( aElem.topsize );
+    pad->SetThermalSpokeAngle( ANGLE_90 );
 
     if( aElem.holesize == 0 )
     {
