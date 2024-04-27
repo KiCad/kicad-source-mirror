@@ -111,7 +111,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-14 14:22-0700\n"
+"POT-Creation-Date: 2024-04-26 19:52-0700\n"
 "PO-Revision-Date: 2024-04-15 19:50+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/kicad/master-"
@@ -442,8 +442,8 @@ msgstr "Permessi insufficienti per salvare il file '%s'."
 #: common/confirm.cpp:321 common/dialogs/dialog_grid_settings.cpp:61
 #: common/dialogs/dialog_grid_settings.cpp:68
 #: common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2034
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1634
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2035
 #: eeschema/files-io.cpp:975 eeschema/files-io.cpp:1043
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:322
 #: kicad/tools/kicad_manager_control.cpp:242
@@ -922,15 +922,15 @@ msgid "Presets (%s+Tab):"
 msgstr "Preimpostazioni (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:610
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1477
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1898
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1478
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1899
 #: pcbnew/widgets/appearance_controls.cpp:2541
 msgid "Save preset..."
 msgstr "Salva preimpostazione..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:611
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1478
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1899
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1479
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1900
 #: pcbnew/widgets/appearance_controls.cpp:2542
 msgid "Delete preset..."
 msgstr "Cancella preimpostazione..."
@@ -946,29 +946,29 @@ msgid "Save Layer Preset"
 msgstr "Salva preimpostazione strato"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:733
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1640
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2041
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2042
 #: pcbnew/widgets/appearance_controls.cpp:2681
 msgid "Overwrite existing preset?"
 msgstr "Sovrescrivere preimpostazione esistente?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:759
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1665
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2066
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1666
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2067
 #: pcbnew/widgets/appearance_controls.cpp:2707
 msgid "Presets"
 msgstr "Reimpostazioni"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:768
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1677
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2078
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1678
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
 #: pcbnew/widgets/appearance_controls.cpp:2719
 msgid "Delete Preset"
 msgstr "Cancella preimpostazione"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:769
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1678
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1679
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2080
 #: pcbnew/widgets/appearance_controls.cpp:2720
 msgid "Select preset:"
 msgstr "Seleziona preimpostazione:"
@@ -3164,7 +3164,7 @@ msgstr "Opzione"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3500
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3502
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:406 pcbnew/plot_board_layers.cpp:90
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -3200,7 +3200,7 @@ msgstr "Anteprima di stampa"
 #: common/dialogs/dialog_print_generic.cpp:97 common/hotkey_store.cpp:59
 #: common/tool/action_menu.cpp:212 common/tool/action_menu.cpp:217
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:136
-#: eeschema/dialogs/dialog_change_symbols.cpp:159
+#: eeschema/dialogs/dialog_change_symbols.cpp:160
 #: eeschema/dialogs/dialog_erc.cpp:107 eeschema/dialogs/dialog_erc.cpp:446
 #: eeschema/dialogs/dialog_export_netlist.cpp:275
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
@@ -4431,7 +4431,7 @@ msgstr "Zoom"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:925
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
-#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3459
+#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3461
 #: pcbnew/pad.cpp:1893 pcbnew/pad.cpp:1907 pcbnew/pcb_dimension.cpp:1618
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -4569,7 +4569,7 @@ msgstr "Prefisso denominazione libreria:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3461
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3463
 #: pcbnew/pad.cpp:1909 pcbnew/pcb_textbox.cpp:655 pcbnew/zone.cpp:630
 #: pcbnew/zone.cpp:1552
 msgid "Solid"
@@ -5772,7 +5772,7 @@ msgstr "Basso"
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:3491 pcbnew/fp_text_grid_table.cpp:145
+#: pcbnew/footprint.cpp:3493 pcbnew/fp_text_grid_table.cpp:145
 #: pcbnew/pad.cpp:1919 pcbnew/zone.cpp:1649
 msgid "Orientation"
 msgstr "Orientamento"
@@ -7301,7 +7301,7 @@ msgstr "Raggruppati per valore"
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
 #: eeschema/dialogs/dialog_sim_model_base.cpp:254 eeschema/sch_symbol.cpp:1945
 #: eeschema/sch_symbol.cpp:1997 eeschema/sch_symbol.cpp:2798
-#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3497
+#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3499
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
 msgstr "Riferimento"
@@ -7317,7 +7317,7 @@ msgstr "Raggruppati per valore e impronta"
 #: eeschema/sch_symbol.cpp:2814 eeschema/tools/sch_edit_tool.cpp:473
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:3514
+#: pcbnew/footprint.cpp:3516
 msgid "Attributes"
 msgstr "Attributi"
 
@@ -8916,7 +8916,7 @@ msgstr "\"%s\" non è un'impronta valida."
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1992 eeschema/sch_symbol.cpp:2550
 #: eeschema/sch_symbol.cpp:2810 eeschema/symbol_editor/symbol_editor.cpp:1296
-#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3510
+#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3512
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:118
 msgid "Keywords"
 msgstr "Parole chiave"
@@ -9303,7 +9303,7 @@ msgstr ""
 "%s\n"
 "non trovato. Script non disponibile."
 
-#: eeschema/connection_graph.cpp:3059
+#: eeschema/connection_graph.cpp:3147
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
@@ -9311,7 +9311,7 @@ msgstr ""
 "Sia %s che %s sono collegati agli stessi elementi; nella netlist verrà usata "
 "%s"
 
-#: eeschema/connection_graph.cpp:3338
+#: eeschema/connection_graph.cpp:3426
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
@@ -9319,13 +9319,13 @@ msgstr ""
 "La connessione %s è collegata graficamente al bus %s ma non è membro di quel "
 "bus"
 
-#: eeschema/connection_graph.cpp:3884
+#: eeschema/connection_graph.cpp:3972
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr ""
 "Al pin foglio %s manca la corrispondente etichetta gerarchica nel foglio"
 
-#: eeschema/connection_graph.cpp:3902
+#: eeschema/connection_graph.cpp:3990
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr ""
@@ -9725,69 +9725,69 @@ msgstr ""
 "Le virgolette doppie (`\"`) intorno agli argomenti sono consigliate nel caso "
 "in cui i nomi dei file contengano spazi o caratteri speciali.\n"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:67
+#: eeschema/dialogs/dialog_change_symbols.cpp:68
 msgid "Change all symbols in schematic"
 msgstr "Cambia tutti i simboli nello schema"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:68
-#: eeschema/dialogs/dialog_change_symbols.cpp:429
+#: eeschema/dialogs/dialog_change_symbols.cpp:69
+#: eeschema/dialogs/dialog_change_symbols.cpp:430
 msgid "Change Symbols"
 msgstr "Cambia simboli"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:77
+#: eeschema/dialogs/dialog_change_symbols.cpp:78
 msgid "Change selected symbol(s)"
 msgstr "Cambia i simboli selezionati"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:94
+#: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching reference designator:"
 msgstr "Cambia i simboli corrispondenti al riferimento:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:95
+#: eeschema/dialogs/dialog_change_symbols.cpp:96
 msgid "Change symbols matching value:"
 msgstr "Cambia i simboli corrispondenti al valore:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:96
+#: eeschema/dialogs/dialog_change_symbols.cpp:97
 msgid "Change symbols matching library identifier:"
 msgstr "Cambia i simboli corrispondenti all'id di libreria:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:133
+#: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update Fields"
 msgstr "Aggiorna campi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:134
+#: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Remove fields if not in new symbol"
 msgstr "Rimuovi i campi non presenti nel nuovo simbolo"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:135
+#: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Reset fields if empty in new symbol"
 msgstr "Reimposta i campi se vuoti nel nuovo simbolo"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:136
+#: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Update field text"
 msgstr "Aggiorna testo campi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:137
+#: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field visibilities"
 msgstr "Aggiorna visibilità campi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:138
+#: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update field sizes and styles"
 msgstr "Aggiorna dimensioni e stili campi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:139
+#: eeschema/dialogs/dialog_change_symbols.cpp:140
 msgid "Update field positions"
 msgstr "Aggiorna posizioni campi"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:140
+#: eeschema/dialogs/dialog_change_symbols.cpp:141
 msgid "Update symbol attributes"
 msgstr "Aggiorna attributi simboli"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:156
+#: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:154
 msgid "Change"
 msgstr "Cambia"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:156
+#: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
 #: kicad/pcm/dialogs/dialog_pcm.cpp:110 kicad/pcm/dialogs/panel_package.cpp:66
 #: kicad/pcm/dialogs/panel_package.cpp:127
@@ -9799,38 +9799,38 @@ msgstr "Cambia"
 msgid "Update"
 msgstr "Aggiorna"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:429
+#: eeschema/dialogs/dialog_change_symbols.cpp:430
 msgid "Update Symbols"
 msgstr "Aggiorna simboli"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:536
+#: eeschema/dialogs/dialog_change_symbols.cpp:537
 msgid "*** No symbols matching criteria found ***"
 msgstr "*** Nessun simbolo corrispondente trovato ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:573
+#: eeschema/dialogs/dialog_change_symbols.cpp:574
 msgid "*** symbol not found ***"
 msgstr "*** simbolo non trovato ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:584
+#: eeschema/dialogs/dialog_change_symbols.cpp:585
 msgid "*** new symbol has too few units ***"
 msgstr "*** il nuovo simbolo ha troppo poche unità ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:800
+#: eeschema/dialogs/dialog_change_symbols.cpp:811
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
 msgstr "Aggiorna simbolo %s da \"%s\" a \"%s\""
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:807
+#: eeschema/dialogs/dialog_change_symbols.cpp:818
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
 msgstr "Aggiorna simboli %s da \"%s\" a \"%s\""
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:817
+#: eeschema/dialogs/dialog_change_symbols.cpp:828
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
 msgstr "Cambia simbolo %s da \"%s\" a \"%s\""
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:824
+#: eeschema/dialogs/dialog_change_symbols.cpp:835
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
 msgstr "Cambia simboli %s da \"%s\" a \"%s\""
@@ -10954,7 +10954,7 @@ msgstr "Mostra finestra di aiuto sintassi"
 #: eeschema/sch_symbol.cpp:2796
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:3495
+#: pcbnew/footprint.cpp:3497
 msgid "Fields"
 msgstr "Campi"
 
@@ -11169,7 +11169,7 @@ msgid "Read Only"
 msgstr "Sola lettura"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1217
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1324
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
 msgid "Save changes?"
 msgstr "Salva i cambiamenti?"
 
@@ -11462,7 +11462,7 @@ msgid "The name '%s' is already in use."
 msgstr "Il nome '%s' è già in uso."
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#: eeschema/dialogs/dialog_sheet_properties.cpp:761
+#: eeschema/dialogs/dialog_sheet_properties.cpp:767
 #: eeschema/dialogs/dialog_symbol_properties.cpp:962
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:637
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:683
@@ -12524,11 +12524,11 @@ msgstr "Errore durante il salvataggio del file dello schema \"%s\"."
 msgid "Failed to save schematic '%s'"
 msgstr "Fallito il salvataggio dello schema \"%s\""
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:701
 msgid "A sheet must have a name."
 msgstr "Un foglio deve avere un nome."
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:703
+#: eeschema/dialogs/dialog_sheet_properties.cpp:709
 msgid "A sheet must have a file specified."
 msgstr "Un foglio deve avere un file specificato."
 
@@ -13353,23 +13353,23 @@ msgstr "Impossibile creare la DIBA d'uscita '%s'."
 msgid "Could not write BOM output '%s'."
 msgstr "Impossibile scrivere la DIBA d'uscita '%s'."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1299
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1300
 #, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "DIBA scritta su '%s'."
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1606
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2007
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1607
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2008
 msgid "BOM preset name:"
 msgstr "Nome premipostazioni DIBA:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1606
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2007
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1607
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2008
 msgid "Save BOM Preset"
 msgstr "Salva preimpostazione DIBA"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1632
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2033
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2034
 #: pcbnew/widgets/appearance_controls.cpp:2673
 msgid ""
 "Default presets cannot be modified.\n"
@@ -16471,7 +16471,7 @@ msgstr "Membri alias bus %s"
 msgid "KiCad Schematic Editor"
 msgstr "Editor degli schemi KiCad"
 
-#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1941
+#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1961
 msgid "Schematic Hierarchy"
 msgstr "Gerarchia schema"
 
@@ -16536,20 +16536,20 @@ msgstr "[Non salvato]"
 msgid "[no schematic loaded]"
 msgstr "[nessuno schema caricato]"
 
-#: eeschema/sch_edit_frame.cpp:1853
+#: eeschema/sch_edit_frame.cpp:1873
 msgid "Schematic Cleanup"
 msgstr "Pulizia schema"
 
-#: eeschema/sch_edit_frame.cpp:1966
+#: eeschema/sch_edit_frame.cpp:1986
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "Collegamento evidenziato: %s"
 
-#: eeschema/sch_edit_frame.cpp:2144
+#: eeschema/sch_edit_frame.cpp:2164
 msgid "Save Symbol to Schematic"
 msgstr "Salva simbolo nello schema"
 
-#: eeschema/sch_edit_frame.cpp:2249 eeschema/tools/ee_actions.cpp:60
+#: eeschema/sch_edit_frame.cpp:2269 eeschema/tools/ee_actions.cpp:60
 msgid "Compare Symbol with Library"
 msgstr "Confronta simbolo a libreria"
 
@@ -17442,7 +17442,7 @@ msgstr "Valore SCH_FILE_T sconosciuto: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:57
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
-#: pcbnew/footprint.cpp:3486 pcbnew/footprint.cpp:3489
+#: pcbnew/footprint.cpp:3488 pcbnew/footprint.cpp:3491
 #: pcbnew/fp_text_grid_table.cpp:144
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2045 pcbnew/pad.cpp:1003
 #: pcbnew/pad.cpp:1917 pcbnew/pcb_dimension.cpp:462
@@ -17855,11 +17855,11 @@ msgstr "X speculare"
 msgid "Mirror Y"
 msgstr "Y speculare"
 
-#: eeschema/sch_symbol.cpp:2804 pcbnew/footprint.cpp:3504
+#: eeschema/sch_symbol.cpp:2804 pcbnew/footprint.cpp:3506
 msgid "Library Link"
 msgstr "Collegamento libreria"
 
-#: eeschema/sch_symbol.cpp:2807 pcbnew/footprint.cpp:3507
+#: eeschema/sch_symbol.cpp:2807 pcbnew/footprint.cpp:3509
 #: pcbnew/plot_board_layers.cpp:114
 msgid "Library Description"
 msgstr "Descrizione libreria"
@@ -17872,11 +17872,11 @@ msgstr "Escludi dalla scheda"
 msgid "Exclude From Simulation"
 msgstr "Escludi dalla simulazione"
 
-#: eeschema/sch_symbol.cpp:2822 pcbnew/footprint.cpp:3521
+#: eeschema/sch_symbol.cpp:2822 pcbnew/footprint.cpp:3523
 msgid "Exclude From Bill of Materials"
 msgstr "Escludi dalla distinta materiali"
 
-#: eeschema/sch_symbol.cpp:2825 pcbnew/footprint.cpp:3524
+#: eeschema/sch_symbol.cpp:2825 pcbnew/footprint.cpp:3526
 msgid "Do not Populate"
 msgstr "Non popolare"
 
@@ -20878,7 +20878,7 @@ msgstr "Cambia in riquadro di testo"
 msgid "Change existing item to a text box"
 msgstr "Cambia l'elemento esistente in riquadro testo"
 
-#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2446
+#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2448
 msgid "Cleanup Sheet Pins"
 msgstr "Ripulisci punti di connessione fogli"
 
@@ -21739,7 +21739,7 @@ msgstr "Aggiungi %s"
 msgid "Draw %s"
 msgstr "Disegna %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2110
+#: eeschema/tools/sch_drawing_tools.cpp:2087
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "Premere <ESC> per annullare la creazione del foglio."
 
@@ -21763,7 +21763,7 @@ msgstr "Trasforma selezione"
 msgid "Edit Main Fields"
 msgstr "Modifica i campi principali"
 
-#: eeschema/tools/sch_edit_tool.cpp:514 eeschema/tools/sch_edit_tool.cpp:2355
+#: eeschema/tools/sch_edit_tool.cpp:514 eeschema/tools/sch_edit_tool.cpp:2357
 msgid "Change To"
 msgstr "Cambia in"
 
@@ -21799,41 +21799,41 @@ msgstr "Modifica campo %s"
 msgid "Edit '%s' Field"
 msgstr "Modifica campo '%s'"
 
-#: eeschema/tools/sch_edit_tool.cpp:2079 eeschema/tools/sch_edit_tool.cpp:2167
+#: eeschema/tools/sch_edit_tool.cpp:2081 eeschema/tools/sch_edit_tool.cpp:2169
 msgid "<empty>"
 msgstr "<vuoto>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2419
+#: eeschema/tools/sch_edit_tool.cpp:2421
 msgid "Slice Wire"
 msgstr "Seziona filo"
 
-#: eeschema/tools/sch_edit_tool.cpp:2419
+#: eeschema/tools/sch_edit_tool.cpp:2421
 msgid "Break Wire"
 msgstr "Interrompi filo"
 
-#: eeschema/tools/sch_edit_tool.cpp:2437
+#: eeschema/tools/sch_edit_tool.cpp:2439
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "Eliminare i pin senza riferimenti da questo foglio?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2498
+#: eeschema/tools/sch_edit_tool.cpp:2500
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "Inserire numero pagina per il percorso foglio%s"
 
-#: eeschema/tools/sch_edit_tool.cpp:2501
+#: eeschema/tools/sch_edit_tool.cpp:2503
 #: eeschema/widgets/hierarchy_pane.cpp:393
 msgid "Edit Sheet Page Number"
 msgstr "Modifica numero pagina foglio"
 
-#: eeschema/tools/sch_edit_tool.cpp:2566
+#: eeschema/tools/sch_edit_tool.cpp:2568
 msgid "Set Attribute"
 msgstr "Imposta attributo"
 
-#: eeschema/tools/sch_edit_tool.cpp:2603
+#: eeschema/tools/sch_edit_tool.cpp:2605
 msgid "Clear Attribute"
 msgstr "Cancella attributo"
 
-#: eeschema/tools/sch_edit_tool.cpp:2640
+#: eeschema/tools/sch_edit_tool.cpp:2642
 msgid "Toggle Attribute"
 msgstr "Commuta attributo"
 
@@ -26235,6 +26235,7 @@ msgid "Linear resistance:"
 msgstr "Resistenza lineare:"
 
 #: pcb_calculator/calculator_panels/panel_cable_size_base.cpp:126
+#, fuzzy, c-format
 msgid "Frequency for 100% skin depth:"
 msgstr "Freq. per 100% profondità di pelle:"
 
@@ -29945,7 +29946,7 @@ msgstr ""
 "Tipo connessione piazzola predefinita a zona.\n"
 "Può essere superata dalle impostazioni piazzola locali"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3460
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3462
 #: pcbnew/pad.cpp:1908 pcbnew/zone.cpp:1551
 msgid "Thermal reliefs"
 msgstr "Raccordi termici"
@@ -31838,6 +31839,7 @@ msgid "Solder paste relative clearance:"
 msgstr "Distanza relativa pasta salda:"
 
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:323
+#, fuzzy, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -32021,6 +32023,7 @@ msgstr ""
 "scheda Distanza e Impostazioni nelle Proprietà di ogni piazzola."
 
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:291
+#, fuzzy, c-format
 msgid ""
 "This is the local clearance ratio applied as a percentage of the pad width "
 "and height for this footprint.\n"
@@ -37129,28 +37132,158 @@ msgstr ""
 "\n"
 "### Vincoli\n"
 "\n"
-"| Tipo vincolo              | Tipo argomento                                                                                                         | Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                             |\n"
+"| Tipo vincolo              | Tipo "
+"argomento                                                                                                         "
+"| "
+"Descrizione                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"|\n"
 "|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
-"| `annular_width`           | min/opt/max                                                                                                            | Checks the width of annular rings on vias.<br>                                                                                                                                                                                                                                                                                                                                                                                                          |\n"
-"| `clearance`               | min                                                                                                                    | Specifies the **electrical** clearance between copper objects of different nets.  (See `physical_clearance` if you wish to specify clearance between objects regardless of net.)<br><br>To allow copper objects to overlap (collide), create a `clearance` constraint with the `min` value less than zero (for example, `-1`).<br>                                                                                                                      |\n"
-"| `courtyard_clearance`     | min                                                                                                                    | Checks the clearance between footprint courtyards and generates an error if any two courtyards are closer than the `min` distance.  If a footprint does not have a courtyard shape, no errors will be generated from this constraint.<br>                                                                                                                                                                                                               |\n"
-"| `diff_pair_gap`           | min/opt/max                                                                                                            | Checks the gap between coupled tracks in a differential pair.  Coupled tracks are segments that are parallel to each other.  Differential pair gap is not tested on uncoupled portions of a differential pair (for example, the fanout from a component).<br>                                                                                                                                                                                           |\n"
-"| `diff_pair_uncoupled`     | max                                                                                                                    | Checks the distance that a differential pair track is routed uncoupled from the other polarity track in the pair (for example, where the pair fans out from a component, or becomes uncoupled to pass around another object such as a via).<br>                                                                                                                                                                                                         |\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | Specify one or more object types to disallow, separated by spaces.  For example, `(constraint disallow track)` or `(constraint disallow track via pad)`.  If an object of this type matches the rule condition, a DRC error will be created.<br><br>This constraint is essentially the same as a keepout rule area, but can be used to create more specific keepout restrictions.<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/max                                                                                                            | Checks the clearance between objects and the board edge.<br><br>This can also be thought of as the \"milling tolerance\" as the board edge will include all graphical items on the `Edge.Cuts` layer as well as any *oval* pad holes.  (See `physical_hole_clearance` for the drilling tolerance.)<br>                                                                                                                                                    |\n"
-"| `length`                  | min/max                                                                                                                | Checks the total routed length for the nets that match the rule condition and generates an error for each net that is below the `min` value (if specified) or above the `max` value (if specified) of the constraint.<br>                                                                                                                                                                                                                               |\n"
-"| `hole`                    | min/max                                                                                                                | Checks the size (diameter) of a drilled hole in a pad or via.  For oval holes, the smaller (minor) diameter will be tested against the `min` value (if specified) and the larger (major) diameter will be tested against the `max` value (if specified).<br>                                                                                                                                                                                            |\n"
-"| `hole_clearance`          | min                                                                                                                    | Checks the clearance between a drilled hole in a pad or via and copper objects on a different net.  The clearance is measured from the diameter of the hole, not its center.<br>                                                                                                                                                                                                                                                                        |\n"
-"| `hole_to_hole`            | min                                                                                                                    | Checks the clearance between mechanically-drilled holes in pads and vias.  The clearance is measured between the diameters of the holes, not between their centers.<br><br>This constraint is soley for the protection of drill bits.  The clearance between **laser-drilled** (microvias) and other non-mechanically-drilled holes is not checked, nor is the clearance between **milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
-"| `physical_clearance`      | min                                                                                                                    | Checks the clearance between two objects on a given layer (including non-copper layers).<br><br>While this can perform more general-purpose checks than `clearance`, it is much slower.  Use `clearance` where possible.<br>                                                                                                                                                                                                                            |\n"
-"| `physical_hole_clearance` | min                                                                                                                    | Checks the clearance between a drilled hole in a pad or via and another object, regardless of net. The clearance is measured from the diameter of the hole, not its center.<br><br>This can also be thought of as the \"drilling tolerance\" as it only includes **round** holes (see `edge_clearance` for the milling tolerance).<br>                                                                                                                    |\n"
-"| `silk_clearance`          | min/opt/max                                                                                                            | Checks the clearance between objects on silkscreen layers and other objects.<br>                                                                                                                                                                                                                                                                                                                                                                        |\n"
-"| `skew`                    | max                                                                                                                    | Checks the total skew for the nets that match the rule condition, that is, the difference between the length of each net and the average of all the lengths of each net that is matched by the rule.  If the absolute value of the difference between that average and the length of any one net is above the constraint `max` value, an error will be generated.<br>                                                                                   |\n"
-"| `thermal_relief_gap`      | min                                                                                                                    | Specifies the width of the gap between a pad and a zone with a thermal-relief connection.<br>                                                                                                                                                                                                                                                                                                                                                           |\n"
-"| `thermal_spoke_width`     | opt                                                                                                                    | Specifies the width of the spokes connecting a pad to a zone with a thermal-relief connection.<br>                                                                                                                                                                                                                                                                                                                                                      |\n"
-"| `track_width`             | min/opt/max                                                                                                            | Checks the width of track and arc segments.  An error will be generated for each segment that has a width below the `min` value (if specified) or above the `max` value (if specified).<br>                                                                                                                                                                                                                                                             |\n"
-"| `via_count`               | max                                                                                                                    | Counts the number of vias on every net matched by the rule condition.  If that number exceeds the constraint `max` value on any matched net, an error will be generated for that net.<br>                                                                                                                                                                                                                                                               |\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`                                                                                 | Specifies the connection to be made between a zone and a pad.<br>                                                                                                                                                                                                                                                                                                                                                                                       |\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| Checks the width of annular rings on vias."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `clearance`               | "
+"min                                                                                                                    "
+"| Specifies the **electrical** clearance between copper objects of different "
+"nets.  (See `physical_clearance` if you wish to specify clearance between "
+"objects regardless of net.)<br><br>To allow copper objects to overlap "
+"(collide), create a `clearance` constraint with the `min` value less than "
+"zero (for example, `-1`)."
+"<br>                                                                                                                      "
+"|\n"
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
+"| Checks the clearance between footprint courtyards and generates an error "
+"if any two courtyards are closer than the `min` distance.  If a footprint "
+"does not have a courtyard shape, no errors will be generated from this "
+"constraint."
+"<br>                                                                                                                                                                                                               "
+"|\n"
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
+"| Checks the gap between coupled tracks in a differential pair.  Coupled "
+"tracks are segments that are parallel to each other.  Differential pair gap "
+"is not tested on uncoupled portions of a differential pair (for example, the "
+"fanout from a component)."
+"<br>                                                                                                                                                                                           "
+"|\n"
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
+"| Checks the distance that a differential pair track is routed uncoupled "
+"from the other polarity track in the pair (for example, where the pair fans "
+"out from a component, or becomes uncoupled to pass around another object "
+"such as a via)."
+"<br>                                                                                                                                                                                                         "
+"|\n"
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| Specify one or more object types to disallow, separated by spaces.  For "
+"example, `(constraint disallow track)` or `(constraint disallow track via "
+"pad)`.  If an object of this type matches the rule condition, a DRC error "
+"will be created.<br><br>This constraint is essentially the same as a keepout "
+"rule area, but can be used to create more specific keepout restrictions."
+"<br>                                                                   |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Checks the clearance between objects and the board edge.<br><br>This can "
+"also be thought of as the \"milling tolerance\" as the board edge will "
+"include all graphical items on the `Edge.Cuts` layer as well as any *oval* "
+"pad holes.  (See `physical_hole_clearance` for the drilling "
+"tolerance.)<br>                                                                                                                                                    "
+"|\n"
+"| `length`                  | min/"
+"max                                                                                                                "
+"| Checks the total routed length for the nets that match the rule condition "
+"and generates an error for each net that is below the `min` value (if "
+"specified) or above the `max` value (if specified) of the constraint."
+"<br>                                                                                                                                                                                                                               "
+"|\n"
+"| `hole`                    | min/"
+"max                                                                                                                "
+"| Checks the size (diameter) of a drilled hole in a pad or via.  For oval "
+"holes, the smaller (minor) diameter will be tested against the `min` value "
+"(if specified) and the larger (major) diameter will be tested against the "
+"`max` value (if specified)."
+"<br>                                                                                                                                                                                            "
+"|\n"
+"| `hole_clearance`          | "
+"min                                                                                                                    "
+"| Checks the clearance between a drilled hole in a pad or via and copper "
+"objects on a different net.  The clearance is measured from the diameter of "
+"the hole, not its center."
+"<br>                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
+"| Checks the clearance between mechanically-drilled holes in pads and vias.  "
+"The clearance is measured between the diameters of the holes, not between "
+"their centers.<br><br>This constraint is soley for the protection of drill "
+"bits.  The clearance between **laser-drilled** (microvias) and other non-"
+"mechanically-drilled holes is not checked, nor is the clearance between "
+"**milled** (oval-shaped) and other non-mechanically-drilled holes.<br> |\n"
+"| `physical_clearance`      | "
+"min                                                                                                                    "
+"| Checks the clearance between two objects on a given layer (including non-"
+"copper layers).<br><br>While this can perform more general-purpose checks "
+"than `clearance`, it is much slower.  Use `clearance` where possible."
+"<br>                                                                                                                                                                                                                            "
+"|\n"
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
+"| Checks the clearance between a drilled hole in a pad or via and another "
+"object, regardless of net. The clearance is measured from the diameter of "
+"the hole, not its center.<br><br>This can also be thought of as the "
+"\"drilling tolerance\" as it only includes **round** holes (see "
+"`edge_clearance` for the milling tolerance)."
+"<br>                                                                                                                    "
+"|\n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
+"| Checks the clearance between objects on silkscreen layers and other "
+"objects."
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `skew`                    | "
+"max                                                                                                                    "
+"| Checks the total skew for the nets that match the rule condition, that is, "
+"the difference between the length of each net and the average of all the "
+"lengths of each net that is matched by the rule.  If the absolute value of "
+"the difference between that average and the length of any one net is above "
+"the constraint `max` value, an error will be generated."
+"<br>                                                                                   "
+"|\n"
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
+"| Specifies the width of the gap between a pad and a zone with a thermal-"
+"relief connection."
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
+"|\n"
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
+"| Specifies the width of the spokes connecting a pad to a zone with a "
+"thermal-relief connection."
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
+"|\n"
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
+"| Checks the width of track and arc segments.  An error will be generated "
+"for each segment that has a width below the `min` value (if specified) or "
+"above the `max` value (if specified)."
+"<br>                                                                                                                                                                                                                                                             "
+"|\n"
+"| `via_count`               | "
+"max                                                                                                                    "
+"| Counts the number of vias on every net matched by the rule condition.  If "
+"that number exceeds the constraint `max` value on any matched net, an error "
+"will be generated for that net."
+"<br>                                                                                                                                                                                                                                                               "
+"|\n"
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| Specifies the connection to be made between a zone and a pad."
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
 "\n"
 "\n"
 "### Items\n"
@@ -37203,7 +37336,8 @@ msgstr ""
 "\n"
 "### Notes\n"
 "\n"
-"Version clause must be the first clause.  It indicates the syntax version of the file so that \n"
+"Version clause must be the first clause.  It indicates the syntax version of "
+"the file so that \n"
 "future rules parsers can perform automatic updates.  It should be\n"
 "set to \"1\".\n"
 "\n"
@@ -37220,7 +37354,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.intersectsCourtyard('<footprint_refdes>')\n"
-"True if any part of `A` lies within the given footprint's principal courtyard.\n"
+"True if any part of `A` lies within the given footprint's principal "
+"courtyard.\n"
 "<br><br>\n"
 "\n"
 "    A.intersectsFrontCourtyard('<footprint_refdes>')\n"
@@ -37238,12 +37373,14 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "True if all of `A` lies within the given zone's outline.\n"
 "\n"
-"NB: this is potentially a more expensive call than `intersectsArea()`.  Use `intersectsArea()`\n"
+"NB: this is potentially a more expensive call than `intersectsArea()`.  Use "
+"`intersectsArea()`\n"
 "where possible.\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
-"The value of the given field. Only footprints have fields, so a field is only returned if\n"
+"The value of the given field. Only footprints have fields, so a field is "
+"only returned if\n"
 "`A` is a footprint.\n"
 "<br><br>\n"
 "\n"
@@ -37253,7 +37390,8 @@ msgstr ""
 "\n"
 "    A.inDiffPair('<net_name>')\n"
 "True if `A` has a net that is part of the specified differential pair.\n"
-"`<net_name>` is the base name of the differential pair.  For example, `inDiffPair('/CLK')`\n"
+"`<net_name>` is the base name of the differential pair.  For example, "
+"`inDiffPair('/CLK')`\n"
 "matches items in the `/CLK_P` and `/CLK_N` nets.\n"
 "<br><br>\n"
 "\n"
@@ -37267,12 +37405,14 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_reference>')\n"
-"True if `A` is a member of a footprint matching the given reference designator.  The\n"
+"True if `A` is a member of a footprint matching the given reference "
+"designator.  The\n"
 "reference can contain wildcards.\n"
 "<br><br>\n"
 "\n"
 "    A.memberOfSheet('<sheet_path>')\n"
-"True if `A` is a member of the given schematic sheet. The sheet path can contain wildcards.\n"
+"True if `A` is a member of the given schematic sheet. The sheet path can "
+"contain wildcards.\n"
 "<br><br>\n"
 "\n"
 "    A.existsOnLayer('<layer_name>')\n"
@@ -37306,11 +37446,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -37405,7 +37547,8 @@ msgstr ""
 "\n"
 "### Documentation\n"
 "\n"
-"For the full documentation see [https://docs.kicad.org](https://docs.kicad.org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
+"For the full documentation see [https://docs.kicad.org](https://docs.kicad."
+"org/GetMajorMinorVersion/en/pcbnew/pcbnew.html#custom_design_rules)."
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:19
 msgid "Default properties for round shapes:"
@@ -38718,7 +38861,7 @@ msgid "'%s' settings differ."
 msgstr "'%s' impostazioni diverse."
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:574
-#: pcbnew/footprint.cpp:3531
+#: pcbnew/footprint.cpp:3533
 msgid "Exempt From Courtyard Requirement"
 msgstr "Esente dai requisiti ingombri"
 
@@ -39155,29 +39298,34 @@ msgstr ""
 "\n"
 "Tempo di esportazione %.3f s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:991
+#: pcbnew/exporters/step/step_pcb_model.cpp:857
+#, c-format
+msgid "Wire not done (contour %d, points %d): OCC error %d\n"
+msgstr ""
+
+#: pcbnew/exporters/step/step_pcb_model.cpp:1005
 #, c-format
 msgid "Build holes for %s\n"
 msgstr "Crea fori per %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:996
+#: pcbnew/exporters/step/step_pcb_model.cpp:1010
 #, c-format
 msgid "Cutting %d/%d %s\n"
 msgstr "Taglio %d/%d %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1023
+#: pcbnew/exporters/step/step_pcb_model.cpp:1037
 msgid "shapes"
 msgstr "forme"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1031
+#: pcbnew/exporters/step/step_pcb_model.cpp:1045
 msgid "pads"
 msgstr "piazzole"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1032
+#: pcbnew/exporters/step/step_pcb_model.cpp:1046
 msgid "tracks"
 msgstr "piste"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1033
+#: pcbnew/exporters/step/step_pcb_model.cpp:1047
 msgid "zones"
 msgstr "zone"
 
@@ -39223,14 +39371,18 @@ msgid "Current Board will be closed. Continue?"
 msgstr "La scheda corrente verrà chiusa. Continuare?"
 
 #: pcbnew/files.cpp:479
+#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-" This may result in different fills from previous KiCad versions which used "
+"This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"Se le zone su questa scheda vengono ri-riempite, verranno usate le impostazioni sulla distanza dal bordo rame (vedere Impostazioni scheda > Regole di progettazione > Vincoli).\n"
-"Ciò può portare a riempimenti diversi dalle versioni precedenti di KiCad che usavano lo spessore linea del bordo scheda sullo strato Edge Cuts."
+"Se le zone su questa scheda vengono ri-riempite, verranno usate le "
+"impostazioni sulla distanza dal bordo rame (vedere Impostazioni scheda > "
+"Regole di progettazione > Vincoli).\n"
+"Ciò può portare a riempimenti diversi dalle versioni precedenti di KiCad che "
+"usavano lo spessore linea del bordo scheda sullo strato Edge Cuts."
 
 #: pcbnew/files.cpp:525
 #, c-format
@@ -39410,80 +39562,80 @@ msgstr "<nessun riferimento predefinito>"
 msgid "Footprint %s"
 msgstr "Impronta %s"
 
-#: pcbnew/footprint.cpp:2752
+#: pcbnew/footprint.cpp:2754
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(atteso 'Foro passante'; effettivo '%s')"
 
-#: pcbnew/footprint.cpp:2755
+#: pcbnew/footprint.cpp:2757
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(atteso 'SMD'; effettivo '%s')"
 
-#: pcbnew/footprint.cpp:2783
+#: pcbnew/footprint.cpp:2785
 msgid "(PTH pad has no copper layers)"
 msgstr "(piazzola PTH senza strati rame)"
 
-#: pcbnew/footprint.cpp:2802
+#: pcbnew/footprint.cpp:2804
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(foro piazzola PTH senza rame)"
 
-#: pcbnew/footprint.cpp:2811
+#: pcbnew/footprint.cpp:2813
 msgid "(SMD pad appears on both front and back copper)"
 msgstr ""
 "(la piazzola SMD compare su entrambi, superiore e inferiore, i lati rame)"
 
-#: pcbnew/footprint.cpp:2818 pcbnew/footprint.cpp:2831
+#: pcbnew/footprint.cpp:2820 pcbnew/footprint.cpp:2833
 msgid "(SMD pad copper and mask layers don't match)"
 msgstr "(gli strati rame e maschera della piazzola SMD non corrispondono)"
 
-#: pcbnew/footprint.cpp:2823 pcbnew/footprint.cpp:2836
+#: pcbnew/footprint.cpp:2825 pcbnew/footprint.cpp:2838
 msgid "(SMD pad copper and paste layers don't match)"
 msgstr "(gli strati rame e pastasalda della piazzola SMD non corrispondono)"
 
-#: pcbnew/footprint.cpp:3016
+#: pcbnew/footprint.cpp:3018
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(gruppo piazzole net-tie contiene numero piazzola sconosciuto %s)"
 
-#: pcbnew/footprint.cpp:3021
+#: pcbnew/footprint.cpp:3023
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(piazzola %s appare in più di un gruppo piazzole net-tie)"
 
-#: pcbnew/footprint.cpp:3458 pcbnew/pad.cpp:1906 pcbnew/zone.cpp:1549
+#: pcbnew/footprint.cpp:3460 pcbnew/pad.cpp:1906 pcbnew/zone.cpp:1549
 msgid "Inherited"
 msgstr "Ereditato"
 
-#: pcbnew/footprint.cpp:3462 pcbnew/pad.cpp:1910 pcbnew/zone.cpp:1553
+#: pcbnew/footprint.cpp:3464 pcbnew/pad.cpp:1910 pcbnew/zone.cpp:1553
 msgid "Thermal reliefs for PTH"
 msgstr "Raccordi termici per fori metallizzati"
 
-#: pcbnew/footprint.cpp:3516
+#: pcbnew/footprint.cpp:3518
 msgid "Not in Schematic"
 msgstr "Non nello schema"
 
-#: pcbnew/footprint.cpp:3518
+#: pcbnew/footprint.cpp:3520
 msgid "Exclude From Position Files"
 msgstr "Escludi dai file di posizione"
 
-#: pcbnew/footprint.cpp:3528 pcbnew/pad.cpp:2020
+#: pcbnew/footprint.cpp:3530 pcbnew/pad.cpp:2020
 msgid "Overrides"
 msgstr "Scavalcamenti"
 
-#: pcbnew/footprint.cpp:3534 pcbnew/pad.cpp:2022
+#: pcbnew/footprint.cpp:3536 pcbnew/pad.cpp:2022
 msgid "Clearance Override"
 msgstr "Scavalcamento distanze"
 
-#: pcbnew/footprint.cpp:3538 pcbnew/pad.cpp:2030
+#: pcbnew/footprint.cpp:3540 pcbnew/pad.cpp:2030
 msgid "Solderpaste Margin Override"
 msgstr "Scavalcamento margine pastasalda"
 
-#: pcbnew/footprint.cpp:3543 pcbnew/pad.cpp:2034
+#: pcbnew/footprint.cpp:3545 pcbnew/pad.cpp:2034
 msgid "Solderpaste Margin Ratio Override"
 msgstr "Scavalcamento rapporto margine pastasalda"
 
-#: pcbnew/footprint.cpp:3548 pcbnew/pad.cpp:2039
+#: pcbnew/footprint.cpp:3550 pcbnew/pad.cpp:2039
 msgid "Zone Connection Style"
 msgstr "Stile connessione zona"
 

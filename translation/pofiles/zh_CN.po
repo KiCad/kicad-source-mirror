@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad_zh_CN_Master_v0.0.32\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-14 14:22-0700\n"
+"POT-Creation-Date: 2024-04-26 19:52-0700\n"
 "PO-Revision-Date: 2024-04-26 15:49+0000\n"
 "Last-Translator: CloverGit <w991593239@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -78,7 +78,8 @@ msgstr ""
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:931
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "电路板缺少外框或外框形状异常 (如板外框线条没有闭合)。可用设计规则检查 (DRC) "
+msgstr ""
+"电路板缺少外框或外框形状异常 (如板外框线条没有闭合)。可用设计规则检查 (DRC) "
 "分析原因。"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
@@ -350,8 +351,8 @@ msgstr "保存文件 '%s' 的权限不足。"
 #: common/confirm.cpp:321 common/dialogs/dialog_grid_settings.cpp:61
 #: common/dialogs/dialog_grid_settings.cpp:68
 #: common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2034
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1634
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2035
 #: eeschema/files-io.cpp:975 eeschema/files-io.cpp:1043
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:322
 #: kicad/tools/kicad_manager_control.cpp:242
@@ -823,15 +824,15 @@ msgid "Presets (%s+Tab):"
 msgstr "预设 (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:610
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1477
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1898
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1478
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1899
 #: pcbnew/widgets/appearance_controls.cpp:2541
 msgid "Save preset..."
 msgstr "保存预设..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:611
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1478
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1899
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1479
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1900
 #: pcbnew/widgets/appearance_controls.cpp:2542
 msgid "Delete preset..."
 msgstr "删除预设..."
@@ -847,29 +848,29 @@ msgid "Save Layer Preset"
 msgstr "保存层预设"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:733
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1640
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2041
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2042
 #: pcbnew/widgets/appearance_controls.cpp:2681
 msgid "Overwrite existing preset?"
 msgstr "覆盖已有预设?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:759
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1665
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2066
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1666
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2067
 #: pcbnew/widgets/appearance_controls.cpp:2707
 msgid "Presets"
 msgstr "预设"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:768
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1677
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2078
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1678
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
 #: pcbnew/widgets/appearance_controls.cpp:2719
 msgid "Delete Preset"
 msgstr "删除预设"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:769
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1678
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1679
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2080
 #: pcbnew/widgets/appearance_controls.cpp:2720
 msgid "Select preset:"
 msgstr "选择预设:"
@@ -3026,7 +3027,7 @@ msgstr "选项"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3500
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3502
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:406 pcbnew/plot_board_layers.cpp:90
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -3062,7 +3063,7 @@ msgstr "打印预览"
 #: common/dialogs/dialog_print_generic.cpp:97 common/hotkey_store.cpp:59
 #: common/tool/action_menu.cpp:212 common/tool/action_menu.cpp:217
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:136
-#: eeschema/dialogs/dialog_change_symbols.cpp:159
+#: eeschema/dialogs/dialog_change_symbols.cpp:160
 #: eeschema/dialogs/dialog_erc.cpp:107 eeschema/dialogs/dialog_erc.cpp:446
 #: eeschema/dialogs/dialog_export_netlist.cpp:275
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
@@ -4247,7 +4248,7 @@ msgstr "缩放"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:925
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
-#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3459
+#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3461
 #: pcbnew/pad.cpp:1893 pcbnew/pad.cpp:1907 pcbnew/pcb_dimension.cpp:1618
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -4381,7 +4382,7 @@ msgstr "库名称前缀:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3461
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3463
 #: pcbnew/pad.cpp:1909 pcbnew/pcb_textbox.cpp:655 pcbnew/zone.cpp:630
 #: pcbnew/zone.cpp:1552
 msgid "Solid"
@@ -5579,7 +5580,7 @@ msgstr "向下"
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:3491 pcbnew/fp_text_grid_table.cpp:145
+#: pcbnew/footprint.cpp:3493 pcbnew/fp_text_grid_table.cpp:145
 #: pcbnew/pad.cpp:1919 pcbnew/zone.cpp:1649
 msgid "Orientation"
 msgstr "方向"
@@ -7086,7 +7087,7 @@ msgstr "按值分组"
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
 #: eeschema/dialogs/dialog_sim_model_base.cpp:254 eeschema/sch_symbol.cpp:1945
 #: eeschema/sch_symbol.cpp:1997 eeschema/sch_symbol.cpp:2798
-#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3497
+#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3499
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
 msgstr "位号"
@@ -7102,7 +7103,7 @@ msgstr "按值和封装分组"
 #: eeschema/sch_symbol.cpp:2814 eeschema/tools/sch_edit_tool.cpp:473
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:3514
+#: pcbnew/footprint.cpp:3516
 msgid "Attributes"
 msgstr "特性"
 
@@ -8690,7 +8691,7 @@ msgstr "'%s' 不是有效封装。"
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1992 eeschema/sch_symbol.cpp:2550
 #: eeschema/sch_symbol.cpp:2810 eeschema/symbol_editor/symbol_editor.cpp:1296
-#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3510
+#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3512
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:118
 msgid "Keywords"
 msgstr "关键字"
@@ -9065,24 +9066,24 @@ msgstr ""
 "%s\n"
 "找不到。脚本不可用。"
 
-#: eeschema/connection_graph.cpp:3059
+#: eeschema/connection_graph.cpp:3147
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都连接到同一项上; 将使用 %s 作为网表中的网络名称"
 
-#: eeschema/connection_graph.cpp:3338
+#: eeschema/connection_graph.cpp:3426
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "网络 %s 以图形方式连接到总线 %s, 但不是总线的成员"
 
-#: eeschema/connection_graph.cpp:3884
+#: eeschema/connection_graph.cpp:3972
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "图纸引脚 %s 在子图纸内没有匹配的层次标签"
 
-#: eeschema/connection_graph.cpp:3902
+#: eeschema/connection_graph.cpp:3990
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "层次标签 %s 在父图纸内没有匹配的图纸引脚"
@@ -9453,69 +9454,69 @@ msgstr ""
 "\n"
 "建议在参数周围加上双引号 (`\"`) , 以防文件名包含空格或特殊字符。\n"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:67
+#: eeschema/dialogs/dialog_change_symbols.cpp:68
 msgid "Change all symbols in schematic"
 msgstr "替换原理图中的所有符号"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:68
-#: eeschema/dialogs/dialog_change_symbols.cpp:429
+#: eeschema/dialogs/dialog_change_symbols.cpp:69
+#: eeschema/dialogs/dialog_change_symbols.cpp:430
 msgid "Change Symbols"
 msgstr "替换指定符号"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:77
+#: eeschema/dialogs/dialog_change_symbols.cpp:78
 msgid "Change selected symbol(s)"
 msgstr "替换已选中的符号"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:94
+#: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching reference designator:"
 msgstr "替换与给定位号相同的符号:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:95
+#: eeschema/dialogs/dialog_change_symbols.cpp:96
 msgid "Change symbols matching value:"
 msgstr "替换值与给定值相同的符号:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:96
+#: eeschema/dialogs/dialog_change_symbols.cpp:97
 msgid "Change symbols matching library identifier:"
 msgstr "替换使用此库索引值的符号:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:133
+#: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update Fields"
 msgstr "更新字段"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:134
+#: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Remove fields if not in new symbol"
 msgstr "如果在新符号中不存在, 则移除字段"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:135
+#: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Reset fields if empty in new symbol"
 msgstr "如果在新符号中为空, 则重置字段"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:136
+#: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Update field text"
 msgstr "更新字段的文本内容"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:137
+#: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field visibilities"
 msgstr "更新字段可见性设置"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:138
+#: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update field sizes and styles"
 msgstr "更新字段大小和样式"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:139
+#: eeschema/dialogs/dialog_change_symbols.cpp:140
 msgid "Update field positions"
 msgstr "更新字段位置"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:140
+#: eeschema/dialogs/dialog_change_symbols.cpp:141
 msgid "Update symbol attributes"
 msgstr "更新符号特性"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:156
+#: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:154
 msgid "Change"
 msgstr "修改"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:156
+#: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
 #: kicad/pcm/dialogs/dialog_pcm.cpp:110 kicad/pcm/dialogs/panel_package.cpp:66
 #: kicad/pcm/dialogs/panel_package.cpp:127
@@ -9527,38 +9528,38 @@ msgstr "修改"
 msgid "Update"
 msgstr "更新"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:429
+#: eeschema/dialogs/dialog_change_symbols.cpp:430
 msgid "Update Symbols"
 msgstr "更新符号"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:536
+#: eeschema/dialogs/dialog_change_symbols.cpp:537
 msgid "*** No symbols matching criteria found ***"
 msgstr "*** 找不到符合筛选条件的符号 ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:573
+#: eeschema/dialogs/dialog_change_symbols.cpp:574
 msgid "*** symbol not found ***"
 msgstr "*** 找不到符号 ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:584
+#: eeschema/dialogs/dialog_change_symbols.cpp:585
 msgid "*** new symbol has too few units ***"
 msgstr "*** 新符号的单元过少 ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:800
+#: eeschema/dialogs/dialog_change_symbols.cpp:811
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
 msgstr "将符号 %s 由 '%s' 更新到 '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:807
+#: eeschema/dialogs/dialog_change_symbols.cpp:818
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
 msgstr "将符号 %s 由 '%s' 更新到 '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:817
+#: eeschema/dialogs/dialog_change_symbols.cpp:828
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
 msgstr "将符号 %s 由 '%s' 替换为 '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:824
+#: eeschema/dialogs/dialog_change_symbols.cpp:835
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
 msgstr "将符号 %s 由 '%s' 替换为 '%s'"
@@ -10665,7 +10666,7 @@ msgstr "显示语法帮助窗口"
 #: eeschema/sch_symbol.cpp:2796
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:3495
+#: pcbnew/footprint.cpp:3497
 msgid "Fields"
 msgstr "字段"
 
@@ -10880,7 +10881,7 @@ msgid "Read Only"
 msgstr "只读"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1217
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1324
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
 msgid "Save changes?"
 msgstr "保存变更吗?"
 
@@ -11168,7 +11169,7 @@ msgid "The name '%s' is already in use."
 msgstr "名称 '%s' 已被使用。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#: eeschema/dialogs/dialog_sheet_properties.cpp:761
+#: eeschema/dialogs/dialog_sheet_properties.cpp:767
 #: eeschema/dialogs/dialog_symbol_properties.cpp:962
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:637
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:683
@@ -12211,11 +12212,11 @@ msgstr "保存原理图文件 '%s' 时出错。"
 msgid "Failed to save schematic '%s'"
 msgstr "未能保存原理图 '%s'"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:701
 msgid "A sheet must have a name."
 msgstr "图纸必须要有一个名称。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:703
+#: eeschema/dialogs/dialog_sheet_properties.cpp:709
 msgid "A sheet must have a file specified."
 msgstr "图纸必须要有对应的文件。"
 
@@ -13037,23 +13038,23 @@ msgstr "无法创建 BOM 输出 '%s'。"
 msgid "Could not write BOM output '%s'."
 msgstr "无法写入 BOM 输出 '%s'。"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1299
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1300
 #, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "将 BOM 输出写入 '%s'"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1606
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2007
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1607
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2008
 msgid "BOM preset name:"
 msgstr "BOM 预设名称:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1606
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2007
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1607
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2008
 msgid "Save BOM Preset"
 msgstr "保存 BOM 预设"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1632
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2033
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2034
 #: pcbnew/widgets/appearance_controls.cpp:2673
 msgid ""
 "Default presets cannot be modified.\n"
@@ -16068,7 +16069,7 @@ msgstr "总线别名 %s 成员"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad 原理图编辑器"
 
-#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1941
+#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1961
 msgid "Schematic Hierarchy"
 msgstr "原理图层次结构"
 
@@ -16131,20 +16132,20 @@ msgstr "[未保存]"
 msgid "[no schematic loaded]"
 msgstr "[没有加载原理图]"
 
-#: eeschema/sch_edit_frame.cpp:1853
+#: eeschema/sch_edit_frame.cpp:1873
 msgid "Schematic Cleanup"
 msgstr "清理原理图"
 
-#: eeschema/sch_edit_frame.cpp:1966
+#: eeschema/sch_edit_frame.cpp:1986
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "高亮网络: %s"
 
-#: eeschema/sch_edit_frame.cpp:2144
+#: eeschema/sch_edit_frame.cpp:2164
 msgid "Save Symbol to Schematic"
 msgstr "保存符号到原理图"
 
-#: eeschema/sch_edit_frame.cpp:2249 eeschema/tools/ee_actions.cpp:60
+#: eeschema/sch_edit_frame.cpp:2269 eeschema/tools/ee_actions.cpp:60
 msgid "Compare Symbol with Library"
 msgstr "将符号与库符号进行比较"
 
@@ -16979,7 +16980,7 @@ msgstr "未知 SCH_FILE_T 值: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:57
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
-#: pcbnew/footprint.cpp:3486 pcbnew/footprint.cpp:3489
+#: pcbnew/footprint.cpp:3488 pcbnew/footprint.cpp:3491
 #: pcbnew/fp_text_grid_table.cpp:144
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2045 pcbnew/pad.cpp:1003
 #: pcbnew/pad.cpp:1917 pcbnew/pcb_dimension.cpp:462
@@ -17387,11 +17388,11 @@ msgstr "X 轴镜像"
 msgid "Mirror Y"
 msgstr "Y 轴镜像"
 
-#: eeschema/sch_symbol.cpp:2804 pcbnew/footprint.cpp:3504
+#: eeschema/sch_symbol.cpp:2804 pcbnew/footprint.cpp:3506
 msgid "Library Link"
 msgstr "库链接"
 
-#: eeschema/sch_symbol.cpp:2807 pcbnew/footprint.cpp:3507
+#: eeschema/sch_symbol.cpp:2807 pcbnew/footprint.cpp:3509
 #: pcbnew/plot_board_layers.cpp:114
 msgid "Library Description"
 msgstr "库描述"
@@ -17404,11 +17405,11 @@ msgstr "不在 PCB 中进行绘制"
 msgid "Exclude From Simulation"
 msgstr "不参与电路仿真"
 
-#: eeschema/sch_symbol.cpp:2822 pcbnew/footprint.cpp:3521
+#: eeschema/sch_symbol.cpp:2822 pcbnew/footprint.cpp:3523
 msgid "Exclude From Bill of Materials"
 msgstr "不在物料清单中显示"
 
-#: eeschema/sch_symbol.cpp:2825 pcbnew/footprint.cpp:3524
+#: eeschema/sch_symbol.cpp:2825 pcbnew/footprint.cpp:3526
 msgid "Do not Populate"
 msgstr "不作装配"
 
@@ -20344,7 +20345,7 @@ msgstr "更改为文本框"
 msgid "Change existing item to a text box"
 msgstr "将现有项目更改为文本框"
 
-#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2446
+#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2448
 msgid "Cleanup Sheet Pins"
 msgstr "清理图纸引脚"
 
@@ -21185,7 +21186,7 @@ msgstr "添加 %s"
 msgid "Draw %s"
 msgstr "绘制 %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2110
+#: eeschema/tools/sch_drawing_tools.cpp:2087
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "按下 <ESC> 取消图纸创建。"
 
@@ -21209,7 +21210,7 @@ msgstr "旋转和镜像"
 msgid "Edit Main Fields"
 msgstr "编辑主字段"
 
-#: eeschema/tools/sch_edit_tool.cpp:514 eeschema/tools/sch_edit_tool.cpp:2355
+#: eeschema/tools/sch_edit_tool.cpp:514 eeschema/tools/sch_edit_tool.cpp:2357
 msgid "Change To"
 msgstr "修改为"
 
@@ -21245,41 +21246,41 @@ msgstr "编辑 %s 字段"
 msgid "Edit '%s' Field"
 msgstr "编辑 '%s' 字段"
 
-#: eeschema/tools/sch_edit_tool.cpp:2079 eeschema/tools/sch_edit_tool.cpp:2167
+#: eeschema/tools/sch_edit_tool.cpp:2081 eeschema/tools/sch_edit_tool.cpp:2169
 msgid "<empty>"
 msgstr "<空>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2419
+#: eeschema/tools/sch_edit_tool.cpp:2421
 msgid "Slice Wire"
 msgstr "分割连线"
 
-#: eeschema/tools/sch_edit_tool.cpp:2419
+#: eeschema/tools/sch_edit_tool.cpp:2421
 msgid "Break Wire"
 msgstr "打断连线"
 
-#: eeschema/tools/sch_edit_tool.cpp:2437
+#: eeschema/tools/sch_edit_tool.cpp:2439
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "您是否希望从此表中删除未引用的引脚?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2498
+#: eeschema/tools/sch_edit_tool.cpp:2500
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "输入图纸路径 %s 的页码"
 
-#: eeschema/tools/sch_edit_tool.cpp:2501
+#: eeschema/tools/sch_edit_tool.cpp:2503
 #: eeschema/widgets/hierarchy_pane.cpp:393
 msgid "Edit Sheet Page Number"
 msgstr "编辑图纸页码"
 
-#: eeschema/tools/sch_edit_tool.cpp:2566
+#: eeschema/tools/sch_edit_tool.cpp:2568
 msgid "Set Attribute"
 msgstr "设置特性"
 
-#: eeschema/tools/sch_edit_tool.cpp:2603
+#: eeschema/tools/sch_edit_tool.cpp:2605
 msgid "Clear Attribute"
 msgstr "清除特性"
 
-#: eeschema/tools/sch_edit_tool.cpp:2640
+#: eeschema/tools/sch_edit_tool.cpp:2642
 msgid "Toggle Attribute"
 msgstr "切换特性"
 
@@ -29223,7 +29224,7 @@ msgstr ""
 "焊盘与覆铜默认连接类型。\n"
 "该设置可被局部焊盘设置覆盖"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3460
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3462
 #: pcbnew/pad.cpp:1908 pcbnew/zone.cpp:1551
 msgid "Thermal reliefs"
 msgstr "缓释热焊盘 (花焊盘)"
@@ -34803,8 +34804,9 @@ msgstr "最小孔环宽度:"
 msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr "最小孔环宽度。一旦设置, 这是一个绝对的最小值, "
-"不能通过网络类、自定义规则或其他设置减少。"
+msgstr ""
+"最小孔环宽度。一旦设置, 这是一个绝对的最小值, 不能通过网络类、自定义规则或其"
+"他设置减少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
@@ -36191,175 +36193,137 @@ msgstr ""
 "\n"
 "### Constraints (约束) \n"
 "\n"
-"| 约束类型           | 变量类型                                              "
-"                                  | 描述                                     "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"       |\n"
-"|---------------------------|------------------------------------------------"
-"------------------------------------------------------------------------|----"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"----------------------------------------------------|\n"
-"| `annular_width`           | min/opt/max                                    "
-"                                                                        | 检"
-"查过孔的孔环宽度<br>                                                         "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                             |\n"
-"| `assertion`               | \"&lt;expression>\"                            "
-"                                                                         | "
-"检查给定的表达式。<br>                                                       "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                       |\n"
-"| `clearance`               | min                                            "
-"                                                                        | "
-"定义不同网络铜箔对象的 **电气** 间隙。  (如果您想定义不考虑网络的对象的间隙，"
-"请查看 `physical_clearance` 约束类型。<br><br>如果允许铜箔对象重叠(碰撞)，"
-"可以创建一个 `clearance` 约束，并将 `min` 值设为小于零  (例如, `-1`)。<br>   "
-"                                                                             "
-"                                      |\n"
-"| `courtyard_clearance`     | min                                            "
-"                                                                        | "
-"检查封装 Courtyard 之间的间隙，如果任何两个封装之间的距离小于 `min` "
-"的值，则会产生错误。如果封装没有 Courtyard，则该约束不会产生错误。<br>       "
-"                                                                             "
-"                                                                             "
-"                                              |\n"
-"| `diff_pair_gap`           | min/opt/max                                    "
-"                                                                        | "
-"检查差分对中耦合走线之间的间隙。 耦合走线是相互平行的线段。 "
-"差分对间隙约束不对差分对的非耦合部分 (例如，元件的扇出部分) 进行测试。<br>   "
-"                                                                             "
-"                                                                             "
-"                              |\n"
-"| `diff_pair_uncoupled`     | max                                            "
-"                                                                        | "
-"检查差分对正负走线非耦合部分的间距 (例如，差分对从元件扇出，或绕过某一物体 "
-"(如通孔) 的非耦合部分) 。<br>                                                "
-"                                                                             "
-"                                                                            |"
-"\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
-"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
-"指定一个或多个对象类型不被允许, 使用空格分割。  例如, `(constraint disallow "
-"track)` 或 `(constraint disallow track via pad)`。  "
-"如果这个类型的对象满足规则条件，就会产生一个 DRC 错误。<br><br>该约束类型与 "
-"keepout 规则区域基本相同，但可以创建更具体的 keepout 约束。"
+"| 约束类型           | 变量类"
+"型                                                                                "
+"| 描"
+"述                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"|\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| 检查过孔的孔环宽度"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
+"| 检查给定的表达式。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"|\n"
+"| `clearance`               | "
+"min                                                                                                                    "
+"| 定义不同网络铜箔对象的 **电气** 间隙。  (如果您想定义不考虑网络的对象的间"
+"隙，请查看 `physical_clearance` 约束类型。<br><br>如果允许铜箔对象重叠(碰"
+"撞)，可以创建一个 `clearance` 约束，并将 `min` 值设为小于零  (例如, `-1`)。"
+"<br>                                                                                                                      "
+"|\n"
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
+"| 检查封装 Courtyard 之间的间隙，如果任何两个封装之间的距离小于 `min` 的值，"
+"则会产生错误。如果封装没有 Courtyard，则该约束不会产生错误。"
+"<br>                                                                                                                                                                                                               "
+"|\n"
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
+"| 检查差分对中耦合走线之间的间隙。 耦合走线是相互平行的线段。 差分对间隙约束"
+"不对差分对的非耦合部分 (例如，元件的扇出部分) 进行测试。"
+"<br>                                                                                                                                                                                           "
+"|\n"
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
+"| 检查差分对正负走线非耦合部分的间距 (例如，差分对从元件扇出，或绕过某一物体 "
+"(如通孔) 的非耦合部分) 。"
+"<br>                                                                                                                                                                                                         "
+"|\n"
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| 指定一个或多个对象类型不被允许, 使用空格分割。  例如, `(constraint "
+"disallow track)` 或 `(constraint disallow track via pad)`。  如果这个类型的对"
+"象满足规则条件，就会产生一个 DRC 错误。<br><br>该约束类型与 keepout 规则区域"
+"基本相同，但可以创建更具体的 keepout 约束。"
 "<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/max                                    "
-"                                                                        | "
-"检查对象与板边的间隙。<br><br>这也可以看作是 \"铣削公差\"，"
-"因为电路板边缘将包括 `Edge.Cuts` 层上的所有图形对象以及任何 *椭圆* 焊盘孔。  "
-"(钻孔公差请查看 `physical_hole_clearance` 约束类型)<br>                      "
-"                                                                             "
-"                                                 |\n"
-"| `length`                  | min/max                                        "
-"                                                                        | "
-"检查符合规则条件的网络的总走线长度，如果网络的长度低于限制条件的 `min` "
-"最小值 (如果指定) 或高于 `max` 最大值 (如果指定) ，则生成错误。<br>          "
-"                                                                             "
-"                                                                             "
-"                                                           |\n"
-"| `hole`                    | min/max                                        "
-"                                                                        | "
-"检查焊盘或过孔中钻孔的大小 (直径) 。 对于椭圆形孔，较小的直径将与 `min` "
-"最小值 (如果指定) 对比，较大的直径将与 `max` 最大值 (如果指定) 对比。<br>    "
-"                                                                             "
-"                                                                             "
-"                              |\n"
-"| `hole_clearance`          | min                                            "
-"                                                                        | "
-"检查焊盘或过孔中的钻孔与不同网络的铜箔对象之间的间隙。 "
-"间隙是从孔的直径而不是孔的中心测量的。<br>                                   "
-"                                                                             "
-"                                                                             "
-"                                                                           |"
-"\n"
-"| `hole_to_hole`            | min                                            "
-"                                                                        | "
-"检查焊盘和过孔中机械钻孔之间的间隙。 间隙在孔边缘之间测量，而不是从孔的中心测"
-"量。<br><br>该约束类型完全是为了保护钻头。 不检查 **激光钻孔** (微孔) "
-"与其他非机械钻孔之间的间隙，也不检查 **铣削孔** (椭圆形) "
-"与其他非机械钻孔之间的间隙。<br> |\n"
-"| `physical_clearance`      | min                                            "
-"                                                                        | "
-"检查给定层 (包括非铜层) 上两个对象之间的间隙。<br><br>虽然这可以执行比 "
-"`clearance` 更通用的检查，但速度要慢得多。 尽可能使用 `clearance` 约束。<br> "
-"                                                                             "
-"                                                                             "
-"                                                                 |\n"
-"| `physical_hole_clearance` | min                                            "
-"                                                                        | "
-"检查焊盘或过孔中的钻孔与另一个对象之间的间隙，无论它们是否属于同一网络。 "
-"间隙是从孔的边缘而不是中心测量的。<br><br>这也可以被认为是“钻孔公差”，"
-"因为它只包括 **圆** 孔 (有关铣削公差，请参阅 `edge_clearance`) 。<br>        "
-"                                                                             "
-"                               |\n"
-"| `silk_clearance`          | min/opt/max                                    "
-"                                                                        | "
-"检查丝印层上的对象与其他对象之间的间隙。<br>                                 "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                   |\n"
-"| `skew`                    | max                                            "
-"                                                                        | "
-"检查所有符合规则条件的网络的 "
-"skew，即符合规则的每个网络的长度与网络总长的平均值之间的差值。 "
-"如果该平均值与任何一个网络的长度之间的差的绝对值高于约束 `max` "
-"最大值，则会产生错误。<br>                                                   "
-"                                |\n"
-"| `thermal_relief_gap`      | min                                            "
-"                                                                        | "
-"指定在热焊盘连接方式下，焊盘与敷铜区域之间的最小间隙。<br>                   "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                    |\n"
-"| `thermal_spoke_width`     | opt                                            "
-"                                                                        | "
-"指定在热焊盘连接方式下，连接焊盘与敷铜的辐条的宽度。<br>                     "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"             |\n"
-"| `track_width`             | min/opt/max                                    "
-"                                                                        | "
-"检查走线和圆弧走线的宽度。 对于宽度低于 `min` 最小值 (如果指定) 或高于 `max` "
-"最大值 (如果指定) 的走线线段，都会生成错误。<br>                             "
-"                                                                             "
-"                                                                             "
-"                                                                      |\n"
-"| `via_count`               | max                                            "
-"                                                                        | "
-"计算每个与规则条件匹配的网络的过孔数量。 如果该数字超过匹配网络上的约束 `max`"
-" 最大值，则将为该网络生成错误。<br>                                          "
-"                                                                             "
-"                                                                             "
-"                                                           |\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
-"                                                                        | "
-"指定焊盘与敷铜区域之间的连接方式。<br>                                       "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                            |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
+"| 检查对象与板边的间隙。<br><br>这也可以看作是 \"铣削公差\"，因为电路板边缘将"
+"包括 `Edge.Cuts` 层上的所有图形对象以及任何 *椭圆* 焊盘孔。  (钻孔公差请查看 "
+"`physical_hole_clearance` 约束类"
+"型)<br>                                                                                                                                                    "
+"|\n"
+"| `length`                  | min/"
+"max                                                                                                                "
+"| 检查符合规则条件的网络的总走线长度，如果网络的长度低于限制条件的 `min` 最小"
+"值 (如果指定) 或高于 `max` 最大值 (如果指定) ，则生成错误。"
+"<br>                                                                                                                                                                                                                               "
+"|\n"
+"| `hole`                    | min/"
+"max                                                                                                                "
+"| 检查焊盘或过孔中钻孔的大小 (直径) 。 对于椭圆形孔，较小的直径将与 `min` 最"
+"小值 (如果指定) 对比，较大的直径将与 `max` 最大值 (如果指定) 对比。"
+"<br>                                                                                                                                                                                            "
+"|\n"
+"| `hole_clearance`          | "
+"min                                                                                                                    "
+"| 检查焊盘或过孔中的钻孔与不同网络的铜箔对象之间的间隙。 间隙是从孔的直径而不"
+"是孔的中心测量的。"
+"<br>                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
+"| 检查焊盘和过孔中机械钻孔之间的间隙。 间隙在孔边缘之间测量，而不是从孔的中心"
+"测量。<br><br>该约束类型完全是为了保护钻头。 不检查 **激光钻孔** (微孔) 与其"
+"他非机械钻孔之间的间隙，也不检查 **铣削孔** (椭圆形) 与其他非机械钻孔之间的间"
+"隙。<br> |\n"
+"| `physical_clearance`      | "
+"min                                                                                                                    "
+"| 检查给定层 (包括非铜层) 上两个对象之间的间隙。<br><br>虽然这可以执行比 "
+"`clearance` 更通用的检查，但速度要慢得多。 尽可能使用 `clearance` 约束。"
+"<br>                                                                                                                                                                                                                            "
+"|\n"
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
+"| 检查焊盘或过孔中的钻孔与另一个对象之间的间隙，无论它们是否属于同一网络。 间"
+"隙是从孔的边缘而不是中心测量的。<br><br>这也可以被认为是“钻孔公差”，因为它只"
+"包括 **圆** 孔 (有关铣削公差，请参阅 `edge_clearance`) 。"
+"<br>                                                                                                                    "
+"|\n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
+"| 检查丝印层上的对象与其他对象之间的间隙。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `skew`                    | "
+"max                                                                                                                    "
+"| 检查所有符合规则条件的网络的 skew，即符合规则的每个网络的长度与网络总长的平"
+"均值之间的差值。 如果该平均值与任何一个网络的长度之间的差的绝对值高于约束 "
+"`max` 最大值，则会产生错误。"
+"<br>                                                                                   "
+"|\n"
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
+"| 指定在热焊盘连接方式下，焊盘与敷铜区域之间的最小间隙。"
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
+"|\n"
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
+"| 指定在热焊盘连接方式下，连接焊盘与敷铜的辐条的宽度。"
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
+"|\n"
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
+"| 检查走线和圆弧走线的宽度。 对于宽度低于 `min` 最小值 (如果指定) 或高于 "
+"`max` 最大值 (如果指定) 的走线线段，都会生成错误。"
+"<br>                                                                                                                                                                                                                                                             "
+"|\n"
+"| `via_count`               | "
+"max                                                                                                                    "
+"| 计算每个与规则条件匹配的网络的过孔数量。 如果该数字超过匹配网络上的约束 "
+"`max` 最大值，则将为该网络生成错误。"
+"<br>                                                                                                                                                                                                                                                               "
+"|\n"
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| 指定焊盘与敷铜区域之间的连接方式。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
 "\n"
 "\n"
 "### Items (对象) \n"
@@ -36413,8 +36377,8 @@ msgstr ""
 "### Notes (注意事项) \n"
 "\n"
 "版本语句必须是第一个语句。 \n"
-"它表示文件的语法版本，以便未来的规则解析器可以执行自动更新。 "
-"它应该设置为“1”。\n"
+"它表示文件的语法版本，以便未来的规则解析器可以执行自动更新。 它应该设置"
+"为“1”。\n"
 "\n"
 "规则应按具体情况排序。 \n"
 "后面的规则优先于前面的规则； 一旦找到后面匹配的规则，就不会检查之前的规则。\n"
@@ -36446,8 +36410,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "若 `A` 完全落在指定区域的边框内，则为 True。\n"
 "\n"
-"注意: 调用该函数比 `intersectsArea()`更费时。尽可能使用 `intersectsArea()`。"
-"\n"
+"注意: 调用该函数比 `intersectsArea()`更费时。尽可能使用 "
+"`intersectsArea()`。\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
@@ -36459,11 +36423,10 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"若 `A` 含有指定差分对的网络，则为 True。 <网络名> "
-"是指定差分对的基础名称。例如， inDiffPair('CLK') matches items in the CLK_P "
-"and CLK_N nets. True \n"
-"`<net_name>` 是差分对的基准名称。 例如, `inDiffPair('/CLK')` "
-"可以匹配网络对象 `/CLK_P` 及 `/CLK_N`。\n"
+"若 `A` 含有指定差分对的网络，则为 True。 <网络名> 是指定差分对的基础名称。例"
+"如， inDiffPair('CLK') matches items in the CLK_P and CLK_N nets. True \n"
+"`<net_name>` 是差分对的基准名称。 例如, `inDiffPair('/CLK')` 可以匹配网络对"
+"象 `/CLK_P` 及 `/CLK_N`。\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -36476,8 +36439,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_reference>|<footprint_id>')\n"
-"若 `A` 是给定参考位号或封装 ID 匹配的封装的成员，则为 "
-"True。参数可以包含通配符。\n"
+"若 `A` 是给定参考位号或封装 ID 匹配的封装的成员，则为 True。参数可以包含通配"
+"符。\n"
 "\n"
 "注意：如果需要与封装ID 匹配，参数中必须包含 ':'。\n"
 "\n"
@@ -36517,13 +36480,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -37923,7 +37886,7 @@ msgid "'%s' settings differ."
 msgstr "%s 设置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:574
-#: pcbnew/footprint.cpp:3531
+#: pcbnew/footprint.cpp:3533
 msgid "Exempt From Courtyard Requirement"
 msgstr "忽略封装外框要求"
 
@@ -38353,29 +38316,34 @@ msgstr ""
 "\n"
 "导出耗时 %.3f s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:991
+#: pcbnew/exporters/step/step_pcb_model.cpp:857
+#, c-format
+msgid "Wire not done (contour %d, points %d): OCC error %d\n"
+msgstr ""
+
+#: pcbnew/exporters/step/step_pcb_model.cpp:1005
 #, c-format
 msgid "Build holes for %s\n"
 msgstr "构造孔洞 %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:996
+#: pcbnew/exporters/step/step_pcb_model.cpp:1010
 #, c-format
 msgid "Cutting %d/%d %s\n"
 msgstr "剪切 %d/%d %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1023
+#: pcbnew/exporters/step/step_pcb_model.cpp:1037
 msgid "shapes"
 msgstr "形状"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1031
+#: pcbnew/exporters/step/step_pcb_model.cpp:1045
 msgid "pads"
 msgstr "焊盘"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1032
+#: pcbnew/exporters/step/step_pcb_model.cpp:1046
 msgid "tracks"
 msgstr "走线"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1033
+#: pcbnew/exporters/step/step_pcb_model.cpp:1047
 msgid "zones"
 msgstr "区域"
 
@@ -38419,16 +38387,17 @@ msgid "Current Board will be closed. Continue?"
 msgstr "当前电路板将关闭。是否继续?"
 
 #: pcbnew/files.cpp:479
+#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-" This may result in different fills from previous KiCad versions which used "
+"This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果重新填充此电路板上的覆铜, 则将应用铜边缘间距设置 (参见电路板配置 > "
-"设计规则 > 约束)。\n"
-"老版本的 KiCad 会将电路板边缘 (Edge Cuts 层) 的线宽作为铜间距, "
-"因此新的填充结果可能与老版本的填充结果不同。"
+"如果重新填充此电路板上的覆铜, 则将应用铜边缘间距设置 (参见电路板配置 > 设计规"
+"则 > 约束)。\n"
+"老版本的 KiCad 会将电路板边缘 (Edge Cuts 层) 的线宽作为铜间距, 因此新的填充结"
+"果可能与老版本的填充结果不同。"
 
 #: pcbnew/files.cpp:525
 #, c-format
@@ -38603,79 +38572,79 @@ msgstr "< 无位号 >"
 msgid "Footprint %s"
 msgstr "封装 %s"
 
-#: pcbnew/footprint.cpp:2752
+#: pcbnew/footprint.cpp:2754
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(应为 '通孔', 实际为 '%s')"
 
-#: pcbnew/footprint.cpp:2755
+#: pcbnew/footprint.cpp:2757
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(应为 '贴片', 实际为 '%s')"
 
-#: pcbnew/footprint.cpp:2783
+#: pcbnew/footprint.cpp:2785
 msgid "(PTH pad has no copper layers)"
 msgstr "(金属化焊盘没有铜层)"
 
-#: pcbnew/footprint.cpp:2802
+#: pcbnew/footprint.cpp:2804
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(金属化焊盘的孔没留下铜)"
 
-#: pcbnew/footprint.cpp:2811
+#: pcbnew/footprint.cpp:2813
 msgid "(SMD pad appears on both front and back copper)"
 msgstr "(贴片焊盘出现在铜层正反面)"
 
-#: pcbnew/footprint.cpp:2818 pcbnew/footprint.cpp:2831
+#: pcbnew/footprint.cpp:2820 pcbnew/footprint.cpp:2833
 msgid "(SMD pad copper and mask layers don't match)"
 msgstr "(贴片焊盘铜层和 mask 层不匹配)"
 
-#: pcbnew/footprint.cpp:2823 pcbnew/footprint.cpp:2836
+#: pcbnew/footprint.cpp:2825 pcbnew/footprint.cpp:2838
 msgid "(SMD pad copper and paste layers don't match)"
 msgstr "(贴片焊盘铜层和锡膏层不匹配)"
 
-#: pcbnew/footprint.cpp:3016
+#: pcbnew/footprint.cpp:3018
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(网络结点焊盘组包含未知的焊盘编号 %s)"
 
-#: pcbnew/footprint.cpp:3021
+#: pcbnew/footprint.cpp:3023
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(焊盘 %s 出现在超过一个网络结点焊盘组中)"
 
-#: pcbnew/footprint.cpp:3458 pcbnew/pad.cpp:1906 pcbnew/zone.cpp:1549
+#: pcbnew/footprint.cpp:3460 pcbnew/pad.cpp:1906 pcbnew/zone.cpp:1549
 msgid "Inherited"
 msgstr "继承"
 
-#: pcbnew/footprint.cpp:3462 pcbnew/pad.cpp:1910 pcbnew/zone.cpp:1553
+#: pcbnew/footprint.cpp:3464 pcbnew/pad.cpp:1910 pcbnew/zone.cpp:1553
 msgid "Thermal reliefs for PTH"
 msgstr "对金属化孔 (PTH) 使用缓释热焊盘 (花焊盘)"
 
-#: pcbnew/footprint.cpp:3516
+#: pcbnew/footprint.cpp:3518
 msgid "Not in Schematic"
 msgstr "不在原理图中"
 
-#: pcbnew/footprint.cpp:3518
+#: pcbnew/footprint.cpp:3520
 msgid "Exclude From Position Files"
 msgstr "从定位文件中排除"
 
-#: pcbnew/footprint.cpp:3528 pcbnew/pad.cpp:2020
+#: pcbnew/footprint.cpp:3530 pcbnew/pad.cpp:2020
 msgid "Overrides"
 msgstr "覆盖"
 
-#: pcbnew/footprint.cpp:3534 pcbnew/pad.cpp:2022
+#: pcbnew/footprint.cpp:3536 pcbnew/pad.cpp:2022
 msgid "Clearance Override"
 msgstr "间距重写"
 
-#: pcbnew/footprint.cpp:3538 pcbnew/pad.cpp:2030
+#: pcbnew/footprint.cpp:3540 pcbnew/pad.cpp:2030
 msgid "Solderpaste Margin Override"
 msgstr "锡膏边距重写"
 
-#: pcbnew/footprint.cpp:3543 pcbnew/pad.cpp:2034
+#: pcbnew/footprint.cpp:3545 pcbnew/pad.cpp:2034
 msgid "Solderpaste Margin Ratio Override"
 msgstr "锡膏边距比例重写"
 
-#: pcbnew/footprint.cpp:3548 pcbnew/pad.cpp:2039
+#: pcbnew/footprint.cpp:3550 pcbnew/pad.cpp:2039
 msgid "Zone Connection Style"
 msgstr "区域连接样式"
 

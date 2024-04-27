@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-14 14:22-0700\n"
+"POT-Creation-Date: 2024-04-26 19:52-0700\n"
 "PO-Revision-Date: 2024-04-17 14:22+0000\n"
 "Last-Translator: taotieren <admin@taotieren.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -54,12 +54,14 @@ msgstr "未加載任何封裝。"
 msgid ""
 "Footprint outline is missing or malformed. Run Footprint Checker for a full "
 "analysis."
-msgstr "封裝缺少外框或外框形狀異常 (如外框線條沒有閉合)。可用封裝檢查器分析原因。"
+msgstr ""
+"封裝缺少外框或外框形狀異常 (如外框線條沒有閉合)。可用封裝檢查器分析原因。"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:931
 msgid "Board outline is missing or malformed. Run DRC for a full analysis."
-msgstr "電路板缺少板框或板框形狀異常 (如板框線條沒有閉合)。可用設計規則檢查 (DRC) "
-"分析原因。"
+msgstr ""
+"電路板缺少板框或板框形狀異常 (如板框線條沒有閉合)。可用設計規則檢查 (DRC) 分"
+"析原因。"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:260
 msgid "Create tracks and vias"
@@ -330,8 +332,8 @@ msgstr "保存文件 '%s' 的權限不足。"
 #: common/confirm.cpp:321 common/dialogs/dialog_grid_settings.cpp:61
 #: common/dialogs/dialog_grid_settings.cpp:68
 #: common/dialogs/panel_setup_severities.cpp:43
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2034
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1634
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2035
 #: eeschema/files-io.cpp:975 eeschema/files-io.cpp:1043
 #: kicad/import_proj.cpp:79 kicad/import_project.cpp:122 kicad/kicad.cpp:322
 #: kicad/tools/kicad_manager_control.cpp:242
@@ -803,15 +805,15 @@ msgid "Presets (%s+Tab):"
 msgstr "預設 (%s+Tab):"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:610
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1477
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1898
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1478
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1899
 #: pcbnew/widgets/appearance_controls.cpp:2541
 msgid "Save preset..."
 msgstr "保存預設..."
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:611
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1478
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1899
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1479
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1900
 #: pcbnew/widgets/appearance_controls.cpp:2542
 msgid "Delete preset..."
 msgstr "刪除預設..."
@@ -827,29 +829,29 @@ msgid "Save Layer Preset"
 msgstr "保存層預設"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:733
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1640
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2041
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1641
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2042
 #: pcbnew/widgets/appearance_controls.cpp:2681
 msgid "Overwrite existing preset?"
 msgstr "覆蓋已有預設?"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:759
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1665
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2066
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1666
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2067
 #: pcbnew/widgets/appearance_controls.cpp:2707
 msgid "Presets"
 msgstr "預設"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:768
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1677
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2078
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1678
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
 #: pcbnew/widgets/appearance_controls.cpp:2719
 msgid "Delete Preset"
 msgstr "刪除預設"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:769
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1678
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2079
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1679
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2080
 #: pcbnew/widgets/appearance_controls.cpp:2720
 msgid "Select preset:"
 msgstr "選擇預設:"
@@ -1117,7 +1119,8 @@ msgstr "將投射以計算反射點的光線數"
 msgid ""
 "Interactions number that a ray can travel through objects. (higher number of "
 "levels improve results, specially on very transparent boards)"
-msgstr "一束光線所能穿過的物體數量。(遞歸深度越大, 效果越好, 特別是在非常透明的板上)"
+msgstr ""
+"一束光線所能穿過的物體數量。(遞歸深度越大, 效果越好, 特別是在非常透明的板上)"
 
 #: 3d-viewer/dialogs/panel_3D_raytracing_options_base.cpp:98
 msgid "Refractions:"
@@ -2239,17 +2242,18 @@ msgid ""
 "over the ones defined in this table.  This means the values in this table "
 "are ignored."
 msgstr ""
-"為每個環境變量輸入名稱和路徑, 灰色的條目是在系統或用戶層級外部定義的名稱。"
-"在系統或用戶層面上定義的環境變量優先於本表中定義的環境變量, "
-"這種情況下本表中的數值會被忽略。"
+"為每個環境變量輸入名稱和路徑, 灰色的條目是在系統或用戶層級外部定義的名稱。在"
+"系統或用戶層面上定義的環境變量優先於本表中定義的環境變量, 這種情況下本表中的"
+"數值會被忽略。"
 
 #: common/dialogs/dialog_configure_paths.cpp:404
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
-msgstr "為了確保環境變量名稱在所有平臺上都有效, 名稱字段只接受大寫字母, "
-"數字和下劃線字符。"
+msgstr ""
+"為了確保環境變量名稱在所有平臺上都有效, 名稱字段只接受大寫字母, 數字和下劃線"
+"字符。"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:23
 msgid "Environment Variables"
@@ -2958,7 +2962,8 @@ msgstr "特殊粘貼"
 msgid ""
 "Select an <b>Option Choice</b> in the listbox above, and then click the "
 "<b>Append Selected Option</b> button."
-msgstr "在上面的列表框中選擇一個 <b>選項選擇</b>, 然後點擊 <b>追加所選選項</b> 按鈕。"
+msgstr ""
+"在上面的列表框中選擇一個 <b>選項選擇</b>, 然後點擊 <b>追加所選選項</b> 按鈕。"
 
 #: common/dialogs/dialog_plugin_options.cpp:52
 #, c-format
@@ -2999,7 +3004,7 @@ msgstr "選項"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:67
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:48
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:57
-#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3500
+#: pcbnew/dialogs/panel_fp_lib_table.cpp:413 pcbnew/footprint.cpp:3502
 #: pcbnew/footprint_wizard_frame.cpp:326 pcbnew/fp_text_grid_table.cpp:138
 #: pcbnew/pcb_dimension.cpp:406 pcbnew/plot_board_layers.cpp:90
 #: pcbnew/widgets/search_handlers.cpp:83
@@ -3035,7 +3040,7 @@ msgstr "打印預覽"
 #: common/dialogs/dialog_print_generic.cpp:97 common/hotkey_store.cpp:59
 #: common/tool/action_menu.cpp:212 common/tool/action_menu.cpp:217
 #: eeschema/dialogs/dialog_annotate.cpp:93 eeschema/dialogs/dialog_bom.cpp:136
-#: eeschema/dialogs/dialog_change_symbols.cpp:159
+#: eeschema/dialogs/dialog_change_symbols.cpp:160
 #: eeschema/dialogs/dialog_erc.cpp:107 eeschema/dialogs/dialog_erc.cpp:446
 #: eeschema/dialogs/dialog_export_netlist.cpp:275
 #: eeschema/dialogs/dialog_ibis_parser_reporter.cpp:36
@@ -3581,8 +3586,8 @@ msgstr ""
 "設置畫布縮放比例。\n"
 "\n"
 "在某些平臺的高 DPI 顯示器上, KiCad 無法確定縮放比例。\n"
-"在這種情況下, 你可能需要將其設置為一個與你的系統 DPI 比例相匹配的值。2.0 "
-"是一個常見的值。\n"
+"在這種情況下, 你可能需要將其設置為一個與你的系統 DPI 比例相匹配的值。2.0 是一"
+"個常見的值。\n"
 "如果這與系統的 DPI 比例不匹配, 則畫布就會與窗口大小和光標位置不匹配。"
 
 #: common/dialogs/panel_common_settings.cpp:96
@@ -3671,7 +3676,8 @@ msgstr "切換編輯器時焦點跟隨鼠標移動"
 msgid ""
 "If the mouse cursor is moved over the canvas of a schematic or PCB editor "
 "window, that window is raised."
-msgstr "如果將鼠標光標移到原理圖或 PCB 編輯器窗口的畫布上, 則對應畫布會被自動激活。"
+msgstr ""
+"如果將鼠標光標移到原理圖或 PCB 編輯器窗口的畫布上, 則對應畫布會被自動激活。"
 
 #: common/dialogs/panel_common_settings_base.cpp:157
 msgid "Show popup indicator when toggling settings with hotkeys"
@@ -3813,7 +3819,8 @@ msgstr "首次按下快捷鍵僅選擇對應工具"
 msgid ""
 "If not checked, hotkeys will immediately perform an action even if the "
 "relevant tool was not previously selected."
-msgstr "如果未選中, 即使未選擇快捷鍵對應的工具, 按下快捷鍵也將立即執行對應的操作。"
+msgstr ""
+"如果未選中, 即使未選擇快捷鍵對應的工具, 按下快捷鍵也將立即執行對應的操作。"
 
 #: common/dialogs/panel_common_settings_base.cpp:295
 msgid "Session"
@@ -3827,7 +3834,8 @@ msgstr "打開工程時自動打開未關閉的工程文件"
 msgid ""
 "If checked, launching a project will also launch tools such as the schematic "
 "and board editors with previously open files"
-msgstr "如果選中, 打開工程時會自動打開工程之前未關閉的工程文件, 例如原理圖和 PCB"
+msgstr ""
+"如果選中, 打開工程時會自動打開工程之前未關閉的工程文件, 例如原理圖和 PCB"
 
 #: common/dialogs/panel_common_settings_base.cpp:320
 msgid "&Auto save:"
@@ -3887,7 +3895,8 @@ msgstr "在自動保存時同時創建備份"
 msgid ""
 "Create backups when the auto save feature is enabled.  If not checked, "
 "backups will only be created when you manually save a file."
-msgstr "啟用自動保存功能後, 在在自動保存動作觸發的同時創建一份工程備份。如果未選中, "
+msgstr ""
+"啟用自動保存功能後, 在在自動保存動作觸發的同時創建一份工程備份。如果未選中, "
 "則僅在手動保存文件時創建備份。"
 
 #: common/dialogs/panel_common_settings_base.cpp:390
@@ -3914,8 +3923,9 @@ msgstr "備份最短間隔時間:"
 msgid ""
 "Number of minutes since the last backup before another will be created the "
 "next time you save (set to 0 for no minimum)"
-msgstr "自上次備份後的經過的時間(分鐘), 超過此時間才會創建新的備份(設置為 0 "
-"表示無最小值)"
+msgstr ""
+"自上次備份後的經過的時間(分鐘), 超過此時間才會創建新的備份(設置為 0 表示無最"
+"小值)"
 
 #: common/dialogs/panel_common_settings_base.cpp:421
 msgid "Maximum total backup size:"
@@ -3925,7 +3935,8 @@ msgstr "最大總備份大小:"
 msgid ""
 "If the total size of backup files grows above this limit, old backups will "
 "be deleted (set to 0 for no limit)"
-msgstr "如果備份文件的總大小超過此限制, 舊的備份將被刪除(設置為 0 表示沒有限制)"
+msgstr ""
+"如果備份文件的總大小超過此限制, 舊的備份將被刪除(設置為 0 表示沒有限制)"
 
 #: common/dialogs/panel_common_settings_base.cpp:430
 msgid "MB"
@@ -3947,12 +3958,11 @@ msgid ""
 "sending said reports when crashes or events occur. Your design files such as "
 "schematic or PCB are never shared in this process."
 msgstr ""
-"允許 KiCad 匿名地向開發人員報告崩潰和特殊事件數據, "
-"以幫助更有效地識別用戶群體中的關鍵 bug, 並幫助繪製功能畫像來指導改進。\n"
+"允許 KiCad 匿名地向開發人員報告崩潰和特殊事件數據, 以幫助更有效地識別用戶群體"
+"中的關鍵 bug, 並幫助繪製功能畫像來指導改進。\n"
 "\n"
-"要鏈接來自相同 KiCad 安裝的自動報告, 將生成一個完全隨機的唯一標識符, "
-"它僅用於崩潰報告的目的。沒有個人身份信息(PII), "
-"包括IP地址被存儲或連接到該標識符。\n"
+"要鏈接來自相同 KiCad 安裝的自動報告, 將生成一個完全隨機的唯一標識符, 它僅用於"
+"崩潰報告的目的。沒有個人身份信息(PII), 包括IP地址被存儲或連接到該標識符。\n"
 "您可以在任何時候通過提供的按鈕重置此 id。\n"
 "\n"
 "如果您選擇自願參與, 那麼發生崩潰或事件時, KiCad 將自動處理發送上述報告。\n"
@@ -4215,7 +4225,7 @@ msgstr "縮放"
 #: pcbnew/dialogs/dialog_pad_properties.cpp:925
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:558
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:839
-#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3459
+#: pcbnew/dialogs/dialog_plot_base.cpp:114 pcbnew/footprint.cpp:3461
 #: pcbnew/pad.cpp:1893 pcbnew/pad.cpp:1907 pcbnew/pcb_dimension.cpp:1618
 #: pcbnew/widgets/appearance_controls.cpp:729
 #: pcbnew/widgets/appearance_controls.cpp:771
@@ -4349,7 +4359,7 @@ msgstr "庫名稱前綴:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:232
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:364
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:332
-#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3461
+#: pcbnew/dialogs/dialog_pad_properties_base.cpp:839 pcbnew/footprint.cpp:3463
 #: pcbnew/pad.cpp:1909 pcbnew/pcb_textbox.cpp:655 pcbnew/zone.cpp:630
 #: pcbnew/zone.cpp:1552
 msgid "Solid"
@@ -5547,7 +5557,7 @@ msgstr "向下"
 #: eeschema/sch_textbox.cpp:526
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:60
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:60
-#: pcbnew/footprint.cpp:3491 pcbnew/fp_text_grid_table.cpp:145
+#: pcbnew/footprint.cpp:3493 pcbnew/fp_text_grid_table.cpp:145
 #: pcbnew/pad.cpp:1919 pcbnew/zone.cpp:1649
 msgid "Orientation"
 msgstr "方向"
@@ -5692,13 +5702,15 @@ msgstr ""
 
 #: common/env_vars.cpp:129
 msgid "A directory containing system-wide scripts installed with KiCad"
-msgstr "KiCad 自帶的腳本文件的存儲路徑(整個系統)/ 一個包含用 KiCad "
-"安裝的系統級腳本的目錄"
+msgstr ""
+"KiCad 自帶的腳本文件的存儲路徑(整個系統)/ 一個包含用 KiCad 安裝的系統級腳本的"
+"目錄"
 
 #: common/env_vars.cpp:131
 msgid "A directory containing user-specific scripts installed with KiCad"
-msgstr "KiCad 自帶的腳本文件的存儲路徑(特定用戶)/一個包含用 KiCad "
-"安裝的用戶指定腳本的目錄"
+msgstr ""
+"KiCad 自帶的腳本文件的存儲路徑(特定用戶)/一個包含用 KiCad 安裝的用戶指定腳本"
+"的目錄"
 
 #: common/env_vars.cpp:135
 msgid "Deprecated version of KICAD_TEMPLATE_DIR."
@@ -6378,8 +6390,8 @@ msgid ""
 "'%s' does not appear to be a valid EasyEDA (JLCEDA) Pro project or library "
 "file. Cannot find project.json or device.json."
 msgstr ""
-"文件 '%s' 似乎不是有效的 EasyEDA (立創 EDA) 專業版工程文件或者庫文件。"
-"無法在其中找到 project.json 或者 device.json。"
+"文件 '%s' 似乎不是有效的 EasyEDA (立創 EDA) 專業版工程文件或者庫文件。無法在"
+"其中找到 project.json 或者 device.json。"
 
 #: common/io/easyedapro/easyedapro_import_utils.cpp:195
 #, c-format
@@ -6900,12 +6912,12 @@ msgid ""
 "sending said reports when crashes or events occur. \n"
 "Your design files such as schematic or PCB are not shared in this process."
 msgstr ""
-"為了更有效地幫助開發人員識別用戶群體中的關鍵錯誤並改進功能, KiCad "
-"可以匿名地向開發人員\n"
-"報告崩潰和特殊事件數據, 並協助進行分析。如果您選擇自願參與, KiCad "
-"將在發生崩潰或特殊事件時\n"
-"自動處理併發送這些報告。在此過程中, 您的設計文件, 如原理圖或 PCB 文件, "
-"不會被上傳。"
+"為了更有效地幫助開發人員識別用戶群體中的關鍵錯誤並改進功能, KiCad 可以匿名地"
+"向開發人員\n"
+"報告崩潰和特殊事件數據, 並協助進行分析。如果您選擇自願參與, KiCad 將在發生崩"
+"潰或特殊事件時\n"
+"自動處理併發送這些報告。在此過程中, 您的設計文件, 如原理圖或 PCB 文件, 不會被"
+"上傳。"
 
 #: common/pgm_base.cpp:385
 msgid "Data collection opt in request"
@@ -7052,7 +7064,7 @@ msgstr "按值分組"
 #: eeschema/dialogs/dialog_rescue_each.cpp:131
 #: eeschema/dialogs/dialog_sim_model_base.cpp:254 eeschema/sch_symbol.cpp:1945
 #: eeschema/sch_symbol.cpp:1997 eeschema/sch_symbol.cpp:2798
-#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3497
+#: eeschema/widgets/search_handlers.cpp:130 pcbnew/footprint.cpp:3499
 #: pcbnew/widgets/search_handlers.cpp:82
 msgid "Reference"
 msgstr "位號"
@@ -7068,7 +7080,7 @@ msgstr "按值和封裝分組"
 #: eeschema/sch_symbol.cpp:2814 eeschema/tools/sch_edit_tool.cpp:473
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:180
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:184
-#: pcbnew/footprint.cpp:3514
+#: pcbnew/footprint.cpp:3516
 msgid "Attributes"
 msgstr "特性"
 
@@ -8258,8 +8270,9 @@ msgstr "重置為默認值"
 msgid ""
 "'%s' is already assigned to '%s' in section '%s'. Are you sure you want to "
 "change its assignment?"
-msgstr "'%1$s' 已被 '%3$s' 中的 '%2$s' 操作所使用, 確定要修改其分配 "
-"(原有分配將被移除)?"
+msgstr ""
+"'%1$s' 已被 '%3$s' 中的 '%2$s' 操作所使用, 確定要修改其分配 (原有分配將被移"
+"除)?"
 
 #: common/widgets/widget_hotkey_list.cpp:501
 msgid "Confirm change"
@@ -8655,7 +8668,7 @@ msgstr "'%s' 不是有效封裝。"
 #: cvpcb/cvpcb_mainframe.cpp:782 eeschema/generate_alias_info.cpp:39
 #: eeschema/sch_symbol.cpp:1992 eeschema/sch_symbol.cpp:2550
 #: eeschema/sch_symbol.cpp:2810 eeschema/symbol_editor/symbol_editor.cpp:1296
-#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3510
+#: eeschema/symbol_viewer_frame.cpp:461 pcbnew/footprint.cpp:3512
 #: pcbnew/generate_footprint_info.cpp:37 pcbnew/plot_board_layers.cpp:118
 msgid "Keywords"
 msgstr "關鍵字"
@@ -8826,8 +8839,9 @@ msgid ""
 "Would you like KiCad to attempt to convert them to the new required LIB_ID "
 "format? (If you answer no, then these assignments will be cleared and you "
 "will need to re-assign them manually.)"
-msgstr "部分分配的封裝是沒有庫名的舊條目。是否要嘗試將其轉換為新的 LIB_ID 格式?("
-"如果選擇否, 則這些封裝分配將被清除, 需要手動重新分配。)"
+msgstr ""
+"部分分配的封裝是沒有庫名的舊條目。是否要嘗試將其轉換為新的 LIB_ID 格式?(如果"
+"選擇否, 則這些封裝分配將被清除, 需要手動重新分配。)"
 
 #: cvpcb/readwrite_dlgs.cpp:149
 #, c-format
@@ -9029,24 +9043,24 @@ msgstr ""
 "%s\n"
 "找不到。腳本不可用。"
 
-#: eeschema/connection_graph.cpp:3059
+#: eeschema/connection_graph.cpp:3147
 #, c-format
 msgid ""
 "Both %s and %s are attached to the same items; %s will be used in the netlist"
 msgstr "%s 和 %s 都連接到同一項上; 將使用 %s 作為網表中的網絡名稱"
 
-#: eeschema/connection_graph.cpp:3338
+#: eeschema/connection_graph.cpp:3426
 #, c-format
 msgid ""
 "Net %s is graphically connected to bus %s but is not a member of that bus"
 msgstr "網絡 %s 以圖形方式連接到總線 %s, 但不是總線的成員"
 
-#: eeschema/connection_graph.cpp:3884
+#: eeschema/connection_graph.cpp:3972
 #, c-format
 msgid "Sheet pin %s has no matching hierarchical label inside the sheet"
 msgstr "圖紙引腳 %s 在子圖紙內沒有匹配的層次標籤"
 
-#: eeschema/connection_graph.cpp:3902
+#: eeschema/connection_graph.cpp:3990
 #, c-format
 msgid "Hierarchical label %s has no matching sheet pin in the parent sheet"
 msgstr "層次標籤 %s 在父圖紙內沒有匹配的圖紙引腳"
@@ -9354,32 +9368,30 @@ msgstr ""
 "\n"
 "BOM 工具創建了一個 BOM, 其中列出了設計中的所有元件。\n"
 "\n"
-"該工具使用外部腳本以所需的輸出格式生成 BOM。選擇不同的腳本會更改 BOM 的格式。"
-"\n"
+"該工具使用外部腳本以所需的輸出格式生成 BOM。選擇不同的腳本會更改 BOM 的格"
+"式。\n"
 "\n"
 "在原理圖編輯器手冊中對生成 BOM 有更詳細的描述。\n"
 "\n"
 "# 2. 使用方法\n"
 "\n"
-"在 **BOM 生成器腳本** "
-"列表中選擇一個生成器腳本。所選生成器的詳細信息顯示在對話框的右側。\n"
+"在 **BOM 生成器腳本** 列表中選擇一個生成器腳本。所選生成器的詳細信息顯示在對"
+"話框的右側。\n"
 "\n"
 "點擊 **生成** 按鈕, 用選定的生成器創建一個 BOM 文件。\n"
 "\n"
-"默認設置提供了幾個生成器腳本選項, 儘管一些額外的腳本已隨 KiCad 安裝, "
-"並可通過 **+** 按鈕添加到列表中。\n"
+"默認設置提供了幾個生成器腳本選項, 儘管一些額外的腳本已隨 KiCad 安裝, 並可通"
+"過 **+** 按鈕添加到列表中。\n"
 "\n"
-"**注意: ** 在 Windows 上, 有一個額外的選項 **顯示控制檯窗口**。"
-"當該選項未被選中時, BOM 生成器在一個隱藏的控制檯窗口中運行, "
-"任何輸出都會被重定向並打印在對話框中。當這個選項被選中時, BOM "
-"生成器會在一個可見的控制檯窗口中運行。\n"
+"**注意: ** 在 Windows 上, 有一個額外的選項 **顯示控制檯窗口**。當該選項未被選"
+"中時, BOM 生成器在一個隱藏的控制檯窗口中運行, 任何輸出都會被重定向並打印在對"
+"話框中。當這個選項被選中時, BOM 生成器會在一個可見的控制檯窗口中運行。\n"
 "\n"
 "# 3. 自定義生成器和命令行\n"
 "\n"
-"在內部, KiCad 創建了一個 XML 格式的中間網表文件, "
-"其中包含了設計中所有元件的信息。BOM "
-"生成器腳本將中間網表文件轉換為所需的輸出格式。KiCad 根據在 BOM "
-"對話框底部輸入的命令行運行 BOM 生成器腳本。\n"
+"在內部, KiCad 創建了一個 XML 格式的中間網表文件, 其中包含了設計中所有元件的信"
+"息。BOM 生成器腳本將中間網表文件轉換為所需的輸出格式。KiCad 根據在 BOM 對話框"
+"底部輸入的命令行運行 BOM 生成器腳本。\n"
 "\n"
 "命令行格式接受文件名的參數。每個格式化參數都被替換成工程特定的路徑或文件名。"
 "支持的格式化參數有: \n"
@@ -9389,8 +9401,8 @@ msgstr ""
 " * `%B`: 輸出 BOM 文件的基本文件名 (沒有文件擴展名)。\n"
 " * `%P`: 工程目錄的絕對路徑, 沒有尾部斜線。\n"
 "\n"
-"**注意: ** `%O` 輸出文件參數不包括文件擴展名。KiCad "
-"將嘗試在命令行中自動添加一個適當的擴展名, 但可能需要手動添加擴展名。\n"
+"**注意: ** `%O` 輸出文件參數不包括文件擴展名。KiCad 將嘗試在命令行中自動添加"
+"一個適當的擴展名, 但可能需要手動添加擴展名。\n"
 "\n"
 "Python 是 BOM 生成器腳本的推薦工具, 但也可以使用其他工具。\n"
 "\n"
@@ -9402,12 +9414,12 @@ msgstr ""
 "python <腳本文件名> <輸入文件名> <輸出文件名> \n"
 "```\n"
 "\n"
-"在 Windows 上, 如果想要的 CSV BOM 的生成器腳本是 `C:\\Users\\username\\kicad"
-"\\my_python_script.py`, 命令行將是。\n"
+"在 Windows 上, 如果想要的 CSV BOM 的生成器腳本是 `C:"
+"\\Users\\username\\kicad\\my_python_script.py`, 命令行將是。\n"
 "\n"
 "```\n"
-"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O.csv\""
-"\n"
+"python.exe C:\\Users\\username\\kicad\\my_python_script.py \"%I\" \"%O."
+"csv\"\n"
 "```\n"
 "\n"
 "在 Linux 上, 如果想要 的CSV BOM 的生成器腳本是 `/home/username/kicad/"
@@ -9419,69 +9431,69 @@ msgstr ""
 "\n"
 "建議在參數周圍加上雙引號 (`\"`) , 以防文件名包含空格或特殊字符。\n"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:67
+#: eeschema/dialogs/dialog_change_symbols.cpp:68
 msgid "Change all symbols in schematic"
 msgstr "替換原理圖中的所有符號"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:68
-#: eeschema/dialogs/dialog_change_symbols.cpp:429
+#: eeschema/dialogs/dialog_change_symbols.cpp:69
+#: eeschema/dialogs/dialog_change_symbols.cpp:430
 msgid "Change Symbols"
 msgstr "替換指定符號"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:77
+#: eeschema/dialogs/dialog_change_symbols.cpp:78
 msgid "Change selected symbol(s)"
 msgstr "替換已選中的符號"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:94
+#: eeschema/dialogs/dialog_change_symbols.cpp:95
 msgid "Change symbols matching reference designator:"
 msgstr "替換與給定位號相同的符號:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:95
+#: eeschema/dialogs/dialog_change_symbols.cpp:96
 msgid "Change symbols matching value:"
 msgstr "替換值與給定值相同的符號:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:96
+#: eeschema/dialogs/dialog_change_symbols.cpp:97
 msgid "Change symbols matching library identifier:"
 msgstr "替換使用此庫索引值的符號:"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:133
+#: eeschema/dialogs/dialog_change_symbols.cpp:134
 msgid "Update Fields"
 msgstr "更新字段"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:134
+#: eeschema/dialogs/dialog_change_symbols.cpp:135
 msgid "Remove fields if not in new symbol"
 msgstr "如果在新符號中不存在, 則移除字段"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:135
+#: eeschema/dialogs/dialog_change_symbols.cpp:136
 msgid "Reset fields if empty in new symbol"
 msgstr "如果在新符號中為空, 則重置字段"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:136
+#: eeschema/dialogs/dialog_change_symbols.cpp:137
 msgid "Update field text"
 msgstr "更新字段的文本內容"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:137
+#: eeschema/dialogs/dialog_change_symbols.cpp:138
 msgid "Update field visibilities"
 msgstr "更新字段可見性設置"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:138
+#: eeschema/dialogs/dialog_change_symbols.cpp:139
 msgid "Update field sizes and styles"
 msgstr "更新字段大小和樣式"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:139
+#: eeschema/dialogs/dialog_change_symbols.cpp:140
 msgid "Update field positions"
 msgstr "更新字段位置"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:140
+#: eeschema/dialogs/dialog_change_symbols.cpp:141
 msgid "Update symbol attributes"
 msgstr "更新符號特性"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:156
+#: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: pcbnew/dialogs/dialog_exchange_footprints.cpp:154
 msgid "Change"
 msgstr "修改"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:156
+#: eeschema/dialogs/dialog_change_symbols.cpp:157
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:44
 #: kicad/pcm/dialogs/dialog_pcm.cpp:110 kicad/pcm/dialogs/panel_package.cpp:66
 #: kicad/pcm/dialogs/panel_package.cpp:127
@@ -9493,38 +9505,38 @@ msgstr "修改"
 msgid "Update"
 msgstr "更新"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:429
+#: eeschema/dialogs/dialog_change_symbols.cpp:430
 msgid "Update Symbols"
 msgstr "更新符號"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:536
+#: eeschema/dialogs/dialog_change_symbols.cpp:537
 msgid "*** No symbols matching criteria found ***"
 msgstr "*** 找不到符合篩選條件的符號 ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:573
+#: eeschema/dialogs/dialog_change_symbols.cpp:574
 msgid "*** symbol not found ***"
 msgstr "*** 找不到符號 ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:584
+#: eeschema/dialogs/dialog_change_symbols.cpp:585
 msgid "*** new symbol has too few units ***"
 msgstr "*** 新符號的單元過少 ***"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:800
+#: eeschema/dialogs/dialog_change_symbols.cpp:811
 #, c-format
 msgid "Update symbol %s from '%s' to '%s'"
 msgstr "將符號 %s 由 '%s' 更新到 '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:807
+#: eeschema/dialogs/dialog_change_symbols.cpp:818
 #, c-format
 msgid "Update symbols %s from '%s' to '%s'"
 msgstr "將符號 %s 由 '%s' 更新到 '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:817
+#: eeschema/dialogs/dialog_change_symbols.cpp:828
 #, c-format
 msgid "Change symbol %s from '%s' to '%s'"
 msgstr "將符號 %s 由 '%s' 替換為 '%s'"
 
-#: eeschema/dialogs/dialog_change_symbols.cpp:824
+#: eeschema/dialogs/dialog_change_symbols.cpp:835
 #, c-format
 msgid "Change symbols %s from '%s' to '%s'"
 msgstr "將符號 %s 由 '%s' 替換為 '%s'"
@@ -10631,7 +10643,7 @@ msgstr "顯示語法幫助窗口"
 #: eeschema/sch_symbol.cpp:2796
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:28
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor_base.cpp:28
-#: pcbnew/footprint.cpp:3495
+#: pcbnew/footprint.cpp:3497
 msgid "Fields"
 msgstr "字段"
 
@@ -10846,7 +10858,7 @@ msgid "Read Only"
 msgstr "只讀"
 
 #: eeschema/dialogs/dialog_lib_edit_pin_table.cpp:1217
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1324
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1325
 msgid "Save changes?"
 msgstr "保存變更嗎?"
 
@@ -11134,7 +11146,7 @@ msgid "The name '%s' is already in use."
 msgstr "名稱 '%s' 已被使用。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties.cpp:550
-#: eeschema/dialogs/dialog_sheet_properties.cpp:761
+#: eeschema/dialogs/dialog_sheet_properties.cpp:767
 #: eeschema/dialogs/dialog_symbol_properties.cpp:962
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:637
 #: pcbnew/dialogs/dialog_footprint_properties_fp_editor.cpp:683
@@ -11192,8 +11204,8 @@ msgid ""
 "not be checked for a dual triode (where unit C is the filament)."
 msgstr ""
 "當所有符號單元具有相同的功能時, 請選中此選項。\n"
-"例如, 對於四輸入與非門應該選中此選項, 而對於雙三極管 (其中單元 C 為 filament)"
-" 則不應選中此選項。"
+"例如, 對於四輸入與非門應該選中此選項, 而對於雙三極管 (其中單元 C 為 "
+"filament) 則不應選中此選項。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:190
 msgid "Has alternate body style (De Morgan)"
@@ -11220,8 +11232,8 @@ msgid ""
 "from editing in the schematic.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
-"勾選此選項, 會使該符號出現在 \"添加電源符號\" 窗口中, 作為一個電源符號使用。"
-"\n"
+"勾選此選項, 會使該符號出現在 \"添加電源符號\" 窗口中, 作為一個電源符號使"
+"用。\n"
 "電源符號的數值文本會被鎖定, 以防其在原理圖中被不慎編輯。\n"
 "電源符號不會在 BOM 中出現, 也不能對電源符號分配封裝。"
 
@@ -11303,13 +11315,13 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"可以在封裝篩選規則列表中, "
-"為符號預先分配一個可選封裝列表。在繪製原理圖添加符號時,\n"
-"會根據符號的封裝篩選規則, 在所有封裝庫中搜索並顯示與其規則匹配的封裝, "
-"你可以從中\n"
+"可以在封裝篩選規則列表中, 為符號預先分配一個可選封裝列表。在繪製原理圖添加符"
+"號時,\n"
+"會根據符號的封裝篩選規則, 在所有封裝庫中搜索並顯示與其規則匹配的封裝, 你可以"
+"從中\n"
 "選擇一個合適的封裝。\n"
-"篩選字段可以包含通配符, 如 sm*, 可以匹配所有以 sm 開頭的封裝名稱, "
-"意味著該符號\n"
+"篩選字段可以包含通配符, 如 sm*, 可以匹配所有以 sm 開頭的封裝名稱, 意味著該符"
+"號\n"
 "默認可選所有以 sm 開頭的封裝。"
 
 #: eeschema/dialogs/dialog_lib_symbol_properties_base.cpp:316
@@ -11453,8 +11465,8 @@ msgid ""
 "in the schematic.\n"
 "Do you wish to continue?"
 msgstr ""
-"此引腳不在 %d mils 柵格上 (未與柵格對齊), "
-"這可能會導致此引腳在在原理圖中難以連接。\n"
+"此引腳不在 %d mils 柵格上 (未與柵格對齊), 這可能會導致此引腳在在原理圖中難以"
+"連接。\n"
 "確定繼續嗎?"
 
 #: eeschema/dialogs/dialog_pin_properties.cpp:440
@@ -11656,8 +11668,9 @@ msgstr "輸出目錄:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the "
 "schematic main file location."
-msgstr "繪製文件的輸出目錄。可以使用絕對路徑, "
-"也可以使用相對於原理圖主文件的位置的相對路徑。"
+msgstr ""
+"繪製文件的輸出目錄。可以使用絕對路徑, 也可以使用相對於原理圖主文件的位置的相"
+"對路徑。"
 
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:42
 #: pcbnew/dialogs/dialog_plot_base.cpp:28
@@ -11796,9 +11809,9 @@ msgid ""
 "\n"
 "The following changes are recommended to update the project."
 msgstr ""
-"此原理圖是使用舊的符號庫繪製的, "
-"原理圖內容可能會被破壞。某些符號可能需要重新鏈接到一個新的符號(名稱不同), "
-"有的符號可能需要被 \"恢復\" (複製並重命名) 到一個新的庫中。\n"
+"此原理圖是使用舊的符號庫繪製的, 原理圖內容可能會被破壞。某些符號可能需要重新"
+"鏈接到一個新的符號(名稱不同), 有的符號可能需要被 \"恢復\" (複製並重命名) 到一"
+"個新的庫中。\n"
 "\n"
 "建議做出以下修改, 以更新工程。"
 
@@ -11896,8 +11909,9 @@ msgstr "導入自:"
 msgid ""
 "Target directory for plot files. Can be absolute or relative to the board "
 "file location."
-msgstr "繪製文件的輸出目錄。可以使用絕對路徑, "
-"也可以使用相對於原理圖主文件的位置的相對路徑。"
+msgstr ""
+"繪製文件的輸出目錄。可以使用絕對路徑, 也可以使用相對於原理圖主文件的位置的相"
+"對路徑。"
 
 #: eeschema/dialogs/dialog_sch_import_settings_base.cpp:44
 #: pcbnew/dialogs/dialog_import_settings_base.cpp:47
@@ -12094,8 +12108,9 @@ msgid ""
 "Using relative hierarchical sheet file name paths improves schematic "
 "portability across systems and platforms.  Using absolute paths can result "
 "in portability issues."
-msgstr "使用相對路徑, 可以提高原理圖在不同系統和平臺上的可移植性, "
-"使用絕對路徑可能會導致可移植性問題。"
+msgstr ""
+"使用相對路徑, 可以提高原理圖在不同系統和平臺上的可移植性, 使用絕對路徑可能會"
+"導致可移植性問題。"
 
 #: eeschema/dialogs/dialog_sheet_properties.cpp:328
 msgid "Use Relative Path"
@@ -12175,11 +12190,11 @@ msgstr "保存原理圖文件 '%s' 時出錯。"
 msgid "Failed to save schematic '%s'"
 msgstr "未能保存原理圖 '%s'"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:695
+#: eeschema/dialogs/dialog_sheet_properties.cpp:701
 msgid "A sheet must have a name."
 msgstr "圖紙必須要有一個名稱。"
 
-#: eeschema/dialogs/dialog_sheet_properties.cpp:703
+#: eeschema/dialogs/dialog_sheet_properties.cpp:709
 msgid "A sheet must have a file specified."
 msgstr "圖紙必須要有對應的文件。"
 
@@ -13001,23 +13016,23 @@ msgstr "無法創建 BOM 輸出 '%s'。"
 msgid "Could not write BOM output '%s'."
 msgstr "無法寫入 BOM 輸出 '%s'。"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1299
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1300
 #, c-format
 msgid "Wrote BOM output to '%s'"
 msgstr "將 BOM 輸出寫入 '%s'"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1606
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2007
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1607
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2008
 msgid "BOM preset name:"
 msgstr "BOM 預設名稱:"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1606
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2007
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1607
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2008
 msgid "Save BOM Preset"
 msgstr "保存 BOM 預設"
 
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1632
-#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2033
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:1633
+#: eeschema/dialogs/dialog_symbol_fields_table.cpp:2034
 #: pcbnew/widgets/appearance_controls.cpp:2673
 msgid ""
 "Default presets cannot be modified.\n"
@@ -13216,16 +13231,18 @@ msgstr "顯示引腳名稱"
 msgid ""
 "This is useful for adding symbols for board footprints such as fiducials\n"
 "and logos that you do not want to appear in the bill of materials export"
-msgstr "這對於添加一些不想出現在物料清單中的電路板封裝 (如基準定位點) 和 logo "
-"標誌等符號很有用"
+msgstr ""
+"這對於添加一些不想出現在物料清單中的電路板封裝 (如基準定位點) 和 logo 標誌等"
+"符號很有用"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:213
 msgid ""
 "This is useful for adding symbols that only get exported to the bill of "
 "materials but\n"
 "not required to layout the board such as mechanical fasteners and enclosures"
-msgstr "這對於添加一些只導出到物料清單但不需要在電路板中佈局的符號很有用, "
-"例如機械固定件和外殼"
+msgstr ""
+"這對於添加一些只導出到物料清單但不需要在電路板中佈局的符號很有用, 例如機械固"
+"定件和外殼"
 
 #: eeschema/dialogs/dialog_symbol_properties_base.cpp:217
 #: pcbnew/dialogs/dialog_footprint_properties_base.cpp:215
@@ -13297,11 +13314,10 @@ msgid ""
 "to skip this step, you will be responsible for manually remapping the "
 "symbols."
 msgstr ""
-"此原理圖當前使用工程符號庫表查找加載庫符號的方法。KiCad "
-"將嘗試映射現有符號以使用新的符號庫表。重新映射將變更某些工程文件, "
-"原理圖可能與舊版本的 KiCad 不兼容。如果需要還原任何變更, "
-"則所有變更的文件都將備份到工程文件夾中的  \"rescue_backup \" 文件夾中。"
-"如果選擇跳過此步驟, 你將負責手動重新映射符號。"
+"此原理圖當前使用工程符號庫表查找加載庫符號的方法。KiCad 將嘗試映射現有符號以"
+"使用新的符號庫表。重新映射將變更某些工程文件, 原理圖可能與舊版本的 KiCad 不兼"
+"容。如果需要還原任何變更, 則所有變更的文件都將備份到工程文件夾中的  "
+"\"rescue_backup \" 文件夾中。如果選擇跳過此步驟, 你將負責手動重新映射符號。"
 
 #: eeschema/dialogs/dialog_symbol_remap.cpp:215
 #, c-format
@@ -13411,8 +13427,8 @@ msgid ""
 "or http(s)://) or \"#<page number>\" to create a hyperlink to a page in this "
 "schematic."
 msgstr ""
-"無效的超鏈接目標。請輸入一個有效的 URL (例如 file:// 或 http(s)://) 或 \""
-"#<頁碼>\" 來創建指向此原理圖中某一頁的超鏈接。"
+"無效的超鏈接目標。請輸入一個有效的 URL (例如 file:// 或 http(s)://) 或 \"#<頁"
+"碼>\" 來創建指向此原理圖中某一頁的超鏈接。"
 
 #: eeschema/dialogs/dialog_text_properties.cpp:539
 msgid "Edit Text Properties"
@@ -13448,8 +13464,9 @@ msgid ""
 "Normally footprints are linked to their symbols via their Unique IDs.  "
 "Select this option only if you want to reset the footprint linkages based on "
 "their reference designators."
-msgstr "通常情況下, 封裝通過其唯一 ID 鏈接到其符號。"
-"僅當您想要根據參考位號重置封裝鏈接時, 才選擇此選項。"
+msgstr ""
+"通常情況下, 封裝通過其唯一 ID 鏈接到其符號。僅當您想要根據參考位號重置封裝鏈"
+"接時, 才選擇此選項。"
 
 #: eeschema/dialogs/dialog_update_from_pcb_base.cpp:55
 msgid "Update references of symbols that have been changed in the PCB editor."
@@ -13695,7 +13712,8 @@ msgstr "單擊沒有連線的引腳時自動進行連線"
 msgid ""
 "When enabled, you can start wiring by clicking on unconnected pins even when "
 "the wire tool is not active"
-msgstr "啟用後, 即使連線工具未處於活動狀態, 也可以通過單擊沒有連線的引腳來開始連線"
+msgstr ""
+"啟用後, 即使連線工具未處於活動狀態, 也可以通過單擊沒有連線的引腳來開始連線"
 
 #: eeschema/dialogs/panel_eeschema_editing_options_base.cpp:56
 #: pcbnew/dialogs/panel_edit_options_base.cpp:368
@@ -15002,8 +15020,9 @@ msgid ""
 "An error was found when loading the schematic that has been automatically "
 "fixed.  Please save the schematic to repair the broken file or it may not be "
 "usable with other versions of KiCad."
-msgstr "加載已自動修復的原理圖時發現錯誤。請保存原理圖以修復損壞的文件, "
-"否則可能無法與其他版本的 KiCad 一起使用。"
+msgstr ""
+"加載已自動修復的原理圖時發現錯誤。請保存原理圖以修復損壞的文件, 否則可能無法"
+"與其他版本的 KiCad 一起使用。"
 
 #: eeschema/files-io.cpp:394
 msgid "Illegal entry found in project file symbol library list."
@@ -15041,9 +15060,9 @@ msgid ""
 "missing symbols, either manual recovery of the schematic or recovery of the "
 "symbol cache library file and reloading the schematic is required."
 msgstr ""
-"在某些情況下, 這可能會導致原理圖損壞。如果原理圖在打開時沒有丟失的符號, "
-"請在進行任何變更之前立即保存它, 以防止數據丟失。如果缺少符號, "
-"則需要手動恢復原理圖或恢復符號緩存庫文件並重新加載原理圖。"
+"在某些情況下, 這可能會導致原理圖損壞。如果原理圖在打開時沒有丟失的符號, 請在"
+"進行任何變更之前立即保存它, 以防止數據丟失。如果缺少符號, 則需要手動恢復原理"
+"圖或恢復符號緩存庫文件並重新加載原理圖。"
 
 #: eeschema/files-io.cpp:444
 msgid "Load Without Cache File"
@@ -16028,7 +16047,7 @@ msgstr "總線別名 %s 成員"
 msgid "KiCad Schematic Editor"
 msgstr "KiCad 原理圖編輯器"
 
-#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1941
+#: eeschema/sch_edit_frame.cpp:204 eeschema/sch_edit_frame.cpp:1961
 msgid "Schematic Hierarchy"
 msgstr "原理圖層次結構"
 
@@ -16051,8 +16070,9 @@ msgid ""
 "Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
 "mode. In order to create/update PCBs from schematics, launch the KiCad shell "
 "and create a project."
-msgstr "無法更新 PCB, 因為原理圖編輯器在獨立模式下打開。為了從原理圖創建/更新 PCB, "
-"請啟動 KiCad Shell 並創建一個工程。"
+msgstr ""
+"無法更新 PCB, 因為原理圖編輯器在獨立模式下打開。為了從原理圖創建/更新 PCB, 請"
+"啟動 KiCad Shell 並創建一個工程。"
 
 #: eeschema/sch_edit_frame.cpp:1269
 msgid "New Schematic"
@@ -16090,20 +16110,20 @@ msgstr "[未保存]"
 msgid "[no schematic loaded]"
 msgstr "[沒有加載原理圖]"
 
-#: eeschema/sch_edit_frame.cpp:1853
+#: eeschema/sch_edit_frame.cpp:1873
 msgid "Schematic Cleanup"
 msgstr "清理原理圖"
 
-#: eeschema/sch_edit_frame.cpp:1966
+#: eeschema/sch_edit_frame.cpp:1986
 #, c-format
 msgid "Highlighted net: %s"
 msgstr "高亮網絡: %s"
 
-#: eeschema/sch_edit_frame.cpp:2144
+#: eeschema/sch_edit_frame.cpp:2164
 msgid "Save Symbol to Schematic"
 msgstr "保存符號到原理圖"
 
-#: eeschema/sch_edit_frame.cpp:2249 eeschema/tools/ee_actions.cpp:60
+#: eeschema/sch_edit_frame.cpp:2269 eeschema/tools/ee_actions.cpp:60
 msgid "Compare Symbol with Library"
 msgstr "將符號與庫符號進行比較"
 
@@ -16271,30 +16291,34 @@ msgstr "符號 %s 中的引腳編號與元件 %s 中定義的引腳編號不一�
 msgid ""
 "The CADSTAR design contains variants which has no KiCad equivalent. Only the "
 "master variant ('%s') was loaded."
-msgstr "CADSTAR 設計包含變體, 但在 KiCad 中沒有對應的等效項。僅加載主變體 ('%s')。"
+msgstr ""
+"CADSTAR 設計包含變體, 但在 KiCad 中沒有對應的等效項。僅加載主變體 ('%s')。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:376
 msgid ""
 "The CADSTAR design contains grouped items which has no KiCad equivalent. Any "
 "grouped items have been ungrouped."
-msgstr "CADSTAR 設計包含組合項目, 但在 KiCad "
-"中沒有對應的等效項。所有組合項目已解組合。"
+msgstr ""
+"CADSTAR 設計包含組合項目, 但在 KiCad 中沒有對應的等效項。所有組合項目已解組"
+"合。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:383
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:160
 msgid ""
 "The CADSTAR design contains re-use blocks which has no KiCad equivalent. The "
 "re-use block information has been discarded during the import."
-msgstr "CADSTAR 設計包含重用塊, 但在 KiCad "
-"中沒有對應的等效項。導入時已丟棄重用塊信息。"
+msgstr ""
+"CADSTAR 設計包含重用塊, 但在 KiCad 中沒有對應的等效項。導入時已丟棄重用塊信"
+"息。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:497
 msgid ""
 "CADSTAR fonts are different to the ones in KiCad. This will likely result in "
 "alignment issues. Please review the imported text elements carefully and "
 "correct manually if required."
-msgstr "CADSTAR 字體不同於 KiCad 中的字體。這可能導致對齊問題。"
-"請仔細檢查導入的文本元素, 如需要請進行手動更正。"
+msgstr ""
+"CADSTAR 字體不同於 KiCad 中的字體。這可能導致對齊問題。請仔細檢查導入的文本元"
+"素, 如需要請進行手動更正。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:502
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:169
@@ -16325,7 +16349,8 @@ msgstr ""
 msgid ""
 "The selected file is a CADSTAR symbol library. It does not contain a "
 "schematic design so cannot be imported/opened in this way."
-msgstr "所選文件是 CADSTAR 符號庫。它不包含原理圖設計, 因此無法以此方式導入/打開。"
+msgstr ""
+"所選文件是 CADSTAR 符號庫。它不包含原理圖設計, 因此無法以此方式導入/打開。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:587
 msgid "The CADSTAR schematic might be corrupt: there is no root sheet."
@@ -16337,15 +16362,17 @@ msgid ""
 "Part definition '%s' references symbol '%s' (alternate '%s') which could not "
 "be found in the symbol library. The part has not been loaded into the KiCad "
 "library."
-msgstr "元件定義 \"%s\" 引用符號 \"%s\"(替代 \"%s\") , 在符號庫中找不到。"
-"元件尚未加載到 KiCad 庫中。"
+msgstr ""
+"元件定義 \"%s\" 引用符號 \"%s\"(替代 \"%s\") , 在符號庫中找不到。元件尚未加載"
+"到 KiCad 庫中。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:687
 #, c-format
 msgid ""
 "Part definition '%s' has an incomplete definition (no symbol definitions are "
 "associated with it). The part has not been loaded into the KiCad library."
-msgstr "部件定義\"%s\"的定義不完整 (沒有與之關聯的符號定義)。該部件尚未加載到 KiCad "
+msgstr ""
+"部件定義\"%s\"的定義不完整 (沒有與之關聯的符號定義)。該部件尚未加載到 KiCad "
 "庫中。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:719
@@ -16360,22 +16387,25 @@ msgstr "符號 '%s' 引用在庫中找不到的元件 '%s'。未加載符號"
 msgid ""
 "Symbol ID '%s' references library symbol '%s' which could not be found in "
 "the library. Did you export all items of the design?"
-msgstr "符號 ID '%s' 引用庫符號 '%s', 在庫中找不到。您是否導出了設計的所有項目?"
+msgstr ""
+"符號 ID '%s' 引用庫符號 '%s', 在庫中找不到。您是否導出了設計的所有項目?"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:837
 #, c-format
 msgid ""
 "Symbol ID '%s' is a signal reference or global signal but it has too many "
 "pins. The expected number of pins is 1 but %d were found."
-msgstr "符號 ID '%s' 是信號參考或全局信號, 但它的引腳太多。引腳數量應為 1 個, "
-"但實際找到了 %d 個。"
+msgstr ""
+"符號 ID '%s' 是信號參考或全局信號, 但它的引腳太多。引腳數量應為 1 個, 但實際"
+"找到了 %d 個。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:977
 #, c-format
 msgid ""
 "Symbol ID '%s' is of an unknown type. It is neither a symbol or a net "
 "power / symbol. The symbol was not loaded."
-msgstr "符號 ID '%s' 的類型未知。它既不是符號也不是網絡電源/符號。該符號未被加載。"
+msgstr ""
+"符號 ID '%s' 的類型未知。它既不是符號也不是網絡電源/符號。該符號未被加載。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:993
 #, c-format
@@ -16384,8 +16414,8 @@ msgid ""
 "supported in KiCad. When the symbol is reloaded from the library, it will "
 "revert to the original 1:1 scale."
 msgstr ""
-"符號 '%s' 在原始 CADSTAR 原理圖中按比例縮放, 但 KiCad 不支持。"
-"當符號從庫中重新加載時, 它將恢復到原來的 1:1 比例。"
+"符號 '%s' 在原始 CADSTAR 原理圖中按比例縮放, 但 KiCad 不支持。當符號從庫中重"
+"新加載時, 它將恢復到原來的 1:1 比例。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:1468
 #, c-format
@@ -16404,8 +16434,9 @@ msgid ""
 "Symbol '%s' is rotated by an angle of %.1f degrees in the original CADSTAR "
 "design but KiCad only supports rotation angles multiples of 90 degrees. The "
 "connecting wires will need manual fixing."
-msgstr "在原始CADSTAR設計中, 符號 '%s' 旋轉了 %.1f 度角, 但 KiCad 僅支持 90 "
-"度倍數的旋轉角。連接線將需要手動固定。"
+msgstr ""
+"在原始CADSTAR設計中, 符號 '%s' 旋轉了 %.1f 度角, 但 KiCad 僅支持 90 度倍數的"
+"旋轉角。連接線將需要手動固定。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2128
 #, c-format
@@ -16428,9 +16459,8 @@ msgid ""
 "to another sheet in the design. KiCad requires all sheet symbols to be "
 "associated to a sheet, so the block was not loaded."
 msgstr ""
-"原理圖塊 ID %s (塊名稱: \"%s\") 繪製在圖紙\"%s\"上, "
-"但未鏈接到工程中的另一張圖紙。KiCad 要求將所有圖紙符號都與圖紙相關聯, "
-"因此未加載該圖塊。"
+"原理圖塊 ID %s (塊名稱: \"%s\") 繪製在圖紙\"%s\"上, 但未鏈接到工程中的另一張"
+"圖紙。KiCad 要求將所有圖紙符號都與圖紙相關聯, 因此未加載該圖塊。"
 
 #: eeschema/sch_io/cadstar/cadstar_sch_archive_loader.cpp:2557
 #, c-format
@@ -16445,8 +16475,8 @@ msgid ""
 "parts library. If none specified it is assumed to be 'symbol.csa' in the "
 "same folder."
 msgstr ""
-"與此 CADSTAR 元件庫相關的 CADSTAR 原理圖存檔 (*.csa)文件的路徑。"
-"如果沒有指定,則假定它位於相同文件夾中的 'symbol.csa'。"
+"與此 CADSTAR 元件庫相關的 CADSTAR 原理圖存檔 (*.csa)文件的路徑。如果沒有指定,"
+"則假定它位於相同文件夾中的 'symbol.csa'。"
 
 #: eeschema/sch_io/cadstar/sch_io_cadstar_archive.cpp:242
 msgid ""
@@ -16501,7 +16531,8 @@ msgstr "無法讀取文件 '%s'。"
 msgid ""
 "'%s' is an Eagle binary-format file; only Eagle XML-format files can be "
 "imported."
-msgstr "'%s' 是 Eagle binary-format 格式文件; 只有 Eagle XML 格式文件才可以被導入。"
+msgstr ""
+"'%s' 是 Eagle binary-format 格式文件; 只有 Eagle XML 格式文件才可以被導入。"
 
 #: eeschema/sch_io/eagle/sch_io_eagle.cpp:1732
 #, c-format
@@ -16927,7 +16958,7 @@ msgstr "未知 SCH_FILE_T 值: %d"
 #: pcbnew/dialogs/panel_fp_editor_defaults.cpp:57
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:50
 #: pcbnew/dialogs/panel_fp_editor_defaults_base.cpp:100
-#: pcbnew/footprint.cpp:3486 pcbnew/footprint.cpp:3489
+#: pcbnew/footprint.cpp:3488 pcbnew/footprint.cpp:3491
 #: pcbnew/fp_text_grid_table.cpp:144
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2045 pcbnew/pad.cpp:1003
 #: pcbnew/pad.cpp:1917 pcbnew/pcb_dimension.cpp:462
@@ -17334,11 +17365,11 @@ msgstr "X 軸鏡像"
 msgid "Mirror Y"
 msgstr "Y 軸鏡像"
 
-#: eeschema/sch_symbol.cpp:2804 pcbnew/footprint.cpp:3504
+#: eeschema/sch_symbol.cpp:2804 pcbnew/footprint.cpp:3506
 msgid "Library Link"
 msgstr "庫鏈接"
 
-#: eeschema/sch_symbol.cpp:2807 pcbnew/footprint.cpp:3507
+#: eeschema/sch_symbol.cpp:2807 pcbnew/footprint.cpp:3509
 #: pcbnew/plot_board_layers.cpp:114
 msgid "Library Description"
 msgstr "庫描述"
@@ -17351,11 +17382,11 @@ msgstr "不在 PCB 中進行繪製"
 msgid "Exclude From Simulation"
 msgstr "不參與電路仿真"
 
-#: eeschema/sch_symbol.cpp:2822 pcbnew/footprint.cpp:3521
+#: eeschema/sch_symbol.cpp:2822 pcbnew/footprint.cpp:3523
 msgid "Exclude From Bill of Materials"
 msgstr "不在物料清單中顯示"
 
-#: eeschema/sch_symbol.cpp:2825 pcbnew/footprint.cpp:3524
+#: eeschema/sch_symbol.cpp:2825 pcbnew/footprint.cpp:3526
 msgid "Do not Populate"
 msgstr "不作裝配"
 
@@ -17568,8 +17599,8 @@ msgstr ""
 "    <tr>\n"
 "         <td>&nbsp;<br><samp>${refdes:field}</samp></td>\n"
 "        <td></td>\n"
-"        <td>&nbsp;<br><samp><i>顯示在相應符號中</i> 所指定參數 <i>的值, "
-"樣例如下: </i></samp></td>\n"
+"        <td>&nbsp;<br><samp><i>顯示在相應符號中</i> 所指定參數 <i>的值, 樣例"
+"如下: </i></samp></td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td>&nbsp;<br><samp>${R3:VALUE}</samp></td>\n"
@@ -17584,8 +17615,8 @@ msgstr ""
 "    </tr>\n"
 "    <tr>\n"
 "        <th>總線定義</th>\n"
-"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp"
-";&nbsp;&nbsp;</th>\n"
+"        <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+"&nbsp;&nbsp;&nbsp;</th>\n"
 "        <th>合成網絡</th>\n"
 "    </tr>\n"
 "    <tr>\n"
@@ -17636,9 +17667,9 @@ msgstr ""
 "        <td>&nbsp;<br><samp>成員{D_{[1..2]} ~{LATCH}}</samp></td>\n"
 "        <td></td>\n"
 "        <td> <samp>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; "
-"&nbsp;&nbsp;&nbsp;&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> "
-"<samp>成員.D<sub>1</sub>, 成員.D<sub>2</sub>, 成員.LATCH</samp> </td>\n"
+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<sub>&nbsp;</sub>&nbsp; &nbsp;&nbsp;&nbsp;"
+"&nbsp;<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u></samp><br> <samp>成員.D<sub>1</"
+"sub>, 成員.D<sub>2</sub>, 成員.LATCH</samp> </td>\n"
 "    </tr>\n"
 "    <tr>\n"
 "        <td><br></td>\n"
@@ -17663,8 +17694,9 @@ msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
 "the sheet '%s' or one of its subsheets as a parent somewhere in the "
 "schematic hierarchy."
-msgstr "該圖紙無法被變更, 因為目標圖紙已經將圖紙 \"%s\" "
-"或其中一個子圖紙作為層次結構中某處的父級圖紙。"
+msgstr ""
+"該圖紙無法被變更, 因為目標圖紙已經將圖紙 \"%s\" 或其中一個子圖紙作為層次結構"
+"中某處的父級圖紙。"
 
 #: eeschema/sheet.cpp:92
 #, c-format
@@ -17672,8 +17704,9 @@ msgid ""
 "The schematic '%s' has not had its symbol library links remapped to the "
 "symbol library table.  The project this schematic belongs to must first be "
 "remapped before it can be imported into the current project."
-msgstr "原理圖 \"%s\" 的符號庫鏈接尚未被重新映射到符號庫表。"
-"這個原理圖所屬的工程必須先被重新映射, 然後才能導入到當前工程。"
+msgstr ""
+"原理圖 \"%s\" 的符號庫鏈接尚未被重新映射到符號庫表。這個原理圖所屬的工程必須"
+"先被重新映射, 然後才能導入到當前工程。"
 
 #: eeschema/sheet.cpp:210
 msgid ""
@@ -17727,8 +17760,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"選定的原理圖中, "
-"有一些庫名稱在當前工程庫表中缺失。這可能導致所加載原理圖的符號庫引用損壞。\n"
+"選定的原理圖中, 有一些庫名稱在當前工程庫表中缺失。這可能導致所加載原理圖的符"
+"號庫引用損壞。\n"
 "\n"
 "是否要繼續?"
 
@@ -17753,8 +17786,8 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"所選原理圖中的某些符號庫名稱在所選原理圖工程庫表中缺失。這可能破壞符號庫引用"
-"。\n"
+"所選原理圖中的某些符號庫名稱在所選原理圖工程庫表中缺失。這可能破壞符號庫引"
+"用。\n"
 "\n"
 "是否要繼續?"
 
@@ -17781,9 +17814,9 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
-"文件名 '%s' 可能會與原理圖中已定義的現有文件名發生衝突, "
-"如果您的操作系統支持不區分大小寫的文件名, "
-"抑或是您將此工程複製到這類操作系統中, 則可能會出現問題。\n"
+"文件名 '%s' 可能會與原理圖中已定義的現有文件名發生衝突, 如果您的操作系統支持"
+"不區分大小寫的文件名, 抑或是您將此工程複製到這類操作系統中, 則可能會出現問"
+"題。\n"
 "是否繼續?"
 
 #: eeschema/sheet.cpp:711
@@ -18932,7 +18965,8 @@ msgstr ""
 msgid ""
 "<b>Warning: reference prefix</b><br>prefix ending by '%s' can create issues "
 "if saved in a symbol library"
-msgstr "<b>警告: 參考前綴</b><br>'%s' 結尾的前綴如果保存在符號庫中, 可能會產生問題"
+msgstr ""
+"<b>警告: 參考前綴</b><br>'%s' 結尾的前綴如果保存在符號庫中, 可能會產生問題"
 
 #: eeschema/symbol_checker.cpp:118
 #, c-format
@@ -18940,8 +18974,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in %s body style."
 msgstr ""
-"<b>重複的引腳 %s</b> %s 位於<b>(%s, %s)</b>, 與引腳 %s%s 衝突, 後者位於 <b>("
-"%s, %s)</b>, (%s 的主體樣式中)。"
+"<b>重複的引腳 %s</b> %s 位於<b>(%s, %s)</b>, 與引腳 %s%s 衝突, 後者位於 "
+"<b>(%s, %s)</b>, (%s 的主體樣式中)。"
 
 #: eeschema/symbol_checker.cpp:133
 #, c-format
@@ -18949,8 +18983,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s of %s body style."
 msgstr ""
-"<b>重複的引腳 %s</b> %s 位於<b>(%s, %s)</b>, 與引腳 %s%s 衝突, 後者位於 <b>("
-"%s, %s)</b>, (在單元 %s 和 %s (%s) 的主體樣式中)。"
+"<b>重複的引腳 %s</b> %s 位於<b>(%s, %s)</b>, 與引腳 %s%s 衝突, 後者位於 "
+"<b>(%s, %s)</b>, (在單元 %s 和 %s (%s) 的主體樣式中)。"
 
 #: eeschema/symbol_checker.cpp:153
 #, c-format
@@ -18967,8 +19001,8 @@ msgid ""
 "<b>Duplicate pin %s</b> %s at location <b>(%s, %s)</b> conflicts with pin "
 "%s%s at location <b>(%s, %s)</b> in units %s and %s."
 msgstr ""
-"<b>重複引腳 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引腳 %s%s 衝突, 後者位於 <b>("
-"%s, %s)</b>, 衝突覆銅在單元 %s和 %s。"
+"<b>重複引腳 %s</b> %s, 位置 <b>(%s, %s)</b>, 和引腳 %s%s 衝突, 後者位於 "
+"<b>(%s, %s)</b>, 衝突覆銅在單元 %s和 %s。"
 
 #: eeschema/symbol_checker.cpp:194
 msgid "<b>A Power Symbol should have only one unit</b><br><br>"
@@ -18999,14 +19033,16 @@ msgstr "<b>可疑電源符號</b><br>不需要不可見的電源輸入引腳<br>
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in %s body "
 "style."
-msgstr "信息: <b>隱藏的電源引腳 %s</b>%s, 位於 <b>(%s, %s)</b>, (%s 的主體樣式中)。"
+msgstr ""
+"信息: <b>隱藏的電源引腳 %s</b>%s, 位於 <b>(%s, %s)</b>, (%s 的主體樣式中)。"
 
 #: eeschema/symbol_checker.cpp:257
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c "
 "of %s body style."
-msgstr "信息: <b>隱藏的電源引腳 %s</b>%s, 位於 <b>(%s, %s)</b>, (單元 %c (屬於 %s))。"
+msgstr ""
+"信息: <b>隱藏的電源引腳 %s</b>%s, 位於 <b>(%s, %s)</b>, (單元 %c (屬於 %s))。"
 
 #: eeschema/symbol_checker.cpp:271
 #, c-format
@@ -19017,7 +19053,8 @@ msgstr "信息: <b>隱藏的電源引腳 %s</b> %s, 位於<b>(%s, %s)</b>。"
 #, c-format
 msgid ""
 "Info: <b>Hidden power pin %s</b> %s at location <b>(%s, %s)</b> in unit %c."
-msgstr "信息: <b>隱藏的電源引腳 %s</b>%s, 位於 <b>(%s, %s)</b>, 此座標在單元 %c 中。"
+msgstr ""
+"信息: <b>隱藏的電源引腳 %s</b>%s, 位於 <b>(%s, %s)</b>, 此座標在單元 %c 中。"
 
 #: eeschema/symbol_checker.cpp:290
 msgid ""
@@ -19027,15 +19064,17 @@ msgstr "(隱藏的電源引腳會將其引腳名稱驅動到任何連接的網�
 #: eeschema/symbol_checker.cpp:305
 #, c-format
 msgid "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> of %s body style."
-msgstr "<b>未在柵格上的引腳 %s</b>, %s 位於 <b>(%s, %s)</b>, (%s 的主體樣式中)。"
+msgstr ""
+"<b>未在柵格上的引腳 %s</b>, %s 位於 <b>(%s, %s)</b>, (%s 的主體樣式中)。"
 
 #: eeschema/symbol_checker.cpp:315
 #, c-format
 msgid ""
 "<b>Off grid pin %s</b> %s at location <b>(%s, %s)</b> in unit %c of %s body "
 "style."
-msgstr "<b>未在柵格上引腳 %s</b>位於 <b>(%s, %s%s )</b>, (單元 %c (屬於%s) "
-"的主體樣式。"
+msgstr ""
+"<b>未在柵格上引腳 %s</b>位於 <b>(%s, %s%s )</b>, (單元 %c (屬於%s) 的主體樣"
+"式。"
 
 #: eeschema/symbol_checker.cpp:329
 #, c-format
@@ -20283,7 +20322,7 @@ msgstr "更改為文本框"
 msgid "Change existing item to a text box"
 msgstr "將現有項目更改為文本框"
 
-#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2446
+#: eeschema/tools/ee_actions.cpp:789 eeschema/tools/sch_edit_tool.cpp:2448
 msgid "Cleanup Sheet Pins"
 msgstr "清理圖紙引腳"
 
@@ -21124,7 +21163,7 @@ msgstr "添加 %s"
 msgid "Draw %s"
 msgstr "繪製 %s"
 
-#: eeschema/tools/sch_drawing_tools.cpp:2110
+#: eeschema/tools/sch_drawing_tools.cpp:2087
 msgid "Press <ESC> to cancel sheet creation."
 msgstr "按下 <ESC> 取消圖紙創建。"
 
@@ -21148,7 +21187,7 @@ msgstr "旋轉和鏡像"
 msgid "Edit Main Fields"
 msgstr "編輯主字段"
 
-#: eeschema/tools/sch_edit_tool.cpp:514 eeschema/tools/sch_edit_tool.cpp:2355
+#: eeschema/tools/sch_edit_tool.cpp:514 eeschema/tools/sch_edit_tool.cpp:2357
 msgid "Change To"
 msgstr "修改為"
 
@@ -21184,41 +21223,41 @@ msgstr "編輯 %s 字段"
 msgid "Edit '%s' Field"
 msgstr "編輯 '%s' 字段"
 
-#: eeschema/tools/sch_edit_tool.cpp:2079 eeschema/tools/sch_edit_tool.cpp:2167
+#: eeschema/tools/sch_edit_tool.cpp:2081 eeschema/tools/sch_edit_tool.cpp:2169
 msgid "<empty>"
 msgstr "<空>"
 
-#: eeschema/tools/sch_edit_tool.cpp:2419
+#: eeschema/tools/sch_edit_tool.cpp:2421
 msgid "Slice Wire"
 msgstr "分割連線"
 
-#: eeschema/tools/sch_edit_tool.cpp:2419
+#: eeschema/tools/sch_edit_tool.cpp:2421
 msgid "Break Wire"
 msgstr "打斷連線"
 
-#: eeschema/tools/sch_edit_tool.cpp:2437
+#: eeschema/tools/sch_edit_tool.cpp:2439
 msgid "Do you wish to delete the unreferenced pins from this sheet?"
 msgstr "您是否希望從此表中刪除未引用的引腳?"
 
-#: eeschema/tools/sch_edit_tool.cpp:2498
+#: eeschema/tools/sch_edit_tool.cpp:2500
 #, c-format
 msgid "Enter page number for sheet path%s"
 msgstr "輸入圖紙路徑 %s 的頁碼"
 
-#: eeschema/tools/sch_edit_tool.cpp:2501
+#: eeschema/tools/sch_edit_tool.cpp:2503
 #: eeschema/widgets/hierarchy_pane.cpp:393
 msgid "Edit Sheet Page Number"
 msgstr "編輯圖紙頁碼"
 
-#: eeschema/tools/sch_edit_tool.cpp:2566
+#: eeschema/tools/sch_edit_tool.cpp:2568
 msgid "Set Attribute"
 msgstr "設置特性"
 
-#: eeschema/tools/sch_edit_tool.cpp:2603
+#: eeschema/tools/sch_edit_tool.cpp:2605
 msgid "Clear Attribute"
 msgstr "清除特性"
 
-#: eeschema/tools/sch_edit_tool.cpp:2640
+#: eeschema/tools/sch_edit_tool.cpp:2642
 msgid "Toggle Attribute"
 msgstr "切換特性"
 
@@ -22917,8 +22956,9 @@ msgstr "輸出單位, 有效選項: mm, m, in, tenths"
 msgid ""
 "Name of folder to create and store 3d models in, if not specified or empty, "
 "the models will be embedded in main exported VRML file"
-msgstr "創建和存儲 3D 模型的文件夾名稱, 如果未指定或為空, 模型將嵌入導出的 VRML "
-"主文件中"
+msgstr ""
+"創建和存儲 3D 模型的文件夾名稱, 如果未指定或為空, 模型將嵌入導出的 VRML 主文"
+"件中"
 
 #: kicad/cli/command_pcb_export_3d.cpp:146
 msgid "Used with --models-dir to output relative paths in the resulting file"
@@ -23202,7 +23242,8 @@ msgstr "要使用的配色主題 (默認使用 PCB 編輯器設置)"
 msgid ""
 "Set page sizing mode (0 = page with frame and title block, 1 = current page "
 "size, 2 = board area only)"
-msgstr "設置頁面大小模式 (0 =帶有框架和標題塊的頁面, 1 =當前頁面大小, 2 =僅板區域)"
+msgstr ""
+"設置頁面大小模式 (0 =帶有框架和標題塊的頁面, 1 =當前頁面大小, 2 =僅板區域)"
 
 #: kicad/cli/command_pcb_export_svg.cpp:73
 #: kicad/cli/command_sch_export_plot.cpp:73
@@ -24118,8 +24159,9 @@ msgid ""
 "Downloaded archive hash for package %s does not match repository entry. This "
 "may indicate a problem with the package, if the issue persists report this "
 "to repository maintainers."
-msgstr "擴展內容包 %s 的已下載壓縮包 HASH 與倉庫記錄不匹配。"
-"這可能表明擴展內容包有問題, 如果問題仍然存在, 請將此報告給倉庫維護者。"
+msgstr ""
+"擴展內容包 %s 的已下載壓縮包 HASH 與倉庫記錄不匹配。這可能表明擴展內容包有問"
+"題, 如果問題仍然存在, 請將此報告給倉庫維護者。"
 
 #: kicad/pcm/pcm_task_manager.cpp:206 kicad/pcm/pcm_task_manager.cpp:426
 #, c-format
@@ -25262,8 +25304,8 @@ msgstr ""
 "___K = V<sub>I</sub>/V<sub>O</sub> = 10<sup>a/20</sup>___<br>\n"
 "___L = K<sup>2</sup> = 10<sup>a/10</sup>___<br>\n"
 "___A = (L+1) / (L&minus;1)___<br><br>\n"
-"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</sub>) "
-"/ (L&minus;1)___<br>\n"
+"___R2 = 2&middot;&radic;(L &middot; Z<sub>in</sub> &middot; Z<sub>out</"
+"sub>) / (L&minus;1)___<br>\n"
 "___R1 = Z<sub>in</sub> &middot; A &minus; R2___<br>\n"
 "___R3 = Z<sub>out</sub> &middot; A &minus; R2___\n"
 
@@ -25669,12 +25711,12 @@ msgid ""
 msgstr ""
 "OVC I: 不與市電直接連接的設備 (如: 由充電器供電的筆記本電腦和手機)\n"
 "\n"
-"OVC II: 需要依靠固定安裝設施供電的耗能設備 (如:家用電器, 便攜式工具, "
-"家庭負載)。\n"
+"OVC II: 需要依靠固定安裝設施供電的耗能設備 (如:家用電器, 便攜式工具, 家庭負"
+"載)。\n"
 "如果有可靠性和可用性要求, 則適用於 OVC III\n"
 "\n"
-"OVC III: 採用固定安裝方式的具有可靠性和可用性要求設備 (例如:電氣開關, "
-"工業用設備)。\n"
+"OVC III: 採用固定安裝方式的具有可靠性和可用性要求設備 (例如:電氣開關, 工業用"
+"設備)。\n"
 "\n"
 "OVC IV: 安裝於供電進線處的設備 (如:電錶, 一次過流保護裝置)"
 
@@ -25703,8 +25745,9 @@ msgid ""
 "Given the rated voltage and the overvoltage category, a device should "
 "withstand this value without a breakdown of insulation. This impulse voltage "
 "is a standard 1.2/50µs wave"
-msgstr "給定額定電壓和過電壓類別, 設備應在絕緣不擊穿的情況下承受該值。"
-"該脈衝電壓是一個標準的 1.2/50μs 方波"
+msgstr ""
+"給定額定電壓和過電壓類別, 設備應在絕緣不擊穿的情況下承受該值。該脈衝電壓是一"
+"個標準的 1.2/50μs 方波"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:95
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:145
@@ -25786,8 +25829,8 @@ msgstr ""
 "\n"
 "基本型: 對有危險的部件進行絕緣。\n"
 "\n"
-"加強型: 單一絕緣, 提供的保護程度相當於雙重絕緣。(即兩個獨立的基本絕緣, "
-"以防其中一個失效)。"
+"加強型: 單一絕緣, 提供的保護程度相當於雙重絕緣。(即兩個獨立的基本絕緣, 以防其"
+"中一個失效)。"
 
 #: pcb_calculator/calculator_panels/panel_electrical_spacing_iec60664_base.cpp:170
 msgid "Functional"
@@ -26874,10 +26917,10 @@ msgstr ""
 "電容器通常使用 E12 值。10% 和 5% 電阻器通常使用 E24 值。1%\n"
 "電阻器使用 E96 值。其他系列不常用。\n"
 "\n"
-"要選擇一個值, 請從計算出的目標值開始, 然後四捨五入到 2 位有效數字 (E24 "
-"或以下), 或 3 位有效數字 (E48 和以下)。\n"
-"對於 E24 或以下, 四捨五入到兩位有效數字；對於 E48 及以上, "
-"四捨五入到三位有效數字。\n"
+"要選擇一個值, 請從計算出的目標值開始, 然後四捨五入到 2 位有效數字 (E24 或以"
+"下), 或 3 位有效數字 (E48 和以下)。\n"
+"對於 E24 或以下, 四捨五入到兩位有效數字；對於 E48 及以上, 四捨五入到三位有效"
+"數字。\n"
 "然後從表中找出與剩餘有效數字最接近的值, 並用它代替這些數字。\n"
 "然後從表中找出與剩餘有效數字最接近的值, 並用它代替這些數字。\n"
 "\n"
@@ -26921,13 +26964,13 @@ msgid ""
 "Selected cells shown with the default system's coloring choice after a table "
 "refill.\n"
 msgstr ""
-"該表顯示了各種金屬和合金之間的電化學電位差異。正數表示行為陽極, "
-"列為陰極。<br>\n"
+"該表顯示了各種金屬和合金之間的電化學電位差異。正數表示行為陽極, 列為陰極。"
+"<br>\n"
 " 電偶腐蝕會在特定條件下影響接觸的不同金屬。<br>\n"
-" 電化學對的陽極被氧化並被腐蝕掉, 而陰極則被溶解的金屬鍍在上面, "
-"但仍受到保護。<br>\n"
-" EN 50310 暗示電壓差低於 300mV。"
-"已知的做法在主要金屬或合金對之間使用第三接觸金屬 (即化學金表面光潔度)。<br>\n"
+" 電化學對的陽極被氧化並被腐蝕掉, 而陰極則被溶解的金屬鍍在上面, 但仍受到保護。"
+"<br>\n"
+" EN 50310 暗示電壓差低於 300mV。已知的做法在主要金屬或合金對之間使用第三接觸"
+"金屬 (即化學金表面光潔度)。<br>\n"
 
 #: pcb_calculator/iec60664_help.h:2
 msgid ""
@@ -26950,8 +26993,8 @@ msgstr ""
 "但是, 本計算器不涵蓋以下情況:\n"
 "\n"
 "- 對於高於30kHz的頻率, 介電性能會降低。IEC60664-4 涵蓋了這些情況\n"
-"- 為了防止汙染, 使用浸漬處理或進行灌封時, 如果滿足了 IEC60664-3 "
-"規定的所有條件,可以適當減小電氣間隙和爬電距離。\n"
+"- 為了防止汙染, 使用浸漬處理或進行灌封時, 如果滿足了 IEC60664-3 規定的所有條"
+"件,可以適當減小電氣間隙和爬電距離。\n"
 "一般不將焊盤視為浸漬。\n"
 "- 通過液體、壓縮空氣或除空氣以外的氣體的絕緣不在 IEC60664 的範圍內"
 
@@ -27072,8 +27115,8 @@ msgstr ""
 "\tE3(50%):  1.0  -   -   -  2.2  -   -   -  4.7  -   -   -\n"
 "\tE1     :  1.0  -   -   -   -   -   -   -   -   -   -   -\n"
 "\n"
-"- 這個計算器可以查找標準 E 系列 (在 10 Ω 和 1 MΩ 之間) "
-"的組合以創建任意的數值。\n"
+"- 這個計算器可以查找標準 E 系列 (在 10 Ω 和 1 MΩ 之間) 的組合以創建任意的數"
+"值。\n"
 "- 您可以輸入0.0025 到 4000 kΩ之間所需的電阻。\n"
 "- 給出了最多使用 4 個元件的解決方案。\n"
 "\n"
@@ -27113,8 +27156,8 @@ msgid ""
 msgstr ""
 "如果你指定最大電流, 則會計算相應的走線寬度。\n"
 "\n"
-"如果你指定其中一個走線寬度, "
-"則將計算它可以處理的最大電流。然後將計算另外的同樣處理此電流的走線寬度。\n"
+"如果你指定其中一個走線寬度, 則將計算它可以處理的最大電流。然後將計算另外的同"
+"樣處理此電流的走線寬度。\n"
 "\n"
 "控制值以粗體顯示。\n"
 "\n"
@@ -27785,7 +27828,8 @@ msgstr "選擇要移除的層:"
 msgid ""
 "Incorrect value for Epsilon R (Epsilon R must be positive or null if not "
 "used)"
-msgstr "Epsilon R (相對介電常數) 的值不正確 (如果未使用, 則 Epsilon R 必須為正或為空)"
+msgstr ""
+"Epsilon R (相對介電常數) 的值不正確 (如果未使用, 則 Epsilon R 必須為正或為空)"
 
 #: pcbnew/board_stackup_manager/panel_board_stackup.cpp:1186
 msgid ""
@@ -29157,7 +29201,7 @@ msgstr ""
 "焊盤與覆銅默認連接類型。\n"
 "該設置可被局部焊盤設置覆蓋"
 
-#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3460
+#: pcbnew/dialogs/dialog_copper_zones_base.cpp:232 pcbnew/footprint.cpp:3462
 #: pcbnew/pad.cpp:1908 pcbnew/zone.cpp:1551
 msgid "Thermal reliefs"
 msgstr "緩釋熱焊盤 (花焊盤)"
@@ -30402,8 +30446,9 @@ msgstr "優化 STEP 文件"
 msgid ""
 "Disables writing parametric curves. Optimizes file size and write/read "
 "times, but may reduce compatibility with other software."
-msgstr "禁止寫入參數曲線。可優化文件大小和寫入/讀取時間, "
-"但可能會降低與其他軟件的兼容性。"
+msgstr ""
+"禁止寫入參數曲線。可優化文件大小和寫入/讀取時間, 但可能會降低與其他軟件的兼容"
+"性。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:145
 msgid "Fuse shapes (time consuming)"
@@ -30421,7 +30466,8 @@ msgstr "導出為複合形狀"
 msgid ""
 "Merges all shapes into a single Compound shape. Useful for external software "
 "that does de-duplication based on shape names."
-msgstr "將所有形狀合併為一個複合形狀。可以便於使用其他軟件根據形狀名稱刪除重複數據。"
+msgstr ""
+"將所有形狀合併為一個複合形狀。可以便於使用其他軟件根據形狀名稱刪除重複數據。"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid "Export tracks, pads and vias"
@@ -30792,8 +30838,9 @@ msgid ""
 "Locked footprints cannot be freely moved and oriented on the canvas and can "
 "only be selected when the 'Locked items' checkbox is checked in the "
 "selection filter."
-msgstr "鎖定的封裝無法在畫布上自由移動和和調整方向, 只有在選擇篩選器中選中 "
-"'已鎖定項目' 複選框時才能選擇。"
+msgstr ""
+"鎖定的封裝無法在畫布上自由移動和和調整方向, 只有在選擇篩選器中選中 '已鎖定項"
+"目' 複選框時才能選擇。"
 
 #: pcbnew/dialogs/dialog_footprint_properties.cpp:392
 #, c-format
@@ -32155,8 +32202,9 @@ msgid ""
 "Select whether to update footprint references to match their currently-"
 "assigned symbols, or to re-assign footprints to symbols which match their "
 "current references."
-msgstr "選擇是否更新封裝位號以匹配其當前關聯的符號, "
-"或者重新封裝位號分配給匹配的符號。"
+msgstr ""
+"選擇是否更新封裝位號以匹配其當前關聯的符號, 或者重新封裝位號分配給匹配的符"
+"號。"
 
 #: pcbnew/dialogs/dialog_import_netlist_base.cpp:53
 msgid "Replace footprints with those specified in netlist"
@@ -32224,7 +32272,8 @@ msgstr "KiCad 層"
 msgid ""
 "All required layers (marked with '*') must be matched. Please click on 'Auto-"
 "Match Layers' to automatically match the remaining layers"
-msgstr "所有必需的層(用'*'標記)必須匹配。請點擊\"自動匹配層\", 自動匹配剩餘的層"
+msgstr ""
+"所有必需的層(用'*'標記)必須匹配。請點擊\"自動匹配層\", 自動匹配剩餘的層"
 
 #: pcbnew/dialogs/dialog_imported_layers.cpp:342
 #: pcbnew/dialogs/dialog_imported_layers_base.cpp:22
@@ -33509,7 +33558,8 @@ msgstr "繞過障礙物"
 msgid ""
 "When enabled, the router tries to move colliding traces behind solid "
 "obstacles (e.g. pads) instead of \"reflecting\" back the collision"
-msgstr "啟用後, 佈線器會嘗試移動可能碰撞的走線繞開實體障礙物 (例如焊盤), 而不是\"高亮"
+msgstr ""
+"啟用後, 佈線器會嘗試移動可能碰撞的走線繞開實體障礙物 (例如焊盤), 而不是\"高亮"
 "\"碰撞"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:67
@@ -33528,8 +33578,8 @@ msgid ""
 "Loop removal works locally (only between the start and end of the currently "
 "routed trace)."
 msgstr ""
-"在佈線過程中移除閉環線路 (例如, 如果新走線與現有走線有相同的連接效果, "
-"則舊走線將被移除)。\n"
+"在佈線過程中移除閉環線路 (例如, 如果新走線與現有走線有相同的連接效果, 則舊走"
+"線將被移除)。\n"
 "環路移除在局部生效 (僅在當前走線的起點和終點之間)。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:87
@@ -33565,7 +33615,8 @@ msgid ""
 "When enabled, the entire portion of the track that is visible on the screen "
 "will be optimized and re-routed when a segment is dragged.  When disabled, "
 "only the area near the segment being dragged will be optimized."
-msgstr "啟用後, 當其中一段走線被拖動時, 屏幕上可見的整個走線部分將被優化和重新佈線。"
+msgstr ""
+"啟用後, 當其中一段走線被拖動時, 屏幕上可見的整個走線部分將被優化和重新佈線。"
 "禁用後, 將只優化被拖動部分附近的走線。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:107
@@ -33587,8 +33638,9 @@ msgid ""
 "When enabled, all track segments will be fixed in place up to the cursor "
 "location.  When disabled, the last segment (closest to the cursor) will "
 "remain free and follow the cursor."
-msgstr "啟用時, 所有的走線段將被固定在光標所在的位置。禁用時, 最後一個線段 "
-"(離光標最近的)將不受約束並跟隨光標。"
+msgstr ""
+"啟用時, 所有的走線段將被固定在光標所在的位置。禁用時, 最後一個線段 (離光標最"
+"近的)將不受約束並跟隨光標。"
 
 #: pcbnew/dialogs/dialog_pns_settings_base.h:63
 msgid "Interactive Router Settings"
@@ -33754,8 +33806,9 @@ msgid ""
 "Locked items cannot be freely moved and oriented on the canvas and can only "
 "be selected when the 'Locked items' checkbox is checked in the selection "
 "filter."
-msgstr "鎖定的封裝無法在畫布上自由移動和定位, 並且只有當\"已鎖定項目"
-"\"複選框在選擇篩選器中啟用時才能被選中。"
+msgstr ""
+"鎖定的封裝無法在畫布上自由移動和定位, 並且只有當\"已鎖定項目\"複選框在選擇篩"
+"選器中啟用時才能被選中。"
 
 #: pcbnew/dialogs/dialog_reference_image_properties_base.cpp:54
 msgid "Associated layer:"
@@ -34249,8 +34302,9 @@ msgid ""
 "Normally footprints on the board should be changed to match footprint "
 "assignment changes made in the schematic. Uncheck this only if you don't "
 "want to change existing footprints on the board."
-msgstr "通常應替換 PCB 上的封裝, 以匹配原理圖中所做的封裝分配變更。"
-"僅當您不想替換電路板上的現有封裝時, 才取消選中此選項。"
+msgstr ""
+"通常應替換 PCB 上的封裝, 以匹配原理圖中所做的封裝分配變更。僅當您不想替換電路"
+"板上的現有封裝時, 才取消選中此選項。"
 
 #: pcbnew/dialogs/dialog_update_pcb_base.h:53
 msgid "Update PCB from Schematic"
@@ -34609,7 +34663,8 @@ msgstr "自動刷新 3D 視圖"
 msgid ""
 "When enabled, edits to the board will cause the 3D view to refresh (may be "
 "slow with larger boards)"
-msgstr "啟用後, 對電路板的編輯將造成 3D 視圖刷新 (對於較大的電路板, 刷新速度可能較慢)"
+msgstr ""
+"啟用後, 對電路板的編輯將造成 3D 視圖刷新 (對於較大的電路板, 刷新速度可能較慢)"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
 msgid "Icon"
@@ -34697,8 +34752,9 @@ msgid ""
 "The minimum clearance between copper items which do not belong to the same "
 "net.  If set, this is an absolute minimum which cannot be reduced by "
 "netclasses, custom rules, or other settings."
-msgstr "不屬於同一網絡的銅對象之間的最小間距。一旦設置, 這是一個絕對的最小值, "
-"不能通過網絡類、自定義規則或其他設置減少。"
+msgstr ""
+"不屬於同一網絡的銅對象之間的最小間距。一旦設置, 這是一個絕對的最小值, 不能通"
+"過網絡類、自定義規則或其他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:62
 msgid "Minimum track width:"
@@ -34708,8 +34764,9 @@ msgstr "最小走線寬度:"
 msgid ""
 "The minimum track width.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
-msgstr "最小走線寬度。一旦設置, 這是一個絕對的最小值, "
-"不能通過網絡類、自定義規則或其他設置減少。"
+msgstr ""
+"最小走線寬度。一旦設置, 這是一個絕對的最小值, 不能通過網絡類、自定義規則或其"
+"他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:79
 msgid "Minimum connection width:"
@@ -34727,8 +34784,9 @@ msgstr "最小環形寬度:"
 msgid ""
 "The minimum annular ring width.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr "最小環形寬度。一旦設置, 這是一個絕對的最小值, "
-"不能通過網絡類、自定義規則或其他設置減少。"
+msgstr ""
+"最小環形寬度。一旦設置, 這是一個絕對的最小值, 不能通過網絡類、自定義規則或其"
+"他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:112
 msgid "Minimum via diameter:"
@@ -34738,8 +34796,9 @@ msgstr "最小過孔直徑:"
 msgid ""
 "The minimum via diameter.  If set, this is an absolute minimum and cannot be "
 "reduced by netclasses, custom rules, or other settings."
-msgstr "最小過孔直徑。一旦設置, 這是一個絕對的最小值, "
-"不能通過網絡類、自定義規則或其他設置減少。"
+msgstr ""
+"最小過孔直徑。一旦設置, 這是一個絕對的最小值, 不能通過網絡類、自定義規則或其"
+"他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:128
 msgid "Copper to hole clearance:"
@@ -34750,8 +34809,9 @@ msgid ""
 "The minimum clearance between a hole and an unassociated copper item.  If "
 "set, this is an absolute minimum and cannot be reduced by custom rules or "
 "other settings."
-msgstr "孔與不相關銅箔項目之間的最小間距。一旦設置, 這是一個絕對的最小值, "
-"不能通過自定義規則或其他設置減少。"
+msgstr ""
+"孔與不相關銅箔項目之間的最小間距。一旦設置, 這是一個絕對的最小值, 不能通過自"
+"定義規則或其他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:144
 msgid "Copper to edge clearance:"
@@ -34762,8 +34822,9 @@ msgid ""
 "The minimum clearance between the board edge and any copper item.  If set, "
 "this is an absolute minimum and cannot be reduced by custom rules or other "
 "settings."
-msgstr "板邊與任意銅箔項目之間的最小間距。一旦設置, 這是一個絕對的最小值, "
-"不能通過自定義規則或其他設置減少。"
+msgstr ""
+"板邊與任意銅箔項目之間的最小間距。一旦設置, 這是一個絕對的最小值, 不能通過自"
+"定義規則或其他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:169
 msgid "Holes"
@@ -34777,8 +34838,9 @@ msgstr "最小通孔:"
 msgid ""
 "The minimum through-hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules or other settings."
-msgstr "最小的通孔尺寸。一旦設置, 這是一個絕對的最小值, "
-"不能通過網絡類、自定義規則或其他設置減少。"
+msgstr ""
+"最小的通孔尺寸。一旦設置, 這是一個絕對的最小值, 不能通過網絡類、自定義規則或"
+"其他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:201
 msgid "Hole to hole clearance:"
@@ -34789,8 +34851,9 @@ msgid ""
 "The minimum clearance between two drilled holes.   If set, this is an "
 "absolute minimum and cannot be reduced by custom rules or other settings. "
 "(Note: does not apply to milled holes.)"
-msgstr "兩個鑽孔間的最小間距。一旦設置, 這是一個絕對的最小值, "
-"不能通過自定義規則或其他設置減少。(注: 不適用於銑孔。)"
+msgstr ""
+"兩個鑽孔間的最小間距。一旦設置, 這是一個絕對的最小值, 不能通過自定義規則或其"
+"他設置減少。(注: 不適用於銑孔。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:226
 msgid "uVias"
@@ -34804,8 +34867,9 @@ msgstr "最小微孔直徑:"
 msgid ""
 "The minimum diameter for micro-vias.  If set, this is an absolute minimum "
 "and cannot be reduced by netclasses, custom rules, or other settings."
-msgstr "微孔的最小直徑。一旦設置, 這是一個絕對的最小值, "
-"不能通過網絡類、自定義規則或其他設置減少。"
+msgstr ""
+"微孔的最小直徑。一旦設置, 這是一個絕對的最小值, 不能通過網絡類、自定義規則或"
+"其他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:258
 msgid "Minimum uVia hole:"
@@ -34815,8 +34879,9 @@ msgstr "最小微孔孔徑:"
 msgid ""
 "The minimum micro-via hole size.  If set, this is an absolute minimum and "
 "cannot be reduced by netclasses, custom rules, or other settings."
-msgstr "最小微孔孔徑。一旦設置, 這是一個絕對的最小值, "
-"不能通過網絡類、自定義規則或其他設置減少。"
+msgstr ""
+"最小微孔孔徑。一旦設置, 這是一個絕對的最小值, 不能通過網絡類、自定義規則或其"
+"他設置減少。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:283
 msgid "Silkscreen"
@@ -34831,8 +34896,9 @@ msgid ""
 "Minimum clearance between two items on the same silkscreen layer.  If set "
 "this can improve legibility.  (Note: does not apply to multiple shapes "
 "within a single footprint.)"
-msgstr "同一絲印層上兩個項目間的最小間距。設置此值可提高可讀性。(注: "
-"不適用於單個封裝中的多個形狀。)"
+msgstr ""
+"同一絲印層上兩個項目間的最小間距。設置此值可提高可讀性。(注: 不適用於單個封裝"
+"中的多個形狀。)"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:315
 msgid "Minimum text height:"
@@ -34864,8 +34930,9 @@ msgid ""
 "The maximum allowed deviation between a true arc or circle and segments used "
 "to approximate it.  Smaller values produce smoother graphics at the expense "
 "of performance."
-msgstr "弧線或圓與用來逼近它的線段之間允許的最大偏差。數值越小, 圖形越平滑, "
-"但會降低性能。"
+msgstr ""
+"弧線或圓與用來逼近它的線段之間允許的最大偏差。數值越小, 圖形越平滑, 但會降低"
+"性能。"
 
 #: pcbnew/dialogs/panel_setup_constraints_base.cpp:386
 #, c-format
@@ -34897,8 +34964,9 @@ msgid ""
 "When enabled, the distance between copper layers will be included in track "
 "length calculations for tracks with vias.  When disabled, via stackup height "
 "is ignored."
-msgstr "啟用後, 計算帶過孔的走線長度時將包括銅層之間的距離。禁用時, "
-"過孔疊層高度將被忽略。"
+msgstr ""
+"啟用後, 計算帶過孔的走線長度時將包括銅層之間的距離。禁用時, 過孔疊層高度將被"
+"忽略。"
 
 #: pcbnew/dialogs/panel_setup_formatting_base.cpp:56
 msgid "When Adding Footprints to Board"
@@ -36104,175 +36172,137 @@ msgstr ""
 "\n"
 "### Constraints (約束) \n"
 "\n"
-"| 約束類型           | 變量類型                                              "
-"                                  | 描述                                     "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"       |\n"
-"|---------------------------|------------------------------------------------"
-"------------------------------------------------------------------------|----"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"-----------------------------------------------------------------------------"
-"----------------------------------------------------|\n"
-"| `annular_width`           | min/opt/max                                    "
-"                                                                        | 檢"
-"查過孔的孔環寬度<br>                                                         "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                             |\n"
-"| `assertion`               | \"&lt;expression>\"                            "
-"                                                                         | "
-"檢查給定的表達式。<br>                                                       "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                       |\n"
-"| `clearance`               | min                                            "
-"                                                                        | "
-"定義不同網絡銅箔對象的 **電氣** 間隙。  (如果您想定義不考慮網絡的對象的間隙，"
-"請查看 `physical_clearance` 約束類型。<br><br>如果允許銅箔對象重疊(碰撞)，"
-"可以創建一個 `clearance` 約束，並將 `min` 值設為小於零  (例如, `-1`)。<br>   "
-"                                                                             "
-"                                      |\n"
-"| `courtyard_clearance`     | min                                            "
-"                                                                        | "
-"檢查封裝 Courtyard 之間的間隙，如果任何兩個封裝之間的距離小於 `min` "
-"的值，則會產生錯誤。如果封裝沒有 Courtyard，則該約束不會產生錯誤。<br>       "
-"                                                                             "
-"                                                                             "
-"                                              |\n"
-"| `diff_pair_gap`           | min/opt/max                                    "
-"                                                                        | "
-"檢查差分對中耦合走線之間的間隙。 耦合走線是相互平行的線段。 "
-"差分對間隙約束不對差分對的非耦合部分 (例如，元件的扇出部分) 進行測試。<br>   "
-"                                                                             "
-"                                                                             "
-"                              |\n"
-"| `diff_pair_uncoupled`     | max                                            "
-"                                                                        | "
-"檢查差分對正負走線非耦合部分的間距 (例如，差分對從元件扇出，或繞過某一物體 "
-"(如通孔) 的非耦合部分) 。<br>                                                "
-"                                                                             "
-"                                                                            |"
-"\n"
-"| `disallow`                | `track`<br>`via`<br>`micro_via`<br>`buried_via`"
-"<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> | "
-"指定一個或多個對象類型不被允許, 使用空格分割。  例如, `(constraint disallow "
-"track)` 或 `(constraint disallow track via pad)`。  "
-"如果這個類型的對象滿足規則條件，就會產生一個 DRC 錯誤。<br><br>該約束類型與 "
-"keepout 規則區域基本相同，但可以創建更具體的 keepout 約束。"
+"| 約束類型           | 變量類"
+"型                                                                                "
+"| 描"
+"述                                                                                                                                                                                                                                                                                                                                                                                                                                             "
+"|\n"
+"|---------------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n"
+"| `annular_width`           | min/opt/"
+"max                                                                                                            "
+"| 檢查過孔的孔環寬度"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                          "
+"|\n"
+"| `assertion`               | \"&lt;"
+"expression>\"                                                                                                     "
+"| 檢查給定的表達式。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                                  "
+"|\n"
+"| `clearance`               | "
+"min                                                                                                                    "
+"| 定義不同網絡銅箔對象的 **電氣** 間隙。  (如果您想定義不考慮網絡的對象的間"
+"隙，請查看 `physical_clearance` 約束類型。<br><br>如果允許銅箔對象重疊(碰"
+"撞)，可以創建一個 `clearance` 約束，並將 `min` 值設為小於零  (例如, `-1`)。"
+"<br>                                                                                                                      "
+"|\n"
+"| `courtyard_clearance`     | "
+"min                                                                                                                    "
+"| 檢查封裝 Courtyard 之間的間隙，如果任何兩個封裝之間的距離小於 `min` 的值，"
+"則會產生錯誤。如果封裝沒有 Courtyard，則該約束不會產生錯誤。"
+"<br>                                                                                                                                                                                                               "
+"|\n"
+"| `diff_pair_gap`           | min/opt/"
+"max                                                                                                            "
+"| 檢查差分對中耦合走線之間的間隙。 耦合走線是相互平行的線段。 差分對間隙約束"
+"不對差分對的非耦合部分 (例如，元件的扇出部分) 進行測試。"
+"<br>                                                                                                                                                                                           "
+"|\n"
+"| `diff_pair_uncoupled`     | "
+"max                                                                                                                    "
+"| 檢查差分對正負走線非耦合部分的間距 (例如，差分對從元件扇出，或繞過某一物體 "
+"(如通孔) 的非耦合部分) 。"
+"<br>                                                                                                                                                                                                         "
+"|\n"
+"| `disallow`                | "
+"`track`<br>`via`<br>`micro_via`<br>`buried_via`<br>`pad`<br>`zone`<br>`text`<br>`graphic`<br>`hole`<br>`footprint`<br> "
+"| 指定一個或多個對象類型不被允許, 使用空格分割。  例如, `(constraint "
+"disallow track)` 或 `(constraint disallow track via pad)`。  如果這個類型的對"
+"象滿足規則條件，就會產生一個 DRC 錯誤。<br><br>該約束類型與 keepout 規則區域"
+"基本相同，但可以創建更具體的 keepout 約束。"
 "<br>                                                                   |\n"
-"| `edge_clearance`          | min/opt/max                                    "
-"                                                                        | "
-"檢查對象與板邊的間隙。<br><br>這也可以看作是 \"銑削公差\"，"
-"因為電路板邊緣將包括 `Edge.Cuts` 層上的所有圖形對象以及任何 *橢圓* 焊盤孔。  "
-"(鑽孔公差請查看 `physical_hole_clearance` 約束類型)<br>                      "
-"                                                                             "
-"                                                 |\n"
-"| `length`                  | min/max                                        "
-"                                                                        | "
-"檢查符合規則條件的網絡的總走線長度，如果網絡的長度低於限制條件的 `min` "
-"最小值 (如果指定) 或高於 `max` 最大值 (如果指定) ，則生成錯誤。<br>          "
-"                                                                             "
-"                                                                             "
-"                                                           |\n"
-"| `hole`                    | min/max                                        "
-"                                                                        | "
-"檢查焊盤或過孔中鑽孔的大小 (直徑) 。 對於橢圓形孔，較小的直徑將與 `min` "
-"最小值 (如果指定) 對比，較大的直徑將與 `max` 最大值 (如果指定) 對比。<br>    "
-"                                                                             "
-"                                                                             "
-"                              |\n"
-"| `hole_clearance`          | min                                            "
-"                                                                        | "
-"檢查焊盤或過孔中的鑽孔與不同網絡的銅箔對象之間的間隙。 "
-"間隙是從孔的直徑而不是孔的中心測量的。<br>                                   "
-"                                                                             "
-"                                                                             "
-"                                                                           |"
-"\n"
-"| `hole_to_hole`            | min                                            "
-"                                                                        | "
-"檢查焊盤和過孔中機械鑽孔之間的間隙。 間隙在孔邊緣之間測量，而不是從孔的中心測"
-"量。<br><br>該約束類型完全是為了保護鑽頭。 不檢查 **激光鑽孔** (微孔) "
-"與其他非機械鑽孔之間的間隙，也不檢查 **銑削孔** (橢圓形) "
-"與其他非機械鑽孔之間的間隙。<br> |\n"
-"| `physical_clearance`      | min                                            "
-"                                                                        | "
-"檢查給定層 (包括非銅層) 上兩個對象之間的間隙。<br><br>雖然這可以執行比 "
-"`clearance` 更通用的檢查，但速度要慢得多。 儘可能使用 `clearance` 約束。<br> "
-"                                                                             "
-"                                                                             "
-"                                                                 |\n"
-"| `physical_hole_clearance` | min                                            "
-"                                                                        | "
-"檢查焊盤或過孔中的鑽孔與另一個對象之間的間隙，無論它們是否屬於同一網絡。 "
-"間隙是從孔的邊緣而不是中心測量的。<br><br>這也可以被認為是“鑽孔公差”，"
-"因為它只包括 **圓** 孔 (有關銑削公差，請參閱 `edge_clearance`) 。<br>        "
-"                                                                             "
-"                               |\n"
-"| `silk_clearance`          | min/opt/max                                    "
-"                                                                        | "
-"檢查絲印層上的對象與其他對象之間的間隙。<br>                                 "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                   |\n"
-"| `skew`                    | max                                            "
-"                                                                        | "
-"檢查所有符合規則條件的網絡的 "
-"skew，即符合規則的每個網絡的長度與網絡總長的平均值之間的差值。 "
-"如果該平均值與任何一個網絡的長度之間的差的絕對值高於約束 `max` "
-"最大值，則會產生錯誤。<br>                                                   "
-"                                |\n"
-"| `thermal_relief_gap`      | min                                            "
-"                                                                        | "
-"指定在熱焊盤連接方式下，焊盤與敷銅區域之間的最小間隙。<br>                   "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                    |\n"
-"| `thermal_spoke_width`     | opt                                            "
-"                                                                        | "
-"指定在熱焊盤連接方式下，連接焊盤與敷銅的輻條的寬度。<br>                     "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"             |\n"
-"| `track_width`             | min/opt/max                                    "
-"                                                                        | "
-"檢查走線和圓弧走線的寬度。 對於寬度低於 `min` 最小值 (如果指定) 或高於 `max` "
-"最大值 (如果指定) 的走線線段，都會生成錯誤。<br>                             "
-"                                                                             "
-"                                                                             "
-"                                                                      |\n"
-"| `via_count`               | max                                            "
-"                                                                        | "
-"計算每個與規則條件匹配的網絡的過孔數量。 如果該數字超過匹配網絡上的約束 `max`"
-" 最大值，則將為該網絡生成錯誤。<br>                                          "
-"                                                                             "
-"                                                                             "
-"                                                           |\n"
-"| `zone_connection`         | `solid`<br>`thermal_reliefs`<br>`none`         "
-"                                                                        | "
-"指定焊盤與敷銅區域之間的連接方式。<br>                                       "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                                                                             "
-"                            |\n"
+"| `edge_clearance`          | min/opt/"
+"max                                                                                                            "
+"| 檢查對象與板邊的間隙。<br><br>這也可以看作是 \"銑削公差\"，因為電路板邊緣將"
+"包括 `Edge.Cuts` 層上的所有圖形對象以及任何 *橢圓* 焊盤孔。  (鑽孔公差請查看 "
+"`physical_hole_clearance` 約束類"
+"型)<br>                                                                                                                                                    "
+"|\n"
+"| `length`                  | min/"
+"max                                                                                                                "
+"| 檢查符合規則條件的網絡的總走線長度，如果網絡的長度低於限制條件的 `min` 最小"
+"值 (如果指定) 或高於 `max` 最大值 (如果指定) ，則生成錯誤。"
+"<br>                                                                                                                                                                                                                               "
+"|\n"
+"| `hole`                    | min/"
+"max                                                                                                                "
+"| 檢查焊盤或過孔中鑽孔的大小 (直徑) 。 對於橢圓形孔，較小的直徑將與 `min` 最"
+"小值 (如果指定) 對比，較大的直徑將與 `max` 最大值 (如果指定) 對比。"
+"<br>                                                                                                                                                                                            "
+"|\n"
+"| `hole_clearance`          | "
+"min                                                                                                                    "
+"| 檢查焊盤或過孔中的鑽孔與不同網絡的銅箔對象之間的間隙。 間隙是從孔的直徑而不"
+"是孔的中心測量的。"
+"<br>                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `hole_to_hole`            | "
+"min                                                                                                                    "
+"| 檢查焊盤和過孔中機械鑽孔之間的間隙。 間隙在孔邊緣之間測量，而不是從孔的中心"
+"測量。<br><br>該約束類型完全是為了保護鑽頭。 不檢查 **激光鑽孔** (微孔) 與其"
+"他非機械鑽孔之間的間隙，也不檢查 **銑削孔** (橢圓形) 與其他非機械鑽孔之間的間"
+"隙。<br> |\n"
+"| `physical_clearance`      | "
+"min                                                                                                                    "
+"| 檢查給定層 (包括非銅層) 上兩個對象之間的間隙。<br><br>雖然這可以執行比 "
+"`clearance` 更通用的檢查，但速度要慢得多。 儘可能使用 `clearance` 約束。"
+"<br>                                                                                                                                                                                                                            "
+"|\n"
+"| `physical_hole_clearance` | "
+"min                                                                                                                    "
+"| 檢查焊盤或過孔中的鑽孔與另一個對象之間的間隙，無論它們是否屬於同一網絡。 間"
+"隙是從孔的邊緣而不是中心測量的。<br><br>這也可以被認為是“鑽孔公差”，因為它只"
+"包括 **圓** 孔 (有關銑削公差，請參閱 `edge_clearance`) 。"
+"<br>                                                                                                                    "
+"|\n"
+"| `silk_clearance`          | min/opt/"
+"max                                                                                                            "
+"| 檢查絲印層上的對象與其他對象之間的間隙。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                        "
+"|\n"
+"| `skew`                    | "
+"max                                                                                                                    "
+"| 檢查所有符合規則條件的網絡的 skew，即符合規則的每個網絡的長度與網絡總長的平"
+"均值之間的差值。 如果該平均值與任何一個網絡的長度之間的差的絕對值高於約束 "
+"`max` 最大值，則會產生錯誤。"
+"<br>                                                                                   "
+"|\n"
+"| `thermal_relief_gap`      | "
+"min                                                                                                                    "
+"| 指定在熱焊盤連接方式下，焊盤與敷銅區域之間的最小間隙。"
+"<br>                                                                                                                                                                                                                                                                                                                                                           "
+"|\n"
+"| `thermal_spoke_width`     | "
+"opt                                                                                                                    "
+"| 指定在熱焊盤連接方式下，連接焊盤與敷銅的輻條的寬度。"
+"<br>                                                                                                                                                                                                                                                                                                                                                      "
+"|\n"
+"| `track_width`             | min/opt/"
+"max                                                                                                            "
+"| 檢查走線和圓弧走線的寬度。 對於寬度低於 `min` 最小值 (如果指定) 或高於 "
+"`max` 最大值 (如果指定) 的走線線段，都會生成錯誤。"
+"<br>                                                                                                                                                                                                                                                             "
+"|\n"
+"| `via_count`               | "
+"max                                                                                                                    "
+"| 計算每個與規則條件匹配的網絡的過孔數量。 如果該數字超過匹配網絡上的約束 "
+"`max` 最大值，則將為該網絡生成錯誤。"
+"<br>                                                                                                                                                                                                                                                               "
+"|\n"
+"| `zone_connection`         | "
+"`solid`<br>`thermal_reliefs`<br>`none`                                                                                 "
+"| 指定焊盤與敷銅區域之間的連接方式。"
+"<br>                                                                                                                                                                                                                                                                                                                                                                                       "
+"|\n"
 "\n"
 "\n"
 "### Items (對象) \n"
@@ -36326,8 +36356,8 @@ msgstr ""
 "### Notes (注意事項) \n"
 "\n"
 "版本語句必須是第一個語句。 \n"
-"它表示文件的語法版本，以便未來的規則解析器可以執行自動更新。 "
-"它應該設置為“1”。\n"
+"它表示文件的語法版本，以便未來的規則解析器可以執行自動更新。 它應該設置"
+"為“1”。\n"
 "\n"
 "規則應按具體情況排序。 \n"
 "後面的規則優先於前面的規則； 一旦找到後面匹配的規則，就不會檢查之前的規則。\n"
@@ -36359,8 +36389,8 @@ msgstr ""
 "    A.enclosedByArea('<zone_name>')\n"
 "若 `A` 完全落在指定區域的邊框內，則為 True。\n"
 "\n"
-"注意: 調用該函數比 `intersectsArea()`更費時。儘可能使用 `intersectsArea()`。"
-"\n"
+"注意: 調用該函數比 `intersectsArea()`更費時。儘可能使用 "
+"`intersectsArea()`。\n"
 "<br><br>\n"
 "\n"
 "    A.getField('<field_name>')\n"
@@ -36372,11 +36402,10 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.inDiffPair('<net_name>')\n"
-"若 `A` 含有指定差分對的網絡，則為 True。 <網絡名> "
-"是指定差分對的基礎名稱。例如， inDiffPair('CLK') matches items in the CLK_P "
-"and CLK_N nets. True \n"
-"`<net_name>` 是差分對的基準名稱。 例如, `inDiffPair('/CLK')` "
-"可以匹配網絡對象 `/CLK_P` 及 `/CLK_N`。\n"
+"若 `A` 含有指定差分對的網絡，則為 True。 <網絡名> 是指定差分對的基礎名稱。例"
+"如， inDiffPair('CLK') matches items in the CLK_P and CLK_N nets. True \n"
+"`<net_name>` 是差分對的基準名稱。 例如, `inDiffPair('/CLK')` 可以匹配網絡對"
+"象 `/CLK_P` 及 `/CLK_N`。\n"
 "<br><br>\n"
 "\n"
 "    AB.isCoupledDiffPair()\n"
@@ -36389,8 +36418,8 @@ msgstr ""
 "<br><br>\n"
 "\n"
 "    A.memberOfFootprint('<footprint_reference>|<footprint_id>')\n"
-"若 `A` 是給定參考位號或封裝 ID 匹配的封裝的成員，則為 "
-"True。參數可以包含通配符。\n"
+"若 `A` 是給定參考位號或封裝 ID 匹配的封裝的成員，則為 True。參數可以包含通配"
+"符。\n"
 "\n"
 "注意：如果需要與封裝ID 匹配，參數中必須包含 ':'。\n"
 "\n"
@@ -36430,13 +36459,13 @@ msgstr ""
 "\n"
 "    (rule \"Distance between Vias of Different Nets\"\n"
 "        (constraint hole_to_hole (min 0.254mm))\n"
-"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Via' && B.Type == 'Via' && A.Net != B."
+"Net\"))\n"
 "\n"
 "    (rule \"Clearance between Pads of Different Nets\"\n"
 "        (constraint clearance (min 3.0mm))\n"
-"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B.Net\"))"
-"\n"
+"        (condition \"A.Type == 'Pad' && B.Type == 'Pad' && A.Net != B."
+"Net\"))\n"
 "\n"
 "\n"
 "    (rule \"Via Hole to Track Clearance\"\n"
@@ -37835,7 +37864,7 @@ msgid "'%s' settings differ."
 msgstr "%s 設置不同。"
 
 #: pcbnew/drc/drc_test_provider_library_parity.cpp:574
-#: pcbnew/footprint.cpp:3531
+#: pcbnew/footprint.cpp:3533
 msgid "Exempt From Courtyard Requirement"
 msgstr "忽略封裝外框要求"
 
@@ -38139,8 +38168,9 @@ msgstr "保存封裝分配文件"
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(supported shapes are oval, rectangle, rounded rectangle, and circle)."
-msgstr "文件包含 Hyperynx 導出器不支持的焊盤形狀 "
-"(支持的形狀為橢圓形、矩形、圓角矩形和圓形)。"
+msgstr ""
+"文件包含 Hyperynx 導出器不支持的焊盤形狀 (支持的形狀為橢圓形、矩形、圓角矩形"
+"和圓形)。"
 
 #: pcbnew/exporters/export_hyperlynx.cpp:173
 msgid "They have been exported as oval pads."
@@ -38264,29 +38294,34 @@ msgstr ""
 "\n"
 "導出耗時 %.3f s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:991
+#: pcbnew/exporters/step/step_pcb_model.cpp:857
+#, c-format
+msgid "Wire not done (contour %d, points %d): OCC error %d\n"
+msgstr ""
+
+#: pcbnew/exporters/step/step_pcb_model.cpp:1005
 #, c-format
 msgid "Build holes for %s\n"
 msgstr "構造孔洞 %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:996
+#: pcbnew/exporters/step/step_pcb_model.cpp:1010
 #, c-format
 msgid "Cutting %d/%d %s\n"
 msgstr "剪切 %d/%d %s\n"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1023
+#: pcbnew/exporters/step/step_pcb_model.cpp:1037
 msgid "shapes"
 msgstr "形狀"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1031
+#: pcbnew/exporters/step/step_pcb_model.cpp:1045
 msgid "pads"
 msgstr "焊盤"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1032
+#: pcbnew/exporters/step/step_pcb_model.cpp:1046
 msgid "tracks"
 msgstr "走線"
 
-#: pcbnew/exporters/step/step_pcb_model.cpp:1033
+#: pcbnew/exporters/step/step_pcb_model.cpp:1047
 msgid "zones"
 msgstr "區域"
 
@@ -38330,16 +38365,17 @@ msgid "Current Board will be closed. Continue?"
 msgstr "當前電路板將關閉。是否繼續?"
 
 #: pcbnew/files.cpp:479
+#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
-" This may result in different fills from previous KiCad versions which used "
+"This may result in different fills from previous KiCad versions which used "
 "the line thicknesses of the board boundary on the Edge Cuts layer."
 msgstr ""
-"如果重新填充此電路板上的覆銅, 則將應用銅邊緣間距設置 (參見電路板配置 > "
-"設計規則 > 約束)。\n"
-"老版本的 KiCad 會將電路板邊緣 (Edge Cuts 層) 的線寬作為銅間距, "
-"因此新的填充結果可能與老版本的填充結果不同。"
+"如果重新填充此電路板上的覆銅, 則將應用銅邊緣間距設置 (參見電路板配置 > 設計規"
+"則 > 約束)。\n"
+"老版本的 KiCad 會將電路板邊緣 (Edge Cuts 層) 的線寬作為銅間距, 因此新的填充結"
+"果可能與老版本的填充結果不同。"
 
 #: pcbnew/files.cpp:525
 #, c-format
@@ -38514,79 +38550,79 @@ msgstr "< 無位號 >"
 msgid "Footprint %s"
 msgstr "封裝 %s"
 
-#: pcbnew/footprint.cpp:2752
+#: pcbnew/footprint.cpp:2754
 #, c-format
 msgid "(expected 'Through hole'; actual '%s')"
 msgstr "(應為 '通孔', 實際為 '%s')"
 
-#: pcbnew/footprint.cpp:2755
+#: pcbnew/footprint.cpp:2757
 #, c-format
 msgid "(expected 'SMD'; actual '%s')"
 msgstr "(應為 '貼片', 實際為 '%s')"
 
-#: pcbnew/footprint.cpp:2783
+#: pcbnew/footprint.cpp:2785
 msgid "(PTH pad has no copper layers)"
 msgstr "(金屬化焊盤沒有銅層)"
 
-#: pcbnew/footprint.cpp:2802
+#: pcbnew/footprint.cpp:2804
 msgid "(PTH pad's hole leaves no copper)"
 msgstr "(金屬化焊盤的孔沒留下銅)"
 
-#: pcbnew/footprint.cpp:2811
+#: pcbnew/footprint.cpp:2813
 msgid "(SMD pad appears on both front and back copper)"
 msgstr "(貼片焊盤出現在銅層正反面)"
 
-#: pcbnew/footprint.cpp:2818 pcbnew/footprint.cpp:2831
+#: pcbnew/footprint.cpp:2820 pcbnew/footprint.cpp:2833
 msgid "(SMD pad copper and mask layers don't match)"
 msgstr "(貼片焊盤銅層和 mask 層不匹配)"
 
-#: pcbnew/footprint.cpp:2823 pcbnew/footprint.cpp:2836
+#: pcbnew/footprint.cpp:2825 pcbnew/footprint.cpp:2838
 msgid "(SMD pad copper and paste layers don't match)"
 msgstr "(貼片焊盤銅層和錫膏層不匹配)"
 
-#: pcbnew/footprint.cpp:3016
+#: pcbnew/footprint.cpp:3018
 #, c-format
 msgid "(net-tie pad group contains unknown pad number %s)"
 msgstr "(網絡結點焊盤組包含未知的焊盤編號 %s)"
 
-#: pcbnew/footprint.cpp:3021
+#: pcbnew/footprint.cpp:3023
 #, c-format
 msgid "(pad %s appears in more than one net-tie pad group)"
 msgstr "(焊盤 %s 出現在超過一個網絡結點焊盤組中)"
 
-#: pcbnew/footprint.cpp:3458 pcbnew/pad.cpp:1906 pcbnew/zone.cpp:1549
+#: pcbnew/footprint.cpp:3460 pcbnew/pad.cpp:1906 pcbnew/zone.cpp:1549
 msgid "Inherited"
 msgstr "繼承"
 
-#: pcbnew/footprint.cpp:3462 pcbnew/pad.cpp:1910 pcbnew/zone.cpp:1553
+#: pcbnew/footprint.cpp:3464 pcbnew/pad.cpp:1910 pcbnew/zone.cpp:1553
 msgid "Thermal reliefs for PTH"
 msgstr "對金屬化孔 (PTH) 使用緩釋熱焊盤 (花焊盤)"
 
-#: pcbnew/footprint.cpp:3516
+#: pcbnew/footprint.cpp:3518
 msgid "Not in Schematic"
 msgstr "不在原理圖中"
 
-#: pcbnew/footprint.cpp:3518
+#: pcbnew/footprint.cpp:3520
 msgid "Exclude From Position Files"
 msgstr "從定位文件中排除"
 
-#: pcbnew/footprint.cpp:3528 pcbnew/pad.cpp:2020
+#: pcbnew/footprint.cpp:3530 pcbnew/pad.cpp:2020
 msgid "Overrides"
 msgstr "覆蓋"
 
-#: pcbnew/footprint.cpp:3534 pcbnew/pad.cpp:2022
+#: pcbnew/footprint.cpp:3536 pcbnew/pad.cpp:2022
 msgid "Clearance Override"
 msgstr "間距重寫"
 
-#: pcbnew/footprint.cpp:3538 pcbnew/pad.cpp:2030
+#: pcbnew/footprint.cpp:3540 pcbnew/pad.cpp:2030
 msgid "Solderpaste Margin Override"
 msgstr "錫膏邊距重寫"
 
-#: pcbnew/footprint.cpp:3543 pcbnew/pad.cpp:2034
+#: pcbnew/footprint.cpp:3545 pcbnew/pad.cpp:2034
 msgid "Solderpaste Margin Ratio Override"
 msgstr "錫膏邊距比例重寫"
 
-#: pcbnew/footprint.cpp:3548 pcbnew/pad.cpp:2039
+#: pcbnew/footprint.cpp:3550 pcbnew/pad.cpp:2039
 msgid "Zone Connection Style"
 msgstr "區域連接樣式"
 
@@ -40029,7 +40065,8 @@ msgstr "Eeschema 網表"
 msgid ""
 "Received an error while reading netlist.  Please report this issue to the "
 "KiCad team using the menu Help->Report Bug."
-msgstr "讀取網表時收到一個錯誤。請使用\"幫助->報告錯誤\"菜單向 KiCad 團隊報告此問題。"
+msgstr ""
+"讀取網表時收到一個錯誤。請使用\"幫助->報告錯誤\"菜單向 KiCad 團隊報告此問題。"
 
 #: pcbnew/pcb_edit_frame.cpp:1929
 #, c-format
@@ -40153,7 +40190,8 @@ msgstr "Pads6 stream 中的 subrecord 6 數據的長度非法: %d。"
 msgid ""
 "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad layer "
 "Eco1_User."
-msgstr "Altium 層 ( %d ) 在 KiCad 中沒有對應的等效項。已將其移至 KiCad 的 Eco1_User "
+msgstr ""
+"Altium 層 ( %d ) 在 KiCad 中沒有對應的等效項。已將其移至 KiCad 的 Eco1_User "
 "層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:443
@@ -40232,7 +40270,8 @@ msgstr "正加載元件 3D 模型..."
 msgid ""
 "Dimension found on an Altium layer (%d) with no KiCad equivalent. It has "
 "been moved to KiCad layer Eco1_User."
-msgstr "Altium 層 ( %d ) 上存在測量標註, 但在 KiCad 中沒有對應的等效項。已將其移至 "
+msgstr ""
+"Altium 層 ( %d ) 上存在測量標註, 但在 KiCad 中沒有對應的等效項。已將其移至 "
 "KiCad 的 Eco1_User 層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1554
@@ -40276,7 +40315,8 @@ msgstr "正加載板覆銅..."
 msgid ""
 "Dashed outline found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
-msgstr "Altium 層 (%d) 上存在虛線輪廓, 但在 KiCad 中沒有對應的等效項。已將其移至 "
+msgstr ""
+"Altium 層 (%d) 上存在虛線輪廓, 但在 KiCad 中沒有對應的等效項。已將其移至 "
 "KiCad 的 Eco1_User 層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2070
@@ -40292,8 +40332,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "正在加載 '%s' 庫:\n"
-"在封裝 %s 中發現在其 Altium 層 (%d) 上存在虛線輪廓, 但在 KiCad "
-"中沒有對應的等效項。已將其移至 KiCad 的 Eco1_User 層。"
+"在封裝 %s 中發現在其 Altium 層 (%d) 上存在虛線輪廓, 但在 KiCad 中沒有對應的等"
+"效項。已將其移至 KiCad 的 Eco1_User 層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2150
 #, c-format
@@ -40301,8 +40341,8 @@ msgid ""
 "Footprint %s contains a dashed outline on Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在封裝 %s 中發現在其 Altium 層 (%d) 上存在虛線輪廓, 但在 KiCad "
-"中沒有對應的等效項。已將其移至 KiCad 的 Eco1_User 層。"
+"在封裝 %s 中發現在其 Altium 層 (%d) 上存在虛線輪廓, 但在 KiCad 中沒有對應的等"
+"效項。已將其移至 KiCad 的 Eco1_User 層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2188
 #, c-format
@@ -40366,8 +40406,8 @@ msgid ""
 "90 degree rotations."
 msgstr ""
 "正在加載 '%s' 庫:\n"
-"在封裝 %s 的焊盤 %s 上有旋轉角度為 %f 度的孔。KiCad 只支持旋轉角度為 90 "
-"度的孔。"
+"在封裝 %s 的焊盤 %s 上有旋轉角度為 %f 度的孔。KiCad 只支持旋轉角度為 90 度的"
+"孔。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:2834
 #, c-format
@@ -40424,8 +40464,8 @@ msgid ""
 "Non-copper pad %s found on an Altium layer (%d) with no KiCad equivalent. It "
 "has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在 Altium 層 (%2$d) 上存在非銅焊盤 %1$s, 但在 KiCad 中沒有對應的等效項。"
-"已將其移至 KiCad 的 Eco1_User 層。"
+"在 Altium 層 (%2$d) 上存在非銅焊盤 %1$s, 但在 KiCad 中沒有對應的等效項。已將"
+"其移至 KiCad 的 Eco1_User 層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3017
 #, c-format
@@ -40435,8 +40475,8 @@ msgid ""
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
 "正在加載 '%1$s' 庫:\n"
-"在封裝 %2$s 中發現在其 Altium 層 (%4$d) 上存在非銅焊盤 %3$s, 但在 KiCad "
-"中沒有對應的等效項。已將其移至 KiCad 的 Eco1_User 層。"
+"在封裝 %2$s 中發現在其 Altium 層 (%4$d) 上存在非銅焊盤 %3$s, 但在 KiCad 中沒"
+"有對應的等效項。已將其移至 KiCad 的 Eco1_User 層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3027
 #, c-format
@@ -40444,8 +40484,8 @@ msgid ""
 "Footprint %s non-copper pad %s found on an Altium layer (%d) with no KiCad "
 "equivalent. It has been moved to KiCad layer Eco1_User."
 msgstr ""
-"在封裝 %1$s 中發現在其 Altium 層 (%3$d) 上存在非銅焊盤 %2$s, 但在 KiCad "
-"中沒有對應的等效項。已將其移至 KiCad 的 Eco1_User 層。"
+"在封裝 %1$s 中發現在其 Altium 層 (%3$d) 上存在非銅焊盤 %2$s, 但在 KiCad 中沒"
+"有對應的等效項。已將其移至 KiCad 的 Eco1_User 層。"
 
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:3050
 #, c-format
@@ -40548,8 +40588,9 @@ msgid ""
 "the schematic. It is recommended that you carry out an 'Align Nets' "
 "procedure in CADSTAR and re-import, to avoid inconsistencies between the PCB "
 "and the schematic. "
-msgstr "選中的文件指示網絡可能與原理圖不同步。建議您在 CADSTAR "
-"中執行對齊網絡程序並重新導入, 以避免 PCB 和原理圖之間的不一致。 "
+msgstr ""
+"選中的文件指示網絡可能與原理圖不同步。建議您在 CADSTAR 中執行對齊網絡程序並重"
+"新導入, 以避免 PCB 和原理圖之間的不一致。 "
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:131
 #, c-format
@@ -40557,15 +40598,17 @@ msgid ""
 "Unable to determine zone fill priorities for layer '%s'. A best attempt has "
 "been made but it is possible that DRC errors exist and that manual editing "
 "of the zone priorities is required."
-msgstr "無法確定層 '%s' 的覆銅填充優先級。已進行了最優嘗試, 但可能存在 DRC "
-"錯誤並且需要手動編輯覆銅優先級。"
+msgstr ""
+"無法確定層 '%s' 的覆銅填充優先級。已進行了最優嘗試, 但可能存在 DRC 錯誤並且需"
+"要手動編輯覆銅優先級。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:145
 msgid ""
 "The CADSTAR design contains Trunk routing elements, which have no KiCad "
 "equivalent. These elements were not loaded."
-msgstr "CADSTAR 設計包含 Trunk 佈線元素, 但在 KiCad "
-"中沒有對應的等效項。未加載這些元素。"
+msgstr ""
+"CADSTAR 設計包含 Trunk 佈線元素, 但在 KiCad 中沒有對應的等效項。未加載這些元"
+"素。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:152
 #, c-format
@@ -40588,15 +40631,17 @@ msgstr ""
 msgid ""
 "The CADSTAR layer '%s' has no KiCad equivalent. All elements on this layer "
 "have been mapped to KiCad layer '%s' instead."
-msgstr "CADSTAR 設計包含層 '%s' , 但在 KiCad 中沒有對應的等效項。"
-"此層上的所有元素都被映射到了 KiCad 的 '%s' 層。"
+msgstr ""
+"CADSTAR 設計包含層 '%s' , 但在 KiCad 中沒有對應的等效項。此層上的所有元素都被"
+"映射到了 KiCad 的 '%s' 層。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:253
 #, c-format
 msgid ""
 "The CADSTAR layer '%s' has been assumed to be a technical layer. All "
 "elements on this layer have been mapped to KiCad layer '%s'."
-msgstr "CADSTAR 層 '%s' 被假定為工藝層。此層上的所有元素都映射到 KiCad 層 '%s'。"
+msgstr ""
+"CADSTAR 層 '%s' 被假定為工藝層。此層上的所有元素都映射到 KiCad 層 '%s'。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:325
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:349
@@ -40621,8 +40666,9 @@ msgid ""
 "KiCad design rules are different from CADSTAR ones. Only the compatible "
 "design rules were imported. It is recommended that you review the design "
 "rules that have been applied."
-msgstr "KiCad 設計規則與 CADSTAR "
-"設計規則不同。僅導入兼容的設計規則。建議您查看已應用的設計規則。"
+msgstr ""
+"KiCad 設計規則與 CADSTAR 設計規則不同。僅導入兼容的設計規則。建議您查看已應用"
+"的設計規則。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:866
 #, c-format
@@ -40630,8 +40676,9 @@ msgid ""
 "Footprint definition '%s' has component copper associated to a pad on "
 "multiple layers. Custom padstacks are not supported in KiCad. The copper "
 "items have been imported as graphical elements."
-msgstr "腳印定義'%s'在多個層上的元件銅與焊盤相關聯。KiCad "
-"不支持自定義焊盤棧。該銅項已作為圖形元素導入。"
+msgstr ""
+"腳印定義'%s'在多個層上的元件銅與焊盤相關聯。KiCad 不支持自定義焊盤棧。該銅項"
+"已作為圖形元素導入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:997
 #, c-format
@@ -40640,8 +40687,8 @@ msgid ""
 "equivalent. The area is neither a via nor route keepout area. The area was "
 "not imported."
 msgstr ""
-"CADSTAR 設計包含 '%s' 區 (存在於庫元件 '%s' 中), 但在 KiCad "
-"中沒有對應的等效項。該區既不是過孔也不是佈線 keepout 區, 因此未被導入。"
+"CADSTAR 設計包含 '%s' 區 (存在於庫元件 '%s' 中), 但在 KiCad 中沒有對應的等效"
+"項。該區既不是過孔也不是佈線 keepout 區, 因此未被導入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1083
 #, c-format
@@ -40649,7 +40696,8 @@ msgid ""
 "The CADSTAR pad definition '%s' is a complex pad stack, which is not "
 "supported in KiCad. Please review the imported pads as they may require "
 "manual correction."
-msgstr "CADSTAR 焊盤定義 '%s' 是一個複雜的焊盤疊, KiCad 不支持它。請檢查導入的焊盤, "
+msgstr ""
+"CADSTAR 焊盤定義 '%s' 是一個複雜的焊盤疊, KiCad 不支持它。請檢查導入的焊盤, "
 "因為它們可能需要人工修正。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1301
@@ -40687,8 +40735,9 @@ msgstr "無法在組地圖中找到子組 %s (父組 ID = %s, 名稱 = %s)。"
 msgid ""
 "Dimension ID %s is an angled dimension, which has no KiCad equivalent. An "
 "aligned dimension was loaded instead."
-msgstr "測量標註 ID %s 是一個角度測量標註, 但在 KiCad "
-"中沒有對應的等效項。已使用對齊測量標註取代。"
+msgstr ""
+"測量標註 ID %s 是一個角度測量標註, 但在 KiCad 中沒有對應的等效項。已使用對齊"
+"測量標註取代。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1483
 #, c-format
@@ -40697,8 +40746,8 @@ msgid ""
 "are not yet supported in KiCad. The dimension object was imported with an "
 "internal dimension style instead."
 msgstr ""
-"測量標註 ID %s 在 CADSTAR 中具有 '外部' 樣式。KiCad "
-"尚未支持外部測量標註樣式。軟件使用內部測量標註樣式導入了該標註對象。"
+"測量標註 ID %s 在 CADSTAR 中具有 '外部' 樣式。KiCad 尚未支持外部測量標註樣"
+"式。軟件使用內部測量標註樣式導入了該標註對象。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1540
 #, c-format
@@ -40710,7 +40759,8 @@ msgstr "錯誤的測量標註類型 (ID%s)。未被導入。"
 msgid ""
 "Dimension %s is an angular dimension which has no KiCad equivalent. The "
 "object was not imported."
-msgstr "測量標註 %s 是一個角度測量標註, 但在 KiCad 中沒有對應的等效項。對象未被導入。"
+msgstr ""
+"測量標註 %s 是一個角度測量標註, 但在 KiCad 中沒有對應的等效項。對象未被導入。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1715
 #, c-format
@@ -40718,15 +40768,17 @@ msgid ""
 "The CADSTAR area '%s' is marked as a placement area in CADSTAR. Placement "
 "areas are not supported in KiCad. Only the supported elements for the area "
 "were imported."
-msgstr "CADSTAR 覆銅 '%s' 在 CADSTAR 中標記為放置覆銅。KiCad "
-"中不支持放置覆銅。僅導入了該覆銅支持的元素。"
+msgstr ""
+"CADSTAR 覆銅 '%s' 在 CADSTAR 中標記為放置覆銅。KiCad 中不支持放置覆銅。僅導入"
+"了該覆銅支持的元素。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1724
 #, c-format
 msgid ""
 "The CADSTAR area '%s' does not have a KiCad equivalent. Pure Placement areas "
 "are not supported."
-msgstr "CADSTAR 設計包含 '%s' 區, 但在 KiCad 中沒有對應的等效項。不支持純放置區。"
+msgstr ""
+"CADSTAR 設計包含 '%s' 區, 但在 KiCad 中沒有對應的等效項。不支持純放置區。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1751
 #, c-format
@@ -40744,24 +40796,26 @@ msgid ""
 "The CADSTAR template '%s' has the setting 'Allow in No Routing Areas' "
 "enabled. This setting has no KiCad equivalent, so it has been ignored."
 msgstr ""
-"CADSTAR 模板 '%s' 啟用了 'Allow in No Routing Areas' 設置, 但在 KiCad "
-"中沒有對應的等效項, 因此已被忽略。"
+"CADSTAR 模板 '%s' 啟用了 'Allow in No Routing Areas' 設置, 但在 KiCad 中沒有"
+"對應的等效項, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1952
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Box Isolated Pins' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr "CADSTAR 模板 '%s' 啟用了 'Box Isolated Pins' 設置, 但在 KiCad "
-"中沒有對應的等效項, 因此已被忽略。"
+msgstr ""
+"CADSTAR 模板 '%s' 啟用了 'Box Isolated Pins' 設置, 但在 KiCad 中沒有對應的等"
+"效項, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1960
 #, c-format
 msgid ""
 "The CADSTAR template '%s' has the setting 'Automatic Repour' enabled. This "
 "setting has no KiCad equivalent, so it has been ignored."
-msgstr "CADSTAR 模板 '%s' 啟用了 'Automatic Repour' 設置, 但在 KiCad "
-"中沒有對應的等效項, 因此已被忽略。"
+msgstr ""
+"CADSTAR 模板 '%s' 啟用了 'Automatic Repour' 設置, 但在 KiCad 中沒有對應的等效"
+"項, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1971
 #, c-format
@@ -40769,8 +40823,9 @@ msgid ""
 "The CADSTAR template '%s' has a non-zero value defined for the 'Sliver "
 "Width' setting. There is no KiCad equivalent for this, so this setting was "
 "ignored."
-msgstr "CADSTAR 模板 '%s' 為 'Sliver Width' 設置了非零值, 但在 KiCad "
-"中沒有對應的等效項, 因此已被忽略。"
+msgstr ""
+"CADSTAR 模板 '%s' 為 'Sliver Width' 設置了非零值, 但在 KiCad 中沒有對應的等效"
+"項, 因此已被忽略。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:1981
 #, c-format
@@ -40780,9 +40835,8 @@ msgid ""
 "between these two settings. The setting for disjoint copper has been applied "
 "as the minimum island area of the KiCad Zone."
 msgstr ""
-"CADSTAR 模板 '%s' 具有不同的設置, 用於\"保留覆銅- 不相交\"和\"保留覆銅 - "
-"隔離\"。KiCad 不區分這兩個設置。不相交覆銅的設置已被應用為 KiCad "
-"覆銅的最小島區。"
+"CADSTAR 模板 '%s' 具有不同的設置, 用於\"保留覆銅- 不相交\"和\"保留覆銅 - 隔離"
+"\"。KiCad 不區分這兩個設置。不相交覆銅的設置已被應用為 KiCad 覆銅的最小島區。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2032
 #, c-format
@@ -40791,8 +40845,8 @@ msgid ""
 "and vias. KiCad only supports one single setting for both. The setting for "
 "pads has been applied."
 msgstr ""
-"CADSTAR 模板 '%s' 在焊盤和過孔中具有不同的緩釋熱焊盤 (花焊盤) 設置。KiCad "
-"僅支持這兩種設置的單一設置。已應用焊盤的設置。"
+"CADSTAR 模板 '%s' 在焊盤和過孔中具有不同的緩釋熱焊盤 (花焊盤) 設置。KiCad 僅"
+"支持這兩種設置的單一設置。已應用焊盤的設置。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2049
 #, c-format
@@ -40803,9 +40857,9 @@ msgid ""
 "Therefore the minimum thickness has been applied as the new spoke width and "
 "will be applied next time the zones are filled."
 msgstr ""
-"CADSTAR 模板\"%s\"在原始設計中具有散熱片, 但引線寬度 (%.2f mm)"
-"比覆銅的最小厚度 (%.2f mm) 更薄。KiCad 要求保留覆銅的最小厚度。因此, "
-"已將最小厚度用作新的引線寬度, 並將在下次填充區域時應用。"
+"CADSTAR 模板\"%s\"在原始設計中具有散熱片, 但引線寬度 (%.2f mm)比覆銅的最小厚"
+"度 (%.2f mm) 更薄。KiCad 要求保留覆銅的最小厚度。因此, 已將最小厚度用作新的引"
+"線寬度, 並將在下次填充區域時應用。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2096
 #, c-format
@@ -40813,8 +40867,9 @@ msgid ""
 "The CADSTAR layer '%s' is defined as a power plane layer. However no net "
 "with such name exists. The layer has been loaded but no copper zone was "
 "created."
-msgstr "CADSTAR 層 '%s' 被定義為電源層。然而, 不存在具有該名稱的網絡。已加載層, "
-"但未創建覆銅區。"
+msgstr ""
+"CADSTAR 層 '%s' 被定義為電源層。然而, 不存在具有該名稱的網絡。已加載層, 但未"
+"創建覆銅區。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2198
 msgid ""
@@ -40823,9 +40878,9 @@ msgid ""
 "filled, or as a KiCad Track if the shape was an unfilled outline (open or "
 "closed)."
 msgstr ""
-"CADSTAR 設計包含 COPPER 元素, 但在 KiCad 中沒有對應的等效項。"
-"如果填充的是實體或圖案填充, 則它們已導入為 KiCad 覆銅; "
-"如果形狀是未填充的輪廓(開放或閉合), 則它們將導入為 KiCad 走線。"
+"CADSTAR 設計包含 COPPER 元素, 但在 KiCad 中沒有對應的等效項。如果填充的是實體"
+"或圖案填充, 則它們已導入為 KiCad 覆銅; 如果形狀是未填充的輪廓(開放或閉合), 則"
+"它們將導入為 KiCad 走線。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2301
 #, c-format
@@ -40849,7 +40904,8 @@ msgstr "由於未加載任何項目, 因此無法設置文本變量。"
 msgid ""
 "The CADSTAR design contains teardrops. This importer does not yet support "
 "them, so the teardrops in the design have been ignored."
-msgstr "CADSTAR 設計包含淚滴。這個導入器還不支持它們, 所以設計中的淚滴被忽略了。"
+msgstr ""
+"CADSTAR 設計包含淚滴。這個導入器還不支持它們, 所以設計中的淚滴被忽略了。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2590
 #, c-format
@@ -40858,16 +40914,17 @@ msgid ""
 "only supports circular vias so this via type has been changed to be a via "
 "with circular shape of %.2f mm diameter."
 msgstr ""
-"通過代碼 '%s' 的 CADSTAR 具有與定義的圓不同的形狀。KiCad 僅支持圓形過孔, "
-"因此此過孔類型已更改為直徑為 %.2f mm 的圓形過孔。"
+"通過代碼 '%s' 的 CADSTAR 具有與定義的圓不同的形狀。KiCad 僅支持圓形過孔, 因此"
+"此過孔類型已更改為直徑為 %.2f mm 的圓形過孔。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:2800
 #, c-format
 msgid ""
 "The shape for '%s' is Hatch filled in CADSTAR, which has no KiCad "
 "equivalent. Using solid fill instead."
-msgstr "形狀 '%s' 在 CADSTAR 作為填充圖案, 但在 KiCad "
-"中沒有對應的等效項。改用實體填充。"
+msgstr ""
+"形狀 '%s' 在 CADSTAR 作為填充圖案, 但在 KiCad 中沒有對應的等效項。改用實體填"
+"充。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3614
 #, c-format
@@ -40876,8 +40933,8 @@ msgid ""
 "hatches (crosshatching) 90 degrees apart. The imported hatching is "
 "crosshatched."
 msgstr ""
-"CADSTAR 圖案填充代碼 '%s' 定義了 %d 個圖案填充。KiCad 僅支持相距 90 "
-"度的兩個圖案填充(剖面線)。導入的剖面線為交叉線。"
+"CADSTAR 圖案填充代碼 '%s' 定義了 %d 個圖案填充。KiCad 僅支持相距 90 度的兩個"
+"圖案填充(剖面線)。導入的剖面線為交叉線。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3624
 #, c-format
@@ -40886,9 +40943,8 @@ msgid ""
 "KiCad only supports one width for the hatching. The imported hatching uses "
 "the width defined in the first hatch definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR 剖面線代碼\"%s\"的每個剖面線具有不同的線寬。KiCad "
-"僅支持一種寬度的剖面線。導入的剖面線使用第一個剖面線定義中定義的寬度, 即 "
-"%.2f mm。"
+"CADSTAR 剖面線代碼\"%s\"的每個剖面線具有不同的線寬。KiCad 僅支持一種寬度的剖"
+"面線。導入的剖面線使用第一個剖面線定義中定義的寬度, 即 %.2f mm。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3636
 #, c-format
@@ -40897,9 +40953,8 @@ msgid ""
 "KiCad only supports one step size for the hatching. The imported hatching "
 "uses the step size defined in the first hatching definition, i.e. %.2f mm."
 msgstr ""
-"CADSTAR 剖面線代碼\"%s\"的每根剖面線具有不同的步長。KiCad "
-"僅支持一種剖面線步長。導入的剖面線使用第一個剖面線定義中定義的步長, 即 %.2f "
-"mm。"
+"CADSTAR 剖面線代碼\"%s\"的每根剖面線具有不同的步長。KiCad 僅支持一種剖面線步"
+"長。導入的剖面線使用第一個剖面線定義中定義的步長, 即 %.2f mm。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:3649
 #, c-format
@@ -40927,9 +40982,9 @@ msgid ""
 "imported. Note: KiCad's version of 'Net Class' is closer to CADSTAR's 'Net "
 "Route Code' (which has been imported for all nets)."
 msgstr ""
-"CADSTAR 設計包含關聯了\"網絡類\"的網絡。但在 KiCad 中沒有對應的等效項, "
-"因此沒有導入這些元素。注: KiCad 的\"網絡類\"版本更接近 CADSTAR "
-"的\"網絡路線編碼\"(已為所有網絡導入)。"
+"CADSTAR 設計包含關聯了\"網絡類\"的網絡。但在 KiCad 中沒有對應的等效項, 因此沒"
+"有導入這些元素。注: KiCad 的\"網絡類\"版本更接近 CADSTAR 的\"網絡路線編碼"
+"\"(已為所有網絡導入)。"
 
 #: pcbnew/pcb_io/cadstar/cadstar_pcb_archive_loader.cpp:4014
 msgid ""
@@ -40938,8 +40993,8 @@ msgid ""
 "imported. Please review the design rules as copper pours will affected by "
 "this."
 msgstr ""
-"CADSTAR 設計包含關聯了\"間隔類\"的網絡。但在 KiCad 中沒有對應的等效項, "
-"因此未導入這些元素。請檢查設計規則, 因為覆銅將受此影響。"
+"CADSTAR 設計包含關聯了\"間隔類\"的網絡。但在 KiCad 中沒有對應的等效項, 因此未"
+"導入這些元素。請檢查設計規則, 因為覆銅將受此影響。"
 
 #: pcbnew/pcb_io/cadstar/pcb_io_cadstar_archive.h:37
 msgid "CADSTAR PCB Archive files"
@@ -42073,8 +42128,9 @@ msgid ""
 "Unable to find complementary differential pair net for length tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
-msgstr "無法找到互補差分對網絡進行長度調整。請確保屬於差分對的名稱以 _N/_P 或 +/- "
-"結束。"
+msgstr ""
+"無法找到互補差分對網絡進行長度調整。請確保屬於差分對的名稱以 _N/_P 或 +/- 結"
+"束。"
 
 #: pcbnew/router/pns_kicad_iface.cpp:657 pcbnew/router/pns_kicad_iface.cpp:747
 #: pcbnew/router/router_tool.cpp:798
@@ -42120,8 +42176,9 @@ msgid ""
 "Unable to find complementary differential pair net for skew tuning. Make "
 "sure the names of the nets belonging to a differential pair end with either "
 "_N/_P or +/-."
-msgstr "無法找到互補差分對網絡進行長度調整。請確保屬於差分對的名稱以 _N/_P 或 +/- "
-"結束。"
+msgstr ""
+"無法找到互補差分對網絡進行長度調整。請確保屬於差分對的名稱以 _N/_P 或 +/- 結"
+"束。"
 
 #: pcbnew/router/pns_router.cpp:213
 msgid "Diff pair gap is less than board minimum clearance."
@@ -42522,8 +42579,9 @@ msgid ""
 "Select the default width for new tracks. Note that this width can be "
 "overridden by the board minimum width, or by the width of an existing track "
 "if the 'Use Existing Track Width' feature is enabled."
-msgstr "選擇新走線的默認寬度。請注意, 這個寬度可以被電路板的最小走線寬度覆蓋; "
-"如果啟用了\"使用現有線路寬度\"功能, 還會被現有走線的寬度覆蓋。"
+msgstr ""
+"選擇新走線的默認寬度。請注意, 這個寬度可以被電路板的最小走線寬度覆蓋; 如果啟"
+"用了\"使用現有線路寬度\"功能, 還會被現有走線的寬度覆蓋。"
 
 #: pcbnew/toolbars_pcb_editor.cpp:537
 msgid ""
@@ -42600,8 +42658,9 @@ msgid ""
 "Cannot update schematic because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you must launch the KiCad "
 "project manager and create a project."
-msgstr "無法更新原理圖, 因為 Pcbnew 在獨立模式下打開。為了從原理圖創建或更新 PCB, "
-"您必須啟動 KiCad 工程管理器並創建項目。"
+msgstr ""
+"無法更新原理圖, 因為 Pcbnew 在獨立模式下打開。為了從原理圖創建或更新 PCB, 您"
+"必須啟動 KiCad 工程管理器並創建項目。"
 
 #: pcbnew/tools/board_editor_control.cpp:1161
 msgid "Place a footprint"
@@ -45324,8 +45383,9 @@ msgstr "不再顯示"
 msgid ""
 "Not all zones are filled. Use Edit > Fill All Zones (%s) if you wish to see "
 "all fills."
-msgstr "不是所有覆銅都被填充。如你希望看到所有覆銅被填充, 請使用\"編輯\" > "
-"\"填充所有的覆銅\"(%s)。"
+msgstr ""
+"不是所有覆銅都被填充。如你希望看到所有覆銅被填充, 請使用\"編輯\" > \"填充所有"
+"的覆銅\"(%s)。"
 
 #: pcbnew/tools/pcb_control.cpp:343
 msgid "Dimmed"
@@ -45735,8 +45795,8 @@ msgid ""
 msgstr ""
 "保存或加載層可見性設置。\n"
 "使用 %s+Tab 打開層可見性設置選擇器。\n"
-"在按住 %s 的同時, 連續按下 Tab "
-"鍵將在彈出的窗口中循環切換已保存的層可見性設置。"
+"在按住 %s 的同時, 連續按下 Tab 鍵將在彈出的窗口中循環切換已保存的層可見性設"
+"置。"
 
 #: pcbnew/widgets/appearance_controls.cpp:451
 #, c-format
@@ -46497,10 +46557,10 @@ msgid ""
 "featuring thousands of symbols, footprints, and 3D models. KiCad has minimal "
 "system requirements and runs on Linux, Windows, and macOS."
 msgstr ""
-"KiCad 是一款自由的, 免費的開源電子設計自動化 (EDA) 軟件套件。"
-"它提供了原理圖繪製, 電路仿真, PCB 設計, 3D 渲染以及對繪圖/數據的導出功能。"
-"還包含一個高質量的元件庫, 其中包含了數千個元件符號, 封裝和 3D 模型。KiCad "
-"對系統要求很低, 可在 Linux、Windows 和 macOS 系統上運行。"
+"KiCad 是一款自由的, 免費的開源電子設計自動化 (EDA) 軟件套件。它提供了原理圖繪"
+"製, 電路仿真, PCB 設計, 3D 渲染以及對繪圖/數據的導出功能。還包含一個高質量的"
+"元件庫, 其中包含了數千個元件符號, 封裝和 3D 模型。KiCad 對系統要求很低, 可在 "
+"Linux、Windows 和 macOS 系統上運行。"
 
 #: resources/linux/metainfo/org.kicad.kicad.metainfo.xml.in:63
 msgid "KiCad PCB Layout Editor"
