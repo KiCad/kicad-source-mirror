@@ -70,7 +70,11 @@ DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent ) :
     m_EnvVars->ClearRows();
     m_EnvVars->AppendCols( 1 );     // for the isExternal flags
     m_EnvVars->HideCol( TV_FLAG_COL );
+#ifndef __WXMAC__
+    // macos crashes on languages at least using non-ascii characters for the column header here of all places
+    // if we use native column headers, so guard it for windows to still look nice
     m_EnvVars->UseNativeColHeader( true );
+#endif
 
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_PATH_EDITOR( this, m_EnvVars, &m_curdir, wxEmptyString ) );
