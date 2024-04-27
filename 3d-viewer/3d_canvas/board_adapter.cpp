@@ -708,6 +708,8 @@ void BOARD_ADAPTER::SetLayerColors( const std::map<int, COLOR4D>& aColors )
 
     for( const auto& [ layer, color ] : aColors )
         settings->SetColor( layer, color );
+
+    Pgm().GetSettingsManager().SaveColorSettings( settings, "3d_viewer" );
 }
 
 
