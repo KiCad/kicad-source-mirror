@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.1.0-3-g43bf300c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -48,8 +48,8 @@ class PANEL_SETUP_NETCLASSES_BASE : public wxPanel
 		WX_GRID* m_netclassGrid;
 		STD_BITMAP_BUTTON* m_addButton;
 		STD_BITMAP_BUTTON* m_removeButton;
-		wxButton* m_importColorsButton;
 		wxStaticText* m_colorDefaultHelpText;
+		wxButton* m_importColorsButton;
 		WX_PANEL* m_membershipPane;
 		wxStaticText* m_staticText5;
 		WX_GRID* m_assignmentGrid;

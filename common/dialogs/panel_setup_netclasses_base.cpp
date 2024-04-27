@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.1.0-3-g43bf300c)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -89,16 +89,17 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_removeButton = new STD_BITMAP_BUTTON( m_netclassesPane, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	buttonBoxSizer->Add( m_removeButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
+
 	buttonBoxSizer->Add( 60, 0, 1, wxEXPAND, 5 );
 
 	m_colorDefaultHelpText = new wxStaticText( m_netclassesPane, wxID_ANY, _("Set color to transparent to use KiCad default color."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_colorDefaultHelpText->Wrap( -1 );
 	buttonBoxSizer->Add( m_colorDefaultHelpText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 10 );
 
-	m_importColorsButton = new wxButton( m_netclassesPane, wxID_ANY, _("Import colors from schematic") );
+	m_importColorsButton = new wxButton( m_netclassesPane, wxID_ANY, _("Import colors from schematic"), wxDefaultPosition, wxDefaultSize, 0 );
 	buttonBoxSizer->Add( m_importColorsButton, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
- 
- 
+
+
 	bUpperSizer->Add( buttonBoxSizer, 0, wxEXPAND|wxLEFT|wxTOP, 5 );
 
 
