@@ -2018,6 +2018,8 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         break;
 
     case SCH_NO_CONNECT_T:
+    case SCH_PIN_T:
+
         break;
 
     default:                // Unexpected item
