@@ -639,6 +639,12 @@ int DIALOG_CHANGE_SYMBOLS::processSymbols( SCH_COMMIT* aCommit,
             symbol->SetExcludedFromBoard( symbol->GetLibSymbolRef()->GetExcludedFromBoard() );
         }
 
+        if( m_resetPinTextVisibility->GetValue() )
+        {
+            symbol->SetShowPinNames( symbol->GetLibSymbolRef()->GetShowPinNames() );
+            symbol->SetShowPinNumbers( symbol->GetLibSymbolRef()->GetShowPinNumbers() );
+        }
+
         bool removeExtras = m_removeExtraBox->GetValue();
         bool resetVis = m_resetFieldVisibilities->GetValue();
         bool resetEffects = m_resetFieldEffects->GetValue();

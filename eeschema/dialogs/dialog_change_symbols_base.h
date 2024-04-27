@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -73,6 +73,7 @@ class DIALOG_CHANGE_SYMBOLS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_resetFieldVisibilities;
 		wxCheckBox* m_resetFieldEffects;
 		wxCheckBox* m_resetFieldPositions;
+		wxCheckBox* m_resetPinTextVisibility;
 		wxCheckBox* m_resetAttributes;
 		wxCheckBox* m_resetCustomPower;
 		WX_HTML_REPORT_PANEL* m_messagePanel;

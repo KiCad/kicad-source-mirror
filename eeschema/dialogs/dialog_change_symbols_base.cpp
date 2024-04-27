@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -117,6 +117,23 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 
 	m_updateOptionsSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Update Options") ), wxVERTICAL );
 
+	wxCheckBox* updateShapeAndPins;
+	updateShapeAndPins = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update symbol shape and pins"), wxDefaultPosition, wxDefaultSize, 0 );
+	updateShapeAndPins->SetValue(true);
+	updateShapeAndPins->Enable( false );
+
+	m_updateOptionsSizer->Add( updateShapeAndPins, 0, wxBOTTOM|wxRIGHT, 5 );
+
+	wxCheckBox* updateKeywordsAndFootprintFilters;
+	updateKeywordsAndFootprintFilters = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update keywords and footprint filters"), wxDefaultPosition, wxDefaultSize, 0 );
+	updateKeywordsAndFootprintFilters->SetValue(true);
+	updateKeywordsAndFootprintFilters->Enable( false );
+
+	m_updateOptionsSizer->Add( updateKeywordsAndFootprintFilters, 0, wxBOTTOM|wxRIGHT, 5 );
+
+
+	m_updateOptionsSizer->Add( 0, 10, 1, wxEXPAND, 5 );
+
 	m_removeExtraBox = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Remove fields if not in library symbol"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_removeExtraBox->SetToolTip( _("Removes fields that do not occur in the original library symbols") );
 
@@ -134,7 +151,7 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 	m_resetFieldVisibilities = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field visibilities"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldVisibilities, 0, wxBOTTOM|wxRIGHT, 4 );
 
-	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_resetFieldEffects = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field text sizes and styles"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetFieldEffects, 0, wxBOTTOM|wxRIGHT, 4 );
 
 	m_resetFieldPositions = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset field positions"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -143,10 +160,11 @@ DIALOG_CHANGE_SYMBOLS_BASE::DIALOG_CHANGE_SYMBOLS_BASE( wxWindow* parent, wxWind
 
 	m_updateOptionsSizer->Add( 0, 10, 1, wxEXPAND, 5 );
 
+	m_resetPinTextVisibility = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset visibility of pin names/numbers"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateOptionsSizer->Add( m_resetPinTextVisibility, 0, wxBOTTOM|wxRIGHT, 5 );
+
 	m_resetAttributes = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Update/reset symbol attributes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetAttributes, 0, wxBOTTOM|wxRIGHT, 5 );
-
-	m_updateOptionsSizer->Add( 0, 10, 1, wxEXPAND, 5 );
 
 	m_resetCustomPower = new wxCheckBox( m_updateOptionsSizer->GetStaticBox(), wxID_ANY, _("Reset custom power symbols"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateOptionsSizer->Add( m_resetCustomPower, 0, wxBOTTOM|wxRIGHT, 5 );
