@@ -22,6 +22,7 @@
 #define DIALOG_EDIT_LIBRARY_TABLES_H
 
 #include <dialog_shim.h>
+#include <wx/panel.h>
 
 
 class DIALOG_EDIT_LIBRARY_TABLES : public DIALOG_SHIM
