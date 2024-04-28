@@ -1658,8 +1658,7 @@ TDF_Label STEP_PCB_MODEL::transferModel( Handle( TDocStd_Document )& source,
             if( s_labelName.Length() > 0 )
                 TDataStd_Name::Set( d_shapeLabel, s_labelName );
 
-            TDF_Label niulab =
-                    d_assy->AddComponent( component, d_shapeLabel, scaled_shape.Location() );
+            TDF_Label niulab = d_assy->AddComponent( component, d_shapeLabel, TopLoc_Location() );
 
             // check for per-surface colors
             stop.Init( shape, TopAbs_FACE );
