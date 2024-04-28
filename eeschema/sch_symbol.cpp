@@ -2598,15 +2598,33 @@ void SCH_SYMBOL::ClearBrightenedPins()
 }
 
 
-bool SCH_SYMBOL::SCH_SYMBOL::GetShowPinNumbers() const
-{
-    return m_part && m_part->GetShowPinNumbers();
-}
-
-
+/*
+ * When modified at the schematic level, we still store the values of these flags in the
+ * associated m_part.  If m_part now diverges from other usages, a new derived LIB_SYMBOL
+ * will be created and stored locally in the schematic.
+ */
 bool SCH_SYMBOL::GetShowPinNames() const
 {
-    return m_part && m_part->GetShowPinNames();
+    wxCHECK( m_part, false );
+    return m_part->GetShowPinNames();
+}
+
+void SCH_SYMBOL::SetShowPinNames( bool aShow )
+{
+    wxCHECK( m_part, /* void */ );
+    m_part->SetShowPinNames( aShow );
+}
+
+bool SCH_SYMBOL::GetShowPinNumbers() const
+{
+    wxCHECK( m_part, false );
+    return m_part->GetShowPinNumbers();
+}
+
+void SCH_SYMBOL::SetShowPinNumbers( bool aShow )
+{
+    wxCHECK( m_part, /* void */ );
+    m_part->SetShowPinNumbers( aShow );
 }
 
 

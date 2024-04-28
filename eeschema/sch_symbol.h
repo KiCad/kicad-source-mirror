@@ -850,11 +850,11 @@ public:
     bool IsPower() const override;
     bool IsNormal() const override;
 
-    /*
-     * We don't currently support changing these at the schematic level.
-     */
     bool GetShowPinNames() const override;
+    void SetShowPinNames( bool aShow ) override;
+
     bool GetShowPinNumbers() const override;
+    void SetShowPinNumbers( bool aShow ) override;
 
     double Similarity( const SCH_ITEM& aOther ) const override;
 

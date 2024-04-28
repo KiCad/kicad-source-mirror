@@ -120,13 +120,13 @@ public:
     /**
      * Set or clear the pin name visibility flag.
      */
-    void SetShowPinNames( bool aShow ) { m_showPinNames = aShow; }
+    virtual void SetShowPinNames( bool aShow ) { m_showPinNames = aShow; }
     virtual bool GetShowPinNames() const { return m_showPinNames; }
 
     /**
      * Set or clear the pin number visibility flag.
      */
-    void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
+    virtual void SetShowPinNumbers( bool aShow ) { m_showPinNumbers = aShow; }
     virtual bool GetShowPinNumbers() const { return m_showPinNumbers; }
 
     /**

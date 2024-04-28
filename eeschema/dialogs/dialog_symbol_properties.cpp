@@ -749,32 +749,25 @@ bool DIALOG_SYMBOL_PROPERTIES::TransferDataFromWindow()
     case 2: m_symbol->SetOrientation( SYM_MIRROR_Y ); break;
     }
 
-    if( m_part )
-    {
-        m_part->SetShowPinNames( m_ShowPinNameButt->GetValue() );
-        m_part->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
-    }
+    m_symbol->SetShowPinNames( m_ShowPinNameButt->GetValue() );
+    m_symbol->SetShowPinNumbers( m_ShowPinNumButt->GetValue() );
 
     // Restore m_Flag modified by SetUnit() and other change settings from the dialog
     m_symbol->ClearFlags();
     m_symbol->SetFlags( flags );
 
     // change all field positions from relative to absolute
-    for( unsigned i = 0;  i < m_fields->size();  ++i )
+    for( SCH_FIELD& field : *m_fields )
     {
-        SCH_FIELD& field = m_fields->at( i );
-
         field.Offset( m_symbol->GetPosition() );
         field.SetText( m_symbol->Schematic()->ConvertRefsToKIIDs( field.GetText() ) );
     }
 
     SCH_FIELDS& fields = m_symbol->GetFields();
-
     fields.clear();
 
-    for( size_t ii = 0; ii < m_fields->size(); ++ii )
+    for( SCH_FIELD& field : *m_fields )
     {
-        SCH_FIELD&      field = m_fields->at( ii );
         const wxString& fieldName = field.GetCanonicalName();
 
         if( fieldName.IsEmpty() && field.GetText().IsEmpty() )
