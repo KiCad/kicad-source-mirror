@@ -25,8 +25,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __TOOL_MANAGER_H
-#define __TOOL_MANAGER_H
+#ifndef TOOL_MANAGER_H
+#define TOOL_MANAGER_H
 
 #include <list>
 #include <map>
@@ -36,17 +36,11 @@
 
 #include <tool/tool_base.h>
 #include <tool/tool_event.h>
-
-namespace KIGFX
-{
-class VIEW_CONTROLS;
-struct VC_SETTINGS;
-}
+#include <view/view_controls.h>
 
 class COMMIT;
 class TOOLS_HOLDER;
 class TOOL_ACTION;
-class TOOL_BASE;
 class ACTION_MANAGER;
 class ACTION_MENU;
 class APP_SETTINGS_BASE;
@@ -646,6 +640,7 @@ private:
      */
     void setActiveState( TOOL_STATE* aState );
 
+private:
     ///< List of tools in the order they were registered
     std::vector<TOOL_BASE*> m_toolOrder;
 
@@ -697,4 +692,4 @@ private:
     bool m_shuttingDown;
 };
 
-#endif // __TOOL_MANAGER_H
+#endif // TOOL_MANAGER_H
