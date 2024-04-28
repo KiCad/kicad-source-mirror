@@ -851,6 +851,11 @@ void SCH_PAINTER::drawPinDanglingIndicator( const VECTOR2I& aPos, const COLOR4D&
 
 void SCH_PAINTER::draw( const SCH_PIN* aPin, int aLayer, bool aDimmed )
 {
+    // Don't draw pins from a selection view-group.  Pins in a schematic must always be drawn
+    // from their parent symbol's m_part.
+    if( dynamic_cast<const SCH_SYMBOL*>( aPin->GetParentSymbol() ) )
+        return;
+
     if( !isUnitAndConversionShown( aPin ) )
         return;
 

@@ -75,13 +75,11 @@ enum class GRAPHIC_PINSHAPE
  *  The symbol library pin object orientations.
  */
 enum class PIN_ORIENTATION {
-    PIN_RIGHT = 'R',
-    PIN_LEFT  = 'L',
-    PIN_UP    = 'U',
-    PIN_DOWN  = 'D',
-
-    LAST_OPTION = PIN_DOWN,
-    INHERIT   = 'I'
+    PIN_RIGHT,
+    PIN_LEFT,
+    PIN_UP,
+    PIN_DOWN,
+    INHERIT
 };
 
 

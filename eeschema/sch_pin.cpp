@@ -1487,19 +1487,6 @@ void SCH_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
     {
         if( aRotateCCW )
         {
-            RotatePoint( m_position, aCenter, -ANGLE_90 );
-
-            switch( GetOrientation() )
-            {
-            default:
-            case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
-            case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
-            case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_UP;    break;
-            case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
-            }
-        }
-        else
-        {
             RotatePoint( m_position, aCenter, ANGLE_90 );
 
             switch( GetOrientation() )
@@ -1509,6 +1496,19 @@ void SCH_PIN::Rotate( const VECTOR2I& aCenter, bool aRotateCCW )
             case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
             case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
             case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
+            }
+        }
+        else
+        {
+            RotatePoint( m_position, aCenter, -ANGLE_90 );
+
+            switch( GetOrientation() )
+            {
+            default:
+            case PIN_ORIENTATION::PIN_RIGHT: m_orientation = PIN_ORIENTATION::PIN_DOWN;  break;
+            case PIN_ORIENTATION::PIN_UP:    m_orientation = PIN_ORIENTATION::PIN_RIGHT; break;
+            case PIN_ORIENTATION::PIN_LEFT:  m_orientation = PIN_ORIENTATION::PIN_UP;    break;
+            case PIN_ORIENTATION::PIN_DOWN:  m_orientation = PIN_ORIENTATION::PIN_LEFT;  break;
             }
         }
     }
