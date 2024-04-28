@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -137,9 +137,9 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 
 	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_visible = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
+	m_visible = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Visible  (text only)"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	m_visible->SetValue(true);
-	fgSizer1->Add( m_visible, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 120 );
+	fgSizer1->Add( m_visible, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 120 );
 
 	m_lineWidthLabel = new wxStaticText( m_specifiedValues, wxID_ANY, _("Line thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthLabel->Wrap( -1 );
