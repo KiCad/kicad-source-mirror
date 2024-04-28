@@ -1611,7 +1611,7 @@ void BOARD_INSPECTION_TOOL::DiffFootprint( FOOTPRINT* aFootprint )
         }
         else
         {
-            if( !aFootprint->FootprintNeedsUpdate( libFootprint.get(), r ) )
+            if( !aFootprint->FootprintNeedsUpdate( libFootprint.get(), 0, r ) )
                 r->Report( _( "No relevant differences detected." ) );
 
             wxPanel*               panel = dialog->AddBlankPage( _( "Visual" ) );
