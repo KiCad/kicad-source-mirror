@@ -285,9 +285,8 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
             return INSPECT_RESULT::CONTINUE;
     }
 
-    // Pads are not sensitive to the layer visibility controls.
-    // They all have their own separate visibility controls
-    // skip them if not visible
+    // Pads are not sensitive to the layer visibility controls; they all have their own separate
+    // visibility controls.
     if( pad )
     {
         if( m_Guide->IgnorePads() )
@@ -337,10 +336,11 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
             && ( boardItem->IsOnLayer( m_Guide->GetPreferredLayer() ) )
             && ( !boardItem->IsLocked() || !m_Guide->IgnoreLockedItems() ) )
     {
-        // footprints and their subcomponents: reference, value and pads are not sensitive
-        // to the layer visibility controls.  They all have their own separate visibility
-        // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
-        // text in a footprint *is* sensitive to layer visibility but that was already handled.
+        // Footprints and their subcomponents: reference, value and pads are not sensitive to the
+        // layer visibility controls; they all have their own separate visibility controls.
+        // For vias, GetLayer() has no meaning, but IsOnLayer() works fine.
+        // User text and fields in a footprint *are* sensitive to layer visibility but they were
+        // already handled.
 
         int accuracy = m_Guide->Accuracy();
 
@@ -390,8 +390,8 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
             {
                 if( dimension )
                 {
-                    // Dimensions feel particularly hard to select, probably due to their
-                    // noisy shape making it feel like they should have a larger boundary.
+                    // Dimensions feel particularly hard to select, probably due to their noisy
+                    // shape making it feel like they should have a larger boundary.
                     accuracy = KiROUND( accuracy * 1.5 );
                 }
 
@@ -407,13 +407,14 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
     if( m_Guide->IncludeSecondary()
             && ( !boardItem || !boardItem->IsLocked() || !m_Guide->IgnoreLockedItems() ) )
     {
-        // for now, "secondary" means "tolerate any visible layer".  It has no effect on other
+        // For now, "secondary" means "tolerate any visible layer".  It has no effect on other
         // criteria, since there is a separate "ignore" control for those in the COLLECTORS_GUIDE
 
-        // footprints and their subcomponents: reference, value and pads are not sensitive
-        // to the layer visibility controls.  They all have their own separate visibility
-        // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
-        // text in a footprint *is* sensitive to layer visibility but that was already handled.
+        // Footprints and their subcomponents: reference, value and pads are not sensitive to the
+        // layer visibility controls; they all have their own separate visibility controls.
+        // For vias, GetLayer() has no meaning, but IsOnLayer() works fine.
+        // User text and fields in a footprint *are* sensitive to layer visibility but they were
+        // already handled.
 
         int accuracy = m_Guide->Accuracy();
 
@@ -461,8 +462,8 @@ INSPECT_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* aTestItem, void* aTestData 
         {
             if( dimension )
             {
-                // Dimensions feel particularly hard to select, probably due to their
-                // noisy shape making it feel like they should have a larger boundary.
+                // Dimensions feel particularly hard to select, probably due to their noisy shape
+                // making it feel like they should have a larger boundary.
                 accuracy = KiROUND( accuracy * 1.5 );
             }
 
@@ -497,8 +498,8 @@ void GENERAL_COLLECTOR::Collect( BOARD_ITEM* aItem, const std::vector<KICAD_T>& 
     aItem->Visit( m_inspector, nullptr, m_scanTypes );
 
     // append 2nd list onto end of the first list
-    for( unsigned i = 0;  i<m_List2nd.size();  ++i )
-        Append( m_List2nd[i] );
+    for( EDA_ITEM* item : m_List2nd )
+        Append( item );
 
     Empty2nd();
 }

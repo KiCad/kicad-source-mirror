@@ -1439,13 +1439,13 @@ SHAPE_POLY_SET FOOTPRINT::GetBoundingHull() const
         if( !isFPEdit && m_privateLayers.test( item->GetLayer() ) )
             continue;
 
-        if( item->Type() != PCB_TEXT_T && item->Type() != PCB_REFERENCE_IMAGE_T )
+        if( item->Type() != PCB_FIELD_T && item->Type() != PCB_REFERENCE_IMAGE_T )
         {
             item->TransformShapeToPolygon( rawPolys, UNDEFINED_LAYER, 0, ARC_LOW_DEF,
                                            ERROR_OUTSIDE );
         }
 
-        // We intentionally exclude footprint text from the bounding hull.
+        // We intentionally exclude footprint fields from the bounding hull.
     }
 
     for( PAD* pad : m_pads )
