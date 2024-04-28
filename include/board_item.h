@@ -371,6 +371,11 @@ public:
                                           int aClearance, int aError, ERROR_LOC aErrorLoc,
                                           bool ignoreLineWidth = false ) const;
 
+    enum COMPARE_FLAGS : int
+    {
+        DRC = 0x01
+    };
+
     struct ptr_cmp
     {
         bool operator() ( const BOARD_ITEM* a, const BOARD_ITEM* b ) const;
