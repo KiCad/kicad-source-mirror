@@ -1572,7 +1572,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
          || ( aEvent.IsAction( &EE_ACTIONS::editValue )     && field->GetId() != VALUE_FIELD     )
          || ( aEvent.IsAction( &EE_ACTIONS::editFootprint ) && field->GetId() != FOOTPRINT_FIELD ) )
         {
-            item = field->GetParentSymbol();
+            item = field->GetParent();
             m_selectionTool->ClearSelection( true );
             m_selectionTool->AddItemToSel( item );
         }
