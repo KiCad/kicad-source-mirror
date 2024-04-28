@@ -45,13 +45,13 @@ KIGFX::VIEW_CONTROLS* TOOL_BASE::getViewControls() const
 }
 
 
-TOOLS_HOLDER* TOOL_BASE::getToolHolderInt() const
+TOOLS_HOLDER* TOOL_BASE::getToolHolderInternal() const
 {
     return m_toolMgr->GetToolHolder();
 }
 
 
-EDA_ITEM* TOOL_BASE::getModelInt() const
+EDA_ITEM* TOOL_BASE::getModelInternal() const
 {
     return m_toolMgr->GetModel();
 }
