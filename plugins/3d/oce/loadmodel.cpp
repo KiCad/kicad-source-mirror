@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2020-2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2020-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -487,11 +487,11 @@ bool getColor( DATA& data, TDF_Label label, Quantity_ColorRGBA& color )
 {
     while( true )
     {
-        if( data.m_color->GetColor( label, XCAFDoc_ColorGen, color ) )
-            return true;
-        else if( data.m_color->GetColor( label, XCAFDoc_ColorSurf, color ) )
+        if( data.m_color->GetColor( label, XCAFDoc_ColorSurf, color ) )
             return true;
         else if( data.m_color->GetColor( label, XCAFDoc_ColorCurv, color ) )
+            return true;
+        else if( data.m_color->GetColor( label, XCAFDoc_ColorGen, color ) )
             return true;
 
         label = label.Father();
@@ -1149,10 +1149,12 @@ bool processFace( const TopoDS_Face& face, DATA& data, SGNODE* parent, std::vect
     Quantity_ColorRGBA lcolor;
 
     // check for a face color; this has precedence over SOLID colors
-    if( data.m_color->GetColor( face, XCAFDoc_ColorGen, lcolor )
+    if( data.m_color->GetColor( face, XCAFDoc_ColorSurf, lcolor )
         || data.m_color->GetColor( face, XCAFDoc_ColorCurv, lcolor )
-        || data.m_color->GetColor( face, XCAFDoc_ColorSurf, lcolor ) )
-            color = &lcolor;
+        || data.m_color->GetColor( face, XCAFDoc_ColorGen, lcolor ) )
+    {
+        color = &lcolor;
+    }
 
     SGNODE* ocolor = data.GetColor( color );
 
