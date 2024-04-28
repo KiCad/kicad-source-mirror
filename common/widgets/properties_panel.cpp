@@ -406,14 +406,19 @@ void PROPERTIES_PANEL::onShow( wxShowEvent& aEvent )
 {
     if( aEvent.IsShown() )
         UpdateData();
+
+    aEvent.Skip();
 }
 
 
 void PROPERTIES_PANEL::onCharHook( wxKeyEvent& aEvent )
 {
-    if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ShiftDown() )
+    if( aEvent.GetKeyCode() == WXK_TAB && !aEvent.ShiftDown() && m_grid->IsAnyModified() )
     {
         m_grid->CommitChangesFromEditor();
+
+        // Pass the tab key on so the default property grid tab behavior is honored.
+        aEvent.Skip();
         return;
     }
 

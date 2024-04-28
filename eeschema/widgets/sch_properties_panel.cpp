@@ -115,11 +115,6 @@ void SCH_PROPERTIES_PANEL::AfterCommit()
     const SELECTION& selection = selectionTool->GetSelection();
 
     rebuildProperties( selection );
-
-    CallAfter( [this]()
-               {
-                   m_frame->GetCanvas()->SetFocus();
-               } );
 }
 
 
@@ -175,6 +170,8 @@ void SCH_PROPERTIES_PANEL::valueChanging( wxPropertyGridEvent& aEvent )
         aEvent.Veto();
         return;
     }
+
+    aEvent.Skip();
 }
 
 
@@ -204,6 +201,8 @@ void SCH_PROPERTIES_PANEL::valueChanged( wxPropertyGridEvent& aEvent )
 
     // Perform grid updates as necessary based on value change
     AfterCommit();
+
+    aEvent.Skip();
 }
 
 

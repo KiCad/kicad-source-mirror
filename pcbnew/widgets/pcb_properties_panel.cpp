@@ -121,11 +121,6 @@ void PCB_PROPERTIES_PANEL::AfterCommit()
     const SELECTION& selection = selectionTool->GetSelection();
 
     rebuildProperties( selection );
-
-    CallAfter( [this]()
-               {
-                   static_cast<PCB_EDIT_FRAME*>( m_frame )->GetCanvas()->SetFocus();
-               } );
 }
 
 

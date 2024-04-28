@@ -87,8 +87,8 @@ protected:
     virtual wxPGProperty* createPGProperty( const PROPERTY_BASE* aProperty ) const = 0;
 
     // Event handlers
-    virtual void valueChanging( wxPropertyGridEvent& aEvent ) {}
-    virtual void valueChanged( wxPropertyGridEvent& aEvent ) {}
+    virtual void valueChanging( wxPropertyGridEvent& aEvent ) { aEvent.Skip(); }
+    virtual void valueChanged( wxPropertyGridEvent& aEvent ) { aEvent.Skip(); }
     void onCharHook( wxKeyEvent& aEvent );
     void onShow( wxShowEvent& aEvent );
 
