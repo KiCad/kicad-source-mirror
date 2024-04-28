@@ -132,7 +132,6 @@ bool SYMBOL_EDITOR_CONTROL::Init()
 
         ctxMenu.AddSeparator();
         ctxMenu.AddItem( EE_ACTIONS::importSymbol,       libInferredCondition );
-        ctxMenu.AddItem( EE_ACTIONS::exportSymbol,       symbolSelectedCondition );
 
         // If we've got nothing else to show, at least show a hide tree option
         ctxMenu.AddSeparator();
@@ -253,15 +252,6 @@ int SYMBOL_EDITOR_CONTROL::Revert( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
         static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->Revert();
-
-    return 0;
-}
-
-
-int SYMBOL_EDITOR_CONTROL::ExportSymbol( const TOOL_EVENT& aEvent )
-{
-    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
-        static_cast<SYMBOL_EDIT_FRAME*>( m_frame )->ExportSymbol();
 
     return 0;
 }
@@ -810,7 +800,6 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::cutSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::CutCopyDelete,         EE_ACTIONS::copySymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::DuplicateSymbol,       EE_ACTIONS::pasteSymbol.MakeEvent() );
-    Go( &SYMBOL_EDITOR_CONTROL::ExportSymbol,          EE_ACTIONS::exportSymbol.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::OpenWithTextEditor,    EE_ACTIONS::openWithTextEditor.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ExportView,            EE_ACTIONS::exportSymbolView.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ExportSymbolAsSVG,     EE_ACTIONS::exportSymbolAsSVG.MakeEvent() );

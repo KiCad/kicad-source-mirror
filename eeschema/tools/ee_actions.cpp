@@ -236,13 +236,6 @@ TOOL_ACTION EE_ACTIONS::importSymbol( TOOL_ACTION_ARGS()
         .Tooltip( _( "Import a symbol to the current library" ) )
         .Icon( BITMAPS::import_part ) );
 
-TOOL_ACTION EE_ACTIONS::exportSymbol( TOOL_ACTION_ARGS()
-        .Name( "eeschema.SymbolLibraryControl.exportSymbol" )
-        .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Export..." ) )
-        .Tooltip( _( "Export a symbol to a new library file" ) )
-        .Icon( BITMAPS::export_part ) );
-
 TOOL_ACTION EE_ACTIONS::openWithTextEditor( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.openWithTextEditor" )
         .Scope( AS_GLOBAL )
