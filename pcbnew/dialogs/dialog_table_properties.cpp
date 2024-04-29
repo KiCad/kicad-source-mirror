@@ -367,7 +367,7 @@ bool DIALOG_TABLE_PROPERTIES::TransferDataFromWindow()
         m_table->SetSeparatorsStroke( stroke );
     }
 
-    if( !commit.Empty() )
+    if( pushCommit )
         commit.Push( _( "Edit Table" ), SKIP_CONNECTIVITY );
 
     return true;

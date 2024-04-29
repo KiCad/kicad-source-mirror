@@ -1141,6 +1141,7 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
                 PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
                 table = new PCB_TABLE( m_frame->GetModel(), bds.GetLineThickness( layer ) );
+                table->SetFlags( IS_NEW );
                 table->SetLayer( layer );
                 table->SetColCount( 1 );
                 table->AddCell( new PCB_TABLECELL( table ) );
@@ -1164,7 +1165,6 @@ int DRAWING_TOOL::DrawTable( const TOOL_EVENT& aEvent )
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear );
 
-                table->ClearFlags();
                 table->Normalize();
 
                 DIALOG_TABLE_PROPERTIES dlg( m_frame, table );
