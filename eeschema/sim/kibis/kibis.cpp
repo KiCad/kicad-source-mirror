@@ -867,7 +867,7 @@ void KIBIS_PIN::getKuKdOneWaveform( KIBIS_MODEL&                            aMod
         simul += "VmeasPD 0 x1.PD_GND0 0\n";
         simul += "VmeasPU x1.PU_PWR0 3 0\n";
         simul += "VmeasPC x1.PC_PWR0 3 0\n";
-        simul += "VmeasGC 0 x1.GC_PWR0 0\n";
+        simul += "VmeasGC 0 x1.GC_GND0 0\n";
 
         if( aModel.HasPullup() && aModel.HasPulldown() )
         {
@@ -1039,7 +1039,7 @@ void KIBIS_PIN::getKuKdTwoWaveforms( KIBIS_MODEL&                            aMo
         simul += "VmeasPD0 0 x1.PD_GND0 0\n";
         simul += "VmeasPU0 x1.PU_PWR0 3 0\n";
         simul += "VmeasPC0 x1.PC_PWR0 3 0\n";
-        simul += "VmeasGC0 0 x1.GC_PWR0 0\n";
+        simul += "VmeasGC0 0 x1.GC_GND0 0\n";
 
 
         simul += "\n x2 3 0 7 DRIVER1 \n";
@@ -1060,7 +1060,7 @@ void KIBIS_PIN::getKuKdTwoWaveforms( KIBIS_MODEL&                            aMo
         simul += "VmeasPD1 0 x2.PD_GND0 0\n";
         simul += "VmeasPU1 x2.PU_PWR0 3 0\n";
         simul += "VmeasPC1 x2.PC_PWR0 3 0\n";
-        simul += "VmeasGC1 0 x2.GC_PWR0 0\n";
+        simul += "VmeasGC1 0 x2.GC_GND0 0\n";
 
         if( aModel.HasPullup() && aModel.HasPulldown() )
         {
