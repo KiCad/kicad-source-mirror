@@ -34,6 +34,7 @@
 #include <wx/fs_zip.h>
 #include <wx/dir.h>
 #include <wx/filename.h>
+#include <wx/msgdlg.h>
 #include <wx/propgrid/propgrid.h>
 #include <wx/snglinst.h>
 #include <wx/stdpaths.h>
