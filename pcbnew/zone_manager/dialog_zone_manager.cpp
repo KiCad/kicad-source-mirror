@@ -226,6 +226,13 @@ int InvokeZonesManager( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aZoneInfo )
 }
 
 
+void DIALOG_ZONE_MANAGER::onDialogResize( wxSizeEvent& event )
+{
+    event.Skip();
+    FitCanvasToScreen();
+}
+
+
 void DIALOG_ZONE_MANAGER::OnZoneSelectionChanged( ZONE* zone )
 {
     for( ZONE_SELECTION_CHANGE_NOTIFIER* i :

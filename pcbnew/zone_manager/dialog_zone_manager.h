@@ -74,6 +74,7 @@ protected:
     void SelectZoneTableItem( wxDataViewItem const& aItem );
 
     void OnViewZonesOverviewOnLeftUp( wxMouseEvent& aEvent ) override;
+	void onDialogResize( wxSizeEvent& event ) override;
 
 
     void OnOk( wxCommandEvent& aEvt );

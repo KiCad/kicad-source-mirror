@@ -57,6 +57,7 @@
       <property name="window_extra_style"></property>
       <property name="window_name"></property>
       <property name="window_style"></property>
+      <event name="OnSize">onDialogResize</event>
       <object class="wxBoxSizer" expanded="true">
         <property name="minimum_size">-1,-1</property>
         <property name="name">m_MainBoxSizer</property>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -62,6 +62,7 @@ class DIALOG_ZONE_MANAGER_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, override them in your derived class
+		virtual void onDialogResize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnTableChar( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnTableCharHook( wxKeyEvent& event ) { event.Skip(); }
 		virtual void OnDataViewCtrlSelectionChanged( wxDataViewEvent& event ) { event.Skip(); }

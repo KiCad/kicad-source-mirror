@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -104,6 +104,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 	m_MainBoxSizer->Fit( this );
 
 	// Connect Events
+	this->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_ZONE_MANAGER_BASE::onDialogResize ) );
 	m_viewZonesOverview->Connect( wxEVT_CHAR, wxKeyEventHandler( DIALOG_ZONE_MANAGER_BASE::OnTableChar ), NULL, this );
 	m_viewZonesOverview->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_ZONE_MANAGER_BASE::OnTableCharHook ), NULL, this );
 	m_viewZonesOverview->Connect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_ZONE_MANAGER_BASE::OnDataViewCtrlSelectionChanged ), NULL, this );
@@ -119,6 +120,7 @@ DIALOG_ZONE_MANAGER_BASE::DIALOG_ZONE_MANAGER_BASE( wxWindow* parent, wxWindowID
 DIALOG_ZONE_MANAGER_BASE::~DIALOG_ZONE_MANAGER_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_ZONE_MANAGER_BASE::onDialogResize ) );
 	m_viewZonesOverview->Disconnect( wxEVT_CHAR, wxKeyEventHandler( DIALOG_ZONE_MANAGER_BASE::OnTableChar ), NULL, this );
 	m_viewZonesOverview->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_ZONE_MANAGER_BASE::OnTableCharHook ), NULL, this );
 	m_viewZonesOverview->Disconnect( wxEVT_COMMAND_DATAVIEW_SELECTION_CHANGED, wxDataViewEventHandler( DIALOG_ZONE_MANAGER_BASE::OnDataViewCtrlSelectionChanged ), NULL, this );
