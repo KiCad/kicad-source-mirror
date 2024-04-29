@@ -177,8 +177,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 //
                 // Careful when pasting.  The pasted pin will be at the same location as it
                 // was copied from, leading us to believe it's a synchronized pin.  It's not.
-                if( m_frame->SynchronizePins()
-                        && ( lib_item->GetEditFlags() & IS_PASTED ) == 0 )
+                if( m_frame->SynchronizePins() && !( lib_item->GetEditFlags() & IS_PASTED ) )
                 {
                     std::set<SCH_PIN*> sync_pins;
 
@@ -188,8 +187,8 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
 
                         if(  lib_item->Type() == SCH_PIN_T )
                         {
-                            SCH_PIN* cur_pin = static_cast<SCH_PIN*>( lib_item );
-                            LIB_SYMBOL* symbol = m_frame->GetCurSymbol();
+                            SCH_PIN*          cur_pin = static_cast<SCH_PIN*>( lib_item );
+                            LIB_SYMBOL*       symbol = m_frame->GetCurSymbol();
                             std::vector<bool> got_unit( symbol->GetUnitCount() + 1 );
 
                             got_unit[cur_pin->GetUnit()] = true;
@@ -240,7 +239,7 @@ bool SYMBOL_EDITOR_MOVE_TOOL::doMoveSelection( const TOOL_EVENT& aEvent, SCH_COM
                 else if( m_frame->GetMoveWarpsCursor() )
                 {
                     VECTOR2I itemPos = selection.GetTopLeftItem()->GetPosition();
-                    m_anchorPos = VECTOR2I( itemPos.x, -itemPos.y );
+                    m_anchorPos = VECTOR2I( itemPos.x, itemPos.y );
 
                     getViewControls()->WarpMouseCursor( m_anchorPos, true, true );
                     m_cursor = m_anchorPos;

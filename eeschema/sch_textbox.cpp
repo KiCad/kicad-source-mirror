@@ -122,19 +122,9 @@ void SCH_TEXTBOX::Rotate90( bool aClockwise )
 
 VECTOR2I SCH_TEXTBOX::GetDrawPos() const
 {
-    BOX2I bbox;
+    BOX2I bbox = BOX2I( m_start, m_end - m_start );
 
-    if( m_layer == LAYER_DEVICE )   // TODO: nuke symbol editor's upside-down coordinate system
-    {
-        bbox = BOX2I( VECTOR2I( std::min( m_start.x, m_end.x ), std::min( -m_start.y, -m_end.y ) ),
-                      VECTOR2I( abs( m_end.x - m_start.x ), abs( m_end.y - m_start.y ) ) );
-    }
-    else
-    {
-        bbox = BOX2I( m_start, m_end - m_start );
-
-        bbox.Normalize();
-    }
+    bbox.Normalize();
 
     VECTOR2I pos( bbox.GetLeft() + m_marginLeft, bbox.GetBottom() - m_marginBottom );
 
@@ -324,16 +314,9 @@ void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aB
                 STROKE_PARAMS::Stroke( shape, lineStyle, penWidth, aSettings,
                         [&]( const VECTOR2I& a, const VECTOR2I& b )
                         {
-                            if( m_layer == LAYER_DEVICE )
-                            {
-                                VECTOR2I ptA = aSettings->TransformCoordinate( a ) + aOffset;
-                                VECTOR2I ptB = aSettings->TransformCoordinate( b ) + aOffset;
-                                GRLine( DC, ptA.x, ptA.y, ptB.x, ptB.y, penWidth, color );
-                            }
-                            else
-                            {
-                                GRLine( DC, a.x, a.y, b.x, b.y, penWidth, color );
-                            }
+                            VECTOR2I ptA = aSettings->TransformCoordinate( a ) + aOffset;
+                            VECTOR2I ptB = aSettings->TransformCoordinate( b ) + aOffset;
+                            GRLine( DC, ptA.x, ptA.y, ptB.x, ptB.y, penWidth, color );
                         } );
             }
 
@@ -353,28 +336,7 @@ void SCH_TEXTBOX::Print( const SCH_RENDER_SETTINGS* aSettings, int aUnit, int aB
         color = color.Mix( bg, 0.5f );
     }
 
-    if( m_layer == LAYER_DEVICE )
-    {
-        SCH_TEXTBOX temp( *this );
-
-        if( aSettings->m_Transform.y1 )
-        {
-            temp.SetTextAngle( temp.GetTextAngle() == ANGLE_HORIZONTAL ? ANGLE_VERTICAL
-                                                                       : ANGLE_HORIZONTAL );
-        }
-
-        // NB: GetDrawPos() will want Symbol Editor (upside-down) coordinates
-        temp.SetStart( VECTOR2I( pt1.x, -pt1.y ) );
-        temp.SetEnd( VECTOR2I( pt2.x, -pt2.y ) );
-
-        GRPrintText( DC, temp.GetDrawPos(), color, temp.GetShownText( true ), temp.GetTextAngle(),
-                     temp.GetTextSize(), temp.GetHorizJustify(), temp.GetVertJustify(), penWidth,
-                     temp.IsItalic(), temp.IsBold(), getDrawFont(), GetFontMetrics() );
-    }
-    else
-    {
-        EDA_TEXT::Print( aSettings, aOffset, color );
-    }
+    EDA_TEXT::Print( aSettings, aOffset, color );
 }
 
 
@@ -472,11 +434,10 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
     if( IsPrivate() )
         return;
 
+    SCH_SHAPE::Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
+
     if( aBackground )
-    {
-        SCH_SHAPE::Plot( aPlotter, aBackground, aPlotOpts, aUnit, aBodyStyle, aOffset, aDimmed );
         return;
-    }
 
     SCH_SHEET_PATH*      sheet = Schematic() ? &Schematic()->CurrentSheet() : nullptr;
     SCH_RENDER_SETTINGS* renderSettings = getRenderSettings( aPlotter );
@@ -525,15 +486,15 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
     penWidth = std::max( penWidth, renderSettings->GetMinPenWidth() );
     aPlotter->SetCurrentLineWidth( penWidth );
 
+    TEXT_ATTRIBUTES       attrs;
     std::vector<VECTOR2I> positions;
-    wxArrayString strings_list;
+    wxArrayString         strings_list;
+
     wxStringSplit( GetShownText( sheet, true ), strings_list, '\n' );
     positions.reserve( strings_list.Count() );
 
-    if( m_layer == LAYER_DEVICE )
+    if( renderSettings->m_Transform != TRANSFORM() || aOffset != VECTOR2I() )
     {
-        VECTOR2I    start = renderSettings->TransformCoordinate( m_start ) + aOffset;
-        VECTOR2I    end = renderSettings->TransformCoordinate( m_end ) + aOffset;
         SCH_TEXTBOX temp( *this );
 
         if( renderSettings->m_Transform.y1 )
@@ -542,17 +503,18 @@ void SCH_TEXTBOX::Plot( PLOTTER* aPlotter, bool aBackground, const SCH_PLOT_OPTS
                                                                        : ANGLE_HORIZONTAL );
         }
 
-        // NB: GetDrawPos() will want Symbol Editor (upside-down) coordinates
-        temp.SetStart( VECTOR2I( start.x, -start.y ) );
-        temp.SetEnd( VECTOR2I( end.x, -end.y ) );
+        temp.SetStart( renderSettings->TransformCoordinate( m_start ) + aOffset );
+        temp.SetEnd( renderSettings->TransformCoordinate( m_end ) + aOffset );
+
+        attrs = temp.GetAttributes();
         temp.GetLinePositions( positions, (int) strings_list.Count() );
     }
     else
     {
+        attrs = GetAttributes();
         GetLinePositions( positions, (int) strings_list.Count() );
     }
 
-    TEXT_ATTRIBUTES attrs = GetAttributes();
     attrs.m_StrokeWidth = penWidth;
     attrs.m_Multiline = false;
 
