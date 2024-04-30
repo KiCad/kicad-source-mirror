@@ -292,29 +292,27 @@ set_user_consent(sentry_user_consent_t new_val)
 {
     SENTRY_WITH_OPTIONS (options) {
         if (sentry__atomic_store((long *)&options->user_consent, new_val)
-            == new_val) {
-            // nothing was changed
-            break; // SENTRY_WITH_OPTIONS
-        }
+            != new_val) {
+            if (options->backend
+                && options->backend->user_consent_changed_func) {
+                options->backend->user_consent_changed_func(options->backend);
+            }
 
-        if (options->backend && options->backend->user_consent_changed_func) {
-            options->backend->user_consent_changed_func(options->backend);
+            sentry_path_t *consent_path
+                = sentry__path_join_str(options->database_path, "user-consent");
+            switch (new_val) {
+            case SENTRY_USER_CONSENT_GIVEN:
+                sentry__path_write_buffer(consent_path, "1\n", 2);
+                break;
+            case SENTRY_USER_CONSENT_REVOKED:
+                sentry__path_write_buffer(consent_path, "0\n", 2);
+                break;
+            case SENTRY_USER_CONSENT_UNKNOWN:
+                sentry__path_remove(consent_path);
+                break;
+            }
+            sentry__path_free(consent_path);
         }
-
-        sentry_path_t *consent_path
-            = sentry__path_join_str(options->database_path, "user-consent");
-        switch (new_val) {
-        case SENTRY_USER_CONSENT_GIVEN:
-            sentry__path_write_buffer(consent_path, "1\n", 2);
-            break;
-        case SENTRY_USER_CONSENT_REVOKED:
-            sentry__path_write_buffer(consent_path, "0\n", 2);
-            break;
-        case SENTRY_USER_CONSENT_UNKNOWN:
-            sentry__path_remove(consent_path);
-            break;
-        }
-        sentry__path_free(consent_path);
     }
 }
 
@@ -549,6 +547,26 @@ fail:
     SENTRY_WARN("dropping transaction");
     sentry_envelope_free(envelope);
     sentry_value_decref(transaction);
+    return NULL;
+}
+
+sentry_envelope_t *
+sentry__prepare_user_feedback(sentry_value_t user_feedback)
+{
+    sentry_envelope_t *envelope = NULL;
+
+    envelope = sentry__envelope_new();
+    if (!envelope
+        || !sentry__envelope_add_user_feedback(envelope, user_feedback)) {
+        goto fail;
+    }
+
+    return envelope;
+
+fail:
+    SENTRY_WARN("dropping user feedback");
+    sentry_envelope_free(envelope);
+    sentry_value_decref(user_feedback);
     return NULL;
 }
 
@@ -1120,6 +1138,20 @@ sentry_span_finish(sentry_span_t *opaque_span)
 
 fail:
     sentry__span_decref(opaque_span);
+}
+
+void
+sentry_capture_user_feedback(sentry_value_t user_feedback)
+{
+    sentry_envelope_t *envelope = NULL;
+
+    SENTRY_WITH_OPTIONS (options) {
+        envelope = sentry__prepare_user_feedback(user_feedback);
+        if (envelope) {
+            sentry__capture_envelope(options->transport, envelope);
+        }
+    }
+    sentry_value_decref(user_feedback);
 }
 
 int

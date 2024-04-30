@@ -4,7 +4,7 @@ import platform
 import re
 import sys
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, UTC
 
 import msgpack
 
@@ -38,6 +38,18 @@ def assert_session(envelope, extra_assertion=None):
         assert_matches(session, extra_assertion)
 
 
+def assert_user_feedback(envelope):
+    user_feedback = None
+    for item in envelope:
+        if item.headers.get("type") == "user_report" and item.payload.json is not None:
+            user_feedback = item.payload.json
+
+    assert user_feedback is not None
+    assert user_feedback["name"] == "some-name"
+    assert user_feedback["email"] == "some-email"
+    assert user_feedback["comments"] == "some-comment"
+
+
 def assert_meta(
     envelope,
     release="test-example-release",
@@ -54,13 +66,16 @@ def assert_meta(
         "user": {"id": 42, "username": "some_name"},
         "transaction": transaction,
         "tags": {"expected-tag": "some value"},
-        "extra": {"extra stuff": "some value", "…unicode key…": "őá…–🤮🚀¿ 한글 테스트"},
+        "extra": {
+            "extra stuff": "some value",
+            "…unicode key…": "őá…–🤮🚀¿ 한글 테스트",
+        },
     }
     expected_sdk = {
         "name": "sentry.native",
-        "version": "0.6.7",
+        "version": "0.7.2",
         "packages": [
-            {"name": "github:getsentry/sentry-native", "version": "0.6.7"},
+            {"name": "github:getsentry/sentry-native", "version": "0.7.2"},
         ],
     }
     if is_android:
@@ -142,6 +157,12 @@ def assert_breadcrumb(envelope):
         "message": "debug crumb",
         "category": "example!",
         "level": "debug",
+        "data": {
+            "url": "https://example.com/api/1.0/users",
+            "method": "GET",
+            "status_code": 200,
+            "reason": "OK",
+        },
     }
     assert any(matches(b, expected) for b in event["breadcrumbs"])
 
@@ -164,16 +185,16 @@ def assert_minidump(envelope):
     assert minidump.payload.bytes.startswith(b"MDMP")
 
 
-def assert_timestamp(ts, now=datetime.utcnow()):
+def assert_timestamp(ts, now=datetime.now(UTC)):
     assert ts[:11] == now.isoformat()[:11]
 
 
-def assert_event(envelope):
+def assert_event(envelope, message="Hello World!"):
     event = envelope.get_event()
     expected = {
         "level": "info",
         "logger": "my-logger",
-        "message": {"formatted": "Hello World!"},
+        "message": {"formatted": message},
     }
     assert_matches(event, expected)
     assert_timestamp(event["timestamp"])
@@ -242,6 +263,9 @@ def _load_crashpad_attachments(msg):
     breadcrumb1 = []
     breadcrumb2 = []
     for part in msg.walk():
+        if part.get_filename() is not None:
+            assert part.get("Content-Type") is None
+
         match part.get_filename():
             case "__sentry-event":
                 event = msgpack.unpackb(part.get_payload(decode=True))
@@ -286,3 +310,11 @@ def assert_crashpad_upload(req):
         and b"\n\nMDMP" in part.as_bytes()
         for part in msg.walk()
     )
+
+
+def assert_gzip_file_header(output):
+    assert output[:3] == b"\x1f\x8b\x08"
+
+
+def assert_gzip_content_encoding(req):
+    assert req.content_encoding == "gzip"

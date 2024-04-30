@@ -5,7 +5,7 @@
 #include "base/strings/sys_string_conversions.h"
 
 #include "base/apple/bridging.h"
-#include "base/logging.h"
+#include "base/check_op.h"
 
 namespace base {
 

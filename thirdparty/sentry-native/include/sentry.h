@@ -30,7 +30,7 @@ extern "C" {
 #        define SENTRY_SDK_NAME "sentry.native"
 #    endif
 #endif
-#define SENTRY_SDK_VERSION "0.6.7"
+#define SENTRY_SDK_VERSION "0.7.2"
 #define SENTRY_SDK_USER_AGENT SENTRY_SDK_NAME "/" SENTRY_SDK_VERSION
 
 /* common platform detection */
@@ -90,7 +90,7 @@ extern "C" {
 
 /* context type dependencies */
 #ifdef _WIN32
-#    include <wtypes.h>
+#    include <windows.h>
 #else
 #    include <signal.h>
 #endif
@@ -1068,6 +1068,11 @@ typedef void (*sentry_logger_function_t)(
  * Sets the sentry-native logger function.
  *
  * Used for logging debug events when the `debug` option is set to true.
+ *
+ * Note: Multiple threads may invoke your `func`. If you plan to mutate any data
+ * inside the `userdata` argument after initialization, you must ensure proper
+ * synchronization inside the logger function.
+ *
  */
 SENTRY_API void sentry_options_set_logger(
     sentry_options_t *opts, sentry_logger_function_t func, void *userdata);
@@ -1887,6 +1892,27 @@ SENTRY_EXPERIMENTAL_API void sentry_transaction_set_name(
     sentry_transaction_t *transaction, const char *name);
 SENTRY_EXPERIMENTAL_API void sentry_transaction_set_name_n(
     sentry_transaction_t *transaction, const char *name, size_t name_len);
+
+/**
+ * Creates a new User Feedback with a specific name, email and comments.
+ *
+ * See https://develop.sentry.dev/sdk/envelopes/#user-feedback
+ *
+ * User Feedback has to be associated with a specific event that has been
+ * sent to Sentry earlier.
+ */
+SENTRY_API sentry_value_t sentry_value_new_user_feedback(
+    const sentry_uuid_t *uuid, const char *name, const char *email,
+    const char *comments);
+SENTRY_API sentry_value_t sentry_value_new_user_feedback_n(
+    const sentry_uuid_t *uuid, const char *name, size_t name_len,
+    const char *email, size_t email_len, const char *comments,
+    size_t comments_len);
+
+/**
+ * Captures a manually created User Feedback and sends it to Sentry.
+ */
+SENTRY_API void sentry_capture_user_feedback(sentry_value_t user_feedback);
 
 /**
  * The status of a Span or Transaction.

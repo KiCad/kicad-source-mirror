@@ -1,3 +1,4 @@
+import gzip
 import subprocess
 import os
 import io
@@ -162,10 +163,17 @@ class Envelope(object):
 
     @classmethod
     def deserialize(
-        cls, bytes  # type: bytes
+        cls, data  # type: bytes
     ):
         # type: (...) -> Envelope
-        return cls.deserialize_from(io.BytesIO(bytes))
+
+        # check if the data is gzip encoded and extract it before deserialization.
+        # 0x1f8b: gzip-magic, 0x08: `DEFLATE` compression method.
+        if data[:3] == b"\x1f\x8b\x08":
+            with gzip.open(io.BytesIO(data), "rb") as output:
+                return cls.deserialize_from(output)
+
+        return cls.deserialize_from(io.BytesIO(data))
 
     def print_verbose(self, indent=0):
         """Pretty prints the envelope."""
@@ -254,7 +262,7 @@ class Item(object):
         headers = json.loads(line)
         length = headers["length"]
         payload = f.read(length)
-        if headers.get("type") in ["event", "session", "transaction"]:
+        if headers.get("type") in ["event", "session", "transaction", "user_report"]:
             rv = cls(headers=headers, payload=PayloadRef(json=json.loads(payload)))
         else:
             rv = cls(headers=headers, payload=payload)

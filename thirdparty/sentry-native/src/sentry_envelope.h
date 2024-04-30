@@ -43,6 +43,12 @@ sentry_envelope_item_t *sentry__envelope_add_transaction(
     sentry_envelope_t *envelope, sentry_value_t transaction);
 
 /**
+ * Add a user feedback to this envelope.
+ */
+sentry_envelope_item_t *sentry__envelope_add_user_feedback(
+    sentry_envelope_t *envelope, sentry_value_t user_feedback);
+
+/**
  * Add a session to this envelope.
  */
 sentry_envelope_item_t *sentry__envelope_add_session(

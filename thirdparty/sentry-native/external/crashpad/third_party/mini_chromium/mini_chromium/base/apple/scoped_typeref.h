@@ -5,7 +5,7 @@
 #ifndef MINI_CHROMIUM_BASE_APPLE_SCOPED_TYPEREF_H_
 #define MINI_CHROMIUM_BASE_APPLE_SCOPED_TYPEREF_H_
 
-#include "base/logging.h"
+#include "base/check.h"
 #include "base/memory/scoped_policy.h"
 
 namespace base {
@@ -17,68 +17,125 @@ struct ScopedTypeRefTraits;
 template <typename T, typename Traits = ScopedTypeRefTraits<T>>
 class ScopedTypeRef {
  public:
-  typedef T element_type;
+  using element_type = T;
 
-  ScopedTypeRef(
-      T object = Traits::InvalidValue(),
+  // Construction from underlying type
+
+  explicit constexpr ScopedTypeRef(
+      element_type object = Traits::InvalidValue(),
       base::scoped_policy::OwnershipPolicy policy = base::scoped_policy::ASSUME)
       : object_(object) {
-    if (object_ && policy == base::scoped_policy::RETAIN)
+    if (object_ != Traits::InvalidValue() &&
+        policy == base::scoped_policy::RETAIN) {
       object_ = Traits::Retain(object_);
+    }
   }
 
-  ScopedTypeRef(const ScopedTypeRef<T, Traits>& that) : object_(that.object_) {
-    if (object_)
+  // Copy construction
+
+  ScopedTypeRef(const ScopedTypeRef<T, Traits>& that) : object_(that.get()) {
+    if (object_ != Traits::InvalidValue()) {
       object_ = Traits::Retain(object_);
+    }
   }
 
-  ~ScopedTypeRef() {
-    if (object_)
-      Traits::Release(object_);
+  template <typename R, typename RTraits>
+  ScopedTypeRef(const ScopedTypeRef<R, RTraits>& that) : object_(that.get()) {
+    if (object_ != Traits::InvalidValue()) {
+      object_ = Traits::Retain(object_);
+    }
   }
+
+  // Copy assignment
 
   ScopedTypeRef& operator=(const ScopedTypeRef<T, Traits>& that) {
     reset(that.get(), base::scoped_policy::RETAIN);
     return *this;
   }
 
-  [[nodiscard]] T* InitializeInto() {
-    DCHECK(!object_);
-    return &object_;
+  template <typename R, typename RTraits>
+  ScopedTypeRef& operator=(const ScopedTypeRef<R, RTraits>& that) {
+    reset(that.get(), base::scoped_policy::RETAIN);
+    return *this;
   }
 
-  void reset(T object = Traits::InvalidValue(),
+  // Move construction
+
+  ScopedTypeRef(ScopedTypeRef<T, Traits>&& that) : object_(that.release()) {}
+
+  template <typename R, typename RTraits>
+  ScopedTypeRef(ScopedTypeRef<R, RTraits>&& that) : object_(that.release()) {}
+
+  // Move assignment
+
+  ScopedTypeRef& operator=(ScopedTypeRef<T, Traits>&& that) {
+    reset(that.release(), base::scoped_policy::ASSUME);
+    return *this;
+  }
+
+  template <typename R, typename RTraits>
+  ScopedTypeRef& operator=(ScopedTypeRef<R, RTraits>&& that) {
+    reset(that.release(), base::scoped_policy::ASSUME);
+    return *this;
+  }
+
+  // Resetting
+
+  template <typename R, typename RTraits>
+  void reset(const ScopedTypeRef<R, RTraits>& that) {
+    reset(that.get(), base::scoped_policy::RETAIN);
+  }
+
+  void reset(element_type object = Traits::InvalidValue(),
              base::scoped_policy::OwnershipPolicy policy =
                  base::scoped_policy::ASSUME) {
-    if (object && policy == base::scoped_policy::RETAIN)
+    if (object != Traits::InvalidValue() &&
+        policy == base::scoped_policy::RETAIN) {
       object = Traits::Retain(object);
-    if (object_)
+    }
+    if (object_ != Traits::InvalidValue()) {
       Traits::Release(object_);
+    }
     object_ = object;
   }
 
-  bool operator==(T that) const { return object_ == that; }
+  // Destruction
 
-  bool operator!=(T that) const { return object_ != that; }
+  ~ScopedTypeRef() {
+    if (object_ != Traits::InvalidValue()) {
+      Traits::Release(object_);
+    }
+  }
 
-  operator T() const { return object_; }
+  [[nodiscard]] element_type* InitializeInto() {
+    CHECK_EQ(object_, Traits::InvalidValue());
+    return &object_;
+  }
 
-  T get() const { return object_; }
+  bool operator==(const ScopedTypeRef& that) const {
+    return object_ == that.object_;
+  }
+  bool operator!=(const ScopedTypeRef& that) const {
+    return object_ != that.object_;
+  }
+  explicit operator bool() const { return object_ != Traits::InvalidValue(); }
+
+  element_type get() const { return object_; }
 
   void swap(ScopedTypeRef& that) {
-    T temp = that.object_;
+    element_type temp = that.object_;
     that.object_ = object_;
     object_ = temp;
   }
 
-  [[nodiscard]] T release() {
-    T temp = object_;
+  [[nodiscard]] element_type release() {
+    element_type temp = object_;
     object_ = Traits::InvalidValue();
     return temp;
   }
 
  private:
-  T object_;
+  element_type object_;
 };
 
 }  // namespace apple

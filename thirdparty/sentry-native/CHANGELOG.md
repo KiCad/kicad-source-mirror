@@ -1,11 +1,68 @@
 # Changelog
 
+## 0.7.2
+
+**Features**:
+
+- Add optional Gzip transport compression via build option `SENTRY_TRANSPORT_COMPRESSION`. Requires system `zlib`. ([#954](https://github.com/getsentry/sentry-native/pull/954))
+- Enable automatic MIME detection of attachments sent with crash-reports from the `crashpad_handler`. ([#973](https://github.com/getsentry/sentry-native/pull/973), [crashpad#98](https://github.com/getsentry/crashpad/pull/98))
+
+**Fixes**:
+
+- Fix the Linux build when targeting RISC-V. ([#972](https://github.com/getsentry/sentry-native/pull/972))
+
+**Thank you**:
+
+- [@Strive-Sun](https://github.com/Strive-Sun)
+- [@jwinarske](https://github.com/jwinarske)
+
+## 0.7.1
+
+**Features**:
+
+- Add user feedback capability to the Native SDK. ([#966](https://github.com/getsentry/sentry-native/pull/966))
+
+**Internal**:
+
+- Remove the `CRASHPAD_WER_ENABLED` build flag. The WER module is now built for all supported Windows targets, and registration is conditional on runtime Windows version checks. ([#950](https://github.com/getsentry/sentry-native/pull/950), [crashpad#96](https://github.com/getsentry/crashpad/pull/96))
+
+**Docs**:
+
+- Add usage of the breadcrumb `data` property to the example. [#951](https://github.com/getsentry/sentry-native/pull/951)
+
+## 0.7.0
+
+**Breaking changes**:
+
+- Make `crashpad` the default backend for Linux. ([#927](https://github.com/getsentry/sentry-native/pull/927))
+- Remove build option `SENTRY_CRASHPAD_SYSTEM`. ([#928](https://github.com/getsentry/sentry-native/pull/928))
+
+**Fixes**:
+
+- Maintain `crashpad` client instance during Native SDK lifecycle. ([#910](https://github.com/getsentry/sentry-native/pull/910))
+- Specify correct dependencies for CMake client projects using a system-provided breakpad. ([#926](https://github.com/getsentry/sentry-native/pull/926))
+- Correct the Windows header include used by `sentry.h`, which fixes the build of [Swift bindings](https://github.com/thebrowsercompany/swift-sentry). ([#935](https://github.com/getsentry/sentry-native/pull/935))
+
+**Internal**:
+
+- Updated `crashpad` to 2023-11-24. ([#912](https://github.com/getsentry/sentry-native/pull/912), [crashpad#91](https://github.com/getsentry/crashpad/pull/91))
+- Fixing `crashpad` build for Windows on ARM64. ([#919](https://github.com/getsentry/sentry-native/pull/919), [crashpad#90](https://github.com/getsentry/crashpad/pull/90), [crashpad#92](https://github.com/getsentry/crashpad/pull/92), [crashpad#93](https://github.com/getsentry/crashpad/pull/93), [crashpad#94](https://github.com/getsentry/crashpad/pull/94))
+- Remove options memory leak during consent setting. ([#922](https://github.com/getsentry/sentry-native/pull/922))
+
+**Thank you**:
+
+Features, fixes and improvements in this release have been contributed by:
+
+- [@compnerd](https://github.com/compnerd)
+- [@stima](https://github.com/stima)
+- [@hyp](https://github.com/hyp)
+
 ## 0.6.7
 
 **Fixes**:
 
-- Disable sigaltstack on Android ([#901](https://github.com/getsentry/sentry-native/pull/901))
-- Prevent stuck crashpad-client on Windows ([#902](https://github.com/getsentry/sentry-native/pull/902), [crashpad#89](https://github.com/getsentry/crashpad/pull/89))
+- Disable sigaltstack on Android. ([#901](https://github.com/getsentry/sentry-native/pull/901))
+- Prevent stuck crashpad-client on Windows. ([#902](https://github.com/getsentry/sentry-native/pull/902), [crashpad#89](https://github.com/getsentry/crashpad/pull/89))
 
 ## 0.6.6
 

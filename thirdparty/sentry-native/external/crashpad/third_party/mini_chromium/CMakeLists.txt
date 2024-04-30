@@ -15,7 +15,7 @@ mc_append_sources(
     check.h
     check_op.h
     compiler_specific.h
-    cxx17_backports.h
+    containers/span.h
     debug/alias.cc
     debug/alias.h
     files/file_path.cc
@@ -52,6 +52,9 @@ mc_append_sources(
     scoped_generic.h
     strings/pattern.cc
     strings/pattern.h
+    strings/strcat.cc
+    strings/strcat.h
+    strings/strcat_internal.h
     strings/string_number_conversions.cc
     strings/string_number_conversions.h
     strings/string_piece.h
@@ -72,6 +75,7 @@ mc_append_sources(
     third_party/icu/icu_utf.h
     threading/thread_local_storage.cc
     threading/thread_local_storage.h
+    types/cxx23_to_underlying.h
 )
 
 if(NOT MINGW)
@@ -84,26 +88,7 @@ else()
     )
 endif()
 
-if(APPLE AND NOT IOS)
-    mc_append_sources(
-        mac/close_nocancel.cc
-        mac/scoped_ioobject.h
-        mac/scoped_launch_data.h
-	    apple/bridging.h
-        apple/foundation_util.h
-        apple/foundation_util.mm
-        apple/mach_logging.cc
-        apple/mach_logging.h
-        apple/scoped_cftyperef.h
-        apple/scoped_mach_port.cc
-        apple/scoped_mach_port.h
-        apple/scoped_mach_vm.cc
-        apple/scoped_mach_vm.h
-        apple/scoped_nsautorelease_pool.h
-        apple/scoped_nsautorelease_pool.mm
-        strings/sys_string_conversions_mac.mm
-    )
-elseif(IOS)
+if(APPLE)
     mc_append_sources(
         apple/bridging.h
         apple/foundation_util.h
@@ -120,6 +105,13 @@ elseif(IOS)
         apple/scoped_typeref.h
         strings/sys_string_conversions_mac.mm
     )
+    if (NOT IOS)
+        mc_append_sources(
+            mac/close_nocancel.cc
+            mac/scoped_ioobject.h
+            mac/scoped_launch_data.h
+        )
+    endif()
 endif()
 
 if(WIN32)

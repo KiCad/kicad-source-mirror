@@ -134,9 +134,9 @@
 
 #if BUILDFLAG(IS_POSIX) && defined(COMPILER_GCC) && defined(__WCHAR_MAX__) && \
     (__WCHAR_MAX__ == 0x7fffffff || __WCHAR_MAX__ == 0xffffffff)
-#define WCHAR_T_IS_UTF32
+#define WCHAR_T_IS_32_BIT
 #elif BUILDFLAG(IS_WIN)
-#define WCHAR_T_IS_UTF16
+#define WCHAR_T_IS_16_BIT
 #else
 #error Please add support for your compiler in build/build_config.h
 #endif
