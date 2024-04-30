@@ -2389,25 +2389,49 @@ void SHAPE_LINE_CHAIN::Simplify( int aMaxError )
     new_points.reserve( m_points.size() );
     new_shapes.reserve( m_shapes.size() );
 
+    auto is_skip = [this]( size_t i, size_t j, size_t k )
+    {
+        return ( ( m_points[i].x == m_points[j].x  // First two points on same vertical line
+                && m_points[i].y != m_points[j].y  // and not on same horizontal line
+                && m_points[i].x != m_points[k].x ) // and not on same vertical line as third point
+              || ( m_points[i].y == m_points[j].y
+                && m_points[i].x != m_points[j].x
+                && m_points[i].y != m_points[k].y ) );
+    };
+
     for( size_t ii = 0; ii < m_points.size(); )
     {
         new_points.push_back( m_points[ii] );
         new_shapes.push_back( m_shapes[ii] );
         size_t jj = ( ii + 1 ) % m_points.size();
-        size_t kk = ( jj + 1 ) % m_points.size();
+        size_t kk = ( ii + 2 ) % m_points.size();
 
         if( m_shapes[ii].first != SHAPE_IS_PT || m_shapes[jj].first != SHAPE_IS_PT
-            || m_shapes[kk].first != SHAPE_IS_PT )
+            || m_shapes[kk].first != SHAPE_IS_PT
+            || is_skip( ii, jj, kk ) )
         {
             ++ii;
             continue;
         }
 
-        while( TestSegmentHitFast( m_points[jj], m_points[ii], m_points[kk], aMaxError )
-               && ii != kk && jj > ii )
+        while( ii != kk && jj > ii && !( kk < ii && !m_closed ) )
         {
+            bool too_far = false;
+
+            for( size_t ll = ii + 1; ll < kk; ++ll )
+            {
+                if( !TestSegmentHitFast( m_points[ll], m_points[ii], m_points[kk], aMaxError ) )
+                {
+                    too_far = true;
+                    break;
+                }
+            }
+
+            if( too_far || is_skip( ii, jj, kk ) )
+                break;
+
             jj = ( jj + 1 ) % m_points.size();
-            kk = ( jj + 1 ) % m_points.size();
+            kk = ( kk + 1 ) % m_points.size();
         }
 
         if( ii == kk || jj <= ii )
