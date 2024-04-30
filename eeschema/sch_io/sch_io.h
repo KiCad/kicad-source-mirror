@@ -302,6 +302,17 @@ public:
     virtual void GetSubLibraryNames( std::vector<wxString>& aNames ) {}
 
     /**
+     * Gets a description of a sublibrary.
+     *
+     * Has no effect if SupportsSubLibraries() returns false.
+     *
+     * @param aName contains the name of the sublibrary for which the description is retrieved
+     *
+     * @return the description of the sublibrary
+     */
+    virtual wxString GetSubLibraryDescription( const wxString& aName ) { return wxEmptyString; }
+
+    /**
      * Retrieves a list of (custom) field names that are present on symbols in this library.
      * The plugin is responsible for guaranteeing that this list contains the set of unique
      * custom field names present on any symbols contained in the library.

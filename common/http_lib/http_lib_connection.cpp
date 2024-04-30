@@ -143,8 +143,15 @@ bool HTTP_LIB_CONNECTION::syncCategories()
         {
             HTTP_LIB_CATEGORY category;
 
-            category.id = item.value()["id"].get<std::string>();
-            category.name = item.value()["name"].get<std::string>();
+            auto& value = item.value();
+            category.id = value["id"].get<std::string>();
+            category.name = value["name"].get<std::string>();
+
+            if( value.contains( "description" ) )
+            {
+                category.description = value["description"].get<std::string>();
+                m_categoryDescriptions[category.name] = category.description;
+            }
 
             m_categories.push_back( category );
         }
@@ -179,12 +186,12 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
     if( m_cachedParts.find( aPartID ) != m_cachedParts.end() )
     {
         // check if it's outdated, if so re-fetch
-        if( std::difftime( std::time( nullptr ), m_cachedParts[aPartID].lastCached ) < m_source.timeout_parts )
+        if( std::difftime( std::time( nullptr ), m_cachedParts[aPartID].lastCached )
+            < m_source.timeout_parts )
         {
             aFetchedPart = m_cachedParts[aPartID];
             return true;
         }
-
     }
 
     std::string res = "";
@@ -299,7 +306,7 @@ bool HTTP_LIB_CONNECTION::SelectOne( const std::string& aPartID, HTTP_LIB_PART& 
 }
 
 
-bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY& aCategory,
+bool HTTP_LIB_CONNECTION::SelectAll( const HTTP_LIB_CATEGORY&    aCategory,
                                      std::vector<HTTP_LIB_PART>& aParts )
 {
     if( !IsValidEndpoint() )

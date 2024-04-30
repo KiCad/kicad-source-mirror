@@ -95,6 +95,8 @@ public:
 
     void GetSubLibraryNames( std::vector<wxString>& aNames ) const;
 
+    wxString GetSubLibraryDescription( const wxString& aName ) const;
+
     /**
      * @see SCH_IO::GetAvailableSymbolFields
      */

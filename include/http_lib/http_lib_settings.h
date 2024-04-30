@@ -61,8 +61,9 @@ struct HTTP_LIB_PART
 
 struct HTTP_LIB_CATEGORY
 {
-    std::string id;   ///< id of category
-    std::string name; ///< name of category
+    std::string id;          ///< id of category
+    std::string name;        ///< name of category
+    std::string description; ///< description of category
 
     std::time_t lastCached = 0;
 

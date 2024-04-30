@@ -104,6 +104,15 @@ void SYMBOL_LIB_TABLE_ROW::GetSubLibraryNames( std::vector<wxString>& aNames ) c
 }
 
 
+wxString SYMBOL_LIB_TABLE_ROW::GetSubLibraryDescription( const wxString& aName ) const
+{
+    if( !plugin )
+        return wxEmptyString;
+
+    return plugin->GetSubLibraryDescription( aName );
+}
+
+
 void SYMBOL_LIB_TABLE_ROW::ShowSettingsDialog( wxWindow* aParent ) const
 {
     wxCHECK( plugin, /* void */ );

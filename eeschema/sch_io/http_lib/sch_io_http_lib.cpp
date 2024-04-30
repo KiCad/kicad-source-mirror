@@ -193,6 +193,10 @@ void SCH_IO_HTTP_LIB::GetSubLibraryNames( std::vector<wxString>& aNames )
     }
 }
 
+wxString SCH_IO_HTTP_LIB::GetSubLibraryDescription( const wxString& aName )
+{
+    return m_conn->getCategoryDescription( std::string( aName.mb_str() ) );
+}
 
 void SCH_IO_HTTP_LIB::GetAvailableSymbolFields( std::vector<wxString>& aNames )
 {
