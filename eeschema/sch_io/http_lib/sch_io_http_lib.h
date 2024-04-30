@@ -62,6 +62,8 @@ public:
 
     void GetSubLibraryNames( std::vector<wxString>& aNames ) override;
 
+    wxString GetSubLibraryDescription( const wxString& aName ) override;
+
     void GetAvailableSymbolFields( std::vector<wxString>& aNames ) override;
 
     void GetDefaultSymbolFields( std::vector<wxString>& aNames ) override;

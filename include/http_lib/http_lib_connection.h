@@ -60,15 +60,18 @@ public:
 
     std::vector<HTTP_LIB_CATEGORY> getCategories() const { return m_categories; }
 
+    std::string getCategoryDescription( const std::string& aCategoryName ) const
+    {
+        return m_categoryDescriptions.at( aCategoryName );
+    }
+
     auto getCachedParts() { return m_cache; }
 
 private:
-
     // This is clunky but at the moment the only way to free the pointer after use without KiCad crashing.
     // at this point we can't use smart pointers as there is a problem with the order of how things are deleted/freed
     std::unique_ptr<KICAD_CURL_EASY> createCurlEasyObject()
     {
-
         std::unique_ptr<KICAD_CURL_EASY> aCurl( new KICAD_CURL_EASY() );
 
         // prepare curl
@@ -88,7 +91,7 @@ private:
 
     wxString httpErrorCodeDescription( uint16_t aHttpCode );
 
-    HTTP_LIB_SOURCE      m_source;
+    HTTP_LIB_SOURCE m_source;
 
     //          part.id     part
     std::map<std::string, HTTP_LIB_PART> m_cachedParts;
@@ -100,7 +103,8 @@ private:
 
     std::string m_lastError;
 
-    std::vector<HTTP_LIB_CATEGORY> m_categories;
+    std::vector<HTTP_LIB_CATEGORY>     m_categories;
+    std::map<std::string, std::string> m_categoryDescriptions;
 
     std::map<std::string, std::string> m_parts;
 
@@ -108,7 +112,6 @@ private:
     const std::string http_endpoint_parts = "parts";
     const std::string http_endpoint_settings = "settings";
     const std::string http_endpoint_auth = "authentication";
-
 };
 
 #endif //KICAD_HTTP_LIB_CONNECTION_H
