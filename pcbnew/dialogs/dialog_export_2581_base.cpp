@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf02)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -88,13 +88,14 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	sbSizer1->Add( fgSizer, 3, wxEXPAND|wxALL, 5 );
 
 
-	bSizer3->Add( sbSizer1, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
+	bSizer3->Add( sbSizer1, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 	wxStaticBoxSizer* sbSizer2;
 	sbSizer2 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("BOM Columns") ), wxVERTICAL );
 
 	wxFlexGridSizer* fgSizer4;
 	fgSizer4 = new wxFlexGridSizer( 0, 2, 5, 0 );
+	fgSizer4->AddGrowableCol( 1 );
 	fgSizer4->SetFlexibleDirection( wxBOTH );
 	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
@@ -161,10 +162,13 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	sbSizer2->Add( fgSizer4, 1, wxBOTTOM|wxEXPAND|wxRIGHT, 5 );
 
 
-	bSizer3->Add( sbSizer2, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
+	bSizer3->Add( sbSizer2, 1, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 10 );
 
 
 	bMainSizer->Add( bSizer3, 0, wxEXPAND, 5 );
+
+
+	bMainSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_stdButtons = new wxStdDialogButtonSizer();
 	m_stdButtonsOK = new wxButton( this, wxID_OK );
@@ -173,12 +177,11 @@ DIALOG_EXPORT_2581_BASE::DIALOG_EXPORT_2581_BASE( wxWindow* parent, wxWindowID i
 	m_stdButtons->AddButton( m_stdButtonsCancel );
 	m_stdButtons->Realize();
 
-	bMainSizer->Add( m_stdButtons, 0, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( m_stdButtons, 0, wxALL|wxEXPAND, 5 );
 
 
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 
 	this->Centre( wxBOTH );
 

@@ -104,7 +104,7 @@ private:
     void onDistPNChange( wxCommandEvent& event ) override;
 
 
-    bool TransferDataToWindow() override;
+    bool Init();
     bool TransferDataFromWindow() override;
 
     PCB_EDIT_FRAME* m_parent;
