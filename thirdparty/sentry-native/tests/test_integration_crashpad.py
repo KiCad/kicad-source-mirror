@@ -1,11 +1,17 @@
-import pytest
 import os
 import shutil
 import sys
 import time
+
+import pytest
+
 from . import make_dsn, run, Envelope
+from .assertions import (
+    assert_crashpad_upload,
+    assert_session,
+    assert_gzip_file_header,
+)
 from .conditions import has_crashpad
-from .assertions import assert_crashpad_upload, assert_session
 
 pytestmark = pytest.mark.skipif(not has_crashpad, reason="tests need crashpad backend")
 
@@ -118,13 +124,15 @@ def test_crashpad_wer_crash(cmake, httpserver, run_args):
 
 
 @pytest.mark.parametrize(
-    "run_args",
+    "run_args,build_args",
     [
         # if we crash, we want a dump
-        ([]),
+        ([], {"SENTRY_TRANSPORT_COMPRESSION": "Off"}),
+        ([], {"SENTRY_TRANSPORT_COMPRESSION": "On"}),
         # if we crash and before-send doesn't discard, we want a dump
         pytest.param(
             ["before-send"],
+            {},
             marks=pytest.mark.skipif(
                 sys.platform == "darwin",
                 reason="crashpad doesn't provide SetFirstChanceExceptionHandler on macOS",
@@ -133,6 +141,7 @@ def test_crashpad_wer_crash(cmake, httpserver, run_args):
         # if on_crash() is non-discarding, a discarding before_send() is overruled, so we get a dump
         pytest.param(
             ["discarding-before-send", "on-crash"],
+            {},
             marks=pytest.mark.skipif(
                 sys.platform == "darwin",
                 reason="crashpad doesn't provide SetFirstChanceExceptionHandler on macOS",
@@ -140,8 +149,9 @@ def test_crashpad_wer_crash(cmake, httpserver, run_args):
         ),
     ],
 )
-def test_crashpad_dumping_crash(cmake, httpserver, run_args):
-    tmp_path = cmake(["sentry_example"], {"SENTRY_BACKEND": "crashpad"})
+def test_crashpad_dumping_crash(cmake, httpserver, run_args, build_args):
+    build_args.update({"SENTRY_BACKEND": "crashpad"})
+    tmp_path = cmake(["sentry_example"], build_args)
 
     # make sure we are isolated from previous runs
     shutil.rmtree(tmp_path / ".sentry-native", ignore_errors=True)
@@ -169,17 +179,22 @@ def test_crashpad_dumping_crash(cmake, httpserver, run_args):
     run(tmp_path, "sentry_example", ["log", "no-setup"], check=True, env=env)
 
     assert len(httpserver.log) == 2
-    outputs = (httpserver.log[0][0], httpserver.log[1][0])
     session, multipart = (
-        (outputs[0].get_data(), outputs[1])
-        if b'"type":"session"' in outputs[0].get_data()
-        else (outputs[1].get_data(), outputs[0])
+        (httpserver.log[0][0], httpserver.log[1][0])
+        if is_session_envelope(httpserver.log[0][0].get_data())
+        else (httpserver.log[1][0], httpserver.log[0][0])
     )
 
-    envelope = Envelope.deserialize(session)
+    if build_args.get("SENTRY_TRANSPORT_COMPRESSION") == "On":
+        assert_gzip_file_header(session.get_data())
 
+    envelope = Envelope.deserialize(session.get_data())
     assert_session(envelope, {"status": "crashed", "errors": 1})
     assert_crashpad_upload(multipart)
+
+
+def is_session_envelope(data):
+    return b'"type":"session"' in data
 
 
 @pytest.mark.skipif(

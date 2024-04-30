@@ -1,9 +1,21 @@
-/* Copyright 2017 The Chromium Authors. All rights reserved.
+/* Copyright 2017 The Chromium Authors
  * Use of this source code is governed by a BSD-style license that can be
  * found in the LICENSE file. */
 
-#ifndef THIRD_PARTY_ZLIB_NAMES_H_
-#define THIRD_PARTY_ZLIB_NAMES_H_
+#ifndef THIRD_PARTY_ZLIB_CHROMECONF_H_
+#define THIRD_PARTY_ZLIB_CHROMECONF_H_
+
+#if defined(COMPONENT_BUILD)
+#if defined(WIN32)
+#if defined(ZLIB_IMPLEMENTATION)
+#define ZEXTERN __declspec(dllexport)
+#else
+#define ZEXTERN __declspec(dllimport)
+#endif
+#elif defined(ZLIB_IMPLEMENTATION)
+#define ZEXTERN __attribute__((visibility("default")))
+#endif
+#endif
 
 /* Rename all zlib names with a Cr_z_ prefix. This is based on the Z_PREFIX
  * option from zconf.h, but with a custom prefix. Where zconf.h would rename
@@ -37,6 +49,9 @@
 #define crc32 Cr_z_crc32
 #define crc32_combine Cr_z_crc32_combine
 #define crc32_combine64 Cr_z_crc32_combine64
+#define crc32_combine_gen64 Cr_z_crc32_combine_gen64
+#define crc32_combine_gen Cr_z_crc32_combine_gen
+#define crc32_combine_op Cr_z_crc32_combine_op
 #define crc32_z Cr_z_crc32_z
 #define deflate Cr_z_deflate
 #define deflateBound Cr_z_deflateBound
@@ -146,7 +161,7 @@
 #define voidpc Cr_z_voidpc
 #define voidpf Cr_z_voidpf
 #define gz_header_s Cr_z_gz_header_s
-#define internal_state Cr_z_internal_state
+/* #undef internal_state */
 /* #undef z_off64_t */
 
 /* An exported symbol that isn't handled by Z_PREFIX in zconf.h */
@@ -160,8 +175,29 @@
 #define crc_fold_init Cr_z_crc_fold_init
 #define crc_reset Cr_z_crc_reset
 #define fill_window_sse Cr_z_fill_window_sse
-#define read_buf Cr_z_read_buf
+#define deflate_read_buf Cr_z_deflate_read_buf
 #define x86_check_features Cr_z_x86_check_features
 #define x86_cpu_enable_simd Cr_z_x86_cpu_enable_simd
 
-#endif  /* THIRD_PARTY_ZLIB_NAMES_H_ */
+/* Symbols added by adler_simd.c */
+#define adler32_simd_ Cr_z_adler32_simd_
+#define x86_cpu_enable_ssse3 Cr_z_x86_cpu_enable_ssse3
+
+/* Symbols added by contrib/optimizations/inffast_chunk */
+#define inflate_fast_chunk_ Cr_z_inflate_fast_chunk_
+
+/* Symbols added by crc32_simd.c */
+#define crc32_sse42_simd_ Cr_z_crc32_sse42_simd_
+
+/* Symbols added by armv8_crc32 */
+#define arm_cpu_enable_crc32 Cr_z_arm_cpu_enable_crc32
+#define arm_cpu_enable_pmull Cr_z_arm_cpu_enable_pmull
+#define arm_check_features Cr_z_arm_check_features
+#define armv8_crc32_little Cr_z_armv8_crc32_little
+#define armv8_crc32_pmull_little Cr_z_armv8_crc32_pmull_little
+
+/* Symbols added by cpu_features.c */
+#define cpu_check_features Cr_z_cpu_check_features
+#define x86_cpu_enable_sse2 Cr_z_x86_cpu_enable_sse2
+
+#endif /* THIRD_PARTY_ZLIB_CHROMECONF_H_ */

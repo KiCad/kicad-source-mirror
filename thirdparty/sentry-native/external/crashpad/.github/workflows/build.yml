@@ -34,6 +34,18 @@ jobs:
           cmake -B cmake-build-stacks -D CRASHPAD_ENABLE_STACKTRACE=ON
           cmake --build cmake-build-stacks --parallel
 
+      - name: Build crashpad Windows ARM64
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          cmake -B cmake-build-arm64 -DCMAKE_TOOLCHAIN_FILE="cmake/toolchains/win_arm64.cmake" -DCRASHPAD_BUILD_TOOLS=On
+          cmake --build cmake-build-arm64 --config RelWithDebInfo -- /p:Platform=ARM64
+
+      - name: Build crashpad with client-side stack traces Windows ARM64
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          cmake -B cmake-build-stacks-arm64 -DCMAKE_TOOLCHAIN_FILE="cmake/toolchains/win_arm64.cmake" -DCRASHPAD_ENABLE_STACKTRACE=ON
+          cmake --build cmake-build-stacks-arm64 --config RelWithDebInfo -- /p:Platform=ARM64
+
   build-ios:
     runs-on: macos-latest
     steps:

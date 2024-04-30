@@ -296,6 +296,36 @@ sentry__envelope_add_transaction(
 }
 
 sentry_envelope_item_t *
+sentry__envelope_add_user_feedback(
+    sentry_envelope_t *envelope, sentry_value_t user_feedback)
+{
+    sentry_envelope_item_t *item = envelope_add_item(envelope);
+    if (!item) {
+        return NULL;
+    }
+
+    sentry_jsonwriter_t *jw = sentry__jsonwriter_new(NULL);
+    if (!jw) {
+        return NULL;
+    }
+
+    sentry_value_t event_id = sentry__ensure_event_id(user_feedback, NULL);
+
+    sentry__jsonwriter_write_value(jw, user_feedback);
+    item->payload = sentry__jsonwriter_into_string(jw, &item->payload_len);
+
+    sentry__envelope_item_set_header(
+        item, "type", sentry_value_new_string("user_report"));
+    sentry_value_t length = sentry_value_new_int32((int32_t)item->payload_len);
+    sentry__envelope_item_set_header(item, "length", length);
+
+    sentry_value_incref(event_id);
+    sentry__envelope_set_header(envelope, "event_id", event_id);
+
+    return item;
+}
+
+sentry_envelope_item_t *
 sentry__envelope_add_session(
     sentry_envelope_t *envelope, const sentry_session_t *session)
 {

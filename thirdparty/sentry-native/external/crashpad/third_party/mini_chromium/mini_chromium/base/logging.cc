@@ -54,6 +54,7 @@
 #include <lib/syslog/global.h>
 #endif
 
+#include "base/check_op.h"
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"

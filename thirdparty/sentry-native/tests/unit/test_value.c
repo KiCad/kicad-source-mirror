@@ -772,3 +772,24 @@ SENTRY_TEST(thread_without_name_still_valid)
         test_name);
     sentry_value_decref(thread);
 }
+
+SENTRY_TEST(user_feedback_is_valid)
+{
+    sentry_uuid_t event_id
+        = sentry_uuid_from_string("c993afb6-b4ac-48a6-b61b-2558e601d65d");
+    sentry_value_t user_feedback = sentry_value_new_user_feedback(
+        &event_id, "some-name", "some-email", "some-comment");
+
+    TEST_CHECK(!sentry_value_is_null(user_feedback));
+    TEST_CHECK_STRING_EQUAL(
+        sentry_value_as_string(sentry_value_get_by_key(user_feedback, "name")),
+        "some-name");
+    TEST_CHECK_STRING_EQUAL(
+        sentry_value_as_string(sentry_value_get_by_key(user_feedback, "email")),
+        "some-email");
+    TEST_CHECK_STRING_EQUAL(sentry_value_as_string(sentry_value_get_by_key(
+                                user_feedback, "comments")),
+        "some-comment");
+
+    sentry_value_decref(user_feedback);
+}

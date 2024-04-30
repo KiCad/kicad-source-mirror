@@ -1,9 +1,10 @@
-import os
 import json
-import sys
-import subprocess
-import pytest
+import os
 import shutil
+import subprocess
+import sys
+
+import pytest
 
 
 class CMake:

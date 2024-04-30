@@ -568,12 +568,14 @@ try_append_module(sentry_value_t modules, const sentry_module_t *module)
 }
 
 // copied from:
-// https://github.com/google/breakpad/blob/216cea7bca53fa441a3ee0d0f5fd339a3a894224/src/client/linux/minidump_writer/linux_dumper.h#L61-L70
+// https://github.com/google/breakpad/blob/eb28e7ed9c1c1e1a717fa34ce0178bf471a6311f/src/client/linux/minidump_writer/linux_dumper.h#L61-L69
 #if defined(__i386) || defined(__ARM_EABI__)                                   \
-    || (defined(__mips__) && _MIPS_SIM == _ABIO32)
+    || (defined(__mips__) && _MIPS_SIM == _ABIO32)                             \
+    || (defined(__riscv) && __riscv_xlen == 32)
 typedef Elf32_auxv_t elf_aux_entry;
-#elif defined(__x86_64) || defined(__aarch64__) || defined(__powerpc64__)      \
-    || (defined(__mips__) && _MIPS_SIM != _ABIO32)
+#elif defined(__x86_64) || defined(__aarch64__)                                \
+    || (defined(__mips__) && _MIPS_SIM != _ABIO32)                             \
+    || (defined(__riscv) && __riscv_xlen == 64)
 typedef Elf64_auxv_t elf_aux_entry;
 #endif
 

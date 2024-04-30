@@ -4,6 +4,8 @@
 
 #include "base/apple/foundation_util.h"
 
+#include "base/check.h"
+
 #if !BUILDFLAG(IS_IOS)
 extern "C" {
 CFTypeID SecACLGetTypeID();

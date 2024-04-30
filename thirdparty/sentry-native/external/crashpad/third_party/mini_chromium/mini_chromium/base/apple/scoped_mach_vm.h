@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-#include "base/logging.h"
+#include "base/check.h"
 
 // Use ScopedMachVM to supervise ownership of pages in the current process
 // through the Mach VM subsystem. Pages allocated with vm_allocate can be

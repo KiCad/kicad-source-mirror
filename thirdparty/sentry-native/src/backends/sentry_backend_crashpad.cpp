@@ -7,10 +7,15 @@ extern "C" {
 #include "sentry_database.h"
 #include "sentry_envelope.h"
 #include "sentry_options.h"
+#ifdef SENTRY_PLATFORM_WINDOWS
+#    include "sentry_os.h"
+#endif
 #include "sentry_path.h"
 #include "sentry_sync.h"
 #include "sentry_transport.h"
-#include "sentry_unix_pageallocator.h"
+#ifdef SENTRY_PLATFORM_LINUX
+#    include "sentry_unix_pageallocator.h"
+#endif
 #include "sentry_utils.h"
 #include "transports/sentry_disk_transport.h"
 }
@@ -43,6 +48,14 @@ extern "C" {
 #    pragma warning(pop)
 #endif
 
+template <typename T>
+static void
+safe_delete(T *&ptr)
+{
+    delete ptr;
+    ptr = nullptr;
+}
+
 extern "C" {
 
 #ifdef SENTRY_PLATFORM_LINUX
@@ -74,12 +87,23 @@ constexpr int g_CrashSignals[] = {
 
 typedef struct {
     crashpad::CrashReportDatabase *db;
+    crashpad::CrashpadClient *client;
     sentry_path_t *event_path;
     sentry_path_t *breadcrumb1_path;
     sentry_path_t *breadcrumb2_path;
     size_t num_breadcrumbs;
     sentry_value_t crash_event;
 } crashpad_state_t;
+
+/**
+ * Correctly destruct C++ members of the crashpad state.
+ */
+static void
+crashpad_state_dtor(crashpad_state_t *state)
+{
+    safe_delete(state->client);
+    safe_delete(state->db);
+}
 
 static void
 crashpad_backend_user_consent_changed(sentry_backend_t *backend)
@@ -90,6 +114,51 @@ crashpad_backend_user_consent_changed(sentry_backend_t *backend)
     }
     data->db->GetSettings()->SetUploadsEnabled(!sentry__should_skip_upload());
 }
+
+#ifdef SENTRY_PLATFORM_WINDOWS
+static void
+crashpad_register_wer_module(
+    const sentry_path_t *absolute_handler_path, const crashpad_state_t *data)
+{
+    windows_version_t win_ver;
+    if (!sentry__get_windows_version(&win_ver) || win_ver.build < 19041) {
+        SENTRY_WARN("Crashpad WER module not registered, because Windows "
+                    "doesn't meet version requirements (build >= 19041).");
+        return;
+    }
+    sentry_path_t *handler_dir = sentry__path_dir(absolute_handler_path);
+    sentry_path_t *wer_path = nullptr;
+    if (handler_dir) {
+        wer_path = sentry__path_join_str(handler_dir, "crashpad_wer.dll");
+        sentry__path_free(handler_dir);
+    }
+
+    if (wer_path && sentry__path_is_file(wer_path)) {
+        SENTRY_TRACEF("registering crashpad WER handler "
+                      "\"%" SENTRY_PATH_PRI "\"",
+            wer_path->path);
+
+        // The WER handler needs to be registered in the registry first.
+        constexpr DWORD dwOne = 1;
+        const LSTATUS reg_res = RegSetKeyValueW(HKEY_CURRENT_USER,
+            L"Software\\Microsoft\\Windows\\Windows Error Reporting\\"
+            L"RuntimeExceptionHelperModules",
+            wer_path->path, REG_DWORD, &dwOne, sizeof(DWORD));
+        if (reg_res != ERROR_SUCCESS) {
+            SENTRY_WARN("registering crashpad WER handler in registry failed");
+        } else {
+            const std::wstring wer_path_string(wer_path->path);
+            if (!data->client->RegisterWerModule(wer_path_string)) {
+                SENTRY_WARN("registering crashpad WER handler module failed");
+            }
+        }
+
+        sentry__path_free(wer_path);
+    } else {
+        SENTRY_WARN("crashpad WER handler module not found");
+    }
+}
+#endif
 
 static void
 crashpad_backend_flush_scope(
@@ -325,60 +394,28 @@ crashpad_backend_startup(
     // Initialize database first, flushing the consent later on as part of
     // `sentry_init` will persist the upload flag.
     data->db = crashpad::CrashReportDatabase::Initialize(database).release();
-
+    data->client = new crashpad::CrashpadClient;
     bool success;
-    crashpad::CrashpadClient client;
     char *minidump_url
         = sentry__dsn_get_minidump_url(options->dsn, options->user_agent);
     if (minidump_url) {
         SENTRY_TRACEF("using minidump URL \"%s\"", minidump_url);
-        success = client.StartHandler(handler, database, database, minidump_url,
-            options->http_proxy ? options->http_proxy : "", annotations,
-            arguments,
+        success = data->client->StartHandler(handler, database, database,
+            minidump_url, options->http_proxy ? options->http_proxy : "",
+            annotations, arguments,
             /* restartable */ true,
             /* asynchronous_start */ false, attachments);
         sentry_free(minidump_url);
     } else {
         SENTRY_WARN(
             "failed to construct minidump URL (check DSN or user-agent)");
-        delete data->db;
-        data->db = nullptr;
+        crashpad_state_dtor(data);
         return 1;
     }
 
-#ifdef CRASHPAD_WER_ENABLED
-    sentry_path_t *handler_dir = sentry__path_dir(absolute_handler_path);
-    sentry_path_t *wer_path = nullptr;
-    if (handler_dir) {
-        wer_path = sentry__path_join_str(handler_dir, "crashpad_wer.dll");
-        sentry__path_free(handler_dir);
-    }
-
-    if (wer_path && sentry__path_is_file(wer_path)) {
-        SENTRY_TRACEF("registering crashpad WER handler "
-                      "\"%" SENTRY_PATH_PRI "\"",
-            wer_path->path);
-
-        // The WER handler needs to be registered in the registry first.
-        DWORD dwOne = 1;
-        LSTATUS reg_res = RegSetKeyValueW(HKEY_CURRENT_USER,
-            L"Software\\Microsoft\\Windows\\Windows Error Reporting\\"
-            L"RuntimeExceptionHelperModules",
-            wer_path->path, REG_DWORD, &dwOne, sizeof(DWORD));
-        if (reg_res != ERROR_SUCCESS) {
-            SENTRY_WARN("registering crashpad WER handler in registry failed");
-        } else {
-            std::wstring wer_path_string(wer_path->path);
-            if (!client.RegisterWerModule(wer_path_string)) {
-                SENTRY_WARN("registering crashpad WER handler module failed");
-            }
-        }
-
-        sentry__path_free(wer_path);
-    } else {
-        SENTRY_WARN("crashpad WER handler module not found");
-    }
-#endif // CRASHPAD_WER_ENABLED
+#ifdef SENTRY_PLATFORM_WINDOWS
+    crashpad_register_wer_module(absolute_handler_path, data);
+#endif
 
     sentry__path_free(absolute_handler_path);
 
@@ -387,8 +424,7 @@ crashpad_backend_startup(
     } else {
         SENTRY_WARN("failed to start crashpad client handler");
         // not calling `shutdown`
-        delete data->db;
-        data->db = nullptr;
+        crashpad_state_dtor(data);
         return 1;
     }
 
@@ -432,9 +468,7 @@ crashpad_backend_shutdown(sentry_backend_t *backend)
     }
 #endif
 
-    auto *data = static_cast<crashpad_state_t *>(backend->data);
-    delete data->db;
-    data->db = nullptr;
+    crashpad_state_dtor(static_cast<crashpad_state_t *>(backend->data));
 
 #ifdef SENTRY_PLATFORM_LINUX
     g_signal_stack.ss_flags = SS_DISABLE;

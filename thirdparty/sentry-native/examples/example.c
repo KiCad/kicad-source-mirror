@@ -9,17 +9,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #ifdef NDEBUG
 #    undef NDEBUG
 #endif
+
 #include <assert.h>
 
 #ifdef SENTRY_PLATFORM_WINDOWS
 #    include <synchapi.h>
 #    define sleep_s(SECONDS) Sleep((SECONDS)*1000)
 #else
+
 #    include <signal.h>
 #    include <unistd.h>
+
 #    define sleep_s(SECONDS) sleep(SECONDS)
 #endif
 
@@ -93,7 +97,9 @@ has_arg(int argc, char **argv, const char *arg)
     return false;
 }
 
-#ifdef CRASHPAD_WER_ENABLED
+#if defined(SENTRY_PLATFORM_WINDOWS) && !defined(__MINGW32__)                  \
+    && !defined(__MINGW64__)
+
 int
 call_rffe_many_times()
 {
@@ -138,7 +144,7 @@ trigger_fastfail_crash()
     __fastfail(77);
 }
 
-#endif // CRASHPAD_WER_ENABLED
+#endif
 
 #ifdef SENTRY_PLATFORM_AIX
 // AIX has a null page mapped to the bottom of memory, which means null derefs
@@ -258,6 +264,21 @@ main(int argc, char **argv)
             debug_crumb, "category", sentry_value_new_string("example!"));
         sentry_value_set_by_key(
             debug_crumb, "level", sentry_value_new_string("debug"));
+
+        // extend the `http` crumb with (optional) data properties as documented
+        // here:
+        // https://develop.sentry.dev/sdk/event-payloads/breadcrumbs/#breadcrumb-types
+        sentry_value_t http_data = sentry_value_new_object();
+        sentry_value_set_by_key(http_data, "url",
+            sentry_value_new_string("https://example.com/api/1.0/users"));
+        sentry_value_set_by_key(
+            http_data, "method", sentry_value_new_string("GET"));
+        sentry_value_set_by_key(
+            http_data, "status_code", sentry_value_new_int32(200));
+        sentry_value_set_by_key(
+            http_data, "reason", sentry_value_new_string("OK"));
+        sentry_value_set_by_key(debug_crumb, "data", http_data);
+
         sentry_add_breadcrumb(debug_crumb);
 
         sentry_value_t nl_crumb
@@ -301,7 +322,8 @@ main(int argc, char **argv)
     if (has_arg(argc, argv, "crash")) {
         trigger_crash();
     }
-#ifdef CRASHPAD_WER_ENABLED
+#if defined(SENTRY_PLATFORM_WINDOWS) && !defined(__MINGW32__)                  \
+    && !defined(__MINGW64__)
     if (has_arg(argc, argv, "fastfail")) {
         trigger_fastfail_crash();
     }
@@ -342,6 +364,16 @@ main(int argc, char **argv)
         sentry_event_add_exception(event, exc);
 
         sentry_capture_event(event);
+    }
+    if (has_arg(argc, argv, "capture-user-feedback")) {
+        sentry_value_t event = sentry_value_new_message_event(
+            SENTRY_LEVEL_INFO, "my-logger", "Hello user feedback!");
+        sentry_uuid_t event_id = sentry_capture_event(event);
+
+        sentry_value_t user_feedback = sentry_value_new_user_feedback(
+            &event_id, "some-name", "some-email", "some-comment");
+
+        sentry_capture_user_feedback(user_feedback);
     }
 
     if (has_arg(argc, argv, "capture-transaction")) {
