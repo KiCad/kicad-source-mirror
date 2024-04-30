@@ -138,6 +138,11 @@ public:
     int HealShapes( const TOOL_EVENT& aEvent );
 
     /**
+     * Simplify the outlines of selected polygon objects
+    */
+    int SimplifyPolygons( const TOOL_EVENT& aEvent );
+
+    /**
      * Modify selected polygons into a single polygon using boolean operations
      * such as merge (union) or subtract (difference)
      */

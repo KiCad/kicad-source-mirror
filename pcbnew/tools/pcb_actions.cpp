@@ -622,6 +622,12 @@ TOOL_ACTION PCB_ACTIONS::chamferLines( TOOL_ACTION_ARGS()
         .Tooltip( _( "Cut away corners between selected lines" ) )
         .Icon( BITMAPS::chamfer ) );
 
+TOOL_ACTION PCB_ACTIONS::simplifyPolygons( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.InteractiveEdit.simplifyPolygons" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Simplify Polygons" ) )
+        .Tooltip( _( "Simplify polygon outlines, removing superfluous points" ) ) );
+
 TOOL_ACTION PCB_ACTIONS::healShapes( TOOL_ACTION_ARGS()
         .Name( "pcbnew.InteractiveEdit.healShapes" )
         .Scope( AS_GLOBAL )

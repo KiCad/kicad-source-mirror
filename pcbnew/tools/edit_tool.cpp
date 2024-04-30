@@ -136,6 +136,9 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
     static const std::vector<KICAD_T> polygonBooleanTypes = { PCB_SHAPE_LOCATE_RECT_T,
                                                               PCB_SHAPE_LOCATE_POLY_T };
 
+    static const std::vector<KICAD_T> polygonSimplifyTypes = { PCB_SHAPE_LOCATE_POLY_T,
+                                                               PCB_ZONE_T };
+
     auto hasCornerCondition =
             [aTool]( const SELECTION& aSelection )
             {
@@ -154,6 +157,7 @@ static std::shared_ptr<CONDITIONAL_MENU> makeShapeModificationMenu( TOOL_INTERAC
 
     // clang-format off
     menu->AddItem( PCB_ACTIONS::healShapes,              SELECTION_CONDITIONS::HasTypes( healShapesTypes ) );
+    menu->AddItem( PCB_ACTIONS::simplifyPolygons,        SELECTION_CONDITIONS::HasTypes( polygonSimplifyTypes ) );
     menu->AddItem( PCB_ACTIONS::filletLines,             SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
     menu->AddItem( PCB_ACTIONS::chamferLines,            SELECTION_CONDITIONS::OnlyTypes( filletChamferTypes ) );
     menu->AddItem( PCB_ACTIONS::extendLines,             SELECTION_CONDITIONS::OnlyTypes( lineExtendTypes )
@@ -1458,6 +1462,76 @@ int EDIT_TOOL::ModifyLines( const TOOL_EVENT& aEvent )
     if (const std::optional<wxString> msg = pairwise_line_routine->GetStatusMessage()) {
         frame()->ShowInfoBarMsg( *msg );
     }
+
+    return 0;
+}
+
+
+int EDIT_TOOL::SimplifyPolygons( const TOOL_EVENT& aEvent )
+{
+    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            {
+                std::vector<VECTOR2I> pts;
+
+                // Iterate from the back so we don't have to worry about removals.
+                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
+                {
+                    BOARD_ITEM* item = aCollector[i];
+
+                    if( !item->IsType( { PCB_SHAPE_LOCATE_POLY_T, PCB_ZONE_T } ) )
+                        aCollector.Remove( item );
+
+                    if( ZONE* zone = dyn_cast<ZONE*>( item ) )
+                    {
+                        if( zone->IsTeardropArea() )
+                            aCollector.Remove( item );
+                    }
+                }
+            },
+            true /* prompt user regarding locked items */ );
+
+    // Store last used value
+    static int s_toleranceValue = pcbIUScale.mmToIU( 3 );
+
+    WX_UNIT_ENTRY_DIALOG dlg( frame(), _( "Simplify Shapes" ), _( "Tolerance value:" ),
+                              s_toleranceValue );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return 0;
+
+    s_toleranceValue = dlg.GetValue();
+
+    if( s_toleranceValue <= 0 )
+        return 0;
+
+    BOARD_COMMIT commit{ this };
+
+    std::vector<PCB_SHAPE*>                 shapeList;
+
+    for( EDA_ITEM* item : selection )
+    {
+        commit.Modify( item );
+
+        if( PCB_SHAPE* shape = dyn_cast<PCB_SHAPE*>( item ) )
+        {
+            SHAPE_POLY_SET& poly = shape->GetPolyShape();
+
+            poly.SimplifyOutlines( s_toleranceValue );
+        }
+
+        if( ZONE* zone = dyn_cast<ZONE*>( item ) )
+        {
+            SHAPE_POLY_SET* poly = zone->Outline();
+
+            poly->SimplifyOutlines( s_toleranceValue );
+        }
+    }
+
+    commit.Push( _( "Simplify Polygons" ) );
+
+    // Notify other tools of the changes
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     return 0;
 }
@@ -3074,6 +3148,7 @@ void EDIT_TOOL::setTransitions()
     Go( &EDIT_TOOL::FilletTracks,          PCB_ACTIONS::filletTracks.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::filletLines.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::chamferLines.MakeEvent() );
+    Go( &EDIT_TOOL::SimplifyPolygons,      PCB_ACTIONS::simplifyPolygons.MakeEvent() );
     Go( &EDIT_TOOL::HealShapes,            PCB_ACTIONS::healShapes.MakeEvent() );
     Go( &EDIT_TOOL::ModifyLines,           PCB_ACTIONS::extendLines.MakeEvent() );
     Go( &EDIT_TOOL::BooleanPolygons,       PCB_ACTIONS::mergePolygons.MakeEvent() );

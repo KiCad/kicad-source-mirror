@@ -162,6 +162,8 @@ public:
     static TOOL_ACTION healShapes;
     /// Extend selected lines to meet at a point
     static TOOL_ACTION extendLines;
+    /// Simplify polygon outlines
+    static TOOL_ACTION simplifyPolygons;
 
     /// Merge multiple polygons into a single polygon
     static TOOL_ACTION mergePolygons;
