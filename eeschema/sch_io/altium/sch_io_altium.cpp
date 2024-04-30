@@ -889,9 +889,9 @@ void SCH_IO_ALTIUM::ParseRecord( int index, std::map<wxString, wxString>& proper
         ParseEllipse( properties );
         break;
 
-        case ALTIUM_SCH_RECORD::PIECHART:
-            m_reporter->Report( _( "Record 'PIECHART' not handled." ), RPT_SEVERITY_INFO );
-            break;
+    case ALTIUM_SCH_RECORD::PIECHART:
+        m_reporter->Report( _( "Record 'PIECHART' not handled." ), RPT_SEVERITY_INFO );
+        break;
 
     case ALTIUM_SCH_RECORD::ROUND_RECTANGLE:
         ParseRoundRectangle( properties );
@@ -4211,6 +4211,13 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
             case ALTIUM_SCH_RECORD::POLYGON: ParsePolygon( properties, symbols ); break;
 
             case ALTIUM_SCH_RECORD::ELLIPSE: ParseEllipse( properties, symbols ); break;
+
+            case ALTIUM_SCH_RECORD::PIECHART:
+                m_reporter->Report( wxString::Format( _( "Record 'PIECHART' not handled, found "
+                                                         "in %s." ),
+                                                      symbols[0]->GetName() ),
+                                    RPT_SEVERITY_ERROR );
+                break;
 
             case ALTIUM_SCH_RECORD::ROUND_RECTANGLE: ParseRoundRectangle( properties, symbols ); break;
 
