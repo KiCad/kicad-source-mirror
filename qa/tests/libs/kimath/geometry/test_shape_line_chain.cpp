@@ -387,6 +387,27 @@ BOOST_AUTO_TEST_CASE( SimplifyDuplicatePoint )
 }
 
 
+// Test that duplicate point gets removed when we call simplify
+BOOST_AUTO_TEST_CASE( SimplifyKeepEndPoint )
+{
+    SHAPE_LINE_CHAIN chain;
+
+    chain.Append( { 114772424, 90949410 } );
+    chain.Append( { 114767360, 90947240 } );
+    chain.Append( { 114772429, 90947228 } );
+    chain.SetClosed( true );
+
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 3 );
+
+    chain.Simplify();
+
+    BOOST_CHECK_EQUAL( chain.CPoints().size(), chain.CShapes().size() );
+    BOOST_CHECK_EQUAL( chain.PointCount(), 3 );
+    BOOST_CHECK( GEOM_TEST::IsOutlineValid( chain ) );
+}
+
+
 struct REMOVE_SHAPE_CASE
 {
     std::string m_ctx_name;
