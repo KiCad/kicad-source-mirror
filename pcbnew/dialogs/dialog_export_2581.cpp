@@ -58,6 +58,10 @@ DIALOG_EXPORT_2581::DIALOG_EXPORT_2581( PCB_EDIT_FRAME* aParent ) :
 
     m_textDistributor->SetSize( m_choiceDistPN->GetSize() );
 
+    // Fill wxChoice (and others) items with data before calling finishDialogSettings()
+    // to calculate suitable widgets sizes
+    Init();
+
     // Now all widgets have the size fixed, call FinishDialogSettings
     finishDialogSettings();
 }
@@ -209,7 +213,7 @@ void DIALOG_EXPORT_2581::onDistPNChange( wxCommandEvent& event )
 }
 
 
-bool DIALOG_EXPORT_2581::TransferDataToWindow()
+bool DIALOG_EXPORT_2581::Init()
 {
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
 
