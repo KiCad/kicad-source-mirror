@@ -561,7 +561,15 @@ bool TestSegmentHitFast( const VECTOR2I& aRefPoint, const VECTOR2I& aStart, cons
     if( aStart.y == aEnd.y && aRefPoint.x > xmin && aRefPoint.x < xmax )
         return std::abs( delta.y ) <= aDist;
 
-    VECTOR2I::extended_type len = ( aEnd - aStart ).EuclideanNorm();
+    VECTOR2I::extended_type len;
+
+    if( aStart.x == aEnd.x )
+        len = std::abs( aStart.y - aEnd.y );
+    else if( aStart.y == aEnd.y )
+        len = std::abs( aStart.x - aEnd.x );
+    else
+        len = ( aEnd - aStart ).EuclideanNorm();
+
     VECTOR2I::extended_type area = len * aDist;
 
     return std::abs( ParallelogramArea( aStart, aRefPoint, aEnd ) ) <= area;
