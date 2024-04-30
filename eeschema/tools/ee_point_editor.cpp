@@ -986,6 +986,7 @@ void EE_POINT_EDITOR::updatePoints()
 
     switch( item->Type() )
     {
+    case SCH_RULE_AREA_T:
     case SCH_SHAPE_T:
     {
         SCH_SHAPE* shape = static_cast<SCH_SHAPE*>( item );
@@ -1263,12 +1264,13 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     SHAPE_LINE_CHAIN& poly = shape->GetPolyShape().Outline( 0 );
     SCH_COMMIT        commit( m_toolMgr );
 
-    commit.Modify( shape, m_frame->GetScreen() );
-
-    if( poly.GetPointCount() < 3 )
+    if( poly.GetPointCount() <= 3 )
         return 0;
 
+    commit.Modify( shape, m_frame->GetScreen() );
+
     poly.Remove( getEditedPointIndex() );
+    setEditedPoint( nullptr );
 
     updateItem( shape, true );
     updatePoints();
