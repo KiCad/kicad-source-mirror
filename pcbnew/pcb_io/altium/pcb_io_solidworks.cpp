@@ -24,7 +24,7 @@
 #include <altium_pcb.h>
 #include <io/altium/altium_binary_parser.h>
 #include <pcb_io/pcb_io.h>
-#include <reporter.h>>
+#include <reporter.h>
 
 #include <board.h>
 
