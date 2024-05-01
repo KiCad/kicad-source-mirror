@@ -24,6 +24,7 @@
 #include <altium_pcb.h>
 #include <io/altium/altium_binary_parser.h>
 #include <pcb_io/pcb_io.h>
+#include <reporter.h>
 
 #include <board.h>
 
@@ -32,6 +33,7 @@
 
 PCB_IO_SOLIDWORKS::PCB_IO_SOLIDWORKS() : PCB_IO( wxS( "Solidworks PCB" ) )
 {
+    m_reporter = &WXLOG_REPORTER::GetInstance();
 }
 
 
@@ -119,7 +121,7 @@ BOARD* PCB_IO_SOLIDWORKS::LoadBoard( const wxString& aFileName, BOARD* aAppendTo
     try
     {
         // Parse File
-        ALTIUM_PCB pcb( m_board, m_progressReporter );
+        ALTIUM_PCB pcb( m_board, m_progressReporter, m_reporter );
         pcb.Parse( altiumPcbFile, mapping );
     }
     catch( CFB::CFBException& exception )

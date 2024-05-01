@@ -33,6 +33,7 @@
 #include <io/io_utils.h>
 #include <io/altium/altium_binary_parser.h>
 #include <pcb_io/pcb_io.h>
+#include <reporter.h>
 
 #include <board.h>
 
@@ -41,6 +42,7 @@
 
 PCB_IO_ALTIUM_DESIGNER::PCB_IO_ALTIUM_DESIGNER() : PCB_IO( wxS( "Altium Designer" ) )
 {
+    m_reporter = &WXLOG_REPORTER::GetInstance();
 }
 
 
@@ -116,7 +118,7 @@ BOARD* PCB_IO_ALTIUM_DESIGNER::LoadBoard( const wxString& aFileName, BOARD* aApp
     try
     {
         // Parse File
-        ALTIUM_PCB pcb( m_board, m_progressReporter );
+        ALTIUM_PCB pcb( m_board, m_progressReporter, m_reporter );
         pcb.Parse( altiumPcbFile, mapping );
     }
     catch( CFB::CFBException& exception )
@@ -278,7 +280,7 @@ FOOTPRINT* PCB_IO_ALTIUM_DESIGNER::FootprintLoad( const wxString& aLibraryPath,
                 continue;
 
             // Parse File
-            ALTIUM_PCB pcb( m_board, nullptr, aLibraryPath, aFootprintName );
+            ALTIUM_PCB pcb( m_board, nullptr, m_reporter, aLibraryPath, aFootprintName );
             return pcb.ParseFootprint( *altiumLibFile, aFootprintName );
         }
     }
