@@ -138,7 +138,7 @@ void IMAGE_SIZE::SetUnit( EDA_UNITS aUnit )
 }
 
 
-BEGIN_EVENT_TABLE( BITMAP2CMP_FRAME, EDA_BASE_FRAME )
+BEGIN_EVENT_TABLE( BITMAP2CMP_FRAME, KIWAY_PLAYER )
     EVT_MENU( wxID_CLOSE, BITMAP2CMP_FRAME::OnExit )
     EVT_MENU( wxID_EXIT, BITMAP2CMP_FRAME::OnExit )
 
@@ -193,6 +193,7 @@ BITMAP2CMP_FRAME::BITMAP2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolManager->InitTools();
 
     ReCreateMenuBar();
+    setupUIConditions();
 
     GetSizer()->SetSizeHints( this );
 
