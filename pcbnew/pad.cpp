@@ -811,26 +811,33 @@ void PAD::SetAttribute( PAD_ATTRIB aAttribute )
         switch( aAttribute )
         {
         case PAD_ATTRIB::PTH:
+            // Plump up to all copper layers
             m_layerMask |= LSET::AllCuMask();
             break;
 
         case PAD_ATTRIB::SMD:
         case PAD_ATTRIB::CONN:
-            if( m_layerMask.test( F_Cu ) )
+        {
+            // Trim down to no more than one copper layer
+            LSET copperLayers = m_layerMask & LSET::AllCuMask();
+
+            if( copperLayers.count() > 1 )
             {
                 m_layerMask &= ~LSET::AllCuMask();
-                m_layerMask.set( F_Cu );
-            }
-            else
-            {
-                m_layerMask &= ~LSET::AllCuMask();
-                m_layerMask.set( B_Cu );
+
+                if( copperLayers.test( B_Cu ) )
+                    m_layerMask.set( B_Cu );
+                else
+                    m_layerMask.set( copperLayers.Seq().front() );
             }
 
+            // No hole
             m_drill = VECTOR2I( 0, 0 );
             break;
+        }
 
         case PAD_ATTRIB::NPTH:
+            // No number; no net
             m_number = wxEmptyString;
             SetNetCode( NETINFO_LIST::UNCONNECTED );
             break;
