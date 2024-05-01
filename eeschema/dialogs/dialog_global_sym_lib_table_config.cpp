@@ -64,61 +64,60 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
                                                   ioe.What() ) );
             return false;
         }
-
-        return true;
     }
-
-    wxString fileName = m_filePicker1->GetPath();
-
-    if( fileName.IsEmpty() )
+    else
     {
-        DisplayError( this, _( "Please select a symbol library table file." ) );
-        return false;
-    }
+        wxString fileName = m_filePicker1->GetPath();
 
-    wxFileName fn = fileName;
+        if( fileName.IsEmpty() )
+        {
+            DisplayError( this, _( "Please select a symbol library table file." ) );
+            return false;
+        }
 
-    // Make sure the symbol library table to copy actually exists.
-    if( !fn.FileExists() )
-    {
-        DisplayError( this, wxString::Format( _( "File '%s' not found." ), fn.GetFullPath() ) );
-        return false;
-    }
+        wxFileName fn = fileName;
 
-    // Make sure the symbol library table to copy is a valid symbol library table file.
-    SYMBOL_LIB_TABLE tmpTable;
+        // Make sure the symbol library table to copy actually exists.
+        if( !fn.FileExists() )
+        {
+            DisplayError( this, wxString::Format( _( "File '%s' not found." ), fn.GetFullPath() ) );
+            return false;
+        }
 
-    try
-    {
-        tmpTable.Load( fn.GetFullPath() );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, wxString::Format( _( "Error reading symbol library table '%s'.\n"
-                                                 "%s" ),
-                                              fn.GetFullPath(),
-                                              ioe.What() ) );
-        return false;
-    }
+        // Make sure the symbol library table to copy is a valid symbol library table file.
+        SYMBOL_LIB_TABLE tmpTable;
 
-    // Create the config path if it doesn't already exist.
-    wxFileName symTableFileName = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
+        try
+        {
+            tmpTable.Load( fn.GetFullPath() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( this, wxString::Format( _( "Error reading symbol library table '%s'.\n"
+                                                     "%s" ),
+                                                  fn.GetFullPath(), ioe.What() ) );
+            return false;
+        }
 
-    if( !symTableFileName.DirExists() && !symTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
-    {
-        DisplayError( this, wxString::Format( _( "Cannot create global library table '%s'." ),
-                                              symTableFileName.GetPath() ) );
-        return false;
-    }
+        // Create the config path if it doesn't already exist.
+        wxFileName symTableFileName = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
 
-    // Copy the global symbol library table file to the user config.
-    if( !::wxCopyFile( fn.GetFullPath(), symTableFileName.GetFullPath() ) )
-    {
-        DisplayError( this, wxString::Format( _( "Error copying global symbol library table '%s' "
-                                                 "to '%s'." ),
-                                              fn.GetFullPath(),
-                                              symTableFileName.GetFullPath() ) );
-        return false;
+        if( !symTableFileName.DirExists() && !symTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
+        {
+            DisplayError( this, wxString::Format( _( "Cannot create global library table '%s'." ),
+                                                  symTableFileName.GetPath() ) );
+            return false;
+        }
+
+        // Copy the global symbol library table file to the user config.
+        if( !::wxCopyFile( fn.GetFullPath(), symTableFileName.GetFullPath() ) )
+        {
+            DisplayError( this,
+                          wxString::Format( _( "Error copying global symbol library table '%s' "
+                                               "to '%s'." ),
+                                            fn.GetFullPath(), symTableFileName.GetFullPath() ) );
+            return false;
+        }
     }
 
     // Load the successfully copied symbol library table file.  This should not fail since the

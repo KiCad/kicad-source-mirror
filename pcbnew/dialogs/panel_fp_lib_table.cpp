@@ -58,6 +58,7 @@
 #include <pcb_edit_frame.h>
 #include <env_paths.h>
 #include <dialogs/dialog_edit_library_tables.h>
+#include <dialogs/dialog_global_fp_lib_table_config.h>
 #include <dialogs/dialog_plugin_options.h>
 #include <footprint_viewer_frame.h>
 #include <footprint_edit_frame.h>
@@ -299,6 +300,73 @@ protected:
 };
 
 
+void PANEL_FP_LIB_TABLE::setupGrid( WX_GRID* aGrid )
+{
+    PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
+
+    auto autoSizeCol = [&]( WX_GRID* aGrid, int aCol )
+    {
+        int prevWidth = aGrid->GetColSize( aCol );
+
+        aGrid->AutoSizeColumn( aCol, false );
+        aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
+    };
+
+    // Give a bit more room for wxChoice editors
+    for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
+        aGrid->SetRowSize( ii, aGrid->GetDefaultRowSize() + 4 );
+
+    // add Cut, Copy, and Paste to wxGrids
+    aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid ) );
+
+    aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+    wxGridCellAttr* attr;
+
+    attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_PATH_EDITOR(
+            m_parent, aGrid, &cfg->m_lastFootprintLibDir, true, m_projectBasePath,
+            [this]( WX_GRID* grid, int row ) -> wxString
+            {
+                auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
+                auto* tableRow = static_cast<FP_LIB_TABLE_ROW*>( libTable->at( row ) );
+                PCB_IO_MGR::PCB_FILE_T       fileType = tableRow->GetFileType();
+                const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
+
+                if( pluginDesc.m_IsFile )
+                    return pluginDesc.FileFilter();
+                else
+                    return wxEmptyString;
+            } ) );
+    aGrid->SetColAttr( COL_URI, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetEditor( new wxGridCellChoiceEditor( m_pluginChoices ) );
+    aGrid->SetColAttr( COL_TYPE, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly(); // not really; we delegate interactivity to GRID_TRICKS
+    aGrid->SetColAttr( COL_ENABLED, attr );
+
+    // No visibility control for footprint libraries yet; this feature is primarily
+    // useful for database libraries and it's only implemented for schematic symbols
+    // at the moment.
+    aGrid->HideCol( COL_VISIBLE );
+
+    // all but COL_OPTIONS, which is edited with Option Editor anyways.
+    autoSizeCol( aGrid, COL_NICKNAME );
+    autoSizeCol( aGrid, COL_TYPE );
+    autoSizeCol( aGrid, COL_URI );
+    autoSizeCol( aGrid, COL_DESCR );
+
+    // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
+    // a currentCell which is sometimes not highlighted.
+    if( aGrid->GetNumberRows() > 0 )
+        aGrid->SelectRow( 0 );
+};
+
+
 PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject,
                                         FP_LIB_TABLE* aGlobalTable, const wxString& aGlobalTblPath,
                                         FP_LIB_TABLE* aProjectTable, const wxString& aProjectTblPath,
@@ -317,10 +385,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
 
     populatePluginList();
 
-    wxArrayString choices;
-
     for( auto& [fileType, desc] : m_supportedFpFiles )
-        choices.Add( PCB_IO_MGR::ShowType( fileType ) );
+        m_pluginChoices.Add( PCB_IO_MGR::ShowType( fileType ) );
 
 
     PCBNEW_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<PCBNEW_SETTINGS>();
@@ -329,71 +395,6 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PRO
         cfg->m_lastFootprintLibDir = PATHS::GetDefaultUserFootprintsPath();
 
     m_lastProjectLibDir = m_projectBasePath;
-
-    auto autoSizeCol =
-            [&]( WX_GRID* aGrid, int aCol )
-            {
-                int prevWidth = aGrid->GetColSize( aCol );
-
-                aGrid->AutoSizeColumn( aCol, false );
-                aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
-            };
-
-    auto setupGrid =
-            [&]( WX_GRID* aGrid )
-            {
-                // Give a bit more room for wxChoice editors
-                aGrid->SetDefaultRowSize( aGrid->GetDefaultRowSize() + 4 );
-
-                // add Cut, Copy, and Paste to wxGrids
-                aGrid->PushEventHandler( new FP_GRID_TRICKS( m_parent, aGrid ) );
-
-                aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-                wxGridCellAttr* attr;
-
-                attr = new wxGridCellAttr;
-                attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
-                        &cfg->m_lastFootprintLibDir, true, m_projectBasePath,
-                        [this]( WX_GRID* grid, int row ) -> wxString
-                        {
-                            auto* libTable = static_cast<FP_LIB_TABLE_GRID*>( grid->GetTable() );
-                            auto* tableRow = static_cast<FP_LIB_TABLE_ROW*>( libTable->at( row ) );
-                            PCB_IO_MGR::PCB_FILE_T fileType = tableRow->GetFileType();
-                            const IO_BASE::IO_FILE_DESC& pluginDesc = m_supportedFpFiles.at( fileType );
-
-                            if( pluginDesc.m_IsFile )
-                                return pluginDesc.FileFilter();
-                            else
-                                return wxEmptyString;
-                        } ) );
-                aGrid->SetColAttr( COL_URI, attr );
-
-                attr = new wxGridCellAttr;
-                attr->SetEditor( new wxGridCellChoiceEditor( choices ) );
-                aGrid->SetColAttr( COL_TYPE, attr );
-
-                attr = new wxGridCellAttr;
-                attr->SetRenderer( new wxGridCellBoolRenderer() );
-                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-                aGrid->SetColAttr( COL_ENABLED, attr );
-
-                // No visibility control for footprint libraries yet; this feature is primarily
-                // useful for database libraries and it's only implemented for schematic symbols
-                // at the moment.
-                aGrid->HideCol( COL_VISIBLE );
-
-                // all but COL_OPTIONS, which is edited with Option Editor anyways.
-                autoSizeCol( aGrid, COL_NICKNAME );
-                autoSizeCol( aGrid, COL_TYPE );
-                autoSizeCol( aGrid, COL_URI );
-                autoSizeCol( aGrid, COL_DESCR );
-
-                // Gives a selection to each grid, mainly for delete button. wxGrid's wake up with
-                // a currentCell which is sometimes not highlighted.
-                if( aGrid->GetNumberRows() > 0 )
-                    aGrid->SelectRow( 0 );
-            };
 
     setupGrid( m_global_grid );
 
@@ -639,8 +640,6 @@ bool PANEL_FP_LIB_TABLE::verifyTables()
 
 void PANEL_FP_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
-    m_cur_grid = m_pageNdx == 0 ? m_global_grid : m_project_grid;
 }
 
 
@@ -1050,6 +1049,55 @@ void PANEL_FP_LIB_TABLE::onSizeGrid( wxSizeEvent& event )
     adjustPathSubsGridColumns( event.GetSize().GetX() );
 
     event.Skip();
+}
+
+
+void PANEL_FP_LIB_TABLE::onReset( wxCommandEvent& event )
+{
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
+    // No need to prompt to preserve an empty table
+    if( m_global_grid->GetNumberRows() > 0 &&
+        !IsOK( this, wxString::Format( _( "This action will reset your global library table on "
+                                          "disk and cannot be undone." ) ) ) )
+    {
+        return;
+    }
+
+    DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG dlg( m_parent );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        m_global_grid->Freeze();
+
+        wxGridTableBase* table = m_global_grid->GetTable();
+        m_global_grid->DestroyTable( table );
+
+        m_global_grid->SetTable( new FP_LIB_TABLE_GRID( *m_globalTable ), true );
+        m_global_grid->PopEventHandler( true );
+        setupGrid( m_global_grid );
+        m_parent->m_GlobalTableChanged = true;
+
+        m_global_grid->Thaw();
+    }
+}
+
+
+void PANEL_FP_LIB_TABLE::onPageChange( wxBookCtrlEvent& event )
+{
+    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
+
+    if( m_pageNdx == 0 )
+    {
+        m_cur_grid = m_global_grid;
+        m_resetGlobal->Enable();
+    }
+    else
+    {
+        m_cur_grid = m_project_grid;
+        m_resetGlobal->Disable();
+    }
 }
 
 

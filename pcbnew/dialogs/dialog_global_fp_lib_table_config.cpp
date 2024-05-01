@@ -63,62 +63,63 @@ bool DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::TransferDataFromWindow()
                                 + wxS( "\n" ) + ioe.What() );
             return false;
         }
-
-        return true;
     }
-
-    wxString fileName = m_filePicker1->GetPath();
-
-    if( fileName.IsEmpty() )
+    else
     {
-        DisplayError( this, _( "Please select a footprint library table file." ) );
-        return false;
-    }
+        wxString fileName = m_filePicker1->GetPath();
 
-    wxFileName fn = fileName;
+        if( fileName.IsEmpty() )
+        {
+            DisplayError( this, _( "Please select a footprint library table file." ) );
+            return false;
+        }
 
-    // Make sure the footprint library table to copy actually exists.
-    if( !fn.FileExists() )
-    {
-        DisplayError( this, wxString::Format( _( "File '%s' not found." ), fn.GetFullPath() ) );
-        return false;
-    }
+        wxFileName fn = fileName;
 
-    // Make sure the footprint library table to copy is a valid footprint library table file.
-    FP_LIB_TABLE tmpTable;
+        // Make sure the footprint library table to copy actually exists.
+        if( !fn.FileExists() )
+        {
+            DisplayError( this, wxString::Format( _( "File '%s' not found." ), fn.GetFullPath() ) );
+            return false;
+        }
 
-    try
-    {
-        tmpTable.Load( fn.GetFullPath() );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, wxString::Format( _( "'%s' is not a valid footprint library table." ),
-                                              fn.GetFullPath() )
-                            + wxS( "\n" ) + ioe.What() );
-        return false;
-    }
+        // Make sure the footprint library table to copy is a valid footprint library table file.
+        FP_LIB_TABLE tmpTable;
 
-    // Create the config path if it doesn't already exist.
-    wxFileName fpTableFileName = FP_LIB_TABLE::GetGlobalTableFileName();
+        try
+        {
+            tmpTable.Load( fn.GetFullPath() );
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            DisplayError( this,
+                          wxString::Format( _( "'%s' is not a valid footprint library table." ),
+                                            fn.GetFullPath() )
+                                  + wxS( "\n" ) + ioe.What() );
+            return false;
+        }
 
-    if( !fpTableFileName.DirExists() && !fpTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
-    {
-        DisplayError( this, wxString::Format( _( "Cannot create library table path '%s'." ),
-                                              fpTableFileName.GetPath() ) );
-        return false;
-    }
+        // Create the config path if it doesn't already exist.
+        wxFileName fpTableFileName = FP_LIB_TABLE::GetGlobalTableFileName();
 
-    // Copy the global footprint library table file to the user config.
-    if( !::wxCopyFile( fn.GetFullPath(), fpTableFileName.GetFullPath() ) )
-    {
-        DisplayError( this, wxString::Format( _( "Cannot copy footprint library table from:\n"
-                                                 "%s\n"
-                                                 "to:\n"
-                                                 "%s." ),
-                                              fn.GetFullPath(),
-                                              fpTableFileName.GetFullPath() ) );
-        return false;
+        if( !fpTableFileName.DirExists() && !fpTableFileName.Mkdir( 0x777, wxPATH_MKDIR_FULL ) )
+        {
+            DisplayError( this, wxString::Format( _( "Cannot create library table path '%s'." ),
+                                                  fpTableFileName.GetPath() ) );
+            return false;
+        }
+
+        // Copy the global footprint library table file to the user config.
+        if( !::wxCopyFile( fn.GetFullPath(), fpTableFileName.GetFullPath() ) )
+        {
+            DisplayError( this,
+                          wxString::Format( _( "Cannot copy footprint library table from:\n"
+                                               "%s\n"
+                                               "to:\n"
+                                               "%s." ),
+                                            fn.GetFullPath(), fpTableFileName.GetFullPath() ) );
+            return false;
+        }
     }
 
     // Load the successfully copied footprint library table file.  This should not fail

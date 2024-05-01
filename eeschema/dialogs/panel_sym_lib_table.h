@@ -59,6 +59,11 @@ private:
     void adjustPathSubsGridColumns( int aWidth );
     void onConvertLegacyLibraries( wxCommandEvent& event ) override;
 
+    void onPageChange( wxBookCtrlEvent& event ) override;
+    void onReset( wxCommandEvent& event ) override;
+
+    void setupGrid( WX_GRID* aGrid );
+
     bool TransferDataFromWindow() override;
 
     /// Populate the readonly environment variable table with names and values
@@ -86,6 +91,7 @@ private:
     PROJECT*                    m_project;
 
     DIALOG_EDIT_LIBRARY_TABLES* m_parent;
+    wxArrayString               m_pluginChoices;
 
     WX_GRID*                    m_cur_grid;     ///< changed based on tab choice
     static size_t               m_pageNdx;      ///< Remember the last notebook page selected

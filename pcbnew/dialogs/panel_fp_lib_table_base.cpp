@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 3.10.1-0-g8feb16b)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -153,6 +153,12 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 
 	bButtonsSizer->Add( 20, 0, 1, wxEXPAND, 5 );
 
+	m_resetGlobal = new wxButton( this, wxID_ANY, _("Reset Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
+	bButtonsSizer->Add( m_resetGlobal, 0, wxALL, 5 );
+
+
+	bButtonsSizer->Add( 0, 0, 0, wxEXPAND, 5 );
+
 	m_migrate_libs_button = new wxButton( this, wxID_ANY, _("Migrate Libraries"), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_migrate_libs_button, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
@@ -205,10 +211,12 @@ PANEL_FP_LIB_TABLE_BASE::PANEL_FP_LIB_TABLE_BASE( wxWindow* parent, wxWindowID i
 
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_FP_LIB_TABLE_BASE::OnUpdateUI ) );
+	m_notebook->Connect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_FP_LIB_TABLE_BASE::onPageChange ), NULL, this );
 	m_append_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_move_up_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
 	m_delete_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
+	m_resetGlobal->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::onReset ), NULL, this );
 	m_migrate_libs_button->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::onMigrateLibraries ), NULL, this );
 	m_path_subs_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 }
@@ -217,10 +225,12 @@ PANEL_FP_LIB_TABLE_BASE::~PANEL_FP_LIB_TABLE_BASE()
 {
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( PANEL_FP_LIB_TABLE_BASE::OnUpdateUI ) );
+	m_notebook->Disconnect( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED, wxNotebookEventHandler( PANEL_FP_LIB_TABLE_BASE::onPageChange ), NULL, this );
 	m_append_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::appendRowHandler ), NULL, this );
 	m_move_up_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::moveUpHandler ), NULL, this );
 	m_move_down_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::moveDownHandler ), NULL, this );
 	m_delete_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::deleteRowHandler ), NULL, this );
+	m_resetGlobal->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::onReset ), NULL, this );
 	m_migrate_libs_button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_FP_LIB_TABLE_BASE::onMigrateLibraries ), NULL, this );
 	m_path_subs_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( PANEL_FP_LIB_TABLE_BASE::onSizeGrid ), NULL, this );
 

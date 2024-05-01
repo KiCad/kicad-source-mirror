@@ -24,6 +24,7 @@
 
 #include <build_version.h>
 #include <common.h>     // For ExpandEnvVarSubstitutions
+#include <dialogs/dialog_global_sym_lib_table_config.h>
 #include <dialogs/dialog_plugin_options.h>
 #include <project.h>
 #include <panel_sym_lib_table.h>
@@ -230,6 +231,86 @@ protected:
 };
 
 
+void PANEL_SYM_LIB_TABLE::setupGrid( WX_GRID* aGrid )
+{
+    auto autoSizeCol =
+        [&]( WX_GRID* aGrid, int aCol )
+        {
+            int prevWidth = aGrid->GetColSize( aCol );
+
+            aGrid->AutoSizeColumn( aCol, false );
+            aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
+        };
+
+    EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
+
+    // Give a bit more room for combobox editors
+    for( int ii = 0; ii < aGrid->GetNumberRows(); ++ii )
+        aGrid->SetRowSize( ii, aGrid->GetDefaultRowSize() + 4 );
+
+    // add Cut, Copy, and Paste to wxGrids
+    aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, aGrid ) );
+
+    aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
+
+    // Set special attributes
+    wxGridCellAttr* attr;
+
+    attr = new wxGridCellAttr;
+
+    wxString fileFiltersStr;
+    wxString allWildcardsStr;
+
+    attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
+                                                &cfg->m_lastSymbolLibDir,
+                                                true, m_project->GetProjectPath(),
+            []( WX_GRID* grid, int row ) -> wxString
+            {
+                auto* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
+                auto* tableRow = static_cast<SYMBOL_LIB_TABLE_ROW*>( libTable->at( row ) );
+
+                IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( tableRow->GetFileType() ) );
+
+                if( pi )
+                {
+                    const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
+
+                    if( desc.m_IsFile )
+                        return desc.FileFilter();
+                }
+
+                return wxEmptyString;
+            } ) );
+    aGrid->SetColAttr( COL_URI, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetEditor( new wxGridCellChoiceEditor( m_pluginChoices ) );
+    aGrid->SetColAttr( COL_TYPE, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    aGrid->SetColAttr( COL_ENABLED, attr );
+
+    attr = new wxGridCellAttr;
+    attr->SetRenderer( new wxGridCellBoolRenderer() );
+    attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
+    aGrid->SetColAttr( COL_VISIBLE, attr );
+
+    // all but COL_OPTIONS, which is edited with Option Editor anyways.
+    autoSizeCol( aGrid, COL_NICKNAME );
+    autoSizeCol( aGrid, COL_TYPE );
+    autoSizeCol( aGrid, COL_URI );
+    autoSizeCol( aGrid, COL_DESCR );
+    autoSizeCol( aGrid, COL_ENABLED );
+
+    // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
+    // a currentCell which is sometimes not highlighted.
+    if( aGrid->GetNumberRows() > 0 )
+        aGrid->SelectRow( 0 );
+};
+
+
 PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, PROJECT* aProject,
                                           SYMBOL_LIB_TABLE* aGlobalTable,
                                           const wxString& aGlobalTablePath,
@@ -245,8 +326,6 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
     // so make it a grid owned table.
     m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_globalTable ), true );
 
-    wxArrayString pluginChoices;
-
     for( const SCH_IO_MGR::SCH_FILE_T& type : SCH_IO_MGR::SCH_FILE_T_vector )
     {
         IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( type ) );
@@ -255,7 +334,7 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
             continue;
 
         if( const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc() )
-            pluginChoices.Add( SCH_IO_MGR::ShowType( type ) );
+            m_pluginChoices.Add( SCH_IO_MGR::ShowType( type ) );
     }
 
     EESCHEMA_SETTINGS* cfg = Pgm().GetSettingsManager().GetAppSettings<EESCHEMA_SETTINGS>();
@@ -265,82 +344,6 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent, P
 
     m_lastProjectLibDir = m_project->GetProjectPath();
 
-    auto autoSizeCol =
-            [&]( WX_GRID* aGrid, int aCol )
-            {
-                int prevWidth = aGrid->GetColSize( aCol );
-
-                aGrid->AutoSizeColumn( aCol, false );
-                aGrid->SetColSize( aCol, std::max( prevWidth, aGrid->GetColSize( aCol ) ) );
-            };
-
-    auto setupGrid =
-            [&]( WX_GRID* aGrid )
-            {
-                // Give a bit more room for combobox editors
-                aGrid->SetDefaultRowSize( aGrid->GetDefaultRowSize() + 4 );
-
-                // add Cut, Copy, and Paste to wxGrids
-                aGrid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, aGrid ) );
-
-                aGrid->SetSelectionMode( wxGrid::wxGridSelectRows );
-
-                // Set special attributes
-                wxGridCellAttr* attr;
-
-                attr = new wxGridCellAttr;
-
-                wxString fileFiltersStr;
-                wxString allWildcardsStr;
-
-                attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, aGrid,
-                                                            &cfg->m_lastSymbolLibDir,
-                                                            true, m_project->GetProjectPath(),
-                        []( WX_GRID* grid, int row ) -> wxString
-                        {
-                            auto* libTable = static_cast<SYMBOL_LIB_TABLE_GRID*>( grid->GetTable() );
-                            auto* tableRow = static_cast<SYMBOL_LIB_TABLE_ROW*>( libTable->at( row ) );
-
-                            IO_RELEASER<SCH_IO> pi( SCH_IO_MGR::FindPlugin( tableRow->GetFileType() ) );
-
-                            if( pi )
-                            {
-                                const IO_BASE::IO_FILE_DESC& desc = pi->GetLibraryDesc();
-
-                                if( desc.m_IsFile )
-                                    return desc.FileFilter();
-                            }
-
-                            return wxEmptyString;
-                        } ) );
-                aGrid->SetColAttr( COL_URI, attr );
-
-                attr = new wxGridCellAttr;
-                attr->SetEditor( new wxGridCellChoiceEditor( pluginChoices ) );
-                aGrid->SetColAttr( COL_TYPE, attr );
-
-                attr = new wxGridCellAttr;
-                attr->SetRenderer( new wxGridCellBoolRenderer() );
-                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-                aGrid->SetColAttr( COL_ENABLED, attr );
-
-                attr = new wxGridCellAttr;
-                attr->SetRenderer( new wxGridCellBoolRenderer() );
-                attr->SetReadOnly();    // not really; we delegate interactivity to GRID_TRICKS
-                aGrid->SetColAttr( COL_VISIBLE, attr );
-
-                // all but COL_OPTIONS, which is edited with Option Editor anyways.
-                autoSizeCol( aGrid, COL_NICKNAME );
-                autoSizeCol( aGrid, COL_TYPE );
-                autoSizeCol( aGrid, COL_URI );
-                autoSizeCol( aGrid, COL_DESCR );
-                autoSizeCol( aGrid, COL_ENABLED );
-
-                // Gives a selection to each grid, mainly for delete button.  wxGrid's wake up with
-                // a currentCell which is sometimes not highlighted.
-                if( aGrid->GetNumberRows() > 0 )
-                    aGrid->SelectRow( 0 );
-            };
 
     setupGrid( m_global_grid );
 
@@ -413,6 +416,7 @@ bool PANEL_SYM_LIB_TABLE::allowAutomaticPluginTypeSelection( wxString& aLibraryP
 bool PANEL_SYM_LIB_TABLE::verifyTables()
 {
     wxString msg;
+    wxBusyCursor wait;
 
     for( SYMBOL_LIB_TABLE_GRID* model : { global_model(), project_model() } )
     {
@@ -443,8 +447,12 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 badCellDlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Remove Invalid Cells" ) ),
                                            wxMessageDialog::ButtonLabel( _( "Cancel Table Update" ) ) );
 
+                wxEndBusyCursor();
+
                 if( badCellDlg.ShowModal() == wxID_NO )
                     return false;
+
+                wxBeginBusyCursor( wxHOURGLASS_CURSOR );
 
                 // Delete the "empty" row, where empty means missing nick or uri.
                 // This also updates the UI which could be slow, but there should only be a few
@@ -468,6 +476,8 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
                 wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
+
+                wxEndBusyCursor();
                 errdlg.ShowModal();
                 return false;
             }
@@ -519,6 +529,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
                     wxWindow* topLevelParent = wxGetTopLevelParent( this );
 
+                    wxEndBusyCursor();
                     wxMessageDialog errdlg( topLevelParent, msg, _( "Library Nickname Error" ) );
                     errdlg.ShowModal();
 
@@ -558,7 +569,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 msg.Printf( _( "Symbol library '%s' failed to load." ), row.GetNickName() );
 
                 wxWindow* topLevelParent = wxGetTopLevelParent( this );
-
+                wxEndBusyCursor();
                 wxMessageDialog errdlg( topLevelParent, msg + wxS( "\n" ) + ioe.What(),
                                         _( "Error Loading Library" ) );
                 errdlg.ShowModal();
@@ -574,8 +585,6 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
 
 void PANEL_SYM_LIB_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 {
-    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
-    m_cur_grid = m_pageNdx == 0 ? m_global_grid : m_project_grid;
 }
 
 
@@ -823,6 +832,56 @@ void PANEL_SYM_LIB_TABLE::moveDownHandler( wxCommandEvent& event )
 
         m_cur_grid->MakeCellVisible( curRow, m_cur_grid->GetGridCursorCol() );
         m_cur_grid->SetGridCursor( curRow, m_cur_grid->GetGridCursorCol() );
+    }
+}
+
+
+void PANEL_SYM_LIB_TABLE::onReset( wxCommandEvent& event )
+{
+    if( !m_cur_grid->CommitPendingChanges() )
+        return;
+
+    // No need to prompt to preserve an empty table
+    if( m_global_grid->GetNumberRows() > 0 &&
+        !IsOK( this, wxString::Format( _( "This action will reset your global library table on "
+                                          "disk and cannot be undone." ) ) ) )
+    {
+        return;
+    }
+
+
+    DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG dlg( m_parent );
+
+    if( dlg.ShowModal() == wxID_OK )
+    {
+        m_global_grid->Freeze();
+
+        wxGridTableBase* table = m_global_grid->GetTable();
+        m_global_grid->DestroyTable( table );
+
+        m_global_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *m_globalTable ), true );
+        m_global_grid->PopEventHandler( true );
+        setupGrid( m_global_grid );
+        m_parent->m_GlobalTableChanged = true;
+
+        m_global_grid->Thaw();
+    }
+}
+
+
+void PANEL_SYM_LIB_TABLE::onPageChange( wxBookCtrlEvent& event )
+{
+    m_pageNdx = (unsigned) std::max( 0, m_notebook->GetSelection() );
+
+    if( m_pageNdx == 0 )
+    {
+        m_cur_grid = m_global_grid;
+        m_resetGlobal->Enable();
+    }
+    else
+    {
+        m_cur_grid = m_project_grid;
+        m_resetGlobal->Disable();
     }
 }
 

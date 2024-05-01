@@ -194,6 +194,8 @@ WX_GRID::~WX_GRID()
     if( m_weOwnTable )
         DestroyTable( GetTable() );
 
+    Disconnect( wxEVT_GRID_EDITOR_SHOWN, wxGridEventHandler( WX_GRID::onCellEditorShown ), nullptr, this );
+    Disconnect( wxEVT_GRID_EDITOR_HIDDEN, wxGridEventHandler( WX_GRID::onCellEditorHidden ), nullptr, this );
     Disconnect( wxEVT_DPI_CHANGED, wxDPIChangedEventHandler( WX_GRID::onDPIChanged ), nullptr, this );
 }
 
