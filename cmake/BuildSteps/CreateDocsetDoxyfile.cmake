@@ -36,7 +36,9 @@ endfunction()
 get_kicad_doc_version(KICAD_DOC_VERSION)
 
 # copy and modify the "normal" Doxyfile
-file(COPY ${SRC_DOXYFILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+cmake_path(GET DOCSET_DOXYFILE PARENT_PATH OUTPUT_DIR)
+file(MAKE_DIRECTORY ${OUTPUT_DIR})
+file(COPY_FILE ${SRC_DOXYFILE} ${DOCSET_DOXYFILE})
 file(APPEND ${DOCSET_DOXYFILE} "
 
 # Added for DocSet generation

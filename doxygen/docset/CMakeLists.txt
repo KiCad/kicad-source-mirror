@@ -41,7 +41,7 @@ if(DOXYGEN_FOUND AND DOXYTAG2ZEALDB AND SED)
     set(SRC_DOXYFILE ${CMAKE_SOURCE_DIR}/doxygen/Doxyfile)
 
     # A new doxyfile with the original, plus some extra config
-    set(DOCSET_DOXYFILE ${CMAKE_CURRENT_BINARY_DIR}}/doxygen/Doxyfile)
+    set(DOCSET_DOXYFILE ${CMAKE_CURRENT_BINARY_DIR}/doxygen/Doxyfile)
 
     # Various pieces of the docset
     set(DOCSET_LOC ${CMAKE_CURRENT_BINARY_DIR}/doxygen/html/${DOCSET_BUNDLE_ID}.docset)
@@ -67,13 +67,14 @@ if(DOXYGEN_FOUND AND DOXYTAG2ZEALDB AND SED)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
         OUTPUT ${DOCSET_DOXYFILE}
         DEPENDS version_header
+                ${SRC_DOXYFILE}
                 ${KICAD_CMAKE_MODULE_PATH}/BuildSteps/CreateDocsetDoxyfile.cmake
         COMMENT "Modifying doxyfile for docset creation"
         )
 
     add_custom_command(
         COMMAND ${DOXYGEN_EXECUTABLE} ${DOCSET_DOXYFILE}
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/doxygen
         OUTPUT ${DOXY_TAG_FILE} ${DOXY_MAKEFILE}
         DEPENDS ${DOCSET_DOXYFILE}
         COMMENT "Generating Doxygen for DocSet"
