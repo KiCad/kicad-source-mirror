@@ -148,6 +148,12 @@ SELECTION_CONDITION EE_CONDITIONS::AllPins = []( const SELECTION& aSel )
 };
 
 
+SELECTION_CONDITION EE_CONDITIONS::AllPinsOrSheetPins = []( const SELECTION& aSel )
+{
+    return aSel.GetSize() >= 1 && aSel.OnlyContains( { SCH_PIN_T, SCH_SHEET_PIN_T } );
+};
+
+
 #define HITTEST_THRESHOLD_PIXELS 5
 
 
@@ -363,6 +369,31 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
     KIID lastRolloverItem = niluuid;
     EE_GRID_HELPER grid( m_toolMgr );
+
+    auto pinOrientation =
+        []( EDA_ITEM* aItem )
+        {
+            SCH_PIN* pin = dynamic_cast<SCH_PIN*>( aItem );
+
+            if( pin )
+                return pin->GetOrientation();
+
+            SCH_SHEET_PIN* sheetPin = dynamic_cast<SCH_SHEET_PIN*>( aItem );
+
+            if( sheetPin )
+            {
+                switch( sheetPin->GetSide() )
+                {
+                default:
+                case SHEET_SIDE::LEFT:   return PIN_ORIENTATION::PIN_RIGHT;
+                case SHEET_SIDE::RIGHT:  return PIN_ORIENTATION::PIN_LEFT;
+                case SHEET_SIDE::TOP:    return PIN_ORIENTATION::PIN_DOWN;
+                case SHEET_SIDE::BOTTOM: return PIN_ORIENTATION::PIN_UP;
+                }
+            }
+
+            return PIN_ORIENTATION::PIN_LEFT;
+        };
 
     // Main loop: keep receiving events
     while( TOOL_EVENT* evt = Wait() )
@@ -621,8 +652,11 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             else if( *evt->GetCommandId() >= ID_POPUP_SCH_PIN_TRICKS_START
                      && *evt->GetCommandId() <= ID_POPUP_SCH_PIN_TRICKS_END )
             {
-                if( !m_selection.OnlyContains( { SCH_PIN_T } ) || m_selection.Empty() )
+                if( !m_selection.OnlyContains( { SCH_PIN_T, SCH_SHEET_PIN_T } )
+                    || m_selection.Empty() )
+                {
                     return 0;
+                }
 
                 // Keep track of new items so we make them the new selection at the end
                 EDA_ITEMS  newItems;
@@ -632,8 +666,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     for( EDA_ITEM* item : m_selection )
                     {
-                        SCH_PIN*        pin = static_cast<SCH_PIN*>( item );
-                        SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( pin->GetPosition() );
+                        SCH_NO_CONNECT* nc = new SCH_NO_CONNECT( item->GetPosition() );
                         commit.Add( nc, m_frame->GetScreen() );
                         newItems.push_back( nc );
                     }
@@ -647,14 +680,13 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     for( EDA_ITEM* item : m_selection )
                     {
-                        SCH_PIN*  pin = static_cast<SCH_PIN*>( item );
-                        SCH_LINE* wire = new SCH_LINE( pin->GetPosition(), LAYER_WIRE );
+                        SCH_LINE* wire = new SCH_LINE( item->GetPosition(), LAYER_WIRE );
 
                         // Add some length to the wire as nothing in our code base handles
                         // 0 length wires very well, least of all the ortho drag algorithm
                         VECTOR2I stub;
 
-                        switch( pin->GetOrientation() )
+                        switch( pinOrientation( item ) )
                         {
                         case PIN_ORIENTATION::PIN_LEFT:
                             stub = VECTOR2I( 1 * wireGrid.x, 0 );
@@ -670,7 +702,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                             break;
                         }
 
-                        wire->SetEndPoint( pin->GetPosition() + stub );
+                        wire->SetEndPoint( item->GetPosition() + stub );
 
                         m_frame->AddToScreen( wire, m_frame->GetScreen() );
                         commit.Added( wire, m_frame->GetScreen() );
@@ -702,24 +734,33 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                     // selected by the user
                     for( EDA_ITEM* item : m_selection )
                     {
-                        SCH_PIN*        pin = static_cast<SCH_PIN*>( item );
+                        SCH_PIN*        pin = dynamic_cast<SCH_PIN*>( item );
+                        SCH_SHEET_PIN*  sheetPin = dynamic_cast<SCH_SHEET_PIN*>( item );
+                        SCH_EDIT_FRAME* sf = dynamic_cast<SCH_EDIT_FRAME*>( m_frame );
                         SCH_LABEL_BASE* label = nullptr;
+
+                        wxString labelText;
+
+                        if( pin )
+                            labelText = pin->GetShownName();
+                        else if( sheetPin && sf )
+                            labelText = sheetPin->GetShownText( &sf->GetCurrentSheet(), false );
 
                         switch( *evt->GetCommandId() )
                         {
                         case ID_POPUP_SCH_PIN_TRICKS_NET_LABEL:
-                            label = new SCH_LABEL( pin->GetPosition(), pin->GetShownName() );
+                            label = new SCH_LABEL( item->GetPosition(), labelText );
                             break;
                         case ID_POPUP_SCH_PIN_TRICKS_HIER_LABEL:
-                            label = new SCH_HIERLABEL( pin->GetPosition(), pin->GetShownName() );
+                            label = new SCH_HIERLABEL( item->GetPosition(), labelText );
                             break;
                         case ID_POPUP_SCH_PIN_TRICKS_GLOBAL_LABEL:
-                            label = new SCH_GLOBALLABEL( pin->GetPosition(), pin->GetShownName() );
+                            label = new SCH_GLOBALLABEL( item->GetPosition(), labelText );
                             break;
                         default: continue;
                         }
 
-                        switch( pin->GetOrientation() )
+                        switch( pinOrientation( item ) )
                         {
                         case PIN_ORIENTATION::PIN_LEFT:
                             label->SetSpinStyle( SPIN_STYLE::SPIN::RIGHT );
@@ -735,7 +776,25 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                             break;
                         }
 
-                        switch( pin->GetType() )
+                        ELECTRICAL_PINTYPE pinType = ELECTRICAL_PINTYPE::PT_UNSPECIFIED;
+
+                        if( pin )
+                        {
+                            pinType = pin->GetType();
+                        }
+                        else if( sheetPin )
+                        {
+                            switch( sheetPin->GetLabelShape() )
+                            {
+                            case LABEL_INPUT:    pinType = ELECTRICAL_PINTYPE::PT_INPUT;    break;
+                            case LABEL_OUTPUT:   pinType = ELECTRICAL_PINTYPE::PT_OUTPUT;   break;
+                            case LABEL_BIDI:     pinType = ELECTRICAL_PINTYPE::PT_BIDI;     break;
+                            case LABEL_TRISTATE: pinType = ELECTRICAL_PINTYPE::PT_TRISTATE; break;
+                            case LABEL_PASSIVE:  pinType = ELECTRICAL_PINTYPE::PT_PASSIVE;  break;
+                            }
+                        }
+
+                        switch( pinType )
                         {
                         case ELECTRICAL_PINTYPE::PT_BIDI:
                             label->SetShape( LABEL_FLAG_SHAPE::L_BIDI );

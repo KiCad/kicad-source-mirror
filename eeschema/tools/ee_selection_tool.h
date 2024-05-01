@@ -54,6 +54,7 @@ public:
     static SELECTION_CONDITION SingleNonExcludedMarker;
     static SELECTION_CONDITION MultipleSymbolsOrPower;
     static SELECTION_CONDITION AllPins;
+    static SELECTION_CONDITION AllPinsOrSheetPins;
 };
 
 

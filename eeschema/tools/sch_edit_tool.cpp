@@ -189,10 +189,11 @@ private:
         EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
         EE_SELECTION&      selection = selTool->GetSelection();
         SCH_PIN*           pin = dynamic_cast<SCH_PIN*>( selection.Front() );
+        SCH_SHEET_PIN*     sheetPin = dynamic_cast<SCH_SHEET_PIN*>( selection.Front() );
 
         Clear();
 
-        if( !pin )
+        if( !pin && !sheetPin )
             return;
 
         Add( _( "Wire" ),               ID_POPUP_SCH_PIN_TRICKS_WIRE,         BITMAPS::add_line );
@@ -578,7 +579,7 @@ bool SCH_EDIT_TOOL::Init()
 
     selToolMenu.AddMenu( makeSymbolUnitMenu( m_selectionTool ),  E_C::SingleMultiUnitSymbol, 1 );
     selToolMenu.AddMenu( makePinFunctionMenu( m_selectionTool ), E_C::SingleMultiFunctionPin, 1 );
-    selToolMenu.AddMenu( makePinTricksMenu( m_selectionTool ),   E_C::AllPins, 1 );
+    selToolMenu.AddMenu( makePinTricksMenu( m_selectionTool ),   E_C::AllPinsOrSheetPins, 1 );
 
     selToolMenu.AddMenu( makeTransformMenu(),          orientCondition, 200 );
     selToolMenu.AddMenu( makeAttributesMenu(),         E_C::HasType( SCH_SYMBOL_T ), 200 );
