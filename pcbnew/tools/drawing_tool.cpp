@@ -3010,7 +3010,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             return nullptr;
         }
 
-        int selectPossibleNetsByPopMenu( std::list<int>& aNetcodeList )
+        std::optional<int> selectPossibleNetsByPopupMenu( std::set<int>& aNetcodeList )
         {
             ACTION_MENU         menu( true );
             const NETINFO_LIST& netInfo = m_board->GetNetInfo();
@@ -3047,7 +3047,9 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             DRAWING_TOOL* drawingTool = m_frame->GetToolManager()->GetTool<DRAWING_TOOL>();
             drawingTool->SetContextMenu( &menu, CMENU_NOW );
 
-            int selectNetCode = -1;
+            int  selectedNetCode = -1;
+            bool cancelled = false;
+
             while( TOOL_EVENT* evt = drawingTool->Wait() )
             {
                 if( evt->Action() == TA_CHOICE_MENU_UPDATE )
@@ -3061,14 +3063,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                     // User has selected an item, so this one will be returned
                     if( id && ( *id > 0 ) && ( *id < menuID ) )
                     {
-                        selectNetCode = menuIDNetCodeMap.at( *id );
+                        selectedNetCode = menuIDNetCodeMap.at( *id );
                     }
                     // User has cancelled the menu (either by <esc> or clicking out of it),
-                    // so different from -1, we return -2 to cancel the via placement
-                    // but stay in the via tool
                     else
                     {
-                        selectNetCode = -2;
+                        cancelled = true;
                     }
                 }
                 else if( evt->Action() == TA_CHOICE_MENU_CLOSED )
@@ -3077,76 +3077,67 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 }
             }
 
-            return selectNetCode;
+            if( cancelled )
+                return std::optional<int>();
+            else
+                return selectedNetCode;
         }
 
-        int findStitchedZoneNet( PCB_VIA* aVia )
+        std::optional<int> findStitchedZoneNet( PCB_VIA* aVia )
         {
-            const VECTOR2I position = aVia->GetPosition();
-            const LSET     lset = aVia->GetLayerSet();
+            const VECTOR2I      position = aVia->GetPosition();
             PCB_DISPLAY_OPTIONS opts = m_frame->GetDisplayOptions();
-            bool highContrast = ( opts.m_ContrastModeDisplay != HIGH_CONTRAST_MODE::NORMAL );
+            std::set<int>       netcodeList;
 
-            // In high contrast mode, it should be treated as the only one visible layer
-            // We just return the net of active layer (not the visible layers) without show menu
-            if( highContrast )
+            // See if there are any connections available on a high-contrast layer
+            if( opts.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::DIMMED
+                || opts.m_ContrastModeDisplay == HIGH_CONTRAST_MODE::HIDDEN )
             {
-                if( lset.test( m_frame->GetActiveLayer() ) )
+                if( aVia->GetLayerSet().test( m_frame->GetActiveLayer() ) )
                 {
                     for( ZONE* z : m_board->Zones() )
                     {
                         if( z->IsOnLayer( m_frame->GetActiveLayer() ) )
                         {
                             if( z->HitTestFilledArea( m_frame->GetActiveLayer(), position ) )
-                                return z->GetNetCode();
+                                netcodeList.insert( z->GetNetCode() );
                         }
                     }
                 }
+            }
+
+            // If there's only one, return it.
+            if( netcodeList.size() == 1 )
+                return *netcodeList.begin();
+
+            // See if there are any connections available on a visible layer
+            LSET lset = LSET( m_board->GetVisibleLayers() & aVia->GetLayerSet() );
+
+            for( ZONE* z : m_board->Zones() )
+            {
+                for( PCB_LAYER_ID layer : lset.Seq() )
+                {
+                    if( z->IsOnLayer( layer ) )
+                    {
+                        if( z->HitTestFilledArea( layer, position ) )
+                            netcodeList.insert( z->GetNetCode() );
+                    }
+                }
+            }
+
+            // If there's only one, return it.
+            if( netcodeList.size() == 1 )
+                return *netcodeList.begin();
+
+            if( netcodeList.size() > 1 )
+            {
+                // The net assignment is ambiguous.  Let the user decide.
+                return selectPossibleNetsByPopupMenu( netcodeList );
             }
             else
             {
-                LSET tempLset = LSET( m_board->GetVisibleLayers() & lset );
-                std::list<int> netcodeList;
-
-                // When there is only one visible layer and the others invisible,
-                // we find net in the only visible layer instead of showing menu
-                if( 1 != tempLset.Seq().size() )
-                {
-                    tempLset = lset;
-                }
-
-                // get possible nets from layers
-                // and store them in netcodelist
-                for( ZONE* z : m_board->Zones() )
-                {
-                    for( PCB_LAYER_ID layer : tempLset.Seq() )
-                    {
-                        if( z->IsOnLayer( layer ) )
-                        {
-                            if( z->HitTestFilledArea( layer, position ) )
-                                netcodeList.push_back( z->GetNetCode() );
-                        }
-
-                    }
-                }
-
-                netcodeList.sort();
-                netcodeList.unique();
-
-                if( netcodeList.size() == 1 )
-                {
-                    return netcodeList.front();
-                }
-
-                // When there are more than one possible net , it's ambiguous
-                // So show a pop-up menu of possible nets
-                if( netcodeList.size() > 1 )
-                {
-                    return selectPossibleNetsByPopMenu( netcodeList );
-                }
+                return NETINFO_LIST::ORPHANED;
             }
-
-            return -1;
         }
 
         void SnapItem( BOARD_ITEM *aItem ) override
@@ -3159,9 +3150,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
             if( settings->tracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS && m_gridHelper.GetSnap() )
             {
-                PCB_TRACK* track = findTrack( via );
-
-                if( track )
+                if( PCB_TRACK* track = findTrack( via ) )
                 {
                     SEG      trackSeg( track->GetStart(), track->GetEnd() );
                     VECTOR2I snap = m_gridHelper.AlignToSegment( position, trackSeg );
@@ -3171,12 +3160,8 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             }
             else if( settings->pads == MAGNETIC_OPTIONS::CAPTURE_ALWAYS && m_gridHelper.GetSnap() )
             {
-                PAD* pad = findPad( via );
-
-                if( pad )
-                {
+                if( PAD* pad = findPad( via ) )
                     aItem->SetPosition( pad->GetPosition() );
-                }
             }
         }
 
@@ -3200,14 +3185,12 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             }
             else
             {
-                int netcode = findStitchedZoneNet( via );
+                std::optional<int> netcode = findStitchedZoneNet( via );
 
-                // -2 signifies that the user has canceled the placement
-                // of the via while remaining in the via tool
-                if( -2 == netcode )
+                if( !netcode.has_value() )  // user cancelled net disambiguation menu
                     return false;
 
-                via->SetNetCode( netcode );
+                via->SetNetCode( netcode.value() );
                 via->SetIsFree( via->GetNetCode() > 0 );
             }
 
