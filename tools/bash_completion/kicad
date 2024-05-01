@@ -1,0 +1,198 @@
+# kicad-cli(1) completion                                     -*- shell-script -*-
+
+__kicad_relevant_files ()
+{
+    # choose files that make sense for the command
+    case $1 in
+        fp)
+            _filedir -d
+            return
+            ;;
+        sym)
+            _filedir '@(kicad_sym)'
+            return
+            ;;
+        pcb | pcbnew)
+            _filedir '@(kicad_pcb)'
+            return
+            ;;
+        sch | eeschema)
+            _filedir '@(kicad_sch)'
+            return
+            ;;
+        pro | kicad)
+            _filedir '@(kicad_pro)'
+            return
+            ;;
+    esac
+}
+
+
+_have kicad-cli &&
+_comp_kicad_cli ()
+{
+    local cur prev words cword split
+    _init_completion -s || return
+
+    case $prev in
+        -h | --help | -v | --version)
+            return
+            ;;
+    esac
+
+    # This exploits that the command/subcommands have to be
+    # arguments 1 and 2
+    local cmd has_cmd=""
+    if [[ $cword > 1 ]] && [[ ${words[1]} != -* ]]; then
+        cmd="${words[1]}"
+        has_cmd=set
+    fi
+
+    if [[ ! $has_cmd ]]; then
+        # Prompt for the main command or global options
+        COMPREPLY=($(compgen -W 'fp sym pcb sch version --help' \
+            -- "$cur"))
+    else
+        local subcmd has_subcmd=""
+        if [[ $cword > 2 ]] && [[ ${words[2]} != -* ]]; then
+            subcmd="${words[2]}"
+            has_subcmd=set
+        fi
+
+        if [[ ! $has_subcmd ]]; then
+            # Get the relevant subcmds for the main command
+            local available_subcmds=()
+            case $cmd in
+                fp | sym)
+                    available_subcmds=('export' 'upgrade')
+                    ;;
+                pcb)
+                    available_subcmds=('drc' 'export')
+                    ;;
+                sch)
+                    available_subcmds=('erc' 'export')
+                    ;;
+                version)
+                    # no futher option
+                    return;
+                    ;;
+            esac
+            COMPREPLY=($(compgen -W "${available_subcmds[*]}" -- "$cur"))
+        else
+            # Handle the subcommand
+            case $subcmd in
+                upgrade)
+                    if [[ $cur == -* ]]; then
+                        COMPREPLY=($(compgen -W '--force --help' \
+                            -- "$cur"))
+                    else
+                        __kicad_relevant_files $cmd
+                    fi
+                    ;;
+                export)
+                    local target has_target=""
+                    if [[ $cword > 3 ]] && [[ ${words[3]} != -* ]]; then
+                        target="${words[3]}"
+                        has_target=set
+                    fi
+
+                    if [[ ! $has_target ]]; then
+                        local available_targets=('svg')
+                        COMPREPLY=($(compgen -W "${available_targets[*]}" -- "$cur"))
+                    else
+                        case $target in
+                            svg)
+                                if [[ $cur == -* ]]; then
+                                    # common args
+                                    local dash_opts=('--help' '--layers'
+                                                '--define-var' '--fp --theme --black-and-white')
+                                    case $cmd in
+                                        'sch')
+                                            dash_opts+=( '--exclude-drawing-sheet' '--no-background-color'
+                                                '--pages')
+                                            ;;
+                                        'pcb')
+                                            dash_opts+=('--drawing-sheet' '--mirror'
+                                                '--negative' '--page-size-mode'
+                                                '--exclude-drawing-sheet' '--drill-shape-opt')
+                                            ;;
+                                    esac
+                                    COMPREPLY=($(compgen -W "${dash_opts[*]}" -- "$cur"))
+                                else
+                                    case $prev in
+                                        -o | --output)
+                                            _filedir -d
+                                            ;;
+                                        --drill-shape-opt)
+                                            COMPREPLY=($(compgen -W "0 1 2" -- "$cur"))
+                                            ;;
+                                        --page-size-mode)
+                                            COMPREPLY=($(compgen -W "0 1 2" -- "$cur"))
+                                            ;;
+                                        --drawing-sheet)
+                                            _filedir
+                                            ;;
+                                        *)
+                                            __kicad_relevant_files $cmd
+                                            ;;
+                                    esac
+                                fi
+                        esac
+                    fi
+                    ;;
+                drc | erc)
+                    if [[ $cur == -* ]]; then
+                        # common args
+                        local dash_opts=('--help' '--output'
+                                    '--define-var' '--format' '--units' '--serverity-all'
+                                    '--severity-warning' '--severity-exclusions'
+                                    '--exit-code-violations' )
+                        if [[ $subcmd == 'drc' ]]; then
+                            dash_opts+=( '--all-track-errors' '--schematic-parity')
+                        fi
+                        COMPREPLY=($(compgen -W "${dash_opts[*]}" -- "$cur"))
+                    else
+                        case $prev in
+                            -o | --output)
+                                _filedir
+                                ;;
+                            --format)
+                                COMPREPLY=($(compgen -W 'json report' \
+                                    -- "$cur"))
+                                ;;
+                            --units)
+                                COMPREPLY=($(compgen -W 'in mm mils' \
+                                    -- "$cur"))
+                                ;;
+                            *)
+                                __kicad_relevant_files $cmd
+                                ;;
+                        esac
+                    fi
+                    ;;
+            esac
+        fi
+        return
+    fi
+} &&
+    complete -F _comp_kicad_cli kicad-cli
+
+# Completes kicad/pcbnew/eeschema, etc commands with only
+# the relevant filetypes
+_comp_kicad_execs ()
+{
+    local cur prev words cword split
+    _init_completion -s || return
+
+    local execname="${words[0]##*/}"
+
+    case $execname in
+        pcbnew | eesechema | kicad)
+            __kicad_relevant_files $execname
+            return
+            ;;
+    esac
+} &&
+    complete -F _comp_kicad_execs pcbnew &&
+    complete -F _comp_kicad_execs eeschema &&
+    complete -F _comp_kicad_execs kicad
