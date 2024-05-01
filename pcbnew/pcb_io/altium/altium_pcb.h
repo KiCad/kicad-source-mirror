@@ -107,6 +107,7 @@ class ALTIUM_PCB
 {
 public:
     explicit ALTIUM_PCB( BOARD* aBoard, PROGRESS_REPORTER* aProgressReporter,
+                         REPORTER* aReporter = nullptr,
                          const wxString& aLibrary = wxEmptyString,
                          const wxString& aFootprintName = wxEmptyString);
     ~ALTIUM_PCB();
@@ -253,6 +254,7 @@ private:
     std::map<ALTIUM_LAYER, ZONE*>        m_outer_plane;
 
     PROGRESS_REPORTER* m_progressReporter;   ///< optional; may be nullptr
+    REPORTER*          m_reporter;           ///< optional; may be nullptr
     unsigned           m_doneCount;
     unsigned           m_lastProgressCount;
     unsigned           m_totalCount;         ///< for progress reporting
