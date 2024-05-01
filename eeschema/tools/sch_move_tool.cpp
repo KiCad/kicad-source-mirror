@@ -143,6 +143,18 @@ void SCH_MOVE_TOOL::orthoLineDrag( SCH_COMMIT* aCommit, SCH_LINE* line, const VE
                 foundPin = true;
                 break;
 
+            case SCH_SHEET_T:
+                for( const auto& pair : m_specialCaseSheetPins )
+                {
+                    if( pair.first->IsConnected( selectedEnd ) )
+                    {
+                        foundPin = true;
+                        break;
+                    }
+                }
+
+                break;
+
             default:
                 break;
             }
@@ -1102,11 +1114,17 @@ void SCH_MOVE_TOOL::getConnectedItems( SCH_ITEM* aOriginalItem, const VECTOR2I& 
                 for( SCH_SHEET_PIN* pin : static_cast<SCH_SHEET*>( test )->GetPins() )
                 {
                     if( pin->IsConnected( aPoint ) )
-                        m_specialCaseSheetPins[ pin ] = { line, line->GetStartPoint() == aPoint };
+                    {
+                        if( pin->IsSelected() )
+                            m_specialCaseSheetPins[pin] = { line,
+                                                            line->GetStartPoint() == aPoint };
+
+                        aList.push_back( pin );
+                    }
                 }
             }
 
-            KI_FALLTHROUGH;
+            break;
 
         case SCH_SYMBOL_T:
         case SCH_JUNCTION_T:
@@ -1212,6 +1230,22 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
 
     for( SCH_ITEM* item : itemsOverlappingRTree )
     {
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
+
+            for( SCH_SHEET_PIN* pin : sheet->GetPins() )
+            {
+                if( !pin->IsSelected() && pin->GetPosition() == aSelectedItem->GetPosition()
+                    && pin->CanConnect( aSelectedItem ) )
+                {
+                    itemsConnectable.push_back( pin );
+                }
+            }
+
+            continue;
+        }
+
         // Skip ourselves, skip already selected items (but not lines, they need both ends tested)
         // and skip unconnectable items
         if( item == aSelectedItem || ( item->Type() != SCH_LINE_T && item->IsSelected() )
@@ -1406,6 +1440,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_COMMIT* aCommit, SCH_ITEM* aSelec
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
         case SCH_DIRECTIVE_LABEL_T:
+        case SCH_SHEET_PIN_T:
             // Performance optimization:
             if( test->HasFlag( SELECTED_BY_DRAG ) )
                 break;
