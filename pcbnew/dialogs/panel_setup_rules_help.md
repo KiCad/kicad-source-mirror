@@ -263,6 +263,11 @@ For the latter use a `(layer "layer_name")` clause in the rule.
         (constraint thermal_spoke_width (min 12mil))
         (condition "A.Name == 'zone_GND' || A.Name == 'zone_PWR'"))
 
+    # Prevent copper fills under the courtyards of capacitors
+    (rule no_copper_under_caps
+        (constraint physical_clearance (min 0mm))
+        (condition "A.Type == 'Zone' && B.Reference == 'C*'"))
+
 
     # Prevent solder wicking from SMD pads
     (rule holes_in_pads

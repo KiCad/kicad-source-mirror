@@ -73,7 +73,7 @@ private:
                                  std::vector<PAD*>& aNoConnectionPads );
 
     void buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                    const std::vector<PAD*> aNoConnectionPads,
+                                    const std::vector<PAD*>& aNoConnectionPads,
                                     SHAPE_POLY_SET& aHoles );
 
     void subtractHigherPriorityZones( const ZONE* aZone, PCB_LAYER_ID aLayer,

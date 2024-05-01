@@ -979,7 +979,7 @@ void ZONE_FILLER::knockoutThermalReliefs( const ZONE* aZone, PCB_LAYER_ID aLayer
  * not connected to it.
  */
 void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLayer,
-                                             const std::vector<PAD*> aNoConnectionPads,
+                                             const std::vector<PAD*>& aNoConnectionPads,
                                              SHAPE_POLY_SET& aHoles )
 {
     BOARD_DESIGN_SETTINGS& bds = m_board->GetDesignSettings();
@@ -1006,7 +1006,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     PCB_LAYER_ID aEvalLayer ) -> int
             {
                 DRC_CONSTRAINT c = bds.m_DRCEngine->EvalRules( aConstraint, a, b, aEvalLayer );
-                return c.GetValue().Min();
+
+                if( c.IsNull() )
+                    return -1;
+                else
+                    return c.GetValue().Min();
             };
 
     // Add non-connected pad clearances
@@ -1026,7 +1030,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                             aZone, aPad, aLayer ) );
                 }
 
-                if( flashLayer && gap > 0 )
+                if( flashLayer && gap >= 0 )
                     addKnockout( aPad, aLayer, gap + extra_margin, aHoles );
 
                 if( hasHole )
@@ -1041,7 +1045,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     gap = std::max( gap, evalRulesForItems( HOLE_CLEARANCE_CONSTRAINT,
                                                             aZone, aPad, aLayer ) );
 
-                    if( gap > 0 )
+                    if( gap >= 0 )
                         addHoleKnockout( aPad, gap + extra_margin, aHoles );
                 }
             };
@@ -1102,7 +1106,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                                     aZone, via, aLayer ) );
                         }
 
-                        if( gap > 0 )
+                        if( gap >= 0 )
                         {
                             int radius = via->GetDrillValue() / 2;
 
@@ -1113,7 +1117,7 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     }
                     else
                     {
-                        if( gap > 0 )
+                        if( gap >= 0 )
                         {
                             aTrack->TransformShapeToPolygon( aHoles, aLayer, gap + extra_margin,
                                                              m_maxError, ERROR_OUTSIDE );
@@ -1176,14 +1180,39 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                                                                     aZone, aItem, aLayer ) );
                         }
 
-                        if( gap > 0 )
-                            addKnockout( aItem, aLayer, gap + extra_margin, ignoreLineWidths, aHoles );
+                        if( gap >= 0 )
+                        {
+                            gap += extra_margin;
+                            addKnockout( aItem, aLayer, gap, ignoreLineWidths, aHoles );
+                        }
+                    }
+                }
+            };
+
+    auto knockoutCourtyardClearance =
+            [&]( FOOTPRINT* aFootprint )
+            {
+                if( aFootprint->GetBoundingBox().Intersects( zone_boundingbox ) )
+                {
+                    int gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone,
+                                                 aFootprint, aLayer );
+
+                    if( gap == 0 )
+                    {
+                        aHoles.Append( aFootprint->GetCourtyard( aLayer ) );
+                    }
+                    else if( gap > 0 )
+                    {
+                        SHAPE_POLY_SET hole = aFootprint->GetCourtyard( aLayer );
+                        hole.Inflate( gap, CORNER_STRATEGY::ROUND_ALL_CORNERS, m_maxError );
+                        aHoles.Append( hole );
                     }
                 }
             };
 
     for( FOOTPRINT* footprint : m_board->Footprints() )
     {
+        knockoutCourtyardClearance( footprint );
         knockoutGraphicClearance( &footprint->Reference() );
         knockoutGraphicClearance( &footprint->Value() );
 
@@ -1273,11 +1302,11 @@ void ZONE_FILLER::buildCopperItemClearances( const ZONE* aZone, PCB_LAYER_ID aLa
                     }
                     else
                     {
-                        int gap = evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT, aZone,
-                                                     aKnockout, aLayer );
+                        int gap = std::max( 0, evalRulesForItems( PHYSICAL_CLEARANCE_CONSTRAINT,
+                                                                  aZone, aKnockout, aLayer ) );
 
-                        gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT, aZone,
-                                                                aKnockout, aLayer ) );
+                        gap = std::max( gap, evalRulesForItems( CLEARANCE_CONSTRAINT,
+                                                                aZone, aKnockout, aLayer ) );
 
                         SHAPE_POLY_SET poly;
                         aKnockout->TransformShapeToPolygon( poly, aLayer, gap + extra_margin,
