@@ -53,7 +53,7 @@
 #include "widgets/wx_menubar.h"
 
 
-BEGIN_EVENT_TABLE( PCB_CALCULATOR_FRAME, EDA_BASE_FRAME )
+BEGIN_EVENT_TABLE( PCB_CALCULATOR_FRAME, KIWAY_PLAYER )
     EVT_MENU( wxID_CLOSE, PCB_CALCULATOR_FRAME::OnExit )
     EVT_MENU( wxID_EXIT, PCB_CALCULATOR_FRAME::OnExit )
 END_EVENT_TABLE()
@@ -113,6 +113,7 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_toolManager->InitTools();
 
     ReCreateMenuBar();
+    setupUIConditions();
 
     GetSizer()->SetSizeHints( this );
 
