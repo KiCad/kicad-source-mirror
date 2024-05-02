@@ -222,7 +222,7 @@ void SCH_COMMIT::pushSchEdit( const wxString& aMessage, int aCommitFlags )
                     } );
         }
 
-        auto updateConnectivityFlag = [&, this]()
+        auto updateConnectivityFlag = [&]()
         {
             if( schItem->IsConnectable() )
             {
