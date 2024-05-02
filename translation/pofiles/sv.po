@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-04-21 22:07+0000\n"
+"PO-Revision-Date: 2024-04-28 14:08+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/master-"
-"source/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/kicad/"
+"master-source/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.1\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: J:\\kicad-winbuilder-3.4\\src\\kicad\n"
 "X-Poedit-SourceCharset: iso-8859-1\n"
@@ -6819,9 +6819,8 @@ msgid "Net class references"
 msgstr "Nätklassreferenser"
 
 #: common/layer_id.cpp:125
-#, fuzzy
 msgid "Rule areas"
-msgstr "Regelområde"
+msgstr "Regelområden"
 
 #: common/layer_id.cpp:126
 msgid "Symbol body outlines"
@@ -13631,9 +13630,8 @@ msgid "Exclude DNP"
 msgstr "Uteslut \"monteras ej\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:103
-#, fuzzy
 msgid "Show 'Exclude from BOM'"
-msgstr "Uteslut från komponentlistan"
+msgstr "Visa \"Uteslut från komponentlistan\""
 
 #: eeschema/dialogs/dialog_symbol_fields_table_base.cpp:110
 msgid "Group symbols"
@@ -15544,9 +15542,8 @@ msgid "Checking conflicts..."
 msgstr "Kontrollerar konflikter ..."
 
 #: eeschema/erc.cpp:1339
-#, fuzzy
 msgid "Checking rule areas..."
-msgstr "Kontrollerar etiketter..."
+msgstr "Kontrollerar regelområden..."
 
 #: eeschema/erc.cpp:1347
 msgid "Checking units..."
@@ -15679,7 +15676,7 @@ msgstr "Motstridiga nätklasstilldelningar"
 
 #: eeschema/erc_item.cpp:123
 msgid "Overlapping rule areas"
-msgstr ""
+msgstr "Överlappande regelområden"
 
 #: eeschema/erc_item.cpp:127
 msgid "Net is graphically connected to a bus but not a bus member"
@@ -16472,9 +16469,9 @@ msgid "Bus to bus entry from %s, %s to %s, %s"
 msgstr "Buss-till-buss-post från %s, %s till %s, %s"
 
 #: eeschema/net_navigator.cpp:183
-#, fuzzy, c-format
+#, c-format
 msgid "Netclass label '%s' at %s, %s"
-msgstr "Global etikett '%s' vid %s, %s"
+msgstr "Nätklassetikett '%s' vid %s, %s"
 
 #: eeschema/net_navigator.cpp:189
 #, c-format
@@ -18071,9 +18068,8 @@ msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgstr "Olika värden för %s%d%s (%s) och %s%d%s (%s)"
 
 #: eeschema/sch_rule_area.cpp:200
-#, fuzzy
 msgid "Schematic rule area"
-msgstr "Schematisk markör"
+msgstr "Regelområde i kretsschemat"
 
 #: eeschema/sch_screen.cpp:914 eeschema/sch_screen.cpp:1006
 #, c-format
@@ -21242,9 +21238,8 @@ msgid "Add Rule Area"
 msgstr "Lägg till regelområde"
 
 #: eeschema/tools/ee_actions.cpp:614
-#, fuzzy
 msgid "Draw rule area"
-msgstr "Rita en ledare"
+msgstr "Rita ett regelområde"
 
 #: eeschema/tools/ee_actions.cpp:622 pcbnew/tools/pcb_actions.cpp:400
 msgid "Delete Last Point"
@@ -22282,9 +22277,8 @@ msgid "Add Corner"
 msgstr "Lägg till hörn"
 
 #: eeschema/tools/rule_area_create_helper.cpp:69
-#, fuzzy
 msgid "Draw Rule Area"
-msgstr "Regelområde"
+msgstr "Rita regelområde"
 
 #: eeschema/tools/sch_drawing_tools.cpp:304
 msgid "Press <ESC> to cancel symbol creation."
@@ -22631,19 +22625,17 @@ msgstr "SVG filnamn"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:365
 #: pcbnew/tools/edit_tool.cpp:2446
-#, fuzzy
 msgid "Hide Field"
-msgstr "Lägg till fält"
+msgstr "Dölj fält"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:367
 #: pcbnew/tools/edit_tool.cpp:2448
-#, fuzzy
 msgid "Hide Fields"
-msgstr "Visa dolda fält"
+msgstr "Dölj fält"
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:369
 msgid "Use the Symbol Properties dialog to remove fields."
-msgstr ""
+msgstr "Använd dialogen 'Symbolegenskaper' för att ta bort fält."
 
 #: eeschema/tools/symbol_editor_edit_tool.cpp:664
 msgid "Edit Pins"
@@ -22692,9 +22684,8 @@ msgid "Rename"
 msgstr "Byt Namn"
 
 #: eeschema/widgets/hierarchy_pane.cpp:398
-#, fuzzy
 msgid "Change name of this sheet"
-msgstr "Ersätt alla symboler i schemat"
+msgstr "Byt namn på detta ark"
 
 #: eeschema/widgets/hierarchy_pane.cpp:417
 #, c-format
@@ -22702,9 +22693,8 @@ msgid "Enter page number for sheet path %s"
 msgstr "Ange sidnummer för arksökväg %s"
 
 #: eeschema/widgets/hierarchy_pane.cpp:488
-#, fuzzy
 msgid "Renaming sheet"
-msgstr "Ritningsarkets ram och namnruta"
+msgstr "Byter namn på ark"
 
 #: eeschema/widgets/hierarchy_pane.cpp:551
 #, c-format
@@ -24243,9 +24233,8 @@ msgid "Export utilities (Gerbers, drill, position files, etc)"
 msgstr "Exportverktyg (Gerber, borr- och positionsfiler etc.)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:72
-#, fuzzy
 msgid "Output file format, options: step, brep, xao, glb (binary glTF)"
-msgstr "Filformat för utmatning; alternativ: step, glb (binär glTF)"
+msgstr "Filformat för utmatning; alternativ: step, brep, xao, glb (binär glTF)"
 
 #: kicad/cli/command_pcb_export_3d.cpp:76
 msgid "Overwrite output file"
@@ -24278,14 +24267,12 @@ msgid "Only generate a board with no components"
 msgstr "Generera endast mönsterkort utan komponenter"
 
 #: kicad/cli/command_pcb_export_3d.cpp:112
-#, fuzzy
 msgid "Exclude board body"
-msgstr "Uteslut från mönsterkort"
+msgstr "Uteslut mönsterkortets basmaterial"
 
 #: kicad/cli/command_pcb_export_3d.cpp:116
-#, fuzzy
 msgid "Exclude 3D models for components"
-msgstr "Exkludera 3D-modeller för komponenter med attributet 'monteras ej'"
+msgstr "Exkludera 3D-modeller för komponenter"
 
 #: kicad/cli/command_pcb_export_3d.cpp:120
 msgid "Export tracks"
@@ -24297,13 +24284,12 @@ msgid "Export zones"
 msgstr "Exportera kopparzoner"
 
 #: kicad/cli/command_pcb_export_3d.cpp:128
-#, fuzzy
 msgid "Export elements on inner copper layers"
-msgstr "Exportera kopparzoner på yttre kopparlager."
+msgstr "Exportera element på inre kopparlager"
 
 #: kicad/cli/command_pcb_export_3d.cpp:132
 msgid "Fuse overlapping geometry together"
-msgstr ""
+msgstr "Slå ihop överlappande geometrier"
 
 #: kicad/cli/command_pcb_export_3d.cpp:138
 msgid "Minimum distance between points to treat them as separate ones"
@@ -24312,6 +24298,7 @@ msgstr "Minsta avstånd mellan punkter för att behandla dem som separata"
 #: kicad/cli/command_pcb_export_3d.cpp:144
 msgid "Only include copper items belonging to nets matching this wildcard"
 msgstr ""
+"Inkludera bara kopparobjekt tillhörande nät som matchar detta jokertecken"
 
 #: kicad/cli/command_pcb_export_3d.cpp:150
 msgid "Do not optimize STEP file (enables writing parametric curves)"
@@ -25112,14 +25099,12 @@ msgid "Export STEP"
 msgstr "Exportera STEP"
 
 #: kicad/kicad_cli.cpp:115
-#, fuzzy
 msgid "Export BREP"
-msgstr "Exportera STEP"
+msgstr "Exportera BREP"
 
 #: kicad/kicad_cli.cpp:116
-#, fuzzy
 msgid "Export XAO"
-msgstr "Exportera DXF"
+msgstr "Exportera XAO"
 
 #: kicad/kicad_cli.cpp:117
 msgid "Export VRML"
@@ -32145,14 +32130,12 @@ msgstr ""
 "mjukvara som utför de-duplikation baserat på formernas namn."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:154
-#, fuzzy
 msgid "Export board body"
-msgstr "Visa basmaterial"
+msgstr "Exportera mönsterkortets basmaterial"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:157
-#, fuzzy
 msgid "Export components"
-msgstr "exportera komponent"
+msgstr "Exportera komponenter"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:160
 msgid "Export tracks, pads and vias"
@@ -32167,9 +32150,8 @@ msgid "Export zones on external copper layers."
 msgstr "Exportera kopparzoner på yttre kopparlager."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
-#, fuzzy
 msgid "Export inner copper layers"
-msgstr "Inre kopparskikt"
+msgstr "Exportera inre kopparskikt"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:173
 msgid "Fuse shapes (time consuming)"
@@ -32204,14 +32186,15 @@ msgid "Export solder paste graphics."
 msgstr "Exportera grafik på lager för lodpasta."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:196
-#, fuzzy
 msgid "Net filter (supports wildcards):"
-msgstr "Text med valfria jokertecken"
+msgstr "Nätfilter (stöder jokertecken):"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:201
 msgid ""
 "Only copper items belonging to nets matching this filter will be exported."
 msgstr ""
+"Endast kopparobjekt tillhörande nät som matchar detta filter kommer att "
+"exporteras."
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:205
 msgid "Board outline chaining tolerance:"
@@ -32238,9 +32221,8 @@ msgstr ""
 "mönsterkortets kontur skapas."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:98
-#, fuzzy
 msgid "Export STEP / BREP / XAO / GLTF"
-msgstr "Exportera STEP / glTF"
+msgstr "Exportera STEP / BREP / XAO / glTF"
 
 #: pcbnew/dialogs/dialog_export_step_process.cpp:183
 #, c-format
@@ -40064,42 +40046,49 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:591
 #: pcbnew/exporters/step/step_pcb_model.cpp:1760
 msgid "** ShapeUpgrade_UnifySameDomain produced a null shape **\n"
-msgstr ""
+msgstr "** ShapeUpgrade_UnifySameDomain producerade en noll-form **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1338
 #, c-format
 msgid "Wire not done (contour points %d): OCC error %d\n"
-msgstr ""
+msgstr "Ledare utfördes inte (konturpunkter %d): OCC-fel %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1342
 #: pcbnew/exporters/step/step_pcb_model.cpp:1356
 #: pcbnew/exporters/step/step_pcb_model.cpp:1395
 #: pcbnew/exporters/step/step_pcb_model.cpp:1410
-#, fuzzy, c-format
+#, c-format
 msgid "z: %g; bounding box: %s\n"
-msgstr "Visa gränslådor för modell"
+msgstr "z: %g; avgränsningslåda: %s\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1353
+#, fuzzy
 msgid ""
 "\n"
 "Wire self-interference check failed\n"
 msgstr ""
+"\n"
+"Kontroll för ledares inkräktande på sig själv fallerade\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1384
 msgid "Using non-simplified polygon.\n"
-msgstr ""
+msgstr "Använder icke förenklad polygon.\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1393
 msgid ""
 "\n"
 "** Outline skipped **\n"
 msgstr ""
+"\n"
+"** Kontur hoppades över **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1408
 msgid ""
 "\n"
 "** Hole skipped **\n"
 msgstr ""
+"\n"
+"** Hål hoppades över **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1564
 #, c-format
@@ -40117,18 +40106,18 @@ msgid ""
 "\n"
 "** Got problems while cutting %s number %d **\n"
 msgstr ""
+"\n"
+"** Fick problem vid skärning av %s nummer %d **\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1595
 #: pcbnew/exporters/step/step_pcb_model.cpp:1729
-#, fuzzy
 msgid "Errors:\n"
-msgstr "Fel"
+msgstr "Fel:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1601
 #: pcbnew/exporters/step/step_pcb_model.cpp:1735
-#, fuzzy
 msgid "Warnings:\n"
-msgstr "Varningar"
+msgstr "Varningar:\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1617
 msgid "shapes"
@@ -40148,7 +40137,7 @@ msgstr "zoner"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1725
 msgid "** Got problems while fusing shapes **\n"
-msgstr ""
+msgstr "** Fick problem vid sammanslagning av former **\n"
 
 #: pcbnew/files.cpp:146
 msgid "All KiCad Board Files"
@@ -40831,9 +40820,8 @@ msgstr "Ställ in"
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2386
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2402
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2428
-#, fuzzy
 msgid "Select a track to tune first."
-msgstr "Välj ett värde att ställa in"
+msgstr "Välj först en ledare att justera längden på."
 
 #: pcbnew/generators/pcb_tuning_pattern.cpp:2470
 msgid "Single track"
@@ -41074,12 +41062,11 @@ msgstr "Exportera IDF 3D-kortrepresentation"
 
 #: pcbnew/menubar_pcb_editor.cpp:136
 msgid "STEP / BREP / XAO..."
-msgstr ""
+msgstr "STEP / BREP / XAO..."
 
 #: pcbnew/menubar_pcb_editor.cpp:136
-#, fuzzy
 msgid "Export STEP / BREP / XAO 3D board representation"
-msgstr "Exportera STEP 3D-kortrepresentation"
+msgstr "Exportera STEP / BREP / XAO 3D-representation av mönsterkort"
 
 #: pcbnew/menubar_pcb_editor.cpp:138
 msgid "SVG..."
@@ -45360,7 +45347,7 @@ msgstr "Byt sida / vänd"
 
 #: pcbnew/tools/edit_tool.cpp:2450
 msgid "Use the Footprint Properties dialog to remove fields."
-msgstr ""
+msgstr "Använd dialogrutan \"Egenskaper för fotavtryck\" för att ta bort fält."
 
 #: pcbnew/tools/edit_tool.cpp:2608
 msgid "Move Exactly"
@@ -47394,9 +47381,8 @@ msgid "Length Tuning Settings..."
 msgstr "Inställningar för ledarlängdsjustering..."
 
 #: pcbnew/tools/pcb_actions.cpp:2449
-#, fuzzy
 msgid "Displays tuning pattern properties dialog"
-msgstr "Visar dialogrutan för objektegenskaper"
+msgstr "Visar dialogrutan för längdjusteringsmönstrens egenskaper"
 
 #: pcbnew/tools/pcb_control.cpp:234
 msgid "Don't show again"
