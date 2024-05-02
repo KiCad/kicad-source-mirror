@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!

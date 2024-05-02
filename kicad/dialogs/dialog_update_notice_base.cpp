@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,8 +50,6 @@ DIALOG_UPDATE_NOTICE_BASE::DIALOG_UPDATE_NOTICE_BASE( wxWindow* parent, wxWindow
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_skipBtn = new wxButton( this, wxID_ANY, _("Skip this version"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_skipBtn->SetToolTip( _("Override locks and apply the operation on all the items selected.\nAny locked items will remain locked after the operation is complete.") );
-
 	bButtonSizer->Add( m_skipBtn, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 
 

@@ -357,7 +357,7 @@
                 <property name="style"></property>
                 <property name="subclass"></property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip">Override locks and apply the operation on all the items selected.&#x0A;Any locked items will remain locked after the operation is complete.</property>
+                <property name="tooltip"></property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
