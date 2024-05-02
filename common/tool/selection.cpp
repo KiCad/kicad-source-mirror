@@ -130,7 +130,7 @@ VECTOR2I SELECTION::GetCenter() const
 }
 
 
-BOX2I SELECTION::GetBoundingBox() const
+BOX2I SELECTION::GetBoundingBox( bool aOnlyVisible ) const
 {
     BOX2I bbox;
 

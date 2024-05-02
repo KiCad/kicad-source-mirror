@@ -105,3 +105,25 @@ const std::vector<KIGFX::VIEW_ITEM*> PCB_SELECTION::updateDrawList() const
 
     return items;
 }
+
+
+BOX2I PCB_SELECTION::GetBoundingBox( bool aOnlyVisible ) const
+{
+    BOX2I bbox;
+
+    for( EDA_ITEM* item : m_items )
+    {
+        if( item->Type() == PCB_FOOTPRINT_T )
+        {
+            FOOTPRINT* footprint = static_cast<FOOTPRINT*>( item );
+
+            bbox.Merge( footprint->GetBoundingBox( true, !aOnlyVisible ) );
+        }
+        else
+        {
+            bbox.Merge( item->GetBoundingBox() );
+        }
+    }
+
+    return bbox;
+}

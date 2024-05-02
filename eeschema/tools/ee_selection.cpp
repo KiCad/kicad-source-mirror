@@ -82,7 +82,7 @@ EDA_ITEM* EE_SELECTION::GetTopLeftItem( bool onlyModules ) const
 }
 
 
-BOX2I EE_SELECTION::GetBoundingBox() const
+BOX2I EE_SELECTION::GetBoundingBox( bool aOnlyVisible ) const
 {
     BOX2I bbox;
 

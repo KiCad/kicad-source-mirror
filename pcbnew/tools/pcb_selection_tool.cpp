@@ -1994,7 +1994,7 @@ void PCB_SELECTION_TOOL::doSyncSelection( const std::vector<BOARD_ITEM*>& aItems
     if( aWithNets )
         selectConnections( aItems );
 
-    BOX2I bbox = m_selection.GetBoundingBox();
+    BOX2I bbox = m_selection.GetBoundingBox( true );
 
     if( bbox.GetWidth() != 0 && bbox.GetHeight() != 0 )
     {
