@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -243,7 +243,7 @@ EASYEDA_PARSER_BASE::ParseLineChains( const wxString& data, int aArcMinSegLen, b
             arc.ConstructFromStartEndCenter( RelPos( start ), RelPos( end ), RelPos( arcCenter ),
                                              !cw );
 
-            chain.Append( arc );
+            chain.Append( arc, aArcMinSegLen );
 
             prevPt = end;
         }
