@@ -237,6 +237,8 @@ std::shared_ptr<DRC_RULE> DRC_RULES_PARSER::parseDRC_RULE()
             break;
 
         case T_layer:
+            if( rule->m_LayerCondition != LSET::AllLayersMask() )
+                reportError( _( "'layer' keyword already present." ) );
             rule->m_LayerSource = FromUTF8();
             rule->m_LayerCondition = parseLayer();
             break;
