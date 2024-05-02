@@ -4405,20 +4405,40 @@ void SCH_IO_ALTIUM::ParseLibHeader( const ALTIUM_COMPOUND_FILE& aAltiumSchFile,
 }
 
 
-void SCH_IO_ALTIUM::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
-                                        const wxString&        aLibraryPath,
-                                        const STRING_UTF8_MAP* aProperties )
+void SCH_IO_ALTIUM::doEnumerateSymbolLib( const wxString& aLibraryPath,
+        const STRING_UTF8_MAP* aProperties,
+        std::function<void(const wxString&, LIB_SYMBOL*)> aInserter )
 {
     ensureLoadedLibrary( aLibraryPath, aProperties );
+
+    bool powerSymbolsOnly = ( aProperties &&
+                              aProperties->find( SYMBOL_LIB_TABLE::PropPowerSymsOnly )
+                                      != aProperties->end() );
 
     auto it = m_libCache.find( aLibraryPath );
 
     if( it != m_libCache.end() )
     {
         for( auto& [libnameStr, libSymbol] : it->second )
-            aSymbolNameList.Add( libnameStr );
-    }
+        {
+            if( powerSymbolsOnly && !libSymbol->IsPower() )
+                continue;
 
+            aInserter( libnameStr, libSymbol );
+        }
+    }
+}
+
+
+void SCH_IO_ALTIUM::EnumerateSymbolLib( wxArrayString&         aSymbolNameList,
+                                        const wxString&        aLibraryPath,
+                                        const STRING_UTF8_MAP* aProperties )
+{
+    doEnumerateSymbolLib( aLibraryPath, aProperties,
+                          [&]( const wxString& aStr, LIB_SYMBOL* )
+                          {
+                              aSymbolNameList.Add( aStr );
+                          } );
 }
 
 
@@ -4426,16 +4446,13 @@ void SCH_IO_ALTIUM::EnumerateSymbolLib( std::vector<LIB_SYMBOL*>& aSymbolList,
                                         const wxString&           aLibraryPath,
                                         const STRING_UTF8_MAP*    aProperties )
 {
-    ensureLoadedLibrary( aLibraryPath, aProperties );
-
-    auto it = m_libCache.find( aLibraryPath );
-
-    if( it != m_libCache.end() )
-    {
-        for( auto& [libnameStr, libSymbol] : it->second )
-            aSymbolList.push_back( libSymbol );
-    }
+    doEnumerateSymbolLib( aLibraryPath, aProperties,
+                          [&]( const wxString&, LIB_SYMBOL* aSymbol )
+                          {
+                              aSymbolList.emplace_back( aSymbol );
+                          } );
 }
+
 
 LIB_SYMBOL* SCH_IO_ALTIUM::LoadSymbol( const wxString&        aLibraryPath,
                                        const wxString&        aAliasName,
