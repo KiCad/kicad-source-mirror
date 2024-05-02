@@ -513,6 +513,11 @@ PCB_SELECTION& PCB_TOOL_BASE::selection()
     return sel;
 }
 
+BOX2I PCB_SELECTION::GetBoundingBox( bool aOnlyVisible ) const
+{
+    return BOX2I();
+}
+
 
 EDA_ITEM* PCB_SELECTION::GetTopLeftItem( bool onlyModules ) const
 {
