@@ -9,13 +9,14 @@
 # Oliver0804 <icetzsr@gmail.com>, 2024.
 # William Lin <unrealin01@gmail.com>, 2024.
 # pominglee <pominglee@gmail.com>, 2024.
+# Andrew <yenchang.lin@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-04-17 14:56+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2024-05-02 08:05+0000\n"
+"Last-Translator: Andrew <yenchang.lin@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/master-source/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.3-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -2577,7 +2578,7 @@ msgstr "快捷鍵列表"
 
 #: common/dialogs/dialog_import_choose_project.cpp:33
 msgid "Project Name"
-msgstr "工程名稱"
+msgstr "專案名稱"
 
 #: common/dialogs/dialog_import_choose_project.cpp:34
 #: kicad/cli/command_pcb.h:31 pcbnew/board.cpp:1209
