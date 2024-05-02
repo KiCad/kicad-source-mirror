@@ -16,16 +16,16 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-04-18 07:23+0000\n"
+"PO-Revision-Date: 2024-04-30 10:07+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/master-"
-"source/nl/>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/"
+"master-source/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.2\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -5211,7 +5211,7 @@ msgstr "Veldnaamsjablonen"
 #: eeschema/sim/toolbars_simulator_frame.cpp:114
 #: eeschema/tools/ee_actions.cpp:73
 msgid "Simulator"
-msgstr "Simulator"
+msgstr "Simulatie"
 
 #: common/eda_base_frame.cpp:1172 common/tool/actions.cpp:1032
 #: common/tool/common_tools.cpp:564 kicad/tools/kicad_manager_actions.cpp:137
@@ -10657,7 +10657,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:346
 msgid "Run external simulator command:"
-msgstr "Externe simulatoropdracht uitvoeren:"
+msgstr "Externe simulatieopdracht uitvoeren:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:348
 msgid ""
@@ -19658,11 +19658,11 @@ msgstr ""
 
 #: eeschema/sim/simulator_frame.cpp:342
 msgid "Spice Simulator"
-msgstr "Spice-simulator"
+msgstr "Spice-simulatie"
 
 #: eeschema/sim/simulator_frame.cpp:354
 msgid "Simulator requires a fully annotated schematic."
-msgstr "De simulator vereist een volledig geannoteerd schema."
+msgstr "Simulatie vereist een volledig geannoteerd schema."
 
 #: eeschema/sim/simulator_frame.cpp:363 eeschema/sim/simulator_frame.cpp:378
 #: eeschema/sim/simulator_frame.cpp:566 eeschema/tools/simulator_control.cpp:81
@@ -22219,7 +22219,7 @@ msgstr "Schema sonderen..."
 
 #: eeschema/tools/ee_actions.cpp:1543
 msgid "Add a simulator probe"
-msgstr "Simulatorsonde toevoegen"
+msgstr "Simulatiesonde toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:1550
 msgid "Add Tuned Value..."
