@@ -178,6 +178,9 @@ private:
     std::map<wxString,LIB_SYMBOL*> ParseLibFile( const ALTIUM_COMPOUND_FILE& aAltiumSchFile );
     std::vector<LIB_SYMBOL*> ParseLibComponent( const std::map<wxString, wxString>& aProperties );
 
+    void doEnumerateSymbolLib( const wxString& aLibraryPath, const STRING_UTF8_MAP* aProperties,
+                               std::function<void(const wxString&, LIB_SYMBOL*)> aInserter );
+
 private:
     SCH_SHEET* m_rootSheet;      // The root sheet of the schematic being loaded..
     SCH_SHEET_PATH m_sheetPath;
