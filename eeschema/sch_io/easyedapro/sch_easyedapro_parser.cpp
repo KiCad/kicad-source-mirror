@@ -480,19 +480,9 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
             VECTOR2D kmid = ScalePosSym( mid );
             VECTOR2D kend = ScalePosSym( end );
 
-            VECTOR2D kcenter = CalcArcCenter( kstart, kmid, kend );
-
             auto shape = std::make_unique<SCH_SHAPE>( SHAPE_T::ARC, LAYER_DEVICE );
 
-            shape->SetStart( kstart );
-            shape->SetEnd( kend );
-            shape->SetCenter( kcenter );
-
-            if( SEG( start, end ).Side( mid ) != SEG( kstart, kend ).Side( shape->GetArcMid() ) )
-            {
-                shape->SetStart( kend );
-                shape->SetEnd( kstart );
-            }
+            shape->SetArcGeometry( kstart, kmid, kend );
 
             shape->SetUnit( currentUnit );
             ApplyLineStyle( lineStyles, shape, styleStr );
@@ -591,7 +581,7 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
                                  svgImportPlugin.GetImageHeight() );
 
                 VECTOR2D pixelScale( schIUScale.IUTomm( ScaleSize( size.x ) ) / imSize.x,
-                                     schIUScale.IUTomm( -ScaleSize( size.y ) ) / imSize.y );
+                                     schIUScale.IUTomm( ScaleSize( size.y ) ) / imSize.y );
 
                 if( upsideDown )
                     pixelScale.y *= -1;
@@ -627,7 +617,7 @@ SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
                     }
 
                     VECTOR2D pixelScale( ScaleSize( size.x ) / img.GetWidth(),
-                                         -ScaleSize( size.y ) / img.GetHeight() );
+                                         ScaleSize( size.y ) / img.GetHeight() );
 
                     // TODO: rotation
                     ConvertImageToLibShapes( ksymbol, 0, img, pixelScale, ScalePosSym( start ) );

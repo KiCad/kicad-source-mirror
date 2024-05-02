@@ -89,7 +89,7 @@ public:
     template <typename T>
     static VECTOR2<T> ScalePosSym( VECTOR2<T> aValue )
     {
-        return VECTOR2<T>( ScaleSize( aValue.x ), ScaleSize( aValue.y ) );
+        return VECTOR2<T>( ScaleSize( aValue.x ), -ScaleSize( aValue.y ) );
     }
 
     double SizeToKi( wxString units );

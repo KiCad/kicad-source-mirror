@@ -47,7 +47,7 @@ public:
     template <typename T>
     VECTOR2<T> RelPosSym( const VECTOR2<T>& aVec )
     {
-        return VECTOR2<T>( RelPosX( aVec.x ), -RelPosY( aVec.y ) );
+        return VECTOR2<T>( RelPosX( aVec.x ), RelPosY( aVec.y ) );
     }
 
     std::pair<LIB_SYMBOL*, bool> MakePowerSymbol( const wxString& aFlagTypename,
