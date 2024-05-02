@@ -96,10 +96,10 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         return;
 
     if( strcmp( idcmd, "$CONFIG" ) == 0 )
-        {
-            GetToolManager()->RunAction( ACTIONS::showSymbolLibTable );
-            return;
-        }
+    {
+        GetToolManager()->RunAction( ACTIONS::showFootprintLibTable );
+        return;
+    }
     else if( strcmp( idcmd, "$CUSTOM_RULES" ) == 0 )
     {
         ShowBoardSetupDialog( _( "Custom Rules" ) );
@@ -145,7 +145,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             SetMsgPanel( items );
         }
 
-        // fall through to hihglighting section
+        // fall through to highlighting section
     }
     else if( strcmp( idcmd, "$NETS:" ) == 0 )
     {
