@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,10 +43,25 @@
 #include <wx/base64.h>
 #include <wx/url.h>
 #include <wx/mstream.h>
+#include <core/map_helpers.h>
 #include <gfx_import_utils.h>
 #include <import_gfx/svg_import_plugin.h>
 #include <import_gfx/graphics_importer_lib_symbol.h>
 #include <import_gfx/graphics_importer_sch.h>
+
+
+// clang-format off
+static const std::vector<wxString> c_attributesWhitelist = { "Datasheet",
+                                                             "Manufacturer Part",
+                                                             "Manufacturer",
+                                                             "BOM_Manufacturer Part",
+                                                             "BOM_Manufacturer",
+                                                             "Supplier Part",
+                                                             "Supplier",
+                                                             "BOM_Supplier Part",
+                                                             "BOM_Supplier",
+                                                             "LCSC Part Name" };
+// clang-format on
 
 
 SCH_EASYEDA_PARSER::SCH_EASYEDA_PARSER( SCHEMATIC*         aSchematic,
@@ -561,97 +576,61 @@ void SCH_EASYEDA_PARSER::ParseSymbolShapes( LIB_SYMBOL*                  aSymbol
             wxString   fillColor = arr[6].Lower();
             //bool       locked = arr[8] != wxS( "0" );
 
-            VECTOR2D start, end;
-            VECTOR2D rad( 10, 10 );
-            bool     isFar = false;
-            bool     cw = false;
+            std::vector<SHAPE_LINE_CHAIN> chains =
+                    ParseLineChains( data, schIUScale.MilsToIU( 10 ), false );
 
-            size_t pos = 0;
-            auto readNumber = [&]( wxString& aOut )
+            auto transform = []( VECTOR2I aVec )
             {
-                wxUniChar ch = data[pos];
-
-                while( ch == ' ' || ch == ',' )
-                    ch = data[++pos];
-
-                while( isdigit( ch ) || ch == '.' || ch == '-' )
-                {
-                    aOut += ch;
-                    pos++;
-
-                    if( pos == data.size() )
-                        break;
-
-                    ch = data[pos];
-                }
+                return VECTOR2I( aVec.x, -aVec.y );
             };
 
-            do
+            for( const SHAPE_LINE_CHAIN& chain : chains )
             {
-                wxUniChar sym = data[pos++];
-
-                if( sym == 'M' )
+                for( int i = 0; i <= chain.PointCount() && i != -1; i = chain.NextShape( i ) )
                 {
-                    wxString xStr, yStr;
-                    readNumber( xStr );
-                    readNumber( yStr );
+                    if( chain.IsArcStart( i ) )
+                    {
+                        SHAPE_ARC arc = chain.Arc( chain.ArcIndex( i ) );
 
-                    start = VECTOR2D( Convert( xStr ), Convert( yStr ) );
+                        std::unique_ptr<LIB_SHAPE> shape =
+                                std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::ARC );
+
+                        shape->SetArcGeometry( transform( arc.GetP0() ),
+                                               transform( arc.GetArcMid() ),
+                                               transform( arc.GetP1() ) );
+
+                        shape->SetUnit( 0 );
+                        shape->SetStroke( STROKE_PARAMS( ScaleSize( lineWidth ), strokeStyle ) );
+
+                        if( fillColor != wxS( "none" ) )
+                        {
+                            shape->SetFilled( true );
+
+                            if( fillColor == strokeColor )
+                                shape->SetFillMode( FILL_T::FILLED_SHAPE );
+                            else
+                                shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
+                        }
+
+                        aSymbol->AddDrawItem( shape.release() );
+                    }
+                    else
+                    {
+                        SEG seg = chain.CSegment( i );
+
+                        std::unique_ptr<LIB_SHAPE> shape =
+                                std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::POLY );
+
+                        shape->AddPoint( transform( seg.A ) );
+                        shape->AddPoint( transform( seg.B ) );
+
+                        shape->SetUnit( 0 );
+                        shape->SetStroke( STROKE_PARAMS( ScaleSize( lineWidth ), strokeStyle ) );
+
+                        aSymbol->AddDrawItem( shape.release() );
+                    }
                 }
-                else if( sym == 'A' )
-                {
-                    wxString radX, radY, unknown, farFlag, cwFlag, endX, endY;
-                    readNumber( radX );
-                    readNumber( radY );
-                    readNumber( unknown );
-                    readNumber( farFlag );
-                    readNumber( cwFlag );
-                    readNumber( endX );
-                    readNumber( endY );
-
-                    isFar = farFlag == wxS( "1" );
-                    cw = cwFlag == wxS( "1" );
-                    rad = VECTOR2D( Convert( radX ), Convert( radY ) );
-                    end = VECTOR2D( Convert( endX ), Convert( endY ) );
-                }
-            } while( pos < data.size() );
-
-            VECTOR2D delta = end - start;
-
-            double avgRad = ( rad.x + rad.y ) / 2;
-            double d = delta.EuclideanNorm();
-            double h = sqrt( std::max( 0.0, avgRad * avgRad - d * d / 4 ) );
-
-            //( !far && cw ) => h
-            //( far && cw ) => -h
-            //( !far && !cw ) => -h
-            //( far && !cw ) => h
-            VECTOR2D arcCenter =
-                    start + delta / 2 + delta.Perpendicular().Resize( ( isFar ^ cw ) ? h : -h );
-
-            if( cw )
-                std::swap( start, end );
-
-            std::unique_ptr<LIB_SHAPE> shape = std::make_unique<LIB_SHAPE>( aSymbol, SHAPE_T::ARC );
-
-            shape->SetStart( RelPosSym( start ) );
-            shape->SetEnd( RelPosSym( end ) );
-            shape->SetCenter( RelPosSym( arcCenter ) );
-
-            shape->SetUnit( 0 );
-            shape->SetStroke( STROKE_PARAMS( ScaleSize( lineWidth ), strokeStyle ) );
-
-            if( fillColor != wxS( "none" ) )
-            {
-                shape->SetFilled( true );
-
-                if( fillColor == strokeColor )
-                    shape->SetFillMode( FILL_T::FILLED_SHAPE );
-                else
-                    shape->SetFillMode( FILL_T::FILLED_WITH_BG_BODYCOLOR );
             }
-
-            aSymbol->AddDrawItem( shape.release() );
         }
         else if( elType == wxS( "R" ) )
         {
@@ -962,22 +941,20 @@ LIB_SYMBOL* SCH_EASYEDA_PARSER::ParseSymbol( const VECTOR2D&              aOrigi
 
     m_relOrigin = aOrigin;
 
-    wxString symbolName = wxS( "Unknown" );
+    std::optional<wxString> valOpt;
+    wxString                symbolName = wxS( "Unknown" );
 
-    if( aParams.find( wxS( "name" ) ) != aParams.end() )
-        symbolName = aParams.at( wxS( "name" ) );
-    else if( aParams.find( wxS( "spiceSymbolName" ) ) != aParams.end() )
-        symbolName = aParams.at( wxS( "spiceSymbolName" ) );
+    if( valOpt = get_opt( aParams, wxS( "name" ) ) )
+        symbolName = *valOpt;
+    else if( valOpt = get_opt( aParams, wxS( "spiceSymbolName" ) ) )
+        symbolName = *valOpt;
 
     wxString symbolPrefix;
 
-    if( aParams.find( wxS( "pre" ) ) != aParams.end() )
-        symbolPrefix = aParams.at( wxS( "pre" ) );
-    else if( aParams.find( wxS( "spicePre" ) ) != aParams.end() )
-        symbolPrefix = aParams.at( wxS( "spicePre" ) );
-
-    if( !symbolPrefix.EndsWith( wxS( "?" ) ) )
-        symbolPrefix += wxS( "?" );
+    if( valOpt = get_opt( aParams, wxS( "pre" ) ) )
+        symbolPrefix = *valOpt;
+    else if( valOpt = get_opt( aParams, wxS( "spicePre" ) ) )
+        symbolPrefix = *valOpt;
 
     LIB_ID libId = EasyEdaToKiCadLibID( wxEmptyString, symbolName );
 
@@ -986,6 +963,31 @@ LIB_SYMBOL* SCH_EASYEDA_PARSER::ParseSymbol( const VECTOR2D&              aOrigi
 
     ksymbol->GetReferenceField().SetText( symbolPrefix );
     ksymbol->GetValueField().SetText( symbolName );
+
+    for( wxString attrName : c_attributesWhitelist )
+    {
+        wxString srcName = attrName;
+
+        if( srcName == wxS( "Datasheet" ) )
+            srcName = wxS( "link" );
+
+        if( valOpt = get_opt( aParams, srcName ) )
+        {
+            if( valOpt->empty() )
+                continue;
+
+            LIB_FIELD* fd = ksymbol->FindField( attrName, true );
+
+            if( !fd )
+            {
+                fd = new LIB_FIELD( ksymbol->GetNextAvailableFieldId(), attrName );
+                ksymbol->AddField( fd );
+            }
+
+            fd->SetText( *valOpt );
+            fd->SetVisible( false );
+        }
+    }
 
     ParseSymbolShapes( ksymbol.get(), aParams, aShapes );
 

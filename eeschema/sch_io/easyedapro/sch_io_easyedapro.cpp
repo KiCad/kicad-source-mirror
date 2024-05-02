@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
@@ -156,7 +156,11 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
             return nullptr;
 
         wxString prjSymUuid = prjSymIt->first;
-        wxString fpTitle;
+
+        wxString                     description;
+        wxString                     customTags;
+        std::map<wxString, wxString> deviceAttributes;
+        wxString                     fpTitle;
 
         for( auto& [key, device] : prjDevices )
         {
@@ -164,6 +168,12 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
 
             if( val && *val == prjSymUuid )
             {
+                description = device.description;
+                deviceAttributes = device.attributes;
+
+                if( device.custom_tags.is_string() )
+                    customTags = device.custom_tags.get<wxString>();
+
                 if( auto fpUuid = get_opt( device.attributes, "Footprint" ) )
                 {
                     if( auto prjFp = get_opt( prjFootprints, *fpUuid ) )
@@ -192,7 +202,7 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
                 lines.emplace_back( js );
             }
 
-            EASYEDAPRO::SYM_INFO symInfo = parser.ParseSymbol( lines );
+            EASYEDAPRO::SYM_INFO symInfo = parser.ParseSymbol( lines, deviceAttributes );
 
             if( !symInfo.libSymbol )
                 EASY_IT_CONTINUE;
@@ -201,6 +211,15 @@ static LIB_SYMBOL* loadSymbol( nlohmann::json project, const wxString& aLibraryP
             symInfo.libSymbol->SetLibId( libID );
             symInfo.libSymbol->SetName( aAliasName );
             symInfo.libSymbol->GetFootprintField().SetText( symLibName + wxS( ":" ) + fpTitle );
+
+            wxString keywords = customTags;
+            keywords.Replace( wxS( ":" ), wxS( " " ), true );
+
+            symInfo.libSymbol->SetKeyWords( keywords );
+
+            description.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true ); // ℃ -> °C
+
+            symInfo.libSymbol->SetDescription( description );
 
             symbol = symInfo.libSymbol.release();
 
@@ -314,13 +333,10 @@ void SCH_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString& aProjectPath )
 
         if( name.EndsWith( wxS( ".esym" ) ) )
         {
-            EASYEDAPRO::PRJ_SYMBOL symData = prjSymbols.at( baseName );
-            EASYEDAPRO::SYM_INFO   symInfo = parser.ParseSymbol( lines );
-
-            if( !symInfo.libSymbol )
-                EASY_IT_CONTINUE;
-
-            wxString fpTitle;
+            wxString                     description;
+            wxString                     customTags;
+            std::map<wxString, wxString> deviceAttributes;
+            wxString                     fpTitle;
 
             for( auto& [key, device] : prjDevices )
             {
@@ -328,6 +344,12 @@ void SCH_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString& aProjectPath )
 
                 if( val && *val == baseName )
                 {
+                    description = device.description;
+                    deviceAttributes = device.attributes;
+
+                    if( device.custom_tags.is_string() )
+                        customTags = device.custom_tags.get<wxString>();
+
                     if( auto fpUuid = get_opt( device.attributes, "Footprint" ) )
                     {
                         if( auto prjFp = get_opt( prjFootprints, *fpUuid ) )
@@ -339,10 +361,25 @@ void SCH_IO_EASYEDAPRO::LoadAllDataFromProject( const wxString& aProjectPath )
                 }
             }
 
+            EASYEDAPRO::PRJ_SYMBOL symData = prjSymbols.at( baseName );
+            EASYEDAPRO::SYM_INFO   symInfo = parser.ParseSymbol( lines, deviceAttributes );
+
+            if( !symInfo.libSymbol )
+                EASY_IT_CONTINUE;
+
             LIB_ID libID = EASYEDAPRO::ToKiCadLibID( symLibName, symData.title );
             symInfo.libSymbol->SetLibId( libID );
             symInfo.libSymbol->SetName( symData.title );
             symInfo.libSymbol->GetFootprintField().SetText( symLibName + wxS( ":" ) + fpTitle );
+
+            wxString keywords = customTags;
+            keywords.Replace( wxS( ":" ), wxS( " " ), true );
+
+            symInfo.libSymbol->SetKeyWords( keywords );
+
+            description.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true ); // ℃ -> °C
+
+            symInfo.libSymbol->SetDescription( description );
 
             m_projectData->m_Symbols.emplace( baseName, std::move( symInfo ) );
         }

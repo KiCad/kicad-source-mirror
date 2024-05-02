@@ -225,7 +225,19 @@ LIB_SYMBOL* loadSymbol( const wxString& aLibraryPath, nlohmann::json aFileData,
                         {
                             parts.RemoveAt( 0 );
 
-                            return parser.ParseSymbol( origin, paramMap, parts );
+                            LIB_SYMBOL* ksymbol = parser.ParseSymbol( origin, paramMap, parts );
+
+                            // Clear reference numbers
+                            LIB_FIELD& refField = ksymbol->GetReferenceField();
+                            wxString   origRef = refField.GetText();
+                            wxString   reference;
+
+                            for( size_t i = 0; i < origRef.size() && !wxIsdigit( origRef[i] ); i++ )
+                                reference << origRef[i];
+
+                            refField.SetText( reference );
+
+                            return ksymbol;
                         }
                     }
                 }
@@ -261,7 +273,19 @@ LIB_SYMBOL* loadSymbol( const wxString& aLibraryPath, nlohmann::json aFileData,
 
             VECTOR2D origin( topDoc.head.x, topDoc.head.y );
 
-            return parser.ParseSymbol( origin, *c_para, topDoc.shape );
+            LIB_SYMBOL* ksymbol = parser.ParseSymbol( origin, *c_para, topDoc.shape );
+
+            // Clear reference numbers
+            LIB_FIELD& refField = ksymbol->GetReferenceField();
+            wxString   origRef = refField.GetText();
+            wxString   reference;
+
+            for( size_t i = 0; i < origRef.size() && !wxIsdigit( origRef[i] ); i++ )
+                reference << origRef[i];
+
+            refField.SetText( reference );
+
+            return ksymbol;
         }
     }
     catch( nlohmann::json::exception& e )

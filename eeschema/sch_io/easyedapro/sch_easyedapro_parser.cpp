@@ -1,8 +1,8 @@
-/*
+﻿/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2023 Alex Shvartzkop <dudesuchamazing@gmail.com>
- * Copyright (C) 2023 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2023-2024 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,6 +50,21 @@
 #include <import_gfx/svg_import_plugin.h>
 #include <import_gfx/graphics_importer_lib_symbol.h>
 #include <import_gfx/graphics_importer_sch.h>
+
+
+// clang-format off
+static const std::vector<wxString> c_attributesWhitelist = { "Value",
+                                                             "Datasheet",
+                                                             "Manufacturer Part",
+                                                             "Manufacturer",
+                                                             "BOM_Manufacturer Part",
+                                                             "BOM_Manufacturer",
+                                                             "Supplier Part",
+                                                             "Supplier",
+                                                             "BOM_Supplier Part",
+                                                             "BOM_Supplier",
+                                                             "LCSC Part Name" };
+// clang-format on
 
 
 SCH_EASYEDAPRO_PARSER::SCH_EASYEDAPRO_PARSER( SCHEMATIC*         aSchematic,
@@ -383,7 +398,9 @@ void SCH_EASYEDAPRO_PARSER::ApplyAttrToField( const std::map<wxString, nlohmann:
 }
 
 
-EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>& aLines )
+EASYEDAPRO::SYM_INFO
+SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohmann::json>&  aLines,
+                                    const std::map<wxString, wxString>& aDeviceAttributes )
 {
     EASYEDAPRO::SYM_INFO symInfo;
 
@@ -686,10 +703,34 @@ EASYEDAPRO::SYM_INFO SCH_EASYEDAPRO_PARSER::ParseSymbol( const std::vector<nlohm
         {
             wxString symbolPrefix = designatorAttr->value;
 
-            if( !symbolPrefix.EndsWith( wxS( "?" ) ) )
-                symbolPrefix += wxS( "?" );
+            if( symbolPrefix.EndsWith( wxS( "?" ) ) )
+                symbolPrefix.RemoveLast();
 
             ksymbol->GetReferenceField().SetText( symbolPrefix );
+        }
+
+        for( const wxString& attrName : c_attributesWhitelist )
+        {
+            if( auto valOpt = get_opt( aDeviceAttributes, attrName ) )
+            {
+                if( valOpt->empty() )
+                    continue;
+
+                LIB_FIELD* fd = ksymbol->FindField( attrName, true );
+
+                if( !fd )
+                {
+                    fd = new LIB_FIELD( ksymbol->GetNextAvailableFieldId(), attrName );
+                    ksymbol->AddField( fd );
+                }
+
+                wxString value = *valOpt;
+
+                value.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true ); // ℃ -> °C
+
+                fd->SetText( value );
+                fd->SetVisible( false );
+            }
         }
     }
 
@@ -1107,7 +1148,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             if( !deviceAttr )
                 continue;
 
-            nlohmann::json compAttrs =
+            std::map<wxString, wxString> compAttrs =
                     aProject.at( "devices" ).at( deviceAttr->value ).at( "attributes" );
 
             wxString symbolId;
@@ -1115,7 +1156,7 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             if( symbolAttr && !symbolAttr->value.IsEmpty() )
                 symbolId = symbolAttr->value;
             else
-                symbolId = compAttrs.at( "Symbol" ).get<wxString>();
+                symbolId = compAttrs.at( "Symbol" );
 
             auto it = aSymbolMap.find( symbolId );
             if( it == aSymbolMap.end() )
@@ -1217,6 +1258,30 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
             }
             else
             {
+                for( const wxString& attrKey : c_attributesWhitelist )
+                {
+                    if( auto valOpt = get_opt( compAttrs, attrKey ) )
+                    {
+                        if( valOpt->empty() )
+                            continue;
+
+                        SCH_FIELD* text = schSym->FindField( attrKey, true );
+
+                        if( !text )
+                        {
+                            text = schSym->AddField(
+                                    SCH_FIELD( schSym.get(), schSym->GetFieldCount(), attrKey ) );
+                        }
+
+                        wxString value = *valOpt;
+
+                        value.Replace( wxS( "\u2103" ), wxS( "\u00B0C" ), true ); // ℃ -> °C
+
+                        text->SetText( value );
+                        text->SetVisible( false );
+                    }
+                }
+
                 auto nameAttr = get_opt( attributes, "Name" );
                 auto valueAttr = get_opt( attributes, "Value" );
 
@@ -1265,15 +1330,18 @@ void SCH_EASYEDAPRO_PARSER::ParseSchematic( SCHEMATIC* aSchematic, SCH_SHEET* aR
                     if( attr.value.IsEmpty() )
                         continue;
 
-                    SCH_FIELD* text =
-                            new SCH_FIELD( schSym.get(), schSym->GetFieldCount(), attrKey );
+                    SCH_FIELD* text = schSym->FindField( attrKey, true );
+
+                    if( !text )
+                    {
+                        text = schSym->AddField(
+                                SCH_FIELD( schSym.get(), schSym->GetFieldCount(), attrKey ) );
+                    }
 
                     text->SetPosition( schSym->GetPosition() );
 
                     ApplyAttrToField( fontStyles, text, attr, false, true, compAttrs,
                                       schSym.get() );
-
-                    schSym->AddField( *text );
                 }
             }
 
