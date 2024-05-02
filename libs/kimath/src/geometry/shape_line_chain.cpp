@@ -2418,7 +2418,8 @@ void SHAPE_LINE_CHAIN::Simplify( int aMaxError )
         {
             bool too_far = false;
 
-            for( size_t ll = ( ii + 1 ) % m_points.size(); ll != kk; ++ll )
+            for( size_t ll = ( ii + 1 ) % m_points.size(); ll != kk;
+                        ll = ( ll + 1 ) % m_points.size() )
             {
                 if( !TestSegmentHitFast( m_points[ll], m_points[ii], m_points[kk], aMaxError ) )
                 {
