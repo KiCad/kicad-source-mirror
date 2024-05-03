@@ -287,7 +287,26 @@ void CLIPBOARD_IO::SaveSelection( const PCB_SELECTION& aSelected, bool isFootpri
 
             wxCHECK2( boardItem, continue );
 
-            if( boardItem->Type() == PCB_FIELD_T || boardItem->Type() == PCB_TEXT_T )
+            if( boardItem->Type() == PCB_FIELD_T )
+            {
+                PCB_FIELD* field = static_cast<PCB_FIELD*>( boardItem );
+                copy = new PCB_TEXT( m_board );
+
+                PCB_TEXT* textItem = static_cast<PCB_TEXT*>( copy );
+                textItem->SetPosition( field->GetPosition() );
+                textItem->SetLayer( field->GetLayer() );
+                textItem->SetHyperlink( field->GetHyperlink() );
+                textItem->SetText( field->GetText() );
+                textItem->SetAttributes( field->GetAttributes() );
+                textItem->SetTextAngle( field->GetDrawRotation() );
+
+                if ( textItem->GetText() == wxT( "${VALUE}" ) )
+                    textItem->SetText( boardItem->GetParentFootprint()->GetValue() );
+                else if ( textItem->GetText() == wxT( "${REFERENCE}" ) )
+                    textItem->SetText( boardItem->GetParentFootprint()->GetReference() );
+
+            }
+            else if( boardItem->Type() == PCB_TEXT_T )
             {
                 copy = static_cast<BOARD_ITEM*>( boardItem->Clone() );
 
