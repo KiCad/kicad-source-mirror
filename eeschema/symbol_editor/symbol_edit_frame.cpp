@@ -1654,15 +1654,13 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
         // The inverse transform is mirroring before, rotate after
         switch( mirror )
         {
-        default:; break;
         case SYM_MIRROR_X: pos.y = -pos.y; break;
         case SYM_MIRROR_Y: pos.x = -pos.x; break;
+        default:                           break;
         }
 
         switch( orientation )
         {
-        default:
-        case SYM_ORIENT_0: break;
         case SYM_ORIENT_90:
             std::swap( pos.x, pos.y );
             pos.x = - pos.x;
@@ -1675,9 +1673,11 @@ void SYMBOL_EDIT_FRAME::LoadSymbolFromSchematic( SCH_SYMBOL* aSymbol )
             pos.x = - pos.x;
             pos.y = - pos.y;
             break;
+        default:
+            break;
         }
 
-        libField.SetPosition( VECTOR2I( pos.x, -pos.y ) );
+        libField.SetPosition( pos );
 
         fullSetOfFields.emplace_back( std::move( libField ) );
     }
