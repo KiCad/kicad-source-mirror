@@ -575,13 +575,13 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
     std::deque<EDA_ITEM*> toCheck;
 
     auto closeEnough =
-            []( VECTOR2I aLeft, VECTOR2I aRight, int aLimit )
+            []( const VECTOR2I& aLeft, const VECTOR2I& aRight, int aLimit )
             {
                 return ( aLeft - aRight ).SquaredEuclideanNorm() <= SEG::Square( aLimit );
             };
 
     auto findInsertionPoint =
-            [&]( VECTOR2I aPoint ) -> VECTOR2I
+            [&]( const VECTOR2I& aPoint ) -> VECTOR2I
             {
                 if( connections.count( aPoint ) )
                     return aPoint;
@@ -618,7 +618,7 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
         SHAPE_LINE_CHAIN outline;
 
         auto insert =
-                [&]( EDA_ITEM* aItem, VECTOR2I aAnchor, bool aDirection )
+                [&]( EDA_ITEM* aItem, const VECTOR2I& aAnchor, bool aDirection )
                 {
                     if( aItem->Type() == PCB_ARC_T
                         || ( aItem->Type() == PCB_SHAPE_T
@@ -652,8 +652,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
                         if( aAnchor == graphic->GetStart() )
                         {
                             for( auto it = graphic->GetBezierPoints().begin();
-                                             it != graphic->GetBezierPoints().end();
-                                             ++it )
+                                 it != graphic->GetBezierPoints().end();
+                                 ++it )
                             {
                                 if( aDirection )
                                     outline.Append( *it );
@@ -665,8 +665,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
                         else
                         {
                             for( auto it = graphic->GetBezierPoints().rbegin();
-                                             it != graphic->GetBezierPoints().rend();
-                                             ++it )
+                                 it != graphic->GetBezierPoints().rend();
+                                 ++it )
                             {
                                 if( aDirection )
                                     outline.Append( *it );
@@ -692,8 +692,8 @@ SHAPE_POLY_SET CONVERT_TOOL::makePolysFromChainedSegs( const std::deque<EDA_ITEM
 
         // aDirection == true for walking "right" and appending to the end of points
         // false for walking "left" and prepending to the beginning
-        std::function<void( EDA_ITEM*, VECTOR2I, bool )> process =
-                [&]( EDA_ITEM* aItem, VECTOR2I aAnchor, bool aDirection )
+        std::function<void( EDA_ITEM*, const VECTOR2I&, bool )> process =
+                [&]( EDA_ITEM* aItem, const VECTOR2I& aAnchor, bool aDirection )
                 {
                     if( aItem->GetFlags() & SKIP_STRUCT )
                         return;
