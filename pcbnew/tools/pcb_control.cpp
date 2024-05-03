@@ -851,14 +851,7 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
             // NOTE: all traversals from the back as processFPItem() might delete the item
 
             for( int ii = static_cast<int>( fp->Fields().size() ) - 1; ii >= 0; ii-- )
-            {
-                PCB_FIELD* field = fp->Fields()[ii];
-
-                if( field->GetId() == REFERENCE_FIELD || field->GetId() == VALUE_FIELD )
-                    continue;
-
-                processFPItem( fp, field );
-            }
+                processFPItem( fp, fp->Fields()[ii] );
 
             for( int ii = static_cast<int>( fp->Pads().size() ) - 1; ii >= 0; ii-- )
                 processFPItem( fp, fp->Pads()[ii] );
@@ -869,7 +862,10 @@ void PCB_CONTROL::pruneItemLayers( std::vector<BOARD_ITEM*>& aItems )
             for( int ii = static_cast<int>( fp->GraphicalItems().size() ) - 1; ii >= 0; ii-- )
                 processFPItem( fp, fp->GraphicalItems()[ii] );
 
-            if( fp->GraphicalItems().size() || fp->Pads().size() || fp->Zones().size() )
+            if( fp->Fields().size()
+                || fp->GraphicalItems().size()
+                || fp->Pads().size()
+                || fp->Zones().size() )
             {
                 returnItems.push_back( fp );
             }
@@ -1026,7 +1022,7 @@ int PCB_CONTROL::Paste( const TOOL_EVENT& aEvent )
                 cancelled = !placeBoardItems( &commit, pastedItems, true, true,
                                               mode == PASTE_MODE::UNIQUE_ANNOTATIONS );
             }
-            else
+            else    // isBoardEditor
             {
                 if( mode == PASTE_MODE::REMOVE_ANNOTATIONS )
                 {
