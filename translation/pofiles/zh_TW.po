@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-04-17 14:22+0000\n"
-"Last-Translator: taotieren <admin@taotieren.com>\n"
+"PO-Revision-Date: 2024-05-03 05:07+0000\n"
+"Last-Translator: pominglee <pominglee@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "kicad/v8/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.3-dev\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: ../../../../../Downloads/kicad-master\n"
@@ -35,7 +35,7 @@ msgstr ""
 
 #: 3d-viewer/3d_cache/3d_plugin_manager.cpp:58
 msgid "All Files"
-msgstr "所有文件"
+msgstr "所有檔案"
 
 #: 3d-viewer/3d_canvas/board_adapter.cpp:330
 msgid "Build board outline"
@@ -247,7 +247,7 @@ msgstr "重置為默認設置"
 #: pcbnew/menubar_footprint_editor.cpp:234 pcbnew/menubar_pcb_editor.cpp:459
 #: pcbnew/toolbars_footprint_viewer.cpp:193
 msgid "&File"
-msgstr "文件 (&F)"
+msgstr "檔案 (&F)"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:140 cvpcb/menubar.cpp:79
 #: eeschema/menubar.cpp:339
@@ -319,14 +319,14 @@ msgstr "舊版顏色"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:720
 msgid "3D Image File Name"
-msgstr "3D 圖像文件名稱"
+msgstr "3D 圖像檔案名稱"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:741
 #: common/eda_base_frame.cpp:1323 common/eda_base_frame.cpp:1327
 #: pcbnew/pcb_io/altium/altium_pcb.cpp:1666
 #, c-format
 msgid "Insufficient permissions to save file '%s'."
-msgstr "保存文件 '%s' 的權限不足。"
+msgstr "儲存檔案 '%s' 的權限不足。"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:742 common/confirm.cpp:131
 #: common/confirm.cpp:321 common/dialogs/dialog_grid_settings.cpp:61
@@ -360,7 +360,7 @@ msgstr "無法將圖像複製到剪貼板"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer_frame.cpp:793
 msgid "Can't save file"
-msgstr "無法保存文件"
+msgstr "無法儲存檔案"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:47
 msgid "Set Pivot"
@@ -485,7 +485,7 @@ msgstr "真實材質渲染"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:255
 msgid "Use all material properties from each 3D model file"
-msgstr "使用每個 3D 模型文件中的所有材質屬性"
+msgstr "使用每個 3D 模型檔案中的所有材質屬性"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:262
 msgid "Render Solid Colors"
@@ -493,7 +493,7 @@ msgstr "純色渲染"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:263
 msgid "Use only the diffuse color property from 3D model file"
-msgstr "僅使用 3D 模型文件中的漫反射顏色屬性"
+msgstr "僅使用 3D 模型檔案中的漫反射顏色屬性"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:270
 msgid "Render CAD Colors"
@@ -533,7 +533,7 @@ msgstr "顯示不在 POS 文件中的元件的 3D 模型"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:307
 msgid "Show 3D models even if not found in .pos file"
-msgstr "無論元件在 .pos 文件中是否存在, 均顯示其 3D 模型"
+msgstr "顯示其 3D 模型即便它在 .pos 檔案中不存在"
 
 #: 3d-viewer/3d_viewer/tools/eda_3d_actions.cpp:315
 msgid "Show 3D Models marked DNP"
@@ -683,7 +683,7 @@ msgstr "虛擬模型"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:72
 msgid "Models not in POS File"
-msgstr "不在 POS 座標文件文件中的模型"
+msgstr "模型不存在 POS檔案中"
 
 #: 3d-viewer/dialogs/appearance_controls_3D.cpp:73
 msgid "Models marked DNP"
@@ -918,7 +918,7 @@ msgstr "(未保存)"
 #: 3d-viewer/dialogs/dialog_select_3d_model.cpp:95
 #, c-format
 msgid "All supported files (%s)"
-msgstr "所有支持的文件 (%s)"
+msgstr "所有支持的檔案 (%s)"
 
 #: 3d-viewer/dialogs/dialog_select_3d_model_base.cpp:58
 msgid "Available paths:"
@@ -1311,7 +1311,7 @@ msgstr "KiCad 圖片轉換器"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:232
 msgid "Image files"
-msgstr "圖片文件"
+msgstr "圖片檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:282 eeschema/menubar.cpp:71
 #: kicad/menubar.cpp:74 pagelayout_editor/menubar.cpp:63
@@ -1323,7 +1323,7 @@ msgstr "打開最近使用"
 #: include/file_history.h:54 pagelayout_editor/menubar.cpp:64
 #: pcbnew/menubar_pcb_editor.cpp:74
 msgid "Clear Recent Files"
-msgstr "清除最近的文件"
+msgstr "清除最近的檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:400
 #: eeschema/tools/sch_drawing_tools.cpp:654
@@ -1335,11 +1335,11 @@ msgstr "選擇圖片"
 #: eeschema/tools/sch_drawing_tools.cpp:655
 #: pagelayout_editor/pl_editor_frame.cpp:866 pcbnew/tools/drawing_tool.cpp:672
 msgid "Image Files"
-msgstr "圖片文件"
+msgstr "圖片檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:444
 msgid "Create Drawing Sheet File"
-msgstr "創建圖紙文件"
+msgstr "建立圖紙檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:461
 #: bitmap2component/bitmap2cmp_frame.cpp:497
@@ -1347,11 +1347,11 @@ msgstr "創建圖紙文件"
 #: bitmap2component/bitmap2cmp_frame.cpp:567
 #, c-format
 msgid "File '%s' could not be created."
-msgstr "無法創建文件 '%s'。"
+msgstr "無法建立檔案 '%s'。"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:481
 msgid "Create PostScript File"
-msgstr "創建 PostScript 文件"
+msgstr "建立 PostScript 檔案"
 
 #: bitmap2component/bitmap2cmp_frame.cpp:517
 msgid "Create Symbol Library"
@@ -1674,19 +1674,19 @@ msgstr "ECO2 用戶層"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Symbol (.kicad_sym file)"
-msgstr "符號 (.kicad_sym 文件)"
+msgstr "符號 (.kicad_sym 檔案)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Footprint (.kicad_mod file)"
-msgstr "封裝 (.kicad_mod 文件)"
+msgstr "封裝 (.kicad_mod 檔案)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Postscript (.ps file)"
-msgstr "Postscript (.ps 文件)"
+msgstr "Postscript (.ps 檔案)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:169
 msgid "Drawing Sheet (.kicad_wks file)"
-msgstr "圖紙 (.kicad_wks file)"
+msgstr "圖紙 (.kicad_wks 檔案)"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:171
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:44
@@ -1695,7 +1695,7 @@ msgstr "輸出格式"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:175
 msgid "Export to File"
-msgstr "導出到文件"
+msgstr "匯出到檔案"
 
 #: bitmap2component/bitmap2cmp_panel_base.cpp:178
 #: pcbnew/board_stackup_manager/panel_board_stackup_base.cpp:147
@@ -1771,7 +1771,7 @@ msgstr "警告"
 
 #: common/confirm.cpp:161 common/confirm.cpp:167
 msgid "File Open Warning"
-msgstr "文件打開警告"
+msgstr "檔案開啟警告"
 
 #: common/confirm.cpp:163 common/confirm.cpp:169
 msgid "Interleaved saves may produce very unexpected results."
@@ -2127,7 +2127,7 @@ msgstr "網絡類:"
 msgid ""
 "Note: complete netclass assignments can be edited in Schematic Setup > "
 "Project."
-msgstr "注: 可在 '原理圖設置 > 工程' 中編輯完整的網絡類分配。"
+msgstr "注意：完整網路類別分配可以在原理圖設定 > 專案中編輯。"
 
 #: common/dialogs/dialog_assign_netclass_base.h:56
 msgid "Add Netclass Assignment"
@@ -2341,7 +2341,7 @@ msgstr "複製自定義全局 %s 庫表"
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
-msgstr "選擇此選項可複製除默認值以外的 %s 庫表文件"
+msgstr "選擇此選項可複製除默認值以外的 %s 庫表檔案"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:63
 #, c-format
@@ -2357,7 +2357,7 @@ msgstr "選擇此選項可在工程專用庫表中定義 %s 庫"
 #: common/dialogs/dialog_global_lib_table_config.cpp:69
 #, c-format
 msgid "Select global %s library table file:"
-msgstr "選擇全局 %s 庫表文件:"
+msgstr "選擇全局 %s 庫表檔案:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
@@ -2412,7 +2412,7 @@ msgstr "假"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
-msgstr "選擇文件"
+msgstr "選擇檔案"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:55
 msgid "Configure Global Library Table"
@@ -2557,8 +2557,8 @@ msgid ""
 "This project file contains multiple PCB+Schematic combinations.\n"
 "Choose which one should be imported to KiCad."
 msgstr ""
-"此工程文件包含多個 PCB + 原理圖 的組合。\n"
-"請選擇一個導入 KiCad。"
+"此專案檔案包含多個 PCB + 原理圖 的組合。\n"
+"請選擇一個匯入 KiCad。"
 
 #: common/dialogs/dialog_import_choose_project_base.h:48
 msgid "Choose Project to Import"
@@ -2755,7 +2755,7 @@ msgstr "工程明細表"
 #: common/dialogs/dialog_page_settings.cpp:474
 #, c-format
 msgid "Drawing sheet file '%s' not found."
-msgstr "找不到圖紙文件 '%s'。"
+msgstr "找不到圖紙檔案 '%s'。"
 
 #: common/dialogs/dialog_page_settings.cpp:707
 #: common/dialogs/dialog_page_settings_base.cpp:54
@@ -2769,7 +2769,7 @@ msgstr "橫向"
 
 #: common/dialogs/dialog_page_settings.cpp:795 pagelayout_editor/files.cpp:59
 msgid "Drawing Sheet File"
-msgstr "圖紙文件"
+msgstr "圖紙檔案"
 
 #: common/dialogs/dialog_page_settings_base.cpp:41
 msgid "dummy text"
@@ -2854,7 +2854,7 @@ msgstr "圖紙"
 #: pcbnew/dialogs/dialog_export_step_base.cpp:23
 #: pcbnew/import_gfx/dialog_import_graphics_base.cpp:25
 msgid "File:"
-msgstr "文件:"
+msgstr "檔案："
 
 #: common/dialogs/dialog_page_settings_base.cpp:183
 msgid "Title Block Parameters"
@@ -3310,7 +3310,7 @@ msgstr "提交更改"
 
 #: common/dialogs/git/dialog_git_commit.cpp:52
 msgid "Filename"
-msgstr "文件名"
+msgstr "檔案名稱"
 
 #: common/dialogs/git/dialog_git_commit.cpp:53
 #: common/dialogs/git/panel_git_repos_base.cpp:100
@@ -3380,7 +3380,7 @@ msgstr "無效的 SSH 密鑰"
 
 #: common/dialogs/git/dialog_git_repository.cpp:374
 msgid "The selected file is not a valid SSH private key"
-msgstr "所選文件不是有效的 SSH 私鑰"
+msgstr "所選檔案不是有效的 SSH 私鑰"
 
 #: common/dialogs/git/dialog_git_repository.cpp:398
 #, c-format
@@ -3428,7 +3428,7 @@ msgstr "SSH 私鑰"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "Select SSH private key file"
-msgstr "選擇 SSH 私鑰文件"
+msgstr "選擇SSH私鑰檔案"
 
 #: common/dialogs/git/dialog_git_repository_base.cpp:104
 msgid "*"
@@ -3603,7 +3603,7 @@ msgstr ""
 
 #: common/dialogs/panel_common_settings.cpp:342
 msgid "Executable files ("
-msgstr "可執行文件 ("
+msgstr "可執行檔案 ("
 
 #: common/dialogs/panel_common_settings.cpp:349
 msgid "Select Preferred PDF Viewer"
