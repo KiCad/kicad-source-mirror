@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-04-18 07:23+0000\n"
+"PO-Revision-Date: 2024-04-30 10:07+0000\n"
 "Last-Translator: Laurens Holst <laurens@grauw.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/kicad/v8/nl/>\n"
 "Language: nl\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.2\n"
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-SearchPath-0: pcbnew\n"
@@ -10240,7 +10240,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:326
 msgid "Run external simulator command:"
-msgstr "Externe simulatoropdracht uitvoeren:"
+msgstr "Externe simulatieopdracht uitvoeren:"
 
 #: eeschema/dialogs/dialog_export_netlist.cpp:328
 msgid ""
@@ -18999,15 +18999,15 @@ msgstr ""
 #: eeschema/sim/toolbars_simulator_frame.cpp:107
 #: eeschema/tools/ee_actions.cpp:67
 msgid "Simulator"
-msgstr "Simulator"
+msgstr "Simulatie"
 
 #: eeschema/sim/simulator_frame.cpp:332
 msgid "Spice Simulator"
-msgstr "Spice-simulator"
+msgstr "Spice-simulatie"
 
 #: eeschema/sim/simulator_frame.cpp:344
 msgid "Simulator requires a fully annotated schematic."
-msgstr "De simulator vereist een volledig geannoteerd schema."
+msgstr "Simulatie vereist een volledig geannoteerd schema."
 
 #: eeschema/sim/simulator_frame.cpp:353 eeschema/sim/simulator_frame.cpp:368
 #: eeschema/sim/simulator_frame.cpp:556 eeschema/tools/simulator_control.cpp:75
@@ -21458,7 +21458,7 @@ msgstr "Schema sonderen..."
 
 #: eeschema/tools/ee_actions.cpp:1472
 msgid "Add a simulator probe"
-msgstr "Simulatorsonde toevoegen"
+msgstr "Simulatiesonde toevoegen"
 
 #: eeschema/tools/ee_actions.cpp:1479
 msgid "Add Tuned Value..."
@@ -39206,7 +39206,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:857
 #, c-format
 msgid "Wire not done (contour %d, points %d): OCC error %d\n"
-msgstr ""
+msgstr "Draad niet voltooid (contour %d, punten %d): OCC-fout %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1005
 #, c-format
@@ -39276,7 +39276,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "Het huidige bord wordt gesloten. Doorgaan?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
