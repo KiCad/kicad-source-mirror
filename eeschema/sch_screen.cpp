@@ -2081,33 +2081,6 @@ bool SCH_SCREENS::HasSchematic( const wxString& aSchematicFileName )
 }
 
 
-bool SCH_SCREENS::CanCauseCaseSensitivityIssue( const wxString& aSchematicFileName ) const
-{
-    wxString   lhsLower;
-    wxString   rhsLower;
-    wxFileName lhs;
-    wxFileName rhs = aSchematicFileName;
-
-    wxCHECK( rhs.IsAbsolute(), false );
-
-    for( const SCH_SCREEN* screen : m_screens )
-    {
-        lhs = screen->GetFileName();
-
-        if( lhs.GetPath() != rhs.GetPath() )
-            continue;
-
-        lhsLower = lhs.GetFullName().Lower();
-        rhsLower = rhs.GetFullName().Lower();
-
-        if( lhsLower == rhsLower && lhs.GetFullName() != rhs.GetFullName() )
-            return true;
-    }
-
-    return false;
-}
-
-
 void SCH_SCREENS::BuildClientSheetPathList()
 {
     SCH_SCREEN* first = GetFirst();
