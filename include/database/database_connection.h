@@ -96,6 +96,8 @@ private:
 
     std::string columnsFor( const std::string& aTable );
 
+    bool selectAllAndCache( const std::string& aTable, const std::string& aKey );
+
     std::unique_ptr<nanodbc::connection> m_conn;
 
     std::string m_dsn;

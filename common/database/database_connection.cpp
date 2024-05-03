@@ -347,6 +347,24 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
             return true;
         }
     }
+    else
+    {
+        wxLogTrace( traceDatabase, wxT( "SelectOne: table `%s` not in row cache; will SelectAll" ),
+                    tableName, aWhere.second );
+
+        selectAllAndCache( tableName, aWhere.first );
+
+        if( m_cache->Get( tableName, cacheEntry ) )
+        {
+            if( cacheEntry.count( aWhere.second ) )
+            {
+                wxLogTrace( traceDatabase, wxT( "SelectOne: `%s` with parameter `%s` - cache hit" ),
+                            tableName, aWhere.second );
+                aResult = cacheEntry.at( aWhere.second );
+                return true;
+            }
+        }
+    }
 
     if( !m_columnCache.count( tableName ) )
     {
@@ -474,44 +492,14 @@ bool DATABASE_CONNECTION::SelectOne( const std::string& aTable,
 }
 
 
-bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::string& aKey,
-                                     std::vector<ROW>& aResults )
+bool DATABASE_CONNECTION::selectAllAndCache( const std::string& aTable, const std::string& aKey )
 {
-    if( !m_conn )
-    {
-        wxLogTrace( traceDatabase, wxT( "Called SelectAll without valid connection!" ) );
-        return false;
-    }
-
-    auto tableMapIter = m_tables.find( aTable );
-
-    if( tableMapIter == m_tables.end() )
-    {
-        wxLogTrace( traceDatabase, wxT( "SelectAll: requested table %s not found in cache" ),
-                    aTable );
-        return false;
-    }
-
-    DB_CACHE_TYPE::CACHE_VALUE cacheEntry;
-
-    if( m_cache->Get( aTable, cacheEntry ) )
-    {
-        wxLogTrace( traceDatabase, wxT( "SelectAll: `%s` - cache hit" ), aTable );
-
-        aResults.reserve( cacheEntry.size() );
-
-        for( auto &[ key, row ] : cacheEntry )
-            aResults.emplace_back( row );
-
-        return true;
-    }
-
     nanodbc::statement statement( *m_conn );
 
     nanodbc::string query = fromUTF8( fmt::format( "SELECT {} FROM {}{}{}", columnsFor( aTable ),
                                                    m_quoteChar, aTable, m_quoteChar ) );
 
-    wxLogTrace( traceDatabase, wxT( "SelectAll: `%s`" ), toUTF8( query ) );
+    wxLogTrace( traceDatabase, wxT( "selectAllAndCache: `%s`" ), toUTF8( query ) );
 
     PROF_TIMER timer;
 
@@ -522,7 +510,8 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
     catch( nanodbc::database_error& e )
     {
         m_lastError = e.what();
-        wxLogTrace( traceDatabase, wxT( "Exception while preparing query for SelectAll: %s" ),
+        wxLogTrace( traceDatabase,
+                    wxT( "Exception while preparing query for selectAllAndCache: %s" ),
                     m_lastError );
 
         // Exception may be due to a connection error; nanodbc won't auto-reconnect
@@ -540,7 +529,8 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
     catch( nanodbc::database_error& e )
     {
         m_lastError = e.what();
-        wxLogTrace( traceDatabase, wxT( "Exception while executing query for SelectAll: %s" ),
+        wxLogTrace( traceDatabase,
+                    wxT( "Exception while executing query for selectAllAndCache: %s" ),
                     m_lastError );
 
         // Exception may be due to a connection error; nanodbc won't auto-reconnect
@@ -551,15 +541,17 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
 
     timer.Stop();
 
+    DB_CACHE_TYPE::CACHE_VALUE cacheEntry;
+
     auto handleException =
             [&]( std::runtime_error& aException, const std::string& aExtraContext = "" )
-            {
-                m_lastError = aException.what();
-                std::string extra = aExtraContext.empty() ? "" : ": " + aExtraContext;
-                wxLogTrace( traceDatabase,
-                            wxT( "Exception while parsing result %d from SelectAll: %s%s" ),
-                            aResults.size(), m_lastError, extra );
-            };
+    {
+        m_lastError = aException.what();
+        std::string extra = aExtraContext.empty() ? "" : ": " + aExtraContext;
+        wxLogTrace( traceDatabase,
+                    wxT( "Exception while parsing result %d from selectAllAndCache: %s%s" ),
+                    cacheEntry.size(), m_lastError, extra );
+    };
 
     while( results.next() )
     {
@@ -636,20 +628,65 @@ bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::strin
             }
         }
 
-        aResults.emplace_back( std::move( result ) );
+        m_cache->Put( aTable, cacheEntry );
+        wxASSERT( result.count( aKey ) );
+        std::string keyStr = std::any_cast<std::string>( result.at( aKey ) );
+        cacheEntry[keyStr] = result;
     }
 
-    wxLogTrace( traceDatabase, wxT( "SelectAll from %s completed in %0.1f ms" ), aTable,
+    wxLogTrace( traceDatabase, wxT( "selectAllAndCache from %s completed in %0.1f ms" ), aTable,
                 timer.msecs() );
 
-    for( const ROW& row : aResults )
+    m_cache->Put( aTable, cacheEntry );
+    return true;
+}
+
+
+bool DATABASE_CONNECTION::SelectAll( const std::string& aTable, const std::string& aKey,
+                                     std::vector<ROW>& aResults )
+{
+    if( !m_conn )
     {
-        wxASSERT( row.count( aKey ) );
-        std::string keyStr = std::any_cast<std::string>( row.at( aKey ) );
-        cacheEntry[keyStr] = row;
+        wxLogTrace( traceDatabase, wxT( "Called SelectAll without valid connection!" ) );
+        return false;
     }
 
-    m_cache->Put( aTable, cacheEntry );
+    auto tableMapIter = m_tables.find( aTable );
+
+    if( tableMapIter == m_tables.end() )
+    {
+        wxLogTrace( traceDatabase, wxT( "SelectAll: requested table %s not found in cache" ),
+                    aTable );
+        return false;
+    }
+
+    DB_CACHE_TYPE::CACHE_VALUE cacheEntry;
+
+    if( !m_cache->Get( aTable, cacheEntry ) )
+    {
+        if( !selectAllAndCache( aTable, aKey ) )
+        {
+            wxLogTrace( traceDatabase, wxT( "SelectAll: `%s` cache fill failed" ), aTable );
+            return false;
+        }
+
+        // Now it should be filled
+        m_cache->Get( aTable, cacheEntry );
+    }
+
+    if( !m_cache->Get( aTable, cacheEntry ) )
+    {
+        wxLogTrace( traceDatabase, wxT( "SelectAll: `%s` failed to get results from cache!" ),
+                    aTable );
+        return false;
+    }
+
+    wxLogTrace( traceDatabase, wxT( "SelectAll: `%s` - returning cached results" ), aTable );
+
+    aResults.reserve( cacheEntry.size() );
+
+    for( auto &[ key, row ] : cacheEntry )
+        aResults.emplace_back( row );
 
     return true;
 }
