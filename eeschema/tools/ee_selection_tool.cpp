@@ -49,6 +49,7 @@
 #include <sch_junction.h>
 #include <sch_marker.h>
 #include <sch_no_connect.h>
+#include <sch_render_settings.h>
 #include <sch_sheet.h>
 #include <sch_sheet_pin.h>
 #include <lib_shape.h>
@@ -1034,8 +1035,12 @@ OPT_TOOL_EVENT EE_SELECTION_TOOL::autostartEvent( TOOL_EVENT* aEvent, EE_GRID_HE
 
             wxCHECK( pin, OPT_TOOL_EVENT() );
 
-            if( !pin->IsVisible() && !m_frame->eeconfig()->m_Appearance.show_hidden_pins )
+            if( !pin->IsVisible()
+                && !( m_frame->eeconfig()->m_Appearance.show_hidden_pins
+                      || m_frame->GetRenderSettings()->m_ShowHiddenPins ) )
+            {
                 return OPT_TOOL_EVENT();
+            }
         }
 
         newEvt->SetMousePosition( pos );
