@@ -27,7 +27,7 @@
  * @file erc_sch_pin_context.cpp
  */
 
-#include <erc_sch_pin_context.h>
+#include <erc/erc_sch_pin_context.h>
 
 
 SCH_PIN* ERC_SCH_PIN_CONTEXT::Pin()

@@ -28,7 +28,7 @@
 #include <core/kicad_algo.h>
 #include <common.h>
 #include <core/kicad_algo.h>
-#include <erc.h>
+#include <erc/erc.h>
 #include <pin_type.h>
 #include <sch_bus_entry.h>
 #include <sch_symbol.h>

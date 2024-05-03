@@ -23,9 +23,9 @@
 
 #include <connection_graph.h>
 #include <schematic.h>
-#include <erc_settings.h>
-#include <erc.h>
-#include <erc_report.h>
+#include <erc/erc_settings.h>
+#include <erc/erc.h>
+#include <erc/erc_report.h>
 #include <sch_rule_area.h>
 #include <settings/settings_manager.h>
 #include <locale_io.h>

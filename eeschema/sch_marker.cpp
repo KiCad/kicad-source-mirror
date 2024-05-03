@@ -28,14 +28,14 @@
 #include <bitmaps.h>
 #include <base_units.h>
 #include <eda_draw_frame.h>
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 #include <sch_marker.h>
 #include <schematic.h>
 #include <widgets/ui_common.h>
 #include <pgm_base.h>
 #include <settings/settings_manager.h>
 #include <settings/color_settings.h>
-#include <erc_item.h>
+#include <erc/erc_item.h>
 #include <sch_screen.h>
 
 /// Factor to convert the maker unit shape to internal units:

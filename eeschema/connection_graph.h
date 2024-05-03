@@ -26,7 +26,7 @@
 #include <utility>
 #include <vector>
 
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 #include <sch_connection.h>
 #include <sch_item.h>
 #include <wx/treectrl.h>

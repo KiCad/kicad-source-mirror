@@ -32,7 +32,7 @@
 #include <reporter.h>
 #include <confirm.h>
 #include <kiway.h>
-#include <erc.h>
+#include <erc/erc.h>
 
 #include <netlist.h>
 #include <netlist_exporter_base.h>

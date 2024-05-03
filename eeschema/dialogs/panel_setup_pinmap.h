@@ -26,7 +26,7 @@
 #define _PANEL_SETUP_PINMAP_H_
 
 #include <sch_pin.h>        // For PINTYPE_COUNT definition
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 #include "panel_setup_pinmap_base.h"
 
 

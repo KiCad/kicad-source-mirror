@@ -22,7 +22,7 @@
 #ifndef _ERC_SETTINGS_H
 #define _ERC_SETTINGS_H
 
-#include <erc_item.h>
+#include <erc/erc_item.h>
 #include <pin_type.h>
 #include <settings/nested_settings.h>
 #include <widgets/ui_common.h>

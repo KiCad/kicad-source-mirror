@@ -25,7 +25,7 @@
 #ifndef TYPE_SCH_MARKER_H_
 #define TYPE_SCH_MARKER_H_
 
-#include <erc_item.h>
+#include <erc/erc_item.h>
 #include <sch_item.h>
 #include <marker_base.h>
 

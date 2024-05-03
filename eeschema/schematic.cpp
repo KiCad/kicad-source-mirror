@@ -23,7 +23,7 @@
 #include <core/ignore.h>
 #include <core/kicad_algo.h>
 #include <ee_collectors.h>
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 #include <sch_marker.h>
 #include <project.h>
 #include <project/project_file.h>

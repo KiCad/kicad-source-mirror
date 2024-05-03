@@ -30,7 +30,7 @@
 #include <tools/ee_actions.h>
 #include <tool/tool_manager.h>
 #include <panel_setup_pinmap.h>
-#include <erc.h>
+#include <erc/erc.h>
 #include <id.h>
 #include <wx/bmpbuttn.h>
 #include <wx/statline.h>

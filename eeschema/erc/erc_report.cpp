@@ -27,7 +27,7 @@
 #include <build_version.h>
 #include "erc_report.h"
 #include <eda_units.h>
-#include <erc.h>
+#include <erc/erc.h>
 #include <fstream>
 #include <macros.h>
 #include <nlohmann/json.hpp>

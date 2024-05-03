@@ -37,14 +37,14 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_inspection_tool.h>
 #include <dialog_erc.h>
-#include <erc.h>
-#include <erc_report.h>
+#include <erc/erc.h>
+#include <erc/erc_report.h>
 #include <id.h>
 #include <confirm.h>
 #include <common.h>
 #include <widgets/wx_html_report_box.h>
 #include <dialogs/dialog_text_entry.h>
-#include <erc_item.h>
+#include <erc/erc_item.h>
 #include <eeschema_settings.h>
 #include <string_utils.h>
 #include <kiplatform/ui.h>

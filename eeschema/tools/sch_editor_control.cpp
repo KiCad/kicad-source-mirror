@@ -34,7 +34,7 @@
 #include <dialogs/dialog_update_from_pcb.h>
 #include <dialogs/hotkey_cycle_popup.h>
 #include <project_rescue.h>
-#include <erc.h>
+#include <erc/erc.h>
 #include <invoke_sch_dialog.h>
 #include <string_utils.h>
 #include <kiway.h>

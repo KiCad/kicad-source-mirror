@@ -46,7 +46,7 @@
 #include <sch_sheet.h>
 #include <sch_pin.h>
 
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 
 class TEST_EE_ITEM_FIXTURE
 {

@@ -28,7 +28,7 @@
 #include <sch_edit_frame.h>
 #include <schematic.h>
 #include <sch_commit.h>
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 #include <sch_reference_list.h>
 #include <symbol_library.h>
 #include <tools/ee_selection.h>

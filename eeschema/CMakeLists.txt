@@ -323,8 +323,17 @@ set( SYNC_SHEET_PIN_SRCS
     sync_sheet_pin/sheet_synchronization_model.cpp
     )
 
+set( EESCHEMA_ERC_SRCS
+    erc/erc.cpp
+    erc/erc_item.cpp
+    erc/erc_report.cpp
+    erc/erc_sch_pin_context.cpp
+    erc/erc_settings.cpp
+    )
+
 set( EESCHEMA_SRCS
     ${EESCHEMA_DLGS}
+    ${EESCHEMA_ERC_SRCS}
     ${EESCHEMA_LIBEDIT_SRCS}
     ${EESCHEMA_SCH_IO}
     ${EESCHEMA_SIM_SRCS}
@@ -342,11 +351,6 @@ set( EESCHEMA_SRCS
     eeschema_helpers.cpp
     eeschema_jobs_handler.cpp
     eeschema_settings.cpp
-    erc.cpp
-    erc_item.cpp
-    erc_report.cpp
-    erc_sch_pin_context.cpp
-    erc_settings.cpp
     fields_data_model.cpp
     fields_grid_table.cpp
     files-io.cpp

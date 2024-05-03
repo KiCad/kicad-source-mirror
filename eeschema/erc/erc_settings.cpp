@@ -18,8 +18,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <erc_item.h>
-#include <erc_settings.h>
+#include <erc/erc_item.h>
+#include <erc/erc_settings.h>
 #include <schematic.h>
 #include <sch_marker.h>
 #include <sch_screen.h>

@@ -27,7 +27,7 @@
 #include <dialogs/panel_setup_buses.h>
 #include <panel_setup_formatting.h>
 #include <panel_setup_pinmap.h>
-#include <erc_item.h>
+#include <erc/erc_item.h>
 #include <panel_text_variables.h>
 #include <panel_bom_presets.h>
 #include <project/project_file.h>

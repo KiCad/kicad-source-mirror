@@ -26,7 +26,7 @@
 #ifndef ERC_H
 #define ERC_H
 
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 #include <vector>
 #include <map>
 

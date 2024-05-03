@@ -37,7 +37,7 @@
 #include <unordered_set>
 
 #include <string_utils.h>
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 #include <sch_symbol.h>
 #include <sch_edit_frame.h>
 

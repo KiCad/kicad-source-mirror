@@ -27,8 +27,8 @@
 #include <vector>
 
 #include <eda_draw_frame.h>
-#include <erc_item.h>
-#include <erc_settings.h>
+#include <erc/erc_item.h>
+#include <erc/erc_settings.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_simple.h>
 #include <sch_line.h>

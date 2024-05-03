@@ -24,7 +24,7 @@
 
 #include "wx/html/m_templ.h"
 #include "wx/html/styleparams.h"
-#include <erc.h>
+#include <erc/erc.h>
 #include <eda_draw_frame.h>
 #include <marker_base.h>
 #include <sch_edit_frame.h>

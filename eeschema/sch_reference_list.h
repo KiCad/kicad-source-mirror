@@ -33,7 +33,7 @@
 #include <sch_sheet_path.h>
 #include <sch_symbol.h>
 #include <sch_text.h>
-#include <erc_settings.h>
+#include <erc/erc_settings.h>
 
 
 /** Schematic annotation scope options. */

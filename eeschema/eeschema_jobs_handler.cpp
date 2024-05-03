@@ -40,8 +40,8 @@
 #include <kiway.h>
 #include <sch_painter.h>
 #include <locale_io.h>
-#include <erc.h>
-#include <erc_report.h>
+#include <erc/erc.h>
+#include <erc/erc_report.h>
 #include <wildcards_and_files_ext.h>
 #include <plotters/plotters_pslike.h>
 #include <drawing_sheet/ds_data_model.h>
