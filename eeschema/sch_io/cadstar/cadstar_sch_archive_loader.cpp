@@ -3395,7 +3395,7 @@ VECTOR2I CADSTAR_SCH_ARCHIVE_LOADER::getKiCadLibraryPoint( const VECTOR2I& aCads
     VECTOR2I retval;
 
     retval.x = getKiCadLength( aCadstarPoint.x - aCadstarCentre.x );
-    retval.y = getKiCadLength( aCadstarPoint.y - aCadstarCentre.y );
+    retval.y = -getKiCadLength( aCadstarPoint.y - aCadstarCentre.y );
 
     return retval;
 }
