@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-04-21 22:07+0000\n"
+"PO-Revision-Date: 2024-04-30 10:07+0000\n"
 "Last-Translator: Henrik Kauhanen <henrik@kauhanen.se>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.2\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -44400,11 +44400,11 @@ msgstr "Kopioi valitut kohteet leikepöydälle määritetyllä aloituspisteellä
 
 #: pcbnew/tools/pcb_actions.cpp:485
 msgid "Duplicate and Increment"
-msgstr "Kopio ja lisäys"
+msgstr "Kopioi ja lisää numerointia"
 
 #: pcbnew/tools/pcb_actions.cpp:486
 msgid "Duplicates the selected item(s), incrementing pad numbers"
-msgstr "Kopioi valitut kohteet lisäämällä anturanumeroita"
+msgstr "Kopioi valitut kohteet anturanumerointia lisäten"
 
 #: pcbnew/tools/pcb_actions.cpp:494
 msgid "Move Exactly..."
