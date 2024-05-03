@@ -191,14 +191,14 @@ const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
     const wxString         text = GetShownText( true );
     BOX2I                  bbox( GetTextPos() );
 
-    bbox.SetWidth( (int) text.length() * attrs.m_Size.x * 1.3 );
+    bbox.SetWidth( KiROUND( (int) text.length() * attrs.m_Size.x * 1.3 ) );
     bbox.SetHeight( attrs.m_Size.y );
 
     switch( attrs.m_Halign )
     {
-    case GR_TEXT_H_ALIGN_LEFT:                                           break;
-    case GR_TEXT_H_ALIGN_CENTER: bbox.Offset( -bbox.GetWidth() / 2, 0 ); break;
-    case GR_TEXT_H_ALIGN_RIGHT:  bbox.Offset( -bbox.GetWidth(),     0 ); break;
+    case GR_TEXT_H_ALIGN_LEFT:                                                  break;
+    case GR_TEXT_H_ALIGN_CENTER: bbox.Offset( - (int) bbox.GetWidth() / 2, 0 ); break;
+    case GR_TEXT_H_ALIGN_RIGHT:  bbox.Offset( - (int) bbox.GetWidth(),     0 ); break;
     case GR_TEXT_H_ALIGN_INDETERMINATE:
         wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
         break;
@@ -206,9 +206,9 @@ const BOX2I DS_DRAW_ITEM_TEXT::GetApproxBBox()
 
     switch( GetAttributes().m_Valign )
     {
-    case GR_TEXT_V_ALIGN_TOP:                                             break;
-    case GR_TEXT_V_ALIGN_CENTER: bbox.Offset( 0, -bbox.GetHeight() / 2 ); break;
-    case GR_TEXT_V_ALIGN_BOTTOM: bbox.Offset( 0, -bbox.GetHeight()     ); break;
+    case GR_TEXT_V_ALIGN_TOP:                                                    break;
+    case GR_TEXT_V_ALIGN_CENTER: bbox.Offset( 0, - (int) bbox.GetHeight() / 2 ); break;
+    case GR_TEXT_V_ALIGN_BOTTOM: bbox.Offset( 0, - (int) bbox.GetHeight()     ); break;
     case GR_TEXT_V_ALIGN_INDETERMINATE:
         wxFAIL_MSG( wxT( "Indeterminate state legal only in dialogs." ) );
         break;
@@ -265,7 +265,7 @@ void DS_DRAW_ITEM_POLYPOLYGONS::PrintWsItem( const RENDER_SETTINGS* aSettings,
                                        outline.CPoint( ii ).y + aOffset.y );
         }
 
-        GRPoly( DC, points_moved.size(), &points_moved[0], true, penWidth, color, color );
+        GRPoly( DC, (int) points_moved.size(), &points_moved[0], true, penWidth, color, color );
     }
 }
 
@@ -371,18 +371,21 @@ bool DS_DRAW_ITEM_RECT::HitTest( const VECTOR2I& aPosition, int aAccuracy ) cons
     // Right line
     start = end;
     end.y = GetEnd().y;
+
     if( TestSegmentHit( aPosition, start, end, dist ) )
         return true;
 
     // lower line
     start = end;
     end.x = GetStart().x;
+
     if( TestSegmentHit( aPosition, start, end, dist ) )
         return true;
 
     // left line
     start = end;
     end = GetStart();
+
     if( TestSegmentHit( aPosition, start, end, dist ) )
         return true;
 
