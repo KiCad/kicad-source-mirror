@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-04-15 06:54+0000\n"
+"PO-Revision-Date: 2024-04-28 03:51+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "kicad/v8/pt_BR/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.1\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
@@ -39370,7 +39370,7 @@ msgstr ""
 #: pcbnew/exporters/step/step_pcb_model.cpp:857
 #, c-format
 msgid "Wire not done (contour %d, points %d): OCC error %d\n"
-msgstr ""
+msgstr "Fio não concluído (contorno %d, pontos %d): Erro OCC %d\n"
 
 #: pcbnew/exporters/step/step_pcb_model.cpp:1005
 #, c-format
@@ -39440,7 +39440,6 @@ msgid "Current Board will be closed. Continue?"
 msgstr "A placa atual será fechada. Prosseguir?"
 
 #: pcbnew/files.cpp:479
-#, fuzzy
 msgid ""
 "If the zones on this board are refilled the Copper Edge Clearance setting "
 "will be used (see Board Setup > Design Rules > Constraints).\n"
@@ -39450,7 +39449,7 @@ msgstr ""
 "Se as regiões desta placa forem preenchidas novamente, a configuração do "
 "isolamento da borda de cobre será usada (consulte Configuração da placa > "
 "Regras de design > Restrições).\n"
-" Isso pode resultar em preenchimentos diferentes das versões anteriores do "
+"Isso pode resultar em preenchimentos diferentes das versões anteriores do "
 "KiCad que usavam as espessuras de linha do limite da placa na camada Edge "
 "Cuts (Cortes de borda)."
 
