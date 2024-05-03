@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-05-03 22:00+0000\n"
-"Last-Translator: Yutaro Urata2 <yutarourata03@gmail.com>\n"
+"PO-Revision-Date: 2024-05-04 22:07+0000\n"
+"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -7636,7 +7636,7 @@ msgstr "列を選択"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr "セレクトされたセルを"
+msgstr "現在選択されているセルを含む行を選択"
 
 #: common/tool/actions.cpp:323
 #, fuzzy
@@ -21150,7 +21150,7 @@ msgstr "電源シンボルを追加"
 
 #: eeschema/tools/ee_actions.cpp:446 eeschema/tools/sch_drawing_tools.cpp:985
 msgid "Add No Connect Flag"
-msgstr "未接続フラグを追加"
+msgstr "空き端子フラグを追加"
 
 #: eeschema/tools/ee_actions.cpp:447
 msgid "Draw no-connection flags"
