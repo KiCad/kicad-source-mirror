@@ -331,7 +331,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 auto compareByLibID =
                         []( const LIB_SYMBOL* aFirst, const LIB_SYMBOL* aSecond ) -> bool
                         {
-                            return aFirst->LibId().Format() < aSecond->LibId().Format();
+                            return aFirst->GetLibId().Format() < aSecond->GetLibId().Format();
                         };
 
                 std::set<LIB_SYMBOL*, decltype( compareByLibID )> part_list( compareByLibID );
