@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf0)
+// C++ code generated with wxFormBuilder (version 4.0.0-0-g0efcecf)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -50,18 +50,26 @@ DIALOG_UPDATE_NOTICE_BASE::DIALOG_UPDATE_NOTICE_BASE( wxWindow* parent, wxWindow
 	bButtonSizer = new wxBoxSizer( wxHORIZONTAL );
 
 	m_skipBtn = new wxButton( this, wxID_ANY, _("Skip this version"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_skipBtn->SetToolTip( _("Ignores the update notice for the announced new version. Additional update notes will be displayed for newer versions.") );
+
 	bButtonSizer->Add( m_skipBtn, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP, 5 );
 
 
 	bButtonSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_btnRemind = new wxButton( this, wxID_ANY, _("Remind me later"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnRemind->SetToolTip( _("Close this update notice. The update notice will be shown again when you relaunch KiCad.") );
+
 	bButtonSizer->Add( m_btnRemind, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP, 5 );
 
 	m_btnDetailsPage = new wxButton( this, wxID_ANY, _("View Details"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnDetailsPage->SetToolTip( _("Launch a web browser to the release announcements page.") );
+
 	bButtonSizer->Add( m_btnDetailsPage, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP, 5 );
 
 	m_btnDownloadPage = new wxButton( this, wxID_ANY, _("Open Downloads Page"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btnDownloadPage->SetToolTip( _("Go to the platform appropriate downloads page.") );
+
 	bButtonSizer->Add( m_btnDownloadPage, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
 
 

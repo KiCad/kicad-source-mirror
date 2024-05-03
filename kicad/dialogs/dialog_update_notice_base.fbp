@@ -357,7 +357,7 @@
                 <property name="style"></property>
                 <property name="subclass"></property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip"></property>
+                <property name="tooltip">Ignores the update notice for the announced new version. Additional update notes will be displayed for newer versions.</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
@@ -442,7 +442,7 @@
                 <property name="style"></property>
                 <property name="subclass">; ; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip"></property>
+                <property name="tooltip">Close this update notice. The update notice will be shown again when you relaunch KiCad.</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
@@ -517,7 +517,7 @@
                 <property name="style"></property>
                 <property name="subclass">; ; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip"></property>
+                <property name="tooltip">Launch a web browser to the release announcements page.</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
@@ -592,7 +592,7 @@
                 <property name="style"></property>
                 <property name="subclass">; ; forward_declare</property>
                 <property name="toolbar_pane">0</property>
-                <property name="tooltip"></property>
+                <property name="tooltip">Go to the platform appropriate downloads page.</property>
                 <property name="validator_data_type"></property>
                 <property name="validator_style">wxFILTER_NONE</property>
                 <property name="validator_type">wxDefaultValidator</property>
