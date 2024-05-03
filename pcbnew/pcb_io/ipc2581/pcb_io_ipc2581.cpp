@@ -1612,11 +1612,13 @@ void PCB_IO_IPC2581::addVia( wxXmlNode* aContentNode, const PCB_VIA* aVia, PCB_L
     addPadStack( padNode, aVia );
     addLocationNode( padNode, aVia->GetPosition().x, aVia->GetPosition().y );
 
-    PCB_SHAPE shape( nullptr, SHAPE_T::CIRCLE );
+    PAD dummy( nullptr );
+    int hole = aVia->GetDrillValue();
+    dummy.SetDrillSize( VECTOR2I( hole, hole ) );
+    dummy.SetPosition( aVia->GetStart() );
+    dummy.SetSize( VECTOR2I( aVia->GetWidth(), aVia->GetWidth() ) );
 
-    shape.SetEnd( { KiROUND( aVia->GetWidth() / 2.0 ), 0 } );
-    addShape( padNode, shape );
-
+    addShape( padNode, dummy, aLayer );
 }
 
 void PCB_IO_IPC2581::addPadStack( wxXmlNode* aPadNode, const PAD* aPad )
