@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:52-0700\n"
-"PO-Revision-Date: 2024-05-03 05:07+0000\n"
+"PO-Revision-Date: 2024-05-04 16:07+0000\n"
 "Last-Translator: Toni Laiho <apelegeos@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/kicad/v8/fi/>\n"
 "Language: fi\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.3-dev\n"
+"X-Generator: Weblate 5.5.3\n"
 "X-Poedit-Language: Finnish\n"
 "X-Poedit-Country: FINLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -21910,9 +21910,8 @@ msgid "Excl. sim"
 msgstr "Poista. sim"
 
 #: eeschema/widgets/search_handlers.cpp:137
-#, fuzzy
 msgid "Excl. BOM"
-msgstr "Poissuljettu materiaaliluettelosta"
+msgstr "Suljettu. materiaaliluettelosta"
 
 #: eeschema/widgets/search_handlers.cpp:138
 msgid "Excl. board"
@@ -32402,7 +32401,6 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_global_edit_teardrops_base.cpp:146
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:375
-#, fuzzy
 msgid "Allow teardrops to span two track segments"
 msgstr "Salli kupariviisteiden kattaa kaksi johdinraidan osaa"
 
@@ -36235,7 +36233,7 @@ msgstr "Edge_Cuts reunavälys"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:675
 msgid "Eco1"
-msgstr "Eco1"
+msgstr "Eko1"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:678
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:688
@@ -36246,7 +36244,7 @@ msgstr "Apu-"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:685
 msgid "Eco2"
-msgstr "Eco2"
+msgstr "Eko2"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:693
 msgid "If you want a separate layer for comments or notes"
@@ -36926,7 +36924,7 @@ msgstr "Kaaripisteet:"
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:384
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:569
 msgid "Allow teardrop to span two track segments"
-msgstr "Salli kupariviisteiden kattaa kaksi johdinraidan osaa"
+msgstr "Salli kupariviisteen kattaa kaksi johdinraidan osaa"
 
 #: pcbnew/dialogs/panel_setup_teardrops_base.cpp:209
 msgid "Default properties for rectangular shapes:"
@@ -42321,7 +42319,7 @@ msgstr "Verkkotunnus"
 #: pcbnew/pcb_track.cpp:1297
 #, c-format
 msgid "Track (arc) %s on %s, length %s"
-msgstr "Johdin (kaari) %s > %s, pituus %s"
+msgstr "Johdinraita (kaari) %s > %s, pituus %s"
 
 #: pcbnew/pcb_track.cpp:1298
 #, c-format
@@ -46921,9 +46919,8 @@ msgid "Hatch Gap"
 msgstr "Täyttöviivan väli"
 
 #: pcbnew/zone.cpp:1686
-#, fuzzy
 msgid "Hatch Minimum Hole Ratio"
-msgstr "Viivoita minimi reikäsuhde"
+msgstr "Kuvioviivoita minimi reikäsuhde"
 
 #: pcbnew/zone.cpp:1694
 msgid "Smoothing Effort"
