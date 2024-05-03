@@ -681,6 +681,35 @@ void DS_DATA_ITEM_TEXT::SetConstrainedTextSize()
 
     if( m_ConstrainedTextSize.y == 0 )
         m_ConstrainedTextSize.y = DS_DATA_MODEL::GetTheInstance().m_DefaultTextSize.y;
+
+    if( m_BoundingBoxSize.x > 0 || m_BoundingBoxSize.y > 0 )
+    {
+        // to know the X and Y size of the line, we should use EDA_TEXT::GetTextBox()
+        // but this function uses integers
+        // So, to avoid truncations with our unit in mm, use microns.
+        VECTOR2I size_micron;
+        #define FSCALE 1000.0
+        int linewidth = 0;
+        size_micron.x = KiROUND( m_ConstrainedTextSize.x * FSCALE );
+        size_micron.y = KiROUND( m_ConstrainedTextSize.y * FSCALE );
+        DS_DRAW_ITEM_TEXT dummy( unityScale, this, 0, m_FullText, VECTOR2I( 0, 0 ), size_micron,
+                                 linewidth, m_Font, m_Italic, m_Bold, m_TextColor );
+        dummy.SetMultilineAllowed( true );
+        dummy.SetHorizJustify( m_Hjustify ) ;
+        dummy.SetVertJustify( m_Vjustify );
+        dummy.SetTextAngle( EDA_ANGLE( m_Orient, DEGREES_T ) );
+
+        BOX2I    rect = dummy.GetTextBox();
+        VECTOR2D size;
+        size.x = KiROUND( (int) rect.GetWidth() / FSCALE );
+        size.y = KiROUND( (int) rect.GetHeight() / FSCALE );
+
+        if( m_BoundingBoxSize.x > 0 && size.x > m_BoundingBoxSize.x )
+            m_ConstrainedTextSize.x *= m_BoundingBoxSize.x / size.x;
+
+        if( m_BoundingBoxSize.y > 0 &&  size.y > m_BoundingBoxSize.y )
+            m_ConstrainedTextSize.y *= m_BoundingBoxSize.y / size.y;
+    }
 }
 
 
