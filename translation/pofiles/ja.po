@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
-"PO-Revision-Date: 2024-04-30 10:07+0000\n"
+"PO-Revision-Date: 2024-05-03 22:00+0000\n"
 "Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.2\n"
+"X-Generator: Weblate 5.5.3\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-Basepath: Source/kicad-master\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -1996,7 +1996,6 @@ msgid "Librarian Team"
 msgstr "ライブラリアン チーム"
 
 #: common/dialog_about/AboutDialog_main.cpp:843
-#, fuzzy
 msgid "3D models"
 msgstr "3D モデル"
 
@@ -7637,7 +7636,7 @@ msgstr "列を選択"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr "今セレクトしてあるセルが入ってる行を選択します"
+msgstr "現在選択しているセルが含まれる行を選択"
 
 #: common/tool/actions.cpp:323
 #, fuzzy
@@ -9488,9 +9487,8 @@ msgstr "シンボルのフットプリント フィルターを使用"
 
 #: cvpcb/tools/cvpcb_actions.cpp:158
 msgid "Filter footprint list by footprint filters defined in the symbol"
-msgstr ""
-"シンボルに定義されたフットプリント フィルターでフットプリント リストをフィル"
-"タリング"
+msgstr "シンボルに定義されたフットプリント フィルターでフットプリント "
+"リストを絞り込み"
 
 #: cvpcb/tools/cvpcb_actions.cpp:166
 msgid "Filter by pin count"
@@ -21152,7 +21150,7 @@ msgstr "電源シンボルを追加"
 
 #: eeschema/tools/ee_actions.cpp:446 eeschema/tools/sch_drawing_tools.cpp:985
 msgid "Add No Connect Flag"
-msgstr "空き端子フラグを追加"
+msgstr "未接続フラグを追加"
 
 #: eeschema/tools/ee_actions.cpp:447
 msgid "Draw no-connection flags"
