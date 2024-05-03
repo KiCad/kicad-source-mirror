@@ -24,6 +24,7 @@
  */
 
 
+#include <wx/debug.h>
 #include <wx/filename.h>
 #include <set>
 #include <common.h>
@@ -198,7 +199,16 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName, bool aCheckIfEnabl
 
     do
     {
-        std::shared_lock<std::shared_mutex> lock( cur->m_mutex );
+        try
+        {
+            std::shared_lock<std::shared_mutex> lock( cur->m_mutex );
+        }
+        catch( std::system_error& e )
+        {
+            wxASSERT_MSG( false, wxString::Format( wxS( "Failed to lock lib table mutex: %s" ),
+                                                   e.what() ) );
+            continue;
+        }
 
         if( cur->m_rowsMap.count( aNickName ) )
             row = &*cur->m_rowsMap.at( aNickName );
