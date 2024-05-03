@@ -317,15 +317,15 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
     name.Replace( wxS( "{slash}" ), wxT( "/" ) );
 
     LIB_ID id;
-    int bad_pos = id.Parse( name );
+    int    bad_pos = id.Parse( name );
 
     if( bad_pos >= 0 )
     {
         if( static_cast<int>( name.size() ) > bad_pos )
         {
-            wxString msg = wxString::Format(
-                    _( "Symbol %s contains invalid character '%c'" ), name,
-                    name[bad_pos] );
+            wxString msg = wxString::Format( _( "Symbol %s contains invalid character '%c'" ),
+                                             name,
+                                             name[bad_pos] );
 
             THROW_PARSE_ERROR( msg, CurSource(), CurLine(), CurLineNumber(), CurOffset() );
         }
@@ -488,6 +488,7 @@ LIB_SYMBOL* SCH_IO_KICAD_SEXPR_PARSER::parseLibSymbol( LIB_SYMBOL_MAP& aSymbolLi
                         unitDisplayName = FromUTF8();
                         symbol->SetUnitDisplayName( m_unit, unitDisplayName );
                     }
+
                     NeedRIGHT();
                     break;
 
@@ -550,40 +551,15 @@ SCH_ITEM* SCH_IO_KICAD_SEXPR_PARSER::ParseSymbolDrawItem()
 {
     switch( CurTok() )
     {
-    case T_arc:
-        return parseSymbolArc();
-        break;
-
-    case T_bezier:
-        return parseSymbolBezier();
-        break;
-
-    case T_circle:
-        return parseSymbolCircle();
-        break;
-
-    case T_pin:
-        return parseSymbolPin();
-        break;
-
-    case T_polyline:
-        return parseSymbolPolyLine();
-        break;
-
-    case T_rectangle:
-        return parseSymbolRectangle();
-        break;
-
-    case T_text:
-        return parseSymbolText();
-        break;
-
-    case T_text_box:
-        return parseSymbolTextBox();
-        break;
-
-    default:
-        Expecting( "arc, bezier, circle, pin, polyline, rectangle, or text" );
+    case T_arc:       return parseSymbolArc();       break;
+    case T_bezier:    return parseSymbolBezier();    break;
+    case T_circle:    return parseSymbolCircle();    break;
+    case T_pin:       return parseSymbolPin();       break;
+    case T_polyline:  return parseSymbolPolyLine();  break;
+    case T_rectangle: return parseSymbolRectangle(); break;
+    case T_text:      return parseSymbolText();      break;
+    case T_text_box:  return parseSymbolTextBox();   break;
+    default:          Expecting( "arc, bezier, circle, pin, polyline, rectangle, or text" );
     }
 
     return nullptr;
@@ -690,6 +666,8 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
         aText->SetText( ConvertToNewOverbarNotation( aText->GetText() ) );
 
     T        token;
+    bool     bold = false;
+    bool     italic = false;
     wxString faceName;
     COLOR4D  color = COLOR4D::UNSPECIFIED;
 
@@ -735,18 +713,14 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
                     break;
 
                 case T_bold:
-                {
-                    bool bold = parseMaybeAbsentBool( true );
+                    bold = parseMaybeAbsentBool( true );
                     aText->SetBoldFlag( bold );
                     break;
-                }
 
                 case T_italic:
-                {
-                    bool italic = parseMaybeAbsentBool( true );
+                    italic = parseMaybeAbsentBool( true );
                     aText->SetItalic( italic );
                     break;
-                }
 
                 case T_color:
                     color.r = parseInt( "red" ) / 255.0;
@@ -768,10 +742,7 @@ void SCH_IO_KICAD_SEXPR_PARSER::parseEDA_TEXT( EDA_TEXT* aText, bool aConvertOve
             }
 
             if( !faceName.IsEmpty() )
-            {
-                aText->SetFont( KIFONT::FONT::GetFont( faceName, aText->IsBold(),
-                                                       aText->IsItalic() ) );
-            }
+                aText->SetFont( KIFONT::FONT::GetFont( faceName, bold, italic ) );
 
             break;
 
@@ -886,8 +857,7 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
 
     wxString name;
     wxString value;
-    std::unique_ptr<SCH_FIELD> field = std::make_unique<SCH_FIELD>( aSymbol.get(),
-                                                                    MANDATORY_FIELDS );
+    auto field = std::make_unique<SCH_FIELD>( aSymbol.get(), MANDATORY_FIELDS );
 
     // By default, fieds are visible.
     // Invisible fields have the hide style or keyword specified in file
@@ -948,9 +918,11 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
         case T_id:
         {
             int id = parseInt( "field ID" );
+
             // Only set an ID that isn't a MANDATORY_FIELDS ID
             if( id >= MANDATORY_FIELDS )
                 field->SetId( id );
+
             NeedRIGHT();
         }
             break;
@@ -984,9 +956,8 @@ SCH_FIELD* SCH_IO_KICAD_SEXPR_PARSER::parseProperty( std::unique_ptr<LIB_SYMBOL>
         }
     }
 
-    // Due to an bug when in #LIB_SYMBOL::Flatten, duplicate ids slipped through
-    // when writing files.  This section replaces duplicate #SCH_FIELD indices on
-    // load.
+    // Due to an bug when in #LIB_SYMBOL::Flatten, duplicate ids slipped through when writing
+    // files.  This section replaces duplicate #SCH_FIELD indices on load.
     if( ( field->GetId() >= MANDATORY_FIELDS ) && m_fieldIDsRead.count( field->GetId() ) )
     {
         int nextAvailableId = field->GetId() + 1;
@@ -3434,8 +3405,11 @@ SCH_SHEET* SCH_IO_KICAD_SEXPR_PARSER::parseSheet()
                             else
                             {
                                 // Whitespaces are not permitted
-                                std::vector<wxString> whitespaces = { wxT( "\r" ), wxT( "\n" ),
-                                    wxT( "\t" ), wxT( " " ) };
+                                static std::vector<wxString> whitespaces =
+                                        { wxT( "\r" ),
+                                          wxT( "\n" ),
+                                          wxT( "\t" ),
+                                          wxT( " " ) };
 
                                 for( wxString ch : whitespaces )
                                     instance.m_PageNumber.Replace( ch, wxEmptyString );
