@@ -66,8 +66,7 @@ std::vector<LIB_SYMBOL*> CADSTAR_SCH_ARCHIVE_LOADER::LoadPartsLib( const wxStrin
     CADSTAR_PARTS_LIB_PARSER p;
 
     if( !p.CheckFileHeader( aFilename.utf8_string() ) )
-        THROW_IO_ERROR(
-                _( "The selected file does not appear to be a CADSTAR parts Library file" ) );
+        THROW_IO_ERROR( _( "File does not appear to be a CADSTAR parts Library file" ) );
 
     // TODO: we could add progress reporting for reading .lib
     CADSTAR_PARTS_LIB_MODEL csLib = p.ReadFile( aFilename.utf8_string() );
@@ -111,12 +110,11 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
 
         if( !Library.SymbolDefinitions.count( symbolID ) )
         {
-            m_reporter->Report(
-                    wxString::Format( _( "Unable to find symbol %s, referenced by part %s. The "
-                                         "part was not loaded." ),
-                                      generateLibName( sym.m_SymbolName, alternateName ),
-                                      aPart.m_Name ),
-                    RPT_SEVERITY_ERROR );
+            m_reporter->Report( wxString::Format( _( "Unable to find symbol %s, referenced by part "
+                                                     "%s. The part was not loaded." ),
+                                                  generateLibName( sym.m_SymbolName, alternateName ),
+                                                  aPart.m_Name ),
+                                RPT_SEVERITY_ERROR );
 
             return nullptr;
         }
@@ -126,12 +124,12 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
 
         if( (int)sym.m_Pins.size() != kiSymDef->GetPinCount() )
         {
-            m_reporter->Report(
-                    wxString::Format( _( "Inconsistent pin numbers in symbol %s compared to the one "
-                                         "defined in part %s. The part was not loaded." ),
-                                      generateLibName( sym.m_SymbolName, alternateName ),
-                                      aPart.m_Name ),
-                    RPT_SEVERITY_ERROR );
+            m_reporter->Report( wxString::Format( _( "Inconsistent pin numbers in symbol %s "
+                                                     "compared to the one defined in part %s. The "
+                                                     "part was not loaded." ),
+                                                  generateLibName( sym.m_SymbolName, alternateName ),
+                                                  aPart.m_Name ),
+                                RPT_SEVERITY_ERROR );
 
             return nullptr;
         }
@@ -181,11 +179,11 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
             retSym->SetDescription( aPart.m_Description.value_or( "" ) );
 
             auto addFieldIfHasValue =
-                [&]( const wxString& aFieldName, const std::optional<std::string>& aFieldValue )
-                {
-                    if( aFieldValue.has_value() )
-                        addNewFieldToSymbol( aFieldName, retSym )->SetText( aFieldValue.value() );
-                };
+                    [&]( const wxString& name, const std::optional<std::string>& value )
+                    {
+                        if( value.has_value() )
+                            addNewFieldToSymbol( name, retSym )->SetText( value.value() );
+                    };
 
             addFieldIfHasValue( PartNumberFieldName,        aPart.m_Number );
             addFieldIfHasValue( PartVersionFieldName,       aPart.m_Version );
@@ -194,7 +192,7 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
             setFootprintOnSymbol( retSym, aPart.m_Pcb_component,
                                   aPart.m_Pcb_alternate.value_or( "" ) );
 
-            if(aPart.m_SpiceModel.has_value())
+            if( aPart.m_SpiceModel.has_value() )
             {
                 wxString modelVal = wxString::Format( "model=\"%s\"", aPart.m_SpiceModel.value() );
                 addNewFieldToSymbol( SIM_DEVICE_FIELD, retSym )->SetText( "SPICE" );
@@ -244,9 +242,10 @@ CADSTAR_SCH_ARCHIVE_LOADER::loadLibPart( const CADSTAR_PART_ENTRY& aPart )
                     pin->SetVisible( false );
 
                     // Generate the coordinate for the pin. We don't want overlapping pins
-                    // and ideally close to the center of the symbol, so we load pins
-                    // in a spiral sequence around the center
-                    if( delta.x == delta.y || ( delta.x < 0 && delta.x == -delta.y )
+                    // and ideally close to the center of the symbol, so we load pins in a
+                    // spiral sequence around the center
+                    if( delta.x == delta.y
+                        || ( delta.x < 0 && delta.x == -delta.y )
                         || ( delta.x > 0 && delta.x == 1 - delta.y ) )
                     {
                         // change direction
@@ -454,8 +453,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::Load( SCHEMATIC* aSchematic, SCH_SHEET* aRootSh
         // or width) to all 4 sides (top, bottom, left right). For the import, we are also rounding
         // the margin to the nearest grid, ensuring all items remain on the grid.
         VECTOR2I targetSheetSize = sheetBoundingBox.GetSize();
-        int    longestSide = std::max( targetSheetSize.x, targetSheetSize.y );
-        int    margin = ( (double) longestSide * 0.03 );
+        int      longestSide = std::max( targetSheetSize.x, targetSheetSize.y );
+        int      margin = ( (double) longestSide * 0.03 );
         margin = roundToNearestGrid( margin );
         targetSheetSize += margin * 2;
 
@@ -681,12 +680,12 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadPartsLibrary()
         {
             if( part.Definition.GateSymbols.size() == 0 )
             {
-                m_reporter->Report(
-                        wxString::Format( _( "Part definition '%s' has an incomplete definition (no"
-                                             " symbol definitions are associated with it). The part"
-                                             " has not been loaded into the KiCad library." ),
-                                          part.Name ),
-                        RPT_SEVERITY_WARNING );
+                m_reporter->Report( wxString::Format( _( "Part definition '%s' has an incomplete "
+                                                         "definition (no symbol definitions are "
+                                                         "associated with it). The part has not "
+                                                         "been loaded into the KiCad library." ),
+                                                      part.Name ),
+                                    RPT_SEVERITY_WARNING );
             }
 
             // Don't save in the library, but still keep it cached as some of the units might have
@@ -800,8 +799,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
                     if( !attrField )
                     {
                         int fieldID = symbol->GetFieldCount();
-                        attrField = symbol->AddField(
-                                SCH_FIELD( VECTOR2I(), fieldID, symbol, attrName ) );
+                        attrField = symbol->AddField( SCH_FIELD( VECTOR2I(), fieldID, symbol,
+                                                                 attrName ) );
                     }
 
                     wxASSERT( attrField->GetName() == attrName );
@@ -821,20 +820,24 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbolInstances()
         {
             if( Library.SymbolDefinitions.find( sym.SymdefID ) == Library.SymbolDefinitions.end() )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Symbol ID '%s' references library symbol '%s' which could not be "
-                           "found in the library. Did you export all items of the design?" ),
-                        sym.ID, sym.PartRef.RefID ) );
+                THROW_IO_ERROR( wxString::Format( _( "Symbol ID '%s' references library symbol "
+                                                     "'%s' which could not be found in the "
+                                                     "library. Did you export all items of the "
+                                                     "design?" ),
+                                                  sym.ID,
+                                                  sym.PartRef.RefID ) );
             }
 
             SYMDEF_SCM libSymDef = Library.SymbolDefinitions.at( sym.SymdefID );
 
             if( libSymDef.Terminals.size() != 1 )
             {
-                THROW_IO_ERROR( wxString::Format(
-                        _( "Symbol ID '%s' is a signal reference or global signal but it has too "
-                           "many pins. The expected number of pins is 1 but %d were found." ),
-                        sym.ID, libSymDef.Terminals.size() ) );
+                THROW_IO_ERROR( wxString::Format( _( "Symbol ID '%s' is a signal reference or "
+                                                     "global signal but it has too many pins. The "
+                                                     "expected number of pins is 1 but %d were "
+                                                     "found." ),
+                                                  sym.ID,
+                                                  libSymDef.Terminals.size() ) );
             }
 
             if( sym.SymbolVariant.Type == SYMBOLVARIANT::TYPE::GLOBALSIGNAL )
@@ -1152,7 +1155,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
         }
 
         auto getHierarchicalLabel =
-                [&]( NETELEMENT_ID aNode ) -> SCH_HIERLABEL*
+                [&]( const NETELEMENT_ID& aNode ) -> SCH_HIERLABEL*
                 {
                     if( aNode.Contains( "BLKT" ) )
                     {
@@ -1263,10 +1266,8 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
 
             SHAPE_LINE_CHAIN wireChain; // Create a temp. line chain representing the connection
 
-            for( POINT pt : conn.Path )
-            {
+            for( const POINT& pt : conn.Path )
                 wireChain.Append( getKiCadPoint( pt ) );
-            }
 
             // AUTO-FIX SHEET PINS
             //--------------------
@@ -1277,7 +1278,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadNets()
             nodes.push_back( conn.StartNode );
             nodes.push_back( conn.EndNode );
 
-            for( NETELEMENT_ID node : nodes )
+            for( const NETELEMENT_ID& node : nodes )
             {
                 SCH_HIERLABEL* sheetPin = getHierarchicalLabel( node );
 
@@ -1811,9 +1812,9 @@ const LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSymdef( const SYMDEF_ID& aSymd
 
 
 void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& aSymdefID,
-                                                 const PART& aCadstarPart,
-                                                 const GATE_ID& aGateID,
-                                                 LIB_SYMBOL* aSymbol )
+                                                              const PART& aCadstarPart,
+                                                              const GATE_ID& aGateID,
+                                                              LIB_SYMBOL* aSymbol )
 {
     wxCHECK( Library.SymbolDefinitions.find( aSymdefID ) != Library.SymbolDefinitions.end(), /*void*/ );
 
@@ -1922,7 +1923,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSymbolGateAndPartFields( const SYMDEF_ID& a
         {
             // Check if the part itself defined a location for the field
             applyToLibraryFieldAttribute( aAttributeVal.AttributeLocation, symDefOrigin,
-                                            attrField );
+                                          attrField );
         }
         else if( attrIsNew )
         {
@@ -2078,9 +2079,7 @@ SCH_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::loadSchematicSymbol( const SYMBOL& aCads
     SCH_SYMBOL* symbol = new SCH_SYMBOL( aKiCadPart, libId, &sheetpath, unit );
 
     if( aCadstarSymbol.IsComponent )
-    {
         symbol->SetRef( &sheetpath, aCadstarSymbol.ComponentRef.Designator );
-    }
 
     symbol->SetPosition( getKiCadPoint( aCadstarSymbol.Origin ) );
 
@@ -2440,7 +2439,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure( const FIGURE& aCadstarFigure,
                        aCadstarSheetIDOverride, aKiCadSchLayerID, aMoveVector, aRotation,
                        aScalingFactor, aTransformCentre, aMirrorInvert );
 
-    for( CUTOUT cutout : aCadstarFigure.Shape.Cutouts )
+    for( const CUTOUT& cutout : aCadstarFigure.Shape.Cutouts )
     {
         loadShapeVertices( cutout.Vertices, aCadstarFigure.LineCodeID, aCadstarSheetIDOverride,
                            aKiCadSchLayerID, aMoveVector, aRotation, aScalingFactor,
@@ -2449,9 +2448,9 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadFigure( const FIGURE& aCadstarFigure,
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets( LAYER_ID              aCadstarSheetID,
+void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets( const LAYER_ID&       aCadstarSheetID,
                                                           const VECTOR2I&       aPosition,
-                                                          VECTOR2I              aSheetSize,
+                                                          const VECTOR2I&       aSheetSize,
                                                           const SCH_SHEET_PATH& aParentSheet )
 {
     wxCHECK_MSG( m_sheetMap.find( aCadstarSheetID ) == m_sheetMap.end(), ,
@@ -2498,7 +2497,7 @@ void CADSTAR_SCH_ARCHIVE_LOADER::loadSheetAndChildSheets( LAYER_ID              
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( LAYER_ID aCadstarSheetID,
+void CADSTAR_SCH_ARCHIVE_LOADER::loadChildSheets( const LAYER_ID& aCadstarSheetID,
                                                   const SCH_SHEET_PATH& aSheet )
 {
     wxCHECK_MSG( m_sheetMap.find( aCadstarSheetID ) != m_sheetMap.end(), ,
@@ -2611,7 +2610,7 @@ std::vector<CADSTAR_SCH_ARCHIVE_LOADER::LAYER_ID> CADSTAR_SCH_ARCHIVE_LOADER::fi
     }
 
     //Add sheets that do not have a parent
-    for( LAYER_ID sheetID : Sheets.SheetOrder )
+    for( const LAYER_ID& sheetID : Sheets.SheetOrder )
     {
         if( std::find( childSheets.begin(), childSheets.end(), sheetID ) == childSheets.end() )
             orphanSheets.push_back( sheetID );
@@ -2621,11 +2620,11 @@ std::vector<CADSTAR_SCH_ARCHIVE_LOADER::LAYER_ID> CADSTAR_SCH_ARCHIVE_LOADER::fi
 }
 
 
-int CADSTAR_SCH_ARCHIVE_LOADER::getSheetNumber( LAYER_ID aCadstarSheetID )
+int CADSTAR_SCH_ARCHIVE_LOADER::getSheetNumber( const LAYER_ID& aCadstarSheetID )
 {
     int i = 1;
 
-    for( LAYER_ID sheetID : Sheets.SheetOrder )
+    for( const LAYER_ID& sheetID : Sheets.SheetOrder )
     {
         if( sheetID == aCadstarSheetID )
             return i;
@@ -2637,7 +2636,8 @@ int CADSTAR_SCH_ARCHIVE_LOADER::getSheetNumber( LAYER_ID aCadstarSheetID )
 }
 
 
-void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetID, SCH_ITEM* aItem )
+void CADSTAR_SCH_ARCHIVE_LOADER::loadItemOntoKiCadSheet( const LAYER_ID& aCadstarSheetID,
+                                                         SCH_ITEM* aItem )
 {
     wxCHECK_MSG( aItem, /*void*/, wxT( "aItem is null" ) );
 
@@ -2721,7 +2721,6 @@ CADSTAR_SCH_ARCHIVE_LOADER::getSymDefFromName( const wxString& aSymdefName,
         return m_DefaultSymDefNamesCache[refKeyToFind];
     }
 
-
     return SYMDEF_ID();
 }
 
@@ -2730,9 +2729,7 @@ bool CADSTAR_SCH_ARCHIVE_LOADER::isAttributeVisible( const ATTRIBUTE_ID& aCadsta
 {
     // Use CADSTAR visibility settings to determine if an attribute is visible
     if( AttrColors.AttributeColors.find( aCadstarAttributeID ) != AttrColors.AttributeColors.end() )
-    {
         return AttrColors.AttributeColors.at( aCadstarAttributeID ).IsVisible;
-    }
 
     return false; // If there is no visibility setting, assume not displayed
 }
@@ -3248,7 +3245,6 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
         default:
             break;
         }
-
     }
 
     return retval;
@@ -3257,10 +3253,11 @@ LIB_SYMBOL* CADSTAR_SCH_ARCHIVE_LOADER::getScaledLibPart( const LIB_SYMBOL* aSym
 
 void CADSTAR_SCH_ARCHIVE_LOADER::fixUpLibraryPins( LIB_SYMBOL* aSymbolToFix, int aGateNumber )
 {
-    auto compLambda = []( const VECTOR2I& aA, const VECTOR2I& aB )
-    {
-        return LexicographicalCompare( aA, aB ) < 0;
-    };
+    auto compLambda =
+            []( const VECTOR2I& aA, const VECTOR2I& aB )
+            {
+                return LexicographicalCompare( aA, aB ) < 0;
+            };
 
     // Store a list of vertical or horizontal segments in the symbol
     // Note: Need the custom comparison function to ensure the map is sorted correctly

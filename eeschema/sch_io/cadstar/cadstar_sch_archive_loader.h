@@ -61,7 +61,7 @@ public:
     const int SMALL_LABEL_SIZE = KiROUND( (double) SCH_IU_PER_MM * 0.4 );
     const double ARC_ACCURACY = SCH_IU_PER_MM * 0.01; // 0.01mm
 
-    explicit CADSTAR_SCH_ARCHIVE_LOADER( wxString aFilename, REPORTER* aReporter,
+    explicit CADSTAR_SCH_ARCHIVE_LOADER( const wxString& aFilename, REPORTER* aReporter,
                                          PROGRESS_REPORTER* aProgressReporter ) :
             CADSTAR_SCH_ARCHIVE_PARSER( aFilename )
     {
@@ -169,16 +169,16 @@ private:
                           bool aOverrideFields = true );
 
     //Helper Functions for loading sheets
-    void loadSheetAndChildSheets( LAYER_ID aCadstarSheetID, const VECTOR2I& aPosition,
-                                  VECTOR2I aSheetSize, const SCH_SHEET_PATH& aParentSheet );
+    void loadSheetAndChildSheets( const LAYER_ID& aCadstarSheetID, const VECTOR2I& aPosition,
+                                  const VECTOR2I& aSheetSize, const SCH_SHEET_PATH& aParentSheet );
 
-    void loadChildSheets( LAYER_ID aCadstarSheetID, const SCH_SHEET_PATH& aSheet );
+    void loadChildSheets( const LAYER_ID& aCadstarSheetID, const SCH_SHEET_PATH& aSheet );
 
     std::vector<LAYER_ID> findOrphanSheets();
 
-    int getSheetNumber( LAYER_ID aCadstarSheetID );
+    int getSheetNumber( const LAYER_ID& aCadstarSheetID );
 
-    void loadItemOntoKiCadSheet( LAYER_ID aCadstarSheetID, SCH_ITEM* aItem );
+    void loadItemOntoKiCadSheet( const LAYER_ID& aCadstarSheetID, SCH_ITEM* aItem );
 
     //Helper Functions for loading library items
     const LIB_SYMBOL* loadSymdef( const SYMDEF_ID& aSymdefID );
