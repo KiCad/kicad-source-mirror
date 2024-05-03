@@ -192,6 +192,7 @@ private:
     static ERC_ITEM pinTableError;
     static ERC_ITEM hierLabelMismatch;
     static ERC_ITEM noConnectConnected;
+    static ERC_ITEM fourWayJunction;
     static ERC_ITEM noConnectDangling;
     static ERC_ITEM labelDangling;
     static ERC_ITEM globalLabelDangling;

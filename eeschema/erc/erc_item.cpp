@@ -75,6 +75,10 @@ ERC_ITEM ERC_ITEM::hierLabelMismatch( ERCE_HIERACHICAL_LABEL,
         _( "Mismatch between hierarchical labels and sheet pins" ),
         wxT( "hier_label_mismatch" ) );
 
+ERC_ITEM ERC_ITEM::fourWayJunction( ERCE_FOUR_WAY_JUNCTION,
+        _( "Four connection points are joined together" ),
+        wxT( "four_way_junction" ) );
+
 ERC_ITEM ERC_ITEM::noConnectConnected( ERCE_NOCONNECT_CONNECTED,
         _( "A pin with a \"no connection\" flag is connected" ),
         wxT( "no_connect_connected" ) );
@@ -212,6 +216,7 @@ std::vector<std::reference_wrapper<RC_ITEM>> ERC_ITEM::allItemTypes( {
                  ERC_ITEM::wireDangling,
                  ERC_ITEM::busEntryNeeded,
                  ERC_ITEM::endpointOffGrid,
+                 ERC_ITEM::fourWayJunction,
 
                  ERC_ITEM::heading_conflicts,
                  ERC_ITEM::duplicateReference,
@@ -263,6 +268,7 @@ std::shared_ptr<ERC_ITEM> ERC_ITEM::Create( int aErrorCode )
     case ERCE_HIERACHICAL_LABEL:       return std::make_shared<ERC_ITEM>( hierLabelMismatch );
     case ERCE_NOCONNECT_CONNECTED:     return std::make_shared<ERC_ITEM>( noConnectConnected );
     case ERCE_NOCONNECT_NOT_CONNECTED: return std::make_shared<ERC_ITEM>( noConnectDangling );
+    case ERCE_FOUR_WAY_JUNCTION:       return std::make_shared<ERC_ITEM>( fourWayJunction );
     case ERCE_LABEL_NOT_CONNECTED:     return std::make_shared<ERC_ITEM>( labelDangling );
     case ERCE_SIMILAR_LABELS:          return std::make_shared<ERC_ITEM>( similarLabels );
     case ERCE_SINGLE_GLOBAL_LABEL:     return std::make_shared<ERC_ITEM>( singleGlobalLabel );

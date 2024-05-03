@@ -51,6 +51,7 @@ set( QA_EESCHEMA_SRCS
 
     sch_io/altium/test_altium_parser_sch.cpp
 
+    erc/test_erc_four_way.cpp
 	erc/test_erc_label_not_connected.cpp
 	erc/test_erc_stacking_pins.cpp
 	erc/test_erc_global_labels.cpp

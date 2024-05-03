@@ -112,6 +112,11 @@ public:
     int TestSimilarLabels();
 
     /**
+     * Test to see if there are potentially confusing 4-way junctions in the schematic.
+    */
+    int TestFourWayJunction();
+
+    /**
      * Test symbols for changed library symbols and broken symbol library links.
      * @return the number of issues found
      */

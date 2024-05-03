@@ -607,6 +607,60 @@ int ERC_TESTER::TestMissingNetclasses()
 }
 
 
+int ERC_TESTER::TestFourWayJunction()
+{
+    int err_count = 0;
+
+    for( const SCH_SHEET_PATH& sheet : m_schematic->GetSheets() )
+    {
+        std::map<VECTOR2I, std::vector<SCH_ITEM*>> connMap;
+        SCH_SCREEN* screen = sheet.LastScreen();
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_SYMBOL_T ) )
+        {
+            SCH_SYMBOL* symbol = static_cast<SCH_SYMBOL*>( item );
+
+            for( SCH_PIN* pin : symbol->GetPins( &sheet ) )
+                connMap[pin->GetPosition()].emplace_back( pin );
+        }
+
+        for( SCH_ITEM* item : screen->Items().OfType( SCH_LINE_T ) )
+        {
+            SCH_LINE* line = static_cast<SCH_LINE*>( item );
+
+            if( line->IsGraphicLine() )
+                continue;
+
+            for( const VECTOR2I& pt : line->GetConnectionPoints() )
+                connMap[pt].emplace_back( line );
+        }
+
+        for( const std::pair<const VECTOR2I, std::vector<SCH_ITEM*>>& pair : connMap )
+        {
+            if( pair.second.size() >= 4 )
+            {
+                err_count++;
+
+                std::shared_ptr<ERC_ITEM> ercItem = ERC_ITEM::Create( ERCE_FOUR_WAY_JUNCTION );
+
+                ercItem->SetItems( pair.second[0], pair.second[1], pair.second[2], pair.second[3] );
+
+                wxString msg = wxString::Format( _( "Four items connected at %d, %d" ),
+                                                 pair.first.x, pair.first.y );
+                ercItem->SetErrorMessage( msg );
+
+                ercItem->SetSheetSpecificPath( sheet );
+
+                SCH_MARKER* marker = new SCH_MARKER( ercItem, pair.first );
+                sheet.LastScreen()->Append( marker );
+            }
+        }
+    }
+
+    return err_count;
+}
+
+
 int ERC_TESTER::TestNoConnectPins()
 {
     int err_count = 0;
@@ -1434,6 +1488,14 @@ void ERC_TESTER::RunTests( DS_PROXY_VIEW_ITEM* aDrawingSheet, SCH_EDIT_FRAME* aE
             aProgressReporter->AdvancePhase( _( "Checking for off grid pins and wires..." ) );
 
         TestOffGridEndpoints();
+    }
+
+    if( settings.IsTestEnabled( ERCE_FOUR_WAY_JUNCTION ) )
+    {
+        if( aProgressReporter )
+            aProgressReporter->AdvancePhase( _( "Checking for four way junctions..." ) );
+
+        TestFourWayJunction();
     }
 
     if( settings.IsTestEnabled( ERCE_UNDEFINED_NETCLASS ) )
