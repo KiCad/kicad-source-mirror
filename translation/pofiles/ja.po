@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
 "PO-Revision-Date: 2024-05-03 22:00+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"Last-Translator: Yutaro Urata2 <yutarourata03@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -7636,7 +7636,7 @@ msgstr "列を選択"
 
 #: common/tool/actions.cpp:317
 msgid "Select complete column(s) containing the current selected cell(s)"
-msgstr "現在選択しているセルが含まれる行を選択"
+msgstr "セレクトされたセルを"
 
 #: common/tool/actions.cpp:323
 #, fuzzy
