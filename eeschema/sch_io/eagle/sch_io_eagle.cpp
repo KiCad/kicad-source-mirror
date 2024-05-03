@@ -2287,7 +2287,7 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolCircle( wxXmlNode* aCircleNode, int aGateNumb
     // Parse the circle properties
     ECIRCLE    c( aCircleNode );
     SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
-    VECTOR2I   center( c.x.ToSchUnits(), c.y.ToSchUnits() );
+    VECTOR2I   center( c.x.ToSchUnits(), -c.y.ToSchUnits() );
 
     circle->SetPosition( center );
     circle->SetEnd( VECTOR2I( center.x + c.radius.ToSchUnits(), center.y ) );
@@ -2303,8 +2303,8 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolRectangle( wxXmlNode* aRectNode, int aGateNum
     ERECT      rect( aRectNode );
     SCH_SHAPE* rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE, LAYER_DEVICE );
 
-    rectangle->SetPosition( VECTOR2I( rect.x1.ToSchUnits(), rect.y1.ToSchUnits() ) );
-    rectangle->SetEnd( VECTOR2I( rect.x2.ToSchUnits(), rect.y2.ToSchUnits() ) );
+    rectangle->SetPosition( VECTOR2I( rect.x1.ToSchUnits(), -rect.y1.ToSchUnits() ) );
+    rectangle->SetEnd( VECTOR2I( rect.x2.ToSchUnits(), -rect.y2.ToSchUnits() ) );
 
     if( rect.rot )
     {
@@ -2335,9 +2335,9 @@ SCH_ITEM* SCH_IO_EAGLE::loadSymbolWire( wxXmlNode* aWireNode, int aGateNumber )
     VECTOR2I begin, end;
 
     begin.x = ewire.x1.ToSchUnits();
-    begin.y = ewire.y1.ToSchUnits();
+    begin.y = -ewire.y1.ToSchUnits();
     end.x   = ewire.x2.ToSchUnits();
-    end.y   = ewire.y2.ToSchUnits();
+    end.y   = -ewire.y2.ToSchUnits();
 
     if( begin == end )
         return nullptr;
@@ -2398,7 +2398,7 @@ SCH_SHAPE* SCH_IO_EAGLE::loadSymbolPolyLine( wxXmlNode* aPolygonNode, int aGateN
         if( vertex->GetName() == wxT( "vertex" ) ) // skip <xmlattr> node
         {
             EVERTEX evertex( vertex );
-            pt = VECTOR2I( evertex.x.ToSchUnits(), evertex.y.ToSchUnits() );
+            pt = VECTOR2I( evertex.x.ToSchUnits(), -evertex.y.ToSchUnits() );
 
             if( prev_curve )
             {
@@ -2430,7 +2430,7 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*
                                 EPIN* aEPin, int aGateNumber )
 {
     std::unique_ptr<SCH_PIN> pin = std::make_unique<SCH_PIN>( aSymbol.get() );
-    pin->SetPosition( VECTOR2I( aEPin->x.ToSchUnits(), aEPin->y.ToSchUnits() ) );
+    pin->SetPosition( VECTOR2I( aEPin->x.ToSchUnits(), -aEPin->y.ToSchUnits() ) );
     pin->SetName( aEPin->name );
     pin->SetUnit( aGateNumber );
 
@@ -2506,7 +2506,7 @@ SCH_PIN* SCH_IO_EAGLE::loadPin( std::unique_ptr<LIB_SYMBOL>& aSymbol, wxXmlNode*
 SCH_TEXT* SCH_IO_EAGLE::loadSymbolText( wxXmlNode* aLibText, int aGateNumber )
 {
     ETEXT             etext( aLibText );
-    VECTOR2I          pos( etext.x.ToSchUnits(), etext.y.ToSchUnits() );
+    VECTOR2I          pos( etext.x.ToSchUnits(), -etext.y.ToSchUnits() );
     const wxString&   eagleText = aLibText->GetNodeContent();
     wxString          adjustedText;
     wxStringTokenizer tokenizer( eagleText, "\r\n" );
@@ -2540,8 +2540,8 @@ void SCH_IO_EAGLE::loadSymbolFrame( wxXmlNode* aFrameNode, std::vector<SCH_ITEM*
 
     int xMin = eframe.x1.ToSchUnits();
     int xMax = eframe.x2.ToSchUnits();
-    int yMin = eframe.y1.ToSchUnits();
-    int yMax = eframe.y2.ToSchUnits();
+    int yMin = -eframe.y1.ToSchUnits();
+    int yMax = -eframe.y2.ToSchUnits();
 
     if( xMin > xMax )
         std::swap( xMin, xMax );
