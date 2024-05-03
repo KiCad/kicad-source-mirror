@@ -15,25 +15,7 @@ macos_build:
     - cd build/macos
     - cmake
       -G Ninja
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo
-      -DDEFAULT_INSTALL_PATH=/Library/Application\ Support /kicad
-      -DOCC_INCLUDE_DIR=/opt/homebrew/Cellar/opencascade/7.7.2_2/include/opencascade
-      -DOCC_LIBRARY_DIR=/opt/homebrew/Cellar/opencascade/7.7.2_2/Lib
-      -DCMAKE_INSTALL_PREFIX=/Users/ci/kicad-mac-builder/build/kicad-dest
-      -DCMAKE_C_COMPILER=/usr/bin/clang
-      -DCMAKE_CXX_COMPILER=/usr/bin/clang++
-      -DwxWidgets_CONFIG_EXECUTABLE=/Users/ci/kicad-mac-builder/build/wxwidgets-dest/bin/wx-config
-      -DKICAD_BUILD_I18N=ON
-      -DKICAD_SCRIPTING_WXPYTHON=ON
-      -DKICAD_BUILD_PNS_DEBUG_TOOL=ON
-      -DPYTHON_EXECUTABLE=/Users/ci/kicad-mac-builder/build/python-dest/Library/Frameworks/Python.framework/Versions/Current/bin/python3
-      -DPYTHON_INCLUDE_DIR=/Users/ci/kicad-mac-builder/build/python-dest/Library/Frameworks/Python.framework/Versions/Current/include/python3.9/
-      -DPYTHON_LIBRARY=/Users/ci/kicad-mac-builder/build/python-dest/Library/Frameworks/Python.framework/Versions/Current/lib/libpython3.9.dylib
-      -DPYTHON_SITE_PACKAGE_PATH=/Users/ci/kicad-mac-builder/build/python-dest/Library/Frameworks/Python.framework/Versions/Current/lib/python3.9/site-packages
-      -DPYTHON_FRAMEWORK=/Users/ci/kicad-mac-builder/build/python-dest/Library/Frameworks/Python.framework
-      -DNGSPICE_INCLUDE_DIR=/Users/ci/kicad-mac-builder/build/ngspice-dest/include
-      -DNGSPICE_LIBRARY=/Users/ci/kicad-mac-builder/build/ngspice-dest/lib/libngspice.dylib
-      -DKICAD_USE_3DCONNEXION=ON
+      -DCMAKE_TOOLCHAIN_FILE=/Users/ci/kicad-mac-builder/toolchain/kicad-mac-builder.cmake
       ../../
     - cmake --build . 2>&1 | tee compilation_log.txt
     - cd ../../
