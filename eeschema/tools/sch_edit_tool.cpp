@@ -876,7 +876,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
                 {
                     SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
-                    field->Rotate( rotPoint, false );
+                    field->Rotate( rotPoint, true );
 
                     if( field->GetTextAngle().IsHorizontal() )
                         field->SetTextAngle( ANGLE_VERTICAL );
@@ -889,7 +889,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             }
             else
             {
-                item->Rotate( rotPoint, false );
+                item->Rotate( rotPoint, true );
             }
         }
 
