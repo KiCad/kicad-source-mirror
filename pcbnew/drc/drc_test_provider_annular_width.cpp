@@ -163,13 +163,17 @@ bool DRC_TEST_PROVIDER_ANNULAR_WIDTH::Run()
                     {
                         switch( pad->GetShape() )
                         {
+                        case PAD_SHAPE::CIRCLE:
+                            annularWidth = ( pad->GetSizeX() - pad->GetDrillSizeX() ) / 2;
+                            handled = true;
+                            break;
+
                         case PAD_SHAPE::CHAMFERED_RECT:
                             if( pad->GetChamferRectRatio() > 0.30 )
                                 break;
 
                             KI_FALLTHROUGH;
 
-                        case PAD_SHAPE::CIRCLE:
                         case PAD_SHAPE::OVAL:
                         case PAD_SHAPE::RECTANGLE:
                         case PAD_SHAPE::ROUNDRECT:
