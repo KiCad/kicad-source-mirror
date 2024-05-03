@@ -421,7 +421,14 @@ int CONVERT_TOOL::CreatePolys( const TOOL_EVENT& aEvent )
 
         if( !getPolys( resolvedSettings ) )
         {
-            DisplayErrorMessage( m_frame, _( "Could not convert selection" ), _( "Objects must form a closed shape" ) );
+            wxString msg;
+
+            if( resolvedSettings.m_Strategy == BOUNDING_HULL )
+                msg = _( "Resulting polygon would be empty" );
+            else
+                msg = _( "Objects must form a closed shape" );
+
+            DisplayErrorMessage( m_frame, _( "Could not convert selection" ), msg );
             return 0;
         }
 
