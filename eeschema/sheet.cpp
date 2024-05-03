@@ -690,16 +690,49 @@ void SCH_EDIT_FRAME::DrawCurrentSheetToClipboard()
 }
 
 
-bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName )
+bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aOldName, const wxString& aSchematicFileName )
 {
     wxString msg;
-    SCH_SCREENS screens( Schematic().Root() );
+    SCH_SHEET_LIST sheets( &Schematic().Root() );
     wxFileName fn = aSchematicFileName;
 
     wxCHECK( fn.IsAbsolute(), false );
 
-    if( eeconfig()->m_Appearance.show_sheet_filename_case_sensitivity_dialog
-      && screens.CanCauseCaseSensitivityIssue( aSchematicFileName ) )
+    auto can_cause_issues = [&]() -> bool
+    {
+        wxFileName lhs;
+        wxFileName rhs = aSchematicFileName;
+        wxFileName old = aOldName;
+        wxString   oldLower = old.GetFullName().Lower();
+        wxString   rhsLower = rhs.GetFullName().Lower();
+        wxString   lhsLower;
+
+        size_t     count = 0;
+
+        wxCHECK( rhs.IsAbsolute(), false );
+
+        for( SCH_SHEET_PATH& sheet : sheets )
+        {
+            lhs = sheet.LastScreen()->GetFileName();
+
+            if( lhs.GetPath() != rhs.GetPath() )
+                continue;
+
+            lhsLower = lhs.GetFullName().Lower();
+
+            if( lhsLower == rhsLower && lhs.GetFullName() != rhs.GetFullName() )
+                count++;
+        }
+
+        // If we are renaming a sheet that is only used once, then we are not going to cause
+        // a case sensitivity issue.
+        if( oldLower == rhsLower )
+            return count > 1;
+
+        return count > 0;
+    };
+
+    if( eeconfig()->m_Appearance.show_sheet_filename_case_sensitivity_dialog && can_cause_issues() )
     {
         msg.Printf( _( "The file name '%s' can cause issues with an existing file name\n"
                        "already defined in the schematic on systems that support case\n"
@@ -712,7 +745,7 @@ bool SCH_EDIT_FRAME::AllowCaseSensitiveFileNameClashes( const wxString& aSchemat
                                  wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION );
         dlg.ShowCheckBox( _( "Do not show this message again." ) );
         dlg.SetYesNoLabels( wxMessageDialog::ButtonLabel( _( "Create New Sheet" ) ),
-                            wxMessageDialog::ButtonLabel( _( "Discard New Sheet" ) ) );
+                            wxMessageDialog::ButtonLabel( _( "Cancel" ) ) );
 
         if( dlg.ShowModal() == wxID_NO )
             return false;

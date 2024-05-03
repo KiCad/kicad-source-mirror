@@ -546,7 +546,7 @@ public:
      * @param aSchematicFileName is the absolute path and file name of the file to test.
      * @return true if the user accepts the potential file name clash risk.
      */
-    bool AllowCaseSensitiveFileNameClashes( const wxString& aSchematicFileName );
+    bool AllowCaseSensitiveFileNameClashes( const wxString& aOldName, const wxString& aSchematicFileName );
 
     /**
      * Edit an existing sheet or add a new sheet to the schematic.
