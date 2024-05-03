@@ -159,6 +159,7 @@ public:
     virtual void SetName( const wxString& aName );
     wxString GetName() const override { return m_name; }
 
+    const LIB_ID& LibId() const { return m_libId; }
     LIB_ID& LibId() { return m_libId; }
     LIB_ID GetLibId() const override { return m_libId; }
     void SetLibId( const LIB_ID& aLibId ) { m_libId = aLibId; }
