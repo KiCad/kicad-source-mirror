@@ -328,7 +328,13 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                 SYMBOL_LIB_TABLE* libs = PROJECT_SCH::SchSymbolLibTable( &m_frame->Prj() );
                 SYMBOL_LIB*       cache = PROJECT_SCH::SchLibs( &m_frame->Prj() )->GetCacheLibrary();
 
-                std::vector<LIB_SYMBOL*> part_list;
+                auto compareByLibID =
+                        []( const LIB_SYMBOL* aFirst, const LIB_SYMBOL* aSecond ) -> bool
+                        {
+                            return aFirst->LibId().Format() < aSecond->LibId().Format();
+                        };
+
+                std::set<LIB_SYMBOL*, decltype( compareByLibID )> part_list( compareByLibID );
 
                 for( SCH_SHEET_PATH& sheet : sheets )
                 {
@@ -341,15 +347,12 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
                         LIB_SYMBOL* libSymbol = SchGetLibSymbol( s->GetLibId(), libs, cache );
 
                         if( libSymbol )
-                            part_list.push_back( libSymbol );
+                            part_list.insert( libSymbol );
                     }
                 }
 
-                // Remove redundant parts
-                sort( part_list.begin(), part_list.end() );
-                part_list.erase( unique( part_list.begin(), part_list.end() ), part_list.end() );
-
                 std::vector<PICKED_SYMBOL> alreadyPlaced;
+
                 for( LIB_SYMBOL* libSymbol : part_list )
                 {
                     PICKED_SYMBOL pickedSymbol;
