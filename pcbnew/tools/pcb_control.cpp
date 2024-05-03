@@ -740,8 +740,8 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
 
     aClipFootprint->Pads().clear();
 
-    // Not all graphic items can be added to the current footprint:
-    // mandatory fields are already existing in the current footprint.
+    // Not all items can be added to the current footprint: mandatory fields are already existing
+    // in the current footprint.
     //
     for( PCB_FIELD* field : aClipFootprint->Fields() )
     {
@@ -776,6 +776,9 @@ static void pasteFootprintItemsToFootprintEditor( FOOTPRINT* aClipFootprint, BOA
             text->SetTextAngle( text->GetTextAngle() - aClipFootprint->GetOrientation() );
             text->SetTextAngle( text->GetTextAngle() + editorFootprint->GetOrientation() );
         }
+
+        item->Rotate( item->GetPosition(), -aClipFootprint->GetOrientation() );
+        item->Rotate( item->GetPosition(), editorFootprint->GetOrientation() );
 
         VECTOR2I pos = item->GetFPRelativePosition();
         item->SetParent( editorFootprint );
