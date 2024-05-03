@@ -1050,7 +1050,7 @@ bool PCB_SELECTION_TOOL::selectMultiple()
             greedySelection = !greedySelection;
 
         m_frame->GetCanvas()->SetCurrentCursor( !greedySelection ? KICURSOR::SELECT_WINDOW
-                                                                : KICURSOR::SELECT_LASSO );
+                                                                 : KICURSOR::SELECT_LASSO );
 
         if( evt->IsCancelInteractive() || evt->IsActivate() )
         {
@@ -1908,7 +1908,10 @@ void PCB_SELECTION_TOOL::SelectAllItemsOnNet( int aNetCode, bool aSelect )
 {
     std::shared_ptr<CONNECTIVITY_DATA> conn = board()->GetConnectivity();
 
-    for( BOARD_ITEM* item : conn->GetNetItems( aNetCode, { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+    for( BOARD_ITEM* item : conn->GetNetItems( aNetCode, { PCB_TRACE_T,
+                                                           PCB_ARC_T,
+                                                           PCB_VIA_T,
+                                                           PCB_SHAPE_T } ) )
     {
         if( itemPassesFilter( item, true ) )
             aSelect ? select( item ) : unselect( item );
@@ -2066,9 +2069,13 @@ void PCB_SELECTION_TOOL::selectConnections( const std::vector<BOARD_ITEM*>& aIte
 
     for( int netCode : netcodeList )
     {
-        for( BOARD_ITEM* item : conn->GetNetItems( netCode,
-                                                   { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T } ) )
+        for( BOARD_ITEM* item : conn->GetNetItems( netCode, { PCB_TRACE_T,
+                                                              PCB_ARC_T,
+                                                              PCB_VIA_T,
+                                                              PCB_SHAPE_T } ) )
+        {
             localConnectionList.insert( item );
+        }
     }
 
     for( BOARD_ITEM* item : localConnectionList )
@@ -2195,8 +2202,8 @@ void PCB_SELECTION_TOOL::zoomFitSelection()
     if( selectionBox.GetWidth() != 0 || selectionBox.GetHeight() != 0 )
     {
         VECTOR2D vsize = selectionBox.GetSize();
-        double   scale = view->GetScale()
-                       / std::max( fabs( vsize.x / screenSize.x ), fabs( vsize.y / screenSize.y ) );
+        double   scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
+                                                      fabs( vsize.y / screenSize.y ) );
         view->SetScale( scale );
         view->SetCenter( selectionBox.Centre() );
         view->Add( &m_selection );
@@ -2269,8 +2276,8 @@ void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
     double ratio = std::max( -1.0, fabs( bbSize.y / screenSize.y ) );
 
     // Original KiCad code for how much to scale the zoom
-    double kicadRatio =
-            std::max( fabs( bbSize.x / screenSize.x ), fabs( bbSize.y / screenSize.y ) );
+    double kicadRatio = std::max( fabs( bbSize.x / screenSize.x ),
+                                  fabs( bbSize.y / screenSize.y ) );
 
     // LUT to scale zoom ratio to provide reasonable schematic context.  Must work
     // with footprints of varying sizes (e.g. 0402 package and 200 pin BGA).
@@ -2278,9 +2285,16 @@ void PCB_SELECTION_TOOL::ZoomFitCrossProbeBBox( const BOX2I& aBBox )
     //
     // "first" = compRatio (footprint height / default text height)
     // "second" = Amount to scale ratio by
-    std::vector<std::pair<double, double>> lut{
-        { 1, 8 },    { 1.5, 5 },  { 3, 3 },    { 4.5, 2.5 }, { 8, 2.0 },
-        { 12, 1.7 }, { 16, 1.5 }, { 24, 1.3 }, { 32, 1.0 },
+    std::vector<std::pair<double, double>> lut {
+        { 1, 8 },
+        { 1.5, 5 },
+        { 3, 3 },
+        { 4.5, 2.5 },
+        { 8, 2.0 },
+        { 12, 1.7 },
+        { 16, 1.5 },
+        { 24, 1.3 },
+        { 32, 1.0 },
     };
 
 
