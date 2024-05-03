@@ -80,7 +80,6 @@ public:
      */
     int ToKicadCoords( int aCoordinate );
     VECTOR2I ToKicadCoords( const VECTOR2I& aPos );
-    VECTOR2I ToInvertedKicadCoords( const VECTOR2I& aPos );
 
     VECTOR2I ToKicadFontSize( int aLTFontSize );
 
@@ -213,7 +212,7 @@ public:
     /**
      * Create schematic text.
      */
-    SCH_TEXT* CreateSCH_TEXT( VECTOR2I aOffset, const wxString& aText, int aFontSize,
+    SCH_TEXT* CreateSCH_TEXT( const VECTOR2I& aOffset, const wxString& aText, int aFontSize,
                           LTSPICE_SCHEMATIC::JUSTIFICATION aJustification );
 
     /**

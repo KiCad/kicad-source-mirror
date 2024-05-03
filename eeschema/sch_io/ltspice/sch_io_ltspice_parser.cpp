@@ -109,8 +109,8 @@ void SCH_IO_LTSPICE_PARSER::CreateLines( LIB_SYMBOL* aSymbol,
 {
     LTSPICE_SCHEMATIC::LINE& lt_line = aLTSymbol.Lines[aIndex];
 
-    shape->AddPoint( ToInvertedKicadCoords( lt_line.End ) );
-    shape->AddPoint( ToInvertedKicadCoords( lt_line.Start ) );
+    shape->AddPoint( ToKicadCoords( lt_line.End ) );
+    shape->AddPoint( ToKicadCoords( lt_line.Start ) );
     shape->SetStroke( getStroke( lt_line.LineWidth, lt_line.LineStyle ) );
 }
 
@@ -327,12 +327,6 @@ int SCH_IO_LTSPICE_PARSER::ToKicadCoords( int aCoordinate )
 VECTOR2I SCH_IO_LTSPICE_PARSER::ToKicadCoords( const VECTOR2I& aPos )
 {
     return VECTOR2I( ToKicadCoords( aPos.x ), ToKicadCoords( aPos.y ) );
-}
-
-
-VECTOR2I SCH_IO_LTSPICE_PARSER::ToInvertedKicadCoords( const VECTOR2I& aPos )
-{
-    return VECTOR2I( ToKicadCoords( aPos.x ), -ToKicadCoords( aPos.y ) );
 }
 
 
@@ -779,7 +773,7 @@ void SCH_IO_LTSPICE_PARSER::setTextJustification( EDA_TEXT*                     
 }
 
 
-SCH_TEXT* SCH_IO_LTSPICE_PARSER::CreateSCH_TEXT( VECTOR2I aOffset, const wxString& aText,
+SCH_TEXT* SCH_IO_LTSPICE_PARSER::CreateSCH_TEXT( const VECTOR2I& aOffset, const wxString& aText,
                                                  int aFontSize,
                                                  LTSPICE_SCHEMATIC::JUSTIFICATION aJustification )
 {
@@ -820,12 +814,12 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
     LIB_SYMBOL* lib_symbol = new LIB_SYMBOL( wxS( "GND" ) );
     SCH_SHAPE*  shape = new SCH_SHAPE( SHAPE_T::POLY,LAYER_DEVICE );
 
-    shape->AddPoint( ToInvertedKicadCoords( { 16, 0 } ) );
-    shape->AddPoint( ToInvertedKicadCoords( { -16, 0 } ) );
-    shape->AddPoint( ToInvertedKicadCoords( { 0, 15 } ) );
-    shape->AddPoint( ToInvertedKicadCoords( { 16, 0 } ) );
-    shape->AddPoint( ToInvertedKicadCoords( { -16, 0 } ) );
-    shape->AddPoint( ToInvertedKicadCoords( { 0, 15 } ) );
+    shape->AddPoint( ToKicadCoords( { 16, 0 } ) );
+    shape->AddPoint( ToKicadCoords( { -16, 0 } ) );
+    shape->AddPoint( ToKicadCoords( { 0, 15 } ) );
+    shape->AddPoint( ToKicadCoords( { 16, 0 } ) );
+    shape->AddPoint( ToKicadCoords( { -16, 0 } ) );
+    shape->AddPoint( ToKicadCoords( { 0, 15 } ) );
 
     shape->SetStroke( STROKE_PARAMS( getLineWidth( LTSPICE_SCHEMATIC::LINEWIDTH::Normal ),
                                      LINE_STYLE::SOLID ) );
@@ -836,7 +830,7 @@ SCH_SYMBOL* SCH_IO_LTSPICE_PARSER::CreatePowerSymbol( const VECTOR2I& aOffset,
     SCH_PIN* pin = new SCH_PIN( lib_symbol );
 
     pin->SetType( ELECTRICAL_PINTYPE::PT_POWER_IN );
-    pin->SetPosition( ToInvertedKicadCoords( { 0, 0 } ) );
+    pin->SetPosition( ToKicadCoords( { 0, 0 } ) );
     pin->SetLength( 5 );
     pin->SetShape( GRAPHIC_PINSHAPE::LINE );
     lib_symbol->AddDrawItem( pin );
@@ -1245,8 +1239,8 @@ void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
 {
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
 
-    aRectangle->SetPosition( ToInvertedKicadCoords( lt_rect.BotRight ) );
-    aRectangle->SetEnd( ToInvertedKicadCoords( lt_rect.TopLeft ) );
+    aRectangle->SetPosition( ToKicadCoords( lt_rect.BotRight ) );
+    aRectangle->SetEnd( ToKicadCoords( lt_rect.TopLeft ) );
     aRectangle->SetStroke( getStroke(  lt_rect.LineWidth, lt_rect.LineStyle ) );
 
     if( aLTSymbol.SymAttributes[wxS( "Prefix" )] == wxS( "X" ) )
@@ -1260,8 +1254,8 @@ void SCH_IO_LTSPICE_PARSER::CreateRect( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol,
     LTSPICE_SCHEMATIC::RECTANGLE& lt_rect = aLTSymbol.Rectangles[aIndex];
     SCH_SHAPE*                    rectangle = new SCH_SHAPE( SHAPE_T::RECTANGLE );
 
-    rectangle->SetPosition( ToInvertedKicadCoords( lt_rect.BotRight ) );
-    rectangle->SetEnd( ToInvertedKicadCoords( lt_rect.TopLeft ) );
+    rectangle->SetPosition( ToKicadCoords( lt_rect.BotRight ) );
+    rectangle->SetEnd( ToKicadCoords( lt_rect.TopLeft ) );
     rectangle->SetStroke( getStroke( lt_rect.LineWidth, lt_rect.LineStyle ) );
 
     rectangle->Move( aLTSymbol.Offset );
@@ -1294,7 +1288,7 @@ void SCH_IO_LTSPICE_PARSER::CreatePin( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
 
     aPin->SetNumber( wxString::Format( wxS( "%d" ), aIndex + 1 ) );
     aPin->SetType( ELECTRICAL_PINTYPE::PT_PASSIVE );
-    aPin->SetPosition( ToInvertedKicadCoords( lt_pin.PinLocation ) );
+    aPin->SetPosition( ToKicadCoords( lt_pin.PinLocation ) );
     aPin->SetLength( 5 );
     aPin->SetShape( GRAPHIC_PINSHAPE::LINE );
 
@@ -1330,9 +1324,9 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
 {
     LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
 
-    aArc->SetCenter( ToInvertedKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
-    aArc->SetEnd( ToInvertedKicadCoords( lt_arc.ArcEnd ) );
-    aArc->SetStart( ToInvertedKicadCoords( lt_arc.ArcStart ) );
+    aArc->SetCenter( ToKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
+    aArc->SetEnd( ToKicadCoords( lt_arc.ArcEnd ) );
+    aArc->SetStart( ToKicadCoords( lt_arc.ArcStart ) );
     aArc->SetStroke( getStroke( lt_arc.LineWidth, lt_arc.LineStyle ) );
 }
 
@@ -1343,9 +1337,9 @@ void SCH_IO_LTSPICE_PARSER::CreateArc( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbol, 
     LTSPICE_SCHEMATIC::ARC& lt_arc = aLTSymbol.Arcs[aIndex];
     SCH_SHAPE*              arc = new SCH_SHAPE( SHAPE_T::ARC );
 
-    arc->SetCenter( ToInvertedKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
-    arc->SetEnd( ToInvertedKicadCoords( lt_arc.ArcEnd ) );
-    arc->SetStart( ToInvertedKicadCoords( lt_arc.ArcStart ) );
+    arc->SetCenter( ToKicadCoords( ( lt_arc.TopLeft + lt_arc.BotRight ) / 2 ) );
+    arc->SetEnd( ToKicadCoords( lt_arc.ArcEnd ) );
+    arc->SetStart( ToKicadCoords( lt_arc.ArcStart ) );
     arc->SetStroke( getStroke( lt_arc.LineWidth, lt_arc.LineStyle ) );
 
     arc->Move( ToKicadCoords( aLTSymbol.Offset ) + m_originOffset );
@@ -1364,8 +1358,8 @@ void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
     VECTOR2I c = ( lt_circle.TopLeft + lt_circle.BotRight ) / 2;
     int r = ( lt_circle.TopLeft.x - lt_circle.BotRight.x ) / 2;
 
-    circle->SetPosition( ToInvertedKicadCoords( c ) );
-    circle->SetEnd( ToInvertedKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );
+    circle->SetPosition( ToKicadCoords( c ) );
+    circle->SetEnd( ToKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );
     circle->SetStroke( getStroke( lt_circle.LineWidth, lt_circle.LineStyle ) );
 
     circle->Move( aLTSymbol.Offset );
@@ -1383,8 +1377,8 @@ void SCH_IO_LTSPICE_PARSER::CreateCircle( LTSPICE_SCHEMATIC::LT_SYMBOL& aLTSymbo
     VECTOR2I c = ( lt_circle.TopLeft + lt_circle.BotRight ) / 2;
     int r = ( lt_circle.TopLeft.x - lt_circle.BotRight.x ) / 2;
 
-    aCircle->SetPosition( ToInvertedKicadCoords( c ) );
-    aCircle->SetEnd( ToInvertedKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );
+    aCircle->SetPosition( ToKicadCoords( c ) );
+    aCircle->SetEnd( ToKicadCoords( c ) + VECTOR2I( abs( ToKicadCoords( r ) ), 0 ) );
     aCircle->SetStroke( getStroke( lt_circle.LineWidth, lt_circle.LineStyle ) );
 }
 
