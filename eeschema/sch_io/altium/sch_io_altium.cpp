@@ -3251,7 +3251,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_90 );
         valueField->SetTextAngle( ANGLE_VERTICAL );
-        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         break;
 
     case ASCH_RECORD_ORIENTATION::UPWARDS:
@@ -3263,7 +3263,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
         symbol->SetOrientation( SYMBOL_ORIENTATION_T::SYM_ORIENT_270 );
         valueField->SetTextAngle( ANGLE_VERTICAL );
-        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_RIGHT );
+        valueField->SetHorizJustify( GR_TEXT_H_ALIGN_LEFT );
         break;
 
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
