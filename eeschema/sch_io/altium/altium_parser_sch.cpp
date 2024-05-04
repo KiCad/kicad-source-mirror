@@ -235,7 +235,7 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProps ) :
     int xfrac = ALTIUM_PROPS_UTILS::ReadInt( aProps, "LOCATION.X_FRAC", 0 );
     int y     = ALTIUM_PROPS_UTILS::ReadInt( aProps, "LOCATION.Y", 0 );
     int yfrac = ALTIUM_PROPS_UTILS::ReadInt( aProps, "LOCATION.Y_FRAC", 0 );
-    location  = VECTOR2I( Altium2KiCadUnit( x, xfrac ), Altium2KiCadUnit( y, yfrac ) );
+    location  = VECTOR2I( Altium2KiCadUnit( x, xfrac ), -Altium2KiCadUnit( y, yfrac ) );
 
     int p     = ALTIUM_PROPS_UTILS::ReadInt( aProps, "PINLENGTH", 0 );
     int pfrac = ALTIUM_PROPS_UTILS::ReadInt( aProps, "PINLENGTH_FRAC", 0 );
@@ -284,7 +284,7 @@ ASCH_PIN::ASCH_PIN( const std::map<wxString, wxString>& aProps ) :
     }
 
     kicadLocation = VECTOR2I( Altium2KiCadUnit( kicadX, kicadXfrac ),
-                              Altium2KiCadUnit( kicadY, kicadYfrac ) );
+                              -Altium2KiCadUnit( kicadY, kicadYfrac ) );
 }
 
 
