@@ -160,6 +160,9 @@ APP_SETTINGS_BASE::APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaV
     m_params.emplace_back( new PARAM<int>( "system.last_imperial_units",
             &m_System.last_imperial_units, static_cast<int>( EDA_UNITS::MILS ) ) );
 
+    m_params.emplace_back( new PARAM<bool>( "system.show_import_issues",
+                                            &m_System.show_import_issues, true ) );
+
     m_params.emplace_back( new PARAM<wxString>( "appearance.color_theme",
             &m_ColorTheme, COLOR_SETTINGS::COLOR_BUILTIN_DEFAULT ) );
 

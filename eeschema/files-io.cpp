@@ -61,6 +61,7 @@
 #include <tools/sch_editor_control.h>
 #include <tools/sch_navigate_tool.h>
 #include <trace_helpers.h>
+#include <widgets/filedlg_import_non_kicad.h>
 #include <widgets/wx_infobar.h>
 #include <wildcards_and_files_ext.h>
 #include <drawing_sheet/ds_data_model.h>
@@ -730,8 +731,13 @@ void SCH_EDIT_FRAME::OnImportProject( wxCommandEvent& aEvent )
     wxFileDialog dlg( this, _( "Import Schematic" ), path, wxEmptyString, fileFiltersStr,
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST ); // TODO
 
+    FILEDLG_IMPORT_NON_KICAD importOptions( eeconfig()->m_System.show_import_issues );
+    dlg.SetCustomizeHook( importOptions );
+
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
+
+    eeconfig()->m_System.show_import_issues = importOptions.GetShowIssues();
 
     // Don't leave dangling pointers to previously-opened document.
     m_toolManager->GetTool<EE_SELECTION_TOOL>()->ClearSelection();
@@ -1383,7 +1389,11 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType,
                                    std::placeholders::_1 ) );
             }
 
-            pi->SetReporter( errorReporter.m_Reporter );
+            if( eeconfig()->m_System.show_import_issues )
+                pi->SetReporter( errorReporter.m_Reporter );
+            else
+                pi->SetReporter( &NULL_REPORTER::GetInstance() );
+
             pi->SetProgressReporter( &progressReporter );
 
             SCH_SHEET* loadedSheet =

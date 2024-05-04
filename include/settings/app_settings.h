@@ -142,6 +142,8 @@ public:
         int                   units;
         int                   last_metric_units;
         int                   last_imperial_units;
+        /// Stored value for "show import issues" when importing non-KiCad designs to this application
+        bool                  show_import_issues;
     };
 
     APP_SETTINGS_BASE( const std::string& aFilename, int aSchemaVersion );
