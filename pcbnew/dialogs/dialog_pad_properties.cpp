@@ -533,8 +533,12 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_layerECO2->SetLabel( m_board->GetLayerName( Eco2_User ) );
     m_layerUserDwgs->SetLabel( m_board->GetLayerName( Dwgs_User ) );
 
+    VECTOR2I absPos;
+
     if( m_currentPad )
     {
+        absPos = m_currentPad->GetPosition();
+
         if( FOOTPRINT* footprint = m_currentPad->GetParentFootprint() )
         {
             VECTOR2I relPos = m_currentPad->GetFPRelativePosition();
@@ -591,8 +595,8 @@ void DIALOG_PAD_PROPERTIES::initValues()
     m_padNetSelector->SetSelectedNetcode( m_previewPad->GetNetCode() );
 
     // Display current pad parameters units:
-    m_posX.ChangeValue( m_previewPad->GetPosition().x );
-    m_posY.ChangeValue( m_previewPad->GetPosition().y );
+    m_posX.ChangeValue( absPos.x );
+    m_posY.ChangeValue( absPos.y );
 
     m_holeX.ChangeValue( m_previewPad->GetDrillSize().x );
     m_holeY.ChangeValue( m_previewPad->GetDrillSize().y );
@@ -1650,17 +1654,13 @@ bool DIALOG_PAD_PROPERTIES::TransferDataFromWindow()
     // define the way the clearance area is defined in zones
     m_currentPad->SetCustomShapeInZoneOpt( m_masterPad->GetCustomShapeInZoneOpt() );
 
-    VECTOR2I relPos = m_masterPad->GetPosition();
-
     if( m_currentPad->GetParentFootprint() && m_currentPad->GetParentFootprint()->IsFlipped() )
     {
         // flip pad (up/down) around its position
-         m_currentPad->Flip( m_currentPad->GetPosition(), false );
-         relPos.y = -relPos.y;
+        m_currentPad->Flip( m_currentPad->GetPosition(), false );
     }
 
-    // Must be done after flipping
-    m_currentPad->SetFPRelativePosition( relPos );
+    m_currentPad->SetPosition( m_masterPad->GetPosition() );
 
     m_parent->SetMsgPanel( m_currentPad );
 
@@ -1813,7 +1813,15 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( PAD* aPad )
     case 3: aPad->SetLocalZoneConnection( ZONE_CONNECTION::NONE );      break;
     }
 
-    aPad->SetPosition( VECTOR2I( m_posX.GetIntValue(), m_posY.GetIntValue() ) );
+    VECTOR2I pos( m_posX.GetIntValue(), m_posY.GetIntValue() );
+
+    if( FOOTPRINT* fp = aPad->GetParentFootprint() )
+    {
+        pos -= fp->GetPosition();
+        RotatePoint( pos, -fp->GetOrientation() );
+    }
+
+    aPad->SetPosition( pos );
 
     if( m_holeShapeCtrl->GetSelection() == CHOICE_SHAPE_CIRCLE )
     {
