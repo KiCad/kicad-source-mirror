@@ -337,8 +337,6 @@ struct ASCH_PIN : ASCH_OWNER_INTERFACE
     bool hidden;
     bool locked;
 
-    bool isKiCadLibPin;  // Tracking variable to handle LibEdit nuance
-
     explicit ASCH_PIN( const std::map<wxString, wxString>& aProps );
 };
 

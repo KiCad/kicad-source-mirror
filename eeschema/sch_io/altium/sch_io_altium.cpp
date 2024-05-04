@@ -82,12 +82,6 @@ static const VECTOR2I GetRelativePosition( const VECTOR2I& aPosition, const SCH_
 }
 
 
-static const VECTOR2I GetLibEditPosition( const VECTOR2I& aPosition )
-{
-    return VECTOR2I( aPosition.x, -aPosition.y );
-}
-
-
 static COLOR4D GetColorFromInt( int color )
 {
     int red   = color & 0x0000FF;
@@ -1176,9 +1170,9 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
 {
     ASCH_PIN elem( aProperties );
 
-    LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                 ? nullptr
-                                 : aSymbol[elem.ownerpartdisplaymode];
+    LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                         ? nullptr
+                                                         : aSymbol[elem.ownerpartdisplaymode];
     SCH_SYMBOL* schSymbol = nullptr;
 
     if( !symbol )
@@ -1189,7 +1183,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
         {
             // TODO: e.g. can depend on Template (RECORD=39
             m_reporter->Report( wxString::Format( wxT( "Pin's owner (%d) not found." ),
-                                                elem.ownerindex ),
+                                                  elem.ownerindex ),
                                 RPT_SEVERITY_DEBUG );
             return;
         }
@@ -1255,10 +1249,11 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
     }
 
     // TODO: position can be sometimes off a little bit!
+
     if( schSymbol )
-        pin->SetPosition( GetRelativePosition( pinLocation + m_sheetOffset, schSymbol ) );
-    else
-        pin->SetPosition( VECTOR2I( pinLocation.x, -pinLocation.y ) );
+        pinLocation = GetRelativePosition( pinLocation + m_sheetOffset, schSymbol );
+
+    pin->SetPosition( pinLocation );
 
     switch( elem.electrical )
     {
@@ -1354,7 +1349,7 @@ void SCH_IO_ALTIUM::ParsePin( const std::map<wxString, wxString>& aProperties,
 
 
 void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
-                         ASCH_RECORD_ORIENTATION orientation )
+                         ASCH_RECORD_ORIENTATION orientation, bool for_lib_item = false )
 {
     int       vjustify, hjustify;
     EDA_ANGLE angle = ANGLE_HORIZONTAL;
@@ -1408,21 +1403,31 @@ void SetTextPositioning( EDA_TEXT* text, ASCH_LABEL_JUSTIFICATION justification,
     switch( orientation )
     {
     case ASCH_RECORD_ORIENTATION::RIGHTWARDS:
+        if( for_lib_item )
+            vjustify *= -1;
+
         angle = ANGLE_HORIZONTAL;
         break;
 
     case ASCH_RECORD_ORIENTATION::LEFTWARDS:
-        vjustify *= -1;
+        if( !for_lib_item )
+            vjustify *= -1;
+
         hjustify *= -1;
         angle = ANGLE_HORIZONTAL;
         break;
 
     case ASCH_RECORD_ORIENTATION::UPWARDS:
+        if( for_lib_item )
+            vjustify *= -1;
+
         angle = ANGLE_VERTICAL;
         break;
 
     case ASCH_RECORD_ORIENTATION::DOWNWARDS:
-        vjustify *= -1;
+        if( !for_lib_item )
+            vjustify *= -1;
+
         hjustify *= -1;
         angle = ANGLE_VERTICAL;
         break;
@@ -1457,17 +1462,16 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
     {
         static const std::map<wxString, wxString> variableMap = {
             { "APPLICATION_BUILDNUMBER", "KICAD_VERSION" },
-            { "SHEETNUMBER",  "#"            },
-            { "SHEETTOTAL",   "##"           },
-            { "TITLE",        "TITLE"        }, // 1:1 maps are sort of useless, but it makes it
-            { "REVISION",     "REVISION"     }, // easier to see that the list is complete
-            { "DATE",         "ISSUE_DATE"   },
-            { "CURRENTDATE",  "CURRENT_DATE" },
-            { "COMPANYNAME",  "COMPANY"      },
-            { "DOCUMENTNAME", "FILENAME"     },
-            { "DOCUMENTFULLPATHANDNAME",
-                              "FILEPATH"     },
-            { "PROJECTNAME",  "PROJECTNAME"  },
+            { "SHEETNUMBER",             "#"             },
+            { "SHEETTOTAL",              "##"            },
+            { "TITLE",                   "TITLE"         },  // including 1:1 maps makes it easier
+            { "REVISION",                "REVISION"      },  //   to see that the list is complete
+            { "DATE",                    "ISSUE_DATE"    },
+            { "CURRENTDATE",             "CURRENT_DATE"  },
+            { "COMPANYNAME",             "COMPANY"       },
+            { "DOCUMENTNAME",            "FILENAME"      },
+            { "DOCUMENTFULLPATHANDNAME", "FILEPATH"      },
+            { "PROJECTNAME",             "PROJECTNAME"   },
         };
 
         wxString  kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
@@ -1496,9 +1500,9 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                ? nullptr
-                                : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                            ? nullptr
+                                                            : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -1518,17 +1522,17 @@ void SCH_IO_ALTIUM::ParseLabel( const std::map<wxString, wxString>& aProperties,
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
-        SCH_TEXT*   textItem = new SCH_TEXT( { 0, 0 }, elem.text, LAYER_DEVICE );
+        VECTOR2I  pos = elem.location;
+        SCH_TEXT* textItem = new SCH_TEXT( { 0, 0 }, elem.text, LAYER_DEVICE );
         symbol->AddDrawItem( textItem, false );
 
         /// Handle labels that are in a library symbol, not on schematic
-        if( !schsym )
-            textItem->SetPosition( GetLibEditPosition(elem.location ) );
-        else
-            textItem->SetPosition( GetRelativePosition( elem.location + m_sheetOffset, schsym ) );
+        if( schsym )
+            pos = GetRelativePosition( elem.location + m_sheetOffset, schsym );
 
+        textItem->SetPosition( pos );
         textItem->SetUnit( std::max( 0, elem.ownerpartid ) );
-        SetTextPositioning( textItem, elem.justification, elem.orientation );
+        SetTextPositioning( textItem, elem.justification, elem.orientation, true );
 
         size_t fontId = elem.fontId;
 
@@ -1667,8 +1671,8 @@ void SCH_IO_ALTIUM::AddLibTextBox( const ASCH_TEXT_FRAME *aElem, std::vector<LIB
     /// Handle text frames that are in a library symbol, not on schematic
     if( !schsym )
     {
-        textBox->SetStart( GetLibEditPosition( aElem->TopRight ) );
-        textBox->SetEnd( GetLibEditPosition( aElem->BottomLeft ) );
+        textBox->SetStart( aElem->TopRight );
+        textBox->SetEnd( aElem->BottomLeft );
     }
     else
     {
@@ -1775,9 +1779,9 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                ? nullptr
-                                : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                            ? nullptr
+                                                            : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -1812,11 +1816,12 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
-                    if( !schsym )
-                        line->AddPoint( GetLibEditPosition( elem.points.at( j ) ) );
-                    else
-                        line->AddPoint( GetRelativePosition( elem.points.at( j ) + m_sheetOffset,
-                                                             schsym ) );
+                    VECTOR2I pos = elem.points.at( j );
+
+                    if( schsym )
+                        pos = GetRelativePosition( pos + m_sheetOffset, schsym );
+
+                    line->AddPoint( pos );
                 }
 
                 line->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID ) );
@@ -1834,11 +1839,12 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
 
                 for( size_t j = i; j < elem.points.size() && j < i + 2; j++ )
                 {
-                    if( !schsym )
-                        line->AddPoint( GetLibEditPosition( elem.points.at( j ) ) );
-                    else
-                        line->AddPoint( GetRelativePosition( elem.points.at( j ) + m_sheetOffset,
-                                                             schsym ) );
+                    VECTOR2I pos = elem.points.at( j );
+
+                    if( schsym )
+                        pos = GetRelativePosition( pos + m_sheetOffset, schsym );
+
+                    line->AddPoint( pos );
                 }
 
                 line->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID ) );
@@ -1853,12 +1859,10 @@ void SCH_IO_ALTIUM::ParseBezier( const std::map<wxString, wxString>& aProperties
 
                 for( size_t j = i; j < elem.points.size() && j < i + 4; j++ )
                 {
-                    VECTOR2I pos;
+                    VECTOR2I pos = elem.points.at( j );
 
-                    if( !schsym )
-                        pos = GetLibEditPosition( elem.points.at( j ) );
-                    else
-                        pos = GetRelativePosition( elem.points.at( j ) + m_sheetOffset, schsym );
+                    if( schsym )
+                        pos = GetRelativePosition( pos + m_sheetOffset, schsym );
 
                     switch( j - i )
                     {
@@ -1907,9 +1911,9 @@ void SCH_IO_ALTIUM::ParsePolyline( const std::map<wxString, wxString>& aProperti
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                     ? nullptr
-                                     : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                             ? nullptr
+                                                             : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -1937,12 +1941,12 @@ void SCH_IO_ALTIUM::ParsePolyline( const std::map<wxString, wxString>& aProperti
 
         line->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-        for( VECTOR2I& point : elem.Points )
+        for( VECTOR2I point : elem.Points )
         {
-            if( !schsym )
-                line->AddPoint( GetLibEditPosition( point ) );
-            else
-                line->AddPoint( GetRelativePosition( point + m_sheetOffset, schsym ) );
+            if( schsym )
+                point = GetRelativePosition( point + m_sheetOffset, schsym );
+
+            line->AddPoint( point );
         }
 
         SetLibShapeLine( elem, line, ALTIUM_SCH_RECORD::POLYLINE );
@@ -1978,9 +1982,9 @@ void SCH_IO_ALTIUM::ParsePolygon( const std::map<wxString, wxString>& aPropertie
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                ? nullptr
-                                : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                            ? nullptr
+                                                            : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -1991,8 +1995,8 @@ void SCH_IO_ALTIUM::ParsePolygon( const std::map<wxString, wxString>& aPropertie
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Polygon's owner (%d) not found." ),
-                                                    elem.ownerindex ),
-                        RPT_SEVERITY_DEBUG );
+                                                      elem.ownerindex ),
+                                    RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2008,18 +2012,20 @@ void SCH_IO_ALTIUM::ParsePolygon( const std::map<wxString, wxString>& aPropertie
         symbol->AddDrawItem( line, false );
         line->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-        for( VECTOR2I& point : elem.points )
+        for( VECTOR2I point : elem.points )
         {
-            if( !schsym )
-                line->AddPoint( GetLibEditPosition( point ) );
-            else
-                line->AddPoint( GetRelativePosition( point + m_sheetOffset, schsym ) );
+            if( schsym )
+                point = GetRelativePosition( point + m_sheetOffset, schsym );
+
+            line->AddPoint( point );
         }
 
-        if( !schsym )
-            line->AddPoint( GetLibEditPosition( elem.points.front() ) );
-        else
-            line->AddPoint( GetRelativePosition( elem.points.front() + m_sheetOffset, schsym ) );
+        VECTOR2I point = elem.points.front();
+
+        if( schsym )
+            point = GetRelativePosition( elem.points.front() + m_sheetOffset, schsym );
+
+        line->AddPoint( point );
 
         SetLibShapeLine( elem, line, ALTIUM_SCH_RECORD::POLYGON );
         SetLibShapeFillAndColor( elem, line, ALTIUM_SCH_RECORD::POLYGON, elem.Color );
@@ -2058,9 +2064,9 @@ void SCH_IO_ALTIUM::ParseRoundRectangle( const std::map<wxString, wxString>& aPr
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                ? nullptr
-                                : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                            ? nullptr
+                                                            : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2098,11 +2104,10 @@ void SCH_IO_ALTIUM::ParseRoundRectangle( const std::map<wxString, wxString>& aPr
             VECTOR2I center = ( elem.TopRight + elem.BottomLeft ) / 2;
             int      radius = std::min( width / 2, height / 2 );
 
-            if( !schsym )
-                rect->SetPosition( GetLibEditPosition( center ) );
-            else
-                rect->SetPosition( GetRelativePosition( center + m_sheetOffset, schsym ) );
+            if( schsym )
+                center = GetRelativePosition( center + m_sheetOffset, schsym );
 
+            rect->SetPosition( center );
             rect->SetEnd( VECTOR2I( rect->GetPosition().x + radius, rect->GetPosition().y ) );
         }
         else
@@ -2111,8 +2116,8 @@ void SCH_IO_ALTIUM::ParseRoundRectangle( const std::map<wxString, wxString>& aPr
 
             if( !schsym )
             {
-                rect->SetPosition( GetLibEditPosition( elem.TopRight ) );
-                rect->SetEnd( GetLibEditPosition( elem.BottomLeft ) );
+                rect->SetPosition( elem.TopRight );
+                rect->SetEnd( elem.BottomLeft );
             }
             else
             {
@@ -2162,7 +2167,7 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
             EDA_ANGLE  includedAngle( elem.m_EndAngle - elem.m_StartAngle, DEGREES_T );
             EDA_ANGLE  startAngle( elem.m_EndAngle, DEGREES_T );
             VECTOR2I   startOffset( KiROUND( arc_radius * startAngle.Cos() ),
-                                   -KiROUND( arc_radius * startAngle.Sin() ) );
+                                    KiROUND( arc_radius * startAngle.Sin() ) );
 
             arc->SetCenter( elem.m_Center + m_sheetOffset );
             arc->SetStart( elem.m_Center + startOffset + m_sheetOffset );
@@ -2175,9 +2180,9 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                     ? nullptr
-                                     : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                             ? nullptr
+                                                             : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2188,8 +2193,8 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Arc's owner (%d) not found." ),
-                                                    elem.ownerindex ),
-                        RPT_SEVERITY_DEBUG );
+                                                      elem.ownerindex ),
+                                    RPT_SEVERITY_DEBUG );
                 return;
             }
 
@@ -2202,21 +2207,23 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
 
         if( elem.m_StartAngle == 0 && ( elem.m_EndAngle == 0 || elem.m_EndAngle == 360 ) )
         {
+            VECTOR2I   center = elem.m_Center;
             SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
             symbol->AddDrawItem( circle, false );
 
             circle->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-            if( !schsym )
-                circle->SetPosition( GetLibEditPosition( elem.m_Center ) );
-            else
-                circle->SetPosition( GetRelativePosition( elem.m_Center + m_sheetOffset, schsym ) );
+            if( schsym )
+                center = GetRelativePosition( center + m_sheetOffset, schsym );
+
+            circle->SetPosition( center );
 
             circle->SetEnd( circle->GetPosition() + VECTOR2I( arc_radius, 0 ) );
             SetLibShapeLine( elem, circle, ALTIUM_SCH_RECORD::ARC );
         }
         else
         {
+            VECTOR2I   center = elem.m_Center;
             SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, LAYER_DEVICE );
             symbol->AddDrawItem( arc, false );
             arc->SetUnit( std::max( 0, elem.ownerpartid ) );
@@ -2224,19 +2231,13 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
             EDA_ANGLE includedAngle( elem.m_EndAngle - elem.m_StartAngle, DEGREES_T );
             EDA_ANGLE startAngle( elem.m_StartAngle, DEGREES_T );
             VECTOR2I  startOffset( KiROUND( arc_radius * startAngle.Cos() ),
-                                   -KiROUND( arc_radius * startAngle.Sin() ) );
+                                   KiROUND( arc_radius * startAngle.Sin() ) );
 
             if( schsym )
-            {
-                arc->SetCenter( GetRelativePosition( elem.m_Center + m_sheetOffset, schsym ) );
-                arc->SetStart( GetRelativePosition( elem.m_Center + startOffset + m_sheetOffset,
-                                                    schsym ) );
-            }
-            else
-            {
-                arc->SetCenter( GetLibEditPosition( elem.m_Center ) );
-                arc->SetStart( GetLibEditPosition( elem.m_Center + startOffset + m_sheetOffset ) );
-            }
+                center = GetRelativePosition( elem.m_Center + m_sheetOffset, schsym );
+
+            arc->SetCenter( center );
+            arc->SetStart( center + startOffset );
 
             arc->SetArcAngleAndEnd( includedAngle.Normalize(), true );
 
@@ -2279,9 +2280,9 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                     ? nullptr
-                                     : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                             ? nullptr
+                                                             : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2292,7 +2293,7 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Elliptical Arc's owner (%d) not found." ),
-                                                    elem.ownerindex ),
+                                                      elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -2328,10 +2329,10 @@ void SCH_IO_ALTIUM::ParseEllipticalArc( const std::map<wxString, wxString>& aPro
             }
             else
             {
-                schbezier->SetStart( GetLibEditPosition( bezier.Start ) );
-                schbezier->SetBezierC1( GetLibEditPosition( bezier.C1 ) );
-                schbezier->SetBezierC2( GetLibEditPosition( bezier.C2 ) );
-                schbezier->SetEnd( GetLibEditPosition( bezier.End ) );
+                schbezier->SetStart( bezier.Start );
+                schbezier->SetBezierC1( bezier.C1 );
+                schbezier->SetBezierC2( bezier.C2 );
+                schbezier->SetEnd( bezier.End );
             }
 
             SetLibShapeLine( elem, schbezier, ALTIUM_SCH_RECORD::ELLIPTICAL_ARC );
@@ -2406,9 +2407,9 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                     ? nullptr
-                                     : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                             ? nullptr
+                                                             : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2444,10 +2445,10 @@ void SCH_IO_ALTIUM::ParseEllipse( const std::map<wxString, wxString>& aPropertie
 
             if( !schsym )
             {
-                libbezier->SetStart( GetLibEditPosition( bezier.Start ) );
-                libbezier->SetBezierC1( GetLibEditPosition( bezier.C1 ) );
-                libbezier->SetBezierC2( GetLibEditPosition( bezier.C2 ) );
-                libbezier->SetEnd( GetLibEditPosition( bezier.End ) );
+                libbezier->SetStart( bezier.Start );
+                libbezier->SetBezierC1( bezier.C1 );
+                libbezier->SetBezierC2( bezier.C2 );
+                libbezier->SetEnd( bezier.End );
             }
             else
             {
@@ -2511,9 +2512,9 @@ void SCH_IO_ALTIUM::ParseCircle( const std::map<wxString, wxString>& aProperties
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                     ? nullptr
-                                     : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                             ? nullptr
+                                                             : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2533,16 +2534,16 @@ void SCH_IO_ALTIUM::ParseCircle( const std::map<wxString, wxString>& aProperties
             schsym = m_symbols.at( libSymbolIt->first );
         }
 
+        VECTOR2I   center = elem.Center;
         SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
         symbol->AddDrawItem( circle, false );
 
         circle->SetUnit( std::max( 0, elem.ownerpartid ) );
 
-        if( !schsym )
-            circle->SetPosition( GetLibEditPosition( elem.Center ) );
-        else
-            circle->SetPosition( GetRelativePosition( elem.Center + m_sheetOffset, schsym ) );
+        if( schsym )
+            center = GetRelativePosition( center + m_sheetOffset, schsym );
 
+        circle->SetPosition( center );
         circle->SetEnd( circle->GetPosition() + VECTOR2I( elem.Radius, 0 ) );
 
         SetLibShapeLine( elem, circle, ALTIUM_SCH_RECORD::ELLIPSE );
@@ -2573,9 +2574,9 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                     ? nullptr
-                                     : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                             ? nullptr
+                                                             : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2586,7 +2587,7 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
             {
                 // TODO: e.g. can depend on Template (RECORD=39
                 m_reporter->Report( wxString::Format( wxT( "Line's owner (%d) not found." ),
-                                                    elem.ownerindex ),
+                                                      elem.ownerindex ),
                                     RPT_SEVERITY_DEBUG );
                 return;
             }
@@ -2605,8 +2606,8 @@ void SCH_IO_ALTIUM::ParseLine( const std::map<wxString, wxString>& aProperties,
 
         if( !schsym )
         {
-            line->AddPoint( GetLibEditPosition( elem.point1 ) );
-            line->AddPoint( GetLibEditPosition( elem.point2 ) );
+            line->AddPoint( elem.point1 );
+            line->AddPoint( elem.point2 );
         }
         else
         {
@@ -2808,9 +2809,9 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
     }
     else
     {
-        LIB_SYMBOL* symbol = static_cast<int>( aSymbol.size() ) <= elem.ownerpartdisplaymode
-                                     ? nullptr
-                                     : aSymbol[elem.ownerpartdisplaymode];
+        LIB_SYMBOL* symbol = (int) aSymbol.size() <= elem.ownerpartdisplaymode
+                                                             ? nullptr
+                                                             : aSymbol[elem.ownerpartdisplaymode];
         SCH_SYMBOL* schsym = nullptr;
 
         if( !symbol )
@@ -2840,8 +2841,8 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
 
         if( !schsym )
         {
-            rect->SetPosition( GetLibEditPosition( sheetTopRight ) );
-            rect->SetEnd( GetLibEditPosition( sheetBottomLeft ) );
+            rect->SetPosition( sheetTopRight );
+            rect->SetEnd( sheetBottomLeft );
         }
         else
         {
@@ -2855,13 +2856,11 @@ void SCH_IO_ALTIUM::ParseRectangle( const std::map<wxString, wxString>& aPropert
 }
 
 
-void SCH_IO_ALTIUM::ParseSheetSymbol( int aIndex,
-                                      const std::map<wxString, wxString>& aProperties )
+void SCH_IO_ALTIUM::ParseSheetSymbol( int aIndex, const std::map<wxString, wxString>& aProperties )
 {
     ASCH_SHEET_SYMBOL elem( aProperties );
 
-    SCH_SHEET*  sheet  = new SCH_SHEET( getCurrentSheet(), elem.location + m_sheetOffset,
-                                        elem.size );
+    SCH_SHEET* sheet = new SCH_SHEET( getCurrentSheet(), elem.location + m_sheetOffset, elem.size );
 
     sheet->SetBorderColor( GetColorFromInt( elem.color ) );
 
@@ -2976,14 +2975,14 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, schIUScale.MilsToIU( -50 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( 50 ) } );
         aKsymbol->AddDrawItem( line1, false );
 
         if( aStyle == ASCH_POWER_PORT_STYLE::CIRCLE )
         {
             SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
             circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), LINE_STYLE::SOLID ) );
-            circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -75 ) } );
+            circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 75 ) } );
             circle->SetEnd( circle->GetPosition() + VECTOR2I( schIUScale.MilsToIU( 25 ), 0 ) );
             aKsymbol->AddDrawItem( circle, false );
         }
@@ -2991,10 +2990,10 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         {
             SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 25 ), schIUScale.MilsToIU( -50 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( 50 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 25 ), schIUScale.MilsToIU( 50 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( 50 ) } );
             aKsymbol->AddDrawItem( line2, false );
         }
 
@@ -3005,15 +3004,15 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         SCH_SHAPE* line = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line->AddPoint( { 0, 0 } );
-        line->AddPoint( { 0, schIUScale.MilsToIU( -72 ) } );
+        line->AddPoint( { 0, schIUScale.MilsToIU( 72 ) } );
         aKsymbol->AddDrawItem( line, false );
 
         SCH_SHAPE* bezier = new SCH_SHAPE( SHAPE_T::BEZIER, LAYER_DEVICE );
         bezier->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 5 ), LINE_STYLE::SOLID ) );
-        bezier->SetStart( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -50 ) } );
-        bezier->SetBezierC1( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( -87 ) } );
-        bezier->SetBezierC2( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -63 ) } );
-        bezier->SetEnd( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( -100 ) } );
+        bezier->SetStart( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( 50 ) } );
+        bezier->SetBezierC1( { schIUScale.MilsToIU( 30 ), schIUScale.MilsToIU( 87 ) } );
+        bezier->SetBezierC2( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( 63 ) } );
+        bezier->SetEnd( { schIUScale.MilsToIU( -30 ), schIUScale.MilsToIU( 100 ) } );
         aKsymbol->AddDrawItem( bezier, false );
 
         return { 0, schIUScale.MilsToIU( 150 ) };
@@ -3026,68 +3025,68 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, schIUScale.MilsToIU( -100 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( 100 ) } );
         aKsymbol->AddDrawItem( line1, false );
 
         if( aStyle == ASCH_POWER_PORT_STYLE::POWER_GROUND )
         {
             SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( 100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( 100 ) } );
             aKsymbol->AddDrawItem( line2, false );
 
             SCH_SHAPE* line3 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line3->AddPoint( { schIUScale.MilsToIU( -70 ), schIUScale.MilsToIU( -130 ) } );
-            line3->AddPoint( { schIUScale.MilsToIU( 70 ), schIUScale.MilsToIU( -130 ) } );
+            line3->AddPoint( { schIUScale.MilsToIU( -70 ), schIUScale.MilsToIU( 130 ) } );
+            line3->AddPoint( { schIUScale.MilsToIU( 70 ), schIUScale.MilsToIU( 130 ) } );
             aKsymbol->AddDrawItem( line3, false );
 
             SCH_SHAPE* line4 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line4->AddPoint( { schIUScale.MilsToIU( -40 ), schIUScale.MilsToIU( -160 ) } );
-            line4->AddPoint( { schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( -160 ) } );
+            line4->AddPoint( { schIUScale.MilsToIU( -40 ), schIUScale.MilsToIU( 160 ) } );
+            line4->AddPoint( { schIUScale.MilsToIU( 40 ), schIUScale.MilsToIU( 160 ) } );
             aKsymbol->AddDrawItem( line4, false );
 
             SCH_SHAPE* line5 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line5->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line5->AddPoint( { schIUScale.MilsToIU( -10 ), schIUScale.MilsToIU( -190 ) } );
-            line5->AddPoint( { schIUScale.MilsToIU( 10 ), schIUScale.MilsToIU( -190 ) } );
+            line5->AddPoint( { schIUScale.MilsToIU( -10 ), schIUScale.MilsToIU( 190 ) } );
+            line5->AddPoint( { schIUScale.MilsToIU( 10 ), schIUScale.MilsToIU( 190 ) } );
             aKsymbol->AddDrawItem( line5, false );
         }
         else if( aStyle == ASCH_POWER_PORT_STYLE::SIGNAL_GROUND )
         {
             SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -200 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( 100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( 100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 200 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( 100 ) } );
             aKsymbol->AddDrawItem( line2, false );
         }
         else if( aStyle == ASCH_POWER_PORT_STYLE::EARTH )
         {
             SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line2->AddPoint( { schIUScale.MilsToIU( -150 ), schIUScale.MilsToIU( -200 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -100 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -100 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( -200 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -150 ), schIUScale.MilsToIU( 200 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( 100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( 100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 200 ) } );
             aKsymbol->AddDrawItem( line2, false );
 
             SCH_SHAPE* line3 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line3->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
-            line3->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( -200 ) } );
+            line3->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 100 ) } );
+            line3->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( 200 ) } );
             aKsymbol->AddDrawItem( line3, false );
         }
         else // ASCH_POWER_PORT_STYLE::GOST_ARROW
         {
             SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
             line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( -50 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -100 ) } );
-            line2->AddPoint( { schIUScale.MilsToIU( 25 ), schIUScale.MilsToIU( -50 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( -25 ), schIUScale.MilsToIU( 50 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 100 ) } );
+            line2->AddPoint( { schIUScale.MilsToIU( 25 ), schIUScale.MilsToIU( 50 ) } );
             aKsymbol->AddDrawItem( line2, false );
 
             return { 0, schIUScale.MilsToIU( 150 ) }; // special case
@@ -3101,33 +3100,33 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, schIUScale.MilsToIU( -160 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( 160 ) } );
         aKsymbol->AddDrawItem( line1, false );
 
         SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-        line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -160 ) } );
-        line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -160 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( 160 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( 160 ) } );
         aKsymbol->AddDrawItem( line2, false );
 
         SCH_SHAPE* line3 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line3->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-        line3->AddPoint( { schIUScale.MilsToIU( -60 ), schIUScale.MilsToIU( -200 ) } );
-        line3->AddPoint( { schIUScale.MilsToIU( 60 ), schIUScale.MilsToIU( -200 ) } );
+        line3->AddPoint( { schIUScale.MilsToIU( -60 ), schIUScale.MilsToIU( 200 ) } );
+        line3->AddPoint( { schIUScale.MilsToIU( 60 ), schIUScale.MilsToIU( 200 ) } );
         aKsymbol->AddDrawItem( line3, false );
 
         SCH_SHAPE* line4 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line4->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-        line4->AddPoint( { schIUScale.MilsToIU( -20 ), schIUScale.MilsToIU( -240 ) } );
-        line4->AddPoint( { schIUScale.MilsToIU( 20 ), schIUScale.MilsToIU( -240 ) } );
+        line4->AddPoint( { schIUScale.MilsToIU( -20 ), schIUScale.MilsToIU( 240 ) } );
+        line4->AddPoint( { schIUScale.MilsToIU( 20 ), schIUScale.MilsToIU( 240 ) } );
         aKsymbol->AddDrawItem( line4, false );
 
         if( aStyle == ASCH_POWER_PORT_STYLE::GOST_POWER_GROUND )
-            return { 0, schIUScale.MilsToIU( 300 ) };
+            return { 0, schIUScale.MilsToIU( -300 ) };
 
         SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
         circle->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-        circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( -160 ) } );
+        circle->SetPosition( { schIUScale.MilsToIU( 0 ), schIUScale.MilsToIU( 160 ) } );
         circle->SetEnd( circle->GetPosition() + VECTOR2I( schIUScale.MilsToIU( 120 ), 0 ) );
         aKsymbol->AddDrawItem( circle, false );
 
@@ -3138,13 +3137,13 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, schIUScale.MilsToIU( -200 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( 200 ) } );
         aKsymbol->AddDrawItem( line1, false );
 
         SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-        line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( -200 ) } );
-        line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( -200 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( -100 ), schIUScale.MilsToIU( 200 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( 100 ), schIUScale.MilsToIU( 200 ) } );
         aKsymbol->AddDrawItem( line2, false );
 
         return { 0, schIUScale.MilsToIU( 250 ) };
@@ -3160,13 +3159,13 @@ VECTOR2I HelperGeneratePowerPortGraphics( LIB_SYMBOL* aKsymbol, ASCH_POWER_PORT_
         SCH_SHAPE* line1 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line1->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
         line1->AddPoint( { 0, 0 } );
-        line1->AddPoint( { 0, schIUScale.MilsToIU( -100 ) } );
+        line1->AddPoint( { 0, schIUScale.MilsToIU( 100 ) } );
         aKsymbol->AddDrawItem( line1, false );
 
         SCH_SHAPE* line2 = new SCH_SHAPE( SHAPE_T::POLY, LAYER_DEVICE );
         line2->SetStroke( STROKE_PARAMS( schIUScale.MilsToIU( 10 ), LINE_STYLE::SOLID ) );
-        line2->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( -100 ) } );
-        line2->AddPoint( { schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( -100 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( -50 ), schIUScale.MilsToIU( 100 ) } );
+        line2->AddPoint( { schIUScale.MilsToIU( 50 ), schIUScale.MilsToIU( 100 ) } );
         aKsymbol->AddDrawItem( line2, false );
 
         return { 0, schIUScale.MilsToIU( 150 ) };
@@ -3193,8 +3192,8 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     {
         libSymbol = powerSymbolIt->second; // cache hit
     }
-    else if( LIB_SYMBOL* alreadyLoaded =
-             m_pi->LoadSymbol( getLibFileName().GetFullPath(), elem.text, m_properties.get() ) )
+    else if( LIB_SYMBOL* alreadyLoaded = m_pi->LoadSymbol( getLibFileName().GetFullPath(),
+                                                           elem.text, m_properties.get() ) )
     {
         libSymbol = alreadyLoaded;
     }
@@ -3777,7 +3776,7 @@ void SCH_IO_ALTIUM::ParseDesignator( const std::map<wxString, wxString>& aProper
 
     SCH_FIELD* field = symbol->GetField( REFERENCE_FIELD );
     field->SetPosition( elem.location + m_sheetOffset );
-    SetTextPositioning( field, elem.justification, elem.orientation );
+    SetTextPositioning( field, elem.justification, elem.orientation, true );
 }
 
 
@@ -3798,7 +3797,7 @@ void SCH_IO_ALTIUM::ParseLibDesignator( const std::map<wxString, wxString>& aPro
         else
             refField.SetText( elem.text.BeforeLast( '?' ) ); // remove the '?' at the end for KiCad-style
 
-        refField.SetPosition( GetLibEditPosition( elem.location ) );
+        refField.SetPosition( elem.location );
 
         if( elem.fontId > 0 && elem.fontId <= static_cast<int>( aFontSizes.size() ) )
         {
@@ -3919,7 +3918,7 @@ void SCH_IO_ALTIUM::ParseParameter( const std::map<wxString, wxString>& aPropert
         field->SetText( kicadText );
         field->SetPosition( elem.location + m_sheetOffset );
         field->SetVisible( !elem.isHidden );
-        SetTextPositioning( field, elem.justification, elem.orientation );
+        SetTextPositioning( field, elem.justification, elem.orientation, true );
     }
 }
 
@@ -3991,11 +3990,9 @@ void SCH_IO_ALTIUM::ParseLibParameter( const std::map<wxString, wxString>& aProp
         wxString kicadText = AltiumSchSpecialStringsToKiCadVariables( elem.text, variableMap );
         field->SetText( kicadText );
 
-
-        field->SetTextPos( GetLibEditPosition( elem.location ) );
-        SetTextPositioning( field, elem.justification, elem.orientation );
+        field->SetTextPos( elem.location );
+        SetTextPositioning( field, elem.justification, elem.orientation, true );
         field->SetVisible( !elem.isHidden );
-        SetTextPositioning( field, elem.justification, elem.orientation );
 
         if( elem.fontId > 0 && elem.fontId <= static_cast<int>( aFontSizes.size() ) )
         {
@@ -4141,52 +4138,49 @@ std::map<wxString,LIB_SYMBOL*> SCH_IO_ALTIUM::ParseLibFile( const ALTIUM_COMPOUN
 
         auto handleBinaryDataLambda =
                 []( const std::string& binaryData ) -> std::map<wxString, wxString>
-        {
+                {
 
-            std::map<wxString, wxString> result;
+                    std::map<wxString, wxString> result;
 
-            ALTIUM_BINARY_READER binreader( binaryData );
+                    ALTIUM_BINARY_READER binreader( binaryData );
 
-            int32_t recordId = binreader.ReadInt32();
+                    int32_t recordId = binreader.ReadInt32();
 
-            if( recordId != static_cast<int32_t>( ALTIUM_SCH_RECORD::PIN ) )
-                THROW_IO_ERROR( "Binary record missing PIN record" );
+                    if( recordId != static_cast<int32_t>( ALTIUM_SCH_RECORD::PIN ) )
+                        THROW_IO_ERROR( "Binary record missing PIN record" );
 
-            result["RECORD"] = wxString::Format( "%d", recordId );
-            binreader.ReadByte(); // unknown
-            result["OWNERPARTID"] = wxString::Format( "%d",  binreader.ReadInt16() );
-            result["OWNERPARTDISPLAYMODE"] = wxString::Format( "%d",  binreader.ReadByte() );
-            result["SYMBOL_INNEREDGE"] = wxString::Format( "%d",  binreader.ReadByte() );
-            result["SYMBOL_OUTEREDGE"] = wxString::Format( "%d",  binreader.ReadByte() );
-            result["SYMBOL_INNER"] = wxString::Format( "%d",  binreader.ReadByte() );
-            result["SYMBOL_OUTER"] = wxString::Format( "%d",  binreader.ReadByte() );
-            result["TEXT"] = binreader.ReadPascalString();
-            binreader.ReadByte(); // unknown
-            result["ELECTRICAL"] = wxString::Format( "%d",  binreader.ReadByte() );
-            result["PINCONGLOMERATE"] = wxString::Format( "%d",  binreader.ReadByte() );
-            result["PINLENGTH"] = wxString::Format( "%d",  binreader.ReadInt16() );
-            result["LOCATION.X"] = wxString::Format( "%d",  binreader.ReadInt16() );
-            result["LOCATION.Y"] = wxString::Format( "%d",  binreader.ReadInt16() );
-            result["COLOR"] = wxString::Format( "%d",  binreader.ReadInt32() );
-            result["NAME"] = binreader.ReadPascalString();
-            result["DESIGNATOR"] = binreader.ReadPascalString();
-            result["SWAPIDGROUP"] = binreader.ReadPascalString();
+                    result["RECORD"] = wxString::Format( "%d", recordId );
+                    binreader.ReadByte(); // unknown
+                    result["OWNERPARTID"] = wxString::Format( "%d",  binreader.ReadInt16() );
+                    result["OWNERPARTDISPLAYMODE"] = wxString::Format( "%d",  binreader.ReadByte() );
+                    result["SYMBOL_INNEREDGE"] = wxString::Format( "%d",  binreader.ReadByte() );
+                    result["SYMBOL_OUTEREDGE"] = wxString::Format( "%d",  binreader.ReadByte() );
+                    result["SYMBOL_INNER"] = wxString::Format( "%d",  binreader.ReadByte() );
+                    result["SYMBOL_OUTER"] = wxString::Format( "%d",  binreader.ReadByte() );
+                    result["TEXT"] = binreader.ReadPascalString();
+                    binreader.ReadByte(); // unknown
+                    result["ELECTRICAL"] = wxString::Format( "%d",  binreader.ReadByte() );
+                    result["PINCONGLOMERATE"] = wxString::Format( "%d",  binreader.ReadByte() );
+                    result["PINLENGTH"] = wxString::Format( "%d",  binreader.ReadInt16() );
+                    result["LOCATION.X"] = wxString::Format( "%d",  binreader.ReadInt16() );
+                    result["LOCATION.Y"] = wxString::Format( "%d",  binreader.ReadInt16() );
+                    result["COLOR"] = wxString::Format( "%d",  binreader.ReadInt32() );
+                    result["NAME"] = binreader.ReadPascalString();
+                    result["DESIGNATOR"] = binreader.ReadPascalString();
+                    result["SWAPIDGROUP"] = binreader.ReadPascalString();
 
 
-            std::string partSeq = binreader.ReadPascalString(); // This is 'part|&|seq'
-            std::vector<std::string> partSeqSplit = split( partSeq, "|" );
+                    std::string partSeq = binreader.ReadPascalString(); // This is 'part|&|seq'
+                    std::vector<std::string> partSeqSplit = split( partSeq, "|" );
 
-            if( partSeqSplit.size() == 3 )
-            {
-                result["PART"] = partSeqSplit[0];
-                result["SEQ"] = partSeqSplit[2];
-            }
+                    if( partSeqSplit.size() == 3 )
+                    {
+                        result["PART"] = partSeqSplit[0];
+                        result["SEQ"] = partSeqSplit[2];
+                    }
 
-            // Mark the pin as belonging to a library symbol, so we can adjust the coordinates
-            // as needed for KiCad's symbol editor
-            result["ISKICADLIBPIN"] = wxString( "T" );
-            return result;
-        };
+                    return result;
+                };
 
         while( reader.GetRemainingBytes() > 0 )
         {
