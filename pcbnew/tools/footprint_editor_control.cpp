@@ -670,6 +670,16 @@ int FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree( const TOOL_EVENT& aEvent )
 }
 
 
+int FOOTPRINT_EDITOR_CONTROL::FootprintTreeSearch( const TOOL_EVENT& aEvent )
+{
+    if (!m_frame->IsSearchTreeShown()) {
+        m_frame->ToggleSearchTree();
+    }
+    m_frame->FocusSearchTreeInput();
+    return 0;
+}
+
+
 int FOOTPRINT_EDITOR_CONTROL::ToggleLayersManager( const TOOL_EVENT& aEvent )
 {
     m_frame->ToggleLayersManager();
@@ -857,6 +867,7 @@ void FOOTPRINT_EDITOR_CONTROL::setTransitions()
     Go( &FOOTPRINT_EDITOR_CONTROL::UnpinLibrary,         ACTIONS::unpinLibrary.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,  PCB_ACTIONS::showFootprintTree.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleFootprintTree,  PCB_ACTIONS::hideFootprintTree.MakeEvent() );
+    Go( &FOOTPRINT_EDITOR_CONTROL::FootprintTreeSearch,  PCB_ACTIONS::footprintTreeSearch.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::Properties,           PCB_ACTIONS::footprintProperties.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::DefaultPadProperties, PCB_ACTIONS::defaultPadProperties.MakeEvent() );
     Go( &FOOTPRINT_EDITOR_CONTROL::ToggleLayersManager,  PCB_ACTIONS::showLayersManager.MakeEvent() );

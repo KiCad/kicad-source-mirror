@@ -251,6 +251,7 @@ public:
     static TOOL_ACTION showPinNumbers;
     static TOOL_ACTION showSymbolTree;
     static TOOL_ACTION hideSymbolTree;
+    static TOOL_ACTION symbolTreeSearch;
     static TOOL_ACTION drawSheetOnClipboard;
     static TOOL_ACTION importGraphics;
     static TOOL_ACTION exportSymbolView;

@@ -289,6 +289,12 @@ TOOL_ACTION EE_ACTIONS::hideSymbolTree( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Hide Symbol Tree" ) )
         .Icon( BITMAPS::search_tree ) );
 
+TOOL_ACTION EE_ACTIONS::symbolTreeSearch( TOOL_ACTION_ARGS()
+        .Name( "eeschema.SymbolLibraryControl.symbolTreeSearch" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Focus Symbol Tree Search Field" ) )
+        .DefaultHotkey( MD_CTRL + 'L' ) );
+
 TOOL_ACTION EE_ACTIONS::exportSymbolView( TOOL_ACTION_ARGS()
         .Name( "eeschema.SymbolLibraryControl.exportSymbolView" )
         .Scope( AS_GLOBAL )

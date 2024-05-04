@@ -711,6 +711,12 @@ bool SYMBOL_EDIT_FRAME::IsSymbolTreeShown() const
 }
 
 
+void SYMBOL_EDIT_FRAME::FocusSearchTreeInput()
+{
+    m_treePane->GetLibTree()->FocusSearchFieldIfExists();
+}
+
+
 void SYMBOL_EDIT_FRAME::FreezeLibraryTree()
 {
     m_treePane->Freeze();

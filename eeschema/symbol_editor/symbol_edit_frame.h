@@ -185,6 +185,7 @@ public:
     void ToggleProperties() override;
 
     bool IsSymbolTreeShown() const;
+    void FocusSearchTreeInput();
     void FreezeLibraryTree();
     void ThawLibraryTree();
 

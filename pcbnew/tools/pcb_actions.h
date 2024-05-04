@@ -448,6 +448,7 @@ public:
 
     static TOOL_ACTION showFootprintTree;
     static TOOL_ACTION hideFootprintTree;
+    static TOOL_ACTION footprintTreeSearch;
 
     // We don't use ACTION::new here because we need to distinguish between New Library
     // and New Footprint.

@@ -697,6 +697,12 @@ TOOL_ACTION PCB_ACTIONS::hideFootprintTree( TOOL_ACTION_ARGS()
         .FriendlyName( _( "Hide Footprint Tree" ) )
         .Icon( BITMAPS::search_tree ) );
 
+TOOL_ACTION PCB_ACTIONS::footprintTreeSearch( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.ModuleEditor.footprintTreeSearch" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Focus the Footprint Tree Search Field" ) )
+        .DefaultHotkey( MD_CTRL + 'L' ) );
+
 TOOL_ACTION PCB_ACTIONS::newFootprint( TOOL_ACTION_ARGS()
         .Name( "pcbnew.ModuleEditor.newFootprint" )
         .Scope( AS_GLOBAL )

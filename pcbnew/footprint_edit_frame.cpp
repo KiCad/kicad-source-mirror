@@ -397,6 +397,12 @@ void FOOTPRINT_EDIT_FRAME::ToggleSearchTree()
 }
 
 
+void FOOTPRINT_EDIT_FRAME::FocusSearchTreeInput()
+{
+    m_treePane->FocusSearchFieldIfExists();
+}
+
+
 void FOOTPRINT_EDIT_FRAME::ToggleLayersManager()
 {
     FOOTPRINT_EDITOR_SETTINGS* settings = GetSettings();

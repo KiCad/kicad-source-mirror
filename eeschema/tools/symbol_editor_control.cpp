@@ -550,6 +550,24 @@ int SYMBOL_EDITOR_CONTROL::ToggleSymbolTree( const TOOL_EVENT& aEvent )
 }
 
 
+int SYMBOL_EDITOR_CONTROL::SymbolTreeSearch( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
+    {
+        SYMBOL_EDIT_FRAME& sym_edit_frame = static_cast<SYMBOL_EDIT_FRAME&>( *m_frame );
+
+        if( !sym_edit_frame.IsSymbolTreeShown() )
+        {
+            wxCommandEvent dummy;
+            sym_edit_frame.OnToggleSymbolTree( dummy );
+        }
+        sym_edit_frame.FocusSearchTreeInput();
+    }
+
+    return 0;
+}
+
+
 int SYMBOL_EDITOR_CONTROL::ToggleProperties( const TOOL_EVENT& aEvent )
 {
     if( m_frame->IsType( FRAME_SCH_SYMBOL_EDITOR ) )
@@ -814,6 +832,7 @@ void SYMBOL_EDITOR_CONTROL::setTransitions()
     Go( &SYMBOL_EDITOR_CONTROL::UnpinLibrary,          ACTIONS::unpinLibrary.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::showSymbolTree.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSymbolTree,      EE_ACTIONS::hideSymbolTree.MakeEvent() );
+    Go( &SYMBOL_EDITOR_CONTROL::SymbolTreeSearch,      EE_ACTIONS::symbolTreeSearch.MakeEvent() );
     Go( &SYMBOL_EDITOR_CONTROL::ToggleSyncedPinsMode,  EE_ACTIONS::toggleSyncedPinsMode.MakeEvent() );
 
     Go( &SYMBOL_EDITOR_CONTROL::ToggleProperties,      ACTIONS::showProperties.MakeEvent() );

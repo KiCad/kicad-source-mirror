@@ -140,6 +140,7 @@ public:
 
     bool IsSearchTreeShown() const;
     void ToggleSearchTree();
+    void FocusSearchTreeInput();
     void ToggleLayersManager();
 
     /**
