@@ -253,9 +253,13 @@ std::vector<PCB_LAYER_ID> ALTIUM_PCB::GetKicadLayersToIterate( ALTIUM_LAYER aAlt
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( _( "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad "
-                         "layer Eco1_User." ),
-                      aAltiumLayer );
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format(
+                    _( "Altium layer (%d) has no KiCad equivalent. It has been moved to KiCad "
+                       "layer Eco1_User." ), aAltiumLayer ), RPT_SEVERITY_INFO );
+        }
+
         klayer = Eco1_User;
     }
 
@@ -1292,9 +1296,14 @@ void ALTIUM_PCB::HelperParseDimensions6Linear( const ADIMENSION6& aElem )
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
-                         "It has been moved to KiCad layer Eco1_User." ),
-                      aElem.layer );
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format(
+                    _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
+                           "It has been moved to KiCad layer Eco1_User." ), aElem.layer ),
+                        RPT_SEVERITY_INFO );
+        }
+
         klayer = Eco1_User;
     }
 
@@ -1394,9 +1403,14 @@ void ALTIUM_PCB::HelperParseDimensions6Radial(const ADIMENSION6 &aElem)
 
     if( klayer == UNDEFINED_LAYER )
     {
-        wxLogWarning( _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
-                         "It has been moved to KiCad layer Eco1_User." ),
-                      aElem.layer );
+        if( m_reporter )
+        {
+            m_reporter->Report( wxString::Format(
+                _( "Dimension found on an Altium layer (%d) with no KiCad equivalent. "
+                   "It has been moved to KiCad layer Eco1_User." ),
+                aElem.layer ), RPT_SEVERITY_INFO );
+        }
+
         klayer = Eco1_User;
     }
 
