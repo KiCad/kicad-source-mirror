@@ -1667,6 +1667,14 @@ void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPc
         case ALTIUM_DIMENSION_KIND::LINEAR:
             HelperParseDimensions6Linear( elem );
             break;
+        case ALTIUM_DIMENSION_KIND::ANGULAR:
+            if( m_reporter )
+            {
+                m_reporter->Report(
+                        wxString::Format( _( "Ignored Angular dimension (not yet supported)." ) ),
+                        RPT_SEVERITY_INFO );
+            }
+            break;
         case ALTIUM_DIMENSION_KIND::RADIAL:
             HelperParseDimensions6Radial( elem );
             break;
@@ -1676,21 +1684,45 @@ void ALTIUM_PCB::ParseDimensions6Data( const ALTIUM_COMPOUND_FILE&     aAltiumPc
         case ALTIUM_DIMENSION_KIND::DATUM:
             if( m_reporter )
             {
-                wxString msg;
-                msg.Printf( _( "Ignored dimension of kind %d (not yet supported)." ), elem.kind );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
+                m_reporter->Report(
+                        wxString::Format( _( "Ignored Datum dimension (not yet supported)." ) ),
+                        RPT_SEVERITY_INFO );
             }
             // HelperParseDimensions6Datum( elem );
             break;
+        case ALTIUM_DIMENSION_KIND::BASELINE:
+            if( m_reporter )
+            {
+                m_reporter->Report(
+                        wxString::Format( _( "Ignored Baseline dimension (not yet supported)." ) ),
+                        RPT_SEVERITY_INFO );
+            }
+            break;
         case ALTIUM_DIMENSION_KIND::CENTER:
             HelperParseDimensions6Center( elem );
+            break;
+        case ALTIUM_DIMENSION_KIND::LINEAR_DIAMETER:
+            if( m_reporter )
+            {
+                m_reporter->Report(
+                        wxString::Format( _( "Ignored Linear dimension (not yet supported)." ) ),
+                        RPT_SEVERITY_INFO );
+            }
+            break;
+        case ALTIUM_DIMENSION_KIND::RADIAL_DIAMETER:
+            if( m_reporter )
+            {
+                m_reporter->Report(
+                        wxString::Format( _( "Ignored Radial dimension (not yet supported)." ) ),
+                        RPT_SEVERITY_INFO );
+            }
             break;
         default:
             if( m_reporter )
             {
                 wxString msg;
                 msg.Printf( _( "Ignored dimension of kind %d (not yet supported)." ), elem.kind );
-                m_reporter->Report( msg, RPT_SEVERITY_DEBUG );
+                m_reporter->Report( msg, RPT_SEVERITY_INFO );
             }
             break;
         }

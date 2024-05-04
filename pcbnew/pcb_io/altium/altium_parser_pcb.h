@@ -74,15 +74,16 @@ enum class ALTIUM_DIMENSION_KIND
 {
     UNKNOWN = 0,
 
-    LINEAR          = 1,
-    ANGULAR         = 2,
-    RADIAL          = 3,
-    LEADER          = 4,
-    DATUM           = 5,
-    BASELINE        = 6,
-    CENTER          = 7,
-    LINEAR_DIAMETER = 8,
-    RADIAL_DIAMETER = 9
+    LINEAR = 1,
+    ANGULAR = 2,
+    RADIAL = 3,
+    LEADER = 4,
+    DATUM = 5,
+    BASELINE = 6,
+    CENTER = 7,
+    UNKNOWN_2 = 8,
+    LINEAR_DIAMETER = 9,
+    RADIAL_DIAMETER = 10
 };
 
 enum class ALTIUM_REGION_KIND
