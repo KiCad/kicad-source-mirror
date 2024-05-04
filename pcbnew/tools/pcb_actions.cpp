@@ -1936,20 +1936,37 @@ TOOL_ACTION PCB_ACTIONS::alignCenterX( TOOL_ACTION_ARGS()
         .Tooltip( _( "Aligns selected items to the horizontal center of the item under the cursor" ) )
         .Icon( BITMAPS::align_items_middle ) );
 
-TOOL_ACTION PCB_ACTIONS::distributeHorizontally( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.AlignAndDistribute.distributeHorizontally" )
+TOOL_ACTION PCB_ACTIONS::distributeHorizontallyCenters( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.AlignAndDistribute.distributeHorizontallyCenters" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Distribute Horizontally" ) )
-        .Tooltip( _( "Distributes selected items between the left-most item and the right-most item" ) )
-        .Icon( BITMAPS::distribute_horizontal ) );
+        .FriendlyName( _( "Distribute Horizontally by Centers" ) )
+        .Tooltip( _( "Distributes selected items between the left-most item and the right-most item"
+                     "so that the item centers are equally distributed" ) )
+        .Icon( BITMAPS::distribute_horizontal_centers ) );
 
-TOOL_ACTION PCB_ACTIONS::distributeVertically( TOOL_ACTION_ARGS()
-        .Name( "pcbnew.AlignAndDistribute.distributeVertically" )
+TOOL_ACTION PCB_ACTIONS::distributeHorizontallyGaps( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.AlignAndDistribute.distributeHorizontallyGaps" )
         .Scope( AS_GLOBAL )
-        .FriendlyName( _( "Distribute Vertically" ) )
-        .Tooltip( _( "Distributes selected items between the top-most item and the bottom-most item" ) )
-        .Icon( BITMAPS::distribute_vertical ) );
+        .FriendlyName( _( "Distribute Horizontally with Even Gaps" ) )
+        .Tooltip( _( "Distributes selected items between the left-most item and the right-most item "
+                     "so that the gaps between items are equal" ) )
+        .Icon( BITMAPS::distribute_horizontal_gaps ) );
 
+TOOL_ACTION PCB_ACTIONS::distributeVerticallyGaps( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.AlignAndDistribute.distributeVerticallyGaps" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Distribute Vertically with Even Gaps" ) )
+        .Tooltip( _( "Distributes selected items between the top-most item and the bottom-most item "
+                     "so that the gaps between items are equal" ) )
+        .Icon( BITMAPS::distribute_vertical_gaps ) );
+
+TOOL_ACTION PCB_ACTIONS::distributeVerticallyCenters( TOOL_ACTION_ARGS()
+        .Name( "pcbnew.AlignAndDistribute.distributeVerticallyCenters" )
+        .Scope( AS_GLOBAL )
+        .FriendlyName( _( "Distribute Vertically by Centers" ) )
+        .Tooltip( _( "Distributes selected items between the top-most item and the bottom-most item "
+                     "so that the item centers are equally distributed" ) )
+        .Icon( BITMAPS::distribute_vertical_centers ) );
 
 // PCB_POINT_EDITOR
 //

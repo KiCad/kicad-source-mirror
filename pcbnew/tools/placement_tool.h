@@ -85,14 +85,9 @@ public:
     int AlignCenterY( const TOOL_EVENT& aEvent );
 
     /**
-     * Distribute the selected items along the X axis.
+     * Distribute the selected items in some way
      */
-    int DistributeHorizontally( const TOOL_EVENT& aEvent );
-
-    /**
-     * Distribute the selected items along the Y axis.
-     */
-    int DistributeVertically( const TOOL_EVENT& aEvent );
+    int DistributeItems( const TOOL_EVENT& aEvent );
 
     ///< Set up handlers for various events.
     void setTransitions() override;
@@ -134,42 +129,21 @@ private:
      * boxes.
      *
      * @note Using the centers of bounding box of items can give unsatisfactory visual results
-     * since items of differing widths will be placed with different gaps. Is only used if
-     * items overlap.
-     */
-    void doDistributeCentersHorizontally( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
-                                          BOARD_COMMIT& aCommit ) const;
-
-    /**
-     * Distribute selected items using an even spacing between the centers of their bounding
-     * boxes.
-     *
-     * @note Using the centers of bounding box of items can give unsatisfactory visual results
      *       since items of differing widths will be placed with different gaps. Is only used
      *       if items overlap
      */
-    void doDistributeCentersVertically( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
-                                        BOARD_COMMIT& aCommit ) const;
+    void doDistributeCenters( bool aIsXAxis, std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
+                              BOARD_COMMIT& aCommit ) const;
 
     /**
-     * Distributes selected items using an even spacing between their bounding boxes
+     * Distributes selected items using an even spacing between their bounding boxe
+     * in the x or y axis.
      *
-     * @note Using the edges of bounding box of items is only possible if there is enough space
-     *       between them. If this is not the case, use the center spacing method
+     * @note If the total item widths exceed the available space, the overlaps will be
+     *       distributed evenly.
      */
-    void doDistributeGapsHorizontally( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
-                                       BOARD_COMMIT& aCommit, const BOARD_ITEM* lastItem,
-                                       int totalGap ) const;
-
-    /**
-     * Distributes selected items using an even spacing between their bounding boxes
-     *
-     * @note Using the edges of bounding box of items is only possible if there is enough space
-     *       between them. If this is not the case, use the center spacing method
-     */
-    void doDistributeGapsVertically( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
-                                     BOARD_COMMIT& aCommit, const BOARD_ITEM* lastItem,
-                                     int totalGap ) const;
+    void doDistributeGaps( bool aIsXAxis, std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
+                           BOARD_COMMIT& aCommit ) const;
 
 private:
     PCB_SELECTION_TOOL*  m_selectionTool;

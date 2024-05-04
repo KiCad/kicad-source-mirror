@@ -30,10 +30,11 @@
 #include <ratsnest/ratsnest_data.h>
 #include <tool/tool_manager.h>
 
-#include <pcb_edit_frame.h>
 #include <board.h>
 #include <board_commit.h>
 #include <bitmaps.h>
+#include <pcb_edit_frame.h>
+#include <geometry/distribute.h>
 #include <view/view_controls.h>
 
 
@@ -73,8 +74,10 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     m_placementMenu->Add( PCB_ACTIONS::alignBottom );
 
     m_placementMenu->AppendSeparator();
-    m_placementMenu->Add( PCB_ACTIONS::distributeHorizontally );
-    m_placementMenu->Add( PCB_ACTIONS::distributeVertically );
+    m_placementMenu->Add( PCB_ACTIONS::distributeHorizontallyCenters );
+    m_placementMenu->Add( PCB_ACTIONS::distributeHorizontallyGaps );
+    m_placementMenu->Add( PCB_ACTIONS::distributeVerticallyCenters );
+    m_placementMenu->Add( PCB_ACTIONS::distributeVerticallyGaps );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
     selToolMenu.AddMenu( m_placementMenu, SELECTION_CONDITIONS::MoreThan( 1 ), 100 );
@@ -476,253 +479,136 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 }
 
 
-int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
+int ALIGN_DISTRIBUTE_TOOL::DistributeItems( const TOOL_EVENT& aEvent )
 {
     PCB_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector,
+                           PCB_SELECTION_TOOL* sTool )
             {
-                // Iterate from the back so we don't have to worry about removals.
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[i];
-
-                    if( item->Type() == PCB_MARKER_T )
-                        aCollector.Remove( item );
-                }
+                sTool->FilterCollectorForMarkers( aCollector );
+                sTool->FilterCollectorForHierarchy( aCollector, true );
+                sTool->FilterCollectorForFreePads( aCollector );
             },
-            m_frame->IsType( FRAME_PCB_EDITOR ) /* prompt user regarding locked items */ );
+            m_frame->IsType( FRAME_PCB_EDITOR ) /* prompt user regarding locked items */
+    );
 
-    if( selection.Size() <= 1 )
+    // Need at least 3 items to distribute - one at each end and at least on in the middle
+    if( selection.Size() < 3 )
         return 0;
 
     BOARD_COMMIT                               commit( m_frame );
+    wxString                                   commitMsg;
     std::vector<std::pair<BOARD_ITEM*, BOX2I>> itemsToDistribute = GetBoundingBoxes( selection );
 
-    // find the last item by reverse sorting
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
-            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
-            {
-                return ( lhs.second.GetRight() > rhs.second.GetRight() );
-            } );
-
-    BOARD_ITEM* lastItem = itemsToDistribute.begin()->first;
-    const int   maxRight = itemsToDistribute.begin()->second.GetRight();
-
-    // sort to get starting order
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
-            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
-            {
-                return ( lhs.second.GetX() < rhs.second.GetX() );
-            } );
-
-    const int minX = itemsToDistribute.begin()->second.GetX();
-    int       totalGap = maxRight - minX;
-    int       totalWidth = 0;
-
-    for( const auto& [ item, rect ] : itemsToDistribute )
-        totalWidth += rect.GetWidth();
-
-    if( totalGap < totalWidth )
+    if( aEvent.Matches( PCB_ACTIONS::distributeHorizontallyCenters.MakeEvent() ) )
     {
-        // the width of the items exceeds the gap (overlapping items) -> use center point spacing
-        doDistributeCentersHorizontally( itemsToDistribute, commit );
+        doDistributeCenters( true, itemsToDistribute, commit );
+        commitMsg = PCB_ACTIONS::distributeHorizontallyCenters.GetFriendlyName();
+    }
+    else if( aEvent.Matches( PCB_ACTIONS::distributeHorizontallyGaps.MakeEvent() ) )
+    {
+        doDistributeGaps( true, itemsToDistribute, commit );
+        commitMsg = PCB_ACTIONS::distributeHorizontallyGaps.GetFriendlyName();
+    }
+    else if( aEvent.Matches( PCB_ACTIONS::distributeVerticallyCenters.MakeEvent() ) )
+    {
+        doDistributeCenters( false, itemsToDistribute, commit );
+        commitMsg = PCB_ACTIONS::distributeVerticallyCenters.GetFriendlyName();
     }
     else
     {
-        totalGap -= totalWidth;
-        doDistributeGapsHorizontally( itemsToDistribute, commit, lastItem, totalGap );
+        doDistributeGaps( false, itemsToDistribute, commit );
+        commitMsg = PCB_ACTIONS::distributeVerticallyGaps.GetFriendlyName();
     }
 
-    commit.Push( _( "Distribute Horizontally" ) );
+    commit.Push( commitMsg );
     return 0;
 }
 
 
-void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsHorizontally( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
-                                                          BOARD_COMMIT& aCommit,
-                                                          const BOARD_ITEM* lastItem,
-                                                          int totalGap ) const
+void ALIGN_DISTRIBUTE_TOOL::doDistributeGaps( bool                                        aIsXAxis,
+                                              std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
+                                              BOARD_COMMIT& aCommit ) const
 {
-    const int itemGap = totalGap / ( aItems.size() - 1 );
-    int       targetX = aItems.begin()->second.GetX();
-
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : aItems )
-    {
-        BOARD_ITEM* item = i.first;
-
-        // cover the corner case where the last item is wider than the previous item and gap
-        if( lastItem == item )
-            continue;
-
-        if( item->GetParent() && item->GetParent()->IsSelected() )
-            continue;
-
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
-
-        int difference = targetX - i.second.GetX();
-        aCommit.Stage( item, CHT_MODIFY );
-        item->Move( VECTOR2I( difference, 0 ) );
-        targetX += ( i.second.GetWidth() + itemGap );
-    }
-}
-
-
-void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( std::vector<std::pair<BOARD_ITEM*, BOX2I>> &aItems,
-                                                             BOARD_COMMIT& aCommit ) const
-{
+    // Sort by start position.
+    // This is a simple way to get the items in a sensible order but it's not perfect.
+    // It will fail if, say, there's a huge items that's bigger than the total span of
+    // all the other items, but at that point a gap-equalising algorithm probably isn't
+    // well-defined anyway.
     std::sort( aItems.begin(), aItems.end(),
-            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
-            {
-                return ( lhs.second.Centre().x < rhs.second.Centre().x );
-            } );
+               [&]( const std::pair<BOARD_ITEM*, BOX2I>& a, const std::pair<BOARD_ITEM*, BOX2I>& b )
+               {
+                   return aIsXAxis ? a.second.GetLeft() < b.second.GetLeft()
+                                   : a.second.GetTop() < b.second.GetTop();
+               } );
 
-    const int totalGap = ( aItems.end()-1 )->second.Centre().x - aItems.begin()->second.Centre().x;
-    const int itemGap = totalGap / ( aItems.size() - 1 );
-    int       targetX = aItems.begin()->second.Centre().x;
+    // Consruct list of item spans in the relevant axis
+    std::vector<std::pair<int, int>> itemSpans;
+    itemSpans.reserve( aItems.size() );
 
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : aItems )
+    for( const auto& [item, box] : aItems )
     {
-        BOARD_ITEM* item = i.first;
-
-        if( item->GetParent() && item->GetParent()->IsSelected() )
-            continue;
-
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
-
-        int difference = targetX - i.second.Centre().x;
-        aCommit.Stage( item, CHT_MODIFY );
-        item->Move( VECTOR2I( difference, 0 ) );
-        targetX += ( itemGap );
-    }
-}
-
-
-int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
-{
-    PCB_SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector, PCB_SELECTION_TOOL* sTool )
-            {
-                // Iterate from the back so we don't have to worry about removals.
-                for( int i = aCollector.GetCount() - 1; i >= 0; --i )
-                {
-                    BOARD_ITEM* item = aCollector[i];
-
-                    if( item->Type() == PCB_MARKER_T )
-                        aCollector.Remove( item );
-                }
-            },
-            m_frame->IsType( FRAME_PCB_EDITOR ) /* prompt user regarding locked items */ );
-
-    if( selection.Size() <= 1 )
-        return 0;
-
-    BOARD_COMMIT                               commit( m_frame );
-    std::vector<std::pair<BOARD_ITEM*, BOX2I>> itemsToDistribute = GetBoundingBoxes( selection );
-
-    // find the last item by reverse sorting
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
-            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
-            {
-                return ( lhs.second.GetBottom() > rhs.second.GetBottom() );
-            } );
-
-    BOARD_ITEM* lastItem = itemsToDistribute.begin()->first;
-    const int   maxBottom = itemsToDistribute.begin()->second.GetBottom();
-
-    // sort to get starting order
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
-            []( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
-            {
-                return ( lhs.second.Centre().y < rhs.second.Centre().y );
-            } );
-
-    int minY = itemsToDistribute.begin()->second.GetY();
-    int totalGap = maxBottom - minY;
-    int totalHeight = 0;
-
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : itemsToDistribute )
-        totalHeight += i.second.GetHeight();
-
-    if( totalGap < totalHeight )
-    {
-        // the width of the items exceeds the gap (overlapping items) -> use center point spacing
-        doDistributeCentersVertically( itemsToDistribute, commit );
-    }
-    else
-    {
-        totalGap -= totalHeight;
-        doDistributeGapsVertically( itemsToDistribute, commit, lastItem, totalGap );
+        const int start = aIsXAxis ? box.GetLeft() : box.GetTop();
+        const int end = aIsXAxis ? box.GetRight() : box.GetBottom();
+        itemSpans.emplace_back( start, end );
     }
 
-    commit.Push( _( "Distribute Vertically" ) );
-    return 0;
-}
+    // Get the deltas needed to distribute the items evenly
+    const std::vector<int> deltas = GetDeltasForDistributeByGaps( itemSpans );
 
-
-void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsVertically( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
-                                                        BOARD_COMMIT& aCommit,
-                                                        const BOARD_ITEM* lastItem,
-                                                        int totalGap ) const
-{
-    const int itemGap = totalGap / ( aItems.size() - 1 );
-    int       targetY = aItems.begin()->second.GetY();
-
-    for( std::pair<BOARD_ITEM*, BOX2I>& i : aItems )
+    // Apply the deltas to the items
+    for( size_t i = 1; i < aItems.size() - 1; ++i )
     {
-        BOARD_ITEM* item = i.first;
+        const auto& [item, box] = aItems[i];
+        const int delta = deltas[i];
 
-        // cover the corner case where the last item is wider than the previous item and gap
-        if( lastItem == item )
-            continue;
-
-        if( item->GetParent() && item->GetParent()->IsSelected() )
-            continue;
-
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
-
-        int difference = targetY - i.second.GetY();
-        aCommit.Stage( item, CHT_MODIFY );
-        item->Move( VECTOR2I( 0, difference ) );
-        targetY += ( i.second.GetHeight() + itemGap );
-    }
-}
-
-
-void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
-                                                           BOARD_COMMIT& aCommit ) const
-{
-    std::sort( aItems.begin(), aItems.end(),
-        [] ( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs)
+        if( delta != 0 )
         {
-            return ( lhs.second.Centre().y < rhs.second.Centre().y );
-        } );
+            const VECTOR2I deltaVec = aIsXAxis ? VECTOR2I( delta, 0 ) : VECTOR2I( 0, delta );
 
-    const int totalGap = ( aItems.end() - 1 )->second.Centre().y
-                         - aItems.begin()->second.Centre().y;
-    const int itemGap  = totalGap / ( aItems.size() - 1 );
-    int       targetY  = aItems.begin()->second.Centre().y;
+            aCommit.Stage( item, CHT_MODIFY );
+            item->Move( deltaVec );
+        }
+    }
+}
 
-    for( const std::pair<BOARD_ITEM*, BOX2I>& i : aItems )
+
+void ALIGN_DISTRIBUTE_TOOL::doDistributeCenters( bool aIsXAxis,
+                                                 std::vector<std::pair<BOARD_ITEM*, BOX2I>>& aItems,
+                                                 BOARD_COMMIT& aCommit ) const
+{
+    std::sort(
+            aItems.begin(), aItems.end(),
+            [&]( const std::pair<BOARD_ITEM*, BOX2I>& lhs, const std::pair<BOARD_ITEM*, BOX2I>& rhs )
+            {
+                const int lhsPos = aIsXAxis ? lhs.second.Centre().x : lhs.second.Centre().y;
+                const int rhsPos = aIsXAxis ? rhs.second.Centre().x : rhs.second.Centre().y;
+                return lhsPos < rhsPos;
+            } );
+
+    std::vector<int> itemCenters;
+    itemCenters.reserve( aItems.size() );
+
+    for( const auto& [item, box] : aItems )
     {
-        BOARD_ITEM* item = i.first;
+        itemCenters.push_back( aIsXAxis ? box.Centre().x : box.Centre().y );
+    }
 
-        if( item->GetParent() && item->GetParent()->IsSelected() )
-            continue;
+    const std::vector<int> deltas = GetDeltasForDistributeByPoints( itemCenters );
 
-        // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB_EDITOR ) )
-            item = item->GetParent();
+    // Apply the deltas to the items
+    for( size_t i = 1; i < aItems.size() - 1; ++i )
+    {
+        const auto& [item, box] = aItems[i];
+        const int delta = deltas[i];
 
-        int difference = targetY - i.second.Centre().y;
-        aCommit.Stage( item, CHT_MODIFY );
-        item->Move( VECTOR2I( 0, difference ) );
-        targetY += ( itemGap );
+        if ( delta != 0)
+        {
+            const VECTOR2I deltaVec = aIsXAxis ? VECTOR2I( delta, 0 ) : VECTOR2I( 0, delta );
+
+            aCommit.Stage( item, CHT_MODIFY );
+            item->Move( deltaVec );
+        }
     }
 }
 
@@ -736,8 +622,12 @@ void ALIGN_DISTRIBUTE_TOOL::setTransitions()
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignCenterX,           PCB_ACTIONS::alignCenterX.MakeEvent() );
     Go( &ALIGN_DISTRIBUTE_TOOL::AlignCenterY,           PCB_ACTIONS::alignCenterY.MakeEvent() );
 
-    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally,
-        PCB_ACTIONS::distributeHorizontally.MakeEvent() );
-    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeVertically,
-        PCB_ACTIONS::distributeVertically.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeItems,
+        PCB_ACTIONS::distributeHorizontallyCenters.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeItems,
+        PCB_ACTIONS::distributeHorizontallyGaps.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeItems,
+        PCB_ACTIONS::distributeVerticallyCenters.MakeEvent() );
+    Go( &ALIGN_DISTRIBUTE_TOOL::DistributeItems,
+        PCB_ACTIONS::distributeVerticallyGaps.MakeEvent() );
 }

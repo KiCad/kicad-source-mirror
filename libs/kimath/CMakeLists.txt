@@ -12,6 +12,7 @@ set( KIMATH_SRCS
     src/trigo.cpp
 
 	src/geometry/chamfer.cpp
+    src/geometry/distribute.cpp
 	src/geometry/eda_angle.cpp
 	src/geometry/ellipse.cpp
     src/geometry/circle.cpp

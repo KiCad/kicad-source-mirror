@@ -247,8 +247,10 @@ set( BMAPS_MID
     directory
     directory_browser
     directory_open
-    distribute_horizontal
-    distribute_vertical
+    distribute_horizontal_centers
+    distribute_horizontal_gaps
+    distribute_vertical_centers
+    distribute_vertical_gaps
     down
     drag
     drag_segment

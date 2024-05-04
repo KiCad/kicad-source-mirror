@@ -309,8 +309,10 @@ public:
     static TOOL_ACTION alignRight;
     static TOOL_ACTION alignCenterX;
     static TOOL_ACTION alignCenterY;
-    static TOOL_ACTION distributeHorizontally;
-    static TOOL_ACTION distributeVertically;
+    static TOOL_ACTION distributeHorizontallyCenters;
+    static TOOL_ACTION distributeHorizontallyGaps;
+    static TOOL_ACTION distributeVerticallyCenters;
+    static TOOL_ACTION distributeVerticallyGaps;
 
     // Position Relative Tool
     /// Activation of the position relative tool
