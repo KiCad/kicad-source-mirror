@@ -147,7 +147,7 @@ private:
 
 private:
     PCB_SELECTION_TOOL*  m_selectionTool;
-    ACTION_MENU*         m_placementMenu;
+    CONDITIONAL_MENU*    m_placementMenu;
     PCB_BASE_FRAME*      m_frame;
 };
 

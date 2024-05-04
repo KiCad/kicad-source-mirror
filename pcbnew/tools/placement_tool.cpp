@@ -59,25 +59,28 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     m_frame = getEditFrame<PCB_BASE_FRAME>();
 
     // Create a context menu and make it available through selection tool
-    m_placementMenu = new ACTION_MENU( true, this );
+    m_placementMenu = new CONDITIONAL_MENU( this );
     m_placementMenu->SetIcon( BITMAPS::align_items );
     m_placementMenu->SetTitle( _( "Align/Distribute" ) );
 
+    const auto canAlign = SELECTION_CONDITIONS::MoreThan( 1 );
+    const auto canDistribute = SELECTION_CONDITIONS::MoreThan( 2 );
+
     // Add all align/distribute commands
-    m_placementMenu->Add( PCB_ACTIONS::alignLeft );
-    m_placementMenu->Add( PCB_ACTIONS::alignCenterX );
-    m_placementMenu->Add( PCB_ACTIONS::alignRight );
+    m_placementMenu->AddItem( PCB_ACTIONS::alignLeft, canAlign );
+    m_placementMenu->AddItem( PCB_ACTIONS::alignCenterX, canAlign );
+    m_placementMenu->AddItem( PCB_ACTIONS::alignRight, canAlign );
 
-    m_placementMenu->AppendSeparator();
-    m_placementMenu->Add( PCB_ACTIONS::alignTop );
-    m_placementMenu->Add( PCB_ACTIONS::alignCenterY );
-    m_placementMenu->Add( PCB_ACTIONS::alignBottom );
+    m_placementMenu->AddSeparator( canAlign );
+    m_placementMenu->AddItem( PCB_ACTIONS::alignTop, canAlign );
+    m_placementMenu->AddItem( PCB_ACTIONS::alignCenterY, canAlign );
+    m_placementMenu->AddItem( PCB_ACTIONS::alignBottom, canAlign );
 
-    m_placementMenu->AppendSeparator();
-    m_placementMenu->Add( PCB_ACTIONS::distributeHorizontallyCenters );
-    m_placementMenu->Add( PCB_ACTIONS::distributeHorizontallyGaps );
-    m_placementMenu->Add( PCB_ACTIONS::distributeVerticallyCenters );
-    m_placementMenu->Add( PCB_ACTIONS::distributeVerticallyGaps );
+    m_placementMenu->AddSeparator( canDistribute );
+    m_placementMenu->AddItem( PCB_ACTIONS::distributeHorizontallyCenters, canDistribute );
+    m_placementMenu->AddItem( PCB_ACTIONS::distributeHorizontallyGaps, canDistribute );
+    m_placementMenu->AddItem( PCB_ACTIONS::distributeVerticallyCenters, canDistribute );
+    m_placementMenu->AddItem( PCB_ACTIONS::distributeVerticallyGaps, canDistribute );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
     selToolMenu.AddMenu( m_placementMenu, SELECTION_CONDITIONS::MoreThan( 1 ), 100 );
