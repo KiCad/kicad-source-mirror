@@ -2142,9 +2142,14 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
 {
     ASCH_ARC elem( aProperties );
 
-    int arc_radius = elem.m_Radius;
-
-    // Try to approximate this ellipse by a series of beziers
+    int       arc_radius = elem.m_Radius;
+    VECTOR2I  center = elem.m_Center;
+    EDA_ANGLE startAngle( elem.m_EndAngle, DEGREES_T );
+    EDA_ANGLE endAngle( elem.m_StartAngle, DEGREES_T );
+    VECTOR2I  startOffset( KiROUND( arc_radius * startAngle.Cos() ),
+                           -KiROUND( arc_radius * startAngle.Sin() ) );
+    VECTOR2I  endOffset( KiROUND( arc_radius * endAngle.Cos() ),
+                         -KiROUND( arc_radius * endAngle.Sin() ) );
 
     if( aSymbol.empty() && ShouldPutItemOnSheet( elem.ownerindex ) )
     {
@@ -2164,14 +2169,10 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
         else
         {
             SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC );
-            EDA_ANGLE  includedAngle( elem.m_EndAngle - elem.m_StartAngle, DEGREES_T );
-            EDA_ANGLE  startAngle( elem.m_EndAngle, DEGREES_T );
-            VECTOR2I   startOffset( KiROUND( arc_radius * startAngle.Cos() ),
-                                    KiROUND( arc_radius * startAngle.Sin() ) );
 
             arc->SetCenter( elem.m_Center + m_sheetOffset );
             arc->SetStart( elem.m_Center + startOffset + m_sheetOffset );
-            arc->SetArcAngleAndEnd( includedAngle.Normalize(), true );
+            arc->SetEnd( elem.m_Center + endOffset + m_sheetOffset );
 
             arc->SetStroke( STROKE_PARAMS( elem.LineWidth, LINE_STYLE::SOLID ) );
 
@@ -2207,7 +2208,6 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
 
         if( elem.m_StartAngle == 0 && ( elem.m_EndAngle == 0 || elem.m_EndAngle == 360 ) )
         {
-            VECTOR2I   center = elem.m_Center;
             SCH_SHAPE* circle = new SCH_SHAPE( SHAPE_T::CIRCLE, LAYER_DEVICE );
             symbol->AddDrawItem( circle, false );
 
@@ -2223,23 +2223,16 @@ void SCH_IO_ALTIUM::ParseArc( const std::map<wxString, wxString>& aProperties,
         }
         else
         {
-            VECTOR2I   center = elem.m_Center;
             SCH_SHAPE* arc = new SCH_SHAPE( SHAPE_T::ARC, LAYER_DEVICE );
             symbol->AddDrawItem( arc, false );
             arc->SetUnit( std::max( 0, elem.ownerpartid ) );
-
-            EDA_ANGLE includedAngle( elem.m_EndAngle - elem.m_StartAngle, DEGREES_T );
-            EDA_ANGLE startAngle( elem.m_StartAngle, DEGREES_T );
-            VECTOR2I  startOffset( KiROUND( arc_radius * startAngle.Cos() ),
-                                   KiROUND( arc_radius * startAngle.Sin() ) );
 
             if( schsym )
                 center = GetRelativePosition( elem.m_Center + m_sheetOffset, schsym );
 
             arc->SetCenter( center );
             arc->SetStart( center + startOffset );
-
-            arc->SetArcAngleAndEnd( includedAngle.Normalize(), true );
+            arc->SetEnd( center + endOffset );
 
             SetLibShapeLine( elem, arc, ALTIUM_SCH_RECORD::ARC );
         }
