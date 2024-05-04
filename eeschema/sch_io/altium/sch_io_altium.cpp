@@ -1127,6 +1127,9 @@ void SCH_IO_ALTIUM::ParseComponent( int aIndex, const std::map<wxString, wxStrin
 
     symbol->SetPosition( elem.location + m_sheetOffset );
 
+    for( SCH_FIELD& field : symbol->GetFields() )
+        field.SetVisible( false );
+
     // TODO: keep it simple for now, and only set position.
     // component->SetOrientation( elem.orientation );
     symbol->SetLibId( libId );
@@ -3196,6 +3199,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
         libSymbol->SetPower();
         libSymbol->SetName( elem.text );
         libSymbol->GetReferenceField().SetText( "#PWR" );
+        libSymbol->GetReferenceField().SetVisible( false );
         libSymbol->GetValueField().SetText( elem.text );
         libSymbol->GetValueField().SetVisible( true );
         libSymbol->SetDescription( wxString::Format( _( "Power symbol creates a global "
@@ -3229,6 +3233,7 @@ void SCH_IO_ALTIUM::ParsePowerPort( const std::map<wxString, wxString>& aPropert
     // each symbol has its own powerSymbolIt for now
     SCH_SYMBOL* symbol = new SCH_SYMBOL();
     symbol->SetRef( &m_sheetPath, "#PWR?" );
+    symbol->GetField( REFERENCE_FIELD )->SetVisible( false );
     symbol->SetValueFieldText( elem.text );
     symbol->SetLibId( libId );
     symbol->SetLibSymbol( new LIB_SYMBOL( *libSymbol ) );
