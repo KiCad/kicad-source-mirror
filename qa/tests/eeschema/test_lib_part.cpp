@@ -516,8 +516,8 @@ BOOST_AUTO_TEST_CASE( Compare )
     // Time stamp comparison tests.
 
     // Check to see if we broke the copy ctor.
-    LIB_SYMBOL* copy = new LIB_SYMBOL( testPart );
-    BOOST_CHECK( testPart.Compare( *copy ) == 0 );
+    LIB_SYMBOL copy( testPart );
+    BOOST_CHECK( testPart.Compare( copy ) == 0 );
 }
 
 
