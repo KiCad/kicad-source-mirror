@@ -24,6 +24,8 @@
 #ifndef SYSINFO_H
 #define SYSINFO_H
 
+#include <cstdint>
+#include <string>
 #include <vector>
 
 namespace KIPLATFORM
