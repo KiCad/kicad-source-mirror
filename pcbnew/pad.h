@@ -340,7 +340,7 @@ public:
      * Return the rotation angle of the pad.
      */
     EDA_ANGLE GetOrientation() const { return m_orient; }
-    EDA_ANGLE GetFPRelativeOrientation();
+    EDA_ANGLE GetFPRelativeOrientation() const;
 
     // For property system
     void SetOrientationDegrees( double aOrientation )

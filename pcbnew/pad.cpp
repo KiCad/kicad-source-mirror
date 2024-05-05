@@ -719,7 +719,7 @@ void PAD::SetFPRelativeOrientation( const EDA_ANGLE& aAngle )
 }
 
 
-EDA_ANGLE PAD::GetFPRelativeOrientation()
+EDA_ANGLE PAD::GetFPRelativeOrientation() const
 {
     if( FOOTPRINT* parentFP = GetParentFootprint() )
         return GetOrientation() - parentFP->GetOrientation();

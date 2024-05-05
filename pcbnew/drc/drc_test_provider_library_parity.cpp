@@ -266,8 +266,8 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
           wxString::Format( _( "%s fabrication property differs." ), PAD_DESC( a ) ) );
 
     // The pad orientation, for historical reasons is the pad rotation + parent rotation.
-    TEST_D( ( a->GetOrientation() - a->GetParentFootprint()->GetOrientation() ).Normalize().AsDegrees(),
-            ( b->GetOrientation() - b->GetParentFootprint()->GetOrientation() ).Normalize().AsDegrees(),
+    TEST_D( a->GetFPRelativeOrientation().Normalize().AsDegrees(),
+            b->GetFPRelativeOrientation().Normalize().AsDegrees(),
             wxString::Format( _( "%s orientation differs." ), PAD_DESC( a ) ) );
 
     TEST( a->GetSize(), b->GetSize(),
@@ -275,27 +275,14 @@ bool padNeedsUpdate( const PAD* a, const PAD* b, REPORTER* aReporter )
     TEST( a->GetDelta(), b->GetDelta(),
           wxString::Format( _( "%s trapezoid delta differs." ), PAD_DESC( a ) ) );
 
-    if( a->GetRoundRectCornerRadius() != b->GetRoundRectCornerRadius()
-        || a->GetRoundRectRadiusRatio() != b->GetRoundRectRadiusRatio() )
-    {
-        diff = true;
+    TEST_D( a->GetRoundRectRadiusRatio(), b->GetRoundRectRadiusRatio(),
+            wxString::Format( _( "%s rounded corners differ." ), PAD_DESC( a ) ) );
 
-        if( aReporter )
-            aReporter->Report( wxString::Format( _( "%s rounded corners differ." ), PAD_DESC( a ) ) );
-        else
-            return true;
-    }
+    TEST_D( a->GetChamferRectRatio(), b->GetChamferRectRatio(),
+            wxString::Format( _( "%s chamfered corner sizes differ." ), PAD_DESC( a ) ) );
 
-    if( a->GetChamferRectRatio() != b->GetChamferRectRatio()
-        || a->GetChamferPositions() != b->GetChamferPositions() )
-    {
-        diff = true;
-
-        if( aReporter )
-            aReporter->Report( wxString::Format( _( "%s chamfered corners differ." ), PAD_DESC( a ) ) );
-        else
-            return true;
-    }
+    TEST( a->GetChamferPositions(), b->GetChamferPositions(),
+          wxString::Format( _( "%s chamfered corners differ." ), PAD_DESC( a ) ) );
 
     TEST_PT( a->GetOffset(), b->GetOffset(),
              wxString::Format( _( "%s shape offset from hole differs." ), PAD_DESC( a ) ) );
