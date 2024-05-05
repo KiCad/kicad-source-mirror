@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 19:51-0700\n"
 "PO-Revision-Date: 2024-05-06 10:07+0000\n"
-"Last-Translator: \"Tokita, Hiroshi\" <tokita.hiroshi@fujitsu.com>\n"
+"Last-Translator: 2tama3 <2tama3@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/kicad/"
 "master-source/ja/>\n"
 "Language: ja\n"
@@ -4513,13 +4513,13 @@ msgstr ""
 "は利用できません"
 
 #: common/dialogs/panel_plugin_settings.cpp:145
-#, fuzzy, c-format
+#, c-format
 msgid "Found %s"
-msgstr "ファイル '%s' が見つかりません。"
+msgstr "発見 '%s'"
 
 #: common/dialogs/panel_plugin_settings.cpp:150
 msgid "Not a valid Python 3 interpreter"
-msgstr "有効な Python 3 インタープリターではありません"
+msgstr "Python 3 インタープリターが見つかりません"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:21
 msgid "KiCad API"
@@ -4530,8 +4530,8 @@ msgid ""
 "When the KiCad API is enabled, plugins and other software running on this "
 "computer can connect to KiCad."
 msgstr ""
-"KiCad API が有効になっている場合、このコンピュータ上で実行するプラグインやそ"
-"の他のソフトウェアは、KiCad に接続できます。"
+"KiCad API が有効になっている場合、このコンピュータ上のプラグインやサードパー"
+"ティのソフトウェアは、KiCad にAPI経由で接続できます。"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:27
 msgid "Enable KiCad API"
@@ -4542,7 +4542,7 @@ msgid ""
 "Enable the KiCad API.  Doing so will allow third-party software running on "
 "your computer to access KiCad."
 msgstr ""
-"KiCad API を有効にする。これにより、コンピュータ上で実行されているサードパー"
+"KiCad API を有効にする事により、このコンピュータ上で実行されているサードパー"
 "ティのソフトウェアがKiCadにアクセスできるようになります。"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:40
@@ -4554,9 +4554,8 @@ msgid "Path to Python interpreter:"
 msgstr "Python インタープリターのパス:"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
-#, fuzzy
 msgid "Select the path to a Python interpreter"
-msgstr "現在のアイテムに追加した最後の点を削除"
+msgstr "Python インタープリターのパスを選択"
 
 #: common/dialogs/panel_plugin_settings_base.cpp:49
 msgid "*.*"
