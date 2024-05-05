@@ -145,6 +145,18 @@ public:
         m_endsSwapped = false;
     }
 
+    void SetCenterY( int y )
+    {
+        m_end.y += y - m_start.y;
+        m_start.y = y;
+    }
+
+    void SetCenterX( int x )
+    {
+        m_end.x += x - m_start.x;
+        m_start.x = x;
+    }
+
     /**
      * Return the ending point of the graphic.
      */
